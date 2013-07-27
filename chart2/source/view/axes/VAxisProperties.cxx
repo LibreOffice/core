@@ -197,7 +197,7 @@ AxisProperties::AxisProperties( const uno::Reference< XAxis >& xAxisModel
 
 AxisProperties::AxisProperties( const AxisProperties& rAxisProperties )
     : m_xAxisModel( rAxisProperties.m_xAxisModel )
-    , m_nDimensionIndex( m_nDimensionIndex )
+    , m_nDimensionIndex( rAxisProperties.m_nDimensionIndex )
     , m_bIsMainAxis( rAxisProperties.m_bIsMainAxis )
     , m_bSwapXAndY( rAxisProperties.m_bSwapXAndY )
     , m_eCrossoverType( rAxisProperties.m_eCrossoverType )

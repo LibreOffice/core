@@ -269,6 +269,22 @@ void TextObjectBar::Execute( SfxRequest &rReq )
         }
         break;
 
+        case SID_ATTR_PARA_LRSPACE:
+        {
+            sal_uInt16 nSlot = SID_ATTR_PARA_LRSPACE;
+            SvxLRSpaceItem aLRSpace = (const SvxLRSpaceItem&)pArgs->Get(
+                GetPool().GetWhich(nSlot));
+
+            SfxItemSet aEditAttr( GetPool(), EE_PARA_LRSPACE, EE_PARA_LRSPACE );
+            aLRSpace.SetWhich( EE_PARA_LRSPACE );
+
+            aEditAttr.Put( aLRSpace );
+            mpView->SetAttributes( aEditAttr );
+
+            Invalidate(SID_ATTR_PARA_LRSPACE);
+        }
+        break;
+
         case SID_OUTLINE_UP:
         {
             if (pOLV)
@@ -314,7 +330,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
         case FN_NUM_BULLET_ON:
             if( pOLV )
                 pOLV->ToggleBullets();
-        break;
+            break;
 
         case SID_GROW_FONT_SIZE:
         case SID_SHRINK_FONT_SIZE:
@@ -581,6 +597,71 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                 SvxScriptSetItem aSvxScriptSetItem( nSlot, rPool );
                 aSvxScriptSetItem.PutItemForScriptType( nScriptType, pArgs->Get( rPool.GetWhich( nSlot ) ) );
                 aNewAttr.Put( aSvxScriptSetItem.GetItemSet() );
+                rReq.Done( aNewAttr );
+                pArgs = rReq.GetArgs();
+            }
+            else if (nSlot == SID_ATTR_PARA_ADJUST_LEFT ||
+                nSlot == SID_ATTR_PARA_ADJUST_CENTER ||
+                nSlot == SID_ATTR_PARA_ADJUST_RIGHT ||
+                nSlot == SID_ATTR_PARA_ADJUST_BLOCK)
+            {
+                switch( nSlot )
+                {
+                case SID_ATTR_PARA_ADJUST_LEFT:
+                    {
+                        aNewAttr.Put( SvxAdjustItem( SVX_ADJUST_LEFT, EE_PARA_JUST ) );
+                    }
+                    break;
+                case SID_ATTR_PARA_ADJUST_CENTER:
+                    {
+                        aNewAttr.Put( SvxAdjustItem( SVX_ADJUST_CENTER, EE_PARA_JUST ) );
+                    }
+                    break;
+                case SID_ATTR_PARA_ADJUST_RIGHT:
+                    {
+                        aNewAttr.Put( SvxAdjustItem( SVX_ADJUST_RIGHT, EE_PARA_JUST ) );
+                    }
+                    break;
+                case SID_ATTR_PARA_ADJUST_BLOCK:
+                    {
+                        aNewAttr.Put( SvxAdjustItem( SVX_ADJUST_BLOCK, EE_PARA_JUST ) );
+                    }
+                    break;
+                }
+                rReq.Done( aNewAttr );
+                pArgs = rReq.GetArgs();
+            }
+            else if(nSlot == SID_ATTR_CHAR_KERNING)
+            {
+                aNewAttr.Put(pArgs->Get(pArgs->GetPool()->GetWhich(nSlot)));
+                rReq.Done( aNewAttr );
+                pArgs = rReq.GetArgs();
+            }
+            else if(nSlot ==  SID_SET_SUPER_SCRIPT )
+            {
+                SvxEscapementItem aItem(EE_CHAR_ESCAPEMENT);
+                SvxEscapement eEsc = (SvxEscapement) ( (const SvxEscapementItem&)
+                                aEditAttr.Get( EE_CHAR_ESCAPEMENT ) ).GetEnumValue();
+
+                if( eEsc == SVX_ESCAPEMENT_SUPERSCRIPT )
+                    aItem.SetEscapement( SVX_ESCAPEMENT_OFF );
+                else
+                    aItem.SetEscapement( SVX_ESCAPEMENT_SUPERSCRIPT );
+                aNewAttr.Put( aItem );
+                rReq.Done( aNewAttr );
+                pArgs = rReq.GetArgs();
+            }
+            else if( nSlot ==  SID_SET_SUB_SCRIPT )
+            {
+                SvxEscapementItem aItem(EE_CHAR_ESCAPEMENT);
+                SvxEscapement eEsc = (SvxEscapement) ( (const SvxEscapementItem&)
+                                aEditAttr.Get( EE_CHAR_ESCAPEMENT ) ).GetEnumValue();
+
+                if( eEsc == SVX_ESCAPEMENT_SUBSCRIPT )
+                    aItem.SetEscapement( SVX_ESCAPEMENT_OFF );
+                else
+                    aItem.SetEscapement( SVX_ESCAPEMENT_SUBSCRIPT );
+                aNewAttr.Put( aItem );
                 rReq.Done( aNewAttr );
                 pArgs = rReq.GetArgs();
             }

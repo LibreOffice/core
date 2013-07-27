@@ -305,8 +305,7 @@ std::wstring RegistrationContextInformation::GetOpenOfficeExecutableName() const
 std::wstring RegistrationContextInformation::GetOpenOfficeCommandline(SHELL_COMMAND ShellCommand,
                                                                       OFFICE_APPLICATION OfficeApp) const
 {
-    // quote the path to OpenOffice, this is important
-    // for Windows 9x
+    // quote the path to Apache OpenOffice, this is important for Windows 9x
     std::wstring cmd_line = std::wstring(TEXT("\"")) + m_OOExecPath + std::wstring(TEXT("\""));
 
     switch( OfficeApp )

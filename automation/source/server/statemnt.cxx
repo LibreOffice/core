@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_automation.hxx"
 #include <com/sun/star/frame/XFramesSupplier.hpp>
@@ -31,39 +29,19 @@
 #include <comphelper/uieventslogger.hxx>
 
 #include <tools/wintypes.hxx>
-#ifndef _DIALOG_HXX //autogen
 #include <vcl/dialog.hxx>
-#endif
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 #include <vcl/menubtn.hxx>
 #include <svtools/svtreebx.hxx>
 #include <svtools/brwbox.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _DOCKWIN_HXX //autogen
 #include <vcl/dockwin.hxx>
-#endif
-#ifndef _FLOATWIN_HXX //autogen
 #include <vcl/floatwin.hxx>
-#endif
-#ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
-#endif
-#ifndef _COMBOBOX_HXX //autogen
 #include <vcl/combobox.hxx>
-#endif
-#ifndef _MOREBTN_HXX //autogen
 #include <vcl/morebtn.hxx>
-#endif
-#ifndef _FIELD_HXX //autogen
 #include <vcl/field.hxx>
-#endif
-#ifndef _TOOLBOX_HXX //autogen
 #include <vcl/toolbox.hxx>
-#endif
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/menu.hxx>
@@ -81,7 +59,6 @@
 #include <svtools/table/tablecontrolinterface.hxx>
 #include <svl/poolitem.hxx>
 #include <svtools/extensionlistbox.hxx>
-// Hat keinen Includeschutz
 #include <svtools/svtdata.hxx>
 #include <tools/time.hxx>
 #include <svtools/stringtransfer.hxx>
@@ -89,40 +66,29 @@
 #include <tools/fsys.hxx>
 #include <svl/stritem.hxx>
 #include <svtools/ttprops.hxx>
-#ifndef _BASIC_TTRESHLP_HXX
 #include <basic/ttstrhlp.hxx>
-#endif
 #include <basic/dispdefs.hxx>
 #include <basic/sbuno.hxx>
 #include <vos/socket.hxx>
 #include <svl/pickerhistory.hxx>
 #include <com/sun/star/util/XCancellable.hpp>
-
 #include <sot/storage.hxx>
 #include <sot/storinfo.hxx>
 #include "statemnt.hxx"
 #include "scmdstrm.hxx"
-
-#ifndef _RETSRTM_HXX
 #include "retstrm.hxx"
-#endif
-
 #if OSL_DEBUG_LEVEL > 1
 #include "editwin.hxx"
 #endif
 #include "rcontrol.hxx"
 #include <automation/communi.hxx>
 #include "testtool.hxx"
-
 #include "profiler.hxx"
-
 #include "recorder.hxx"
-
 #include "testtool.hrc"
 #include <basic/svtmsg.hrc>
-
 #include <algorithm>
-
+#include <vcl/dibtools.hxx>
 
 using namespace com::sun::star::frame;
 using namespace com::sun::star::uno;
@@ -3932,7 +3898,7 @@ sal_Bool StatementControl::HandleVisibleControls( Window *pControl )
 
                 SvFileStream fOut;
                 fOut.Open(aString1,STREAM_STD_WRITE);
-                aBmp.Write(fOut);
+                WriteDIB(aBmp, fOut, true, true);
                 if ( fOut.GetError() )
                     ReportError( aUId, GEN_RES_STR1( S_ERROR_SAVING_IMAGE, UniString::CreateFromInt32( fOut.GetError() ) ) );
                 fOut.Close();

@@ -48,11 +48,11 @@ XOutdevItemPool::XOutdevItemPool(
     const XubString aNullStr;
     const Graphic aNullGraphic;
     const basegfx::B2DPolyPolygon aNullPol;
-    const Color aNullLineCol(RGB_Color(COL_BLACK));
-    const Color aNullFillCol(RGB_COLORDATA( 153, 204, 255 ));
+    const Color aNullLineCol(COL_DEFAULT_SHAPE_STROKE); // #121448# Use defined default color
+    const Color aNullFillCol(COL_DEFAULT_SHAPE_FILLING); // #121448# Use defined default color
     const Color aNullShadowCol(RGB_Color(COL_LIGHTGRAY));
     const XDash aNullDash;
-    const XGradient aNullGrad(aNullLineCol, RGB_Color(COL_WHITE));
+    const XGradient aNullGrad(RGB_Color(COL_BLACK), RGB_Color(COL_WHITE));
     const XHatch aNullHatch(aNullLineCol);
 
     // get master pointer, evtl. add myself to the end of the pools
@@ -118,7 +118,6 @@ XOutdevItemPool::XOutdevItemPool(
     mppLocalPoolDefaults[XATTR_FORMTXTSHDWCOLOR   -XATTR_START] = new XFormTextShadowColorItem(aNullStr,aNullShadowCol);
     mppLocalPoolDefaults[XATTR_FORMTXTSHDWXVAL    -XATTR_START] = new XFormTextShadowXValItem;
     mppLocalPoolDefaults[XATTR_FORMTXTSHDWYVAL    -XATTR_START] = new XFormTextShadowYValItem;
-    mppLocalPoolDefaults[XATTR_FORMTXTSTDFORM     -XATTR_START] = new XFormTextStdFormItem;
     mppLocalPoolDefaults[XATTR_FORMTXTHIDEFORM    -XATTR_START] = new XFormTextHideFormItem;
     mppLocalPoolDefaults[XATTR_FORMTXTSHDWTRANSP  -XATTR_START] = new XFormTextShadowTranspItem;
 
@@ -161,8 +160,14 @@ XOutdevItemPool::XOutdevItemPool(
     mpLocalItemInfos[XATTR_FORMTXTSHDWCOLOR -XATTR_START]._nSID = SID_FORMTEXT_SHDWCOLOR;
     mpLocalItemInfos[XATTR_FORMTXTSHDWXVAL  -XATTR_START]._nSID = SID_FORMTEXT_SHDWXVAL;
     mpLocalItemInfos[XATTR_FORMTXTSHDWYVAL  -XATTR_START]._nSID = SID_FORMTEXT_SHDWYVAL;
-    mpLocalItemInfos[XATTR_FORMTXTSTDFORM   -XATTR_START]._nSID = SID_FORMTEXT_STDFORM;
     mpLocalItemInfos[XATTR_FORMTXTHIDEFORM  -XATTR_START]._nSID = SID_FORMTEXT_HIDEFORM;
+
+    // associate new slots for panels with known items
+    mpLocalItemInfos[XATTR_FILLTRANSPARENCE - XATTR_START]._nSID = SID_ATTR_FILL_TRANSPARENCE;
+    mpLocalItemInfos[XATTR_FILLFLOATTRANSPARENCE - XATTR_START]._nSID = SID_ATTR_FILL_FLOATTRANSPARENCE;
+    mpLocalItemInfos[XATTR_LINETRANSPARENCE - XATTR_START]._nSID = SID_ATTR_LINE_TRANSPARENCE;
+    mpLocalItemInfos[XATTR_LINEJOINT - XATTR_START]._nSID = SID_ATTR_LINE_JOINT;
+    mpLocalItemInfos[XATTR_LINECAP - XATTR_START]._nSID = SID_ATTR_LINE_CAP;
 
     // if it's my own creation level, set Defaults and ItemInfos
     if(XATTR_START == GetFirstWhich() && XATTR_END == GetLastWhich())

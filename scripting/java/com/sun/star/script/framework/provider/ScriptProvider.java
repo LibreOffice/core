@@ -138,7 +138,7 @@ public abstract class ScriptProvider
                 new Type(XMacroExpander.class), serviceObj);
 
             XMLParserFactory.setOfficeDTDURL(me.expandMacros(
-                "${$BRAND_BASE_DIR/program/bootstraprc::BaseInstallation}/share/dtd/officedocument/1_0/"));
+                "${$OOO_BASE_DIR/program/bootstraprc::BaseInstallation}/share/dtd/officedocument/1_0/"));
 
         }
         catch ( Exception e )
@@ -214,20 +214,20 @@ public abstract class ScriptProvider
                     if ( originalContextURL.startsWith( "bundled" ) )
                     {
                         contextUrl = "vnd.sun.star.expand:$BUNDLED_EXTENSIONS";
-                        extensionDb = "vnd.sun.star.expand:${$BRAND_BASE_DIR/program/" + PathUtils.BOOTSTRAP_NAME + "::UserInstallation}/user";
+                        extensionDb = "vnd.sun.star.expand:${$OOO_BASE_DIR/program/" + PathUtils.BOOTSTRAP_NAME + "::UserInstallation}/user";
                         extensionRepository = "bundled";
                     }
 
                     if ( originalContextURL.startsWith( "share" ) )
                     {
-                        contextUrl = "vnd.sun.star.expand:${$BRAND_BASE_DIR/program/" + PathUtils.BOOTSTRAP_NAME + "::BaseInstallation}/share";
-                        extensionDb = "vnd.sun.star.expand:${$BRAND_BASE_DIR/program/" + PathUtils.BOOTSTRAP_NAME + "::UserInstallation}/user";
+                        contextUrl = "vnd.sun.star.expand:${$OOO_BASE_DIR/program/" + PathUtils.BOOTSTRAP_NAME + "::BaseInstallation}/share";
+                        extensionDb = "vnd.sun.star.expand:${$OOO_BASE_DIR/program/" + PathUtils.BOOTSTRAP_NAME + "::UserInstallation}/user";
                         extensionRepository = "shared";
                     }
                     else if ( originalContextURL.startsWith( "user" ) )
                     {
-                        contextUrl = "vnd.sun.star.expand:${$BRAND_BASE_DIR/program/" + PathUtils.BOOTSTRAP_NAME + "::UserInstallation}/user";
-                        extensionDb = "vnd.sun.star.expand:${$BRAND_BASE_DIR/program/" + PathUtils.BOOTSTRAP_NAME + "::UserInstallation}/user";
+                        contextUrl = "vnd.sun.star.expand:${$OOO_BASE_DIR/program/" + PathUtils.BOOTSTRAP_NAME + "::UserInstallation}/user";
+                        extensionDb = "vnd.sun.star.expand:${$OOO_BASE_DIR/program/" + PathUtils.BOOTSTRAP_NAME + "::UserInstallation}/user";
                         extensionRepository = "user";
                     }
 

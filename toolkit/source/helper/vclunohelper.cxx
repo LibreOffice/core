@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_toolkit.hxx"
 
@@ -42,9 +40,7 @@
 #include <com/sun/star/awt/MouseButton.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/embed/EmbedMapUnits.hpp>
-
 #include <com/sun/star/graphic/XGraphic.hpp>
-
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <toolkit/awt/vclxbitmap.hxx>
@@ -55,12 +51,11 @@
 #include <toolkit/awt/vclxfont.hxx>
 #include <toolkit/controls/unocontrolcontainer.hxx>
 #include <toolkit/controls/unocontrolcontainermodel.hxx>
-
 #include <vcl/graph.hxx>
 #include <comphelper/processfactory.hxx>
-
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/awt/Point.hpp>
+#include <vcl/dibtools.hxx>
 
 using namespace ::com::sun::star;
 
@@ -101,12 +96,12 @@ BitmapEx VCLUnoHelper::GetBitmap( const ::com::sun::star::uno::Reference< ::com:
             {
                 ::com::sun::star::uno::Sequence<sal_Int8> aBytes = rxBitmap->getDIB();
                 SvMemoryStream aMem( (char*) aBytes.getArray(), aBytes.getLength(), STREAM_READ );
-                aMem >> aDIB;
+                ReadDIB(aDIB, aMem, true);
             }
             {
                 ::com::sun::star::uno::Sequence<sal_Int8> aBytes = rxBitmap->getMaskDIB();
                 SvMemoryStream aMem( (char*) aBytes.getArray(), aBytes.getLength(), STREAM_READ );
-                aMem >> aMask;
+                ReadDIB(aMask, aMem, true);
             }
             aBmp = BitmapEx( aDIB, aMask );
         }

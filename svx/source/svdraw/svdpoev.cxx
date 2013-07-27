@@ -112,7 +112,7 @@ void SdrPolyEditView::CheckPolyPossibilitiesHelper(
 
         const basegfx::B2DPolyPolygon aMarkedPolyPolygon(rMarkedSdrPathObj.getB2DPolyPolygonInObjectCoordinates());
 
-        for(sdr::selection::Indices::iterator aCurrent(rMarkedPoints.begin());
+        for(sdr::selection::Indices::const_iterator aCurrent(rMarkedPoints.begin());
             aCurrent != rMarkedPoints.end(); aCurrent++)
         {
             sal_uInt32 nNum(*aCurrent);

@@ -24,14 +24,7 @@
 #ifndef UDKSERVICE_X2CSTL_HXX
 #define UDKSERVICE_X2CSTL_HXX
 
-
-#if STLPORT_VERSION < 321
-#include <tools/presys.h>
-#include    <vector.h>
-#include <tools/postsys.h>
-#else
 #include    <vector>
-#endif  // STLPORT_VERSION < 321
 
 #ifdef _USE_NO_NAMERSPACES_
 #define std

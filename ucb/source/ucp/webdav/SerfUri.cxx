@@ -28,7 +28,7 @@
 #include <rtl/ustrbuf.hxx>
 #include "SerfUri.hxx"
 #include "DAVException.hxx"
-#include <AprEnv.hxx>
+#include "AprEnv.hxx"
 
 #include "../inc/urihelper.hxx"
 

@@ -80,9 +80,8 @@ namespace vclcanvas
         BackBufferSharedPtr pBackBuffer( new BackBuffer( rOutDevProvider->getOutDev() ) );
         pBackBuffer->setSize( aSize );
 
-        // create mask backbuffer, with one bit color depth
-        BackBufferSharedPtr pBackBufferMask( new BackBuffer( rOutDevProvider->getOutDev(),
-                                                             true ) );
+        // create mask backbuffer, with one bit color depth #122485# use full depth to avoid problem with 1bit depth, get AAed masks
+        BackBufferSharedPtr pBackBufferMask( new BackBuffer( rOutDevProvider->getOutDev() ) ); // , true ) ); // #122485#
         pBackBufferMask->setSize( aSize );
 
         // TODO(F1): Implement alpha vdev (could prolly enable

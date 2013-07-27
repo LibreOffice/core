@@ -30,19 +30,23 @@ Profile gid_Profile_Uno_Ini
   #else
     Name = "uno.ini";
   #endif
-    Dir = gid_Dir_Program;
+    Dir = gid_Brand_Dir_Program;
+//    Dir = gid_Dir_Program;
     Styles = (NETWORK);
 End
 
 Profile gid_Profile_Version_Ini_Basis
     ModuleID = gid_Module_Root;
     Name = PROFILENAME(version);
-    Dir = gid_Dir_Program;
+    Dir = gid_Brand_Dir_Program;
+//    Dir = gid_Dir_Program;
     Styles = ();
 End
 
 Profile gid_Profile_Fundamentalbasis_Ini
     ModuleID = gid_Module_Root;
-    Name = PROFILENAME(fundamentalbasis);
-    Dir = gid_Dir_Program;
+    Name = PROFILENAME(fundamental);
+//    Name = PROFILENAME(fundamentalbasis);
+    Dir = gid_Brand_Dir_Program;
+//    Dir = gid_Dir_Program;
 End

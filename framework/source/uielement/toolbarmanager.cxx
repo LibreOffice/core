@@ -64,6 +64,7 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/ToolbarControllerFactory.hpp>
 #include <com/sun/star/ui/XUIElementSettings.hpp>
 #include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
 #include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
@@ -84,6 +85,7 @@
 #include <toolkit/unohlp.hxx>
 #endif
 #include <comphelper/mediadescriptor.hxx>
+#include <comphelper/processfactory.hxx>
 #include <svtools/miscopt.hxx>
 #include <svl/imageitm.hxx>
 #include <svtools/framestatuslistener.hxx>
@@ -269,15 +271,13 @@ ToolBarManager::ToolBarManager( const Reference< XMultiServiceFactory >& rServic
     if ( pWindow )
         ((SystemWindow *)pWindow)->GetTaskPaneList()->AddWindow( m_pToolBar );
 
-    if ( m_xServiceManager.is() )
+    Reference< XComponentContext > xContext(::comphelper::getProcessComponentContext());
+    if ( xContext.is() )
     {
-        m_xToolbarControllerRegistration = Reference< XUIControllerRegistration >(
-                                                    m_xServiceManager->createInstance( SERVICENAME_TOOLBARCONTROLLERFACTORY ),
-                                                UNO_QUERY );
+        m_xToolbarControllerFactory = frame::ToolbarControllerFactory::create( xContext );
 
-        m_xURLTransformer.set( m_xServiceManager->createInstance(
-                                                                SERVICENAME_URLTRANSFORMER),
-                                                             UNO_QUERY );
+        m_xURLTransformer.set( xContext->getServiceManager()->createInstanceWithContext(
+            SERVICENAME_URLTRANSFORMER, xContext), UNO_QUERY );
     }
 
     m_pToolBar->SetSelectHdl( LINK( this, ToolBarManager, Select) );
@@ -928,7 +928,6 @@ void ToolBarManager::CreateControllers()
 {
     RTL_LOGFILE_CONTEXT( aLog, "framework (cd100003) ::ToolBarManager::CreateControllers" );
 
-    Reference< XMultiComponentFactory > xToolbarControllerFactory( m_xToolbarControllerRegistration, UNO_QUERY );
     Reference< XComponentContext > xComponentContext;
     Reference< XPropertySet > xProps( m_xServiceManager, UNO_QUERY );
     Reference< XWindow > xToolbarWindow = VCLUnoHelper::GetInterface( m_pToolBar );
@@ -968,40 +967,40 @@ void ToolBarManager::CreateControllers()
             }
         }
 
-        if ( m_xToolbarControllerRegistration.is() &&
-             m_xToolbarControllerRegistration->hasController( aCommandURL, m_aModuleIdentifier ))
+        if ( m_xToolbarControllerFactory.is() &&
+             m_xToolbarControllerFactory->hasController( aCommandURL, m_aModuleIdentifier ))
         {
-            if ( xToolbarControllerFactory.is() )
+            PropertyValue aPropValue;
+            std::vector< Any > aPropertyVector;
+
+            aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ModuleIdentifier" ));
+            aPropValue.Value    <<= m_aModuleIdentifier;
+            aPropertyVector.push_back( makeAny( aPropValue ));
+            aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
+            aPropValue.Value    <<= m_xFrame;
+            aPropertyVector.push_back( makeAny( aPropValue ));
+            aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ServiceManager" ));
+            aPropValue.Value    <<= m_xServiceManager;
+            aPropertyVector.push_back( makeAny( aPropValue ));
+            aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ParentWindow" ));
+            aPropValue.Value    <<= xToolbarWindow;
+            aPropertyVector.push_back( makeAny( aPropValue ));
+            aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Identifier" ));
+            aPropValue.Value    = uno::makeAny( nId );
+            aPropertyVector.push_back( uno::makeAny( aPropValue ) );
+
+            if ( nWidth > 0 )
             {
-                PropertyValue aPropValue;
-                std::vector< Any > aPropertyVector;
-
-                aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ModuleName" ));
-                aPropValue.Value    <<= m_aModuleIdentifier;
+                aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Width" ));
+                aPropValue.Value    <<= nWidth;
                 aPropertyVector.push_back( makeAny( aPropValue ));
-                aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
-                aPropValue.Value    <<= m_xFrame;
-                aPropertyVector.push_back( makeAny( aPropValue ));
-                aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ServiceManager" ));
-                aPropValue.Value    <<= m_xServiceManager;
-                aPropertyVector.push_back( makeAny( aPropValue ));
-                aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ParentWindow" ));
-                aPropValue.Value    <<= xToolbarWindow;
-                aPropertyVector.push_back( makeAny( aPropValue ));
-
-                if ( nWidth > 0 )
-                {
-                    aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Width" ));
-                    aPropValue.Value    <<= nWidth;
-                    aPropertyVector.push_back( makeAny( aPropValue ));
-                }
-
-                Sequence< Any > aArgs( comphelper::containerToSequence( aPropertyVector ));
-                xController = Reference< XStatusListener >( xToolbarControllerFactory->createInstanceWithArgumentsAndContext(
-                                                                aCommandURL, aArgs, xComponentContext ),
-                                                            UNO_QUERY );
-                bInit = sal_False; // Initialization is done through the factory service
             }
+
+            Sequence< Any > aArgs( comphelper::containerToSequence( aPropertyVector ));
+            xController = Reference< XStatusListener >( m_xToolbarControllerFactory->createInstanceWithArgumentsAndContext(
+                                                            aCommandURL, aArgs, xComponentContext ),
+                                                        UNO_QUERY );
+            bInit = sal_False; // Initialization is done through the factory service
         }
 
         if (( aCommandURL == aLoadURL ) && ( !m_pToolBar->IsItemVisible(nId)))
@@ -1098,9 +1097,12 @@ void ToolBarManager::CreateControllers()
                 aPropValue.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ParentWindow" ));
                 aPropValue.Value <<= xToolbarWindow;
                 aPropertyVector.push_back( makeAny( aPropValue ));
-                aPropValue.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ModuleName" ));
+                aPropValue.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ModuleIdentifier" ));
                 aPropValue.Value <<= m_aModuleIdentifier;
                 aPropertyVector.push_back( makeAny( aPropValue ));
+                aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Identifier" ));
+                aPropValue.Value    = uno::makeAny( nId );
+                aPropertyVector.push_back( uno::makeAny( aPropValue ) );
 
                 if ( nWidth > 0 )
                 {
@@ -1316,9 +1318,12 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                             try
                             {
                                 Reference< XIndexAccess > xMenuContainer;
-                                if ( m_xDocUICfgMgr.is() )
+                                if ( m_xDocUICfgMgr.is() &&
+                                     m_xDocUICfgMgr->hasSettings( aCommandURL ) )
                                     xMenuContainer  = m_xDocUICfgMgr->getSettings( aCommandURL, sal_False );
-                                if ( !xMenuContainer.is() && m_xUICfgMgr.is() )
+                                if ( !xMenuContainer.is() &&
+                                     m_xUICfgMgr.is() &&
+                                     m_xUICfgMgr->hasSettings( aCommandURL ) )
                                     xMenuContainer = m_xUICfgMgr->getSettings( aCommandURL, sal_False );
                                 if ( xMenuContainer.is() && xMenuContainer->getCount() )
                                 {
@@ -1365,7 +1370,10 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
 
                     sal_uInt16 nItemBits = ConvertStyleToToolboxItemBits( nStyle );
                     if ( aMenuDesc.is() )
+                    {
                         m_aMenuMap[ nId ] = aMenuDesc;
+                        nItemBits |= TIB_DROPDOWNONLY;
+                    }
                     m_pToolBar->InsertItem( nId, aString, nItemBits );
                     m_pToolBar->SetItemCommand( nId, aCommandURL );
                     if ( aTooltip.getLength() )

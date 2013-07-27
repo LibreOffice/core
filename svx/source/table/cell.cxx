@@ -111,7 +111,7 @@ namespace sdr
         {
         protected:
             // create a new itemset
-            SfxItemSet& CreateObjectSpecificItemSet(SfxItemPool& rPool);
+            virtual SfxItemSet& CreateObjectSpecificItemSet(SfxItemPool& rPool);
 
         public:
             // basic constructor
@@ -124,15 +124,15 @@ namespace sdr
             ~CellProperties();
 
             // Clone() operator, normally just calls the local copy constructor
-            BaseProperties& Clone(SdrObject& rObj) const;
+            virtual BaseProperties& Clone(SdrObject& rObj) const;
 
-            void ForceDefaultAttributes();
+            virtual void ForceDefaultAttributes();
 
-            void ItemSetChanged(const SfxItemSet& rSet);
+            virtual void ItemSetChanged(const SfxItemSet& rSet);
 
-            void ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem);
+            virtual void ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem);
 
-            void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr);
+            virtual void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr);
 
             sdr::table::CellRef mxCell;
         };
@@ -274,7 +274,7 @@ namespace sdr
             AttributeProperties::ItemChange( nWhich, pNewItem );
         }
 
-        void CellProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr)
+        void CellProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr)
         {
             TextProperties::SetStyleSheet( pNewStyleSheet, bDontRemoveHardAttr );
         }

@@ -1005,6 +1005,11 @@ void IMapWindow::CreateDefaultObject()
                         pSdrPathObj->setB2DPolyPolygonInObjectCoordinates(basegfx::B2DPolyPolygon(aInnerPoly));
                         break;
                     }
+                    default: // PathType_Line, PathType_OpenPolygon, PathType_OpenBezier
+                    {
+                        OSL_ENSURE(false, "IMapWindow uses non-closed path definitions (!)");
+                        break;
+                    }
                 }
             }
         }

@@ -215,8 +215,8 @@ void FmXUndoEnvironment::dispose()
 
     Lock();
 
-    sal_uInt16 nCount = rModel.GetPageCount();
-    sal_uInt16 i;
+    sal_uInt32 nCount = rModel.GetPageCount();
+    sal_uInt32 i;
     for (i = 0; i < nCount; i++)
     {
         FmFormPage* pPage = dynamic_cast< FmFormPage* >( rModel.GetPage(i) );
@@ -266,8 +266,8 @@ void FmXUndoEnvironment::ModeChanged()
     {
         bReadOnly = !bReadOnly;
 
-        sal_uInt16 nCount = rModel.GetPageCount();
-        sal_uInt16 i;
+        sal_uInt32 nCount = rModel.GetPageCount();
+        sal_uInt32 i;
         for (i = 0; i < nCount; i++)
         {
             FmFormPage* pPage = dynamic_cast< FmFormPage* >( rModel.GetPage(i) );

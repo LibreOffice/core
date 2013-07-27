@@ -149,7 +149,7 @@ public class ChXDiagram extends TestCase {
 
         try {
             log.println( "creating a sheetdocument" );
-            xSheetDoc = SOF.createCalcDoc(null);;
+            xSheetDoc = SOF.createCalcDoc(null);
         } catch (com.sun.star.uno.Exception e) {
             // Some exception occures.FAILED
             e.printStackTrace( log );
@@ -188,7 +188,7 @@ public class ChXDiagram extends TestCase {
     * <ul>
     *  <li> <code>'CHARTDOC'</code> for
     *      {@link ifc.chart._Dim3DDiagram}, {@link ifc.chart._StockDiagram},
-    *      {@link ifc.chart._ChartAxisZSupplier}, {@link _LineDiagram},
+    *      {@link ifc.chart._ChartAxisZSupplier}, {@link ifc.chart._LineDiagram},
     *      {@link ifc.chart._BarDiagram}, {@link ifc.chart._Diagram},
     *      {@link ifc.chart._ChartTwoAxisYSupplier},
     *      {@link ifc.chart._StackableDiagram}, {@link ifc.chart._Diagram},

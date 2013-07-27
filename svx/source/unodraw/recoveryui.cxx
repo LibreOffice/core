@@ -186,7 +186,7 @@ static OUString GetCrashConfigDir()
 {
 
 #if defined(WNT) || defined(OS2)
-    OUString    ustrValue = OUString::createFromAscii("${$BRAND_BASE_DIR/program/bootstrap.ini:UserInstallation}");
+    OUString    ustrValue = OUString::createFromAscii("${$OOO_BASE_DIR/program/bootstrap.ini:UserInstallation}");
 #elif defined(MACOSX)
     OUString    ustrValue = OUString::createFromAscii("~");
 #else

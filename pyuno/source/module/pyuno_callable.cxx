@@ -44,8 +44,6 @@ namespace pyuno
 typedef struct
 {
     Reference<XInvocation2> xInvocation;
-    Reference<XSingleServiceFactory> xInvocationFactory;
-    Reference<XTypeConverter> xTypeConverter;
     OUString methodName;
     ConversionMode mode;
 } PyUNO_callable_Internals;
@@ -199,7 +197,11 @@ static PyTypeObject PyUNO_callable_Type =
     (printfunc) 0,
     (getattrfunc) 0,
     (setattrfunc) 0,
+#if PY_MAJOR_VERSION >= 3
+    0,
+#else
     (cmpfunc) 0,
+#endif
     (reprfunc) 0,
     0,
     0,
@@ -245,8 +247,6 @@ static PyTypeObject PyUNO_callable_Type =
 PyRef PyUNO_callable_new (
     const Reference<XInvocation2> &my_inv,
     const OUString & methodName,
-    const Reference<XSingleServiceFactory> &xInvocationFactory,
-    const Reference<XTypeConverter> &tc,
     enum ConversionMode mode )
 {
     PyUNO_callable* self;
@@ -258,8 +258,6 @@ PyRef PyUNO_callable_new (
     self->members = new PyUNO_callable_Internals;
     self->members->xInvocation = my_inv;
     self->members->methodName = methodName;
-    self->members->xInvocationFactory = xInvocationFactory;
-    self->members->xTypeConverter = tc;
     self->members->mode = mode;
 
     return PyRef( (PyObject*)self, SAL_NO_ACQUIRE );

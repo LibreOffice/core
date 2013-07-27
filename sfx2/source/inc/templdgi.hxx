@@ -237,8 +237,8 @@ protected:
     void                SaveFactoryStyleFilter( SfxObjectShell* i_pObjSh, sal_Int32 i_nFilter );
 
 public:
-    SfxCommonTemplateDialog_Impl( SfxBindings* pB, SfxDockingWindow* );
-    SfxCommonTemplateDialog_Impl( SfxBindings* pB, ModalDialog* );
+    SfxCommonTemplateDialog_Impl( SfxBindings* pB, Window*, bool );
+    SfxCommonTemplateDialog_Impl( SfxBindings* pB, Window* );
     ~SfxCommonTemplateDialog_Impl();
 
     DECL_LINK( MenuSelectHdl, Menu * );
@@ -293,9 +293,10 @@ private:
     friend class SfxTemplateControllerItem;
     friend class SfxTemplateDialogWrapper;
     friend class DropToolBox_Impl;
+    friend class SfxTemplatePanelControl;
 
-    SfxTemplateDialog*  m_pFloat;
-    sal_Bool                m_bZoomIn;
+    Window* m_pFloat;
+    sal_Bool            m_bZoomIn;
     DropToolBox_Impl    m_aActionTbL;
     ToolBox             m_aActionTbR;
 
@@ -324,8 +325,11 @@ protected:
 
 public:
     friend class SfxTemplateDialog;
-    SfxTemplateDialog_Impl( Window* pParent, SfxBindings*, SfxTemplateDialog* pWindow );
+    SfxTemplateDialog_Impl( SfxBindings*, SfxTemplateDialog* pDlgWindow );
+    SfxTemplateDialog_Impl( SfxBindings*, SfxTemplatePanelControl* pDlgWindow );
     ~SfxTemplateDialog_Impl();
+
+    void Initialize (void);
 };
 
 // class SfxTemplateCatalog_Impl -----------------------------------------

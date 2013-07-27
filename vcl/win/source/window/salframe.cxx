@@ -1053,16 +1053,16 @@ WinSalFrame::~WinSalFrame()
 
     // Release Cache DC
     if ( mpGraphics2 &&
-         mpGraphics2->mhDC )
+         mpGraphics2->getHDC() )
         ReleaseGraphics( mpGraphics2 );
 
     // destroy saved DC
     if ( mpGraphics )
     {
         if ( mpGraphics->mhDefPal )
-            SelectPalette( mpGraphics->mhDC, mpGraphics->mhDefPal, TRUE );
+            SelectPalette( mpGraphics->getHDC(), mpGraphics->mhDefPal, TRUE );
         ImplSalDeInitGraphics( mpGraphics );
-        ReleaseDC( mhWnd, mpGraphics->mhDC );
+        ReleaseDC( mhWnd, mpGraphics->getHDC() );
         delete mpGraphics;
         mpGraphics = NULL;
     }
@@ -1109,7 +1109,7 @@ SalGraphics* WinSalFrame::GetGraphics()
         if ( !mpGraphics2 )
         {
             mpGraphics2 = new WinSalGraphics;
-            mpGraphics2->mhDC        = 0;
+            mpGraphics2->setHDC(0);
             mpGraphics2->mhWnd       = mhWnd;
             mpGraphics2->mbPrinter   = FALSE;
             mpGraphics2->mbVirDev    = FALSE;
@@ -1122,7 +1122,7 @@ SalGraphics* WinSalFrame::GetGraphics()
                                         (WPARAM)mhWnd, 0 );
         if ( hDC )
         {
-            mpGraphics2->mhDC = hDC;
+            mpGraphics2->setHDC(hDC);
             if ( pSalData->mhDitherPal )
             {
                 mpGraphics2->mhDefPal = SelectPalette( hDC, pSalData->mhDitherPal, TRUE );
@@ -1145,7 +1145,7 @@ SalGraphics* WinSalFrame::GetGraphics()
             if ( hDC )
             {
                 mpGraphics = new WinSalGraphics;
-                mpGraphics->mhDC      = hDC;
+                mpGraphics->setHDC(hDC);
                 mpGraphics->mhWnd     = mhWnd;
                 mpGraphics->mbPrinter = FALSE;
                 mpGraphics->mbVirDev  = FALSE;
@@ -1173,17 +1173,17 @@ void WinSalFrame::ReleaseGraphics( SalGraphics* pGraphics )
 {
     if ( mpGraphics2 == pGraphics )
     {
-        if ( mpGraphics2->mhDC )
+        if ( mpGraphics2->getHDC() )
         {
             SalData* pSalData = GetSalData();
             if ( mpGraphics2->mhDefPal )
-                SelectPalette( mpGraphics2->mhDC, mpGraphics2->mhDefPal, TRUE );
+                SelectPalette( mpGraphics2->getHDC(), mpGraphics2->mhDefPal, TRUE );
             ImplSalDeInitGraphics( mpGraphics2 );
             ImplSendMessage( pSalData->mpFirstInstance->mhComWnd,
                              SAL_MSG_RELEASEDC,
                              (WPARAM)mhWnd,
-                             (LPARAM)mpGraphics2->mhDC );
-            mpGraphics2->mhDC = 0;
+                             (LPARAM)mpGraphics2->getHDC() );
+            mpGraphics2->setHDC(0);
             pSalData->mnCacheDCInUse--;
         }
     }
@@ -1679,12 +1679,12 @@ static void ImplSetParentFrame( WinSalFrame* pThis, HWND hNewParentWnd, sal_Bool
 
     // Release Cache DC
     if ( pThis->mpGraphics2 &&
-         pThis->mpGraphics2->mhDC )
+         pThis->mpGraphics2->getHDC() )
     {
         // save current gdi objects before hdc is gone
-        hFont   = (HFONT)   GetCurrentObject( pThis->mpGraphics2->mhDC, OBJ_FONT);
-        hPen    = (HPEN)    GetCurrentObject( pThis->mpGraphics2->mhDC, OBJ_PEN);
-        hBrush  = (HBRUSH)  GetCurrentObject( pThis->mpGraphics2->mhDC, OBJ_BRUSH);
+        hFont   = (HFONT)   GetCurrentObject( pThis->mpGraphics2->getHDC(), OBJ_FONT);
+        hPen    = (HPEN)    GetCurrentObject( pThis->mpGraphics2->getHDC(), OBJ_PEN);
+        hBrush  = (HBRUSH)  GetCurrentObject( pThis->mpGraphics2->getHDC(), OBJ_BRUSH);
         pThis->ReleaseGraphics( pThis->mpGraphics2 );
 
         // recreate cache dc only if it was destroyed
@@ -1695,9 +1695,9 @@ static void ImplSetParentFrame( WinSalFrame* pThis, HWND hNewParentWnd, sal_Bool
     if ( pThis->mpGraphics )
     {
         if ( pThis->mpGraphics->mhDefPal )
-            SelectPalette( pThis->mpGraphics->mhDC, pThis->mpGraphics->mhDefPal, TRUE );
+            SelectPalette( pThis->mpGraphics->getHDC(), pThis->mpGraphics->mhDefPal, TRUE );
         ImplSalDeInitGraphics( pThis->mpGraphics );
-        ReleaseDC( pThis->mhWnd, pThis->mpGraphics->mhDC );
+        ReleaseDC( pThis->mhWnd, pThis->mpGraphics->getHDC() );
     }
 
     // create a new hwnd with the same styles
@@ -1725,7 +1725,7 @@ static void ImplSetParentFrame( WinSalFrame* pThis, HWND hNewParentWnd, sal_Bool
                                                 (WPARAM) hWnd, 0 );
                 if ( hDC )
                 {
-                    pThis->mpGraphics2->mhDC = hDC;
+                    pThis->mpGraphics2->setHDC(hDC);
                     if ( pSalData->mhDitherPal )
                     {
                         pThis->mpGraphics2->mhDefPal = SelectPalette( hDC, pSalData->mhDitherPal, TRUE );
@@ -1754,11 +1754,11 @@ static void ImplSetParentFrame( WinSalFrame* pThis, HWND hNewParentWnd, sal_Bool
         {
             // re-create DC
             pThis->mpGraphics->mhWnd = hWnd;
-            pThis->mpGraphics->mhDC = GetDC( hWnd );
+            pThis->mpGraphics->setHDC( GetDC( hWnd ) );
             if ( GetSalData()->mhDitherPal )
             {
-                pThis->mpGraphics->mhDefPal = SelectPalette( pThis->mpGraphics->mhDC, GetSalData()->mhDitherPal, TRUE );
-                RealizePalette( pThis->mpGraphics->mhDC );
+                pThis->mpGraphics->mhDefPal = SelectPalette( pThis->mpGraphics->getHDC(), GetSalData()->mhDitherPal, TRUE );
+                RealizePalette( pThis->mpGraphics->getHDC() );
             }
             ImplSalInitGraphics( pThis->mpGraphics );
             pThis->mbGraphics = TRUE;
@@ -3724,8 +3724,8 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
     // Wir restaurieren den Background-Modus bei jeder Texteingabe,
     // da einige Tools wie RichWin uns diesen hin- und wieder umsetzen
     if ( pFrame->mpGraphics &&
-         pFrame->mpGraphics->mhDC )
-        SetBkMode( pFrame->mpGraphics->mhDC, TRANSPARENT );
+         pFrame->mpGraphics->getHDC() )
+        SetBkMode( pFrame->mpGraphics->getHDC(), TRANSPARENT );
 
     // determine modifiers
     if ( GetKeyState( VK_SHIFT ) & 0x8000 )
@@ -4088,7 +4088,7 @@ static bool ImplHandlePaintMsg( HWND hWnd )
         // Clip-Region muss zurueckgesetzt werden, da wir sonst kein
         // ordentliches Bounding-Rectangle bekommen
         if ( pFrame->mpGraphics && pFrame->mpGraphics->mhRegion )
-            SelectClipRgn( pFrame->mpGraphics->mhDC, 0 );
+            SelectClipRgn( pFrame->mpGraphics->getHDC(), 0 );
 
         // Laut Window-Doku soll man erst abfragen, ob ueberhaupt eine
         // Paint-Region anliegt
@@ -4105,7 +4105,7 @@ static bool ImplHandlePaintMsg( HWND hWnd )
             // ClipRegion wieder herstellen
             if ( pFrame->mpGraphics && pFrame->mpGraphics->mhRegion )
             {
-                SelectClipRgn( pFrame->mpGraphics->mhDC,
+                SelectClipRgn( pFrame->mpGraphics->getHDC(),
                                pFrame->mpGraphics->mhRegion );
             }
 
@@ -4127,7 +4127,7 @@ static bool ImplHandlePaintMsg( HWND hWnd )
             // ClipRegion wieder herstellen
             if ( pFrame->mpGraphics && pFrame->mpGraphics->mhRegion )
             {
-                SelectClipRgn( pFrame->mpGraphics->mhDC,
+                SelectClipRgn( pFrame->mpGraphics->getHDC(),
                                pFrame->mpGraphics->mhRegion );
             }
         }
@@ -4510,8 +4510,8 @@ static void ImplHandleForcePalette( HWND hWnd )
             WinSalGraphics* pGraphics = pFrame->mpGraphics;
             if ( pGraphics && pGraphics->mhDefPal )
             {
-                SelectPalette( pGraphics->mhDC, hPal, FALSE );
-                if ( RealizePalette( pGraphics->mhDC ) )
+                SelectPalette( pGraphics->getHDC(), hPal, FALSE );
+                if ( RealizePalette( pGraphics->getHDC() ) )
                 {
                     InvalidateRect( hWnd, NULL, FALSE );
                     UpdateWindow( hWnd );
@@ -4575,7 +4575,7 @@ static LRESULT ImplHandlePalette( sal_Bool bFrame, HWND hWnd, UINT nMsg,
         pGraphics = pTempVD->mpGraphics;
         if ( pGraphics->mhDefPal )
         {
-            SelectPalette( pGraphics->mhDC,
+            SelectPalette( pGraphics->getHDC(),
                            pGraphics->mhDefPal,
                            TRUE );
         }
@@ -4587,7 +4587,7 @@ static LRESULT ImplHandlePalette( sal_Bool bFrame, HWND hWnd, UINT nMsg,
         pGraphics = pTempFrame->mpGraphics;
         if ( pGraphics && pGraphics->mhDefPal )
         {
-            SelectPalette( pGraphics->mhDC,
+            SelectPalette( pGraphics->getHDC(),
                            pGraphics->mhDefPal,
                            TRUE );
         }
@@ -4600,7 +4600,7 @@ static LRESULT ImplHandlePalette( sal_Bool bFrame, HWND hWnd, UINT nMsg,
         pFrame = GetWindowPtr( hWnd );
     if ( pFrame && pFrame->mpGraphics )
     {
-        hDC = pFrame->mpGraphics->mhDC;
+        hDC = pFrame->mpGraphics->getHDC();
         bStdDC = TRUE;
     }
     else
@@ -4625,8 +4625,8 @@ static LRESULT ImplHandlePalette( sal_Bool bFrame, HWND hWnd, UINT nMsg,
         pGraphics = pTempVD->mpGraphics;
         if ( pGraphics->mhDefPal )
         {
-            SelectPalette( pGraphics->mhDC, hPal, TRUE );
-            RealizePalette( pGraphics->mhDC );
+            SelectPalette( pGraphics->getHDC(), hPal, TRUE );
+            RealizePalette( pGraphics->getHDC() );
         }
         pTempVD = pTempVD->mpNext;
     }
@@ -4638,8 +4638,8 @@ static LRESULT ImplHandlePalette( sal_Bool bFrame, HWND hWnd, UINT nMsg,
             pGraphics = pTempFrame->mpGraphics;
             if ( pGraphics && pGraphics->mhDefPal )
             {
-                SelectPalette( pGraphics->mhDC, hPal, TRUE );
-                if ( RealizePalette( pGraphics->mhDC ) )
+                SelectPalette( pGraphics->getHDC(), hPal, TRUE );
+                if ( RealizePalette( pGraphics->getHDC() ) )
                     bUpdate = TRUE;
             }
         }
@@ -5520,8 +5520,8 @@ static sal_Bool ImplHandleIMEComposition( HWND hWnd, LPARAM lParam )
         // Wir restaurieren den Background-Modus bei jeder Texteingabe,
         // da einige Tools wie RichWin uns diesen hin- und wieder umsetzen
         if ( pFrame->mpGraphics &&
-             pFrame->mpGraphics->mhDC )
-            SetBkMode( pFrame->mpGraphics->mhDC, TRANSPARENT );
+             pFrame->mpGraphics->getHDC() )
+            SetBkMode( pFrame->mpGraphics->getHDC(), TRANSPARENT );
     }
 
     if ( pFrame && pFrame->mbHandleIME )

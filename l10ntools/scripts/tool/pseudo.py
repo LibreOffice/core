@@ -38,7 +38,7 @@ class PseudoSet:
             tmplist.extend(other)
             return PseudoSet(self._remove_dupes(tmplist))
         else:
-            print "__or__(None)"
+            print("__or__(None)")
 
     def __sub__(self,other):
         tmplist = []
@@ -46,7 +46,7 @@ class PseudoSet:
             tmplist.extend(self._list)
             [tmplist.remove(key) for key in other if key in tmplist]
         else:
-            print "__sub__(none)"
+            print("__sub__(none)")
         return PseudoSet(tmplist)
 
     def __and__(self, other):
@@ -55,13 +55,13 @@ class PseudoSet:
             [tmplist.append(key) for key in self._list if key in other]
             return PseudoSet(tmplist)
         else:
-            print "__and__(None)"
+            print("__and__(None)")
 
     def __iter__(self):
         return self._list.__iter__()
 
     def __items__(self):
-        return self._list.items()
+        return list(self._list.items())
 
     def __keys__(self):
         return keys(self._list)
@@ -70,7 +70,7 @@ class PseudoSet:
         tmpdict = {}
         for key in list:
             tmpdict[key] = 1
-        return tmpdict.keys()
+        return list(tmpdict.keys())
 
 # incomplete OrderedDict() class implementation
 class PseudoOrderedDict(dict):
@@ -79,7 +79,7 @@ class PseudoOrderedDict(dict):
 
     def __init__(self, defaults={}):
         dict.__init__(self)
-        for n,v in defaults.items():
+        for n,v in list(defaults.items()):
             self[n] = v
 
     def __setitem__(self, key, value):
@@ -105,10 +105,10 @@ class PseudoOrderedDict(dict):
 
     def iteritems(self):
         #return self._valuelist
-        return zip(self._keylist, self._valuelist)
+        return list(zip(self._keylist, self._valuelist))
 
     def items(self):
-        return zip(self._keylist,self._valuelist)
+        return list(zip(self._keylist,self._valuelist))
 
     def __keys__(self):
         return self._keylist
@@ -140,23 +140,23 @@ def _testdriver_set():
     list1.append("e")
 
     if "a" in list:
-        print "YEAH!"
+        print("YEAH!")
 
     a = PseudoSet(list)
     b = PseudoSet(list1)
 
-    print "a="+str(a)
-    print "b="+str(b)
-    print "a|b=" + str(a|b)
-    print "a="+str(a)
-    print "b="+str(b)
-    print "a&b=" + str(a&b)
-    print "a="+str(a)
-    print "b="+str(b)
-    print "a-b" + str(a-b)
+    print("a="+str(a))
+    print("b="+str(b))
+    print("a|b=" + str(a|b))
+    print("a="+str(a))
+    print("b="+str(b))
+    print("a&b=" + str(a&b))
+    print("a="+str(a))
+    print("b="+str(b))
+    print("a-b" + str(a-b))
 
     for key in a:
-        print key
+        print(key)
 
 def _testdriver_dict():
     d = PseudoOrderedDict()
@@ -167,12 +167,12 @@ def _testdriver_dict():
     d["e"] = 5
     d["f"] = 6
 
-    print "a="+str(d["a"])
-    print "e="+str(d["e"])
-    for key,value in d.iteritems():
-        print "d["+key+"]="+str(d[key])
-        print "key="+str(key)+" value="+str(value)
+    print("a="+str(d["a"]))
+    print("e="+str(d["e"]))
+    for key,value in d.items():
+        print("d["+key+"]="+str(d[key]))
+        print("key="+str(key)+" value="+str(value))
 
-    print "keys="+str(d.keys())
+    print("keys="+str(list(d.keys())))
 
 #_testdriver_dict()

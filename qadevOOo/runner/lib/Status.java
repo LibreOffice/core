@@ -43,8 +43,8 @@ public class Status extends SimpleStatus {
 
     /**
      * Construct a status: use runState and state
-     * @param runState: either PASSED, SKIPPED, etc.
-     * @param state: OK or FAILED.
+     * @param runState either PASSED, SKIPPED, etc.
+     * @param state OK or FAILED.
      */
     public Status(int runState, boolean state ) {
         super(runState, state);
@@ -52,7 +52,7 @@ public class Status extends SimpleStatus {
 
     /**
      * Construct a status: use own message and state.
-     * @parame messaeg An own message for the status.
+     * @parame message An own message for the status.
      * @param state: OK or FAILED.
      */
     public Status(String message, boolean state) {
@@ -116,7 +116,7 @@ public class Status extends SimpleStatus {
      * "FAILED.The getLabel works wrong", "PASSED.OK".
      */
     public String toString() {
-        String str = getRunStateString() + "." + getStateString();;
+        String str = getRunStateString() + "." + getStateString();
 
         return str;
     }

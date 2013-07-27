@@ -62,7 +62,7 @@ $(eval $(call gb_Library_add_linked_libs,msword,\
     svx \
     svxcore \
     sw \
-    tk \
+    ootk \
     tl \
     ucbhelper \
     utl \

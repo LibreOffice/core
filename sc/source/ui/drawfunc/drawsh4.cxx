@@ -35,7 +35,7 @@
 #include <svx/xdef.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewfrm.hxx>
-
+#include <svx/svdoashp.hxx>
 #include "drawsh.hxx"
 #include "drawview.hxx"
 #include "viewdata.hxx"
@@ -56,7 +56,10 @@ void ScDrawShell::GetFormTextState(SfxItemSet& rSet)
     if ( pViewFrm->HasChildWindow(nId) )
         pDlg = (SvxFontWorkDialog*)(pViewFrm->GetChildWindow(nId)->GetWindow());
 
-    if ( !pObj || !dynamic_cast< const SdrTextObj* >(pObj) || !static_cast< const SdrTextObj* >(pObj)->HasText() )
+    if(!pObj
+        || !dynamic_cast< const SdrTextObj* >(pObj)
+        || !pObj->HasText()
+        || dynamic_cast< const SdrObjCustomShape* >(pObj))
     {
         if ( pDlg )
             pDlg->SetActive(sal_False);
@@ -66,7 +69,6 @@ void ScDrawShell::GetFormTextState(SfxItemSet& rSet)
         rSet.DisableItem(XATTR_FORMTXTDISTANCE);
         rSet.DisableItem(XATTR_FORMTXTSTART);
         rSet.DisableItem(XATTR_FORMTXTMIRROR);
-        rSet.DisableItem(XATTR_FORMTXTSTDFORM);
         rSet.DisableItem(XATTR_FORMTXTHIDEFORM);
         rSet.DisableItem(XATTR_FORMTXTOUTLINE);
         rSet.DisableItem(XATTR_FORMTXTSHADOW);
@@ -83,15 +85,15 @@ void ScDrawShell::GetFormTextState(SfxItemSet& rSet)
             if ( pDocSh )
             {
                 const SfxPoolItem*  pItem = pDocSh->GetItem( SID_COLOR_TABLE );
-                XColorTable*        pColorTable = NULL;
+                XColorListSharedPtr aColorTable;
 
                 if ( pItem )
-                    pColorTable = ((SvxColorTableItem*)pItem)->GetColorTable();
+                    aColorTable = static_cast< const SvxColorTableItem* >(pItem)->GetColorTable();
 
                 pDlg->SetActive();
 
-                if ( pColorTable )
-                    pDlg->SetColorTable( pColorTable );
+                if ( aColorTable.get() )
+                    pDlg->SetColorTable( aColorTable );
                 else
                     { DBG_ERROR( "ColorList not found :-/" ); }
             }

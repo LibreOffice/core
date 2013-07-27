@@ -469,14 +469,17 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
         break;
 
         case SID_HORIZONTAL:  // BASIC
+        case SID_FLIP_HORIZONTAL:
         {
             mpDrawView->MirrorMarkedObjHorizontal();
+            // mpDrawView->MirrorAllMarkedHorizontal(); TTTT: Which one?
             Cancel();
             rReq.Done ();
         }
         break;
 
         case SID_VERTICAL:  // BASIC
+        case SID_FLIP_VERTICAL:
         {
             mpDrawView->MirrorMarkedObjVertical();
             Cancel();

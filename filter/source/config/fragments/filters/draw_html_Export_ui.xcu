@@ -22,6 +22,5 @@
     <node oor:name="draw_html_Export">
         <prop oor:name="UIName">
             <value xml:lang="en-US">HTML Document (%productname% Draw)</value>
-                        <value xml:lang="x-translate">HTML Document (%productname% Draw)</value>
         </prop>
     </node>

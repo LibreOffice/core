@@ -28,6 +28,7 @@
 
 #include <algorithm>
 #include <list>
+#include <vector>
 #include <tools/gen.hxx>
 #include <tools/debug.hxx>
 #include <global.hxx>

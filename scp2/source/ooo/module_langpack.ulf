@@ -710,3 +710,9 @@ en-US = "Asturian"
 
 [STR_DESC_MODULE_LANGPACK_AST]
 en-US = "Installs Asturian support in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_GD]
+en-US = "Gaelic (Scotland)"
+
+[STR_DESC_MODULE_LANGPACK_GD]
+en-US = "Installs Gaelic (Scotland) support in %PRODUCTNAME %PRODUCTVERSION"

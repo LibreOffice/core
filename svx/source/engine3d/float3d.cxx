@@ -536,6 +536,7 @@ void Svx3DWin::Reset()
 
     // Nichts selektieren, um Fehler beim erstselektieren zu vermeiden
     aCtlLightPreview.GetSvx3DLightControl().SelectLight(0);
+    aCtlLightPreview.CheckSelection();
 }
 
 bool Svx3DWin::GetUILightState( ImageButton& aBtn ) const
@@ -1874,7 +1875,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     // Kantenrundung
     if( !aMtrPercentDiagonal.IsEmptyFieldValue() )
     {
-        sal_uInt16 nValue = aMtrPercentDiagonal.GetValue();
+        sal_uInt16 nValue = static_cast< sal_uInt16 >(aMtrPercentDiagonal.GetValue());
         rAttrs.Put(SfxUInt16Item(SDRATTR_3DOBJ_PERCENT_DIAGONAL, nValue));
     }
     else
@@ -1883,7 +1884,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     // Tiefenskalierung
     if( !aMtrBackscale.IsEmptyFieldValue() )
     {
-        sal_uInt16 nValue = aMtrBackscale.GetValue();
+        sal_uInt16 nValue = static_cast< sal_uInt16 >(aMtrBackscale.GetValue());
         rAttrs.Put(SfxUInt16Item(SDRATTR_3DOBJ_BACKSCALE, nValue));
     }
     else
@@ -1892,7 +1893,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     // Endwinkel
     if( !aMtrEndAngle.IsEmptyFieldValue() )
     {
-        sal_uInt16 nValue = aMtrEndAngle.GetValue();
+        sal_uInt32 nValue = static_cast< sal_uInt16 >(aMtrEndAngle.GetValue());
         rAttrs.Put(SfxUInt32Item(SDRATTR_3DOBJ_END_ANGLE, nValue));
     }
     else
@@ -1959,7 +1960,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     // Neigung (Schatten)
     if( !aMtrSlant.IsEmptyFieldValue() )
     {
-        sal_uInt16 nValue2 = aMtrSlant.GetValue();
+        sal_uInt16 nValue2 = static_cast< sal_uInt16 >(aMtrSlant.GetValue());
         rAttrs.Put(SfxUInt16Item(SDRATTR_3DSCENE_SHADOW_SLANT, nValue2));
     }
     else
@@ -2292,7 +2293,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     // Glanzpunkt Intensitaet
     if( !aMtrMatSpecularIntensity.IsEmptyFieldValue() )
     {
-        sal_uInt16 nValue2 = aMtrMatSpecularIntensity.GetValue();
+        sal_uInt16 nValue2 = static_cast< sal_uInt16 >(aMtrMatSpecularIntensity.GetValue());
         rAttrs.Put(SfxUInt16Item(SDRATTR_3DOBJ_MAT_SPECULAR_INTENSITY, nValue2));
     }
     else
@@ -3221,7 +3222,7 @@ void Svx3DWin::DocumentReload()
 // -----------------------------------------------------------------------
 void Svx3DWin::InitColorLB( const SdrModel* pDoc )
 {
-    aLbLight1.Fill( pDoc->GetColorTable() );
+    aLbLight1.Fill( pDoc->GetColorTableFromSdrModel() );
     aLbLight2.CopyEntries( aLbLight1 );
     aLbLight3.CopyEntries( aLbLight1 );
     aLbLight4.CopyEntries( aLbLight1 );

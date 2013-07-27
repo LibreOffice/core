@@ -25,7 +25,7 @@
 #include <serf.h>
 
 #include <sal/types.h>
-#include <DAVRequestEnvironment.hxx>
+#include "DAVRequestEnvironment.hxx"
 
 namespace http_dav_ucp
 {
@@ -66,7 +66,7 @@ protected:
     void handleEndOfResponseData( serf_bucket_t * inSerfResponseBucket ) = 0;
 
     const char* getPathStr() const;
-    const bool useChunkedEncoding() const;
+    bool useChunkedEncoding() const;
 
 private:
     const char* mPathStr;

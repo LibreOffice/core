@@ -26,7 +26,7 @@
 
   <property name="prj" value=".."/>
   <property file="${prj}/java/build.env"/>
-  <property name="build.compiler"   value="classic"/>
+  <property name="build.compiler"   value="modern"/>
   <property name="optimize"   value="on"/>
   <property name="debug"   value="on"/>
   <property name="installerclasses" value="${out}/class/sframeworkinstall"/>

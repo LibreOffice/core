@@ -30,10 +30,10 @@
             Pocket Word
         </converter-display-name>
         <converter-description>
-            OpenOffice Writer XML to/from Pocket Word conversion.
+            OpenOffice.org XML Writer to/from Pocket Word conversion.
         </converter-description>
         <converter-vendor>
-            OpenOffice.org
+            Apache OpenOffice
         </converter-vendor>
         <converter-class-impl>
             org.openoffice.xmerge.converter.xml.sxw.pocketword.PluginFactoryImpl

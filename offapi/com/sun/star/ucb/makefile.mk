@@ -37,7 +37,7 @@ IDLFILES=\
     AlreadyInitializedException.idl\
     AnyCompareFactory.idl\
     AuthenticationRequest.idl\
-    URLAuthenticationRequest.idl\
+    CHAOSProgressStart.idl\
     CachedContentResultSet.idl\
     CachedContentResultSetFactory.idl\
     CachedContentResultSetStub.idl\
@@ -46,7 +46,6 @@ IDLFILES=\
     CachedDynamicResultSetFactory.idl\
     CachedDynamicResultSetStub.idl\
     CachedDynamicResultSetStubFactory.idl\
-    CHAOSProgressStart.idl\
     CertificateValidationRequest.idl\
     Command.idl\
     CommandAbortedException.idl\
@@ -83,6 +82,8 @@ IDLFILES=\
     Error.idl\
     ExpandContentProvider.idl\
     ExportStreamInfo.idl\
+    FTPContent.idl\
+    FTPContentProvider.idl\
     FetchError.idl\
     FetchResult.idl\
     FileContent.idl\
@@ -91,10 +92,8 @@ IDLFILES=\
     FolderList.idl\
     FolderListCommand.idl\
     FolderListEntry.idl\
-    FTPContent.idl\
-    FTPContentProvider.idl\
-    GlobalTransferCommandArgument.idl\
     GIOContentProvider.idl\
+    GlobalTransferCommandArgument.idl\
     GnomeVFSContentProvider.idl\
     GnomeVFSDocumentContent.idl\
     GnomeVFSFolderContent.idl\
@@ -108,6 +107,7 @@ IDLFILES=\
     HierarchyFolderContent.idl\
     HierarchyLinkContent.idl\
     HierarchyRootFolderContent.idl\
+    IOErrorCode.idl\
     IllegalIdentifierException.idl\
     InsertCommandArgument.idl\
     InteractiveAppException.idl\
@@ -117,8 +117,8 @@ IDLFILES=\
     InteractiveFileIOException.idl\
     InteractiveIOException.idl\
     InteractiveLockingException.idl\
-    InteractiveLockingLockedException.idl\
     InteractiveLockingLockExpiredException.idl\
+    InteractiveLockingLockedException.idl\
     InteractiveLockingNotLockedException.idl\
     InteractiveNetworkConnectException.idl\
     InteractiveNetworkException.idl\
@@ -128,12 +128,11 @@ IDLFILES=\
     InteractiveNetworkResolveNameException.idl\
     InteractiveNetworkWriteException.idl\
     InteractiveWrongMediumException.idl\
-    IOErrorCode.idl\
     Link.idl\
     ListAction.idl\
     ListActionType.idl\
-    ListenerAlreadySetException.idl\
     ListEvent.idl\
+    ListenerAlreadySetException.idl\
     Lock.idl\
     LockDepth.idl\
     LockEntry.idl\
@@ -159,6 +158,7 @@ IDLFILES=\
     PostCommandArgument2.idl\
     Priority.idl\
     PropertiesManager.idl\
+    PropertyCommandArgument.idl\
     PropertySetRegistry.idl\
     PropertyValueInfo.idl\
     PropertyValueState.idl\
@@ -191,10 +191,11 @@ IDLFILES=\
     TransferInfo.idl\
     TransferResult.idl\
     TransientDocumentsContentProvider.idl\
-    TransientDocumentsRootContent.idl\
     TransientDocumentsDocumentContent.idl\
     TransientDocumentsFolderContent.idl\
+    TransientDocumentsRootContent.idl\
     TransientDocumentsStreamContent.idl\
+    URLAuthenticationRequest.idl\
     UniversalContentBroker.idl\
     UnsupportedCommandException.idl\
     UnsupportedDataSinkException.idl\
@@ -204,6 +205,7 @@ IDLFILES=\
     WebDAVContentProvider.idl\
     WebDAVDocumentContent.idl\
     WebDAVFolderContent.idl\
+    WebDAVHTTPMethod.idl \
     WelcomeDynamicResultSetStruct.idl\
     XAnyCompare.idl\
     XAnyCompareFactory.idl\
@@ -262,7 +264,7 @@ IDLFILES=\
     XSimpleFileAccess3.idl\
     XSortedDynamicResultSetFactory.idl\
     XSourceInitialization.idl\
-    XWebDAVCommandEnvironment.idl
+    XWebDAVCommandEnvironment.idl \
 
 # ------------------------------------------------------------------
 

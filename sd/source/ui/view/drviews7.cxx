@@ -206,6 +206,18 @@ IMPL_LINK( DrawViewShell, ClipboardChanged, TransferableDataHelper*, pDataHelper
     return 0;
 }
 
+
+
+
+void DrawViewShell::GetDrawAttrState(SfxItemSet& rSet)
+{
+    SfxItemSet aSet( mpDrawView->GetGeoAttrFromMarked() );
+    rSet.Put(aSet,sal_False);
+}
+
+
+
+
 /*************************************************************************
 |*
 |* Status (Enabled/Disabled) von Menue-SfxSlots setzen
@@ -509,6 +521,8 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     {
         rSet.DisableItem( SID_HORIZONTAL );
         rSet.DisableItem( SID_VERTICAL );
+        rSet.DisableItem( SID_FLIP_HORIZONTAL );
+        rSet.DisableItem( SID_FLIP_VERTICAL );
     }
 
     if( !mpDrawView->IsMirrorAllowed() )

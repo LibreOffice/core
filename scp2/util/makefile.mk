@@ -87,13 +87,6 @@ SCP1FILES  = installation_ooo.par          \
 SCP1FILES +=                               \
              directory_ooo_macosx.par      
 .ENDIF
- 
-.IF "$(WITH_BINFILTER)" != "NO"
-SCP1FILES +=                               \
-             module_binfilter.par          \
-             registryitem_binfilter.par    \
-             file_binfilter.par
-.ENDIF
 
 .IF "$(ENABLE_OPENGL)" == "TRUE"
 SCP1FILES +=                               \
@@ -187,7 +180,7 @@ SCP1FILES += \
 .ENDIF
 
 # ------------------------------------------------------------------------
-# OpenOffice.org with JRE
+# Apache OpenOffice with JRE
 
 SCP2LINK_PRODUCT_TYPE=osl
 SCP2TARGET = setup_osljre
@@ -241,13 +234,6 @@ SCP2FILES  = installation_ooo.par          \
 .IF "$(OS)"=="MACOSX" 
 SCP2FILES +=                               \
              directory_ooo_macosx.par      
-.ENDIF
- 
-.IF "$(WITH_BINFILTER)" != "NO"
-SCP2FILES +=                               \
-             module_binfilter.par          \
-             registryitem_binfilter.par    \
-             file_binfilter.par
 .ENDIF
 
 .IF "$(SOLAR_JAVA)"!=""
@@ -327,7 +313,7 @@ SCP2FILES += \
 SCP2FILES += layout.par
 .ENDIF # ENABLE_LAYOUT == TRUE
 
-.IF "$(BUILD_SPECIAL)"!=""
+.IF "$(ENABLE_ONLINE_UPDATE)"!=""
 SCP2FILES += \
              module_onlineupdate.par   \
              file_onlineupdate.par

@@ -44,7 +44,6 @@ SRC1FILES =	\
 # ... exception files .........................
 
 EXCEPTIONSFILES=\
-        $(SLO)$/statusbarontroller.obj	\
         $(SLO)$/RelationControl.obj		\
         $(SLO)$/toolboxcontroller.obj	\
         $(SLO)$/tabletree.obj			\

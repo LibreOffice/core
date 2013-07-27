@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_drawinglayer.hxx"
 
@@ -34,7 +32,6 @@
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
-#include <drawinglayer/primitive2d/metafileprimitive2d.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
@@ -61,6 +58,7 @@
 #include <drawinglayer/primitive2d/pagepreviewprimitive2d.hxx>
 #include <drawinglayer/primitive2d/epsprimitive2d.hxx>
 #include <basegfx/polygon/b2dlinegeometry.hxx>
+#include <vcl/dibtools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // for PDFExtOutDevData Graphic support
@@ -372,6 +370,7 @@ namespace drawinglayer
 
             if(rB2DPolygon.count() && !mnSvtGraphicStrokeCount)
             {
+                basegfx::B2DPolygon aLocalPolygon(rB2DPolygon);
                 basegfx::BColor aStrokeColor;
                 basegfx::B2DPolyPolygon aStartArrow;
                 basegfx::B2DPolyPolygon aEndArrow;
@@ -389,29 +388,37 @@ namespace drawinglayer
                 // SvtGraphicStroke has NO entry for stroke color(!)
                 mpOutputDevice->SetLineColor(Color(aStrokeColor));
 
-                if(!rB2DPolygon.isClosed())
+                if(!aLocalPolygon.isClosed())
                 {
                     double fPolyLength(0.0);
+                    double fStart(0.0);
+                    double fEnd(0.0);
 
                     if(pStart && pStart->isActive())
                     {
-                        fPolyLength = basegfx::tools::getLength(rB2DPolygon);
+                        fPolyLength = basegfx::tools::getLength(aLocalPolygon);
 
                         aStartArrow = basegfx::tools::createAreaGeometryForLineStartEnd(
-                            rB2DPolygon, pStart->getB2DPolyPolygon(), true, pStart->getWidth(),
-                            fPolyLength, pStart->isCentered() ? 0.5 : 0.0, 0);
+                            aLocalPolygon, pStart->getB2DPolyPolygon(), true, pStart->getWidth(),
+                            fPolyLength, pStart->isCentered() ? 0.5 : 0.0, &fStart);
                     }
 
                     if(pEnd && pEnd->isActive())
                     {
                         if(basegfx::fTools::equalZero(fPolyLength))
                         {
-                            fPolyLength = basegfx::tools::getLength(rB2DPolygon);
+                            fPolyLength = basegfx::tools::getLength(aLocalPolygon);
                         }
 
                         aEndArrow = basegfx::tools::createAreaGeometryForLineStartEnd(
-                            rB2DPolygon, pEnd->getB2DPolyPolygon(), false, pEnd->getWidth(),
-                            fPolyLength, pEnd->isCentered() ? 0.5 : 0.0, 0);
+                            aLocalPolygon, pEnd->getB2DPolyPolygon(), false, pEnd->getWidth(),
+                            fPolyLength, pEnd->isCentered() ? 0.5 : 0.0, &fEnd);
+                    }
+
+                    if(0.0 != fStart || 0.0 != fEnd)
+                    {
+                        // build new poly, consume something from old poly
+                        aLocalPolygon = basegfx::tools::getSnippetAbsolute(aLocalPolygon, fStart, fPolyLength - fEnd, fPolyLength);
                     }
                 }
 
@@ -492,14 +499,12 @@ namespace drawinglayer
                 // concept of PDF export and SvtGraphicStroke usage does simply not
                 // allow handling such definitions. The only clean way would be to
                 // add the transformation to SvtGraphicStroke and to handle it there
-                basegfx::B2DPolygon aB2DPolygon(rB2DPolygon);
-
-                aB2DPolygon.transform(maCurrentTransformation);
+                aLocalPolygon.transform(maCurrentTransformation);
                 aStartArrow.transform(maCurrentTransformation);
                 aEndArrow.transform(maCurrentTransformation);
 
                 pRetval = new SvtGraphicStroke(
-                    Polygon(aB2DPolygon),
+                    Polygon(aLocalPolygon),
                     PolyPolygon(aStartArrow),
                     PolyPolygon(aEndArrow),
                     mfCurrentUnifiedTransparence,
@@ -1355,7 +1360,10 @@ namespace drawinglayer
                 }
                 case PRIMITIVE2D_ID_BITMAPPRIMITIVE2D :
                 {
-                    // direct draw of transformed BitmapEx primitive; use default processing
+                    // direct draw of transformed BitmapEx primitive; use default processing, but without
+                    // former testing if graphic content is inside discrete local viewport; this is not
+                    // setup for metafile targets (metafile renderer tries to render in logic coordinates,
+                    // the mapping is kept to the OutputDevice for better Metafile recording)
                     RenderBitmapPrimitive2D(static_cast< const primitive2d::BitmapPrimitive2D& >(rCandidate));
                     break;
                 }
@@ -1643,9 +1651,6 @@ namespace drawinglayer
                         impStartSvtGraphicFill(pSvtGraphicFill);
                         mpOutputDevice->DrawGradient(aToolsPolyPolygon, aVCLGradient);
                         impEndSvtGraphicFill(pSvtGraphicFill);
-
-                        // NO usage of common own gradient randerer, not used ATM for VCL MetaFile, see text above
-                        // RenderPolyPolygonGradientPrimitive2D(static_cast< const primitive2d::PolyPolygonGradientPrimitive2D& >(rCandidate));
                     }
 
                     break;
@@ -1706,23 +1711,6 @@ namespace drawinglayer
                     if(bSupportSvtGraphicFill)
                     {
                         impEndSvtGraphicFill(pSvtGraphicFill);
-                    }
-
-                    break;
-                }
-                case PRIMITIVE2D_ID_METAFILEPRIMITIVE2D :
-                {
-                    static bool bUseMetaFilePrimitiveDecomposition(true);
-
-                    if(bUseMetaFilePrimitiveDecomposition)
-                    {
-                        // use new Metafile decomposition
-                        process(rCandidate.get2DDecomposition(getViewInformation2D()));
-                    }
-                    else
-                    {
-                        // direct draw of MetaFile, use default pocessing
-                        RenderMetafilePrimitive2D(static_cast< const primitive2d::MetafilePrimitive2D& >(rCandidate));
                     }
 
                     break;
@@ -2082,7 +2070,8 @@ namespace drawinglayer
                                 if(bDoSaveForVisualControl)
                                 {
                                     SvFileStream aNew(String(ByteString( "c:\\test.bmp" ), RTL_TEXTENCODING_UTF8), STREAM_WRITE|STREAM_TRUNC);
-                                    aNew << aBmContent;
+
+                                    WriteDIB(aBmContent, aNew, false, true);
                                 }
 #endif
 

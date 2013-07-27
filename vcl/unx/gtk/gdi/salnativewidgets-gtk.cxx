@@ -484,7 +484,7 @@ bool GtkSalGraphics::setClipRegion( const Region& i_rClip )
     return bRet;
 }
 
-void GtkSalGraphics::copyBits( const SalTwoRect* pPosAry,
+void GtkSalGraphics::copyBits( const SalTwoRect& rPosAry,
                                SalGraphics* pSrcGraphics )
 {
     GtkSalFrame* pFrame = GetGtkFrame();
@@ -502,7 +502,7 @@ void GtkSalGraphics::copyBits( const SalTwoRect* pPosAry,
                                             None );
         }
     }
-    X11SalGraphics::copyBits( pPosAry, pSrcGraphics );
+    X11SalGraphics::copyBits( rPosAry, pSrcGraphics );
     if( pFrame && pFrame->getBackgroundPixmap() != None )
         XSetWindowBackgroundPixmap( pFrame->getDisplay()->GetDisplay(),
                                     aWin,
@@ -1375,7 +1375,7 @@ sal_Bool GtkSalGraphics::NWPaintGTKScrollbar( ControlType, ControlPart nPart,
                                           const OUString& )
 {
     OSL_ASSERT( aValue.getType() == CTRL_SCROLLBAR );
-    const ScrollbarValue* pScrollbarVal = static_cast<const ScrollbarValue *>(&aValue);
+    const ScrollbarValue* pScrollbarVal = (aValue.getType() == CTRL_SCROLLBAR) ? static_cast<const ScrollbarValue*>(&aValue) : NULL;
     GdkPixmap*      pixmap = NULL;
     Rectangle       pixmapRect, scrollbarRect;
     GtkStateType    stateType;

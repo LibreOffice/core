@@ -76,7 +76,7 @@ class MenuItem extends ToggleButton {
         *
         * @return an instance of <code>AccessibleStateSet</code>
         *    containing the current state set of the object
-        * @see AccessibleState
+        * @see javax.accessibility.AccessibleState
         */
         public javax.accessibility.AccessibleStateSet getAccessibleStateSet() {
             javax.accessibility.AccessibleStateSet stateSet = super.getAccessibleStateSet();

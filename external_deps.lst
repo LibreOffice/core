@@ -70,7 +70,7 @@ if ( true )
     name = Adobe-Core35_AFMs-314.tar.gz
     URL1 = $(OOO_EXTRAS)$(MD5)-$(name)
 
-if (SOLAR_JAVA == TRUE)
+if (SOLAR_JAVA==TRUE && SYSTEM_LUCENE!=YES)
     MD5 = 17960f35b2239654ba608cf1f3e256b3
     name = lucene-2.9.4-src.tar.gz
     URL1 = http://archive.apache.org/dist/lucene/java/2.9.4/lucene-2.9.4-src.tar.gz
@@ -126,9 +126,9 @@ if ( true )
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if ( true )
-    SHA1 = 231af70b7567a753b49df4216743010c193884b7
-    name = serf-1.1.0.tar.bz2
-    URL1 = http://serf.googlecode.com/files/serf-1.1.0.tar.bz2
+    SHA1 = f65fbbd72926c8e7cf0dbd4ada03b0d226f461fd
+    name = serf-1.2.1.tar.bz2
+    URL1 = http://serf.googlecode.com/files/serf-1.2.1.tar.bz2
     URL2 = $(OOO_EXTRAS)$(SHA1)-$(name)
 
 if (SOLAR_JAVA==TRUE && (ENABLE_MEDIAWIKI==YES || ENABLE_REPORTBUILDER==YES))
@@ -168,28 +168,28 @@ if ( true )
     URL1 = http://archive.apache.org/dist/apr/$(name)
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
-if ( true )
+if ( USE_SYSTEM_STL != YES )
     MD5 = c441926f3a552ed3e5b274b62e86af16
     name = STLport-4.0.tar.gz
     # This seems to be the original host, but the MD5 sum does not match.
     # URL1 = http://sourceforge.net/projects/stlport/files/STLport%20archive/STLport%204/STLport-4.0.tar.gz/download
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
-if ( true )
+if ( USE_SYSTEM_STL != YES )
     MD5 = 18f577b374d60b3c760a3a3350407632
     name = STLport-4.5.tar.gz
     URL1 = http://sourceforge.net/projects/stlport/files/STLport%20archive/STLport%204/STLport-4.5.tar.gz/download
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
-if ( true )
+if ( USE_SYSTEM_STL != YES )
     MD5 = 7376930b0d3f3d77a685d94c4a3acda8
     name = STLport-4.5-0119.tar.gz
     URL1 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (SYSTEM_LIBXML != YES)
-    MD5 = 7740a8ec23878a2f50120e1faa2730f2
-    name = libxml2-2.7.6.tar.gz
-    URL1 = ftp://xmlsoft.org/libxml2/libxml2-2.7.6.tar.gz
+    MD5 = 8127a65e8c3b08856093099b52599c86
+    name = libxml2-2.7.8.tar.gz
+    URL1 = ftp://xmlsoft.org/libxml2/libxml2-2.7.8.tar.gz
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (SYSTEM_LIBXSLT != YES)
@@ -217,9 +217,9 @@ if (ENABLE_MEDIAWIKI == YES)
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (SYSTEM_PYTHON != YES)
-    MD5 = c57477edd6d18bd9eeca2f21add73919
-    name = Python-2.7.3.tar.bz2
-    URL1 = http://www.python.org/ftp/python/2.7.3/Python-2.7.3.tar.bz2
+    MD5 =  6334b666b7ff2038c761d7b27ba699c1
+    name = Python-2.7.5.tar.bz2
+    URL1 = http://www.python.org/ftp/python/2.7.5/Python-2.7.5.tar.bz2
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (SYSTEM_BOOST!=YES || (OS==SOLARIS && COM!=GCC))

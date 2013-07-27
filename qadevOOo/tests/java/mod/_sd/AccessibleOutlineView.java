@@ -59,11 +59,11 @@ public class AccessibleOutlineView extends TestCase {
      * method to provide the implementation and related objects. The method is
      * called from <code>getTestEnvironment()</code>.
      *
-     * @param tParam test parameters
+     * @param Param test parameters
      * @param log writer to log information while testing
      *
      * @see TestEnvironment
-     * @see #getTestEnvironment()
+     * @see #getTestEnvironment
      */
     protected TestEnvironment createTestEnvironment
             (TestParameters Param, PrintWriter log) {
@@ -105,13 +105,12 @@ public class AccessibleOutlineView extends TestCase {
     /**
     * Called while disposing a <code>TestEnvironment</code>.
     * Disposes Impress documents.
-    * @param tParam test parameters
-    * @param tEnv the environment to cleanup
+    * @param Param test parameters
     * @param log writer to log information while testing
     */
     protected void cleanup( TestParameters Param, PrintWriter log ) {
         log.println("disposing Impress document");
-        util.DesktopTools.closeDoc(xImpressDoc);;
+        util.DesktopTools.closeDoc(xImpressDoc);
     }
 
     /**
@@ -119,10 +118,10 @@ public class AccessibleOutlineView extends TestCase {
      * implementation does nothing. Subclasses can override to initialize
      * objects shared among all <code>TestEnvironment</code>s.
      *
-     * @param tParam test parameters
+     * @param Param test parameters
      * @param log writer to log information while testing
      *
-     * @see #initializeTestCase()
+     * @see #initializeTestCase
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
         // get a soffice factory object

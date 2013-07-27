@@ -32,7 +32,12 @@ BuildArch: noarch
 Requires: /etc/SuSE-release
 # .. but not for Sun JDS
 Conflicts: SunDesktopVersion
-Provides: openoffice.org3-desktop-integration
+Provides: openoffice-desktop-integration
+Obsoletes: openoffice.org3.0-suse-menus
+Obsoletes: openoffice.org3.1-suse-menus
+Obsoletes: openoffice.org3.2-suse-menus
+Obsoletes: openoffice.org3.3-suse-menus
+Obsoletes: openoffice.org3.4-suse-menus
 %define _unpackaged_files_terminate_build 0
 %define _binary_filedigest_algorithm 1
 %define _binary_payload w9.gzdio

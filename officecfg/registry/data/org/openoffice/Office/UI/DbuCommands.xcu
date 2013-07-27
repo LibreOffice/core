@@ -139,7 +139,7 @@
             </node>
             <node oor:name=".uno:DBIndexDesign" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Index Design...</value>
+                    <value xml:lang="en-US">~Index Design...</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -481,7 +481,7 @@
             </node>
             <node oor:name=".uno:DSBFormLetter" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Mail Merge...</value>
+                    <value xml:lang="en-US">~Mail Merge...</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -505,12 +505,12 @@
             </node>
             <node oor:name=".uno:FormSlots/deleteRecord" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Delete Record</value>
+                    <value xml:lang="en-US">Delete ~Record</value>
                 </prop>
             </node>
             <node oor:name=".uno:FormSlots/insertRecord" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Record</value>
+                    <value xml:lang="en-US">~Record</value>
                 </prop>
             </node>
         </node>

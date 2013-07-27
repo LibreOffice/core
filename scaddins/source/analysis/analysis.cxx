@@ -27,6 +27,7 @@
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
+#include <rtl/random.h>
 #include <string.h>
 
 #include <tools/resmgr.hxx>
@@ -808,15 +809,52 @@ double SAL_CALL AnalysisAddIn::getSqrtpi( double fNum ) THROWDEF_RTE_IAE
 
 double SAL_CALL AnalysisAddIn::getRandbetween( double fMin, double fMax ) THROWDEF_RTE_IAE
 {
+    static sal_Int32 nScRandomIx = 0, nScRandomIy = 0, nScRandomIz = 0, nScRandomIt = 0;
+    static rtlRandomPool aPool = rtl_random_createPool();
+    double fScRandomW;
+
     fMin = ::rtl::math::round( fMin, 0, rtl_math_RoundingMode_Up );
     fMax = ::rtl::math::round( fMax, 0, rtl_math_RoundingMode_Up );
     if( fMin > fMax )
         THROW_IAE;
 
+    // Seeding for the PRNG: should be good enough but we
+    // monitor the values to keep things under control.
+    if (nScRandomIx <= 0)
+    rtl_random_getBytes(aPool, &nScRandomIx, sizeof(nScRandomIx));
+    if (nScRandomIy <= 0)
+    rtl_random_getBytes(aPool, &nScRandomIy, sizeof(nScRandomIy));
+    if (nScRandomIz <= 0)
+    rtl_random_getBytes(aPool, &nScRandomIz, sizeof(nScRandomIz));
+    if (nScRandomIt <= 0)
+    rtl_random_getBytes(aPool, &nScRandomIt, sizeof(nScRandomIt));
+
+    // Basically unmodified algorithm from
+    // Wichman and Hill, "Generating good pseudo-random numbers",
+    //      December 5, 2005.
+
+    nScRandomIx = 11600L * (nScRandomIx % 185127L) - 10379L * (nScRandomIx / 185127L);
+    nScRandomIy = 47003L * (nScRandomIy %  45688L) - 10479L * (nScRandomIy /  45688L);
+    nScRandomIz = 23000L * (nScRandomIz %  93368L) - 19423L * (nScRandomIz /  93368L);
+    nScRandomIt = 33000L * (nScRandomIt %  65075L) -  8123L * (nScRandomIt /  65075L);
+    if (nScRandomIx < 0)
+    nScRandomIx += 2147483579L;
+    if (nScRandomIy < 0)
+    nScRandomIy += 2147483543L;
+    if (nScRandomIz < 0)
+    nScRandomIz += 2147483123L;
+    if (nScRandomIt < 0)
+    nScRandomIt += 2147483123L;
+
+    fScRandomW = (double)nScRandomIx*0.0000000004656613022670 +
+            (double)nScRandomIy*0.0000000004656613100760 +
+        (double)nScRandomIz*0.0000000004656613360968 +
+        (double)nScRandomIt*0.0000000004656614011490;
+
+
     // fMax -> range
     double fRet = fMax - fMin + 1.0;
-    fRet *= rand();
-    fRet /= (RAND_MAX + 1.0);
+    fRet *= fScRandomW - (sal_Int32)fScRandomW ;
     fRet += fMin;
     fRet = floor( fRet );   // simple floor is sufficient here
     RETURN_FINITE( fRet );

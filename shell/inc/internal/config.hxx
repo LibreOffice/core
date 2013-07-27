@@ -40,10 +40,10 @@
 #define MODULE_NAME_FILTER TEXT("ooofilt.dll")
 #endif
 
-#define COLUMN_HANDLER_DESCRIPTIVE_NAME    TEXT("OpenOffice.org Column Handler")
-#define INFOTIP_HANDLER_DESCRIPTIVE_NAME   TEXT("OpenOffice.org Infotip Handler")
-#define PROPSHEET_HANDLER_DESCRIPTIVE_NAME TEXT("OpenOffice.org Property Sheet Handler")
-#define THUMBVIEWER_HANDLER_DESCRIPTIVAE_NAME TEXT("OpenOffice.org Thumbnail Viewer")
+#define COLUMN_HANDLER_DESCRIPTIVE_NAME    TEXT("OpenOffice Column Handler")
+#define INFOTIP_HANDLER_DESCRIPTIVE_NAME   TEXT("OpenOffice Infotip Handler")
+#define PROPSHEET_HANDLER_DESCRIPTIVE_NAME TEXT("OpenOffice Property Sheet Handler")
+#define THUMBVIEWER_HANDLER_DESCRIPTIVAE_NAME TEXT("OpenOffice Thumbnail Viewer")
 
 #define META_CONTENT_NAME               "meta.xml"
 #define DOC_CONTENT_NAME                "content.xml"

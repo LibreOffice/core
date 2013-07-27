@@ -1298,9 +1298,6 @@ void DlgEditor::Print( Printer* pPrinter, const String& rTitle )    // not worki
         MapMode aMap( MAP_100TH_MM );
         pPrinter->SetMapMode( aMap );
         Font aFont;
-#ifdef OS2
-        //aFont.SetName( System::GetStandardFont( STDFONT_SWISS ).GetName() );
-#endif
         aFont.SetAlign( ALIGN_BOTTOM );
         aFont.SetSize( Size( 0, 360 ));
         pPrinter->SetFont( aFont );
@@ -1312,18 +1309,6 @@ void DlgEditor::Print( Printer* pPrinter, const String& rTitle )    // not worki
         lcl_PrintHeader( pPrinter, rTitle );
 
         Bitmap aDlg;
-#ifdef OS2
-        Bitmap* pDlg = new Bitmap;
-        //pSbxForm->SnapShot( *pDlg );
-        SvMemoryStream* pStrm = new SvMemoryStream;
-        *pStrm << *pDlg;
-        delete pDlg;
-        pStrm->Seek(0);
-        *pStrm >> aDlg;
-        delete pStrm;
-#else
-        //pSbxForm->SnapShot( aDlg );
-#endif
         Size aBmpSz( pPrinter->PixelToLogic( aDlg.GetSizePixel() ) );
         double nPaperSzWidth = aPaperSz.Width();
         double nPaperSzHeight = aPaperSz.Height();

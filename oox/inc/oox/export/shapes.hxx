@@ -62,7 +62,7 @@ private:
 
     struct ShapeHash
     {
-        std::hash<const char*> maHashFunction;
+        rtl::CStringHash maHashFunction;
 
         size_t operator()( const ::com::sun::star::uno::Reference < ::com::sun::star::drawing::XShape > ) const;
     };

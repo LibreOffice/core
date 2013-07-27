@@ -19,72 +19,51 @@
  *
  *************************************************************/
 
-
-
 #ifndef __com_sun_star_system_XSystemShellExecute_idl__
 #define __com_sun_star_system_XSystemShellExecute_idl__
 
-#ifndef __com_sun_star_uno_RuntimeException_idl__
-#include <com/sun/star/uno/RuntimeException.idl>
-#endif
-
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-
-#ifndef __com_sun_star_system_SystemShellExecuteException_idl__
 #include <com/sun/star/system/SystemShellExecuteException.idl>
-#endif
-
-//=============================================================================
 
 module com { module sun { module star { module system {
 
-//=============================================================================
 /** Specifies an interface for executing a system command.
 */
-
-
-published interface XSystemShellExecute: com::sun::star::uno::XInterface
+published interface XSystemShellExecute
 {
-    //-------------------------------------------------------------------------
     /** Executes an abitrary system command.
 
-        @param aCommand
-        Specifies the command to execute. This may be an executable file or a
-        document which is registered with an application on a specific platform,
-        so that the platform knows what application to launch for that document.
-        If the command specifies a path to an executable, etc, this has to be
-        a system specific path.
+    @param aCommand
+        Specifies the command to execute.
+        <p>This may be an executable file or a document which is registered with
+        an application on a specific platform, so that the platform knows what
+        application to launch for that document.</p>
+        <p>If the command specifies a path to an executable, etc, this has to be
+        a system specific path.</p>
 
-        @param aParameter
-        Specifies a list of space separated parameters. The method does not
-        validate the given parameters, but only passes it as a parameter to the
-        specified command.
+    @param aParameter
+        Specifies a list of space separated parameters.
+        <p>The method does not validate the given parameters, but only passes it
+        as a parameter to the specified command.</p>
 
-        @param nFlags
-        Specifies different flags to control the execution of this method, for example,
-        avoid showing system error messages, in case of failures, etc.
+    @param nFlags
+        A combination of <type>SystemShellExecuteFlags</type> specifying different
+        flags to control the execution of this method.
 
-        @throws com::sun::star::lang::IllegalArgumentException
+    @throws com::sun::star::lang::IllegalArgumentException
         when the specified flags are wrong or exclude each other.
-.
-        @throws com::sun::star::sys::SystemExecuteException
+
+    @throws com::sun::star::sys::SystemExecuteException
         in the case of errors when trying to executed the specified command.
-
-        @see com::sun::star::system::SystemShellExecuteFlags
     */
-    void execute( [in] string aCommand, [in] string aParameter, [in] long nFlags )
-        raises( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::system::SystemShellExecuteException );
+    void execute( [in] string sCommand,
+                  [in] string sParameter,
+                  [in] long nFlags )
+        raises( ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::system::SystemShellExecuteException );
 };
-
-//=============================================================================
 
 }; }; }; };
 
 #endif
-

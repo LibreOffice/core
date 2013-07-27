@@ -61,8 +61,8 @@ public:
     virtual bool        HasMetrics() const;
     virtual void        ScaleMetrics(long nMul, long nDiv);
 
-    const XHatch&       GetHatchValue(const XHatchTable* pTable = 0) const; // GetValue -> GetHatchValue
-    void                SetHatchValue(const XHatch& rNew)  { aHatch = rNew; Detach(); } // SetValue -> SetHatchValue
+    const XHatch&           GetHatchValue(const XHatchList* pTable = 0) const; // GetValue -> GetHatchValue
+    void                    SetHatchValue(const XHatch& rNew)  { aHatch = rNew; Detach(); } // SetValue -> SetHatchValue
 
     static sal_Bool CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 );
     XFillHatchItem* checkForUniqueItem( SdrModel* pModel ) const;

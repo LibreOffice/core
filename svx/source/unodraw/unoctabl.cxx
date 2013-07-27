@@ -44,7 +44,7 @@ using namespace ::cppu;
 class SvxUnoColorTable : public WeakImplHelper2< container::XNameContainer, lang::XServiceInfo >
 {
 private:
-    XColorTable*    pTable;
+    XColorListSharedPtr     maTable;
 
 public:
     SvxUnoColorTable() throw();
@@ -82,13 +82,12 @@ public:
 };
 
 SvxUnoColorTable::SvxUnoColorTable() throw()
+:   maTable(XPropertyListFactory::CreateSharedXColorList(SvtPathOptions().GetPalettePath()))
 {
-    pTable = new XColorTable( SvtPathOptions().GetPalettePath() );
 }
 
 SvxUnoColorTable::~SvxUnoColorTable() throw()
 {
-    delete pTable;
 }
 
 sal_Bool SAL_CALL SvxUnoColorTable::supportsService( const  OUString& ServiceName ) throw(uno::RuntimeException)
@@ -132,21 +131,18 @@ void SAL_CALL SvxUnoColorTable::insertByName( const OUString& aName, const uno::
     if( !(aElement >>= nColor) )
         throw lang::IllegalArgumentException();
 
-    if( pTable )
-    {
-        XColorEntry* pEntry = new XColorEntry( Color( (ColorData)nColor ), aName  );
-        pTable->Insert( pTable->Count(), pEntry );
-    }
+    XColorEntry* pEntry = new XColorEntry( Color( (ColorData)nColor ), aName  );
+    maTable->Insert( pEntry, maTable->Count() );
 }
 
 void SAL_CALL SvxUnoColorTable::removeByName( const OUString& Name )
     throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    long nIndex = pTable ? ((XPropertyTable*)pTable)->Get( Name ) : -1;
+    long nIndex = maTable->GetIndex(Name);
     if( nIndex == -1 )
         throw container::NoSuchElementException();
 
-    pTable->Remove( nIndex );
+    maTable->Remove( nIndex );
 }
 
 // XNameReplace
@@ -157,37 +153,37 @@ void SAL_CALL SvxUnoColorTable::replaceByName( const OUString& aName, const uno:
     if( !(aElement >>= nColor) )
         throw lang::IllegalArgumentException();
 
-    long nIndex = pTable ? ((XPropertyTable*)pTable)->Get( aName ) : -1;
+    long nIndex = maTable->GetIndex(aName);
     if( nIndex == -1  )
         throw container::NoSuchElementException();
 
     XColorEntry* pEntry = new XColorEntry( Color( (ColorData)nColor ), aName );
-    delete pTable->Replace( nIndex, pEntry );
+    delete maTable->Replace( pEntry, nIndex );
 }
 
 // XNameAccess
 uno::Any SAL_CALL SvxUnoColorTable::getByName( const  OUString& aName )
     throw( container::NoSuchElementException,  lang::WrappedTargetException, uno::RuntimeException)
 {
-    long nIndex = pTable ? ((XPropertyTable*)pTable)->Get( aName ) : -1;
+    long nIndex = maTable->GetIndex(aName);
     if( nIndex == -1 )
         throw container::NoSuchElementException();
 
-    XColorEntry* pEntry = ((XColorTable*)pTable)->GetColor( nIndex );
+    XColorEntry* pEntry = maTable->GetColor( nIndex );
     return uno::Any( (sal_Int32) pEntry->GetColor().GetRGBColor() );
 }
 
 uno::Sequence< OUString > SAL_CALL SvxUnoColorTable::getElementNames(  )
     throw( uno::RuntimeException )
 {
-    const long nCount = pTable ? pTable->Count() : 0;
+    const long nCount = maTable->Count();
 
     uno::Sequence< OUString > aSeq( nCount );
     OUString* pStrings = aSeq.getArray();
 
     for( long nIndex = 0; nIndex < nCount; nIndex++ )
     {
-        XColorEntry* pEntry = pTable->GetColor( (long)nIndex );
+        XColorEntry* pEntry = maTable->GetColor( (long)nIndex );
         pStrings[nIndex] = pEntry->GetName();
     }
 
@@ -197,7 +193,7 @@ uno::Sequence< OUString > SAL_CALL SvxUnoColorTable::getElementNames(  )
 sal_Bool SAL_CALL SvxUnoColorTable::hasByName( const OUString& aName )
     throw( uno::RuntimeException )
 {
-    long nIndex = pTable ? ((XPropertyTable*)pTable)->Get( aName ) : -1;
+    long nIndex = maTable->GetIndex( aName );
     return nIndex != -1;
 }
 
@@ -211,7 +207,7 @@ uno::Type SAL_CALL SvxUnoColorTable::getElementType(  )
 sal_Bool SAL_CALL SvxUnoColorTable::hasElements(  )
     throw( uno::RuntimeException )
 {
-    return pTable && pTable->Count() != 0;
+    return maTable->Count() != 0;
 }
 
 /**
@@ -238,6 +234,8 @@ uno::Reference< uno::XInterface > SAL_CALL create_EnhancedCustomShapeEngine( con
 #include "cppuhelper/factory.hxx"
 #include "uno/lbnames.h"
 #include <svx/sdr/primitive2d/primitiveFactory2d.hxx>
+#include "sidebar/PanelFactory.hxx"
+
 
 /*
 namespace svx
@@ -366,16 +364,15 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory (
                 ::svx::SvXMLGraphicExportHelper_createInstance,
                 ::svx::SvXMLGraphicExportHelper_getSupportedServiceNames() );
         }
-/*
-        else if( ::svx::ExtrusionDepthController_getImplementationName().equalsAscii( pImplName ) )
+        else if (::svx::sidebar::PanelFactory::getImplementationName().equalsAscii(pImplName))
         {
             xFactory = ::cppu::createSingleFactory(
-                reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ),
-                ::svx::ExtrusionDepthController_getImplementationName(),
-                ::svx::ExtrusionDepthController_createInstance,
-                ::svx::ExtrusionDepthController_getSupportedServiceNames() );
+                reinterpret_cast<lang::XMultiServiceFactory*>(pServiceManager),
+                ::svx::sidebar::PanelFactory::getImplementationName(),
+                ::svx::sidebar::PanelFactory::createInstance,
+                ::svx::sidebar::PanelFactory::getSupportedServiceNames());
         }
-*/
+
         if( xFactory.is())
         {
             xFactory->acquire();

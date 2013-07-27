@@ -38,6 +38,9 @@
 #include <editeng/fontitem.hxx>
 #include <svl/poolitem.hxx>
 #include <editeng/tstpitem.hxx>
+#include <editeng/kernitem.hxx>
+#include <editeng/lspcitem.hxx>
+#include <editeng/ulspitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/protitem.hxx>
 #include <svx/chrtitem.hxx>
@@ -83,7 +86,6 @@
 #include <svx/xftshit.hxx>
 #include <svx/xftshcit.hxx>
 #include <svx/xftshxy.hxx>
-#include <svx/xftsfit.hxx>
 #include <svx/xtextit0.hxx>
 #include <avmedia/mediaitem.hxx>
 #include <svx/drawitem.hxx>
@@ -127,6 +129,11 @@
 #include <svl/rectitem.hxx>
 
 #include <sfx2/frame.hxx>
+#include <svx/xlncapit.hxx>
+#include <svx/xflftrit.hxx>
+#include <svx/xlinjoit.hxx>
+#include <svx/AffineMatrixItem.hxx>
+#include <svx/galleryitem.hxx>
 
 #define SFX_TYPEMAP
 #include "sdslots.hxx"

@@ -203,9 +203,17 @@ TabPage TP_OPTIONS_MISC
     {
         HelpID = "sd:CheckBox:TP_OPTIONS_MISC:CBX_START_WITH_ACTUAL_PAGE";
         Pos = MAP_APPFONT ( 12 , 145  ) ;
-        Size = MAP_APPFONT ( 242 , 10 ) ;
+        Size = MAP_APPFONT ( 116 , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "Always with current page" ;
+    };
+    CheckBox CBX_START_WITH_PRESENTER_SCREEN
+    {
+        HelpID = "sd:CheckBox:TP_OPTIONS_MISC:CBX_START_WITH_PRESENTER_SCREEN";
+        Pos = MAP_APPFONT ( 12 , 145  ) ;
+        Size = MAP_APPFONT ( 116 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "With Presenter Screen" ;
     };
     FixedLine FT_COMPATIBILITY
     {

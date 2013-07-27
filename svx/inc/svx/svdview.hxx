@@ -30,6 +30,8 @@
 #include "svx/svxdllapi.h"
 #include <svx/svdcrtv.hxx>
 #include <unotools/options.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // predefines
@@ -135,7 +137,9 @@ private:
     // The OverlayObjects
     ::sdr::overlay::OverlayObjectList               maObjects;
 
-    void ImplCreateOverlays(const SdrView& rView, const basegfx::B2DPolyPolygon& rPolyPolygon);
+    void ImplCreateOverlays(
+        const SdrView& rView,
+        const basegfx::B2DPolyPolygon& rLinePolyPolygon);
 
 public:
     SdrDropMarkerOverlay(const SdrView& rView, const SdrObject& rObject);

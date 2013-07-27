@@ -49,7 +49,7 @@
 #include <svx/sdr/overlay/overlaybitmapex.hxx>
 #include <svx/sdr/overlay/overlayline.hxx>
 #include <svx/sdr/overlay/overlaytriangle.hxx>
-#include <svx/sdr/overlay/overlayhatchrect.hxx>
+#include <svx/sdr/overlay/overlayrectangle.hxx>
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <vcl/svapp.hxx>
@@ -57,6 +57,14 @@
 #include <vcl/lazydelete.hxx>
 #include <svx/svdlegacy.hxx>
 #include <algorithm>
+
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
+#include <svx/sdr/overlay/overlayprimitive2dsequenceobject.hxx>
+#include <drawinglayer/primitive2d/graphicprimitive2d.hxx>
+#include <drawinglayer/primitive2d/maskprimitive2d.hxx>
+#include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
+#include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // #i15222#
@@ -92,18 +100,10 @@ public:
 #define INDIVIDUAL_COUNT    (4)
 
 SdrHdlBitmapSet::SdrHdlBitmapSet(sal_uInt16 nResId)
-:   maMarkersBitmap(),
+:   maMarkersBitmap(ResId(nResId, *ImpGetResMgr())), // just use ressource with alpha channel
     // 14 kinds (BitmapMarkerKind) use index [0..5], 4 extra
     maRealMarkers((KIND_COUNT * INDEX_COUNT) + INDIVIDUAL_COUNT)
 {
-    // #101928# change color used for transparent parts to 0x00ff00ff (ImageList standard)
-    const Color aColTransparent(0x00ff00ff);
-    const Bitmap aBitmap(ResId(nResId, *ImpGetResMgr()));
-    const Bitmap aMask(aBitmap.CreateMask(aColTransparent));
-
-    // create a real BitmapEx with an AlphaMask
-    maMarkersBitmap = BitmapEx(aBitmap, aMask);
-    // maMarkersBitmap = BitmapEx(aBitmap, aColTransparent);
 }
 
 SdrHdlBitmapSet::~SdrHdlBitmapSet()
@@ -167,15 +167,15 @@ const BitmapEx& SdrHdlBitmapSet::GetBitmapEx(BitmapMarkerKind eKindOfMarker, sal
                 }
                 case 2:
                 {
-                    return impGetOrCreateTargetBitmap(nIndex, Rectangle(Point(72, 78), Size(13, 13)));
+                    return impGetOrCreateTargetBitmap(nIndex, Rectangle(Point(72, 79), Size(13, 13)));
                 }
                 case 3:
                 {
-                    return impGetOrCreateTargetBitmap(nIndex, Rectangle(Point(85, 78), Size(13, 13)));
+                    return impGetOrCreateTargetBitmap(nIndex, Rectangle(Point(85, 79), Size(13, 13)));
                 }
                 case 4:
                 {
-                    return impGetOrCreateTargetBitmap(nIndex, Rectangle(Point(98, 78), Size(13, 13)));
+                    return impGetOrCreateTargetBitmap(nIndex, Rectangle(Point(98, 79), Size(13, 13)));
                 }
                 default: // case 5:
                 {
@@ -185,17 +185,19 @@ const BitmapEx& SdrHdlBitmapSet::GetBitmapEx(BitmapMarkerKind eKindOfMarker, sal
         }
 
         case Circ_7x7:
+        case Customshape_7x7:
         {
             return impGetOrCreateTargetBitmap((4 * INDEX_COUNT) + nInd, Rectangle(Point(27, nYPos), Size(7, 7)));
         }
 
         case Circ_9x9:
-        case Customshape1:
+        case Customshape_9x9:
         {
             return impGetOrCreateTargetBitmap((5 * INDEX_COUNT) + nInd, Rectangle(Point(34, nYPos), Size(9, 9)));
         }
 
         case Circ_11x11:
+        case Customshape_11x11:
         {
             return impGetOrCreateTargetBitmap((6 * INDEX_COUNT) + nInd, Rectangle(Point(43, nYPos), Size(11, 11)));
         }
@@ -248,14 +250,14 @@ const BitmapEx& SdrHdlBitmapSet::GetBitmapEx(BitmapMarkerKind eKindOfMarker, sal
         case Anchor: // #101688# AnchorTR for SW
         case AnchorTR:
         {
-            return impGetOrCreateTargetBitmap((KIND_COUNT * INDEX_COUNT) + 2, Rectangle(Point(24, 68), Size(24, 23)));
+            return impGetOrCreateTargetBitmap((KIND_COUNT * INDEX_COUNT) + 2, Rectangle(Point(24, 68), Size(24, 24)));
         }
 
         // #98388# add AnchorPressed to be able to aninate anchor control
         case AnchorPressed:
         case AnchorPressedTR:
         {
-            return impGetOrCreateTargetBitmap((KIND_COUNT * INDEX_COUNT) + 3, Rectangle(Point(48, 68), Size(24, 23)));
+            return impGetOrCreateTargetBitmap((KIND_COUNT * INDEX_COUNT) + 3, Rectangle(Point(48, 68), Size(24, 24)));
         }
     }
 
@@ -487,6 +489,7 @@ void SdrHdl::CreateB2dIAObject(::sdr::overlay::OverlayManager& rOverlayManager)
             else
             {
                 eKindOfMarker = (mb1PixMore) ? Rect_9x9 : Rect_7x7;
+                break;
             }
             break;
         }
@@ -530,7 +533,7 @@ void SdrHdl::CreateB2dIAObject(::sdr::overlay::OverlayManager& rOverlayManager)
         // for SJ and the CustomShapeHandles:
         case HDL_CUSTOMSHAPE1:
         {
-            eKindOfMarker = Customshape1;
+            eKindOfMarker = (mb1PixMore) ? Customshape_9x9 : Customshape_7x7;
             eColIndex = Yellow;
             break;
         }
@@ -592,6 +595,10 @@ BitmapMarkerKind SdrHdl::GetNextBigger(BitmapMarkerKind eKnd) const
         case Circ_7x7:          eRetval = Circ_9x9;         break;
         case Circ_9x9:          eRetval = Circ_11x11;       break;
         //case Circ_11x11:      eRetval = ; break;
+
+        case Customshape_7x7:       eRetval = Customshape_9x9;      break;
+        case Customshape_9x9:       eRetval = Customshape_11x11;    break;
+        //case Customshape_11x11:   eRetval = ; break;
 
         case Elli_7x9:          eRetval = Elli_9x11;        break;
         //case Elli_9x11:           eRetval = ; break;
@@ -655,7 +662,27 @@ BitmapEx SdrHdl::ImpGetBitmapEx(BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd,
 
     if(mrHdlList.GetHdlSize() > 3)
     {
-        bForceBiggerSize = true;
+        switch(eKindOfMarker)
+        {
+            case Anchor:
+            case AnchorPressed:
+            case AnchorTR:
+            case AnchorPressedTR:
+            {
+                // #121463# For anchor, do not simply make bigger because of HdlSize,
+                // do it dependent of IsSelected() which Writer can set in drag mode
+                if(IsSelected())
+                {
+                    bForceBiggerSize = true;
+                }
+                break;
+            }
+            default:
+            {
+                bForceBiggerSize = true;
+                break;
+            }
+        }
     }
 
     // #101928# ...for high contrast, too.
@@ -1451,6 +1478,7 @@ namespace
                 return n1 < n2;
             }
 
+            // should never happen and is even unreachable; just leave it here for security
             return pA->getPosition().getX() < pB->getPosition().getX();
         }
     };
@@ -1501,7 +1529,7 @@ sal_uInt32 SdrHdlList::GetHdlNum(const SdrHdl* pHdl) const
     return CONTAINER_ENTRY_NOTFOUND;
 }
 
-SdrHdl* SdrHdlList::IsHdlListHit(const basegfx::B2DPoint& rPosition, SdrHdl* pHdl0) const
+SdrHdl* SdrHdlList::IsHdlListHit(const basegfx::B2DPoint& rPosition) const
 {
     SdrHdl* pRet = 0;
     const sal_uInt32 nAnz(GetHdlCount());
@@ -1914,7 +1942,7 @@ E3dVolumeMarker::~E3dVolumeMarker()
 void E3dVolumeMarker::CreateB2dIAObject(::sdr::overlay::OverlayManager& rOverlayManager)
 {
     ::sdr::overlay::OverlayObject* pNewOverlayObject = new
-        ::sdr::overlay::OverlayPolyPolygonStriped(aWireframePoly);
+        ::sdr::overlay::OverlayPolyPolygonStripedAndFilled(aWireframePoly);
 
     pNewOverlayObject->setBaseColor(Color(COL_BLACK));
     rOverlayManager.add(*pNewOverlayObject);
@@ -2090,14 +2118,17 @@ ImpTextframeHdl::~ImpTextframeHdl()
 
 void ImpTextframeHdl::CreateB2dIAObject(::sdr::overlay::OverlayManager& rOverlayManager)
 {
-    const svtools::ColorConfig aColorConfig;
-    const Color aHatchCol( aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor );
-    ::sdr::overlay::OverlayHatchRect* pNewOverlayObject = new ::sdr::overlay::OverlayHatchRect(
+    const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
+    const Color aHilightColor(aSvtOptionsDrawinglayer.getHilightColor());
+    const double fTransparence(aSvtOptionsDrawinglayer.GetTransparentSelectionPercent() * 0.01);
+    ::sdr::overlay::OverlayRectangle* pNewOverlayObject = new ::sdr::overlay::OverlayRectangle(
         maTransformation,
-        aHatchCol,
+        aHilightColor,
+        fTransparence,
         3.0,
         3.0,
-        45 * F_PI180);
+        500,
+        true); // allow animation; the Handle is not shown at text edit time
 
     pNewOverlayObject->setHittable(false);
     rOverlayManager.add(*pNewOverlayObject);
@@ -2230,6 +2261,195 @@ void SdrCropHdl::CreateB2dIAObject(::sdr::overlay::OverlayManager& rOverlayManag
 
     rOverlayManager.add(*pOverlayObject);
     maOverlayGroup.append(*pOverlayObject);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+SdrCropViewHdl::SdrCropViewHdl( // TTTT: Check if CropPreview works, including all mirrorings (see mbExtraMirrorXFromGraphic in trunk)
+    SdrHdlList& rHdlList,
+    const SdrObject& rSdrHdlObject,
+    const basegfx::B2DHomMatrix& rObjectTransform,
+    const Graphic& rGraphic,
+    double fCropLeft,
+    double fCropTop,
+    double fCropRight,
+    double fCropBottom)
+:   SdrHdl(rHdlList, &rSdrHdlObject, HDL_USER),
+    maObjectTransform(rObjectTransform),
+    maGraphic(rGraphic),
+    mfCropLeft(fCropLeft),
+    mfCropTop(fCropTop),
+    mfCropRight(fCropRight),
+    mfCropBottom(fCropBottom)
+{
+}
+
+void SdrCropViewHdl::CreateB2dIAObject(::sdr::overlay::OverlayManager& rOverlayManager)
+{
+    GetRidOfIAObject();
+
+    // decompose to have current translate and scale
+    basegfx::B2DVector aScale, aTranslate;
+    double fRotate, fShearX;
+
+    maObjectTransform.decompose(aScale, aTranslate, fRotate, fShearX);
+
+    if(aScale.equalZero())
+    {
+        return;
+    }
+
+    // detect 180 degree rotation, this is the same as mirrored in X and Y,
+    // thus change to mirroring. Prefer mirroring here. Use the equal call
+    // with getSmallValue here, the original which uses rtl::math::approxEqual
+    // is too correct here. Maybe this changes with enhanced precision in aw080
+    // to the better so that this can be reduced to the more precise call again
+    if(basegfx::fTools::equal(fabs(fRotate), F_PI, 0.000000001))
+    {
+        aScale.setX(aScale.getX() * -1.0);
+        aScale.setY(aScale.getY() * -1.0);
+        fRotate = 0.0;
+    }
+
+    // remember mirroring, reset at Scale and adapt crop values for usage;
+    // mirroring can stay in the object transformation, so do not have to
+    // cope with it here (except later for the CroppedImage transformation,
+    // see below)
+    const bool bMirroredX(aScale.getX() < 0.0);
+    const bool bMirroredY(aScale.getY() < 0.0);
+    double fCropLeft(mfCropLeft);
+    double fCropTop(mfCropTop);
+    double fCropRight(mfCropRight);
+    double fCropBottom(mfCropBottom);
+
+    if(bMirroredX)
+    {
+        aScale.setX(-aScale.getX());
+        fCropLeft = mfCropRight;
+        fCropRight = mfCropLeft;
+    }
+
+    if(bMirroredY)
+    {
+        aScale.setY(-aScale.getY());
+        fCropTop = mfCropBottom;
+        fCropBottom = mfCropTop;
+    }
+
+    // create target translate and scale
+    const basegfx::B2DVector aTargetScale(
+        aScale.getX() + fCropRight + fCropLeft,
+        aScale.getY() + fCropBottom + fCropTop);
+    const basegfx::B2DVector aTargetTranslate(
+        aTranslate.getX() - fCropLeft,
+        aTranslate.getY() - fCropTop);
+
+    // create ranges to make comparisons
+    const basegfx::B2DRange aCurrentForCompare(
+        aTranslate.getX(), aTranslate.getY(),
+        aTranslate.getX() + aScale.getX(), aTranslate.getY() + aScale.getY());
+    basegfx::B2DRange aCropped(
+        aTargetTranslate.getX(), aTargetTranslate.getY(),
+        aTargetTranslate.getX() + aTargetScale.getX(), aTargetTranslate.getY() + aTargetScale.getY());
+
+    if(aCropped.isEmpty())
+    {
+        // nothing to return since cropped content is completely empty
+        return;
+    }
+
+    if(aCurrentForCompare.equal(aCropped))
+    {
+        // no crop at all
+        return;
+    }
+
+    // back-transform to have values in unit coordinates
+    basegfx::B2DHomMatrix aBackToUnit;
+    aBackToUnit.translate(-aTranslate.getX(), -aTranslate.getY());
+    aBackToUnit.scale(
+        basegfx::fTools::equalZero(aScale.getX()) ? 1.0 : 1.0 / aScale.getX(),
+        basegfx::fTools::equalZero(aScale.getY()) ? 1.0 : 1.0 / aScale.getY());
+
+    // transform cropped back to unit coordinates
+    aCropped.transform(aBackToUnit);
+
+    // prepare crop PolyPolygon
+    basegfx::B2DPolygon aGraphicOutlinePolygon(
+        basegfx::tools::createPolygonFromRect(
+            aCropped));
+    basegfx::B2DPolyPolygon aCropPolyPolygon(aGraphicOutlinePolygon);
+
+    // current range is unit range
+    basegfx::B2DRange aOverlap(0.0, 0.0, 1.0, 1.0);
+
+    aOverlap.intersect(aCropped);
+
+    if(!aOverlap.isEmpty())
+    {
+        aCropPolyPolygon.append(
+            basegfx::tools::createPolygonFromRect(
+                aOverlap));
+    }
+
+    // transform to object coordinates to prepare for clip
+    aCropPolyPolygon.transform(maObjectTransform);
+    aGraphicOutlinePolygon.transform(maObjectTransform);
+
+    // create cropped transformation
+    basegfx::B2DHomMatrix aCroppedTransform;
+
+    aCroppedTransform.scale(
+        bMirroredX ? -aCropped.getWidth() : aCropped.getWidth(),
+        bMirroredY ? -aCropped.getHeight() : aCropped.getHeight());
+    aCroppedTransform.translate(
+        bMirroredX ? aCropped.getMaxX() : aCropped.getMinX(),
+        bMirroredY ? aCropped.getMaxY() : aCropped.getMinY());
+    aCroppedTransform = maObjectTransform * aCroppedTransform;
+
+    // prepare graphic primitive (tranformed)
+    const drawinglayer::primitive2d::Primitive2DReference aGraphic(
+        new drawinglayer::primitive2d::GraphicPrimitive2D(
+            aCroppedTransform,
+            maGraphic));
+
+    // prepare outline polygon for whole graphic
+    const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
+    const basegfx::BColor aHilightColor(aSvtOptionsDrawinglayer.getHilightColor().getBColor());
+    const drawinglayer::primitive2d::Primitive2DReference aGraphicOutline(
+        new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
+        aGraphicOutlinePolygon,
+        aHilightColor));
+
+    // combine these
+    drawinglayer::primitive2d::Primitive2DSequence aCombination(2);
+    aCombination[0] = aGraphic;
+    aCombination[1] = aGraphicOutline;
+
+    // embed to MaskPrimitive2D
+    const drawinglayer::primitive2d::Primitive2DReference aMaskedGraphic(
+        new drawinglayer::primitive2d::MaskPrimitive2D(
+            aCropPolyPolygon,
+            aCombination));
+
+    // embed to UnifiedTransparencePrimitive2D
+    const drawinglayer::primitive2d::Primitive2DReference aTransparenceMaskedGraphic(
+        new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
+            drawinglayer::primitive2d::Primitive2DSequence(&aMaskedGraphic, 1),
+            0.8));
+
+    const drawinglayer::primitive2d::Primitive2DSequence aSequence(&aTransparenceMaskedGraphic, 1);
+    ::sdr::overlay::OverlayObject* pOverlayObject = new sdr::overlay::OverlayPrimitive2DSequenceObject(aSequence);
+    DBG_ASSERT(pOverlayObject, "Got NO new IAO!");
+
+    if(pOverlayObject)
+    {
+        // only informative object, no hit
+        pOverlayObject->setHittable(false);
+
+        rOverlayManager.add(*pOverlayObject);
+        maOverlayGroup.append(*pOverlayObject);
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

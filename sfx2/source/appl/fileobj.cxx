@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
 
@@ -47,6 +45,7 @@
 #include "sfx2/sfxresid.hxx"
 #include "fileobj.hxx"
 #include "app.hrc"
+#include <vcl/dibtools.hxx>
 
 namespace css = ::com::sun::star;
 
@@ -187,9 +186,16 @@ sal_Bool SvFileObject::GetData( ::com::sun::star::uno::Any & rData,
                     break;
 
                 case  FORMAT_BITMAP:
-                    if( !aGrf.GetBitmap().IsEmpty())
-                        aMemStm << aGrf.GetBitmap();
+                {
+                    const Bitmap aBitmap(aGrf.GetBitmap());
+
+                    if(!aBitmap.IsEmpty())
+                    {
+                        WriteDIB(aBitmap, aMemStm, false, true);
+                    }
+
                     break;
+                }
 
                 default:
                     if( aGrf.GetGDIMetaFile().GetActionCount() )

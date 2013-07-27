@@ -27,16 +27,9 @@
 #include "pppoptimizertoken.hxx"
 #include <osl/mutex.hxx>
 #include <hash_map>
-#include <string.h>
+#include <rtl/string.hxx>
 
-struct TCheck
-{
-    bool operator()( const char* s1, const char* s2 ) const
-    {
-        return strcmp( s1, s2 ) == 0;
-    }
-};
-typedef std::hash_map< const char*, PPPOptimizerTokenEnum, std::hash<const char*>, TCheck> TypeNameHashMap;
+typedef std::hash_map< const char*, PPPOptimizerTokenEnum, rtl::CStringHash, rtl::CStringEqual> TypeNameHashMap;
 static TypeNameHashMap* pHashMap = NULL;
 static ::osl::Mutex& getHashMapMutex()
 {
@@ -112,7 +105,6 @@ static const TokenTable pTokenTableArray[] =
     { "Alpha",              TK_Alpha },
     { "Animated",           TK_Animated },
     { "Background",         TK_Background },
-    { "BitmapPath",         TK_BitmapPath },
     { "Border",             TK_Border },
     { "Closeable",          TK_Closeable },
     { "ColorMode",          TK_ColorMode },
@@ -146,11 +138,11 @@ static const TokenTable pTokenTableArray[] =
     { "GraphicURL",         TK_GraphicURL },
     { "GraphicStreamURL",   TK_GraphicStreamURL },
     { "Height",             TK_Height },
-    { "HelpFile",           TK_HelpFile },
+    { "HelpURL",            TK_HelpURL },
     { "Hidden",             TK_Hidden },
     { "ID",                 TK_ID },
     { "ImageURL",           TK_ImageURL },
-    { "InformationDialog",  TK_InformationDialog },
+    { "ParentWindow",       TK_ParentWindow },// TODO move it
     { "InputStream",        TK_InputStream },
     { "Interlaced",         TK_Interlaced },
     { "IsInternal",         TK_IsInternal },
@@ -186,7 +178,7 @@ static const TokenTable pTokenTableArray[] =
     { "Spin",               TK_Spin },
     { "Step",               TK_Step },
     { "State",              TK_State },
-    { "StatusDispatcher",   TK_StatusDispatcher },
+    { "StatusListener",     TK_StatusListener },
     { "StringItemList",     TK_StringItemList },
     { "Strings",            TK_Strings },
     { "TabIndex",           TK_TabIndex },
@@ -226,8 +218,8 @@ static const TokenTable pTokenTableArray[] =
     { "CurrentGraphicObject",TK_CurrentGraphicObject },
     { "OLEObjects",         TK_OLEObjects },
     { "CurrentOLEObject",   TK_CurrentOLEObject },
-
-    { "STR_SUN_OPTIMIZATION_WIZARD2",STR_SUN_OPTIMIZATION_WIZARD2 },
+#if 0
+    { "STR_PRESENTATION_MINIMIZER",STR_PRESENTATION_MINIMIZER },
     { "STR_STEPS",                  STR_STEPS },
     { "STR_HELP",                   STR_HELP },
     { "STR_BACK",                   STR_BACK },
@@ -292,7 +284,7 @@ static const TokenTable pTokenTableArray[] =
     { "STR_OPTIMIZING_GRAPHICS",    STR_OPTIMIZING_GRAPHICS },
     { "STR_CREATING_OLE_REPLACEMENTS",STR_CREATING_OLE_REPLACEMENTS },
     { "STR_FileSizeSeparator",      STR_FILESIZESEPARATOR },
-
+#endif
     { "Last",               TK_Last },
     { "NotFound",           TK_NotFound }
 };

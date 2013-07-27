@@ -34,6 +34,8 @@
 #include <tools/shl.hxx>
 #include <svx/svdview.hxx>
 #include <editeng/spltitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
 #include <editeng/orphitem.hxx>
 #include <editeng/brkitem.hxx>
 #include <editeng/widwitem.hxx>
@@ -139,13 +141,13 @@ using namespace ::com::sun::star;
 void SwDrawTextShell::Execute( SfxRequest &rReq )
 {
     SwWrtShell &rSh = GetShell();
-        OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
-        SfxItemSet aEditAttr(pOLV->GetAttribs());
+    OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
+    SfxItemSet aEditAttr(pOLV->GetAttribs());
     SfxItemSet aNewAttr(*aEditAttr.GetPool(), aEditAttr.GetRanges());
 
-    sal_uInt16 nSlot = rReq.GetSlot();
+    const sal_uInt16 nSlot = rReq.GetSlot();
 
-    sal_uInt16 nWhich = GetPool().GetWhich(nSlot);
+    const sal_uInt16 nWhich = GetPool().GetWhich(nSlot);
     const SfxItemSet *pNewAttrs = rReq.GetArgs();
 
     bool bRestoreSelection = false;
@@ -202,8 +204,16 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
 
         case SID_ATTR_CHAR_UNDERLINE:
         {
-             FontUnderline eFU = ((const SvxUnderlineItem&)aEditAttr.Get(EE_CHAR_UNDERLINE)).GetLineStyle();
-            aNewAttr.Put(SvxUnderlineItem(eFU == UNDERLINE_SINGLE ? UNDERLINE_NONE : UNDERLINE_SINGLE, EE_CHAR_UNDERLINE));
+            if ( pNewAttrs )
+            {
+                const SvxTextLineItem& rTextLineItem = static_cast< const SvxTextLineItem& >( pNewAttrs->Get( pNewAttrs->GetPool()->GetWhich(nSlot) ) );
+                aNewAttr.Put( SvxUnderlineItem( rTextLineItem.GetLineStyle(), EE_CHAR_UNDERLINE ) );
+            }
+            else
+            {
+                FontUnderline eFU = ((const SvxUnderlineItem&)aEditAttr.Get(EE_CHAR_UNDERLINE)).GetLineStyle();
+                aNewAttr.Put( SvxUnderlineItem(eFU == UNDERLINE_SINGLE ? UNDERLINE_NONE : UNDERLINE_SINGLE, EE_CHAR_UNDERLINE) );
+            }
         }
         break;
 
@@ -236,6 +246,33 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
         case SID_ATTR_PARA_ADJUST_BLOCK:
             aNewAttr.Put(SvxAdjustItem(SVX_ADJUST_BLOCK, EE_PARA_JUST));
         break;
+        case SID_ATTR_PARA_LRSPACE:
+            {
+                SvxLRSpaceItem aParaMargin((const SvxLRSpaceItem&)rReq.
+                                        GetArgs()->Get(nSlot));
+                aParaMargin.SetWhich( EE_PARA_LRSPACE );
+                aNewAttr.Put(aParaMargin);
+                rReq.Done();
+            }
+            break;
+        case SID_ATTR_PARA_LINESPACE:
+            {
+                SvxLineSpacingItem aLineSpace = (const SvxLineSpacingItem&)pNewAttrs->Get(
+                                                            GetPool().GetWhich(nSlot));
+                aLineSpace.SetWhich( EE_PARA_SBL );
+                aNewAttr.Put( aLineSpace );
+                rReq.Done();
+            }
+            break;
+        case SID_ATTR_PARA_ULSPACE:
+            {
+                SvxULSpaceItem aULSpace = (const SvxULSpaceItem&)pNewAttrs->Get(
+                    GetPool().GetWhich(nSlot));
+                aULSpace.SetWhich( EE_PARA_ULSPACE );
+                aNewAttr.Put( aULSpace );
+                rReq.Done();
+            }
+            break;
 
         case SID_ATTR_PARA_LINESPACE_10:
         {
@@ -286,6 +323,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
         }
         break;
 
+        case SID_CHAR_DLG_EFFECT:
         case SID_CHAR_DLG:
         case SID_CHAR_DLG_FOR_PARAGRAPH:
         {
@@ -317,6 +355,10 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
 
                 SfxAbstractTabDialog* pDlg = pFact->CreateSwCharDlg( pView->GetWindow(), *pView, aDlgAttr, DLG_CHAR,0, sal_True );
                 DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                if (nSlot == SID_CHAR_DLG_EFFECT)
+                {
+                    pDlg->SetCurPageId(TP_CHAR_EXT);
+                }
                 sal_uInt16 nRet = pDlg->Execute();
                 if(RET_OK == nRet )
                 {
@@ -630,6 +672,48 @@ ASK_ADJUST:
                     rSet.InvalidateItem( nSlotId ), nSlotId = 0;
                 else
                     bFlag = eAdjust == ((SvxAdjustItem*)pAdjust)->GetAdjust();
+            }
+            break;
+
+        case SID_ATTR_PARA_LRSPACE:
+            {
+                SfxItemState eState = aEditAttr.GetItemState(EE_PARA_LRSPACE);
+                if( eState >= SFX_ITEM_DEFAULT )
+                {
+                    SvxLRSpaceItem aLR = (const SvxLRSpaceItem&) aEditAttr.Get( EE_PARA_LRSPACE );
+                    aLR.SetWhich(SID_ATTR_PARA_LRSPACE);
+                    rSet.Put(aLR);
+                }
+                else
+                    rSet.InvalidateItem(nSlotId);
+                nSlotId = 0;
+            }
+            break;
+        case SID_ATTR_PARA_LINESPACE:
+            {
+                SfxItemState eState = aEditAttr.GetItemState(EE_PARA_SBL);
+                if( eState >= SFX_ITEM_DEFAULT )
+                {
+                    SvxLineSpacingItem aLR = (const SvxLineSpacingItem&) aEditAttr.Get( EE_PARA_SBL );
+                    rSet.Put(aLR);
+                }
+                else
+                    rSet.InvalidateItem(nSlotId);
+                nSlotId = 0;
+            }
+            break;
+        case SID_ATTR_PARA_ULSPACE:
+            {
+                SfxItemState eState = aEditAttr.GetItemState(EE_PARA_ULSPACE);
+                if( eState >= SFX_ITEM_DEFAULT )
+                {
+                    SvxULSpaceItem aULSpace = (const SvxULSpaceItem&) aEditAttr.Get( EE_PARA_ULSPACE );
+                    aULSpace.SetWhich(SID_ATTR_PARA_ULSPACE);
+                    rSet.Put(aULSpace);
+                }
+                else
+                    rSet.InvalidateItem(nSlotId);
+                nSlotId = 0;
             }
             break;
 

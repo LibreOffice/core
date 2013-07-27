@@ -19,85 +19,55 @@
  *
  *************************************************************/
 
-
-
 #ifndef __com_sun_star_awt_XMessageBoxFactory_idl__
 #define __com_sun_star_awt_XMessageBoxFactory_idl__
 
-#ifndef __com_sun_star_awt_XWindowPeer_idl__
 #include <com/sun/star/awt/XWindowPeer.idl>
-#endif
-
-#ifndef __com_sun_star_awt_XMessageBox_idl__
 #include <com/sun/star/awt/XMessageBox.idl>
-#endif
-
-#ifndef __com_sun_star_awt_MessageBoxButtons_idl__
 #include <com/sun/star/awt/MessageBoxButtons.idl>
-#endif
-
-#ifndef __com_sun_star_awt_Rectangle_idl__
-#include <com/sun/star/awt/Rectangle.idl>
-#endif
-
-
-//=============================================================================
+#include <com/sun/star/awt/MessageBoxType.idl>
 
 module com { module sun { module star { module awt {
-
-//=============================================================================
 
 /** specifies a factory interface for creating message boxes.
  */
 published interface XMessageBoxFactory : com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
-
     /** creates a message box.
 
         @returns
-        the created message box or a null reference if it cannot be
-        created.
+            the created message box or a null reference if it cannot be
+            created.
 
         @param aParent
-        a valid XWindowPeer reference which is used as a parent. This parameter
-        must not be null.
+            a valid XWindowPeer reference which is used as a parent.
 
-        @param aPosSize
-        a rectangle which defines the position and size of the message
-        box in pixel.
+            <p>This parameter must not be null.</p>
 
         @param aType
-        a string which determines the message box type.
-        The following strings are defined.
-        <ul>
-            <li><b>infobox</b>A message box to inform the user about a certain event.
-                <b>Attention:</b><br/>This type of message box ignores the argument
-                aButton because a info box always shows a OK button.
-            </li>
-            <li><b>warningbox</b>A message to warn the user about a certain problem.</li>
-            <li><b>errorbox</b>A message box to provide an error message to the user.</li>
-            <li><b>querybox</b>A message box to query information from the user.</li>
-            <li><b>messbox</b>A normal message box.</li>
-        </ul>
+            the message box type.
 
         @param aButtons
-        specifies which buttons should be available on the
-        message box. A combination of
-        <type scope="com::sun::star::awt">MessageBoxButtons</type>. An <b>infobox</b>
-        ignores this paramter and always use button "OK".
+            specifies which buttons should be available on the message box.
+
+            <p>A combination of <type>MessageBoxButtons</type>.</p>
+            <p>A <member scope="com::sun::star::awt">MessageBoxType::INFOBOX</member>
+            ignores this paramter, instead it uses a
+            <member scope="com::sun::star::awt">MessageBoxButtons::BUTTONS_OK</member>.</p>
 
         @param aTitle
-        specifies the title of the message box.
+                specifies the title of the message box.
 
         @param aMessage
-        specifies text which will be shown by the message box.
-        Line-breaks must be added using 'CR' or 'CR+LF'.
+            specifies text which will be shown by the message box.
+            Line-breaks must be added using 'CR' or 'CR+LF'.
     */
-    XMessageBox createMessageBox( [in] com::sun::star::awt::XWindowPeer aParent, [in] com::sun::star::awt::Rectangle aPosSize, [in] string aType, [in] long aButtons, [in] string aTitle, [in] string aMessage );
+    XMessageBox createMessageBox( [in] com::sun::star::awt::XWindowPeer aParent,
+                                  [in] MessageBoxType eType,
+                                  [in] long nButtons,
+                                  [in] string sTitle,
+                                  [in] string sMessage );
 };
-
-//=============================================================================
 
 }; }; }; };
 

@@ -66,6 +66,7 @@
 #include <svx/svdopath.hxx>
 #include <svx/polypolygoneditor.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
+#include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/primitive2d/markerarrayprimitive2d.hxx>
 #include <svx/sdr/primitive2d/sdrattributecreator.hxx>
@@ -123,10 +124,22 @@ drawinglayer::primitive2d::Primitive2DSequence SdrDragEntryPolyPolygon::createPr
             aColB.invert();
         }
 
-        drawinglayer::primitive2d::Primitive2DReference aPolyPolygonMarkerPrimitive2D(
-            new drawinglayer::primitive2d::PolyPolygonMarkerPrimitive2D(aCopy, aColA, aColB, fStripeLength));
+        aRetval.realloc(2);
+        aRetval[0] = new drawinglayer::primitive2d::PolyPolygonMarkerPrimitive2D(
+            aCopy,
+            aColA,
+            aColB,
+            fStripeLength);
 
-        aRetval = drawinglayer::primitive2d::Primitive2DSequence(&aPolyPolygonMarkerPrimitive2D, 1);
+        const basegfx::BColor aHilightColor(aSvtOptionsDrawinglayer.getHilightColor().getBColor());
+        const double fTransparence(aSvtOptionsDrawinglayer.GetTransparentSelectionPercent() * 0.01);
+
+        aRetval[1] = new drawinglayer::primitive2d::PolyPolygonSelectionPrimitive2D(
+            aCopy,
+            aHilightColor,
+            fTransparence,
+            3.0,
+            false);
     }
 
     return aRetval;

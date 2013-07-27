@@ -328,12 +328,16 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
 
 void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
 {
-    OutlineViewModelChangeGuard aGuard( *pOlView );
-
+    sal_uInt16 nSId = rReq.GetSlot();
+    std::auto_ptr< OutlineViewModelChangeGuard > aGuard;
+    if (nSId != SID_OUTLINE_BULLET && nSId != FN_SVX_SET_BULLET && nSId != FN_SVX_SET_NUMBER)
+    {
+        aGuard.reset( new OutlineViewModelChangeGuard(*pOlView) );
+    }
     DeactivateCurrentFunction();
 
     OutlinerView* pOutlinerView = pOlView->GetViewByWindow( GetActiveWindow() );
-    sal_uInt16 nSId = rReq.GetSlot();
+    //sal_uInt16 nSId = rReq.GetSlot();
 
     switch( nSId )
     {
@@ -378,6 +382,8 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
         break;
 
         case SID_OUTLINE_BULLET:
+        case FN_SVX_SET_BULLET:
+        case FN_SVX_SET_NUMBER:
         {
             SetCurrentFunction( FuOutlineBullet::Create( this, GetActiveWindow(), pOlView, GetDoc(), rReq ) );
             Cancel();
@@ -392,6 +398,7 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
         }
         break;
 
+        case SID_CHAR_DLG_EFFECT:
         case SID_CHAR_DLG:
         {
             SetCurrentFunction( FuChar::Create( this, GetActiveWindow(), pOlView, GetDoc(), rReq ) );

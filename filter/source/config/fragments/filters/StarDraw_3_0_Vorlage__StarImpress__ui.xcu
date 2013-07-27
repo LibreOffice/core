@@ -22,6 +22,5 @@
     <node oor:name="StarDraw 3.0 Vorlage (StarImpress)">
         <prop oor:name="UIName">
             <value xml:lang="en-US">StarDraw 3.0 Template (%productname% Impress)</value>
-                        <value xml:lang="x-translate">StarDraw 3.0 Template (%productname% Impress)</value>
         </prop>
     </node>

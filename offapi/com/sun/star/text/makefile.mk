@@ -234,6 +234,7 @@ IDLFILES=\
       XTextColumns.idl\
       XTextContent.idl\
       XTextCursor.idl\
+    XMarkingAccess.idl\
     XTextCopy.idl\
       XTextDocument.idl\
       XTextEmbeddedObject.idl\

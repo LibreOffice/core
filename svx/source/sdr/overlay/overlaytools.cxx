@@ -34,6 +34,8 @@
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
+#include <vcl/svapp.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -67,8 +69,8 @@ namespace drawinglayer
                 // and unrotated, more like a marker
                 const double fLeft(((0.0 - getCenterX()) * getDiscreteUnit()) + getBasePosition().getX());
                 const double fTop(((0.0 - getCenterY()) * getDiscreteUnit()) + getBasePosition().getY());
-                const double fRight((((aBitmapSize.getWidth() - 1.0) - getCenterX()) * getDiscreteUnit()) + getBasePosition().getX());
-                const double fBottom((((aBitmapSize.getHeight() - 1.0) - getCenterY()) * getDiscreteUnit()) + getBasePosition().getY());
+                const double fRight(((aBitmapSize.getWidth() - getCenterX()) * getDiscreteUnit()) + getBasePosition().getX());
+                const double fBottom(((aBitmapSize.getHeight() - getCenterY()) * getDiscreteUnit()) + getBasePosition().getY());
 
                 // create a BitmapPrimitive2D using those positions
                 basegfx::B2DHomMatrix aTransform;
@@ -154,27 +156,25 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        OverlayHatchPrimitive::OverlayHatchPrimitive(
+        OverlayRectanglePrimitive::OverlayRectanglePrimitive(
             const basegfx::B2DHomMatrix& rTransformation,
-            double fDiscreteHatchDistance,
-            double fHatchRotation,
-            const basegfx::BColor& rHatchColor,
+            const basegfx::BColor& rColor,
+            double fTransparence,
             double fDiscreteGrow,
             double fDiscreteShrink)
         :   DiscreteMetricDependentPrimitive2D(),
             maTransformation(rTransformation),
-            mfDiscreteHatchDistance(fDiscreteHatchDistance),
-            mfHatchRotation(fHatchRotation),
-            maHatchColor(rHatchColor),
+            maColor(rColor),
+            mfTransparence(fTransparence),
             mfDiscreteGrow(fDiscreteGrow),
             mfDiscreteShrink(fDiscreteShrink)
         {}
 
-        Primitive2DSequence OverlayHatchPrimitive::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DSequence OverlayRectanglePrimitive::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             Primitive2DSequence aRetval;
 
-            if(basegfx::fTools::more(getDiscreteUnit(), 0.0))
+            if(basegfx::fTools::more(getDiscreteUnit(), 0.0) && getTransparence() <= 1.0)
             {
                 // decompose transformation to get single values
                 basegfx::B2DVector aScale;
@@ -185,49 +185,84 @@ namespace drawinglayer
                 // build ranges with only scale
                 basegfx::B2DRange aInnerRange(0.0, 0.0, aScale.getX(), aScale.getY());
                 basegfx::B2DRange aOuterRange(aInnerRange);
-                basegfx::B2DPolyPolygon aHatchPolyPolygon;
 
-                // grow ranges with discrete sizes
+                // grow/shrink inner/outer polygons
                 aOuterRange.grow(getDiscreteUnit() * getDiscreteGrow());
                 aInnerRange.grow(getDiscreteUnit() * -getDiscreteShrink());
 
-                // create polygon data from it
-                aHatchPolyPolygon.append(basegfx::tools::createPolygonFromRect(aOuterRange));
+                // convert to polygons
+                const double fFullGrow(getDiscreteGrow() + getDiscreteShrink());
+                const double fRelativeRadiusX(fFullGrow / aOuterRange.getWidth());
+                const double fRelativeRadiusY(fFullGrow / aOuterRange.getHeight());
+                basegfx::B2DPolygon aOuterPolygon(
+                    basegfx::tools::createPolygonFromRect(
+                        aOuterRange,
+                        fRelativeRadiusX,
+                        fRelativeRadiusY));
+                basegfx::B2DPolygon aInnerPolygon(
+                    basegfx::tools::createPolygonFromRect(
+                        aInnerRange));
 
-                if(!aInnerRange.isEmpty())
-                {
-                    aHatchPolyPolygon.append(basegfx::tools::createPolygonFromRect(aInnerRange));
-                }
+                // create filled primitive
+                basegfx::B2DPolyPolygon aPolyPolygon;
+
+                aPolyPolygon.append(aOuterPolygon);
+                aPolyPolygon.append(aInnerPolygon);
 
                 // transform polygon data except already applied scale
-                aHatchPolyPolygon.transform(
+                aPolyPolygon.transform(
                     basegfx::tools::createShearXRotateTranslateB2DHomMatrix(
                         fShearX, fRotate, aTranslate));
 
-                // create fill parameters
-                const basegfx::BColor aEmptyColor(0.0, 0.0, 0.0);
-                const drawinglayer::attribute::FillHatchAttribute aFillHatchAttribute(
-                    drawinglayer::attribute::HATCHSTYLE_SINGLE,
-                    getDiscreteHatchDistance() * getDiscreteUnit(),
-                    getHatchRotation() - fRotate,
-                    getHatchColor(),
-                    3, // same default as VCL, a minimum of three discrete units (pixels) offset
-                    false);
+                if(Application::GetSettings().GetStyleSettings().GetHighContrastMode())
+                {
+                    // for high contrast, use hatch
+                    const basegfx::BColor aHighContrastLineColor(Application::GetSettings().GetStyleSettings().GetFontColor().getBColor());
+                    const basegfx::BColor aEmptyColor(0.0, 0.0, 0.0);
+                    const double fHatchRotation(45 * F_PI180);
+                    const double fDiscreteHatchDistance(3.0);
+                    const drawinglayer::attribute::FillHatchAttribute aFillHatchAttribute(
+                        drawinglayer::attribute::HATCHSTYLE_SINGLE,
+                        fDiscreteHatchDistance * getDiscreteUnit(),
+                        fHatchRotation - fRotate, // TTTT: check visualization(!)
+                        aHighContrastLineColor,
+                        3, // same default as VCL, a minimum of three discrete units (pixels) offset
+                        false);
+                    const Primitive2DReference aHatch(
+                        new PolyPolygonHatchPrimitive2D(
+                            aPolyPolygon,
+                            aEmptyColor,
+                            aFillHatchAttribute));
 
-                // create primitive
-                const Primitive2DReference aPrimitive(
-                    new PolyPolygonHatchPrimitive2D(
-                        aHatchPolyPolygon,
-                        aEmptyColor,
-                        aFillHatchAttribute));
+                    aRetval = Primitive2DSequence(&aHatch, 1);
+                }
+                else
+                {
+                    // create fill primitive
+                    const Primitive2DReference aFill(
+                        new PolyPolygonColorPrimitive2D(
+                            aPolyPolygon,
+                            getColor()));
 
-                aRetval = Primitive2DSequence(&aPrimitive, 1);
+                    aRetval = Primitive2DSequence(&aFill, 1);
+
+                    // embed filled to transparency (if used)
+                    if(getTransparence() > 0.0)
+                    {
+                        const Primitive2DReference aFillTransparent(
+                            new UnifiedTransparencePrimitive2D(
+                                aRetval,
+                                getTransparence()));
+
+                        aRetval = Primitive2DSequence(&aFillTransparent, 1);
+                    }
+                }
             }
 
             return aRetval;
         }
 
-        ImplPrimitrive2DIDBlock(OverlayHatchPrimitive, PRIMITIVE2D_ID_OVERLAYHATCHPRIMITIVE)
+        ImplPrimitrive2DIDBlock(OverlayRectanglePrimitive, PRIMITIVE2D_ID_OVERLAYRECTANGLEPRIMITIVE)
 
     } // end of namespace primitive2d
 } // end of namespace drawinglayer

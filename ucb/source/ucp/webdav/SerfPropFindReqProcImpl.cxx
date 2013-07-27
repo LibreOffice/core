@@ -22,12 +22,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_ucb.hxx"
 
-#include <SerfPropFindReqProcImpl.hxx>
-#include <SerfTypes.hxx>
-#include <DAVProperties.hxx>
+#include "SerfPropFindReqProcImpl.hxx"
+#include "SerfTypes.hxx"
+#include "DAVProperties.hxx"
 
-#include <webdavresponseparser.hxx>
+#include "webdavresponseparser.hxx"
 #include <comphelper/seqstream.hxx>
+#include <rtl/ustrbuf.hxx>
+
 
 using namespace com::sun::star;
 
@@ -94,14 +96,20 @@ serf_bucket_t * SerfPropFindReqProcImpl::createSerfRequestBucket( serf_request_t
 
     // body bucket - certain properties OR all properties OR only property names
     serf_bucket_t* body_bkt = 0;
-    rtl::OUString aBodyText;
+    rtl::OString aBodyText;
     {
+        // TODO is it really needed a Unicode string buffer?
+        // All properties and property names aren't supposed to be ASCII?
+        rtl::OUStringBuffer aBuffer;
+        aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( PROPFIND_HEADER ));
+
         // create and fill body bucket with requested properties
         const int nPropCount = ( !mbOnlyPropertyNames && mpPropNames )
                                ? mpPropNames->size()
                                : 0;
         if ( nPropCount > 0 )
         {
+            aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( "<prop>" ) );
             SerfPropName thePropName;
             for ( int theIndex = 0; theIndex < nPropCount; theIndex ++ )
             {
@@ -110,34 +118,32 @@ serf_bucket_t * SerfPropFindReqProcImpl::createSerfRequestBucket( serf_request_t
                                                    thePropName );
 
                 /* <*propname* xmlns="*propns*" /> */
-                aBodyText += rtl::OUString::createFromAscii( "<" );
-                aBodyText += rtl::OUString::createFromAscii( thePropName.name );
-                aBodyText += rtl::OUString::createFromAscii( " xmlnx=\"" );
-                aBodyText += rtl::OUString::createFromAscii( thePropName.nspace );
-                aBodyText += rtl::OUString::createFromAscii( "\"/>" );
+                aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( "<" ));
+                aBuffer.appendAscii( thePropName.name );
+                aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( " xmlnx=\"" ));
+                aBuffer.appendAscii( thePropName.nspace );
+                aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( "\"/>" ));
             }
 
-            aBodyText = rtl::OUString::createFromAscii( "<prop>" ) +
-                        aBodyText +
-                        rtl::OUString::createFromAscii( "</prop>" );
+            aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( "</prop>" ));
         }
         else
         {
             if ( mbOnlyPropertyNames )
             {
-                aBodyText = rtl::OUString::createFromAscii( "<propname/>" );
+                aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( "<propname/>" ));
             }
             else
             {
-                aBodyText = rtl::OUString::createFromAscii( "<allprop/>" );
+                aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( "<allprop/>" ));
             }
         }
 
-        aBodyText = rtl::OUString::createFromAscii( PROPFIND_HEADER ) +
-                    aBodyText +
-                    rtl::OUString::createFromAscii( PROPFIND_TRAILER );
-        body_bkt = SERF_BUCKET_SIMPLE_STRING( rtl::OUStringToOString( aBodyText, RTL_TEXTENCODING_UTF8 ),
-                                              pSerfBucketAlloc );
+        aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( PROPFIND_TRAILER ));
+        aBodyText = rtl::OUStringToOString( aBuffer.makeStringAndClear(), RTL_TEXTENCODING_UTF8 );
+        body_bkt = serf_bucket_simple_copy_create( aBodyText.getStr(),
+                                                   aBodyText.getLength(),
+                                                   pSerfBucketAlloc );
     }
 
     // create serf request

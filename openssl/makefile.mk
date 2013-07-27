@@ -159,6 +159,8 @@ OUT2BIN += out/libeay32.dll
     .ENDIF
 .ENDIF
 
+PATCH_FILES += openssl-0.9.8o-clang.patch
+
 #set INCLUDE=D:\sol_temp\n\msvc7net3\PlatformSDK\include;D:\sol_temp\n\msvc7net3\include\ && set path=%path%;D:\sol_temp\r\btw\SRC680\perl\bin &&
 
 # --- Targets ------------------------------------------------------

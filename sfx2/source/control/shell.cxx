@@ -51,6 +51,7 @@
 #include <sfx2/mnumgr.hxx>
 #include "statcach.hxx"
 #include <sfx2/msgpool.hxx>
+#include <sfx2/sidebar/ContextChangeBroadcaster.hxx>
 
 //====================================================================
 
@@ -83,6 +84,8 @@ struct SfxShell_Impl: public SfxBroadcaster
     svtools::AsynchronLink*     pUpdater;
     SfxVerbSlotArr_Impl         aSlotArr;
     com::sun::star::uno::Sequence < com::sun::star::embed::VerbDescriptor > aVerbList;
+    ::sfx2::sidebar::ContextChangeBroadcaster maContextChangeBroadcaster;
+
     SfxShell_Impl()  : pExecuter( 0 ), pUpdater( 0 ) {}
     ~SfxShell_Impl() { delete pExecuter; delete pUpdater;}
 };
@@ -186,6 +189,8 @@ SfxShell::~SfxShell()
 
 {
     DBG_DTOR(SfxShell, 0);
+
+
     delete pImp;
 }
 
@@ -753,14 +758,12 @@ void SfxShell::Activate
     wird, um den Subclasses die Gelegenheit zu geben, auf das Aktivieren
     zu reagieren.
 
-    Die Basisimplementation ist leer und braucht nicht gerufen zu werden.
-
-
     [Querverweise]
     StarView SystemWindow::Activate(sal_Bool)
 */
 
 {
+    BroadcastContextForActivation(true);
 }
 
 //--------------------------------------------------------------------
@@ -786,15 +789,14 @@ void SfxShell::Deactivate
     wird, um den Subclasses die Gelegenheit zu geben, auf das Deaktivieren
     zu reagieren.
 
-    Die Basisimplementation ist leer und braucht nicht gerufen zu werden.
-
-
     [Querverweise]
     StarView SystemWindow::Dectivate(sal_Bool)
 */
 
 {
+    BroadcastContextForActivation(false);
 }
+
 
 void SfxShell::ParentActivate
 (
@@ -1272,6 +1274,11 @@ void SfxShell::ApplyItemSet( sal_uInt16, const SfxItemSet& )
 {
 }
 
+void SfxShell::SetContextName (const ::rtl::OUString& rsContextName)
+{
+    pImp->maContextChangeBroadcaster.Initialize(rsContextName);
+}
+
 void SfxShell::SetViewShell_Impl( SfxViewShell* pView )
 {
     pImp->pViewSh = pView;
@@ -1279,3 +1286,12 @@ void SfxShell::SetViewShell_Impl( SfxViewShell* pView )
 
 
 
+void SfxShell::BroadcastContextForActivation (const bool bIsActivated)
+{
+    SfxViewFrame* pViewFrame = GetFrame();
+    if (pViewFrame != NULL)
+        if (bIsActivated)
+            pImp->maContextChangeBroadcaster.Activate(pViewFrame->GetFrame().GetFrameInterface());
+        else
+            pImp->maContextChangeBroadcaster.Deactivate(pViewFrame->GetFrame().GetFrameInterface());
+}

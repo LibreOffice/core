@@ -28,6 +28,7 @@
 #include <dialmgr.hxx>
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
+//#include <rtl/ustrbuf.hxx>
 #include <sfx2/sfxcommands.h>
 #include <sfx2/sfxdefs.hxx>
 #include <sfx2/sfxuno.hxx>
@@ -46,7 +47,7 @@
 #include <vcl/tabpage.hxx>
 
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
-#include <com/sun/star/system/XSystemShellExecute.hpp>
+#include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/uno/Any.h>
 
 #include "about.hxx"
@@ -71,7 +72,7 @@
 #define NOTICE_FILE     "NOTICE"  FILE_EXTENSION
 
 // Dir where the files are located
-#define BRAND_DIR_SHARE_README  "${BRAND_BASE_DIR}/share/readme/"
+#define OOO_DIR_SHARE_README  "${OOO_BASE_DIR}/share/readme/"
 
 using namespace com::sun::star;
 
@@ -219,13 +220,13 @@ namespace
         maTabCtrl.Show();
 
         // Notice and License are not localized
-        const rtl::OUString sLicense( RTL_CONSTASCII_USTRINGPARAM( BRAND_DIR_SHARE_README LICENSE_FILE ) );
-        const rtl::OUString sNotice( RTL_CONSTASCII_USTRINGPARAM(  BRAND_DIR_SHARE_README NOTICE_FILE ) );
+        const rtl::OUString sLicense( RTL_CONSTASCII_USTRINGPARAM( OOO_DIR_SHARE_README LICENSE_FILE ) );
+        const rtl::OUString sNotice( RTL_CONSTASCII_USTRINGPARAM(  OOO_DIR_SHARE_README NOTICE_FILE ) );
 
         // get localized README
         rtl::OUStringBuffer aBuff;
         lang::Locale aLocale = Application::GetSettings().GetUILocale();
-        aBuff.appendAscii( RTL_CONSTASCII_STRINGPARAM( BRAND_DIR_SHARE_README README_FILE "_" ) );
+        aBuff.appendAscii( RTL_CONSTASCII_STRINGPARAM( OOO_DIR_SHARE_README README_FILE "_" ) );
         aBuff.append( aLocale.Language );
         if ( aLocale.Country.getLength() )
         {
@@ -279,15 +280,15 @@ namespace
 
 // -----------------------------------------------------------------------
 
-AboutDialog::AboutDialog( Window* pParent, const ResId& rId ) :
+AboutDialog::AboutDialog( Window* pParent, const ResId  & rId ) :
     SfxModalDialog( pParent, rId ),
     maOKButton( this, ResId( RID_CUI_ABOUT_BTN_OK, *rId.GetResMgr() ) ),
     maReadmeButton( this, ResId( RID_CUI_ABOUT_BTN_README, *rId.GetResMgr() ) ),
     maVersionText( this, ResId( RID_CUI_ABOUT_FTXT_VERSION, *rId.GetResMgr() ) ),
     maBuildInfoEdit( this, ResId( RID_CUI_ABOUT_FTXT_BUILDDATA, *rId.GetResMgr() ) ),
     maCopyrightEdit( this, ResId( RID_CUI_ABOUT_FTXT_COPYRIGHT, *rId.GetResMgr() ) ),
-    maCreditsLink( this, ResId( RID_CUI_ABOUT_FTXT_WELCOME_LINK, *rId.GetResMgr() )  ),
-    maCopyrightTextStr( ResId( RID_CUI_ABOUT_STR_COPYRIGHT, *rId.GetResMgr() ) )
+    maCreditsLink( this, ResId( RID_CUI_ABOUT_FTXT_WELCOME_LINK, *rId.GetResMgr() )  )
+//    maCopyrightTextStr( ResId( RID_CUI_ABOUT_STR_COPYRIGHT, *rId.GetResMgr() ) )
 {
     bool bLoad = vcl::ImageRepository::loadBrandingImage(
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("about")),
@@ -298,6 +299,39 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId ) :
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("logo")),
             maMainLogo );
     OSL_ENSURE( bLoad, "Can't load logo image");
+
+    const String vendor( ResId( RID_CUI_ABOUT_STR_COPYRIGHT_VENDOR, *rId.GetResMgr() ) );
+    String createdRes( ResId( RID_CUI_ABOUT_STR_CREATED, *rId.GetResMgr() ) );
+    if ( !vendor.EqualsAscii("Apache Software Foundation") ) {
+        createdRes = String( ResId( RID_CUI_ABOUT_STR_CREATED_VENDOR, *rId.GetResMgr() ));
+    }
+    const String copyrightAcknowledge( ResId( RID_CUI_ABOUT_STR_ACKNOWLEDGE, *rId.GetResMgr() ) );
+
+    rtl::OUStringBuffer sbcopyright(250);
+    sbcopyright.appendAscii("Copyright ");
+    sbcopyright.append((sal_Unicode)0x00a9);
+    sbcopyright.appendAscii(" ");
+    rtl::OUString sYear( RTL_CONSTASCII_USTRINGPARAM("2013") );
+    if (vendor.EqualsAscii("Apache Software Foundation")) {
+        sbcopyright.append(sYear);
+        sbcopyright.appendAscii(" The Apache Software Foundation.\n\n");
+    } else {
+#ifdef COPYRIGHT_YEAR
+        const rtl::OUString sDefYear( RTL_CONSTASCII_USTRINGPARAM( STRINGIFY( COPYRIGHT_YEAR ) ) );
+        if ( sDefYear.getLength() > 0 )
+        {
+            sYear = sDefYear;
+        }
+#endif
+        sbcopyright.append(sYear);
+        sbcopyright.appendAscii(" ");
+        sbcopyright.append(vendor);
+        sbcopyright.appendAscii(".\nPortion copyright The Apache Software Foundation.\n\n");
+    }
+    sbcopyright.append( createdRes );
+    sbcopyright.appendAscii("\n\n");
+    sbcopyright.append( copyrightAcknowledge );
+    maCopyrightTextStr = sbcopyright.makeStringAndClear();
 
     InitControls();
 
@@ -350,6 +384,7 @@ void AboutDialog::ApplyStyleSettings()
     Color aWindowColor( rSettings.GetWindowColor() );
     Wallpaper aWall( aWindowColor );
     SetBackground( aWall );
+
     Font aNewFont( maCopyrightEdit.GetFont() );
     aNewFont.SetTransparent( sal_True );
 
@@ -517,6 +552,13 @@ sal_Bool AboutDialog::Close()
 void AboutDialog::Paint( const Rectangle& rRect )
 {
     SetClipRegion( rRect );
+
+    // workaround to ensure that the background is painted correct
+    // on MacOS for exmaple the background was grey and the image and other controls white
+    SetFillColor(GetSettings().GetStyleSettings().GetWindowColor());
+    SetLineColor();
+    DrawRect(rRect);
+
     DrawImage( maMainLogoPos, maMainLogo );
     DrawImage( maAppLogoPos, maAppLogo );
 
@@ -532,13 +574,9 @@ IMPL_LINK ( AboutDialog, OpenLinkHdl_Impl, svt::FixedHyperlink*, EMPTYARG )
     {
         try
         {
-            uno::Reference< uno::XComponentContext > xContext =
-                ::comphelper::getProcessComponentContext();
             uno::Reference< com::sun::star::system::XSystemShellExecute > xSystemShell(
-                xContext->getServiceManager()->createInstanceWithContext(
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.system.SystemShellExecute" ) ),
-                    xContext ),
-                uno::UNO_QUERY_THROW );
+                com::sun::star::system::SystemShellExecute::create(
+                    ::comphelper::getProcessComponentContext() ) );
             if ( xSystemShell.is() )
                 xSystemShell->execute( sURL, rtl::OUString(), com::sun::star::system::SystemShellExecuteFlags::DEFAULTS );
         }

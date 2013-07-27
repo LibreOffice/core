@@ -83,17 +83,7 @@ TabPage TP_PREPARE
                             TAB_PAGE_HEIGHT - CONTENT_POS_X - TAB_PAGE_CONTENT_MARGIN - ( 2 * FIXED_TEXT_HEIGHT - SPACING_UNRELATED ) );
         WordBreak = TRUE;
 
-        Text [ en-US ] = "This wizard will guide you through the task of migrating your macros.\n\n"
-
-            "After you finished it, all macros which were formerly embedded into the forms and reports of "
-            "the current database document will have been moved to the document itself. In this course, "
-            "libraries will be renamed as needed.\n\n"
-
-            "If your forms and reports contain references to those macros, they will be adjusted, where "
-            "possible.\n\n"
-
-            "Before the migration can start, all forms, reports, queries and tables belonging to the document must be closed. "
-            "Press 'Next' to do so.";
+        Text [ en-US ] = "This wizard will guide you through the task of migrating your macros.\n\nAfter you finished it, all macros which were formerly embedded into the forms and reports of the current database document will have been moved to the document itself. In this course, libraries will be renamed as needed.\n\nIf your forms and reports contain references to those macros, they will be adjusted, where possible.\n\nBefore the migration can start, all forms, reports, queries and tables belonging to the document must be closed. Press 'Next' to do so.";
     };
 
     FixedText FT_CLOSE_DOC_ERROR
@@ -134,9 +124,7 @@ TabPage TP_SAVE_DBDOC_AS
 
         WordBreak = TRUE;
 
-        Text [ en-US ] = "To allow you to go back to the state before the migration, the database "
-            "document will be backed up to a location of your choice. Every change done by the wizard will "
-            "be made to the original document, the backup will stay untouched.";
+        Text [ en-US ] = "To allow you to go back to the state before the migration, the database document will be backed up to a location of your choice. Every change done by the wizard will be made to the original document, the backup will stay untouched.";
     };
 
     FixedText FT_SAVE_AS_LABEL
@@ -352,13 +340,11 @@ TabPage TP_SUMMARY
 String STR_FORM
 {
     Text [ en-US ] = "Form '$name$'";
-    Text [ x-comment ] = "This refers to a form document inside a database document.";
 };
 
 String STR_REPORT
 {
     Text [ en-US ] = "Report '$name$'";
-    Text [ x-comment ] = "This refers to a report document inside a database document.";
 };
 
 String STR_OVERALL_PROGRESS

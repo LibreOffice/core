@@ -1,6 +1,0 @@
-Dies ist ein Testfile, welches nur dort stehen muß. 
-Was dort drinnen steht ist vollkommen egal.
-
-Gebraucht ür den File_dlg.bas - Test.
-
-TZ 15.4.99

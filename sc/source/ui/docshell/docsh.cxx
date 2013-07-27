@@ -2594,6 +2594,13 @@ ScDocShell::ScDocShell( const sal_uInt64 i_nSfxCreationFlags )
     bIsInplace = (GetCreateMode() == SFX_CREATE_MODE_EMBEDDED);
     //  wird zurueckgesetzt, wenn nicht inplace
 
+    // #118840# set flag at ScDocument that it is used temporary (e.g. inplace
+    // for transporting a chart over the clipboard)
+    if(bIsInplace)
+    {
+        aDocument.mbIsTemporary = true;
+    }
+
     pDocFunc = new ScDocFunc(*this);
 
     //  SetBaseModel needs exception handling
@@ -3004,7 +3011,7 @@ bool ScDocShell::GetProtectionHash( /*out*/ ::com::sun::star::uno::Sequence< sal
     return bRes;
 }
 
-void ScDocShell::BeforeLoading( SfxMedium& rMedium, const ::rtl::OUString & rstrTypeName, const ::rtl::OUString & rstrFilterName )
+void ScDocShell::BeforeLoading( SfxMedium& /*rMedium*/, const ::rtl::OUString & rstrTypeName, const ::rtl::OUString & /*rstrFilterName*/ )
 {
     const sal_uInt8 nMediumFlag = GetMediumFlag<false>( rstrTypeName );
 
@@ -3017,7 +3024,7 @@ void ScDocShell::BeforeLoading( SfxMedium& rMedium, const ::rtl::OUString & rstr
     }
 }
 
-void ScDocShell::AfterLoading( SfxMedium& rMedium, const ::rtl::OUString & rstrTypeName, const ::rtl::OUString & rstrFilterName )
+void ScDocShell::AfterLoading( SfxMedium& /*rMedium*/, const ::rtl::OUString & rstrTypeName, const ::rtl::OUString & /*rstrFilterName*/ )
 {
     const sal_uInt8 nMediumFlag = GetMediumFlag<false>( rstrTypeName );
 

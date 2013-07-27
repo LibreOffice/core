@@ -35,7 +35,7 @@
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
-#include <com/sun/star/system/XSystemShellExecute.hpp>
+#include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/util/XStringSubstitution.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
@@ -85,10 +85,10 @@ DEFINE_XTYPEPROVIDER_5(SystemExec                    ,
                        css::frame::XNotifyingDispatch,
                        css::frame::XDispatch         )
 
-DEFINE_XSERVICEINFO_MULTISERVICE(SystemExec                   ,
-                                 ::cppu::OWeakObject          ,
-                                 SERVICENAME_PROTOCOLHANDLER  ,
-                                 IMPLEMENTATIONNAME_SYSTEMEXEC)
+DEFINE_XSERVICEINFO_MULTISERVICE_2(SystemExec                   ,
+                                   ::cppu::OWeakObject          ,
+                                   SERVICENAME_PROTOCOLHANDLER  ,
+                                   IMPLEMENTATIONNAME_SYSTEMEXEC)
 
 DEFINE_INIT_SERVICE(SystemExec,
                     {
@@ -102,12 +102,12 @@ DEFINE_INIT_SERVICE(SystemExec,
 
 //_________________________________________________________________________________________________________________
 
-SystemExec::SystemExec( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory )
+SystemExec::SystemExec( const css::uno::Reference< css::uno::XComponentContext >& xContext )
         //  Init baseclasses first
         : ThreadHelpBase( &Application::GetSolarMutex() )
         , OWeakObject   (                               )
         // Init member
-        , m_xFactory    ( xFactory                      )
+        , m_xContext    ( xContext                      )
 {
 }
 
@@ -115,7 +115,7 @@ SystemExec::SystemExec( const css::uno::Reference< css::lang::XMultiServiceFacto
 
 SystemExec::~SystemExec()
 {
-    m_xFactory = NULL;
+    m_xContext = NULL;
 }
 
 //_________________________________________________________________________________________________________________
@@ -171,7 +171,7 @@ void SAL_CALL SystemExec::dispatchWithNotification( const css::util::URL&       
 
     // SAFE ->
     ReadGuard aReadLock(m_aLock);
-    css::uno::Reference< css::lang::XMultiServiceFactory > xFactory = m_xFactory;
+    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
     aReadLock.unlock();
     // <- SAFE
 
@@ -180,14 +180,14 @@ void SAL_CALL SystemExec::dispatchWithNotification( const css::util::URL&       
     try
     {
         css::uno::Reference< css::util::XStringSubstitution > xPathSubst(
-            xFactory->createInstance(SERVICENAME_SUBSTITUTEPATHVARIABLES),
+            xContext->getServiceManager()->createInstanceWithContext(
+                SERVICENAME_SUBSTITUTEPATHVARIABLES, xContext),
             css::uno::UNO_QUERY_THROW);
 
         ::rtl::OUString sSystemURL = xPathSubst->substituteVariables(sSystemURLWithVariables, sal_True); // sal_True force an exception if unknown variables exists !
 
         css::uno::Reference< css::system::XSystemShellExecute > xShell(
-            xFactory->createInstance(SERVICENAME_SYSTEMSHELLEXECUTE),
-            css::uno::UNO_QUERY_THROW);
+            css::system::SystemShellExecute::create(xContext));
 
         xShell->execute(sSystemURL, ::rtl::OUString(), css::system::SystemShellExecuteFlags::DEFAULTS);
         impl_notifyResultListener(xListener, css::frame::DispatchResultState::SUCCESS);

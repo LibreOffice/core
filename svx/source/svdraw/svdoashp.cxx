@@ -1982,7 +1982,7 @@ bool SdrObjCustomShape::applySpecialDrag(SdrDragStat& rDrag)
         }
         case HDL_MOVE :
         {
-            sdr::legacy::MoveSdrObject(*this, Size(rDrag.GetDX(), rDrag.GetDY()));
+            sdr::legacy::MoveSdrObject(*this, Size(basegfx::fround(rDrag.GetDX()), basegfx::fround(rDrag.GetDY())));
             break;
         }
         default: break;
@@ -2765,7 +2765,6 @@ void SdrObjCustomShape::RestGeoData(const SdrObjGeoData& rGeo)
     // TTTT: MirrorX/Y removed
     //SetMirroredX( rAGeo.bMirroredX );
     //SetMirroredY( rAGeo.bMirroredY );
-
         SdrCustomShapeGeometryItem rGeometryItem = (SdrCustomShapeGeometryItem&)GetMergedItem(SDRATTR_CUSTOMSHAPE_GEOMETRY);
         const rtl::OUString sAdjustmentValues(RTL_CONSTASCII_USTRINGPARAM("AdjustmentValues"));
         PropertyValue aPropVal;

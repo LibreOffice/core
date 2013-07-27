@@ -91,6 +91,11 @@
 #include "Window.hxx"
 #include "fupoor.hxx"
 
+#include <editeng/numitem.hxx>
+#include <editeng/eeitem.hxx>
+#include <svl/poolitem.hxx>
+#include <glob.hrc>
+
 #ifndef SO2_DECL_SVINPLACEOBJECT_DEFINED
 #define SO2_DECL_SVINPLACEOBJECT_DEFINED
 SO2_DECL_REF(SvInPlaceObject)
@@ -172,7 +177,8 @@ ViewShell::~ViewShell()
 {
     // Keep the content window from accessing in its destructor the
     // WindowUpdater.
-    mpContentWindow->SetViewShell(NULL);
+    if (mpContentWindow)
+        mpContentWindow->SetViewShell(NULL);
 
     delete mpZoomList;
 
@@ -181,6 +187,13 @@ ViewShell::~ViewShell()
     if (mpImpl->mpSubShellFactory.get() != NULL)
         GetViewShellBase().GetViewShellManager()->RemoveSubShellFactory(
             this,mpImpl->mpSubShellFactory);
+
+    if (mpContentWindow)
+    {
+        OSL_TRACE("destroying mpContentWindow at %x with parent %x", mpContentWindow.get(),
+            mpContentWindow->GetParent());
+        mpContentWindow.reset();
+    }
 }
 
 
@@ -314,7 +327,7 @@ void ViewShell::Exit (void)
 
 void ViewShell::Activate(sal_Bool bIsMDIActivate)
 {
-    SfxShell::Activate(bIsMDIActivate);
+    // Do not forward to SfxShell::Activate()
 
     // Laut MI darf keiner GrabFocus rufen, der nicht genau weiss von
     // welchem Window der Focus gegrabt wird. Da Activate() vom SFX teilweise
@@ -785,10 +798,89 @@ void ViewShell::SetupRulers (void)
     }
 }
 
+const SfxPoolItem* ViewShell::GetNumBulletItem(SfxItemSet& aNewAttr, sal_uInt16& nNumItemId)
+{
+    const SfxPoolItem* pTmpItem = NULL;
+
+    if(aNewAttr.GetItemState(nNumItemId, sal_False, &pTmpItem) == SFX_ITEM_SET)
+    {
+        return pTmpItem;
+    }
+    else
+    {
+        nNumItemId = aNewAttr.GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE);
+        SfxItemState eState = aNewAttr.GetItemState(nNumItemId, sal_False, &pTmpItem);
+        if (eState == SFX_ITEM_SET)
+            return pTmpItem;
+        else
+        {
+            bool bOutliner(false);
+            bool bTitle(false);
+
+            if( mpView && mpView->areSdrObjectsSelected() )
+            {
+                const SdrObjectVector aSelection(mpView->getSelectedSdrObjectVectorFromSdrMarkView());
+
+                for(sal_uInt32 nNum(0); nNum < aSelection.size(); nNum++)
+                {
+                    SdrObject* pObj = aSelection[nNum];
+
+                    if( pObj && SdrInventor == pObj->GetObjInventor() )
+                    {
+                        switch(pObj->GetObjIdentifier())
+                        {
+                        case OBJ_TITLETEXT:
+                            bTitle = true;
+                            break;
+                        case OBJ_OUTLINETEXT:
+                            bOutliner = true;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            const SvxNumBulletItem *pItem = NULL;
+            if(bOutliner)
+            {
+                SfxStyleSheetBasePool* pSSPool = mpView->GetDocSh()->GetStyleSheetPool();
+                String aStyleName((SdResId(STR_LAYOUT_OUTLINE)));
+                aStyleName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " 1" ) );
+                SfxStyleSheetBase* pFirstStyleSheet = pSSPool->Find( aStyleName, SD_STYLE_FAMILY_PSEUDO);
+                if( pFirstStyleSheet )
+                    pFirstStyleSheet->GetItemSet().GetItemState(EE_PARA_NUMBULLET, sal_False, (const SfxPoolItem**)&pItem);
+            }
+
+            if( pItem == NULL )
+                pItem = (SvxNumBulletItem*) aNewAttr.GetPool()->GetSecondaryPool()->GetPoolDefaultItem(EE_PARA_NUMBULLET);
+
+            aNewAttr.Put(*pItem, EE_PARA_NUMBULLET);
+
+            if(bTitle && aNewAttr.GetItemState(EE_PARA_NUMBULLET,sal_True) == SFX_ITEM_ON )
+            {
+                SvxNumBulletItem* pItem = (SvxNumBulletItem*)aNewAttr.GetItem(EE_PARA_NUMBULLET,sal_True);
+                SvxNumRule* pRule = pItem->GetNumRule();
+                if(pRule)
+                {
+                    SvxNumRule aNewRule( *pRule );
+                    aNewRule.SetFeatureFlag( NUM_NO_NUMBERS, sal_True );
+
+                    SvxNumBulletItem aNewItem( aNewRule, EE_PARA_NUMBULLET );
+                    aNewAttr.Put(aNewItem);
+                }
+            }
+
+            SfxItemState eState = aNewAttr.GetItemState(nNumItemId, sal_False, &pTmpItem);
+            if (eState == SFX_ITEM_SET)
+                return pTmpItem;
+
+        }
+    }
+    return pTmpItem;
+}
 
 
-
-bool ViewShell::HasRuler (void)
+bool ViewShell::HasRuler()
 {
     return mbHasRulers;
 }
@@ -940,9 +1032,10 @@ void ViewShell::ArrangeGUIElements (void)
     {
         OSL_ASSERT (GetViewShell()!=NULL);
 
-        mpContentWindow->SetPosSizePixel(
-            Point(nLeft,nTop),
-            Size(nRight-nLeft,nBottom-nTop));
+        if (mpContentWindow)
+            mpContentWindow->SetPosSizePixel(
+                Point(nLeft,nTop),
+                Size(nRight-nLeft,nBottom-nTop));
     }
 
     // Windows in the center and rulers at the left and top side.
@@ -1057,12 +1150,12 @@ void ViewShell::ImpGetUndoStrings(SfxItemSet &rSet) const
     ::svl::IUndoManager* pUndoManager = ImpGetUndoManager();
     if(pUndoManager)
     {
-        sal_uInt16 nCount(pUndoManager->GetUndoActionCount());
+        sal_uInt32 nCount(pUndoManager->GetUndoActionCount());
         if(nCount)
         {
             // prepare list
             List aStringList;
-            sal_uInt16 a;
+            sal_uInt32 a;
 
             for( a = 0; a < nCount; a++)
             {
@@ -1092,12 +1185,12 @@ void ViewShell::ImpGetRedoStrings(SfxItemSet &rSet) const
     ::svl::IUndoManager* pUndoManager = ImpGetUndoManager();
     if(pUndoManager)
     {
-        sal_uInt16 nCount(pUndoManager->GetRedoActionCount());
+        sal_uInt32 nCount(pUndoManager->GetRedoActionCount());
         if(nCount)
         {
             // prepare list
             List aStringList;
-            sal_uInt16 a;
+            sal_uInt32 a;
 
             for( a = 0; a < nCount; a++)
             {
@@ -1136,7 +1229,7 @@ void ViewShell::ImpSidUndo(bool, SfxRequest& rReq)
 
     if(nNumber && pUndoManager)
     {
-        sal_uInt16 nCount(pUndoManager->GetUndoActionCount());
+        sal_uInt32 nCount(pUndoManager->GetUndoActionCount());
         if(nCount >= nNumber)
         {
             try
@@ -1148,7 +1241,7 @@ void ViewShell::ImpSidUndo(bool, SfxRequest& rReq)
                     pUndoManager->Undo();
                 }
             }
-            catch( const Exception& e )
+            catch( const Exception& /*e*/ )
             {
                 // no need to handle. By definition, the UndoManager handled this by clearing the
                 // Undo/Redo stacks
@@ -1185,7 +1278,7 @@ void ViewShell::ImpSidRedo(bool, SfxRequest& rReq)
 
     if(nNumber && pUndoManager)
     {
-        sal_uInt16 nCount(pUndoManager->GetRedoActionCount());
+        sal_uInt32 nCount(pUndoManager->GetRedoActionCount());
         if(nCount >= nNumber)
         {
             try
@@ -1197,7 +1290,7 @@ void ViewShell::ImpSidRedo(bool, SfxRequest& rReq)
                     pUndoManager->Redo();
                 }
             }
-            catch( const Exception& e )
+            catch( const Exception& /*e*/ )
             {
                 // no need to handle. By definition, the UndoManager handled this by clearing the
                 // Undo/Redo stacks

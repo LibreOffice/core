@@ -60,7 +60,7 @@ $(eval $(call gb_Library_add_linked_libs,svt,\
     sot \
     stl \
     svl \
-    tk \
+    ootk \
     tl \
     ucbhelper \
     utl \

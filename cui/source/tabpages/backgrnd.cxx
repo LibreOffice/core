@@ -401,6 +401,9 @@ SvxBackgroundTabPage::SvxBackgroundTabPage( Window* pParent,
     FillColorValueSets_Impl();
 
     aBackgroundColorSet.SetSelectHdl( HDL(BackgroundColorHdl_Impl) );
+    aBackgroundColorSet.SetStyle(aBackgroundColorSet.GetStyle() | WB_ITEMBORDER | WB_NAMEFIELD | WB_NONEFIELD);
+    aBackgroundColorSet.SetText(SVX_RESSTR(RID_SVXSTR_TRANSPARENT));
+    aBackgroundColorSet.SetAccessibleName(aBackgroundColorBox.GetText());
     FreeResource();
 
     aBtnBrowse.SetAccessibleRelationMemberOf(&aGbFile);
@@ -1194,55 +1197,46 @@ void SvxBackgroundTabPage::FillColorValueSets_Impl()
 {
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     const SfxPoolItem* pItem = NULL;
-    XColorTable* pColorTable = NULL;
-    const Size aSize15x15 = Size( 15, 15 );
-    bool bOwn = false;
+    XColorListSharedPtr aColorTable;
+    long nColorCount(0);
 
     if ( pDocSh && ( 0 != ( pItem = pDocSh->GetItem( SID_COLOR_TABLE ) ) ) )
-        pColorTable = ( (SvxColorTableItem*)pItem )->GetColorTable();
-
-    if ( !pColorTable )
     {
-        bOwn = true;
-        pColorTable = new XColorTable( SvtPathOptions().GetPalettePath() );
+        aColorTable = dynamic_cast< const SvxColorTableItem* >(pItem)->GetColorTable();
     }
 
-    if ( pColorTable )
+    if ( !aColorTable.get() )
     {
-        short i = 0;
-        long nCount = pColorTable->Count();
-        XColorEntry* pEntry = NULL;
-        Color aColWhite( COL_WHITE );
-        String aStrWhite( EditResId( RID_SVXITEMS_COLOR_WHITE ) );
-        WinBits nBits = ( aBackgroundColorSet.GetStyle() | WB_ITEMBORDER | WB_NAMEFIELD | WB_NONEFIELD );
-        aBackgroundColorSet.SetText( SVX_RESSTR( RID_SVXSTR_TRANSPARENT ) );
-        aBackgroundColorSet.SetStyle( nBits );
-        aBackgroundColorSet.SetAccessibleName(aBackgroundColorBox.GetText());
-        for ( i = 0; i < nCount; i++ )
-        {
-            pEntry = pColorTable->GetColor(i);
-            aBackgroundColorSet.InsertItem( i + 1, pEntry->GetColor(), pEntry->GetName() );
-        }
-
-        while ( i < 80 )
-        {
-            aBackgroundColorSet.InsertItem( i + 1, aColWhite, aStrWhite );
-            i++;
-        }
-
-        if ( nCount > 80 )
-        {
-            aBackgroundColorSet.SetStyle( nBits | WB_VSCROLL );
-        }
+        aColorTable = XPropertyListFactory::CreateSharedXColorList(SvtPathOptions().GetPalettePath());
     }
 
-    if ( bOwn )
-        delete pColorTable;
+    if ( aColorTable.get() )
+    {
+        nColorCount = aColorTable->Count();
+        aBackgroundColorSet.Clear();
+        aBackgroundColorSet.addEntriesForXColorList(aColorTable);
+    }
 
-    aBackgroundColorSet.SetColCount( 10 );
-    aBackgroundColorSet.SetLineCount( 10 );
-    aBackgroundColorSet.CalcWindowSizePixel( aSize15x15 );
+    const WinBits nBits(aBackgroundColorSet.GetStyle() | WB_ITEMBORDER | WB_NAMEFIELD | WB_NONEFIELD);
+    aBackgroundColorSet.SetStyle(nBits);
+    aBackgroundColorSet.SetColCount(aBackgroundColorSet.getColumnCount());
 
+    // here we have enough space to the left, so layout with fixed column size
+    // and fixed height, adapt width. Apply the adapted width by moving the left
+    // edge of the control to the left, keeping the right edge aligned
+    // with the original position
+    const Point aCurrentPosContainer(aBorderWin.GetPosPixel());
+    const Size aCurrentSizeContainer(aBorderWin.GetOutputSizePixel());
+    const Size aCurrentSizeContent(aBackgroundColorSet.GetOutputSizePixel());
+    const Size aNewSizeContent(aBackgroundColorSet.layoutToGivenHeight(aCurrentSizeContent.Height() - 4, nColorCount));
+    static sal_Int32 nAdd = 4;
+    const Size aNewSizeContainer(aNewSizeContent.Width() + nAdd, aNewSizeContent.Height() + nAdd);
+    const Point aNewPos((aCurrentPosContainer.X() + aCurrentSizeContainer.Width()) - aNewSizeContainer.Width(), aCurrentPosContainer.Y());
+
+    aBorderWin.SetOutputSizePixel(aNewSizeContainer);
+    aBackgroundColorSet.SetOutputSizePixel(aNewSizeContent);
+    aBackgroundColorSet.SetPosSizePixel(Point(nAdd/2, nAdd/2), aNewSizeContent);
+    aBorderWin.SetPosSizePixel(aNewPos, aNewSizeContainer);
 }
 
 //------------------------------------------------------------------------

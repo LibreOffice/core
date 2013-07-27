@@ -34,7 +34,6 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <svx/sdr/contact/objectcontacttools.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -70,6 +69,20 @@ namespace sdr
             // at all
             OSL_ENSURE(false, "OverlayObject derivation without visualisation definition (missing createOverlayObjectPrimitive2DSequence implementation) (!)");
             return drawinglayer::primitive2d::Primitive2DSequence();
+        }
+
+        sal_uInt32 OverlayObject::impCheckBlinkTimeValueRange(sal_uInt32 nBlinkTime) const
+        {
+            if(nBlinkTime < 25)
+            {
+                nBlinkTime = 25;
+            }
+            else if(nBlinkTime > 10000)
+            {
+                nBlinkTime = 10000;
+            }
+
+            return nBlinkTime;
         }
 
         void OverlayObject::allowAntiAliase(bool bNew)

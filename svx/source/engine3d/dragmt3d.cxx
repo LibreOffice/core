@@ -60,7 +60,7 @@ E3dDragMethod::E3dDragMethod (
     // Fuer alle in der selektion befindlichen 3D-Objekte
     // eine Unit anlegen
     static bool bDoInvalidate(false);
-    long nObjs(0);
+    sal_uInt32 nObjs(0);
 
     if(mbMoveFull)
     {
@@ -294,7 +294,8 @@ void E3dDragMethod::CreateOverlayGeometry(::sdr::overlay::OverlayManager& rOverl
 
     if(aResult.count())
     {
-        ::sdr::overlay::OverlayPolyPolygonStriped* pNew = new ::sdr::overlay::OverlayPolyPolygonStriped(aResult);
+        ::sdr::overlay::OverlayPolyPolygonStripedAndFilled* pNew = new ::sdr::overlay::OverlayPolyPolygonStripedAndFilled(
+            aResult);
         rOverlayManager.add(*pNew);
         addToOverlayObjectList(*pNew);
     }

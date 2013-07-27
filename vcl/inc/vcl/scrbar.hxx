@@ -93,9 +93,9 @@ private:
     DECL_DLLPRIVATE_LINK(       ImplAutoTimerHdl, AutoTimer* );
 
 public:
-                    ScrollBar( Window* pParent, WinBits nStyle = WB_VERT );
-                    ScrollBar( Window* pParent, const ResId& rResId );
-                    ~ScrollBar();
+    explicit        ScrollBar( Window* pParent, WinBits nStyle = WB_VERT );
+    explicit        ScrollBar( Window* pParent, const ResId& );
+    virtual         ~ScrollBar();
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt );
     virtual void    Tracking( const TrackingEvent& rTEvt );
@@ -156,11 +156,12 @@ private:
     SAL_DLLPRIVATE void ImplInitSettings();
 
 public:
-                    ScrollBarBox( Window* pParent, WinBits nStyle = 0 );
-                    ScrollBarBox( Window* pParent, const ResId& rResId );
+    explicit        ScrollBarBox( Window* pParent, WinBits nStyle = 0 );
+    explicit        ScrollBarBox( Window* pParent, const ResId& );
 
     virtual void    StateChanged( StateChangedType nType );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 };
 
 #endif // _SV_SCRBAR_HXX
+

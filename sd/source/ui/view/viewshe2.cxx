@@ -84,6 +84,7 @@
 #include <svtools/soerr.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svx/svdlegacy.hxx>
+#include <svx/charthelper.hxx>
 
 #ifdef _MSC_VER
 #pragma optimize ( "", off )
@@ -978,7 +979,7 @@ bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
 
         if( bChangeDefaultsForChart && xObj.is())
         {
-            AdaptDefaultsForChart( xObj );
+            ChartHelper::AdaptDefaultsForChart( xObj );
         }
 
         pSdClient->DoVerb(nVerb);   // ErrCode wird ggf. vom Sfx ausgegeben
@@ -1183,35 +1184,6 @@ basegfx::B2DPoint ViewShell::GetWinViewPos() const
 basegfx::B2DPoint ViewShell::GetViewOrigin() const
 {
     return mpContentWindow->GetViewOrigin();
-}
-
-void ViewShell::AdaptDefaultsForChart(
-    const uno::Reference < embed::XEmbeddedObject > & xEmbObj )
-{
-    if( xEmbObj.is())
-    {
-        uno::Reference< chart2::XChartDocument > xChartDoc( xEmbObj->getComponent(), uno::UNO_QUERY );
-        OSL_ENSURE( xChartDoc.is(), "Trying to set chart property to non-chart OLE" );
-        if( !xChartDoc.is())
-            return;
-
-        try
-        {
-            // set background to transparent (none)
-            uno::Reference< beans::XPropertySet > xPageProp( xChartDoc->getPageBackground());
-            if( xPageProp.is())
-                xPageProp->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("FillStyle")),
-                                             uno::makeAny( drawing::FillStyle_NONE ));
-            // set no border
-            if( xPageProp.is())
-                xPageProp->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("LineStyle")),
-                                             uno::makeAny( drawing::LineStyle_NONE ));
-        }
-        catch( const uno::Exception & )
-        {
-            OSL_ENSURE( false, "Exception caught in AdaptDefaultsForChart" );
-        }
-    }
 }
 
 void ViewShell::UpdateVisAreaChanged()

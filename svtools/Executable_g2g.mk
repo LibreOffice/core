@@ -43,6 +43,15 @@ $(eval $(call gb_Executable_add_linked_libs,g2g,\
     $(gb_STDLIBS) \
 ))
 
+ifneq ($(USE_SYSTEM_STL),YES)
+ifeq ($(PRODUCT),)
+ $(eval $(call gb_Executable_set_cxxflags,g2g,\
+        $$(CXXFLAGS) \
+        -D_DEBUG \
+))
+endif
+endif
+
 $(eval $(call gb_Executable_add_exception_objects,g2g,\
     svtools/bmpmaker/g2g \
 ))

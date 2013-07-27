@@ -193,6 +193,12 @@ void RtfExport::AppendBookmark( const OUString& rName, bool /*bSkip*/ )
     m_pAttrOutput->WriteBookmarks_Impl(aStarts, aEnds);
 }
 
+//For i120928,to export graphic of bullet for RTF filter
+void RtfExport::ExportGrfBullet(const SwTxtNode& /* rNd */)
+{
+    //This is for RTF filter on the graphic bullets
+}
+
 void RtfExport::WriteChar( sal_Unicode )
 {
     OSL_TRACE("%s", OSL_THIS_FUNC);
@@ -402,8 +408,21 @@ void RtfExport::WriteStyles()
 void RtfExport::WriteMainText()
 {
     OSL_TRACE("%s start", OSL_THIS_FUNC);
-    pCurPam->GetPoint()->nNode = pDoc->GetNodes().GetEndOfContent().StartOfSectionNode()->GetIndex();
+
+    SwTableNode* pTableNode = pCurPam->GetNode()->FindTableNode();
+    if ( m_pWriter && m_pWriter->bWriteOnlyFirstTable
+         && pTableNode != 0 )
+    {
+        pCurPam->GetPoint()->nNode = *pTableNode;
+        pCurPam->GetMark()->nNode = *(pTableNode->EndOfSectionNode());
+    }
+    else
+    {
+        pCurPam->GetPoint()->nNode = pDoc->GetNodes().GetEndOfContent().StartOfSectionNode()->GetIndex();
+    }
+
     WriteText();
+
     OSL_TRACE("%s end", OSL_THIS_FUNC);
 }
 

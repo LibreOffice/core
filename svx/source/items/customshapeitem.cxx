@@ -29,19 +29,6 @@
 using namespace ::std;
 using namespace com::sun::star;
 
-bool SdrCustomShapeGeometryItem::PropertyEq::operator()( const rtl::OUString& r1, const rtl::OUString& r2 ) const
-{
-    return r1.equals( r2 );
-}
-bool SdrCustomShapeGeometryItem::PropertyPairEq::operator()( const SdrCustomShapeGeometryItem::PropertyPair& r1, const SdrCustomShapeGeometryItem::PropertyPair& r2 ) const
-{
-    return ( r1.first.equals( r2.first ) ) && ( r1.second.equals( r2.second ) );
-}
-size_t SdrCustomShapeGeometryItem::PropertyPairHash::operator()( const SdrCustomShapeGeometryItem::PropertyPair &r1 ) const
-{
-    return (size_t)r1.first.hashCode() + r1.second.hashCode();
-};
-
 SdrCustomShapeGeometryItem::SdrCustomShapeGeometryItem()
 :   SfxPoolItem( SDRATTR_CUSTOMSHAPE_GEOMETRY )
 {}

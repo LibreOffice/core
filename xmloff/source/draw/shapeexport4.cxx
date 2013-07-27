@@ -473,7 +473,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
 
         if ( aGeoPropSet >>= aGeoPropSeq )
         {
-            const rtl::OUString sCustomShapeType( RTL_CONSTASCII_USTRINGPARAM( "NonPrimitive" ) );
+            const rtl::OUString sCustomShapeType( RTL_CONSTASCII_USTRINGPARAM( "non-primitive" ) );
             rtl::OUString aCustomShapeType( sCustomShapeType );
 
             sal_Int32 j, nGeoPropCount = aGeoPropSeq.getLength();

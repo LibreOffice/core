@@ -197,7 +197,7 @@ bool AquaSalGraphics::CheckContext()
 
         if( !mrContext )
         {
-            const CGSize aLayerSize = {nWidth,nHeight};
+            const CGSize aLayerSize = CGSizeMake( nWidth, nHeight);
             NSGraphicsContext* pNSGContext = [NSGraphicsContext graphicsContextWithWindow: mpFrame->getWindow()];
             CGContextRef xCGContext = reinterpret_cast<CGContextRef>([pNSGContext graphicsPort]);
             mxLayer = CGLayerCreateWithContext( xCGContext, aLayerSize, NULL );
@@ -253,7 +253,7 @@ void AquaSalGraphics::RefreshRect(float lX, float lY, float lWidth, float lHeigh
 
 CGPoint* AquaSalGraphics::makeCGptArray(sal_uLong nPoints, const SalPoint*  pPtAry)
 {
-    CGPoint *CGpoints = new (CGPoint[nPoints]);
+    CGPoint *CGpoints = new CGPoint[ nPoints];
     if ( CGpoints )
       {
         for(sal_uLong i=0;i<nPoints;i++)

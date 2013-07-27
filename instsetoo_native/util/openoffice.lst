@@ -1,250 +1,244 @@
 Globals
 {
-	Settings
-	{
-		variables
-		{
-			OOOBASEVERSION 3.5
-			OOOPACKAGEVERSION 3.5.0
-			UREPACKAGEVERSION 3.5.0
-			URELAYERVERSION 1
-			BASISROOTNAME OpenOffice.org
-			UNIXBASISROOTNAME openoffice.org
-			SERVICETAG_PRODUCTNAME OpenOffice.org 3.5
-			SERVICETAG_PRODUCTVERSION 3.5
-			SERVICETAG_PARENTNAME OpenOffice.org 3.5 
-			SERVICETAG_SOURCE {buildsource}{minor}(Build:{buildid})
-			SERVICETAG_URN urn:uuid:500061aa-5666-11e0-8e00-080020a9ed93
-			HIDELICENSEDIALOG 1
-			PACKAGEPREFIX 
-			BASISPACKAGEPREFIX ooobasis
-			UREPACKAGEPREFIX openoffice.org
-			SOLSUREPACKAGEPREFIX openofficeorg
-			USE_FILEVERSION 1
-			LIBRARYVERSION 9.4.0
-			POOLPRODUCT 1
-			REGISTRATION_HOST https://registration.openoffice.org
-			REGISTRATIONURL http://survey.services.openoffice.org/user/index.php
-			PROGRESSBARCOLOR 14,133,205
-			PROGRESSSIZE 320,7
-			PROGRESSPOSITION 185,206
-			PROGRESSFRAMECOLOR 207,208,211
-			NATIVEPROGRESS true
-			REGISTRYLAYERNAME Layers
-			SERVICEPACK 1
-			UPDATE_DATABASE 1
-			CREATE_MSP_INSTALLSET 0
-			UPDATE_DATABASE_LISTNAME finals_instsetoo.txt
- 			PACKAGEMAP package_names.txt,package_names_ext.txt
-			WINDOWSPATCHLEVEL 8
-			OOOVENDOR Apache Software Foundation
-			OOODOWNLOADNAME 1
-			STARTCENTER_LAYOUT_STYLE 0
-			NOLANGUAGESELECTIONPRODUCT 0
-			BUILDIDCWS {buildidcws}
+    Settings
+    {
+        variables
+        {
+            APACHEPROJECTNAME Apache OpenOffice
+            OOOBASEVERSION 4.0
+            OOOPACKAGEVERSION 4.0.0
+            UREPACKAGEVERSION 4.0.0
+            URELAYERVERSION 1
+            BASISROOTNAME OpenOffice
+            UNIXBASISROOTNAME openoffice
+            HIDELICENSEDIALOG 1
+            PACKAGEPREFIX 
+            BASISPACKAGEPREFIX openoffice
+            UREPACKAGEPREFIX openoffice
+            SOLSUREPACKAGEPREFIX openoffice
+            USE_FILEVERSION 1
+            LIBRARYVERSION 10.0.0
+            POOLPRODUCT 1
+            PROGRESSBARCOLOR 14,133,205
+            PROGRESSSIZE 432,4
+            PROGRESSPOSITION 60,180
+            PROGRESSFRAMECOLOR 207,208,211
+            SHOWPROGRESSFRAME false
+            NATIVEPROGRESS false
+            REGISTRYLAYERNAME Layers
+            SERVICEPACK 1
+            UPDATE_DATABASE 1
+            CREATE_MSP_INSTALLSET 0
+            UPDATE_DATABASE_LISTNAME finals_instsetoo.txt
+            PACKAGEMAP package_names.txt,package_names_ext.txt
+            WINDOWSPATCHLEVEL 8
+            OOOVENDOR Apache Software Foundation
+            AOODOWNLOADNAME 1
+            STARTCENTER_LAYOUT_STYLE 0
+            NOLANGUAGESELECTIONPRODUCT 0
+            BUILDIDCWS {buildidcws}
             OPENSOURCE 1
-		}
-	}
+            OOOXMLFILEFORMATNAME OpenOffice.org XML
+            OOOXMLFILEFORMATVERSION 1.0
+            WRITERCOMPATIBILITYVERSIONOOO11 OpenOffice.org 1.1
+            SERVICETAG_PRODUCTNAME Apache OpenOffice 4.0
+            SERVICETAG_PRODUCTVERSION 4.0
+            SERVICETAG_PARENTNAME Apache OpenOffice 4.0
+            SERVICETAG_SOURCE {buildsource}{minor}(Build:{buildid})
+            SERVICETAG_URN urn:uuid:500061aa-5666-11e0-8e00-080020a9ed93
+            REGISTRATION_HOST https://registration.openoffice.org
+            REGISTRATION_PRODUCT OpenOffice.org
+            REGISTRATION_CID 926117
+        }
+    }
 }
 
-OpenOffice
+Apache_OpenOffice
 {
-	Settings
-	{
-		variables
-		{
-			PRODUCTNAME OpenOffice.org
-			PRODUCTVERSION 3.5
-			PRODUCTEXTENSION 
-			LONG_PRODUCTEXTENSION 
-			SHORT_PRODUCTEXTENSION 
+    Settings
+    {
+        variables
+        {
+            FULLPRODUCTNAME Apache OpenOffice
+            PRODUCTNAME OpenOffice
+            PRODUCTVERSION 4.0.0
+            PRODUCTEXTENSION 
+            LONG_PRODUCTEXTENSION 
+            SHORT_PRODUCTEXTENSION 
             POSTVERSIONEXTENSION
             POSTVERSIONEXTENSIONUNIX
-			BRANDPACKAGEVERSION 3
-			USERDIRPRODUCTVERSION 3
-			ABOUTBOXPRODUCTVERSION 3.5.0
-			BASEPRODUCTVERSION 3.5
+            BRANDPACKAGEVERSION 4
+            USERDIRPRODUCTVERSION 4
+            ABOUTBOXPRODUCTVERSION 4.0.0
+            BASEPRODUCTVERSION 4.0
             PCPFILENAME openoffice.pcp
-			UPDATEURL http://update38.services.openoffice.org/ProductUpdateService/check.Update
-            ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
-			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,userland.txt,version.lst
-			REMOVE_UPGRADE_CODE_FILE upgradecode_remove_ooo.txt
-			ADDSYSTEMINTEGRATION 1
-			EVAL
-			FILEFORMATNAME OpenOffice.org
-			FILEFORMATVERSION 1.0
-			WRITERCOMPATIBILITYVERSIONOOO11 OpenOffice.org 1.1
-			PACKAGEVERSION 3.5.0
-			PACKAGEREVISION {milestone}
-			LICENSENAME ALv2
-			GLOBALFILEGID gid_File_Lib_Vcl
-			GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
-			SPELLCHECKERFILE spellchecker_selection.txt
-			OPENSOURCE 1
-			SETSTATICPATH 1
-			OOODOWNLOADNAME 1
-			XPDINSTALLER 0
-			BETAUPGRADECODE
-			STUBUPGRADECODE {0E7B27B8-D658-4BF9-98D6-EC361582EB4A}
-			CHANGETARGETDIR 1
-			USE_FILEVERSION 1
-			LIBRARYVERSION 9.4.0
-			PATCHCODEFILE ooo_patchcodes.txt
-			DOWNLOADBANNER	ooobanner.bmp
-			DOWNLOADBITMAP	ooobitmap.bmp
-			DOWNLOADSETUPICO	ooosetup.ico
-			RELATIVE_PATHES_IN_DDF 1
-			STARTCENTER_ADDFEATURE_URL http://extensions.openoffice.org/
-			STARTCENTER_INFO_URL http://www.openoffice.org
-			STARTCENTER_TEMPLREP_URL http://templates.openoffice.org
-			STARTCENTER_LAYOUT_STYLE 0
-			REGISTRATION_PRODUCT OpenOffice.org
-			REGISTRATION_CID 926117
-			DICT_REPO_URL http://extensions.openoffice.org/dictionaries
-		}
-		active			1
-		compression		5
-		script			setup_osl
-		downloadname	Apache_OpenOffice_{productversion}_{os}_install_{languages}
-		langpackdownloadname	Apache_OpenOffice_{productversion}_languagepack_{os}_install_{languages}
-		include			{solarenvpath}/{os}/loader2,.,{localpath}/bin,{solarpath}/bin.{minor}/ooowoure,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor}/desktop-integration/{pkgtype},{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},../../external/common,{solarenvpath}/{os}/OOo_external
-	}
+            UPDATEURL https://ooo-updates.apache.org/aoo40/check.Update
+            ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,userland.txt,version.lst
+            REMOVE_UPGRADE_CODE_FILE upgradecode_remove_ooo.txt
+            ADDSYSTEMINTEGRATION 1
+            EVAL
+            PACKAGEVERSION 4.0.0
+            PACKAGEREVISION {milestone}
+            LICENSENAME ALv2
+            GLOBALFILEGID gid_File_Lib_Vcl
+            GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
+            SPELLCHECKERFILE spellchecker_selection.txt
+            OPENSOURCE 1
+            SETSTATICPATH 1
+            AOODOWNLOADNAME 1
+            AOODOWNLOADNAMEPREFIX Apache_OpenOffice
+            XPDINSTALLER 0
+            BETAUPGRADECODE
+            STUBUPGRADECODE {0E7B27B8-D658-4BF9-98D6-EC361582EB4A}
+            CHANGETARGETDIR 1
+            USE_FILEVERSION 1
+            LIBRARYVERSION 10.0.0
+            PATCHCODEFILE ooo_patchcodes.txt
+            DOWNLOADBANNER	ooobanner.bmp
+            DOWNLOADBITMAP	ooobitmap.bmp
+            DOWNLOADSETUPICO	ooosetup.ico
+            RELATIVE_PATHES_IN_DDF 1
+            STARTCENTER_ADDFEATURE_URL http://extensions.openoffice.org/
+            STARTCENTER_INFO_URL http://www.openoffice.org
+            STARTCENTER_TEMPLREP_URL http://templates.openoffice.org
+            STARTCENTER_LAYOUT_STYLE 0
+            DICT_REPO_URL http://extensions.openoffice.org/dictionaries
+        }
+        active			1
+        compression		5
+        script			setup_osl
+        downloadname	Apache_OpenOffice_{productversion}_{os}_install_{languages}
+        langpackdownloadname	Apache_OpenOffice_{productversion}_languagepack_{os}_install_{languages}
+        include			{solarenvpath}/{os}/loader2,.,{localpath}/bin,{solarpath}/bin.{minor}/ooowoure,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor}/desktop-integration/{pkgtype},{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},../../external/common,{solarenvpath}/{os}/OOo_external
+    }
 }
 
-OpenOffice_wJRE
+Apache_OpenOffice_wJRE
 {
-	Settings
-	{
-		variables
-		{
-			PRODUCTNAME OpenOffice.org
-			PRODUCTVERSION 3.5
-			PRODUCTEXTENSION 
-			LONG_PRODUCTEXTENSION 
-			SHORT_PRODUCTEXTENSION 
-			POSTVERSIONEXTENSION
-			POSTVERSIONEXTENSIONUNIX
-			BRANDPACKAGEVERSION 3
-			USERDIRPRODUCTVERSION 3
-			ABOUTBOXPRODUCTVERSION 3.5.0
-			BASEPRODUCTVERSION 3.5
-			UPDATEURL http://update38.services.openoffice.org/ProductUpdateService/check.Update
-			ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
-			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion2.dat,userland.txt,version.lst
-			REMOVE_UPGRADE_CODE_FILE upgradecode_remove_ooo.txt
-			ADDSYSTEMINTEGRATION 1
-			EVAL
-			FILEFORMATNAME OpenOffice.org
-			FILEFORMATVERSION 1.0
-			WRITERCOMPATIBILITYVERSIONOOO11 OpenOffice.org 1.1
-			PACKAGEVERSION 3.5.0
-			PACKAGEREVISION {milestone}
-			LICENSENAME ALv2
-			WITHJREPRODUCT 1
-			GLOBALFILEGID gid_File_Lib_Vcl
-			GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
-			SPELLCHECKERFILE spellchecker_selection.txt
-			OPENSOURCE 1
-			SETSTATICPATH 1
-			OOODOWNLOADNAME 1
-			XPDINSTALLER 1
-			BETAUPGRADECODE
-			STUBUPGRADECODE {0E7B27B8-D658-4BF9-98D6-EC361582EB4A}
-			CHANGETARGETDIR 1
-			USE_FILEVERSION 1
-			LIBRARYVERSION 9.4.0
-			PATCHCODEFILE ooo_patchcodes.txt
-			JAVAPRODUCT 1
-			DOWNLOADBANNER	ooobanner.bmp
-			DOWNLOADBITMAP	ooobitmap.bmp
-			DOWNLOADSETUPICO	ooosetup.ico
-			RELATIVE_PATHES_IN_DDF 1
-			STARTCENTER_ADDFEATURE_URL http://extensions.openoffice.org/
-			STARTCENTER_INFO_URL http://www.openoffice.org
-			STARTCENTER_TEMPLREP_URL http://templates.openoffice.org
-			STARTCENTER_LAYOUT_STYLE 0
-			REGISTRATION_PRODUCT OpenOffice.org
-			REGISTRATION_CID 926117
-			DICT_REPO_URL http://extensions.openoffice.org/dictionaries
-		}
-		active			1
-		compression		5
-		script			setup_osljre
-		downloadname	Apache_OpenOffice_{productversion}_{os}_installwjre_{languages}
-		include			{solarenvpath}/{os}/loader2,.,{localpath}/bin,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor}/desktop-integration/{pkgtype},{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},../../external/common,{solarenvpath}/{os}/OOo_external
-	}
+    Settings
+    {
+        variables
+        {
+            FULLPRODUCTNAME Apache OpenOffice
+            PRODUCTNAME OpenOffice
+            PRODUCTVERSION 4.0.0
+            PRODUCTEXTENSION 
+            LONG_PRODUCTEXTENSION 
+            SHORT_PRODUCTEXTENSION 
+            POSTVERSIONEXTENSION
+            POSTVERSIONEXTENSIONUNIX
+            BRANDPACKAGEVERSION 4
+            USERDIRPRODUCTVERSION 4
+            ABOUTBOXPRODUCTVERSION 4.0.0
+            BASEPRODUCTVERSION 4.0
+            UPDATEURL https://ooo-site.apache.org/projects/update/aoo40/check.Update
+            ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion2.dat,userland.txt,version.lst
+            REMOVE_UPGRADE_CODE_FILE upgradecode_remove_ooo.txt
+            ADDSYSTEMINTEGRATION 1
+            EVAL
+            PACKAGEVERSION 4.0.0
+            PACKAGEREVISION {milestone}
+            LICENSENAME ALv2
+            WITHJREPRODUCT 1
+            GLOBALFILEGID gid_File_Lib_Vcl
+            GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
+            SPELLCHECKERFILE spellchecker_selection.txt
+            OPENSOURCE 1
+            SETSTATICPATH 1
+            AOODOWNLOADNAME 1
+            AOODOWNLOADNAMEPREFIX Apache_OpenOffice_wJRE
+            XPDINSTALLER 1
+            BETAUPGRADECODE
+            STUBUPGRADECODE {0E7B27B8-D658-4BF9-98D6-EC361582EB4A}
+            CHANGETARGETDIR 1
+            USE_FILEVERSION 1
+            LIBRARYVERSION 10.0.0
+            PATCHCODEFILE ooo_patchcodes.txt
+            JAVAPRODUCT 1
+            DOWNLOADBANNER	ooobanner.bmp
+            DOWNLOADBITMAP	ooobitmap.bmp
+            DOWNLOADSETUPICO	ooosetup.ico
+            RELATIVE_PATHES_IN_DDF 1
+            STARTCENTER_ADDFEATURE_URL http://extensions.openoffice.org/
+            STARTCENTER_INFO_URL http://www.openoffice.org
+            STARTCENTER_TEMPLREP_URL http://templates.openoffice.org
+            STARTCENTER_LAYOUT_STYLE 0
+            DICT_REPO_URL http://extensions.openoffice.org/dictionaries
+        }
+        active			1
+        compression		5
+        script			setup_osljre
+        downloadname	Apache_OpenOffice_{productversion}_{os}_installwjre_{languages}
+        include			{solarenvpath}/{os}/loader2,.,{localpath}/bin,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor}/desktop-integration/{pkgtype},{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},../../external/common,{solarenvpath}/{os}/OOo_external
+    }
 }
 
-OpenOffice_Dev
+Apache_OpenOffice_Dev
 {
-	Settings
-	{
-		variables
-		{
-			PRODUCTNAME OOo-dev
-			PRODUCTVERSION 3.5
-			PRODUCTEXTENSION 
-			LONG_PRODUCTEXTENSION 
-			SHORT_PRODUCTEXTENSION 
-			BASISROOTNAME OOo-dev
-			UNIXBASISROOTNAME ooo-dev
-			POSTVERSIONEXTENSION
-			POSTVERSIONEXTENSIONUNIX
-			BRANDPACKAGEVERSION 3
-			USERDIRPRODUCTVERSION 3
-			ABOUTBOXPRODUCTVERSION 3.5.0
-			BASEPRODUCTVERSION 3.5
-			DEVELOPMENTPRODUCT 1
-			BASISPACKAGEPREFIX ooobasis-dev
-			UREPACKAGEPREFIX ooodev
-			SOLSUREPACKAGEPREFIX ooodev
-			REGISTRYLAYERNAME LayerDev
-			SERVICETAG_URN urn:uuid:1680b00d-e45c-11de-82d6-080020a9ed93
-			UPDATEURL http://update38.services.openoffice.org/ProductUpdateService/check.Update
-			ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
-			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion2.dat,userland.txt,version.lst
-			EVAL
-			FILEFORMATNAME OpenOffice.org
-			FILEFORMATVERSION 1.0
-			WRITERCOMPATIBILITYVERSIONOOO11 OpenOffice.org 1.1
-			PACKAGEVERSION 3.5.0
-			PACKAGEREVISION {milestone}
-			LICENSENAME ALv2
-			GLOBALFILEGID gid_File_Lib_Vcl
-			GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
-			SPELLCHECKERFILE spellchecker_selection.txt
-			OPENSOURCE 1
-			SETSTATICPATH 1
-			OOODOWNLOADNAME 1
-			XPDINSTALLER 0
-			BETAUPGRADECODE
-			STUBUPGRADECODE {0E7B27B8-D658-4BF9-98D6-EC361582EB4A}
-			CHANGETARGETDIR 1
-			USE_FILEVERSION 1
-			JAVAPRODUCT 0
-			LIBRARYVERSION 9.4.0
-			PATCHCODEFILE ooodev_patchcodes.txt
-			CODEFILENAME codes_ooodev.txt
-			DOWNLOADBANNER	ooobanner.bmp
-			DOWNLOADBITMAP	ooobitmap.bmp
-			DOWNLOADSETUPICO	ooosetup.ico
-			LOCALUSERDIR $ORIGIN/..
-			RELATIVE_PATHES_IN_DDF 1
-			STARTCENTER_ADDFEATURE_URL http://extensions.openoffice.org/
-			STARTCENTER_INFO_URL http://www.openoffice.org
-			STARTCENTER_TEMPLREP_URL http://templates.openoffice.org
-			STARTCENTER_LAYOUT_STYLE 0
-			REGISTRATION_PRODUCT OpenOffice.org
-			REGISTRATION_CID 926117
-			DICT_REPO_URL http://extensions.openoffice.org/dictionaries
-		}
-		active			1
-		compression		5
-		script			setup_osl
-		downloadname	Apache_OpenOffice-dev_{productversion}_{os}_install_{languages}
-		langpackdownloadname	Apache_OpenOffice_{productversion}_languagepack_{os}_install_{languages}
-		include			{solarenvpath}/{os}/loader2,.,{localpath}/bin/dev,{localpath}/bin,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/openoffice_dev,{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},../../external/common,{solarenvpath}/{os}/OOo_external
-	}
+    Settings
+    {
+        variables
+        {
+            FULLPRODUCTNAME AOO-Developer-Build
+            PRODUCTNAME AOO-Developer-Build
+            PRODUCTVERSION 4.0.0
+            PRODUCTEXTENSION 
+            LONG_PRODUCTEXTENSION 
+            SHORT_PRODUCTEXTENSION 
+            BASISROOTNAME AOOdev
+            UNIXBASISROOTNAME aoodev
+            POSTVERSIONEXTENSION
+            POSTVERSIONEXTENSIONUNIX
+            BRANDPACKAGEVERSION 4
+            USERDIRPRODUCTVERSION 4
+            ABOUTBOXPRODUCTVERSION 4.0.0
+            BASEPRODUCTVERSION 4.0
+            DEVELOPMENTPRODUCT 1
+            BASISPACKAGEPREFIX aoodev
+            UREPACKAGEPREFIX aoodev
+            SOLSUREPACKAGEPREFIX aoodev
+            REGISTRYLAYERNAME LayerDev
+            UPDATEURL https://ooo-site.apache.org/projects/update/aoo40/check.Update
+            ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion2.dat,userland.txt,version.lst
+            EVAL
+            PACKAGEVERSION 4.0.0
+            PACKAGEREVISION {milestone}
+            LICENSENAME ALv2
+            GLOBALFILEGID gid_File_Lib_Vcl
+            GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
+            SPELLCHECKERFILE spellchecker_selection.txt
+            OPENSOURCE 1
+            SETSTATICPATH 1
+            AOODOWNLOADNAME 1
+            AOODOWNLOADNAMEPREFIX Apache_OpenOffice-Dev
+            XPDINSTALLER 0
+            BETAUPGRADECODE
+            STUBUPGRADECODE {0E7B27B8-D658-4BF9-98D6-EC361582EB4A}
+            CHANGETARGETDIR 1
+            USE_FILEVERSION 1
+            JAVAPRODUCT 0
+            LIBRARYVERSION 10.0.0
+            PATCHCODEFILE ooodev_patchcodes.txt
+            CODEFILENAME codes_ooodev.txt
+            DOWNLOADBANNER	ooobanner.bmp
+            DOWNLOADBITMAP	ooobitmap.bmp
+            DOWNLOADSETUPICO	ooosetup.ico
+            LOCALUSERDIR $ORIGIN/..
+            RELATIVE_PATHES_IN_DDF 1
+            STARTCENTER_ADDFEATURE_URL http://extensions.openoffice.org/
+            STARTCENTER_INFO_URL http://www.openoffice.org
+            STARTCENTER_TEMPLREP_URL http://templates.openoffice.org
+            STARTCENTER_LAYOUT_STYLE 0
+            DICT_REPO_URL http://extensions.openoffice.org/dictionaries
+            SERVICETAG_URN urn:uuid:1680b00d-e45c-11de-82d6-080020a9ed93
+        }
+        active			1
+        compression		5
+        script			setup_osl
+        downloadname	Apache_OpenOffice-dev_{productversion}_{os}_install_{languages}
+        langpackdownloadname	Apache_OpenOffice_{productversion}_languagepack_{os}_install_{languages}
+        include			{solarenvpath}/{os}/loader2,.,{localpath}/bin/dev,{localpath}/bin,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/openoffice_dev,{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},../../external/common,{solarenvpath}/{os}/OOo_external
+    }
 }
 
 URE
@@ -254,9 +248,10 @@ URE
         downloadname URE_{productversion}_{os}_install_{languages}
         variables
         {
+            FULLPRODUCTNAME URE
             PRODUCTNAME URE
-            PRODUCTVERSION 3.5
-            PACKAGEVERSION 3.5
+            PRODUCTVERSION 4.0.0
+            PACKAGEVERSION 4.0
             PACKAGEREVISION 1
             PRODUCTEXTENSION
             LONG_PRODUCTEXTENSION
@@ -273,13 +268,14 @@ URE
             DONTUSESTARTMENUFOLDER 1
             RELATIVE_PATHES_IN_DDF 1
             NOLANGUAGESELECTIONPRODUCT 1
-			STARTCENTER_ADDFEATURE_URL http://extensions.openoffice.org/
-			STARTCENTER_INFO_URL http://www.openoffice.org
-			STARTCENTER_TEMPLREP_URL http://templates.openoffice.org
+            AOODOWNLOADNAMEPREFIX Apache_OpenOffice-URE
+            STARTCENTER_ADDFEATURE_URL http://extensions.openoffice.org/
+            STARTCENTER_INFO_URL http://www.openoffice.org
+            STARTCENTER_TEMPLREP_URL http://templates.openoffice.org
             STARTCENTER_LAYOUT_STYLE 0
             ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,version.lst
-			PACKAGEMAP package_names_ext.txt
-			DICT_REPO_URL http://extensions.openoffice.org/dictionaries
+            PACKAGEMAP package_names_ext.txt
+            DICT_REPO_URL http://extensions.openoffice.org/dictionaries
         }
         active 1
         compression 5
@@ -288,27 +284,28 @@ URE
     }
 }
 
-OpenOffice_SDK
+Apache_OpenOffice_SDK
 {
     Settings
     {
         downloadname Apache_OpenOffice-SDK_{packageversion}_{os}_install_{languages}
         variables
         {
-            PRODUCTNAME OpenOffice.org
-            PRODUCTVERSION 3.5
+            FULLPRODUCTNAME Apache OpenOffice
+            PRODUCTNAME OpenOffice
+            PRODUCTVERSION 4.0.0
             PRODUCTEXTENSION
             LONG_PRODUCTEXTENSION
             SHORT_PRODUCTEXTENSION
             POSTVERSIONEXTENSION SDK
             POSTVERSIONEXTENSIONUNIX sdk
-            BRANDPACKAGEVERSION 3
-            PACKAGEVERSION 3.5.0
+            BRANDPACKAGEVERSION 4
+            PACKAGEVERSION 4.0.0
             PACKAGEREVISION {milestone}
             PACK_INSTALLED 1
             POOLPRODUCT 0
             DMG_VOLUMEEXTENSION SDK
-            DATABASENAME openofficeorg34sdk
+            DATABASENAME openofficeorg40sdk
             NO_README_IN_ROOTDIR 1
             LICENSENAME ALv2
             IGNOREDIRECTORYLAYER 1
@@ -321,11 +318,12 @@ OpenOffice_SDK
             DOWNLOADSETUPICO ooosetup.ico
             DONTUSESTARTMENUFOLDER 1
             RELATIVE_PATHES_IN_DDF 1
-			STARTCENTER_ADDFEATURE_URL http://extensions.openoffice.org/
-			STARTCENTER_INFO_URL http://www.openoffice.org
-			STARTCENTER_TEMPLREP_URL http://templates.openoffice.org
+            AOODOWNLOADNAMEPREFIX Apache_OpenOffice-SDK
+            STARTCENTER_ADDFEATURE_URL http://extensions.openoffice.org/
+            STARTCENTER_INFO_URL http://www.openoffice.org
+            STARTCENTER_TEMPLREP_URL http://templates.openoffice.org
             STARTCENTER_LAYOUT_STYLE 0
-			DICT_REPO_URL http://extensions.openoffice.org/dictionaries
+            DICT_REPO_URL http://extensions.openoffice.org/dictionaries
         }
         active 1
         compression 5
@@ -334,15 +332,16 @@ OpenOffice_SDK
     }
 }
 
-OpenOffice_Dev_SDK
+Apache_OpenOffice_Dev_SDK
 {
     Settings
     {
         downloadname Apache_OpenOffice-Dev-SDK_{packageversion}_{os}_install_{languages}
         variables
         {
-            PRODUCTNAME OOo-dev
-            PRODUCTVERSION 3.5
+            FULLPRODUCTNAME AOO-Developer-Build
+            PRODUCTNAME AOO-Developer-Build
+            PRODUCTVERSION 4.0.0
             PRODUCTEXTENSION
             LONG_PRODUCTEXTENSION
             SHORT_PRODUCTEXTENSION
@@ -350,18 +349,18 @@ OpenOffice_Dev_SDK
             UNIXBASISROOTNAME ooo-dev
             POSTVERSIONEXTENSION SDK
             POSTVERSIONEXTENSIONUNIX sdk
-            BRANDPACKAGEVERSION 3
-            PACKAGEVERSION 3.5.0
+            BRANDPACKAGEVERSION 4
+            PACKAGEVERSION 4.0.0
             PACKAGEREVISION {milestone}
-            BASISPACKAGEPREFIX ooobasis-dev
-            UREPACKAGEPREFIX ooodev
-            SOLSUREPACKAGEPREFIX ooodev
+            BASISPACKAGEPREFIX aoodev
+            UREPACKAGEPREFIX aoodev
+            SOLSUREPACKAGEPREFIX aoodev
             REGISTRYLAYERNAME LayerDev
-			DEVELOPMENTPRODUCT 1
+            DEVELOPMENTPRODUCT 1
             PACK_INSTALLED 1
             POOLPRODUCT 0
             DMG_VOLUMEEXTENSION SDK
-            DATABASENAME openofficeorg35devsdk
+            DATABASENAME openofficeorg40devsdk
             NO_README_IN_ROOTDIR 1
             LICENSENAME ALv2
             IGNOREDIRECTORYLAYER 1
@@ -374,11 +373,12 @@ OpenOffice_Dev_SDK
             DOWNLOADSETUPICO ooosetup.ico
             DONTUSESTARTMENUFOLDER 1
             RELATIVE_PATHES_IN_DDF 1
-			STARTCENTER_ADDFEATURE_URL http://extensions.openoffice.org/
-			STARTCENTER_INFO_URL http://www.openoffice.org
-			STARTCENTER_TEMPLREP_URL http://templates.openoffice.org
+            AOODOWNLOADNAMEPREFIX Apache_OpenOffice-Dev-SDK
+            STARTCENTER_ADDFEATURE_URL http://extensions.openoffice.org/
+            STARTCENTER_INFO_URL http://www.openoffice.org
+            STARTCENTER_TEMPLREP_URL http://templates.openoffice.org
             STARTCENTER_LAYOUT_STYLE 0
-			DICT_REPO_URL http://extensions.openoffice.org/dictionaries
+            DICT_REPO_URL http://extensions.openoffice.org/dictionaries
         }
         active 1
         compression 5

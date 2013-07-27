@@ -255,7 +255,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
 {
     HelpId = HID_OPTIONS_SEARCH ;
     OutputSize = TRUE ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     SVLook = TRUE ;
     Hide = TRUE ;
     Text [ en-US ] = "Search" ;
@@ -304,7 +304,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Pos = MAP_APPFONT ( EDIT_START_XPOS , GB_SEARCH_TOP + 26 ) ;
         Size = MAP_APPFONT ( 125 , 10 ) ;
         Check = TRUE ;
-        Text [ en-US ] = "And" ;
+        Text [ en-US ] = "~And" ;
     };
     RadioButton RB_OR
     {
@@ -379,31 +379,37 @@ TabPage RID_SVXPAGE_INET_SEARCH
             < "Lower" ; > ;
         };
     };
+
+    #define PB_SEARCH_POS_Y     TP_HEIGHT - RSC_CD_PUSHBUTTON_HEIGHT - RSC_SP_TBPG_INNERBORDER_BOTTOM
+    #define PB_SEARCH_POS_X1    TP_WIDTH - ( RSC_CD_PUSHBUTTON_WIDTH * 4 ) - ( RSC_SP_CTRL_GROUP_X * 3 ) - RSC_SP_TBPG_INNERBORDER_RIGHT
+    #define PB_SEARCH_POS_X2    TP_WIDTH - ( RSC_CD_PUSHBUTTON_WIDTH * 3 ) - ( RSC_SP_CTRL_GROUP_X * 2 ) - RSC_SP_TBPG_INNERBORDER_RIGHT
+    #define PB_SEARCH_POS_X3    TP_WIDTH - ( RSC_CD_PUSHBUTTON_WIDTH * 2 ) - ( RSC_SP_CTRL_GROUP_X * 1 ) - RSC_SP_TBPG_INNERBORDER_RIGHT
+    #define PB_SEARCH_POS_X4    TP_WIDTH - RSC_CD_PUSHBUTTON_WIDTH - RSC_SP_TBPG_INNERBORDER_RIGHT
     PushButton PB_NEW
     {
         HelpID = "cui:PushButton:RID_SVXPAGE_INET_SEARCH:PB_NEW";
-        Pos = MAP_APPFONT ( 39 , GB_SEARCH_TOP + 131 + 6 ) ;
+        Pos = MAP_APPFONT ( PB_SEARCH_POS_X1 , PB_SEARCH_POS_Y ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "N~ew";
     };
     PushButton PB_ADD
     {
         HelpID = "cui:PushButton:RID_SVXPAGE_INET_SEARCH:PB_ADD";
-        Pos = MAP_APPFONT ( 92 , GB_SEARCH_TOP + 131 + 6 ) ;
+        Pos = MAP_APPFONT (PB_SEARCH_POS_X2 , PB_SEARCH_POS_Y ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Add" ;
     };
     PushButton PB_CHANGE
     {
         HelpID = "cui:PushButton:RID_SVXPAGE_INET_SEARCH:PB_CHANGE";
-        Pos = MAP_APPFONT ( 145 , GB_SEARCH_TOP + 131 + 6 ) ;
+        Pos = MAP_APPFONT ( PB_SEARCH_POS_X3 , PB_SEARCH_POS_Y ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Modify" ;
     };
     PushButton PB_DELETE
     {
         HelpID = "cui:PushButton:RID_SVXPAGE_INET_SEARCH:PB_DELETE";
-        Pos = MAP_APPFONT ( 198 , GB_SEARCH_TOP + 131 + 6 ) ;
+        Pos = MAP_APPFONT ( PB_SEARCH_POS_X4 , PB_SEARCH_POS_Y ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Delete" ;
     };

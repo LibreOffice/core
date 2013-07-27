@@ -103,8 +103,7 @@ public class DrawController_HandoutView extends TestCase {
     /**
     * Called while disposing a <code>TestEnvironment</code>.
     * Disposes Impress documents.
-    * @param tParam test parameters
-    * @param tEnv the environment to cleanup
+    * @param Param test parameters
     * @param log writer to log information while testing
     */
     protected void cleanup( TestParameters Param, PrintWriter log) {
@@ -114,7 +113,7 @@ public class DrawController_HandoutView extends TestCase {
     }
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Creates two impress documents. After creating
     * of the documents makes short
     * wait to allow frames to be loaded. Retrieves
@@ -144,7 +143,7 @@ public class DrawController_HandoutView extends TestCase {
     *      {@link ifc.frame._XController}(the current controller of the second
     *      created document) </li>
     *  <li> <code>'DrawPage'</code> for
-    *      {@link ifc.drawing.DrawingDocumentDrawView}(the draw page which will
+    *      {@link ifc.drawing._DrawingDocumentDrawView}(the draw page which will
     *      be new current page) </li>
     * </ul>
     * @see com.sun.star.frame.XModel

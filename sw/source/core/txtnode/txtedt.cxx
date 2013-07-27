@@ -88,6 +88,7 @@
 
 #include <vector>
 
+#include <unotextrange.hxx>
 
 using rtl::OUString;
 using namespace ::com::sun::star;
@@ -1352,7 +1353,14 @@ SwRect SwTxtFrm::SmartTagScan( SwCntntNode* /*pActNode*/, xub_StrLen /*nActPos*/
 
         Reference< ::com::sun::star::frame::XController > xController = pNode->GetDoc()->GetDocShell()->GetController();
 
-        xub_StrLen nLangBegin = nBegin;
+    SwPosition start(*pNode, nBegin);
+    SwPosition end  (*pNode, nEnd);
+        Reference< ::com::sun::star::text::XTextRange > xRange = SwXTextRange::CreateXTextRange(*pNode->GetDoc(), start, &end);
+
+    rSmartTagMgr.RecognizeTextRange(xRange, xTextMarkup, xController);
+
+
+    xub_StrLen nLangBegin = nBegin;
         xub_StrLen nLangEnd = nEnd;
 
         // smart tag recognization has to be done for each language portion:
@@ -1367,7 +1375,7 @@ SwRect SwTxtFrm::SmartTagScan( SwCntntNode* /*pActNode*/, xub_StrLen /*nActPos*/
             const sal_uInt32 nExpandBegin = ModelToViewHelper::ConvertToViewPosition( pConversionMap, nLangBegin );
             const sal_uInt32 nExpandEnd   = ModelToViewHelper::ConvertToViewPosition( pConversionMap, nLangEnd );
 
-            rSmartTagMgr.Recognize( aExpandText, xTextMarkup, xController, aLocale, nExpandBegin, nExpandEnd - nExpandBegin );
+            rSmartTagMgr.RecognizeString(aExpandText, xTextMarkup, xController, aLocale, nExpandBegin, nExpandEnd - nExpandBegin );
 
             nLangBegin = nLangEnd;
         }

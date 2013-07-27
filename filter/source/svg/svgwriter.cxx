@@ -1280,6 +1280,14 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
 
                     if( rPoly.GetSize() )
                     {
+                        const LineInfo& rLineInfo = pA->GetLineInfo();
+
+                        if(rLineInfo.GetWidth())
+                        {
+                            sal_Int32 nStrokeWidth = ImplMap(rLineInfo.GetWidth());
+                            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrStrokeWidth, ::rtl::OUString::valueOf( nStrokeWidth ) );
+                        }
+
                         mpContext->AddPaintAttr( mpVDev->GetLineColor(), Color( COL_TRANSPARENT ) );
                         ImplWritePolyPolygon( rPoly, sal_True );
                     }
@@ -1550,83 +1558,109 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                     aStroke.getEndArrow( aEndArrow );
 
                     // Currently no support for strokes with start/end arrow(s)
-                    sal_Bool bSkip = ( !aStartArrow.Count() && !aEndArrow.Count() );
+                    // added that support
+                    Polygon aPoly;
 
-                    if( bSkip )
+                    aStroke.getPath(aPoly);
+
+                    if(mapCurShape.get())
                     {
-                        Polygon aPoly;
-
-                        aStroke.getPath(aPoly);
-
-                        if(mapCurShape.get())
+                        if(1 != mapCurShape->maShapePolyPoly.Count()
+                            || !mapCurShape->maShapePolyPoly[0].IsEqual(aPoly))
                         {
-                            if(1 != mapCurShape->maShapePolyPoly.Count()
-                                || !mapCurShape->maShapePolyPoly[0].IsEqual(aPoly))
-                            {
-                                // this path action is not covering the same path than the already existing
-                                // fill polypolygon, so write out the fill polygon
-                                ImplWriteShape( *mapCurShape );
-                                mapCurShape.reset();
-                            }
+                            // this path action is not covering the same path than the already existing
+                            // fill polypolygon, so write out the fill polygon
+                            ImplWriteShape( *mapCurShape );
+                            mapCurShape.reset();
+                        }
+                    }
+
+                    if( !mapCurShape.get() )
+                    {
+
+                        mapCurShape.reset( new SVGShapeDescriptor );
+
+                        if( pElementId )
+                        {
+                            mapCurShape->maId = *pElementId + B2UCONST("_") + ::rtl::OUString::valueOf(nEntryCount++);
                         }
 
-                        if( !mapCurShape.get() )
+                        mapCurShape->maShapePolyPoly = aPoly;
+                    }
+
+                    mapCurShape->maShapeLineColor = mpVDev->GetLineColor();
+                    mapCurShape->maShapeLineColor.SetTransparency( (sal_uInt8) FRound( aStroke.getTransparency() * 255.0 ) );
+                    mapCurShape->mnStrokeWidth = FRound( aStroke.getStrokeWidth() );
+                    aStroke.getDashArray( mapCurShape->maDashArray );
+
+                    // added support for LineJoin
+                    switch(aStroke.getJoinType())
+                    {
+                        default: /* SvtGraphicStroke::joinMiter,  SvtGraphicStroke::joinNone */
                         {
+                            mapCurShape->maLineJoin = basegfx::B2DLINEJOIN_MITER;
+                            break;
+                        }
+                        case SvtGraphicStroke::joinRound:
+                        {
+                            mapCurShape->maLineJoin = basegfx::B2DLINEJOIN_ROUND;
+                            break;
+                        }
+                        case SvtGraphicStroke::joinBevel:
+                        {
+                            mapCurShape->maLineJoin = basegfx::B2DLINEJOIN_BEVEL;
+                            break;
+                        }
+                    }
 
-                            mapCurShape.reset( new SVGShapeDescriptor );
+                    // added support for LineCap
+                    switch(aStroke.getCapType())
+                    {
+                        default: /* SvtGraphicStroke::capButt */
+                        {
+                            mapCurShape->maLineCap = com::sun::star::drawing::LineCap_BUTT;
+                            break;
+                        }
+                        case SvtGraphicStroke::capRound:
+                        {
+                            mapCurShape->maLineCap = com::sun::star::drawing::LineCap_ROUND;
+                            break;
+                        }
+                        case SvtGraphicStroke::capSquare:
+                        {
+                            mapCurShape->maLineCap = com::sun::star::drawing::LineCap_SQUARE;
+                            break;
+                        }
+                    }
 
-                            if( pElementId )
-                            {
-                                mapCurShape->maId = *pElementId + B2UCONST("_") + ::rtl::OUString::valueOf(nEntryCount++);
-                            }
+                    if(mapCurShape.get() &&(aStartArrow.Count() || aEndArrow.Count()))
+                    {
+                        ImplWriteShape( *mapCurShape );
 
-                            mapCurShape->maShapePolyPoly = aPoly;
+                        mapCurShape->maShapeFillColor = mapCurShape->maShapeLineColor;
+                        mapCurShape->maShapeLineColor = Color(COL_TRANSPARENT);
+                        mapCurShape->mnStrokeWidth = 0;
+                        mapCurShape->maDashArray.clear();
+                        mapCurShape->maLineJoin = basegfx::B2DLINEJOIN_MITER;
+                        mapCurShape->maLineCap = com::sun::star::drawing::LineCap_BUTT;
+
+                        if(aStartArrow.Count())
+                        {
+                            mapCurShape->maShapePolyPoly = aStartArrow;
+                            mapCurShape->maId = *pElementId + B2UCONST("_") + ::rtl::OUString::valueOf(nEntryCount++);
+
+                            ImplWriteShape( *mapCurShape );
                         }
 
-                        mapCurShape->maShapeLineColor = mpVDev->GetLineColor();
-                        mapCurShape->maShapeLineColor.SetTransparency( (sal_uInt8) FRound( aStroke.getTransparency() * 255.0 ) );
-                        mapCurShape->mnStrokeWidth = FRound( aStroke.getStrokeWidth() );
-                        aStroke.getDashArray( mapCurShape->maDashArray );
-
-                        // added support for LineJoin
-                        switch(aStroke.getJoinType())
+                        if(aEndArrow.Count())
                         {
-                            default: /* SvtGraphicStroke::joinMiter,  SvtGraphicStroke::joinNone */
-                            {
-                                mapCurShape->maLineJoin = basegfx::B2DLINEJOIN_MITER;
-                                break;
-                            }
-                            case SvtGraphicStroke::joinRound:
-                            {
-                                mapCurShape->maLineJoin = basegfx::B2DLINEJOIN_ROUND;
-                                break;
-                            }
-                            case SvtGraphicStroke::joinBevel:
-                            {
-                                mapCurShape->maLineJoin = basegfx::B2DLINEJOIN_BEVEL;
-                                break;
-                            }
+                            mapCurShape->maShapePolyPoly = aEndArrow;
+                            mapCurShape->maId = *pElementId + B2UCONST("_") + ::rtl::OUString::valueOf(nEntryCount++);
+
+                            ImplWriteShape( *mapCurShape );
                         }
 
-                        // added support for LineCap
-                        switch(aStroke.getCapType())
-                        {
-                            default: /* SvtGraphicStroke::capButt */
-                            {
-                                mapCurShape->maLineCap = com::sun::star::drawing::LineCap_BUTT;
-                                break;
-                            }
-                            case SvtGraphicStroke::capRound:
-                            {
-                                mapCurShape->maLineCap = com::sun::star::drawing::LineCap_ROUND;
-                                break;
-                            }
-                            case SvtGraphicStroke::capSquare:
-                            {
-                                mapCurShape->maLineCap = com::sun::star::drawing::LineCap_SQUARE;
-                                break;
-                            }
-                        }
+                        mapCurShape.reset();
                     }
 
                     // write open shape in every case
@@ -1637,6 +1671,8 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                     }
 
                     // skip rest of comment
+                    sal_Bool bSkip = true;
+
                     while( bSkip && ( ++nCurAction < nCount ) )
                     {
                         pAction = rMtf.GetAction( nCurAction );

@@ -106,8 +106,9 @@ void SVX_DLLPRIVATE SetInsertedAtSdrPageFromSdrModel(SdrPage& rPage, bool bInser
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-SdrModel::SdrModel(const String& rPath, SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, bool bUseExtColorTable)
-:   mxUnoModel(),
+SdrModel::SdrModel(const String& rPath, SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers)
+:   boost::noncopyable(),
+    mxUnoModel(),
     maMasterPageVector(),
     maPageVector(),
     mpModelLayerAdmin(0),
@@ -143,17 +144,16 @@ SdrModel::SdrModel(const String& rPath, SfxItemPool* pPool, ::comphelper::IEmbed
     mnDefaultTabulator(0),
     mnCharCompressType(0),
     maTablePath(rPath),
-    mpColorTable(0),
-    mpDashList(0),
-    mpLineEndList(0),
-    mpHatchList(0),
-    mpGradientList(0),
-    mpBitmapList(0),
+    maColorTable(),
+    maDashList(),
+    maLineEndList(),
+    maHatchList(),
+    maGradientList(),
+    maBitmapList(),
     mnHandoutPageCount(0),
     mbDeletePool(false),
     mbUndoEnabled(true),
     mbChanged(false),
-    mbExternalColorTable(bUseExtColorTable),
     mbReadOnly(false),
     mbPickThroughTransparentTextFrames(false),
     mbSwapGraphics(false),
@@ -161,7 +161,8 @@ SdrModel::SdrModel(const String& rPath, SfxItemPool* pPool, ::comphelper::IEmbed
     mbModelLocked(false),
     mbKernAsianPunctuation(false),
     mbAddExtLeading(false),
-    mbInDestruction(false)
+    mbInDestruction(false),
+    mbDisableTextEditUsesCommonUndoManager(false)
 {
     SvxAsianConfig aAsian;
     mnCharCompressType = aAsian.GetCharDistanceCompression();
@@ -192,19 +193,6 @@ SdrModel::SdrModel(const String& rPath, SfxItemPool* pPool, ::comphelper::IEmbed
 
     mpDrawOutliner = SdrMakeOutliner(OUTLINERMODE_TEXTOBJECT, this);
     ImpSetOutlinerDefaults(mpDrawOutliner, true);
-
-    XOutdevItemPool* pXOutdevItemPool = dynamic_cast< XOutdevItemPool* >(&GetItemPool());
-
-    if(!mbExternalColorTable)
-    {
-        mpColorTable = new XColorTable(maTablePath, pXOutdevItemPool);
-    }
-
-    mpDashList = new XDashList(maTablePath, pXOutdevItemPool);
-    mpLineEndList = new XLineEndList(maTablePath, pXOutdevItemPool);
-    mpHatchList = new XHatchList(maTablePath, pXOutdevItemPool);
-    mpGradientList = new XGradientList(maTablePath, pXOutdevItemPool);
-    mpBitmapList = new XBitmapList(maTablePath, pXOutdevItemPool);
 }
 
 SdrModel::~SdrModel()
@@ -278,18 +266,6 @@ SdrModel::~SdrModel()
     {
         mpForbiddenCharactersTable->release();
     }
-
-    // Tabellen, Listen und Paletten loeschen
-    if(!mbExternalColorTable)
-    {
-        delete mpColorTable;
-    }
-
-    delete mpDashList;
-    delete mpLineEndList;
-    delete mpHatchList;
-    delete mpGradientList;
-    delete mpBitmapList;
 
     if(mpNumberFormatter)
     {
@@ -775,9 +751,9 @@ void SdrModel::ClearModel(bool bCalledFromDestructor)
     mpModelLayerAdmin->ClearLayer();
 }
 
-SdrModel* SdrModel::AllocModel() const
+SdrModel* SdrModel::AllocModel() const // TTTT: Check AllocModel usages and if it's needed and what exactly it does
 {
-    SdrModel* pModel = new SdrModel;
+    SdrModel* pModel = new SdrModel();
 
     pModel->SetExchangeObjectUnit(GetExchangeObjectUnit());
     pModel->SetExchangeObjectScale(GetExchangeObjectScale());
@@ -1207,20 +1183,20 @@ void SdrModel::TakeUnitStr(FieldUnit eUnit, XubString& rStr)
         }
         case FUNIT_100TH_MM:
         {
-            sal_Char aText[] = "/100mm";
-            rStr = UniString(aText, sizeof(aText-1));
+            const sal_Char aText[] = "/100mm";
+            rStr = UniString(aText, sizeof(aText)-1);
             break;
         }
         case FUNIT_MM     :
         {
-            sal_Char aText[] = "mm";
-            rStr = UniString(aText, sizeof(aText-1));
+            const sal_Char aText[] = "mm";
+            rStr = UniString(aText, sizeof(aText)-1);
             break;
         }
         case FUNIT_CM     :
         {
-            sal_Char aText[] = "cm";
-            rStr = UniString(aText, sizeof(aText-1));
+            const sal_Char aText[] = "cm";
+            rStr = UniString(aText, sizeof(aText)-1);
             break;
         }
         case FUNIT_M      :
@@ -1231,26 +1207,26 @@ void SdrModel::TakeUnitStr(FieldUnit eUnit, XubString& rStr)
         }
         case FUNIT_KM     :
         {
-            sal_Char aText[] = "km";
-            rStr = UniString(aText, sizeof(aText-1));
+            const sal_Char aText[] = "km";
+            rStr = UniString(aText, sizeof(aText)-1);
             break;
         }
         case FUNIT_TWIP   :
         {
-            sal_Char aText[] = "twip";
-            rStr = UniString(aText, sizeof(aText-1));
+            const sal_Char aText[] = "twip";
+            rStr = UniString(aText, sizeof(aText)-1);
             break;
         }
         case FUNIT_POINT  :
         {
-            sal_Char aText[] = "pt";
-            rStr = UniString(aText, sizeof(aText-1));
+            const sal_Char aText[] = "pt";
+            rStr = UniString(aText, sizeof(aText)-1);
             break;
         }
         case FUNIT_PICA   :
         {
             sal_Char aText[] = "pica";
-            rStr = UniString(aText, sizeof(aText-1));
+            rStr = UniString(aText, sizeof(aText)-1);
             break;
         }
         case FUNIT_INCH   :
@@ -1261,14 +1237,14 @@ void SdrModel::TakeUnitStr(FieldUnit eUnit, XubString& rStr)
         }
         case FUNIT_FOOT   :
         {
-            sal_Char aText[] = "ft";
-            rStr = UniString(aText, sizeof(aText-1));
+            const sal_Char aText[] = "ft";
+            rStr = UniString(aText, sizeof(aText)-1);
             break;
         }
         case FUNIT_MILE   :
         {
-            sal_Char aText[] = "mile(s)";
-            rStr = UniString(aText, sizeof(aText-1));
+            const sal_Char aText[] = "mile(s)";
+            rStr = UniString(aText, sizeof(aText)-1);
             break;
         }
         case FUNIT_PERCENT:
@@ -2316,32 +2292,100 @@ const ::com::sun::star::uno::Sequence< sal_Int8 >& SdrModel::getUnoTunnelImpleme
     return *pSeq;
 }
 
-void SdrModel::SetDrawingLayerPoolDefaults()
-{
-    const String aNullStr;
-    const Color aNullLineCol(COL_DEFAULT_SHAPE_STROKE);
-    const Color aNullFillCol(COL_DEFAULT_SHAPE_FILLING);
-    const XHatch aNullHatch(aNullLineCol);
-
-    mpItemPool->SetPoolDefaultItem(XFillColorItem(aNullStr, aNullFillCol));
-    mpItemPool->SetPoolDefaultItem(XFillHatchItem(mpItemPool, aNullHatch));
-    mpItemPool->SetPoolDefaultItem(XLineColorItem(aNullStr, aNullLineCol));
-}
-
 bool SdrModel::IsWriter() const
 {
     return false;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// i120668, move from the header files, add delete action
+void SdrModel::SetColorTableAtSdrModel(XColorListSharedPtr aTable)
+{
+    maColorTable = aTable;
+}
 
-void SdrModel::SetColorTable(XColorTable* pTable) { delete mpColorTable; mpColorTable = pTable; }
-void SdrModel::SetDashList(XDashList* pList) { delete mpDashList; mpDashList = pList; }
-void SdrModel::SetLineEndList(XLineEndList* pList) { delete mpLineEndList; mpLineEndList = pList; }
-void SdrModel::SetHatchList(XHatchList* pList) { delete mpHatchList; mpHatchList = pList; }
-void SdrModel::SetGradientList(XGradientList* pList) { delete mpGradientList; mpGradientList = pList; }
-void SdrModel::SetBitmapList(XBitmapList* pList) { delete mpBitmapList; mpBitmapList = pList; }
+XColorListSharedPtr SdrModel::GetColorTableFromSdrModel() const
+{
+    if(!maColorTable.get())
+    {
+        const_cast< SdrModel* >(this)->maColorTable = XPropertyListFactory::CreateSharedXColorList(maTablePath);
+    }
+
+    return maColorTable;
+}
+
+void SdrModel::SetDashListAtSdrModel(XDashListSharedPtr aList)
+{
+    maDashList = aList;
+}
+
+XDashListSharedPtr SdrModel::GetDashListFromSdrModel() const
+{
+    if(!maDashList.get())
+    {
+        const_cast< SdrModel* >(this)->maDashList = XPropertyListFactory::CreateSharedXDashList(maTablePath);
+    }
+
+    return maDashList;
+}
+
+void SdrModel::SetLineEndListAtSdrModel(XLineEndListSharedPtr aList)
+{
+    maLineEndList = aList;
+}
+
+XLineEndListSharedPtr SdrModel::GetLineEndListFromSdrModel() const
+{
+    if(!maLineEndList.get())
+    {
+        const_cast< SdrModel* >(this)->maLineEndList = XPropertyListFactory::CreateSharedXLineEndList(maTablePath);
+    }
+
+    return maLineEndList;
+}
+
+void SdrModel::SetHatchListAtSdrModel(XHatchListSharedPtr aList)
+{
+    maHatchList = aList;
+}
+
+XHatchListSharedPtr SdrModel::GetHatchListFromSdrModel() const
+{
+    if(!maHatchList.get())
+    {
+        const_cast< SdrModel* >(this)->maHatchList = XPropertyListFactory::CreateSharedXHatchList(maTablePath);
+    }
+
+    return maHatchList;
+}
+
+void SdrModel::SetGradientListAtSdrModel(XGradientListSharedPtr aList)
+{
+    maGradientList = aList;
+}
+
+XGradientListSharedPtr SdrModel::GetGradientListFromSdrModel() const
+{
+    if(!maGradientList.get())
+    {
+        const_cast< SdrModel* >(this)->maGradientList = XPropertyListFactory::CreateSharedXGradientList(maTablePath);
+    }
+
+    return maGradientList;
+}
+
+void SdrModel::SetBitmapListAtSdrModel(XBitmapListSharedPtr aList)
+{
+    maBitmapList = aList;
+}
+
+XBitmapListSharedPtr SdrModel::GetBitmapListFromSdrModel() const
+{
+    if(!maBitmapList.get())
+    {
+        const_cast< SdrModel* >(this)->maBitmapList = XPropertyListFactory::CreateSharedXBitmapList(maTablePath);
+    }
+
+    return maBitmapList;
+}
 
 ::std::set< SdrView* > SdrModel::getSdrViews() const
 {

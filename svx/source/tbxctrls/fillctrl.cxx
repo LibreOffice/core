@@ -129,14 +129,6 @@ void SvxFillToolBoxControl::StateChanged(
                 delete pStyleItem;
                 pStyleItem = (XFillStyleItem*) pState->Clone();
                 pFillTypeLB->Enable();
-
-                eLastXFS = pFillTypeLB->GetSelectEntryPos();
-                bUpdate = sal_True;
-
-                XFillStyle eXFS = (XFillStyle)pStyleItem->GetValue();
-                pFillTypeLB->SelectEntryPos(
-                    sal::static_int_cast< sal_uInt16 >( eXFS ) );
-                pFillAttrLB->Enable();
             }
             else if( pStyleItem )
             {
@@ -175,6 +167,27 @@ void SvxFillToolBoxControl::StateChanged(
                         bEnableControls = sal_True;
                 }
             }
+
+            if( pStyleItem )
+            {
+                // ensure that the correct entry is selected in pFillTypeLB. It
+                // might have been changed by nSID == SID_ATTR_FILL_STYLE, but
+                // it might also be in an in-between state when user had started to
+                // change fillstyle, but not yet changed fillvalue for new style
+                // and when nSID == SID_ATTR_FILL_COLOR/SID_ATTR_FILL_GRADIENT/
+                // SID_ATTR_FILL_HATCH/SID_ATTR_FILL_BITMAP value change is triggered
+                eLastXFS = pFillTypeLB->GetSelectEntryPos();
+                XFillStyle eXFS = (XFillStyle)pStyleItem->GetValue();
+
+                if(eLastXFS != eXFS)
+                {
+                    bUpdate = sal_True;
+                    pFillTypeLB->SelectEntryPos( sal::static_int_cast< sal_uInt16 >( eXFS ) );
+                }
+
+                pFillAttrLB->Enable();
+            }
+
             if( bEnableControls )
             {
                 //pFillTypeLB->Enable();
@@ -316,21 +329,17 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
                         aTmpStr += TMP_STR_END;
 
                         XGradientEntry* pEntry = new XGradientEntry( pGradientItem->GetGradientValue(), aTmpStr );
-                        String aEmptyString = String();
-                         XGradientList aGradientList( aEmptyString );
-                        aGradientList.Insert( pEntry );
-                        aGradientList.SetDirty( sal_False );
-                        Bitmap* pBmp = aGradientList.CreateBitmapForUI( 0 );
+                        XGradientListSharedPtr aGradientList(XPropertyListFactory::CreateSharedXGradientList(String::CreateFromAscii("TmpList")));
 
-                        if( pBmp )
+                        aGradientList->Insert(pEntry);
+                        aGradientList->SetDirty(false);
+                        const Bitmap aBmp = aGradientList->GetUiBitmap( 0 );
+
+                        if( !aBmp.IsEmpty() )
                         {
-                            ( (ListBox*)pFillAttrLB )->InsertEntry( pEntry->GetName(), *pBmp );
+                            ( (ListBox*)pFillAttrLB )->InsertEntry( pEntry->GetName(), aBmp );
                             pFillAttrLB->SelectEntryPos( pFillAttrLB->GetEntryCount() - 1 );
-                            delete pBmp;
                         }
-
-                        aGradientList.Remove( 0 );
-                        delete pEntry;
                     }
                     // NEU
                 }
@@ -366,21 +375,17 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
                         aTmpStr += TMP_STR_END;
 
                         XHatchEntry* pEntry = new XHatchEntry( pHatchItem->GetHatchValue(), aTmpStr );
-                        String aEmptyString = String();
-                        XHatchList aHatchList( aEmptyString );
-                        aHatchList.Insert( pEntry );
-                        aHatchList.SetDirty( sal_False );
-                        Bitmap* pBmp = aHatchList.CreateBitmapForUI( 0 );
+                        XHatchListSharedPtr aHatchList(XPropertyListFactory::CreateSharedXHatchList(String::CreateFromAscii("TmpList")));
 
-                        if( pBmp )
+                        aHatchList->Insert( pEntry );
+                        aHatchList->SetDirty( sal_False );
+                        const Bitmap aBmp = aHatchList->GetUiBitmap( 0 );
+
+                        if( !aBmp.IsEmpty() )
                         {
-                            ( (ListBox*)pFillAttrLB )->InsertEntry( pEntry->GetName(), *pBmp );
+                            ( (ListBox*)pFillAttrLB )->InsertEntry( pEntry->GetName(), aBmp );
                             pFillAttrLB->SelectEntryPos( pFillAttrLB->GetEntryCount() - 1 );
-                            delete pBmp;
                         }
-
-                        aHatchList.Remove( 0 );
-                        delete pEntry;
                     }
                     // NEU
                 }
@@ -422,14 +427,12 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
                         aTmpStr += aString;
                         aTmpStr += TMP_STR_END;
 
-                        XBitmapEntry* pEntry = new XBitmapEntry(pBitmapItem->GetGraphicObject(), aTmpStr);
-                        XBitmapList aBitmapList( String::CreateFromAscii("TmpList") );
-                        aBitmapList.Insert( pEntry );
-                        aBitmapList.SetDirty( sal_False );
-                        pFillAttrLB->Fill( &aBitmapList );
+                        XBitmapListSharedPtr aNew(XPropertyListFactory::CreateSharedXBitmapList(String::CreateFromAscii("TmpList")));
+                        aNew->Insert(new XBitmapEntry(pBitmapItem->GetGraphicObject(), aTmpStr));
+                        aNew->SetDirty(false);
+
+                        pFillAttrLB->Fill( aNew );
                         pFillAttrLB->SelectEntryPos( pFillAttrLB->GetEntryCount() - 1 );
-                        aBitmapList.Remove( 0 );
-                        delete pEntry;
                     }
                     // NEU
                 }

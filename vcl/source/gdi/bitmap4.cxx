@@ -1003,3 +1003,6 @@ sal_Bool Bitmap::ImplPopArt( const BmpFilterParam* /*pFilterParam*/, const Link*
 
     return bRet;
 }
+
+// -----------------------------------------------------------------------------
+// eof

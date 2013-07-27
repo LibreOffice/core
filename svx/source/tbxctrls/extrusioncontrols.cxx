@@ -28,11 +28,6 @@
 
 #include <string> // HACK: prevent conflict between STLPORT and Workshop headers
 
-#include <com/sun/star/util/XURLTransformer.hpp>
-#include <com/sun/star/awt/MenuItemStyle.hpp>
-#include <com/sun/star/awt/XPopupMenuExtended.hpp>
-#include <com/sun/star/graphic/XGraphic.hpp>
-
 #include <vos/mutex.hxx>
 
 #include <svtools/toolbarmenu.hxx>
@@ -544,7 +539,7 @@ OUString SAL_CALL ExtrusionDepthController_getImplementationName()
 Sequence< OUString > SAL_CALL ExtrusionDepthController_getSupportedServiceNames() throw( RuntimeException )
 {
     Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.PopupMenuController" ));
+    aSNS.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ToolbarController" ));
     return aSNS;
 }
 

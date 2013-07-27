@@ -44,10 +44,6 @@ COMP_TYPEFLAG = $(OUT_MISC)/cpp_$(COMP_NAME)_types.flag
 
 CXXFILES = \
            MyProtocolHandler.cxx \
-           MyJob.cxx \
-           MyListener.cxx \
-           WriterListener.cxx \
-           CalcListener.cxx \
            ListenerHelper.cxx \
            exports.cxx
 
@@ -83,14 +79,14 @@ $(SHAREDLIB_OUT)/%.$(SHAREDLIB_EXT) : $(SLOFILES)
 	-$(MKDIR) $(subst /,$(PS),$(OUT_COMP_GEN))
 	$(LINK) $(COMP_LINK_FLAGS) /OUT:$@ \
 	/MAP:$(OUT_COMP_GEN)/$(subst $(SHAREDLIB_EXT),map,$(@F)) $(SLOFILES) \
-	$(CPPUHELPERLIB) $(CPPULIB) $(SALLIB) $(STLPORTLIB) msvcrt.lib kernel32.lib
+	$(CPPUHELPERLIB) $(CPPULIB) $(SALLIB) msvcrt.lib msvcprt.lib kernel32.lib
 	$(LINK_MANIFEST)
 else
 #$(SHAREDLIB_OUT)/%.$(SHAREDLIB_EXT) : $(SLOFILES) $(COMP_MAPFILE)
 $(SHAREDLIB_OUT)/%.$(SHAREDLIB_EXT) : $(SLOFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(LINK) $(COMP_LINK_FLAGS) $(LINK_LIBS) -o $@ $(SLOFILES) \
-	$(CPPUHELPERLIB) $(CPPULIB) $(SALLIB) $(STLPORTLIB) $(STC++LIB) $(CPPUHELPERDYLIB) $(CPPUDYLIB) $(SALDYLIB)
+	$(CPPUHELPERLIB) $(CPPULIB) $(SALLIB) $(STC++LIB) $(CPPUHELPERDYLIB) $(CPPUDYLIB) $(SALDYLIB)
 ifeq "$(OS)" "MACOSX"
 	$(INSTALL_NAME_URELIBS)  $@
 endif
@@ -105,10 +101,6 @@ $(OUT_COMP_GEN)/%/manifest.xml :
 	@echo $(SQM)  $(SQM)$(OSEP)manifest:file-entry manifest:media-type="$(QM)application/vnd.sun.star.configuration-data$(QM)" >> $@
 	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)Addons.xcu$(QM)"/$(CSEP) >> $@
 	@echo $(SQM)  $(SQM)$(OSEP)manifest:file-entry manifest:media-type="$(QM)application/vnd.sun.star.configuration-data$(QM)" >> $@
-	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)WriterWindowState.xcu$(QM)"/$(CSEP) >> $@
-	@echo $(SQM)  $(SQM)$(OSEP)manifest:file-entry manifest:meda-type="$(QM)application/vnd.sun.star.configuration-data$(QM)" >> $@
-	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)CalcWindowState.xcu$(QM)"/$(CSEP) >> $@
-	@echo $(SQM)  $(SQM)$(OSEP)manifest:file-entry manifest:media-type="$(QM)application/vnd.sun.star.configuration-data$(QM)" >> $@
 	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)ProtocolHandler.xcu$(QM)"/$(CSEP) >> $@
 	@echo $(SQM)  $(SQM)$(OSEP)manifest:file-entry manifest:media-type="$(QM)application/vnd.sun.star.uno-components;platform=$(UNOPKG_PLATFORM)$(QM)">> $@
 	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)$(COMP_NAME).components$(QM)"/$(CSEP)>> $@
@@ -122,9 +114,6 @@ $(COMP_COMPONENTS) :
 	@echo $(OSEP)?xml version="$(QM)1.0$(QM)" encoding="$(QM)UTF-8$(QM)"?$(CSEP) > $@
 	@echo $(OSEP)components xmlns="$(QM)http://openoffice.org/2010/uno-components$(QM)"$(CSEP) >> $@
 	@echo $(SQM)  $(SQM)$(OSEP)component loader="$(QM)com.sun.star.loader.SharedLibrary$(QM)" uri="$(QM)$(UNOPKG_PLATFORM)/$(COMP_IMPL_NAME)$(QM)"$(CSEP) >> $@
-	@echo $(SQM)    $(SQM)$(OSEP)implementation name="$(QM)vnd.My.impl.NewDocListener$(QM)"$(CSEP) >> $@
-	@echo $(SQM)      $(SQM)$(OSEP)service name="$(QM)vnd.My.NewDocListener$(QM)"/$(CSEP) >> $@
-	@echo $(SQM)    $(SQM)$(OSEP)/implementation$(CSEP) >> $@
 	@echo $(SQM)    $(SQM)$(OSEP)implementation name="$(QM)vnd.demo.Impl.ProtocolHandler$(QM)"$(CSEP) >> $@
 	@echo $(SQM)      $(SQM)$(OSEP)service name="$(QM)vnd.demo.ProtocolHandler$(QM)"/$(CSEP) >> $@
 	@echo $(SQM)    $(SQM)$(OSEP)/implementation$(CSEP) >> $@
@@ -132,13 +121,13 @@ $(COMP_COMPONENTS) :
 	@echo $(OSEP)/components$(CSEP) >> $@
 
 # rule for component package file
-$(COMP_PACKAGE) : $(SHAREDLIB_OUT)/$(COMP_IMPL_NAME) Addons.xcu ProtocolHandler.xcu WriterWindowState.xcu CalcWindowState.xcu $(COMP_UNOPKG_MANIFEST) $(COMP_COMPONENTS)
+$(COMP_PACKAGE) : $(SHAREDLIB_OUT)/$(COMP_IMPL_NAME) Addons.xcu ProtocolHandler.xcu $(COMP_UNOPKG_MANIFEST) $(COMP_COMPONENTS)
 	-$(MKDIR) $(subst /,$(PS),$(@D)) && $(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(OUT_COMP_GEN)/$(UNOPKG_PLATFORM))
 	$(COPY) $(subst /,$(PS),$<) $(subst /,$(PS),$(OUT_COMP_GEN)/$(UNOPKG_PLATFORM))
 	cd $(subst /,$(PS),$(OUT_COMP_GEN)) && $(SDK_ZIP) -u ../../bin/$(@F) $(COMP_NAME).components
 	cd $(subst /,$(PS),$(OUT_COMP_GEN)) && $(SDK_ZIP) -u ../../bin/$(@F) $(UNOPKG_PLATFORM)/$(<F)
-	$(SDK_ZIP) -u $@ Addons.xcu ProtocolHandler.xcu WriterWindowState.xcu CalcWindowState.xcu logo_small.png logo_big.png
+	$(SDK_ZIP) -u $@ Addons.xcu ProtocolHandler.xcu logo_small.png logo_big.png
 	cd $(subst /,$(PS),$(OUT_COMP_GEN)/$(subst .$(UNOOXT_EXT),,$(@F))) && $(SDK_ZIP) -u ../../../bin/$(@F) META-INF/manifest.xml
 
 $(COMP_REGISTERFLAG) : $(COMP_PACKAGE)
@@ -156,7 +145,7 @@ endif
 
 Example : $(COMP_REGISTERFLAG)
 	@echo --------------------------------------------------------------------------------
-	@echo The "$(QM)ProtocolHandler$(QM)" addon component was installed if SDK_AUTO_DEPLOYMENT = YES.
+	@echo The "$(QM)Complext Toolbar Controlls$(QM)" component was installed if SDK_AUTO_DEPLOYMENT = YES.
 	@echo You can use this component inside your office installation, see the example
 	@echo description.
 	@echo --------------------------------------------------------------------------------

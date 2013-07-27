@@ -396,7 +396,6 @@ throw (::com::sun::star::uno::RuntimeException)
 void SAL_CALL SfxStatusBarControl::paint(
     const uno::Reference< awt::XGraphics >& xGraphics,
     const awt::Rectangle& rOutputRectangle,
-    ::sal_Int32 nItemId,
     ::sal_Int32 nStyle )
 throw ( ::uno::RuntimeException )
 {
@@ -406,14 +405,14 @@ throw ( ::uno::RuntimeException )
     if ( pOutDev )
     {
         ::Rectangle aRect = VCLRectangle( rOutputRectangle );
-        UserDrawEvent aUserDrawEvent( pOutDev, aRect, (sal_uInt16)nItemId, (sal_uInt16)nStyle );
+        UserDrawEvent aUserDrawEvent( pOutDev, aRect, pBar->GetCurItemId(), (sal_uInt16)nStyle );
         Paint( aUserDrawEvent );
     }
 }
 
 //--------------------------------------------------------------------
 
-void SAL_CALL SfxStatusBarControl::click()
+void SAL_CALL SfxStatusBarControl::click( const awt::Point& )
 throw ( uno::RuntimeException )
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
@@ -422,7 +421,7 @@ throw ( uno::RuntimeException )
 
 //--------------------------------------------------------------------
 
-void SAL_CALL SfxStatusBarControl::doubleClick()
+void SAL_CALL SfxStatusBarControl::doubleClick( const awt::Point& )
 throw ( uno::RuntimeException )
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );

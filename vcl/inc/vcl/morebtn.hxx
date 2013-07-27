@@ -54,9 +54,9 @@ protected:
     SAL_DLLPRIVATE void ImplLoadRes( const ResId& rResId );
 
 public:
-                        MoreButton( Window* pParent, WinBits nStyle = 0 );
-                        MoreButton( Window* pParent, const ResId& rResId );
-                        ~MoreButton();
+    explicit            MoreButton( Window* pParent, WinBits nStyle = 0 );
+    explicit            MoreButton( Window* pParent, const ResId& );
+    virtual             ~MoreButton();
 
     void                Click();
 
@@ -89,3 +89,4 @@ inline void MoreButton::SetState( sal_Bool bNewState )
 }
 
 #endif  // _SV_MOREBTN_HXX
+

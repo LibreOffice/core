@@ -25,6 +25,7 @@
 #include "precompiled_comphelper.hxx"
 
 #include <comphelper/numberedcollection.hxx>
+#include <algorithm>
 
 //_______________________________________________
 // includes

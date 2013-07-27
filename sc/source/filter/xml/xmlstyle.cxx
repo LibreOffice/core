@@ -61,7 +61,7 @@ using namespace ::xmloff::token;
 using namespace ::formula;
 using ::rtl::OUString;
 
-#define MAP(name,prefix,token,type,context)  { name, sizeof(name)-1, prefix, token, type, context, SvtSaveOptions::ODFVER_010 }
+#define MAP(name,prefix,token,type,context)  { name, sizeof(name)-1, prefix, token, static_cast<sal_Int32>(type), context, SvtSaveOptions::ODFVER_010 }
 #define MAP_EXT(name,prefix,token,type,context)  { name, sizeof(name)-1, prefix, token, type, context, SvtSaveOptions::ODFVER_LATEST }
 #define MAP_END()   { NULL, 0, 0, XML_TOKEN_INVALID, 0, 0, SvtSaveOptions::ODFVER_010 }
 

@@ -131,8 +131,7 @@ FT_Error (*pFTEmbolden)(FT_GlyphSlot);
 FT_Error (*pFTOblique)(FT_GlyphSlot);
 static bool bEnableSizeFT = false;
 
-struct EqStr{ bool operator()(const char* a, const char* b) const { return !strcmp(a,b); } };
-typedef ::std::hash_map<const char*,FtFontFile*,::std::hash<const char*>, EqStr> FontFileList;
+typedef ::std::hash_map< const char*, FtFontFile*, rtl::CStringHash, rtl::CStringEqual> FontFileList;
 namespace { struct vclFontFileList : public rtl::Static< FontFileList, vclFontFileList > {}; }
 
 // -----------------------------------------------------------------------

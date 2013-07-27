@@ -94,9 +94,9 @@ $(MISC)/{$(PRODUCTLIST)}/postremove : $$(@:f)
 # --- openoffice.xml---------------------------
 
 .IF "$(common_build)"=="TRUE"
-# Copy the openoffice.org.xml file to $(MISC) 
-#$(MISC)/$(foreach,i,$(PRODUCTLIST) $i/$i.xml) :  $(COMMONMISC)/$$(@:b)/openoffice.org.xml
-$(MISC)/$(foreach,i,$(PRODUCTLIST) $(MISC)/$i/openoffice.org.xml) :  $(COMMONMISC)/$$(@:b)/openoffice.org.xml
+# Copy the apacheopenoffice.xml file to $(MISC) 
+#$(MISC)/$(foreach,i,$(PRODUCTLIST) $i/$i.xml) :  $(COMMONMISC)/$$(@:b)/apacheopenoffice.xml
+$(MISC)/$(foreach,i,$(PRODUCTLIST) $(MISC)/$i/apacheopenoffice.xml) :  $(COMMONMISC)/$$(@:b)/apacheopenoffice.xml
     $(MKDIRHIER) $(@:d)
     echo hier hier $@
     cat $< | tr -d "\015" > $@
@@ -112,7 +112,7 @@ $(MISC)/{$(PRODUCTLIST)}$/prototype : $$(@:f) ../productversion.mk makefile.mk
 # --- packaging ---------------------------------------------------
 
 #$(PKGFILES) : $(MISC)/{$(PRODUCTLIST)}/{copyright pkginfo depend mailcap postinstall postremove} makefile.mk $(MISC)/$$(@:b:b:s/-desktop-integration//)/$$(@:b:b:s/-desktop-integration//).xml
-$(PKGFILES) : $(MISC)/{$(PRODUCTLIST)}/{copyright pkginfo depend mailcap postinstall postremove} makefile.mk $(MISC)/$$(@:b:b:s/-desktop-integration//)/openoffice.org.xml
+$(PKGFILES) : $(MISC)/{$(PRODUCTLIST)}/{copyright pkginfo depend mailcap postinstall postremove} makefile.mk $(MISC)/$$(@:b:b:s/-desktop-integration//)/apacheopenoffice.xml
 $(PKGFILES) : $(MISC)$/{$(PRODUCTLIST)}$/prototype
     @-$(RM) $(BIN)$/$(@:f)
     @$(MKDIRHIER) $(@:d)

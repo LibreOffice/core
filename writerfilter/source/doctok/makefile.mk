@@ -65,10 +65,8 @@ SLOFILES= \
 
 SHL1TARGET=$(TARGET)
 
-.IF "$(GUI)"=="UNX" || "$(GUI)"=="MAC"
+.IF "$(GUI)"=="UNX" || "$(GUI)"=="MAC" || "$(GUI)"=="OS2"
 RESOURCEMODELLIB=-lresourcemodel
-.ELIF "$(GUI)"=="OS2"
-RESOURCEMODELLIB=$(LB)$/iresourcemodel.lib
 .ELIF "$(GUI)"=="WNT"
 .IF "$(COM)"=="GCC"
 RESOURCEMODELLIB=-lresourcemodel

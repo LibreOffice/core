@@ -230,32 +230,27 @@ ColorPropertyBox::ColorPropertyBox( sal_Int32 nControlType, Window* pParent, con
 
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     DBG_ASSERT( pDocSh, "DocShell not found!" );
-    XColorTable* pColorTable = NULL;
-    bool bKillTable = false;
+    XColorListSharedPtr aColorTable;
     const SfxPoolItem* pItem = NULL;
 
     if ( pDocSh && ( ( pItem = pDocSh->GetItem( SID_COLOR_TABLE ) ) != 0) )
-        pColorTable = ( (SvxColorTableItem*)pItem )->GetColorTable();
+        aColorTable = static_cast< const SvxColorTableItem* >(pItem)->GetColorTable();
 
-    if ( !pColorTable )
+    if ( !aColorTable.get() )
     {
-        pColorTable = new XColorTable( SvtPathOptions().GetPalettePath() );
-        bKillTable = true;
+        aColorTable = XPropertyListFactory::CreateSharedXColorList(SvtPathOptions().GetPalettePath());
     }
 
     sal_Int32 nColor = 0;
     rValue >>= nColor;
 
-    for ( long i = 0; i < pColorTable->Count(); i++ )
+    for ( long i = 0; i < aColorTable->Count(); i++ )
     {
-        XColorEntry* pEntry = pColorTable->GetColor(i);
+        XColorEntry* pEntry = aColorTable->GetColor(i);
         sal_uInt16 nPos = mpControl->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
         if( pEntry->GetColor().GetRGBColor() == (sal_uInt32)nColor )
             mpControl->SelectEntryPos( nPos );
     }
-
-    if ( bKillTable )
-        delete pColorTable;
 }
 
 // --------------------------------------------------------------------
@@ -1250,31 +1245,26 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, con
     // fill the color box
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     DBG_ASSERT( pDocSh, "DocShell not found!" );
-    XColorTable* pColorTable = NULL;
-    bool bKillTable = false;
+    XColorListSharedPtr aColorTable;
     const SfxPoolItem* pItem = NULL;
 
     if ( pDocSh && ( (pItem = pDocSh->GetItem( SID_COLOR_TABLE ) ) != 0 ) )
-        pColorTable = ( (SvxColorTableItem*)pItem )->GetColorTable();
+        aColorTable = static_cast< const SvxColorTableItem* >(pItem)->GetColorTable();
 
-    if ( !pColorTable )
+    if ( !aColorTable.get() )
     {
-        pColorTable = new XColorTable( SvtPathOptions().GetPalettePath() );
-        bKillTable = true;
+        aColorTable = XPropertyListFactory::CreateSharedXColorList(SvtPathOptions().GetPalettePath());
     }
 
     mpCLBDimColor->SetUpdateMode( false );
 
-    for ( long i = 0; i < pColorTable->Count(); i++ )
+    for ( long i = 0; i < aColorTable->Count(); i++ )
     {
-        XColorEntry* pEntry = pColorTable->GetColor(i);
+        XColorEntry* pEntry = aColorTable->GetColor(i);
         mpCLBDimColor->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
     }
 
     mpCLBDimColor->SetUpdateMode( true );
-
-    if ( bKillTable )
-        delete pColorTable;
 
     //
     // init settings controls
@@ -1812,7 +1802,7 @@ void CustomAnimationEffectTabPage::openSoundFileDialog()
         if( nPos < 0 ) // not in Soundliste
         {
             // try to insert in Gallery
-            if( GalleryExplorer::InsertURL( GALLERY_THEME_USERSOUNDS, aFile, SGA_FORMAT_SOUND ) )
+            if( GalleryExplorer::InsertURL( GALLERY_THEME_USERSOUNDS, aFile ) )
             {
                 clearSoundListBox();
                 fillSoundListBox();

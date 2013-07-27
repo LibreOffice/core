@@ -45,12 +45,15 @@ private:
     ImplListBoxFloatingWindow*  mpFloatWin;
     ImplWin*                    mpImplWin;
     ImplBtn*                    mpBtn;
-    sal_uInt16                      mnDDHeight;
-    sal_uInt16                      mnSaveValue;
-    sal_Bool                        mbDDAutoSize;
+    sal_uInt16                  mnDDHeight;
+    sal_uInt16                  mnSaveValue;
     Link                        maSelectHdl;
     Link                        maDoubleClickHdl;
-    sal_uInt16 mnLineCount;
+    sal_uInt16                  mnLineCount;
+
+    /// bitfield
+    bool            mbDDAutoSize : 1;
+    bool            mbEdgeBlending : 1;
 
 //#if 0 // _SOLAR__PRIVATE
 private:
@@ -79,9 +82,9 @@ protected:
     virtual void        FillLayoutData() const;
 
 public:
-                        ListBox( Window* pParent, WinBits nStyle = WB_BORDER );
-                        ListBox( Window* pParent, const ResId& rResId );
-                        ~ListBox();
+    explicit            ListBox( Window* pParent, WinBits nStyle = WB_BORDER );
+    explicit            ListBox( Window* pParent, const ResId& );
+    virtual             ~ListBox();
 
     virtual void        Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
     virtual void        Resize();
@@ -107,11 +110,12 @@ public:
 
     Rectangle           GetDropDownPosSizePixel() const;
 
+    void AdaptDropDownLineCountToMaximum();
     void                SetDropDownLineCount( sal_uInt16 nLines );
     sal_uInt16              GetDropDownLineCount() const;
 
-    void                EnableAutoSize( sal_Bool bAuto );
-    sal_Bool                IsAutoSizeEnabled() const { return mbDDAutoSize; }
+    void                EnableAutoSize( bool bAuto );
+    bool                IsAutoSizeEnabled() const { return mbDDAutoSize; }
 
     void                EnableDDAutoWidth( sal_Bool b );
     sal_Bool                IsDDAutoWidthEnabled() const;
@@ -218,6 +222,9 @@ public:
 
     void            EnableMirroring();
 
+    bool GetEdgeBlending() const { return mbEdgeBlending; }
+    void SetEdgeBlending(bool bNew);
+
     /** checks whether a certain point lies within the bounds of
         a listbox item and returns the item as well as the character position
         the point is at.
@@ -255,8 +262,9 @@ private:
     sal_uInt16          GetSavedValue();
 
 public:
-                    MultiListBox( Window* pParent, WinBits nStyle = 0 );
-                    MultiListBox( Window* pParent, const ResId& rResId );
+    explicit        MultiListBox( Window* pParent, WinBits nStyle = 0 );
+    explicit        MultiListBox( Window* pParent, const ResId& );
 };
 
 #endif  // _SV_LSTBOX_HXX
+

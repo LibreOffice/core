@@ -31,11 +31,16 @@
 #include <editeng/frmdir.hxx>
 #include <fltshell.hxx>         // fuer den Attribut Stack
 
+#include <svx/svdobj.hxx>
+#define SW_DRAWLAYER 0x30334353
+#define SW_UD_IMAPDATA      2
+
 #include <vector>
 #include <stack>
 #include <deque>
 #include <map>
 #include <utility>
+#include <limits>
 
 #include "tracer.hxx"
 #include "ww8struc.hxx"     // WW8_BRC
@@ -186,6 +191,8 @@ public:
         std::vector<sal_uInt8> &rParaSprms, SwTxtNode *pNode=0);
     SwNumRule* CreateNextRule(bool bSimple);
     ~WW8ListManager();
+    SwNumRule* GetNumRule(sal_uInt16 i);
+    sal_uInt16 GetWW8LSTInfoNum() const{return static_cast< sal_uInt16 >(maLSTInfos.size());}
 private:
     wwSprmParser maSprmParser;
     SwWW8ImplReader& rReader;
@@ -313,14 +320,8 @@ private:
     Position& operator=(const Position&);
 };
 
-class SwWW8FltRefStack : public SwFltEndStack
+namespace SwWW8
 {
-public:
-    SwWW8FltRefStack(SwDoc* pDo, sal_uLong nFieldFl)
-        : SwFltEndStack( pDo, nFieldFl )
-    {}
-    bool IsFtnEdnBkmField(const SwFmtFld& rFmtFld, sal_uInt16& rBkmNo);
-
     struct ltstr
     {
         bool operator()(const String &r1, const String &r2) const
@@ -328,10 +329,37 @@ public:
             return r1.CompareIgnoreCaseToAscii(r2) == COMPARE_LESS;
         }
     };
+};
+
+class SwWW8ReferencedFltEndStack : public SwFltEndStack
+{
+public:
+    SwWW8ReferencedFltEndStack( SwDoc* pDo, sal_uLong nFieldFl )
+        : SwFltEndStack( pDo, nFieldFl )
+        , aReferencedTOCBookmarks()
+    {}
+
+    // Keep track of referenced TOC bookmarks in order to suppress the import
+    // of unreferenced ones.
+    std::set<String, SwWW8::ltstr> aReferencedTOCBookmarks;
+protected:
+    virtual void SetAttrInDoc( const SwPosition& rTmpPos,
+                               SwFltStackEntry* pEntry );
+};
+
+class SwWW8FltRefStack : public SwFltEndStack
+{
+public:
+    SwWW8FltRefStack(SwDoc* pDo, sal_uLong nFieldFl)
+        : SwFltEndStack( pDo, nFieldFl )
+        , aFieldVarNames()
+    {}
+    bool IsFtnEdnBkmField(const SwFmtFld& rFmtFld, sal_uInt16& rBkmNo);
+
     //Keep track of variable names created with fields, and the bookmark
     //mapped to their position, hopefully the same, but very possibly
     //an additional pseudo bookmark
-    std::map<String, String, ltstr> aFieldVarNames;
+    std::map<String, String, SwWW8::ltstr> aFieldVarNames;
 protected:
     SwFltStackEntry *RefToVar(const SwField* pFld,SwFltStackEntry *pEntry);
     virtual void SetAttrInDoc(const SwPosition& rTmpPos,
@@ -342,6 +370,48 @@ private:
     SwWW8FltRefStack& operator=(const SwWW8FltRefStack&);
 };
 
+template< typename Type >
+inline bool get_flag( Type nBitField, Type nMask )
+{ return (nBitField & nMask) != 0; }
+
+template< typename ReturnType, typename Type >
+inline ReturnType ulimit_cast( Type nValue, ReturnType nMax )
+{ return static_cast< ReturnType >( ::std::min< Type >( nValue, nMax ) ); }
+
+
+template< typename ReturnType, typename Type >
+inline ReturnType ulimit_cast( Type nValue )
+{ return ulimit_cast( nValue, ::std::numeric_limits< ReturnType >::max() ); }
+
+class SwMacroInfo : public SdrObjUserData
+{
+public:
+                    SwMacroInfo();
+    virtual         ~SwMacroInfo();
+
+    virtual SdrObjUserData* Clone( SdrObject* pObj ) const;
+
+
+    void            SetHlink( const rtl::OUString& rHlink ) { maHlink = rHlink; }
+    const rtl::OUString& GetHlink() const { return maHlink; }
+     void            SetTarFrm( const rtl::OUString& rTarFrm ) { maTarFrm = rTarFrm; }
+    const rtl::OUString& GetTarFrm() const { return maTarFrm; }
+    void            SetShapeId( const sal_uInt32& rShapeId ) { maShapeId = rShapeId; }
+    const sal_uInt32& GetShapeId() const { return maShapeId; }
+    void            SetName( const rtl::OUString& rName ) { maNameStr = rName; }
+    const rtl::OUString& GetName() const { return maNameStr; }
+
+private:
+    sal_uInt32   maShapeId;
+    rtl::OUString   maHlink;
+    rtl::OUString maNameStr;
+    rtl::OUString maTarFrm;
+};
+struct HyperLinksTable
+{
+    String hLinkAddr;
+    String tarFrm;
+};
 
 namespace sw
 {
@@ -843,11 +913,11 @@ private:
     sw::util::RedlineStack *mpRedlineStack;
 
     /*
-    This stack is for fields that get referneced later, e.g. BookMarks and TOX.
+    This stack is for fields that get referenced later, e.g. BookMarks and TOX.
     They get inserted at the end of the document, it is the same stack for
     headers/footers/main text/textboxes/tables etc...
     */
-    SwFltEndStack *pReffedStck;
+    SwWW8ReferencedFltEndStack *pReffedStck;
 
     /*
     This stack is for fields whose true conversion cannot be determined until
@@ -1644,6 +1714,8 @@ public:     // eigentlich private, geht aber leider nur public
     CharSet GetCurrentCJKCharSet();
 
     void PostProcessAttrs();
+    static void       ReadEmbeddedData(SvMemoryStream& rStrm, SwDocShell* pDocShell ,struct HyperLinksTable& hlStr);
+    static String ReadRawUniString( SvMemoryStream& rStrm,sal_uInt16 nChars, bool b16Bit );
 };
 
 bool CanUseRemoteLink(const String &rGrfName);

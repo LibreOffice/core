@@ -72,6 +72,7 @@
 #include <rtl/bootstrap.hxx>
 #include <rtl/instance.hxx>
 #include <vcl/metaact.hxx>
+#include <vcl/dibtools.hxx>
 
 #include "SvFilterOptionsDialog.hxx"
 
@@ -1157,11 +1158,7 @@ void GraphicFilter::ImplInit()
 
     if( bUseConfig )
     {
-#if defined WNT || defined OS2
-        rtl::OUString url(RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR/program"));
-#else
         rtl::OUString url(RTL_CONSTASCII_USTRINGPARAM("$OOO_BASE_DIR/program"));
-#endif
         rtl::Bootstrap::expandMacros(url); //TODO: detect failure
         utl::LocalFileHelper::ConvertURLToPhysicalName(url, aFilterPath);
     }
@@ -1932,7 +1929,7 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& 
                 ResMgr*     pResMgr = CREATERESMGR( svt );
                 sal_Bool    bRleCoding = aConfigItem.ReadBool( String( RTL_CONSTASCII_USTRINGPARAM( "RLE_Coding" ) ), sal_True );
                 // Wollen wir RLE-Kodiert speichern?
-                aBmp.Write( rOStm, bRleCoding );
+                WriteDIB(aBmp, rOStm, bRleCoding, true);
                 delete pResMgr;
 
                 if( rOStm.GetError() )

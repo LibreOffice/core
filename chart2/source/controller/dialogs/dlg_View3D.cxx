@@ -55,7 +55,7 @@ using namespace ::com::sun::star::chart2;
 
 sal_uInt16 View3DDialog::m_nLastPageId = 0;
 
-View3DDialog::View3DDialog(Window* pParent, const uno::Reference< frame::XModel > & xChartModel, XColorTable* pColorTable )
+View3DDialog::View3DDialog(Window* pParent, const uno::Reference< frame::XModel > & xChartModel, XColorListSharedPtr aColorTable )
     : TabDialog(pParent,SchResId(DLG_3D_VIEW))
     , m_aTabControl(this,SchResId(TABCTRL))
     , m_aBtnOK(this,SchResId(BTN_OK))
@@ -71,7 +71,7 @@ View3DDialog::View3DDialog(Window* pParent, const uno::Reference< frame::XModel 
     uno::Reference< beans::XPropertySet > xSceneProperties( ChartModelHelper::findDiagram( xChartModel ), uno::UNO_QUERY );
     m_pGeometry   = new ThreeD_SceneGeometry_TabPage(&m_aTabControl,xSceneProperties,m_aControllerLocker);
     m_pAppearance = new ThreeD_SceneAppearance_TabPage(&m_aTabControl,xChartModel,m_aControllerLocker);
-    m_pIllumination = new ThreeD_SceneIllumination_TabPage(&m_aTabControl,xSceneProperties,xChartModel,pColorTable);
+    m_pIllumination = new ThreeD_SceneIllumination_TabPage(&m_aTabControl,xSceneProperties,xChartModel,aColorTable);
 
     m_aTabControl.InsertPage( TP_3D_SCENEGEOMETRY, String(SchResId(STR_PAGE_PERSPECTIVE)) );
     m_aTabControl.InsertPage( TP_3D_SCENEAPPEARANCE, String(SchResId(STR_PAGE_APPEARANCE)) );

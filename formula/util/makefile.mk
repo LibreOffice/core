@@ -92,11 +92,7 @@ SHL2STDLIBS= \
         $(CPPUHELPERLIB)        \
         $(SALLIB)
         
-.IF "$(GUI)"=="OS2"
-SHL2STDLIBS+= \
-        $(LB)$/ifor.lib
-SHL2DEPN=$(LB)$/i$(TARGET).lib
-.ELIF "$(GUI)"!="WNT" || "$(COM)"=="GCC"
+.IF "$(GUI)"!="WNT" || "$(COM)"=="GCC"
 SHL2STDLIBS+= \
         -lfor$(DLLPOSTFIX)
 SHL2DEPN=$(SHL1TARGETN)

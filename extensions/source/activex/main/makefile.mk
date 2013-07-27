@@ -137,8 +137,10 @@ SHL1STDLIBS_X64+=\
 SHL1OBJS_X64=$(SLOFILES_X64)
 SHL1DEF_X64=$(TARGET).def
 
-SHL1STDLIBS_X64+= $(ATL_LIB)$/amd64$/atls.lib
-
+SHL1STDLIBS_X64+= $(ATL_LIB_X64)$/atls.lib 
+.IF "$(HAVE_ATLTHUNK)" == "YES"
+    SHL1STDLIBS_X64+= $(ATL_LIB_X64)$/atlthunk.lib
+.ENDIF
 .ENDIF # "$(BUILD_X64)"!=""
 
 # --- Targets ----------------------------------

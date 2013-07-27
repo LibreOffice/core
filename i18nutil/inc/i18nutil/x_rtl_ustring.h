@@ -32,18 +32,15 @@
 
 /**
  * Allocates a new <code>rtl_uString</code> which can hold nLen + 1 characters.
- * The reference count is 0. The characters of room is not cleared.
- * This method is similar to rtl_uString_new_WithLength in rtl/ustring.h, but
- * can allocate a new string more efficiently. You need to "acquire" by such as
- * OUString( rtl_uString * value ) if you intend to use it for a while.
- * @param   [output] newStr
+ * The reference count is 1. The memory allocated for the characters is not initialized.
  * @param   [input]  nLen
  */
-inline void SAL_CALL x_rtl_uString_new_WithLength( rtl_uString ** newStr, sal_Int32 nLen, sal_Int32 _refCount = 0 )
+inline rtl_uString * SAL_CALL x_rtl_uString_new_WithLength( sal_Int32 nLen )
 {
-  *newStr = (rtl_uString*) rtl_allocateMemory ( sizeof(rtl_uString) + sizeof(sal_Unicode) * nLen);
-  (*newStr)->refCount = _refCount;
-  (*newStr)->length = nLen;
+  rtl_uString *newStr = (rtl_uString*) rtl_allocateMemory ( sizeof(rtl_uString) + sizeof(sal_Unicode) * nLen);
+  newStr->refCount = 1;
+  newStr->length = nLen;
+  return newStr;
 
   // rtl_uString is defined in rtl/ustring.h as below:
   //typedef struct _rtl_uString
@@ -52,14 +49,6 @@ inline void SAL_CALL x_rtl_uString_new_WithLength( rtl_uString ** newStr, sal_In
   //    sal_Int32       length;
   //    sal_Unicode     buffer[1];
   //} rtl_uString;
-}
-
-inline rtl_uString * SAL_CALL x_rtl_uString_new_WithLength( sal_Int32 nLen, sal_Int32 _refCount = 0 )
-{
-  rtl_uString *newStr = (rtl_uString*) rtl_allocateMemory ( sizeof(rtl_uString) + sizeof(sal_Unicode) * nLen);
-  newStr->refCount = _refCount;
-  newStr->length = nLen;
-  return newStr;
 }
 
 /**

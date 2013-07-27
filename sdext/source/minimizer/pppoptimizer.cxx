@@ -30,28 +30,32 @@
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
-using namespace ::rtl;
+#define SERVICE_NAME "com.sun.star.presentation.PresentationOptimizer"
+
+
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 
-#define SERVICE_NAME "com.sun.star.comp.PPPOptimizer"
+using ::rtl::OUString;
 
 // ----------------
 // - PPPOptimizer -
 // ----------------
 
-PPPOptimizer::PPPOptimizer( const Reference< XComponentContext > &rxMSF ) :
-    mxMSF( rxMSF )
+PPPOptimizer::PPPOptimizer( const Reference< XComponentContext > &rxContext ) :
+    mxContext( rxContext )
 {
+    OSL_TRACE("PPPOptimizer::PPPOptimizer");
 }
 
 // -----------------------------------------------------------------------------
 
 PPPOptimizer::~PPPOptimizer()
 {
+    OSL_TRACE("PPPOptimizer::~PPPOptimizer");
 }
 
 // -----------------------------------------------------------------------------
@@ -61,6 +65,7 @@ PPPOptimizer::~PPPOptimizer()
 void SAL_CALL PPPOptimizer::initialize( const Sequence< Any >& aArguments )
     throw ( Exception, RuntimeException )
 {
+    OSL_TRACE("PPPOptimizer::initialize");
     if( aArguments.getLength() != 1 )
         throw IllegalArgumentException();
 
@@ -100,7 +105,8 @@ Reference< com::sun::star::frame::XDispatch > SAL_CALL PPPOptimizer::queryDispat
     const URL& aURL, const ::rtl::OUString& /* aTargetFrameName */, sal_Int32 /* nSearchFlags */ ) throw( RuntimeException )
 {
     Reference < XDispatch > xRet;
-    if ( aURL.Protocol.compareToAscii( "vnd.com.sun.star.comp.PPPOptimizer:" ) == 0 )
+    if ( aURL.Protocol.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(
+        "vnd.com.sun.star.presentation.PresentationOptimizer:" ) ) )
     {
 //      if ( aURL.Path.compareToAscii( "Function1" ) == 0 )
         xRet = this;
@@ -130,16 +136,19 @@ Sequence< Reference< com::sun::star::frame::XDispatch > > SAL_CALL PPPOptimizer:
 void SAL_CALL PPPOptimizer::dispatch( const URL& rURL, const Sequence< PropertyValue >& lArguments )
     throw( RuntimeException )
 {
-    if ( mxController.is() && ( rURL.Protocol.compareToAscii( "vnd.com.sun.star.comp.PPPOptimizer:" ) == 0 ) )
+    OSL_TRACE("PPPOptimizer::dispatch");
+    if ( mxController.is() && rURL.Protocol.equalsAsciiL(
+        RTL_CONSTASCII_STRINGPARAM(
+            "vnd.com.sun.star.presentation.PresentationOptimizer:" )))
     {
-        if ( rURL.Path.compareToAscii( "optimize" ) == 0 )
+        if ( rURL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("optimize") ) )
         {
             Reference< XModel > xModel( mxController->getModel() );
             if ( xModel.is() )
             {
                 try
                 {
-                    ImpOptimizer aOptimizer( mxMSF, xModel );
+                    ImpOptimizer aOptimizer( mxContext, xModel );
                     aOptimizer.Optimize( lArguments );
                 }
                 catch( Exception& )
@@ -187,7 +196,7 @@ sal_Int64 PPPOptimizer::GetFileSize( const rtl::OUString& rURL )
 
 OUString PPPOptimizer_getImplementationName()
 {
-    return OUString ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.PPPOptimizerImp" ) );
+    return OUString ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.presentation.PresentationOptimizer" ) );
 }
 
 Sequence< OUString > PPPOptimizer_getSupportedServiceNames()

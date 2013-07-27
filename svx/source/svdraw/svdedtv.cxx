@@ -140,7 +140,7 @@ SdrEditView::~SdrEditView()
 SdrLayer* SdrEditView::InsertNewLayer(const XubString& rName, sal_uInt16 nPos)
 {
     SdrLayerAdmin& rLA = getSdrModelFromSdrView().GetModelLayerAdmin();
-    const sal_uInt16 nMax(rLA.GetLayerCount());
+    const sal_uInt32 nMax(rLA.GetLayerCount());
 
     if(nPos > nMax)
     {
@@ -247,7 +247,7 @@ void SdrEditView::DeleteLayer(const XubString& rName)
 {
     SdrLayerAdmin& rLA = getSdrModelFromSdrView().GetModelLayerAdmin();
     SdrLayer* pLayer = rLA.GetLayer(rName, true);
-    sal_uInt16 nLayerNum(rLA.GetLayerPos(pLayer));
+    const sal_uInt32 nLayerNum(rLA.GetLayerPos(pLayer));
 
     if(SDRLAYER_NOTFOUND != nLayerNum)
     {
@@ -263,9 +263,9 @@ void SdrEditView::DeleteLayer(const XubString& rName)
         for(sal_uInt16 nPageKind(0); nPageKind < 2; nPageKind++)
         {
             // MasterPages and DrawPages
-            const sal_uInt16 nPgAnz(bMaPg ? getSdrModelFromSdrView().GetMasterPageCount() : getSdrModelFromSdrView().GetPageCount());
+            const sal_uInt32 nPgAnz(bMaPg ? getSdrModelFromSdrView().GetMasterPageCount() : getSdrModelFromSdrView().GetPageCount());
 
-            for(sal_uInt16 nPgNum(0); nPgNum < nPgAnz; nPgNum++)
+            for(sal_uInt32 nPgNum(0); nPgNum < nPgAnz; nPgNum++)
             {
                 // over all pages
                 SdrPage* pPage = (bMaPg) ? getSdrModelFromSdrView().GetMasterPage(nPgNum) : getSdrModelFromSdrView().GetPage(nPgNum);

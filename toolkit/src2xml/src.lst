@@ -617,8 +617,6 @@
 ../../filter/source/xsltdialog/xmlfiltertabpagexslt.src
 ../../filter/source/xsltdialog/xmlfiltertestdialog.src
 ../../filter/source/xsltdialog/xmlfiltertabpagebasic.src
-../../toolkit/source/awt/accessiblestrings.src
-../../toolkit/source/awt/xthrobber.src
 ../../xmlsecurity/source/dialogs/warnings.src
 ../../xmlsecurity/source/dialogs/macrosecurity.src
 ../../xmlsecurity/source/dialogs/certificatechooser.src

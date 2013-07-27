@@ -187,8 +187,7 @@ void ToolbarsMenuController::addCommand(
         aLabel = rLabel;
 
     rPopupMenu->insertItem( nItemId, aLabel, 0, nItemId );
-    Reference< awt::XMenuExtended > xMenuExtended( m_xPopupMenu, UNO_QUERY );
-    xMenuExtended->setCommand( nItemId, rCommandURL );
+    rPopupMenu->setCommand( nItemId, rCommandURL );
 
     bool bInternal = ( rCommandURL.indexOf( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( STATIC_INTERNAL_CMD_PART ))) == 0);
     if ( !bInternal )
@@ -377,9 +376,8 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
     m_aCommandVector.clear();
 
     // Retrieve layout manager for additional information
-    rtl::OUString                   aEmptyString;
-    Reference< awt::XMenuExtended > xMenuExtended( rPopupMenu, UNO_QUERY );
-    Reference< XLayoutManager >     xLayoutManager( getLayoutManagerFromFrame( m_xFrame ));
+    rtl::OUString aEmptyString;
+    Reference< XLayoutManager > xLayoutManager( getLayoutManagerFromFrame( m_xFrame ));
 
     m_bResetActive = sal_False;
     if ( xLayoutManager.is() )
@@ -490,7 +488,7 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
 
             // Store complete uno-command so it can also be dispatched. This is necessary to support
             // the test tool!
-            xMenuExtended->setCommand( nIndex, aCmd );
+            rPopupMenu->setCommand( nIndex, aCmd );
             ++nIndex;
         }
 
@@ -619,7 +617,7 @@ void SAL_CALL ToolbarsMenuController::statusChanged( const FeatureStateEvent& Ev
 }
 
 // XMenuListener
-void SAL_CALL ToolbarsMenuController::select( const css::awt::MenuEvent& rEvent ) throw (RuntimeException)
+void SAL_CALL ToolbarsMenuController::itemSelected( const css::awt::MenuEvent& rEvent ) throw (RuntimeException)
 {
     Reference< css::awt::XPopupMenu >   xPopupMenu;
     Reference< XMultiServiceFactory >   xServiceManager;
@@ -780,7 +778,7 @@ void SAL_CALL ToolbarsMenuController::select( const css::awt::MenuEvent& rEvent 
     }
 }
 
-void SAL_CALL ToolbarsMenuController::activate( const css::awt::MenuEvent& ) throw (RuntimeException)
+void SAL_CALL ToolbarsMenuController::itemActivated( const css::awt::MenuEvent& ) throw (RuntimeException)
 {
     std::vector< rtl::OUString >   aCmdVector;
     Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );

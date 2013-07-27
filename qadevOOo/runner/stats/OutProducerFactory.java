@@ -38,7 +38,7 @@ public class OutProducerFactory {
      *   <li>DataBaseOut - If set to true, a database outproducer is created.
      *   <li>OutProducer - The value of this parameter names the class that is created.
      * </ul>
-     * @param Parameters of the test.
+     * @param param Parameters of the test.
      * @return The created out producer.
      */
     public static LogWriter createOutProducer(Hashtable param) {

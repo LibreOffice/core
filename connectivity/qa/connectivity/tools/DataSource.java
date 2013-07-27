@@ -156,4 +156,4 @@ public class DataSource
     {
         return (String)impl_getPropertyValue( "Name" );
     }
-};
+}

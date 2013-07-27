@@ -248,9 +248,19 @@ namespace svgio
             if(nLength)
             {
                 // prepare FontAttribute
-                const rtl::OUString aFontFamily = rSvgStyleAttributes.getFontFamily().empty() ?
+                rtl::OUString aFontFamily = rSvgStyleAttributes.getFontFamily().empty() ?
                     rtl::OUString(rtl::OUString::createFromAscii("Times New Roman")) :
                     rSvgStyleAttributes.getFontFamily()[0];
+
+                // #122324# if the FontFamily name ends on ' embedded' it is probably a re-import
+                // of a SVG export with fiont embedding. Remove this to make font matching work. This
+                // is pretty safe since there should be no font family names ending on ' embedded'.
+                // Remove again when FontEmbedding is implemented in SVG import
+                if(aFontFamily.endsWithAsciiL(" embedded", 9))
+                {
+                    aFontFamily = aFontFamily.copy(0, aFontFamily.getLength() - 9);
+                }
+
                 const ::FontWeight nFontWeight(getVclFontWeight(rSvgStyleAttributes.getFontWeight()));
                 bool bSymbol(false);
                 bool bVertical(false);
@@ -394,6 +404,38 @@ namespace svgio
                     {
                         // TextAlign_notset, TextAlign_left: nothing to do
                         // TextAlign_justify is not clear currently; handle as TextAlign_left
+                        break;
+                    }
+                }
+
+                // get BaselineShift
+                const BaselineShift aBaselineShift(rSvgStyleAttributes.getBaselineShift());
+
+                // apply BaselineShift
+                switch(aBaselineShift)
+                {
+                    case BaselineShift_Sub:
+                    {
+                        aPosition.setY(aPosition.getY() + aTextLayouterDevice.getUnderlineOffset());
+                        break;
+                    }
+                    case BaselineShift_Super:
+                    {
+                        aPosition.setY(aPosition.getY() + aTextLayouterDevice.getOverlineOffset());
+                        break;
+                    }
+                    case BaselineShift_Percentage:
+                    case BaselineShift_Length:
+                    {
+                        const SvgNumber aNumber(rSvgStyleAttributes.getBaselineShiftNumber());
+                        const double mfBaselineShift(aNumber.solve(*this, length));
+
+                        aPosition.setY(aPosition.getY() + mfBaselineShift);
+                        break;
+                    }
+                    default: // BaselineShift_Baseline
+                    {
+                        // nothing to do
                         break;
                     }
                 }

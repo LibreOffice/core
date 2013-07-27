@@ -28,7 +28,7 @@ en-US = "Welcome to the %PRODUCTNAME% %PRODUCTVERSION% Error Report"
 
 
 [%WELCOME_BODY1%]
-en-US = "This error report tool gathers information about how %PRODUCTNAME% is working and sends it to Oracle to help improve future versions.\n\n"
+en-US = "This error report tool gathers information about how %PRODUCTNAME% is working and sends it to Apache OpenOffice to help improve future versions.\n\n"
 
 
 [%WELCOME_BODY2%]
@@ -36,11 +36,11 @@ en-US = "It's easy - just send the report without any further effort on your par
 
 
 [%WELCOME_BODY3%]
-en-US = "Customer Privacy\nThe information gathered is limited to data concerning the state of %PRODUCTNAME% %PRODUCTVERSION% when the error occurred. Other information about passwords or document contents is not collected.\n\nThe information will only be used to improve the quality of %PRODUCTNAME% and will not be shared with third parties.\nFor more information on Oracle's privacy policy, visit\n"
+en-US = "Customer Privacy\nThe information gathered is limited to data concerning the state of %PRODUCTNAME% %PRODUCTVERSION% when the error occurred. Other information about passwords or document contents is not collected.\n\nThe information will only be used to improve the quality of %PRODUCTNAME% and will not be shared with third parties.\nFor more information on Apache OpenOffice's privacy policy, visit\n"
 
 
 [%PRIVACY_URL%]
-en-US = "http://www.oracle.com/html/services-privacy-policy.html"
+en-US = "http://www.openoffice.org/privacy.html"
 
 
 [%NEXT_BUTTON%]
@@ -64,7 +64,7 @@ en-US = "An error occurred while running %PRODUCTNAME% %PRODUCTVERSION%"
 
 
 [%REPORT_BODY%]
-en-US = "The %PRODUCTNAME% %PRODUCTVERSION% Error Report has gathered information that could help Oracle improve %PRODUCTNAME%.\nIn the spaces below, you can enter a title for your crash report and describe the action you were trying to carry out when the error occurred. Then click 'Send'.\n"
+en-US = "The %PRODUCTNAME% %PRODUCTVERSION% Error Report has gathered information that could help Apache OpenOffice improve %PRODUCTNAME%.\nIn the spaces below, you can enter a title for your crash report and describe the action you were trying to carry out when the error occurred. Then click 'Send'.\n"
 
 
 [%ENTER_TITLE%]
@@ -72,7 +72,7 @@ en-US = "Which type of document (e.g. presentation) were you using when the erro
 
 
 [%ALLOW_CONTACT%]
-en-US = "~I allow Oracle to contact me regarding this report."
+en-US = "~I allow Apache OpenOffice to contact me regarding this report."
 
 
 [%ENTER_EMAIL%]
@@ -177,7 +177,7 @@ en-US = "Status: The error report has been sent successfully."
 
 
 [%ERROR_MSG_NOEMAILADDRESS%]
-en-US = "You have marked the option 'I allow Oracle to contact me regarding this report.'\nPlease enter your e-mail address."
+en-US = "You have marked the option 'I allow Apache OpenOffice to contact me regarding this report.'\nPlease enter your e-mail address."
 
 
 [%MSG_CMDLINE_USAGE%]

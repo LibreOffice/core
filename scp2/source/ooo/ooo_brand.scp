@@ -53,12 +53,12 @@ File gid_File_Txt_License_Root
     Styles = (PACKED);
 End
 
-File gid_Brand_File_ServicesRdb
-    TXT_FILE_BODY;
-    Dir = gid_Brand_Dir_Program;
-    Name = "/ooo/services.rdb";
-    Styles = (PACKED);
-End
+//File gid_Brand_File_ServicesRdb
+//    TXT_FILE_BODY;
+//    Dir = gid_Brand_Dir_Program;
+//    Name = "/ooo/services.rdb";
+//    Styles = (PACKED);
+//End
 
 ProfileItem gid_Brand_Profileitem_Bootstrap_Errorreport_Server
     ProfileID = gid_Brand_Profile_Bootstrap_Ini;
@@ -66,7 +66,7 @@ ProfileItem gid_Brand_Profileitem_Bootstrap_Errorreport_Server
     Section = "ErrorReport";
     Order = 8;
     Key = "ErrorReportServer";
-  #if defined(BUILD_SPECIAL)
+  #if defined(ENABLE_ERROR_REPORT_SERVER)
     Value = "report.services.openoffice.org";
   #else
     Value = "";

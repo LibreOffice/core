@@ -32,7 +32,6 @@
 
 #define GRCACHE_REUSE_VECTORS 1
 
-//#include <rope>
 #include <hash_map>
 
 class TextSourceAdaptor;

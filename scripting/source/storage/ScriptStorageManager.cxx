@@ -82,7 +82,7 @@ ScriptStorageManager::ScriptStorageManager( const Reference<
                                                    "/singletons/com.sun.star.util.theMacroExpander" ) ), UNO_QUERY_THROW );
 
         OUString base = OUString::createFromAscii(
-                            SAL_CONFIGFILE( "${$BRAND_BASE_DIR/program/bootstrap" ) );
+                            SAL_CONFIGFILE( "${$OOO_BASE_DIR/program/bootstrap" ) );
 
         setupAppStorage( xME,
                          base.concat( OUString::createFromAscii( "::BaseInstallation}/share" ) ),

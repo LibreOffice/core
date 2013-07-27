@@ -326,11 +326,11 @@ sub create_epm_header
     my $line = "";
     my $infoline = "";
 
-    # %product OpenOffice.org Software
+    # %product Apache OpenOffice Software
     # %version 2.0
     # %description A really great software
     # %copyright 1999-2003 by OOo
-    # %vendor OpenOffice.org
+    # %vendor Apache OpenOffice project
     # %license /test/replace/01/LICENSE01
     # %readme /test/replace/01/README01
     # %requires foo
@@ -492,7 +492,7 @@ sub create_epm_header
     {
         # refer to the license in the matching AOO installation
         # TODO: sync AOO dest license full path with lpacks/sdks/exts
-        my $licpath = "openoffice.org3/program/" . $licensefilename;
+        my $licpath = "openoffice4/program/" . $licensefilename;
         $foundlicensefile = 1;
         $line = "%license " . $licpath . "\n";
         push(@epmheader, $line);
@@ -538,23 +538,13 @@ sub create_epm_header
                 if ( $installer::globals::debian ) { $onereplaces =~ s/_/-/g; } # Debian allows no underline in package name
                 $line = "%replaces" . " " . $onereplaces . "\n";
                 push(@epmheader, $line);
-
-                # Force the openofficeorg packages to get removed,
-                # see http://www.debian.org/doc/debian-policy/ch-relationships.html
-                # 7.5.2 Replacing whole packages, forcing their removal
-
-                if ( $installer::globals::debian )
-                {
-                    $line = "%incompat" . " " . $onereplaces . "\n";
-                    push(@epmheader, $line);
-                }
             }
 
-            if ( $installer::globals::debian && $variableshashref->{'UNIXPRODUCTNAME'} eq 'openoffice.org' )
+            if ( $installer::globals::debian && $variableshashref->{'UNIXPRODUCTNAME'} eq 'openoffice' )
             {
                 $line = "%provides" . " openoffice.org-unbundled\n";
                 push(@epmheader, $line);
-                $line = "%incompat" . " openoffice.org-bundled\n";
+                $line = "%replaces" . " openoffice.org-bundled\n";
                 push(@epmheader, $line);
             }
         }
@@ -3435,7 +3425,6 @@ sub finalize_linux_patch
     my $productname = $allvariables->{'PRODUCTNAME'};
     $productname = lc($productname);
     $productname =~ s/ /_/g;    # abc office -> abc_office
-#   $productname =~ s/\.//g;    # openoffice.org -> openofficeorg
 
     $infoline = "Adding productname $productname into Linux patch script\n";
     push( @installer::globals::logfileinfo, $infoline);

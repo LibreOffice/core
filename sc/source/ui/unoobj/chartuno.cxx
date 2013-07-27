@@ -39,6 +39,7 @@
 #include <unotools/moduleoptions.hxx>
 #include <sot/clsids.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <svx/charthelper.hxx>
 
 #include "chartuno.hxx"
 #include "miscuno.hxx"
@@ -298,6 +299,10 @@ void SAL_CALL ScChartsObj::addNewByName( const rtl::OUString& aName,
 
         pPage->InsertObjectToSdrObjList(*pObj);
         pModel->AddUndo( new SdrUndoNewObj( *pObj ) );
+
+        // #121334# This call will change the chart's default background fill from white to transparent.
+        // Add here again if this is wanted (see task description for details)
+        // ChartHelper::AdaptDefaultsForChart( xObj );
 
         // Dies veranlaesst Chart zum sofortigen Update
         //SvData aEmpty;

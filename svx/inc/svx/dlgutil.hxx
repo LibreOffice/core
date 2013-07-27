@@ -34,7 +34,8 @@
 // Functions -------------------------------------------------------------
 class SfxItemSet;
 
-SVX_DLLPUBLIC FieldUnit GetModuleFieldUnit( const SfxItemSet& );
+SVX_DLLPUBLIC FieldUnit GetModuleFieldUnit(const SfxItemSet&);
+SVX_DLLPUBLIC FieldUnit GetModuleFieldUnit();
 
 #define OUTPUT_DRAWMODE_COLOR       (DRAWMODE_DEFAULT)
 #define OUTPUT_DRAWMODE_CONTRAST    (DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT)

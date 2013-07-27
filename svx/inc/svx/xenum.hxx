@@ -25,14 +25,6 @@
 #define _XENUM_HXX
 
 enum XLineStyle         { XLINE_NONE, XLINE_SOLID, XLINE_DASH };
-enum XLineJoint
-{
-    XLINEJOINT_NONE,        // no rounding
-    XLINEJOINT_MIDDLE,      // calc middle value between joints
-    XLINEJOINT_BEVEL,       // join edges with line
-    XLINEJOINT_MITER,       // extend till cut
-    XLINEJOINT_ROUND        // create arc
-};
 enum XDashStyle         { XDASH_RECT, XDASH_ROUND, XDASH_RECTRELATIVE,
                           XDASH_ROUNDRELATIVE };
 enum XFillStyle         { XFILL_NONE, XFILL_SOLID, XFILL_GRADIENT, XFILL_HATCH,
@@ -44,12 +36,6 @@ enum XFormTextStyle     { XFT_ROTATE, XFT_UPRIGHT, XFT_SLANTX, XFT_SLANTY,
                           XFT_NONE };
 enum XFormTextAdjust    { XFT_LEFT, XFT_RIGHT, XFT_AUTOSIZE, XFT_CENTER };
 enum XFormTextShadow    { XFTSHADOW_NONE, XFTSHADOW_NORMAL, XFTSHADOW_SLANT};
-enum XFormTextStdForm   { XFTFORM_NONE = 0, XFTFORM_TOPCIRC, XFTFORM_BOTCIRC,
-                          XFTFORM_LFTCIRC, XFTFORM_RGTCIRC, XFTFORM_TOPARC,
-                          XFTFORM_BOTARC, XFTFORM_LFTARC, XFTFORM_RGTARC,
-                          XFTFORM_BUTTON1, XFTFORM_BUTTON2,
-                          XFTFORM_BUTTON3, XFTFORM_BUTTON4};
-
 
 #endif      // _XENUM_HXX
 

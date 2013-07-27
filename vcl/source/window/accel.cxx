@@ -637,7 +637,7 @@ Accelerator* Accelerator::GetAccel( const KeyCode rKeyCode ) const
     if ( pEntry )
         return pEntry->mpAccel;
     else
-        return sal_False;
+        return NULL;
 }
 
 // -----------------------------------------------------------------------

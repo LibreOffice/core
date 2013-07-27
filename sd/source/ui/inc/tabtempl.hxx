@@ -30,12 +30,6 @@
 class SdrModel;
 class SfxObjectShell;
 class SdrView;
-class XColorTable;
-class XGradientList;
-class XBitmapList;
-class XDashList;
-class XHatchList;
-class XLineEndList;
 
 
 /*************************************************************************
@@ -49,12 +43,12 @@ private:
     const SfxObjectShell&   rDocShell;
     SdrView*                pSdrView;
 
-    XColorTable*        pColorTab;
-    XGradientList*      pGradientList;
-    XHatchList*         pHatchingList;
-    XBitmapList*        pBitmapList;
-    XDashList*          pDashList;
-    XLineEndList*       pLineEndList;
+    XColorListSharedPtr     maColorTab;
+    XGradientListSharedPtr  maGradientList;
+    XHatchListSharedPtr     maHatchingList;
+    XBitmapListSharedPtr    maBitmapList;
+    XDashListSharedPtr      maDashList;
+    XLineEndListSharedPtr   maLineEndList;
 
     sal_uInt16              nPageType;
     sal_uInt16              nDlgType;

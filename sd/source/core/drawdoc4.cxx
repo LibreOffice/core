@@ -1363,12 +1363,12 @@ void SdDrawDocument::SetSDTextDefaults()
 
     SvxNumRule aNumRule( NUM_BULLET_REL_SIZE|NUM_BULLET_COLOR|NUM_CHAR_TEXT_DISTANCE, 10, false);
 
-    aNumberFormat.SetLSpace( 0 );
-    aNumberFormat.SetAbsLSpace( 0 );
-    aNumberFormat.SetFirstLineOffset( 0 );
-    aNumRule.SetLevel( 0, aNumberFormat );
+    //aNumberFormat.SetLSpace( 0 );
+    //aNumberFormat.SetAbsLSpace( 0 );
+    //aNumberFormat.SetFirstLineOffset( 0 );
+    //aNumRule.SetLevel( 0, aNumberFormat );
 
-    for( sal_uInt16 i = 1; i < aNumRule.GetLevelCount(); i++ )
+    for( sal_uInt16 i = 0; i < aNumRule.GetLevelCount(); i++ )
     {
         const short nLSpace = (i + 1) * 600;
         aNumberFormat.SetLSpace(nLSpace);

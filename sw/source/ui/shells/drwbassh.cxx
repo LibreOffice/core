@@ -381,6 +381,10 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
 
                     }
                 }
+                else
+                {
+                    pSdrView->SetGeoAttrToMarked( *pArgs );
+                }
             }
         }
         break;
@@ -768,9 +772,18 @@ void SwDrawBaseShell::GetState(SfxItemSet& rSet)
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
+
+void SwDrawBaseShell::GetDrawAttrStateForIFBX( SfxItemSet& rSet )
+{
+    SwWrtShell *pSh = &GetShell();
+    SdrView*    pSdrView = pSh->GetDrawView();
+
+    if(pSdrView && pSdrView->areSdrObjectsSelected())
+    {
+        SfxItemSet aNewAttr(pSdrView->GetGeoAttrFromMarked());
+        rSet.Put(aNewAttr,false);
+    }
+}
 
 
 sal_Bool SwDrawBaseShell::Disable(SfxItemSet& rSet, sal_uInt16 nWhich)
@@ -988,7 +1001,3 @@ IMPL_LINK(SwDrawBaseShell, ValidatePosition, SvxSwFrameValidation*, pValidation 
         pValidation->nHeight = pValidation->nMaxHeight;
     return 0;
 }
-
-
-
-

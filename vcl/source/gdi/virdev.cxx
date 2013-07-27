@@ -274,7 +274,7 @@ sal_Bool VirtualDevice::ImplSetOutputSizePixel( const Size& rNewSize, sal_Bool b
                 aPosAry.mnDestWidth  = nWidth;
                 aPosAry.mnDestHeight = nHeight;
 
-                pGraphics->CopyBits( &aPosAry, mpGraphics, this, this );
+                pGraphics->CopyBits( aPosAry, mpGraphics, this, this );
                 pNewVirDev->ReleaseGraphics( pGraphics );
                 ImplReleaseGraphics();
                 pSVData->mpDefInst->DestroyVirtualDevice( mpVirDev );

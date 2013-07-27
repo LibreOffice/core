@@ -1457,8 +1457,8 @@ SdrUnoObj* FmFormShell::GetFormControl( const Reference< XControlModel >& _rxMod
     FmFormModel* pModel = GetFormModel();
     if ( pModel )
     {
-        sal_uInt16 pageCount = pModel->GetPageCount();
-        for ( sal_uInt16 page = 0; page < pageCount; ++page )
+        sal_uInt32 pageCount = pModel->GetPageCount();
+        for ( sal_uInt32 page = 0; page < pageCount; ++page )
         {
             pPage = pModel->GetPage( page );
             OSL_ENSURE( pPage, "FmFormShell::GetFormControl: NULL page encountered!" );

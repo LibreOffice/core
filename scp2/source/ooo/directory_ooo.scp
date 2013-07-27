@@ -69,37 +69,48 @@ End
 Directory gid_Dir_Ooo_Openofficeorg
     ParentID = PREDEFINED_PROGDIR;
   #if defined(WNT) || defined(OS2)
-    HostName = "${BASISROOTNAME}";
+    HostName = "${PRODUCTNAME} ${BRANDPACKAGEVERSION}";
   #else
-    HostName = "${UNIXBASISROOTNAME}";
+    HostName = "${UNIXPRODUCTNAME}${BRANDPACKAGEVERSION}";
   #endif
+//    ParentID = PREDEFINED_PROGDIR;
+//  #if defined(WNT) || defined(OS2)
+//    HostName = "${BASISROOTNAME}";
+//  #else
+//    HostName = "${UNIXBASISROOTNAME}";
+//  #endif
 End
 #endif
 
 #ifndef MACOSX
 Directory gid_Dir_Ooo_Basis
-  #if defined(WNT) || defined(OS2)
-    ParentID = gid_Dir_Brand_Root;
-  #else
     ParentID = gid_Dir_Ooo_Openofficeorg;
-  #endif
-  #if defined(WNT) || defined(OS2)
-    HostName = "Basis";
-  #else
-    HostName = "basis${OOOBASEVERSION}";
-  #endif
+    HostName = "";
     Styles = (BASISDIRECTORY);
+//  #if defined(WNT) || defined(OS2)
+//    ParentID = gid_Dir_Brand_Root;
+//  #else
+//    ParentID = gid_Dir_Ooo_Openofficeorg;
+//  #endif
+//  #if defined(WNT) || defined(OS2)
+//    HostName = "";
+//  #else
+//    HostName = "basis${OOOBASEVERSION}";
+//  #endif
+//    Styles = (BASISDIRECTORY);
 End
 #endif
 
-Directory gid_Dir_Program
-#if defined MACOSX
-    ParentID = gid_Brand_Dir_BasisLink;
-#else
-    ParentID = gid_Dir_Ooo_Basis;
-#endif
-    DosName = "program";
-End
+//Directory gid_Dir_Program
+//#if defined MACOSX
+//    ParentID = gid_Brand_Dir_Program;
+////    ParentID = gid_Brand_Dir_BasisLink;
+//#else
+//    ParentID = gid_Brand_Dir_Program;
+////    ParentID = gid_Dir_Ooo_Basis;
+//#endif
+//    DosName = "";
+//End
 
 #if defined MACOSX
 Unixlink gid_Unixlink_Applications
@@ -112,18 +123,21 @@ End
 #endif
 
 Directory gid_Dir_Program_Remote
-    ParentID = gid_Dir_Program;
+    ParentID = gid_Brand_Dir_Program;
+//    ParentID = gid_Dir_Program;
     DosName = "remote";
 End
 
 Directory gid_Dir_Program_Local
-    ParentID = gid_Dir_Program;
+    ParentID = gid_Brand_Dir_Program;
+//    ParentID = gid_Dir_Program;
     DosName = "local";
 End
 
 Directory gid_Dir_Addin
     Styles = (CREATE);
-    ParentID = gid_Dir_Program;
+    ParentID = gid_Brand_Dir_Program;
+//    ParentID = gid_Dir_Program;
     DosName = "addin";
 End
 
@@ -133,29 +147,34 @@ Directory gid_Dir_Addin_Source
 End
 
 Directory gid_Dir_Filter
-    ParentID = gid_Dir_Program;
+    ParentID = gid_Brand_Dir_Program;
+//    ParentID = gid_Dir_Program;
     DosName = "filter";
 End
 
 Directory gid_Dir_Resource
-    ParentID = gid_Dir_Program;
+    ParentID = gid_Brand_Dir_Program;
+//    ParentID = gid_Dir_Program;
     DosName = "resource";
 End
 
 Directory gid_Dir_Httphome
-    ParentID = gid_Dir_Program;
+    ParentID = gid_Brand_Dir_Program;
+//    ParentID = gid_Dir_Program;
     DosName = "httphome";
 End
 
 Directory gid_Dir_Classes
-    ParentID = gid_Dir_Program;
+    ParentID = gid_Brand_Dir_Program;
+//    ParentID = gid_Dir_Program;
     DosName = "classes";
 End
 
 #ifdef WNT
 
 Directory gid_Dir_Shellnew
-    ParentID = gid_Dir_Program;
+    ParentID = gid_Brand_Dir_Program;
+//    ParentID = gid_Dir_Program;
     DosName = "shellnew";
 End
 
@@ -163,9 +182,10 @@ End
 
 Directory gid_Dir_User
 #if defined MACOSX
-    ParentID = gid_Brand_Dir_BasisLink;
+    ParentID = gid_Dir_Bundle_Contents;
 #else
-    ParentID = gid_Dir_Ooo_Basis;
+    ParentID = gid_Dir_Brand_Root;
+//    ParentID = gid_Dir_Ooo_Basis;
 #endif
     DosName = "presets";
 End
@@ -334,17 +354,18 @@ Directory gid_Dir_Work
     Styles = (WORKSTATION);
 End
 
-Directory gid_Dir_Plugin
-    ParentID = gid_Dir_Program;
-    DosName = "plugin";
-    Styles = (WORKSTATION, CREATE);
-End
+//Directory gid_Dir_Plugin
+//    ParentID = gid_Dir_Program;
+//    DosName = "plugin";
+//    Styles = (WORKSTATION, CREATE);
+//End
 
 Directory gid_Dir_Share
 #if defined MACOSX
-    ParentID = gid_Brand_Dir_BasisLink;
+    ParentID = gid_Dir_Bundle_Contents;
 #else
-    ParentID = gid_Dir_Ooo_Basis;
+    ParentID = gid_Dir_Brand_Root;
+//    ParentID = gid_Dir_Ooo_Basis;
 #endif
     DosName = "share";
 End
@@ -891,6 +912,40 @@ Directory gid_Dir_Gallery_Bullets
     DosName = "bullets";
 End
 
+//////////////////////////////////////////////////////////////////////////////
+
+Directory gid_Dir_Gallery_Computers
+    ParentID = gid_Dir_Gallery;
+    DosName = "computers";
+End
+
+Directory gid_Dir_Gallery_Diagrams
+    ParentID = gid_Dir_Gallery;
+    DosName = "diagrams";
+End
+
+Directory gid_Dir_Gallery_Environment
+    ParentID = gid_Dir_Gallery;
+    DosName = "environment";
+End
+
+Directory gid_Dir_Gallery_Finance
+    ParentID = gid_Dir_Gallery;
+    DosName = "finance";
+End
+
+Directory gid_Dir_Gallery_Transport
+    ParentID = gid_Dir_Gallery;
+    DosName = "transport";
+End
+
+Directory gid_Dir_Gallery_Txtshapes
+    ParentID = gid_Dir_Gallery;
+    DosName = "textshapes";
+End
+
+//////////////////////////////////////////////////////////////////////////////
+
 Directory gid_Dir_Gallery_Flags
     ParentID = gid_Dir_Gallery;
     DosName = "flags";
@@ -1202,20 +1257,30 @@ Directory gid_Dir_Share_Fingerprint
     DosName = "fingerprint";
 End
 
+
+#ifndef MACOSX
 Directory gid_Dir_Basis_Sdk
-#if defined MACOSX
-    ParentID = gid_Brand_Dir_BasisLink;
-#else
-    ParentID = gid_Dir_Ooo_Basis;
-#endif
+    ParentID = gid_Dir_Brand_Root;
+//    ParentID = gid_Dir_Ooo_Basis;
     DosName = "sdk";
 End
+#endif
+
+//Directory gid_Dir_Basis_Sdk
+//#if defined MACOSX
+//    ParentID = gid_Brand_Dir_BasisLink;
+//#else
+//    ParentID = gid_Dir_Ooo_Basis;
+//#endif
+//    DosName = "sdk";
+//End
 
 Directory gid_Dir_Help
 #if defined MACOSX
-    ParentID = gid_Brand_Dir_BasisLink;
+    ParentID = gid_Dir_Bundle_Contents;
 #else
-    ParentID = gid_Dir_Ooo_Basis;
+    ParentID = gid_Dir_Brand_Root;
+//    ParentID = gid_Dir_Ooo_Basis;
 #endif
     DosName = "help";
 End

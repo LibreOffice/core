@@ -40,7 +40,7 @@ public:
 
                 ScChartShell(ScViewData* pData);
     virtual     ~ScChartShell();
-
+    virtual void HandleSelectionChange (void);
 };
 
 #endif

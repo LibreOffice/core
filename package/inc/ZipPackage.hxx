@@ -37,6 +37,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 #include <HashMaps.hxx>
+#include <vector>
 #include <osl/file.h>
 #include <mutexholder.hxx>
 

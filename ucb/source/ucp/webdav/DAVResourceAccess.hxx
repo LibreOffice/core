@@ -32,6 +32,7 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/ucb/Lock.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
+#include <com/sun/star/ucb/WebDAVHTTPMethod.hpp>
 #include "DAVAuthListener.hxx"
 #include "DAVException.hxx"
 #include "DAVSession.hxx"
@@ -123,6 +124,14 @@ public:
 
     com::sun::star::uno::Reference< com::sun::star::io::XInputStream >
     GET( const std::vector< rtl::OUString > & rHeaderNames, // empty == 'all'
+         DAVResource & rResource,
+         const com::sun::star::uno::Reference<
+             com::sun::star::ucb::XCommandEnvironment > & xEnv )
+        throw ( DAVException );
+
+    com::sun::star::uno::Reference< com::sun::star::io::XInputStream >
+    GET( DAVRequestHeaders & rRequestHeaders,
+         const std::vector< rtl::OUString > & rHeaderNames, // empty == 'all'
          DAVResource & rResource,
          const com::sun::star::uno::Reference<
              com::sun::star::ucb::XCommandEnvironment > & xEnv )
@@ -221,7 +230,7 @@ public:
         const com::sun::star::uno::Reference<
             com::sun::star::ucb::XCommandEnvironment > & xEnv,
         const rtl::OUString & rURI,
-        const rtl::OUString & rMethod,
+        com::sun::star::ucb::WebDAVHTTPMethod eMethod,
         DAVRequestHeaders & rRequestHeaders );
 
 private:

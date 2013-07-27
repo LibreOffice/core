@@ -57,17 +57,16 @@ public:
     virtual void UnLockUndoNoModifiedPosition();
     virtual void SetUndoNoResetModified();
     virtual bool IsUndoNoResetModified() const;
-//    virtual bool Undo();
     virtual SwUndoId StartUndo(SwUndoId const eUndoId,
                 SwRewriter const*const pRewriter);
     virtual SwUndoId EndUndo(SwUndoId const eUndoId,
                 SwRewriter const*const pRewriter);
     virtual void DelAllUndoObj();
     virtual bool GetLastUndoInfo(::rtl::OUString *const o_pStr,
-                SwUndoId *const o_pId) const;
+                                 SwUndoId *const o_pId) const;
     virtual SwUndoComments_t GetUndoComments() const;
-//    virtual bool Redo();
-    virtual bool GetFirstRedoInfo(::rtl::OUString *const o_pStr) const;
+    virtual bool GetFirstRedoInfo(::rtl::OUString *const o_pStr,
+                                  SwUndoId *const o_pId = 0) const;
     virtual SwUndoComments_t GetRedoComments() const;
     virtual bool Repeat(::sw::RepeatContext & rContext,
                 sal_uInt16 const nRepeatCnt);

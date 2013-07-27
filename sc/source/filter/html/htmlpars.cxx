@@ -1897,40 +1897,6 @@ ScHTMLTable* ScHTMLTableMap::CreateTable( const ImportInfo& rInfo, bool bPreForm
     return pTable;
 }
 
-// ----------------------------------------------------------------------------
-
-/** Simplified forward iterator for convenience.
-
-    Before the iterator can be dereferenced, it must be tested with the is()
-    method. The iterator may be invalid directly after construction (e.g. empty
-    container).
- */
-class ScHTMLTableIterator
-{
-public:
-    /** Constructs the iterator for the passed table map.
-        @param pTableMap  Pointer to the table map (is allowed to be NULL). */
-    explicit            ScHTMLTableIterator( const ScHTMLTableMap* pTableMap );
-
-    inline bool         is() const { return maIter != maEnd; }
-    inline ScHTMLTable* operator->() { return maIter->second.get(); }
-    inline ScHTMLTable& operator*() { return *maIter->second; }
-    inline ScHTMLTableIterator& operator++() { ++maIter; return *this; }
-
-private:
-    ScHTMLTableMap::const_iterator maIter;
-    ScHTMLTableMap::const_iterator maEnd;
-};
-
-ScHTMLTableIterator::ScHTMLTableIterator( const ScHTMLTableMap* pTableMap )
-{
-    if( pTableMap )
-    {
-        maIter = pTableMap->begin();
-        maEnd = pTableMap->end();
-    }
-}
-
 // ============================================================================
 
 ScHTMLTableAutoId::ScHTMLTableAutoId( ScHTMLTableId& rnUnusedId ) :
@@ -2299,8 +2265,15 @@ void ScHTMLTable::ApplyCellBorders( ScDocument* pDoc, const ScAddress& rFirstPos
         }
     }
 
-    for( ScHTMLTableIterator aIter( mxNestedTables.get() ); aIter.is(); ++aIter )
-        aIter->ApplyCellBorders( pDoc, rFirstPos );
+    if ( mxNestedTables.get() )
+    {
+        for ( ScHTMLTableMap::const_iterator aIter( mxNestedTables->begin() );
+             aIter != mxNestedTables->end(); ++aIter )
+        {
+            if ( aIter->second.get() )
+                aIter->second->ApplyCellBorders( pDoc, rFirstPos );
+        }
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -2593,8 +2566,15 @@ void ScHTMLTable::CalcNeededDocSize(
 
 void ScHTMLTable::FillEmptyCells()
 {
-    for( ScHTMLTableIterator aIter( mxNestedTables.get() ); aIter.is(); ++aIter )
-        aIter->FillEmptyCells();
+    if ( mxNestedTables.get() )
+    {
+        for ( ScHTMLTableMap::const_iterator aIter( mxNestedTables->begin() );
+             aIter != mxNestedTables->end(); ++aIter )
+        {
+            if ( aIter->second.get() )
+                aIter->second->FillEmptyCells();
+        }
+    }
 
     // insert the final vertically merged ranges into maUsedCells
     for( const ScRange* pRange = maVMergedCells.First(); pRange; pRange = maVMergedCells.Next() )
@@ -2627,8 +2607,15 @@ void ScHTMLTable::FillEmptyCells()
 void ScHTMLTable::RecalcDocSize()
 {
     // recalc table sizes recursively from inner to outer
-    for( ScHTMLTableIterator aIter( mxNestedTables.get() ); aIter.is(); ++aIter )
-        aIter->RecalcDocSize();
+    if ( mxNestedTables.get() )
+    {
+        for ( ScHTMLTableMap::const_iterator aIter( mxNestedTables->begin() );
+             aIter != mxNestedTables->end(); ++aIter )
+        {
+            if ( aIter->second.get() )
+                aIter->second->RecalcDocSize();
+        }
+    }
 
     /*  Two passes: first calculates the sizes of single columns/rows, then
         the sizes of spanned columns/rows. This allows to fill nested tables

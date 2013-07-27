@@ -62,7 +62,7 @@
 #include "PresentationViewShell.hxx"
 #include "FormShellManager.hxx"
 #include "ToolBarManager.hxx"
-#include "taskpane/PanelId.hxx"
+#include "SidebarPanelId.hxx"
 #include "Window.hxx"
 #include "framework/ConfigurationController.hxx"
 #include "DocumentRenderer.hxx"
@@ -198,7 +198,6 @@ public:
     void GetSlotState (SfxItemSet& rSet);
 
     void ProcessRestoreEditingViewSlot (void);
-    void ProcessTaskPaneSlot (SfxRequest& rRequest);
 
 private:
     ViewShellBase& mrBase;
@@ -731,13 +730,6 @@ void ViewShellBase::Execute (SfxRequest& rRequest)
                 framework::FrameworkHelper::msSlideSorterURL);
             break;
 
-        case SID_TASKPANE:
-            mpImpl->SetPaneVisibility(
-                rRequest,
-                framework::FrameworkHelper::msRightPaneURL,
-                framework::FrameworkHelper::msTaskPaneURL);
-            break;
-
         case SID_NORMAL_MULTI_PANE_GUI:
         case SID_SLIDE_SORTER_MULTI_PANE_GUI:
         case SID_DRAWINGMODE:
@@ -750,10 +742,6 @@ void ViewShellBase::Execute (SfxRequest& rRequest)
 
         case SID_WIN_FULLSCREEN:
             // The full screen mode is not supported.  Ignore the request.
-            break;
-
-        case SID_SHOW_TOOL_PANEL:
-            mpImpl->ProcessTaskPaneSlot(rRequest);
             break;
 
         case SID_RESTORE_EDITING_VIEW:
@@ -1450,11 +1438,6 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
                             xContext, FrameworkHelper::msLeftDrawPaneURL);
                         break;
 
-                    case SID_TASKPANE:
-                        xResourceId = ResourceId::create(
-                            xContext, FrameworkHelper::msRightPaneURL);
-                        break;
-
                     case SID_NORMAL_MULTI_PANE_GUI:
                         xResourceId = ResourceId::createWithAnchorURL(
                             xContext,
@@ -1546,52 +1529,6 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
 
 }
 
-
-
-
-void ViewShellBase::Implementation::ProcessTaskPaneSlot (SfxRequest& rRequest)
-{
-    // Set the visibility state of the toolpanel and one of its top
-    // level panels.
-    bool bShowToolPanel = true;
-    toolpanel::PanelId nPanelId (
-        toolpanel::PID_UNKNOWN);
-    bool bPanelIdGiven = false;
-
-    // Extract the given arguments.
-    const SfxItemSet* pArgs = rRequest.GetArgs();
-    if (pArgs)
-    {
-        if ((pArgs->Count() == 1) || (pArgs->Count() == 2))
-        {
-            SFX_REQUEST_ARG (rRequest, pIsPanelVisible, SfxBoolItem, ID_VAL_ISVISIBLE );
-            if (pIsPanelVisible != NULL)
-                bShowToolPanel = pIsPanelVisible->GetValue();
-        }
-        if (pArgs->Count() == 2)
-        {
-            SFX_REQUEST_ARG (rRequest, pPanelId, SfxUInt32Item, ID_VAL_PANEL_INDEX );
-            if (pPanelId != NULL)
-            {
-                nPanelId = static_cast<
-                    toolpanel::PanelId>(
-                        pPanelId->GetValue());
-                bPanelIdGiven = true;
-            }
-        }
-    }
-
-    // Ignore the request for some combinations of panels and view
-    // shell types.
-    if (bPanelIdGiven
-        && ! (nPanelId==toolpanel::PID_LAYOUT
-            && mrBase.GetMainViewShell()!=NULL
-            && mrBase.GetMainViewShell()->GetShellType()==ViewShell::ST_OUTLINE))
-    {
-        framework::FrameworkHelper::Instance(mrBase)->RequestTaskPanel(
-            framework::FrameworkHelper::msLayoutTaskPanelURL);
-    }
-}
 
 
 } // end of namespace sd

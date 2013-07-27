@@ -124,7 +124,6 @@ $(eval $(call gb_Library_set_defs,vclplug_gen,\
 ifeq ($(XRANDR_DLOPEN),FALSE)
 $(eval $(call gb_Library_set_cxxflags,vclplug_gen,\
     $$(CXXFLAGS) \
-    $$(XRANDR_CFLAGS) \
 ))
 $(eval $(call gb_Library_set_ldflags,vclplug_gen,\
     $$(LDFLAGS) \

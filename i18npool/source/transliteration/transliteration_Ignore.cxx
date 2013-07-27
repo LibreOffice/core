@@ -204,7 +204,7 @@ transliteration_Ignore::folding( const OUString& inStr, sal_Int32 startPos,
       offset.realloc(newStr->length);
     *dst = (sal_Unicode) 0;
 
-    return OUString( newStr ); // defined in rtl/usrting. The reference count is increased from 0 to 1.
+    return OUString( newStr, SAL_NO_ACQUIRE ); // take over ownership of <newStr>
 }
 
 sal_Unicode SAL_CALL

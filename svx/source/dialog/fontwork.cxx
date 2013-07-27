@@ -113,13 +113,6 @@ void SvxFontWorkControllerItem::StateChanged( sal_uInt16 /*nSID*/, SfxItemState 
             rFontWorkDlg.SetMirror_Impl(pStateItem);
             break;
         }
-        case SID_FORMTEXT_STDFORM:
-        {
-            const XFormTextStdFormItem* pStateItem = dynamic_cast< const XFormTextStdFormItem* >( pItem);
-            DBG_ASSERT(pStateItem || pItem == 0, "XFormTextStdFormItem erwartet");
-            rFontWorkDlg.SetStdForm_Impl(pStateItem);
-            break;
-        }
         case SID_FORMTEXT_HIDEFORM:
         {
             const XFormTextHideFormItem* pStateItem = dynamic_cast< const XFormTextHideFormItem* >( pItem);
@@ -203,8 +196,6 @@ SvxFontWorkDialog::SvxFontWorkDialog( SfxBindings *pBindinx,
                                       const ResId& rResId ) :
     SfxDockingWindow( pBindinx, pCW, _pParent, rResId ),
 
-    aFormSet        (this, ResId(VS_FORMS,*rResId.GetResMgr())),
-
     aTbxStyle       (this, ResId(TBX_STYLE,*rResId.GetResMgr())),
     aTbxAdjust      (this, ResId(TBX_ADJUST,*rResId.GetResMgr())),
 
@@ -234,7 +225,7 @@ SvxFontWorkDialog::SvxFontWorkDialog( SfxBindings *pBindinx,
     maImageList     (ResId(IL_FONTWORK,*rResId.GetResMgr())),
     maImageListH    (ResId(ILH_FONTWORK,*rResId.GetResMgr())),
 
-    pColorTable     (NULL)
+    maColorTable()
 {
     FreeResource();
 
@@ -245,16 +236,12 @@ SvxFontWorkDialog::SvxFontWorkDialog( SfxBindings *pBindinx,
     pCtrlItems[2] = new SvxFontWorkControllerItem(SID_FORMTEXT_DISTANCE, *this, rBindings);
     pCtrlItems[3] = new SvxFontWorkControllerItem(SID_FORMTEXT_START, *this, rBindings);
     pCtrlItems[4] = new SvxFontWorkControllerItem(SID_FORMTEXT_MIRROR, *this, rBindings);
-    pCtrlItems[5] = new SvxFontWorkControllerItem(SID_FORMTEXT_STDFORM, *this, rBindings);
-    pCtrlItems[6] = new SvxFontWorkControllerItem(SID_FORMTEXT_HIDEFORM, *this, rBindings);
-    pCtrlItems[7] = new SvxFontWorkControllerItem(SID_FORMTEXT_OUTLINE, *this, rBindings);
-    pCtrlItems[8] = new SvxFontWorkControllerItem(SID_FORMTEXT_SHADOW, *this, rBindings);
-    pCtrlItems[9] = new SvxFontWorkControllerItem(SID_FORMTEXT_SHDWCOLOR, *this, rBindings);
-    pCtrlItems[10] = new SvxFontWorkControllerItem(SID_FORMTEXT_SHDWXVAL, *this, rBindings);
-    pCtrlItems[11] = new SvxFontWorkControllerItem(SID_FORMTEXT_SHDWYVAL, *this, rBindings);
-
-    WinBits aNewStyle = ( aFormSet.GetStyle() | WB_VSCROLL | WB_ITEMBORDER | WB_DOUBLEBORDER );
-    aFormSet.SetStyle( aNewStyle );
+    pCtrlItems[5] = new SvxFontWorkControllerItem(SID_FORMTEXT_HIDEFORM, *this, rBindings);
+    pCtrlItems[6] = new SvxFontWorkControllerItem(SID_FORMTEXT_OUTLINE, *this, rBindings);
+    pCtrlItems[7] = new SvxFontWorkControllerItem(SID_FORMTEXT_SHADOW, *this, rBindings);
+    pCtrlItems[8] = new SvxFontWorkControllerItem(SID_FORMTEXT_SHDWCOLOR, *this, rBindings);
+    pCtrlItems[9] = new SvxFontWorkControllerItem(SID_FORMTEXT_SHDWXVAL, *this, rBindings);
+    pCtrlItems[10] = new SvxFontWorkControllerItem(SID_FORMTEXT_SHDWYVAL, *this, rBindings);
 
     Size aSize = aTbxStyle.CalcWindowSizePixel();
     aTbxStyle.SetSizePixel(aSize);
@@ -265,9 +252,6 @@ SvxFontWorkDialog::SvxFontWorkDialog( SfxBindings *pBindinx,
 
     aTbxShadow.SetSizePixel(aSize);
     aTbxShadow.SetSelectHdl( LINK(this, SvxFontWorkDialog, SelectShadowHdl_Impl) );
-
-//  aFbShadowX.SetBitmap(Bitmap(FW_RESID(RID_SVXBMP_SHADOW_XDIST)));
-//  aFbShadowY.SetBitmap(Bitmap(FW_RESID(RID_SVXBMP_SHADOW_YDIST)));
 
     Link aLink = LINK(this, SvxFontWorkDialog, ModifyInputHdl_Impl);
     aMtrFldDistance.SetModifyHdl( aLink );
@@ -300,14 +284,6 @@ SvxFontWorkDialog::SvxFontWorkDialog( SfxBindings *pBindinx,
 
     aInputTimer.SetTimeout(500);
     aInputTimer.SetTimeoutHdl(LINK(this, SvxFontWorkDialog, InputTimoutHdl_Impl));
-
-    aFormSet.SetSelectHdl( LINK(this, SvxFontWorkDialog, FormSelectHdl_Impl) );
-    aFormSet.SetColCount(4);
-    aFormSet.SetLineCount(2);
-
-    Bitmap aBmp(SVX_RES(RID_SVXBMP_FONTWORK_FORM1));
-    aSize.Height() = aFormSet.CalcWindowSizePixel(aBmp.GetSizePixel()).Height() + 2;
-    aFormSet.SetSizePixel(aSize);
 }
 
 /*************************************************************************
@@ -504,27 +480,6 @@ void SvxFontWorkDialog::SetMirror_Impl(const XFormTextMirrorItem* pItem)
 {
     if ( pItem )
         aTbxAdjust.CheckItem(TBI_ADJUST_MIRROR, pItem->GetValue());
-}
-
-/*************************************************************************
-|*
-|* Standardform im ValueSet anzeigen
-|*
-\************************************************************************/
-
-void SvxFontWorkDialog::SetStdForm_Impl(const XFormTextStdFormItem* pItem)
-{
-    if ( pItem )
-    {
-        aFormSet.Enable();
-        aFormSet.SetNoSelection();
-
-        if ( pItem->GetValue() != XFTFORM_NONE )
-            aFormSet.SelectItem(
-                sal::static_int_cast< sal_uInt16 >(pItem->GetValue()));
-    }
-    else
-        aFormSet.Disable();
 }
 
 /*************************************************************************
@@ -922,23 +877,6 @@ IMPL_LINK( SvxFontWorkDialog, InputTimoutHdl_Impl, void *, EMPTYARG )
 |*
 \************************************************************************/
 
-IMPL_LINK( SvxFontWorkDialog, FormSelectHdl_Impl, void *, EMPTYARG )
-{
-    XFormTextStdFormItem aItem;
-
-    if ( aFormSet.IsNoSelection() )
-        aItem.SetValue(XFTFORM_NONE);
-    else
-        aItem.SetValue(aFormSet.GetSelectItemId());
-    GetBindings().GetDispatcher()->Execute( SID_FORMTEXT_STDFORM, SFX_CALLMODE_RECORD, &aItem, 0L );
-    aFormSet.SetNoSelection();
-    return 0;
-}
-
-/*************************************************************************
-|*
-\************************************************************************/
-
 IMPL_LINK( SvxFontWorkDialog, ColorSelectHdl_Impl, void *, EMPTYARG )
 {
 // Changed by obo. Linux-Compiler can't parse commented lines
@@ -954,13 +892,13 @@ IMPL_LINK( SvxFontWorkDialog, ColorSelectHdl_Impl, void *, EMPTYARG )
 |*
 \************************************************************************/
 
-void SvxFontWorkDialog::SetColorTable(const XColorTable* pTable)
+void SvxFontWorkDialog::SetColorTable(XColorListSharedPtr aTable)
 {
-    if ( pTable && pTable != pColorTable )
+    if ( aTable != maColorTable )
     {
-        pColorTable = pTable;
+        maColorTable = aTable;
         aShadowColorLB.Clear();
-        aShadowColorLB.Fill(pColorTable);
+        aShadowColorLB.Fill(maColorTable);
     }
 }
 
@@ -970,297 +908,6 @@ void SvxFontWorkDialog::SetColorTable(const XColorTable* pTable)
 
 void SvxFontWorkDialog::SetActive(sal_Bool /*bActivate*/)
 {
-}
-
-/*************************************************************************
-|*
-|* Standard-FontWork-Objekt erzeugen
-|*
-\************************************************************************/
-
-void SvxFontWorkDialog::CreateStdFormObj(SdrView& rView,
-                                         const SfxItemSet& rAttr,
-                                         SdrObject& rOldObj,
-                                         XFormTextStdForm eForm)
-{
-    SfxItemSet  aAttr(*rAttr.GetPool(), XATTR_FORMTXTSTYLE,
-                                        XATTR_FORMTXTHIDEFORM);
-    SdrObject*  pNewObj = NULL;
-    XFormTextAdjust eAdjust = XFT_AUTOSIZE;
-
-//-/    rOldObj.TakeAttributes(aAttr, sal_True, sal_False);
-    aAttr.Put(rOldObj.GetMergedItemSet());
-
-    const XFormTextStdFormItem& rOldForm = (const XFormTextStdFormItem&)
-                                            aAttr.Get(XATTR_FORMTXTSTDFORM);
-
-    basegfx::B2DRange aRange(sdr::legacy::GetSnapRange(rOldObj));
-
-    if ( !dynamic_cast< SdrPathObj* >(&rOldObj) )
-    {
-        const basegfx::B2DPoint aTopLeft(aRange.getMinimum());
-
-        aRange = sdr::legacy::GetLogicRange(rOldObj);
-
-        if(!aRange.getMinimum().equal(aTopLeft))
-    {
-            aRange.transform(basegfx::tools::createTranslateB2DHomMatrix(aTopLeft - aRange.getMinimum()));
-        }
-    }
-
-    aAttr.Put(rAttr);
-
-    if ( rOldForm.GetValue() == XFTFORM_NONE )
-    {
-        const double fWidth(aRange.getWidth());
-
-        aRange = basegfx::B2DRange(
-            aRange.getMinX(), aRange.getMinY(),
-            aRange.getMinX() + fWidth, aRange.getMinY() + fWidth);
-
-        aAttr.Put(XFormTextStyleItem(XFT_ROTATE));
-    }
-
-    const basegfx::B2DPoint aCenter(aRange.getCenter());
-
-    switch ( eForm )
-    {
-        case XFTFORM_TOPCIRC:
-        case XFTFORM_BOTCIRC:
-        case XFTFORM_LFTCIRC:
-        case XFTFORM_RGTCIRC:
-        case XFTFORM_TOPARC:
-        case XFTFORM_BOTARC:
-        case XFTFORM_LFTARC:
-        case XFTFORM_RGTARC:
-        {
-            double fBeg, fEnd;
-
-            switch ( eForm )
-            {
-                default: ; //prevent warning
-                case XFTFORM_TOPCIRC:
-                    fBeg = 0.0;
-                    fEnd = F_PI;
-                    break;
-                case XFTFORM_BOTCIRC:
-                    fBeg = F_PI;
-                    fEnd = F_2PI;
-                    break;
-                case XFTFORM_LFTCIRC:
-                    fBeg = F_PI2 * 3.0;
-                    fEnd = F_PI2;
-                    break;
-                case XFTFORM_RGTCIRC:
-                    fBeg = F_PI2;
-                    fEnd = F_PI2 * 3.0;
-                    break;
-                case XFTFORM_TOPARC:
-                    fBeg = F_PI4 * 7.0;
-                    fEnd = F_PI4 * 5.0;
-                    break;
-                case XFTFORM_BOTARC:
-                    fBeg = F_PI4 * 3.0;
-                    fEnd = F_PI4;
-                    break;
-                case XFTFORM_LFTARC:
-                    fBeg = F_PI4 * 5.0;
-                    fEnd = F_PI4 * 3.0;
-                    break;
-                case XFTFORM_RGTARC:
-                    fBeg = F_PI4;
-                    fEnd = F_PI4 * 7.0;
-                    break;
-            }
-
-            pNewObj = new SdrCircObj(
-                rOldObj.getSdrModelFromSdrObject(),
-                CircleType_Arc,
-                basegfx::tools::createScaleTranslateB2DHomMatrix(
-                    aRange.getRange(),
-                    aRange.getMinimum()),
-                fBeg,
-                fEnd);
-            break;
-        }
-        case XFTFORM_BUTTON1:
-        {
-            basegfx::B2DPolyPolygon aPolyPolygon;
-            basegfx::B2DPolygon aLine;
-            const double fR(aRange.getWidth() * 0.5);
-
-            basegfx::B2DPolygon aTopArc(
-                basegfx::tools::createPolygonFromEllipseSegment(
-                    aCenter,
-                    -fR,
-                    fR,
-                    ((3600.0 - 1750.0) * F_PI) / 1800.0,
-                    ((3600.0 - 50.0) * F_PI) / 1800.0));
-            aTopArc.flip();
-
-            basegfx::B2DPolygon aBottomArc(
-                basegfx::tools::createPolygonFromEllipseSegment(
-                    aCenter,
-                    -fR,
-                    fR,
-                    ((3600.0 - 3550.0) * F_PI) / 1800.0,
-                    ((3600.0 - 1850.0) * F_PI) / 1800.0));
-            aBottomArc.flip();
-
-            // Polygone schliessen
-            aTopArc.setClosed(true);
-            aBottomArc.setClosed(true);
-            aPolyPolygon.append(aTopArc);
-
-            aLine.append(aBottomArc.getB2DPoint(aBottomArc.count() - 1));
-            aLine.append(aBottomArc.getB2DPoint(0));
-            aLine.setClosed(true);
-
-            aPolyPolygon.append(aLine);
-            aPolyPolygon.append(aBottomArc);
-
-            pNewObj = new SdrPathObj(rOldObj.getSdrModelFromSdrObject(), aPolyPolygon);
-            eAdjust = XFT_CENTER;
-            break;
-        }
-        case XFTFORM_BUTTON2:
-        case XFTFORM_BUTTON3:
-        case XFTFORM_BUTTON4:
-        {
-            basegfx::B2DPolyPolygon aPolyPolygon;
-            basegfx::B2DPolygon aLine;
-            const double fR(aRange.getWidth() * 0.5);
-            const double fWDiff(fR / 5.0);
-            double fHDiff(0.0);
-
-            if ( eForm == XFTFORM_BUTTON4 )
-            {
-                basegfx::B2DPolygon aNewArc(
-                    basegfx::tools::createPolygonFromEllipseSegment(
-                        aCenter,
-                        -fR,
-                        fR,
-                        ((3600.0 - 2650.0) * F_PI) / 1800.0,
-                        ((3600.0 - 950.0) * F_PI) / 1800.0));
-
-                aNewArc.flip();
-                aNewArc.setClosed(true);
-                aPolyPolygon.append(aNewArc);
-                eAdjust = XFT_CENTER;
-            }
-            else
-            {
-                basegfx::B2DPolygon aNewArc(basegfx::tools::createPolygonFromUnitCircle(1));
-                const basegfx::B2DHomMatrix aArcMatrix(
-                    basegfx::tools::createScaleTranslateB2DHomMatrix(
-                        -fR,
-                        fR,
-                        aCenter.getX(),
-                        aCenter.getY()));
-
-                aNewArc.removeDoublePoints();
-                aNewArc.flip();
-                aNewArc.transform(aArcMatrix);
-
-                /// This emulates the closed flag from the old call, but I think this
-                /// always has been not wanted. Thus I list it here, but deactivate it
-                //aNewArc.append(aCenter);
-
-                aNewArc.setClosed(true);
-                aPolyPolygon.append(aNewArc);
-            }
-
-            if ( eForm == XFTFORM_BUTTON3 )
-            {
-                fHDiff = -aRange.getHeight() / 10.0;
-            }
-            else
-            {
-                fHDiff = aRange.getHeight() / 20.0;
-            }
-
-            aLine.append(basegfx::B2DPoint(aRange.getMinX() + fWDiff, aRange.getCenter().getY() + fHDiff));
-            aLine.append(basegfx::B2DPoint(aRange.getMaxX() - fWDiff, aRange.getCenter().getY() + fHDiff));
-            aLine.setClosed(true);
-            aPolyPolygon.append(aLine);
-
-            if ( eForm == XFTFORM_BUTTON4 )
-            {
-                basegfx::B2DPolygon aNewArc(
-                    basegfx::tools::createPolygonFromEllipseSegment(
-                        aCenter,
-                        -fR,
-                        fR,
-                        ((3600.0 - 850.0) * F_PI) / 1800.0,
-                        ((3600.0 - 2750.0) * F_PI) / 1800.0));
-
-                aNewArc.flip();
-                aNewArc.setClosed(true);
-                aPolyPolygon.append(aNewArc);
-            }
-
-            if ( eForm == XFTFORM_BUTTON3 )
-            {
-                fHDiff += fHDiff;
-                aLine.setB2DPoint(0L, basegfx::B2DPoint(aLine.getB2DPoint(0L).getX(), aLine.getB2DPoint(0L).getY() - fHDiff));
-                aLine.setB2DPoint(1L, basegfx::B2DPoint(aLine.getB2DPoint(1L).getX(), aLine.getB2DPoint(1L).getY() - fHDiff));
-                aPolyPolygon.append(aLine);
-            }
-
-            pNewObj = new SdrPathObj(rOldObj.getSdrModelFromSdrObject(), aPolyPolygon);
-            break;
-        }
-        default: ; //prevent warning
-    }
-    if ( pNewObj )
-    {
-        // #78478# due to DLs changes in Outliner the object needs
-        // a model to get an outliner for later calls to
-        // pNewObj->SetOutlinerParaObject(pPara) (see below).
-        const basegfx::B2DRange aSnap(sdr::legacy::GetSnapRange(*pNewObj));
-
-        sdr::legacy::transformSdrObject(
-            *pNewObj,
-            basegfx::tools::createTranslateB2DHomMatrix(
-                aRange.getMinimum() - aSnap.getMinimum()));
-
-        rView.BegUndo( SVX_RESSTR( RID_SVXSTR_FONTWORK_UNDOCREATE ) );
-        OutlinerParaObject* pPara = rOldObj.GetOutlinerParaObject();
-        sal_Bool bHide = sal_True;
-
-        if ( pPara != NULL )
-        {
-            pPara = new OutlinerParaObject(*pPara);
-            pNewObj->SetOutlinerParaObject(pPara);
-        }
-        else
-            bHide = sal_False;
-
-        rView.ReplaceObjectAtView(rOldObj, *pNewObj, true);
-        pNewObj->SetLayer(rOldObj.GetLayer());
-        aAttr.Put(XFormTextHideFormItem(bHide));
-        aAttr.Put(XFormTextAdjustItem(eAdjust));
-
-        XFormTextShadow eShadow = XFTSHADOW_NONE;
-
-        if ( nLastShadowTbxId == TBI_SHADOW_NORMAL )
-        {
-            eShadow = XFTSHADOW_NORMAL;
-            aAttr.Put(XFormTextShadowXValItem(nSaveShadowX));
-            aAttr.Put(XFormTextShadowYValItem(nSaveShadowY));
-        }
-        else if ( nLastShadowTbxId == TBI_SHADOW_SLANT )
-        {
-            eShadow = XFTSHADOW_SLANT;
-            aAttr.Put(XFormTextShadowXValItem(nSaveShadowAngle));
-            aAttr.Put(XFormTextShadowYValItem(nSaveShadowSize));
-        }
-
-        aAttr.Put(XFormTextShadowItem(eShadow));
-
-        rView.SetAttributes(aAttr);
-        rView.EndUndo();
-    }
 }
 
 void SvxFontWorkDialog::DataChanged( const DataChangedEvent& rDCEvt )
@@ -1276,37 +923,6 @@ void SvxFontWorkDialog::DataChanged( const DataChangedEvent& rDCEvt )
 void SvxFontWorkDialog::ApplyImageList()
 {
     bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
-
-    ResMgr* _pMgr = &DIALOG_MGR();
-
-    sal_uInt16 nBitmapResId = bHighContrast ? RID_SVXBMP_FONTWORK_FORM1_H : RID_SVXBMP_FONTWORK_FORM1;
-    sal_uInt16 nTextResId = RID_SVXSTR_FONTWORK_FORM1;
-
-    bool bInit = aFormSet.GetItemCount() == 0;
-
-    if( bInit )
-    {
-/*
-        Size aSize( aTbxStyle.CalcWindowSizePixel() );
-        Bitmap aBmp(ResId(RID_SVXBMP_FONTWORK_FORM1,_pMgr));
-        aSize.Height() = aFormSet.CalcWindowSizePixel(aBmp.GetSizePixel()).Height() + 2;
-        aFormSet.SetSizePixel(aSize);
-*/
-    }
-
-    sal_uInt16 i;
-    for( i = 1; i < 13; i++, nTextResId++, nBitmapResId++ )
-    {
-        if( bInit )
-        {
-            aFormSet.InsertItem( i, Bitmap(ResId(nBitmapResId,*_pMgr)),
-                                    String(ResId(nTextResId,*_pMgr)));
-        }
-        else
-        {
-            aFormSet.SetItemImage( i, Bitmap(ResId(nBitmapResId,*_pMgr)) );
-        }
-    }
 
     ImageList& rImgLst = bHighContrast ? maImageListH : maImageList;
 

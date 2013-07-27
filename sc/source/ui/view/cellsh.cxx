@@ -42,7 +42,9 @@
 #include <sfx2/objface.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <sfx2/sidebar/EnumContext.hxx>
 #include <svx/clipfmtitem.hxx>
+#include <svx/sidebar/ContextChangeEventMultiplexer.hxx>
 #include <editeng/langitem.hxx>
 
 #include "cellsh.hxx"
@@ -85,6 +87,7 @@ ScCellShell::ScCellShell(ScViewData* pData) :
 {
     SetHelpId(HID_SCSHELL_CELLSH);
     SetName(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("Cell")));
+    SfxShell::SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_Cell));
 }
 
 ScCellShell::~ScCellShell()

@@ -19,34 +19,22 @@
  *
  *************************************************************/
 
-
 #ifndef __com_sun_star_awt_MenuEvent_idl__
 #define __com_sun_star_awt_MenuEvent_idl__
 
-#ifndef __com_sun_star_lang_EventObject_idl__
 #include <com/sun/star/lang/EventObject.idl>
-#endif
 
-
-//=============================================================================
-
- module com {  module sun {  module star {  module awt {
-
-//=============================================================================
+module com {  module sun {  module star {  module awt {
 
 /** specifies a menu event.
  */
 published struct MenuEvent: com::sun::star::lang::EventObject
 {
-    //-------------------------------------------------------------------------
-
-    /** contains the item id.
+    /** contains the item ID.
      */
     short MenuId;
 
 };
-
-//=============================================================================
 
 }; }; }; };
 

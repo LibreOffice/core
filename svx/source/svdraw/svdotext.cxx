@@ -1194,7 +1194,7 @@ void SdrTextObj::SetVerticalWriting(bool bVertical)
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
-bool SdrTextObj::IsRealyEdited() const
+bool SdrTextObj::IsRealyEdited() const // TTTT: Is this used?
 {
     return pEdtOutl && pEdtOutl->IsModified();
 }

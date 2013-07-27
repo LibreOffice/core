@@ -38,7 +38,6 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <rtl/ustring.hxx>
-
 #include "valueimp.hxx"
 
 #define _SV_VALUESET_CXX
@@ -70,16 +69,17 @@ void ValueSet::ImplInit()
     mnUserVisLines      = 0;
     mnSpacing           = 0;
     mnFrameStyle        = 0;
-    mbFormat            = sal_True;
-    mbHighlight         = sal_False ;
-    mbSelection         = sal_False;
-    mbNoSelection       = sal_True;
-    mbDrawSelection     = sal_True;
-    mbBlackSel          = sal_False;
-    mbDoubleSel         = sal_False;
-    mbScroll            = sal_False;
-    mbDropPos           = sal_False;
-    mbFullMode          = sal_True;
+    mbFormat            = true;
+    mbHighlight         = false;
+    mbSelection         = false;
+    mbNoSelection       = true;
+    mbDrawSelection     = true;
+    mbBlackSel          = false;
+    mbDoubleSel         = false;
+    mbScroll            = false;
+    mbDropPos           = false;
+    mbFullMode          = true;
+    mbEdgeBlending      = false;
 
     // #106446#, #106601# force mirroring of virtual device
     maVirDev.EnableRTL( GetParent()->IsRTLEnabled() );
@@ -152,8 +152,7 @@ void ValueSet::ImplDeleteItems()
 
 // -----------------------------------------------------------------------
 
-void ValueSet::ImplInitSettings( sal_Bool bFont,
-                                 sal_Bool bForeground, sal_Bool bBackground )
+void ValueSet::ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground )
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
@@ -256,9 +255,10 @@ void ValueSet::ImplFormatItem( ValueSetItem* pItem )
 
     if ( (aRect.GetHeight() > 0) && (aRect.GetWidth() > 0) )
     {
+        const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+
         if ( pItem == mpNoneItem )
         {
-            const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
             maVirDev.SetFont( GetFont() );
             maVirDev.SetTextColor( ( nStyle & WB_MENUSTYLEVALUESET ) ? rStyleSettings.GetMenuTextColor() : rStyleSettings.GetWindowTextColor() );
             maVirDev.SetTextFillColor();
@@ -287,7 +287,6 @@ void ValueSet::ImplFormatItem( ValueSetItem* pItem )
         }
         else
         {
-            const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
             if ( IsColor() )
                 maVirDev.SetFillColor( maColor );
             else if ( nStyle & WB_MENUSTYLEVALUESET )
@@ -324,6 +323,21 @@ void ValueSet::ImplFormatItem( ValueSetItem* pItem )
                 }
                 else
                     maVirDev.DrawImage( aPos, pItem->maImage, nImageStyle );
+            }
+        }
+
+        const sal_uInt16 nEdgeBlendingPercent(GetEdgeBlending() ? rStyleSettings.GetEdgeBlending() : 0);
+
+        if(nEdgeBlendingPercent)
+        {
+            const Color& rTopLeft(rStyleSettings.GetEdgeBlendingTopLeftColor());
+            const Color& rBottomRight(rStyleSettings.GetEdgeBlendingBottomRightColor());
+            const sal_uInt8 nAlpha((nEdgeBlendingPercent * 255) / 100);
+            const BitmapEx aBlendFrame(createBlendFrame(aRect.GetSize(), nAlpha, rTopLeft, rBottomRight));
+
+            if(!aBlendFrame.IsEmpty())
+            {
+                maVirDev.DrawBitmapEx(aRect.TopLeft(), aBlendFrame);
             }
         }
     }
@@ -432,7 +446,7 @@ void ValueSet::Format()
         mnCols = mnUserCols;
 
     // Zeilenanzahl berechnen
-    mbScroll = sal_False;
+    mbScroll = false;
     mnLines = (long)mpImpl->mpItemList->Count() / mnCols;
     if ( mpImpl->mpItemList->Count() % mnCols )
         mnLines++;
@@ -451,7 +465,7 @@ void ValueSet::Format()
     else
         mnVisLines = mnLines;
     if ( mnLines > mnVisLines )
-        mbScroll = sal_True;
+        mbScroll = true;
     if ( mnLines <= mnVisLines )
         mnFirstLine = 0;
     else
@@ -531,17 +545,17 @@ void ValueSet::Format()
               (aHighColor.GetBlue() > 0x80)) ||
              ((aHighColor.GetRed() == 0x80) && (aHighColor.GetGreen() == 0x80) &&
               (aHighColor.GetBlue() == 0x80)) )
-            mbBlackSel = sal_True;
+            mbBlackSel = true;
         else
-            mbBlackSel = sal_False;
+            mbBlackSel = false;
 
         // Wenn die Items groesser sind, dann die Selektion doppelt so breit
         // zeichnen
         if ( (nStyle & WB_DOUBLEBORDER) &&
              ((nItemWidth >= 25) && (nItemHeight >= 20)) )
-            mbDoubleSel = sal_True;
+            mbDoubleSel = true;
         else
-            mbDoubleSel = sal_False;
+            mbDoubleSel = false;
 
         // Calculate offsets
         long nStartX;
@@ -663,7 +677,7 @@ void ValueSet::Format()
     }
 
     // Jetzt haben wir formatiert und warten auf das naechste
-    mbFormat = sal_False;
+    mbFormat = false;
 
     // ScrollBar loeschen
     if ( pDelScrBar )
@@ -928,12 +942,12 @@ void ValueSet::ImplHighlightItem( sal_uInt16 nItemId, sal_Bool bIsSelection )
 
         // Wenn keiner selektiert ist, dann Selektion nicht malen
         if ( !bIsSelection && mbNoSelection )
-            mbDrawSelection = sal_False;
+            mbDrawSelection = false;
 
         // Neu ausgeben und alte Selection wegnehmen
         ImplHideSelect( nOldItem );
         ImplDrawSelect();
-        mbDrawSelection = sal_True;
+        mbDrawSelection = true;
     }
 }
 
@@ -1121,7 +1135,7 @@ sal_Bool ValueSet::ImplScroll( const Point& rPos )
 
     if ( mnFirstLine != nOldLine )
     {
-        mbFormat = sal_True;
+        mbFormat = true;
         ImplDraw();
         return sal_True;
     }
@@ -1256,7 +1270,7 @@ IMPL_LINK( ValueSet,ImplScrollHdl, ScrollBar*, pScrollBar )
     if ( nNewFirstLine != mnFirstLine )
     {
         mnFirstLine = nNewFirstLine;
-        mbFormat = sal_True;
+        mbFormat = true;
         ImplDraw();
     }
     return 0;
@@ -1291,14 +1305,14 @@ void ValueSet::ImplTracking( const Point& rPos, sal_Bool bRepeat )
     if ( pItem && (pItem->meType != VALUESETITEM_SPACE) )
     {
         if( GetStyle() & WB_MENUSTYLEVALUESET )
-            mbHighlight = sal_True;
+            mbHighlight = true;
 
         ImplHighlightItem( pItem->mnId );
     }
     else
     {
         if( GetStyle() & WB_MENUSTYLEVALUESET )
-            mbHighlight = sal_True;
+            mbHighlight = true;
 
         ImplHighlightItem( mnSelItemId, sal_False );
     }
@@ -1321,15 +1335,15 @@ void ValueSet::ImplEndTracking( const Point& rPos, sal_Bool bCancel )
         SelectItem( pItem->mnId );
         if ( !mbSelection && !(GetStyle() & WB_NOPOINTERFOCUS) )
             GrabFocus();
-        mbHighlight = sal_False;
-        mbSelection = sal_False;
+        mbHighlight = false;
+        mbSelection = false;
         Select();
     }
     else
     {
         ImplHighlightItem( mnSelItemId, sal_False );
-        mbHighlight = sal_False;
-        mbSelection = sal_False;
+        mbHighlight = false;
+        mbSelection = false;
     }
 }
 
@@ -1342,7 +1356,7 @@ void ValueSet::MouseButtonDown( const MouseEvent& rMEvt )
         ValueSetItem* pItem = ImplGetItem( ImplGetItem( rMEvt.GetPosPixel() ) );
         if ( mbSelection )
         {
-            mbHighlight = sal_True;
+            mbHighlight = true;
             if ( pItem && (pItem->meType != VALUESETITEM_SPACE) )
             {
                 mnOldItemId  = mnSelItemId;
@@ -1359,7 +1373,7 @@ void ValueSet::MouseButtonDown( const MouseEvent& rMEvt )
                 if ( (pItem->mnBits & VIB_NODOUBLECLICK) || (rMEvt.GetClicks() == 1) )
                 {
                     mnOldItemId  = mnSelItemId;
-                    mbHighlight  = sal_True;
+                    mbHighlight  = true;
                     mnHighItemId = mnSelItemId;
                     ImplHighlightItem( pItem->mnId );
                     StartTracking( STARTTRACK_SCROLLREPEAT );
@@ -1693,7 +1707,7 @@ void ValueSet::LoseFocus()
 
 void ValueSet::Resize()
 {
-    mbFormat = sal_True;
+    mbFormat = true;
     if ( IsReallyVisible() && IsUpdateMode() )
         Invalidate();
     Control::Resize();
@@ -1767,7 +1781,7 @@ void ValueSet::StateChanged( StateChangedType nType )
     }
     else if ( (nType == STATE_CHANGE_STYLE) || (nType == STATE_CHANGE_ENABLE) )
     {
-        mbFormat = sal_True;
+        mbFormat = true;
         ImplInitSettings( sal_False, sal_False, sal_True );
         Invalidate();
     }
@@ -1785,7 +1799,7 @@ void ValueSet::DataChanged( const DataChangedEvent& rDCEvt )
          ((rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
           (rDCEvt.GetFlags() & SETTINGS_STYLE)) )
     {
-        mbFormat = sal_True;
+        mbFormat = true;
         ImplInitSettings( sal_True, sal_True, sal_True );
         Invalidate();
     }
@@ -1825,7 +1839,7 @@ void ValueSet::InsertItem( sal_uInt16 nItemId, const Image& rImage, sal_uInt16 n
     pItem->maImage  = rImage;
     mpImpl->mpItemList->Insert( pItem, (sal_uLong)nPos );
 
-    mbFormat = sal_True;
+    mbFormat = true;
     if ( IsReallyVisible() && IsUpdateMode() )
         Invalidate();
 }
@@ -1844,7 +1858,7 @@ void ValueSet::InsertItem( sal_uInt16 nItemId, const Color& rColor, sal_uInt16 n
     pItem->maColor  = rColor;
     mpImpl->mpItemList->Insert( pItem, (sal_uLong)nPos );
 
-    mbFormat = sal_True;
+    mbFormat = true;
     if ( IsReallyVisible() && IsUpdateMode() )
         Invalidate();
 }
@@ -1865,7 +1879,7 @@ void ValueSet::InsertItem( sal_uInt16 nItemId, const Image& rImage,
     pItem->maText   = rText;
     mpImpl->mpItemList->Insert( pItem, (sal_uLong)nPos );
 
-    mbFormat = sal_True;
+    mbFormat = true;
     if ( IsReallyVisible() && IsUpdateMode() )
         Invalidate();
 }
@@ -1886,7 +1900,7 @@ void ValueSet::InsertItem( sal_uInt16 nItemId, const Color& rColor,
     pItem->maText   = rText;
     mpImpl->mpItemList->Insert( pItem, (sal_uLong)nPos );
 
-    mbFormat = sal_True;
+    mbFormat = true;
     if ( IsReallyVisible() && IsUpdateMode() )
         Invalidate();
 }
@@ -1904,7 +1918,7 @@ void ValueSet::InsertItem( sal_uInt16 nItemId, sal_uInt16 nPos )
     pItem->meType   = VALUESETITEM_USERDRAW;
     mpImpl->mpItemList->Insert( pItem, (sal_uLong)nPos );
 
-    mbFormat = sal_True;
+    mbFormat = true;
     if ( IsReallyVisible() && IsUpdateMode() )
         Invalidate();
 }
@@ -1922,7 +1936,7 @@ void ValueSet::InsertSpace( sal_uInt16 nItemId, sal_uInt16 nPos )
     pItem->meType   = VALUESETITEM_SPACE;
     mpImpl->mpItemList->Insert( pItem, (sal_uLong)nPos );
 
-    mbFormat = sal_True;
+    mbFormat = true;
     if ( IsReallyVisible() && IsUpdateMode() )
         Invalidate();
 }
@@ -1945,10 +1959,10 @@ void ValueSet::RemoveItem( sal_uInt16 nItemId )
         mnOldItemId     = 0;
         mnHighItemId    = 0;
         mnSelItemId     = 0;
-        mbNoSelection   = sal_True;
+        mbNoSelection   = true;
     }
 
-    mbFormat = sal_True;
+    mbFormat = true;
     if ( IsReallyVisible() && IsUpdateMode() )
         Invalidate();
 }
@@ -1984,9 +1998,9 @@ void ValueSet::CopyItems( const ValueSet& rValueSet )
     mnOldItemId     = 0;
     mnHighItemId    = 0;
     mnSelItemId     = 0;
-    mbNoSelection   = sal_True;
+    mbNoSelection   = true;
 
-    mbFormat = sal_True;
+    mbFormat = true;
     if ( IsReallyVisible() && IsUpdateMode() )
         Invalidate();
 }
@@ -2003,9 +2017,9 @@ void ValueSet::Clear()
     mnOldItemId     = 0;
     mnHighItemId    = 0;
     mnSelItemId     = 0;
-    mbNoSelection   = sal_True;
+    mbNoSelection   = true;
 
-    mbFormat = sal_True;
+    mbFormat = true;
     if ( IsReallyVisible() && IsUpdateMode() )
         Invalidate();
 }
@@ -2069,7 +2083,7 @@ Rectangle ValueSet::GetItemRect( sal_uInt16 nItemId ) const
 
 // -----------------------------------------------------------------------
 
-void ValueSet::EnableFullItemMode( sal_Bool bFullMode )
+void ValueSet::EnableFullItemMode( bool bFullMode )
 {
     mbFullMode = bFullMode;
 }
@@ -2081,7 +2095,7 @@ void ValueSet::SetColCount( sal_uInt16 nNewCols )
     if ( mnUserCols != nNewCols )
     {
         mnUserCols = nNewCols;
-        mbFormat = sal_True;
+        mbFormat = true;
         if ( IsReallyVisible() && IsUpdateMode() )
             Invalidate();
     }
@@ -2094,7 +2108,7 @@ void ValueSet::SetLineCount( sal_uInt16 nNewLines )
     if ( mnUserVisLines != nNewLines )
     {
         mnUserVisLines = nNewLines;
-        mbFormat = sal_True;
+        mbFormat = true;
         if ( IsReallyVisible() && IsUpdateMode() )
             Invalidate();
     }
@@ -2107,7 +2121,7 @@ void ValueSet::SetItemWidth( long nNewItemWidth )
     if ( mnUserItemWidth != nNewItemWidth )
     {
         mnUserItemWidth = nNewItemWidth;
-        mbFormat = sal_True;
+        mbFormat = true;
         if ( IsReallyVisible() && IsUpdateMode() )
             Invalidate();
     }
@@ -2120,7 +2134,7 @@ void ValueSet::SetItemHeight( long nNewItemHeight )
     if ( mnUserItemHeight != nNewItemHeight )
     {
         mnUserItemHeight = nNewItemHeight;
-        mbFormat = sal_True;
+        mbFormat = true;
         if ( IsReallyVisible() && IsUpdateMode() )
             Invalidate();
     }
@@ -2133,7 +2147,7 @@ void ValueSet::SetFirstLine( sal_uInt16 nNewLine )
     if ( mnFirstLine != nNewLine )
     {
         mnFirstLine = nNewLine;
-        mbFormat = sal_True;
+        mbFormat = true;
         if ( IsReallyVisible() && IsUpdateMode() )
             Invalidate();
     }
@@ -2158,7 +2172,7 @@ void ValueSet::SelectItem( sal_uInt16 nItemId )
     {
         sal_uInt16 nOldItem = mnSelItemId ? mnSelItemId : 1;
         mnSelItemId = nItemId;
-        mbNoSelection = sal_False;
+        mbNoSelection = false;
 
         sal_Bool bNewOut;
         sal_Bool bNewLine;
@@ -2190,7 +2204,7 @@ void ValueSet::SelectItem( sal_uInt16 nItemId )
             {
                 // Falls sich der sichtbare Bereich geaendert hat,
                 // alles neu ausgeben
-                mbFormat = sal_True;
+                mbFormat = true;
                 ImplDraw();
             }
             else
@@ -2272,9 +2286,9 @@ void ValueSet::SelectItem( sal_uInt16 nItemId )
 
 void ValueSet::SetNoSelection()
 {
-    mbNoSelection   = sal_True;
-    mbHighlight     = sal_False;
-    mbSelection     = sal_False;
+    mbNoSelection   = true;
+    mbHighlight     = false;
+    mbSelection     = false;
 
     if ( IsReallyVisible() && IsUpdateMode() )
         ImplDraw();
@@ -2321,7 +2335,7 @@ void ValueSet::SetItemImage( sal_uInt16 nItemId, const Image& rImage )
         Invalidate( pItem->maRect );
     }
     else
-        mbFormat = sal_True;
+        mbFormat = true;
 }
 
 // -----------------------------------------------------------------------
@@ -2355,7 +2369,7 @@ void ValueSet::SetItemColor( sal_uInt16 nItemId, const Color& rColor )
         Invalidate( pItem->maRect );
     }
     else
-        mbFormat = sal_True;
+        mbFormat = true;
 }
 
 // -----------------------------------------------------------------------
@@ -2390,7 +2404,7 @@ void ValueSet::SetItemData( sal_uInt16 nItemId, void* pData )
             Invalidate( pItem->maRect );
         }
         else
-            mbFormat = sal_True;
+            mbFormat = true;
     }
 }
 
@@ -2466,7 +2480,7 @@ XubString ValueSet::GetItemText( sal_uInt16 nItemId ) const
 void ValueSet::SetColor( const Color& rColor )
 {
     maColor     = rColor;
-    mbFormat    = sal_True;
+    mbFormat    = true;
     if ( IsReallyVisible() && IsUpdateMode() )
         ImplDraw();
 }
@@ -2479,7 +2493,7 @@ void ValueSet::SetExtraSpacing( sal_uInt16 nNewSpacing )
     {
         mnSpacing = nNewSpacing;
 
-        mbFormat = sal_True;
+        mbFormat = true;
         if ( IsReallyVisible() && IsUpdateMode() )
             Invalidate();
     }
@@ -2490,8 +2504,8 @@ void ValueSet::SetExtraSpacing( sal_uInt16 nNewSpacing )
 void ValueSet::StartSelection()
 {
     mnOldItemId     = mnSelItemId;
-    mbHighlight     = sal_True;
-    mbSelection     = sal_True;
+    mbHighlight     = true;
+    mbSelection     = true;
     mnHighItemId    = mnSelItemId;
 }
 
@@ -2505,9 +2519,9 @@ void ValueSet::EndSelection()
             EndTracking( ENDTRACK_CANCEL );
 
         ImplHighlightItem( mnSelItemId );
-        mbHighlight = sal_False;
+        mbHighlight = false;
     }
-    mbSelection = sal_False;
+    mbSelection = false;
 }
 
 // -----------------------------------------------------------------------
@@ -2636,7 +2650,7 @@ Size ValueSet::CalcWindowSizePixel( const Size& rItemSize, sal_uInt16 nDesireCol
 
 // -----------------------------------------------------------------------
 
-Size ValueSet::CalcItemSizePixel( const Size& rItemSize, sal_Bool bOut ) const
+Size ValueSet::CalcItemSizePixel( const Size& rItemSize, bool bOut ) const
 {
     Size aSize = rItemSize;
 
@@ -2682,7 +2696,7 @@ long ValueSet::GetScrollWidth() const
 
 sal_uInt16 ValueSet::ShowDropPos( const Point& rPos )
 {
-    mbDropPos = sal_True;
+    mbDropPos = true;
 
     // Gegebenenfalls scrollen
     ImplScroll( rPos );
@@ -2725,7 +2739,7 @@ void ValueSet::HideDropPos()
     if ( mbDropPos )
     {
         ImplDrawDropPos( sal_False );
-        mbDropPos = sal_False;
+        mbDropPos = false;
     }
 }
 
@@ -2752,3 +2766,19 @@ const Link& ValueSet::GetHighlightHdl() const
 
 // -----------------------------------------------------------------------
 
+void ValueSet::SetEdgeBlending(bool bNew)
+{
+    if(mbEdgeBlending != bNew)
+    {
+        mbEdgeBlending = bNew;
+        mbFormat = true;
+
+        if(IsReallyVisible() && IsUpdateMode())
+        {
+            Invalidate();
+        }
+    }
+}
+
+// -----------------------------------------------------------------------
+// eof

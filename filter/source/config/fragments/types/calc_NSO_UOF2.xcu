@@ -28,7 +28,6 @@
         <prop oor:name="PreferredFilter"><value>NSO Calc UOF2</value></prop>
         <prop oor:name="UIName">
             <value xml:lang="en-US">Uniform Office Format 2 spreadsheet</value>
-            <value xml:lang="zh-CN">中文办公软件文档格式2 工作簿</value>
         </prop>
         <prop oor:name="ClipboardFormat"><value>doctype:uos:UOF2</value></prop>
     </node>

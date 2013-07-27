@@ -318,9 +318,10 @@ Menu RID_POPUP_EDIT
         };
         MenuItem
         {
-            Text [ en-US ] = "Style" ;
             Identifier = RID_MN_FORMAT_STYLE ;
             HelpID = HID_MN_FORMAT_STYLE ;
+//DUPLICATE         Text [ en-US ] = "Style" ;
+            Text [ en-US ] = "St~yle";
             SubMenu = Menu
             {
                 ItemList =
@@ -377,7 +378,6 @@ Menu RID_POPUP_EDIT
                     };
                 };
             };
-            Text [ en-US ] = "St~yle";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };

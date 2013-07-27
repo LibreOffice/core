@@ -106,7 +106,6 @@
 #include <svx/xftshit.hxx>
 #include <svx/xftshcit.hxx>
 #include <svx/xftshxy.hxx>
-#include <svx/xftsfit.hxx>
 #include <svx/grafctrl.hxx>
 
 
@@ -137,6 +136,12 @@
 #define SvxDrawAlignItem SfxAllEnumItem
 #define SvxDrawBezierItem SfxAllEnumItem
 #define avmedia_MediaItem ::avmedia::MediaItem
+
+#include <svx/xflftrit.hxx>
+#include <svx/xlncapit.hxx>
+#include <svx/xlinjoit.hxx>
+#include <svx/AffineMatrixItem.hxx>
+#include <svx/galleryitem.hxx>
 
 #define SFX_TYPEMAP
 #include <sfx2/msg.hxx>

@@ -353,7 +353,7 @@ GdkCursor* GtkSalDisplay::getFromXPM( const char *pBitmap,
 
 #define MAKE_CURSOR( vcl_name, name ) \
     case vcl_name: \
-        pCursor = getFromXPM( name##curs##_bits, name##mask##_bits, \
+        pCursor = getFromXPM( (const char*)name##curs##_bits, (const char*)name##mask##_bits, \
                               name##curs_width, name##curs_height, \
                               name##curs_x_hot, name##curs_y_hot ); \
         break

@@ -73,7 +73,7 @@ import com.sun.star.util.XURLTransformer;
  * @see ifc.accessibility._XAccessibleEventBroadcaster
  * @see ifc.accessibility._XAccessibleContext
  * @see ifc.accessibility._XAccessibleComponent
- * @see ifc.accessibility.XAccessibleText
+ * @see ifc.accessibility._XAccessibleText
  */
 public class AccessibleIconChoiceCtrlEntry extends TestCase {
 
@@ -251,7 +251,7 @@ public class AccessibleIconChoiceCtrlEntry extends TestCase {
     */
     private void shortWait() {
         try {
-            Thread.sleep(5000); ;
+            Thread.sleep(5000);
         } catch (InterruptedException e) {
             System.out.println("While waiting :" + e) ;
         }

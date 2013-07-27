@@ -29,7 +29,7 @@
         <converter-description>
             StarCalc XML to/from Pocket Excel 2.0 conversion
         </converter-description>
-        <converter-vendor>OpenOffice.org</converter-vendor>
+        <converter-vendor>Apache OpenOffice</converter-vendor>
         <converter-class-impl>
             org.openoffice.xmerge.converter.xml.sxc.pexcel.PluginFactoryImpl
         </converter-class-impl>

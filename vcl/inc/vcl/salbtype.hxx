@@ -123,9 +123,7 @@ public:
     inline              BitmapColor( const BitmapColor& rBitmapColor );
     inline              BitmapColor( sal_uInt8 cRed, sal_uInt8 cGreen, sal_uInt8 cBlue );
     inline              BitmapColor( const Color& rColor );
-#ifndef BINFILTER_COMPAT
     explicit
-#endif // BINFILTER_COMPAT
     inline              BitmapColor( sal_uInt8 cIndex );
 
     inline              ~BitmapColor() {};
@@ -255,6 +253,7 @@ public:
     inline void         SetColorFor24Bit( const BitmapColor& rColor, HPBYTE pPixel ) const;
 
     inline void         GetColorFor32Bit( BitmapColor& rColor, ConstHPBYTE pPixel ) const;
+    inline void         GetColorAndAlphaFor32Bit( BitmapColor& rColor, sal_uInt8& rAlpha, ConstHPBYTE pPixel ) const;
     inline void         SetColorFor32Bit( const BitmapColor& rColor, HPBYTE pPixel ) const;
 };
 
@@ -281,8 +280,9 @@ struct VCL_DLLPUBLIC BitmapBuffer
 // - StretchAndConvert -
 // ---------------------
 
-VCL_DLLPUBLIC BitmapBuffer* StretchAndConvert( const BitmapBuffer& rSrcBuffer, const SalTwoRect& rTwoRect,
-                                               sal_uLong nDstBitmapFormat, BitmapPalette* pDstPal = NULL, ColorMask* pDstMask = NULL );
+VCL_DLLPUBLIC BitmapBuffer* StretchAndConvert(
+    const BitmapBuffer& rSrcBuffer, const SalTwoRect& rTwoRect,
+    sal_uLong nDstBitmapFormat, const BitmapPalette* pDstPal = NULL, const ColorMask* pDstMask = NULL );
 
 // ------------------------------------------------------------------
 
@@ -874,6 +874,21 @@ inline void ColorMask::GetColorFor32Bit( BitmapColor& rColor, ConstHPBYTE pPixel
 #else
     const sal_uInt32 nVal = *(sal_uInt32*) pPixel;
 #endif
+
+    MASK_TO_COLOR( nVal, mnRMask, mnGMask, mnBMask, mnRShift, mnGShift, mnBShift, rColor );
+}
+
+// ------------------------------------------------------------------
+
+inline void ColorMask::GetColorAndAlphaFor32Bit( BitmapColor& rColor, sal_uInt8& rAlpha, ConstHPBYTE pPixel ) const
+{
+#ifdef OSL_BIGENDIAN
+    const sal_uInt32 nVal = (sal_uInt32) pPixel[ 0 ] | ( (sal_uInt32) pPixel[ 1 ] << 8UL ) |
+                        ( (sal_uInt32) pPixel[ 2 ] << 16UL ) | ( (sal_uInt32) pPixel[ 3 ] << 24UL );
+#else
+    const sal_uInt32 nVal = *(sal_uInt32*) pPixel;
+#endif
+    rAlpha = (sal_uInt8)(nVal >> 24);
 
     MASK_TO_COLOR( nVal, mnRMask, mnGMask, mnBMask, mnRShift, mnGShift, mnBShift, rColor );
 }

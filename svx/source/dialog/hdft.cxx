@@ -406,7 +406,7 @@ void SvxHFPage::Reset( const SfxItemSet& rSet )
                     0 != (pItem = pShell->GetItem(SID_HTML_MODE))))
     {
         nHtmlMode = ((SfxUInt16Item*)pItem)->GetValue();
-        if(nHtmlMode && HTMLMODE_ON)
+        if(nHtmlMode & HTMLMODE_ON)
         {
             aCntSharedBox.Hide();
             aBackgroundBtn.Hide();

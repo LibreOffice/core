@@ -297,7 +297,8 @@ namespace vclcanvas
                 {
                     // source already has alpha channel - 1:1 mapping,
                     // i.e. aAlphaMap[0]=0,...,aAlphaMap[255]=255.
-                    ::std::iota( aAlphaMap, &aAlphaMap[256], 0 );
+                    sal_uInt8* p = aAlphaMap;
+                    for( int n = 0; n < 256; ++n) *(p++) = n;
                 }
                 else
                 {

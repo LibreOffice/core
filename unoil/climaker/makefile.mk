@@ -64,8 +64,8 @@ $(BIN)/cli_oootypes.dll : $(RDB) $(EXTRA_RDB) version.txt
         $(CLIMAKER) $(CLIMAKERFLAGS) \
         --out $@ \
          --assembly-version $(CLI_OOOTYPES_NEW_VERSION) \
-        --assembly-company "OpenOffice.org" \
-        --assembly-description "This assembly contains metadata for the StarOffice/OpenOffice.org API." \
+        --assembly-company "Apache OpenOffice" \
+        --assembly-description "This assembly contains metadata for the Apache OpenOffice API." \
         -X $(EXTRA_RDB) \
         -r $(SOLARBINDIR)$/cli_uretypes.dll \
         --keyfile $(SOLARBINDIR)$/cliuno.snk \

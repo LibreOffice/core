@@ -33,14 +33,9 @@
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/graphic/XPrimitiveFactory2D.hpp>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
-
-//// header for function rtl_createUuid
-//#include <rtl/uuid.h>
-//#include <vcl/pdfextoutdevdata.hxx>
-//
-//#include <com/sun/star/lang/XUnoTunnel.hpp>
-//#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-//#include <svtools/embedhlp.hxx>
+#include <com/sun/star/chart2/XChartDocument.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/drawing/LineStyle.hpp>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -137,6 +132,37 @@ drawinglayer::primitive2d::Primitive2DSequence ChartHelper::tryToGetChartContent
     }
 
     return aRetval;
+}
+
+void ChartHelper::AdaptDefaultsForChart(
+    const uno::Reference < embed::XEmbeddedObject > & xEmbObj,
+    bool /* bNoFillStyle */,
+    bool /* bNoLineStyle */)
+{
+    if( xEmbObj.is())
+    {
+        uno::Reference< chart2::XChartDocument > xChartDoc( xEmbObj->getComponent(), uno::UNO_QUERY );
+        OSL_ENSURE( xChartDoc.is(), "Trying to set chart property to non-chart OLE" );
+        if( !xChartDoc.is())
+            return;
+
+        try
+        {
+            // set background to transparent (none)
+            uno::Reference< beans::XPropertySet > xPageProp( xChartDoc->getPageBackground());
+            if( xPageProp.is())
+                xPageProp->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("FillStyle")),
+                                             uno::makeAny( drawing::FillStyle_NONE ));
+            // set no border
+            if( xPageProp.is())
+                xPageProp->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("LineStyle")),
+                                             uno::makeAny( drawing::LineStyle_NONE ));
+        }
+        catch( const uno::Exception & )
+        {
+            OSL_ENSURE( false, "Exception caught in AdaptDefaultsForChart" );
+        }
+    }
 }
 
 //////////////////////////////////////////////////////////////////////////////

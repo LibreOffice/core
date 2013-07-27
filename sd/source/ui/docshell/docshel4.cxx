@@ -297,7 +297,6 @@ sal_Bool DrawDocShell::InitNew( const ::com::sun::star::uno::Reference< ::com::s
 
     if (bRet)
     {
-        mpDoc->SetDrawingLayerPoolDefaults();
 
         if( !mbSdDataObj )
             mpDoc->NewOrLoadCompleted(NEW_DOC);  // otherwise calling

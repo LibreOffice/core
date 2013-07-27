@@ -74,8 +74,8 @@ protected:
     virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
 
 public:
-                    Dialog( Window* pParent, WinBits nStyle = WB_STDDIALOG );
-                    Dialog( Window* pParent, const ResId& rResId );
+    explicit        Dialog( Window* pParent, WinBits nStyle = WB_STDDIALOG );
+    explicit        Dialog( Window* pParent, const ResId& );
     virtual         ~Dialog();
 
     virtual long    Notify( NotifyEvent& rNEvt );
@@ -128,8 +128,8 @@ class VCL_DLLPUBLIC ModelessDialog : public Dialog
 //#endif
 
 public:
-                    ModelessDialog( Window* pParent, WinBits nStyle = WB_STDMODELESS );
-                    ModelessDialog( Window* pParent, const ResId& rResId );
+    explicit        ModelessDialog( Window* pParent, WinBits nStyle = WB_STDMODELESS );
+    explicit        ModelessDialog( Window* pParent, const ResId& );
 };
 
 // ---------------
@@ -139,8 +139,8 @@ public:
 class VCL_DLLPUBLIC ModalDialog : public Dialog
 {
 public:
-                    ModalDialog( Window* pParent, WinBits nStyle = WB_STDMODAL );
-                    ModalDialog( Window* pParent, const ResId& rResId );
+    explicit        ModalDialog( Window* pParent, WinBits nStyle = WB_STDMODAL );
+    explicit        ModalDialog( Window* pParent, const ResId& );
 
 private:
     using Window::Show;
@@ -156,3 +156,4 @@ private:
 };
 
 #endif  // _SV_DIALOG_HXX
+

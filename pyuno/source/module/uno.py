@@ -21,13 +21,24 @@
 import sys
 
 import pyuno
-import __builtin__
+try:
+    import __builtin__ as builtins
+except:
+    import builtins
+
+try:
+    unicode
+    bytes = str
+    bytearray = str
+except NameError:
+    unicode = str
+
 import socket # since on Windows sal3.dll no longer calls WSAStartup
 
 # all functions and variables starting with a underscore (_) must be considered private
 # and can be changed at any time. Don't use them
 _g_ctx = pyuno.getComponentContext( )
-_g_delegatee = __builtin__.__dict__["__import__"]
+_g_delegatee = builtins.__dict__["__import__"]
 
 def getComponentContext():
     """ returns the UNO component context, that was used to initialize the python runtime.
@@ -171,23 +182,9 @@ class Char:
             return self.value == that.value
         return False
 
-# Suggested by Christian, but still some open problems which need to be solved first
-#
-#class ByteSequence(str):
-#
-#    def __repr__(self):
-#        return "<ByteSequence instance %s>" % str.__repr__(self)
-
-    # for a little bit compatibility; setting value is not possible as
-    # strings are immutable
-#    def _get_value(self):
-#        return self
-#
-#    value = property(_get_value)
-
 class ByteSequence:
     def __init__(self, value):
-        if isinstance(value, str):
+        if isinstance(value, (bytes, bytearray)):
             self.value = value
         elif isinstance(value, ByteSequence):
             self.value = value.value
@@ -200,7 +197,7 @@ class ByteSequence:
     def __eq__(self, that):
         if isinstance( that, ByteSequence):
             return self.value == that.value
-        if isinstance(that, str):
+        elif isinstance(that, (bytes, bytearray)):
             return self.value == that
         return False
 
@@ -214,7 +211,7 @@ class ByteSequence:
         return self.value.__iter__()
 
     def __add__( self , b ):
-        if isinstance( b, str ):
+        if isinstance( b, (bytes, bytearray) ):
             return ByteSequence( self.value + b )
         elif isinstance( b, ByteSequence ):
             return ByteSequence( self.value + b.value )
@@ -259,7 +256,7 @@ def _uno_import( name, *optargs, **kwargs ):
         else:
             mod = pyuno.__class__(x)  # How to create a module ??
         d = mod.__dict__
-
+    
     RuntimeException = pyuno.getClass( "com.sun.star.uno.RuntimeException" )
     for x in fromlist:
         if x not in d:
@@ -286,16 +283,7 @@ def _uno_import( name, *optargs, **kwargs ):
     return mod
 
 # hook into the __import__ chain
-__builtin__.__dict__["__import__"] = _uno_import
-
-# private function, don't use
-def _impl_extractName(name):
-    r = list(range(len(name)-1,0,-1))
-    for i in r:
-        if name[i] == ".":
-            name = name[i+1:len(name)]
-            break
-    return name
+builtins.__dict__["__import__"] = _uno_import
 
 # private, referenced from the pyuno shared library
 def _uno_struct__init__(self,*args):
@@ -306,11 +294,11 @@ def _uno_struct__init__(self,*args):
 
 # private, referenced from the pyuno shared library
 def _uno_struct__getattr__(self,name):
-    return __builtin__.getattr(self.__dict__["value"],name)
+    return getattr(self.__dict__["value"],name)
 
 # private, referenced from the pyuno shared library
 def _uno_struct__setattr__(self,name,value):
-    return __builtin__.setattr(self.__dict__["value"],name,value)
+    return setattr(self.__dict__["value"],name,value)
 
 # private, referenced from the pyuno shared library
 def _uno_struct__repr__(self):
@@ -324,6 +312,10 @@ def _uno_struct__eq__(self,cmp):
     if hasattr(cmp,"value"):
         return self.__dict__["value"] == cmp.__dict__["value"]
     return False
+
+def _uno_struct__dir__(self):
+    return dir(self.__dict__["value"]) + list(self.__dict__.keys()) + \
+                list(self.__class__.__dict__.keys())
 
 # referenced from pyuno shared lib and pythonscript.py
 def _uno_extract_printable_stacktrace( trace ):

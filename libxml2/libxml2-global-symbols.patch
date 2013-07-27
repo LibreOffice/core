@@ -1,5 +1,5 @@
---- misc/libxml2-2.7.6/libxml2.syms	Tue Oct  6 18:31:35 2009
-+++ misc/build/libxml2-2.7.6/libxml2.syms	Wed Jul  7 15:43:17 2010
+--- misc/libxml2-2.7.8/libxml2.syms	Tue Oct  6 18:31:35 2009
++++ misc/build/libxml2-2.7.8/libxml2.syms	Wed Jul  7 15:43:17 2010
 @@ -2184,10 +2184,10 @@
  } LIBXML2_2.6.27;
  

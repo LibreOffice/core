@@ -746,9 +746,13 @@ ScFormulaCell::ScFormulaCell( const ScFormulaCell& rCell, ScDocument& rDoc, cons
     bInChangeTrack( sal_False ),
     bTableOpDirty( sal_False ),
     bNeedListening( sal_False ),
-    pValidRefToken( rCell.pValidRefToken ),
     aPos( rPos )
 {
+    if ( rCell.pValidRefToken )
+        pValidRefToken = static_cast<ScToken*>(rCell.pValidRefToken->Clone());
+    else
+        pValidRefToken = NULL;
+
     pCode = (rCell.pCode) ? rCell.pCode->Clone() : NULL;
 
     if ( nCloneFlags & SC_CLONECELL_ADJUST3DREL )

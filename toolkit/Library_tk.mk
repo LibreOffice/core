@@ -21,15 +21,15 @@
 
 
 
-$(eval $(call gb_Library_Library,tk))
+$(eval $(call gb_Library_Library,ootk))
 
-$(eval $(call gb_Library_set_componentfile,tk,toolkit/util/tk))
+$(eval $(call gb_Library_set_componentfile,ootk,toolkit/util/ootk))
 
-$(eval $(call gb_Library_add_package_headers,tk,toolkit_inc))
+$(eval $(call gb_Library_add_package_headers,ootk,toolkit_inc))
 
-#$(eval $(call gb_Library_add_precompiled_header,tk,$(SRCDIR)/toolkit/inc/pch/precompiled_toolkit))
+#$(eval $(call gb_Library_add_precompiled_header,ootk,$(SRCDIR)/toolkit/inc/pch/precompiled_toolkit))
 
-$(eval $(call gb_Library_set_include,tk,\
+$(eval $(call gb_Library_set_include,ootk,\
     $$(INCLUDE) \
     -I$(SRCDIR)/toolkit/inc \
     -I$(SRCDIR)/toolkit/inc/pch \
@@ -37,12 +37,12 @@ $(eval $(call gb_Library_set_include,tk,\
     -I$(OUTDIR)/inc/offuh \
 ))
 
-$(eval $(call gb_Library_set_defs,tk,\
+$(eval $(call gb_Library_set_defs,ootk,\
     $$(DEFS) \
     -DTOOLKIT_DLLIMPLEMENTATION \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,tk,\
+$(eval $(call gb_Library_add_linked_libs,ootk,\
     comphelper \
     cppu \
     cppuhelper \
@@ -54,7 +54,7 @@ $(eval $(call gb_Library_add_linked_libs,tk,\
     $(gb_STDLIBS) \
 ))
 
-$(eval $(call gb_Library_add_exception_objects,tk,\
+$(eval $(call gb_Library_add_exception_objects,ootk,\
     toolkit/source/awt/asynccallback \
     toolkit/source/awt/stylesettings \
     toolkit/source/awt/vclxaccessiblecomponent \
@@ -84,8 +84,6 @@ $(eval $(call gb_Library_add_exception_objects,tk,\
     toolkit/source/awt/vclxwindow \
     toolkit/source/awt/vclxwindow1 \
     toolkit/source/awt/vclxwindows \
-    toolkit/source/awt/xsimpleanimation \
-    toolkit/source/awt/xthrobber \
     toolkit/source/controls/accessiblecontrolcontext \
     toolkit/source/controls/controlmodelcontainerbase \
     toolkit/source/controls/dialogcontrol \
@@ -105,9 +103,7 @@ $(eval $(call gb_Library_add_exception_objects,tk,\
     toolkit/source/controls/stdtabcontroller \
     toolkit/source/controls/stdtabcontrollermodel \
     toolkit/source/controls/tkscrollbar \
-    toolkit/source/controls/tksimpleanimation \
     toolkit/source/controls/tkspinbutton \
-    toolkit/source/controls/tkthrobber \
     toolkit/source/controls/animatedimages \
     toolkit/source/controls/spinningprogress \
     toolkit/source/controls/tree/treecontrol \
@@ -156,12 +152,12 @@ $(eval $(call gb_Library_add_exception_objects,tk,\
 ))
 
 ifeq ($(GUIBASE),aqua)
-$(eval $(call gb_Library_set_cxxflags,tk,\
+$(eval $(call gb_Library_set_cxxflags,ootk,\
     $$(CXXFLAGS) $(gb_OBJCXXFLAGS)))
 endif
 
 ifeq ($(OS),LINUX)
-$(eval $(call gb_Library_add_linked_libs,tk,\
+$(eval $(call gb_Library_add_linked_libs,ootk,\
     X11 \
 ))
 endif

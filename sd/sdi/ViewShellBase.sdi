@@ -82,11 +82,6 @@ interface ViewShellBaseView
         ExecMethod = Execute;
         StateMethod = GetState;
     ]
-    SID_SHOW_TOOL_PANEL
-    [
-        ExecMethod = Execute;
-        StateMethod = GetState;
-    ]
     SID_WIN_FULLSCREEN
     [
         ExecMethod = Execute;

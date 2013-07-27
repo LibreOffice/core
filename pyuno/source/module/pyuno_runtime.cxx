@@ -35,6 +35,8 @@
 
 #include <com/sun/star/beans/XMaterialHolder.hpp>
 
+#include <vector>
+
 using rtl::OUString;
 using rtl::OUStringToOString;
 using rtl::OUStringBuffer;
@@ -73,7 +75,11 @@ static PyTypeObject RuntimeImpl_Type =
     (printfunc) 0,
     (getattrfunc) 0,
     (setattrfunc) 0,
+#if PY_MAJOR_VERSION >= 3
+    0,
+#else
     (cmpfunc) 0,
+#endif
     (reprfunc) 0,
     0,
     0,
@@ -154,8 +160,9 @@ static PyRef importUnoModule( ) throw ( RuntimeException )
         OUStringBuffer buf;
         buf.appendAscii( "python object raised an unknown exception (" );
         PyRef valueRep( PyObject_Repr( excValue.get() ), SAL_NO_ACQUIRE );
-        buf.appendAscii( PyBytes_AsString( valueRep.get())).appendAscii( ", traceback follows\n" );
-        buf.appendAscii( PyBytes_AsString( str.get() ) );
+
+        buf.append( pyString2ustring( valueRep.get() ) ).appendAscii( ", traceback follows\n" );
+        buf.append( pyString2ustring( str.get() ) );
         throw RuntimeException( buf.makeStringAndClear(), Reference< XInterface > () );
     }
     PyRef dict( PyModule_GetDict( module.get() ) );
@@ -544,7 +551,7 @@ PyRef Runtime::any2PyObject (const Any &a ) const
             // assuming that the Message is always the first member, wuuuu
             void *pData = (void*)a.getValue();
             OUString message = *(OUString * )pData;
-            PyRef pymsg = ustring2PyString( message );
+            PyRef pymsg = USTR_TO_PYSTR( message );
             PyTuple_SetItem( args.get(), 0 , pymsg.getAcquired() );
             // the exception base functions want to have an "args" tuple,
             // which contains the message
@@ -662,7 +669,21 @@ Any Runtime::pyObject2Any ( const PyRef & source, enum ConversionMode mode ) con
     {
 
     }
-#if PY_MAJOR_VERSION < 3    // Python 3 has no PyInt
+#if PY_MAJOR_VERSION >= 3   // Python 3 has no PyInt
+    else if (PyBool_Check(o))
+    {
+        if( o == Py_True )
+        {
+            sal_Bool b = sal_True;
+            a = Any( &b, getBooleanCppuType() );
+        }
+        else
+        {
+            sal_Bool b = sal_False;
+            a = Any( &b, getBooleanCppuType() );
+        }
+    }
+#else
     else if (PyInt_Check (o))
     {
         if( o == Py_True )
@@ -724,8 +745,10 @@ Any Runtime::pyObject2Any ( const PyRef & source, enum ConversionMode mode ) con
         double d = PyFloat_AsDouble (o);
         a <<= d;
     }
+#if PY_MAJOR_VERSION < 3
     else if (PyBytes_Check (o))
     a <<= pyString2ustring(o);
+#endif
     else if( PyUnicode_Check( o ) )
     a <<= pyString2ustring(o);
     else if (PyTuple_Check (o))
@@ -750,6 +773,13 @@ Any Runtime::pyObject2Any ( const PyRef & source, enum ConversionMode mode ) con
                 seq = Sequence<sal_Int8 > (
                     (sal_Int8*) PyBytes_AsString(str.get()), PyBytes_Size(str.get()));
             }
+#if PY_MAJOR_VERSION >= 3
+            else if ( PyByteArray_Check( str.get() ) )
+            {
+                seq = Sequence< sal_Int8 >(
+                    (sal_Int8 *) PyByteArray_AS_STRING(str.get()), PyByteArray_GET_SIZE(str.get()));
+            }
+#endif
             a <<= seq;
         }
         else
@@ -776,7 +806,7 @@ Any Runtime::pyObject2Any ( const PyRef & source, enum ConversionMode mode ) con
                     Reference< XInterface > () );
             }
         }
-        else if( PyObject_IsInstance( o, getPyUnoClass( runtime ).get() ) )
+        else if( PyObject_IsInstance( o, getPyUnoClass().get() ) )
         {
             PyUNO* o_pi;
             o_pi = (PyUNO*) o;
@@ -881,7 +911,7 @@ Any Runtime::pyObject2Any ( const PyRef & source, enum ConversionMode mode ) con
                 OUStringBuffer buf;
                 buf.appendAscii( "Couldn't convert " );
                 PyRef reprString( PyObject_Str( o ) , SAL_NO_ACQUIRE );
-                buf.appendAscii( PyBytes_AsString( reprString.get() ) );
+                buf.append( pyString2ustring( reprString.get() ) );
                 buf.appendAscii( " to a UNO type" );
                 throw RuntimeException( buf.makeStringAndClear(), Reference< XInterface > () );
             }
@@ -939,7 +969,7 @@ Any Runtime::extractUnoException( const PyRef & excType, const PyRef &excValue, 
         PyRef typeName( PyObject_Str( excType.get() ), SAL_NO_ACQUIRE );
         if( typeName.is() )
         {
-            buf.appendAscii( PyBytes_AsString( typeName.get() ) );
+            buf.append( pyString2ustring( typeName.get() ) );
         }
         else
         {
@@ -949,7 +979,7 @@ Any Runtime::extractUnoException( const PyRef & excType, const PyRef &excValue, 
         PyRef valueRep( PyObject_Str( excValue.get() ), SAL_NO_ACQUIRE );
         if( valueRep.is() )
         {
-            buf.appendAscii( PyBytes_AsString( valueRep.get()));
+            buf.append( pyString2ustring( valueRep.get()));
         }
         else
         {
@@ -958,7 +988,7 @@ Any Runtime::extractUnoException( const PyRef & excType, const PyRef &excValue, 
         buf.appendAscii( ", traceback follows\n" );
         if( str.is() )
         {
-            buf.appendAscii( PyBytes_AsString( str.get() ) );
+            buf.append( pyString2ustring( str.get() ) );
         }
         else
         {

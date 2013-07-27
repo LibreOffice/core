@@ -150,6 +150,7 @@ namespace svgio
             mpId(0),
             mpClass(0),
             maXmlSpace(XmlSpace_notset),
+            maDisplay(Display_inline),
             maCssStyleVector()
         {
             OSL_ENSURE(SVGTokenUnknown != maType, "SvgNode with unknown type created (!)");
@@ -184,13 +185,145 @@ namespace svgio
         void SvgNode::parseAttributes(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttribs)
         {
             const sal_uInt32 nAttributes(xAttribs->getLength());
+            // #122522# SVG defines that 'In general, this means that the presentation attributes have
+            // lower priority than other CSS style rules specified in author style sheets or ‘style’
+            // attributes.' in http://www.w3.org/TR/SVG/styling.html#UsingPresentationAttributes
+            // (6.4 Specifying properties using the presentation attributes SVG 1.1). That means that
+            // e.g. font-size will appear as presentation attribute and CSS style attribute. In these
+            // cases, CSS style attributes need to have precedence. To do so it is possible to create
+            // a proirity system for all properties of a shape, but it will also work to parse the
+            // presentation attributes of type 'style' last, so they will overwrite the less-prioritized
+            // already interpreted ones. Thus, remember SVGTokenStyle entries and parse them last.
+            // To make this work it is required that parseAttribute is only called by parseAttributes
+            // which is the case.
+            std::vector< sal_uInt32 > aSVGTokenStyleIndexes;
 
             for(sal_uInt32 a(0); a < nAttributes; a++)
             {
                 const ::rtl::OUString aTokenName(xAttribs->getNameByIndex(a));
+                const SVGToken aSVGToken(StrToSVGToken(aTokenName));
 
-                parseAttribute(aTokenName, StrToSVGToken(aTokenName), xAttribs->getValueByIndex(a));
+                if(SVGTokenStyle == aSVGToken)
+                {
+                    // #122522# remember SVGTokenStyle entry
+                    aSVGTokenStyleIndexes.push_back(a);
+                }
+                else
+                {
+                    parseAttribute(aTokenName, aSVGToken, xAttribs->getValueByIndex(a));
+                }
             }
+
+            // #122522# parse SVGTokenStyle entries last to override already interpreted
+            // 'presentation attributes' of potenially the same type
+            for(sal_uInt32 b(0); b < aSVGTokenStyleIndexes.size(); b++)
+            {
+                const sal_uInt32 nSVGTokenStyleIndex(aSVGTokenStyleIndexes[b]);
+                const ::rtl::OUString aTokenName(xAttribs->getNameByIndex(nSVGTokenStyleIndex));
+
+                parseAttribute(aTokenName, SVGTokenStyle, xAttribs->getValueByIndex(nSVGTokenStyleIndex));
+            }
+        }
+
+        Display getDisplayFromContent(const rtl::OUString& aContent)
+        {
+            if(aContent.getLength())
+            {
+                static rtl::OUString aStrInline(rtl::OUString::createFromAscii("inline"));
+                static rtl::OUString aStrBlock(rtl::OUString::createFromAscii("block"));
+                static rtl::OUString aStrList_item(rtl::OUString::createFromAscii("list-item"));
+                static rtl::OUString aStrRun_in(rtl::OUString::createFromAscii("run-in"));
+                static rtl::OUString aStrCompact(rtl::OUString::createFromAscii("compact"));
+                static rtl::OUString aStrMarker(rtl::OUString::createFromAscii("marker"));
+                static rtl::OUString aStrTable(rtl::OUString::createFromAscii("table"));
+                static rtl::OUString aStrInline_table(rtl::OUString::createFromAscii("inline-table"));
+                static rtl::OUString aStrTable_row_group(rtl::OUString::createFromAscii("table-row-group"));
+                static rtl::OUString aStrTable_header_group(rtl::OUString::createFromAscii("table-header-group"));
+                static rtl::OUString aStrTable_footer_group(rtl::OUString::createFromAscii("table-footer-group"));
+                static rtl::OUString aStrTable_row(rtl::OUString::createFromAscii("table-row"));
+                static rtl::OUString aStrTable_column_group(rtl::OUString::createFromAscii("table-column-group"));
+                static rtl::OUString aStrTable_column(rtl::OUString::createFromAscii("table-column"));
+                static rtl::OUString aStrTable_cell(rtl::OUString::createFromAscii("table-cell"));
+                static rtl::OUString aStrTable_caption(rtl::OUString::createFromAscii("table-caption"));
+                static rtl::OUString aStrNone(rtl::OUString::createFromAscii("none"));
+                static rtl::OUString aStrInherit(rtl::OUString::createFromAscii("inherit"));
+
+                if(aContent.match(aStrInline))
+                {
+                    return Display_inline;
+                }
+                else if(aContent.match(aStrNone))
+                {
+                    return Display_none;
+                }
+                else if(aContent.match(aStrInherit))
+                {
+                    return Display_inherit;
+                }
+                else if(aContent.match(aStrBlock))
+                {
+                    return Display_block;
+                }
+                else if(aContent.match(aStrList_item))
+                {
+                    return Display_list_item;
+                }
+                else if(aContent.match(aStrRun_in))
+                {
+                    return Display_run_in;
+                }
+                else if(aContent.match(aStrCompact))
+                {
+                    return Display_compact;
+                }
+                else if(aContent.match(aStrMarker))
+                {
+                    return Display_marker;
+                }
+                else if(aContent.match(aStrTable))
+                {
+                    return Display_table;
+                }
+                else if(aContent.match(aStrInline_table))
+                {
+                    return Display_inline_table;
+                }
+                else if(aContent.match(aStrTable_row_group))
+                {
+                    return Display_table_row_group;
+                }
+                else if(aContent.match(aStrTable_header_group))
+                {
+                    return Display_table_header_group;
+                }
+                else if(aContent.match(aStrTable_footer_group))
+                {
+                    return Display_table_footer_group;
+                }
+                else if(aContent.match(aStrTable_row))
+                {
+                    return Display_table_row;
+                }
+                else if(aContent.match(aStrTable_column_group))
+                {
+                    return Display_table_column_group;
+                }
+                else if(aContent.match(aStrTable_column))
+                {
+                    return Display_table_column;
+                }
+                else if(aContent.match(aStrTable_cell))
+                {
+                    return Display_table_cell;
+                }
+                else if(aContent.match(aStrTable_caption))
+                {
+                    return Display_table_caption;
+                }
+            }
+
+            // return the default
+            return Display_inline;
         }
 
         void SvgNode::parseAttribute(const rtl::OUString& /*rTokenName*/, SVGToken aSVGToken, const rtl::OUString& aContent)
@@ -231,6 +364,14 @@ namespace svgio
                     }
                     break;
                 }
+                case SVGTokenDisplay:
+                {
+                    if(aContent.getLength())
+                    {
+                        setDisplay(getDisplayFromContent(aContent));
+                    }
+                    break;
+                }
                 default:
                 {
                     break;
@@ -240,6 +381,11 @@ namespace svgio
 
         void SvgNode::decomposeSvgNode(drawinglayer::primitive2d::Primitive2DSequence& rTarget, bool bReferenced) const
         {
+            if(Display_none == getDisplay())
+            {
+                return;
+            }
+
             if(!bReferenced)
             {
                 if(SVGTokenDefs == getType() ||
@@ -259,6 +405,9 @@ namespace svgio
 
                     // also not directly used are Markers and Patterns, only indirecty used
                     // by reference
+
+                    // #121656# also do not decompose nodes which have display="none" set
+                    // as property
                     return;
                 }
             }
@@ -273,7 +422,7 @@ namespace svgio
                 {
                     SvgNode* pCandidate = rChildren[a];
 
-                    if(pCandidate)
+                    if(pCandidate && Display_none != pCandidate->getDisplay())
                     {
                         drawinglayer::primitive2d::Primitive2DSequence aNewTarget;
 

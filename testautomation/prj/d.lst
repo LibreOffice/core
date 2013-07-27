@@ -1,4 +1,0 @@
-mkdir: %COMMON_DEST%\bin%_EXT%\win
-
-..\global\win\*.win %COMMON_DEST%\bin%_EXT%\win\*.win
-

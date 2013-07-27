@@ -6559,7 +6559,7 @@ bool PDFWriterImpl::emitTrailer()
     aLine.append( "/Root " );
     aLine.append( m_nCatalogObject );
     aLine.append( " 0 R\n" );
-    if( nSecObject |= 0 )
+    if( nSecObject )
     {
         aLine.append( "/Encrypt ");
         aLine.append( nSecObject );
@@ -7175,7 +7175,6 @@ void PDFWriterImpl::drawVerticalGlyphs(
         }
         aDeltaPos += (m_pReferenceDevice->PixelToLogic( Point( (int)((double)nXOffset/fXScale), 0 ) ) - m_pReferenceDevice->PixelToLogic( Point() ) );
         if( i < rGlyphs.size()-1 )
-        // [Bug 120627] the text on the Y axis is reversed when export ppt file to PDF format
         {
             long nOffsetX = rGlyphs[i+1].m_aPos.X() - rGlyphs[i].m_aPos.X();
             long nOffsetY = rGlyphs[i+1].m_aPos.Y() - rGlyphs[i].m_aPos.Y();

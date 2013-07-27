@@ -38,12 +38,6 @@ force_dmake_to_error
 ENABLE_PCH=TRUE
 .ENDIF			# "$(USE_PCH)"!=""
 
-.IF "$(ENABLE_PCH)"!="" && "$(BUILD_SPECIAL)"!=""
-.IF "$(SOLARSRC)"=="$(SRC_ROOT)"
-NETWORK_BUILD:=TRUE
-.ENDIF			# "$(SOLARSRC)"=="$(SRC_ROOT)"
-.ENDIF			# "$(ENABLE_PCH)"!="" && "$(BUILD_SPECIAL)"!=""
-
 .INCLUDE : unitools.mk
 
 .INCLUDE : minor.mk
@@ -1365,11 +1359,11 @@ CPPUNIT_CFLAGS =
 
 COMPONENTPREFIX_URE_NATIVE = vnd.sun.star.expand:$$URE_INTERNAL_LIB_DIR/
 COMPONENTPREFIX_URE_JAVA = vnd.sun.star.expand:$$URE_INTERNAL_JAVA_DIR/
-.IF "$(OS)" == "WNT" || "$(OS)" == "OS2"
-COMPONENTPREFIX_BASIS_NATIVE = vnd.sun.star.expand:$$BRAND_BASE_DIR/program/
-.ELSE
+#.IF "$(OS)" == "WNT" || "$(OS)" == "OS2"
+#COMPONENTPREFIX_BASIS_NATIVE = vnd.sun.star.expand:$$OOO_BASE_DIR/program/
+#.ELSE
 COMPONENTPREFIX_BASIS_NATIVE = vnd.sun.star.expand:$$OOO_BASE_DIR/program/
-.END
+#.END
 COMPONENTPREFIX_BASIS_JAVA = vnd.sun.star.expand:$$OOO_BASE_DIR/program/classes/
 COMPONENTPREFIX_BASIS_PYTHON = vnd.openoffice.pymodule:
 COMPONENTPREFIX_INBUILD_NATIVE = \

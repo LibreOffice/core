@@ -77,6 +77,8 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_NAME_GROUP ) ||
             SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_OBJECT_TITLE_DESCRIPTION ) ||
             SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_ATTR_FILL_STYLE ) ||
+            SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_ATTR_FILL_TRANSPARENCE ) ||
+            SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_ATTR_FILL_FLOATTRANSPARENCE ) ||
             SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_CHANGEBEZIER ) ||
             SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_CHANGEPOLYGON ) ||
             SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_LINEEND_POLYGON ) ||
@@ -175,7 +177,9 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             {
                 if(!pSdrPathObj->isClosed())
                 {
-                      rSet.DisableItem( SID_ATTR_FILL_STYLE );
+                    rSet.DisableItem( SID_ATTR_FILL_STYLE );
+                    rSet.DisableItem( SID_ATTR_FILL_TRANSPARENCE );
+                    rSet.DisableItem( SID_ATTR_FILL_FLOATTRANSPARENCE );
                 }
             }
 
@@ -378,6 +382,8 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             if( bLine && !bText && !bDrawObj &&!b3dObj)
             {
                 rSet.DisableItem( SID_ATTR_FILL_STYLE );
+                rSet.DisableItem( SID_ATTR_FILL_TRANSPARENCE );
+                rSet.DisableItem( SID_ATTR_FILL_FLOATTRANSPARENCE );
             }
             if( !bEdgeObj )
                 rSet.DisableItem( SID_CONNECTION_DLG );
@@ -490,15 +496,19 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             rSet.DisableItem( SID_BEHIND_OBJ );
             rSet.DisableItem( SID_CONVERT );
 
+            //      rSet.DisableItem( SID_BEZIER_EDIT );
             rSet.DisableItem( SID_SIZE_OPTIMAL );
             rSet.DisableItem( SID_LINEEND_POLYGON );
             rSet.DisableItem( SID_COPYOBJECTS );
             rSet.DisableItem( SID_HORIZONTAL );
             rSet.DisableItem( SID_VERTICAL );
+            rSet.DisableItem( SID_FLIP_HORIZONTAL );
+            rSet.DisableItem( SID_FLIP_VERTICAL );
             rSet.DisableItem( SID_GROUP );
             rSet.DisableItem( SID_UNGROUP );
             rSet.DisableItem( SID_NAME_GROUP );
 
+            // #i68101#
             rSet.DisableItem( SID_OBJECT_TITLE_DESCRIPTION );
 
             rSet.DisableItem( SID_DISMANTLE );

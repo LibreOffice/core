@@ -36,6 +36,7 @@
 
 // includes for member variables
 #include <com/sun/star/uno/Reference.hxx>
+#include "mip.hxx"
 #include <map>
 
 
@@ -56,7 +57,6 @@ namespace rtl { class OUString; }
 namespace xforms
 {
     class Binding;
-    class MIP;
     class BindingCollection;
     class SubmissionCollection;
     class InstanceCollection;

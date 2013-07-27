@@ -32,26 +32,11 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 .INCLUDE : ../deployment/inc/dp_misc.mk
+.INCLUDE : ../deployment/inc/dp_gui.mk
 
 .IF "$(ENABLE_GNOMEVFS)"=="TRUE"
 CFLAGS+=-DGNOME_VFS_ENABLED
 .ENDIF
-
-.IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2" || "$(GUIBASE)"=="aqua" || "$(ENABLE_SYSTRAY_GTK)"=="TRUE"
-CFLAGS+=-DENABLE_QUICKSTART_APPLET
-.ENDIF
-
-# .IF "$(OS)" == "WNT"
-# .IF "$(COM)" == "GCC"
-# DEPLOYMENTMISCLIB = -ldeploymentmisc$(DLLPOSTFIX)
-# .ELSE
-# DEPLOYMENTMISCLIB = ideploymentmisc$(DLLPOSTFIX).lib
-# .ENDIF
-# .ELIF "$(OS)" == "OS2"
-# DEPLOYMENTMISCLIB = ideploymentmisc$(DLLPOSTFIX).lib
-# .ELSE
-# DEPLOYMENTMISCLIB = -ldeploymentmisc$(DLLPOSTFIX)
-# .ENDIF
 
 .IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2" || "$(GUIBASE)"=="aqua" || "$(ENABLE_SYSTRAY_GTK)"=="TRUE"
 CFLAGS+=-DENABLE_QUICKSTART_APPLET
@@ -85,6 +70,7 @@ SHL1STDLIBS = \
     $(CPPUHELPERLIB) \
     $(CPPULIB) \
     $(DEPLOYMENTMISCLIB) \
+    $(DEPLOYMENTGUILIB) \
     $(I18NISOLANGLIB) \
     $(SALLIB) \
     $(SFXLIB) \

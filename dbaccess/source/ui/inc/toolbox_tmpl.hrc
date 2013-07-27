@@ -29,7 +29,6 @@
 #define MID_SBA_QRY_REFRESH \
     Identifier = ID_BROWSER_REFRESH ; \
     Text [ en-US ] = "Refresh"; \
-    Text [ x-comment ] = " ";   \
 
 
 #define MID_NEW_VIEW_DESIGN \

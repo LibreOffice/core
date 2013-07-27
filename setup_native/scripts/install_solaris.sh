@@ -254,7 +254,7 @@ cat > ${INSTALL_ROOT}/usr/lib/postrun << \EOF
 set -e
 
 # Override UserInstallation in bootstraprc for unopkg ..
-UserInstallation='$BRAND_BASE_DIR/../UserInstallation'
+UserInstallation='$OOO_BASE_DIR/../UserInstallation'
 export UserInstallation
 
 if [ -x /usr/bin/mktemp ]
@@ -363,7 +363,7 @@ fi
 # patch the "bootstraprc" to create a self-containing installation
 for i in ${PKG_LIST}; do
   my_dir=${INSTALL_ROOT}`pkgparam -d ${PACKAGE_PATH} "$i" BASEDIR`
-  find "$my_dir" -type f -name bootstraprc -exec sh -ce 'test ! -f "$0".orig && mv "$0" "$0".orig && sed '\''s,^UserInstallation=$SYSUSERCONFIG.*,UserInstallation=$BRAND_BASE_DIR/../UserInstallation,'\'' "$0".orig > "$0"' {} \;
+  find "$my_dir" -type f -name bootstraprc -exec sh -ce 'test ! -f "$0".orig && mv "$0" "$0".orig && sed '\''s,^UserInstallation=$SYSUSERCONFIG.*,UserInstallation=$OOO_BASE_DIR/../UserInstallation,'\'' "$0".orig > "$0"' {} \;
 done
 
 # if an unpack directory exists, it can be removed now

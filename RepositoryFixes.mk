@@ -74,11 +74,17 @@ gb_Library_FILENAMES := $(patsubst xml2:ixml2%,xml2:libxml2$(gb_Library_IARCEXT)
 gb_Library_FILENAMES := $(patsubst xslt:ixslt%,xslt:libxslt.dll$(gb_Library_IARCEXT),$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst rdf:irdf%,rdf:librdf.dll$(gb_Library_IARCEXT),$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst z:iz%,z:zlib%,$(gb_Library_FILENAMES))
+
+ifeq ($(USE_SYSTEM_STL),YES)
+gb_Library_FILENAMES := $(patsubst stl:istl%,stl:msvcprt%,$(gb_Library_FILENAMES))
+else
 ifeq ($(gb_PRODUCT),$(true))
 gb_Library_FILENAMES := $(patsubst stl:istl%,stl:stlport_vc71%,$(gb_Library_FILENAMES))
 else
 gb_Library_FILENAMES := $(patsubst stl:istl%,stl:stlport_vc71_stldebug%,$(gb_Library_FILENAMES))
 endif
+endif
+
 gb_Library_NOILIBFILENAMES:=\
     icule \
     icuuc \
@@ -124,11 +130,17 @@ gb_Library_FILENAMES := $(patsubst xslt:ixslt%,xslt:libxslt%,$(gb_Library_FILENA
 gb_Library_FILENAMES := $(patsubst rdf:irdf%,rdf:librdf%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst z:iz%,z:zlib%,$(gb_Library_FILENAMES))
 gb_StaticLibrary_FILENAMES := $(patsubst graphite:graphite%,graphite:graphite_dll%,$(gb_StaticLibrary_FILENAMES))
+
+ifeq ($(USE_SYSTEM_STL),YES)
+gb_Library_FILENAMES := $(patsubst stl:istl%,stl:msvcprt%,$(gb_Library_FILENAMES))
+else
 ifeq ($(gb_PRODUCT),$(true))
 gb_Library_FILENAMES := $(patsubst stl:istl%,stl:stlport_vc71%,$(gb_Library_FILENAMES))
 else
 gb_Library_FILENAMES := $(patsubst stl:istl%,stl:stlport_vc71_stldebug%,$(gb_Library_FILENAMES))
 endif
+endif
+
 gb_Library_NOILIBFILENAMES:=\
     advapi32 \
     gdi32 \
@@ -153,9 +165,9 @@ gb_Library_NOILIBFILENAMES:=\
 
 gb_Library_FILENAMES := $(filter-out $(foreach lib,$(gb_Library_NOILIBFILENAMES),$(lib):%),$(gb_Library_FILENAMES))
 gb_Library_FILENAMES += $(foreach lib,$(gb_Library_NOILIBFILENAMES),$(lib):$(lib)$(gb_Library_PLAINEXT))
-ifneq ($(gb_PRODUCT),$(true))
-gb_Library_FILENAMES := $(patsubst msvcrt:msvcrt%,msvcrt:msvcrtd%,$(gb_Library_FILENAMES))
-endif
+#ifneq ($(gb_PRODUCT),$(true))
+#gb_Library_FILENAMES := $(patsubst msvcrt:msvcrt%,msvcrt:msvcrtd%,$(gb_Library_FILENAMES))
+#endif
 
 gb_Library_DLLFILENAMES := $(patsubst comphelper:comphelper%,comphelper:comphelp%,$(gb_Library_DLLFILENAMES))
 gb_Library_DLLFILENAMES := $(patsubst icuuc:icuuc%,icuuc:icuuc40%,$(gb_Library_DLLFILENAMES))
@@ -173,14 +185,12 @@ gb_Library_FILENAMES := $(patsubst cppuhelper:cppuhelper%,cppuhelper:cppuh3%,$(g
 gb_Library_FILENAMES := $(patsubst cppunit:icppunit%,cppunit:cppunit%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst cui:iicuc%,cui:icuc%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst i18nisolang1:i18nisolang1%,i18nisolang1:i18nisolang1gcc3%,$(gb_Library_FILENAMES))
-gb_Library_FILENAMES := $(patsubst i18nutil:i18nutil%,i18nutil:i18nutilgcc3%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst jvmaccess:jvmaccess%,jvmaccess:jvmaccess3gcc3%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst jvmfwk:jvmfwk%,jvmfwk:jvmfwk3%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst rdf:rdf%,rdf:librdf%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst tl:itl%,tl:tl%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst sal:sal%,sal:sal3%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst salhelper:salhelper%,salhelper:salhelp3%,$(gb_Library_FILENAMES))
-gb_Library_FILENAMES := $(patsubst sb:sb%,sb:basic%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst sfx:isfx%,sfx:sfx%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst svl:isvl%,svl:svl%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst svt:isvt%,svt:svtool%,$(gb_Library_FILENAMES))

@@ -194,7 +194,9 @@ public:
     /** returns the index of the text that contains the given point or -1 */
     virtual sal_Int32 CheckTextHit(const basegfx::B2DPoint& rPnt) const;
 
+    // #121917#
     virtual bool HasText() const;
+
     bool IsTextEditActive() const { return (pEdtOutl != 0L); }
     bool IsTextEditActive( const sdr::table::CellPos& rPos );
 

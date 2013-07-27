@@ -474,34 +474,6 @@ SfxVoidItem AutoPilotMenu SID_AUTOPILOTMENU
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem BackgroundImage SID_GALLERY_BG_BRUSH
-(SfxStringItem ImageFile SID_FILE_NAME)
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = TRUE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    /* status: */
-    SlotType = SfxStringItem
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_INSERT;
-]
-
-//--------------------------------------------------------------------------
 SfxVoidItem Backspace SID_BACKSPACE
 ()
 [
@@ -3958,6 +3930,32 @@ SfxBoolItem Navigator SID_NAVIGATOR
 
 //--------------------------------------------------------------------------
 SfxBoolItem TaskPane SID_TASKPANE
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    Readonly = FALSE,
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_VIEW;
+]
+
+//--------------------------------------------------------------------------
+SfxBoolItem Sidebar SID_SIDEBAR
 [
     /* flags: */
     AutoUpdate = TRUE,

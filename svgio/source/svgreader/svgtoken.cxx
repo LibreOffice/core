@@ -35,6 +35,7 @@ namespace svgio
         static rtl::OUString aSVGStrViewBox(rtl::OUString::createFromAscii("viewBox"));
         static rtl::OUString aSVGStrTransform(rtl::OUString::createFromAscii("transform"));
         static rtl::OUString aSVGStrStyle(rtl::OUString::createFromAscii("style"));
+        static rtl::OUString aSVGStrDisplay(rtl::OUString::createFromAscii("display")); // #121656#
         static rtl::OUString aSVGStrD(rtl::OUString::createFromAscii("d"));
         static rtl::OUString aSVGStrX(rtl::OUString::createFromAscii("x"));
         static rtl::OUString aSVGStrY(rtl::OUString::createFromAscii("y"));
@@ -164,6 +165,7 @@ namespace svgio
         static rtl::OUString aSVGStrStrokeWidth(rtl::OUString::createFromAscii("stroke-width"));
 
         static rtl::OUString aSVGStrText(rtl::OUString::createFromAscii("text"));
+        static rtl::OUString aSVGStrBaselineShift(rtl::OUString::createFromAscii("baseline-shift"));
 
         SVGToken StrToSVGToken(const rtl::OUString& rStr)
         {
@@ -178,6 +180,7 @@ namespace svgio
                 aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrViewBox, SVGTokenViewBox));
                 aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrTransform, SVGTokenTransform));
                 aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrStyle, SVGTokenStyle));
+                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrDisplay, SVGTokenDisplay)); // #121656#
                 aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrD, SVGTokenD));
                 aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrX, SVGTokenX));
                 aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrY, SVGTokenY));
@@ -305,6 +308,7 @@ namespace svgio
                 aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrStrokeWidth, SVGTokenStrokeWidth));
 
                 aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrText, SVGTokenText));
+                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrBaselineShift, SVGTokenBaselineShift));
             }
 
             const SVGTokenMapper::const_iterator aResult(aSVGTokenMapperList.find(rStr));

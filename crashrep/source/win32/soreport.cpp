@@ -179,7 +179,7 @@ static FILE *_tmpfile(void)
 
 static BOOL GetCrashDataPath( LPTSTR szBuffer )
 {
-    ::rtl::OUString ustrValue = ::rtl::OUString::createFromAscii("${$BRAND_BASE_DIR/program/bootstrap.ini:UserInstallation}");
+    ::rtl::OUString ustrValue = ::rtl::OUString::createFromAscii("${$OOO_BASE_DIR/program/bootstrap.ini:UserInstallation}");
     ::rtl::Bootstrap::expandMacros( ustrValue );
 
     if ( ustrValue.getLength() )

@@ -602,9 +602,9 @@ sub DownloadFile ($$$)
             {
                 unlink($temporary_filename);
                 printf("    %s checksum does not match (%s instead of %s)\n",
+                       $checksum->{'type'},
                        $file_checksum,
-                       $checksum->{'value'},
-                       $checksum->{'type'});
+                       $checksum->{'value'});
                 return 0;
             }
         }

@@ -28,6 +28,8 @@
 
 class SdDrawDocument;
 class SfxRequest;
+class SfxItemSet;
+class SfxPoolItem;
 
 namespace sd {
 
@@ -55,7 +57,12 @@ private:
         ::sd::View* pView,
         SdDrawDocument* pDoc,
         SfxRequest& rReq);
+
+    void SetCurrentBulletsNumbering(SfxRequest& rReq);
+
+    const SfxPoolItem* GetNumBulletItem(SfxItemSet& aNewAttr, sal_uInt32& nNumItemId);
 };
+
 
 } // end of namespace sd
 

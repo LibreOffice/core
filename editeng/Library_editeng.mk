@@ -144,7 +144,7 @@ $(eval $(call gb_Library_add_linked_libs,editeng,\
     drawinglayer \
     lng \
     svt \
-    tk \
+    ootk \
     vcl \
     svl \
     stl \

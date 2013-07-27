@@ -25,6 +25,12 @@
 #define _SVARRAY_HXX
 
 #if 0
+// Nobody wants to touch this code, not even with a ten-foot pole.
+// If one has to read it then the following mapping might be useful:
+//  "nm" seems to be "type name" of the array
+//  "AE" means "type of array element"
+//  "IS" means "initial size", i.e. the initial number of elements
+//  "GS" means "growth size"
 ***********************************************************************
 *
 *   Hier folgt die Beschreibung fuer die exportierten Makros:
@@ -763,23 +769,9 @@ SV_IMPL_VARARR(nm##_SAR, AE)\
 _SV_IMPL_SORTAR_ALG( nm,AE )\
 _SV_SEEK_OBJECT( nm,AE )
 
-#if defined (C40) || defined (C41) || defined (C42) || defined(C50) || defined(C52)
-#define C40_INSERT( c, p, n) Insert( (c const *) p, n )
-#define C40_PTR_INSERT( c, p) Insert( (c const *) p )
-#define C40_REPLACE( c, p, n) Replace( (c const *) p, n )
-#define C40_GETPOS( c, r) GetPos( (c const *)r )
-#else
-#if defined WTC || defined ICC || defined HPUX || (defined GCC && __GNUC__ >= 3) || (defined(WNT) && _MSC_VER >= 1400)
 #define C40_INSERT( c, p, n ) Insert( (c const *&) p, n )
 #define C40_PTR_INSERT( c, p ) Insert( (c const *&) p )
 #define C40_REPLACE( c, p, n ) Replace( (c const *&) p, n )
 #define C40_GETPOS( c, r) GetPos( (c const *&) r )
-#else
-#define C40_INSERT( c, p, n ) Insert( p, n )
-#define C40_PTR_INSERT( c, p ) Insert( p )
-#define C40_REPLACE( c, p, n ) Replace( p, n )
-#define C40_GETPOS( c, r) GetPos( r )
-#endif
-#endif
 
 #endif  //_SVARRAY_HXX

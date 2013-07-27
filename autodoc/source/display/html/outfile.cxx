@@ -45,176 +45,176 @@ using csi::xml::AnAttribute;
 
 const char * const
     C_sStdStyle =
-    "body   { background-color:#ffffff; }"CRLF
-    "h1     { font-size:20pt; margin-top:3pt; margin-bottom:7pt; }"CRLF
-    "h2     { font-family:Arial; font-size:16pt; margin-top:3pt; margin-bottom:5pt; }"CRLF
-    "h3     { font-size:13pt; margin-top:2pt; margin-bottom:3pt; }"CRLF
-    "h4     { font-size:10pt; font-weight:bold; margin-top:2pt; margin-bottom:1pt; }"CRLF
-    "dl     { margin-top:1pt; margin-bottom:1pt; }"CRLF
-    "dl.member  { margin-top:1pt; margin-bottom:1pt; background-color:#eeeeff; }"CRLF
-    "dt     { font-size:10pt; font-weight:bold; margin-top:2pt; margin-bottom:1pt; }"CRLF
-    "dt.member  { font-size:13pt; font-weight:bold; margin-top:2pt; margin-bottom:1pt; }"CRLF
-    "dt.simple  { font-size:10pt; font-weight:normal; margin-top:2pt; margin-bottom:1pt; }"CRLF
-    "dd     { font-size:10pt; margin-top:1pt; margin-bottom:1pt; }"CRLF
-    "dd.member  { font-size:10pt; margin-top:1pt; margin-bottom:1pt; background-color:#ffffff; }"CRLF
-    "p      { font-size:10pt; margin-top:3pt; margin-bottom:1pt; }"CRLF
-    "pre    { font-family:monospace; font-size:10pt; margin-top:1pt; margin-bottom:1pt; }"CRLF
-    "tr     { font-size:10pt; }"CRLF
-    "td     { font-size:10pt; }"CRLF
+    "body   { background-color:#ffffff; }" CRLF
+    "h1     { font-size:20pt; margin-top:3pt; margin-bottom:7pt; }" CRLF
+    "h2     { font-family:Arial; font-size:16pt; margin-top:3pt; margin-bottom:5pt; }" CRLF
+    "h3     { font-size:13pt; margin-top:2pt; margin-bottom:3pt; }" CRLF
+    "h4     { font-size:10pt; font-weight:bold; margin-top:2pt; margin-bottom:1pt; }" CRLF
+    "dl     { margin-top:1pt; margin-bottom:1pt; }" CRLF
+    "dl.member  { margin-top:1pt; margin-bottom:1pt; background-color:#eeeeff; }" CRLF
+    "dt     { font-size:10pt; font-weight:bold; margin-top:2pt; margin-bottom:1pt; }" CRLF
+    "dt.member  { font-size:13pt; font-weight:bold; margin-top:2pt; margin-bottom:1pt; }" CRLF
+    "dt.simple  { font-size:10pt; font-weight:normal; margin-top:2pt; margin-bottom:1pt; }" CRLF
+    "dd     { font-size:10pt; margin-top:1pt; margin-bottom:1pt; }" CRLF
+    "dd.member  { font-size:10pt; margin-top:1pt; margin-bottom:1pt; background-color:#ffffff; }" CRLF
+    "p      { font-size:10pt; margin-top:3pt; margin-bottom:1pt; }" CRLF
+    "pre    { font-family:monospace; font-size:10pt; margin-top:1pt; margin-bottom:1pt; }" CRLF
+    "tr     { font-size:10pt; }" CRLF
+    "td     { font-size:10pt; }" CRLF
     CRLF
-    "dt.attention   { color:#dd0000; }"CRLF
+    "dt.attention   { color:#dd0000; }" CRLF
     CRLF
-    "div.title      { text-align:center;  line-height:26pt; background-color:#ccccff; }"CRLF
-    ".subtitle      { background-color:#ccccff; }"CRLF
+    "div.title      { text-align:center;  line-height:26pt; background-color:#ccccff; }" CRLF
+    ".subtitle      { background-color:#ccccff; }" CRLF
     CRLF
-    "td.flagname    { background-color:#eeeeff; font-family:Arial; font-size:8pt; font-weight:bold; }"CRLF
-    "td.flagyes     { font-family:Arial; font-size:8pt; font-weight:bold; }"CRLF
-    "td.flagno      { font-family:Arial; font-size:8pt; }"CRLF
-    "td.flagtext    { font-family:Arial; font-size:8pt; font-weight:bold; }"CRLF
+    "td.flagname    { background-color:#eeeeff; font-family:Arial; font-size:8pt; font-weight:bold; }" CRLF
+    "td.flagyes     { font-family:Arial; font-size:8pt; font-weight:bold; }" CRLF
+    "td.flagno      { font-family:Arial; font-size:8pt; }" CRLF
+    "td.flagtext    { font-family:Arial; font-size:8pt; font-weight:bold; }" CRLF
     CRLF
-    "td.navimain, td.navimain a"CRLF
-    "               { background-color:#eeeeff; color:#000000;"CRLF
-    "                 font-family:Arial; font-size:12pt; font-weight:bold; }"CRLF
-    "td.navimainself"CRLF
-    "               { background-color:#2222ad; color:#ffffff;"CRLF
-    "                 font-family:Arial; font-size:12pt; font-weight:bold; }"CRLF
-    "td.navimainnone"CRLF
-    "               { background-color:#eeeeff; color:#000000;"CRLF
-    "                 font-family:Arial; font-size:12pt; }"CRLF
+    "td.navimain, td.navimain a" CRLF
+    "               { background-color:#eeeeff; color:#000000;" CRLF
+    "                 font-family:Arial; font-size:12pt; font-weight:bold; }" CRLF
+    "td.navimainself" CRLF
+    "               { background-color:#2222ad; color:#ffffff;" CRLF
+    "                 font-family:Arial; font-size:12pt; font-weight:bold; }" CRLF
+    "td.navimainnone" CRLF
+    "               { background-color:#eeeeff; color:#000000;" CRLF
+    "                 font-family:Arial; font-size:12pt; }" CRLF
     CRLF
-    "div.define     { font-family:Arial; background-color:#ccccff; }"CRLF
+    "div.define     { font-family:Arial; background-color:#ccccff; }" CRLF
     CRLF
-    ".nqclass       { color:#008800; }"CRLF
+    ".nqclass       { color:#008800; }" CRLF
     CRLF
-    "h3.help        { background-color:#eeeeff; margin-top:12pt; }"CRLF
+    "h3.help        { background-color:#eeeeff; margin-top:12pt; }" CRLF
     CRLF
-    ".btpubl        { color:#33ff33; }"CRLF
-    ".btprot        { color:#cc9933; }"CRLF
-    ".btpriv        { color:#ff6666; }"CRLF
-    ".btvpubl       { color:#33ff33; font-style:italic; }"CRLF
-    ".btvprot       { color:#cc9933; font-style:italic; }"CRLF
-    ".btvpriv       { color:#ff6666; font-style:italic; }"CRLF
-    ".btself        { font-weight:bold; }"CRLF
+    ".btpubl        { color:#33ff33; }" CRLF
+    ".btprot        { color:#cc9933; }" CRLF
+    ".btpriv        { color:#ff6666; }" CRLF
+    ".btvpubl       { color:#33ff33; font-style:italic; }" CRLF
+    ".btvprot       { color:#cc9933; font-style:italic; }" CRLF
+    ".btvpriv       { color:#ff6666; font-style:italic; }" CRLF
+    ".btself        { font-weight:bold; }" CRLF
     ;
 
 
 const char * const
     C_sCssExplanations =
-    "/* Explanation of CSS classes:"CRLF
+    "/* Explanation of CSS classes:" CRLF
     CRLF
-    "dl.member       provides coloured frame for function descriptions."CRLF
-    "dd.member       makes the content of this frame white"CRLF
+    "dl.member       provides coloured frame for function descriptions." CRLF
+    "dd.member       makes the content of this frame white" CRLF
     CRLF
-    "dt.attention    special colour for @attention remarks"CRLF
+    "dt.attention    special colour for @attention remarks" CRLF
     CRLF
-    "div.title       HTML page headline"CRLF
-    ".subtitle       headline of lists of members and similar"CRLF
+    "div.title       HTML page headline" CRLF
+    ".subtitle       headline of lists of members and similar" CRLF
     CRLF
-    "                These are for the flagtables in classes:"CRLF
-    "td.flagname     Flag name."CRLF
-    "td.flagyes      flag value \"yes\""CRLF
-    "td.flagno       flag value \"no\""CRLF
-    "td.flagtext     other flag value"CRLF
-    CRLF
-    CRLF
-    "                These are for the main navigationbar:"CRLF
-    "td.navimain, td.navimain a"CRLF
-    "                Links in navibar."CRLF
-    "td.navimainself Text in navibar which refers to current page."CRLF
-    "td.navimainnone Text which links to nothing."CRLF
+    "                These are for the flagtables in classes:" CRLF
+    "td.flagname     Flag name." CRLF
+    "td.flagyes      flag value \"yes\"" CRLF
+    "td.flagno       flag value \"no\"" CRLF
+    "td.flagtext     other flag value" CRLF
     CRLF
     CRLF
-    "div.define      Subtitles on the #define/macro descriptions page"CRLF
+    "                These are for the main navigationbar:" CRLF
+    "td.navimain, td.navimain a" CRLF
+    "                Links in navibar." CRLF
+    "td.navimainself Text in navibar which refers to current page." CRLF
+    "td.navimainnone Text which links to nothing." CRLF
     CRLF
-    ".nqclass        special color for classes in the qualification"CRLF
-    "                on top of type pages like in:"CRLF
-    "                ::nsp1::nsp2::_ClassXY_::"CRLF
     CRLF
-    "h3.help         Subtitles on the help page"CRLF
+    "div.define      Subtitles on the #define/macro descriptions page" CRLF
     CRLF
-    "                These are for the base class tree on class pages:"CRLF
-    ".btpubl         public base class"CRLF
-    ".btprot         protected"CRLF
-    ".btpriv         private"CRLF
-    ".btvpubl        virtual public"CRLF
-    ".btvprot        virtual protected"CRLF
-    ".btvpriv        virtual private"CRLF
-    ".btself         placeholder for currently displayed class"CRLF
+    ".nqclass        special color for classes in the qualification" CRLF
+    "                on top of type pages like in:" CRLF
+    "                ::nsp1::nsp2::_ClassXY_::" CRLF
     CRLF
-    "*/"CRLF
+    "h3.help         Subtitles on the help page" CRLF
+    CRLF
+    "                These are for the base class tree on class pages:" CRLF
+    ".btpubl         public base class" CRLF
+    ".btprot         protected" CRLF
+    ".btpriv         private" CRLF
+    ".btvpubl        virtual public" CRLF
+    ".btvprot        virtual protected" CRLF
+    ".btvpriv        virtual private" CRLF
+    ".btself         placeholder for currently displayed class" CRLF
+    CRLF
+    "*/" CRLF
     ;
 
 
 const char * const
     C_sStdStyle_withDivFrame =
-    "body   { background-color:#ffffff; }"CRLF
-    "#adc-cppref h1     { font-size:20pt; margin-top:3pt; margin-bottom:7pt; }"CRLF
-    "#adc-cppref h2     { font-family:Arial; font-size:16pt; margin-top:3pt; margin-bottom:5pt; }"CRLF
-    "#adc-cppref h3     { font-size:13pt; margin-top:2pt; margin-bottom:3pt; }"CRLF
-    "#adc-cppref h4     { font-size:10pt; font-weight:bold; margin-top:2pt; margin-bottom:1pt; }"CRLF
-    "#adc-cppref dl     { margin-top:1pt; margin-bottom:1pt; }"CRLF
-    "#adc-cppref dl.member  { margin-top:1pt; margin-bottom:1pt; background-color:#eeeeff; }"CRLF
-    "#adc-cppref dt     { font-size:10pt; font-weight:bold; margin-top:2pt; margin-bottom:1pt; }"CRLF
-    "#adc-cppref dt.member  { font-size:13pt; font-weight:bold; margin-top:2pt; margin-bottom:1pt; }"CRLF
-    "#adc-cppref dt.simple  { font-size:10pt; font-weight:normal; margin-top:2pt; margin-bottom:1pt; }"CRLF
-    "#adc-cppref dd     { font-size:10pt; margin-top:1pt; margin-bottom:1pt; }"CRLF
-    "#adc-cppref dd.member  { font-size:10pt; margin-top:1pt; margin-bottom:1pt; background-color:#ffffff; }"CRLF
-    "#adc-cppref p      { font-size:10pt; margin-top:3pt; margin-bottom:1pt; }"CRLF
-    "#adc-cppref pre    { font-family:monospace; font-size:10pt; margin-top:1pt; margin-bottom:1pt; }"CRLF
-    "#adc-cppref tr     { font-size:10pt; }"CRLF
-    "#adc-cppref td     { font-size:10pt; }"CRLF
+    "body   { background-color:#ffffff; }" CRLF
+    "#adc-cppref h1     { font-size:20pt; margin-top:3pt; margin-bottom:7pt; }" CRLF
+    "#adc-cppref h2     { font-family:Arial; font-size:16pt; margin-top:3pt; margin-bottom:5pt; }" CRLF
+    "#adc-cppref h3     { font-size:13pt; margin-top:2pt; margin-bottom:3pt; }" CRLF
+    "#adc-cppref h4     { font-size:10pt; font-weight:bold; margin-top:2pt; margin-bottom:1pt; }" CRLF
+    "#adc-cppref dl     { margin-top:1pt; margin-bottom:1pt; }" CRLF
+    "#adc-cppref dl.member  { margin-top:1pt; margin-bottom:1pt; background-color:#eeeeff; }" CRLF
+    "#adc-cppref dt     { font-size:10pt; font-weight:bold; margin-top:2pt; margin-bottom:1pt; }" CRLF
+    "#adc-cppref dt.member  { font-size:13pt; font-weight:bold; margin-top:2pt; margin-bottom:1pt; }" CRLF
+    "#adc-cppref dt.simple  { font-size:10pt; font-weight:normal; margin-top:2pt; margin-bottom:1pt; }" CRLF
+    "#adc-cppref dd     { font-size:10pt; margin-top:1pt; margin-bottom:1pt; }" CRLF
+    "#adc-cppref dd.member  { font-size:10pt; margin-top:1pt; margin-bottom:1pt; background-color:#ffffff; }" CRLF
+    "#adc-cppref p      { font-size:10pt; margin-top:3pt; margin-bottom:1pt; }" CRLF
+    "#adc-cppref pre    { font-family:monospace; font-size:10pt; margin-top:1pt; margin-bottom:1pt; }" CRLF
+    "#adc-cppref tr     { font-size:10pt; }" CRLF
+    "#adc-cppref td     { font-size:10pt; }" CRLF
     CRLF
-    "#adc-cppref dt.attention   { color:#dd0000; }"CRLF
+    "#adc-cppref dt.attention   { color:#dd0000; }" CRLF
     CRLF
-    "#adc-cppref div.title      { text-align:center;  line-height:26pt; background-color:#ccccff; }"CRLF
-    "#adc-cppref .subtitle      { background-color:#ccccff; }"CRLF
+    "#adc-cppref div.title      { text-align:center;  line-height:26pt; background-color:#ccccff; }" CRLF
+    "#adc-cppref .subtitle      { background-color:#ccccff; }" CRLF
     CRLF
-    "#adc-cppref td.flagname    { background-color:#eeeeff; font-family:Arial; font-size:8pt; font-weight:bold; }"CRLF
-    "#adc-cppref td.flagyes     { font-family:Arial; font-size:8pt; font-weight:bold; }"CRLF
-    "#adc-cppref td.flagno      { font-family:Arial; font-size:8pt; }"CRLF
-    "#adc-cppref td.flagtext    { font-family:Arial; font-size:8pt; font-weight:bold; }"CRLF
+    "#adc-cppref td.flagname    { background-color:#eeeeff; font-family:Arial; font-size:8pt; font-weight:bold; }" CRLF
+    "#adc-cppref td.flagyes     { font-family:Arial; font-size:8pt; font-weight:bold; }" CRLF
+    "#adc-cppref td.flagno      { font-family:Arial; font-size:8pt; }" CRLF
+    "#adc-cppref td.flagtext    { font-family:Arial; font-size:8pt; font-weight:bold; }" CRLF
     CRLF
-    "#adc-cppref td.navimain, #adc-cppref td.navimain a"CRLF
-    "               { background-color:#eeeeff; color:#000000;"CRLF
-    "                 font-family:Arial; font-size:12pt; font-weight:bold; }"CRLF
-    "#adc-cppref td.navimainself"CRLF
-    "               { background-color:#2222ad; color:#ffffff;"CRLF
-    "                 font-family:Arial; font-size:12pt; font-weight:bold; }"CRLF
-    "#adc-cppref td.navimainnone"CRLF
-    "               { background-color:#eeeeff; color:#000000;"CRLF
-    "                 font-family:Arial; font-size:12pt; }"CRLF
+    "#adc-cppref td.navimain, #adc-cppref td.navimain a" CRLF
+    "               { background-color:#eeeeff; color:#000000;" CRLF
+    "                 font-family:Arial; font-size:12pt; font-weight:bold; }" CRLF
+    "#adc-cppref td.navimainself" CRLF
+    "               { background-color:#2222ad; color:#ffffff;" CRLF
+    "                 font-family:Arial; font-size:12pt; font-weight:bold; }" CRLF
+    "#adc-cppref td.navimainnone" CRLF
+    "               { background-color:#eeeeff; color:#000000;" CRLF
+    "                 font-family:Arial; font-size:12pt; }" CRLF
     CRLF
-    "#adc-cppref div.define     { font-family:Arial; background-color:#ccccff; }"CRLF
+    "#adc-cppref div.define     { font-family:Arial; background-color:#ccccff; }" CRLF
     CRLF
-    "#adc-cppref .nqclass       { color:#008800; }"CRLF
+    "#adc-cppref .nqclass       { color:#008800; }" CRLF
     CRLF
-    "#adc-cppref h3.help        { background-color:#eeeeff; margin-top:12pt; }"CRLF
+    "#adc-cppref h3.help        { background-color:#eeeeff; margin-top:12pt; }" CRLF
     CRLF
-    "#adc-cppref .btpubl        { color:#33ff33; }"CRLF
-    "#adc-cppref .btprot        { color:#cc9933; }"CRLF
-    "#adc-cppref .btpriv        { color:#ff6666; }"CRLF
-    "#adc-cppref .btvpubl       { color:#33ff33; font-style:italic; }"CRLF
-    "#adc-cppref .btvprot       { color:#cc9933; font-style:italic; }"CRLF
-    "#adc-cppref .btvpriv       { color:#ff6666; font-style:italic; }"CRLF
-    "#adc-cppref .btself        { font-weight:bold; }"CRLF
-    ""CRLF
-    "#adc-cppref table { empty-cells:show; }"CRLF
-    ""CRLF
-    "#adc-cppref .childlist td, "CRLF
-    "#adc-cppref .commentedlinks td, "CRLF
-    "#adc-cppref .memberlist td, "CRLF
-    "#adc-cppref .subtitle td, "CRLF
-    "#adc-cppref .crosstitle td  { border: .1pt solid #000000; }"CRLF
-    ""CRLF
-    "#adc-cppref .flag-table td { border: .1pt solid #cccccc; } "CRLF
-    ""CRLF
-    "#adc-cppref .title-table td, "CRLF
-    "#adc-cppref .table-in-method td, "CRLF
-    "#adc-cppref .table-in-data td, "CRLF
-    "#adc-cppref .navimain td, "CRLF
-    "#adc-cppref .navisub td, "CRLF
-    "#adc-cppref .expl-table td, "CRLF
-    "#adc-cppref .param-table td  { border: none; }"CRLF
+    "#adc-cppref .btpubl        { color:#33ff33; }" CRLF
+    "#adc-cppref .btprot        { color:#cc9933; }" CRLF
+    "#adc-cppref .btpriv        { color:#ff6666; }" CRLF
+    "#adc-cppref .btvpubl       { color:#33ff33; font-style:italic; }" CRLF
+    "#adc-cppref .btvprot       { color:#cc9933; font-style:italic; }" CRLF
+    "#adc-cppref .btvpriv       { color:#ff6666; font-style:italic; }" CRLF
+    "#adc-cppref .btself        { font-weight:bold; }" CRLF
+    "" CRLF
+    "#adc-cppref table { empty-cells:show; }" CRLF
+    "" CRLF
+    "#adc-cppref .childlist td, " CRLF
+    "#adc-cppref .commentedlinks td, " CRLF
+    "#adc-cppref .memberlist td, " CRLF
+    "#adc-cppref .subtitle td, " CRLF
+    "#adc-cppref .crosstitle td  { border: .1pt solid #000000; }" CRLF
+    "" CRLF
+    "#adc-cppref .flag-table td { border: .1pt solid #cccccc; } " CRLF
+    "" CRLF
+    "#adc-cppref .title-table td, " CRLF
+    "#adc-cppref .table-in-method td, " CRLF
+    "#adc-cppref .table-in-data td, " CRLF
+    "#adc-cppref .navimain td, " CRLF
+    "#adc-cppref .navisub td, " CRLF
+    "#adc-cppref .expl-table td, " CRLF
+    "#adc-cppref .param-table td  { border: none; }" CRLF
     ;
 
 

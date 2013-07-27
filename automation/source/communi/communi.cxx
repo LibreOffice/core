@@ -196,7 +196,8 @@ void CommunicationLinkViaSocket::run()
     sal_Bool bWasError = sal_False;
     while ( schedule() && !bWasError && GetStreamSocket() )
     {
-        if ( bWasError |= !DoReceiveDataStream() )
+        bWasError |= !DoReceiveDataStream();
+        if( bWasError)
             continue;
 
         TimeValue sNochEins = {0, 1000000};

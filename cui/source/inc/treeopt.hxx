@@ -43,7 +43,9 @@ CreateTabPage   GetSSOCreator( void );
 class SfxModule;
 class SfxShell;
 class SfxItemSet;
-class XColorTable;
+class XColorList;
+typedef ::boost::shared_ptr< XColorList > XColorListSharedPtr;
+
 class OfaOptionsTreeListBox : public SvTreeListBox
 {
     using  SvListView::Collapse;
@@ -196,8 +198,8 @@ private:
     SvLBoxEntry*    pCurrentPageEntry;
 
     // for the ColorTabPage
-    SfxItemSet*     pColorPageItemSet;
-    XColorTable*    pColorTab;
+    SfxItemSet*         pColorPageItemSet;
+    XColorListSharedPtr maColorTab;
     sal_uInt16          nChangeType;
     sal_uInt16          nUnknownType;
     sal_uInt16          nUnknownPos;
@@ -269,7 +271,7 @@ public:
     void                ApplyItemSets();
 
     sal_uInt16              GetColorChanged() const { return nChangeType; }
-    XColorTable*        GetColorTable() { return pColorTab; }
+    XColorListSharedPtr GetColorTable() { return maColorTab; }
 
     // helper functions to call the language settings TabPage from the SpellDialog
     static void         ApplyLanguageOptions(const SfxItemSet& rSet);

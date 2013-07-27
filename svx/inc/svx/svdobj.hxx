@@ -44,6 +44,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <svx/svdpool.hxx>
 #include <boost/utility.hpp>
+#include <svl/poolitem.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines
@@ -861,6 +862,9 @@ public:
 
     // get all SdrEdgeObjs connected to this object
     ::std::vector< SdrEdgeObj* > getAllConnectedSdrEdgeObj() const;
+
+    // #121917#
+    virtual bool HasText() const;
 };
 
 typedef tools::WeakReference< SdrObject > SdrObjectWeakRef;

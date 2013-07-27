@@ -66,12 +66,12 @@ getBootstrapData(
     if ( ! rBuildID.getLength() )
         return false;
 
-    rInstallSetID = UNISTRING( "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("version") ":UpdateID}" );
+    rInstallSetID = UNISTRING( "${$OOO_BASE_DIR/program/" SAL_CONFIGFILE("version") ":UpdateID}" );
     rtl::Bootstrap::expandMacros( rInstallSetID );
     if ( ! rInstallSetID.getLength() )
         return false;
 
-    rtl::OUString aValue( UNISTRING( "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("version") ":UpdateURL}" ) );
+    rtl::OUString aValue( UNISTRING( "${$OOO_BASE_DIR/program/" SAL_CONFIGFILE("version") ":UpdateURL}" ) );
     rtl::Bootstrap::expandMacros( aValue );
 
     if( aValue.getLength() > 0 )

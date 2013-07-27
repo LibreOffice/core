@@ -58,6 +58,8 @@
 #include <svx/dialogs.hrc>
 #include <svx/drawitem.hxx>
 #include <svx/xtable.hxx>
+#include "tabvwsh.hxx"
+#include <sfx2/bindings.hxx>
 
 #define ScDrawShell
 #include "scslots.hxx"
@@ -132,14 +134,21 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
 
         case SID_ATTR_LINE_STYLE:
         case SID_ATTR_LINEEND_STYLE:
+        case SID_ATTR_LINE_START:
+        case SID_ATTR_LINE_END:
         case SID_ATTR_LINE_DASH:
         case SID_ATTR_LINE_WIDTH:
         case SID_ATTR_LINE_COLOR:
+        case SID_ATTR_LINE_TRANSPARENCE:
+        case SID_ATTR_LINE_JOINT:
+        case SID_ATTR_LINE_CAP:
         case SID_ATTR_FILL_STYLE:
         case SID_ATTR_FILL_COLOR:
         case SID_ATTR_FILL_GRADIENT:
         case SID_ATTR_FILL_HATCH:
         case SID_ATTR_FILL_BITMAP:
+        case SID_ATTR_FILL_TRANSPARENCE:
+        case SID_ATTR_FILL_FLOATTRANSPARENCE:
 
         // #i25616#
         case SID_ATTR_FILL_SHADOW:
@@ -153,6 +162,9 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
                         case SID_ATTR_LINE_DASH:
                         case SID_ATTR_LINE_WIDTH:
                         case SID_ATTR_LINE_COLOR:
+                        case SID_ATTR_LINE_TRANSPARENCE:
+                        case SID_ATTR_LINE_JOINT:
+                        case SID_ATTR_LINE_CAP:
                             ExecuteLineDlg( rReq );
                             break;
 
@@ -161,6 +173,8 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
                         case SID_ATTR_FILL_GRADIENT:
                         case SID_ATTR_FILL_HATCH:
                         case SID_ATTR_FILL_BITMAP:
+                        case SID_ATTR_FILL_TRANSPARENCE:
+                        case SID_ATTR_FILL_FLOATTRANSPARENCE:
 
                         // #i25616#
                         case SID_ATTR_FILL_SHADOW:
@@ -232,6 +246,7 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
 #endif
 
         case SID_ATTR_TRANSFORM:
+        {
             {
                 if ( pView->areSdrObjectsSelected() )
                 {
@@ -300,7 +315,20 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
                     }
                 }
             }
+
+            ScTabViewShell* pViewShell = pViewData->GetViewShell();
+            SfxBindings& rBindings=pViewShell->GetViewFrame()->GetBindings();
+            rBindings.Invalidate(SID_ATTR_TRANSFORM_WIDTH);
+            rBindings.Invalidate(SID_ATTR_TRANSFORM_HEIGHT);
+            rBindings.Invalidate(SID_ATTR_TRANSFORM_POS_X);
+            rBindings.Invalidate(SID_ATTR_TRANSFORM_POS_Y);
+            rBindings.Invalidate(SID_ATTR_TRANSFORM_ANGLE);
+            rBindings.Invalidate(SID_ATTR_TRANSFORM_ROT_X);
+            rBindings.Invalidate(SID_ATTR_TRANSFORM_ROT_Y);
+            rBindings.Invalidate(SID_ATTR_TRANSFORM_AUTOWIDTH);
+            rBindings.Invalidate(SID_ATTR_TRANSFORM_AUTOHEIGHT);
             break;
+        }
 
         default:
             break;
@@ -431,10 +459,7 @@ void ScDrawShell::ExecuteAreaDlg( SfxRequest& rReq, sal_uInt16 nTabPage )
 
     // #i74099# by default, the dialog deletes the current color table if a different one is loaded
     // (see SwDrawShell::ExecDrawDlg)
-    const SvxColorTableItem* pColorItem =
-        static_cast<const SvxColorTableItem*>( pViewData->GetSfxDocShell()->GetItem(SID_COLOR_TABLE) );
-    if (pColorItem->GetColorTable() == XColorTable::GetStdColorTable())
-        pDlg->DontDeleteColorTable();
+    // const SvxColorTableItem* pColorItem = static_cast<const SvxColorTableItem*>( pViewData->GetSfxDocShell()->GetItem(SID_COLOR_TABLE) );
 
     if ( nTabPage != 0xffff )
         pDlg->SetCurPageId( nTabPage );

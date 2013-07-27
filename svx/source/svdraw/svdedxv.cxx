@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
@@ -50,23 +48,22 @@
 #include <svx/svditer.hxx>
 #include "svx/svdpagv.hxx"
 #include "svx/svdpage.hxx"
-#include "svx/svdetc.hxx"   // fuer GetDraftFillColor
+#include "svx/svdetc.hxx"
 #include "svx/svdotable.hxx"
 #include <svx/selectioncontroller.hxx>
 
 #ifdef DBG_UTIL
 #include <svdibrow.hxx>
 #endif
-
 #include <svx/svdoutl.hxx>
-#include <svx/svddrgv.hxx>  // fuer SetSolidDragging()
-#include "svx/svdstr.hrc"   // Namen aus der Resource
-#include "svx/svdglob.hxx"  // StringCache
+#include <svx/svddrgv.hxx>
+#include "svx/svdstr.hrc"
+#include "svx/svdglob.hxx"
 #include "svx/globl3d.hxx"
 #include <editeng/outliner.hxx>
 #include <editeng/adjitem.hxx>
 #include <svtools/colorcfg.hxx>
-#include <vcl/svapp.hxx> //add CHINA001
+#include <vcl/svapp.hxx>
 #include <svx/svdlegacy.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <svx/sdrtexthelpers.hxx>
@@ -74,6 +71,8 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <svx/sdrundomanager.hxx>
+#include <svx/sdr/overlay/overlaytools.hxx>
+#include <drawinglayer/processor2d/processor2dtools.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -414,7 +413,7 @@ void SdrObjEditView::ImpPaintOutlinerView(OutlinerView& rOutlView, const basegfx
 
     aBlankRange.expand(maMinTextEditArea);
 
-    basegfx::B2DRange aPixRange(rTargetDevice.GetViewTransformation() * aBlankRange);
+    const basegfx::B2DRange aPixRange(rTargetDevice.GetViewTransformation() * aBlankRange);
 
     aBlankRange.intersect(rRange);
 
@@ -429,42 +428,39 @@ void SdrObjEditView::ImpPaintOutlinerView(OutlinerView& rOutlView, const basegfx
 
     if(bTextFrame && !bFitToSize)
     {
-        aPixRange.grow(1.0);
+        // completely reworked to use primitives; this ensures same look and functionality
+        const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
+        drawinglayer::processor2d::BaseProcessor2D* pProcessor = drawinglayer::processor2d::createProcessor2DFromOutputDevice(
+            rTargetDevice,
+            aViewInformation2D);
 
-        const sal_uInt16 nPixSiz(rOutlView.GetInvalidateMore() - 1);
-
+        if(pProcessor)
         {
-            // xPixRect Begrenzen, wegen Treiberproblem bei zu weit hinausragenden Pixelkoordinaten
-            const basegfx::B2DVector aDiscreteScale(rTargetDevice.GetDiscreteRange().getRange());
-            const double a(2.0 * nPixSiz);
-            const double fMaxX(aDiscreteScale.getX() + a);
-            const double fMaxY(aDiscreteScale.getY() + a);
+            const bool bMerk(rTargetDevice.IsMapModeEnabled());
+            const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
+            const Color aHilightColor(aSvtOptionsDrawinglayer.getHilightColor());
+            const double fTransparence(aSvtOptionsDrawinglayer.GetTransparentSelectionPercent() * 0.01);
+            const sal_uInt16 nPixSiz(rOutlView.GetInvalidateMore() - 1);
+            const basegfx::B2DHomMatrix aTransformation(
+                basegfx::tools::createScaleTranslateB2DHomMatrix(
+                    aPixRange.getWidth(),
+                    aPixRange.getHeight(),
+                    aPixRange.getMinX(),
+                    aPixRange.getMinY()));
+            const drawinglayer::primitive2d::Primitive2DReference xReference(
+                new drawinglayer::primitive2d::OverlayRectanglePrimitive(
+                    aTransformation,
+                    aHilightColor.getBColor(),
+                    fTransparence,
+                    std::max(6, nPixSiz - 2), // grow
+                    0.0)); // shrink
+            const drawinglayer::primitive2d::Primitive2DSequence aSequence(&xReference, 1);
 
-            aPixRange = basegfx::B2DRange(
-                basegfx::fTools::less(aPixRange.getMinX(), -a) ? aPixRange.getMinX() - a : aPixRange.getMinX(),
-                basegfx::fTools::less(aPixRange.getMinY(), -a) ? aPixRange.getMinY() - a : aPixRange.getMinY(),
-                basegfx::fTools::more(aPixRange.getMaxX(), fMaxX) ? fMaxX : aPixRange.getMaxX(),
-                basegfx::fTools::more(aPixRange.getMaxY(), fMaxY) ? fMaxY : aPixRange.getMaxY());
+            rTargetDevice.EnableMapMode(false);
+            pProcessor->process(aSequence);
+            rTargetDevice.EnableMapMode(bMerk);
+            delete pProcessor;
         }
-
-        basegfx::B2DRange aOuterPix(aPixRange);
-
-        aOuterPix.grow(nPixSiz);
-
-        const bool bMerk(rTargetDevice.IsMapModeEnabled());
-
-        rTargetDevice.EnableMapMode(false);
-
-        svtools::ColorConfig aColorConfig;
-        Color aHatchCol( aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor );
-        const Hatch aHatch( HATCH_SINGLE, aHatchCol, 3, 450 );
-        basegfx::B2DPolyPolygon aPolyPoly;
-
-        aPolyPoly.append(basegfx::tools::createPolygonFromRect(aOuterPix));
-        aPolyPoly.append(basegfx::tools::createPolygonFromRect(aPixRange));
-
-        rTargetDevice.DrawHatch(PolyPolygon(aPolyPoly), aHatch);
-        rTargetDevice.EnableMapMode(bMerk);
     }
 
     rOutlView.ShowCursor();
@@ -893,7 +889,7 @@ bool SdrObjEditView::SdrBeginTextEdit(
                 mxSelectionController->onSelectionHasChanged();
             }
 
-            if(IsUndoEnabled())
+            if(IsUndoEnabled() && !getSdrModelFromSdrView().GetDisableTextEditUsesCommonUndoManager())
             {
                 SdrUndoManager* pSdrUndoManager = getSdrUndoManagerForEnhancedTextEdit();
 
@@ -979,7 +975,7 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
     SdrUndoManager* pUndoEditUndoManager = 0;
     bool bNeedToUndoSavedRedoTextEdit(false);
 
-    if(IsUndoEnabled() && pTEObj && pTEOutliner)
+    if(IsUndoEnabled() && pTEObj && pTEOutliner && !getSdrModelFromSdrView().GetDisableTextEditUsesCommonUndoManager())
     {
         // change back the UndoManager to the remembered original one
         ::svl::IUndoManager* pOriginal = pTEOutliner->SetUndoManager(mpOldTextEditUndoManager);
@@ -2445,6 +2441,44 @@ void SdrObjEditView::OnBeginPasteOrDrop( PasteOrDropInfos* )
 void SdrObjEditView::OnEndPasteOrDrop( PasteOrDropInfos* )
 {
     // applications can derive from these virtual methods to do something before a drop or paste operation
+}
+
+sal_uInt16 SdrObjEditView::GetSelectionLevel() const
+{
+    sal_uInt16 nLevel = 0xFFFF;
+    if( IsTextEdit() )
+    {
+        OSL_ENSURE(GetTextEditOutlinerView()," SdrObjEditView::GetSelectionLevel(): no TextEditOutlinerView (!)");
+        OSL_ENSURE(GetTextEditOutliner(), "SdrObjEditView::GetAttributes(): no TextEditOutliner (!)");
+
+        if( GetTextEditOutlinerView() )
+        {
+            //start and end position
+            const ESelection aSelect(GetTextEditOutlinerView()->GetSelection());
+            sal_uInt16 nStartPara = ::std::min( aSelect.nStartPara, aSelect.nEndPara );
+            sal_uInt16 nEndPara = ::std::max( aSelect.nStartPara, aSelect.nEndPara );
+
+            //get level from each paragraph
+            nLevel = 0;
+
+            for( sal_uInt16 nPara = nStartPara; nPara <= nEndPara; nPara++ )
+            {
+                sal_uInt16 nParaDepth = 1 << GetTextEditOutliner()->GetDepth( nPara );
+                if( !(nLevel & nParaDepth) )
+                    nLevel += nParaDepth;
+            }
+
+            //reduce one level for Outliner Object
+            //if( nLevel > 0 && GetTextEditObject()->GetObjIdentifier() == OBJ_OUTLINETEXT )
+            //  nLevel = nLevel >> 1;
+
+            //no bullet paragraph selected
+            if( nLevel == 0)
+                nLevel = 0xFFFF;
+        }
+    }
+
+    return nLevel;
 }
 
 bool SdrObjEditView::SupportsFormatPaintbrush(const SdrObject& rSdrObject) const

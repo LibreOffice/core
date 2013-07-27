@@ -49,8 +49,6 @@ class SVX_DLLPUBLIC SvxLongLRSpaceItem : public SfxPoolItem
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
 
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
-
 private:
     SVX_DLLPRIVATE const SvxLongLRSpaceItem& operator=(const SvxLongLRSpaceItem &); // n.i.
 
@@ -59,6 +57,8 @@ public:
     SvxLongLRSpaceItem(long lLeft, long lRight, sal_uInt16 nId);
     SvxLongLRSpaceItem(const SvxLongLRSpaceItem &);
     SvxLongLRSpaceItem();
+
+    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
 
     long    GetLeft() const { return lLeft; }
     long    GetRight() const { return lRight; }
@@ -85,8 +85,6 @@ class SVX_DLLPUBLIC SvxLongULSpaceItem : public SfxPoolItem
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
 
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
-
 private:
     SVX_DLLPRIVATE const SvxLongULSpaceItem& operator=(const SvxLongULSpaceItem &); // n.i.
 
@@ -95,6 +93,8 @@ public:
     SvxLongULSpaceItem(long lUpper, long lLower, sal_uInt16 nId);
     SvxLongULSpaceItem(const SvxLongULSpaceItem &);
     SvxLongULSpaceItem();
+
+    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
 
     long    GetUpper() const { return lLeft; }
     long    GetLower() const { return lRight; }

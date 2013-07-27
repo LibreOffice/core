@@ -67,7 +67,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     if (nCount < 1)
     {
         printf("using: DocumentLoader -env:URE_MORE_TYPES=<office_types_rdb_url> <file_url> [<uno_connection_url>]\n\n"
-               "example: DocumentLoader -env:URE_MORE_TYPES=\"file:///.../basis-link/program/offapi.rdb\" \"file:///e:/temp/test.odt\" \"uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager\"\n");
+               "example: DocumentLoader -env:URE_MORE_TYPES=\"file:///.../OpenOffice%204/program/types.rdb\" \"file:///e:/temp/test.odt\" \"uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager\"\n");
         exit(1);
     }
      if (nCount == 2)

@@ -41,6 +41,9 @@
 #include <svx/svdouno.hxx>
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>
+#include <svx/sidebar/SelectionChangeHandler.hxx>
+#include <svx/sidebar/SelectionAnalyzer.hxx>
+#include <svx/sidebar/ContextChangeEventMultiplexer.hxx>
 
 #include "drawsh.hxx"
 #include "drawview.hxx"
@@ -53,15 +56,23 @@
 #include <svx/svdoole2.hxx>
 #include <svx/svdocapt.hxx>
 
+#include <boost/bind.hpp>
+
+
 sal_uInt16 ScGetFontWorkId();       // in drtxtob
 
 using namespace com::sun::star;
+
 
 //------------------------------------------------------------------
 
 ScDrawShell::ScDrawShell( ScViewData* pData ) :
     SfxShell(pData->GetViewShell()),
-    pViewData( pData )
+    pViewData( pData ),
+    mpSelectionChangeHandler(new svx::sidebar::SelectionChangeHandler(
+            ::boost::bind(&ScDrawShell::GetSidebarContextName, this),
+            GetFrame()->GetFrame().GetController(),
+            sfx2::sidebar::EnumContext::Context_Cell))
 {
     SetPool( &pViewData->GetScDrawView()->getSdrModelFromSdrView().GetItemPool() );
     ::svl::IUndoManager* pMgr = pViewData->GetSfxDocShell()->GetUndoManager();
@@ -72,10 +83,13 @@ ScDrawShell::ScDrawShell( ScViewData* pData ) :
     }
     SetHelpId( HID_SCSHELL_DRAWSH );
     SetName(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("Drawing")));
+
+    mpSelectionChangeHandler->Connect();
 }
 
 ScDrawShell::~ScDrawShell()
 {
+    mpSelectionChangeHandler->Disconnect();
 }
 
 void ScDrawShell::GetState( SfxItemSet& rSet )          // Zustaende / Toggles
@@ -137,6 +151,8 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // Funktionen disabl
     {
         rSet.DisableItem( SID_MIRROR_HORIZONTAL );
         rSet.DisableItem( SID_MIRROR_VERTICAL );
+        rSet.DisableItem( SID_FLIP_HORIZONTAL );
+        rSet.DisableItem( SID_FLIP_VERTICAL );
     }
 
     const SdrObjectVector aSelection(pView->getSelectedSdrObjectVectorFromSdrMarkView());
@@ -289,23 +305,12 @@ void ScDrawShell::GetDrawAttrState( SfxItemSet& rSet )
 
     if( bHasMarked )
     {
-        rSet.Put( pDrView->GetAttrFromMarked(sal_False) );
-
-        // Wenn die View selektierte Objekte besitzt, muessen entspr. Items
-        // von SFX_ITEM_DEFAULT (_ON) auf SFX_ITEM_DISABLED geaendert werden
-
-        SfxWhichIter aIter( rSet, XATTR_LINE_FIRST, XATTR_FILL_LAST );
-        sal_uInt16 nWhich = aIter.FirstWhich();
-        while( nWhich )
-        {
-            if( SFX_ITEM_DEFAULT == rSet.GetItemState( nWhich ) )
-                rSet.DisableItem( nWhich );
-
-            nWhich = aIter.NextWhich();
-        }
+        rSet.Put( pDrView->GetAttrFromMarked(sal_False), false );
     }
     else
+    {
         rSet.Put( pDrView->GetDefaultAttr() );
+    }
 
     SdrPageView* pPV = pDrView->GetSdrPageView();
     if ( pPV )
@@ -390,4 +395,36 @@ bool ScDrawShell::AreAllObjectsOnLayer(sal_uInt16 nLayerNo, const SdrObjectVecto
     return true;
 }
 
+void ScDrawShell::GetDrawAttrStateForIFBX( SfxItemSet& rSet )
+{
+    ScDrawView* pView = pViewData->GetScDrawView();
 
+    if(pView && pView->areSdrObjectsSelected())
+    {
+        SfxItemSet aNewAttr(pView->GetGeoAttrFromMarked());
+        rSet.Put(aNewAttr, sal_False);
+    }
+}
+
+
+
+
+void ScDrawShell::Activate (const sal_Bool bMDI)
+{
+    (void)bMDI;
+
+    ContextChangeEventMultiplexer::NotifyContextChange(
+        GetFrame()->GetFrame().GetController(),
+        ::sfx2::sidebar::EnumContext::GetContextEnum(
+            GetSidebarContextName()));
+}
+
+
+
+
+::rtl::OUString ScDrawShell::GetSidebarContextName (void)
+{
+    return sfx2::sidebar::EnumContext::GetContextName(
+        ::svx::sidebar::SelectionAnalyzer::GetContextForSelection_SC(
+            GetDrawView()->getSelectedSdrObjectVectorFromSdrMarkView()));
+}

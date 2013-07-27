@@ -93,15 +93,13 @@ class MailToDispatcher : // interfaces
 {
     /* member */
     private:
-
-        /// reference to global uno service manager which had created us
-        css::uno::Reference< css::lang::XMultiServiceFactory > m_xFactory;
+        css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
     /* interface */
     public:
 
         // ctor/dtor
-                 MailToDispatcher( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory );
+                 MailToDispatcher( const css::uno::Reference< css::uno::XComponentContext >& xContext );
         virtual ~MailToDispatcher(                                                                        );
 
         // XInterface, XTypeProvider, XServiceInfo

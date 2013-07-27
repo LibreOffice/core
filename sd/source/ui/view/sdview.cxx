@@ -51,11 +51,13 @@
 
 #include <svx/dialogs.hrc>
 #include <sfx2/viewfrm.hxx>
+#include <sfx2/sidebar/EnumContext.hxx>
 #include <svx/svdopage.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svx/xlndsit.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/xlnclit.hxx>
+#include <svx/sidebar/ContextChangeEventMultiplexer.hxx>
 #include <vcl/virdev.hxx>
 
 #include "app.hrc"
@@ -79,6 +81,7 @@
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
+#include <svx/svdotable.hxx>
 #include "EventMultiplexer.hxx"
 #include "ViewShellBase.hxx"
 #include "ViewShellManager.hxx"
@@ -89,16 +92,18 @@
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <svx/sdr/contact/objectcontact.hxx>
+#include <svx/sdr/table/tablecontroller.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <svx/unoapi.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <svx/svdlegacy.hxx>
-
+#include "DrawController.hxx"
 #include <numeric>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
+using namespace sdr::table;
 namespace sd {
 
 #ifndef SO2_DECL_SVINPLACEOBJECT_DEFINED
@@ -759,6 +764,11 @@ bool View::SdrBeginTextEdit(
         pGivenOutlinerView, bDontDeleteOutliner,
         bOnlyOneView, bGrabFocus);
 
+    if ( mpViewSh )
+    {
+        mpViewSh->GetViewShellBase().GetDrawController().FireSelectionChangeListener();
+    }
+
     if (bReturn)
     {
         ::Outliner* pOL = GetTextEditOutliner();
@@ -777,11 +787,18 @@ bool View::SdrBeginTextEdit(
                     aBackground = pObj->getSdrPageFromSdrObject()->GetPageBackgroundColor(GetSdrPageView());
                 }
             }
-            pOL->SetBackgroundColor( aBackground  );
+
+            if(pOL)
+            {
+                pOL->SetBackgroundColor( aBackground  );
+            }
         }
 
-        pOL->SetParaInsertedHdl(LINK(this, View, OnParagraphInsertedHdl));
-        pOL->SetParaRemovingHdl(LINK(this, View, OnParagraphRemovingHdl));
+        if (pOL)
+        {
+            pOL->SetParaInsertedHdl(LINK(this, View, OnParagraphInsertedHdl));
+            pOL->SetParaRemovingHdl(LINK(this, View, OnParagraphRemovingHdl));
+        }
     }
 
     return(bReturn);
@@ -818,10 +835,17 @@ SdrEndTextEditKind View::SdrEndTextEdit(bool bDontDeleteReally )
         }
     }
 
-    GetViewShell()->GetViewShellBase().GetEventMultiplexer()->MultiplexEvent(sd::tools::EventMultiplexerEvent::EID_END_TEXT_EDIT, (void*)xObj.get() );
+    GetViewShell()->GetViewShellBase().GetEventMultiplexer()->MultiplexEvent(
+        sd::tools::EventMultiplexerEvent::EID_END_TEXT_EDIT,
+        (void*)xObj.get() );
 
     if( xObj.is() )
     {
+        if ( mpViewSh )
+        {
+            mpViewSh->GetViewShellBase().GetDrawController().FireSelectionChangeListener();
+        }
+
         SdPage* pPage = dynamic_cast< SdPage* >( xObj->getSdrPageFromSdrObject() );
         if( pPage )
             pPage->onEndTextEdit( xObj.get() );
@@ -1308,6 +1332,204 @@ void View::OnEndPasteOrDrop( PasteOrDropInfos* pInfos )
             }
         }
     }
+}
+
+bool View::ShouldToggleOn(
+    const bool bBulletOnOffMode,
+    const bool bNormalBullet)
+{
+    // If setting bullets/numbering by the dialog, always should toggle on.
+    if (!bBulletOnOffMode)
+    {
+        return true;
+    }
+
+    if(!areSdrObjectsSelected())
+    {
+        return false;
+    }
+
+    bool bToggleOn(false);
+    const SdrObjectVector aSelection(getSelectedSdrObjectVectorFromSdrMarkView());
+    SdrOutliner* pOutliner = SdrMakeOutliner(OUTLINERMODE_TEXTOBJECT, &getSdrModelFromSdrView());
+
+    for(sal_uInt32 nIndex(0); nIndex < aSelection.size() && !bToggleOn; nIndex++)
+    {
+        SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >(aSelection[nIndex]);
+
+        if (!pTextObj || pTextObj->IsTextEditActive())
+        {
+            continue;
+        }
+
+        SdrTableObj* pTableObj = dynamic_cast< SdrTableObj* >(pTextObj);
+
+        if(pTableObj)
+        {
+            CellPos aStart, aEnd;
+            SvxTableController* pTableController = dynamic_cast< SvxTableController* >(getSelectionController().get());
+
+            if (pTableController)
+            {
+                pTableController->getSelectedCells(aStart, aEnd);
+            }
+            else
+            {
+                aStart = pTableObj->getFirstCell();
+                aEnd = pTableObj->getLastCell();
+            }
+
+            const sal_Int32 nColCount(pTableObj->getColumnCount());
+
+            for (sal_Int32 nRow = aStart.mnRow; nRow <= aEnd.mnRow && !bToggleOn; nRow++)
+            {
+                for (sal_Int32 nCol = aStart.mnCol; nCol <= aEnd.mnCol && !bToggleOn; nCol++)
+                {
+                    sal_Int32 nIndex = nRow * nColCount + nCol;
+                    SdrText* pText = pTableObj->getText(nIndex);
+                    if (!pText || !pText->GetOutlinerParaObject())
+                        continue;
+
+                    pOutliner->SetText(*(pText->GetOutlinerParaObject()));
+                    sal_Int16 nStatus = pOutliner->GetBulletsNumberingStatus();
+                    bToggleOn = ((bNormalBullet && nStatus != 0) || (!bNormalBullet && nStatus != 1)) ? sal_True : bToggleOn;
+                    pOutliner->Clear();
+                }
+            }
+        }
+        else
+        {
+            OutlinerParaObject* pParaObj = pTextObj->GetOutlinerParaObject();
+            if (!pParaObj)
+                continue;
+
+            pOutliner->SetText(*pParaObj);
+            sal_Int16 nStatus = pOutliner->GetBulletsNumberingStatus();
+            bToggleOn = ((bNormalBullet && nStatus != 0) || (!bNormalBullet && nStatus != 1)) ? sal_True : bToggleOn;
+            pOutliner->Clear();
+        }
+    }
+
+    delete pOutliner;
+
+    return bToggleOn;
+}
+
+void View::ChangeMarkedObjectsBulletsNumbering(
+    const bool bToggle,
+    const bool bHandleBullets,
+    const SvxNumRule* pNumRule,
+    const bool bSwitchOff )
+{
+    if(!areSdrObjectsSelected())
+    {
+        return;
+    }
+
+    Window* pWindow = dynamic_cast< Window* >(GetFirstOutputDevice());
+    const bool bUndoEnabled = getSdrModelFromSdrView().IsUndoEnabled();
+    SdrUndoGroup* pUndoGroup = bUndoEnabled ? new SdrUndoGroup(getSdrModelFromSdrView()) : 0;
+
+    const bool bToggleOn =
+        bSwitchOff
+        ? false
+        : ShouldToggleOn( bToggle, bHandleBullets );
+
+    SdrOutliner* pOutliner = SdrMakeOutliner(OUTLINERMODE_TEXTOBJECT, &getSdrModelFromSdrView());
+    OutlinerView* pOutlinerView = new OutlinerView(pOutliner, pWindow);
+    const SdrObjectVector aSelection(getSelectedSdrObjectVectorFromSdrMarkView());
+
+    for (sal_uInt32 nIndex = 0; nIndex < aSelection.size(); nIndex++)
+    {
+        SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >(aSelection[nIndex]);
+        if (!pTextObj || pTextObj->IsTextEditActive())
+            continue;
+        SdrTableObj* pTableObj = dynamic_cast< SdrTableObj* >(pTextObj);
+        if (pTableObj)
+        {
+            CellPos aStart, aEnd;
+            SvxTableController* pTableController = dynamic_cast< SvxTableController* >(getSelectionController().get());
+            if (pTableController)
+            {
+                pTableController->getSelectedCells(aStart, aEnd);
+            }
+            else
+            {
+                aStart = pTableObj->getFirstCell();
+                aEnd = pTableObj->getLastCell();
+            }
+            sal_Int32 nColCount = pTableObj->getColumnCount();
+            for (sal_Int32 nRow = aStart.mnRow; nRow <= aEnd.mnRow; nRow++)
+            {
+                for (sal_Int32 nCol = aStart.mnCol; nCol <= aEnd.mnCol; nCol++)
+                {
+                    sal_Int32 nIndex = nRow * nColCount + nCol;
+                    SdrText* pText = pTableObj->getText(nIndex);
+                    if (!pText || !pText->GetOutlinerParaObject())
+                        continue;
+
+                    pOutliner->SetText(*(pText->GetOutlinerParaObject()));
+                    if (bUndoEnabled)
+                    {
+                        SdrUndoObjSetText* pTxtUndo = dynamic_cast< SdrUndoObjSetText* >(
+                            getSdrModelFromSdrView().GetSdrUndoFactory().CreateUndoObjectSetText(*pTextObj, nIndex));
+                        pUndoGroup->AddAction(pTxtUndo);
+                    }
+                    if ( !bToggleOn )
+                    {
+                        pOutlinerView->SwitchOffBulletsNumbering();
+                    }
+                    else
+                    {
+                        pOutlinerView->ApplyBulletsNumbering( bHandleBullets, pNumRule, bToggle );
+                    }
+                    sal_uInt32 nParaCount = pOutliner->GetParagraphCount();
+                    pText->SetOutlinerParaObject(pOutliner->CreateParaObject(0, (sal_uInt16)nParaCount));
+                    pOutliner->Clear();
+                }
+            }
+            // Broadcast the object change event.
+            if (!pTextObj->AdjustTextFrameWidthAndHeight())
+            {
+                pTextObj->SetChanged();
+                const SdrObjectChangeBroadcaster aSdrObjectChangeBroadcaster(*pTextObj);
+            }
+        }
+        else
+        {
+            OutlinerParaObject* pParaObj = pTextObj->GetOutlinerParaObject();
+            if (!pParaObj)
+                continue;
+            pOutliner->SetText(*pParaObj);
+            if (bUndoEnabled)
+            {
+                SdrUndoObjSetText* pTxtUndo = dynamic_cast< SdrUndoObjSetText* >(
+                    getSdrModelFromSdrView().GetSdrUndoFactory().CreateUndoObjectSetText(*pTextObj, 0));
+                pUndoGroup->AddAction(pTxtUndo);
+            }
+            if ( !bToggleOn )
+            {
+                pOutlinerView->SwitchOffBulletsNumbering();
+            }
+            else
+            {
+                pOutlinerView->ApplyBulletsNumbering( bHandleBullets, pNumRule, bToggle );
+            }
+            sal_uInt32 nParaCount = pOutliner->GetParagraphCount();
+            pTextObj->SetOutlinerParaObject(pOutliner->CreateParaObject(0, (sal_uInt16)nParaCount));
+            pOutliner->Clear();
+        }
+    }
+
+    if ( bUndoEnabled && pUndoGroup->GetActionCount() > 0 )
+    {
+        getSdrModelFromSdrView().BegUndo();
+        getSdrModelFromSdrView().AddUndo(pUndoGroup);
+        getSdrModelFromSdrView().EndUndo();
+    }
+
+    delete pOutliner;
+    delete pOutlinerView;
 }
 
 } // end of namespace sd

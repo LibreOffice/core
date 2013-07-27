@@ -69,8 +69,8 @@ import com.sun.star.util.XURLTransformer;
  *
  * @see com.sun.star.accessibility.XAccessibleComponent
  * @see com.sun.star.accessibility.XAccessibleContext
- * @see ifc.n.star.accessibility._XAccessibleComponent
- * @see ifc.n.star.accessibility._XAccessibleContext
+ * @see ifc.accessibility._XAccessibleComponent
+ * @see ifc.accessibility._XAccessibleContext
  */
 public class ScAccessibleDocumentPagePreview extends TestCase {
 
@@ -79,14 +79,14 @@ public class ScAccessibleDocumentPagePreview extends TestCase {
     /**
     * Called to create an instance of <code>TestEnvironment</code>
     * with an object to test and related objects.
-    * Switchs the document to Print Preview mode.
-    * Obtains accissible object for the page view.
+    * Switches the document to Print Preview mode.
+    * Obtains accessible object for the page view.
     *
-    * @param tParam test parameters
+    * @param Param test parameters
     * @param log writer to log information while testing
     *
     * @see TestEnvironment
-    * @see #getTestEnvironment()
+    * @see #getTestEnvironment
     */
     protected TestEnvironment createTestEnvironment(
         TestParameters Param, PrintWriter log) {
@@ -196,8 +196,7 @@ public class ScAccessibleDocumentPagePreview extends TestCase {
     /**
     * Called while disposing a <code>TestEnvironment</code>.
     * Disposes calc document.
-    * @param tParam test parameters
-    * @param tEnv the environment to cleanup
+    * @param Param test parameters
     * @param log writer to log information while testing
     */
     protected void cleanup( TestParameters Param, PrintWriter log) {
@@ -212,10 +211,10 @@ public class ScAccessibleDocumentPagePreview extends TestCase {
      * implementation does nothing. Subclasses can override to initialize
      * objects shared among all <code>TestEnvironment</code>s.
      *
-     * @param tParam test parameters
+     * @param Param test parameters
      * @param log writer to log information while testing
      *
-     * @see #initializeTestCase()
+     * @see #initializeTestCase
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
         // get a soffice factory object

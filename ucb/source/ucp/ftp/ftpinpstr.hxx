@@ -33,11 +33,11 @@
 
 #include <rtl/ustring.hxx>
 #include <osl/mutex.hxx>
-#include <cppuhelper/weak.hxx>
-#include <cppuhelper/queryinterface.hxx>
+#include <osl/file.h>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
-#include <stdio.h>
+#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/basemutex.hxx>
 
 
 namespace ftp {
@@ -50,11 +50,13 @@ namespace ftp {
 
     namespace css = com::sun::star;
 
+    typedef ::cppu::WeakImplHelper2<
+        com::sun::star::io::XInputStream,
+        com::sun::star::io::XSeekable > FTPInputStream_Base;
 
     class FTPInputStream
-        : public cppu::OWeakObject,
-          public com::sun::star::io::XInputStream,
-          public com::sun::star::io::XSeekable
+        : protected cppu::BaseMutex,
+          public FTPInputStream_Base
     {
     public:
 
@@ -62,16 +64,9 @@ namespace ftp {
          *  on which the inputstream acts.
          */
 
-        FTPInputStream(FILE* tmpfl = 0);
+        FTPInputStream(oslFileHandle tmpfl = 0);
 
         ~FTPInputStream();
-
-        virtual css::uno::Any SAL_CALL queryInterface(const css::uno::Type& rType)
-            throw(css::uno::RuntimeException);
-
-        virtual void SAL_CALL acquire(void) throw();
-
-        virtual void SAL_CALL release(void) throw();
 
         virtual sal_Int32 SAL_CALL
         readBytes(css::uno::Sequence< sal_Int8 >& aData,
@@ -135,10 +130,8 @@ namespace ftp {
 //          void append(const void* pBuffer,size_t size,size_t nmemb);
 
     private:
-
-        osl::Mutex m_aMutex;
-        FILE* m_tmpfl;
-        sal_Int64 m_nLength;
+        oslFileHandle m_tmpfl;
+        sal_uInt64 m_nLength;
     };
 
 

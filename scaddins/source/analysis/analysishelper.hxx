@@ -35,6 +35,19 @@
 
 #include <math.h>
 
+// STLport definitions
+// This works around some issues with Boost
+//
+#ifdef WNT
+#define _STLP_HAS_NATIVE_FLOAT_ABS
+#endif
+
+#include <boost/tr1/complex.hpp>
+using namespace boost::math;
+#ifndef double_complex
+typedef std::complex<double>        double_complex;
+#endif
+
 #include <tools/resid.hxx>
 #include <tools/rc.hxx>
 
@@ -436,11 +449,11 @@ public:
 
 //-----------------------------------------------------------------------------
 
+
 class Complex
 {
-    double                  r;
-    double                  i;
-    sal_Unicode             c;
+    double_complex      Num;
+    sal_Unicode          c;
 
 public:
     inline                  Complex( double fReal, double fImag = 0.0, sal_Unicode cC = '\0' );
@@ -798,49 +811,44 @@ inline const FuncData* FuncDataList::Get( sal_uInt32 n ) const
 
 
 inline Complex::Complex( double fReal, double fImag, sal_Unicode cC ) :
-        r( fReal ), i( fImag ), c( cC )
+        Num( fReal, fImag ), c( cC )
 {
 }
 
 
 inline double Complex::Real( void ) const
 {
-    return r;
+    return Num.real();
 }
 
 
 inline double Complex::Imag( void ) const
 {
-    return i;
+    return Num.imag();
 }
 
 
 inline double Complex::Abs( void ) const
 {
-    return sqrt( r * r + i * i );
+    return std::norm( Num );
 }
 
 
 void Complex::Conjugate( void )
 {
-    i = -i;
+    Num = std::conj( Num );
 }
 
 
 inline void Complex::Mult( double f )
 {
-    i *= f;
-    r *= f;
+    Num = f * Num;
 }
 
 
 inline void Complex::Mult( const Complex& rM )
 {
-    double  r_ = r;
-    double  i_ = i;
-
-    r = r_ * rM.r - i_ * rM.i;
-    i = r_ * rM.i + i_ * rM.r;
+    Num = Num * rM.Num;
 
     if( !c ) c = rM.c;
 }
@@ -848,16 +856,16 @@ inline void Complex::Mult( const Complex& rM )
 
 inline void Complex::Sub( const Complex& rC )
 {
-    r -= rC.r;
-    i -= rC.i;
+    Num -= rC.Num;
+
     if( !c ) c = rC.c;
 }
 
 
 inline void Complex::Add( const Complex& rAdd )
 {
-    r += rAdd.r;
-    i += rAdd.i;
+    Num += rAdd.Num;
+
     if( !c ) c = rAdd.c;
 }
 

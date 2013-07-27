@@ -43,10 +43,6 @@ INCPRE+= $(foreach,i,$(ATL_INCLUDE) -I$(i))
 
 .IF "$(GUI)" == "WNT" && "$(DISABLE_ATL)"==""
 
-.IF "$(USE_STLP_DEBUG)"!=""
-CDEFS+=-D_DEBUG
-.ENDIF # "$(USE_STLP_DEBUG)"!=""
-
 SLOFILES= \
             $(SLO)$/servreg.obj		\
             $(SLO)$/servprov.obj	\
@@ -77,11 +73,7 @@ SHL1STDLIBS=\
 
 .IF "$(COM)"=="MSC"
 .IF "$(WINDOWS_VISTA_PSDK)"!="" || "$(CCNUMVER)"<="001399999999"
-.IF "$(USE_STLP_DEBUG)" != ""
-    SHL1STDLIBS+= $(ATL_LIB)$/atlsd.lib
-.ELSE
     SHL1STDLIBS+= $(ATL_LIB)$/atls.lib
-.ENDIF
 .ENDIF # "$(WINDOWS_VISTA_PSDK)"!="" || "$(CCNUMVER)"<="001399999999"
 .ENDIF # "$(COM)"=="MSC"
 
@@ -105,11 +97,7 @@ SHL2STDLIBS=\
 
 .IF "$(COM)"=="MSC"
 .IF "$(WINDOWS_VISTA_PSDK)"!="" || "$(CCNUMVER)"<="001399999999"
-.IF "$(USE_STLP_DEBUG)" != ""
-    SHL2STDLIBS+= $(ATL_LIB)$/atlsd.lib
-.ELSE
     SHL2STDLIBS+= $(ATL_LIB)$/atls.lib
-.ENDIF
 .ENDIF # "$(WINDOWS_VISTA_PSDK)"!="" || "$(CCNUMVER)"<="001399999999"
 .ENDIF # "$(COM)"=="MSC"
 

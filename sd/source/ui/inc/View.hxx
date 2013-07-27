@@ -32,6 +32,7 @@
 #include "fupoor.hxx"
 
 #include "smarttag.hxx"
+#include <editeng/numitem.hxx>
 
 class SdDrawDocument;
 class SdrOle2Obj;
@@ -127,9 +128,9 @@ public:
 
     bool RestoreDefaultText( SdrTextObj* pTextObj );
 
-    bool                    InsertData( const TransferableDataHelper& rDataHelper,
-                                        const basegfx::B2DPoint& rPos, sal_Int8& rDnDAction, bool bDrag,
-                                        sal_uInt32 nFormat = 0, sal_uInt32 nPage = SDRPAGE_NOTFOUND, sal_uInt32 nLayer = SDRLAYER_NOTFOUND );
+    bool InsertData( const TransferableDataHelper& rDataHelper,
+        const basegfx::B2DPoint& rPos, sal_Int8& rDnDAction, bool bDrag,
+        sal_uInt32 nFormat = 0, sal_uInt32 nPage = SDRPAGE_NOTFOUND, SdrLayerID nLayer = SDRLAYER_NOTFOUND );
     /** gets the metafile from the given transferable helper and insert it as a graphic shape.
         @param bOptimize if set to true, the metafile is analyzed and if only one bitmap action is
                          present, then is is inserted as a single graphic.
@@ -188,6 +189,31 @@ public:
     void SetResizeFreeAllowed( bool bSet ) { if(mbResizeFreeAllowed != bSet) mbResizeFreeAllowed = bSet; }
     void SetResizePropAllowed( bool bSet ) { if(mbResizePropAllowed != bSet) mbResizePropAllowed = bSet; }
     void SetResizeProtected( bool bSet ) { if(mbResizeProtect != bSet) mbResizeProtect = bSet; }
+
+    bool ShouldToggleOn(
+        const bool bBulletOnOffMode,
+        const bool bNormalBullet);
+
+    /** change the bullets/numbering of the marked objects
+
+        @param bToggle
+        true: just toggle the current bullets/numbering on --> off resp. off --> on
+
+        @param bHandleBullets
+        true: handle bullets
+        false: handle numbering
+
+        @param pNumRule
+        numbering rule which needs to be applied. can be 0.
+
+        @param bSwitchOff
+        true: switch off bullets/numbering
+    */
+    void ChangeMarkedObjectsBulletsNumbering(
+        const bool bToggle,
+        const bool bHandleBullets,
+        const SvxNumRule* pNumRule,
+        const bool bSwitchOff);
 
     SdrObject* GetEmptyPresentationObject( PresObjKind eKind );
 protected:

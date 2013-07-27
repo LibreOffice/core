@@ -644,7 +644,7 @@ void SimpleWinLayout::DrawText( SalGraphics& rGraphics ) const
         return;
 
     WinSalGraphics& rWinGraphics = static_cast<WinSalGraphics&>(rGraphics);
-    HDC aHDC = rWinGraphics.mhDC;
+    HDC aHDC = rWinGraphics.getHDC();
 
     HFONT hOrigFont = DisableFontScaling();
 
@@ -2937,7 +2937,7 @@ void  GraphiteWinLayout::AdjustLayout(ImplLayoutArgs& rArgs)
 void GraphiteWinLayout::DrawText(SalGraphics &sal_graphics) const
 {
     HFONT hOrigFont = DisableFontScaling();
-    HDC aHDC = static_cast<WinSalGraphics&>(sal_graphics).mhDC;
+    const HDC aHDC = static_cast<WinSalGraphics&>(sal_graphics).getHDC();
     maImpl.DrawBase() = WinLayout::maDrawBase;
     maImpl.DrawOffset() = WinLayout::maDrawOffset;
     const int MAX_GLYPHS = 2;
@@ -2956,7 +2956,7 @@ void GraphiteWinLayout::DrawText(SalGraphics &sal_graphics) const
                       NULL, (LPCWSTR)&(glyphWStr), nGlyphs, NULL);
     } while (nGlyphs);
     if( hOrigFont )
-          DeleteFont( SelectFont( mhDC, hOrigFont ) );
+          DeleteFont( SelectFont( aHDC, hOrigFont ) );
 }
 
 int GraphiteWinLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) const
@@ -3017,11 +3017,11 @@ SalLayout* WinSalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLe
     {
 #ifdef ENABLE_GRAPHITE
         if (rFontFace.SupportsGraphite())
-            pWinLayout = new GraphiteWinLayout(mhDC, rFontFace, rFontInstance);
+            pWinLayout = new GraphiteWinLayout( getHDC(), rFontFace, rFontInstance);
         else
 #endif // ENABLE_GRAPHITE
         // script complexity is determined in upper layers
-        pWinLayout = new UniscribeLayout( mhDC, rFontFace, rFontInstance );
+        pWinLayout = new UniscribeLayout( getHDC(), rFontFace, rFontInstance );
         // NOTE: it must be guaranteed that the WinSalGraphics lives longer than
         // the created UniscribeLayout, otherwise the data passed into the
         // constructor might become invalid too early
@@ -3044,10 +3044,10 @@ SalLayout* WinSalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLe
             eCharSet = mpLogFont->lfCharSet;
 #ifdef ENABLE_GRAPHITE
         if (rFontFace.SupportsGraphite())
-            pWinLayout = new GraphiteWinLayout(mhDC, rFontFace, rFontInstance);
+            pWinLayout = new GraphiteWinLayout( getHDC(), rFontFace, rFontInstance);
         else
 #endif // ENABLE_GRAPHITE
-            pWinLayout = new SimpleWinLayout( mhDC, eCharSet, rFontFace, rFontInstance );
+            pWinLayout = new SimpleWinLayout( getHDC(), eCharSet, rFontFace, rFontInstance );
     }
 
     if( mfFontScale != 1.0 )
@@ -3062,7 +3062,7 @@ int WinSalGraphics::GetMinKashidaWidth()
 {
     if( !mpWinFontEntry[0] )
         return 0;
-    mpWinFontEntry[0]->InitKashidaHandling( mhDC );
+    mpWinFontEntry[0]->InitKashidaHandling( getHDC() );
     int nMinKashida = static_cast<int>(mfFontScale * mpWinFontEntry[0]->GetMinKashidaWidth());
     return nMinKashida;
 }

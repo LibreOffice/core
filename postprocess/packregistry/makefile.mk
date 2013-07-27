@@ -63,15 +63,15 @@ MY_FILES_base = \
     $(MY_MOD)/org/openoffice/Office/Common-base.xcu \
     $(MY_MOD)/org/openoffice/Setup-base.xcu
 
-MY_FILES_brand = \
-    $(MY_XCU)/Office/Compatibility.xcu \
-    $(MY_MOD)/org/openoffice/Office/Common-brand.xcu \
-    $(MY_MOD)/org/openoffice/Office/UI-brand.xcu \
-    $(MY_MOD)/org/openoffice/Setup-brand.xcu
-.IF "$(ENABLE_SVCTAGS)" == "YES"
-MY_FILES_brand += \
-    $(MY_MOD)/org/openoffice/Office/Jobs/Jobs-registration.xcu
-.END
+#MY_FILES_brand = \
+#    $(MY_XCU)/Office/Compatibility.xcu \
+#    $(MY_MOD)/org/openoffice/Office/Common-brand.xcu \
+#    $(MY_MOD)/org/openoffice/Office/UI-brand.xcu \
+#    $(MY_MOD)/org/openoffice/Setup-brand.xcu
+#.IF "$(ENABLE_SVCTAGS)" == "YES"
+#MY_FILES_brand += \
+#    $(MY_MOD)/org/openoffice/Office/Jobs/Jobs-registration.xcu
+#.END
 
 MY_DEPS_calc = main
 MY_FILES_calc = \
@@ -121,6 +121,10 @@ MY_FILES_impress = \
     $(MY_MOD)/fcfg_impress_types.xcu \
     $(MY_MOD)/org/openoffice/Office/Common-impress.xcu \
     $(MY_MOD)/org/openoffice/Office/Embedding-impress.xcu \
+    $(MY_MOD)/org/openoffice/Office/Jobs/Jobs-presenterscreen.xcu \
+    $(MY_MOD)/org/openoffice/Office/ProtocolHandler/ProtocolHandler-presenterscreen.xcu \
+    $(MY_XCS)/Office/PresenterScreen.xcs \
+    $(MY_XCU)/Office/PresenterScreen.xcu \
     $(MY_MOD)/org/openoffice/Setup-impress.xcu
 
 MY_FILES_korea = \
@@ -196,6 +200,7 @@ MY_FILES_main = \
     $(MY_XCS)/Office/UI/GenericCategories.xcs \
     $(MY_XCS)/Office/UI/GenericCommands.xcs \
     $(MY_XCS)/Office/UI/GlobalSettings.xcs \
+    $(MY_XCS)/Office/UI/Sidebar.xcs \
     $(MY_XCS)/Office/UI/StartModuleCommands.xcs \
     $(MY_XCS)/Office/UI/StartModuleWindowState.xcs \
     $(MY_XCS)/Office/UI/WindowContentFactories.xcs \
@@ -225,6 +230,7 @@ MY_FILES_main = \
     $(MY_XCU)/Office/Calc.xcu \
     $(MY_XCU)/Office/Canvas.xcu \
     $(MY_XCU)/Office/Common.xcu \
+    $(MY_XCU)/Office/Compatibility.xcu \
     $(MY_XCU)/Office/DataAccess.xcu \
     $(MY_XCU)/Office/Embedding.xcu \
     $(MY_XCU)/Office/ExtensionDependencies.xcu \
@@ -259,6 +265,7 @@ MY_FILES_main = \
     $(MY_XCU)/Office/UI/Factories.xcu \
     $(MY_XCU)/Office/UI/GenericCategories.xcu \
     $(MY_XCU)/Office/UI/GenericCommands.xcu \
+    $(MY_XCU)/Office/UI/Sidebar.xcu \
     $(MY_XCU)/Office/UI/StartModuleCommands.xcu \
     $(MY_XCU)/Office/UI/StartModuleWindowState.xcu \
     $(MY_XCU)/Office/UI.xcu \
@@ -283,13 +290,20 @@ MY_FILES_main = \
     $(MY_MOD)/fcfg_chart_types.xcu \
     $(MY_MOD)/fcfg_internalgraphics_filters.xcu \
     $(MY_MOD)/fcfg_internalgraphics_types.xcu \
+    $(MY_MOD)/org/openoffice/Office/Common-brand.xcu \
     $(MY_MOD)/org/openoffice/Office/Embedding-chart.xcu \
+    $(MY_MOD)/org/openoffice/Office/UI-brand.xcu \
+    $(MY_MOD)/org/openoffice/Setup-brand.xcu \
     $(MY_MOD)/org/openoffice/Setup-start.xcu \
     $(MY_MOD)/org/openoffice/TypeDetection/UISort-calc.xcu \
     $(MY_MOD)/org/openoffice/TypeDetection/UISort-draw.xcu \
     $(MY_MOD)/org/openoffice/TypeDetection/UISort-impress.xcu \
     $(MY_MOD)/org/openoffice/TypeDetection/UISort-math.xcu \
     $(MY_MOD)/org/openoffice/TypeDetection/UISort-writer.xcu
+.IF "$(ENABLE_SVCTAGS)" == "YES"
+MY_FILES_main += \
+    $(MY_MOD)/org/openoffice/Office/Jobs/Jobs-registration.xcu
+.END
 .IF "$(GUIBASE)" == "aqua"
 MY_FILES_main += \
     $(MY_MOD)/DataAccess/macab.xcu \
@@ -433,28 +447,6 @@ MY_DEPS_xsltfilter = main
 MY_FILES_xsltfilter = \
     $(MY_MOD)/fcfg_xslt_filters.xcu \
     $(MY_MOD)/fcfg_xslt_types.xcu
-
-.IF "$(WITH_BINFILTER)" != "NO"
-MY_XCDS += $(MISC)/binfilter.xcd
-MY_DEPS_binfilter = main
-MY_FILES_binfilter = \
-    $(MY_MOD)/fcfg_chart_bf_filters.xcu \
-    $(MY_MOD)/fcfg_chart_bf_types.xcu \
-    $(MY_MOD)/fcfg_calc_bf_filters.xcu \
-    $(MY_MOD)/fcfg_calc_bf_types.xcu \
-    $(MY_MOD)/fcfg_draw_bf_filters.xcu \
-    $(MY_MOD)/fcfg_draw_bf_types.xcu \
-    $(MY_MOD)/fcfg_global_bf_filters.xcu \
-    $(MY_MOD)/fcfg_global_bf_types.xcu \
-    $(MY_MOD)/fcfg_impress_bf_filters.xcu \
-    $(MY_MOD)/fcfg_impress_bf_types.xcu \
-    $(MY_MOD)/fcfg_math_bf_filters.xcu \
-    $(MY_MOD)/fcfg_math_bf_types.xcu \
-    $(MY_MOD)/fcfg_web_bf_filters.xcu \
-    $(MY_MOD)/fcfg_web_bf_types.xcu \
-    $(MY_MOD)/fcfg_writer_bf_filters.xcu \
-    $(MY_MOD)/fcfg_writer_bf_types.xcu
-.END
 
 .IF "$(GUIBASE)" == "unx" && \
         (("$(ENABLE_GCONF)" == "TRUE" && "$(ENABLE_LOCKDOWN)" == "YES") || \

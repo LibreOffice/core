@@ -27,5 +27,5 @@ SET PATH=%JAVA_HOME%\bin;%PATH%;%MY_ANT_HOME%\bin;
 set config_shell=sh
 set perl_sh_dir=/usr/bin
 
-sh ./configure --prefix=/@unixroot/usr --disable-binfilter --with-system-zlib --with-system-jpeg --without-stlport --with-system-icu --with-system-curl --with-system-python --with-system-openssl --with-system-libxml --with-system-libxslt --disable-werror --disable-mozilla --disable-odk --with-x=no --disable-fontconfig --disable-gnome-vfs --disable-gtk --with-java=yes --disable-gcjaot --without-fonts --with-ant-home=%MY_ANT_HOME% --without-junit --with-system-apr --with-system-apr-util --with-system-serf --with-system-coinmp | tee configure.log
+sh ./configure --prefix=/@unixroot/usr --with-system-zlib --with-system-jpeg --without-stlport --with-system-icu --with-system-curl --with-system-python --with-system-openssl --with-system-libxml --with-system-libxslt --disable-werror --disable-mozilla --disable-odk --with-x=no --disable-fontconfig --disable-gnome-vfs --disable-gtk --with-java=yes --disable-gcjaot --without-fonts --with-ant-home=%MY_ANT_HOME% --without-junit --with-system-apr --with-system-apr-util --with-system-serf --with-system-coinmp | tee configure.log
 endlocal

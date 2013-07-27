@@ -74,7 +74,7 @@ public class _XAccessibleSelection extends MultiMethodTest {
      * Retrieves the interface <code>XAccessibleContext</code>
      * and object relation.
      * @see com.sun.star.accessibility.XAccessibleContext
-     * @see ifc.accessibility.XAccessibleContext
+     * @see ifc.accessibility._XAccessibleContext
      */
     protected void before() {
         xAC = (XAccessibleContext) UnoRuntime.queryInterface(

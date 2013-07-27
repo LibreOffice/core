@@ -20,14 +20,12 @@
  *************************************************************/
 
 
+#ifndef L10NTOOLS_SRCITER_HXX
+#define L10NTOOLS_SRCITER_HXX
 
-#ifndef L10NTOOLS_DIRECTORY_HXX
-#define L10NTOOLS_DIRECTORY_HXX
 #include <l10ntools/directory.hxx>
-#endif
 
 // class SourceTreeIterator
-//
 
 class SourceTreeIterator
 {
@@ -51,4 +49,5 @@ public:
     virtual void OnExecuteDirectory( const rtl::OUString &rDirectory );
 };
 
+#endif // L10NTOOLS_SRCITER_HXX
 

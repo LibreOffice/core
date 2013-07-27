@@ -347,8 +347,6 @@ sal_Bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
     //#i16874# AutoKerning as default for new documents
     pDoc->SetDefault( SvxAutoKernItem( sal_True, RES_CHRATR_AUTOKERN ) );
 
-    pDoc->SetDrawDefaults();
-
     // --> OD 2005-02-10 #i42080# - Due to the several calls of method <SetDefault(..)>
     // at the document instance, the document is modified. Thus, reset this
     // status here. Note: In method <SubInitNew()> this is also done.
@@ -437,15 +435,6 @@ SwDocShell::SwDocShell( SwDoc *pD, SfxObjectCreateMode eMode ):
     // wir als BroadCaster werden auch unser eigener Listener
     // (fuer DocInfo/FileNamen/....)
     EndListening( *this );
-    SvxColorTableItem* pColItem = (SvxColorTableItem*)GetItem(SID_COLOR_TABLE);
-    // wird nur die DocInfo fuer den Explorer gelesen, ist das Item nicht da
-    if(pColItem)
-    {
-        XColorTable* pTable = pColItem->GetColorTable();
-        // wurde eine neue Table angelegt, muss sie auch geloescht werden.
-        if((void*)pTable  != (void*)(XColorTable::GetStdColorTable()) )
-            delete pTable;
-    }
 
     delete pOLEChildList;
 }

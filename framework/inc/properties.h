@@ -329,20 +329,6 @@ class PropHelper
 
         return bChanged;
     }
-
-    //___________________________________________
-
-    /** calculates the count of items inside the given ascii array.
-     *
-     *  @param  pArray  must point to an array of items from type sal_Char
-     *
-     *  @return The count of items inside this array, calculated by knowing the size of sal_Char.
-     */
-
-    static sal_Int32 calculatePropArrayCount( const sal_Char* pArray[] )
-    {
-        return (sal_Int32)(sizeof(pArray)/sizeof(sal_Char*));
-    }
 };
 
 } // namespace framework

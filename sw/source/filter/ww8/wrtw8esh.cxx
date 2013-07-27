@@ -105,11 +105,232 @@
 #include <svx/svdlegacy.hxx>
 #include <svx/fmmodel.hxx>
 #include <editeng/shaditem.hxx>
+#include <svx/unoapi.hxx>
+#include <escher.hxx>
+#include <fmtinfmt.hxx>
+#include <fmturl.hxx>
+#include "sfx2/sfxsids.hrc"
+#include <svl/urihelper.hxx>
+#include <unotools/saveopt.hxx>
 
 using namespace com::sun::star;
 using namespace sw::util;
 using namespace sw::types;
 using namespace nsFieldFlags;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::UNO_QUERY;
+using ::com::sun::star::beans::XPropertySet;
+using ::com::sun::star::drawing::XShape;
+
+bool SwBasicEscherEx::IsRelUrl()
+{
+    SvtSaveOptions aSaveOpt;
+    bool bRelUrl = false;
+    SfxMedium * pMedium = rWrt.GetWriter().GetMedia();
+    if ( pMedium )
+        bRelUrl = pMedium->IsRemote() ? aSaveOpt.IsSaveRelINet() : aSaveOpt.IsSaveRelFSys();
+    return bRelUrl;
+}
+
+String SwBasicEscherEx::GetBasePath()
+{
+    String sDocUrl;
+    String sBasePath;
+    SfxMedium * pMedium = rWrt.GetWriter().GetMedia();
+    if ( pMedium )
+    {
+        const SfxItemSet* pPItemSet = pMedium->GetItemSet();
+        if( pPItemSet )
+        {
+            const SfxStringItem* pPItem = dynamic_cast< const SfxStringItem* >( pPItemSet->GetItem( SID_FILE_NAME ) );
+            if ( pPItem )
+                    sDocUrl = pPItem->GetValue();
+        }
+    }
+
+        sBasePath = sDocUrl.Copy( 0, sDocUrl.SearchBackward( '/' ) + 1 );
+    return sBasePath;
+
+}
+
+String SwBasicEscherEx::BuildFileName(sal_uInt16& rnLevel, bool& rbRel, const String& rUrl )
+{
+        String aDosName( INetURLObject( rUrl ).getFSysPath( INetURLObject::FSYS_DOS ) );
+        rnLevel = 0;
+    rbRel = IsRelUrl();
+
+        if( rbRel )
+        {
+         // try to convert to relative file name
+            String aTmpName( aDosName );
+            aDosName = INetURLObject::GetRelURL( GetBasePath(), rUrl,
+                INetURLObject::WAS_ENCODED, INetURLObject::DECODE_WITH_CHARSET );
+
+            if( aDosName.SearchAscii( INET_FILE_SCHEME ) == 0 )
+            {
+                    // not converted to rel -> back to old, return absolute flag
+                    aDosName = aTmpName;
+                    rbRel = false;
+            }
+           else if( aDosName.SearchAscii( "./" ) == 0 )
+           {
+                aDosName.Erase( 0, 2 );
+           }
+           else
+           {
+                while( aDosName.SearchAndReplaceAscii( "../", String::EmptyString() ) == 0 )
+                    ++rnLevel;
+           }
+    }
+    return aDosName;
+}
+
+void SwBasicEscherEx::WriteHyperlinkWithinFly( SvMemoryStream& rStrm, const SwFmtURL* pINetFmtArg)
+{
+    if ( !pINetFmtArg ) return;
+
+    sal_uInt8 maGuidStdLink[ 16 ] ={
+        0xD0, 0xC9, 0xEA, 0x79, 0xF9, 0xBA, 0xCE, 0x11, 0x8C, 0x82, 0x00, 0xAA, 0x00, 0x4B, 0xA9, 0x0B };
+    sal_uInt8 maGuidUrlMoniker[ 16 ] = {
+        0xE0, 0xC9, 0xEA, 0x79, 0xF9, 0xBA, 0xCE, 0x11, 0x8C, 0x82, 0x00, 0xAA, 0x00, 0x4B, 0xA9, 0x0B };
+
+    sal_uInt8 maGuidFileMoniker[ 16 ] = {
+        0x03, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46 };
+    sal_uInt8 maGuidFileTail[] = {
+            0xFF, 0xFF, 0xAD, 0xDE, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+        };
+    //const sal_uInt16 WW8_ID_HLINK               = 0x01B8;
+    const sal_uInt32 WW8_HLINK_BODY             = 0x00000001;   /// Contains file link or URL.
+    const sal_uInt32 WW8_HLINK_ABS              = 0x00000002;   /// Absolute path.
+    //const sal_uInt32 WW8_HLINK_DESCR            = 0x00000014;   /// Description.
+    const sal_uInt32 WW8_HLINK_MARK             = 0x00000008;   /// Text mark.
+    const sal_uInt32 WW8_HLINK_FRAME            = 0x00000080;   /// Target frame.
+    //const sal_uInt32 WW8_HLINK_UNC              = 0x00000100;   /// UNC path.
+    SvMemoryStream tmpStrm;
+    String tmpTextMark;
+
+    String rUrl = pINetFmtArg->GetURL();
+    String rTarFrm = pINetFmtArg->GetTargetFrameName();
+    sal_uInt32          mnFlags = 0;
+
+        INetURLObject aUrlObj( rUrl );
+        const INetProtocol eProtocol = aUrlObj.GetProtocol();
+
+    //Target Frame
+    if( rTarFrm.Len() > 0 )
+        {
+        SwWW8Writer::WriteLong( tmpStrm, rTarFrm.Len()+1 );
+            SwWW8Writer::WriteString16( tmpStrm, rTarFrm, false);
+
+            tmpStrm << sal_uInt16( 0 );
+
+            mnFlags |= WW8_HLINK_FRAME;
+        }
+
+        // file link or URL
+        if( eProtocol == INET_PROT_FILE || (eProtocol == INET_PROT_NOT_VALID && rUrl.GetChar( 0 ) != '#') )
+        {
+            sal_uInt16 nLevel;
+            bool bRel;
+            String aFileName( BuildFileName( nLevel, bRel, rUrl ));
+
+            if( !bRel )
+                    mnFlags |= WW8_HLINK_ABS;
+
+        mnFlags |= WW8_HLINK_BODY;
+
+        tmpStrm.Write( maGuidFileMoniker,sizeof(maGuidFileMoniker) );
+        tmpStrm << nLevel;
+        SwWW8Writer::WriteLong( tmpStrm, aFileName.Len()+1);
+        SwWW8Writer::WriteString8( tmpStrm, aFileName, true, RTL_TEXTENCODING_MS_1252 );
+        tmpStrm.Write( maGuidFileTail,sizeof(maGuidFileTail) );
+
+        //For UNICODE
+        SwWW8Writer::WriteLong( tmpStrm, 2*aFileName.Len()+6);
+        SwWW8Writer::WriteLong( tmpStrm, 2*aFileName.Len());
+        tmpStrm << sal_uInt16(0x0003);
+        SwWW8Writer::WriteString16(tmpStrm, aFileName, false);
+        }
+    else if( eProtocol != INET_PROT_NOT_VALID )
+        {
+        tmpStrm.Write( maGuidUrlMoniker,sizeof(maGuidUrlMoniker) );
+            SwWW8Writer::WriteLong( tmpStrm, 2*(rUrl.Len()+1));
+
+            SwWW8Writer::WriteString16(tmpStrm, rUrl, true);
+            mnFlags |= WW8_HLINK_BODY | WW8_HLINK_ABS;
+        }
+        else if( rUrl.GetChar( 0 ) == '#' )
+        {
+        String aTextMark( rUrl.Copy( 1 ) );
+            aTextMark.SearchAndReplace( '.', '!' );
+        //sal_uInt8 tmpLen = aTextMark.Len();
+        tmpTextMark = aTextMark;
+        }
+
+    if( tmpTextMark.Len() == 0 && aUrlObj.HasMark() )
+    {
+        tmpTextMark = aUrlObj.GetMark();
+    }
+
+    if( tmpTextMark.Len()>0 )
+        {
+        SwWW8Writer::WriteLong( tmpStrm, tmpTextMark.Len()+1);
+            SwWW8Writer::WriteString16(tmpStrm, tmpTextMark, true);
+
+        mnFlags |= WW8_HLINK_MARK;
+        }
+
+    rStrm.Write( maGuidStdLink,16 );
+       rStrm  << sal_uInt32( 2 )
+            << mnFlags;
+    tmpStrm.Seek( STREAM_SEEK_TO_BEGIN );
+    sal_uInt32 nStrmPos = tmpStrm.Tell();
+        tmpStrm.Seek( STREAM_SEEK_TO_END );
+        sal_uInt32 nStrmSize = tmpStrm.Tell();
+        tmpStrm.Seek( nStrmPos );
+    sal_uInt32 nLen;
+    nLen = nStrmSize - nStrmPos;
+    if(nLen >0)
+    {
+        sal_uInt8* pBuffer = new sal_uInt8[ nLen ];
+        tmpStrm.Read(pBuffer, nLen);
+        rStrm.Write( pBuffer, nLen );
+        delete[] pBuffer;
+    }
+}
+void SwBasicEscherEx::PreWriteHyperlinkWithinFly(const SwFrmFmt& rFmt,EscherPropertyContainer& rPropOpt)
+{
+    const SfxPoolItem* pItem;
+    const SwAttrSet& rAttrSet = rFmt.GetAttrSet();
+    if (SFX_ITEM_SET == rAttrSet.GetItemState(RES_URL, true, &pItem))
+    {
+        const SwFmtURL *pINetFmt = dynamic_cast<const SwFmtURL*>(pItem);
+        if(pINetFmt && pINetFmt->GetURL().Len()>0)
+        {
+            SvMemoryStream *rStrm = new SvMemoryStream ;
+            String tmpstr=pINetFmt->GetURL();
+            WriteHyperlinkWithinFly( *rStrm, pINetFmt );
+            sal_uInt8* pBuf = (sal_uInt8*) rStrm->GetData();
+            sal_uInt32 nSize = rStrm->Seek( STREAM_SEEK_TO_END );
+            rPropOpt.AddOpt( ESCHER_Prop_pihlShape, sal_True, nSize, pBuf, nSize );
+            sal_uInt32 nValue;
+            String aNamestr = pINetFmt->GetName();
+            if(aNamestr.Len()>0)
+            {
+                rPropOpt.AddOpt(ESCHER_Prop_wzName, aNamestr );
+            }
+            if(rPropOpt.GetOpt( ESCHER_Prop_fPrint, nValue))
+            {
+                nValue|=0x03080008;
+                rPropOpt.AddOpt(ESCHER_Prop_fPrint, nValue );
+            }
+            else
+                rPropOpt.AddOpt(ESCHER_Prop_fPrint, 0x03080008 );
+        }
+    }
+}
 
 //#110185# get a part fix for this type of element
 bool WW8Export::MiserableFormFieldExportHack(const SwFrmFmt& rFrmFmt)
@@ -1360,6 +1581,57 @@ sal_uInt32 AddMirrorFlags(sal_uInt32 nFlags, const SwMirrorGrf &rMirror)
     }
     return nFlags;
 }
+//For i120928,this function is added to export graphic of bullet
+sal_Int32 SwBasicEscherEx::WriteGrfBullet(const Graphic& rGrf)
+{
+    OpenContainer( ESCHER_SpContainer );
+    AddShape(ESCHER_ShpInst_PictureFrame, 0xa00,0x401);
+    EscherPropertyContainer aPropOpt;
+    GraphicObject   aGraphicObject( rGrf );
+    ByteString      aUniqueId = aGraphicObject.GetUniqueID();
+    if ( aUniqueId.Len() )
+    {
+        const MapMode aMap100mm( MAP_100TH_MM );
+        Size    aSize( rGrf.GetPrefSize() );
+        if ( MAP_PIXEL == rGrf.GetPrefMapMode().GetMapUnit() )
+        {
+            aSize = Application::GetDefaultDevice()->PixelToLogic(aSize, aMap100mm );
+        }
+        else
+        {
+            aSize = OutputDevice::LogicToLogic( aSize,rGrf.GetPrefMapMode(), aMap100mm );
+        }
+
+        const basegfx::B2DRange aRange(0.0, 0.0, aSize.Width(), aSize.Height());
+        sal_uInt32 nBlibId = mxGlobal->GetBlibID( *(mxGlobal->QueryPictureStream()), aUniqueId,aRange, NULL, 0 );
+        if (nBlibId)
+            aPropOpt.AddOpt(ESCHER_Prop_pib, nBlibId, sal_True);
+    }
+    aPropOpt.AddOpt( ESCHER_Prop_pibFlags, ESCHER_BlipFlagDefault );
+    aPropOpt.AddOpt( ESCHER_Prop_dyTextTop, DrawModelToEmu(0));
+    aPropOpt.AddOpt( ESCHER_Prop_dyTextBottom, DrawModelToEmu(0));
+    aPropOpt.AddOpt( ESCHER_Prop_dxTextLeft, DrawModelToEmu(0));
+    aPropOpt.AddOpt( ESCHER_Prop_dxTextRight, DrawModelToEmu(0));
+    aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x80000 );
+    aPropOpt.AddOpt( ESCHER_Prop_dyTextTop, 0 );
+    aPropOpt.AddOpt( ESCHER_Prop_dyTextBottom, 0 );
+    aPropOpt.AddOpt( ESCHER_Prop_dxTextLeft, 0 );
+    aPropOpt.AddOpt( ESCHER_Prop_dxTextRight, 0 );
+    const Color aTmpColor( COL_WHITE );
+    SvxBrushItem aBrush( aTmpColor, RES_BACKGROUND );
+    const SvxBrushItem *pRet = rWrt.GetCurrentPageBgBrush();
+    if (pRet && (pRet->GetGraphic() ||( pRet->GetColor() != COL_TRANSPARENT)))
+        aBrush = *pRet;
+    WriteBrushAttr(aBrush, aPropOpt);
+
+    aPropOpt.AddOpt( ESCHER_Prop_pictureActive, 0 );
+    aPropOpt.Commit( GetStream() );
+    AddAtom(4, ESCHER_ClientAnchor);
+    GetStream() << (sal_uInt32)0x80000000;
+    CloseContainer();
+
+    return 0;
+}
 
 sal_Int32 SwBasicEscherEx::WriteGrfFlyFrame(const SwFrmFmt& rFmt, sal_uInt32 nShapeId)
 {
@@ -1804,6 +2076,8 @@ sal_Int32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrmFmt& rFmt,
         rPropOpt.AddOpt( ESCHER_Prop_fPrint, 0x200020 );
     }
 
+    PreWriteHyperlinkWithinFly(rFmt,rPropOpt);
+
     return nLineWidth;
 }
 
@@ -1896,6 +2170,8 @@ sal_Int32 SwEscherEx::WriteFlyFrameAttr(const SwFrmFmt& rFmt, MSO_SPT eShapeType
             }
         }
     }
+
+    PreWriteHyperlinkWithinFly(rFmt,rPropOpt);
 
     return nLineWidth;
 }
@@ -2018,34 +2294,49 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, WW8Export& rWW8Wrt)
                 case sw::Frame::eFormControl:
                     WriteOCXControl(rFmt, nShapeId = GenerateShapeId());
                     break;
-                case sw::Frame::eDrawing:
-                    aWinwordAnchoring.SetAnchoring(rFmt);
-                    const SdrObject* pSdrObj = rFmt.FindRealSdrObject();
-                    if (pSdrObj)
-                    {
-//                        bool bSwapInPage = false;
-//                        if (!pSdrObj->getSdrPageFromSdrObject())
-//                        {
-//                            if (SdrModel* pModel = rWrt.pDoc->GetDrawModel())
-//                            {
-//                                if (SdrPage *pPage = pModel->GetPage(0))
-//                                {
-//                                    bSwapInPage = true;
-//                                    (const_cast<SdrObject*>(pSdrObj))->SetPage(pPage);
-//                                }
-//                            }
-//                        }
+                case sw::Frame::eDrawing: {
+                        aWinwordAnchoring.SetAnchoring(rFmt);
+                        const SdrObject* pSdrObj = rFmt.FindRealSdrObject();
+                        if (pSdrObj)
+                        {
+                            bool bSwapInPage = false;
+                            if (!pSdrObj->getSdrPageFromSdrObject())
+                            {
+                                if (SdrModel* pModel = rWrt.pDoc->GetDrawModel())
+                                {
+                                    if (SdrPage *pPage = pModel->GetPage(0))
+                                    {
+                                        bSwapInPage = true;
+                                        pPage->InsertObjectToSdrObjList(*const_cast< SdrObject* >(pSdrObj));
+                                        // (const_cast<SdrObject*>(pSdrObj))->SetPage(pPage); // TTTT: Check
+                                    }
+                                }
+                            }
 
-                        nShapeId = AddSdrObject(*pSdrObj);
+                            // TTTT: Looks as if SdrPage is needed here, maybe no longer ?!?
+                            nShapeId = AddSdrObject(*pSdrObj);
 
-  //                      if (bSwapInPage)
-  //                          (const_cast<SdrObject*>(pSdrObj))->SetPage(0);
-                    }
+                            if (bSwapInPage)
+                            {
+                                SdrPage* pPage = pSdrObj->getSdrPageFromSdrObject();
+
+                                if(pPage)
+                                {
+                                    pPage->RemoveObjectFromSdrObjList(pSdrObj->GetNavigationPosition());
+                                }
+                                // (const_cast<SdrObject*>(pSdrObj))->SetPage(0); TTTT: Is this temp insertion needed?
+                                // when only for model, it's not (!)
+                            }
+                        }
 #ifdef DBG_UTIL
-                    else
-                        ASSERT( !this, "Where is the SDR-Object?" );
+                        else
+                            ASSERT( !this, "Where is the SDR-Object?" );
 #endif
-                }
+                    }
+                    break;
+                default:
+                    break;
+            }
 
             if( !nShapeId )
             {

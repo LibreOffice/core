@@ -100,7 +100,6 @@ SLOFILES =  \
         $(SLO)$/hdrcont.obj \
         $(SLO)$/colrowba.obj \
         $(SLO)$/olkact.obj \
-        $(SLO)$/galwrap.obj \
         $(SLO)$/imapwrap.obj \
         $(SLO)$/reffact.obj \
         $(SLO)$/selectionstate.obj \

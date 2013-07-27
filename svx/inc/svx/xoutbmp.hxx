@@ -61,19 +61,11 @@ public:
 
     static GraphicFilter* pGrfFilter;
 
-    static BitmapEx     CreateQuickDrawBitmapEx( const Graphic& rGraphic, const OutputDevice& rCompDev,
-                                                 const MapMode& rMapMode, const Size& rLogSize,
-                                                 const Point& rPoint, const Size& rSize );
     static Graphic      MirrorGraphic( const Graphic& rGraphic, const sal_uIntPtr nMirrorFlags );
     static Animation    MirrorAnimation( const Animation& rAnimation, sal_Bool bHMirr, sal_Bool bVMirr );
     static sal_uInt16       WriteGraphic( const Graphic& rGraphic, String& rFileName,
                                       const String& rFilterName, const sal_uIntPtr nFlags = 0L,
                                       const Size* pMtfSize_100TH_MM = NULL );
-    static void         DrawQuickDrawBitmapEx( OutputDevice* pOutDev, const Point& rPt,
-                                               const Size& rSize, const BitmapEx& rBmpEx );
-    static void         DrawTiledBitmapEx( OutputDevice* pOutDev, const Point& rStartPt, const Size& rGrfSize,
-                                           const Rectangle& rTileRect, const BitmapEx& rBmpEx );
-
     static sal_uInt16       ExportGraphic( const Graphic& rGraphic, const INetURLObject& rURL,
                                        GraphicFilter& rFilter, const sal_uInt16 nFormat,
                                        const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >* pFilterData = NULL );

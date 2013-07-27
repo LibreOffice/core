@@ -127,13 +127,18 @@ CFLAGSCC+=$(C_RESTRICTIONFLAGS)
 # -z combreloc combines multiple relocation sections. Reduces overhead on startup
 # -norunpath prevents the compiler from recording his own libs in the runpath
 LINKFLAGSRUNPATH_URELIB=-R\''$$ORIGIN'\'
-LINKFLAGSRUNPATH_UREBIN=-R\''$$ORIGIN/../lib:$$ORIGIN'\'
+LINKFLAGSRUNPATH_UREBIN=-R\''$$ORIGIN'\'
+#LINKFLAGSRUNPATH_UREBIN=-R\''$$ORIGIN/../lib:$$ORIGIN'\'
     #TODO: drop $ORIGIN once no URE executable is also shipped in OOo
-LINKFLAGSRUNPATH_OOO=-R\''$$ORIGIN:$$ORIGIN/../ure-link/lib'\'
-LINKFLAGSRUNPATH_SDK=-R\''$$ORIGIN/../../ure-link/lib'\'
-LINKFLAGSRUNPATH_BRAND=-R\''$$ORIGIN:$$ORIGIN/../basis-link/program:$$ORIGIN/../basis-link/ure-link/lib'\'
+LINKFLAGSRUNPATH_OOO=-R\''$$ORIGIN'\'
+LINKFLAGSRUNPATH_SDK=-R\''$$ORIGIN'\'
+LINKFLAGSRUNPATH_BRAND=-R\''$$ORIGIN'\'
+#LINKFLAGSRUNPATH_OOO=-R\''$$ORIGIN:$$ORIGIN/../ure-link/lib'\'
+#LINKFLAGSRUNPATH_SDK=-R\''$$ORIGIN/../../ure-link/lib'\'
+#LINKFLAGSRUNPATH_BRAND=-R\''$$ORIGIN:$$ORIGIN/../basis-link/program:$$ORIGIN/../basis-link/ure-link/lib'\'
 LINKFLAGSRUNPATH_OXT=
-LINKFLAGSRUNPATH_BOXT=-R\''$$ORIGIN/../../../basis-link/program'\'
+LINKFLAGSRUNPATH_BOXT=-R\''$$ORIGIN'\'
+#LINKFLAGSRUNPATH_BOXT=-R\''$$ORIGIN/../../../basis-link/program'\'
 LINKFLAGSRUNPATH_NONE=
 LINKFLAGS=-w -mt -z combreloc -PIC -temp=/tmp -norunpath -library=no%Cstd
 LINKCFLAGS=-w -mt -z combreloc -norunpath

@@ -1186,7 +1186,7 @@ void SAL_CALL BaseContent::insert( sal_Int32 nMyCommandIdentifier,
 
     // Inserts the content, which has the flag m_bIsFresh
 
-    if( ! m_nState & NameForInsertionSet )
+    if ( !m_nState | !NameForInsertionSet )
     {
         m_pMyShell->installError( nMyCommandIdentifier,
                                   TASKHANDLING_NONAMESET_INSERT_COMMAND );

@@ -253,7 +253,7 @@ sal_Bool CGMBitmap::ImplGetDimensions( CGMBitmapDescriptor& rDesc )
     rDesc.mnScanSize = 0;
     switch( rDesc.mnLocalColorPrecision )
     {
-        case 0x80000001 :                       // monochrome ( bit = 0->backgroundcolor )
+        case static_cast<long>(0x80000001) :    // monochrome ( bit = 0->backgroundcolor )
         case 0 :                                //              bit = 1->fillcolor
             rDesc.mnDstBitsPerPixel = 1;
             break;

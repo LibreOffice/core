@@ -448,7 +448,6 @@ void SdrItemPool::TakeItemName(sal_uInt16 nWhich, String& rItemName)
         case XATTR_FORMTXTSHDWCOLOR : nResId = SIP_XA_FORMTXTSHDWCOLOR;break;
         case XATTR_FORMTXTSHDWXVAL  : nResId = SIP_XA_FORMTXTSHDWXVAL;break;
         case XATTR_FORMTXTSHDWYVAL  : nResId = SIP_XA_FORMTXTSHDWYVAL;break;
-        case XATTR_FORMTXTSTDFORM   : nResId = SIP_XA_FORMTXTSTDFORM;break;
         case XATTR_FORMTXTHIDEFORM  : nResId = SIP_XA_FORMTXTHIDEFORM;break;
         case XATTR_FORMTXTSHDWTRANSP: nResId = SIP_XA_FORMTXTSHDWTRANSP;break;
 
@@ -1484,10 +1483,10 @@ SfxItemPresentation __EXPORT SdrTextAniAmountItem::GetPresentation(
 
     if(nValue < 0)
     {
-        sal_Char aText[] = "pixel";
+        const sal_Char aText[] = "pixel";
 
         rText = UniString::CreateFromInt32(-nValue);
-        rText += UniString(aText, sizeof(aText-1));
+        rText += UniString(aText, sizeof(aText)-1);
     }
     else
     {
@@ -2234,8 +2233,8 @@ XubString __EXPORT SdrMeasureUnitItem::GetValueTextByPos(sal_uInt16 nPos) const
 
     if((FieldUnit)nPos == FUNIT_NONE)
     {
-        sal_Char aText[] = "default";
-        aRetval += UniString(aText, sizeof(aText-1));
+        const sal_Char aText[] = "default";
+        aRetval += UniString(aText, sizeof(aText)-1);
     }
     else
     {
@@ -2476,26 +2475,26 @@ XubString __EXPORT SdrGrafModeItem::GetValueTextByPos(sal_uInt16 nPos) const
     {
         case 1:
         {
-            sal_Char aTextGreys[] = "Greys";
-            aStr += UniString(aTextGreys, sizeof(aTextGreys-1));
+            const sal_Char aTextGreys[] = "Greys";
+            aStr += UniString(aTextGreys, sizeof(aTextGreys)-1);
             break;
         }
         case 2:
         {
-            sal_Char aTextBlackWhite[] = "Black/White";
-            aStr += UniString(aTextBlackWhite, sizeof(aTextBlackWhite-1));
+            const sal_Char aTextBlackWhite[] = "Black/White";
+            aStr += UniString(aTextBlackWhite, sizeof(aTextBlackWhite)-1);
             break;
         }
         case 3:
         {
-            sal_Char aTextWatermark[] = "Watermark";
-            aStr += UniString(aTextWatermark, sizeof(aTextWatermark-1));
+            const sal_Char aTextWatermark[] = "Watermark";
+            aStr += UniString(aTextWatermark, sizeof(aTextWatermark)-1);
             break;
         }
         default:
         {
-            sal_Char aTextStandard[] = "Standard";
-            aStr += UniString(aTextStandard, sizeof(aTextStandard-1));
+            const sal_Char aTextStandard[] = "Standard";
+            aStr += UniString(aTextStandard, sizeof(aTextStandard)-1);
             break;
         }
     }

@@ -66,12 +66,12 @@ public:
     SAL_DLLPRIVATE void             ImplSetSymbolRect(const Rectangle&);
 
 protected:
-                        Button( WindowType nType );
+    explicit            Button( WindowType nType );
 
 public:
-                        Button( Window* pParent, WinBits nStyle = 0 );
-                        Button( Window* pParent, const ResId& rResId );
-                       ~Button();
+    explicit            Button( Window* pParent, WinBits nStyle = 0 );
+    explicit            Button( Window* pParent, const ResId& );
+    virtual             ~Button();
 
     virtual void        Click();
 
@@ -149,7 +149,7 @@ public:
     SAL_DLLPRIVATE sal_Bool            ImplIsDefButton() const;
 
 protected:
-                    PushButton( WindowType nType );
+    explicit        PushButton( WindowType nType );
 
     virtual void    FillLayoutData() const;
     virtual const Font&
@@ -157,9 +157,9 @@ protected:
     virtual const Color&
                     GetCanonicalTextColor( const StyleSettings& _rStyle ) const;
 public:
-                    PushButton( Window* pParent, WinBits nStyle = 0 );
-                    PushButton( Window* pParent, const ResId& rResId );
-                    ~PushButton();
+    explicit        PushButton( Window* pParent, WinBits nStyle = 0 );
+    explicit        PushButton( Window* pParent, const ResId& );
+    virtual         ~PushButton();
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt );
     virtual void    Tracking( const TrackingEvent& rTEvt );
@@ -232,8 +232,8 @@ private:
     SAL_DLLPRIVATE                 OKButton & operator= (const OKButton &);
 
 public:
-                    OKButton( Window* pParent, WinBits nStyle = WB_DEFBUTTON );
-                    OKButton( Window* pParent, const ResId& rResId );
+    explicit        OKButton( Window* pParent, WinBits nStyle = WB_DEFBUTTON );
+    explicit        OKButton( Window* pParent, const ResId& );
 
     virtual void    Click();
 };
@@ -254,8 +254,8 @@ private:
     SAL_DLLPRIVATE      CancelButton & operator= (const CancelButton &);
 
 public:
-                    CancelButton( Window* pParent, WinBits nStyle = 0 );
-                    CancelButton( Window* pParent, const ResId& rResId );
+    explicit        CancelButton( Window* pParent, WinBits nStyle = 0 );
+    explicit        CancelButton( Window* pParent, const ResId& );
 
     virtual void    Click();
 };
@@ -276,8 +276,8 @@ private:
     SAL_DLLPRIVATE      HelpButton & operator= ( const HelpButton & );
 
 public:
-                    HelpButton( Window* pParent, WinBits nStyle = 0 );
-                    HelpButton( Window* pParent, const ResId& rResId );
+    explicit        HelpButton( Window* pParent, WinBits nStyle = 0 );
+    explicit        HelpButton( Window* pParent, const ResId& );
 
     virtual void    Click();
 };
@@ -344,9 +344,9 @@ protected:
     void            DrawRadioButtonState( );
 
 public:
-                    RadioButton( Window* pParent, WinBits nWinStyle = 0 );
-                    RadioButton( Window* pParent, const ResId& rResId );
-                    ~RadioButton();
+    explicit        RadioButton( Window* pParent, WinBits nWinStyle = 0 );
+    explicit        RadioButton( Window* pParent, const ResId& );
+    virtual         ~RadioButton();
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt );
     virtual void    Tracking( const TrackingEvent& rTEvt );
@@ -437,21 +437,19 @@ protected:
     using Window::ImplInit;
     SAL_DLLPRIVATE void         ImplInit( Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE void         ImplLoadRes( const ResId& rResId );
-    SAL_DLLPRIVATE virtual void FillLayoutData() const;
-    SAL_DLLPRIVATE virtual const Font&
-                                GetCanonicalFont( const StyleSettings& _rStyle ) const;
-    SAL_DLLPRIVATE virtual const Color&
-                                GetCanonicalTextColor( const StyleSettings& _rStyle ) const;
+    virtual void FillLayoutData() const;
+    virtual const Font&         GetCanonicalFont( const StyleSettings& _rStyle ) const;
+    virtual const Color&        GetCanonicalTextColor( const StyleSettings& _rStyle ) const;
 
-    SAL_DLLPRIVATE virtual void ImplDrawCheckBoxState();
+    virtual void ImplDrawCheckBoxState();
     SAL_DLLPRIVATE const Rectangle& GetStateRect() const { return maStateRect; }
     SAL_DLLPRIVATE const Rectangle& GetMouseRect() const { return maMouseRect; }
 public:
     SAL_DLLPRIVATE void         ImplCheck();
     SAL_DLLPRIVATE void         ImplSetMinimumNWFSize();
 public:
-                    CheckBox( Window* pParent, WinBits nStyle = 0 );
-                    CheckBox( Window* pParent, const ResId& rResId );
+    explicit        CheckBox( Window* pParent, WinBits nStyle = 0 );
+    explicit        CheckBox( Window* pParent, const ResId& );
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt );
     virtual void    Tracking( const TrackingEvent& rTEvt );
@@ -515,12 +513,12 @@ private:
     SAL_DLLPRIVATE          ImageButton & operator= ( const ImageButton & );
 
 protected:
-                    ImageButton( WindowType nType );
+    explicit        ImageButton( WindowType nType );
 
 public:
-                    ImageButton( Window* pParent, WinBits nStyle = 0 );
-                    ImageButton( Window* pParent, const ResId& rResId );
-                    ~ImageButton();
+    explicit        ImageButton( Window* pParent, WinBits nStyle = 0 );
+    explicit        ImageButton( Window* pParent, const ResId& );
+    virtual         ~ImageButton();
 };
 
 class VCL_DLLPUBLIC ImageRadioButton : public RadioButton
@@ -530,9 +528,9 @@ class VCL_DLLPUBLIC ImageRadioButton : public RadioButton
     SAL_DLLPRIVATE  ImageRadioButton & operator= ( const ImageRadioButton & );
 
 public:
-                    ImageRadioButton( Window* pParent, WinBits nStyle = 0 );
-                    ImageRadioButton( Window* pParent, const ResId& rResId );
-                    ~ImageRadioButton();
+    explicit        ImageRadioButton( Window* pParent, WinBits nStyle = 0 );
+    explicit        ImageRadioButton( Window* pParent, const ResId& );
+    virtual         ~ImageRadioButton();
 };
 
 class VCL_DLLPUBLIC TriStateBox : public CheckBox
@@ -542,9 +540,9 @@ class VCL_DLLPUBLIC TriStateBox : public CheckBox
     SAL_DLLPRIVATE  TriStateBox & operator= ( const TriStateBox & );
 
 public:
-            TriStateBox( Window* pParent, WinBits nStyle = 0 );
-            TriStateBox( Window* pParent, const ResId& rResId );
-            ~TriStateBox();
+    explicit        TriStateBox( Window* pParent, WinBits nStyle = 0 );
+    explicit        TriStateBox( Window* pParent, const ResId& );
+    virtual         ~TriStateBox();
 };
 
 class VCL_DLLPUBLIC DisclosureButton : public CheckBox
@@ -552,10 +550,11 @@ class VCL_DLLPUBLIC DisclosureButton : public CheckBox
 protected:
     SAL_DLLPRIVATE virtual void ImplDrawCheckBoxState();
 public:
-    DisclosureButton( Window* pParent, WinBits nStyle = 0 );
-    DisclosureButton( Window* pParent, const ResId& rResId );
+    explicit DisclosureButton( Window* pParent, WinBits nStyle = 0 );
+    explicit DisclosureButton( Window* pParent, const ResId& );
 
     virtual void    KeyInput( const KeyEvent& rKEvt );
 };
 
 #endif  // _SV_BUTTON_HXX
+

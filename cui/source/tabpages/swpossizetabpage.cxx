@@ -721,8 +721,8 @@ sal_Bool SvxSwPosSizeTabPage::FillItemSet( SfxItemSet& rSet)
                     m_aRange.transform(basegfx::tools::createTranslateB2DHomMatrix(-m_pSdrView->GetSdrPageView()->GetPageOrigin()));
                 }
 
-                nHoriByPos += m_aAnchorPos.getX();
-                nVertByPos += m_aAnchorPos.getY();
+                nHoriByPos += basegfx::fround(m_aAnchorPos.getX());
+                nVertByPos += basegfx::fround(m_aAnchorPos.getY());
 
                 rSet.Put( SfxInt32Item( GetWhich( SID_ATTR_TRANSFORM_POS_X ), nHoriByPos ) );
                 rSet.Put( SfxInt32Item( GetWhich( SID_ATTR_TRANSFORM_POS_Y ), nVertByPos ) );
@@ -1942,7 +1942,7 @@ void SvxSwPosSizeTabPage::SetView( const SdrView* pSdrView )
 
         if( ( pObj->GetObjInventor() == SdrInventor ) &&
             ( eKind==OBJ_TEXT || eKind==OBJ_TITLETEXT || eKind==OBJ_OUTLINETEXT) &&
-            ( (SdrTextObj*) pObj )->HasText() )
+            pObj->HasText() )
         {
             DBG_ERROR("AutoWidth/AutoHeight should be enabled");
         }

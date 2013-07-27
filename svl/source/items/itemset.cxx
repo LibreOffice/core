@@ -25,10 +25,7 @@
 #include "precompiled_svl.hxx"
 
 #include <string.h>
-
-#if STLPORT_VERSION>=321
 #include <cstdarg>
-#endif
 
 #define _SVSTDARR_USHORTS
 #define _SVSTDARR_ULONGS

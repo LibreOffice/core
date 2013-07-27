@@ -1,5 +1,5 @@
 #**************************************************************
-#  
+#
 #  Licensed to the Apache Software Foundation (ASF) under one
 #  or more contributor license agreements.  See the NOTICE file
 #  distributed with this work for additional information
@@ -7,16 +7,16 @@
 #  to you under the Apache License, Version 2.0 (the
 #  "License"); you may not use this file except in compliance
 #  with the License.  You may obtain a copy of the License at
-#  
+#
 #    http://www.apache.org/licenses/LICENSE-2.0
-#  
+#
 #  Unless required by applicable law or agreed to in writing,
 #  software distributed under the License is distributed on an
 #  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
 #  KIND, either express or implied.  See the License for the
 #  specific language governing permissions and limitations
 #  under the License.
-#  
+#
 #**************************************************************
 
 # Global settings file for the minimal build environment of the SDK
@@ -93,15 +93,14 @@ CPPUHELPERLIB=icppuhelper.lib
 SALHELPERLIB=isalhelper.lib
 REGLIB=ireg.lib
 STORELIB=istore.lib
-STLPORTLIB=stlport_vc71$(STLDEBUG).lib
 
 BLANK= 
 EMPTYSTRING=
 PATH_SEPARATOR=;
 
 # use this for release version
-CC_FLAGS_JNI=-c -MT -Zm500 -Zc:forScope,wchar_t- -wd4251 -wd4275 -wd4290 -wd4675 -wd4786 -wd4800 -Zc:forScope -GR -EHa
-CC_FLAGS=-c -MT -Zm500 -Zc:forScope,wchar_t- -wd4251 -wd4275 -wd4290 -wd4675 -wd4786 -wd4800 -Zc:forScope -GR -EHa
+CC_FLAGS_JNI=-c -MT -Zm500 -Zc:wchar_t- -wd4251 -wd4275 -wd4290 -wd4675 -wd4786 -wd4800 -GR -EHa
+CC_FLAGS=-c -MT -Zm500 -Zc:wchar_t- -wd4251 -wd4275 -wd4290 -wd4675 -wd4786 -wd4800 -GR -EHa
 ifeq "$(CPP_MANIFEST)" "true"
 #CC_FLAGS+=-EHa -Zc:wchar_t-
 LINK_MANIFEST=mt -manifest $@.manifest "-outputresource:$@;2"
@@ -127,17 +126,13 @@ CC_OUTPUT_SWITCH=-Fo
 
 LIBRARY_LINK_FLAGS=/NODEFAULTLIB /DLL /DEBUGTYPE:cv
 COMP_LINK_FLAGS=$(LIBRARY_LINK_FLAGS) /DEF:$(PRJ)/settings/component.uno.def
-EXE_LINK_FLAGS=/MAP /OPT:NOREF /SUBSYSTEM:CONSOLE /BASE:0x1b000000 /DEBUGTYPE:cv /NODEFAULTLIB  msvcrt.lib kernel32.lib
+EXE_LINK_FLAGS=/MAP /OPT:NOREF /SUBSYSTEM:CONSOLE /BASE:0x1b000000 /DEBUGTYPE:cv /NODEFAULTLIB  msvcrt.lib msvcprt.lib kernel32.lib
 ifeq "$(DEBUG)" "yes"
 LIBRARY_LINK_FLAGS+=/DEBUG
 EXE_LINK_FLAGS+=/DEBUG
 endif
 
 LINK_JAVA_LIBS=/LIBPATH:"$(OO_SDK_JAVA_HOME)/lib"
-
-ifneq "$(OO_SDK_URE_HOME)" ""
-URE_MISC=$(OO_SDK_URE_HOME)\misc
-endif
 
 # use this for release version
 #EXE_LINK_FLAGS=/MAP /OPT:NOREF /SUBSYSTEM:CONSOLE /BASE:0x1100000
@@ -154,7 +149,7 @@ endif
 ifneq (,$(findstring solaris,$(PLATFORM)))
 # Settings for Solaris using Sun Workshop compiler
 
-PROCTYPE := $(shell $(PRJ)/config.guess | cut -d"-" -f1)$(shell /usr/ccs/bin/elfdump -e "$(OO_SDK_URE_HOME)/lib/libuno_sal.so.3" | /usr/xpg4/bin/grep -q -w ELFCLASS64 && echo 64)
+PROCTYPE := $(shell $(PRJ)/config.guess | cut -d"-" -f1)$(shell /usr/ccs/bin/elfdump -e "$(OFFICE_PROGRAM_PATH)/libuno_sal.so.3" | /usr/xpg4/bin/grep -q -w ELFCLASS64 && echo 64)
 
 ifeq "$(PROCTYPE)" "sparc"
 PLATFORM=solsparc
@@ -211,11 +206,6 @@ CPPUHELPERLIB=-luno_cppuhelperC52
 SALHELPERLIB=-luno_salhelperC52
 REGLIB=-lreg
 STORELIB=-lstore
-ifeq "$(PROCTYPE)" "sparc64"
-STLPORTLIB=-library=stlport4
-else
-STLPORTLIB=-lstlport_sunpro$(STLDEBUG)
-endif
 
 EMPTYSTRING=
 PATH_SEPARATOR=:
@@ -246,17 +236,13 @@ endif
 COMP_LINK_FLAGS=$(LIBRARY_LINK_FLAGS)
 
 EXE_LINK_FLAGS=-w -mt -z combreloc -PIC -temp=/tmp -norunpath -Bdirect -z defs
-LINK_LIBS=-L"$(OUT)/lib" -L"$(OO_SDK_HOME)/lib" -L"$(OO_SDK_URE_LIB_DIR)"
+LINK_LIBS=-L"$(OUT)/lib" -L"$(OO_SDK_HOME)/lib" -L"$(OO_SDK_OFFICE_LIB_DIR)"
 LINK_JAVA_LIBS=-L"$(OO_SDK_JAVA_HOME)/jre/lib/$(JAVA_PROC_TYPE)"
 
 ifeq "$(PROCTYPE)" "sparc64"
 CC_FLAGS+=-m64
 LIBRARY_LINK_FLAGS+=-m64
 EXE_LINK_FLAGS+=-m64
-endif
-
-ifneq "$(OO_SDK_URE_HOME)" ""
-URE_MISC=$(OO_SDK_URE_HOME)/share/misc
 endif
 
 endif
@@ -277,27 +263,23 @@ PLATFORM=linux
 PACKAGE_LIB_DIR=linux_$(PROCTYPE).plt
 UNOPKG_PLATFORM=Linux_$(PROCTYPE)
 JAVA_PROC_TYPE=$(PROCTYPE)
-STLPORT=no
 
 ifeq "$(PROCTYPE)" "i386"
 PACKAGE_LIB_DIR=linux_x86.plt
 UNOPKG_PLATFORM=Linux_x86
 JAVA_PROC_TYPE=i386
-STLPORT=yes
 endif
 
 ifeq "$(PROCTYPE)" "powerpc"
 PACKAGE_LIB_DIR=linux_powerpc.plt
 UNOPKG_PLATFORM=Linux_PowerPC
 JAVA_PROC_TYPE=ppc
-STLPORT=yes
 endif
 
 ifeq "$(PROCTYPE)" "sparc"
 PACKAGE_LIB_DIR=linux_sparc.plt
 UNOPKG_PLATFORM=Linux_SPARC
 JAVA_PROC_TYPE=sparc
-STLPORT=yes
 endif
 
 ifeq "$(PROCTYPE)" "x86_64"
@@ -349,15 +331,6 @@ CPPUHELPERLIB=-luno_cppuhelper$(COMID)
 SALHELPERLIB=-luno_salhelper$(COMID)
 REGLIB=-lreg
 STORELIB=-lstore
-ifeq "$(STLPORT)" "yes"
-ifeq "$(STLPORT_VER)" "500"
-STLPORTLIB=-lstlport
-else
-STLPORTLIB=-lstlport_gcc$(STLDEBUG)
-endif
-else
-STLPORTLIB=
-endif
 
 EMPTYSTRING=
 PATH_SEPARATOR=:
@@ -399,12 +372,8 @@ COMP_LINK_FLAGS=$(LIBRARY_LINK_FLAGS)
 
 #EXE_LINK_FLAGS=-Wl,--allow-shlib-undefined -Wl,-export-dynamic -Wl,-z,defs -Wl,--whole-archive -lsalcpprt -Wl,--no-whole-archive
 EXE_LINK_FLAGS=-Wl,--allow-shlib-undefined -Wl,-export-dynamic -Wl,-z,defs -Wl,--no-whole-archive
-LINK_LIBS=-L"$(OUT)/lib" -L"$(OO_SDK_HOME)/lib" -L"$(OO_SDK_URE_LIB_DIR)"
+LINK_LIBS=-L"$(OUT)/lib" -L"$(OO_SDK_HOME)/lib" -L"$(OO_SDK_OFFICE_LIB_DIR)"
 LINK_JAVA_LIBS=-L"$(OO_SDK_JAVA_HOME)/jre/lib/$(JAVA_PROC_TYPE)"
-
-ifneq "$(OO_SDK_URE_HOME)" ""
-URE_MISC=$(OO_SDK_URE_HOME)/share/misc
-endif
 
 endif
 
@@ -483,14 +452,14 @@ SALHELPERLIB=-luno_salhelper$(COMID)
 REGLIB=-lreg
 STORELIB=-lstore
 
-SALDYLIB=-Wl,-dylib_file,@__________________________________________________URELIB/libuno_sal.dylib.3:'$(OO_SDK_URE_LIB_DIR)/libuno_sal.dylib'
-CPPUDYLIB=-Wl,-dylib_file,@__________________________________________________URELIB/libuno_cppu.dylib.3:'$(OO_SDK_URE_LIB_DIR)/libuno_cppu.dylib'
-CPPUHELPERDYLIB=-Wl,-dylib_file,@__________________________________________________URELIB/libuno_cppuhelper'$(COMID).dylib.3:$(OO_SDK_URE_LIB_DIR)/libuno_cppuhelper$(COMID).dylib'
-SALHELPERDYLIB=-Wl,-dylib_file,@__________________________________________________URELIB/libuno_salhelper$(COMID).dylib.3:'$(OO_SDK_URE_LIB_DIR)/libuno_salhelper$(COMID).dylib'
-REGDYLIB=-Wl,-dylib_file,@__________________________________________________URELIB/libreg.dylib.3:'$(OO_SDK_URE_LIB_DIR)/libreg.dylib'
-STOREDYLIB=-Wl,-dylib_file,@__________________________________________________URELIB/libstore.dylib.3:'$(OO_SDK_URE_LIB_DIR)/libstore.dylib'
+SALDYLIB=-Wl,-dylib_file,@__________________________________________________URELIB/libuno_sal.dylib.3:'$(OO_SDK_OFFICE_LIB_DIR)/libuno_sal.dylib'
+CPPUDYLIB=-Wl,-dylib_file,@__________________________________________________URELIB/libuno_cppu.dylib.3:'$(OO_SDK_OFFICE_LIB_DIR)/libuno_cppu.dylib'
+CPPUHELPERDYLIB=-Wl,-dylib_file,@__________________________________________________URELIB/libuno_cppuhelper'$(COMID).dylib.3:$(OO_SDK_OFFICE_LIB_DIR)/libuno_cppuhelper$(COMID).dylib'
+SALHELPERDYLIB=-Wl,-dylib_file,@__________________________________________________URELIB/libuno_salhelper$(COMID).dylib.3:'$(OO_SDK_OFFICE_LIB_DIR)/libuno_salhelper$(COMID).dylib'
+REGDYLIB=-Wl,-dylib_file,@__________________________________________________URELIB/libreg.dylib.3:'$(OO_SDK_OFFICE_LIB_DIR)/libreg.dylib'
+STOREDYLIB=-Wl,-dylib_file,@__________________________________________________URELIB/libstore.dylib.3:'$(OO_SDK_OFFICE_LIB_DIR)/libstore.dylib'
 
-INSTALL_NAME_URELIBS=install_name_tool -change @__________________________________________________URELIB/libuno_sal.dylib.3 @executable_path/urelibs/libuno_sal.dylib.3 -change  @__________________________________________________URELIB/libuno_cppu.dylib.3 @executable_path/urelibs/libuno_cppu.dylib.3 -change @__________________________________________________URELIB/libuno_cppuhelper$(COMID).dylib.3 @executable_path/urelibs/libuno_cppuhelper$(COMID).dylib.3 -change @__________________________________________________URELIB/libuno_salhelper$(COMID).dylib.3 @executable_path/urelibs/libuno_salhelper$(COMID).dylib.3 -change @__________________________________________________URELIB/libreg.dylib.3 @executable_path/urelibs/libreg.dylib.3 -change @__________________________________________________URELIB/libstore.dylib.3 @executable_path/urelibs/libstore.dylib.3
+INSTALL_NAME_URELIBS=install_name_tool -change @__________________________________________________URELIB/libuno_sal.dylib.3 @executable_path/libuno_sal.dylib.3 -change  @__________________________________________________URELIB/libuno_cppu.dylib.3 @executable_path/libuno_cppu.dylib.3 -change @__________________________________________________URELIB/libuno_cppuhelper$(COMID).dylib.3 @executable_path/libuno_cppuhelper$(COMID).dylib.3 -change @__________________________________________________URELIB/libuno_salhelper$(COMID).dylib.3 @executable_path/libuno_salhelper$(COMID).dylib.3 -change @__________________________________________________URELIB/libreg.dylib.3 @executable_path/libreg.dylib.3 -change @__________________________________________________URELIB/libstore.dylib.3 @executable_path/libstore.dylib.3
 
 INSTALL_NAME_URELIBS_BIN=install_name_tool -change @__________________________________________________URELIB/libuno_sal.dylib.3 libuno_sal.dylib.3 -change  @__________________________________________________URELIB/libuno_cppu.dylib.3 libuno_cppu.dylib.3 -change @__________________________________________________URELIB/libuno_cppuhelper$(COMID).dylib.3 libuno_cppuhelper$(COMID).dylib.3 -change @__________________________________________________URELIB/libuno_salhelper$(COMID).dylib.3 libuno_salhelper$(COMID).dylib.3 -change @__________________________________________________URELIB/libreg.dylib.3 libreg.dylib.3 -change @__________________________________________________URELIB/libstore.dylib.3 libstore.dylib.3
 
@@ -524,13 +493,9 @@ LIBRARY_LINK_FLAGS=-dynamiclib -single_module -Wl,-multiply_defined,suppress $(G
 COMP_LINK_FLAGS=$(LIBRARY_LINK_FLAGS)
 
 EXE_LINK_FLAGS=$(GCC_ARCH_OPTION) -Wl,-multiply_defined,suppress
-LINK_LIBS=-L$(OUT)/lib -L$(OO_SDK_OUT)/$(PLATFORM)/lib -L"$(OO_SDK_URE_LIB_DIR)"
+LINK_LIBS=-L$(OUT)/lib -L$(OO_SDK_OUT)/$(PLATFORM)/lib -L"$(OO_SDK_OFFICE_LIB_DIR)"
 LINK_JAVA_LIBS=-framework JavaVM
 #LINK_JAVA_LIBS=-L"$(OO_SDK_JAVA_HOME)/Libraries"
-
-ifneq "$(OO_SDK_URE_HOME)" ""
-URE_MISC=$(OO_SDK_URE_HOME)/share/misc
-endif
 
 endif
 
@@ -615,11 +580,6 @@ CPPUHELPERLIB=-luno_cppuhelper$(COMID)
 SALHELPERLIB=-luno_salhelper$(COMID)
 REGLIB=-lreg
 STORELIB=-lstore
-ifeq "$(STLPORT_VER)" "500"
-STLPORTLIB=-lstlport
-else
-STLPORTLIB=-lstlport_gcc$(STLDEBUG)
-endif
 
 EMPTYSTRING=
 PATH_SEPARATOR=:
@@ -649,11 +609,17 @@ COMP_LINK_FLAGS=$(LIBRARY_LINK_FLAGS)
 
 EXE_LINK_FLAGS=-Wl,--allow-shlib-undefined 
 #EXE_LINK_FLAGS+=-Wl,-export-dynamic -Wl,-z,defs
-LINK_LIBS=-L"$(OUT)/lib" -L"$(OO_SDK_HOME)/lib" -L"$(OO_SDK_URE_LIB_DIR)" $(PTHREAD_LIBS)
+LINK_LIBS=-L"$(OUT)/lib" -L"$(OO_SDK_HOME)/lib" -L"$(OO_SDK_OFFICE_LIB_DIR)" $(PTHREAD_LIBS)
 LINK_JAVA_LIBS=-L"$(OO_SDK_JAVA_HOME)/jre/lib/$(JAVA_PROC_TYPE)"
 
-ifneq "$(OO_SDK_URE_HOME)" ""
-URE_MISC=$(OO_SDK_URE_HOME)/share/misc
 endif
 
+# add additional boost specific settings
+ifneq "$(OO_SDK_BOOST_HOME)" ""
+STL_INCLUDES+= -I"$(OO_SDK_BOOST_HOME)"
+endif
+
+# Add OSL_DEBUG_LEVEL to compiler the flags (for OSL_TRACE et. al.)
+ifeq "$(DEBUG)" "yes"
+CC_FLAGS += -DOSL_DEBUG_LEVEL=2
 endif

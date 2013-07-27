@@ -43,23 +43,11 @@ $main::operatingSystem = `$main::sdkpath/config.guess | cut -d"-" -f3,4`;
 chomp ($main::operatingSystem);
 
 $main::OO_SDK_HOME = $main::sdkpath;
-#$main::OO_SDK_HOME = "";
 $main::OO_SDK_HOME_SUGGESTION = $main::sdkpath;
-
-$main::OFFICE_OR_URE = "Office";
-$main::OFFICE_OR_URE_SUGGESTION = "Office";
 
 $main::OFFICE_HOME = "";
 
-$main::OFFICE_BASE_HOME = substr($main::sdkpath, 0, rindex($main::sdkpath, "/sdk"));
-
-if ( $main::operatingSystem =~ m/darwin/ )
-{
-#   $main::OO_SDK_URE_HOME = `cd $main::sdkpath/../ure-link && pwd`;
-} else {
-    $main::OO_SDK_URE_HOME = `cd $main::sdkpath/../ure-link && pwd`;
-}
-chomp($main::OO_SDK_URE_HOME);
+#$main::OFFICE_BASE_HOME = substr($main::sdkpath, 0, rindex($main::sdkpath, "/sdk"));
 
 $main::OO_SDK_MAKE_HOME = "";
 $main::makeName = "make";
@@ -75,6 +63,16 @@ $main::correctVersion = 0;
 $main::OO_SDK_ZIP_HOME = "";
 $main::OO_SDK_ZIP_HOME_SUGGESTION = searchprog("zip");
 $main::zipVersion = "2.3";
+
+$main::OO_SDK_CAT_HOME = "";
+$main::OO_SDK_CAT_HOME_SUGGESTION = searchprog("cat");
+# TODO cat version
+# $main::catVersion = "";
+
+$main::OO_SDK_SED_HOME = "";
+$main::OO_SDK_SED_HOME_SUGGESTION = searchprog("sed");
+# TODO sed version
+# $main::sedVersion = "";
 
 $main::OO_SDK_CPP_HOME = "";
 $main::cppName = "gcc";
@@ -96,6 +94,10 @@ if ( $main::operatingSystem =~ m/darwin/ )
 $main::OO_SDK_JAVA_HOME_SUGGESTION = searchprog("javac");
 $main::javaVersion = "1.5.0_01";
 
+$main::OO_SDK_BOOST_HOME_SUGGESTION = "";
+$main::boostVersion = "1.48.0";
+$main::skipBoostDir = 0;
+
 $main::SDK_AUTO_DEPLOYMENT = "";
 $main::SDK_AUTO_DEPLOYMENT_SUGGESTION = "YES";
 
@@ -105,142 +107,105 @@ $main::skipOutputDir = 0;
 
 $main::return = 0;
 
-if ( $main::OFFICE_OR_URE eq "Office" )
+if ( $main::operatingSystem =~ m/darwin/ )
 {
-    if ( $main::operatingSystem =~ m/darwin/ )
-    {
 # used for a SDK as part of the office installation
-#       $main::OFFICE_HOME = `cd $main::sdkpath/../../.. && pwd`;
-#       chomp($main::OFFICE_HOME);
-#       print " Used Office = $main::OFFICE_HOME\n";
-        print " Used SDK = $main::OO_SDK_HOME\n\n";
+#    $main::OFFICE_HOME = `cd $main::sdkpath/../../.. && pwd`;
+#    chomp($main::OFFICE_HOME);
+#    print " Used Office = $main::OFFICE_HOME\n";
+    print " Used SDK = $main::OO_SDK_HOME\n\n";
 
-        $main::OFFICE_HOME_SUGGESTION = searchMacOffice();
-        while ( (! -d "$main::OFFICE_HOME" ) ||
-                ((-d "$main::OFFICE_HOME") && (! -d "$main::OFFICE_HOME/Contents/MacOS")) )
-        {
-            print " Enter the Office installation directory [$main::OFFICE_HOME_SUGGESTION]: ";
-            $main::OFFICE_HOME = readStdIn();
-            chop($main::OFFICE_HOME);
-            if ( $main::OFFICE_HOME eq "" )
-            {
-                $main::OFFICE_HOME = $main::OFFICE_HOME_SUGGESTION;
-            }
+    $main::OFFICE_HOME_SUGGESTION = searchMacOffice();
+    while ( (! -d "$main::OFFICE_HOME" ) ||
+        ((-d "$main::OFFICE_HOME") && (! -d "$main::OFFICE_HOME/Contents/MacOS")) )
+    {
+    print " Enter the Office installation directory [$main::OFFICE_HOME_SUGGESTION]: ";
+    $main::OFFICE_HOME = readStdIn();
+    chop($main::OFFICE_HOME);
+    if ( $main::OFFICE_HOME eq "" )
+    {
+        $main::OFFICE_HOME = $main::OFFICE_HOME_SUGGESTION;
+    }
 
-            if ( ! -d "$main::OFFICE_HOME" )
-            {
-                $main::OFFICE_HOME = "";
-                print " Error: An office installation is required, please specify the path to a valid installation.\n";
-            }
+    if ( ! -d "$main::OFFICE_HOME" )
+    {
+        $main::OFFICE_HOME = "";
+        print " Error: An office installation is required, please specify the path to a valid installation.\n";
+    }
 
-            # check more details
-            if ( -d "$main::OFFICE_HOME/Contents/basis-link" ) {
-                $main::OFFICE_BASE_HOME = "$main::OFFICE_HOME/Contents/basis-link";
-                if ( -d "$main::OFFICE_BASE_HOME/ure-link" ) {
-                    $main::OO_SDK_URE_HOME = "$main::OFFICE_BASE_HOME/ure-link";
-                } else {
-                    $main::OFFICE_HOME = "";
-                    $main::OFFICE_BASE_HOME = "";
-                    $main::OO_SDK_URE_HOME = "";
-                    print " Error: no URE found in office installation, please specify the path to a valid installation.\n";
-                }
-            } else {
-                $main::OFFICE_HOME = "";
-                $main::OFFICE_BASE_HOME = "";
-                $main::OO_SDK_URE_HOME = "";
-                print " Error: no base layer found in office installation, please specify the path to a valid installation.\n";
-            }
-        }
+#   $main::OFFICE_BASE_HOME = "$main::OFFICE_HOME/Contents";
+    }
+} else
+{
+    $main::OFFICE_HOME_SUGGESTION = searchoffice();
+
+    if ( $main::OFFICE_HOME_SUGGESTION eq "" ) {
+    # prepare Office path
+    $main::OFFICE_HOME_SUGGESTION = searchprog("soffice");
+    }
+
+    if ( ! $main::OFFICE_HOME_SUGGESTION eq "" )
+    {
+    my $tmpOffice = readlink "$main::OFFICE_HOME_SUGGESTION/soffice";
+
+    if ( $tmpOffice eq "" )
+    {
+        $tmpOffice = "$main::OFFICE_HOME_SUGGESTION/soffice";
+    }
+
+    my $offset = rindex($tmpOffice, "/program/soffice");
+    if ( $offset != -1 )
+    {
+        $main::OFFICE_HOME_SUGGESTION = substr($tmpOffice, 0, $offset);
     } else
     {
-        $main::OFFICE_HOME_SUGGESTION = searchoffice();
-
-        if ( $main::OFFICE_HOME_SUGGESTION eq "" ) {
-            # prepare Office path
-            $main::OFFICE_HOME_SUGGESTION = searchprog("soffice");
-        }
-
-        if ( ! $main::OFFICE_HOME_SUGGESTION eq "" )
+        $offset = rindex($tmpOffice, "/soffice");
+        if ( $offset != -1 )
         {
-            my $tmpOffice = readlink "$main::OFFICE_HOME_SUGGESTION/soffice";
-
-            if ( $tmpOffice eq "" )
-            {
-                $tmpOffice = "$main::OFFICE_HOME_SUGGESTION/soffice";
-            }
-
-            my $offset = rindex($tmpOffice, "/program/soffice");
-            if ( $offset != -1 )
-            {
-                $main::OFFICE_HOME_SUGGESTION = substr($tmpOffice, 0, $offset);
-            } else
-            {
-                $offset = rindex($tmpOffice, "/soffice");
-                if ( $offset != -1 )
-                {
-                    $main::OFFICE_HOME_SUGGESTION = substr($tmpOffice, 0, $offset);
-                } else
-                {
-                    $main::OFFICE_HOME_SUGGESTION = "";
-                }
-            }
-        }
-
-        while ( (! -d "$main::OFFICE_HOME" ) ||
-                ((-d "$main::OFFICE_HOME") && (! -d "$main::OFFICE_HOME/program")) )
+        $main::OFFICE_HOME_SUGGESTION = substr($tmpOffice, 0, $offset);
+        } else
         {
-            print " Enter the Office installation directory [$main::OFFICE_HOME_SUGGESTION]: ";
-            $main::OFFICE_HOME = readStdIn();
-            chop($main::OFFICE_HOME);
-            if ( $main::OFFICE_HOME eq "" )
-            {
-                $main::OFFICE_HOME = $main::OFFICE_HOME_SUGGESTION;
-            }
-
-            if ( ! -d "$main::OFFICE_HOME" )
-            {
-                $main::OFFICE_HOME = "";
-                print " Error: An office installation is required, please specify the path to a valid installation.\n";
-            } else
-            {
-                # special work for a network installation, no prgram directory but a link to the soffice binary
-                if ( (! -d "$main::OFFICE_HOME/program") && (-e "$main::OFFICE_HOME/soffice") )
-                {
-                    my $soserver = `ls -l $OFFICE_HOME_SUGGESTION/soffice | sed -n 's/.* -> //p'`;
-                    $soserver= substr($soserver, 0, rindex($soserver, "program") - 1);
-
-                    if ( ! -d $soserver )
-                    {
-                        $main::OFFICE_HOME = "";
-                        print " Error: An office installation is required, please specify the path to a valid installation.\n";
-                    } else
-                    {
-                        $main::OFFICE_HOME = $soserver;
-                    }
-                }
-            }
+        $main::OFFICE_HOME_SUGGESTION = "";
         }
     }
-}
-else
-{
-    # prepare URE path
-    $main::OO_SDK_URE_HOME_SUGGESTION = "/opt/openoffice.org/ure";
-    $main::OO_SDK_URE_HOME_SUGGESTION = "" unless
-        -e "$main::OO_SDK_URE_HOME_SUGGESTION/bin/uno";
-    for (;;)
+    }
+
+    while ( (! -d "$main::OFFICE_HOME" ) ||
+        ((-d "$main::OFFICE_HOME") && (! -d "$main::OFFICE_HOME/program")) )
     {
-        print " Enter the URE installation directory",
-            " [$main::OO_SDK_URE_HOME_SUGGESTION]: ";
-        $main::OO_SDK_URE_HOME = readStdIn();
-        chop $main::OO_SDK_URE_HOME;
-        $main::OO_SDK_URE_HOME = $main::OO_SDK_URE_HOME_SUGGESTION if
-            $main::OO_SDK_URE_HOME eq "" &&
-            $main::OO_SDK_URE_HOME_SUGGESTION ne "";
-        last if -e "$main::OO_SDK_URE_HOME/bin/uno";
-        print " Error: A valid URE installation is required.\n";
+    print " Enter the Office installation directory [$main::OFFICE_HOME_SUGGESTION]: ";
+    $main::OFFICE_HOME = readStdIn();
+    chop($main::OFFICE_HOME);
+    if ( $main::OFFICE_HOME eq "" )
+    {
+        $main::OFFICE_HOME = $main::OFFICE_HOME_SUGGESTION;
+    }
+
+    if ( ! -d "$main::OFFICE_HOME" )
+    {
+        $main::OFFICE_HOME = "";
+        print " Error: An office installation is required, please specify the path to a valid installation.\n";
+    } else
+    {
+        # special work for a network installation, no prgram directory but a link to the soffice binary
+        if ( (! -d "$main::OFFICE_HOME/program") && (-e "$main::OFFICE_HOME/soffice") )
+        {
+        my $soserver = `ls -l $OFFICE_HOME_SUGGESTION/soffice | sed -n 's/.* -> //p'`;
+        $soserver= substr($soserver, 0, rindex($soserver, "program") - 1);
+
+        if ( ! -d $soserver )
+        {
+            $main::OFFICE_HOME = "";
+            print " Error: An office installation is required, please specify the path to a valid installation.\n";
+        } else
+        {
+            $main::OFFICE_HOME = $soserver;
+        }
+        }
+    }
     }
 }
+
 
 # prepare GNU make path
 while ( (!$main::correctVersion) &&
@@ -324,6 +289,54 @@ while ( (!$main::correctVersion) &&
             }
         }
     }
+}
+
+# prepare cat path
+$main::correctVersion = 0;
+while ( (!$main::correctVersion) &&
+        ((! -d "$main::OO_SDK_CAT_HOME" ) ||
+         ((-d "$main::OO_SDK_CAT_HOME") && (! -e "$main::OO_SDK_CAT_HOME/cat"))) )
+{
+    print " Enter cat tool directory [$main::OO_SDK_CAT_HOME_SUGGESTION]: ";
+    $main::OO_SDK_CAT_HOME = readStdIn();
+    chop($main::OO_SDK_CAT_HOME);
+    if ( $main::OO_SDK_CAT_HOME eq "" )
+    {
+        $main::OO_SDK_CAT_HOME = $main::OO_SDK_CAT_HOME_SUGGESTION;
+    }
+    if ( (! -d "$main::OO_SDK_CAT_HOME") ||
+         ((-d "$main::OO_SDK_CAT_HOME") && (! -e "$main::OO_SDK_CAT_HOME/cat")) )
+    {
+        $main::OO_SDK_CAT_HOME = "";
+        print " Error: cat tool is required, please specify a cat tool directory.\n";
+    }
+    # else ...
+    # TODO check version
+    # NOTE: only Linux cat understands --version
+}
+
+# prepare sed path
+$main::correctVersion = 0;
+while ( (!$main::correctVersion) &&
+        ((! -d "$main::OO_SDK_SED_HOME" ) ||
+         ((-d "$main::OO_SDK_SED_HOME") && (! -e "$main::OO_SDK_SED_HOME/sed"))) )
+{
+    print " Enter sed tool directory [$main::OO_SDK_SED_HOME_SUGGESTION]: ";
+    $main::OO_SDK_SED_HOME = readStdIn();
+    chop($main::OO_SDK_SED_HOME);
+    if ( $main::OO_SDK_SED_HOME eq "" )
+    {
+        $main::OO_SDK_SED_HOME = $main::OO_SDK_SED_HOME_SUGGESTION;
+    }
+    if ( (! -d "$main::OO_SDK_SED_HOME") ||
+         ((-d "$main::OO_SDK_SED_HOME") && (! -e "$main::OO_SDK_SED_HOME/sed")) )
+    {
+        $main::OO_SDK_SED_HOME = "";
+        print " Error: sed tool is required, please specify a sed tool directory.\n";
+    }
+    # else ...
+    # TODO check version
+    # NOTE: only Linux sed understands --version
 }
 
 # prepare C++ compiler path
@@ -481,6 +494,34 @@ while ( (!$main::correctVersion) &&
     }
 }
 
+# prepare boost directory (optional)
+while ( (!$main::skipBoostDir) &&
+        ((! -d "$main::OO_SDK_BOOST_HOME" ) ||
+         ((-d "$main::OO_SDK_BOOST_HOME") && (! -e "$main::OO_SDK_BOOST_HOME/boost/tr1/unordered_map.hpp"))) )
+{
+
+    print " Enter boost directory [$main::OO_SDK_BOOST_HOME_SUGGESTION]: ";
+    $main::OO_SDK_BOOST_HOME = readStdIn();
+    chop($main::OO_SDK_BOOST_HOME);
+    if ( $main::OO_SDK_BOOST_HOME eq "" )
+    {
+        $main::OO_SDK_BOOST_HOME = $main::OO_SDK_BOOST_HOME_SUGGESTION;
+    }
+    if ( (! -d "$main::OO_SDK_BOOST_HOME") ||
+         ((-d "$main::OO_SDK_BOOST_HOME") && (! -e "$main::OO_SDK_BOOST_HOME/boost/tr1/unordered_map.hpp")) )
+    {
+        print " Error: boost couldn't be find or verified, please specify a boost directory.\n";
+        if ( skipChoice("optional output directory") == 1 )
+        {
+            $main::skipBoostDir = 1;
+        }
+        $main::OO_SDK_BOOST_HOME = "";
+    } else
+    {
+        # the boost directory is optional
+        $main::skipBoostDir = 1;
+    }
+}
 
 # prepare output directory (optional)
 while ( (!$main::skipOutputDir) &&
@@ -515,31 +556,21 @@ while ( (!$main::skipOutputDir) &&
 }
 
 # prepare auto deployment
-if ( $main::OFFICE_OR_URE eq "Office" )
+while ( $main::SDK_AUTO_DEPLOYMENT eq "" ||
+    ((! $main::SDK_AUTO_DEPLOYMENT eq "YES") &&
+     (! $main::SDK_AUTO_DEPLOYMENT eq "NO")) )
 {
-    while ( $main::SDK_AUTO_DEPLOYMENT eq "" ||
-         ((! $main::SDK_AUTO_DEPLOYMENT eq "YES") &&
-          (! $main::SDK_AUTO_DEPLOYMENT eq "NO")) )
+    print " Automatic deployment of UNO components (YES/NO) [$main::SDK_AUTO_DEPLOYMENT_SUGGESTION]: ";
+    $main::SDK_AUTO_DEPLOYMENT = uc <STDIN>;
+    chop($main::SDK_AUTO_DEPLOYMENT);
+    if ( $main::SDK_AUTO_DEPLOYMENT eq "" )
     {
-        print " Automatic deployment of UNO components (YES/NO) [$main::SDK_AUTO_DEPLOYMENT_SUGGESTION]: ";
-        $main::SDK_AUTO_DEPLOYMENT = uc <STDIN>;
-        chop($main::SDK_AUTO_DEPLOYMENT);
-        if ( $main::SDK_AUTO_DEPLOYMENT eq "" )
-        {
-            $main::SDK_AUTO_DEPLOYMENT = "YES";
-        }
+    $main::SDK_AUTO_DEPLOYMENT = "YES";
     }
 }
-else
-{
-    $main::SDK_AUTO_DEPLOYMENT = "NO";
-}
 
-prepareScriptFile("setsdkenv_unix.sh.in", "setsdkenv_unix.sh", 1);
+prepareScriptFile("setsdkenv_unix.sh.in", "setsdkenv_unix.sh");
 chmod 0644, "$main::OO_SDK_CONFIG_HOME/$main::hostname/setsdkenv_unix.sh";
-
-prepareScriptFile("setsdkenv_unix.csh.in", "setsdkenv_unix.csh", 2);
-chmod 0644, "$main::OO_SDK_CONFIG_HOME/$main::hostname/setsdkenv_unix.csh";
 
 print "\n";
 print " ************************************************************************\n";
@@ -548,7 +579,6 @@ print " * For each time you want to use this configured SDK environment, you\n";
 print " * have to run the \"setsdkenv_unix\" script file!\n";
 print " * Alternatively can you source one of the scripts\n";
 print " *   \"$main::OO_SDK_CONFIG_HOME/$main::hostname/setsdkenv_unix.sh\"\n";
-print " *   \"$main::OO_SDK_CONFIG_HOME/$main::hostname/setsdkenv_unix.csh\"\n";
 print " * to get an environment without starting a new shell.\n";
 print " ************************************************************************\n\n";
 
@@ -657,27 +687,17 @@ sub searchprog
 
 sub searchMacOffice
 {
-    if (-d "/Applications/OpenOffice.org.app" ) {
-        return "/Applications/OpenOffice.org.app"
+    if (-d "/Applications/OpenOffice.app" ) {
+        return "/Applications/OpenOffice.app"
     }
-    if (-d "/Applications/Oracle Open Office.app" ) {
-        return "/Applications/Oracle Open Office.app";
-    }
-    if (-d "/Applications/StarOffice.app" ) {
-        return "/Applications/StarOffice.app";
-    }
-    if (-d "/Applications/StarSuite.app" ) {
-        return "/Applications/StarSuite.app";
-    }
-
     return "";
 }
 
 sub searchoffice
 {
-    my $offset = rindex($main::sdkpath, "/openoffice.org");
+    my $offset = rindex($main::sdkpath, "/openoffice");
     my $tmpOffice = substr($main::sdkpath, 0, $offset);
-    my $officepath = "$tmpOffice/openoffice.org$main::OO_MAJORVERSION";
+    my $officepath = "$tmpOffice/openoffice$main::OO_MAJORVERSION";
 
 #   if ( $main::OO_MINORVERSION > 0) {
 #       $officepath = "$officepath$main::OO_MINORVERSION";
@@ -687,59 +707,7 @@ sub searchoffice
     if (-d $officepath && -e "$officepath/program/soffice") {
         return $officepath;
     }
-    # fallback
-    my $tmpversion = $main::OO_MAJORVERSION;
-#   if ( $main::OO_MINORVERSION > 0) {
-#       $tmpversion = "$tmpversion.$main::OO_MINORVERSION";
-#   }
-
-    $officepath = "$tmpOffice/oracle_open_office$tmpversion";
-    if (-d $officepath && -e "$officepath/program/soffice") {
-        return $officepath;
-    }
-
-    my $tmpversion = $main::OO_MAJORVERSION + 6;
-    if ( $main::OO_MINORVERSION > 0) {
-        $tmpversion = "$tmpversion.$main::OO_MINORVERSION";
-    }
-
-    $officepath = "$tmpOffice/staroffice$tmpversion";
-    if (-d $officepath && -e "$officepath/program/soffice") {
-        return $officepath;
-    }
-    $officepath = "$tmpOffice/StarOffice$tmpversion";
-    if (-d $officepath && -e "$officepath/program/soffice") {
-        return $officepath;
-    }
-    $officepath = "$tmpOffice/starsuite$tmpversion";
-    if (-d $officepath && -e "$officepath/program/soffice") {
-        return $officepath;
-    }
-    $officepath = "$tmpOffice/StarSuite$tmpversion";
-    if (-d $officepath && -e "$officepath/program/soffice") {
-        return $officepath;
-    }
-    $officepath = "";
-
-    # search other potential matching office versions
-    my $path = "/opt/";
-    my $entry = "";
-    my $version = "0";
-    for $entry (glob($path.'*')) {
-        ## if the file is a directory
-        if( -d $entry) {
-
-            if ($entry =~ m#(.+(o|O)ffice(\.org){0,1}(\d([\d\.]){0,2}))# ||
-                $entry =~ m#(.+(s|S)uite(.*)(\d([\d\.]){0,2}))# )
-            {
-                if ($4 > $version) {
-                    $version = $4;
-                    $officepath = $entry;
-                }
-            }
-        }
-    }
-    return $officepath;
+    return "";
 }
 
 
@@ -761,12 +729,12 @@ sub testVersion
 
     for ($i=0; $i <= $length; $i++ )
     {
-        if ( @testVersion->[$i] > @mustBeVersion->[$i] )
+        if ( @testVersion[$i] > @mustBeVersion[$i] )
         {
             return 1; # 1 indicates a correct version
         }
 
-        if ( @testVersion->[$i] < @mustBeVersion->[$i] )
+        if ( @testVersion[$i] < @mustBeVersion[$i] )
         {
             if ( $#checkOnly == 1 ) {
                 print " The command '$toolName' has the version $tmpTestVersion.\n";
@@ -794,9 +762,6 @@ sub prepareScriptFile()
 {
     my $inputFile = shift;
     my $outputFile = shift;
-    # shell mode 1 = sh
-    #            2 = csh
-    my $shellMode = shift;
 
     if ( ! -d "$main::OO_SDK_CONFIG_HOME/$main::hostname" )
     {
@@ -811,13 +776,14 @@ sub prepareScriptFile()
         $_ =~ s#\@OO_SDK_NAME\@#$main::OO_SDK_NAME#go;
         $_ =~ s#\@OO_SDK_HOME\@#$main::OO_SDK_HOME#go;
         $_ =~ s#\@OFFICE_HOME\@#$main::OFFICE_HOME#go;
-        $_ =~ s#\@OFFICE_BASE_HOME\@#$main::OFFICE_BASE_HOME#go;
-        $_ =~ s#\@OO_SDK_URE_HOME\@#$main::OO_SDK_URE_HOME#go;
         $_ =~ s#\@OO_SDK_MAKE_HOME\@#$main::OO_SDK_MAKE_HOME#go;
         $_ =~ s#\@OO_SDK_ZIP_HOME\@#$main::OO_SDK_ZIP_HOME#go;
+        $_ =~ s#\@OO_SDK_CAT_HOME\@#$main::OO_SDK_CAT_HOME#go;
+        $_ =~ s#\@OO_SDK_SED_HOME\@#$main::OO_SDK_SED_HOME#go;
         $_ =~ s#\@OO_SDK_CPP_HOME\@#$main::OO_SDK_CPP_HOME#go;
         $_ =~ s#\@OO_SDK_CC_55_OR_HIGHER\@#$main::OO_SDK_CC_55_OR_HIGHER#go;
         $_ =~ s#\@OO_SDK_JAVA_HOME\@#$main::OO_SDK_JAVA_HOME#go;
+        $_ =~ s#\@OO_SDK_BOOST_HOME\@#$main::OO_SDK_BOOST_HOME#go;
         $_ =~ s#\@SDK_AUTO_DEPLOYMENT\@#$main::SDK_AUTO_DEPLOYMENT#go;
         $_ =~ s#\@OO_SDK_OUTPUT_DIR\@#$main::OO_SDK_OUTPUT_DIR#go;
 

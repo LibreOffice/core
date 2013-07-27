@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 #ifndef _SVX_GALBRWS_HXX_
 #define _SVX_GALBRWS_HXX_
 
@@ -29,12 +27,6 @@
 #include <vcl/graph.hxx>
 #include <tools/urlobj.hxx>
 #include "svx/svxdllapi.h"
-
-// -----------
-// - Defines -
-// -----------
-
-#define GALLERYBROWSER() ((GalleryBrowser*)( SfxViewFrame::Current()->GetChildWindow(GalleryChildWindow::GetChildWindowId())->GetWindow()))
 
 // -------------------------
 // - SvxGalleryChildWindow -
@@ -64,7 +56,7 @@ class GalleryBrowser2;
 class GallerySplitter;
 class Gallery;
 
-class GalleryBrowser : public SfxDockingWindow
+class SVX_DLLPUBLIC GalleryBrowser : public SfxDockingWindow
 {
     friend class GalleryBrowser1;
     friend class GalleryBrowser2;
@@ -72,19 +64,16 @@ class GalleryBrowser : public SfxDockingWindow
     using Window::KeyInput;
 
 private:
-
     Size                    maLastSize;
     GallerySplitter*        mpSplitter;
     GalleryBrowser1*        mpBrowser1;
     GalleryBrowser2*        mpBrowser2;
     Gallery*                mpGallery;
-    long                    mnDummy1;
-    long                    mnDummy2;
-    long                    mnDummy3;
 
+    /// bitfield
     void                    InitSettings();
 
-    virtual sal_Bool            Close();
+    virtual sal_Bool        Close();
     virtual void            Resize();
     virtual void            GetFocus();
 
@@ -99,12 +88,6 @@ public:
                             GalleryBrowser( SfxBindings* pBindings, SfxChildWindow* pCW,
                                             Window* pParent, const ResId& rResId );
                             ~GalleryBrowser();
-
-    INetURLObject           GetURL() const;
-    String                  GetFilterName() const;
-    Graphic                 GetGraphic() const;
-    sal_Bool                    GetVCDrawModel( FmFormModel& rModel ) const;
-    sal_Bool                    IsLinkage() const;
 
     sal_Bool                    KeyInput( const KeyEvent& rKEvt, Window* pWindow );
 };

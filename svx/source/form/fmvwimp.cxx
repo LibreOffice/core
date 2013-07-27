@@ -832,7 +832,7 @@ bool FmXFormView::isFocusable( const Reference< XControl >& i_rControl )
             return true;
         }
     }
-    catch( const Exception& e )
+    catch( const Exception& /*e*/ )
     {
         DBG_UNHANDLED_EXCEPTION();
     }

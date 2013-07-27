@@ -30,6 +30,7 @@
 #include <sfx2/viewsh.hxx>
 #include "TabControl.hxx"
 #include "pres.hxx"
+#include <svx/sidebar/SelectionChangeHandler.hxx>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/scanner/XScannerManager.hpp>
 
@@ -160,6 +161,7 @@ public:
 
     void            ExecCtrl(SfxRequest& rReq);
     void            GetCtrlState(SfxItemSet& rSet);
+    void            GetDrawAttrState(SfxItemSet& rSet);
     void            GetMenuState(SfxItemSet& rSet);
     void            GetTableMenuState(SfxItemSet& rSet);
     /** Set the items of the given item set that are related to
@@ -192,6 +194,9 @@ public:
     void            ExecNavigatorWin(SfxRequest& rReq);
     void            GetNavigatorWinState(SfxItemSet& rSet);
 
+    void         ExecutePropPanelAttr (SfxRequest& rReq);
+    void            GetStatePropPanelAttr(SfxItemSet& rSet);
+
     void            ExecEffectWin(SfxRequest& rReq);
 
     void            Update3DWindow();
@@ -213,6 +218,8 @@ public:
 
     void            AttrExec (SfxRequest& rReq);
     void            AttrState (SfxItemSet& rSet);
+
+    void        ExecChar(SfxRequest& rReq);
 
     void            ExecuteAnnotation (SfxRequest& rRequest);
     void            GetAnnotationState (SfxItemSet& rItemSet);
@@ -359,6 +366,8 @@ public:
     */
     virtual bool RelocateToParentWindow (::Window* pParentWindow);
 
+    ::rtl::OUString GetSidebarContextName (void) const;
+
 protected:
     DrawView*       mpDrawView;
     SdPage*         mpActualPage;
@@ -425,6 +434,10 @@ private:
     /** This flag is used to prevent nested calls to SwitchPage().
     */
     bool mbIsInSwitchPage;
+
+    /** Listen for selection changes and broadcast context changes for the sidebar.
+    */
+    ::rtl::Reference<svx::sidebar::SelectionChangeHandler> mpSelectionChangeHandler;
 
     void Construct (DrawDocShell* pDocSh, PageKind ePageKind);
 

@@ -7,7 +7,7 @@
         version="1.0.0.0"
         processorArchitecture="x86"
     />
-	<description>OpenOffice.org Installer</description>
+	<description>Apache OpenOffice Installer</description>
     <trustInfo xmlns="urn:schemas-microsoft-com:asm.v3">
         <security>
             <requestedPrivileges>

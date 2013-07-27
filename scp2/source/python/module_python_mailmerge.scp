@@ -25,7 +25,12 @@
 
 File gid_File_Pymailmerge
     TXT_FILE_BODY;
-    Dir = gid_Dir_Program;
+#if defined MACOSX
+    Dir = gid_Brand_Dir_Program;
+#else
+    Dir = gid_Dir_Common_Ure;
+#endif
+//    Dir = gid_Dir_Program;
     Name = "mailmerge.py";
     Styles = (PACKED);
 End

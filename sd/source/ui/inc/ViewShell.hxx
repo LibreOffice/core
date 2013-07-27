@@ -35,9 +35,7 @@
 #include "glob.hxx"
 #include "pres.hxx"
 #include "cfgids.hxx"
-#ifndef _SD_VIEW_HXX
 #include "View.hxx"
-#endif
 #include "sddllapi.h"
 
 #include <com/sun/star/drawing/XDrawSubController.hpp>
@@ -113,7 +111,7 @@ public:
         ST_OUTLINE,
         ST_SLIDE_SORTER,
         ST_PRESENTATION,
-        ST_TASK_PANE
+        ST_SIDEBAR
     };
 
     ViewShell (
@@ -196,7 +194,9 @@ public:
     virtual void SetUIUnit(FieldUnit eUnit);
     virtual void SetDefTabHRuler( sal_uInt16 nDefTab );
 
-    bool HasRuler (void);
+    const SfxPoolItem* GetNumBulletItem(SfxItemSet& aNewAttr, sal_uInt16& nNumItemId);
+
+    bool HasRuler();
     void SetRuler(bool bRuler);
 
     /** Set internal values of all scroll bars that determine thumb size and
@@ -416,9 +416,6 @@ public:
         was successfull.
     */
     virtual bool RelocateToParentWindow (::Window* pParentWindow);
-
-    void AdaptDefaultsForChart(
-        const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject > & xEmbObj );
 
     /** Depending on the given request create a new page or duplicate an
         existing one.  A new page is created behind the given slide.

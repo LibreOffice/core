@@ -73,7 +73,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     swd \
     swui \
     textconversiondlgs \
-    tk \
+    ootk \
     tl \
     utl \
     unordf \

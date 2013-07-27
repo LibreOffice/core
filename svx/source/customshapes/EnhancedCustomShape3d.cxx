@@ -777,8 +777,8 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(const SdrObject& rShape2d, cons
             const rtl::OUString sLightFace(RTL_CONSTASCII_USTRINGPARAM("LightFace"));
             // const bool bLight2Harsh(GetBool(rGeometryItem, sSecondLightHarsh, false));
             // const bool bLightFace(GetBool(rGeometryItem, sLightFace, false));
-            const sal_uInt16 nAmbientColor(basegfx::fround(std::min(fAmbientIntensity * 255.0, 255.0)));
-            const Color aGlobalAmbientColor((sal_uInt8)nAmbientColor, (sal_uInt8)nAmbientColor, (sal_uInt8)nAmbientColor);
+            const sal_uInt8 nAmbientColor(static_cast< sal_uInt8 >(basegfx::fround(std::min(fAmbientIntensity * 255.0, 255.0))));
+            const Color aGlobalAmbientColor(nAmbientColor, nAmbientColor, nAmbientColor);
 
             pScene->GetProperties().SetObjectItem(SvxColorItem(aGlobalAmbientColor, SDRATTR_3DSCENE_AMBIENTCOLOR));
 

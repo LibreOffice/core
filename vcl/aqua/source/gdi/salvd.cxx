@@ -228,7 +228,7 @@ sal_Bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
 
     DBG_ASSERT( xCGContext, "no context" );
 
-    const CGSize aNewSize = { nDX, nDY };
+    const CGSize aNewSize = CGSizeMake( nDX, nDY);
     mxLayer = CGLayerCreateWithContext( xCGContext, aNewSize, NULL );
 
     if( mxLayer && mpGraphics )

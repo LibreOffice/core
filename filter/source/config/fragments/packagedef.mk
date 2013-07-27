@@ -52,16 +52,4 @@ INCLUDE_FRAGMENTS = \
      $(PRJ)$/source$/config$/fragments$/fcfg_impressgraphics.mk \
      $(PRJ)$/source$/config$/fragments$/fcfg_internalgraphics.mk
 
-.IF "$(WITH_BINFILTER)" != "NO"
-INCLUDE_FRAGMENTS += \
-     $(PRJ)$/source$/config$/fragments$/fcfg_writer_bf.mk \
-     $(PRJ)$/source$/config$/fragments$/fcfg_web_bf.mk \
-     $(PRJ)$/source$/config$/fragments$/fcfg_global_bf.mk \
-     $(PRJ)$/source$/config$/fragments$/fcfg_calc_bf.mk \
-     $(PRJ)$/source$/config$/fragments$/fcfg_draw_bf.mk \
-     $(PRJ)$/source$/config$/fragments$/fcfg_impress_bf.mk \
-     $(PRJ)$/source$/config$/fragments$/fcfg_chart_bf.mk \
-     $(PRJ)$/source$/config$/fragments$/fcfg_math_bf.mk
-.ENDIF
-
 .INCLUDE: $(INCLUDE_FRAGMENTS)

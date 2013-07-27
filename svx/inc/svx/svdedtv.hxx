@@ -219,6 +219,7 @@ public:
     void SetMarkedObjSnapRange(const basegfx::B2DRange& rRange, bool bCopy = false);
     void MoveMarkedObj(const basegfx::B2DVector& rOffset, bool bCopy = false);
     void ResizeMarkedObj(const basegfx::B2DPoint& rRefPoint, const basegfx::B2DTuple& rScale, bool bCopy = false);
+    // TTTT: Needed? void ResizeMultMarkedObj(const Point& rRef, const Fraction& xFact, const Fraction& yFact, const bool bCopy, const bool bWdh, const bool bHgt);
     double GetMarkedObjRotate() const;
     void RotateMarkedObj(const basegfx::B2DPoint& rRefPoint, double fAngle, bool bCopy = false);
     void MirrorMarkedObj(const basegfx::B2DPoint& rRefPoint1, const basegfx::B2DPoint& rRefPoint2, bool bCopy = false);

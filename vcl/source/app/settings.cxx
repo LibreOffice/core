@@ -36,6 +36,7 @@
 #include "vcl/gradient.hxx"
 #include "vcl/unohelp.hxx"
 #include "vcl/bitmapex.hxx"
+#include "vcl/outdev.hxx"
 
 #include "unotools/fontcfg.hxx"
 #include "unotools/localedatawrapper.hxx"
@@ -398,10 +399,7 @@ sal_Bool KeyboardSettings::operator ==( const KeyboardSettings& rSet ) const
     if ( mpData == rSet.mpData )
         return sal_True;
 
-    if ( (mpData->mnOptions             == rSet.mpData->mnOptions) )
-        return sal_True;
-    else
-        return sal_False;
+    return (mpData->mnOptions == rSet.mpData->mnOptions);
 }
 
 // =======================================================================
@@ -434,6 +432,16 @@ ImplStyleData::ImplStyleData()
     mnSymbolsStyle              = STYLE_SYMBOLS_AUTO;
     mnPreferredSymbolsStyle         = STYLE_SYMBOLS_AUTO;
     mpFontOptions              = NULL;
+    mnEdgeBlending = 35;
+    maEdgeBlendingTopLeftColor = RGB_COLORDATA(0xC0, 0xC0, 0xC0);
+    maEdgeBlendingBottomRightColor = RGB_COLORDATA(0x40, 0x40, 0x40);
+    mnListBoxMaximumLineCount = 25;
+    mnColorValueSetColumnCount = 12;
+    mnColorValueSetMaximumRowCount = 40;
+    maListBoxPreviewDefaultLogicSize = Size(15, 7);
+    maListBoxPreviewDefaultPixelSize = Size(0, 0); // on-demand calculated in GetListBoxPreviewDefaultPixelSize()
+    mnListBoxPreviewDefaultLineWidth = 1;
+    mbPreviewUsesCheckeredBackground = true;
 
     SetStandardStyles();
 }
@@ -535,8 +543,18 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     mnSkipDisabledInMenus       = rData.mnSkipDisabledInMenus;
     mnToolbarIconSize           = rData.mnToolbarIconSize;
     mnSymbolsStyle              = rData.mnSymbolsStyle;
-    mnPreferredSymbolsStyle         = rData.mnPreferredSymbolsStyle;
+    mnPreferredSymbolsStyle     = rData.mnPreferredSymbolsStyle;
     mpFontOptions               = rData.mpFontOptions;
+    mnEdgeBlending              = rData.mnEdgeBlending;
+    maEdgeBlendingTopLeftColor  = rData.maEdgeBlendingTopLeftColor;
+    maEdgeBlendingBottomRightColor = rData.maEdgeBlendingBottomRightColor;
+    mnListBoxMaximumLineCount   = rData.mnListBoxMaximumLineCount;
+    mnColorValueSetColumnCount  = rData.mnColorValueSetColumnCount;
+    mnColorValueSetMaximumRowCount = rData.mnColorValueSetMaximumRowCount;
+    maListBoxPreviewDefaultLogicSize = rData.maListBoxPreviewDefaultLogicSize;
+    maListBoxPreviewDefaultPixelSize = rData.maListBoxPreviewDefaultPixelSize;
+    mnListBoxPreviewDefaultLineWidth = rData.mnListBoxPreviewDefaultLineWidth;
+    mbPreviewUsesCheckeredBackground = rData.mbPreviewUsesCheckeredBackground;
 }
 
 // -----------------------------------------------------------------------
@@ -653,6 +671,17 @@ StyleSettings::~StyleSettings()
         delete mpData;
     else
         mpData->mnRefCount--;
+}
+
+const Size& StyleSettings::GetListBoxPreviewDefaultPixelSize() const
+{
+    if(0 == mpData->maListBoxPreviewDefaultPixelSize.Width() || 0 == mpData->maListBoxPreviewDefaultPixelSize.Height())
+    {
+        const_cast< StyleSettings* >(this)->mpData->maListBoxPreviewDefaultPixelSize =
+            Application::GetDefaultDevice()->LogicToPixel(mpData->maListBoxPreviewDefaultLogicSize, MAP_APPFONT);
+    }
+
+    return mpData->maListBoxPreviewDefaultPixelSize;
 }
 
 // -----------------------------------------------------------------------
@@ -1036,7 +1065,17 @@ sal_Bool StyleSettings::operator ==( const StyleSettings& rSet ) const
          (mpData->maIconFont                == rSet.mpData->maIconFont)                 &&
          (mpData->mnUseImagesInMenus        == rSet.mpData->mnUseImagesInMenus)         &&
          (mpData->mnSkipDisabledInMenus     == rSet.mpData->mnSkipDisabledInMenus)      &&
-         (mpData->maFontColor               == rSet.mpData->maFontColor ))
+         (mpData->maFontColor               == rSet.mpData->maFontColor)                &&
+         (mpData->mnEdgeBlending                    == rSet.mpData->mnEdgeBlending)                     &&
+         (mpData->maEdgeBlendingTopLeftColor        == rSet.mpData->maEdgeBlendingTopLeftColor)         &&
+         (mpData->maEdgeBlendingBottomRightColor    == rSet.mpData->maEdgeBlendingBottomRightColor)     &&
+         (mpData->mnListBoxMaximumLineCount         == rSet.mpData->mnListBoxMaximumLineCount)          &&
+         (mpData->mnColorValueSetColumnCount        == rSet.mpData->mnColorValueSetColumnCount)         &&
+         (mpData->mnColorValueSetMaximumRowCount    == rSet.mpData->mnColorValueSetMaximumRowCount)     &&
+         (mpData->maListBoxPreviewDefaultLogicSize  == rSet.mpData->maListBoxPreviewDefaultLogicSize)   &&
+         (mpData->maListBoxPreviewDefaultPixelSize  == rSet.mpData->maListBoxPreviewDefaultPixelSize)   &&
+         (mpData->mnListBoxPreviewDefaultLineWidth  == rSet.mpData->mnListBoxPreviewDefaultLineWidth)   &&
+         (mpData->mbPreviewUsesCheckeredBackground == rSet.mpData->mbPreviewUsesCheckeredBackground))
         return sal_True;
     else
         return sal_False;
@@ -1167,7 +1206,7 @@ sal_Bool MiscSettings::GetEnableATToolSupport() const
         HKEY hkey;
 
         if( ERROR_SUCCESS == RegOpenKey(HKEY_CURRENT_USER,
-            "Software\\OpenOffice.org\\Accessibility\\AtToolSupport",
+            "Software\\OpenOffice\\Accessibility\\AtToolSupport",
             &hkey) )
         {
             DWORD dwType;
@@ -1245,7 +1284,7 @@ void MiscSettings::SetEnableATToolSupport( sal_Bool bEnable )
 
         // If the accessibility key in the Windows registry exists, change it synchronously
         if( ERROR_SUCCESS == RegOpenKey(HKEY_CURRENT_USER,
-            "Software\\OpenOffice.org\\Accessibility\\AtToolSupport",
+            "Software\\OpenOffice\\Accessibility\\AtToolSupport",
             &hkey) )
         {
             DWORD dwType;
@@ -1381,10 +1420,7 @@ sal_Bool NotificationSettings::operator ==( const NotificationSettings& rSet ) c
     if ( mpData == rSet.mpData )
         return sal_True;
 
-    if ( (mpData->mnOptions             == rSet.mpData->mnOptions) )
-        return sal_True;
-    else
-        return sal_False;
+    return (mpData->mnOptions == rSet.mpData->mnOptions);
 }
 
 // =======================================================================

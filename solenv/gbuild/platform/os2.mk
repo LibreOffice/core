@@ -317,6 +317,8 @@ $(call gb_Helper_abbreviate_dirs_native,\
 		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
 		$(PCHOBJS))) && \
+	$(if $(DLLTARGET), echo EXPORTS >> $(DLLDEF) &&) \
+	$(if $(DLLTARGET), emxexp @$${RESPONSEFILE} | fix_exp_file | sort | uniq | fix_def_ord >> $(DLLDEF) &&) \
 	$(gb_LINK) \
 		$(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
 		$(if $(filter StaticLibrary,$(TARGETTYPE)),$(gb_StaticLibrary_TARGETTYPEFLAGS)) \
@@ -330,7 +332,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
 		$(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) \
 		$(if $(DLLTARGET),-o $(DLLTARGET), -o $(1) ); \
 		RC=$$?; rm $${RESPONSEFILE} \
-	$(if $(DLLTARGET),; emximp -p2048 -o $(1) $(DLLTARGET) ) \
+	$(if $(DLLTARGET),; emximp -p2048 -o $(1) $(DLLDEF) ) \
 	$(if $(DLLTARGET),; if [ ! -f $(DLLTARGET) ]; then rm -f $(1) && false; fi) ; exit $$RC)
 endef
 
@@ -655,7 +657,7 @@ endif
 
 gb_XSLTPROCPRECOMMAND := PATH="$${PATH}:$(OUTDIR)/bin"
 gb_Library_COMPONENTPREFIXES := \
-    OOO:vnd.sun.star.expand:\dBRAND_BASE_DIR/program/ \
+    OOO:vnd.sun.star.expand:\dOOO_BASE_DIR/program/ \
     URELIB:vnd.sun.star.expand:\dURE_INTERNAL_LIB_DIR/ \
 
 # vim: set noet sw=4 ts=4:

@@ -472,7 +472,7 @@ public class Frame extends java.awt.Frame implements javax.accessibility.Accessi
         *
         * @return an instance of AccessibleState containing the current state
         * of the object
-        * @see AccessibleState
+        * @see javax.accessibility.AccessibleState
         */
         public javax.accessibility.AccessibleStateSet getAccessibleStateSet() {
             javax.accessibility.AccessibleStateSet states = super.getAccessibleStateSet();
@@ -638,5 +638,28 @@ public class Frame extends java.awt.Frame implements javax.accessibility.Accessi
             unoAccessibleComponent.grabFocus();
         }
     }
+
+    /**
+     * Determines whether this component is displayable. A component is
+     * displayable when it is connected to a native screen resource.
+     * <p>
+     * A component is made displayable either when it is added to
+     * a displayable containment hierarchy or when its containment
+     * hierarchy is made displayable.
+     * A containment hierarchy is made displayable when its ancestor
+     * window is either packed or made visible.
+     * <p>
+     * A component is made undisplayable either when it is removed from
+     * a displayable containment hierarchy or when its containment hierarchy
+     * is made undisplayable.  A containment hierarchy is made
+     * undisplayable when its ancestor window is disposed.
+     *
+     * @return <code>true</code> if the component is displayable
+     */
+    @Override
+    public boolean isDisplayable() {
+        return true;
+    }
+
 }
 

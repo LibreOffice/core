@@ -35,6 +35,7 @@ class SvxLineBox;
 class SvxMetricField;
 class SvxColorBox;
 class XLineEndList;
+typedef ::boost::shared_ptr< XLineEndList > XLineEndListSharedPtr;
 
 //========================================================================
 // SvxLineStyleController:
@@ -103,7 +104,7 @@ class SvxLineEndWindow : public SfxPopupWindow
     using FloatingWindow::StateChanged;
 
 private:
-    XLineEndList*   pLineEndList;
+    XLineEndListSharedPtr   maLineEndList;
     ValueSet        aLineEndSet;
     sal_uInt16          nCols;
     sal_uInt16          nLines;

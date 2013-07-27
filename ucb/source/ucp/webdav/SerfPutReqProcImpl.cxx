@@ -24,7 +24,7 @@
 
 #include <rtl/ustring.hxx>
 
-#include <SerfPutReqProcImpl.hxx>
+#include "SerfPutReqProcImpl.hxx"
 
 #include <serf.h>
 
@@ -63,6 +63,11 @@ serf_bucket_t * SerfPutReqProcImpl::createSerfRequestBucket( serf_request_t * in
                                                                  body_bkt,
                                                                  serf_request_get_alloc( inSerfRequest ) );
     handleChunkedEncoding(req_bkt, mnDataLen);
+
+    // set request header fields
+    serf_bucket_t* hdrs_bkt = serf_bucket_request_get_headers( req_bkt );
+    // general header fields provided by caller
+    setRequestHeaders( hdrs_bkt );
 
     return req_bkt;
 }

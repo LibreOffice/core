@@ -894,7 +894,7 @@ void ShutdownIcon::SetAutostart( bool bActivate )
 #else // UNX
         getDotAutostart( true );
 
-        OUString aPath( RTL_CONSTASCII_USTRINGPARAM("${BRAND_BASE_DIR}/share/xdg/qstart.desktop" ) );
+        OUString aPath( RTL_CONSTASCII_USTRINGPARAM("${OOO_BASE_DIR}/share/xdg/qstart.desktop" ) );
         Bootstrap::expandMacros( aPath );
 
         OUString aDesktopFile;

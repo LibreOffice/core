@@ -19,60 +19,32 @@
  *
  *************************************************************/
 
-
 #ifndef __com_sun_star_awt_XMessageBox_idl__
 #define __com_sun_star_awt_XMessageBox_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
 
-
-//=============================================================================
-
- module com {  module sun {  module star {  module awt {
-
-//=============================================================================
+module com {  module sun {  module star {  module awt {
 
 /** gives access to a message box.
-
-    @deprecated
  */
-published interface XMessageBox: com::sun::star::uno::XInterface
+published interface XMessageBox
 {
-    //-------------------------------------------------------------------------
-
-    /** sets the caption text.
+    /** the caption text.
      */
-    [oneway] void setCaptionText( [in] string aText );
+    [attribute] string CaptionText;
 
-    //-------------------------------------------------------------------------
-
-    /** returns the caption text.
+    /** the message text.
      */
-    string getCaptionText();
-
-    //-------------------------------------------------------------------------
-
-    /** sets the message text.
-     */
-    [oneway] void setMessageText( [in] string aText );
-
-    //-------------------------------------------------------------------------
-
-    /** returns the message text.
-     */
-    string getMessageText();
-
-    //-------------------------------------------------------------------------
+    [attribute] string MessageText;
 
     /** shows the message box.
+
+        @return
+            one of <type>MessageBoxResults</type>.
      */
     short execute();
-
 };
-
-//=============================================================================
 
 }; }; }; };
 

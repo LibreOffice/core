@@ -19,18 +19,14 @@
  *
  *************************************************************/
 
-
-
 #include "precompiled_vcl.hxx"
 
 #include "sal/config.h"
-
 #include <list>
 #include <memory>
 #include <utility>
 #include <vector>
 #include <hash_map>
-
 #include "com/sun/star/container/XNameAccess.hpp"
 #include "com/sun/star/io/XInputStream.hpp"
 #include "com/sun/star/lang/Locale.hpp"
@@ -39,30 +35,24 @@
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/Sequence.hxx"
-
 #include "comphelper/processfactory.hxx"
-
 #include "osl/file.hxx"
 #include "osl/diagnose.h"
-
 #include "rtl/bootstrap.hxx"
 #include "rtl/string.h"
 #include "rtl/textenc.h"
 #include "rtl/ustrbuf.hxx"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
-
 #include "sal/types.h"
-
 #include "tools/stream.hxx"
 #include "tools/urlobj.hxx"
-
 #include "vcl/bitmapex.hxx"
 #include "vcl/pngread.hxx"
 #include "vcl/settings.hxx"
 #include "vcl/svapp.hxx"
-
 #include "impimagetree.hxx"
+#include <vcl/dibtools.hxx>
 
 namespace {
 
@@ -109,8 +99,10 @@ void loadFromStream(
         vcl::PNGReader aPNGReader( *s );
         aPNGReader.SetIgnoreGammaChunk( sal_True );
         bitmap = aPNGReader.Read();
-    } else {
-        *s >> bitmap;
+    }
+    else
+    {
+        ReadDIBBitmapEx(bitmap, *s);
     }
 }
 
@@ -223,7 +215,7 @@ void ImplImageTree::resetZips() {
     m_zips.clear();
     {
         rtl::OUString url(
-            RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR/program/edition/images.zip"));
+            RTL_CONSTASCII_USTRINGPARAM("$OOO_BASE_DIR/program/edition/images.zip"));
         rtl::Bootstrap::expandMacros(url);
         INetURLObject u(url);
         OSL_ASSERT(!u.HasError());
@@ -234,7 +226,7 @@ void ImplImageTree::resetZips() {
     }
     {
         rtl::OUString url(
-            RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR/share/config"));
+            RTL_CONSTASCII_USTRINGPARAM("$OOO_BASE_DIR/share/config"));
         rtl::Bootstrap::expandMacros(url);
         INetURLObject u(url);
         OSL_ASSERT(!u.HasError());
@@ -252,7 +244,7 @@ void ImplImageTree::resetZips() {
     {
         rtl::OUString url(
             RTL_CONSTASCII_USTRINGPARAM(
-                "$BRAND_BASE_DIR/share/config/images_brand.zip"));
+                "$OOO_BASE_DIR/share/config/images_brand.zip"));
         rtl::Bootstrap::expandMacros(url);
         m_zips.push_back(
             std::make_pair(

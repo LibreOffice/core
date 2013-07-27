@@ -48,3 +48,12 @@ FieldUnit GetModuleFieldUnit( const SfxItemSet& rSet )
     return eUnit;
 }
 
+// -----------------------------------------------------------------------
+
+FieldUnit GetModuleFieldUnit()
+{
+    return SfxModule::GetCurrentFieldUnit();
+}
+
+// -----------------------------------------------------------------------
+// eof

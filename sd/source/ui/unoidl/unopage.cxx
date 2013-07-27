@@ -19,10 +19,9 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
+
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/presentation/ClickAction.hpp>
 #include <com/sun/star/presentation/FadeEffect.hpp>
@@ -59,7 +58,6 @@
 #include <rtl/uuid.h>
 #include <rtl/memory.h>
 #include <comphelper/serviceinfohelper.hxx>
-
 #include <comphelper/extract.hxx>
 #include <list>
 #include <svx/svditer.hxx>
@@ -82,6 +80,7 @@
 #include "unopback.hxx"
 #include "unohelp.hxx"
 #include <svx/globaldrawitempool.hxx>
+#include <vcl/dibtools.hxx>
 
 using ::com::sun::star::animations::XAnimationNode;
 using ::com::sun::star::animations::XAnimationNodeSupplier;
@@ -1090,8 +1089,9 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
             if ( pDocShell )
             {
                 sal_uInt32 nPgNum = 0;
-                sal_uInt32 nPageCount = rDoc.GetSdPageCount( PK_STANDARD );
-                sal_uInt32 nPageNumber = (sal_uInt16)( ( GetPage()->GetPageNumber() - 1 ) >> 1 );
+                const sal_uInt32 nPageCount = rDoc.GetSdPageCount( PK_STANDARD );
+                const sal_uInt32 nPageNumber = ( GetPage()->GetPageNumber() - 1 ) >> 1;
+
                 while( nPgNum < nPageCount )
                 {
                     rDoc.SetSelected( rDoc.GetSdPage( nPgNum, PK_STANDARD ), nPgNum == nPageNumber );
@@ -1121,30 +1121,32 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
 
     case WID_PAGE_PREVIEWBITMAP :
         {
-            SdDrawDocument& rDoc = static_cast< SdDrawDocument& >(GetPage()->getSdrModelFromSdrPage());
-            ::sd::DrawDocShell* pDocShell = rDoc.GetDocSh();
-
-            if ( pDocShell )
+            SdDrawDocument* pDoc = dynamic_cast< SdDrawDocument* >(&GetPage()->getSdrModelFromSdrPage());
+            if ( pDoc )
             {
-                sal_uInt32 nPgNum = 0;
-                sal_uInt32 nPageCount = rDoc.GetSdPageCount( PK_STANDARD );
-                sal_uInt32 nPageNumber = (sal_uInt16)( ( GetPage()->GetPageNumber() - 1 ) >> 1 );
-                while( nPgNum < nPageCount )
+                ::sd::DrawDocShell* pDocShell = pDoc->GetDocSh();
+                if ( pDocShell )
                 {
-                    rDoc.SetSelected( rDoc.GetSdPage( nPgNum, PK_STANDARD ), nPgNum == nPageNumber );
+                    sal_uInt32 nPgNum = 0;
+                    const sal_uInt32 nPageCount = pDoc->GetSdPageCount( PK_STANDARD );
+                    const sal_uInt32 nPageNumber = ( GetPage()->GetPageNumber() - 1 ) >> 1;
+
+                    while( nPgNum < nPageCount )
+                    {
+                        pDoc->SetSelected( pDoc->GetSdPage( nPgNum, PK_STANDARD ), nPgNum == nPageNumber );
                         nPgNum++;
-                }
-
-                ::boost::shared_ptr<GDIMetaFile> pMetaFile = pDocShell->GetPreviewMetaFile();
-                BitmapEx aBitmap;
-
-                if ( pMetaFile && pMetaFile->CreateThumbnail( 160, /* magic value taken from GraphicHelper::getThumbnailFormatFromGDI_Impl() */
-                                                                aBitmap ) )
-                {
-                    SvMemoryStream aMemStream;
-                    aBitmap.GetBitmap().Write( aMemStream, false, false );
-                    uno::Sequence<sal_Int8> aSeq( (sal_Int8*)aMemStream.GetData(), aMemStream.Tell() );
-                    aAny <<= aSeq;
+                    }
+                    ::boost::shared_ptr<GDIMetaFile> pMetaFile =
+                        pDocShell->GetPreviewMetaFile();
+                    BitmapEx aBitmap;
+                    if ( pMetaFile && pMetaFile->CreateThumbnail( 160, /* magic value taken from GraphicHelper::getThumbnailFormatFromGDI_Impl() */
+                                                                  aBitmap ) )
+                    {
+                        SvMemoryStream aMemStream;
+                        WriteDIB(aBitmap.GetBitmap(), aMemStream, false, false);
+                        uno::Sequence<sal_Int8> aSeq( (sal_Int8*)aMemStream.GetData(), aMemStream.Tell() );
+                        aAny <<= aSeq;
+                    }
                 }
             }
         }

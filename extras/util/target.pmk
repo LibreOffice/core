@@ -51,6 +51,17 @@ GALLERY_OPTIONAL_TARGET         = galloptional
 GALLERY_SOUND_TARGET            = gallsound
 GALLERY_CLIPART_TARGET          = gallclipart
 GALLERY_BULLETS_TARGET          = gallbullets
+
+GALLERY_ARROWS_TARGET           = gallarrows
+GALLERY_COMPUTERS_TARGET        = gallcomputers
+GALLERY_DIAGRAMS_TARGET         = galldiagrams
+GALLERY_EDUCATION_TARGET        = galleducation
+GALLERY_ENVIRONMENT_TARGET      = gallenvironment
+GALLERY_FINANCE_TARGET          = gallfinance
+GALLERY_PEOPLE_TARGET           = gallpeople
+GALLERY_TRANSPORT_TARGET        = galltransport
+GALLERY_TXTSHAPES_TARGET        = galltxtshapes
+
 GALLERY_FLAGS_TARGET            = gallflags
 GALLERY_HTMLEXPO_TARGET         = gallhtmlexpo
 GALLERY_MAPS_TARGET             = gallmaps

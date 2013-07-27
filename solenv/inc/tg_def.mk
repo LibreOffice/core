@@ -288,8 +288,12 @@ $(DEF$(TNR)TARGETN) .PHONY :
     $(COMMAND_ECHO)+$(RENAME) $@.tmpfile $@
     @+-$(RM) $@.tmp_ord
     @+-$(RM) $@.exptmpfile
-    $(COMMAND_ECHO)+$(IMPLIB) $(IMPLIBFLAGS) $(SHL$(TNR)IMPLIBN:s/.lib/.a/) $@
-    $(COMMAND_ECHO)+emxomf -o $(SHL$(TNR)IMPLIBN) $(SHL$(TNR)IMPLIBN:s/.lib/.a/) 
+.IF "$(SHL$(TNR)USE_EXPORTS)"=="" || "$(SHL$(TNR)USE_EXPORTS)"=="ordinal"
+#03/11/2012  if 'name' is not used, export from def file (with ordinals)
+    @echo Build import library from DEF file.
+    @+-$(RM) $(LB)/$(SHL$(TNR)TARGETN:b).lib
+    $(COMMAND_ECHO)+$(IMPLIB) $(IMPLIBFLAGS) $(LB)/$(SHL$(TNR)TARGETN:b).lib $@
+.ENDIF			# "$(SHL$(TNR)USE_EXPORTS)"==""
 
 .ENDIF			# "$(GUI)"=="OS2"
 

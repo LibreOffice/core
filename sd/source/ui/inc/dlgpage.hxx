@@ -29,11 +29,6 @@
 #include "dlgpage.hrc"
 
 class SfxObjectShell;
-class XColorTable;
-class XGradientList;
-class XHatchList;
-class XBitmapList;
-
 typedef sal_uInt16 ChangeType;
 
 /*************************************************************************
@@ -48,10 +43,10 @@ private:
 
     const SfxObjectShell* mpDocShell;
 
-    XColorTable*        mpColorTab;
-    XGradientList*      mpGradientList;
-    XHatchList*         mpHatchingList;
-    XBitmapList*        mpBitmapList;
+    XColorListSharedPtr     maColorTab;
+    XGradientListSharedPtr  maGradientList;
+    XHatchListSharedPtr     maHatchingList;
+    XBitmapListSharedPtr    maBitmapList;
 public:
 
     SdPageDlg( SfxObjectShell* pDocSh, Window* pParent, const SfxItemSet* pAttr, bool bAreaPage = true );

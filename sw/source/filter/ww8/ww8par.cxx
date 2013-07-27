@@ -107,6 +107,14 @@
 #include <functional>
 #include "writerhelper.hxx"
 #include "writerwordglue.hxx"
+
+#include "ndgrf.hxx"
+#include <editeng/brshitem.hxx>
+#include <editeng/editids.hrc>
+#include <txtflcnt.hxx>
+#include <fmtflcnt.hxx>
+#include <txatbase.hxx>
+
 #include "ww8par2.hxx"          // class WW8RStyle, class WW8AnchorPara
 #include <frmatr.hxx>
 #include <math.h>
@@ -122,7 +130,7 @@
 #include <iostream>
 #include <dbgoutsw.hxx>
 #endif
-
+#include <svx/hlnkitem.hxx>
 #include "WW8Sttbf.hxx"
 #include "WW8FibData.hxx"
 #define MM_250 1417             // WW-Default fuer Hor. Seitenraender: 2.5 cm
@@ -133,6 +141,245 @@ using namespace sw::util;
 using namespace sw::types;
 using namespace nsHdFtFlags;
 
+#define VT_EMPTY            0
+#define VT_I4               3
+#define VT_LPSTR            30
+#define VT_LPWSTR           31
+#define VT_BLOB             65
+#define VT_TYPEMASK         0xFFF
+/** Expands to a pointer behind the last element of a STATIC data array (like STL end()). */
+#define STATIC_TABLE_END( array )   ((array)+STATIC_TABLE_SIZE(array))
+/** Expands to the size of a STATIC data array. */
+#define STATIC_TABLE_SIZE( array )  (sizeof(array)/sizeof(*(array)))
+
+SwMacroInfo* GetMacroInfo( SdrObject* pObj, sal_Bool bCreate )             // static
+{
+    if ( pObj )
+    {
+        sal_uInt16 nCount = pObj->GetUserDataCount();
+            for( sal_uInt16 i = 0; i < nCount; i++ )
+            {
+            SdrObjUserData* pData = pObj->GetUserData( i );
+                if( pData && pData->GetInventor() == SW_DRAWLAYER
+                    && pData->GetId() == SW_UD_IMAPDATA)
+                        return dynamic_cast<SwMacroInfo*>(pData);
+            }
+            if ( bCreate )
+            {
+            SwMacroInfo* pData = new SwMacroInfo;
+                pObj->InsertUserData( pData, 0 );
+                return pData;
+            }
+    }
+
+        return 0;
+};
+
+void lclGetAbsPath( String& rPath, sal_uInt16 nLevel, SwDocShell* pDocShell)
+{
+    String aTmpStr;
+        while( nLevel )
+        {
+        aTmpStr.AppendAscii( "../" );
+            --nLevel;
+        }
+    if(aTmpStr.Len())
+        aTmpStr += rPath;
+    else
+        aTmpStr = rPath;
+
+    if(aTmpStr.Len())
+    {
+        bool bWasAbs = false;
+            rPath = pDocShell->GetMedium()->GetURLObject().smartRel2Abs( aTmpStr, bWasAbs ).GetMainURL( INetURLObject::NO_DECODE );
+            // full path as stored in SvxURLField must be encoded
+    }
+}
+
+void lclIgnoreString32( SvMemoryStream& rStrm, bool b16Bit )
+{
+    sal_uInt32 nChars;
+        rStrm >> nChars;
+        if( b16Bit )
+        nChars *= 2;
+        rStrm.SeekRel( nChars );
+}
+
+String SwWW8ImplReader::ReadRawUniString( SvMemoryStream& rStrm,sal_uInt16 nChars, bool b16Bit )
+{
+    // Fixed-size characters
+    const sal_uInt8 WW8_NUL_C                   = '\x00';       /// NUL chararcter.
+    const sal_uInt16 WW8_NUL                    = WW8_NUL_C;    /// NUL chararcter (unicode).
+    String aRet;
+    sal_Unicode         mcNulSubst = '\0';
+
+    sal_uInt16 nCharsLeft = nChars;
+    sal_Unicode* pcBuffer = new sal_Unicode[ nCharsLeft + 1 ];
+
+    sal_Unicode* pcUniChar = pcBuffer;
+       sal_Unicode* pcEndChar = pcBuffer + nCharsLeft;
+
+       if( b16Bit )
+       {
+        sal_uInt16 nReadChar;
+                for( ;  (pcUniChar < pcEndChar); ++pcUniChar )
+                {
+                rStrm >> (nReadChar);
+                    (*pcUniChar) = (nReadChar == WW8_NUL) ? mcNulSubst : static_cast< sal_Unicode >( nReadChar );
+                }
+        }
+        else
+        {
+            sal_uInt8 nReadChar;
+                for( ; (pcUniChar < pcEndChar); ++pcUniChar )
+                {
+                rStrm >> nReadChar ;
+                    (*pcUniChar) = (nReadChar == WW8_NUL_C) ? mcNulSubst : static_cast< sal_Unicode >( nReadChar );
+                }
+        }
+
+       *pcEndChar = '\0';
+       aRet.Append( pcBuffer );
+    delete[] pcBuffer;
+    return aRet;
+}
+
+void lclAppendString32( String& rString, SvMemoryStream& rStrm, sal_uInt32 nChars, bool b16Bit )
+{
+    sal_uInt16 nReadChars = ulimit_cast< sal_uInt16 >( nChars );
+    String urlStr = SwWW8ImplReader::ReadRawUniString( rStrm, nReadChars, b16Bit );
+        rString.Append( urlStr );
+}
+
+void lclAppendString32( String& rString, SvMemoryStream& rStrm, bool b16Bit )
+{
+    sal_uInt32 nValue;
+        rStrm >>( nValue );
+        lclAppendString32( rString, rStrm, nValue, b16Bit );
+}
+
+void SwWW8ImplReader::ReadEmbeddedData( SvMemoryStream& rStrm, SwDocShell* pDocShell, struct HyperLinksTable& hlStr)
+{
+    // (0x01B8) HLINK -------------------------------------------------------------
+    // const sal_uInt16 WW8_ID_HLINK               = 0x01B8;
+    const sal_uInt32 WW8_HLINK_BODY             = 0x00000001;   /// Contains file link or URL.
+    const sal_uInt32 WW8_HLINK_ABS              = 0x00000002;   /// Absolute path.
+    const sal_uInt32 WW8_HLINK_DESCR            = 0x00000014;   /// Description.
+    const sal_uInt32 WW8_HLINK_MARK             = 0x00000008;   /// Text mark.
+    const sal_uInt32 WW8_HLINK_FRAME            = 0x00000080;   /// Target frame.
+    const sal_uInt32 WW8_HLINK_UNC              = 0x00000100;   /// UNC path.
+
+    //  sal_uInt8 maGuidStdLink[ 16 ] ={
+    //      0xD0, 0xC9, 0xEA, 0x79, 0xF9, 0xBA, 0xCE, 0x11, 0x8C, 0x82, 0x00, 0xAA, 0x00, 0x4B, 0xA9, 0x0B };
+
+    sal_uInt8 maGuidUrlMoniker[ 16 ] = {
+        0xE0, 0xC9, 0xEA, 0x79, 0xF9, 0xBA, 0xCE, 0x11, 0x8C, 0x82, 0x00, 0xAA, 0x00, 0x4B, 0xA9, 0x0B };
+
+    sal_uInt8 maGuidFileMoniker[ 16 ] = {
+        0x03, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46 };
+
+    sal_uInt8*  aGuid = new sal_uInt8[ 16 ];
+    sal_uInt32 nFlags;
+
+
+        rStrm.Read( aGuid, 16);
+        rStrm.SeekRel( 4 );
+        rStrm >> nFlags;
+
+        sal_uInt16 nLevel = 0;                  // counter for level to climb down in path
+        ::std::auto_ptr< String > xLongName;    // link / file name
+        ::std::auto_ptr< String > xShortName;   // 8.3-representation of file name
+        ::std::auto_ptr< String > xTextMark;    // text mark
+
+    // description (ignore)
+        if( ::get_flag( nFlags, WW8_HLINK_DESCR ) )
+        lclIgnoreString32( rStrm, true );
+
+    // target frame
+        if( ::get_flag( nFlags, WW8_HLINK_FRAME ) )
+    {
+        ::std::auto_ptr< String > FrmName;
+        FrmName.reset( new String );
+        lclAppendString32(*FrmName , rStrm , true);
+        hlStr.tarFrm = *FrmName;
+    }
+
+        // UNC path
+    if( ::get_flag( nFlags, WW8_HLINK_UNC ) )
+        {
+        xLongName.reset( new String );
+            lclAppendString32( *xLongName, rStrm, true );
+        lclGetAbsPath( *xLongName, 0 , pDocShell);
+        }
+        // file link or URL
+        else if( ::get_flag( nFlags, WW8_HLINK_BODY ) )
+        {
+            rStrm.Read( aGuid, 16);
+
+            if( (memcmp(aGuid, maGuidFileMoniker, 16) == 0) )
+            {
+                    rStrm >> nLevel;
+                    xShortName.reset( new String );
+            lclAppendString32( *xShortName,rStrm, false );
+            rStrm.SeekRel( 24 );
+
+                    sal_uInt32 nStrLen;
+                    rStrm >> nStrLen;
+                    if( nStrLen )
+                    {
+                        rStrm >> nStrLen;
+                        nStrLen /= 2;
+                        rStrm.SeekRel( 2 );
+                        xLongName.reset( new String );
+                lclAppendString32( *xLongName, rStrm,nStrLen, true );
+                lclGetAbsPath( *xLongName, nLevel, pDocShell);
+                    }
+                    else
+                lclGetAbsPath( *xShortName, nLevel, pDocShell);
+            }
+            else    if( (memcmp(aGuid, maGuidUrlMoniker, 16) == 0) )
+            {
+            sal_uInt32 nStrLen;
+                    rStrm >> nStrLen;
+                    nStrLen /= 2;
+                    xLongName.reset( new String );
+            lclAppendString32( *xLongName,rStrm, nStrLen, true );
+                    if( !::get_flag( nFlags, WW8_HLINK_ABS ) )
+                lclGetAbsPath( *xLongName, 0 ,pDocShell);
+            }
+            else
+            {
+                DBG_ERRORFILE( "WW8Hyperlink::ReadEmbeddedData - unknown content GUID" );
+            }
+    }
+
+    // text mark
+        if( ::get_flag( nFlags, WW8_HLINK_MARK ) )
+        {
+        xTextMark.reset( new String );
+            lclAppendString32( *xTextMark, rStrm, true );
+        }
+
+    if( !xLongName.get() && xShortName.get() )
+    {
+        xLongName.reset( new String );
+        xLongName->Append(*xShortName);
+    }
+        else if( !xLongName.get() && xTextMark.get() )
+        xLongName.reset( new String );
+
+        if( xLongName.get() )
+        {
+        if( xTextMark.get() )
+            {
+                    if( xLongName->Len() == 0 )
+                        xTextMark->SearchAndReplaceAll( '!', '.' );
+                    xLongName->Append( '#' );
+                    xLongName->Append( *xTextMark );
+            }
+        hlStr.hLinkAddr = *xLongName;
+        }
+}
 
 SwMSDffManager::SwMSDffManager( SwWW8ImplReader& rRdr )
     : SvxMSDffManager(*rRdr.pTableStream, rRdr.GetBaseURL(), rRdr.pWwFib->fcDggInfo,
@@ -760,6 +1007,51 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
             delete pImpRec;
     }
 
+    sal_uInt32 nBufferSize = GetPropertyValue( DFF_Prop_pihlShape );
+     if( (0 < nBufferSize) && (nBufferSize <= 0xFFFF) && SeekToContent( DFF_Prop_pihlShape, rSt ) )
+    {
+        SvMemoryStream aMemStream;
+        String aStrURL;
+        struct HyperLinksTable hlStr;
+        sal_uInt16 mnRawRecId,mnRawRecSize;
+        aMemStream << sal_uInt16( 0 ) << static_cast< sal_uInt16 >( nBufferSize );
+
+        // copy from DFF stream to memory stream
+        ::std::vector< sal_uInt8 > aBuffer( nBufferSize );
+        sal_uInt8* pnData = &aBuffer.front();
+        sal_uInt8 mnStreamSize;
+        if( pnData && rSt.Read( pnData, nBufferSize ) == nBufferSize )
+        {
+            aMemStream.Write( pnData, nBufferSize );
+            aMemStream.Seek( STREAM_SEEK_TO_END );
+            mnStreamSize = aMemStream.Tell();
+            aMemStream.Seek( STREAM_SEEK_TO_BEGIN );
+            bool bRet =  4 <= mnStreamSize;
+            if( bRet )
+                aMemStream >> mnRawRecId >> mnRawRecSize;
+            SwDocShell* pDocShell = rReader.mpDocShell;
+            if(pDocShell)
+            {
+                rReader.ReadEmbeddedData( aMemStream, pDocShell, hlStr);
+            }
+        }
+
+        if(pObj && hlStr.hLinkAddr.Len() > 0)
+        {
+            SwMacroInfo* pInfo = GetMacroInfo( pObj, true );
+            if( pInfo )
+            {
+                pInfo->SetShapeId( rObjData.nShapeId );
+                pInfo->SetHlink( hlStr.hLinkAddr );
+                if(hlStr.tarFrm.Len() > 0)
+                    pInfo->SetTarFrm( hlStr.tarFrm );
+                String aNameStr = GetPropertyString( DFF_Prop_wzName, rSt );
+                if(aNameStr.Len() > 0)
+                    pInfo->SetName( aNameStr );
+            }
+        }
+        }
+
     return pObj;
 }
 
@@ -940,6 +1232,41 @@ bool SwWW8FltControlStack::CheckSdOD(sal_Int32 nStart,sal_Int32 nEnd)
     return rReader.IsParaEndInCPs(nStart,nEnd);
 }
 //End
+
+void SwWW8ReferencedFltEndStack::SetAttrInDoc( const SwPosition& rTmpPos,
+                                               SwFltStackEntry* pEntry )
+{
+    switch( pEntry->pAttr->Which() )
+    {
+    case RES_FLTR_BOOKMARK:
+        {
+            // suppress insertion of bookmark, which is recognized as an internal bookmark used for table-of-content
+            // and which is not referenced.
+            bool bInsertBookmarkIntoDoc = true;
+
+            SwFltBookmark* pFltBookmark = dynamic_cast<SwFltBookmark*>(pEntry->pAttr);
+            if ( pFltBookmark != 0 && pFltBookmark->IsTOCBookmark() )
+            {
+                const String& rName = pFltBookmark->GetName();
+                ::std::set< String, SwWW8::ltstr >::const_iterator aResult = aReferencedTOCBookmarks.find(rName);
+                if ( aResult == aReferencedTOCBookmarks.end() )
+                {
+                    bInsertBookmarkIntoDoc = false;
+                }
+            }
+            if ( bInsertBookmarkIntoDoc )
+            {
+                SwFltEndStack::SetAttrInDoc( rTmpPos, pEntry );
+            }
+            break;
+        }
+    default:
+        SwFltEndStack::SetAttrInDoc( rTmpPos, pEntry );
+        break;
+    }
+
+}
+
 void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
     SwFltStackEntry* pEntry)
 {
@@ -3996,7 +4323,7 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
         RefFldStck: Keeps track of bookmarks which may be inserted as
         variables intstead.
     */
-    pReffedStck = new SwFltEndStack(&rDoc, nFieldFlags);
+    pReffedStck = new SwWW8ReferencedFltEndStack(&rDoc, nFieldFlags);
     pReffingStck = new SwWW8FltRefStack(&rDoc, nFieldFlags);
 
     pAnchorStck = new SwWW8FltAnchorStack(&rDoc, nFieldFlags);
@@ -4133,6 +4460,11 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
 
     pSBase = new WW8ScannerBase(pStrm,pTableStream,pDataStream,pWwFib);
 
+    if ( !pSBase->IsValid() )
+    {
+        return ERR_SWG_READ_ERROR;
+    }
+
     static const SvxExtNumType eNumTA[16] =
     {
         SVX_NUM_ARABIC, SVX_NUM_ROMAN_UPPER, SVX_NUM_ROMAN_LOWER,
@@ -4208,23 +4540,25 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
     if (pGloss)
     {
         WW8PLCF aPlc(pTableStream, pWwFib->fcPlcfglsy, pWwFib->lcbPlcfglsy, 0);
-
-        WW8_CP nStart, nEnd;
-        void* pDummy;
-
-        for (int i=0;i<pGloss->GetNoStrings();i++,aPlc++)
+        if ( aPlc.IsValid() )
         {
-            SwNodeIndex aIdx( rDoc.GetNodes().GetEndOfContent());
-            SwTxtFmtColl* pColl =
-                rDoc.GetTxtCollFromPool(RES_POOLCOLL_STANDARD,
-                false);
-            SwStartNode *pNode =
-                rDoc.GetNodes().MakeTextSection(aIdx,
-                SwNormalStartNode,pColl);
-            pPaM->GetPoint()->nNode = pNode->GetIndex()+1;
-            pPaM->GetPoint()->nContent.Assign(pPaM->GetCntntNode(),0);
-            aPlc.Get( nStart, nEnd, pDummy );
-            ReadText(nStart,nEnd-nStart-1,MAN_MAINTEXT);
+            WW8_CP nStart, nEnd;
+            void* pDummy;
+
+            for (int i=0; i<pGloss->GetNoStrings(); i++,aPlc++)
+            {
+                SwNodeIndex aIdx( rDoc.GetNodes().GetEndOfContent());
+                SwTxtFmtColl* pColl =
+                    rDoc.GetTxtCollFromPool(RES_POOLCOLL_STANDARD,
+                    false);
+                SwStartNode *pNode =
+                    rDoc.GetNodes().MakeTextSection(aIdx,
+                    SwNormalStartNode,pColl);
+                pPaM->GetPoint()->nNode = pNode->GetIndex()+1;
+                pPaM->GetPoint()->nContent.Assign(pPaM->GetCntntNode(),0);
+                aPlc.Get( nStart, nEnd, pDummy );
+                ReadText(nStart,nEnd-nStart-1,MAN_MAINTEXT);
+            }
         }
     }
     else //ordinary case
@@ -4344,7 +4678,8 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
     GrafikDtor();
     DELETEZ( pMSDffManager );
     DELETEZ( pHdFt );
-    DELETEZ( pLstManager );
+    //For i120928,delay the destruct action
+    //DELETEZ( pLstManager );
     DELETEZ( pSBase );
     delete pWDop;
     DELETEZ( pFonts );
@@ -4361,6 +4696,86 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
     delete mpRedlineStack;
     DeleteAnchorStk();
     DeleteRefStks();
+    //For i120928,achieve the graphics from the special bookmark with is for graphic bullet
+    {
+        std::vector<const SwGrfNode*> vecBulletGrf;
+        std::vector<SwFrmFmt*> vecFrmFmt;
+
+        IDocumentMarkAccess* const pMarkAccess =
+                                                rDoc.getIDocumentMarkAccess();
+        if ( pMarkAccess )
+        {
+                  IDocumentMarkAccess::const_iterator_t ppBkmk =
+                                        pMarkAccess->findBookmark( C2U("_PictureBullets") );
+            //for(IDocumentMarkAccess::const_iterator_t ppBookmark = ppBkmk->begin();
+                  //    ppBookmark != ppBkmk->end(); ppBookmark++)
+                  if ( ppBkmk != pMarkAccess->getBookmarksEnd() &&
+                             IDocumentMarkAccess::GetType( *(ppBkmk->get()) )
+                                == IDocumentMarkAccess::BOOKMARK )
+                    {
+                SwTxtNode* pTxtNode = ppBkmk->get()->GetMarkStart().nNode.GetNode().GetTxtNode();
+                         if ( pTxtNode )
+                {
+                    const SwpHints *pHints = pTxtNode->GetpSwpHints();
+                    for(int nHintPos = 0; pHints && nHintPos < pHints->Count(); ++nHintPos)
+                    {
+                        const SwTxtAttr *pHt = (*pHints)[nHintPos];
+                        xub_StrLen st = *(pHt->GetStart());
+                        if(pHt && pHt->Which() == RES_TXTATR_FLYCNT && (st >= ppBkmk->get()->GetMarkStart().nContent.GetIndex()))
+                        {
+                            SwFrmFmt *pFrmFmt = pHt->GetFlyCnt().GetFrmFmt();
+                            const SwNodeIndex *pNdIdx = pFrmFmt->GetCntnt().GetCntntIdx();
+                            const SwNodes &nos = pNdIdx->GetNodes();
+                            const SwGrfNode *pGrf = dynamic_cast<const SwGrfNode*>(nos[pNdIdx->GetIndex() + 1]);
+                            if (pGrf)
+                            {
+                                vecBulletGrf.push_back(pGrf);
+                                vecFrmFmt.push_back(pFrmFmt);
+                            }
+                        }
+                    }
+                    // update graphic bullet information
+                    sal_uInt16 nCount = pLstManager->GetWW8LSTInfoNum();
+                    for (sal_uInt16 i = 0; i < nCount; ++i)
+                    {
+                        SwNumRule* pRule = pLstManager->GetNumRule(i);
+                        for (sal_uInt16 j = 0; j < MAXLEVEL; ++j)
+                        {
+                            SwNumFmt aNumFmt(pRule->Get(j));
+                            sal_Int16 nType = aNumFmt.GetNumberingType();
+                            sal_uInt16 nGrfBulletCP = aNumFmt.GetGrfBulletCP();
+                            if (nType == SVX_NUM_BITMAP && vecBulletGrf.size() > nGrfBulletCP)
+                            {
+                                Graphic aGraphic = vecBulletGrf[nGrfBulletCP]->GetGrf();
+                                SvxBrushItem aBrush(aGraphic, GPOS_AREA, SID_ATTR_BRUSH);
+                                Font aFont = numfunc::GetDefBulletFont();
+                                int nHeight = aFont.GetHeight() * 12;//20;
+                                Size aPrefSize( aGraphic.GetPrefSize());
+                                if (aPrefSize.Height() * aPrefSize.Width() != 0 )
+                                {
+                                    int nWidth = (nHeight * aPrefSize.Width()) / aPrefSize.Height();
+                                    Size aSize(nWidth, nHeight);
+                                    aNumFmt.SetGraphicBrush(&aBrush, &aSize);
+                                }
+                                else
+                                {
+                                    aNumFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
+                                    aNumFmt.SetBulletChar(0x2190);
+                                }
+                                pRule->Set( j, aNumFmt );
+                            }
+                        }
+                    }
+                    // Remove additional pictures
+                    for (sal_uInt16 i = 0; i < vecFrmFmt.size(); ++i)
+                    {
+                        rDoc.DelLayoutFmt(vecFrmFmt[i]);
+                    }
+                }
+            }
+            DELETEZ( pLstManager );
+        }
+    }
 
     UpdateFields();
 
@@ -5316,3 +5731,20 @@ namespace sw
 }
 
 /* vi:set tabstop=4 shiftwidth=4 expandtab: */
+
+SwMacroInfo::SwMacroInfo() :
+    SdrObjUserData( SW_DRAWLAYER, SW_UD_IMAPDATA )
+{
+}
+
+SwMacroInfo::~SwMacroInfo()
+{
+}
+
+SdrObjUserData* SwMacroInfo::Clone( SdrObject* /*pObj*/ ) const
+{
+   return new SwMacroInfo( *this );
+}
+
+
+

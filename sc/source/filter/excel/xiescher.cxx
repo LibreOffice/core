@@ -75,6 +75,7 @@
 #include <svx/unoapi.hxx>
 #include <svx/svditer.hxx>
 #include <editeng/writingmodeitem.hxx>
+#include <svx/charthelper.hxx>
 
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
@@ -86,6 +87,7 @@
 #include <svx/xlntrit.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/svdlegacy.hxx>
+#include <vcl/dibtools.hxx>
 
 #include "document.hxx"
 #include "drwlayer.hxx"
@@ -644,7 +646,7 @@ void XclImpDrawObjBase::ConvertLineStyle( SdrObject& rSdrObj, const XclObjLineDa
         long nLineWidth = 35 * ::std::min( rLineData.mnWidth, EXC_OBJ_LINE_THICK );
         rSdrObj.SetMergedItem( XLineWidthItem( nLineWidth ) );
         rSdrObj.SetMergedItem( XLineColorItem( EMPTY_STRING, GetPalette().GetColor( rLineData.mnColorIdx ) ) );
-        rSdrObj.SetMergedItem( XLineJointItem( XLINEJOINT_MITER ) );
+        rSdrObj.SetMergedItem( XLineJointItem( com::sun::star::drawing::LineJoint_MITER ) );
 
         sal_uLong nDotLen = ::std::max< sal_uLong >( 70 * rLineData.mnWidth, 35 );
         sal_uLong nDashLen = 3 * nDotLen;
@@ -744,7 +746,7 @@ void XclImpDrawObjBase::ConvertFillStyle( SdrObject& rSdrObj, const XclObjFillDa
                 aMemStrm << sal_uInt32( pnPattern[ nIdx ] ); // 32-bit little-endian
             aMemStrm.Seek( STREAM_SEEK_TO_BEGIN );
             Bitmap aBitmap;
-            aBitmap.Read( aMemStrm, sal_False );
+            ReadDIB(aBitmap, aMemStrm, false);
             rSdrObj.SetMergedItem(XFillStyleItem(XFILL_BITMAP));
             rSdrObj.SetMergedItem(XFillBitmapItem(EMPTY_STRING, Graphic(aBitmap)));
         }
@@ -1755,6 +1757,10 @@ SdrObject* XclImpChartObj::DoCreateSdrObj( XclImpDffConverter& rDffConv, const b
         const ::com::sun::star::awt::Size aAwtSize(basegfx::fround(aNewSize.getX()), basegfx::fround(aNewSize.getY()));
 
         xEmbObj->setVisualAreaSize( nAspect, aAwtSize );
+
+        // #121334# This call will change the chart's default background fill from white to transparent.
+        // Add here again if this is wanted (see task description for details)
+        // ChartHelper::AdaptDefaultsForChart( xEmbObj );
 
         // create the container OLE object
         xSdrObj.reset(
@@ -3988,7 +3994,7 @@ void XclImpDrawing::ReadBmp( Graphic& rGraphic, const XclImpRoot& rRoot, XclImpS
     // import the graphic from memory stream
     aMemStrm.Seek( STREAM_SEEK_TO_BEGIN );
     Bitmap aBitmap;
-    if( aBitmap.Read( aMemStrm, sal_False ) )   // read DIB without file header
+    if( ReadDIB(aBitmap, aMemStrm, false) )   // read DIB without file header
         rGraphic = aBitmap;
 }
 

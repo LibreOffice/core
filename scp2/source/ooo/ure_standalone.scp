@@ -38,9 +38,9 @@ End
 Directory gid_Dir_Ooo_Openofficeorg
     ParentID = PREDEFINED_PROGDIR;
   #ifdef WNT
-    HostName = "OpenOffice.org";
+    HostName = "OpenOffice";
   #else
-    HostName = "openoffice.org";
+    HostName = "openoffice";
   #endif
     Styles = (ISINSTALLLOCATION);
 End

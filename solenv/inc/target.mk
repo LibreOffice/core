@@ -31,10 +31,6 @@ MKFILENAME:=TARGET.MK
 target_empty=warn_target_empty
 .ENDIF
 
-.IF "$(PRJNAME)" == "binfilter"
-CDEFS+=-DBINFILTER_COMPAT
-.ENDIF
-
 .IF "$(STL_OS2_BUILDING)" != ""
 CDEFS+=-DSTL_OS2_BUILDING
 .ENDIF

@@ -281,7 +281,7 @@ echo "Installing the RPMs"
 
 ABSROOT=`cd ${INSTALLDIR}; pwd`
 RELOCATIONS=`rpm -qp --qf "--relocate %{PREFIXES}=${ABSROOT}%{PREFIXES} \n" $RPMLIST | sort -u | tr -d "\012"`
-UserInstallation=\$BRAND_BASE_DIR/../UserInstallation rpm ${DEBIAN_FLAGS} $RPMCMD --ignoresize -vh $RELOCATIONS --dbpath $RPM_DB_PATH $RPMLIST
+UserInstallation=\$OOO_BASE_DIR/../UserInstallation rpm ${DEBIAN_FLAGS} $RPMCMD --ignoresize -vh $RELOCATIONS --dbpath $RPM_DB_PATH $RPMLIST
 
 #
 # Create a link into the users home directory
@@ -305,7 +305,7 @@ then
 fi
 
 # patch the "bootstraprc" to create a self-containing installation
-find "$INSTALLDIR" -type f -name bootstraprc -exec /bin/bash -ce 'test ! -e "$0".orig && mv "$0" "$0".orig && sed '\''s,^UserInstallation=$SYSUSERCONFIG.*,UserInstallation=$BRAND_BASE_DIR/../UserInstallation,'\'' "$0".orig > "$0"' {} \;
+find "$INSTALLDIR" -type f -name bootstraprc -exec /bin/bash -ce 'test ! -e "$0".orig && mv "$0" "$0".orig && sed '\''s,^UserInstallation=$SYSUSERCONFIG.*,UserInstallation=$OOO_BASE_DIR/../UserInstallation,'\'' "$0".orig > "$0"' {} \;
 
 # if an unpack directory exists, it can be removed now
 if [ ! -z "$UNPACKDIR" ]

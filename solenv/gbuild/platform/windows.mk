@@ -115,7 +115,7 @@ gb_CFLAGS := \
 	-wd4800 \
 	-wd4820 \
 	-wd4826 \
-	-Zc:forScope,wchar_t- \
+	-Zc:wchar_t- \
 	-Zm500 \
 
 gb_CXXFLAGS := \
@@ -161,7 +161,7 @@ gb_CXXFLAGS := \
 	-wd4800 \
 	-wd4820 \
 	-wd4826 \
-	-Zc:forScope,wchar_t- \
+	-Zc:wchar_t- \
 	-Zm500 \
 
 gb_STDLIBS := \
@@ -190,11 +190,7 @@ gb_NoexPrecompiledHeader_NOEXCEPTIONFLAGS := $(gb_LinkTarget_NOEXCEPTIONFLAGS)
 gb_LinkTarget_LDFLAGS := \
 	-MACHINE:IX86 \
 	-NODEFAULTLIB \
-	-OPT:NOREF \
 	-SUBSYSTEM:CONSOLE \
-	-safeseh \
-	-nxcompat \
-	-dynamicbase \
 	$(patsubst %,-LIBPATH:%,$(filter-out .,$(subst ;, ,$(subst \,/,$(ILIB))))) \
 
 ifneq ($(ENABLE_CRASHDUMP),)
@@ -438,7 +434,7 @@ endef
 # Library class
 
 gb_Library_DEFS := -D_DLL
-gb_Library_TARGETTYPEFLAGS := -DLL
+gb_Library_TARGETTYPEFLAGS := -DLL -OPT:NOREF -SAFESEH -NXCOMPAT -DYNAMICBASE
 gb_Library_get_rpath :=
 
 gb_Library_SYSPRE := i
@@ -483,11 +479,21 @@ gb_Library_FILENAMES :=\
 gb_Library_DLLEXT := .dll
 gb_Library_MAJORVER := 3
 gb_Library_RTEXT := MSC$(gb_Library_DLLEXT)
+
+ifeq ($(USE_SYSTEM_STL),YES)
+ifeq ($(gb_PRODUCT),$(true))
+gb_Library_STLEXT := msvcprt.lib
+else
+gb_Library_STLEXT := msvcprt.lib
+endif
+else
 ifeq ($(gb_PRODUCT),$(true))
 gb_Library_STLEXT := port_vc7145$(gb_Library_DLLEXT)
 else
 gb_Library_STLEXT := port_vc7145_stldebug$(gb_Library_DLLEXT)
 endif
+endif
+
 gb_Library_OOOEXT := $(gb_Library_DLLEXT)
 gb_Library_UNOEXT := .uno$(gb_Library_DLLEXT)
 gb_Library_UNOVEREXT := $(gb_Library_MAJORVER)$(gb_Library_DLLEXT)
@@ -588,7 +594,7 @@ endef
 # Executable class
 
 gb_Executable_EXT := .exe
-gb_Executable_TARGETTYPEFLAGS := -RELEASE -BASE:0x1b000000 -OPT:NOREF -INCREMENTAL:NO -DEBUG
+gb_Executable_TARGETTYPEFLAGS := -RELEASE -BASE:0x1b000000 -OPT:NOREF -INCREMENTAL:NO -DEBUG -SAFESEH -NXCOMPAT -DYNAMICBASE
 gb_Executable_get_rpath :=
 
 define gb_Executable_Executable_platform
@@ -753,7 +759,7 @@ endif
 
 gb_XSLTPROCPRECOMMAND := PATH="$${PATH}:$(OUTDIR)/bin"
 gb_Library_COMPONENTPREFIXES := \
-    OOO:vnd.sun.star.expand:\dBRAND_BASE_DIR/program/ \
+    OOO:vnd.sun.star.expand:\dOOO_BASE_DIR/program/ \
     URELIB:vnd.sun.star.expand:\dURE_INTERNAL_LIB_DIR/ \
 
 # vim: set noet sw=4 ts=4:

@@ -24,7 +24,7 @@
 PRJ=..$/..$/..
 
 PRJNAME=bridges
-TARGET=gcc3_uno
+TARGET=$(COMNAME)_uno
 LIBTARGET=no
 ENABLE_EXCEPTIONS=TRUE
 
@@ -34,7 +34,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files --------------------------------------------------------
 
-.IF "$(COM)$(OS)$(CPU)$(COMNAME)" == "GCCMACOSXIgcc3"
+.IF "$(OS)$(CPU)" == "MACOSXI"
 
 .IF "$(cppu_no_leak)" == ""
 CFLAGS += -DLEAK_STATIC_DATA

@@ -48,12 +48,6 @@
   <implementation name="com.sun.star.comp.framework.License">
     <service name="com.sun.star.task.Job"/>
   </implementation>
-  <implementation name="com.sun.star.comp.framework.LogoImageStatusbarController">
-    <service name="com.sun.star.frame.StatusbarController"/>
-  </implementation>
-  <implementation name="com.sun.star.comp.framework.LogoTextStatusbarController">
-    <service name="com.sun.star.frame.StatusbarController"/>
-  </implementation>
   <implementation name="com.sun.star.comp.framework.MacrosMenuController">
     <service name="com.sun.star.frame.PopupMenuController"/>
   </implementation>
@@ -69,17 +63,11 @@
   <implementation name="com.sun.star.comp.framework.OXTFileHandler">
     <service name="com.sun.star.frame.ContentHandler"/>
   </implementation>
-  <implementation name="com.sun.star.comp.framework.PopupMenuController">
-    <service name="com.sun.star.frame.ToolbarController"/>
-  </implementation>
   <implementation name="com.sun.star.comp.framework.PopupMenuControllerDispatcher">
     <service name="com.sun.star.frame.ProtocolHandler"/>
   </implementation>
   <implementation name="com.sun.star.comp.framework.ServiceHandler">
     <service name="com.sun.star.frame.ProtocolHandler"/>
-  </implementation>
-  <implementation name="com.sun.star.comp.framework.SimpleTextStatusbarController">
-    <service name="com.sun.star.frame.StatusbarController"/>
   </implementation>
   <implementation name="com.sun.star.comp.framework.ToolBarsMenuController">
     <service name="com.sun.star.frame.PopupMenuController"/>

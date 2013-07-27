@@ -169,15 +169,23 @@ public:
     // dieser Instanz und ausserdem auch den StatusEventHdl.
     // Ebenso kann eine spezifische OutlinerView vorgegeben werden.
 
-    virtual bool SdrBeginTextEdit(SdrObject* pObj, ::Window* pWin = 0, bool bIsNewObj = false,
-        SdrOutliner* pGivenOutliner = 0, OutlinerView* pGivenOutlinerView = 0,
-        bool bDontDeleteOutliner = false, bool bOnlyOneView = false, bool bGrabFocus = true);
+    virtual bool SdrBeginTextEdit(
+        SdrObject* pObj,
+        ::Window* pWin = 0,
+        bool bIsNewObj = false,
+        SdrOutliner* pGivenOutliner = 0,
+        OutlinerView* pGivenOutlinerView = 0,
+        bool bDontDeleteOutliner = false,
+        bool bOnlyOneView = false,
+        bool bGrabFocus = true);
+
     // bDontDeleteReally ist ein Spezialparameter fuer den Writer.
     // Ist dieses Flag gesetzt, dann wird ein evtl. leeres Textobjekt
     // nicht geloescht. Stattdessen gibt es dann einen Returncode
     // SDRENDTEXTEDIT_SHOULDBEDELETED (anstelle von SDRENDTEXTEDIT_BEDELETED)
     // der besagt, dass das Objekt geloescht werden sollte.
-    virtual SdrEndTextEditKind SdrEndTextEdit(bool bDontDeleteReally = false);
+    virtual SdrEndTextEditKind SdrEndTextEdit(
+        bool bDontDeleteReally = false);
     virtual bool IsTextEdit() const;
 
     // true=Es wird ein Textrahmen (OBJ_TEXT,OBJ_OUTLINETEXT,...) editiert
@@ -239,6 +247,8 @@ public:
     // Intern: Beim Splitteraufziehen neue OutlinerView...
     virtual void AddWindowToPaintView(OutputDevice* pNewWin);
     virtual void DeleteWindowFromPaintView(OutputDevice* pOldWin);
+
+    sal_uInt16 GetSelectionLevel() const;
 
     //************************************************************************
     // Object-MacroModus (z.B. Rect als Button oder sowas):

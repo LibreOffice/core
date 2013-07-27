@@ -33,7 +33,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/DispatchResultEvent.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
-#include <com/sun/star/system/XSystemShellExecute.hpp>
+#include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/task/XJob.hpp>
 #include <com/sun/star/task/XJobExecutor.hpp>
@@ -120,7 +120,7 @@ static inline rtl::OUString getBuildId()
 //------------------------------------------------------------------------------
 static inline rtl::OUString getBaseInstallation()
 {
-    rtl::OUString aPathVal(UNISTRING("${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("bootstrap") ":BaseInstallation}"));
+    rtl::OUString aPathVal(UNISTRING("${$OOO_BASE_DIR/program/" SAL_CONFIGFILE("bootstrap") ":BaseInstallation}"));
     rtl::Bootstrap::expandMacros(aPathVal);
     return aPathVal;
 }
@@ -932,8 +932,7 @@ UpdateCheck::install()
     osl::MutexGuard aGuard(m_aMutex);
 
     const uno::Reference< c3s::XSystemShellExecute > xShellExecute(
-        createService( UNISTRING( "com.sun.star.system.SystemShellExecute" ), m_xContext ),
-        uno::UNO_QUERY );
+        c3s::SystemShellExecute::create( m_xContext ) );
 
     try {
         // Construct install command ??

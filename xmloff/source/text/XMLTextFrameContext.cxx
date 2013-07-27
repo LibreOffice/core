@@ -1422,7 +1422,8 @@ XMLTextFrameContext::~XMLTextFrameContext()
 void XMLTextFrameContext::EndElement()
 {
     /// solve if multiple image child contexts were imported
-    solveMultipleImages();
+    /// the winner is returned, if something has yet to be done with it
+    /*const SvXMLImportContext* pWinner =*/ solveMultipleImages();
 
     SvXMLImportContext *pContext = &m_xImplContext;
     XMLTextFrameContext_Impl *pImpl = dynamic_cast< XMLTextFrameContext_Impl* >( pContext );

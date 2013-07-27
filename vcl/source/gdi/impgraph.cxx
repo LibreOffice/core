@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
@@ -40,6 +38,7 @@
 #include <vcl/metaact.hxx>
 #include <impgraph.hxx>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
+#include <vcl/dibtools.hxx>
 
 // -----------
 // - Defines -
@@ -1794,7 +1793,7 @@ SvStream& operator>>( SvStream& rIStm, ImpGraphic& rImpGraphic )
 
                 rIStm.SeekRel( -4 );
                 rIStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
-                rIStm >> aBmpEx;
+                ReadDIBBitmapEx(aBmpEx, rIStm);
 
                 if( !rIStm.GetError() )
                 {
@@ -1937,7 +1936,7 @@ SvStream& operator<<( SvStream& rOStm, const ImpGraphic& rImpGraphic )
                         }
                         else
                         {
-                            rOStm << rImpGraphic.maEx;
+                            WriteDIBBitmapEx(rImpGraphic.maEx, rOStm);
                         }
                     }
                     break;

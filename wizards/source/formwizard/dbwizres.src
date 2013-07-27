@@ -1475,7 +1475,6 @@ String RID_DB_REPORT_WIZARD_START + 88
 String RID_DB_REPORT_WIZARD_START + 89
 {
     Text [ en-US ] = "Page #page# of #count#";
-    Text [ x-comment ] = "Please don't translate the words #page# and #count#, these are placeholders.";
 };
 String RID_DB_REPORT_WIZARD_START + 90
 {

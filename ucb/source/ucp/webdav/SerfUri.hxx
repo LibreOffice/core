@@ -25,7 +25,7 @@
 
 #include <apr_uri.h>
 #include <rtl/ustring.hxx>
-#include <DAVException.hxx>
+#include "DAVException.hxx"
 
 namespace http_dav_ucp
 {

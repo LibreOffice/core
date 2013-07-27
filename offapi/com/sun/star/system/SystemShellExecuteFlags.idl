@@ -19,33 +19,24 @@
  *
  *************************************************************/
 
-
-
 #ifndef __com_sun_star_system_SystemShellExecuteFlags_idl__
 #define __com_sun_star_system_SystemShellExecuteFlags_idl__
 
-
 module com { module sun { module star { module system {
 
-//=============================================================================
 /** Different settings for the <type>SystemShellExecute</type> service.
  */
-
 published constants SystemShellExecuteFlags
 {
-    //---------------------------------------------------------------------
     /** Uses the default settings for executing commands.
     */
-    const long DEFAULTS                = 0;
+    const long DEFAULTS = 0;
 
-    //---------------------------------------------------------------------
     /** Prevents the display of system error message boxes if the
         method <member scope="com::sun::star::system">XSystemShellExecute::execute()</member> fails.
      */
     const long NO_SYSTEM_ERROR_MESSAGE = 1;
 };
-
-//=============================================================================
 
 }; }; }; };
 

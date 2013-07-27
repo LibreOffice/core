@@ -70,7 +70,6 @@ extern "C" void SAL_CALL createRegistryInfo_ODBTypeWizDialogSetup();
 extern "C" void SAL_CALL createRegistryInfo_OColumnControlModel();
 extern "C" void SAL_CALL createRegistryInfo_OColumnControl();
 extern "C" void SAL_CALL createRegistryInfo_OToolboxController();
-extern "C" void SAL_CALL createRegistryInfo_OStatusbarController();
 extern "C" void SAL_CALL createRegistryInfo_CopyTableWizard();
 extern "C" void SAL_CALL createRegistryInfo_OTextConnectionSettingsDialog();
 
@@ -102,7 +101,6 @@ extern "C" void SAL_CALL createRegistryInfo_DBU()
         createRegistryInfo_OColumnControlModel();
         createRegistryInfo_OColumnControl();
         createRegistryInfo_OToolboxController();
-        createRegistryInfo_OStatusbarController();
         createRegistryInfo_CopyTableWizard();
         createRegistryInfo_OTextConnectionSettingsDialog();
         bInit = sal_True;

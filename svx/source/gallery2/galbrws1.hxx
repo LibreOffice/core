@@ -28,6 +28,8 @@
 #include <vector>
 #include "svx/galbrws.hxx"
 
+#include <boost/function.hpp>
+
 // -----------------
 // - GalleryButton -
 // -----------------
@@ -74,9 +76,12 @@ class VclAbstractDialog2;
 struct ExchangeData;
 class SfxItemSet;
 
+namespace svx { namespace sidebar { class GalleryControl; } }
+
 class GalleryBrowser1 : public Control, SfxListener
 {
     friend class GalleryBrowser;
+    friend class svx::sidebar::GalleryControl;
     friend class GalleryThemeListBox;
     using Control::Notify;
     using Window::KeyInput;
@@ -93,6 +98,9 @@ private:
     Image                   aImgDefault;
     Image                   aImgReadOnly;
     Image                   aImgImported;
+
+    ::boost::function<sal_Bool(const KeyEvent&,Window*)> maKeyInputHandler;
+    ::boost::function<void(void)> maThemeSlectionHandler;
 
     void                    ImplAdjustControls();
     sal_uIntPtr                 ImplInsertThemeEntry( const GalleryThemeEntry* pEntry );
@@ -119,7 +127,12 @@ private:
 
 public:
 
-                            GalleryBrowser1( GalleryBrowser* pParent, const ResId& rResId, Gallery* pGallery );
+                            GalleryBrowser1(
+                                Window* pParent,
+                                const ResId& rResId,
+                                Gallery* pGallery,
+                                const ::boost::function<sal_Bool(const KeyEvent&,Window*)>& rKeyInputHandler,
+                                const ::boost::function<void(void)>& rThemeSlectionHandler);
                             ~GalleryBrowser1();
 
     void                    SelectTheme( const String& rThemeName ) { mpThemes->SelectEntry( rThemeName ); SelectThemeHdl( NULL ); }

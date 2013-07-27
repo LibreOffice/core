@@ -570,7 +570,7 @@ sal_Bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
     {
         if( aValue.getType() == CTRL_SPINBUTTONS )
         {
-            const SpinbuttonValue *pValue = static_cast<const SpinbuttonValue*>(&aValue);
+            const SpinbuttonValue* pValue = (aValue.getType() == CTRL_SPINBUTTONS) ? static_cast<const SpinbuttonValue*>(&aValue) : NULL;
             sal_Bool bOk = sal_False;
 
             RECT rect;
@@ -1157,15 +1157,15 @@ sal_Bool WinSalGraphics::drawNativeControl( ControlType nType,
     rc.bottom = buttonRect.Bottom()+1;
 
     // set default text alignment
-    int ta = SetTextAlign( mhDC, TA_LEFT|TA_TOP|TA_NOUPDATECP );
+    int ta = SetTextAlign( getHDC(), TA_LEFT|TA_TOP|TA_NOUPDATECP );
 
     OUString aCaptionStr( aCaption.replace('~', '&') ); // translate mnemonics
-    bOk = ImplDrawNativeControl(mhDC, hTheme, rc,
+    bOk = ImplDrawNativeControl(getHDC(), hTheme, rc,
                             nType, nPart, nState, aValue,
                             aCaptionStr );
 
     // restore alignment
-    SetTextAlign( mhDC, ta );
+    SetTextAlign( getHDC(), ta );
 
 
     //GdiFlush();

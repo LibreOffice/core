@@ -259,7 +259,7 @@ public class ThreadPool_Test extends ComplexTestCase {
             protected abstract void runTest() throws InterruptedException;
 
             private final int count;
-        };
+        }
 
         Stress stress1 = new Stress(50) {
                 protected void runTest() throws InterruptedException {

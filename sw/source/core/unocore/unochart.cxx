@@ -1619,7 +1619,7 @@ void SwChartDataProvider::InvalidateTable( const SwTable *pTable )
            pTable->GetFrmFmt()->GetDoc()->GetChartControllerHelper().StartOrContinueLocking();
 
         const Set_DataSequenceRef_t &rSet = aDataSequences[ pTable ];
-        Set_DataSequenceRef_t::iterator aIt( rSet.begin() );
+        Set_DataSequenceRef_t::const_iterator aIt( rSet.begin() );
         while (aIt != rSet.end())
         {
 //            uno::Reference< util::XModifiable > xRef( uno::Reference< chart2::data::XDataSequence >(*aIt), uno::UNO_QUERY );
@@ -1712,8 +1712,8 @@ void SwChartDataProvider::DisposeAllDataSequences( const SwTable *pTable )
         //! would become invalid.
         const Set_DataSequenceRef_t aSet( aDataSequences[ pTable ] );
 
-        Set_DataSequenceRef_t::iterator aIt( aSet.begin() );
-        Set_DataSequenceRef_t::iterator aEndIt( aSet.end() );
+        Set_DataSequenceRef_t::const_iterator aIt( aSet.begin() );
+        Set_DataSequenceRef_t::const_iterator aEndIt( aSet.end() );
         while (aIt != aEndIt)
         {
 //            uno::Reference< lang::XComponent > xRef( uno::Reference< chart2::data::XDataSequence >(*aIt), uno::UNO_QUERY );
@@ -1792,7 +1792,7 @@ void SwChartDataProvider::AddRowCols(
 
             // iterate over all data-sequences for the table
             const Set_DataSequenceRef_t &rSet = aDataSequences[ &rTable ];
-            Set_DataSequenceRef_t::iterator aIt( rSet.begin() );
+            Set_DataSequenceRef_t::const_iterator aIt( rSet.begin() );
             while (aIt != rSet.end())
             {
 //               uno::Reference< chart2::data::XTextualDataSequence > xRef( uno::Reference< chart2::data::XDataSequence >(*aIt), uno::UNO_QUERY );

@@ -1902,7 +1902,20 @@ void __EXPORT ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
     }
 
     if (DrawMouseButtonUp(rMEvt))       // includes format paint brush handling for drawing objects
+    {
+        ScTabViewShell* pViewShell = pViewData->GetViewShell();
+        SfxBindings& rBindings=pViewShell->GetViewFrame()->GetBindings();
+        rBindings.Invalidate(SID_ATTR_TRANSFORM_WIDTH);
+        rBindings.Invalidate(SID_ATTR_TRANSFORM_HEIGHT);
+        rBindings.Invalidate(SID_ATTR_TRANSFORM_POS_X);
+        rBindings.Invalidate(SID_ATTR_TRANSFORM_POS_Y);
+        rBindings.Invalidate(SID_ATTR_TRANSFORM_ANGLE);
+        rBindings.Invalidate(SID_ATTR_TRANSFORM_ROT_X);
+        rBindings.Invalidate(SID_ATTR_TRANSFORM_ROT_Y);
+        rBindings.Invalidate(SID_ATTR_TRANSFORM_AUTOWIDTH);
+        rBindings.Invalidate(SID_ATTR_TRANSFORM_AUTOHEIGHT);
         return;
+    }
 
     rMark.SetMarking(sal_False);
 
@@ -3083,7 +3096,20 @@ void __EXPORT ScGridWindow::KeyInput(const KeyEvent& rKEvt)
             return;
 
         if (DrawKeyInput(rKEvt))
+        {
+            const KeyCode& rKeyCode = rKEvt.GetKeyCode();
+            if (rKeyCode.GetCode() == KEY_DOWN
+                || rKeyCode.GetCode() == KEY_UP
+                || rKeyCode.GetCode() == KEY_LEFT
+                || rKeyCode.GetCode() == KEY_RIGHT)
+            {
+                ScTabViewShell* pViewShell = pViewData->GetViewShell();
+                SfxBindings& rBindings = pViewShell->GetViewFrame()->GetBindings();
+                rBindings.Invalidate(SID_ATTR_TRANSFORM_POS_X);
+                rBindings.Invalidate(SID_ATTR_TRANSFORM_POS_Y);
+             }
             return;
+        }
 
         if (!pViewData->GetView()->IsDrawSelMode() && !DrawHasMarkedObj())  //  keine Eingaben im Zeichenmodus
         {                                                           //! DrawShell abfragen !!!
@@ -3548,6 +3574,13 @@ sal_Int8 ScGridWindow::AcceptDrop( const AcceptDropEvent& rEvt )
         {
             sal_Int8 nMyAction = rEvt.mnAction;
 
+            // clear DND_ACTION_LINK when other actions are set. The usage below cannot handle
+            // multiple set values
+            if((nMyAction & DND_ACTION_LINK) && (nMyAction & (DND_ACTION_COPYMOVE)))
+            {
+                nMyAction &= ~DND_ACTION_LINK;
+            }
+
             if ( !rData.pDrawTransfer ||
                     !IsMyModel(rData.pDrawTransfer->GetDragSourceView()) )      // drawing within the document
                 if ( rEvt.mbDefault && nMyAction == DND_ACTION_MOVE )
@@ -3559,7 +3592,7 @@ sal_Int8 ScGridWindow::AcceptDrop( const AcceptDropEvent& rEvt )
             const SdrView* pSdrView = pViewData->GetView()->GetScDrawView();
             SdrObject* pHitObj = pThisDoc->GetObjectAtPoint(pViewData->GetTabNo(), aLogicPos, pSdrView);
 
-            if ( pHitObj && nMyAction == DND_ACTION_LINK && !rData.pDrawTransfer )
+            if ( pHitObj && nMyAction == DND_ACTION_LINK ) // && !rData.pDrawTransfer )
             {
                 if ( IsDropFormatSupported(SOT_FORMATSTR_ID_SVXB)
                     || IsDropFormatSupported(SOT_FORMAT_GDIMETAFILE)
@@ -4182,8 +4215,9 @@ sal_Int8 ScGridWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
 
     const basegfx::B2DPoint aPixelPos(aPos.X(), aPos.Y());
     basegfx::B2DPoint aLogicPos(GetInverseViewTransformation() * aPixelPos); // after cell edit mode is ended
+    sal_Bool bIsLink = ( rEvt.mnAction == DND_ACTION_LINK );
 
-    if (rData.pDrawTransfer)
+    if (!bIsLink && rData.pDrawTransfer)
     {
         sal_uInt16 nFlags = rData.pDrawTransfer->GetDragSourceFlags();
 
@@ -4218,8 +4252,6 @@ sal_Int8 ScGridWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
             return rEvt.mnAction;
         }
     }
-
-    sal_Bool bIsLink = ( rEvt.mnAction == DND_ACTION_LINK );
 
     ScDocument* pThisDoc = pViewData->GetDocument();
     const SdrView* pSdrView = pViewData->GetView()->GetScDrawView();
@@ -5362,25 +5394,9 @@ void ScGridWindow::UpdateSelectionOverlay()
                 aRanges.push_back(aTransform * aRB);
             }
 
-            // #i97672# get the system's hilight color and limit it to the maximum
-            // allowed luminance. This is needed to react on too bright hilight colors
-            // which would otherwise vive a bad visualisation
-            Color aHighlight(GetSettings().GetStyleSettings().GetHighlightColor());
+            // get the system's hilight color
             const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
-            const basegfx::BColor aSelection(aHighlight.getBColor());
-            const double fLuminance(aSelection.luminance());
-            const double fMaxLum(aSvtOptionsDrawinglayer.GetSelectionMaximumLuminancePercent() / 100.0);
-
-            if(fLuminance > fMaxLum)
-            {
-                const double fFactor(fMaxLum / fLuminance);
-                const basegfx::BColor aNewSelection(
-                    aSelection.getRed() * fFactor,
-                    aSelection.getGreen() * fFactor,
-                    aSelection.getBlue() * fFactor);
-
-                aHighlight = Color(aNewSelection);
-            }
+            const Color aHighlight(aSvtOptionsDrawinglayer.getHilightColor());
 
             sdr::overlay::OverlayObject* pOverlay = new sdr::overlay::OverlaySelection(
                 sdr::overlay::OVERLAY_TRANSPARENT,

@@ -240,6 +240,9 @@ class IDocumentMarkAccess
 
         // Returns the MarkType used to create the mark
         static MarkType SAL_DLLPUBLIC_EXPORT GetType(const ::sw::mark::IMark& rMark);
+
+        static SAL_DLLPUBLIC_EXPORT const ::rtl::OUString& GetCrossRefHeadingBookmarkNamePrefix();
+        static SAL_DLLPUBLIC_EXPORT bool IsLegalPaMForCrossRefHeadingBookmark( const SwPaM& );
     protected:
         virtual ~IDocumentMarkAccess() {};
 };

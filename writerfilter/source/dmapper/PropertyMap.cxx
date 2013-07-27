@@ -998,7 +998,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
                 else
                     xRangeProperties = uno::Reference< beans::XPropertySet >( m_xStartingRange, uno::UNO_QUERY_THROW );
             /* break type
-            0 - No break 1 - New Colunn 2 - New page 3 - Even page 4 - odd page */
+            0 - No break 1 - New Column 2 - New page 3 - Even page 4 - odd page */
                 xRangeProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_PAGE_DESC_NAME ),
                     uno::makeAny( m_bTitlePage ? m_sFirstPageStyleName : m_sFollowPageStyleName ));
     //  todo: page breaks with odd/even page numbering are not available - find out current page number to check how to change the number

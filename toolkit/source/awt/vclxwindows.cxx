@@ -37,7 +37,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <com/sun/star/awt/VisualEffect.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/system/XSystemShellExecute.hpp>
+#include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/resource/XStringResourceResolver.hpp>
 #include <com/sun/star/awt/ImageScaleMode.hpp>
@@ -700,7 +700,7 @@ void VCLXImageControl::setProperty( const ::rtl::OUString& PropertyName, const :
     {
         case BASEPROPERTY_IMAGE_SCALE_MODE:
         {
-            sal_Int16 nScaleMode( ImageScaleMode::Anisotropic );
+            sal_Int16 nScaleMode( ImageScaleMode::ANISOTROPIC );
             if ( pImageControl && ( Value >>= nScaleMode ) )
             {
                 pImageControl->SetScaleMode( nScaleMode );
@@ -714,7 +714,7 @@ void VCLXImageControl::setProperty( const ::rtl::OUString& PropertyName, const :
             sal_Bool bScaleImage = sal_False;
             if ( pImageControl && ( Value >>= bScaleImage ) )
             {
-                pImageControl->SetScaleMode( bScaleImage ? ImageScaleMode::Anisotropic : ImageScaleMode::None );
+                pImageControl->SetScaleMode( bScaleImage ? ImageScaleMode::ANISOTROPIC : ImageScaleMode::NONE );
             }
         }
         break;
@@ -736,11 +736,11 @@ void VCLXImageControl::setProperty( const ::rtl::OUString& PropertyName, const :
     switch ( nPropType )
     {
         case BASEPROPERTY_IMAGE_SCALE_MODE:
-            aProp <<= ( pImageControl ? pImageControl->GetScaleMode() : ImageScaleMode::Anisotropic );
+            aProp <<= ( pImageControl ? pImageControl->GetScaleMode() : ImageScaleMode::ANISOTROPIC );
             break;
 
         case BASEPROPERTY_SCALEIMAGE:
-            aProp <<= ( pImageControl && pImageControl->GetScaleMode() != ImageScaleMode::None ) ? sal_True : sal_False;
+            aProp <<= ( pImageControl && pImageControl->GetScaleMode() != ImageScaleMode::NONE ) ? sal_True : sal_False;
             break;
 
         default:
@@ -2626,8 +2626,8 @@ void VCLXFixedHyperlink::ProcessWindowEvent( const VclWindowEvent& rVclWindowEve
                 if ( pBase )
                     sURL = pBase->GetURL();
                 Reference< ::com::sun::star::system::XSystemShellExecute > xSystemShellExecute(
-                    ::comphelper::getProcessServiceFactory()->createInstance(
-                        ::rtl::OUString::createFromAscii( "com.sun.star.system.SystemShellExecute" )), uno::UNO_QUERY );
+                    ::com::sun::star::system::SystemShellExecute::create(
+                        ::comphelper::getProcessComponentContext() ) );
                 if ( sURL.getLength() > 0 && xSystemShellExecute.is() )
                 {
                     try

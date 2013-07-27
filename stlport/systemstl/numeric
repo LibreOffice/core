@@ -22,26 +22,14 @@
 #ifndef SYSTEM_STL_NUMERIC
 #define SYSTEM_STL_NUMERIC
 
-#ifdef GCC
-# include <functional>
-# ifdef __MINGW32__
-#  define _SYSTEM_STL_MAKE_HEADER(path,header) <path/header>
-#  include _SYSTEM_STL_MAKE_HEADER(GXX_INCLUDE_PATH,numeric)
-# else
-#  include <ext/../numeric>
-# endif
-# include <ext/numeric>
-
-# ifndef __GXX_EXPERIMENTAL_CXX0X__
-namespace std
-{
-	using __gnu_cxx::iota;
-}
-# endif
-
-#else
-# error UNSUPPORTED COMPILER
+#ifdef HAVE_STL_INCLUDE_PATH
+	// TODO: use computed include file name
+	#include_next <numeric>
+#elif defined(_MSC_VER)
+	#include <../../VC/include/numeric>
+#else // fall back to boost/tr1
+	#include <boost/tr1/tr1/numeric>
 #endif
 
 #endif
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+

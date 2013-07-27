@@ -75,7 +75,8 @@ namespace sfx2 {
 class SvxSearchItem;
 class SvxShadowItem;
 class Window;
-class XColorTable;
+class XColorList;
+typedef ::boost::shared_ptr< XColorList > XColorListSharedPtr;
 class List;
 
 class ScAutoFormatData;
@@ -264,7 +265,7 @@ private:
     SfxPrinter*         pPrinter;
     VirtualDevice*      pVirtualDevice_100th_mm;
     ScDrawLayer*        pDrawLayer;                     // SdrModel
-    XColorTable*        pColorTable;
+    XColorListSharedPtr maColorTable;
     ScConditionalFormatList* pCondFormList;             // bedingte Formate
     ScValidationDataList* pValidationList;              // Gueltigkeit
     SvNumberFormatterIndexTable*    pFormatExchangeList;            // zum Umsetzen von Zahlenformaten
@@ -420,7 +421,6 @@ private:
 
     sal_uInt8               nAsianCompression;
     sal_uInt8               nAsianKerning;
-    sal_Bool                bSetDrawDefaults;
 
     sal_Bool                bPastingDrawFromOtherDoc;
 
@@ -437,6 +437,9 @@ private:
     bool                mbExecuteLinkEnabled;
     bool                mbChangeReadOnlyEnabled;    // allow changes in read-only document (for API import filters)
     bool                mbStreamValidLocked;
+
+    // #118840# Have a flag to know that this ScDocument is used temporary
+    bool                mbIsTemporary : 1;
 
     sal_Int16           mnNamedRangesLockCount;
 
@@ -464,7 +467,7 @@ public:
     void            GetDocStat( ScDocStat& rDocStat );
 
     SC_DLLPUBLIC void           InitDrawLayer( SfxObjectShell* pDocShell = NULL );
-    XColorTable*    GetColorTable();
+    XColorListSharedPtr GetColorTable();
 
     SC_DLLPUBLIC sfx2::LinkManager*     GetLinkManager() const;
 
@@ -479,8 +482,6 @@ public:
 
     void                    GetLanguage( LanguageType& rLatin, LanguageType& rCjk, LanguageType& rCtl ) const;
     void                    SetLanguage( LanguageType eLatin, LanguageType eCjk, LanguageType eCtl );
-
-    void                    SetDrawDefaults();
 
     void                        SetConsolidateDlgData( const ScConsolidateParam* pData );
     const ScConsolidateParam*   GetConsolidateDlgData() const { return pConsolidateDlgData; }
@@ -616,6 +617,10 @@ public:
     void            SetStreamValid( SCTAB nTab, sal_Bool bSet, sal_Bool bIgnoreLock = sal_False );
     void            LockStreamValid( bool bLock );
     bool            IsStreamValidLocked() const                         { return mbStreamValidLocked; }
+
+    // #118840# Have a flag to know that this ScDocument is used temporary
+    bool IsTemporary() const { return mbIsTemporary; }
+
     SC_DLLPUBLIC sal_Bool        IsPendingRowHeights( SCTAB nTab ) const;
     SC_DLLPUBLIC void            SetPendingRowHeights( SCTAB nTab, sal_Bool bSet );
     SC_DLLPUBLIC void           SetLayoutRTL( SCTAB nTab, sal_Bool bRTL );
@@ -1864,14 +1869,12 @@ private: // CLOOK-Impl-Methoden
     void    ImplDeleteOptions();
 
     void    DeleteDrawLayer();
-    void    DeleteColorTable();
     SC_DLLPUBLIC sal_Bool   DrawGetPrintArea( ScRange& rRange, sal_Bool bSetHor, sal_Bool bSetVer ) const;
     void    DrawMovePage( sal_uInt16 nOldPos, sal_uInt16 nNewPos );
     void    DrawCopyPage( sal_uInt16 nOldPos, sal_uInt16 nNewPos );
 
     void    UpdateDrawPrinter();
     void    UpdateDrawLanguages();
-    void    UpdateDrawDefaults();
     SC_DLLPUBLIC void   InitClipPtrs( ScDocument* pSourceDoc );
 
     void    LoadDdeLinks(SvStream& rStream);

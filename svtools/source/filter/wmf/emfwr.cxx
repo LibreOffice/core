@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
@@ -29,6 +27,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <vcl/lineinfo.hxx>
+#include <vcl/dibtools.hxx>
 
 // -----------
 // - Defines -
@@ -752,7 +751,7 @@ void EMFWriter::ImplWriteBmpRecord( const Bitmap& rBmp, const Point& rPt,
         (*mpStm) << (sal_uInt32) 0 << ( ( ROP_XOR == maVDev.GetRasterOp() && WIN_SRCCOPY == nROP ) ? WIN_SRCINVERT : nROP );
         ImplWriteSize( rSz );
 
-        rBmp.Write( aMemStm, sal_True, sal_False );
+        WriteDIB(rBmp, aMemStm, true, false);
 
         sal_uInt32  nDIBSize = aMemStm.Tell(), nHeaderSize, nCompression, nColsUsed, nPalCount, nImageSize;
         sal_uInt16  nBitCount;

@@ -1242,7 +1242,7 @@ void SubstitutePathVariables::SetPredefinedPathVariables( PredefinedPathVariable
     aPreDefPathVariables.m_FixedVar[ PREDEFVAR_TEMP ] = ConvertOSLtoUCBURL( aTmp );
 
     aPreDefPathVariables.m_FixedVar[PREDEFVAR_BRANDBASEURL] = rtl::OUString(
-    RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR"));
+    RTL_CONSTASCII_USTRINGPARAM("$OOO_BASE_DIR"));
     rtl::Bootstrap::expandMacros(
         aPreDefPathVariables.m_FixedVar[PREDEFVAR_BRANDBASEURL]);
 }

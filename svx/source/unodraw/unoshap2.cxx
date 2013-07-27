@@ -2116,26 +2116,26 @@ void SAL_CALL SvxCustomShape::setPropertyValue( const OUString& aPropertyName, c
     // TTTT: All exceptions because of mirroring should be obsolete
     SvxShape::setPropertyValue( aPropertyName, aValue );
 
-    //OGuard aGuard( Application::GetSolarMutex() );
-    //SdrObject* pObject = mpObj.get();
-    //
-    //const bool bCustomShapeGeometry(pObject && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CustomShapeGeometry" ) ));
+    OGuard aGuard( Application::GetSolarMutex() );
+    SdrObjCustomShape* pObject = dynamic_cast< SdrObjCustomShape* >(mpObj.get());
+
+    const bool bCustomShapeGeometry(pObject && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CustomShapeGeometry" ) ));
     //bool bMirroredX = false;
     //bool bMirroredY = false;
-    //
+
     //if ( bCustomShapeGeometry )
     //{
     //  bMirroredX = ( ((SdrObjCustomShape*)pObject)->IsMirroredX() );
     //  bMirroredY = ( ((SdrObjCustomShape*)pObject)->IsMirroredY() );
     //}
-    //
-    //SvxShape::setPropertyValue( aPropertyName, aValue );
-    //
-    //if ( bCustomShapeGeometry )
-    //{
-    //  ((SdrObjCustomShape*)pObject)->MergeDefaultAttributes(0);
-    //  const Rectangle aRect( sdr::legacy::GetSnapRect(*pObject) );
-    //
+
+    SvxShape::setPropertyValue( aPropertyName, aValue );
+
+    if ( bCustomShapeGeometry )
+    {
+        pObject->MergeDefaultAttributes(0);
+        //const Rectangle aRect( sdr::legacy::GetSnapRect(*pObject) );
+
     //  // #i38892#
     //  const bool bNeedsMirrorX(((SdrObjCustomShape*)pObject)->IsMirroredX() != bMirroredX);
     //  const bool bNeedsMirrorY(((SdrObjCustomShape*)pObject)->IsMirroredY() != bMirroredY);
@@ -2173,7 +2173,7 @@ void SAL_CALL SvxCustomShape::setPropertyValue( const OUString& aPropertyName, c
     //      if(pNewList)
     //          *pNewList = *pListCopy;
     //  }
-    //}
+    }
 }
 
 // TTTT:

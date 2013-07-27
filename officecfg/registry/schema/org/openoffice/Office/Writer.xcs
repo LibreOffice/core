@@ -1298,10 +1298,10 @@
 					<!-- UIHints: Tools - Options - Text document - Layout - [Section] Lines -->
 					<info>
 						<author>OS</author>
-						<desc>Displays the control points as simple squares without a 3D effect.</desc>
+						<desc>Specifies whether control points are displayed simple or enhanced.</desc>
 						<label>Simple control points</label>
 					</info>
-					<value>false</value>
+					<value>true</value>
 				</prop>
 				<prop oor:name="LargeControlPoint" oor:type="xs:boolean">
 					<!-- OldPath: Writer/Layout/Lines -->
@@ -1309,16 +1309,25 @@
 					<!-- UIHints: Tools - Options - Text document - Layout - [Section] Lines -->
 					<info>
 						<author>OS</author>
-						<desc>Displays larger control points.</desc>
+						<desc>Specifies whether control points are displayed as larger than the default size.</desc>
 						<label>Large control points</label>
 					</info>
-					<value>false</value>
+					<value>true</value>
 				</prop>
 			</group>
 			<group oor:name="Window">
 				<info>
 					<desc>Contains various window settings such as scrollbars, rules, etc.</desc>
 				</info>
+                <prop oor:name="ShowScrollBarTips" oor:type="xs:boolean">
+                    <!-- UIHints: Not accessible via user interface -->
+                    <info>
+                        <author>arielch</author>
+                        <desc>Enables the user to prevent the display of help tips on the scrollbars programmatically.</desc>
+                        <label>Prevent scrollbars help tips</label>
+                    </info>
+                    <value>true</value>
+                </prop>
 				<prop oor:name="HorizontalScroll" oor:type="xs:boolean">
 					<!-- OldPath: Writer/Layout/Window -->
 					<!-- OldLocation: Soffice.cfg -->
@@ -4817,6 +4826,11 @@
 								<desc>KeyRight</desc>
 							</info>
 						</enumeration>
+                        <enumeration oor:value="1282"> <!-- 0x502 -->
+                            <info>
+                                <desc>KeyTab</desc>
+                            </info>
+                        </enumeration>
 						<enumeration oor:value="1284"> <!-- 0x504 -->
 							<info>
 								<desc>KeySpace</desc>

@@ -36,11 +36,6 @@ namespace psp
 
 class VCL_PLUGIN_PUBLIC FontCache
 {
-    struct FontDir;
-    friend class FontDir;
-    struct FontFile;
-    friend class FontFile;
-
     typedef std::list< PrintFontManager::PrintFont* > FontCacheEntry;
     struct FontFile
     {
@@ -93,3 +88,4 @@ public:
 } // namespace psp
 
 #endif // _PSPRINT_FONTCACHE_HXX
+

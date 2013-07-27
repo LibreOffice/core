@@ -22,7 +22,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_ucb.hxx"
 
-#include <SerfGetReqProcImpl.hxx>
+#include "SerfGetReqProcImpl.hxx"
 
 using namespace com::sun::star;
 

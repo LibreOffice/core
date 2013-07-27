@@ -43,9 +43,6 @@ COMP_TYPEFLAG = $(OUT_MISC)/cpp_$(COMP_NAME)_types.flag
 
 # Allow deploying the extension when running it
 
-#this should be in odk/settings/std.mk
-OUT_DEPLOY=$(OUT)/deploy
-
 OUT_COMP_DEPLOY=$(OUT_DEPLOY)/$(COMP_NAME)
 OUT_DEPLOY_DIR=$(subst /,$(PS),$(OUT_COMP_DEPLOY))
 OUT_DEPLOY_URL=$(URLPREFIX)$(OUT_COMP_DEPLOY)
@@ -60,10 +57,6 @@ CXXFILES = \
 
 SLOFILES = $(patsubst %.cxx,$(OUT_COMP_SLO)/%.$(OBJ_EXT),$(CXXFILES))
 
-# Add OSL_DEBUG_LEVEL to compiler the flags (for OSL_TRACE et. al.)
-ifeq "$(DEBUG)" "yes"
-CC_FLAGS += -DOSL_DEBUG_LEVEL=2
-endif
 
 # Targets
 .PHONY: ALL

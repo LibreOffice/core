@@ -32,8 +32,7 @@
 #include <vcl/window.hxx>
 #include <svx/sdr/overlay/overlayobject.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <drawinglayer/processor2d/baseprocessor2d.hxx>
-#include <svx/sdr/contact/objectcontacttools.hxx>
+#include <drawinglayer/processor2d/processor2dtools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -55,7 +54,7 @@ namespace sdr
                 const bool bIsAntiAliasing(getDrawinglayerOpt().IsAntiAliasing());
 
                 // create processor
-                drawinglayer::processor2d::BaseProcessor2D* pProcessor = ::sdr::contact::createBaseProcessor2DFromOutputDevice(
+                drawinglayer::processor2d::BaseProcessor2D* pProcessor = drawinglayer::processor2d::createProcessor2DFromOutputDevice(
                     rDestinationDevice,
                     getCurrentViewInformation2D());
 

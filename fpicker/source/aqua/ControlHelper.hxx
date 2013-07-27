@@ -62,7 +62,7 @@ public:
     uno::Any   getValue( sal_Int16 nControlId, sal_Int16 nControlAction ) const;
     void       enableControl( sal_Int16 nControlId, sal_Bool bEnable ) const;
     OUString   getLabel( sal_Int16 nControlId );
-    void       setLabel( sal_Int16 nControlId, const NSString* aLabel );
+    void       setLabel( sal_Int16 nControlId, NSString* aLabel );
 
     //------------------------------------------------------------------------------------
     // other stuff
@@ -179,7 +179,7 @@ private:
     void         createControls();
     void         createFilterControl();
     void         createUserPane();
-    NSTextField* createLabelWithString(const NSString* label);
+    NSTextField* createLabelWithString( NSString* label);
 
     int          getControlElementName(const Class clazz, const int nControlId) const;
     NSControl*   getControl( const sal_Int16 nControlId ) const;

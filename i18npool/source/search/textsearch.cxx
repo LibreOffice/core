@@ -65,6 +65,7 @@ static sal_Int32 COMPLEX_TRANS_MASK_TMP =
     TransliterationModules_ignoreProlongedSoundMark_ja_JP;
 static const sal_Int32 COMPLEX_TRANS_MASK = COMPLEX_TRANS_MASK_TMP | TransliterationModules_IGNORE_KANA | TransliterationModules_FULLWIDTH_HALFWIDTH;
 static const sal_Int32 SIMPLE_TRANS_MASK = ~COMPLEX_TRANS_MASK;
+static const sal_Int32 REGEX_TRANS_MASK = ~(COMPLEX_TRANS_MASK | TransliterationModules_IGNORE_CASE | TransliterationModules_UPPERCASE_LOWERCASE | TransliterationModules_LOWERCASE_UPPERCASE);
     // Above 2 transliteration is simple but need to take effect in
     // complex transliteration
 
@@ -705,7 +706,7 @@ void TextSearch::RESrchPrepare( const ::com::sun::star::util::SearchOptions& rOp
 {
     // select the transliterated pattern string
     const OUString& rPatternStr =
-        (rOptions.transliterateFlags & SIMPLE_TRANS_MASK) ? sSrchStr
+        (rOptions.transliterateFlags & REGEX_TRANS_MASK) ? sSrchStr
         : ((rOptions.transliterateFlags & COMPLEX_TRANS_MASK) ? sSrchStr2 : rOptions.searchString);
 
     sal_uInt32 nIcuSearchFlags = UREGEX_UWORD; // request UAX#29 unicode capability
@@ -715,8 +716,10 @@ void TextSearch::RESrchPrepare( const ::com::sun::star::util::SearchOptions& rOp
     // REG_NOSUB is not used anywhere => not implemented
     // NORM_WORD_ONLY is only used for SearchAlgorithm==Absolute
     // LEV_RELAXED is only used for SearchAlgorithm==Approximate
-    // why is even ALL_IGNORE_CASE deprecated in UNO? because of transliteration taking care of it???
-    if( (rOptions.searchFlag & com::sun::star::util::SearchFlags::ALL_IGNORE_CASE) != 0)
+    // Note that the search flag ALL_IGNORE_CASE is deprecated in UNO
+    // probably because the transliteration flag IGNORE_CASE handles it as well.
+    if( (rOptions.searchFlag & com::sun::star::util::SearchFlags::ALL_IGNORE_CASE) != 0
+    ||  (rOptions.transliterateFlags & TransliterationModules_IGNORE_CASE) != 0)
         nIcuSearchFlags |= UREGEX_CASE_INSENSITIVE;
     UErrorCode nIcuErr = U_ZERO_ERROR;
     // assumption: transliteration didn't mangle regexp control chars
@@ -759,7 +762,7 @@ SearchResult TextSearch::RESrchFrwrd( const OUString& searchStr,
 
     // use the ICU RegexMatcher to find the matches
     UErrorCode nIcuErr = U_ZERO_ERROR;
-    const IcuUniString aSearchTargetStr( (const UChar*)searchStr.getStr(), searchStr.getLength());
+    const IcuUniString aSearchTargetStr( (const UChar*)searchStr.getStr(), endPos);
     pRegexMatcher->reset( aSearchTargetStr);
     // search until there is a valid match
     for(;;)
@@ -816,9 +819,15 @@ SearchResult TextSearch::RESrchBkwrd( const OUString& searchStr,
 
     // find the last match
     int nLastPos = 0;
+    int nFoundEnd = 0;
     do {
         nLastPos = pRegexMatcher->start( nIcuErr);
-    } while( pRegexMatcher->find( nLastPos + 1, nIcuErr));
+        nFoundEnd = pRegexMatcher->end( nIcuErr);
+        if( nFoundEnd >= startPos)
+            break;
+        if( nFoundEnd == nLastPos)
+            ++nFoundEnd;
+    } while( pRegexMatcher->find( nFoundEnd, nIcuErr));
 
     // find last match again to get its details
     pRegexMatcher->find( nLastPos, nIcuErr);

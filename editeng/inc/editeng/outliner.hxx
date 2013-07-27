@@ -35,6 +35,7 @@
 #include <tools/link.hxx>
 #include <rsc/rscsfx.hxx>
 #include "editeng/editengdllapi.h"
+#include <editeng/numitem.hxx>
 #include <svtools/grfmgr.hxx>
 #include <editeng/pathtextportion.hxx>
 #include <vector>
@@ -369,7 +370,7 @@ public:
 
     void            TransliterateText( sal_Int32 nTransliterationMode );
 
-    ESelection  GetSelection();
+    ESelection  GetSelection() const;
 
     sal_uInt16      GetSelectedScriptType() const;
 
@@ -385,10 +386,43 @@ public:
     const SvxFieldItem* GetFieldUnderMousePointer( sal_uInt16& nPara, xub_StrLen& nPos ) const;
     const SvxFieldItem* GetFieldAtSelection() const;
 
-    /** enables numbering for the selected paragraphs if the numbering of the first paragraph is off
-        or disables numbering for the selected paragraphs if the numbering of the first paragraph is on
+    /** enables bullets for the selected paragraphs if the bullets/numbering of the first paragraph is off
+        or disables bullets/numbering for the selected paragraphs if the bullets/numbering of the first paragraph is on
     */
-    void        ToggleBullets();
+    void ToggleBullets();
+
+    void ToggleBulletsNumbering(
+        const bool bToggle,
+        const bool bHandleBullets,
+        const SvxNumRule* pNumRule = NULL );
+
+    /** apply bullets/numbering for paragraphs
+
+        @param boolean bHandleBullets
+        true: handle bullets
+        false: handle numbering
+
+        @param pNewNumRule
+        numbering rule which needs to be applied. can be 0.
+
+        @param boolean bAtSelection
+        true: apply bullets/numbering at selected paragraphs
+        false: apply bullets/numbering at all paragraphs
+    */
+    void ApplyBulletsNumbering(
+        const bool bHandleBullets,
+        const SvxNumRule* pNewNumRule,
+        const bool bCheckCurrentNumRuleBeforeApplyingNewNumRule,
+        const bool bAtSelection = false );
+
+    /** switch off bullets/numbering for paragraphs
+
+        @param boolean bAtSelection
+        true: switch off bullets/numbering at selected paragraphs
+        false: switch off bullets/numbering at all paragraphs
+    */
+    void SwitchOffBulletsNumbering(
+        const bool bAtSelection = false );
 
     /** enables numbering for the selected paragraphs that are not enabled and ignore all selected
         paragraphs that already have numbering enabled.
@@ -664,15 +698,16 @@ class EDITENG_DLLPUBLIC Outliner : public SfxBroadcaster
     DECL_LINK(              BeginPasteOrDropHdl, PasteOrDropInfos* );
     DECL_LINK(              EndPasteOrDropHdl, PasteOrDropInfos* );
     DECL_LINK(              EditEngineNotifyHdl, EENotify* );
-    void                    ImplCheckParagraphs( sal_uInt16 nStart, sal_uInt16 nEnd );
-    sal_Bool                    ImplHasBullet( sal_uInt16 nPara ) const;
-    Size                    ImplGetBulletSize( sal_uInt16 nPara );
-    sal_uInt16              ImplGetNumbering( sal_uInt16 nPara, const SvxNumberFormat* pParaFmt );
-    void                    ImplCalcBulletText( sal_uInt16 nPara, sal_Bool bRecalcLevel, sal_Bool bRecalcChilds );
-    String                  ImplGetBulletText( sal_uInt16 nPara );
-    void                    ImplCheckNumBulletItem( sal_uInt16 nPara );
-    void                    ImplInitDepth( sal_uInt16 nPara, sal_Int16 nDepth, sal_Bool bCreateUndo, sal_Bool bUndoAction = sal_False );
-    void                    ImplSetLevelDependendStyleSheet( sal_uInt16 nPara, SfxStyleSheet* pLevelStyle = NULL );
+
+    void ImplCheckParagraphs( sal_uInt16 nStart, sal_uInt16 nEnd );
+    bool ImplHasNumberFormat( sal_uInt16 nPara ) const;
+    Size ImplGetBulletSize( sal_uInt16 nPara );
+    sal_uInt16 ImplGetNumbering( sal_uInt16 nPara, const SvxNumberFormat* pParaFmt );
+    void ImplCalcBulletText( sal_uInt16 nPara, sal_Bool bRecalcLevel, sal_Bool bRecalcChilds );
+    String ImplGetBulletText( sal_uInt16 nPara );
+    void ImplCheckNumBulletItem( sal_uInt16 nPara );
+    void ImplInitDepth( sal_uInt16 nPara, sal_Int16 nDepth, sal_Bool bCreateUndo, sal_Bool bUndoAction = sal_False );
+    void ImplSetLevelDependendStyleSheet( sal_uInt16 nPara, SfxStyleSheet* pLevelStyle = NULL );
 
     void                    ImplBlockInsertionCallbacks( sal_Bool b );
 
@@ -1075,6 +1110,26 @@ public:
 
     /// get path thext portions of text for text on curve functionality
     void getPathTextPortions(::std::vector< PathTextPortion >& rTarget);
+
+    /** determine the bullets/numbering status of the given paragraphs
+
+        @param nParaStart
+        index of paragraph at which the check starts
+
+        @param nParaEnd
+        index of paragraph at which the check ends
+
+        @returns
+        0 : all paragraphs have bullets
+        1 : all paragraphs have numbering
+        2 : otherwise
+    */
+    sal_Int16 GetBulletsNumberingStatus(
+        const sal_uInt16 nParaStart,
+        const sal_uInt16 nParaEnd ) const;
+
+    // convenient method to determine the bullets/numbering status for all paragraphs
+    sal_Int16 GetBulletsNumberingStatus() const;
 };
 
 #endif

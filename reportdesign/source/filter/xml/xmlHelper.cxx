@@ -118,7 +118,7 @@ const XMLPropertyHandler* OPropertyHandlerFactory::GetPropertyHandler(sal_Int32 
 #define MAP_CONST_ASCII( name, prefix, token, type, context )  { name, sizeof(name)-1,  XML_NAMESPACE_##prefix, XML_##token, type|XML_TYPE_PROP_TEXT,       context, SvtSaveOptions::ODFVER_010 }
 #define GMAP( name, prefix, token, type, context )  { name.ascii, name.length,          XML_NAMESPACE_##prefix, XML_##token, type|XML_TYPE_PROP_GRAPHIC,    context, SvtSaveOptions::ODFVER_010 }
 #define MAP_CONST_C_ASCII( name, prefix, token, type, context ) { name, sizeof(name)-1, XML_NAMESPACE_##prefix, XML_##token, type|XML_TYPE_PROP_TABLE_CELL, context, SvtSaveOptions::ODFVER_010 }
-#define MAP_CONST_C( name, prefix, token, type, context )  { name, name.length,         XML_NAMESPACE_##prefix, XML_##token, type|XML_TYPE_PROP_TABLE_CELL, context, SvtSaveOptions::ODFVER_010 }
+#define MAP_CONST_C( name, prefix, token, type, context )  { name, name.length,         XML_NAMESPACE_##prefix, XML_##token, static_cast<sal_Int32>(type|XML_TYPE_PROP_TABLE_CELL), context, SvtSaveOptions::ODFVER_010 }
 #define MAP_END() { NULL, 0, 0, XML_TOKEN_INVALID, 0 ,0, SvtSaveOptions::ODFVER_010}
 // -----------------------------------------------------------------------------
 UniReference < XMLPropertySetMapper > OXMLHelper::GetCellStylePropertyMap(bool _bOldFormat)
@@ -401,9 +401,9 @@ const SvXMLEnumMapEntry* OXMLHelper::GetImageScaleOptions()
 {
        static SvXMLEnumMapEntry s_aXML_EnumMap[] =
        {
-               // { XML_NONE,          awt::ImageScaleMode::None }, // default
-               { XML_ISOTROPIC,        awt::ImageScaleMode::Isotropic },
-               { XML_ANISOTROPIC,      awt::ImageScaleMode::Anisotropic },
+               // { XML_NONE,          awt::ImageScaleMode::NONE }, // default
+               { XML_ISOTROPIC,        awt::ImageScaleMode::ISOTROPIC },
+               { XML_ANISOTROPIC,      awt::ImageScaleMode::ANISOTROPIC },
                { XML_TOKEN_INVALID, 0 }
        };
        return s_aXML_EnumMap;

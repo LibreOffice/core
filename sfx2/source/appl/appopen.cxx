@@ -36,7 +36,7 @@
 #include <com/sun/star/frame/XDispatchResultListener.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
-#include <com/sun/star/system/XSystemShellExecute.hpp>
+#include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/document/XTypeDetection.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
@@ -988,8 +988,9 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
             if ( !pFilter || !( pFilter->IsOwnFormat() ))
             {
                 // hyperlink does not link to own type => special handling (http, ftp) browser and (other external protocols) OS
-                Reference< XSystemShellExecute > xSystemShellExecute( ::comphelper::getProcessServiceFactory()->createInstance(
-                                                    ::rtl::OUString::createFromAscii( "com.sun.star.system.SystemShellExecute" )), UNO_QUERY );
+                Reference< XSystemShellExecute > xSystemShellExecute(
+                    com::sun::star::system::SystemShellExecute::create(
+                        ::comphelper::getProcessComponentContext() ) );
                 if ( xSystemShellExecute.is() )
                 {
                     if ( aINetProtocol == INET_PROT_MAILTO )

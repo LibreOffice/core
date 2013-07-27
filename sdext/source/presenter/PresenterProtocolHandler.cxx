@@ -56,7 +56,7 @@ using ::rtl::OUString;
 namespace sdext { namespace presenter {
 
 namespace {
-    const static OUString gsProtocol (A2S("vnd.com.sun.star.comp.PresenterScreen:"));
+    const static OUString gsProtocol (A2S("vnd.com.sun.star.presentation.PresenterScreen:"));
 
     class Command
     {
@@ -249,7 +249,7 @@ private:
 
 OUString PresenterProtocolHandler::getImplementationName_static (void)
 {
-    return A2S("vnd.sun.star.sdext.presenter.PresenterProtocolHandler");
+    return A2S("com.sun.star.comp.presentation.PresenterProtocolHandler");
 }
 
 

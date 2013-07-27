@@ -38,6 +38,10 @@ CFLAGS+= -DENABLE_LAYOUT=1 -I../$(PRJ)/layout/inc -I../$(PRJ)/layout/$(INPATH)/i
 CFLAGS+= -DBUILD_VER_STRING="$(BUILD_VER_STRING)"
 .ENDIF
 
+# compile date (year) = copyright year used in About dialog
+CFLAGS+= -DCOPYRIGHT_YEAR="$(shell date +"%Y")"
+
+
 # --- Files --------------------------------------------------------
 
 SRS1NAME=dialogs

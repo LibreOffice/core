@@ -37,6 +37,7 @@
 #include <com/sun/star/rendering/FontRequest.hpp>
 #include <com/sun/star/rendering/PanoseProportion.hpp>
 #include <com/sun/star/rendering/XCanvasFont.hpp>
+#include <com/sun/star/rendering/TextDirection.hpp>
 #include <comphelper/sequence.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <tools/color.hxx>
@@ -71,6 +72,35 @@ namespace dxcanvas
     {
     }
 
+    void setupLayoutMode( VirtualDevice& rVirDev,
+                              sal_Int8      nTextDirection )
+    {
+            // TODO(P3): avoid if already correctly set
+            ULONG nLayoutMode;
+            switch( nTextDirection )
+            {
+                default:
+                    nLayoutMode = 0;
+                    break;
+                case rendering::TextDirection::WEAK_LEFT_TO_RIGHT:
+                    nLayoutMode = TEXT_LAYOUT_BIDI_LTR;
+                    break;
+                case rendering::TextDirection::STRONG_LEFT_TO_RIGHT:
+                    nLayoutMode = TEXT_LAYOUT_BIDI_LTR | TEXT_LAYOUT_BIDI_STRONG;
+                    break;
+                case rendering::TextDirection::WEAK_RIGHT_TO_LEFT:
+                    nLayoutMode = TEXT_LAYOUT_BIDI_RTL;
+                    break;
+                case rendering::TextDirection::STRONG_RIGHT_TO_LEFT:
+                    nLayoutMode = TEXT_LAYOUT_BIDI_RTL | TEXT_LAYOUT_BIDI_STRONG;
+                    break;
+            }
+
+            // set calculated layout mode. Origin is always the left edge,
+            // as required at the API spec
+            rVirDev.SetLayoutMode( nLayoutMode | TEXT_LAYOUT_TEXTORIGIN_LEFT );
+    }
+
     void TextLayoutDrawHelper::drawText(
         const GraphicsSharedPtr&                            rGraphics,
         const ::com::sun::star::rendering::ViewState&       rViewState,
@@ -81,7 +111,8 @@ namespace dxcanvas
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::rendering::XCanvasFont >&     rCanvasFont,
         const ::com::sun::star::geometry::Matrix2D&         rFontMatrix,
-        bool                                                bAlphaSurface )
+        bool                                                bAlphaSurface,
+        sal_Int8                                            nTextDirection)
     {
         HDC hdc = rGraphics->GetHDC();
 
@@ -156,6 +187,8 @@ namespace dxcanvas
 
             // set font
             aVirtualDevice.SetFont(aFont);
+
+            setupLayoutMode( aVirtualDevice, nTextDirection );
 
             // create world transformation matrix
             ::basegfx::B2DHomMatrix aWorldTransform;
@@ -240,7 +273,8 @@ namespace dxcanvas
     geometry::RealRectangle2D TextLayoutDrawHelper::queryTextBounds( const rendering::StringContext&                    rText,
                                                                      const uno::Sequence< double >&                     rLogicalAdvancements,
                                                                      const uno::Reference< rendering::XCanvasFont >&    rCanvasFont,
-                                                                     const geometry::Matrix2D&                          rFontMatrix )
+                                                                     const geometry::Matrix2D&                          rFontMatrix,
+                                                                     sal_Int8                                           nTextDirection )
     {
         if(!(rText.Length))
             return geometry::RealRectangle2D();
@@ -285,6 +319,8 @@ namespace dxcanvas
 
         // set font
         aVirtualDevice.SetFont(aFont);
+
+        setupLayoutMode( aVirtualDevice, nTextDirection );
 
         // need metrics for Y offset, the XCanvas always renders
         // relative to baseline

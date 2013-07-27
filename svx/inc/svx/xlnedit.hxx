@@ -59,7 +59,7 @@ public:
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
 
-    basegfx::B2DPolyPolygon GetLineEndValue(const XLineEndTable* pTable = 0) const;
+    basegfx::B2DPolyPolygon GetLineEndValue(const XLineEndList* pTable = 0) const;
     void SetLineEndValue(const basegfx::B2DPolyPolygon& rPolyPolygon) { maPolyPolygon = rPolyPolygon; Detach(); }
 
     XLineEndItem* checkForUniqueItem( SdrModel* pModel ) const;

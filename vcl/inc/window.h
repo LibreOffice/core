@@ -382,7 +382,8 @@ public:
                         mbDisableAccessibleLabeledByRelation:1,
                         mbHelpTextDynamic:1,
                         mbFakeFocusSet:1,
-                        mbInterceptChildWindowKeyDown:1;
+                        mbInterceptChildWindowKeyDown:1,
+                        mbIsThemingEnabled;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxDNDListenerContainer;
 };

@@ -23,45 +23,34 @@
 #ifndef __com_sun_star_text_AutoTextGroup_idl__
 #define __com_sun_star_text_AutoTextGroup_idl__
 
-#ifndef __com_sun_star_text_XAutoTextGroup_idl__
 #include <com/sun/star/text/XAutoTextGroup.idl>
-#endif
-
-#ifndef __com_sun_star_container_XIndexAccess_idl__
 #include <com/sun/star/container/XIndexAccess.idl>
-#endif
-
-#ifndef __com_sun_star_container_XNamed_idl__
 #include <com/sun/star/container/XNamed.idl>
-#endif
 
+module com {  module sun {  module star {  module text {
 
-//=============================================================================
-
- module com {  module sun {  module star {  module text {
-
-//=============================================================================
-
-// DocMerge from xml: service com::sun::star::text::AutoTextGroup
-/** provides access to text blocks in a group.@see com::sun::star::text::AutoTextContainer
+/** provides access to text blocks in a group.
+    @see com::sun::star::text::AutoTextContainer
  */
 published service AutoTextGroup
 {
-    // DocMerge: empty anyway
     interface com::sun::star::text::XAutoTextGroup;
 
-    // DocMerge: empty anyway
     interface com::sun::star::container::XIndexAccess;
 
-
-    // DocMerge from xml: service com::sun::star::text::AutoTextGroup: interface com::sun::star::container::XNamed
     /** provides access to the name of the group.
-     */
+    */
     interface com::sun::star::container::XNamed;
 
-};
+    /** The path to the file containing the <type>AutoTextEntry</type>&apos;s in this group
+     */
+    [property, readonly] string FilePath;
 
-//=============================================================================
+    /** The title of this <type>AutoTextGroup</type>
+     */
+    [property] string Title;
+
+};
 
 }; }; }; };
 

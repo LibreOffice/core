@@ -24,6 +24,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+#include <IDocumentMarkAccess.hxx>
 #include <crossrefbookmark.hxx>
 #include <ndtxt.hxx>
 
@@ -38,12 +39,9 @@ namespace sw { namespace mark
         const OUString& rPrefix)
         : Bookmark(rPaM, rCode, rName, rShortName)
     {
-        if(rPaM.HasMark())
-            OSL_ENSURE((rPaM.GetMark()->nNode == rPaM.GetPoint()->nNode &&
-                rPaM.Start()->nContent.GetIndex() == 0 &&
-                rPaM.End()->nContent.GetIndex() == rPaM.GetPoint()->nNode.GetNode().GetTxtNode()->Len()),
-                "<CrossRefBookmark::CrossRefBookmark(..)>"
-                "- creation of cross-reference bookmark with an expanded PaM that does not expand over exactly one whole paragraph.");
+        OSL_ENSURE( IDocumentMarkAccess::IsLegalPaMForCrossRefHeadingBookmark( rPaM ),
+                    "<CrossRefBookmark::CrossRefBookmark(..)>"
+                    "- creation of cross-reference bookmark with an illegal PaM that does not expand over exactly one whole paragraph.");
         SetMarkPos(*rPaM.Start());
         if(!rName.getLength())
             m_aName = MarkBase::GenerateNewName(rPrefix);
@@ -72,14 +70,12 @@ namespace sw { namespace mark
         const KeyCode& rCode,
         const OUString& rName,
         const OUString& rShortName)
-        : CrossRefBookmark(rPaM, rCode, rName, rShortName, our_sNamePrefix)
+        : CrossRefBookmark(rPaM, rCode, rName, rShortName, IDocumentMarkAccess::GetCrossRefHeadingBookmarkNamePrefix())
     { }
-
-    const ::rtl::OUString CrossRefHeadingBookmark::our_sNamePrefix = ::rtl::OUString::createFromAscii("__RefHeading__");
 
     bool CrossRefHeadingBookmark::IsLegalName(const ::rtl::OUString& rName)
     {
-        return rName.match(our_sNamePrefix);
+        return rName.match(IDocumentMarkAccess::GetCrossRefHeadingBookmarkNamePrefix());
     }
 
     CrossRefNumItemBookmark::CrossRefNumItemBookmark(const SwPaM& rPaM,

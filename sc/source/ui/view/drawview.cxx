@@ -226,6 +226,10 @@ void ScDrawView::InvalidateDrawTextAttrs()
     rBindings.Invalidate( SID_ULINE_VAL_DOTTED );
     rBindings.Invalidate( SID_ATTR_CHAR_OVERLINE );
     rBindings.Invalidate( SID_ATTR_CHAR_COLOR );
+    rBindings.Invalidate( SID_ATTR_PARA_ADJUST_LEFT );
+    rBindings.Invalidate( SID_ATTR_PARA_ADJUST_RIGHT );
+    rBindings.Invalidate( SID_ATTR_PARA_ADJUST_BLOCK );
+    rBindings.Invalidate( SID_ATTR_PARA_ADJUST_CENTER);
     rBindings.Invalidate( SID_ALIGNLEFT );
     rBindings.Invalidate( SID_ALIGNCENTERHOR );
     rBindings.Invalidate( SID_ALIGNRIGHT );
@@ -235,6 +239,9 @@ void ScDrawView::InvalidateDrawTextAttrs()
     rBindings.Invalidate( SID_ATTR_PARA_LINESPACE_20 );
     rBindings.Invalidate( SID_SET_SUPER_SCRIPT );
     rBindings.Invalidate( SID_SET_SUB_SCRIPT );
+    rBindings.Invalidate( SID_ATTR_CHAR_KERNING );
+    rBindings.Invalidate( SID_ATTR_CHAR_STRIKEOUT );
+    rBindings.Invalidate( SID_ATTR_CHAR_SHADOWED );
     rBindings.Invalidate( SID_TEXTDIRECTION_LEFT_TO_RIGHT );
     rBindings.Invalidate( SID_TEXTDIRECTION_TOP_TO_BOTTOM );
     rBindings.Invalidate( SID_ATTR_PARA_LEFT_TO_RIGHT );
@@ -405,6 +412,24 @@ void ScDrawView::DoConnect(SdrOle2Obj* pOleObj)
     if ( pViewData )
         pViewData->GetViewShell()->ConnectObject( pOleObj );
 }
+
+namespace
+{
+    void triggerSelectionChanged(ScTabViewShell* pViewSh)
+    {
+        if(pViewSh && pViewSh->GetViewFrame())
+        {
+            SfxFrame& rFrame = pViewSh->GetViewFrame()->GetFrame();
+            uno::Reference< frame::XController > xController = rFrame.GetController();
+            if (xController.is())
+            {
+                ScTabViewObj* pImp = ScTabViewObj::getImplementation( xController );
+                if (pImp)
+                    pImp->SelectionChanged();
+            }
+        }
+    }
+} // end of anonymous namespace
 
 void ScDrawView::handleSelectionChange()
 {
@@ -581,25 +606,53 @@ void ScDrawView::handleSelectionChange()
         }
     }
 
-    //  uno object for view returns drawing objects as selection,
-    //  so it must notify its SelectionChangeListeners
-
-    if (pViewFrame)
-    {
-        SfxFrame& rFrame = pViewFrame->GetFrame();
-        uno::Reference<frame::XController> xController = rFrame.GetController();
-        if (xController.is())
-        {
-            ScTabViewObj* pImp = ScTabViewObj::getImplementation( xController );
-            if (pImp)
-                pImp->SelectionChanged();
-        }
-    }
+    // uno object for view returns drawing objects as selection,
+    // so it must notify its SelectionChangeListeners
+    triggerSelectionChanged(pViewSh);
 
     //  update selection transfer object
 
     pViewSh->CheckSelectionTransfer();
 
+}
+
+bool ScDrawView::SdrBeginTextEdit(
+    SdrObject* pObj,
+    ::Window* pWin,
+    bool bIsNewObj,
+    SdrOutliner* pGivenOutliner,
+    OutlinerView* pGivenOutlinerView,
+    bool bDontDeleteOutliner,
+    bool bOnlyOneView,
+    bool bGrabFocus)
+{
+    const bool bRetval(
+        FmFormView::SdrBeginTextEdit(
+            pObj, pWin, bIsNewObj, pGivenOutliner,  pGivenOutlinerView,
+            bDontDeleteOutliner, bOnlyOneView, bGrabFocus));
+
+    // uno object for view returns drawing objects as selection,
+    // so it must notify its SelectionChangeListeners
+
+    // TTTT: Not sure if this is the right place to do this; a
+    // selection change *should* call ScDrawView::handleSelectionChange() above
+    // which also uses triggerSelectionChanged. Thus, SdrBeginTextEdit and
+    // SdrEndTextEdit overloads should be obsolete
+
+    triggerSelectionChanged(pViewData->GetViewShell());
+
+    return bRetval;
+}
+
+SdrEndTextEditKind ScDrawView::SdrEndTextEdit(bool bDontDeleteReally)
+{
+    const SdrEndTextEditKind aRetval(FmFormView::SdrEndTextEdit(bDontDeleteReally));
+
+    // uno object for view returns drawing objects as selection,
+    // so it must notify its SelectionChangeListeners
+    triggerSelectionChanged(pViewData->GetViewShell());
+
+    return aRetval;
 }
 
 void __EXPORT ScDrawView::LazyReactOnObjectChanges()
@@ -779,7 +832,7 @@ void ScDrawView::DeleteMarked()
             DBG_ASSERT( aNoteData.mpCaption == pCaptObj, "ScDrawView::DeleteMarked - caption object does not match" );
             // collect the drawing undo action created while deleting the note
             if( bUndo )
-                pDrawLayer->BeginCalcUndo();
+                pDrawLayer->BeginCalcUndo(false);
             // delete the note (already removed from document above)
             delete pNote;
             // add the undo action for the note

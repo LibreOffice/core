@@ -524,16 +524,16 @@ void ImplSalInitGraphics( WinSalGraphics* pData )
     // Beim Printer berechnen wir die minimale Linienstaerke
     if ( pData->mbPrinter )
     {
-        int nDPIX = GetDeviceCaps( pData->mhDC, LOGPIXELSX );
+        int nDPIX = GetDeviceCaps( pData->getHDC(), LOGPIXELSX );
         if ( nDPIX <= 300 )
             pData->mnPenWidth = 0;
         else
             pData->mnPenWidth = nDPIX/300;
     }
 
-    ::SetTextAlign( pData->mhDC, TA_BASELINE | TA_LEFT | TA_NOUPDATECP );
-    ::SetBkMode( pData->mhDC, TRANSPARENT );
-    ::SetROP2( pData->mhDC, R2_COPYPEN );
+    ::SetTextAlign( pData->getHDC(), TA_BASELINE | TA_LEFT | TA_NOUPDATECP );
+    ::SetBkMode( pData->getHDC(), TRANSPARENT );
+    ::SetROP2( pData->getHDC(), R2_COPYPEN );
 }
 
 // -----------------------------------------------------------------------
@@ -541,14 +541,14 @@ void ImplSalInitGraphics( WinSalGraphics* pData )
 void ImplSalDeInitGraphics( WinSalGraphics* pData )
 {
     // clear clip region
-    SelectClipRgn( pData->mhDC, 0 );
+    SelectClipRgn( pData->getHDC(), 0 );
     // select default objects
     if ( pData->mhDefPen )
-        SelectPen( pData->mhDC, pData->mhDefPen );
+        SelectPen( pData->getHDC(), pData->mhDefPen );
     if ( pData->mhDefBrush )
-        SelectBrush( pData->mhDC, pData->mhDefBrush );
+        SelectBrush( pData->getHDC(), pData->mhDefBrush );
     if ( pData->mhDefFont )
-        SelectFont( pData->mhDC, pData->mhDefFont );
+        SelectFont( pData->getHDC(), pData->mhDefFont );
 }
 
 // =======================================================================
@@ -733,7 +733,7 @@ WinSalGraphics::WinSalGraphics()
 
     mfFontScale = 1.0;
 
-    mhDC                = 0;
+    mhLocalDC           = 0;
     mhPen               = 0;
     mhBrush             = 0;
     mhRegion            = 0;
@@ -795,8 +795,8 @@ WinSalGraphics::~WinSalGraphics()
 
 void WinSalGraphics::GetResolution( long& rDPIX, long& rDPIY )
 {
-    rDPIX = GetDeviceCaps( mhDC, LOGPIXELSX );
-    rDPIY = GetDeviceCaps( mhDC, LOGPIXELSY );
+    rDPIX = GetDeviceCaps( getHDC(), LOGPIXELSX );
+    rDPIY = GetDeviceCaps( getHDC(), LOGPIXELSY );
 
     // #111139# this fixes the symptom of div by zero on startup
     // however, printing will fail most likely as communication with
@@ -809,7 +809,7 @@ void WinSalGraphics::GetResolution( long& rDPIX, long& rDPIY )
 
 sal_uInt16 WinSalGraphics::GetBitCount()
 {
-    return (sal_uInt16)GetDeviceCaps( mhDC, BITSPIXEL );
+    return (sal_uInt16)GetDeviceCaps( getHDC(), BITSPIXEL );
 }
 
 // -----------------------------------------------------------------------
@@ -846,7 +846,7 @@ void WinSalGraphics::ResetClipRegion()
         mhRegion = 0;
     }
 
-    SelectClipRgn( mhDC, 0 );
+    SelectClipRgn( getHDC(), 0 );
 }
 
 // -----------------------------------------------------------------------
@@ -1054,7 +1054,7 @@ bool WinSalGraphics::setClipRegion( const Region& i_rClip )
     }
 
     if( mhRegion )
-        SelectClipRgn( mhDC, mhRegion );
+        SelectClipRgn( getHDC(), mhRegion );
     return mhRegion != 0;
 }
 
@@ -1064,7 +1064,7 @@ void WinSalGraphics::SetLineColor()
 {
     // create and select new pen
     HPEN hNewPen = GetStockPen( NULL_PEN );
-    HPEN hOldPen = SelectPen( mhDC, hNewPen );
+    HPEN hOldPen = SelectPen( getHDC(), hNewPen );
 
     // destory or save old pen
     if ( mhPen )
@@ -1122,7 +1122,7 @@ void WinSalGraphics::SetLineColor( SalColor nSalColor )
     }
 
     // select new pen
-    HPEN hOldPen = SelectPen( mhDC, hNewPen );
+    HPEN hOldPen = SelectPen( getHDC(), hNewPen );
 
     // destory or save old pen
     if ( mhPen )
@@ -1146,7 +1146,7 @@ void WinSalGraphics::SetFillColor()
 {
     // create and select new brush
     HBRUSH hNewBrush = GetStockBrush( NULL_BRUSH );
-    HBRUSH hOldBrush = SelectBrush( mhDC, hNewBrush );
+    HBRUSH hOldBrush = SelectBrush( getHDC(), hNewBrush );
 
     // destory or save old brush
     if ( mhBrush )
@@ -1250,7 +1250,7 @@ void WinSalGraphics::SetFillColor( SalColor nSalColor )
     }
 
     // select new brush
-    HBRUSH hOldBrush = SelectBrush( mhDC, hNewBrush );
+    HBRUSH hOldBrush = SelectBrush( getHDC(), hNewBrush );
 
     // destory or save old brush
     if ( mhBrush )
@@ -1273,7 +1273,7 @@ void WinSalGraphics::SetFillColor( SalColor nSalColor )
 void WinSalGraphics::SetXORMode( bool bSet, bool )
 {
     mbXORMode = bSet;
-    ::SetROP2( mhDC, bSet ? R2_XORPEN : R2_COPYPEN );
+    ::SetROP2( getHDC(), bSet ? R2_XORPEN : R2_COPYPEN );
 }
 
 // -----------------------------------------------------------------------
@@ -1297,13 +1297,13 @@ void WinSalGraphics::drawPixel( long nX, long nY )
     if ( mbXORMode )
     {
         HBRUSH  hBrush = CreateSolidBrush( mnPenColor );
-        HBRUSH  hOldBrush = SelectBrush( mhDC, hBrush );
-        PatBlt( mhDC, (int)nX, (int)nY, (int)1, (int)1, PATINVERT );
-        SelectBrush( mhDC, hOldBrush );
+        HBRUSH  hOldBrush = SelectBrush( getHDC(), hBrush );
+        PatBlt( getHDC(), (int)nX, (int)nY, (int)1, (int)1, PATINVERT );
+        SelectBrush( getHDC(), hOldBrush );
         DeleteBrush( hBrush );
     }
     else
-        SetPixel( mhDC, (int)nX, (int)nY, mnPenColor );
+        SetPixel( getHDC(), (int)nX, (int)nY, mnPenColor );
 }
 
 // -----------------------------------------------------------------------
@@ -1322,20 +1322,20 @@ void WinSalGraphics::drawPixel( long nX, long nY, SalColor nSalColor )
     if ( mbXORMode )
     {
         HBRUSH  hBrush = CreateSolidBrush( nCol );
-        HBRUSH  hOldBrush = SelectBrush( mhDC, hBrush );
-        PatBlt( mhDC, (int)nX, (int)nY, (int)1, (int)1, PATINVERT );
-        SelectBrush( mhDC, hOldBrush );
+        HBRUSH  hOldBrush = SelectBrush( getHDC(), hBrush );
+        PatBlt( getHDC(), (int)nX, (int)nY, (int)1, (int)1, PATINVERT );
+        SelectBrush( getHDC(), hOldBrush );
         DeleteBrush( hBrush );
     }
     else
-        ::SetPixel( mhDC, (int)nX, (int)nY, nCol );
+        ::SetPixel( getHDC(), (int)nX, (int)nY, nCol );
 }
 
 // -----------------------------------------------------------------------
 
 void WinSalGraphics::drawLine( long nX1, long nY1, long nX2, long nY2 )
 {
-    MoveToEx( mhDC, (int)nX1, (int)nY1, NULL );
+    MoveToEx( getHDC(), (int)nX1, (int)nY1, NULL );
 
     // we must paint the endpoint
     int bPaintEnd = TRUE;
@@ -1356,20 +1356,20 @@ void WinSalGraphics::drawLine( long nX1, long nY1, long nX2, long nY2 )
             nX2--;
     }
 
-    LineTo( mhDC, (int)nX2, (int)nY2 );
+    LineTo( getHDC(), (int)nX2, (int)nY2 );
 
     if ( bPaintEnd && !mbPrinter )
     {
         if ( mbXORMode )
         {
             HBRUSH  hBrush = CreateSolidBrush( mnPenColor );
-            HBRUSH  hOldBrush = SelectBrush( mhDC, hBrush );
-            PatBlt( mhDC, (int)nX2, (int)nY2, (int)1, (int)1, PATINVERT );
-            SelectBrush( mhDC, hOldBrush );
+            HBRUSH  hOldBrush = SelectBrush( getHDC(), hBrush );
+            PatBlt( getHDC(), (int)nX2, (int)nY2, (int)1, (int)1, PATINVERT );
+            SelectBrush( getHDC(), hOldBrush );
             DeleteBrush( hBrush );
         }
         else
-            SetPixel( mhDC, (int)nX2, (int)nY2, mnPenColor );
+            SetPixel( getHDC(), (int)nX2, (int)nY2, mnPenColor );
     }
 }
 
@@ -1381,7 +1381,7 @@ void WinSalGraphics::drawRect( long nX, long nY, long nWidth, long nHeight )
     {
         if ( !mbPrinter )
         {
-            PatBlt( mhDC, (int)nX, (int)nY, (int)nWidth, (int)nHeight,
+            PatBlt( getHDC(), (int)nX, (int)nY, (int)nWidth, (int)nHeight,
                     mbXORMode ? PATINVERT : PATCOPY );
         }
         else
@@ -1391,11 +1391,11 @@ void WinSalGraphics::drawRect( long nX, long nY, long nWidth, long nHeight )
             aWinRect.top    = nY;
             aWinRect.right  = nX+nWidth;
             aWinRect.bottom = nY+nHeight;
-            ::FillRect( mhDC, &aWinRect, mhBrush );
+            ::FillRect( getHDC(), &aWinRect, mhBrush );
         }
     }
     else
-        WIN_Rectangle( mhDC, (int)nX, (int)nY, (int)(nX+nWidth), (int)(nY+nHeight) );
+        WIN_Rectangle( getHDC(), (int)nX, (int)nY, (int)(nX+nWidth), (int)(nY+nHeight) );
 }
 
 // -----------------------------------------------------------------------
@@ -1409,8 +1409,8 @@ void WinSalGraphics::drawPolyLine( sal_uLong nPoints, const SalPoint* pPtAry )
     POINT* pWinPtAry = (POINT*)pPtAry;
     // Wegen Windows 95 und der Beschraenkung auf eine maximale Anzahl
     // von Punkten
-    if ( !Polyline( mhDC, pWinPtAry, (int)nPoints ) && (nPoints > MAX_64KSALPOINTS) )
-        Polyline( mhDC, pWinPtAry, MAX_64KSALPOINTS );
+    if ( !Polyline( getHDC(), pWinPtAry, (int)nPoints ) && (nPoints > MAX_64KSALPOINTS) )
+        Polyline( getHDC(), pWinPtAry, MAX_64KSALPOINTS );
 }
 
 // -----------------------------------------------------------------------
@@ -1424,8 +1424,8 @@ void WinSalGraphics::drawPolygon( sal_uLong nPoints, const SalPoint* pPtAry )
     POINT* pWinPtAry = (POINT*)pPtAry;
     // Wegen Windows 95 und der Beschraenkung auf eine maximale Anzahl
     // von Punkten
-    if ( !WIN_Polygon( mhDC, pWinPtAry, (int)nPoints ) && (nPoints > MAX_64KSALPOINTS) )
-        WIN_Polygon( mhDC, pWinPtAry, MAX_64KSALPOINTS );
+    if ( !WIN_Polygon( getHDC(), pWinPtAry, (int)nPoints ) && (nPoints > MAX_64KSALPOINTS) )
+        WIN_Polygon( getHDC(), pWinPtAry, MAX_64KSALPOINTS );
 }
 
 // -----------------------------------------------------------------------
@@ -1471,7 +1471,7 @@ void WinSalGraphics::drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoint
         n += nPoints;
     }
 
-    if ( !WIN_PolyPolygon( mhDC, pWinPointAryAry, (int*)pWinPointAry, (UINT)nPoly ) &&
+    if ( !WIN_PolyPolygon( getHDC(), pWinPointAryAry, (int*)pWinPointAry, (UINT)nPoly ) &&
          (nPolyPolyPoints > MAX_64KSALPOINTS) )
     {
         nPolyPolyPoints  = 0;
@@ -1486,9 +1486,9 @@ void WinSalGraphics::drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoint
         if ( pWinPointAry[(UINT)nPoly] > MAX_64KSALPOINTS )
             pWinPointAry[(UINT)nPoly] = MAX_64KSALPOINTS;
         if ( nPoly == 1 )
-            WIN_Polygon( mhDC, pWinPointAryAry, *pWinPointAry );
+            WIN_Polygon( getHDC(), pWinPointAryAry, *pWinPointAry );
         else
-            WIN_PolyPolygon( mhDC, pWinPointAryAry, (int*)pWinPointAry, nPoly );
+            WIN_PolyPolygon( getHDC(), pWinPointAryAry, (int*)pWinPointAry, nPoly );
     }
 
     if ( pWinPointAry != aWinPointAry )
@@ -1510,7 +1510,7 @@ sal_Bool WinSalGraphics::drawPolyLineBezier( sal_uLong nPoints, const SalPoint* 
     DBG_ASSERT( sizeof( POINT ) == sizeof( SalPoint ),
                 "WinSalGraphics::DrawPolyLineBezier(): POINT != SalPoint" );
 
-    ImplRenderPath( mhDC, nPoints, pPtAry, pFlgAry );
+    ImplRenderPath( getHDC(), nPoints, pPtAry, pFlgAry );
 
     return sal_True;
 #else
@@ -1546,13 +1546,13 @@ sal_Bool WinSalGraphics::drawPolygonBezier( sal_uLong nPoints, const SalPoint* p
 
     sal_Bool bRet( sal_False );
 
-    if( BeginPath( mhDC ) )
+    if( BeginPath( getHDC() ) )
     {
-        PolyDraw(mhDC, pWinPointAry, pWinFlagAry, nPoints);
+        PolyDraw(getHDC(), pWinPointAry, pWinFlagAry, nPoints);
 
-        if( EndPath( mhDC ) )
+        if( EndPath( getHDC() ) )
         {
-            if( StrokeAndFillPath( mhDC ) )
+            if( StrokeAndFillPath( getHDC() ) )
                 bRet = sal_True;
         }
     }
@@ -1603,13 +1603,13 @@ sal_Bool WinSalGraphics::drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt
 
     sal_Bool bRet( sal_False );
 
-    if( BeginPath( mhDC ) )
+    if( BeginPath( getHDC() ) )
     {
-        PolyDraw(mhDC, pWinPointAry, pWinFlagAry, nTotalPoints);
+        PolyDraw(getHDC(), pWinPointAry, pWinFlagAry, nTotalPoints);
 
-        if( EndPath( mhDC ) )
+        if( EndPath( getHDC() ) )
         {
-            if( StrokeAndFillPath( mhDC ) )
+            if( StrokeAndFillPath( getHDC() ) )
                 bRet = sal_True;
         }
     }
@@ -1719,7 +1719,7 @@ sal_Bool WinSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, v
     {
         int nEscape = POSTSCRIPT_PASSTHROUGH;
 
-        if ( Escape( mhDC, QUERYESCSUPPORT, sizeof( int ), ( LPSTR )&nEscape, 0 ) )
+        if ( Escape( getHDC(), QUERYESCSUPPORT, sizeof( int ), ( LPSTR )&nEscape, 0 ) )
         {
             double  nBoundingBox[4];
 
@@ -1806,7 +1806,7 @@ sal_Bool WinSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, v
                 // #107797# Write out buffer
                 // ----------------------------------------------------------------------------------
                 *((sal_uInt16*)aBuf.getStr()) = (sal_uInt16)( aBuf.getLength() - 2 );
-                Escape ( mhDC, nEscape, aBuf.getLength(), (LPTSTR)aBuf.getStr(), 0 );
+                Escape ( getHDC(), nEscape, aBuf.getLength(), (LPTSTR)aBuf.getStr(), 0 );
 
 
                 // #107797# Write out EPS transformation code
@@ -1826,7 +1826,7 @@ sal_Bool WinSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, v
                 aBuf.append( "] concat\n"
                              "%%BeginDocument:\n" );
                 *((sal_uInt16*)aBuf.getStr()) = (sal_uInt16)( aBuf.getLength() - 2 );
-                Escape ( mhDC, nEscape, aBuf.getLength(), (LPTSTR)aBuf.getStr(), 0 );
+                Escape ( getHDC(), nEscape, aBuf.getLength(), (LPTSTR)aBuf.getStr(), 0 );
 
 
                 // #107797# Write out actual EPS content
@@ -1842,7 +1842,7 @@ sal_Bool WinSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, v
                     // of size POSTSCRIPT_BUFSIZE at construction time of aBuf
                     *((sal_uInt16*)aBuf.getStr()) = (sal_uInt16)nDoNow;
                     memcpy( (void*)(aBuf.getStr() + 2), (BYTE*)pPtr + nSize - nToDo, nDoNow );
-                    sal_uLong nResult = Escape ( mhDC, nEscape, nDoNow + 2, (LPTSTR)aBuf.getStr(), 0 );
+                    sal_uLong nResult = Escape ( getHDC(), nEscape, nDoNow + 2, (LPTSTR)aBuf.getStr(), 0 );
                     if (!nResult )
                         break;
                     nToDo -= nResult;
@@ -1858,7 +1858,7 @@ sal_Bool WinSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, v
                              "countdictstack dict_count_salWin sub {end} repeat\n"
                              "b4_Inc_state_salWin restore\n\n" );
                 *((sal_uInt16*)aBuf.getStr()) = (sal_uInt16)( aBuf.getLength() - 2 );
-                Escape ( mhDC, nEscape, aBuf.getLength(), (LPTSTR)aBuf.getStr(), 0 );
+                Escape ( getHDC(), nEscape, aBuf.getLength(), (LPTSTR)aBuf.getStr(), 0 );
                 bRetValue = TRUE;
             }
         }
@@ -1873,7 +1873,7 @@ SystemGraphicsData WinSalGraphics::GetGraphicsData() const
 {
     SystemGraphicsData aRes;
     aRes.nSize = sizeof(aRes);
-    aRes.hDC = mhDC;
+    aRes.hDC = const_cast< WinSalGraphics* >(this)->getHDC();
     return aRes;
 }
 

@@ -66,10 +66,7 @@ void writePath(
     if (end == NULL) {
         exit(EXIT_FAILURE);
     }
-    std::size_t n = (end - path) * sizeof (wchar_t);
-    if (fwrite(path, 1, n, stdout) != n) {
-        exit(EXIT_FAILURE);
-    }
+    fprintf(stdout, "%S", path);
 }
 
 }
@@ -83,23 +80,12 @@ int wmain(int argc, wchar_t ** argv, wchar_t **) {
 #endif
         wchar_t path[MAX_PATH];
         wchar_t * pathEnd = getBrandPath(path);
-        if (tools::buildPath(path, path, pathEnd, MY_STRING(L"..\\basis-link"))
-            == NULL)
-        {
-            exit(EXIT_FAILURE);
-        }
-        pathEnd = tools::resolveLink(path);
-        if (pathEnd == NULL ||
-            (tools::buildPath(path, path, pathEnd, MY_STRING(L"\\ure-link")) ==
-             NULL))
-        {
-            exit(EXIT_FAILURE);
-        }
-        pathEnd = tools::resolveLink(path);
+
         if (pathEnd == NULL) {
             exit(EXIT_FAILURE);
         }
-        writePath(path, pathEnd, MY_STRING(L"\\bin"));
+
+        writePath(path, pathEnd, MY_STRING(L""));
 #ifdef __MINGW32__
     } else if (argc == 2 && strcmp(argv[1], "java") == 0) {
 #else
@@ -111,32 +97,17 @@ int wmain(int argc, wchar_t ** argv, wchar_t **) {
         wchar_t path[MAX_PATH];
         wchar_t * pathEnd = getBrandPath(path);
         writePath(path, pathEnd, MY_STRING(L""));
-        if (tools::buildPath(path, path, pathEnd, MY_STRING(L"..\\basis-link"))
-            == NULL)
-        {
-            exit(EXIT_FAILURE);
-        }
-        pathEnd = tools::resolveLink(path);
         if (pathEnd == NULL) {
             exit(EXIT_FAILURE);
         }
         writeNull();
-        writePath(path, pathEnd, MY_STRING(L"\\program\\classes\\unoil.jar"));
-        if (tools::buildPath(path, path, pathEnd, MY_STRING(L"\\ure-link")) ==
-            NULL)
-        {
-            exit(EXIT_FAILURE);
-        }
-        pathEnd = tools::resolveLink(path);
-        if (pathEnd == NULL) {
-            exit(EXIT_FAILURE);
-        }
+        writePath(path, pathEnd, MY_STRING(L"classes\\unoil.jar"));
         writeNull();
-        writePath(path, pathEnd, MY_STRING(L"\\java\\ridl.jar"));
+        writePath(path, pathEnd, MY_STRING(L"\classes\\ridl.jar"));
         writeNull();
-        writePath(path, pathEnd, MY_STRING(L"\\java\\jurt.jar"));
+        writePath(path, pathEnd, MY_STRING(L"classes\\jurt.jar"));
         writeNull();
-        writePath(path, pathEnd, MY_STRING(L"\\java\\juh.jar"));
+        writePath(path, pathEnd, MY_STRING(L"classes\\juh.jar"));
     } else {
         exit(EXIT_FAILURE);
     }

@@ -49,7 +49,7 @@ $(eval $(call gb_Library_add_linked_libs,fwk,\
     stl \
     svl \
     svt \
-    tk \
+    ootk \
     tl \
     ucbhelper \
     utl \
@@ -112,6 +112,7 @@ $(eval $(call gb_Library_add_exception_objects,fwk,\
     framework/source/loadenv/loadenv \
     framework/source/loadenv/targethelper \
     framework/source/register/registerservices \
+    framework/source/services/ContextChangeEventMultiplexer \
     framework/source/services/autorecovery \
     framework/source/services/backingcomp \
     framework/source/services/backingwindow \
@@ -145,6 +146,7 @@ $(eval $(call gb_Library_add_exception_objects,fwk,\
     framework/source/uielement/controlmenucontroller \
     framework/source/uielement/dropdownboxtoolbarcontroller \
     framework/source/uielement/edittoolbarcontroller \
+    framework/source/uielement/genericstatusbarcontroller \
     framework/source/uielement/generictoolbarcontroller \
     framework/source/uielement/imagebuttontoolbarcontroller \
     framework/source/uielement/langselectionstatusbarcontroller \
@@ -152,13 +154,16 @@ $(eval $(call gb_Library_add_exception_objects,fwk,\
     framework/source/uielement/menubarmerger \
     framework/source/uielement/menubarwrapper \
     framework/source/uielement/objectmenucontroller \
+    framework/source/uielement/popuptoolbarcontroller \
     framework/source/uielement/panelwindow \
     framework/source/uielement/panelwrapper \
     framework/source/uielement/progressbarwrapper \
     framework/source/uielement/recentfilesmenucontroller \
     framework/source/uielement/spinfieldtoolbarcontroller \
     framework/source/uielement/statusbar \
+    framework/source/uielement/statusbaritem \
     framework/source/uielement/statusbarmanager \
+    framework/source/uielement/statusbarmerger \
     framework/source/uielement/statusbarwrapper \
     framework/source/uielement/statusindicatorinterfacewrapper \
     framework/source/uielement/togglebuttontoolbarcontroller \
@@ -170,11 +175,9 @@ $(eval $(call gb_Library_add_exception_objects,fwk,\
     framework/source/uifactory/addonstoolboxfactory \
     framework/source/uifactory/factoryconfiguration \
     framework/source/uifactory/menubarfactory \
-    framework/source/uifactory/popupmenucontrollerfactory \
-    framework/source/uifactory/statusbarcontrollerfactory \
     framework/source/uifactory/statusbarfactory \
-    framework/source/uifactory/toolbarcontrollerfactory \
     framework/source/uifactory/toolboxfactory \
+    framework/source/uifactory/uicontrollerfactory \
     framework/source/uifactory/uielementfactorymanager \
     framework/source/uifactory/windowcontentfactorymanager \
     framework/source/xml/acceleratorconfigurationreader \

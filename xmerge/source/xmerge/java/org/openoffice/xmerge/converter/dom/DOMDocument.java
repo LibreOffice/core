@@ -235,7 +235,7 @@ public class DOMDocument
      *  <p>TODO: remove dependency on com.sun.xml.tree.XmlDocument
      *  package!</p>
      *
-     *  @param  Document  DOM <code>Document</code> object.
+     *  @param  doc  DOM <code>Document</code> object.
      *
      *  @return  <code>byte</code> array of DOM <code>Document</code>
      *           object.
@@ -369,7 +369,7 @@ public class DOMDocument
 
     /**
      *  <p>Creates a new DOM <code>Document</code> containing minimum
-     *  OpenOffice XML tags.</p>
+     *  OpenOffice.org XML tags.</p>
      *
      *  <p>This method uses the subclass
      *  <code>getOfficeClassAttribute</code> method to get the

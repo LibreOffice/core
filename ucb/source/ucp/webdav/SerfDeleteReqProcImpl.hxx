@@ -22,7 +22,7 @@
 #ifndef INCLUDED_SERFDELETEREQPROCIMPL_HXX
 #define INCLUDED_SERFDELETEREQPROCIMPL_HXX
 
-#include <SerfRequestProcessorImpl.hxx>
+#include "SerfRequestProcessorImpl.hxx"
 
 namespace http_dav_ucp
 {

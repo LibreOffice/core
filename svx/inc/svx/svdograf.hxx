@@ -87,7 +87,6 @@ protected:
     GraphicObject*          pGraphic;           // Zur Beschleunigung von Bitmapausgaben, besonders von gedrehten.
     GraphicObject*          mpReplacementGraphic;
     SdrGraphicLink*         pGraphicLink;       // Und hier noch ein Pointer fuer gelinkte Grafiken
-    bool                    bMirrored;          // True bedeutet, die Grafik ist horizontal, d.h. ueber die Y-Achse gespiegelt auszugeben.
 
     // #111096#
     // Flag for allowing text animation. Default is sal_true.
@@ -181,9 +180,6 @@ public:
     GDIMetaFile getMetafileFromEmbeddedSvg() const;
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
-
-    bool                    IsMirrored() { return bMirrored; }
-    void                    SetMirrored( bool _bMirrored ) { bMirrored = _bMirrored; }
 
     // #111096#
     // Access to GrafAnimationAllowed flag

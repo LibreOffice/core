@@ -71,6 +71,13 @@
 #include "doubleref.hxx"
 #include "queryparam.hxx"
 
+#include <boost/random/mersenne_twister.hpp>
+#include <boost/random/uniform_01.hpp>
+
+#include <boost/math/special_functions/acosh.hpp>
+#include <boost/math/special_functions/asinh.hpp>
+#include <boost/math/special_functions/atanh.hpp>
+
 #define SC_DOUBLE_MAXVALUE  1.7e307
 
 IMPL_FIXEDMEMPOOL_NEWDEL( ScTokenStack, 8, 4 )
@@ -1541,8 +1548,12 @@ void ScInterpreter::ScPi()
 
 void ScInterpreter::ScRandom()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScRandom" );
-    PushDouble((double)rand() / ((double)RAND_MAX+1.0));
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "bst", "ScInterpreter::ScRandom" );
+
+    boost::random::mt19937 ScGen(static_cast<unsigned int>(std::time(0)));
+    static boost::uniform_01<boost::mt19937> ScZeroOne(ScGen);
+
+    PushDouble(ScZeroOne());
 }
 
 
@@ -1663,7 +1674,7 @@ void ScInterpreter::ScCotHyp()
 void ScInterpreter::ScArcSinHyp()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScArcSinHyp" );
-    PushDouble( ::rtl::math::asinh( GetDouble()));
+    PushDouble( ::boost::math::asinh( GetDouble()));
 }
 
 void ScInterpreter::ScArcCosHyp()
@@ -1673,7 +1684,7 @@ void ScInterpreter::ScArcCosHyp()
     if (fVal < 1.0)
         PushIllegalArgument();
     else
-        PushDouble( ::rtl::math::acosh( fVal));
+        PushDouble( ::boost::math::acosh( fVal));
 }
 
 void ScInterpreter::ScArcTanHyp()
@@ -1683,7 +1694,7 @@ void ScInterpreter::ScArcTanHyp()
     if (fabs(fVal) >= 1.0)
         PushIllegalArgument();
     else
-        PushDouble( ::rtl::math::atanh( fVal));
+        PushDouble( ::boost::math::atanh( fVal));
 }
 
 
@@ -6495,7 +6506,7 @@ ScDBQueryParamBase* ScInterpreter::GetDBParams( sal_Bool& rMissingField )
             return pParam.release();
         }
     }
-    return false;
+    return NULL;
 }
 
 

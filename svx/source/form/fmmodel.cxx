@@ -67,8 +67,8 @@ struct FmFormModelImplData
 |* Ctor
 |*
 \************************************************************************/
-FmFormModel::FmFormModel(const XubString& rPath, SfxItemPool* pPool, SfxObjectShell* pPers, bool bUseExtColorTable)
-:   SdrModel(rPath, pPool, pPers, bUseExtColorTable)
+FmFormModel::FmFormModel(const XubString& rPath, SfxItemPool* pPool, SfxObjectShell* pPers)
+:   SdrModel(rPath, pPool, pPers)
             ,m_pImpl( NULL )
             ,m_pObjShell(0)
             ,m_bOpenInDesignMode(sal_False)

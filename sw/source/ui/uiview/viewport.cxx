@@ -717,49 +717,53 @@ IMPL_LINK( SwView, ScrollHdl, SwScrollbar *, pScrollbar )
         //              so we dont must do it agin.
         EndScrollHdl(pScrollbar);
 
-        Point aPos( aVisArea.TopLeft() );
-        lcl_GetPos(this, aPos, pScrollbar, IsDocumentBorder());
-
-        sal_uInt16 nPhNum = 1;
-        sal_uInt16 nVirtNum = 1;
-
-        String sDisplay;
-        if(pWrtShell->GetPageNumber( aPos.Y(), sal_False, nPhNum, nVirtNum, sDisplay ))
+        if ( Help::IsQuickHelpEnabled() &&
+             pWrtShell->GetViewOptions()->IsShowScrollBarTips())
         {
-            // JP 21.07.00: the end scrollhandler invalidate the FN_STAT_PAGE,
-            //              so we dont must do it agin.
-//          if(!GetViewFrame()->GetFrame().IsInPlace())
-//              S F X_BINDINGS().Update(FN_STAT_PAGE);
+            Point aPos( aVisArea.TopLeft() );
+            lcl_GetPos(this, aPos, pScrollbar, IsDocumentBorder());
 
-            //QuickHelp:
-            if( pWrtShell->GetPageCnt() > 1 && Help::IsQuickHelpEnabled() )
+            sal_uInt16 nPhNum = 1;
+            sal_uInt16 nVirtNum = 1;
+
+            String sDisplay;
+            if(pWrtShell->GetPageNumber( aPos.Y(), sal_False, nPhNum, nVirtNum, sDisplay ))
             {
-                if( !nPgNum || nPgNum != nPhNum )
+                // JP 21.07.00: the end scrollhandler invalidate the FN_STAT_PAGE,
+                //                 so we dont must do it agin.
+    //          if(!GetViewFrame()->GetFrame().IsInPlace())
+    //                S F X_BINDINGS().Update(FN_STAT_PAGE);
+
+                //QuickHelp:
+                if( pWrtShell->GetPageCnt() > 1 )
                 {
-                    Rectangle aRect;
-                    aRect.Left() = pScrollbar->GetParent()->OutputToScreenPixel(
-                                        pScrollbar->GetPosPixel() ).X() -8;
-                    aRect.Top() = pScrollbar->OutputToScreenPixel(
-                                    pScrollbar->GetPointerPosPixel() ).Y();
-                    aRect.Right()   = aRect.Left();
-                    aRect.Bottom()  = aRect.Top();
-
-                    String sPageStr( GetPageStr( nPhNum, nVirtNum, sDisplay ));
-                    SwContentAtPos aCnt( SwContentAtPos::SW_OUTLINE );
-                    pWrtShell->GetContentAtPos( aPos, aCnt );
-                    if( aCnt.sStr.Len() )
+                    if( !nPgNum || nPgNum != nPhNum )
                     {
-                        sPageStr += String::CreateFromAscii(
-                                        RTL_CONSTASCII_STRINGPARAM( "  - " ));
-                        sPageStr.Insert( aCnt.sStr, 0, 80 );
-                        sPageStr.SearchAndReplaceAll( '\t', ' ' );
-                        sPageStr.SearchAndReplaceAll( 0x0a, ' ' );
-                    }
+                        Rectangle aRect;
+                        aRect.Left() = pScrollbar->GetParent()->OutputToScreenPixel(
+                                            pScrollbar->GetPosPixel() ).X() -8;
+                        aRect.Top() = pScrollbar->OutputToScreenPixel(
+                                        pScrollbar->GetPointerPosPixel() ).Y();
+                        aRect.Right()     = aRect.Left();
+                        aRect.Bottom()    = aRect.Top();
 
-                    Help::ShowQuickHelp( pScrollbar, aRect, sPageStr,
-                                    QUICKHELP_RIGHT|QUICKHELP_VCENTER);
+                        String sPageStr( GetPageStr( nPhNum, nVirtNum, sDisplay ));
+                        SwContentAtPos aCnt( SwContentAtPos::SW_OUTLINE );
+                        pWrtShell->GetContentAtPos( aPos, aCnt );
+                        if( aCnt.sStr.Len() )
+                        {
+                            sPageStr += String::CreateFromAscii(
+                                            RTL_CONSTASCII_STRINGPARAM( "  - " ));
+                            sPageStr.Insert( aCnt.sStr, 0, 80 );
+                            sPageStr.SearchAndReplaceAll( '\t', ' ' );
+                            sPageStr.SearchAndReplaceAll( 0x0a, ' ' );
+                        }
+
+                        Help::ShowQuickHelp( pScrollbar, aRect, sPageStr,
+                                        QUICKHELP_RIGHT|QUICKHELP_VCENTER);
+                    }
+                    nPgNum = nPhNum;
                 }
-                nPgNum = nPhNum;
             }
         }
     }

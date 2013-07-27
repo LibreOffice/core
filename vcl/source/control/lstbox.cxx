@@ -99,11 +99,11 @@ void ListBox::ImplInitListBoxData()
     mpFloatWin      = NULL;
     mpImplWin       = NULL;
     mpBtn           = NULL;
-
     mnDDHeight      = 0;
-    mbDDAutoSize    = sal_True;
     mnSaveValue     = LISTBOX_ENTRY_NOTFOUND;
     mnLineCount     = 0;
+    mbDDAutoSize    = true;
+    mbEdgeBlending  = false;
 }
 
 // -----------------------------------------------------------------------
@@ -152,13 +152,13 @@ void ListBox::ImplInit( Window* pParent, WinBits nStyle )
         mpImplWin->SetUserDrawHdl( LINK( this, ListBox, ImplUserDrawHdl ) );
         mpImplWin->Show();
         mpImplWin->GetDropTarget()->addDropTargetListener(xDrop);
+        mpImplWin->SetEdgeBlending(GetEdgeBlending());
 
         mpBtn = new ImplBtn( this, WB_NOLIGHTBORDER | WB_RECTSTYLE );
         ImplInitDropDownButton( mpBtn );
         mpBtn->SetMBDownHdl( LINK( this, ListBox, ImplClickBtnHdl ) );
         mpBtn->Show();
         mpBtn->GetDropTarget()->addDropTargetListener(xDrop);
-
     }
 
     Window* pLBParent = this;
@@ -171,6 +171,7 @@ void ListBox::ImplInit( Window* pParent, WinBits nStyle )
     mpImplLB->SetDoubleClickHdl( LINK( this, ListBox, ImplDoubleClickHdl ) );
     mpImplLB->SetUserDrawHdl( LINK( this, ListBox, ImplUserDrawHdl ) );
     mpImplLB->SetPosPixel( Point() );
+    mpImplLB->SetEdgeBlending(GetEdgeBlending());
     mpImplLB->Show();
 
     mpImplLB->GetDropTarget()->addDropTargetListener(xDrop);
@@ -584,15 +585,20 @@ void ListBox::DataChanged( const DataChangedEvent& rDCEvt )
 
 // -----------------------------------------------------------------------
 
-void ListBox::EnableAutoSize( sal_Bool bAuto )
+void ListBox::EnableAutoSize( bool bAuto )
 {
     mbDDAutoSize = bAuto;
     if ( mpFloatWin )
     {
         if ( bAuto && !mpFloatWin->GetDropDownLineCount() )
-            mpFloatWin->SetDropDownLineCount( 5 );
+        {
+            // use GetListBoxMaximumLineCount here; before, was on fixed number of five
+            AdaptDropDownLineCountToMaximum();
+        }
         else if ( !bAuto )
+        {
             mpFloatWin->SetDropDownLineCount( 0 );
+        }
     }
 }
 
@@ -618,6 +624,14 @@ void ListBox::SetDropDownLineCount( sal_uInt16 nLines )
     mnLineCount = nLines;
     if ( mpFloatWin )
         mpFloatWin->SetDropDownLineCount( mnLineCount );
+}
+
+// -----------------------------------------------------------------------
+
+void ListBox::AdaptDropDownLineCountToMaximum()
+{
+    // adapt to maximum allowed number
+    SetDropDownLineCount(std::min(GetEntryCount(), GetSettings().GetStyleSettings().GetListBoxMaximumLineCount()));
 }
 
 // -----------------------------------------------------------------------
@@ -1624,6 +1638,37 @@ const Wallpaper& ListBox::GetDisplayBackground() const
     return mpImplLB->GetDisplayBackground();
 }
 
+// -----------------------------------------------------------------------
+
+void ListBox::SetEdgeBlending(bool bNew)
+{
+    if(mbEdgeBlending != bNew)
+    {
+        mbEdgeBlending = bNew;
+
+        if(IsDropDownBox())
+        {
+            mpImplWin->Invalidate();
+        }
+        else
+        {
+            mpImplLB->Invalidate();
+        }
+
+        if(mpImplWin)
+        {
+            mpImplWin->SetEdgeBlending(GetEdgeBlending());
+        }
+
+        if(mpImplLB)
+        {
+            mpImplLB->SetEdgeBlending(GetEdgeBlending());
+        }
+
+        Invalidate();
+    }
+}
+
 // =======================================================================
 MultiListBox::MultiListBox( Window* pParent, WinBits nStyle ) :
     ListBox( WINDOW_MULTILISTBOX )
@@ -1646,3 +1691,4 @@ MultiListBox::MultiListBox( Window* pParent, const ResId& rResId ) :
         Show();
     EnableMultiSelection( sal_True );
 }
+

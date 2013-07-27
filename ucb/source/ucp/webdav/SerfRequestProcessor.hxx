@@ -28,11 +28,11 @@
 
 #include <serf.h>
 
-#include <DAVTypes.hxx>
-#include <DAVResource.hxx>
-#include <DAVException.hxx>
+#include "DAVTypes.hxx"
+#include "DAVResource.hxx"
+#include "DAVException.hxx"
 
-#include <SerfInputStream.hxx>
+#include "SerfInputStream.hxx"
 #include <com/sun/star/io/XOutputStream.hpp>
 
 namespace http_dav_ucp

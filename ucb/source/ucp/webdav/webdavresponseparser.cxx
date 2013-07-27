@@ -22,7 +22,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_ucb.hxx"
 
-#include <webdavresponseparser.hxx>
+#include "webdavresponseparser.hxx"
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <cppuhelper/implbase2.hxx>
 #include <com/sun/star/xml/sax/XParser.hpp>
@@ -180,8 +180,8 @@ namespace
 
         const ::rtl::OUString& getNamespace() const { return maNamespace; }
         const ::rtl::OUString& getName() const { return maName; }
-        const WebDAVNamespace getWebDAVNamespace() const { return maWebDAVNamespace; }
-        const WebDAVName getWebDAVName() const { return maWebDAVName; }
+        WebDAVNamespace getWebDAVNamespace() const { return maWebDAVNamespace; }
+        WebDAVName getWebDAVName() const { return maWebDAVName; }
     };
 
     void WebDAVContext::parseForNamespaceTokens(const uno::Reference< xml::sax::XAttributeList >& xAttribs)

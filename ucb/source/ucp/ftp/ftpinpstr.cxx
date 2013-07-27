@@ -37,7 +37,6 @@
 #include <algorithm>
 #define STD_ALGORITHM
 #endif
-#include <stdio.h>
 
 using namespace ftp;
 using namespace com::sun::star::uno;
@@ -45,52 +44,28 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::io;
 
 
-FTPInputStream::FTPInputStream(FILE* tmpfl)
-    : m_tmpfl(tmpfl ? tmpfl : tmpfile())
+FTPInputStream::FTPInputStream( oslFileHandle tmpfl )
+    : m_tmpfl(tmpfl)
+    , m_nLength( 0 )
 {
-    fseek(m_tmpfl,0,SEEK_END);
-//      fpos_t pos;
-//      fgetpos(m_tmpfl,&pos);
-    long pos = ftell(m_tmpfl);
-    rewind(m_tmpfl);
-    m_nLength = sal_Int64(pos);
+    if ( !m_tmpfl )
+        osl_createTempFile( NULL, &m_tmpfl, NULL );
+    OSL_ENSURE( m_tmpfl, "input stream without tempfile!" );
+
+    if ( osl_setFilePos( m_tmpfl, osl_Pos_End, 0 ) == osl_File_E_None )
+    {
+        sal_uInt64 nFileSize = 0;
+        if ( osl_getFilePos( m_tmpfl, &nFileSize ) == osl_File_E_None )
+            m_nLength = nFileSize;
+        osl_setFilePos( m_tmpfl, osl_Pos_Absolut, 0 );
+    }
 }
-
-
 
 FTPInputStream::~FTPInputStream()
 {
     if ( 0 != m_tmpfl)
-        fclose(m_tmpfl);
+        osl_closeFile(m_tmpfl);
 }
-
-
-Any SAL_CALL FTPInputStream::queryInterface(
-    const Type& rType
-)
-    throw(
-        RuntimeException
-    )
-{
-    Any aRet = ::cppu::queryInterface(rType,
-                                      SAL_STATIC_CAST( XInputStream*,this ),
-                                      SAL_STATIC_CAST( XSeekable*,this ) );
-
-    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
-}
-
-
-
-void SAL_CALL FTPInputStream::acquire( void ) throw() {
-    OWeakObject::acquire();
-}
-
-
-
-void SAL_CALL FTPInputStream::release( void ) throw() {
-    OWeakObject::release();
-}
-
 
 sal_Int32 SAL_CALL FTPInputStream::readBytes(Sequence< sal_Int8 >& aData,
                                              sal_Int32 nBytesToRead)
@@ -101,23 +76,22 @@ sal_Int32 SAL_CALL FTPInputStream::readBytes(Sequence< sal_Int8 >& aData,
 {
     osl::MutexGuard aGuard(m_aMutex);
 
-    if(0 <= nBytesToRead && aData.getLength() < nBytesToRead)
-        aData.realloc(nBytesToRead);
+    sal_uInt64 nBeforePos( 0 );
+    sal_uInt64 nBytesRequested( nBytesToRead );
+    sal_uInt64 nBytesRead( 0 );
 
-//     fpos_t bpos,epos;
+    osl_getFilePos( m_tmpfl, &nBeforePos );
 
-//     fgetpos(m_tmpfl,&bpos);
-//     fread(aData.getArray(),nBytesToRead,1,m_tmpfl);
-//     fgetpos(m_tmpfl,&epos);
-    long bpos,epos;
+    if ( 0 == ( nBytesRequested = std::min< sal_uInt64 >( m_nLength - nBeforePos, nBytesRequested ) ) )
+        return 0;
 
-    bpos = ftell(m_tmpfl);
-    if (fread(aData.getArray(),nBytesToRead,1,m_tmpfl) != 1)
+    if ( 0 <= nBytesToRead && aData.getLength() < nBytesToRead )
+        aData.realloc( nBytesToRead );
+
+    if ( osl_readFile( m_tmpfl, aData.getArray(), nBytesRequested, &nBytesRead ) != osl_File_E_None )
         throw IOException();
 
-    epos = ftell(m_tmpfl);
-
-    return sal_Int32(epos-bpos);
+    return sal_Int32( nBytesRead );
 }
 
 
@@ -143,7 +117,7 @@ void SAL_CALL FTPInputStream::skipBytes(sal_Int32 nBytesToSkip)
     if(!m_tmpfl)
         throw IOException();
 
-    fseek(m_tmpfl,long(nBytesToSkip),SEEK_CUR);
+    osl_setFilePos( m_tmpfl, osl_Pos_Current, nBytesToSkip );
 }
 
 
@@ -165,7 +139,7 @@ void SAL_CALL FTPInputStream::closeInput(void)
 {
     osl::MutexGuard aGuard(m_aMutex);
     if(m_tmpfl)
-        fclose(m_tmpfl),m_tmpfl = 0;
+        osl_closeFile(m_tmpfl),m_tmpfl = 0;
 }
 
 
@@ -179,7 +153,7 @@ void SAL_CALL FTPInputStream::seek(sal_Int64 location)
     if(!m_tmpfl)
         throw IOException();
 
-    fseek(m_tmpfl,long(location),SEEK_SET);
+    osl_setFilePos( m_tmpfl, osl_Pos_Absolut, location );
 }
 
 
@@ -194,11 +168,9 @@ FTPInputStream::getPosition(
     if(!m_tmpfl)
         throw IOException();
 
-//     fpos_t pos;
-//     fgetpos(m_tmpfl,&pos);
-    long pos;
-    pos = ftell(m_tmpfl);
-    return sal_Int64(pos);
+    sal_uInt64 nFilePos = 0;
+    osl_getFilePos( m_tmpfl, &nFilePos );
+    return nFilePos;
 }
 
 

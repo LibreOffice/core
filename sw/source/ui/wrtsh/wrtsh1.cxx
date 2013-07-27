@@ -33,9 +33,7 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 
-#if STLPORT_VERSION>=321
 #include <math.h>   // prevent conflict between exception and std::exception
-#endif
 #include <hintids.hxx>
 #include <svx/svdview.hxx>
 #include <sot/factory.hxx>
@@ -303,8 +301,9 @@ void SwWrtShell::Insert( const String &rPath, const String &rFilter,
         DelRight();
         // eingefuegte Grafik in eigenen Absatz, falls am Ende
         // eines nichtleeren Absatzes
-    if ( IsEndPara() && !IsSttPara() )
-        SwFEShell::SplitNode();
+    //For i120928,avoid to split node
+    //if ( IsEndPara() && !IsSttPara() )
+    //  SwFEShell::SplitNode();
 
     EnterSelFrmMode();
 

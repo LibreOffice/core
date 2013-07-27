@@ -143,7 +143,7 @@ void ConfigurationControllerResourceManager::ActivateResource (
     if ( ! xFactory.is())
     {
 #if defined VERBOSE && VERBOSE>=1
-        OSL_TRACE("    no factory found fo %s\n",
+        OSL_TRACE("    no factory found for %s\n",
             OUStringToOString(sResourceURL, RTL_TEXTENCODING_UTF8).getStr());
 #endif
         return;
@@ -163,9 +163,9 @@ void ConfigurationControllerResourceManager::ActivateResource (
             // of registered factories.
             mpResourceFactoryContainer->RemoveFactoryForReference(xFactory);
         }
-        catch(Exception&)
+        catch (Exception& e)
         {
-            DBG_UNHANDLED_EXCEPTION();
+            (void)e;
         }
 
         if (xResource.is())
@@ -204,9 +204,10 @@ void ConfigurationControllerResourceManager::ActivateResource (
 /* In this method we do following steps.
     1. Remove the resource from the URL->Object map of the configuration
     controller.
-    2. Notify listeners.
+    2. Notify listeners that deactivation has started.
     3. Remove the resource id from the current configuration.
     4. Release the resource.
+    5. Notify listeners about that deactivation is completed.
 */
 void ConfigurationControllerResourceManager::DeactivateResource (
     const Reference<XResourceId>& rxResourceId,
@@ -256,6 +257,12 @@ void ConfigurationControllerResourceManager::DeactivateResource (
     {
         DBG_UNHANDLED_EXCEPTION();
     }
+
+    // 5.  Notifiy listeners that the resource is being deactivated.
+    mpBroadcaster->NotifyListeners(
+        FrameworkHelper::msResourceDeactivationEndEvent,
+        rxResourceId,
+        NULL);
 
 #if defined VERBOSE && VERBOSE>=1
     if (bSuccess)

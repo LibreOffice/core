@@ -70,7 +70,8 @@ XCSFILES= \
     Category.xcs \
     GenericCategories.xcs \
     GlobalSettings.xcs \
-    WindowContentFactories.xcs
+    WindowContentFactories.xcs \
+    Sidebar.xcs
 
 .INCLUDE :  target.mk
 

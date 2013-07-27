@@ -245,6 +245,70 @@ File gid_File_Extra_Gallroot
     Name = "gallroot.zip";
 End
 
+//////////////////////////////////////////////////////////////////////////////
+
+File gid_File_Extra_Gallarrows
+    Dir = gid_Dir_Gallery_Arrows;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "gallarrows.zip";
+End
+
+File gid_File_Extra_Gallcomputers
+    Dir = gid_Dir_Gallery_Computers;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "gallcomputers.zip";
+End
+
+File gid_File_Extra_Galldiagrams
+    Dir = gid_Dir_Gallery_Diagrams;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "galldiagrams.zip";
+End
+
+File gid_File_Extra_Galleducation
+    Dir = gid_Dir_Gallery_Education;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "galleducation.zip";
+End
+
+File gid_File_Extra_Gallenvironment
+    Dir = gid_Dir_Gallery_Environment;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "gallenvironment.zip";
+End
+
+File gid_File_Extra_Gallfinance
+    Dir = gid_Dir_Gallery_Finance;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "gallfinance.zip";
+End
+
+File gid_File_Extra_Gallpeople
+    Dir = gid_Dir_Gallery_People;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "gallpeople.zip";
+End
+
+File gid_File_Extra_Gallsymbols
+    Dir = gid_Dir_Gallery_Symbols;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "gallsymbols.zip";
+End
+
+File gid_File_Extra_Galltransport
+    Dir = gid_Dir_Gallery_Transport;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "galltransport.zip";
+End
+
+File gid_File_Extra_Galltxtshapes
+    Dir = gid_Dir_Gallery_Txtshapes;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "galltxtshapes.zip";
+End
+
+//////////////////////////////////////////////////////////////////////////////
+
 File gid_File_Extra_Gallrulers
     Dir = gid_Dir_Gallery_Rulers;
     ARCHIVE_TXT_FILE_BODY;

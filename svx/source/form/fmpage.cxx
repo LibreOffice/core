@@ -219,8 +219,8 @@ sal_Bool FmFormPage::RequestHelp( Window* pWindow, SdrView* pView,
     {
         // Hilfe anzeigen
         const basegfx::B2DRange aDiscreteRange(pWindow->GetInverseViewTransformation() * pObj->getObjectRange(pView));
-        const Point aTopLeft(basegfx::fround(aDiscreteRange.getMinX()), aDiscreteRange.getMinY());
-        const Point aBottomRight(basegfx::fround(aDiscreteRange.getMaxX()), aDiscreteRange.getMaxY());
+        const Point aTopLeft(basegfx::fround(aDiscreteRange.getMinX()), basegfx::fround(aDiscreteRange.getMinY()));
+        const Point aBottomRight(basegfx::fround(aDiscreteRange.getMaxX()), basegfx::fround(aDiscreteRange.getMaxY()));
         const Rectangle aItemRectangle(
             pWindow->OutputToScreenPixel(aTopLeft),
             pWindow->OutputToScreenPixel(aBottomRight));

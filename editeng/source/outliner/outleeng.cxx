@@ -53,7 +53,7 @@ OutlinerEditEng::~OutlinerEditEng()
 
 void OutlinerEditEng::PaintingFirstLine( sal_uInt16 nPara, const Point& rStartPos, long nBaseLineY, const Point& rOrigin, short nOrientation, OutputDevice* pOutDev )
 {
-    if( GetControlWord() && EE_CNTRL_OUTLINER )
+    if( GetControlWord() & EE_CNTRL_OUTLINER )
     {
         PaintFirstLineInfo aInfo( nPara, rStartPos, nBaseLineY, rOrigin, nOrientation, pOutDev );
         pOwner->maPaintFirstLineHdl.Call( &aInfo );
@@ -76,7 +76,7 @@ Rectangle OutlinerEditEng::GetBulletArea( sal_uInt16 nPara )
     Rectangle aBulletArea = Rectangle( Point(), Point() );
     if ( nPara < pOwner->pParaList->GetParagraphCount() )
     {
-        if ( pOwner->ImplHasBullet( nPara ) )
+        if ( pOwner->ImplHasNumberFormat( nPara ) )
             aBulletArea = pOwner->ImpCalcBulletArea( nPara, sal_False, sal_False );
     }
     return aBulletArea;

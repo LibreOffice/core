@@ -68,6 +68,9 @@
 #include "sdresid.hxx"
 #include "fupoor.hxx"
 
+#include <svx/galleryitem.hxx>
+#include <com/sun/star/gallery/GalleryItemType.hpp>
+
 namespace sd {
 
 #ifndef SO2_DECL_SVINPLACEOBJECT_DEFINED
@@ -94,101 +97,96 @@ void DrawViewShell::ExecGallery(SfxRequest& rReq)
 
     const SfxItemSet* pArgs = rReq.GetArgs();
 
-    if ( pArgs )
+    SFX_ITEMSET_ARG( pArgs, pGalleryItem, SvxGalleryItem, SID_GALLERY_FORMATS );
+    if ( !pGalleryItem )
+        return;
+
+    GetDocSh()->SetWaitCursor( sal_True );
+    sal_Int8 nType( pGalleryItem->GetType() );
+
+    if (nType == com::sun::star::gallery::GalleryItemType::GRAPHIC)
     {
-        const sal_uInt32        nFormats = ( (SfxUInt32Item&) pArgs->Get( SID_GALLERY_FORMATS ) ).GetValue();
-        GalleryExplorer*    pGal = SVX_GALLERY();
+        // insert graphic
+        Graphic aGraphic( pGalleryItem->GetGraphic() );
+        SdrGrafObj* pSingleGrafObj(dynamic_cast< SdrGrafObj* >(mpDrawView->getSelectedIfSingle()));
 
-        if ( pGal )
+        if(pSingleGrafObj && pSingleGrafObj->IsEmptyPresObj())
         {
-            GetDocSh()->SetWaitCursor( true );
+            // look for a single selected GraphicObject
+            SdrGrafObj* pNewGrafObj = static_cast< SdrGrafObj* >(pSingleGrafObj->CloneSdrObject());
 
-            // Graphik einfuegen
-            if (nFormats & SGA_FORMAT_GRAPHIC && mpDrawView->GetSdrPageView())
+            pNewGrafObj->SetEmptyPresObj(false);
+            pNewGrafObj->SetOutlinerParaObject(0);
+            pNewGrafObj->SetGraphic(aGraphic);
+
+            String aStr(getSelectionDescription(mpDrawView->getSelectedSdrObjectVectorFromSdrMarkView()));
+
+            aStr += sal_Unicode(' ');
+            aStr += String(SdResId(STR_UNDO_REPLACE));
+            mpDrawView->BegUndo(aStr);
+            mpDrawView->ReplaceObjectAtView(*pSingleGrafObj, *pNewGrafObj);
+            mpDrawView->EndUndo();
+        }
+        else
+        {
+            // check for size reduction to inner page size
+            const basegfx::B2DHomMatrix aMapModeTransform(OutputDevice::LogicToLogic(aGraphic.GetPrefMapMode(), MapMode(MAP_100TH_MM)));
+            basegfx::B2DVector aGraphicScale(aMapModeTransform * basegfx::B2DVector(aGraphic.GetPrefSize().Width(), aGraphic.GetPrefSize().Height()));
+            const SdrPage& rPage = mpDrawView->GetSdrPageView()->getSdrPageFromSdrPageView();
+            const basegfx::B2DVector aPageScale(rPage.GetInnerPageScale());
+
+            if(basegfx::fTools::more(aGraphicScale.getY(), aPageScale.getY() || basegfx::fTools::more(aGraphicScale.getX(), aPageScale.getX()))
+                && !basegfx::fTools::equalZero(aGraphicScale.getY())
+                && !basegfx::fTools::equalZero(aPageScale.getY()))
             {
-                Graphic aGraphic = pGal->GetGraphic();
+                const double fGrfWH(aGraphicScale.getX() / aGraphicScale.getY());
+                const double fWinWH(aPageScale.getX() / aPageScale.getY());
 
-                // Ggf. Groesse reduzieren
-                const Size aSiz100thmm(GetActiveWindow()->LogicToLogic(aGraphic.GetPrefSize(), aGraphic.GetPrefMapMode(), MapMode(MAP_100TH_MM)));
-                basegfx::B2DVector aSizeLogic(aSiz100thmm.Width(), aSiz100thmm.Height());
-
-                // Groesse ggf. auf Seitengroesse begrenzen
-                SdrPage& rPage = mpDrawView->GetSdrPageView()->getSdrPageFromSdrPageView();
-                const basegfx::B2DVector aInnerPageScale(rPage.GetInnerPageScale());
-
-                // Falls Grafik zu gross, wird die Grafik in die Seite eingepasst
-                if(!basegfx::fTools::equalZero(aSizeLogic.getY())
-                    && !basegfx::fTools::equalZero(aInnerPageScale.getY())
-                    && (basegfx::fTools::more(aSizeLogic.getY(), aInnerPageScale.getY())
-                        || basegfx::fTools::more(aSizeLogic.getX(), aInnerPageScale.getX())))
+                if(basegfx::fTools::less(fGrfWH, fWinWH))
                 {
-                    const double fGrfWH(aSizeLogic.getX() / aSizeLogic.getY());
-                    const double fWinWH(aInnerPageScale.getX() / aInnerPageScale.getY());
-
-                    // Grafik an Pagesize anpassen (skaliert)
-                    if(!basegfx::fTools::equalZero(fGrfWH) && basegfx::fTools::less(fGrfWH, fWinWH))
-                    {
-                        aSizeLogic.setX(aInnerPageScale.getY() * fGrfWH);
-                        aSizeLogic.setY(aInnerPageScale.getY());
-                    }
-                    else
-                    {
-                        aSizeLogic.setX(aInnerPageScale.getX());
-                        aSizeLogic.setY(aInnerPageScale.getX() / fGrfWH);
-                    }
+                    aGraphicScale.setX(aPageScale.getY() * fGrfWH);
+                    aGraphicScale.setY(aPageScale.getY());
                 }
-
-                // Ausgaberechteck fuer Grafik setzen
-                const basegfx::B2DPoint aPnt(((aInnerPageScale - aSizeLogic) * 0.5) + basegfx::B2DPoint(rPage.GetLeftPageBorder(), rPage.GetTopPageBorder()));
-                bool bInsertNewObject = true;
-                SdrGrafObj* pGrafObj = dynamic_cast< SdrGrafObj* >(mpDrawView->getSelectedIfSingle());
-
-                if(pGrafObj && pGrafObj->IsEmptyPresObj() )
+                else
                 {
-                    /******************************************
-                    * Das leere Graphik-Objekt bekommt eine neue
-                    * Graphik
-                    ******************************************/
-                    bInsertNewObject = false;
-
-                    SdrGrafObj* pNewGrafObj = (SdrGrafObj*) pGrafObj->CloneSdrObject();
-                    pNewGrafObj->SetEmptyPresObj(false);
-                                pNewGrafObj->SetOutlinerParaObject(NULL);
-                                pNewGrafObj->SetGraphic(aGraphic);
-
-                    String aStr;
-
-                    pGrafObj->TakeObjNameSingul(aStr);
-                                aStr += sal_Unicode(' ');
-                                aStr += String(SdResId(STR_UNDO_REPLACE));
-                                mpDrawView->BegUndo(aStr);
-                    mpDrawView->ReplaceObjectAtView(*pGrafObj, *pNewGrafObj);
-                                mpDrawView->EndUndo();
+                    aGraphicScale.setX(aPageScale.getX());
+                    aGraphicScale.setY(aPageScale.getX() / fGrfWH);
                 }
-
-                if( bInsertNewObject )
-                {
-                    pGrafObj = new SdrGrafObj(
-                        *GetDoc(),
-                        aGraphic,
-                        basegfx::tools::createScaleTranslateB2DHomMatrix(aSizeLogic, aPnt));
-                    mpDrawView->InsertObjectAtView(*pGrafObj, SDRINSERT_SETDEFLAYER);
-                }
-
-                // Soll nur ein Link benutzt werden?
-                if( pGrafObj && pGal->IsLinkage() )
-                    pGrafObj->SetGraphicLink( pGal->GetURL().GetMainURL( INetURLObject::NO_DECODE ), pGal->GetFilterName() );
-            }
-            // insert sound
-            else if( nFormats & SGA_FORMAT_SOUND )
-            {
-                const SfxStringItem aMediaURLItem( SID_INSERT_AVMEDIA, pGal->GetURL().GetMainURL( INetURLObject::NO_DECODE ) );
-                   GetViewFrame()->GetDispatcher()->Execute( SID_INSERT_AVMEDIA, SFX_CALLMODE_SYNCHRON, &aMediaURLItem, 0L );
             }
 
-            GetDocSh()->SetWaitCursor( false );
+            // create range for graphic output
+            const basegfx::B2DPoint aTopLeft(
+                rPage.GetLeftPageBorder() + ((aPageScale.getX() - aGraphicScale.getX()) * 0.5),
+                rPage.GetTopPageBorder() + ((aPageScale.getY() - aGraphicScale.getY()) * 0.5));
+            const basegfx::B2DRange aTragetRange(
+                aTopLeft,
+                aTopLeft + aGraphicScale);
+
+            pSingleGrafObj = new SdrGrafObj(
+                mpDrawView->getSdrModelFromSdrView(),
+                aGraphic,
+                basegfx::tools::createScaleTranslateB2DHomMatrix(
+                    aTragetRange.getRange(),
+                    aTragetRange.getMinimum()));
+
+            mpDrawView->InsertObjectAtView(*pSingleGrafObj);
+        }
+
+        // use link?
+        if(pSingleGrafObj && pGalleryItem->IsLink())
+        {
+            pSingleGrafObj->SetGraphicLink(pGalleryItem->GetURL(), pGalleryItem->GetFilterName());
         }
     }
+    else if( nType == com::sun::star::gallery::GalleryItemType::MEDIA )
+    {
+        // insert sound
+        const SfxStringItem aMediaURLItem( SID_INSERT_AVMEDIA, pGalleryItem->GetURL() );
+
+        GetViewFrame()->GetDispatcher()->Execute( SID_INSERT_AVMEDIA, SFX_CALLMODE_SYNCHRON, &aMediaURLItem, 0L );
+    }
+
+    GetDocSh()->SetWaitCursor( sal_False );
 }
 
 
@@ -340,8 +338,8 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                     SFX_REQUEST_ARG (rReq, pGreen, SfxUInt32Item, ID_VAL_GREEN );
                     SFX_REQUEST_ARG (rReq, pBlue, SfxUInt32Item, ID_VAL_BLUE );
 
-                    XGradientList *pGradientList = GetDoc()->GetGradientList ();
-                    long          nCounts        = pGradientList->Count ();
+                    XGradientListSharedPtr aGradientList = GetDoc()->GetGradientListFromSdrModel();
+                    long          nCounts        = aGradientList->Count ();
                     Color         aColor ((sal_uInt8) pRed->GetValue (),
                                           (sal_uInt8) pGreen->GetValue (),
                                           (sal_uInt8) pBlue->GetValue ());
@@ -352,17 +350,17 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
 
                     for ( i = 0; i < nCounts; i ++)
                     {
-                        XGradientEntry *pEntry = pGradientList->GetGradient (i);
+                        XGradientEntry *pEntry = aGradientList->GetGradient (i);
 
                         if (pEntry->GetName () == pName->GetValue ())
                         {
-                            XGradient &rGradient = pEntry->GetGradient ();
+                            XGradient aGradient(pEntry->GetGradient());
 
-                            if (rReq.GetSlot () == SID_SETGRADSTARTCOLOR) rGradient.SetStartColor (aColor);
-                            else rGradient.SetEndColor (aColor);
+                            if (rReq.GetSlot () == SID_SETGRADSTARTCOLOR) aGradient.SetStartColor (aColor);
+                            else aGradient.SetEndColor (aColor);
 
                             pAttr->Put (XFillStyleItem (XFILL_GRADIENT), XATTR_FILLSTYLE);
-                            pAttr->Put (XFillGradientItem (pName->GetValue (), rGradient), XATTR_FILLGRADIENT);
+                            pAttr->Put (XFillGradientItem (pName->GetValue (), aGradient), XATTR_FILLGRADIENT);
                             break;
                         }
                     }
@@ -377,7 +375,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                                                  ? aColor
                                                  : aBlack);
 
-                        GetDoc()->GetGradientList ()->Insert (new XGradientEntry (aGradient, pName->GetValue ()));
+                        GetDoc()->GetGradientListFromSdrModel()->Insert (new XGradientEntry (aGradient, pName->GetValue ()));
 
                         pAttr->Put (XFillStyleItem (XFILL_GRADIENT), XATTR_FILLSTYLE);
                         pAttr->Put (XFillGradientItem (pName->GetValue (), aGradient), XATTR_FILLGRADIENT);
@@ -400,8 +398,8 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                     SFX_REQUEST_ARG (rReq, pGreen, SfxUInt32Item, ID_VAL_GREEN );
                     SFX_REQUEST_ARG (rReq, pBlue, SfxUInt32Item, ID_VAL_BLUE );
 
-                    XHatchList *pHatchList = GetDoc()->GetHatchList ();
-                    long       nCounts     = pHatchList->Count ();
+                    XHatchListSharedPtr aHatchList = GetDoc()->GetHatchListFromSdrModel();
+                    long       nCounts     = aHatchList.get() ? aHatchList->Count() : 0;
                     Color      aColor ((sal_uInt8) pRed->GetValue (),
                                        (sal_uInt8) pGreen->GetValue (),
                                        (sal_uInt8) pBlue->GetValue ());
@@ -412,16 +410,16 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
 
                     for ( i = 0; i < nCounts; i ++)
                     {
-                        XHatchEntry *pEntry = pHatchList->GetHatch (i);
+                        XHatchEntry *pEntry = aHatchList->GetHatch (i);
 
                         if (pEntry->GetName () == pName->GetValue ())
                         {
-                            XHatch &rHatch = pEntry->GetHatch ();
+                            XHatch aHatch(pEntry->GetHatch());
 
-                            rHatch.SetColor (aColor);
+                            aHatch.SetColor (aColor);
 
                             pAttr->Put (XFillStyleItem (XFILL_HATCH), XATTR_FILLSTYLE);
-                            pAttr->Put (XFillHatchItem (pName->GetValue (), rHatch), XATTR_FILLHATCH);
+                            pAttr->Put (XFillHatchItem (pName->GetValue (), aHatch), XATTR_FILLHATCH);
                             break;
                         }
                     }
@@ -430,7 +428,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                     {
                         XHatch aHatch (aColor);
 
-                        GetDoc()->GetHatchList ()->Insert (new XHatchEntry (aHatch, pName->GetValue ()));
+                        GetDoc()->GetHatchListFromSdrModel()->Insert (new XHatchEntry (aHatch, pName->GetValue ()));
 
                         pAttr->Put (XFillStyleItem (XFILL_HATCH), XATTR_FILLSTYLE);
                         pAttr->Put (XFillHatchItem (pName->GetValue (), aHatch), XATTR_FILLHATCH);
@@ -465,19 +463,19 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                         pAttr->ClearItem (XATTR_LINEDASH);
                         pAttr->ClearItem (XATTR_LINESTYLE);
 
-                        XDashList  *pDashList = GetDoc()->GetDashList ();
-                        long       nCounts    = pDashList->Count ();
+                        XDashListSharedPtr aDashList = GetDoc()->GetDashListFromSdrModel();
+                        long       nCounts    = aDashList.get() ? aDashList->Count() : 0;
                         XDashEntry *pEntry    = new XDashEntry (aNewDash, pName->GetValue ());
                         long i;
 
                         for ( i = 0; i < nCounts; i++ )
-                            if (pDashList->GetDash (i)->GetName () == pName->GetValue ())
+                            if (aDashList->GetDash (i)->GetName () == pName->GetValue ())
                                 break;
 
                         if (i < nCounts)
-                            pDashList->Replace (pEntry, i);
+                            aDashList->Replace (pEntry, i);
                         else
-                            pDashList->Insert (pEntry);
+                            aDashList->Insert (pEntry);
 
                         pAttr->Put (XLineDashItem (pName->GetValue (), aNewDash), XATTR_LINEDASH);
                         pAttr->Put (XLineStyleItem (XLINE_DASH), XATTR_LINESTYLE);
@@ -517,28 +515,28 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                         pAttr->ClearItem (XATTR_FILLGRADIENT);
                         pAttr->ClearItem (XATTR_FILLSTYLE);
 
-                        XGradientList  *pGradientList = GetDoc()->GetGradientList ();
-                        long           nCounts        = pGradientList->Count ();
+                        XGradientListSharedPtr aGradientList = GetDoc()->GetGradientListFromSdrModel();
+                        long           nCounts        = aGradientList->Count ();
                         long i;
 
                         for ( i = 0; i < nCounts; i++ )
                         {
-                            XGradientEntry *pEntry = pGradientList->GetGradient (i);
+                            XGradientEntry *pEntry = aGradientList->GetGradient (i);
 
                             if (pEntry->GetName () == pName->GetValue ())
                             {
-                                XGradient &rGradient = pEntry->GetGradient ();
+                                XGradient aGradient(pEntry->GetGradient());
 
-                                rGradient.SetGradientStyle ((XGradientStyle) pStyle->GetValue ());
-                                rGradient.SetAngle (pAngle->GetValue () * 10);
-                                rGradient.SetBorder ((short) pBorder->GetValue ());
-                                rGradient.SetXOffset ((short) pCenterX->GetValue ());
-                                rGradient.SetYOffset ((short) pCenterY->GetValue ());
-                                rGradient.SetStartIntens ((short) pStart->GetValue ());
-                                rGradient.SetEndIntens ((short) pEnd->GetValue ());
+                                aGradient.SetGradientStyle ((XGradientStyle) pStyle->GetValue ());
+                                aGradient.SetAngle (pAngle->GetValue () * 10);
+                                aGradient.SetBorder ((short) pBorder->GetValue ());
+                                aGradient.SetXOffset ((short) pCenterX->GetValue ());
+                                aGradient.SetYOffset ((short) pCenterY->GetValue ());
+                                aGradient.SetStartIntens ((short) pStart->GetValue ());
+                                aGradient.SetEndIntens ((short) pEnd->GetValue ());
 
                                 pAttr->Put (XFillStyleItem (XFILL_GRADIENT), XATTR_FILLSTYLE);
-                                pAttr->Put (XFillGradientItem (pName->GetValue (), rGradient), XATTR_FILLGRADIENT);
+                                pAttr->Put (XFillGradientItem (pName->GetValue (), aGradient), XATTR_FILLGRADIENT);
                                 break;
                             }
                         }
@@ -551,7 +549,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                                                  (short) pCenterY->GetValue (), (short) pBorder->GetValue (),
                                                  (short) pStart->GetValue (), (short) pEnd->GetValue ());
 
-                            pGradientList->Insert (new XGradientEntry (aGradient, pName->GetValue ()));
+                            aGradientList->Insert (new XGradientEntry (aGradient, pName->GetValue ()));
                             pAttr->Put (XFillStyleItem (XFILL_GRADIENT), XATTR_FILLSTYLE);
                             pAttr->Put (XFillGradientItem (pName->GetValue (), aGradient), XATTR_FILLGRADIENT);
                         }
@@ -583,24 +581,24 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                         pAttr->ClearItem (XATTR_FILLHATCH);
                         pAttr->ClearItem (XATTR_FILLSTYLE);
 
-                        XHatchList *pHatchList = GetDoc()->GetHatchList ();
-                        long       nCounts     = pHatchList->Count ();
+                        XHatchListSharedPtr aHatchList = GetDoc()->GetHatchListFromSdrModel();
+                        long       nCounts     = aHatchList.get() ? aHatchList->Count() : 0;
                         long i;
 
                         for ( i = 0; i < nCounts; i++ )
                         {
-                            XHatchEntry *pEntry = pHatchList->GetHatch (i);
+                            XHatchEntry *pEntry = aHatchList->GetHatch (i);
 
                             if (pEntry->GetName () == pName->GetValue ())
                             {
-                                XHatch &rHatch = pEntry->GetHatch ();
+                                XHatch aHatch(pEntry->GetHatch());
 
-                                rHatch.SetHatchStyle ((XHatchStyle) pStyle->GetValue ());
-                                rHatch.SetDistance (pDistance->GetValue ());
-                                rHatch.SetAngle (pAngle->GetValue () * 10);
+                                aHatch.SetHatchStyle ((XHatchStyle) pStyle->GetValue ());
+                                aHatch.SetDistance (pDistance->GetValue ());
+                                aHatch.SetAngle (pAngle->GetValue () * 10);
 
                                 pAttr->Put (XFillStyleItem (XFILL_HATCH), XATTR_FILLSTYLE);
-                                pAttr->Put (XFillHatchItem (pName->GetValue (), rHatch), XATTR_FILLHATCH);
+                                pAttr->Put (XFillHatchItem (pName->GetValue (), aHatch), XATTR_FILLHATCH);
                                 break;
                             }
                         }
@@ -611,7 +609,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                             XHatch aHatch (aBlack, (XHatchStyle) pStyle->GetValue (), pDistance->GetValue (),
                                            pAngle->GetValue () * 10);
 
-                            pHatchList->Insert (new XHatchEntry (aHatch, pName->GetValue ()));
+                            aHatchList->Insert (new XHatchEntry (aHatch, pName->GetValue ()));
                             pAttr->Put (XFillStyleItem (XFILL_HATCH), XATTR_FILLSTYLE);
                             pAttr->Put (XFillHatchItem (pName->GetValue (), aHatch), XATTR_FILLHATCH);
                         }
@@ -633,14 +631,14 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                 {
                     SFX_REQUEST_ARG (rReq, pName, SfxStringItem, ID_VAL_INDEX );
 
-                    XGradientList  *pGradientList = GetDoc()->GetGradientList ();
-                    long           nCounts        = pGradientList->Count ();
+                    XGradientListSharedPtr aGradientList = GetDoc()->GetGradientListFromSdrModel();
+                    long           nCounts        = aGradientList->Count ();
 
                     for (long i = 0;
                               i < nCounts;
                               i ++)
                     {
-                        XGradientEntry *pEntry = pGradientList->GetGradient (i);
+                        XGradientEntry *pEntry = aGradientList->GetGradient (i);
 
                         if (pEntry->GetName () == pName->GetValue ())
                         {
@@ -667,14 +665,14 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                 {
                     SFX_REQUEST_ARG (rReq, pName, SfxStringItem, ID_VAL_INDEX );
 
-                    XHatchList *pHatchList = GetDoc()->GetHatchList ();
-                    long       nCounts     = pHatchList->Count ();
+                    XHatchListSharedPtr aHatchList = GetDoc()->GetHatchListFromSdrModel();
+                    long       nCounts     = aHatchList.get() ? aHatchList->Count() : 0;
 
                     for (long i = 0;
                               i < nCounts;
                               i ++)
                     {
-                        XHatchEntry *pEntry = pHatchList->GetHatch (i);
+                        XHatchEntry *pEntry = aHatchList->GetHatch (i);
 
                         if (pEntry->GetName () == pName->GetValue ())
                         {

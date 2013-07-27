@@ -27,11 +27,16 @@ Name: %pkgprefix-freedesktop-menus
 #BuildRequires: perl
 Group: Office
 License: ALv2
-Provides: openoffice.org3-desktop-integration
+Provides: openoffice-desktop-integration
 Conflicts: %pkgprefix-suse-menus
 Conflicts: %pkgprefix-debian-menus
 Conflicts: %pkgprefix-redhat-menus
 Conflicts: %pkgprefix-mandriva-menus
+Obsoletes: openoffice.org3.0-freedesktop-menus
+Obsoletes: openoffice.org3.1-freedesktop-menus
+Obsoletes: openoffice.org3.2-freedesktop-menus
+Obsoletes: openoffice.org3.3-freedesktop-menus
+Obsoletes: openoffice.org3.4-freedesktop-menus
 BuildArch: noarch
 AutoReqProv: no
 %define _binary_filedigest_algorithm 1

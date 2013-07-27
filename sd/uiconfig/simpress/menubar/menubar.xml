@@ -119,7 +119,7 @@
                 </menu:menupopup>
             </menu:menu>
             <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:TaskPane"/>
+      <menu:menuitem menu:id=".uno:Sidebar"/>
       <menu:menuitem menu:id=".uno:LeftPaneImpress"/>
             <menu:menuitem menu:id=".uno:AvailableToolbars"/>
             <menu:menuitem menu:id=".uno:StatusBarVisible"/>
@@ -270,6 +270,7 @@
             <menu:menuitem menu:id=".uno:Gallery"/>
             <menu:menuitem menu:id=".uno:BmpMask"/>
             <menu:menuitem menu:id=".uno:AVMediaPlayer"/>
+            <menu:menuitem menu:id=".uno:PresentationMinimizer"/>
             <menu:menuseparator/>
             <menu:menu menu:id=".uno:MacrosMenu">
                 <menu:menupopup>

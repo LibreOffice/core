@@ -54,11 +54,11 @@ public class AccessibleEditableTextPara extends TestCase {
     * with an object to test and related objects.
     * Obtains accissible object for the spreadsheet document.
     *
-    * @param tParam test parameters
+    * @param Param test parameters
     * @param log writer to log information while testing
     *
     * @see TestEnvironment
-    * @see #getTestEnvironment()
+    * @see #getTestEnvironment
     */
     protected TestEnvironment createTestEnvironment(
         TestParameters Param, PrintWriter log) {
@@ -110,8 +110,7 @@ public class AccessibleEditableTextPara extends TestCase {
     /**
     * Called while disposing a <code>TestEnvironment</code>.
     * Disposes text document.
-    * @param tParam test parameters
-    * @param tEnv the environment to cleanup
+    * @param Param test parameters
     * @param log writer to log information while testing
     */
     protected void cleanup( TestParameters Param, PrintWriter log) {
@@ -124,10 +123,10 @@ public class AccessibleEditableTextPara extends TestCase {
      * implementation does nothing. Subclasses can override to initialize
      * objects shared among all <code>TestEnvironment</code>s.
      *
-     * @param tParam test parameters
+     * @param Param test parameters
      * @param log writer to log information while testing
      *
-     * @see #initializeTestCase()
+     * @see #initializeTestCase
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
         // get a soffice factory object

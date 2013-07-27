@@ -191,8 +191,8 @@ static bool SkipUnusedField(void)
 #define HDOFILE_HAS_CHILD   0x02
 
 /**
- * °øÅë Çì´õ¸¦ ÀÐ¾îµå¸°´Ù.
- * °³Ã¼Á¾·ù/¿¬°áÁ¤º¸/»ó´ëÀ§Ä¡/°³Ã¼Å©±â/Àý´ëÀ§Ä¡/Â÷Áö¿µ¿ª/±âº»¼Ó¼º/È¸Àü¼Ó¼º/±×¶óµ¥ÀÌ¼Ç/ºñÆ®¸ÊÆÐÅÏ
+ * ê³µí†µ í—¤ë”ë¥¼ ì½ì–´ë“œë¦°ë‹¤.
+ * ê°œì²´ì¢…ë¥˜/ì—°ê²°ì •ë³´/ìƒëŒ€ìœ„ì¹˜/ê°œì²´í¬ê¸°/ì ˆëŒ€ìœ„ì¹˜/ì°¨ì§€ì˜ì—­/ê¸°ë³¸ì†ì„±/íšŒì „ì†ì„±/ê·¸ë¼ë°ì´ì…˜/ë¹„íŠ¸ë§µíŒ¨í„´
  */
 static bool LoadCommonHeader(HWPDrawingObject * hdo, WORD * link_info)
 {
@@ -785,7 +785,7 @@ int cmd, void *argp, int argv)
 }
 
 
-/* HWPDrawObject ¸â¹ö ÇÔ¼ö */
+/* HWPDrawObject ë©¤ë²„ í•¨ìˆ˜ */
 
 HWPDrawingObject::HWPDrawingObject()
 {

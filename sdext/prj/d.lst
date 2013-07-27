@@ -1,10 +1,33 @@
-mkdir: %_DEST%\bin%_EXT%\minimizer
-mkdir: %_DEST%\bin%_EXT%\presenter
 mkdir: %_DEST%\bin%_EXT%\pdfimport
 ..\%__SRC%\bin\pdf2xml.* %_DEST%\bin%_EXT%\pdf2xml.*
 ..\%__SRC%\bin\pdfunzip.* %_DEST%\bin%_EXT%\pdfunzip.*
 ..\%__SRC%\bin\pdfimport.oxt %_DEST%\bin%_EXT%\pdfimport\pdfimport.oxt
-..\%__SRC%\bin\presentation-minimizer.oxt %_DEST%\bin%_EXT%\minimizer\presentation-minimizer.oxt
-..\%__SRC%\bin\presentation_minimizer_develop.zip %_DEST%\bin%_EXT%\minimizer\presentation_minimizer_develop.zip
-..\%__SRC%\bin\presenter-screen.oxt %_DEST%\bin%_EXT%\presenter\presenter-screen.oxt
-..\%__SRC%\bin\presenter-screen_develop.zip %_DEST%\bin%_EXT%\presenter\presenter-screen_develop.zip
+
+
+
+mkdir: %COMMON_DEST%\res%_EXT%
+..\%__SRC%\bin\*.res %_DEST%\bin%_EXT%\*.res
+
+mkdir: %_DEST%\xml%_EXT%
+mkdir: %_DEST%\xml%_EXT%\registry
+mkdir: %_DEST%\xml%_EXT%\registry\spool
+mkdir: %_DEST%\xml%_EXT%\registry\spool\org
+mkdir: %_DEST%\xml%_EXT%\registry\spool\org\openoffice
+mkdir: %_DEST%\xml%_EXT%\registry\spool\org\openoffice\Office
+mkdir: %_DEST%\xml%_EXT%\registry\spool\org\openoffice\Office\Jobs
+mkdir: %_DEST%\xml%_EXT%\registry\spool\org\openoffice\Office\ProtocolHandler
+
+..\%__SRC%\misc\registry\spool\org\openoffice\Office\Jobs\*.xcu %_DEST%\xml%_EXT%\registry\spool\org\openoffice\Office\Jobs
+..\%__SRC%\misc\registry\spool\org\openoffice\Office\ProtocolHandler\*.xcu %_DEST%\xml%_EXT%\registry\spool\org\openoffice\Office\ProtocolHandler
+
+mkdir: %_DEST%\xml%_EXT%
+..\%__SRC%\misc\PresentationMinimizer.component %_DEST%\xml%_EXT%\PresentationMinimizer.component
+..\%__SRC%\misc\PresenterScreen.component %_DEST%\xml%_EXT%\PresenterScreen.component
+
+..\%__SRC%\bin\PresentationMinimizer*.dll %_DEST%\bin%_EXT%\PresentationMinimizer*.dll
+..\%__SRC%\bin\PreMin*.dll %_DEST%\bin%_EXT%\PreMin*.dll
+..\%__SRC%\lib\PresentationMinimizer*.so %_DEST%\lib%_EXT%
+..\%__SRC%\bin\PresenterScreen*.dll %_DEST%\bin%_EXT%\PresenterScreen*.dll
+..\%__SRC%\bin\PreScr*.dll %_DEST%\bin%_EXT%\PreScr*.dll
+..\%__SRC%\lib\PresenterScreen*.so %_DEST%\lib%_EXT%
+..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib

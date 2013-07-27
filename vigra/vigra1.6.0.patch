@@ -379,7 +379,7 @@ diff -uprN misc/vigra1.6.0/include/vigra/basicimage.hxx misc/build/vigra1.6.0/in
      {
          value_type * newdata = 0;
          value_type ** newlines = 0;
-@@ -1124,8 +1156,8 @@ BasicImage<PIXELTYPE, Alloc>::resizeCopy
+@@ -1124,15 +1156,15 @@ BasicImage<PIXELTYPE, Alloc>::resizeCopy
              if (newsize != width_*height_) // different sizes, must reallocate
              {
                  newdata = allocator_.allocate(typename Alloc::size_type(newsize));
@@ -390,6 +390,15 @@ diff -uprN misc/vigra1.6.0/include/vigra/basicimage.hxx misc/build/vigra1.6.0/in
                  deallocate();
              }
              else // need only to reshape
+             {
+                 newdata = data_;
+-                std::copy(data, data + newsize, newdata);
+-                newlines = initLineStartArray(newdata, width, height);
++                std::copy(src_data, src_data + newsize, newdata);
++                newlines = initLineStartArray(newdata, w, h);
+                 pallocator_.deallocate(lines_, typename Alloc::size_type(height_));
+             }
+         }
 @@ -1143,12 +1175,12 @@ BasicImage<PIXELTYPE, Alloc>::resizeCopy
  
          data_ = newdata;

@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 
@@ -60,7 +58,6 @@
 #include <vcl/metaact.hxx>
 #include <svx/svxids.hrc>
 #include <toolkit/helper/vclunohelper.hxx>
-
 #include "DrawDocShell.hxx"
 #include "fupoor.hxx"
 #include "Window.hxx"
@@ -75,7 +72,6 @@
 #include "strmname.h"
 #include "unomodel.hxx"
 #include "ViewClipboard.hxx"
-
 #include <sfx2/ipclient.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/processfactory.hxx>
@@ -83,6 +79,7 @@
 #include <vcl/cvtgrf.hxx>
 #include <svx/sdrhittesthelper.hxx>
 #include <svx/svdlegacy.hxx>
+#include <svx/xbtmpit.hxx>
 
 // --------------
 // - Namespaces -
@@ -291,7 +288,7 @@ if( aPreviewSizePixel.Width() && aPreviewSizePixel.Height() )
 
 bool View::InsertData( const TransferableDataHelper& rDataHelper,
                          const basegfx::B2DPoint& rPos, sal_Int8& rDnDAction, bool bDrag,
-                         sal_uInt32 nFormat, sal_uInt32 nPage, sal_uInt32 nLayer )
+                         sal_uInt32 nFormat, sal_uInt32 nPage, SdrLayerID nLayer )
 {
     maDropPos = rPos;
     mnAction = rDnDAction;
@@ -327,6 +324,12 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
     SdTransferable* pOwnData = NULL;
     SdTransferable* pImplementation = SdTransferable::getImplementation( aDataHelper.GetTransferable() );
+
+    if(pImplementation && (rDnDAction & DND_ACTION_LINK))
+    {
+        // suppress own data when it's intention is to use it as fill information
+        pImplementation = 0;
+    }
 
     // try to get own transfer data
     if( pImplementation )
@@ -380,10 +383,13 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
         }
     }
 
+    // Changed the whole decision tree to be dependent of bReturn as a flag that
+    // the work was done; this allows to check multiple formats and not just fail
+    // when a CHECK_FORMAT_TRANS(*format*) detected format does not work. This is
+    // e.g. necessary for FORMAT_BITMAP
     if( pOwnData && !nFormat )
     {
         const View* pSourceView = pOwnData->GetView();
-
 
         if( pOwnData->GetDocShell() && pOwnData->IsPageTransferable() && dynamic_cast< View* >(this) )
         {
@@ -415,11 +421,11 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                                 if( IsUndoEnabled() )
                                 {
                                     BegUndo(String(SdResId(STR_MODIFYLAYER)));
-                                    AddUndo(getSdrModelFromSdrView().GetSdrUndoFactory().CreateUndoObjectLayerChange(*pO, pO->GetLayer(), (SdrLayerID)nLayer));
+                                    AddUndo(getSdrModelFromSdrView().GetSdrUndoFactory().CreateUndoObjectLayerChange(*pO, pO->GetLayer(), nLayer));
                                     EndUndo();
                                 }
 
-                                pO->SetLayer( (SdrLayerID) nLayer );
+                                pO->SetLayer( nLayer );
                             }
 
                         bReturn = true;
@@ -672,7 +678,8 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
             }
        }
     }
-    else if( CHECK_FORMAT_TRANS( SOT_FORMATSTR_ID_DRAWING ) )
+
+    if(!bReturn && CHECK_FORMAT_TRANS( SOT_FORMATSTR_ID_DRAWING ))
     {
         SotStorageStreamRef xStm;
 
@@ -757,6 +764,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                                 BegUndo( String( SdResId( STR_UNDO_DRAGDROP ) ) );
                                 AddUndo( mpDoc->GetSdrUndoFactory().CreateUndoAttrObject( *pPickObj ) );
                             }
+
                             aSet.Put( pObj->GetMergedItemSet() );
 
                             // Eckenradius soll nicht uebernommen werden.
@@ -764,6 +772,16 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                             // welche den Eckenradius == 0 haben. Dieser soll
                             // nicht auf das Objekt uebertragen werden.
                             aSet.ClearItem( SDRATTR_ECKENRADIUS );
+
+                            const SdrGrafObj* pSdrGrafObj = dynamic_cast< const SdrGrafObj* >(pObj);
+
+                            if(pSdrGrafObj)
+                            {
+                                // If we have a graphic as source object, use it's graphic
+                                // content as fill style
+                                aSet.Put(XFillStyleItem(XFILL_BITMAP));
+                                aSet.Put(XFillBitmapItem(&pSdrGrafObj->GetObjectItemPool(), pSdrGrafObj->GetGraphic()));
+                            }
 
                             pPickObj->SetMergedItemSetAndBroadcast( aSet );
 
@@ -806,7 +824,8 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
             }
         }
     }
-    else if( CHECK_FORMAT_TRANS( SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE ) )
+
+    if(!bReturn && CHECK_FORMAT_TRANS(SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE))
     {
         ::rtl::OUString aOUString;
 
@@ -832,10 +851,11 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
             }
         }
     }
-    else if( !bLink &&
-             ( CHECK_FORMAT_TRANS( SOT_FORMATSTR_ID_EMBED_SOURCE ) ||
-               CHECK_FORMAT_TRANS( SOT_FORMATSTR_ID_EMBEDDED_OBJ ) )  &&
-               aDataHelper.HasFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR ) )
+
+    if(!bReturn &&
+        !bLink &&
+        (CHECK_FORMAT_TRANS(SOT_FORMATSTR_ID_EMBED_SOURCE) || CHECK_FORMAT_TRANS(SOT_FORMATSTR_ID_EMBEDDED_OBJ))  &&
+        aDataHelper.HasFormat(SOT_FORMATSTR_ID_OBJECTDESCRIPTOR))
     {
         //TODO/LATER: is it possible that this format is binary?! (from old versions of SO)
         uno::Reference < io::XInputStream > xStm;
@@ -1022,10 +1042,11 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
             }
         }
     }
-    else if( !bLink &&
-             ( CHECK_FORMAT_TRANS( SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE ) ||
-               CHECK_FORMAT_TRANS( SOT_FORMATSTR_ID_EMBED_SOURCE_OLE ) ) &&
-               aDataHelper.HasFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR_OLE ) )
+
+    if(!bReturn &&
+        !bLink &&
+        (CHECK_FORMAT_TRANS(SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE) || CHECK_FORMAT_TRANS(SOT_FORMATSTR_ID_EMBED_SOURCE_OLE)) &&
+        aDataHelper.HasFormat(SOT_FORMATSTR_ID_OBJECTDESCRIPTOR_OLE))
     {
         // online insert ole if format is forced or no gdi metafile is available
         if( (nFormat != 0) || !aDataHelper.HasFormat( FORMAT_GDIMETAFILE ) )
@@ -1180,9 +1201,11 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
         {
             // if no object was inserted, insert a picture
             InsertMetaFile( aDataHelper, rPos, pImageMap, true );
+            bReturn = true;
         }
     }
-    else if( ( !bLink || pPickObj ) && CHECK_FORMAT_TRANS( SOT_FORMATSTR_ID_SVXB ) )
+
+    if(!bReturn && (!bLink || pPickObj) && CHECK_FORMAT_TRANS(SOT_FORMATSTR_ID_SVXB))
     {
         SotStorageStreamRef xStm;
 
@@ -1216,7 +1239,8 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
             bReturn = true;
         }
     }
-    else if( ( !bLink || pPickObj ) && CHECK_FORMAT_TRANS( FORMAT_GDIMETAFILE ) )
+
+    if(!bReturn && (!bLink || pPickObj) && CHECK_FORMAT_TRANS(FORMAT_GDIMETAFILE))
     {
         basegfx::B2DPoint aInsertPos( rPos );
 
@@ -1236,11 +1260,34 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
         bReturn = InsertMetaFile( aDataHelper, aInsertPos, pImageMap, nFormat == 0 ? true : false ) ? true : false;
     }
-    else if( ( !bLink || pPickObj ) && CHECK_FORMAT_TRANS( FORMAT_BITMAP ) )
-    {
-        Bitmap aBmp;
 
-        if( aDataHelper.GetBitmap( FORMAT_BITMAP, aBmp ) )
+    if(!bReturn && (!bLink || pPickObj) && CHECK_FORMAT_TRANS(FORMAT_BITMAP))
+    {
+        BitmapEx aBmpEx;
+
+        // get basic Bitmap data
+        aDataHelper.GetBitmapEx(FORMAT_BITMAP, aBmpEx);
+
+        if(aBmpEx.IsEmpty())
+        {
+            // if this did not work, try to get graphic formats and convert these to bitmap
+            Graphic aGraphic;
+
+            if(aDataHelper.GetGraphic(FORMAT_GDIMETAFILE, aGraphic))
+            {
+                aBmpEx = aGraphic.GetBitmapEx();
+            }
+            else if(aDataHelper.GetGraphic(SOT_FORMATSTR_ID_SVXB, aGraphic))
+            {
+                aBmpEx = aGraphic.GetBitmapEx();
+            }
+            else if(aDataHelper.GetGraphic(FORMAT_BITMAP, aGraphic))
+            {
+                aBmpEx = aGraphic.GetBitmapEx();
+            }
+        }
+
+        if(!aBmpEx.IsEmpty())
         {
             basegfx::B2DPoint aInsertPos(rPos);
 
@@ -1258,14 +1305,15 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
             }
 
             // #90129# restrict movement to WorkArea
-            const basegfx::B2DVector aImageMapSize(aBmp.GetPrefSize().Width(), aBmp.GetPrefSize().Height());
+            const basegfx::B2DVector aImageMapSize(aBmpEx.GetPrefSize().Width(), aBmpEx.GetPrefSize().Height());
             ImpCheckInsertPos(aInsertPos, aImageMapSize, GetWorkArea());
 
-            InsertGraphic( aBmp, mnAction, aInsertPos, NULL, pImageMap );
+            InsertGraphic( aBmpEx, mnAction, aInsertPos, NULL, pImageMap );
             bReturn = true;
         }
     }
-    else if( pPickObj && CHECK_FORMAT_TRANS( SOT_FORMATSTR_ID_XFA ) )
+
+    if(!bReturn && pPickObj && CHECK_FORMAT_TRANS( SOT_FORMATSTR_ID_XFA ) )
     {
         SotStorageStreamRef xStm;
 
@@ -1322,7 +1370,8 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
             }
         }
     }
-    else if( !bLink && CHECK_FORMAT_TRANS( SOT_FORMATSTR_ID_HTML ) )
+
+    if(!bReturn && !bLink && CHECK_FORMAT_TRANS(SOT_FORMATSTR_ID_HTML))
     {
         SotStorageStreamRef xStm;
 
@@ -1333,7 +1382,8 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
             bReturn = SdrView::Paste( *xStm, String(), EE_FORMAT_HTML, maDropPos, pPage, nPasteOptions );
         }
     }
-    else if( !bLink && CHECK_FORMAT_TRANS( SOT_FORMATSTR_ID_EDITENGINE ) )
+
+    if(!bReturn && !bLink && CHECK_FORMAT_TRANS(SOT_FORMATSTR_ID_EDITENGINE))
     {
         SotStorageStreamRef xStm;
 
@@ -1362,7 +1412,8 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                 bReturn = SdrView::Paste( *xStm, String(), EE_FORMAT_BIN, maDropPos, pPage, nPasteOptions );
         }
     }
-    else if( !bLink && CHECK_FORMAT_TRANS( FORMAT_RTF ) )
+
+    if(!bReturn && !bLink && CHECK_FORMAT_TRANS(FORMAT_RTF))
     {
         SotStorageStreamRef xStm;
 
@@ -1398,7 +1449,8 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
             }
         }
     }
-    else if( CHECK_FORMAT_TRANS( FORMAT_FILE_LIST ) )
+
+    if(!bReturn && CHECK_FORMAT_TRANS(FORMAT_FILE_LIST))
     {
         FileList aDropFileList;
 
@@ -1414,7 +1466,8 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
         bReturn = true;
     }
-    else if( CHECK_FORMAT_TRANS( FORMAT_FILE ) )
+
+    if(!bReturn && CHECK_FORMAT_TRANS(FORMAT_FILE))
     {
         String aDropFile;
 
@@ -1427,7 +1480,8 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
         bReturn = true;
     }
-    else if( !bLink && CHECK_FORMAT_TRANS( FORMAT_STRING ) )
+
+    if(!bReturn && !bLink && CHECK_FORMAT_TRANS(FORMAT_STRING))
     {
         if( ( FORMAT_STRING == nFormat ) ||
             ( !aDataHelper.HasFormat( SOT_FORMATSTR_ID_SOLK ) &&

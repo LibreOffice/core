@@ -662,6 +662,10 @@ SvxShapeKind SvxDrawPage::getSvxShapeKind( const ::rtl::OUString& aName ) const 
                 aSvxShapeKind = SvxShapeKind_OLE2;
                 break;
             }
+            default:
+            {
+                break;
+            }
         }
     }
     else

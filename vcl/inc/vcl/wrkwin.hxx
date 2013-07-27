@@ -67,11 +67,11 @@ protected:
     SAL_DLLPRIVATE void ImplSetFrameState( sal_uLong aFrameState );
 
 public:
-                    WorkWindow( Window* pParent, const ResId& rResId );
-                    WorkWindow( Window* pParent, WinBits nStyle = WB_STDWORK );
-                    WorkWindow( Window* pParent, const ::com::sun::star::uno::Any& aSystemWorkWindowToken, WinBits nStyle = WB_STDWORK );
-                    WorkWindow( SystemParentData* pParent ); // Not in the REMOTE-Version
-                    ~WorkWindow();
+    explicit        WorkWindow( Window* pParent, const ResId& );
+    explicit        WorkWindow( Window* pParent, WinBits nStyle = WB_STDWORK );
+    explicit        WorkWindow( Window* pParent, const ::com::sun::star::uno::Any& aSystemWorkWindowToken, WinBits nStyle = WB_STDWORK );
+    explicit        WorkWindow( SystemParentData* pParent ); // Not in the REMOTE-Version
+    virtual         ~WorkWindow();
 
     virtual sal_Bool    Close();
 
@@ -102,3 +102,4 @@ public:
 };
 
 #endif // _SV_WRKWIN_HXX
+

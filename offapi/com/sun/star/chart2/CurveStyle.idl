@@ -45,9 +45,8 @@ enum CurveStyle
      */
     CUBIC_SPLINES,
 
-    /** Data points are connected via a smoothed B-spline curve.  The
-        data points themselves are not necessarily part of to the
-        curve.
+    /** Data points are connected via a parametric, interpolating
+        B-spline curve.
      */
     B_SPLINES,
 

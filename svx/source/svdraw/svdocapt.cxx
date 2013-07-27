@@ -579,7 +579,11 @@ bool SdrCaptionObj::BegCreate(SdrDragStat& rStat)
     sdr::legacy::transformSdrObject(*this, basegfx::tools::createTranslateB2DHomMatrix(rStat.GetNow() - aSnapRange.getMinimum()));
 
     aTailPoly[0]=Point(basegfx::fround(rStat.GetStart().getX()), basegfx::fround(rStat.GetStart().getY()));
-    Rectangle aOldRect(floor(aSnapRange.getMinX()), floor(aSnapRange.getMinY()), ceil(aSnapRange.getMaxX()), ceil(aSnapRange.getMaxY()));
+    Rectangle aOldRect(
+        basegfx::fround(floor(aSnapRange.getMinX())),
+        basegfx::fround(floor(aSnapRange.getMinY())),
+        basegfx::fround(ceil(aSnapRange.getMaxX())),
+        basegfx::fround(ceil(aSnapRange.getMaxY())));
     ImpCalcTail(aPara, aTailPoly, aOldRect);
 
     rStat.SetActionRange(aSnapRange);
@@ -595,7 +599,11 @@ bool SdrCaptionObj::MovCreate(SdrDragStat& rStat)
     const basegfx::B2DRange aSnapRange(sdr::legacy::GetSnapRange(*this));
     sdr::legacy::transformSdrObject(*this, basegfx::tools::createTranslateB2DHomMatrix(rStat.GetNow() - aSnapRange.getMinimum()));
 
-    Rectangle aOldRect(floor(aSnapRange.getMinX()), floor(aSnapRange.getMinY()), ceil(aSnapRange.getMaxX()), ceil(aSnapRange.getMaxY()));
+    Rectangle aOldRect(
+        basegfx::fround(floor(aSnapRange.getMinX())),
+        basegfx::fround(floor(aSnapRange.getMinY())),
+        basegfx::fround(ceil(aSnapRange.getMaxX())),
+        basegfx::fround(ceil(aSnapRange.getMaxY())));
     ImpCalcTail(aPara, aTailPoly, aOldRect);
 
     rStat.SetActionRange(aSnapRange);
@@ -611,7 +619,11 @@ bool SdrCaptionObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
     const basegfx::B2DRange aSnapRange(sdr::legacy::GetSnapRange(*this));
     sdr::legacy::transformSdrObject(*this, basegfx::tools::createTranslateB2DHomMatrix(rStat.GetNow() - aSnapRange.getMinimum()));
 
-    Rectangle aOldRect(floor(aSnapRange.getMinX()), floor(aSnapRange.getMinY()), ceil(aSnapRange.getMaxX()), ceil(aSnapRange.getMaxY()));
+    Rectangle aOldRect(
+        basegfx::fround(floor(aSnapRange.getMinX())),
+        basegfx::fround(floor(aSnapRange.getMinY())),
+        basegfx::fround(ceil(aSnapRange.getMaxX())),
+        basegfx::fround(ceil(aSnapRange.getMaxY())));
     ImpCalcTail(aPara, aTailPoly, aOldRect);
 
     return (eCmd==SDRCREATE_FORCEEND || rStat.GetPointAnz()>=2);

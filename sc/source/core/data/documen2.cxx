@@ -130,7 +130,7 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         pPrinter( NULL ),
         pVirtualDevice_100th_mm( NULL ),
         pDrawLayer( NULL ),
-        pColorTable( NULL ),
+        maColorTable(),
         pCondFormList( NULL ),
         pValidationList( NULL ),
         pFormatExchangeList( NULL ),
@@ -204,7 +204,6 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         nVisSpellState( 0 ),
         nAsianCompression(SC_ASIANCOMPRESSION_INVALID),
         nAsianKerning(SC_ASIANKERNING_INVALID),
-        bSetDrawDefaults( sal_False ),
         bPastingDrawFromOtherDoc( sal_False ),
         nInDdeLinkUpdate( 0 ),
         bInUnoBroadcast( sal_False ),
@@ -216,6 +215,7 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         mbExecuteLinkEnabled( true ),
         mbChangeReadOnlyEnabled( false ),
         mbStreamValidLocked( false ),
+        mbIsTemporary(false), // #118840#
         mnNamedRangesLockCount( 0 )
 {
     SetStorageGrammar( formula::FormulaGrammar::GRAM_STORAGE_DEFAULT);
@@ -458,7 +458,6 @@ ScDocument::~ScDocument()
         xPoolHelper->SourceDocumentGone();
     xPoolHelper.unbind();
 
-    DeleteColorTable();
     delete pScriptTypeData;
     delete pOtherObjects;
     delete pRecursionHelper;

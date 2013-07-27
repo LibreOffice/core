@@ -35,7 +35,7 @@
 namespace psp {
 
 // forwards
-class JobData;
+struct JobData;
 
 /*
  * lightweight container to handle RGB values
@@ -124,7 +124,7 @@ class Font3;
 class GlyphSet;
 class PrinterJob;
 class PrintFontManager;
-class KernPair;
+struct KernPair;
 struct CharacterMetric;
 
 /*

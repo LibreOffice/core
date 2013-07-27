@@ -43,22 +43,22 @@ DLLEXPORT hchar ksc5601_han_to_ucs2 (hchar);
 DLLEXPORT hchar ksc5601_sym_to_ucs2 (hchar);
 DLLEXPORT hchar_string hstr2ucsstr(hchar const* hstr);
 /**
- * ÇÑÄÄ½ºÆ®¸µÀ» ¿Ï¼ºÇü½ºÆ®¸µÀ¸·Î º¯È¯ÇÑ´Ù.
+ * í•œì»´ìŠ¤íŠ¸ë§ì„ ì™„ì„±í˜•ìŠ¤íŠ¸ë§ìœ¼ë¡œ ë³€í™˜í•œë‹¤.
  */
 DLLEXPORT ::std::string hstr2ksstr(hchar const* hstr);
 
 /**
- * ÇÑ±ÛÀ» Æ÷ÇÔÇÒ ¼ö ÀÖ´Â charÇü½ºÆ®¸µÀ» ÇÑÄÄ½ºÆ®¸µÀ¸·Î º¯È¯ÇÑ´Ù.
+ * í•œê¸€ì„ í¬í•¨í•  ìˆ˜ ìˆëŠ” charí˜•ìŠ¤íŠ¸ë§ì„ í•œì»´ìŠ¤íŠ¸ë§ìœ¼ë¡œ ë³€í™˜í•œë‹¤.
  */
 DLLEXPORT hchar_string kstr2hstr(uchar const* src);
 
 /**
- * hwpÀÇ °æ·Î¸¦ unixÇüÅÂ·Î ¹Ù²Û´Ù.
+ * hwpì˜ ê²½ë¡œë¥¼ unixí˜•íƒœë¡œ ë°”ê¾¼ë‹¤.
  */
 DLLEXPORT ::std::string urltounix(const char *src);
 
 /**
- * hwpÀÇ °æ·Î¸¦ windowsÇüÅÂ·Î ¹Ù²Û´Ù.
+ * hwpì˜ ê²½ë¡œë¥¼ windowsí˜•íƒœë¡œ ë°”ê¾¼ë‹¤.
  */
 #ifdef _WIN32
 DLLEXPORT ::std::string urltowin(const char *src);
@@ -69,7 +69,7 @@ DLLEXPORT ::std::string urltowin(const char *src);
 DLLEXPORT char* Int2Str(int value, const char *format, char *buf);
 
 /**
- * colorÀÎµ¦½º °ª°ú À½¿µ°ªÀ» Á¶ÇÕÇÏ¿© ½ºÅ¸¿ÀÇÇ½ºÀÇ color·Î º¯È¯
+ * colorì¸ë±ìŠ¤ ê°’ê³¼ ìŒì˜ê°’ì„ ì¡°í•©í•˜ì—¬ ìŠ¤íƒ€ì˜¤í”¼ìŠ¤ì˜ colorë¡œ ë³€í™˜
  */
 DLLEXPORT char *hcolor2str(uchar color, uchar shade, char *buf, bool bIsChar = false);
 

@@ -250,14 +250,14 @@ public:
     // react on selection changes
     virtual void handleSelectionChange();
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
     // mechanism to complete disable handles at the view. Handles will be hidden and deleted
     // when set, no new ones created, no interaction allowed. Handles will be recreated and shown
     // when reset. Default is false.
     bool IsMarkedObjHit(const basegfx::B2DPoint& rPnt, double fTol = 2.0) const;
 
     // Pick: Unterstuetzte Optionen fuer nOptions sind SEARCH_NEXT, SEARCH_BACKWARD (ni)
-    SdrHdl* PickHandle(const basegfx::B2DPoint& rPnt, sal_uInt32 nOptions = 0, SdrHdl* pHdl0 = 0) const;
+    SdrHdl* PickHandle(const basegfx::B2DPoint& rPnt) const;
 
     // Pick: Unterstuetzte Optionen fuer nOptions sind:
     // SDRSEARCH_DEEP SDRSEARCH_ALSOONMASTER SDRSEARCH_TESTMARKABLE SDRSEARCH_TESTTEXTEDIT
@@ -374,7 +374,7 @@ public:
     // Handleliste erneut berechnet. Alle vorher gemerkten SdrHdl* sind
     // damit ungueltig, ebenso die Punkt-Id's!
     // Pick: Unterstuetzte Optionen fuer nOptions sind SEARCH_NEXT, SEARCH_BACKWARD
-    bool PickGluePoint(const basegfx::B2DPoint& rPnt, SdrObject*& rpObj, sal_uInt32& rnId, sal_uInt32 nOptions = 0) const;
+    bool PickGluePoint(const basegfx::B2DPoint& rPnt, SdrObject*& rpObj, sal_uInt32& rnId) const;
     bool MarkGluePoint(const SdrObject* pObj, sal_uInt32 nId, bool bUnmark = false);
     bool IsGluePointMarked(const SdrObject& rObj, sal_uInt32 nId) const;
     bool UnmarkGluePoint(const SdrHdl& rHdl);

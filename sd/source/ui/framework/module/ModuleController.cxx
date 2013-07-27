@@ -304,9 +304,18 @@ void SAL_CALL ModuleController::requestResource (const OUString& rsResourceURL)
                 // Create the factory service.
                 Sequence<Any> aArguments(1);
                 aArguments[0] <<= mxController;
-                xFactory = xGlobalFactory->createInstanceWithArguments(
-                    iFactory->second,
-                    aArguments);
+                OSL_TRACE("creating resource %s",
+                    OUStringToOString(iFactory->second, RTL_TEXTENCODING_ASCII_US).getStr());
+                try
+                {
+                    xFactory = xGlobalFactory->createInstanceWithArguments(
+                        iFactory->second,
+                        aArguments);
+                }
+                catch(Exception&e)
+                {
+                    OSL_TRACE("caught exception while creating factory.");
+                }
 
                 // Remember that this factory has been instanced.
                 (*mpLoadedFactories)[iFactory->second] = xFactory;

@@ -157,12 +157,16 @@ gb_GLOBALDEFS := \
 	-DENABLE_LAYOUT=0 \
 	-DOSL_DEBUG_LEVEL=$(gb_DEBUGLEVEL) \
 	-DSOLAR_JAVA \
-	-DSTLPORT_VERSION=$(STLPORT_VER) \
 	-DSUPD=$(UPD) \
 	-DVCL \
 	$(gb_OSDEFS) \
 	$(gb_COMPILERDEFS) \
 	$(gb_CPUDEFS) \
+
+ifneq ($(USE_SYSTEM_STL),YES)
+gb_GLOBALDEFS += \
+	-DSTLPORT_VERSION=$(STLPORT_VER)
+endif
 
 ifeq ($(gb_PRODUCT),$(true))
 gb_GLOBALDEFS += \
@@ -173,7 +177,6 @@ else
 gb_GLOBALDEFS += \
 	-DDBG_UTIL \
 	-D_STLP_DEBUG \
-	-D_DEBUG \
 
 endif
 

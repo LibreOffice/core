@@ -49,6 +49,9 @@ TARFILE_MD5=d1e9a7a7f532bb031a3c175d86688d95
 PATCH_FILES=\
     $(TARFILE_NAME).patch \
     boost_freebsd.patch
+.IF "$(GUI)"=="OS2"
+PATCH_FILES+=boost-os2.patch
+.ENDIF
 
 CONFIGURE_DIR=
 CONFIGURE_ACTION=
@@ -115,6 +118,7 @@ $(PACKAGE_DIR)$/$(NORMALIZE_FLAG_FILE) : $(PACKAGE_DIR)$/$(BUILD_FLAG_FILE)
     @$(GNUCOPY) -R $(PACKAGE_DIR)$/$(TARFILE_NAME)$/boost$/lambda $(INCCOM)$/$(PRJNAME)
     @$(GNUCOPY) -R $(PACKAGE_DIR)$/$(TARFILE_NAME)$/boost$/logic $(INCCOM)$/$(PRJNAME)
     @$(GNUCOPY) -R $(PACKAGE_DIR)$/$(TARFILE_NAME)$/boost$/math $(INCCOM)$/$(PRJNAME)
+    @$(GNUCOPY) -R $(PACKAGE_DIR)$/$(TARFILE_NAME)$/boost$/move $(INCCOM)$/$(PRJNAME)
     @$(GNUCOPY) -R $(PACKAGE_DIR)$/$(TARFILE_NAME)$/boost$/mpi $(INCCOM)$/$(PRJNAME)
     @$(GNUCOPY) -R $(PACKAGE_DIR)$/$(TARFILE_NAME)$/boost$/mpl $(INCCOM)$/$(PRJNAME)
     @$(GNUCOPY) -R $(PACKAGE_DIR)$/$(TARFILE_NAME)$/boost$/msm $(INCCOM)$/$(PRJNAME)

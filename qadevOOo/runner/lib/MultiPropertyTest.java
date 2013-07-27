@@ -59,7 +59,7 @@ import com.sun.star.uno.Type;
  *
  * @see MultiMethodTest
  * @see #testProperty(String)
- * @see #testProperty(String, Propertytester)
+ * @see #testProperty(String, PropertyTester)
  * @see #getNewValue
  * @see #compare
  * @see #toString(Object)
@@ -105,7 +105,7 @@ public class MultiPropertyTest extends MultiMethodTest
      * calls testProperty method for the method. Otherwise calls
      * super.invokeTestMethod().
      *
-     * @see #MultiMethodTest.invokeTestMethod()
+     * @see MultiMethodTest#invokeTestMethod
      */
     protected void invokeTestMethod(Method meth, String methName)
     {
@@ -258,11 +258,11 @@ public class MultiPropertyTest extends MultiMethodTest
         /**
          * The method checks result of setting a new value to the
          * property based o the following arguments:
-         *   @propName - the property to test
-         *   @oldValue - the old value of the property, before changing it.
-         *   @newValue - the new value the property has been set with
-         *   @resValue - the value of the property after having changed it
-         *   @exception - if not null - the exception thrown by
+         * @param propName - the property to test
+         * @param oldValue - the old value of the property, before changing it.
+         * @param newValue - the new value the property has been set with
+         * @param resValue - the value of the property after having changed it
+         * @param exception - if not null - the exception thrown by
          *                 XPropertySet.setPropertyValue, else indicates
          *                 normal method completion.
          *
@@ -509,9 +509,9 @@ public class MultiPropertyTest extends MultiMethodTest
          * specified as parameters.
          *
          * @param val1 Not <code>null</code> value for the property
-         * tested.
-         * @param val1 Not <code>null</code> value for the property
-         * tested which differs from the first value.
+         *     tested.
+         * @param val2 Not <code>null</code> value for the property
+         *     tested which differs from the first value.
          */
         public PropertyValueSwitcher(Object val1, Object val2)
         {
@@ -560,7 +560,7 @@ public class MultiPropertyTest extends MultiMethodTest
      * Tests the property using <code>PropertyValueSwitcher</code>
      * tester and two values for this property.
      *
-     * @see #PropertyValueSwitcher
+     * @see PropertyValueSwitcher
      */
     protected void testProperty(String propName, Object val1, Object val2)
     {

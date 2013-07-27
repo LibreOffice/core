@@ -32,11 +32,38 @@
 #include <ucbhelper/contentidentifier.hxx>
 #include "webdavprovider.hxx"
 #include "webdavcontent.hxx"
+#include "webdavuseragent.hxx"
 
-#include "osl/mutex.hxx"
+#include <osl/mutex.hxx>
+#include <rtl/ustrbuf.hxx>
+#include <comphelper/processfactory.hxx>
+#include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
 
 using namespace com::sun::star;
 using namespace http_dav_ucp;
+
+
+rtl::OUString &WebDAVUserAgent::operator()() const
+{
+    rtl::OUStringBuffer aBuffer;
+    aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( "$ooName/$ooSetupVersion" ));
+#if OSL_DEBUG_LEVEL > 0
+#ifdef APR_VERSION
+    aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( " apr/" APR_VERSION ));
+#endif
+
+#ifdef APR_UTIL_VERSION
+    aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( " apr-util/" APR_UTIL_VERSION ));
+#endif
+
+#ifdef SERF_VERSION
+    aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( " serf/" SERF_VERSION ));
+#endif
+#endif
+    static rtl::OUString aUserAgent( aBuffer.makeStringAndClear() );
+    return aUserAgent;
+}
 
 //=========================================================================
 //=========================================================================
@@ -52,6 +79,55 @@ ContentProvider::ContentProvider(
   m_xDAVSessionFactory( new DAVSessionFactory() ),
   m_pProps( 0 )
 {
+    static bool bInit = false;
+    if ( bInit )
+        return;
+    bInit = true;
+    try
+    {
+        uno::Reference< uno::XComponentContext > xContext(
+            ::comphelper::getProcessComponentContext() );
+        uno::Reference< lang::XMultiServiceFactory > xConfigProvider(
+            xContext->getServiceManager()->createInstanceWithContext(
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                  "com.sun.star.configuration.ConfigurationProvider")), xContext),
+            uno::UNO_QUERY_THROW );
+
+        beans::NamedValue aNodePath;
+        aNodePath.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ) );
+        aNodePath.Value <<= rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Setup/Product"));
+
+        uno::Sequence< uno::Any > aArgs( 1 );
+        aArgs[0] <<= aNodePath;
+
+        uno::Reference< container::XNameAccess > xConfigAccess(
+            xConfigProvider->createInstanceWithArguments(
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "com.sun.star.configuration.ConfigurationAccess")), aArgs),
+            uno::UNO_QUERY_THROW );
+
+        rtl::OUString aVal;
+        xConfigAccess->getByName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooName"))) >>= aVal;
+
+        rtl::OUString &aUserAgent = WebDAVUserAgent::get();
+        sal_Int32 nIndex = aUserAgent.indexOfAsciiL( RTL_CONSTASCII_STRINGPARAM( "$ooName" ) );
+        if ( !aVal.getLength() || nIndex == -1 )
+            return;
+        aUserAgent = aUserAgent.replaceAt( nIndex, RTL_CONSTASCII_LENGTH( "$ooName" ), aVal );
+
+        xConfigAccess->getByName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooSetupVersion"))) >>= aVal;
+        nIndex = aUserAgent.indexOfAsciiL( RTL_CONSTASCII_STRINGPARAM( "$ooSetupVersion" ) );
+        if ( !aVal.getLength() || nIndex == -1 )
+            return;
+        aUserAgent = aUserAgent.replaceAt( nIndex, RTL_CONSTASCII_LENGTH( "$ooSetupVersion" ), aVal );
+
+    }
+    catch ( const uno::Exception &e )
+    {
+        OSL_TRACE( "ContentProvider -caught exception! %s",
+                   rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
+        (void) e;
+    }
 }
 
 //=========================================================================

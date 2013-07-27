@@ -479,10 +479,6 @@ sub update_property_table
     my $arpcomments = get_arpcomments_for_property_table($allvariables, $languagestringref);
     my $installlevel = get_installlevel_for_property_table();
     my $ischeckforproductupdates = get_ischeckforproductupdates_for_property_table();
-#   my $manufacturer = get_manufacturer_for_property_table();
-# tweak publisher name in the registry to OOOVENDOR=Apache Software Foundation. The global change of the
-# manufacturer from "OpenOffice.org" to "Apache Software Foundation" requires more analysis and testing
-# because more registry entries/keys are potentially affected. For example test product updates etc.
     my $manufacturer = $allvariables->{'OOOVENDOR'};
     my $productlanguage = get_productlanguage_for_property_table($language);
     my $productname = get_productname_for_property_table($allvariables);

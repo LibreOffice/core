@@ -117,7 +117,8 @@ File gid_File_Lib_Cli_Oootypes_Assembly
     TXT_FILE_BODY;
     Styles = (PACKED, ASSEMBLY, DONTRENAMEINPATCH);
     Name = "cli_oootypes.dll";
-    Dir = gid_Dir_Program;
+    Dir = gid_Dir_Common_Ure;
+//    Dir = gid_Dir_Program;
     Assemblyname = "cli_oootypes";
     PublicKeyToken = "ce2cb7e279207b9e";
     Version = "${CLI_OOOTYPES_NEW_VERSION}";
@@ -135,7 +136,8 @@ File gid_File_Lib_Policy_Cli_Oootypes_Assembly
     TXT_FILE_BODY;
     Styles = (PACKED, ASSEMBLY, DONTRENAMEINPATCH);
     Name = "${CLI_OOOTYPES_POLICY_ASSEMBLY}.dll";
-    Dir = gid_Dir_Program;
+    Dir = gid_Dir_Common_Ure;
+//    Dir = gid_Dir_Program;
     Assemblyname = "${CLI_OOOTYPES_POLICY_ASSEMBLY}";
     PublicKeyToken = "ce2cb7e279207b9e";
     Version = "${CLI_OOOTYPES_POLICY_VERSION}";
@@ -154,7 +156,8 @@ File gid_File_Lib_Policy_Cli_Oootypes_Config
     TXT_FILE_BODY;
     Styles = (PACKED, ASSIGNCOMPOMENT, DONTRENAMEINPATCH);
     Name = "cli_oootypes.config";
-    Dir = gid_Dir_Program;
+    Dir = gid_Dir_Common_Ure;
+//    Dir = gid_Dir_Program;
     AssignComponent = gid_File_Lib_Policy_Cli_Oootypes_Assembly;
 End
 
@@ -559,7 +562,8 @@ End
 File gid_File_Lib_Fps_Kde4
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Program;
+    Dir = gid_Dir_Common_Ure;
+//    Dir = gid_Dir_Program;
     Name = SPECIAL_COMPONENT_LIB_NAME(fps_kde4.uno);
 End
 #endif
@@ -957,7 +961,8 @@ STD_LIB_FILE(gid_File_Lib_Writerfilter,writerfilter)
 File gid_File_Lib_Mingwm10
     BIN_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Program;
+    Dir = gid_Dir_Common_Ure;
+//    Dir = gid_Dir_Program;
     Name = "mingwm10.dll";
 End
 
@@ -970,7 +975,8 @@ End
 File gid_File_Lib_Msvcr80
     BIN_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Program;
+    Dir = gid_Dir_Common_Ure;
+//    Dir = gid_Dir_Program;
 #ifndef _STLP_DEBUG
     Name = "msvcr80.dll";
 #else
@@ -987,7 +993,8 @@ End
 File gid_File_Lib_Msvcp80
     BIN_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Program;
+    Dir = gid_Dir_Common_Ure;
+//    Dir = gid_Dir_Program;
 #ifndef _STLP_DEBUG
     Name = "msvcp80.dll";
 #else
@@ -1004,7 +1011,8 @@ End
 File gid_File_Lib_Msvcm80
     BIN_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Program;
+    Dir = gid_Dir_Common_Ure;
+//    Dir = gid_Dir_Program;
 #ifndef _STLP_DEBUG
     Name = "msvcm80.dll";
 #else
@@ -1021,7 +1029,8 @@ End
 
 File gid_File_Lib_Mingw_GccS
     TXT_FILE_BODY;
-    Dir = gid_Dir_Program;
+    Dir = gid_Dir_Common_Ure;
+//    Dir = gid_Dir_Program;
     Name = MINGW_GCCDLL;
     Styles = (PACKED);
 End
@@ -1032,7 +1041,8 @@ End
 
 File gid_File_Lib_Mingw_Stdcpp
     TXT_FILE_BODY;
-    Dir = gid_Dir_Program;
+    Dir = gid_Dir_Common_Ure;
+//    Dir = gid_Dir_Program;
     Name = MINGW_GXXDLL;
     Styles = (PACKED);
 End
@@ -1047,7 +1057,8 @@ End
 File gid_File_Msvcm80crt_Manifest
     BIN_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Program;
+    Dir = gid_Dir_Common_Ure;
+//    Dir = gid_Dir_Program;
 #ifndef _STLP_DEBUG
     Name = "Microsoft.VC80.CRT.manifest";
 #else
@@ -1058,8 +1069,13 @@ End
 #endif
 #endif
 
+#if defined(OS2)
+STD_LIB_FILE(gid_File_Lib_Mysql,mysql)
+STD_LIB_FILE(gid_File_Lib_Odbc,odbc)
+#else
 STD_LIB_FILE(gid_File_Lib_Mysql,mysql.uno)
 STD_LIB_FILE(gid_File_Lib_Odbc,odbc.uno)
+#endif
 
 // STD_LIB_FILE( gid_File_Lib_Ofa , ofa)
 
@@ -1122,6 +1138,13 @@ File gid_File_Lib_Deployment
     PACKED_LIB_FILE_BODY;
 End
 
+#ifdef OS2
+STD_LIB_FILE(gid_File_Lib_DeploymentGui, deplgui)
+#else
+STD_LIB_FILE(gid_File_Lib_DeploymentGui, deploymentgui.uno)
+#endif
+
+/*
 File gid_File_Lib_DeploymentGui
 #if defined UNX
     Name = STRING(CONCAT4(deploymentgui,DLLPOSTFIX,.uno,UNXSUFFIX));
@@ -1132,6 +1155,7 @@ File gid_File_Lib_DeploymentGui
 #endif
     PACKED_LIB_FILE_BODY;
 End
+*/
 
 #ifdef OS2
 STD_LIB_FILE(gid_File_Lib_DeploymentMisc, deplmisc)
@@ -1185,7 +1209,8 @@ File gid_File_Lib_Vclplug_Kde4
     Name = LIBNAME(vclplug_kde4);
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Program;
+    Dir = gid_Dir_Common_Ure;
+//    Dir = gid_Dir_Program;
 End
 #endif
 #endif
@@ -1332,6 +1357,32 @@ File gid_File_Lib_Slideshow
   #endif
 End
 
+File gid_File_Lib_PresentationMinimizer
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = SCP2_OOO_BIN_DIR;
+  #ifdef UNX
+    Name = STRING(CONCAT2(PresentationMinimizer.uno,UNXSUFFIX));
+  #elif defined OS2
+    Name = "PreMin.dll";
+  #else
+    Name = "PresentationMinimizer.uno.dll";
+  #endif
+End
+
+File gid_File_Lib_PresenterScreen
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = SCP2_OOO_BIN_DIR;
+  #ifdef UNX
+    Name = STRING(CONCAT2(PresenterScreen.uno,UNXSUFFIX));
+  #elif defined OS2
+    Name = "PreScr.dll";
+  #else
+    Name = "PresenterScreen.uno.dll";
+  #endif
+End
+
 File gid_File_Lib_Sdbc_2
     TXT_FILE_BODY;
     Styles = (PACKED);
@@ -1375,7 +1426,7 @@ File gid_File_Lib_Smplmail
     TXT_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
-    Name = "smplmail.uno.dll";
+    Name = "sysmail.uno.dll";
 End
 
 #endif
@@ -1460,7 +1511,7 @@ SPECIAL_COMPONENT_LIB_FILE( gid_File_Lib_Wininetbe, wininetbe1.uno )
 SPECIAL_COMPONENT_LIB_FILE( gid_File_Lib_Macbe, macbe1.uno )
 #endif
 
-STD_LIB_FILE( gid_File_Lib_Tk, tk )
+STD_LIB_FILE( gid_File_Lib_Tk, ootk )
 STD_LIB_FILE( gid_File_Lib_Acc, acc )
 
 STD_LIB_FILE( gid_File_Lib_Tools, tl )

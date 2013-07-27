@@ -22,6 +22,5 @@
     <node oor:name="StarCalc 5.0 Vorlage/Template">
         <prop oor:name="UIName">
             <value xml:lang="en-US">StarCalc 5.0 Template</value>
-                        <value xml:lang="x-translate">StarCalc 5.0 Template</value>
         </prop>
     </node>

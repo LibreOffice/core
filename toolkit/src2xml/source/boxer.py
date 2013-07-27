@@ -31,7 +31,7 @@ class DlgLayoutBuilder(object):
     def addWidget (self, elem):
         x, y = int(elem.getAttr('x')), int(elem.getAttr('y'))
         self.rows[y] = self.rows.get (y, {})
-        while self.rows[y].has_key(x):
+        while x in self.rows[y]:
             y += 1
             self.rows[y] = self.rows.get (y, {})
         self.rows[y][x] = elem

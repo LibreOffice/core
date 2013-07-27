@@ -614,6 +614,7 @@ class WinMtfOutput
         sal_uInt32          GetMapMode() const { return mnMapMode; };
         void                SetMapMode( sal_uInt32 mnMapMode );
         void                SetWorldTransform( const XForm& rXForm );
+        const XForm& GetWorldTransform() const { return maXForm; }
         void                ModifyWorldTransform( const XForm& rXForm, sal_uInt32 nMode );
 
         void                Push();

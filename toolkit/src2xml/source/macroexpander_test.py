@@ -31,7 +31,7 @@ class TestCase:
         mcExpander.debug = True
         mcExpander.expand()
         tokens = mcExpander.getTokens()
-        print tokens
+        print(tokens)
 
     @staticmethod
     def simpleNoArgs ():
@@ -79,13 +79,13 @@ class TestCase:
         TestCase.run(tokens, defines)
 
 def main ():
-    print "simple expansion with no arguments"
+    print("simple expansion with no arguments")
     TestCase.simpleNoArgs()
-    print "simple argument expansion"
+    print("simple argument expansion")
     TestCase.simpleArgs()
-    print "multi-token argument expansion"
+    print("multi-token argument expansion")
     TestCase.multiTokenArgs()
-    print "nested argument expansion"
+    print("nested argument expansion")
     TestCase.nestedTokenArgs()
 
 if __name__ ==  '__main__':

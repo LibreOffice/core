@@ -41,7 +41,6 @@ namespace drawinglayer { namespace primitive2d {
     class FillGraphicPrimitive2D;
     class PolyPolygonGradientPrimitive2D;
     class PolyPolygonGraphicPrimitive2D;
-    class PolyPolygonColorPrimitive2D;
     class MetafilePrimitive2D;
     class MaskPrimitive2D;
     class UnifiedTransparencePrimitive2D;
@@ -69,7 +68,7 @@ namespace drawinglayer
             This processor is the base class for VCL-Based processors. It has no
             processBasePrimitive2D implementation and thus is not usable directly.
          */
-        class DRAWINGLAYER_DLLPUBLIC VclProcessor2D : public BaseProcessor2D
+        class VclProcessor2D : public BaseProcessor2D
         {
         protected:
             // the destination OutDev
@@ -97,10 +96,7 @@ namespace drawinglayer
             void RenderPolygonHairlinePrimitive2D(const primitive2d::PolygonHairlinePrimitive2D& rPolygonCandidate, bool bPixelBased);
             void RenderBitmapPrimitive2D(const primitive2d::BitmapPrimitive2D& rBitmapCandidate);
             void RenderFillGraphicPrimitive2D(const primitive2d::FillGraphicPrimitive2D& rFillBitmapCandidate);
-            void RenderPolyPolygonGradientPrimitive2D(const primitive2d::PolyPolygonGradientPrimitive2D& rPolygonCandidate);
             void RenderPolyPolygonGraphicPrimitive2D(const primitive2d::PolyPolygonGraphicPrimitive2D& rPolygonCandidate);
-            void RenderPolyPolygonColorPrimitive2D(const primitive2d::PolyPolygonColorPrimitive2D& rPolygonCandidate);
-            void RenderMetafilePrimitive2D(const primitive2d::MetafilePrimitive2D& rPolygonCandidate);
             void RenderMaskPrimitive2DPixel(const primitive2d::MaskPrimitive2D& rMaskCandidate);
             void RenderModifiedColorPrimitive2D(const primitive2d::ModifiedColorPrimitive2D& rModifiedCandidate);
             void RenderUnifiedTransparencePrimitive2D(const primitive2d::UnifiedTransparencePrimitive2D& rTransCandidate);

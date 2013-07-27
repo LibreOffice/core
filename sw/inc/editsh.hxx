@@ -496,6 +496,9 @@ public:
     sal_Bool HasBullet() const;
     // <- i29560
 
+    sal_Bool SelectionHasNumber() const;
+    sal_Bool SelectionHasBullet() const;
+
     String GetUniqueNumRuleName( const String* pChkStr = 0, sal_Bool bAutoNum = sal_True ) const;
     void ChgNumRuleFmts( const SwNumRule& rRule );
     // setze und erfrage, ob an aktueller PointPos eine Numerierung mit

@@ -77,7 +77,12 @@ GalleryThemeEntry::GalleryThemeEntry( const INetURLObject& rBaseURL, const Strin
     SetModified( _bNewFile );
 
     if( nId && bThemeNameFromResource )
-        aName = String( GAL_RESID( RID_GALLERYSTR_THEME_START + (sal_uInt16) nId ) );
+    {
+        const ResId aId (GAL_RESID( RID_GALLERYSTR_THEME_START + (sal_uInt16) nId));
+        if (aId.GetpResource() == NULL)
+            OSL_TRACE("");
+        aName = String(aId);
+    }
 
     if( !aName.Len() )
         aName = rName;
@@ -600,6 +605,17 @@ String Gallery::GetThemeName( sal_uIntPtr nThemeId ) const
             case( GALLERY_THEME_FONTWORK_VERTICAL ): aFallback = "private://gallery/hidden/fontworkvertical"; break;
             case( GALLERY_THEME_RULERS ): aFallback = "Rulers"; break;
             case( GALLERY_THEME_SOUNDS ): aFallback = "Sounds"; break;
+
+            case( RID_GALLERYSTR_THEME_ARROWS ): aFallback = "Arrows"; break;
+            case( RID_GALLERYSTR_THEME_COMPUTERS ): aFallback = "Computers"; break;
+            case( RID_GALLERYSTR_THEME_DIAGRAMS ): aFallback = "Diagrams"; break;
+            case( RID_GALLERYSTR_THEME_EDUCATION ): aFallback = "Education"; break;
+            case( RID_GALLERYSTR_THEME_ENVIRONMENT ): aFallback = "Environment"; break;
+            case( RID_GALLERYSTR_THEME_FINANCE ): aFallback = "Finance"; break;
+            case( RID_GALLERYSTR_THEME_PEOPLE ): aFallback = "People"; break;
+            case( RID_GALLERYSTR_THEME_SYMBOLS ): aFallback = "Symbols"; break;
+            case( RID_GALLERYSTR_THEME_TRANSPORT ): aFallback = "Transport"; break;
+            case( RID_GALLERYSTR_THEME_TXTSHAPES ): aFallback = "Textshapes"; break;
 
             default:
             break;

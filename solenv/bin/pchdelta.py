@@ -101,7 +101,7 @@ def binaryTest(dirlist, lines, pchname, header, footer, acceptedlines, indent, s
 
     # Reject one liners
     if linecount == 1:
-        print indent + "Rejected: " + lines[0]
+        print(indent + "Rejected: " + lines[0])
         return acceptedlines
 
     # Recurse with multiline slices
@@ -117,7 +117,7 @@ def binaryTest(dirlist, lines, pchname, header, footer, acceptedlines, indent, s
         if (splitend - splitstart) == 0:
             continue
         splitslice = lines[splitstart:splitend]
-        print indent + "[" + str(startpoint + splitstart) + ":" + str(startpoint + splitend) + "] (" + str(splitend - splitstart) + ")"
+        print(indent + "[" + str(startpoint + splitstart) + ":" + str(startpoint + splitend) + "] (" + str(splitend - splitstart) + ")")
         acceptedlines = binaryTest(dirlist, splitslice, pchname, header, footer, acceptedlines, indent + " ", startpoint + splitstart)
         splitstart = splitend
 
@@ -127,7 +127,7 @@ def binaryTest(dirlist, lines, pchname, header, footer, acceptedlines, indent, s
 # Main entry point
 
 if len(sys.argv) < 3:
-    print "Usage: " + sys.argv[0] + " <pch_target> <dir1> [<dir2> <dir3> ...]"
+    print("Usage: " + sys.argv[0] + " <pch_target> <dir1> [<dir2> <dir3> ...]")
     sys.exit(1)
 
 pchname = os.path.abspath(sys.argv[1])
@@ -139,7 +139,7 @@ if os.path.exists("buildlog.txt"):
 
 # test for corner case of everything working from the start
 if testSequenceBuild(dirlist):
-    print "pch working, nothing to do."
+    print("pch working, nothing to do.")
     sys.exit(0)
 
 # Open the header file for reading
@@ -158,10 +158,10 @@ writePch(pchname + "_backup", header, footer, lines, [])
 writePch(pchname, header, footer, [], [])
 if not testSequenceBuild(dirlist):
     writePch(pchname, header, footer, lines, [])
-    print "Building with no candidate lines failed. Convergence questionable, aborting."
+    print("Building with no candidate lines failed. Convergence questionable, aborting.")
     sys.exit(0)
 
 # Starting pruning
-print "Starting evaluation of " + str(len(lines)) + " lines"
+print("Starting evaluation of " + str(len(lines)) + " lines")
 acceptedlines = binaryTest(dirlist, lines, pchname, header, footer, [], "", 0)
 writePch(pchname, header, footer, acceptedlines, [])

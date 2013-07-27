@@ -31,6 +31,8 @@
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
 
+#include <vector>
+
 class SdrObject;
 class SdrPage;
 class ScModelObj;

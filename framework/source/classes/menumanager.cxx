@@ -147,7 +147,8 @@ MenuManager::MenuManager(
     m_xFrame            = rFrame;
     m_bInitialized      = sal_False;
     m_bIsBookmarkMenu   = sal_False;
-    SAL_STATIC_CAST( ::com::sun::star::uno::XInterface*, (OWeakObject*)this )->acquire();
+
+    acquire();
 
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
     m_bWasHiContrast    = rSettings.GetHighContrastMode();

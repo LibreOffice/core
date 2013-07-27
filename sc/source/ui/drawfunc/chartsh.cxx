@@ -49,6 +49,7 @@
 #include "drawview.hxx"
 #include "scresid.hxx"
 #include <svx/svdobj.hxx>
+#include <sfx2/sidebar/EnumContext.hxx>
 
 #define ScChartShell
 #include "scslots.hxx"
@@ -67,6 +68,7 @@ ScChartShell::ScChartShell(ScViewData* pData) :
 {
     SetHelpId(HID_SCSHELL_CHARTSH);
     SetName(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("ChartObject")));
+    SfxShell::SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_Chart));
 }
 
 ScChartShell::~ScChartShell()
@@ -74,4 +76,8 @@ ScChartShell::~ScChartShell()
 }
 
 
-
+void ScChartShell::HandleSelectionChange (void)
+{
+    // Do not call the implementation in the base class.  Let
+    // Activate()/Deactivate() handle context switches.
+}

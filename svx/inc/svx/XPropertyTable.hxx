@@ -28,7 +28,7 @@
 #include "svx/svxdllapi.h"
 #include <svx/xtable.hxx>
 
-SVX_DLLPUBLIC ::com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL SvxUnoXColorTable_createInstance( XPropertyTable* pTable ) throw();
+SVX_DLLPUBLIC ::com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL SvxUnoXColorTable_createInstance( XPropertyList* pTable ) throw();
 SVX_DLLPUBLIC ::com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL SvxUnoXLineEndTable_createInstance( XPropertyList* pList ) throw();
 SVX_DLLPUBLIC ::com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL SvxUnoXDashTable_createInstance( XPropertyList* pList ) throw();
 SVX_DLLPUBLIC ::com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL SvxUnoXHatchTable_createInstance( XPropertyList* pList ) throw();

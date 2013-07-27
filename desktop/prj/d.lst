@@ -74,6 +74,9 @@ mkdir: %_DEST%\bin%_EXT%\odf4ms
 ..\%__SRC%\bin\depl*.dll %_DEST%\bin%_EXT%\depl*.dll
 ..\%__SRC%\lib\deployment*.uno.so %_DEST%\lib%_EXT%\deployment*.uno.so
 ..\%__SRC%\lib\deployment*.uno.dylib %_DEST%\lib%_EXT%\deployment*.uno.dylib
+..\%__SRC%\bin\deploymentgui*.dll %_DEST%\bin%_EXT%\deploymentgui*.dll
+..\%__SRC%\lib\libdeploymentgui*.uno.so %_DEST%\lib%_EXT%\libdeploymentgui*.uno.so
+..\%__SRC%\lib\libdeploymentgui*.uno.dylib %_DEST%\lib%_EXT%\libdeploymentgui*.uno.dylib
 ..\%__SRC%\bin\deploymentmisc*.dll %_DEST%\bin%_EXT%\deploymentmisc*.dll
 ..\%__SRC%\lib\libdeploymentmisc*.so %_DEST%\lib%_EXT%\libdeploymentmisc*.so
 ..\%__SRC%\lib\libdeploymentmisc*.dylib %_DEST%\lib%_EXT%\libdeploymentmisc*.dylib
@@ -143,7 +146,6 @@ mkdir: %_DEST%\xml%_EXT%\registry\spool\org\openoffice\Office\Jobs
 ..\%__SRC%\misc\deployment.component %_DEST%\xml%_EXT%\deployment.component
 ..\%__SRC%\misc\deploymentgui.component %_DEST%\xml%_EXT%\deploymentgui.component
 ..\%__SRC%\misc\migrationoo2.component %_DEST%\xml%_EXT%\migrationoo2.component
-..\%__SRC%\misc\migrationoo3.component %_DEST%\xml%_EXT%\migrationoo3.component
 ..\%__SRC%\misc\offacc.component %_DEST%\xml%_EXT%\offacc.component
 ..\%__SRC%\misc\socomp.component %_DEST%\xml%_EXT%\socomp.component
 ..\%__SRC%\misc\spl.component %_DEST%\xml%_EXT%\spl.component

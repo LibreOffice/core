@@ -30,7 +30,8 @@ FolderItem gid_Folderitem_Swriter
     FileID = gid_File_Exe_Swriter;
     IconFile = gid_File_Exe_Swriter;
     IconID = 0;
-    WkDir = gid_Dir_Program;
+    WkDir = gid_Brand_Dir_Program;
+//    WkDir = gid_Dir_Program;
     Parameter = "";
     Styles = (NOWEB, NON_ADVERTISED);
     ALL_LANG(Tooltip, STR_FI_TOOLTIP_WRITER);

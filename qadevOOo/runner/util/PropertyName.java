@@ -133,8 +133,8 @@ public interface PropertyName {
     final public static String CYGWIN = "Cygwin";
     /**
      * parameter name: "NoCwsAttach"<p>
-     * If this paraeter is set to "true" , a status of CWS-UnoAPI-Tests was not attached to EIS<p>
-     * @see tests.complex.unoapi.CheckModuleAPI
+     * If this parameter is set to "true" , a status of CWS-UnoAPI-Tests was not attached to EIS<p>
+     * @see complex.unoapi.CheckModuleAPI
      */
     final public static String NO_CWS_ATTACH = "NoCwsAttach";
     /**

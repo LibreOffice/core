@@ -55,7 +55,11 @@ SLOFILES=\
 # --- ODBC Library -----------------------------------
 
 
+.IF "$(GUI)" == "OS2"
+REALNAME:=$(ODBC_TARGET)
+.ELSE
 REALNAME:=$(ODBC_TARGET).uno
+.ENDIF
 SHL1TARGET=$(REALNAME)$(DLLPOSTFIX)
 SHL1OBJS=$(SLOFILES)
 SHL1STDLIBS=\

@@ -1609,31 +1609,27 @@ void    SvxNumOptionsTabPage::Reset( const SfxItemSet& rSet )
     {
         SfxObjectShell* pDocSh = SfxObjectShell::Current();
         DBG_ASSERT( pDocSh, "DocShell not found!" );
-        XColorTable* pColorTable = NULL;
-        bool bKillTable = false;
+        XColorListSharedPtr aColorTable;
+
         if ( pDocSh )
         {
             pItem = pDocSh->GetItem( SID_COLOR_TABLE );
             if ( pItem )
-                pColorTable = ( (SvxColorTableItem*)pItem )->GetColorTable();
+                aColorTable = static_cast< const SvxColorTableItem* >(pItem)->GetColorTable();
         }
 
-        if ( !pColorTable )
+        if ( !aColorTable.get() )
         {
-            pColorTable = new XColorTable( SvtPathOptions().GetPalettePath() );
-            bKillTable = true;
+            aColorTable = XPropertyListFactory::CreateSharedXColorList(SvtPathOptions().GetPalettePath());
         }
 
            aBulColLB.InsertEntry( Color( COL_AUTO ), SVX_RESSTR( RID_SVXSTR_AUTOMATIC ));
 
-        for ( long i = 0; i < pColorTable->Count(); i++ )
+        for ( long i = 0; i < aColorTable->Count(); i++ )
         {
-            XColorEntry* pEntry = pColorTable->GetColor(i);
+            XColorEntry* pEntry = aColorTable->GetColor(i);
             aBulColLB.InsertEntry( pEntry->GetColor(), pEntry->GetName() );
         }
-
-        if ( bKillTable )
-            delete pColorTable;
     }
 
     SfxObjectShell* pShell;

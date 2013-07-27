@@ -531,7 +531,7 @@ public class Protocol extends JComponent
      * @param   sMessage
      *              the pure message
      *
-     * @see     log(type,message)
+     * @see     #log(int, String)
      */
     public synchronized void log( /*IN*/ String sMessage )
     {
@@ -761,8 +761,8 @@ public class Protocol extends JComponent
      *
      * @return  A string, which includes the whole header.
      *
-     * @see     finish()
-     * @see     generateHTMLFooter()
+     * @see     #finish()
+     * @see     #impl_generateHTMLFooter()
      */
     private String impl_generateHTMLHeader()
     {
@@ -791,7 +791,7 @@ public class Protocol extends JComponent
      * @param   sOut
      *              used to generate the log output there.
      *
-     * @param   lProps/aProp
+     * @param   lProps
      *              represent the property(array) to be logged.
      */
     private void impl_logPropertyArray( /*OUT*/ StringBuffer                       sOut   ,

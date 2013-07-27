@@ -46,7 +46,9 @@ $(INCCOM)$/stlport$/hash_map \
 $(INCCOM)$/stlport$/hash_set \
 $(INCCOM)$/stlport$/numeric \
 $(INCCOM)$/stlport$/slist \
-$(INCCOM)$/stlport$/rope \
+$(INCCOM)$/stlport$/list \
+$(INCCOM)$/stlport$/map \
+$(INCCOM)$/stlport$/set \
 $(INCCOM)$/stlport$/vector: systemstl$/$$(@:f)
     $(MKDIRHIER) $(@:d)
     $(COPY) $< $@

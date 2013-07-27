@@ -84,12 +84,6 @@ namespace framework{
 
 #define CFG_ENCODING_OPEN                           DECLARE_ASCII("[\'"                                             )   /// used to start encoding of set names
 #define CFG_ENCODING_CLOSE                          DECLARE_ASCII("\']"                                             )   /// used to finish encoding of set names
-#define PRODUCTNAME_VARIABLE                        DECLARE_ASCII("%productname%")
-#define PRODUCTNAME_VARLENGTH                       13
-#define PRODUCTNAME_FALLBACK                        DECLARE_ASCII("StarOffice"                                      )   /// fallback, if configuration can't give us current set product name ...
-#define FORMATVERSION_VARIABLE                      DECLARE_ASCII("%formatversion%"                                 )
-#define FORMATVERSION_VARLENGTH                     15
-#define FORMATVERSION_FALLBACK                      DECLARE_ASCII("6.0/7"                                           )
 
 //*****************************************************************************************************************
 // We know some default values ...

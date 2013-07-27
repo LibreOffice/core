@@ -209,7 +209,8 @@ void Impl3DMirrorConstructOverlay::SetMirrorAxis(const basegfx::B2DPoint& rMirro
                     basegfx::B2DPolyPolygon aPolyPolygon(mpPolygons[b]);
                     aPolyPolygon.transform(aMatrixTransform);
 
-                    ::sdr::overlay::OverlayPolyPolygonStriped* pNew = new ::sdr::overlay::OverlayPolyPolygonStriped(aPolyPolygon);
+                    ::sdr::overlay::OverlayPolyPolygonStripedAndFilled* pNew = new ::sdr::overlay::OverlayPolyPolygonStripedAndFilled(
+                        aPolyPolygon);
                     pTargetOverlay->add(*pNew);
                     maObjects.append(*pNew);
                 }
@@ -243,7 +244,7 @@ void E3dView::DrawMarkedObj(OutputDevice& rOut) const
     bool bSpecialHandling = false;
     E3dScene *pScene = NULL;
     const SdrObjectVector aSelection(getSelectedSdrObjectVectorFromSdrMarkView());
-    sal_Int32 nObjs(0);
+    sal_uInt32 nObjs(0);
 
     for(nObjs = 0; nObjs < aSelection.size(); nObjs++)
     {
@@ -1286,7 +1287,7 @@ bool E3dView::BegDragObj(const basegfx::B2DPoint& rPnt, const SdrHdl* pHdl, doub
             bool bThereAre3DObjects = false;
             const SdrObjectVector aSelection(getSelectedSdrObjectVectorFromSdrMarkView());
 
-            for(sal_Int32 nObjs(0); nObjs < aSelection.size(); nObjs++)
+            for(sal_uInt32 nObjs(0); nObjs < aSelection.size(); nObjs++)
             {
                 SdrObject *pObj = aSelection[nObjs];
                 E3dScene* pE3dScene = dynamic_cast< E3dScene* >(pObj);
@@ -1798,7 +1799,7 @@ void E3dView::CheckPossibilities()
         bool bCoumpound = false;
         bool b3DObject = false;
 
-        for(sal_Int32 nObjs(0); (nObjs < aSelection.size()) && !bCoumpound; nObjs++)
+        for(sal_uInt32 nObjs(0); (nObjs < aSelection.size()) && !bCoumpound; nObjs++)
         {
             SdrObject *pObj = aSelection[nObjs];
 

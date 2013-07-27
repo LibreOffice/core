@@ -148,8 +148,8 @@ namespace utl
             // s_pData = &s_theData;
             rtl::OUString uri;
             rtl::Bootstrap::get(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BRAND_BASE_DIR")), uri);
-            s_pData = new Impl(uri + OUString(RTL_CONSTASCII_USTRINGPARAM("/program/"BOOTSTRAP_DATA_NAME)));
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OOO_BASE_DIR")), uri);
+            s_pData = new Impl(uri + OUString(RTL_CONSTASCII_USTRINGPARAM( "/program/" BOOTSTRAP_DATA_NAME)));
         }
         return *s_pData;
     }
@@ -693,7 +693,7 @@ OUString Bootstrap::getAllUsersValue(OUString const& _sDefault)
 {
     OUString const csAllUsersItem(RTL_CONSTASCII_USTRINGPARAM(SETUP_ITEM_ALLUSERS));
 
-    rtl::Bootstrap aData( getExecutableDirectory() + OUString( RTL_CONSTASCII_USTRINGPARAM( "/"SETUP_DATA_NAME ) ) );
+    rtl::Bootstrap aData( getExecutableDirectory() + OUString( RTL_CONSTASCII_USTRINGPARAM( "/" SETUP_DATA_NAME ) ) );
     OUString sResult;
     aData.getFrom( csAllUsersItem, sResult, _sDefault );
     return sResult;
@@ -908,9 +908,9 @@ sal_Bool Bootstrap::Impl::getVersionValue(OUString const& _sName, OUString& _rVa
     // try to open version.ini (versionrc)
     rtl::OUString uri;
     rtl::Bootstrap::get(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BRAND_BASE_DIR")), uri);
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OOO_BASE_DIR")), uri);
     rtl::Bootstrap aData( uri +
-                          OUString(RTL_CONSTASCII_USTRINGPARAM("/program/"SAL_CONFIGFILE("version"))) );
+                          OUString(RTL_CONSTASCII_USTRINGPARAM( "/program/" SAL_CONFIGFILE("version"))) );
     if ( aData.getHandle() == NULL )
         // version.ini (versionrc) doesn't exist
         return sal_False;

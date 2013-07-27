@@ -78,45 +78,48 @@ void callVirtualMethod(
     // never called
     if (! pAdjustedThisPtr) CPPU_CURRENT_NAMESPACE::dummy_can_throw_anything("xxx"); // address something
 
+    // see the function call convention for IA32 apps on OSX at
+    // http://developer.apple.com/library/mac/#documentation/DeveloperTools/Conceptual/LowLevelABI/130-IA-32_Function_Calling_Conventions/IA32.html
+    // though it mentions that virtual functions may use something different in practice both gcc and clang use the stdcall convention
     volatile long edx = 0, eax = 0; // for register returns
     void * stackptr;
     asm volatile (
         "mov   %%esp, %6\n\t"
         "mov   %0, %%eax\n\t"
         "mov   %%eax, %%edx\n\t"
-                // stack padding to keep stack aligned:
+                // padding to keep stack 16-byte aligned
         "shl   $2, %%eax\n\t"
         "neg   %%eax\n\t"
         "add   %%esp, %%eax\n\t"
         "and   $0xf, %%eax\n\t"
         "sub   %%eax, %%esp\n\t"
-                // copy:
+                // push the arguments onto the stack
         "mov   %%edx, %%eax\n\t"
         "dec   %%edx\n\t"
         "shl   $2, %%edx\n\t"
         "add   %1, %%edx\n"
-        "Lcopy:\n\t"
+    "Lcopy:\n\t"
         "pushl 0(%%edx)\n\t"
         "sub   $4, %%edx\n\t"
         "dec   %%eax\n\t"
         "jne   Lcopy\n\t"
         // do the actual call
-        "mov   %2, %%edx\n\t"
-        "mov   0(%%edx), %%edx\n\t"
+        "mov   %2, %%edx\n\t"       // edx = this
+        "mov   0(%%edx), %%edx\n\t" // edx = vtable
         "mov   %3, %%eax\n\t"
         "shl   $2, %%eax\n\t"
-        "add   %%eax, %%edx\n\t"
-        "mov   0(%%edx), %%edx\n\t"
+        "add   %%eax, %%edx\n\t"    // func** edx = vtable[n]
+        "mov   0(%%edx), %%edx\n\t" // func* edx
         "call  *%%edx\n\t"
         // save return registers
          "mov   %%eax, %4\n\t"
          "mov   %%edx, %5\n\t"
-        // cleanup stack
+        // restore stack
         "mov   %6, %%esp\n\t"
         :
         : "m"(nStackLongs), "m"(pStackLongs), "m"(pAdjustedThisPtr),
           "m"(nVtableIndex), "m"(eax), "m"(edx), "m"(stackptr)
-        : "eax", "edx" );
+        : "eax", "ecx", "edx" );
     switch( pReturnTypeDescr->eTypeClass )
     {
     case typelib_TypeClass_VOID:
@@ -124,6 +127,7 @@ void callVirtualMethod(
     case typelib_TypeClass_HYPER:
     case typelib_TypeClass_UNSIGNED_HYPER:
         ((long*)pRegisterReturn)[1] = edx;
+    // fall through
     case typelib_TypeClass_LONG:
     case typelib_TypeClass_UNSIGNED_LONG:
     case typelib_TypeClass_CHAR:

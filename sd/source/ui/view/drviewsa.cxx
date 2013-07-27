@@ -57,6 +57,7 @@
 #include <sfx2/dispatch.hxx>
 #include <svtools/cliplistener.hxx>
 #include <svx/float3d.hxx>
+#include <svx/sidebar/SelectionAnalyzer.hxx>
 #include "helpids.h"
 
 #include "view/viewoverlaymanager.hxx"
@@ -80,9 +81,12 @@
 #include "ToolBarManager.hxx"
 #include "annotationmanager.hxx"
 
+#include <boost/bind.hpp>
+
 using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using sfx2::sidebar::EnumContext;
 
 namespace {
 static const ::rtl::OUString MASTER_VIEW_TOOL_BAR_NAME(
@@ -137,13 +141,22 @@ void SAL_CALL ScannerEventListener::disposing( const ::com::sun::star::lang::Eve
 DrawViewShell::DrawViewShell( SfxViewFrame* pFrame, ViewShellBase& rViewShellBase, ::Window* pParentWindow, PageKind ePageKind, FrameView* pFrameViewArgument )
 : ViewShell (pFrame, pParentWindow, rViewShellBase)
 , maTabControl(this, pParentWindow)
-, mbIsInSwitchPage(false)
+, mbIsInSwitchPage(false),
+  mpSelectionChangeHandler(new svx::sidebar::SelectionChangeHandler(
+          ::boost::bind(&DrawViewShell::GetSidebarContextName, this),
+          uno::Reference<frame::XController>(&rViewShellBase.GetDrawController()),
+          sfx2::sidebar::EnumContext::Context_Default))
+
 {
     if (pFrameViewArgument != NULL)
         mpFrameView = pFrameViewArgument;
     else
         mpFrameView = new FrameView(*GetDoc());
     Construct(GetDocSh(), ePageKind);
+
+    mpSelectionChangeHandler->Connect();
+
+    SetContextName(GetSidebarContextName());
 }
 
 /*************************************************************************
@@ -154,6 +167,8 @@ DrawViewShell::DrawViewShell( SfxViewFrame* pFrame, ViewShellBase& rViewShellBas
 
 DrawViewShell::~DrawViewShell()
 {
+    mpSelectionChangeHandler->Disconnect();
+
     mpAnnotationManager.reset();
     mpViewOverlayManager.reset();
 
@@ -853,6 +868,33 @@ void DrawViewShell::GetAnnotationState (SfxItemSet& rItemSet )
 {
     if( mpAnnotationManager.get() )
         mpAnnotationManager->GetAnnotationState( rItemSet );
+}
+
+
+
+
+::rtl::OUString DrawViewShell::GetSidebarContextName (void) const
+{
+    ::svx::sidebar::SelectionAnalyzer::ViewType eViewType (::svx::sidebar::SelectionAnalyzer::VT_Standard);
+    switch (mePageKind)
+    {
+        case PK_HANDOUT:
+            eViewType = ::svx::sidebar::SelectionAnalyzer::VT_Handout;
+            break;
+        case PK_NOTES:
+            eViewType = ::svx::sidebar::SelectionAnalyzer::VT_Notes;
+            break;
+        case PK_STANDARD:
+            if (meEditMode == EM_MASTERPAGE)
+                eViewType = ::svx::sidebar::SelectionAnalyzer::VT_Master;
+            else
+                eViewType = ::svx::sidebar::SelectionAnalyzer::VT_Standard;
+            break;
+    }
+    return EnumContext::GetContextName(
+        ::svx::sidebar::SelectionAnalyzer::GetContextForSelection_SD(
+            mpDrawView->getSelectedSdrObjectVectorFromSdrMarkView(),
+            eViewType));
 }
 
 

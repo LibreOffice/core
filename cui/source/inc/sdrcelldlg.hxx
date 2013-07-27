@@ -24,24 +24,28 @@
 #ifndef _SVX_FORMAT_CELLS_DLG_HXX
 #define _SVX_FORMAT_CELLS_DLG_HXX
 
-
 #include <sfx2/tabdlg.hxx>
 
-class XColorTable;
+class XColorList;
 class XGradientList;
 class XHatchList;
 class XBitmapList;
 class SdrModel;
+
+typedef ::boost::shared_ptr< XColorList > XColorListSharedPtr;
+typedef ::boost::shared_ptr< XHatchList > XHatchListSharedPtr;
+typedef ::boost::shared_ptr< XGradientList > XGradientListSharedPtr;
+typedef ::boost::shared_ptr< XBitmapList > XBitmapListSharedPtr;
 
 class SvxFormatCellsDialog : public SfxTabDialog
 {
 private:
     const SfxItemSet&   mrOutAttrs;
 
-    XColorTable*        mpColorTab;
-    XGradientList*      mpGradientList;
-    XHatchList*         mpHatchingList;
-    XBitmapList*        mpBitmapList;
+    XColorListSharedPtr     maColorTab;
+    XGradientListSharedPtr  maGradientList;
+    XHatchListSharedPtr     maHatchingList;
+    XBitmapListSharedPtr    maBitmapList;
 
 protected:
     virtual void Apply();

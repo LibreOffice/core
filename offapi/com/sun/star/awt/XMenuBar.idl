@@ -19,28 +19,18 @@
  *
  *************************************************************/
 
-
 #ifndef __com_sun_star_awt_XMenuBar_idl__
 #define __com_sun_star_awt_XMenuBar_idl__
 
-#ifndef __com_sun_star_awt_XMenu_idl__
 #include <com/sun/star/awt/XMenu.idl>
-#endif
 
-
-//=============================================================================
-
- module com {  module sun {  module star {  module awt {
-
-//=============================================================================
+module com {  module sun {  module star {  module awt {
 
 /** identifies a menu bar.
  */
-published interface XMenuBar: com::sun::star::awt::XMenu
+published interface XMenuBar: XMenu
 {
 };
-
-//=============================================================================
 
 }; }; }; };
 

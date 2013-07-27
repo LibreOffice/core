@@ -61,8 +61,7 @@ public class ModuleUIConfigurationManager extends TestCase {
     /**
      * Cleanup: close the created document
      * @param tParam The test parameters.
-     * @param The log writer.
-     * @return The test environment.
+     * @param log The log writer.
      */
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         log.println("    disposing xTextDoc ");

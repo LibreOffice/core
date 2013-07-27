@@ -54,7 +54,7 @@
 #include <com/sun/star/linguistic2/XDictionaryList.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
-#include <com/sun/star/system/XSystemShellExecute.hpp>
+#include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <unotools/extendedsecurityoptions.hxx>
 #include <svtools/svlbox.hxx>
@@ -148,12 +148,9 @@ static void lcl_OpenURL( const ::rtl::OUString& rURL )
     {
         try
         {
-            uno::Reference< lang::XMultiServiceFactory > xSMGR =
-                ::comphelper::getProcessServiceFactory();
             uno::Reference< css::system::XSystemShellExecute > xSystemShell(
-                xSMGR->createInstance( ::rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.system.SystemShellExecute" ) ) ),
-                uno::UNO_QUERY_THROW );
+                css::system::SystemShellExecute::create(
+                    ::comphelper::getProcessComponentContext() ) );
             if ( xSystemShell.is() )
                 xSystemShell->execute( rURL, ::rtl::OUString(), css::system::SystemShellExecuteFlags::DEFAULTS );
         }

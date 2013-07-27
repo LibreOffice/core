@@ -67,11 +67,11 @@ public class SwAccessibleHeaderView extends TestCase {
     * <code>FooterIsOn</code> by <code>true</code>. Obtains accessible component
     * for header.
     *
-    * @param tParam test parameters
+    * @param Param test parameters
     * @param log writer to log information while testing
     *
     * @see TestEnvironment
-    * @see #getTestEnvironment()
+    * @see #getTestEnvironment
     */
     protected TestEnvironment createTestEnvironment(
         TestParameters Param, PrintWriter log) {
@@ -159,8 +159,7 @@ public class SwAccessibleHeaderView extends TestCase {
     /**
     * Called while disposing a <code>TestEnvironment</code>.
     * Disposes text document.
-    * @param tParam test parameters
-    * @param tEnv the environment to cleanup
+    * @param Param test parameters
     * @param log writer to log information while testing
     */
     protected void cleanup( TestParameters Param, PrintWriter log) {
@@ -172,10 +171,10 @@ public class SwAccessibleHeaderView extends TestCase {
      * Called while the <code>TestCase</code> initialization.
      * Creates a text document.
      *
-     * @param tParam test parameters
+     * @param Param test parameters
      * @param log writer to log information while testing
      *
-     * @see #initializeTestCase()
+     * @see #initializeTestCase
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
         log.println( "creating a text document" );

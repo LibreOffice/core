@@ -329,7 +329,9 @@ public:
     bool IsOutlText() const { return bTextFrame && (eTextKind==OBJ_OUTLINETEXT || eTextKind==OBJ_TITLETEXT); }
     SdrObjKind GetTextKind() const { return eTextKind; }
 
+    // #121917#
     virtual bool HasText() const;
+
     bool HasEditText() const;
     bool IsTextEditActive() const { return (pEdtOutl != 0); }
 

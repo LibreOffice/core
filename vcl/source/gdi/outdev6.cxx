@@ -302,8 +302,14 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
         const double fTransparency = 0.01 * nTransparencePercent;
         if( mbFillColor )
         {
-            // draw the transparent polygon
-            // NOTE: filled polygons are assumed to be drawn as if they were always closed
+            // #121591#
+            // CAUTION: Only non printing (pixel-renderer) VCL commands from OutputDevices
+            // should be used when printing. Normally this is avoided by the printer being
+            // non-AAed and thus e.g. on WIN GdiPlus calls are not used. It may be necessary
+            // to add (OUTDEV_PRINTER != meOutDevType) to the entering if statement, thus
+            // using the fallbacl some lines below (which is not very good, though). For
+            // now, WinSalGraphics::drawPolyPolygon will detect printer usage and correct
+            // the wrong mapping (see there for details)
             bDrawn = mpGraphics->DrawPolyPolygon( aB2DPolyPolygon, fTransparency, this );
         }
 
@@ -1248,3 +1254,31 @@ bool OutputDevice::DrawEPS( const Point& rPoint, const Size& rSize,
     return bDrawn;
 }
 
+// -----------------------------------------------------------------------
+
+void OutputDevice::DrawCheckered(const Point& rPos, const Size& rSize, sal_uInt32 nLen, Color aStart, Color aEnd)
+{
+    const sal_uInt32 nMaxX(rPos.X() + rSize.Width());
+    const sal_uInt32 nMaxY(rPos.Y() + rSize.Height());
+
+    Push(PUSH_LINECOLOR|PUSH_FILLCOLOR);
+    SetLineColor();
+
+    for(sal_uInt32 x(0), nX(rPos.X()); nX < nMaxX; x++, nX += nLen)
+    {
+        const sal_uInt32 nRight(std::min(nMaxX, nX + nLen));
+
+        for(sal_uInt32 y(0), nY(rPos.Y()); nY < nMaxY; y++, nY += nLen)
+        {
+            const sal_uInt32 nBottom(std::min(nMaxY, nY + nLen));
+
+            SetFillColor((x & 0x0001) ^ (y & 0x0001) ? aStart : aEnd);
+            DrawRect(Rectangle(nX, nY, nRight, nBottom));
+        }
+    }
+
+    Pop();
+}
+
+// -----------------------------------------------------------------------
+// eof

@@ -348,7 +348,7 @@ oslFileError FileHandle_Impl::readAt (
     if (!(m_state & STATE_READABLE))
         return osl_File_E_BADF;
 
-#if defined(LINUX) || defined(SOLARIS)
+#if defined(LINUX) || defined(SOLARIS) || defined(FREEBSD) || defined(MACOSX)
 
     ssize_t nBytes = ::pread (m_fd, pBuffer, nBytesRequested, nOffset);
     if ((-1 == nBytes) && (EOVERFLOW == errno))
@@ -362,7 +362,7 @@ oslFileError FileHandle_Impl::readAt (
     if (-1 == nBytes)
         return oslTranslateFileError (OSL_FET_ERROR, errno);
 
-#else /* !(LINUX || SOLARIS) */
+#else /* no pread(2) ! */
 
     if (nOffset != m_offset)
     {
@@ -376,7 +376,7 @@ oslFileError FileHandle_Impl::readAt (
         return oslTranslateFileError (OSL_FET_ERROR, errno);
     m_offset += nBytes;
 
-#endif /* !(LINUX || SOLARIS) */
+#endif /* no pread(2) ! */
 
     OSL_FILE_TRACE("FileHandle_Impl::readAt(%d, %lld, %ld)", m_fd, nOffset, nBytes);
     *pBytesRead = nBytes;
@@ -397,13 +397,13 @@ oslFileError FileHandle_Impl::writeAt (
     if (!(m_state & STATE_WRITEABLE))
         return osl_File_E_BADF;
 
-#if defined(LINUX) || defined(SOLARIS)
+#if defined(LINUX) || defined(SOLARIS) || defined(FREEBSD) || defined(MACOSX)
 
     ssize_t nBytes = ::pwrite (m_fd, pBuffer, nBytesToWrite, nOffset);
     if (-1 == nBytes)
         return oslTranslateFileError (OSL_FET_ERROR, errno);
 
-#else /* !(LINUX || SOLARIS) */
+#else /* no pwrite(2) ! */
 
     if (nOffset != m_offset)
     {
@@ -417,7 +417,7 @@ oslFileError FileHandle_Impl::writeAt (
         return oslTranslateFileError (OSL_FET_ERROR, errno);
     m_offset += nBytes;
 
-#endif /* !(LINUX || SOLARIS) */
+#endif /* no pwrite(2) ! */
 
     OSL_FILE_TRACE("FileHandle_Impl::writeAt(%d, %lld, %ld)", m_fd, nOffset, nBytes);
     m_size = std::max (m_size, sal::static_int_cast< sal_uInt64 >(nOffset + nBytes));

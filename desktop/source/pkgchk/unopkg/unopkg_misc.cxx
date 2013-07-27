@@ -451,7 +451,7 @@ Reference<XComponentContext> connectToOffice(
 OUString getLockFilePath()
 {
     OUString ret;
-    OUString sBootstrap(RTL_CONSTASCII_USTRINGPARAM("${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}"));
+    OUString sBootstrap(RTL_CONSTASCII_USTRINGPARAM("${$OOO_BASE_DIR/program/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}"));
     rtl::Bootstrap::expandMacros(sBootstrap);
     OUString sAbs;
     if (::osl::File::E_None ==  ::osl::File::getAbsoluteFileURL(

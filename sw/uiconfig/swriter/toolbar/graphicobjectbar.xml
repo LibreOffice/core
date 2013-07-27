@@ -33,8 +33,8 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:GrafTransparence"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:FlipVertical"/>
  <toolbar:toolbaritem xlink:href=".uno:FlipHorizontal"/>
+ <toolbar:toolbaritem xlink:href=".uno:FlipVertical"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:FrameDialog"/>
 </toolbar:toolbar>

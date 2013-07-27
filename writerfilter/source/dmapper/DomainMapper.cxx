@@ -2847,7 +2847,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
                 {
                     //get value from style sheet and invert it
                     sal_Int16 nStyleValue = 0;
-                    double fDoubleValue;
+                    double fDoubleValue = 0;
                     uno::Any aStyleVal = m_pImpl->GetPropertyFromStyleSheet(ePropertyId);
                     if( !aStyleVal.hasValue() )
                     {
@@ -3262,7 +3262,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         /* WRITERFILTERSTATUS: done: 50, planned: 2, spent: 0 */
         /* break type
           0 - No break
-          1 - New Colunn
+          1 - New Column
           2 - New page
           3 - Even page
           4 - odd page

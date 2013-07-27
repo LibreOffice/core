@@ -137,7 +137,7 @@ void SAL_CALL ManifestImport::startElement( const OUString& aName, const uno::Re
                 nDerivedKeySize = 0;
                 if ( !bIgnoreEncryptData )
                 {
-                    long nDigestId = 0;
+                    sal_Int32 nDigestId = 0;
                     const OUString& rChecksumType = aConvertedAttribs[sChecksumTypeAttribute];
                     if( rChecksumType.equalsAscii( SHA1_1K_NAME )
                     ||  rChecksumType.equalsAscii( SHA1_1K_URL ) )
@@ -164,7 +164,7 @@ void SAL_CALL ManifestImport::startElement( const OUString& aName, const uno::Re
             {
                 if ( !bIgnoreEncryptData )
                 {
-                    long nCypherId = 0;
+                    sal_Int32 nCypherId = 0;
                     const OUString& rAlgoName = aConvertedAttribs[sAlgorithmNameAttribute];
                     if ( rAlgoName.equalsAscii( BLOWFISH_NAME )
                     ||   rAlgoName.equalsAscii( BLOWFISH_URL ) )

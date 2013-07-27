@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 #ifndef _SVDMODEL_HXX
 #define _SVDMODEL_HXX
 
@@ -44,6 +42,7 @@
 #include "svx/svxdllapi.h"
 #include <vos/ref.hxx>
 #include <set>
+#include <svx/xtable.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // predefines
@@ -73,12 +72,6 @@ class SfxItemSet;
 class SfxRepeatTarget;
 class SfxUndoAction;
 class SfxUndoManager;
-class XBitmapList;
-class XColorTable;
-class XDashList;
-class XGradientList;
-class XHatchList;
-class XLineEndList;
 class SvxForbiddenCharactersTable;
 class SvNumberFormatter;
 class SdrOutlinerCache;
@@ -162,14 +155,15 @@ public:
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-class SVX_DLLPUBLIC SdrModel : public SfxBroadcaster, public tools::WeakBase< SdrModel >
+class SVX_DLLPUBLIC SdrModel
+:   private boost::noncopyable,
+    public SfxBroadcaster,
+    public tools::WeakBase< SdrModel >
 {
 private:
     // this is a weak reference to a possible living api wrapper for this model
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxUnoModel;
 
-    SVX_DLLPRIVATE SdrModel(const SdrModel& rSrcModel);
-    SVX_DLLPRIVATE void operator=(const SdrModel& rSrcModel);
     SVX_DLLPRIVATE bool operator==(const SdrModel& rCmpModel) const;
     SVX_DLLPRIVATE void ImpPostUndoAction(SdrUndoAction* pUndo);
     SVX_DLLPRIVATE void ImpSetUIUnit();
@@ -231,21 +225,21 @@ protected:
     sal_uInt16                      mnDefaultTabulator;
     sal_uInt16                      mnCharCompressType;
 
-    // tables for fill/line/... styles
-    String                          maTablePath;
-    XColorTable*                    mpColorTable;
-    XDashList*                      mpDashList;
-    XLineEndList*                   mpLineEndList;
-    XHatchList*                     mpHatchList;
-    XGradientList*                  mpGradientList;
-    XBitmapList*                    mpBitmapList;
+    // lists for colors, dashes, lineends, hatches, gradients and bitmaps for this model
+    String                  maTablePath;
+    XColorListSharedPtr     maColorTable;
+    XDashListSharedPtr      maDashList;
+    XLineEndListSharedPtr   maLineEndList;
+    XHatchListSharedPtr     maHatchList;
+    XGradientListSharedPtr  maGradientList;
+    XBitmapListSharedPtr    maBitmapList;
+
     sal_uInt16                      mnHandoutPageCount;
 
     /// bitfield
     bool                            mbDeletePool : 1;        // zum Aufraeumen von pMyPool ab 303a
     bool                            mbUndoEnabled : 1;  // If false no undo is recorded or we are during the execution of an undo action
     bool                            mbChanged : 1;
-    bool                            mbExternalColorTable : 1; // Keinen eigenen ColorTable (SW)
     bool                            mbReadOnly : 1;
     bool                            mbPickThroughTransparentTextFrames : 1;
     bool                            mbSwapGraphics : 1;
@@ -254,22 +248,12 @@ protected:
     bool                            mbKernAsianPunctuation : 1;
     bool                            mbAddExtLeading : 1;
     bool                            mbInDestruction : 1;
+    bool                            mbDisableTextEditUsesCommonUndoManager : 1;
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoModel();
 
 public:
-    // Steckt man hier seinen eigenen Pool rein, so wird die Klasse auch
-    // Aktionen an ihm vornehmen (Put(),Remove()). Bei Zerstoerung von
-    // SdrModel wird dieser Pool ver delete geloescht!
-    // Gibt man den Konstruktor stattdessen eine NULL mit, so macht sich
-    // die Klasse einen eigenen Pool (SdrItemPool), den sie dann auch im
-    // Destruktor zerstoert.
-    // Bei Verwendung eines eigenen Pools ist darauf zu achten, dass dieser
-    // von SdrItemPool abgeleitet ist, falls man von SdrAttrObj abgeleitete
-    // Zeichenobjekte verwenden moechte. Setzt man degegen nur vom abstrakten
-    // Basisobjekt SdrObject abgeleitete Objekte ein, so ist man frei in der
-    // Wahl des Pools.
-    SdrModel(const String& rPath = String(), SfxItemPool* pPool = 0, ::comphelper::IEmbeddedHelper* pPers = 0, bool bUseExtColorTable = false);
+    SdrModel(const String& rPath = String(), SfxItemPool* pPool = 0, ::comphelper::IEmbeddedHelper* pPers = 0);
     virtual ~SdrModel();
     void ClearModel(bool bCalledFromDestructor);
 
@@ -506,18 +490,23 @@ public:
     SdrUndoFactory& GetSdrUndoFactory() const;
 
     // Zugriffsmethoden fuer Paletten, Listen und Tabellen
-    void            SetColorTable(XColorTable* pTable)       ;
-    XColorTable*    GetColorTable() const                    { return mpColorTable; }
-    void            SetDashList(XDashList* pList)            ;
-    XDashList*      GetDashList() const                      { return mpDashList; }
-    void            SetLineEndList(XLineEndList* pList)      ;
-    XLineEndList*   GetLineEndList() const                   { return mpLineEndList; }
-    void            SetHatchList(XHatchList* pList)          ;
-    XHatchList*     GetHatchList() const                     { return mpHatchList; }
-    void            SetGradientList(XGradientList* pList)    ;
-    XGradientList*  GetGradientList() const                  { return mpGradientList; }
-    void            SetBitmapList(XBitmapList* pList)        ;
-    XBitmapList*    GetBitmapList() const                    { return mpBitmapList; }
+    void SetColorTableAtSdrModel(XColorListSharedPtr aTable);
+    XColorListSharedPtr GetColorTableFromSdrModel() const;
+
+    void SetDashListAtSdrModel(XDashListSharedPtr aList);
+    XDashListSharedPtr GetDashListFromSdrModel() const;
+
+    void SetLineEndListAtSdrModel(XLineEndListSharedPtr aList);
+    XLineEndListSharedPtr GetLineEndListFromSdrModel() const;
+
+    void SetHatchListAtSdrModel(XHatchListSharedPtr aList);
+    XHatchListSharedPtr GetHatchListFromSdrModel() const;
+
+    void SetGradientListAtSdrModel(XGradientListSharedPtr aList);
+    XGradientListSharedPtr GetGradientListFromSdrModel() const;
+
+    void SetBitmapListAtSdrModel(XBitmapListSharedPtr aList);
+    XBitmapListSharedPtr GetBitmapListFromSdrModel() const;
 
     // Der StyleSheetPool wird der DrawingEngine nur bekanntgemacht.
     // Zu loeschen hat ihn schliesslich der, der ihn auch konstruiert hat.
@@ -535,6 +524,9 @@ public:
 
     void SetStarDrawPreviewMode(bool bPreview);
     bool IsStarDrawPreviewMode() { return mbStarDrawPreviewMode; }
+
+    bool GetDisableTextEditUsesCommonUndoManager() const { return mbDisableTextEditUsesCommonUndoManager; }
+    void SetDisableTextEditUsesCommonUndoManager(bool bNew) { mbDisableTextEditUsesCommonUndoManager = bNew; }
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getUnoModel();
     void setUnoModel( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xModel );
@@ -577,9 +569,6 @@ public:
         This returns false if undo was disabled using EnableUndo( false ) and
         also during the runtime of the Undo() and Redo() methods. */
     bool IsUndoEnabled() const;
-
-    // init some pool defaults for DrawingLayer
-    void SetDrawingLayerPoolDefaults();
 
     // old hack, not easily to remove. Formally used mbMyPool, changed to virtual bool,
     // overloaded in SwDrawDocument

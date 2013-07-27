@@ -29,14 +29,19 @@
 #include <sfx2/module.hxx>
 #include <svx/svdobj.hxx>
 #include <tools/link.hxx>
+#include <rtl/ref.hxx>
 
 class AbstractSvxNameDialog; //CHINA001 class SvxNameDialog;
 class ScViewData;
 class ScDrawView;
+namespace svx { namespace sidebar {
+class SelectionChangeHandler;
+} }
 
 class ScDrawShell : public SfxShell
 {
     ScViewData* pViewData;
+    ::rtl::Reference<svx::sidebar::SelectionChangeHandler> mpSelectionChangeHandler;
 
     DECL_LINK( NameObjectHdl, AbstractSvxNameDialog* );
 
@@ -45,6 +50,7 @@ class ScDrawShell : public SfxShell
 #endif
 
 protected:
+    virtual void    Activate(sal_Bool bMDI);
     ScViewData* GetViewData()   { return pViewData; }
 
 public:
@@ -80,6 +86,9 @@ public:
     ScDrawView* GetDrawView();
 
     bool AreAllObjectsOnLayer(sal_uInt16 nLayerNo, const SdrObjectVector& rSelection);
+
+    void GetDrawAttrStateForIFBX( SfxItemSet& rSet );
+    ::rtl::OUString GetSidebarContextName (void);
 };
 
 

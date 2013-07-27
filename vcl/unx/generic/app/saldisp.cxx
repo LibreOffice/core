@@ -788,7 +788,7 @@ void SalDisplay::initScreen( int nScreen ) const
         }
         rSD.m_hInvert50 = XCreateBitmapFromData( pDisp_,
                                                  rSD.m_aRefWindow,
-                                                 invert50_bits,
+                                                 (const char*)invert50_bits,
                                                  invert50_width,
                                                  invert50_height );
     }
@@ -1056,9 +1056,9 @@ inline KeySym sal_XModifier2Keysym( Display         *pDisplay,
                                     XModifierKeymap *pXModMap,
                                     int              n )
 {
-    return XKeycodeToKeysym( pDisplay,
+    return XkbKeycodeToKeysym( pDisplay,
                              pXModMap->modifiermap[n*pXModMap->max_keypermod],
-                             0 );
+                             0, 0 );
 }
 
 void SalDisplay::ModifierMapping()
@@ -1737,7 +1737,7 @@ KeySym SalDisplay::GetKeySym( XKeyEvent        *pEvent,
 
     // Now get the unmodified KeySym for KeyCode retrieval
     // try to strip off modifiers, e.g. Ctrl-$ becomes Ctrl-Shift-4
-    *pUnmodifiedKeySym  = XKeycodeToKeysym( GetDisplay(), pEvent->keycode, 0);
+    *pUnmodifiedKeySym = XkbKeycodeToKeysym( GetDisplay(), pEvent->keycode, 0, 0 );
 
     return nKeySym;
 }
@@ -1747,7 +1747,7 @@ KeySym SalDisplay::GetKeySym( XKeyEvent        *pEvent,
 #define MAKE_BITMAP( name ) \
     XCreateBitmapFromData( pDisp_, \
                            DefaultRootWindow( pDisp_ ), \
-                           name##_bits, \
+                           (const char*)name##_bits, \
                            name##_width, \
                            name##_height )
 

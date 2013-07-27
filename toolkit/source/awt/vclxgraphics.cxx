@@ -26,6 +26,7 @@
 
 #include <toolkit/awt/vclxgraphics.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
+#include <toolkit/awt/vclxfont.hxx>
 #include <toolkit/helper/macros.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <cppuhelper/typeprovider.hxx>
@@ -34,30 +35,32 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/image.hxx>
 #include <vcl/gradient.hxx>
 #include <tools/debug.hxx>
 
+using namespace com::sun::star;
 
 //  ----------------------------------------------------
 //  class VCLXGraphics
 //  ----------------------------------------------------
 
-// ::com::sun::star::uno::XInterface
-::com::sun::star::uno::Any VCLXGraphics::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
+// uno::XInterface
+uno::Any VCLXGraphics::queryInterface( const uno::Type & rType ) throw(uno::RuntimeException)
 {
-    ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::XGraphics*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::lang::XTypeProvider*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::lang::XUnoTunnel*, this ) );
+    uno::Any aRet = ::cppu::queryInterface( rType,
+                                        SAL_STATIC_CAST( awt::XGraphics*, this ),
+                                        SAL_STATIC_CAST( lang::XTypeProvider*, this ),
+                                        SAL_STATIC_CAST( lang::XUnoTunnel*, this ) );
     return (aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ));
 }
 
-// ::com::sun::star::lang::XUnoTunnel
+// lang::XUnoTunnel
 IMPL_XUNOTUNNEL( VCLXGraphics )
 
-// ::com::sun::star::lang::XTypeProvider
+// lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( VCLXGraphics )
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics>* ) NULL )
+    getCppuType( ( uno::Reference< awt::XGraphics>* ) NULL )
 IMPL_XTYPEPROVIDER_END
 
 VCLXGraphics::VCLXGraphics() : mrMutex( Application::GetSolarMutex() )
@@ -79,6 +82,7 @@ void VCLXGraphics::SetOutputDevice( OutputDevice* pOutDev )
 {
     mpOutputDevice = pOutDev;
     mxDevice = NULL;
+    initAttrs();
 }
 
 void VCLXGraphics::Init( OutputDevice* pOutDev )
@@ -86,12 +90,7 @@ void VCLXGraphics::Init( OutputDevice* pOutDev )
     DBG_ASSERT( !mpOutputDevice, "VCLXGraphics::Init allready has pOutDev !" );
     mpOutputDevice  = pOutDev;
 
-    maFont          = mpOutputDevice->GetFont();
-    maTextColor     = COL_BLACK;
-    maTextFillColor = COL_TRANSPARENT;
-    maLineColor     = COL_BLACK;
-    maFillColor     = COL_WHITE;
-    meRasterOp      = ROP_OVERPAINT;
+    initAttrs();
     mpClipRegion    = NULL;
 
     // Register at OutputDevice
@@ -99,6 +98,19 @@ void VCLXGraphics::Init( OutputDevice* pOutDev )
     if ( !pLst )
         pLst = mpOutputDevice->CreateUnoGraphicsList();
     pLst->Insert( this, LIST_APPEND );
+}
+
+void VCLXGraphics::initAttrs()
+{
+    if ( !mpOutputDevice )
+        return;
+
+    maFont          = mpOutputDevice->GetFont();
+    maTextColor     = mpOutputDevice->GetTextColor(); /* COL_BLACK */
+    maTextFillColor = mpOutputDevice->GetTextFillColor(); /* COL_TRANSPARENT */
+    maLineColor     = mpOutputDevice->GetLineColor(); /* COL_BLACK */
+    maFillColor     = mpOutputDevice->GetFillColor(); /* COL_WHITE */
+    meRasterOp      = mpOutputDevice->GetRasterOp(); /* ROP_OVERPAINT */
 }
 
 void VCLXGraphics::InitOutputDevice( sal_uInt16 nFlags )
@@ -135,7 +147,7 @@ void VCLXGraphics::InitOutputDevice( sal_uInt16 nFlags )
     }
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice > VCLXGraphics::getDevice() throw(::com::sun::star::uno::RuntimeException)
+uno::Reference< awt::XDevice > VCLXGraphics::getDevice() throw(uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
 
@@ -148,11 +160,11 @@ void VCLXGraphics::InitOutputDevice( sal_uInt16 nFlags )
     return mxDevice;
 }
 
-::com::sun::star::awt::SimpleFontMetric VCLXGraphics::getFontMetric() throw(::com::sun::star::uno::RuntimeException)
+awt::SimpleFontMetric VCLXGraphics::getFontMetric() throw(uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
 
-    ::com::sun::star::awt::SimpleFontMetric aM;
+    awt::SimpleFontMetric aM;
     if( mpOutputDevice )
     {
         mpOutputDevice->SetFont( maFont );
@@ -161,56 +173,104 @@ void VCLXGraphics::InitOutputDevice( sal_uInt16 nFlags )
     return aM;
 }
 
-void VCLXGraphics::setFont( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFont >& rxFont ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXGraphics::setFont( const uno::Reference< awt::XFont >& rxFont ) throw(uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
 
     maFont = VCLUnoHelper::CreateFont( rxFont );
 }
 
-void VCLXGraphics::selectFont( const ::com::sun::star::awt::FontDescriptor& rDescription ) throw(::com::sun::star::uno::RuntimeException)
+uno::Reference< awt::XFont > VCLXGraphics::getFont() throw(uno::RuntimeException)
+{
+    uno::Reference< awt::XFont > xFont;
+    uno::Reference< awt::XDevice > xDevice( getDevice() );
+
+    ::vos::OGuard aGuard( GetMutex() );
+
+    if ( xDevice.is() )
+    {
+        VCLXFont *pFont = new VCLXFont;
+        pFont->Init( *xDevice.get(), maFont );
+        xFont.set( static_cast< ::cppu::OWeakObject* >( pFont ), uno::UNO_QUERY );
+    }
+
+    return xFont;
+}
+
+void VCLXGraphics::selectFont( const awt::FontDescriptor& rDescription ) throw(uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
 
     maFont = VCLUnoHelper::CreateFont( rDescription, Font() );
 }
 
-void VCLXGraphics::setTextColor( sal_Int32 nColor ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXGraphics::setTextColor( sal_Int32 nColor ) throw(uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
 
     maTextColor = Color( (sal_uInt32)nColor );
 }
 
-void VCLXGraphics::setTextFillColor( sal_Int32 nColor ) throw(::com::sun::star::uno::RuntimeException)
+::sal_Int32 VCLXGraphics::getTextColor() throw(uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    return maTextColor.GetColor();
+}
+
+void VCLXGraphics::setTextFillColor( sal_Int32 nColor ) throw(uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
 
     maTextFillColor = Color( (sal_uInt32)nColor );
 }
 
-void VCLXGraphics::setLineColor( sal_Int32 nColor ) throw(::com::sun::star::uno::RuntimeException)
+::sal_Int32 VCLXGraphics::getTextFillColor() throw(uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    return maTextFillColor.GetColor();
+}
+
+void VCLXGraphics::setLineColor( sal_Int32 nColor ) throw(uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
 
     maLineColor = Color( (sal_uInt32)nColor );
 }
 
-void VCLXGraphics::setFillColor( sal_Int32 nColor ) throw(::com::sun::star::uno::RuntimeException)
+::sal_Int32 VCLXGraphics::getLineColor() throw(uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    return maLineColor.GetColor();
+}
+
+void VCLXGraphics::setFillColor( sal_Int32 nColor ) throw(uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
 
     maFillColor = Color( (sal_uInt32)nColor );
 }
 
-void VCLXGraphics::setRasterOp( ::com::sun::star::awt::RasterOperation eROP ) throw(::com::sun::star::uno::RuntimeException)
+::sal_Int32 VCLXGraphics::getFillColor() throw(uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    return maFillColor.GetColor();
+}
+
+void VCLXGraphics::setRasterOp( awt::RasterOperation eROP ) throw(uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
 
     meRasterOp = (RasterOp)eROP;
 }
 
-void VCLXGraphics::setClipRegion( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XRegion >& rxRegion ) throw(::com::sun::star::uno::RuntimeException)
+awt::RasterOperation VCLXGraphics::getRasterOp()
+throw(uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    return (awt::RasterOperation) meRasterOp;
+}
+
+void VCLXGraphics::setClipRegion( const uno::Reference< awt::XRegion >& rxRegion ) throw(uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
 
@@ -221,7 +281,7 @@ void VCLXGraphics::setClipRegion( const ::com::sun::star::uno::Reference< ::com:
         mpClipRegion = NULL;
 }
 
-void VCLXGraphics::intersectClipRegion( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XRegion >& rxRegion ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXGraphics::intersectClipRegion( const uno::Reference< awt::XRegion >& rxRegion ) throw(uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
 
@@ -235,7 +295,7 @@ void VCLXGraphics::intersectClipRegion( const ::com::sun::star::uno::Reference< 
     }
 }
 
-void VCLXGraphics::push(  ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXGraphics::push(  ) throw(uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
 
@@ -244,7 +304,7 @@ void VCLXGraphics::push(  ) throw(::com::sun::star::uno::RuntimeException)
         mpOutputDevice->Push();
 }
 
-void VCLXGraphics::pop(  ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXGraphics::pop(  ) throw(uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
 
@@ -253,7 +313,20 @@ void VCLXGraphics::pop(  ) throw(::com::sun::star::uno::RuntimeException)
         mpOutputDevice->Pop();
 }
 
-void VCLXGraphics::copy( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice >& rxSource, sal_Int32 nSourceX, sal_Int32 nSourceY, sal_Int32 nSourceWidth, sal_Int32 nSourceHeight, sal_Int32 nDestX, sal_Int32 nDestY, sal_Int32 nDestWidth, sal_Int32 nDestHeight ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXGraphics::clear(
+    const awt::Rectangle& aRect )
+throw(uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    if( mpOutputDevice )
+    {
+        const ::Rectangle aVCLRect = VCLUnoHelper::ConvertToVCLRect( aRect );
+        mpOutputDevice->Erase( aVCLRect );
+    }
+}
+
+void VCLXGraphics::copy( const uno::Reference< awt::XDevice >& rxSource, sal_Int32 nSourceX, sal_Int32 nSourceY, sal_Int32 nSourceWidth, sal_Int32 nSourceHeight, sal_Int32 nDestX, sal_Int32 nDestY, sal_Int32 nDestWidth, sal_Int32 nDestHeight ) throw(uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
 
@@ -270,14 +343,14 @@ void VCLXGraphics::copy( const ::com::sun::star::uno::Reference< ::com::sun::sta
     }
 }
 
-void VCLXGraphics::draw( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDisplayBitmap >& rxBitmapHandle, sal_Int32 nSourceX, sal_Int32 nSourceY, sal_Int32 nSourceWidth, sal_Int32 nSourceHeight, sal_Int32 nDestX, sal_Int32 nDestY, sal_Int32 nDestWidth, sal_Int32 nDestHeight ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXGraphics::draw( const uno::Reference< awt::XDisplayBitmap >& rxBitmapHandle, sal_Int32 nSourceX, sal_Int32 nSourceY, sal_Int32 nSourceWidth, sal_Int32 nSourceHeight, sal_Int32 nDestX, sal_Int32 nDestY, sal_Int32 nDestWidth, sal_Int32 nDestHeight ) throw(uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
 
     if( mpOutputDevice )
     {
         InitOutputDevice( INITOUTDEV_CLIPREGION|INITOUTDEV_RASTEROP);
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap > xBitmap( rxBitmapHandle, ::com::sun::star::uno::UNO_QUERY );
+        uno::Reference< awt::XBitmap > xBitmap( rxBitmapHandle, uno::UNO_QUERY );
         BitmapEx aBmpEx = VCLUnoHelper::GetBitmap( xBitmap );
 
         Point aPos(nDestX - nSourceX, nDestY - nSourceY);
@@ -302,7 +375,7 @@ void VCLXGraphics::draw( const ::com::sun::star::uno::Reference< ::com::sun::sta
     }
 }
 
-void VCLXGraphics::drawPixel( sal_Int32 x, sal_Int32 y ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXGraphics::drawPixel( sal_Int32 x, sal_Int32 y ) throw(uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
 
@@ -313,7 +386,7 @@ void VCLXGraphics::drawPixel( sal_Int32 x, sal_Int32 y ) throw(::com::sun::star:
     }
 }
 
-void VCLXGraphics::drawLine( sal_Int32 x1, sal_Int32 y1, sal_Int32 x2, sal_Int32 y2 ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXGraphics::drawLine( sal_Int32 x1, sal_Int32 y1, sal_Int32 x2, sal_Int32 y2 ) throw(uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
 
@@ -324,7 +397,7 @@ void VCLXGraphics::drawLine( sal_Int32 x1, sal_Int32 y1, sal_Int32 x2, sal_Int32
     }
 }
 
-void VCLXGraphics::drawRect( sal_Int32 x, sal_Int32 y, sal_Int32 width, sal_Int32 height ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXGraphics::drawRect( sal_Int32 x, sal_Int32 y, sal_Int32 width, sal_Int32 height ) throw(uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
 
@@ -335,7 +408,7 @@ void VCLXGraphics::drawRect( sal_Int32 x, sal_Int32 y, sal_Int32 width, sal_Int3
     }
 }
 
-void VCLXGraphics::drawRoundedRect( sal_Int32 x, sal_Int32 y, sal_Int32 width, sal_Int32 height, sal_Int32 nHorzRound, sal_Int32 nVertRound ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXGraphics::drawRoundedRect( sal_Int32 x, sal_Int32 y, sal_Int32 width, sal_Int32 height, sal_Int32 nHorzRound, sal_Int32 nVertRound ) throw(uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
 
@@ -346,7 +419,7 @@ void VCLXGraphics::drawRoundedRect( sal_Int32 x, sal_Int32 y, sal_Int32 width, s
     }
 }
 
-void VCLXGraphics::drawPolyLine( const ::com::sun::star::uno::Sequence< sal_Int32 >& DataX, const ::com::sun::star::uno::Sequence< sal_Int32 >& DataY ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXGraphics::drawPolyLine( const uno::Sequence< sal_Int32 >& DataX, const uno::Sequence< sal_Int32 >& DataY ) throw(uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
 
@@ -357,7 +430,7 @@ void VCLXGraphics::drawPolyLine( const ::com::sun::star::uno::Sequence< sal_Int3
     }
 }
 
-void VCLXGraphics::drawPolygon( const ::com::sun::star::uno::Sequence< sal_Int32 >& DataX, const ::com::sun::star::uno::Sequence< sal_Int32 >& DataY ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXGraphics::drawPolygon( const uno::Sequence< sal_Int32 >& DataX, const uno::Sequence< sal_Int32 >& DataY ) throw(uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
 
@@ -368,7 +441,7 @@ void VCLXGraphics::drawPolygon( const ::com::sun::star::uno::Sequence< sal_Int32
     }
 }
 
-void VCLXGraphics::drawPolyPolygon( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< sal_Int32 > >& DataX, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< sal_Int32 > >& DataY ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXGraphics::drawPolyPolygon( const uno::Sequence< uno::Sequence< sal_Int32 > >& DataX, const uno::Sequence< uno::Sequence< sal_Int32 > >& DataY ) throw(uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
 
@@ -384,7 +457,7 @@ void VCLXGraphics::drawPolyPolygon( const ::com::sun::star::uno::Sequence< ::com
     }
 }
 
-void VCLXGraphics::drawEllipse( sal_Int32 x, sal_Int32 y, sal_Int32 width, sal_Int32 height ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXGraphics::drawEllipse( sal_Int32 x, sal_Int32 y, sal_Int32 width, sal_Int32 height ) throw(uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
 
@@ -395,7 +468,7 @@ void VCLXGraphics::drawEllipse( sal_Int32 x, sal_Int32 y, sal_Int32 width, sal_I
     }
 }
 
-void VCLXGraphics::drawArc( sal_Int32 x, sal_Int32 y, sal_Int32 width, sal_Int32 height, sal_Int32 x1, sal_Int32 y1, sal_Int32 x2, sal_Int32 y2 ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXGraphics::drawArc( sal_Int32 x, sal_Int32 y, sal_Int32 width, sal_Int32 height, sal_Int32 x1, sal_Int32 y1, sal_Int32 x2, sal_Int32 y2 ) throw(uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
 
@@ -406,7 +479,7 @@ void VCLXGraphics::drawArc( sal_Int32 x, sal_Int32 y, sal_Int32 width, sal_Int32
     }
 }
 
-void VCLXGraphics::drawPie( sal_Int32 x, sal_Int32 y, sal_Int32 width, sal_Int32 height, sal_Int32 x1, sal_Int32 y1, sal_Int32 x2, sal_Int32 y2 ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXGraphics::drawPie( sal_Int32 x, sal_Int32 y, sal_Int32 width, sal_Int32 height, sal_Int32 x1, sal_Int32 y1, sal_Int32 x2, sal_Int32 y2 ) throw(uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
 
@@ -417,7 +490,7 @@ void VCLXGraphics::drawPie( sal_Int32 x, sal_Int32 y, sal_Int32 width, sal_Int32
     }
 }
 
-void VCLXGraphics::drawChord( sal_Int32 x, sal_Int32 y, sal_Int32 width, sal_Int32 height, sal_Int32 x1, sal_Int32 y1, sal_Int32 x2, sal_Int32 y2 ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXGraphics::drawChord( sal_Int32 x, sal_Int32 y, sal_Int32 width, sal_Int32 height, sal_Int32 x1, sal_Int32 y1, sal_Int32 x2, sal_Int32 y2 ) throw(uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
 
@@ -428,7 +501,7 @@ void VCLXGraphics::drawChord( sal_Int32 x, sal_Int32 y, sal_Int32 width, sal_Int
     }
 }
 
-void VCLXGraphics::drawGradient( sal_Int32 x, sal_Int32 y, sal_Int32 width, sal_Int32 height, const ::com::sun::star::awt::Gradient& rGradient ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXGraphics::drawGradient( sal_Int32 x, sal_Int32 y, sal_Int32 width, sal_Int32 height, const awt::Gradient& rGradient ) throw(uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
 
@@ -447,7 +520,7 @@ void VCLXGraphics::drawGradient( sal_Int32 x, sal_Int32 y, sal_Int32 width, sal_
     }
 }
 
-void VCLXGraphics::drawText( sal_Int32 x, sal_Int32 y, const ::rtl::OUString& rText ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXGraphics::drawText( sal_Int32 x, sal_Int32 y, const ::rtl::OUString& rText ) throw(uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
 
@@ -458,7 +531,7 @@ void VCLXGraphics::drawText( sal_Int32 x, sal_Int32 y, const ::rtl::OUString& rT
     }
 }
 
-void VCLXGraphics::drawTextArray( sal_Int32 x, sal_Int32 y, const ::rtl::OUString& rText, const ::com::sun::star::uno::Sequence< sal_Int32 >& rLongs ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXGraphics::drawTextArray( sal_Int32 x, sal_Int32 y, const ::rtl::OUString& rText, const uno::Sequence< sal_Int32 >& rLongs ) throw(uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
 
@@ -470,5 +543,17 @@ void VCLXGraphics::drawTextArray( sal_Int32 x, sal_Int32 y, const ::rtl::OUStrin
 }
 
 
+void VCLXGraphics::drawImage( sal_Int32 x, sal_Int32 y, sal_Int32 width, sal_Int32 height, sal_Int16 nStyle, const uno::Reference< graphic::XGraphic >& xGraphic ) throw(uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
 
-
+    if( mpOutputDevice && xGraphic.is() )
+    {
+        Image aImage( xGraphic );
+        if ( !!aImage )
+        {
+            InitOutputDevice( INITOUTDEV_CLIPREGION|INITOUTDEV_RASTEROP|INITOUTDEV_COLORS );
+            mpOutputDevice->DrawImage( Point( x, y ), Size( width, height ), aImage, nStyle );
+        }
+    }
+}

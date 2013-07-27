@@ -32,7 +32,14 @@
 #include <boost/shared_ptr.hpp>
 #include <vector>
 
+// this operator is not defined by default
+inline bool operator!=( const ::com::sun::star::awt::Size& rSize1, const ::com::sun::star::awt::Size& rSize2 )
+{
+    return (rSize1.Width != rSize2.Width) || (rSize1.Height != rSize2.Height);
+}
+
 //.............................................................................
+
 namespace chart
 {
 namespace wrapper

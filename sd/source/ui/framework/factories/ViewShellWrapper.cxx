@@ -25,7 +25,6 @@
 
 #include "framework/ViewShellWrapper.hxx"
 #include "framework/Pane.hxx"
-#include "taskpane/ToolPanelViewShell.hxx"
 #include "ViewShell.hxx"
 #include "Window.hxx"
 
@@ -50,7 +49,6 @@ using ::com::sun::star::rendering::XCanvas;
 using ::com::sun::star::lang::DisposedException;
 
 using ::rtl::OUString;
-using ::sd::toolpanel::ToolPanelViewShell;
 
 namespace sd { namespace framework {
 

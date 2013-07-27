@@ -122,7 +122,9 @@
 #include "WW8Sttbf.hxx"
 #include <editeng/charrotateitem.hxx>
 #include "WW8FibData.hxx"
-
+#ifndef _NUMRULE_HXX
+#include "numrule.hxx"//For i120928
+#endif
 using namespace sw::util;
 using namespace sw::types;
 
@@ -312,7 +314,7 @@ void WW8_WrtBookmarks::MoveFieldMarks(sal_uLong nFrom,sal_uLong nTo)
     {
         if (aItr->second)
         {
-            if (aItr->second->first == nFrom)
+            if (aItr->second->first == (long)nFrom)
             {
                 aItr->second->second.first = true;
                 aItr->second->first = nTo;
@@ -1424,6 +1426,125 @@ void WW8Export::AppendBookmark( const rtl::OUString& rName, bool bSkip )
     pBkmks->Append( nSttCP, rName );
 }
 
+//For i120928,collect all the graphics of bullets applied to paragraphs
+int WW8Export::CollectGrfsOfBullets() const
+{
+    m_vecBulletPic.clear();
+
+    if ( pDoc )
+    {
+        sal_uInt16 nCountRule = pDoc->GetNumRuleTbl().Count();
+        for (sal_uInt16 n = 0; n < nCountRule; ++n)
+            {
+            const SwNumRule &rRule = *(pDoc->GetNumRuleTbl().GetObject(n));
+            sal_uInt16 nLevels = rRule.IsContinusNum() ? 1 : 9;
+            for (sal_uInt16 nLvl = 0; nLvl < nLevels; ++nLvl)
+                {
+                        const SwNumFmt &rFmt = rRule.Get(nLvl);
+                if (SVX_NUM_BITMAP != rFmt.GetNumberingType())
+                {
+                    continue;
+                }
+                const Graphic *pGrf = rFmt.GetBrush()? rFmt.GetBrush()->GetGraphic():0;
+                if ( pGrf )
+                {
+                    bool bHas = false;
+                    for (sal_uInt16 i = 0; i < m_vecBulletPic.size(); ++i)
+                    {
+                        if (m_vecBulletPic[i]->GetChecksum() == pGrf->GetChecksum())
+                        {
+                            bHas = true;
+                            break;
+                        }
+                    }
+                    if (!bHas)
+                    {
+                        m_vecBulletPic.push_back(pGrf);
+                    }
+                }
+            }
+        }
+    }
+
+    return m_vecBulletPic.size();
+}
+//Export Graphic of Bullets
+void WW8Export::ExportGrfBullet(const SwTxtNode& rNd)
+{
+    int nCount = CollectGrfsOfBullets();
+    if (nCount > 0)
+    {
+        SwPosition aPos(rNd);
+        String aPicBullets = String::CreateFromAscii("_PictureBullets");
+        AppendBookmark(aPicBullets);
+        for (int i = 0; i < nCount; i++)
+        {
+            sw::Frame aFrame(*(m_vecBulletPic[i]), aPos);
+            OutGrfBullets(aFrame);
+        }
+        AppendBookmark(aPicBullets);
+    }
+}
+
+static sal_uInt8 nAttrMagicIdx = 0;
+void WW8Export::OutGrfBullets(const sw::Frame & rFrame)
+{
+    if ( !pGrf || !pChpPlc || !pO )
+        return;
+
+    pGrf->Insert(rFrame);
+    pChpPlc->AppendFkpEntry( Strm().Tell(), pO->Count(), pO->GetData() );
+        pO->Remove( 0, pO->Count() );
+    //if links...
+    WriteChar( (char)1 );
+
+    sal_uInt8 aArr[ 22 ];
+    sal_uInt8* pArr = aArr;
+
+    // sprmCFSpec
+    if( bWrtWW8 )
+        Set_UInt16( pArr, 0x855 );
+    else
+        Set_UInt8( pArr, 117 );
+    Set_UInt8( pArr, 1 );
+
+    Set_UInt16( pArr, 0x083c );
+    Set_UInt8( pArr, 0x81 );
+
+    // sprmCPicLocation
+    if( bWrtWW8 )
+        Set_UInt16( pArr, 0x6a03 );
+    else
+    {
+        Set_UInt8( pArr, 68 );
+        Set_UInt8( pArr, 4 );
+    }
+    Set_UInt32( pArr, GRF_MAGIC_321 );
+
+    //extern  nAttrMagicIdx;
+    --pArr;
+    Set_UInt8( pArr, nAttrMagicIdx++ );
+    pChpPlc->AppendFkpEntry( Strm().Tell(), static_cast< short >(pArr - aArr), aArr );
+}
+//Achieve the index position
+int WW8Export::GetGrfIndex(const SvxBrushItem& rBrush)
+{
+    int nIndex = -1;
+    if ( rBrush.GetGraphic() )
+    {
+        for (sal_uInt16 i = 0; i < m_vecBulletPic.size(); ++i)
+        {
+            if (m_vecBulletPic[i]->GetChecksum() == rBrush.GetGraphic()->GetChecksum())
+            {
+                nIndex = i;
+                break;
+            }
+        }
+    }
+
+    return nIndex;
+}
+
 void MSWordExportBase::AppendWordBookmark( const String& rName )
 {
     AppendBookmark( BookmarkToWord( rName ) );
@@ -1917,7 +2038,7 @@ void WW8AttributeOutput::TableInfoRow( ww8::WW8TableNodeInfoInner::Pointer_t pTa
     }
 }
 
-static sal_uInt16 lcl_TCFlags(SwDoc &rDoc, const SwTableBox * pBox, long nRowSpan)
+static sal_uInt16 lcl_TCFlags(SwDoc &rDoc, const SwTableBox * pBox, const sal_Int32 nRowSpan)
 {
     sal_uInt16 nFlags = 0;
 

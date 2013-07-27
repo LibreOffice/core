@@ -57,6 +57,12 @@
 #include <svx/svdlegacy.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <svx/AffineMatrixItem.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <svx/xlnwtit.hxx>
+#include <svx/xlnstwit.hxx>
+#include <svx/xlnedwit.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -255,35 +261,86 @@ void SdrEditView::ResizeMarkedObj(const basegfx::B2DPoint& rRefPoint, const base
     }
 }
 
+// TTTT: Needed?
+//void SdrEditView::ResizeMultMarkedObj(const Point& rRef,
+//    const Fraction& xFact,
+//    const Fraction& yFact,
+//    const bool bCopy,
+//    const bool bWdh,
+//    const bool bHgt)
+//{
+//  const bool bUndo = IsUndoEnabled();
+//  if( bUndo )
+//  {
+//      XubString aStr;
+//      ImpTakeDescriptionStr(STR_EditResize,aStr);
+//      if (bCopy)
+//          aStr+=ImpGetResStr(STR_EditWithCopy);
+//      BegUndo(aStr);
+//  }
+//
+//  if (bCopy)
+//      CopyMarkedObj();
+//
+//  sal_uIntPtr nMarkAnz=GetMarkedObjectCount();
+//  for (sal_uIntPtr nm=0; nm<nMarkAnz; nm++)
+//  {
+//      SdrMark* pM=GetSdrMarkByIndex(nm);
+//      SdrObject* pO=pM->GetMarkedSdrObj();
+//      if( bUndo )
+//      {
+//          std::vector< SdrUndoAction* > vConnectorUndoActions( CreateConnectorUndo( *pO ) );
+//          AddUndoActions( vConnectorUndoActions );
+//          AddUndo( GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pO));
+//        }
+//
+//        Fraction aFrac(1,1);
+//        if (bWdh && bHgt)
+//            pO->Resize(rRef, xFact, yFact);
+//        else if (bWdh)
+//            pO->Resize(rRef, xFact, aFrac);
+//        else if (bHgt)
+//            pO->Resize(rRef, aFrac, yFact);
+//    }
+//  if( bUndo )
+//      EndUndo();
+//}
+
 double SdrEditView::GetMarkedObjRotate() const
 {
-    double fRetval(0.0);
-
-    if(areSdrObjectsSelected())
+    if(!areSdrObjectsSelected())
     {
-        const SdrObjectVector aSelection(getSelectedSdrObjectVectorFromSdrMarkView());
-
-        for(sal_uInt32 a(0); a < aSelection.size(); a++)
-        {
-            SdrObject* pObject = aSelection[a];
-
-            if(a)
-            {
-                const double fNew(pObject->getSdrObjectRotate());
-
-                if(!basegfx::fTools::equal(fNew, fRetval))
-                {
-                    return 0.0;
-                }
-            }
-            else
-            {
-                fRetval = pObject->getSdrObjectRotate();
-            }
-        }
+        return 0.0;
     }
 
-    return fRetval;
+    SdrObject* pSingle = getSelectedIfSingle();
+
+    if(pSingle)
+    {
+        return pSingle->getSdrObjectRotate();
+    }
+
+    const SdrObjectVector aSelection(getSelectedSdrObjectVectorFromSdrMarkView());
+
+    if(aSelection.size())
+    {
+        SdrObject* pObject = aSelection[0];
+
+        if(pObject)
+        {
+            return pObject->getSdrObjectRotate();
+        }
+        else
+        {
+            OSL_ENSURE(false, "OOps, areSdrObjectsSelected() == true, but no first object (!)");
+        }
+    }
+    else
+    {
+        OSL_ENSURE(false, "OOps, areSdrObjectsSelected() == true, but no objects (!)");
+    }
+
+    return 0.0;
 }
 
 void SdrEditView::RotateMarkedObj(const basegfx::B2DPoint& rRefPoint, double fAngle, bool bCopy)
@@ -1368,6 +1425,16 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, bool bReplaceAll)
         // #i38135#
         bool bResetAnimationTimer(false);
 
+        // check if LineWidth is part of the change
+        const bool bLineWidthChange(SFX_ITEM_SET == aAttr.GetItemState(XATTR_LINEWIDTH));
+        sal_Int32 nNewLineWidth(0);
+        sal_Int32 nOldLineWidth(0);
+
+        if(bLineWidthChange)
+        {
+            nNewLineWidth = ((const XLineWidthItem&)aAttr.Get(XATTR_LINEWIDTH)).GetValue();
+        }
+
         for(sal_uInt32 nm(0); nm < aSelection.size(); nm++)
         {
             SdrObject* pObj = aSelection[nm];
@@ -1414,8 +1481,37 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, bool bReplaceAll)
                 aUpdaters.push_back(new E3DModifySceneSnapRectUpdater(pObj));
             }
 
+            if(bLineWidthChange)
+            {
+                nOldLineWidth = ((const XLineWidthItem&)pObj->GetMergedItem(XATTR_LINEWIDTH)).GetValue();
+            }
+
             // set attributes at object
             pObj->SetMergedItemSetAndBroadcast(aAttr, bReplaceAll);
+
+            if(bLineWidthChange)
+            {
+                const SfxItemSet& rSet = pObj->GetMergedItemSet();
+
+                if(nOldLineWidth != nNewLineWidth)
+                {
+                    if(SFX_ITEM_DONTCARE != rSet.GetItemState(XATTR_LINESTARTWIDTH))
+                    {
+                        const sal_Int32 nValAct(((const XLineStartWidthItem&)rSet.Get(XATTR_LINESTARTWIDTH)).GetValue());
+                        const sal_Int32 nValNewStart(std::max((sal_Int32)0, nValAct + (((nNewLineWidth - nOldLineWidth) * 15) / 10)));
+
+                        pObj->SetMergedItem(XLineStartWidthItem(nValNewStart));
+                    }
+
+                    if(SFX_ITEM_DONTCARE != rSet.GetItemState(XATTR_LINEENDWIDTH))
+                    {
+                        const sal_Int32 nValAct(((const XLineEndWidthItem&)rSet.Get(XATTR_LINEENDWIDTH)).GetValue());
+                        const sal_Int32 nValNewEnd(std::max((sal_Int32)0, nValAct + (((nNewLineWidth - nOldLineWidth) * 15) / 10)));
+
+                        pObj->SetMergedItem(XLineEndWidthItem(nValNewEnd));
+                    }
+                }
+            }
 
             SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >(pObj);
 
@@ -1757,6 +1853,48 @@ SfxItemSet SdrEditView::GetGeoAttrFromMarked() const
         {
             aRetSet.Put(SdrMetricItem(SDRATTR_ECKENRADIUS, nRadius));
         }
+
+        const SdrObject* pSingle = getSelectedIfSingle();
+        basegfx::B2DHomMatrix aTransformation;
+
+        if(pSingle)
+        {
+            // single object, get homogen transformation
+            aTransformation = pSingle->getSdrObjectTransformation();
+        }
+        else
+        {
+            // multiple objects, range is collected in aRange, but LogicToPagePos is already applied,
+            // so get again
+            const basegfx::B2DRange aAllRange(getMarkedObjectSnapRange());
+            aTransformation = basegfx::tools::createScaleTranslateB2DHomMatrix(
+                aAllRange.getMinimum(),
+                aAllRange.getMaximum());
+        }
+
+        if(aTransformation.isIdentity())
+        {
+            aRetSet.InvalidateItem(SID_ATTR_TRANSFORM_MATRIX);
+        }
+        else
+        {
+            com::sun::star::geometry::AffineMatrix2D aAffineMatrix2D;
+            basegfx::B2DPoint aPageOffset(0.0, 0.0);
+
+            if(GetSdrPageView())
+            {
+                aPageOffset = GetSdrPageView()->GetPageOrigin();
+            }
+
+            aAffineMatrix2D.m00 = aTransformation.get(0, 0);
+            aAffineMatrix2D.m01 = aTransformation.get(0, 1);
+            aAffineMatrix2D.m02 = aTransformation.get(0, 2) - aPageOffset.getX();
+            aAffineMatrix2D.m10 = aTransformation.get(1, 0);
+            aAffineMatrix2D.m11 = aTransformation.get(1, 1);
+            aAffineMatrix2D.m12 = aTransformation.get(1, 2) - aPageOffset.getY();
+
+            aRetSet.Put(AffineMatrixItem(&aAffineMatrix2D));
+        }
     }
 
     return aRetSet;
@@ -1764,301 +1902,303 @@ SfxItemSet SdrEditView::GetGeoAttrFromMarked() const
 
 void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
 {
-    if(areSdrObjectsSelected())
+    if(!areSdrObjectsSelected())
     {
-        const SdrObjectVector aSelection(getSelectedSdrObjectVectorFromSdrMarkView());
-        basegfx::B2DRange aRange(getMarkedObjectSnapRange());
+        return;
+    }
 
-        if(aRange.isEmpty())
+    const SdrObjectVector aSelection(getSelectedSdrObjectVectorFromSdrMarkView());
+    basegfx::B2DRange aRange(getMarkedObjectSnapRange());
+
+    if(aRange.isEmpty())
+    {
+        return;
+    }
+
+    const basegfx::B2DPoint aPageOrigin(GetSdrPageView()
+        ? GetSdrPageView()->GetPageOrigin()
+        : basegfx::B2DPoint(0.0, 0.0));
+
+    aRange.transform(basegfx::tools::createTranslateB2DHomMatrix(-aPageOrigin));
+
+    const bool bModeIsRotate(SDRDRAG_ROTATE == GetDragMode());
+    basegfx::B2DPoint aNewRotateCenter(0.0, 0.0);
+    basegfx::B2DPoint aOldRotateCenter(aNewRotateCenter);
+
+    if(bModeIsRotate)
+    {
+        const basegfx::B2DPoint aRotateAxe(GetRef1() - aPageOrigin);
+
+        aNewRotateCenter = aOldRotateCenter = aRotateAxe;
+    }
+
+    SfxItemSet aSetAttr(getSdrModelFromSdrView().GetItemPool());
+    const SfxPoolItem* pPoolItem = 0;
+
+    // position change?
+    const basegfx::B2DPoint aOldTranslate(aRange.getMinimum());
+    basegfx::B2DPoint aNewTranslate(aOldTranslate);
+
+    if (SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_POS_X,true,&pPoolItem))
+    {
+        aNewTranslate.setX(((const SfxInt32Item*)pPoolItem)->GetValue());
+    }
+
+    if (SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_POS_Y,true,&pPoolItem))
+    {
+        aNewTranslate.setY(((const SfxInt32Item*)pPoolItem)->GetValue());
+    }
+
+    // scale change?
+    const basegfx::B2DVector aOldSize(aRange.getRange());
+    basegfx::B2DVector aNewSize(aOldSize);
+    bool bChgHgt(false);
+
+    if (SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_WIDTH,true,&pPoolItem))
+    {
+        aNewSize.setX(((const SfxUInt32Item*)pPoolItem)->GetValue());
+    }
+
+    if (SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_HEIGHT,true,&pPoolItem))
+    {
+        aNewSize.setY(((const SfxUInt32Item*)pPoolItem)->GetValue());
+        bChgHgt = true;
+    }
+
+    RECT_POINT eSizePoint(RP_MM);
+    const bool bScaleChanged(!aNewSize.equal(aOldSize));
+
+    if(bScaleChanged)
+    {
+        eSizePoint=(RECT_POINT)((const SfxAllEnumItem&)rAttr.Get(SID_ATTR_TRANSFORM_SIZE_POINT)).GetValue();
+    }
+
+    // rotation change?
+    const double fOldRotateAngle(GetMarkedObjRotate());
+    double fNewRotateAngle(fOldRotateAngle);
+
+    if (SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_ANGLE,true,&pPoolItem))
+    {
+        const sal_Int32 nAllRot(((const SfxInt32Item*)pPoolItem)->GetValue());
+        fNewRotateAngle = (((36000 - nAllRot) % 36000) * F_PI) / 18000.0;
+    }
+
+    const bool bRotate(!basegfx::fTools::equal(fOldRotateAngle, fNewRotateAngle));
+
+    // #86909# pos rot point x
+    if(bRotate || SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_ROT_X, true ,&pPoolItem))
+    {
+        aNewRotateCenter.setX(((const SfxInt32Item&)rAttr.Get(SID_ATTR_TRANSFORM_ROT_X)).GetValue());
+    }
+
+    // #86909# pos rot point y
+    if(bRotate || SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_ROT_Y, true ,&pPoolItem))
+    {
+        aNewRotateCenter.setY(((const SfxInt32Item&)rAttr.Get(SID_ATTR_TRANSFORM_ROT_Y)).GetValue());
+    }
+
+    // shear change?
+    double fShearAngle(0.0);
+    basegfx::B2DPoint aShearOffset(0.0, 0.0);
+    bool bShearVert(false);
+    bool bShear(false);
+
+    if(SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_TRANSFORM_SHEAR,true,&pPoolItem))
+    {
+        const sal_Int32 nAllShear(((const SfxInt32Item*)pPoolItem)->GetValue());
+        const double fMaxShearRange(F_PI2 * (89.0/90.0));
+        double fNewShearAngle(((-nAllShear) * F_PI) / 18000.0);
+
+        fNewShearAngle = basegfx::snapToRange(fNewShearAngle, -F_PI, F_PI);
+        fNewShearAngle = basegfx::clamp(fNewShearAngle, -fMaxShearRange, fMaxShearRange);
+
+        bShearVert = ((const SfxBoolItem&)rAttr.Get(SID_ATTR_TRANSFORM_SHEAR_VERTICAL)).GetValue();
+        double fOldShearAngle(GetMarkedObjShearX());
+
+        if(bShearVert)
         {
-            return;
+            // Currently only ShearX is directly used at the SdrObject since the homogen
+            // matrix only has six degrees of freedom and it has to be decided which one
+            // to use. It can be shown mathematically that a ShearY about degree x is
+            // the same as a 90 degree rotation, a ShearY(-x) and a -90 degree back-rotation.
+            // Exactly this will be used below. It also shows that the ShearY is -ShearX, thus
+            // the compare value can be detected
+            fOldShearAngle = -fOldShearAngle;
         }
 
-        const basegfx::B2DPoint aPageOrigin(GetSdrPageView()
-            ? GetSdrPageView()->GetPageOrigin()
-            : basegfx::B2DPoint(0.0, 0.0));
-
-        aRange.transform(basegfx::tools::createTranslateB2DHomMatrix(-aPageOrigin));
-
-        const bool bModeIsRotate(SDRDRAG_ROTATE == GetDragMode());
-        basegfx::B2DPoint aNewRotateCenter(0.0, 0.0);
-        basegfx::B2DPoint aOldRotateCenter(aNewRotateCenter);
-
-        if(bModeIsRotate)
+        if(!basegfx::fTools::equal(fNewShearAngle, fOldShearAngle))
         {
-            const basegfx::B2DPoint aRotateAxe(GetRef1() - aPageOrigin);
-
-            aNewRotateCenter = aOldRotateCenter = aRotateAxe;
+            fShearAngle = fNewShearAngle - fOldShearAngle;
+            bShear = true;
         }
 
-        SfxItemSet aSetAttr(getSdrModelFromSdrView().GetItemPool());
-        const SfxPoolItem* pPoolItem = 0;
-
-        // position change?
-        const basegfx::B2DPoint aOldTranslate(aRange.getMinimum());
-        basegfx::B2DPoint aNewTranslate(aOldTranslate);
-
-        if (SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_POS_X,true,&pPoolItem))
+        if(bShear)
         {
-            aNewTranslate.setX(((const SfxInt32Item*)pPoolItem)->GetValue());
+            aShearOffset.setX(((const SfxInt32Item&)rAttr.Get(SID_ATTR_TRANSFORM_SHEAR_X)).GetValue());
+            aShearOffset.setY(((const SfxInt32Item&)rAttr.Get(SID_ATTR_TRANSFORM_SHEAR_Y)).GetValue());
+        }
+    }
+
+    bool bSetAttr(false);
+
+    // AutoGrow
+    if (SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_AUTOWIDTH,true,&pPoolItem))
+    {
+        bool bAutoGrow=((const SfxBoolItem*)pPoolItem)->GetValue();
+        aSetAttr.Put(SdrOnOffItem(SDRATTR_TEXT_AUTOGROWWIDTH, bAutoGrow));
+        bSetAttr = true;
+    }
+
+    if (SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_AUTOHEIGHT,true,&pPoolItem))
+    {
+        bool bAutoGrow=((const SfxBoolItem*)pPoolItem)->GetValue();
+        aSetAttr.Put(SdrOnOffItem(SDRATTR_TEXT_AUTOGROWHEIGHT, bAutoGrow));
+        bSetAttr = true;
+    }
+
+    // rounded edge changed?
+    if (mbEdgeRadiusAllowed && SFX_ITEM_SET==rAttr.GetItemState(SDRATTR_ECKENRADIUS,true,&pPoolItem))
+    {
+        sal_Int32 nRadius=((SdrMetricItem*)pPoolItem)->GetValue();
+        aSetAttr.Put(SdrMetricItem(SDRATTR_ECKENRADIUS, nRadius));
+        bSetAttr = true;
+    }
+
+    ForcePossibilities();
+    BegUndo(ImpGetResStr(STR_EditTransform), getSelectionDescription(aSelection));
+
+    if(bSetAttr)
+    {
+        SetAttrToMarked(aSetAttr, false);
+    }
+
+    // change scale
+    if(bScaleChanged && (mbResizeFreeAllowed || mbResizePropAllowed))
+    {
+        basegfx::B2DPoint aRefPoint(aRange.getMinimum());
+
+        switch(eSizePoint)
+        {
+            default: break; // case RP_LT
+            case RP_MT: aRefPoint = basegfx::B2DPoint(aRange.getCenterX(), aRange.getMinY()); break;
+            case RP_RT: aRefPoint = basegfx::B2DPoint(aRange.getMaxX(), aRange.getMinY()); break;
+            case RP_LM: aRefPoint = basegfx::B2DPoint(aRange.getMinX(), aRange.getCenterY()); break;
+            case RP_MM: aRefPoint = aRange.getCenter(); break;
+            case RP_RM: aRefPoint = basegfx::B2DPoint(aRange.getMaxX(), aRange.getCenterY()); break;
+            case RP_LB: aRefPoint = basegfx::B2DPoint(aRange.getMinX(), aRange.getMaxY()); break;
+            case RP_MB: aRefPoint = basegfx::B2DPoint(aRange.getCenterX(), aRange.getMaxY()); break;
+            case RP_RB: aRefPoint = aRange.getMaximum(); break;
         }
 
-        if (SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_POS_Y,true,&pPoolItem))
+        aRefPoint += aPageOrigin;
+
+        const basegfx::B2DTuple aScale(
+            aNewSize.getX() / (basegfx::fTools::equalZero(aOldSize.getX()) ? 1.0 : aOldSize.getX()),
+            aNewSize.getY() / (basegfx::fTools::equalZero(aOldSize.getY()) ? 1.0 : aOldSize.getY()));
+
+        ResizeMarkedObj(aRefPoint, aScale);
+    }
+
+    // change shear
+    if(bShear && mbShearAllowed)
+    {
+        basegfx::B2DPoint aRef(aShearOffset + aPageOrigin);
+
+        if(bShearVert)
         {
-            aNewTranslate.setY(((const SfxInt32Item*)pPoolItem)->GetValue());
+            // see explanation at setting bShearVert
+            RotateMarkedObj(aRef, F_PI2);
+            ShearMarkedObj(aRef, -fShearAngle, true);
+            RotateMarkedObj(aRef, -F_PI2);
         }
-
-        // scale change?
-        const basegfx::B2DVector aOldSize(aRange.getRange());
-        basegfx::B2DVector aNewSize(aOldSize);
-        bool bChgHgt(false);
-
-        if (SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_WIDTH,true,&pPoolItem))
+        else
         {
-            aNewSize.setX(((const SfxUInt32Item*)pPoolItem)->GetValue());
+            ShearMarkedObj(aRef, fShearAngle, false);
         }
+    }
 
-        if (SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_HEIGHT,true,&pPoolItem))
+    // change rotation
+    if(bRotate && (mbRotateFreeAllowed || mbRotate90Allowed))
+    {
+        const basegfx::B2DPoint aRef(aNewRotateCenter + aPageOrigin);
+
+        RotateMarkedObj(aRef, fNewRotateAngle - fOldRotateAngle);
+    }
+
+    // set rotation point position
+    if(bModeIsRotate && !aNewRotateCenter.equal(aOldRotateCenter))
+    {
+        const basegfx::B2DPoint aNewRef1(aNewRotateCenter + aPageOrigin);
+
+        SetRef1(aNewRef1);
+    }
+
+    // change translation
+    if(!aOldTranslate.equal(aNewTranslate) && mbMoveAllowedOnSelection)
+    {
+        MoveMarkedObj(aNewTranslate - aOldTranslate);
+    }
+
+    // protect position
+    if(SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_TRANSFORM_PROTECT_POS, true, &pPoolItem))
+    {
+        const bool bProtPos(((const SfxBoolItem*)pPoolItem)->GetValue());
+        bool bChanged(false);
+
+        for(sal_uInt32 i(0); i < aSelection.size(); i++)
         {
-            aNewSize.setY(((const SfxUInt32Item*)pPoolItem)->GetValue());
-            bChgHgt = true;
-        }
+            SdrObject* pObj = aSelection[i];
 
-        RECT_POINT eSizePoint(RP_MM);
-        const bool bScaleChanged(!aNewSize.equal(aOldSize));
-
-        if(bScaleChanged)
-        {
-            eSizePoint=(RECT_POINT)((const SfxAllEnumItem&)rAttr.Get(SID_ATTR_TRANSFORM_SIZE_POINT)).GetValue();
-        }
-
-        // rotation change?
-        const double fOldRotateAngle(GetMarkedObjRotate());
-        double fNewRotateAngle(fOldRotateAngle);
-
-        if (SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_ANGLE,true,&pPoolItem))
-        {
-            const sal_Int32 nAllRot(((const SfxInt32Item*)pPoolItem)->GetValue());
-            fNewRotateAngle = (((36000 - nAllRot) % 36000) * F_PI) / 18000.0;
-        }
-
-        const bool bRotate(!basegfx::fTools::equal(fOldRotateAngle, fNewRotateAngle));
-
-        // #86909# pos rot point x
-        if(bRotate || SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_ROT_X, true ,&pPoolItem))
-        {
-            aNewRotateCenter.setX(((const SfxInt32Item&)rAttr.Get(SID_ATTR_TRANSFORM_ROT_X)).GetValue());
-        }
-
-        // #86909# pos rot point y
-        if(bRotate || SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_ROT_Y, true ,&pPoolItem))
-        {
-            aNewRotateCenter.setY(((const SfxInt32Item&)rAttr.Get(SID_ATTR_TRANSFORM_ROT_Y)).GetValue());
-        }
-
-        // shear change?
-        double fShearAngle(0.0);
-        basegfx::B2DPoint aShearOffset(0.0, 0.0);
-        bool bShearVert(false);
-        bool bShear(false);
-
-        if(SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_TRANSFORM_SHEAR,true,&pPoolItem))
-        {
-            const sal_Int32 nAllShear(((const SfxInt32Item*)pPoolItem)->GetValue());
-            const double fMaxShearRange(F_PI2 * (89.0/90.0));
-            double fNewShearAngle(((-nAllShear) * F_PI) / 18000.0);
-
-            fNewShearAngle = basegfx::snapToRange(fNewShearAngle, -F_PI, F_PI);
-            fNewShearAngle = basegfx::clamp(fNewShearAngle, -fMaxShearRange, fMaxShearRange);
-
-            bShearVert = ((const SfxBoolItem&)rAttr.Get(SID_ATTR_TRANSFORM_SHEAR_VERTICAL)).GetValue();
-            double fOldShearAngle(GetMarkedObjShearX());
-
-            if(bShearVert)
+            if(pObj->IsMoveProtect() != bProtPos)
             {
-                // Currently only ShearX is directly used at the SdrObject since the homogen
-                // matrix only has six degrees of freedom and it has to be decided which one
-                // to use. It can be shown mathematically that a ShearY about degree x is
-                // the same as a 90 degree rotation, a ShearY(-x) and a -90 degree back-rotation.
-                // Exactly this will be used below. It also shows that the ShearY is -ShearX, thus
-                // the compare value can be detected
-                fOldShearAngle = -fOldShearAngle;
-            }
+                bChanged = true;
+                pObj->SetMoveProtect(bProtPos);
 
-            if(!basegfx::fTools::equal(fNewShearAngle, fOldShearAngle))
+                if(bProtPos)
+                {
+                    pObj->SetResizeProtect(true);
+                }
+            }
+        }
+
+        if(bChanged)
+        {
+            mbMoveProtect = bProtPos;
+
+            if(bProtPos)
             {
-                fShearAngle = fNewShearAngle - fOldShearAngle;
-                bShear = true;
-            }
-
-            if(bShear)
-            {
-                aShearOffset.setX(((const SfxInt32Item&)rAttr.Get(SID_ATTR_TRANSFORM_SHEAR_X)).GetValue());
-                aShearOffset.setY(((const SfxInt32Item&)rAttr.Get(SID_ATTR_TRANSFORM_SHEAR_Y)).GetValue());
+                mbResizeProtect = true;
             }
         }
+    }
 
-        bool bSetAttr(false);
-
-        // AutoGrow
-        if (SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_AUTOWIDTH,true,&pPoolItem))
+    if(!mbMoveProtect)
+    {
+        // protect size
+        if(SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_TRANSFORM_PROTECT_SIZE, true, &pPoolItem))
         {
-            bool bAutoGrow=((const SfxBoolItem*)pPoolItem)->GetValue();
-            aSetAttr.Put(SdrOnOffItem(SDRATTR_TEXT_AUTOGROWWIDTH, bAutoGrow));
-            bSetAttr = true;
-        }
-
-        if (SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_AUTOHEIGHT,true,&pPoolItem))
-        {
-            bool bAutoGrow=((const SfxBoolItem*)pPoolItem)->GetValue();
-            aSetAttr.Put(SdrOnOffItem(SDRATTR_TEXT_AUTOGROWHEIGHT, bAutoGrow));
-            bSetAttr = true;
-        }
-
-        // rounded edge changed?
-        if (mbEdgeRadiusAllowed && SFX_ITEM_SET==rAttr.GetItemState(SDRATTR_ECKENRADIUS,true,&pPoolItem))
-        {
-            sal_Int32 nRadius=((SdrMetricItem*)pPoolItem)->GetValue();
-            aSetAttr.Put(SdrMetricItem(SDRATTR_ECKENRADIUS, nRadius));
-            bSetAttr = true;
-        }
-
-        ForcePossibilities();
-        BegUndo(ImpGetResStr(STR_EditTransform), getSelectionDescription(aSelection));
-
-        if(bSetAttr)
-        {
-            SetAttrToMarked(aSetAttr, false);
-        }
-
-        // change scale
-        if(bScaleChanged && (mbResizeFreeAllowed || mbResizePropAllowed))
-        {
-            basegfx::B2DPoint aRefPoint(aRange.getMinimum());
-
-            switch(eSizePoint)
-            {
-                default: break; // case RP_LT
-                case RP_MT: aRefPoint = basegfx::B2DPoint(aRange.getCenterX(), aRange.getMinY()); break;
-                case RP_RT: aRefPoint = basegfx::B2DPoint(aRange.getMaxX(), aRange.getMinY()); break;
-                case RP_LM: aRefPoint = basegfx::B2DPoint(aRange.getMinX(), aRange.getCenterY()); break;
-                case RP_MM: aRefPoint = aRange.getCenter(); break;
-                case RP_RM: aRefPoint = basegfx::B2DPoint(aRange.getMaxX(), aRange.getCenterY()); break;
-                case RP_LB: aRefPoint = basegfx::B2DPoint(aRange.getMinX(), aRange.getMaxY()); break;
-                case RP_MB: aRefPoint = basegfx::B2DPoint(aRange.getCenterX(), aRange.getMaxY()); break;
-                case RP_RB: aRefPoint = aRange.getMaximum(); break;
-            }
-
-            aRefPoint += aPageOrigin;
-
-            const basegfx::B2DTuple aScale(
-                aNewSize.getX() / (basegfx::fTools::equalZero(aOldSize.getX()) ? 1.0 : aOldSize.getX()),
-                aNewSize.getY() / (basegfx::fTools::equalZero(aOldSize.getY()) ? 1.0 : aOldSize.getY()));
-
-            ResizeMarkedObj(aRefPoint, aScale);
-        }
-
-        // change shear
-        if(bShear && mbShearAllowed)
-        {
-            basegfx::B2DPoint aRef(aShearOffset + aPageOrigin);
-
-            if(bShearVert)
-            {
-                // see explanation at setting bShearVert
-                RotateMarkedObj(aRef, F_PI2);
-                ShearMarkedObj(aRef, -fShearAngle, true);
-                RotateMarkedObj(aRef, -F_PI2);
-            }
-            else
-            {
-                ShearMarkedObj(aRef, fShearAngle, false);
-            }
-        }
-
-        // change rotation
-        if(bRotate && (mbRotateFreeAllowed || mbRotate90Allowed))
-        {
-            const basegfx::B2DPoint aRef(aNewRotateCenter + aPageOrigin);
-
-            RotateMarkedObj(aRef, fNewRotateAngle - fOldRotateAngle);
-        }
-
-        // set rotation point position
-        if(bModeIsRotate && !aNewRotateCenter.equal(aOldRotateCenter))
-        {
-            const basegfx::B2DPoint aNewRef1(aNewRotateCenter + aPageOrigin);
-
-            SetRef1(aNewRef1);
-        }
-
-        // change translation
-        if(!aOldTranslate.equal(aNewTranslate) && mbMoveAllowedOnSelection)
-        {
-            MoveMarkedObj(aNewTranslate - aOldTranslate);
-        }
-
-        // protect position
-        if(SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_TRANSFORM_PROTECT_POS, true, &pPoolItem))
-        {
-            const bool bProtPos(((const SfxBoolItem*)pPoolItem)->GetValue());
+            const bool bProtSize(((const SfxBoolItem*)pPoolItem)->GetValue());
             bool bChanged(false);
 
             for(sal_uInt32 i(0); i < aSelection.size(); i++)
             {
                 SdrObject* pObj = aSelection[i];
 
-                if(pObj->IsMoveProtect() != bProtPos)
+                if(pObj->IsResizeProtect() != bProtSize)
                 {
                     bChanged = true;
-                    pObj->SetMoveProtect(bProtPos);
-
-                    if(bProtPos)
-                    {
-                        pObj->SetResizeProtect(true);
-                    }
+                    pObj->SetResizeProtect(bProtSize);
                 }
             }
 
             if(bChanged)
             {
-                mbMoveProtect = bProtPos;
-
-                if(bProtPos)
-                {
-                    mbResizeProtect = true;
-                }
+                mbResizeProtect = bProtSize;
             }
         }
-
-        if(!mbMoveProtect)
-        {
-            // protect size
-            if(SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_TRANSFORM_PROTECT_SIZE, true, &pPoolItem))
-            {
-                const bool bProtSize(((const SfxBoolItem*)pPoolItem)->GetValue());
-                bool bChanged(false);
-
-                for(sal_uInt32 i(0); i < aSelection.size(); i++)
-                {
-                    SdrObject* pObj = aSelection[i];
-
-                    if(pObj->IsResizeProtect() != bProtSize)
-                    {
-                        bChanged = true;
-                        pObj->SetResizeProtect(bProtSize);
-                    }
-                }
-
-                if(bChanged)
-                {
-                    mbResizeProtect = bProtSize;
-                }
-            }
-        }
-
-        EndUndo();
     }
+
+    EndUndo();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

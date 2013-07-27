@@ -148,7 +148,7 @@ void DrawViewShell::UIDeactivated( SfxInPlaceClient* pCli )
 
 void DrawViewShell::Deactivate(sal_Bool bIsMDIActivate)
 {
-    ViewShell::Deactivate(bIsMDIActivate);
+    // Do not forward to ViewShell::Deactivate() to prevent a context change.
 }
 
 namespace
@@ -377,6 +377,8 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
             eEMode = EM_MASTERPAGE;
         }
 
+        GetViewShellBase().GetDrawController().BroadcastContextChange();
+
         meEditMode = eEMode;
         mbIsLayerModeActive = bIsLayerModeActive;
 
@@ -498,6 +500,8 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
         Invalidate( SID_TITLE_MASTERPAGE );
         Invalidate( SID_NOTES_MASTERPAGE );
         Invalidate( SID_HANDOUT_MASTERPAGE );
+
+        SetContextName(GetSidebarContextName());
     }
 }
 

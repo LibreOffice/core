@@ -76,6 +76,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/sidebar/Sidebar.hxx>
 #include <svx/svxids.hrc>
 #include <svx/zoomitem.hxx>
 #include <svx/svxdlg.hxx>
@@ -186,11 +187,10 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
 
         case SID_SLIDE_TRANSITIONS_PANEL:
         {
-            // Make the slide transition panel visible (expand it)
-            // in the tool pane.
-            if (mrSlideSorter.GetViewShellBase() != NULL)
-                framework::FrameworkHelper::Instance(*mrSlideSorter.GetViewShellBase())
-                    ->RequestTaskPanel(sd::framework::FrameworkHelper::msSlideTransitionTaskPanelURL);
+            // Make the slide transition panel visible in the sidebar.
+            ::sfx2::sidebar::Sidebar::ShowPanel(
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SlideTransitionPanel")),
+                pShell->GetViewFrame()->GetFrame().GetFrameInterface());
             rRequest.Ignore ();
             break;
         }

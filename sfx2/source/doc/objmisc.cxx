@@ -2366,20 +2366,20 @@ void SfxObjectShell::StoreLog()
 
     if ( pImp->m_xLogRing.is() )
     {
-#ifdef WNT
-        ::rtl::OUString aFileURL = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "${$BRAND_BASE_DIR/program/bootstrap.ini:UserInstallation}" ) );
-#else
-        ::rtl::OUString aFileURL = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "${$BRAND_BASE_DIR/program/bootstraprc:UserInstallation}" ) );
-#endif
-
+        ::rtl::OUString aFileURL = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "${$OOO_BASE_DIR/program/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}" ) );
+//#ifdef WNT
+//        ::rtl::OUString aFileURL = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "${$OOO_BASE_DIR/program/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}" ) );
+//#else
+//        ::rtl::OUString aFileURL = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "${$OOO_BASE_DIR/program/bootstraprc:UserInstallation}" ) );
+//#endif
         ::rtl::Bootstrap::expandMacros( aFileURL );
 
-#ifdef WNT
-        ::rtl::OUString aBuildID = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "${$BRAND_BASE_DIR/program/setup.ini:buildid}" ) );
-#else
-        ::rtl::OUString aBuildID = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "${$BRAND_BASE_DIR/program/setuprc:buildid}" ) );
-#endif
-
+//#ifdef WNT
+//        ::rtl::OUString aBuildID = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "${$OOO_BASE_DIR/program/setup.ini:buildid}" ) );
+//#else
+//        ::rtl::OUString aBuildID = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "${$OOO_BASE_DIR/program/setuprc:buildid}" ) );
+//#endif
+        ::rtl::OUString aBuildID = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "${$OOO_BASE_DIR/program/" SAL_CONFIGFILE("setup") ":buildid}" ) );
         ::rtl::Bootstrap::expandMacros( aBuildID );
 
         if ( aFileURL.getLength() )

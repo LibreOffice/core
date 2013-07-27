@@ -130,12 +130,12 @@ public class ScriptMetaData extends ScriptEntry implements Cloneable {
     // to be exposed at all
 
     private static final String SHARE =
-        "vnd.sun.star.expand:${$BRAND_BASE_DIR/program/" +
+        "vnd.sun.star.expand:${$OOO_BASE_DIR/program/" +
         PathUtils.BOOTSTRAP_NAME +
         "::BaseInstallation}/share";
 
     private static final String USER =
-        "vnd.sun.star.expand:${$BRAND_BASE_DIR/program/" +
+        "vnd.sun.star.expand:${$OOO_BASE_DIR/program/" +
         PathUtils.BOOTSTRAP_NAME +
         "::UserInstallation}/user";
 

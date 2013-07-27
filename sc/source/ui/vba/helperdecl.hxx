@@ -26,7 +26,7 @@
 namespace comphelper {
 namespace service_decl {
 template <typename ImplT_, typename WithArgsT = with_args<false> >
-struct vba_service_class_ : public serviceimpl_base< detail::OwnServiceImpl<ImplT_>, WithArgsT >
+struct vba_service_class_ : public serviceimpl_base< vba_detail::OwnServiceImpl<ImplT_>, WithArgsT >
 {
     typedef serviceimpl_base< detail::OwnServiceImpl<ImplT_>, WithArgsT > baseT;
     /** Default ctor.  Implementation class without args, expecting

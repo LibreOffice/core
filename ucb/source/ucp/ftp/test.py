@@ -29,7 +29,7 @@ def grep(pattern,dirname,names):
 			lines = open(filename,"r").readlines()
 			for line in lines:
 				if pattern.search(line):
-					print filename
+					print(filename)
 					break
 
 

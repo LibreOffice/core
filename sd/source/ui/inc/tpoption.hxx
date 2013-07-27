@@ -117,6 +117,7 @@ private:
     MetricField aMtrFldTabstop;
 
     CheckBox    aCbxStartWithActualPage;
+    CheckBox    aCbxStartWithPresenterScreen;
     FixedLine   aGrpStartWithActualPage;
     FixedLine   aTxtCompatibility;
     CheckBox    aCbxUsePrinterMetrics;

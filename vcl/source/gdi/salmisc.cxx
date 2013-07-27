@@ -288,8 +288,9 @@ static void ImplTCToPAL( const BitmapBuffer& rSrcBuffer, BitmapBuffer& rDstBuffe
 // - StretchAndConvert -
 // ---------------------
 
-BitmapBuffer* StretchAndConvert( const BitmapBuffer& rSrcBuffer, const SalTwoRect& rTwoRect,
-                                 sal_uLong nDstBitmapFormat, BitmapPalette* pDstPal, ColorMask* pDstMask )
+BitmapBuffer* StretchAndConvert(
+    const BitmapBuffer& rSrcBuffer, const SalTwoRect& rTwoRect,
+    sal_uLong nDstBitmapFormat, const BitmapPalette* pDstPal, const ColorMask* pDstMask )
 {
     FncGetPixel     pFncGetPixel;
     FncSetPixel     pFncSetPixel;

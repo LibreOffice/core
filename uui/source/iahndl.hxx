@@ -51,7 +51,7 @@ namespace com { namespace sun { namespace star {
         class XMultiServiceFactory;
     }
     namespace security {
-        class DocumentSignatureInformation;
+        struct DocumentSignatureInformation;
     }
     namespace task {
         class FutureDocumentVersionProductUpdateRequest;

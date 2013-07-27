@@ -22,6 +22,7 @@
 
 
 import com.sun.star.awt.Rectangle;
+import com.sun.star.awt.MessageBoxType;
 import com.sun.star.awt.XMessageBox;
 import com.sun.star.awt.XMessageBoxFactory;
 import com.sun.star.awt.XVclWindowPeer;
@@ -164,9 +165,7 @@ public class MessageBox  {
         try {
             Object oToolkit = m_xMCF.createInstanceWithContext("com.sun.star.awt.Toolkit", m_xContext);
             XMessageBoxFactory xMessageBoxFactory = (XMessageBoxFactory) UnoRuntime.queryInterface(XMessageBoxFactory.class, oToolkit);
-            // rectangle may be empty if position is in the center of the parent peer
-            Rectangle aRectangle = new Rectangle();
-            XMessageBox xMessageBox = xMessageBoxFactory.createMessageBox(_xParentWindowPeer, aRectangle, "errorbox", com.sun.star.awt.MessageBoxButtons.BUTTONS_OK, _sTitle, _sMessage);
+            XMessageBox xMessageBox = xMessageBoxFactory.createMessageBox(_xParentWindowPeer, MessageBoxType.ERRORBOX, com.sun.star.awt.MessageBoxButtons.BUTTONS_OK, _sTitle, _sMessage);
             xComponent = (XComponent) UnoRuntime.queryInterface(XComponent.class, xMessageBox);
             if (xMessageBox != null){
                 short nResult = xMessageBox.execute();

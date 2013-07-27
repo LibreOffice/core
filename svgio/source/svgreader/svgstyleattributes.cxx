@@ -318,10 +318,11 @@ namespace svgio
             if(!aSvgGradientEntryVector.empty())
             {
                 basegfx::B2DHomMatrix aGeoToUnit;
+                basegfx::B2DHomMatrix aGradientTransform;
 
                 if(rFillGradient.getGradientTransform())
                 {
-                    aGeoToUnit = *rFillGradient.getGradientTransform();
+                    aGradientTransform = *rFillGradient.getGradientTransform();
                 }
 
                 if(userSpaceOnUse == rFillGradient.getGradientUnits())
@@ -366,6 +367,7 @@ namespace svgio
                     drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(
                         rTarget,
                         new drawinglayer::primitive2d::SvgLinearGradientPrimitive2D(
+                            aGradientTransform,
                             rPath,
                             aSvgGradientEntryVector,
                             aStart,
@@ -427,6 +429,7 @@ namespace svgio
                     drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(
                         rTarget,
                         new drawinglayer::primitive2d::SvgRadialGradientPrimitive2D(
+                            aGradientTransform,
                             rPath,
                             aSvgGradientEntryVector,
                             aStart,
@@ -994,12 +997,9 @@ namespace svgio
             const basegfx::B2DPolyPolygon& rPath,
             drawinglayer::primitive2d::Primitive2DSequence& rTarget) const
         {
-            const bool bIsLine(1 == rPath.count()
-                && !rPath.areControlPointsUsed()
-                && 2 == rPath.getB2DPolygon(0).count());
-
             if(!rPath.count())
             {
+                // no geometry at all
                 return;
             }
 
@@ -1007,13 +1007,7 @@ namespace svgio
 
             if(aGeoRange.isEmpty())
             {
-                return;
-            }
-
-            if(!bIsLine && // not for lines
-                (basegfx::fTools::equalZero(aGeoRange.getWidth())
-                || basegfx::fTools::equalZero(aGeoRange.getHeight())))
-            {
+                // no geometry range
                 return;
             }
 
@@ -1021,11 +1015,21 @@ namespace svgio
 
             if(basegfx::fTools::equalZero(fOpacity))
             {
+                // not visible
                 return;
             }
 
+            // check if it's a line
+            const bool bNoWidth(basegfx::fTools::equalZero(aGeoRange.getWidth()));
+            const bool bNoHeight(basegfx::fTools::equalZero(aGeoRange.getHeight()));
+            const bool bIsTwoPointLine(1 == rPath.count()
+                && !rPath.areControlPointsUsed()
+                && 2 == rPath.getB2DPolygon(0).count());
+            const bool bIsLine(bIsTwoPointLine || bNoWidth || bNoHeight);
+
             if(!bIsLine)
             {
+                // create fill
                 basegfx::B2DPolyPolygon aPath(rPath);
                 const bool bNeedToCheckClipRule(SVGTokenPath == mrOwner.getType() || SVGTokenPolygon == mrOwner.getType());
                 const bool bClipPathIsNonzero(!bIsLine && bNeedToCheckClipRule && mbIsClipPathContent && FillRule_nonzero == maClipRule);
@@ -1040,6 +1044,7 @@ namespace svgio
                 add_fill(aPath, rTarget, aGeoRange);
             }
 
+            // create stroke
             add_stroke(rPath, rTarget, aGeoRange);
 
             // Svg supports markers for path, polygon, polyline and line
@@ -1079,6 +1084,18 @@ namespace svgio
                     aSource = drawinglayer::primitive2d::Primitive2DSequence(&xRef, 1);
                 }
 
+                if(pTransform)
+                {
+                    // create embedding group element with transformation. This applies the given
+                    // transformation to the graphical content, but *not* to mask and/or clip (as needed)
+                    const drawinglayer::primitive2d::Primitive2DReference xRef(
+                        new drawinglayer::primitive2d::TransformPrimitive2D(
+                            *pTransform,
+                            aSource));
+
+                    aSource = drawinglayer::primitive2d::Primitive2DSequence(&xRef, 1);
+                }
+
                 if(getClipPathXLink().getLength())
                 {
                     // try to access linked ClipPath
@@ -1105,17 +1122,6 @@ namespace svgio
 
                     if(aSource.hasElements()) // test again, applied mask may have lead to empty geometry
                     {
-                        if(pTransform)
-                        {
-                            // create embedding group element with transformation
-                            const drawinglayer::primitive2d::Primitive2DReference xRef(
-                                new drawinglayer::primitive2d::TransformPrimitive2D(
-                                    *pTransform,
-                                    aSource));
-
-                            aSource = drawinglayer::primitive2d::Primitive2DSequence(&xRef, 1);
-                        }
-
                         // append to current target
                         drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(rTarget, aSource);
                     }
@@ -1165,6 +1171,8 @@ namespace svgio
             mpMarkerEndXLink(0),
             maFillRule(FillRule_notset),
             maClipRule(FillRule_nonzero),
+            maBaselineShift(BaselineShift_Baseline),
+            maBaselineShiftNumber(0),
             mbIsClipPathContent(SVGTokenClipPathNode == mrOwner.getType()),
             mbStrokeDasharraySet(false)
         {
@@ -1183,7 +1191,7 @@ namespace svgio
         {
         }
 
-        void SvgStyleAttributes::parseStyleAttribute(const rtl::OUString& /*rTokenName*/, SVGToken aSVGToken, const rtl::OUString& aContent)
+        void SvgStyleAttributes::parseStyleAttribute(const rtl::OUString& /* rTokenName */, SVGToken aSVGToken, const rtl::OUString& aContent)
         {
             switch(aSVGToken)
             {
@@ -1787,6 +1795,55 @@ namespace svgio
                     readLocalUrl(aContent, maMarkerEndXLink);
                     break;
                 }
+                case SVGTokenDisplay:
+                {
+                    // There may be display:none statements inside of style defines, e.g. the following line:
+                    // style="display:none"
+                    // taken from a svg example; this needs to be parsed and set at the owning node. Do not call
+                    // mrOwner.parseAttribute(...) here, this would lead to a recursion
+                    if(aContent.getLength())
+                    {
+                        mrOwner.setDisplay(getDisplayFromContent(aContent));
+                    }
+                    break;
+                }
+                case SVGTokenBaselineShift:
+                {
+                    if(aContent.getLength())
+                    {
+                        static rtl::OUString aStrSub(rtl::OUString::createFromAscii("sub"));
+                        static rtl::OUString aStrSuper(rtl::OUString::createFromAscii("super"));
+                        SvgNumber aNum;
+
+                        if(aContent.match(aStrSub))
+                        {
+                            setBaselineShift(BaselineShift_Sub);
+                        }
+                        else if(aContent.match(aStrSuper))
+                        {
+                            setBaselineShift(BaselineShift_Super);
+                        }
+                        else if(readSingleNumber(aContent, aNum))
+                        {
+                            setBaselineShiftNumber(aNum);
+
+                            if(Unit_percent == aNum.getUnit())
+                            {
+                                setBaselineShift(BaselineShift_Percentage);
+                            }
+                            else
+                            {
+                                setBaselineShift(BaselineShift_Length);
+                            }
+                        }
+                        else
+                        {
+                            // no BaselineShift or inherit (which is automatically)
+                            setBaselineShift(BaselineShift_Baseline);
+                        }
+                    }
+                    break;
+                }
                 default:
                 {
                     break;
@@ -1960,7 +2017,7 @@ namespace svgio
             return 0;
         }
 
-        const SvgNumber SvgStyleAttributes::getStrokeWidth() const
+        SvgNumber SvgStyleAttributes::getStrokeWidth() const
         {
             if(mbIsClipPathContent)
             {
@@ -1982,7 +2039,7 @@ namespace svgio
             return SvgNumber(1.0);
         }
 
-        const SvgNumber SvgStyleAttributes::getStopOpacity() const
+        SvgNumber SvgStyleAttributes::getStopOpacity() const
         {
             if(maStopOpacity.isSet())
             {
@@ -1993,7 +2050,7 @@ namespace svgio
             return SvgNumber(1.0);
         }
 
-        const SvgNumber SvgStyleAttributes::getFillOpacity() const
+        SvgNumber SvgStyleAttributes::getFillOpacity() const
         {
             if(mbIsClipPathContent)
             {
@@ -2015,7 +2072,7 @@ namespace svgio
             return SvgNumber(1.0);
         }
 
-        const FillRule SvgStyleAttributes::getFillRule() const
+        FillRule SvgStyleAttributes::getFillRule() const
         {
             if(FillRule_notset != maFillRule)
             {
@@ -2056,7 +2113,7 @@ namespace svgio
             return maStrokeDasharray;
         }
 
-        const SvgNumber SvgStyleAttributes::getStrokeDashOffset() const
+        SvgNumber SvgStyleAttributes::getStrokeDashOffset() const
         {
             if(maStrokeDashOffset.isSet())
             {
@@ -2110,7 +2167,7 @@ namespace svgio
             return StrokeLinejoin_miter;
         }
 
-        const SvgNumber SvgStyleAttributes::getStrokeMiterLimit() const
+        SvgNumber SvgStyleAttributes::getStrokeMiterLimit() const
         {
             if(maStrokeMiterLimit.isSet())
             {
@@ -2128,7 +2185,7 @@ namespace svgio
             return SvgNumber(4.0);
         }
 
-        const SvgNumber SvgStyleAttributes::getStrokeOpacity() const
+        SvgNumber SvgStyleAttributes::getStrokeOpacity() const
         {
             if(maStrokeOpacity.isSet())
             {
@@ -2164,10 +2221,28 @@ namespace svgio
             return maFontFamily;
         }
 
-        const SvgNumber SvgStyleAttributes::getFontSize() const
+        SvgNumber SvgStyleAttributes::getFontSize() const
         {
             if(maFontSize.isSet())
             {
+                // #122524# Handle Unit_percent realtive to parent FontSize (see SVG1.1
+                // spec 10.10 Font selection properties ‘font-size’, lastline (klick 'normative
+                // definition of the property')
+                if(Unit_percent == maFontSize.getUnit())
+                {
+                    const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+
+                    if(pSvgStyleAttributes)
+                    {
+                        const SvgNumber aParentNumber = pSvgStyleAttributes->getFontSize();
+
+                        return SvgNumber(
+                            aParentNumber.getNumber() * maFontSize.getNumber() * 0.01,
+                            aParentNumber.getUnit(),
+                            true);
+                    }
+                }
+
                 return maFontSize;
             }
 
@@ -2360,7 +2435,7 @@ namespace svgio
             return 0;
         }
 
-        const rtl::OUString SvgStyleAttributes::getMarkerStartXLink() const
+        rtl::OUString SvgStyleAttributes::getMarkerStartXLink() const
         {
             if(maMarkerStartXLink.getLength())
             {
@@ -2392,7 +2467,7 @@ namespace svgio
             return mpMarkerStartXLink;
         }
 
-        const rtl::OUString SvgStyleAttributes::getMarkerMidXLink() const
+        rtl::OUString SvgStyleAttributes::getMarkerMidXLink() const
         {
             if(maMarkerMidXLink.getLength())
             {
@@ -2424,7 +2499,7 @@ namespace svgio
             return mpMarkerMidXLink;
         }
 
-        const rtl::OUString SvgStyleAttributes::getMarkerEndXLink() const
+        rtl::OUString SvgStyleAttributes::getMarkerEndXLink() const
         {
             if(maMarkerEndXLink.getLength())
             {
@@ -2456,6 +2531,26 @@ namespace svgio
             return mpMarkerEndXLink;
         }
 
+        SvgNumber SvgStyleAttributes::getBaselineShiftNumber() const
+        {
+            // #122524# Handle Unit_percent realtive to parent BaselineShift
+            if(Unit_percent == maBaselineShiftNumber.getUnit())
+            {
+                const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+
+                if(pSvgStyleAttributes)
+                {
+                    const SvgNumber aParentNumber = pSvgStyleAttributes->getBaselineShiftNumber();
+
+                    return SvgNumber(
+                        aParentNumber.getNumber() * maBaselineShiftNumber.getNumber() * 0.01,
+                        aParentNumber.getUnit(),
+                        true);
+                }
+            }
+
+            return maBaselineShiftNumber;
+        }
     } // end of namespace svgreader
 } // end of namespace svgio
 

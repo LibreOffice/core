@@ -59,7 +59,7 @@ VS_VERSION_INFO versioninfo
 			block "040704E4"
 			{
 				// German StringTable
-				value "CompanyName",		"OpenOffice.org\0"
+				value "CompanyName",		"Apache Software Foundation\0"
 				value "FileDescription", "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\0"
 				value "FileVersion",		PPS(VER_LEVEL) "\0"
 				value "ProductVersion",		PPS(VER_LEVEL) "\0"
@@ -71,7 +71,7 @@ VS_VERSION_INFO versioninfo
 			block "040904E4"
 			{
 				// International StringTable
-				value "CompanyName", 		"OpenOffice.org\0"
+				value "CompanyName", 		"Apache Software Foundation\0"
 				value "FileDescription",	"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\0"
 				value "FileVersion",		PPS(VER_LEVEL) "\0"
 				value "ProductVersion",		PPS(VER_LEVEL) "\0"

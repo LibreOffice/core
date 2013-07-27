@@ -27,6 +27,9 @@
         <prop oor:name="ooName" install:module="brand">
             <value >${PRODUCTNAME}</value>
         </prop>
+        <prop oor:name="ooFullname" install:module="brand">
+            <value >${FULLPRODUCTNAME}</value>
+        </prop>
         <prop oor:name="ooSetupVersion" install:module="brand">
             <value >${PRODUCTVERSION}</value>
         </prop>
@@ -41,10 +44,10 @@
             <value >${PRODUCTEXTENSION}</value>
         </prop>
         <prop oor:name="ooXMLFileFormatVersion" install:module="brand">
-            <value >${FILEFORMATVERSION}</value>
+            <value >${OOOXMLFILEFORMATVERSION}</value>
         </prop>
         <prop oor:name="ooXMLFileFormatName" install:module="brand">
-            <value >${FILEFORMATNAME}</value>
+            <value >${OOOXMLFILEFORMATNAME}</value>
         </prop>
         <prop oor:name="ooOpenSourceContext" install:module="brand">
             <value >${OPENSOURCE}</value>
@@ -781,7 +784,7 @@
     <node oor:name="SupportedVersions">
       <node oor:name="OpenOffice.org2+StarOffice8+StarSuite8" oor:op="replace">
         <prop oor:name="Priority">
-          <value>10</value>
+          <value>20</value>
         </prop>
         <prop oor:name="VersionIdentifiers">
           <value oor:separator=",">OpenOffice.org 2=openoffice.org2,StarOffice 8=staroffice8,StarSuite 8=starsuite8</value>
@@ -803,11 +806,6 @@
                 <it>/org.openoffice.Office.DataAccess/DataSources</it>
                 <it>/org.openoffice.Office.DataAccess/DriverManager</it>
               </value>
-            </prop>
-          </node>
-          <node oor:name="Deployment" oor:op="replace">
-            <prop oor:name="MigrationService">
-              <value>com.sun.star.migration.Extensions</value>
             </prop>
           </node>
           <node oor:name="Inet" oor:op="replace">
@@ -933,11 +931,6 @@
               <value>/org.openoffice.Office.Security</value>
             </prop>
           </node>
-          <node oor:name="UI" oor:op="replace">
-            <prop oor:name="IncludedNodes">
-              <value>/org.openoffice.Office.UI/ColorScheme</value>
-            </prop>
-          </node>
           <node oor:name="Writer" oor:op="replace">
             <prop oor:name="IncludedNodes">
               <value>
@@ -951,6 +944,144 @@
           </node>
         </node>
       </node>
+        <node oor:name="OpenOffice.org3" oor:op="replace">
+            <prop oor:name="Priority">
+                <value>10</value>
+            </prop>
+            <prop oor:name="VersionIdentifiers">
+                <value oor:separator=",">OpenOffice.org 3=openoffice.org/3</value>
+            </prop>
+            <node oor:name="MigrationSteps">
+                <node oor:name="Files" oor:op="replace">
+                    <prop oor:name="IncludedFiles">
+                        <value>
+                            <!--Datasources-->
+                            <it>.*/database/biblio/biblio\.dbf</it>
+                            <!--Common-->
+                            <it>.*/autotext/.*</it>
+                            <it>.*/autocorr/.*</it>
+                            <it>.*/config/.*\.so[bcdegh]</it>
+                            <it>.*/config/soffice.cfg/modules/.*/toolbar/custom.*\.xml</it>
+                            <it>.*/config/soffice.cfg/modules/.*/images/.*</it>
+                            <it>.*/gallery/.*</it>
+                            <it>.*/template/.*</it>
+                        </value>
+                    </prop>
+                    <prop oor:name="ExcludedFiles">
+                    </prop>
+                </node>
+                <node oor:name="Configuration" oor:op="replace">
+                    <prop oor:name="IncludedNodes">
+                        <value>
+                            <!--Datasources-->
+                            <it>/org.openoffice.Office.DataAccess</it>
+                            <!--Inet-->
+                            <it>/org.openoffice.Inet</it>
+                            <!--UserProfile-->
+                            <it>/org.openoffice.UserProfile</it>
+                            <!--Common-->
+                            <it>/org.openoffice.Office.Compatibility</it>
+                            <it>/org.openoffice.Office.Custom</it>
+                            <it>/org.openoffice.Office.Embedding</it>
+                            <it>/org.openoffice.Office.Events</it>
+                            <it>/org.openoffice.Office.ExtendedColorScheme</it>
+                            <it>/org.openoffice.Office.Common/Accessibility</it>
+                            <it>/org.openoffice.Office.Common/Accessibility/AutoDetectSystemHC</it>
+                            <it>/org.openoffice.Office.Common/AsianLayout</it>
+                            <it>/org.openoffice.Office.Common/AutoCorrect</it>
+                            <it>/org.openoffice.Office.Common/Cache</it>
+                            <it>/org.openoffice.Office.Common/DateFormat</it>
+                            <it>/org.openoffice.Office.Common/ExternalMailer/Program</it>
+                            <it>/org.openoffice.Office.Common/Filter</it>
+                            <it>/org.openoffice.Office.Common/Font</it>
+                            <it>/org.openoffice.Office.Common/Forms</it>
+                            <it>/org.openoffice.Office.Common/Gallery</it>
+                            <it>/org.openoffice.Office.Common/Help</it>
+                            <it>/org.openoffice.Office.Common/History</it>
+                            <it>/org.openoffice.Office.Common/I18N</it>
+                            <it>/org.openoffice.Office.Common/InternalMSExport</it>
+                            <it>/org.openoffice.Office.Common/Load</it>
+                            <it>/org.openoffice.Office.Common/Misc/FormControlPilotsEnabled</it>
+                            <it>/org.openoffice.Office.Common/Misc/PluginsEnabled</it>
+                            <it>/org.openoffice.Office.Common/Misc/SymbolSet</it>
+                            <it>/org.openoffice.Office.Common/Misc/UseSystemFileDialog</it>
+                            <it>/org.openoffice.Office.Common/Misc/UseSystemPrintDialog</it>
+                            <it>/org.openoffice.Office.Common/Misc/SymbolStyle</it>
+                            <it>/org.openoffice.Office.Common/Passwords</it>
+                            <it>/org.openoffice.Office.Common/Print/PrintingModifiesDocument</it>
+                            <it>/org.openoffice.Office.Common/Print/Warning</it>
+                            <it>/org.openoffice.Office.Common/Vectorize</it>
+                            <it>/org.openoffice.Office.Common/Save</it>
+                            <it>/org.openoffice.Office.Common/SearchOptions</it>
+                            <it>/org.openoffice.Office.Common/Undo</it>
+                            <it>/org.openoffice.Office.Common/View/Dialog/Dialog/MiddleMouseButton</it>
+                            <it>/org.openoffice.Office.Common/View/Dialog/MousePositioning</it>
+                            <it>/org.openoffice.Office.Common/View/Localization</it>
+                            <it>/org.openoffice.Office.Common/View/Menu</it>
+                            <it>/org.openoffice.Office.Common/_3D_Engine</it>
+                            <!--Calc-->
+                            <it>/org.openoffice.Office.Calc</it>
+                            <!--Chart-->
+                            <it>/org.openoffice.Office.Chart</it>
+                            <!--Draw-->
+                            <it>/org.openoffice.Office.Draw</it>
+                            <!--Impress-->
+                            <it>/org.openoffice.Office.Impress</it>
+                            <!--Labels-->
+                            <it>/org.openoffice.Office.Labels</it>
+                            <!--Linguistic-->
+                            <it>/org.openoffice.Office.Linguistic</it>
+                            <!--Math-->
+                            <it>/org.openoffice.Office.Math</it>
+                            <!--Security-->
+                            <it>/org.openoffice.Office.Security</it>
+                            <!--Writer-->
+                            <it>/org.openoffice.Office.Writer</it>
+                            <it>/org.openoffice.Office.WriterWeb</it>
+                        </value>
+                    </prop>
+                    <prop oor:name="ExcludedNodes">
+                        <value>
+                            <!--Datasources-->
+                            <it>/org.openoffice.Office.DataAccess/Bibliography</it>
+                            <it>/org.openoffice.Office.DataAccess/ConnectionPool</it>
+                            <it>/org.openoffice.Office.DataAccess/DataSources</it>
+                            <it>/org.openoffice.Office.DataAccess/DriverManager</it>
+                            <!--Common-->
+                            <it>/org.openoffice.Office.Common/_3D_Engine/OpenGL</it>
+                            <it>/org.openoffice.Office.Common/Help/Registration</it>
+                            <!--Linguistic-->
+                            <it>/org.openoffice.Office.Linguistic/ServiceManager</it>
+                            <!--Writer-->
+                            <it>/org.openoffice.Office.Writer/Wizard</it>
+                        </value>
+                    </prop>
+                </node>
+                <node oor:name="Deployment" oor:op="replace">
+                    <prop oor:name="MigrationService">
+                        <value>com.sun.star.migration.Extensions</value>
+                    </prop>
+                    <prop oor:name="ExcludedExtensions">
+                        <value>
+                            <!-- presentation minimizer is integrated since AOO 4.0 -->
+                            <it>com.sun.star.PresentationMinimizer-*</it>
+                            <!-- presentation screen is integrated since AOO 4.0 -->
+                            <it>com.sun.PresenterScreen-*</it>
+                        </value>
+                    </prop>
+                </node>
+                <node oor:name="Basic" oor:op="replace">
+                    <prop oor:name="MigrationService">
+                        <value>com.sun.star.migration.Basic</value>
+                    </prop>
+                </node>
+                <node oor:name="Linguistic" oor:op="replace">
+                    <prop oor:name="MigrationService">
+                        <value>com.sun.star.migration.Wordbooks</value>
+                    </prop>
+                </node>
+            </node>
+        </node>
     </node>
-    </node>
+  </node>
 </oor:component-data>

@@ -23,6 +23,11 @@ Version: %version
 Release: %release
 Summary: %productname desktop integration
 Name: %pkgprefix-mandriva-menus
+Obsoletes: openoffice.org3.0-mandriva-menus
+Obsoletes: openoffice.org3.1-mandriva-menus
+Obsoletes: openoffice.org3.2-mandriva-menus
+Obsoletes: openoffice.org3.3-mandriva-menus
+Obsoletes: openoffice.org3.4-mandriva-menus
 Group: Office
 License: ALv2
 AutoReqProv: no
@@ -33,7 +38,7 @@ BuildArch: noarch
 #        here and check for the 'mandriva-release' in the future (next year).
 #
 Requires: mandrake-release
-Provides: openoffice.org3-desktop-integration
+Provides: openoffice-desktop-integration
 
 %define _unpackaged_files_terminate_build 0
 %define _binary_filedigest_algorithm 1

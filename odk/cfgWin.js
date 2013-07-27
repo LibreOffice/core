@@ -18,12 +18,15 @@
 //  under the License.
 //  
 // *************************************************************
+
 // This script asks for variables, which are necessary for building the
 // examples of the Office Development Kit. The script duplicates the template
 // script and inserts the variables into the copied script.
 // The Script was developed for the operating systems Microsoft Windows.
-var regKeyOfficeCurrentUser = "HKEY_CURRENT_USER\\Software\\OpenOffice.org\\UNO\\InstallPath\\";
-var regKeyOfficeLocaleMachine = "HKEY_LOCAL_MACHINE\\Software\\OpenOffice.org\\UNO\\InstallPath\\";
+var regKeyOfficeCurrentUser6432Node = "HKEY_CURRENT_USER\\Software\\Wow6432Node\\OpenOffice\\UNO\\InstallPath\\";
+var regKeyOfficeLocaleMachine6432Node = "HKEY_LOCAL_MACHINE\\Software\\Wow6432Node\\OpenOffice\\UNO\\InstallPath\\";
+var regKeyOfficeCurrentUser = "HKEY_CURRENT_USER\\Software\\OpenOffice\\UNO\\InstallPath\\";
+var regKeyOfficeLocaleMachine = "HKEY_LOCAL_MACHINE\\Software\\OpenOffice\\UNO\\InstallPath\\";
 var regKeyDotNetInstallRoot = "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\.NETFramework\\InstallRoot";
 var regKeyDotNet1_1 = "HKLM\\Software\\Microsoft\\.NETFramework\\policy\\v1.1\\4322";
 var sDirDotNet1_1 = "v1.1.4322";
@@ -37,7 +40,7 @@ var regKeyVC90 = "HKLM\\SOFTWARE\\Microsoft\\VisualStudio\\9.0\\Setup\\VC\\Produ
 
 //var regKeyVCExpress80 = "HKLM\\SOFTWARE\\Microsoft\\VCExpress\\8.0\\Setup\\VC\\ProductDir";
 var regKeyVCExpress90 = "HKLM\\SOFTWARE\\Microsoft\\VCExpress\\9.0\\Setup\\VC\\ProductDir";
-
+var regKeyVCExpress90_2 = "HKLM\\SOFTWARE\\Wow6432Node\\Microsoft\\VCExpress\\9.0\\Setup\\VC\\ProductDir";
 var regKeyWindowsSDK = "HKLM\\SOFTWARE\\Microsoft\\Microsoft SDKs\\Windows\\CurrentInstallFolder";
 
 var WshShell = WScript.CreateObject("WScript.Shell");
@@ -58,10 +61,11 @@ var oo_user_sdk_env_script=oo_user_sdk_dir + "\\setsdkenv_windows.bat";
 
 var office_home=getOfficeHome();
 var office_base_home=getOfficeBaseHome();
-var oo_sdk_ure_home=getUreHome();
 
 var oo_sdk_make_home=getMakeHome();
 var oo_sdk_zip_home=getZipHome();
+var oo_sdk_cat_home=getCatHome();
+var oo_sdk_sed_home=getSedHome();
 var oo_sdk_manifest_used="";
 var oo_sdk_windowssdk="";
 var oo_sdk_cpp_home=getCppHome();
@@ -172,16 +176,32 @@ function getOfficeHome()
     if (sSuggestedHome.length == 0)
     {
         try {   
-            sSuggestedHome = WshShell.RegRead(regKeyOfficeCurrentUser);
-			//The registry entry points to the program folder but we need the 
-			//installation folder
+            sSuggestedHome = WshShell.RegRead(regKeyOfficeCurrentUser6432Node);
+	    //The registry entry points to the program folder but we need the 
+	    //installation folder
         } catch(exc) {}
         if (sSuggestedHome.length == 0)
         {
             try {
+                sSuggestedHome = WshShell.RegRead(regKeyOfficeLocaleMachine6432Node);
+                //The registry entry points to the program folder but we need 
+		//the installation folder
+            } catch (exc) {}
+        }
+ 	if (sSuggestedHome.length == 0)
+        {
+            try {
                 sSuggestedHome = WshShell.RegRead(regKeyOfficeLocaleMachine);
                 //The registry entry points to the program folder but we need 
-				//the installation folder
+		//the installation folder
+            } catch (exc) {}
+        }
+ 	if (sSuggestedHome.length == 0)
+        {
+            try {
+                sSuggestedHome = WshShell.RegRead(regKeyOfficeLocaleMachine);
+                //The registry entry points to the program folder but we need 
+		//the installation folder
             } catch (exc) {}
         }
 
@@ -243,7 +263,7 @@ function searchOffice()
 	var officepath ="";
 	var index=-1;
 
-	if ((index = tmp.lastIndexOf("\\Basis")) != -1) {
+	if ((index = tmp.lastIndexOf("\\sdk")) != -1) {
 	   tmp = tmp.substr(0, index);
 	}
 
@@ -263,39 +283,6 @@ function getOfficeBaseHome()
 	officebase = officebase.substr(0, index);
 
 	return officebase;
-}
-
-function getUreHome()
-{
-	var tmpure = oo_sdk_home;
-	var ure = "";
-	var index=0;
-    if ((index = tmpure.lastIndexOf("Basis")) != -1)   
-	   tmpure = tmpure.substr(0, index);
-
-    if (aFileSystemObject.FileExists(tmpure + "\\URE\\bin\\uno.exe")) {
-	   ure = tmpure + "\URE";
-	}
-
-	return ure;
-
-/*
-    var suggestion = WshSysEnv("OO_SDK_URE_HOME");
-    var choice;
-    for (;;) {
-        stdout.Write(
-            "\n Enter the URE installation directory [" + suggestion + "]:");
-        choice = stdin.ReadLine();
-        if (choice == "") {
-            choice = suggestion;
-        }
-        if (aFileSystemObject.FileExists(choice + "\\bin\\uno.exe")) {
-            break;
-        }
-        stdout.WriteLine("\n Error: A valid URE installation is required.");
-    }
-    return choice;
-*/
 }
 
 function getMakeHome()
@@ -350,6 +337,10 @@ function getMakeHome()
 function getZipHome()
 {
     var sSuggestedHome = WshSysEnv("OO_SDK_ZIP_HOME");
+
+    if (sSuggestedHome.length == 0 && oo_sdk_make_home.length > 0) {
+       sSuggestedHome = oo_sdk_make_home;
+    }
     
     while(true)
     {
@@ -393,6 +384,118 @@ function getZipHome()
     }   
 }
 
+function getCatHome()
+{
+    var sSuggestedHome = WshSysEnv("OO_SDK_CAT_HOME");
+
+    if (sSuggestedHome.length == 0 && oo_sdk_make_home.length > 0) {
+       sSuggestedHome = oo_sdk_make_home;
+    }
+
+    while(true)
+    {
+        stdout.Write("\n Enter a cat (2.0 or higher) tools directory [" +
+                     sSuggestedHome + "]:");
+        var sHome = stdin.ReadLine();
+        if (sHome.length == 0)
+        {
+            //No user input, use default.
+            if ( ! aFileSystemObject.FolderExists(sSuggestedHome))
+            {
+                stdout.WriteLine("\n Error: Could not find directory \"" +
+                                 sSuggestedHome + "\". cat is required, please " +
+                                 "specify a cat tools directory." +
+                                 "\nYou can get cat from " +
+                                 "http://sourceforge.net/projects/unxutils/files/latest/download");
+                sSuggestedHome = "";
+                continue;
+            }
+            sHome = sSuggestedHome;
+        }
+        else
+        {
+            //validate the user input
+            if ( ! aFileSystemObject.FolderExists(sHome))
+            {
+                stdout.WriteLine("\n Error: The directory \"" + sHome +
+                                 "\" does not exist. cat is required, please " +
+                                 "specify a cat tools directory." +
+                                 "\nYou can get cat from " +
+                                 "http://sourceforge.net/projects/unxutils/files/latest/download");
+                continue;
+            }
+        }
+        //Check for the make executable
+        var sCatPath = sHome + "\\cat.exe";
+        if (! aFileSystemObject.FileExists(sCatPath))
+        {
+            stdout.WriteLine("\n Error: Could not find \"" + sCatPath +
+                             "\". cat is required, please specify a cat tools " +
+                             "directory." +
+                             "\nYou can get cat from " +
+                             "http://sourceforge.net/projects/unxutils/files/latest/download");
+            continue;
+        }
+        return sHome;
+    }
+}
+
+function getSedHome()
+{
+    var sSuggestedHome = WshSysEnv("OO_SDK_SED_HOME");
+
+    if (sSuggestedHome.length == 0 && oo_sdk_make_home.length > 0) {
+       sSuggestedHome = oo_sdk_make_home;
+    }
+
+    while(true)
+    {
+        stdout.Write("\n Enter a sed (3.02 or higher) tools directory [" +
+                     sSuggestedHome + "]:");
+        var sHome = stdin.ReadLine();
+        if (sHome.length == 0)
+        {
+            //No user input, use default.
+            if ( ! aFileSystemObject.FolderExists(sSuggestedHome))
+            {
+                stdout.WriteLine("\n Error: Could not find directory \"" +
+                                 sSuggestedHome + "\". sed is required, please " +
+                                 "specify a sed tools directory." +
+                                 "\nYou can get sed from " +
+                                 "http://sourceforge.net/projects/unxutils/files/latest/download");
+                sSuggestedHome = "";
+                continue;
+            }
+            sHome = sSuggestedHome;
+        }
+        else
+        {
+            //validate the user input
+            if ( ! aFileSystemObject.FolderExists(sHome))
+            {
+                stdout.WriteLine("\n Error: The directory \"" + sHome +
+                                 "\" does not exist. sed is required, please " +
+                                 "specify a sed tools directory." +
+                                 "\nYou can get sed from " +
+                                 "http://sourceforge.net/projects/unxutils/files/latest/download");
+                continue;
+            }
+        }
+        //Check for the make executable
+        var sSedPath = sHome + "\\sed.exe";
+        if (! aFileSystemObject.FileExists(sSedPath))
+        {
+            stdout.WriteLine("\n Error: Could not find \"" + sSedPath +
+                             "\". sed is required, please specify a sed tools " +
+                             "directory." +
+                             "\nYou can get sed from " +
+                             "http://sourceforge.net/projects/unxutils/files/latest/download");
+            continue;
+        }
+        return sHome;
+    }
+}
+
 function getCppHome()
 {
     var sSuggestedHome = WshSysEnv("OO_SDK_CPP_HOME");
@@ -404,11 +507,17 @@ function getCppHome()
         }catch (exc) {}
         if (sVC.length == 0)
         {
-	        try {
-				sVC = WshShell.RegRead(regKeyVC90);
-			}catch (exc) {}
-		}        
-		// check Windows SDK if VC 9
+	   try {
+	       sVC = WshShell.RegRead(regKeyVCExpress90_2);
+	   }catch (exc) {}
+	}
+	if (sVC.length == 0)
+        {
+	   try {
+	       sVC = WshShell.RegRead(regKeyVC90);
+	   }catch (exc) {}
+	}        
+	// check Windows SDK if VC 9
         if (sVC.length > 0)
         {
 		    oo_sdk_manifest_used="true";	
@@ -813,74 +922,61 @@ function writeBatFile(fdir, file)
         "REM are necessary for building the examples of the Office Development Kit.\n" +
         "REM The Script was developed for the operating systems Windows.\n" +
         "REM The SDK name\n" +
-        "REM Example: set OO_SDK_NAME=openoffice3.0_sdk\n" +
-        "set OO_SDK_NAME=" + oo_sdk_name  +
-        "\n\n" +
+        "REM Example: @set \"OO_SDK_NAME=openoffice4.0_sdk\"\n" +
+        "@set \"OO_SDK_NAME=" + oo_sdk_name  +
+        "\"\n\n" +
         "REM Installation directory of the Software Development Kit.\n" +
-        "REM Example: set OO_SDK_HOME=C:\\Program Files\\OpenOffice.org\\Basic 3.0\\sdk\n" +
-        "set OO_SDK_HOME=" + oo_sdk_home  +
-        "\n\n" +
+        "REM Example: @set \"OO_SDK_HOME=C:\\Program Files\\OpenOffice\\4\\sdk\"\n" +
+        "@set \"OO_SDK_HOME=" + oo_sdk_home  +
+        "\"\n\n" +
         "REM Office installation directory.\n" +
-        "REM Example: set OFFICE_HOME=C:\\Program Files\\OpenOffice.org 3\n" +
-        "set OFFICE_HOME=" + office_home +
-        "\n\n" +
-        "REM Example: set OFFICE_HOME=C:\\Program Files\\OpenOffice.org\\Basis 3.0\n" +
-        "set OFFICE_BASE_HOME=" + office_base_home +
-        "\n\n" +
-        "REM URE installation directory.\n" +
-        "REM Example: set OO_SDK_URE_HOME=C:\\Program Files\\OpenOffice.org\\URE\n" +
-        "set OO_SDK_URE_HOME=" + oo_sdk_ure_home +
-        "\n\n" +
+        "REM Example: @set \"OFFICE_HOME=C:\\Program Files\\OpenOffice 4\"\n" +
+        "@set \"OFFICE_HOME=" + office_home +
+        "\"\n\n" +
         "REM Directory of the make command.\n" +
-        "REM Example: set OO_SDK_MAKE_HOME=D:\\NextGenerationMake\\make\n" + 
-        "set OO_SDK_MAKE_HOME=" + oo_sdk_make_home + 
-        "\n\n" +
-		"REM Directory of the zip tool.\n" +
-		"REM Example: set OO_SDK_ZIP_HOME=D:\\infozip\\bin\n" +
-		"set OO_SDK_ZIP_HOME=" + oo_sdk_zip_home + 
-        "\n\n" +
+        "REM Example: @set \"OO_SDK_MAKE_HOME=C:\\UnxUtils\\usr\\local\\wbin\"\n" + 
+        "@set \"OO_SDK_MAKE_HOME=" + oo_sdk_make_home + 
+        "\"\n\n" +
+	"REM Directory of the zip tool.\n" +
+	"REM Example: @set \"OO_SDK_ZIP_HOME=C:\\UnxUtils\\usr\\local\\wbin\"\n" +
+	"@set \"OO_SDK_ZIP_HOME=" + oo_sdk_zip_home + 
+        "\"\n\n" +
+        "REM Directory of the cat tool.\n" +
+        "REM Example: @set \"OO_SDK_CAT_HOME=C:\\UnxUtils\\usr\\local\\wbin\"\n" +
+        "@set \"OO_SDK_CAT_HOME=" + oo_sdk_cat_home +
+        "\"\n\n" +
+        "REM Directory of the sed tool.\n" +
+        "REM Example: @set \"OO_SDK_SED_HOME=C:\\UnxUtils\\usr\\local\\wbin\"\n" +
+        "@set \"OO_SDK_SED_HOME=" + oo_sdk_sed_home +
+        "\"\n\n" +
         "REM Directory of the C++ compiler.\n" + 
-        "REM Example:set OO_SDK_CPP_HOME=C:\\Program Files\\Microsoft Visual Studio 9.0\\VC\\bin\n" + 
-        "set OO_SDK_CPP_HOME=" + oo_sdk_cpp_home + 
-		"\nset CPP_MANIFEST=" + oo_sdk_manifest_used +
-		"\nset CPP_WINDOWS_SDK=" + oo_sdk_windowssdk +
-        "\n\n" + 
+        "REM Example: @set \"OO_SDK_CPP_HOME=C:\\Program Files\\Microsoft Visual Studio 9.0\\VC\\bin\"\n" + 
+        "@set \"OO_SDK_CPP_HOME=" + oo_sdk_cpp_home + 
+	"\"\n@set \"CPP_MANIFEST=" + oo_sdk_manifest_used +
+	"\"\n@set \"CPP_WINDOWS_SDK=" + oo_sdk_windowssdk +
+        "\"\n\n" + 
         "REM Directory of the C# and VB.NET compilers.\n" + 
-        "REM Example:set OO_SDK_CLI_HOME=C:\\WINXP\\Microsoft.NET\\Framework\\v1.0.3705\n" +
-        "set OO_SDK_CLI_HOME=" + oo_sdk_cli_home + 
-        "\n\n" +
+        "REM Example: @set \"OO_SDK_CLI_HOME=C:\\WINXP\\Microsoft.NET\\Framework\\v1.0.3705\"\n" +
+        "@set \"OO_SDK_CLI_HOME=" + oo_sdk_cli_home + 
+        "\"\n\n" +
         "REM Java SDK installation directory.\n" + 
-        "REM Example: set OO_SDK_JAVA_HOME=C:\\Program Files\\Java\\jdk1.6.0_05\n" + 
-        "set OO_SDK_JAVA_HOME=" + oo_sdk_java_home + 
-        "\n\n" + 
+        "REM Example: @set \"OO_SDK_JAVA_HOME=C:\\Program Files\\Java\\jdk1.6.0_05\"\n" + 
+        "@set \"OO_SDK_JAVA_HOME=" + oo_sdk_java_home + 
+        "\"\n\n" + 
         "REM Special output directory\n" + 
-        "REM Example: set OO_SDK_OUT=C:\\" + oo_sdk_name + "\n" +
-        "set OO_SDK_OUT=" + oo_sdk_out + 
-        "\n\n" +
+        "REM Example: @set \"OO_SDK_OUT=C:\\" + oo_sdk_name + "\"\n" +
+        "@set \"OO_SDK_OUT=" + oo_sdk_out + 
+        "\"\n\n" +
         "REM Automatic deployment\n" + 
-        "REM Example: set SDK_AUTO_DEPLOYMENT=YES\n" +
-        "set SDK_AUTO_DEPLOYMENT=" + sdk_auto_deployment +
-        "\n\n" +
-		"set STLDEBUG=" + stldebug + "\n" +
-		"REM check stlport lib in 4NT shell\n" +
-		"REM if exist \"%OO_SDK_HOME%\\windows\\lib\\stlport_vc71_stldebug.lib\". (\n" +
-		"REM   set STLDEBUG=_stldebug\n" +
-		"REM )\n\n" +
-        "REM Check installation path for the Office Development Kit.\n" +
+        "REM Example: @set \"SDK_AUTO_DEPLOYMENT=YES\"\n" +
+        "@set \"SDK_AUTO_DEPLOYMENT=" + sdk_auto_deployment +
+        "\"\n\n" +
+	"REM Check installation path for the Office Development Kit.\n" +
         "if not defined OO_SDK_HOME (\n" +
         "   echo Error: the variable OO_SDK_HOME is missing!\n" +
         "   goto :error\n" +
         " )\n" + 
-        "\n" + 
-        "REM Check installation path for the office.\n" + 
-        "REM if not defined OFFICE_HOME (\n" + 
-        "REM if not defined OO_SDK_URE_HOME (\n" + 
-        "REM    echo Error: either of the variables OFFICE_HOME and\n" +
-        "REM    echo OO_SDK_URE_HOME is missing!\n" + 
-        "REM    goto :error\n" + 
-        "REM  )\n" +
-        "REM  )\n" +
-        "\n" +
+        "\n\n" +
         "REM Check installation path for GNU make.\n" + 
         "if not defined OO_SDK_MAKE_HOME (\n" + 
         "   echo Error: the variable OO_SDK_MAKE_HOME is missing!\n" +
@@ -893,74 +989,63 @@ function writeBatFile(fdir, file)
         "   goto :error\n" +
         " )\n" +
         "\n" +
+        "REM Check installation path for the cat tool.\n" +
+        "if not defined OO_SDK_CAT_HOME (\n" +
+        "   echo Error: the variable OO_SDK_CAT_HOME is missing!\n" +
+        "   goto :error\n" +
+        " )\n" +
+        "\n" +
+        "REM Check installation path for the sed tool.\n" +
+        "if not defined OO_SDK_SED_HOME (\n" +
+        "   echo Error: the variable OO_SDK_SED_HOME is missing!\n" +
+        "   goto :error\n" +
+        " )\n" +
+        "\n" +
         "REM Set library path. \n" + 
-        "set LIB=%OO_SDK_HOME%\\lib;%LIB%\n" +
+        "@set \"LIB=%OO_SDK_HOME%\\lib;%LIB%\"\n" +
         "if defined CPP_WINDOWS_SDK (\n" +
-        "   set LIB=%LIB%;%CPP_WINDOWS_SDK%\\lib\n" +
+        "   @set \"LIB=%LIB%;%CPP_WINDOWS_SDK%\\lib\"\n" +
         " )\n" +
         "\n" +
         "REM Set office program path.\n" +
         "if defined OFFICE_HOME (\n" +
-        "   set OFFICE_PROGRAM_PATH=%OFFICE_HOME%\\program\n" +
-        " )\n" +
+        "   @set \"OFFICE_PROGRAM_PATH=%OFFICE_HOME%\\program\"\n" +
+        " )" +
         "\n" +
-        "REM Set office program path.\n" +
-        "if defined OFFICE_BASE_HOME (\n" +
-        "   set OFFICE_BASE_PROGRAM_PATH=%OFFICE_BASE_HOME%\\program\n" +
-        " )\n" +
-        "\n" +
-		"REM Set UNO path, necessary to ensure that the cpp examples using the\n" +
-		"REM new UNO bootstrap mechanism use the configured office installation\n" +
-		"REM (only set when using an Office).\n" +
-		"if defined OFFICE_HOME (\n" +
-		"   set UNO_PATH=%OFFICE_PROGRAM_PATH%\n" +
-		" )\n" +
-        "\n" +
-        "REM if defined OO_SDK_URE_HOME (\n" +
-        "set OO_SDK_URE_BIN_DIR=%OO_SDK_URE_HOME%\\bin\n" +
-        "set OO_SDK_URE_LIB_DIR=%OO_SDK_URE_HOME%\\bin\n" +
-        "set OO_SDK_URE_JAVA_DIR=%OO_SDK_URE_HOME%\\java\n" +
-        "REM ) else (\n" +
-        "set OO_SDK_OFFICE_BIN_DIR=%OFFICE_PROGRAM_PATH%\n" +
-        "set OO_SDK_OFFICE_LIB_DIR=%OFFICE_BASE_PROGRAM_PATH%\n" +
-        "set OO_SDK_OFFICE_JAVA_DIR=%OFFICE_BASE_PROGRAM_PATH%\\classes\n" +
-        "REM )\n" +
+        "REM Set UNO path, necessary to ensure that the cpp examples using the\n" +
+	"REM new UNO bootstrap mechanism use the configured office installation\n" +
+	 "REM (only set when using an Office).\n" +
+	"if defined OFFICE_HOME (\n" +
+	"   @set \"UNO_PATH=%OFFICE_PROGRAM_PATH%\"\n" +
+	" )\n" +
+        "\n\n" +
+        "@set \"OO_SDK_OFFICE_BIN_DIR=%OFFICE_PROGRAM_PATH%\"\n" +
+        "@set \"OO_SDK_OFFICE_LIB_DIR=%OFFICE_PROGRAM_PATH%\"\n" +
+        "@set \"OO_SDK_OFFICE_JAVA_DIR=%OFFICE_PROGRAM_PATH%\\classes\"\n" +
         "\n" +
         "REM Set classpath\n" +
-        "set CLASSPATH=%OO_SDK_URE_JAVA_DIR%\\juh.jar;%OO_SDK_URE_JAVA_DIR%\\jurt.jar;%OO_SDK_URE_JAVA_DIR%\\ridl.jar;%OO_SDK_URE_JAVA_DIR%\\unoloader.jar;%OO_SDK_OFFICE_JAVA_DIR%\\unoil.jar\n" +
-        "REM if defined OFFICE_HOME (\n" +
-        "REM     set CLASSPATH=%CLASSPATH%;%OO_SDK_OFFICE_JAVA_DIR%\\unoil.jar\n" +
-        "REM  )\n" +
+        "@set \"CLASSPATH=%OO_SDK_OFFICE_JAVA_DIR%\\juh.jar;%OO_SDK_OFFICE_JAVA_DIR%\\jurt.jar;%OO_SDK_OFFICE_JAVA_DIR%\\ridl.jar;%OO_SDK_OFFICE_JAVA_DIR%\\unoloader.jar;%OO_SDK_OFFICE_JAVA_DIR%\\unoil.jar\"\n" +
         "\n" +
         "REM Add directory of the SDK tools to the path.\n" +
-        "set PATH=%OO_SDK_HOME%\\bin;%OO_SDK_URE_BIN_DIR%;%OO_SDK_OFFICE_BIN_DIR%;%OO_SDK_HOME%\\WINexample.out\\bin;%PATH%\n" +
+        "set \"PATH=%OO_SDK_HOME%\\bin;%OO_SDK_OFFICE_BIN_DIR%;%OO_SDK_OFFICE_BIN_DIR%;%OO_SDK_HOME%\\WINexample.out\\bin;%OO_SDK_MAKE_HOME%;%OO_SDK_ZIP_HOME%;%OO_SDK_CAT_HOME%;%OO_SDK_SED_HOME%;%PATH%\"\n" +
         "\n" +
         "REM Set PATH appropriate to the output directory\n" +
         "if defined OO_SDK_OUT (\n" + 
-        "   set PATH=%OO_SDK_OUT%\\WINexample.out\\bin;%PATH%\n" + 
+        "   @set \"PATH=%OO_SDK_OUT%\\WINexample.out\\bin;%PATH%\"\n" + 
         " ) else (\n" + 
-        "   set PATH=%OO_SDK_HOME%\\WINexample.out\\bin;%PATH%\n" + 
+        "   @set \"PATH=%OO_SDK_HOME%\\WINexample.out\\bin;%PATH%\"\n" + 
         " )\n" + 
-        "\n" +
-        "REM Add directory of the command make to the path, if necessary.\n" +
-        "if defined OO_SDK_MAKE_HOME set PATH=%OO_SDK_MAKE_HOME%;%PATH%\n" + 
-        "\n" + 
-	"REM Add directory of the zip tool to the path, if necessary.\n" +
-	"if defined OO_SDK_ZIP_HOME set PATH=%OO_SDK_ZIP_HOME%;%PATH%\n" +
-        "\n" + 
-        "REM Add directory of the C++ compiler to the path, if necessary.\n" +
-        "if defined OO_SDK_CPP_HOME set PATH=%OO_SDK_CPP_HOME%;%PATH%\n" + 
         "\n" +
         "REM Add directory of the Win SDK to the path, if necessary.\n" +
         "if defined CPP_WINDOWS_SDK (\n" +
-		"   set PATH=%CPP_WINDOWS_SDK\\bin%;%PATH%\n" + 
-		"   set INCLUDE=%CPP_WINDOWS_SDK\\Include%;%INCLUDE%\n" + 
+	"   @set \"PATH=%CPP_WINDOWS_SDK\\bin%;%PATH%\"\n" + 
+	"   @set \"INCLUDE=%CPP_WINDOWS_SDK\\Include%;%INCLUDE%\"\n" + 
         ")\n" +
         "REM Add directory of the C# and VB.NET compilers to the path, if necessary.\n" + 
-        "if defined OO_SDK_CLI_HOME set PATH=%OO_SDK_CLI_HOME%;%PATH%\n" + 
+        "if defined OO_SDK_CLI_HOME @set \"PATH=%OO_SDK_CLI_HOME%;%PATH%\"\n" + 
         "\n" + 
         "REM Add directory of the Java tools to the path, if necessary.\n" + 
-        "if defined OO_SDK_JAVA_HOME set PATH=%OO_SDK_JAVA_HOME%\\bin;%OO_SDK_JAVA_HOME%\\jre\\bin;%PATH%\n" +
+        "if defined OO_SDK_JAVA_HOME @set \"PATH=%OO_SDK_JAVA_HOME%\\bin;%OO_SDK_JAVA_HOME%\\jre\\bin;%PATH%\"\n" +
         "\n" +
         "REM Set environment for C++ compiler tools, if necessary.\n" + 
         "if defined OO_SDK_CPP_HOME call \"%OO_SDK_CPP_HOME%\\VCVARS32.bat\"\n" +
@@ -975,10 +1060,10 @@ function writeBatFile(fdir, file)
         "echo  *\n" +       
         "echo  * SDK = %OO_SDK_HOME%\n" +
         "echo  * Office = %OFFICE_HOME%\n" +
-        "echo  * Office Base = %OFFICE_BASE_HOME%\n" +
-        "echo  * URE = %OO_SDK_URE_HOME%\n" +
         "echo  * Make = %OO_SDK_MAKE_HOME%\n" +
         "echo  * Zip = %OO_SDK_ZIP_HOME%\n" +
+        "echo  * cat = %OO_SDK_CAT_HOME%\n" +
+        "echo  * sed = %OO_SDK_SED_HOME%\n" +
         "echo  * C++ Compiler = %OO_SDK_CPP_HOME%\n" +
         "echo  * C# and VB.NET compilers = %OO_SDK_CLI_HOME%\n" +
         "echo  * Java = %OO_SDK_JAVA_HOME%\n" +
@@ -996,6 +1081,3 @@ function writeBatFile(fdir, file)
         );
         newFile.Close();        
 }
-
-
-

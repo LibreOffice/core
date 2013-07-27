@@ -38,7 +38,6 @@ TabPage RID_OPTPAGE_CHART_DEFCOLORS
         Pos     = MAP_APPFONT ( 6 , 3  ) ;
         Size    = MAP_APPFONT ( 80 , 8 ) ;
         Text [ en-US ] = "Chart colors";
-        Text [ x-comment ] = " ";
     };
     ListBox LB_CHART_COLOR_LIST
     {
@@ -54,7 +53,6 @@ TabPage RID_OPTPAGE_CHART_DEFCOLORS
         Pos     = MAP_APPFONT ( 92 , 3  ) ;
         Size    = MAP_APPFONT ( 106 , 8 ) ;
         Text [ en-US ] = "Color table" ;
-        Text [ x-comment ] = " ";
     };
     Control CT_COLOR_BOX
     {
@@ -69,7 +67,6 @@ TabPage RID_OPTPAGE_CHART_DEFCOLORS
         Pos = MAP_APPFONT ( 204 , 165 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Default";
-        Text [ x-comment ] = " ";
     };
 };
 

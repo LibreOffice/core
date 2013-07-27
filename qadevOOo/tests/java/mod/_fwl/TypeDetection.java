@@ -71,7 +71,7 @@ import util.SOfficeFactory;
  * @see ifc.container._XNameContainer
  * @see ifc.container._XNameReplace
  * @see ifc.document._XTypeDetection
- * @see ifc.util.XFlushable
+ * @see ifc.util._XFlushable
  */
 public class TypeDetection extends TestCase {
 
@@ -119,7 +119,7 @@ public class TypeDetection extends TestCase {
             (XNameAccess.class, oObj);
         String[] elementNames = xNA.getElementNames();
         String elementName = elementNames[0];
-        Object[] instance = null;;
+        Object[] instance = null;
         try{
             instance = (Object[]) xNA.getByName(elementName);
         } catch (com.sun.star.container.NoSuchElementException e){

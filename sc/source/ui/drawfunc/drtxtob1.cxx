@@ -53,7 +53,7 @@
 //------------------------------------------------------------------------
 
 sal_Bool ScDrawTextObjectBar::ExecuteCharDlg( const SfxItemSet& rArgs,
-                                                SfxItemSet& rOutSet )
+                                                SfxItemSet& rOutSet , sal_uInt16 nSlot)
 {
 //CHINA001  ScCharDlg* pDlg = new ScCharDlg( pViewData->GetDialogParent(),
 //CHINA001  &rArgs,
@@ -65,6 +65,10 @@ sal_Bool ScDrawTextObjectBar::ExecuteCharDlg( const SfxItemSet& rArgs,
     SfxAbstractTabDialog* pDlg = pFact->CreateScCharDlg(  pViewData->GetDialogParent(), &rArgs,
                                                         pViewData->GetSfxDocShell(),RID_SCDLG_CHAR );
     DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
+    if (nSlot == SID_CHAR_DLG_EFFECT)
+    {
+        pDlg->SetCurPageId(RID_SVXPAGE_CHAR_EFFECTS);
+    }
     sal_Bool bRet = ( pDlg->Execute() == RET_OK );
 
     if ( bRet )

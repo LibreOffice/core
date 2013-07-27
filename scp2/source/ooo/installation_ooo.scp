@@ -30,9 +30,9 @@ Installation gid_Installation_Ooo
     OOoBaseVersion = "${OOOBASEVERSION}";
     UserDirProductVersion = "${USERDIRPRODUCTVERSION}";
     JavaVersion = "${JAVAVERSION}";
-    SxwFormatName = "OpenOffice.org";
-    SxwFormatVersion = "1.1";
-    VendorName = "OpenOffice.org";
+    SxwFormatName = "OpenOffice.org XML";
+    SxwFormatVersion = "1.0";
+    VendorName = "Apache OpenOffice";
   #ifdef WNT
     DefaultDestPath = "<winprogpath>\${PRODUCTNAME}${PRODUCTVERSION}";
   #else

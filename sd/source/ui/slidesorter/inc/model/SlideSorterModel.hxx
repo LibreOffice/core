@@ -55,8 +55,8 @@ namespace sd { namespace slidesorter { namespace model {
 
 class DocumentPageContainer;
 
-inline sal_Int32 FromCoreIndex (const sal_uInt16 nCoreIndex) { return (nCoreIndex-1)/2; }
-inline sal_uInt16 ToCoreIndex (const sal_Int32 nIndex) { return nIndex*2+1; }
+inline sal_Int32 FromCoreIndex (const sal_uInt32 nCoreIndex) { return (nCoreIndex-1)/2; }
+inline sal_uInt32 ToCoreIndex (const sal_Int32 nIndex) { return nIndex*2+1; }
 
 /** The model of the slide sorter gives access to the slides that are to be
     displayed in the slide sorter view.  Via the SetDocumentSlides() method

@@ -30,7 +30,7 @@
 //-----------------------------------------------------------
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
-#include <com/sun/star/system/XSimpleMailClientSupplier.hpp>
+#include <com/sun/star/system/XSystemMailProvider.hpp>
 #include <cppuhelper/servicefactory.hxx>
 #include <cppuhelper/servicefactory.hxx>
 #include <rtl/ustring.hxx>
@@ -103,7 +103,7 @@ int SAL_CALL main(int , char*, char* )
 
     try
     {
-        Reference< XSimpleMailClientSupplier > xSmplMailClientSuppl(
+        Reference< XSystemMailProvider > xSmplMailClientSuppl(
             g_xFactory->createInstance( OUString::createFromAscii( "com.sun.star.system.SimpleSystemMail" ) ), UNO_QUERY );
 
         if ( !xSmplMailClientSuppl.is() )
@@ -112,13 +112,13 @@ int SAL_CALL main(int , char*, char* )
             return(-1);
         }
 
-        Reference< XSimpleMailClient > xSmplMailClient(
-            xSmplMailClientSuppl->querySimpleMailClient( ) );
+        Reference< XMailClient > xSmplMailClient(
+            xSmplMailClientSuppl->queryMailClient( ) );
 
         if ( xSmplMailClient.is( ) )
         {
-            Reference< XSimpleMailMessage > xSmplMailMsg(
-                xSmplMailClient->createSimpleMailMessage( ) );
+            Reference< XMailMessage > xSmplMailMsg(
+                xSmplMailClient->createMailMessage( ) );
 
             if ( xSmplMailMsg.is( ) )
             {
@@ -152,7 +152,7 @@ int SAL_CALL main(int , char*, char* )
 
                 xSmplMailMsg->setAttachement( attachements );
 
-                xSmplMailClient->sendSimpleMailMessage( xSmplMailMsg, 0 );
+                xSmplMailClient->sendMailMessage( xSmplMailMsg, 0 );
             }
         }
     }

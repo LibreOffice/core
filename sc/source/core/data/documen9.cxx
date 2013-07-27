@@ -76,7 +76,7 @@ SfxBroadcaster* ScDocument::GetDrawBroadcaster()
 void ScDocument::BeginDrawUndo()
 {
     if (pDrawLayer)
-        pDrawLayer->BeginCalcUndo();
+        pDrawLayer->BeginCalcUndo(false);
 }
 
 sal_Bool ScDocument::IsDrawRecording() const
@@ -90,19 +90,19 @@ void ScDocument::EndDrawUndo()
         delete pDrawLayer->GetCalcUndo();
 }
 
-XColorTable* ScDocument::GetColorTable()
+XColorListSharedPtr ScDocument::GetColorTable()
 {
     if (pDrawLayer)
-        return pDrawLayer->GetColorTable();
+        return pDrawLayer->GetColorTableFromSdrModel();
     else
     {
-        if (!pColorTable)
+        if (!maColorTable.get())
         {
             SvtPathOptions aPathOpt;
-            pColorTable = new XColorTable( aPathOpt.GetPalettePath() );
+            maColorTable = XPropertyListFactory::CreateSharedXColorList(aPathOpt.GetPalettePath());
         }
 
-        return pColorTable;
+        return maColorTable;
     }
 }
 
@@ -188,7 +188,11 @@ void ScDocument::InitDrawLayer( SfxObjectShell* pDocShell )
         pDrawLayer->SetDefaultTabulator( GetDocOptions().GetTabDistance() );
 
         UpdateDrawPrinter();
-        UpdateDrawDefaults();
+
+        // set draw defaults directly
+        SfxItemPool& rDrawPool = pDrawLayer->GetItemPool();
+        rDrawPool.SetPoolDefaultItem( SvxAutoKernItem( sal_True, EE_CHAR_PAIRKERNING ) );
+
         UpdateDrawLanguages();
         if (bImportingXML)
             pDrawLayer->EnableAdjust(sal_False);
@@ -211,18 +215,6 @@ void ScDocument::UpdateDrawLanguages()
         rDrawPool.SetPoolDefaultItem( SvxLanguageItem( eLanguage, EE_CHAR_LANGUAGE ) );
         rDrawPool.SetPoolDefaultItem( SvxLanguageItem( eCjkLanguage, EE_CHAR_LANGUAGE_CJK ) );
         rDrawPool.SetPoolDefaultItem( SvxLanguageItem( eCtlLanguage, EE_CHAR_LANGUAGE_CTL ) );
-    }
-}
-
-void ScDocument::UpdateDrawDefaults()
-{
-    // drawing layer defaults that are set for new documents (if InitNew was called)
-
-    if ( pDrawLayer && bSetDrawDefaults )
-    {
-        SfxItemPool& rDrawPool = pDrawLayer->GetItemPool();
-        rDrawPool.SetPoolDefaultItem( SvxAutoKernItem( sal_True, EE_CHAR_PAIRKERNING ) );
-        pDrawLayer->SetDrawingLayerPoolDefaults();
     }
 }
 
@@ -260,11 +252,6 @@ IMPL_LINK_INLINE_END( ScDocument, GetUserDefinedColor, sal_uInt16 *, pColorIndex
 void ScDocument::DeleteDrawLayer()
 {
     delete pDrawLayer;
-}
-
-void ScDocument::DeleteColorTable()
-{
-    delete pColorTable;
 }
 
 sal_Bool ScDocument::DrawGetPrintArea( ScRange& rRange, sal_Bool bSetHor, sal_Bool bSetVer ) const

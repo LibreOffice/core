@@ -338,6 +338,8 @@ Module gid_Module_Root_Files_5
 	gid_File_Lib_Sax_Uno,
 	gid_File_Lib_Fastsax_Uno,
 	gid_File_Lib_Slideshow,
+    gid_File_Lib_PresentationMinimizer
+    gid_File_Lib_PresenterScreen
 	gid_File_Lib_Recentfile,
 	gid_File_Lib_Scriptframe,
 	gid_File_Lib_Sdbc_2,
@@ -813,7 +815,7 @@ Module gid_Module_Root_Userland
 End
 #endif
 
-// #ifdef BUILD_SPECIAL
+// #ifdef ENABLE_OOOIMPROVEMENT
 // Module gid_Module_Root_Extension_Oooimprovement
 //    Name = "gid_Module_Root_Extension_Oooimprovement";
 //    Description = "gid_Module_Root_Extension_Oooimprovement";

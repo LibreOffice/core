@@ -39,7 +39,7 @@ NO_BSYMBOLIC=TRUE
 # technique though, so this warning is plain wrong and has been fixed 
 # in gcc 4.3. Unfortunately there is no way at all to suppress this warning.
 # Some files in this directory use zero allocated arrays, we need to
-# diable the WaE mechanism for the GCC 4.2.x series.
+# disable the WaE mechanism for the GCC 4.2.x series.
 .IF "$(COM)"=="GCC"
 .IF "$(CCNUMVER)">="000400020000" && "$(CCNUMVER)"<="000400020003"
 CFLAGSWERRCXX:=

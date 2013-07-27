@@ -1,0 +1,59 @@
+/**************************************************************
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ *
+ *************************************************************/
+
+#ifndef __com_sun_star_awt_ImageDrawMode_idl__
+#define __com_sun_star_awt_ImageDrawMode_idl__
+
+module com { module sun { module star { module awt {
+
+/** defines modes how an image is drawn onto a device
+
+    @see <member scope="com::sun::star::awt">XGraphics2::drawImage</member>
+    @since Apache OpenOffice 4.0
+ */
+constants ImageDrawMode
+{
+    /** the image is drawn as is, without any color transformation.
+     */
+    const short NONE = 0x0000;
+
+    /** the image is drawn as if it represented a feature whose state is disabled.
+     */
+    const short DISABLE = 0x0001;
+
+    /** the image is drawn as being highlighted.
+        See <member scope="com::sun::star::awt">XStyleSettings::HighlightColor</member>.
+     */
+    const short HIGHLIGHT = 0x0002;
+
+    /** the image is drawn as being deactivated.
+        See <member scope="com::sun::star::awt">XStyleSettings::DeactiveColor</member>.
+     */
+    const short DEACTIVE = 0x0004;
+
+    /** the image is drawn semi-transparent.
+     */
+    const short SEMITRANSPARENT = 0x0010;
+};
+
+}; }; }; };
+
+#endif

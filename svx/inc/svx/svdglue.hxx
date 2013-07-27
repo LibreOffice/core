@@ -155,8 +155,7 @@ public:
     const SdrGluePoint& operator[](sal_uInt32 nPos) const { return *GetObject(nPos); }
 
     sal_uInt32 FindGluePoint(sal_uInt32 nId) const;
-    sal_uInt32 GPLHitTest(const basegfx::B2DPoint& rPnt, double fTolLog, const basegfx::B2DRange& rObjectRange,
-        bool bBack = false, sal_uInt32 nId0 = 0) const;
+    sal_uInt32 GPLHitTest(const basegfx::B2DPoint& rPnt, double fTolLog, const basegfx::B2DRange& rObjectRange, bool bBack = false) const;
 
     // Temporaer zu setzen fuer Transformationen am Bezugsobjekt
     void TransformGluePoints(const basegfx::B2DHomMatrix& rTransformation, const basegfx::B2DRange& rObjectRange);

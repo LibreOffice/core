@@ -200,10 +200,6 @@ void ResMgrContainer::init()
 
     // 1. fixed locations
     rtl::OUString uri(
-        RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR/program/resource"));
-    rtl::Bootstrap::expandMacros(uri);
-    aDirs.push_back(uri);
-    uri = rtl::OUString(
         RTL_CONSTASCII_USTRINGPARAM("$OOO_BASE_DIR/program/resource"));
     rtl::Bootstrap::expandMacros(uri);
     aDirs.push_back(uri);

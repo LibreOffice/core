@@ -307,15 +307,7 @@ static const CustomShapeTypeTranslationTable pCustomShapeTypeTranslationTable[] 
     { "mso-spt202", "rect" }
 };
 
-struct StringCheck
-{
-    bool operator()( const char* s1, const char* s2 ) const
-    {
-        return strcmp( s1, s2 ) == 0;
-    }
-};
-
-typedef std::hash_map< const char*, const char*, std::hash<const char*>, StringCheck> CustomShapeTypeTranslationHashMap;
+typedef std::hash_map< const char*, const char*, CStringHash, CStringEqual> CustomShapeTypeTranslationHashMap;
 static CustomShapeTypeTranslationHashMap* pCustomShapeTypeTranslationHashMap = NULL;
 
 static const char* lcl_GetPresetGeometry( const char* sShapeType )
@@ -871,7 +863,7 @@ ShapeExport& ShapeExport::WriteRectangleShape( Reference< XShape > xShape )
 }
 
 typedef ShapeExport& (ShapeExport::*ShapeConverter)( Reference< XShape > );
-typedef std::hash_map< const char*, ShapeConverter, std::hash<const char*>, StringCheck> NameToConvertMapType;
+typedef std::hash_map< const char*, ShapeConverter, CStringHash, CStringEqual> NameToConvertMapType;
 
 static const NameToConvertMapType& lcl_GetConverters()
 {

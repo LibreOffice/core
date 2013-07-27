@@ -42,7 +42,7 @@ using namespace com::sun::star;
 #include <sfx2/app.hxx>
 #include <sot/clsids.hxx>
 #include <svx/svdlegacy.hxx>
-
+#include <svx/charthelper.hxx>
 #include "address.hxx"
 #include "scfobj.hxx"
 #include "document.hxx"
@@ -91,6 +91,10 @@ void Sc10InsertObject::InsertChart( ScDocument* pDoc, SCTAB nDestTab, const Rect
         aSz.Width = rRect.GetSize().Width();
         aSz.Height = rRect.GetSize().Height();
         xObj->setVisualAreaSize( embed::Aspects::MSOLE_CONTENT, aSz );
+
+        // #121334# This call will change the chart's default background fill from white to transparent.
+        // Add here again if this is wanted (see task description for details)
+        // ChartHelper::AdaptDefaultsForChart( xObj );
 
             // hier kann das Chart noch nicht mit Daten gefuettert werden,
             // weil die Formeln noch nicht berechnet sind.

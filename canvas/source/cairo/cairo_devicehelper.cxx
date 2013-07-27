@@ -19,28 +19,21 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_canvas.hxx"
 
 #include <canvas/debug.hxx>
 #include <canvas/verbosetrace.hxx>
 #include <canvas/canvastools.hxx>
-
 #include <osl/mutex.hxx>
 #include <cppuhelper/compbase1.hxx>
-
 #include <com/sun/star/lang/NoSupportException.hpp>
-
 #include <toolkit/helper/vclunohelper.hxx>
 #include <basegfx/tools/canvastools.hxx>
 #include <basegfx/tools/unopolypolygon.hxx>
-
 #include <vcl/canvastools.hxx>
-
+#include <vcl/dibtools.hxx>
 #include <tools/stream.hxx>
-
 #include "cairo_spritecanvas.hxx"
 #include "cairo_canvasbitmap.hxx"
 #include "cairo_devicehelper.hxx"
@@ -267,8 +260,8 @@ namespace cairocanvas
             const ::Point aEmptyPoint;
             bool bOldMap( mpRefDevice->IsMapModeEnabled() );
             mpRefDevice->EnableMapMode( sal_False );
-            aStream << mpRefDevice->GetBitmap(aEmptyPoint,
-                                              mpRefDevice->GetOutputSizePixel());
+            const ::Bitmap aTempBitmap(mpRefDevice->GetBitmap(aEmptyPoint, mpRefDevice->GetOutputSizePixel()));
+            WriteDIB(aTempBitmap, aStream, false, true);
             mpRefDevice->EnableMapMode( bOldMap );
 
             ++nFilePostfixCount;

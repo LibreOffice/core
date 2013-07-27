@@ -905,11 +905,6 @@ String AbstractSvxAreaTabDialog_Impl::GetText() const
     return pDlg->GetText();
 }
 
-void AbstractSvxAreaTabDialog_Impl::DontDeleteColorTable()
-{
-    return pDlg->DontDeleteColorTable();
-}
-
 void AbstractSvxPostItDialog_Impl::SetText( const XubString& rStr )
 {
     pDlg->SetText( rStr );

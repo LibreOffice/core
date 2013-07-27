@@ -37,7 +37,6 @@
 #include "editeng/editengdllapi.h"
 
 class Color;
-class XColorTable;
 class IntlWrapper;
 // static and prototypes -------------------------------------------------
 

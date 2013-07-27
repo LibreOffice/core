@@ -83,7 +83,8 @@ ImplConnectMarkerOverlay::ImplConnectMarkerOverlay(const SdrCreateView& rView, S
             const basegfx::B2DVector aHalfLogicSize(pTargetOverlay->getOutputDevice().GetInverseViewTransformation() * basegfx::B2DVector(4.0, 4.0));
 
             // object
-            ::sdr::overlay::OverlayPolyPolygonStriped* pNew = new ::sdr::overlay::OverlayPolyPolygonStriped(aB2DPolyPolygon);
+            ::sdr::overlay::OverlayPolyPolygonStripedAndFilled* pNew = new ::sdr::overlay::OverlayPolyPolygonStripedAndFilled(
+                aB2DPolyPolygon);
             pTargetOverlay->add(*pNew);
             maObjects.append(*pNew);
 
@@ -95,9 +96,10 @@ ImplConnectMarkerOverlay::ImplConnectMarkerOverlay(const SdrCreateView& rView, S
                 const basegfx::B2DRange aBigRange(rPosition - aHalfLogicSize, rPosition + aHalfLogicSize);
                 const basegfx::B2DPolygon aTempPoly(basegfx::tools::createPolygonFromRect(aBigRange));
 
-                pNew = new ::sdr::overlay::OverlayPolyPolygonStriped(basegfx::B2DPolyPolygon(aTempPoly));
-                    pTargetOverlay->add(*pNew);
-                    maObjects.append(*pNew);
+                pNew = new ::sdr::overlay::OverlayPolyPolygonStripedAndFilled(
+                    basegfx::B2DPolyPolygon(aTempPoly));
+                pTargetOverlay->add(*pNew);
+                maObjects.append(*pNew);
             }
         }
     }
@@ -155,7 +157,8 @@ void ImpSdrCreateViewExtraData::CreateAndShowOverlay(const SdrCreateView& rView,
 
             if(rPolyPoly.count())
             {
-                ::sdr::overlay::OverlayPolyPolygonStriped* pNew = new ::sdr::overlay::OverlayPolyPolygonStriped(rPolyPoly);
+                ::sdr::overlay::OverlayPolyPolygonStripedAndFilled* pNew = new ::sdr::overlay::OverlayPolyPolygonStripedAndFilled(
+                    rPolyPoly);
                 pOverlayManager->add(*pNew);
                 maObjects.append(*pNew);
             }

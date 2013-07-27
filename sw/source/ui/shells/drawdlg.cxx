@@ -103,10 +103,9 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
             AbstractSvxAreaTabDialog * pDlg = pFact->CreateSvxAreaTabDialog( NULL,
                 &aNewAttr, &pView->getSdrModelFromSdrView(), pView);
             DBG_ASSERT(pDlg, "Dialogdiet fail!");
-            const SvxColorTableItem* pColorItem = (const SvxColorTableItem*)
+            // const SvxColorTableItem* pColorItem = (const SvxColorTableItem*)
                                     GetView().GetDocShell()->GetItem(SID_COLOR_TABLE);
-            if(pColorItem->GetColorTable() == XColorTable::GetStdColorTable())
-                pDlg->DontDeleteColorTable();
+
             if (pDlg->Execute() == RET_OK)
             {
                 pSh->StartAction();
@@ -118,12 +117,18 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
 
                 static sal_uInt16 __READONLY_DATA aInval[] =
                 {
-                    SID_ATTR_FILL_STYLE, SID_ATTR_FILL_COLOR, 0
+                    SID_ATTR_FILL_STYLE,
+                    SID_ATTR_FILL_COLOR,
+                    SID_ATTR_FILL_TRANSPARENCE,
+                    SID_ATTR_FILL_FLOATTRANSPARENCE,
+                    0
                 };
                 SfxBindings &rBnd = GetView().GetViewFrame()->GetBindings();
                 rBnd.Invalidate(aInval);
                 rBnd.Update(SID_ATTR_FILL_STYLE);
                 rBnd.Update(SID_ATTR_FILL_COLOR);
+                rBnd.Update(SID_ATTR_FILL_TRANSPARENCE);
+                rBnd.Update(SID_ATTR_FILL_FLOATTRANSPARENCE);
             }
             delete pDlg;
         }
@@ -150,8 +155,16 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
 
                 static sal_uInt16 __READONLY_DATA aInval[] =
                 {
-                    SID_ATTR_LINE_STYLE, SID_ATTR_LINE_WIDTH,
-                    SID_ATTR_LINE_COLOR, 0
+                    SID_ATTR_LINE_STYLE,                // ( SID_SVX_START + 169 )
+                    SID_ATTR_LINE_DASH,                 // ( SID_SVX_START + 170 )
+                    SID_ATTR_LINE_WIDTH,                // ( SID_SVX_START + 171 )
+                    SID_ATTR_LINE_COLOR,                // ( SID_SVX_START + 172 )
+                    SID_ATTR_LINE_START,                // ( SID_SVX_START + 173 )
+                    SID_ATTR_LINE_END,                  // ( SID_SVX_START + 174 )
+                    SID_ATTR_LINE_TRANSPARENCE,         // (SID_SVX_START+1107)
+                    SID_ATTR_LINE_JOINT,                // (SID_SVX_START+1110)
+                    SID_ATTR_LINE_CAP,                  // (SID_SVX_START+1111)
+                    0
                 };
 
                 GetView().GetViewFrame()->GetBindings().Invalidate(aInval);
@@ -204,12 +217,17 @@ void SwDrawShell::ExecDrawAttrArgs(SfxRequest& rReq)
             case SID_ATTR_FILL_GRADIENT:
             case SID_ATTR_FILL_HATCH:
             case SID_ATTR_FILL_BITMAP:
+            case SID_ATTR_FILL_TRANSPARENCE:
+            case SID_ATTR_FILL_FLOATTRANSPARENCE:
                 pDis->Execute(SID_ATTRIBUTES_AREA, sal_False);
                 break;
             case SID_ATTR_LINE_STYLE:
             case SID_ATTR_LINE_DASH:
             case SID_ATTR_LINE_WIDTH:
             case SID_ATTR_LINE_COLOR:
+            case SID_ATTR_LINE_TRANSPARENCE:
+            case SID_ATTR_LINE_JOINT:
+            case SID_ATTR_LINE_CAP:
                 pDis->Execute(SID_ATTRIBUTES_LINE, sal_False);
                 break;
         }

@@ -775,7 +775,9 @@ SdrOle2Obj::SdrOle2Obj(
     bFrame=bFrame_;
 
     if ( xObjRef.is() && (xObjRef->getStatus( GetAspect() ) & embed::EmbedMisc::EMBED_NEVERRESIZE ) )
+    {
         SetResizeProtect(true);
+    }
 }
 
 // -----------------------------------------------------------------------------
@@ -1500,7 +1502,10 @@ void SdrOle2Obj::SetObjRef( const com::sun::star::uno::Reference < com::sun::sta
         DELETEZ( pGraphic );
 
         if ( (xObjRef->getStatus( GetAspect() ) & embed::EmbedMisc::EMBED_NEVERRESIZE ) )
+        {
             SetResizeProtect(true);
+        }
+
         Connect();
     }
 

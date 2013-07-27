@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 #include <sfx2/linkmgr.hxx>
@@ -40,11 +38,10 @@
 #include <svx/svdobj.hxx>
 #include <svx/svdtrans.hxx>
 #include <svx/svdetc.hxx>
-#include <svx/svdattrx.hxx>  // NotPersistItems
-#include <svx/svdoedge.hxx>  // #32383# Die Verbinder nach Move nochmal anbroadcasten
-#include <svx/svdglob.hxx>   // StringCache
-#include <svx/svdstr.hrc>    // Objektname
-
+#include <svx/svdattrx.hxx>
+#include <svx/svdoedge.hxx>
+#include <svx/svdglob.hxx>
+#include <svx/svdstr.hrc>
 #include <svx/svxids.hrc>
 #include <svl/whiter.hxx>
 #include <svx/svdpool.hxx>
@@ -396,6 +393,11 @@ const basegfx::B2DHomMatrix& SdrObjGroup::getSdrObjectTransformation() const
         // transformation of the group is it's size (scale) and position (translation)
         // of all sub-objects combined. To not always create this, use isIdentity() as
         // hint for recalculation
+
+        // TTTT: Check how this works with
+        // - using the rotation angle of the 1st object for group rotation
+        // - is the local object transformation reset on change (obj insert/remove/modify)?
+
         if(maSdrObjectTransformation.getB2DHomMatrix().isIdentity())
         {
             const basegfx::B2DRange aSnapRange(sdr::legacy::GetAllObjSnapRange(getSdrObjectVector()));

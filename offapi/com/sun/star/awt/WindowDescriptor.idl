@@ -106,10 +106,8 @@ published struct WindowDescriptor
             <li>radiobutton</li>
             <li>scrollbar</li>
             <li>scrollbarbox</li>
-            <li>simpleanimation</li>
             <li>spinbutton</li>
             <li>spinfield</li>
-            <li>throbber</li>
             <li>splitter</li>
             <li>splitwindow</li>
             <li>statusbar</li>

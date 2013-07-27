@@ -175,18 +175,19 @@ DBG_NAME(edithdl)
 
 class SwAnchorMarker
 {
-    SdrHdl* mpHdl;
-    basegfx::B2DPoint maHdlPos;
-    basegfx::B2DPoint maLastPos;
+private:
+    SdrHdl*             mpHdl;
+    basegfx::B2DPoint   maHdlPos;
+    basegfx::B2DPoint   maLastPos;
     // --> OD 2010-09-16 #i114522#
     bool bTopRightHandle;
     // <--
 public:
-    SwAnchorMarker( SdrHdl* pH )
-    :   mpHdl( pH ),
-        maHdlPos( pH->getPosition() ),
-        maLastPos( pH->getPosition() ),
-        bTopRightHandle( HDL_ANCHOR_TR == pH->GetKind() )
+    SwAnchorMarker( SdrHdl& rH )
+    :   mpHdl( &rH ),
+        maHdlPos( rH.getPosition() ),
+        maLastPos( rH.getPosition() ),
+        bTopRightHandle(rH.GetKind() == HDL_ANCHOR_TR)
     {
     }
 
@@ -195,7 +196,8 @@ public:
     void SetPos( const basegfx::B2DPoint& rNew ) { mpHdl->setPosition( rNew ); }
     const basegfx::B2DPoint& GetPos() { return mpHdl->getPosition(); }
     const basegfx::B2DPoint& GetHdlPos() { return maHdlPos; }
-    void ChgHdl( SdrHdl* pNew ) { mpHdl = pNew; }
+    void ChgHdl( SdrHdl& rNew ) { mpHdl = &rNew; }
+    void SetSelected(bool bSelected) { mpHdl->SetSelected(bSelected); }
 
     // --> OD 2010-09-16 #i114522#
     const basegfx::B2DPoint GetPosForHitTest( const OutputDevice& rOut )
@@ -419,7 +421,7 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
         }
         else
         {
-            SdrObject* pObj; SdrPageView* pPV;
+            SdrObject* pObj = 0;
             pSdrView->SetHitTolerancePixel( HIT_PIX );
             if ( bNotInSelObj && bExecHyperlinks &&
                  pSdrView->PickObj( aB2DLPt, pSdrView->getHitTolLog(), pObj, SDRSEARCH_PICKMACRO ))
@@ -961,14 +963,8 @@ void SwEditWin::ChangeFly( sal_uInt8 nDir, sal_Bool bWeb )
     SwWrtShell &rSh = rView.GetWrtShell();
     SwRect aTmp = rSh.GetFlyRect();
     if( aTmp.HasArea() &&
-        // --> FME 2005-01-13 #i40348#
-        // IsSelObjProtected() seems to be the correct condition, not
-        // !HasReadonlySel(), otherwise frame is not moveable if content is
-        // protected.
-        !rSh.IsSelObjProtected( FLYPROTECT_POS|FLYPROTECT_SIZE ) )
-        // <--
+        !rSh.IsSelObjProtected( FLYPROTECT_POS ) )
     {
-        // OD 18.09.2003 #i18732# - add item <RES_FOLLOW_TEXT_FLOW>
         SfxItemSet aSet(rSh.GetAttrPool(),
                         RES_FRM_SIZE, RES_FRM_SIZE,
                         RES_VERT_ORIENT, RES_ANCHOR,
@@ -1610,17 +1606,15 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
                 switch( rKeyCode.GetModifier() | rKeyCode.GetCode() )
                 {
                 case KEY_RIGHT | KEY_MOD2:
-                case KEY_RIGHT | KEY_SHIFT:
                     eKeyState = KS_ColRightBig;
                     eFlyState = KS_Fly_Change;
-                    nDir = rKeyCode.GetModifier() & KEY_SHIFT ? MOVE_RIGHT_HUGE : MOVE_RIGHT_SMALL;
+                    nDir = MOVE_RIGHT_SMALL;
                     goto KEYINPUT_CHECKTABLE;
 
                 case KEY_LEFT | KEY_MOD2:
-                case KEY_LEFT | KEY_SHIFT:
                     eKeyState = KS_ColRightSmall;
                     eFlyState = KS_Fly_Change;
-                    nDir = rKeyCode.GetModifier() & KEY_SHIFT ? MOVE_LEFT_HUGE : MOVE_LEFT_SMALL;
+                    nDir = MOVE_LEFT_SMALL;
                     goto KEYINPUT_CHECKTABLE;
 
                 case KEY_RIGHT | KEY_MOD2 | KEY_SHIFT:
@@ -1648,17 +1642,15 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
                     goto KEYINPUT_CHECKTABLE;
 
                 case KEY_UP | KEY_MOD2:
-                case KEY_UP | KEY_SHIFT:
                     eKeyState = KS_ColBottomSmall;
                     eFlyState = KS_Fly_Change;
-                    nDir = rKeyCode.GetModifier() & KEY_SHIFT ? MOVE_UP_HUGE : MOVE_UP_SMALL;
+                    nDir = MOVE_UP_SMALL;
                     goto KEYINPUT_CHECKTABLE;
 
                 case KEY_DOWN | KEY_MOD2:
-                case KEY_DOWN | KEY_SHIFT:
                     eKeyState = KS_ColBottomBig;
                     eFlyState = KS_Fly_Change;
-                    nDir = rKeyCode.GetModifier() & KEY_SHIFT ? MOVE_DOWN_HUGE : MOVE_DOWN_SMALL;
+                    nDir = MOVE_DOWN_SMALL;
                     goto KEYINPUT_CHECKTABLE;
 
 //              case KEY_UP | KEY_MOD2 | KEY_SHIFT:
@@ -1701,6 +1693,28 @@ KEYINPUT_CHECKTABLE:
                             eKeyState = KS_EnterCharCell;
                     }
                     break;
+
+                // huge object move
+                case KEY_RIGHT | KEY_SHIFT:
+                case KEY_LEFT | KEY_SHIFT:
+                case KEY_UP | KEY_SHIFT:
+                case KEY_DOWN | KEY_SHIFT:
+                {
+                    if ( pFlyFmt
+                         || ( (rSh.GetSelectionType() & (nsSelectionType::SEL_DRW|nsSelectionType::SEL_DRW_FORM))
+                              && rSh.GetDrawView()->areSdrObjectsSelected() ) )
+                    {
+                        eKeyState = pFlyFmt ? KS_Fly_Change : KS_Draw_Change;
+                        switch ( rKeyCode.GetCode() )
+                        {
+                            case KEY_RIGHT: nDir = MOVE_RIGHT_HUGE; break;
+                            case KEY_LEFT: nDir = MOVE_LEFT_HUGE; break;
+                            case KEY_UP: nDir = MOVE_UP_HUGE; break;
+                            case KEY_DOWN: nDir = MOVE_DOWN_HUGE; break;
+                        }
+                    }
+                    break;
+                }
 
 //-------
 // Insert/Delete
@@ -2865,7 +2879,9 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                             ( pHdl->GetKind() == HDL_ANCHOR ||
                               pHdl->GetKind() == HDL_ANCHOR_TR ) )
                     {
-                        pAnchorMarker = new SwAnchorMarker( pHdl );
+                        // #121463# Set selected during drag
+                        pHdl->SetSelected(true);
+                        pAnchorMarker = new SwAnchorMarker( *pHdl );
                         UpdatePointer( aDocPos, rMEvt.GetModifier() );
                         return;
                     }
@@ -3018,7 +3034,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                     ( pHdl->GetKind() == HDL_ANCHOR ||
                                       pHdl->GetKind() == HDL_ANCHOR_TR ) )
                             {
-                                pAnchorMarker = new SwAnchorMarker( pHdl );
+                                pAnchorMarker = new SwAnchorMarker( *pHdl );
                                 UpdatePointer( aDocPos, rMEvt.GetModifier() );
                                 return;
                             }
@@ -3700,7 +3716,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                         ( pHdl->GetKind() == HDL_ANCHOR ||
                           pHdl->GetKind() == HDL_ANCHOR_TR ) )
                 {
-                    pAnchorMarker->ChgHdl( pHdl );
+                    pAnchorMarker->ChgHdl( *pHdl );
                     if( aNew.X() || aNew.Y() )
                     {
                         pAnchorMarker->SetPos( basegfx::B2DPoint(aNew.X(), aNew.Y()) );
@@ -4051,6 +4067,9 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
 
     if( pAnchorMarker )
     {
+        // #121463# delete selected after drag
+        pAnchorMarker->SetSelected(false);
+
         Point aPnt(basegfx::fround(pAnchorMarker->GetLastPos().getX()), basegfx::fround(pAnchorMarker->GetLastPos().getY()));
         DELETEZ( pAnchorMarker );
         if( aPnt.X() || aPnt.Y() )

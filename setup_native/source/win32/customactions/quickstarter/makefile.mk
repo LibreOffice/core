@@ -47,6 +47,10 @@ UWINAPILIB=
 
 .IF "$(GUI)"=="WNT"
 
+.IF "$(USE_SYSTEM_STL)" != "YES" && "$(PRODUCT)" = ""
+CDEFS+=-D_DEBUG
+.ENDIF
+
 STDSHL += \
     $(ADVAPI32LIB)\
     $(SHELL32LIB)\

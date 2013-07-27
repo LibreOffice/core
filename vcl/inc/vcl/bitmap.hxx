@@ -29,6 +29,18 @@
 #include <vcl/mapmod.hxx>
 #include <tools/rc.hxx>
 #include <vcl/region.hxx>
+#include <tools/color.hxx>
+
+#ifdef WNT
+#define _STLP_HAS_NATIVE_FLOAT_ABS
+#endif
+
+#include <boost/math/special_functions/sinc.hpp>
+
+using namespace boost::math::policies;
+typedef policy<
+    promote_double<false>
+> SincPolicy;
 
 // -----------
 // - Defines -
@@ -243,6 +255,8 @@ public:
 class Lanczos3Kernel : public Kernel
 {
 public:
+    Lanczos3Kernel( void) {}
+
     virtual double GetWidth() const
     {
         return 3.0;
@@ -261,13 +275,15 @@ public:
         }
 
         x *= M_PI;
-
-        return sin(x) / x;
+        return boost::math::sinc_pi(x, SincPolicy());
     }
 };
 
 class BicubicKernel : public Kernel
 {
+public:
+    BicubicKernel( void) {}
+
     virtual double GetWidth() const
     {
         return 2.0;
@@ -295,6 +311,9 @@ class BicubicKernel : public Kernel
 
 class BilinearKernel : public Kernel
 {
+public:
+    BilinearKernel( void) {}
+
     virtual double GetWidth() const
     {
         return 1.0;
@@ -318,6 +337,9 @@ class BilinearKernel : public Kernel
 
 class BoxKernel : public Kernel
 {
+public:
+    BoxKernel( void) {}
+
     virtual double GetWidth() const
     {
         return 0.5;
@@ -343,8 +365,6 @@ class   BitmapWriteAccess;
 class   BitmapPalette;
 class   ImpBitmap;
 class   Color;
-class   SvStream;
-struct  DIBInfoHeader;
 class   ResId;
 class   GDIMetaFile;
 class   AlphaMask;
@@ -382,20 +402,6 @@ public:
                    ImpBitmap*           ImplGetImpBitmap() const;
     SAL_DLLPRIVATE void                 ImplSetImpBitmap( ImpBitmap* pImpBmp );
     SAL_DLLPRIVATE void                 ImplAssignWithSize( const Bitmap& rBitmap );
-
-    SAL_DLLPRIVATE static sal_Bool          ImplReadDIB( SvStream& rIStm, Bitmap& rBmp, sal_uLong nOffset );
-    SAL_DLLPRIVATE static sal_Bool          ImplReadDIBFileHeader( SvStream& rIStm, sal_uLong& rOffset );
-    SAL_DLLPRIVATE static sal_Bool          ImplReadDIBInfoHeader( SvStream& rIStm, DIBInfoHeader& rHeader, sal_Bool& bTopDown );
-    SAL_DLLPRIVATE static sal_Bool          ImplReadDIBPalette( SvStream& rIStm, BitmapWriteAccess& rAcc, sal_Bool bQuad );
-    SAL_DLLPRIVATE static sal_Bool          ImplReadDIBBits( SvStream& rIStm, DIBInfoHeader& rHeader, BitmapWriteAccess& rAcc, sal_Bool bTopDown );
-    SAL_DLLPRIVATE sal_Bool                 ImplWriteDIB( SvStream& rOStm, BitmapReadAccess& rAcc, sal_Bool bCompressed ) const;
-    SAL_DLLPRIVATE static sal_Bool          ImplWriteDIBFileHeader( SvStream& rOStm, BitmapReadAccess& rAcc );
-    SAL_DLLPRIVATE static sal_Bool          ImplWriteDIBPalette( SvStream& rOStm, BitmapReadAccess& rAcc );
-    SAL_DLLPRIVATE static sal_Bool          ImplWriteDIBBits( SvStream& rOStm, BitmapReadAccess& rAcc,
-                                                             sal_uLong nCompression, sal_uInt32& rImageSize );
-    SAL_DLLPRIVATE static void          ImplDecodeRLE( sal_uInt8* pBuffer, DIBInfoHeader& rHeader,
-                                           BitmapWriteAccess& rAcc, sal_Bool bRLE4 );
-    SAL_DLLPRIVATE static sal_Bool          ImplWriteRLE( SvStream& rOStm, BitmapReadAccess& rAcc, sal_Bool bRLE4 );
 
     SAL_DLLPRIVATE void                     ImplAdaptBitCount(Bitmap& rNew) const;
     SAL_DLLPRIVATE sal_Bool                 ImplScaleFast( const double& rScaleX, const double& rScaleY );
@@ -436,7 +442,7 @@ public:
                             Bitmap( const Size& rSizePixel, sal_uInt16 nBitCount, const BitmapPalette* pPal = NULL );
                             Bitmap( const ResId& rResId );
                             Bitmap( SalBitmap* pSalBitmap );
-                            ~Bitmap();
+    virtual                 ~Bitmap();
 
     Bitmap&                 operator=( const Bitmap& rBitmap );
     inline sal_Bool             operator!() const;
@@ -456,7 +462,7 @@ public:
     inline void             SetPrefSize( const Size& rSize );
 
     Size                    GetSizePixel() const;
-    void                    SetSizePixel( const Size& rNewSize );
+    void                    SetSizePixel( const Size& rNewSize, sal_uInt32 nScaleFlag = BMP_SCALE_FASTESTINTERPOLATE );
 
     /**
      * The pixel size of a bitmap's source (e.g. an image file)
@@ -654,7 +660,7 @@ public:
 
         @return sal_True, if the operation was completed successfully.
      */
-    sal_Bool                    Scale( const Size& rNewSize, sal_uLong nScaleFlag = BMP_SCALE_FASTESTINTERPOLATE );
+    sal_Bool                    Scale( const Size& rNewSize, sal_uInt32 nScaleFlag = BMP_SCALE_FASTESTINTERPOLATE );
 
     /** Scale the bitmap
 
@@ -666,7 +672,7 @@ public:
 
         @return sal_True, if the operation was completed successfully.
      */
-    sal_Bool                    Scale( const double& rScaleX, const double& rScaleY, sal_uLong nScaleFlag = BMP_SCALE_FASTESTINTERPOLATE );
+    sal_Bool                    Scale( const double& rScaleX, const double& rScaleY, sal_uInt32 nScaleFlag = BMP_SCALE_FASTESTINTERPOLATE );
 
     // Adapt the BitCount of rNew to BitCount of lolal, including grey or color paltette
     // Can be used to create alpha/mask bitmaps after their processing in 24bit
@@ -878,18 +884,9 @@ public:
                                     const BmpFilterParam* pFilterParam = NULL,
                                     const Link* pProgress = NULL );
 
-public:
     BitmapReadAccess*       AcquireReadAccess();
     BitmapWriteAccess*      AcquireWriteAccess();
     void                    ReleaseAccess( BitmapReadAccess* pAccess );
-
-public:
-
-    sal_Bool                    Read( SvStream& rIStm, sal_Bool bFileHeader = sal_True );
-    sal_Bool                    Write( SvStream& rOStm, sal_Bool bCompressed = sal_True, sal_Bool bFileHeader = sal_True ) const;
-
-    friend VCL_DLLPUBLIC SvStream&        operator>>( SvStream& rIStm, Bitmap& rBitmap );
-    friend VCL_DLLPUBLIC SvStream&        operator<<( SvStream& rOStm, const Bitmap& rBitmap );
 };
 
 // -----------

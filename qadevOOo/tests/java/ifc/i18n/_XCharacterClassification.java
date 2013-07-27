@@ -301,7 +301,7 @@ public class _XCharacterClassification extends MultiMethodTest {
     * is equal to a number where element is located in array. Also method has
     * <b> OK </b> status for symbol with code 55296, because it doesn't work
     * since it hasn't the right neighborhood.<p>
-    * @see http://ppewww.ph.gla.ac.uk/~flavell/unicode/unidata.html
+    * @see "http://ppewww.ph.gla.ac.uk/~flavell/unicode/unidata.html"
     */
     public void _getScript() {
         boolean res = true;
@@ -401,7 +401,7 @@ public class _XCharacterClassification extends MultiMethodTest {
 
     /**
     * Method returns locale for a given language and country.
-    * @param localeIndex index of needed locale.
+    * @param k index of needed locale.
     */
     private Locale getLocale(int k) {
         return new Locale(languages[k],countries[k],"");

@@ -121,8 +121,8 @@ cp printeradmin.sh ${DESTDIR}/usr/bin/${PREFIX}-printeradmin
 chmod 0755 ${DESTDIR}/usr/bin/${PREFIX} ${DESTDIR}/usr/bin/${PREFIX}-printeradmin
 
 mkdir -p ${DESTDIR}/usr/share/mime/packages
-cp openoffice.org.xml ${DESTDIR}/usr/share/mime/packages/
-chmod 0644 ${DESTDIR}/usr/share/mime/packages/openoffice.org.xml
+cp apacheopenoffice.xml ${DESTDIR}/usr/share/mime/packages/
+chmod 0644 ${DESTDIR}/usr/share/mime/packages/apacheopenoffice.xml
 
 mkdir -p ${DESTDIR}/usr/share/applications
 for i in `cat launcherlist`; do

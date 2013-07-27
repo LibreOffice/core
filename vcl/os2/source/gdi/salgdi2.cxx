@@ -51,7 +51,7 @@ bool Os2SalGraphics::supportsOperation( OutDevSupportType ) const
 }
 
 
-void Os2SalGraphics::copyBits( const SalTwoRect* pPosAry, SalGraphics* pSrcGraphics )
+void Os2SalGraphics::copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics )
 {
     HPS     hSrcPS;
     POINTL  thePoints[4];
@@ -71,22 +71,22 @@ void Os2SalGraphics::copyBits( const SalTwoRect* pPosAry, SalGraphics* pSrcGraph
     }
 
     // lower-left corner of target
-    thePoints[0].x = pPosAry->mnDestX;
-    thePoints[0].y = TY( pPosAry->mnDestY + pPosAry->mnDestHeight - 1 );
+    thePoints[0].x = rPosAry.mnDestX;
+    thePoints[0].y = TY( rPosAry.mnDestY + rPosAry.mnDestHeight - 1 );
 
     // upper-right corner of target
-    thePoints[1].x = pPosAry->mnDestX + pPosAry->mnDestWidth;
-    thePoints[1].y = TY( pPosAry->mnDestY - 1 );
+    thePoints[1].x = rPosAry.mnDestX + rPosAry.mnDestWidth;
+    thePoints[1].y = TY( rPosAry.mnDestY - 1 );
 
     // lower-left corner of source
-    thePoints[2].x = pPosAry->mnSrcX;
-    thePoints[2].y = nSrcHeight - ( pPosAry->mnSrcY + pPosAry->mnSrcHeight );
+    thePoints[2].x = rPosAry.mnSrcX;
+    thePoints[2].y = nSrcHeight - ( rPosAry.mnSrcY + rPosAry.mnSrcHeight );
 
-    if ( ( pPosAry->mnDestWidth != pPosAry->mnSrcWidth ) || ( pPosAry->mnDestHeight != pPosAry->mnSrcHeight ) )
+    if ( ( rPosAry.mnDestWidth != rPosAry.mnSrcWidth ) || ( rPosAry.mnDestHeight != rPosAry.mnSrcHeight ) )
     {
         // upper-right corner of Source
-        thePoints[3].x = pPosAry->mnSrcX + pPosAry->mnSrcWidth;
-        thePoints[3].y = nSrcHeight - pPosAry->mnSrcY + pPosAry->mnSrcHeight;
+        thePoints[3].x = rPosAry.mnSrcX + rPosAry.mnSrcWidth;
+        thePoints[3].y = nSrcHeight - rPosAry.mnSrcY + rPosAry.mnSrcHeight;
 
         GpiBitBlt( mhPS, hSrcPS, 4, thePoints,
                    mbXORMode ? ROP_SRCINVERT : ROP_SRCCOPY, BBO_IGNORE );
@@ -275,7 +275,7 @@ void Os2SalGraphics::copyArea( long nDestX, long nDestY,
 // -----------------------------------------------------------------------
 
 void ImplDrawBitmap( HPS hPS, long nScreenHeight,
-                     const SalTwoRect* pPosAry, const Os2SalBitmap& rSalBitmap,
+                     const SalTwoRect& rPosAry, const Os2SalBitmap& rSalBitmap,
                      PM_BOOL bPrinter, int nDrawMode )
 {
     if( hPS )
@@ -305,15 +305,15 @@ void ImplDrawBitmap( HPS hPS, long nScreenHeight,
             long                nInfoSize = *(ULONG*) pBI + rSalBitmap.ImplGetDIBColorCount( hDrawDIB ) * sizeof( RGB2 );
             PM_BYTE*                pBits = (PM_BYTE*) pBI + nInfoSize;
 
-            pts[0].x = pPosAry->mnDestX;
-            pts[0].y = nScreenHeight - pPosAry->mnDestY - pPosAry->mnDestHeight;
-            pts[1].x = pPosAry->mnDestX + pPosAry->mnDestWidth - 1;
-            pts[1].y = nScreenHeight - pPosAry->mnDestY - 1;
+            pts[0].x = rPosAry.mnDestX;
+            pts[0].y = nScreenHeight - rPosAry.mnDestY - rPosAry.mnDestHeight;
+            pts[1].x = rPosAry.mnDestX + rPosAry.mnDestWidth - 1;
+            pts[1].y = nScreenHeight - rPosAry.mnDestY - 1;
 
-            pts[2].x = pPosAry->mnSrcX;
-            pts[2].y = nHeight - ( pPosAry->mnSrcY + pPosAry->mnSrcHeight );
-            pts[3].x = pPosAry->mnSrcX + pPosAry->mnSrcWidth;
-            pts[3].y = nHeight - pPosAry->mnSrcY;
+            pts[2].x = rPosAry.mnSrcX;
+            pts[2].y = nHeight - ( rPosAry.mnSrcY + rPosAry.mnSrcHeight );
+            pts[3].x = rPosAry.mnSrcX + rPosAry.mnSrcWidth;
+            pts[3].y = nHeight - rPosAry.mnSrcY;
 
             // if we've got a 1Bit DIB, we create a 4Bit substitute
             if( ( pBIH->cBitCount == 1 ) && !hSubst )
@@ -400,15 +400,15 @@ void ImplDrawBitmap( HPS hPS, long nScreenHeight,
         {
             POINTL pts[ 4 ];
 
-            pts[0].x = pPosAry->mnDestX;
-            pts[0].y = nScreenHeight - pPosAry->mnDestY - pPosAry->mnDestHeight;
-            pts[1].x = pPosAry->mnDestX + pPosAry->mnDestWidth - 1;
-            pts[1].y = nScreenHeight - pPosAry->mnDestY - 1;
+            pts[0].x = rPosAry.mnDestX;
+            pts[0].y = nScreenHeight - rPosAry.mnDestY - rPosAry.mnDestHeight;
+            pts[1].x = rPosAry.mnDestX + rPosAry.mnDestWidth - 1;
+            pts[1].y = nScreenHeight - rPosAry.mnDestY - 1;
 
-            pts[2].x = pPosAry->mnSrcX;
-            pts[2].y = rSalBitmap.GetSize().Height() - ( pPosAry->mnSrcY + pPosAry->mnSrcHeight );
-            pts[3].x = pPosAry->mnSrcX + pPosAry->mnSrcWidth;
-            pts[3].y = rSalBitmap.GetSize().Height() - pPosAry->mnSrcY;
+            pts[2].x = rPosAry.mnSrcX;
+            pts[2].y = rSalBitmap.GetSize().Height() - ( rPosAry.mnSrcY + rPosAry.mnSrcHeight );
+            pts[3].x = rPosAry.mnSrcX + rPosAry.mnSrcWidth;
+            pts[3].y = rSalBitmap.GetSize().Height() - rPosAry.mnSrcY;
 
             GpiWCBitBlt( hPS, hDrawDDB, 4L, pts, nDrawMode, BBO_IGNORE );
 /*
@@ -425,30 +425,29 @@ void ImplDrawBitmap( HPS hPS, long nScreenHeight,
 
 // -----------------------------------------------------------------------
 
-void Os2SalGraphics::drawBitmap( const SalTwoRect* pPosAry,
-                              const SalBitmap& rSalBitmap )
+void Os2SalGraphics::drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap )
 {
     ImplDrawBitmap( mhPS, mnHeight,
-                    pPosAry, static_cast<const Os2SalBitmap&>(rSalBitmap),
+                    rPosAry, static_cast<const Os2SalBitmap&>(rSalBitmap),
                     mbPrinter,
                     mbXORMode ? ROP_SRCINVERT : ROP_SRCCOPY );
 }
 
 // -----------------------------------------------------------------------
 
-void Os2SalGraphics::drawBitmap( const SalTwoRect* pPosAry,
+void Os2SalGraphics::drawBitmap( const SalTwoRect& rPosAry,
                               const SalBitmap& rSalBitmap,
                               SalColor nTransparentColor )
 {
     DBG_ASSERT( !mbPrinter, "No transparency print possible!" );
     //const Os2SalBitmap& rSalBitmap = static_cast<const Os2SalBitmap&>(rSSalBitmap);
     // an FM: kann erst einmal unberuecksichtigt bleiben
-    drawBitmap( pPosAry, rSalBitmap );
+    drawBitmap( rPosAry, rSalBitmap );
 }
 
 // -----------------------------------------------------------------------
 
-void Os2SalGraphics::drawBitmap( const SalTwoRect* pPosAry,
+void Os2SalGraphics::drawBitmap( const SalTwoRect& rPosAry,
                               const SalBitmap& rSSalBitmap,
                               const SalBitmap& rSTransparentBitmap )
 {
@@ -459,12 +458,12 @@ void Os2SalGraphics::drawBitmap( const SalTwoRect* pPosAry,
 
     if( bFastTransparent )
     {
-        ImplDrawBitmap( mhPS, mnHeight, pPosAry, rTransparentBitmap, FALSE, ROP_SRCAND );
-        ImplDrawBitmap( mhPS, mnHeight, pPosAry, rSalBitmap, FALSE, ROP_SRCPAINT );
+        ImplDrawBitmap( mhPS, mnHeight, rPosAry, rTransparentBitmap, FALSE, ROP_SRCAND );
+        ImplDrawBitmap( mhPS, mnHeight, rPosAry, rSalBitmap, FALSE, ROP_SRCPAINT );
     }
     else
     {
-        SalTwoRect      aPosAry = *pPosAry;
+        SalTwoRect      aPosAry = rPosAry;
         int             nDstX = (int) aPosAry.mnDestX;
         int             nDstY = (int) aPosAry.mnDestY;
         int             nDstWidth = (int) aPosAry.mnDestWidth;
@@ -497,13 +496,13 @@ void Os2SalGraphics::drawBitmap( const SalTwoRect* pPosAry,
         aPtL[ 2 ].y = TY( nDstY + nDstHeight - 1 );
 
         GpiBitBlt( hMemPS, hPS, 3, aPtL, ROP_SRCCOPY, BBO_IGNORE );
-        ImplDrawBitmap( hMaskPS, nDstHeight, &aPosAry, rTransparentBitmap, FALSE, ROP_SRCCOPY );
+        ImplDrawBitmap( hMaskPS, nDstHeight, aPosAry, rTransparentBitmap, FALSE, ROP_SRCCOPY );
 
         aPtL[ 2 ].x = 0;
         aPtL[ 2 ].y = 0;
 
         GpiBitBlt( hMemPS, hMaskPS, 3, aPtL, ROP_SRCAND, BBO_IGNORE );
-        ImplDrawBitmap( hMaskPS, nDstHeight, &aPosAry, rSalBitmap, FALSE, ROP_SRCERASE );
+        ImplDrawBitmap( hMaskPS, nDstHeight, aPosAry, rSalBitmap, FALSE, ROP_SRCERASE );
         GpiBitBlt( hMemPS, hMaskPS, 3, aPtL, ROP_SRCPAINT, BBO_IGNORE );
 
         aPtL[ 0 ].x = nDstX;
@@ -542,6 +541,20 @@ bool Os2SalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
 
 // -----------------------------------------------------------------------
 
+bool Os2SalGraphics::drawTransformedBitmap(
+    const basegfx::B2DPoint& rNull,
+    const basegfx::B2DPoint& rX,
+    const basegfx::B2DPoint& rY,
+    const SalBitmap& rSourceBitmap,
+    const SalBitmap* pAlphaBitmap)
+{
+    // here direct support for transformed bitmaps can be impemented
+    (void)rNull; (void)rX; (void)rY; (void)rSourceBitmap; (void)pAlphaBitmap;
+    return false;
+}
+
+// -----------------------------------------------------------------------
+
 bool Os2SalGraphics::drawAlphaRect( long nX, long nY, long nWidth,
                                     long nHeight, sal_uInt8 nTransparency )
 {
@@ -551,7 +564,7 @@ bool Os2SalGraphics::drawAlphaRect( long nX, long nY, long nWidth,
 
 // -----------------------------------------------------------------------
 
-void Os2SalGraphics::drawMask( const SalTwoRect* pPosAry,
+void Os2SalGraphics::drawMask( const SalTwoRect& rPosAry,
                             const SalBitmap& rSSalBitmap,
                             SalColor nMaskColor )
 {
@@ -559,7 +572,7 @@ void Os2SalGraphics::drawMask( const SalTwoRect* pPosAry,
 
     const Os2SalBitmap& rSalBitmap = static_cast<const Os2SalBitmap&>(rSSalBitmap);
 
-    SalTwoRect  aPosAry = *pPosAry;
+    SalTwoRect  aPosAry = rPosAry;
     HPS         hPS = mhPS;
     IMAGEBUNDLE aBundle, aOldBundle;
     AREABUNDLE  aAreaBundle, aOldAreaBundle;
@@ -582,7 +595,7 @@ void Os2SalGraphics::drawMask( const SalTwoRect* pPosAry,
     Ft2SetAttrs( hPS, PRIM_AREA, ABB_COLOR | ABB_BACK_COLOR | ABB_SYMBOL |
                  ABB_MIX_MODE | ABB_BACK_MIX_MODE, 0, &aAreaBundle );
 
-    ImplDrawBitmap( hPS, mnHeight, &aPosAry, rSalBitmap, FALSE, 0x00B8L );
+    ImplDrawBitmap( hPS, mnHeight, aPosAry, rSalBitmap, FALSE, 0x00B8L );
 
     Ft2SetAttrs( hPS, PRIM_IMAGE, IBB_COLOR | IBB_BACK_COLOR, 0, &aOldBundle );
     Ft2SetAttrs( hPS, PRIM_AREA, ABB_COLOR | ABB_BACK_COLOR | ABB_SYMBOL |

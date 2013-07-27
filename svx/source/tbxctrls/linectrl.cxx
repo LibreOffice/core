@@ -362,7 +362,7 @@ SvxLineEndWindow::SvxLineEndWindow(
     SfxPopupWindow( nSlotId,
                     rFrame,
                     WinBits( WB_BORDER | WB_STDFLOATWIN | WB_SIZEABLE | WB_3DLOOK ) ),
-    pLineEndList    ( NULL ),
+    maLineEndList(),
     aLineEndSet     ( this, WinBits( WB_ITEMBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT ) ),
     nCols           ( 2 ),
     nLines          ( 12 ),
@@ -384,7 +384,7 @@ SvxLineEndWindow::SvxLineEndWindow(
                     rFrame,
                     pParentWindow,
                     WinBits( WB_BORDER | WB_STDFLOATWIN | WB_SIZEABLE | WB_3DLOOK ) ),
-    pLineEndList    ( NULL ),
+    maLineEndList(),
     aLineEndSet     ( this, WinBits( WB_ITEMBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT ) ),
     nCols           ( 2 ),
     nLines          ( 12 ),
@@ -409,13 +409,13 @@ void SvxLineEndWindow::implInit()
     {
         pItem = pDocSh->GetItem( SID_LINEEND_LIST );
         if( pItem )
-            pLineEndList = ( (SvxLineEndListItem*) pItem )->GetLineEndList();
+            maLineEndList = static_cast< const SvxLineEndListItem* >(pItem)->GetLineEndList();
 
         pItem = pDocSh->GetItem( SID_ATTR_LINEEND_WIDTH_DEFAULT );
         if( pItem )
             nLineEndWidth = ( (SfxUInt16Item*) pItem )->GetValue();
     }
-    DBG_ASSERT( pLineEndList, "LineEndList wurde nicht gefunden" );
+    DBG_ASSERT( maLineEndList.get(), "LineEndList wurde nicht gefunden" );
 
     aLineEndSet.SetSelectHdl( LINK( this, SvxLineEndWindow, SelectHdl ) );
     aLineEndSet.SetColCount( nCols );
@@ -458,12 +458,12 @@ IMPL_LINK( SvxLineEndWindow, SelectHdl, void *, EMPTYARG )
     }
     else if( nId % 2 ) // LinienAnfang
     {
-        XLineEndEntry* pEntry = pLineEndList->GetLineEnd( ( nId - 1 ) / 2 - 1 );
+        XLineEndEntry* pEntry = maLineEndList->GetLineEnd( ( nId - 1 ) / 2 - 1 );
         pLineStartItem  = new XLineStartItem( pEntry->GetName(), pEntry->GetLineEnd() );
     }
     else // LinienEnde
     {
-        XLineEndEntry* pEntry = pLineEndList->GetLineEnd( nId / 2 - 2 );
+        XLineEndEntry* pEntry = maLineEndList->GetLineEnd( nId / 2 - 2 );
         pLineEndItem    = new XLineEndItem( pEntry->GetName(), pEntry->GetLineEnd() );
     }
 
@@ -505,42 +505,41 @@ IMPL_LINK( SvxLineEndWindow, SelectHdl, void *, EMPTYARG )
 
 void SvxLineEndWindow::FillValueSet()
 {
-    if( pLineEndList )
+    if(maLineEndList.get())
     {
         XLineEndEntry*      pEntry  = NULL;
-        Bitmap*             pBmp    = NULL;
         VirtualDevice       aVD;
 
-        long nCount = pLineEndList->Count();
+        long nCount = maLineEndList->Count();
 
         // Erster Eintrag: kein LinienEnde
         // Temporaer wird ein Eintrag hinzugefuegt, um die UI-Bitmap zu erhalten
         basegfx::B2DPolyPolygon aNothing;
-        pLineEndList->Insert( new XLineEndEntry( aNothing, SVX_RESSTR( RID_SVXSTR_NONE ) ) );
-        pEntry = pLineEndList->GetLineEnd( nCount );
-        pBmp = pLineEndList->GetBitmap( nCount );
-        DBG_ASSERT( pBmp, "UI-Bitmap wurde nicht erzeugt" );
+        maLineEndList->Insert( new XLineEndEntry( aNothing, SVX_RESSTR( RID_SVXSTR_NONE ) ) );
+        pEntry = maLineEndList->GetLineEnd( nCount );
+        Bitmap aBmp = maLineEndList->GetUiBitmap( nCount );
+        OSL_ENSURE( !aBmp.IsEmpty(), "UI-Bitmap wurde nicht erzeugt" );
 
-        aBmpSize = pBmp->GetSizePixel();
+        aBmpSize = aBmp.GetSizePixel();
         aVD.SetOutputSizePixel( aBmpSize, sal_False );
         aBmpSize.Width() = aBmpSize.Width() / 2;
         Point aPt0( 0, 0 );
         Point aPt1( aBmpSize.Width(), 0 );
 
-        aVD.DrawBitmap( Point(), *pBmp );
+        aVD.DrawBitmap( Point(), aBmp );
         aLineEndSet.InsertItem( 1, aVD.GetBitmap( aPt0, aBmpSize ), pEntry->GetName() );
         aLineEndSet.InsertItem( 2, aVD.GetBitmap( aPt1, aBmpSize ), pEntry->GetName() );
 
-        delete pLineEndList->Remove( nCount );
+        delete maLineEndList->Remove( nCount );
 
         for( long i = 0; i < nCount; i++ )
         {
-            pEntry = pLineEndList->GetLineEnd( i );
+            pEntry = maLineEndList->GetLineEnd( i );
             DBG_ASSERT( pEntry, "Konnte auf LineEndEntry nicht zugreifen" );
-            pBmp = pLineEndList->GetBitmap( i );
-            DBG_ASSERT( pBmp, "UI-Bitmap wurde nicht erzeugt" );
+            aBmp = maLineEndList->GetUiBitmap( i );
+            OSL_ENSURE( !aBmp.IsEmpty(), "UI-Bitmap wurde nicht erzeugt" );
 
-            aVD.DrawBitmap( aPt0, *pBmp );
+            aVD.DrawBitmap( aPt0, aBmp );
             aLineEndSet.InsertItem( (sal_uInt16)((i+1L)*2L+1L), aVD.GetBitmap( aPt0, aBmpSize ), pEntry->GetName() );
             aLineEndSet.InsertItem( (sal_uInt16)((i+2L)*2L),    aVD.GetBitmap( aPt1, aBmpSize ), pEntry->GetName() );
         }
@@ -648,8 +647,8 @@ void SvxLineEndWindow::StateChanged(
         // Die Liste der LinienEnden (LineEndList) hat sich geaendert:
         if ( pState && dynamic_cast< const SvxLineEndListItem* >(pState))
         {
-            pLineEndList = ((SvxLineEndListItem*)pState)->GetLineEndList();
-            DBG_ASSERT( pLineEndList, "LineEndList nicht gefunden" );
+            maLineEndList = static_cast< const SvxLineEndListItem* >(pState)->GetLineEndList();
+            DBG_ASSERT( maLineEndList.get(), "LineEndList nicht gefunden" );
 
             aLineEndSet.Clear();
             FillValueSet();

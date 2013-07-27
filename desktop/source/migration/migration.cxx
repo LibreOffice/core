@@ -768,26 +768,35 @@ void MigrationImpl::copyConfig() {
     for (Components::const_iterator i(comps.begin()); i != comps.end(); ++i) {
         if (!i->second.includedPaths.empty()) {
             rtl::OUStringBuffer buf(m_aInfo.userdata);
-            buf.appendAscii(RTL_CONSTASCII_STRINGPARAM("/user/registry/data"));
-            sal_Int32 n = 0;
-            do {
-                rtl::OUString seg(i->first.getToken(0, '.', n));
-                rtl::OUString enc(
-                    rtl::Uri::encode(
-                        seg, rtl_UriCharClassPchar, rtl_UriEncodeStrict,
-                        RTL_TEXTENCODING_UTF8));
-                if (enc.getLength() == 0 && seg.getLength() != 0) {
-                    OSL_TRACE(
-                        ("configuration migration component %s ignored (cannot"
-                         " be encoded as file path)"),
-                        rtl::OUStringToOString(
-                            i->first, RTL_TEXTENCODING_UTF8).getStr());
-                    goto next;
-                }
-                buf.append(sal_Unicode('/'));
-                buf.append(enc);
-            } while (n >= 0);
-            buf.appendAscii(RTL_CONSTASCII_STRINGPARAM(".xcu"));
+            if ( m_aInfo.productname.equals( OUString::createFromAscii("OpenOffice.org 3") ) )
+            {
+                // OpenOffice.org 3 configuration file
+                buf.appendAscii(RTL_CONSTASCII_STRINGPARAM("/user/registrymodifications.xcu"));
+            }
+            else
+            {
+                // OpenOffice.org 2 configuration files
+                buf.appendAscii(RTL_CONSTASCII_STRINGPARAM("/user/registry/data"));
+                sal_Int32 n = 0;
+                do {
+                    rtl::OUString seg(i->first.getToken(0, '.', n));
+                    rtl::OUString enc(
+                        rtl::Uri::encode(
+                            seg, rtl_UriCharClassPchar, rtl_UriEncodeStrict,
+                            RTL_TEXTENCODING_UTF8));
+                    if (enc.getLength() == 0 && seg.getLength() != 0) {
+                        OSL_TRACE(
+                            ("configuration migration component %s ignored (cannot"
+                             " be encoded as file path)"),
+                            rtl::OUStringToOString(
+                                i->first, RTL_TEXTENCODING_UTF8).getStr());
+                        goto next;
+                    }
+                    buf.append(sal_Unicode('/'));
+                    buf.append(enc);
+                } while (n >= 0);
+                buf.appendAscii(RTL_CONSTASCII_STRINGPARAM(".xcu"));
+            }
             configuration::Update::get(
                 comphelper::getProcessComponentContext())->
                 insertModificationXcuFile(

@@ -281,6 +281,7 @@ extern unsigned int nanosleep(unsigned int);
 #   define  IORESOURCE_TRANSFER_SYSV
 #   define  IOCHANNEL_TRANSFER_BSD
 #   define  LIBPATH "LD_LIBRARY_PATH"
+#   define  OLD_SHADOW_API
 #endif
 
 #ifdef MACOSX

@@ -710,8 +710,6 @@ void SwDoc::InitDrawModel()
             pViewSh = (ViewShell*)pViewSh->GetNext();
         }while( pViewSh != pCurrentView );
     }
-
-    UpdateDrawDefaults();
 }
 
 /** method to notify drawing page view about the invisible layers
@@ -1104,18 +1102,4 @@ namespace docfunc
 }
 // <--
 
-void SwDoc::SetDrawDefaults()
-{
-    mbSetDrawDefaults = true;
-    UpdateDrawDefaults();
-}
-
-void SwDoc::UpdateDrawDefaults()
-{
-    // drawing layer defaults that are set for new documents (if InitNew was called)
-    if ( pDrawModel && mbSetDrawDefaults )
-    {
-        pDrawModel->SetDrawingLayerPoolDefaults();
-    }
-}
-
+// eof

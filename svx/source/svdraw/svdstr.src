@@ -1880,11 +1880,6 @@ String SIP_XA_FORMTXTSHDWYVAL
     Text [ en-US ] = "Fontwork shadow offset Y";
 };
 
-String SIP_XA_FORMTXTSTDFORM
-{
-    Text [ en-US ] = "Fontwork default form";
-};
-
 String SIP_XA_FORMTXTHIDEFORM
 {
     Text [ en-US ] = "Hide fontwork outline";
@@ -2733,12 +2728,12 @@ Bitmap SIP_SA_PAGESHADOW35X35
 
 Bitmap SIP_SA_MARKERS
 {
-    File = "markers.bmp";
+    File = "markers.png";
 };
 
 Bitmap SIP_SA_FINE_MARKERS
 {
-    File = "markers2.bmp";
+    File = "markers2.png";
 };
 
 // #100499#
@@ -2750,7 +2745,7 @@ Bitmap BMP_SVXOLEOBJ
 // #101928#
 Bitmap SIP_SA_ACCESSIBILITY_MARKERS
 {
-    File = "markersACC.bmp";
+    File = "markersACC.png";
 };
 
 String STR_ObjNameSingulMEDIA
@@ -2843,6 +2838,16 @@ Bitmap SIP_SA_CROP_FINE_MARKERS
 Bitmap SIP_SA_ACCESSIBILITY_CROP_MARKERS
 {
     File = "cropmarkersACC.bmp";
+};
+
+// DialControl bitmaps
+Bitmap IMG_DIACONTROL_NORMAL
+{
+    File = "rotation.png";
+};
+Bitmap IMG_DIACONTROL_H
+{
+    File = "rotation_h.png";
 };
 
 //IAccessibility2 Implementation 2009-----

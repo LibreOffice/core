@@ -36,6 +36,7 @@
 #include <sfx2/request.hxx>
 #include <svl/whiter.hxx>
 #include <vcl/msgbox.hxx>
+#include <sfx2/sidebar/EnumContext.hxx>
 
 #include "sc.hrc"
 #include "pivotsh.hxx"
@@ -78,6 +79,7 @@ ScPivotShell::ScPivotShell( ScTabViewShell* pViewSh ) :
     }
     SetHelpId( HID_SCSHELL_PIVOTSH );
     SetName(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("Pivot")));
+    SfxShell::SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_Pivot));
 }
 
 //------------------------------------------------------------------------
@@ -195,4 +197,3 @@ ScDPObject* ScPivotShell::GetCurrDPObject()
     return rViewData.GetDocument()->GetDPAtCursor(
         rViewData.GetCurX(), rViewData.GetCurY(), rViewData.GetTabNo() );
 }
-

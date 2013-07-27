@@ -42,12 +42,13 @@ all:
 
 
 TARFILE_NAME=Python-$(PYVERSION)
-TARFILE_MD5=c57477edd6d18bd9eeca2f21add73919
+TARFILE_MD5=6334b666b7ff2038c761d7b27ba699c1
 PATCH_FILES=\
     python-solaris.patch \
     python-freebsd.patch \
     python-md5.patch \
     python-ssl.patch \
+    python-solver-before-std.patch \
     python-$(PYVERSION)-sysbase.patch \
     python-$(PYVERSION)-nohardlink.patch \
     python-$(PYVERSION)-pcbuild.patch
@@ -113,11 +114,7 @@ BUILD_DIR=PCbuild
 # Build python executable and then runs a minimal script. Running the minimal script
 # ensures that certain *.pyc files are generated which would otherwise be created on
 # solver during registration in insetoo_native
-.IF "$(SYSBASE)" != ""
 BUILD_ACTION=$(COMPATH)$/vcpackages$/vcbuild.exe -useenv pcbuild.sln "Release|Win32"
-.ELSE
-BUILD_ACTION=$(COMPATH)$/vcpackages$/vcbuild.exe pcbuild.sln "Release|Win32"
-.ENDIF # "$(SYSBASE)" != ""
 .ENDIF
 .ENDIF
 

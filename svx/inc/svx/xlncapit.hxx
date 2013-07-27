@@ -28,12 +28,11 @@
 #include <com/sun/star/drawing/LineCap.hpp>
 
 //---------------------
-// class LineCapItem
-//---------------------
 
 class SVX_DLLPUBLIC XLineCapItem : public SfxEnumItem
 {
 public:
+    POOLITEM_FACTORY()
     XLineCapItem(com::sun::star::drawing::LineCap eLineCap = com::sun::star::drawing::LineCap_BUTT);
     XLineCapItem(SvStream& rIn);
 

@@ -3401,7 +3401,9 @@ SwAttrFnTab aHTMLAttrFnTab = {
 /* RES_CHRATR_OVERLINE */           OutHTML_CSS1Attr,
 /* RES_CHRATR_DUMMY1 */             0,
 /* RES_CHRATR_DUMMY2 */             0,
-
+//For i120935, Insert blank entry for RES_CHRATR_BIDITRL and RES_CHRATR_IDCTHINT, for keep the identical res order
+/*RES_CHRATR_BIDIRTL*/          0,
+/*RES_CHRATR_IDCTHINT*/     0,
 /* RES_TXTATR_REFMARK */            0,
 /* RES_TXTATR_TOXMARK */            0,
 /* RES_TXTATR_META */               0,

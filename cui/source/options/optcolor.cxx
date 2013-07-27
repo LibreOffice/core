@@ -945,24 +945,27 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
         }
     }
 
-    XColorTable aColorTable( SvtPathOptions().GetPalettePath() );
+    XColorListSharedPtr aColorTable(XPropertyListFactory::CreateSharedXColorList(SvtPathOptions().GetPalettePath()));
     aColorBoxes[0]->InsertAutomaticEntry();
-    for( sal_Int32 i = 0; i < aColorTable.Count(); i++ )
+    for( sal_Int32 i = 0; i < aColorTable->Count(); i++ )
     {
-        XColorEntry* pEntry = aColorTable.GetColor(i);
+        XColorEntry* pEntry = aColorTable->GetColor(i);
         aColorBoxes[0]->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
     }
 
     aColorBoxes[0]->SetHelpId( aColorLBHids[0] );
+    aColorBoxes[0]->SetDropDownLineCount( 10 );
+    const sal_Int32 nColorLBHids = sizeof( aColorLBHids )/ sizeof( aColorLBHids[0] );
 
     for( sal_Int32 i = 1; i < nCount; i++ )
     {
-        if(aColorBoxes[i])
-        {
-            aColorBoxes[i]->CopyEntries( *aColorBoxes[0] );
-            if( i < sal_Int32(sizeof(aColorLBHids)/sizeof(aColorLBHids[0])) )
-               aColorBoxes[i]->SetHelpId( aColorLBHids[i] );
-        }
+        if( !aColorBoxes[i] )
+            continue;
+
+        aColorBoxes[i]->CopyEntries( *aColorBoxes[0] );
+        if( i < nColorLBHids )
+            aColorBoxes[i]->SetHelpId( aColorLBHids[i] );
+        aColorBoxes[i]->SetDropDownLineCount( 10 );
     }
 }
 /* -----------------------------27.03.2002 11:04------------------------------

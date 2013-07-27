@@ -155,7 +155,7 @@ SdrUndoAction* OReportUndoFactory::CreateUndoCopyPage(SdrPage& rPage)
     return m_pUndoFactory->CreateUndoCopyPage( rPage );
 }
 
-SdrUndoAction* OReportUndoFactory::CreateUndoSetPageNum(SdrPage& rNewPg, sal_uInt16 nOldPageNum1, sal_uInt16 nNewPageNum1)
+SdrUndoAction* OReportUndoFactory::CreateUndoSetPageNum(SdrPage& rNewPg, sal_uInt32 nOldPageNum1, sal_uInt32 nNewPageNum1)
 {
     return m_pUndoFactory->CreateUndoSetPageNum( rNewPg, nOldPageNum1, nNewPageNum1 );
 }

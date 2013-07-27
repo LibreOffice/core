@@ -23,7 +23,7 @@
 
 #include "macros.inc"
 
-#if defined(BUILD_SPECIAL)
+#if defined(ENABLE_OOOIMPROVEMENT)
 File gid_File_Share_Registry_Oooimprovement_Xcd
     TXT_FILE_BODY;
     Styles = (PACKED);
@@ -32,7 +32,7 @@ File gid_File_Share_Registry_Oooimprovement_Xcd
 End
 #endif
 
-#if defined(BUILD_SPECIAL)
+#if defined(ENABLE_OOOIMPROVEMENT)
 #ifdef OS2
 STD_LIB_FILE( gid_File_Lib_Oooimprovement , oooimp)
 #else

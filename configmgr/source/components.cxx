@@ -515,18 +515,6 @@ Components::Components(
         expand(
             rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM("$OOO_BASE_DIR/share/registry"))));
-    parseXcsXcuLayer(
-        4,
-        expand(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "$BRAND_BASE_DIR/share/registry"))));
-    parseModuleLayer(
-        6,
-        expand(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "$BRAND_BASE_DIR/share/registry/modules"))));
     parseXcsXcuIniLayer(
         7,
         expand(
@@ -829,7 +817,7 @@ rtl::OUString Components::getModificationFileUrl() const {
     return expand(
         rtl::OUString(
             RTL_CONSTASCII_USTRINGPARAM(
-                "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("bootstrap")
+                "${$OOO_BASE_DIR/program/" SAL_CONFIGFILE("bootstrap")
                 ":UserInstallation}/user/registrymodifications.xcu")));
 }
 
@@ -850,7 +838,7 @@ void Components::parseModificationLayer() {
             expand(
                 rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM(
-                        "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("bootstrap")
+                        "${$OOO_BASE_DIR/program/" SAL_CONFIGFILE("bootstrap")
                         ":UserInstallation}/user/registry/data"))),
             false);
     }

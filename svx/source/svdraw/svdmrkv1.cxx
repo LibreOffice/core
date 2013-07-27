@@ -403,7 +403,7 @@ void SdrMarkView::MarkGluePoints(const basegfx::B2DRange* pRange, bool bUnmark)
     }
 }
 
-bool SdrMarkView::PickGluePoint(const basegfx::B2DPoint& rPnt, SdrObject*& rpObj, sal_uInt32& rnId, sal_uInt32 nOptions) const
+bool SdrMarkView::PickGluePoint(const basegfx::B2DPoint& rPnt, SdrObject*& rpObj, sal_uInt32& rnId) const
 {
     rpObj = 0;
     rnId = 0;
@@ -414,7 +414,6 @@ bool SdrMarkView::PickGluePoint(const basegfx::B2DPoint& rPnt, SdrObject*& rpObj
     }
 
     SdrObject* pObj0=rpObj;
-    sal_uInt32 nId0 = rnId;
     const SdrObjectVector aSelection(getSelectedSdrObjectVectorFromSdrMarkView());
     sal_uInt32 nMarkNum(aSelection.size());
 
@@ -426,7 +425,7 @@ bool SdrMarkView::PickGluePoint(const basegfx::B2DPoint& rPnt, SdrObject*& rpObj
 
         if(pGPL)
         {
-            const sal_uInt32 nNum(pGPL->GPLHitTest(rPnt, getHitTolLog(), sdr::legacy::GetSnapRange(*pObj), false, nId0));
+            const sal_uInt32 nNum(pGPL->GPLHitTest(rPnt, getHitTolLog(), sdr::legacy::GetSnapRange(*pObj), false));
 
             if(SDRGLUEPOINT_NOTFOUND != nNum)
             {

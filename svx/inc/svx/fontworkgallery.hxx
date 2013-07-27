@@ -106,12 +106,12 @@ class SVX_DLLPUBLIC FontWorkGalleryDialog : public ModalDialog
     DECL_LINK( ClickTextDirectionHdl, ImageButton * );
 
 
-    void            initfavorites(sal_uInt16 nThemeId, std::vector< Bitmap * >& rFavorites);
+    void            initFavorites(sal_uInt16 nThemeId);
     void            insertSelectedFontwork();
     void            changeText( SdrTextObj* pObj );
-    void            fillFavorites( sal_uInt16 nThemeId, std::vector< Bitmap * >& rFavorites );
+    void            fillFavorites(sal_uInt16 nThemeId);
 
-    std::vector< Bitmap * > maFavoritesHorizontal;
+    std::vector< BitmapEx> maFavoritesHorizontal;
 
 public:
     // if ppSdrObject is given the object is not inserted to the current page of the given view, but

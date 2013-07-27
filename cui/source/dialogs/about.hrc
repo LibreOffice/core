@@ -28,12 +28,15 @@
 #define RID_CUI_ABOUT_FTXT_VERSION                  3
 #define RID_CUI_ABOUT_FTXT_COPYRIGHT                4
 #define RID_CUI_ABOUT_FTXT_BUILDDATA                5
-#define RID_CUI_ABOUT_STR_COPYRIGHT                 6
-#define RID_CUI_ABOUT_FTXT_WELCOME_LINK             7
+#define RID_CUI_ABOUT_STR_COPYRIGHT_VENDOR          6
+#define RID_CUI_ABOUT_STR_CREATED                   7
+#define RID_CUI_ABOUT_STR_CREATED_VENDOR            8
+#define RID_CUI_ABOUT_STR_ACKNOWLEDGE               9
+#define RID_CUI_ABOUT_FTXT_WELCOME_LINK             10
 
-#define RID_CUI_README_TBCTL                        8
-#define RID_CUI_README_OKBTN                        9
-#define RID_CUI_READMEPAGE                          10
-#define RID_CUI_LICENSEPAGE                         11
-#define RID_CUI_NOTICEPAGE                          12
-#define RID_CUI_README_TBPAGE_EDIT                  13
+#define RID_CUI_README_TBCTL                        20
+#define RID_CUI_README_OKBTN                        21
+#define RID_CUI_READMEPAGE                          22
+#define RID_CUI_LICENSEPAGE                         23
+#define RID_CUI_NOTICEPAGE                          24
+#define RID_CUI_README_TBPAGE_EDIT                  25

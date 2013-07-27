@@ -1,0 +1,50 @@
+--- misc/silgraphite-2.3.1/wrappers/win32/WinFont.cpp	2013-05-27 11:54:18.432327600 +0200
++++ misc/build/silgraphite-2.3.1/wrappers/win32/WinFont.cpp	2013-05-27 11:52:02.662562100 +0200
+@@ -869,7 +869,7 @@
+ 
+ } // namespace gr
+ 
+-template stdext::hash_map<
++template hashmap_ns::hash_map<
+ 	gr::WinFont::LogFontWrapper,
+ 	gr::WinFont::FontHandleCache::FontCacheValue,
+ 	gr::WinFont::LogFontHashFuncs>;
+--- misc/silgraphite-2.3.1/wrappers/win32/WinFont.h	2013-05-27 11:56:04.110372100 +0200
++++ misc/build/silgraphite-2.3.1/wrappers/win32/WinFont.h	2013-05-27 11:55:56.412931800 +0200
+@@ -28,8 +28,12 @@
+ #include "Font.h"
+ #include <map>
+ 
+-#ifdef _STLPORT_VERSION
+-namespace stdext = _STLP_STD;
++#ifdef SYSTEM_STL_HASHMAP
++namespace hashmap_ns = std;
++#elif defined(_STLPORT_VERSION)
++namespace hashmap_ns = _STLP_STD;
++#else
++namespace hashmap_ns = stdext;
+ #endif
+ 
+ namespace gr
+@@ -212,7 +216,7 @@
+         FontCacheValue GetCache(LOGFONT & lf);
+ 		void DeleteFont(HFONT hfont);
+ 
+-		typedef stdext::hash_map<LogFontWrapper, FontCacheValue, LogFontHashFuncs> FontHandleHashMap;
++		typedef hashmap_ns::hash_map<LogFontWrapper, FontCacheValue, LogFontHashFuncs> FontHandleHashMap;
+ 
+ 	protected:
+ 		FontHandleHashMap m_hmlffcv;
+--- misc/silgraphite-2.3.1/engine/include/graphite/GrCommon.h	2013-05-27 15:10:31.799725700 +0200
++++ misc/build/silgraphite-2.3.1/engine/include/graphite/GrCommon.h	2013-05-27 15:10:19.387015800 +0200
+@@ -18,8 +18,8 @@
+ #ifndef GRCOMMON_INCLUDED
+ #define GRCOMMON_INCLUDED
+ 
+-#define _SECURE_SCL 0	// to allow GlyphSetIterator to work, which points off the end of a vector
+-#define _HAS_ITERATOR_DEBUGGING 0
++//#define _SECURE_SCL 0	// to allow GlyphSetIterator to work, which points off the end of a vector
++//#define _HAS_ITERATOR_DEBUGGING 0
+ 
+ // Standard Headers.
+ 

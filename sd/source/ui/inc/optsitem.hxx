@@ -248,33 +248,34 @@ private:
     sal_uLong   nDefaultObjectSizeWidth;
     sal_uLong   nDefaultObjectSizeHeight;
 
-    bool    bStartWithTemplate      : 1;    // Misc/NewDoc/AutoPilot
-    bool    bMarkedHitMovesAlways   : 1;    // Misc/ObjectMoveable
-    bool    bMoveOnlyDragging       : 1;    // Currently, not in use !!!
-    bool    bCrookNoContortion      : 1;    // Misc/NoDistort
-    bool    bQuickEdit              : 1;    // Misc/TextObject/QuickEditing
-    bool    bMasterPageCache        : 1;    // Misc/BackgroundCache
-    bool    bDragWithCopy           : 1;    // Misc/CopyWhileMoving
-    bool    bPickThrough            : 1;    // Misc/TextObject/Selectable
-    bool    bBigHandles             : 1;    // Misc/BigHandles
-    bool    bDoubleClickTextEdit    : 1;    // Misc/DclickTextedit
-    bool    bClickChangeRotation    : 1;    // Misc/RotateClick
-    bool    bStartWithActualPage    : 1;    // Misc/Start/CurrentPage
-    bool    bSolidDragging          : 1;    // Misc/ModifyWithAttributes
-    bool    bSolidMarkHdl           : 1;    // /Misc/SimpleHandles
-    bool    bSummationOfParagraphs  : 1;    // misc/SummationOfParagraphs
+    /// bitfield
+    bool        bStartWithTemplate          : 1;    // Misc/NewDoc/AutoPilot
+    bool        bMarkedHitMovesAlways       : 1;    // Misc/ObjectMoveable
+    bool        bMoveOnlyDragging           : 1;    // Currently, not in use !!!
+    bool        bCrookNoContortion          : 1;    // Misc/NoDistort
+    bool        bQuickEdit                  : 1;    // Misc/TextObject/QuickEditing
+    bool        bMasterPageCache            : 1;    // Misc/BackgroundCache
+    bool        bDragWithCopy               : 1;    // Misc/CopyWhileMoving
+    bool        bPickThrough                : 1;    // Misc/TextObject/Selectable
+    bool        bBigHandles                 : 1;    // Misc/BigHandles
+    bool        bDoubleClickTextEdit        : 1;    // Misc/DclickTextedit
+    bool        bClickChangeRotation        : 1;    // Misc/RotateClick
+    bool        bStartWithActualPage        : 1;    // Misc/Start/CurrentPage
+    bool        bStartWithPresenterScreen   : 1;    // Misc/Start/PresenterScreen
+    bool        bSolidDragging              : 1;    // Misc/ModifyWithAttributes
+    bool        bSolidMarkHdl               : 1;    // /Misc/SimpleHandles
+    bool        bSummationOfParagraphs      : 1;    // misc/SummationOfParagraphs
     // #90356#
-    bool    bShowUndoDeleteWarning  : 1;    // Misc/ShowUndoDeleteWarning
+    bool        bShowUndoDeleteWarning      : 1;    // Misc/ShowUndoDeleteWarning
     // #i75315#
-    bool    bSlideshowRespectZOrder : 1;    // Misc/SlideshowRespectZOrder
-    bool    bShowComments           : 1;    // Misc/ShowComments
+    bool        bSlideshowRespectZOrder     : 1;    // Misc/SlideshowRespectZOrder
+    bool        bShowComments               : 1;    // Misc/ShowComments
 
-    sal_Bool    bPreviewNewEffects;
-    sal_Bool    bPreviewChangedEffects;
-    sal_Bool    bPreviewTransitions;
+    bool        bPreviewNewEffects          : 1;
+    bool        bPreviewChangedEffects      : 1;
+    bool        bPreviewTransitions         : 1;
 
     sal_Int32   mnDisplay;
-
     sal_Int32 mnPenColor;
     double mnPenWidth;
 
@@ -311,6 +312,7 @@ public:
     bool    IsDoubleClickTextEdit() const { Init(); return bDoubleClickTextEdit; }
     bool    IsClickChangeRotation() const { Init(); return bClickChangeRotation; }
     bool    IsStartWithActualPage() const { Init(); return bStartWithActualPage; }
+    bool    IsStartWithPresenterScreen() const { Init(); return (sal_Bool) bStartWithPresenterScreen; }
     bool    IsSolidDragging() const { Init(); return bSolidDragging; }
     bool    IsSolidMarkHdl() const { Init(); return bSolidMarkHdl; }
     bool    IsSummationOfParagraphs() const { Init(); return bSummationOfParagraphs != 0; };
@@ -328,9 +330,9 @@ public:
     sal_uLong   GetDefaultObjectSizeWidth() const { Init(); return nDefaultObjectSizeWidth; }
     sal_uLong   GetDefaultObjectSizeHeight() const { Init(); return nDefaultObjectSizeHeight; }
 
-    sal_Bool    IsPreviewNewEffects() const { Init(); return bPreviewNewEffects; }
-    sal_Bool    IsPreviewChangedEffects() const { Init(); return bPreviewChangedEffects; }
-    sal_Bool    IsPreviewTransitions() const { Init(); return bPreviewTransitions; }
+    bool    IsPreviewNewEffects() const { Init(); return bPreviewNewEffects; }
+    bool    IsPreviewChangedEffects() const { Init(); return bPreviewChangedEffects; }
+    bool    IsPreviewTransitions() const { Init(); return bPreviewTransitions; }
 
     sal_Int32   GetDisplay() const { Init(); return mnDisplay; }
     void        SetDisplay( sal_Int32 nDisplay = 0 ) { if( mnDisplay != nDisplay ) { OptionsChanged(); mnDisplay = nDisplay; } }
@@ -353,6 +355,7 @@ public:
     void    SetDoubleClickTextEdit( bool bOn = true ) { if( bDoubleClickTextEdit != bOn ) { OptionsChanged(); bDoubleClickTextEdit = bOn; } }
     void    SetClickChangeRotation( bool bOn = true ) { if( bClickChangeRotation != bOn ) { OptionsChanged(); bClickChangeRotation = bOn; } }
     void    SetStartWithActualPage( bool bOn = true ) { if( bStartWithActualPage != bOn ) { OptionsChanged(); bStartWithActualPage = bOn; } }
+    void    SetStartWithPresenterScreen( bool bOn = true ) { if( bStartWithPresenterScreen != bOn ) { OptionsChanged(); bStartWithPresenterScreen = bOn; } }
     void    SetSummationOfParagraphs( bool bOn = true ){ if ( bOn != bSummationOfParagraphs ) { OptionsChanged(); bSummationOfParagraphs = bOn; } }
     /** Set the printer independent layout mode.
         @param nOn
@@ -370,9 +373,9 @@ public:
     void    SetDefaultObjectSizeWidth( sal_uLong nWidth ) { if( nDefaultObjectSizeWidth != nWidth ) { OptionsChanged(); nDefaultObjectSizeWidth = nWidth; } }
     void    SetDefaultObjectSizeHeight( sal_uLong nHeight ) { if( nDefaultObjectSizeHeight != nHeight ) { OptionsChanged(); nDefaultObjectSizeHeight = nHeight; } }
 
-    void    SetPreviewNewEffects( sal_Bool bOn )  { if( bPreviewNewEffects != bOn ) { OptionsChanged(); bPreviewNewEffects = bOn; } }
-    void    SetPreviewChangedEffects( sal_Bool bOn )  { if( bPreviewChangedEffects != bOn ) { OptionsChanged(); bPreviewChangedEffects = bOn; } }
-    void    SetPreviewTransitions( sal_Bool bOn )  { if( bPreviewTransitions != bOn ) { OptionsChanged(); bPreviewTransitions = bOn; } }
+    void    SetPreviewNewEffects( bool bOn )  { if( bPreviewNewEffects != bOn ) { OptionsChanged(); bPreviewNewEffects = bOn; } }
+    void    SetPreviewChangedEffects( bool bOn )  { if( bPreviewChangedEffects != bOn ) { OptionsChanged(); bPreviewChangedEffects = bOn; } }
+    void    SetPreviewTransitions( bool bOn )  { if( bPreviewTransitions != bOn ) { OptionsChanged(); bPreviewTransitions = bOn; } }
 
     bool    IsShowComments() const { Init(); return bShowComments; }
     void    SetShowComments( bool bShow )  { if( bShowComments != bShow ) { OptionsChanged(); bShowComments = bShow; } }

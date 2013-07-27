@@ -24,11 +24,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-
-#if STLPORT_VERSION>=321
 #include <cstdarg>
-#endif
 
 #include <svtools/svmedit.hxx>
 #include <svl/eitem.hxx>
@@ -224,7 +220,7 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
                 sDBName += (String)sColumnName;
 
                 SwFldMgr aFldMgr(GetShellPtr());
-                SwInsertFld_Data aData(TYP_DBFLD, 0, sDBName, aEmptyStr, 0, sal_False, sal_True);
+                SwInsertFld_Data aData(TYP_DBFLD, 0, sDBName, aEmptyStr, 0, NULL, sal_True);
                 if(pConnectionItem)
                     aData.aDBConnection = ((SfxUsrAnyItem*)pConnectionItem)->GetValue();
                 if(pColumnItem)

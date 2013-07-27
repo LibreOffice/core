@@ -57,7 +57,6 @@ String RID_SVXSTR_SELMODE_BLK
 {
      // 'Block' shortened to max. 3 chararcters
     Text [ en-US ] = "BLK" ;
-    Text [ x-comment ] = " ";
 };
 
 String RID_SVXSTR_XMLSEC_SIG_OK

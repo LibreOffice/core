@@ -40,8 +40,8 @@ private:
     SAL_DLLPRIVATE void ImplInitSettings();
 
 public:
-                    TabPage( Window* pParent, WinBits nStyle = 0 );
-                    TabPage( Window* pParent, const ResId& rResId );
+    explicit        TabPage( Window* pParent, WinBits nStyle = 0 );
+    explicit        TabPage( Window* pParent, const ResId& );
 
     virtual void    Paint( const Rectangle& rRect );
     virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
@@ -56,3 +56,4 @@ public:
 };
 
 #endif  // _SV_TABPAGE_HXX
+

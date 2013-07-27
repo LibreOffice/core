@@ -2377,7 +2377,7 @@ bool SdrTableObj::applySpecialDrag(SdrDragStat& rDrag)
 
         case HDL_MOVE:
         {
-               sdr::legacy::MoveSdrObject(*this, Size( rDrag.GetDX(), rDrag.GetDY() ) );
+               sdr::legacy::MoveSdrObject(*this, Size( basegfx::fround(rDrag.GetDX()), basegfx::fround(rDrag.GetDY()) ) );
             break;
         }
 

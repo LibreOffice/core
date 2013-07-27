@@ -31,13 +31,13 @@ class SdfData:
         self._filename = filename
 
     def __getitem__(self, key):
-        if self._dict.has_key(key):
+        if key in self._dict:
             return self._dict[key]
         else:
             return None
 
     def has_key(self, key):
-        return self._dict.has_key(key)
+        return key in self._dict
 
     def __setitem__(self, key, value):
         self._dict[key] = value
@@ -50,7 +50,7 @@ class SdfData:
             f = open(self._filename, "r")
             lines = [line.rstrip('\n') for line in f.readlines()]
         except IOError:
-            print "ERROR: Trying to read "+ self._filename
+            print("ERROR: Trying to read "+ self._filename)
             raise
         else:
             f.close()
@@ -63,11 +63,11 @@ class SdfData:
     def write(self, filename):
         try:
             f = open(filename, "w+")
-            for value in self._dict.itervalues():
+            for value in self._dict.values():
                 #f.write( repr(value)+"\n" )
                 f.write(value + "\n")
         except IOError:
-            print "ERROR: Trying to write " + filename
+            print("ERROR: Trying to write " + filename)
             raise
         else:
             f.close()

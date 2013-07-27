@@ -1189,6 +1189,9 @@ sub rename_directory
 
     my $infoline = "";
 
+    # noticed problems under Windows from time to time that directories can't be moved, seems a timing issue
+    # workaround with sleep, should be investigated with a new packaging mechanism
+    sleep(2);
     if ( move($olddir, $newdir) )
     {
         $infoline = "\nMoved directory from $olddir to $newdir\n";

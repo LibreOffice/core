@@ -96,7 +96,8 @@ namespace utl
                 WRITERCOMPATIBILITYVERSIONOOO11,
                 OPENSOURCECONTEXT,
                 ABOUTBOXPRODUCTVERSION,
-                OOOVENDOR
+                OOOVENDOR,
+                FULLPRODUCTNAME
             };
             //direct readonly access to some special configuration elements
             static com::sun::star::uno::Any GetDirectConfigProperty(ConfigProperty eProp);

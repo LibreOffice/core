@@ -6547,8 +6547,8 @@ com.sun.star.task.JobExecutor
 TOPIC:
 com.sun.star.task.JobExecutor
 
-LINK:Documentation/DevGuide/Database/Data_Sources_in_OpenOffice.org_API#DatabaseContext
-DESCR:Database - Data Sources in OpenOffice.org API - DatabaseContext
+LINK:Documentation/DevGuide/Database/Data_Sources_in_Apache_OpenOffice_API#DatabaseContext
+DESCR:Database - Data Sources in Apache OpenOffice API - DatabaseContext
 REF:
 com.sun.star.sdb.Connection
 com.sun.star.sdb.DatabaseContext
@@ -7510,8 +7510,8 @@ com.sun.star.table.CellAddress
 com.sun.star.sheet.XSheetAnnotationAnchor
 TOPIC:
 
-LINK:Documentation/DevGuide/OfficeDev/Frame-Controller-Model_Paradigm_in_OpenOffice.org
-DESCR:OfficeDev - Frame-Controller-Model Paradigm in OpenOffice.org
+LINK:Documentation/DevGuide/OfficeDev/Frame-Controller-Model_Paradigm_in_Apache_OpenOffice
+DESCR:OfficeDev - Frame-Controller-Model Paradigm in Apache OpenOffice
 REF:
 TOPIC:
 com.sun.star.frame.XController

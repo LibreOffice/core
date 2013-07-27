@@ -29,12 +29,12 @@ END
 platform=`uname -s`
 case $$platform in
 SunOS)
-  BASISPACKAGE=openofficeorg-core01
+  BASISPACKAGE=apacheopenoffice-core01
   BASISDIR=`pkginfo -r $$BASISPACKAGE`
   PRODUCTINSTALLLOCATION="$$BASEDIR"
   ;;
 Linux)
-  BASISPACKAGE=openoffice.org-core01
+  BASISPACKAGE=apacheopenoffice-core01
   BASISDIR=`rpm -q --queryformat "%{INSTALLPREFIX}" $$BASISPACKAGE`
   PRODUCTINSTALLLOCATION="$$RPM_INSTALL_PREFIX"
   ;;
@@ -44,11 +44,11 @@ Linux)
 esac
 
 # creating link to basis layer
-if [ -d $$BASISDIR/openoffice.org/basisBASISDIRECTORYVERSION ]
+if [ -d $$BASISDIR/openoffice/basisBASISDIRECTORYVERSION ]
 then
-      ln -s $$BASISDIR/openoffice.org/basisBASISDIRECTORYVERSION $$PRODUCTINSTALLLOCATION/PRODUCTDIRECTORYNAME/basis-link >/dev/null 2>&1
+      ln -s $$BASISDIR/openoffice/basisBASISDIRECTORYVERSION $$PRODUCTINSTALLLOCATION/PRODUCTDIRECTORYNAME/basis-link >/dev/null 2>&1
 else
-      ln -s ../openoffice.org/basisBASISDIRECTORYVERSION $$PRODUCTINSTALLLOCATION/PRODUCTDIRECTORYNAME/basis-link >/dev/null 2>&1
+      ln -s ../openoffice/basisBASISDIRECTORYVERSION $$PRODUCTINSTALLLOCATION/PRODUCTDIRECTORYNAME/basis-link >/dev/null 2>&1
 fi
 
 exit 0

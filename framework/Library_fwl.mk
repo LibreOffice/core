@@ -46,7 +46,7 @@ $(eval $(call gb_Library_add_linked_libs,fwl,\
     stl \
     svl \
     svt \
-    tk \
+    ootk \
     tl \
     utl \
     vcl \
@@ -71,12 +71,8 @@ $(eval $(call gb_Library_add_exception_objects,fwl,\
     framework/source/uielement/footermenucontroller \
     framework/source/uielement/headermenucontroller \
     framework/source/uielement/langselectionmenucontroller \
-    framework/source/uielement/logoimagestatusbarcontroller \
-    framework/source/uielement/logotextstatusbarcontroller \
     framework/source/uielement/macrosmenucontroller \
     framework/source/uielement/newmenucontroller \
-    framework/source/uielement/popupmenucontroller \
-    framework/source/uielement/simpletextstatusbarcontroller \
     framework/source/uielement/toolbarsmenucontroller \
 ))
 

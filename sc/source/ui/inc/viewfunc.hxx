@@ -137,12 +137,12 @@ public:
                                         SCCOL nPosX, SCROW nPosY, basegfx::B2DPoint* pLogicPos = NULL,
                                         sal_Bool bLink = sal_False, sal_Bool bAllowDialogs = sal_False );
 
-    sal_Bool        PasteFile( const basegfx::B2DPoint&, const String&, sal_Bool bLink=sal_False );
-    sal_Bool        PasteObject( const basegfx::B2DPoint&, const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >&, const basegfx::B2DVector* = NULL, const Graphic* = NULL, const ::rtl::OUString& = ::rtl::OUString(), sal_Int64 nAspect = ::com::sun::star::embed::Aspects::MSOLE_CONTENT );
-    sal_Bool        PasteBitmap( const basegfx::B2DPoint&, const Bitmap& );
-    sal_Bool        PasteMetaFile( const basegfx::B2DPoint&, const GDIMetaFile& );
-    sal_Bool        PasteGraphic( const basegfx::B2DPoint& rPos, const Graphic& rGraphic,
-                                    const String& rFile, const String& rFilter );
+    sal_Bool PasteFile( const basegfx::B2DPoint&, const String&, sal_Bool bLink=sal_False );
+    sal_Bool PasteObject( const basegfx::B2DPoint&, const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >&, const basegfx::B2DVector* = NULL, const Graphic* = NULL, const ::rtl::OUString& = ::rtl::OUString(), sal_Int64 nAspect = ::com::sun::star::embed::Aspects::MSOLE_CONTENT );
+    sal_Bool PasteBitmapEx( const basegfx::B2DPoint&, const BitmapEx& );
+    sal_Bool PasteMetaFile( const basegfx::B2DPoint&, const GDIMetaFile& );
+    sal_Bool PasteGraphic( const basegfx::B2DPoint& rPos, const Graphic& rGraphic, const String& rFile, const String& rFilter );
+
     sal_Bool            PasteBookmark( sal_uLong nFormatId,
                                 const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::datatransfer::XTransferable >& rxTransferable,

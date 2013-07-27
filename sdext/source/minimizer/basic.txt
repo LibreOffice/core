@@ -101,7 +101,7 @@ oDoc = oDesk.loadComponentFromURL( url, "_blank", 0, FileProperties() )
 
 Dim oInitialization( 0 ) as Object
 oInitialization(0) = oDoc.getCurrentController.getFrame
-oPPPOptimizerDialog = createUNOservice("com.sun.star.comp.PPPOptimizerImp")
+oPPPOptimizerDialog = createUNOservice("com.sun.star.comp.presentation.PresentationOptimizer")
 oPPPOptimizerDialog.initialize( oInitialization )
 oPPPOptimizerDialog.dispatch(oURL, oArg)
 odoc.dispose

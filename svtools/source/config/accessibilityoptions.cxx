@@ -86,6 +86,10 @@ public:
     sal_Bool    GetIsSystemFont() const;
     sal_Int16   GetHelpTipSeconds() const;
     sal_Bool    IsSelectionInReadonly() const;
+    sal_Int16   GetEdgeBlending() const;
+    sal_Int16   GetListBoxMaximumLineCount() const;
+    sal_Int16   GetColorValueSetColumnCount() const;
+    sal_Bool    GetPreviewUsesCheckeredBackground() const;
 
     void        SetAutoDetectSystemHC(sal_Bool bSet);
     void        SetIsForPagePreviews(sal_Bool bSet);
@@ -96,6 +100,10 @@ public:
     void        SetIsSystemFont(sal_Bool bSet);
     void        SetHelpTipSeconds(sal_Int16 nSet);
     void        SetSelectionInReadonly(sal_Bool bSet);
+    void        SetEdgeBlending(sal_Int16 nSet);
+    void        SetListBoxMaximumLineCount(sal_Int16 nSet);
+    void        SetColorValueSetColumnCount(sal_Int16 nSet);
+    void        SetPreviewUsesCheckeredBackground(sal_Bool bSet);
 
     sal_Bool    IsModified() const { return bIsModified; };
 };
@@ -300,6 +308,78 @@ sal_Bool SvtAccessibilityOptions_Impl::IsSelectionInReadonly() const
     return bRet;
 }
 
+sal_Int16 SvtAccessibilityOptions_Impl::GetEdgeBlending() const
+{
+    css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
+    sal_Int16 nRet = 35;
+
+    try
+    {
+        if(xNode.is())
+            xNode->getPropertyValue(s_sEdgeBlending) >>= nRet;
+    }
+    catch(const css::uno::Exception& ex)
+    {
+        LogHelper::logIt(ex);
+    }
+
+    return nRet;
+}
+
+sal_Int16 SvtAccessibilityOptions_Impl::GetListBoxMaximumLineCount() const
+{
+    css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
+    sal_Int16 nRet = 25;
+
+    try
+    {
+        if(xNode.is())
+            xNode->getPropertyValue(s_sListBoxMaximumLineCount) >>= nRet;
+    }
+    catch(const css::uno::Exception& ex)
+    {
+        LogHelper::logIt(ex);
+    }
+
+    return nRet;
+}
+
+sal_Int16 SvtAccessibilityOptions_Impl::GetColorValueSetColumnCount() const
+{
+    css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
+    sal_Int16 nRet = 12;
+
+    try
+    {
+        if(xNode.is())
+            xNode->getPropertyValue(s_sColorValueSetColumnCount) >>= nRet;
+    }
+    catch(const css::uno::Exception& ex)
+    {
+        LogHelper::logIt(ex);
+    }
+
+    return nRet;
+}
+
+sal_Bool SvtAccessibilityOptions_Impl::GetPreviewUsesCheckeredBackground() const
+{
+    css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
+    sal_Bool bRet = sal_False;
+
+    try
+    {
+        if(xNode.is())
+            xNode->getPropertyValue(s_sPreviewUsesCheckeredBackground) >>= bRet;
+    }
+    catch(const css::uno::Exception& ex)
+    {
+        LogHelper::logIt(ex);
+    }
+
+    return bRet;
+}
+
 void SvtAccessibilityOptions_Impl::SetAutoDetectSystemHC(sal_Bool bSet)
 {
     css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
@@ -482,19 +562,145 @@ void SvtAccessibilityOptions_Impl::SetSelectionInReadonly(sal_Bool bSet)
 
 void SvtAccessibilityOptions_Impl::SetVCLSettings()
 {
-    AllSettings aAllSettings = Application::GetSettings();
-    HelpSettings aHelpSettings = aAllSettings.GetHelpSettings();
+    AllSettings aAllSettings(Application::GetSettings());
+    StyleSettings aStyleSettings(aAllSettings.GetStyleSettings());
+    HelpSettings aHelpSettings(aAllSettings.GetHelpSettings());
+    bool StyleSettingsChanged(false);
+
     aHelpSettings.SetTipTimeout( GetIsHelpTipsDisappear() ? GetHelpTipSeconds() * 1000 : HELP_TIP_TIMEOUT);
     aAllSettings.SetHelpSettings(aHelpSettings);
-    if(aAllSettings.GetStyleSettings().GetUseSystemUIFonts() != GetIsSystemFont() )
+
+    if(aStyleSettings.GetUseSystemUIFonts() != GetIsSystemFont())
     {
-        StyleSettings aStyleSettings = aAllSettings.GetStyleSettings();
-        aStyleSettings.SetUseSystemUIFonts( GetIsSystemFont()  );
+        aStyleSettings.SetUseSystemUIFonts(GetIsSystemFont());
+        StyleSettingsChanged = true;
+    }
+
+    const sal_Int16 nEdgeBlendingCountA(GetEdgeBlending());
+    OSL_ENSURE(nEdgeBlendingCountA >= 0, "OOps, negative values for EdgeBlending are not allowed (!)");
+    const sal_uInt16 nEdgeBlendingCountB(static_cast< sal_uInt16 >(nEdgeBlendingCountA >= 0 ? nEdgeBlendingCountA : 0));
+
+    if(aStyleSettings.GetEdgeBlending() != nEdgeBlendingCountB)
+    {
+        aStyleSettings.SetEdgeBlending(nEdgeBlendingCountB);
+        StyleSettingsChanged = true;
+    }
+
+    const sal_Int16 nMaxLineCountA(GetListBoxMaximumLineCount());
+    OSL_ENSURE(nMaxLineCountA >= 0, "OOps, negative values for ListBoxMaximumLineCount are not allowed (!)");
+    const sal_uInt16 nMaxLineCountB(static_cast< sal_uInt16 >(nMaxLineCountA >= 0 ? nMaxLineCountA : 0));
+
+    if(aStyleSettings.GetListBoxMaximumLineCount() != nMaxLineCountB)
+    {
+        aStyleSettings.SetListBoxMaximumLineCount(nMaxLineCountB);
+        StyleSettingsChanged = true;
+    }
+
+    const sal_Int16 nMaxColumnCountA(GetColorValueSetColumnCount());
+    OSL_ENSURE(nMaxColumnCountA >= 0, "OOps, negative values for ColorValueSetColumnCount are not allowed (!)");
+    const sal_uInt16 nMaxColumnCountB(static_cast< sal_uInt16 >(nMaxColumnCountA >= 0 ? nMaxColumnCountA : 0));
+
+    if(aStyleSettings.GetColorValueSetColumnCount() != nMaxColumnCountB)
+    {
+        aStyleSettings.SetColorValueSetColumnCount(nMaxColumnCountB);
+        StyleSettingsChanged = true;
+    }
+
+    const bool bPreviewUsesCheckeredBackground(GetPreviewUsesCheckeredBackground());
+
+    if(aStyleSettings.GetPreviewUsesCheckeredBackground() != bPreviewUsesCheckeredBackground)
+    {
+        aStyleSettings.SetPreviewUsesCheckeredBackground(bPreviewUsesCheckeredBackground);
+        StyleSettingsChanged = true;
+    }
+
+    if(StyleSettingsChanged)
+    {
         aAllSettings.SetStyleSettings(aStyleSettings);
-        Application::MergeSystemSettings( aAllSettings );
+        Application::MergeSystemSettings(aAllSettings);
     }
 
     Application::SetSettings(aAllSettings);
+}
+
+void SvtAccessibilityOptions_Impl::SetEdgeBlending(sal_Int16 nSet)
+{
+    css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
+
+    try
+    {
+        if(xNode.is() && xNode->getPropertyValue(s_sEdgeBlending)!=nSet)
+        {
+            xNode->setPropertyValue(s_sEdgeBlending, css::uno::makeAny(nSet));
+            ::comphelper::ConfigurationHelper::flush(m_xCfg);
+
+            bIsModified = sal_True;
+        }
+    }
+    catch(const css::uno::Exception& ex)
+    {
+        LogHelper::logIt(ex);
+    }
+}
+
+void SvtAccessibilityOptions_Impl::SetListBoxMaximumLineCount(sal_Int16 nSet)
+{
+    css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
+
+    try
+    {
+        if(xNode.is() && xNode->getPropertyValue(s_sListBoxMaximumLineCount)!=nSet)
+        {
+            xNode->setPropertyValue(s_sListBoxMaximumLineCount, css::uno::makeAny(nSet));
+            ::comphelper::ConfigurationHelper::flush(m_xCfg);
+
+            bIsModified = sal_True;
+        }
+    }
+    catch(const css::uno::Exception& ex)
+    {
+        LogHelper::logIt(ex);
+    }
+}
+
+void SvtAccessibilityOptions_Impl::SetColorValueSetColumnCount(sal_Int16 nSet)
+{
+    css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
+
+    try
+    {
+        if(xNode.is() && xNode->getPropertyValue(s_sColorValueSetColumnCount)!=nSet)
+        {
+            xNode->setPropertyValue(s_sColorValueSetColumnCount, css::uno::makeAny(nSet));
+            ::comphelper::ConfigurationHelper::flush(m_xCfg);
+
+            bIsModified = sal_True;
+        }
+    }
+    catch(const css::uno::Exception& ex)
+    {
+        LogHelper::logIt(ex);
+    }
+}
+
+void SvtAccessibilityOptions_Impl::SetPreviewUsesCheckeredBackground(sal_Bool bSet)
+{
+    css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
+
+    try
+    {
+        if(xNode.is() && xNode->getPropertyValue(s_sPreviewUsesCheckeredBackground)!=bSet)
+        {
+            xNode->setPropertyValue(s_sPreviewUsesCheckeredBackground, css::uno::makeAny(bSet));
+            ::comphelper::ConfigurationHelper::flush(m_xCfg);
+
+            bIsModified = sal_True;
+        }
+    }
+    catch(const css::uno::Exception& ex)
+    {
+        LogHelper::logIt(ex);
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -599,6 +805,22 @@ sal_Bool SvtAccessibilityOptions::IsSelectionInReadonly() const
 {
     return sm_pSingleImplConfig->IsSelectionInReadonly();
 }
+sal_Int16 SvtAccessibilityOptions::GetEdgeBlending() const
+{
+    return sm_pSingleImplConfig->GetEdgeBlending();
+}
+sal_Int16 SvtAccessibilityOptions::GetListBoxMaximumLineCount() const
+{
+    return sm_pSingleImplConfig->GetListBoxMaximumLineCount();
+}
+sal_Int16 SvtAccessibilityOptions::GetColorValueSetColumnCount() const
+{
+    return sm_pSingleImplConfig->GetColorValueSetColumnCount();
+}
+sal_Bool SvtAccessibilityOptions::GetPreviewUsesCheckeredBackground() const
+{
+    return sm_pSingleImplConfig->GetPreviewUsesCheckeredBackground();
+}
 
 // -----------------------------------------------------------------------
 void SvtAccessibilityOptions::SetAutoDetectSystemHC(sal_Bool bSet)
@@ -637,9 +859,25 @@ void SvtAccessibilityOptions::SetSelectionInReadonly(sal_Bool bSet)
 {
     sm_pSingleImplConfig->SetSelectionInReadonly(bSet);
 }
-
 void SvtAccessibilityOptions::SetVCLSettings()
 {
     sm_pSingleImplConfig->SetVCLSettings();
 }
+void SvtAccessibilityOptions::SetEdgeBlending(sal_Int16 nSet)
+{
+    sm_pSingleImplConfig->SetEdgeBlending(nSet);
+}
+void SvtAccessibilityOptions::SetListBoxMaximumLineCount(sal_Int16 nSet)
+{
+    sm_pSingleImplConfig->SetListBoxMaximumLineCount(nSet);
+}
+void SvtAccessibilityOptions::SetColorValueSetColumnCount(sal_Int16 nSet)
+{
+    sm_pSingleImplConfig->SetColorValueSetColumnCount(nSet);
+}
+void SvtAccessibilityOptions::SetPreviewUsesCheckeredBackground(sal_Bool bSet)
+{
+    sm_pSingleImplConfig->SetPreviewUsesCheckeredBackground(bSet);
+}
+
 // -----------------------------------------------------------------------

@@ -22,6 +22,5 @@
     <node oor:name="Text">
         <prop oor:name="UIName">
             <value xml:lang="en-US">Text</value>
-                        <value xml:lang="x-translate">Text</value>
         </prop>
     </node>

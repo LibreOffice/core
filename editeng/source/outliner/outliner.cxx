@@ -370,6 +370,62 @@ void Outliner::SetParaIsNumberingRestart( sal_uInt16 nPara, sal_Bool bParaIsNumb
     }
 }
 
+sal_Int16 Outliner::GetBulletsNumberingStatus(
+    const sal_uInt16 nParaStart,
+    const sal_uInt16 nParaEnd ) const
+{
+    if ( nParaStart > nParaEnd
+         || nParaEnd >= pParaList->GetParagraphCount() )
+    {
+        DBG_ASSERT( false,"<Outliner::GetBulletsNumberingStatus> - unexpected parameter values" );
+        return 2;
+    }
+
+    sal_uInt16 nBulletsCount = 0;
+    sal_uInt16 nNumberingCount = 0;
+    for (sal_uInt16 nPara = nParaStart; nPara <= nParaEnd; nPara++)
+    {
+        if ( !pParaList->GetParagraph(nPara) )
+        {
+            break;
+        }
+        const SvxNumberFormat* pFmt = GetNumberFormat(nPara);
+        if (!pFmt)
+        {
+            // At least, exists one paragraph that has no Bullets/Numbering.
+            break;
+        }
+        else if ((pFmt->GetNumberingType() == SVX_NUM_BITMAP) || (pFmt->GetNumberingType() == SVX_NUM_CHAR_SPECIAL))
+        {
+            // Having Bullets in this paragraph.
+            nBulletsCount++;
+        }
+        else
+        {
+            // Having Numbering in this paragraph.
+            nNumberingCount++;
+        }
+    }
+
+    const sal_uInt16 nParaCount = nParaEnd - nParaStart + 1;
+    if ( nBulletsCount == nParaCount )
+    {
+        return 0;
+    }
+    else if ( nNumberingCount == nParaCount )
+    {
+        return 1;
+    }
+    return 2;
+}
+
+sal_Int16 Outliner::GetBulletsNumberingStatus() const
+{
+    return pParaList->GetParagraphCount() > 0
+           ? GetBulletsNumberingStatus( 0, pParaList->GetParagraphCount()-1 )
+           : 2;
+}
+
 OutlinerParaObject* Outliner::CreateParaObject( sal_uInt16 nStartPara, sal_uInt16 nCount ) const
 {
     DBG_CHKTHIS(Outliner,0);
@@ -959,7 +1015,7 @@ void Outliner::PaintBullet( sal_uInt16 nPara, const Point& rStartPos,
         bDrawBullet = rBulletState.GetValue() ? true : false;
     }
 
-    if ( ImplHasBullet( nPara ) && bDrawBullet)
+    if ( ImplHasNumberFormat( nPara ) && bDrawBullet)
     {
         sal_Bool bVertical = IsVertical();
 
@@ -1460,7 +1516,7 @@ sal_Bool Outliner::HasChilds( Paragraph* pParagraph ) const
     return pParaList->HasChilds( pParagraph );
 }
 
-sal_Bool Outliner::ImplHasBullet( sal_uInt16 nPara ) const
+bool Outliner::ImplHasNumberFormat( sal_uInt16 nPara ) const
 {
     return GetNumberFormat(nPara) != 0;
 }
@@ -1709,7 +1765,7 @@ EBulletInfo Outliner::GetBulletInfo( sal_uInt16 nPara )
     EBulletInfo aInfo;
 
     aInfo.nParagraph = nPara;
-    aInfo.bVisible = ImplHasBullet( nPara );
+    aInfo.bVisible = ImplHasNumberFormat( nPara ) ? sal_True : sal_False;
 
     const SvxNumberFormat* pFmt = GetNumberFormat( nPara );
     aInfo.nType = pFmt ? pFmt->GetNumberingType() : 0;

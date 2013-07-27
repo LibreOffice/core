@@ -1166,7 +1166,7 @@ ScChangeTrack* XclExpChangeTrack::CreateTempChangeTrack()
     DBG_ASSERT( nOrigCount == pTempDoc->GetTableCount(),
         "XclExpChangeTrack::CreateTempChangeTrack - table count mismatch" );
     if( nOrigCount != pTempDoc->GetTableCount() )
-        return sal_False;
+        return NULL;
 
     return pOrigChangeTrack->Clone(pTempDoc);
 }

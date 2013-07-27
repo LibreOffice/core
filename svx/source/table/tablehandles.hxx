@@ -86,9 +86,11 @@ public:
     TableBorderHdl(
         SdrHdlList& rHdlList,
         const SdrObject& rSdrHdlObject,
-        const basegfx::B2DRange& rRange );
+        const basegfx::B2DRange& rRange,
+        bool bAnimate);
 
     virtual Pointer GetPointer() const;
+    bool getAnimate() const { return mbAnimate; }
 
 protected:
     // create marker for this kind
@@ -98,6 +100,9 @@ protected:
 
 private:
     basegfx::B2DRange maRange;
+
+    /// bitfield
+    bool            mbAnimate : 1;
 };
 
 } // end of namespace table

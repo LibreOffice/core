@@ -391,10 +391,10 @@ void SdrGluePointList::operator=(const SdrGluePointList& rSrcList)
 sal_uInt32 SdrGluePointList::Insert(const SdrGluePoint& rGP)
 {
     SdrGluePoint* pGP=new SdrGluePoint(rGP);
-    sal_uInt16 nId(pGP->GetId());
+    sal_uInt32 nId(pGP->GetId());
     const sal_uInt32 nAnz(GetCount());
     sal_uInt32 nInsPos(nAnz);
-    const sal_uInt16 nLastId(nAnz ? GetObject(nAnz - 1)->GetId() : 0);
+    const sal_uInt32 nLastId(nAnz ? GetObject(nAnz - 1)->GetId() : 0);
     DBG_ASSERT(nLastId>=nAnz,"SdrGluePointList::Insert(): nLastId<nAnz");
     const bool bHole(nLastId > nAnz);
 
@@ -411,7 +411,7 @@ sal_uInt32 SdrGluePointList::Insert(const SdrGluePoint& rGP)
             for(sal_uInt32 nNum(0); nNum < nAnz && !bBrk; nNum++)
             {
                 const SdrGluePoint* pGP2=GetObject(nNum);
-                const sal_uInt16 nTmpId(pGP2->GetId());
+                const sal_uInt32 nTmpId(pGP2->GetId());
 
                 if(nTmpId == nId)
                 {
@@ -469,8 +469,7 @@ sal_uInt32 SdrGluePointList::FindGluePoint(sal_uInt32 nId) const
     return nRet;
 }
 
-sal_uInt32 SdrGluePointList::GPLHitTest(const basegfx::B2DPoint& rPnt, double fTolLog, const basegfx::B2DRange& rObjectRange,
-    bool bBack, sal_uInt32 nId0) const
+sal_uInt32 SdrGluePointList::GPLHitTest(const basegfx::B2DPoint& rPnt, double fTolLog, const basegfx::B2DRange& rObjectRange, bool bBack) const
 {
     const sal_uInt32 nAnz(GetCount());
     sal_uInt32 nRet(SDRGLUEPOINT_NOTFOUND);

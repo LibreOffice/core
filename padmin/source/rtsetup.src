@@ -194,7 +194,7 @@ TabPage RID_RTS_DEVICEPAGE
             < "PostScript (Level from driver)" ; 1; > ;
             < "PostScript Level 1" ; 2; > ;
             < "PostScript Level 2"; 3; > ;
-            < "PostScript Level 3"; 3; > ;
+            < "PostScript Level 3"; 4; > ;
             < "PDF"; 10; > ;
         };
     };

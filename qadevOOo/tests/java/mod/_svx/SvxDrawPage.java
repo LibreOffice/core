@@ -120,7 +120,6 @@ public class SvxDrawPage extends TestCase {
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         log.println("    disposing xSheetDoc ");
         util.DesktopTools.closeDoc(xDoc);
-        ;
     }
 
     /**

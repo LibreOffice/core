@@ -1,0 +1,1778 @@
+diff -u misc/Python-2.7.5/PCbuild/_bsddb.vcproj misc/build/Python-2.7.5/PCbuild/_bsddb.vcproj
+--- misc/Python-2.7.5/PCbuild/_bsddb.vcproj	2012-04-09 18:07:35.000000000 -0500
++++ misc/build/Python-2.7.5/PCbuild/_bsddb.vcproj	2012-07-30 20:59:37.000000000 -0500
+@@ -56,6 +56,7 @@
+ 			/>
+ 			<Tool
+ 				Name="VCLinkerTool"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 				AdditionalDependencies="$(bsddbDepLibs)"
+ 				BaseAddress="0x1e180000"
+ 			/>
+@@ -120,6 +121,7 @@
+ 			/>
+ 			<Tool
+ 				Name="VCLinkerTool"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 				AdditionalDependencies="$(bsddbDepLibs)"
+ 				BaseAddress="0x1e180000"
+ 			/>
+@@ -183,6 +185,7 @@
+ 			/>
+ 			<Tool
+ 				Name="VCLinkerTool"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 				AdditionalDependencies="$(bsddbDepLibs)"
+ 				BaseAddress="0x1e180000"
+ 			/>
+@@ -248,6 +251,7 @@
+ 			/>
+ 			<Tool
+ 				Name="VCLinkerTool"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 				AdditionalDependencies="$(bsddbDepLibs)"
+ 				BaseAddress="0x1e180000"
+ 			/>
+@@ -311,6 +315,7 @@
+ 			/>
+ 			<Tool
+ 				Name="VCLinkerTool"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 				AdditionalDependencies="$(bsddbDepLibs)"
+ 				BaseAddress="0x1e180000"
+ 			/>
+@@ -375,6 +380,7 @@
+ 			/>
+ 			<Tool
+ 				Name="VCLinkerTool"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 				AdditionalDependencies="$(bsddbDepLibs)"
+ 				BaseAddress="0x1e180000"
+ 				TargetMachine="17"
+@@ -439,6 +445,7 @@
+ 			/>
+ 			<Tool
+ 				Name="VCLinkerTool"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 				AdditionalDependencies="$(bsddbDepLibs)"
+ 				BaseAddress="0x1e180000"
+ 			/>
+@@ -503,6 +510,7 @@
+ 			/>
+ 			<Tool
+ 				Name="VCLinkerTool"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 				AdditionalDependencies="$(bsddbDepLibs)"
+ 				BaseAddress="0x1e180000"
+ 				TargetMachine="17"
+diff -u misc/Python-2.7.5/PCbuild/_ctypes.vcproj misc/build/Python-2.7.5/PCbuild/_ctypes.vcproj
+--- misc/Python-2.7.5/PCbuild/_ctypes.vcproj	2012-04-09 18:07:35.000000000 -0500
++++ misc/build/Python-2.7.5/PCbuild/_ctypes.vcproj	2012-07-30 20:59:37.000000000 -0500
+@@ -177,7 +177,7 @@
+ 			/>
+ 			<Tool
+ 				Name="VCLinkerTool"
+-				AdditionalOptions="/EXPORT:DllGetClassObject,PRIVATE /EXPORT:DllCanUnloadNow,PRIVATE"
++				AdditionalOptions="/SAFESEH /DYNAMICBASE /NXCOMPAT /EXPORT:DllGetClassObject,PRIVATE /EXPORT:DllCanUnloadNow,PRIVATE"
+ 				SubSystem="0"
+ 				BaseAddress="0x1D1A0000"
+ 			/>
+@@ -241,7 +241,7 @@
+ 			/>
+ 			<Tool
+ 				Name="VCLinkerTool"
+-				AdditionalOptions="/EXPORT:DllGetClassObject,PRIVATE /EXPORT:DllCanUnloadNow,PRIVATE"
++				AdditionalOptions="/SAFESEH /DYNAMICBASE /NXCOMPAT /EXPORT:DllGetClassObject,PRIVATE /EXPORT:DllCanUnloadNow,PRIVATE"
+ 				SubSystem="0"
+ 				BaseAddress="0x1D1A0000"
+ 			/>
+@@ -304,7 +304,7 @@
+ 			/>
+ 			<Tool
+ 				Name="VCLinkerTool"
+-				AdditionalOptions="/EXPORT:DllGetClassObject,PRIVATE /EXPORT:DllCanUnloadNow,PRIVATE"
++				AdditionalOptions="/SAFESEH /DYNAMICBASE /NXCOMPAT /EXPORT:DllGetClassObject,PRIVATE /EXPORT:DllCanUnloadNow,PRIVATE"
+ 				SubSystem="0"
+ 				BaseAddress="0x1D1A0000"
+ 			/>
+@@ -368,7 +368,7 @@
+ 			/>
+ 			<Tool
+ 				Name="VCLinkerTool"
+-				AdditionalOptions="/EXPORT:DllGetClassObject,PRIVATE /EXPORT:DllCanUnloadNow,PRIVATE"
++				AdditionalOptions="/SAFESEH /DYNAMICBASE /NXCOMPAT /EXPORT:DllGetClassObject,PRIVATE /EXPORT:DllCanUnloadNow,PRIVATE"
+ 				SubSystem="0"
+ 				BaseAddress="0x1D1A0000"
+ 				TargetMachine="17"
+@@ -432,7 +432,7 @@
+ 			/>
+ 			<Tool
+ 				Name="VCLinkerTool"
+-				AdditionalOptions="/EXPORT:DllGetClassObject,PRIVATE /EXPORT:DllCanUnloadNow,PRIVATE"
++				AdditionalOptions="/SAFESEH /DYNAMICBASE /NXCOMPAT /EXPORT:DllGetClassObject,PRIVATE /EXPORT:DllCanUnloadNow,PRIVATE"
+ 				SubSystem="0"
+ 				BaseAddress="0x1D1A0000"
+ 			/>
+@@ -496,7 +496,7 @@
+ 			/>
+ 			<Tool
+ 				Name="VCLinkerTool"
+-				AdditionalOptions="/EXPORT:DllGetClassObject,PRIVATE /EXPORT:DllCanUnloadNow,PRIVATE"
++				AdditionalOptions="/SAFESEH /DYNAMICBASE /NXCOMPAT /EXPORT:DllGetClassObject,PRIVATE /EXPORT:DllCanUnloadNow,PRIVATE"
+ 				SubSystem="0"
+ 				BaseAddress="0x1D1A0000"
+ 				TargetMachine="17"
+diff -u misc/Python-2.7.5/PCbuild/_ctypes_test.vcproj misc/build/Python-2.7.5/PCbuild/_ctypes_test.vcproj
+--- misc/Python-2.7.5/PCbuild/_ctypes_test.vcproj	2012-04-09 18:07:35.000000000 -0500
++++ misc/build/Python-2.7.5/PCbuild/_ctypes_test.vcproj	2012-07-30 20:59:37.000000000 -0500
+@@ -54,6 +54,7 @@
+ 			/>
+ 			<Tool
+ 				Name="VCLinkerTool"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -113,6 +114,7 @@
+ 			/>
+ 			<Tool
+ 				Name="VCLinkerTool"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -172,6 +174,7 @@
+ 			/>
+ 			<Tool
+ 				Name="VCLinkerTool"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -232,6 +235,7 @@
+ 			/>
+ 			<Tool
+ 				Name="VCLinkerTool"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -291,6 +295,7 @@
+ 			/>
+ 			<Tool
+ 				Name="VCLinkerTool"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -352,6 +357,7 @@
+ 			<Tool
+ 				Name="VCLinkerTool"
+ 				TargetMachine="17"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -411,6 +417,7 @@
+ 			/>
+ 			<Tool
+ 				Name="VCLinkerTool"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -472,6 +479,7 @@
+ 			<Tool
+ 				Name="VCLinkerTool"
+ 				TargetMachine="17"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+diff -u misc/Python-2.7.5/PCbuild/_elementtree.vcproj misc/build/Python-2.7.5/PCbuild/_elementtree.vcproj
+--- misc/Python-2.7.5/PCbuild/_elementtree.vcproj	2012-04-09 18:07:35.000000000 -0500
++++ misc/build/Python-2.7.5/PCbuild/_elementtree.vcproj	2012-07-30 20:59:37.000000000 -0500
+@@ -57,6 +57,7 @@
+ 			<Tool
+ 				Name="VCLinkerTool"
+ 				BaseAddress="0x1D100000"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -119,6 +120,7 @@
+ 			<Tool
+ 				Name="VCLinkerTool"
+ 				BaseAddress="0x1D100000"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -181,6 +183,7 @@
+ 			<Tool
+ 				Name="VCLinkerTool"
+ 				BaseAddress="0x1D100000"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -244,6 +247,7 @@
+ 			<Tool
+ 				Name="VCLinkerTool"
+ 				BaseAddress="0x1D100000"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -306,6 +310,7 @@
+ 			<Tool
+ 				Name="VCLinkerTool"
+ 				BaseAddress="0x1D100000"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -370,6 +375,7 @@
+ 				Name="VCLinkerTool"
+ 				BaseAddress="0x1D100000"
+ 				TargetMachine="17"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -432,6 +438,7 @@
+ 			<Tool
+ 				Name="VCLinkerTool"
+ 				BaseAddress="0x1D100000"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -496,6 +503,7 @@
+ 				Name="VCLinkerTool"
+ 				BaseAddress="0x1D100000"
+ 				TargetMachine="17"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+diff -u misc/Python-2.7.5/PCbuild/_hashlib.vcproj misc/build/Python-2.7.5/PCbuild/_hashlib.vcproj
+--- misc/Python-2.7.5/PCbuild/_hashlib.vcproj	2012-04-09 18:07:35.000000000 -0500
++++ misc/build/Python-2.7.5/PCbuild/_hashlib.vcproj	2012-07-30 20:59:37.000000000 -0500
+@@ -58,6 +58,7 @@
+ 			<Tool
+ 				Name="VCLinkerTool"
+ 				AdditionalDependencies="ws2_32.lib $(opensslDir)\out32\libeay32.lib $(opensslDir)\out32\ssleay32.lib"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -121,6 +122,7 @@
+ 			<Tool
+ 				Name="VCLinkerTool"
+ 				AdditionalDependencies="ws2_32.lib $(opensslDir)\out64\libeay32.lib $(opensslDir)\out64\ssleay32.lib"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -184,6 +186,7 @@
+ 			<Tool
+ 				Name="VCLinkerTool"
+ 				AdditionalDependencies="ws2_32.lib $(opensslDir)\out32\libeay32.lib $(opensslDir)\out32\ssleay32.lib"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -248,6 +251,7 @@
+ 			<Tool
+ 				Name="VCLinkerTool"
+ 				AdditionalDependencies="ws2_32.lib $(opensslDir)\out64\libeay32.lib $(opensslDir)\out64\ssleay32.lib"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -311,6 +315,7 @@
+ 			<Tool
+ 				Name="VCLinkerTool"
+ 				AdditionalDependencies="ws2_32.lib $(opensslDir)\out32\libeay32.lib $(opensslDir)\out32\ssleay32.lib"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -376,6 +381,7 @@
+ 				Name="VCLinkerTool"
+ 				AdditionalDependencies="ws2_32.lib $(opensslDir)\out64\libeay32.lib $(opensslDir)\out64\ssleay32.lib"
+ 				TargetMachine="17"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -439,6 +445,7 @@
+ 			<Tool
+ 				Name="VCLinkerTool"
+ 				AdditionalDependencies="ws2_32.lib $(opensslDir)\out32\libeay32.lib $(opensslDir)\out32\ssleay32.lib"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -504,6 +511,7 @@
+ 				Name="VCLinkerTool"
+ 				AdditionalDependencies="ws2_32.lib $(opensslDir)\out64\libeay32.lib $(opensslDir)\out64\ssleay32.lib"
+ 				TargetMachine="17"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+diff -u misc/Python-2.7.5/PCbuild/_msi.vcproj misc/build/Python-2.7.5/PCbuild/_msi.vcproj
+--- misc/Python-2.7.5/PCbuild/_msi.vcproj	2012-04-09 18:07:35.000000000 -0500
++++ misc/build/Python-2.7.5/PCbuild/_msi.vcproj	2012-07-30 20:59:37.000000000 -0500
+@@ -56,6 +56,7 @@
+ 				Name="VCLinkerTool"
+ 				AdditionalDependencies="fci.lib msi.lib rpcrt4.lib"
+ 				BaseAddress="0x1D160000"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -117,6 +118,7 @@
+ 				Name="VCLinkerTool"
+ 				AdditionalDependencies="fci.lib msi.lib rpcrt4.lib"
+ 				BaseAddress="0x1D160000"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -178,6 +180,7 @@
+ 				Name="VCLinkerTool"
+ 				AdditionalDependencies="fci.lib msi.lib rpcrt4.lib"
+ 				BaseAddress="0x1D160000"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -240,6 +243,7 @@
+ 				Name="VCLinkerTool"
+ 				AdditionalDependencies="fci.lib msi.lib rpcrt4.lib"
+ 				BaseAddress="0x1D160000"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -301,6 +305,7 @@
+ 				Name="VCLinkerTool"
+ 				AdditionalDependencies="fci.lib msi.lib rpcrt4.lib"
+ 				BaseAddress="0x1D160000"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -364,6 +369,7 @@
+ 				AdditionalDependencies="fci.lib msi.lib rpcrt4.lib"
+ 				BaseAddress="0x1D160000"
+ 				TargetMachine="17"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -425,6 +431,7 @@
+ 				Name="VCLinkerTool"
+ 				AdditionalDependencies="fci.lib msi.lib rpcrt4.lib"
+ 				BaseAddress="0x1D160000"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -488,6 +495,7 @@
+ 				AdditionalDependencies="fci.lib msi.lib rpcrt4.lib"
+ 				BaseAddress="0x1D160000"
+ 				TargetMachine="17"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+diff -u misc/Python-2.7.5/PCbuild/_multiprocessing.vcproj misc/build/Python-2.7.5/PCbuild/_multiprocessing.vcproj
+--- misc/Python-2.7.5/PCbuild/_multiprocessing.vcproj	2012-04-09 18:07:35.000000000 -0500
++++ misc/build/Python-2.7.5/PCbuild/_multiprocessing.vcproj	2012-07-30 20:59:37.000000000 -0500
+@@ -56,6 +56,7 @@
+ 				Name="VCLinkerTool"
+ 				AdditionalDependencies="ws2_32.lib"
+ 				BaseAddress="0x1e1D0000"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -117,6 +118,7 @@
+ 				Name="VCLinkerTool"
+ 				AdditionalDependencies="ws2_32.lib"
+ 				BaseAddress="0x1e1D0000"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -178,6 +180,7 @@
+ 				Name="VCLinkerTool"
+ 				AdditionalDependencies="ws2_32.lib"
+ 				BaseAddress="0x1e1D0000"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -240,6 +243,7 @@
+ 				Name="VCLinkerTool"
+ 				AdditionalDependencies="ws2_32.lib"
+ 				BaseAddress="0x1e1D0000"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -301,6 +305,7 @@
+ 				Name="VCLinkerTool"
+ 				AdditionalDependencies="ws2_32.lib"
+ 				BaseAddress="0x1e1D0000"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -364,6 +369,7 @@
+ 				AdditionalDependencies="ws2_32.lib"
+ 				BaseAddress="0x1e1D0000"
+ 				TargetMachine="17"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -425,6 +431,7 @@
+ 				Name="VCLinkerTool"
+ 				AdditionalDependencies="ws2_32.lib"
+ 				BaseAddress="0x1e1D0000"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -488,6 +495,7 @@
+ 				AdditionalDependencies="ws2_32.lib"
+ 				BaseAddress="0x1e1D0000"
+ 				TargetMachine="17"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+diff -u misc/Python-2.7.5/PCbuild/_socket.vcproj misc/build/Python-2.7.5/PCbuild/_socket.vcproj
+--- misc/Python-2.7.5/PCbuild/_socket.vcproj	2012-04-09 18:07:35.000000000 -0500
++++ misc/build/Python-2.7.5/PCbuild/_socket.vcproj	2012-07-30 20:59:37.000000000 -0500
+@@ -56,6 +56,7 @@
+ 				Name="VCLinkerTool"
+ 				AdditionalDependencies="ws2_32.lib"
+ 				BaseAddress="0x1e1D0000"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -117,6 +118,7 @@
+ 				Name="VCLinkerTool"
+ 				AdditionalDependencies="ws2_32.lib"
+ 				BaseAddress="0x1e1D0000"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -178,6 +180,7 @@
+ 				Name="VCLinkerTool"
+ 				AdditionalDependencies="ws2_32.lib"
+ 				BaseAddress="0x1e1D0000"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -240,6 +243,7 @@
+ 				Name="VCLinkerTool"
+ 				AdditionalDependencies="ws2_32.lib"
+ 				BaseAddress="0x1e1D0000"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -301,6 +305,7 @@
+ 				Name="VCLinkerTool"
+ 				AdditionalDependencies="ws2_32.lib"
+ 				BaseAddress="0x1e1D0000"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -364,6 +369,7 @@
+ 				AdditionalDependencies="ws2_32.lib"
+ 				BaseAddress="0x1e1D0000"
+ 				TargetMachine="17"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -425,6 +431,7 @@
+ 				Name="VCLinkerTool"
+ 				AdditionalDependencies="ws2_32.lib"
+ 				BaseAddress="0x1e1D0000"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -488,6 +495,7 @@
+ 				AdditionalDependencies="ws2_32.lib"
+ 				BaseAddress="0x1e1D0000"
+ 				TargetMachine="17"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+diff -u misc/Python-2.7.5/PCbuild/_sqlite3.vcproj misc/build/Python-2.7.5/PCbuild/_sqlite3.vcproj
+--- misc/Python-2.7.5/PCbuild/_sqlite3.vcproj	2012-04-09 18:07:35.000000000 -0500
++++ misc/build/Python-2.7.5/PCbuild/_sqlite3.vcproj	2012-07-30 20:59:37.000000000 -0500
+@@ -57,6 +57,7 @@
+ 			<Tool
+ 				Name="VCLinkerTool"
+ 				BaseAddress="0x1e180000"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -119,6 +120,7 @@
+ 			<Tool
+ 				Name="VCLinkerTool"
+ 				BaseAddress="0x1e180000"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -181,6 +183,7 @@
+ 			<Tool
+ 				Name="VCLinkerTool"
+ 				BaseAddress="0x1e180000"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -244,6 +247,7 @@
+ 			<Tool
+ 				Name="VCLinkerTool"
+ 				BaseAddress="0x1e180000"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -306,6 +310,7 @@
+ 			<Tool
+ 				Name="VCLinkerTool"
+ 				BaseAddress="0x1e180000"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -370,6 +375,7 @@
+ 				Name="VCLinkerTool"
+ 				BaseAddress="0x1e180000"
+ 				TargetMachine="17"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -432,6 +438,7 @@
+ 			<Tool
+ 				Name="VCLinkerTool"
+ 				BaseAddress="0x1e180000"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -496,6 +503,7 @@
+ 				Name="VCLinkerTool"
+ 				BaseAddress="0x1e180000"
+ 				TargetMachine="17"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+diff -u misc/Python-2.7.5/PCbuild/_ssl.vcproj misc/build/Python-2.7.5/PCbuild/_ssl.vcproj
+--- misc/Python-2.7.5/PCbuild/_ssl.vcproj	2012-04-09 18:07:35.000000000 -0500
++++ misc/build/Python-2.7.5/PCbuild/_ssl.vcproj	2012-07-30 20:59:37.000000000 -0500
+@@ -43,7 +43,7 @@
+ 			/>
+ 			<Tool
+ 				Name="VCCLCompilerTool"
+-				AdditionalIncludeDirectories="$(opensslDir)\inc32"
++				AdditionalIncludeDirectories="$(SOLARVERSION)\$(INPATH)\inc$(UPDMINOREXT)\external"
+ 			/>
+ 			<Tool
+ 				Name="VCManagedResourceCompilerTool"
+@@ -57,7 +57,8 @@
+ 			/>
+ 			<Tool
+ 				Name="VCLinkerTool"
+-				AdditionalDependencies="ws2_32.lib $(opensslDir)\out32\libeay32.lib $(opensslDir)\out32\ssleay32.lib"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
++				AdditionalDependencies="ws2_32.lib $(SOLARVER)\$(INPATH)\lib$(UPDMINOREXT)\libeay32.lib $(SOLARVER)\$(INPATH)\lib$(UPDMINOREXT)\ssleay32.lib"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -106,7 +107,7 @@
+ 			/>
+ 			<Tool
+ 				Name="VCCLCompilerTool"
+-				AdditionalIncludeDirectories="$(opensslDir)\inc64"
++				AdditionalIncludeDirectories="$(SOLARVERSION)\$(INPATH)\inc$(UPDMINOREXT)\external"
+ 			/>
+ 			<Tool
+ 				Name="VCManagedResourceCompilerTool"
+@@ -120,7 +121,8 @@
+ 			/>
+ 			<Tool
+ 				Name="VCLinkerTool"
+-				AdditionalDependencies="ws2_32.lib $(opensslDir)\out64\libeay32.lib $(opensslDir)\out64\ssleay32.lib"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
++				AdditionalDependencies="ws2_32.lib $(SOLARVER)\$(INPATH)\lib$(UPDMINOREXT)\libeay32.lib $(SOLARVER)\$(INPATH)\lib$(UPDMINOREXT)\ssleay32.lib"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -169,7 +171,7 @@
+ 			/>
+ 			<Tool
+ 				Name="VCCLCompilerTool"
+-				AdditionalIncludeDirectories="$(opensslDir)\inc32"
++				AdditionalIncludeDirectories="$(SOLARVERSION)\$(INPATH)\inc$(UPDMINOREXT)\external"
+ 			/>
+ 			<Tool
+ 				Name="VCManagedResourceCompilerTool"
+@@ -183,7 +185,8 @@
+ 			/>
+ 			<Tool
+ 				Name="VCLinkerTool"
+-				AdditionalDependencies="ws2_32.lib $(opensslDir)\out32\libeay32.lib $(opensslDir)\out32\ssleay32.lib"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
++				AdditionalDependencies="ws2_32.lib $(SOLARVER)\$(INPATH)\lib$(UPDMINOREXT)\libeay32.lib $(SOLARVER)\$(INPATH)\lib$(UPDMINOREXT)\ssleay32.lib"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -233,7 +236,7 @@
+ 			/>
+ 			<Tool
+ 				Name="VCCLCompilerTool"
+-				AdditionalIncludeDirectories="$(opensslDir)\inc64"
++				AdditionalIncludeDirectories="$(SOLARVERSION)\$(INPATH)\inc$(UPDMINOREXT)\external"
+ 			/>
+ 			<Tool
+ 				Name="VCManagedResourceCompilerTool"
+@@ -247,7 +250,8 @@
+ 			/>
+ 			<Tool
+ 				Name="VCLinkerTool"
+-				AdditionalDependencies="ws2_32.lib $(opensslDir)\out64\libeay32.lib $(opensslDir)\out64\ssleay32.lib"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
++				AdditionalDependencies="ws2_32.lib $(SOLARVER)\$(INPATH)\lib$(UPDMINOREXT)\libeay32.lib $(SOLARVER)\$(INPATH)\lib$(UPDMINOREXT)\ssleay32.lib"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -296,7 +300,7 @@
+ 			/>
+ 			<Tool
+ 				Name="VCCLCompilerTool"
+-				AdditionalIncludeDirectories="$(opensslDir)\inc32"
++				AdditionalIncludeDirectories="$(SOLARVERSION)\$(INPATH)\inc$(UPDMINOREXT)\external"
+ 			/>
+ 			<Tool
+ 				Name="VCManagedResourceCompilerTool"
+@@ -310,7 +314,8 @@
+ 			/>
+ 			<Tool
+ 				Name="VCLinkerTool"
+-				AdditionalDependencies="ws2_32.lib $(opensslDir)\out32\libeay32.lib $(opensslDir)\out32\ssleay32.lib"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
++				AdditionalDependencies="ws2_32.lib $(SOLARVER)\$(INPATH)\lib$(UPDMINOREXT)\libeay32.lib $(SOLARVER)\$(INPATH)\lib$(UPDMINOREXT)\ssleay32.lib"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -360,7 +365,7 @@
+ 			/>
+ 			<Tool
+ 				Name="VCCLCompilerTool"
+-				AdditionalIncludeDirectories="$(opensslDir)\inc64"
++				AdditionalIncludeDirectories="$(SOLARVERSION)\$(INPATH)\inc$(UPDMINOREXT)\external"
+ 			/>
+ 			<Tool
+ 				Name="VCManagedResourceCompilerTool"
+@@ -374,7 +379,8 @@
+ 			/>
+ 			<Tool
+ 				Name="VCLinkerTool"
+-				AdditionalDependencies="ws2_32.lib $(opensslDir)\out64\libeay32.lib $(opensslDir)\out64\ssleay32.lib"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
++				AdditionalDependencies="ws2_32.lib $(SOLARVER)\$(INPATH)\lib$(UPDMINOREXT)\libeay32.lib $(SOLARVER)\$(INPATH)\lib$(UPDMINOREXT)\ssleay32.lib"
+ 				TargetMachine="17"
+ 			/>
+ 			<Tool
+@@ -424,7 +430,7 @@
+ 			/>
+ 			<Tool
+ 				Name="VCCLCompilerTool"
+-				AdditionalIncludeDirectories="$(opensslDir)\inc32"
++				AdditionalIncludeDirectories="$(SOLARVERSION)\$(INPATH)\inc$(UPDMINOREXT)\external"
+ 			/>
+ 			<Tool
+ 				Name="VCManagedResourceCompilerTool"
+@@ -438,7 +444,8 @@
+ 			/>
+ 			<Tool
+ 				Name="VCLinkerTool"
+-				AdditionalDependencies="ws2_32.lib $(opensslDir)\out32\libeay32.lib $(opensslDir)\out32\ssleay32.lib"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
++				AdditionalDependencies="ws2_32.lib $(SOLARVER)\$(INPATH)\lib$(UPDMINOREXT)\libeay32.lib $(SOLARVER)\$(INPATH)\lib$(UPDMINOREXT)\ssleay32.lib"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -488,7 +495,7 @@
+ 			/>
+ 			<Tool
+ 				Name="VCCLCompilerTool"
+-				AdditionalIncludeDirectories="$(opensslDir)\inc64"
++				AdditionalIncludeDirectories="$(SOLARVERSION)\$(INPATH)\inc$(UPDMINOREXT)\external"
+ 			/>
+ 			<Tool
+ 				Name="VCManagedResourceCompilerTool"
+@@ -502,7 +509,8 @@
+ 			/>
+ 			<Tool
+ 				Name="VCLinkerTool"
+-				AdditionalDependencies="ws2_32.lib $(opensslDir)\out64\libeay32.lib $(opensslDir)\out64\ssleay32.lib"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
++				AdditionalDependencies="ws2_32.lib $(SOLARVER)\$(INPATH)\lib$(UPDMINOREXT)\libeay32.lib $(SOLARVER)\$(INPATH)\lib$(UPDMINOREXT)\ssleay32.lib"
+ 				TargetMachine="17"
+ 			/>
+ 			<Tool
+diff -u misc/Python-2.7.5/PCbuild/_testcapi.vcproj misc/build/Python-2.7.5/PCbuild/_testcapi.vcproj
+--- misc/Python-2.7.5/PCbuild/_testcapi.vcproj	2012-04-09 18:07:35.000000000 -0500
++++ misc/build/Python-2.7.5/PCbuild/_testcapi.vcproj	2012-07-30 20:59:37.000000000 -0500
+@@ -55,6 +55,7 @@
+ 			<Tool
+ 				Name="VCLinkerTool"
+ 				BaseAddress="0x1e1F0000"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -115,6 +116,7 @@
+ 			<Tool
+ 				Name="VCLinkerTool"
+ 				BaseAddress="0x1e1F0000"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -175,6 +177,7 @@
+ 			<Tool
+ 				Name="VCLinkerTool"
+ 				BaseAddress="0x1e1F0000"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -236,6 +239,7 @@
+ 			<Tool
+ 				Name="VCLinkerTool"
+ 				BaseAddress="0x1e1F0000"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -296,6 +300,7 @@
+ 			<Tool
+ 				Name="VCLinkerTool"
+ 				BaseAddress="0x1e1F0000"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -358,6 +363,7 @@
+ 				Name="VCLinkerTool"
+ 				BaseAddress="0x1e1F0000"
+ 				TargetMachine="17"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -418,6 +424,7 @@
+ 			<Tool
+ 				Name="VCLinkerTool"
+ 				BaseAddress="0x1e1F0000"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -480,6 +487,7 @@
+ 				Name="VCLinkerTool"
+ 				BaseAddress="0x1e1F0000"
+ 				TargetMachine="17"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+diff -u misc/Python-2.7.5/PCbuild/_tkinter.vcproj misc/build/Python-2.7.5/PCbuild/_tkinter.vcproj
+--- misc/Python-2.7.5/PCbuild/_tkinter.vcproj	2012-04-09 18:07:35.000000000 -0500
++++ misc/build/Python-2.7.5/PCbuild/_tkinter.vcproj	2012-07-30 20:59:37.000000000 -0500
+@@ -57,6 +57,7 @@
+ 			<Tool
+ 				Name="VCLinkerTool"
+ 				AdditionalDependencies="$(tcltkLibDebug)"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -119,6 +120,7 @@
+ 			<Tool
+ 				Name="VCLinkerTool"
+ 				AdditionalDependencies="$(tcltk64LibDebug)"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -181,6 +183,7 @@
+ 			<Tool
+ 				Name="VCLinkerTool"
+ 				AdditionalDependencies="$(tcltkLib)"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -244,6 +247,7 @@
+ 			<Tool
+ 				Name="VCLinkerTool"
+ 				AdditionalDependencies="$(tcltk64Lib)"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -306,6 +310,7 @@
+ 			<Tool
+ 				Name="VCLinkerTool"
+ 				AdditionalDependencies="$(tcltkLib)"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -370,6 +375,7 @@
+ 				Name="VCLinkerTool"
+ 				AdditionalDependencies="$(tcltk64Lib)"
+ 				TargetMachine="17"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -432,6 +438,7 @@
+ 			<Tool
+ 				Name="VCLinkerTool"
+ 				AdditionalDependencies="$(tcltkLib)"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -496,6 +503,7 @@
+ 				Name="VCLinkerTool"
+ 				AdditionalDependencies="$(tcltk64Lib)"
+ 				TargetMachine="17"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+diff -u misc/Python-2.7.5/PCbuild/bdist_wininst.vcproj misc/build/Python-2.7.5/PCbuild/bdist_wininst.vcproj
+--- misc/Python-2.7.5/PCbuild/bdist_wininst.vcproj	2012-04-09 18:07:35.000000000 -0500
++++ misc/build/Python-2.7.5/PCbuild/bdist_wininst.vcproj	2012-07-30 20:59:37.000000000 -0500
+@@ -81,8 +81,7 @@
+ 				IgnoreDefaultLibraryNames="LIBC"
+ 				ProgramDatabaseFile="..\lib\distutils\command\wininst-9.0.pdb"
+ 				SubSystem="2"
+-				RandomizedBaseAddress="1"
+-				DataExecutionPrevention="0"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 				TargetMachine="1"
+ 			/>
+ 			<Tool
+@@ -171,8 +170,7 @@
+ 				IgnoreDefaultLibraryNames="LIBC"
+ 				ProgramDatabaseFile="..\lib\distutils\command\wininst-9.0-amd64.pdb"
+ 				SubSystem="2"
+-				RandomizedBaseAddress="1"
+-				DataExecutionPrevention="0"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 				TargetMachine="17"
+ 			/>
+ 			<Tool
+diff -u misc/Python-2.7.5/PCbuild/bz2.vcproj misc/build/Python-2.7.5/PCbuild/bz2.vcproj
+--- misc/Python-2.7.5/PCbuild/bz2.vcproj	2012-04-09 18:07:35.000000000 -0500
++++ misc/build/Python-2.7.5/PCbuild/bz2.vcproj	2012-07-30 20:59:37.000000000 -0500
+@@ -57,6 +57,7 @@
+ 			<Tool
+ 				Name="VCLinkerTool"
+ 				BaseAddress="0x1D170000"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -119,6 +120,7 @@
+ 			<Tool
+ 				Name="VCLinkerTool"
+ 				BaseAddress="0x1D170000"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -181,6 +183,7 @@
+ 			<Tool
+ 				Name="VCLinkerTool"
+ 				BaseAddress="0x1D170000"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -244,6 +247,7 @@
+ 			<Tool
+ 				Name="VCLinkerTool"
+ 				BaseAddress="0x1D170000"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -306,6 +310,7 @@
+ 			<Tool
+ 				Name="VCLinkerTool"
+ 				BaseAddress="0x1D170000"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -370,6 +375,7 @@
+ 				Name="VCLinkerTool"
+ 				BaseAddress="0x1D170000"
+ 				TargetMachine="17"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -432,6 +438,7 @@
+ 			<Tool
+ 				Name="VCLinkerTool"
+ 				BaseAddress="0x1D170000"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -496,6 +503,7 @@
+ 				Name="VCLinkerTool"
+ 				BaseAddress="0x1D170000"
+ 				TargetMachine="17"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+diff -u misc/Python-2.7.5/PCbuild/kill_python.vcproj misc/build/Python-2.7.5/PCbuild/kill_python.vcproj
+--- misc/Python-2.7.5/PCbuild/kill_python.vcproj	2012-04-09 18:07:35.000000000 -0500
++++ misc/build/Python-2.7.5/PCbuild/kill_python.vcproj	2012-07-30 20:59:37.000000000 -0500
+@@ -56,6 +56,7 @@
+ 				Name="VCLinkerTool"
+ 				OutputFile="$(OutDir)\$(ProjectName)_d.exe"
+ 				SubSystem="1"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -117,6 +118,7 @@
+ 				Name="VCLinkerTool"
+ 				OutputFile="$(OutDir)\$(ProjectName)_d.exe"
+ 				SubSystem="1"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -177,6 +179,7 @@
+ 			<Tool
+ 				Name="VCLinkerTool"
+ 				SubSystem="1"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -238,6 +241,7 @@
+ 			<Tool
+ 				Name="VCLinkerTool"
+ 				SubSystem="1"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+diff -u misc/Python-2.7.5/PCbuild/make_buildinfo.vcproj misc/build/Python-2.7.5/PCbuild/make_buildinfo.vcproj
+--- misc/Python-2.7.5/PCbuild/make_buildinfo.vcproj	2012-04-09 18:07:35.000000000 -0500
++++ misc/build/Python-2.7.5/PCbuild/make_buildinfo.vcproj	2012-07-30 20:59:37.000000000 -0500
+@@ -61,6 +61,7 @@
+ 				OutputFile="$(OutDir)/make_buildinfo.exe"
+ 				ProgramDatabaseFile="$(TargetDir)$(TargetName).pdb"
+ 				SubSystem="1"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -119,6 +120,7 @@
+ 			/>
+ 			<Tool
+ 				Name="VCLinkerTool"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+diff -u misc/Python-2.7.5/PCbuild/make_versioninfo.vcproj misc/build/Python-2.7.5/PCbuild/make_versioninfo.vcproj
+--- misc/Python-2.7.5/PCbuild/make_versioninfo.vcproj	2012-04-09 18:07:35.000000000 -0500
++++ misc/build/Python-2.7.5/PCbuild/make_versioninfo.vcproj	2012-07-30 20:59:37.000000000 -0500
+@@ -71,6 +71,7 @@
+ 				ProgramDatabaseFile="$(TargetDir)$(TargetName).pdb"
+ 				SubSystem="1"
+ 				BaseAddress="0x1d000000"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -137,6 +138,7 @@
+ 			<Tool
+ 				Name="VCLinkerTool"
+ 				OutputFile="$(SolutionDir)make_versioninfo.exe"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -214,6 +216,7 @@
+ 				ProgramDatabaseFile="$(TargetDir)$(TargetName).pdb"
+ 				SubSystem="1"
+ 				BaseAddress="0x1d000000"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -282,6 +285,7 @@
+ 				Name="VCLinkerTool"
+ 				OutputFile="$(SolutionDir)make_versioninfo_d.exe"
+ 				TargetMachine="17"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+diff -u misc/Python-2.7.5/PCbuild/pcbuild.sln misc/build/Python-2.7.5/PCbuild/pcbuild.sln
+--- misc/Python-2.7.5/PCbuild/pcbuild.sln	2012-04-09 18:07:35.000000000 -0500
++++ misc/build/Python-2.7.5/PCbuild/pcbuild.sln	2012-07-30 21:04:33.000000000 -0500
+@@ -38,17 +38,17 @@
+ 		{CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26} = {CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26}
+ 	EndProjectSection
+ EndProject
+-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "_bsddb", "_bsddb.vcproj", "{B4D38F3F-68FB-42EC-A45D-E00657BB3627}"
+-	ProjectSection(ProjectDependencies) = postProject
+-		{6DE10744-E396-40A5-B4E2-1B69AA7C8D31} = {6DE10744-E396-40A5-B4E2-1B69AA7C8D31}
+-		{CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26} = {CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26}
+-	EndProjectSection
+-EndProject
+-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "_ctypes", "_ctypes.vcproj", "{0E9791DB-593A-465F-98BC-681011311618}"
+-	ProjectSection(ProjectDependencies) = postProject
+-		{CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26} = {CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26}
+-	EndProjectSection
+-EndProject
++#Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "_bsddb", "_bsddb.vcproj", "{B4D38F3F-68FB-42EC-A45D-E00657BB3627}"
++#	ProjectSection(ProjectDependencies) = postProject
++#		{6DE10744-E396-40A5-B4E2-1B69AA7C8D31} = {6DE10744-E396-40A5-B4E2-1B69AA7C8D31}
++#		{CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26} = {CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26}
++#	EndProjectSection
++#EndProject
++#Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "_ctypes", "_ctypes.vcproj", "{0E9791DB-593A-465F-98BC-681011311618}"
++#	ProjectSection(ProjectDependencies) = postProject
++#		{CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26} = {CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26}
++#	EndProjectSection
++#EndProject
+ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "_ctypes_test", "_ctypes_test.vcproj", "{9EC7190A-249F-4180-A900-548FDCF3055F}"
+ 	ProjectSection(ProjectDependencies) = postProject
+ 		{CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26} = {CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26}
+@@ -69,12 +69,12 @@
+ 		{CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26} = {CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26}
+ 	EndProjectSection
+ EndProject
+-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "_sqlite3", "_sqlite3.vcproj", "{13CECB97-4119-4316-9D42-8534019A5A44}"
+-	ProjectSection(ProjectDependencies) = postProject
+-		{CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26} = {CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26}
+-		{A1A295E5-463C-437F-81CA-1F32367685DA} = {A1A295E5-463C-437F-81CA-1F32367685DA}
+-	EndProjectSection
+-EndProject
++#Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "_sqlite3", "_sqlite3.vcproj", "{13CECB97-4119-4316-9D42-8534019A5A44}"
++#	ProjectSection(ProjectDependencies) = postProject
++#		{CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26} = {CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26}
++#		{A1A295E5-463C-437F-81CA-1F32367685DA} = {A1A295E5-463C-437F-81CA-1F32367685DA}
++#	EndProjectSection
++#EndProject
+ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "_ssl", "_ssl.vcproj", "{C6E20F84-3247-4AD6-B051-B073268F73BA}"
+ 	ProjectSection(ProjectDependencies) = postProject
+ 		{B11D750F-CD1F-4A96-85CE-E69A5C5259F9} = {B11D750F-CD1F-4A96-85CE-E69A5C5259F9}
+@@ -87,16 +87,16 @@
+ 		{CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26} = {CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26}
+ 	EndProjectSection
+ EndProject
+-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "_tkinter", "_tkinter.vcproj", "{4946ECAC-2E69-4BF8-A90A-F5136F5094DF}"
+-	ProjectSection(ProjectDependencies) = postProject
+-		{CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26} = {CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26}
+-	EndProjectSection
+-EndProject
+-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "bz2", "bz2.vcproj", "{73FCD2BD-F133-46B7-8EC1-144CD82A59D5}"
+-	ProjectSection(ProjectDependencies) = postProject
+-		{CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26} = {CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26}
+-	EndProjectSection
+-EndProject
++#Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "_tkinter", "_tkinter.vcproj", "{4946ECAC-2E69-4BF8-A90A-F5136F5094DF}"
++#	ProjectSection(ProjectDependencies) = postProject
++#		{CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26} = {CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26}
++#	EndProjectSection
++#EndProject
++#Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "bz2", "bz2.vcproj", "{73FCD2BD-F133-46B7-8EC1-144CD82A59D5}"
++#	ProjectSection(ProjectDependencies) = postProject
++#		{CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26} = {CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26}
++#	EndProjectSection
++#EndProject
+ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "select", "select.vcproj", "{18CAE28C-B454-46C1-87A0-493D91D97F03}"
+ 	ProjectSection(ProjectDependencies) = postProject
+ 		{CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26} = {CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26}
+@@ -114,17 +114,17 @@
+ EndProject
+ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "bdist_wininst", "bdist_wininst.vcproj", "{EB1C19C1-1F18-421E-9735-CAEE69DC6A3C}"
+ EndProject
+-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "_hashlib", "_hashlib.vcproj", "{447F05A8-F581-4CAC-A466-5AC7936E207E}"
+-	ProjectSection(ProjectDependencies) = postProject
+-		{B11D750F-CD1F-4A96-85CE-E69A5C5259F9} = {B11D750F-CD1F-4A96-85CE-E69A5C5259F9}
+-		{CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26} = {CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26}
+-	EndProjectSection
+-EndProject
+-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sqlite3", "sqlite3.vcproj", "{A1A295E5-463C-437F-81CA-1F32367685DA}"
+-	ProjectSection(ProjectDependencies) = postProject
+-		{6DE10744-E396-40A5-B4E2-1B69AA7C8D31} = {6DE10744-E396-40A5-B4E2-1B69AA7C8D31}
+-	EndProjectSection
+-EndProject
++#Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "_hashlib", "_hashlib.vcproj", "{447F05A8-F581-4CAC-A466-5AC7936E207E}"
++#	ProjectSection(ProjectDependencies) = postProject
++#		{B11D750F-CD1F-4A96-85CE-E69A5C5259F9} = {B11D750F-CD1F-4A96-85CE-E69A5C5259F9}
++#		{CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26} = {CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26}
++#	EndProjectSection
++#EndProject
++#Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sqlite3", "sqlite3.vcproj", "{A1A295E5-463C-437F-81CA-1F32367685DA}"
++#	ProjectSection(ProjectDependencies) = postProject
++#		{6DE10744-E396-40A5-B4E2-1B69AA7C8D31} = {6DE10744-E396-40A5-B4E2-1B69AA7C8D31}
++#	EndProjectSection
++#EndProject
+ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "_multiprocessing", "_multiprocessing.vcproj", "{9E48B300-37D1-11DD-8C41-005056C00008}"
+ 	ProjectSection(ProjectDependencies) = postProject
+ 		{CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26} = {CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26}
+diff -u misc/Python-2.7.5/PCbuild/pyexpat.vcproj misc/build/Python-2.7.5/PCbuild/pyexpat.vcproj
+--- misc/Python-2.7.5/PCbuild/pyexpat.vcproj	2012-04-09 18:07:35.000000000 -0500
++++ misc/build/Python-2.7.5/PCbuild/pyexpat.vcproj	2012-07-30 20:59:37.000000000 -0500
+@@ -56,6 +56,7 @@
+ 			/>
+ 			<Tool
+ 				Name="VCLinkerTool"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -117,6 +118,7 @@
+ 			/>
+ 			<Tool
+ 				Name="VCLinkerTool"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -178,6 +180,7 @@
+ 			/>
+ 			<Tool
+ 				Name="VCLinkerTool"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -240,6 +243,7 @@
+ 			/>
+ 			<Tool
+ 				Name="VCLinkerTool"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -301,6 +305,7 @@
+ 			/>
+ 			<Tool
+ 				Name="VCLinkerTool"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -364,6 +369,7 @@
+ 			<Tool
+ 				Name="VCLinkerTool"
+ 				TargetMachine="17"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -425,6 +431,7 @@
+ 			/>
+ 			<Tool
+ 				Name="VCLinkerTool"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -488,6 +495,7 @@
+ 			<Tool
+ 				Name="VCLinkerTool"
+ 				TargetMachine="17"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+diff -u misc/Python-2.7.5/PCbuild/python.vcproj misc/build/Python-2.7.5/PCbuild/python.vcproj
+--- misc/Python-2.7.5/PCbuild/python.vcproj	2012-04-09 18:07:35.000000000 -0500
++++ misc/build/Python-2.7.5/PCbuild/python.vcproj	2012-07-30 20:59:37.000000000 -0500
+@@ -66,6 +66,7 @@
+ 				SubSystem="1"
+ 				StackReserveSize="2000000"
+ 				BaseAddress="0x1d000000"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -139,6 +140,7 @@
+ 				SubSystem="1"
+ 				StackReserveSize="2000000"
+ 				BaseAddress="0x1d000000"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -213,6 +215,7 @@
+ 				SubSystem="1"
+ 				StackReserveSize="2000000"
+ 				BaseAddress="0x1d000000"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -288,6 +291,7 @@
+ 				SubSystem="1"
+ 				StackReserveSize="2100000"
+ 				BaseAddress="0x1d000000"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -361,6 +365,7 @@
+ 				StackReserveSize="2000000"
+ 				BaseAddress="0x1d000000"
+ 				ImportLibrary=""
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -436,6 +441,7 @@
+ 				BaseAddress="0x1d000000"
+ 				ImportLibrary=""
+ 				TargetMachine="17"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -509,6 +515,7 @@
+ 				StackReserveSize="2000000"
+ 				BaseAddress="0x1d000000"
+ 				ImportLibrary=""
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -584,6 +591,7 @@
+ 				BaseAddress="0x1d000000"
+ 				ImportLibrary=""
+ 				TargetMachine="17"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+diff -u misc/Python-2.7.5/PCbuild/pythoncore.vcproj misc/build/Python-2.7.5/PCbuild/pythoncore.vcproj
+--- misc/Python-2.7.5/PCbuild/pythoncore.vcproj	2012-04-09 18:07:35.000000000 -0500
++++ misc/build/Python-2.7.5/PCbuild/pythoncore.vcproj	2012-07-30 20:59:37.000000000 -0500
+@@ -69,6 +69,7 @@
+ 				ProgramDatabaseFile="$(OutDir)$(PyDllName).pdb"
+ 				BaseAddress="0x1e000000"
+ 				ImportLibrary="$(OutDir)$(PyDllName).lib"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -144,6 +145,7 @@
+ 				ProgramDatabaseFile="$(OutDir)$(PyDllName).pdb"
+ 				BaseAddress="0x1e000000"
+ 				ImportLibrary="$(OutDir)$(PyDllName).lib"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -222,6 +224,7 @@
+ 				ProgramDatabaseFile="$(OutDir)$(PyDllName)_d.pdb"
+ 				BaseAddress="0x1e000000"
+ 				ImportLibrary="$(OutDir)$(PyDllName)_d.lib"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -300,6 +303,7 @@
+ 				ProgramDatabaseFile="$(OutDir)$(PyDllName)_d.pdb"
+ 				BaseAddress="0x1e000000"
+ 				ImportLibrary="$(OutDir)$(PyDllName)_d.lib"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -374,6 +378,7 @@
+ 				ProgramDatabaseFile="$(OutDir)$(PyDllName).pdb"
+ 				BaseAddress="0x1e000000"
+ 				ImportLibrary="$(OutDirPGI)$(PyDllName).lib"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -450,6 +455,7 @@
+ 				BaseAddress="0x1e000000"
+ 				ImportLibrary="$(OutDirPGI)$(PyDllName).lib"
+ 				TargetMachine="17"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -524,6 +530,7 @@
+ 				ProgramDatabaseFile="$(OutDir)$(PyDllName).pdb"
+ 				BaseAddress="0x1e000000"
+ 				ImportLibrary="$(OutDirPGI)$(PyDllName).lib"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -600,6 +607,7 @@
+ 				BaseAddress="0x1e000000"
+ 				ImportLibrary="$(OutDirPGI)$(PyDllName).lib"
+ 				TargetMachine="17"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -1874,4 +1882,4 @@
+ 	</Files>
+ 	<Globals>
+ 	</Globals>
+-</VisualStudioProject>
+\ No newline at end of file
++</VisualStudioProject>
+diff -u misc/Python-2.7.5/PCbuild/pythonw.vcproj misc/build/Python-2.7.5/PCbuild/pythonw.vcproj
+--- misc/Python-2.7.5/PCbuild/pythonw.vcproj	2012-04-09 18:07:35.000000000 -0500
++++ misc/build/Python-2.7.5/PCbuild/pythonw.vcproj	2012-07-30 20:59:37.000000000 -0500
+@@ -66,6 +66,7 @@
+ 				StackReserveSize="2000000"
+ 				BaseAddress="0x1d000000"
+ 				TargetMachine="1"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -137,6 +138,7 @@
+ 				OutputFile="$(OutDir)\pythonw_d.exe"
+ 				StackReserveSize="2000000"
+ 				BaseAddress="0x1d000000"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -208,6 +210,7 @@
+ 				StackReserveSize="2000000"
+ 				BaseAddress="0x1d000000"
+ 				TargetMachine="1"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -279,6 +282,7 @@
+ 				OutputFile="$(OutDir)\pythonw.exe"
+ 				StackReserveSize="2000000"
+ 				BaseAddress="0x1d000000"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -351,6 +355,7 @@
+ 				BaseAddress="0x1d000000"
+ 				ImportLibrary=""
+ 				TargetMachine="1"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -424,6 +429,7 @@
+ 				BaseAddress="0x1d000000"
+ 				ImportLibrary=""
+ 				TargetMachine="17"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -496,6 +502,7 @@
+ 				BaseAddress="0x1d000000"
+ 				ImportLibrary=""
+ 				TargetMachine="1"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -569,6 +576,7 @@
+ 				BaseAddress="0x1d000000"
+ 				ImportLibrary=""
+ 				TargetMachine="17"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+diff -u misc/Python-2.7.5/PCbuild/select.vcproj misc/build/Python-2.7.5/PCbuild/select.vcproj
+--- misc/Python-2.7.5/PCbuild/select.vcproj	2012-04-09 18:07:35.000000000 -0500
++++ misc/build/Python-2.7.5/PCbuild/select.vcproj	2012-07-30 20:59:37.000000000 -0500
+@@ -57,6 +57,7 @@
+ 				AdditionalDependencies="ws2_32.lib"
+ 				IgnoreDefaultLibraryNames="libc"
+ 				BaseAddress="0x1D110000"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -119,6 +120,7 @@
+ 				AdditionalDependencies="ws2_32.lib"
+ 				IgnoreDefaultLibraryNames="libc"
+ 				BaseAddress="0x1D110000"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -181,6 +183,7 @@
+ 				AdditionalDependencies="ws2_32.lib"
+ 				IgnoreDefaultLibraryNames="libc"
+ 				BaseAddress="0x1D110000"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -244,6 +247,7 @@
+ 				AdditionalDependencies="ws2_32.lib"
+ 				IgnoreDefaultLibraryNames="libc"
+ 				BaseAddress="0x1D110000"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -306,6 +310,7 @@
+ 				AdditionalDependencies="ws2_32.lib"
+ 				IgnoreDefaultLibraryNames="libc"
+ 				BaseAddress="0x1D110000"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -370,6 +375,7 @@
+ 				IgnoreDefaultLibraryNames="libc"
+ 				BaseAddress="0x1D110000"
+ 				TargetMachine="17"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -432,6 +438,7 @@
+ 				AdditionalDependencies="ws2_32.lib"
+ 				IgnoreDefaultLibraryNames="libc"
+ 				BaseAddress="0x1D110000"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -496,6 +503,7 @@
+ 				IgnoreDefaultLibraryNames="libc"
+ 				BaseAddress="0x1D110000"
+ 				TargetMachine="17"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+diff -u misc/Python-2.7.5/PCbuild/sqlite3.vcproj misc/build/Python-2.7.5/PCbuild/sqlite3.vcproj
+--- misc/Python-2.7.5/PCbuild/sqlite3.vcproj	2012-04-09 18:07:35.000000000 -0500
++++ misc/build/Python-2.7.5/PCbuild/sqlite3.vcproj	2012-07-30 20:59:37.000000000 -0500
+@@ -56,6 +56,7 @@
+ 			<Tool
+ 				Name="VCLinkerTool"
+ 				OutputFile="$(OutDir)\$(ProjectName)_d.dll"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -117,6 +118,7 @@
+ 			<Tool
+ 				Name="VCLinkerTool"
+ 				OutputFile="$(OutDir)\$(ProjectName)_d.dll"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -178,6 +180,7 @@
+ 			<Tool
+ 				Name="VCLinkerTool"
+ 				OutputFile="$(OutDir)\$(ProjectName).dll"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -240,6 +243,7 @@
+ 			<Tool
+ 				Name="VCLinkerTool"
+ 				OutputFile="$(OutDir)\$(ProjectName).dll"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -301,6 +305,7 @@
+ 			<Tool
+ 				Name="VCLinkerTool"
+ 				OutputFile="$(OutDir)\$(ProjectName).dll"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -362,6 +367,7 @@
+ 			/>
+ 			<Tool
+ 				Name="VCLinkerTool"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -423,6 +429,7 @@
+ 			<Tool
+ 				Name="VCLinkerTool"
+ 				OutputFile="$(OutDir)\$(ProjectName).dll"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -484,6 +491,7 @@
+ 			/>
+ 			<Tool
+ 				Name="VCLinkerTool"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+diff -u misc/Python-2.7.5/PCbuild/unicodedata.vcproj misc/build/Python-2.7.5/PCbuild/unicodedata.vcproj
+--- misc/Python-2.7.5/PCbuild/unicodedata.vcproj	2012-04-09 18:07:35.000000000 -0500
++++ misc/build/Python-2.7.5/PCbuild/unicodedata.vcproj	2012-07-30 20:59:37.000000000 -0500
+@@ -55,6 +55,7 @@
+ 			<Tool
+ 				Name="VCLinkerTool"
+ 				BaseAddress="0x1D120000"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -115,6 +116,7 @@
+ 			<Tool
+ 				Name="VCLinkerTool"
+ 				BaseAddress="0x1D120000"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -175,6 +177,7 @@
+ 			<Tool
+ 				Name="VCLinkerTool"
+ 				BaseAddress="0x1D120000"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -236,6 +239,7 @@
+ 			<Tool
+ 				Name="VCLinkerTool"
+ 				BaseAddress="0x1D120000"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -296,6 +300,7 @@
+ 			<Tool
+ 				Name="VCLinkerTool"
+ 				BaseAddress="0x1D120000"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -358,6 +363,7 @@
+ 				Name="VCLinkerTool"
+ 				BaseAddress="0x1D120000"
+ 				TargetMachine="17"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -418,6 +424,7 @@
+ 			<Tool
+ 				Name="VCLinkerTool"
+ 				BaseAddress="0x1D120000"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -480,6 +487,7 @@
+ 				Name="VCLinkerTool"
+ 				BaseAddress="0x1D120000"
+ 				TargetMachine="17"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+diff -u misc/Python-2.7.5/PCbuild/w9xpopen.vcproj misc/build/Python-2.7.5/PCbuild/w9xpopen.vcproj
+--- misc/Python-2.7.5/PCbuild/w9xpopen.vcproj	2012-04-09 18:07:35.000000000 -0500
++++ misc/build/Python-2.7.5/PCbuild/w9xpopen.vcproj	2012-07-30 20:59:37.000000000 -0500
+@@ -59,6 +59,7 @@
+ 			<Tool
+ 				Name="VCLinkerTool"
+ 				SubSystem="1"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -124,6 +125,7 @@
+ 			<Tool
+ 				Name="VCLinkerTool"
+ 				SubSystem="1"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -191,6 +193,7 @@
+ 				Name="VCLinkerTool"
+ 				GenerateDebugInformation="false"
+ 				SubSystem="1"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -259,6 +262,7 @@
+ 				Name="VCLinkerTool"
+ 				GenerateDebugInformation="false"
+ 				SubSystem="1"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -327,6 +331,7 @@
+ 				GenerateDebugInformation="false"
+ 				SubSystem="1"
+ 				ImportLibrary=""
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -397,6 +402,7 @@
+ 				SubSystem="1"
+ 				ImportLibrary=""
+ 				TargetMachine="17"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -465,6 +471,7 @@
+ 				GenerateDebugInformation="false"
+ 				SubSystem="1"
+ 				ImportLibrary=""
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -535,6 +542,7 @@
+ 				SubSystem="1"
+ 				ImportLibrary=""
+ 				TargetMachine="17"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+diff -u misc/Python-2.7.5/PCbuild/winsound.vcproj misc/build/Python-2.7.5/PCbuild/winsound.vcproj
+--- misc/Python-2.7.5/PCbuild/winsound.vcproj	2012-04-09 18:07:35.000000000 -0500
++++ misc/build/Python-2.7.5/PCbuild/winsound.vcproj	2012-07-30 20:59:37.000000000 -0500
+@@ -55,6 +55,7 @@
+ 			<Tool
+ 				Name="VCLinkerTool"
+ 				AdditionalDependencies="winmm.lib"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -115,6 +116,7 @@
+ 			<Tool
+ 				Name="VCLinkerTool"
+ 				AdditionalDependencies="winmm.lib"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -175,6 +177,7 @@
+ 			<Tool
+ 				Name="VCLinkerTool"
+ 				AdditionalDependencies="winmm.lib"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -236,6 +239,7 @@
+ 			<Tool
+ 				Name="VCLinkerTool"
+ 				AdditionalDependencies="winmm.lib"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -296,6 +300,7 @@
+ 			<Tool
+ 				Name="VCLinkerTool"
+ 				AdditionalDependencies="winmm.lib"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -358,6 +363,7 @@
+ 				Name="VCLinkerTool"
+ 				AdditionalDependencies="winmm.lib"
+ 				TargetMachine="17"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -418,6 +424,7 @@
+ 			<Tool
+ 				Name="VCLinkerTool"
+ 				AdditionalDependencies="winmm.lib"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -480,6 +487,7 @@
+ 				Name="VCLinkerTool"
+ 				AdditionalDependencies="winmm.lib"
+ 				TargetMachine="17"
++				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"

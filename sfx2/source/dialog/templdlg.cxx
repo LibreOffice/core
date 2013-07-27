@@ -98,6 +98,9 @@ static sal_uInt16 nLastItemId = USHRT_MAX;
 // filter box has maximum 12 entries visible
 #define MAX_FILTER_ENTRIES          12
 
+#define SFX_TEMPLDLG_FILTER_MAX             0xFFFF
+#define SFX_TEMPLDLG_FILTER_HIERARCHICAL    0xFFFE
+
 //=========================================================================
 
 SFX_IMPL_DOCKINGWINDOW(SfxTemplateDialogWrapper, SID_STYLE_DESIGNER)
@@ -118,7 +121,7 @@ SfxTemplateDialog::SfxTemplateDialog
 */
     : SfxDockingWindow( pBind, pCW, pParent, SfxResId(DLG_STYLE_DESIGNER) ),
 
-    pImpl( new SfxTemplateDialog_Impl( pParent, pBind, this ) )
+    pImpl( new SfxTemplateDialog_Impl( pBind, this ) )
 
 {
     pImpl->updateNonFamilyImages();
@@ -397,6 +400,137 @@ void SfxTemplateDialogWrapper::SetParagraphFamily()
     // forward to SfxTemplateDialog, because SfxTemplateDialog isn't exported
     static_cast< SfxTemplateDialog* >( GetWindow() )->SetParagraphFamily();
 }
+
+
+
+//===== SfxTemplatePanelControl ===============================================
+
+SfxTemplatePanelControl::SfxTemplatePanelControl (
+    SfxBindings* pBindings,
+    Window* pParentWindow)
+    : DockingWindow(pParentWindow, SfxResId(DLG_STYLE_DESIGNER) ),
+      pImpl(new SfxTemplateDialog_Impl(pBindings, this)),
+      mpBindings(pBindings)
+{
+    OSL_ASSERT(mpBindings!=NULL);
+
+    pImpl->updateNonFamilyImages();
+
+    SetStyle(GetStyle() & ~WB_DOCKABLE);
+}
+
+
+
+
+SfxTemplatePanelControl::~SfxTemplatePanelControl (void)
+{
+    delete pImpl;
+}
+
+
+
+
+ISfxTemplateCommon* SfxTemplatePanelControl::GetISfxTemplateCommon()
+{
+    return pImpl->GetISfxTemplateCommon();
+}
+
+
+
+
+void SfxTemplatePanelControl::SetParagraphFamily()
+{
+    // first select the paragraph family
+    pImpl->FamilySelect( SFX_STYLE_FAMILY_PARA );
+    // then select the automatic filter
+    pImpl->SetAutomaticFilter();
+}
+
+
+
+
+void SfxTemplatePanelControl::DataChanged( const DataChangedEvent& _rDCEvt )
+{
+    if ( ( DATACHANGED_SETTINGS == _rDCEvt.GetType() ) &&
+         ( 0 != ( SETTINGS_STYLE & _rDCEvt.GetFlags() ) ) )
+    {
+        pImpl->updateFamilyImages();
+        pImpl->updateNonFamilyImages();
+    }
+
+    DockingWindow::DataChanged( _rDCEvt );
+}
+
+
+
+
+void SfxTemplatePanelControl::Update()
+{
+    pImpl->Update();
+}
+
+
+
+
+void SfxTemplatePanelControl::Resize()
+{
+    if(pImpl)
+        pImpl->Resize();
+    DockingWindow::Resize();
+}
+
+
+void SfxTemplatePanelControl::FreeResource (void)
+{
+    DockingWindow::FreeResource();
+}
+
+
+SfxChildAlignment SfxTemplatePanelControl::CheckAlignment(SfxChildAlignment eActAlign,SfxChildAlignment eAlign)
+{
+    switch (eAlign)
+    {
+        case SFX_ALIGN_TOP:
+        case SFX_ALIGN_HIGHESTTOP:
+        case SFX_ALIGN_LOWESTTOP:
+        case SFX_ALIGN_BOTTOM:
+        case SFX_ALIGN_LOWESTBOTTOM:
+        case SFX_ALIGN_HIGHESTBOTTOM:
+            return eActAlign;
+
+        case SFX_ALIGN_LEFT:
+        case SFX_ALIGN_RIGHT:
+        case SFX_ALIGN_FIRSTLEFT:
+        case SFX_ALIGN_LASTLEFT:
+        case SFX_ALIGN_FIRSTRIGHT:
+        case SFX_ALIGN_LASTRIGHT:
+            return eAlign;
+
+        default:
+            return eAlign;
+    }
+}
+
+
+void SfxTemplatePanelControl::StateChanged( StateChangedType nStateChange )
+{
+    if ( nStateChange == STATE_CHANGE_INITSHOW )
+    {
+        SfxViewFrame *pFrame = mpBindings->GetDispatcher_Impl()->GetFrame();
+        Window* pEditWin = pFrame->GetViewShell()->GetWindow();
+
+        Size aSize = pEditWin->GetSizePixel();
+        Point aPoint = pEditWin->OutputToScreenPixel( pEditWin->GetPosPixel() );
+        aPoint = GetParent()->ScreenToOutputPixel( aPoint );
+        Size aWinSize = GetSizePixel();
+        aPoint.X() += aSize.Width() - aWinSize.Width() - 20;
+        aPoint.Y() += aSize.Height() / 2 - aWinSize.Height() / 2;
+        //      SetFloatingPos( aPoint );
+    }
+
+    DockingWindow::StateChanged( nStateChange );
+}
+
 
 //=========================================================================
 SV_DECL_PTRARR_DEL(ExpandedEntries, StringPtr,16,8)
@@ -733,7 +867,7 @@ SvLBoxEntry* FillBox_Impl(SvTreeListBox *pBox,
 
 // Konstruktor
 
-SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, SfxDockingWindow* pW ) :
+SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, Window* pW, bool ) :
 
     aISfxTemplateCommon     ( this ),
     pBindings               ( pB ),
@@ -751,7 +885,7 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, Sfx
     aFmtLb                  ( this, WB_BORDER | WB_TABSTOP | WB_SORT | WB_QUICK_SEARCH ),
     aFilterLb               ( pW, WB_BORDER | WB_DROPDOWN | WB_TABSTOP ),
 
-    nActFamily              ( 0xffff ),
+    nActFamily              ( SFX_TEMPLDLG_FILTER_MAX ),
     nActFilter              ( 0 ),
     nAppFilter              ( 0 ),
 
@@ -781,7 +915,7 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, Sfx
 
 //-------------------------------------------------------------------------
 
-SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, ModalDialog* pW ) :
+SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, Window* pW ) :
 
     aISfxTemplateCommon     ( this ),
     pBindings               ( pB ),
@@ -796,7 +930,7 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, Mod
     aFmtLb                  ( this, SfxResId( BT_VLIST ) ),
     aFilterLb               ( pW, SfxResId( BT_FLIST ) ),
 
-    nActFamily              ( 0xffff ),
+    nActFamily              ( SFX_TEMPLDLG_FILTER_MAX ),
     nActFilter              ( 0 ),
     nAppFilter              ( 0 ),
 
@@ -870,8 +1004,10 @@ void SfxCommonTemplateDialog_Impl::ReadResource()
     else
         pStyleFamilies = new SfxStyleFamilies( aFamId );
 
-    nActFilter = pCurObjShell ? static_cast< sal_uInt16 >( LoadFactoryStyleFilter( pCurObjShell ) ) : 0xFFFF;
-    if ( pCurObjShell && 0xFFFF == nActFilter )
+    nActFilter = pCurObjShell ?
+        static_cast< sal_uInt16 >( LoadFactoryStyleFilter( pCurObjShell ) ) :
+        SFX_TEMPLDLG_FILTER_MAX;
+    if ( pCurObjShell && SFX_TEMPLDLG_FILTER_MAX == nActFilter )
         nActFilter = pCurObjShell->GetAutoStyleFilterIndex();
 
         // Einfuegen in die Toolbox
@@ -1163,7 +1299,7 @@ void SfxCommonTemplateDialog_Impl::EnableTreeDrag( sal_Bool bEnable )
 void SfxCommonTemplateDialog_Impl::FillTreeBox()
 {
     DBG_ASSERT( pTreeBox, "FillTreeBox() without treebox");
-    if(pStyleSheetPool && nActFamily != 0xffff)
+    if(pStyleSheetPool && nActFamily != SFX_TEMPLDLG_FILTER_MAX)
     {
         const SfxStyleFamilyItem *pItem = GetFamilyItem_Impl();
         pStyleSheetPool->SetSearchMask(pItem->GetFamily(), SFXSTYLEBIT_ALL);
@@ -1472,7 +1608,7 @@ void SfxCommonTemplateDialog_Impl::Update_Impl()
      SfxTemplateItem *pItem = 0;
      // aktueller Bereich nicht innerhalb der erlaubten Bereiche
      // oder Default
-     if(nActFamily == 0xffff || 0 == (pItem = pFamilyState[nActFamily-1] ) )
+     if(nActFamily == SFX_TEMPLDLG_FILTER_MAX || 0 == (pItem = pFamilyState[nActFamily-1] ) )
      {
          CheckItem(nActFamily, sal_False);
          SfxTemplateItem **ppItem = pFamilyState;
@@ -1492,7 +1628,7 @@ void SfxCommonTemplateDialog_Impl::Update_Impl()
          // andere DocShell -> alles neu
          CheckItem( nActFamily, sal_True );
          nActFilter = static_cast< sal_uInt16 >( LoadFactoryStyleFilter( pDocShell ) );
-         if ( 0xFFFF == nActFilter )
+         if ( SFX_TEMPLDLG_FILTER_MAX == nActFilter )
             nActFilter = pDocShell->GetAutoStyleFilterIndex();
 
          nAppFilter = pItem->GetValue();
@@ -1508,10 +1644,6 @@ void SfxCommonTemplateDialog_Impl::Update_Impl()
          // anderer Filter fuer automatisch
          CheckItem( nActFamily, sal_True );
          const SfxStyleFamilyItem *pStyleItem =  GetFamilyItem_Impl();
-#if OSL_DEBUG_LEVEL > 1
-         SfxFilterTupel *pT;
-         pT = pStyleItem->GetFilterList().GetObject(nActFilter);
-#endif
          if(0 == pStyleItem->GetFilterList().GetObject(nActFilter)->nFlags
             && nAppFilter != pItem->GetValue())
          {
@@ -1789,6 +1921,17 @@ IMPL_LINK( SfxCommonTemplateDialog_Impl, FilterSelectHdl, ListBox *, pBox )
             SelectStyle(aSelectEntry);
             pTreeBox->SetAccessibleName(SfxResId(STR_STYLE_ELEMTLIST));
             pTreeBox->Show();
+
+            // Save the filter state
+            SfxViewFrame *pViewFrame = pBindings->GetDispatcher_Impl()->GetFrame();
+            SfxObjectShell *pDocShell = pViewFrame->GetObjectShell();
+            if (pDocShell)
+            {
+                // only in the configuration
+                // SetAutoStyleFilterIndex would update nActFilter
+                // which should only contain a valid listbox entry
+                SaveFactoryStyleFilter( pDocShell, SFX_TEMPLDLG_FILTER_HIERARCHICAL );
+            }
         }
     }
 
@@ -1859,13 +2002,13 @@ void SfxCommonTemplateDialog_Impl::ActionSelect(sal_uInt16 nEntry)
         }
         case SID_STYLE_NEW_BY_EXAMPLE:
         {
-            if(pStyleSheetPool && nActFamily != 0xffff)
+            if(pStyleSheetPool && nActFamily != SFX_TEMPLDLG_FILTER_MAX)
             {
                 const SfxStyleFamily eFam=GetFamilyItem_Impl()->GetFamily();
 //pStyleSheetPool->GetSearchFamily();
                 const SfxStyleFamilyItem *pItem = GetFamilyItem_Impl();
                 sal_uInt16 nFilter;
-                if(pItem&&nActFilter!=0xffff)
+                if(pItem&&nActFilter!=SFX_TEMPLDLG_FILTER_MAX)
                 {
                     nFilter = pItem->GetFilterList().GetObject(
                         nActFilter)->nFlags;
@@ -1956,7 +2099,7 @@ sal_Int32 SfxCommonTemplateDialog_Impl::LoadFactoryStyleFilter( SfxObjectShell* 
 
 void SfxCommonTemplateDialog_Impl::SaveFactoryStyleFilter( SfxObjectShell* i_pObjSh, sal_Int32 i_nFilter )
 {
-    DBG_ASSERT( i_pObjSh, "SfxCommonTemplateDialog_Impl::LoadFactoryStyleFilter(): no ObjectShell" );
+    DBG_ASSERT( i_pObjSh, "SfxCommonTemplateDialog_Impl::SaveFactoryStyleFilter(): no ObjectShell" );
     Reference< ::com::sun::star::container::XNameReplace > xContainer( xModuleManager, UNO_QUERY );
     if ( xContainer.is() )
     {
@@ -1985,7 +2128,7 @@ IMPL_LINK( SfxCommonTemplateDialog_Impl, DropHdl, StyleTreeListBox_Impl *, pBox 
 void SfxCommonTemplateDialog_Impl::NewHdl(void *)
 {
     String aEmpty;
-    if ( nActFamily != 0xffff )
+    if ( nActFamily != SFX_TEMPLDLG_FILTER_MAX )
     {
         Window* pTmp;
         pTmp = Application::GetDefDialogParent();
@@ -1997,7 +2140,7 @@ void SfxCommonTemplateDialog_Impl::NewHdl(void *)
         const SfxStyleFamilyItem *pItem = GetFamilyItem_Impl();
         const SfxStyleFamily eFam=pItem->GetFamily();
         sal_uInt16 nMask;
-        if(pItem&&nActFilter!=0xffff)
+        if(pItem&&nActFilter!=SFX_TEMPLDLG_FILTER_MAX)
         {
             nMask = pItem->GetFilterList().GetObject(
                 nActFilter)->nFlags;
@@ -2265,7 +2408,7 @@ void SfxCommonTemplateDialog_Impl::ExecuteContextMenu_Impl( const Point& rPos, W
 SfxStyleFamily SfxCommonTemplateDialog_Impl::GetActualFamily() const
 {
     const SfxStyleFamilyItem *pFamilyItem = GetFamilyItem_Impl();
-    if( !pFamilyItem || nActFamily == 0xffff )
+    if( !pFamilyItem || nActFamily == SFX_TEMPLDLG_FILTER_MAX )
         return SFX_STYLE_FAMILY_PARA;
     else
         return pFamilyItem->GetFamily();
@@ -2307,10 +2450,11 @@ PopupMenu* SfxCommonTemplateDialog_Impl::CreateContextMenu( void )
 
 // ------------------------------------------------------------------------
 
-SfxTemplateDialog_Impl::SfxTemplateDialog_Impl(
-    Window* /*pParent*/, SfxBindings* pB, SfxTemplateDialog* pDlgWindow ) :
 
-    SfxCommonTemplateDialog_Impl( pB, pDlgWindow ),
+SfxTemplateDialog_Impl::SfxTemplateDialog_Impl(
+    SfxBindings* pB, SfxTemplateDialog* pDlgWindow ) :
+
+    SfxCommonTemplateDialog_Impl( pB, pDlgWindow, true ),
 
     m_pFloat            ( pDlgWindow ),
     m_bZoomIn           ( sal_False ),
@@ -2320,6 +2464,32 @@ SfxTemplateDialog_Impl::SfxTemplateDialog_Impl(
 {
     pDlgWindow->FreeResource();
     Initialize();
+}
+
+SfxTemplateDialog_Impl::SfxTemplateDialog_Impl(
+    SfxBindings* pB, SfxTemplatePanelControl* pDlgWindow )
+    : SfxCommonTemplateDialog_Impl( pB, pDlgWindow, true ),
+      m_pFloat          ( pDlgWindow ),
+      m_bZoomIn         ( sal_False ),
+      m_aActionTbL        ( pDlgWindow, this ),
+      m_aActionTbR      ( pDlgWindow, SfxResId( TB_ACTION ) )
+{
+    pDlgWindow->FreeResource();
+    Initialize();
+}
+
+void SfxTemplateDialog_Impl::Initialize (void)
+{
+    // Read the filter stored in the configuration
+    // This is already done in ReadResource(), invoked by Initialize()
+    // and stored in nActFilter, but we can't rely on nActFilter's value
+    // because it is changed in UpdateStyles_Impl
+    SfxViewFrame* pViewFrame = pBindings->GetDispatcher_Impl()->GetFrame();
+    pCurObjShell = pViewFrame->GetObjectShell();
+    const sal_uInt16 nConfigFilter = pCurObjShell ?
+        static_cast< sal_uInt16 >( LoadFactoryStyleFilter( pCurObjShell ) ) : 0;
+
+    SfxCommonTemplateDialog_Impl::Initialize();
 
     m_aActionTbL.SetSelectHdl(LINK(this, SfxTemplateDialog_Impl, ToolBoxLSelect));
     m_aActionTbR.SetSelectHdl(LINK(this, SfxTemplateDialog_Impl, ToolBoxRSelect));
@@ -2330,6 +2500,13 @@ SfxTemplateDialog_Impl::SfxTemplateDialog_Impl(
     aFont.SetWeight( WEIGHT_NORMAL );
     aFilterLb.SetFont( aFont );
     m_aActionTbL.SetHelpId( HID_TEMPLDLG_TOOLBOX_LEFT );
+
+    if ( nConfigFilter == SFX_TEMPLDLG_FILTER_HIERARCHICAL )
+    {
+        bHierarchical = sal_False;
+        aFilterLb.SelectEntry(String(SfxResId(STR_STYLE_FILTER_HIERARCHICAL)));
+        FilterSelectHdl(&aFilterLb);
+    }
 }
 
 // ------------------------------------------------------------------------
@@ -2374,7 +2551,11 @@ void SfxTemplateDialog_Impl::updateFamilyImages()
         return;
 
     // let the families collection update the images
-    sal_Bool bIsHighContrast = m_pFloat->GetSettings().GetStyleSettings().GetHighContrastMode();
+    sal_Bool bIsHighContrast;
+    if (m_pFloat != NULL)
+        bIsHighContrast = m_pFloat->GetSettings().GetStyleSettings().GetHighContrastMode();
+    else
+        bIsHighContrast = false;
     pStyleFamilies->updateImages( *m_pStyleFamiliesId, bIsHighContrast ? BMP_COLOR_HIGHCONTRAST : BMP_COLOR_NORMAL );
 
     // and set the new images on our toolbox
@@ -2390,8 +2571,9 @@ void SfxTemplateDialog_Impl::updateFamilyImages()
 // ------------------------------------------------------------------------
 void SfxTemplateDialog_Impl::updateNonFamilyImages()
 {
-    m_aActionTbR.SetImageList( ImageList( SfxResId(
-        m_pFloat->GetSettings().GetStyleSettings().GetHighContrastMode() ? IMG_LST_STYLE_DESIGNER_HC
+    if (m_pFloat != NULL)
+        m_aActionTbR.SetImageList( ImageList( SfxResId(
+                    m_pFloat->GetSettings().GetStyleSettings().GetHighContrastMode() ? IMG_LST_STYLE_DESIGNER_HC
                                                              : DLG_STYLE_DESIGNER ) ) );
 }
 
@@ -2446,7 +2628,8 @@ void SfxTemplateDialog_Impl::LoadedFamilies()
 // Die Groesse der Listboxen wird angepasst
 void SfxTemplateDialog_Impl::Resize()
 {
-    FloatingWindow *pF = m_pFloat->GetFloatingWindow();
+    SfxDockingWindow* pDockingWindow = dynamic_cast<SfxDockingWindow*>(m_pFloat);
+    FloatingWindow *pF = pDockingWindow!=NULL ? pDockingWindow->GetFloatingWindow() : NULL;
     if ( pF )
     {
 //      if(pF->IsZoomedIn() && m_bZoomIn==sal_False)
@@ -2458,6 +2641,8 @@ void SfxTemplateDialog_Impl::Resize()
             return;
     }
 
+    if (m_pFloat == NULL)
+        return;
     Size aDlgSize=m_pFloat->PixelToLogic(m_pFloat->GetOutputSizePixel());
     Size aSizeATL=m_pFloat->PixelToLogic(m_aActionTbL.CalcWindowSizePixel());
     Size aSizeATR=m_pFloat->PixelToLogic(m_aActionTbR.CalcWindowSizePixel());
@@ -2520,23 +2705,29 @@ void SfxTemplateDialog_Impl::Resize()
 
 Size SfxTemplateDialog_Impl::GetMinOutputSizePixel()
 {
-    Size aSizeATL=m_pFloat->PixelToLogic(m_aActionTbL.CalcWindowSizePixel());
-    Size aSizeATR=m_pFloat->PixelToLogic(m_aActionTbR.CalcWindowSizePixel());
-    Size aMinSize=Size(
-        aSizeATL.Width()+aSizeATR.Width()+
-        2*SFX_TEMPLDLG_HFRAME + SFX_TEMPLDLG_MIDHSPACE,
-        4*aSizeATL.Height()+2*SFX_TEMPLDLG_MIDVSPACE);
-    return aMinSize;
+    if (m_pFloat != NULL)
+    {
+        Size aSizeATL=m_pFloat->PixelToLogic(m_aActionTbL.CalcWindowSizePixel());
+        Size aSizeATR=m_pFloat->PixelToLogic(m_aActionTbR.CalcWindowSizePixel());
+        Size aMinSize=Size(
+            aSizeATL.Width()+aSizeATR.Width()+
+                2*SFX_TEMPLDLG_HFRAME + SFX_TEMPLDLG_MIDHSPACE,
+            4*aSizeATL.Height()+2*SFX_TEMPLDLG_MIDVSPACE);
+        return aMinSize;
+    }
+    else
+        return Size(0,0);
 }
 
 //-------------------------------------------------------------------------
 
 void SfxTemplateDialog_Impl::Command( const CommandEvent& rCEvt )
 {
-    if(COMMAND_CONTEXTMENU  == rCEvt.GetCommand())
-        ExecuteContextMenu_Impl( rCEvt.GetMousePosPixel(), m_pFloat );
-    else
-        m_pFloat->Command(rCEvt);
+    if (m_pFloat != NULL)
+        if(COMMAND_CONTEXTMENU  == rCEvt.GetCommand())
+            ExecuteContextMenu_Impl( rCEvt.GetMousePosPixel(), m_pFloat );
+        else
+            m_pFloat->Command(rCEvt);
 }
 
 //-------------------------------------------------------------------------
@@ -2914,10 +3105,10 @@ void SfxCommonTemplateDialog_Impl::SetFamily( sal_uInt16 nId )
 {
     if ( nId != nActFamily )
     {
-        if ( nActFamily != 0xFFFF )
+        if ( nActFamily != SFX_TEMPLDLG_FILTER_MAX )
             CheckItem( nActFamily, sal_False );
         nActFamily = nId;
-        if ( nId != 0xFFFF )
+        if ( nId != SFX_TEMPLDLG_FILTER_MAX )
             bUpdateFamily = sal_True;
     }
 }

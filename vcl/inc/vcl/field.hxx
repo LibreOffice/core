@@ -64,7 +64,7 @@ protected:
     sal_Bool                    IsDefaultLocale() const { return mbDefaultLocale; }
 
 public:
-                            FormatterBase( Edit* pField = NULL );
+    explicit                FormatterBase( Edit* pField = NULL );
     virtual                 ~FormatterBase();
 
     const LocaleDataWrapper& GetLocaleDataWrapper() const;
@@ -502,9 +502,9 @@ public:
 class VCL_DLLPUBLIC PatternField : public SpinField, public PatternFormatter
 {
 public:
-                            PatternField( Window* pParent, WinBits nWinStyle );
-                            PatternField( Window* pParent, const ResId& rResId );
-                            ~PatternField();
+    explicit                PatternField( Window* pParent, WinBits nWinStyle );
+    explicit                PatternField( Window* pParent, const ResId& );
+    virtual                 ~PatternField();
 
     virtual long            PreNotify( NotifyEvent& rNEvt );
     virtual long            Notify( NotifyEvent& rNEvt );
@@ -522,9 +522,9 @@ protected:
     SAL_DLLPRIVATE void     ImplLoadRes( const ResId& rResId );
 
 public:
-                            NumericField( Window* pParent, WinBits nWinStyle );
-                            NumericField( Window* pParent, const ResId& rResId );
-                            ~NumericField();
+    explicit                NumericField( Window* pParent, WinBits nWinStyle );
+    explicit                NumericField( Window* pParent, const ResId& );
+    virtual                 ~NumericField();
 
     virtual long            PreNotify( NotifyEvent& rNEvt );
     virtual long            Notify( NotifyEvent& rNEvt );
@@ -549,9 +549,9 @@ protected:
     SAL_DLLPRIVATE void     ImplLoadRes( const ResId& rResId );
 
 public:
-                            MetricField( Window* pParent, WinBits nWinStyle );
-                            MetricField( Window* pParent, const ResId& rResId );
-                            ~MetricField();
+    explicit                MetricField( Window* pParent, WinBits nWinStyle );
+    explicit                MetricField( Window* pParent, const ResId& );
+    virtual                 ~MetricField();
 
     virtual long            PreNotify( NotifyEvent& rNEvt );
     virtual long            Notify( NotifyEvent& rNEvt );
@@ -616,9 +616,9 @@ protected:
     SAL_DLLPRIVATE void     ImplLoadRes( const ResId& rResId );
 
 public:
-                            CurrencyField( Window* pParent, WinBits nWinStyle );
-                            CurrencyField( Window* pParent, const ResId& rResId );
-                            ~CurrencyField();
+    explicit                CurrencyField( Window* pParent, WinBits nWinStyle );
+    explicit                CurrencyField( Window* pParent, const ResId& );
+    virtual                 ~CurrencyField();
 
     virtual long            PreNotify( NotifyEvent& rNEvt );
     virtual long            Notify( NotifyEvent& rNEvt );
@@ -648,9 +648,9 @@ protected:
     SAL_DLLPRIVATE void     ImplLoadRes( const ResId& rResId );
 
 public:
-                            DateField( Window* pParent, WinBits nWinStyle );
-                            DateField( Window* pParent, const ResId& rResId );
-                            ~DateField();
+    explicit                DateField( Window* pParent, WinBits nWinStyle );
+    explicit                DateField( Window* pParent, const ResId& );
+    virtual                 ~DateField();
 
     virtual long            PreNotify( NotifyEvent& rNEvt );
     virtual long            Notify( NotifyEvent& rNEvt );
@@ -684,9 +684,9 @@ protected:
     SAL_DLLPRIVATE void     ImplLoadRes( const ResId& rResId );
 
 public:
-                            TimeField( Window* pParent, WinBits nWinStyle );
-                            TimeField( Window* pParent, const ResId& rResId );
-                            ~TimeField();
+    explicit                TimeField( Window* pParent, WinBits nWinStyle );
+    explicit                TimeField( Window* pParent, const ResId& );
+    virtual                 ~TimeField();
 
     virtual long            PreNotify( NotifyEvent& rNEvt );
     virtual long            Notify( NotifyEvent& rNEvt );
@@ -715,9 +715,9 @@ public:
 class VCL_DLLPUBLIC PatternBox : public ComboBox, public PatternFormatter
 {
 public:
-                            PatternBox( Window* pParent, WinBits nWinStyle );
-                            PatternBox( Window* pParent, const ResId& rResId );
-                            ~PatternBox();
+    explicit                PatternBox( Window* pParent, WinBits nWinStyle );
+    explicit                PatternBox( Window* pParent, const ResId& );
+    virtual                 ~PatternBox();
 
     virtual long            PreNotify( NotifyEvent& rNEvt );
     virtual long            Notify( NotifyEvent& rNEvt );
@@ -742,9 +742,9 @@ public:
 class VCL_DLLPUBLIC NumericBox : public ComboBox, public NumericFormatter
 {
 public:
-                            NumericBox( Window* pParent, WinBits nWinStyle );
-                            NumericBox( Window* pParent, const ResId& rResId );
-                            ~NumericBox();
+    explicit                NumericBox( Window* pParent, WinBits nWinStyle );
+    explicit                NumericBox( Window* pParent, const ResId& );
+    virtual                 ~NumericBox();
 
     virtual long            PreNotify( NotifyEvent& rNEvt );
     virtual long            Notify( NotifyEvent& rNEvt );
@@ -769,9 +769,9 @@ public:
 class VCL_DLLPUBLIC MetricBox : public ComboBox, public MetricFormatter
 {
 public:
-                            MetricBox( Window* pParent, WinBits nWinStyle );
-                            MetricBox( Window* pParent, const ResId& rResId );
-                            ~MetricBox();
+    explicit                MetricBox( Window* pParent, WinBits nWinStyle );
+    explicit                MetricBox( Window* pParent, const ResId& );
+    virtual                 ~MetricBox();
 
     virtual long            PreNotify( NotifyEvent& rNEvt );
     virtual long            Notify( NotifyEvent& rNEvt );
@@ -802,9 +802,9 @@ public:
 class VCL_DLLPUBLIC CurrencyBox : public ComboBox, public CurrencyFormatter
 {
 public:
-                            CurrencyBox( Window* pParent, WinBits nWinStyle );
-                            CurrencyBox( Window* pParent, const ResId& rResId );
-                            ~CurrencyBox();
+    explicit                CurrencyBox( Window* pParent, WinBits nWinStyle );
+    explicit                CurrencyBox( Window* pParent, const ResId& );
+    virtual                 ~CurrencyBox();
 
     virtual long            PreNotify( NotifyEvent& rNEvt );
     virtual long            Notify( NotifyEvent& rNEvt );
@@ -831,9 +831,9 @@ public:
 class VCL_DLLPUBLIC DateBox : public ComboBox, public DateFormatter
 {
 public:
-                            DateBox( Window* pParent, WinBits nWinStyle );
-                            DateBox( Window* pParent, const ResId& rResId );
-                            ~DateBox();
+    explicit                DateBox( Window* pParent, WinBits nWinStyle );
+    explicit                DateBox( Window* pParent, const ResId& );
+    virtual                 ~DateBox();
 
     virtual long            PreNotify( NotifyEvent& rNEvt );
     virtual long            Notify( NotifyEvent& rNEvt );
@@ -858,9 +858,9 @@ public:
 class VCL_DLLPUBLIC TimeBox : public ComboBox, public TimeFormatter
 {
 public:
-                            TimeBox( Window* pParent, WinBits nWinStyle );
-                            TimeBox( Window* pParent, const ResId& rResId );
-                            ~TimeBox();
+    explicit                TimeBox( Window* pParent, WinBits nWinStyle );
+    explicit                TimeBox( Window* pParent, const ResId& );
+    virtual                 ~TimeBox();
 
     virtual long            PreNotify( NotifyEvent& rNEvt );
     virtual long            Notify( NotifyEvent& rNEvt );

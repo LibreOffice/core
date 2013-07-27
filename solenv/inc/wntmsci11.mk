@@ -77,7 +77,7 @@ COMPILE_ECHO_FILE=
 # disable "warning C4675: resolved overload was found by argument-dependent
 # lookup":
 # -wd4251 -wd4275 -wd4290 -wd4675 -wd4786 -wd4800
-CFLAGS+=-Zm500 -Zc:forScope,wchar_t- -GR
+CFLAGS+=-Zm500 -Zc:wchar_t- -GR
 
 # Stack buffer overrun detection.
 CFLAGS+=-GS
@@ -285,14 +285,13 @@ LINKFLAGSOPT=
 UWINAPILIB*=uwinapi.lib
 .IF "$(DYNAMIC_CRT)"!=""
 .IF "$(USE_STLP_DEBUG)" != ""
-LIBCMT=msvcrtd.lib
+LIBCMT=msvcrt.lib
 .ELSE  # "$(USE_STLP_DEBUG)" != ""
 LIBCMT=msvcrt.lib
 .ENDIF # "$(USE_STLP_DEBUG)" != ""
 .ELSE # "$(DYNAMIC_CRT)"!=""
 .IF "$(USE_STLP_DEBUG)" != ""
-LIBCMT=libcmtd.lib
-CDEFS+=-D_DEBUG
+LIBCMT=libcmt.lib
 .ELSE  # "$(USE_STLP_DEBUG)" != ""
 LIBCMT=libcmt.lib
 .ENDIF # "$(USE_STLP_DEBUG)" != ""
@@ -309,12 +308,28 @@ STDLIBCUIMT=$(LIBCMT) $(UWINAPILIB) kernel32.lib user32.lib oldnames.lib
 STDSHLGUIMT=$(LIBCMT) $(UWINAPILIB) kernel32.lib user32.lib oldnames.lib
 STDSHLCUIMT=$(LIBCMT) $(UWINAPILIB) kernel32.lib user32.lib oldnames.lib
 
+.IF "$(USE_SYSTEM_STL)" == "YES"
+.IF "$(DYNAMIC_CRT)"!=""
+.IF "$(USE_STLP_DEBUG)" != ""
+LIBCMT+= msvcprt.lib
+.ELSE
+LIBCMT+= msvcprt.lib
+.ENDIF
+.ELSE # "$(DYNAMIC_CRT)"==""
+.IF "$(USE_STLP_DEBUG)" != ""
+LIBCMT+= libcpmt.lib
+.ELSE
+LIBCMT+= libcpmt.lib
+.ENDIF "$(USE_STLP_DEBUG)" == ""
+.ENDIF # "$(DYNAMIC_CRT)"!=""
+.ELSE # !USE_SYSTEM_STL
 .IF "$(USE_STLP_DEBUG)" != ""
 LIBSTLPORT=stlport_vc71_stldebug.lib
 LIBSTLPORTST=stlport_vc71_stldebug_static.lib
 .ELSE
 LIBSTLPORT=stlport_vc71.lib
 LIBSTLPORTST=stlport_vc71_static.lib
+.ENDIF
 .ENDIF
 
 .IF "$(PROF_EDITION)" == ""

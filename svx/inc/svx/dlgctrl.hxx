@@ -30,22 +30,17 @@
 #include "svx/svxdllapi.h"
 #include <svx/rectenum.hxx>
 #include <vcl/graph.hxx>
+
 #ifndef _XTABLE_HXX
 class XBitmapEntry;
-class XBitmapList;
 class XColorEntry;
-class XColorTable;
 class XDash;
 class XDashEntry;
-class XDashList;
 class XGradient;
 class XGradientEntry;
-class XGradientList;
 class XHatch;
 class XHatchEntry;
-class XHatchList;
 class XLineEndEntry;
-class XLineEndList;
 class XFillAttrSetItem;
 #endif
 
@@ -252,6 +247,10 @@ public:
 |* ColorLB kann mit Farben und Namen gefuellt werden
 |*
 \************************************************************************/
+
+class XColorList;
+typedef ::boost::shared_ptr< XColorList > XColorListSharedPtr;
+
 class SVX_DLLPUBLIC ColorLB : public ColorListBox
 {
 
@@ -259,10 +258,10 @@ public:
          ColorLB( Window* pParent, ResId Id ) : ColorListBox( pParent, Id ) {}
          ColorLB( Window* pParent, WinBits aWB ) : ColorListBox( pParent, aWB ) {}
 
-    virtual void Fill( const XColorTable* pTab );
+    virtual void Fill( const XColorListSharedPtr aTab );
 
-    void Append( XColorEntry* pEntry, Bitmap* pBmp = NULL );
-    void Modify( XColorEntry* pEntry, sal_uInt16 nPos, Bitmap* pBmp = NULL );
+    void Append( const XColorEntry& rEntry );
+    void Modify( const XColorEntry& rEntry, sal_uInt16 nPos );
 };
 
 /*************************************************************************
@@ -270,24 +269,21 @@ public:
 |* HatchingLB
 |*
 \************************************************************************/
+
+class XHatchList;
+typedef ::boost::shared_ptr< XHatchList > XHatchListSharedPtr;
+
 class SVX_DLLPUBLIC HatchingLB : public ListBox
 {
-
 public:
-         HatchingLB( Window* pParent, ResId Id, sal_Bool bUserDraw = sal_True );
-         HatchingLB( Window* pParent, WinBits aWB, sal_Bool bUserDraw = sal_True );
+     explicit HatchingLB( Window* pParent, ResId Id);
+     explicit HatchingLB( Window* pParent, WinBits aWB);
 
-    virtual void Fill( const XHatchList* pList );
-    virtual void UserDraw( const UserDrawEvent& rUDEvt );
+    virtual void Fill( const XHatchListSharedPtr aList );
 
-    void    Append( XHatchEntry* pEntry, Bitmap* pBmp = NULL );
-    void    Modify( XHatchEntry* pEntry, sal_uInt16 nPos, Bitmap* pBmp = NULL );
-    void    SelectEntryByList( const XHatchList* pList, const String& rStr,
-                        const XHatch& rXHatch, sal_uInt16 nDist = 0 );
-
-private:
-    XHatchList*     mpList;
-    sal_Bool            mbUserDraw;
+    void    Append( const XHatchEntry& rEntry, const Bitmap& rBitmap );
+    void    Modify( const XHatchEntry& rEntry, sal_uInt16 nPos, const Bitmap& rBitmap );
+    void    SelectEntryByList( const XHatchListSharedPtr aList, const String& rStr, const XHatch& rXHatch, sal_uInt16 nDist = 0 );
 };
 
 /*************************************************************************
@@ -295,23 +291,24 @@ private:
 |* GradientLB
 |*
 \************************************************************************/
+
+class XGradientList;
+typedef ::boost::shared_ptr< XGradientList > XGradientListSharedPtr;
+
 class SVX_DLLPUBLIC GradientLB : public ListBox
 {
 public:
-    GradientLB( Window* pParent, ResId Id, sal_Bool bUserDraw = sal_True );
-    GradientLB( Window* pParent, WinBits aWB, sal_Bool bUserDraw = sal_True );
+    explicit GradientLB( Window* pParent, ResId Id);
+    explicit GradientLB( Window* pParent, WinBits aWB);
 
-    virtual void Fill( const XGradientList* pList );
-    virtual void UserDraw( const UserDrawEvent& rUDEvt );
+    virtual void Fill( const XGradientListSharedPtr aList );
 
-    void    Append( XGradientEntry* pEntry, Bitmap* pBmp = NULL );
-    void    Modify( XGradientEntry* pEntry, sal_uInt16 nPos, Bitmap* pBmp = NULL );
-    void    SelectEntryByList( const XGradientList* pList, const String& rStr,
-                        const XGradient& rXGradient, sal_uInt16 nDist = 0 );
+    void    Append( const XGradientEntry& rEntry, const Bitmap& rBitmap );
+    void    Modify( const XGradientEntry& rEntry, sal_uInt16 nPos, const Bitmap& rBitmap );
+    void    SelectEntryByList( const XGradientListSharedPtr aList, const String& rStr, const XGradient& rXGradient, sal_uInt16 nDist = 0 );
 
 private:
-    XGradientList* mpList;
-    sal_Bool            mbUserDraw;
+    XGradientListSharedPtr maList;
 };
 
 /*************************************************************************
@@ -319,26 +316,23 @@ private:
 |* BitmapLB
 |*
 \************************************************************************/
+
+class XBitmapList;
+typedef ::boost::shared_ptr< XBitmapList > XBitmapListSharedPtr;
+
 class SVX_DLLPUBLIC BitmapLB : public ListBox
 {
 public:
-    BitmapLB(Window* pParent, ResId Id, bool bUserDraw = true);
+    explicit BitmapLB(Window* pParent, ResId Id);
 
-    virtual void Fill(const XBitmapList* pList);
-    virtual void UserDraw(const UserDrawEvent& rUDEvt);
+    virtual void Fill(const XBitmapListSharedPtr aList);
 
-    void Append(XBitmapEntry* pEntry, BitmapEx* pBmpEx = 0);
-    void Modify(XBitmapEntry* pEntry, sal_uInt16 nPos, BitmapEx* pBmpEx = 0);
-    void SelectEntryByList(const XBitmapList* pList, const String& rStr);
+    void Append(const Size& rSize, const XBitmapEntry& rEntry);
+    void Modify(const Size& rSize, const XBitmapEntry& rEntry, sal_uInt16 nPos);
+    void SelectEntryByList(const XBitmapListSharedPtr aList, const String& rStr);
 
 private:
-    VirtualDevice   maVD;
     BitmapEx        maBitmapEx;
-
-    XBitmapList*    mpList;
-    bool            mbUserDraw;
-
-    SVX_DLLPRIVATE void SetVirtualDevice();
 };
 
 /*************************************************************************
@@ -349,21 +343,18 @@ private:
 class FillAttrLB : public ColorListBox
 {
 private:
-    VirtualDevice   maVD;
     BitmapEx        maBitmapEx;
-
-    void SetVirtualDevice();
 
 public:
     FillAttrLB( Window* pParent, ResId Id );
     FillAttrLB( Window* pParent, WinBits aWB );
 
-    virtual void Fill( const XColorTable* pTab );
-    virtual void Fill( const XHatchList* pList );
-    virtual void Fill( const XGradientList* pList );
-    virtual void Fill( const XBitmapList* pList );
+    virtual void Fill( const XColorListSharedPtr aTab );
+    virtual void Fill( const XHatchListSharedPtr aList );
+    virtual void Fill( const XGradientListSharedPtr aList );
+    virtual void Fill( const XBitmapListSharedPtr aList );
 
-    void SelectEntryByList(const XBitmapList* pList, const String& rStr);
+    void SelectEntryByList(const XBitmapListSharedPtr aList, const String& rStr);
 };
 
 /*************************************************************************
@@ -386,20 +377,30 @@ public:
 |* LineLB
 |*
 \************************************************************************/
+
+class XDashList;
+typedef ::boost::shared_ptr< XDashList > XDashListSharedPtr;
+
 class SVX_DLLPUBLIC LineLB : public ListBox
 {
+private:
+    /// bitfield
+    /// defines if standard fields (none, solid) are added, default is true
+    bool        mbAddStandardFields : 1;
 
 public:
-         LineLB( Window* pParent, ResId Id ) : ListBox( pParent, Id ) {}
-         LineLB( Window* pParent, WinBits aWB ) : ListBox( pParent, aWB ) {}
+    LineLB(Window* pParent, ResId Id);
+    LineLB(Window* pParent, WinBits aWB);
+    virtual ~LineLB();
 
-    virtual void Fill( const XDashList* pList );
+    virtual void Fill(const XDashListSharedPtr aList);
 
-    void Append( XDashEntry* pEntry, Bitmap* pBmp = NULL );
-    void Modify( XDashEntry* pEntry, sal_uInt16 nPos, Bitmap* pBmp = NULL );
-    void SelectEntryByList( const XDashList* pList, const String& rStr,
-                            const XDash& rDash, sal_uInt16 nDist = 0 );
-    void FillStyles();
+    bool getAddStandardFields() const { return mbAddStandardFields; }
+    void setAddStandardFields(bool bNew);
+
+    void Append(const XDashEntry& rEntry, const Bitmap& rBitmap );
+    void Modify(const XDashEntry& rEntry, sal_uInt16 nPos, const Bitmap& rBitmap );
+    void SelectEntryByList(const XDashListSharedPtr aList, const String& rStr, const XDash& rDash, sal_uInt16 nDist = 0);
 };
 
 /*************************************************************************
@@ -407,19 +408,22 @@ public:
 |* LineEndsLB
 |*
 \************************************************************************/
+
+class XLineEndList;
+typedef ::boost::shared_ptr< XLineEndList > XLineEndListSharedPtr;
+
 class SVX_DLLPUBLIC LineEndLB : public ListBox
 {
 
 public:
-         LineEndLB( Window* pParent, ResId Id ) : ListBox( pParent, Id ) {}
-         LineEndLB( Window* pParent, WinBits aWB ) : ListBox( pParent, aWB ) {}
+                          LineEndLB( Window* pParent, ResId Id );
+                          LineEndLB( Window* pParent, WinBits aWB );
+                 virtual ~LineEndLB (void);
 
-    virtual void Fill( const XLineEndList* pList, sal_Bool bStart = sal_True );
+    virtual void Fill( const XLineEndListSharedPtr aList, bool bStart = true );
 
-    void    Append( XLineEndEntry* pEntry, Bitmap* pBmp = NULL,
-                    sal_Bool bStart = sal_True );
-    void    Modify( XLineEndEntry* pEntry, sal_uInt16 nPos, Bitmap* pBmp = NULL,
-                    sal_Bool bStart = sal_True );
+    void    Append( const XLineEndEntry& rEntry, const Bitmap& rBitmap, bool bStart = true );
+    void    Modify( const XLineEndEntry& rEntry, sal_uInt16 nPos, const Bitmap& rBitmap, bool bStart = true );
 };
 
 //////////////////////////////////////////////////////////////////////////////

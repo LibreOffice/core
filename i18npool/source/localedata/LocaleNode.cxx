@@ -158,27 +158,27 @@ LocaleNode* LocaleNode::createNode (const OUString& name, const Reference< XAttr
 
 #define OSTR(s) (OUStringToOString( (s), RTL_TEXTENCODING_UTF8).getStr())
 
-void print_OUString( const OUString& s )
+static void print_OUString( const OUString& s )
 {
     printf( "%s", OSTR(s));
 }
 
-bool is_empty( const OUString& s )
+static bool is_empty_string( const OUString& s )
 {
      return (s.getLength()==0) || (s.getLength()==1 && s[0]=='\n');
 }
 
-void print_indent( int depth )
+static void print_indent( int depth )
 {
      for( int i=0; i<depth; i++ ) printf("    ");
 }
 
-void print_color( int color )
+static void print_color( int color )
 {
      printf("\033[%dm", color);
 }
 
-void print_node( const LocaleNode* p, int depth=0 )
+static void print_node( const LocaleNode* p, int depth=0 )
 {
      if( !p ) return;
 
@@ -206,7 +206,7 @@ void print_node( const LocaleNode* p, int depth=0 )
      }
      printf(">");
      printf("\n");
-     if( !is_empty( p->getValue() ) )
+     if( !is_empty_string( p->getValue() ) )
      {
           print_indent( depth+1 );
           printf("value: ");

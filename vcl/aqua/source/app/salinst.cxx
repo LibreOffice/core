@@ -1326,7 +1326,7 @@ NSImage* CreateNSImage( const Image& rImage )
         NSGraphicsContext* pContext = [NSGraphicsContext currentContext];
         CGContextRef rCGContext = reinterpret_cast<CGContextRef>([pContext graphicsPort]);
 
-        const CGRect aDstRect = { {0, 0}, { aSize.Width(), aSize.Height() } };
+        const CGRect aDstRect = CGRectMake( 0, 0, aSize.Width(), aSize.Height());
         CGContextDrawImage( rCGContext, aDstRect, xImage );
 
         [pImage unlockFocus];

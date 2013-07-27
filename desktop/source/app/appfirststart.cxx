@@ -61,7 +61,7 @@ OUString Desktop::GetLicensePath()
     if (aLicensePath.getLength() > 0)
         return aLicensePath;
 
-    OUString aBaseInstallPath(RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR"));
+    OUString aBaseInstallPath(RTL_CONSTASCII_USTRINGPARAM("$OOO_BASE_DIR"));
     rtl::Bootstrap::expandMacros(aBaseInstallPath);
 
     // determine the filename of the license to show

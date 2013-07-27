@@ -67,6 +67,10 @@ void lcl_InvalidateAttribs( SfxBindings& rBindings )
     rBindings.Invalidate( SID_ATTR_CHAR_COLOR );
     rBindings.Invalidate( SID_ATTR_CHAR_FONT );
     rBindings.Invalidate( SID_ATTR_CHAR_FONTHEIGHT );
+    rBindings.Invalidate( SID_ATTR_PARA_ADJUST_LEFT );
+    rBindings.Invalidate( SID_ATTR_PARA_ADJUST_RIGHT );
+    rBindings.Invalidate( SID_ATTR_PARA_ADJUST_BLOCK );
+    rBindings.Invalidate( SID_ATTR_PARA_ADJUST_CENTER);
     rBindings.Invalidate( SID_ALIGNLEFT );
     rBindings.Invalidate( SID_ALIGNCENTERHOR );
     rBindings.Invalidate( SID_ALIGNRIGHT );
@@ -86,6 +90,11 @@ void lcl_InvalidateAttribs( SfxBindings& rBindings )
     rBindings.Invalidate( SID_ALIGN_ANY_HCENTER );
     rBindings.Invalidate( SID_ALIGN_ANY_RIGHT );
     rBindings.Invalidate( SID_ALIGN_ANY_JUSTIFIED );
+    rBindings.Invalidate( SID_ATTR_CHAR_KERNING );
+    rBindings.Invalidate( SID_SET_SUPER_SCRIPT );
+    rBindings.Invalidate( SID_SET_SUB_SCRIPT );
+    rBindings.Invalidate( SID_ATTR_CHAR_STRIKEOUT );
+    rBindings.Invalidate( SID_ATTR_CHAR_SHADOWED );
 }
 
 void lcl_UpdateHyphenator( Outliner& rOutliner, SdrObject* pObj )
@@ -202,7 +211,7 @@ sal_Bool __EXPORT FuText::MouseButtonDown(const MouseEvent& rMEvt)
                 pO->SetVertical( bVertical );
 
                 //!??   ohne uebergebenen Outliner stimmen die Defaults nicht ???!?
-                if ( pView->SdrBeginTextEdit(pObj, pWindow, sal_True, pO) )
+                if ( pView->SdrBeginTextEdit(pObj, pWindow, true, pO) )
                 {
                     //  EditEngine-UndoManager anmelden
                     pViewShell->SetDrawTextUndo( &pO->GetUndoManager() );
@@ -667,7 +676,7 @@ void FuText::SetInEditMode(SdrObject* pObj, const Point* pMousePixel,
                 pO->SetVertical( bVertical );
 
                 //!??   ohne uebergebenen Outliner stimmen die Defaults nicht ???!?
-                if ( pView->SdrBeginTextEdit(pObj, pWindow, sal_True, pO) )
+                if ( pView->SdrBeginTextEdit(pObj, pWindow, true, pO) )
                 {
                     //  EditEngine-UndoManager anmelden
                     pViewShell->SetDrawTextUndo( &pO->GetUndoManager() );

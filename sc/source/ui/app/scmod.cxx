@@ -105,7 +105,9 @@
 #include "preview.hxx"
 
 #include <svx/xmlsecctrl.hxx>
-
+#include <svx/galleryitem.hxx>
+#include <svx/xlinjoit.hxx>
+#include <svx/xlncapit.hxx>
 
 #define ScModule
 #include "scslots.hxx"
@@ -1044,7 +1046,10 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
         }
         SetViewOptions( rNewOpt );
         if (pBindings)
+        {
             pBindings->Invalidate(SID_HELPLINES_MOVE);
+            pBindings->Invalidate(SID_SCGRIDSHOW);
+        }
     }
 
     //============================================

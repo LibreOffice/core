@@ -43,6 +43,7 @@ namespace svgio
             SVGTokenViewBox,
             SVGTokenTransform,
             SVGTokenStyle,
+            SVGTokenDisplay, // #121656#
             SVGTokenD,
             SVGTokenX,
             SVGTokenY,
@@ -180,6 +181,7 @@ namespace svgio
 
             // text tokens
             SVGTokenText,
+            SVGTokenBaselineShift,
 
             SVGTokenLast
         };

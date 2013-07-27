@@ -29,6 +29,15 @@
 #include <vcl/outdev.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
+// predefines
+
+namespace drawinglayer { namespace primitive2d {
+    class PolyPolygonColorPrimitive2D;
+    class PolygonHairlinePrimitive2D;
+    class PolygonStrokePrimitive2D;
+}}
+
+//////////////////////////////////////////////////////////////////////////////
 
 namespace drawinglayer
 {
@@ -40,7 +49,7 @@ namespace drawinglayer
             all feeded primitives to a VCL Window. It is the currently used renderer
             for all VCL editing output from the DrawingLayer.
          */
-        class DRAWINGLAYER_DLLPUBLIC VclPixelProcessor2D : public VclProcessor2D
+        class VclPixelProcessor2D : public VclProcessor2D
         {
         private:
         protected:
@@ -50,6 +59,11 @@ namespace drawinglayer
             virtual void processBasePrimitive2D(
                 const primitive2d::BasePrimitive2D& rCandidate,
                 const primitive2d::Primitive2DReference& rUnoCandidate);
+
+            // some helpers to try direct paints (shortcuts)
+            bool tryDrawPolyPolygonColorPrimitive2DDirect(const drawinglayer::primitive2d::PolyPolygonColorPrimitive2D& rSource, double fTransparency);
+            bool tryDrawPolygonHairlinePrimitive2DDirect(const drawinglayer::primitive2d::PolygonHairlinePrimitive2D& rSource, double fTransparency);
+            bool tryDrawPolygonStrokePrimitive2DDirect(const drawinglayer::primitive2d::PolygonStrokePrimitive2D& rSource, double fTransparency);
 
         public:
             /// constructor/destructor

@@ -342,7 +342,6 @@ TabPage TP_OPTPRINT_PAGE
         Pos = MAP_APPFONT ( 103 , 53 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text [ en-US ] = "Right to Left" ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_NO
     {

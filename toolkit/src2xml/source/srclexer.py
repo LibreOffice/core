@@ -303,14 +303,14 @@ build the syntax tree.
             self.handleMacroInclude(buf)
         elif command == 'ifdef':
             defineName = buf.strip()
-            if self.defines.has_key(defineName):
+            if defineName in self.defines:
                 self.visibilityStack.append(SrcLexer.VISIBLE)
             else:
                 self.visibilityStack.append(SrcLexer.INVISIBLE_PRE)
 
         elif command == 'ifndef':
             defineName = buf.strip()
-            if self.defines.has_key(defineName):
+            if defineName in self.defines:
                 self.visibilityStack.append(SrcLexer.INVISIBLE_PRE)
             else:
                 self.visibilityStack.append(SrcLexer.VISIBLE)
@@ -351,8 +351,8 @@ build the syntax tree.
         elif command in ['error', 'pragma']:
             pass
         else:
-            print "'%s' '%s'"%(command, buf)
-            print self.filepath
+            print("'%s' '%s'"%(command, buf))
+            print(self.filepath)
             sys.exit(0)
 
         return i
@@ -407,10 +407,10 @@ build the syntax tree.
                 progress ("%s already included\n"%headerPath)
             return
 
-        if SrcLexer.headerCache.has_key(headerPath):
+        if headerPath in SrcLexer.headerCache:
             if self.debug:
                 progress ("%s in cache\n"%headerPath)
-            for key in SrcLexer.headerCache[headerPath].defines.keys():
+            for key in list(SrcLexer.headerCache[headerPath].defines.keys()):
                 self.defines[key] = SrcLexer.headerCache[headerPath].defines[key]
             return
 
@@ -422,7 +422,7 @@ build the syntax tree.
         hdrData = HeaderData()
         hdrData.tokens = mclexer.getTokens()
         headerDefines = mclexer.getDefines()
-        for key in headerDefines.keys():
+        for key in list(headerDefines.keys()):
             defines[key] = headerDefines[key]
             hdrData.defines[key] = headerDefines[key]
 
@@ -430,15 +430,15 @@ build the syntax tree.
         SrcLexer.headerCache[headerPath] = hdrData
 
         # Update the list of headers that have already been expaneded.
-        for key in mclexer.headerDict.keys():
+        for key in list(mclexer.headerDict.keys()):
             self.headerDict[key] = True
 
         if self.debug:
             progress ("defines found in header %s:\n"%headerSub)
-            for key in defines.keys():
+            for key in list(defines.keys()):
                 progress ("  '%s'\n"%key)
 
-        for key in defines.keys():
+        for key in list(defines.keys()):
             self.defines[key] = defines[key]
 
 

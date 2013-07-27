@@ -48,6 +48,8 @@
 #include "cppuhelper/access_control.hxx"
 #include "cppuhelper/findsofficepath.h"
 
+#include <cppuhelper/com/sun/star/container/XElementAccess.hpp>
+
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/uno/XCurrentContext.hpp"
 
@@ -67,6 +69,7 @@
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 #define ARLEN(x) sizeof (x) / sizeof *(x)
 
+void primeWeakMap( void); // as defined in primeweak.cxx
 
 using namespace ::rtl;
 using namespace ::osl;
@@ -376,6 +379,8 @@ SAL_CALL defaultBootstrap_InitialComponentContext(
     Bootstrap const & bootstrap )
     SAL_THROW( (Exception) )
 {
+    primeWeakMap();
+
     OUString bootstrapPath;
     if (!bootstrap.getFrom(
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URE_INTERNAL_LIB_DIR")),

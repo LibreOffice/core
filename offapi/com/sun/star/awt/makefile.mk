@@ -100,6 +100,7 @@ IDLFILES=\
     Gradient.idl\
     GradientStyle.idl\
     ImageAlign.idl\
+    ImageDrawMode.idl\
     ImagePosition.idl\
     ImageScaleMode.idl\
     ImageStatus.idl\
@@ -116,7 +117,8 @@ IDLFILES=\
     MenuEvent.idl\
     MenuItemStyle.idl\
     MessageBoxButtons.idl\
-    MessageBoxCommand.idl\
+    MessageBoxResults.idl\
+    MessageBoxType.idl\
     MouseButton.idl\
     MouseEvent.idl\
     MouseWheelBehavior.idl\
@@ -190,12 +192,8 @@ IDLFILES=\
     UnoControlRoadmapModel.idl\
     UnoControlScrollBar.idl\
     UnoControlScrollBarModel.idl\
-    UnoControlSimpleAnimation.idl\
-    UnoControlSimpleAnimationModel.idl\
     UnoControlSpinButton.idl\
     UnoControlSpinButtonModel.idl\
-    UnoControlThrobber.idl\
-    UnoControlThrobberModel.idl\
     UnoControlTimeField.idl\
     UnoControlTimeFieldModel.idl\
     VclContainerEvent.idl\
@@ -287,9 +285,7 @@ IDLFILES=\
     XSystemDependentMenuPeer.idl\
     XSystemDependentWindowPeer.idl\
     SystemDependentXWindow.idl\
-    XSimpleAnimation.idl\
     XSimpleTabController.idl\
-    XThrobber.idl\
     XTabController.idl\
     XTabControllerModel.idl\
         XTabListener.idl\
@@ -317,7 +313,6 @@ IDLFILES=\
     XWindowListener.idl\
     XWindowListener2.idl\
     XWindowPeer.idl\
-    XMenuExtended.idl\
     MaxChildrenException.idl\
     XDialog2.idl\
     XLayoutContainer.idl\
@@ -326,10 +321,6 @@ IDLFILES=\
     XLayoutRoot.idl\
     XLayoutUnit.idl \
     MenuItemType.idl \
-    MenuLogo.idl \
-    XMenuExtended2.idl \
-    XMenuBarExtended.idl \
-    XPopupMenuExtended.idl \
     XItemList.idl \
     XItemListListener.idl \
     ItemListEvent.idl \

@@ -24,7 +24,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "tablecontroller.hxx"
+#include <svx/sdr/table/tablecontroller.hxx>
+#include <tablemodel.hxx>
 
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>

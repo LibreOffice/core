@@ -1662,118 +1662,116 @@ sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const ::rtl::OUStr
 
         switch( nWID )
         {
-            case XATTR_FILLBITMAP:
-            {
-                XBitmapList* pBitmapList = pModel->GetBitmapList();
+        case XATTR_FILLBITMAP:
+        {
+            XBitmapListSharedPtr aBitmapList = pModel->GetBitmapListFromSdrModel();
 
-                if( !pBitmapList )
-                    return sal_False;
-
-                long nPos = ((XPropertyList*)pBitmapList)->Get(aStrName);
-                if( nPos == -1 )
-                    return sal_False;
-
-                XBitmapEntry* pEntry = pBitmapList->GetBitmap( nPos );
-                XFillBitmapItem aBmpItem;
-                aBmpItem.SetWhich( XATTR_FILLBITMAP );
-                aBmpItem.SetName( rName );
-                aBmpItem.SetGraphicObject(pEntry->GetGraphicObject());
-                rSet.Put( aBmpItem );
-                break;
-            }
-            case XATTR_FILLGRADIENT:
-            {
-                XGradientList* pGradientList = pModel->GetGradientList();
-
-                if( !pGradientList )
-                    return sal_False;
-
-                long nPos = ((XPropertyList*)pGradientList)->Get(aStrName);
-                if( nPos == -1 )
-                    return sal_False;
-
-                XGradientEntry* pEntry = pGradientList->GetGradient( nPos );
-                XFillGradientItem aGrdItem;
-                aGrdItem.SetWhich( XATTR_FILLGRADIENT );
-                aGrdItem.SetName( rName );
-                aGrdItem.SetGradientValue( pEntry->GetGradient() );
-                rSet.Put( aGrdItem );
-                break;
-            }
-            case XATTR_FILLHATCH:
-            {
-                XHatchList* pHatchList = pModel->GetHatchList();
-
-                if( !pHatchList )
-                    return sal_False;
-
-                long nPos = ((XPropertyList*)pHatchList)->Get(aStrName);
-                if( nPos == -1 )
-                    return sal_False;
-
-                XHatchEntry* pEntry = pHatchList->GetHatch( nPos );
-                XFillHatchItem aHatchItem;
-                aHatchItem.SetWhich( XATTR_FILLHATCH );
-                aHatchItem.SetName( rName );
-                aHatchItem.SetHatchValue( pEntry->GetHatch() );
-                rSet.Put( aHatchItem );
-                break;
-            }
-            case XATTR_LINEEND:
-            case XATTR_LINESTART:
-            {
-                XLineEndList* pLineEndList = pModel->GetLineEndList();
-
-                if( !pLineEndList )
-                    return sal_False;
-
-                long nPos = ((XPropertyList*)pLineEndList)->Get(aStrName);
-                if( nPos == -1 )
-                    return sal_False;
-
-                XLineEndEntry* pEntry = pLineEndList->GetLineEnd( nPos );
-                if( XATTR_LINEEND == nWID )
-                {
-                    XLineEndItem aLEItem;
-                    aLEItem.SetWhich( XATTR_LINEEND );
-                    aLEItem.SetName( rName );
-                    aLEItem.SetLineEndValue( pEntry->GetLineEnd() );
-                    rSet.Put( aLEItem );
-                }
-                else
-                {
-                    XLineStartItem aLSItem;
-                    aLSItem.SetWhich( XATTR_LINESTART );
-                    aLSItem.SetName( rName );
-                    aLSItem.SetLineStartValue( pEntry->GetLineEnd() );
-                    rSet.Put( aLSItem );
-                }
-
-                break;
-            }
-            case XATTR_LINEDASH:
-            {
-                XDashList* pDashList = pModel->GetDashList();
-
-                if( !pDashList )
-                    return sal_False;
-
-                long nPos = ((XPropertyList*)pDashList)->Get(aStrName);
-                if( nPos == -1 )
-                    return sal_False;
-
-                XDashEntry* pEntry = pDashList->GetDash( nPos );
-                XLineDashItem aDashItem;
-                aDashItem.SetWhich( XATTR_LINEDASH );
-                aDashItem.SetName( rName );
-                aDashItem.SetDashValue( pEntry->GetDash() );
-                rSet.Put( aDashItem );
-                break;
-            }
-            default:
-            {
+            if( !aBitmapList.get() )
                 return sal_False;
+
+            long nPos = aBitmapList->GetIndex(aStrName);
+            if( nPos == -1 )
+                return sal_False;
+
+            XBitmapEntry* pEntry = aBitmapList->GetBitmap( nPos );
+            XFillBitmapItem aBmpItem;
+            aBmpItem.SetWhich( XATTR_FILLBITMAP );
+            aBmpItem.SetName( rName );
+            aBmpItem.SetGraphicObject(pEntry->GetGraphicObject());
+            rSet.Put( aBmpItem );
+            break;
+        }
+        case XATTR_FILLGRADIENT:
+        {
+            XGradientListSharedPtr aGradientList = pModel->GetGradientListFromSdrModel();
+
+            if( !aGradientList.get() )
+                return sal_False;
+
+            long nPos = aGradientList->GetIndex(aStrName);
+            if( nPos == -1 )
+                return sal_False;
+
+            XGradientEntry* pEntry = aGradientList->GetGradient( nPos );
+            XFillGradientItem aGrdItem;
+            aGrdItem.SetWhich( XATTR_FILLGRADIENT );
+            aGrdItem.SetName( rName );
+            aGrdItem.SetGradientValue( pEntry->GetGradient() );
+            rSet.Put( aGrdItem );
+            break;
+        }
+        case XATTR_FILLHATCH:
+        {
+            XHatchListSharedPtr aHatchList = pModel->GetHatchListFromSdrModel();
+
+            if( !aHatchList.get() )
+                return sal_False;
+
+            long nPos = aHatchList->GetIndex(aStrName);
+            if( nPos == -1 )
+                return sal_False;
+
+            XHatchEntry* pEntry = aHatchList->GetHatch( nPos );
+            XFillHatchItem aHatchItem;
+            aHatchItem.SetWhich( XATTR_FILLHATCH );
+            aHatchItem.SetName( rName );
+            aHatchItem.SetHatchValue( pEntry->GetHatch() );
+            rSet.Put( aHatchItem );
+            break;
+        }
+        case XATTR_LINEEND:
+        case XATTR_LINESTART:
+        {
+            XLineEndListSharedPtr aLineEndList = pModel->GetLineEndListFromSdrModel();
+
+            if( !aLineEndList.get() )
+                return sal_False;
+
+            long nPos = aLineEndList->GetIndex(aStrName);
+            if( nPos == -1 )
+                return sal_False;
+
+            XLineEndEntry* pEntry = aLineEndList->GetLineEnd( nPos );
+            if( XATTR_LINEEND == nWID )
+            {
+                XLineEndItem aLEItem;
+                aLEItem.SetWhich( XATTR_LINEEND );
+                aLEItem.SetName( rName );
+                aLEItem.SetLineEndValue( pEntry->GetLineEnd() );
+                rSet.Put( aLEItem );
             }
+            else
+            {
+                XLineStartItem aLSItem;
+                aLSItem.SetWhich( XATTR_LINESTART );
+                aLSItem.SetName( rName );
+                aLSItem.SetLineStartValue( pEntry->GetLineEnd() );
+                rSet.Put( aLSItem );
+            }
+
+            break;
+        }
+        case XATTR_LINEDASH:
+        {
+            XDashListSharedPtr aDashList = pModel->GetDashListFromSdrModel();
+
+            if( !aDashList.get() )
+                return sal_False;
+
+            long nPos = aDashList->GetIndex(aStrName);
+            if( nPos == -1 )
+                return sal_False;
+
+            XDashEntry* pEntry = aDashList->GetDash( nPos );
+            XLineDashItem aDashItem;
+            aDashItem.SetWhich( XATTR_LINEDASH );
+            aDashItem.SetName( rName );
+            aDashItem.SetDashValue( pEntry->GetDash() );
+            rSet.Put( aDashItem );
+            break;
+        }
+        default:
+            return sal_False;
         }
     }
 
@@ -2384,7 +2382,18 @@ bool SvxShape::setPropertyValueImpl( const ::rtl::OUString&, const SfxItemProper
             {
                 SdrGrafObj* pObj = dynamic_cast< SdrGrafObj* >( mpObj.get() );
                 if( pObj )
-                    pObj->SetMirrored(bMirror);
+                {
+                    // TTTT: Really mirror in X
+                    basegfx::B2DHomMatrix aMirror;
+
+                    aMirror.translate(-0.5, 0.0);
+                    aMirror.scale(-1.0, 1.0);
+                    aMirror.translate(0.5, 0.0);
+                    aMirror = pObj->getSdrObjectTransformation() * aMirror;
+
+                    pObj->setSdrObjectTransformation(aMirror);
+                    // pObj->SetMirrored(bMirror);
+                }
                 return true;
             }
             break;
@@ -2943,10 +2952,10 @@ bool SvxShape::getPropertyValueImpl( const ::rtl::OUString&, const SfxItemProper
             break;
         }
 
-        case OWN_ATTR_MIRRORED:
+        case OWN_ATTR_MIRRORED: // TTTT: Check usages, old stuff.
         {
             SdrGrafObj* pSdrGrafObj = dynamic_cast< SdrGrafObj* >(mpObj.get());
-            rValue <<= pSdrGrafObj ? (sal_Bool)pSdrGrafObj->IsMirrored() : sal_False;
+            rValue <<= pSdrGrafObj ? (sal_Bool)pSdrGrafObj->isMirroredX() : sal_False;
         }
 
         case OWN_ATTR_EDGE_START_OBJ:

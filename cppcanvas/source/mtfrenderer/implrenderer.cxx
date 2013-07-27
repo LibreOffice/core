@@ -1498,6 +1498,13 @@ namespace cppcanvas
                                            getState( rStates ).lineColor,
                                            rCanvas );
                         }
+                        else
+                        {
+                            // #120994# Do switch on/off LineColor, even when a overriding one is set
+                            bool bSetting(static_cast<MetaLineColorAction*>(pCurrAct)->IsSetting());
+
+                            getState( rStates ).isLineColorSet = bSetting;
+                        }
                         break;
 
                     case META_FILLCOLOR_ACTION:
@@ -1507,6 +1514,13 @@ namespace cppcanvas
                                            getState( rStates ).isFillColorSet,
                                            getState( rStates ).fillColor,
                                            rCanvas );
+                        }
+                        else
+                        {
+                            // #120994# Do switch on/off FillColor, even when a overriding one is set
+                            bool bSetting(static_cast<MetaFillColorAction*>(pCurrAct)->IsSetting());
+
+                            getState( rStates ).isFillColorSet = bSetting;
                         }
                         break;
 
@@ -1539,6 +1553,13 @@ namespace cppcanvas
                                            getState( rStates ).textFillColor,
                                            rCanvas );
                         }
+                        else
+                        {
+                            // #120994# Do switch on/off TextFillColor, even when a overriding one is set
+                            bool bSetting(static_cast<MetaTextFillColorAction*>(pCurrAct)->IsSetting());
+
+                            getState( rStates ).isTextFillColorSet = bSetting;
+                        }
                         break;
 
                     case META_TEXTLINECOLOR_ACTION:
@@ -1548,6 +1569,13 @@ namespace cppcanvas
                                            getState( rStates ).isTextLineColorSet,
                                            getState( rStates ).textLineColor,
                                            rCanvas );
+                        }
+                        else
+                        {
+                            // #120994# Do switch on/off TextLineColor, even when a overriding one is set
+                            bool bSetting(static_cast<MetaTextLineColorAction*>(pCurrAct)->IsSetting());
+
+                            getState( rStates ).isTextLineColorSet = bSetting;
                         }
                         break;
 

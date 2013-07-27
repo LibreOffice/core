@@ -465,7 +465,7 @@ namespace svxform
                 {
                     const ::rtl::OUString sScaleModeProperty( RTL_CONSTASCII_USTRINGPARAM( "ScaleMode" ) );
                     if ( xPSI->hasPropertyByName( sScaleModeProperty ) )
-                        _rxControlModel->setPropertyValue( sScaleModeProperty, makeAny( ImageScaleMode::Isotropic ) );
+                        _rxControlModel->setPropertyValue( sScaleModeProperty, makeAny( ImageScaleMode::ISOTROPIC ) );
                 }
                 break;
             }

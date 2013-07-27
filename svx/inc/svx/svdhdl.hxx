@@ -34,6 +34,8 @@
 #include "svx/svxdllapi.h"
 #include <svx/xpoly.hxx>
 #include <svx/svdoedge.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <svx/sdgcpitm.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // predefines
@@ -128,7 +130,9 @@ enum BitmapMarkerKind
     AnchorPressedTR,
 
     // for SJ and the CustomShapeHandles:
-    Customshape1
+    Customshape_7x7,
+    Customshape_9x9,
+    Customshape_11x11
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -334,7 +338,7 @@ public:
 
     // Zuletzt eingefuegte Handles werden am ehesten getroffen
     // (wenn Handles uebereinander liegen).
-    SdrHdl* IsHdlListHit(const basegfx::B2DPoint& rPosition, SdrHdl* pHdl0 = 0) const;
+    SdrHdl* IsHdlListHit(const basegfx::B2DPoint& rPosition) const;
     SdrHdl* GetHdlByKind(SdrHdlKind eKind1) const;
 };
 
@@ -615,6 +619,34 @@ protected:
     BitmapEx GetBitmapForHandle( const BitmapEx& rBitmap, sal_uInt16 nSize );
 
     static BitmapEx GetHandlesBitmap( bool bIsFineHdl, bool bIsHighContrast );
+};
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+class SVX_DLLPUBLIC SdrCropViewHdl : public SdrHdl
+{
+private:
+    basegfx::B2DHomMatrix       maObjectTransform;
+    Graphic                     maGraphic;
+    double                      mfCropLeft;
+    double                      mfCropTop;
+    double                      mfCropRight;
+    double                      mfCropBottom;
+
+public:
+    SdrCropViewHdl(
+        SdrHdlList& rHdlList,
+        const SdrObject& rSdrHdlObject,
+        const basegfx::B2DHomMatrix& rObjectTransform,
+        const Graphic& rGraphic,
+        double fCropLeft,
+        double fCropTop,
+        double fCropRight,
+        double fCropBottom);
+
+protected:
+    // create marker for this kind
+    virtual void CreateB2dIAObject(::sdr::overlay::OverlayManager& rOverlayManager);
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

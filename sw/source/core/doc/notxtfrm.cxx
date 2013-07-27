@@ -19,11 +19,8 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-
 
 #include <hintids.hxx>
 #include <tools/urlobj.hxx>
@@ -71,17 +68,15 @@
 #include <accessibilityoptions.hxx>
 #include <com/sun/star/embed/EmbedMisc.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
-
 #include <svtools/embedhlp.hxx>
 #include <svx/charthelper.hxx>
-// --> OD 2009-03-05 #i99665#
 #include <dview.hxx>
-// <--
-
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <svx/sdr/contact/objectcontacttools.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <drawinglayer/processor2d/processor2dtools.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
 
 using namespace com::sun::star;
 
@@ -886,7 +881,7 @@ bool paintUsingPrimitivesHelper(
                 uno::Sequence< beans::PropertyValue >());
 
             // get a primitive processor for rendering
-            drawinglayer::processor2d::BaseProcessor2D* pProcessor2D = sdr::contact::createBaseProcessor2DFromOutputDevice(
+            drawinglayer::processor2d::BaseProcessor2D* pProcessor2D = drawinglayer::processor2d::createProcessor2DFromOutputDevice(
                 rOutputDevice,
                 aViewInformation2D);
 
@@ -1042,10 +1037,43 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
                             aAlignedGrfArea.Left(), aAlignedGrfArea.Top(),
                             aAlignedGrfArea.Right(), aAlignedGrfArea.Bottom());
                         const bool bCropped(aGrfAttr.IsCropped());
+                        drawinglayer::primitive2d::Primitive2DSequence aContent;
+                        GraphicAttr aSuppressGraphicAttr(aGrfAttr);
+
+                        aSuppressGraphicAttr.SetCrop(0, 0, 0, 0);
+                        aSuppressGraphicAttr.SetRotation(0);
+                        aSuppressGraphicAttr.SetMirrorFlags(0);
+
+                        const bool bNeedTransformedGraphic(
+                            aSuppressGraphicAttr.IsSpecialDrawMode() ||
+                            aSuppressGraphicAttr.IsAdjusted() ||
+                            aSuppressGraphicAttr.IsMirrored() ||
+                            aSuppressGraphicAttr.IsRotated() ||
+                            aSuppressGraphicAttr.IsTransparent());
+
+                        if(bNeedTransformedGraphic)
+                        {
+                            // #122039# need to apply graphic transformation if GraphicAttr are used qwhich need this
+                            const Graphic aTransformedGraphic(rGrfObj.GetTransformedGraphic(&aSuppressGraphicAttr));
+                            const basegfx::B2DRange aRange(rSvgDataPtr->getRange());
+                            const basegfx::B2DHomMatrix aTransform(
+                                basegfx::tools::createScaleTranslateB2DHomMatrix(
+                                    aRange.getRange(),
+                                    aRange.getMinimum()));
+
+                            aContent.realloc(1);
+                            aContent[0] = new drawinglayer::primitive2d::BitmapPrimitive2D(
+                                aTransformedGraphic.GetBitmapEx(),
+                                aTransform);
+                        }
+                        else
+                        {
+                            aContent = rSvgDataPtr->getPrimitive2DSequence();
+                        }
 
                         bDone = paintUsingPrimitivesHelper(
                             *pOut,
-                            rSvgDataPtr->getPrimitive2DSequence(),
+                            aContent,
                             rSvgDataPtr->getRange(),
                             aTargetRange,
                             bCropped ? aGrfAttr.GetLeftCrop() : 0,

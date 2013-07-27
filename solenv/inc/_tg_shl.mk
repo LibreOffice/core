@@ -48,7 +48,7 @@ SHL1RPATH*=OOO
 LINKFLAGSRUNPATH_$(SHL1RPATH)*=/ERROR:/Bad_SHL1RPATH_value
 SHL1LINKFLAGS+=$(LINKFLAGSRUNPATH_$(SHL1RPATH))
 
-.IF "$(SHL1USE_EXPORTS)"==""
+.IF "$(SHL1USE_EXPORTS)"=="" || "$(GUI)"=="OS2"
 SHL1DEF*=$(MISC)/$(SHL1TARGET).def
 .ENDIF			# "$(SHL1USE_EXPORTS)"==""
 
@@ -544,8 +544,11 @@ $(SHL1TARGETN) : \
 
 .ENDIF			# "$(USE_DEFFILE)"!=""
 
-    $(COMMAND_ECHO)+$(IMPLIB) -p256 $(IMPLIBFLAGS) $(SHL1IMPLIBN) $@
-    $(COMMAND_ECHO)+$(IMPLIB) -p256 $(IMPLIBFLAGS) $(LB)/$(SHL1TARGET).lib $@
+.IF "$(SHL1USE_EXPORTS)"=="name"
+#03/11/2012  if 'name' is used, export from DLL file (only names, no ordinals)
+    @echo Build import library from DLL file.
+    $(COMMAND_ECHO)+$(IMPLIB) $(IMPLIBFLAGS) $(LB)/$(SHL1TARGETN:b).lib $@
+.ENDIF			# "$(SHL1USE_EXPORTS)"==""
 
 .IF "$(SHL1TARGET8)" != "$(SHL1TARGET)"
     $(COMMAND_ECHO)+$(COPY) $@ $(@:d)$(SHL1TARGET8).dll
@@ -585,7 +588,7 @@ SHL2RPATH*=OOO
 LINKFLAGSRUNPATH_$(SHL2RPATH)*=/ERROR:/Bad_SHL2RPATH_value
 SHL2LINKFLAGS+=$(LINKFLAGSRUNPATH_$(SHL2RPATH))
 
-.IF "$(SHL2USE_EXPORTS)"==""
+.IF "$(SHL2USE_EXPORTS)"=="" || "$(GUI)"=="OS2"
 SHL2DEF*=$(MISC)/$(SHL2TARGET).def
 .ENDIF			# "$(SHL2USE_EXPORTS)"==""
 
@@ -1081,8 +1084,11 @@ $(SHL2TARGETN) : \
 
 .ENDIF			# "$(USE_DEFFILE)"!=""
 
-    $(COMMAND_ECHO)+$(IMPLIB) -p256 $(IMPLIBFLAGS) $(SHL2IMPLIBN) $@
-    $(COMMAND_ECHO)+$(IMPLIB) -p256 $(IMPLIBFLAGS) $(LB)/$(SHL2TARGET).lib $@
+.IF "$(SHL2USE_EXPORTS)"=="name"
+#03/11/2012  if 'name' is used, export from DLL file (only names, no ordinals)
+    @echo Build import library from DLL file.
+    $(COMMAND_ECHO)+$(IMPLIB) $(IMPLIBFLAGS) $(LB)/$(SHL2TARGETN:b).lib $@
+.ENDIF			# "$(SHL2USE_EXPORTS)"==""
 
 .IF "$(SHL2TARGET8)" != "$(SHL2TARGET)"
     $(COMMAND_ECHO)+$(COPY) $@ $(@:d)$(SHL2TARGET8).dll
@@ -1122,7 +1128,7 @@ SHL3RPATH*=OOO
 LINKFLAGSRUNPATH_$(SHL3RPATH)*=/ERROR:/Bad_SHL3RPATH_value
 SHL3LINKFLAGS+=$(LINKFLAGSRUNPATH_$(SHL3RPATH))
 
-.IF "$(SHL3USE_EXPORTS)"==""
+.IF "$(SHL3USE_EXPORTS)"=="" || "$(GUI)"=="OS2"
 SHL3DEF*=$(MISC)/$(SHL3TARGET).def
 .ENDIF			# "$(SHL3USE_EXPORTS)"==""
 
@@ -1618,8 +1624,11 @@ $(SHL3TARGETN) : \
 
 .ENDIF			# "$(USE_DEFFILE)"!=""
 
-    $(COMMAND_ECHO)+$(IMPLIB) -p256 $(IMPLIBFLAGS) $(SHL3IMPLIBN) $@
-    $(COMMAND_ECHO)+$(IMPLIB) -p256 $(IMPLIBFLAGS) $(LB)/$(SHL3TARGET).lib $@
+.IF "$(SHL3USE_EXPORTS)"=="name"
+#03/11/2012  if 'name' is used, export from DLL file (only names, no ordinals)
+    @echo Build import library from DLL file.
+    $(COMMAND_ECHO)+$(IMPLIB) $(IMPLIBFLAGS) $(LB)/$(SHL3TARGETN:b).lib $@
+.ENDIF			# "$(SHL3USE_EXPORTS)"==""
 
 .IF "$(SHL3TARGET8)" != "$(SHL3TARGET)"
     $(COMMAND_ECHO)+$(COPY) $@ $(@:d)$(SHL3TARGET8).dll
@@ -1659,7 +1668,7 @@ SHL4RPATH*=OOO
 LINKFLAGSRUNPATH_$(SHL4RPATH)*=/ERROR:/Bad_SHL4RPATH_value
 SHL4LINKFLAGS+=$(LINKFLAGSRUNPATH_$(SHL4RPATH))
 
-.IF "$(SHL4USE_EXPORTS)"==""
+.IF "$(SHL4USE_EXPORTS)"=="" || "$(GUI)"=="OS2"
 SHL4DEF*=$(MISC)/$(SHL4TARGET).def
 .ENDIF			# "$(SHL4USE_EXPORTS)"==""
 
@@ -2155,8 +2164,11 @@ $(SHL4TARGETN) : \
 
 .ENDIF			# "$(USE_DEFFILE)"!=""
 
-    $(COMMAND_ECHO)+$(IMPLIB) -p256 $(IMPLIBFLAGS) $(SHL4IMPLIBN) $@
-    $(COMMAND_ECHO)+$(IMPLIB) -p256 $(IMPLIBFLAGS) $(LB)/$(SHL4TARGET).lib $@
+.IF "$(SHL4USE_EXPORTS)"=="name"
+#03/11/2012  if 'name' is used, export from DLL file (only names, no ordinals)
+    @echo Build import library from DLL file.
+    $(COMMAND_ECHO)+$(IMPLIB) $(IMPLIBFLAGS) $(LB)/$(SHL4TARGETN:b).lib $@
+.ENDIF			# "$(SHL4USE_EXPORTS)"==""
 
 .IF "$(SHL4TARGET8)" != "$(SHL4TARGET)"
     $(COMMAND_ECHO)+$(COPY) $@ $(@:d)$(SHL4TARGET8).dll
@@ -2196,7 +2208,7 @@ SHL5RPATH*=OOO
 LINKFLAGSRUNPATH_$(SHL5RPATH)*=/ERROR:/Bad_SHL5RPATH_value
 SHL5LINKFLAGS+=$(LINKFLAGSRUNPATH_$(SHL5RPATH))
 
-.IF "$(SHL5USE_EXPORTS)"==""
+.IF "$(SHL5USE_EXPORTS)"=="" || "$(GUI)"=="OS2"
 SHL5DEF*=$(MISC)/$(SHL5TARGET).def
 .ENDIF			# "$(SHL5USE_EXPORTS)"==""
 
@@ -2692,8 +2704,11 @@ $(SHL5TARGETN) : \
 
 .ENDIF			# "$(USE_DEFFILE)"!=""
 
-    $(COMMAND_ECHO)+$(IMPLIB) -p256 $(IMPLIBFLAGS) $(SHL5IMPLIBN) $@
-    $(COMMAND_ECHO)+$(IMPLIB) -p256 $(IMPLIBFLAGS) $(LB)/$(SHL5TARGET).lib $@
+.IF "$(SHL5USE_EXPORTS)"=="name"
+#03/11/2012  if 'name' is used, export from DLL file (only names, no ordinals)
+    @echo Build import library from DLL file.
+    $(COMMAND_ECHO)+$(IMPLIB) $(IMPLIBFLAGS) $(LB)/$(SHL5TARGETN:b).lib $@
+.ENDIF			# "$(SHL5USE_EXPORTS)"==""
 
 .IF "$(SHL5TARGET8)" != "$(SHL5TARGET)"
     $(COMMAND_ECHO)+$(COPY) $@ $(@:d)$(SHL5TARGET8).dll
@@ -2733,7 +2748,7 @@ SHL6RPATH*=OOO
 LINKFLAGSRUNPATH_$(SHL6RPATH)*=/ERROR:/Bad_SHL6RPATH_value
 SHL6LINKFLAGS+=$(LINKFLAGSRUNPATH_$(SHL6RPATH))
 
-.IF "$(SHL6USE_EXPORTS)"==""
+.IF "$(SHL6USE_EXPORTS)"=="" || "$(GUI)"=="OS2"
 SHL6DEF*=$(MISC)/$(SHL6TARGET).def
 .ENDIF			# "$(SHL6USE_EXPORTS)"==""
 
@@ -3229,8 +3244,11 @@ $(SHL6TARGETN) : \
 
 .ENDIF			# "$(USE_DEFFILE)"!=""
 
-    $(COMMAND_ECHO)+$(IMPLIB) -p256 $(IMPLIBFLAGS) $(SHL6IMPLIBN) $@
-    $(COMMAND_ECHO)+$(IMPLIB) -p256 $(IMPLIBFLAGS) $(LB)/$(SHL6TARGET).lib $@
+.IF "$(SHL6USE_EXPORTS)"=="name"
+#03/11/2012  if 'name' is used, export from DLL file (only names, no ordinals)
+    @echo Build import library from DLL file.
+    $(COMMAND_ECHO)+$(IMPLIB) $(IMPLIBFLAGS) $(LB)/$(SHL6TARGETN:b).lib $@
+.ENDIF			# "$(SHL6USE_EXPORTS)"==""
 
 .IF "$(SHL6TARGET8)" != "$(SHL6TARGET)"
     $(COMMAND_ECHO)+$(COPY) $@ $(@:d)$(SHL6TARGET8).dll
@@ -3270,7 +3288,7 @@ SHL7RPATH*=OOO
 LINKFLAGSRUNPATH_$(SHL7RPATH)*=/ERROR:/Bad_SHL7RPATH_value
 SHL7LINKFLAGS+=$(LINKFLAGSRUNPATH_$(SHL7RPATH))
 
-.IF "$(SHL7USE_EXPORTS)"==""
+.IF "$(SHL7USE_EXPORTS)"=="" || "$(GUI)"=="OS2"
 SHL7DEF*=$(MISC)/$(SHL7TARGET).def
 .ENDIF			# "$(SHL7USE_EXPORTS)"==""
 
@@ -3766,8 +3784,11 @@ $(SHL7TARGETN) : \
 
 .ENDIF			# "$(USE_DEFFILE)"!=""
 
-    $(COMMAND_ECHO)+$(IMPLIB) -p256 $(IMPLIBFLAGS) $(SHL7IMPLIBN) $@
-    $(COMMAND_ECHO)+$(IMPLIB) -p256 $(IMPLIBFLAGS) $(LB)/$(SHL7TARGET).lib $@
+.IF "$(SHL7USE_EXPORTS)"=="name"
+#03/11/2012  if 'name' is used, export from DLL file (only names, no ordinals)
+    @echo Build import library from DLL file.
+    $(COMMAND_ECHO)+$(IMPLIB) $(IMPLIBFLAGS) $(LB)/$(SHL7TARGETN:b).lib $@
+.ENDIF			# "$(SHL7USE_EXPORTS)"==""
 
 .IF "$(SHL7TARGET8)" != "$(SHL7TARGET)"
     $(COMMAND_ECHO)+$(COPY) $@ $(@:d)$(SHL7TARGET8).dll
@@ -3807,7 +3828,7 @@ SHL8RPATH*=OOO
 LINKFLAGSRUNPATH_$(SHL8RPATH)*=/ERROR:/Bad_SHL8RPATH_value
 SHL8LINKFLAGS+=$(LINKFLAGSRUNPATH_$(SHL8RPATH))
 
-.IF "$(SHL8USE_EXPORTS)"==""
+.IF "$(SHL8USE_EXPORTS)"=="" || "$(GUI)"=="OS2"
 SHL8DEF*=$(MISC)/$(SHL8TARGET).def
 .ENDIF			# "$(SHL8USE_EXPORTS)"==""
 
@@ -4303,8 +4324,11 @@ $(SHL8TARGETN) : \
 
 .ENDIF			# "$(USE_DEFFILE)"!=""
 
-    $(COMMAND_ECHO)+$(IMPLIB) -p256 $(IMPLIBFLAGS) $(SHL8IMPLIBN) $@
-    $(COMMAND_ECHO)+$(IMPLIB) -p256 $(IMPLIBFLAGS) $(LB)/$(SHL8TARGET).lib $@
+.IF "$(SHL8USE_EXPORTS)"=="name"
+#03/11/2012  if 'name' is used, export from DLL file (only names, no ordinals)
+    @echo Build import library from DLL file.
+    $(COMMAND_ECHO)+$(IMPLIB) $(IMPLIBFLAGS) $(LB)/$(SHL8TARGETN:b).lib $@
+.ENDIF			# "$(SHL8USE_EXPORTS)"==""
 
 .IF "$(SHL8TARGET8)" != "$(SHL8TARGET)"
     $(COMMAND_ECHO)+$(COPY) $@ $(@:d)$(SHL8TARGET8).dll
@@ -4344,7 +4368,7 @@ SHL9RPATH*=OOO
 LINKFLAGSRUNPATH_$(SHL9RPATH)*=/ERROR:/Bad_SHL9RPATH_value
 SHL9LINKFLAGS+=$(LINKFLAGSRUNPATH_$(SHL9RPATH))
 
-.IF "$(SHL9USE_EXPORTS)"==""
+.IF "$(SHL9USE_EXPORTS)"=="" || "$(GUI)"=="OS2"
 SHL9DEF*=$(MISC)/$(SHL9TARGET).def
 .ENDIF			# "$(SHL9USE_EXPORTS)"==""
 
@@ -4840,8 +4864,11 @@ $(SHL9TARGETN) : \
 
 .ENDIF			# "$(USE_DEFFILE)"!=""
 
-    $(COMMAND_ECHO)+$(IMPLIB) -p256 $(IMPLIBFLAGS) $(SHL9IMPLIBN) $@
-    $(COMMAND_ECHO)+$(IMPLIB) -p256 $(IMPLIBFLAGS) $(LB)/$(SHL9TARGET).lib $@
+.IF "$(SHL9USE_EXPORTS)"=="name"
+#03/11/2012  if 'name' is used, export from DLL file (only names, no ordinals)
+    @echo Build import library from DLL file.
+    $(COMMAND_ECHO)+$(IMPLIB) $(IMPLIBFLAGS) $(LB)/$(SHL9TARGETN:b).lib $@
+.ENDIF			# "$(SHL9USE_EXPORTS)"==""
 
 .IF "$(SHL9TARGET8)" != "$(SHL9TARGET)"
     $(COMMAND_ECHO)+$(COPY) $@ $(@:d)$(SHL9TARGET8).dll
@@ -4881,7 +4908,7 @@ SHL10RPATH*=OOO
 LINKFLAGSRUNPATH_$(SHL10RPATH)*=/ERROR:/Bad_SHL10RPATH_value
 SHL10LINKFLAGS+=$(LINKFLAGSRUNPATH_$(SHL10RPATH))
 
-.IF "$(SHL10USE_EXPORTS)"==""
+.IF "$(SHL10USE_EXPORTS)"=="" || "$(GUI)"=="OS2"
 SHL10DEF*=$(MISC)/$(SHL10TARGET).def
 .ENDIF			# "$(SHL10USE_EXPORTS)"==""
 
@@ -5377,8 +5404,11 @@ $(SHL10TARGETN) : \
 
 .ENDIF			# "$(USE_DEFFILE)"!=""
 
-    $(COMMAND_ECHO)+$(IMPLIB) -p256 $(IMPLIBFLAGS) $(SHL10IMPLIBN) $@
-    $(COMMAND_ECHO)+$(IMPLIB) -p256 $(IMPLIBFLAGS) $(LB)/$(SHL10TARGET).lib $@
+.IF "$(SHL10USE_EXPORTS)"=="name"
+#03/11/2012  if 'name' is used, export from DLL file (only names, no ordinals)
+    @echo Build import library from DLL file.
+    $(COMMAND_ECHO)+$(IMPLIB) $(IMPLIBFLAGS) $(LB)/$(SHL10TARGETN:b).lib $@
+.ENDIF			# "$(SHL10USE_EXPORTS)"==""
 
 .IF "$(SHL10TARGET8)" != "$(SHL10TARGET)"
     $(COMMAND_ECHO)+$(COPY) $@ $(@:d)$(SHL10TARGET8).dll
@@ -5430,10 +5460,10 @@ $(SHL1IMPLIBN):	\
 
 .ELIF "$(GUI)" == "OS2"
 
-# touch creates an empty file, but this is not good for emxomfar, so
-# create a dummy lib here
-    $(COMMAND_ECHO)-$(LIBMGR) $(LIBFLAGS) $@ $(SHL1VERSIONOBJ)
-    +@echo build of $(SHL1TARGETN) creates $@
+    @echo Import libs generated with .def file or with .dll file.
+# make 'dmake' happy
+    @-$(RM) $@
+    @$(TOUCH) $@
 
 .ELSE
     @echo no ImportLibs on Mac and *ix
@@ -5484,10 +5514,10 @@ $(SHL2IMPLIBN):	\
 
 .ELIF "$(GUI)" == "OS2"
 
-# touch creates an empty file, but this is not good for emxomfar, so
-# create a dummy lib here
-    $(COMMAND_ECHO)-$(LIBMGR) $(LIBFLAGS) $@ $(SHL2VERSIONOBJ)
-    +@echo build of $(SHL2TARGETN) creates $@
+    @echo Import libs generated with .def file or with .dll file.
+# make 'dmake' happy
+    @-$(RM) $@
+    @$(TOUCH) $@
 
 .ELSE
     @echo no ImportLibs on Mac and *ix
@@ -5538,10 +5568,10 @@ $(SHL3IMPLIBN):	\
 
 .ELIF "$(GUI)" == "OS2"
 
-# touch creates an empty file, but this is not good for emxomfar, so
-# create a dummy lib here
-    $(COMMAND_ECHO)-$(LIBMGR) $(LIBFLAGS) $@ $(SHL3VERSIONOBJ)
-    +@echo build of $(SHL3TARGETN) creates $@
+    @echo Import libs generated with .def file or with .dll file.
+# make 'dmake' happy
+    @-$(RM) $@
+    @$(TOUCH) $@
 
 .ELSE
     @echo no ImportLibs on Mac and *ix
@@ -5592,10 +5622,10 @@ $(SHL4IMPLIBN):	\
 
 .ELIF "$(GUI)" == "OS2"
 
-# touch creates an empty file, but this is not good for emxomfar, so
-# create a dummy lib here
-    $(COMMAND_ECHO)-$(LIBMGR) $(LIBFLAGS) $@ $(SHL4VERSIONOBJ)
-    +@echo build of $(SHL4TARGETN) creates $@
+    @echo Import libs generated with .def file or with .dll file.
+# make 'dmake' happy
+    @-$(RM) $@
+    @$(TOUCH) $@
 
 .ELSE
     @echo no ImportLibs on Mac and *ix
@@ -5646,10 +5676,10 @@ $(SHL5IMPLIBN):	\
 
 .ELIF "$(GUI)" == "OS2"
 
-# touch creates an empty file, but this is not good for emxomfar, so
-# create a dummy lib here
-    $(COMMAND_ECHO)-$(LIBMGR) $(LIBFLAGS) $@ $(SHL5VERSIONOBJ)
-    +@echo build of $(SHL5TARGETN) creates $@
+    @echo Import libs generated with .def file or with .dll file.
+# make 'dmake' happy
+    @-$(RM) $@
+    @$(TOUCH) $@
 
 .ELSE
     @echo no ImportLibs on Mac and *ix
@@ -5700,10 +5730,10 @@ $(SHL6IMPLIBN):	\
 
 .ELIF "$(GUI)" == "OS2"
 
-# touch creates an empty file, but this is not good for emxomfar, so
-# create a dummy lib here
-    $(COMMAND_ECHO)-$(LIBMGR) $(LIBFLAGS) $@ $(SHL6VERSIONOBJ)
-    +@echo build of $(SHL6TARGETN) creates $@
+    @echo Import libs generated with .def file or with .dll file.
+# make 'dmake' happy
+    @-$(RM) $@
+    @$(TOUCH) $@
 
 .ELSE
     @echo no ImportLibs on Mac and *ix
@@ -5754,10 +5784,10 @@ $(SHL7IMPLIBN):	\
 
 .ELIF "$(GUI)" == "OS2"
 
-# touch creates an empty file, but this is not good for emxomfar, so
-# create a dummy lib here
-    $(COMMAND_ECHO)-$(LIBMGR) $(LIBFLAGS) $@ $(SHL7VERSIONOBJ)
-    +@echo build of $(SHL7TARGETN) creates $@
+    @echo Import libs generated with .def file or with .dll file.
+# make 'dmake' happy
+    @-$(RM) $@
+    @$(TOUCH) $@
 
 .ELSE
     @echo no ImportLibs on Mac and *ix
@@ -5808,10 +5838,10 @@ $(SHL8IMPLIBN):	\
 
 .ELIF "$(GUI)" == "OS2"
 
-# touch creates an empty file, but this is not good for emxomfar, so
-# create a dummy lib here
-    $(COMMAND_ECHO)-$(LIBMGR) $(LIBFLAGS) $@ $(SHL8VERSIONOBJ)
-    +@echo build of $(SHL8TARGETN) creates $@
+    @echo Import libs generated with .def file or with .dll file.
+# make 'dmake' happy
+    @-$(RM) $@
+    @$(TOUCH) $@
 
 .ELSE
     @echo no ImportLibs on Mac and *ix
@@ -5862,10 +5892,10 @@ $(SHL9IMPLIBN):	\
 
 .ELIF "$(GUI)" == "OS2"
 
-# touch creates an empty file, but this is not good for emxomfar, so
-# create a dummy lib here
-    $(COMMAND_ECHO)-$(LIBMGR) $(LIBFLAGS) $@ $(SHL9VERSIONOBJ)
-    +@echo build of $(SHL9TARGETN) creates $@
+    @echo Import libs generated with .def file or with .dll file.
+# make 'dmake' happy
+    @-$(RM) $@
+    @$(TOUCH) $@
 
 .ELSE
     @echo no ImportLibs on Mac and *ix
@@ -5916,10 +5946,10 @@ $(SHL10IMPLIBN):	\
 
 .ELIF "$(GUI)" == "OS2"
 
-# touch creates an empty file, but this is not good for emxomfar, so
-# create a dummy lib here
-    $(COMMAND_ECHO)-$(LIBMGR) $(LIBFLAGS) $@ $(SHL10VERSIONOBJ)
-    +@echo build of $(SHL10TARGETN) creates $@
+    @echo Import libs generated with .def file or with .dll file.
+# make 'dmake' happy
+    @-$(RM) $@
+    @$(TOUCH) $@
 
 .ELSE
     @echo no ImportLibs on Mac and *ix

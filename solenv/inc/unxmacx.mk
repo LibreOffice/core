@@ -111,7 +111,7 @@ CFLAGSEXCEPTIONS=-fexceptions -fno-enforce-eh-specs
 CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 
 # Normal C++ compilation flags
-CFLAGSCXX=-pipe -malign-natural -fsigned-char -Wno-long-double $(ARCH_FLAGS)
+CFLAGSCXX=-pipe -malign-natural -fsigned-char $(ARCH_FLAGS)
 CFLAGSCXX+= -Wno-ctor-dtor-privacy
 
 PICSWITCH:=-fPIC

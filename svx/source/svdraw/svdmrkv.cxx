@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
@@ -34,11 +32,9 @@
 #include <svx/svdpagv.hxx>
 #include <svx/svdpage.hxx>
 #include "svddrgm1.hxx"
-
 #ifdef DBG_UTIL
 #include <svdibrow.hxx>
 #endif
-
 #include <svx/svdoole2.hxx>
 #include <svx/xgrad.hxx>
 #include <svx/xflgrit.hxx>
@@ -55,6 +51,8 @@
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdrhittesthelper.hxx>
 #include <svx/svdlegacy.hxx>
+#include <svx/svdocapt.hxx>
+#include <svx/svdograf.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // selection visualisation of Objects, Points and GluePoints
@@ -642,14 +640,21 @@ void SdrMarkView::SetMarkHandles()
     maViewHandleList.SetDistortShear(SDRDRAG_SHEAR == GetDragMode());
     const SdrObjectVector aSelection(getSelectedSdrObjectVectorFromSdrMarkView());
     const bool bStdDrag(SDRDRAG_MOVE == GetDragMode());
-    const bool bFrmHdl(ImpIsFrameHandles());
+    bool bFrmHdl(ImpIsFrameHandles());
+    const SdrObject* pSingleSelected = getSelectedIfSingle();
+    const SdrTextObj* pSingleTextObj = dynamic_cast< const SdrTextObj* >(pSingleSelected);
+    const bool bSingleTextObjMark(pSingleTextObj && pSingleTextObj->IsTextFrame());
+
+    // #122142# for captions in TextEdit, force to FrameHdls to get the special text selection
+    if(!bFrmHdl && bSingleTextObjMark && dynamic_cast< const SdrCaptionObj* >(pSingleSelected))
+    {
+        bFrmHdl = true;
+    }
 
     if(bFrmHdl)
     {
         const basegfx::B2DRange& rSnapRange(getMarkedObjectSnapRange());
-        SdrObject* pSingleSelected = getSelectedIfSingle();
-        SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >(pSingleSelected);
-        const bool bHideHandlesWhenInTextEdit(getAsSdrView()->IsTextEdit() && pTextObj && pTextObj->IsInEditMode());
+        const bool bHideHandlesWhenInTextEdit(getAsSdrView()->IsTextEdit() && pSingleTextObj && pSingleTextObj->IsInEditMode());
 
         // #i118524# if inplace activated OLE is selected,
         // suppress handles
@@ -663,12 +668,10 @@ void SdrMarkView::SetMarkHandles()
 
         if(!rSnapRange.isEmpty() && !bHideHandlesWhenInTextEdit && !bHideHandlesWhenOleActive)
         {
-            const bool bSingleTextObjMark(1 == aSelection.size() && pTextObj && pTextObj->IsTextFrame());
-
             if(bSingleTextObjMark)
             {
                 const sal_uInt32 nSiz0(maViewHandleList.GetHdlCount());
-                pTextObj->AddToHdlList(maViewHandleList);
+                pSingleTextObj->AddToHdlList(maViewHandleList);
                 const sal_uInt32 nSiz1(maViewHandleList.GetHdlCount());
 
                 for(sal_uInt32 i(nSiz0); i < nSiz1; i++)
@@ -679,6 +682,52 @@ void SdrMarkView::SetMarkHandles()
             }
             else if(SDRDRAG_CROP == GetDragMode())
             {
+                const SdrGrafObj* pSdrGrafObj = dynamic_cast< const SdrGrafObj* >(pSingleSelected);
+
+                if(pSdrGrafObj)
+                {
+                    const SdrGrafCropItem& rCrop = static_cast< const SdrGrafCropItem& >(pSdrGrafObj->GetMergedItem(SDRATTR_GRAFCROP));
+
+                    if(rCrop.GetLeft() || rCrop.GetTop() || rCrop.GetRight() ||rCrop.GetBottom())
+                    {
+                        // get and decompose object transfoemation to have current translate and scale
+                        const basegfx::B2DHomMatrix aMatrix(pSdrGrafObj->getSdrObjectTransformation());
+                        basegfx::B2DVector aScale, aTranslate;
+                        double fRotate, fShearX;
+
+                        aMatrix.decompose(aScale, aTranslate, fRotate, fShearX);
+
+                        if(!aScale.equalZero())
+                        {
+                            // get crop scale
+                            const basegfx::B2DVector aCropScaleFactor(
+                                pSdrGrafObj->GetGraphicObject().calculateCropScaling(
+                                    aScale.getX(),
+                                    aScale.getY(),
+                                    rCrop.GetLeft(),
+                                    rCrop.GetTop(),
+                                    rCrop.GetRight(),
+                                    rCrop.GetBottom()));
+
+                            // apply crop scale
+                            const double fCropLeft(rCrop.GetLeft() * aCropScaleFactor.getX());
+                            const double fCropTop(rCrop.GetTop() * aCropScaleFactor.getY());
+                            const double fCropRight(rCrop.GetRight() * aCropScaleFactor.getX());
+                            const double fCropBottom(rCrop.GetBottom() * aCropScaleFactor.getY());
+
+                            new SdrCropViewHdl(
+                                maViewHandleList,
+                                *pSingleSelected,
+                                aMatrix,
+                                pSdrGrafObj->GetGraphicObject().GetGraphic(),
+                                fCropLeft,
+                                fCropTop,
+                                fCropRight,
+                                fCropBottom);
+                        }
+                    }
+                }
+
                 const basegfx::B2DPoint aCenter(rSnapRange.getCenter());
 
                 new SdrCropHdl(maViewHandleList, *pSingleSelected, HDL_UPLFT, rSnapRange.getMinimum());
@@ -689,6 +738,7 @@ void SdrMarkView::SetMarkHandles()
                 new SdrCropHdl(maViewHandleList, *pSingleSelected, HDL_LWLFT, basegfx::B2DTuple(rSnapRange.getMinX(), rSnapRange.getMaxY()));
                 new SdrCropHdl(maViewHandleList, *pSingleSelected, HDL_LOWER, basegfx::B2DTuple(aCenter.getX(), rSnapRange.getMaxY()));
                 new SdrCropHdl(maViewHandleList, *pSingleSelected, HDL_LWRGT, rSnapRange.getMaximum());
+
             }
             else
             {
@@ -1262,9 +1312,9 @@ bool SdrMarkView::IsMarkedObjHit(const basegfx::B2DPoint& rPnt, double fTol) con
     return bRet;
 }
 
-SdrHdl* SdrMarkView::PickHandle(const basegfx::B2DPoint& rPnt, sal_uInt32 nOptions, SdrHdl* pHdl0) const
+SdrHdl* SdrMarkView::PickHandle(const basegfx::B2DPoint& rPnt) const
 {
-    return maViewHandleList.IsHdlListHit(rPnt, pHdl0);
+    return maViewHandleList.IsHdlListHit(rPnt);
 }
 
 bool SdrMarkView::MarkObj(const basegfx::B2DPoint& rPnt, double fTol, bool bToggle, bool bDeep)

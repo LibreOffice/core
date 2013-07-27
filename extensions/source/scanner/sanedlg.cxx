@@ -19,20 +19,18 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <tools/config.hxx>
-
 #include <vcl/msgbox.hxx>
 #include <sanedlg.hxx>
 #include <sanedlg.hrc>
 #include <grid.hxx>
 #include <math.h>
+#include <vcl/dibtools.hxx>
 
 #define USE_SAVE_STATE
 #undef  SAVE_ALL_STATES
@@ -732,7 +730,7 @@ void SaneDlg::AcquirePreview()
         fprintf( stderr, "Previewbitmapstream contains %d bytes\n", (int)aTransporter.getStream().Tell() );
 #endif
         aTransporter.getStream().Seek( STREAM_SEEK_TO_BEGIN );
-        maPreviewBitmap.Read( aTransporter.getStream(), sal_True );
+        ReadDIB(maPreviewBitmap, aTransporter.getStream(), true);
     }
 
     SetAdjustedNumericalValue( "resolution", fResl );

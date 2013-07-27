@@ -224,15 +224,7 @@ ostream & XMLTag::output(ostream & o, const string & sIndent) const
     return o;
 }
 
-struct eqstr
-{
-    bool operator()(const char* s1, const char* s2) const
-    {
-        return strcmp(s1, s2) == 0;
-    }
-};
-
-typedef hash_map<const char *, TagLogger::Pointer_t, hash<const char *>, eqstr> TagLoggerHashMap_t;
+typedef hash_map< const char*, TagLogger::Pointer_t, rtl::CStringHash, rtl::CStringEqual> TagLoggerHashMap_t;
 static TagLoggerHashMap_t * tagLoggers = NULL;
 
 TagLogger::TagLogger()

@@ -379,10 +379,10 @@ sal_Bool ScViewFunc::PasteObject( const basegfx::B2DPoint& rPos, const uno::Refe
         return sal_False;
 }
 
-sal_Bool ScViewFunc::PasteBitmap( const basegfx::B2DPoint& rPos, const Bitmap& rBmp )
+sal_Bool ScViewFunc::PasteBitmapEx( const basegfx::B2DPoint& rPos, const BitmapEx& rBmpEx )
 {
     String aEmpty;
-    Graphic aGraphic(rBmp);
+    Graphic aGraphic(rBmpEx);
     return PasteGraphic( rPos, aGraphic, aEmpty, aEmpty );
 }
 

@@ -660,10 +660,10 @@ SvxAreaTabPage::SvxAreaTabPage( Window* pParent, const SfxItemSet& rInAttrs ) :
 
     rOutAttrs           ( rInAttrs ),
 
-    pColorTab( NULL ),
-    pGradientList( NULL ),
-    pHatchingList( NULL ),
-    pBitmapList( NULL ),
+    maColorTab(),
+    maGradientList(),
+    maHatchingList(),
+    maBitmapList(),
 
     pXPool              ( (XOutdevItemPool*) rInAttrs.GetPool() ),
     aXFillAttr          ( pXPool ),
@@ -787,12 +787,12 @@ SvxAreaTabPage::SvxAreaTabPage( Window* pParent, const SfxItemSet& rInAttrs ) :
 void SvxAreaTabPage::Construct()
 {
     // fill colortables / lists
-    aLbColor.Fill( pColorTab );
-    aLbHatchBckgrdColor.Fill ( pColorTab );
+    aLbColor.Fill( maColorTab );
+    aLbHatchBckgrdColor.Fill ( maColorTab );
 
-    aLbGradient.Fill( pGradientList );
-    aLbHatching.Fill( pHatchingList );
-    aLbBitmap.Fill( pBitmapList );
+    aLbGradient.Fill( maGradientList );
+    aLbHatching.Fill( maHatchingList );
+    aLbBitmap.Fill( maBitmapList );
 }
 
 // -----------------------------------------------------------------------
@@ -813,19 +813,18 @@ void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
     {
         *pbAreaTP = sal_True;
 
-        if( pColorTab )
+        if( maColorTab.get() )
         {
             // Bitmapliste
             if( *pnBitmapListState )
             {
                 if( *pnBitmapListState & CT_CHANGED )
-                    pBitmapList = ( (SvxAreaTabDialog*) DLGWIN )->
-                                            GetNewBitmapList();
+                    maBitmapList = ( (SvxAreaTabDialog*) DLGWIN )->GetNewBitmapList();
 
                 _nPos = aLbBitmap.GetSelectEntryPos();
 
                 aLbBitmap.Clear();
-                aLbBitmap.Fill( pBitmapList );
+                aLbBitmap.Fill( maBitmapList );
                 nCount = aLbBitmap.GetEntryCount();
                 if( nCount == 0 )
                     ; // This case should never occur
@@ -839,13 +838,12 @@ void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
             if( *pnHatchingListState )
             {
                 if( *pnHatchingListState & CT_CHANGED )
-                    pHatchingList = ( (SvxAreaTabDialog*) DLGWIN )->
-                                            GetNewHatchingList();
+                    maHatchingList = ( (SvxAreaTabDialog*) DLGWIN )->GetNewHatchingList();
 
                 _nPos = aLbHatching.GetSelectEntryPos();
 
                 aLbHatching.Clear();
-                aLbHatching.Fill( pHatchingList );
+                aLbHatching.Fill( maHatchingList );
                 nCount = aLbHatching.GetEntryCount();
                 if( nCount == 0 )
                     ; // This case should never occur
@@ -861,13 +859,12 @@ void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
             if( *pnGradientListState )
             {
                 if( *pnGradientListState & CT_CHANGED )
-                    pGradientList = ( (SvxAreaTabDialog*) DLGWIN )->
-                                            GetNewGradientList();
+                    maGradientList = ( (SvxAreaTabDialog*) DLGWIN )->GetNewGradientList();
 
                 _nPos = aLbGradient.GetSelectEntryPos();
 
                 aLbGradient.Clear();
-                aLbGradient.Fill( pGradientList );
+                aLbGradient.Fill( maGradientList );
                 nCount = aLbGradient.GetEntryCount();
                 if( nCount == 0 )
                     ; // This case should never occur
@@ -881,12 +878,11 @@ void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
             if( *pnColorTableState )
             {
                 if( *pnColorTableState & CT_CHANGED )
-                    pColorTab = ( (SvxAreaTabDialog*) DLGWIN )->
-                                            GetNewColorTable();
+                    maColorTab = ( (SvxAreaTabDialog*) DLGWIN )->GetNewColorTable();
                 // aLbColor
                 _nPos = aLbColor.GetSelectEntryPos();
                 aLbColor.Clear();
-                aLbColor.Fill( pColorTab );
+                aLbColor.Fill( maColorTab );
                 nCount = aLbColor.GetEntryCount();
                 if( nCount == 0 )
                     ; // This case should never occur
@@ -900,7 +896,7 @@ void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
                 // Backgroundcolor of hatch
                 _nPos = aLbHatchBckgrdColor.GetSelectEntryPos();
                 aLbHatchBckgrdColor.Clear();
-                aLbHatchBckgrdColor.Fill( pColorTab );
+                aLbHatchBckgrdColor.Fill( maColorTab );
                 nCount = aLbHatchBckgrdColor.GetEntryCount();
                 if( nCount == 0 )
                     ; // This case should never occur
@@ -1055,7 +1051,7 @@ sal_Bool SvxAreaTabPage::FillItemSet( SfxItemSet& rAttrs )
                 if( _nPos != LISTBOX_ENTRY_NOTFOUND &&
                     _nPos != aLbGradient.GetSavedValue() )
                 {
-                    XGradient aGradient = pGradientList->GetGradient( _nPos )->GetGradient();
+                    XGradient aGradient = maGradientList->GetGradient( _nPos )->GetGradient();
                     String aString = aLbGradient.GetSelectEntry();
                     XFillGradientItem aItem( aString, aGradient );
                     pOld = GetOldItem( rAttrs, XATTR_FILLGRADIENT );
@@ -1086,7 +1082,7 @@ sal_Bool SvxAreaTabPage::FillItemSet( SfxItemSet& rAttrs )
                 if( _nPos != LISTBOX_ENTRY_NOTFOUND &&
                    _nPos != aLbHatching.GetSavedValue() )
                 {
-                    XHatch aHatching = pHatchingList->GetHatch( _nPos )->GetHatch();
+                    XHatch aHatching = maHatchingList->GetHatch( _nPos )->GetHatch();
                     String aString = aLbHatching.GetSelectEntry();
                     XFillHatchItem aItem( aString, aHatching );
                     pOld = GetOldItem( rAttrs, XATTR_FILLHATCH );
@@ -1132,7 +1128,7 @@ sal_Bool SvxAreaTabPage::FillItemSet( SfxItemSet& rAttrs )
                 if( nPos != LISTBOX_ENTRY_NOTFOUND &&
                     nPos != aLbBitmap.GetSavedValue() )
                 {
-                    const XBitmapEntry* pXBitmapEntry = pBitmapList->GetBitmap(nPos);
+                    const XBitmapEntry* pXBitmapEntry = maBitmapList->GetBitmap(nPos);
                     const String aString(aLbBitmap.GetSelectEntry());
                     const XFillBitmapItem aFillBitmapItem(aString, pXBitmapEntry->GetGraphicObject());
                     pOld = GetOldItem( rAttrs, XATTR_FILLBITMAP );
@@ -1473,7 +1469,7 @@ void SvxAreaTabPage::Reset( const SfxItemSet& rAttrs )
                     String    aString( aGradientItem.GetName() );
                     XGradient aGradient( aGradientItem.GetGradientValue() );
 
-                    aLbGradient.SelectEntryByList( pGradientList, aString, aGradient );
+                    aLbGradient.SelectEntryByList( maGradientList, aString, aGradient );
                 }
                 ClickGradientHdl_Impl( this );
             break;
@@ -1870,9 +1866,9 @@ IMPL_LINK( SvxAreaTabPage, ClickColorHdl_Impl, void *, EMPTYARG )
 
     // Text der Tabelle setzen
     String          aString( CUI_RES( RID_SVXSTR_TABLE ) ); aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
-    INetURLObject   aURL( pColorTab->GetPath() );
+    INetURLObject   aURL( maColorTab->GetPath() );
 
-    aURL.Append( pColorTab->GetName() );
+    aURL.Append( maColorTab->GetName() );
     DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
     if( aURL.getBase().getLength() > 18 )
@@ -1960,9 +1956,9 @@ IMPL_LINK( SvxAreaTabPage, ClickGradientHdl_Impl, void *, EMPTYARG )
 
     // Text der Tabelle setzen
     String          aString( CUI_RES( RID_SVXSTR_TABLE ) ); aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
-    INetURLObject   aURL( pGradientList->GetPath() );
+    INetURLObject   aURL( maGradientList->GetPath() );
 
-    aURL.Append( pGradientList->GetName() );
+    aURL.Append( maGradientList->GetName() );
     DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
     if( aURL.getBase().getLength() > 18 )
@@ -1987,7 +1983,7 @@ IMPL_LINK( SvxAreaTabPage, ModifyGradientHdl_Impl, void *, EMPTYARG )
     if( _nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         // ItemSet fuellen und an aCtlXRectPreview weiterleiten
-        XGradientEntry* pEntry = pGradientList->GetGradient( _nPos );
+        XGradientEntry* pEntry = maGradientList->GetGradient( _nPos );
 
         rXFSet.Put( XFillStyleItem( XFILL_GRADIENT ) );
         rXFSet.Put( XFillGradientItem( String(),
@@ -2055,9 +2051,9 @@ IMPL_LINK( SvxAreaTabPage, ClickHatchingHdl_Impl, void *, EMPTYARG )
 
     // Text der Tabelle setzen
     String          aString( CUI_RES( RID_SVXSTR_TABLE ) );     aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
-    INetURLObject   aURL( pHatchingList->GetPath() );
+    INetURLObject   aURL( maHatchingList->GetPath() );
 
-    aURL.Append( pHatchingList->GetName() );
+    aURL.Append( maHatchingList->GetName() );
     DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
     if( aURL.getBase().getLength() > 18 )
@@ -2084,7 +2080,7 @@ IMPL_LINK( SvxAreaTabPage, ModifyHatchingHdl_Impl, void *, EMPTYARG )
     if( _nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         // ItemSet fuellen und an aCtlXRectPreview weiterleiten
-        XHatchEntry* pEntry = pHatchingList->GetHatch( _nPos );
+        XHatchEntry* pEntry = maHatchingList->GetHatch( _nPos );
 
         rXFSet.Put( XFillStyleItem( XFILL_HATCH ) );
         rXFSet.Put( XFillHatchItem( String(), pEntry->GetHatch() ) );
@@ -2223,9 +2219,9 @@ IMPL_LINK( SvxAreaTabPage, ClickBitmapHdl_Impl, void *, EMPTYARG )
 
     // Text der Tabelle setzen
     String          aString( CUI_RES( RID_SVXSTR_TABLE ) );     aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
-    INetURLObject   aURL( pBitmapList->GetPath() );
+    INetURLObject   aURL( maBitmapList->GetPath() );
 
-    aURL.Append( pBitmapList->GetName() );
+    aURL.Append( maBitmapList->GetName() );
     DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
     if( aURL.getBase().getLength() > 18 )
@@ -2250,7 +2246,7 @@ IMPL_LINK( SvxAreaTabPage, ModifyBitmapHdl_Impl, void *, EMPTYARG )
     if( _nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         // ItemSet fuellen und an aCtlXRectPreview weiterleiten
-        const XBitmapEntry* pEntry = pBitmapList->GetBitmap(_nPos);
+        const XBitmapEntry* pEntry = maBitmapList->GetBitmap(_nPos);
 
         rXFSet.Put(XFillStyleItem(XFILL_BITMAP));
         rXFSet.Put(XFillBitmapItem(String(), pEntry->GetGraphicObject()));

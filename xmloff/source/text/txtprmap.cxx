@@ -37,13 +37,13 @@ using namespace ::com::sun::star::uno;
 using namespace ::xmloff::token;
 
 #define _M_E( a, p, l, t, c ) \
-    { a, sizeof(a)-1, XML_NAMESPACE_##p, XML_##l, t, c, SvtSaveOptions::ODFVER_010 }
+    { a, sizeof(a)-1, XML_NAMESPACE_##p, XML_##l, static_cast<sal_Int32>(t), c, SvtSaveOptions::ODFVER_010 }
 
 #define _M_EV( a, p, l, t, c, v ) \
-    { a, sizeof(a)-1, XML_NAMESPACE_##p, XML_##l, t, c, v }
+    { a, sizeof(a)-1, XML_NAMESPACE_##p, XML_##l, static_cast<sal_Int32>(t), c, v }
 
 #define _M_ED( a, p, l, t, c ) \
-    { a, sizeof(a)-1, XML_NAMESPACE_##p, XML_##l, (t) | MID_FLAG_DEFAULT_ITEM_EXPORT, c, SvtSaveOptions::ODFVER_010 }
+    { a, sizeof(a)-1, XML_NAMESPACE_##p, XML_##l, static_cast<sal_Int32>((t) | MID_FLAG_DEFAULT_ITEM_EXPORT), c, SvtSaveOptions::ODFVER_010 }
 
 // text properties
 #define MT_E( a, p, l, t, c ) \

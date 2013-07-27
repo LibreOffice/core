@@ -28,6 +28,7 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/alpha.hxx>
 #include <tools/color.hxx>
+#include <basegfx/color/bcolormodifier.hxx>
 
 // -------------------
 // - TransparentType -
@@ -46,9 +47,9 @@ enum TransparentType
 
 class VCL_DLLPUBLIC BitmapEx
 {
-    friend class ImpGraphic;
-
 private:
+    friend class ImpGraphic;
+    friend bool VCL_DLLPUBLIC WriteDIBBitmapEx(const BitmapEx& rSource, SvStream& rOStm);
 
     Bitmap              aBitmap;
     Bitmap              aMask;
@@ -59,14 +60,8 @@ private:
 
 public:
 
-//#if 0 // _SOLAR__PRIVATE
-
     SAL_DLLPRIVATE  ImpBitmap*  ImplGetBitmapImpBitmap() const { return aBitmap.ImplGetImpBitmap(); }
     SAL_DLLPRIVATE  ImpBitmap*  ImplGetMaskImpBitmap() const { return aMask.ImplGetImpBitmap(); }
-
-//#endif // PRIVATE
-
-public:
 
                         BitmapEx();
                         BitmapEx( const ResId& rResId );
@@ -109,7 +104,7 @@ public:
     AlphaMask           GetAlpha() const;
 
     const Size&         GetSizePixel() const { return aBitmapSize; }
-    void                SetSizePixel( const Size& rNewSize );
+    void                SetSizePixel( const Size& rNewSize, sal_uInt32 nScaleFlag = BMP_SCALE_FASTESTINTERPOLATE );
 
     const Size&         GetPrefSize() const { return aBitmap.GetPrefSize(); }
     void                SetPrefSize( const Size& rPrefSize ) { aBitmap.SetPrefSize( rPrefSize ); }
@@ -255,7 +250,7 @@ public:
 
         @return sal_True, if the operation was completed successfully.
      */
-    sal_Bool                Scale( const Size& rNewSize, sal_uLong nScaleFlag = BMP_SCALE_FASTESTINTERPOLATE );
+    sal_Bool                Scale( const Size& rNewSize, sal_uInt32 nScaleFlag = BMP_SCALE_FASTESTINTERPOLATE );
 
     /** Scale the bitmap
 
@@ -267,7 +262,7 @@ public:
 
         @return sal_True, if the operation was completed successfully.
      */
-    sal_Bool                Scale( const double& rScaleX, const double& rScaleY, sal_uLong nScaleFlag = BMP_SCALE_FASTESTINTERPOLATE );
+    sal_Bool                Scale( const double& rScaleX, const double& rScaleY, sal_uInt32 nScaleFlag = BMP_SCALE_FASTESTINTERPOLATE );
 
     /** Rotate bitmap by the specified angle
 
@@ -387,10 +382,75 @@ public:
      */
     sal_uInt8 GetTransparency(sal_Int32 nX, sal_Int32 nY) const;
 
-public:
+    /** Create transformed Bitmap
 
-    friend VCL_DLLPUBLIC SvStream&  operator<<( SvStream& rOStm, const BitmapEx& rBitmapEx );
-    friend VCL_DLLPUBLIC SvStream&  operator>>( SvStream& rIStm, BitmapEx& rBitmapEx );
+        @param fWidth
+        The target width in pixels
+
+        @param fHeight
+        The target height in pixels
+
+        @param rTransformation
+        The back transformation for each pixel in (0 .. fWidth),(0 .. fHeight) to
+        local pixel coordiantes
+    */
+    BitmapEx TransformBitmapEx(
+        double fWidth,
+        double fHeight,
+        const basegfx::B2DHomMatrix& rTransformation) const;
+
+    /** Create transformed Bitmap
+
+        @param rTransformation
+        The transformation from unit coordinates to target
+
+        @param fMaximumArea
+        A limitation for the maximum size of pixels to use for the result
+
+        @return The transformed bitmap
+    */
+    BitmapEx getTransformed(
+        const basegfx::B2DHomMatrix& rTransformation,
+        double fMaximumArea = 500000.0) const;
+
+    /** Create ColorStack-modified version of this BitmapEx
+
+        @param rBColorModifierStack
+        A ColrModifierStack which defines how each pixel has to be modified
+    */
+    BitmapEx ModifyBitmapEx(const basegfx::BColorModifierStack& rBColorModifierStack) const;
 };
+
+// ------------------------------------------------------------------
+/** Create a blend frame as BitmapEx
+
+    @param nAlpha
+    The blend value defines how strong the frame will be blended with the
+    existing content, 255 == full coverage, 0 == no frame will be drawn
+
+    @param aColorTopLeft, aColorBottomRight, aColorTopRight, aColorBottomLeft
+    The colors defining the frame. If the version without aColorTopRight and
+    aColorBottomLeft is used, these colors are linearly interpolated from
+    aColorTopLeft and aColorBottomRight using the width and height of the area
+
+    @param rSize
+    The size of the frame in pixels
+    */
+
+BitmapEx VCL_DLLPUBLIC createBlendFrame(
+    const Size& rSize,
+    sal_uInt8 nAlpha,
+    Color aColorTopLeft,
+    Color aColorBottomRight);
+
+BitmapEx VCL_DLLPUBLIC createBlendFrame(
+    const Size& rSize,
+    sal_uInt8 nAlpha,
+    Color aColorTopLeft,
+    Color aColorTopRight,
+    Color aColorBottomRight,
+    Color aColorBottomLeft);
+
+// ------------------------------------------------------------------
 
 #endif // _SV_BITMAPEX_HXX

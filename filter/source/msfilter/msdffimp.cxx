@@ -141,6 +141,7 @@ using namespace vos;
 #include "svx/EnhancedCustomShape2d.hxx"
 #include <svx/svdlegacy.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <vcl/dibtools.hxx>
 
 using namespace ::com::sun::star    ;
 using namespace ::com::sun::star::drawing;
@@ -1017,11 +1018,11 @@ void DffPropertyReader::ApplyLineAttributes( SfxItemSet& rSet, const MSO_SPT eSh
         if ( eShapeType == mso_sptMin )
             eLineJointDefault = mso_lineJoinRound;
         MSO_LineJoin eLineJoint = (MSO_LineJoin)GetPropertyValue( DFF_Prop_lineJoinStyle, eLineJointDefault );
-        XLineJoint eXLineJoint( XLINEJOINT_MITER );
+        com::sun::star::drawing::LineJoint eXLineJoint( com::sun::star::drawing::LineJoint_MITER );
         if ( eLineJoint == mso_lineJoinBevel )
-            eXLineJoint = XLINEJOINT_BEVEL;
+            eXLineJoint = com::sun::star::drawing::LineJoint_BEVEL;
         else if ( eLineJoint == mso_lineJoinRound )
-            eXLineJoint = XLINEJOINT_ROUND;
+            eXLineJoint = com::sun::star::drawing::LineJoint_ROUND;
         rSet.Put( XLineJointItem( eXLineJoint ) );
 
         if ( nLineFlags & 0x10 )
@@ -1702,7 +1703,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         {
             const rtl::OUString sDepth( RTL_CONSTASCII_USTRINGPARAM ( "Depth" ) );
             double fBackDepth = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DExtrudeBackward, 1270 * 360 )) / 360.0;
-            double fForeDepth = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DExtrudeForward ), 0 ) / 360.0;
+            double fForeDepth = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DExtrudeForward, 0 )) / 360.0;
             double fDepth = fBackDepth + fForeDepth;
             double fFraction = fDepth != 0.0 ? fForeDepth / fDepth : 0;
             EnhancedCustomShapeParameterPair aDepthParaPair;
@@ -2892,7 +2893,7 @@ void DffPropertyReader::ImportGradientColor( SfxItemSet& aSet,MSO_FillType eMSO_
         nChgColors ^= 1;
     else if ( nFocus < 0 )//If it is a negative focus, the color will be swapped
     {
-        nFocus =- nFocus;
+        nFocus = -nFocus;
         nChgColors ^= 1;
     }
 
@@ -6747,7 +6748,7 @@ sal_Bool SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, 
         if( ( nInst & 0xFFFE ) == 0x7A8 )
         {   // DIBs direkt holen
             Bitmap aNew;
-            if( aNew.Read( *pGrStream, sal_False ) )
+            if( ReadDIB(aNew, *pGrStream, false) )
             {
                 rData = Graphic( aNew );
                 nRes = GRFILTER_OK;

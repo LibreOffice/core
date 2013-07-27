@@ -52,6 +52,7 @@
 #include <svx/svdundo.hxx>
 #include <svx/svdlegacy.hxx>
 #include <sfx2/msgpool.hxx>
+#include <svx/charthelper.hxx>
 #include <scmod.hxx>
 
 // BM/IHA --
@@ -89,8 +90,6 @@ using namespace ::com::sun::star;
 #include "uiitems.hxx"
 #include "globstr.hrc"
 #include "drawview.hxx"
-
-extern SdrObject* pSkipPaintObj;            // output.cxx - dieses Objekt nicht zeichnen
 
 //------------------------------------------------------------------------
 
@@ -390,11 +389,6 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pVie
                     aScale,
                     aPnt));
 
-                // Dieses Objekt nicht vor dem Aktivieren zeichnen
-                // (in MarkListHasChanged kommt ein Update)
-            if (!bIsFromFile)
-                pSkipPaintObj = pObj;
-
             pView->InsertObjectAtView(*pObj);
 
             if ( nAspect != embed::Aspects::MSOLE_ICON )
@@ -431,7 +425,6 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pVie
                 else
                 {
                     pViewShell->ActivateObject( (SdrOle2Obj*) pObj, SVVERB_SHOW );
-                    pSkipPaintObj = NULL;
                 }
             }
 
@@ -683,11 +676,11 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
             basegfx::tools::createScaleTranslateB2DHomMatrix(
                 aScale,
                 aStart));
-
-        // Dieses Objekt nicht vor dem Aktivieren zeichnen
-        pSkipPaintObj = pObj;
-
         SdrPageView* pPV = pView->GetSdrPageView();
+
+        // #121334# This call will change the chart's default background fill from white to transparent.
+        // Add here again if this is wanted (see task description for details)
+        // ChartHelper::AdaptDefaultsForChart( xObj );
 
         if(pPV)
         {

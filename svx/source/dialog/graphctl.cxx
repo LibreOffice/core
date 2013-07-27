@@ -197,7 +197,7 @@ void GraphCtrl::InitSdrModel()
     delete pModel;
 
     // Model anlegen
-    pModel = new SdrModel;
+    pModel = new SdrModel();
     pModel->GetItemPool().FreezeIdRanges();
     pModel->SetExchangeObjectUnit( aMap100.GetMapUnit() );
     pModel->SetExchangeObjectScale( Fraction( 1, 1 ) );

@@ -60,18 +60,6 @@ REALFILTERPACKAGES_TYPES_FLAG = \
     $(DIR_FILTERCFGOUT)$/fcfg_drawgraphics.types_flag       \
     $(DIR_FILTERCFGOUT)$/fcfg_impressgraphics.types_flag
 
-.IF "$(WITH_BINFILTER)" != "NO"
-REALFILTERPACKAGES_TYPES_FLAG += \
-    $(DIR_FILTERCFGOUT)$/fcfg_writer_bf.types_flag          \
-    $(DIR_FILTERCFGOUT)$/fcfg_web_bf.types_flag             \
-    $(DIR_FILTERCFGOUT)$/fcfg_global_bf.types_flag          \
-    $(DIR_FILTERCFGOUT)$/fcfg_calc_bf.types_flag            \
-    $(DIR_FILTERCFGOUT)$/fcfg_draw_bf.types_flag            \
-    $(DIR_FILTERCFGOUT)$/fcfg_impress_bf.types_flag         \
-    $(DIR_FILTERCFGOUT)$/fcfg_chart_bf.types_flag           \
-    $(DIR_FILTERCFGOUT)$/fcfg_math_bf.types_flag
-.ENDIF
-
 REALFILTERPACKAGES_FILTERS_FLAG = \
     $(DIR_FILTERCFGOUT)$/fcfg_base.filters_flag               \
     $(DIR_FILTERCFGOUT)$/fcfg_writer.filters_flag             \
@@ -90,18 +78,6 @@ REALFILTERPACKAGES_FILTERS_FLAG = \
     $(DIR_FILTERCFGOUT)$/fcfg_pocketword.filters_flag         \
     $(DIR_FILTERCFGOUT)$/fcfg_drawgraphics.filters_flag       \
     $(DIR_FILTERCFGOUT)$/fcfg_impressgraphics.filters_flag
-
-.IF "$(WITH_BINFILTER)" != "NO"
-REALFILTERPACKAGES_FILTERS_FLAG += \
-    $(DIR_FILTERCFGOUT)$/fcfg_writer_bf.filters_flag          \
-    $(DIR_FILTERCFGOUT)$/fcfg_web_bf.filters_flag             \
-    $(DIR_FILTERCFGOUT)$/fcfg_global_bf.filters_flag          \
-    $(DIR_FILTERCFGOUT)$/fcfg_calc_bf.filters_flag            \
-    $(DIR_FILTERCFGOUT)$/fcfg_draw_bf.filters_flag            \
-    $(DIR_FILTERCFGOUT)$/fcfg_impress_bf.filters_flag         \
-    $(DIR_FILTERCFGOUT)$/fcfg_chart_bf.filters_flag           \
-    $(DIR_FILTERCFGOUT)$/fcfg_math_bf.filters_flag
-.ENDIF
 
 REALFILTERPACKAGES_FILTERS_UI_MERGE = \
     $(DIR_LOCMERGE)$/filter_ui.xcu
@@ -130,18 +106,6 @@ REALFILTERPACKAGES_OTHERS_FLAG = \
     $(DIR_FILTERCFGOUT)$/fcfg_pocketword.others_flag         \
     $(DIR_FILTERCFGOUT)$/fcfg_drawgraphics.others_flag       \
     $(DIR_FILTERCFGOUT)$/fcfg_impressgraphics.others_flag
-
-.IF "$(WITH_BINFILTER)" != "NO"
-REALFILTERPACKAGES_OTHERS_FLAG += \
-    $(DIR_FILTERCFGOUT)$/fcfg_writer_bf.others_flag          \
-    $(DIR_FILTERCFGOUT)$/fcfg_web_bf.others_flag             \
-    $(DIR_FILTERCFGOUT)$/fcfg_global_bf.others_flag          \
-    $(DIR_FILTERCFGOUT)$/fcfg_calc_bf.others_flag            \
-    $(DIR_FILTERCFGOUT)$/fcfg_draw_bf.others_flag            \
-    $(DIR_FILTERCFGOUT)$/fcfg_impress_bf.others_flag         \
-    $(DIR_FILTERCFGOUT)$/fcfg_chart_bf.others_flag           \
-    $(DIR_FILTERCFGOUT)$/fcfg_math_bf.others_flag
-.ENDIF
 
 INTERNALFILTERPACKAGES_TYPES_FLAG = \
     $(DIR_FILTERCFGOUT)$/fcfg_internalgraphics.types_flag

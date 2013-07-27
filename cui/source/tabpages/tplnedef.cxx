@@ -164,6 +164,10 @@ SvxLineDefTabPage::SvxLineDefTabPage
     aLbLineStyles.SetSelectHdl(
         LINK( this, SvxLineDefTabPage, SelectLinestyleHdl_Impl ) );
 
+    // #122042# switch off default adding of 'none' and 'solid' entries
+    // for this ListBox; we want to select only editable/dashed styles
+    aLbLineStyles.setAddStandardFields(false);
+
     // Absolut (in mm) oder Relativ (in %)
     aCbxSynchronize.SetClickHdl(
         LINK( this, SvxLineDefTabPage, ChangeMetricHdl_Impl ) );
@@ -177,8 +181,6 @@ SvxLineDefTabPage::SvxLineDefTabPage
     aMtrLength2.SetModifyHdl( aLink );
     aMtrDistance.SetModifyHdl( aLink );
 
-    pDashList = NULL;
-
     aBtnAdd.SetAccessibleRelationMemberOf( &aFlDefinition );
     aBtnModify.SetAccessibleRelationMemberOf( &aFlDefinition );
     aBtnDelete.SetAccessibleRelationMemberOf( &aFlDefinition );
@@ -191,8 +193,8 @@ SvxLineDefTabPage::SvxLineDefTabPage
 
 void SvxLineDefTabPage::Construct()
 {
-    // Linienstile
-    aLbLineStyles.Fill( pDashList );
+    // Line style fill; do *not* add default fields here
+    aLbLineStyles.Fill( maDashList );
 }
 
 // -----------------------------------------------------------------------
@@ -202,7 +204,7 @@ void SvxLineDefTabPage::ActivatePage( const SfxItemSet& )
     if( *pDlgType == 0 ) // Flaechen-Dialog
     {
         // ActivatePage() wird aufgerufen bevor der Dialog PageCreated() erhaelt !!!
-        if( pDashList )
+        if( maDashList.get() )
         {
             if( *pPageType == 1 &&
                 *pPosDashLb != LISTBOX_ENTRY_NOTFOUND )
@@ -215,9 +217,9 @@ void SvxLineDefTabPage::ActivatePage( const SfxItemSet& )
             // Ermitteln (evtl. abschneiden) des Namens und in
             // der GroupBox darstellen
             String          aString( CUI_RES( RID_SVXSTR_TABLE ) ); aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
-            INetURLObject   aURL( pDashList->GetPath() );
+            INetURLObject   aURL( maDashList->GetPath() );
 
-            aURL.Append( pDashList->GetName() );
+            aURL.Append( maDashList->GetName() );
             DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
 /*          if ( aURL.getBase().Len() > 18 )
@@ -284,7 +286,7 @@ void SvxLineDefTabPage::CheckChanges_Impl()
             case RET_BTN_1: // Aendern
             {
                 ClickModifyHdl_Impl( this );
-                //aXDash = pDashList->Get( nPos )->GetDash();
+                //aXDash = maDashList->Get( nPos )->GetDash();
             }
             break;
 
@@ -292,7 +294,7 @@ void SvxLineDefTabPage::CheckChanges_Impl()
             {
                 ClickAddHdl_Impl( this );
                 //nPos = aLbLineStyles.GetSelectEntryPos();
-                //aXDash = pDashList->Get( nPos )->GetDash();
+                //aXDash = maDashList->Get( nPos )->GetDash();
             }
             break;
 
@@ -364,7 +366,7 @@ void SvxLineDefTabPage::Reset( const SfxItemSet& rAttrs )
     SelectLinestyleHdl_Impl( NULL );
 
     // Status der Buttons ermitteln
-    if( pDashList->Count() )
+    if( maDashList.get() && maDashList->Count() )
     {
         aBtnModify.Enable();
         aBtnDelete.Enable();
@@ -390,14 +392,17 @@ SfxTabPage* SvxLineDefTabPage::Create( Window* pWindow,
 
 IMPL_LINK( SvxLineDefTabPage, SelectLinestyleHdl_Impl, void *, p )
 {
-    if( pDashList->Count() > 0 )
+    if(maDashList.get() && maDashList->Count())
     {
         int nTmp = aLbLineStyles.GetSelectEntryPos();
-        if( nTmp == LISTBOX_ENTRY_NOTFOUND )
+
+        if(LISTBOX_ENTRY_NOTFOUND == nTmp)
         {
+            OSL_ENSURE(false, "OOps, non-existent LineDash selected (!)");
+            nTmp = 1;
         }
-        else
-            aDash = pDashList->GetDash( nTmp )->GetDash();
+
+        aDash = maDashList->GetDash( nTmp )->GetDash();
 
         FillDialog_Impl();
 
@@ -584,7 +589,7 @@ IMPL_LINK( SvxLineDefTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
     String aName;
     XDashEntry* pEntry;
 
-    long nCount = pDashList->Count();
+    long nCount = maDashList.get() ? maDashList->Count() : 0;
     long j = 1;
     sal_Bool bDifferent = sal_False;
 
@@ -596,7 +601,7 @@ IMPL_LINK( SvxLineDefTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
         bDifferent = sal_True;
 
         for ( long i = 0; i < nCount && bDifferent; i++ )
-            if ( aName == pDashList->GetDash( i )->GetName() )
+            if ( aName == maDashList->GetDash( i )->GetName() )
                 bDifferent = sal_False;
     }
 
@@ -613,7 +618,7 @@ IMPL_LINK( SvxLineDefTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
 
         for( long i = 0; i < nCount && bDifferent; i++ )
         {
-            if( aName == pDashList->GetDash( i )->GetName() )
+            if( aName == maDashList->GetDash( i )->GetName() )
                 bDifferent = sal_False;
         }
 
@@ -624,10 +629,9 @@ IMPL_LINK( SvxLineDefTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
 
             pEntry = new XDashEntry( aDash, aName );
 
-            long nDashCount = pDashList->Count();
-            pDashList->Insert( pEntry, nDashCount );
-            Bitmap* pBitmap = pDashList->GetBitmap( nDashCount );
-            aLbLineStyles.Append( pEntry, pBitmap );
+            long nDashCount = maDashList.get() ? maDashList->Count() : 0;
+            maDashList->Insert( pEntry, nDashCount );
+            aLbLineStyles.Append( *pEntry, maDashList->GetUiBitmap( nDashCount ) );
 
             aLbLineStyles.SelectEntryPos( aLbLineStyles.GetEntryCount() - 1 );
 
@@ -655,7 +659,7 @@ IMPL_LINK( SvxLineDefTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
     delete( pDlg );
 
     // Status der Buttons ermitteln
-    if ( pDashList->Count() )
+    if ( maDashList.get() && maDashList->Count() )
     {
         aBtnModify.Enable();
         aBtnDelete.Enable();
@@ -675,7 +679,7 @@ IMPL_LINK( SvxLineDefTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
         ResMgr& rMgr = CUI_MGR();
         String aNewName( SVX_RES( RID_SVXSTR_LINESTYLE ) );
         String aDesc( ResId( RID_SVXSTR_DESC_LINESTYLE, rMgr ) );
-        String aName( pDashList->GetDash( nPos )->GetName() );
+        String aName( maDashList->GetDash( nPos )->GetName() );
         String aOldName = aName;
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
@@ -683,7 +687,7 @@ IMPL_LINK( SvxLineDefTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
         AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, aName, aDesc );
         DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
 
-        long nCount = pDashList->Count();
+        long nCount = maDashList.get() ? maDashList->Count() : 0;
         sal_Bool bDifferent = sal_False;
         sal_Bool bLoop = sal_True;
 
@@ -694,7 +698,7 @@ IMPL_LINK( SvxLineDefTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
 
             for( long i = 0; i < nCount && bDifferent; i++ )
             {
-                if( aName == pDashList->GetDash( i )->GetName() &&
+                if( aName == maDashList->GetDash( i )->GetName() &&
                     aName != aOldName )
                     bDifferent = sal_False;
             }
@@ -706,9 +710,8 @@ IMPL_LINK( SvxLineDefTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
 
                 XDashEntry* pEntry = new XDashEntry( aDash, aName );
 
-                delete pDashList->Replace( pEntry, nPos );
-                Bitmap* pBitmap = pDashList->GetBitmap( nPos );
-                aLbLineStyles.Modify( pEntry, nPos, pBitmap );
+                delete maDashList->Replace( pEntry, nPos );
+                aLbLineStyles.Modify( *pEntry, nPos, maDashList->GetUiBitmap( nPos ) );
 
                 aLbLineStyles.SelectEntryPos( nPos );
 
@@ -751,7 +754,7 @@ IMPL_LINK( SvxLineDefTabPage, ClickDeleteHdl_Impl, void *, EMPTYARG )
 
         if ( aQueryBox.Execute() == RET_YES )
         {
-            delete pDashList->Remove( nPos );
+            delete maDashList->Remove( nPos );
             aLbLineStyles.RemoveEntry( nPos );
             aLbLineStyles.SelectEntryPos( 0 );
 
@@ -766,7 +769,7 @@ IMPL_LINK( SvxLineDefTabPage, ClickDeleteHdl_Impl, void *, EMPTYARG )
     }
 
     // Status der Buttons ermitteln
-    if ( !pDashList->Count() )
+    if ( !maDashList.get() || !maDashList->Count() )
     {
         aBtnModify.Disable();
         aBtnDelete.Disable();
@@ -788,7 +791,7 @@ IMPL_LINK( SvxLineDefTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
             String( ResId( RID_SVXSTR_WARN_TABLE_OVERWRITE, rMgr ) ) ).Execute();
 
         if ( nReturn == RET_YES )
-            pDashList->Save();
+            maDashList->Save();
     }
 
     if ( nReturn != RET_CANCEL )
@@ -810,25 +813,21 @@ IMPL_LINK( SvxLineDefTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
             aPathURL.removeFinalSlash();
 
             // Liste speichern
-            XDashList* pDshLst = new XDashList( aPathURL.GetMainURL( INetURLObject::NO_DECODE ), pXPool );
-            pDshLst->SetName( aURL.getName() );
+            XDashListSharedPtr aDshLst(XPropertyListFactory::CreateSharedXDashList(aPathURL.GetMainURL(INetURLObject::NO_DECODE)));
+            aDshLst->SetName( aURL.getName() );
 
-            if( pDshLst->Load() )
+            if( aDshLst->Load() )
             {
-                if( pDshLst )
+                if( aDshLst.get() )
                 {
-                    // Pruefen, ob Tabelle geloescht werden darf:
-                    if( pDashList != ( (SvxLineTabDialog*) DLGWIN )->GetDashList() )
-                        delete pDashList;
-
-                    pDashList = pDshLst;
-                    ( (SvxLineTabDialog*) DLGWIN )->SetNewDashList( pDashList );
+                    maDashList = aDshLst;
+                    ( (SvxLineTabDialog*) DLGWIN )->SetNewDashList( maDashList );
 
                     aLbLineStyles.Clear();
-                    aLbLineStyles.Fill( pDashList );
+                    aLbLineStyles.Fill( maDashList );
                     Reset( rOutAttrs );
 
-                    pDashList->SetName( aURL.getName() );
+                    maDashList->SetName( aURL.getName() );
 
 /*                  // Ermitteln (evtl. abschneiden) des Namens und in
                     // der GroupBox darstellen
@@ -859,7 +858,7 @@ IMPL_LINK( SvxLineDefTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
     }
 
     // Status der Buttons ermitteln
-    if ( pDashList->Count() )
+    if ( maDashList.get() && maDashList->Count() )
     {
         aBtnModify.Enable();
         aBtnDelete.Enable();
@@ -886,9 +885,9 @@ IMPL_LINK( SvxLineDefTabPage, ClickSaveHdl_Impl, void *, EMPTYARG )
     INetURLObject aFile( SvtPathOptions().GetPalettePath() );
     DBG_ASSERT( aFile.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
-    if( pDashList->GetName().Len() )
+    if( maDashList->GetName().Len() )
     {
-        aFile.Append( pDashList->GetName() );
+        aFile.Append( maDashList->GetName() );
 
         if( !aFile.getExtension().getLength() )
             aFile.SetExtension( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "sod" ) ) );
@@ -903,10 +902,10 @@ IMPL_LINK( SvxLineDefTabPage, ClickSaveHdl_Impl, void *, EMPTYARG )
         aPathURL.removeSegment();
         aPathURL.removeFinalSlash();
 
-        pDashList->SetName( aURL.getName() );
-        pDashList->SetPath( aPathURL.GetMainURL( INetURLObject::NO_DECODE ) );
+        maDashList->SetName( aURL.getName() );
+        maDashList->SetPath( aPathURL.GetMainURL( INetURLObject::NO_DECODE ) );
 
-        if( pDashList->Save() )
+        if( maDashList->Save() )
         {
 /*          // Ermitteln (evtl. abschneiden) des Namens und in
             // der GroupBox darstellen
@@ -1014,7 +1013,7 @@ void SvxLineDefTabPage::DataChanged( const DataChangedEvent& rDCEvt )
     {
         sal_uInt16 nOldSelect = aLbLineStyles.GetSelectEntryPos();
         aLbLineStyles.Clear();
-        aLbLineStyles.Fill( pDashList );
+        aLbLineStyles.Fill( maDashList );
         aLbLineStyles.SelectEntryPos( nOldSelect );
     }
 }

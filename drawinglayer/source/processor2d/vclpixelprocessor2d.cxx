@@ -99,6 +99,141 @@ namespace drawinglayer
             mpOutputDevice->SetAntialiasing(mpOutputDevice->GetAntialiasing() & ~ANTIALIASING_ENABLE_B2DDRAW);
         }
 
+        bool VclPixelProcessor2D::tryDrawPolyPolygonColorPrimitive2DDirect(const drawinglayer::primitive2d::PolyPolygonColorPrimitive2D& rSource, double fTransparency)
+        {
+            basegfx::B2DPolyPolygon aLocalPolyPolygon(rSource.getB2DPolyPolygon());
+
+            if(!aLocalPolyPolygon.count())
+            {
+                // no geometry, done
+                return true;
+            }
+
+            const basegfx::BColor aPolygonColor(maBColorModifierStack.getModifiedColor(rSource.getBColor()));
+
+            mpOutputDevice->SetFillColor(Color(aPolygonColor));
+            mpOutputDevice->SetLineColor();
+            aLocalPolyPolygon.transform(maCurrentTransformation);
+            mpOutputDevice->DrawTransparent(
+                aLocalPolyPolygon,
+                fTransparency);
+
+            return true;
+        }
+
+        bool VclPixelProcessor2D::tryDrawPolygonHairlinePrimitive2DDirect(const drawinglayer::primitive2d::PolygonHairlinePrimitive2D& rSource, double fTransparency)
+        {
+            basegfx::B2DPolygon aLocalPolygon(rSource.getB2DPolygon());
+
+            if(!aLocalPolygon.count())
+            {
+                // no geometry, done
+                return true;
+            }
+
+            const basegfx::BColor aLineColor(maBColorModifierStack.getModifiedColor(rSource.getBColor()));
+
+            mpOutputDevice->SetFillColor();
+            mpOutputDevice->SetLineColor(Color(aLineColor));
+            aLocalPolygon.transform(maCurrentTransformation);
+
+            // try drawing; if it did not work, use standard fallback
+            if(mpOutputDevice->TryDrawPolyLineDirect(
+                aLocalPolygon,
+                0.0,
+                fTransparency))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        bool VclPixelProcessor2D::tryDrawPolygonStrokePrimitive2DDirect(const drawinglayer::primitive2d::PolygonStrokePrimitive2D& rSource, double fTransparency)
+        {
+            basegfx::B2DPolygon aLocalPolygon(rSource.getB2DPolygon());
+
+            if(!aLocalPolygon.count())
+            {
+                // no geometry, done
+                return true;
+            }
+
+            aLocalPolygon = basegfx::tools::simplifyCurveSegments(aLocalPolygon);
+            basegfx::B2DPolyPolygon aHairLinePolyPolygon;
+
+            if(rSource.getStrokeAttribute().isDefault() || 0.0 == rSource.getStrokeAttribute().getFullDotDashLen())
+            {
+                // no line dashing, just copy
+                aHairLinePolyPolygon.append(aLocalPolygon);
+            }
+            else
+            {
+                // apply LineStyle
+                basegfx::tools::applyLineDashing(
+                    aLocalPolygon,
+                    rSource.getStrokeAttribute().getDotDashArray(),
+                    &aHairLinePolyPolygon,
+                    0,
+                    rSource.getStrokeAttribute().getFullDotDashLen());
+            }
+
+            if(!aHairLinePolyPolygon.count())
+            {
+                // no geometry, done
+                return true;
+            }
+
+            const basegfx::BColor aLineColor(
+                maBColorModifierStack.getModifiedColor(
+                    rSource.getLineAttribute().getColor()));
+
+            mpOutputDevice->SetFillColor();
+            mpOutputDevice->SetLineColor(Color(aLineColor));
+            aHairLinePolyPolygon.transform(maCurrentTransformation);
+
+            double fLineWidth(rSource.getLineAttribute().getWidth());
+
+            if(basegfx::fTools::more(fLineWidth, 0.0))
+            {
+                basegfx::B2DVector aLineWidth(fLineWidth, 0.0);
+
+                aLineWidth = maCurrentTransformation * aLineWidth;
+                fLineWidth = aLineWidth.getLength();
+            }
+
+            bool bHasPoints(false);
+            bool bTryWorked(false);
+
+            for(sal_uInt32 a(0); a < aHairLinePolyPolygon.count(); a++)
+            {
+                const basegfx::B2DPolygon aSingle(aHairLinePolyPolygon.getB2DPolygon(a));
+
+                if(aSingle.count())
+                {
+                    bHasPoints = true;
+
+                    if(mpOutputDevice->TryDrawPolyLineDirect(
+                        aSingle,
+                        fLineWidth,
+                        fTransparency,
+                        rSource.getLineAttribute().getLineJoin(),
+                        rSource.getLineAttribute().getLineCap()))
+                    {
+                        bTryWorked = true;
+                    }
+                }
+            }
+
+            if(!bTryWorked && !bHasPoints)
+            {
+                // no geometry despite try
+                bTryWorked = true;
+            }
+
+            return bTryWorked;
+        }
+
         void VclPixelProcessor2D::processBasePrimitive2D(
             const primitive2d::BasePrimitive2D& rCandidate,
             const primitive2d::Primitive2DReference& /*rUnoCandidate*/)
@@ -178,13 +313,41 @@ namespace drawinglayer
                 }
                 case PRIMITIVE2D_ID_POLYGONHAIRLINEPRIMITIVE2D :
                 {
+                    // try to use directly
+                    const primitive2d::PolygonHairlinePrimitive2D& rPolygonHairlinePrimitive2D = static_cast< const primitive2d::PolygonHairlinePrimitive2D& >(rCandidate);
+                    static bool bAllowed(true);
+
+                    if(bAllowed && tryDrawPolygonHairlinePrimitive2DDirect(rPolygonHairlinePrimitive2D, 0.0))
+                    {
+                        break;
+                    }
+
                     // direct draw of hairline
-                    RenderPolygonHairlinePrimitive2D(static_cast< const primitive2d::PolygonHairlinePrimitive2D& >(rCandidate), true);
+                    RenderPolygonHairlinePrimitive2D(rPolygonHairlinePrimitive2D, true);
                     break;
                 }
                 case PRIMITIVE2D_ID_BITMAPPRIMITIVE2D :
                 {
                     // direct draw of transformed BitmapEx primitive
+                    const primitive2d::BitmapPrimitive2D& rBitmapCandidate = static_cast< const primitive2d::BitmapPrimitive2D& >(rCandidate);
+
+                    // check if graphic content is inside discrete local ViewPort
+                    const basegfx::B2DRange& rDiscreteViewPort(getViewInformation2D().getDiscreteViewport());
+                    const basegfx::B2DHomMatrix aLocalTransform(maCurrentTransformation * rBitmapCandidate.getTransform());
+
+                    if(!rDiscreteViewPort.isEmpty())
+                    {
+                        basegfx::B2DRange aUnitRange(0.0, 0.0, 1.0, 1.0);
+
+                        aUnitRange.transform(aLocalTransform);
+
+                        if(!aUnitRange.overlaps(rDiscreteViewPort))
+                        {
+                            // content is outside discrete local ViewPort
+                            break;
+                        }
+                    }
+
                     RenderBitmapPrimitive2D(static_cast< const primitive2d::BitmapPrimitive2D& >(rCandidate));
                     break;
                 }
@@ -197,7 +360,29 @@ namespace drawinglayer
                 case PRIMITIVE2D_ID_POLYPOLYGONGRADIENTPRIMITIVE2D :
                 {
                     // direct draw of gradient
-                    RenderPolyPolygonGradientPrimitive2D(static_cast< const primitive2d::PolyPolygonGradientPrimitive2D& >(rCandidate));
+                    const primitive2d::PolyPolygonGradientPrimitive2D& rPolygonCandidate = static_cast< const primitive2d::PolyPolygonGradientPrimitive2D& >(rCandidate);
+                    const attribute::FillGradientAttribute& rGradient(rPolygonCandidate.getFillGradient());
+                    basegfx::BColor aStartColor(maBColorModifierStack.getModifiedColor(rGradient.getStartColor()));
+                    basegfx::BColor aEndColor(maBColorModifierStack.getModifiedColor(rGradient.getEndColor()));
+                    basegfx::B2DPolyPolygon aLocalPolyPolygon(rPolygonCandidate.getB2DPolyPolygon());
+
+                    if(aLocalPolyPolygon.count())
+                    {
+                        aLocalPolyPolygon.transform(maCurrentTransformation);
+
+                        if(aStartColor == aEndColor)
+                        {
+                            // no gradient at all, draw as polygon in AA and non-AA case
+                            mpOutputDevice->SetLineColor();
+                            mpOutputDevice->SetFillColor(Color(aStartColor));
+                            mpOutputDevice->DrawPolyPolygon(aLocalPolyPolygon);
+                        }
+                        else
+                        {
+                            // use the primitive decomposition of the metafile
+                            process(rPolygonCandidate.get2DDecomposition(getViewInformation2D()));
+                        }
+                    }
                     break;
                 }
                 case PRIMITIVE2D_ID_POLYPOLYGONGRAPHICPRIMITIVE2D :
@@ -208,8 +393,53 @@ namespace drawinglayer
                 }
                 case PRIMITIVE2D_ID_POLYPOLYGONCOLORPRIMITIVE2D :
                 {
-                    // direct draw of PolyPolygon with color
-                    RenderPolyPolygonColorPrimitive2D(static_cast< const primitive2d::PolyPolygonColorPrimitive2D& >(rCandidate));
+                    // try to use directly
+                    const primitive2d::PolyPolygonColorPrimitive2D& rPolyPolygonColorPrimitive2D = static_cast< const primitive2d::PolyPolygonColorPrimitive2D& >(rCandidate);
+                    basegfx::B2DPolyPolygon aLocalPolyPolygon;
+                    static bool bAllowed(true);
+
+                    if(bAllowed && tryDrawPolyPolygonColorPrimitive2DDirect(rPolyPolygonColorPrimitive2D, 0.0))
+                    {
+                        // okay, done. In this case no gaps should have to be repaired, too
+                    }
+                    else
+                    {
+                        // direct draw of PolyPolygon with color
+                        const basegfx::BColor aPolygonColor(maBColorModifierStack.getModifiedColor(rPolyPolygonColorPrimitive2D.getBColor()));
+
+                        mpOutputDevice->SetFillColor(Color(aPolygonColor));
+                        mpOutputDevice->SetLineColor();
+                        aLocalPolyPolygon = rPolyPolygonColorPrimitive2D.getB2DPolyPolygon();
+                        aLocalPolyPolygon.transform(maCurrentTransformation);
+                        mpOutputDevice->DrawPolyPolygon(aLocalPolyPolygon);
+                    }
+
+                    // when AA is on and this filled polygons are the result of stroked line geometry,
+                    // draw the geometry once extra as lines to avoid AA 'gaps' between partial polygons
+                    // Caution: This is needed in both cases (!)
+                    if(mnPolygonStrokePrimitive2D
+                        && getOptionsDrawinglayer().IsAntiAliasing()
+                        && (mpOutputDevice->GetAntialiasing() & ANTIALIASING_ENABLE_B2DDRAW))
+                    {
+                        const basegfx::BColor aPolygonColor(maBColorModifierStack.getModifiedColor(rPolyPolygonColorPrimitive2D.getBColor()));
+                        sal_uInt32 nCount(aLocalPolyPolygon.count());
+
+                        if(!nCount)
+                        {
+                            aLocalPolyPolygon = rPolyPolygonColorPrimitive2D.getB2DPolyPolygon();
+                            aLocalPolyPolygon.transform(maCurrentTransformation);
+                            nCount = aLocalPolyPolygon.count();
+                        }
+
+                        mpOutputDevice->SetFillColor();
+                        mpOutputDevice->SetLineColor(Color(aPolygonColor));
+
+                        for(sal_uInt32 a(0); a < nCount; a++)
+                        {
+                            mpOutputDevice->DrawPolyLine(aLocalPolyPolygon.getB2DPolygon(a), 0.0);
+                        }
+                    }
+
                     break;
                 }
                 case PRIMITIVE2D_ID_METAFILEPRIMITIVE2D :
@@ -223,17 +453,8 @@ namespace drawinglayer
                         mpOutputDevice->SetAntialiasing(nOldAntiAliase | ANTIALIASING_PIXELSNAPHAIRLINE);
                     }
 
-                    static bool bTestMetaFilePrimitiveDecomposition(true);
-                    if(bTestMetaFilePrimitiveDecomposition)
-                    {
-                        // use new Metafile decomposition
-                        process(rCandidate.get2DDecomposition(getViewInformation2D()));
-                    }
-                    else
-                    {
-                        // direct draw of MetaFile
-                        RenderMetafilePrimitive2D(static_cast< const primitive2d::MetafilePrimitive2D& >(rCandidate));
-                    }
+                    // use new Metafile decomposition
+                    process(rCandidate.get2DDecomposition(getViewInformation2D()));
 
                     if(bForceLineSnap)
                     {
@@ -290,25 +511,41 @@ namespace drawinglayer
                                             // single transparent PolyPolygon identified, use directly
                                             const primitive2d::PolyPolygonColorPrimitive2D* pPoPoColor = static_cast< const primitive2d::PolyPolygonColorPrimitive2D* >(pBasePrimitive);
                                             OSL_ENSURE(pPoPoColor, "OOps, PrimitiveID and PrimitiveType do not match (!)");
-                                            const basegfx::BColor aPolygonColor(maBColorModifierStack.getModifiedColor(pPoPoColor->getBColor()));
-                                            mpOutputDevice->SetFillColor(Color(aPolygonColor));
-                                            mpOutputDevice->SetLineColor();
-
-                                            basegfx::B2DPolyPolygon aLocalPolyPolygon(pPoPoColor->getB2DPolyPolygon());
-                                            aLocalPolyPolygon.transform(maCurrentTransformation);
-
-                                            mpOutputDevice->DrawTransparent(aLocalPolyPolygon, rUniTransparenceCandidate.getTransparence());
-                                            bDrawTransparentUsed = true;
+                                            bDrawTransparentUsed = tryDrawPolyPolygonColorPrimitive2DDirect(*pPoPoColor, rUniTransparenceCandidate.getTransparence());
                                             break;
                                         }
-                                        // #i# need to wait for #i101378# which is in CWS vcl112 to directly paint transparent hairlines
-                                        //case PRIMITIVE2D_ID_POLYGONHAIRLINEPRIMITIVE2D:
-                                        //{
-                                        //  // single transparent PolygonHairlinePrimitive2D identified, use directly
-                                        //  const primitive2d::PolygonHairlinePrimitive2D* pPoHair = static_cast< const primitive2d::PolygonHairlinePrimitive2D* >(pBasePrimitive);
-                                        //  OSL_ENSURE(pPoHair, "OOps, PrimitiveID and PrimitiveType do not match (!)");
-                                        //  break;
-                                        //}
+                                        case PRIMITIVE2D_ID_POLYGONHAIRLINEPRIMITIVE2D:
+                                        {
+                                            // single transparent PolygonHairlinePrimitive2D identified, use directly
+                                            const primitive2d::PolygonHairlinePrimitive2D* pPoHair = static_cast< const primitive2d::PolygonHairlinePrimitive2D* >(pBasePrimitive);
+                                            OSL_ENSURE(pPoHair, "OOps, PrimitiveID and PrimitiveType do not match (!)");
+
+                                            // do no tallow by default - problem is that self-overlapping parts of this geometry will
+                                            // not be in a all-same transparency but will already alpha-cover themselves with blending.
+                                            // This is not what the UnifiedTransparencePrimitive2D defines: It requires all it's
+                                            // content to be uniformely transparent.
+                                            // For hairline the effect is pretty minimal, but still not correct.
+                                            static bool bAllowed(false);
+
+                                            bDrawTransparentUsed = bAllowed && tryDrawPolygonHairlinePrimitive2DDirect(*pPoHair, rUniTransparenceCandidate.getTransparence());
+                                            break;
+                                        }
+                                        case PRIMITIVE2D_ID_POLYGONSTROKEPRIMITIVE2D:
+                                        {
+                                            // single transparent PolygonStrokePrimitive2D identified, use directly
+                                            const primitive2d::PolygonStrokePrimitive2D* pPoStroke = static_cast< const primitive2d::PolygonStrokePrimitive2D* >(pBasePrimitive);
+                                            OSL_ENSURE(pPoStroke, "OOps, PrimitiveID and PrimitiveType do not match (!)");
+
+                                            // do no tallow by default - problem is that self-overlapping parts of this geometry will
+                                            // not be in a all-same transparency but will already alpha-cover themselves with blending.
+                                            // This is not what the UnifiedTransparencePrimitive2D defines: It requires all it's
+                                            // content to be uniformely transparent.
+                                            // To check, acitvate and draw a wide transparent self-crossing line/curve
+                                            static bool bAllowed(false);
+
+                                            bDrawTransparentUsed = bAllowed && tryDrawPolygonStrokePrimitive2DDirect(*pPoStroke, rUniTransparenceCandidate.getTransparence());
+                                            break;
+                                        }
                                     }
                                 }
                             }
@@ -408,6 +645,14 @@ namespace drawinglayer
                 }
                 case PRIMITIVE2D_ID_POLYGONSTROKEPRIMITIVE2D:
                 {
+                    // try to use directly
+                    const primitive2d::PolygonStrokePrimitive2D& rPolygonStrokePrimitive2D = static_cast< const primitive2d::PolygonStrokePrimitive2D& >(rCandidate);
+
+                    if(tryDrawPolygonStrokePrimitive2DDirect(rPolygonStrokePrimitive2D, 0.0))
+                    {
+                        break;
+                    }
+
                     // the stroke primitive may be decomposed to filled polygons. To keep
                     // evtl. set DrawModes aka DRAWMODE_BLACKLINE, DRAWMODE_GRAYLINE,
                     // DRAWMODE_GHOSTEDLINE, DRAWMODE_WHITELINE or DRAWMODE_SETTINGSLINE
@@ -436,9 +681,7 @@ namespace drawinglayer
                         // as filled polygons is geometrically corret but looks wrong since polygon filling avoids
                         // the right and bottom pixels. The used method evaluates that and takes the correct action,
                         // including calling recursively with decomposition if line is wide enough
-                        const primitive2d::PolygonStrokePrimitive2D& rPolygonStrokePrimitive = static_cast< const primitive2d::PolygonStrokePrimitive2D& >(rCandidate);
-
-                        RenderPolygonStrokePrimitive2D(rPolygonStrokePrimitive);
+                        RenderPolygonStrokePrimitive2D(rPolygonStrokePrimitive2D);
                     }
 
                     // restore DrawMode

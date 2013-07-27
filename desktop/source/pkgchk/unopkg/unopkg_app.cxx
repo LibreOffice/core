@@ -269,7 +269,7 @@ extern "C" int unopkg_main()
             return 0;
         }
         else if (isOption( info_version, &nPos )) {
-            dp_misc::writeConsole("\n"APP_NAME" Version 3.3\n");
+            dp_misc::writeConsole( "\n" APP_NAME " Version 3.3\n");
             return 0;
         }
         //consume all bootstrap variables which may occur before the subcommannd
@@ -391,10 +391,10 @@ extern "C" int unopkg_main()
             //bootstrapped. Otherwies files could be locked by this process.
 
             //If there is no folder left in
-            //$BRAND_BASE_DIR/share/extensions
+            //$OOO_BASE_DIR/share/extensions
             //then we can delete the registration data at
             //$BUNDLED_EXTENSIONS_USER
-            if (hasNoFolder(OUSTR("$BRAND_BASE_DIR/share/extensions")))
+            if (hasNoFolder(OUSTR("$OOO_BASE_DIR/share/extensions")))
             {
                 removeFolder(OUSTR("$BUNDLED_EXTENSIONS_PREREG"));
                 //return otherwise we create the registration data again
@@ -513,9 +513,8 @@ extern "C" int unopkg_main()
                 //Now prepare the vector which tells what extension has an
                 //unaccepted license
                 vecUnaccepted.resize(vecExtUnaccepted.size() + vec_packages.size());
-                ::std::vector<bool>::iterator i_unaccepted =
-                      ::std::fill_n(vecUnaccepted.begin(),
-                                    vecExtUnaccepted.size(), true);
+                ::std::fill_n( vecUnaccepted.begin(), vecExtUnaccepted.size(), true);
+                std::vector<bool>::iterator i_unaccepted = vecUnaccepted.begin() + vecExtUnaccepted.size();
                 ::std::fill_n(i_unaccepted, vec_packages.size(), false);
 
                 dp_misc::writeConsole(
@@ -649,7 +648,7 @@ extern "C" int unopkg_main()
         }
 
         if (option_verbose)
-            dp_misc::writeConsole(OUSTR("\n"APP_NAME" done.\n"));
+            dp_misc::writeConsole( OUSTR( "\n" APP_NAME " done.\n"));
         //Force to release all bridges which connect us to the child processes
         disposeBridges(xLocalComponentContext);
         return 0;
@@ -661,7 +660,7 @@ extern "C" int unopkg_main()
     }
     catch (ucb::CommandAbortedException &)
     {
-        dp_misc::writeConsoleError("\n"APP_NAME" aborted!\n");
+        dp_misc::writeConsoleError( "\n" APP_NAME " aborted!\n");
     }
     catch (deployment::DeploymentException & exc)
     {
@@ -699,7 +698,7 @@ extern "C" int unopkg_main()
             OUSTR("\n"));
     }
     if (!bNoOtherErrorMsg)
-        dp_misc::writeConsoleError("\n"APP_NAME" failed.\n");
+        dp_misc::writeConsoleError( "\n" APP_NAME " failed.\n");
     disposeBridges(xLocalComponentContext);
     return 1;
 }

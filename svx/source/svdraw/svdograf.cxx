@@ -373,8 +373,7 @@ SdrGrafObj::SdrGrafObj(
 :   SdrRectObj(
         rSdrModel,
         rTransform),
-    pGraphicLink(0),
-    bMirrored(false)
+    pGraphicLink(0)
 {
     pGraphic = new GraphicObject( rGrf );
     mpReplacementGraphic = 0;
@@ -415,7 +414,6 @@ void SdrGrafObj::copyDataFromSdrObject(const SdrObject& rSource)
             aCropRect = pSource->aCropRect;
             aFileName = pSource->aFileName;
             aFilterName = pSource->aFilterName;
-            bMirrored = pSource->bMirrored;
 
             if(pSource->pGraphicLink)
             {
@@ -531,6 +529,7 @@ Graphic SdrGrafObj::GetTransformedGraphic( sal_uIntPtr nTransformFlags ) const /
     const bool bMirror(0 != (nTransformFlags & SDRGRAFOBJ_TRANSFORMATTR_MIRROR));
     const long nOldRotAngle(sdr::legacy::GetRotateAngle(*this));
     const bool bRotate((0 != (nTransformFlags & SDRGRAFOBJ_TRANSFORMATTR_ROTATE)) && (0 != nOldRotAngle) && (GRAPHIC_NONE != eType));
+    const bool bMirrored(isMirrored()); // TTTT: Hopefully no longer needed...
 
     // #104115# Need cropping info earlier
     const_cast< SdrGrafObj* >(this)->ImpSetAttrToGrafInfo();
@@ -737,16 +736,15 @@ void SdrGrafObj::ReleaseGraphicLink()
 
 void SdrGrafObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
-    const bool bAnim(pGraphic->IsAnimated());
     const bool bNoPresGrf((GRAPHIC_NONE != pGraphic->GetType()) && !IsEmptyPresObj());
     const long nOldRotAngle(sdr::legacy::GetRotateAngle(*this));
 
     rInfo.mbResizeFreeAllowed = nOldRotAngle % 9000 == 0 || nOldRotAngle % 18000 == 0 || nOldRotAngle % 27000 == 0;
     rInfo.mbResizePropAllowed = true;
-    rInfo.mbRotateFreeAllowed = bNoPresGrf && !bAnim;
-    rInfo.mbRotate90Allowed = bNoPresGrf && !bAnim;
-    rInfo.mbMirrorFreeAllowed = bNoPresGrf && !bAnim;
-    rInfo.mbMirror45Allowed = bNoPresGrf && !bAnim;
+    rInfo.mbRotateFreeAllowed = bNoPresGrf;
+    rInfo.mbRotate90Allowed = bNoPresGrf;
+    rInfo.mbMirrorFreeAllowed = bNoPresGrf;
+    rInfo.mbMirror45Allowed = bNoPresGrf;
     rInfo.mbMirror90Allowed = !IsEmptyPresObj();
     rInfo.mbTransparenceAllowed = false;
     rInfo.mbGradientAllowed = false;

@@ -1933,8 +1933,9 @@ sal_Bool ScAttrArray::GetLastAttr( SCROW& rLastRow, SCROW nLastData ) const
     while ( nStartPos > 0 && pData[nStartPos-1].nRow > nLastData &&
             !pData[nStartPos].pPattern->IsVisible() )
         --nStartPos;
-
-    if(nStartPos >= 0 && pData[nStartPos].nRow > nLastData)
+    if(nStartPos == 0 && !pData[nStartPos].pPattern->IsVisible()) // add this condition for handle only default pattern in one colume
+        rLastRow = nLastData;
+    else if(nStartPos >= 0 && pData[nStartPos].nRow > nLastData)
     {
         bFound = sal_True;
         rLastRow = pData[nStartPos].nRow;

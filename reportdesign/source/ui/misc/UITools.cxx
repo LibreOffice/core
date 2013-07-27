@@ -44,7 +44,7 @@
 #include <editeng/charscaleitem.hxx>
 #include <svx/algitem.hxx>
 #include <svx/svdpagv.hxx>
-#include <svx/xtable.hxx>       // XColorTable
+#include <svx/xtable.hxx>       // XColorList
 #include <editeng/brshitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/emphitem.hxx>
@@ -656,7 +656,7 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
     };
     Window* pParent = VCLUnoHelper::GetWindow( _rxParentWindow );
     ::std::auto_ptr<FontList> pFontList(new FontList( pParent ));
-    ::std::auto_ptr<XColorTable> pColorTable( new XColorTable( SvtPathOptions().GetPalettePath() ));
+    XColorListSharedPtr aColorTable(XPropertyListFactory::CreateSharedXColorList(SvtPathOptions().GetPalettePath()));
     SfxPoolItem* pDefaults[] =
     {
         new SvxFontItem(ITEMID_FONT),
@@ -677,7 +677,7 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
         new SvxEscapementItem(ITEMID_ESCAPEMENT),
         new SvxFontListItem(pFontList.get(),ITEMID_FONTLIST),
         new SvxAutoKernItem(sal_False,ITEMID_AUTOKERN),
-        new SvxColorTableItem(pColorTable.get(),ITEMID_COLOR_TABLE),
+        new SvxColorTableItem(aColorTable,ITEMID_COLOR_TABLE),
         new SvxBlinkItem(sal_False,ITEMID_BLINK),
         new SvxEmphasisMarkItem(EMPHASISMARK_NONE,ITEMID_EMPHASISMARK),
         new SvxTwoLinesItem(sal_True,0,0,ITEMID_TWOLINES),
@@ -773,11 +773,6 @@ bool openAreaDialog( const uno::Reference<report::XShape >& _xShape,const uno::R
         {   // want the dialog to be destroyed before our set
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             ::std::auto_ptr<AbstractSvxAreaTabDialog> pDialog(pFact->CreateSvxAreaTabDialog( pParent,pDescriptor.get(),pModel.get() ));
-            // #i74099# by default, the dialog deletes the current color table if a different one is loaded
-            // (see SwDrawShell::ExecDrawDlg)
-            const SvxColorTableItem* pColorItem = static_cast<const SvxColorTableItem*>( pDescriptor->GetItem(SID_COLOR_TABLE) );
-            if (pColorItem && pColorItem->GetColorTable() == XColorTable::GetStdColorTable())
-                pDialog->DontDeleteColorTable();
             bSuccess = ( RET_OK == pDialog->Execute() );
             if ( bSuccess )
             {

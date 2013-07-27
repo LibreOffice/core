@@ -74,6 +74,18 @@ public:
 
     virtual void    DeleteMarked();
 
+    virtual bool SdrBeginTextEdit(
+        SdrObject* pObj,
+        ::Window* pWin = 0,
+        bool bIsNewObj = false,
+        SdrOutliner* pGivenOutliner = 0,
+        OutlinerView* pGivenOutlinerView = 0,
+        bool bDontDeleteOutliner = false,
+        bool bOnlyOneView = false,
+        bool bGrabFocus = true);
+    virtual SdrEndTextEditKind SdrEndTextEdit(
+        bool bDontDeleteReally = false);
+
     void            DrawMarks( OutputDevice* pOut ) const;
 
     void            MarkDropObj( SdrObject* pObj );

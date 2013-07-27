@@ -50,6 +50,7 @@
   <node oor:name="Insert">
     <node oor:name="Caption">
       <prop oor:name="CaptionOrderNumberingFirst">
+         <value xml:lang="x-no-translate"/>
          <value xml:lang="hu">true</value>
       </prop>
       <node oor:name="WriterObject">
@@ -701,7 +702,8 @@
  <node oor:name="Layout" >
   <node oor:name="Other" >
     <prop oor:name="TabStop">
-     <value xml:lang="zh-CN">740</value>
+        <value xml:lang="x-no-translate">1250</value>
+        <value xml:lang="zh-CN">740</value>
     </prop>
   </node>
  </node>

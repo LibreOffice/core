@@ -42,7 +42,7 @@
 #include <svx/svdmrkv.hxx>
 #include <svx/svdpagv.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
-#include <svx/sdr/overlay/overlayhatchrect.hxx>
+#include <svx/sdr/overlay/overlayrectangle.hxx>
 #include <drawinglayer/primitive2d/hiddengeometryprimitive2d.hxx>
 
 namespace sdr { namespace table {
@@ -257,9 +257,11 @@ drawinglayer::primitive2d::Primitive2DSequence OverlayTableEdge::createOverlayOb
 TableBorderHdl::TableBorderHdl(
     SdrHdlList& rHdlList,
     const SdrObject& rSdrHdlObject,
-    const basegfx::B2DRange& rRange )
-: SdrHdl( rHdlList, &rSdrHdlObject, HDL_MOVE, rRange.getMinimum() )
-, maRange( rRange )
+    const basegfx::B2DRange& rRange,
+    bool bAnimate)
+:   SdrHdl(rHdlList, &rSdrHdlObject, HDL_MOVE, rRange.getMinimum()),
+    maRange(rRange),
+    mbAnimate(bAnimate)
 {
 
 }
@@ -280,13 +282,22 @@ void TableBorderHdl::CreateB2dIAObject(::sdr::overlay::OverlayManager& rOverlayM
         basegfx::tools::createScaleTranslateB2DHomMatrix(
             maRange.getRange(),
             maRange.getMinimum()));
+    const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
+    const Color aHilightColor(aSvtOptionsDrawinglayer.getHilightColor());
+    const double fTransparence(aSvtOptionsDrawinglayer.GetTransparentSelectionPercent() * 0.01);
 
-    sdr::overlay::OverlayObject* pOverlayObject = new sdr::overlay::OverlayHatchRect(
+    sdr::overlay::OverlayObject* pOverlayObject = new sdr::overlay::OverlayRectangle(
         aTransformation,
-        Color(0x80, 0x80, 0x80),
+        aHilightColor,
+        fTransparence,
         6.0,
         0.0,
-        45 * F_PI180);
+        500,
+        // make animation dependent from text edit active, because for tables
+        // this handle is also used when text edit *is* active for it. This
+        // interferes too much concerning repaint stuff (at least as long as
+        // text edit is not yet on the overlay)
+        getAnimate());
 
     rOverlayManager.add(*pOverlayObject);
     maOverlayGroup.append(*pOverlayObject);

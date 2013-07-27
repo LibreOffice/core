@@ -1,0 +1,58 @@
+/**************************************************************
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ *
+ *************************************************************/
+
+#ifndef __com_sun_star_system_MailClientFlags_idl__
+#define __com_sun_star_system_MailClientFlags_idl__
+
+module com { module sun { module star { module system {
+
+/**  These constants are used to specify how the <type>XMailClient</type>
+     should behave.
+ */
+constants MailClientFlags
+{
+    /** Uses the default settings when sending a mail, e.g.
+        launches the current configured system mail client.
+    */
+    const long DEFAULTS = 0;
+
+    /** Does not show the current configured system mail client GUI, but sends
+        the mail without any further user interaction.
+        <p>If this flag is specified, a recipient address must have been
+        specified for the given <type>XMailMessage</type>
+        object given to the method
+        <member scope="com::sun::star::system">XMailClient::sendMailMessage()</member>.</p>
+    */
+    const long NO_USER_INTERFACE = 1;
+
+    /** No logon dialog should be displayed to prompt the user for logon
+        information if necessary.
+        <p>When this flag is specified and the user needs to logon in order
+        to send a mail message via the method
+        <member scope="com::sun::star::system">XMailClient::sendMailMessage()</member>,
+        an <type scope="com::sun::star::uno">Exception</type> will be thrown.</p>
+    */
+    const long NO_LOGON_DIALOG = 2;
+};
+
+}; }; }; };
+
+#endif

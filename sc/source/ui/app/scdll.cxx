@@ -37,6 +37,7 @@
 
 #include <sot/clsids.hxx>
 #include <sfx2/taskpane.hxx>
+#include <sfx2/sidebar/SidebarChildWindow.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/docfile.hxx>
@@ -262,6 +263,7 @@ void ScDLL::Init()
 
     // common SFX controller
     ::sfx2::TaskPaneWrapper::RegisterChildWindow( sal_False, pMod );
+    ::sfx2::sidebar::SidebarChildWindow::RegisterChildWindow(NULL, pMod);
 
     // Svx-StatusBar-Controller
     SvxInsertStatusBarControl       ::RegisterControl(SID_ATTR_INSERT,      pMod);

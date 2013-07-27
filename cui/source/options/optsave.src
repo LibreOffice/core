@@ -227,7 +227,6 @@ TabPage RID_SFXPAGE_SAVE
         Size = MAP_APPFONT ( 239 , 8 ) ;
         Hide = TRUE;
         Text [ en-US ] = "Not using ODF 1.2 Extended may cause infomation to be lost.";
-        Text [ x-comment ] = "EN-US, the term 'extended' must not be translated.";
     };
     Image IMG_ODF_WARNING
     {

@@ -98,14 +98,6 @@ SRS1FILES= \
         $(SRS)$/classes.srs \
         $(SRS)$/sbx.srs
 
-# --- TESTTOOL IDE ------------------------------------------------------
-# The resources are linked here
-
-RESLIB1NAME=stt
-RESLIB1IMAGES=$(PRJ)$/res
-RESLIB1SRSFILES= \
-        $(SRS)$/app.srs
-        
 RESLIB2NAME=sb
 RESLIB2IMAGES=$(PRJ)$/res
 RESLIB2SRSFILES= \

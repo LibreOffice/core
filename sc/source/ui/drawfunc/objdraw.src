@@ -33,7 +33,6 @@
         Identifier = SID_TEXT_STANDARD ; \
         HelpID = CMD_SID_TEXT_STANDARD ; \
         Text [ en-US ] = "~Default" ; \
-        Text [ x-comment ] = " ";\
     };
 
  // Font (SID_ATTR_CHAR_FONT) und Groesse (SID_ATTR_CHAR_FONTHEIGHT) duerfen nicht im
@@ -85,18 +84,15 @@
                     Identifier = SID_SET_SUPER_SCRIPT ; \
                     HelpID = CMD_SID_SET_SUPER_SCRIPT ; \
                     Text [ en-US ] = "~Superscript" ; \
-                    Text [ x-comment ] = " ";\
                 };\
                 MenuItem\
                 {\
                     Identifier = SID_SET_SUB_SCRIPT ; \
                     HelpID = CMD_SID_SET_SUB_SCRIPT ; \
                     Text [ en-US ] = "S~ubscript" ; \
-                    Text [ x-comment ] = " ";\
                 };\
             };\
         };\
-        Text [ x-comment ] = " ";\
     };\
     MenuItem\
     {\
@@ -114,7 +110,6 @@
                     HelpID = CMD_SID_ATTR_PARA_ADJUST_LEFT ; \
                     RadioCheck = TRUE ; \
                     Text [ en-US ] = "~Left" ;\
-                    Text [ x-comment ] = " ";   \
                 };\
                 MenuItem\
                 {\
@@ -136,11 +131,9 @@
                     HelpID = CMD_SID_ATTR_PARA_ADJUST_BLOCK ; \
                     RadioCheck = TRUE ; \
                     Text [ en-US ] = "~Justified" ; \
-                    Text [ x-comment ] = " ";\
                 };\
             };\
         };\
-        Text [ x-comment ] = " ";\
     };\
     MenuItem\
     {\
@@ -169,7 +162,6 @@
                 };\
             };\
         };\
-        Text [ x-comment ] = " ";\
     };
 
 #define MN_DRWTXT \
@@ -207,7 +199,6 @@
         HelpID = CMD_SID_DRAWTEXT_ATTR_DLG ; \
         Text [ en-US ] = "Te~xt..." ; \
         /* ### ACHTUNG: Neuer Text in Resource? Textattribute für die selektierten Textobjekte festlegen : Textattribute f³r die selektierten Textobjekte festlegen */\
-        Text [ x-comment ] = " ";\
     };
 
 #define MN_ASSIGNMACRO \
@@ -216,7 +207,6 @@
          Identifier = SID_ASSIGNMACRO ; \
          HelpID = CMD_SID_ASSIGNMACRO ; \
          Text [ en-US ] = "Assig~n Macro..." ; \
-         Text [ x-comment ] = " ";\
      };
 
 #define MN_ORIGINALSIZE \
@@ -226,7 +216,6 @@
         HelpId = CMD_SID_ORIGINALSIZE ; \
         /* ### ACHTUNG: Neuer Text in Resource? Originalgröße : Originalgr÷˜e */\
         Text [ en-US ] = "~Original Size" ; \
-        Text [ x-comment ] = " ";\
     };
 
 #define MN_RENAME_OBJECT \
@@ -261,18 +250,15 @@
                     Identifier = SID_MIRROR_VERTICAL ; \
                     HelpId = CMD_SID_MIRROR_VERTICAL ; \
                     Text [ en-US ] = "~Vertically" ; \
-                    Text [ x-comment ] = " ";\
                 };\
                 MenuItem\
                 {\
                     Identifier = SID_MIRROR_HORIZONTAL ; \
                     HelpId = CMD_SID_MIRROR_HORIZONTAL ; \
                     Text [ en-US ] = "~Horizontal" ; \
-                    Text [ x-comment ] = " ";\
                 };\
             };\
         };\
-        Text [ x-comment ] = " ";\
     };
 
 #define MN_ARRANGESUB \
@@ -295,7 +281,6 @@
                     HelpId = CMD_SID_FRAME_UP ; \
                     /* ### ACHTUNG: Neuer Text in Resource? W~eiter nach vorn : Weiter nach vorn */\
                     Text [ en-US ] = "Bring ~Forward" ; \
-                    Text [ x-comment ] = " ";\
                 };\
                 MenuItem\
                 {\
@@ -303,7 +288,6 @@
                     HelpId = CMD_SID_FRAME_DOWN ; \
                     /* ### ACHTUNG: Neuer Text in Resource? Weiter ~nach hinten : Weiter nach hinten */\
                     Text [ en-US ] = "Send Back~ward" ; \
-                    Text [ x-comment ] = " ";\
                 };\
                 MenuItem\
                 {\
@@ -320,7 +304,6 @@
                 };\
             };\
         };\
-        Text [ x-comment ] = " ";\
     };
 
 #define MN_ANCHORSUB \
@@ -339,7 +322,6 @@
                     Identifier = SID_ANCHOR_PAGE ; \
                     HelpId = CMD_SID_ANCHOR_PAGE ; \
                     Text [ en-US ] = "To P~age" ; \
-                    Text [ x-comment ] = " ";\
                 };\
                 MenuItem\
                 {\
@@ -347,11 +329,9 @@
                     Identifier = SID_ANCHOR_CELL ; \
                     HelpId = CMD_SID_ANCHOR_CELL ; \
                     Text [ en-US ] = "To ~Cell" ; \
-                    Text [ x-comment ] = " ";\
                 };\
             };\
         };\
-        Text [ x-comment ] = " ";\
     };
 
 #define MN_ALIGNSUB \
@@ -394,7 +374,6 @@
                 };\
             };\
         };\
-        Text [ x-comment ] = " ";\
     };
 
  //
@@ -406,7 +385,6 @@
 String RID_DRAW_OBJECTBAR
 {
     Text [ en-US ] = "Drawing Object Bar" ;
-    Text [ x-comment ] = " ";
 };
  //
  // Text-Toolbox
@@ -414,7 +392,6 @@ String RID_DRAW_OBJECTBAR
 String RID_TEXT_TOOLBOX
 {
     Text [ en-US ] = "Text Object Bar" ;
-    Text [ x-comment ] = " ";
 };
  //
  // Graphics toolbox
@@ -430,7 +407,6 @@ String RID_POPUP_DRAW
 {
     /* ### ACHTUNG: Neuer Text in Resource? Popup-Menü für Zeichenobjekte : Popup-Men³ f³r Zeichenobjekte */
     Text [ en-US ] = "Pop-up menu for drawing objects" ;
-    Text [ x-comment ] = " ";
 };
  //
  //     Popup-Menue fuer (allgemeine) Zeichenobjekte
@@ -673,7 +649,6 @@ String RID_POPUP_DRAWTEXT
 {
     /* ### ACHTUNG: Neuer Text in Resource? Popup-Menü für Text-Objekte : Popup-Men³ f³r Text-Objekte */
     Text [ en-US ] = "Pop-up menu for text objects" ;
-    Text [ x-comment ] = " ";
 };
 
 Menu RID_POPUP_DRAWTEXT

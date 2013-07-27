@@ -37,6 +37,7 @@ IDLFILES=\
         SmartTagAction.idl\
         SmartTagRecognizer.idl\
         SmartTagRecognizerMode.idl\
+        XRangeBasedSmartTagRecognizer.idl\
         XSmartTagAction.idl\
         XSmartTagRecognizer.idl
 

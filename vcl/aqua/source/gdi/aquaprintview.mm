@@ -55,7 +55,7 @@
     // #i101108# sanity check
     if( nWidth < 1 )
         nWidth = 1;
-    NSRect aRect = { { page % nWidth, page / nWidth }, aPaperSize };
+    NSRect aRect = { NSMakePoint( page % nWidth, page / nWidth), aPaperSize };
     return aRect;
 }
 

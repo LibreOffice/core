@@ -74,7 +74,7 @@ public class _XDictionaryList extends MultiMethodTest {
         public void processDictionaryListEvent( DictionaryListEvent aDicEvent) {
             listenerCalled = true;
         }
-    };
+    }
 
     XDictionaryListEventListener listener = new MyDictionaryListEventListener();
 

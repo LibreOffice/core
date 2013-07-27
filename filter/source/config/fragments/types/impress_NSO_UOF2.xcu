@@ -28,7 +28,6 @@
         <prop oor:name="PreferredFilter"><value>NSO Impress UOF2</value></prop>
         <prop oor:name="UIName">
             <value xml:lang="en-US">Uniform Office Format 2 presentation</value>
-            <value xml:lang="zh-CN">中文办公软件文档格式2 演示文稿</value>
         </prop>
         <prop oor:name="ClipboardFormat"><value>doctype:uop:UOF2</value></prop>
     </node>

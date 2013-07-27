@@ -36,11 +36,10 @@ class BitmapEx;
 
 class VCL_DLLPUBLIC AlphaMask : private Bitmap
 {
+private:
     friend class BitmapEx;
     friend class OutputDevice;
-    friend VCL_DLLPUBLIC SvStream& operator<<( SvStream&, const ImageList& );
-
-private:
+    friend bool VCL_DLLPUBLIC ReadDIBBitmapEx(BitmapEx& rTarget, SvStream& rIStm);
 
     SAL_DLLPRIVATE const Bitmap&    ImplGetBitmap() const;
     SAL_DLLPRIVATE void             ImplSetBitmap( const Bitmap& rBitmap );
@@ -51,7 +50,7 @@ public:
                             AlphaMask( const Bitmap& rBitmap );
                             AlphaMask( const AlphaMask& rAlphaMask );
                             AlphaMask( const Size& rSizePixel, sal_uInt8* pEraseTransparency = NULL );
-                            ~AlphaMask();
+    virtual                 ~AlphaMask();
 
     AlphaMask&              operator=( const Bitmap& rBitmap );
     AlphaMask&              operator=( const AlphaMask& rAlphaMask ) { return (AlphaMask&) Bitmap::operator=( rAlphaMask ); }
@@ -66,7 +65,10 @@ public:
     void                    SetPrefSize( const Size& rSize ) { Bitmap::SetPrefSize( rSize ); }
 
     Size                    GetSizePixel() const { return Bitmap::GetSizePixel(); }
-    void                    SetSizePixel( const Size& rNewSize ) { Bitmap::SetSizePixel( rNewSize ); }
+    void                    SetSizePixel( const Size& rNewSize, sal_uInt32 nScaleFlag = BMP_SCALE_FASTESTINTERPOLATE )
+    {
+        Bitmap::SetSizePixel( rNewSize, nScaleFlag );
+    }
 
     sal_uLong                   GetSizeBytes() const { return Bitmap::GetSizeBytes(); }
     sal_uLong                   GetChecksum() const { return Bitmap::GetChecksum(); }
@@ -81,8 +83,8 @@ public:
     sal_Bool                    Erase( sal_uInt8 cTransparency );
     sal_Bool                    Invert();
     sal_Bool                    Mirror( sal_uLong nMirrorFlags );
-    sal_Bool                    Scale( const Size& rNewSize, sal_uLong nScaleFlag = BMP_SCALE_FASTESTINTERPOLATE );
-    sal_Bool                    Scale( const double& rScaleX, const double& rScaleY, sal_uLong nScaleFlag = BMP_SCALE_FASTESTINTERPOLATE );
+    sal_Bool                    Scale( const Size& rNewSize, sal_uInt32 nScaleFlag = BMP_SCALE_FASTESTINTERPOLATE );
+    sal_Bool                    Scale( const double& rScaleX, const double& rScaleY, sal_uInt32 nScaleFlag = BMP_SCALE_FASTESTINTERPOLATE );
     sal_Bool                    Rotate( long nAngle10, sal_uInt8 cFillTransparency );
     sal_Bool                    Replace( const Bitmap& rMask, sal_uInt8 rReplaceTransparency );
     sal_Bool                    Replace( sal_uInt8 cSearchTransparency, sal_uInt8 cReplaceTransparency, sal_uLong nTol = 0UL );
@@ -94,14 +96,7 @@ public:
     BitmapReadAccess*       AcquireReadAccess() { return Bitmap::AcquireReadAccess(); }
     BitmapWriteAccess*      AcquireWriteAccess() { return Bitmap::AcquireWriteAccess(); }
     void                    ReleaseAccess( BitmapReadAccess* pAccess );
-
-public:
-
-    sal_Bool                    Read( SvStream& rIStm, sal_Bool bFileHeader = sal_True ) { return Bitmap::Read( rIStm, bFileHeader ); }
-    sal_Bool                    Write( SvStream& rOStm, sal_Bool bCompressed = sal_True, sal_Bool bFileHeader = sal_True ) const { return Bitmap::Write( rOStm, bCompressed, bFileHeader ); }
-
-    friend VCL_DLLPUBLIC SvStream& operator<<( SvStream& rOStm, const BitmapEx& rBitmapEx );
-    friend VCL_DLLPUBLIC SvStream& operator>>( SvStream& rIStm, BitmapEx& rBitmapEx );
 };
 
 #endif // _SV_ALPHA_HXX
+// eof

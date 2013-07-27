@@ -36,7 +36,7 @@ USE_DEFFILE=TRUE
 
 .IF "$(SOLAR_JAVA)"==""
 nojava:
-    @echo "Not building jurt because Java is disabled"
+    @echo "Not building hsqldb because Java is disabled"
 .ENDIF
 
 .IF "$(SYSTEM_HSQLDB)" == "YES"

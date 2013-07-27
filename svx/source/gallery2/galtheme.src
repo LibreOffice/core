@@ -123,6 +123,14 @@ String RID_GALLERYSTR_THEME_SURFACES
 
 // -----------------------------------------------------------------------------
 
+String RID_GALLERYSTR_THEME_HTMLBUTTONS
+{
+    // !!! Don't translate, please !!!
+    Text = "private://gallery/hidden/HtmlExportButtons";
+};
+
+// -----------------------------------------------------------------------------
+
 String RID_GALLERYSTR_THEME_POWERPOINT
 {
     // !!! Don't translate, please !!!
@@ -134,6 +142,38 @@ String RID_GALLERYSTR_THEME_POWERPOINT
 String RID_GALLERYSTR_THEME_RULERS
 {
     Text [ en-US ] = "Rulers";
+};
+
+// -----------------------------------------------------------------------------
+
+String RID_GALLERYSTR_THEME_COMPUTERS
+{
+       Text [ en-US ] = "Computers";
+};
+
+String RID_GALLERYSTR_THEME_DIAGRAMS
+{
+       Text [ en-US ] = "Diagrams";
+};
+
+String RID_GALLERYSTR_THEME_ENVIRONMENT
+{
+       Text [ en-US ] = "Environment";
+};
+
+String RID_GALLERYSTR_THEME_FINANCE
+{
+       Text [ en-US ] = "Finance";
+};
+
+String RID_GALLERYSTR_THEME_TRANSPORT
+{
+       Text [ en-US ] = "Transport";
+};
+
+String RID_GALLERYSTR_THEME_TXTSHAPES
+{
+       Text [ en-US ] = "Textshapes";
 };
 
 // -----------------------------------------------------------------------------

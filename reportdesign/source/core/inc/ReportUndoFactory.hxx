@@ -66,7 +66,7 @@ namespace rptui
         virtual SdrUndoAction*  CreateUndoDeletePage(SdrPage& rPage);
         virtual SdrUndoAction* CreateUndoNewPage(SdrPage& rPage);
         virtual SdrUndoAction* CreateUndoCopyPage(SdrPage& rPage);
-        virtual SdrUndoAction* CreateUndoSetPageNum(SdrPage& rNewPg, sal_uInt16 nOldPageNum1, sal_uInt16 nNewPageNum1);
+        virtual SdrUndoAction* CreateUndoSetPageNum(SdrPage& rNewPg, sal_uInt32 nOldPageNum1, sal_uInt32 nNewPageNum1);
 
         // master page
         virtual SdrUndoAction* CreateUndoPageRemoveMasterPage(SdrPage& rChangedPage);

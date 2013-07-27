@@ -857,7 +857,7 @@ void SvxPositionSizeTabPage::Construct()
 
         if((pObj->GetObjInventor() == SdrInventor)
             && (OBJ_TEXT == eKind || OBJ_TITLETEXT == eKind || OBJ_OUTLINETEXT == eKind)
-            && ((SdrTextObj*)pObj)->HasText())
+            && pObj->HasText())
         {
             mbAdjustDisabled = false;
             maFlAdjust.Enable();

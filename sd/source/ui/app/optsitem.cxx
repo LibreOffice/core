@@ -486,6 +486,7 @@ SdOptionsMisc::SdOptionsMisc( sal_uInt16 nConfigId, bool bUseConfig ) :
     // #97016#
     nDefaultObjectSizeWidth(8000),
     nDefaultObjectSizeHeight(5000),
+
     bStartWithTemplate( true ),
     bMarkedHitMovesAlways( true ),
     bMoveOnlyDragging( false ),
@@ -494,12 +495,13 @@ SdOptionsMisc::SdOptionsMisc( sal_uInt16 nConfigId, bool bUseConfig ) :
     bMasterPageCache( true ),
     bDragWithCopy( false ),
     bPickThrough( true ),
-    bBigHandles( false ),
+    bBigHandles( true ), // new default: Use big handles
     bDoubleClickTextEdit( true ),
     bClickChangeRotation( false ),
     bStartWithActualPage( false ),
+    bStartWithPresenterScreen( true ), // default: Enable the Presenter Screen
     bSolidDragging( true ),
-    bSolidMarkHdl( true ),
+    bSolidMarkHdl( true ), // default: Use nice handles
     bSummationOfParagraphs( false ),
     bShowUndoDeleteWarning( true ),
     bSlideshowRespectZOrder( true ),
@@ -534,6 +536,7 @@ bool SdOptionsMisc::operator==( const SdOptionsMisc& rOpt ) const
             IsDoubleClickTextEdit() == rOpt.IsDoubleClickTextEdit() &&
             IsClickChangeRotation() == rOpt.IsClickChangeRotation() &&
             IsStartWithActualPage() == rOpt.IsStartWithActualPage() &&
+            IsStartWithPresenterScreen() == rOpt.IsStartWithPresenterScreen() &&
             IsSummationOfParagraphs() == rOpt.IsSummationOfParagraphs() &&
             IsSolidDragging() == rOpt.IsSolidDragging() &&
             IsSolidMarkHdl() == rOpt.IsSolidMarkHdl() &&
@@ -596,10 +599,12 @@ void SdOptionsMisc::GetPropNameArray( const char**& ppNames, sal_uLong& rCount )
         "Display",
 
         "PenColor",
-        "PenWidth"
+        "PenWidth",
+
+        "Start/PresenterScreen"
     };
 
-    rCount = ( ( GetConfigId() == SDCFG_IMPRESS ) ? 27 : 16 );
+    rCount = ( ( GetConfigId() == SDCFG_IMPRESS ) ? 28 : 16 );
     ppNames = aPropNames;
 }
 
@@ -660,6 +665,9 @@ bool SdOptionsMisc::ReadData( const Any* pValues )
 
         if( pValues[26].hasValue() )
             SetPresentationPenWidth( getSafeValue< double >( pValues[ 26 ] ) );
+
+        if( pValues[27].hasValue() )
+            SetStartWithPresenterScreen( *(sal_Bool*) pValues[ 27 ].getValue() );
     }
 
     return true;
@@ -706,6 +714,8 @@ bool SdOptionsMisc::WriteData( Any* pValues ) const
 
         pValues[ 25 ] <<= GetPresentationPenColor();
         pValues[ 26 ] <<= GetPresentationPenWidth();
+
+        pValues[ 27 ] <<= IsStartWithPresenterScreen();
     }
 
     return true;
@@ -733,6 +743,7 @@ SdOptionsMiscItem::SdOptionsMiscItem( sal_uInt16 _nWhich, SdOptions* pOpts, ::sd
     {
         maOptionsMisc.SetStartWithTemplate( pOpts->IsStartWithTemplate() );
         maOptionsMisc.SetStartWithActualPage( pOpts->IsStartWithActualPage() );
+        maOptionsMisc.SetStartWithPresenterScreen( pOpts->IsStartWithPresenterScreen() );
         maOptionsMisc.SetSummationOfParagraphs( pOpts->IsSummationOfParagraphs() );
         // #90356#
         maOptionsMisc.SetShowUndoDeleteWarning( pOpts->IsShowUndoDeleteWarning() );
@@ -822,6 +833,7 @@ void SdOptionsMiscItem::SetOptions( SdOptions* pOpts ) const
         pOpts->SetDoubleClickTextEdit( maOptionsMisc.IsDoubleClickTextEdit() );
         pOpts->SetClickChangeRotation( maOptionsMisc.IsClickChangeRotation() );
         pOpts->SetStartWithActualPage( maOptionsMisc.IsStartWithActualPage() );
+        pOpts->SetStartWithPresenterScreen( maOptionsMisc.IsStartWithPresenterScreen() );
         pOpts->SetSummationOfParagraphs( maOptionsMisc.IsSummationOfParagraphs() );
         pOpts->SetSolidDragging( maOptionsMisc.IsSolidDragging() );
         pOpts->SetSolidMarkHdl( maOptionsMisc.IsSolidMarkHdl() );

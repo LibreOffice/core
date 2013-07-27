@@ -38,8 +38,8 @@
 
 const LPTSTR CXMergeFilter::m_pszPSWExportCLSID     = _T("{BDD611C3-7BAB-460F-8711-5B9AC9EF6020}");
 const LPTSTR CXMergeFilter::m_pszPSWExportExt       = _T("sxw");
-const LPTSTR CXMergeFilter::m_pszPSWExportDesc      = _T("OpenOffice.org Writer XML Document");
-const LPTSTR CXMergeFilter::m_pszPSWExportShortDesc = _T("OpenOffice.org Writer");
+const LPTSTR CXMergeFilter::m_pszPSWExportDesc      = _T("OpenOffice.org XML Writer Document");
+const LPTSTR CXMergeFilter::m_pszPSWExportShortDesc = _T("OpenOffice.org XML Writer");
 
 const LPTSTR CXMergeFilter::m_pszPSWImportCLSID     = _T("{CB43F086-838D-4FA4-B5F6-3406B9A57439}");
 const LPTSTR CXMergeFilter::m_pszPSWImportExt       = _T("psw");
@@ -48,8 +48,8 @@ const LPTSTR CXMergeFilter::m_pszPSWImportShortDesc = _T("Pocket Word");
 
 const LPTSTR CXMergeFilter::m_pszPXLExportCLSID     = _T("{C6AB3E74-9F4F-4370-8120-A8A6FABB7A7C}");
 const LPTSTR CXMergeFilter::m_pszPXLExportExt       = _T("sxc");
-const LPTSTR CXMergeFilter::m_pszPXLExportDesc      = _T("OpenOffice.org Calc XML Document");
-const LPTSTR CXMergeFilter::m_pszPXLExportShortDesc = _T("OpenOffice.org Calc");
+const LPTSTR CXMergeFilter::m_pszPXLExportDesc      = _T("OpenOffice.org XML Calc Document");
+const LPTSTR CXMergeFilter::m_pszPXLExportShortDesc = _T("OpenOffice.org XML Calc");
 
 const LPTSTR CXMergeFilter::m_pszPXLImportCLSID     = _T("{43887C67-4D5D-4127-BAAC-87A288494C7C}");
 const LPTSTR CXMergeFilter::m_pszPXLImportExt       = _T("pxl");
@@ -237,7 +237,7 @@ STDMETHODIMP CXMergeFilter::NextConvertFile(int nConversion, CFF_CONVERTINFO *pc
         }
     }
 
-    // Get the StarOffice/OpenOffice class directory
+    // Get the Apache OpenOffice class directory
     if (m_szClasspath == NULL)
     {
         m_szClasspath = GetXMergeClassPath();

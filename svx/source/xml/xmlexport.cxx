@@ -253,7 +253,7 @@ sal_Bool SvxDrawingLayerImport( SdrModel* pModel, const uno::Reference<io::XInpu
             }
         }
     }
-    catch( uno::Exception& r )
+    catch( uno::Exception& /*r*/ )
     {
         DBG_UNHANDLED_EXCEPTION();
     }

@@ -1170,13 +1170,14 @@ private:
     /// bitfield
     bool                    mbHasComplexData : 1;
 
-    sal_uInt32  ImplGetColor( const sal_uInt32 rColor, bool bSwap = true );
-    void        ImplCreateGraphicAttributes( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
-                                                sal_uInt32 nBlibId, bool bCreateCroppingAttributes );
-    bool    ImplCreateEmbeddedBmp( const ByteString& rUniqueId );
+    sal_uInt32 ImplGetColor( const sal_uInt32 rColor, bool bSwap = true );
+    void ImplCreateGraphicAttributes(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
+        sal_uInt32 nBlibId,
+        bool bCreateCroppingAttributes );
+    bool ImplCreateEmbeddedBmp( const ByteString& rUniqueId );
 
 public :
-
     EscherPropertyContainer();
     EscherPropertyContainer(
         EscherGraphicProvider& rGraphicProvider,    // the PropertyContainer needs to know

@@ -3473,7 +3473,7 @@
 						<desc>Specifies whether the HelpAgent is enabled.</desc>
 						<label>enable HelpAgent</label>
 					</info>
-					<value>true</value>
+					<value>false</value>
 				</prop>
 				<prop oor:name="Timeout" oor:type="xs:int">
 					<info>
@@ -6156,7 +6156,62 @@
 				</info>
 				<value>false</value>
 			</prop>
-		</group>
+          <prop oor:name="EdgeBlending" oor:type="xs:short">
+            <info>
+              <author>ALG</author>
+              <desc>
+                Option to use EdgeBlending for previews in the UI (for ColorValueSet, ColorDropDown, FillStyle/LineStyle
+                previews, etc...). EdgeBlending will visualize a one pixel border on the preview object with interpolated
+                colors (default: TopLeft White, BottomRight Black) so that a nice 3D effect is shown. It is a percent
+                value describing how strong the effect shall be. The value 0% switches it off, while the value 100% will
+                cover the preview object's border completely with one pixel. Values in-between vill be alpha-blended with
+                the original preview image.
+              </desc>
+              <label>Defines the EdgeBlending for Previews in Percent.</label>
+            </info>
+            <value>35</value>
+          </prop>
+          <prop oor:name="ListBoxMaximumLineCount" oor:type="xs:short">
+            <info>
+              <author>ALG</author>
+              <desc>
+                This option controls how many lines of a ListBox will be shown as a maximum. If the ListBox has less lines,
+                all lines will be shown when opening the drop down content. If it has more lines, the visible number of
+                lines will be limited to this number. The value 0 disables this feature, negative values are not allowed.
+                This feature may not be used automatically by all ListBox implementations,
+                but it gives a central hint value to use if an implementation wants to adapt to something useful.
+              </desc>
+              <label>Defines the maximum number of lines visible in a ListBox.</label>
+            </info>
+            <value>25</value>
+          </prop>
+          <prop oor:name="ColorValueSetColumnCount" oor:type="xs:short">
+            <info>
+              <author>ALG</author>
+              <desc>
+                This option controls how many columns the ColorValueSets (the matrix-organized dialogs for color select)
+                will have. The default is 12 and this is aligned with the layout of the standard color palette. thus, when you
+                change this value, you should know what you do. This setting also influences some width-oriented layouts in
+                dialogs where this ColorValueSets are used, e.g. FillStyle dialog.
+              </desc>
+              <label>Defines the number of columns that will be shown in a ColorValueSet.</label>
+            </info>
+            <value>12</value>
+          </prop>
+          <prop oor:name="PreviewUsesCheckeredBackground" oor:type="xs:boolean">
+            <info>
+              <author>ALG</author>
+              <desc>
+                This option allows to make previews (e.g. UI previews for object attirbutes) show the content with a checkeded 
+                background to allow simple identification and better preview of transparent content, e.g. when a draw object
+                is filled with a transparent graphic (SVG or bitmap) the preview will show the checkered background shine
+                through, so the user can identify that the fill has transparency with a single look.
+              </desc>
+              <label>Shows previews with shining through checkered background to visualize transparency.</label>
+            </info>
+            <value>false</value>
+          </prop>
+        </group>
  		<set oor:name="OfficeObjects" oor:node-type="ObjectNames">
  			<info>
 				<deprecated>Replaced by org.openoffice.Office.Embedding/ObjectNames.</deprecated>

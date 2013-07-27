@@ -1180,8 +1180,8 @@ bool SwEditShell::GetGrammarCorrection(
                 {
                     // return suggestions for first error that includes the given error position
                     const linguistic2::SingleProofreadingError &rError = rResult.aErrors[i];
-                    if (rError.nErrorStart <= rErrorPosInText &&
-                        rErrorPosInText < rError.nErrorStart + rError.nErrorLength)
+                    if( (rError.nErrorStart <= rErrorPosInText) &&
+                        (rErrorPosInText + nLen <= rError.nErrorStart + rError.nErrorLength))
                     {
                         rSuggestions = rError.aSuggestions;
                         rErrorIndexInResult = i;

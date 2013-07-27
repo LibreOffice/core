@@ -28,7 +28,6 @@
 #include <hash_map>
 #include <sal/config.h>
 #include <malloc.h>
-#include <new.h>
 #include <typeinfo.h>
 #include <signal.h>
 

@@ -69,7 +69,7 @@ $(eval $(call gb_Library_add_linked_libs,sw,\
     svt \
     svx \
     svxcore \
-    tk \
+    ootk \
     tl \
     ucbhelper \
     utl \
@@ -646,6 +646,13 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/ui/shells/txtattr \
     sw/source/ui/shells/txtcrsr \
     sw/source/ui/shells/txtnum \
+    sw/source/ui/sidebar/PageOrientationControl \
+    sw/source/ui/sidebar/PageMarginControl \
+    sw/source/ui/sidebar/PageSizeControl \
+    sw/source/ui/sidebar/PageColumnControl \
+    sw/source/ui/sidebar/PagePropertyPanel \
+    sw/source/ui/sidebar/WrapPropertyPanel \
+    sw/source/ui/sidebar/SwPanelFactory \
     sw/source/ui/smartmenu/stmenu \
     sw/source/ui/table/chartins \
     sw/source/ui/table/swtablerep \

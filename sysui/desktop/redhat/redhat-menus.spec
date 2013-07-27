@@ -28,8 +28,13 @@ License: ALv2
 Vendor: Apache Software Foundation
 AutoReqProv: no
 BuildArch: noarch
+Obsoletes: openoffice.org3.0-redhat-menus
+Obsoletes: openoffice.org3.1-redhat-menus
+Obsoletes: openoffice.org3.2-redhat-menus
+Obsoletes: openoffice.org3.3-redhat-menus
+Obsoletes: openoffice.org3.4-redhat-menus
 Requires: redhat-release
-Provides: openoffice.org3-desktop-integration
+Provides: openoffice-desktop-integration
 %define _unpackaged_files_terminate_build 0
 %define _binary_filedigest_algorithm 1
 %define _binary_payload w9.gzdio

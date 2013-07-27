@@ -45,14 +45,14 @@
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/system/XSystemShellExecute.hpp>
+#include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 
 #include <rtl/logfile.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <comphelper/mimeconfighelper.hxx>
 #include <comphelper/storagehelper.hxx>
-
+#include <comphelper/processfactory.hxx>
 
 #include <targetstatecontrol.hxx>
 
@@ -878,9 +878,9 @@ void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
 
                 if (m_aTempDumpURL.getLength())
                 {
-                    uno::Reference< ::com::sun::star::system::XSystemShellExecute > xSystemShellExecute( m_xFactory->createInstance(
-                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.system.SystemShellExecute"))),
-                        uno::UNO_QUERY_THROW);
+                    uno::Reference< ::com::sun::star::system::XSystemShellExecute > xSystemShellExecute(
+                        ::com::sun::star::system::SystemShellExecute::create(
+                            ::comphelper::getProcessComponentContext() ) );
                     xSystemShellExecute->execute(m_aTempDumpURL, ::rtl::OUString(), ::com::sun::star::system::SystemShellExecuteFlags::DEFAULTS);
                 }
                 else

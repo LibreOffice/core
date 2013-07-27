@@ -54,7 +54,6 @@
 #ifndef _VCL_MNEMONIC_HXX_
 #include <vcl/mnemonic.hxx>
 #endif
-#include <com/sun/star/awt/XMenuExtended.hpp>
 #include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/document/XDocumentLanguages.hpp>

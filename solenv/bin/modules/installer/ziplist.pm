@@ -639,7 +639,7 @@ sub set_manufacturer
 {
     my ($allvariables) = @_;
 
-    my $openofficeproductname = "OpenOffice.org";
+    my $openofficeproductname = "OpenOffice";
     my $sunname = "";
 
 
@@ -673,13 +673,6 @@ sub set_default_productversion_if_required
     if (!($allvariables->{'PRODUCTVERSION'}))
     {
         $allvariables->{'PRODUCTVERSION'} = 1;  # FAKE
-    }
-
-    # Creating differentiators for BUILD_SPECIAL in layering
-    if ( ! $ENV{'BUILD_SPECIAL'} )
-    {
-        if ( $allvariables->{'REGISTRYLAYERNAME'} ) { $allvariables->{'REGISTRYLAYERNAME'} = $allvariables->{'REGISTRYLAYERNAME'} . "_"; }
-        if (( $installer::globals::iswindowsbuild ) && ( $allvariables->{'BASISROOTNAME'} )) { $allvariables->{'BASISROOTNAME'} = $allvariables->{'BASISROOTNAME'} . "_"; }
     }
 }
 

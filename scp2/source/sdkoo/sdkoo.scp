@@ -43,33 +43,15 @@ End
 #ifndef MACOSX
 
 #ifdef WNT
-Directory gid_Dir_Sdkoo_Root
+Directory gid_Dir_OpenOffice_Sdk
     ParentID = PREDEFINED_PROGDIR;
     HostName = "${PRODUCTNAME}_${PRODUCTVERSION}_${POSTVERSIONEXTENSION}";
     Styles = (OFFICEDIRECTORY, ISINSTALLLOCATION);
 End
-#endif
-
-#ifndef WNT
-Directory gid_Dir_Ooo_Openofficeorg_Sdk
+#else
+Directory gid_Dir_OpenOffice_Sdk
     ParentID = PREDEFINED_PROGDIR;
-  #ifdef WNT
-    HostName = "${BASISROOTNAME}";
-  #else
-    HostName = "${UNIXBASISROOTNAME}";
-  #endif
-End
-#endif
-
-#ifndef WNT
-Directory gid_Dir_Ooo_Basis_Sdk
-    ParentID = gid_Dir_Ooo_Openofficeorg_Sdk;
-  #ifdef WNT
-    HostName = "Basis ${OOOBASEVERSION}";
-  #else
-    HostName = "basis${OOOBASEVERSION}";
-  #endif
-    Styles = (BASISDIRECTORY);
+    HostName = "${UNIXPRODUCTNAME}${BRANDPACKAGEVERSION}";
 End
 #endif
 
@@ -78,14 +60,9 @@ End
 Directory gid_Dir_Basis_Sdk
 #if defined MACOSX
     ParentID = PREDEFINED_PROGDIR;
-    // DosName = "OpenOffice.org${OOOBASEVERSION}_SDK";
-    DosName = "OpenOffice.org_SDK";
+    DosName = "OpenOffice_SDK";
 #else
-  #if defined WNT
-    ParentID = gid_Dir_Sdkoo_Root;
-  #else
-    ParentID = gid_Dir_Ooo_Basis_Sdk;
-  #endif
+    ParentID = gid_Dir_OpenOffice_Sdk;
     DosName = "sdk";
 #endif
 End
@@ -192,7 +169,7 @@ Unixlink gid_Unixlink_Sal_Link_Sdk
     Styles = ();
     Name = SCP2_URE_DL_UNO_NORMAL("sal");
     Dir = gid_Dir_Lib_Sdk;
-    Target = "../../ure-link/lib/" SCP2_URE_DL_UNO_VER("sal", "3");
+    Target = "../../program/" SCP2_URE_DL_UNO_VER("sal", "3");
 End
 #endif
 
@@ -202,7 +179,7 @@ Unixlink gid_Unixlink_Salhelper_Link_Sdk
     Styles = ();
     Name = SCP2_URE_DL_UNO_COMID_NORMAL("salhelper");
     Dir = gid_Dir_Lib_Sdk;
-    Target = "../../ure-link/lib/" SCP2_URE_DL_UNO_COMID_VER("salhelper", "3");
+    Target = "../../program/" SCP2_URE_DL_UNO_COMID_VER("salhelper", "3");
 End
 #endif
 
@@ -212,7 +189,7 @@ Unixlink gid_Unixlink_Cppu_Link_Sdk
     Styles = ();
     Name = SCP2_URE_DL_UNO_NORMAL("cppu");
     Dir = gid_Dir_Lib_Sdk;
-    Target = "../../ure-link/lib/" SCP2_URE_DL_UNO_VER("cppu", "3");
+    Target = "../../program/" SCP2_URE_DL_UNO_VER("cppu", "3");
 End
 #endif
 
@@ -223,7 +200,7 @@ Unixlink gid_Unixlink_Cppuhelper_Link_Sdk
     // Styles = (LAYERLINK);
     Name = SCP2_URE_DL_UNO_COMID_NORMAL("cppuhelper");
     Dir = gid_Dir_Lib_Sdk;
-    Target = "../../ure-link/lib/" SCP2_URE_DL_UNO_COMID_VER("cppuhelper", "3");
+    Target = "../../program/" SCP2_URE_DL_UNO_COMID_VER("cppuhelper", "3");
 End
 #endif
 
@@ -233,7 +210,7 @@ Unixlink gid_Unixlink_Purpenvhelper_Link_Sdk
     Styles = ();
     Name = SCP2_URE_DL_UNO_COMID_NORMAL("purpenvhelper");
     Dir = gid_Dir_Lib_Sdk;
-    Target = "../../ure-link/lib/" SCP2_URE_DL_UNO_COMID_VER("purpenvhelper", "3");
+    Target = "../../program/" SCP2_URE_DL_UNO_COMID_VER("purpenvhelper", "3");
 End
 #endif
 

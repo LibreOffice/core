@@ -1,0 +1,80 @@
+/**************************************************************
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ *
+ *************************************************************/
+
+#ifndef __com_sun_star_system_XMailClient_idl__
+#define __com_sun_star_system_XMailClient_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#include <com/sun/star/system/XMailMessage.idl>
+#include <com/sun/star/system/MailClientFlags.idl>
+
+module com { module sun { module star { module system {
+
+/** Specifies an interface for creating and sending email messages
+    through a mail client.
+ */
+interface XMailClient
+{
+    /** Create a mail message object that implements the interface
+        <type>XMailMessage</type>.
+
+        @returns
+            An object that implements the <type>XMailMessage</type> interface.
+    */
+    XMailMessage createMailMessage();
+
+    /** Sends a given mail message object that implements the interface
+        <type>XMailMessage</type>.
+
+        @param xMailMessage
+            Specifies a configured mail object to be sent.
+
+        @param aFlag
+            Specifies different flags that control the send process.
+            <p>Possible flags are specified in <type>MailClientFlags</type>.</p>
+            <p>If the flag <const scope="com::sun::star::system">MailClientFlags::NO_USER_INTERFACE</const>
+            is specified, a recipient address must have been specified for the
+            given <type>XMailMessage</type>.</p>
+
+        @throws com::sun::star::lang::IllegalArgumentException
+            <ul>
+                <li>If invalid or excluding flags have been specified.</li>
+                <li>The flag <const scope="com::sun::star::system">MailClientFlags::NO_USER_INTERFACE</const>
+                is specified and no recipient address has been specified for the
+                given <type>XMailMessage</type> object.</li>
+                <li>The parameter <type>XMailMessage</type> is <NULL/>.</li>
+            </ul>
+
+        @throws com::sun::star::uno::Exception
+            if an error occurs while sending the mail.
+            <p>The <member scope="com::sun::star::uno">Execption::Message</member>
+            may contain an error description.</p>
+    */
+    void sendMailMessage( [in] XMailMessage xMailMessage,
+                          [in] long aFlag )
+        raises( ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::uno::Exception );
+};
+
+}; }; }; };
+
+#endif

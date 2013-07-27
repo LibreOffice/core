@@ -72,7 +72,7 @@ $(eval $(call gb_Library_add_linked_libs,svxcore,\
     stl \
     svl \
     svt \
-    tk \
+    ootk \
     tl \
     ucbhelper \
     utl \
@@ -176,11 +176,14 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/gallery2/galmisc \
     svx/source/gallery2/galobj \
     svx/source/gallery2/galtheme \
+    svx/source/gallery2/GalleryControl \
+    svx/source/gallery2/GallerySplitter \
     svx/source/items/chrtitem \
     svx/source/items/clipfmtitem \
     svx/source/items/customshapeitem \
     svx/source/items/drawitem \
     svx/source/items/e3ditem \
+    svx/source/items/galleryitem \
     svx/source/items/grfitem \
     svx/source/sdr/animation/scheduler \
     svx/source/sdr/animation/objectanimator \
@@ -217,7 +220,6 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/sdr/contact/viewcontact \
     svx/source/sdr/contact/viewcontactofsdrole2obj \
     svx/source/sdr/contact/displayinfo \
-    svx/source/sdr/contact/objectcontacttools \
     svx/source/sdr/contact/viewcontactofe3dscene \
     svx/source/sdr/contact/viewcontactofsdrrectobj \
     svx/source/sdr/contact/viewobjectcontactofsdrole2obj \
@@ -242,7 +244,7 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/sdr/overlay/overlayrollingrectangle \
     svx/source/sdr/overlay/overlaytriangle \
     svx/source/sdr/overlay/overlayselection \
-    svx/source/sdr/overlay/overlayhatchrect \
+    svx/source/sdr/overlay/overlayrectangle \
     svx/source/sdr/overlay/overlaybitmapex \
     svx/source/sdr/overlay/overlaymanagerbuffered \
     svx/source/sdr/overlay/overlayhelpline \
@@ -386,6 +388,7 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/tbxctrls/fontworkgallery \
     svx/source/tbxctrls/tbcontrl \
     svx/source/tbxctrls/tbxcolorupdate \
+    svx/source/tbxctrls/SvxColorValueSet \
     svx/source/toolbars/extrusionbar \
     svx/source/toolbars/fontworkbar \
     svx/source/unodraw/gluepts \
@@ -427,6 +430,7 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/xoutdev/xtabgrdt \
     svx/source/xoutdev/xtabhtch \
     svx/source/xoutdev/xtable \
+    svx/source/xoutdev/XPropertyEntry \
     svx/source/xoutdev/xtablend \
 ))
 

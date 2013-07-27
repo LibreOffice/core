@@ -126,10 +126,7 @@ SHL2STDLIBS= \
         $(VOSLIB)				\
         $(SALLIB)
         
-.IF "$(GUI)"=="OS2"
-SHL2STDLIBS+=	$(LB)$/i$(TARGET).lib
-SHL2DEPN=$(LB)$/i$(TARGET).lib
-.ELIF "$(GUI)"!="WNT" || "$(COM)"=="GCC"
+.IF "$(GUI)"!="WNT" || "$(COM)"=="GCC" || "$(GUI)"=="OS2"
 SHL2STDLIBS+= \
         -l$(TARGET)$(DLLPOSTFIX)
 SHL2DEPN=$(SHL1TARGETN)

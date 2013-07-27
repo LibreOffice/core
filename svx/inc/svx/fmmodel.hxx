@@ -51,7 +51,7 @@ private:
     SVX_DLLPRIVATE void operator=(const FmFormModel& rSrcModel);   // never implemented
 
 public:
-    FmFormModel(const XubString& rPath = XubString(), SfxItemPool* pPool = 0, SfxObjectShell* pPers = 0, bool bUseExtColorTable = 0);
+    FmFormModel(const XubString& rPath = XubString(), SfxItemPool* pPool = 0, SfxObjectShell* pPers = 0);
     virtual ~FmFormModel();
 
     virtual SdrPage* AllocPage(bool bMasterPage);

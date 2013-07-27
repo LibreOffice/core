@@ -53,8 +53,8 @@
              nodeprecated="true"
              nodeprecatedlist="true"
              use="true"
-             Doctitle="OpenOffice XMerge API"
-             windowtitle="OpenOffice XMerge API"
+             Doctitle="Apache OpenOffice XMerge API"
+             windowtitle="Apache OpenOffice XMerge API"
              classpathref="classpath">
             <fileset dir="../source/bridge" defaultexcludes="yes">
                <include name="**/*.java"/>

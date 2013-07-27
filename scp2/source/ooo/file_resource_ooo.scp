@@ -80,7 +80,6 @@ STD_RES_FILE( gid_File_Res_Spa, spa )
 
 #endif
 
-STD_RES_FILE( gid_File_Res_Stt, stt )
 STD_RES_FILE( gid_File_Res_Sb, sb )
 
 STD_RES_FILE( gid_File_Res_Svl, svl )
@@ -95,7 +94,7 @@ STD_RES_FILE( gid_File_Res_Cui, cui )
 
 STD_RES_FILE( gid_File_Res_Sw, sw )
 
-STD_RES_FILE( gid_File_Res_Tk, tk )
+
 STD_RES_FILE( gid_File_Res_Acc, acc )
 
 STD_RES_FILE( gid_File_Res_Tpl, tpl )
@@ -126,4 +125,6 @@ STD_RES_FILE( gid_File_Res_T602Filter, t602filter )
 
 STD_RES_FILE( gid_File_Res_Forui, forui )
 STD_RES_FILE( gid_File_Res_For, for )
+
+STD_RES_FILE( gid_File_Res_PresentationMinimizer, minimizer )
 

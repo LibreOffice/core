@@ -74,6 +74,7 @@
 #define RC_UNDO                     (RC_BASE + 3750)
 #define RC_SMARTTAG                    (RC_BASE + 3950)  // SMARTTAGS
 #define RC_UNOCORE                  (RC_BASE + 4050)
+#define RC_PROPERTYPANEL            (RC_BASE + 4070)
 #define RC_ANNOTATION               (RC_BASE + 4150)
 
 /*--------------------------------------------------------------------
@@ -264,4 +265,7 @@
 #define RC_UNOCORE_BEGIN            RC_UNOCORE
 #define RC_UNOCORE_END              (RC_UNOCORE + 10)
 
+// property panel
+#define RC_PROPERTYPANEL_BEGIN            RC_PROPERTYPANEL
+#define RC_PROPERTYPANEL_END              (RC_PROPERTYPANEL + 10)
 #endif

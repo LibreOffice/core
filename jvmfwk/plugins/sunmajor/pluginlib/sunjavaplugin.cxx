@@ -267,7 +267,7 @@ javaPluginError jfw_plugin_getAllJavaInfos(
             }
         }
 
-        if (arExcludeList > 0)
+        if( arExcludeList != NULL)
         {
             bool bExclude = false;
             for (int j = 0; j < nLenList; j++)
@@ -397,7 +397,7 @@ javaPluginError jfw_plugin_getJavaInfoByPath(
             return JFW_PLUGIN_E_FAILED_VERSION;
     }
 
-    if (arExcludeList > 0)
+    if( arExcludeList != NULL)
     {
         for (int i = 0; i < nLenList; i++)
         {
@@ -498,7 +498,7 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
             sRuntimeLib, osl_getThreadTextEncoding());
         rtl::OString sSymbol = rtl::OUStringToOString(
             sSymbolCreateJava, osl_getThreadTextEncoding());
-        fprintf(stderr,"[Java framework]sunjavaplugin"SAL_DLLEXTENSION
+        fprintf(stderr,"[Java framework]sunjavaplugin" SAL_DLLEXTENSION
                 "Java runtime library: %s does not export symbol %s !\n",
                 sLib.getStr(), sSymbol.getStr());
         return JFW_PLUGIN_E_VM_CREATION_FAILED;
@@ -589,13 +589,13 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
         rtl::OUString message;
         if( err < 0)
         {
-            fprintf(stderr,"[Java framework] sunjavaplugin"SAL_DLLEXTENSION
+            fprintf( stderr,"[Java framework] sunjavaplugin" SAL_DLLEXTENSION
                     "Can not create Java Virtual Machine\n");
             errcode = JFW_PLUGIN_E_VM_CREATION_FAILED;
         }
         else if( err > 0)
         {
-            fprintf(stderr,"[Java framework] sunjavaplugin"SAL_DLLEXTENSION
+            fprintf( stderr,"[Java framework] sunjavaplugin" SAL_DLLEXTENSION
                     "Can not create JavaVirtualMachine, abort handler was called.\n");
             errcode = JFW_PLUGIN_E_VM_CREATION_FAILED;
         }
@@ -603,7 +603,7 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
     else
     {
         *ppVm = pJavaVM;
-        JFW_TRACE2("[Java framework] sunjavaplugin"SAL_DLLEXTENSION " has created a VM.\n");
+        JFW_TRACE2( "[Java framework] sunjavaplugin" SAL_DLLEXTENSION " has created a VM.\n");
     }
 
 

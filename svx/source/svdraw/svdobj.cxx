@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 #include <com/sun/star/lang/XComponent.hpp>
@@ -40,22 +38,22 @@
 #include <svx/svddrag.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/svdview.hxx>   // fuer Dragging (Ortho abfragen)
-#include "svx/svdglob.hxx"   // StringCache
-#include <svx/svdstr.hrc>    // Objektname
-#include <svx/svdogrp.hxx>   // Factory
-#include <svx/svdopath.hxx>  // Factory
-#include <svx/svdoedge.hxx>  // Factory
-#include <svx/svdorect.hxx>  // Factory
-#include <svx/svdocirc.hxx>  // Factory
-#include <svx/svdotext.hxx>  // Factory
-#include <svx/svdomeas.hxx>  // Factory
-#include <svx/svdograf.hxx>  // Factory
-#include <svx/svdoole2.hxx>  // Factory
-#include <svx/svdocapt.hxx>  // Factory
-#include <svx/svdopage.hxx>  // Factory
-#include <svx/svdouno.hxx>   // Factory
-#include <svx/svdattrx.hxx> // NotPersistItems
+#include <svx/svdview.hxx>
+#include "svx/svdglob.hxx"
+#include <svx/svdstr.hrc>
+#include <svx/svdogrp.hxx>
+#include <svx/svdopath.hxx>
+#include <svx/svdoedge.hxx>
+#include <svx/svdorect.hxx>
+#include <svx/svdocirc.hxx>
+#include <svx/svdotext.hxx>
+#include <svx/svdomeas.hxx>
+#include <svx/svdograf.hxx>
+#include <svx/svdoole2.hxx>
+#include <svx/svdocapt.hxx>
+#include <svx/svdopage.hxx>
+#include <svx/svdouno.hxx>
+#include <svx/svdattrx.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/svdomedia.hxx>
 #include <svx/xlnwtit.hxx>
@@ -559,7 +557,8 @@ void SdrObject::setParentOfSdrObject(SdrObjList* pNew)
 }
 
 SdrObject::SdrObject(SdrModel& rSdrModel, const basegfx::B2DHomMatrix& rTransform)
-:   SfxListener(),
+:   boost::noncopyable(),
+    SfxListener(),
     SfxBroadcaster(),
     tools::WeakBase< SdrObject >(),
     mrSdrModelFromSdrObject(rSdrModel),
@@ -1711,6 +1710,23 @@ const SfxPoolItem& SdrObject::GetObjectItem(const sal_uInt16 nWhich) const
     return GetObjectItemSet().Get(nWhich);
 }
 
+//SfxMapUnit SdrObject::GetObjectMapUnit() const // TTTT: May not be needed
+//{
+//    SfxMapUnit aRetval(SFX_MAPUNIT_100TH_MM);
+//    SdrItemPool* pPool = GetObjectItemPool();
+//
+//    if(pPool)
+//    {
+//        aRetval = pPool->GetMetric(0);
+//    }
+//    else
+//    {
+//        OSL_ENSURE(pPool, "SdrObjects always need a pool (!)");
+//    }
+//
+//    return aRetval;
+//}
+
 const SfxPoolItem& SdrObject::GetMergedItem(const sal_uInt16 nWhich) const
 {
     return GetMergedItemSet().Get(nWhich);
@@ -2109,6 +2125,31 @@ SdrGluePointList* SdrObject::ForceGluePointList()
     return mpPlusData->mpGluePoints;
 }
 
+void extractLineContourFromPrimitive2DSequence(
+    const drawinglayer::primitive2d::Primitive2DSequence& rxSequence,
+    basegfx::B2DPolygonVector& rExtractedHairlines,
+    basegfx::B2DPolyPolygonVector& rExtractedLineFills)
+{
+    rExtractedHairlines.clear();
+    rExtractedLineFills.clear();
+
+    if(rxSequence.hasElements())
+    {
+        // use neutral ViewInformation
+        const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
+
+        // create extractor, process and get result
+        drawinglayer::processor2d::LineGeometryExtractor2D aExtractor(aViewInformation2D);
+        aExtractor.process(rxSequence);
+
+        // copy line results
+        rExtractedHairlines = aExtractor.getExtractedHairlines();
+
+        // copy fill rsults
+        rExtractedLineFills = aExtractor.getExtractedLineFills();
+    }
+}
+
 SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, bool bForceLineDash) const
 {
     bool bNoChange(true);
@@ -2121,32 +2162,25 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, bool bForceLineDas
 
         if(xSequence.hasElements())
         {
-            // use neutral ViewInformation
-            const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
+            basegfx::B2DPolygonVector aExtractedHairlines;
+            basegfx::B2DPolyPolygonVector aExtractedLineFills;
 
-            // create extractor, process and get result
-            drawinglayer::processor2d::LineGeometryExtractor2D aExtractor(aViewInformation2D);
-            aExtractor.process(xSequence);
+            extractLineContourFromPrimitive2DSequence(xSequence, aExtractedHairlines, aExtractedLineFills);
 
-            // #i102241# check for line results
-            const basegfx::B2DPolygonVector& rHairlineVector = aExtractor.getExtractedHairlines();
-
-            if(rHairlineVector.size())
+            if(!aExtractedHairlines.empty())
             {
                 // for SdrObject creation, just copy all to a single Hairline-PolyPolygon
-                for(sal_uInt32 a(0); a < rHairlineVector.size(); a++)
+                for(sal_uInt32 a(0); a < aExtractedHairlines.size(); a++)
                 {
-                    aMergedHairlinePolyPolygon.append(rHairlineVector[a]);
+                    aMergedHairlinePolyPolygon.append(aExtractedHairlines[a]);
                 }
             }
 
-            // #i102241# check for fill rsults
-            const basegfx::B2DPolyPolygonVector& rLineFillVector(aExtractor.getExtractedLineFills());
-
-            if(rLineFillVector.size())
+            // check for fill rsults
+            if(!aExtractedLineFills.empty())
             {
                 // merge to a single PolyPolygon (OR)
-                aMergedLineFillPolyPolygon = basegfx::tools::mergeToSinglePolyPolygon(rLineFillVector);
+                aMergedLineFillPolyPolygon = basegfx::tools::mergeToSinglePolyPolygon(aExtractedLineFills);
             }
         }
 
@@ -2179,8 +2213,7 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, bool bForceLineDas
 
             if(aMergedHairlinePolyPolygon.count())
             {
-                // create SdrObject for hairline geometry
-                // OBJ_PATHLINE is necessary here, not OBJ_PATHFILL. This is intended
+                // create SdrObject for hairline geometry. A non-closed polygon hiere is intended
                 // to get a non-filled object. If the poly is closed, the PathObj takes care for
                 // the correct closed state.
                 aLineHairlinePart = new SdrPathObj(
@@ -2633,6 +2666,12 @@ void SdrObject::SetBLIPSizeRange(const basegfx::B2DRange& aRange)
 void SdrObject::SetContextWritingMode( const sal_Int16 /*_nContextWritingMode*/ )
 {
     // this base class does not support different writing modes, so ignore the call
+}
+
+// #121917#
+bool SdrObject::HasText() const
+{
+    return false;
 }
 
 ::std::vector< SdrEdgeObj* > SdrObject::getAllConnectedSdrEdgeObj() const

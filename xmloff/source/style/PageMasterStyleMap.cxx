@@ -31,7 +31,7 @@
 
 using namespace ::xmloff::token;
 
-#define _MAP(name,prefix,token,type,context)  { name, sizeof(name)-1, prefix, token, type, context, SvtSaveOptions::ODFVER_010 }
+#define _MAP(name,prefix,token,type,context)  { name, sizeof(name)-1, prefix, token, static_cast<sal_Int32>(type), context, SvtSaveOptions::ODFVER_010 }
 #define PLMAP(name,prefix,token,type,context) \
         _MAP(name,prefix,token,type|XML_TYPE_PROP_PAGE_LAYOUT,context)
 #define HFMAP(name,prefix,token,type,context) \
