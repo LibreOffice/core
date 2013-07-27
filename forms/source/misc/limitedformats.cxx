@@ -84,13 +84,13 @@ namespace frm
     };
 
     //---------------------------------------------------------------------
-    static const FormatEntry* lcl_getFormatTable(sal_Int16 nTableId)
+    static FormatEntry* lcl_getFormatTable(sal_Int16 nTableId)
     {
         switch (nTableId)
         {
             case FormComponentType::TIMEFIELD:
             {
-                static const FormatEntry s_aFormats[] = {
+                static FormatEntry s_aFormats[] = {
                     { "HH:MM", -1, ltEnglishUS },
                     { "HH:MM:SS", -1, ltEnglishUS },
                     { "HH:MM AM/PM", -1, ltEnglishUS },
@@ -103,7 +103,7 @@ namespace frm
             }
             case FormComponentType::DATEFIELD:
             {
-                static const FormatEntry s_aFormats[] = {
+                static FormatEntry s_aFormats[] = {
                     { "T-M-JJ", -1, ltGerman },
                     { "TT-MM-JJ", -1, ltGerman },
                     { "TT-MM-JJJJ", -1, ltGerman },
@@ -151,7 +151,7 @@ namespace frm
     //---------------------------------------------------------------------
     void OLimitedFormats::ensureTableInitialized(const sal_Int16 _nTableId)
     {
-        const FormatEntry* pFormatTable = lcl_getFormatTable(_nTableId);
+        FormatEntry* pFormatTable = lcl_getFormatTable(_nTableId);
         if (-1 == pFormatTable->nKey)
         {
             ::osl::MutexGuard aGuard(s_aMutex);
@@ -166,7 +166,7 @@ namespace frm
                 if (xStandardFormats.is())
                 {
                     // loop through the table
-                    FormatEntry* pLoopFormats = const_cast<FormatEntry*>(pFormatTable);
+                    FormatEntry* pLoopFormats = pFormatTable;
                     while (pLoopFormats->pDescription)
                     {
                         // get the key for the description
@@ -206,8 +206,8 @@ namespace frm
     void OLimitedFormats::clearTable(const sal_Int16 _nTableId)
     {
         ::osl::MutexGuard aGuard(s_aMutex);
-        const FormatEntry* pFormats = lcl_getFormatTable(_nTableId);
-        FormatEntry* pResetLoop = const_cast<FormatEntry*>(pFormats);
+        FormatEntry* pFormats = lcl_getFormatTable(_nTableId);
+        FormatEntry* pResetLoop = pFormats;
         while (pResetLoop->pDescription)
         {
             pResetLoop->nKey = -1;
