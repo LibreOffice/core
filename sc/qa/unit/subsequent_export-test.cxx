@@ -27,6 +27,7 @@
 #include "document.hxx"
 #include "cellform.hxx"
 #include "formulacell.hxx"
+#include "tokenarray.hxx"
 
 #include "svx/svdoole2.hxx"
 
@@ -56,6 +57,7 @@ public:
 
     void testInlineArrayXLS();
     void testEmbeddedChartXLS();
+    void testFormulaReferenceXLS();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -70,6 +72,7 @@ public:
     CPPUNIT_TEST(testNamedRangeBugfdo62729);
     CPPUNIT_TEST(testInlineArrayXLS);
     CPPUNIT_TEST(testEmbeddedChartXLS);
+    CPPUNIT_TEST(testFormulaReferenceXLS);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -401,6 +404,45 @@ void ScExportTest::testEmbeddedChartXLS()
     CPPUNIT_ASSERT_MESSAGE("Label range (B3:B5) not found.", aRanges.In(ScRange(1,2,1,1,4,1)));
     CPPUNIT_ASSERT_MESSAGE("Data label (C2) not found.", aRanges.In(ScAddress(2,1,1)));
     CPPUNIT_ASSERT_MESSAGE("Data range (C3:C5) not found.", aRanges.In(ScRange(2,2,1,2,4,1)));
+
+    xDocSh->DoClose();
+}
+
+void ScExportTest::testFormulaReferenceXLS()
+{
+    ScDocShellRef xShell = loadDoc("formula-reference.", XLS);
+    CPPUNIT_ASSERT(xShell.Is());
+
+    ScDocShellRef xDocSh = saveAndReload(xShell, XLS);
+    xShell->DoClose();
+    CPPUNIT_ASSERT(xDocSh.Is());
+
+    ScDocument* pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    if (!checkFormula(*pDoc, ScAddress(3,1,0), "$A$2+$B$2+$C$2"))
+        CPPUNIT_FAIL("Wrong formula in D2");
+
+    if (!checkFormula(*pDoc, ScAddress(3,2,0), "A3+B3+C3"))
+        CPPUNIT_FAIL("Wrong formula in D3");
+
+    if (!checkFormula(*pDoc, ScAddress(3,5,0), "SUM($A$6:$C$6)"))
+        CPPUNIT_FAIL("Wrong formula in D6");
+
+    if (!checkFormula(*pDoc, ScAddress(3,6,0), "SUM(A7:C7)"))
+        CPPUNIT_FAIL("Wrong formula in D7");
+
+    if (!checkFormula(*pDoc, ScAddress(3,9,0), "$Two.$A$2+$Two.$B$2+$Two.$C$2"))
+        CPPUNIT_FAIL("Wrong formula in D10");
+
+    if (!checkFormula(*pDoc, ScAddress(3,10,0), "$Two.A3+$Two.B3+$Two.C3"))
+        CPPUNIT_FAIL("Wrong formula in D11");
+
+    if (!checkFormula(*pDoc, ScAddress(3,13,0), "MIN($Two.$A$2:$C$2)"))
+        CPPUNIT_FAIL("Wrong formula in D14");
+
+    if (!checkFormula(*pDoc, ScAddress(3,14,0), "MAX($Two.A3:C3)"))
+        CPPUNIT_FAIL("Wrong formula in D15");
 
     xDocSh->DoClose();
 }

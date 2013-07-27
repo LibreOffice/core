@@ -155,48 +155,6 @@ void Test::testFormulaRefData()
     CPPUNIT_ASSERT_MESSAGE("Wrong end position of extended range.", aTest.aEnd == ScAddress(8,6,0));
 }
 
-namespace {
-
-OUString toString(
-    ScDocument& rDoc, const ScAddress& rPos, ScTokenArray& rArray, FormulaGrammar::Grammar eGram = FormulaGrammar::GRAM_NATIVE)
-{
-    ScCompiler aComp(&rDoc, rPos, rArray);
-    aComp.SetGrammar(eGram);
-    OUStringBuffer aBuf;
-    aComp.CreateStringFromTokenArray(aBuf);
-    return aBuf.makeStringAndClear();
-}
-
-ScTokenArray* getTokens(ScDocument& rDoc, const ScAddress& rPos)
-{
-    ScFormulaCell* pCell = rDoc.GetFormulaCell(rPos);
-    if (!pCell)
-        return NULL;
-
-    return pCell->GetCode();
-}
-
-bool checkFormula(ScDocument& rDoc, const ScAddress& rPos, const char* pExpected)
-{
-    ScTokenArray* pCode = getTokens(rDoc, rPos);
-    if (!pCode)
-    {
-        cerr << "Empty token array." << endl;
-        return false;
-    }
-
-    OUString aFormula = toString(rDoc, rPos, *pCode);
-    if (aFormula != OUString::createFromAscii(pExpected))
-    {
-        cerr << "Formula '" << pExpected << "' expected, but '" << aFormula << "' found" << endl;
-        return false;
-    }
-
-    return true;
-}
-
-}
-
 void Test::testFormulaCompiler()
 {
     struct {

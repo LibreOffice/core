@@ -24,6 +24,7 @@
 #include <sfx2/docfilt.hxx>
 #include "sfx2/docfile.hxx"
 #include "svl/stritem.hxx"
+#include "formula/grammar.hxx"
 
 #include <string>
 #include <sstream>
@@ -52,6 +53,7 @@ SC_DLLPUBLIC bool testEqualsWithTolerance( long nVal1, long nVal2, long nTol );
 
 class SdrOle2Obj;
 class ScRangeList;
+class ScTokenArray;
 
 // data format for row height tests
 struct TestParam
@@ -94,6 +96,15 @@ SC_DLLPUBLIC const SdrOle2Obj* getSingleChartObject(ScDocument& rDoc, sal_uInt16
 SC_DLLPUBLIC std::vector<OUString> getChartRangeRepresentations(const SdrOle2Obj& rChartObj);
 
 SC_DLLPUBLIC ScRangeList getChartRanges(ScDocument& rDoc, const SdrOle2Obj& rChartObj);
+
+SC_DLLPUBLIC bool checkFormula(ScDocument& rDoc, const ScAddress& rPos, const char* pExpected);
+
+/**
+ * Convert formula token array to a formula string.
+ */
+SC_DLLPUBLIC OUString toString(
+    ScDocument& rDoc, const ScAddress& rPos, ScTokenArray& rArray,
+    formula::FormulaGrammar::Grammar eGram = formula::FormulaGrammar::GRAM_NATIVE);
 
 inline std::string print(const ScAddress& rAddr)
 {

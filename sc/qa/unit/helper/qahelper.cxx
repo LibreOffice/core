@@ -10,6 +10,7 @@
 #include "qahelper.hxx"
 #include "csv_handler.hxx"
 #include "drwlayer.hxx"
+#include "compiler.hxx"
 #include "svx/svdpage.hxx"
 #include "svx/svdoole2.hxx"
 
@@ -233,6 +234,48 @@ ScRangeList getChartRanges(ScDocument& rDoc, const SdrOle2Obj& rChartObj)
     }
 
     return aRanges;
+}
+
+namespace {
+
+ScTokenArray* getTokens(ScDocument& rDoc, const ScAddress& rPos)
+{
+    ScFormulaCell* pCell = rDoc.GetFormulaCell(rPos);
+    if (!pCell)
+        return NULL;
+
+    return pCell->GetCode();
+}
+
+}
+
+bool checkFormula(ScDocument& rDoc, const ScAddress& rPos, const char* pExpected)
+{
+    ScTokenArray* pCode = getTokens(rDoc, rPos);
+    if (!pCode)
+    {
+        cerr << "Empty token array." << endl;
+        return false;
+    }
+
+    OUString aFormula = toString(rDoc, rPos, *pCode);
+    if (aFormula != OUString::createFromAscii(pExpected))
+    {
+        cerr << "Formula '" << pExpected << "' expected, but '" << aFormula << "' found" << endl;
+        return false;
+    }
+
+    return true;
+}
+
+OUString toString(
+    ScDocument& rDoc, const ScAddress& rPos, ScTokenArray& rArray, formula::FormulaGrammar::Grammar eGram)
+{
+    ScCompiler aComp(&rDoc, rPos, rArray);
+    aComp.SetGrammar(eGram);
+    OUStringBuffer aBuf;
+    aComp.CreateStringFromTokenArray(aBuf);
+    return aBuf.makeStringAndClear();
 }
 
 ScDocShellRef ScBootstrapFixture::load( bool bReadWrite,
