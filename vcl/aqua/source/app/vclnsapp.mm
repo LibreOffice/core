@@ -17,7 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "rtl/ustrbuf.hxx"
+#include "sal/config.h"
+
+#include <vector>
 
 #include "vcl/window.hxx"
 #include "vcl/svapp.hxx"
@@ -288,8 +290,9 @@
 -(BOOL)application: (NSApplication*)app openFile: (NSString*)pFile
 {
     (void)app;
-    const rtl::OUString aFile( GetOUString( pFile ) );
-    if( ! AquaSalInstance::isOnCommandLine( aFile ) )
+    std::vector<OUString> aFile;
+    aFile.push_back( GetOUString( pFile ) );
+    if( ! AquaSalInstance::isOnCommandLine( aFile[0] ) )
     {
         const ApplicationEvent* pAppEvent = new ApplicationEvent(ApplicationEvent::TYPE_OPEN, aFile);
         AquaSalInstance::aAppEventList.push_back( pAppEvent );
@@ -300,7 +303,7 @@
 -(void)application: (NSApplication*) app openFiles: (NSArray*)files
 {
     (void)app;
-    rtl::OUStringBuffer aFileList( 256 );
+    std::vector<OUString> aFileList;
 
     NSEnumerator* it = [files objectEnumerator];
     NSString* pFile = nil;
@@ -310,18 +313,16 @@
         const rtl::OUString aFile( GetOUString( pFile ) );
         if( ! AquaSalInstance::isOnCommandLine( aFile ) )
         {
-            if( aFileList.getLength() > 0 )
-                aFileList.append('\n');
-            aFileList.append( aFile );
+            aFileList.push_back( aFile );
         }
     }
 
-    if( aFileList.getLength() )
+    if( !aFileList.empty() )
     {
         // we have no back channel here, we have to assume success, in which case
         // replyToOpenOrPrint does not need to be called according to documentation
         // [app replyToOpenOrPrint: NSApplicationDelegateReplySuccess];
-        const ApplicationEvent* pAppEvent = new ApplicationEvent(ApplicationEvent::TYPE_OPEN, aFileList.makeStringAndClear());
+        const ApplicationEvent* pAppEvent = new ApplicationEvent(ApplicationEvent::TYPE_OPEN, aFileList);
         AquaSalInstance::aAppEventList.push_back( pAppEvent );
     }
 }
@@ -329,7 +330,8 @@
 -(BOOL)application: (NSApplication*)app printFile: (NSString*)pFile
 {
     (void)app;
-    const rtl::OUString aFile( GetOUString( pFile ) );
+    std::vector<OUString> aFile;
+    aFile.push_back( GetOUString( pFile ) );
 	const ApplicationEvent* pAppEvent = new ApplicationEvent(ApplicationEvent::TYPE_PRINT, aFile);
 	AquaSalInstance::aAppEventList.push_back( pAppEvent );
     return YES;
@@ -340,18 +342,16 @@
     (void)printSettings;
     (void)bShowPrintPanels;
     // currently ignores print settings an bShowPrintPanels
-    rtl::OUStringBuffer aFileList( 256 );
+    std::vector<OUString> aFileList;
 
     NSEnumerator* it = [files objectEnumerator];
     NSString* pFile = nil;
 
     while( (pFile = [it nextObject]) != nil )
     {
-        if( aFileList.getLength() > 0 )
-            aFileList.append('\n');
-        aFileList.append( GetOUString( pFile ) );
+        aFileList.push_back( GetOUString( pFile ) );
     }
-	const ApplicationEvent* pAppEvent = new ApplicationEvent(ApplicationEvent::TYPE_PRINT, aFileList.makeStringAndClear());
+	const ApplicationEvent* pAppEvent = new ApplicationEvent(ApplicationEvent::TYPE_PRINT, aFileList);
 	AquaSalInstance::aAppEventList.push_back( pAppEvent );
     // we have no back channel here, we have to assume success
     // correct handling would be NSPrintingReplyLater and then send [app replyToOpenOrPrint]

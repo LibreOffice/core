@@ -2616,7 +2616,7 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
     case ApplicationEvent::TYPE_ACCEPT:
         // every time an accept parameter is used we create an acceptor
         // with the corresponding accept-string
-        createAcceptor(rAppEvent.GetData());
+        createAcceptor(rAppEvent.GetStringData());
         break;
     case ApplicationEvent::TYPE_APPEAR:
         if ( !GetCommandLineArgs().IsInvisible() )
@@ -2665,7 +2665,7 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
         }
         break;
     case ApplicationEvent::TYPE_HELP:
-        displayCmdlineHelp(rAppEvent.GetData());
+        displayCmdlineHelp(rAppEvent.GetStringData());
         break;
     case ApplicationEvent::TYPE_VERSION:
         displayVersion();
@@ -2677,7 +2677,9 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
             {
                 ProcessDocumentsRequest* pDocsRequest = new ProcessDocumentsRequest(
                     rCmdLine.getCwdUrl());
-                pDocsRequest->aOpenList.push_back(rAppEvent.GetData());
+                std::vector<OUString> const & data(rAppEvent.GetStringsData());
+                pDocsRequest->aOpenList.insert(
+                    pDocsRequest->aOpenList.end(), data.begin(), data.end());
                 pDocsRequest->pcProcessed = NULL;
 
                 OfficeIPCThread::ExecuteCmdLineRequests( *pDocsRequest );
@@ -2687,7 +2689,7 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
         break;
     case ApplicationEvent::TYPE_OPENHELPURL:
         // start help for a specific URL
-        Application::GetHelp()->Start(rAppEvent.GetData(), NULL);
+        Application::GetHelp()->Start(rAppEvent.GetStringData(), NULL);
         break;
     case ApplicationEvent::TYPE_PRINT:
         {
@@ -2696,7 +2698,9 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
             {
                 ProcessDocumentsRequest* pDocsRequest = new ProcessDocumentsRequest(
                     rCmdLine.getCwdUrl());
-                pDocsRequest->aPrintList.push_back(rAppEvent.GetData());
+                std::vector<OUString> const & data(rAppEvent.GetStringsData());
+                pDocsRequest->aPrintList.insert(
+                    pDocsRequest->aPrintList.end(), data.begin(), data.end());
                 pDocsRequest->pcProcessed = NULL;
 
                 OfficeIPCThread::ExecuteCmdLineRequests( *pDocsRequest );
@@ -2735,10 +2739,10 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
 
             Reference< css::util::XURLTransformer > xParser = css::util::URLTransformer::create(xContext);
             css::util::URL aCommand;
-            if( rAppEvent.GetData() == OUString("PREFERENCES") )
-                aCommand.Complete = OUString( ".uno:OptionsTreeDialog"  );
-            else if( rAppEvent.GetData() == OUString("ABOUT") )
-                aCommand.Complete = OUString( ".uno:About"  );
+            if( rAppEvent.GetStringData() == "PREFERENCES" )
+                aCommand.Complete = ".uno:OptionsTreeDialog";
+            else if( rAppEvent.GetStringData() == "ABOUT" )
+                aCommand.Complete = ".uno:About";
             if( !aCommand.Complete.isEmpty() )
             {
                 xParser->parseStrict(aCommand);
@@ -2753,7 +2757,7 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
         break;
     case ApplicationEvent::TYPE_UNACCEPT:
         // try to remove corresponding acceptor
-        destroyAcceptor(rAppEvent.GetData());
+        destroyAcceptor(rAppEvent.GetStringData());
         break;
     default:
         SAL_WARN( "desktop.app", "this cannot happen");
