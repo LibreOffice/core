@@ -50,7 +50,7 @@ public:
 
 inline const SwTxtNode& SwTxtTOXMark::GetTxtNode() const
 {
-    OSL_ENSURE( m_pTxtNode, "SwTxtTOXMark: where is my TxtNode?" );
+    assert( m_pTxtNode );
     return *m_pTxtNode;
 }
 

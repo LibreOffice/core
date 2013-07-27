@@ -113,7 +113,7 @@ public:
 
 inline const SwTxtNode& SwTxtRuby::GetTxtNode() const
 {
-    OSL_ENSURE( m_pTxtNode, "SwTxtRuby: where is my TxtNode?" );
+    assert( m_pTxtNode );
     return *m_pTxtNode;
 }
 

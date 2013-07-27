@@ -170,12 +170,12 @@ public:
 // --- inlines -----------------------------------------------------------
 inline OUString SwAuthEntry::GetAuthorField(ToxAuthorityField ePos) const
 {
-    OSL_ENSURE(AUTH_FIELD_END > ePos, "wrong index");
+    SAL_WARN_IF(AUTH_FIELD_END <= ePos, "sw", "wrong index");
     return aAuthFields[ePos];
 }
 inline void SwAuthEntry::SetAuthorField(ToxAuthorityField ePos, const OUString& rField)
 {
-    OSL_ENSURE(AUTH_FIELD_END > ePos, "wrong index");
+    SAL_WARN_IF(AUTH_FIELD_END <= ePos, "sw", "wrong index");
     if(AUTH_FIELD_END > ePos)
         aAuthFields[ePos] = rField;
 }

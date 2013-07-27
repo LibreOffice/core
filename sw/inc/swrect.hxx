@@ -18,7 +18,7 @@
  */
 #ifndef _SWRECT_HXX
 #define _SWRECT_HXX
-#include <osl/diagnose.h>
+#include <sal/log.hxx>
 #include <tools/gen.hxx>
 class SvStream;
 
@@ -296,7 +296,7 @@ inline SwRect &SwRect::operator-=( const Size &rSz )
 // other
 inline Rectangle SwRect::SVRect() const
 {
-    OSL_ENSURE( !IsEmpty(), "SVRect() without Width or Height" );
+    SAL_WARN_IF( IsEmpty(), "sw", "SVRect() without Width or Height" );
     return Rectangle( m_Point.getX(), m_Point.getY(),
         m_Point.getX() + m_Size.getWidth() - 1,         //Right()
         m_Point.getY() + m_Size.getHeight() - 1 );      //Bottom()

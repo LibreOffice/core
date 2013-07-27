@@ -23,7 +23,6 @@
 #include <assert.h>
 
 #include <tools/solar.h>
-#include <osl/diagnose.h>
 #include <swdllapi.h>
 
 struct BlockInfo;

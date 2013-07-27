@@ -108,9 +108,9 @@ class SwNoteProps: public utl::ConfigItem
             const ::com::sun::star::uno::Sequence< OUString >& rNames = GetPropertyNames();
                 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > aValues = GetProperties(rNames);
                 const ::com::sun::star::uno::Any* pValues = aValues.getConstArray();
-               OSL_ENSURE(aValues.getLength() == rNames.getLength(), "GetProperties failed");
+                SAL_WARN_IF(aValues.getLength() != rNames.getLength(), "sw", "GetProperties failed");
                 if (aValues.getLength())
-                pValues[0]>>=bIsShowAnchor;
+                    pValues[0]>>=bIsShowAnchor;
         }
 
         bool IsShowAnchor()
