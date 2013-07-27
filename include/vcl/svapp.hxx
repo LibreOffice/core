@@ -24,7 +24,9 @@
 
 #include <sal/config.h>
 
+#include <cassert>
 #include <stdexcept>
+#include <vector>
 
 #include <comphelper/solarmutex.hxx>
 #include <osl/thread.hxx>
@@ -100,20 +102,42 @@ public:
         TYPE_SHOWDIALOG, TYPE_UNACCEPT
     };
 
-    ApplicationEvent() {}
+    explicit ApplicationEvent(Type type): aEvent(type) {
+        assert(
+            type == TYPE_APPEAR || type == TYPE_VERSION
+            || type == TYPE_PRIVATE_DOSHUTDOWN || type == TYPE_QUICKSTART);
+    }
 
-    explicit ApplicationEvent(
-        Type rEvent, const OUString& rData = OUString()):
-        aEvent(rEvent),
-        aData(rData)
-    {}
+    ApplicationEvent(Type type, OUString const & data): aEvent(type) {
+        assert(
+            type == TYPE_ACCEPT || type == TYPE_HELP || type == TYPE_OPENHELPURL
+            || type == TYPE_SHOWDIALOG || type == TYPE_UNACCEPT);
+        aData.push_back(data);
+    }
+
+    ApplicationEvent(Type type, std::vector<OUString> const & data):
+        aEvent(type), aData(data)
+    { assert(type == TYPE_OPEN || type == TYPE_PRINT); }
 
     Type GetEvent() const { return aEvent; }
-    const OUString& GetData() const { return aData; }
+
+    OUString GetStringData() const {
+        assert(
+            aEvent == TYPE_ACCEPT || aEvent == TYPE_HELP
+            || aEvent == TYPE_OPENHELPURL || aEvent == TYPE_SHOWDIALOG
+            || aEvent == TYPE_UNACCEPT);
+        assert(aData.size() == 1);
+        return aData[0];
+    }
+
+    std::vector<OUString> const & GetStringsData() const {
+        assert(aEvent == TYPE_OPEN || aEvent == TYPE_PRINT);
+        return aData;
+    }
 
 private:
     Type aEvent;
-    OUString aData;
+    std::vector<OUString> aData;
 };
 
 

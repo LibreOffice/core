@@ -40,7 +40,6 @@
 #include <vector>
 
 class Timer;
-class ApplicationEvent;
 class WorkWindow;
 class ISfxTemplateCommon;
 class BasicManager;
