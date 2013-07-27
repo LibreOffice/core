@@ -707,13 +707,6 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 String aGrfName, aFltName;
                 const Graphic aGrf( pGalleryItem->GetGraphic() );
 
-                if( pGalleryItem->IsLink() )
-                {
-                    // Linked
-                    aGrfName = pGalleryItem->GetURL();
-                    aFltName = pGalleryItem->GetFilterName();
-                }
-
                 if ( nSelType & nsSelectionType::SEL_GRF )
                     rSh.ReRead( aGrfName, aFltName, &aGrf );
                 else

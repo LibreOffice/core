@@ -30,7 +30,6 @@ TYPEINIT1_AUTOFACTORY( SvxGalleryItem, SfxPoolItem );
 
 SvxGalleryItem::SvxGalleryItem()
     : m_nType( css::gallery::GalleryItemType::EMPTY )
-    , m_bIsLink( sal_False )
 {
     DBG_CTOR(SvxGalleryItem, 0);
 }
@@ -38,7 +37,6 @@ SvxGalleryItem::SvxGalleryItem()
 SvxGalleryItem::SvxGalleryItem( const SvxGalleryItem &rItem )
     : SfxPoolItem( rItem )
     , m_nType( rItem.m_nType )
-    , m_bIsLink( rItem.m_bIsLink )
     , m_aURL( rItem.m_aURL )
     , m_xDrawing( rItem.m_xDrawing )
     , m_xGraphic( rItem.m_xGraphic )
@@ -50,7 +48,6 @@ SvxGalleryItem::SvxGalleryItem(
     const ::sal_uInt16 nId )
     : SfxPoolItem( nId )
     , m_nType( css::gallery::GalleryItemType::EMPTY )
-    , m_bIsLink( sal_False )
 {
     DBG_CTOR(SvxGalleryItem, 0);
 }
@@ -66,16 +63,14 @@ bool SvxGalleryItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /* nMemberId */ 
 
     aSeq[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SVXGALLERYITEM_TYPE ));
     aSeq[0].Value <<= m_nType;
-    aSeq[1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SVXGALLERYITEM_LINK ));
-    aSeq[1].Value <<= m_bIsLink;
-    aSeq[2].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SVXGALLERYITEM_URL ));
+    aSeq[1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SVXGALLERYITEM_URL ));
+    aSeq[1].Value <<= m_aURL;
+    aSeq[2].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SVXGALLERYITEM_FILTER ));
     aSeq[2].Value <<= m_aURL;
-    aSeq[3].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SVXGALLERYITEM_FILTER ));
-    aSeq[3].Value <<= m_aURL;
-    aSeq[4].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SVXGALLERYITEM_DRAWING ));
-    aSeq[4].Value <<= m_xDrawing;
-    aSeq[5].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SVXGALLERYITEM_GRAPHIC ));
-    aSeq[5].Value <<= m_xGraphic;
+    aSeq[3].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SVXGALLERYITEM_DRAWING ));
+    aSeq[3].Value <<= m_xDrawing;
+    aSeq[4].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SVXGALLERYITEM_GRAPHIC ));
+    aSeq[4].Value <<= m_xGraphic;
 
     rVal <<= aSeq;
 
@@ -94,7 +89,6 @@ bool SvxGalleryItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /* nMemberId
     sal_Bool bIsSetType( sal_False );
 
     sal_Int8 nType(0);
-    sal_Bool bIsLink( sal_False );
     rtl::OUString aURL, aFilterName;
     css::uno::Reference< css::lang::XComponent > xDrawing;
     css::uno::Reference< css::graphic::XGraphic > xGraphic;
@@ -106,11 +100,6 @@ bool SvxGalleryItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /* nMemberId
         if ( pProp->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SVXGALLERYITEM_TYPE ) ) )
         {
             bAllConverted &= bIsSetType = ( pProp->Value >>= nType );
-            ++nConverted;
-        }
-        else if ( pProp->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SVXGALLERYITEM_LINK ) ) )
-        {
-            bAllConverted &= ( pProp->Value >>= bIsLink );
             ++nConverted;
         }
         else if ( pProp->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SVXGALLERYITEM_URL ) ) )
@@ -139,7 +128,6 @@ bool SvxGalleryItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /* nMemberId
         return false;
 
     m_nType = nType;
-    m_bIsLink = bIsLink;
     m_aURL = aURL;
     m_aFilterName = aFilterName;
     m_xDrawing = xDrawing;
@@ -155,7 +143,6 @@ int SvxGalleryItem::operator==( const SfxPoolItem& rAttr ) const
     const SvxGalleryItem& rItem = static_cast<const SvxGalleryItem&>(rAttr);
 
     int bRet = m_nType  == rItem.m_nType &&
-            m_bIsLink   == rItem.m_bIsLink &&
             m_aURL      == rItem.m_aURL &&
             m_xDrawing  == rItem.m_xDrawing &&
             m_xGraphic  == rItem.m_xGraphic;

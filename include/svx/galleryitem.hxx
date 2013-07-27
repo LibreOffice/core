@@ -28,12 +28,11 @@
 // property names map those from css::gallery::GalleryItem
 // with exception of "AsLink" and "FilterName"
 #define SVXGALLERYITEM_TYPE     "GalleryItemType"
-#define SVXGALLERYITEM_LINK     "AsLink"
 #define SVXGALLERYITEM_URL      "URL"
 #define SVXGALLERYITEM_FILTER   "FilterName"
 #define SVXGALLERYITEM_DRAWING  "Drawing"
 #define SVXGALLERYITEM_GRAPHIC  "Graphic"
-#define SVXGALLERYITEM_PARAMS   6
+#define SVXGALLERYITEM_PARAMS   5
 #define SVXGALLERYITEM_ARGNAME  "GalleryItem"
 
 DBG_NAMEEX_VISIBILITY( SvxGalleryItem, SVX_DLLPUBLIC )
@@ -41,7 +40,6 @@ DBG_NAMEEX_VISIBILITY( SvxGalleryItem, SVX_DLLPUBLIC )
 class SVX_DLLPUBLIC SvxGalleryItem : public SfxPoolItem
 {
     sal_Int8 m_nType;
-    sal_Bool m_bIsLink;
     rtl::OUString m_aURL;
     rtl::OUString m_aFilterName;
     com::sun::star::uno::Reference< com::sun::star::lang::XComponent > m_xDrawing;
@@ -56,7 +54,6 @@ public:
     ~SvxGalleryItem();
 
     sal_Int8 GetType() const { return m_nType; }
-    sal_Bool IsLink() const { return m_bIsLink; }
     const rtl::OUString GetURL() const { return m_aURL; }
     const rtl::OUString GetFilterName() const { return m_aFilterName; }
     const com::sun::star::uno::Reference< com::sun::star::lang::XComponent > GetDrawing() const { return m_xDrawing; }

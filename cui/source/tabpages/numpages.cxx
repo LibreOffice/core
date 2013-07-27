@@ -792,11 +792,9 @@ SvxBitmapPickTabPage::SvxBitmapPickTabPage(Window* pParent,
 {
     SetExchangeSupport();
     get(m_pErrorText, "errorft");
-    get(m_pLinkedCB, "linkgraphics");
     get(m_pExamplesVS, "valueset");
     m_pExamplesVS->SetSelectHdl(LINK(this, SvxBitmapPickTabPage, NumSelectHdl_Impl));
     m_pExamplesVS->SetDoubleClickHdl(LINK(this, SvxBitmapPickTabPage, DoubleClickHdl_Impl));
-    m_pLinkedCB->SetClickHdl(LINK(this, SvxBitmapPickTabPage, LinkBmpHdl_Impl));
 
     eCoreUnit = rSet.GetPool()->GetMetric(rSet.GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE));
 
@@ -921,16 +919,6 @@ void  SvxBitmapPickTabPage::Reset( const SfxItemSet& rSet )
         pActNum = new  SvxNumRule(*pSaveNum);
     else if(*pSaveNum != *pActNum)
         *pActNum = *pSaveNum;
-    if(!pActNum->IsFeatureSupported(NUM_ENABLE_LINKED_BMP))
-    {
-        m_pLinkedCB->Check(sal_False);
-        m_pLinkedCB->Enable(sal_False);
-    }
-    else if(!pActNum->IsFeatureSupported(NUM_ENABLE_EMBEDDED_BMP))
-    {
-        m_pLinkedCB->Check(sal_True);
-        m_pLinkedCB->Enable(sal_False);
-    }
 }
 
 IMPL_LINK_NOARG(SvxBitmapPickTabPage, NumSelectHdl_Impl)
@@ -944,8 +932,6 @@ IMPL_LINK_NOARG(SvxBitmapPickTabPage, NumSelectHdl_Impl)
         sal_uInt16 nMask = 1;
         String aEmptyStr;
         sal_uInt16 nSetNumberingType = SVX_NUM_BITMAP;
-        if(m_pLinkedCB->IsChecked())
-            nSetNumberingType |= LINK_TOKEN;
         for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
         {
             if(nActNumLvl & nMask)
@@ -981,15 +967,6 @@ IMPL_LINK_NOARG(SvxBitmapPickTabPage, DoubleClickHdl_Impl)
     NumSelectHdl_Impl(m_pExamplesVS);
     PushButton& rOk = GetTabDialog()->GetOKButton();
     rOk.GetClickHdl().Call(&rOk);
-    return 0;
-}
-
-IMPL_LINK_NOARG(SvxBitmapPickTabPage, LinkBmpHdl_Impl)
-{
-    if(!m_pExamplesVS->IsNoSelection())
-    {
-        NumSelectHdl_Impl(m_pExamplesVS);
-    }
     return 0;
 }
 

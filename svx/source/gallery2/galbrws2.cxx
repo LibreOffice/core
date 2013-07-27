@@ -185,9 +185,7 @@ throw ( css::uno::RuntimeException )
     {
         if ( !rEvent.IsEnabled )
         {
-            PopupMenu *pAddMenu = maPopupMenu.GetPopupMenu( MN_ADDMENU );
-            pAddMenu->EnableItem( MN_ADD, sal_False );
-            pAddMenu->EnableItem( MN_ADD_LINK, sal_False );
+            maPopupMenu.EnableItem( MN_ADD, sal_False );
         }
     }
     else if ( rURL.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( CMD_SID_GALLERY_BG_BRUSH ) ) )
@@ -242,16 +240,13 @@ void GalleryThemePopup::ExecutePopup( Window *pWindow, const ::Point &aPos )
     css::uno::Reference< css::frame::XStatusListener > xThis( this );
 
     const SgaObjKind eObjKind = mpTheme->GetObjectKind( mnObjectPos );
-    PopupMenu*       pAddMenu = maPopupMenu.GetPopupMenu( MN_ADDMENU );
     INetURLObject    aURL;
 
     const_cast< GalleryTheme* >( mpTheme )->GetURL( mnObjectPos, aURL );
     const sal_Bool bValidURL = ( aURL.GetProtocol() != INET_PROT_NOT_VALID );
 
-    pAddMenu->EnableItem( MN_ADD, bValidURL && SGA_OBJ_SOUND != eObjKind );
-    pAddMenu->EnableItem( MN_ADD_LINK, bValidURL && SGA_OBJ_SVDRAW != eObjKind );
+    maPopupMenu.EnableItem( MN_ADD, bValidURL && SGA_OBJ_SOUND != eObjKind );
 
-    maPopupMenu.EnableItem( MN_ADDMENU, pAddMenu->IsItemEnabled( MN_ADD ) || pAddMenu->IsItemEnabled( MN_ADD_LINK ) );
     maPopupMenu.EnableItem( MN_PREVIEW, bValidURL );
 
     maPopupMenu.CheckItem( MN_PREVIEW, mbPreview );
@@ -335,17 +330,14 @@ void GalleryThemePopup::ExecutePopup( Window *pWindow, const ::Point &aPos )
     }
 
     if( !maBackgroundPopup.GetItemCount() || ( eObjKind == SGA_OBJ_SVDRAW ) || ( eObjKind == SGA_OBJ_SOUND ) )
-        pAddMenu->EnableItem( MN_BACKGROUND, sal_False );
+        maPopupMenu.EnableItem( MN_BACKGROUND, sal_False );
     else
     {
-        pAddMenu->EnableItem( MN_BACKGROUND, sal_True );
-        pAddMenu->SetPopupMenu( MN_BACKGROUND, &maBackgroundPopup );
+        maPopupMenu.EnableItem( MN_BACKGROUND, sal_True );
+        maPopupMenu.SetPopupMenu( MN_BACKGROUND, &maBackgroundPopup );
         maBackgroundPopup.SetSelectHdl( LINK( this, GalleryThemePopup, BackgroundMenuSelectHdl ) );
     }
 
-    pAddMenu->RemoveDisabledEntries();
-    if ( !pAddMenu->GetItemCount() )
-        maPopupMenu.EnableItem( MN_ADDMENU, sal_False );
     maPopupMenu.RemoveDisabledEntries();
 
     maPopupMenu.SetSelectHdl( LINK( this, GalleryThemePopup, MenuSelectHdl ) );
@@ -361,7 +353,6 @@ IMPL_LINK( GalleryThemePopup, MenuSelectHdl, Menu*, pMenu )
     switch ( nId )
     {
         case( MN_ADD ):
-        case( MN_ADD_LINK ):
         {
             const CommandInfoMap::const_iterator it = m_aCommandInfo.find( SID_GALLERY_FORMATS );
             if ( it != m_aCommandInfo.end() )
@@ -688,16 +679,13 @@ sal_Bool GalleryBrowser2::KeyInput( const KeyEvent& rKEvt, Window* pWindow )
 
     if( !bRet && !maViewBox.HasFocus() && nItemId && mpCurTheme )
     {
-        sal_uInt16              nExecuteId = 0;
-        const SgaObjKind    eObjKind = mpCurTheme->GetObjectKind( nItemId - 1 );
+        sal_uInt16          nExecuteId = 0;
         INetURLObject       aURL;
 
         const_cast< GalleryTheme* >( mpCurTheme )->GetURL( nItemId - 1, aURL );
 
         const sal_Bool  bValidURL = ( aURL.GetProtocol() != INET_PROT_NOT_VALID );
         sal_Bool        bPreview = bValidURL;
-        sal_Bool        bAdd = bValidURL;
-        sal_Bool        bAddLink = ( bValidURL && SGA_OBJ_SVDRAW != eObjKind );
         sal_Bool        bDelete = sal_False;
         sal_Bool        bTitle = sal_False;
 
@@ -725,13 +713,9 @@ sal_Bool GalleryBrowser2::KeyInput( const KeyEvent& rKEvt, Window* pWindow )
             case( KEY_I ):
             {
                 // Inserting a gallery item in the document must be dispatched
-                if( bAddLink && rKEvt.GetKeyCode().IsShift() && rKEvt.GetKeyCode().IsMod1() )
-                    nExecuteId = MN_ADD_LINK;
-                else if( bAdd )
-                    nExecuteId = MN_ADD;
-                if( nExecuteId )
+                if( bValidURL )
                 {
-                    Dispatch( nExecuteId );
+                    Dispatch( MN_ADD );
                     return sal_True;
                 }
             }
@@ -1109,7 +1093,6 @@ void GalleryBrowser2::Dispatch(
     switch( nId )
     {
         case( MN_ADD ):
-        case( MN_ADD_LINK ):
         {
             css::uno::Reference< css::frame::XDispatch > xDispatch( rxDispatch );
             css::util::URL aURL = rURL;
@@ -1133,7 +1116,6 @@ void GalleryBrowser2::Dispatch(
                 return;
 
             sal_Int8 nType = 0;
-            sal_Bool bIsLink( MN_ADD_LINK == nId );
             OUString aFileURL, aFilterName;
             css::uno::Reference< css::lang::XComponent > xDrawing;
             css::uno::Reference< css::graphic::XGraphic > xGraphic;
@@ -1159,12 +1141,6 @@ void GalleryBrowser2::Dispatch(
                 break;
             }
 
-            if ( bIsLink )
-            {
-                aFileURL = mpCurTheme->GetObjectURL( mnCurActionPos ).GetMainURL( INetURLObject::NO_DECODE );
-                OSL_ENSURE( aFileURL.getLength(), "gallery item is link but no URL!" );
-            }
-
             Graphic aGraphic;
             sal_Bool bGraphic = mpCurTheme->GetGraphic( mnCurActionPos, aGraphic );
             if ( bGraphic && !!aGraphic )
@@ -1175,16 +1151,14 @@ void GalleryBrowser2::Dispatch(
 
             aSeq[0].Name = OUString( SVXGALLERYITEM_TYPE );
             aSeq[0].Value <<= nType;
-            aSeq[1].Name = OUString( SVXGALLERYITEM_LINK );
-            aSeq[1].Value <<= bIsLink;
-            aSeq[2].Name = OUString( SVXGALLERYITEM_URL );
-            aSeq[2].Value <<= aFileURL;
-            aSeq[3].Name = OUString( SVXGALLERYITEM_FILTER );
-            aSeq[3].Value <<= aFilterName;
-            aSeq[4].Name = OUString( SVXGALLERYITEM_DRAWING );
-            aSeq[4].Value <<= xDrawing;
-            aSeq[5].Name = OUString( SVXGALLERYITEM_GRAPHIC );
-            aSeq[5].Value <<= xGraphic;
+            aSeq[1].Name = OUString( SVXGALLERYITEM_URL );
+            aSeq[1].Value <<= aFileURL;
+            aSeq[2].Name = OUString( SVXGALLERYITEM_FILTER );
+            aSeq[2].Value <<= aFilterName;
+            aSeq[3].Name = OUString( SVXGALLERYITEM_DRAWING );
+            aSeq[3].Value <<= xDrawing;
+            aSeq[4].Name = OUString( SVXGALLERYITEM_GRAPHIC );
+            aSeq[4].Value <<= xGraphic;
 
             css::uno::Sequence< css::beans::PropertyValue > aArgs( 1 );
             aArgs[0].Name = OUString( SVXGALLERYITEM_ARGNAME );

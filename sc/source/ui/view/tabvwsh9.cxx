@@ -91,12 +91,6 @@ void ScTabViewShell::ExecGallery( SfxRequest& rReq )
         Point   aPos     = GetInsertPos();
 
         String aPath, aFilter;
-        if ( pGalleryItem->IsLink() ) // als Link einfuegen?
-        {
-            aPath = pGalleryItem->GetURL();
-            aFilter = pGalleryItem->GetFilterName();
-        }
-
         PasteGraphic( aPos, aGraphic, aPath, aFilter );
     }
     else if ( nType == com::sun::star::gallery::GalleryItemType::MEDIA )

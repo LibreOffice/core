@@ -302,37 +302,15 @@ Menu RID_SVXMN_GALLERY2
     {
         MenuItem
         {
-            Identifier = MN_ADDMENU ;
-            HelpId = HID_GALLERY_MN_ADDMENU ;
+            Identifier = MN_ADD ;
+            HelpId = HID_GALLERY_MN_ADD ;
             Text [ en-US ] = "~Insert" ;
-            SubMenu = Menu
-            {
-                ItemList =
-                {
-                    MenuItem
-                    {
-                        Identifier = MN_ADD ;
-                        HelpId = HID_GALLERY_MN_ADD ;
-                        Text [ en-US ] = "~Copy" ;
-                    };
-                    MenuItem
-                    {
-                        Identifier = MN_ADD_LINK ;
-                        HelpId = HID_GALLERY_MN_ADD_LINK ;
-                        Text [ en-US ] = "Link" ;
-                    };
-                    MenuItem
-                    {
-                        Separator = TRUE ;
-                    };
-                    MenuItem
-                    {
-                        Identifier = MN_BACKGROUND ;
-                        HelpId = HID_GALLERY_MN_BACKGROUND ;
-                        Text [ en-US ] = "Bac~kground" ;
-                    };
-                };
-            };
+        };
+        MenuItem
+        {
+            Identifier = MN_BACKGROUND ;
+            HelpId = HID_GALLERY_MN_BACKGROUND ;
+            Text [ en-US ] = "Insert as Bac~kground" ;
         };
         MenuItem
         {
