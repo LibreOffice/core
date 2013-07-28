@@ -79,7 +79,7 @@ public:
         CreateClipboard( const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& i_rArguments );
     virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface > CreateDragSource();
     virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface > CreateDropTarget();
-    virtual void            AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType);
+    virtual void            AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType, const OUString& rDocumentService);
 };
 
 #endif // _SV_SALINST_H

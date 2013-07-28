@@ -1030,7 +1030,7 @@ void* WinSalInstance::GetConnectionIdentifier( ConnectionIdentifierType& rReturn
       @param aFileUrl
                 The file url of the document.
 */
-void WinSalInstance::AddToRecentDocumentList(const OUString& rFileUrl, const OUString& /*rMimeType*/)
+void WinSalInstance::AddToRecentDocumentList(const OUString& rFileUrl, const OUString& /*rMimeType*/, const OUString& /* rDocumentService */)
 {
     OUString system_path;
     osl::FileBase::RC rc = osl::FileBase::getSystemPathFromFileURL(rFileUrl, system_path);

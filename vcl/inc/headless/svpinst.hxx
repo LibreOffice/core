@@ -158,7 +158,7 @@ public:
 
     virtual void*           GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes );
 
-    virtual void            AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType);
+    virtual void            AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType, const OUString& rDocumentService);
 
     virtual GenPspGraphics *CreatePrintGraphics();
 };

@@ -383,7 +383,7 @@ public:
           If an empty string will be provided "application/octet-stream"
           will be used.
     */
-    static void AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType);
+    static void AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType, const OUString& rDocumentService);
 
     /** Do we have a native / system file selector available ?
      */

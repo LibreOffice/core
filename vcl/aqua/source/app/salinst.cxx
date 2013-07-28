@@ -1037,7 +1037,7 @@ static bool isDangerousUrl( const OUString& rUrl )
     return false;
 }
 
-void AquaSalInstance::AddToRecentDocumentList(const OUString& rFileUrl, const OUString& /*rMimeType*/)
+void AquaSalInstance::AddToRecentDocumentList(const OUString& rFileUrl, const OUString& /*rMimeType*/, const OUString& /*rDocumentService*/)
 {
     // Convert file URL for external use (see above)
     OUString externalUrl = translateToExternalUrl(rFileUrl);

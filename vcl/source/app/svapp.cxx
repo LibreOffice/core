@@ -1821,10 +1821,10 @@ const OUString& Application::GetDesktopEnvironment()
     return SalGetDesktopEnvironment();
 }
 
-void Application::AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType)
+void Application::AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType, const OUString& rDocumentService)
 {
     ImplSVData* pSVData = ImplGetSVData();
-    pSVData->mpDefInst->AddToRecentDocumentList(rFileUrl, rMimeType);
+    pSVData->mpDefInst->AddToRecentDocumentList(rFileUrl, rMimeType, rDocumentService);
 }
 
 bool InitAccessBridge( bool bShowCancel, bool &rCancelled )
