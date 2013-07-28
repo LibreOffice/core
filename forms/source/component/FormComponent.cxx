@@ -2347,6 +2347,7 @@ void OBoundControlModel::doSetControlValue( const Any& _rValue )
     catch( const Exception& )
     {
         OSL_FAIL( "OBoundControlModel::doSetControlValue: caught an exception!" );
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 
@@ -2367,6 +2368,7 @@ void OBoundControlModel::onConnectedValidator( )
     catch( const Exception& )
     {
         OSL_FAIL( "OBoundControlModel::onConnectedValidator: caught an exception!" );
+        DBG_UNHANDLED_EXCEPTION();
     }
     recheckValidity( false );
 }
@@ -2385,6 +2387,7 @@ void OBoundControlModel::onDisconnectedValidator( )
     catch( const Exception& )
     {
         OSL_FAIL( "OBoundControlModel::onDisconnectedValidator: caught an exception!" );
+        DBG_UNHANDLED_EXCEPTION();
     }
     recheckValidity( false );
 }
