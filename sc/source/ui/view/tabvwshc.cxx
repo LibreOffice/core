@@ -65,7 +65,8 @@
 #include "SamplingDialog.hxx"
 #include "DescriptiveStatisticsDialog.hxx"
 #include "AnalysisOfVarianceDialog.hxx"
-
+#include "CorrelationDialog.hxx"
+#include "CovarianceDialog.hxx"
 
 //------------------------------------------------------------------
 
@@ -338,6 +339,18 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
         case SID_ANALYSIS_OF_VARIANCE_DIALOG:
         {
             pResult = new ScAnalysisOfVarianceDialog( pB, pCW, pParent, GetViewData() );
+        }
+        break;
+
+        case SID_CORRELATION_DIALOG:
+        {
+            pResult = new ScCorrelationDialog( pB, pCW, pParent, GetViewData() );
+        }
+        break;
+
+        case SID_COVARIANCE_DIALOG:
+        {
+            pResult = new ScCovarianceDialog( pB, pCW, pParent, GetViewData() );
         }
         break;
 

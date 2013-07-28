@@ -25,6 +25,34 @@
 
 #include "StatisticsInputOutputDialog.hxx"
 
+ScRangeList ScStatisticsInputOutputDialog::MakeColumnRangeList(SCTAB aTab, ScAddress aStart, ScAddress aEnd)
+{
+    ScRangeList aRangeList;
+    for (SCCOL inCol = aStart.Col(); inCol <= aEnd.Col(); inCol++)
+    {
+        ScRange aColumnRange (
+            ScAddress(inCol, aStart.Row(), aTab),
+            ScAddress(inCol, aEnd.Row(),   aTab) );
+
+        aRangeList.Append(aColumnRange);
+    }
+    return aRangeList;
+}
+
+ScRangeList ScStatisticsInputOutputDialog::MakeRowRangeList(SCTAB aTab, ScAddress aStart, ScAddress aEnd)
+{
+    ScRangeList aRangeList;
+    for (SCROW inRow = aStart.Row(); inRow <= aEnd.Row(); inRow++)
+    {
+        ScRange aRowRange (
+            ScAddress(aStart.Col(), inRow, aTab),
+            ScAddress(aEnd.Col(),   inRow, aTab) );
+
+        aRangeList.Append(aRowRange);
+    }
+    return aRangeList;
+}
+
 ScStatisticsInputOutputDialog::ScStatisticsInputOutputDialog(
                     SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,
                     Window* pParent, ScViewData* pViewData, const OString& rID, const OUString& rUIXMLDescription ) :

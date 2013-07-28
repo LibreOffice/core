@@ -271,6 +271,8 @@ void ScDLL::Init()
     ScSamplingDialogWrapper             ::RegisterChildWindow(false, pMod);
     ScDescriptiveStatisticsDialogWrapper::RegisterChildWindow(false, pMod);
     ScAnalysisOfVarianceDialogWrapper   ::RegisterChildWindow(false, pMod);
+    ScCorrelationDialogWrapper          ::RegisterChildWindow(false, pMod);
+    ScCovarianceDialogWrapper           ::RegisterChildWindow(false, pMod);
 
     // First docking Window for Calc
     ScFunctionChildWindow       ::RegisterChildWindow(false, pMod);

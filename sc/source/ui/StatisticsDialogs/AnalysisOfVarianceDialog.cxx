@@ -30,6 +30,7 @@
 namespace
 {
 
+
 static const char* lclBasicStatisticsLabels[] =
 {
     "Groups", "Count", "Sum", "Mean", "Variance", NULL
@@ -45,6 +46,8 @@ static const char* lclAnovaLabels[] =
     "Source of Variation", "SS", "df", "MS", "F", "P-value", "F critical", NULL
 };
 
+static const OUString lclWildcardNumber("%NUMBER%");
+static const OUString lclColumnLabelTemplate("Column %NUMBER%");
 static const OUString lclWildcardRange("%RANGE%");
 
 OUString lclCreateMultiParameterFormula(
@@ -87,7 +90,8 @@ sal_Bool ScAnalysisOfVarianceDialog::Close()
 
 void ScAnalysisOfVarianceDialog::CalculateInputAndWriteToOutput( )
 {
-    OUString aUndo("Analysis Of Variance");
+    OUString aUndo(SC_RESSTR(STR_ANALYSIS_OF_VARIANCE_UNDO_NAME));
+
     ScDocShell* pDocShell = mViewData->GetDocShell();
     svl::IUndoManager* pUndoManager = pDocShell->GetUndoManager();
     pUndoManager->EnterListAction( aUndo, aUndo );
@@ -123,7 +127,8 @@ void ScAnalysisOfVarianceDialog::CalculateInputAndWriteToOutput( )
         {
             outCol = mOutputAddress.Col();
             aAddress = ScAddress(outCol, outRow, outTab);
-            OUString aGroupName = OUString("Column ") + OUString::number(inCol - aStart.Col() + 1);
+            OUString aNumberString = OUString::number(inCol - aStart.Col() + 1);
+            OUString aGroupName = lclColumnLabelTemplate.replaceAll(lclWildcardNumber, aNumberString);
             pDocShell->GetDocFunc().SetStringCell(aAddress, aGroupName, true);
             outCol++;
 

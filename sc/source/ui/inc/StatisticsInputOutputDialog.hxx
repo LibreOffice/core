@@ -52,6 +52,10 @@ protected:
     ScAddress::Details  mAddressDetails;
     ScAddress           mOutputAddress;
 
+    static ScRangeList MakeColumnRangeList(SCTAB aTab, ScAddress aStart, ScAddress aEnd);
+    static ScRangeList MakeRowRangeList(SCTAB aTab, ScAddress aStart, ScAddress aEnd);
+
+
 private:
     // Widgets
     PushButton*         mpButtonApply;

@@ -175,6 +175,8 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
             case SID_SAMPLING_DIALOG:
             case SID_DESCRIPTIVE_STATISTICS_DIALOG:
             case SID_ANALYSIS_OF_VARIANCE_DIALOG:
+            case SID_CORRELATION_DIALOG:
+            case SID_COVARIANCE_DIALOG:
             {
                 bDisable = !bSimpleArea;
             }

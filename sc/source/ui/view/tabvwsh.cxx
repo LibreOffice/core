@@ -85,6 +85,9 @@ SFX_IMPL_INTERFACE(ScTabViewShell,SfxViewShell,ScResId(SCSTR_TABVIEWSHELL))
     SFX_CHILDWINDOW_REGISTRATION(ScSamplingDialogWrapper::GetChildWindowId());
     SFX_CHILDWINDOW_REGISTRATION(ScDescriptiveStatisticsDialogWrapper::GetChildWindowId());
     SFX_CHILDWINDOW_REGISTRATION(ScAnalysisOfVarianceDialogWrapper::GetChildWindowId());
+    SFX_CHILDWINDOW_REGISTRATION(ScCorrelationDialogWrapper::GetChildWindowId());
+    SFX_CHILDWINDOW_REGISTRATION(ScCovarianceDialogWrapper::GetChildWindowId());
+
 }
 
 SFX_IMPL_NAMED_VIEWFACTORY( ScTabViewShell, "Default" )

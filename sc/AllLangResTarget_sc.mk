@@ -83,6 +83,9 @@ $(eval $(call gb_SrsTarget_add_files,sc/res,\
     sc/source/ui/StatisticsDialogs/RandomNumberGeneratorDialog.src \
     sc/source/ui/StatisticsDialogs/SamplingDialog.src \
     sc/source/ui/StatisticsDialogs/DescriptiveStatisticsDialog.src \
+    sc/source/ui/StatisticsDialogs/AnalysisOfVarianceDialog.src \
+    sc/source/ui/StatisticsDialogs/CorrelationDialog.src \
+    sc/source/ui/StatisticsDialogs/CovarianceDialog.src \
     sc/source/core/src/compiler.src \
 ))
 

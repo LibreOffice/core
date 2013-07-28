@@ -81,6 +81,19 @@ private:
     ScAnalysisOfVarianceDialogWrapper() SAL_DELETED_FUNCTION;
 };
 
+class ScCorrelationDialogWrapper :
+    public ChildWindowWrapper<SID_CORRELATION_DIALOG>
+{
+private:
+    ScCorrelationDialogWrapper() SAL_DELETED_FUNCTION;
+};
+
+class ScCovarianceDialogWrapper :
+    public ChildWindowWrapper<SID_COVARIANCE_DIALOG>
+{
+private:
+    ScCovarianceDialogWrapper() SAL_DELETED_FUNCTION;
+};
 
 class ScAcceptChgDlgWrapper: public SfxChildWindow
 {

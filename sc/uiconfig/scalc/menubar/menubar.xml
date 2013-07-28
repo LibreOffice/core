@@ -485,6 +485,8 @@
                     <menu:menuitem menu:id=".uno:SamplingDialog"/>
                     <menu:menuitem menu:id=".uno:DescriptiveStatisticsDialog"/>
                     <menu:menuitem menu:id=".uno:AnalysisOfVarianceDialog"/>
+                    <menu:menuitem menu:id=".uno:CorrelationDialog"/>
+                    <menu:menuitem menu:id=".uno:CovarianceDialog"/>
                 </menu:menupopup>
             </menu:menu>
         </menu:menupopup>
