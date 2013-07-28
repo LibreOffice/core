@@ -17,16 +17,18 @@
           <object class="GtkBox" id="box2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="spacing">6</property>
+            <property name="homogeneous">True</property>
             <child>
               <object class="GtkRadioButton" id="buttonnone">
-                <property name="width_request">30</property>
-                <property name="height_request">30</property>
+                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="tooltip_markup" translatable="yes">None</property>
                 <property name="tooltip_text" translatable="yes">None</property>
                 <property name="action_name">.uno:WrapOff</property>
+                <property name="use_action_appearance">False</property>
                 <property name="xalign">0</property>
                 <property name="active">True</property>
                 <property name="draw_indicator">True</property>
@@ -34,20 +36,19 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="padding">10</property>
                 <property name="position">0</property>
               </packing>
             </child>
             <child>
               <object class="GtkRadioButton" id="buttonbefore">
-                <property name="width_request">30</property>
-                <property name="height_request">30</property>
+                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="tooltip_markup" translatable="yes">Before</property>
                 <property name="tooltip_text" translatable="yes">Before</property>
                 <property name="action_name">.uno:WrapLeft</property>
+                <property name="use_action_appearance">False</property>
                 <property name="xalign">0</property>
                 <property name="active">True</property>
                 <property name="draw_indicator">True</property>
@@ -55,20 +56,19 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="padding">10</property>
                 <property name="position">1</property>
               </packing>
             </child>
             <child>
               <object class="GtkRadioButton" id="buttonafter">
-                <property name="width_request">30</property>
-                <property name="height_request">30</property>
+                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="tooltip_markup" translatable="yes">After</property>
                 <property name="tooltip_text" translatable="yes">After</property>
                 <property name="action_name">.uno:WrapRight</property>
+                <property name="use_action_appearance">False</property>
                 <property name="xalign">0</property>
                 <property name="active">True</property>
                 <property name="draw_indicator">True</property>
@@ -76,20 +76,19 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="padding">10</property>
                 <property name="position">2</property>
               </packing>
             </child>
             <child>
               <object class="GtkRadioButton" id="buttonparallel">
-                <property name="width_request">30</property>
-                <property name="height_request">30</property>
+                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="tooltip_markup" translatable="yes">Parallel</property>
                 <property name="tooltip_text" translatable="yes">Parallel</property>
                 <property name="action_name">.uno:WrapOn</property>
+                <property name="use_action_appearance">False</property>
                 <property name="xalign">0</property>
                 <property name="active">True</property>
                 <property name="draw_indicator">True</property>
@@ -97,20 +96,19 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="padding">10</property>
                 <property name="position">3</property>
               </packing>
             </child>
             <child>
               <object class="GtkRadioButton" id="buttonthrough">
-                <property name="width_request">30</property>
-                <property name="height_request">30</property>
+                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="tooltip_markup" translatable="yes">Through</property>
                 <property name="tooltip_text" translatable="yes">Through</property>
                 <property name="action_name">.uno:WrapThrough</property>
+                <property name="use_action_appearance">False</property>
                 <property name="xalign">0</property>
                 <property name="active">True</property>
                 <property name="draw_indicator">True</property>
@@ -118,20 +116,19 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="padding">10</property>
                 <property name="position">4</property>
               </packing>
             </child>
             <child>
               <object class="GtkRadioButton" id="buttonoptimal">
-                <property name="width_request">30</property>
-                <property name="height_request">30</property>
+                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="tooltip_markup" translatable="yes">Optimal</property>
                 <property name="tooltip_text" translatable="yes">Optimal</property>
                 <property name="action_name">.uno:WrapIdeal</property>
+                <property name="use_action_appearance">False</property>
                 <property name="xalign">0</property>
                 <property name="active">True</property>
                 <property name="draw_indicator">True</property>
@@ -139,7 +136,6 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="padding">10</property>
                 <property name="position">5</property>
               </packing>
             </child>
