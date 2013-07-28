@@ -34,6 +34,24 @@
       "revId": "e2322fd87ea03d9234a5a914cffd30cc3d1e1567",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//91Y\u003d",
+        "filename": "vcl/source/control/field2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2291,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2013-07-28T17:26:14Z",
+      "side": 1,
+      "message": "\u003e even en empty string has \"\\0\", no ?\n\nFound it: aStr is a OUStringBuffer, not a OUString. OUStringBuffer::operator[] has\n\n assert(index \u003e\u003d 0 \u0026\u0026 index \u003c pData-\u003elength);\n\nas opposed to OUString::operator[] which has\n\n   assert(index \u003e\u003d 0 \u0026\u0026 index \u003c\u003d getLength());\n          //TODO: should really check for \u003c getLength(), but there is quite\n          // some clever code out there that violates this function\u0027s\n          // documented precondition and relies on s[s.getLength()] \u003d\u003d 0 and\n          // that would need to be fixed first\n\n\nSo that\u0027s why I was getting the abort. Is the old code safe in non-debug build? Maybe yes, maybe not. Dunno. Easier to just add the check. (and even if the old code is \"safe in non-debug\", remove one behaviour difference between debug-mode and non-debug-mode).",
+      "parentUuid": "AAAAXn//914\u003d",
+      "revId": "e2322fd87ea03d9234a5a914cffd30cc3d1e1567",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
