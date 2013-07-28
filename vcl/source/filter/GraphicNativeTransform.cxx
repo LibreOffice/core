@@ -141,45 +141,50 @@ bool GraphicNativeTransform::rotateGeneric(sal_uInt16 aRotation, OUString aType)
 
 bool GraphicNativeTransform::rotateJPEG(sal_uInt16 aRotation)
 {
-    GfxLink aLink = mrGraphic.GetLink();
-
-    SvMemoryStream aSourceStream;
-    aSourceStream.Write(aLink.GetData(), aLink.GetDataSize());
-    aSourceStream.Seek( STREAM_SEEK_TO_BEGIN );
-
-    Orientation aOrientation = TOP_LEFT;
-
-    Exif exif;
-    if ( exif.read(aSourceStream) )
-    {
-        aOrientation = exif.getOrientation();
-    }
-
-    SvMemoryStream aTargetStream;
-    JpegTransform tranform(aSourceStream, aTargetStream);
-    tranform.setRotate(aRotation);
-    tranform.perform();
-
-    aTargetStream.Seek( STREAM_SEEK_TO_BEGIN );
-
-    // Reset orientation in exif if needed
-    if ( exif.hasExif() && aOrientation != TOP_LEFT)
-    {
-        exif.setOrientation(TOP_LEFT);
-        exif.write(aTargetStream);
-    }
-
-    aTargetStream.Seek( STREAM_SEEK_TO_END );
-    sal_uInt32 aBufferSize = aTargetStream.Tell();
-    sal_uInt8* pBuffer = new sal_uInt8[ aBufferSize ];
-
-    aTargetStream.Seek( STREAM_SEEK_TO_BEGIN );
-    aTargetStream.Read( pBuffer, aBufferSize );
-
     BitmapEx aBitmap = mrGraphic.GetBitmapEx();
-    aBitmap.Rotate(aRotation, COL_BLACK);
-    mrGraphic = aBitmap;
-    mrGraphic.SetLink( GfxLink( pBuffer, aBufferSize, aLink.GetType(), sal_True ) );
+
+    if (aBitmap.GetSizePixel().Width()  % 16 != 0 ||
+        aBitmap.GetSizePixel().Height() % 16 != 0 )
+    {
+        rotateGeneric(aRotation, OUString("png"));
+    }
+    else
+    {
+        GfxLink aLink = mrGraphic.GetLink();
+
+        SvMemoryStream aSourceStream;
+        aSourceStream.Write(aLink.GetData(), aLink.GetDataSize());
+        aSourceStream.Seek( STREAM_SEEK_TO_BEGIN );
+
+        Orientation aOrientation = TOP_LEFT;
+
+        Exif exif;
+        if ( exif.read(aSourceStream) )
+        {
+            aOrientation = exif.getOrientation();
+        }
+
+        SvMemoryStream aTargetStream;
+        JpegTransform tranform(aSourceStream, aTargetStream);
+        tranform.setRotate(aRotation);
+        tranform.perform();
+
+        aTargetStream.Seek( STREAM_SEEK_TO_BEGIN );
+
+        // Reset orientation in exif if needed
+        if ( exif.hasExif() && aOrientation != TOP_LEFT)
+        {
+            exif.setOrientation(TOP_LEFT);
+            exif.write(aTargetStream);
+        }
+
+        aTargetStream.Seek( STREAM_SEEK_TO_BEGIN );
+
+        Graphic aGraphic;
+        GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
+        rFilter.ImportGraphic( aGraphic, OUString("import"), aTargetStream );
+        mrGraphic = aGraphic;
+    }
 
     return true;
 }
