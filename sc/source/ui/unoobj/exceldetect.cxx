@@ -74,6 +74,10 @@ bool hasStream(const uno::Reference<io::XInputStream>& xInStream, const OUString
     return xStorage->IsStream(rName);
 }
 
+/**
+ * We detect BIFF 2, 3 and 4 file types together since the only thing that
+ * set them apart is the BOF ID.
+ */
 bool isExcel40(const uno::Reference<io::XInputStream>& xInStream)
 {
     SfxMedium aMedium;
@@ -93,12 +97,18 @@ bool isExcel40(const uno::Reference<io::XInputStream>& xInStream)
     sal_uInt16 nBofId, nBofSize;
     *pStream >> nBofId >> nBofSize;
 
-    if (nBofId != 0x0409)
-        // This ID signifies Excel 4.0 format.  It must be 0x0409.
-        return false;
+    switch (nBofId)
+    {
+        case 0x0009: // Excel 2.1 worksheet (BIFF 2)
+        case 0x0209: // Excel 3.0 worksheet (BIFF 3)
+        case 0x0409: // Excel 4.0 worksheet (BIFF 4)
+            break;
+        default:
+            return false;
+    }
 
     if (nBofSize < 4 || 16 < nBofSize)
-        // BOF record must be sized between 4 and 16 for Excel 4.0 stream.
+        // BOF record must be sized between 4 and 16 for BIFF 2, 3 and 4.
         return false;
 
     sal_Size nPos = pStream->Tell();
