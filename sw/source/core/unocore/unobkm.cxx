@@ -47,10 +47,9 @@ namespace
 {
     static OUString lcl_QuoteName(const OUString& rName)
     {
-        static const OUString sStart = OUString(String(SW_RES(STR_START_QUOTE)));
-        static const OUString sEnd = OUString(String(SW_RES(STR_END_QUOTE)));
-        OUStringBuffer sBuf(64);
-        return sBuf.append(sStart).append(rName).append(sEnd).makeStringAndClear();
+        static const OUString sStart = SW_RES(STR_START_QUOTE);
+        static const OUString sEnd = SW_RES(STR_END_QUOTE);
+        return sStart + rName + sEnd;
     }
 }
 
