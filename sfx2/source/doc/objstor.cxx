@@ -2108,7 +2108,8 @@ void SfxObjectShell::AddToRecentlyUsedList()
     {
         const SfxFilter* pOrgFilter = pMedium->GetOrigFilter();
         Application::AddToRecentDocumentList( aUrl.GetURLNoPass( INetURLObject::NO_DECODE ),
-                                              (pOrgFilter) ? pOrgFilter->GetMimeType() : OUString() );
+                                              (pOrgFilter) ? pOrgFilter->GetMimeType() : OUString(),
+                                              (pOrgFilter) ? pOrgFilter->GetServiceName() : OUString() );
     }
 }
 
