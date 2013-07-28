@@ -2244,7 +2244,7 @@ static bool ImplTimeGetValue( const OUString& rStr, Time& rTime,
     short       nHour   = 0;
     short       nMinute = 0;
     short       nSecond = 0;
-    short       n100Sec = 0;
+    sal_Int64   nNanoSec = 0;
     Time        aTime( 0, 0, 0 );
 
     if ( rStr.isEmpty() )
@@ -2298,7 +2298,7 @@ static bool ImplTimeGetValue( const OUString& rStr, Time& rTime,
                     return false;
                 if ( !aStr.isEmpty() && aStr[0] == '-' )
                     bNegative = true;
-                n100Sec = (short)aStr.toString().toInt32();
+                nNanoSec = aStr.toString().toInt64();
             }
             else
                 nSecond = (short)aStr.toString().toInt32();
@@ -2351,44 +2351,44 @@ static bool ImplTimeGetValue( const OUString& rStr, Time& rTime,
             nHour += nMinute / 60;
             nMinute %= 60;
         }
-        n100Sec = (short)aStr.toString().toInt32();
+        nNanoSec = aStr.toString().toInt64();
+    }
 
-        if ( n100Sec )
+    if ( nNanoSec )
+    {
+        assert(aStr.getLength() >= 1);
+
+        sal_Int32 nLen = 1; // at least one digit, otherwise nNanoSec==0
+
+        while ( aStr.getLength() > nLen && aStr[nLen] >= '0' && aStr[nLen] <= '9' )
+            nLen++;
+
+        while ( nLen < 9)
         {
-            xub_StrLen nLen = 1; // at least one digit, otherwise n100Sec==0
-
-            while ( aStr[nLen] >= '0' && aStr[nLen] <= '9' )
-                nLen++;
-
-            if ( nLen > 2 )
-            {
-                while( nLen > 3 )
-                {
-                    n100Sec = n100Sec / 10;
-                    nLen--;
-                }
-                // round if negative?
-                n100Sec = (n100Sec + 5) / 10;
-            }
-            else if ( nLen == 1 )
-            {
-                n100Sec = n100Sec * 10;
-            }
+            nNanoSec *= 10;
+            ++nLen;
+        }
+        while ( nLen > 9 )
+        {
+            // round if negative?
+            nNanoSec = (nNanoSec + 5) / 10;
+            --nLen;
         }
     }
 
-    if ( (nMinute > 59) || (nSecond > 59) || (n100Sec > 100) )
+    assert(nNanoSec > -1000000000 && nNanoSec < 1000000000);
+    if ( (nMinute > 59) || (nSecond > 59) || (nNanoSec > 1000000000) )
         return false;
 
     if ( eFormat == TIMEF_NONE )
-        nSecond = n100Sec = 0;
+        nSecond = nNanoSec = 0;
     else if ( eFormat == TIMEF_SEC )
-        n100Sec = 0;
+        nNanoSec = 0;
 
     if ( !bDuration )
     {
         if ( bNegative || (nHour < 0) || (nMinute < 0) ||
-             (nSecond < 0) || (n100Sec < 0) )
+             (nSecond < 0) || (nNanoSec < 0) )
             return false;
 
         OUString aUpperCaseStr = aStr.toString().toAsciiUpperCase();
@@ -2404,22 +2404,25 @@ static bool ImplTimeGetValue( const OUString& rStr, Time& rTime,
             nHour = 0;
 
         aTime = Time( (sal_uInt16)nHour, (sal_uInt16)nMinute, (sal_uInt16)nSecond,
-                      (sal_uInt16)n100Sec );
+                      (sal_uInt32)nNanoSec );
     }
     else
     {
+        assert( !bNegative || (nHour < 0) || (nMinute < 0) ||
+             (nSecond < 0) || (nNanoSec < 0) );
         if ( bNegative || (nHour < 0) || (nMinute < 0) ||
-             (nSecond < 0) || (n100Sec < 0) )
+             (nSecond < 0) || (nNanoSec < 0) )
         {
+            // LEM TODO: this looks weird... I think buggy when parsing "05:-02:18"
             bNegative   = true;
             nHour       = nHour < 0 ? -nHour : nHour;
             nMinute     = nMinute < 0 ? -nMinute : nMinute;
             nSecond     = nSecond < 0 ? -nSecond : nSecond;
-            n100Sec     = n100Sec < 0 ? -n100Sec : n100Sec;
+            nNanoSec    = nNanoSec < 0 ? -nNanoSec : nNanoSec;
         }
 
         aTime = Time( (sal_uInt16)nHour, (sal_uInt16)nMinute, (sal_uInt16)nSecond,
-                      (sal_uInt16)n100Sec );
+                      (sal_uInt32)nNanoSec );
         if ( bNegative )
             aTime = -aTime;
     }
@@ -2567,7 +2570,7 @@ void TimeField::ImplTimeSpinArea( sal_Bool bUp )
             aTime += aAddTime;
             if ( !IsDuration() )
             {
-                Time aAbsMaxTime( 23, 59, 59, 99 );
+                Time aAbsMaxTime( 23, 59, 59, 999999999 );
                 if ( aTime > aAbsMaxTime )
                     aTime = aAbsMaxTime;
                 Time aAbsMinTime( 0, 0 );
@@ -2594,7 +2597,7 @@ void TimeFormatter::ImplInit()
 TimeFormatter::TimeFormatter() :
     maLastTime( 0, 0 ),
     maMin( 0, 0 ),
-    maMax( 23, 59, 59, 99 ),
+    maMax( 23, 59, 59, 999999999 ),
     maCorrectedTime( Time::SYSTEM ),
     mbEnforceValidValue( sal_True ),
     maFieldTime( 0, 0 )

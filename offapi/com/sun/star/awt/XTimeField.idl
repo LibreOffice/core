@@ -33,58 +33,58 @@ published interface XTimeField: com::sun::star::uno::XInterface
 
     /** sets the time value which is displayed in the time field.
 
-        <p>The time value must be specified in the format HHMMSShh,
-        where HH are hours, MM are minutes, SS are seconds and hh are
-        hundredth seconds.</p>
+        <p>The time value must be specified in the format HHMMSSnnnnnnnnn,
+        where HH are hours, MM are minutes, SS are seconds and
+        nnnnnnnnn are nanoseconds.</p>
      */
-    void setTime( [in] long Time );
+    void setTime( [in] hyper Time );
 
 
     /** returns the time value which is currently displayed in the time field.
      */
-    long getTime();
+    hyper getTime();
 
 
     /** sets the minimum time value that can be entered by the user.
      */
-    void setMin( [in] long Time );
+    void setMin( [in] hyper Time );
 
 
     /** returns the currently set minimum time value that can be entered by
         the user.
      */
-    long getMin();
+    hyper getMin();
 
 
     /** sets the maximum time value that can be entered by the user.
      */
-    void setMax( [in] long Time );
+    void setMax( [in] hyper Time );
 
 
     /** returns the currently set maximum time value that can be entered by
         the user.
      */
-    long getMax();
+    hyper getMax();
 
 
     /** sets the first value to be set on POS1 key.
      */
-    void setFirst( [in] long Time );
+    void setFirst( [in] hyper Time );
 
 
     /** returns the currently set first value which is set on POS1 key.
      */
-    long getFirst();
+    hyper getFirst();
 
 
     /** sets the last value to be set on END key.
      */
-    void setLast( [in] long Time );
+    void setLast( [in] hyper Time );
 
 
     /** returns the currently set last value which is set on END key.
      */
-    long getLast();
+    hyper getLast();
 
 
     /** sets an empty value for the time.

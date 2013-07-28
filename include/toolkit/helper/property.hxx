@@ -68,9 +68,9 @@ namespace uno {
 #define BASEPROPERTY_DATE                            30 // sal_Int32
 #define BASEPROPERTY_DATEMIN                         31 // sal_Int32
 #define BASEPROPERTY_DATEMAX                         32 // sal_Int32
-#define BASEPROPERTY_TIME                            33 // sal_Int32
-#define BASEPROPERTY_TIMEMIN                         34 // sal_Int32
-#define BASEPROPERTY_TIMEMAX                         35 // sal_Int32
+#define BASEPROPERTY_TIME                            33 // sal_Int64
+#define BASEPROPERTY_TIMEMIN                         34 // sal_Int64
+#define BASEPROPERTY_TIMEMAX                         35 // sal_Int64
 #define BASEPROPERTY_VALUE_INT32                     36 // sal_Int32
 #define BASEPROPERTY_VALUEMIN_INT32                  37 // sal_Int32
 #define BASEPROPERTY_VALUEMAX_INT32                  38 // sal_Int32
