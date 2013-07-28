@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//92U\u003d",
+        "filename": "vcl/source/control/field2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2291,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-07-28T16:35:25Z",
+      "side": 1,
+      "message": "even en empty string as \"\\0\" no ?\nbeside how can nSep can be \u003e\u003d 0 and yet aStr be empty ?",
+      "revId": "e2322fd87ea03d9234a5a914cffd30cc3d1e1567",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
