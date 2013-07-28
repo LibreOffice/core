@@ -1321,6 +1321,24 @@ rtl::OUString enumtoString(AutoLayout aut)
         case AUTOLAYOUT_TITLE_4CONTENT:
         retstr="AUTOLAYOUT_TITLE_4CONTENT";
         break;
+        case AUTOLAYOUT_ONLY_TEXT:
+        retstr="AUTOLAYOUT_ONLY_TEXT";
+        break;
+        case AUTOLAYOUT_TITLE_ONLY:
+        retstr="AUTOLAYOUT_TITLE_ONLY";
+        break;
+        case AUTOLAYOUT_TITLE_6CONTENT:
+        retstr="AUTOLAYOUT_TITLE_6CONTENT";
+        break;
+        case AUTOLAYOUT__START:
+        retstr="AUTOLAYOUT__START";
+        break;
+        case AUTOLAYOUT_TITLE_2CONTENT_CONTENT:
+        retstr="AUTOLAYOUT_TITLE_2CONTENT_CONTENT";
+        break;
+        case AUTOLAYOUT_TITLE_2CONTENT_OVER_CONTENT:
+        retstr="AUTOLAYOUT_TITLE_2CONTENT_OVER_CONTENT";
+        break;
         default:
         retstr="unknown";
         break;
