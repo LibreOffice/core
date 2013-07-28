@@ -585,11 +585,6 @@ ModalDialog RID_SCDLG_SHOW_TAB
 };
 
 
-String STR_VALERR
-{
-        Text [ en-US ] = "Invalid value" ;
-};
-
 #define TXT_COLS \
     Text [ en-US ] = "~Columns" ; \
 

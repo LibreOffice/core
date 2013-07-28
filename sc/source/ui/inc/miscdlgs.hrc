@@ -75,9 +75,6 @@
 #define FL_ENTRYLIST    10
 #define LB_ENTRYLIST    11
 
-// Row fillers
-#define STR_VALERR      50
-
 // Auto format
 #define LB_FORMAT           1
 #define FL_FORMAT           9

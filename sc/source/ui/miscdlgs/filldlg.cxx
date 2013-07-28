@@ -30,6 +30,7 @@
 
 #include "scresid.hxx"
 #include "document.hxx"
+#include "globstr.hrc"
 #include "miscdlgs.hrc"
 
 #define _FILLDLG_CXX

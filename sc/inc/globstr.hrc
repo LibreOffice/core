@@ -725,6 +725,9 @@
 #define STR_CORRELATION_UNDO_NAME               589
 #define STR_COVARIANCE_UNDO_NAME                590
 
+// Row fillers
+#define STR_VALERR              591
+
 
 #endif
 

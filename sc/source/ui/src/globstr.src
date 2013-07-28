@@ -2089,6 +2089,11 @@ Resource RID_GLOBSTR
     {
         Text [ en-US ] = "click to open hyperlink:";
     };
+    String STR_VALERR
+    {
+        Text [ en-US ] = "Invalid value" ;
+    };
+
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
