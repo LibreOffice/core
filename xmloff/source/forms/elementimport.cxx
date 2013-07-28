@@ -306,9 +306,10 @@ namespace xmloff
                 xMultiProps->setPropertyValues(aNames, aValues);
                 bSuccess = sal_True;
             }
-            catch(Exception&)
+            catch(const Exception&)
             {
                 OSL_FAIL("OElementImport::implApplySpecificProperties: could not set the properties (using the XMultiPropertySet)!");
+                DBG_UNHANDLED_EXCEPTION();
             }
         }
 
@@ -326,11 +327,12 @@ namespace xmloff
                 {
                     m_xElement->setPropertyValue(aPropValues->Name, aPropValues->Value);
                 }
-                catch(Exception&)
+                catch(const Exception&)
                 {
                     OSL_FAIL(OStringBuffer("OElementImport::implApplySpecificProperties: could not set the property \"").
                         append(OUStringToOString(aPropValues->Name, RTL_TEXTENCODING_ASCII_US)).
                         append("\"!").getStr());
+                    DBG_UNHANDLED_EXCEPTION();
                 }
             }
         }
@@ -468,11 +470,12 @@ namespace xmloff
 
                 m_xElement->setPropertyValue( aPropValues->Name, aPropValues->Value );
             }
-            catch(Exception&)
+            catch(const Exception&)
             {
                 OSL_FAIL(OStringBuffer("OElementImport::EndElement: could not set the property \"").
                     append(OUStringToOString(aPropValues->Name, RTL_TEXTENCODING_ASCII_US)).
                     append("\"!").getStr());
+                DBG_UNHANDLED_EXCEPTION();
             }
         }
     }
@@ -1031,6 +1034,7 @@ namespace xmloff
         catch( const Exception& )
         {
             OSL_FAIL( "OControlImport::EndElement: caught an exception while retrieving the class id!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
 
         const sal_Char* pValueProperty = NULL;
@@ -1068,6 +1072,7 @@ namespace xmloff
                 catch( const Exception& )
                 {
                     OSL_FAIL( "OControlImport::EndElement: caught an exception while retrieving the current value property!" );
+                    DBG_UNHANDLED_EXCEPTION();
                 }
             }
         }
@@ -1085,6 +1090,7 @@ namespace xmloff
             catch( const Exception& )
             {
                 OSL_FAIL( "OControlImport::EndElement: caught an exception while restoring the value property!" );
+                DBG_UNHANDLED_EXCEPTION();
             }
         }
 

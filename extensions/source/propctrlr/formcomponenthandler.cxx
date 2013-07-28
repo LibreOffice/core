@@ -2003,6 +2003,7 @@ namespace pcr
         catch( const Exception& )
         {
             OSL_FAIL( "FormComponentPropertyHandler::impl_updateDependentProperty_nothrow: caught an exception!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 
@@ -2074,6 +2075,7 @@ namespace pcr
         catch( const Exception& )
         {
             OSL_FAIL( "FormComponentPropertyHandler::impl_initComponentMetaData_throw: caught an exception!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 
@@ -2328,6 +2330,7 @@ namespace pcr
         catch( const Exception& )
         {
             OSL_FAIL( "FormComponentPropertyHandler::impl_getRowSet_nothrow: caught an exception!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
         return xReturn;
     }
@@ -2367,6 +2370,7 @@ namespace pcr
         catch (const Exception&)
         {
             OSL_FAIL( "FormComponentPropertyHandler::impl_initFieldList_nothrow: caught an exception!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 
@@ -2423,6 +2427,7 @@ namespace pcr
             catch( const Exception& )
             {
                 OSL_FAIL( "FormComponentPropertyHandler::impl_ensureRowsetConnection_nothrow: caught an exception during error handling!" );
+                DBG_UNHANDLED_EXCEPTION();
             }
             // additional info about what happended
             INetURLObject aParser( sDataSourceName );
@@ -2481,6 +2486,7 @@ namespace pcr
         catch (const Exception&)
         {
             OSL_FAIL("FormComponentPropertyHandler::impl_describeCursorSource_nothrow: caught an exception !");
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 
@@ -2658,6 +2664,7 @@ namespace pcr
         catch( const Exception& )
         {
             OSL_FAIL( "FormComponentPropertyHandler::impl_dialogFilterOrSort_nothrow: caught an exception!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
 
         if ( aErrorInfo.isValid() )
@@ -2752,6 +2759,7 @@ namespace pcr
         catch( const Exception& )
         {
             OSL_FAIL( "FormComponentPropertyHandler::impl_dialogFormatting_nothrow: : caught an exception!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
         return bChanged;
     }
@@ -3282,6 +3290,7 @@ namespace pcr
             catch( const Exception& )
             {
                 OSL_FAIL( "FormComponentPropertyHandler::impl_hasValidDataSourceSignature_nothrow: caught an exception!" );
+                DBG_UNHANDLED_EXCEPTION();
             }
         }
         return bHas;

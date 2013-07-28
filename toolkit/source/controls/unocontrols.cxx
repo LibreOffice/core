@@ -627,6 +627,7 @@ void SAL_CALL GraphicControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 n
     catch( const ::com::sun::star::uno::Exception& )
     {
         OSL_FAIL( "GraphicControlModel::setFastPropertyValue_NoBroadcast: caught an exception while aligning the ImagePosition/ImageAlign properties!" );
+        DBG_UNHANDLED_EXCEPTION();
         mbAdjustingImagePosition = sal_False;
     }
 }

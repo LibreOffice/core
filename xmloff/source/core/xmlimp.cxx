@@ -19,6 +19,7 @@
 
 #include <string.h>
 
+#include <tools/diagnose_ex.h>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
@@ -172,7 +173,8 @@ getBuildIdsProperty(uno::Reference<beans::XPropertySet> const& xImportInfo)
         }
         catch (Exception const& e)
         {
-            SAL_WARN("xmloff.core", "exception getting BuildId" << e.Message);
+            SAL_WARN("xmloff.core", "exception getting BuildId");
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
     return OUString();
@@ -849,7 +851,8 @@ void SAL_CALL SvXMLImport::setTargetDocument( const uno::Reference< lang::XCompo
     }
     catch (uno::Exception const& e)
     {
-        SAL_WARN("xmloff.core", "exception caught: " << e.Message);
+        SAL_WARN("xmloff.core", "exception caught");
+        DBG_UNHANDLED_EXCEPTION();
     }
     if (!mxEventListener.is())
     {
@@ -1456,10 +1459,12 @@ void SvXMLImport::AddNumberStyle(sal_Int32 nKey, const OUString& rName)
         catch ( uno::Exception& )
         {
             SAL_WARN( "xmloff.core", "Numberformat could not be inserted");
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
     else {
         SAL_WARN( "xmloff.core", "not possible to create NameContainer");
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 

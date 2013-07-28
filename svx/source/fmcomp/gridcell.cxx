@@ -121,6 +121,7 @@ namespace
         catch( const Exception& )
         {
             OSL_FAIL( "getModelLineEndSetting: caught an exception!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
         return eFormat;
     }
@@ -587,6 +588,7 @@ DbCellControl::DbCellControl( DbGridColumn& _rColumn, sal_Bool /*_bText*/ )
         catch( const Exception& )
         {
             OSL_FAIL( "DbCellControl::doPropertyListening: caught an exception!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 }
@@ -611,6 +613,7 @@ void DbCellControl::implDoPropertyListening(const OUString& _rPropertyName, sal_
     catch( const Exception& )
     {
         OSL_FAIL( "DbCellControl::doPropertyListening: caught an exception!" );
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 
@@ -1121,6 +1124,7 @@ void DbTextField::Init( Window& rParent, const Reference< XRowSet >& xCursor)
     catch( const Exception& )
     {
         OSL_FAIL( "DbTextField::Init: caught an exception while determining the multi-line capabilities!" );
+        DBG_UNHANDLED_EXCEPTION();
     }
 
     m_bIsSimpleEdit = !bIsMultiLine;

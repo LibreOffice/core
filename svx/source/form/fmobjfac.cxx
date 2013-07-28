@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <tools/diagnose_ex.h>
 #include <comphelper/stl_types.hxx>
 #include <svx/svdobj.hxx>
 #include "svx/fmtools.hxx"
@@ -119,6 +120,7 @@ namespace
         catch( const Exception& )
         {
             OSL_FAIL( "lcl_initProperty: caught an exception!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 }

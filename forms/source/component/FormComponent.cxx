@@ -551,6 +551,7 @@ void OControlModel::readHelpTextCompatibly(const staruno::Reference< stario::XOb
     catch(const Exception&)
     {
         SAL_WARN("forms.component", "OControlModel::readHelpTextCompatibly: could not forward the property value to the aggregate!");
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 
@@ -566,6 +567,7 @@ void OControlModel::writeHelpTextCompatibly(const staruno::Reference< stario::XO
     catch(const Exception&)
     {
         SAL_WARN("forms.component", "OControlModel::writeHelpTextCompatibly: could not retrieve the property value from the aggregate!");
+        DBG_UNHANDLED_EXCEPTION();
     }
     ::comphelper::operator<<( _rxOutStream, sHelpText);
 }
@@ -608,7 +610,8 @@ OControlModel::OControlModel(
                 }
                 catch( const Exception& )
                 {
-                    SAL_WARN("forms.component",  "OControlModel::OControlModel: caught an exception!" );
+                    SAL_WARN("forms.component",  "OControlModel::OControlModel: caught an exception!");
+                    DBG_UNHANDLED_EXCEPTION();
                 }
             }
         }
@@ -996,7 +999,7 @@ Any OControlModel::getPropertyDefaultByHandle( sal_Int32 _nHandle ) const
             if ( m_aPropertyBagHelper.hasDynamicPropertyByHandle( _nHandle ) )
                 m_aPropertyBagHelper.getDynamicPropertyDefaultByHandle( _nHandle, aReturn );
             else
-                SAL_WARN("forms.component",  "OControlModel::convertFastPropertyValue: unknown handle!" );
+                SAL_WARN("forms.component",  "OControlModel::convertFastPropertyValue: unknown handle " << _nHandle);
     }
     return aReturn;
 }
@@ -1073,7 +1076,7 @@ sal_Bool OControlModel::convertFastPropertyValue(
             if ( m_aPropertyBagHelper.hasDynamicPropertyByHandle( _nHandle ) )
                 bModified = m_aPropertyBagHelper.convertDynamicFastPropertyValue( _nHandle, _rValue, _rConvertedValue, _rOldValue );
             else
-                SAL_WARN("forms.component",  "OControlModel::convertFastPropertyValue: unknown handle!" );
+                SAL_WARN("forms.component",  "OControlModel::convertFastPropertyValue: unknown handle " << _nHandle);
             break;
     }
     return bModified;
@@ -1117,7 +1120,7 @@ void OControlModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const A
             if ( m_aPropertyBagHelper.hasDynamicPropertyByHandle( _nHandle ) )
                 m_aPropertyBagHelper.setDynamicFastPropertyValue( _nHandle, _rValue );
             else
-                SAL_WARN("forms.component",  "OControlModel::setFastPropertyValue_NoBroadcast: unknown handle!" );
+                SAL_WARN("forms.component",  "OControlModel::setFastPropertyValue_NoBroadcast: unknown handle " << _nHandle );
             break;
     }
 }
@@ -2002,7 +2005,8 @@ void SAL_CALL OBoundControlModel::propertyChange( const PropertyChangeEvent& evt
         }
         catch( const Exception& )
         {
-            SAL_WARN("forms.component",  "OBoundControlModel::propertyChange: could not adjust my binding-controlled property!" );
+            SAL_WARN("forms.component",  "OBoundControlModel::propertyChange: could not adjust my binding-controlled property!");
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 }
@@ -2168,7 +2172,7 @@ sal_Bool OBoundControlModel::connectToField(const Reference<XRowSet>& rForm)
                 }
                 else
                 {
-                    SAL_WARN("forms.component", "OBoundControlModel::connectToField: property NAME not supported!");
+                    SAL_WARN("forms.component", "OBoundControlModel::connectToField: property " << PROPERTY_VALUE << " not supported!");
                     impl_setField_noNotify( NULL );
                 }
             }
@@ -2377,7 +2381,8 @@ void OBoundControlModel::doSetControlValue( const Any& _rValue )
     }
     catch( const Exception& )
     {
-        SAL_WARN("forms.component",  "OBoundControlModel::doSetControlValue: caught an exception!" );
+        SAL_WARN("forms.component",  "OBoundControlModel::doSetControlValue: caught an exception!");
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 
@@ -2397,7 +2402,8 @@ void OBoundControlModel::onConnectedValidator( )
     }
     catch( const Exception& )
     {
-        SAL_WARN("forms.component",  "OBoundControlModel::onConnectedValidator: caught an exception!" );
+        SAL_WARN("forms.component",  "OBoundControlModel::onConnectedValidator: caught an exception!");
+        DBG_UNHANDLED_EXCEPTION();
     }
     recheckValidity( false );
 }
@@ -2415,7 +2421,8 @@ void OBoundControlModel::onDisconnectedValidator( )
     }
     catch( const Exception& )
     {
-        SAL_WARN("forms.component",  "OBoundControlModel::onDisconnectedValidator: caught an exception!" );
+        SAL_WARN("forms.component",  "OBoundControlModel::onDisconnectedValidator: caught an exception!");
+        DBG_UNHANDLED_EXCEPTION();
     }
     recheckValidity( false );
 }
@@ -2504,6 +2511,7 @@ void OBoundControlModel::reset() throw (RuntimeException)
     catch( const SQLException& )
     {
         SAL_WARN("forms.component",  "OBoundControlModel::reset: caught an SQL exception!" );
+        DBG_UNHANDLED_EXCEPTION();
     }
     // #i24495# - don't count the insert row as "invalid"
 
@@ -2550,6 +2558,7 @@ void OBoundControlModel::reset() throw (RuntimeException)
         catch(const Exception&)
         {
             SAL_WARN("forms.component", "OBoundControlModel::reset: this should have succeeded in all cases!");
+            DBG_UNHANDLED_EXCEPTION();
         }
 
         sal_Bool bNeedValueTransfer = sal_True;
@@ -2712,7 +2721,8 @@ void OBoundControlModel::disconnectExternalValueBinding( )
     }
     catch( const Exception& )
     {
-        SAL_WARN("forms.component",  "OBoundControlModel::disconnectExternalValueBinding: caught an exception!" );
+        SAL_WARN("forms.component",  "OBoundControlModel::disconnectExternalValueBinding: caught an exception!");
+        DBG_UNHANDLED_EXCEPTION();
     }
 
     // if the binding also acts as our validator, disconnect the validator, too
@@ -3081,7 +3091,8 @@ void OBoundControlModel::recheckValidity( bool _bForceNotification )
     }
     catch( const Exception& )
     {
-        SAL_WARN("forms.component",  "OBoundControlModel::recheckValidity: caught an exception!" );
+        SAL_WARN("forms.component",  "OBoundControlModel::recheckValidity: caught an exception!");
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 

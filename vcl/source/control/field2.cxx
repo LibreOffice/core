@@ -19,6 +19,7 @@
 
 #include "sal/config.h"
 
+#include <tools/diagnose_ex.h>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <tools/rc.h>
@@ -165,6 +166,7 @@ static int ImplIsPatternChar( sal_Unicode cChar, sal_Char cEditMask )
     catch (const ::com::sun::star::uno::Exception&)
     {
         SAL_WARN( "vcl.control", "ImplIsPatternChar: Exception caught!" );
+        DBG_UNHANDLED_EXCEPTION();
         return sal_False;
     }
 
