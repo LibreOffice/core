@@ -1105,7 +1105,14 @@ void SmRootNode::CreateTextFromNode(OUString &rText)
     }
     else
         rText += "sqrt ";
+
+    if (!pExtra && GetSubNode(2)->GetNumSubNodes() > 1)
+        rText += "{ ";
+
     GetSubNode(2)->CreateTextFromNode(rText);
+
+    if (!pExtra && GetSubNode(2)->GetNumSubNodes() > 1)
+        rText += "} ";
 }
 
 
