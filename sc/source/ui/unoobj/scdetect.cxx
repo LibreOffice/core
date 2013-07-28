@@ -296,8 +296,6 @@ OUString SAL_CALL ScFilterDetect::detect( uno::Sequence<beans::PropertyValue>& l
             bDeepDetection = lDescriptor[nProperty].Value.get<sal_Bool>();
     }
 
-    fprintf(stdout, "ScFilterDetect::detect:   type = '%s'\n", rtl::OUStringToOString(aTypeName, RTL_TEXTENCODING_UTF8).getStr());
-
     // can't check the type for external filters, so set the "dont" flag accordingly
     SolarMutexGuard aGuard;
     //SfxFilterFlags nMust = SFX_FILTER_IMPORT, nDont = SFX_FILTER_NOTINSTALLED;
