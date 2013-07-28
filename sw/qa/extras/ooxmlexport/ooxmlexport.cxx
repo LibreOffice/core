@@ -104,6 +104,7 @@ public:
     void testFdo66781();
     void testFdo60990();
     void testFdo65718();
+    void testFdo44689();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -184,6 +185,7 @@ void Test::run()
         {"fdo66781.docx", &Test::testFdo66781},
         {"fdo60990.odt", &Test::testFdo60990},
         {"fdo65718.docx", &Test::testFdo65718},
+        {"fdo44689.docx", &Test::testFdo44689},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -1086,6 +1088,13 @@ void Test::testFdo65718()
     // So I had to add the hack of the '+1' to make the test-case pass
     CPPUNIT_ASSERT_EQUAL(sal_Int32( EMU_TO_MM100(114300) + 1 ), getProperty<sal_Int32>(xPropertySet, "LeftMargin") );
     CPPUNIT_ASSERT_EQUAL(sal_Int32( EMU_TO_MM100(114300) + 1), getProperty<sal_Int32>(xPropertySet, "RightMargin") );
+}
+
+void Test::testFdo44689()
+{
+    // The problem was that the import & export process did not analyze the 'start from page' attribute of a section
+    uno::Reference<beans::XPropertySet> xPara(getParagraph(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(7), getProperty<sal_Int16>(xPara, "PageNumberOffset"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
