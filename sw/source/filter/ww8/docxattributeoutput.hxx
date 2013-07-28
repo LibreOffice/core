@@ -73,14 +73,15 @@ enum DocxColBreakStatus
  */
 struct OutputBorderOptions
 {
-    sal_Int32    tag;
-    bool         bUseStartEnd;
-    bool         bWriteTag;
-    bool         bWriteInsideHV;
-    bool         bWriteDistance;
-    bool         bCheckDistanceSize;
+    sal_Int32           tag;
+    bool                bUseStartEnd;
+    bool                bWriteTag;
+    bool                bWriteInsideHV;
+    bool                bWriteDistance;
+    SvxShadowLocation   aShadowLocation;
+    bool                bCheckDistanceSize;
 
-    OutputBorderOptions() : tag(0), bUseStartEnd(false), bWriteTag(true), bWriteInsideHV(false), bWriteDistance(false), bCheckDistanceSize(false) {}
+    OutputBorderOptions() : tag(0), bUseStartEnd(false), bWriteTag(true), bWriteInsideHV(false), bWriteDistance(false), aShadowLocation(SVX_SHADOW_NONE), bCheckDistanceSize(false) {}
 };
 
 /**
