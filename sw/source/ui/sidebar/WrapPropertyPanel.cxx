@@ -38,9 +38,6 @@ const char UNO_WRAPON[] = ".uno:WrapOn";
 const char UNO_WRAPTHROUGH[] = ".uno:WrapThrough";
 const char UNO_WRAPIDEAL[] = ".uno:WrapIdeal";
 
-#define A2S(pString) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(pString)))
-
-
 namespace sw { namespace sidebar {
 
 WrapPropertyPanel* WrapPropertyPanel::Create (
@@ -49,11 +46,11 @@ WrapPropertyPanel* WrapPropertyPanel::Create (
     SfxBindings* pBindings)
 {
     if (pParent == NULL)
-        throw ::com::sun::star::lang::IllegalArgumentException(A2S("no parent Window given to WrapPropertyPanel::Create"), NULL, 0);
+        throw ::com::sun::star::lang::IllegalArgumentException("no parent Window given to WrapPropertyPanel::Create", NULL, 0);
     if ( ! rxFrame.is())
-        throw ::com::sun::star::lang::IllegalArgumentException(A2S("no XFrame given to WrapPropertyPanel::Create"), NULL, 1);
+        throw ::com::sun::star::lang::IllegalArgumentException("no XFrame given to WrapPropertyPanel::Create", NULL, 1);
     if (pBindings == NULL)
-        throw ::com::sun::star::lang::IllegalArgumentException(A2S("no SfxBindings given to WrapPropertyPanel::Create"), NULL, 2);
+        throw ::com::sun::star::lang::IllegalArgumentException("no SfxBindings given to WrapPropertyPanel::Create", NULL, 2);
 
     return new WrapPropertyPanel(
         pParent,
@@ -106,17 +103,17 @@ void WrapPropertyPanel::Initialize()
     mpRBIdealWrap->SetClickHdl(aLink);
 
     aWrapIL.AddImage( UNO_WRAPOFF,
-                      ::GetImage( mxFrame, A2S(".uno:WrapOff"), sal_False ) );
+                      ::GetImage( mxFrame, UNO_WRAPOFF, sal_False ) );
     aWrapIL.AddImage( UNO_WRAPLEFT,
-                      ::GetImage( mxFrame, A2S(".uno:WrapLeft"), sal_False ) );
+                      ::GetImage( mxFrame, UNO_WRAPLEFT, sal_False ) );
     aWrapIL.AddImage( UNO_WRAPRIGHT,
-                      ::GetImage( mxFrame, A2S(".uno:WrapRight"), sal_False ) );
+                      ::GetImage( mxFrame, UNO_WRAPRIGHT, sal_False ) );
     aWrapIL.AddImage( UNO_WRAPON,
-                      ::GetImage( mxFrame, A2S(".uno:WrapOn"), sal_False ) );
+                      ::GetImage( mxFrame, UNO_WRAPON, sal_False ) );
     aWrapIL.AddImage( UNO_WRAPTHROUGH,
-                      ::GetImage( mxFrame, A2S(".uno:WrapThrough"), sal_False ) );
+                      ::GetImage( mxFrame, UNO_WRAPTHROUGH, sal_False ) );
     aWrapIL.AddImage( UNO_WRAPIDEAL,
-                      ::GetImage( mxFrame, A2S(".uno:WrapIdeal"), sal_False ) );
+                      ::GetImage( mxFrame, UNO_WRAPIDEAL, sal_False ) );
 
     mpRBNoWrap->SetModeRadioImage( aWrapIL.GetImage(UNO_WRAPOFF) );
     if ( Application::GetSettings().GetLayoutRTL() )
