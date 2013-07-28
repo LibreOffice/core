@@ -155,10 +155,10 @@ void TitleBarUpdate::impl_updateApplicationID(const css::uno::Reference< css::fr
         OUString aModuleId = xModuleManager->identify(xFrame);
         OUString sDesktopName;
 #if !defined(MACOSX)
-        if ( aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.TextDocument")) ||
-             aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.GlobalDocument")) ||
-             aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.WebDocument")) ||
-             aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.xforms.XMLFormDocument")) )
+        if ( aModuleId == "com.sun.star.text.TextDocument" ||
+             aModuleId == "com.sun.star.text.GlobalDocument" ||
+             aModuleId == "com.sun.star.text.WebDocument" ||
+             aModuleId == "com.sun.star.xforms.XMLFormDocument" )
             sDesktopName = OUString("Writer");
         else if ( aModuleId == "com.sun.star.sheet.SpreadsheetDocument" )
             sDesktopName = OUString("Calc");
@@ -168,12 +168,12 @@ void TitleBarUpdate::impl_updateApplicationID(const css::uno::Reference< css::fr
             sDesktopName = OUString("Draw");
         else if ( aModuleId == "com.sun.star.formula.FormulaProperties" )
             sDesktopName = OUString("Math");
-        else if ( aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.sdb.DatabaseDocument")) ||
-                  aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.sdb.OfficeDatabaseDocument")) ||
-                  aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.sdb.RelationDesign")) ||
-                  aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.sdb.QueryDesign")) ||
-                  aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.sdb.TableDesign")) ||
-                  aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.sdb.DataSourceBrowser")) )
+        else if ( aModuleId == "com.sun.star.sdb.DatabaseDocument" ||
+                  aModuleId == "com.sun.star.sdb.OfficeDatabaseDocument" ||
+                  aModuleId == "com.sun.star.sdb.RelationDesign" ||
+                  aModuleId == "com.sun.star.sdb.QueryDesign" ||
+                  aModuleId == "com.sun.star.sdb.TableDesign" ||
+                  aModuleId == "com.sun.star.sdb.DataSourceBrowser" )
             sDesktopName = OUString("Base");
         else
             sDesktopName = OUString("Startcenter");
