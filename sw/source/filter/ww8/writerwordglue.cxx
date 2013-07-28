@@ -344,10 +344,9 @@ namespace sw
     namespace util
     {
 
-        bool IsPlausableSingleWordSection(const SwFrmFmt &rTitleFmt,
-            const SwFrmFmt &rFollowFmt)
+        bool IsPlausableSingleWordSection(const SwFrmFmt &rTitleFmt, const SwFrmFmt &rFollowFmt)
         {
-            bool bPlausableTitlePage = true;
+            bool bPlausableSingleWordSection = true;
 
             const SwFmtCol& rFirstCols = rTitleFmt.GetCol();
             const SwFmtCol& rFollowCols = rFollowFmt.GetCol();
@@ -361,21 +360,21 @@ namespace sw
             if (rFirstColumns.size() != rFollowColumns.size())
             {
                 //e.g. #i4320#
-                bPlausableTitlePage = false;
+                bPlausableSingleWordSection = false;
             }
             else if (rOneLR != rTwoLR)
-                bPlausableTitlePage = false;
+                bPlausableSingleWordSection = false;
             else if (rFirstFrmSize != rFollowFrmSize)
-                bPlausableTitlePage = false;
+                bPlausableSingleWordSection = false;
             else
             {
                 HdFtDistanceGlue aOne(rTitleFmt.GetAttrSet());
                 HdFtDistanceGlue aTwo(rFollowFmt.GetAttrSet());
                 //e.g. #i14509#
                 if (!aOne.EqualTopBottom(aTwo))
-                    bPlausableTitlePage = false;
+                    bPlausableSingleWordSection = false;
             }
-            return bPlausableTitlePage;
+            return bPlausableSingleWordSection;
         }
 
         HdFtDistanceGlue::HdFtDistanceGlue(const SfxItemSet &rPage)
