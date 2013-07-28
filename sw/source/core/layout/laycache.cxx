@@ -623,7 +623,14 @@ bool SwLayHelper::CheckInsertPage()
     {
         sal_uInt16 nPgNum = 0;
         if ( !pDesc )
-            pDesc = rpPage->GetPageDesc()->GetFollow();
+        {
+             pDesc = rpPage->GetPageDesc()->GetFollow();
+
+            SwFmtPageDesc rFollowDesc( pDesc );
+            nPgNum = rFollowDesc.GetNumOffset();
+            if ( 0 <= nPgNum )
+                ((SwRootFrm*)rpPage->GetUpper())->SetVirtPageNum(sal_True);
+        }
         else
         {
             if ( 0 != (nPgNum = rDesc.GetNumOffset()) )
