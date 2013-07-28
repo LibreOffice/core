@@ -137,7 +137,6 @@ void lcl_AddPropertiesToVector_only_BitmapProperties( ::std::vector< ::com::sun:
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
-
     rOutProperties.push_back(
         Property( "FillBitmapRectanglePoint",
                   FillProperties::PROP_FILL_BITMAP_RECTANGLEPOINT,
@@ -174,7 +173,6 @@ void lcl_AddPropertiesToVector_only_BitmapProperties( ::std::vector< ::com::sun:
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 }
 
-
 void lcl_AddDefaultsToMap_without_BitmapProperties(
     ::chart::tPropertyValueMap & rOutMap )
 {
@@ -208,7 +206,6 @@ void FillProperties::AddPropertiesToVector(
     ::std::vector< Property > & rOutProperties )
 {
     // Fill Properties see service drawing::FillProperties
-    // ---------------
     lcl_AddPropertiesToVector_without_BitmapProperties( rOutProperties );
     lcl_AddPropertiesToVector_only_BitmapProperties( rOutProperties );
 }

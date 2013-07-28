@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "tp_3D_SceneIllumination.hxx"
 #include "tp_3D_SceneIllumination.hrc"
 #include "ResId.hxx"
@@ -40,10 +39,8 @@
 #include <svx/svx3ditems.hxx>
 #include <svx/svddef.hxx>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
@@ -90,8 +87,6 @@ bool LightButton::isLightOn() const
     return m_bLightOn;
 }
 
-//-----------------------------------------------------------------------------
-
 ColorButton::ColorButton( Window* pParent, const ResId& rResId )
             : ImageButton( pParent, rResId )
 {
@@ -102,8 +97,6 @@ ColorButton::ColorButton( Window* pParent, const ResId& rResId )
 ColorButton::~ColorButton()
 {
 }
-
-//-----------------------------------------------------------------------------
 
 struct LightSource
 {
@@ -144,8 +137,6 @@ void LightSourceInfo::initButtonFromSource()
         aLightSource.bIsEnabled ? RID_SVXIMAGE_LIGHT_ON : RID_SVXIMAGE_LIGHT_OFF
     ) ) );
 }
-
-//-----------------------------------------------------------------------------
 
 namespace
 {
@@ -264,8 +255,6 @@ namespace
         }
     }
 }
-
-//-----------------------------------------------------------------------------
 
 ThreeD_SceneIllumination_TabPage::ThreeD_SceneIllumination_TabPage( Window* pWindow
                 , const uno::Reference< beans::XPropertySet > & xSceneProperties
@@ -634,8 +623,6 @@ void ThreeD_SceneIllumination_TabPage::updatePreview()
     }
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

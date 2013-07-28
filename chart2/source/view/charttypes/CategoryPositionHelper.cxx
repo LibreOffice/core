@@ -17,13 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "CategoryPositionHelper.hxx"
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 CategoryPositionHelper::CategoryPositionHelper( double fSeriesCount, double fCategoryWidth )
     : m_fSeriesCount(fSeriesCount)
@@ -88,8 +85,6 @@ void CategoryPositionHelper::setCategoryWidth( double fCategoryWidth )
     m_fCategoryWidth = fCategoryWidth;
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

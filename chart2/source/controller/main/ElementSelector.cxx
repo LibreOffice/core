@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "ElementSelector.hxx"
 #include "macros.hxx"
 #include "ObjectNameProvider.hxx"
@@ -50,8 +49,6 @@ namespace
 {
 static const OUString lcl_aServiceName( "com.sun.star.comp.chart.ElementSelectorToolbarController" );
 }
-
-//------------------------------------------------------------------------------
 
 SelectorListBox::SelectorListBox( Window* pParent, WinBits nStyle )
     : ListBox( pParent, nStyle )
@@ -251,23 +248,19 @@ Reference< ::com::sun::star::accessibility::XAccessible > SelectorListBox::Creat
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 APPHELPER_XSERVICEINFO_IMPL( ElementSelectorToolbarController, lcl_aServiceName );
 
-//------------------------------------------------------------------------------
 Sequence< OUString > ElementSelectorToolbarController::getSupportedServiceNames_Static()
 {
     Sequence< OUString > aServices(1);
     aServices[ 0 ] = "com.sun.star.frame.ToolbarController";
     return aServices;
 }
-// -----------------------------------------------------------------------------
 ElementSelectorToolbarController::ElementSelectorToolbarController( const uno::Reference< uno::XComponentContext > & xContext )
     : m_xCC( xContext )
 {
 }
-// -----------------------------------------------------------------------------
 ElementSelectorToolbarController::~ElementSelectorToolbarController()
 {
 }
-// -----------------------------------------------------------------------------
 // XInterface
 Any SAL_CALL ElementSelectorToolbarController::queryInterface( const Type& _rType ) throw (RuntimeException)
 {
@@ -276,22 +269,18 @@ Any SAL_CALL ElementSelectorToolbarController::queryInterface( const Type& _rTyp
         aReturn = ElementSelectorToolbarController_BASE::queryInterface(_rType);
     return aReturn;
 }
-// -----------------------------------------------------------------------------
 void SAL_CALL ElementSelectorToolbarController::acquire() throw ()
 {
     ToolboxController::acquire();
 }
-// -----------------------------------------------------------------------------
 void SAL_CALL ElementSelectorToolbarController::release() throw ()
 {
     ToolboxController::release();
 }
-// -----------------------------------------------------------------------------
 void SAL_CALL ElementSelectorToolbarController::initialize( const Sequence< Any >& rArguments ) throw (Exception, RuntimeException)
 {
     ToolboxController::initialize(rArguments);
 }
-// -----------------------------------------------------------------------------
 void SAL_CALL ElementSelectorToolbarController::statusChanged( const frame::FeatureStateEvent& rEvent ) throw ( RuntimeException )
 {
     if( m_apSelectorListBox.get() )
@@ -306,7 +295,6 @@ void SAL_CALL ElementSelectorToolbarController::statusChanged( const frame::Feat
         }
     }
 }
-// -----------------------------------------------------------------------------
 uno::Reference< awt::XWindow > SAL_CALL ElementSelectorToolbarController::createItemWindow( const uno::Reference< awt::XWindow >& xParent )
         throw (uno::RuntimeException)
 {
@@ -328,8 +316,6 @@ uno::Reference< awt::XWindow > SAL_CALL ElementSelectorToolbarController::create
     return xItemWindow;
 }
 
-//..........................................................................
 } // chart2
-//..........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "AreaWrapper.hxx"
 #include "macros.hxx"
 #include "ContainerHelper.hxx"
@@ -70,11 +69,7 @@ struct StaticAreaWrapperPropertyArray : public rtl::StaticAggregate< Sequence< P
 {
 };
 
-
 } // anonymous namespace
-
-// --------------------------------------------------------------------------------
-// --------------------------------------------------------------------------------
 
 namespace chart
 {
@@ -148,8 +143,6 @@ void SAL_CALL AreaWrapper::removeEventListener(
     m_aEventListenerContainer.removeInterface( aListener );
 }
 
-// ================================================================================
-
 // WrappedPropertySet
 Reference< beans::XPropertySet > AreaWrapper::getInnerPropertySet()
 {
@@ -173,8 +166,6 @@ const std::vector< WrappedProperty* > AreaWrapper::createWrappedProperties()
 
     return aWrappedProperties;
 }
-
-// ================================================================================
 
 Sequence< OUString > AreaWrapper::getSupportedServiceNames_Static()
 {

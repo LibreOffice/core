@@ -115,8 +115,6 @@ struct StaticWallInfo : public rtl::StaticAggregate< uno::Reference< beans::XPro
 
 } // anonymous namespace
 
-// ================================================================================
-
 namespace chart
 {
 
@@ -141,8 +139,6 @@ uno::Reference< util::XCloneable > SAL_CALL Wall::createClone()
 {
     return uno::Reference< util::XCloneable >( new Wall( *this ));
 }
-
-// ================================================================================
 
 // ____ OPropertySet ____
 uno::Any Wall::GetDefaultValue( sal_Int32 nHandle ) const
@@ -220,8 +216,6 @@ void Wall::fireModifyEvent()
 {
     m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
 }
-
-// ================================================================================
 
 uno::Sequence< OUString > Wall::getSupportedServiceNames_Static()
 {

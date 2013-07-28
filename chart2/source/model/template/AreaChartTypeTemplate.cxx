@@ -244,9 +244,6 @@ Reference< chart2::XChartType > SAL_CALL AreaChartTypeTemplate::getChartTypeForN
     return xResult;
 }
 
-
-// ----------------------------------------
-
 uno::Sequence< OUString > AreaChartTypeTemplate::getSupportedServiceNames_Static()
 {
     uno::Sequence< OUString > aServices( 2 );

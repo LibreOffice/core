@@ -43,17 +43,11 @@
 #include <com/sun/star/drawing/NormalsKind.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 using namespace ::rtl::math;
 using namespace ::com::sun::star::chart2;
-
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 
 AreaChart::AreaChart( const uno::Reference<XChartType>& xChartTypeModel
                      , sal_Int32 nDimensionCount
@@ -134,8 +128,6 @@ bool AreaChart::isSeparateStackingForDifferentSigns( sal_Int32 /*nDimensionIndex
     // no separate stacking in all types of line/area charts
     return false;
 }
-
-//-----------------------------------------------------------------
 
 LegendSymbolStyle AreaChart::getLegendSymbolStyle()
 {
@@ -610,20 +602,17 @@ void AreaChart::impl_createSeriesShapes()
     //iterate through all series again to create the series shapes
     ::std::vector< ::std::vector< VDataSeriesGroup > >::iterator            aZSlotIter = m_aZSlots.begin();
     const ::std::vector< ::std::vector< VDataSeriesGroup > >::const_iterator aZSlotEnd = m_aZSlots.end();
-//=============================================================================
     for( sal_Int32 nZ=1; aZSlotIter != aZSlotEnd; ++aZSlotIter, ++nZ )
     {
         ::std::vector< VDataSeriesGroup >::iterator             aXSlotIter = aZSlotIter->begin();
         const ::std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
 
-    //=============================================================================
         for( ; aXSlotIter != aXSlotEnd; ++aXSlotIter )
         {
             ::std::vector< VDataSeries* >* pSeriesList = &(aXSlotIter->m_aSeriesVector);
 
             ::std::vector< VDataSeries* >::const_iterator       aSeriesIter = pSeriesList->begin();
             const ::std::vector< VDataSeries* >::const_iterator aSeriesEnd  = pSeriesList->end();
-    //=============================================================================
 
             std::map< sal_Int32, drawing::PolyPolygonShape3D* > aPreviousSeriesPolyMap;//a PreviousSeriesPoly for each different nAttachedAxisIndex
             drawing::PolyPolygonShape3D* pSeriesPoly = NULL;
@@ -727,7 +716,6 @@ void AreaChart::createShapes()
     m_xTextTarget     = m_pShapeFactory->createGroup2D( m_xFinalTarget,OUString() );
     m_xRegressionCurveEquationTarget = m_pShapeFactory->createGroup2D( m_xFinalTarget,OUString() );
 
-    //---------------------------------------------
     //check necessary here that different Y axis can not be stacked in the same group? ... hm?
 
     //update/create information for current group
@@ -747,7 +735,6 @@ void AreaChart::createShapes()
 
     bool bDateCategory = (m_pExplicitCategoriesProvider && m_pExplicitCategoriesProvider->isDateAxis());
 
-//=============================================================================
     //iterate through all x values per indices
     for( sal_Int32 nIndex = nStartIndex; nIndex < nEndIndex; nIndex++ )
     {
@@ -792,7 +779,6 @@ void AreaChart::createShapes()
             }
         }
 
-//=============================================================================
         aZSlotIter = m_aZSlots.begin();
         for( sal_Int32 nZ=1; aZSlotIter != aZSlotEnd; ++aZSlotIter, ++nZ )
         {
@@ -808,7 +794,6 @@ void AreaChart::createShapes()
                 const std::vector<VDataSeries*>::const_iterator aSeriesEnd  = rSeriesList.end();
 
                 std::map< sal_Int32, double > aLogicYForNextSeriesMap;//one for each different nAttachedAxisIndex
-    //=============================================================================
                 //iterate through all series
                 for( sal_Int32 nSeriesIndex = 0; aSeriesIter != aSeriesEnd; ++aSeriesIter, ++nSeriesIndex )
                 {
@@ -1102,9 +1087,6 @@ void AreaChart::createShapes()
             }//next x slot
         }//next z slot
     }//next category
-//=============================================================================
-//=============================================================================
-//=============================================================================
 
     impl_createSeriesShapes();
 
@@ -1124,8 +1106,6 @@ void AreaChart::createShapes()
     OSL_TRACE( "\nPPPPPPPPP<<<<<<<<<<<< area chart :: createShapes():: skipped points: %d created points: %d", nSkippedPoints, nCreatedPoints );
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

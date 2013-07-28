@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "XMLFilter.hxx"
 #include "macros.hxx"
 #include "MediaDescriptorHelper.hxx"
@@ -59,7 +58,6 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::osl::MutexGuard;
 
-// ----------------------------------------
 namespace
 {
 #define LOCAL_CONST_STR(i, x) sal_Char const i[sizeof(x)] = x
@@ -204,10 +202,7 @@ uno::Reference< embed::XStorage > lcl_getReadStorage(
     return xStorage;
 }
 
-
 } // anonymous namespace
-
-// ----------------------------------------
 
 namespace chart
 {
@@ -284,7 +279,6 @@ void SAL_CALL XMLFilter::setTargetDocument(
     m_xTargetDoc = Document;
 }
 
-
 // ____ XExporter ____
 void SAL_CALL XMLFilter::setSourceDocument(
     const Reference< lang::XComponent >& Document )
@@ -296,7 +290,6 @@ void SAL_CALL XMLFilter::setSourceDocument(
 
     m_xSourceDoc = Document;
 }
-
 
 sal_Int32 XMLFilter::impl_Import(
     const Reference< lang::XComponent > & xDocumentComp,
@@ -496,7 +489,6 @@ sal_Int32 XMLFilter::impl_ImportStream(
                 Reference< xml::sax::XDocumentHandler > xDocHandler(
                     xFactory->createInstanceWithArgumentsAndContext( rServiceName, aFilterCompArgs, m_xContext ),
                     uno::UNO_QUERY_THROW );
-
 
                 Reference< document::XImporter > xImporter( xDocHandler, uno::UNO_QUERY_THROW );
                 xImporter->setTargetDocument( Reference< lang::XComponent >( m_xTargetDoc, uno::UNO_QUERY_THROW ));
@@ -771,8 +763,6 @@ sal_Int32 XMLFilter::impl_ExportStream(
     return nWarning;
 }
 
-// --------------------------------------------------------------------------------
-
 Sequence< OUString > XMLFilter::getSupportedServiceNames_Static()
 {
     Sequence< OUString > aServices( 2 );
@@ -783,7 +773,6 @@ Sequence< OUString > XMLFilter::getSupportedServiceNames_Static()
     // XInitialization, XNamed
     return aServices;
 }
-// -----------------------------------------------------------------------------
 
 void XMLFilter::isOasisFormat(const Sequence< beans::PropertyValue >& _rMediaDescriptor, bool & rOutOASIS )
 {
@@ -791,15 +780,12 @@ void XMLFilter::isOasisFormat(const Sequence< beans::PropertyValue >& _rMediaDes
     if( aMDHelper.ISSET_FilterName )
         rOutOASIS = aMDHelper.FilterName == "chart8";
 }
-// -----------------------------------------------------------------------------
 OUString XMLFilter::getMediaType(bool _bOasis)
 {
     return _bOasis ? MIMETYPE_OASIS_OPENDOCUMENT_CHART : MIMETYPE_VND_SUN_XML_CHART;
 }
-// -----------------------------------------------------------------------------
 
 APPHELPER_XSERVICEINFO_IMPL( XMLFilter, OUString("com.sun.star.comp.chart2.XMLFilter") );
-// -----------------------------------------------------------------------------
 
 void XMLReportFilterHelper::isOasisFormat(const Sequence< beans::PropertyValue >& _rMediaDescriptor, bool & rOutOASIS )
 {
@@ -807,7 +793,6 @@ void XMLReportFilterHelper::isOasisFormat(const Sequence< beans::PropertyValue >
     if( aMDHelper.ISSET_FilterName )
         rOutOASIS = aMDHelper.FilterName == "StarOffice XML (Base) Report Chart";
 }
-// -----------------------------------------------------------------------------
 OUString XMLReportFilterHelper::getMediaType(bool )
 {
     return MIMETYPE_OASIS_OPENDOCUMENT_REPORT_CHART;

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "ObjectIdentifier.hxx"
 #include "macros.hxx"
 #include "TitleHelper.hxx"
@@ -39,10 +38,8 @@
 
 #include <rtl/ustrbuf.hxx>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
@@ -339,7 +336,6 @@ OUString ObjectIdentifier::createClassifiedIdentifierForObject(
     OUString aParentParticle;
     OUString aDragMethodServiceName;
     OUString aDragParameterString;
-
 
     try
     {
@@ -1435,8 +1431,6 @@ Any ObjectIdentifier::getAny() const
     return aAny;
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

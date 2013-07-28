@@ -210,9 +210,6 @@ struct StaticPointWrapperPropertyArray : public rtl::StaticAggregate< Sequence< 
 {
 };
 
-//----------------------------------------------------------------------------------------------------------------------
-
-
 //PROP_SERIES_ATTACHED_AXIS
 class WrappedAttachedAxisProperty : public ::chart::WrappedProperty
 {
@@ -286,8 +283,6 @@ void WrappedAttachedAxisProperty::setPropertyValue( const Any& rOuterValue, cons
     }
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-
 class WrappedSegmentOffsetProperty : public ::chart::WrappedProperty
 {
 public:
@@ -329,8 +324,6 @@ Any WrappedSegmentOffsetProperty::convertOuterToInnerValue( const Any& rOuterVal
 
     return aResult;
 }
-
-//----------------------------------------------------------------------------------------------------------------------
 
 class WrappedLineColorProperty : public WrappedSeriesAreaOrLineProperty
 {
@@ -393,8 +386,6 @@ Any WrappedLineColorProperty::getPropertyDefault( const Reference< beans::XPrope
         return WrappedSeriesAreaOrLineProperty::getPropertyDefault( xInnerPropertyState );
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-
 class WrappedLineStyleProperty : public WrappedSeriesAreaOrLineProperty
 {
 public:
@@ -448,9 +439,6 @@ void WrappedLineStyleProperty::setPropertyToDefault( const Reference< beans::XPr
 }
 
 } // anonymous namespace
-
-
-// --------------------------------------------------------------------------------
 
 namespace chart
 {
@@ -544,8 +532,6 @@ void SAL_CALL DataSeriesPointWrapper::disposing( const lang::EventObject& /*Sour
 {
 }
 
-// ================================================================================
-
 bool DataSeriesPointWrapper::isSupportingAreaProperties()
 {
     Reference< chart2::XDataSeries > xSeries( this->getDataSeries() );
@@ -590,8 +576,6 @@ Reference< beans::XPropertySet > DataSeriesPointWrapper::getDataPointProperties(
     return xPointProp;
 }
 
-// ================================================================================
-
 //ReferenceSizePropertyProvider
 void DataSeriesPointWrapper::updateReferenceSize()
 {
@@ -615,8 +599,6 @@ awt::Size DataSeriesPointWrapper::getCurrentSizeForReference()
 {
     return m_spChart2ModelContact->GetPageSize();
 }
-
-// ================================================================================
 
 // WrappedPropertySet
 
@@ -853,8 +835,6 @@ Any SAL_CALL DataSeriesPointWrapper::getPropertyValue( const OUString& rProperty
     }
     return WrappedPropertySet::getPropertyValue( rPropertyName );
 }
-
-// ================================================================================
 
 uno::Sequence< OUString > DataSeriesPointWrapper::getSupportedServiceNames_Static()
 {

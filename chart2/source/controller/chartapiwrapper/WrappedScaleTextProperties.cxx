@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "WrappedScaleTextProperties.hxx"
 #include "FastPropertyIdRanges.hxx"
 #include "macros.hxx"
@@ -30,7 +29,6 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::beans::Property;
 
-//.............................................................................
 namespace chart
 {
 namespace wrapper
@@ -128,7 +126,6 @@ enum
 
 }//anonymous namespace
 
-//-----------------------------------------------------------------------------
 void WrappedScaleTextProperties::addProperties( ::std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
@@ -139,8 +136,6 @@ void WrappedScaleTextProperties::addProperties( ::std::vector< Property > & rOut
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 }
 
-//-----------------------------------------------------------------------------
-
 void WrappedScaleTextProperties::addWrappedProperties( std::vector< WrappedProperty* >& rList
                                  , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
 {
@@ -149,6 +144,5 @@ void WrappedScaleTextProperties::addWrappedProperties( std::vector< WrappedPrope
 
 } //namespace wrapper
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

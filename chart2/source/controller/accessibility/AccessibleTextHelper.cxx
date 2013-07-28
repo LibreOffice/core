@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "AccessibleTextHelper.hxx"
 #include "DrawViewWrapper.hxx"
 
@@ -180,8 +179,6 @@ lang::Locale SAL_CALL AccessibleTextHelper::getLocale()
     OSL_FAIL( "Not implemented in this helper" );
     return lang::Locale();
 }
-
-
 
 } //  namespace chart
 

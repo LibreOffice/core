@@ -55,7 +55,6 @@ public:
                 ::com::sun::star::beans::PropertyValue > getReducedForModel();
 
 public:
-    //---------------------
     //all properties given in the constructor are stored in the following three sequences
 
     ::com::sun::star::uno::Sequence<
@@ -70,12 +69,10 @@ public:
         ::com::sun::star::beans::PropertyValue >
                         m_aAdditionalProperties; //these are properties which are not described in service com.sun.star.document.MediaDescriptor
 
-    //----------------------
     //properties which should be given to a model are additionally stored in this sequence (not documented properties and deprecated properties are not included!)
     ::com::sun::star::uno::Sequence<
         ::com::sun::star::beans::PropertyValue >
                         m_aModelProperties; //these are properties which are not described in service com.sun.star.document.MediaDescriptor
-
 
     //@todo define this for debug only, except URL
     sal_Bool            AsTemplate; //document is a template.
@@ -109,7 +106,6 @@ public:
 
     OUString     HierarchicalDocumentName;
     sal_Bool            ISSET_HierarchicalDocumentName;
-
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >
                         OutputStream; //a stream to receive the document data for saving

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "WrappedAddInProperty.hxx"
 #include "macros.hxx"
 
@@ -25,10 +24,8 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
 using namespace ::com::sun::star;
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 namespace wrapper
 {
 
@@ -57,8 +54,6 @@ Any WrappedAddInProperty::getPropertyValue( const Reference< beans::XPropertySet
     return uno::makeAny( m_rChartDocumentWrapper.getAddIn() );
 }
 
-//.............................................................................
-
 WrappedBaseDiagramProperty::WrappedBaseDiagramProperty( ChartDocumentWrapper& rChartDocumentWrapper )
     : ::chart::WrappedProperty( "BaseDiagram" , OUString() )
     , m_rChartDocumentWrapper( rChartDocumentWrapper )
@@ -84,8 +79,6 @@ Any WrappedBaseDiagramProperty::getPropertyValue( const Reference< beans::XPrope
     return uno::makeAny( m_rChartDocumentWrapper.getBaseDiagram() );
 }
 
-//.............................................................................
-
 WrappedAdditionalShapesProperty::WrappedAdditionalShapesProperty( ChartDocumentWrapper& rChartDocumentWrapper )
     : ::chart::WrappedProperty( "AdditionalShapes" , OUString() )
     , m_rChartDocumentWrapper( rChartDocumentWrapper )
@@ -106,8 +99,6 @@ Any WrappedAdditionalShapesProperty::getPropertyValue( const Reference< beans::X
 {
     return uno::makeAny( m_rChartDocumentWrapper.getAdditionalShapes() );
 }
-
-//.............................................................................
 
 WrappedRefreshAddInAllowedProperty::WrappedRefreshAddInAllowedProperty( ChartDocumentWrapper& rChartDocumentWrapper )
     : ::chart::WrappedProperty( "RefreshAddInAllowed" , OUString() )
@@ -137,6 +128,5 @@ Any WrappedRefreshAddInAllowedProperty::getPropertyValue( const Reference< beans
 } //namespace wrapper
 
 } //namespace chart
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

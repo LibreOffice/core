@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "UndoGuard.hxx"
 #include "ChartModelClone.hxx"
 #include "UndoActions.hxx"
@@ -34,8 +33,6 @@ using ::com::sun::star::uno::Sequence;
 namespace chart
 {
 
-//-----------------------------------------------------------------------------
-
 UndoGuard::UndoGuard( const OUString& i_undoString, const uno::Reference< document::XUndoManager > & i_undoManager,
                                const ModelFacet i_facet )
     :m_xChartModel( i_undoManager->getParent(), uno::UNO_QUERY_THROW )
@@ -47,15 +44,11 @@ UndoGuard::UndoGuard( const OUString& i_undoString, const uno::Reference< docume
     m_pDocumentSnapshot.reset( new ChartModelClone( m_xChartModel, i_facet ) );
 }
 
-//-----------------------------------------------------------------------------
-
 UndoGuard::~UndoGuard()
 {
     if ( !!m_pDocumentSnapshot )
         discardSnapshot();
 }
-
-//-----------------------------------------------------------------------------
 
 void UndoGuard::commit()
 {
@@ -75,8 +68,6 @@ void UndoGuard::commit()
     m_bActionPosted = true;
 }
 
-//-----------------------------------------------------------------------------
-
 void UndoGuard::rollback()
 {
     ENSURE_OR_RETURN_VOID( !!m_pDocumentSnapshot, "no snapshot!" );
@@ -84,15 +75,12 @@ void UndoGuard::rollback()
     discardSnapshot();
 }
 
-//-----------------------------------------------------------------------------
 void UndoGuard::discardSnapshot()
 {
     ENSURE_OR_RETURN_VOID( !!m_pDocumentSnapshot, "no snapshot!" );
     m_pDocumentSnapshot->dispose();
     m_pDocumentSnapshot.reset();
 }
-
-//-----------------------------------------------------------------------------
 
 UndoLiveUpdateGuard::UndoLiveUpdateGuard( const OUString& i_undoString, const uno::Reference< document::XUndoManager >& i_undoManager )
     :UndoGuard( i_undoString, i_undoManager, E_MODEL )
@@ -104,8 +92,6 @@ UndoLiveUpdateGuard::~UndoLiveUpdateGuard()
     if ( !isActionPosted() )
         rollback();
 }
-
-//-----------------------------------------------------------------------------
 
 UndoLiveUpdateGuardWithData::UndoLiveUpdateGuardWithData(
         const OUString& i_undoString, const uno::Reference< document::XUndoManager >& i_undoManager )
@@ -119,15 +105,11 @@ UndoLiveUpdateGuardWithData::~UndoLiveUpdateGuardWithData()
         rollback();
 }
 
-//-----------------------------------------------------------------------------
-
 UndoGuardWithSelection::UndoGuardWithSelection(
         const OUString& i_undoString, const uno::Reference< document::XUndoManager >& i_undoManager )
     :UndoGuard( i_undoString, i_undoManager, E_MODEL_WITH_SELECTION )
 {
 }
-
-//-----------------------------------------------------------------------------
 
 UndoGuardWithSelection::~UndoGuardWithSelection()
 {
@@ -150,8 +132,6 @@ HiddenUndoContext::HiddenUndoContext( const Reference< document::XUndoManager > 
             // prevents the leaveUndoContext in the dtor
     }
 }
-
-//-----------------------------------------------------------------------------
 
 HiddenUndoContext::~HiddenUndoContext()
 {

@@ -27,10 +27,8 @@
 #include <memory>
 #include "TextDirectionListBox.hxx"
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 class LegendPositionResources;
 class SchLegendPosTabPage : public SfxTabPage
@@ -53,9 +51,7 @@ public:
     virtual void Reset(const SfxItemSet& rInAttrs);
 };
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 #endif
 

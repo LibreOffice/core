@@ -26,7 +26,6 @@
 
 using namespace ::com::sun::star;
 
-
 namespace chart
 {
 

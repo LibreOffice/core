@@ -150,8 +150,6 @@ bool lcl_SetContentForNamedProperty(
 
 } // anonymous namespace
 
-// ========================================
-
 namespace chart
 {
 namespace wrapper

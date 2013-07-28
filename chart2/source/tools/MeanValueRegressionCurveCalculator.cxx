@@ -25,7 +25,6 @@
 
 using namespace ::com::sun::star;
 
-
 namespace chart
 {
 
@@ -93,7 +92,6 @@ double SAL_CALL MeanValueRegressionCurveCalculator::getCurveValue( double /*x*/ 
 {
     return m_fMeanValue;
 }
-
 
 uno::Sequence< geometry::RealPoint2D > SAL_CALL MeanValueRegressionCurveCalculator::getCurveValues(
     double min, double max, ::sal_Int32 nPointCount,

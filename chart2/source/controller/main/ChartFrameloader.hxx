@@ -26,10 +26,8 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase2.hxx>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 class ChartFrameLoader : public ::cppu::WeakImplHelper2<
          ::com::sun::star::frame::XSynchronousFrameLoader
@@ -54,16 +52,12 @@ public:
                ::com::sun::star::uno::XComponentContext > const & xContext);
     virtual ~ChartFrameLoader();
 
-    //-----------------------------------------------------------------
     // ::com::sun::star::lang::XServiceInfo
-    //-----------------------------------------------------------------
 
     APPHELPER_XSERVICEINFO_DECL()
     APPHELPER_SERVICE_FACTORY_HELPER(ChartFrameLoader)
 
-    //-----------------------------------------------------------------
     // ::com::sun::star::frame::XFrameLoader
-    //-----------------------------------------------------------------
 
     virtual sal_Bool SAL_CALL
         load( const ::com::sun::star::uno::Sequence<
@@ -76,9 +70,7 @@ public:
         cancel()            throw (::com::sun::star::uno::RuntimeException);
 };
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 #endif
 

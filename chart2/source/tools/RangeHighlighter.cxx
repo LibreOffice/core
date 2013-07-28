@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "RangeHighlighter.hxx"
 #include "WeakListenerAdapter.hxx"
 #include "ChartModelHelper.hxx"
@@ -383,7 +382,6 @@ void RangeHighlighter::stopListening()
         m_xListener.clear();
     }
 }
-
 
 // ____ WeakComponentImplHelperBase ____
 // is called when dispose() is called at this component

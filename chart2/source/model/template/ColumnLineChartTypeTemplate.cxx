@@ -416,8 +416,6 @@ Reference< XDataInterpreter > SAL_CALL ColumnLineChartTypeTemplate::getDataInter
     return m_xDataInterpreter;
 }
 
-// ----------------------------------------
-
 uno::Sequence< OUString > ColumnLineChartTypeTemplate::getSupportedServiceNames_Static()
 {
     uno::Sequence< OUString > aServices( 2 );

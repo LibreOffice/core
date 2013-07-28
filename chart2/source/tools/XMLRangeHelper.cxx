@@ -17,16 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "XMLRangeHelper.hxx"
 #include <unotools/charclass.hxx>
 #include <rtl/ustrbuf.hxx>
 
 #include <algorithm>
 #include <functional>
-
-
-// ================================================================================
 
 namespace
 {
@@ -53,8 +49,6 @@ private:
     OUStringBuffer & m_aResultBuffer;
 };
 
-// ----------------------------------------
-
 /** unary function that removes backslash escapes in a sal_Unicode array (which
     you can get from an OUString with getStr()) and puts the result into the
     OUStringBuffer given in the CTOR
@@ -74,8 +68,6 @@ public:
 private:
     OUStringBuffer & m_aResultBuffer;
 };
-
-// ----------------------------------------
 
 void lcl_getXMLStringForCell( const ::chart::XMLRangeHelper::Cell & rCell, OUStringBuffer * output )
 {
@@ -290,8 +282,6 @@ bool lcl_getCellRangeAddressFromXMLString(
 }
 
 } // anonymous namespace
-
-// ================================================================================
 
 namespace chart
 {

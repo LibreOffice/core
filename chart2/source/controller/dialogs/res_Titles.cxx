@@ -17,17 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "res_Titles.hxx"
 #include "res_Titles.hrc"
 #include "ResId.hxx"
 #include "TitleDialogData.hxx"
 #include <svtools/controldims.hrc>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 TitleResources::TitleResources( Window* pWindow, bool bShowSecondaryAxesTitle )
     : m_aFT_Main(pWindow, SchResId(FT_MAINTITLE))
@@ -205,8 +202,6 @@ void TitleResources::readFromResources( TitleDialogData& rOutput )
     rOutput.aTextList[6] = m_aEd_SecondaryYAxis.GetText();
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

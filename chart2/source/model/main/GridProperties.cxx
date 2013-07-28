@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "GridProperties.hxx"
 #include "LinePropertiesHelper.hxx"
 #include "UserDefinedProperties.hxx"
@@ -35,8 +34,6 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::beans::Property;
 using ::osl::MutexGuard;
-
-// ____________________________________________________________
 
 namespace
 {
@@ -106,7 +103,6 @@ private:
         return ::chart::ContainerHelper::ContainerToSequence( aProperties );
     }
 
-
 };
 
 struct StaticGridInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticGridInfoHelper_Initializer >
@@ -128,8 +124,6 @@ struct StaticGridInfo : public rtl::StaticAggregate< uno::Reference< beans::XPro
 };
 
 } // anonymous namespace
-
-// ____________________________________________________________
 
 namespace chart
 {
@@ -239,8 +233,6 @@ void GridProperties::fireModifyEvent()
 {
     m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
 }
-
-// ================================================================================
 
 Sequence< OUString > GridProperties::getSupportedServiceNames_Static()
 {

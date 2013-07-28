@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "StockBar.hxx"
 #include "LinePropertiesHelper.hxx"
 #include "FillProperties.hxx"
@@ -38,8 +37,6 @@ using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::beans::Property;
 using ::osl::MutexGuard;
-
-// ____________________________________________________________
 
 namespace
 {
@@ -113,8 +110,6 @@ struct StaticStockBarDefaults : public rtl::StaticAggregate< ::chart::tPropertyV
 
 } // anonymous namespace
 
-// ____________________________________________________________
-
 namespace chart
 {
 
@@ -144,7 +139,6 @@ StockBar::StockBar( const StockBar & rOther ) :
 
 StockBar::~StockBar()
 {}
-
 
 // ____ XCloneable ____
 uno::Reference< util::XCloneable > SAL_CALL StockBar::createClone()
@@ -229,8 +223,6 @@ void StockBar::fireModifyEvent()
 {
     m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
 }
-
-// ================================================================================
 
 uno::Sequence< OUString > StockBar::getSupportedServiceNames_Static()
 {

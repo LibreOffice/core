@@ -19,10 +19,8 @@
 #ifndef CHART_ITEMPROPERTYMAP_HXX
 #define CHART_ITEMPROPERTYMAP_HXX
 
-
 #include <comphelper/InlineContainer.hxx>
 #include "ItemConverter.hxx"
-
 
 #define IPM_MAP_ENTRY(wid,uno,mid) (wid, ::std::make_pair< ::comphelper::ItemConverter::tPropertyNameType, ::comphelper::ItemConverter::tMemberIdType >(\
     uno, mid))

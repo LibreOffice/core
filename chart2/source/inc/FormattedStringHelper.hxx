@@ -24,10 +24,8 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include "charttoolsdllapi.hxx"
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 class OOO_DLLPUBLIC_CHARTTOOLS FormattedStringHelper
 {
@@ -43,9 +41,7 @@ public:
                         ::com::sun::star::beans::XPropertySet > & xTextProperties ) throw();
 };
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

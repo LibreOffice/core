@@ -24,12 +24,10 @@
 
 #include <boost/shared_ptr.hpp>
 
-//.............................................................................
 namespace chart
 {
 namespace wrapper
 {
-//.............................................................................
 
 class WrappedLinkNumberFormatProperty;
 
@@ -75,10 +73,8 @@ private:
     WrappedNumberFormatProperty* m_pWrappedNumberFormatProperty;
 };
 
-//.............................................................................
 } //namespace wrapper
 } //namespace chart
-//.............................................................................
 
 // CHART2_WRAPPEDNUMBERFORMATPROPERTY_HXX
 #endif

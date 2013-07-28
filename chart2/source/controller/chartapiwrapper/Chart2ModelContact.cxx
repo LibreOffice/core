@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "Chart2ModelContact.hxx"
 #include "ChartModelHelper.hxx"
 #include "LegendHelper.hxx"
@@ -167,8 +166,6 @@ sal_Int32 Chart2ModelContact::getExplicitNumberFormatKeyForSeries(
         ChartModelHelper::findDiagram( m_xChartModel )
         );
 }
-
-//-----------------------------------------------------------------------------
 
 awt::Size Chart2ModelContact::GetPageSize() const
 {

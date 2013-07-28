@@ -32,10 +32,8 @@
 #include <cppuhelper/implbase1.hxx>
 #include <vector>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 class ShapeFactory;
 class PlottingPositionHelper;
@@ -88,9 +86,7 @@ protected: //member
     // needs to be created and deleted by the derived class
     PlottingPositionHelper*                             m_pPosHelper;
 };
-//.............................................................................
 } //namespace chart
-//.............................................................................
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

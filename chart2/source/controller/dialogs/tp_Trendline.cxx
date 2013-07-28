@@ -17,15 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "tp_Trendline.hxx"
 #include "ResId.hxx"
 #include "TabPages.hrc"
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 TrendlineTabPage::TrendlineTabPage( Window* pParent, const SfxItemSet& rInAttrs ) :
         SfxTabPage( pParent, SchResId( TP_TRENDLINE ), rInAttrs ),
@@ -62,8 +59,6 @@ void TrendlineTabPage::DataChanged( const DataChangedEvent& rDCEvt )
         m_aTrendlineResources.FillValueSets();
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

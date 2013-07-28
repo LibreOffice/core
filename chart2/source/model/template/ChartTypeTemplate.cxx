@@ -48,8 +48,6 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
 
-// ======================================================================
-
 namespace
 {
 
@@ -308,7 +306,6 @@ void SAL_CALL ChartTypeTemplate::changeDiagramData(
         }
 #if OSL_DEBUG_LEVEL >= CHART_TRACE_OSL_DEBUG_LEVEL
     OSL_TRACE( "ChartTypeTemplate::changeDiagramData: Showing Diagram structure" );
-    OSL_TRACE( "---------------------------------------------------------------" );
     ::chart::debug::ChartDebugTraceDiagram( xDiagram );
 #endif
     }
@@ -528,8 +525,6 @@ void SAL_CALL ChartTypeTemplate::resetStyles( const Reference< chart2::XDiagram 
     return m_aServiceName;
 }
 
-// ________________________________________
-
 sal_Int32 ChartTypeTemplate::getDimension() const
 {
     return 2;
@@ -544,8 +539,6 @@ bool ChartTypeTemplate::isSwapXAndY() const
 {
     return false;
 }
-
-// ________________________________________
 
 void ChartTypeTemplate::createCoordinateSystems(
     const Reference< chart2::XCoordinateSystemContainer > & xOutCooSysCnt )
@@ -808,7 +801,6 @@ void ChartTypeTemplate::FillDiagram(
 
 #if OSL_DEBUG_LEVEL >= CHART_TRACE_OSL_DEBUG_LEVEL
     OSL_TRACE( "ChartTypeTemplate::FillDiagram: Showing Diagram structure" );
-    OSL_TRACE( "---------------------------------------------------------" );
     ::chart::debug::ChartDebugTraceDiagram( xDiagram );
 #endif
 }
@@ -924,8 +916,6 @@ Reference< uno::XComponentContext > ChartTypeTemplate::GetComponentContext() con
 {
     return m_xContext;
 }
-
-// ================================================================================
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 APPHELPER_XSERVICEINFO_IMPL( ChartTypeTemplate,

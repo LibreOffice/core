@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "ObjectHierarchy.hxx"
 #include "ObjectIdentifier.hxx"
 #include "ChartModelHelper.hxx"
@@ -621,7 +620,6 @@ ObjectHierarchy::tOID ImplObjectHierarchy::getParent(
 
 } // namespace impl
 
-
 ObjectHierarchy::ObjectHierarchy(
     const Reference< XChartDocument > & xChartDocument,
     ExplicitValueProvider * pExplicitValueProvider /* = 0 */,
@@ -690,8 +688,6 @@ sal_Int32 ObjectHierarchy::getIndexInParent(
     }
     return -1;
 }
-
-// ================================================================================
 
 ObjectKeyNavigation::ObjectKeyNavigation(
     const ObjectHierarchy::tOID & rCurrentOID,

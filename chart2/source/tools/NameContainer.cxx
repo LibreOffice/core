@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "NameContainer.hxx"
 
 #include <com/sun/star/uno/Any.hxx>
@@ -26,11 +25,8 @@ using namespace ::com::sun::star;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
 
-
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 uno::Reference< container::XNameContainer > createNameContainer(
         const ::com::sun::star::uno::Type& rType, const OUString& rServicename, const OUString& rImplementationName )
@@ -88,10 +84,6 @@ Sequence< OUString > SAL_CALL NameContainer::getSupportedServiceNames()
     return aSNS;
 }
 
-//-----------------------------------------------------------------
-//-----------------------------------------------------------------
-//-----------------------------------------------------------------
-
 // XNameContainer
 void SAL_CALL NameContainer::insertByName( const OUString& rName, const Any& rElement )
     throw( lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, uno::RuntimeException )
@@ -100,8 +92,6 @@ void SAL_CALL NameContainer::insertByName( const OUString& rName, const Any& rEl
         throw container::ElementExistException();
     m_aMap.insert( tContentMap::value_type( rName, rElement ));
 }
-
-
 
 void SAL_CALL NameContainer::removeByName( const OUString& Name )
     throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
@@ -169,8 +159,6 @@ uno::Reference< util::XCloneable > SAL_CALL NameContainer::createClone()
     return uno::Reference< util::XCloneable >( new NameContainer( *this ));
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

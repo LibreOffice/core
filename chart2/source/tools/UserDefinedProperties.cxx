@@ -51,7 +51,6 @@ void UserDefinedProperties::AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
     // UserDefinedAttributesSupplier
-    // ----------------------------
     rOutProperties.push_back(
         Property( "UserDefinedAttributes",
                   PROP_XML_USERDEF,

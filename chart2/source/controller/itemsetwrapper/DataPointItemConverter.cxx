@@ -297,7 +297,6 @@ bool DataPointItemConverter::GetItemProperty( tWhichIdType nWhichId, tPropertyNa
     return true;
 }
 
-
 bool DataPointItemConverter::ApplySpecialItem(
     sal_uInt16 nWhichId, const SfxItemSet & rItemSet )
     throw( uno::Exception )

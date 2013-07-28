@@ -572,7 +572,6 @@ const tMakeStringStringMap& lcl_getChartTypeNameMap()
     return g_aChartTypeNameMap;
 }
 
-
 OUString lcl_getOldChartTypeName( const OUString & rNewChartTypeName )
 {
     OUString aOld(rNewChartTypeName);
@@ -587,8 +586,6 @@ OUString lcl_getOldChartTypeName( const OUString & rNewChartTypeName )
 }
 
 } // anonymous namespace
-
-// --------------------------------------------------------------------------------
 
 namespace chart
 {
@@ -930,7 +927,6 @@ Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getZAxis()
     return Reference< beans::XPropertySet >( m_xZAxis, uno::UNO_QUERY );
 }
 
-
 // ____ XTwoAxisXSupplier ____
 Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getSecondaryXAxis()
     throw (uno::RuntimeException)
@@ -939,7 +935,6 @@ Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getSecondaryXAxis()
         m_xSecondXAxis = new AxisWrapper( AxisWrapper::SECOND_X_AXIS, m_spChart2ModelContact );
     return Reference< beans::XPropertySet >( m_xSecondXAxis, uno::UNO_QUERY );
 }
-
 
 // ____ XAxisXSupplier (base of XTwoAxisXSupplier) ____
 Reference< drawing::XShape > SAL_CALL DiagramWrapper::getXAxisTitle()
@@ -980,7 +975,6 @@ Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getXHelpGrid()
     return xRet;
 }
 
-
 // ____ XTwoAxisYSupplier ____
 Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getSecondaryYAxis()
     throw (uno::RuntimeException)
@@ -989,7 +983,6 @@ Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getSecondaryYAxis()
         m_xSecondYAxis = new AxisWrapper( AxisWrapper::SECOND_Y_AXIS, m_spChart2ModelContact );
     return Reference< beans::XPropertySet >( m_xSecondYAxis, uno::UNO_QUERY );
 }
-
 
 // ____ XAxisYSupplier (base of XTwoAxisYSupplier) ____
 Reference< drawing::XShape > SAL_CALL DiagramWrapper::getYAxisTitle()
@@ -1168,8 +1161,6 @@ void SAL_CALL DiagramWrapper::removeEventListener(
     m_aEventListenerContainer.removeInterface( aListener );
 }
 
-//-----------------------------------------------------------------------------------------------------------------
-
 //PROP_DIAGRAM_DATAROW_SOURCE
 class WrappedDataRowSourceProperty : public WrappedProperty
 {
@@ -1269,8 +1260,6 @@ Any WrappedDataRowSourceProperty::getPropertyDefault( const Reference< beans::XP
     aRet <<= ::com::sun::star::chart::ChartDataRowSource_COLUMNS;
     return aRet;
 }
-
-//-----------------------------------------------------------------------------------------------------------------
 
 //PROP_DIAGRAM_STACKED
 //PROP_DIAGRAM_DEEP
@@ -1386,8 +1375,6 @@ Any WrappedStackingProperty::getPropertyDefault( const Reference< beans::XProper
     return aRet;
 }
 
-//-----------------------------------------------------------------------------------------------------------------
-
 //PROP_DIAGRAM_THREE_D
 class WrappedDim3DProperty : public WrappedProperty
 {
@@ -1458,8 +1445,6 @@ Any WrappedDim3DProperty::getPropertyDefault( const Reference< beans::XPropertyS
     aRet <<= sal_Bool( sal_False );
     return aRet;
 }
-
-//-----------------------------------------------------------------------------------------------------------------
 
 //PROP_DIAGRAM_VERTICAL
 class WrappedVerticalProperty : public WrappedProperty
@@ -1536,8 +1521,6 @@ Any WrappedVerticalProperty::getPropertyDefault( const Reference< beans::XProper
     aRet <<= sal_Bool( sal_False );
     return aRet;
 }
-
-//-----------------------------------------------------------------------------------------------------------------
 
 //PROP_DIAGRAM_NUMBER_OF_LINES
 class WrappedNumberOfLinesProperty : public WrappedProperty
@@ -1693,8 +1676,6 @@ Any WrappedNumberOfLinesProperty::getPropertyDefault( const Reference< beans::XP
     return aRet;
 }
 
-//-----------------------------------------------------------------------------------------------------------------
-
 //PROP_DIAGRAM_ATTRIBUTED_DATA_POINTS
 class WrappedAttributedDataPointsProperty : public WrappedProperty
 {
@@ -1812,8 +1793,6 @@ Any WrappedAttributedDataPointsProperty::getPropertyDefault( const Reference< be
     return aRet;
 }
 
-//-----------------------------------------------------------------------------------------------------------------
-
 //PROP_DIAGRAM_SOLIDTYPE
 class WrappedSolidTypeProperty : public WrappedProperty
 {
@@ -1888,8 +1867,6 @@ Any WrappedSolidTypeProperty::getPropertyDefault( const Reference< beans::XPrope
     return uno::makeAny( ::com::sun::star::chart::ChartSolidType::RECTANGULAR_SOLID );
 }
 
-//-----------------------------------------------------------------------------------------------------------------
-
 class WrappedAutomaticSizeProperty : public WrappedProperty
 {
 public:
@@ -1961,8 +1938,6 @@ Any WrappedAutomaticSizeProperty::getPropertyDefault( const Reference< beans::XP
     return aRet;
 }
 
-//-----------------------------------------------------------------------------------------------------------------
-
 //PROP_DIAGRAM_INCLUDE_HIDDEN_CELLS
 class WrappedIncludeHiddenCellsProperty : public WrappedProperty
 {
@@ -1997,8 +1972,6 @@ void WrappedIncludeHiddenCellsProperty::setPropertyValue( const Any& rOuterValue
     ChartModelHelper::setIncludeHiddenCells( bNewValue, m_spChart2ModelContact->getChartModel() );
 }
 
-//-----------------------------------------------------------------------------------------------------------------
-
 // ____ XDiagramProvider ____
 Reference< chart2::XDiagram > SAL_CALL DiagramWrapper::getDiagram()
     throw (uno::RuntimeException)
@@ -2013,8 +1986,6 @@ void SAL_CALL DiagramWrapper::setDiagram(
     //@todo: remove this method from interface
     OSL_FAIL("DiagramWrapper::setDiagram is not implemented, should be removed and not be called" );
 }
-
-// ================================================================================
 
 Reference< beans::XPropertySet > DiagramWrapper::getInnerPropertySet()
 {
@@ -2058,8 +2029,6 @@ const std::vector< WrappedProperty* > DiagramWrapper::createWrappedProperties()
 
     return aWrappedProperties;
 }
-
-// ================================================================================
 
 uno::Sequence< OUString > DiagramWrapper::getSupportedServiceNames_Static()
 {

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "MinimumAndMaximumSupplier.hxx"
 
 #include <com/sun/star/chart/TimeUnit.hpp>
@@ -25,10 +24,8 @@
 #include <rtl/math.hxx>
 #include <com/sun/star/awt/Size.hpp>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 
 MergedMinimumAndMaximumSupplier::MergedMinimumAndMaximumSupplier()
@@ -207,8 +204,6 @@ void MergedMinimumAndMaximumSupplier::setTimeResolutionOnXAxis( long nTimeResolu
         (*aIt)->setTimeResolutionOnXAxis( nTimeResolution, rNullDate );
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

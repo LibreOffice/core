@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "VAxisBase.hxx"
 #include "ShapeFactory.hxx"
 #include "CommonConverters.hxx"
@@ -27,10 +26,8 @@
 #include <memory>
 #include <boost/scoped_ptr.hpp>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
@@ -174,7 +171,6 @@ bool VAxisBase::prepareShapeCreation()
 
     if( m_bReCreateAllTickInfos )
     {
-        //-----------------------------------------
         //create all scaled tickmark values
         removeTextShapesFromTicks();
 
@@ -185,7 +181,6 @@ bool VAxisBase::prepareShapeCreation()
     if( m_xGroupShape_Shapes.is() )
         return true;
 
-    //-----------------------------------------
     //create named group shape
     m_xGroupShape_Shapes = this->createGroupShape( m_xLogicTarget, m_nDimension==2 ? m_aCID : "");
 
@@ -248,8 +243,6 @@ void VAxisBase::updateUnscaledValuesAtTicks( TickIter& rIter )
     }
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

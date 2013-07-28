@@ -17,15 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "RangeEdit.hxx"
 
 namespace chart
 {
 
-//============================================================================
 // class RangeEdit
-//----------------------------------------------------------------------------
 RangeEdit::RangeEdit( Window* pParent, const ResId& rResId):
     Edit( pParent , rResId )
 {
@@ -55,8 +52,6 @@ void RangeEdit::KeyInput( const KeyEvent& rKEvt )
        Edit::KeyInput( rKEvt );
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

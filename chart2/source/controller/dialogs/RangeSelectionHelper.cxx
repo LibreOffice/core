@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "RangeSelectionHelper.hxx"
 #include "RangeSelectionListener.hxx"
 #include "macros.hxx"
@@ -38,8 +37,6 @@ using namespace ::com::sun::star;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
-
-// ----------------------------------------
 
 namespace chart
 {

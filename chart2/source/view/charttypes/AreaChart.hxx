@@ -23,16 +23,12 @@
 #include "VSeriesPlotter.hxx"
 #include <com/sun/star/chart2/CurveStyle.hpp>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 class AreaChart : public VSeriesPlotter
 {
-    //-------------------------------------------------------------------------
     // public methods
-    //-------------------------------------------------------------------------
 public:
     AreaChart( const ::com::sun::star::uno::Reference<
              ::com::sun::star::chart2::XChartType >& xChartTypeModel
@@ -49,25 +45,17 @@ public:
     virtual void createShapes();
     virtual void addSeries( VDataSeries* pSeries, sal_Int32 zSlot = -1, sal_Int32 xSlot = -1,sal_Int32 ySlot = -1 );
 
-    //-------------------
     virtual ::com::sun::star::drawing::Direction3D  getPreferredDiagramAspectRatio() const;
     virtual bool keepAspectRatio() const;
 
-    //-------------------------------------------------------------------------
     // MinimumAndMaximumSupplier
-    //-------------------------------------------------------------------------
     virtual double getMaximumX();
     virtual bool isExpandIfValuesCloseToBorder( sal_Int32 nDimensionIndex );
     virtual bool isSeparateStackingForDifferentSigns( sal_Int32 nDimensionIndex );
 
-    //-------------------------------------------------------------------------
-
     virtual LegendSymbolStyle getLegendSymbolStyle();
     virtual ::com::sun::star::uno::Any getExplicitSymbol( const VDataSeries& rSeries, sal_Int32 nPointIndex=-1/*-1 for series symbol*/ );
 
-    //-------------------------------------------------------------------------
-    //-------------------------------------------------------------------------
-    //-------------------------------------------------------------------------
 private: //methods
     //no default constructor
     AreaChart();
@@ -112,9 +100,7 @@ private: //member
     ::com::sun::star::uno::Reference<
                     ::com::sun::star::drawing::XShapes > m_xRegressionCurveEquationTarget;
 };
-//.............................................................................
 } //namespace chart
-//.............................................................................
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

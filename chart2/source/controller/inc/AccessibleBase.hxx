@@ -77,7 +77,6 @@ struct AccessibleElementInfo
     ::accessibility::IAccessibleViewForwarder* m_pViewForwarder;
 };
 
-
 namespace impl
 {
 typedef ::cppu::PartialWeakComponentImplHelper6<
@@ -229,7 +228,6 @@ protected:
         { WeakComponentImplHelperBase::addEventListener(xListener); }
     virtual void SAL_CALL removeEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & xListener)throw (::com::sun::star::uno::RuntimeException)
         { WeakComponentImplHelperBase::removeEventListener(xListener); }
-
 
     // ________ WeakComponentImplHelper (XComponent::dispose) ________
     virtual void SAL_CALL disposing();

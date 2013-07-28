@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "CachedDataSequence.hxx"
 #include "macros.hxx"
 #include "PropertyHelper.hxx"
@@ -57,8 +56,6 @@ enum
 };
 }  // anonymous namespace
 
-
-// ____________________
 namespace chart
 {
 
@@ -226,8 +223,6 @@ Sequence< Any > CachedDataSequence::Impl_getMixedData() const
     return aResult;
 }
 
-// ================================================================================
-
 Sequence< OUString > CachedDataSequence::getSupportedServiceNames_Static()
 {
     Sequence< OUString > aServices( 4 );
@@ -249,14 +244,12 @@ Reference< beans::XPropertySetInfo > SAL_CALL CachedDataSequence::getPropertySet
 }
 
 // ____ ::comphelper::OPropertySetHelper ____
-// __________________________________________
 ::cppu::IPropertyArrayHelper& CachedDataSequence::getInfoHelper()
 {
     return *getArrayHelper();
 }
 
 // ____ ::comphelper::OPropertyArrayHelper ____
-// ____________________________________________
 ::cppu::IPropertyArrayHelper* CachedDataSequence::createArrayHelper() const
 {
     Sequence< beans::Property > aProps;
@@ -268,8 +261,6 @@ Reference< beans::XPropertySetInfo > SAL_CALL CachedDataSequence::getPropertySet
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 APPHELPER_XSERVICEINFO_IMPL( CachedDataSequence, lcl_aServiceName )
-
-// ================================================================================
 
 // ________ XNumericalDataSequence ________
 Sequence< double > SAL_CALL CachedDataSequence::getNumericalData()

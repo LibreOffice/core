@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <rtl/math.hxx>
 
 #include <valarray>
@@ -55,8 +54,6 @@ using ::com::sun::star::uno::Sequence;
 
 namespace chart
 {
-
-// ================================================================================
 
 namespace
 {
@@ -224,7 +221,6 @@ private:
     sal_Int32 m_nLevel;
 };
 
-
 struct lcl_setAnyAtLevel : public ::std::binary_function< vector< uno::Any >, uno::Any, vector< uno::Any > >
 {
 public:
@@ -308,8 +304,6 @@ private:
 };
 
 } // anonymous namespace
-
-// ================================================================================
 
 InternalDataProvider::InternalDataProvider( const Reference< uno::XComponentContext > & /*_xContext*/)
     : m_bDataInColumns( true )
@@ -1092,7 +1086,6 @@ void SAL_CALL InternalDataProvider::registerDataSequenceForChanges( const Refere
         lcl_addDataSequenceToMap( xSeq->getSourceRangeRepresentation(), xSeq );
 }
 
-
 // ____ XRangeXMLConversion ____
 OUString SAL_CALL InternalDataProvider::convertRangeToXML( const OUString& aRangeRepresentation )
     throw (lang::IllegalArgumentException,
@@ -1464,17 +1457,12 @@ Reference< util::XCloneable > SAL_CALL InternalDataProvider::createClone()
     return Reference< util::XCloneable >( new InternalDataProvider( *this ));
 }
 
-
-// ================================================================================
-
 Sequence< OUString > InternalDataProvider::getSupportedServiceNames_Static()
 {
     Sequence< OUString > aServices( 1 );
     aServices[ 0 ] = "com.sun.star.chart2.data.DataProvider";
     return aServices;
 }
-
-// ================================================================================
 
 APPHELPER_XSERVICEINFO_IMPL( InternalDataProvider, lcl_aServiceName );
 

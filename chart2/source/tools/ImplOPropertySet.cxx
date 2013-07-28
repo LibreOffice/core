@@ -192,7 +192,6 @@ void ImplOPropertySet::cloneInterfaceProperties()
                      lcl_replaceInterfacePropertiesByClones());
 }
 
-
 } //  namespace impl
 } //  namespace chart
 

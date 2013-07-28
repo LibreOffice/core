@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "VPolarTransformation.hxx"
 #include "ViewDefines.hxx"
 #include "CommonConverters.hxx"
@@ -30,7 +29,6 @@ using ::com::sun::star::uno::RuntimeException;
 
 namespace chart
 {
-
 
 VPolarTransformation::VPolarTransformation( const PolarPlottingPositionHelper& rPositionHelper )
         : m_aPositionHelper(rPositionHelper)
@@ -79,7 +77,6 @@ sal_Int32 SAL_CALL VPolarTransformation::getTargetDimension()
 {
     return 3;
 }
-
 
 }  // namespace chart
 

@@ -105,14 +105,10 @@ uno::Sequence< uno::Sequence< double > > lcl_getDBL_MINInsteadNAN( const uno::Se
 
 } // anonymous namespace
 
-// --------------------------------------------------------------------------------
-
 namespace chart
 {
 namespace wrapper
 {
-
-//--------------------------------------------------------------------------------------
 
 struct lcl_Operator
 {
@@ -129,8 +125,6 @@ struct lcl_Operator
         return false;
     }
 };
-
-//--------------------------------------------------------------------------
 
 struct lcl_AllOperator : public lcl_Operator
 {
@@ -179,8 +173,6 @@ struct lcl_AllOperator : public lcl_Operator
     Reference< XChartData > m_xDataToApply;
 };
 
-//--------------------------------------------------------------------------
-
 struct lcl_DataOperator : public lcl_Operator
 {
     lcl_DataOperator( const Sequence< Sequence< double > >& rData )
@@ -197,8 +189,6 @@ struct lcl_DataOperator : public lcl_Operator
 
     const Sequence< Sequence< double > >& m_rData;
 };
-
-//--------------------------------------------------------------------------
 
 struct lcl_RowDescriptionsOperator : public lcl_Operator
 {
@@ -232,8 +222,6 @@ struct lcl_RowDescriptionsOperator : public lcl_Operator
     bool m_bDataInColumns;
 };
 
-//--------------------------------------------------------------------------
-
 struct lcl_ComplexRowDescriptionsOperator : public lcl_Operator
 {
     lcl_ComplexRowDescriptionsOperator( const Sequence< Sequence< OUString > >& rComplexRowDescriptions
@@ -265,7 +253,6 @@ struct lcl_ComplexRowDescriptionsOperator : public lcl_Operator
     Reference< chart2::XChartDocument > m_xChartDoc;
     bool m_bDataInColumns;
 };
-//--------------------------------------------------------------------------
 
 struct lcl_AnyRowDescriptionsOperator : public lcl_Operator
 {
@@ -288,8 +275,6 @@ struct lcl_AnyRowDescriptionsOperator : public lcl_Operator
 
     const Sequence< Sequence< uno::Any > >& m_rAnyRowDescriptions;
 };
-
-//--------------------------------------------------------------------------
 
 struct lcl_ColumnDescriptionsOperator : public lcl_Operator
 {
@@ -323,8 +308,6 @@ struct lcl_ColumnDescriptionsOperator : public lcl_Operator
     bool m_bDataInColumns;
 };
 
-//--------------------------------------------------------------------------
-
 struct lcl_ComplexColumnDescriptionsOperator : public lcl_Operator
 {
     lcl_ComplexColumnDescriptionsOperator( const Sequence< Sequence< OUString > >& rComplexColumnDescriptions
@@ -357,8 +340,6 @@ struct lcl_ComplexColumnDescriptionsOperator : public lcl_Operator
     bool m_bDataInColumns;
 };
 
-//--------------------------------------------------------------------------
-
 struct lcl_AnyColumnDescriptionsOperator : public lcl_Operator
 {
     lcl_AnyColumnDescriptionsOperator( const Sequence< Sequence< uno::Any > >& rAnyColumnDescriptions )
@@ -380,8 +361,6 @@ struct lcl_AnyColumnDescriptionsOperator : public lcl_Operator
 
     const Sequence< Sequence< uno::Any > >& m_rAnyColumnDescriptions;
 };
-
-//--------------------------------------------------------------------------
 
 struct lcl_DateCategoriesOperator : public lcl_Operator
 {
@@ -405,8 +384,6 @@ struct lcl_DateCategoriesOperator : public lcl_Operator
 
     const Sequence< double >& m_rDates;
 };
-
-//--------------------------------------------------------------------------
 
 ChartDataWrapper::ChartDataWrapper( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact ) :
         m_spChart2ModelContact( spChart2ModelContact ),
@@ -559,8 +536,6 @@ void SAL_CALL ChartDataWrapper::setDateCategories( const Sequence< double >& rDa
     DiagramHelper::switchToDateCategories( xChartDoc );
 }
 
-//--------------------------------------------------------------------------------------
-
 // ____ XChartData (base of XChartDataArray) ____
 void SAL_CALL ChartDataWrapper::addChartDataChangeEventListener(
     const uno::Reference<
@@ -620,7 +595,6 @@ void SAL_CALL ChartDataWrapper::disposing( const lang::EventObject& /* Source */
 {
 }
 
-
 void ChartDataWrapper::fireChartDataChangeEvent(
     ::com::sun::star::chart::ChartDataChangeEvent& aEvent )
 {
@@ -643,8 +617,6 @@ void ChartDataWrapper::fireChartDataChangeEvent(
             xListener->chartDataChanged( aEvent );
     }
 }
-
-// --------------------------------------------------------------------------------
 
 void ChartDataWrapper::switchToInternalDataProvider()
 {
@@ -709,7 +681,6 @@ void ChartDataWrapper::applyData( lcl_Operator& rDataOperator )
     uno::Sequence< beans::PropertyValue > aArguments( DataSourceHelper::createArguments(
             aRangeString, aSequenceMapping, bUseColumns, bFirstCellAsLabel, bHasCategories ) );
 
-
     // /-- locked controllers
     ControllerLockGuard aCtrlLockGuard( uno::Reference< frame::XModel >( xChartDoc, uno::UNO_QUERY ));
 
@@ -745,8 +716,6 @@ void ChartDataWrapper::applyData( lcl_Operator& rDataOperator )
     // \-- locked controllers
 }
 
-// --------------------------------------------------------------------------------
-
 uno::Sequence< OUString > ChartDataWrapper::getSupportedServiceNames_Static()
 {
     uno::Sequence< OUString > aServices( 2 );
@@ -755,8 +724,6 @@ uno::Sequence< OUString > ChartDataWrapper::getSupportedServiceNames_Static()
 
     return aServices;
 }
-
-// ================================================================================
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 APPHELPER_XSERVICEINFO_IMPL( ChartDataWrapper, lcl_aServiceName );

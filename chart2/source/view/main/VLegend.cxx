@@ -48,10 +48,8 @@ using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 namespace
 {
@@ -796,8 +794,6 @@ VLegend::VLegend(
 {
 }
 
-// ----------------------------------------
-
 void VLegend::init(
     const Reference< drawing::XShapes >& xTargetPage,
     const Reference< lang::XMultiServiceFactory >& xFactory,
@@ -808,14 +804,10 @@ void VLegend::init(
     m_xModel = xModel;
 }
 
-// ----------------------------------------
-
 void VLegend::setDefaultWritingMode( sal_Int16 nDefaultWritingMode )
 {
     m_nDefaultWritingMode = nDefaultWritingMode;
 }
-
-// ----------------------------------------
 
 bool VLegend::isVisible( const Reference< XLegend > & xLegend )
 {
@@ -835,8 +827,6 @@ bool VLegend::isVisible( const Reference< XLegend > & xLegend )
 
     return bShow;
 }
-
-// ----------------------------------------
 
 void VLegend::createShapes(
     const awt::Size & rAvailableSpace,
@@ -960,8 +950,6 @@ void VLegend::createShapes(
     }
 }
 
-// ----------------------------------------
-
 void VLegend::changePosition(
     awt::Rectangle & rOutAvailableSpace,
     const awt::Size & rPageSize )
@@ -1014,8 +1002,6 @@ void VLegend::changePosition(
     }
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

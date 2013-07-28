@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "ControllerCommandDispatch.hxx"
 #include "ChartModelHelper.hxx"
 #include "DiagramHelper.hxx"
@@ -74,8 +73,6 @@ bool lcl_isStatusBarVisible( const Reference< frame::XController > & xController
 
 namespace chart
 {
-
-// ----------------------------------------
 
 namespace impl
 {
@@ -138,7 +135,6 @@ struct ControllerState
     bool bMayFormatXErrorBars;
     bool bMayFormatYErrorBars;
 };
-
 
 ControllerState::ControllerState() :
         bHasSelectedObject( false ),
@@ -307,7 +303,6 @@ void ControllerState::update(
     }
 }
 
-
 /** Represents the current state of the model.
 
     You can set the state by calling update().  After this call the state is
@@ -461,7 +456,6 @@ bool ModelState::HasAnyTitle() const
 
 } // namespace impl
 
-// ----------------------------------------
 DBG_NAME(ControllerCommandDispatch)
 
 ControllerCommandDispatch::ControllerCommandDispatch(
@@ -799,7 +793,6 @@ void SAL_CALL ControllerCommandDispatch::modified( const lang::EventObject& aEve
 
     CommandDispatch::modified( aEvent );
 }
-
 
 // ____ XSelectionChangeListener ____
 void SAL_CALL ControllerCommandDispatch::selectionChanged( const lang::EventObject& aEvent )

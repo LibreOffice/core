@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "CommandDispatch.hxx"
 #include "CommonFunctors.hxx"
 #include "macros.hxx"
@@ -188,8 +187,6 @@ void CommandDispatch::fireStatusEventForURL(
         }
     }
 }
-
-
 
 } //  namespace chart
 

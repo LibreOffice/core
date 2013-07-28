@@ -44,6 +44,5 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL chartview_component_getFactory(
         pImplName, pServiceManager, pRegistryKey , g_entries_chart2_view );
 }
 }
-//=========================================================================
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

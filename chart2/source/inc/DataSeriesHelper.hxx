@@ -86,7 +86,6 @@ OOO_DLLPUBLIC_CHARTTOOLS ::com::sun::star::uno::Reference<
                           ::com::sun::star::uno::Reference<
                               ::com::sun::star::chart2::XDataSeries > > & aSeries );
 
-
 /** Get the label of a series (e.g. for the legend)
 
     @param rLabelSequenceRole

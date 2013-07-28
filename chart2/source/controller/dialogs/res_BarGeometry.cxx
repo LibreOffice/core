@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "res_BarGeometry.hxx"
 #include "ResourceIds.hrc"
 #include "Strings.hrc"
@@ -25,10 +24,8 @@
 
 #include <svtools/controldims.hrc>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 BarGeometryResources::BarGeometryResources( Window* pWindow )
     : m_aFT_Geometry( pWindow, pWindow->GetStyle() )
@@ -96,8 +93,6 @@ void BarGeometryResources::SelectEntryPos( sal_uInt16 nPos )
         m_aLB_Geometry.SelectEntryPos( nPos );
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

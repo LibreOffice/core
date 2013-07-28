@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "res_LegendPosition.hxx"
 #include "ResourceIds.hrc"
 #include "Strings.hrc"
@@ -36,10 +35,8 @@
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
@@ -258,8 +255,6 @@ void LegendPositionResources::SetAccessibleRelationMemberOf(Window* pMemberOf)
     m_aRbtBottom.SetAccessibleRelationMemberOf(pMemberOf);
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

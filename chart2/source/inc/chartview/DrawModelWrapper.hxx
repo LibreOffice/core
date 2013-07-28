@@ -31,10 +31,8 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include "chartviewdllapi.hxx"
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 class OOO_DLLPUBLIC_CHARTVIEW DrawModelWrapper : private SdrModel
 {
@@ -68,7 +66,6 @@ public:
          getChartRootShape( const ::com::sun::star::uno::Reference<
             ::com::sun::star::drawing::XDrawPage>& xPage );
 
-
     SAL_DLLPRIVATE void lockControllers();
     SAL_DLLPRIVATE void unlockControllers();
 
@@ -100,9 +97,7 @@ public:
     static bool removeShape( const ::com::sun::star::uno::Reference<
                     ::com::sun::star::drawing::XShape >& xShape );
 };
-//.............................................................................
 } //namespace chart
-//.............................................................................
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

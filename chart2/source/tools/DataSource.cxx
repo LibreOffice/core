@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "DataSource.hxx"
 #include "LabeledDataSequence.hxx"
 
@@ -63,16 +62,12 @@ void SAL_CALL DataSource::setData( const Sequence< Reference< chart2::data::XLab
     m_aDataSeq = aData;
 }
 
-// ================================================================================
-
 Sequence< OUString > DataSource::getSupportedServiceNames_Static()
 {
     Sequence< OUString > aServices( 1 );
     aServices[ 0 ] = "com.sun.star.chart2.data.DataSource";
     return aServices;
 }
-
-// ================================================================================
 
 APPHELPER_XSERVICEINFO_IMPL( DataSource, lcl_aServiceName );
 

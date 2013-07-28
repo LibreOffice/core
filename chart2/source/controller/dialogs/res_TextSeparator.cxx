@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "res_TextSeparator.hxx"
 #include "ResourceIds.hrc"
 #include "Strings.hrc"
@@ -26,10 +25,8 @@
 
 #include <svtools/controldims.hrc>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 TextSeparatorResources::TextSeparatorResources( Window* pWindow )
     : m_aFT_Separator( pWindow, pWindow->GetStyle() )
@@ -140,8 +137,6 @@ void TextSeparatorResources::SetDefault()
     return OUString( " " );
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

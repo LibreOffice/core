@@ -130,8 +130,6 @@ template< typename T >
     return SequenceToSTLContainer< ::std::set< T > >( rSeq );
 }
 
-// ----------------------------------------
-
 /** converts the keys of a Pair Associative Container into a UNO sequence
 
     example:

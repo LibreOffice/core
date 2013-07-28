@@ -19,9 +19,7 @@
 #ifndef CHARTSFXITEMIDS_HXX
 #define CHARTSFXITEMIDS_HXX
 
-// ============================================================
 // SCHATTR
-// ============================================================
 
 // can't this be changed to 0?
 #define SCHATTR_START                       1
@@ -65,9 +63,7 @@
 #define SCHATTR_STAT_ERRORBAR_TYPE          (SCHATTR_STAT_START + 9)
 #define SCHATTR_STAT_END                    SCHATTR_STAT_ERRORBAR_TYPE
 
-// --------------------------------------------------------
 // these attributes are for replacement of enum eChartStyle
-// --------------------------------------------------------
 
 #define SCHATTR_STYLE_START             ( SCHATTR_STAT_END +1 )
 
@@ -87,8 +83,6 @@
 #define SCHATTR_STYLE_SYMBOL            ( SCHATTR_STYLE_START + 8 )
 #define SCHATTR_STYLE_SHAPE             ( SCHATTR_STYLE_START + 9 )
 #define SCHATTR_STYLE_END               ( SCHATTR_STYLE_SHAPE )
-
-// --------------------------------------------------------------------------
 
 #define SCHATTR_AXIS                    (SCHATTR_STYLE_END + 1)// see chtmodel.hxx defines CHART_AXIS_PRIMARY_X, etc.
 //Re-mapped:
@@ -177,9 +171,7 @@
 
 #define SCHATTR_END                     SCHATTR_REGRESSION_END
 
-// ============================================================
 // values for Items
-// ============================================================
 
 // values for SCHATTR_AXIS_TICKS and SCHATTR_AXIS_HELPTICKS items
 #define CHAXIS_MARK_BOTH   3
@@ -209,9 +201,6 @@
 #define CHART_AXIS_PRIMARY_Z    3
 #define CHART_AXIS_SECONDARY_Y  4
 #define CHART_AXIS_SECONDARY_X  5
-
-// ============================================================
-// ============================================================
 
 #endif
 

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "MinMaxLineWrapper.hxx"
 #include "macros.hxx"
 #include "Chart2ModelContact.hxx"
@@ -118,8 +117,6 @@ struct StaticMinMaxLineWrapperInfo : public rtl::StaticAggregate< uno::Reference
 };
 
 } // anonymous namespace
-
-// --------------------------------------------------------------------------------
 
 namespace chart
 {
@@ -409,9 +406,6 @@ uno::Sequence< uno::Any > SAL_CALL MinMaxLineWrapper::getPropertyDefaults( const
     }
     return aRetSeq;
 }
-
-
-// ================================================================================
 
 Sequence< OUString > MinMaxLineWrapper::getSupportedServiceNames_Static()
 {

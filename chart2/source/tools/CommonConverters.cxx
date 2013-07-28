@@ -27,19 +27,12 @@
 
 #include <cstdarg>
 
-
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 using namespace ::com::sun::star;
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 //  diverse methods for class conversions; e.g. ::basegfx::B3DHomMatrix to HomogenMatrix
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 
 drawing::HomogenMatrix B3DHomMatrixToHomogenMatrix( const ::basegfx::B3DHomMatrix& rM )
 {
@@ -99,7 +92,6 @@ drawing::HomogenMatrix B3DHomMatrixToHomogenMatrix( const ::basegfx::B3DHomMatri
     aM.set(2, 2, rM.get(3, 3));
     return aM;
 }
-
 
 drawing::HomogenMatrix3 B2DHomMatrixToHomogenMatrix3( const ::basegfx::B2DHomMatrix& rM )
 {
@@ -532,8 +524,6 @@ bool replaceParamterInString( OUString & rInOutResourceString,
     return true;
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

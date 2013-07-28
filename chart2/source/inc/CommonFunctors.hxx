@@ -135,8 +135,6 @@ struct OOO_DLLPUBLIC_CHARTTOOLS DoubleToOUString : public ::std::unary_function<
     }
 };
 
-// ================================================================================
-
 /** can be used to find an element with a specific first element in e.g. a
     vector of pairs (for searching keys in maps you will of course use map::find)
  */

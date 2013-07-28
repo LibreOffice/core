@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "SeriesOptionsItemConverter.hxx"
 #include "SchWhichPairs.hxx"
 
@@ -52,8 +51,6 @@ namespace chart
 {
 namespace wrapper
 {
-
-// ========================================
 
 SeriesOptionsItemConverter::SeriesOptionsItemConverter(
         const uno::Reference< frame::XModel >& xChartModel

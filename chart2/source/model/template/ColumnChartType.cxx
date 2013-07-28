@@ -28,8 +28,6 @@ using namespace ::com::sun::star;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::beans::Property;
 
-//-----------------------------------------------------------------------------
-
 namespace
 {
 
@@ -176,7 +174,6 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL ColumnChartType::getPropertyS
 {
     return *StaticColumnChartTypeInfo::get();
 }
-
 
 uno::Sequence< OUString > ColumnChartType::getSupportedServiceNames_Static()
 {

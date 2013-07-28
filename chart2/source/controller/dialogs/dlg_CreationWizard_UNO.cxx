@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "dlg_CreationWizard_UNO.hxx"
 #include "dlg_CreationWizard.hxx"
 #include "macros.hxx"
@@ -38,10 +37,8 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 
 CreationWizardUnoDlg::CreationWizardUnoDlg( const uno::Reference< uno::XComponentContext >& xContext )
@@ -65,7 +62,6 @@ CreationWizardUnoDlg::~CreationWizardUnoDlg()
         m_pDialog = 0;
     }
 }
-//-------------------------------------------------------------------------
 // lang::XServiceInfo
 APPHELPER_XSERVICEINFO_IMPL(CreationWizardUnoDlg,CHART_WIZARD_DIALOG_SERVICE_IMPLEMENTATION_NAME)
 
@@ -77,7 +73,6 @@ APPHELPER_XSERVICEINFO_IMPL(CreationWizardUnoDlg,CHART_WIZARD_DIALOG_SERVICE_IMP
     return aSNS;
 }
 
-//-------------------------------------------------------------------------
 // XInterface
 uno::Any SAL_CALL CreationWizardUnoDlg::queryInterface( const uno::Type& aType ) throw (uno::RuntimeException)
 {
@@ -121,7 +116,6 @@ uno::Any SAL_CALL CreationWizardUnoDlg::queryAggregation( uno::Type const & rTyp
     return OComponentHelper::queryAggregation( rType );
 }
 
-//-------------------------------------------------------------------------
 #define LCL_CPPUTYPE(t) (::getCppuType( reinterpret_cast< const uno::Reference<t> *>(0)))
 
 uno::Sequence< uno::Type > CreationWizardUnoDlg::getTypes() throw(uno::RuntimeException)
@@ -157,8 +151,6 @@ uno::Sequence< sal_Int8 > SAL_CALL CreationWizardUnoDlg::getImplementationId( vo
     return theCreationWizardUnoDlgImplementationId::get().getSeq();
 }
 
-//-------------------------------------------------------------------------
-
 // XTerminateListener
 void SAL_CALL CreationWizardUnoDlg::queryTermination( const lang::EventObject& /*Event*/ ) throw( frame::TerminationVetoException, uno::RuntimeException)
 {
@@ -172,8 +164,6 @@ void SAL_CALL CreationWizardUnoDlg::queryTermination( const lang::EventObject& /
     }
 }
 
-//-------------------------------------------------------------------------
-
 void SAL_CALL CreationWizardUnoDlg::notifyTermination( const lang::EventObject& /*Event*/ ) throw (uno::RuntimeException)
 {
     // we are going down, so dispose us!
@@ -185,11 +175,9 @@ void SAL_CALL CreationWizardUnoDlg::disposing( const lang::EventObject& /*Source
     //Listener should deregister himself and relaese all references to the closing object.
 }
 
-//-------------------------------------------------------------------------
 void SAL_CALL CreationWizardUnoDlg::setTitle( const OUString& /*rTitle*/ ) throw(uno::RuntimeException)
 {
 }
-//-------------------------------------------------------------------------
 void CreationWizardUnoDlg::createDialogOnDemand()
 {
     SolarMutexGuard aSolarGuard;
@@ -222,7 +210,6 @@ void CreationWizardUnoDlg::createDialogOnDemand()
         }
     }
 }
-//-------------------------------------------------------------------------
 IMPL_LINK( CreationWizardUnoDlg, DialogEventHdl, VclWindowEvent*, pEvent )
 {
     if(pEvent && (pEvent->GetId() == VCLEVENT_OBJECT_DYING) )
@@ -230,7 +217,6 @@ IMPL_LINK( CreationWizardUnoDlg, DialogEventHdl, VclWindowEvent*, pEvent )
     return 0;
 }
 
-//-------------------------------------------------------------------------
 sal_Int16 SAL_CALL CreationWizardUnoDlg::execute(  ) throw(uno::RuntimeException)
 {
     sal_Int16 nRet = RET_CANCEL;
@@ -247,7 +233,6 @@ sal_Int16 SAL_CALL CreationWizardUnoDlg::execute(  ) throw(uno::RuntimeException
     return nRet;
 }
 
-//-------------------------------------------------------------------------
 void SAL_CALL CreationWizardUnoDlg::initialize( const uno::Sequence< uno::Any >& aArguments ) throw(uno::Exception, uno::RuntimeException)
 {
     const uno::Any* pArguments = aArguments.getConstArray();
@@ -268,7 +253,6 @@ void SAL_CALL CreationWizardUnoDlg::initialize( const uno::Sequence< uno::Any >&
     }
 }
 
-//-------------------------------------------------------------------------
 // ____ OComponentHelper ____
 /// Called in dispose method after the listeners were notified.
 void SAL_CALL CreationWizardUnoDlg::disposing()
@@ -404,8 +388,6 @@ void SAL_CALL CreationWizardUnoDlg::removeVetoableChangeListener( const OUString
     OSL_FAIL("not implemented");
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

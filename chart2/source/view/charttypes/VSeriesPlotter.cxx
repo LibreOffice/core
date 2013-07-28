@@ -80,8 +80,6 @@ using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 
-//-----------------------------------------------------------------------------
-
 VDataSeriesGroup::CachedYValues::CachedYValues()
         : m_bValuesDirty(true)
         , m_fMinimumY(0.0)
@@ -131,8 +129,6 @@ sal_Int32 VDataSeriesGroup::getSeriesCount() const
 {
     return m_aSeriesVector.size();
 }
-
-//-----------------------------------------------------------------------------
 
 VSeriesPlotter::VSeriesPlotter( const uno::Reference<XChartType>& xChartTypeModel
                                , sal_Int32 nDimensionCount, bool bCategoryXAxis )
@@ -446,7 +442,6 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
         if( !pLabel )
             return xTextShape;
 
-        //------------------------------------------------
         //prepare legend symbol
 
         float fViewFontSize( 10.0 );
@@ -540,7 +535,6 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
                 }
             }
         }
-        //------------------------------------------------
         //prepare properties for multipropertyset-interface of shape
         tNameSequence* pPropNames;
         tAnySequence* pPropValues;
@@ -548,7 +542,6 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
             return xTextShape;
         LabelPositionHelper::changeTextAdjustment( *pPropValues, *pPropNames, eAlignment );
 
-        //------------------------------------------------
         //create text shape
         xTextShape = ShapeFactory(m_xShapeFactory).
             createText( xTarget_, aText.makeStringAndClear()
@@ -737,7 +730,6 @@ void lcl_AddErrorBottomLine( const drawing::Position3D& rPosition, ::basegfx::B2
         double MaxX = pPosHelper->getLogicMaxX();
         double MaxY = pPosHelper->getLogicMaxY();
         double fZ = pPosHelper->getLogicMinZ();
-
 
         if( bYError )
         {
@@ -1221,7 +1213,6 @@ void VSeriesPlotter::createRegressionCurveEquationShapes(
     }
 }
 
-
 void VSeriesPlotter::setMappedProperties(
           const uno::Reference< drawing::XShape >& xTargetShape
         , const uno::Reference< beans::XPropertySet >& xSource
@@ -1238,9 +1229,7 @@ void VSeriesPlotter::setTimeResolutionOnXAxis( long TimeResolution, const Date& 
     m_aNullDate = rNullDate;
 }
 
-//-------------------------------------------------------------------------
 // MinimumAndMaximumSupplier
-//-------------------------------------------------------------------------
 long VSeriesPlotter::calculateTimeResolutionOnXAxis()
 {
     long nRet = ::com::sun::star::chart::TimeUnit::YEAR;
@@ -2456,8 +2445,6 @@ VSeriesPlotter* VSeriesPlotter::createSeriesPlotter(
     return pRet;
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

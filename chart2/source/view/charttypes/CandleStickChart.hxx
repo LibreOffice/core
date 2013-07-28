@@ -22,17 +22,13 @@
 
 #include "VSeriesPlotter.hxx"
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 class BarPositionHelper;
 
 class CandleStickChart : public VSeriesPlotter
 {
-    //-------------------------------------------------------------------------
     // public methods
-    //-------------------------------------------------------------------------
 public:
     CandleStickChart( const ::com::sun::star::uno::Reference<
                         ::com::sun::star::chart2::XChartType >& xChartTypeModel
@@ -44,18 +40,10 @@ public:
 
     virtual ::com::sun::star::drawing::Direction3D  getPreferredDiagramAspectRatio() const;
 
-    //-------------------------------------------------------------------------
     // MinimumAndMaximumSupplier
-    //-------------------------------------------------------------------------
     virtual bool isSeparateStackingForDifferentSigns( sal_Int32 nDimensionIndex );
 
-    //-------------------------------------------------------------------------
-
     virtual LegendSymbolStyle getLegendSymbolStyle();
-
-    //-------------------------------------------------------------------------
-    //-------------------------------------------------------------------------
-    //-------------------------------------------------------------------------
 
 private: //methods
     //no default constructor
@@ -64,9 +52,7 @@ private: //methods
 private: //member
     BarPositionHelper*                   m_pMainPosHelper;
 };
-//.............................................................................
 } //namespace chart
-//.............................................................................
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

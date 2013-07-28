@@ -21,10 +21,8 @@
 
 #include "Tickmarks.hxx"
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 class EquidistantTickIter : public TickIter
 {
@@ -55,7 +53,6 @@ private: //methods
 
     bool        gotoFirst();
     bool        gotoNext();
-
 
     double      getTickValue(sal_Int32 nDepth, sal_Int32 nIndex) const
                 {
@@ -140,9 +137,7 @@ private: //member
     double    m_fOuterMajorTickBorderMax_Scaled;
 };
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "tp_Wizard_TitlesAndObjects.hxx"
 #include "tp_Wizard_TitlesAndObjects.hrc"
 #include "Strings.hrc"
@@ -32,13 +31,10 @@
 #include "NoWarningThisInCTOR.hxx"
 #include "ControllerLockGuard.hxx"
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
-
 
 TitlesAndObjectsTabPage::TitlesAndObjectsTabPage( svt::OWizardMachine* pParent
         , const uno::Reference< XChartDocument >& xChartModel
@@ -168,9 +164,6 @@ bool TitlesAndObjectsTabPage::canAdvance() const
     return false;
 }
 
-
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

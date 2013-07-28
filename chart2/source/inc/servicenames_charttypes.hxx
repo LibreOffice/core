@@ -19,10 +19,8 @@
 #ifndef _CHART2_SERVICENAMES_CHARTTYPES_HXX
 #define _CHART2_SERVICENAMES_CHARTTYPES_HXX
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 #define CHART2_SERVICE_NAME_CHARTTYPE_AREA OUString( "com.sun.star.chart2.AreaChartType" )
 #define CHART2_SERVICE_NAME_CHARTTYPE_BAR OUString( "com.sun.star.chart2.BarChartType" )
@@ -35,9 +33,7 @@ namespace chart
 #define CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK OUString( "com.sun.star.chart2.CandleStickChartType" )
 #define CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE OUString( "com.sun.star.chart2.BubbleChartType" )
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

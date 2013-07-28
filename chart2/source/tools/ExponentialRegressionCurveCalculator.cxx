@@ -26,7 +26,6 @@
 
 using namespace ::com::sun::star;
 
-
 namespace chart
 {
 
@@ -130,7 +129,6 @@ uno::Sequence< geometry::RealPoint2D > SAL_CALL ExponentialRegressionCurveCalcul
 
     return RegressionCurveCalculator::getCurveValues( min, max, nPointCount, xScalingX, xScalingY, bMaySkipPointsInCalculation );
 }
-
 
 OUString ExponentialRegressionCurveCalculator::ImplGetRepresentation(
     const uno::Reference< util::XNumberFormatter >& xNumFormatter,

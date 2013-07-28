@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "tp_RangeChooser.hxx"
 #include "tp_RangeChooser.hrc"
 #include "Strings.hrc"
@@ -67,16 +66,13 @@ void lcl_shiftControlY( Control & rControl, long nYOffset )
 }
 } // anonymous namespace
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
-
 
 RangeChooserTabPage::RangeChooserTabPage( Window* pParent
         , DialogModel & rDialogModel
@@ -362,7 +358,6 @@ IMPL_LINK_NOARG(RangeChooserTabPage, ChooseRangeHdl)
     return 0;
 }
 
-
 void RangeChooserTabPage::listeningFinished( const OUString & rNewRange )
 {
     //user has selected a new range
@@ -397,8 +392,6 @@ void RangeChooserTabPage::setDirty()
         m_bIsDirty = true;
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

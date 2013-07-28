@@ -25,7 +25,6 @@
 namespace chart
 {
 
-
 class PolynomialRegressionCurveCalculator : public RegressionCurveCalculator
 {
 public:

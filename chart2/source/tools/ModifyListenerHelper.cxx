@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "ModifyListenerHelper.hxx"
 #include "WeakListenerAdapter.hxx"
 #include "macros.hxx"
@@ -84,8 +83,6 @@ private:
 };
 
 } //  anonymous namespace
-
-// ================================================================================
 
 namespace chart
 {

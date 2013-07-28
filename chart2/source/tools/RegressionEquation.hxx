@@ -78,7 +78,6 @@ protected:
         getPropertySetInfo()
         throw (::com::sun::star::uno::RuntimeException);
 
-
     // ____ XCloneable ____
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone()
         throw (::com::sun::star::uno::RuntimeException);

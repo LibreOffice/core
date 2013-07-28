@@ -90,7 +90,6 @@ protected:
     void Init( const DataSeries & rOther );
 
     // ____ XDataSeries ____
-    // _____________________
     /// @see ::com::sun::star::chart2::XDataSeries
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
         SAL_CALL getDataPointByIndex( sal_Int32 nIndex )
@@ -102,19 +101,16 @@ protected:
         throw (::com::sun::star::uno::RuntimeException);
 
     // ____ XDataSink ____
-    // ___________________
     /// @see ::com::sun::star::chart2::data::XDataSink
     virtual void SAL_CALL setData( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XLabeledDataSequence > >& aData )
         throw (::com::sun::star::uno::RuntimeException);
 
     // ____ XDataSource ____
-    // _____________________
     /// @see ::com::sun::star::chart2::data::XDataSource
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XLabeledDataSequence > > SAL_CALL getDataSequences()
         throw (::com::sun::star::uno::RuntimeException);
 
     // ____ OPropertySet ____
-    // ______________________
     virtual ::com::sun::star::uno::Any GetDefaultValue( sal_Int32 nHandle ) const
         throw(::com::sun::star::beans::UnknownPropertyException);
     virtual void SAL_CALL getFastPropertyValue( ::com::sun::star::uno::Any& rValue, sal_Int32 nHandle ) const;
@@ -126,7 +122,6 @@ protected:
     virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
 
     // ____ XPropertySet ____
-    // ______________________
     /// @see ::com::sun::star::beans::XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL
         getPropertySetInfo()
@@ -136,7 +131,6 @@ protected:
     using ::com::sun::star::beans::XFastPropertySet::getFastPropertyValue;
 
     // ____ XRegressionCurveContainer ____
-    // ___________________________________
     /// @see ::com::sun::star::chart2::XRegressionCurveContainer
     virtual void SAL_CALL addRegressionCurve(
         const ::com::sun::star::uno::Reference<

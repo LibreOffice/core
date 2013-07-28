@@ -229,7 +229,6 @@ uno::Sequence< OUString > SAL_CALL ScatterChartType::getSupportedOptionalRoles()
     return uno::Sequence< OUString >();
 }
 
-
 // ____ OPropertySet ____
 uno::Any ScatterChartType::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)

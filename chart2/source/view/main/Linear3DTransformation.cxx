@@ -93,7 +93,6 @@ sal_Int32 SAL_CALL Linear3DTransformation::getTargetDimension()
     return 3;
 }
 
-
 }  // namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

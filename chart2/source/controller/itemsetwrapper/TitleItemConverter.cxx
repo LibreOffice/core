@@ -52,8 +52,6 @@ namespace chart
 namespace wrapper
 {
 
-// ========================================
-
 class FormattedStringsConverter : public ::comphelper::MultipleItemConverter
 {
 public:
@@ -69,8 +67,6 @@ public:
 protected:
     virtual const sal_uInt16 * GetWhichPairs() const;
 };
-
-// ----------------------------------------
 
 SAL_WNODEPRECATED_DECLARATIONS_PUSH
 FormattedStringsConverter::FormattedStringsConverter(
@@ -107,8 +103,6 @@ const sal_uInt16 * FormattedStringsConverter::GetWhichPairs() const
 {
     return nCharacterPropertyWhichPairs;
 }
-
-// ========================================
 
 SAL_WNODEPRECATED_DECLARATIONS_PUSH
 TitleItemConverter::TitleItemConverter(
@@ -183,7 +177,6 @@ bool TitleItemConverter::GetItemProperty( tWhichIdType nWhichId, tPropertyNameWi
     rOutProperty =(*aIt).second;
     return true;
 }
-
 
 bool TitleItemConverter::ApplySpecialItem(
     sal_uInt16 nWhichId, const SfxItemSet & rItemSet )

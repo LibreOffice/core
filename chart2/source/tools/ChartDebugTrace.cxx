@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "ChartDebugTrace.hxx"
 #include "macros.hxx"
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

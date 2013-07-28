@@ -35,7 +35,6 @@ void LinePropertiesHelper::AddPropertiesToVector(
     ::std::vector< Property > & rOutProperties )
 {
     // Line Properties see service drawing::LineProperties
-    // ---------------
     rOutProperties.push_back(
         Property( "LineStyle",
                   PROP_LINE_STYLE,

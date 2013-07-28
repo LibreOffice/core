@@ -33,12 +33,9 @@
 #include <vcl/fixed.hxx>
 #include <com/sun/star/sheet/XRangeSelection.hpp>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
-//-----------------------------------------------------------------------------
 /**
 */
 class ChartTypeTemplateProvider;
@@ -110,9 +107,7 @@ protected: //member
     TabPageNotifiable *                                     m_pTabPageNotifiable;
 };
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

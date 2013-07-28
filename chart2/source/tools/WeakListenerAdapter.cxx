@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "WeakListenerAdapter.hxx"
 
 using namespace ::com::sun::star;
@@ -43,8 +42,6 @@ void SAL_CALL WeakModifyListenerAdapter::modified( const lang::EventObject& aEve
     if( xModListener.is())
         xModListener->modified( aEvent );
 }
-
-// --------------------------------------------------------------------------------
 
 WeakSelectionChangeListenerAdapter::WeakSelectionChangeListenerAdapter(
     const Reference< view::XSelectionChangeListener > & xListener ) :

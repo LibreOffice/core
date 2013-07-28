@@ -17,28 +17,23 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "dlg_ChartType_UNO.hxx"
 #include "dlg_ChartType.hxx"
 #include "servicenames.hxx"
 #include <osl/mutex.hxx>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 uno::Reference< uno::XInterface >
             SAL_CALL ChartTypeUnoDlg::Create(const uno::Reference< uno::XComponentContext >& _xContext)
 {
     return *(new ChartTypeUnoDlg(_xContext));
 }
-// -----------------------------------------------------------------------------
 ChartTypeUnoDlg::ChartTypeUnoDlg( const uno::Reference< uno::XComponentContext >& _xContext )
                     : ChartTypeUnoDlg_BASE( _xContext )
 {
 }
-// -----------------------------------------------------------------------------
 ChartTypeUnoDlg::~ChartTypeUnoDlg()
 {
     // we do this here cause the base class' call to destroyDialog won't reach us anymore : we're within an dtor,
@@ -50,27 +45,21 @@ ChartTypeUnoDlg::~ChartTypeUnoDlg()
             destroyDialog();
     }
 }
-//-------------------------------------------------------------------------
 // lang::XServiceInfo
-//-------------------------------------------------------------------------
 OUString SAL_CALL ChartTypeUnoDlg::getImplementationName() throw(uno::RuntimeException)
 {
     return getImplementationName_Static();
 }
 
-//-------------------------------------------------------------------------
 OUString ChartTypeUnoDlg::getImplementationName_Static() throw(uno::RuntimeException)
 {
     return CHART_TYPE_DIALOG_SERVICE_IMPLEMENTATION_NAME;
 }
 
-//-------------------------------------------------------------------------
 ::comphelper::StringSequence SAL_CALL ChartTypeUnoDlg::getSupportedServiceNames() throw(uno::RuntimeException)
 {
     return getSupportedServiceNames_Static();
 }
-
-//-------------------------------------------------------------------------
 
 uno::Sequence< OUString > ChartTypeUnoDlg::getSupportedServiceNames_Static()
 {
@@ -78,13 +67,11 @@ uno::Sequence< OUString > ChartTypeUnoDlg::getSupportedServiceNames_Static()
     aSNS.getArray()[ 0 ] = CHART_TYPE_DIALOG_SERVICE_NAME;
     return aSNS;
 }
-//-------------------------------------------------------------------------
 uno::Sequence< sal_Int8 > SAL_CALL ChartTypeUnoDlg::getImplementationId( void ) throw( uno::RuntimeException )
 {
     static ::cppu::OImplementationId aId;
     return aId.getImplementationId();
 }
-//------------------------------------------------------------------------------
 void ChartTypeUnoDlg::implInitialize(const uno::Any& _rValue)
 {
     beans::PropertyValue aProperty;
@@ -98,25 +85,20 @@ void ChartTypeUnoDlg::implInitialize(const uno::Any& _rValue)
     else
         ChartTypeUnoDlg_BASE::implInitialize(_rValue);
 }
-//------------------------------------------------------------------------------
 Dialog* ChartTypeUnoDlg::createDialog(Window* _pParent)
 {
     return new ChartTypeDialog( _pParent, m_xChartModel, m_aContext );
 }
-//-------------------------------------------------------------------------
-//-------------------------------------------------------------------------
 uno::Reference<beans::XPropertySetInfo>  SAL_CALL ChartTypeUnoDlg::getPropertySetInfo() throw(uno::RuntimeException)
 {
     return createPropertySetInfo( getInfoHelper() );
 }
 
-//-------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper& ChartTypeUnoDlg::getInfoHelper()
 {
     return *const_cast<ChartTypeUnoDlg*>(this)->getArrayHelper();
 }
 
-//------------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper* ChartTypeUnoDlg::createArrayHelper( ) const
 {
     uno::Sequence< beans::Property > aProps;
@@ -124,8 +106,6 @@ uno::Reference<beans::XPropertySetInfo>  SAL_CALL ChartTypeUnoDlg::getPropertySe
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

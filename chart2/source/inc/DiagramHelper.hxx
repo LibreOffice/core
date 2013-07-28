@@ -36,7 +36,6 @@
 #include <utility>
 #include <vector>
 
-
 namespace chart
 {
 
@@ -265,7 +264,6 @@ public:
                 ::com::sun::star::chart2::XChartType >& xFirstType,
                 const ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XChartType >& xSecondType );
-
 
     /**
         * Test if a series can be moved.

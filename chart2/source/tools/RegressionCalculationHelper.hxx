@@ -66,7 +66,6 @@ tDoubleVectorPair
     return aResult;
 }
 
-
 class isValid : public ::std::binary_function< double, double, bool >
 {
 public:

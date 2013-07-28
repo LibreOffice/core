@@ -21,7 +21,6 @@
 
 #include "ItemConverter.hxx"
 
-
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/chart2/XCoordinateSystem.hpp>

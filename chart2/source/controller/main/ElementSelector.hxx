@@ -30,10 +30,8 @@
 
 #include <memory>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 struct ListBoxEntryData
 {
@@ -70,9 +68,6 @@ class SelectorListBox : public ListBox
         bool m_bReleaseFocus;
 };
 
-// ------------------------------------------------------------------
-// ------------------------------------------------------------------
-
 typedef ::cppu::ImplHelper1 < ::com::sun::star::lang::XServiceInfo> ElementSelectorToolbarController_BASE;
 
 class ElementSelectorToolbarController : public ::svt::ToolboxController
@@ -108,9 +103,7 @@ private:
     ::std::auto_ptr< SelectorListBox > m_apSelectorListBox;
 };
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 #endif
 

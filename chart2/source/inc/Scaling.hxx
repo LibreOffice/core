@@ -25,12 +25,9 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase3.hxx>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
-//-----------------------------------------------------------------------------
 /**
 */
 
@@ -73,8 +70,6 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >      m_xContext;
 };
 
-// ----------------------------------------
-
 class ExponentialScaling :
         public ::cppu::WeakImplHelper3 <
         ::com::sun::star::chart2::XScaling,
@@ -113,8 +108,6 @@ private:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >      m_xContext;
 };
-
-// ----------------------------------------
 
 class LinearScaling : public ::cppu::WeakImplHelper3 <
         ::com::sun::star::chart2::XScaling,
@@ -155,8 +148,6 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >      m_xContext;
 };
 
-// ----------------------------------------
-
 class PowerScaling : public ::cppu::WeakImplHelper3 <
         ::com::sun::star::chart2::XScaling,
         ::com::sun::star::lang::XServiceName,
@@ -195,9 +186,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >      m_xContext;
 };
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

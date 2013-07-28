@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "ChartModelClone.hxx"
 #include "ChartModelHelper.hxx"
 #include "ControllerLockGuard.hxx"
@@ -36,10 +35,8 @@
 #include <comphelper/property.hxx>
 #include <tools/diagnose_ex.h>
 
-//......................................................................................................................
 namespace chart
 {
-//......................................................................................................................
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
@@ -64,9 +61,7 @@ namespace chart
     using ::com::sun::star::chart2::data::XDataSource;
     using ::com::sun::star::chart2::data::XLabeledDataSequence;
 
-    // =================================================================================================================
     // = helper
-    // =================================================================================================================
     namespace
     {
         Reference< XModel > lcl_cloneModel( const Reference< XModel > & xModel )
@@ -86,10 +81,7 @@ namespace chart
 
     }
 
-    // =================================================================================================================
     // = ChartModelClone
-    // =================================================================================================================
-    // -----------------------------------------------------------------------------------------------------------------
     ChartModelClone::ChartModelClone( const Reference< XModel >& i_model, const ModelFacet i_facet )
     {
         m_xModelClone.set( lcl_cloneModel( i_model ) );
@@ -117,15 +109,12 @@ namespace chart
         }
     }
 
-
-    // -----------------------------------------------------------------------------------------------------------------
     ChartModelClone::~ChartModelClone()
     {
         if ( !impl_isDisposed() )
             dispose();
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
     void ChartModelClone::dispose()
     {
         if ( impl_isDisposed() )
@@ -145,7 +134,6 @@ namespace chart
         m_aSelection.clear();
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
     ModelFacet ChartModelClone::getFacet() const
     {
         if ( m_aSelection.hasValue() )
@@ -155,7 +143,6 @@ namespace chart
         return E_MODEL;
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
     void ChartModelClone::applyToModel( const Reference< XModel >& i_model ) const
     {
         applyModelContentToModel( i_model, m_xModelClone, m_xDataClone );
@@ -174,7 +161,6 @@ namespace chart
         }
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
     namespace
     {
         void ImplApplyDataToModel( const Reference< XModel >& i_model, const Reference< XInternalDataProvider > & i_data )
@@ -197,7 +183,6 @@ namespace chart
         }
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
     void ChartModelClone::applyModelContentToModel( const Reference< XModel >& i_model,
         const Reference< XModel >& i_modelToCopyFrom, const Reference< XInternalDataProvider >& i_data )
     {
@@ -262,9 +247,6 @@ namespace chart
         }
     }
 
-
-//......................................................................................................................
 } // namespace chart
-//......................................................................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

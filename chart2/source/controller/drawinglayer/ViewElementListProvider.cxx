@@ -40,7 +40,6 @@
 // header for class XLineEndItem
 #include <svx/xlnedit.hxx>
 
-//------------
 //oldChartModelWrapper
 
 // header for class SfxItemPool
@@ -49,23 +48,17 @@
 #include <svtools/ctrltool.hxx>
 // header for class Application
 #include <vcl/svapp.hxx>
-//------------
 // header for class SdrObject
 #include <svx/svdobj.hxx>
 
-
-//---------------
 //for creation of a symbol Graphic
 // header for class VirtualDevice
 #include <vcl/virdev.hxx>
 // header for class SdrView
 #include <svx/svdview.hxx>
-//---------------
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 
 ViewElementListProvider::ViewElementListProvider( DrawModelWrapper* pDrawModelWrapper )
@@ -79,9 +72,6 @@ ViewElementListProvider::~ViewElementListProvider()
     if(m_pFontList)
         delete m_pFontList;
 }
-
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 
 XColorListRef   ViewElementListProvider::GetColorTable() const
 {
@@ -123,8 +113,6 @@ XBitmapListRef   ViewElementListProvider::GetBitmapList() const
         return m_pDrawModelWrapper->GetBitmapList();
     return XBitmapListRef();
 }
-
-//-----------------------------------------------------------------------------
 
 //create chartspecific symbols for linecharts
 SdrObjList* ViewElementListProvider::GetSymbolList() const
@@ -203,9 +191,6 @@ Graphic ViewElementListProvider::GetSymbolGraphic( sal_Int32 nStandardSymbol, co
     return aGraph;
 }
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-
 FontList* ViewElementListProvider::getFontList() const
 {
     //was old chart:
@@ -221,8 +206,6 @@ FontList* ViewElementListProvider::getFontList() const
     }
     return m_pFontList;
 }
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

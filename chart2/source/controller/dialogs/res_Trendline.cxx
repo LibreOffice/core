@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "res_Trendline.hxx"
 #include "tp_Trendline.hrc"
 #include "ResId.hxx"
@@ -87,7 +86,6 @@ TrendlineResources::TrendlineResources( Window * pParent, const SfxItemSet& rInA
 
 TrendlineResources::~TrendlineResources()
 {}
-
 
 IMPL_LINK( TrendlineResources, SelectTrendLine, RadioButton *, pRadioButton )
 {

@@ -64,7 +64,6 @@ public:
     /// merge XTypeProvider implementations
     DECLARE_XTYPEPROVIDER()
 
-
     virtual void SAL_CALL setPropertyValue(const OUString& p1, const css::uno::Any& p2) throw (css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException)
         { ::property::OPropertySet::setPropertyValue(p1, p2); }
     virtual css::uno::Any SAL_CALL getPropertyValue(const OUString& p1) throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException)
@@ -77,7 +76,6 @@ public:
         { ::property::OPropertySet::addVetoableChangeListener(p1, p2); }
     virtual void SAL_CALL removeVetoableChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XVetoableChangeListener>& p2) throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException)
         { ::property::OPropertySet::removeVetoableChangeListener(p1, p2); }
-
 
 protected:
     explicit FormattedString( const FormattedString & rOther );

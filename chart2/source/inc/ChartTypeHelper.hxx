@@ -27,12 +27,9 @@
 #include <com/sun/star/drawing/Direction3D.hpp>
 #include "charttoolsdllapi.hxx"
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
-//-----------------------------------------------------------------------------
 /**
 */
 
@@ -91,9 +88,7 @@ public:
     static bool isSupportingOnlyDeepStackingFor3D( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& xChartType );
 };
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

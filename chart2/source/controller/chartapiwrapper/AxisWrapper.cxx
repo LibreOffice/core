@@ -224,7 +224,6 @@ void lcl_AddPropertiesToVector(
                   ::getCppuType( reinterpret_cast< const double * >(0)),
                   beans::PropertyAttribute::MAYBEVOID ));
 
-
     rOutProperties.push_back(
         Property( "Origin",
                   PROP_AXIS_ORIGIN,
@@ -259,7 +258,6 @@ void lcl_AddPropertiesToVector(
                   PROP_AXIS_MARK_POSITION,
                   ::getCppuType( reinterpret_cast< const ::com::sun::star::chart::ChartAxisMarkPosition * >(0)),
                   beans::PropertyAttribute::MAYBEDEFAULT ));
-
 
     //Properties for labels:
     rOutProperties.push_back(
@@ -370,8 +368,6 @@ struct StaticAxisWrapperPropertyArray : public rtl::StaticAggregate< Sequence< P
 };
 
 } // anonymous namespace
-
-// --------------------------------------------------------------------------------
 
 namespace chart
 {
@@ -568,8 +564,6 @@ void SAL_CALL AxisWrapper::removeEventListener(
     m_aEventListenerContainer.removeInterface( aListener );
 }
 
-// ================================================================================
-
 //ReferenceSizePropertyProvider
 void AxisWrapper::updateReferenceSize()
 {
@@ -593,8 +587,6 @@ awt::Size AxisWrapper::getCurrentSizeForReference()
 {
     return m_spChart2ModelContact->GetPageSize();
 }
-
-// ================================================================================
 
 Reference< chart2::XAxis > AxisWrapper::getAxis()
 {
@@ -672,8 +664,6 @@ const std::vector< WrappedProperty* > AxisWrapper::createWrappedProperties()
 
     return aWrappedProperties;
 }
-
-// ================================================================================
 
 Sequence< OUString > AxisWrapper::getSupportedServiceNames_Static()
 {

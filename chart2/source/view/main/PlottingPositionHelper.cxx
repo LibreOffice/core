@@ -34,10 +34,8 @@
 
 #include <rtl/math.hxx>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
@@ -247,7 +245,6 @@ void PlottingPositionHelper::transformScaledLogicToScene( drawing::PolyPolygonSh
     }
 }
 
-
 void PlottingPositionHelper::clipScaledLogicValues( double* pX, double* pY, double* pZ ) const
 {
     //get logic clip values:
@@ -322,10 +319,6 @@ drawing::Direction3D PlottingPositionHelper::getScaledLogicWidth() const
     aRet.DirectionZ = MaxZ - MinZ;
     return aRet;
 }
-
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 
 PolarPlottingPositionHelper::PolarPlottingPositionHelper( NormalAxis eNormalAxis )
     : m_fRadiusOffset(0.0)

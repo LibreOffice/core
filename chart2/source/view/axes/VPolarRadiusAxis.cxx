@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "VPolarRadiusAxis.hxx"
 #include "VCartesianAxis.hxx"
 #include "PlottingPositionHelper.hxx"
@@ -25,10 +24,8 @@
 #include "Tickmarks_Equidistant.hxx"
 #include <rtl/math.hxx>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 using namespace ::rtl::math;
@@ -158,7 +155,6 @@ void VPolarRadiusAxis::createShapes()
         aAxisProperties.m_pfMainLinePositionAtOtherAxis = new double( pTickInfo->getUnscaledTickValue() );
         aAxisProperties.m_bDisplayLabels=false;
 
-        //-------------------
         VCartesianAxis aAxis(aAxisProperties,m_xNumberFormatsSupplier
             ,1,2,new PolarPlottingPositionHelper());
         aAxis.setExplicitScaleAndIncrement( m_aScale, m_aIncrement );
@@ -170,8 +166,6 @@ void VPolarRadiusAxis::createShapes()
     }
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -121,7 +121,6 @@ public:
     ::com::sun::star::awt::Point GetTitlePosition( const ::com::sun::star::uno::Reference<
                       ::com::sun::star::chart2::XTitle > & xTitle ) const;
 
-
     /** Returns the size of the object in logic coordinates.
      */
     ::com::sun::star::awt::Size GetAxisSize( const ::com::sun::star::uno::Reference<

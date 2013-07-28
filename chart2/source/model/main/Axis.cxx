@@ -297,8 +297,6 @@ void lcl_CloneSubGrids(
 
 } // anonymous namespace
 
-// ================================================================================
-
 namespace chart
 {
 
@@ -418,8 +416,6 @@ void Axis::AllocateSubGrids()
         ModifyListenerHelper::addListener( *aBroadcaster, xModifyEventForwarder );
 }
 
-// --------------------------------------------------------------------------------
-
 // ____ XAxis ____
 void SAL_CALL Axis::setScaleData( const chart2::ScaleData& rScaleData )
     throw (uno::RuntimeException)
@@ -477,7 +473,6 @@ Sequence< Reference< beans::XPropertySet > > SAL_CALL Axis::getSubTickProperties
     OSL_FAIL( "Not implemented yet" );
     return Sequence< Reference< beans::XPropertySet > >();
 }
-
 
 // ____ XTitled ____
 Reference< chart2::XTitle > SAL_CALL Axis::getTitleObject()
@@ -574,8 +569,6 @@ void Axis::fireModifyEvent()
     m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
 }
 
-// ================================================================================
-
 // ____ OPropertySet ____
 uno::Any Axis::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)
@@ -598,8 +591,6 @@ Reference< beans::XPropertySetInfo > SAL_CALL Axis::getPropertySetInfo()
 {
     return *StaticAxisInfo::get();
 }
-
-// ================================================================================
 
 Sequence< OUString > Axis::getSupportedServiceNames_Static()
 {

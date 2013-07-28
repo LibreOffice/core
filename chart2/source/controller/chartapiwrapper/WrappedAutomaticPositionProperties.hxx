@@ -23,7 +23,6 @@
 #include "WrappedProperty.hxx"
 #include <vector>
 
-//.............................................................................
 namespace chart
 {
 namespace wrapper

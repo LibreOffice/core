@@ -189,6 +189,5 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL charttools_component_getFactory(
         pImplName, pServiceManager, pRegistryKey , g_entries_chart2_tools );
 }
 }
-//=========================================================================
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

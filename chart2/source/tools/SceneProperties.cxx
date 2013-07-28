@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "SceneProperties.hxx"
 #include "macros.hxx"
 #include "ChartTypeHelper.hxx"
@@ -123,9 +122,7 @@ void SceneProperties::AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
-
     // Light Sources
-    // -------------
     // light source 1
     rOutProperties.push_back(
         Property( "D3DSceneLightColor1",
@@ -337,7 +334,6 @@ void SceneProperties::AddDefaultsToMap(
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_SCENE_PERSPECTIVE, drawing::ProjectionMode_PERSPECTIVE );
 
     // Light Sources
-    // -------------
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_SCENE_LIGHT_ON_1, false );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_SCENE_LIGHT_ON_2, true );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_SCENE_LIGHT_ON_3, false );

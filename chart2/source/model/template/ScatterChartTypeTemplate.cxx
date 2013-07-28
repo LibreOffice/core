@@ -395,8 +395,6 @@ Reference< chart2::XDataInterpreter > SAL_CALL ScatterChartTypeTemplate::getData
     return m_xDataInterpreter;
 }
 
-// ----------------------------------------
-
 Sequence< OUString > ScatterChartTypeTemplate::getSupportedServiceNames_Static()
 {
     Sequence< OUString > aServices( 2 );

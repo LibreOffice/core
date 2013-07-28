@@ -313,8 +313,6 @@ void RegressionCurveModel::fireModifyEvent()
     m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
 }
 
-// ================================================================================
-
 // ____ OPropertySet ____
 uno::Any RegressionCurveModel::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)
@@ -338,19 +336,13 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL RegressionCurveModel::getProp
     return *StaticRegressionCurveInfo::get();
 }
 
-// ================================================================================
-
 // needed by MSC compiler
 using impl::RegressionCurveModel_Base;
 
 IMPLEMENT_FORWARD_XINTERFACE2( RegressionCurveModel, RegressionCurveModel_Base, OPropertySet )
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( RegressionCurveModel, RegressionCurveModel_Base, OPropertySet )
 
-
-
 // implementations
-
-// --------------------------------------------------------------------------------
 
 MeanValueRegressionCurve::MeanValueRegressionCurve(
     const uno::Reference< uno::XComponentContext > & xContext )
@@ -378,8 +370,6 @@ uno::Reference< util::XCloneable > SAL_CALL MeanValueRegressionCurve::createClon
     return uno::Reference< util::XCloneable >( new MeanValueRegressionCurve( *this ));
 }
 
-// --------------------------------------------------------------------------------
-
 LinearRegressionCurve::LinearRegressionCurve(
     const uno::Reference< uno::XComponentContext > & xContext )
         : RegressionCurveModel( xContext, RegressionCurveModel::CURVE_TYPE_LINEAR )
@@ -405,8 +395,6 @@ uno::Reference< util::XCloneable > SAL_CALL LinearRegressionCurve::createClone()
 {
     return uno::Reference< util::XCloneable >( new LinearRegressionCurve( *this ));
 }
-
-// --------------------------------------------------------------------------------
 
 LogarithmicRegressionCurve::LogarithmicRegressionCurve(
     const uno::Reference< uno::XComponentContext > & xContext )
@@ -434,8 +422,6 @@ uno::Reference< util::XCloneable > SAL_CALL LogarithmicRegressionCurve::createCl
     return uno::Reference< util::XCloneable >( new LogarithmicRegressionCurve( *this ));
 }
 
-// --------------------------------------------------------------------------------
-
 ExponentialRegressionCurve::ExponentialRegressionCurve(
     const uno::Reference< uno::XComponentContext > & xContext )
         : RegressionCurveModel( xContext, RegressionCurveModel::CURVE_TYPE_EXPONENTIAL )
@@ -462,8 +448,6 @@ uno::Reference< util::XCloneable > SAL_CALL ExponentialRegressionCurve::createCl
     return uno::Reference< util::XCloneable >( new ExponentialRegressionCurve( *this ));
 }
 
-// --------------------------------------------------------------------------------
-
 PotentialRegressionCurve::PotentialRegressionCurve(
     const uno::Reference< uno::XComponentContext > & xContext )
         : RegressionCurveModel( xContext, RegressionCurveModel::CURVE_TYPE_POWER )
@@ -489,7 +473,6 @@ uno::Reference< util::XCloneable > SAL_CALL PotentialRegressionCurve::createClon
 {
     return uno::Reference< util::XCloneable >( new PotentialRegressionCurve( *this ));
 }
-
 
 PolynomialRegressionCurve::PolynomialRegressionCurve(
     const uno::Reference< uno::XComponentContext > & xContext )
@@ -542,7 +525,6 @@ uno::Reference< util::XCloneable > SAL_CALL MovingAverageRegressionCurve::create
 {
     return uno::Reference< util::XCloneable >( new MovingAverageRegressionCurve( *this ));
 }
-
 
 } //  namespace chart
 

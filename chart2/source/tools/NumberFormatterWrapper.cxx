@@ -28,10 +28,8 @@
 #include <i18nlangtag/mslangid.hxx>
 #include <com/sun/star/util/DateTime.hpp>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 
 FixedNumberFormatter::FixedNumberFormatter(
@@ -51,10 +49,6 @@ OUString FixedNumberFormatter::getFormattedString( double fValue, sal_Int32& rLa
     return m_aNumberFormatterWrapper.getFormattedString(
         m_nNumberFormatKey, fValue, rLabelColor, rbColorChanged );
 }
-
-//-----------------------------------------------------------------------
-//-----------------------------------------------------------------------
-//-----------------------------------------------------------------------
 
 NumberFormatterWrapper::NumberFormatterWrapper( const uno::Reference< util::XNumberFormatsSupplier >& xSupplier )
                     : m_xNumberFormatsSupplier(xSupplier)
@@ -141,8 +135,6 @@ OUString NumberFormatterWrapper::getFormattedString( sal_Int32 nNumberFormatKey,
     return aText;
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

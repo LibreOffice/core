@@ -32,7 +32,6 @@
 #include <com/sun/star/chart2/Symbol.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 
-
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
@@ -50,7 +49,6 @@ using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 
-// ----------------------------------------
 namespace
 {
 
@@ -185,7 +183,6 @@ void lcl_insertOrDeleteDataLabelsToSeriesAndAllPoints( const Reference< chart2::
 }
 
 } // anonymous namespace
-// ----------------------------------------
 
 namespace chart
 {
@@ -858,7 +855,6 @@ void deleteDataLabelsFromSeriesAndAllPoints( const Reference< chart2::XDataSerie
 {
     lcl_insertOrDeleteDataLabelsToSeriesAndAllPoints( xSeries, false /*bInsert*/ );
 }
-
 
 void insertDataLabelToPoint( const Reference< beans::XPropertySet >& xPointProp )
 {

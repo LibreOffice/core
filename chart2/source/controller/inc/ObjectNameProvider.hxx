@@ -25,12 +25,9 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
-//-----------------------------------------------------------------------------
 /** Provides localized ui strings for the userinterface.
 */
 
@@ -73,9 +70,7 @@ public:
     static OUString getSelectedObjectText( const OUString & rObjectCID, const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& xChartDocument );
 };
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -50,7 +50,6 @@ private:
 
     bool satisfiesPrerequisites() const;
 
-
     ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XChartDocument > m_xChartDocument;
 };

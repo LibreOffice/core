@@ -53,8 +53,6 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
 using ::osl::MutexGuard;
 
-// ======================================================================
-
 namespace
 {
 
@@ -274,8 +272,6 @@ lcl_tCooSysMapping lcl_CloneCoordinateSystems(
 }
 
 } // anonymous namespace
-
-// ======================================================================
 
 namespace chart
 {
@@ -619,8 +615,6 @@ void Diagram::fireModifyEvent()
     m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
 }
 
-// ============================================================
-
 Sequence< OUString > Diagram::getSupportedServiceNames_Static()
 {
     Sequence< OUString > aServices( 3 );
@@ -712,8 +706,6 @@ void SAL_CALL Diagram::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) co
     else
         ::property::OPropertySet::getFastPropertyValue( rValue,nHandle );
 }
-
-// ================================================================================
 
 using impl::Diagram_Base;
 

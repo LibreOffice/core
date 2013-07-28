@@ -110,8 +110,6 @@ struct StaticPageBackgroundInfo : public rtl::StaticAggregate< uno::Reference< b
 
 } // anonymous namespace
 
-// ================================================================================
-
 namespace chart
 {
 
@@ -138,8 +136,6 @@ uno::Reference< util::XCloneable > SAL_CALL PageBackground::createClone()
 {
     return uno::Reference< util::XCloneable >( new PageBackground( *this ));
 }
-
-// ================================================================================
 
 // ____ OPropertySet ____
 uno::Any PageBackground::GetDefaultValue( sal_Int32 nHandle ) const
@@ -217,8 +213,6 @@ void PageBackground::fireModifyEvent()
 {
     m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
 }
-
-// ================================================================================
 
 uno::Sequence< OUString > PageBackground::getSupportedServiceNames_Static()
 {

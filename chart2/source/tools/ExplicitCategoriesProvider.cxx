@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "ExplicitCategoriesProvider.hxx"
 #include "DiagramHelper.hxx"
 #include "ChartTypeHelper.hxx"
@@ -33,17 +32,14 @@
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::std::vector;
-
 
 ExplicitCategoriesProvider::ExplicitCategoriesProvider( const Reference< chart2::XCoordinateSystem >& xCooSysModel
                                                        , const uno::Reference< frame::XModel >& xChartModel )
@@ -533,7 +529,6 @@ void ExplicitCategoriesProvider::init()
     }
 }
 
-
 Sequence< OUString > ExplicitCategoriesProvider::getSimpleCategories()
 {
     if( !m_bIsExplicitCategoriesInited )
@@ -597,8 +592,6 @@ const std::vector< DatePlusIndex >&  ExplicitCategoriesProvider::getDateCategori
     return m_aDateCategories;
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

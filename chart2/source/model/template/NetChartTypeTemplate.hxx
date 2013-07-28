@@ -65,7 +65,6 @@ protected:
                 getChartTypeForIndex( sal_Int32 nChartTypeIndex );
     virtual StackMode getStackMode( sal_Int32 nChartTypeIndex ) const;
 
-
 private:
     StackMode  m_eStackMode;
     bool                                 m_bHasSymbols;

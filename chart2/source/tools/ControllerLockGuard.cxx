@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "ControllerLockGuard.hxx"
 
 using namespace ::com::sun::star;
@@ -41,8 +40,6 @@ ControllerLockGuard::~ControllerLockGuard()
         m_xModel->unlockControllers();
 }
 
-// ================================================================================
-
 ControllerLockHelper::ControllerLockHelper( const Reference< frame::XModel > & xModel ) :
         m_xModel( xModel )
 {}
@@ -61,8 +58,6 @@ void ControllerLockHelper::unlockControllers()
     if( m_xModel.is())
         m_xModel->unlockControllers();
 }
-
-// ================================================================================
 
 ControllerLockHelperGuard::ControllerLockHelperGuard( ControllerLockHelper & rHelper ) :
         m_rHelper( rHelper )

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "BaseCoordinateSystem.hxx"
 #include "macros.hxx"
 #include "PropertyHelper.hxx"
@@ -366,7 +365,6 @@ void BaseCoordinateSystem::fireModifyEvent()
     m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
 }
 
-
 // ____ OPropertySet ____
 uno::Any BaseCoordinateSystem::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)
@@ -383,7 +381,6 @@ uno::Any BaseCoordinateSystem::GetDefaultValue( sal_Int32 nHandle ) const
 {
     return *StaticCooSysInfoHelper::get();
 }
-
 
 // ____ XPropertySet ____
 Reference< beans::XPropertySetInfo > SAL_CALL BaseCoordinateSystem::getPropertySetInfo()

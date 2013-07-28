@@ -24,7 +24,6 @@ using namespace ::com::sun::star;
 namespace apphelper
 {
 
-
 const short FLAG_DEPRECATED =1;
 const short FLAG_MODEL      =2;
 
@@ -70,7 +69,6 @@ MediaDescriptorHelper::MediaDescriptorHelper( const uno::Sequence<
     m_aModelProperties.realloc(0);
     m_aModelProperties.realloc(rMediaDescriptor.getLength());
     sal_Int32 nModelCount = 0;
-
 
     //read given rMediaDescriptor and store in internal structures:
     for( sal_Int32 i= rMediaDescriptor.getLength();i--;)

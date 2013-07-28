@@ -28,12 +28,9 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <basegfx/matrix/b3dhommatrix.hxx>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
-//-----------------------------------------------------------------------------
 class TickFactory;
 
 class VAxisOrGridBase : public PlotterBase
@@ -51,8 +48,6 @@ public:
 
     virtual TickFactory* createTickFactory();
 
-    //-------------------------------------------------------------------------
-    //-------------------------------------------------------------------------
 protected: //member
     ExplicitScaleData       m_aScale;
     ExplicitIncrementData   m_aIncrement;
@@ -65,9 +60,7 @@ protected: //member
     CuboidPlanePosition m_eBottomPos;
 };
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

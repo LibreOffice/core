@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "CandleStickChart.hxx"
 #include "ShapeFactory.hxx"
 #include "CommonConverters.hxx"
@@ -32,18 +31,12 @@
 #include <rtl/math.hxx>
 #include <editeng/unoprnms.hxx>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 using namespace ::rtl::math;
 using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
-
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 
 CandleStickChart::CandleStickChart( const uno::Reference<XChartType>& xChartTypeModel
                                     , sal_Int32 nDimensionCount )
@@ -59,18 +52,12 @@ CandleStickChart::~CandleStickChart()
     delete m_pMainPosHelper;
 }
 
-//-------------------------------------------------------------------------
 // MinimumAndMaximumSupplier
-//-------------------------------------------------------------------------
 
 bool CandleStickChart::isSeparateStackingForDifferentSigns( sal_Int32 /* nDimensionIndex */ )
 {
     return false;
 }
-
-//-----------------------------------------------------------------
-//-----------------------------------------------------------------
-//-----------------------------------------------------------------
 
 LegendSymbolStyle CandleStickChart::getLegendSymbolStyle()
 {
@@ -115,7 +102,6 @@ void CandleStickChart::createShapes()
     uno::Reference< drawing::XShapes > xTextTarget(
         m_pShapeFactory->createGroup2D( m_xFinalTarget,OUString() ));
 
-    //---------------------------------------------
     //check necessary here that different Y axis can not be stacked in the same group? ... hm?
 
     bool bJapaneseStyle=true;//@todo is this the correct default?
@@ -152,13 +138,11 @@ void CandleStickChart::createShapes()
     sal_Int32 nStartIndex = 0;
     sal_Int32 nEndIndex = VSeriesPlotter::getPointCount();
     double fLogicZ = 1.5;//as defined
-//=============================================================================
     //iterate through all x values per indices
     for( sal_Int32 nIndex = nStartIndex; nIndex < nEndIndex; nIndex++ )
     {
         ::std::vector< ::std::vector< VDataSeriesGroup > >::iterator             aZSlotIter = m_aZSlots.begin();
         const ::std::vector< ::std::vector< VDataSeriesGroup > >::const_iterator  aZSlotEnd = m_aZSlots.end();
-//=============================================================================
         for( sal_Int32 nZ=0; aZSlotIter != aZSlotEnd; ++aZSlotIter, nZ++ )
         {
             ::std::vector< VDataSeriesGroup >::iterator             aXSlotIter = aZSlotIter->begin();
@@ -178,7 +162,6 @@ void CandleStickChart::createShapes()
 
             //update/create information for current group
             pPosHelper->updateSeriesCount( aZSlotIter->size() );
-//=============================================================================
             //iterate through all x slots in this category
             for( double fSlotX=0; aXSlotIter != aXSlotEnd; ++aXSlotIter, fSlotX+=1.0 )
             {
@@ -186,7 +169,6 @@ void CandleStickChart::createShapes()
 
                 ::std::vector< VDataSeries* >::const_iterator       aSeriesIter = pSeriesList->begin();
                 const ::std::vector< VDataSeries* >::const_iterator aSeriesEnd  = pSeriesList->end();
-    //=============================================================================
                 //iterate through all series in this x slot
                 for( ; aSeriesIter != aSeriesEnd; ++aSeriesIter )
                 {
@@ -343,9 +325,6 @@ void CandleStickChart::createShapes()
             }//next x slot
         }//next z slot
     }//next category
-//=============================================================================
-//=============================================================================
-//=============================================================================
     /* @todo remove series shapes if empty
     //remove and delete point-group-shape if empty
     if(!xSeriesGroupShape_Shapes->getCount())
@@ -360,8 +339,6 @@ void CandleStickChart::createShapes()
     //... todo
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

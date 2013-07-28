@@ -21,15 +21,11 @@
 
 #include <vcl/window.hxx>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
-
 
 class WindowController;
 
-//-----------------------------------------------------------------------------
 /** The ChartWindow collects events from the window and forwards them the to the controller
 thus the controller can perform appropriate actions
 */
@@ -73,9 +69,7 @@ private:
     void adjustHighContrastMode();
 };
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 #endif
 

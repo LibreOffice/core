@@ -83,10 +83,8 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 namespace
 {
@@ -225,9 +223,7 @@ OUString lcl_getFormatCommandForObjectCID( const OUString& rCID )
 
 const short HITPIX=2; //hit-tolerance in pixel
 
-//-----------------------------------------------------------------
 // awt::XWindow
-//-----------------------------------------------------------------
 void SAL_CALL ChartController::setPosSize(
     sal_Int32 X,
     sal_Int32 Y,
@@ -469,9 +465,7 @@ void SAL_CALL ChartController::removePaintListener(
         xWindow->removePaintListener( xListener );
 }
 
-//-----------------------------------------------------------------
 // impl vcl window controller methods
-//-----------------------------------------------------------------
 void ChartController::PrePaint()
 {
     // forward VCLs PrePaint window event to DrawingLayer
@@ -535,10 +529,6 @@ bool isDoubleClick( const MouseEvent& rMEvt )
         !rMEvt.IsMod1() && !rMEvt.IsMod2() && !rMEvt.IsShift();
 }
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-
 void ChartController::startDoubleClickWaiting()
 {
     SolarMutexGuard aGuard;
@@ -584,8 +574,6 @@ IMPL_LINK_NOARG(ChartController, DoubleClickWaitingHdl)
 
     return 0;
 }
-
-//------------------------------------------------------------------------
 
 void ChartController::execute_MouseButtonDown( const MouseEvent& rMEvt )
 {
@@ -1599,9 +1587,7 @@ bool ChartController::requestQuickHelp(
     return bResult;
 }
 
-//-----------------------------------------------------------------
 // XSelectionSupplier (optional interface)
-//-----------------------------------------------------------------
         sal_Bool SAL_CALL ChartController
 ::select( const uno::Any& rSelection )
         throw( lang::IllegalArgumentException )
@@ -2019,8 +2005,6 @@ void ChartController::impl_SetMousePointer( const MouseEvent & rEvent )
     }
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

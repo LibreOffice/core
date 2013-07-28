@@ -24,10 +24,8 @@
 #include "ResId.hxx"
 #include "NoWarningThisInCTOR.hxx"
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 using namespace ::com::sun::star;
 
@@ -57,8 +55,6 @@ bool SchLegendDlg::writeToModel( const uno::Reference< frame::XModel >& xChartMo
     return true;
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

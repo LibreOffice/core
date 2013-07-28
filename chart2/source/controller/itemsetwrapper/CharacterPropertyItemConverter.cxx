@@ -64,8 +64,6 @@ namespace
 }
 } // anonymous namespace
 
-// ========================================
-
 namespace chart
 {
 namespace wrapper

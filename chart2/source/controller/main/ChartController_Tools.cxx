@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "ChartController.hxx"
 #include "ChartWindow.hxx"
 #include "ChartModelHelper.hxx"
@@ -942,7 +941,6 @@ void ChartController::executeDispatch_ToggleGridVertical()
         aUndoGuard.commit();
     }
 }
-
 
 void ChartController::impl_ShapeControllerDispatch( const util::URL& rURL, const Sequence< beans::PropertyValue >& rArgs )
 {

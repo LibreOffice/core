@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "DataInterpreter.hxx"
 #include "DataSeries.hxx"
 #include "DataSourceHelper.hxx"
@@ -385,8 +384,6 @@ bool DataInterpreter::UseCategoriesAsX( const Sequence< beans::PropertyValue > &
         GetProperty( rArguments, "UseCategoriesAsX" ) >>= bUseCategoriesAsX;
     return bUseCategoriesAsX;
 }
-
-// ------------------------------------------------------------
 
 Sequence< OUString > DataInterpreter::getSupportedServiceNames_Static()
 {

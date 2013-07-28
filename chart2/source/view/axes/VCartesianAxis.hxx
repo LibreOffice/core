@@ -24,16 +24,12 @@
 
 #include <memory>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 class VCartesianAxis : public VAxisBase
 {
-    //-------------------------------------------------------------------------
     // public methods
-    //-------------------------------------------------------------------------
 public:
     VCartesianAxis( const AxisProperties& rAxisProperties
            , const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xNumberFormatsSupplier
@@ -57,16 +53,13 @@ public:
     TickIter* createMaximumLabelTickIterator( sal_Int32 nTextLevel );
     sal_Int32 getTextLevelCount() const;
 
-    //-------------------------------------------------------------------------
     virtual TickFactory* createTickFactory();
 
-    //-------------------------------------------------------------------------
     double      getLogicValueWhereMainLineCrossesOtherAxis() const;
     double      getLogicValueWhereLabelLineCrossesOtherAxis() const;
     bool        getLogicValueWhereExtraLineCrossesOtherAxis( double& fCrossesOtherAxis) const;
     void        get2DAxisMainLine( ::basegfx::B2DVector& rStart, ::basegfx::B2DVector& rEnd, double fCrossesOtherAxis );
 
-    //-------------------------------------------------------------------------
     //Layout interface for cartesian axes:
 
     //the returned value describes the minimum size that is necessary
@@ -82,10 +75,6 @@ public:
     //with the creation of at most one text shape
     //(this is e.g. true if the parameters allow for labels parallel to the axis.)
 //    sal_bool  canQuicklyCalculateMinimumOrthogonalSize();
-
-
-    //-------------------------------------------------------------------------
-    //-------------------------------------------------------------------------
 
     struct ScreenPosAndLogicPos
     {
@@ -119,9 +108,7 @@ protected: //methods
     ScreenPosAndLogicPos getScreenPosAndLogicPos( double fLogicX, double fLogicY, double fLogicZ ) const;
 };
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -265,8 +265,6 @@ namespace chart
 {
 namespace wrapper
 {
-//-----------------------------------------------------------------------------------------------------------------
-
 
 //PROP_DOCUMENT_LABELS_IN_FIRST_ROW
 class WrappedDataSourceLabelsInFirstRowProperty : public WrappedProperty
@@ -366,9 +364,6 @@ Any WrappedDataSourceLabelsInFirstRowProperty::getPropertyDefault( const Referen
     return aRet;
 }
 
-//-----------------------------------------------------------------------------------------------------------------
-
-
 //PROP_DOCUMENT_LABELS_IN_FIRST_COLUMN
 class WrappedDataSourceLabelsInFirstColumnProperty : public WrappedProperty
 {
@@ -467,9 +462,6 @@ Any WrappedDataSourceLabelsInFirstColumnProperty::getPropertyDefault( const Refe
     return aRet;
 }
 
-//-----------------------------------------------------------------------------------------------------------------
-
-
 //PROP_DOCUMENT_HAS_LEGEND
 class WrappedHasLegendProperty : public WrappedProperty
 {
@@ -554,9 +546,6 @@ Any WrappedHasLegendProperty::getPropertyDefault( const Reference< beans::XPrope
     return aRet;
 }
 
-//-----------------------------------------------------------------------------------------------------------------
-
-
 //PROP_DOCUMENT_HAS_MAIN_TITLE
 class WrappedHasMainTitleProperty : public WrappedProperty
 {
@@ -630,9 +619,6 @@ Any WrappedHasMainTitleProperty::getPropertyDefault( const Reference< beans::XPr
     return aRet;
 }
 
-//-----------------------------------------------------------------------------------------------------------------
-
-
 //PROP_DOCUMENT_HAS_SUB_TITLE
 class WrappedHasSubTitleProperty : public WrappedProperty
 {
@@ -670,7 +656,6 @@ void WrappedHasSubTitleProperty::setPropertyValue( const Any& rOuterValue, const
     if( ! (rOuterValue >>= bNewValue) )
         throw lang::IllegalArgumentException("Property HasSubTitle requires value of type boolean", 0, 0 );
 
-
     try
     {
         if( bNewValue )
@@ -706,8 +691,6 @@ Any WrappedHasSubTitleProperty::getPropertyDefault( const Reference< beans::XPro
     aRet <<= sal_False;
     return aRet;
 }
-
-//-----------------------------------------------------------------------------------------------------------------
 
 ChartDocumentWrapper::ChartDocumentWrapper(
     const Reference< uno::XComponentContext > & xContext ) :
@@ -954,7 +937,6 @@ Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::getCurrentSelection(
         return xModel->getCurrentSelection();
     return 0;
 }
-
 
 // ____ XComponent ____
 void SAL_CALL ChartDocumentWrapper::dispose()
@@ -1522,8 +1504,6 @@ void ChartDocumentWrapper::_disposing( const lang::EventObject& rSource )
         m_xChartView.set( 0 );
 }
 
-// ================================================================================
-
 // WrappedPropertySet
 Reference< beans::XPropertySet > ChartDocumentWrapper::getInnerPropertySet()
 {
@@ -1552,8 +1532,6 @@ const std::vector< WrappedProperty* > ChartDocumentWrapper::createWrappedPropert
 
     return aWrappedProperties;
 }
-
-// ================================================================================
 
 uno::Sequence< OUString > ChartDocumentWrapper::getSupportedServiceNames_Static()
 {

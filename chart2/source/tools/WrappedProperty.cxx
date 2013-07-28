@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "WrappedProperty.hxx"
 #include "macros.hxx"
 #include <com/sun/star/drawing/LineStyle.hpp>
@@ -26,11 +25,8 @@ using namespace ::com::sun::star;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 
-
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 WrappedProperty::WrappedProperty( const OUString& rOuterName, const OUString& rInnerName)
                          : m_aOuterName( rOuterName )
@@ -133,8 +129,6 @@ beans::PropertyState WrappedProperty::getPropertyState( const Reference< beans::
     return aState;
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

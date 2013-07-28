@@ -48,10 +48,8 @@
 
 using namespace ::com::sun::star;
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 namespace
 {
@@ -132,7 +130,6 @@ AxisPositionsTabPage::AxisPositionsTabPage(Window* pWindow,const SfxItemSet& rIn
     long nFixTextHeight = m_aFT_PlaceLabels.GetSizePixel().Height();
     long nLabelPlacementWidth = m_aFT_PlaceLabels.CalcMinimumSize().Width();
     long nMarkPlacementWidth = m_aFT_PlaceTicks.CalcMinimumSize().Width();
-
 
     long nWidth_0 = ::std::max( m_aFT_Major.CalcMinimumSize().Width(), m_aFT_Minor.CalcMinimumSize().Width() );
     nWidth_0 = ::std::max( nWidth_0, nLabelPlacementWidth );
@@ -358,7 +355,6 @@ void AxisPositionsTabPage::Reset(const SfxItemSet& rInAttrs)
     else
         m_aLB_PlaceTicks.SetNoSelection();
 
-
     if( !m_bSupportAxisPositioning )
     {
         m_aFL_AxisLine.Show(false);
@@ -480,8 +476,6 @@ IMPL_LINK_NOARG(AxisPositionsTabPage, PlaceLabelsSelectHdl)
     return 0;
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -49,10 +49,8 @@
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 using namespace ::rtl::math;
@@ -60,10 +58,6 @@ using ::basegfx::B2DVector;
 using ::com::sun::star::uno::Reference;
 using ::basegfx::B2DPolygon;
 using ::basegfx::B2DPolyPolygon;
-
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 
 VCartesianAxis::VCartesianAxis( const AxisProperties& rAxisProperties
             , const Reference< util::XNumberFormatsSupplier >& xNumberFormatsSupplier
@@ -664,7 +658,6 @@ bool VCartesianAxis::createTextShapes(
     TickInfo* pPREPreviousVisibleTickInfo = NULL;
     TickInfo* pLastVisibleNeighbourTickInfo = NULL;
 
-    //------------------------------------------------
     //prepare properties for multipropertyset-interface of shape
     tNameSequence aPropNames;
     tAnySequence aPropValues;
@@ -683,7 +676,6 @@ bool VCartesianAxis::createTextShapes(
         *pColorAny >>= nColor;
 
     uno::Any* pLimitedSpaceAny = PropertyMapper::getValuePointerForLimitedSpace(aPropValues,aPropNames,bLimitedHeight);
-    //------------------------------------------------
 
     sal_Int32 nTick = 0;
     for( TickInfo* pTickInfo = rTickIter.firstInfo()
@@ -1401,7 +1393,6 @@ void VCartesianAxis::createLabels()
     if( !prepareShapeCreation() )
         return;
 
-    //-----------------------------------------
     //create labels
     if( m_aAxisProperties.m_bDisplayLabels )
     {
@@ -1410,10 +1401,8 @@ void VCartesianAxis::createLabels()
         if( !pTickFactory2D )
             return;
 
-        //-----------------------------------------
         //get the transformed screen values for all tickmarks in aAllTickInfos
         pTickFactory2D->updateScreenValues( m_aAllTickInfos );
-        //-----------------------------------------
         //'hide' tickmarks with identical screen values in aAllTickInfos
         hideIdenticalScreenValues( m_aAllTickInfos );
 
@@ -1458,7 +1447,6 @@ void VCartesianAxis::createMaximumLabels()
     if( !prepareShapeCreation() )
         return;
 
-    //-----------------------------------------
     //create labels
     if( m_aAxisProperties.m_bDisplayLabels )
     {
@@ -1467,7 +1455,6 @@ void VCartesianAxis::createMaximumLabels()
         if( !pTickFactory2D )
             return;
 
-        //-----------------------------------------
         //get the transformed screen values for all tickmarks in aAllTickInfos
         pTickFactory2D->updateScreenValues( m_aAllTickInfos );
 
@@ -1496,7 +1483,6 @@ void VCartesianAxis::createMaximumLabels()
 
 void VCartesianAxis::updatePositions()
 {
-    //-----------------------------------------
     //update positions of labels
     if( m_aAxisProperties.m_bDisplayLabels )
     {
@@ -1505,7 +1491,6 @@ void VCartesianAxis::updatePositions()
         if( !pTickFactory2D )
             return;
 
-        //-----------------------------------------
         //update positions of all existing text shapes
         pTickFactory2D->updateScreenValues( m_aAllTickInfos );
 
@@ -1608,11 +1593,9 @@ void VCartesianAxis::createShapes()
     if( !pTickFactory2D )
         return;
 
-    //-----------------------------------------
     //create line shapes
     if(2==m_nDimension)
     {
-        //-----------------------------------------
         //create extra long ticks to separate complex categories (create them only there where the labels are)
         if( isComplexCategoryAxis() )
         {
@@ -1648,7 +1631,6 @@ void VCartesianAxis::createShapes()
                 createTickMarkLineShapes( *aDepthIter, aTickmarkPropertiesList[nDepth], *pTickFactory2D, true /*bOnlyAtLabels*/ );
             }
         }
-        //-----------------------------------------
         //create normal ticks for major and minor intervals
         {
             ::std::vector< ::std::vector< TickInfo > > aUnshiftedTickInfos;
@@ -1669,7 +1651,6 @@ void VCartesianAxis::createShapes()
             for( sal_Int32 nDepth=0; aDepthIter != aDepthEnd && nDepth < nTickmarkPropertiesCount; ++aDepthIter, nDepth++ )
                 createTickMarkLineShapes( *aDepthIter, m_aAxisProperties.m_aTickmarkPropertiesList[nDepth], *pTickFactory2D, false /*bOnlyAtLabels*/ );
         }
-        //-----------------------------------------
         //create axis main lines
         //it serves also as the handle shape for the axis selection
         {
@@ -1681,7 +1662,6 @@ void VCartesianAxis::createShapes()
             //because of this name this line will be used for marking the axis
             m_pShapeFactory->setShapeName( xShape, "MarkHandles" );
         }
-        //-----------------------------------------
         //create an additional line at NULL
         if( !AxisHelper::isAxisPositioningEnabled() )
         {
@@ -1700,8 +1680,6 @@ void VCartesianAxis::createShapes()
     //createLabels();
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -45,22 +45,14 @@
 #include <svl/stritem.hxx>
 #include <editeng/fontitem.hxx>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
-
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 
 void SAL_CALL ChartController::executeDispatch_EditText( const Point* pMousePixel )
 {
     this->StartTextEdit( pMousePixel );
 }
-
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 
 void ChartController::StartTextEdit( const Point* pMousePixel )
 {
@@ -156,9 +148,6 @@ bool ChartController::EndTextEdit()
     return true;
 }
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-
 void SAL_CALL ChartController::executeDispatch_InsertSpecialCharacter()
 {
     SolarMutexGuard aGuard;
@@ -229,9 +218,6 @@ uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
     return xResult;
 }
 
-
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

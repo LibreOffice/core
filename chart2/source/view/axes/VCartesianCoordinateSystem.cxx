@@ -28,15 +28,11 @@
 //for auto_ptr
 #include <memory>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
-
-//.............................................................................
 
 class TextualDataProvider : public ::cppu::WeakImplHelper1<
         ::com::sun::star::chart2::data::XTextualDataSequence
@@ -61,8 +57,6 @@ public:
 private: //member
     uno::Sequence< OUString > m_aTextSequence;
 };
-
-//.............................................................................
 
 VCartesianCoordinateSystem::VCartesianCoordinateSystem( const Reference< XCoordinateSystem >& xCooSys )
     : VCoordinateSystem(xCooSys)
@@ -215,8 +209,6 @@ void VCartesianCoordinateSystem::updateScalesAndIncrementsOnAxes()
     }
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

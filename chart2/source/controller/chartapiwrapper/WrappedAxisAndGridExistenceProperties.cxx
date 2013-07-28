@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "WrappedAxisAndGridExistenceProperties.hxx"
 #include "AxisHelper.hxx"
 #include "ChartModelHelper.hxx"
@@ -29,7 +28,6 @@ using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 
-//.............................................................................
 namespace chart
 {
 namespace wrapper
@@ -202,8 +200,6 @@ Any WrappedAxisAndGridExistenceProperty::getPropertyDefault( const Reference< be
     return aRet;
 }
 
-//---------------------------------------------------------------------------------------------------------------
-
 class WrappedAxisTitleExistenceProperty : public WrappedProperty
 {
 public:
@@ -318,8 +314,6 @@ Any WrappedAxisTitleExistenceProperty::getPropertyDefault( const Reference< bean
     return aRet;
 }
 
-//---------------------------------------------------------------------------------------------------------------
-
 class WrappedAxisLabelExistenceProperty : public WrappedProperty
 {
 public:
@@ -427,6 +421,5 @@ Any WrappedAxisLabelExistenceProperty::getPropertyDefault( const Reference< bean
 
 } //namespace wrapper
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

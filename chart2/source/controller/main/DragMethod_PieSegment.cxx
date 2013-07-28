@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "DragMethod_PieSegment.hxx"
 
 #include "Strings.hrc"
@@ -29,10 +28,8 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
@@ -148,8 +145,6 @@ void DragMethod_PieSegment::createSdrDragEntries()
         addSdrDragEntry(new SdrDragEntryPolyPolygon(aNewPolyPolygon));
     }
 }
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

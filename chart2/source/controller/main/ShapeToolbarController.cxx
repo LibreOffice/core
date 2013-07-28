@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "ShapeToolbarController.hxx"
 
 #include <osl/mutex.hxx>
@@ -28,16 +27,13 @@
 #include <svx/svxids.hrc>
 #include <svx/tbxcustomshapes.hxx>
 
-
 using namespace com::sun::star;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 OUString ShapeToolbarController::getImplementationName() throw (uno::RuntimeException)
 {
@@ -283,8 +279,6 @@ void ShapeToolbarController::updateImage() throw (uno::RuntimeException)
     }
 }
 
-//.............................................................................
 } //  namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

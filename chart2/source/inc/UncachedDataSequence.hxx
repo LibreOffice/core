@@ -44,7 +44,6 @@
 
 #include <vector>
 
-// ____________________
 namespace chart
 {
 
@@ -192,7 +191,6 @@ private:
 };
 
 }  // namespace chart
-
 
 // _CHART_UNCACHEDDATASEQUENCE_HXX
 #endif

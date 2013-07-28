@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "WrappedNumberFormatProperty.hxx"
 #include "macros.hxx"
 
@@ -25,12 +24,10 @@ using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
 
-//.............................................................................
 namespace chart
 {
 namespace wrapper
 {
-//.............................................................................
 
 WrappedNumberFormatProperty::WrappedNumberFormatProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
         : WrappedDirectStateProperty( "NumberFormat", "NumberFormat" )
@@ -100,8 +97,6 @@ Any WrappedNumberFormatProperty::getPropertyDefault( const Reference< beans::XPr
 {
     return uno::makeAny( sal_Int32( 0 ) );
 }
-
-//-----------------------------------------------------------------------------
 
 WrappedLinkNumberFormatProperty::WrappedLinkNumberFormatProperty( WrappedNumberFormatProperty* pWrappedNumberFormatProperty )
     : WrappedProperty( "LinkNumberFormatToSource", OUString() )
@@ -177,9 +172,7 @@ Any WrappedLinkNumberFormatProperty::getPropertyDefault( const Reference< beans:
     return uno::makeAny( bLink );
 }
 
-//.............................................................................
 } //namespace wrapper
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

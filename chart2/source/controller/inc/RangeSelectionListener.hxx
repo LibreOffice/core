@@ -37,8 +37,6 @@ protected:
     ~RangeSelectionListenerParent() {}
 };
 
-// ----------------------------------------
-
 class RangeSelectionListener : public
     ::cppu::WeakImplHelper1<
         ::com::sun::star::sheet::XRangeSelectionListener >

@@ -80,10 +80,8 @@ OUString lcl_getServiceNameForType( ::chart::RegressionCurveHelper::tRegressionT
 }
 } // anonymous namespace
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 Reference< XRegressionCurve > RegressionCurveHelper::createMeanValueLine(
     const Reference< XComponentContext > & xContext )
@@ -126,8 +124,6 @@ Reference< XRegressionCurve > RegressionCurveHelper::createRegressionCurveByServ
 
     return xResult;
 }
-
-// ------------------------------------------------------------
 
 Reference< XRegressionCurveCalculator > RegressionCurveHelper::createRegressionCurveCalculatorByServiceName(
     OUString aServiceName )
@@ -239,8 +235,6 @@ void RegressionCurveHelper::initializeCurveCalculator(
                                uno::Reference< data::XDataSource >( xSeries, uno::UNO_QUERY ),
                                (nAxisType == AxisType::REALNUMBER) );
 }
-
-// ----------------------------------------
 
 bool RegressionCurveHelper::hasMeanValueLine(
     const uno::Reference< XRegressionCurveContainer > & xRegCnt )
@@ -708,8 +702,6 @@ bool RegressionCurveHelper::hasEquation( const Reference< chart2::XRegressionCur
     return bHasEquation;
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

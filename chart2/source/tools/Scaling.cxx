@@ -31,10 +31,8 @@ static const OUString lcl_aServiceName_Power( "com.sun.star.chart2.PowerScaling"
 
 }
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
@@ -89,8 +87,6 @@ uno::Sequence< OUString > LogarithmicScaling::getSupportedServiceNames_Static()
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 APPHELPER_XSERVICEINFO_IMPL( LogarithmicScaling, lcl_aServiceName_Logarithmic )
 
-// ----------------------------------------
-
 ExponentialScaling::ExponentialScaling( const uno::Reference< uno::XComponentContext > & xContext ) :
         m_fBase( 10.0 ),
         m_xContext( xContext )
@@ -139,8 +135,6 @@ uno::Sequence< OUString > ExponentialScaling::getSupportedServiceNames_Static()
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 APPHELPER_XSERVICEINFO_IMPL( ExponentialScaling, lcl_aServiceName_Exponential )
-
-// ----------------------------------------
 
 LinearScaling::LinearScaling( const uno::Reference< uno::XComponentContext > & xContext ) :
         m_fSlope( 1.0 ),
@@ -193,8 +187,6 @@ uno::Sequence< OUString > LinearScaling::getSupportedServiceNames_Static()
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 APPHELPER_XSERVICEINFO_IMPL( LinearScaling, lcl_aServiceName_Linear )
 
-// ----------------------------------------
-
 PowerScaling::PowerScaling( const uno::Reference< uno::XComponentContext > & xContext ) :
         m_fExponent( 10.0 ),
         m_xContext( xContext )
@@ -244,8 +236,6 @@ uno::Sequence< OUString > PowerScaling::getSupportedServiceNames_Static()
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 APPHELPER_XSERVICEINFO_IMPL( PowerScaling, lcl_aServiceName_Power )
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

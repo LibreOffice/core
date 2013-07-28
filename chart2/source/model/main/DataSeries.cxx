@@ -40,8 +40,6 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
 using ::osl::MutexGuard;
 
-// ----------------------------------------
-
 namespace
 {
 
@@ -149,8 +147,6 @@ void lcl_CloneAttributedDataPoints(
 }
 
 } // anonymous namespace
-
-// ----------------------------------------
 
 namespace chart
 {
@@ -476,7 +472,6 @@ Sequence< Reference< chart2::data::XLabeledDataSequence > > SAL_CALL DataSeries:
     return ContainerHelper::ContainerToSequence( m_aDataSequences );
 }
 
-
 // ____ XRegressionCurveContainer ____
 void SAL_CALL DataSeries::addRegressionCurve(
     const uno::Reference< chart2::XRegressionCurve >& xRegressionCurve )
@@ -603,9 +598,6 @@ void DataSeries::fireModifyEvent()
 {
     m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
 }
-
-
-// ================================================================================
 
 using impl::DataSeries_Base;
 using ::property::OPropertySet;

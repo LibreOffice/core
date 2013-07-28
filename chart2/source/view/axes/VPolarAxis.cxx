@@ -26,10 +26,8 @@
 
 #include <boost/scoped_ptr.hpp>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
@@ -68,8 +66,6 @@ sal_Bool VPolarAxis::isAnythingToDraw()
     return ( 2==m_nDimension && VAxisBase::isAnythingToDraw() );
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

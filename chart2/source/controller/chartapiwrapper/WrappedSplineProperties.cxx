@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "WrappedSplineProperties.hxx"
 #include "macros.hxx"
 #include "FastPropertyIdRanges.hxx"
@@ -31,13 +30,11 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::beans::Property;
 
-//.............................................................................
 namespace chart
 {
 namespace wrapper
 {
 
-//-----------------------------------------------------------------------------
 //PROPERTYTYPE is the type of the outer property
 
 template< typename PROPERTYTYPE >
@@ -180,7 +177,6 @@ enum
 
 }//anonymous namespace
 
-//-----------------------------------------------------------------------------
 void WrappedSplineProperties::addProperties( ::std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
@@ -206,7 +202,6 @@ void WrappedSplineProperties::addProperties( ::std::vector< Property > & rOutPro
                   | beans::PropertyAttribute::MAYBEVOID ));
 }
 
-//-----------------------------------------------------------------------------
 void WrappedSplineProperties::addWrappedProperties( std::vector< WrappedProperty* >& rList
                                     , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
 {
@@ -214,8 +209,6 @@ void WrappedSplineProperties::addWrappedProperties( std::vector< WrappedProperty
     rList.push_back( new WrappedSplineProperty<sal_Int32>( "SplineOrder", "SplineOrder", uno::makeAny(sal_Int32(3)), spChart2ModelContact ) );
     rList.push_back( new WrappedSplineProperty<sal_Int32>( "SplineResolution", "CurveResolution", uno::makeAny(sal_Int32(20)), spChart2ModelContact ) );
 }
-
-//-----------------------------------------------------------------------------
 
 WrappedSplineTypeProperty::WrappedSplineTypeProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
     : WrappedSplineProperty<sal_Int32>( "SplineType", "CurveStyle", uno::makeAny(sal_Int32(0)), spChart2ModelContact )
@@ -293,6 +286,5 @@ Any WrappedSplineTypeProperty::convertOuterToInnerValue( const Any& rOuterValue 
 
 } //namespace wrapper
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
