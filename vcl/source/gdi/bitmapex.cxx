@@ -1251,7 +1251,7 @@ BitmapEx VCL_DLLPUBLIC createBlendFrame(
     const long nW(rSize.Width());
     const long nH(rSize.Height());
 
-    if(nW && nH)
+    if(nW > 1 && nH > 1)
     {
         sal_uInt8 aEraseTrans(0xff);
         Bitmap aContent(rSize, 24);
