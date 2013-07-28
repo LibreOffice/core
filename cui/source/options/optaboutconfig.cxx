@@ -90,7 +90,7 @@ void CuiAboutConfigTabPage::Reset( const SfxItemSet& )
    OUString sRootNodePath = "/";
    pPrefBox->Clear();
 
-   Reference< XNameAccess > xConfigAccess = getConfigAccess( sRootNodePath );
+   Reference< XNameAccess > xConfigAccess = getConfigAccess( sRootNodePath, sal_False );
 
    FillItems( xConfigAccess, sRootNodePath );
 }
@@ -214,7 +214,7 @@ void CuiAboutConfigTabPage::FillItems( Reference< XNameAccess >xNameAccess, OUSt
     }
 }
 
-Reference< XNameAccess > CuiAboutConfigTabPage::getConfigAccess( OUString sNodePath )
+Reference< XNameAccess > CuiAboutConfigTabPage::getConfigAccess( OUString sNodePath, sal_Bool bUpdate )
 {
     uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
 
@@ -228,9 +228,16 @@ Reference< XNameAccess > CuiAboutConfigTabPage::getConfigAccess( OUString sNodeP
     uno::Sequence< uno::Any > aArgumentList( 1 );
     aArgumentList[0] = uno::makeAny( aProperty );
 
+    OUString sAccessString;
+
+    if( bUpdate )
+        sAccessString = "com.sun.star.configuration.ConfigurationUpdateAccess";
+    else
+        sAccessString = "com.sun.star.configuration.ConfigurationAccess";
+
     uno::Reference< container::XNameAccess > xNameAccess(
                 xConfigProvider->createInstanceWithArguments(
-                    "com.sun.star.configuration.ConfigurationAccess", aArgumentList ),
+                    sAccessString, aArgumentList ),
                 uno::UNO_QUERY_THROW );
 
     return xNameAccess;
@@ -261,6 +268,13 @@ IMPL_LINK( CuiAboutConfigTabPage, HeaderSelect_Impl, HeaderBar*, pBar )
     pModel->SetSortMode( eMode );
     pModel->Resort();
     return 1;
+}
+
+IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl )
+{
+    SvTreeListEntry* pEntry = pPrefBox->FirstSelected();
+    return 0;
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
