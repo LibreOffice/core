@@ -2369,8 +2369,8 @@ void DbTimeField::implAdjustGenericFieldSetting( const Reference< XPropertySet >
     if ( m_pWindow && _rxModel.is() )
     {
         sal_Int16   nFormat     = getINT16( _rxModel->getPropertyValue( FM_PROP_TIMEFORMAT ) );
-        sal_Int32   nMin        = getINT32( _rxModel->getPropertyValue( FM_PROP_TIMEMIN ) );
-        sal_Int32   nMax        = getINT32( _rxModel->getPropertyValue( FM_PROP_TIMEMAX ) );
+        sal_Int64   nMin        = getINT64( _rxModel->getPropertyValue( FM_PROP_TIMEMIN ) );
+        sal_Int64   nMax        = getINT64( _rxModel->getPropertyValue( FM_PROP_TIMEMAX ) );
         sal_Bool    bStrict     = getBOOL( _rxModel->getPropertyValue( FM_PROP_STRICTFORMAT ) );
 
         static_cast< TimeField* >( m_pWindow )->SetExtFormat( (ExtTimeFieldFormat)nFormat );
@@ -2431,7 +2431,7 @@ void DbTimeField::updateFromModel( Reference< XPropertySet > _rxModel )
 {
     OSL_ENSURE( _rxModel.is() && m_pWindow, "DbTimeField::updateFromModel: invalid call!" );
 
-    sal_Int32 nTime = 0;
+    sal_Int64 nTime = 0;
     if ( _rxModel->getPropertyValue( FM_PROP_DATE ) >>= nTime )
         static_cast< TimeField* >( m_pWindow )->SetTime( ::Time( nTime ) );
     else
@@ -2444,7 +2444,7 @@ sal_Bool DbTimeField::commitControl()
     OUString aText(m_pWindow->GetText());
     Any aVal;
     if (!aText.isEmpty())
-        aVal <<= (sal_Int32)static_cast<TimeField*>(m_pWindow)->GetTime().GetTime();
+        aVal <<= (sal_Int64)static_cast<TimeField*>(m_pWindow)->GetTime().GetTime();
     else
         aVal.clear();
 

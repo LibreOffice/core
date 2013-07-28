@@ -5153,7 +5153,7 @@ IMPL_XTYPEPROVIDER_START( VCLXTimeField )
     VCLXFormattedSpinField::getTypes()
 IMPL_XTYPEPROVIDER_END
 
-void VCLXTimeField::setTime( sal_Int32 nTime ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXTimeField::setTime( sal_Int64 nTime ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -5170,11 +5170,11 @@ void VCLXTimeField::setTime( sal_Int32 nTime ) throw(::com::sun::star::uno::Runt
     }
 }
 
-sal_Int32 VCLXTimeField::getTime() throw(::com::sun::star::uno::RuntimeException)
+sal_Int64 VCLXTimeField::getTime() throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
-    sal_Int32 nTime = 0;
+    sal_Int64 nTime = 0;
     TimeField* pTimeField = (TimeField*) GetWindow();
     if ( pTimeField )
         nTime = pTimeField->GetTime().GetTime();
@@ -5182,7 +5182,7 @@ sal_Int32 VCLXTimeField::getTime() throw(::com::sun::star::uno::RuntimeException
     return nTime;
 }
 
-void VCLXTimeField::setMin( sal_Int32 nTime ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXTimeField::setMin( sal_Int64 nTime ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -5191,11 +5191,11 @@ void VCLXTimeField::setMin( sal_Int32 nTime ) throw(::com::sun::star::uno::Runti
         pTimeField->SetMin( nTime );
 }
 
-sal_Int32 VCLXTimeField::getMin() throw(::com::sun::star::uno::RuntimeException)
+sal_Int64 VCLXTimeField::getMin() throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
-    sal_Int32 nTime = 0;
+    sal_Int64 nTime = 0;
     TimeField* pTimeField = (TimeField*) GetWindow();
     if ( pTimeField )
         nTime = pTimeField->GetMin().GetTime();
@@ -5203,7 +5203,7 @@ sal_Int32 VCLXTimeField::getMin() throw(::com::sun::star::uno::RuntimeException)
     return nTime;
 }
 
-void VCLXTimeField::setMax( sal_Int32 nTime ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXTimeField::setMax( sal_Int64 nTime ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -5212,11 +5212,11 @@ void VCLXTimeField::setMax( sal_Int32 nTime ) throw(::com::sun::star::uno::Runti
         pTimeField->SetMax( nTime );
 }
 
-sal_Int32 VCLXTimeField::getMax() throw(::com::sun::star::uno::RuntimeException)
+sal_Int64 VCLXTimeField::getMax() throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
-    sal_Int32 nTime = 0;
+    sal_Int64 nTime = 0;
     TimeField* pTimeField = (TimeField*) GetWindow();
     if ( pTimeField )
         nTime = pTimeField->GetMax().GetTime();
@@ -5224,7 +5224,7 @@ sal_Int32 VCLXTimeField::getMax() throw(::com::sun::star::uno::RuntimeException)
     return nTime;
 }
 
-void VCLXTimeField::setFirst( sal_Int32 nTime ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXTimeField::setFirst( sal_Int64 nTime ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -5233,11 +5233,11 @@ void VCLXTimeField::setFirst( sal_Int32 nTime ) throw(::com::sun::star::uno::Run
         pTimeField->SetFirst( nTime );
 }
 
-sal_Int32 VCLXTimeField::getFirst() throw(::com::sun::star::uno::RuntimeException)
+sal_Int64 VCLXTimeField::getFirst() throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
-    sal_Int32 nTime = 0;
+    sal_Int64 nTime = 0;
     TimeField* pTimeField = (TimeField*) GetWindow();
     if ( pTimeField )
         nTime = pTimeField->GetFirst().GetTime();
@@ -5245,7 +5245,7 @@ sal_Int32 VCLXTimeField::getFirst() throw(::com::sun::star::uno::RuntimeExceptio
     return nTime;
 }
 
-void VCLXTimeField::setLast( sal_Int32 nTime ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXTimeField::setLast( sal_Int64 nTime ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -5254,11 +5254,11 @@ void VCLXTimeField::setLast( sal_Int32 nTime ) throw(::com::sun::star::uno::Runt
         pTimeField->SetLast( nTime );
 }
 
-sal_Int32 VCLXTimeField::getLast() throw(::com::sun::star::uno::RuntimeException)
+sal_Int64 VCLXTimeField::getLast() throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
-    sal_Int32 nTime = 0;
+    sal_Int64 nTime = 0;
     TimeField* pTimeField = (TimeField*) GetWindow();
     if ( pTimeField )
         nTime = pTimeField->GetLast().GetTime();
@@ -5314,7 +5314,7 @@ void VCLXTimeField::setProperty( const OUString& PropertyName, const ::com::sun:
                 }
                 else
                 {
-                    sal_Int32 n = 0;
+                    sal_Int64 n = 0;
                     if ( Value >>= n )
                          setTime( n );
                 }
@@ -5322,14 +5322,14 @@ void VCLXTimeField::setProperty( const OUString& PropertyName, const ::com::sun:
             break;
             case BASEPROPERTY_TIMEMIN:
             {
-                sal_Int32 n = 0;
+                sal_Int64 n = 0;
                 if ( Value >>= n )
                      setMin( n );
             }
             break;
             case BASEPROPERTY_TIMEMAX:
             {
-                sal_Int32 n = 0;
+                sal_Int64 n = 0;
                 if ( Value >>= n )
                      setMax( n );
             }
@@ -5368,17 +5368,17 @@ void VCLXTimeField::setProperty( const OUString& PropertyName, const ::com::sun:
         {
             case BASEPROPERTY_TIME:
             {
-                aProp <<= (sal_Int32) getTime();
+                aProp <<= (sal_Int64) getTime();
             }
             break;
             case BASEPROPERTY_TIMEMIN:
             {
-                aProp <<= (sal_Int32) getMin();
+                aProp <<= (sal_Int64) getMin();
             }
             break;
             case BASEPROPERTY_TIMEMAX:
             {
-                aProp <<= (sal_Int32) getMax();
+                aProp <<= (sal_Int64) getMax();
             }
             break;
             case BASEPROPERTY_ENFORCE_FORMAT:
