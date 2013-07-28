@@ -185,7 +185,7 @@ SwFmtINetFmt::SwFmtINetFmt()
     nVisitedId( 0 )
 {}
 
-SwFmtINetFmt::SwFmtINetFmt( const XubString& rURL, const XubString& rTarget )
+SwFmtINetFmt::SwFmtINetFmt( const OUString& rURL, const OUString& rTarget )
     : SfxPoolItem( RES_TXTATR_INETFMT ),
     aURL( rURL ),
     aTargetFrame( rTarget ),
@@ -292,33 +292,37 @@ const SvxMacro* SwFmtINetFmt::GetMacro( sal_uInt16 nEvent ) const
 
 bool SwFmtINetFmt::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
-    bool bRet = true;
-    XubString sVal;
     nMemberId &= ~CONVERT_TWIPS;
     switch(nMemberId)
     {
         case MID_URL_URL:
-            sVal = aURL;
+            rVal <<= aURL;
         break;
         case MID_URL_TARGET:
-            sVal = aTargetFrame;
+            rVal <<= aTargetFrame;
         break;
         case MID_URL_HYPERLINKNAME:
-            sVal = aName;
+            rVal <<= aName;
         break;
         case MID_URL_VISITED_FMT:
-            sVal = aVisitedFmt;
+        {
+            String sVal = aVisitedFmt;
             if( !sVal.Len() && nVisitedId != 0 )
                 SwStyleNameMapper::FillUIName( nVisitedId, sVal );
             if( sVal.Len() )
                 SwStyleNameMapper::FillProgName( sVal, sVal, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true );
+            rVal <<= OUString(sVal);
+        }
         break;
         case MID_URL_UNVISITED_FMT:
-            sVal = aINetFmt;
+        {
+            String sVal = aINetFmt;
             if( !sVal.Len() && nINetId != 0 )
                 SwStyleNameMapper::FillUIName( nINetId, sVal );
             if( sVal.Len() )
                 SwStyleNameMapper::FillProgName( sVal, sVal, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true );
+            rVal <<= OUString(sVal);
+        }
         break;
         case MID_URL_HYPERLINKEVENTS:
         {
@@ -330,13 +334,13 @@ bool SwFmtINetFmt::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 
             // all others return a string; so we just set rVal here and exit
             rVal <<= xNameReplace;
-            return bRet;
         }
+        break;
         default:
+            rVal <<= OUString();
         break;
     }
-    rVal <<= OUString(sVal);
-    return bRet;
+    return true;
 }
 bool SwFmtINetFmt::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId  )
 {
@@ -370,32 +374,36 @@ bool SwFmtINetFmt::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId  )
         // all string properties:
         if(rVal.getValueType() != ::getCppuType((OUString*)0))
             return false;
-        XubString sVal = *(OUString*)rVal.getValue();
+
         switch(nMemberId)
         {
             case MID_URL_URL:
-                aURL = sVal;
+                rVal >>= aURL;
                 break;
             case MID_URL_TARGET:
-                aTargetFrame = sVal;
+                rVal >>= aTargetFrame;
                 break;
             case MID_URL_HYPERLINKNAME:
-                aName = sVal;
+                rVal >>= aName;
                 break;
             case MID_URL_VISITED_FMT:
             {
+                OUString sVal;
+                rVal >>= sVal;
                 String aString;
                 SwStyleNameMapper::FillUIName( sVal, aString, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true );
-                aVisitedFmt = OUString ( aString );
+                aVisitedFmt = aString;
                 nVisitedId = SwStyleNameMapper::GetPoolIdFromUIName( aVisitedFmt,
                                                nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
             }
             break;
             case MID_URL_UNVISITED_FMT:
             {
+                OUString sVal;
+                rVal >>= sVal;
                 String aString;
                 SwStyleNameMapper::FillUIName( sVal, aString, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true );
-                aINetFmt = OUString ( aString );
+                aINetFmt = aString;
                 nINetId = SwStyleNameMapper::GetPoolIdFromUIName( aINetFmt, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
             }
             break;

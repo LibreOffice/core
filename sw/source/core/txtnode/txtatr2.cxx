@@ -130,7 +130,7 @@ SwCharFmt* SwTxtINetFmt::GetCharFmt()
     const SwFmtINetFmt& rFmt = SwTxtAttrEnd::GetINetFmt();
     SwCharFmt* pRet = NULL;
 
-    if( rFmt.GetValue().Len() )
+    if( !rFmt.GetValue().isEmpty() )
     {
         const SwDoc* pDoc = GetTxtNode().GetDoc();
         if( !IsVisitedValid() )

@@ -1278,7 +1278,7 @@ sal_Bool SwCrsrShell::GetContentAtPos( const Point& rPt,
                     pTxtAttr = pTxtNd->GetTxtAttrAt(
                             aPos.nContent.GetIndex(), RES_TXTATR_INETFMT);
                     // "detect" only INetAttrs with URLs
-                    if( pTxtAttr && pTxtAttr->GetINetFmt().GetValue().Len() )
+                    if( pTxtAttr && !pTxtAttr->GetINetFmt().GetValue().isEmpty() )
                     {
                         bRet = sal_True;
                         if( bSetCrsr )
@@ -1657,7 +1657,7 @@ bool SwCrsrShell::GotoINetAttr( const SwTxtINetFmt& rAttr )
 }
 
 
-const SwFmtINetFmt* SwCrsrShell::FindINetAttr( const String& rName ) const
+const SwFmtINetFmt* SwCrsrShell::FindINetAttr( const OUString& rName ) const
 {
     return mpDoc->FindINetAttr( rName );
 }

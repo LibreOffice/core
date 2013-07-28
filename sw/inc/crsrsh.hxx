@@ -777,7 +777,7 @@ public:
 
     sal_Bool SelectTxtAttr( sal_uInt16 nWhich, sal_Bool bExpand, const SwTxtAttr* pAttr = 0 );
     bool GotoINetAttr( const SwTxtINetFmt& rAttr );
-    const SwFmtINetFmt* FindINetAttr( const String& rName ) const;
+    const SwFmtINetFmt* FindINetAttr( const OUString& rName ) const;
 
     sal_Bool CheckTblBoxCntnt( const SwPosition* pPos = 0 );
     void SaveTblBoxCntnt( const SwPosition* pPos = 0 );

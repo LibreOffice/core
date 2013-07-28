@@ -1809,7 +1809,7 @@ public:
     void SetAutoCorrExceptWord( SwAutoCorrExceptWord* pNew );
     SwAutoCorrExceptWord* GetAutoCorrExceptWord()       { return mpACEWord; }
 
-    const SwFmtINetFmt* FindINetAttr( const String& rName ) const;
+    const SwFmtINetFmt* FindINetAttr( const OUString& rName ) const;
 
     /// Call into intransparent Basic; expect possible Return String.
     bool ExecMacro( const SvxMacro& rMacro, String* pRet = 0, SbxArray* pArgs = 0 );

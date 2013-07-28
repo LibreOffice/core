@@ -760,7 +760,7 @@ IMAGE_SETEVENT:
             // Wenn das Attribut auch ein Sprungziel ist, fuegen
             // wir noch eine Bookmark vor der Grafik ein, weil das
             // SwFmtURL kein Sprungziel ist.
-            if( rINetFmt.GetName().Len() )
+            if( !rINetFmt.GetName().isEmpty() )
             {
                 pPam->Move( fnMoveBackward );
                 InsertBookmark( rINetFmt.GetName() );

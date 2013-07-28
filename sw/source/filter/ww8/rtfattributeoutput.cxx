@@ -2363,7 +2363,7 @@ void RtfAttributeOutput::TextINetFormat( const SwFmtINetFmt& rURL )
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
 
-    if( rURL.GetValue().Len() )
+    if( !rURL.GetValue().isEmpty() )
     {
         const SwCharFmt* pFmt;
         const SwTxtINetFmt* pTxtAtr = rURL.GetTxtINetFmt();

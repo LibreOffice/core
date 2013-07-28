@@ -250,14 +250,14 @@ sal_Bool SwAutoCorrDoc::SetAttr( xub_StrLen nStt, xub_StrLen nEnd, sal_uInt16 nS
     return 0 != nWhich;
 }
 
-sal_Bool SwAutoCorrDoc::SetINetAttr( xub_StrLen nStt, xub_StrLen nEnd, const String& rURL )
+sal_Bool SwAutoCorrDoc::SetINetAttr( xub_StrLen nStt, xub_StrLen nEnd, const OUString& rURL )
 {
     const SwNodeIndex& rNd = rCrsr.GetPoint()->nNode;
     SwPaM aPam( rNd, nStt, rNd, nEnd );
 
     SfxItemSet aSet( rEditSh.GetDoc()->GetAttrPool(),
                         RES_TXTATR_INETFMT, RES_TXTATR_INETFMT );
-    aSet.Put( SwFmtINetFmt( rURL, aEmptyStr ));
+    aSet.Put( SwFmtINetFmt( rURL, OUString() ));
     rEditSh.GetDoc()->SetFmtItemByAutoFmt( aPam, aSet );
     if( bUndoIdInitialized )
         bUndoIdInitialized = true;

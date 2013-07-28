@@ -1312,7 +1312,7 @@ int SwTransferable::PasteData( TransferableDataHelper& rData,
                     INetBookmark aBkmk;
                     if( rData.GetINetBookmark( nFormat, aBkmk ) )
                     {
-                        SwFmtINetFmt aFmt( aBkmk.GetURL(), aEmptyStr );
+                        SwFmtINetFmt aFmt( aBkmk.GetURL(), OUString() );
                         rSh.InsertURL( aFmt, aBkmk.GetDescription() );
                         nRet = 1;
                     }
@@ -1441,7 +1441,7 @@ int SwTransferable::PasteData( TransferableDataHelper& rData,
 
                 if( nRet )
                 {
-                    SwFmtINetFmt aFmt( sURL, aEmptyStr );
+                    SwFmtINetFmt aFmt( sURL, OUString() );
                     rSh.InsertURL( aFmt, sDesc );
                 }
             }
@@ -2448,7 +2448,7 @@ int SwTransferable::_PasteAsHyperlink( TransferableDataHelper& rData,
 
         default:
             {
-                rSh.InsertURL( SwFmtINetFmt( sFile, aEmptyStr ),
+                rSh.InsertURL( SwFmtINetFmt( sFile, OUString() ),
                                 sDesc.Len() ? sDesc : sFile );
             }
         }
@@ -2535,7 +2535,7 @@ int SwTransferable::_PasteFileName( TransferableDataHelper& rData,
 
                     default:
                         {
-                            rSh.InsertURL( SwFmtINetFmt( sFile, aEmptyStr ),
+                            rSh.InsertURL( SwFmtINetFmt( sFile, OUString() ),
                                             sDesc.Len() ? sDesc : sFile );
                         }
                     }

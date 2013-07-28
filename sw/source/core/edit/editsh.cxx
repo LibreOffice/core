@@ -633,16 +633,16 @@ Graphic SwEditShell::GetIMapGraphic() const
     return aRet;
 }
 
-sal_Bool SwEditShell::InsertURL( const SwFmtINetFmt& rFmt, const String& rStr, sal_Bool bKeepSelection )
+sal_Bool SwEditShell::InsertURL( const SwFmtINetFmt& rFmt, const OUString& rStr, sal_Bool bKeepSelection )
 {
     // URL and hint text (directly or via selection) necessary
-    if( !rFmt.GetValue().Len() ||   ( !rStr.Len() && !HasSelection() ) )
+    if( rFmt.GetValue().isEmpty() || ( rStr.isEmpty() && !HasSelection() ) )
         return sal_False;
     StartAllAction();
     GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_UI_INSERT_URLTXT, NULL);
     bool bInsTxt = true;
 
-    if( rStr.Len() )
+    if( !rStr.isEmpty() )
     {
         SwPaM* pCrsr = GetCrsr();
         if( pCrsr->HasMark() && *pCrsr->GetPoint() != *pCrsr->GetMark() )
@@ -652,7 +652,7 @@ sal_Bool SwEditShell::InsertURL( const SwFmtINetFmt& rFmt, const String& rStr, s
             if( pCrsr->GetNext() == pCrsr )
             {
                 // einfach Selection -> Text ueberpruefen
-                String sTxt(comphelper::string::stripEnd(GetSelTxt(), ' '));
+                const OUString sTxt(comphelper::string::stripEnd(GetSelTxt(), ' '));
                 if( sTxt == rStr )
                     bDelTxt = bInsTxt = false;
             }
@@ -669,7 +669,7 @@ sal_Bool SwEditShell::InsertURL( const SwFmtINetFmt& rFmt, const String& rStr, s
         {
             Insert2( rStr );
             SetMark();
-            ExtendSelection( sal_False, rStr.Len() );
+            ExtendSelection( sal_False, rStr.getLength() );
         }
     }
     else

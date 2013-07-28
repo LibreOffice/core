@@ -796,7 +796,7 @@ public:
     /// Calculates selection.
     String Calculate();
 
-    sal_Bool InsertURL( const SwFmtINetFmt& rFmt, const String& rStr,
+    sal_Bool InsertURL( const SwFmtINetFmt& rFmt, const OUString& rStr,
                     sal_Bool bKeepSelection = sal_False );
     sal_uInt16 GetINetAttrs( SwGetINetAttrs& rArr );
 

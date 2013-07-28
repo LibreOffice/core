@@ -75,7 +75,7 @@ sal_Bool SAL_CALL SwAccessibleHyperlink::doAccessibleAction( sal_Int32 nIndex )
     if( pTxtAttr && 0 == nIndex )
     {
         const SwFmtINetFmt& rINetFmt = pTxtAttr->GetINetFmt();
-        if( rINetFmt.GetValue().Len() )
+        if( !rINetFmt.GetValue().isEmpty() )
         {
             ViewShell *pVSh = xPara->GetShell();
             if( pVSh )
@@ -102,16 +102,14 @@ OUString SAL_CALL SwAccessibleHyperlink::getAccessibleActionDescription(
         sal_Int32 nIndex )
         throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
-    OUString sDesc;
-
     const SwTxtAttr *pTxtAttr = GetTxtAttr();
     if( pTxtAttr && 0 == nIndex )
     {
         const SwFmtINetFmt& rINetFmt = pTxtAttr->GetINetFmt();
-        sDesc = OUString( rINetFmt.GetValue() );
+        return rINetFmt.GetValue();
     }
 
-    return sDesc;
+    return OUString();
 }
 
 uno::Reference< XAccessibleKeyBinding > SAL_CALL

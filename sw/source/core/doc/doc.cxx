@@ -2039,7 +2039,7 @@ void SwDoc::InvalidateAutoCompleteFlag()
     }   //swmod 080219
 }
 
-const SwFmtINetFmt* SwDoc::FindINetAttr( const String& rName ) const
+const SwFmtINetFmt* SwDoc::FindINetAttr( const OUString& rName ) const
 {
     const SwFmtINetFmt* pItem;
     const SwTxtINetFmt* pTxtAttr;
@@ -2048,7 +2048,7 @@ const SwFmtINetFmt* SwDoc::FindINetAttr( const String& rName ) const
     for( n = 0; n < nMaxItems; ++n )
         if( 0 != (pItem = (SwFmtINetFmt*)GetAttrPool().GetItem2(
             RES_TXTATR_INETFMT, n ) ) &&
-            pItem->GetName().Equals( rName ) &&
+            pItem->GetName() == rName &&
             0 != ( pTxtAttr = pItem->GetTxtINetFmt()) &&
             0 != ( pTxtNd = pTxtAttr->GetpTxtNode() ) &&
             &pTxtNd->GetNodes() == &GetNodes() )
