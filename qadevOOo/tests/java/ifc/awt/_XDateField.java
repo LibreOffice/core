@@ -22,6 +22,7 @@ package ifc.awt;
 import lib.MultiMethodTest;
 
 import com.sun.star.awt.XDateField;
+import com.sun.star.util.Date;
 
 /**
 * Testing <code>com.sun.star.awt.XDateField</code>
@@ -66,12 +67,12 @@ public class _XDateField extends MultiMethodTest {
         requiredMethod("getDate()") ;
 
         boolean result = true ;
-        oObj.setDate(19000101) ;
+        oObj.setDate(new Date((short)1, (short)1, (short)1900)) ;
 
-        result = oObj.getDate() == 19000101 ;
+        result = oObj.getDate() == new Date((short)1, (short)1, (short)1900); ;
 
         if (! result ) {
-            System.out.println("getDate: "+oObj.getDate()+" , expected 19000101");
+            System.out.println("getDate: " + oObj.getDate() + " , expected 1900-01-01");
         }
 
         tRes.tested("setDate()", result) ;
@@ -100,9 +101,9 @@ public class _XDateField extends MultiMethodTest {
     public void _setMin() {
 
         boolean result = true ;
-        oObj.setMin(4978) ;
+        oObj.setMin(new Date((short)5, (short)2, (short)1963));
 
-        result = oObj.getMin() == 4978 ;
+        result = oObj.getMin() == new Date((short)5, (short)2, (short)1963);
 
         tRes.tested("setMin()", result) ;
     }
@@ -130,9 +131,9 @@ public class _XDateField extends MultiMethodTest {
     public void _setMax() {
 
         boolean result = true ;
-        oObj.setMax(27856) ;
+        oObj.setMax(new Date((short)18, (short)9, (short)2117)) ;
 
-        result = oObj.getMax() == 27856 ;
+        result = oObj.getMax() == new Date((short)18, (short)9, (short)2117) ;
 
         tRes.tested("setMax()", result) ;
     }
@@ -160,9 +161,9 @@ public class _XDateField extends MultiMethodTest {
     public void _setFirst() {
 
         boolean result = true ;
-        oObj.setFirst(5118) ;
+        oObj.setFirst(new Date((short)7, (short)12, (short)1972)) ;
 
-        result = oObj.getFirst() == 5118 ;
+        result = oObj.getFirst() == new Date((short)7, (short)12, (short)1972) ;
 
         if (!result) {
             log.println("Set to " + 5118 + " but returned " + oObj.getFirst()) ;
@@ -178,7 +179,7 @@ public class _XDateField extends MultiMethodTest {
     public void _getFirst() {
 
         boolean result = true ;
-        int val = oObj.getFirst() ;
+        com.sun.star.util.Date val = oObj.getFirst() ;
 
         log.println("getFirst() = " + val) ;
 
@@ -196,12 +197,12 @@ public class _XDateField extends MultiMethodTest {
     public void _setLast() {
 
         boolean result = true ;
-        oObj.setLast(23450) ;
+        oObj.setLast(new Date((short)23, (short)8, (short)2053)) ;
 
-        result = oObj.getLast() == 23450 ;
+        result = oObj.getLast() == new Date((short)23, (short)8, (short)2053) ;
 
         if (!result) {
-            log.println("Set to " + 23450 + " but returned " + oObj.getLast()) ;
+            log.println("Set to 2053-08-23 but returned " + oObj.getLast()) ;
         }
 
         tRes.tested("setLast()", result) ;
@@ -214,7 +215,7 @@ public class _XDateField extends MultiMethodTest {
     public void _getLast() {
 
         boolean result = true ;
-        int val = oObj.getLast() ;
+        com.sun.star.util.Date val = oObj.getLast() ;
 
         log.println("getLast() = " + val) ;
 

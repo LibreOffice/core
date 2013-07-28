@@ -167,7 +167,7 @@ OUString SAL_CALL OTimeModel::getServiceName() throw ( ::com::sun::star::uno::Ru
 void OTimeModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
     BEGIN_DESCRIBE_PROPERTIES( 4, OEditBaseModel )
-        DECL_PROP3(DEFAULT_TIME,            sal_Int32,              BOUND, MAYBEDEFAULT, MAYBEVOID);
+        DECL_PROP3(DEFAULT_TIME,            util::Time,             BOUND, MAYBEDEFAULT, MAYBEVOID);
         DECL_PROP1(TABINDEX,                sal_Int16,              BOUND);
         DECL_PROP1(FORMATKEY,               sal_Int32,              TRANSIENT);
         DECL_IFACE_PROP2(FORMATSSUPPLIER,   XNumberFormatsSupplier, READONLY, TRANSIENT);
@@ -274,48 +274,21 @@ sal_Bool OTimeModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
 }
 
 //------------------------------------------------------------------------------
-void OTimeModel::impl_translateControlValueToUNOTime( Any& _rUNOValue ) const
-{
-    _rUNOValue = getControlValue();
-    if ( _rUNOValue.hasValue() )
-    {
-        sal_Int64 nTime = 0;
-        OSL_VERIFY( _rUNOValue >>= nTime );
-        if ( nTime == ::Time( 99, 99, 99 ).GetTime() )
-            // "invalid time" in VCL is different from "invalid time" in UNO
-            _rUNOValue.clear();
-        else
-            _rUNOValue <<= DBTypeConversion::toTime( nTime );
-    }
-}
-
-//------------------------------------------------------------------------------
 Any OTimeModel::translateControlValueToExternalValue( ) const
 {
-    Any aExternalValue;
-    impl_translateControlValueToUNOTime( aExternalValue );
-    return aExternalValue;
+    return getControlValue();
 }
 
 //------------------------------------------------------------------------------
 Any OTimeModel::translateExternalValueToControlValue( const Any& _rExternalValue ) const
 {
-    Any aControlValue;
-    if ( _rExternalValue.hasValue() )
-    {
-        util::Time aTime;
-        OSL_VERIFY( _rExternalValue >>= aTime );
-        aControlValue <<= DBTypeConversion::toINT64( aTime );
-    }
-    return aControlValue;
+    return _rExternalValue;
 }
 
 //------------------------------------------------------------------------------
 Any OTimeModel::translateControlValueToValidatableValue( ) const
 {
-    Any aValidatableValue;
-    impl_translateControlValueToUNOTime( aValidatableValue );
-    return aValidatableValue;
+    return getControlValue();
 }
 
 //------------------------------------------------------------------------------
@@ -325,9 +298,7 @@ Any OTimeModel::translateDbColumnToControlValue()
     if ( m_xColumn->wasNull() )
         m_aSaveValue.clear();
     else
-        // TODO FIXME: "the aggregated set expects an Int32 as value ..."
-        //             need to fix it for int64
-        m_aSaveValue <<= DBTypeConversion::toINT64( aTime );
+        m_aSaveValue <<= aTime;
 
     return m_aSaveValue;
 }
