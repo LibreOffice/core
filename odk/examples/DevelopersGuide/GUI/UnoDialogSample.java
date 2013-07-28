@@ -627,7 +627,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
         return xTextComponent;
     }
 
-    public XPropertySet insertTimeField(int _nPosX, int _nPosY, int _nWidth, int _nTime, int _nTimeMin, int _nTimeMax){
+    public XPropertySet insertTimeField(int _nPosX, int _nPosY, int _nWidth, long _nTime, long _nTimeMin, long _nTimeMax){
         XPropertySet xTFModelPSet = null;
         try{
             // create a unique name by means of an own implementation...
@@ -649,9 +649,9 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
             // The following properties may also be set with XMultiPropertySet but we
             // use the XPropertySet interface merely for reasons of demonstration
             xTFModelPSet.setPropertyValue("TimeFormat", new Short((short) 5));
-            xTFModelPSet.setPropertyValue("TimeMin", new Integer(_nTimeMin));
-            xTFModelPSet.setPropertyValue("TimeMax", new Integer(_nTimeMax));
-            xTFModelPSet.setPropertyValue("Time", new Integer(_nTime));
+            xTFModelPSet.setPropertyValue("TimeMin", new Long(_nTimeMin));
+            xTFModelPSet.setPropertyValue("TimeMax", new Long(_nTimeMax));
+            xTFModelPSet.setPropertyValue("Time", new Long(_nTime));
         } catch (com.sun.star.uno.Exception ex) {
             /* perform individual exception handling here.
              * Possible exception types are:

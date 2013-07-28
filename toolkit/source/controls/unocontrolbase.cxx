@@ -112,59 +112,56 @@ void UnoControlBase::ImplSetPropertyValue( const OUString& aPropertyName, const 
         return ::com::sun::star::uno::Any();
 }
 
-sal_Bool UnoControlBase::ImplGetPropertyValue_BOOL( sal_uInt16 nProp )
+template <typename T> T UnoControlBase::ImplGetPropertyValuePOD( sal_uInt16 nProp )
 {
-    sal_Bool b = sal_False;
+    T t(0);
     if ( mxModel.is() )
     {
         ::com::sun::star::uno::Any aVal = ImplGetPropertyValue( GetPropertyName( nProp ) );
-        aVal >>= b;
+        aVal >>= t;
     }
-    return b;
+    return t;
+}
+
+template <typename T> T UnoControlBase::ImplGetPropertyValueClass( sal_uInt16 nProp )
+{
+    T t;
+    if ( mxModel.is() )
+    {
+        ::com::sun::star::uno::Any aVal = ImplGetPropertyValue( GetPropertyName( nProp ) );
+        aVal >>= t;
+    }
+    return t;
+}
+
+sal_Bool UnoControlBase::ImplGetPropertyValue_BOOL( sal_uInt16 nProp )
+{
+    return ImplGetPropertyValuePOD<sal_Bool>(nProp);
 }
 
 sal_Int16 UnoControlBase::ImplGetPropertyValue_INT16( sal_uInt16 nProp )
 {
-    sal_Int16 n = 0;
-    if ( mxModel.is() )
-    {
-        ::com::sun::star::uno::Any aVal = ImplGetPropertyValue( GetPropertyName( nProp ) );
-        aVal >>= n;
-    }
-    return n;
+    return ImplGetPropertyValuePOD<sal_Int16>(nProp);
 }
 
 sal_Int32 UnoControlBase::ImplGetPropertyValue_INT32( sal_uInt16 nProp )
 {
-    sal_Int32 n = 0;
-    if ( mxModel.is() )
-    {
-        ::com::sun::star::uno::Any aVal = ImplGetPropertyValue( GetPropertyName( nProp ) );
-        aVal >>= n;
-    }
-    return n;
+    return ImplGetPropertyValuePOD<sal_Int32>(nProp);
+}
+
+sal_Int64 UnoControlBase::ImplGetPropertyValue_INT64( sal_uInt16 nProp )
+{
+    return ImplGetPropertyValuePOD<sal_Int64>(nProp);
 }
 
 double UnoControlBase::ImplGetPropertyValue_DOUBLE( sal_uInt16 nProp )
 {
-    double n = 0;
-    if ( mxModel.is() )
-    {
-        ::com::sun::star::uno::Any aVal = ImplGetPropertyValue( GetPropertyName( nProp ) );
-        aVal >>= n;
-    }
-    return n;
+    return ImplGetPropertyValuePOD<double>(nProp);
 }
 
 OUString UnoControlBase::ImplGetPropertyValue_UString( sal_uInt16 nProp )
 {
-    OUString aStr;
-    if ( mxModel.is() )
-    {
-        ::com::sun::star::uno::Any aVal = ImplGetPropertyValue( GetPropertyName( nProp ) );
-        aVal >>= aStr;
-    }
-    return aStr;
+    return ImplGetPropertyValueClass<OUString>(nProp);
 }
 
 ::com::sun::star::awt::Size UnoControlBase::Impl_getMinimumSize()
