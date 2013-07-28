@@ -1905,7 +1905,7 @@ void WinSalFrame::SetScreenNumber( unsigned int nNewScreen )
 
 void WinSalFrame::SetApplicationID( const OUString &rApplicationID )
 {
-    if( aSalShlData.maVersionInfo.dwMajorVersion >= 6 )
+    if ( aSalShlData.mbW7 )
     {
         // http://msdn.microsoft.com/en-us/library/windows/desktop/dd378430(v=vs.85).aspx
         // A window's properties must be removed before the window is closed.
@@ -1915,7 +1915,6 @@ void WinSalFrame::SetApplicationID( const OUString &rApplicationID )
         pSHGetPropertyStoreForWindow = ( SHGETPROPERTYSTOREFORWINDOW )GetProcAddress(
                                        GetModuleHandleW (L"shell32.dll"), "SHGetPropertyStoreForWindow" );
 
-        // A mere presence of the symbol means we are at least on Windows 7 or Windows Server 2008 R2
         if( pSHGetPropertyStoreForWindow )
         {
             IPropertyStore *pps;

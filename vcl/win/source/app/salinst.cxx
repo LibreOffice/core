@@ -493,6 +493,7 @@ SalInstance* CreateSalInstance()
 
     // determine the windows version
     aSalShlData.mbWXP        = 0;
+    aSalShlData.mbW7         = 0;
     memset( &aSalShlData.maVersionInfo, 0, sizeof(aSalShlData.maVersionInfo) );
     aSalShlData.maVersionInfo.dwOSVersionInfoSize = sizeof( aSalShlData.maVersionInfo );
     if ( GetVersionEx( &aSalShlData.maVersionInfo ) )
@@ -501,6 +502,10 @@ SalInstance* CreateSalInstance()
         if ( aSalShlData.maVersionInfo.dwMajorVersion > 5 ||
            ( aSalShlData.maVersionInfo.dwMajorVersion == 5 && aSalShlData.maVersionInfo.dwMinorVersion >= 1 ) )
             aSalShlData.mbWXP = 1;
+    // Windows 7 ?
+    if ( aSalShlData.maVersionInfo.dwMajorVersion > 6 ||
+       ( aSalShlData.maVersionInfo.dwMajorVersion == 6 && aSalShlData.maVersionInfo.dwMinorVersion >= 1 ) )
+        aSalShlData.mbW7 = 1;
     }
 
     pSalData->mnAppThreadId = GetCurrentThreadId();
@@ -1030,7 +1035,7 @@ void* WinSalInstance::GetConnectionIdentifier( ConnectionIdentifierType& rReturn
       @param aFileUrl
                 The file url of the document.
 */
-void WinSalInstance::AddToRecentDocumentList(const OUString& rFileUrl, const OUString& /*rMimeType*/, const OUString& /* rDocumentService */)
+void WinSalInstance::AddToRecentDocumentList(const OUString& rFileUrl, const OUString& /*rMimeType*/, const OUString& rDocumentService)
 {
     OUString system_path;
     osl::FileBase::RC rc = osl::FileBase::getSystemPathFromFileURL(rFileUrl, system_path);
@@ -1038,7 +1043,64 @@ void WinSalInstance::AddToRecentDocumentList(const OUString& rFileUrl, const OUS
     OSL_ENSURE(osl::FileBase::E_None == rc, "Invalid file url");
 
     if (osl::FileBase::E_None == rc)
+    {
+        if ( aSalShlData.mbW7 )
+        {
+            typedef HRESULT ( WINAPI *SHCREATEITEMFROMPARSINGNAME )( PCWSTR, IBindCtx*, REFIID, void **ppv );
+            SHCREATEITEMFROMPARSINGNAME pSHCreateItemFromParsingName =
+                                        ( SHCREATEITEMFROMPARSINGNAME )GetProcAddress(
+                                        GetModuleHandleW (L"shell32.dll"), "SHCreateItemFromParsingName" );
+
+            if( pSHCreateItemFromParsingName )
+            {
+                IShellItem* pShellItem = NULL;
+
+                HRESULT hr = pSHCreateItemFromParsingName ( system_path.getStr(), NULL, IID_PPV_ARGS(&pShellItem) );
+
+                if ( SUCCEEDED(hr) && pShellItem )
+                {
+                    OUString sApplicationName;
+
+                    if ( rDocumentService == "com.sun.star.text.TextDocument" ||
+                         rDocumentService == "com.sun.star.text.GlobalDocument" ||
+                         rDocumentService == "com.sun.star.text.WebDocument" ||
+                         rDocumentService == "com.sun.star.xforms.XMLFormDocument" )
+                        sApplicationName = "Writer";
+                    else if ( rDocumentService == "com.sun.star.sheet.SpreadsheetDocument" ||
+                         rDocumentService == "com.sun.star.chart2.ChartDocument" )
+                        sApplicationName = "Calc";
+                    else if ( rDocumentService == "com.sun.star.presentation.PresentationDocument" )
+                        sApplicationName = "Impress";
+                    else if ( rDocumentService == "com.sun.star.drawing.DrawingDocument" )
+                        sApplicationName = "Draw";
+                    else if ( rDocumentService == "com.sun.star.formula.FormulaProperties" )
+                        sApplicationName = "Math";
+                    else if ( rDocumentService == "com.sun.star.sdb.DatabaseDocument" ||
+                         rDocumentService == "com.sun.star.sdb.OfficeDatabaseDocument" ||
+                         rDocumentService == "com.sun.star.sdb.RelationDesign" ||
+                         rDocumentService == "com.sun.star.sdb.QueryDesign" ||
+                         rDocumentService == "com.sun.star.sdb.TableDesign" ||
+                         rDocumentService == "com.sun.star.sdb.DataSourceBrowser" )
+                        sApplicationName = "Base";
+
+                    if ( !sApplicationName.isEmpty() )
+                    {
+                        OUString sApplicationID("TheDocumentFoundation.LibreOffice.");
+                        sApplicationID += sApplicationName;
+
+                        SHARDAPPIDINFO info;
+                        info.psi = pShellItem;
+                        info.pszAppID = sApplicationID.getStr();
+
+                        SHAddToRecentDocs ( SHARD_APPIDINFO, &info );
+                        return;
+                    }
+                }
+            }
+        }
+        // For whatever reason, we could not use the SHARD_APPIDNFO semantics
         SHAddToRecentDocs(SHARD_PATHW, system_path.getStr());
+    }
 }
 
 // -----------------------------------------------------------------------
