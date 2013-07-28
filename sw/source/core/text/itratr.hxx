@@ -72,6 +72,9 @@ protected:
             aMagicNo[SW_LATIN] = aMagicNo[SW_CJK] = aMagicNo[SW_CTL] = NULL;
         }
 
+    /// Implementation of the considering public methods (to avoid recursion)
+    sal_Bool ImplSeekAndChgAttrIter( const xub_StrLen nNewPos, OutputDevice* pOut );
+    sal_Bool ImplSeekStartAndChgAttrIter( OutputDevice* pOut, const sal_Bool bParaFont );
 public:
     // Constructor, destructor
     inline SwAttrIter( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf )
@@ -83,18 +86,28 @@ public:
     inline SwRedlineItr *GetRedln() { return pRedln; }
     // The parameter returns the position of the next change before or at the
     // char position.
-    // Returns sal_False, if there's no change before or at the positon,
-    // else sal_True.
     xub_StrLen GetNextAttr( ) const;
-    // Enables the attributes used at char pos nPos in the logical font
+    /// Enables the attributes used at char pos nPos in the logical font
     sal_Bool Seek( const xub_StrLen nPos );
     // Creates the font at the specified position via Seek() and checks
     // if it's a symbol font.
     sal_Bool IsSymbol( const xub_StrLen nPos );
 
-    // Executes ChgPhysFnt if Seek() returns sal_True
+    /** Executes ChgPhysFnt if Seek() returns sal_True
+     *  and change font to merge character border with neighbours.
+    **/
     sal_Bool SeekAndChgAttrIter( const xub_StrLen nPos, OutputDevice* pOut );
     sal_Bool SeekStartAndChgAttrIter( OutputDevice* pOut, const sal_Bool bParaFont = sal_False );
+
+    /** Merge character border with removing left/right border of the font if the
+     *  the neighbours of the current position (nPos) has the same height
+     *  and same kind of border.
+     *  @param      bStart  true if it is called from SeekStartAndChgAttrIter
+     *                      false, otherwise
+     *  @return     true,   if font change (removing some of its borders)
+     *              false,  otherwise
+    **/
+    bool MergeCharBorder( const bool bStart );
 
     // Do we have an attribute change at all?
     inline sal_Bool HasHints() const { return 0 != pHints; }

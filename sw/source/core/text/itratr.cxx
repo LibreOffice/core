@@ -122,6 +122,12 @@ SwTxtAttr *SwAttrIter::GetAttr( const xub_StrLen nPosition ) const
 
 sal_Bool SwAttrIter::SeekAndChgAttrIter( const xub_StrLen nNewPos, OutputDevice* pOut )
 {
+    sal_Bool bRet = ImplSeekAndChgAttrIter(nNewPos, pOut);
+    return MergeCharBorder(false) || bRet;
+}
+
+sal_Bool SwAttrIter::ImplSeekAndChgAttrIter( const xub_StrLen nNewPos, OutputDevice* pOut )
+{
     sal_Bool bChg = nStartIndex && nNewPos == nPos ? pFnt->IsFntChg() : Seek( nNewPos );
     if ( pLastOut != pOut )
     {
@@ -138,6 +144,7 @@ sal_Bool SwAttrIter::SeekAndChgAttrIter( const xub_StrLen nNewPos, OutputDevice*
                 aFntIdx[ pFnt->GetActual() ], pFnt->GetActual() );
         pFnt->ChgPhysFnt( pShell, *pOut );
     }
+
     return bChg;
 }
 
@@ -153,8 +160,13 @@ sal_Bool SwAttrIter::IsSymbol( const xub_StrLen nNewPos )
 /*************************************************************************
  *                        SwAttrIter::SeekStartAndChg()
  *************************************************************************/
-
 sal_Bool SwAttrIter::SeekStartAndChgAttrIter( OutputDevice* pOut, const sal_Bool bParaFont )
+{
+    sal_Bool bRet = ImplSeekStartAndChgAttrIter( pOut, bParaFont );
+    return bParaFont ? bRet : MergeCharBorder(true) || bRet;
+}
+
+sal_Bool SwAttrIter::ImplSeekStartAndChgAttrIter( OutputDevice* pOut, const sal_Bool bParaFont )
 {
     if ( pRedln && pRedln->ExtOn() )
         pRedln->LeaveExtend( *pFnt, 0 );
@@ -246,6 +258,7 @@ void SwAttrIter::SeekFwd( const xub_StrLen nNewPos )
     while ( ( nStartIndex < pHints->GetStartCount() ) &&
            (*(pTxtAttr=pHints->GetStart(nStartIndex))->GetStart()<=nNewPos))
     {
+
         // oeffne die TextAttribute, deren Ende hinter der neuen Position liegt
         if ( *pTxtAttr->GetAnyEnd() > nNewPos )  Chg( pTxtAttr );
         nStartIndex++;
@@ -351,6 +364,62 @@ xub_StrLen SwAttrIter::GetNextAttr( ) const
     if( pRedln )
         return pRedln->GetNextRedln( nNext );
     return nNext;
+}
+
+static bool lcl_HasMergeableBorder(const SwFont& rFirst, const SwFont& rSecond)
+{
+    return
+        rFirst.GetTopBorder() == rSecond.GetTopBorder() &&
+        rFirst.GetBottomBorder() == rSecond.GetBottomBorder() &&
+        rFirst.GetLeftBorder() == rSecond.GetLeftBorder() &&
+        rFirst.GetRightBorder() == rSecond.GetRightBorder();
+}
+
+bool SwAttrIter::MergeCharBorder( const bool bStart )
+{
+    const xub_StrLen nActPos = nPos;
+    bool bRemoveLeft = false;
+    bool bRemoveRight = false;
+    SwFont aTmpFont = *pFnt;
+    const sal_Int32 nTmpStart = nStartIndex;
+
+    // Check whether next neightbour has same border and height
+    if( aTmpFont.GetRightBorder() && pHints && nTmpStart < pHints->GetStartCount() )
+    {
+        ImplSeekAndChgAttrIter(GetNextAttr(), pLastOut);
+        if( aTmpFont.GetHeight(pShell, *pLastOut) == pFnt->GetHeight(pShell, *pLastOut) &&
+            lcl_HasMergeableBorder(aTmpFont, *pFnt) )
+        {
+            bRemoveRight = true;
+        }
+    }
+
+    // Check whether previous neightbour has same border and height
+    if( aTmpFont.GetLeftBorder() && nTmpStart > 1)
+    {
+        ImplSeekAndChgAttrIter(nActPos-1, pLastOut);
+        if( aTmpFont.GetHeight(pShell, *pLastOut) == pFnt->GetHeight(pShell, *pLastOut) &&
+            lcl_HasMergeableBorder(aTmpFont, *pFnt) )
+        {
+            bRemoveLeft = true;
+        }
+    }
+
+    // If the iterator changed its position, than we have to reset it.
+    if( nPos != nActPos )
+    {
+        if( bStart )
+            ImplSeekStartAndChgAttrIter(pLastOut, false);
+        else
+            ImplSeekAndChgAttrIter(nActPos, pLastOut);
+    }
+
+    if( bRemoveRight )
+        pFnt->SetRightBorder(0);
+    if( bRemoveLeft )
+        pFnt->SetLeftBorder(0);
+
+    return bRemoveLeft || bRemoveRight;
 }
 
 class SwMinMaxArgs
