@@ -540,7 +540,6 @@ void SAL_CALL PieChartTypeTemplate::applyStyle(
     }
 }
 
-
 void SAL_CALL PieChartTypeTemplate::resetStyles( const Reference< chart2::XDiagram >& xDiagram )
     throw (uno::RuntimeException)
 {
@@ -616,8 +615,6 @@ void PieChartTypeTemplate::adaptDiagram( const uno::Reference< chart2::XDiagram 
     //different default for scene geometry:
     ThreeDHelper::setDefaultRotation( uno::Reference< beans::XPropertySet >( xDiagram, uno::UNO_QUERY ), true );
 }
-
-// ----------------------------------------
 
 uno::Sequence< OUString > PieChartTypeTemplate::getSupportedServiceNames_Static()
 {

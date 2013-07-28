@@ -25,7 +25,6 @@
 #include <cppuhelper/implbase1.hxx>
 #include <svx/AccessibleShapeTreeInfo.hxx>
 
-
 namespace accessibility
 {
 class AccessibleShape;

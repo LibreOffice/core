@@ -30,10 +30,8 @@
 
 class SfxToolBoxControl;
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 typedef ::cppu::ImplHelper2 < ::com::sun::star::lang::XServiceInfo,
                               ::com::sun::star::frame::XSubToolbarController> ShapeToolbarController_Base;
@@ -87,9 +85,7 @@ public:
     virtual void SAL_CALL updateImage() throw (::com::sun::star::uno::RuntimeException);
 };
 
-//.............................................................................
 } //  namespace chart
-//.............................................................................
 
 #endif //CHART2_SHAPETOOLBARCONTROLLER_HXX
 

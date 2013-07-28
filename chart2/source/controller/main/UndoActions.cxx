@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "UndoActions.hxx"
 #include "DisposeHelper.hxx"
 #include "CommonFunctors.hxx"
@@ -36,7 +35,6 @@
 #include <algorithm>
 
 using namespace ::com::sun::star;
-
 
 namespace chart
 {
@@ -61,7 +59,6 @@ namespace impl
     using ::com::sun::star::chart2::XChartDocument;
     using ::com::sun::star::document::UndoFailedException;
 
-// ---------------------------------------------------------------------------------------------------------------------
 UndoElement::UndoElement( const OUString& i_actionString, const Reference< XModel >& i_documentModel, const ::boost::shared_ptr< ChartModelClone >& i_modelClone )
     :UndoElement_MBase()
     ,UndoElement_TBase( m_aMutex )
@@ -71,12 +68,10 @@ UndoElement::UndoElement( const OUString& i_actionString, const Reference< XMode
 {
 }
 
-// ---------------------------------------------------------------------------------------------------------------------
 UndoElement::~UndoElement()
 {
 }
 
-// ---------------------------------------------------------------------------------------------------------------------
 void SAL_CALL UndoElement::disposing()
 {
     if ( !!m_pModelClone )
@@ -85,13 +80,11 @@ void SAL_CALL UndoElement::disposing()
     m_xDocumentModel.clear();
 }
 
-// ---------------------------------------------------------------------------------------------------------------------
 OUString SAL_CALL UndoElement::getTitle() throw (RuntimeException)
 {
     return m_sActionString;
 }
 
-// ---------------------------------------------------------------------------------------------------------------------
 void UndoElement::impl_toggleModelState()
 {
     // get a snapshot of the current state of our model
@@ -102,23 +95,18 @@ void UndoElement::impl_toggleModelState()
     m_pModelClone = pNewClone;
 }
 
-// ---------------------------------------------------------------------------------------------------------------------
 void SAL_CALL UndoElement::undo(  ) throw (UndoFailedException, RuntimeException)
 {
     impl_toggleModelState();
 }
 
-// ---------------------------------------------------------------------------------------------------------------------
 void SAL_CALL UndoElement::redo(  ) throw (UndoFailedException, RuntimeException)
 {
     impl_toggleModelState();
 }
 
-// =====================================================================================================================
 // = ShapeUndoElement
-// =====================================================================================================================
 
-// ---------------------------------------------------------------------------------------------------------------------
 ShapeUndoElement::ShapeUndoElement( SdrUndoAction& i_sdrUndoAction )
     :ShapeUndoElement_MBase()
     ,ShapeUndoElement_TBase( m_aMutex )
@@ -126,12 +114,10 @@ ShapeUndoElement::ShapeUndoElement( SdrUndoAction& i_sdrUndoAction )
 {
 }
 
-// ---------------------------------------------------------------------------------------------------------------------
 ShapeUndoElement::~ShapeUndoElement()
 {
 }
 
-// ---------------------------------------------------------------------------------------------------------------------
 OUString SAL_CALL ShapeUndoElement::getTitle() throw (RuntimeException)
 {
     if ( !m_pAction )
@@ -139,7 +125,6 @@ OUString SAL_CALL ShapeUndoElement::getTitle() throw (RuntimeException)
     return m_pAction->GetComment();
 }
 
-// ---------------------------------------------------------------------------------------------------------------------
 void SAL_CALL ShapeUndoElement::undo(  ) throw (UndoFailedException, RuntimeException)
 {
     if ( !m_pAction )
@@ -147,7 +132,6 @@ void SAL_CALL ShapeUndoElement::undo(  ) throw (UndoFailedException, RuntimeExce
     m_pAction->Undo();
 }
 
-// ---------------------------------------------------------------------------------------------------------------------
 void SAL_CALL ShapeUndoElement::redo(  ) throw (UndoFailedException, RuntimeException)
 {
     if ( !m_pAction )
@@ -155,7 +139,6 @@ void SAL_CALL ShapeUndoElement::redo(  ) throw (UndoFailedException, RuntimeExce
     m_pAction->Redo();
 }
 
-// ---------------------------------------------------------------------------------------------------------------------
 void SAL_CALL ShapeUndoElement::disposing()
 {
 }

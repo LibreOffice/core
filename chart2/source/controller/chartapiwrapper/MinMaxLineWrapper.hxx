@@ -24,7 +24,6 @@
 #include "WrappedIgnoreProperty.hxx"
 #include <cppuhelper/interfacecontainer.hxx>
 
-
 #include <com/sun/star/chart2/XDiagram.hpp>
 
 // header for class OPropertyArrayHelper

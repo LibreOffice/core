@@ -30,7 +30,6 @@
 
 #include <memory>
 
-
 namespace chart
 {
 

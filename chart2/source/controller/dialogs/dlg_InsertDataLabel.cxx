@@ -17,17 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "dlg_InsertDataLabel.hxx"
 #include "dlg_InsertDataLabel.hrc"
 #include "ResId.hxx"
 #include "ObjectNameProvider.hxx"
 #include "res_DataLabel.hxx"
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 DataLabelsDialog::DataLabelsDialog(Window* pWindow, const SfxItemSet& rInAttrs, SvNumberFormatter* pFormatter) :
     ModalDialog(pWindow, SchResId(DLG_DATA_DESCR)),
@@ -58,8 +55,6 @@ void DataLabelsDialog::FillItemSet(SfxItemSet& rOutAttrs)
     m_apDataLabelResources->FillItemSet(rOutAttrs);
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

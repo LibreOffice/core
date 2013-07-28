@@ -51,8 +51,6 @@ using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 
-//-----------------------------------------------------------------------------
-
 namespace chart
 {
 class WrappedLegendAlignmentProperty : public WrappedProperty
@@ -209,7 +207,6 @@ Any WrappedLegendAlignmentProperty::convertOuterToInnerValue( const Any& rOuterV
     return uno::makeAny( eNewPos );
 }
 }
-//-----------------------------------------------------------------------------
 
 namespace
 {
@@ -271,8 +268,6 @@ struct StaticLegendWrapperPropertyArray : public rtl::StaticAggregate< Sequence<
 };
 
 } // anonymous namespace
-
-// --------------------------------------------------------------------------------
 
 namespace chart
 {
@@ -368,8 +363,6 @@ void SAL_CALL LegendWrapper::removeEventListener(
     m_aEventListenerContainer.removeInterface( aListener );
 }
 
-// ================================================================================
-
 //ReferenceSizePropertyProvider
 void LegendWrapper::updateReferenceSize()
 {
@@ -394,8 +387,6 @@ awt::Size LegendWrapper::getCurrentSizeForReference()
 {
     return m_spChart2ModelContact->GetPageSize();
 }
-
-// ================================================================================
 
 // WrappedPropertySet
 Reference< beans::XPropertySet > LegendWrapper::getInnerPropertySet()
@@ -428,8 +419,6 @@ const std::vector< WrappedProperty* > LegendWrapper::createWrappedProperties()
 
     return aWrappedProperties;
 }
-
-// ================================================================================
 
 Sequence< OUString > LegendWrapper::getSupportedServiceNames_Static()
 {

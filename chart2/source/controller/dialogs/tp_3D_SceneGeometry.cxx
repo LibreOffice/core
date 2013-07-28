@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "tp_3D_SceneGeometry.hxx"
 #include "tp_3D_SceneGeometry.hrc"
 #include "ResId.hxx"
@@ -31,10 +30,8 @@
 #include <editeng/unoprnms.hxx>
 #include <com/sun/star/drawing/ProjectionMode.hpp>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 using namespace ::com::sun::star;
 
@@ -134,7 +131,6 @@ ThreeD_SceneGeometry_TabPage::ThreeD_SceneGeometry_TabPage( Window* pWindow
     m_aMFPerspective.SetUpdateDataHdl( LINK( this, ThreeD_SceneGeometry_TabPage, PerspectiveChanged ) );
     m_aMFPerspective.SetModifyHdl( LINK( this, ThreeD_SceneGeometry_TabPage, PerspectiveEdited ) );
     m_aMFPerspective.Enable( m_aCbxPerspective.IsChecked() );
-
 
     //RightAngledAxes
     sal_Bool bRightAngledAxes = false;
@@ -282,8 +278,6 @@ IMPL_LINK_NOARG(ThreeD_SceneGeometry_TabPage, RightAngledAxesToggled)
     return 0;
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

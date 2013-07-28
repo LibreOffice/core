@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "BubbleChart.hxx"
 #include "PlottingPositionHelper.hxx"
 #include "ShapeFactory.hxx"
@@ -38,17 +37,11 @@
 #include <com/sun/star/drawing/NormalsKind.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 using namespace ::rtl::math;
 using namespace ::com::sun::star::chart2;
-
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 
 BubbleChart::BubbleChart( const uno::Reference<XChartType>& xChartTypeModel
                      , sal_Int32 nDimensionCount )
@@ -159,8 +152,6 @@ bool BubbleChart::isSeparateStackingForDifferentSigns( sal_Int32 /*nDimensionInd
     return false;
 }
 
-//-----------------------------------------------------------------
-
 LegendSymbolStyle BubbleChart::getLegendSymbolStyle()
 {
     return LegendSymbolStyle_CIRCLE;
@@ -230,7 +221,6 @@ void BubbleChart::createShapes()
     if( m_fMaxLogicBubbleSize <= 0 || m_fBubbleSizeFactorToScreen <= 0 )
         return;
 
-//=============================================================================
     //iterate through all x values per indices
     for( sal_Int32 nIndex = nStartIndex; nIndex < nEndIndex; nIndex++ )
     {
@@ -248,7 +238,6 @@ void BubbleChart::createShapes()
                 ::std::vector< VDataSeries* >::const_iterator       aSeriesIter = pSeriesList->begin();
                 const ::std::vector< VDataSeries* >::const_iterator aSeriesEnd  = pSeriesList->end();
 
-    //=============================================================================
                 //iterate through all series
                 for( sal_Int32 nSeriesIndex = 0; aSeriesIter != aSeriesEnd; ++aSeriesIter, ++nSeriesIndex )
                 {
@@ -373,7 +362,6 @@ void BubbleChart::createShapes()
                                 break;
                             }
 
-
                             awt::Point aScreenPosition2D( LabelPositionHelper(pPosHelper,m_nDimension,m_xLogicTarget,m_pShapeFactory)
                                 .transformSceneToScreenPosition( aScenePosition3D ) );
                             sal_Int32 nOffset = 0;
@@ -392,14 +380,9 @@ void BubbleChart::createShapes()
             }//next x slot
         }//next z slot
     }//next category
-//=============================================================================
-//=============================================================================
-//=============================================================================
     OSL_TRACE( "\nPPPPPPPPP<<<<<<<<<<<< area chart :: createShapes():: skipped points: %d created points: %d", nSkippedPoints, nCreatedPoints );
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

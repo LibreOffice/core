@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "RelativePositionHelper.hxx"
 #include <rtl/math.hxx>
 
@@ -119,7 +118,6 @@ chart2::RelativePosition RelativePositionHelper::getReanchoredPosition(
 
     return aResult;
 }
-
 
 awt::Point RelativePositionHelper::getUpperLeftCornerOfAnchoredObject(
       awt::Point aPoint

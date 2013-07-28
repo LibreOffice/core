@@ -158,7 +158,6 @@ private:
     ::osl::Mutex                                   m_aMutex;
 };
 
-// =============================================================================
 class XMLReportFilterHelper : public XMLFilter
 {
     virtual void isOasisFormat(const ::com::sun::star::uno::Sequence<

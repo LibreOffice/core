@@ -457,8 +457,6 @@ void SAL_CALL ErrorBar::setParent(
     m_xParent.set( Parent );
 }
 
-// ================================================================================
-
 uno::Sequence< OUString > ErrorBar::getSupportedServiceNames_Static()
 {
     uno::Sequence< OUString > aServices( 2 );

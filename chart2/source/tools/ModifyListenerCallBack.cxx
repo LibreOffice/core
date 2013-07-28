@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "ModifyListenerCallBack.hxx"
 #include "MutexContainer.hxx"
 #include <cppuhelper/compbase1.hxx>
@@ -54,7 +53,6 @@ private:
     Link m_aLink;//will be callef on modify
     Reference< util::XModifyBroadcaster > m_xBroadcaster;//broadcaster to listen at
 };
-
 
 ModifyListenerCallBack_impl::ModifyListenerCallBack_impl( const Link& rCallBack )
                         : ModifyListenerCallBack_Base( m_aMutex )
@@ -97,8 +95,6 @@ void ModifyListenerCallBack_impl::stopListening()
         m_xBroadcaster.clear();
     }
 }
-
-//-------------------------------------------
 
 ModifyListenerCallBack::ModifyListenerCallBack( const Link& rCallBack )
                         : pModifyListener_impl( new ModifyListenerCallBack_impl(rCallBack) )

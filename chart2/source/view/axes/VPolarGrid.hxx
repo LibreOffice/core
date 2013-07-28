@@ -24,21 +24,16 @@
 #include "VLineProperties.hxx"
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
-//-----------------------------------------------------------------------------
 /**
 */
 class PolarPlottingPositionHelper;
 
 class VPolarGrid : public VAxisOrGridBase
 {
-//-------------------------------------------------------------------------
 // public methods
-//-------------------------------------------------------------------------
 public:
     VPolarGrid( sal_Int32 nDimensionIndex, sal_Int32 nDimensionCount
         , const ::com::sun::star::uno::Sequence<
@@ -74,9 +69,7 @@ private: //member
                     , const ::std::vector<VLineProperties>& rLinePropertiesList );
 };
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

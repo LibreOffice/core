@@ -17,16 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "TimerTriggeredControllerLock.hxx"
 
 // header for define EDIT_UPDATEDATA_TIMEOUT
 #include <vcl/edit.hxx>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 using namespace ::com::sun::star;
 
@@ -55,8 +52,6 @@ IMPL_LINK_NOARG(TimerTriggeredControllerLock, TimerTimeout)
     return 0;
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

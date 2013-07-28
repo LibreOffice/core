@@ -270,8 +270,6 @@ Reference< chart2::XDataInterpreter > SAL_CALL BubbleChartTypeTemplate::getDataI
     return m_xDataInterpreter;
 }
 
-// ----------------------------------------
-
 Sequence< OUString > BubbleChartTypeTemplate::getSupportedServiceNames_Static()
 {
     Sequence< OUString > aServices( 2 );

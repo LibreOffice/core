@@ -27,10 +27,8 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 class LegendPositionResources
 {
@@ -47,7 +45,6 @@ public:
                        ::com::sun::star::frame::XModel >& xChartModel );
     void writeToModel( const ::com::sun::star::uno::Reference<
                        ::com::sun::star::frame::XModel >& xChartModel ) const;
-
 
     void initFromItemSet( const SfxItemSet& rInAttrs );
     void writeToItemSet( SfxItemSet& rOutAttrs ) const;
@@ -76,9 +73,7 @@ private:
     Link            m_aChangeLink;
 };
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 #endif
 

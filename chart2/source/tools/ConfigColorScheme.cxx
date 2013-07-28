@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "ConfigColorScheme.hxx"
 #include "ContainerHelper.hxx"
 #include "macros.hxx"
@@ -38,8 +37,6 @@ namespace
 static const OUString aSeriesPropName( "Series" );
 
 } // anonymous namespace
-
-// --------------------------------------------------------------------------------
 
 namespace chart
 {
@@ -108,8 +105,6 @@ uno::Any ChartConfigItem::getProperty( const OUString & aPropertyName )
 
 } // namespace impl
 
-// --------------------------------------------------------------------------------
-
 // explicit
 ConfigColorScheme::ConfigColorScheme(
     const Reference< uno::XComponentContext > & xContext ) :
@@ -174,8 +169,6 @@ void ConfigColorScheme::notify( const OUString & rPropertyName )
         m_bNeedsUpdate = true;
 }
 
-// ================================================================================
-
 Sequence< OUString > ConfigColorScheme::getSupportedServiceNames_Static()
 {
     Sequence< OUString > aServices( 1 );
@@ -186,8 +179,6 @@ Sequence< OUString > ConfigColorScheme::getSupportedServiceNames_Static()
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 APPHELPER_XSERVICEINFO_IMPL( ConfigColorScheme,
                              OUString("com.sun.star.comp.chart2.ConfigDefaultColorScheme") )
-
-// ================================================================================
 
 } //  namespace chart
 

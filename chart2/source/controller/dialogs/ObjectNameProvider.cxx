@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "ObjectNameProvider.hxx"
 #include "ResId.hxx"
 #include "Strings.hrc"
@@ -38,10 +37,8 @@
 #include <com/sun/star/chart2/XTitle.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
@@ -315,8 +312,6 @@ OUString ObjectNameProvider::getAxisName( const OUString& rObjectCID
 {
     OUString aRet;
 
-
-
     Reference< XAxis > xAxis(
         ObjectIdentifier::getObjectPropertySet( rObjectCID , xChartModel ), uno::UNO_QUERY );
 
@@ -411,7 +406,6 @@ OUString ObjectNameProvider::getGridName( const OUString& rObjectCID
                         , const uno::Reference< frame::XModel >& xChartModel )
 {
     OUString aRet;
-
 
     sal_Int32 nCooSysIndex = -1;
     sal_Int32 nDimensionIndex = -1;
@@ -714,7 +708,6 @@ OUString ObjectNameProvider::getSelectedObjectText( const OUString & rObjectCID,
     return aRet;
 }
 
-
 OUString ObjectNameProvider::getNameForCID(
     const OUString& rObjectCID,
     const uno::Reference< chart2::XChartDocument >& xChartDocument )
@@ -794,8 +787,6 @@ OUString ObjectNameProvider::getName_ObjectForAllSeries( ObjectType eObjectType 
     return aRet;
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

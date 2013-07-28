@@ -88,10 +88,7 @@ Sequence< OUString > PolarCoordinateSystem::getSupportedServiceNames_Static()
 APPHELPER_XSERVICEINFO_IMPL( PolarCoordinateSystem,
                              OUString("com.sun.star.comp.chart.PolarCoordinateSystem") )
 
-
-// =================================
 // ==== PolarCoordinateSystem2d ====
-// =================================
 
 PolarCoordinateSystem2d::PolarCoordinateSystem2d(
     const uno::Reference< uno::XComponentContext > & xContext ) :
@@ -113,9 +110,7 @@ Sequence< OUString > PolarCoordinateSystem2d::getSupportedServiceNames_Static()
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 APPHELPER_XSERVICEINFO_IMPL( PolarCoordinateSystem2d, lcl_aImplementationNamePolar2d )
 
-// =================================
 // ==== PolarCoordinateSystem3d ====
-// =================================
 
 PolarCoordinateSystem3d::PolarCoordinateSystem3d(
     const uno::Reference< uno::XComponentContext > & xContext ) :

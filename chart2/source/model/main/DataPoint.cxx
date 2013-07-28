@@ -38,8 +38,6 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::beans::Property;
 using ::osl::MutexGuard;
 
-// ____________________________________________________________
-
 namespace
 {
 
@@ -85,8 +83,6 @@ struct StaticDataPointInfo : public rtl::StaticAggregate< uno::Reference< beans:
 };
 
 } // anonymous namespace
-
-// ____________________________________________________________
 
 namespace chart
 {

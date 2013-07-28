@@ -53,8 +53,6 @@ protected:
         throw (::com::sun::star::uno::RuntimeException);
 };
 
-//-------------------------------------------------------------------------------------
-
 class NetChartType : public NetChartType_Base
 {
 public:

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "ReferenceSizeProvider.hxx"
 #include "RelativeSizeHelper.hxx"
 #include "ChartModelHelper.hxx"
@@ -37,8 +36,6 @@ using namespace ::com::sun::star::chart2;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
-
-// ================================================================================
 
 namespace chart
 {
@@ -322,7 +319,6 @@ void ReferenceSizeProvider::toggleAutoResizeState()
 {
     setAutoResizeState( m_bUseAutoScale ? AUTO_RESIZE_NO : AUTO_RESIZE_YES );
 }
-
 
 /** sets the auto-resize at all objects that support this feature for text.
     eNewState must be either AUTO_RESIZE_YES or AUTO_RESIZE_NO

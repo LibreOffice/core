@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "RegressionCurveCalculator.hxx"
 #include "RegressionCalculationHelper.hxx"
 #include "servicenames_coosystems.hxx"
@@ -163,7 +162,6 @@ OUString SAL_CALL RegressionCurveCalculator::getFormattedRepresentation(
 
     return ImplGetRepresentation( xNumFormatter, nNumberFormatKey );
 }
-
 
 } //  namespace chart
 

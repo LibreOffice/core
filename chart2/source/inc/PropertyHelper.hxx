@@ -95,8 +95,6 @@ OOO_DLLPUBLIC_CHARTTOOLS OUString addBitmapUniqueNameToTable(
         ::com::sun::star::lang::XMultiServiceFactory > & xFact,
     const OUString & rPreferredName );
 
-// --------------------------------------------------------------------------------
-
 /** Set a property to a certain value in the given map.  This works for
     properties that are already set, and those which are not yet in the map.
 
@@ -142,10 +140,7 @@ template<>
  */
 OOO_DLLPUBLIC_CHARTTOOLS void setEmptyPropertyValueDefault( tPropertyValueMap & rOutMap, tPropertyValueMapKey key );
 
-
 } // namespace PropertyHelper
-
-// ================================================================================
 
 struct OOO_DLLPUBLIC_CHARTTOOLS PropertyNameLess
 {

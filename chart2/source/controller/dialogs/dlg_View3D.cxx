@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "dlg_View3D.hxx"
 #include "dlg_View3D.hrc"
 #include "Strings.hrc"
@@ -35,17 +34,11 @@
 // for RET_OK
 #include <vcl/msgbox.hxx>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
-
-//-----------------------------------------------------------------------------
-//-------------------------------------------------------------------
-//-------------------------------------------------------------------
 
 sal_uInt16 View3DDialog::m_nLastPageId = 0;
 
@@ -102,8 +95,6 @@ short View3DDialog::Execute()
     return nResult;
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

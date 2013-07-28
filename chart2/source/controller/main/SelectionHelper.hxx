@@ -27,14 +27,10 @@ class SdrObject;
 #include <svx/svdtypes.hxx>
 #include <com/sun/star/drawing/XShape.hpp>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 class ObjectIdentifier;
-
-//-----------------------------------------------------------------------------
 
 class Selection
 {
@@ -107,10 +103,8 @@ public:
                     , const ::com::sun::star::uno::Reference<
                         ::com::sun::star::frame::XModel >& xChartModel );
 
-
     SelectionHelper( SdrObject* pSelectedObj );
     virtual ~SelectionHelper();
-
 
     //MarkHandleProvider:
     virtual bool getMarkHandles( SdrHdlList& rHdlList );
@@ -124,9 +118,7 @@ private:
     SdrObject*      m_pMarkObj;//object that is marked instead to have more pretty handles
 };
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

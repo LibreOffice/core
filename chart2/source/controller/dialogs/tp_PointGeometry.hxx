@@ -22,10 +22,8 @@
 // header for SfxTabPage
 #include <sfx2/tabdlg.hxx>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 class BarGeometryResources;
 class SchLayoutTabPage : public SfxTabPage
@@ -42,9 +40,7 @@ private:
     BarGeometryResources*   m_pGeometryResources;
 };
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 #endif
 

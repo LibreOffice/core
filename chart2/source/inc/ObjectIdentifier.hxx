@@ -34,12 +34,9 @@
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
-//-----------------------------------------------------------------------------
 /**
 */
 enum ObjectType
@@ -131,7 +128,6 @@ public:
                     ::com::sun::star::chart2::XDiagram >& xDiagram
         , const ::com::sun::star::uno::Reference<
                     ::com::sun::star::frame::XModel >& xChartModel );
-
 
     static OUString createParticleForCoordinateSystem(
           const ::com::sun::star::uno::Reference<
@@ -263,9 +259,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > m_xAdditionalShape;
 };
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

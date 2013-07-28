@@ -121,7 +121,6 @@ bool RegressionCurveItemConverter::GetItemProperty(
     return false;
 }
 
-
 bool RegressionCurveItemConverter::ApplySpecialItem(
     sal_uInt16 nWhichId, const SfxItemSet & rItemSet )
     throw( uno::Exception )

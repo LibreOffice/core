@@ -26,10 +26,8 @@
 
 using namespace ::com::sun::star;
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 Stripe::Stripe( const drawing::Position3D& rPoint1
         , const drawing::Direction3D& rDirectionToPoint2
@@ -345,8 +343,6 @@ uno::Any Stripe::getTexturePolygon( short nRotatedTexture ) const
     return uno::Any( &aPP, ::getCppuType((const drawing::PolyPolygonShape3D*)0) );
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

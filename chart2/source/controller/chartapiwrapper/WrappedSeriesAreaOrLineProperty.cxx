@@ -17,15 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "WrappedSeriesAreaOrLineProperty.hxx"
 #include "DataSeriesPointWrapper.hxx"
 #include "macros.hxx"
 
 using ::com::sun::star::uno::Any;
 
-
-//.............................................................................
 namespace chart
 {
 namespace wrapper
@@ -56,6 +53,5 @@ OUString WrappedSeriesAreaOrLineProperty::getInnerName() const
 
 } //namespace wrapper
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

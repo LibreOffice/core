@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "AccessibleBase.hxx"
 #include "AccessibleChartShape.hxx"
 #include "ObjectHierarchy.hxx"
@@ -98,8 +97,6 @@ AccessibleBase::~AccessibleBase()
 {
     OSL_ASSERT( m_bIsDisposed );
 }
-
-// ________ public ________
 
 bool AccessibleBase::CheckDisposeState( bool bThrowException /* default: true */ ) const
     throw (lang::DisposedException)
@@ -221,8 +218,6 @@ void AccessibleBase::RemoveState( sal_Int16 aState )
     OSL_ASSERT( m_pStateSetHelper );
     m_pStateSetHelper->RemoveState( aState );
 }
-
-// ________ protected ________
 
 bool AccessibleBase::UpdateChildren()
 {
@@ -467,13 +462,6 @@ AccessibleUniqueId AccessibleBase::GetId() const
     return m_aAccInfo.m_aOID;
 }
 
-// ____________________________________
-// ____________________________________
-//
-//             Interfaces
-// ____________________________________
-// ____________________________________
-
 // ________ (XComponent::dispose) ________
 void SAL_CALL AccessibleBase::disposing()
 {
@@ -646,7 +634,6 @@ Reference< XAccessibleStateSet > SAL_CALL AccessibleBase::getAccessibleStateSet(
 
     return m_aStateSet;
 }
-
 
 lang::Locale SAL_CALL AccessibleBase::getLocale()
     throw (IllegalAccessibleComponentStateException, RuntimeException)

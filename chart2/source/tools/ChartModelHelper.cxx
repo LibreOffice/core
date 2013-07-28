@@ -36,10 +36,8 @@
 #include <com/sun/star/embed/XVisualObject.hpp>
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
@@ -135,7 +133,6 @@ uno::Reference< XCoordinateSystem > ChartModelHelper::getFirstCoordinateSystem( 
 {
     return getDataSeries( uno::Reference< chart2::XChartDocument >( xModel, uno::UNO_QUERY ));
 }
-
 
 uno::Reference< XChartType > ChartModelHelper::getChartTypeOfSeries(
                                 const uno::Reference< frame::XModel >& xModel
@@ -272,8 +269,6 @@ bool ChartModelHelper::setIncludeHiddenCells( bool bIncludeHiddenCells, const un
     return bChanged;
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -42,15 +42,10 @@
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
-
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 
 void lcl_getPositionAndSizeFromItemSet( const SfxItemSet& rItemSet, awt::Rectangle& rPosAndSize, const awt::Size aOriginalSize )
 {
@@ -150,7 +145,6 @@ void SAL_CALL ChartController::executeDispatch_PositionAndSize()
             m_pChartWindow, &aItemSet, pSdrView, RID_SCH_TransformTabDLG_SVXPAGE_ANGLE, bResizePossible );
         OSL_ENSURE( pDlg, "Couldn't create SchTransformTabDialog" );
 
-
         if( pDlg->Execute() == RET_OK )
         {
             const SfxItemSet* pOutItemSet = pDlg->GetOutputItemSet();
@@ -181,8 +175,6 @@ void SAL_CALL ChartController::executeDispatch_PositionAndSize()
     }
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

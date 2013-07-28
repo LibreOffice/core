@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "AccStatisticsObject.hxx"
 #include <vcl/svapp.hxx>
 #include <svx/svditer.hxx>

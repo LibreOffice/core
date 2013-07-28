@@ -23,16 +23,10 @@
 #include <rtl/math.hxx>
 #include <com/sun/star/chart2/DataPointLabel.hpp>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
-
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 
 PlotterBase::PlotterBase( sal_Int32 nDimensionCount )
         : m_xLogicTarget(NULL)
@@ -70,7 +64,6 @@ void PlotterBase::setScales( const std::vector< ExplicitScaleData >& rScales, bo
     OSL_PRECOND(m_nDimension<=static_cast<sal_Int32>(rScales.size()),"Dimension of Plotter does not fit two dimension of given scale sequence");
     m_pPosHelper->setScales( rScales, bSwapXAndYAxis );
 }
-
 
 void PlotterBase::setTransformationSceneToScreen( const drawing::HomogenMatrix& rMatrix)
 {
@@ -116,8 +109,6 @@ bool PlotterBase::isValidPosition( const drawing::Position3D& rPos )
     return true;
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

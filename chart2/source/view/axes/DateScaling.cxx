@@ -31,10 +31,8 @@ static const OUString lcl_aServiceName_InverseDateScaling( "com.sun.star.chart2.
 static const double lcl_fNumberOfMonths = 12.0;//todo: this needs to be offered by basic tools Date class if it should be more generic
 }
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 using ::com::sun::star::chart::TimeUnit::DAY;
@@ -112,8 +110,6 @@ uno::Sequence< OUString > DateScaling::getSupportedServiceNames_Static()
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 APPHELPER_XSERVICEINFO_IMPL( DateScaling, lcl_aServiceName_DateScaling )
-
-// ----------------------------------------
 
 InverseDateScaling::InverseDateScaling( const Date& rNullDate, sal_Int32 nTimeUnit, bool bShifted )
         : m_aNullDate( rNullDate )
@@ -194,8 +190,6 @@ uno::Sequence< OUString > InverseDateScaling::getSupportedServiceNames_Static()
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 APPHELPER_XSERVICEINFO_IMPL( InverseDateScaling, lcl_aServiceName_InverseDateScaling )
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

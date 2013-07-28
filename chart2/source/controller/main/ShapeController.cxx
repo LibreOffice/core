@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "ShapeController.hxx"
 #include "ShapeController.hrc"
 #include "ChartController.hxx"
@@ -51,10 +50,8 @@ using namespace ::com::sun::star::frame;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 ShapeController::ShapeController( const Reference< uno::XComponentContext >& rxContext,
         ChartController* pController )
@@ -721,8 +718,6 @@ bool ShapeController::isForwardPossible()
     return false;
 }
 
-//.............................................................................
 } //  namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

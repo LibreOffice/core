@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "DialogModel.hxx"
 #include "RangeSelectionHelper.hxx"
 #include "PropertyHelper.hxx"
@@ -56,8 +55,6 @@ using namespace ::chart::ContainerHelper;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
-
-// ----------------------------------------
 
 namespace
 {
@@ -358,9 +355,6 @@ struct lcl_addSeriesNumber : public ::std::binary_function<
 };
 
 } // anonymous namespace
-
-// ----------------------------------------
-
 
 namespace chart
 {

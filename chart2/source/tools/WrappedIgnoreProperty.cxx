@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "WrappedIgnoreProperty.hxx"
 #include "macros.hxx"
 #include <com/sun/star/awt/Gradient.hpp>
@@ -33,11 +32,8 @@ using namespace ::com::sun::star;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
-
 
 WrappedIgnoreProperty::WrappedIgnoreProperty( const OUString& rOuterName, const Any& rDefaultValue )
                          : WrappedProperty( rOuterName, OUString() )
@@ -127,8 +123,6 @@ void WrappedIgnoreProperties::addIgnoreFillProperties_only_BitmapProperties( ::s
     rList.push_back( new WrappedIgnoreProperty( "FillBitmapMode", uno::makeAny( drawing::BitmapMode_REPEAT ) ) );
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

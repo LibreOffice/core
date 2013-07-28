@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "dlg_ChartType.hxx"
 #include "dlg_ChartType.hrc"
 #include "ResId.hxx"
@@ -29,10 +28,8 @@
 
 using namespace ::com::sun::star;
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
@@ -63,8 +60,6 @@ ChartTypeDialog::~ChartTypeDialog()
     delete m_pChartTypeTabPage;
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

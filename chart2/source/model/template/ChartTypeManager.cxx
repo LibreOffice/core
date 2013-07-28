@@ -52,8 +52,6 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
 using ::osl::MutexGuard;
 
-// ======================================================================
-
 namespace
 {
 
@@ -600,8 +598,6 @@ Sequence< OUString > ChartTypeManager::getSupportedServiceNames_Static()
     aServices[ 1 ] = "com.sun.star.lang.MultiServiceFactory";
     return aServices;
 }
-
-// ================================================================================
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 APPHELPER_XSERVICEINFO_IMPL( ChartTypeManager,

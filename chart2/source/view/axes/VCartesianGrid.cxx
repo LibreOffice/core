@@ -31,10 +31,8 @@
 #include <vector>
 #include <boost/scoped_ptr.hpp>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
@@ -163,11 +161,6 @@ void addLine3D( drawing::PolyPolygonShape3D& rPoints, sal_Int32 nIndex
     AddPointToPoly( rPoints, aPoint, nIndex );
 }
 
-//---------------------------------------------------------------------------------
-//---------------------------------------------------------------------------------
-//---------------------------------------------------------------------------------
-//---------------------------------------------------------------------------------
-
 VCartesianGrid::VCartesianGrid( sal_Int32 nDimensionIndex, sal_Int32 nDimensionCount
                                , const Sequence< Reference< beans::XPropertySet > > & rGridPropertiesList )
             : VAxisOrGridBase( nDimensionIndex, nDimensionCount )
@@ -206,33 +199,28 @@ void VCartesianGrid::createShapes()
         return;
     //somehow equal to axis tickmarks
 
-    //-----------------------------------------
     //create named group shape
     Reference< drawing::XShapes > xGroupShape_Shapes(
         this->createGroupShape( m_xLogicTarget, m_aCID ) );
 
     if(!xGroupShape_Shapes.is())
         return;
-    //-----------------------------------------
 
     ::std::vector<VLineProperties> aLinePropertiesList;
     fillLinePropertiesFromGridModel( aLinePropertiesList, m_aGridPropertiesList );
 
-    //-----------------------------------------
     //create all scaled tickmark values
     boost::scoped_ptr< TickFactory > apTickFactory( this->createTickFactory() );
     TickFactory& aTickFactory = *apTickFactory.get();
     ::std::vector< ::std::vector< TickInfo > > aAllTickInfos;
     aTickFactory.getAllTicks( aAllTickInfos );
 
-    //-----------------------------------------
     //create tick mark line shapes
     ::std::vector< ::std::vector< TickInfo > >::iterator aDepthIter             = aAllTickInfos.begin();
     const ::std::vector< ::std::vector< TickInfo > >::const_iterator aDepthEnd  = aAllTickInfos.end();
 
     if(aDepthIter == aDepthEnd)//no tickmarks at all
         return;
-
 
     sal_Int32 nLinePropertiesCount = aLinePropertiesList.size();
     for( sal_Int32 nDepth=0
@@ -288,7 +276,6 @@ void VCartesianGrid::createShapes()
                 m_pShapeFactory->createLine2D( xTarget, aHandlesPoints, &aHandleLineProperties );
             m_pShapeFactory->setShapeName( xHandleShape, "HandlesOnly" );
         }
-        //-----------------------------------------
         else //if(2!=m_nDimension)
         {
             GridLinePoints aGridLinePoints( m_pPosHelper, m_nDimensionIndex, m_eLeftWallPos, m_eBackWallPos, m_eBottomPos );
@@ -320,8 +307,6 @@ void VCartesianGrid::createShapes()
     }
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

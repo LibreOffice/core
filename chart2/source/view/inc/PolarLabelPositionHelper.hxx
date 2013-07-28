@@ -24,12 +24,9 @@
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/drawing/Position3D.hpp>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
-//-----------------------------------------------------------------------------
 /**
 */
 class PolarPlottingPositionHelper;
@@ -62,9 +59,7 @@ private:
     PolarPlottingPositionHelper*    m_pPosHelper;
 };
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

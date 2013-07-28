@@ -52,8 +52,6 @@ public:
                 ::com::sun::star::uno::XComponentContext > & xContext,
             OUString aServiceName );
 
-    // ------------------------------------------------------------
-
     static bool hasMeanValueLine(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XRegressionCurveContainer > & xRegCnt );
@@ -153,8 +151,6 @@ public:
                 com::sun::star::chart2::XRegressionCurve > & xRegressionCurve,
             const com::sun::star::uno::Reference<
                 com::sun::star::uno::XComponentContext > & xContext );
-
-    // ------------------------------------------------------------
 
     /// returns a calculator object for regression curves (used by the view)
     static com::sun::star::uno::Reference< com::sun::star::chart2::XRegressionCurveCalculator >

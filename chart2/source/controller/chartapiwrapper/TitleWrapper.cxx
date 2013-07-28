@@ -45,7 +45,6 @@ using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 
-
 namespace chart
 {
 class WrappedTitleStringProperty : public WrappedProperty
@@ -109,8 +108,6 @@ Any WrappedTitleStringProperty::getPropertyDefault( const Reference< beans::XPro
     return uno::makeAny( OUString() );//default title is a empty String
 }
 
-//-----------------------------------------------------------------------------
-
 class WrappedStackedTextProperty : public WrappedProperty
 {
 public:
@@ -127,8 +124,6 @@ WrappedStackedTextProperty::~WrappedStackedTextProperty()
 }
 
 }// end namespace chart
-
-//-----------------------------------------------------------------------------
 
 namespace
 {
@@ -197,8 +192,6 @@ struct StaticTitleWrapperPropertyArray : public rtl::StaticAggregate< Sequence< 
 };
 
 } // anonymous namespace
-
-// --------------------------------------------------------------------------------
 
 namespace chart
 {
@@ -288,8 +281,6 @@ void SAL_CALL TitleWrapper::removeEventListener(
     m_aEventListenerContainer.removeInterface( aListener );
 }
 
-// ================================================================================
-
 Reference< beans::XPropertySet > TitleWrapper::getFirstCharacterPropertySet()
 {
     Reference< beans::XPropertySet > xProp;
@@ -352,7 +343,6 @@ void TitleWrapper::setFastCharacterPropertyValue(
     }
 }
 
-// ================================================================================
 // WrappedPropertySet
 
 void SAL_CALL TitleWrapper::setPropertyValue( const OUString& rPropertyName, const Any& rValue )
@@ -465,8 +455,6 @@ void SAL_CALL TitleWrapper::removePropertyChangeListener( const OUString& rPrope
         WrappedPropertySet::removePropertyChangeListener( rPropertyName, xListener );
 }
 
-// ================================================================================
-
 //ReferenceSizePropertyProvider
 void TitleWrapper::updateReferenceSize()
 {
@@ -491,8 +479,6 @@ awt::Size TitleWrapper::getCurrentSizeForReference()
 {
     return m_spChart2ModelContact->GetPageSize();
 }
-
-// ================================================================================
 
 Reference< chart2::XTitle > TitleWrapper::getTitleObject()
 {
@@ -524,8 +510,6 @@ const std::vector< WrappedProperty* > TitleWrapper::createWrappedProperties()
 
     return aWrappedProperties;
 }
-
-// ================================================================================
 
 Sequence< OUString > TitleWrapper::getSupportedServiceNames_Static()
 {

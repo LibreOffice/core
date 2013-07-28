@@ -88,7 +88,6 @@ private:
     ::boost::shared_ptr< ChartModelClone >                              m_pModelClone;
 };
 
-
 typedef ::cppu::BaseMutex                                                           ShapeUndoElement_MBase;
 typedef ::cppu::WeakComponentImplHelper1< ::com::sun::star::document::XUndoAction > ShapeUndoElement_TBase;
 class ShapeUndoElement  :public ShapeUndoElement_MBase

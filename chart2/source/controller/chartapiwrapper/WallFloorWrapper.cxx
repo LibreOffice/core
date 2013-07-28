@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "WallFloorWrapper.hxx"
 #include "macros.hxx"
 #include "Chart2ModelContact.hxx"
@@ -76,8 +75,6 @@ struct StaticWallFloorWrapperPropertyArray : public rtl::StaticAggregate< Sequen
 
 } // anonymous namespace
 
-// --------------------------------------------------------------------------------
-
 namespace chart
 {
 namespace wrapper
@@ -121,8 +118,6 @@ void SAL_CALL WallFloorWrapper::removeEventListener(
     m_aEventListenerContainer.removeInterface( aListener );
 }
 
-// ================================================================================
-
 // WrappedPropertySet
 Reference< beans::XPropertySet > WallFloorWrapper::getInnerPropertySet()
 {
@@ -158,8 +153,6 @@ const std::vector< WrappedProperty* > WallFloorWrapper::createWrappedProperties(
 
     return aWrappedProperties;
 }
-
-// ================================================================================
 
 Sequence< OUString > WallFloorWrapper::getSupportedServiceNames_Static()
 {

@@ -183,7 +183,6 @@ Any SAL_CALL
     return GetDefaultValue( rPH.getHandleByName( aPropertyName ) );
 }
 
-
 // ____ XMultiPropertyStates ____
 
 // Note: getPropertyStates() is already implemented in XPropertyState with the
@@ -426,7 +425,6 @@ void SAL_CALL OPropertySet::setFastPropertyValue( sal_Int32 nHandle, const Any& 
 
     firePropertyChangeEvent();
 }
-
 
 } //  namespace property
 

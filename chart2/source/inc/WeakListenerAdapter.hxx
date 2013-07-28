@@ -28,7 +28,6 @@
 
 namespace chart
 {
-// --------------------------------------------------------------------------------
 
 /** Adapter that enables adding listeners as weak UNO references.  Thus, adding
     an object as listener to a broadcaster does not increase its reference
@@ -80,8 +79,6 @@ private:
     ::com::sun::star::uno::WeakReference< Listener > m_xListener;
 };
 
-// --------------------------------------------------------------------------------
-
 class WeakModifyListenerAdapter :
         public WeakListenerAdapter< ::com::sun::star::util::XModifyListener >
 {
@@ -95,8 +92,6 @@ protected:
     virtual void SAL_CALL modified( const ::com::sun::star::lang::EventObject& aEvent )
         throw (::com::sun::star::uno::RuntimeException);
 };
-
-// --------------------------------------------------------------------------------
 
 class WeakSelectionChangeListenerAdapter :
         public WeakListenerAdapter< ::com::sun::star::view::XSelectionChangeListener >

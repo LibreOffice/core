@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "DragMethod_Base.hxx"
 
 #include "Strings.hrc"
@@ -31,10 +30,8 @@
 #include <svx/ActionDescriptionProvider.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
@@ -78,8 +75,6 @@ Pointer DragMethod_Base::GetSdrDragPointer() const
     else
         return Pointer(POINTER_MOVE);
 }
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

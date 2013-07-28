@@ -24,12 +24,9 @@
 #include "Tickmarks.hxx"
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
-//-----------------------------------------------------------------------------
 /**
 */
 
@@ -63,8 +60,6 @@ public:
 
     void setExrtaLinePositionAtOtherAxis( const double& fCrossingAt );
 
-    //-------------------------------------------------------------------------
-    //-------------------------------------------------------------------------
 protected: //methods
     sal_Int32 getIndexOfLongestLabel( const ::com::sun::star::uno::Sequence< OUString >& rLabels );
     void removeTextShapesFromTicks();
@@ -96,9 +91,7 @@ protected: //member
     sal_Int32 m_nMaximumTextHeightSoFar;
 };
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

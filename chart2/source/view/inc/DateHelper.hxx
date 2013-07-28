@@ -22,12 +22,9 @@
 #include <com/sun/star/chart2/XScaling.hpp>
 #include <tools/date.hxx>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
-//-----------------------------------------------------------------------------
 /**
 */
 
@@ -45,9 +42,7 @@ public:
     static double RasterizeDateValue( double fValue, const Date& rNullDate, long TimeResolution );
 };
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

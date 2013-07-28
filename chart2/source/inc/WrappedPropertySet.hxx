@@ -34,10 +34,8 @@
 
 #include <vector>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 class OOO_DLLPUBLIC_CHARTTOOLS WrappedPropertySet :
                            public MutexContainer
@@ -126,9 +124,7 @@ protected: //member
     //OMultiTypeInterfaceContainerHelperInt32             m_aVetoableListenerContainer;
 };
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 // CHART_WRAPPEDPROPERTYSET_HXX
 #endif

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "WrappedGapwidthProperty.hxx"
 #include "macros.hxx"
 #include "DiagramHelper.hxx"
@@ -27,8 +26,6 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
 
-
-//.............................................................................
 namespace chart
 {
 namespace wrapper
@@ -36,8 +33,6 @@ namespace wrapper
 
 const sal_Int32 DEFAULT_GAPWIDTH = 100;
 const sal_Int32 DEFAULT_OVERLAP = 0;
-
-//-----------------------------------------------------------------------------
 
 WrappedBarPositionProperty_Base::WrappedBarPositionProperty_Base(
                   const OUString& rOuterName
@@ -157,8 +152,6 @@ Any WrappedBarPositionProperty_Base::getPropertyValue( const Reference< beans::X
     return m_aOuterValue;
 }
 
-//-----------------------------------------------------------------------------
-
 WrappedGapwidthProperty::WrappedGapwidthProperty(
         ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
     : WrappedBarPositionProperty_Base( "GapWidth", "GapwidthSequence", DEFAULT_GAPWIDTH, spChart2ModelContact )
@@ -167,8 +160,6 @@ WrappedGapwidthProperty::WrappedGapwidthProperty(
 WrappedGapwidthProperty::~WrappedGapwidthProperty()
 {
 }
-
-//-----------------------------------------------------------------------------
 
 WrappedBarOverlapProperty::WrappedBarOverlapProperty(
         ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
@@ -181,6 +172,5 @@ WrappedBarOverlapProperty::~WrappedBarOverlapProperty()
 
 } //  namespace wrapper
 } //  namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

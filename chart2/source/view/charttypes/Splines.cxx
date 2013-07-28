@@ -26,10 +26,8 @@
 
 #define MAX_BSPLINE_DEGREE 15
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 
 namespace
@@ -57,7 +55,6 @@ public:
                            double fY1FirstDerivation,
                            double fYnFirstDerivation );
 
-
     /** @descr creates an object that calculates cublic splines on construction
                for the special case of periodic cubic spline
 
@@ -65,7 +62,6 @@ public:
                they need to be sorted in x values. First and last y value must be equal
      */
     lcl_SplineCalculation( const tPointVecType & rSortedPoints);
-
 
     /** @descr this function corresponds to the function splint in [1].
 
@@ -115,8 +111,6 @@ private:
     void CalculatePeriodic();
 };
 
-//-----------------------------------------------------------------------------
-
 lcl_SplineCalculation::lcl_SplineCalculation(
     const tPointVecType & rSortedPoints,
     double fY1FirstDerivation,
@@ -132,8 +126,6 @@ lcl_SplineCalculation::lcl_SplineCalculation(
     Calculate();
 }
 
-//-----------------------------------------------------------------------------
-
 lcl_SplineCalculation::lcl_SplineCalculation(
     const tPointVecType & rSortedPoints)
         : m_aPoints( rSortedPoints ),
@@ -146,8 +138,6 @@ lcl_SplineCalculation::lcl_SplineCalculation(
     ::rtl::math::setInf( &m_fLastInterpolatedValue, sal_False );
     CalculatePeriodic();
 }
-//-----------------------------------------------------------------------------
-
 
 void lcl_SplineCalculation::Calculate()
 {
@@ -412,8 +402,6 @@ double lcl_SplineCalculation::GetInterpolatedValue( double x )
              ( h*h ) / 6.0 );
 }
 
-//-----------------------------------------------------------------------------
-
 // helper methods for B-spline
 
 // Create parameter t_0 to t_n using the centripetal method with a power of 0.5
@@ -542,8 +530,6 @@ void applyNtoParameterT(const lcl_tSizeType i,const double tk,const sal_uInt32 p
 }
 
 } //  anonymous namespace
-
-//-----------------------------------------------------------------------------
 
 // Calculates uniform parametric splines with subinterval length 1,
 // according ODF1.2 part 1, chapter 'chart interpolation'.
@@ -674,7 +660,6 @@ void SplineCalculater::CalculateCubicSplines(
         // delete aSplineZ;
     }
 }
-
 
 // The implementation follows closely ODF1.2 spec, chapter chart:interpolation
 // using the same names as in spec as far as possible, without prefix.
@@ -968,8 +953,6 @@ void SplineCalculater::CalculateBSplines(
     } // next piece of the series
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

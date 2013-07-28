@@ -33,10 +33,8 @@
 #include <com/sun/star/chart2/DataPointGeometry3D.hpp>
 #include <rtl/math.hxx>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 using namespace ::rtl::math;
 using namespace ::com::sun::star::chart2;
@@ -67,8 +65,6 @@ BarChart::~BarChart()
 {
     delete m_pMainPosHelper;
 }
-
-//-------------------------------------------------------------------------
 
 PlottingPositionHelper& BarChart::getPlottingPositionHelper( sal_Int32 nAxisIndex ) const
 {
@@ -425,8 +421,6 @@ void BarChart::createShapes()
     uno::Reference< drawing::XShapes > xTextTarget(
         m_pShapeFactory->createGroup2D( m_xFinalTarget,OUString() ));
 
-
-    //---------------------------------------------
     uno::Reference< drawing::XShapes > xRegressionCurveEquationTarget(
         m_pShapeFactory->createGroup2D( m_xFinalTarget,OUString() ));
     //check necessary here that different Y axis can not be stacked in the same group? ... hm?
@@ -448,7 +442,6 @@ void BarChart::createShapes()
 
     sal_Int32 nStartIndex = 0;
     sal_Int32 nEndIndex = VSeriesPlotter::getPointCount();
-//=============================================================================
     //iterate through all x values per indices
     for( sal_Int32 nPointIndex = nStartIndex; nPointIndex < nEndIndex; nPointIndex++ )
     {
@@ -479,14 +472,12 @@ void BarChart::createShapes()
             }
         }
 
-//=============================================================================
         aZSlotIter = m_aZSlots.begin();
         for( sal_Int32 nZ=1; aZSlotIter != aZSlotEnd; ++aZSlotIter, nZ++ )
         {
             ::std::vector< VDataSeriesGroup >::iterator             aXSlotIter = aZSlotIter->begin();
             const ::std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
 
-//=============================================================================
             //iterate through all x slots in this category
             double fSlotX=0;
             for( aXSlotIter = aZSlotIter->begin(); aXSlotIter != aXSlotEnd; ++aXSlotIter, fSlotX+=1.0 )
@@ -553,7 +544,6 @@ void BarChart::createShapes()
 
                 ::std::vector< VDataSeries* >::const_iterator       aSeriesIter = pSeriesList->begin();
                 const ::std::vector< VDataSeries* >::const_iterator aSeriesEnd  = pSeriesList->end();
-    //=============================================================================
                 //iterate through all series in this x slot
                 for( ; aSeriesIter != aSeriesEnd; ++aSeriesIter )
                 {
@@ -581,8 +571,6 @@ void BarChart::createShapes()
                         }
                         bDrawConnectionLinesInited = true;
                     }
-
-                    //------------
 
                     uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes(
                         getSeriesGroupShape(*aSeriesIter, xSeriesTarget) );
@@ -807,7 +795,6 @@ void BarChart::createShapes()
                         //create error bar
                         createErrorBar_Y( aUnscaledLogicPosition, **aSeriesIter, nPointIndex, m_xLogicTarget, &fLogicX );
 
-                        //------------
                         //create data point label
                         if( (**aSeriesIter).getDataPointLabelIfLabel(nPointIndex) )
                         {
@@ -849,14 +836,10 @@ void BarChart::createShapes()
             }//next x slot
         }//next z slot
     }//next category
-//=============================================================================
-//=============================================================================
-//=============================================================================
     if( bDrawConnectionLines )
     {
         ::std::vector< ::std::vector< VDataSeriesGroup > >::iterator             aZSlotIter = m_aZSlots.begin();
         const ::std::vector< ::std::vector< VDataSeriesGroup > >::const_iterator  aZSlotEnd = m_aZSlots.end();
-//=============================================================================
         for( sal_Int32 nZ=1; aZSlotIter != aZSlotEnd; ++aZSlotIter, nZ++ )
         {
             ::std::vector< VDataSeriesGroup >::iterator             aXSlotIter = aZSlotIter->begin();
@@ -873,7 +856,6 @@ void BarChart::createShapes()
             }
             PlotterBase::m_pPosHelper = pPosHelper;
 
-//=============================================================================
             //iterate through all x slots in this category
             for( double fSlotX=0; aXSlotIter != aXSlotEnd; ++aXSlotIter, fSlotX+=1.0 )
             {
@@ -881,7 +863,6 @@ void BarChart::createShapes()
 
                 ::std::vector< VDataSeries* >::const_iterator       aSeriesIter = pSeriesList->begin();
                 const ::std::vector< VDataSeries* >::const_iterator aSeriesEnd  = pSeriesList->end();
-//=============================================================================
                 //iterate through all series in this x slot
                 for( ; aSeriesIter != aSeriesEnd; ++aSeriesIter )
                 {
@@ -918,8 +899,6 @@ void BarChart::createShapes()
     OSL_TRACE( "\nPPPPPPPPP<<<<<<<<<<<< bar chart :: createShapes():: skipped points: %d created points: %d", nSkippedPoints, nCreatedPoints );
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

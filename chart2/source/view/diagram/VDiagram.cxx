@@ -42,10 +42,8 @@
 #include <svx/scene3d.hxx>
 #include <svx/e3dsceneupdater.hxx>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
@@ -175,7 +173,6 @@ void VDiagram::createShapes_2d()
         m_xCoordinateRegionShape = uno::Reference<drawing::XShape>( xShapes, uno::UNO_QUERY );
     }
 
-    //---------------------------
     bool bAddFloorAndWall = DiagramHelper::isSupportingFloorAndWall( m_xDiagram );
 
     //add back wall
@@ -218,7 +215,6 @@ void VDiagram::createShapes_2d()
 
     }
 
-    //---------------------------
     //position and size for diagram
     adjustPosAndSize_2d( m_aAvailablePosIncludingAxes, m_aAvailableSizeIncludingAxes );
 }
@@ -496,14 +492,10 @@ void VDiagram::createShapes_3d()
     uno::Reference< drawing::XShapes > xOuterGroup_Shapes =
             uno::Reference<drawing::XShapes>( m_xOuterGroupShape, uno::UNO_QUERY );
 
-
-    //-------------------------------------------------------------------------
     //create additional group to manipulate the aspect ratio of the whole diagram:
     xOuterGroup_Shapes = m_pShapeFactory->createGroup3D( xOuterGroup_Shapes, OUString() );
 
     m_xAspectRatio3D = uno::Reference< beans::XPropertySet >( xOuterGroup_Shapes, uno::UNO_QUERY );
-
-    //---------------------------
 
     bool bAddFloorAndWall = DiagramHelper::isSupportingFloorAndWall( m_xDiagram );
 
@@ -661,7 +653,6 @@ void VDiagram::createShapes_3d()
             ShapeFactory::setShapeName( xShape, aFloorCID );
         }
     }
-    //---------------------------
 
     //create an additional scene for the smaller inner coordinate region:
     {
@@ -774,8 +765,6 @@ void VDiagram::reduceToMimimumSize()
     return adjustPosAndSize( aNewPos, aNewSize );
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

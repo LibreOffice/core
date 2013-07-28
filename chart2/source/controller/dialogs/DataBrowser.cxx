@@ -92,12 +92,9 @@ sal_Int32 lcl_getColumnInData( sal_uInt16 nCol )
 
 } // anonymous namespace
 
-// --------------------------------------------------------------------------------
-
 namespace chart
 {
 
-// ----------------------------------------
 namespace impl
 {
 
@@ -425,7 +422,6 @@ struct applyChangesFunctor : public ::std::unary_function< ::boost::shared_ptr< 
 };
 
 } // namespace impl
-// ----------------------------------------
 
 namespace
 {
@@ -468,7 +464,6 @@ sal_Int32 lcl_getColumnInDataOrHeader(
 }
 
 } // anonymous namespace
-
 
 DataBrowser::DataBrowser( Window* pParent, const ResId& rId, bool bLiveUpdate ) :
     ::svt::EditBrowseBox( pParent, rId, EBBF_SMART_TAB_TRAVEL | EBBF_HANDLE_COLUMN_TEXT, BROWSER_STANDARD_FLAGS ),
@@ -743,7 +738,6 @@ bool DataBrowser::IsReadOnly() const
 {
     return m_bIsReadOnly;
 }
-
 
 void DataBrowser::SetClean()
 {

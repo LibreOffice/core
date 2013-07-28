@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "DataSourceHelper.hxx"
 #include "macros.hxx"
 #include "ChartModelHelper.hxx"
@@ -37,10 +36,8 @@
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
@@ -517,8 +514,6 @@ Sequence< OUString > DataSourceHelper::getRangesFromDataSource( const Reference<
     return ContainerHelper::ContainerToSequence( aResult );
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

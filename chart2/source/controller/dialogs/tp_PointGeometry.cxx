@@ -29,10 +29,8 @@
 // header for class Svx3DHorizontalSegmentsItem
 #include <svx/svx3ditems.hxx>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 SchLayoutTabPage::SchLayoutTabPage(Window* pWindow,const SfxItemSet& rInAttrs)
                  : SfxTabPage(pWindow, SchResId(TP_LAYOUT), rInAttrs)
@@ -87,8 +85,6 @@ void SchLayoutTabPage::Reset(const SfxItemSet& rInAttrs)
     }
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

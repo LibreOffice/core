@@ -17,16 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "RangeSelectionButton.hxx"
 #include "Bitmaps.hrc"
 #include "Strings.hrc"
 #include "ResId.hxx"
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 RangeSelectionButton::RangeSelectionButton( Window *pParent, const ResId& rResId ) :
     ImageButton( pParent, rResId )
@@ -39,8 +36,6 @@ RangeSelectionButton::~RangeSelectionButton()
 {
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

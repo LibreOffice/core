@@ -82,10 +82,8 @@
 // react on this by rebuilding the view
 #define TEST_ENABLE_MODIFY_LISTENER
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
@@ -94,9 +92,7 @@ using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 DBG_NAME(ChartController)
-//-----------------------------------------------------------------
 // ChartController Constructor and Destructor
-//-----------------------------------------------------------------
 
 ChartController::ChartController(uno::Reference<uno::XComponentContext> const & xContext) :
     m_aLifeTimeManager( NULL ),
@@ -129,8 +125,6 @@ ChartController::~ChartController()
     stopDoubleClickWaiting();
 }
 
-//-----------------------------------------------------------------
-
 ChartController::RefCountable::RefCountable() : m_nRefCount(0)
 {
 }
@@ -148,8 +142,6 @@ void ChartController::RefCountable::release()
     if(!m_nRefCount)
         delete this;
 }
-
-//-----------------------------------------------------------------
 
 ChartController::TheModel::TheModel( const uno::Reference< frame::XModel > & xModel ) :
     m_xModel( xModel ),
@@ -254,8 +246,6 @@ void ChartController::TheModel::tryTermination()
     }
 }
 
-//-----------------------------------------------------------------
-
 ChartController::TheModelRef::TheModelRef( TheModel* pTheModel, osl::Mutex& rMutex ) :
     m_pTheModel(pTheModel),
     m_rModelMutex(rMutex)
@@ -308,10 +298,7 @@ sal_Bool ChartController::TheModelRef::is() const
     return (m_pTheModel != 0);
 }
 
-
-//-----------------------------------------------------------------
 // private methods
-//-----------------------------------------------------------------
 
 sal_Bool ChartController::impl_isDisposedOrSuspended() const
 {
@@ -326,9 +313,7 @@ sal_Bool ChartController::impl_isDisposedOrSuspended() const
     return sal_False;
 }
 
-//-----------------------------------------------------------------
 // lang::XServiceInfo
-//-----------------------------------------------------------------
 
 APPHELPER_XSERVICEINFO_IMPL(ChartController,CHART_CONTROLLER_SERVICE_IMPLEMENTATION_NAME)
 
@@ -341,9 +326,7 @@ uno::Sequence< OUString > ChartController::getSupportedServiceNames_Static()
     return aSNS;
 }
 
-//-----------------------------------------------------------------
 // XController
-//-----------------------------------------------------------------
 
 void SAL_CALL ChartController::attachFrame(
     const uno::Reference<frame::XFrame>& xFrame )
@@ -372,9 +355,6 @@ void SAL_CALL ChartController::attachFrame(
 
     //@todo nothing right???
 
-
-
-    //--------------------------------------------------
     //create view @todo is this the correct place here??
 
     Window* pParent = NULL;
@@ -694,7 +674,6 @@ sal_Bool SAL_CALL ChartController::suspend( sal_Bool bSuspend )
     return sal_True;
 }
 
-
 void ChartController::impl_createDrawViewController()
 {
     SolarMutexGuard aGuard;
@@ -719,9 +698,7 @@ void ChartController::impl_deleteDrawViewController()
     }
 }
 
-//-----------------------------------------------------------------
 // XComponent (base of XController)
-//-----------------------------------------------------------------
 
 void SAL_CALL ChartController::dispose()
     throw(uno::RuntimeException)
@@ -847,10 +824,7 @@ void SAL_CALL ChartController::removeEventListener(
     m_aLifeTimeManager.m_aListenerContainer.removeInterface( ::getCppuType((const uno::Reference< lang::XEventListener >*)0), xListener );
 }
 
-
-//-----------------------------------------------------------------
 // util::XCloseListener
-//-----------------------------------------------------------------
 void SAL_CALL ChartController::queryClosing(
     const lang::EventObject& rSource,
     sal_Bool bGetsOwnership )
@@ -932,9 +906,7 @@ bool ChartController::impl_releaseThisModel(
     return bReleaseModel;
 }
 
-//-----------------------------------------------------------------
 // util::XEventListener (base of XCloseListener)
-//-----------------------------------------------------------------
 void SAL_CALL ChartController::disposing(
     const lang::EventObject& rSource )
         throw(uno::RuntimeException)
@@ -963,10 +935,7 @@ void SAL_CALL ChartController::layoutEvent(
     }
 }
 
-
-//-----------------------------------------------------------------
 // XDispatchProvider (required interface)
-//-----------------------------------------------------------------
 
 namespace
 {
@@ -1056,9 +1025,7 @@ uno::Sequence<uno::Reference<frame::XDispatch > >
     return uno::Sequence<uno::Reference<frame::XDispatch > > ();
 }
 
-//-----------------------------------------------------------------
 // frame::XDispatch
-//-----------------------------------------------------------------
 
 void SAL_CALL ChartController::dispatch(
     const util::URL& rURL,
@@ -1076,7 +1043,6 @@ void SAL_CALL ChartController::dispatch(
         this->executeDispatch_Cut();
     else if(aCommand == "DataRanges" )
         this->executeDispatch_SourceData();
-    //----------------------------------
     else if(aCommand == "Update" ) //Update Chart
     {
         ChartViewHelper::setViewToDirtyState( getModel() );
@@ -1261,9 +1227,7 @@ void SAL_CALL ChartController::removeStatusListener(
     //@todo
 }
 
-//-----------------------------------------------------------------
 // XContextMenuInterception (optional interface)
-//-----------------------------------------------------------------
 void SAL_CALL ChartController::registerContextMenuInterceptor(
     const uno::Reference< ui::XContextMenuInterceptor >& /* xInterceptor */)
         throw(uno::RuntimeException)
@@ -1280,10 +1244,6 @@ void SAL_CALL ChartController::releaseContextMenuInterceptor(
 
 // ____ XEmbeddedClient ____
 // implementation see: ChartController_EditData.cxx
-
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 
 void SAL_CALL ChartController::executeDispatch_ChartType()
 {
@@ -1387,8 +1347,6 @@ void SAL_CALL ChartController::modified(
     // @todo: change the source in ChartModel to always be the model itself ?
     //todo? update menu states ?
 }
-
-//-----------------------------------------------------------------------------
 
 IMPL_LINK( ChartController, NotifyUndoActionHdl, SdrUndoAction*, pUndoAction )
 {
@@ -1557,8 +1515,6 @@ void ChartController::impl_initializeAccessible( const uno::Reference< lang::XIn
         ;
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

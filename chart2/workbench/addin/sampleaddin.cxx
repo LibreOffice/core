@@ -29,7 +29,6 @@
 
 using namespace com::sun::star;
 
-
 // code for creating instances of SampleAddIn
 
 extern "C" {
@@ -89,10 +88,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
 
 }   // extern C
 
-
-// --------------------
 // class SampleAddIn
-// --------------------
 
 SampleAddIn::SampleAddIn()
 {
@@ -101,7 +97,6 @@ SampleAddIn::SampleAddIn()
 
 SampleAddIn::~SampleAddIn()
 {}
-
 
 // this functionality should be provided by the chart API some day
 sal_Bool SampleAddIn::getLogicalPosition( uno::Reference< drawing::XShape >& xAxis,
@@ -255,8 +250,6 @@ void SAL_CALL SampleAddIn::refresh() throw( uno::RuntimeException )
             // now we have the page to insert objects
 
             // add a horizontal line at the middle value of the first series
-            // -------------------------------------------------------------
-
 
             // get the logical position from the coordinate
             // get x- and y-axis
@@ -319,7 +312,6 @@ void SAL_CALL SampleAddIn::refresh() throw( uno::RuntimeException )
                         xTextRange->setString( aText );
                     }
                 }
-
 
                 // position line and text
 

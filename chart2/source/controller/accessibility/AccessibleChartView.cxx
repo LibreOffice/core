@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "AccessibleChartView.hxx"
 #include "chartview/ExplicitValueProvider.hxx"
 #include "servicenames.hxx"
@@ -50,10 +49,8 @@ using ::com::sun::star::uno::WeakReference;
 using ::com::sun::star::uno::Any;
 using osl::MutexGuard;
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 AccessibleChartView::AccessibleChartView(
     const Reference< uno::XComponentContext >& xContext, SdrView* pView ) :
@@ -73,7 +70,6 @@ AccessibleChartView::~AccessibleChartView()
 {
     delete m_pViewForwarder;
 }
-
 
 awt::Rectangle AccessibleChartView::GetWindowPosSize() const
 {
@@ -174,9 +170,7 @@ awt::Point SAL_CALL AccessibleChartView::getLocationOnScreen()
     return aResult;
 }
 
-//-----------------------------------------------------------------
 // lang::XInitialization
-//-----------------------------------------------------------------
 
 void SAL_CALL AccessibleChartView::initialize( const Sequence< Any >& rArguments )
                 throw (uno::Exception, uno::RuntimeException)
@@ -351,9 +345,7 @@ ExplicitValueProvider* AccessibleChartView::getExplicitValueProvider()
     return ExplicitValueProvider::getExplicitValueProvider(m_xChartView);
 }
 
-//-------------------------------------------------------------------------
 // view::XSelectionChangeListener
-//-------------------------------------------------------------------------
 
 void SAL_CALL AccessibleChartView::selectionChanged( const lang::EventObject& /*rEvent*/ )
                 throw (uno::RuntimeException)
@@ -379,24 +371,18 @@ void SAL_CALL AccessibleChartView::selectionChanged( const lang::EventObject& /*
     }
 }
 
-//-------------------------------------------------------------------------
 // lang::XComponent::dispose()
-//-------------------------------------------------------------------------
 void SAL_CALL AccessibleChartView::disposing()
 {
     AccessibleBase::disposing();
 }
 
-//-------------------------------------------------------------------------
 // XEventListener
-//-------------------------------------------------------------------------
 void SAL_CALL AccessibleChartView::disposing( const lang::EventObject& /*Source*/ )
     throw (uno::RuntimeException)
 {
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

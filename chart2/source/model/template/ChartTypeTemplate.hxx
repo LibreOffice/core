@@ -41,7 +41,6 @@ namespace chart
     derive from this class.
 
     createDiagramByDataSource
-    -------------------------
 
     This does the following steps using some virtual helper-methods, that may be
     overloaded by derived classes:
@@ -130,7 +129,6 @@ protected:
         throw (::com::sun::star::uno::RuntimeException);
 
     // Methods to overload for automatic creation
-    // ------------------------------------------
 
     /// returns 2 by default.  Supported are 2 and 3
     virtual sal_Int32 getDimension() const;
@@ -151,7 +149,6 @@ protected:
     virtual bool isSwapXAndY() const;
 
     // Methods for creating the diagram piecewise
-    // ------------------------------------------
 
     /** Allows derived classes to manipulate the diagramas whole, like changing
         the wall color. The default implementation is empty. It is called by

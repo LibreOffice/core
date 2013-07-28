@@ -59,7 +59,6 @@
 #include <boost/shared_ptr.hpp>
 #include <set>
 
-
 class SdrModel;
 
 namespace svt
@@ -75,11 +74,8 @@ namespace graphic {
 }
 }}}
 
-
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 class UndoGuard;
 
@@ -160,16 +156,12 @@ public:
                ::com::sun::star::uno::XComponentContext > const & xContext);
     virtual ~ChartController();
 
-    //-----------------------------------------------------------------
     // ::com::sun::star::lang::XServiceInfo
-    //-----------------------------------------------------------------
 
     APPHELPER_XSERVICEINFO_DECL()
     APPHELPER_SERVICE_FACTORY_HELPER(ChartController)
 
-    //-----------------------------------------------------------------
     // ::com::sun::star::frame::XController (required interface)
-    //-----------------------------------------------------------------
     virtual void SAL_CALL
         attachFrame( const ::com::sun::star::uno::Reference<
                       ::com::sun::star::frame::XFrame > & xFrame )
@@ -197,9 +189,7 @@ public:
         suspend( sal_Bool bSuspend )
                             throw (::com::sun::star::uno::RuntimeException);
 
-    //-----------------------------------------------------------------
     // ::com::sun::star::lang::XComponent (base of XController)
-    //-----------------------------------------------------------------
     virtual void SAL_CALL
         dispose()           throw (::com::sun::star::uno::RuntimeException);
 
@@ -213,9 +203,7 @@ public:
                           ::com::sun::star::lang::XEventListener > & xListener )
                             throw (::com::sun::star::uno::RuntimeException);
 
-    //-----------------------------------------------------------------
     // ::com::sun::star::frame::XDispatchProvider (required interface)
-    //-----------------------------------------------------------------
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::frame::XDispatch> SAL_CALL
         queryDispatch( const ::com::sun::star::util::URL& rURL
@@ -230,9 +218,7 @@ public:
                             ::com::sun::star::frame::DispatchDescriptor > & xDescripts)
                             throw (::com::sun::star::uno::RuntimeException);
 
-    //-----------------------------------------------------------------
     // ::com::sun::star::view::XSelectionSupplier (optional interface)
-    //-----------------------------------------------------------------
     virtual sal_Bool SAL_CALL
         select( const ::com::sun::star::uno::Any& rSelection )
                             throw ( com::sun::star::lang::IllegalArgumentException );
@@ -250,9 +236,7 @@ public:
                             com::sun::star::view::XSelectionChangeListener > & xListener )
                             throw (::com::sun::star::uno::RuntimeException);
 
-    //-----------------------------------------------------------------
     // ::com::sun::star::ui::XContextMenuInterception (optional interface)
-    //-----------------------------------------------------------------
     virtual void SAL_CALL
         registerContextMenuInterceptor( const ::com::sun::star::uno::Reference<
                             ::com::sun::star::ui::XContextMenuInterceptor > & xInterceptor)
@@ -263,14 +247,9 @@ public:
                             ::com::sun::star::ui::XContextMenuInterceptor > & xInterceptor)
                             throw (::com::sun::star::uno::RuntimeException);
 
-
-    //-----------------------------------------------------------------
-    //-----------------------------------------------------------------
     //additional interfaces
 
-    //-----------------------------------------------------------------
     // ::com::sun::star::util::XCloseListener
-    //-----------------------------------------------------------------
     virtual void SAL_CALL
         queryClosing( const ::com::sun::star::lang::EventObject& Source
                             , sal_Bool GetsOwnership )
@@ -281,16 +260,12 @@ public:
         notifyClosing( const ::com::sun::star::lang::EventObject& Source )
                             throw (::com::sun::star::uno::RuntimeException);
 
-    //-------------------------------------------------------------------------------------
     // ::com::sun::star::util::XEventListener (base of XCloseListener and XModifyListener)
-    //-------------------------------------------------------------------------------------
     virtual void SAL_CALL
         disposing( const ::com::sun::star::lang::EventObject& Source )
                             throw (::com::sun::star::uno::RuntimeException);
 
-    //-----------------------------------------------------------------
     // ::com::sun::star::frame::XDispatch
-    //-----------------------------------------------------------------
 
     virtual void SAL_CALL
         dispatch( const ::com::sun::star::util::URL& aURL
@@ -310,9 +285,7 @@ public:
                     , const ::com::sun::star::util::URL& aURL )
                     throw (::com::sun::star::uno::RuntimeException);
 
-    //-----------------------------------------------------------------
     // ::com::sun::star::awt::XWindow
-    //-----------------------------------------------------------------
     virtual void SAL_CALL
         setPosSize( sal_Int32 X, sal_Int32 Y
                     , sal_Int32 Width, sal_Int32 Height, sal_Int16 Flags )
@@ -333,7 +306,6 @@ public:
     virtual void SAL_CALL
         setFocus()  throw (::com::sun::star::uno::RuntimeException);
 
-    //----------------
     virtual void SAL_CALL
         addWindowListener( const ::com::sun::star::uno::Reference<
                     ::com::sun::star::awt::XWindowListener >& xListener )
@@ -394,9 +366,7 @@ public:
                     ::com::sun::star::awt::XPaintListener >& xListener )
                     throw (::com::sun::star::uno::RuntimeException);
 
-    //-----------------------------------------------------------------
     // ::com::sun::star::lang XMultiServiceFactory
-    //-----------------------------------------------------------------
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
         createInstance( const OUString& aServiceSpecifier )
             throw (::com::sun::star::uno::Exception,
@@ -411,32 +381,24 @@ public:
         getAvailableServiceNames()
             throw (::com::sun::star::uno::RuntimeException);
 
-    //-----------------------------------------------------------------
     // ::com::sun::star::util::XModifyListener
-    //-----------------------------------------------------------------
     virtual void SAL_CALL modified(
         const ::com::sun::star::lang::EventObject& aEvent )
         throw (::com::sun::star::uno::RuntimeException);
 
-    //-----------------------------------------------------------------
     // ::com::sun::star::util::XModeChangeListener
-    //-----------------------------------------------------------------
     virtual void SAL_CALL modeChanged(
         const ::com::sun::star::util::ModeChangeEvent& _rSource )
         throw (::com::sun::star::uno::RuntimeException);
 
-    //-----------------------------------------------------------------
     // ::com::sun::star::frame::XLayoutManagerListener
-    //-----------------------------------------------------------------
     virtual void SAL_CALL layoutEvent(
         const ::com::sun::star::lang::EventObject& aSource,
         ::sal_Int16 eLayoutEvent,
         const ::com::sun::star::uno::Any& aInfo )
         throw (::com::sun::star::uno::RuntimeException);
 
-    //-----------------------------------------------------------------
     // chart2::WindowController
-    //-----------------------------------------------------------------
     virtual void PrePaint();
     virtual void execute_Paint( const Rectangle& rRect );
     virtual void execute_MouseButtonDown( const MouseEvent& rMEvt );
@@ -457,9 +419,6 @@ public:
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 
-    //-----------------------------------------------------------------
-    //-----------------------------------------------------------------
-
     static bool isObjectDeleteable( const ::com::sun::star::uno::Any& rSelection );
 
     void setDrawMode( ChartDrawMode eMode ) { m_eDrawMode = eMode; }
@@ -470,16 +429,7 @@ public:
     DECL_LINK( NotifyUndoActionHdl, SdrUndoAction* );
 
 public:
-    //-----------------------------------------------------------------
-    //-----------------------------------------------------------------
-    //-----------------------------------------------------------------
-    //-----------------------------------------------------------------
     //private
-    //-----------------------------------------------------------------
-    //-----------------------------------------------------------------
-    //-----------------------------------------------------------------
-    //-----------------------------------------------------------------
-
 
 private:
     DrawModelWrapper* GetDrawModelWrapper();
@@ -722,9 +672,7 @@ private:
     void impl_switchDiagramPositioningToExcludingPositioning();
 };
 
-//.............................................................................
 }  // namespace chart
-//.............................................................................
 
 #endif
 

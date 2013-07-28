@@ -164,7 +164,6 @@ OUString SAL_CALL LineChartType::getChartType()
     return CHART2_SERVICE_NAME_CHARTTYPE_LINE;
 }
 
-
 // ____ OPropertySet ____
 uno::Any LineChartType::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)

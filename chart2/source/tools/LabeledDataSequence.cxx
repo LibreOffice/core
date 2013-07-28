@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "LabeledDataSequence.hxx"
 #include "ModifyListenerHelper.hxx"
 #include "macros.hxx"
@@ -150,8 +149,6 @@ void SAL_CALL LabeledDataSequence::removeModifyListener( const Reference< util::
     }
 }
 
-// ================================================================================
-
 Sequence< OUString > LabeledDataSequence::getSupportedServiceNames_Static()
 {
     Sequence< OUString > aServices( 1 );
@@ -162,8 +159,6 @@ Sequence< OUString > LabeledDataSequence::getSupportedServiceNames_Static()
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 APPHELPER_XSERVICEINFO_IMPL( LabeledDataSequence,
                              OUString("com.sun.star.comp.chart2.LabeledDataSequence") )
-
-// ================================================================================
 
 } //  namespace chart
 

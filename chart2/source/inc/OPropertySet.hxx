@@ -41,7 +41,6 @@ namespace property
 namespace impl
 { class ImplOPropertySet; }
 
-
 class OOO_DLLPUBLIC_CHARTTOOLS OPropertySet :
     public ::cppu::OBroadcastHelper,
     // includes beans::XPropertySet, XMultiPropertySet and XFastPropertySet
@@ -78,7 +77,6 @@ protected:
         @see ::cppu::OPropertySetHelper
      */
     virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() = 0;
-
 
     /** Try to convert the value <code>rValue</code> to the type required by the
         property associated with <code>nHandle</code>.
@@ -154,9 +152,7 @@ protected:
     /// call this when a derived component is disposed
     virtual void disposePropertySet();
 
-    // ========================================
     // Interfaces
-    // ========================================
 
     // ____ XInterface ____
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType )

@@ -79,15 +79,11 @@ public:
             SfxItemPool& rItemPool );
     virtual ~ItemConverter();
 
-    // typedefs -------------------------------
-
     typedef sal_uInt16          tWhichIdType;
     typedef OUString tPropertyNameType;
     typedef sal_uInt8            tMemberIdType;
 
     typedef ::std::pair< tPropertyNameType, tMemberIdType > tPropertyNameWithMemberId;
-
-    // ----------------------------------------
 
     /** applies all properties that can be mapped to items into the given item
         set.

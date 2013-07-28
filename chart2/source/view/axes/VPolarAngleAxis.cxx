@@ -29,10 +29,8 @@
 
 #include <boost/scoped_ptr.hpp>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 using namespace ::rtl::math;
@@ -63,7 +61,6 @@ bool VPolarAngleAxis::createTextShapes_ForAngleAxis(
     FixedNumberFormatter aFixedNumberFormatter(
         m_xNumberFormatsSupplier, rAxisLabelProperties.nNumberFormatKey );
 
-    //------------------------------------------------
     //prepare text properties for multipropertyset-interface of shape
     tNameSequence aPropNames;
     tAnySequence aPropValues;
@@ -79,8 +76,6 @@ bool VPolarAngleAxis::createTextShapes_ForAngleAxis(
         *pColorAny >>= nColor;
 
     const uno::Sequence< OUString >* pLabels = m_bUseTextLabels? &m_aTextLabels : 0;
-
-    //------------------------------------------------
 
     //TickInfo* pLastVisibleNeighbourTickInfo = NULL;
     sal_Int32 nTick = 0;
@@ -171,7 +166,6 @@ void VPolarAngleAxis::createLabels()
 
     if( m_aAxisProperties.m_bDisplayLabels )
     {
-        //-----------------------------------------
         //get the transformed screen values for all tickmarks in aAllTickInfos
         boost::scoped_ptr< TickFactory > apTickFactory( this->createTickFactory() );
 
@@ -205,7 +199,6 @@ void VPolarAngleAxis::createShapes()
     double fLogicRadius = m_pPosHelper->getOuterLogicRadius();
     double fLogicZ      = 1.0;//as defined
 
-    //-----------------------------------------
     //create axis main lines
     drawing::PointSequenceSequence aPoints(1);
     VPolarGrid::createLinePointSequence_ForAngleAxis( aPoints, m_aAllTickInfos, m_aIncrement, m_aScale, m_pPosHelper, fLogicRadius, fLogicZ );
@@ -214,13 +207,10 @@ void VPolarAngleAxis::createShapes()
     //because of this name this line will be used for marking the axis
     m_pShapeFactory->setShapeName( xShape, "MarkHandles" );
 
-    //-----------------------------------------
     //create labels
     createLabels();
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

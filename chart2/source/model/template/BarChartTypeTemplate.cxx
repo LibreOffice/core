@@ -228,7 +228,6 @@ Reference< chart2::XChartType > SAL_CALL BarChartTypeTemplate::getChartTypeForNe
     return xResult;
 }
 
-
 // ____ OPropertySet ____
 uno::Any BarChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)
@@ -305,7 +304,6 @@ void SAL_CALL BarChartTypeTemplate::resetStyles(
     DiagramHelper::setVertical( xDiagram, false );
 }
 
-
 void BarChartTypeTemplate::createCoordinateSystems(
     const Reference< chart2::XCoordinateSystemContainer > & xCooSysCnt )
 {
@@ -314,8 +312,6 @@ void BarChartTypeTemplate::createCoordinateSystems(
     Reference< chart2::XDiagram > xDiagram( xCooSysCnt, uno::UNO_QUERY );
     DiagramHelper::setVertical( xDiagram, m_eBarDirection == HORIZONTAL );
 }
-
-// ----------------------------------------
 
 Sequence< OUString > BarChartTypeTemplate::getSupportedServiceNames_Static()
 {

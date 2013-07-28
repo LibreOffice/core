@@ -96,7 +96,6 @@ uno::Reference< beans::XPropertySet > lcl_GetErrorBar(
     return eType;
 }
 
-
 uno::Reference< beans::XPropertySet > lcl_GetDefaultErrorBar()
 {
     // todo: use a valid context

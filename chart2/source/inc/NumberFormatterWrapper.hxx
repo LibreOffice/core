@@ -23,12 +23,9 @@
 #include <svl/zforlist.hxx>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
-//-----------------------------------------------------------------------------
 /**
 */
 class FixedNumberFormatter;
@@ -54,7 +51,6 @@ private: //private member
     ::com::sun::star::uno::Any m_aNullDate;
 };
 
-
 class OOO_DLLPUBLIC_CHARTTOOLS FixedNumberFormatter
 {
 public:
@@ -69,9 +65,7 @@ private:
     sal_uLong                       m_nNumberFormatKey;
 };
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

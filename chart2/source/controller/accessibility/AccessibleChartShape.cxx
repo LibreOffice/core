@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "AccessibleChartShape.hxx"
 #include "ObjectHierarchy.hxx"
 #include "ObjectIdentifier.hxx"
@@ -32,7 +31,6 @@ using namespace ::com::sun::star::accessibility;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::RuntimeException;
-
 
 namespace chart
 {

@@ -27,10 +27,8 @@
 #include <svl/intitem.hxx>
 #include <svtools/controldims.hrc>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 PolarOptionsTabPage::PolarOptionsTabPage( Window* pWindow,const SfxItemSet& rInAttrs ) :
     SfxTabPage( pWindow, SchResId(TP_POLAROPTIONS), rInAttrs ),
@@ -110,8 +108,6 @@ void PolarOptionsTabPage::Reset(const SfxItemSet& rInAttrs)
     }
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1350,7 +1350,6 @@ bool lcl_moveSeriesOrCheckIfMoveIsAllowed(
                                 else
                                     nNewSeriesIndex++;
 
-
                                 if( nNewSeriesIndex >= 0 && nNewSeriesIndex < aSeriesList.getLength() )
                                 {
                                     //move series in the same charttype
@@ -1439,7 +1438,6 @@ bool lcl_moveSeriesOrCheckIfMoveIsAllowed(
 }
 } // anonymous namespace
 
-
 bool DiagramHelper::isSeriesMoveable(
     const Reference< XDiagram >& xDiagram,
     const Reference< XDataSeries >& xGivenDataSeries,
@@ -1453,7 +1451,6 @@ bool DiagramHelper::isSeriesMoveable(
 
     return bIsMoveable;
 }
-
 
 bool DiagramHelper::moveSeries( const Reference< XDiagram >& xDiagram, const Reference< XDataSeries >& xGivenDataSeries, bool bForward )
 {

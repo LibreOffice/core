@@ -111,7 +111,6 @@ void Chart2ImportTest::testErrorBarRange()
     CPPUNIT_ASSERT_EQUAL(aRangePos, OUString("$Sheet1.$C$2:$C$4"));
 }
 
-
 // stepped line interpolation
 void Chart2ImportTest::testSteppedLines()
 {

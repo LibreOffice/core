@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "ConfigurationAccess.hxx"
 #include "macros.hxx"
 
@@ -28,11 +27,8 @@
 // header for rtl::Static
 #include <rtl/instance.hxx>
 
-
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 
 namespace
@@ -46,8 +42,6 @@ bool lcl_IsMetric()
     return ( eSys == MEASURE_METRIC );
 }
 }//end anonymous namespace
-
-// ----------------------------------------
 
 class CalcConfigItem : public ::utl::ConfigItem
 {
@@ -105,8 +99,6 @@ namespace ConfigurationAccess
     }
 } //namespace ConfigurationAccess
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

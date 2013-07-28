@@ -38,11 +38,8 @@ namespace
 }
 } // anonymous namespace
 
-
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 ChartWindow::ChartWindow( WindowController* pWindowController, Window* pParent, WinBits nStyle )
         : Window(pParent, nStyle)
@@ -256,8 +253,6 @@ void ChartWindow::Invalidate( const Region& rRegion, sal_uInt16 nFlags )
     ::Window::Invalidate( rRegion, nFlags );
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

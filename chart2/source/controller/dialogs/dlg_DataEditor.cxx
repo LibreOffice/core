@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "dlg_DataEditor.hxx"
 #include "dlg_DataEditor.hrc"
 #include "Strings.hrc"
@@ -40,7 +39,6 @@
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
-
 
 namespace chart
 {

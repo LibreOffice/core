@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "dlg_CreationWizard.hxx"
 #include "dlg_CreationWizard.hrc"
 #include "ResId.hxx"
@@ -32,10 +31,8 @@
 #include "ChartTypeTemplateProvider.hxx"
 #include "DialogModel.hxx"
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 
 #define PATH_FULL   1
@@ -222,8 +219,6 @@ String CreationWizard::getStateDisplayName( WizardState nState ) const
     return SCH_RESSTR(nResId);
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

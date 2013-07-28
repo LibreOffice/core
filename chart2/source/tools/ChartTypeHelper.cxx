@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "ChartTypeHelper.hxx"
 #include "DiagramHelper.hxx"
 #include "DataSeriesHelper.hxx"
@@ -29,11 +28,9 @@
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
 
-//.............................................................................
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
-//.............................................................................
 namespace chart
 {
 
@@ -688,8 +685,6 @@ bool ChartTypeHelper::isSupportingOnlyDeepStackingFor3D( const uno::Reference< X
     return bRet;
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

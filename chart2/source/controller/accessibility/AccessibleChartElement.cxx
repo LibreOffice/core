@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "AccessibleChartElement.hxx"
 #include "CharacterProperties.hxx"
 #include "ObjectIdentifier.hxx"
@@ -118,12 +117,8 @@ void AccessibleChartElement::InitTextEdit()
         }
 }
 
-// ____________________________________
-// ____________________________________
 //
 //             Interfaces
-// ____________________________________
-// ____________________________________
 
 // ________ AccessibleBase::XAccessibleContext ________
 Reference< XAccessible > AccessibleChartElement::ImplGetAccessibleChildById( sal_Int32 i ) const
@@ -267,7 +262,6 @@ sal_Int32 SAL_CALL AccessibleChartElement::getBackground()
 {
     return AccessibleBase::getBackground();
 }
-
 
 } // namespace chart
 

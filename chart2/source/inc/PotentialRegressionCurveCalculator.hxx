@@ -25,7 +25,6 @@
 namespace chart
 {
 
-
 class PotentialRegressionCurveCalculator :
         public RegressionCurveCalculator
 {

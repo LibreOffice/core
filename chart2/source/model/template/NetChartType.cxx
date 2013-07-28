@@ -144,8 +144,6 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL NetChartType_Base::getPropert
     return *StaticNetChartTypeInfo::get();
 }
 
-//-----------------------------------------------------------------------------
-
 NetChartType::NetChartType(
     const uno::Reference< uno::XComponentContext > & xContext ) :
         NetChartType_Base( xContext )

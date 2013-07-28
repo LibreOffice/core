@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "UncachedDataSequence.hxx"
 #include "macros.hxx"
 #include "PropertyHelper.hxx"
@@ -51,8 +50,6 @@ enum
 };
 }  // anonymous namespace
 
-
-// ____________________
 namespace chart
 {
 
@@ -122,8 +119,6 @@ void UncachedDataSequence::registerProperties()
                       ::getCppuType( & m_aXMLRange ) );
 }
 
-// ================================================================================
-
 Sequence< OUString > UncachedDataSequence::getSupportedServiceNames_Static()
 {
     Sequence< OUString > aServices( 4 );
@@ -145,14 +140,12 @@ Reference< beans::XPropertySetInfo > SAL_CALL UncachedDataSequence::getPropertyS
 }
 
 // ____ ::comphelper::OPropertySetHelper ____
-// __________________________________________
 ::cppu::IPropertyArrayHelper& UncachedDataSequence::getInfoHelper()
 {
     return *getArrayHelper();
 }
 
 // ____ ::comphelper::OPropertyArrayHelper ____
-// ____________________________________________
 ::cppu::IPropertyArrayHelper* UncachedDataSequence::createArrayHelper() const
 {
     Sequence< beans::Property > aProps;
@@ -164,8 +157,6 @@ Reference< beans::XPropertySetInfo > SAL_CALL UncachedDataSequence::getPropertyS
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 APPHELPER_XSERVICEINFO_IMPL( UncachedDataSequence, lcl_aServiceName )
-
-// ================================================================================
 
 // ________ XNumericalDataSequence ________
 Sequence< double > SAL_CALL UncachedDataSequence::getNumericalData()
@@ -214,7 +205,6 @@ OUString SAL_CALL UncachedDataSequence::getSourceRangeRepresentation()
 {
     return getName();
 }
-
 
 Sequence< OUString > SAL_CALL UncachedDataSequence::generateLabel( chart2::data::LabelOrigin )
     throw (uno::RuntimeException)
@@ -294,15 +284,12 @@ void SAL_CALL UncachedDataSequence::setName( const OUString& aName )
     fireModifyEvent();
 }
 
-
-
 Reference< util::XCloneable > SAL_CALL UncachedDataSequence::createClone()
     throw (uno::RuntimeException)
 {
     UncachedDataSequence * pNewSeq = new UncachedDataSequence( *this );
     return Reference< util::XCloneable >( pNewSeq );
 }
-
 
 // ____ XModifiable ____
 ::sal_Bool SAL_CALL UncachedDataSequence::isModified()

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "tp_DataSource.hxx"
 #include "tp_DataSource.hrc"
 #include "Strings.hrc"
@@ -50,8 +49,6 @@ using namespace ::com::sun::star::chart2;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
-
-// --------------------------------------------------------------------------------
 
 namespace
 {
@@ -211,8 +208,6 @@ void lcl_increaseHeightOfControl( Control & rControl, long nYOffset )
 }
 
 } //  anonymous namespace
-
-// --------------------------------------------------------------------------------
 
 namespace chart
 {

@@ -17,22 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "VLineProperties.hxx"
 #include "macros.hxx"
 #include <com/sun/star/drawing/LineStyle.hpp>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 //  get line properties from a propertyset
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 
 VLineProperties::VLineProperties()
 {
@@ -94,8 +87,6 @@ bool VLineProperties::isLineVisible() const
     return bRet;
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

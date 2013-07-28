@@ -262,8 +262,6 @@ void Legend::fireModifyEvent()
     m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
 }
 
-// ================================================================================
-
 Sequence< OUString > Legend::getSupportedServiceNames_Static()
 {
     const sal_Int32 nNumServices( 6 );

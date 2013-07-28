@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "WrappedTextRotationProperty.hxx"
 #include "macros.hxx"
 #include <com/sun/star/beans/XPropertyState.hpp>
@@ -25,8 +24,6 @@
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Any;
 
-
-//.............................................................................
 namespace chart
 {
 
@@ -71,6 +68,5 @@ Any WrappedTextRotationProperty::convertOuterToInnerValue( const Any& rOuterValu
 }
 
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

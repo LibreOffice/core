@@ -375,8 +375,6 @@ void SAL_CALL LineChartTypeTemplate::applyStyle(
     }
 }
 
-// ----------------------------------------
-
 Sequence< OUString > LineChartTypeTemplate::getSupportedServiceNames_Static()
 {
     Sequence< OUString > aServices( 2 );

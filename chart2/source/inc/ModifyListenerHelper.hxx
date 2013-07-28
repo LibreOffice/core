@@ -43,8 +43,6 @@ namespace ModifyListenerHelper
 
 OOO_DLLPUBLIC_CHARTTOOLS ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener > createModifyEventForwarder();
 
-// ================================================================================
-
 /** This helper class serves as forwarder of modify events.  It can be used
     whenever an object has to send modify events after it gets a modify event of
     one of its children.
@@ -107,8 +105,6 @@ private:
 
     tListenerMap m_aListenerMap;
 };
-
-// ================================================================================
 
 namespace impl
 {
@@ -190,9 +186,6 @@ private:
 };
 
 } //  namespace impl
-
-// --------------------------------------------------------------------------------
-
 
 template< class InterfaceRef >
 void addListener(

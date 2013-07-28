@@ -703,7 +703,6 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
             }
             break;
 
-
         case SCHATTR_AXIS_AUTO_ORIGIN:
         {
             if( (static_cast< const SfxBoolItem & >(

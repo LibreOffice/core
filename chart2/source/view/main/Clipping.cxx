@@ -24,17 +24,11 @@
 #include <com/sun/star/drawing/Position3D.hpp>
 #include <com/sun/star/drawing/DoubleSequence.hpp>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 using ::basegfx::B2DRectangle;
 using ::basegfx::B2DTuple;
-
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 
 namespace{
 /** @descr  This is a supporting function for lcl_clip2d.  It computes a new parametric
@@ -287,8 +281,6 @@ void Clipping::clipPolygonAtRectangle( const drawing::PolyPolygonShape3D& rPolyg
     }
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

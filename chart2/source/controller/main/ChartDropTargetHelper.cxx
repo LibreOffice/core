@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "ChartDropTargetHelper.hxx"
 #include "DiagramHelper.hxx"
 #include "DataSourceHelper.hxx"

@@ -123,7 +123,6 @@ protected:
     }
 };
 
-//-----------------------------------------------------------------
 /*
 Use this Guard in your apicalls to protect access on resources
 which will be released in dispose.
@@ -185,7 +184,6 @@ your XComponent::dispose method has to be implemented in the following way:
 }
 
 */
-//-----------------------------------------------------------------
 
 class OOO_DLLPUBLIC_CHARTTOOLS LifeTimeGuard
 {
@@ -215,7 +213,6 @@ private:
     LifeTimeGuard( const LifeTimeGuard& );
     LifeTimeGuard& operator= ( const LifeTimeGuard& );
 };
-
 
 template<class T>
 class NegativeGuard

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "StockDataInterpreter.hxx"
 #include "DataSeries.hxx"
 #include "macros.hxx"
@@ -121,7 +120,6 @@ InterpretedData SAL_CALL StockDataInterpreter::interpretDataSource(
             ++nVolumeSeries;
         aSequences[nBarGroupIndex].realloc( nVolumeSeries );
     }
-
 
     // create data
     sal_Int32 nSourceIndex = 0;   // index into aData sequence

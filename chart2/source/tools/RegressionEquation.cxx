@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "RegressionEquation.hxx"
 #include "LinePropertiesHelper.hxx"
 #include "FillProperties.hxx"
@@ -41,8 +40,6 @@ using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::beans::Property;
 using ::osl::MutexGuard;
-
-// ____________________________________________________________
 
 namespace
 {
@@ -178,8 +175,6 @@ struct StaticRegressionEquationInfo : public rtl::StaticAggregate< uno::Referenc
 
 } // anonymous namespace
 
-// ____________________________________________________________
-
 namespace chart
 {
 
@@ -199,7 +194,6 @@ RegressionEquation::RegressionEquation( const RegressionEquation & rOther ) :
 
 RegressionEquation::~RegressionEquation()
 {}
-
 
 // ____ XCloneable ____
 uno::Reference< util::XCloneable > SAL_CALL RegressionEquation::createClone()
@@ -285,8 +279,6 @@ void RegressionEquation::fireModifyEvent()
     m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
 }
 
-// --------------------------------------------------------------------------------
-
 // ____ XTitle ____
 uno::Sequence< uno::Reference< chart2::XFormattedString > > SAL_CALL RegressionEquation::getText()
     throw (uno::RuntimeException)
@@ -306,8 +298,6 @@ void SAL_CALL RegressionEquation::setText( const uno::Sequence< uno::Reference< 
         ContainerHelper::SequenceToVector( m_aStrings ), m_xModifyEventForwarder );
     fireModifyEvent();
 }
-
-// ================================================================================
 
 uno::Sequence< OUString > RegressionEquation::getSupportedServiceNames_Static()
 {

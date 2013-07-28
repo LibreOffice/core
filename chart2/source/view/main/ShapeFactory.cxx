@@ -41,7 +41,6 @@
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/uno/Any.hxx>
 
-
 #include <editeng/unoprnms.hxx>
 #include <rtl/math.hxx>
 #include <svx/svdocirc.hxx>
@@ -55,16 +54,10 @@
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 // set a name/CID at a shape (is used for selection handling)
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 
 void ShapeFactory::setShapeName( const uno::Reference< drawing::XShape >& xShape
                                , const OUString& rName )
@@ -87,8 +80,6 @@ void ShapeFactory::setShapeName( const uno::Reference< drawing::XShape >& xShape
     }
 }
 
-//-----------------------------------------------------------------------------
-
 OUString ShapeFactory::getShapeName( const uno::Reference< drawing::XShape >& xShape )
 {
     OUString aRet;
@@ -109,8 +100,6 @@ OUString ShapeFactory::getShapeName( const uno::Reference< drawing::XShape >& xS
 
     return aRet;
 }
-
-//-----------------------------------------------------------------------------
 
 uno::Reference< drawing::XShapes > ShapeFactory::getChartRootShape(
     const uno::Reference< drawing::XDrawPage>& xDrawPage )
@@ -136,8 +125,6 @@ uno::Reference< drawing::XShapes > ShapeFactory::getChartRootShape(
     return xRet;
 }
 
-//-----------------------------------------------------------------------------
-
 uno::Reference< drawing::XShapes > ShapeFactory::getOrCreateChartRootShape(
     const uno::Reference< drawing::XDrawPage>& xDrawPage )
 {
@@ -152,11 +139,7 @@ uno::Reference< drawing::XShapes > ShapeFactory::getOrCreateChartRootShape(
     return xRet;
 }
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 //  diverse PolyPolygon create methods
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 
 uno::Any createPolyPolygon_Cube(
             const drawing::Direction3D& rSize, double fRoundedEdge, bool bRounded = true )
@@ -179,7 +162,6 @@ uno::Any createPolyPolygon_Cube(
     const bool bRoundEdges = fRoundedEdge && fOffset < fWidthH && 2.0 * fOffset < fHeightSign*fHeight;
     const sal_Int32 nPointCount = bRoundEdges ? 13 : 5;
 
-    //--------------------------------------
     drawing::PolyPolygonShape3D aPP;
 
     aPP.SequenceX.realloc(1);
@@ -256,7 +238,6 @@ uno::Any createPolyPolygon_Cylinder(
     //fHeight may be negative
     OSL_PRECOND(fRadius>0, "The radius of a cylinder needs to be > 0");
 
-    //--------------------------------------
     drawing::PolyPolygonShape3D aPP;
 
     nVerticalSegmentCount=1;
@@ -283,7 +264,6 @@ uno::Any createPolyPolygon_Cylinder(
     if( fHeight<0.0 )
         ::std::swap(fY1,fY2);
 
-    //----------------------------
     for(sal_Int32 nN = 2; nN--;)
         *pInnerSequenceZ++ = 0.0;
 
@@ -292,7 +272,6 @@ uno::Any createPolyPolygon_Cylinder(
 
     *pInnerSequenceX++ = fRadius;
     *pInnerSequenceY++ = fY1;
-    //----------------------------
 
     pOuterSequenceX++;pOuterSequenceY++;pOuterSequenceZ++;
     pOuterSequenceX->realloc(2);
@@ -303,7 +282,6 @@ uno::Any createPolyPolygon_Cylinder(
     pInnerSequenceY = pOuterSequenceY->getArray();
     pInnerSequenceZ = pOuterSequenceZ->getArray();
 
-    //----------------------------
     for(sal_Int32 nN = 2; nN--;)
         *pInnerSequenceZ++ = 0.0;
 
@@ -312,7 +290,6 @@ uno::Any createPolyPolygon_Cylinder(
 
     *pInnerSequenceX++ = fRadius;
     *pInnerSequenceY++ = fY2;
-    //----------------------------
 
     pOuterSequenceX++;pOuterSequenceY++;pOuterSequenceZ++;
     pOuterSequenceX->realloc(2);
@@ -323,7 +300,6 @@ uno::Any createPolyPolygon_Cylinder(
     pInnerSequenceY = pOuterSequenceY->getArray();
     pInnerSequenceZ = pOuterSequenceZ->getArray();
 
-    //----------------------------
     for(sal_Int32 nN = 2; nN--;)
         *pInnerSequenceZ++ = 0.0;
 
@@ -332,7 +308,6 @@ uno::Any createPolyPolygon_Cylinder(
 
     *pInnerSequenceX++ = 0.0;
     *pInnerSequenceY++ = fY2;
-    //----------------------------
 
     return uno::Any( &aPP, ::getCppuType((const drawing::PolyPolygonShape3D*)0) );
 }
@@ -384,7 +359,6 @@ uno::Any createPolyPolygon_Cone( double fHeight, double fRadius, double fTopHeig
         ::std::swap(fY1,fY3);
     }
 
-    //----------------------------
     for(sal_Int32 nN = 2; nN--;)
         *pInnerSequenceZ++ = 0.0;
 
@@ -393,7 +367,6 @@ uno::Any createPolyPolygon_Cone( double fHeight, double fRadius, double fTopHeig
 
     *pInnerSequenceY++ = fY2;
     *pInnerSequenceX++ = fX2;
-    //----------------------------
 
     pOuterSequenceX++;pOuterSequenceY++;pOuterSequenceZ++;
     pOuterSequenceX->realloc(2);
@@ -404,7 +377,6 @@ uno::Any createPolyPolygon_Cone( double fHeight, double fRadius, double fTopHeig
     pInnerSequenceY = pOuterSequenceY->getArray();
     pInnerSequenceZ = pOuterSequenceZ->getArray();
 
-    //----------------------------
     for(sal_Int32 nN = 2; nN--;)
         *pInnerSequenceZ++ = 0.0;
 
@@ -413,16 +385,11 @@ uno::Any createPolyPolygon_Cone( double fHeight, double fRadius, double fTopHeig
 
     *pInnerSequenceY++ = fY3;
     *pInnerSequenceX++ = fX3;
-    //----------------------------
 
     return uno::Any( &aPP, ::getCppuType((const drawing::PolyPolygonShape3D*)0) );
 }
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 //  methods for 3D shape creation
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 
 uno::Reference<drawing::XShape>
         ShapeFactory::createCube(
@@ -769,10 +736,6 @@ uno::Reference<drawing::XShape>
     return xShape;
 }
 
-//------------------------------------------------------------------------------------------------------------
-//------------------------------------------------------------------------------------------------------------
-//------------------------------------------------------------------------------------------------------------
-
 void appendAndCloseBezierCoords( drawing::PolyPolygonBezierCoords& rReturn, const drawing::PolyPolygonBezierCoords& rAdd, sal_Bool bAppendInverse )
 {
     if(!rAdd.Coordinates.getLength())
@@ -797,8 +760,6 @@ void appendAndCloseBezierCoords( drawing::PolyPolygonBezierCoords& rReturn, cons
     rReturn.Coordinates[0][nOldCount+nAddCount] = rReturn.Coordinates[0][0];
     rReturn.Flags[0][nOldCount+nAddCount] = rReturn.Flags[0][0];
 }
-
-//------------------------------------------------------------------------------------------------------------
 
 drawing::PolyPolygonBezierCoords getCircularArcBezierCoords(
         double fStartAngleRadian, double fWidthAngleRadian, double fUnitRadius
@@ -913,8 +874,6 @@ drawing::PolyPolygonBezierCoords getCircularArcBezierCoords(
     return aReturn;
 }
 
-//------------------------------------------------------------------------------------------------------------
-
 drawing::PolyPolygonBezierCoords getRingBezierCoords(
             double fUnitCircleInnerRadius
             , double fUnitCircleOuterRadius
@@ -938,8 +897,6 @@ drawing::PolyPolygonBezierCoords getRingBezierCoords(
 
     return aReturn;
 }
-
-//------------------------------------------------------------------------------------------------------------
 
 uno::Reference< drawing::XShape >
         ShapeFactory::createPieSegment2D(
@@ -990,8 +947,6 @@ uno::Reference< drawing::XShape >
 
     return xShape;
 }
-
-//------------------------------------------------------------------------------------------------------------
 
 uno::Reference< drawing::XShape >
         ShapeFactory::createPieSegment(
@@ -1073,10 +1028,6 @@ uno::Reference< drawing::XShape >
     }
     return xShape;
 }
-
-//------------------------------------------------------------------------------------------------------------
-//------------------------------------------------------------------------------------------------------------
-//------------------------------------------------------------------------------------------------------------
 
 uno::Reference< drawing::XShape >
         ShapeFactory::createStripe( const uno::Reference< drawing::XShapes >& xTarget
@@ -1315,7 +1266,6 @@ drawing::PolyPolygonShape3D createPolyPolygon_Symbol( const drawing::Position3D&
             break;
     }
 
-    //--------------------------------------
     drawing::PolyPolygonShape3D aPP;
 
     aPP.SequenceX.realloc(1);
@@ -1446,7 +1396,6 @@ drawing::PolyPolygonShape3D createPolyPolygon_Symbol( const drawing::Position3D&
             *pInnerSequenceX++ = fX-fWidthH;
             *pInnerSequenceY++ = fY-fHeightH;
 
-
             *pInnerSequenceX++ = fX+fWidthH;
             *pInnerSequenceY++ = fY-fHeightH;
 
@@ -1480,7 +1429,6 @@ drawing::PolyPolygonShape3D createPolyPolygon_Symbol( const drawing::Position3D&
             *pInnerSequenceX++ = fX+fWidthH;
             *pInnerSequenceY++ = fY-0.2*fHeightH;
 
-
             *pInnerSequenceX++ = fX+fWidthH;
             *pInnerSequenceY++ = fY+0.2*fHeightH;
 
@@ -1498,7 +1446,6 @@ drawing::PolyPolygonShape3D createPolyPolygon_Symbol( const drawing::Position3D&
 
             *pInnerSequenceX++ = fX+0.2*fWidthH;
             *pInnerSequenceY++ = fY-fHeightH;
-
 
             *pInnerSequenceX++ = fX+0.2*fWidthH;
             *pInnerSequenceY++ = fY+fHeightH;
@@ -2366,8 +2313,6 @@ void ShapeFactory::removeSubShapes( const uno::Reference< drawing::XShapes >& xS
     }
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

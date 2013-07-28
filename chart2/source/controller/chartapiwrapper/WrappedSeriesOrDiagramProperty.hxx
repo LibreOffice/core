@@ -28,7 +28,6 @@
 #include <boost/shared_ptr.hpp>
 #include <vector>
 
-//.............................................................................
 namespace chart
 {
 namespace wrapper
@@ -175,7 +174,6 @@ protected:
 
 } //namespace wrapper
 } //namespace chart
-//.............................................................................
 
 // CHART_WRAPPED_SERIES_OR_DIAGRAM_PROPERTY_HXX
 #endif

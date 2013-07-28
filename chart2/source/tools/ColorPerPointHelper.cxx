@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "ColorPerPointHelper.hxx"
 #include "macros.hxx"
 #include <com/sun/star/chart2/XDataSeries.hpp>
@@ -25,10 +24,8 @@
 
 #include <algorithm>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
@@ -80,8 +77,6 @@ bool ColorPerPointHelper::hasPointOwnProperties(
     return false;
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

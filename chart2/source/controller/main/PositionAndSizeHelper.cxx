@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "PositionAndSizeHelper.hxx"
 #include "macros.hxx"
 #include "ChartModelHelper.hxx"
@@ -32,10 +31,8 @@
 #include <tools/gen.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
@@ -149,8 +146,6 @@ bool PositionAndSizeHelper::moveObject( const OUString& rObjectCID
     return moveObject( eObjectType, xObjectProp, aNewPositionAndSize, rPageRectangle );
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -34,10 +34,8 @@
 
 #include <boost/scoped_ptr.hpp>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
@@ -102,10 +100,6 @@ bool PiePositionHelper::getInnerAndOuterRadius( double fCategoryX
     return bIsVisible;
 }
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-
 PieChart::PieChart( const uno::Reference<XChartType>& xChartTypeModel
                    , sal_Int32 nDimensionCount
                    , bool bExcludingPositioning )
@@ -143,15 +137,11 @@ PieChart::~PieChart()
     delete m_pPosHelper;
 }
 
-//-----------------------------------------------------------------
-
 void PieChart::setScales( const std::vector< ExplicitScaleData >& rScales, bool /* bSwapXAndYAxis */ )
 {
     OSL_ENSURE(m_nDimension<=static_cast<sal_Int32>(rScales.size()),"Dimension of Plotter does not fit two dimension of given scale sequence");
     m_pPosHelper->setScales( rScales, true );
 }
-
-//-----------------------------------------------------------------
 
 drawing::Direction3D PieChart::getPreferredDiagramAspectRatio() const
 {
@@ -180,7 +170,6 @@ uno::Reference< drawing::XShape > PieChart::createDataPoint(
         , double fLogicZ, double fDepth, double fExplodePercentage
         , tPropertyNameValueMap* pOverwritePropertiesMap )
 {
-    //---------------------------
     //transform position:
     drawing::Direction3D aOffset;
     if( !::rtl::math::approxEqual( fExplodePercentage, 0.0 ) )
@@ -192,7 +181,6 @@ uno::Reference< drawing::XShape > PieChart::createDataPoint(
         aOffset = aNewOrigin - aOrigin;
     }
 
-    //---------------------------
     //create point
     uno::Reference< drawing::XShape > xShape(0);
     if(m_nDimension==3)
@@ -327,10 +315,8 @@ void PieChart::createShapes()
         createGroupShape( m_xLogicTarget,OUString() ));
     uno::Reference< drawing::XShapes > xTextTarget(
         m_pShapeFactory->createGroup2D( m_xFinalTarget,OUString() ));
-    //---------------------------------------------
     //check necessary here that different Y axis can not be stacked in the same group? ... hm?
 
-//=============================================================================
     ::std::vector< VDataSeriesGroup >::iterator             aXSlotIter = m_aZSlots[0].begin();
     const ::std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = m_aZSlots[0].end();
 
@@ -352,7 +338,6 @@ void PieChart::createShapes()
         catch (const uno::Exception&) { }
     }
 
-//=============================================================================
     for( double fSlotX=0; aXSlotIter != aXSlotEnd && (m_bUseRings||fSlotX<0.5 ); ++aXSlotIter, fSlotX+=1.0 )
     {
         ::std::vector< VDataSeries* >* pSeriesList = &(aXSlotIter->m_aSeriesVector);
@@ -422,14 +407,12 @@ void PieChart::createShapes()
                     ASSERT_EXCEPTION( e );
                 }
 
-                //---------------------------
                 //transforme to unit circle:
                 double fUnitCircleWidthAngleDegree = m_pPosHelper->getWidthAngleDegree( fLogicStartAngleValue, fLogicEndAngleValue );
                 double fUnitCircleStartAngleDegree = m_pPosHelper->transformToAngleDegree( fLogicStartAngleValue );
                 double fUnitCircleInnerRadius = m_pPosHelper->transformToRadius( fLogicInnerRadius );
                 double fUnitCircleOuterRadius = m_pPosHelper->transformToRadius( fLogicOuterRadius );
 
-                //---------------------------
                 //point color:
                 boost::scoped_ptr< tPropertyNameValueMap > apOverwritePropertiesMap(NULL);
                 {
@@ -548,9 +531,6 @@ void PieChart::createShapes()
             }//next series in x slot (next y slot)
         }//next category
     }//next x slot
-//=============================================================================
-//=============================================================================
-//=============================================================================
     /* @todo remove series shapes if empty
     //remove and delete point-group-shape if empty
     if(!xSeriesGroupShape_Shapes->getCount())
@@ -783,7 +763,6 @@ bool PieChart::tryMoveLabels( PieLabelInfo* pFirstBorder, PieLabelInfo* pSecondB
 
 void PieChart::rearrangeLabelToAvoidOverlapIfRequested( const awt::Size& rPageSize )
 {
-    //------------------------------------------------------------------
     //check whether there are any labels that should be moved
     std::vector< PieLabelInfo >::iterator aIt1 = m_aLabelInfoList.begin();
     std::vector< PieLabelInfo >::const_iterator aEnd = m_aLabelInfoList.end();
@@ -803,7 +782,6 @@ void PieChart::rearrangeLabelToAvoidOverlapIfRequested( const awt::Size& rPageSi
     if( ::rtl::math::approxEqual( fPageDiagonaleLength, 0.0 ) )
         return;
 
-    //------------------------------------------------------------------
     //init next and previous
     aIt1 = m_aLabelInfoList.begin();
     std::vector< PieLabelInfo >::iterator aIt2 = aIt1;
@@ -820,14 +798,11 @@ void PieChart::rearrangeLabelToAvoidOverlapIfRequested( const awt::Size& rPageSi
     }
     aIt1->pNext = &(*(m_aLabelInfoList.begin()));
 
-
-    //------------------------------------------------------------------
     //detect overlaps and move
     sal_Int32 nMaxIterations = 50;
     while( detectLabelOverlapsAndMove( rPageSize ) && nMaxIterations > 0 )
         nMaxIterations--;
 
-    //------------------------------------------------------------------
     //create connection lines for the moved labels
     aEnd = m_aLabelInfoList.end();
     VLineProperties aVLineProperties;
@@ -850,7 +825,6 @@ void PieChart::rearrangeLabelToAvoidOverlapIfRequested( const awt::Size& rPageSi
                 nY2 = aRect.getMinY();
             else if( nY1 > aRect.getMaxY() )
                 nY2 = aRect.getMaxY();
-
 
             //when the line is very short compared to the page size don't create one
             ::basegfx::B2DVector aLength(nX1-nX2, nY1-nY2);
@@ -877,8 +851,6 @@ void PieChart::rearrangeLabelToAvoidOverlapIfRequested( const awt::Size& rPageSi
     }
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "tp_ErrorBars.hxx"
 #include "ResId.hxx"
 #include "TabPages.hrc"
@@ -25,10 +24,8 @@
 
 using namespace ::com::sun::star;
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 ErrorBarsTabPage::ErrorBarsTabPage( Window* pParent, const SfxItemSet& rInAttrs ) :
         SfxTabPage( pParent, SchResId( TP_YERRORBAR ), rInAttrs ),
@@ -85,8 +82,6 @@ void ErrorBarsTabPage::SetChartDocumentForRangeChoosing(
     m_aErrorBarResources.SetChartDocumentForRangeChoosing( xChartDocument );
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

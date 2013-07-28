@@ -48,7 +48,6 @@ using ::com::sun::star::beans::Property;
 using ::com::sun::star::uno::Any;
 using ::osl::MutexGuard;
 
-// ----------------------------------------
 namespace
 {
 
@@ -153,7 +152,6 @@ struct StaticStockChartTypeTemplateInfo : public rtl::StaticAggregate< uno::Refe
 };
 
 } // anonymous namespace
-// ----------------------------------------
 
 namespace chart
 {
@@ -346,7 +344,6 @@ void StockChartTypeTemplate::createChartTypes(
 
         std::vector< Reference< chart2::XChartType > > aChartTypeVec;
         // Bars (Volume)
-        // -------------
         if( bHasVolume )
         {
             // chart type
@@ -386,7 +383,6 @@ void StockChartTypeTemplate::createChartTypes(
         ++nSeriesIndex;
 
         // Lines (remaining series)
-        // ------------------------
         if( aSeriesSeq.getLength() > nSeriesIndex &&
             aSeriesSeq[ nSeriesIndex ].getLength() > 0 )
         {
@@ -521,8 +517,6 @@ Reference< XDataInterpreter > SAL_CALL StockChartTypeTemplate::getDataInterprete
 
     return m_xDataInterpreter;
 }
-
-// ----------------------------------------
 
 Sequence< OUString > StockChartTypeTemplate::getSupportedServiceNames_Static()
 {

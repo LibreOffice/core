@@ -22,20 +22,15 @@
 #include "VAxisOrGridBase.hxx"
 #include "VLineProperties.hxx"
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
-//-----------------------------------------------------------------------------
 /**
 */
 
 class VCartesianGrid : public VAxisOrGridBase
 {
-//-------------------------------------------------------------------------
 // public methods
-//-------------------------------------------------------------------------
 public:
     VCartesianGrid( sal_Int32 nDimensionIndex, sal_Int32 nDimensionCount
         , const ::com::sun::star::uno::Sequence<
@@ -57,9 +52,7 @@ private:
             ::com::sun::star::beans::XPropertySet > > m_aGridPropertiesList; //main grid, subgrid, subsubgrid etc
 };
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

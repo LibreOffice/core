@@ -112,16 +112,12 @@ public:
     virtual ::sal_Bool SAL_CALL isDataFlavorSupported( const ::com::sun::star::datatransfer::DataFlavor& aFlavor )
                 throw (::com::sun::star::uno::RuntimeException);
 
-    //-------------------------------------------------------------------------------------
     // ::com::sun::star::util::XEventListener (base of XCloseListener and XModifyListener)
-    //-------------------------------------------------------------------------------------
     virtual void SAL_CALL
         disposing( const ::com::sun::star::lang::EventObject& Source )
                             throw (::com::sun::star::uno::RuntimeException);
 
-    //-----------------------------------------------------------------
     // ::com::sun::star::util::XModifyListener
-    //-----------------------------------------------------------------
     virtual void SAL_CALL modified(
         const ::com::sun::star::lang::EventObject& aEvent )
         throw (::com::sun::star::uno::RuntimeException);
@@ -129,23 +125,17 @@ public:
     //SfxListener
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
-    //-----------------------------------------------------------------
     // ::com::sun::star::util::XModeChangeBroadcaster
-    //-----------------------------------------------------------------
 
     virtual void SAL_CALL addModeChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModeChangeListener >& _rxListener ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeModeChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModeChangeListener >& _rxListener ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL addModeChangeApproveListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModeChangeApproveListener >& _rxListener ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeModeChangeApproveListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModeChangeApproveListener >& _rxListener ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException);
 
-    //-----------------------------------------------------------------
     // ::com::sun::star::util::XUpdatable
-    //-----------------------------------------------------------------
     virtual void SAL_CALL update() throw (::com::sun::star::uno::RuntimeException);
 
-    //-----------------------------------------------------------------
     // ::com::sun::star::beans::XPropertySet
-    //-----------------------------------------------------------------
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
@@ -154,9 +144,7 @@ public:
     virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
-    //-----------------------------------------------------------------
     // ::com::sun::star::lang::XMultiServiceFactory
-    //-----------------------------------------------------------------
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstance( const OUString& aServiceSpecifier )
         throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstanceWithArguments(
@@ -197,7 +185,6 @@ private: //methods
         , const ::com::sun::star::awt::Size& rPageSize
         , bool bUseFixedInnerSize
         , const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape>& xDiagram_MarkHandles );
-
 
 private: //member
     ::osl::Mutex m_aMutex;

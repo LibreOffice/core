@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "ChartTypeDialogController.hxx"
 #include "ResId.hxx"
 #include "HelpIds.hrc"
@@ -43,10 +42,8 @@
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
@@ -111,10 +108,6 @@ bool ChartTypeParameter::mapsToSimilarService( const ChartTypeParameter& rParame
         return nTheHigherTheLess>nMax-6;
     return true;
 }
-
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 
 ChartTypeDialogController::ChartTypeDialogController()
     : bSupportsXAxisWithValues(false)
@@ -397,7 +390,6 @@ void ChartTypeDialogController::fillExtraControls( const ChartTypeParameter& /*r
 void ChartTypeDialogController::setTemplateProperties( const uno::Reference< beans::XPropertySet >& /*xTemplateProps*/ ) const throw (uno::RuntimeException)
 {
 }
-//--------------------------------------------------------------------------
 
 ColumnOrBarChartDialogController_Base::ColumnOrBarChartDialogController_Base()
                                         : ChartTypeDialogController()
@@ -421,7 +413,6 @@ void ColumnOrBarChartDialogController_Base::adjustSubTypeAndEnableControls( Char
         rParameter.nSubTypeIndex=1;
     }
 }
-//--------------------------------------------------------------------------
 ColumnChartDialogController::ColumnChartDialogController()
 {
 }
@@ -497,8 +488,6 @@ void ColumnChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const
     rSubTypeList.SetItemText( 4, SCH_RESSTR( STR_DEEP ) );
 }
 
-//--------------------------------------------------------------------------
-
 BarChartDialogController::BarChartDialogController()
 {
 }
@@ -573,8 +562,6 @@ void BarChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const Ch
     rSubTypeList.SetItemText( 4, SCH_RESSTR( STR_DEEP ) );
 }
 
-//--------------------------------------------------------------------------
-
 PieChartDialogController::PieChartDialogController()
 {
 }
@@ -637,7 +624,6 @@ void PieChartDialogController::adjustParameterToSubType( ChartTypeParameter& rPa
     if(rParameter.eStackMode==GlobalStackMode_STACK_Z)
         rParameter.eStackMode = GlobalStackMode_NONE;
 }
-//--------------------------------------------------------------------------
 LineChartDialogController::LineChartDialogController()
 {
 }
@@ -656,7 +642,6 @@ const tTemplateServiceChartTypeParameterMap& LineChartDialogController::getTempl
 {
     static tTemplateServiceChartTypeParameterMap m_aTemplateMap =
     tTemplateServiceChartTypeParameterMap
-    //-------------------------------------------------------
     ( "com.sun.star.chart2.template.Symbol" ,                     ChartTypeParameter(1,false,false,GlobalStackMode_NONE,true,false) )
     ( "com.sun.star.chart2.template.StackedSymbol" ,              ChartTypeParameter(1,false,false,GlobalStackMode_STACK_Y,true,false) )
     ( "com.sun.star.chart2.template.PercentStackedSymbol" ,       ChartTypeParameter(1,false,false,GlobalStackMode_STACK_Y_PERCENT,true,false) )
@@ -666,11 +651,9 @@ const tTemplateServiceChartTypeParameterMap& LineChartDialogController::getTempl
     ( "com.sun.star.chart2.template.Line" ,                       ChartTypeParameter(3,false,false,GlobalStackMode_NONE,false,true) )
     ( "com.sun.star.chart2.template.StackedLine" ,                ChartTypeParameter(3,false,false,GlobalStackMode_STACK_Y,false,true) )
     ( "com.sun.star.chart2.template.PercentStackedLine" ,         ChartTypeParameter(3,false,false,GlobalStackMode_STACK_Y_PERCENT,false,true) )
-    //-------------------------------------------------------
     ( "com.sun.star.chart2.template.StackedThreeDLine" ,          ChartTypeParameter(4,false,true,GlobalStackMode_STACK_Y,false,true) )
     ( "com.sun.star.chart2.template.PercentStackedThreeDLine" ,   ChartTypeParameter(4,false,true,GlobalStackMode_STACK_Y_PERCENT,false,true) )
     ( "com.sun.star.chart2.template.ThreeDLineDeep" ,             ChartTypeParameter(4,false,true,GlobalStackMode_STACK_Z,false,true) )
-    //-------------------------------------------------------
     ;
     return m_aTemplateMap;
 }
@@ -788,7 +771,6 @@ void LineChartDialogController::adjustParameterToMainType( ChartTypeParameter& r
 
     ChartTypeDialogController::adjustParameterToMainType( rParameter );
 }
-//--------------------------------------------------------------------------
 XYChartDialogController::XYChartDialogController()
 {
     bSupportsXAxisWithValues = true;
@@ -808,7 +790,6 @@ const tTemplateServiceChartTypeParameterMap& XYChartDialogController::getTemplat
 {
     static tTemplateServiceChartTypeParameterMap m_aTemplateMap =
     tTemplateServiceChartTypeParameterMap
-    //-------------------------------------------------------
     ( "com.sun.star.chart2.template.ScatterSymbol" ,              ChartTypeParameter(1,true,false,GlobalStackMode_NONE,true,false) )
     ( "com.sun.star.chart2.template.ScatterLineSymbol" ,          ChartTypeParameter(2,true,false,GlobalStackMode_NONE,true,true) )
     ( "com.sun.star.chart2.template.ScatterLine" ,                ChartTypeParameter(3,true,false,GlobalStackMode_NONE,false,true) )
@@ -889,7 +870,6 @@ void XYChartDialogController::adjustParameterToSubType( ChartTypeParameter& rPar
             break;
     }
 }
-//--------------------------------------------------------------------------
 AreaChartDialogController::AreaChartDialogController()
 {
 }
@@ -971,7 +951,6 @@ void AreaChartDialogController::adjustParameterToMainType( ChartTypeParameter& r
 
     ChartTypeDialogController::adjustParameterToMainType( rParameter );
 }
-//--------------------------------------------------------------------------
 NetChartDialogController::NetChartDialogController()
 {
     bSupports3D = false;
@@ -1064,7 +1043,6 @@ void NetChartDialogController::adjustParameterToSubType( ChartTypeParameter& rPa
             break;
     }
 }
-//--------------------------------------------------------------------------
 StockChartDialogController::StockChartDialogController()
 {
     bSupports3D = false;
@@ -1112,7 +1090,6 @@ void StockChartDialogController::adjustParameterToSubType( ChartTypeParameter& r
     rParameter.b3DLook = false;
     rParameter.eStackMode = GlobalStackMode_NONE;
 }
-//--------------------------------------------------------------------------
 CombiColumnLineChartDialogController::CombiColumnLineChartDialogController()
                     : m_pFT_NumberOfLines(0)
                     , m_pMF_NumberOfLines(0)
@@ -1267,7 +1244,6 @@ void CombiColumnLineChartDialogController::adjustParameterToSubType( ChartTypePa
             break;
     }
 }
-//--------------------------------------------------------------------------
 BubbleChartDialogController::BubbleChartDialogController()
 {
 }
@@ -1301,8 +1277,6 @@ void BubbleChartDialogController::adjustParameterToSubType( ChartTypeParameter& 
     rParameter.b3DLook = false;
     rParameter.eStackMode = GlobalStackMode_NONE;
 }
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "ChartViewHelper.hxx"
 #include "macros.hxx"
 #include "servicenames.hxx"
@@ -26,10 +25,8 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
 
@@ -54,8 +51,6 @@ void ChartViewHelper::setViewToDirtyState( const uno::Reference< frame::XModel >
         ASSERT_EXCEPTION( ex );
     }
 }
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -22,16 +22,12 @@
 #include "VSeriesPlotter.hxx"
 #include <com/sun/star/drawing/Direction3D.hpp>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 class BubbleChart : public VSeriesPlotter
 {
-    //-------------------------------------------------------------------------
     // public methods
-    //-------------------------------------------------------------------------
 public:
     BubbleChart( const ::com::sun::star::uno::Reference<
              ::com::sun::star::chart2::XChartType >& xChartTypeModel
@@ -42,22 +38,14 @@ public:
 
     virtual void addSeries( VDataSeries* pSeries, sal_Int32 zSlot = -1, sal_Int32 xSlot = -1,sal_Int32 ySlot = -1 );
 
-    //-------------------
     virtual ::com::sun::star::drawing::Direction3D  getPreferredDiagramAspectRatio() const;
 
-    //-------------------------------------------------------------------------
     // MinimumAndMaximumSupplier
-    //-------------------------------------------------------------------------
     virtual bool isExpandIfValuesCloseToBorder( sal_Int32 nDimensionIndex );
     virtual bool isSeparateStackingForDifferentSigns( sal_Int32 nDimensionIndex );
 
-    //-------------------------------------------------------------------------
-
     virtual LegendSymbolStyle getLegendSymbolStyle();
 
-    //-------------------------------------------------------------------------
-    //-------------------------------------------------------------------------
-    //-------------------------------------------------------------------------
 private: //methods
     //no default constructor
     BubbleChart();
@@ -76,9 +64,7 @@ private: //member
     double m_fMaxLogicBubbleSize;//calculated values
     double m_fBubbleSizeFactorToScreen;//calculated values
 };
-//.............................................................................
 } //namespace chart
-//.............................................................................
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

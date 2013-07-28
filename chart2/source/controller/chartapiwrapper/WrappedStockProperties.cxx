@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "WrappedStockProperties.hxx"
 #include "macros.hxx"
 #include "FastPropertyIdRanges.hxx"
@@ -33,13 +32,10 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::beans::Property;
 
-//.............................................................................
 namespace chart
 {
 namespace wrapper
 {
-
-//-----------------------------------------------------------------------------
 
 class WrappedStockProperty : public WrappedProperty
 {
@@ -119,8 +115,6 @@ void WrappedStockProperty::setPropertyValue( const ::com::sun::star::uno::Any& r
     return m_aDefaultValue;
 }
 
-//-------------------------------------------------------------------------------------
-
 class WrappedVolumeProperty : public WrappedStockProperty
 {
 public:
@@ -191,8 +185,6 @@ uno::Reference< chart2::XChartTypeTemplate > WrappedVolumeProperty::getNewTempla
     }
     return xTemplate;
 }
-
-//-------------------------------------------------------------------------------------
 
 class WrappedUpDownProperty : public WrappedStockProperty
 {
@@ -269,7 +261,6 @@ enum
 
 }//anonymous namespace
 
-//-----------------------------------------------------------------------------
 void WrappedStockProperties::addProperties( ::std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
@@ -288,7 +279,6 @@ void WrappedStockProperties::addProperties( ::std::vector< Property > & rOutProp
                   | beans::PropertyAttribute::MAYBEVOID ));
 }
 
-//-----------------------------------------------------------------------------
 void WrappedStockProperties::addWrappedProperties( std::vector< WrappedProperty* >& rList
                                     , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
 {
@@ -298,6 +288,5 @@ void WrappedStockProperties::addWrappedProperties( std::vector< WrappedProperty*
 
 } //namespace wrapper
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

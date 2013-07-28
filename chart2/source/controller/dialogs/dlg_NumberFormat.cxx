@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "dlg_NumberFormat.hxx"
 
 // header for class SfxItemSet
@@ -33,10 +32,8 @@
 // header for SvNumberFormatter
 #include <svl/zforlist.hxx>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 
 NumberFormatDialog::NumberFormatDialog(Window* pParent, SfxItemSet& rSet)
@@ -70,8 +67,6 @@ SfxItemSet NumberFormatDialog::CreateEmptyItemSetForNumberFormatDialog( SfxItemP
     return SfxItemSet( rItemPool, nWhichPairs );
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

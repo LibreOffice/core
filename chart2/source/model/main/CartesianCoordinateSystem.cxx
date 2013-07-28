@@ -88,10 +88,7 @@ Sequence< OUString > CartesianCoordinateSystem::getSupportedServiceNames_Static(
 APPHELPER_XSERVICEINFO_IMPL( CartesianCoordinateSystem,
                              OUString("com.sun.star.comp.chart.CartesianCoordinateSystem"))
 
-
-// =================================
 // ==== CartesianCoordinateSystem2d ====
-// =================================
 
 CartesianCoordinateSystem2d::CartesianCoordinateSystem2d(
     const uno::Reference< uno::XComponentContext > & xContext ) :
@@ -113,9 +110,7 @@ Sequence< OUString > CartesianCoordinateSystem2d::getSupportedServiceNames_Stati
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 APPHELPER_XSERVICEINFO_IMPL( CartesianCoordinateSystem2d, lcl_aImplementationNameCartesian2d )
 
-// =================================
 // ==== CartesianCoordinateSystem3d ====
-// =================================
 
 CartesianCoordinateSystem3d::CartesianCoordinateSystem3d(
     const uno::Reference< uno::XComponentContext > & xContext ) :

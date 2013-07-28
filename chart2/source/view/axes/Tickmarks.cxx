@@ -24,10 +24,8 @@
 #include <rtl/math.hxx>
 #include <memory>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 using namespace ::rtl::math;
@@ -89,10 +87,6 @@ TickInfo* PureTickIter::nextInfo()
     return 0;
 }
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-
 TickFactory::TickFactory(
           const ExplicitScaleData& rScale, const ExplicitIncrementData& rIncrement )
             : m_rScale( rScale )
@@ -141,9 +135,7 @@ void TickFactory::getAllTicksShifted( ::std::vector< ::std::vector< TickInfo > >
         EquidistantTickFactory( m_rScale, m_rIncrement ).getAllTicksShifted( rAllTickInfos );
 }
 
-//-----------------------------------------------------------------------------
 // ___TickFactory_2D___
-//-----------------------------------------------------------------------------
 TickFactory_2D::TickFactory_2D(
           const ExplicitScaleData& rScale, const ExplicitIncrementData& rIncrement
           //, double fStrech_SceneToScreen, double fOffset_SceneToScreen )
@@ -317,8 +309,6 @@ void TickFactory_2D::updateScreenValues( ::std::vector< ::std::vector< TickInfo 
     }
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

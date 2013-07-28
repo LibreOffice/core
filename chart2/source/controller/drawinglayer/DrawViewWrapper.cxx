@@ -49,10 +49,8 @@
 
 using namespace ::com::sun::star;
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 namespace
 {
@@ -236,7 +234,6 @@ void DrawViewWrapper::MarkObject( SdrObject* pObj )
     this->showMarkHandles();
 }
 
-
 void DrawViewWrapper::setMarkHandleProvider( MarkHandleProvider* pMarkHandleProvider )
 {
     m_pMarkHandleProvider = pMarkHandleProvider;
@@ -387,8 +384,6 @@ SdrObject* DrawViewWrapper::getSdrObject( const uno::Reference<
     return pRet;
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

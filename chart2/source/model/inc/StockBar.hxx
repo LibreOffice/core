@@ -50,7 +50,6 @@ public:
     explicit StockBar( bool bRisingCourse );
     virtual ~StockBar();
 
-
     /// XServiceInfo declarations
     APPHELPER_XSERVICEINFO_DECL()
 
@@ -70,7 +69,6 @@ protected:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL
         getPropertySetInfo()
         throw (::com::sun::star::uno::RuntimeException);
-
 
     // ____ XCloneable ____
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone()

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "dlg_ShapeFont.hxx"
 #include "ViewElementListProvider.hxx"
 #include "ResId.hxx"
@@ -32,10 +31,8 @@
 using ::com::sun::star::uno::Reference;
 using namespace ::com::sun::star;
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 ShapeFontDialog::ShapeFontDialog( Window* pParent, const SfxItemSet* pAttr,
     const ViewElementListProvider* pViewElementListProvider )
@@ -77,8 +74,6 @@ void ShapeFontDialog::PageCreated( sal_uInt16 nId, SfxTabPage& rPage )
     }
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

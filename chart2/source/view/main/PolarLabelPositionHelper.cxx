@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "PolarLabelPositionHelper.hxx"
 #include "PlottingPositionHelper.hxx"
 #include "CommonConverters.hxx"
@@ -26,10 +25,8 @@
 
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
@@ -122,7 +119,6 @@ awt::Point PolarLabelPositionHelper::getLabelScreenPositionAndAlignmentForUnitCi
                 fAngleDegree = 270.0;
         }
     }
-    //------------------------------
     //set LabelAlignment
     if( !bCenter )
     {
@@ -173,8 +169,6 @@ awt::Point PolarLabelPositionHelper::getLabelScreenPositionAndAlignmentForUnitCi
     return aRet;
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

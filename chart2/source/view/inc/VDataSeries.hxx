@@ -51,7 +51,6 @@ public:
     sal_Int32 detectNumberFormatKey( sal_Int32 index ) const;
     sal_Int32 getLength() const;
 
-
     ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::data::XDataSequence >     Model;
 

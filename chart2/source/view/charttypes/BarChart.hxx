@@ -22,17 +22,13 @@
 
 #include "VSeriesPlotter.hxx"
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 class BarPositionHelper;
 
 class BarChart : public VSeriesPlotter
 {
-    //-------------------------------------------------------------------------
     // public methods
-    //-------------------------------------------------------------------------
 public:
     BarChart( const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XChartType >& xChartTypeModel
@@ -42,13 +38,8 @@ public:
     virtual void createShapes();
     virtual void addSeries( VDataSeries* pSeries, sal_Int32 zSlot = -1, sal_Int32 xSlot = -1,sal_Int32 ySlot = -1 );
 
-    //-------------------
     virtual ::com::sun::star::drawing::Direction3D  getPreferredDiagramAspectRatio() const;
     virtual bool keepAspectRatio() const;
-
-    //-------------------------------------------------------------------------
-    //-------------------------------------------------------------------------
-    //-------------------------------------------------------------------------
 
 private: //methods
     //no default constructor
@@ -80,9 +71,7 @@ private: //member
     ::com::sun::star::uno::Sequence< sal_Int32 > m_aOverlapSequence;
     ::com::sun::star::uno::Sequence< sal_Int32 > m_aGapwidthSequence;
 };
-//.............................................................................
 } //namespace chart
-//.............................................................................
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

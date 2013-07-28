@@ -199,9 +199,6 @@ void FormattedString::fireModifyEvent()
     m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
 }
 
-
-// ----------------------------------------
-
 Sequence< OUString > FormattedString::getSupportedServiceNames_Static()
 {
     Sequence< OUString > aServices( 2 );
@@ -228,15 +225,12 @@ uno::Any FormattedString::GetDefaultValue( sal_Int32 nHandle ) const
     return *StaticFormattedStringInfoHelper::get();
 }
 
-
 // ____ XPropertySet ____
 uno::Reference< beans::XPropertySetInfo > SAL_CALL FormattedString::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
     return *StaticFormattedStringInfo::get();
 }
-
-// ================================================================================
 
 using impl::FormattedString_Base;
 

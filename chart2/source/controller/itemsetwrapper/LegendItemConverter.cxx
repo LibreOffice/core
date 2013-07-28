@@ -97,7 +97,6 @@ bool LegendItemConverter::GetItemProperty( tWhichIdType /*nWhichId*/, tPropertyN
     return false;
 }
 
-
 bool LegendItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet& rInItemSet )
     throw( uno::Exception )
 {

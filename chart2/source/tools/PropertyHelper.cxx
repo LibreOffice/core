@@ -212,7 +212,6 @@ OUString addGradientUniqueNameToTable(
     return OUString();
 }
 
-
 OUString addTransparencyGradientUniqueNameToTable(
     const Any & rValue,
     const Reference< lang::XMultiServiceFactory > & xFact,
@@ -264,8 +263,6 @@ OUString addBitmapUniqueNameToTable(
     return OUString();
 }
 
-// ----------------------------------------
-
 void setPropertyValueAny( tPropertyValueMap & rOutMap, tPropertyValueMapKey key, const uno::Any & rAny )
 {
     tPropertyValueMap::iterator aIt( rOutMap.find( key ));
@@ -292,7 +289,6 @@ template<>
 {
     setPropertyValueDefaultAny( rOutMap, key, rAny );
 }
-
 
 void setEmptyPropertyValueDefault( tPropertyValueMap & rOutMap, tPropertyValueMapKey key )
 {

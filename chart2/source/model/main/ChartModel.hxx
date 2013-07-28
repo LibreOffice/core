@@ -71,8 +71,6 @@
 
 class SvNumberFormatter;
 
-//=============================================================================
-
 namespace chart
 {
 
@@ -230,22 +228,16 @@ public:
     explicit ChartModel( const ChartModel & rOther );
     virtual ~ChartModel();
 
-    //-----------------------------------------------------------------
     // ::com::sun::star::lang::XServiceInfo
-    //-----------------------------------------------------------------
 
     APPHELPER_XSERVICEINFO_DECL()
     APPHELPER_SERVICE_FACTORY_HELPER(ChartModel)
 
-    //-----------------------------------------------------------------
     // ::com::sun::star::lang::XInitialization
-    //-----------------------------------------------------------------
     virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
                 throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
-    //-----------------------------------------------------------------
     // ::com::sun::star::frame::XModel (required interface)
-    //-----------------------------------------------------------------
 
     virtual sal_Bool SAL_CALL
         attachResource( const OUString& rURL
@@ -293,10 +285,7 @@ public:
         getCurrentSelection()
                             throw (::com::sun::star::uno::RuntimeException);
 
-
-    //-----------------------------------------------------------------
     // ::com::sun::star::lang::XComponent (base of XModel)
-    //-----------------------------------------------------------------
     virtual void SAL_CALL
         dispose()           throw (::com::sun::star::uno::RuntimeException);
 
@@ -310,17 +299,13 @@ public:
                           ::com::sun::star::lang::XEventListener > & xListener )
                             throw (::com::sun::star::uno::RuntimeException);
 
-    //-----------------------------------------------------------------
     // ::com::sun::star::util::XCloseable
-    //-----------------------------------------------------------------
     virtual void SAL_CALL
         close( sal_Bool bDeliverOwnership )
                             throw(::com::sun::star::util::CloseVetoException,
                                   ::com::sun::star::uno::RuntimeException);
 
-    //-----------------------------------------------------------------
     // ::com::sun::star::util::XCloseBroadcaster (base of XCloseable)
-    //-----------------------------------------------------------------
     virtual void SAL_CALL
         addCloseListener( const ::com::sun::star::uno::Reference<
                             ::com::sun::star::util::XCloseListener > & xListener )
@@ -331,18 +316,14 @@ public:
                             ::com::sun::star::util::XCloseListener > & xListener )
                             throw (::com::sun::star::uno::RuntimeException);
 
-    //-----------------------------------------------------------------
     // ::com::sun::star::frame::XStorable2 (extension of XStorable)
-    //-----------------------------------------------------------------
     virtual void SAL_CALL storeSelf(
         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rMediaDescriptor )
         throw (::com::sun::star::lang::IllegalArgumentException,
                ::com::sun::star::io::IOException,
                ::com::sun::star::uno::RuntimeException);
 
-    //-----------------------------------------------------------------
     // ::com::sun::star::frame::XStorable (required interface)
-    //-----------------------------------------------------------------
     virtual sal_Bool SAL_CALL
         hasLocation()       throw (::com::sun::star::uno::RuntimeException);
 
@@ -370,9 +351,7 @@ public:
                             throw (::com::sun::star::io::IOException
                             , ::com::sun::star::uno::RuntimeException);
 
-    //-----------------------------------------------------------------
     // ::com::sun::star::util::XModifiable (required interface)
-    //-----------------------------------------------------------------
     virtual sal_Bool SAL_CALL
         isModified()        throw (::com::sun::star::uno::RuntimeException);
 
@@ -381,9 +360,7 @@ public:
                             throw (::com::sun::star::beans::PropertyVetoException
                             , ::com::sun::star::uno::RuntimeException);
 
-    //-----------------------------------------------------------------
     // ::com::sun::star::util::XModifyBroadcaster (base of XModifiable)
-    //-----------------------------------------------------------------
     virtual void SAL_CALL
         addModifyListener( const ::com::sun::star::uno::Reference<
                             ::com::sun::star::util::XModifyListener >& xListener )
@@ -416,9 +393,7 @@ public:
         const ::com::sun::star::datatransfer::DataFlavor& aFlavor )
         throw (::com::sun::star::uno::RuntimeException);
 
-    //-----------------------------------------------------------------
     // lang::XTypeProvider (overloaded method of WeakImplHelper)
-    //-----------------------------------------------------------------
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL
         getTypes() throw (::com::sun::star::uno::RuntimeException);
 
@@ -430,9 +405,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoManager > SAL_CALL
         getUndoManager(  ) throw (::com::sun::star::uno::RuntimeException);
 
-    //-----------------------------------------------------------------
     // ::com::sun::star::chart2::XChartDocument
-    //-----------------------------------------------------------------
     virtual ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XDiagram > SAL_CALL
         getFirstDiagram()       throw (::com::sun::star::uno::RuntimeException);

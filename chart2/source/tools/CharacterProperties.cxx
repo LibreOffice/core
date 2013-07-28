@@ -41,7 +41,6 @@
 
 #include <comphelper/InlineContainer.hxx>
 
-
 // header for struct SvtLinguConfig
 #include <unotools/lingucfg.hxx>
 #include <i18nlangtag/mslangid.hxx>
@@ -51,7 +50,6 @@
 using namespace ::com::sun::star;
 
 using ::com::sun::star::beans::Property;
-
 
 namespace chart
 {

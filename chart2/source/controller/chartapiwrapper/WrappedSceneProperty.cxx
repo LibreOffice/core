@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "WrappedSceneProperty.hxx"
 #include "macros.hxx"
 #include "DiagramHelper.hxx"
@@ -29,7 +28,6 @@ using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 
-//.............................................................................
 namespace chart
 {
 namespace wrapper
@@ -40,8 +38,6 @@ void WrappedSceneProperty::addWrappedProperties( std::vector< WrappedProperty* >
 {
     rList.push_back( new WrappedD3DTransformMatrixProperty( spChart2ModelContact ) );
 }
-
-//----------------------------------------------------------------------------------------------------------------------
 
 WrappedD3DTransformMatrixProperty::WrappedD3DTransformMatrixProperty(
             ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
@@ -114,6 +110,5 @@ Any WrappedD3DTransformMatrixProperty::getPropertyDefault( const Reference< bean
 
 } //namespace wrapper
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

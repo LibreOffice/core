@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "DataBrowserModel.hxx"
 #include "DialogModel.hxx"
 #include "ChartModelHelper.hxx"
@@ -58,7 +57,6 @@ using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 
-
 namespace
 {
 OUString lcl_getRole(
@@ -79,7 +77,6 @@ OUString lcl_getRole(
     }
     return aResult;
 }
-
 
 OUString lcl_getRole(
     const Reference< chart2::data::XLabeledDataSequence > & xLSeq )
@@ -229,7 +226,6 @@ bool lcl_ShowCategoriesAsDataLabel( const Reference< chart2::XDiagram > & xDiagr
 
 namespace chart
 {
-
 
 struct DataBrowserModel::tDataColumn
 {

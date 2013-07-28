@@ -31,7 +31,6 @@ namespace chart2 {
 }
 }}}
 
-// ----------------------------------------
 namespace chart
 {
 
@@ -72,7 +71,6 @@ public:
         unknown.
     */
     void toggleAutoResizeState();
-
 
     /** Sets the ReferencePageSize according to the internal settings of this
         class at the XPropertySet, and the adapted font sizes if bAdaptFontSizes

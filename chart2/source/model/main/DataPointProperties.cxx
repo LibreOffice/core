@@ -46,7 +46,6 @@ void DataPointProperties::AddPropertiesToVector(
     ::std::vector< Property > & rOutProperties )
 {
     // DataPointProperties
-    // ===================
 
     // Common
     // ------
@@ -66,7 +65,6 @@ void DataPointProperties::AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     // Fill Properties
-    // ---------------
     rOutProperties.push_back(
         Property( "FillStyle",
                   PROP_DATAPOINT_FILL_STYLE,
@@ -89,7 +87,6 @@ void DataPointProperties::AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT
                   | beans::PropertyAttribute::MAYBEVOID ));
-
 
     rOutProperties.push_back(
         beans::Property( "GradientStepCount",
@@ -155,7 +152,6 @@ void DataPointProperties::AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEVOID ));
 
     // Line Properties
-    // ---------------
     rOutProperties.push_back(
         Property( "LineStyle",
                   LinePropertiesHelper::PROP_LINE_STYLE,
@@ -210,7 +206,6 @@ void DataPointProperties::AddPropertiesToVector(
                   ::getCppuType( reinterpret_cast< const sal_Int16 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
-
 
     rOutProperties.push_back(
         Property( "FillBitmapRectanglePoint",

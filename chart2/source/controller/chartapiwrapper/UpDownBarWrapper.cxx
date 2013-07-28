@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "UpDownBarWrapper.hxx"
 #include "macros.hxx"
 #include "Chart2ModelContact.hxx"
@@ -120,8 +119,6 @@ struct StaticUpDownBarWrapperDefaults : public rtl::StaticAggregate< ::chart::tP
 };
 
 } // anonymous namespace
-
-// --------------------------------------------------------------------------------
 
 namespace chart
 {
@@ -372,9 +369,6 @@ uno::Sequence< uno::Any > SAL_CALL UpDownBarWrapper::getPropertyDefaults( const 
     }
     return aRetSeq;
 }
-
-
-// ================================================================================
 
 Sequence< OUString > UpDownBarWrapper::getSupportedServiceNames_Static()
 {

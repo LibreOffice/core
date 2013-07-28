@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "dlg_DataSource.hxx"
 #include "dlg_DataSource.hrc"
 #include "Strings.hrc"
@@ -40,13 +39,8 @@ using namespace ::chart;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 
-// --------------------------------------------------------------------------------
-
-
 namespace chart
 {
-
-// ----------------------------------------
 
 class DocumentChartTypeTemplateProvider : public ChartTypeTemplateProvider
 {
@@ -87,8 +81,6 @@ Reference< chart2::XChartTypeTemplate > DocumentChartTypeTemplateProvider::getCu
 {
     return m_xTemplate;
 }
-
-// ----------------------------------------
 
 class DataSourceTabControl : public TabControl
 {
@@ -132,8 +124,6 @@ void DataSourceTabControl::EnableTabToggling()
 {
     m_bTogglingEnabled = true;
 }
-
-// ----------------------------------------
 
 sal_uInt16 DataSourceDialog::m_nLastPageId = 0;
 
@@ -236,7 +226,6 @@ void DataSourceDialog::setValidPage( TabPage * pTabPage )
         m_pTabControl->EnableTabToggling();
     }
 }
-
 
 } //  namespace chart
 

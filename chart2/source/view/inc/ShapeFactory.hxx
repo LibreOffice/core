@@ -33,10 +33,8 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 
 class Stripe;
 class ShapeFactory
@@ -50,7 +48,6 @@ public:
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::drawing::XShapes >& xTarget
                 , OUString aName = OUString() );
-
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >
         createGroup3D(
@@ -159,8 +156,6 @@ public:
                     , const ::com::sun::star::drawing::Position3D& rPos
                     , const ::com::sun::star::drawing::Direction3D& rSize );
 
-    //------------------- create 2D elements:
-
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
         createText( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget2D
                     , const OUString& rText
@@ -240,9 +235,7 @@ private:
         m_xShapeFactory;
 };
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

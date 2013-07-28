@@ -307,8 +307,6 @@ void ChartType::fireModifyEvent()
         m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
 }
 
-// ================================================================================
-
 using impl::ChartType_Base;
 
 IMPLEMENT_FORWARD_XINTERFACE2( ChartType, ChartType_Base, ::property::OPropertySet )

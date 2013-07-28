@@ -113,8 +113,6 @@ private:
 
 } //  namespace impl
 
-// --------------------------------------------------------------------------------
-
 template< class InterfaceRef >
 void addListener(
     const InterfaceRef & xObject,

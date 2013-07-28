@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "ThreeDHelper.hxx"
 #include "macros.hxx"
 #include "DiagramHelper.hxx"
@@ -31,10 +30,8 @@
 #include <com/sun/star/chart2/XDiagram.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
@@ -294,7 +291,6 @@ void lcl_setSimpleScheme( drawing::ShadeMode& rShadeMode
 }
 
 } //end anonymous namespace
-
 
 drawing::CameraGeometry ThreeDHelper::getDefaultCameraGeometry( bool bPie )
 {
@@ -1498,8 +1494,6 @@ CuboidPlanePosition ThreeDHelper::getAutomaticCuboidPlanePositionForStandardBott
     return eRet;
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

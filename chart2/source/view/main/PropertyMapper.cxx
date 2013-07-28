@@ -27,10 +27,8 @@
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/drawing/LineJoint.hpp>
 
-//.............................................................................
 namespace chart
 {
-//.............................................................................
 using namespace ::com::sun::star;
 
 namespace
@@ -461,8 +459,6 @@ void PropertyMapper::getPreparedTextShapePropertyLists(
     PropertyMapper::getMultiPropertyListsFromValueMap( rPropNames, rPropValues, aValueMap );
 }
 
-//.............................................................................
 } //namespace chart
-//.............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

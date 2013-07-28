@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "InternalData.hxx"
 #include "ResId.hxx"
 #include "Strings.hrc"
@@ -34,7 +33,6 @@ using namespace ::std;
 namespace chart
 {
 
-// ----------------------------------------
 namespace
 {
 struct lcl_NumberedStringGenerator
@@ -70,7 +68,6 @@ template< typename T >
 }
 
 } // anonymous namespace
-// ----------------------------------------
 
 InternalData::InternalData()
     : m_nColumnCount( 0 )

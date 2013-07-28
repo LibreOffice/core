@@ -206,7 +206,6 @@ private:
         return ::chart::ContainerHelper::ContainerToSequence( aProperties );
     }
 
-
 };
 
 struct StaticTitleInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticTitleInfoHelper_Initializer >
@@ -228,8 +227,6 @@ struct StaticTitleInfo : public rtl::StaticAggregate< uno::Reference< beans::XPr
 };
 
 } // anonymous namespace
-
-// ================================================================================
 
 namespace chart
 {
@@ -264,8 +261,6 @@ uno::Reference< util::XCloneable > SAL_CALL Title::createClone()
     return uno::Reference< util::XCloneable >( new Title( *this ));
 }
 
-// --------------------------------------------------------------------------------
-
 // ____ XTitle ____
 uno::Sequence< uno::Reference< chart2::XFormattedString > > SAL_CALL Title::getText()
     throw (uno::RuntimeException)
@@ -290,8 +285,6 @@ void SAL_CALL Title::setText( const uno::Sequence< uno::Reference< chart2::XForm
         ContainerHelper::SequenceToVector( rNewStrings ), m_xModifyEventForwarder );
     fireModifyEvent();
 }
-
-// ================================================================================
 
 // ____ OPropertySet ____
 uno::Any Title::GetDefaultValue( sal_Int32 nHandle ) const
@@ -369,9 +362,6 @@ void Title::fireModifyEvent()
 {
     m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
 }
-
-
-// ================================================================================
 
 uno::Sequence< OUString > Title::getSupportedServiceNames_Static()
 {

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "GridWrapper.hxx"
 #include "macros.hxx"
 #include "AxisHelper.hxx"
@@ -73,8 +72,6 @@ struct StaticGridWrapperPropertyArray : public rtl::StaticAggregate< Sequence< P
 };
 
 } // anonymous namespace
-
-// --------------------------------------------------------------------------------
 
 namespace chart
 {
@@ -138,8 +135,6 @@ void SAL_CALL GridWrapper::removeEventListener(
     m_aEventListenerContainer.removeInterface( aListener );
 }
 
-// ================================================================================
-
 // WrappedPropertySet
 
 Reference< beans::XPropertySet > GridWrapper::getInnerPropertySet()
@@ -177,8 +172,6 @@ const std::vector< WrappedProperty* > GridWrapper::createWrappedProperties()
 
     return aWrappedProperties;
 }
-
-// ================================================================================
 
 Sequence< OUString > GridWrapper::getSupportedServiceNames_Static()
 {
