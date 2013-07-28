@@ -186,7 +186,7 @@ IMPL_LINK(FmFormObjFactory, MakeObject, SdrObjFactory*, pObjFactory)
 
             case OBJ_FM_TIMEFIELD:
                 sServiceSpecifier = FM_COMPONENT_TIMEFIELD;
-                aInitialProperties.push_back( PropertyValueArray::value_type( FM_PROP_TIMEMAX, makeAny( (sal_Int32)( Time( 23, 59, 59, 99 ).GetTime() ) ) ) );
+                aInitialProperties.push_back( PropertyValueArray::value_type( FM_PROP_TIMEMAX, makeAny( (sal_Int64)( Time( 23, 59, 59, 999999999 ).GetTime() ) ) ) );
                 break;
 
             case OBJ_FM_NUMERICFIELD:
