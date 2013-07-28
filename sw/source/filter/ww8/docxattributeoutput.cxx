@@ -1482,7 +1482,7 @@ void DocxAttributeOutput::ParagraphStyle( sal_uInt16 nStyle )
     m_pSerializer->singleElementNS( XML_w, XML_pStyle, FSNS( XML_w, XML_val ), aStyleId.getStr(), FSEND );
 }
 
-static void impl_borderLine( FSHelperPtr pSerializer, sal_Int32 elementToken, const SvxBorderLine* pBorderLine, sal_uInt16 nDist )
+static void impl_borderLine( FSHelperPtr pSerializer, sal_Int32 elementToken, const SvxBorderLine* pBorderLine, sal_uInt16 nDist, bool bWriteShadow = false )
 {
     FastAttributeList* pAttr = pSerializer->createAttrList();
 
@@ -1578,6 +1578,12 @@ static void impl_borderLine( FSHelperPtr pSerializer, sal_Int32 elementToken, co
         pAttr->add( FSNS( XML_w, XML_color ), sColor );
     }
 
+    if (bWriteShadow)
+    {
+        // Set the shadow value
+        pAttr->add( FSNS( XML_w, XML_shadow ), "1" );
+    }
+
     XFastAttributeListRef xAttrs( pAttr );
     pSerializer->singleElementNS( XML_w, elementToken, xAttrs );
 }
@@ -1591,6 +1597,7 @@ static OutputBorderOptions lcl_getTableDefaultBorderOptions(bool bEcma)
     rOptions.bWriteTag = true;
     rOptions.bWriteInsideHV = true;
     rOptions.bWriteDistance = false;
+    rOptions.aShadowLocation = SVX_SHADOW_NONE;
     rOptions.bCheckDistanceSize = false;
 
     return rOptions;
@@ -1605,6 +1612,7 @@ static OutputBorderOptions lcl_getTableCellBorderOptions(bool bEcma)
     rOptions.bWriteTag = true;
     rOptions.bWriteInsideHV = true;
     rOptions.bWriteDistance = false;
+    rOptions.aShadowLocation = SVX_SHADOW_NONE;
     rOptions.bCheckDistanceSize = false;
 
     return rOptions;
@@ -1619,6 +1627,7 @@ static OutputBorderOptions lcl_getBoxBorderOptions()
     rOptions.bWriteTag = false;
     rOptions.bWriteInsideHV = false;
     rOptions.bWriteDistance = true;
+    rOptions.aShadowLocation = SVX_SHADOW_NONE;
     rOptions.bCheckDistanceSize = false;
 
     return rOptions;
@@ -1665,9 +1674,40 @@ static void impl_borders( FSHelperPtr pSerializer, const SvxBoxItem& rBox, const
     {
         const SvxBorderLine* pLn = rBox.GetLine( *pBrd );
 
-        if (!tagWritten && rOptions.bWriteTag) {
+        if (!tagWritten && rOptions.bWriteTag)
+        {
             pSerializer->startElementNS( XML_w, rOptions.tag, FSEND );
             tagWritten = true;
+        }
+
+        bool bWriteShadow = false;
+        if (rOptions.aShadowLocation == SVX_SHADOW_NONE)
+        {
+            // The border has no shadow
+        }
+        else if (rOptions.aShadowLocation == SVX_SHADOW_BOTTOMRIGHT)
+        {
+            // Special case of 'Bottom-Right' shadow:
+            // If the shadow location is 'Bottom-Right' - then turn on the shadow
+            // for ALL the sides. This is because in Word - if you select a shadow
+            // for a border - it turn on the shadow for ALL the sides (but shows only
+            // the bottom-right one).
+            // This is so that no information will be lost if passed through LibreOffice
+            bWriteShadow = true;
+        }
+        else
+        {
+            // If there is a shadow, and it's not the regular 'Bottom-Right',
+            // then write only the 'shadowed' sides of the border
+            if  (
+                    ( ( rOptions.aShadowLocation == SVX_SHADOW_TOPLEFT     || rOptions.aShadowLocation == SVX_SHADOW_TOPRIGHT      )    &&  *pBrd == BOX_LINE_TOP   )  ||
+                    ( ( rOptions.aShadowLocation == SVX_SHADOW_TOPLEFT     || rOptions.aShadowLocation == SVX_SHADOW_BOTTOMLEFT    )    &&  *pBrd == BOX_LINE_LEFT  )  ||
+                    ( ( rOptions.aShadowLocation == SVX_SHADOW_BOTTOMLEFT  || rOptions.aShadowLocation == SVX_SHADOW_BOTTOMRIGHT   )    &&  *pBrd == BOX_LINE_BOTTOM)  ||
+                    ( ( rOptions.aShadowLocation == SVX_SHADOW_TOPRIGHT    || rOptions.aShadowLocation == SVX_SHADOW_BOTTOMRIGHT   )    &&  *pBrd == BOX_LINE_RIGHT )
+                )
+            {
+                bWriteShadow = true;
+            }
         }
 
         sal_uInt16 nDist = 0;
@@ -1691,7 +1731,8 @@ static void impl_borders( FSHelperPtr pSerializer, const SvxBoxItem& rBox, const
                 nDist = rBox.GetDistance( *pBrd );
             }
         }
-        impl_borderLine( pSerializer, aXmlElements[i], pLn, nDist );
+
+        impl_borderLine( pSerializer, aXmlElements[i], pLn, nDist, bWriteShadow );
 
         // When exporting default borders, we need to export these 2 attr
         if ( rOptions.bWriteInsideHV) {
@@ -5085,28 +5126,37 @@ void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
 
     OutputBorderOptions aOutputBorderOptions = lcl_getBoxBorderOptions();
 
-    if ( !m_bOpenedSectPr )
-    {
-        // Normally open the borders tag for paragraphs
-        m_pSerializer->startElementNS( XML_w, XML_pBdr, FSEND );
-    }
-    else
-    {
-        // If inside a section - check if the distance is larger than 31 points
-        aOutputBorderOptions.bCheckDistanceSize = true;
-    }
-
-    impl_borders( m_pSerializer, rBox, aOutputBorderOptions, &m_pageMargins );
-
     if ( m_bOpenedSectPr )
     {
+        // Inside a section
+
+        // Check if the distance is larger than 31 points
+        aOutputBorderOptions.bCheckDistanceSize = true;
+
+        // Check if there is a shadow item
+        const SfxPoolItem* pItem = GetExport().HasItem( RES_SHADOW );
+        if ( pItem )
+        {
+            const SvxShadowItem* pShadowItem = (const SvxShadowItem*)pItem;
+            aOutputBorderOptions.aShadowLocation = pShadowItem->GetLocation();
+        }
+
+        impl_borders( m_pSerializer, rBox, aOutputBorderOptions, &m_pageMargins );
+
         // Special handling for pgBorder
         m_pSerializer->mergeTopMarks( sax_fastparser::MERGE_MARKS_PREPEND );
         m_pSerializer->mergeTopMarks( );
     }
     else
     {
-        // Normally close the borders tag for paragraphs
+        // Not inside a section
+
+        // Open the paragraph's borders tag
+        m_pSerializer->startElementNS( XML_w, XML_pBdr, FSEND );
+
+        impl_borders( m_pSerializer, rBox, aOutputBorderOptions, &m_pageMargins );
+
+        // Close the paragraph's borders tag
         m_pSerializer->endElementNS( XML_w, XML_pBdr );
     }
 }
