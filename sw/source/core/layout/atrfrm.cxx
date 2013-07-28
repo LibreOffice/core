@@ -551,6 +551,7 @@ SwFmtPageDesc::SwFmtPageDesc( const SwFmtPageDesc &rCpy )
     : SfxPoolItem( RES_PAGEDESC ),
     SwClient( (SwPageDesc*)rCpy.GetPageDesc() ),
     nNumOffset( rCpy.nNumOffset ),
+    bNumOffsetIsSet ( rCpy.bNumOffsetIsSet ),
     nDescNameIdx( rCpy.nDescNameIdx ),
     pDefinedIn( 0 )
 {
@@ -560,6 +561,7 @@ SwFmtPageDesc::SwFmtPageDesc( const SwPageDesc *pDesc )
     : SfxPoolItem( RES_PAGEDESC ),
     SwClient( (SwPageDesc*)pDesc ),
     nNumOffset( 0 ),
+    bNumOffsetIsSet ( false ),
     nDescNameIdx( 0xFFFF ), // IDX_NO_VALUE
     pDefinedIn( 0 )
 {
@@ -570,6 +572,7 @@ SwFmtPageDesc &SwFmtPageDesc::operator=(const SwFmtPageDesc &rCpy)
     if (rCpy.GetPageDesc())
         RegisterToPageDesc(*const_cast<SwPageDesc*>(rCpy.GetPageDesc()));
     nNumOffset = rCpy.nNumOffset;
+    bNumOffsetIsSet = rCpy.bNumOffsetIsSet;
     nDescNameIdx = rCpy.nDescNameIdx;
     pDefinedIn = 0;
 
@@ -588,6 +591,7 @@ int  SwFmtPageDesc::operator==( const SfxPoolItem& rAttr ) const
     OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
     return  ( pDefinedIn == ((SwFmtPageDesc&)rAttr).pDefinedIn ) &&
             ( nNumOffset == ((SwFmtPageDesc&)rAttr).nNumOffset ) &&
+            ( bNumOffsetIsSet == ((SwFmtPageDesc&)rAttr).bNumOffsetIsSet ) &&
             ( GetPageDesc() == ((SwFmtPageDesc&)rAttr).GetPageDesc() );
 }
 
