@@ -1910,7 +1910,9 @@ sal_uInt16 SwFrm::GetVirtPageNum() const
             continue;
 
         const SwFmtPageDesc *pDesc = (SwFmtPageDesc*)pItem;
-        if ( pDesc->GetNumOffset() && pDesc->GetDefinedIn() )
+
+        // Page number offset can be 0 or greater
+        if ( (pDesc->GetNumOffset() >= 0) && pDesc->GetDefinedIn() )
         {
             const SwModify *pMod = pDesc->GetDefinedIn();
             SwVirtPageNumInfo aInfo( pPage );
