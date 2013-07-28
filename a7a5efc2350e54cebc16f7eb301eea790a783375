@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//910\u003d",
+        "filename": "oox/source/docprop/docprophandler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-07-28T17:10:43Z",
+      "side": 1,
+      "message": "I know it was like in the old code already.. but\naChars.getStr()[digitsPos] \u003c\u003d\u003e aChars[digitPos]",
+      "revId": "a7a5efc2350e54cebc16f7eb301eea790a783375",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
