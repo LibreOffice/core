@@ -2290,13 +2290,13 @@ static bool ImplTimeGetValue( const OUString& rStr, Time& rTime,
                 return false;
 
             nSepPos = aStr.indexOf( rLocaleDataWrapper.getTimeSep() );
-            if ( aStr[0] == '-' )
+            if ( !aStr.isEmpty() && aStr[0] == '-' )
                 bNegative = true;
             if ( nSepPos >= 0 )
             {
                 if ( !ImplCutTimePortion( aStr, nSepPos, _bSkipInvalidCharacters, &nSecond ) )
                     return false;
-                if ( aStr[0] == '-' )
+                if ( !aStr.isEmpty() && aStr[0] == '-' )
                     bNegative = true;
                 n100Sec = (short)aStr.toString().toInt32();
             }
@@ -2320,7 +2320,7 @@ static bool ImplTimeGetValue( const OUString& rStr, Time& rTime,
         aStr.remove( 0, nSepPos+1 );
 
         nSepPos = aStr.indexOf( rLocaleDataWrapper.getTimeSep() );
-        if ( aStr[0] == '-' )
+        if ( !aStr.isEmpty() && aStr[0] == '-' )
             bNegative = true;
         if ( nSepPos >= 0 )
         {
@@ -2329,7 +2329,7 @@ static bool ImplTimeGetValue( const OUString& rStr, Time& rTime,
             aStr.remove( 0, nSepPos+1 );
 
             nSepPos = aStr.indexOf( rLocaleDataWrapper.getTimeSep() );
-            if ( aStr[0] == '-' )
+            if ( !aStr.isEmpty() && aStr[0] == '-' )
                 bNegative = true;
             if ( nSepPos >= 0 )
             {
