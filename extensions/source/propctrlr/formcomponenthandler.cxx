@@ -579,7 +579,7 @@ namespace pcr
         {
             util::Date aDate;
             OSL_VERIFY( _rControlValue >>= aDate );
-            aPropertyValue <<= (sal_Int32)DBTypeConversion::toINT32( aDate );
+            aPropertyValue <<= aDate;
         }
         break;
 
@@ -590,7 +590,7 @@ namespace pcr
         {
             util::Time aTime;
             OSL_VERIFY( _rControlValue >>= aTime );
-            aPropertyValue <<= DBTypeConversion::toINT64( aTime );
+            aPropertyValue <<= aTime;
         }
         break;
 
