@@ -22,7 +22,7 @@
         <presobj kind="PRESOBJ_OUTLINE2" layout-pos-x="1400" layout-pos-y="11274" layout-size-height="5809" layout-size-width="12297"/>
         <presobj kind="PRESOBJ_OUTLINE3" layout-pos-x="14311" layout-pos-y="11274" layout-size-height="5809" layout-size-width="12297"/>
     </layout>
-    <layout type="AUTOLAYOUT_TITLE_4SCONTENT">
+    <layout type="AUTOLAYOUT_TITLE_4CONTENT">
         <presobj kind="PRESOBJ_TITLE" layout-pos-x="1400" layout-pos-y="837" layout-size-height="4400" layout-size-width="25600"/>
         <presobj kind="PRESOBJ_OUTLINE1" layout-pos-x="1400" layout-pos-y="4914" layout-size-height="5809" layout-size-width="12297"/>
         <presobj kind="PRESOBJ_OUTLINE2" layout-pos-x="14311" layout-pos-y="5914" layout-size-height="4509" layout-size-width="12297"/>

@@ -1117,6 +1117,7 @@ Rectangle SdPage::GetLayoutRect() const
 const int MAX_PRESOBJS = 7; // maximum number of presentation objects per layout
 const int VERTICAL = 0x8000;
 const int PRESOBJPROP = 4;
+std::vector<Reference<XNode>> layoutinfo; //temporarily at global scope
 
 struct LayoutDescriptor
 {
@@ -1317,12 +1318,28 @@ rtl::OUString enumtoString(AutoLayout aut)
         case AUTOLAYOUT_TITLE_CONTENT_2CONTENT:
         retstr="AUTOLAYOUT_TITLE_CONTENT_2CONTENT";
         break;
+        case AUTOLAYOUT_TITLE_4CONTENT:
+        retstr="AUTOLAYOUT_TITLE_4CONTENT";
+        break;
         default:
         retstr="unknown";
         break;
         // case AUTOLAYOUT_TITLE_4SCONTENT:            return "AUTOLAYOUT_TITLE_4SCONTENT";
     }
     return retstr;
+}
+
+void parseXml()
+{
+    int layoutlistsize;
+    const Reference<XElement> root= getRootElement();//get the root element of my xml file
+    const Reference<XNodeList> layoutlist = root->getElementsByTagName("layout");
+    layoutlistsize=layoutlist->getLength();
+    for( long index=0; index<layoutlistsize ;index++)
+    {
+        Reference<XNode> layoutnode = layoutlist->item(index);      //get i'th layout element
+        layoutinfo.push_back(layoutnode);
+    }
 }
 
 static void CalcAutoLayoutRectangles( SdPage& rPage, int nLayout, Rectangle* rRectangle ,const rtl::OUString& autolayout)
@@ -1333,7 +1350,6 @@ static void CalcAutoLayoutRectangles( SdPage& rPage, int nLayout, Rectangle* rRe
     long layoutlistsize;
     rtl::OUString sLayoutAttName;
     rtl::OUString sPresObjKindAttName;
-    bool bnoprop=true;                   //use it to skip the remaining loop ,once propvalue is obtained
     double propvalue[4];
 
     if( rPage.GetPageKind() != PK_HANDOUT )
@@ -1376,61 +1392,55 @@ static void CalcAutoLayoutRectangles( SdPage& rPage, int nLayout, Rectangle* rRe
 
     sal_Bool    bRightToLeft = ( rPage.GetModel() && static_cast< SdDrawDocument* >( rPage.GetModel() )->GetDefaultWritingMode() == ::com::sun::star::text::WritingMode_RL_TB );
 
-    const Reference<XNodeList> layoutlist = root->getElementsByTagName("layout");
-    layoutlistsize=layoutlist->getLength();
-    rtl::OUString sLayoutType = autolayout;
-    for( long index=0; index<layoutlistsize ;index++)
+    parseXml(); //calling this for temporary reference,have to use it somewhere else.
+    for(int y=0; y < layoutinfo.size(); y++) //loop through vector of Xnodes
     {
-        if(bnoprop)
+        Reference<XNode> layoutnode = layoutinfo[y];      //get i'th layout element
+        Reference<XNamedNodeMap> layoutattrlist =layoutnode->getAttributes();
+        Reference<XNode> layoutattr = layoutattrlist->getNamedItem("type");
+        sLayoutAttName=layoutattr->getNodeValue();              //get the attribute value of layout(i.e it's type)
+        rtl::OUString sLayoutType = autolayout;
+
+        if(sLayoutAttName==sLayoutType)
         {
-            Reference<XNode> layoutnode = layoutlist->item(index);      //get i'th layout element
-            Reference<XNamedNodeMap> layoutattrlist =layoutnode->getAttributes();
-            Reference<XNode> layoutattr = layoutattrlist->getNamedItem("type");
-            sLayoutAttName=layoutattr->getNodeValue();              //get the attribute value of layout(i.e it's type)
-
-            if(sLayoutAttName==sLayoutType)
+            int count=0;
+            Reference<XNodeList> layoutchildrens = layoutnode->getChildNodes();
+            presobjsize = layoutchildrens->getLength();         //get the length of that of the layout(number of pres objects)
+            for( long j=0; j< presobjsize ; j++)
             {
-                Reference<XNodeList> layoutchildrens = layoutnode->getChildNodes();
-                presobjsize = layoutchildrens->getLength();         //get the length of that of the layout(number of pres objects)
-                for( long j=1; j< presobjsize ; j++)
+                rtl::OUString nodename;
+                Reference<XNode> presobj = layoutchildrens->item(j);    //get the j'th presobj for that layout
+                nodename=presobj->getNodeName();
+                if(nodename=="presobj")//check whether children is blank 'text-node' or 'presobj' node
                 {
-                    rtl::OUString nodename;
-                    Reference<XNode> presobj = layoutchildrens->item(j);    //get the j'th presobj for that layout
-                    nodename=presobj->getNodeName();
-                    if(nodename=="presobj")//check whether children is blank 'text-node' or 'presobj' node
-                    {
-                        Reference<XNamedNodeMap> presObjAttributes = presobj->getAttributes();
-                        Reference<XNode> presObjKindAttr = presObjAttributes->getNamedItem("kind");
-                        sPresObjKindAttName = presObjKindAttr->getNodeValue();  //get the value of it's presobj kind
+                    Reference<XNamedNodeMap> presObjAttributes = presobj->getAttributes();
 
-                        Reference<XNode> presObjPosX = presObjAttributes->getNamedItem("layout-pos-x");
-                        rtl::OUString sValue = presObjPosX->getNodeValue();
-                        propvalue[0] = sValue.toDouble();
+                    Reference<XNode> presObjPosX = presObjAttributes->getNamedItem("layout-pos-x");
+                    rtl::OUString sValue = presObjPosX->getNodeValue();
+                    propvalue[0] = sValue.toDouble();
 
-                        Reference<XNode> presObjPosY = presObjAttributes->getNamedItem("layout-pos-y");
-                        sValue = presObjPosY->getNodeValue();
-                        propvalue[1] = sValue.toDouble();
+                    Reference<XNode> presObjPosY = presObjAttributes->getNamedItem("layout-pos-y");
+                    sValue = presObjPosY->getNodeValue();
+                    propvalue[1] = sValue.toDouble();
 
-                        Reference<XNode> presObjSizeHeight = presObjAttributes->getNamedItem("layout-size-height");
-                        sValue = presObjSizeHeight->getNodeValue();
-                        propvalue[2] = sValue.toDouble();
+                    Reference<XNode> presObjSizeHeight = presObjAttributes->getNamedItem("layout-size-height");
+                    sValue = presObjSizeHeight->getNodeValue();
+                    propvalue[2] = sValue.toDouble();
 
-                        Reference<XNode> presObjSizeWidth = presObjAttributes->getNamedItem("layout-size-width");
-                        sValue = presObjSizeWidth->getNodeValue();
-                        propvalue[3] = sValue.toDouble();
+                    Reference<XNode> presObjSizeWidth = presObjAttributes->getNamedItem("layout-size-width");
+                    sValue = presObjSizeWidth->getNodeValue();
+                    propvalue[3] = sValue.toDouble();
 
-                        aLayoutPos.X() = propvalue[0];
-                        aLayoutPos.Y() = propvalue[1];
-                        aLayoutSize.Height() = propvalue[2];
-                        aLayoutSize.Width() = propvalue[3];
-                        rRectangle[j] = Rectangle (aLayoutPos, aLayoutSize);
-                    }
+                    aLayoutPos.X() = propvalue[0];
+                    aLayoutPos.Y() = propvalue[1];
+                    aLayoutSize.Height() = propvalue[2];
+                    aLayoutSize.Width() = propvalue[3];
+                    rRectangle[count] = Rectangle (aLayoutPos, aLayoutSize);
+                    count=count+1;
                 }
-                bnoprop=false;
             }
-        }
-        else
             break;
+        }
     }
 
     switch( nLayout )
