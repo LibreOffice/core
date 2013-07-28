@@ -1238,7 +1238,7 @@ Reference<XElement> getRootElement()
 }
 
 //read the information from XML file(traversing from layout node)
-void readLayoutPropFromFile(const Reference<XElement>& root, const rtl::OUString& sLayoutType, const rtl::OUString& sPresObjKind, double propvalue[])
+void readLayoutPropFromFile(const Reference<XElement>& root, const rtl::OUString& sLayoutType, const rtl::OUString& sPresObjKind, sal_Int32 propvalue[])
 {
     long presobjsize;
     long layoutlistsize;
@@ -1353,7 +1353,7 @@ void parseXml()
     const Reference<XElement> root= getRootElement();//get the root element of my xml file
     const Reference<XNodeList> layoutlist = root->getElementsByTagName("layout");
     layoutlistsize=layoutlist->getLength();
-    for( long index=0; index<layoutlistsize ;index++)
+    for(int index=0; index<layoutlistsize ;index++)
     {
         Reference<XNode> layoutnode = layoutlist->item(index);      //get i'th layout element
         layoutinfo.push_back(layoutnode);
@@ -1364,11 +1364,10 @@ static void CalcAutoLayoutRectangles( SdPage& rPage, int nLayout, Rectangle* rRe
 {
     Rectangle aTitleRect;
     Rectangle aLayoutRect;
-    long presobjsize;
-    long layoutlistsize;
+    int presobjsize;
     rtl::OUString sLayoutAttName;
     rtl::OUString sPresObjKindAttName;
-    double propvalue[4];
+    sal_Int32 propvalue[4];
 
     if( rPage.GetPageKind() != PK_HANDOUT )
     {
@@ -1424,7 +1423,7 @@ static void CalcAutoLayoutRectangles( SdPage& rPage, int nLayout, Rectangle* rRe
             int count=0;
             Reference<XNodeList> layoutchildrens = layoutnode->getChildNodes();
             presobjsize = layoutchildrens->getLength();         //get the length of that of the layout(number of pres objects)
-            for( long j=0; j< presobjsize ; j++)
+            for( int j=0; j< presobjsize ; j++)
             {
                 rtl::OUString nodename;
                 Reference<XNode> presobj = layoutchildrens->item(j);    //get the j'th presobj for that layout
@@ -1435,19 +1434,19 @@ static void CalcAutoLayoutRectangles( SdPage& rPage, int nLayout, Rectangle* rRe
 
                     Reference<XNode> presObjPosX = presObjAttributes->getNamedItem("layout-pos-x");
                     rtl::OUString sValue = presObjPosX->getNodeValue();
-                    propvalue[0] = sValue.toDouble();
+                    propvalue[0] = sValue.toInt32();
 
                     Reference<XNode> presObjPosY = presObjAttributes->getNamedItem("layout-pos-y");
                     sValue = presObjPosY->getNodeValue();
-                    propvalue[1] = sValue.toDouble();
+                    propvalue[1] = sValue.toInt32();
 
                     Reference<XNode> presObjSizeHeight = presObjAttributes->getNamedItem("layout-size-height");
                     sValue = presObjSizeHeight->getNodeValue();
-                    propvalue[2] = sValue.toDouble();
+                    propvalue[2] = sValue.toInt32();
 
                     Reference<XNode> presObjSizeWidth = presObjAttributes->getNamedItem("layout-size-width");
                     sValue = presObjSizeWidth->getNodeValue();
-                    propvalue[3] = sValue.toDouble();
+                    propvalue[3] = sValue.toInt32();
 
                     aLayoutPos.X() = propvalue[0];
                     aLayoutPos.Y() = propvalue[1];
