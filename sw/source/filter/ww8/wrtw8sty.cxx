@@ -1086,8 +1086,18 @@ void MSWordSections::AppendSection( const SwFmtPageDesc& rPD,
     if (HeaderFooterWritten()) {
         return; // #i117955# prevent new sections in endnotes
     }
-    WW8_SepInfo aI( rPD.GetPageDesc(), pSectionFmt, nLnNumRestartNo,
-            rPD.GetNumOffset(), &rNd );
+
+    // In the pointer 'rPD' (which is of type 'SwFmtPageDesc') - the 'nNumOffset' is set
+    // by default to '0' which represents 'not set'. However - now LO supports page offset of value '0',
+    // so instead of changing all the function type from 'sal_uInt16' to 'sal_Int16' (to allow '-1'),
+    // a different way is used to know if the value was 'set' or not - adding another member - 'NumOffsetIsSet'
+    sal_Int16 nNumOffset = -1;
+    if (rPD.GetNumOffsetIsSet() == sal_True)
+    {
+        nNumOffset = rPD.GetNumOffset();
+    }
+
+    WW8_SepInfo aI( rPD.GetPageDesc(), pSectionFmt, nLnNumRestartNo, nNumOffset, &rNd );
     aSects.push_back( aI );
     NeedsDocumentProtected( aI );
 }
@@ -1411,7 +1421,7 @@ void WW8AttributeOutput::SectionBiDi( bool bBiDi )
     }
 }
 
-void WW8AttributeOutput::SectionPageNumbering( sal_uInt16 nNumType, sal_uInt16 nPageRestartNumber )
+void WW8AttributeOutput::SectionPageNumbering( sal_uInt16 nNumType, sal_Int16 nPageRestartNumber )
 {
     // sprmSNfcPgn
     sal_uInt8 nb = WW8Export::GetNumId( nNumType );
@@ -1421,7 +1431,7 @@ void WW8AttributeOutput::SectionPageNumbering( sal_uInt16 nNumType, sal_uInt16 n
         m_rWW8Export.pO->push_back( 147 );
     m_rWW8Export.pO->push_back( nb );
 
-    if ( nPageRestartNumber )
+    if ( nPageRestartNumber >= 0 )
     {
         // sprmSFPgnRestart
         if ( m_rWW8Export.bWrtWW8 )

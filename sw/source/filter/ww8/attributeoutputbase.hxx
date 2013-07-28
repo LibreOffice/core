@@ -300,8 +300,8 @@ public:
 
     /// The style of the page numbers.
     ///
-    /// nPageRestartNumberr being 0 means no restart.
-    virtual void SectionPageNumbering( sal_uInt16 nNumType, sal_uInt16 nPageRestartNumber ) = 0;
+    /// nPageRestartNumber being -1 means no restart.
+    virtual void SectionPageNumbering( sal_uInt16 nNumType, sal_Int16 nPageRestartNumber ) = 0;
 
     /// The type of breaking.
     virtual void SectionType( sal_uInt8 nBreakCode ) = 0;
