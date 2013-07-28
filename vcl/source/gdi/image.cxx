@@ -504,21 +504,6 @@ sal_uInt16 ImageList::ImplGetImageId( const OUString& rImageName ) const
         return 0;
 }
 
-void ImageList::AddImage( sal_uInt16 nId, const Image& rImage )
-{
-    DBG_CHKTHIS( ImageList, NULL );
-    DBG_CHKOBJ( &rImage, Image, NULL );
-    DBG_ASSERT( nId, "ImageList::AddImage(): ImageId == 0" );
-    DBG_ASSERT( GetImagePos( nId ) == IMAGELIST_IMAGE_NOTFOUND, "ImageList::AddImage() - ImageId already exists" );
-    DBG_ASSERT( rImage.mpImplData, "ImageList::AddImage(): Wrong Size" );
-    DBG_ASSERT( !mpImplData || (rImage.GetSizePixel() == mpImplData->maImageSize), "ImageList::AddImage(): Wrong Size" );
-
-    if( !mpImplData )
-        ImplInit( 0, rImage.GetSizePixel() );
-
-    mpImplData->AddImage( rtl::OUString(), nId, rImage.GetBitmapEx());
-}
-
 void ImageList::AddImage( const OUString& rImageName, const Image& rImage )
 {
     DBG_ASSERT( GetImagePos( rImageName ) == IMAGELIST_IMAGE_NOTFOUND, "ImageList::AddImage() - ImageName already exists" );

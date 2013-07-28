@@ -103,7 +103,6 @@ public:
     Size            GetImageSize() const;
 
     void            AddImage( const OUString& rImageName, const Image& rImage );
-    void            AddImage( sal_uInt16 nNewId, const Image& rImage );
 
     void            ReplaceImage( const OUString& rImageName, const Image& rImage );
 
