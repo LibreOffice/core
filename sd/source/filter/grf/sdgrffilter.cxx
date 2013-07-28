@@ -183,7 +183,7 @@ void SdGRFFilter::HandleGraphicFilterError( sal_uInt16 nFilterError, sal_uLong n
         ErrorHandler::HandleError( ERRCODE_IO_GENERAL );
     else
     {
-        ErrorBox aErrorBox( NULL, WB_OK, String( SdResId( nId ) ) );
+        ErrorBox aErrorBox(NULL, WB_OK, SD_RESSTR(nId));
         aErrorBox.Execute();
     }
 }

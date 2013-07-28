@@ -573,7 +573,7 @@ sal_Bool ImplSdPPTImport::Import()
                         ///////////////////
                         // standardsheet //
                         ///////////////////
-                        pSheet = (SfxStyleSheet*)mpDoc->GetStyleSheetPool()->Find( String(SdResId( STR_STANDARD_STYLESHEET_NAME )), SD_STYLE_FAMILY_GRAPHICS );
+                        pSheet = (SfxStyleSheet*)mpDoc->GetStyleSheetPool()->Find(SD_RESSTR(STR_STANDARD_STYLESHEET_NAME), SD_STYLE_FAMILY_GRAPHICS );
                         if ( pSheet )
                         {
                             SfxItemSet& rItemSet = pSheet->GetItemSet();
@@ -586,7 +586,7 @@ sal_Bool ImplSdPPTImport::Import()
                     }
 
                     // PSEUDO
-                    pSheet = (SfxStyleSheet*)mpDoc->GetStyleSheetPool()->Find( String(SdResId( STR_PSEUDOSHEET_BACKGROUNDOBJECTS )), SD_STYLE_FAMILY_PSEUDO );
+                    pSheet = (SfxStyleSheet*)mpDoc->GetStyleSheetPool()->Find(SD_RESSTR(STR_PSEUDOSHEET_BACKGROUNDOBJECTS), SD_STYLE_FAMILY_PSEUDO );
                     if ( pSheet )
                     {
                         SfxItemSet& rItemSet = pSheet->GetItemSet();
@@ -2251,10 +2251,10 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                 case PRESOBJ_SLIDENUMBER :
                 case PRESOBJ_FOOTER :
                 case PRESOBJ_HEADER :
-                    pSheet = (SfxStyleSheet*)mpDoc->GetStyleSheetPool()->Find( String(SdResId( STR_PSEUDOSHEET_BACKGROUNDOBJECTS )), SD_STYLE_FAMILY_PSEUDO );
+                    pSheet = (SfxStyleSheet*)mpDoc->GetStyleSheetPool()->Find(SD_RESSTR(STR_PSEUDOSHEET_BACKGROUNDOBJECTS), SD_STYLE_FAMILY_PSEUDO );
                 break;
                 default :
-                    pSheet = (SfxStyleSheet*)mpDoc->GetStyleSheetPool()->Find( String(SdResId( STR_STANDARD_STYLESHEET_NAME )), SD_STYLE_FAMILY_GRAPHICS );
+                    pSheet = (SfxStyleSheet*)mpDoc->GetStyleSheetPool()->Find(SD_RESSTR(STR_STANDARD_STYLESHEET_NAME), SD_STYLE_FAMILY_GRAPHICS );
             }
         }
         break;

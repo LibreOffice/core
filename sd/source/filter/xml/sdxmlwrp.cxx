@@ -542,7 +542,7 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
         {
             sal_Int32 nProgressRange(1000000);
             sal_Int32 nProgressCurrent(0);
-            OUString aMsg = String( SdResId( STR_LOAD_DOC ) );
+            OUString aMsg(SD_RESSTR(STR_LOAD_DOC));
             mxStatusIndicator->start(aMsg, nProgressRange);
 
             // set ProgressRange
@@ -937,7 +937,7 @@ sal_Bool SdXMLFilter::Export()
                 {
                     sal_Int32 nProgressRange(1000000);
                     sal_Int32 nProgressCurrent(0);
-                    OUString aMsg = String( SdResId( STR_SAVE_DOC ) );
+                    OUString aMsg(SD_RESSTR(STR_SAVE_DOC));
                     mxStatusIndicator->start(aMsg, nProgressRange);
 
                     // set ProgressRange

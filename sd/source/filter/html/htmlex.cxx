@@ -91,7 +91,7 @@ using namespace ::com::sun::star::document;
 
 // get parameter from Itemset
 
-#define RESTOHTML( res ) StringToHTMLString(String(SdResId(res)))
+#define RESTOHTML( res ) StringToHTMLString(SD_RESSTR(res))
 
 const char *pButtonNames[] =
 {
@@ -2371,7 +2371,7 @@ bool HtmlExport::CreateNavBarFrames()
         aStr.AppendAscii( "<center>\r\n" );
 
     // first page
-        aButton = String(SdResId(STR_HTMLEXP_FIRSTPAGE));
+        aButton = SD_RESSTR(STR_HTMLEXP_FIRSTPAGE);
         if(mnButtonThema != -1)
             aButton = CreateImage(GetButtonName((nFile == 0 || mnSdPageCount == 1?
                                   BTN_FIRST_0:BTN_FIRST_1)), aButton);
@@ -2383,7 +2383,7 @@ bool HtmlExport::CreateNavBarFrames()
         aStr.AppendAscii( "\r\n" );
 
     // to the previous page
-        aButton = String(SdResId(STR_PUBLISH_BACK));
+        aButton = SD_RESSTR(STR_PUBLISH_BACK);
         if(mnButtonThema != -1)
             aButton = CreateImage(GetButtonName((nFile == 0 || mnSdPageCount == 1?
                                     BTN_PREV_0:BTN_PREV_1)), aButton);
@@ -2395,7 +2395,7 @@ bool HtmlExport::CreateNavBarFrames()
         aStr.AppendAscii( "\r\n" );
 
     // to the next page
-        aButton = String(SdResId(STR_PUBLISH_NEXT));
+        aButton = SD_RESSTR(STR_PUBLISH_NEXT);
         if(mnButtonThema != -1)
             aButton = CreateImage(GetButtonName((nFile ==2 || mnSdPageCount == 1?
                                     BTN_NEXT_0:BTN_NEXT_1)), aButton);
@@ -2407,7 +2407,7 @@ bool HtmlExport::CreateNavBarFrames()
         aStr.AppendAscii( "\r\n" );
 
     // to the last page
-        aButton = String(SdResId(STR_HTMLEXP_LASTPAGE));
+        aButton = SD_RESSTR(STR_HTMLEXP_LASTPAGE);
         if(mnButtonThema != -1)
             aButton = CreateImage(GetButtonName((nFile ==2 || mnSdPageCount == 1?
                                   BTN_LAST_0:BTN_LAST_1)), aButton);
@@ -2426,7 +2426,7 @@ bool HtmlExport::CreateNavBarFrames()
     // content
         if (mbContentsPage)
         {
-            aButton = String(SdResId(STR_PUBLISH_OUTLINE));
+            aButton = SD_RESSTR(STR_PUBLISH_OUTLINE);
             if(mnButtonThema != -1)
                 aButton = CreateImage(GetButtonName(BTN_INDEX), aButton);
 
@@ -2438,7 +2438,7 @@ bool HtmlExport::CreateNavBarFrames()
     // text mode
         if(mbImpress)
         {
-            aButton = String(SdResId(STR_HTMLEXP_SETTEXT));
+            aButton = SD_RESSTR(STR_HTMLEXP_SETTEXT);
             if(mnButtonThema != -1)
                 aButton = CreateImage(GetButtonName(BTN_TEXT), aButton);
 
@@ -2471,7 +2471,7 @@ bool HtmlExport::CreateNavBarFrames()
         aStr.AppendAscii( "</title>\r\n</head>\r\n" );
         aStr += CreateBodyTag();
 
-        aButton = String(SdResId(STR_HTMLEXP_OUTLINE));
+        aButton = SD_RESSTR(STR_HTMLEXP_OUTLINE);
         if(mnButtonThema != -1)
             aButton = CreateImage(GetButtonName(BTN_MORE), aButton);
 
@@ -2496,7 +2496,7 @@ bool HtmlExport::CreateNavBarFrames()
         aStr.AppendAscii( "</title>\r\n</head>\r\n" );
         aStr += CreateBodyTag();
 
-        aButton = String(SdResId(STR_HTMLEXP_NOOUTLINE));
+        aButton = SD_RESSTR(STR_HTMLEXP_NOOUTLINE);
         if(mnButtonThema != -1)
             aButton = CreateImage(GetButtonName(BTN_LESS), aButton);
 
