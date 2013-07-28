@@ -2923,7 +2923,7 @@ Writer& OutHTML_INetFmt( Writer& rWrt, const SwFmtINetFmt& rINetFmt, sal_Bool bO
     sal_Bool bEvents = pMacTable != 0 && !pMacTable->empty();
 
     // Gibt es ueberhaupt etwas auszugeben?
-    if( !aURL.Len() && !bEvents && !rINetFmt.GetName().Len() )
+    if( !aURL.Len() && !bEvents && rINetFmt.GetName().isEmpty() )
         return rWrt;
 
     // Tag aus? Dann nur ein </A> ausgeben.
@@ -2999,7 +2999,7 @@ Writer& OutHTML_INetFmt( Writer& rWrt, const SwFmtINetFmt& rINetFmt, sal_Bool bO
         sOut.append('\"');
     }
 
-    if( rINetFmt.GetName().Len() )
+    if( !rINetFmt.GetName().isEmpty() )
     {
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_name).append("=\"");
         rWrt.Strm() << sOut.makeStringAndClear().getStr();

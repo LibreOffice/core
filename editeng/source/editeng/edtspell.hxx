@@ -148,7 +148,7 @@ public:
     virtual sal_Bool    ReplaceRange( xub_StrLen nPos, xub_StrLen nLen, const String& rTxt );
 
     virtual sal_Bool    SetAttr( sal_uInt16 nStt, sal_uInt16 nEnd, sal_uInt16 nSlotId, SfxPoolItem& );
-    virtual sal_Bool    SetINetAttr( sal_uInt16 nStt, sal_uInt16 nEnd, const String& rURL );
+    virtual sal_Bool    SetINetAttr( sal_uInt16 nStt, sal_uInt16 nEnd, const OUString& rURL );
 
     virtual const String* GetPrevPara( sal_Bool bAtNormalPos );
 

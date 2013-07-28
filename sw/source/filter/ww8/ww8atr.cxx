@@ -1614,11 +1614,11 @@ void WW8AttributeOutput::CharBackground( const SvxBrushItem& rBrush )
 
 void WW8AttributeOutput::TextINetFormat( const SwFmtINetFmt& rINet )
 {
-    if ( rINet.GetValue().Len() )
+    if ( !rINet.GetValue().isEmpty() )
     {
         sal_uInt16 nId;
-        const String& rStr = rINet.GetINetFmt();
-        if ( rStr.Len() )
+        const OUString rStr = rINet.GetINetFmt();
+        if ( !rStr.isEmpty() )
             nId = rINet.GetINetFmtId();
         else
             nId = RES_POOLCHR_INET_NORMAL;

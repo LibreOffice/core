@@ -500,7 +500,7 @@ void _InitCore()
     aAttrTab[ RES_CHRATR_BOX - POOLATTR_BEGIN ] =           new SvxBoxItem( RES_CHRATR_BOX );
 
     aAttrTab[ RES_TXTATR_AUTOFMT- POOLATTR_BEGIN ] =        new SwFmtAutoFmt;
-    aAttrTab[ RES_TXTATR_INETFMT - POOLATTR_BEGIN ] =       new SwFmtINetFmt( aEmptyStr, aEmptyStr );
+    aAttrTab[ RES_TXTATR_INETFMT - POOLATTR_BEGIN ] =       new SwFmtINetFmt( OUString(), OUString() );
     aAttrTab[ RES_TXTATR_REFMARK - POOLATTR_BEGIN ] =       new SwFmtRefMark( aEmptyStr );
     aAttrTab[ RES_TXTATR_TOXMARK - POOLATTR_BEGIN ] =       new SwTOXMark;
     aAttrTab[ RES_TXTATR_CHARFMT- POOLATTR_BEGIN ] =        new SwFmtCharFmt( 0 );

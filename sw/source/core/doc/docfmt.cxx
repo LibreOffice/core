@@ -343,7 +343,7 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
         // Special case: if the Crsr is located within a URL attribute, we take over it's area
         SwTxtAttr const*const pURLAttr(
             pTxtNd->GetTxtAttrAt(rSt.GetIndex(), RES_TXTATR_INETFMT));
-        if (pURLAttr && pURLAttr->GetINetFmt().GetValue().Len())
+        if (pURLAttr && !pURLAttr->GetINetFmt().GetValue().isEmpty())
         {
             nMkPos = *pURLAttr->GetStart();
             nPtPos = *pURLAttr->GetEnd();
@@ -790,7 +790,7 @@ lcl_InsAttr(SwDoc *const pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
             // Special case: if the Crsr is located within a URL attribute, we take over it's area
             SwTxtAttr const*const pURLAttr(
                 pTxtNd->GetTxtAttrAt(rSt.GetIndex(), RES_TXTATR_INETFMT));
-            if (pURLAttr && pURLAttr->GetINetFmt().GetValue().Len())
+            if (pURLAttr && !pURLAttr->GetINetFmt().GetValue().isEmpty())
             {
                 nMkPos = *pURLAttr->GetStart();
                 nPtPos = *pURLAttr->GetEnd();

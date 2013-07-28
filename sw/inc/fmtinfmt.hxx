@@ -19,7 +19,6 @@
 #ifndef _FMTINFMT_HXX
 #define _FMTINFMT_HXX
 
-#include <tools/string.hxx>
 #include <svl/poolitem.hxx>
 #include "swdllapi.h"
 
@@ -34,17 +33,17 @@ class SW_DLLPUBLIC SwFmtINetFmt: public SfxPoolItem
 {
     friend class SwTxtINetFmt;
 
-    String aURL;                    ///< URL.
-    String aTargetFrame;            ///< Target frame for URL.
-    String aINetFmt;
-    String aVisitedFmt;
-    String aName;                   ///< Name of the link.
+    OUString aURL;                  ///< URL.
+    OUString aTargetFrame;          ///< Target frame for URL.
+    OUString aINetFmt;
+    OUString aVisitedFmt;
+    OUString aName;                 ///< Name of the link.
     SvxMacroTableDtor* pMacroTbl;
     SwTxtINetFmt* pTxtAttr;         ///< My TextAttribute.
     sal_uInt16 nINetId;
     sal_uInt16 nVisitedId;
 public:
-    SwFmtINetFmt( const String& rURL, const String& rTarget );
+    SwFmtINetFmt( const OUString& rURL, const OUString& rTarget );
     SwFmtINetFmt( const SwFmtINetFmt& rAttr );
     SwFmtINetFmt();                     ///< For TypeInfo.
     virtual ~SwFmtINetFmt();
@@ -69,18 +68,18 @@ public:
     const SwTxtINetFmt* GetTxtINetFmt() const   { return pTxtAttr; }
     SwTxtINetFmt* GetTxtINetFmt()               { return pTxtAttr; }
 
-    const String& GetValue() const          { return aURL; }
+    OUString GetValue() const               { return aURL; }
 
-    const String& GetName() const           { return aName; }
-    void SetName( const String& rNm )       { aName = rNm; }
+    OUString GetName() const                { return aName; }
+    void SetName( const OUString& rNm )     { aName = rNm; }
 
-    const String& GetTargetFrame() const    { return aTargetFrame; }
+    OUString GetTargetFrame() const         { return aTargetFrame; }
 
-    const String& GetINetFmt() const        { return aINetFmt; }
-    void SetINetFmt( const String& rNm )    { aINetFmt = rNm; }
+    OUString GetINetFmt() const             { return aINetFmt; }
+    void SetINetFmt( const OUString& rNm )  { aINetFmt = rNm; }
 
-    const String& GetVisitedFmt() const     { return aVisitedFmt; }
-    void SetVisitedFmt( const String& rNm ) { aVisitedFmt = rNm; }
+    OUString GetVisitedFmt() const            { return aVisitedFmt; }
+    void SetVisitedFmt( const OUString& rNm ) { aVisitedFmt = rNm; }
 
     sal_uInt16 GetINetFmtId() const             { return nINetId; }
     void SetINetFmtId( sal_uInt16 nNew )        { nINetId = nNew; }

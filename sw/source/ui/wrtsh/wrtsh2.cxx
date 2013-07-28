@@ -307,7 +307,7 @@ void SwWrtShell::ClickToField( const SwField& rFld )
 
 void SwWrtShell::ClickToINetAttr( const SwFmtINetFmt& rItem, sal_uInt16 nFilter )
 {
-    if( !rItem.GetValue().Len() )
+    if( rItem.GetValue().isEmpty() )
         return ;
 
     bIsInClickToEdit = true;
@@ -419,17 +419,26 @@ void SwWrtShell::NavigatorPaste( const NaviContentBookmark& rBkmk,
     if( EXCHG_IN_ACTION_COPY == nAction )
     {
         // Insert
-        String sURL = rBkmk.GetURL();
+        OUString sURL = rBkmk.GetURL();
         // Is this is a jump within the current Doc?
         const SwDocShell* pDocShell = GetView().GetDocShell();
         if(pDocShell->HasName())
         {
-            const String rName = pDocShell->GetMedium()->GetURLObject().GetURLNoMark();
+            const OUString rName = pDocShell->GetMedium()->GetURLObject().GetURLNoMark();
 
-            if(COMPARE_EQUAL == sURL.CompareTo(rName, rName.Len()))
-                sURL.Erase(0, rName.Len());
+            if (sURL.startsWith(rName))
+            {
+                if (sURL.getLength()>rName.getLength())
+                {
+                    sURL = sURL.copy(rName.getLength());
+                }
+                else
+                {
+                    sURL = OUString();
+                }
+            }
         }
-        SwFmtINetFmt aFmt( sURL, aEmptyStr );
+        SwFmtINetFmt aFmt( sURL, OUString() );
         InsertURL( aFmt, rBkmk.GetDescription() );
     }
     else

@@ -96,7 +96,7 @@ public:
     virtual sal_Bool SetAttr( xub_StrLen nStt, xub_StrLen nEnd, sal_uInt16 nSlotId,
                             SfxPoolItem& ) = 0;
 
-    virtual sal_Bool SetINetAttr( xub_StrLen nStt, xub_StrLen nEnd, const String& rURL ) = 0;
+    virtual sal_Bool SetINetAttr( xub_StrLen nStt, xub_StrLen nEnd, const OUString& rURL ) = 0;
 
     // Return the text of a previous paragraph. This must not be empty!
     // If no paragraph exits or just an empty one, then return 0.

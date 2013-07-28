@@ -253,7 +253,7 @@ private:
         //fprintf(stderr, "TestAutoCorrDoc::SetAttr\n");
         return true;
     }
-    virtual sal_Bool SetINetAttr( xub_StrLen, xub_StrLen, const String& )
+    virtual sal_Bool SetINetAttr( xub_StrLen, xub_StrLen, const OUString& )
     {
         //fprintf(stderr, "TestAutoCorrDoc::SetINetAttr\n");
         return true;

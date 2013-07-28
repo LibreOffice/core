@@ -395,7 +395,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const String& rPath, bool bOutline, c
                         }
 
                         // set the link in the StartNode
-                        SwFmtINetFmt aINet( sFileName , aEmptyStr );
+                        SwFmtINetFmt aINet( sFileName , OUString() );
                         SwTxtNode* pTNd = (SwTxtNode*)pStartNd;
                         pTNd->InsertItem(aINet, 0, pTNd->GetTxt().getLength());
 
