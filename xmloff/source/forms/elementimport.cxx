@@ -720,8 +720,8 @@ namespace xmloff
         case OControlElement::IMAGE_FRAME:       pServiceName = "com.sun.star.form.component.DatabaseImageControl"; break;
         case OControlElement::HIDDEN:            pServiceName = "com.sun.star.form.component.HiddenControl"; break;
         case OControlElement::GRID:              pServiceName = "com.sun.star.form.component.GridControl"; break;
-        case OControlElement::TIME:              pServiceName = "com.sun.star.form.component.DateField"; break;
-        case OControlElement::DATE:              pServiceName = "com.sun.star.form.component.TimeField"; break;
+        case OControlElement::TIME:              pServiceName = "com.sun.star.form.component.TimeField"; break;
+        case OControlElement::DATE:              pServiceName = "com.sun.star.form.component.DateField"; break;
         default:                                 break;
         }
         if ( pServiceName != NULL )
