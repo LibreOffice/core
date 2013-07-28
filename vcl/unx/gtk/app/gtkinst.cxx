@@ -219,7 +219,7 @@ extern "C"
     typedef void(* addItemFnc)(void *, const char *);
 }
 
-void GtkInstance::AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType)
+void GtkInstance::AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType, const OUString& rDocumentService)
 {
     OString sGtkURL;
     rtl_TextEncoding aSystemEnc = osl_getThreadTextEncoding();
@@ -241,6 +241,7 @@ void GtkInstance::AddToRecentDocumentList(const OUString& rFileUrl, const OUStri
     GtkRecentManager *manager = gtk_recent_manager_get_default ();
     gtk_recent_manager_add_item (manager, sGtkURL.getStr());
     (void)rMimeType;
+    (void)rDocumentService;
 #else
     static getDefaultFnc sym_gtk_recent_manager_get_default =
         (getDefaultFnc)osl_getAsciiFunctionSymbol( GetSalData()->m_pPlugin, "gtk_recent_manager_get_default" );
@@ -250,7 +251,7 @@ void GtkInstance::AddToRecentDocumentList(const OUString& rFileUrl, const OUStri
     if (sym_gtk_recent_manager_get_default && sym_gtk_recent_manager_add_item)
         sym_gtk_recent_manager_add_item(sym_gtk_recent_manager_get_default(), sGtkURL.getStr());
     else
-        X11SalInstance::AddToRecentDocumentList(rFileUrl, rMimeType);
+        X11SalInstance::AddToRecentDocumentList(rFileUrl, rMimeType, rDocumentService);
 #endif
 }
 
