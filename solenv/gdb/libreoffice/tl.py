@@ -149,27 +149,27 @@ class DatePrinter(object):
 
 class TimeImpl(DateTimeImpl):
 
-    def __init__(self, hour, minute, second, hundreth_of_second = 0):
+    def __init__(self, hour, minute, second, nanosecond = 0):
         super(TimeImpl, self).__init__(None, self)
         self.hour = hour
         self.minute = minute
         self.second = second
-        self.hundreth_of_second = hundreth_of_second
+        self.nanosecond = nanosecond
 
     def __str__(self):
         decimal = ''
-        if self.hundreth_of_second != 0:
-            decimal = '.%d' % self.hundreth_of_second
-        return "%d:%d:%d%s" % (self.hour, self.minute, self.second, decimal)
+        if self.nanosecond != 0:
+            decimal = '.%09d' % self.nanosecond
+        return "%02d:%02d:%02d%s" % (self.hour, self.minute, self.second, decimal)
 
     @staticmethod
     def parse(val):
         time = val['nTime']
-        h = time / 1000000
-        m = (time / 10000) % 100
-        s = (time / 100) % 100
-        s_100 = time % 100
-        return TimeImpl(h, m, s, s_100)
+        h = time / 10000000000000
+        m = (time / 100000000000) % 100
+        s = (time / 1000000000) % 100
+        ns = time % 1000000000
+        return TimeImpl(h, m, s, ns)
 
 class TimePrinter(object):
     '''Prints time'''
