@@ -52,6 +52,24 @@
       "revId": "e2322fd87ea03d9234a5a914cffd30cc3d1e1567",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//9zk\u003d",
+        "filename": "vcl/source/control/field2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2291,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-07-28T23:40:55Z",
+      "side": 1,
+      "message": "ok.\nI do thing that pretending taht \\0 is not there or even worse actually generating object for which that is the case is begging for trouble\n(no so much for the case above, but for the numerous case where we use getStr as a \u0027null-terminated-string\u0027\n\n(for instance OUString(rStr.getStr() + foo))\nto get a trailing substring\n\nor the numerous while loop like\ncursor \u003d str.getStr()\nwhile(*cursor)\n{\n}\n\nNot that rtl_stringbuffer_insert() and _delete() both take great care to insure that the string end with a \\0\n\nand rtl_stringbuffer_ensureCapacity calculate the minimum memory size as (len +1)*2\n\nThe problem I think is that the assert on OUString can be more lenient because OUString [] can only be used to read\nwhereas [] can also be use to write in OUStringBuffer... and indeed overwriting the final \\0 would be very bad.\n\nI\u0027m not fluent enough in c++ to know if there is a way to distinguish these 2 cases (aStr[] as a left-value vs a right value)\n\nso in fine, this is just wasting cpu to do a test and taking a branch for nothing. but heh... nothing new here :-)\nConsider my remarks \u0027addressed\u0027 :-)",
+      "parentUuid": "AAAAXn//91Y\u003d",
+      "revId": "e2322fd87ea03d9234a5a914cffd30cc3d1e1567",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
