@@ -174,7 +174,7 @@ public class _XTimeField extends MultiMethodTest {
     public void _getFirst() {
 
         boolean result = true ;
-        int val = oObj.getFirst() ;
+        long val = oObj.getFirst() ;
 
         log.println("getFirst() = " + val) ;
 
@@ -210,7 +210,7 @@ public class _XTimeField extends MultiMethodTest {
     public void _getLast() {
 
         boolean result = true ;
-        int val = oObj.getLast() ;
+        long val = oObj.getLast() ;
 
         log.println("getLast() = " + val) ;
 

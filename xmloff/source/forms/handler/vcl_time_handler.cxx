@@ -56,7 +56,7 @@ namespace xmloff
     //------------------------------------------------------------------------------------------------------------------
     OUString VCLTimeHandler::getAttributeValue( const Any& i_propertyValue ) const
     {
-        sal_Int32 nVCLTime(0);
+        sal_Int64 nVCLTime(0);
         OSL_VERIFY( i_propertyValue >>= nVCLTime );
         ::Time aVCLTime( nVCLTime );
 
@@ -74,7 +74,7 @@ namespace xmloff
     //------------------------------------------------------------------------------------------------------------------
     bool VCLTimeHandler::getPropertyValues( const OUString i_attributeValue, PropertyValues& o_propertyValues ) const
     {
-        sal_Int32 nVCLTime(0);
+        sal_Int64 nVCLTime(0);
 
         Duration aDuration;
         if (::sax::Converter::convertDuration( aDuration, i_attributeValue ))
@@ -86,11 +86,13 @@ namespace xmloff
         else
         {
             // compatibility format, before we wrote those values in XML-schema compatible form
-            if (!::sax::Converter::convertNumber(nVCLTime, i_attributeValue))
+            if (!::sax::Converter::convertNumber64(nVCLTime, i_attributeValue))
             {
                 OSL_ENSURE( false, "VCLTimeHandler::getPropertyValues: unknown time format (no XML-schema time, no legacy integer)!" );
                 return false;
             }
+            // legacy integer was in centiseconds
+            nVCLTime *= ::Time::nanoPerCenti;
         }
 
         const Any aPropertyValue( makeAny( nVCLTime ) );

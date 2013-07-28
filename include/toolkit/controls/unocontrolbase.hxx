@@ -39,9 +39,12 @@ protected:
     void                        ImplSetPropertyValues( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aValues, sal_Bool bUpdateThis );
     ::com::sun::star::uno::Any  ImplGetPropertyValue( const OUString& aPropertyName );
 
+    template <typename T> T ImplGetPropertyValuePOD( sal_uInt16 nProp );
+    template <typename T> T ImplGetPropertyValueClass( sal_uInt16 nProp );
     sal_Bool        ImplGetPropertyValue_BOOL( sal_uInt16 nProp );
     sal_Int16       ImplGetPropertyValue_INT16( sal_uInt16 nProp );
     sal_Int32       ImplGetPropertyValue_INT32( sal_uInt16 nProp );
+    sal_Int64       ImplGetPropertyValue_INT64( sal_uInt16 nProp );
     double          ImplGetPropertyValue_DOUBLE( sal_uInt16 nProp );
     OUString ImplGetPropertyValue_UString( sal_uInt16 nProp );
 

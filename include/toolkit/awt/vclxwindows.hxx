@@ -1019,16 +1019,16 @@ public:
     ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::awt::XTimeField
-    void SAL_CALL setTime( sal_Int32 Time ) throw(::com::sun::star::uno::RuntimeException);
-    sal_Int32 SAL_CALL getTime(  ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL setMin( sal_Int32 Time ) throw(::com::sun::star::uno::RuntimeException);
-    sal_Int32 SAL_CALL getMin(  ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL setMax( sal_Int32 Time ) throw(::com::sun::star::uno::RuntimeException);
-    sal_Int32 SAL_CALL getMax(  ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL setFirst( sal_Int32 Time ) throw(::com::sun::star::uno::RuntimeException);
-    sal_Int32 SAL_CALL getFirst(  ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL setLast( sal_Int32 Time ) throw(::com::sun::star::uno::RuntimeException);
-    sal_Int32 SAL_CALL getLast(  ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL setTime( sal_Int64 Time ) throw(::com::sun::star::uno::RuntimeException);
+    sal_Int64 SAL_CALL getTime(  ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL setMin( sal_Int64 Time ) throw(::com::sun::star::uno::RuntimeException);
+    sal_Int64 SAL_CALL getMin(  ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL setMax( sal_Int64 Time ) throw(::com::sun::star::uno::RuntimeException);
+    sal_Int64 SAL_CALL getMax(  ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL setFirst( sal_Int64 Time ) throw(::com::sun::star::uno::RuntimeException);
+    sal_Int64 SAL_CALL getFirst(  ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL setLast( sal_Int64 Time ) throw(::com::sun::star::uno::RuntimeException);
+    sal_Int64 SAL_CALL getLast(  ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL setEmpty(  ) throw(::com::sun::star::uno::RuntimeException);
     sal_Bool SAL_CALL isEmpty(  ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL setStrictFormat( sal_Bool bStrict ) throw(::com::sun::star::uno::RuntimeException);
