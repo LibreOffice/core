@@ -382,7 +382,7 @@ void SvpSalInstance::StartTimer( sal_uLong nMS )
     }
 }
 
-void SvpSalInstance::AddToRecentDocumentList(const OUString&, const OUString&)
+void SvpSalInstance::AddToRecentDocumentList(const OUString&, const OUString&, const OUString&)
 {
 }
 

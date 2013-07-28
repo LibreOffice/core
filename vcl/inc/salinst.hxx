@@ -159,7 +159,7 @@ public:
                             CreateDragSource();
     virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
                             CreateDropTarget();
-    virtual void            AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType) = 0;
+    virtual void            AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType, const OUString& rDocumentService) = 0;
 
     virtual bool            hasNativeFileSelection() const { return false; }
 

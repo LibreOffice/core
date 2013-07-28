@@ -197,7 +197,9 @@ void SfxPickList::AddDocumentToPickList( SfxObjectShell* pDocSh )
             OUString() );
 
     if ( aURL.GetProtocol() == INET_PROT_FILE )
-        Application::AddToRecentDocumentList( aURL.GetURLNoPass( INetURLObject::NO_DECODE ), (pFilter) ? pFilter->GetMimeType() : OUString() );
+        Application::AddToRecentDocumentList( aURL.GetURLNoPass( INetURLObject::NO_DECODE ),
+                                                                 (pFilter) ? pFilter->GetMimeType() : OUString(),
+                                                                 (pFilter) ? pFilter->GetServiceName() : OUString() );
 }
 
 SfxPickList& SfxPickList::Get()
