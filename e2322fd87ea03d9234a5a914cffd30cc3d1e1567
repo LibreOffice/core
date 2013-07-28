@@ -16,6 +16,24 @@
       "revId": "e2322fd87ea03d9234a5a914cffd30cc3d1e1567",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//914\u003d",
+        "filename": "vcl/source/control/field2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2291,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2013-07-28T17:04:08Z",
+      "side": 1,
+      "message": "\u003e even en empty string has \"\\0\", no ?\n\nI touched that because I got an assertion failure in one of the four places I subsequently changed. \u0027t was definitely fixed by that change... Trying to reproduce.\n\n\u003e  how can nSep can be \u003e\u003d 0 and yet aStr be empty ?\n\nimplCutTimePortion modifies aStr; it removes the (prefix) part that corresponds to the value it puts in nMinute.",
+      "parentUuid": "AAAAXn//92U\u003d",
+      "revId": "e2322fd87ea03d9234a5a914cffd30cc3d1e1567",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
