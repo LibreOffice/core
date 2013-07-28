@@ -71,6 +71,48 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ucb;
 
+#include <stdio.h>
+#include <string>
+#include <sys/time.h>
+
+namespace {
+
+class stack_printer
+{
+public:
+    explicit stack_printer(const char* msg) :
+        msMsg(msg)
+    {
+        fprintf(stdout, "%s: --begin\n", msMsg.c_str());
+        mfStartTime = getTime();
+    }
+
+    ~stack_printer()
+    {
+        double fEndTime = getTime();
+        fprintf(stdout, "%s: --end (duration: %g sec)\n", msMsg.c_str(), (fEndTime - mfStartTime));
+    }
+
+    void printTime(int line) const
+    {
+        double fEndTime = getTime();
+        fprintf(stdout, "%s: --(%d) (duration: %g sec)\n", msMsg.c_str(), line, (fEndTime - mfStartTime));
+    }
+
+private:
+    double getTime() const
+    {
+        timeval tv;
+        gettimeofday(&tv, NULL);
+        return tv.tv_sec + tv.tv_usec / 1000000.0;
+    }
+
+    ::std::string msMsg;
+    double mfStartTime;
+};
+
+}
+
 ScFilterDetect::ScFilterDetect( const uno::Reference<uno::XComponentContext>& /*xContext*/ )
 {
 }
@@ -217,6 +259,7 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
 OUString SAL_CALL ScFilterDetect::detect( uno::Sequence<beans::PropertyValue>& lDescriptor )
     throw( uno::RuntimeException )
 {
+    stack_printer __stack_printer__("ScFilterDetect::detect");
     uno::Reference< XInputStream > xStream;
     uno::Reference< XContent > xContent;
     uno::Reference< XInteractionHandler > xInteraction;
@@ -295,6 +338,8 @@ OUString SAL_CALL ScFilterDetect::detect( uno::Sequence<beans::PropertyValue>& l
         else if (lDescriptor[nProperty].Name == "DeepDetection")
             bDeepDetection = lDescriptor[nProperty].Value.get<sal_Bool>();
     }
+
+    fprintf(stdout, "ScFilterDetect::detect:   type = '%s'\n", rtl::OUStringToOString(aTypeName, RTL_TEXTENCODING_UTF8).getStr());
 
     // can't check the type for external filters, so set the "dont" flag accordingly
     SolarMutexGuard aGuard;
