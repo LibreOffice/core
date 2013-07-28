@@ -121,19 +121,9 @@ protected:
                             *pFrameProgMap,
                             *pNumRuleProgMap;
 
-    static boost::ptr_vector<String>* NewUINameArray( boost::ptr_vector<String>*&,
-                                      sal_uInt16 nStt,
-                                      sal_uInt16 nEnd );
-
-    static boost::ptr_vector<String>* NewProgNameArray( boost::ptr_vector<String>*&,
-                                          const SwTableEntry *pTable,
-                                          sal_uInt8 nCount);
-
     static void fillNameFromId ( sal_uInt16 nId, String &rName, bool bProgName );
     static const String& getNameFromId ( sal_uInt16 nId, const String &rName, bool bProgName );
     static const NameToIdHash& getHashTable ( SwGetPoolIdFromName, bool bProgName );
-    static bool SuffixIsUser ( const String & rString );
-    static void CheckSuffixAndDelete ( String & rString );
 
 public:
     // This gets the UI Name from the programmatic name
