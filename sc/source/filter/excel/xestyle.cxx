@@ -3213,6 +3213,9 @@ void XclExpTableStyle::SaveXml( XclExpXmlStream& rStrm )
 XclExpTableStyles::XclExpTableStyles( const XclExpRoot& rRoot, XclExpDxfs& rDxfs )
     :XclExpRoot( rRoot )
 {
+    //Set the has table styles member to false, for conditions when there is not
+    //table style defined.
+    mbHasTableStyles = false;
     //Search through the collection of ScDBData (Database Ranges)
     //checking for any table styles associated with them
     miCount = 0;
@@ -3233,10 +3236,12 @@ XclExpTableStyles::XclExpTableStyles( const XclExpRoot& rRoot, XclExpDxfs& rDxfs
             */
             ScDBDataFormatting aDBFormatting;
             (*itr).GetTableFormatting( aDBFormatting );
-            if( &(aDBFormatting) )//Probably non-standard?
+            if( &(aDBFormatting)!=NULL )//Probably non-standard?
             {
                 miCount++;
                 maStyleContainer.push_back( new XclExpTableStyle( rRoot, aDBFormatting, rDxfs ) );
+                //We have atleast one style so mbHasTableStyles needs to be set
+                mbHasTableStyles = true;
             }
         }
     }
@@ -3248,13 +3253,16 @@ XclExpTableStyles::~XclExpTableStyles()
 
 void XclExpTableStyles::SaveXml( XclExpXmlStream& rStrm )
 {
-    sax_fastparser::FSHelperPtr& rStyleSheet = rStrm.GetCurrentStream();
-    rStyleSheet->startElement( XML_tableStyles, XML_count, OString::number(miCount).getStr(), FSEND );
-    for ( StyleContainer::iterator itr = maStyleContainer.begin(); itr != maStyleContainer.end(); ++itr )
+    if( mbHasTableStyles ) //If it has table styles only then start the element
     {
-        itr->SaveXml( rStrm );
+        sax_fastparser::FSHelperPtr& rStyleSheet = rStrm.GetCurrentStream();
+        rStyleSheet->startElement( XML_tableStyles, XML_count, OString::number(miCount).getStr(), FSEND );
+        for ( StyleContainer::iterator itr = maStyleContainer.begin(); itr != maStyleContainer.end(); ++itr )
+        {
+            itr->SaveXml( rStrm );
+        }
+        rStyleSheet->endElement( XML_tableStyles );
     }
-    rStyleSheet->endElement( XML_tableStyles );
 }
 
 // ============================================================================

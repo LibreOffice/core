@@ -804,6 +804,7 @@ private:
     typedef boost::ptr_vector< XclExpTableStyle > StyleContainer;
     StyleContainer maStyleContainer;
     int miCount;
+    bool mbHasTableStyles;
 };
 
 // ============================================================================
