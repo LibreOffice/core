@@ -1460,6 +1460,10 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         case NS_ooxml::LN_CT_Background_color:
             m_pImpl->m_oBackgroundColor.reset(nIntValue);
         break;
+        case NS_ooxml::LN_CT_PageNumber_start:
+            if (pSectionContext != NULL)
+                pSectionContext->SetPageNumber(nIntValue);
+        break;
         default:
             {
 #if OSL_DEBUG_LEVEL > 0
@@ -3386,6 +3390,15 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
             // Set default format, so at least the date picker is created.
             m_pImpl->m_pSdtHelper->getDateFormat().reset(0);
             SAL_WARN("writerfilter", "unhandled w:dateFormat value");
+        }
+    }
+    break;
+    case NS_ooxml::LN_EG_SectPrContents_pgNumType:
+    {
+        writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+        if( pProperties.get())
+        {
+            pProperties->resolve(*this);
         }
     }
     break;

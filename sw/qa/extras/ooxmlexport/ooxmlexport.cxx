@@ -108,6 +108,7 @@ public:
     void testFdo67013();
     void testParaShadow();
     void testTableFloatingMargins();
+    void testFdo44689_start_page_7();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -192,6 +193,7 @@ void Test::run()
         {"fdo67013.docx", &Test::testFdo67013},
         {"para-shadow.docx", &Test::testParaShadow},
         {"table-floating-margins.docx", &Test::testTableFloatingMargins},
+        {"fdo44689_start_page_7.docx", &Test::testFdo44689_start_page_7},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -1161,6 +1163,13 @@ void Test::testTableFloatingMargins()
     // Paragraph bottom margin wasn't 0 in the A1 cell of the floating table.
     xmlDocPtr pXmlDoc = parseExport();
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:pict/v:rect/v:textbox/w:txbxContent/w:tbl/w:tr[1]/w:tc[1]/w:p/w:pPr/w:spacing", "after", "0");
+}
+
+void Test::testFdo44689_start_page_7()
+{
+    // The problem was that the import & export process did not analyze the 'start from page' attribute of a section
+    uno::Reference<beans::XPropertySet> xPara(getParagraph(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(7), getProperty<sal_Int16>(xPara, "PageNumberOffset"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
