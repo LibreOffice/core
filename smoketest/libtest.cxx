@@ -38,8 +38,11 @@ int main (int argc, char **argv)
 
     if( argc > 3 )
     {
-        fprintf( stderr, "save document as '%s'\n", argv[3] );
-        if ( !pDocument->saveAs( argv[ 3 ] ) )
+        const char *pFilter = NULL;
+        if( argc > 4 )
+            pFilter = argv[4];
+        fprintf( stderr, "save document as '%s' (%s)\n", argv[3], pFilter ? pFilter : "<null>" );
+        if( !pDocument->saveAs( argv[3], pFilter ) )
         {
             char *pError = pOffice->getError();
             fprintf( stderr, "failed to save document '%s'\n", pError);

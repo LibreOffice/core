@@ -15,7 +15,8 @@ class LODocument
 public:
     virtual ~LODocument() {}
 
-    virtual bool saveAs (const char *url) = 0;
+    // Save as the given format, if format is NULL sniff from ext'n
+    virtual bool saveAs (const char *url, const char *format = NULL) = 0;
 };
 
 class LibLibreOffice

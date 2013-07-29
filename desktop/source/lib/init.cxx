@@ -43,6 +43,59 @@ class LibLibreOffice_Impl;
 
 static LibLibreOffice_Impl *gImpl = NULL;
 
+typedef struct {
+    const char *extn;
+    const char *filterName;
+} ExtensionMap;
+
+static const ExtensionMap
+aWriterExtensionMap[] = {
+    { "doc",   "MS Word 97" },
+    { "docx",  "MS Word 2007 XML" },
+    { "fodt",  "OpenDocument Text Flat XML" },
+    { "html",  "HTML (StarWriter)" },
+    { "odt",   "writer8" },
+    { "ott",   "writer8_template" },
+    { "pdf",   "writer_pdf_Export" },
+    { "txt",   "Text" },
+    { "xhtml", "XHTML Writer File" },
+    { NULL, NULL }
+};
+
+static const ExtensionMap
+aCalcExtensionMap[] = {
+    { "csv",   "Text - txt - csv (StarCalc)" },
+    { "fods",  "OpenDocument Spreadsheet Flat XML" },
+    { "html",  "HTML (StarCalc)" },
+    { "ods",   "calc8" },
+    { "ots",   "calc8_template" },
+    { "pdf",   "calc_pdf_Export" },
+    { "xhtml", "XHTML Calc File" },
+    { "xls",   "MS Excel 97" },
+    { "xlsx",  "Calc MS Excel 2007 XML" },
+    { NULL, NULL }
+};
+
+static const ExtensionMap
+aImpressExtensionMap[] = {
+    { "fodp",  "OpenDocument Presentation Flat XML" },
+    { "html",  "impress_html_Export" },
+    { "odg",   "impress8_draw" },
+    { "odp",   "impress8" },
+    { "otp",   "impress8_template" },
+    { "pdf",   "impress_pdf_Export" },
+    { "potm",  "Impress MS PowerPoint 2007 XML Template" },
+    { "pot",   "MS PowerPoint 97 Vorlage" },
+    { "pptx",  "Impress MS PowerPoint 2007 XML" },
+    { "pps",   "MS PowerPoint 97 Autoplay" },
+    { "ppt",   "MS PowerPoint 97" },
+    { "svg",   "impress_svg_Export" },
+    { "swf",   "impress_flash_Export" },
+    { "xhtml", "XHTML Impress File" },
+    { NULL, NULL }
+};
+
+
 class LibLODocument_Impl : public LODocument
 {
     uno::Reference < css::lang::XComponent > mxComponent;
@@ -50,7 +103,7 @@ public:
     LibLODocument_Impl( const uno::Reference < css::lang::XComponent > &xComponent )
             : mxComponent( xComponent )
         { }
-    virtual bool saveAs (const char *url);
+    virtual bool saveAs (const char *url, const char *format);
 };
 
 class LibLibreOffice_Impl : public LibLibreOffice
@@ -109,20 +162,52 @@ LibLibreOffice_Impl::documentLoad( const char *docUrl )
     return NULL;
 }
 
-bool LibLODocument_Impl::saveAs (const char *url)
+bool LibLODocument_Impl::saveAs (const char *url, const char *format)
 {
     OUString sURL = getUString( url );
+    OUString sFormat = getUString( format );
 
     try {
         uno::Reference< frame::XModel > xDocument( mxComponent, uno::UNO_QUERY_THROW );
         uno::Sequence< beans::PropertyValue > aSeq = xDocument->getArgs();
 
-        OUString aFilterName;
+        OUString aFilterName, aDocumentService;
         for( sal_Int32 i = 0; i < aSeq.getLength(); ++i )
         {
             if( aSeq[i].Name == "FilterName" )
                 aSeq[i].Value >>= aFilterName;
+            else if( aSeq[i].Name == "DocumentService" )
+                aSeq[i].Value >>= aDocumentService;
+            OUString aValue;
+            aSeq[i].Value >>= aValue;
         }
+
+        if( aDocumentService == "")
+        {
+            gImpl->maLastExceptionMsg = "Unknown document type";
+            return false;
+        }
+        const ExtensionMap *pMap;
+
+        if( aDocumentService == "com.sun.star.sheet.SpreadsheetDocument" )
+            pMap = (const ExtensionMap *)aCalcExtensionMap;
+        else if( aDocumentService == "com.sun.star.presentation.PresentationDocument" )
+            pMap = (const ExtensionMap *)aImpressExtensionMap;
+        else // for the sake of argument only writer documents ...
+            pMap = (const ExtensionMap *)aWriterExtensionMap;
+
+        if( format )
+        {
+            for( sal_Int32 i = 0; pMap[i].extn; i++ )
+            {
+                if( sFormat.equalsIgnoreAsciiCaseAscii( pMap[i].extn ) )
+                {
+                    aFilterName = getUString( pMap[i].filterName );
+                    break;
+                }
+            }
+        }
+
         aSeq.realloc(2);
         aSeq[0].Name = "Overwrite";
         aSeq[0].Value <<= sal_True;
@@ -130,7 +215,7 @@ bool LibLODocument_Impl::saveAs (const char *url)
         aSeq[1].Value <<= aFilterName;
 
         uno::Reference< frame::XStorable > xStorable( mxComponent, uno::UNO_QUERY_THROW );
-        xStorable->storeAsURL( sURL, aSeq );
+        xStorable->storeToURL( sURL, aSeq );
 
         return true;
     } catch (const uno::Exception &ex) {
