@@ -4071,50 +4071,6 @@ bool ScCompiler::HandleExternalReference(const FormulaToken& _aToken)
     return true;
 }
 
-
-//---------------------------------------------------------------------------
-
-
-//---------------------------------------------------------------------------
-// Append token to RPN code
-//---------------------------------------------------------------------------
-
-
-//-----------------------------------------------------------------------------
-
-//---------------------------------------------------------------------------
-// RPN creation by recursion
-//---------------------------------------------------------------------------
-
-
-
-//-----------------------------------------------------------------------------
-
-bool ScCompiler::HasModifiedRange()
-{
-    pArr->Reset();
-    for ( FormulaToken* t = pArr->Next(); t; t = pArr->Next() )
-    {
-        OpCode eOpCode = t->GetOpCode();
-        if ( eOpCode == ocName )
-        {
-            const ScRangeData* pRangeData = GetRangeData( *t);
-            if (pRangeData && pRangeData->IsModified())
-                return true;
-        }
-        else if ( eOpCode == ocDBArea )
-        {
-            ScDBData* pDBData = pDoc->GetDBCollection()->getNamedDBs().findByIndex(t->GetIndex());
-            if (pDBData && pDBData->IsModified())
-                return true;
-        }
-    }
-    return false;
-}
-
-
-//---------------------------------------------------------------------------
-
 template< typename T, typename S >
 static S lcl_adjval( S& n, T pos, T max, bool bRel )
 {
@@ -4313,50 +4269,6 @@ void ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
             }
         }
     }
-}
-
-bool ScCompiler::UpdateNameReference(UpdateRefMode eUpdateRefMode,
-                                     const ScRange& r,
-                                     SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
-                                     bool& rChanged, bool bSharedFormula, bool bLocal)
-{
-    bool bRelRef = false;   // set if relative reference
-    rChanged = false;
-    pArr->Reset();
-    ScToken* t;
-    while ( (t = static_cast<ScToken*>(pArr->GetNextReference())) != NULL )
-    {
-        SingleDoubleRefModifier aMod( *t );
-        ScComplexRefData& rRef = aMod.Ref();
-        bRelRef = rRef.Ref1.IsColRel() || rRef.Ref1.IsRowRel() ||
-            rRef.Ref1.IsTabRel();
-        if (!bRelRef && t->GetType() == svDoubleRef)
-            bRelRef = rRef.Ref2.IsColRel() || rRef.Ref2.IsRowRel() ||
-                rRef.Ref2.IsTabRel();
-        bool bUpdate = !rRef.Ref1.IsColRel() || !rRef.Ref1.IsRowRel() ||
-            !rRef.Ref1.IsTabRel();
-        if (!bUpdate && t->GetType() == svDoubleRef)
-            bUpdate = !rRef.Ref2.IsColRel() || !rRef.Ref2.IsRowRel() ||
-                !rRef.Ref2.IsTabRel();
-        if (!bSharedFormula && !bLocal)
-        {
-            // We cannot update names with sheet-relative references, they may
-            // be used on other sheets as well and the resulting reference
-            // would be wrong. This is a dilemma if col/row would need to be
-            // updated for the current usage.
-            bUpdate = bUpdate && !rRef.Ref1.IsTabRel() && !rRef.Ref2.IsTabRel();
-        }
-        if (bUpdate)
-        {
-            ScRange aRefRange = rRef.toAbs(aPos);
-            if (ScRefUpdate::Update(pDoc, eUpdateRefMode, aPos, r, nDx, nDy, nDz, rRef, aRefRange, ScRefUpdate::ABSOLUTE) != UR_NOTHING)
-            {
-                rRef.SetRange(aRefRange, aPos);
-                rChanged = true;
-            }
-        }
-    }
-    return bRelRef;
 }
 
 void ScCompiler::CreateStringFromExternal(OUStringBuffer& rBuffer, FormulaToken* pTokenP)

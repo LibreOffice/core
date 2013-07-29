@@ -441,17 +441,10 @@ public:
     static void MoveRelWrap( ScTokenArray& rArr, ScDocument* pDoc, const ScAddress& rPos,
                              SCCOL nMaxCol, SCROW nMaxRow );
 
-    bool UpdateNameReference( UpdateRefMode eUpdateRefMode,
-                              const ScRange&,
-                              SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
-                              bool& rChanged, bool bSharedFormula = false, bool bLocal = false);
-
     void UpdateReference( UpdateRefMode eUpdateRefMode,
                                   const ScAddress& rOldPos, const ScRange&,
                                   SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
                                   bool& rChanged, bool& rRefSizeChanged );
-
-    bool HasModifiedRange();
 
     /** If the character is allowed as first character in sheet names or
         references, includes '$' and '?'. */
