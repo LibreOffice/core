@@ -238,7 +238,12 @@ sal_Bool SwTableFmt::GetRowSplit() const
 
 sal_uInt16 SwTableFmt::GetRepeatHeading() const
 {
-    return (static_cast<const SfxUInt16Item&>( GetFmtAttr( FN_PARAM_TABLE_HEADLINE ) )).GetValue();
+    const SfxPoolItem* pItem;
+
+    if( SFX_ITEM_SET == GetItemState( FN_PARAM_TABLE_HEADLINE, sal_False, &pItem ) )
+        return ((const SfxUInt16Item*)pItem)->GetValue();
+
+    return 0;
 }
 
 void SwTableFmt::RestoreTableProperties( SwTableFmt* pSrcFmt, SwTable &table )
