@@ -5085,28 +5085,33 @@ void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
 
     OutputBorderOptions aOutputBorderOptions = lcl_getBoxBorderOptions();
 
-    if ( !m_bOpenedSectPr )
+    if ( m_bOpenedSectPr && GetWritingHeaderFooter() == false)
     {
-        // Normally open the borders tag for paragraphs
-        m_pSerializer->startElementNS( XML_w, XML_pBdr, FSEND );
-    }
-    else
-    {
-        // If inside a section - check if the distance is larger than 31 points
+        // =================
+        // Section Borders
+        // =================
+
+        // Check if the distance is larger than 31 points
         aOutputBorderOptions.bCheckDistanceSize = true;
-    }
 
-    impl_borders( m_pSerializer, rBox, aOutputBorderOptions, &m_pageMargins );
+        impl_borders( m_pSerializer, rBox, aOutputBorderOptions, &m_pageMargins );
 
-    if ( m_bOpenedSectPr )
-    {
         // Special handling for pgBorder
         m_pSerializer->mergeTopMarks( sax_fastparser::MERGE_MARKS_PREPEND );
         m_pSerializer->mergeTopMarks( );
     }
     else
     {
-        // Normally close the borders tag for paragraphs
+        // =====================
+        // Not inside a section
+        // =====================
+
+        // Open the paragraph's borders tag
+        m_pSerializer->startElementNS( XML_w, XML_pBdr, FSEND );
+
+        impl_borders( m_pSerializer, rBox, aOutputBorderOptions, &m_pageMargins );
+
+        // Close the paragraph's borders tag
         m_pSerializer->endElementNS( XML_w, XML_pBdr );
     }
 }
@@ -5280,6 +5285,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_pRedlineData( NULL ),
       m_nRedlineId( 0 ),
       m_bOpenedSectPr( false ),
+      m_bWritingHeaderFooter( false ),
       m_sFieldBkm( ),
       m_nNextMarkId( 0 ),
       m_bPostitStart(false),

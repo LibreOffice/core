@@ -104,6 +104,7 @@ public:
     void testFdo66781();
     void testFdo60990();
     void testFdo65718();
+    void testFdo67013();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -184,6 +185,7 @@ void Test::run()
         {"fdo66781.docx", &Test::testFdo66781},
         {"fdo60990.odt", &Test::testFdo60990},
         {"fdo65718.docx", &Test::testFdo65718},
+        {"fdo67013.docx", &Test::testFdo67013},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -996,14 +998,12 @@ void Test::testFdo66929()
 
 void Test::testPageBorderSpacingExportCase2()
 {
-    /*
-     * The problem was that the exporter didn't mirror the workaround of the
-     * importer, regarding the page border's spacing : the <w:pgBorders w:offsetFrom="page">
-     * and the inner nodes like <w:top w:space="24" .... />
-     *
-     * The exporter ALWAYS exported 'w:offsetFrom="text"' even when the spacing values where too large
-     * for Word to handle (larger than 31 points)
-     */
+     // The problem was that the exporter didn't mirror the workaround of the
+     // importer, regarding the page border's spacing : the <w:pgBorders w:offsetFrom="page">
+     // and the inner nodes like <w:top w:space="24" .... />
+     //
+     // The exporter ALWAYS exported 'w:offsetFrom="text"' even when the spacing values where too large
+     // for Word to handle (larger than 31 points)
 
     xmlDocPtr pXmlDoc = parseExport();
 
@@ -1086,6 +1086,43 @@ void Test::testFdo65718()
     // So I had to add the hack of the '+1' to make the test-case pass
     CPPUNIT_ASSERT_EQUAL(sal_Int32( EMU_TO_MM100(114300) + 1 ), getProperty<sal_Int32>(xPropertySet, "LeftMargin") );
     CPPUNIT_ASSERT_EQUAL(sal_Int32( EMU_TO_MM100(114300) + 1), getProperty<sal_Int32>(xPropertySet, "RightMargin") );
+}
+
+void Test::testFdo67013()
+{
+    /*
+     * The problem was that borders inside headers \ footers were not exported
+     * This was checked in xray using these commands:
+     *
+     * xHeaderText = ThisComponent.getStyleFamilies().getByName("PageStyles").getByName("Standard").HeaderText
+     * xHeaderEnum = xHeaderText.createEnumeration()
+     * xHeaderFirstParagraph = xHeaderEnum.nextElement()
+     * xHeaderBottomBorder = xHeaderFirstParagraph.BottomBorder
+     *
+     * xFooterText = ThisComponent.getStyleFamilies().getByName("PageStyles").getByName("Standard").FooterText
+     * xFooterEnum = xFooterText.createEnumeration()
+     * xFooterFirstParagraph = xFooterEnum.nextElement()
+     * xFooterTopBorder = xFooterFirstParagraph.TopBorder
+     */
+    uno::Reference<text::XText> xHeaderText = getProperty< uno::Reference<text::XText> >(getStyles("PageStyles")->getByName(DEFAULT_STYLE), "HeaderText");
+    uno::Reference< text::XTextRange > xHeaderParagraph = getParagraphOfText( 1, xHeaderText );
+    table::BorderLine2 aHeaderBottomBorder = getProperty<table::BorderLine2>(xHeaderParagraph, "BottomBorder");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x622423), aHeaderBottomBorder.Color);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(106), aHeaderBottomBorder.InnerLineWidth);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(26), aHeaderBottomBorder.LineDistance);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(7), aHeaderBottomBorder.LineStyle);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(159), aHeaderBottomBorder.LineWidth);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(26), aHeaderBottomBorder.OuterLineWidth);
+
+    uno::Reference<text::XText> xFooterText = getProperty< uno::Reference<text::XText> >(getStyles("PageStyles")->getByName(DEFAULT_STYLE), "FooterText");
+    uno::Reference< text::XTextRange > xFooterParagraph = getParagraphOfText( 1, xFooterText );
+    table::BorderLine2 aFooterTopBorder = getProperty<table::BorderLine2>(xFooterParagraph, "TopBorder");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x622423), aFooterTopBorder.Color);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(26), aFooterTopBorder.InnerLineWidth);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(26), aFooterTopBorder.LineDistance);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(4), aFooterTopBorder.LineStyle);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(159), aFooterTopBorder.LineWidth);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(106), aFooterTopBorder.OuterLineWidth);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
