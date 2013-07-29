@@ -47,8 +47,6 @@ using namespace std;
 
 namespace // private
 {
-  const Type CPPUTYPE_SEQINT8  = getCppuType((Sequence<sal_Int8>*)0);
-
   /* Determine whether or not a DataFlavor is valid.
    */
   bool isValidFlavor(const DataFlavor& aFlavor)
@@ -528,7 +526,7 @@ DataFlavor DataFlavorMapper::systemToOpenOfficeFlavor(NSString* systemDataFlavor
     {
         oOOFlavor.MimeType = aTryFlavor;
         oOOFlavor.HumanPresentableName = OUString();
-        oOOFlavor.DataType = CPPUTYPE_SEQINT8;
+        oOOFlavor.DataType = getCppuType((Sequence<sal_Int8>*)0);
     }
 
     return oOOFlavor;
