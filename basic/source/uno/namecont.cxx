@@ -1019,13 +1019,11 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
         INetURLObject aUserBasicInetObj( maLibraryPath.getToken(1, (sal_Unicode)';') );
         OUString aStandardStr("Standard");
 
-        static char const strPrevFolderName_1[] = "__basic_80";
-        static char const strPrevFolderName_2[] = "__basic_80_2";
         INetURLObject aPrevUserBasicInetObj_1( aUserBasicInetObj );
         aPrevUserBasicInetObj_1.removeSegment();
         INetURLObject aPrevUserBasicInetObj_2 = aPrevUserBasicInetObj_1;
-        aPrevUserBasicInetObj_1.Append( OString( strPrevFolderName_1 ));
-        aPrevUserBasicInetObj_2.Append( OString( strPrevFolderName_2 ));
+        aPrevUserBasicInetObj_1.Append( "__basic_80" );
+        aPrevUserBasicInetObj_2.Append( "__basic_80_2" );
 
         // #i93163
         bool bCleanUp = false;
@@ -1090,7 +1088,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
                 OUString aFolderUserBasic = aUserBasicInetObj.GetMainURL( INetURLObject::NO_DECODE );
                 INetURLObject aUserBasicTmpInetObj( aUserBasicInetObj );
                 aUserBasicTmpInetObj.removeSegment();
-                aUserBasicTmpInetObj.Append( OString( "__basic_tmp" ));
+                aUserBasicTmpInetObj.Append( "__basic_tmp" );
                 OUString aFolderTmp = aUserBasicTmpInetObj.GetMainURL( INetURLObject::NO_DECODE );
 
                 mxSFI->move( aFolderUserBasic, aFolderTmp );
@@ -1217,10 +1215,9 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
         // #i93163
         if( bCleanUp )
         {
-            static const char strErrorSavFolderName[] = "__basic_80_err";
             INetURLObject aPrevUserBasicInetObj_Err( aUserBasicInetObj );
             aPrevUserBasicInetObj_Err.removeSegment();
-            aPrevUserBasicInetObj_Err.Append( OString( strErrorSavFolderName ));
+            aPrevUserBasicInetObj_Err.Append( "__basic_80_err" );
             OUString aPrevFolder_Err = aPrevUserBasicInetObj_Err.GetMainURL( INetURLObject::NO_DECODE );
 
             bool bSaved = false;

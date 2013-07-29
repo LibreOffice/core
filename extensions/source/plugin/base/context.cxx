@@ -134,7 +134,7 @@ void XPluginContext_Impl::getURL(const Reference< ::com::sun::star::plugin::XPlu
     {
         INetURLObject aURL;
         aURL.SetSmartProtocol( INET_PROT_FILE );
-        aURL.SetSmartURL( OUStringToOString( url, m_aEncoding ) );
+        aURL.SetSmartURL( url );
 
         OUString aUrl = aURL.GetMainURL(INetURLObject::DECODE_TO_IURI);
         // the mimetype cannot be specified

@@ -1011,7 +1011,7 @@ sal_Int16 SAL_CALL SalGtkFilePicker::execute() throw( uno::RuntimeException )
                         gchar *gFileName = g_filename_from_uri ( sFileName.getStr(), NULL, NULL );
                         if( g_file_test( gFileName, G_FILE_TEST_IS_REGULAR ) )
                         {
-                            INetURLObject aFileObj( sFileName );
+                            INetURLObject aFileObj( OStringToOUString(sFileName, RTL_TEXTENCODING_UTF8) );
 
                             OString baseName(
                               OUStringToOString(

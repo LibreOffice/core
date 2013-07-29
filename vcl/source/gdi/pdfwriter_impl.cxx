@@ -4547,7 +4547,7 @@ we check in the following sequence:
                         OStringBuffer aLineLoc( 1024 );
                         appendDestinationName( aFragment , aLineLoc );
 //substitute the fragment
-                        aTargetURL.SetMark( aLineLoc.getStr() );
+                        aTargetURL.SetMark( OStringToOUString(aLineLoc.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US) );
                     }
                     OUString aURL = aTargetURL.GetMainURL( bFileSpec ? INetURLObject::DECODE_WITH_CHARSET : INetURLObject::NO_DECODE );
                     appendLiteralStringEncrypt(bSetRelative ? INetURLObject::GetRelURL( m_aContext.BaseURL, aURL,

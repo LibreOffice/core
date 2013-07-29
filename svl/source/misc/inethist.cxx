@@ -430,14 +430,14 @@ void INetURLHistory::NormalizeUrl_Impl (INetURLObject &rUrl)
             if (!rUrl.HasPort())
                 rUrl.SetPort (INETHIST_DEF_HTTP_PORT);
             if (!rUrl.HasURLPath())
-                rUrl.SetURLPath (OString("/"));
+                rUrl.SetURLPath("/");
             break;
 
         case INET_PROT_HTTPS:
             if (!rUrl.HasPort())
                 rUrl.SetPort (INETHIST_DEF_HTTPS_PORT);
             if (!rUrl.HasURLPath())
-                rUrl.SetURLPath (OString("/"));
+                rUrl.SetURLPath("/");
             break;
 
         default:
