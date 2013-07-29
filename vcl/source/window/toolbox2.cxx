@@ -367,7 +367,7 @@ sal_Bool ImplToolItem::IsClipped() const
 // -----------------------------------------------------------------------
 // -----------------------------------------------------------------------
 
-const OUString ToolBox::ImplConvertMenuString( const XubString& rStr )
+const OUString ToolBox::ImplConvertMenuString( const OUString& rStr )
 {
     OUString aCvtStr( rStr );
     if ( mbMenuStrings )
@@ -629,7 +629,7 @@ void ToolBox::InsertItem( sal_uInt16 nItemId, const Image& rImage,
 // -----------------------------------------------------------------------
 
 void ToolBox::InsertItem( sal_uInt16 nItemId, const Image& rImage,
-                          const XubString& rText,
+                          const OUString& rText,
                           ToolBoxItemBits nBits, sal_uInt16 nPos )
 {
     DBG_ASSERT( nItemId, "ToolBox::InsertItem(): ItemId == 0" );
@@ -649,7 +649,7 @@ void ToolBox::InsertItem( sal_uInt16 nItemId, const Image& rImage,
 
 // -----------------------------------------------------------------------
 
-void ToolBox::InsertItem( sal_uInt16 nItemId, const XubString& rText,
+void ToolBox::InsertItem( sal_uInt16 nItemId, const OUString& rText,
                           ToolBoxItemBits nBits, sal_uInt16 nPos )
 {
     DBG_ASSERT( nItemId, "ToolBox::InsertItem(): ItemId == 0" );

@@ -230,7 +230,7 @@ private:
     using Window::ImplInvalidate;
     SAL_DLLPRIVATE void            ImplInvalidate( sal_Bool bNewCalc = sal_False, sal_Bool bFullPaint = sal_False );
     SAL_DLLPRIVATE void            ImplUpdateItem( sal_uInt16 nIndex = 0xFFFF );
-    SAL_DLLPRIVATE const OUString ImplConvertMenuString( const XubString& rStr );
+    SAL_DLLPRIVATE const OUString ImplConvertMenuString( const OUString& rStr );
     SAL_DLLPRIVATE sal_Bool            ImplHandleMouseMove( const MouseEvent& rMEvt, sal_Bool bRepeat = sal_False );
     SAL_DLLPRIVATE sal_Bool            ImplHandleMouseButtonUp( const MouseEvent& rMEvt, sal_Bool bCancel = sal_False );
     SAL_DLLPRIVATE void            ImplChangeHighlight( ImplToolItem* pItem, sal_Bool bNoGrabFocus = sal_False );
@@ -349,10 +349,10 @@ public:
                                     ToolBoxItemBits nBits = 0,
                                     sal_uInt16 nPos = TOOLBOX_APPEND );
     void                InsertItem( sal_uInt16 nItemId, const Image& rImage,
-                                    const XubString& rText,
+                                    const OUString& rText,
                                     ToolBoxItemBits nBits = 0,
                                     sal_uInt16 nPos = TOOLBOX_APPEND );
-    void                InsertItem( sal_uInt16 nItemId, const XubString& rText,
+    void                InsertItem( sal_uInt16 nItemId, const OUString& rText,
                                     ToolBoxItemBits nBits = 0,
                                     sal_uInt16 nPos = TOOLBOX_APPEND );
     void                InsertWindow( sal_uInt16 nItemId, Window* pWindow,
