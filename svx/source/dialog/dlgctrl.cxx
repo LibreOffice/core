@@ -362,8 +362,9 @@ void SvxRectCtl::KeyInput( const KeyEvent& rKeyEvt )
         {
             SetActualRP( eNewRP );
 
-            if( WINDOW_TABPAGE == GetParent()->GetType() )
-                ( (SvxTabPage*) GetParent() )->PointChanged( this, eRP );
+            Window *pTabPage = getNonLayoutParent(this);
+            if (pTabPage && WINDOW_TABPAGE == pTabPage->GetType())
+                ((SvxTabPage*) pTabPage)->PointChanged(this, eRP);
 
             SetFocusRect();
         }
@@ -676,8 +677,9 @@ void SvxRectCtl::SetState( CTL_STATE nState )
     eRP = GetRPFromPoint( _aPtNew );
     Invalidate();
 
-    if( WINDOW_TABPAGE == GetParent()->GetType() )
-        ( (SvxTabPage*) GetParent() )->PointChanged( this, eRP );
+    Window *pTabPage = getNonLayoutParent(this);
+    if (pTabPage && WINDOW_TABPAGE == pTabPage->GetType())
+        ((SvxTabPage*)pTabPage)->PointChanged(this, eRP);
 }
 
 sal_uInt8 SvxRectCtl::GetNumOfChildren( void ) const
@@ -766,14 +768,11 @@ SvxPixelCtl::SvxPixelCtl( Window* pParent, const ResId& rResId, sal_uInt16 nNumb
     memset(pPixel, 0, nSquares * sizeof(sal_uInt16));
 }
 
-SvxPixelCtl::SvxPixelCtl( Window* pParent, sal_uInt16 nNumber ) :
-Control     ( pParent, WB_BORDER ),
-nLines      ( nNumber ),
-bPaintable  ( sal_True )
+SvxPixelCtl::SvxPixelCtl(Window* pParent, sal_uInt16 nNumber)
+    : Control(pParent, WB_BORDER)
+    , nLines(nNumber)
+    , bPaintable(true)
 {
-    //aRectSize = GetOutputSize();
-    aRectSize = LogicToPixel(Size(72, 72), MAP_APPFONT);
-
     SetPixelColor( Color( COL_BLACK ) );
     SetBackgroundColor( Color( COL_WHITE ) );
     SetLineColor( Application::GetSettings().GetStyleSettings().GetShadowColor() );
@@ -783,9 +782,20 @@ bPaintable  ( sal_True )
     memset(pPixel, 0, nSquares * sizeof(sal_uInt16));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxPixelCtl(Window *pParent, sal_uInt16 nNumber)
+void SvxPixelCtl::Resize()
 {
-    return new SvxPixelCtl(pParent, 8 ); //nNumber);
+    Control::Resize();
+    aRectSize = GetOutputSize();
+}
+
+Size SvxPixelCtl::GetOptimalSize() const
+{
+    return LogicToPixel(Size(72, 72), MAP_APPFONT);
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxPixelCtl(Window *pParent, VclBuilder::stringmap&)
+{
+    return new SvxPixelCtl(pParent, 8);
 }
 // Destructor dealocating the dynamic array
 
@@ -808,6 +818,9 @@ void SvxPixelCtl::ChangePixel( sal_uInt16 nPixel )
 
 void SvxPixelCtl::MouseButtonDown( const MouseEvent& rMEvt )
 {
+    if (!aRectSize.Width() || !aRectSize.Height())
+        return;
+
     Point aPt = PixelToLogic( rMEvt.GetPosPixel() );
     Point aPtTl, aPtBr;
     sal_uInt16  nX, nY;
@@ -824,14 +837,18 @@ void SvxPixelCtl::MouseButtonDown( const MouseEvent& rMEvt )
 
     Invalidate( Rectangle( aPtTl, aPtBr ) );
 
-    if( WINDOW_TABPAGE == GetParent()->GetType() )
-        ( (SvxTabPage*) GetParent() )->PointChanged( this, RP_MM ); // RectPoint is a dummy
+    Window *pTabPage = getNonLayoutParent(this);
+    if (pTabPage && WINDOW_TABPAGE == pTabPage->GetType())
+        ((SvxTabPage*)pTabPage)->PointChanged(this, RP_MM); // RectPoint is a dummy
 }
 
 // Draws the Control (Rectangle with nine circles)
 
 void SvxPixelCtl::Paint( const Rectangle& )
 {
+    if (!aRectSize.Width() || !aRectSize.Height())
+        return;
+
     sal_uInt16  i, j, nTmp;
     Point   aPtTl, aPtBr;
 

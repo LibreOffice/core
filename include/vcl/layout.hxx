@@ -755,7 +755,7 @@ VCL_DLLPUBLIC bool isInitialLayout(const Window *pWindow);
 Size getLegacyBestSizeForChildren(const Window &rWindow);
 
 //Get first parent which is not a layout widget
-Window* getNonLayoutParent(Window *pParent);
+VCL_DLLPUBLIC Window* getNonLayoutParent(Window *pParent);
 
 //Get first real parent which is not a layout widget
 Window* getNonLayoutRealParent(Window *pParent);

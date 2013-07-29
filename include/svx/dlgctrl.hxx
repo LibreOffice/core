@@ -184,6 +184,8 @@ public:
 
     virtual void Paint( const Rectangle& rRect );
     virtual void MouseButtonDown( const MouseEvent& rMEvt );
+    virtual void Resize();
+    virtual Size GetOptimalSize() const;
 
     void    SetXBitmap( const BitmapEx& rBitmapEx );
 
