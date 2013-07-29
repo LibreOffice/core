@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//9xU\u003d",
+        "filename": "sw/qa/core/Test-BigPtrArray.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000107
+      },
+      "writtenOn": "2013-07-29T11:28:22Z",
+      "side": 1,
+      "message": "Remove also #ifdef TIMELOG and #endif for this line.",
+      "revId": "c1baffb5843865c76ebeac0dbf762762c0726d7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//9xQ\u003d",
+        "filename": "sw/source/filter/xml/swxml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1000107
+      },
+      "writtenOn": "2013-07-29T11:28:22Z",
+      "side": 1,
+      "message": "I think it is better to add an empty string first\nSAL_INFO( \"sw.filter\", \"\" \u003c\u003c pFilterName \u003c\u003c \" created\" );",
+      "revId": "c1baffb5843865c76ebeac0dbf762762c0726d7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
