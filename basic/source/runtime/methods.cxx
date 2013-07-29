@@ -4455,6 +4455,9 @@ RTLFUNC(MsgBox)
 
     nType &= (16+32+64);
     MessBox* pBox = 0;
+
+    SolarMutexGuard aSolarGuard;
+
     Window* pParent = GetpApp()->GetDefDialogParent();
     switch( nType )
     {
