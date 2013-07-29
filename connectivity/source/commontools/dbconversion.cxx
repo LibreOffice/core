@@ -457,7 +457,13 @@ namespace dbtools
         utl::Time aTime;
         sal_Int32 nSeparation = _sSQLString.indexOf( ' ' );
         if ( -1 != nSeparation )
+        {
+            const sal_Unicode *p = _sSQLString.getStr() + nSeparation;
+            const sal_Unicode *const begin = p;
+            for(;isspace(*p);++p);
+            nSeparation += p - begin;
             aTime = toTime( _sSQLString.copy( nSeparation ) );
+        }
 
         return utl::DateTime(aTime.NanoSeconds, aTime.Seconds, aTime.Minutes, aTime.Hours,
                         aDate.Day, aDate.Month, aDate.Year, false);
