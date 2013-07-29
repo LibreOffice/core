@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//9vA\u003d",
+        "filename": "sw/qa/core/Test-BigPtrArray.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000107
+      },
+      "writtenOn": "2013-07-29T21:32:31Z",
+      "side": 1,
+      "message": "Too many empty raws beetwen include, remove one.",
+      "revId": "1d49dde211331380532c95931ee2f24437e820df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//9vI\u003d",
+        "filename": "sw/source/filter/xml/wrtxml.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 504,
+      "author": {
+        "id": 1000107
+      },
+      "writtenOn": "2013-07-29T21:32:31Z",
+      "side": 1,
+      "message": "Last part is not needed, remove please \u003c\u003c \"\\\"\"",
+      "revId": "1d49dde211331380532c95931ee2f24437e820df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//9vE\u003d",
+        "filename": "sw/source/filter/xml/wrtxml.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 590,
+      "author": {
+        "id": 1000107
+      },
+      "writtenOn": "2013-07-29T21:32:31Z",
+      "side": 1,
+      "message": "Add an empty string before\nSAL_INFO( \"sw.filter\", \"\" \u003c\u003c pServiceName \u003c\u003c \" instantiated.\" );",
+      "revId": "1d49dde211331380532c95931ee2f24437e820df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
