@@ -462,6 +462,8 @@ void EditorWindow::Command( const CommandEvent& rCEvt )
              ( rCEvt.GetCommand() == COMMAND_AUTOSCROLL ) )
         {
             HandleScrollCommand( rCEvt, rModulWindow.GetHScrollBar(), &rModulWindow.GetEditVScrollBar() );
+            if( pCodeCompleteWnd->IsVisible() ) // hide the code complete window
+                pCodeCompleteWnd->ClearAndHide();
         }
     }
 }
@@ -499,7 +501,6 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
     bool const bWasModified = pEditEngine->IsModified();
     // see if there is an accelerator to be processed first
     bool bDone = SfxViewShell::Current()->KeyInput( rKEvt );
-
 
     if( rKEvt.GetCharCode() == '"' && CodeCompleteOptions::IsAutoCloseQuotesOn() )
     {//autoclose double quotes
@@ -632,16 +633,22 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
                         }
                         if( aEntryVect.size() > 0 )
                         {
+                            // calculate position
                             Rectangle aRect = ( (TextEngine*) GetEditEngine() )->PaMtoEditCursor( aSel.GetEnd() , false );
+                            long nViewYOffset = pEditView->GetStartDocPos().Y();
+                            Point aPoint = aRect.BottomRight();
+                            aPoint.Y() = aPoint.Y() - nViewYOffset;
                             aSel.GetStart().GetIndex() += 1;
                             aSel.GetEnd().GetIndex() += 1;
                             pCodeCompleteWnd->ClearListBox();
                             pCodeCompleteWnd->SetTextSelection(aSel);
+                            //fill the listbox
                             for(unsigned int l = 0; l < aEntryVect.size(); ++l)
                             {
                                 pCodeCompleteWnd->InsertEntry( aEntryVect[l] );
                             }
-                            pCodeCompleteWnd->SetPosPixel( aRect.BottomRight() );
+                            //show it
+                            pCodeCompleteWnd->SetPosPixel( aPoint );
                             pCodeCompleteWnd->Show();
                             pCodeCompleteWnd->ResizeListBox();
                             pCodeCompleteWnd->SelectFirstEntry();

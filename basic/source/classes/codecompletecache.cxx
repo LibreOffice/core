@@ -27,7 +27,7 @@ namespace
 }
 
 CodeCompleteOptions::CodeCompleteOptions()
-: bIsCodeCompleteOn( false ),
+: bIsCodeCompleteOn( true ),
 bIsProcedureAutoCompleteOn( false ),
 bIsAutoCloseQuotesOn( false ),
 bIsAutoCloseParenthesisOn( false )
