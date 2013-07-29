@@ -1448,7 +1448,7 @@ void ScTable::UpdateDrawRef( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW nR
 }
 
 void ScTable::UpdateReference(
-    const sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc, bool bIncludeDraw, bool bUpdateNoteCaptionPos )
+    sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc, bool bIncludeDraw, bool bUpdateNoteCaptionPos )
 {
     bool bUpdated = false;
     SCCOL i;
@@ -1475,7 +1475,7 @@ void ScTable::UpdateReference(
 
     // Named expressions need to be updated before formulas acessing them.
     if (mpRangeName)
-        mpRangeName->UpdateReference(rCxt, true);
+        mpRangeName->UpdateReference(rCxt, nTab);
 
     for ( ; i<=iMax; i++)
         bUpdated |= aCol[i].UpdateReference(rCxt, pUndoDoc);

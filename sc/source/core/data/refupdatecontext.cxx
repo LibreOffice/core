@@ -24,9 +24,42 @@ bool RefUpdateContext::isDeleted() const
     return (meMode == URM_INSDEL) && (mnColDelta < 0 || mnRowDelta < 0 || mnTabDelta < 0);
 }
 
-RefUpdateResult::RefUpdateResult() : mbValueChanged(false), mbReferenceModified(false) {}
+void RefUpdateContext::setUpdatedName(SCTAB nTab, sal_uInt16 nIndex)
+{
+    UpdatedNamesType::iterator it = maUpdatedNames.find(nTab);
+    if (it == maUpdatedNames.end())
+    {
+        // Insert a new container for this sheet index.
+        NameIndicesType aIndices;
+        std::pair<UpdatedNamesType::iterator,bool> r =
+            maUpdatedNames.insert(UpdatedNamesType::value_type(nTab, aIndices));
+
+        if (!r.second)
+            // Insertion failed for whatever reason.
+            return;
+
+        it = r.first;
+    }
+
+    NameIndicesType& rIndices = it->second;
+    rIndices.insert(nIndex);
+}
+
+bool RefUpdateContext::isNameUpdated(SCTAB nTab, sal_uInt16 nIndex) const
+{
+    UpdatedNamesType::const_iterator it = maUpdatedNames.find(nTab);
+    if (it == maUpdatedNames.end())
+        return false;
+
+    const NameIndicesType& rIndices = it->second;
+    return rIndices.count(nIndex) > 0;
+}
+
+RefUpdateResult::RefUpdateResult() : mbValueChanged(false), mbReferenceModified(false), mbNameModified(false) {}
 RefUpdateResult::RefUpdateResult(const RefUpdateResult& r) :
-    mbValueChanged(r.mbValueChanged), mbReferenceModified(r.mbReferenceModified) {}
+    mbValueChanged(r.mbValueChanged),
+    mbReferenceModified(r.mbReferenceModified),
+    mbNameModified(r.mbNameModified) {}
 
 }
 

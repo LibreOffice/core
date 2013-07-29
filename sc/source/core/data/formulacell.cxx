@@ -2269,6 +2269,7 @@ bool ScFormulaCell::UpdateReferenceOnShift(
     bool bValChanged = false;
     bool bRefModified = false;
     bool bRefSizeChanged = false;
+    bool bRecompile = bCompile;
 
     if (bHasRefs)
     {
@@ -2276,6 +2277,8 @@ bool ScFormulaCell::UpdateReferenceOnShift(
         sc::RefUpdateResult aRes = pCode->AdjustReferenceOnShift(rCxt, aOldPos);
         bRefModified = aRes.mbReferenceModified;
         bValChanged = aRes.mbValueChanged;
+        if (aRes.mbNameModified)
+            bRecompile = true;
     }
 
     if (bValChanged || bRefModified)
@@ -2285,7 +2288,6 @@ bool ScFormulaCell::UpdateReferenceOnShift(
         // Cell may reference itself, e.g. ocColumn, ocRow without parameter
         bOnRefMove = (bValChanged || (aPos != aOldPos));
 
-    bool bColRowNameCompile = false;
     bool bHasRelName = false;
     bool bNewListening = false;
     bool bInDeleteUndo = false;
@@ -2294,8 +2296,8 @@ bool ScFormulaCell::UpdateReferenceOnShift(
     {
         // Upon Insert ColRowNames have to be recompiled in case the
         // insertion occurs right in front of the range.
-        if (bHasColRowNames)
-            bColRowNameCompile = checkCompileColRowName(rCxt, *pDocument, *pCode, aOldPos, aPos, bValChanged);
+        if (bHasColRowNames && !bRecompile)
+            bRecompile = checkCompileColRowName(rCxt, *pDocument, *pCode, aOldPos, aPos, bValChanged);
 
         ScChangeTrack* pChangeTrack = pDocument->GetChangeTrack();
         bInDeleteUndo = (pChangeTrack && pChangeTrack->IsInDeleteUndo());
@@ -2304,7 +2306,7 @@ bool ScFormulaCell::UpdateReferenceOnShift(
         bHasRelName = HasRelNameReference();
         // Reference changed and new listening needed?
         // Except in Insert/Delete without specialties.
-        bNewListening = (bRefModified || bColRowNameCompile
+        bNewListening = (bRefModified || bRecompile
                 || (bValChanged && (bInDeleteUndo || bRefSizeChanged)) || bHasRelName);
 
         if ( bNewListening )
@@ -2312,12 +2314,13 @@ bool ScFormulaCell::UpdateReferenceOnShift(
     }
 
     // NeedDirty for changes except for Copy and Move/Insert without RelNames
-    bool bNeedDirty = (bValChanged || bColRowNameCompile || bOnRefMove);
+    bool bNeedDirty = (bValChanged || bRecompile || bOnRefMove);
 
     if (pUndoDoc && (bValChanged || bOnRefMove))
         setOldCodeToUndo(pUndoDoc, aUndoPos, pOldCode.get(), eTempGrammar, cMatrixFlag);
 
-    if ( (bCompile = (bCompile || bColRowNameCompile)) != 0 )
+    bCompile |= bRecompile;
+    if (bCompile)
     {
         CompileTokenArray( bNewListening ); // no Listening
         bNeedDirty = true;

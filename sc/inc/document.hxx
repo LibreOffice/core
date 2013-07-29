@@ -1232,7 +1232,7 @@ public:
     SC_DLLPUBLIC void           CopyUpdated( ScDocument* pPosDoc, ScDocument* pDestDoc );
 
     void UpdateReference(
-        const sc::RefUpdateContext& rCxt,  ScDocument* pUndoDoc = NULL, bool bIncludeDraw = true,
+        sc::RefUpdateContext& rCxt,  ScDocument* pUndoDoc = NULL, bool bIncludeDraw = true,
         bool bUpdateNoteCaptionPos = true );
 
     SC_DLLPUBLIC void           UpdateTranspose( const ScAddress& rDestPos, ScDocument* pClipDoc,

@@ -975,7 +975,7 @@ sal_Int64 ScDocument::GetNewUnoId()
 }
 
 void ScDocument::UpdateReference(
-    const sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc, bool bIncludeDraw, bool bUpdateNoteCaptionPos )
+    sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc, bool bIncludeDraw, bool bUpdateNoteCaptionPos )
 {
     if (!ValidRange(rCxt.maRange))
         return;
@@ -1006,7 +1006,7 @@ void ScDocument::UpdateReference(
         xRowNameRanges->UpdateReference( eUpdateRefMode, this, aRange, nDx, nDy, nDz );
         pDBCollection->UpdateReference( eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, nDx, nDy, nDz );
         if (pRangeName)
-            pRangeName->UpdateReference(rCxt, false);
+            pRangeName->UpdateReference(rCxt, -1);
         if ( pDPCollection )
             pDPCollection->UpdateReference( eUpdateRefMode, aRange, nDx, nDy, nDz );
         UpdateChartRef( eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, nDx, nDy, nDz );

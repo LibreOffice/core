@@ -13,12 +13,18 @@
 #include "global.hxx"
 #include "address.hxx"
 
+#include <boost/unordered_map.hpp>
+#include <boost/unordered_set.hpp>
+
 class ScDocument;
 
 namespace sc {
 
 struct RefUpdateContext
 {
+    typedef boost::unordered_set<sal_uInt16> NameIndicesType;
+    typedef boost::unordered_map<SCTAB, NameIndicesType> UpdatedNamesType;
+
     ScDocument& mrDoc;
 
     /**
@@ -42,16 +48,24 @@ struct RefUpdateContext
     /** Amount and direction of movement in the sheet direction. */
     SCTAB mnTabDelta;
 
+    /** All named expressions that have been updated during this reference
+     *  update run. */
+    UpdatedNamesType maUpdatedNames;
+
     RefUpdateContext(ScDocument& rDoc);
 
     bool isInserted() const;
     bool isDeleted() const;
+
+    void setUpdatedName(SCTAB nTab, sal_uInt16 nIndex);
+    bool isNameUpdated(SCTAB nTab, sal_uInt16 nIndex) const;
 };
 
 struct RefUpdateResult
 {
     bool mbValueChanged;
     bool mbReferenceModified;
+    bool mbNameModified;
 
     RefUpdateResult();
     RefUpdateResult(const RefUpdateResult& r);

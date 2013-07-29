@@ -136,13 +136,11 @@ public:
      * Adjust all references in named expression. In named expression, we only
      * update absolute positions, and leave relative positions intact.
      *
-     * Also, there is no such thing as the base position in named expressions.
-     *
      * @param rCxt context that stores details of shifted region
      *
      * @return update result.
      */
-    sc::RefUpdateResult AdjustReferenceInName( const sc::RefUpdateContext& rCxt );
+    sc::RefUpdateResult AdjustReferenceInName( const sc::RefUpdateContext& rCxt, const ScAddress& rPos );
 
     /**
      * Adjust all references on sheet deletion.

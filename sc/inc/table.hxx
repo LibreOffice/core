@@ -502,7 +502,7 @@ public:
     bool CompileErrorCells(sal_uInt16 nErrCode);
 
     void UpdateReference(
-        const sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc = NULL,
+        sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc = NULL,
         bool bIncludeDraw = true, bool bUpdateNoteCaptionPos = true );
 
     void        UpdateDrawRef( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW nRow1, SCTAB nTab1,

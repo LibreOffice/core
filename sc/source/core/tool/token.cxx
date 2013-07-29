@@ -2471,6 +2471,21 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
                 rRef.SetRange(aAbs, aNewPos);
             }
             break;
+            case svIndex:
+            {
+                const formula::FormulaToken* pToken = *p;
+                if (pToken->GetOpCode() == ocName)
+                {
+                    SCTAB nTab = -1;
+                    if (!pToken->IsGlobal())
+                        nTab = rOldPos.Tab();
+
+                    // Check if this named expression has been modified.
+                    if (rCxt.isNameUpdated(nTab, pToken->GetIndex()))
+                        aRes.mbNameModified = true;
+                }
+            }
+            break;
             default:
                 ;
         }
@@ -2533,19 +2548,26 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMove(
 
 namespace {
 
-bool adjustSingleRefInName( ScSingleRefData& rRef, const sc::RefUpdateContext& rCxt )
+bool adjustSingleRefInName(
+    ScSingleRefData& rRef, const sc::RefUpdateContext& rCxt, const ScAddress& rPos )
 {
-    if (rRef.IsTabRel())
-        // Ignore reference with relative sheet position for now.
-        return false;
+    ScAddress aAbs = rRef.toAbs(rPos);
 
-    if (rRef.Tab() < rCxt.maRange.aStart.Tab() || rCxt.maRange.aEnd.Tab() < rRef.Tab())
-        // References sheet that has not shifted. Don't change it.
+    if (aAbs.Tab() < rCxt.maRange.aStart.Tab() || rCxt.maRange.aEnd.Tab() < aAbs.Tab())
+    {
+        // This references a sheet that has not shifted. Don't change it.
         return false;
+    }
+
+    if (rRef.IsColRel() || rRef.IsRowRel())
+    {
+        // Adjust references only when both column and row are absolute.
+        return false;
+    }
 
     bool bChanged = false;
 
-    if (!rRef.IsColRel() && rCxt.mnColDelta)
+    if (rCxt.mnColDelta)
     {
         // Adjust absolute column reference.
         if (rCxt.maRange.aStart.Col() <= rRef.Col() && rRef.Col() <= rCxt.maRange.aEnd.Col())
@@ -2555,7 +2577,7 @@ bool adjustSingleRefInName( ScSingleRefData& rRef, const sc::RefUpdateContext& r
         }
     }
 
-    if (!rRef.IsRowRel() && rCxt.mnRowDelta)
+    if (rCxt.mnRowDelta)
     {
         // Adjust absolute row reference.
         if (rCxt.maRange.aStart.Row() <= rRef.Row() && rRef.Row() <= rCxt.maRange.aEnd.Row())
@@ -2577,7 +2599,8 @@ bool adjustSingleRefInName( ScSingleRefData& rRef, const sc::RefUpdateContext& r
 
 }
 
-sc::RefUpdateResult ScTokenArray::AdjustReferenceInName( const sc::RefUpdateContext& rCxt )
+sc::RefUpdateResult ScTokenArray::AdjustReferenceInName(
+    const sc::RefUpdateContext& rCxt, const ScAddress& rPos )
 {
     sc::RefUpdateResult aRes;
 
@@ -2591,7 +2614,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceInName( const sc::RefUpdateCont
             {
                 ScToken* pToken = static_cast<ScToken*>(*p);
                 ScSingleRefData& rRef = pToken->GetSingleRef();
-                if (adjustSingleRefInName(rRef, rCxt))
+                if (adjustSingleRefInName(rRef, rCxt, rPos))
                     aRes.mbReferenceModified = true;
             }
             break;
@@ -2599,9 +2622,9 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceInName( const sc::RefUpdateCont
             {
                 ScToken* pToken = static_cast<ScToken*>(*p);
                 ScComplexRefData& rRef = pToken->GetDoubleRef();
-                if (adjustSingleRefInName(rRef.Ref1, rCxt))
+                if (adjustSingleRefInName(rRef.Ref1, rCxt, rPos))
                     aRes.mbReferenceModified = true;
-                if (adjustSingleRefInName(rRef.Ref2, rCxt))
+                if (adjustSingleRefInName(rRef.Ref2, rCxt, rPos))
                     aRes.mbReferenceModified = true;
             }
             break;

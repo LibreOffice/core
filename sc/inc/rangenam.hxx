@@ -122,7 +122,12 @@ public:
     SC_DLLPUBLIC void GetSymbol( OUString& rSymbol, const ScAddress& rPos, const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT ) const;
     void            UpdateSymbol( OUStringBuffer& rBuffer, const ScAddress&,
                                     const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT );
-    void UpdateReference( const sc::RefUpdateContext& rCxt, bool bLocal = false );
+
+    /**
+     * @param nLocalTab sheet index where this name belongs, or -1 for global
+     *                  name.
+     */
+    void UpdateReference( sc::RefUpdateContext& rCxt, SCTAB nLocalTab = -1 );
     bool            IsModified() const              { return bModified; }
 
     SC_DLLPUBLIC void           GuessPosition();
@@ -183,7 +188,7 @@ public:
     SC_DLLPUBLIC ScRangeData* findByUpperName(const OUString& rName);
     SC_DLLPUBLIC const ScRangeData* findByUpperName(const OUString& rName) const;
     SC_DLLPUBLIC ScRangeData* findByIndex(sal_uInt16 i) const;
-    void UpdateReference(const sc::RefUpdateContext& rCxt, bool bLocal = false);
+    void UpdateReference( sc::RefUpdateContext& rCxt, SCTAB nLocalTab = -1 );
     void UpdateTabRef(SCTAB nTable, ScRangeData::TabRefUpdateMode eMode, SCTAB nNewTable = 0, SCTAB nNewSheets = 1);
     void UpdateTranspose(const ScRange& rSource, const ScAddress& rDest);
     void UpdateGrow(const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY);

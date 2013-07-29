@@ -1015,7 +1015,39 @@ void Test::testFormulaRefUpdateNamedExpression()
     CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(3,3,0));
     CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(3,4,0));
 
+    // Fill B10:B12 with values.
+    m_pDoc->SetValue(ScAddress(1,9,0), 10);
+    m_pDoc->SetValue(ScAddress(1,10,0), 11);
+    m_pDoc->SetValue(ScAddress(1,11,0), 12);
 
+    // Insert a new named expression that references these values as absolute range.
+    pName = new ScRangeData(
+        m_pDoc, "MyRange", "$B$10:$B$12", ScAddress(0,0,0), RT_NAME, formula::FormulaGrammar::GRAM_NATIVE);
+    bInserted = pGlobalNames->insert(pName);
+    CPPUNIT_ASSERT_MESSAGE("Failed to insert a new name.", bInserted);
+
+    // Set formula at C8 that references this named expression.
+    m_pDoc->SetString(ScAddress(2,7,0), "=SUM(MyRange)");
+    CPPUNIT_ASSERT_EQUAL(33.0, m_pDoc->GetValue(ScAddress(2,7,0)));
+
+    // Shift B10:B12 to right by 2 columns.
+    m_pDoc->InsertCol(ScRange(1,9,0,2,11,0));
+
+    // This should shift the absolute range B10:B12 that MyRange references.
+    pName = pGlobalNames->findByUpperName("MYRANGE");
+    CPPUNIT_ASSERT_MESSAGE("Failed to find named expression 'MyRange' in the global scope.", pName);
+    OUString aExpr;
+    pName->GetSymbol(aExpr);
+    CPPUNIT_ASSERT_EQUAL(OUString("$D$10:$D$12"), aExpr);
+
+    // This move shouldn't affect the value of C8.
+    ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(2,7,0));
+    CPPUNIT_ASSERT_MESSAGE("This should be a formula cell.", pFC);
+    CPPUNIT_ASSERT_EQUAL(33.0, m_pDoc->GetValue(ScAddress(2,7,0)));
+
+    // Update the value of D10 and make sure C8 gets updated.
+    m_pDoc->SetValue(ScAddress(3,9,0), 20);
+    CPPUNIT_ASSERT_EQUAL(43.0, m_pDoc->GetValue(ScAddress(2,7,0)));
 
     m_pDoc->DeleteTab(0);
 }

@@ -271,11 +271,14 @@ void ScRangeData::UpdateSymbol( OUStringBuffer& rBuffer, const ScAddress& rPos,
     aComp.CreateStringFromTokenArray( rBuffer );
 }
 
-void ScRangeData::UpdateReference( const sc::RefUpdateContext& rCxt, bool /*bLocal*/ )
+void ScRangeData::UpdateReference( sc::RefUpdateContext& rCxt, SCTAB nLocalTab )
 {
-    bool bChanged = false;
-    sc::RefUpdateResult aRes = pCode->AdjustReferenceInName(rCxt);
+    OUString aStr;
+    rCxt.maRange.Format(aStr, SCR_ABS_3D, pDoc);
+    sc::RefUpdateResult aRes = pCode->AdjustReferenceInName(rCxt, aPos);
     bModified = aRes.mbReferenceModified;
+    if (aRes.mbReferenceModified)
+        rCxt.setUpdatedName(nLocalTab, nIndex);
 }
 
 void ScRangeData::UpdateTranspose( const ScRange& rSource, const ScAddress& rDest )
@@ -713,11 +716,11 @@ ScRangeData* ScRangeName::findByIndex(sal_uInt16 i) const
     return nPos < maIndexToData.size() ? maIndexToData[nPos] : NULL;
 }
 
-void ScRangeName::UpdateReference(const sc::RefUpdateContext& rCxt, bool bLocal)
+void ScRangeName::UpdateReference(sc::RefUpdateContext& rCxt, SCTAB nLocalTab )
 {
     DataType::iterator itr = maData.begin(), itrEnd = maData.end();
     for (; itr != itrEnd; ++itr)
-        itr->second->UpdateReference(rCxt, bLocal);
+        itr->second->UpdateReference(rCxt, nLocalTab);
 }
 
 void ScRangeName::UpdateTabRef(SCTAB nTable, ScRangeData::TabRefUpdateMode eMode, SCTAB nNewTable, SCTAB nNewSheets)
