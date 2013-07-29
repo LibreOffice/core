@@ -46,6 +46,8 @@ CuiAboutConfigTabPage::CuiAboutConfigTabPage( Window* pParent, const SfxItemSet&
     WinBits nBits = WB_SCROLL | WB_SORT | WB_HSCROLL | WB_VSCROLL;
     pPrefBox = new svx::OptHeaderTabListBox( *m_pPrefCtrl, nBits );
 
+    m_pEditBtn->SetClickHdl( LINK( this, CuiAboutConfigTabPage, StandardHdl_Impl ) );
+
     HeaderBar &rBar = pPrefBox->GetTheHeaderBar();
     rBar.InsertItem( ITEMID_PREF, get<FixedText>("preference")->GetText(), 0, HIB_LEFT | HIB_VCENTER | HIB_CLICKABLE | HIB_UPARROW);
     rBar.InsertItem( ITEMID_TYPE, get<FixedText>("status")->GetText(), 0,  HIB_LEFT | HIB_VCENTER | HIB_CLICKABLE | HIB_UPARROW );
@@ -273,6 +275,20 @@ IMPL_LINK( CuiAboutConfigTabPage, HeaderSelect_Impl, HeaderBar*, pBar )
 IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl )
 {
     SvTreeListEntry* pEntry = pPrefBox->FirstSelected();
+
+    OUString sType = pPrefBox->GetEntryText( pEntry, 2 );
+
+    if( sType == OUString("boolean") )
+    {
+        //TODO: this is just cosmetic, take all needed value and handle them properly
+        OUString sValue = pPrefBox->GetEntryText( pEntry, 1 );
+            if (sValue == OUString("true"))
+                pPrefBox->SetEntryText( OUString("false"), pEntry, 1 );
+            else if(sValue == OUString("false"))
+                pPrefBox->SetEntryText( OUString("true"), pEntry, 1 );
+    }
+    //TODO: add other types
+
     return 0;
 
 }
