@@ -3733,6 +3733,7 @@ void ScXMLExport::WriteNamedRange(ScRangeName* pRangeName)
         AddAttribute(sAttrName, it->second->GetName());
 
         rtl::OUString sBaseCellAddress;
+        it->second->ValidateTabRefs();
         ScRangeStringConverter::GetStringFromAddress( sBaseCellAddress, it->second->GetPos(), pDoc,
                             FormulaGrammar::CONV_OOO, ' ', false, SCA_ABS_3D);
         AddAttribute(XML_NAMESPACE_TABLE, XML_BASE_CELL_ADDRESS, sBaseCellAddress);
