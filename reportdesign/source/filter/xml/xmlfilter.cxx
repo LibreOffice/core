@@ -717,7 +717,7 @@ const SvXMLTokenMap& ORptFilter::GetDocElemTokenMap() const
 {
     if ( !m_pDocElemTokenMap.get() )
     {
-        static SvXMLTokenMapEntry aElemTokenMap[]=
+        static const SvXMLTokenMapEntry aElemTokenMap[]=
         {
             { XML_NAMESPACE_OFFICE, XML_SETTINGS,           XML_TOK_DOC_SETTINGS    },
             { XML_NAMESPACE_OFFICE, XML_STYLES,             XML_TOK_DOC_STYLES      },
@@ -752,7 +752,7 @@ const SvXMLTokenMap& ORptFilter::GetFunctionElemTokenMap() const
 {
     if ( !m_pFunctionElemTokenMap.get() )
     {
-        static SvXMLTokenMapEntry aElemTokenMap[]=
+        static const SvXMLTokenMapEntry aElemTokenMap[]=
         {
             { XML_NAMESPACE_REPORT, XML_NAME,           XML_TOK_FUNCTION_NAME   },
             { XML_NAMESPACE_REPORT, XML_FORMULA,        XML_TOK_FUNCTION_FORMULA},
@@ -770,7 +770,7 @@ const SvXMLTokenMap& ORptFilter::GetFormatElemTokenMap() const
 {
     if ( !m_pFormatElemTokenMap.get() )
     {
-        static SvXMLTokenMapEntry aElemTokenMap[]=
+        static const SvXMLTokenMapEntry aElemTokenMap[]=
         {
             { XML_NAMESPACE_REPORT, XML_ENABLED     , XML_TOK_ENABLED           },
             { XML_NAMESPACE_REPORT, XML_FORMULA     , XML_TOK_FORMULA           },
@@ -786,7 +786,7 @@ const SvXMLTokenMap& ORptFilter::GetGroupElemTokenMap() const
 {
     if ( !m_pGroupElemTokenMap.get() )
     {
-        static SvXMLTokenMapEntry aElemTokenMap[]=
+        static const SvXMLTokenMapEntry aElemTokenMap[]=
         {
             { XML_NAMESPACE_REPORT, XML_START_NEW_COLUMN            ,   XML_TOK_START_NEW_COLUMN            },
             { XML_NAMESPACE_REPORT, XML_RESET_PAGE_NUMBER           ,   XML_TOK_RESET_PAGE_NUMBER           },
@@ -812,7 +812,7 @@ const SvXMLTokenMap& ORptFilter::GetReportElementElemTokenMap() const
 {
     if ( !m_pElemTokenMap.get() )
     {
-        static SvXMLTokenMapEntry aElemTokenMap[]=
+        static const SvXMLTokenMapEntry aElemTokenMap[]=
         {
             { XML_NAMESPACE_REPORT, XML_PRINT_REPEATED_VALUES       ,XML_TOK_PRINT_REPEATED_VALUES              },
             { XML_NAMESPACE_REPORT, XML_PRINT_WHEN_GROUP_CHANGE     ,XML_TOK_PRINT_WHEN_GROUP_CHANGE            },
@@ -830,7 +830,7 @@ const SvXMLTokenMap& ORptFilter::GetControlElemTokenMap() const
 {
     if ( !m_pControlElemTokenMap.get() )
     {
-        static SvXMLTokenMapEntry aElemTokenMap[]=
+        static const SvXMLTokenMapEntry aElemTokenMap[]=
         {
             { XML_NAMESPACE_FORM,   XML_LABEL               ,XML_TOK_LABEL              },
             { XML_NAMESPACE_FORM,   XML_PROPERTIES          ,XML_TOK_PROPERTIES         },
@@ -852,7 +852,7 @@ const SvXMLTokenMap& ORptFilter::GetControlPropertyElemTokenMap() const
 {
     if ( !m_pControlElemTokenMap.get() )
     {
-        static SvXMLTokenMapEntry aElemTokenMap[]=
+        static const SvXMLTokenMapEntry aElemTokenMap[]=
         {
             { XML_NAMESPACE_FORM,   XML_PROPERTY_NAME   ,XML_TOK_PROPERTY_NAME          },
             { XML_NAMESPACE_OOO,    XML_VALUE_TYPE      ,XML_TOK_VALUE_TYPE             },
@@ -874,7 +874,7 @@ const SvXMLTokenMap& ORptFilter::GetComponentElemTokenMap() const
 {
     if ( !m_pComponentElemTokenMap.get() )
     {
-        static SvXMLTokenMapEntry aElemTokenMap[]=
+        static const SvXMLTokenMapEntry aElemTokenMap[]=
         {
             { XML_NAMESPACE_DRAW,   XML_NAME                        ,   XML_TOK_NAME                        },
             { XML_NAMESPACE_DRAW,   XML_TEXT_STYLE_NAME             ,   XML_TOK_TEXT_STYLE_NAME             },
@@ -890,7 +890,7 @@ const SvXMLTokenMap& ORptFilter::GetColumnTokenMap() const
 {
     if ( !m_pColumnTokenMap.get() )
     {
-        static SvXMLTokenMapEntry aElemTokenMap[]=
+        static const SvXMLTokenMapEntry aElemTokenMap[]=
         {
             { XML_NAMESPACE_TABLE,  XML_NAME                        ,   XML_TOK_NAME                        },
             { XML_NAMESPACE_TABLE,  XML_STYLE_NAME                  ,   XML_TOK_COLUMN_STYLE_NAME           },
@@ -914,7 +914,7 @@ const SvXMLTokenMap& ORptFilter::GetSectionElemTokenMap() const
 {
     if ( !m_pSectionElemTokenMap.get() )
     {
-        static SvXMLTokenMapEntry aElemTokenMap[]=
+        static const SvXMLTokenMapEntry aElemTokenMap[]=
         {
             { XML_NAMESPACE_TABLE,  XML_TABLE                       ,   XML_TOK_TABLE                       },
             { XML_NAMESPACE_TABLE,  XML_NAME                        ,   XML_TOK_SECTION_NAME                },
@@ -937,7 +937,7 @@ const SvXMLTokenMap& ORptFilter::GetCellElemTokenMap() const
 {
     if ( !m_pCellElemTokenMap.get() )
     {
-        static SvXMLTokenMapEntry aElemTokenMap[]=
+        static const SvXMLTokenMapEntry aElemTokenMap[]=
         {
             { XML_NAMESPACE_TEXT,   XML_P                           ,   XML_TOK_P                           },
             { XML_NAMESPACE_REPORT, XML_FIXED_CONTENT               ,   XML_TOK_FIXED_CONTENT               },

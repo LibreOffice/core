@@ -448,7 +448,7 @@ namespace
         sal_Int16 script;
     };
 
-    static UBlock2Script scriptList[] =
+    static const UBlock2Script scriptList[] =
     {
         {UBLOCK_NO_BLOCK, UBLOCK_NO_BLOCK, ScriptType::WEAK},
         {UBLOCK_BASIC_LATIN, UBLOCK_ARMENIAN, ScriptType::LATIN},

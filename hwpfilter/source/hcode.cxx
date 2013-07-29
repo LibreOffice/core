@@ -388,7 +388,7 @@ static unsigned hhtg_tg[] =
 // ?
 static char LineCharDir(hchar ch)
 {
-    static char index2dir[] = { 10, 11, 9, 14, 15, 13, 6, 7, 5, 3, 12 };
+    static const char index2dir[] = { 10, 11, 9, 14, 15, 13, 6, 7, 5, 3, 12 };
 
     return (LINEBASE <= ch && ch < LINEBASE + 11 * 7) ?
         index2dir[(ch - LINEBASE) % 11] : 0;

@@ -403,7 +403,7 @@ void ShapeBase::convertShapeProperties( const Reference< XShape >& rxShape ) con
         if (aPropMap.hasProperty(PROP_LineColor))
         {
             uno::Reference<beans::XPropertySet> xPropertySet(rxShape, uno::UNO_QUERY);
-            static sal_Int32 aBorders[] = {
+            static const sal_Int32 aBorders[] = {
                 PROP_TopBorder, PROP_LeftBorder, PROP_BottomBorder, PROP_RightBorder
             };
             for (unsigned int i = 0; i < SAL_N_ELEMENTS(aBorders); ++i)

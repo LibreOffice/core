@@ -190,7 +190,7 @@ const XMLPropertyMapEntry* OXMLHelper::GetColumnStyleProps()
 // -----------------------------------------------------------------------------
 const SvXMLEnumMapEntry* OXMLHelper::GetReportPrintOptions()
 {
-    static SvXMLEnumMapEntry s_aXML_EnumMap[] =
+    static const SvXMLEnumMapEntry s_aXML_EnumMap[] =
     {
         { XML_NOT_WITH_REPORT_HEADER,               report::ReportPrintOption::NOT_WITH_REPORT_HEADER },
         { XML_NOT_WITH_REPORT_FOOTER,               report::ReportPrintOption::NOT_WITH_REPORT_FOOTER },
@@ -202,7 +202,7 @@ const SvXMLEnumMapEntry* OXMLHelper::GetReportPrintOptions()
 // -----------------------------------------------------------------------------
 const SvXMLEnumMapEntry* OXMLHelper::GetForceNewPageOptions()
 {
-    static SvXMLEnumMapEntry s_aXML_EnumMap[] =
+    static const SvXMLEnumMapEntry s_aXML_EnumMap[] =
     {
         { XML_BEFORE_SECTION,       report::ForceNewPage::BEFORE_SECTION },
         { XML_AFTER_SECTION,        report::ForceNewPage::AFTER_SECTION },
@@ -214,7 +214,7 @@ const SvXMLEnumMapEntry* OXMLHelper::GetForceNewPageOptions()
 // -----------------------------------------------------------------------------
 const SvXMLEnumMapEntry* OXMLHelper::GetKeepTogetherOptions()
 {
-    static SvXMLEnumMapEntry s_aXML_EnumMap[] =
+    static const SvXMLEnumMapEntry s_aXML_EnumMap[] =
     {
         { XML_WHOLE_GROUP,          report::KeepTogether::WHOLE_GROUP },
         { XML_WITH_FIRST_DETAIL,    report::KeepTogether::WITH_FIRST_DETAIL },
@@ -225,7 +225,7 @@ const SvXMLEnumMapEntry* OXMLHelper::GetKeepTogetherOptions()
 // -----------------------------------------------------------------------------
 const SvXMLEnumMapEntry* OXMLHelper::GetCommandTypeOptions()
 {
-    static SvXMLEnumMapEntry s_aXML_EnumMap[] =
+    static const SvXMLEnumMapEntry s_aXML_EnumMap[] =
     {
         { XML_TABLE, CommandType::TABLE },
         { XML_QUERY, CommandType::QUERY },
@@ -334,7 +334,7 @@ uno::Reference<beans::XPropertySet> OXMLHelper::createBorderPropertySet()
 // -----------------------------------------------------------------------------
 SvXMLTokenMap* OXMLHelper::GetReportElemTokenMap()
 {
-    static SvXMLTokenMapEntry aElemTokenMap[]=
+    static const SvXMLTokenMapEntry aElemTokenMap[]=
     {
         { XML_NAMESPACE_REPORT, XML_REPORT_HEADER,              XML_TOK_REPORT_HEADER           },
         { XML_NAMESPACE_REPORT, XML_PAGE_HEADER ,               XML_TOK_PAGE_HEADER             },
@@ -361,7 +361,7 @@ SvXMLTokenMap* OXMLHelper::GetReportElemTokenMap()
 // -----------------------------------------------------------------------------
 SvXMLTokenMap* OXMLHelper::GetSubDocumentElemTokenMap()
 {
-    static SvXMLTokenMapEntry aElemTokenMap[]=
+    static const SvXMLTokenMapEntry aElemTokenMap[]=
     {
         { XML_NAMESPACE_REPORT, XML_MASTER_DETAIL_FIELD,    XML_TOK_MASTER_DETAIL_FIELD},
         { XML_NAMESPACE_REPORT, XML_MASTER,                 XML_TOK_MASTER},
@@ -373,7 +373,7 @@ SvXMLTokenMap* OXMLHelper::GetSubDocumentElemTokenMap()
 // -----------------------------------------------------------------------------
 const SvXMLEnumMapEntry* OXMLHelper::GetImageScaleOptions()
 {
-       static SvXMLEnumMapEntry s_aXML_EnumMap[] =
+       static const SvXMLEnumMapEntry s_aXML_EnumMap[] =
        {
                { XML_ISOTROPIC,        awt::ImageScaleMode::ISOTROPIC },
                { XML_ANISOTROPIC,      awt::ImageScaleMode::ANISOTROPIC },

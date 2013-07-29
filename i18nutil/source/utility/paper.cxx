@@ -235,7 +235,7 @@ PaperInfo PaperInfo::getSystemDefaultPaper()
             {
                 OString aPaper(pBuffer);
                 aPaper = aPaper.trim();
-                static struct { const char *pName; Paper ePaper; } aCustoms [] =
+                static const struct { const char *pName; Paper ePaper; } aCustoms [] =
                 {
                     { "B0",   PAPER_B0_ISO },
                     { "B1",   PAPER_B1_ISO },

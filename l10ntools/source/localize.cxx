@@ -287,7 +287,7 @@ void handleFilesOfDir(
 }
 
 bool includeProject(const OString& rProject) {
-    static OString projects[] = {
+    static const OString projects[] = {
         "accessibility",
         "android",
         "avmedia",

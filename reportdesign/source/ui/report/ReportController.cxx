@@ -2403,7 +2403,7 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
         new SfxUInt16Item(RPTUI_ID_METRIC,static_cast<sal_uInt16>(eUserMetric))
     };
 
-    static sal_uInt16 pRanges[] =
+    static const sal_uInt16 pRanges[] =
     {
         RPTUI_ID_LRSPACE,RPTUI_ID_BRUSH,
         SID_ATTR_METRIC,SID_ATTR_METRIC,
@@ -4063,7 +4063,7 @@ OUString SAL_CALL OReportController::getMode(  ) throw (::com::sun::star::uno::R
 }
 ::com::sun::star::uno::Sequence< OUString > SAL_CALL OReportController::getSupportedModes(  ) throw (::com::sun::star::uno::RuntimeException)
 {
-    static OUString s_sModes[] = { OUString("remote"),
+    static const OUString s_sModes[] = { OUString("remote"),
                                           OUString("normal") };
     return uno::Sequence< OUString> (&s_sModes[0],sizeof(s_sModes)/sizeof(s_sModes[0]));
 }
@@ -4215,7 +4215,7 @@ void OReportController::openZoomDialog()
         {
             new SvxZoomItem()
         };
-        static sal_uInt16 pRanges[] =
+        static const sal_uInt16 pRanges[] =
         {
             SID_ATTR_ZOOM,SID_ATTR_ZOOM,
             0

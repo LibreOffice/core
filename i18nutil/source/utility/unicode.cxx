@@ -392,7 +392,7 @@ sal_Bool SAL_CALL unicode::isWhiteSpace( const sal_Unicode ch) {
 sal_Int16 SAL_CALL unicode::getScriptClassFromUScriptCode(UScriptCode eScript)
 {
     //See unicode/uscript.h
-    static sal_Int16 scriptTypes[] =
+    static const sal_Int16 scriptTypes[] =
     {
         ScriptType::WEAK, ScriptType::WEAK, ScriptType::COMPLEX, ScriptType::LATIN, ScriptType::COMPLEX,
         ScriptType::ASIAN, ScriptType::LATIN, ScriptType::LATIN, ScriptType::LATIN, ScriptType::COMPLEX,

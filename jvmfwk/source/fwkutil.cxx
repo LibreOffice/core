@@ -123,7 +123,7 @@ bool isAccessibilitySupportDesired()
 
 rtl::ByteSequence encodeBase16(const rtl::ByteSequence& rawData)
 {
-    static char EncodingTable[] =
+    static const char EncodingTable[] =
         {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
     sal_Int32 lenRaw = rawData.getLength();
     char* pBuf = new char[lenRaw * 2];
@@ -152,7 +152,7 @@ rtl::ByteSequence encodeBase16(const rtl::ByteSequence& rawData)
 
 rtl::ByteSequence decodeBase16(const rtl::ByteSequence& data)
 {
-    static char decodingTable[] =
+    static const char decodingTable[] =
         {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
     sal_Int32 lenData = data.getLength();
     sal_Int32 lenBuf = lenData / 2; //always divisable by two
