@@ -29,24 +29,10 @@
 #include <svtools/miscopt.hxx>
 #include <vector>
 
-enum BASIC_DLLPUBLIC AutocompleteType
-{
-    ACSUB,
-    ACFUNC
-};
-
-struct IncompleteProcData
-{
-    OUString sProcName;
-    sal_uInt16 nLine;
-    AutocompleteType aType;
-};
-
 typedef boost::unordered_map< OUString, OUString, OUStringHash > CodeCompleteVarTypes;
 /* variable name, type */
 typedef boost::unordered_map< OUString, CodeCompleteVarTypes, OUStringHash > CodeCompleteVarScopes;
 /* procedure, CodeCompleteVarTypes */
-typedef std::vector< IncompleteProcData > IncompleteProcedures;
 
 class BASIC_DLLPUBLIC CodeCompleteOptions
 {
@@ -59,6 +45,7 @@ private:
     bool bIsProcedureAutoCompleteOn;
     bool bIsAutoCloseQuotesOn;
     bool bIsAutoCloseParenthesisOn;
+    bool bIsAutoCorrectSpellingOn;
     SvtMiscOptions aMiscOptions;
 
 public:
@@ -76,6 +63,10 @@ public:
 
     static bool IsAutoCloseParenthesisOn();
     static void SetAutoCloseParenthesisOn( const bool& b );
+
+    static bool IsAutoCorrectSpellingOn();
+    static void SetAutoCorrectSpellingOn( const bool& b );
+
 };
 
 class BASIC_DLLPUBLIC CodeCompleteDataCache
@@ -100,6 +91,7 @@ public:
     void InsertGlobalVar( const OUString& sVarName, const OUString& sVarType );
     void InsertLocalVar( const OUString& sProcName, const OUString& sVarName, const OUString& sVarType );
     OUString GetVarType( const OUString& sVarName ) const;
+    OUString GetCorrectCaseVarName( const OUString& sVarName ) const;
     void print() const; // wrapper for operator<<, prints to std::cerr
     void Clear();
 };

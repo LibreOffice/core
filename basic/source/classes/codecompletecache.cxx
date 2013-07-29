@@ -27,10 +27,11 @@ namespace
 }
 
 CodeCompleteOptions::CodeCompleteOptions()
-: bIsCodeCompleteOn( true ),
+: bIsCodeCompleteOn( false ),
 bIsProcedureAutoCompleteOn( false ),
 bIsAutoCloseQuotesOn( false ),
-bIsAutoCloseParenthesisOn( false )
+bIsAutoCloseParenthesisOn( false ),
+bIsAutoCorrectSpellingOn( false )
 {
 }
 
@@ -77,6 +78,16 @@ bool CodeCompleteOptions::IsAutoCloseParenthesisOn()
 void CodeCompleteOptions::SetAutoCloseParenthesisOn( const bool& b )
 {
     theCodeCompleteOptions::get().bIsAutoCloseParenthesisOn = b;
+}
+
+bool CodeCompleteOptions::IsAutoCorrectSpellingOn()
+{
+    return theCodeCompleteOptions::get().aMiscOptions.IsExperimentalMode() && theCodeCompleteOptions::get().bIsAutoCorrectSpellingOn;
+}
+
+void CodeCompleteOptions::SetAutoCorrectSpellingOn( const bool& b )
+{
+    theCodeCompleteOptions::get().bIsAutoCorrectSpellingOn = b;
 }
 
 std::ostream& operator<< (std::ostream& aStream, const CodeCompleteDataCache& aCache)
@@ -160,6 +171,28 @@ OUString CodeCompleteDataCache::GetVarType( const OUString& sVarName ) const
     {
         if( aIt->first.equalsIgnoreAsciiCase( sVarName ) )
             return aIt->second;
+    }
+    return OUString(""); //not found
+}
+
+OUString CodeCompleteDataCache::GetCorrectCaseVarName( const OUString& sVarName ) const
+{
+    for( CodeCompleteVarScopes::const_iterator aIt = aVarScopes.begin(); aIt != aVarScopes.end(); ++aIt )
+    {
+        CodeCompleteVarTypes aTypes = aIt->second;
+        for( CodeCompleteVarTypes::const_iterator aOtherIt = aTypes.begin(); aOtherIt != aTypes.end(); ++aOtherIt )
+        {
+            if( aOtherIt->first.equalsIgnoreAsciiCase( sVarName ) )
+            {
+                return aOtherIt->first;
+            }
+        }
+    }
+    //not a local, search global scope
+    for( CodeCompleteVarTypes::const_iterator aIt = aGlobalVars.begin(); aIt != aGlobalVars.end(); ++aIt )
+    {
+        if( aIt->first.equalsIgnoreAsciiCase( sVarName ) )
+            return aIt->first;
     }
     return OUString(""); //not found
 }
