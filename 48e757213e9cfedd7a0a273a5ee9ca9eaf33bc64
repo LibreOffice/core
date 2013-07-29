@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//9xo\u003d",
+        "filename": "sw/source/filter/html/htmlatr.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1464,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-07-29T10:27:41Z",
+      "side": 1,
+      "message": "again: why the inversion of the parameter here ?\nnStartPos is a uint16 index in liste. nNewEnd is a position in string...\nyou can\u0027t just swap them around like that\n\nPS: I stopped the review there... I mentioned that particular problem earlier, you silently ignored it in a new version... I\u0027m not inclined to have to do a full review every time...",
+      "revId": "48e757213e9cfedd7a0a273a5ee9ca9eaf33bc64",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
