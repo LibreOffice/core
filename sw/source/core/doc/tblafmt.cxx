@@ -1051,10 +1051,9 @@ void SwTableAutoFmtTbl::EraseAutoFmt(size_t const i)
     m_pImpl->m_AutoFormats.erase(m_pImpl->m_AutoFormats.begin() + i);
 }
 
-void SwTableAutoFmtTbl::MoveAutoFmt(size_t const target, size_t source)
+SwTableAutoFmt* SwTableAutoFmtTbl::ReleaseAutoFmt(size_t const i)
 {
-    m_pImpl->m_AutoFormats.transfer(m_pImpl->m_AutoFormats.begin() + target,
-            m_pImpl->m_AutoFormats.begin() + source, m_pImpl->m_AutoFormats);
+    return m_pImpl->m_AutoFormats.release(m_pImpl->m_AutoFormats.begin() + i).release();
 }
 
 SwTableAutoFmtTbl::~SwTableAutoFmtTbl()
