@@ -100,7 +100,7 @@ SalMenuItem* WinSalInstance::CreateMenuItem( const SalItemParams* pItemData )
         pSalMenuItem->mnId    = pItemData->nId;
 
         // 'translate' mnemonics
-        pSalMenuItem->mText.SearchAndReplace( '~', '&' );
+        pSalMenuItem->mText = pSalMenuItem->mText.replaceAll( "~", "&" );
 
         pSalMenuItem->mInfo.fMask = MIIM_TYPE | MIIM_STATE | MIIM_ID | MIIM_DATA;
         pSalMenuItem->mInfo.fType = MFT_STRING;
@@ -109,8 +109,8 @@ SalMenuItem* WinSalInstance::CreateMenuItem( const SalItemParams* pItemData )
             pSalMenuItem->mInfo.fType |= MFT_OWNERDRAW;
         pSalMenuItem->mInfo.fState = MFS_ENABLED;
 #endif
-        pSalMenuItem->mInfo.dwTypeData = (LPWSTR) pSalMenuItem->mText.GetBuffer();
-        pSalMenuItem->mInfo.cch = pSalMenuItem->mText.Len();
+        pSalMenuItem->mInfo.dwTypeData = (LPWSTR) pSalMenuItem->mText.getStr();
+        pSalMenuItem->mInfo.cch = pSalMenuItem->mText.getLength();
 
         pSalMenuItem->mInfo.wID = pItemData->nId;
         pSalMenuItem->mInfo.dwItemData = (ULONG_PTR) pSalMenuItem; // user data
@@ -319,7 +319,7 @@ void WinSalMenu::SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const OU
     WinSalMenuItem* pWItem = static_cast<WinSalMenuItem*>(pSalMenuItem);
         pWItem->mText = rText;
         // 'translate' mnemonics
-        pWItem->mText.SearchAndReplace( '~', '&' );
+        pWItem->mText = pWItem->mText.replaceAll( "~", "&" );
         pWItem->mInfo.fMask = MIIM_TYPE | MIIM_DATA;
         pWItem->mInfo.fType = MFT_STRING;
 #ifdef OWNERDRAW
@@ -329,7 +329,7 @@ void WinSalMenu::SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const OU
 
         // combine text and accelerator text
         XubString aStr( pWItem->mText );
-        if( pWItem->mAccelText.Len() )
+        if( pWItem->mAccelText.getLength() )
         {
             aStr.AppendAscii("\t");
             aStr.Append( pWItem->mAccelText );
@@ -358,7 +358,7 @@ void WinSalMenu::SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const
 #endif
         // combine text and accelerator text
         XubString aStr( pWItem->mText );
-        if( pWItem->mAccelText.Len() )
+        if( pWItem->mAccelText.getLength() )
         {
             aStr.AppendAscii("\t");
             aStr.Append( pWItem->mAccelText );

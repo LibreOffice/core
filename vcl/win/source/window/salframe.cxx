@@ -4678,7 +4678,7 @@ static int ImplMeasureItem( HWND hWnd, WPARAM wParam, LPARAM lParam )
 
         // menu text and accelerator
         String aStr(pSalMenuItem->mText);
-        if( pSalMenuItem->mAccelText.Len() )
+        if( pSalMenuItem->mAccelText.getLength() )
         {
             aStr.AppendAscii(" ");
             aStr.Append( pSalMenuItem->mAccelText );
@@ -4830,7 +4830,7 @@ static int ImplDrawItem(HWND, WPARAM wParam, LPARAM lParam )
             DST_PREFIXTEXT | (fDisabled && !fSelected ? DSS_DISABLED : DSS_NORMAL) ) )
             ImplWriteLastError(GetLastError(), "ImplDrawItem");
 
-        if( pSalMenuItem->mAccelText.Len() )
+        if( pSalMenuItem->mAccelText.getLength() )
         {
             SIZE strSizeA;
             aStr = pSalMenuItem->mAccelText;
