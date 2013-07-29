@@ -314,7 +314,7 @@ public:
     SwTableAutoFmt      & operator[](size_t i);
     void InsertAutoFmt(size_t i, SwTableAutoFmt * pFmt);
     void EraseAutoFmt(size_t i);
-    void MoveAutoFmt(size_t target, size_t source);
+    SwTableAutoFmt* ReleaseAutoFmt(size_t i);
 
     sal_Bool Load();
     sal_Bool Save() const;
