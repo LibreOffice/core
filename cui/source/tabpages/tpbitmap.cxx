@@ -24,6 +24,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/pathoptions.hxx>
 #include <sfx2/app.hxx>
+#include <sfx2/dialoghelper.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <unotools/localfilehelper.hxx>
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
@@ -69,7 +70,7 @@ SvxBitmapTabPage::SvxBitmapTabPage(  Window* pParent, const SfxItemSet& rInAttrs
     aXFillAttr          ( pXPool ),
     rXFSet              ( aXFillAttr.GetItemSet() )
 {
-    get(m_pBxPixelEditor,"boxEDITOR");
+    get(m_pBxPixelEditor,"maingrid");
     get(m_pCtlPixel,"CTL_PIXEL");
     get(m_pLbColor,"LB_COLOR");
     get(m_pLbBackgroundColor,"LB_BACKGROUND_COLOR");
@@ -84,21 +85,16 @@ SvxBitmapTabPage::SvxBitmapTabPage(  Window* pParent, const SfxItemSet& rInAttrs
     get(m_pBtnSave,"BTN_SAVE");
 
     // size of the bitmap listbox
-    Size aSize = LogicToPixel(Size(88, 110), MAP_APPFONT);
+    Size aSize = getDrawListBoxOptimalSize(this);
     m_pLbBitmaps->set_width_request(aSize.Width());
     m_pLbBitmaps->set_height_request(aSize.Height());
 
-    // size of the bitmap editor
-    Size aSize2 = LogicToPixel(Size(72, 72), MAP_APPFONT);
-    m_pCtlPixel->set_width_request(aSize2.Width());
-    m_pCtlPixel->set_height_request(aSize2.Height());
-
     // size of the bitmap display
-    Size aSize3 = LogicToPixel(Size(88, 42), MAP_APPFONT);
-    m_pCtlPreview->set_width_request(aSize3.Width());
-    m_pCtlPreview->set_height_request(aSize3.Height());
+    Size aSize2 = getDrawPreviewOptimalSize(this);
+    m_pCtlPreview->set_width_request(aSize2.Width());
+    m_pCtlPreview->set_height_request(aSize2.Height());
 
-    m_pBitmapCtl = new SvxBitmapCtl(this, m_pCtlPreview->GetSizePixel());
+    m_pBitmapCtl = new SvxBitmapCtl(this, aSize2);
 
     // this page needs ExchangeSupport
     SetExchangeSupport();
@@ -118,6 +114,7 @@ SvxBitmapTabPage::SvxBitmapTabPage(  Window* pParent, const SfxItemSet& rInAttrs
     m_pLbColor->SetSelectHdl( LINK( this, SvxBitmapTabPage, ChangePixelColorHdl_Impl ) );
     m_pLbBackgroundColor->SetSelectHdl( LINK( this, SvxBitmapTabPage, ChangeBackgrndColorHdl_Impl ) );
 
+    setPreviewsToSamePlace(pParent, this);
 }
 
 SvxBitmapTabPage::~SvxBitmapTabPage()
@@ -275,7 +272,7 @@ void SvxBitmapTabPage::Reset( const SfxItemSet&  )
     ChangeBitmapHdl_Impl( this );
 
     // determine button state
-    if( pBitmapList->Count() )
+    if( pBitmapList.is() && pBitmapList->Count() )
     {
         m_pBtnAdd->Enable();
         m_pBtnModify->Enable();
