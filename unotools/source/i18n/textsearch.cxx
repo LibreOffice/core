@@ -284,7 +284,7 @@ void TextSearch::ReplaceBackReferences( OUString& rReplaceStr, const OUString &r
                 sal_Int32 nLength = rResult.endOffset[0] - rResult.startOffset[0];
                 sBuff.append(rStr.getStr() + nStart, nLength);
             }
-            else if( rReplaceStr[i] == '$' && i < rReplaceStr.getLength() - 1)
+            else if((i < rReplaceStr.getLength() - 1) && rReplaceStr[i] == '$')
             {
                 sFndChar = rReplaceStr[ i + 1 ];
                 switch(sFndChar)
@@ -327,7 +327,7 @@ void TextSearch::ReplaceBackReferences( OUString& rReplaceStr, const OUString &r
                     break;
                 }
             }
-            else if( rReplaceStr[i] == '\\' && i < rReplaceStr.getLength() - 1)
+            else if((i < rReplaceStr.getLength() - 1) && rReplaceStr[i] == '\\')
             {
                 sFndChar = rReplaceStr[ i+1 ];
                 switch(sFndChar)
