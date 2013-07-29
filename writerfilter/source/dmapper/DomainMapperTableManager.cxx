@@ -146,7 +146,7 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                             {
                                 // Step 1. Check whether all cells have fixed widths in the given row of table.
                                 ::std::vector< IntVectorPtr >::iterator itr;
-                                for (itr = m_aCellWidths.begin(); itr != m_aCellWidths.end(); itr ++)
+                                for (itr = m_aCellWidths.begin(); itr != m_aCellWidths.end(); ++itr )
                                 {
                                     IntVectorPtr itrVal = (*itr);
                                     for (std::vector<sal_Int32>::const_iterator aValIter = itrVal->begin(); aValIter != itrVal->end(); ++aValIter)

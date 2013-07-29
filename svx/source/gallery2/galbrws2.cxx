@@ -303,7 +303,7 @@ void GalleryThemePopup::ExecutePopup( Window *pWindow, const ::Point &aPos )
     css::uno::Reference< css::util::XURLTransformer > xTransformer(
         mpBrowser->GetURLTransformer() );
     for ( CommandInfoMap::iterator it = m_aCommandInfo.begin();
-         it != m_aCommandInfo.end(); it++ )
+         it != m_aCommandInfo.end(); ++it )
     {
         try
         {

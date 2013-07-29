@@ -163,13 +163,13 @@ public:
             if(aIter->second)
             {
                 aIter->second--;
-                aIter++;
+                ++aIter;
             }
             else
             {
                 EntryMap::iterator aDelete(aIter);
                 WinSalBitmap* pSource = aDelete->first;
-                aIter++;
+                ++aIter;
                 maEntries.erase(aDelete);
 
                 if(maEntries.empty())

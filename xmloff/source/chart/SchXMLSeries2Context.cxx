@@ -866,7 +866,7 @@ void SchXMLSeries2Context::setStylesToRegressionCurves(
     std::list< RegressionStyle >::iterator iStyle;
 
     // iterate over regession etc
-    for( iStyle = rSeriesDefaultsAndStyles.maRegressionStyleList.begin(); iStyle != rSeriesDefaultsAndStyles.maRegressionStyleList.end(); iStyle++ )
+    for( iStyle = rSeriesDefaultsAndStyles.maRegressionStyleList.begin(); iStyle != rSeriesDefaultsAndStyles.maRegressionStyleList.end(); ++iStyle )
     {
         try
         {
