@@ -120,8 +120,7 @@ OUString SAL_CALL OResultSetMetaData::getColumnLabel(sal_Int32 column)
     throw(SQLException, RuntimeException)
 {
     // TODO: clarify what this is -- probably not the alias
-    (void) column;
-    return OUString();
+    return getColumnName(column);
 }
 
 OUString SAL_CALL OResultSetMetaData::getColumnServiceName(sal_Int32 column)

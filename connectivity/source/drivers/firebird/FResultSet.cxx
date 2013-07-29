@@ -321,6 +321,10 @@ sal_Int32 SAL_CALL OResultSet::findColumn(const OUString& columnName)
             break;
     }
 
+    // TODO: add appropriate error
+    if (i > nLen)
+        throw SQLException();
+
     return i;
 }
 // -------------------------------------------------------------------------
