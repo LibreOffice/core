@@ -171,7 +171,7 @@ getBuildIdsProperty(uno::Reference<beans::XPropertySet> const& xImportInfo)
                 return aBuildId;
             }
         }
-        catch (Exception const& e)
+        catch (Exception const&)
         {
             SAL_WARN("xmloff.core", "exception getting BuildId");
             DBG_UNHANDLED_EXCEPTION();
@@ -849,7 +849,7 @@ void SAL_CALL SvXMLImport::setTargetDocument( const uno::Reference< lang::XCompo
                    < SOFFICE_FILEFORMAT_8;
         }
     }
-    catch (uno::Exception const& e)
+    catch (uno::Exception const&)
     {
         SAL_WARN("xmloff.core", "exception caught");
         DBG_UNHANDLED_EXCEPTION();
