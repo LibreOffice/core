@@ -848,16 +848,106 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getSchemas()
 {
     return NULL;
 }
-// -------------------------------------------------------------------------
+
 uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumnPrivileges(
-    const Any& catalog, const OUString& schema, const OUString& table,
-    const OUString& columnNamePattern ) throw(SQLException, RuntimeException)
+        const Any& aCatalog,
+        const OUString& sSchema,
+        const OUString& sTable,
+        const OUString& sColumnNamePattern)
+    throw(SQLException, RuntimeException)
 {
-    (void) catalog;
-    (void) schema;
-    (void) table;
-    (void) columnNamePattern;
-    return NULL;
+    (void) aCatalog;
+    (void) sSchema;
+
+    SAL_INFO("connectivity.firebird", "getColumnPrivileges() with "
+             "Table: " << sTable
+             << " & ColumnNamePattern: " << sColumnNamePattern);
+
+    ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTables);
+    uno::Reference< XResultSet > xResultSet = pResultSet;
+    uno::Reference< XStatement > statement = m_pConnection->createStatement();
+
+    static const OUString wld("%");
+    OUStringBuffer queryBuf(
+            "SELECT "
+            "priv.RDB$RELATION_NAME, "  // 1 Table name
+            "priv.RDB$GRANTOR,"         // 2
+            "priv.RDB$USER, "           // 3 Grantee
+            "priv.RDB$PRIVILEGE, "      // 4
+            "priv.RDB$GRANT_OPTION, "   // 5 is Grantable
+            "priv.RDB$FIELD_NAME "      // 6 Column name
+            "FROM RDB$USER_PRIVILEGES priv ");
+
+    {
+        OUString sAppend = "WHERE priv.RDB$RELATION_NAME = '%' ";
+        queryBuf.append(sAppend.replaceAll("%", sTable));
+    }
+    if (!sColumnNamePattern.isEmpty())
+    {
+        OUString sAppend;
+        if (sColumnNamePattern.match(wld))
+            sAppend = "AND priv.RDB$FIELD_NAME LIKE '%' ";
+        else
+            sAppend = "AND priv.RDB$FIELD_NAME = '%' ";
+
+        queryBuf.append(sAppend.replaceAll(wld, sColumnNamePattern));
+    }
+
+    queryBuf.append(" ORDER BY priv.RDB$FIELD, "
+                              "priv.RDB$PRIVILEGE");
+
+    OUString query = queryBuf.makeStringAndClear();
+
+    uno::Reference< XResultSet > rs = statement->executeQuery(query.getStr());
+    uno::Reference< XRow > xRow( rs, UNO_QUERY_THROW );
+    ODatabaseMetaDataResultSet::ORows aResults;
+
+    while( rs->next() )
+    {
+        ODatabaseMetaDataResultSet::ORow aCurrentRow(8);
+
+        // 1. TABLE_CAT
+        aCurrentRow.push_back(new ORowSetValueDecorator());
+        // 2. TABLE_SCHEM
+        aCurrentRow.push_back(new ORowSetValueDecorator());
+
+        // 3. TABLE_NAME
+        {
+            OUString sTableName = xRow->getString(1);
+            aCurrentRow.push_back(new ORowSetValueDecorator(sTableName));
+        }
+        // 3. COLUMN_NAME
+        {
+            OUString sColumnName = xRow->getString(6);
+            aCurrentRow.push_back(new ORowSetValueDecorator(sColumnName));
+        }
+        // 4. GRANTOR
+        {
+            OUString sGrantor = xRow->getString(2);
+            aCurrentRow.push_back(new ORowSetValueDecorator(sGrantor));
+        }
+        // 5. GRANTEE
+        {
+            OUString sGrantee = xRow->getString(3);
+            aCurrentRow.push_back(new ORowSetValueDecorator(sGrantee));
+        }
+        // 6. Privilege
+        {
+            OUString sPrivilege = xRow->getString(4);
+            aCurrentRow.push_back(new ORowSetValueDecorator(sPrivilege));
+        }
+        // 7. IS_GRANTABLE
+        {
+            sal_Bool bIsGrantable = xRow->getBoolean(5);
+            aCurrentRow.push_back(new ORowSetValueDecorator(bIsGrantable));
+        }
+
+        aResults.push_back(aCurrentRow);
+    }
+
+    pResultSet->setRows( aResults );
+
+    return xResultSet;
 }
 
 uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
@@ -1256,6 +1346,8 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
     uno::Reference< XResultSet > xResultSet = pResultSet;
     uno::Reference< XStatement > statement = m_pConnection->createStatement();
 
+    // TODO: column specific privileges are included, we may need
+    // to have WHERE RDB$FIELD_NAME = NULL or similar.
     static const OUString wld("%");
     OUStringBuffer queryBuf(
             "SELECT "
@@ -1271,9 +1363,9 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
     {
         OUString sAppend;
         if (sTableNamePattern.match(wld))
-            sAppend = "AND priv.RDB$RELATION_NAME LIKE '%' ";
+            sAppend = "WHERE priv.RDB$RELATION_NAME LIKE '%' ";
         else
-            sAppend = "AND priv.RDB$RELATION_NAME = '%' ";
+            sAppend = "WHERE priv.RDB$RELATION_NAME = '%' ";
 
         queryBuf.append(sAppend.replaceAll(wld, sTableNamePattern));
     }
