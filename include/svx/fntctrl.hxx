@@ -49,7 +49,7 @@ private:
 
 public:
                         SvxFontPrevWindow( Window* pParent, const ResId& rId );
-                        SvxFontPrevWindow(Window* pParent);
+                        SvxFontPrevWindow(Window* pParent, WinBits nStyle);
     virtual             ~SvxFontPrevWindow();
 
     virtual void        StateChanged( StateChangedType nStateChange );
