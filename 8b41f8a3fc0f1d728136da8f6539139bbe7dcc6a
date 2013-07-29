@@ -53,6 +53,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAXn//970\u003d",
+        "filename": "sw/source/filter/html/htmlatr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1463,
+      "author": {
+        "id": 1000464
+      },
+      "writtenOn": "2013-07-29T13:29:14Z",
+      "side": 1,
+      "message": "Because at line 1146 in the head of FixSplittedItem there is the same arguments order.",
+      "parentUuid": "AAAAXn//+AU\u003d",
+      "revId": "8b41f8a3fc0f1d728136da8f6539139bbe7dcc6a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAXn//+AY\u003d",
         "filename": "sw/source/filter/html/htmlatr.cxx",
         "patchSetId": 1
