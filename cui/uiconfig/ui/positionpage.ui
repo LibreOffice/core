@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
   <!-- interface-requires LibreOffice 1.0 -->
+  <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">1</property>
     <property name="upper">100</property>
@@ -20,6 +20,23 @@
     <property name="upper">999.89999999999998</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
+  </object>
+  <object class="GtkListStore" id="liststore1">
+    <columns>
+      <!-- column-name gchararray1 -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">Default</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Expanded</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Condensed</col>
+      </row>
+    </data>
   </object>
   <object class="GtkBox" id="PositionPage">
     <property name="visible">True</property>
@@ -496,15 +513,16 @@
         <property name="valign">end</property>
         <property name="top_padding">6</property>
         <property name="left_padding">12</property>
+        <property name="right_padding">12</property>
         <child>
-          <object class="svxlo-SvxFontPrevWindow" id="preview">
+          <object class="svxlo-SvxFontPrevWindow" id="preview:border">
             <property name="height_request">100</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
             <child internal-child="accessible">
-              <object class="AtkObject" id="preview-atkobject">
+              <object class="AtkObject" id="preview:border-atkobject">
                 <property name="AtkObject::accessible-name" translatable="yes">Preview</property>
               </object>
             </child>
@@ -518,22 +536,5 @@
         <property name="position">3</property>
       </packing>
     </child>
-  </object>
-  <object class="GtkListStore" id="liststore1">
-    <columns>
-      <!-- column-name gchararray1 -->
-      <column type="gchararray"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">Default</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Expanded</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Condensed</col>
-      </row>
-    </data>
   </object>
 </interface>

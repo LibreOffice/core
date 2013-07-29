@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
   <!-- interface-requires LibreOffice 1.0 -->
+  <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkListStore" id="liststore1">
     <columns>
       <!-- column-name gchararray1 -->
@@ -643,13 +643,14 @@
         <property name="can_focus">False</property>
         <property name="top_padding">6</property>
         <property name="left_padding">12</property>
+        <property name="right_padding">12</property>
         <child>
-          <object class="svxlo-SvxFontPrevWindow" id="preview">
+          <object class="svxlo-SvxFontPrevWindow" id="preview:border">
             <property name="height_request">100</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child internal-child="accessible">
-              <object class="AtkObject" id="preview-atkobject">
+              <object class="AtkObject" id="preview:border-atkobject">
                 <property name="AtkObject::accessible-name" translatable="yes">Preview</property>
               </object>
             </child>
