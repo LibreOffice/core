@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 
 #include "selfterminatefilestream.hxx"
@@ -25,7 +24,6 @@
 
 using namespace ::com::sun::star;
 
-//-----------------------------------------------
 OSelfTerminateFileStream::OSelfTerminateFileStream( const uno::Reference< uno::XComponentContext > xContext, const OUString& aURL )
 : m_aURL( aURL )
 {
@@ -42,13 +40,11 @@ OSelfTerminateFileStream::OSelfTerminateFileStream( const uno::Reference< uno::X
     m_xSeekable.set( m_xInputStream, uno::UNO_QUERY_THROW );
 }
 
-//-----------------------------------------------
 OSelfTerminateFileStream::~OSelfTerminateFileStream()
 {
     CloseStreamDeleteFile();
 }
 
-//-----------------------------------------------
 void OSelfTerminateFileStream::CloseStreamDeleteFile()
 {
     try
@@ -66,7 +62,6 @@ void OSelfTerminateFileStream::CloseStreamDeleteFile()
     {}
 }
 
-//-----------------------------------------------
 sal_Int32 SAL_CALL OSelfTerminateFileStream::readBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
         throw ( io::NotConnectedException,
                 io::BufferSizeExceededException,
@@ -76,7 +71,6 @@ sal_Int32 SAL_CALL OSelfTerminateFileStream::readBytes( uno::Sequence< sal_Int8 
     return m_xInputStream->readBytes( aData, nBytesToRead );
 }
 
-//-----------------------------------------------
 sal_Int32 SAL_CALL OSelfTerminateFileStream::readSomeBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
         throw ( io::NotConnectedException,
                 io::BufferSizeExceededException,
@@ -86,7 +80,6 @@ sal_Int32 SAL_CALL OSelfTerminateFileStream::readSomeBytes( uno::Sequence< sal_I
     return m_xInputStream->readSomeBytes( aData, nMaxBytesToRead );
 }
 
-//-----------------------------------------------
 void SAL_CALL OSelfTerminateFileStream::skipBytes( sal_Int32 nBytesToSkip )
         throw ( io::NotConnectedException,
                 io::BufferSizeExceededException,
@@ -96,7 +89,6 @@ void SAL_CALL OSelfTerminateFileStream::skipBytes( sal_Int32 nBytesToSkip )
     return m_xInputStream->skipBytes( nBytesToSkip );
 }
 
-//-----------------------------------------------
 sal_Int32 SAL_CALL OSelfTerminateFileStream::available(  )
         throw ( io::NotConnectedException,
                 io::IOException,
@@ -105,7 +97,6 @@ sal_Int32 SAL_CALL OSelfTerminateFileStream::available(  )
     return m_xInputStream->available();
 }
 
-//-----------------------------------------------
 void SAL_CALL OSelfTerminateFileStream::closeInput(  )
         throw ( io::NotConnectedException,
                 io::IOException,
@@ -114,7 +105,6 @@ void SAL_CALL OSelfTerminateFileStream::closeInput(  )
     CloseStreamDeleteFile();
 }
 
-//-----------------------------------------------
 void SAL_CALL OSelfTerminateFileStream::seek( sal_Int64 location )
         throw ( lang::IllegalArgumentException,
                 io::IOException,
@@ -123,7 +113,6 @@ void SAL_CALL OSelfTerminateFileStream::seek( sal_Int64 location )
     m_xSeekable->seek( location );
 }
 
-//-----------------------------------------------
 sal_Int64 SAL_CALL OSelfTerminateFileStream::getPosition()
         throw ( io::IOException,
                 uno::RuntimeException)
@@ -131,7 +120,6 @@ sal_Int64 SAL_CALL OSelfTerminateFileStream::getPosition()
     return m_xSeekable->getPosition();
 }
 
-//-----------------------------------------------
 sal_Int64 SAL_CALL OSelfTerminateFileStream::getLength()
         throw ( io::IOException,
                 uno::RuntimeException )

@@ -95,7 +95,6 @@ public:
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source )
         throw (::com::sun::star::uno::RuntimeException);
 
-
     // XTransactionListener
     virtual void SAL_CALL preCommit( const ::com::sun::star::lang::EventObject& aEvent )
         throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);

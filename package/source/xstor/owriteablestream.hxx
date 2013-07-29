@@ -40,7 +40,6 @@
 #include <com/sun/star/beans/StringPair.hpp>
 #include <com/sun/star/logging/XSimpleLogRing.hpp>
 
-
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/interfacecontainer.h>
@@ -51,7 +50,6 @@
 
 #include "ocompinstream.hxx"
 #include "mutexholder.hxx"
-
 
 struct PreCreationStruct
 {
@@ -143,7 +141,6 @@ struct OWriteStream_Impl : public PreCreationStruct
     sal_Int16 m_nRelInfoStatus;
     sal_Int32 m_nRelId;
 
-
 private:
     OUString GetFilledTempFileIfNo( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xStream );
     OUString FillTempGetFileName();
@@ -231,7 +228,6 @@ public:
                         sal_Int32 nStreamMode,
                         sal_Bool bHierarchyAccess );
 
-
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > GetRawInStream();
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > GetPlainRawInStream();
 
@@ -247,7 +243,6 @@ public:
     void GetCopyOfLastCommit(
                   ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xTargetStream,
                             const ::comphelper::SequenceAsHashMap& aEncryptionData );
-
 
     void CommitStreamRelInfo(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xRelStorage,
