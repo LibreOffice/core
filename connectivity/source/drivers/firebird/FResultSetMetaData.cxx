@@ -71,7 +71,7 @@ sal_Bool SAL_CALL OResultSetMetaData::isCaseSensitive(sal_Int32 column)
     // there remains some ambiguity if there is another mixed-case-named column
     // of the same name. For safety always assume case insensitive.
     (void) column;
-    return sal_False;
+    return sal_True;
 }
 
 OUString SAL_CALL OResultSetMetaData::getSchemaName(sal_Int32 column)
