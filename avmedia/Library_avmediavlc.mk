@@ -35,6 +35,7 @@ $(eval $(call gb_Library_use_libraries,avmediavlc,\
 	sal \
 	tl \
 	vcl \
+	utl \
 	$(gb_UWINAPI) \
 ))
 
