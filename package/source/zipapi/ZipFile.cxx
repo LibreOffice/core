@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ucb/XProgressHandler.hpp>
 #include <com/sun/star/packages/zip/ZipConstants.hpp>
@@ -78,8 +77,6 @@ ZipFile::ZipFile( uno::Reference < XInputStream > &xInput, const uno::Reference 
         }
     }
 }
-
-
 
 ZipFile::ZipFile( uno::Reference < XInputStream > &xInput, const uno::Reference < XComponentContext > & rxContext, sal_Bool bInitialise, sal_Bool bForceRecovery, uno::Reference < XProgressHandler > xProgress )
     throw(IOException, ZipException, RuntimeException)
@@ -392,7 +389,6 @@ uno::Reference< XInputStream > ZipFile::StaticGetDataFromRawStream( const uno::R
         throw ZipIOException("The stream must be seekable!\n",
                             uno::Reference< XInterface >() );
 
-
     // if we have a digest, then this file is an encrypted one and we should
     // check if we can decrypt it or not
     OSL_ENSURE( rData->m_aDigest.getLength(), "Can't detect password correctness without digest!\n" );
@@ -522,7 +518,6 @@ uno::Reference< XInputStream > ZipFile::createUnbufferedStream(
 
     return new XUnbufferedStream ( m_xContext, aMutexHolder, rEntry, xStream, rData, nStreamMode, bIsEncrypted, aMediaType, bRecoveryMode );
 }
-
 
 ZipEnumeration * SAL_CALL ZipFile::entries(  )
 {

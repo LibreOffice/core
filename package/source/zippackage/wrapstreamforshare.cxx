@@ -23,7 +23,6 @@
 
 using namespace ::com::sun::star;
 
-
 WrapStreamForShare::WrapStreamForShare( const uno::Reference< io::XInputStream >& xInStream,
                                         const SotMutexHolderRef& rMutexRef )
 : m_rMutexRef( rMutexRef )

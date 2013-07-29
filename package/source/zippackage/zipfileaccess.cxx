@@ -34,10 +34,8 @@
 
 #include <memory>
 
-
 using namespace ::com::sun::star;
 
-// ----------------------------------------------------------------
 OZipFileAccess::OZipFileAccess( const uno::Reference< uno::XComponentContext >& rxContext )
 : m_aMutexHolder( new SotMutexHolder )
 , m_xContext( rxContext )
@@ -49,7 +47,6 @@ OZipFileAccess::OZipFileAccess( const uno::Reference< uno::XComponentContext >& 
         throw uno::RuntimeException(OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
 }
 
-// ----------------------------------------------------------------
 OZipFileAccess::~OZipFileAccess()
 {
     {
@@ -65,7 +62,6 @@ OZipFileAccess::~OZipFileAccess()
     }
 }
 
-// ----------------------------------------------------------------
 uno::Sequence< OUString > OZipFileAccess::GetPatternsFromString_Impl( const OUString& aString )
 {
     if ( aString.isEmpty() )
@@ -112,7 +108,6 @@ uno::Sequence< OUString > OZipFileAccess::GetPatternsFromString_Impl( const OUSt
     return aPattern;
 }
 
-// ----------------------------------------------------------------
 sal_Bool OZipFileAccess::StringGoodForPattern_Impl( const OUString& aString,
                                                     const uno::Sequence< OUString >& aPattern )
 {
@@ -161,7 +156,6 @@ sal_Bool OZipFileAccess::StringGoodForPattern_Impl( const OUString& aString,
 }
 
 // XInitialization
-// ----------------------------------------------------------------
 void SAL_CALL OZipFileAccess::initialize( const uno::Sequence< uno::Any >& aArguments )
     throw ( uno::Exception,
             uno::RuntimeException )
@@ -226,7 +220,6 @@ void SAL_CALL OZipFileAccess::initialize( const uno::Sequence< uno::Any >& aArgu
 }
 
 // XNameAccess
-// ----------------------------------------------------------------
 uno::Any SAL_CALL OZipFileAccess::getByName( const OUString& aName )
     throw ( container::NoSuchElementException,
             lang::WrappedTargetException,
@@ -255,7 +248,6 @@ uno::Any SAL_CALL OZipFileAccess::getByName( const OUString& aName )
     return uno::makeAny ( xEntryStream );
 }
 
-// ----------------------------------------------------------------
 uno::Sequence< OUString > SAL_CALL OZipFileAccess::getElementNames()
     throw ( uno::RuntimeException )
 {
@@ -290,7 +282,6 @@ uno::Sequence< OUString > SAL_CALL OZipFileAccess::getElementNames()
     return aNames;
 }
 
-// ----------------------------------------------------------------
 sal_Bool SAL_CALL OZipFileAccess::hasByName( const OUString& aName )
     throw (uno::RuntimeException)
 {
@@ -307,7 +298,6 @@ sal_Bool SAL_CALL OZipFileAccess::hasByName( const OUString& aName )
     return ( aIter != m_pZipFile->GetEntryHash().end() );
 }
 
-// ----------------------------------------------------------------
 uno::Type SAL_CALL OZipFileAccess::getElementType()
     throw ( uno::RuntimeException )
 {
@@ -322,7 +312,6 @@ uno::Type SAL_CALL OZipFileAccess::getElementType()
     return getCppuType( ( const uno::Reference< io::XInputStream >* )NULL );
 }
 
-// ----------------------------------------------------------------
 sal_Bool SAL_CALL OZipFileAccess::hasElements()
     throw ( uno::RuntimeException )
 {
@@ -338,7 +327,6 @@ sal_Bool SAL_CALL OZipFileAccess::hasElements()
 }
 
 // XZipFileAccess
-// ----------------------------------------------------------------
 uno::Reference< io::XInputStream > SAL_CALL OZipFileAccess::getStreamByPattern( const OUString& aPatternString )
     throw ( container::NoSuchElementException,
             io::IOException,
@@ -374,7 +362,6 @@ uno::Reference< io::XInputStream > SAL_CALL OZipFileAccess::getStreamByPattern( 
 }
 
 // XComponent
-// ----------------------------------------------------------------
 void SAL_CALL OZipFileAccess::dispose()
     throw ( uno::RuntimeException )
 {
@@ -406,7 +393,6 @@ void SAL_CALL OZipFileAccess::dispose()
     m_bDisposed = sal_True;
 }
 
-// ----------------------------------------------------------------
 void SAL_CALL OZipFileAccess::addEventListener( const uno::Reference< lang::XEventListener >& xListener )
     throw ( uno::RuntimeException )
 {
@@ -420,7 +406,6 @@ void SAL_CALL OZipFileAccess::addEventListener( const uno::Reference< lang::XEve
     m_pListenersContainer->addInterface( xListener );
 }
 
-// ----------------------------------------------------------------
 void SAL_CALL OZipFileAccess::removeEventListener( const uno::Reference< lang::XEventListener >& xListener )
     throw ( uno::RuntimeException )
 {
@@ -433,7 +418,6 @@ void SAL_CALL OZipFileAccess::removeEventListener( const uno::Reference< lang::X
         m_pListenersContainer->removeInterface( xListener );
 }
 
-//-------------------------------------------------------------------------
 uno::Sequence< OUString > SAL_CALL OZipFileAccess::impl_staticGetSupportedServiceNames()
 {
     uno::Sequence< OUString > aRet(2);
@@ -442,27 +426,23 @@ uno::Sequence< OUString > SAL_CALL OZipFileAccess::impl_staticGetSupportedServic
     return aRet;
 }
 
-//-------------------------------------------------------------------------
 OUString SAL_CALL OZipFileAccess::impl_staticGetImplementationName()
 {
     return OUString("com.sun.star.comp.package.zip.ZipFileAccess");
 }
 
-//-------------------------------------------------------------------------
 uno::Reference< uno::XInterface > SAL_CALL OZipFileAccess::impl_staticCreateSelfInstance(
             const uno::Reference< lang::XMultiServiceFactory >& rxMSF )
 {
     return uno::Reference< uno::XInterface >( *new OZipFileAccess( comphelper::getComponentContext(rxMSF) ) );
 }
 
-//-------------------------------------------------------------------------
 OUString SAL_CALL OZipFileAccess::getImplementationName()
     throw ( uno::RuntimeException )
 {
     return impl_staticGetImplementationName();
 }
 
-//-------------------------------------------------------------------------
 sal_Bool SAL_CALL OZipFileAccess::supportsService( const OUString& ServiceName )
     throw ( uno::RuntimeException )
 {
@@ -475,7 +455,6 @@ sal_Bool SAL_CALL OZipFileAccess::supportsService( const OUString& ServiceName )
     return sal_False;
 }
 
-//-------------------------------------------------------------------------
 uno::Sequence< OUString > SAL_CALL OZipFileAccess::getSupportedServiceNames()
     throw ( uno::RuntimeException )
 {

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "ocompinstream.hxx"
 #include <com/sun/star/embed/StorageFormats.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -28,7 +27,6 @@
 
 using namespace ::com::sun::star;
 
-//-----------------------------------------------
 OInputCompStream::OInputCompStream( OWriteStream_Impl& aImpl,
                                     uno::Reference < io::XInputStream > xStream,
                                     const uno::Sequence< beans::PropertyValue >& aProps,
@@ -48,7 +46,6 @@ OInputCompStream::OInputCompStream( OWriteStream_Impl& aImpl,
     OSL_ENSURE( xStream.is(), "No stream is provided!\n" );
 }
 
-//-----------------------------------------------
 OInputCompStream::OInputCompStream( uno::Reference < io::XInputStream > xStream,
                                     const uno::Sequence< beans::PropertyValue >& aProps,
                                     sal_Int32 nStorageType )
@@ -63,7 +60,6 @@ OInputCompStream::OInputCompStream( uno::Reference < io::XInputStream > xStream,
     OSL_ENSURE( xStream.is(), "No stream is provided!\n" );
 }
 
-//-----------------------------------------------
 OInputCompStream::~OInputCompStream()
 {
     {
@@ -80,7 +76,6 @@ OInputCompStream::~OInputCompStream()
     }
 }
 
-//-----------------------------------------------
 uno::Any SAL_CALL OInputCompStream::queryInterface( const uno::Type& rType )
         throw( uno::RuntimeException )
 {
@@ -111,7 +106,6 @@ uno::Any SAL_CALL OInputCompStream::queryInterface( const uno::Type& rType )
     return OWeakObject::queryInterface( rType );
 }
 
-//-----------------------------------------------
 sal_Int32 SAL_CALL OInputCompStream::readBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
         throw ( io::NotConnectedException,
                 io::BufferSizeExceededException,
@@ -134,7 +128,6 @@ sal_Int32 SAL_CALL OInputCompStream::readBytes( uno::Sequence< sal_Int8 >& aData
     return m_xStream->readBytes( aData, nBytesToRead );
 }
 
-//-----------------------------------------------
 sal_Int32 SAL_CALL OInputCompStream::readSomeBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
         throw ( io::NotConnectedException,
                 io::BufferSizeExceededException,
@@ -158,7 +151,6 @@ sal_Int32 SAL_CALL OInputCompStream::readSomeBytes( uno::Sequence< sal_Int8 >& a
 
 }
 
-//-----------------------------------------------
 void SAL_CALL OInputCompStream::skipBytes( sal_Int32 nBytesToSkip )
         throw ( io::NotConnectedException,
                 io::BufferSizeExceededException,
@@ -182,7 +174,6 @@ void SAL_CALL OInputCompStream::skipBytes( sal_Int32 nBytesToSkip )
 
 }
 
-//-----------------------------------------------
 sal_Int32 SAL_CALL OInputCompStream::available(  )
         throw ( io::NotConnectedException,
                 io::IOException,
@@ -205,7 +196,6 @@ sal_Int32 SAL_CALL OInputCompStream::available(  )
 
 }
 
-//-----------------------------------------------
 void SAL_CALL OInputCompStream::closeInput(  )
         throw ( io::NotConnectedException,
                 io::IOException,
@@ -214,7 +204,6 @@ void SAL_CALL OInputCompStream::closeInput(  )
     dispose();
 }
 
-//-----------------------------------------------
 uno::Reference< io::XInputStream > SAL_CALL OInputCompStream::getInputStream()
         throw ( uno::RuntimeException )
 {
@@ -231,7 +220,6 @@ uno::Reference< io::XInputStream > SAL_CALL OInputCompStream::getInputStream()
     return uno::Reference< io::XInputStream >( static_cast< io::XInputStream* >( this ), uno::UNO_QUERY );
 }
 
-//-----------------------------------------------
 uno::Reference< io::XOutputStream > SAL_CALL OInputCompStream::getOutputStream()
         throw ( uno::RuntimeException )
 {
@@ -245,7 +233,6 @@ uno::Reference< io::XOutputStream > SAL_CALL OInputCompStream::getOutputStream()
     return uno::Reference< io::XOutputStream >();
 }
 
-//-----------------------------------------------
 void OInputCompStream::InternalDispose()
 {
     // can be called only by OWriteStream_Impl
@@ -274,7 +261,6 @@ void OInputCompStream::InternalDispose()
     m_bDisposed = sal_True;
 }
 
-//-----------------------------------------------
 void SAL_CALL OInputCompStream::dispose(  )
         throw ( uno::RuntimeException )
 {
@@ -302,7 +288,6 @@ void SAL_CALL OInputCompStream::dispose(  )
     m_bDisposed = sal_True;
 }
 
-//-----------------------------------------------
 void SAL_CALL OInputCompStream::addEventListener( const uno::Reference< lang::XEventListener >& xListener )
         throw ( uno::RuntimeException )
 {
@@ -319,7 +304,6 @@ void SAL_CALL OInputCompStream::addEventListener( const uno::Reference< lang::XE
     m_pInterfaceContainer->addInterface( xListener );
 }
 
-//-----------------------------------------------
 void SAL_CALL OInputCompStream::removeEventListener( const uno::Reference< lang::XEventListener >& xListener )
         throw ( uno::RuntimeException )
 {
@@ -334,7 +318,6 @@ void SAL_CALL OInputCompStream::removeEventListener( const uno::Reference< lang:
         m_pInterfaceContainer->removeInterface( xListener );
 }
 
-//-----------------------------------------------
 sal_Bool SAL_CALL OInputCompStream::hasByID(  const OUString& sID )
         throw ( io::IOException,
                 uno::RuntimeException )
@@ -361,7 +344,6 @@ sal_Bool SAL_CALL OInputCompStream::hasByID(  const OUString& sID )
     return sal_False;
 }
 
-//-----------------------------------------------
 OUString SAL_CALL OInputCompStream::getTargetByID(  const OUString& sID  )
         throw ( container::NoSuchElementException,
                 io::IOException,
@@ -386,7 +368,6 @@ OUString SAL_CALL OInputCompStream::getTargetByID(  const OUString& sID  )
     return OUString();
 }
 
-//-----------------------------------------------
 OUString SAL_CALL OInputCompStream::getTypeByID(  const OUString& sID  )
         throw ( container::NoSuchElementException,
                 io::IOException,
@@ -411,7 +392,6 @@ OUString SAL_CALL OInputCompStream::getTypeByID(  const OUString& sID  )
     return OUString();
 }
 
-//-----------------------------------------------
 uno::Sequence< beans::StringPair > SAL_CALL OInputCompStream::getRelationshipByID(  const OUString& sID  )
         throw ( container::NoSuchElementException,
                 io::IOException,
@@ -442,7 +422,6 @@ uno::Sequence< beans::StringPair > SAL_CALL OInputCompStream::getRelationshipByI
     throw container::NoSuchElementException();
 }
 
-//-----------------------------------------------
 uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OInputCompStream::getRelationshipsByType(  const OUString& sType  )
         throw ( io::IOException,
                 uno::RuntimeException )
@@ -478,7 +457,6 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OInputCompStream::g
     return aResult;
 }
 
-//-----------------------------------------------
 uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OInputCompStream::getAllRelationships()
         throw (io::IOException, uno::RuntimeException)
 {
@@ -507,7 +485,6 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OInputCompStream::g
     throw io::IOException(); // the relations info could not be read
 }
 
-//-----------------------------------------------
 void SAL_CALL OInputCompStream::insertRelationshipByID(  const OUString& /*sID*/, const uno::Sequence< beans::StringPair >& /*aEntry*/, ::sal_Bool /*bReplace*/  )
         throw ( container::ElementExistException,
                 io::IOException,
@@ -527,7 +504,6 @@ void SAL_CALL OInputCompStream::insertRelationshipByID(  const OUString& /*sID*/
     throw io::IOException(); // TODO: Access denied
 }
 
-//-----------------------------------------------
 void SAL_CALL OInputCompStream::removeRelationshipByID(  const OUString& /*sID*/  )
         throw ( container::NoSuchElementException,
                 io::IOException,
@@ -547,7 +523,6 @@ void SAL_CALL OInputCompStream::removeRelationshipByID(  const OUString& /*sID*/
     throw io::IOException(); // TODO: Access denied
 }
 
-//-----------------------------------------------
 void SAL_CALL OInputCompStream::insertRelationships(  const uno::Sequence< uno::Sequence< beans::StringPair > >& /*aEntries*/, ::sal_Bool /*bReplace*/  )
         throw ( container::ElementExistException,
                 io::IOException,
@@ -567,7 +542,6 @@ void SAL_CALL OInputCompStream::insertRelationships(  const uno::Sequence< uno::
     throw io::IOException(); // TODO: Access denied
 }
 
-//-----------------------------------------------
 void SAL_CALL OInputCompStream::clearRelationships()
         throw ( io::IOException,
                 uno::RuntimeException )
@@ -586,7 +560,6 @@ void SAL_CALL OInputCompStream::clearRelationships()
     throw io::IOException(); // TODO: Access denied
 }
 
-//-----------------------------------------------
 uno::Reference< beans::XPropertySetInfo > SAL_CALL OInputCompStream::getPropertySetInfo()
         throw ( uno::RuntimeException )
 {
@@ -602,7 +575,6 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL OInputCompStream::getProperty
     return uno::Reference< beans::XPropertySetInfo >();
 }
 
-//-----------------------------------------------
 void SAL_CALL OInputCompStream::setPropertyValue( const OUString& aPropertyName, const uno::Any& /*aValue*/ )
         throw ( beans::UnknownPropertyException,
                 beans::PropertyVetoException,
@@ -630,8 +602,6 @@ void SAL_CALL OInputCompStream::setPropertyValue( const OUString& aPropertyName,
     throw beans::UnknownPropertyException(); // TODO
 }
 
-
-//-----------------------------------------------
 uno::Any SAL_CALL OInputCompStream::getPropertyValue( const OUString& aProp )
         throw ( beans::UnknownPropertyException,
                 lang::WrappedTargetException,
@@ -666,8 +636,6 @@ uno::Any SAL_CALL OInputCompStream::getPropertyValue( const OUString& aProp )
     throw beans::UnknownPropertyException(); // TODO
 }
 
-
-//-----------------------------------------------
 void SAL_CALL OInputCompStream::addPropertyChangeListener(
     const OUString& /*aPropertyName*/,
     const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/ )
@@ -686,8 +654,6 @@ void SAL_CALL OInputCompStream::addPropertyChangeListener(
     //TODO:
 }
 
-
-//-----------------------------------------------
 void SAL_CALL OInputCompStream::removePropertyChangeListener(
     const OUString& /*aPropertyName*/,
     const uno::Reference< beans::XPropertyChangeListener >& /*aListener*/ )
@@ -706,8 +672,6 @@ void SAL_CALL OInputCompStream::removePropertyChangeListener(
     //TODO:
 }
 
-
-//-----------------------------------------------
 void SAL_CALL OInputCompStream::addVetoableChangeListener(
     const OUString& /*PropertyName*/,
     const uno::Reference< beans::XVetoableChangeListener >& /*aListener*/ )
@@ -726,8 +690,6 @@ void SAL_CALL OInputCompStream::addVetoableChangeListener(
     //TODO:
 }
 
-
-//-----------------------------------------------
 void SAL_CALL OInputCompStream::removeVetoableChangeListener(
     const OUString& /*PropertyName*/,
     const uno::Reference< beans::XVetoableChangeListener >& /*aListener*/ )
@@ -745,6 +707,5 @@ void SAL_CALL OInputCompStream::removeVetoableChangeListener(
 
     //TODO:
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

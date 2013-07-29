@@ -72,7 +72,6 @@ ZipPackageFolder::ZipPackageFolder ( sal_Int32 nFormat,
         rCachedImplId = getImplementationId();
 }
 
-
 ZipPackageFolder::~ZipPackageFolder()
 {
 }
@@ -351,7 +350,6 @@ bool ZipPackageFolder::saveChild( const OUString &rShortName, const ContentInfo 
         aPropSet[PKG_MNFST_VERSION].Value <<= OUString(); // no version is stored for streams currently
         aPropSet[PKG_MNFST_FULLPATH].Name = sFullPathProperty;
         aPropSet[PKG_MNFST_FULLPATH].Value <<= pTempEntry->sPath;
-
 
         OSL_ENSURE( rInfo.pStream->GetStreamMode() != PACKAGE_STREAM_NOTSET, "Unacceptable ZipPackageStream mode!" );
 
