@@ -79,6 +79,7 @@ namespace
     ImpTimedRefDev::~ImpTimedRefDev()
     {
         OSL_ENSURE(0L == mnUseCount, "destruction of a still used ImpTimedRefDev (!)");
+        const SolarMutexGuard aGuard;
         delete mpVirDev;
     }
 
