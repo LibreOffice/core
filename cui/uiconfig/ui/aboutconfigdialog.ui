@@ -48,12 +48,12 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="status">
+                      <object class="GtkLabel" id="property">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0.51999998092651367</property>
                         <property name="yalign">0.50999999046325684</property>
-                        <property name="label" translatable="yes">Status</property>
+                        <property name="label" translatable="yes">Property</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>

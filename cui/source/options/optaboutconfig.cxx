@@ -26,10 +26,10 @@ using namespace ::com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::container;
 
-#define ITEMID_PREF     1
-#define ITEMID_TYPE     2
-#define ITEMID_STATUS   3
-#define ITEMID_VALUE    4
+#define ITEMID_PREFNAME     1
+#define ITEMID_PROPERTY     2
+#define ITEMID_TYPE         3
+#define ITEMID_VALUE        4
 
 CuiAboutConfigTabPage::CuiAboutConfigTabPage( Window* pParent, const SfxItemSet& rItemSet )
     :SfxTabPage( pParent, "AboutConfig", "cui/ui/aboutconfigdialog.ui", rItemSet)
@@ -49,16 +49,16 @@ CuiAboutConfigTabPage::CuiAboutConfigTabPage( Window* pParent, const SfxItemSet&
     m_pEditBtn->SetClickHdl( LINK( this, CuiAboutConfigTabPage, StandardHdl_Impl ) );
 
     HeaderBar &rBar = pPrefBox->GetTheHeaderBar();
-    rBar.InsertItem( ITEMID_PREF, get<FixedText>("preference")->GetText(), 0, HIB_LEFT | HIB_VCENTER | HIB_CLICKABLE | HIB_UPARROW);
-    rBar.InsertItem( ITEMID_TYPE, get<FixedText>("status")->GetText(), 0,  HIB_LEFT | HIB_VCENTER | HIB_CLICKABLE | HIB_UPARROW );
-    rBar.InsertItem( ITEMID_STATUS, get<FixedText>("type")->GetText(), 0,  HIB_LEFT | HIB_VCENTER | HIB_CLICKABLE | HIB_UPARROW );
+    rBar.InsertItem( ITEMID_PREFNAME, get<FixedText>("preference")->GetText(), 0, HIB_LEFT | HIB_VCENTER | HIB_CLICKABLE | HIB_UPARROW);
+    rBar.InsertItem( ITEMID_PROPERTY, get<FixedText>("property")->GetText(), 0,  HIB_LEFT | HIB_VCENTER | HIB_CLICKABLE | HIB_UPARROW );
+    rBar.InsertItem( ITEMID_TYPE, get<FixedText>("type")->GetText(), 0,  HIB_LEFT | HIB_VCENTER | HIB_CLICKABLE | HIB_UPARROW );
     rBar.InsertItem( ITEMID_VALUE, get<FixedText>("value")->GetText(), 0,  HIB_LEFT | HIB_VCENTER | HIB_CLICKABLE | HIB_UPARROW );
 
-    long aTabs[] = {4,0,12,12,12};
+    long aTabs[] = {4,120,50,50,50};//TODO: Not works correctly hardcoded for now.
 
     aTabs[2] += aTabs[1] + rBar.GetTextWidth(rBar.GetItemText(1));
-    aTabs[3] += aTabs[2] + rBar.GetTextWidth(rBar.GetItemText(2));
-    aTabs[4] += aTabs[3] + rBar.GetTextWidth(rBar.GetItemText(3));
+    aTabs[3] += aTabs[2] + 160; //rBar.GetTextWidth(rBar.GetItemText(2));
+    aTabs[4] += aTabs[3] + 40; //rBar.GetTextWidth(rBar.GetItemText(3));
 
     pPrefBox->SetTabs(aTabs, MAP_PIXEL);
 
@@ -92,6 +92,9 @@ void CuiAboutConfigTabPage::Reset( const SfxItemSet& )
    OUString sRootNodePath = "/";
    pPrefBox->Clear();
 
+   m_pDefaultBtn->Enable(sal_False);
+   m_pEditBtn->Enable(sal_False);
+
    Reference< XNameAccess > xConfigAccess = getConfigAccess( sRootNodePath, sal_False );
 
    FillItems( xConfigAccess, sRootNodePath );
@@ -102,6 +105,8 @@ void CuiAboutConfigTabPage::FillItems( Reference< XNameAccess >xNameAccess, OUSt
     sal_Bool bIsLeafNode;
 
     Reference< XHierarchicalNameAccess > xHierarchicalNameAccess( xNameAccess, uno::UNO_QUERY_THROW );
+
+    pPrefBox->SetUpdateMode(sal_False);
 
     uno::Sequence< OUString > seqItems = xNameAccess->getElementNames();
     for( sal_Int16 i = 0; i < seqItems.getLength(); ++i )
@@ -127,7 +132,7 @@ void CuiAboutConfigTabPage::FillItems( Reference< XNameAccess >xNameAccess, OUSt
         {
             Any aProp = xHierarchicalNameAccess->getByHierarchicalName(seqItems[i]); //xProperty->getAsProperty();
 
-            OUString test;
+            OUString sValue;
             if( aProp.hasValue() )
             {
                 switch( aProp.getValueType().getTypeClass() )
@@ -142,7 +147,7 @@ void CuiAboutConfigTabPage::FillItems( Reference< XNameAccess >xNameAccess, OUSt
                         if(aProp >>= nVal)
                         {
                             OUString aNumber( OUString::valueOf( nVal ) );
-                            test = aNumber;
+                            sValue = aNumber;
                         }
                     }
                     break;
@@ -153,7 +158,7 @@ void CuiAboutConfigTabPage::FillItems( Reference< XNameAccess >xNameAccess, OUSt
                         if(aProp >>= bVal  )
                         {
                             OUString sBoolean( OUString::valueOf( bVal ) );
-                            test = sBoolean;
+                            sValue = sBoolean;
                         }
                     }
                     break;
@@ -163,7 +168,7 @@ void CuiAboutConfigTabPage::FillItems( Reference< XNameAccess >xNameAccess, OUSt
                         OUString sString;
                         if(aProp >>= sString)
                         {
-                            test = sString;
+                            sValue = sString;
                         }
 
                     }
@@ -172,18 +177,18 @@ void CuiAboutConfigTabPage::FillItems( Reference< XNameAccess >xNameAccess, OUSt
                     case ::com::sun::star::uno::TypeClass_SEQUENCE :
                     //case ::com::sun::star::uno::TypeClass_ARRAY :
                     {
-                        test = OUString("");
-                        if( OUString("[]long").equals(aProp.getValueTypeName()) )
+                        sValue = OUString("");
+                        if( OUString("[]long") ==aProp.getValueTypeName() ||
+                                OUString("[]short")==aProp.getValueTypeName() )
                         {
                             uno::Sequence<sal_Int32> seqLong;
                             if( aProp >>= seqLong )
                             {
-                                //test = OUString("Congrats bro!");
                                 for(sal_Int16 nInd=0;  nInd < seqLong.getLength(); ++nInd)
                                 {
                                     OUString sNumber( OUString::valueOf(seqLong[nInd]) );
-                                    test += sNumber;
-                                    test += OUString(",");
+                                    sValue += sNumber;
+                                    sValue += OUString(",");
                                 }
                             }
                         }
@@ -195,7 +200,7 @@ void CuiAboutConfigTabPage::FillItems( Reference< XNameAccess >xNameAccess, OUSt
                             {
                                 for( sal_Int16 nInd=0; nInd < seqOUString.getLength(); ++nInd )
                                 {
-                                    test += seqOUString[nInd] + OUString(",");
+                                    sValue += seqOUString[nInd] + OUString(",");
                                 }
                             }
                         }
@@ -204,16 +209,18 @@ void CuiAboutConfigTabPage::FillItems( Reference< XNameAccess >xNameAccess, OUSt
 
                     default:
                     {
-                        test = OUString("test");
+                        sValue = OUString("test");
                     }
                 }
             }
 
-            OUString sType = aProp.getValueTypeName();//.getTypeName() ;//Type.getTypeName();
-            OUString sPrefName = sPath + OUString("-") + seqItems[i] ;
-            InsertEntry( sPrefName, test, sType , sPath );//for testing only will change
+            OUString sType = aProp.getValueTypeName();
+            //OUString sPrefName = sPath + OUString("-") + seqItems[i] ;
+            InsertEntry( sPath, seqItems [ i ], sType, sValue);
         }
     }
+
+    pPrefBox->SetUpdateMode(sal_True);
 }
 
 Reference< XNameAccess > CuiAboutConfigTabPage::getConfigAccess( OUString sNodePath, sal_Bool bUpdate )
@@ -281,11 +288,11 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl )
     if( sType == OUString("boolean") )
     {
         //TODO: this is just cosmetic, take all needed value and handle them properly
-        OUString sValue = pPrefBox->GetEntryText( pEntry, 1 );
+        OUString sValue = pPrefBox->GetEntryText( pEntry, 3 );
             if (sValue == OUString("true"))
-                pPrefBox->SetEntryText( OUString("false"), pEntry, 1 );
+                pPrefBox->SetEntryText( OUString("false"), pEntry, 3 );
             else if(sValue == OUString("false"))
-                pPrefBox->SetEntryText( OUString("true"), pEntry, 1 );
+                pPrefBox->SetEntryText( OUString("true"), pEntry, 3 );
     }
     //TODO: add other types
 
