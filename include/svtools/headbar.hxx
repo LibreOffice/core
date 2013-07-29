@@ -344,8 +344,8 @@ public:
 
     Size                CalcWindowSizePixel() const;
 
-    inline void             SetHelpText( const String& rText )      { Window::SetHelpText( rText ); }
-    inline const String&    GetHelpText() const                     { return Window::GetHelpText(); }
+    inline void             SetHelpText( const OUString& rText )    { Window::SetHelpText( rText ); }
+    inline const OUString&  GetHelpText() const                     { return Window::GetHelpText(); }
     inline void             SetHelpId( const OString& rId )    { Window::SetHelpId( rId ); }
     inline const OString& GetHelpId() const                    { return Window::GetHelpId(); }
 

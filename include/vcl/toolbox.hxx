@@ -502,14 +502,14 @@ public:
     sal_Bool                IsCustomize() { return mbCustomize; }
     sal_Bool                IsInCustomizeMode() const { return mbCustomizeMode; }
 
-    void                SetHelpText( const XubString& rText )
+    void                SetHelpText( const OUString& rText )
                             { DockingWindow::SetHelpText( rText ); }
-    const XubString&    GetHelpText() const
+    const OUString&     GetHelpText() const
                             { return DockingWindow::GetHelpText(); }
 
     void                SetHelpId( const OString& rId )
                             { DockingWindow::SetHelpId( rId ); }
-    const OString& GetHelpId() const
+    const OString&      GetHelpId() const
                             { return DockingWindow::GetHelpId(); }
 
     void                SetClickHdl( const Link& rLink ) { maClickHdl = rLink; }

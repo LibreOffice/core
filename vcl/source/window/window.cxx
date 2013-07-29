@@ -4906,18 +4906,18 @@ void Window::RequestHelp( const HelpEvent& rHEvt )
     // with help text set
     if ( rHEvt.GetMode() & HELPMODE_BALLOON )
     {
-        const XubString* pStr = &(GetHelpText());
-        if ( !pStr->Len() )
-            pStr = &(GetQuickHelpText());
-        if ( !pStr->Len() && ImplGetParent() && !ImplIsOverlapWindow() )
+        OUString rStr = GetHelpText();
+        if ( rStr.isEmpty() )
+            rStr = GetQuickHelpText();
+        if ( rStr.isEmpty() && ImplGetParent() && !ImplIsOverlapWindow() )
             ImplGetParent()->RequestHelp( rHEvt );
         else
-            Help::ShowBalloon( this, rHEvt.GetMousePosPixel(), *pStr );
+            Help::ShowBalloon( this, rHEvt.GetMousePosPixel(), rStr );
     }
     else if ( rHEvt.GetMode() & HELPMODE_QUICK )
     {
-        const XubString* pStr = &(GetQuickHelpText());
-        if ( !pStr->Len() && ImplGetParent() && !ImplIsOverlapWindow() )
+        const OUString& rStr = GetQuickHelpText();
+        if ( rStr.isEmpty() && ImplGetParent() && !ImplIsOverlapWindow() )
             ImplGetParent()->RequestHelp( rHEvt );
         else
         {
@@ -4926,9 +4926,9 @@ void Window::RequestHelp( const HelpEvent& rHEvt )
                 aPos = ImplGetParent()->OutputToScreenPixel( aPos );
             Rectangle   aRect( aPos, GetSizePixel() );
             String      aHelpText;
-            if ( pStr->Len() )
+            if ( rStr.getLength() )
                 aHelpText = GetHelpText();
-            Help::ShowQuickHelp( this, aRect, *pStr, aHelpText, QUICKHELP_CTRLTEXT );
+            Help::ShowQuickHelp( this, aRect, rStr, aHelpText, QUICKHELP_CTRLTEXT );
         }
     }
     else
@@ -7989,14 +7989,14 @@ const Wallpaper& Window::GetDisplayBackground() const
 
 // -----------------------------------------------------------------------
 
-const XubString& Window::GetHelpText() const
+const OUString& Window::GetHelpText() const
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     String aStrHelpId( OStringToOUString( GetHelpId(), RTL_TEXTENCODING_UTF8 ) );
     bool bStrHelpId = (aStrHelpId.Len() > 0);
 
-    if ( !mpWindowImpl->maHelpText.Len() && bStrHelpId )
+    if ( !mpWindowImpl->maHelpText.getLength() && bStrHelpId )
     {
         if ( !IsDialog() && (mpWindowImpl->mnType != WINDOW_TABPAGE) && (mpWindowImpl->mnType != WINDOW_FLOATINGWINDOW) )
         {
@@ -8013,7 +8013,7 @@ const XubString& Window::GetHelpText() const
         static const char* pEnv = getenv( "HELP_DEBUG" );
         if( pEnv && *pEnv )
         {
-            OUStringBuffer aTxt( 64+mpWindowImpl->maHelpText.Len() );
+            OUStringBuffer aTxt( 64+mpWindowImpl->maHelpText.getLength() );
             aTxt.append( mpWindowImpl->maHelpText );
             aTxt.appendAscii( "\n------------------\n" );
             aTxt.append( OUString( aStrHelpId ) );
@@ -8925,16 +8925,16 @@ sal_uInt16 Window::GetAccessibleRole() const
     return nRole;
 }
 
-void Window::SetAccessibleName( const String& rName )
+void Window::SetAccessibleName( const OUString& rName )
 {
    if ( !mpWindowImpl->mpAccessibleInfos )
         mpWindowImpl->mpAccessibleInfos = new ImplAccessibleInfos;
 
     delete mpWindowImpl->mpAccessibleInfos->pAccessibleName;
-    mpWindowImpl->mpAccessibleInfos->pAccessibleName = new String( rName );
+    mpWindowImpl->mpAccessibleInfos->pAccessibleName = new OUString( rName );
 }
 
-String Window::GetAccessibleName() const
+OUString Window::GetAccessibleName() const
 {
     if (mpWindowImpl->mpAccessibleInfos && mpWindowImpl->mpAccessibleInfos->pAccessibleName)
         return *mpWindowImpl->mpAccessibleInfos->pAccessibleName;
@@ -8994,17 +8994,17 @@ OUString Window::getDefaultAccessibleName() const
     return GetNonMnemonicString( aAccessibleName );
 }
 
-void Window::SetAccessibleDescription( const String& rDescription )
+void Window::SetAccessibleDescription( const OUString& rDescription )
 {
    if ( ! mpWindowImpl->mpAccessibleInfos )
         mpWindowImpl->mpAccessibleInfos = new ImplAccessibleInfos;
 
     DBG_ASSERT( !mpWindowImpl->mpAccessibleInfos->pAccessibleDescription, "AccessibleDescription already set!" );
     delete mpWindowImpl->mpAccessibleInfos->pAccessibleDescription;
-    mpWindowImpl->mpAccessibleInfos->pAccessibleDescription = new String( rDescription );
+    mpWindowImpl->mpAccessibleInfos->pAccessibleDescription = new OUString( rDescription );
 }
 
-String Window::GetAccessibleDescription() const
+OUString Window::GetAccessibleDescription() const
 {
     String aAccessibleDescription;
     if ( mpWindowImpl->mpAccessibleInfos && mpWindowImpl->mpAccessibleInfos->pAccessibleDescription )

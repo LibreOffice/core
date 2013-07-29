@@ -925,17 +925,17 @@ public:
     // this may be a child's background color (e.g. ListBox)
     virtual const Wallpaper& GetDisplayBackground() const;
 
-    void                SetHelpText( const XubString& rHelpText );
-    const XubString&    GetHelpText() const;
+    void                SetHelpText( const OUString& rHelpText );
+    const OUString&     GetHelpText() const;
 
-    void                SetQuickHelpText( const XubString& rHelpText );
-    const XubString&    GetQuickHelpText() const;
+    void                SetQuickHelpText( const OUString& rHelpText );
+    const OUString&     GetQuickHelpText() const;
 
     void                SetHelpId( const OString& );
-    const OString& GetHelpId() const;
+    const OString&      GetHelpId() const;
 
     void                SetUniqueId( const OString& );
-    const OString& GetUniqueId() const;
+    const OString&      GetUniqueId() const;
 
     Window*             FindWindow( const Point& rPos ) const;
 
@@ -1001,11 +1001,11 @@ public:
     void    SetAccessibleRole( sal_uInt16 nRole );
     sal_uInt16  GetAccessibleRole() const;
 
-    void    SetAccessibleName( const String& rName );
-    String  GetAccessibleName() const;
+    void    SetAccessibleName( const OUString& rName );
+    OUString  GetAccessibleName() const;
 
-    void    SetAccessibleDescription( const String& rDescr );
-    String  GetAccessibleDescription() const;
+    void    SetAccessibleDescription( const OUString& rDescr );
+    OUString  GetAccessibleDescription() const;
 
     void    SetAccessibleRelationLabeledBy( Window* pLabeledBy );
     Window* GetAccessibleRelationLabeledBy() const;

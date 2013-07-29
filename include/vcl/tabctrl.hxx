@@ -162,14 +162,14 @@ public:
 
     void                SetPageImage( sal_uInt16 nPageId, const Image& rImage );
 
-    void                SetHelpText( const XubString& rText )
+    void                SetHelpText( const OUString& rText )
                             { Control::SetHelpText( rText ); }
-    const XubString&    GetHelpText() const
+    const OUString&     GetHelpText() const
                             { return Control::GetHelpText(); }
 
     void                SetHelpId( const OString& rId )
                             { Control::SetHelpId( rId ); }
-    const OString& GetHelpId() const
+    const OString&      GetHelpId() const
                             { return Control::GetHelpId(); }
 
     void                SetActivatePageHdl( const Link& rLink ) { maActivateHdl = rLink; }

@@ -1653,18 +1653,18 @@ sal_Bool Window::IsZoom() const
     return mpWindowImpl->maZoom.GetNumerator() != mpWindowImpl->maZoom.GetDenominator();
 }
 
-void Window::SetHelpText( const XubString& rHelpText )
+void Window::SetHelpText( const OUString& rHelpText )
 {
     mpWindowImpl->maHelpText = rHelpText;
     mpWindowImpl->mbHelpTextDynamic = sal_True;
 }
 
-void Window::SetQuickHelpText( const XubString& rHelpText )
+void Window::SetQuickHelpText( const OUString& rHelpText )
 {
     mpWindowImpl->maQuickHelpText = rHelpText;
 }
 
-const XubString& Window::GetQuickHelpText() const
+const OUString& Window::GetQuickHelpText() const
 {
     return mpWindowImpl->maQuickHelpText;
 }

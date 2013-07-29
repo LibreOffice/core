@@ -209,8 +209,8 @@ struct ImplFrameData
 struct ImplAccessibleInfos
 {
     sal_uInt16 nAccessibleRole;
-    String* pAccessibleName;
-    String* pAccessibleDescription;
+    OUString* pAccessibleName;
+    OUString* pAccessibleDescription;
     Window* pLabeledByWindow;
     Window* pLabelForWindow;
     Window* pMemberOfWindow;
@@ -263,7 +263,7 @@ public:
     Cursor*             mpCursor;
     Pointer             maPointer;
     Fraction            maZoom;
-    XubString           maText;
+    OUString            maText;
     Font*               mpControlFont;
     Color               maControlForeground;
     Color               maControlBackground;
@@ -277,10 +277,10 @@ public:
     long                mnY;
     long                mnAbsScreenX;
     Point               maPos;
-    OString        maHelpId;
-    OString        maUniqId;
-    XubString           maHelpText;
-    XubString           maQuickHelpText;
+    OString             maHelpId;
+    OString             maUniqId;
+    OUString            maHelpText;
+    OUString            maQuickHelpText;
     InputContext        maInputContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > mxWindowPeer;
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > mxAccessible;
