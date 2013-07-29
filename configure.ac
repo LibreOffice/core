@@ -1624,13 +1624,6 @@ AC_ARG_WITH(system-bluez,
         [Use bluetooth.h already on system.]),,
     [with_system_bluez="$with_system_headers"])
 
-AC_ARG_WITH(system-xextensions-headers,
-    AS_HELP_STRING([--with-system-xextensions-headers],
-        [To build without system X11 extensions headers, use
-         --without-system-xextensions-headers. This is possibly
-         useful on legacy unix systems which ship with the libs
-         but without the headers.]))
-
 AC_ARG_WITH(system-mesa-headers,
     AS_HELP_STRING([--with-system-mesa-headers],
         [Use Mesa headers already on system.]),,
@@ -8807,16 +8800,8 @@ if test "$WANT_X11" = "yes"; then
     dnl ===================================================================
     dnl Check for extension headers
     dnl ===================================================================
-    AC_MSG_CHECKING([whether to use internal X11 extensions headers])
-    if test "$with_system_xextensions_headers" != "no"; then
-        AC_MSG_RESULT([no])
-        AC_CHECK_HEADERS(X11/extensions/shape.h,[],[AC_MSG_ERROR([libXext headers not found])],
-        [#include <X11/extensions/shape.h>])
-    else
-        AC_MSG_RESULT([yes])
-        BUILD_TYPE="$BUILD_TYPE X11_EXTENSIONS"
-    fi
-
+    AC_CHECK_HEADERS(X11/extensions/shape.h,[],[AC_MSG_ERROR([libXext headers not found])],
+     [#include <X11/extensions/shape.h>])
 fi
 
 dnl ===================================================================
@@ -8829,14 +8814,8 @@ if test "$WANT_X11" = "yes" -a  "$test_xrender" = "yes"; then
     XRENDER_CFLAGS=$(printf '%s' "$XRENDER_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
     AC_CHECK_LIB([Xrender], [XRenderQueryVersion], [:],
       [AC_MSG_ERROR(libXrender not found or functional)], [])
-    AC_MSG_CHECKING([which Xrender headers to use])
-    if test "$with_system_xextensions_headers" != "no"; then
-        AC_MSG_RESULT([external])
-        AC_CHECK_HEADER(X11/extensions/Xrender.h, [],
-          [AC_MSG_ERROR(Xrender not found. install X)], [])
-    else
-        AC_MSG_RESULT([internal])
-    fi
+    AC_CHECK_HEADER(X11/extensions/Xrender.h, [],
+      [AC_MSG_ERROR(Xrender not found. install X)], [])
 else
     AC_MSG_RESULT([no])
 fi
@@ -11380,18 +11359,16 @@ if test "$test_cairo" = "yes"; then
         CAIRO_CFLAGS=$(printf '%s' "$CAIRO_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
 
         if test "$test_xrender" = "yes"; then
-            if test "$with_system_xextensions_headers" != "no"; then
-                AC_MSG_CHECKING([whether Xrender.h defines PictStandardA8])
-                AC_LANG_PUSH([C])
-                AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <X11/extensions/Xrender.h>]],[[
+            AC_MSG_CHECKING([whether Xrender.h defines PictStandardA8])
+            AC_LANG_PUSH([C])
+            AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <X11/extensions/Xrender.h>]],[[
 #ifdef PictStandardA8
 #else
       return fail;
 #endif
 ]])],[AC_MSG_RESULT([yes])],[AC_MSG_ERROR([no, X headers too old.])])
 
-                AC_LANG_POP([C])
-            fi
+            AC_LANG_POP([C])
         fi
         libo_MINGW_CHECK_DLL([libcairo])
         libo_MINGW_TRY_DLL([libfontconfig])
