@@ -493,6 +493,7 @@
       <object class="GtkAlignment" id="alignment13">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="valign">end</property>
         <property name="top_padding">6</property>
         <property name="left_padding">12</property>
         <child>
@@ -513,6 +514,7 @@
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
+        <property name="pack_type">end</property>
         <property name="position">3</property>
       </packing>
     </child>
