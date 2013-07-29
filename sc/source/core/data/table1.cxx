@@ -1475,7 +1475,7 @@ void ScTable::UpdateReference(
 
     // Named expressions need to be updated before formulas acessing them.
     if (mpRangeName)
-        mpRangeName->UpdateReference( eUpdateRefMode, aRange, nDx, nDy, nDz, true );
+        mpRangeName->UpdateReference(rCxt, true);
 
     for ( ; i<=iMax; i++)
         bUpdated |= aCol[i].UpdateReference(rCxt, pUndoDoc);

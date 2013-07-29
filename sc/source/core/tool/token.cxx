@@ -2156,7 +2156,6 @@ void ScTokenArray::AdjustAbsoluteRefs( const ScDocument* pOldDoc, const ScAddres
                     AdjustSingleRefData( rRef1, rOldPos, rNewPos );
                 if (!bRangeName || !(rRef2.IsColRel() || rRef2.IsRowRel() || rRef2.IsTabRel()))
                     AdjustSingleRefData( rRef2, rOldPos, rNewPos );
-
             }
             break;
             case svSingleRef :
@@ -2169,8 +2168,6 @@ void ScTokenArray::AdjustAbsoluteRefs( const ScDocument* pOldDoc, const ScAddres
                 // for range names only adjust if all parts are absolute
                 if (!bRangeName || !(rRef.IsColRel() || rRef.IsRowRel() || rRef.IsTabRel()))
                     AdjustSingleRefData( rRef, rOldPos, rNewPos );
-
-
             }
             break;
             default:
@@ -2524,6 +2521,88 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMove(
                 }
 
                 rRef.SetRange(aAbs, rNewPos);
+            }
+            break;
+            default:
+                ;
+        }
+    }
+
+    return aRes;
+}
+
+namespace {
+
+bool adjustSingleRefInName( ScSingleRefData& rRef, const sc::RefUpdateContext& rCxt )
+{
+    if (rRef.IsTabRel())
+        // Ignore reference with relative sheet position for now.
+        return false;
+
+    if (rRef.Tab() < rCxt.maRange.aStart.Tab() || rCxt.maRange.aEnd.Tab() < rRef.Tab())
+        // References sheet that has not shifted. Don't change it.
+        return false;
+
+    bool bChanged = false;
+
+    if (!rRef.IsColRel() && rCxt.mnColDelta)
+    {
+        // Adjust absolute column reference.
+        if (rCxt.maRange.aStart.Col() <= rRef.Col() && rRef.Col() <= rCxt.maRange.aEnd.Col())
+        {
+            rRef.IncCol(rCxt.mnColDelta);
+            bChanged = true;
+        }
+    }
+
+    if (!rRef.IsRowRel() && rCxt.mnRowDelta)
+    {
+        // Adjust absolute row reference.
+        if (rCxt.maRange.aStart.Row() <= rRef.Row() && rRef.Row() <= rCxt.maRange.aEnd.Row())
+        {
+            rRef.IncRow(rCxt.mnRowDelta);
+            bChanged = true;
+        }
+    }
+
+    if (!rRef.IsTabRel() && rCxt.mnTabDelta)
+    {
+        // Sheet range has already been checked above.
+        rRef.IncTab(rCxt.mnTabDelta);
+        bChanged = true;
+    }
+
+    return bChanged;
+}
+
+}
+
+sc::RefUpdateResult ScTokenArray::AdjustReferenceInName( const sc::RefUpdateContext& rCxt )
+{
+    sc::RefUpdateResult aRes;
+
+    FormulaToken** p = pCode;
+    FormulaToken** pEnd = p + static_cast<size_t>(nLen);
+    for (; p != pEnd; ++p)
+    {
+        switch ((*p)->GetType())
+        {
+            case svSingleRef:
+            {
+                ScToken* pToken = static_cast<ScToken*>(*p);
+                ScSingleRefData& rRef = pToken->GetSingleRef();
+                if (adjustSingleRefInName(rRef, rCxt))
+                    aRes.mbReferenceModified = true;
+            }
+            break;
+            case svDoubleRef:
+            {
+                ScToken* pToken = static_cast<ScToken*>(*p);
+                ScComplexRefData& rRef = pToken->GetDoubleRef();
+                if (adjustSingleRefInName(rRef.Ref1, rCxt))
+                    aRes.mbReferenceModified = true;
+                if (adjustSingleRefInName(rRef.Ref2, rCxt))
+                    aRes.mbReferenceModified = true;
             }
             break;
             default:

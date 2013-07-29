@@ -133,6 +133,18 @@ public:
         const sc::RefUpdateContext& rCxt, const ScAddress& rOldPos, const ScAddress& rNewPos );
 
     /**
+     * Adjust all references in named expression. In named expression, we only
+     * update absolute positions, and leave relative positions intact.
+     *
+     * Also, there is no such thing as the base position in named expressions.
+     *
+     * @param rCxt context that stores details of shifted region
+     *
+     * @return update result.
+     */
+    sc::RefUpdateResult AdjustReferenceInName( const sc::RefUpdateContext& rCxt );
+
+    /**
      * Adjust all references on sheet deletion.
      *
      * @param nDelPos position of sheet being deleted.

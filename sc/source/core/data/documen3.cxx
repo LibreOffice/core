@@ -1006,7 +1006,7 @@ void ScDocument::UpdateReference(
         xRowNameRanges->UpdateReference( eUpdateRefMode, this, aRange, nDx, nDy, nDz );
         pDBCollection->UpdateReference( eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, nDx, nDy, nDz );
         if (pRangeName)
-            pRangeName->UpdateReference( eUpdateRefMode, aRange, nDx, nDy, nDz );
+            pRangeName->UpdateReference(rCxt, false);
         if ( pDPCollection )
             pDPCollection->UpdateReference( eUpdateRefMode, aRange, nDx, nDy, nDz );
         UpdateChartRef( eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, nDx, nDy, nDz );

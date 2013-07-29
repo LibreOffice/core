@@ -33,6 +33,7 @@
 #include "rechead.hxx"
 #include "refupdat.hxx"
 #include "document.hxx"
+#include "refupdatecontext.hxx"
 
 #include "formula/errorcodes.hxx"
 
@@ -46,7 +47,7 @@ using ::std::unary_function;
 
 ScRangeData::ScRangeData( ScDocument* pDok,
                           const OUString& rName,
-                          const String& rSymbol,
+                          const OUString& rSymbol,
                           const ScAddress& rAddress,
                           RangeType nType,
                           const FormulaGrammar::Grammar eGrammar ) :
@@ -62,7 +63,7 @@ ScRangeData::ScRangeData( ScDocument* pDok,
                 mnMaxRow    (-1),
                 mnMaxCol    (-1)
 {
-    if (rSymbol.Len() > 0)
+    if (!rSymbol.isEmpty())
         CompileRangeData( rSymbol, pDoc->IsImportingXML());
         // Let the compiler set an error on unknown names for a subsequent
         // CompileUnresolvedXML().
@@ -141,7 +142,7 @@ ScRangeData::~ScRangeData()
     delete pCode;
 }
 
-void ScRangeData::CompileRangeData( const String& rSymbol, bool bSetError )
+void ScRangeData::CompileRangeData( const OUString& rSymbol, bool bSetError )
 {
     if (eTempGrammar == FormulaGrammar::GRAM_UNSPECIFIED)
     {
@@ -270,33 +271,12 @@ void ScRangeData::UpdateSymbol( OUStringBuffer& rBuffer, const ScAddress& rPos,
     aComp.CreateStringFromTokenArray( rBuffer );
 }
 
-void ScRangeData::UpdateReference(  UpdateRefMode eUpdateRefMode,
-                                    const ScRange& r,
-                                    SCsCOL nDx, SCsROW nDy, SCsTAB nDz, bool bLocal )
+void ScRangeData::UpdateReference( const sc::RefUpdateContext& rCxt, bool /*bLocal*/ )
 {
     bool bChanged = false;
-
-    pCode->Reset();
-    if( pCode->GetNextReference() )
-    {
-        bool bSharedFormula = ((eType & RT_SHARED) == RT_SHARED);
-        ScCompiler aComp( pDoc, aPos, *pCode );
-        aComp.SetGrammar(pDoc->GetGrammar());
-        const bool bRelRef = aComp.UpdateNameReference( eUpdateRefMode, r,
-                                                    nDx, nDy, nDz,
-                                                    bChanged, bSharedFormula, bLocal);
-        if (bSharedFormula)
-        {
-            if (bRelRef)
-                eType = eType | RT_SHAREDMOD;
-            else
-                eType = eType & ~RT_SHAREDMOD;
-        }
-    }
-
-    bModified = bChanged;
+    sc::RefUpdateResult aRes = pCode->AdjustReferenceInName(rCxt);
+    bModified = aRes.mbReferenceModified;
 }
-
 
 void ScRangeData::UpdateTranspose( const ScRange& rSource, const ScAddress& rDest )
 {
@@ -733,12 +713,11 @@ ScRangeData* ScRangeName::findByIndex(sal_uInt16 i) const
     return nPos < maIndexToData.size() ? maIndexToData[nPos] : NULL;
 }
 
-void ScRangeName::UpdateReference(
-    UpdateRefMode eUpdateRefMode, const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz, bool bLocal)
+void ScRangeName::UpdateReference(const sc::RefUpdateContext& rCxt, bool bLocal)
 {
     DataType::iterator itr = maData.begin(), itrEnd = maData.end();
     for (; itr != itrEnd; ++itr)
-        itr->second->UpdateReference(eUpdateRefMode, rRange, nDx, nDy, nDz, bLocal);
+        itr->second->UpdateReference(rCxt, bLocal);
 }
 
 void ScRangeName::UpdateTabRef(SCTAB nTable, ScRangeData::TabRefUpdateMode eMode, SCTAB nNewTable, SCTAB nNewSheets)

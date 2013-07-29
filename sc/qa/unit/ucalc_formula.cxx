@@ -964,6 +964,62 @@ void Test::testFormulaRefUpdateMove()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testFormulaRefUpdateNamedExpression()
+{
+    m_pDoc->InsertTab(0, "Formula");
+
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+
+    // Fill C2:C5 with values.
+    m_pDoc->SetValue(ScAddress(2,1,0), 1);
+    m_pDoc->SetValue(ScAddress(2,2,0), 2);
+    m_pDoc->SetValue(ScAddress(2,3,0), 3);
+    m_pDoc->SetValue(ScAddress(2,4,0), 4);
+
+    // Add a named expression that references the immediate left cell.
+    ScRangeName* pGlobalNames = m_pDoc->GetRangeName();
+    CPPUNIT_ASSERT_MESSAGE("Failed to obtain global named expression object.", pGlobalNames);
+    ScRangeData* pName = new ScRangeData(
+        m_pDoc, "ToLeft", "RC[-1]", ScAddress(2,1,0), RT_NAME, formula::FormulaGrammar::GRAM_NATIVE_XL_R1C1);
+
+    bool bInserted = pGlobalNames->insert(pName);
+    CPPUNIT_ASSERT_MESSAGE("Failed to insert a new name.", bInserted);
+
+    // Insert formulas in D2:D5 using the named expression.
+    m_pDoc->SetString(ScAddress(3,1,0), "=ToLeft");
+    m_pDoc->SetString(ScAddress(3,2,0), "=ToLeft");
+    m_pDoc->SetString(ScAddress(3,3,0), "=ToLeft");
+    m_pDoc->SetString(ScAddress(3,4,0), "=ToLeft");
+
+    // Make sure the results are correct.
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(3,1,0));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(3,2,0));
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(3,3,0));
+    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(3,4,0));
+
+    // Push cells in column C down by one cell.
+    m_pDoc->InsertRow(ScRange(2,0,0,2,0,0));
+
+    // Make sure the results change accordingly.
+    CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(3,1,0));
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(3,2,0));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(3,3,0));
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(3,4,0));
+
+    // Move cells back.
+    m_pDoc->DeleteRow(ScRange(2,0,0,2,0,0));
+
+    // Make sure the results are back as well.
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(3,1,0));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(3,2,0));
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(3,3,0));
+    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(3,4,0));
+
+
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testFuncCOLUMN()
 {
     m_pDoc->InsertTab(0, "Formula");

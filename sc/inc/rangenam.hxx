@@ -33,6 +33,10 @@
 class ScDocument;
 class ScTokenArray;
 
+namespace sc {
+    struct RefUpdateContext;
+}
+
 typedef sal_uInt16 RangeType;
 
 #define RT_NAME             ((RangeType)0x0000)
@@ -65,7 +69,7 @@ private:
     SCROW           mnMaxRow;
     SCCOL           mnMaxCol;
 
-    void CompileRangeData( const String& rSymbol, bool bSetError );
+    void CompileRangeData( const OUString& rSymbol, bool bSetError );
     void InitCode();
 public:
 
@@ -75,7 +79,7 @@ public:
 
     SC_DLLPUBLIC                ScRangeData( ScDocument* pDoc,
                                  const OUString& rName,
-                                 const String& rSymbol,
+                                 const OUString& rSymbol,
                                  const ScAddress& rAdr = ScAddress(),
                                  RangeType nType = RT_NAME,
                                  const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT );
@@ -118,9 +122,7 @@ public:
     SC_DLLPUBLIC void GetSymbol( OUString& rSymbol, const ScAddress& rPos, const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT ) const;
     void            UpdateSymbol( OUStringBuffer& rBuffer, const ScAddress&,
                                     const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT );
-    void            UpdateReference( UpdateRefMode eUpdateRefMode,
-                             const ScRange& r,
-                             SCsCOL nDx, SCsROW nDy, SCsTAB nDz, bool bLocal = false );
+    void UpdateReference( const sc::RefUpdateContext& rCxt, bool bLocal = false );
     bool            IsModified() const              { return bModified; }
 
     SC_DLLPUBLIC void           GuessPosition();
@@ -181,8 +183,7 @@ public:
     SC_DLLPUBLIC ScRangeData* findByUpperName(const OUString& rName);
     SC_DLLPUBLIC const ScRangeData* findByUpperName(const OUString& rName) const;
     SC_DLLPUBLIC ScRangeData* findByIndex(sal_uInt16 i) const;
-    void UpdateReference(UpdateRefMode eUpdateRefMode, const ScRange& rRange,
-                         SCsCOL nDx, SCsROW nDy, SCsTAB nDz, bool bLocal = false);
+    void UpdateReference(const sc::RefUpdateContext& rCxt, bool bLocal = false);
     void UpdateTabRef(SCTAB nTable, ScRangeData::TabRefUpdateMode eMode, SCTAB nNewTable = 0, SCTAB nNewSheets = 1);
     void UpdateTranspose(const ScRange& rSource, const ScAddress& rDest);
     void UpdateGrow(const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY);
