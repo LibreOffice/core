@@ -20,6 +20,7 @@
 
 #include <svtools/svmedit.hxx>
 #include <vcl/xtextedt.hxx>
+#include <vcl/builder.hxx>
 #include <svtools/editsyntaxhighlighter.hxx>
 #include <vcl/txtattr.hxx>
 
@@ -36,6 +37,11 @@ MultiLineEditSyntaxHighlight::MultiLineEditSyntaxHighlight( Window* pParent, con
 {
     EnableUpdateData(300);
     aHighlighter.initialize( aLanguage );
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeMultiLineEditSyntaxHighlight(Window *pParent, VclBuilder::stringmap &)
+{
+    return new MultiLineEditSyntaxHighlight(pParent);
 }
 
 MultiLineEditSyntaxHighlight::~MultiLineEditSyntaxHighlight()
