@@ -10,6 +10,7 @@
 $(eval $(call gb_UIConfig_UIConfig,dbaccess))
 
 $(eval $(call gb_UIConfig_add_uifiles,dbaccess, \
+    dbaccess/uiconfig/ui/directsqldialog  \
     dbaccess/uiconfig/ui/querypropertiesdialog  \
     dbaccess/uiconfig/ui/generalpagedialog \
     dbaccess/uiconfig/ui/generalpagewizard \
