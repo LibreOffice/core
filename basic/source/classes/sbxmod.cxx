@@ -894,10 +894,7 @@ void SbModule::SetSource32( const OUString& r )
     StartDefinitions();
     SbiTokenizer aTok( r );
     aTok.SetCompatible( IsVBACompat() );
-    if( CodeCompleteOptions::IsProcedureAutoCompleteOn() )
-    {
-        aIncompleteProcs.clear();
-    }
+
     while( !aTok.IsEof() )
     {
         SbiToken eEndTok = NIL;
@@ -941,15 +938,12 @@ void SbModule::SetSource32( const OUString& r )
         }
         // Definition of the method
         SbMethod* pMeth = NULL;
-        OUString sMethName;
         if( eEndTok != NIL )
         {
             sal_uInt16 nLine1 = aTok.GetLine();
             if( aTok.Next() == SYMBOL )
             {
                 OUString aName_( aTok.GetSym() );
-                //std::cerr << "method name: " << aName_ << std::endl;
-                sMethName = aName_;
                 SbxDataType t = aTok.GetType();
                 if( t == SbxVARIANT && eEndTok == ENDSUB )
                 {
@@ -973,34 +967,16 @@ void SbModule::SetSource32( const OUString& r )
                 if( aTok.Next() == eEndTok )
                 {
                     pMeth->nLine2 = aTok.GetLine();
-                    //std::cerr << "there is end for "<< sMethName << std::endl;
                     break;
                 }
             }
             if( aTok.IsEof() )
             {
                 pMeth->nLine2 = aTok.GetLine();
-                if( CodeCompleteOptions::IsProcedureAutoCompleteOn() )
-                {
-                    IncompleteProcData aProcData;
-                    aProcData.sProcName = sMethName;
-                    aProcData.nLine = pMeth->nLine2;
-
-                    if( eEndTok == ENDSUB )
-                        aProcData.aType = ACSUB;
-                    if( eEndTok == ENDFUNC )
-                        aProcData.aType = ACFUNC;
-                    aIncompleteProcs.push_back(aProcData);
-                }
             }
         }
     }
     EndDefinitions( sal_True );
-}
-
-IncompleteProcedures SbModule::GetIncompleteProcedures() const
-{
-    return aIncompleteProcs;
 }
 
 // Broadcast of a hint to all Basics

@@ -56,7 +56,6 @@ class BASIC_DLLPUBLIC SbModule : public SbxObject, private ::boost::noncopyable
     std::vector< OUString > mModuleVariableNames;
 
     BASIC_DLLPRIVATE void implClearIfVarDependsOnDeletedBasic( SbxVariable* pVar, StarBASIC* pDeletedBasic );
-    IncompleteProcedures aIncompleteProcs;
 
 protected:
     com::sun::star::uno::Reference< com::sun::star::script::XInvocation > mxWrapper;
@@ -137,7 +136,6 @@ public:
     bool createCOMWrapperForIface( ::com::sun::star::uno::Any& o_rRetAny, SbClassModuleObject* pProxyClassModuleObject );
     void GetCodeCompleteDataFromParse(CodeCompleteDataCache& aCache);
     SbxArrayRef GetMethods();
-    IncompleteProcedures GetIncompleteProcedures() const;
 };
 
 SV_DECL_IMPL_REF(SbModule)

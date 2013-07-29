@@ -508,6 +508,37 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
     // see if there is an accelerator to be processed first
     bool bDone = SfxViewShell::Current()->KeyInput( rKEvt );
 
+    if( (rKEvt.GetKeyCode().GetCode() == KEY_SPACE ||
+        rKEvt.GetKeyCode().GetCode() == KEY_TAB ||
+        rKEvt.GetKeyCode().GetCode() == KEY_RETURN ) && CodeCompleteOptions::IsAutoCorrectSpellingOn() )
+    {
+        TextSelection aSel = GetEditView()->GetSelection();
+        sal_uLong nLine =  aSel.GetStart().GetPara();
+        OUString aLine( pEditEngine->GetText( nLine ) ); // the line being modified
+
+        HighlightPortions aPortions;
+        aHighlighter.getHighlightPortions( nLine, aLine, aPortions );
+        if( aPortions.size() > 0 )
+        {
+            HighlightPortion& r = aPortions[aPortions.size()-1];
+            if( r.tokenType == 9 ) // correct the last entered keyword
+            {
+                OUString sStr = aLine.copy(r.nBegin, r.nEnd - r.nBegin);
+                if( !sStr.isEmpty() )
+                {
+                    //capitalize first letter and replace
+                    sStr = sStr.toAsciiLowerCase();
+                    sStr = sStr.replaceAt( 0, 1, OUString(sStr[0]).toAsciiUpperCase() );
+
+                    TextPaM aStart(nLine, aSel.GetStart().GetIndex() - sStr.getLength() );
+                    TextSelection sTextSelection(aStart, TextPaM(nLine, aSel.GetStart().GetIndex()));
+                    pEditEngine->ReplaceText( sTextSelection, sStr );
+                    pEditView->SetSelection( aSel );
+                }
+            }
+        }
+    }
+
     if( rKEvt.GetCharCode() == '"' && CodeCompleteOptions::IsAutoCloseQuotesOn() )
     {//autoclose double quotes
         TextSelection aSel = GetEditView()->GetSelection();
@@ -547,21 +578,77 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
     {//autoclose implementation
         TextSelection aSel = GetEditView()->GetSelection();
         sal_uLong nLine = aSel.GetStart().GetPara();
+        OUString aLine( pEditEngine->GetText( nLine ) );
         OUString sActSub = GetActualSubName( nLine );
-        IncompleteProcedures aProcData = rModulWindow.GetSbModule()->GetIncompleteProcedures();
-        for( unsigned int i = 0; i < aProcData.size(); ++i )
+
+        HighlightPortions aPortions;
+        aHighlighter.getHighlightPortions( nLine, aLine, aPortions );
+        OUString sProcType;
+        OUString sProcName;
+        bool bFoundType = false;
+        bool bFoundName = false;
+        if( aPortions.size() != 0 )
         {
-            if( aProcData[i].sProcName == sActSub )
-            {//found the procedure to autocomplete
-                TextPaM aEnd( aProcData[i].nLine, 0 );
-                TextPaM aStart( aProcData[i].nLine, 0 );
-                GetEditView()->SetSelection( TextSelection( aStart, aEnd ) );
-                if( aProcData[i].aType == AutocompleteType::ACSUB )
-                    GetEditView()->InsertText( OUString("\nEnd Sub\n") );
-                if( aProcData[i].aType == AutocompleteType::ACFUNC )
-                    GetEditView()->InsertText( OUString("\nEnd Function\n") );
-                GetEditView()->SetSelection( aSel );
-                break;
+            for ( size_t i = 0; i < aPortions.size(); i++ )
+            {
+                HighlightPortion& r = aPortions[i];
+                OUString sTokStr = aLine.copy(r.nBegin, r.nEnd - r.nBegin);
+                if( r.tokenType == 9 && ( sTokStr.equalsIgnoreAsciiCase("sub")
+                    || sTokStr.equalsIgnoreAsciiCase("function")) )
+                {
+                    sProcType = sTokStr;
+                    bFoundType = true;
+                }
+                if( r.tokenType == 1 && bFoundType )
+                {
+                    sProcName = sTokStr;
+                    bFoundName = true;
+                    break;
+                }
+            }
+            if( bFoundType && bFoundName )
+            {// found, search for end
+                if( nLine+1 == pEditEngine->GetParagraphCount() )
+                { //append to the end
+                    OUString sText("\nEnd ");
+                    if( sProcType.equalsIgnoreAsciiCase("function") )
+                        sText += OUString( "Function\n" );
+                    if( sProcType.equalsIgnoreAsciiCase("sub") )
+                        sText += OUString( "Sub\n" );
+                    pEditView->InsertText( sText );
+                }
+                else
+                {
+                    for( sal_uLong i = nLine+1; i < pEditEngine->GetParagraphCount(); ++i )
+                    {
+                        OUString aCurrLine = pEditEngine->GetText( i );
+                        HighlightPortions aCurrPortions;
+                        aHighlighter.getHighlightPortions( i, aCurrLine, aCurrPortions );
+                        if( aCurrPortions.size() >= 3 )
+                        {
+                            HighlightPortion& r1 = aCurrPortions[0];
+                            OUString sStr1 = aCurrLine.copy(r1.nBegin, r1.nEnd - r1.nBegin);
+
+                            if( r1.tokenType == 9 )
+                            {
+                                if( sStr1.equalsIgnoreAsciiCase("sub") )
+                                {
+                                    pEditView->InsertText( OUString ( "\nEnd Sub\n" ) );
+                                    break;
+                                }
+                                if( sStr1.equalsIgnoreAsciiCase("function") )
+                                {
+                                    pEditView->InsertText( OUString ( "\nEnd Function\n" ) );
+                                    break;
+                                }
+                                if( sStr1.equalsIgnoreAsciiCase("end") )
+                                {
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -588,6 +675,13 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
 
             OUString sBaseName = aVect[0];//variable name
             OUString sVarType = aCodeCompleteCache.GetVarType( sBaseName );
+            if( !sVarType.isEmpty() && CodeCompleteOptions::IsAutoCorrectSpellingOn() )//correct variable name
+            {
+                TextPaM aStart(nLine, aSel.GetStart().GetIndex() - sBaseName.getLength() );
+                TextSelection sTextSelection(aStart, TextPaM(nLine, aSel.GetStart().GetIndex()));
+                pEditEngine->ReplaceText( sTextSelection, aCodeCompleteCache.GetCorrectCaseVarName(sBaseName) );
+                pEditView->SetSelection( aSel );
+            }
 
             Reference< lang::XMultiServiceFactory > xFactory( comphelper::getProcessServiceFactory(), UNO_SET_THROW );
             Reference< reflection::XIdlReflection > xRefl( xFactory->createInstance("com.sun.star.reflection.CoreReflection"), UNO_QUERY_THROW );

@@ -36,6 +36,7 @@ private:
     CheckBox* pAutocloseProcChk;
     CheckBox* pAutocloseParenChk;
     CheckBox* pAutocloseQuotesChk;
+    CheckBox* pAutoCorrectSpellingChk;
 
     DECL_LINK(OkHdl, void*);
     DECL_LINK(CancelHdl, void*);
