@@ -23,6 +23,7 @@
 #include <cassert>
 #include <limits>
 #include <unistd.h>
+#include <sys/stat.h>
 #endif
 
 #include "osl/process.h"
@@ -64,7 +65,9 @@ void sal_detail_initialize(int argc, char ** argv) {
     }
     assert(openMax >= 0 && openMax <= std::numeric_limits< int >::max());
     for (int fd = 3; fd < openMax; ++fd) {
-        close(fd);
+        struct stat s;
+        if (fstat(fd, &s) != -1 && S_ISREG(s.st_mode))
+            close(fd);
     }
 #endif
     sal_initGlobalTimer();
