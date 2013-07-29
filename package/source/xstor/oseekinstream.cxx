@@ -106,7 +106,6 @@ void SAL_CALL OInputSeekStream::release()
     OInputCompStream::release();
 }
 
-
 void SAL_CALL OInputSeekStream::seek( sal_Int64 location )
         throw ( lang::IllegalArgumentException,
                 io::IOException,

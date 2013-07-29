@@ -124,7 +124,6 @@ void ZipPackageStream::setZipEntryOnLoading( const ZipEntry &rInEntry )
         bToBeCompressed = sal_False;
 }
 
-//--------------------------------------------------------------------------
 void ZipPackageStream::CloseOwnStreamIfAny()
 {
     if ( xStream.is() )
@@ -135,7 +134,6 @@ void ZipPackageStream::CloseOwnStreamIfAny()
     }
 }
 
-//--------------------------------------------------------------------------
 uno::Reference< io::XInputStream > ZipPackageStream::GetOwnSeekStream()
 {
     if ( !m_bHasSeekable && xStream.is() )
@@ -156,7 +154,6 @@ uno::Reference< io::XInputStream > ZipPackageStream::GetOwnSeekStream()
     return xStream;
 }
 
-//--------------------------------------------------------------------------
 uno::Reference< io::XInputStream > ZipPackageStream::GetRawEncrStreamNoHeaderCopy()
 {
     if ( m_nStreamMode != PACKAGE_STREAM_RAW || !GetOwnSeekStream().is() )
@@ -189,19 +186,16 @@ uno::Reference< io::XInputStream > ZipPackageStream::GetRawEncrStreamNoHeaderCop
     return xTempIn;
 }
 
-//--------------------------------------------------------------------------
 sal_Int32 ZipPackageStream::GetEncryptionAlgorithm() const
 {
     return m_nImportedEncryptionAlgorithm ? m_nImportedEncryptionAlgorithm : rZipPackage.GetEncAlgID();
 }
 
-//--------------------------------------------------------------------------
 sal_Int32 ZipPackageStream::GetBlockSize() const
 {
     return GetEncryptionAlgorithm() == ::com::sun::star::xml::crypto::CipherID::AES_CBC_W3C_PADDING ? 16 : 8;
 }
 
-//--------------------------------------------------------------------------
 ::rtl::Reference< EncryptionData > ZipPackageStream::GetEncryptionData( bool bUseWinEncoding )
 {
     ::rtl::Reference< EncryptionData > xResult;
@@ -217,7 +211,6 @@ sal_Int32 ZipPackageStream::GetBlockSize() const
     return xResult;
 }
 
-//--------------------------------------------------------------------------
 uno::Sequence< sal_Int8 > ZipPackageStream::GetEncryptionKey( bool bUseWinEncoding )
 {
     uno::Sequence< sal_Int8 > aResult;
@@ -254,7 +247,6 @@ uno::Sequence< sal_Int8 > ZipPackageStream::GetEncryptionKey( bool bUseWinEncodi
     return aResult;
 }
 
-//--------------------------------------------------------------------------
 sal_Int32 ZipPackageStream::GetStartKeyGenID()
 {
     // generally should all the streams use the same Start Key
@@ -262,7 +254,6 @@ sal_Int32 ZipPackageStream::GetStartKeyGenID()
     return m_nImportedStartKeyAlgorithm ? m_nImportedStartKeyAlgorithm : rZipPackage.GetStartKeyGenID();
 }
 
-//--------------------------------------------------------------------------
 uno::Reference< io::XInputStream > ZipPackageStream::TryToGetRawFromDataStream( sal_Bool bAddHeaderForEncr )
 {
     if ( m_nStreamMode != PACKAGE_STREAM_DATA || !GetOwnSeekStream().is() || ( bAddHeaderForEncr && !bToBeEncrypted ) )
@@ -370,7 +361,6 @@ uno::Reference< io::XInputStream > ZipPackageStream::TryToGetRawFromDataStream( 
     throw io::IOException(OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
 }
 
-//--------------------------------------------------------------------------
 sal_Bool ZipPackageStream::ParsePackageRawStream()
 {
     OSL_ENSURE( GetOwnSeekStream().is(), "A stream must be provided!\n" );
@@ -454,7 +444,6 @@ void ZipPackageStream::SetPackageMember( sal_Bool bNewValue )
 }
 
 // XActiveDataSink
-//--------------------------------------------------------------------------
 void SAL_CALL ZipPackageStream::setInputStream( const uno::Reference< io::XInputStream >& aStream )
         throw( RuntimeException )
 {
@@ -467,7 +456,6 @@ void SAL_CALL ZipPackageStream::setInputStream( const uno::Reference< io::XInput
     m_nStreamMode = PACKAGE_STREAM_DETECT;
 }
 
-//--------------------------------------------------------------------------
 uno::Reference< io::XInputStream > SAL_CALL ZipPackageStream::getRawData()
         throw( RuntimeException )
 {
@@ -496,7 +484,6 @@ uno::Reference< io::XInputStream > SAL_CALL ZipPackageStream::getRawData()
     }
 }
 
-//--------------------------------------------------------------------------
 uno::Reference< io::XInputStream > SAL_CALL ZipPackageStream::getInputStream()
         throw( RuntimeException )
 {
@@ -528,7 +515,6 @@ uno::Reference< io::XInputStream > SAL_CALL ZipPackageStream::getInputStream()
 }
 
 // XDataSinkEncrSupport
-//--------------------------------------------------------------------------
 uno::Reference< io::XInputStream > SAL_CALL ZipPackageStream::getDataStream()
         throw ( packages::WrongPasswordException,
                 io::IOException,
@@ -572,7 +558,6 @@ uno::Reference< io::XInputStream > SAL_CALL ZipPackageStream::getDataStream()
         return uno::Reference< io::XInputStream >();
 }
 
-//--------------------------------------------------------------------------
 uno::Reference< io::XInputStream > SAL_CALL ZipPackageStream::getRawStream()
         throw ( packages::NoEncryptionException,
                 io::IOException,
@@ -606,8 +591,6 @@ uno::Reference< io::XInputStream > SAL_CALL ZipPackageStream::getRawStream()
     throw packages::NoEncryptionException(OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
 }
 
-
-//--------------------------------------------------------------------------
 void SAL_CALL ZipPackageStream::setDataStream( const uno::Reference< io::XInputStream >& aStream )
         throw ( io::IOException,
                 RuntimeException )
@@ -616,7 +599,6 @@ void SAL_CALL ZipPackageStream::setDataStream( const uno::Reference< io::XInputS
     m_nStreamMode = PACKAGE_STREAM_DATA;
 }
 
-//--------------------------------------------------------------------------
 void SAL_CALL ZipPackageStream::setRawStream( const uno::Reference< io::XInputStream >& aStream )
         throw ( packages::EncryptionNotAllowedException,
                 packages::NoRawFormatException,
@@ -647,7 +629,6 @@ void SAL_CALL ZipPackageStream::setRawStream( const uno::Reference< io::XInputSt
     m_nStreamMode = PACKAGE_STREAM_RAW;
 }
 
-//--------------------------------------------------------------------------
 uno::Reference< io::XInputStream > SAL_CALL ZipPackageStream::getPlainRawStream()
         throw ( io::IOException,
                 uno::RuntimeException )
@@ -680,7 +661,6 @@ uno::Reference< io::XInputStream > SAL_CALL ZipPackageStream::getPlainRawStream(
 
 // XUnoTunnel
 
-//--------------------------------------------------------------------------
 sal_Int64 SAL_CALL ZipPackageStream::getSomething( const Sequence< sal_Int8 >& aIdentifier )
     throw( RuntimeException )
 {
@@ -692,7 +672,6 @@ sal_Int64 SAL_CALL ZipPackageStream::getSomething( const Sequence< sal_Int8 >& a
 }
 
 // XPropertySet
-//--------------------------------------------------------------------------
 void SAL_CALL ZipPackageStream::setPropertyValue( const OUString& aPropertyName, const Any& aValue )
         throw( beans::UnknownPropertyException, beans::PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException )
 {
@@ -851,7 +830,6 @@ void SAL_CALL ZipPackageStream::setPropertyValue( const OUString& aPropertyName,
         throw beans::UnknownPropertyException(OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
 }
 
-//--------------------------------------------------------------------------
 Any SAL_CALL ZipPackageStream::getPropertyValue( const OUString& PropertyName )
         throw( beans::UnknownPropertyException, WrappedTargetException, RuntimeException )
 {
@@ -895,21 +873,18 @@ Any SAL_CALL ZipPackageStream::getPropertyValue( const OUString& PropertyName )
         throw beans::UnknownPropertyException(OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
 }
 
-//--------------------------------------------------------------------------
 void ZipPackageStream::setSize ( const sal_Int64 nNewSize )
 {
     if ( aEntry.nCompressedSize != nNewSize )
         aEntry.nMethod = DEFLATED;
     aEntry.nSize = nNewSize;
 }
-//--------------------------------------------------------------------------
 OUString ZipPackageStream::getImplementationName()
     throw ( RuntimeException )
 {
     return OUString ("ZipPackageStream");
 }
 
-//--------------------------------------------------------------------------
 Sequence< OUString > ZipPackageStream::getSupportedServiceNames()
     throw ( RuntimeException )
 {
@@ -917,7 +892,7 @@ Sequence< OUString > ZipPackageStream::getSupportedServiceNames()
     aNames[0] = "com.sun.star.packages.PackageStream";
     return aNames;
 }
-//--------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ZipPackageStream::supportsService( OUString const & rServiceName )
     throw ( RuntimeException )
 {

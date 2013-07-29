@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <rtl/digest.h>
 #include <rtl/ref.hxx>
 
@@ -83,6 +82,5 @@ uno::Sequence< ::sal_Int8 > SAL_CALL SHA1DigestContext::finalizeDigestAndDispose
 
     return aResult;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

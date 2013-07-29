@@ -77,7 +77,6 @@ public:
                  const com::sun::star::uno::Reference < com::sun::star::io::XInputStream >& xRawStream,
                  const ::rtl::Reference< EncryptionData >& rData );
 
-
     virtual ~XUnbufferedStream();
 
     // XInputStream

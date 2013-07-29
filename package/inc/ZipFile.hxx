@@ -125,7 +125,6 @@ public:
             SotMutexHolderRef aMutexHolder )
         throw(::com::sun::star::io::IOException, ::com::sun::star::packages::zip::ZipException, ::com::sun::star::uno::RuntimeException);
 
-
     static ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XDigestContext > StaticGetDigestContextForChecksum(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xArgContext,
             const ::rtl::Reference< EncryptionData >& xEncryptionData );
@@ -161,7 +160,6 @@ public:
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
             const ::com::sun::star::uno::Sequence< sal_Int8 > &aReadBuffer,
             const ::rtl::Reference < EncryptionData > &rData );
-
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getInputStream(
             ZipEntry& rEntry,

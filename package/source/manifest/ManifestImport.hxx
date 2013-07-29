@@ -115,7 +115,6 @@ protected:
     const OUString sPBKDF2_Name;
     const OUString sPBKDF2_URL;
 
-
     OUString PushNameAndNamespaces( const OUString& aName,
                                            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttribs,
                                            StringHashMap& o_aConvertedAttribs );

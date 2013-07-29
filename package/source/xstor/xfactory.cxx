@@ -30,10 +30,8 @@
 #include "xfactory.hxx"
 #include "xstorage.hxx"
 
-
 using namespace ::com::sun::star;
 
-//-------------------------------------------------------------------------
 sal_Bool CheckPackageSignature_Impl( const uno::Reference< io::XInputStream >& xInputStream,
                                      const uno::Reference< io::XSeekable >& xSeekable )
 {
@@ -55,7 +53,6 @@ sal_Bool CheckPackageSignature_Impl( const uno::Reference< io::XInputStream >& x
         return sal_True; // allow to create a storage based on empty stream
 }
 
-//-------------------------------------------------------------------------
 uno::Sequence< OUString > SAL_CALL OStorageFactory::impl_staticGetSupportedServiceNames()
 {
     uno::Sequence< OUString > aRet(2);
@@ -64,20 +61,17 @@ uno::Sequence< OUString > SAL_CALL OStorageFactory::impl_staticGetSupportedServi
     return aRet;
 }
 
-//-------------------------------------------------------------------------
 OUString SAL_CALL OStorageFactory::impl_staticGetImplementationName()
 {
     return OUString("com.sun.star.comp.embed.StorageFactory");
 }
 
-//-------------------------------------------------------------------------
 uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::impl_staticCreateSelfInstance(
             const uno::Reference< lang::XMultiServiceFactory >& xServiceManager )
 {
     return uno::Reference< uno::XInterface >( *new OStorageFactory( comphelper::getComponentContext(xServiceManager) ) );
 }
 
-//-------------------------------------------------------------------------
 uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstance()
     throw ( uno::Exception,
             uno::RuntimeException )
@@ -96,7 +90,6 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstance()
                 uno::UNO_QUERY );
 }
 
-//-------------------------------------------------------------------------
 uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithArguments(
             const uno::Sequence< uno::Any >& aArguments )
     throw ( uno::Exception,
@@ -280,14 +273,12 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
     throw uno::Exception(); // general error during creation
 }
 
-//-------------------------------------------------------------------------
 OUString SAL_CALL OStorageFactory::getImplementationName()
     throw ( uno::RuntimeException )
 {
     return impl_staticGetImplementationName();
 }
 
-//-------------------------------------------------------------------------
 sal_Bool SAL_CALL OStorageFactory::supportsService( const OUString& ServiceName )
     throw ( uno::RuntimeException )
 {
@@ -300,7 +291,6 @@ sal_Bool SAL_CALL OStorageFactory::supportsService( const OUString& ServiceName 
     return sal_False;
 }
 
-//-------------------------------------------------------------------------
 uno::Sequence< OUString > SAL_CALL OStorageFactory::getSupportedServiceNames()
     throw ( uno::RuntimeException )
 {

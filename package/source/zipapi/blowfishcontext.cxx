@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <rtl/cipher.h>
 #include <rtl/ref.hxx>
 
@@ -108,6 +107,5 @@ uno::Sequence< ::sal_Int8 > SAL_CALL BlowfishCFB8CipherContext::finalizeCipherCo
 
     return uno::Sequence< sal_Int8 >();
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
