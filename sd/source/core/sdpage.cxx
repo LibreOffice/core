@@ -1410,7 +1410,7 @@ static void CalcAutoLayoutRectangles( SdPage& rPage, int nLayout, Rectangle* rRe
     sal_Bool    bRightToLeft = ( rPage.GetModel() && static_cast< SdDrawDocument* >( rPage.GetModel() )->GetDefaultWritingMode() == ::com::sun::star::text::WritingMode_RL_TB );
 
     parseXml(); //calling this for temporary reference,have to use it somewhere else.
-    for(int y=0; y < layoutinfo.size(); y++) //loop through vector of Xnodes
+    for(size_t y=0; y < layoutinfo.size(); y++) //loop through vector of Xnodes
     {
         Reference<XNode> layoutnode = layoutinfo[y];      //get i'th layout element
         Reference<XNamedNodeMap> layoutattrlist =layoutnode->getAttributes();
