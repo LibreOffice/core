@@ -638,41 +638,27 @@
       </packing>
     </child>
     <child>
-      <object class="GtkFrame" id="frame12">
+      <object class="GtkAlignment" id="alignment12">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label_xalign">0</property>
-        <property name="shadow_type">none</property>
+        <property name="top_padding">6</property>
+        <property name="left_padding">12</property>
         <child>
-          <object class="GtkAlignment" id="alignment12">
+          <object class="svxlo-SvxFontPrevWindow" id="preview">
+            <property name="height_request">100</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="top_padding">6</property>
-            <property name="left_padding">12</property>
-            <child>
-              <object class="svxlo-SvxFontPrevWindow" id="preview">
-                <property name="height_request">100</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="preview-atkobject">
+                <property name="AtkObject::accessible-name" translatable="yes">Preview</property>
               </object>
             </child>
-          </object>
-        </child>
-        <child type="label">
-          <object class="GtkLabel" id="label50">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Preview</property>
-            <attributes>
-              <attribute name="weight" value="bold"/>
-            </attributes>
           </object>
         </child>
       </object>
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="pack_type">end</property>
         <property name="position">1</property>
       </packing>
     </child>
