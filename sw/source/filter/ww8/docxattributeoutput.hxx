@@ -629,6 +629,9 @@ private:
     /// Flag indicating that the section properties are being written
     bool m_bOpenedSectPr;
 
+    /// Flag indicating that the header \ footer are being written
+    bool m_bWritingHeaderFooter;
+
     /// Field data to remember in the text run
     std::vector< FieldInfos > m_Fields;
     String m_sFieldBkm;
@@ -734,6 +737,9 @@ public:
     virtual oox::drawingml::DrawingML& GetDrawingML();
 
     void BulletDefinition(int nId, const Graphic& rGraphic, Size aSize) SAL_OVERRIDE;
+
+    void SetWritingHeaderFooter( bool bWritingHeaderFooter )    {   m_bWritingHeaderFooter = bWritingHeaderFooter;   }
+    bool GetWritingHeaderFooter( )  {   return m_bWritingHeaderFooter;  }
 };
 
 #endif // _DOCXATTRIBUTEOUTPUT_HXX_
