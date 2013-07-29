@@ -142,18 +142,23 @@ void CodeCompleteDataCache::InsertLocalVar( const OUString& sProcName, const OUS
     }
 }
 
-OUString CodeCompleteDataCache::GetVarType( const OUString& sVarName )
+OUString CodeCompleteDataCache::GetVarType( const OUString& sVarName ) const
 {
     for( CodeCompleteVarScopes::const_iterator aIt = aVarScopes.begin(); aIt != aVarScopes.end(); ++aIt )
     {
         CodeCompleteVarTypes aTypes = aIt->second;
-        if( aTypes[sVarName] != OUString("") )
-            return aTypes[sVarName];
+        for( CodeCompleteVarTypes::const_iterator aOtherIt = aTypes.begin(); aOtherIt != aTypes.end(); ++aOtherIt )
+        {
+            if( aOtherIt->first.equalsIgnoreAsciiCase( sVarName ) )
+            {
+                return aOtherIt->second;
+            }
+        }
     }
     //not a local, search global scope
     for( CodeCompleteVarTypes::const_iterator aIt = aGlobalVars.begin(); aIt != aGlobalVars.end(); ++aIt )
     {
-        if( aIt->first == sVarName )
+        if( aIt->first.equalsIgnoreAsciiCase( sVarName ) )
             return aIt->second;
     }
     return OUString(""); //not found

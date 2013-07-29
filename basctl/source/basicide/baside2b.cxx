@@ -598,6 +598,7 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
                 {
                     unsigned int j = 1;
                     OUString sMethName;
+                    bool bReflect = true;
                     while( j != aVect.size() )
                     {
                         sMethName = aVect[j];
@@ -610,43 +611,47 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
                         }
                         else
                         {
+                            bReflect = false;
                             break;
                         }
                         j++;
                     }
-                    Sequence< Reference< reflection::XIdlMethod > > aMethods = xClass->getMethods();
-                    Sequence< Reference< reflection::XIdlField > > aFields = xClass->getFields();
-                    std::vector< OUString > aEntryVect;
+                    if( bReflect )
+                    {
+                        Sequence< Reference< reflection::XIdlMethod > > aMethods = xClass->getMethods();
+                        Sequence< Reference< reflection::XIdlField > > aFields = xClass->getFields();
+                        std::vector< OUString > aEntryVect;
 
-                    if( aMethods.getLength() != 0 )
-                    {
-                        for(sal_Int32 l = 0; l < aMethods.getLength(); ++l)
+                        if( aMethods.getLength() != 0 )
                         {
-                            aEntryVect.push_back(OUString(aMethods[l]->getName()));
+                            for(sal_Int32 l = 0; l < aMethods.getLength(); ++l)
+                            {
+                                aEntryVect.push_back(OUString(aMethods[l]->getName()));
+                            }
                         }
-                    }
-                    if( aFields.getLength() != 0 )
-                    {
-                        for(sal_Int32 l = 0; l < aFields.getLength(); ++l)
+                        if( aFields.getLength() != 0 )
                         {
-                            aEntryVect.push_back(OUString(aFields[l]->getName()));
+                            for(sal_Int32 l = 0; l < aFields.getLength(); ++l)
+                            {
+                                aEntryVect.push_back(OUString(aFields[l]->getName()));
+                            }
                         }
-                    }
-                    if( aEntryVect.size() > 0 )
-                    {
-                        Rectangle aRect = ( (TextEngine*) GetEditEngine() )->PaMtoEditCursor( aSel.GetEnd() , false );
-                        aSel.GetStart().GetIndex() += 1;
-                        aSel.GetEnd().GetIndex() += 1;
-                        pCodeCompleteWnd->ClearListBox();
-                        pCodeCompleteWnd->SetTextSelection(aSel);
-                        for(unsigned int l = 0; l < aEntryVect.size(); ++l)
+                        if( aEntryVect.size() > 0 )
                         {
-                            pCodeCompleteWnd->InsertEntry( aEntryVect[l] );
+                            Rectangle aRect = ( (TextEngine*) GetEditEngine() )->PaMtoEditCursor( aSel.GetEnd() , false );
+                            aSel.GetStart().GetIndex() += 1;
+                            aSel.GetEnd().GetIndex() += 1;
+                            pCodeCompleteWnd->ClearListBox();
+                            pCodeCompleteWnd->SetTextSelection(aSel);
+                            for(unsigned int l = 0; l < aEntryVect.size(); ++l)
+                            {
+                                pCodeCompleteWnd->InsertEntry( aEntryVect[l] );
+                            }
+                            pCodeCompleteWnd->SetPosPixel( aRect.BottomRight() );
+                            pCodeCompleteWnd->Show();
+                            pCodeCompleteWnd->ResizeListBox();
+                            pCodeCompleteWnd->SelectFirstEntry();
                         }
-                        pCodeCompleteWnd->SetPosPixel( aRect.BottomRight() );
-                        pCodeCompleteWnd->Show();
-                        pCodeCompleteWnd->ResizeListBox();
-                        pCodeCompleteWnd->SelectFirstEntry();
                     }
                 }
             }
