@@ -34,6 +34,24 @@
       "revId": "48e757213e9cfedd7a0a273a5ee9ca9eaf33bc64",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//9vo\u003d",
+        "filename": "sw/source/filter/html/htmlatr.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1464,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-07-29T16:38:47Z",
+      "side": 1,
+      "message": "sorry, I must have missed your answer...\nnonetheless. you cannot change the order of the argument without adjusting the caller.\nhere the prototype was \u0027wrong\u0027 (when you look at the caller), but since both argument had the same type it did not have any impact. note the variable name in the prototype are decorative... and have no semantic impact.\n\nsee line 1586 (as indicated originally)\nthe caller pass: HTMLSttPos*,  sal_Int32 and sal_uInt16\nYou prolly have some warning there with this patch (implicit downcast of a signed 32 bits into an unsigned 16 bit)",
+      "parentUuid": "AAAAXn//9xY\u003d",
+      "revId": "48e757213e9cfedd7a0a273a5ee9ca9eaf33bc64",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
