@@ -16,6 +16,24 @@
       "revId": "37eb789055b3b079fc8f6784832822f85dab2d0e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//9yA\u003d",
+        "filename": "vcl/source/filter/GraphicNativeTransform.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2013-07-29T09:41:26Z",
+      "side": 0,
+      "message": "Yes, instead of modifying the GfxLink it is safer to just import from the stream. This way the image shown and the image contained in GfxLink are equal. In the bug it happened that both were out of sync and the user did not see a problem with the image until he reopened the document.",
+      "parentUuid": "AAAAXn//9yY\u003d",
+      "revId": "37eb789055b3b079fc8f6784832822f85dab2d0e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
