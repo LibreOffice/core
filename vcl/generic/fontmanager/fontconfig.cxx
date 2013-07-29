@@ -777,7 +777,7 @@ static void addtopattern(FcPattern *pPattern,
             case WIDTH_SEMI_EXPANDED:   nWidth = FC_WIDTH_SEMIEXPANDED;break;
             case WIDTH_EXPANDED:        nWidth = FC_WIDTH_EXPANDED;break;
             case WIDTH_EXTRA_EXPANDED:  nWidth = FC_WIDTH_EXTRAEXPANDED;break;
-            case WIDTH_ULTRA_EXPANDED:  nWidth = FC_WIDTH_ULTRACONDENSED;break;
+            case WIDTH_ULTRA_EXPANDED:  nWidth = FC_WIDTH_ULTRAEXPANDED;break;
             default:
                 break;
         }
