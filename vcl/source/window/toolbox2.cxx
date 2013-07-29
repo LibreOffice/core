@@ -133,7 +133,7 @@ ImplToolItem::ImplToolItem( sal_uInt16 nItemId, const Image& rImage,
 
 // -----------------------------------------------------------------------
 
-ImplToolItem::ImplToolItem( sal_uInt16 nItemId, const XubString& rText,
+ImplToolItem::ImplToolItem( sal_uInt16 nItemId, const OUString& rText,
                             ToolBoxItemBits nItemBits ) :
     maText( rText )
 {
@@ -143,7 +143,7 @@ ImplToolItem::ImplToolItem( sal_uInt16 nItemId, const XubString& rText,
 // -----------------------------------------------------------------------
 
 ImplToolItem::ImplToolItem( sal_uInt16 nItemId, const Image& rImage,
-                            const XubString& rText, ToolBoxItemBits nItemBits ) :
+                            const OUString& rText, ToolBoxItemBits nItemBits ) :
     maImage( rImage ),
     maText( rText )
 {
@@ -298,7 +298,7 @@ void ImplToolItem::DetermineButtonDrawStyle( ButtonType eButtonType, sal_Bool& r
         bHasImage = sal_False;
     else
         bHasImage = sal_True;
-    if ( !maText.Len() )
+    if ( maText.isEmpty() )
         bHasText = sal_False;
     else
         bHasText = sal_True;
@@ -1469,7 +1469,7 @@ Image ToolBox::GetItemImage( sal_uInt16 nItemId ) const
 
 // -----------------------------------------------------------------------
 
-void ToolBox::SetItemText( sal_uInt16 nItemId, const XubString& rText )
+void ToolBox::SetItemText( sal_uInt16 nItemId, const OUString& rText )
 {
     sal_uInt16 nPos = GetItemPos( nItemId );
 
@@ -1501,14 +1501,14 @@ void ToolBox::SetItemText( sal_uInt16 nItemId, const XubString& rText )
 
 // -----------------------------------------------------------------------
 
-const XubString& ToolBox::GetItemText( sal_uInt16 nItemId ) const
+const OUString& ToolBox::GetItemText( sal_uInt16 nItemId ) const
 {
+
     ImplToolItem* pItem = ImplGetItem( nItemId );
 
-    if ( pItem )
-        return pItem->maText;
-    else
-        return ImplGetSVEmptyStr();
+    assert( pItem );
+
+    return pItem->maText;
 }
 
 // -----------------------------------------------------------------------
@@ -1817,7 +1817,7 @@ const OUString ToolBox::GetItemCommand( sal_uInt16 nItemId ) const
 
 // -----------------------------------------------------------------------
 
-void ToolBox::SetQuickHelpText( sal_uInt16 nItemId, const XubString& rText )
+void ToolBox::SetQuickHelpText( sal_uInt16 nItemId, const OUString& rText )
 {
     ImplToolItem* pItem = ImplGetItem( nItemId );
 
@@ -1827,19 +1827,21 @@ void ToolBox::SetQuickHelpText( sal_uInt16 nItemId, const XubString& rText )
 
 // -----------------------------------------------------------------------
 
-const XubString& ToolBox::GetQuickHelpText( sal_uInt16 nItemId ) const
+const OUString& ToolBox::GetQuickHelpText( sal_uInt16 nItemId ) const
 {
+    static const OUString sEmpty;
+
     ImplToolItem* pItem = ImplGetItem( nItemId );
 
     if ( pItem )
         return pItem->maQuickHelpText;
     else
-        return ImplGetSVEmptyStr();
+        return sEmpty;
 }
 
 // -----------------------------------------------------------------------
 
-void ToolBox::SetHelpText( sal_uInt16 nItemId, const XubString& rText )
+void ToolBox::SetHelpText( sal_uInt16 nItemId, const OUString& rText )
 {
     ImplToolItem* pItem = ImplGetItem( nItemId );
 
@@ -1849,7 +1851,7 @@ void ToolBox::SetHelpText( sal_uInt16 nItemId, const XubString& rText )
 
 // -----------------------------------------------------------------------
 
-const XubString& ToolBox::GetHelpText( sal_uInt16 nItemId ) const
+const OUString& ToolBox::GetHelpText( sal_uInt16 nItemId ) const
 {
     return ImplGetHelpText( nItemId );
 }

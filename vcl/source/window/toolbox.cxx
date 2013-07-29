@@ -1836,7 +1836,7 @@ sal_Bool ToolBox::ImplCalcItem()
                     bImage = sal_False;
                 else
                     bImage = sal_True;
-                if ( !it->maText.Len() )
+                if ( it->maText.isEmpty() )
                     bText = sal_False;
                 else
                     bText = sal_True;
@@ -4250,28 +4250,25 @@ void ToolBox::Resize()
 }
 
 // -----------------------------------------------------------------------
-const XubString& ToolBox::ImplGetHelpText( sal_uInt16 nItemId ) const
+const OUString& ToolBox::ImplGetHelpText( sal_uInt16 nItemId ) const
 {
     ImplToolItem* pItem = ImplGetItem( nItemId );
 
-    if ( pItem )
-    {
-        if ( !pItem->maHelpText.Len() && ( !pItem->maHelpId.isEmpty() || pItem->maCommandStr.Len() ))
-        {
-            Help* pHelp = Application::GetHelp();
-            if ( pHelp )
-            {
-                if ( pItem->maCommandStr.Len() )
-                    pItem->maHelpText = pHelp->GetHelpText( pItem->maCommandStr, this );
-                if ( !pItem->maHelpText.Len() && !pItem->maHelpId.isEmpty() )
-                    pItem->maHelpText = pHelp->GetHelpText( OStringToOUString( pItem->maHelpId, RTL_TEXTENCODING_UTF8 ), this );
-            }
-        }
+    assert( pItem );
 
-        return pItem->maHelpText;
+    if ( pItem->maHelpText.isEmpty() && ( !pItem->maHelpId.isEmpty() || pItem->maCommandStr.getLength() ))
+    {
+        Help* pHelp = Application::GetHelp();
+        if ( pHelp )
+        {
+            if ( pItem->maCommandStr.getLength() )
+                pItem->maHelpText = pHelp->GetHelpText( pItem->maCommandStr, this );
+            if ( pItem->maHelpText.isEmpty() && !pItem->maHelpId.isEmpty() )
+                pItem->maHelpText = pHelp->GetHelpText( OStringToOUString( pItem->maHelpId, RTL_TEXTENCODING_UTF8 ), this );
+        }
     }
-    else
-        return ImplGetSVEmptyStr();
+
+    return pItem->maHelpText;
 }
 
 // -----------------------------------------------------------------------

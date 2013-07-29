@@ -248,7 +248,7 @@ private:
     SAL_DLLPRIVATE void            ImplExecuteCustomMenu();
     SAL_DLLPRIVATE sal_Bool            ImplIsFloatingMode() const;
     SAL_DLLPRIVATE sal_Bool            ImplIsInPopupMode() const;
-    SAL_DLLPRIVATE const XubString& ImplGetHelpText( sal_uInt16 nItemId ) const;
+    SAL_DLLPRIVATE const OUString& ImplGetHelpText( sal_uInt16 nItemId ) const;
     SAL_DLLPRIVATE Size            ImplGetOptimalFloatingSize();
     SAL_DLLPRIVATE sal_Bool            ImplHasExternalMenubutton();
     SAL_DLLPRIVATE void            ImplDrawFloatwinBorder( ImplToolItem* pItem );
@@ -422,8 +422,8 @@ public:
     Image               GetItemImage( sal_uInt16 nItemId ) const;
     void                SetItemImageAngle( sal_uInt16 nItemId, long nAngle10 );
     void                SetItemImageMirrorMode( sal_uInt16 nItemId, sal_Bool bMirror );
-    void                SetItemText( sal_uInt16 nItemId, const XubString& rText );
-    const XubString&    GetItemText( sal_uInt16 nItemId ) const;
+    void                SetItemText( sal_uInt16 nItemId, const OUString& rText );
+    const OUString&     GetItemText( sal_uInt16 nItemId ) const;
     void                SetItemWindow( sal_uInt16 nItemId, Window* pNewWindow );
     Window*             GetItemWindow( sal_uInt16 nItemId ) const;
     sal_uInt16              GetHighlightItemId() const { return mnHighItemId; }
@@ -452,15 +452,15 @@ public:
     const OUString      GetItemCommand( sal_uInt16 nItemId ) const;
 
     using Window::SetQuickHelpText;
-    void                SetQuickHelpText( sal_uInt16 nItemId, const XubString& rText );
+    void                SetQuickHelpText( sal_uInt16 nItemId, const OUString& rText );
     using Window::GetQuickHelpText;
-    const XubString&    GetQuickHelpText( sal_uInt16 nItemId ) const;
+    const OUString&     GetQuickHelpText( sal_uInt16 nItemId ) const;
 
-    void                SetHelpText( sal_uInt16 nItemId, const XubString& rText );
-    const XubString&    GetHelpText( sal_uInt16 nItemId ) const;
+    void                SetHelpText( sal_uInt16 nItemId, const OUString& rText );
+    const OUString&     GetHelpText( sal_uInt16 nItemId ) const;
 
     void                SetHelpId( sal_uInt16 nItemId, const OString& rHelpId );
-    OString        GetHelpId( sal_uInt16 nItemId ) const;
+    OString             GetHelpId( sal_uInt16 nItemId ) const;
 
     //  window size according to current alignment, floating state and number of lines
     Size                CalcWindowSizePixel() const;

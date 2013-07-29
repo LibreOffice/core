@@ -56,11 +56,11 @@ struct ImplToolItem
     Image               maHighImage;
     long                mnImageAngle;
     bool                mbMirrorMode;
-    XubString           maText;
-    XubString           maQuickHelpText;
-    XubString           maHelpText;
-    String              maCommandStr;
-    OString        maHelpId;
+    OUString            maText;
+    OUString            maQuickHelpText;
+    OUString            maHelpText;
+    OUString            maCommandStr;
+    OString             maHelpId;
     Rectangle           maRect;
     Rectangle           maCalcRect;
     /// Widget layout may request size; set it as the minimal size (like, the item will always have at least this size).
@@ -85,10 +85,10 @@ struct ImplToolItem
                         ImplToolItem();
                         ImplToolItem( sal_uInt16 nItemId, const Image& rImage,
                                       ToolBoxItemBits nItemBits );
-                        ImplToolItem( sal_uInt16 nItemId, const XubString& rTxt,
+                        ImplToolItem( sal_uInt16 nItemId, const OUString& rTxt,
                                       ToolBoxItemBits nItemBits );
                         ImplToolItem( sal_uInt16 nItemId, const Image& rImage,
-                                      const XubString& rTxt,
+                                      const OUString& rTxt,
                                       ToolBoxItemBits nItemBits );
                         ~ImplToolItem();
 
