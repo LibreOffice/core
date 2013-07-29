@@ -51,20 +51,14 @@ namespace dbaui
         OModuleClient m_aModuleClient;
         ::osl::Mutex    m_aMutex;
 
-        FixedLine       m_aFrame;
-        FixedText       m_aSQLLabel;
-        MultiLineEditSyntaxHighlight    m_aSQL;
-        PushButton      m_aExecute;
-        FixedText       m_aHistoryLabel;
+        MultiLineEditSyntaxHighlight*    m_pSQL;
+        PushButton*      m_pExecute;
         ListBox*        m_pSQLHistory;
-        FixedLine       m_aStatusFrame;
-        MultiLineEdit   m_aStatus;
+        MultiLineEdit*   m_pStatus;
         CheckBox*       m_pShowOutput;
-        FixedLine       m_aOutputFrame;
-        MultiLineEdit   m_aOutput;
-        FixedLine       m_aButtonSeparator;
-        HelpButton      m_aHelp;
-        PushButton      m_aClose;
+        MultiLineEdit*   m_pOutput;
+        HelpButton*      m_pHelp;
+        PushButton*      m_pClose;
 
         typedef ::std::deque< String >  StringQueue;
         StringQueue     m_aStatementHistory;    // previous statements
