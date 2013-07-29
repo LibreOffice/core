@@ -28,7 +28,6 @@
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 
 #include <cuires.hrc>
-#include "tabarea.hrc"
 #include "helpid.hrc"
 #include "svx/xattr.hxx"
 #include <svx/xpool.hxx>

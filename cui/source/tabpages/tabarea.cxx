@@ -32,7 +32,6 @@
 #include <svx/svdmodel.hxx>
 #include "svx/drawitem.hxx"
 #include "cuitabarea.hxx"
-#include "tabarea.hrc"
 #include "dlgname.hxx"
 #include <dialmgr.hxx>
 
@@ -42,13 +41,22 @@ SvxAreaTabDialog::SvxAreaTabDialog
     const SfxItemSet* pAttr,
     SdrModel* pModel,
     const SdrView* /* pSdrView */
-) :
+)
+    : SfxTabDialog( pParent,
+                  "AreaDialog",
+                  "cui/ui/areadialog.ui",
+                  pAttr )
+    , m_nAreaTabPage(0)
+    , m_nShadowTabPage(0)
+    , m_nTransparenceTabPage(0)
+    , m_nColorTabPage(0)
+    , m_nGradientTabPage(0)
+    , m_nHatchTabPage(0)
+    , m_nBitmapTabPage(0)
 
-    SfxTabDialog( pParent, CUI_RES( RID_SVXDLG_AREA ), pAttr ),
-
-    mpDrawModel          ( pModel ),
-    mpColorList           ( pModel->GetColorList() ),
-    mpNewColorList        ( pModel->GetColorList() ),
+    , mpDrawModel          ( pModel ),
+    mpColorList          ( pModel->GetColorList() ),
+    mpNewColorList       ( pModel->GetColorList() ),
     mpGradientList       ( pModel->GetGradientList() ),
     mpNewGradientList    ( pModel->GetGradientList() ),
     mpHatchingList       ( pModel->GetHatchList() ),
@@ -56,6 +64,7 @@ SvxAreaTabDialog::SvxAreaTabDialog
     mpBitmapList         ( pModel->GetBitmapList() ),
     mpNewBitmapList      ( pModel->GetBitmapList() ),
     mrOutAttrs           ( *pAttr ),
+
     mnColorListState ( CT_NONE ),
     mnBitmapListState ( CT_NONE ),
     mnGradientListState ( CT_NONE ),
@@ -64,17 +73,15 @@ SvxAreaTabDialog::SvxAreaTabDialog
     mnDlgType( 0 ),
     mbAreaTP( sal_False )
 {
-    FreeResource();
+    m_nAreaTabPage = AddTabPage( "RID_SVXPAGE_AREA", SvxAreaTabPage::Create, 0 );
+    m_nShadowTabPage = AddTabPage( "RID_SVXPAGE_SHADOW", SvxShadowTabPage::Create, 0 );
+    m_nTransparenceTabPage = AddTabPage( "RID_SVXPAGE_TRANSPARENCE", SvxTransparenceTabPage::Create,  0);
+    m_nColorTabPage = AddTabPage( "RID_SVXPAGE_COLOR", SvxColorTabPage::Create, 0 );
+    m_nGradientTabPage = AddTabPage( "RID_SVXPAGE_GRADIENT", SvxGradientTabPage::Create, 0 );
+    m_nHatchTabPage = AddTabPage( "RID_SVXPAGE_HATCH", SvxHatchTabPage::Create, 0 );
+    m_nBitmapTabPage = AddTabPage( "RID_SVXPAGE_BITMAP", SvxBitmapTabPage::Create,  0);
 
-    AddTabPage( RID_SVXPAGE_AREA, SvxAreaTabPage::Create, 0 );
-    AddTabPage( RID_SVXPAGE_SHADOW, SvxShadowTabPage::Create, 0 );
-    AddTabPage( RID_SVXPAGE_TRANSPARENCE, SvxTransparenceTabPage::Create,  0);
-    AddTabPage( RID_SVXPAGE_COLOR, SvxColorTabPage::Create, 0 );
-    AddTabPage( RID_SVXPAGE_GRADIENT, SvxGradientTabPage::Create, 0 );
-    AddTabPage( RID_SVXPAGE_HATCH, SvxHatchTabPage::Create, 0 );
-    AddTabPage( RID_SVXPAGE_BITMAP, SvxBitmapTabPage::Create,  0);
-
-    SetCurPageId( RID_SVXPAGE_AREA );
+    SetCurPageId( "RID_SVXPAGE_AREA" );
 
     CancelButton& rBtnCancel = GetCancelButton();
     rBtnCancel.SetClickHdl( LINK( this, SvxAreaTabDialog, CancelHdlImpl ) );
@@ -222,9 +229,8 @@ IMPL_LINK_INLINE_END( SvxAreaTabDialog, CancelHdlImpl, void *, p )
 
 void SvxAreaTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
-    switch( nId )
+    if (nId == m_nAreaTabPage )
     {
-        case RID_SVXPAGE_AREA:
             ( (SvxAreaTabPage&) rPage ).SetColorList( mpColorList );
             ( (SvxAreaTabPage&) rPage ).SetGradientList( mpGradientList );
             ( (SvxAreaTabPage&) rPage ).SetHatchingList( mpHatchingList );
@@ -240,21 +246,18 @@ void SvxAreaTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
             ( (SvxAreaTabPage&) rPage ).Construct();
             // ActivatePage() is not called the first time
             ( (SvxAreaTabPage&) rPage ).ActivatePage( mrOutAttrs );
-
-        break;
-
-        case RID_SVXPAGE_SHADOW:
-        {
+    }
+    else if (nId == m_nShadowTabPage)
+    {
             ( (SvxShadowTabPage&) rPage ).SetColorList( mpColorList );
             ( (SvxShadowTabPage&) rPage ).SetPageType( mnPageType );
             ( (SvxShadowTabPage&) rPage ).SetDlgType( mnDlgType );
             ( (SvxShadowTabPage&) rPage ).SetAreaTP( &mbAreaTP );
             ( (SvxShadowTabPage&) rPage ).SetColorChgd( &mnColorListState );
             ( (SvxShadowTabPage&) rPage ).Construct();
-        }
-        break;
-
-        case RID_SVXPAGE_GRADIENT:
+    }
+    else if (nId == m_nGradientTabPage)
+    {
             ( (SvxGradientTabPage&) rPage ).SetColorList( mpColorList );
             ( (SvxGradientTabPage&) rPage ).SetGradientList( mpGradientList );
             ( (SvxGradientTabPage&) rPage ).SetPageType( &mnPageType );
@@ -264,9 +267,9 @@ void SvxAreaTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
             ( (SvxGradientTabPage&) rPage ).SetGrdChgd( &mnGradientListState );
             ( (SvxGradientTabPage&) rPage ).SetColorChgd( &mnColorListState );
             ( (SvxGradientTabPage&) rPage ).Construct();
-        break;
-
-        case RID_SVXPAGE_HATCH:
+    }
+    else if (nId == m_nHatchTabPage)
+    {
             ( (SvxHatchTabPage&) rPage ).SetColorList( mpColorList );
             ( (SvxHatchTabPage&) rPage ).SetHatchingList( mpHatchingList );
             ( (SvxHatchTabPage&) rPage ).SetPageType( &mnPageType );
@@ -276,9 +279,9 @@ void SvxAreaTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
             ( (SvxHatchTabPage&) rPage ).SetHtchChgd( &mnHatchingListState );
             ( (SvxHatchTabPage&) rPage ).SetColorChgd( &mnColorListState );
             ( (SvxHatchTabPage&) rPage ).Construct();
-        break;
-
-        case RID_SVXPAGE_BITMAP:
+    }
+    else if (nId == m_nBitmapTabPage)
+    {
             ( (SvxBitmapTabPage&) rPage ).SetColorList( mpColorList );
             ( (SvxBitmapTabPage&) rPage ).SetBitmapList( mpBitmapList );
             ( (SvxBitmapTabPage&) rPage ).SetPageType( &mnPageType );
@@ -288,9 +291,9 @@ void SvxAreaTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
             ( (SvxBitmapTabPage&) rPage ).SetBmpChgd( &mnBitmapListState );
             ( (SvxBitmapTabPage&) rPage ).SetColorChgd( &mnColorListState );
             ( (SvxBitmapTabPage&) rPage ).Construct();
-        break;
-
-        case RID_SVXPAGE_COLOR:
+    }
+    else if (nId == m_nColorTabPage)
+    {
             ( (SvxColorTabPage&) rPage ).SetColorList( mpColorList );
             ( (SvxColorTabPage&) rPage ).SetPageType( &mnPageType );
             ( (SvxColorTabPage&) rPage ).SetDlgType( &mnDlgType );
@@ -298,14 +301,12 @@ void SvxAreaTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
             ( (SvxColorTabPage&) rPage ).SetAreaTP( &mbAreaTP );
             ( (SvxColorTabPage&) rPage ).SetColorChgd( &mnColorListState );
             ( (SvxColorTabPage&) rPage ).Construct();
-        break;
-
-        case RID_SVXPAGE_TRANSPARENCE:
+    }
+    else if (nId == m_nTransparenceTabPage)
+    {
             ( (SvxTransparenceTabPage&) rPage ).SetPageType( mnPageType );
             ( (SvxTransparenceTabPage&) rPage ).SetDlgType( mnDlgType );
             ( (SvxTransparenceTabPage&) rPage ).Construct();
-        break;
-
     }
 }
 

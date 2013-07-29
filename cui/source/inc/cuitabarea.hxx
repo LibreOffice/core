@@ -36,6 +36,14 @@ class SdrView;
 
 class SvxAreaTabDialog : public SfxTabDialog
 {
+    sal_uInt16            m_nAreaTabPage;
+    sal_uInt16            m_nShadowTabPage;
+    sal_uInt16            m_nTransparenceTabPage;
+    sal_uInt16            m_nColorTabPage;
+    sal_uInt16            m_nGradientTabPage;
+    sal_uInt16            m_nHatchTabPage;
+    sal_uInt16            m_nBitmapTabPage;
+
 private:
     SdrModel*           mpDrawModel;
 
@@ -69,7 +77,8 @@ protected:
 
 public:
     SvxAreaTabDialog( Window* pParent,
-                      const SfxItemSet* pAttr, SdrModel* pModel,
+                      const SfxItemSet* pAttr,
+                      SdrModel* pModel,
                       const SdrView* pSdrView = NULL );
     ~SvxAreaTabDialog();
 
