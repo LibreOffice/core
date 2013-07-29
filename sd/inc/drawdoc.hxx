@@ -164,7 +164,7 @@ private:
     sal_Bool                mbOnlineSpell;
     sal_Bool                mbSummationOfParagraphs;
     bool                mbStartWithPresentation;        ///< is set to true when starting with command line parameter -start
-    bool                mbExitAfterPresenting = false;         ///< true if mbStartWithPresentation AND Presentation was shown fully
+    bool                mbExitAfterPresenting;         ///< true if mbStartWithPresentation AND Presentation was shown fully
     LanguageType        meLanguage;
     LanguageType        meLanguageCJK;
     LanguageType        meLanguageCTL;
