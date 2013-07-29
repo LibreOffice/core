@@ -40,7 +40,6 @@
 #include "svx/xoutbmp.hxx"
 #include "svx/drawitem.hxx"
 #include "cuitabarea.hxx"
-#include "tabarea.hrc"
 #include "defdlgname.hxx"
 #include "dlgname.hxx"
 #include <svx/svxdlg.hxx>
