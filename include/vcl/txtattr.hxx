@@ -100,19 +100,19 @@ public:
 class TextAttribHyperLink : public TextAttrib
 {
 private:
-    XubString   maURL;
-    XubString   maDescription;
+    OUString    maURL;
+    OUString    maDescription;
     Color       maColor;
 
 public:
                             TextAttribHyperLink( const TextAttribHyperLink& rAttr );
                             ~TextAttribHyperLink();
 
-    void                    SetURL( const XubString& rURL )             { maURL = rURL; }
-    const XubString&            GetURL() const                              { return maURL; }
+    void                    SetURL( const OUString& rURL )             { maURL = rURL; }
+    const OUString&         GetURL() const                              { return maURL; }
 
-    void                    SetDescription( const XubString& rDescr )   { maDescription = rDescr; }
-    const XubString&            GetDescription() const                      { return maDescription; }
+    void                    SetDescription( const OUString& rDescr )   { maDescription = rDescr; }
+    const OUString&         GetDescription() const                      { return maDescription; }
 
     void                    SetColor( const Color& rColor )             { maColor = rColor; }
     const Color&            GetColor() const                            { return maColor; }
