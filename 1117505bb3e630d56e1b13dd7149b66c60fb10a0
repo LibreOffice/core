@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//9w8\u003d",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1674,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-07-29T11:48:36Z",
+      "side": 1,
+      "message": "The enum has more values than just _BOTTOMRIGHT. Wouldn\u0027t it be better to try to map all values except for _NONE to this, to get at least some shadow?",
+      "revId": "1117505bb3e630d56e1b13dd7149b66c60fb10a0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//9xA\u003d",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5109,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-07-29T11:48:36Z",
+      "side": 1,
+      "message": "Note that such \"extensive\" comments are generally frowned upon (see e.g. fdo#62475).",
+      "revId": "1117505bb3e630d56e1b13dd7149b66c60fb10a0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
