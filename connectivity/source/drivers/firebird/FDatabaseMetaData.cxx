@@ -1239,14 +1239,95 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getBestRowIdentifier(
     (void) nullable;
     return NULL;
 }
-// -------------------------------------------------------------------------
+
 uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
-    const Any& catalog, const OUString& schemaPattern, const OUString& tableNamePattern ) throw(SQLException, RuntimeException)
+        const Any& aCatalog,
+        const OUString& sSchemaPattern,
+        const OUString& sTableNamePattern)
+    throw(SQLException, RuntimeException)
 {
-    (void) catalog;
-    (void) schemaPattern;
-    (void) tableNamePattern;
-    return NULL;
+    (void) aCatalog;
+    (void) sSchemaPattern;
+
+    SAL_INFO("connectivity.firebird", "getTablePrivileges() with "
+             "TableNamePattern: " << sTableNamePattern);
+
+    ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTables);
+    uno::Reference< XResultSet > xResultSet = pResultSet;
+    uno::Reference< XStatement > statement = m_pConnection->createStatement();
+
+    static const OUString wld("%");
+    OUStringBuffer queryBuf(
+            "SELECT "
+            "priv.RDB$RELATION_NAME, "  // 1
+            "priv.RDB$GRANTOR,"         // 2
+            "priv.RDB$USER, "           // 3 Grantee
+            "priv.RDB$PRIVILEGE, "      // 4
+            "priv.RDB$GRANT_OPTION "    // 5 is Grantable
+            "FROM RDB$USER_PRIVILEGES priv ");
+    // "WHERE (priv.RDB$USER = ?????????)"
+
+    if (!sTableNamePattern.isEmpty())
+    {
+        OUString sAppend;
+        if (sTableNamePattern.match(wld))
+            sAppend = "AND priv.RDB$RELATION_NAME LIKE '%' ";
+        else
+            sAppend = "AND priv.RDB$RELATION_NAME = '%' ";
+
+        queryBuf.append(sAppend.replaceAll(wld, sTableNamePattern));
+    }
+    queryBuf.append(" ORDER BY priv.RDB$RELATION_TYPE, "
+                              "priv.RDB$RELATION_NAME, "
+                              "priv.RDB$PRIVILEGE");
+
+    OUString query = queryBuf.makeStringAndClear();
+
+    uno::Reference< XResultSet > rs = statement->executeQuery(query.getStr());
+    uno::Reference< XRow > xRow( rs, UNO_QUERY_THROW );
+    ODatabaseMetaDataResultSet::ORows aResults;
+
+    while( rs->next() )
+    {
+        ODatabaseMetaDataResultSet::ORow aCurrentRow(7);
+
+        // 1. TABLE_CAT
+        aCurrentRow.push_back(new ORowSetValueDecorator());
+        // 2. TABLE_SCHEM
+        aCurrentRow.push_back(new ORowSetValueDecorator());
+
+        // 3. TABLE_NAME
+        {
+            OUString sTableName = xRow->getString(1);
+            aCurrentRow.push_back(new ORowSetValueDecorator(sTableName));
+        }
+        // 4. GRANTOR
+        {
+            OUString sGrantor = xRow->getString(2);
+            aCurrentRow.push_back(new ORowSetValueDecorator(sGrantor));
+        }
+        // 5. GRANTEE
+        {
+            OUString sGrantee = xRow->getString(3);
+            aCurrentRow.push_back(new ORowSetValueDecorator(sGrantee));
+        }
+        // 6. Privilege
+        {
+            OUString sPrivilege = xRow->getString(4);
+            aCurrentRow.push_back(new ORowSetValueDecorator(sPrivilege));
+        }
+        // 7. IS_GRANTABLE
+        {
+            sal_Bool bIsGrantable = xRow->getBoolean(5);
+            aCurrentRow.push_back(new ORowSetValueDecorator(bIsGrantable));
+        }
+
+        aResults.push_back(aCurrentRow);
+    }
+
+    pResultSet->setRows( aResults );
+
+    return xResultSet;
 }
 // -------------------------------------------------------------------------
 uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCrossReference(
