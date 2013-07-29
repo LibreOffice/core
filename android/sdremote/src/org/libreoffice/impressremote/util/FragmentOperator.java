@@ -17,25 +17,35 @@ public final class FragmentOperator {
     private FragmentOperator() {
     }
 
-    public static void setUpFragment(FragmentActivity aActivity, Fragment aFragment) {
-        if (isFragmentSetUp(aActivity)) {
+    public static void addFragment(FragmentActivity aActivity, Fragment aFragment) {
+        if (isFragmentAdded(aActivity)) {
             return;
         }
 
-        installFragment(aActivity, aFragment);
+        FragmentTransaction aFragmentTransaction = beginFragmentTransaction(aActivity);
+
+        aFragmentTransaction.add(android.R.id.content, aFragment);
+
+        aFragmentTransaction.commit();
     }
 
-    private static boolean isFragmentSetUp(FragmentActivity aActivity) {
+    private static boolean isFragmentAdded(FragmentActivity aActivity) {
         FragmentManager aFragmentManager = aActivity.getSupportFragmentManager();
 
         return aFragmentManager.findFragmentById(android.R.id.content) != null;
     }
 
-    private static void installFragment(FragmentActivity aActivity, Fragment aFragment) {
+    private static FragmentTransaction beginFragmentTransaction(FragmentActivity aActivity) {
         FragmentManager aFragmentManager = aActivity.getSupportFragmentManager();
-        FragmentTransaction aFragmentTransaction = aFragmentManager.beginTransaction();
 
-        aFragmentTransaction.add(android.R.id.content, aFragment);
+        return aFragmentManager.beginTransaction();
+    }
+
+    public static void replaceFragmentAnimated(FragmentActivity aActivity, Fragment aFragment) {
+        FragmentTransaction aFragmentTransaction = beginFragmentTransaction(aActivity);
+        aFragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+
+        aFragmentTransaction.replace(android.R.id.content, aFragment);
 
         aFragmentTransaction.commit();
     }

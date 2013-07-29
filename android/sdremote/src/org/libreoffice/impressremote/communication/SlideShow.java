@@ -20,14 +20,14 @@ public class SlideShow {
 
     private final Timer mTimer;
 
-    public SlideShow() {
+    public SlideShow(Timer aTimer) {
         this.mSlidesCount = 0;
         this.mCurrentSlideIndex = 0;
 
         this.mSlidePreviewsBytes = new SparseArray<byte[]>();
         this.mSlideNotes = new SparseArray<String>();
 
-        this.mTimer = new Timer();
+        this.mTimer = aTimer;
     }
 
     public void setSlidesCount(int aSlidesCount) {

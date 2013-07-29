@@ -110,7 +110,7 @@ public class ComputersActivity extends SherlockFragmentActivity implements Actio
     private void setUpComputersList() {
         Fragment aComputersFragment = ComputersFragment.newInstance(ComputersFragment.Type.WIFI);
 
-        FragmentOperator.setUpFragment(this, aComputersFragment);
+        FragmentOperator.addFragment(this, aComputersFragment);
     }
 
     @Override

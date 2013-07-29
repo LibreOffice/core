@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menu_slides_pager"
+        android:title="@string/menu_slides_pager"
+        android:icon="@drawable/ic_action_pager"
+        android:showAsAction="always"/>
+
+    <item
+        android:id="@+id/menu_slides_grid"
+        android:title="@string/menu_slides_grid"
+        android:icon="@drawable/ic_action_grid"
+        android:showAsAction="always"/>
+
+    <item
+        android:id="@+id/menu_timer"
+        android:title="@string/menu_timer"
+        android:icon="@drawable/ic_action_timer"
+        android:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/menu_stop_slide_show"
+        android:title="@string/menu_stop_slide_show"
+        android:showAsAction="never"/>
+
+</menu>

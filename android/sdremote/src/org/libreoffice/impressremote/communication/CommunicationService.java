@@ -19,7 +19,7 @@ import android.support.v4.content.LocalBroadcastManager;
 
 import org.libreoffice.impressremote.util.Intents;
 
-public class CommunicationService extends Service implements Runnable, MessagesListener {
+public class CommunicationService extends Service implements Runnable, MessagesListener, Timer.TimerListener {
     public static enum State {
         DISCONNECTED, SEARCHING, CONNECTING, CONNECTED
     }
@@ -58,7 +58,7 @@ public class CommunicationService extends Service implements Runnable, MessagesL
 
         mServersManager = new ServersManager(this);
 
-        mSlideShow = new SlideShow();
+        mSlideShow = new SlideShow(new Timer(this));
 
         mThread = new Thread(this);
         mThread.start();
@@ -275,6 +275,12 @@ public class CommunicationService extends Service implements Runnable, MessagesL
         mSlideShow.setSlideNotes(aSlideIndex, aNotes);
 
         Intent aIntent = Intents.buildSlideNotesIntent(aSlideIndex);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(aIntent);
+    }
+
+    @Override
+    public void onTimerUpdated() {
+        Intent aIntent = Intents.buildTimerUpdatedIntent();
         LocalBroadcastManager.getInstance(this).sendBroadcast(aIntent);
     }
 

@@ -16,8 +16,8 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
@@ -26,8 +26,12 @@ import com.actionbarsherlock.view.MenuItem;
 import org.libreoffice.impressremote.R;
 import org.libreoffice.impressremote.communication.CommunicationService;
 import org.libreoffice.impressremote.communication.SlideShow;
+import org.libreoffice.impressremote.communication.Timer;
 import org.libreoffice.impressremote.fragment.SlidesGridFragment;
 import org.libreoffice.impressremote.fragment.SlidesPagerFragment;
+import org.libreoffice.impressremote.fragment.TimerEditingDialog;
+import org.libreoffice.impressremote.fragment.TimerSettingDialog;
+import org.libreoffice.impressremote.util.FragmentOperator;
 import org.libreoffice.impressremote.util.Intents;
 
 public class SlideShowActivity extends SherlockFragmentActivity implements ServiceConnection {
@@ -57,7 +61,7 @@ public class SlideShowActivity extends SherlockFragmentActivity implements Servi
     }
 
     private void setUpFragment() {
-        setUpFragment(buildFragment());
+        FragmentOperator.replaceFragmentAnimated(this, buildFragment());
     }
 
     private Fragment buildFragment() {
@@ -71,15 +75,6 @@ public class SlideShowActivity extends SherlockFragmentActivity implements Servi
             default:
                 return SlidesPagerFragment.newInstance();
         }
-    }
-
-    private void setUpFragment(Fragment aFragment) {
-        FragmentTransaction aTransaction = getSupportFragmentManager().beginTransaction();
-        aTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
-
-        aTransaction.replace(android.R.id.content, aFragment);
-
-        aTransaction.commit();
     }
 
     private void bindService() {
@@ -124,6 +119,30 @@ public class SlideShowActivity extends SherlockFragmentActivity implements Servi
         public void onReceive(Context aContext, Intent aIntent) {
             if (Intents.Actions.SLIDE_CHANGED.equals(aIntent.getAction())) {
                 mSlideShowActivity.setUpSlideShowInformation();
+                return;
+            }
+
+            if (Intents.Actions.TIMER_UPDATED.equals(aIntent.getAction())) {
+                mSlideShowActivity.setUpSlideShowInformation();
+                return;
+            }
+
+            if (Intents.Actions.TIMER_STARTED.equals(aIntent.getAction())) {
+                int aMinutesLength = aIntent.getIntExtra(Intents.Extras.MINUTES, 0);
+                mSlideShowActivity.startTimer(aMinutesLength);
+                return;
+            }
+
+            if (Intents.Actions.TIMER_RESUMED.equals(aIntent.getAction())) {
+                mSlideShowActivity.resumeTimer();
+                return;
+            }
+
+            if (Intents.Actions.TIMER_CHANGED.equals(aIntent.getAction())) {
+                int aMinutesLength = aIntent.getIntExtra(Intents.Extras.MINUTES, 0);
+                mSlideShowActivity.changeTimer(aMinutesLength);
+                mSlideShowActivity.resumeTimer();
+                mSlideShowActivity.setUpSlideShowInformation();
             }
         }
     }
@@ -131,6 +150,10 @@ public class SlideShowActivity extends SherlockFragmentActivity implements Servi
     private IntentFilter buildIntentsReceiverFilter() {
         IntentFilter aIntentFilter = new IntentFilter();
         aIntentFilter.addAction(Intents.Actions.SLIDE_CHANGED);
+        aIntentFilter.addAction(Intents.Actions.TIMER_UPDATED);
+        aIntentFilter.addAction(Intents.Actions.TIMER_STARTED);
+        aIntentFilter.addAction(Intents.Actions.TIMER_RESUMED);
+        aIntentFilter.addAction(Intents.Actions.TIMER_CHANGED);
 
         return aIntentFilter;
     }
@@ -148,6 +171,10 @@ public class SlideShowActivity extends SherlockFragmentActivity implements Servi
         getSupportActionBar().setSubtitle(buildSlideShowTimerProgress());
     }
 
+    private boolean isServiceBound() {
+        return mCommunicationService != null;
+    }
+
     private String buildSlideShowProgress() {
         SlideShow aSlideShow = mCommunicationService.getSlideShow();
 
@@ -158,7 +185,38 @@ public class SlideShowActivity extends SherlockFragmentActivity implements Servi
     }
 
     private String buildSlideShowTimerProgress() {
-        return null;
+        Timer aTimer = mCommunicationService.getSlideShow().getTimer();
+
+        if (!aTimer.isSet()) {
+            return null;
+        }
+
+        if (aTimer.isTimeUp()) {
+            return getString(R.string.message_time_is_up);
+        }
+
+        int aMinutesLeft = aTimer.getMinutesLeft();
+
+        return getResources().getQuantityString(R.plurals.mask_timer_progress, aMinutesLeft, aMinutesLeft);
+    }
+
+    private void startTimer(int aMinutesLength) {
+        Timer aTimer = mCommunicationService.getSlideShow().getTimer();
+
+        aTimer.setMinutesLength(aMinutesLength);
+        aTimer.start();
+
+        setUpSlideShowInformation();
+    }
+
+    private void resumeTimer() {
+        mCommunicationService.getSlideShow().getTimer().resume();
+    }
+
+    private void changeTimer(int aMinutesLength) {
+        Timer aTimer = mCommunicationService.getSlideShow().getTimer();
+
+        aTimer.setMinutesLength(aMinutesLength);
     }
 
     @Override
@@ -170,27 +228,42 @@ public class SlideShowActivity extends SherlockFragmentActivity implements Servi
 
     @Override
     public boolean onCreateOptionsMenu(Menu aMenu) {
-        getSupportMenuInflater().inflate(getActionBarMenuResourceId(), aMenu);
+        getSupportMenuInflater().inflate(R.menu.menu_action_bar_slide_show, aMenu);
 
         return true;
     }
 
-    private int getActionBarMenuResourceId() {
+    @Override
+    public boolean onPrepareOptionsMenu(Menu aMenu) {
+        MenuItem aSlidesPagerMenuItem = aMenu.findItem(R.id.menu_slides_pager);
+        MenuItem aSlidesGridMenuItem = aMenu.findItem(R.id.menu_slides_grid);
+
         switch (mMode) {
             case PAGER:
-                return R.menu.menu_action_bar_slide_show_pager;
+                aSlidesPagerMenuItem.setVisible(false);
+                aSlidesGridMenuItem.setVisible(true);
+                break;
 
             case GRID:
-                return R.menu.menu_action_bar_slide_show_grid;
+                aSlidesPagerMenuItem.setVisible(true);
+                aSlidesGridMenuItem.setVisible(false);
+                break;
 
             default:
-                return R.menu.menu_action_bar_slide_show_pager;
+                break;
         }
+
+        return super.onPrepareOptionsMenu(aMenu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem aMenuItem) {
         switch (aMenuItem.getItemId()) {
+            case android.R.id.home:
+                navigateUp();
+
+                return true;
+
             case R.id.menu_slides_grid:
                 mMode = Mode.GRID;
 
@@ -207,8 +280,13 @@ public class SlideShowActivity extends SherlockFragmentActivity implements Servi
 
                 return true;
 
-            case android.R.id.home:
-                navigateUp();
+            case R.id.menu_timer:
+                callTimer();
+
+                return true;
+
+            case R.id.menu_stop_slide_show:
+                stopSlideShow();
 
                 return true;
 
@@ -217,11 +295,38 @@ public class SlideShowActivity extends SherlockFragmentActivity implements Servi
         }
     }
 
+    private void navigateUp() {
+        finish();
+    }
+
     private void refreshActionBarMenu() {
         supportInvalidateOptionsMenu();
     }
 
-    private void navigateUp() {
+    private void callTimer() {
+        Timer aTimer = mCommunicationService.getSlideShow().getTimer();
+
+        if (aTimer.isSet()) {
+            int aTimerLength = aTimer.getMinutesLeft();
+
+            DialogFragment aFragment = TimerEditingDialog.newInstance(aTimerLength);
+            aFragment.show(getSupportFragmentManager(), TimerEditingDialog.TAG);
+
+            pauseTimer();
+        }
+        else {
+            DialogFragment aFragment = TimerSettingDialog.newInstance();
+            aFragment.show(getSupportFragmentManager(), TimerSettingDialog.TAG);
+        }
+    }
+
+    private void pauseTimer() {
+        mCommunicationService.getSlideShow().getTimer().pause();
+    }
+
+    private void stopSlideShow() {
+        mCommunicationService.getTransmitter().stopPresentation();
+
         finish();
     }
 
@@ -245,9 +350,15 @@ public class SlideShowActivity extends SherlockFragmentActivity implements Servi
     protected void onDestroy() {
         super.onDestroy();
 
+        stopTimer();
+
         disconnectComputer();
 
         unbindService();
+    }
+
+    private void stopTimer() {
+        mCommunicationService.getSlideShow().getTimer().stop();
     }
 
     private void disconnectComputer() {
@@ -256,10 +367,6 @@ public class SlideShowActivity extends SherlockFragmentActivity implements Servi
         }
 
         mCommunicationService.disconnect();
-    }
-
-    private boolean isServiceBound() {
-        return mCommunicationService != null;
     }
 
     private void unbindService() {

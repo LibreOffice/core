@@ -8,116 +8,82 @@
  */
 package org.libreoffice.impressremote.communication;
 
-public class Timer {
-    /**
-     * This stores the starting time of the timer if running.
-     * <p/>
-     * If paused this stores how long the timer was previously running.
-     */
-    private long mTime;
-    private long mCountdownTime;
+import java.util.concurrent.TimeUnit;
 
-    private boolean mIsRunning;
-    private boolean mIsCountdown;
+import android.os.Handler;
 
-    public Timer() {
-        mTime = 0;
-        mCountdownTime = 0;
-
-        mIsRunning = false;
-        mIsCountdown = false;
+public class Timer implements Runnable {
+    public interface TimerListener {
+        public void onTimerUpdated();
     }
 
-    /**
-     * Set whether this timer should be a normal or a countdown timer.
-     *
-     * @param aIsCountdown Whether this should be a countdown timer.
-     */
-    public void setCountdown(boolean aIsCountdown) {
-        mIsCountdown = aIsCountdown;
+    private static final long UPDATE_PERIOD_IN_MINUTES = 1;
 
-        if (mIsRunning) {
-            reset();
-        }
+    private final Handler mTimerHandler;
+    private final TimerListener mTimerListener;
+
+    private int mTotalMinutes;
+    private int mPassedMinutes;
+
+    public Timer(TimerListener aTimerListener) {
+        mTimerHandler = new Handler();
+        mTimerListener = aTimerListener;
+
+        mTotalMinutes = 0;
+        mPassedMinutes = 0;
     }
 
-    public boolean isCountdown() {
-        return mIsCountdown;
+    public void setMinutesLength(int aLengthInMinutes) {
+        mTotalMinutes = aLengthInMinutes;
     }
 
-    /**
-     * Set the countdown time. Can be set, and isn't lost, whatever mode
-     * the timer is running in.
-     *
-     * @param aCountdownTime The countdown time.
-     */
-    public void setCountdownTime(long aCountdownTime) {
-        mCountdownTime = aCountdownTime;
+    public int getMinutesLength() {
+        return mTotalMinutes;
     }
 
-    public long getCountdownTime() {
-        return mCountdownTime;
-    }
-
-    public boolean isRunning() {
-        return mIsRunning;
-    }
-
-    /**
-     * Reset the timer, and stop it it was running.
-     */
-    public void reset() {
-        mIsRunning = false;
-        mTime = 0;
+    public boolean isSet() {
+        return mTotalMinutes != 0;
     }
 
     public void start() {
-        if (mIsRunning) {
+        if (!isSet()) {
             return;
         }
 
-        mTime = System.currentTimeMillis() - mTime;
-        mIsRunning = true;
+        mTimerHandler.postDelayed(this, TimeUnit.MINUTES.toMillis(UPDATE_PERIOD_IN_MINUTES));
+    }
+
+    @Override
+    public void run() {
+        updatePassedMinutes();
+
+        mTimerListener.onTimerUpdated();
+
+        start();
+    }
+
+    private void updatePassedMinutes() {
+        mPassedMinutes++;
+    }
+
+    public void pause() {
+        stop();
+    }
+
+    public void resume() {
+        start();
     }
 
     public void stop() {
-        if (!mIsRunning)
-            return;
-
-        mTime = System.currentTimeMillis() - mTime;
-        mIsRunning = false;
+        mTimerHandler.removeCallbacks(this);
     }
 
-    /**
-     * Get either how long this timer has been running, or how long the
-     * timer still has left to run.
-     *
-     * @return running time in millis.
-     */
-    public long getTimeMillis() {
-        if (mIsCountdown) {
-            return calculateCountdownRunningTime();
-        }
-
-        return calculateRunningTime();
+    public boolean isTimeUp() {
+        return getMinutesLeft() <= 0;
     }
 
-    private long calculateCountdownRunningTime() {
-        long aRunningTime = mCountdownTime - calculateRunningTime();
-
-        if (aRunningTime < 0) {
-            reset();
-        }
-
-        return aRunningTime;
-    }
-
-    private long calculateRunningTime() {
-        if (mIsRunning) {
-            return System.currentTimeMillis() - mTime;
-        }
-
-        return mTime;
+    public int getMinutesLeft() {
+        return mTotalMinutes - mPassedMinutes;
     }
 }
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <style name="Theme.ImpressRemote" parent="Theme.Sherlock.Light.DarkActionBar">
+    <style name="Theme.ImpressRemote" parent="Theme.Sherlock.Light.DarkActionBar.ForceOverflow">
         <item name="android:actionBarStyle">@style/Theme.ImpressRemote.ActionBar</item>
         <item name="actionBarStyle">@style/Theme.ImpressRemote.ActionBar</item>
 

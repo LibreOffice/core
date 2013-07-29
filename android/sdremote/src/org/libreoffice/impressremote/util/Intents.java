@@ -39,6 +39,11 @@ public final class Intents {
         public static final String SLIDE_CHANGED = "SLIDE_CHANGED";
         public static final String SLIDE_PREVIEW = "SLIDE_PREVIEW";
         public static final String SLIDE_NOTES = "SLIDE_NOTES";
+
+        public static final String TIMER_UPDATED = "TIMER_UPDATED";
+        public static final String TIMER_STARTED = "TIMER_STARTED";
+        public static final String TIMER_RESUMED = "TIMER_RESUMED";
+        public static final String TIMER_CHANGED = "TIMER_CHANGED";
     }
 
     public static final class Extras {
@@ -52,6 +57,8 @@ public final class Intents {
         public static final String SERVER_NAME = "SERVER_NAME";
 
         public static final String SLIDE_INDEX = "SLIDE_INDEX";
+
+        public static final String MINUTES = "MINUTES";
     }
 
     public static final class RequestCodes {
@@ -138,6 +145,28 @@ public final class Intents {
 
     public static Intent buildCommunicationServiceIntent(Context aContext) {
         return new Intent(aContext, CommunicationService.class);
+    }
+
+    public static Intent buildTimerUpdatedIntent() {
+        return new Intent(Actions.TIMER_UPDATED);
+    }
+
+    public static Intent buildTimerStartedIntent(int aMinutesLength) {
+        Intent aIntent = new Intent(Actions.TIMER_STARTED);
+        aIntent.putExtra(Extras.MINUTES, aMinutesLength);
+
+        return aIntent;
+    }
+
+    public static Intent buildTimerResumedIntent() {
+        return new Intent(Actions.TIMER_RESUMED);
+    }
+
+    public static Intent buildTimerChangedIntent(int aMinutesLength) {
+        Intent aIntent = new Intent(Actions.TIMER_CHANGED);
+        aIntent.putExtra(Extras.MINUTES, aMinutesLength);
+
+        return aIntent;
     }
 }
 

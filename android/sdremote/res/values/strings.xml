@@ -10,6 +10,7 @@
     <string name="title_connection">Connection</string>
     <string name="title_creation">Creation</string>
     <string name="title_slide_show">Slide Show</string>
+    <string name="title_timer">Timer</string>
 
     <string name="menu_licenses">Open source licenses</string>
     <string name="menu_reconnect">Reconnect</string>
@@ -17,9 +18,13 @@
     <string name="menu_remove_computer">Remove</string>
     <string name="menu_slides_grid">Slides grid</string>
     <string name="menu_slides_pager">Slides pager</string>
+    <string name="menu_timer">Timer</string>
+    <string name="menu_stop_slide_show">Stop slide show</string>
 
     <string name="button_cancel">Cancel</string>
     <string name="button_save">Save</string>
+    <string name="button_start">Start</string>
+    <string name="button_reset">Reset</string>
 
     <string name="message_impress_pin_validation">Go to “Slide Show → Impress Remote” in LibreOffice Impress and enter the code.</string>
     <string name="message_connection_failed_title">Connection failed</string>
@@ -28,6 +33,7 @@
     <string name="message_impress_pairing_check">If you have Bluetooth pairing issues check instructions related to your desktop OS.</string>
     <string name="message_ip_address_validation">You should type a valid IP address.</string>
     <string name="message_name_notice">Name is optional — IP address would be used instead if you wish.</string>
+    <string name="message_time_is_up">Time is up</string>
 
     <string name="hint_ip_address">IP address</string>
     <string name="hint_name">Name</string>
@@ -35,5 +41,9 @@
     <string name="header_notes">Notes</string>
 
     <string name="mask_slide_show_progress">Slide %1$d from %2$d</string>
+    <plurals name="mask_timer_progress">
+        <item quantity="one">One minute left</item>
+        <item quantity="other">%d minutes left</item>
+    </plurals>
 
 </resources>
