@@ -171,15 +171,15 @@ int SwCondCollItem::operator==( const SfxPoolItem& rItem) const
     return bReturn;
 }
 
-const String&   SwCondCollItem::GetStyle(sal_uInt16 nPos) const
+OUString SwCondCollItem::GetStyle(sal_uInt16 nPos) const
 {
-    return nPos < COND_COMMAND_COUNT ? sStyles[nPos] : aEmptyStr;
+    return nPos < COND_COMMAND_COUNT ? sStyles[nPos] : OUString();
 }
 
-void SwCondCollItem::SetStyle(const String* pStyle, sal_uInt16 nPos)
+void SwCondCollItem::SetStyle(const OUString* pStyle, sal_uInt16 nPos)
 {
     if( nPos < COND_COMMAND_COUNT )
-        sStyles[nPos] = pStyle ? *pStyle : aEmptyStr;
+        sStyles[nPos] = pStyle ? *pStyle : OUString();
 }
 
 const CommandStruct* SwCondCollItem::GetCmds()

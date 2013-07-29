@@ -2782,12 +2782,10 @@ void SwWW8ImplReader::Read_SubF_Ruby( WW8ReadFieldParams& rReadParam)
         //Create a new char style if necessary
         if (!pCharFmt)
         {
-            SwCharFmt *pFmt=0;
-            String aNm;
             //Take this as the base name
-            SwStyleNameMapper::FillUIName(RES_POOLCHR_RUBYTEXT,aNm);
-            aNm+=OUString::number(aRubyCharFmts.size()+1);
-            pFmt = rDoc.MakeCharFmt(aNm,(SwCharFmt*)rDoc.GetDfltCharFmt());
+            const OUString aNm = SwStyleNameMapper::GetUIName(RES_POOLCHR_RUBYTEXT)
+                               + OUString::number(aRubyCharFmts.size()+1);
+            SwCharFmt *pFmt = rDoc.MakeCharFmt(aNm,(SwCharFmt*)rDoc.GetDfltCharFmt());
             SvxFontHeightItem aHeightItem(nFontSize*10, 100, RES_CHRATR_FONTSIZE);
             SvxFontItem aFontItem(FAMILY_DONTKNOW,sFontName,
                 aEmptyStr,PITCH_DONTKNOW,RTL_TEXTENCODING_DONTKNOW, RES_CHRATR_FONT);

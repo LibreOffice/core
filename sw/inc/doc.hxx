@@ -350,9 +350,9 @@ class SW_DLLPUBLIC SwDoc :
     mutable SwNumRuleTbl    *mpNumRuleTbl;   ///< List of all named NumRules.
 
     /// Hash map to find numrules by name
-    mutable boost::unordered_map<String, SwNumRule *, StringHash> maNumRuleMap;
+    mutable boost::unordered_map<OUString, SwNumRule *, StringHashRef> maNumRuleMap;
 
-    typedef boost::unordered_map< String, SwList*, StringHash > tHashMapForLists;
+    typedef boost::unordered_map<OUString, SwList*, StringHashRef> tHashMapForLists;
     /// container to hold the lists of the text document
     tHashMapForLists maLists;
     /// relation between list style and its default list

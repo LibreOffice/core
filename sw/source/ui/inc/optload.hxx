@@ -139,10 +139,10 @@ private:
     String          sSWGraphic;
     String          sOLE;
 
-    String          sIllustration;
-    String          sTable;
-    String          sText;
-    String          sDrawing;
+    OUString        sIllustration;
+    OUString        sTable;
+    OUString        sText;
+    OUString        sDrawing;
 
     String          sBegin;
     String          sEnd;

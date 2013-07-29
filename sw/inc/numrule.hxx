@@ -126,7 +126,7 @@ private:
     tParagraphStyleList maParagraphStyleList;
 
     /** boost::unordered_map containing "name->rule" relation */
-    boost::unordered_map<String, SwNumRule *, StringHash> * pNumRuleMap;
+    boost::unordered_map<OUString, SwNumRule *, StringHashRef> * pNumRuleMap;
 
     String sName;
     SwNumRuleType eRuleType;
@@ -206,7 +206,7 @@ public:
        @param pNumRuleMap      map to register in
      */
     void SetNumRuleMap(
-                boost::unordered_map<String, SwNumRule *, StringHash>* pNumRuleMap );
+                boost::unordered_map<OUString, SwNumRule *, StringHashRef>* pNumRuleMap );
 
     static char* GetOutlineRuleName() { return pDefOutlineName; }
 

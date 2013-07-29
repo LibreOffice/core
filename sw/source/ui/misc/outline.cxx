@@ -377,9 +377,8 @@ short SwOutlineTabDialog::Ok()
 
     for(i = 0; i < MAXLEVEL; ++i )
     {
-        String sHeadline;
-        ::SwStyleNameMapper::FillUIName( static_cast< sal_uInt16 >(RES_POOLCOLL_HEADLINE1 + i),
-                                         sHeadline );
+        const OUString sHeadline = SwStyleNameMapper::GetUIName(
+            static_cast< sal_uInt16 >(RES_POOLCOLL_HEADLINE1 + i) );
         SwTxtFmtColl* pColl = rWrtSh.FindTxtFmtCollByName( sHeadline );
         if( !pColl )
         {

@@ -637,7 +637,7 @@ bool SwGetRefField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         break;
     case FIELD_PROP_PAR1:
     {
-        String  sTmp(GetPar1());
+        OUString sTmp(GetPar1());
         if(REF_SEQUENCEFLD == nSubType)
         {
             sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( sTmp, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
@@ -651,7 +651,7 @@ bool SwGetRefField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
                 break;
             }
         }
-        rAny <<= OUString(sTmp);
+        rAny <<= sTmp;
     }
     break;
     case FIELD_PROP_PAR3:

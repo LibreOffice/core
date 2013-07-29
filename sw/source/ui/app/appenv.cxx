@@ -185,8 +185,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
     if(pOldSh )
     {
         const SwPageDesc& rCurPageDesc = pOldSh->GetPageDesc(pOldSh->GetCurPageDesc());
-        String sJacket;
-        SwStyleNameMapper::FillUIName( RES_POOLPAGE_JAKET, sJacket );
+        const OUString sJacket = SwStyleNameMapper::GetUIName( RES_POOLPAGE_JAKET );
         bEnvChange = rCurPageDesc.GetName() == sJacket;
 
         IDocumentDeviceAccess* pIDDA_old = pOldSh->getIDocumentDeviceAccess();

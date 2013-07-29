@@ -181,9 +181,9 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet& )
         pStyle = iter.Next();
     }
 
-    String sStr;
-    SwStyleNameMapper::FillUIName( static_cast< sal_uInt16 >(bEndNote ? RES_POOLCOLL_ENDNOTE
-                           : RES_POOLCOLL_FOOTNOTE), sStr );
+    const OUString sStr = SwStyleNameMapper::GetUIName(
+        static_cast< sal_uInt16 >(bEndNote ? RES_POOLCOLL_ENDNOTE
+                                           : RES_POOLCOLL_FOOTNOTE));
     if(LISTBOX_ENTRY_NOTFOUND == m_pParaTemplBox->GetEntryPos( sStr ) )
         m_pParaTemplBox->InsertEntry( sStr );
 

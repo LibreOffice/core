@@ -1053,7 +1053,7 @@ bool SwDoc::DelNumRule( const String& rName, bool bBroadcast )
         }
         // #i34097# DeleteAndDestroy deletes rName if
         // rName is directly taken from the numrule.
-        const String aTmpName( rName );
+        const OUString aTmpName( rName );
         delete (*mpNumRuleTbl)[ nPos ];
         mpNumRuleTbl->erase( mpNumRuleTbl->begin() + nPos );
         maNumRuleMap.erase(aTmpName);
@@ -2495,7 +2495,7 @@ SwList* SwDoc::getListByName( const String sListId ) const
 {
     SwList* pList = 0;
 
-    boost::unordered_map< String, SwList*, StringHash >::const_iterator
+    boost::unordered_map< OUString, SwList*, StringHashRef >::const_iterator
                                             aListIter = maLists.find( sListId );
     if ( aListIter != maLists.end() )
     {
@@ -2542,7 +2542,7 @@ SwList* SwDoc::getListForListStyle( const String sListStyleName ) const
 {
     SwList* pList = 0;
 
-    boost::unordered_map< String, SwList*, StringHash >::const_iterator
+    boost::unordered_map< OUString, SwList*, StringHashRef >::const_iterator
                             aListIter = maListStyleLists.find( sListStyleName );
     if ( aListIter != maListStyleLists.end() )
     {

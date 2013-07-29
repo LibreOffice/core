@@ -892,10 +892,10 @@ throw (beans::UnknownPropertyException)
         break;
     case FN_UNO_PAGE_STYLE:
         {
-            String sVal;
+            OUString sVal;
             SwUnoCursorHelper::GetCurPageStyle( aPam, sVal );
-            eRet = sVal.Len() ? beans::PropertyState_DIRECT_VALUE
-                              : beans::PropertyState_AMBIGUOUS_VALUE;
+            eRet = sVal.isEmpty() ? beans::PropertyState_AMBIGUOUS_VALUE
+                                  : beans::PropertyState_DIRECT_VALUE;
         }
         break;
     lcl_SwXParagraph_getPropertyStateDEFAULT:

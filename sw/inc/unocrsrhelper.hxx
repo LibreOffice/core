@@ -88,7 +88,7 @@ namespace SwUnoCursorHelper
                                         , com::sun::star::beans::PropertyState& eState
                                         , const SwTxtNode* pNode = 0 );
 
-    void                        GetCurPageStyle(SwPaM& rPaM, String &rString);
+    void                        GetCurPageStyle(SwPaM& rPaM, OUString &rString);
 
     inline sal_Bool             IsStartOfPara(SwPaM& rUnoCrsr)
                                         { return rUnoCrsr.GetPoint()->nContent == 0;}

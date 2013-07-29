@@ -552,7 +552,7 @@ const OUString&  SwDocStyleSheet::GetParent() const
             return aEmptyOUStr;       // there's no parent
         }
 
-        String sTmp;
+        OUString sTmp;
         if( !pFmt )         // not yet there, so default Parent
         {
             sal_uInt16 i = SwStyleNameMapper::GetPoolIdFromUIName( aName, eGetType );
@@ -2476,7 +2476,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
             aLst.Append( cCHAR, pFmt == rDoc.GetDfltCharFmt()
                         ? SwStyleNameMapper::GetTextUINameArray()[ RES_POOLCOLL_STANDARD -
                                                 RES_POOLCOLL_TEXT_BEGIN ]
-                        : pFmt->GetName() );
+                        : OUString(pFmt->GetName()) );
         }
 
         // PoolFormate
@@ -2807,7 +2807,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::Find(const OUString& rName)
     return 0;
 }
 
-void SwStyleSheetIterator::AppendStyleList(const boost::ptr_vector<String>& rList,
+void SwStyleSheetIterator::AppendStyleList(const boost::ptr_vector<OUString>& rList,
                                             sal_Bool bTestUsed, sal_Bool bTestHidden, bool bOnlyHidden,
                                             sal_uInt16 nSection, char cType )
 {

@@ -161,7 +161,7 @@ sal_Bool SwCondCollPage::FillItemSet(SfxItemSet &rSet)
     SwCondCollItem aCondItem;
     for(sal_uInt16 i = 0; i < aStrArr.Count(); i++)
     {
-        String sEntry = aTbLinks.GetEntryText(i, 1);
+        OUString sEntry = aTbLinks.GetEntryText(i, 1);
         aCondItem.SetStyle( &sEntry, i);
     }
     rSet.Put(aCondItem);

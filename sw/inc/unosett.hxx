@@ -142,7 +142,7 @@ class SwXNumberingRules : public cppu::WeakAggImplHelper5
 >,
     public SwClient
 {
-    String                      sNewCharStyleNames[MAXLEVEL];
+    OUString                    sNewCharStyleNames[MAXLEVEL];
     String                      sNewBulletFontNames[MAXLEVEL];
     String                      sCreatedNumRuleName; //connects to a numbering in SwDoc
     SwDoc*                      pDoc;
@@ -203,7 +203,7 @@ public:
                 const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rProperties, sal_Int32 nIndex)
                 throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException );
 
-    const String*           GetNewCharStyleNames() const {return sNewCharStyleNames;}
+    const OUString*         GetNewCharStyleNames() const {return sNewCharStyleNames;}
     const String*           GetBulletFontNames() const {return sNewBulletFontNames;}
     const SwNumRule*        GetNumRule() {return pNumRule;}
 

@@ -19,80 +19,69 @@
 #ifndef _STRINGHASH_HXX
 #define _STRINGHASH_HXX
 
-#include <tools/string.hxx>
-
 struct StringEq
 {
-    sal_Bool operator() ( const String *r1,
-                            const String *r2) const
+    bool operator() ( const OUString *r1, const OUString *r2) const
     {
-        return r1->Equals(*r2);
+        return *r1 == *r2;
     }
 };
 
 struct StringEqRef
 {
-    sal_Bool operator() (const String &r1, const String &r2) const
+    bool operator() (const OUString &r1, const OUString &r2) const
     {
-        return r1.Equals(r2);
-    }
-};
-
-struct StringHash
-{
-    size_t operator() ( const String *rString) const
-    {
-        sal_Int32 h, nLen;
-        h = nLen = rString->Len();
-        const sal_Unicode *pStr = rString->GetBuffer();
-
-        if ( nLen < 16 )
-            while ( nLen-- > 0 )
-                h = (h*37) + *(pStr++);
-        else
-        {
-            sal_Int32               nSkip;
-            const sal_Unicode* pEndStr = pStr+nLen-5;
-
-            /* only sample some characters */
-            /* the first 3, some characters between, and the last 5 */
-            h = (h*39) + *(pStr++);
-            h = (h*39) + *(pStr++);
-            h = (h*39) + *(pStr++);
-
-            nSkip = nLen / nLen < 32 ? 4 : 8;
-            nLen -= 8;
-            while ( nLen > 0 )
-            {
-                h = (h*39) + ( *pStr );
-                pStr += nSkip;
-                nLen -= nSkip;
-            }
-
-            h = (h*39) + *(pEndStr++);
-            h = (h*39) + *(pEndStr++);
-            h = (h*39) + *(pEndStr++);
-            h = (h*39) + *(pEndStr++);
-            h = (h*39) + *(pEndStr++);
-        }
-        return h;
-    }
-
-    size_t operator() (const String & rStr) const
-    {
-        return (*this)(&rStr);
+        return r1 == r2;
     }
 };
 
 struct StringHashRef
 {
-    size_t operator () (const String &rStr) const
+    size_t operator() (const OUString &rStr) const
     {
-        StringHash aStrHash;
+        const sal_Int32 nLen = rStr.getLength();
+        sal_Int32 h = nLen;
 
-        return aStrHash(&rStr);
+        if ( nLen < 16 )
+        {
+            for (sal_Int32 i=0; i<nLen; ++i)
+            {
+                h = (h*37) + rStr[i];
+            }
+        }
+        else
+        {
+            /* only sample some characters */
+            /* the first 3, some characters between, and the last 5 */
+            for (sal_Int32 i=0; i<3; ++i)
+            {
+                h = (h*39) + rStr[i];
+            }
+
+            const sal_Int32 nSkip = nLen / (nLen < 32 ? 4 : 8);
+            for (sal_Int32 i=3; i<nLen-5; i+=nSkip)
+            {
+                h = (h*39) + rStr[i];
+            }
+
+            for (sal_Int32 i=nLen-5; i<nLen; ++i)
+            {
+                h = (h*39) + rStr[i];
+            }
+        }
+        return h;
     }
 };
+
+struct StringHash
+{
+    size_t operator() (const OUString *rStr) const
+    {
+        StringHashRef aStrHashRef;
+        return aStrHashRef(*rStr);
+    }
+};
+
 #endif // _STRINGHASH_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

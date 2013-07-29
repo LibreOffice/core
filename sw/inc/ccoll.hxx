@@ -20,7 +20,6 @@
 #define _CCOLL_HXX
 
 #include <svl/poolitem.hxx>
-#include <tools/string.hxx>
 #include <sfx2/tabdlg.hxx>
 
 #include <vcl/fixed.hxx>
@@ -62,7 +61,7 @@ class SW_DLLPUBLIC SwCondCollItem : public SfxPoolItem
 {
     static const CommandStruct  aCmds[COND_COMMAND_COUNT];
 
-    String                      sStyles[COND_COMMAND_COUNT];
+    OUString                    sStyles[COND_COMMAND_COUNT];
 
 public:
     SwCondCollItem(sal_uInt16 nWhich = FN_COND_COLL);
@@ -75,8 +74,8 @@ public:
 
     static const CommandStruct* GetCmds();
 
-    const String&               GetStyle(sal_uInt16 nPos) const;
-    void                        SetStyle( const String* pStyle, sal_uInt16 nPos);
+    OUString                    GetStyle(sal_uInt16 nPos) const;
+    void                        SetStyle( const OUString* pStyle, sal_uInt16 nPos);
 
 };
 

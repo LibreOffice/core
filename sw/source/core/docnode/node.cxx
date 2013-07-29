@@ -111,7 +111,7 @@ void SetParent( boost::shared_ptr<const SfxItemSet>& mrpAttrSet,
         aNewSet.SetParent( pParentSet );
         aNewSet.ClearItem( RES_FRMATR_STYLE_NAME );
         aNewSet.ClearItem( RES_FRMATR_CONDITIONAL_STYLE_NAME );
-        String sVal;
+        OUString sVal;
 
         if ( pParentFmt )
         {

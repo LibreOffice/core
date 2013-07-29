@@ -378,9 +378,9 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
             {
                 if( pAny )
                 {
-                    String sVal;
+                    OUString sVal;
                     SwStyleNameMapper::FillProgName(pFmt->GetName(), sVal, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, true );
-                    *pAny <<= OUString(sVal);
+                    *pAny <<= sVal;
                 }
             }
             else
@@ -389,11 +389,11 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
         break;
         case FN_UNO_PAGE_STYLE :
         {
-            String sVal;
+            OUString sVal;
             GetCurPageStyle(rPam, sVal);
             if( pAny )
-                *pAny <<= OUString(sVal);
-            if(!sVal.Len())
+                *pAny <<= sVal;
+            if (sVal.isEmpty())
                 eNewState = PropertyState_AMBIGUOUS_VALUE;
         }
         break;
@@ -770,16 +770,16 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
             if(pSwNum->GetNumRule())
             {
                 SwNumRule aRule(*pSwNum->GetNumRule());
-                const String* pNewCharStyles =  pSwNum->GetNewCharStyleNames();
+                const OUString* pNewCharStyles =  pSwNum->GetNewCharStyleNames();
                 const String* pBulletFontNames = pSwNum->GetBulletFontNames();
                 for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
                 {
                     SwNumFmt aFmt(aRule.Get( i ));
-                    if( pNewCharStyles[i].Len() &&
+                    if( !pNewCharStyles[i].isEmpty() &&
                         !SwXNumberingRules::isInvalidStyle(pNewCharStyles[i]) &&
                         (!aFmt.GetCharFmt() || pNewCharStyles[i] != aFmt.GetCharFmt()->GetName()))
                     {
-                        if(!pNewCharStyles[i].Len())
+                        if (pNewCharStyles[i].isEmpty())
                             aFmt.SetCharFmt(0);
                         else
                         {
@@ -896,7 +896,7 @@ void  getNumberingProperty(SwPaM& rPam, PropertyState& eState, Any * pAny )
         eState = PropertyState_DEFAULT_VALUE;
 }
 
-void GetCurPageStyle(SwPaM& rPaM, String &rString)
+void GetCurPageStyle(SwPaM& rPaM, OUString &rString)
 {
     if (!rPaM.GetCntntNode())
         return; // TODO: is there an easy way to get it for tables/sections?

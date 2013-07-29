@@ -2778,19 +2778,22 @@ void SwTOXEntryTabPage::SetWrtShell(SwWrtShell& rSh)
 
 String  SwTOXEntryTabPage::GetLevelHelp(sal_uInt16 nLevel) const
 {
-    String sRet;
     SwMultiTOXTabDialog* pTOXDlg = (SwMultiTOXTabDialog*)GetTabDialog();
     const CurTOXType aCurType = pTOXDlg->GetCurrentTOXType();
     if( TOX_INDEX == aCurType.eType )
-        SwStyleNameMapper::FillUIName( static_cast< sal_uInt16 >(1 == nLevel ? RES_POOLCOLL_TOX_IDXBREAK
-                                  : RES_POOLCOLL_TOX_IDX1 + nLevel-2), sRet );
+    {
+        return SwStyleNameMapper::GetUIName(static_cast< sal_uInt16 >(
+            1 == nLevel ? RES_POOLCOLL_TOX_IDXBREAK
+                        : RES_POOLCOLL_TOX_IDX1 + nLevel-2));
+    }
 
-    else if( TOX_AUTHORITIES == aCurType.eType )
+    if( TOX_AUTHORITIES == aCurType.eType )
     {
         //wildcard -> show entry text
-        sRet = '*';
+        return OUString('*');
     }
-    return sRet;
+
+    return OUString();
 }
 
 SwTokenWindow::SwTokenWindow(SwTOXEntryTabPage* pParent, const ResId& rResId) :

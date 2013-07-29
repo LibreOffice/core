@@ -160,7 +160,7 @@ void SwXMLTextParagraphExport::exportStyleContent(
                     GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                                 XML_CONDITION,
                                 sBuffer.makeStringAndClear() );
-                    String aString;
+                    OUString aString;
                     SwStyleNameMapper::FillProgName(
                                     rCond.GetTxtFmtColl()->GetName(),
                                     aString,

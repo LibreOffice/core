@@ -150,7 +150,7 @@ void SwNumRule::RemoveTxtNode( SwTxtNode& rTxtNode )
 }
 
 
-void SwNumRule::SetNumRuleMap(boost::unordered_map<String, SwNumRule *, StringHash> *
+void SwNumRule::SetNumRuleMap(boost::unordered_map<OUString, SwNumRule *, StringHashRef> *
                               _pNumRuleMap)
 {
     pNumRuleMap = _pNumRuleMap;
