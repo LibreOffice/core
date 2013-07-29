@@ -190,8 +190,6 @@ SwAutoFormatDlg::~SwAutoFormatDlg()
 
 void SwAutoFormatDlg::dispose()
 {
-    if (bCoreDataChanged)
-        pTableTable->Save();
     delete pTableTable;
     m_pLbFormat.clear();
     m_pFormatting.clear();
