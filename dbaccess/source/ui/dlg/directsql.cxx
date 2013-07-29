@@ -73,33 +73,25 @@ namespace dbaui
 DBG_NAME(DirectSQLDialog)
 //--------------------------------------------------------------------
     DirectSQLDialog::DirectSQLDialog( Window* _pParent, const Reference< XConnection >& _rxConn )
-        :ModalDialog(_pParent, ModuleRes(DLG_DIRECTSQL))
-        ,m_aFrame               (this, ModuleRes(FL_SQL))
-        ,m_aSQLLabel            (this, ModuleRes(FT_SQL))
-        ,m_aSQL                 (this, ModuleRes(ME_SQL))
-        ,m_aExecute             (this, ModuleRes(PB_EXECUTE))
-        ,m_aHistoryLabel        (this, ModuleRes(FT_HISTORY))
-        ,m_pSQLHistory(new LargeEntryListBox(this, ModuleRes(LB_HISTORY)))
-        ,m_aStatusFrame         (this, ModuleRes(FL_STATUS))
-        ,m_aStatus              (this, ModuleRes(ME_STATUS))
-        ,m_pShowOutput(new CheckBox(this, ModuleRes(CB_SHOWOUTPUT)))
-        ,m_aOutputFrame         (this, ModuleRes(FL_OUTPUT))
-        ,m_aOutput              (this, ModuleRes(ME_OUTPUT))
-        ,m_aButtonSeparator     (this, ModuleRes(FL_BUTTONS))
-        ,m_aHelp                (this, ModuleRes(PB_HELP))
-        ,m_aClose               (this, ModuleRes(PB_CLOSE))
+        :ModalDialog(_pParent, "DirectSQLDialog" , "dbaccess/ui/directsqldialog.ui")
         ,m_nHistoryLimit(20)
         ,m_nStatusCount(1)
         ,m_xConnection(_rxConn)
     {
+        get(m_pSQL,"sql");
+        get(m_pExecute,"execute");
+        get(m_pSQLHistory,"sqlhistory");
+        get(m_pStatus,"status");
+        get(m_pShowOutput,"showoutput");
+        get(m_pOutput,"output");
+        get(m_pClose,"close");
+
         DBG_CTOR(DirectSQLDialog,NULL);
 
-        FreeResource();
+        m_pSQL->GrabFocus();
 
-        m_aSQL.GrabFocus();
-
-        m_aExecute.SetClickHdl(LINK(this, DirectSQLDialog, OnExecute));
-        m_aClose.SetClickHdl(LINK(this, DirectSQLDialog, OnClose));
+        m_pExecute->SetClickHdl(LINK(this, DirectSQLDialog, OnExecute));
+        m_pClose->SetClickHdl(LINK(this, DirectSQLDialog, OnClose));
         m_pSQLHistory->SetSelectHdl(LINK(this, DirectSQLDialog, OnListEntrySelected));
         m_pSQLHistory->SetDropDownLineCount(10);
 
@@ -109,8 +101,8 @@ DBG_NAME(DirectSQLDialog)
         if (xConnComp.is())
             startComponentListening(xConnComp);
 
-        m_aSQL.SetModifyHdl(LINK(this, DirectSQLDialog, OnStatementModified));
-        OnStatementModified(&m_aSQL);
+        m_pSQL->SetModifyHdl(LINK(this, DirectSQLDialog, OnStatementModified));
+        OnStatementModified(m_pSQL);
     }
 
     //--------------------------------------------------------------------
@@ -120,8 +112,6 @@ DBG_NAME(DirectSQLDialog)
             ::osl::MutexGuard aGuard(m_aMutex);
             stopAllComponentListening();
         }
-        delete m_pSQLHistory;
-        delete m_pShowOutput;
 
         DBG_DTOR(DirectSQLDialog,NULL);
     }
@@ -226,7 +216,7 @@ DBG_NAME(DirectSQLDialog)
             OSL_ENSURE(xStatement.is(), "DirectSQLDialog::implExecuteStatement: no statement returned by the connection!");
 
             // clear the output box
-            m_aOutput.SetText(OUString());
+            m_pOutput->SetText(OUString());
             if (xStatement.is())
             {
                 if (OUString(_rStatement).toAsciiUpperCase().startsWith("SELECT") && m_pShowOutput->IsChecked())
@@ -288,10 +278,10 @@ DBG_NAME(DirectSQLDialog)
     {
         OUString sAppendMessage = OUString::number(m_nStatusCount++) + ": " + _rMessage + "\n\n";
 
-        OUString sCompleteMessage = m_aStatus.GetText() + sAppendMessage;
-        m_aStatus.SetText(sCompleteMessage);
+        OUString sCompleteMessage = m_pStatus->GetText() + sAppendMessage;
+        m_pStatus->SetText(sCompleteMessage);
 
-        m_aStatus.SetSelection(Selection(sCompleteMessage.getLength(), sCompleteMessage.getLength()));
+        m_pStatus->SetSelection(Selection(sCompleteMessage.getLength(), sCompleteMessage.getLength()));
     }
 
     //--------------------------------------------------------------------
@@ -300,9 +290,9 @@ DBG_NAME(DirectSQLDialog)
         String sAppendMessage = _rMessage;
         sAppendMessage += OUString("\n");
 
-        String sCompleteMessage = m_aOutput.GetText();
+        String sCompleteMessage = m_pOutput->GetText();
         sCompleteMessage += sAppendMessage;
-        m_aOutput.SetText(sCompleteMessage);
+        m_pOutput->SetText(sCompleteMessage);
     }
 
     //--------------------------------------------------------------------
@@ -310,7 +300,7 @@ DBG_NAME(DirectSQLDialog)
     {
         CHECK_INVARIANTS("DirectSQLDialog::executeCurrent");
 
-        String sStatement = m_aSQL.GetText();
+        String sStatement = m_pSQL->GetText();
 
         // execute
         implExecuteStatement(sStatement);
@@ -318,8 +308,8 @@ DBG_NAME(DirectSQLDialog)
         // add the statement to the history
         implAddToStatementHistory(sStatement);
 
-        m_aSQL.SetSelection(Selection());
-        m_aSQL.GrabFocus();
+        m_pSQL->SetSelection(Selection());
+        m_pSQL->GrabFocus();
     }
 
     //--------------------------------------------------------------------
@@ -331,8 +321,8 @@ DBG_NAME(DirectSQLDialog)
         {
             // set the text in the statement editor
             String sStatement = m_aStatementHistory[_nHistoryPos];
-            m_aSQL.SetText(sStatement);
-            OnStatementModified(&m_aSQL);
+            m_pSQL->SetText(sStatement);
+            OnStatementModified(m_pSQL);
 
             if (_bUpdateListBox)
             {
@@ -342,8 +332,8 @@ DBG_NAME(DirectSQLDialog)
                     "DirectSQLDialog::switchToHistory: inconsistent listbox entries!");
             }
 
-            m_aSQL.GrabFocus();
-            m_aSQL.SetSelection(Selection(sStatement.Len(), sStatement.Len()));
+            m_pSQL->GrabFocus();
+            m_pSQL->SetSelection(Selection(sStatement.Len(), sStatement.Len()));
         }
         else
             OSL_FAIL("DirectSQLDialog::switchToHistory: invalid position!");
@@ -352,7 +342,7 @@ DBG_NAME(DirectSQLDialog)
     //--------------------------------------------------------------------
     IMPL_LINK( DirectSQLDialog, OnStatementModified, void*, /*NOTINTERESTEDIN*/ )
     {
-        m_aExecute.Enable(!m_aSQL.GetText().isEmpty());
+        m_pExecute->Enable(!m_pSQL->GetText().isEmpty());
         return 0L;
     }
 
