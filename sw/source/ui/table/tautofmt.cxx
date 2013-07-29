@@ -409,19 +409,18 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, RenameHdl)
                 {
                     // no format with this name exists, so rename it
                     m_pLbFormat->RemoveEntry( nDfltStylePos + nIndex );
-                    SwTableAutoFmt* p = &(*pTableTbl)[ nIndex ];
+                    SwTableAutoFmt* p = pTableTbl->ReleaseAutoFmt( nIndex );
 
                     p->SetName( aFormatName );
 
                     // keep all arrays sorted!
                     for( n = 1; n < pTableTbl->size(); ++n )
-                        if ((n != nIndex) &&
-                            ((*pTableTbl)[n].GetName() > aFormatName))
+                        if ((*pTableTbl)[n].GetName() > aFormatName)
                         {
                             break;
                         }
 
-                    pTableTbl->MoveAutoFmt(n, nIndex);
+                    pTableTbl->InsertAutoFmt( n, p );
                     m_pLbFormat->InsertEntry( aFormatName, nDfltStylePos + n );
                     m_pLbFormat->SelectEntryPos( nDfltStylePos + n );
 
