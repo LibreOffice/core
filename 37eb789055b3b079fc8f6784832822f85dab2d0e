@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//9yY\u003d",
+        "filename": "vcl/source/filter/GraphicNativeTransform.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-07-29T08:32:36Z",
+      "side": 0,
+      "message": "Did you intentionally modify these last about 10 lines?",
+      "revId": "37eb789055b3b079fc8f6784832822f85dab2d0e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
