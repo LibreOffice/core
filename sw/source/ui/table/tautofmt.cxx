@@ -178,8 +178,6 @@ SwAutoFormatDlg::SwAutoFormatDlg( Window* pParent, SwWrtShell* pWrtShell,
 
 SwAutoFormatDlg::~SwAutoFormatDlg()
 {
-    if (bCoreDataChanged)
-        pTableTbl->Save();
     delete pTableTbl;
 }
 
