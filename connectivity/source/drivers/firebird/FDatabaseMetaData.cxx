@@ -800,46 +800,175 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTableTypes(  ) throw
 {
     return NULL;
 }
-// -------------------------------------------------------------------------
-uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo(  ) throw(SQLException, RuntimeException)
+
+uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
+    throw(SQLException, RuntimeException)
 {
-    SAL_INFO("connectivity.firebird", "getTypeInfo().");
+    SAL_INFO("connectivity.firebird", "getTypeInfo()");
 
     // this returns an empty resultset where the column-names are already set
     // in special the metadata of the resultset already returns the right columns
-    ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTypeInfo);
+    ODatabaseMetaDataResultSet* pResultSet =
+            new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTypeInfo);
     uno::Reference< XResultSet > xResultSet = pResultSet;
-    static ODatabaseMetaDataResultSet::ORows aRows;
+    static ODatabaseMetaDataResultSet::ORows aResults;
 
-    if(aRows.empty())
+    if(aResults.empty())
     {
-        ODatabaseMetaDataResultSet::ORow aRow;
-        aRow.reserve(19);
-        aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
-        aRow.push_back(new ORowSetValueDecorator(OUString("VARCHAR(100)")));
-        aRow.push_back(new ORowSetValueDecorator(DataType::VARCHAR));
-        aRow.push_back(new ORowSetValueDecorator((sal_Int32)s_nCHAR_OCTET_LENGTH));
-        aRow.push_back(ODatabaseMetaDataResultSet::getQuoteValue());
-        aRow.push_back(ODatabaseMetaDataResultSet::getQuoteValue());
-        aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
-        // aRow.push_back(new ORowSetValueDecorator((sal_Int32)ColumnValue::NULLABLE));
-        aRow.push_back(ODatabaseMetaDataResultSet::get1Value());
-        aRow.push_back(ODatabaseMetaDataResultSet::get1Value());
-        aRow.push_back(new ORowSetValueDecorator((sal_Int32)ColumnSearch::CHAR));
-        aRow.push_back(ODatabaseMetaDataResultSet::get1Value());
-        aRow.push_back(ODatabaseMetaDataResultSet::get0Value());
-        aRow.push_back(ODatabaseMetaDataResultSet::get0Value());
-        aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
-        aRow.push_back(ODatabaseMetaDataResultSet::get0Value());
-        aRow.push_back(ODatabaseMetaDataResultSet::get0Value());
-        aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
-        aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
-        aRow.push_back(new ORowSetValueDecorator((sal_Int32)10));
+        ODatabaseMetaDataResultSet::ORow aRow(19);
 
-        aRows.push_back(aRow);
+        // Common data
+        aRow[4] = ODatabaseMetaDataResultSet::getQuoteValue(); // Literal quote marks
+        aRow[5] = ODatabaseMetaDataResultSet::getQuoteValue(); // Literal quote marks
+        aRow[6] = new ORowSetValueDecorator();               // Create Params
+        aRow[7] = new ORowSetValueDecorator(sal_Bool(true)); // Nullable
+        aRow[8] = new ORowSetValueDecorator(sal_Bool(true)); // Case sensitive
+        aRow[10] = new ORowSetValueDecorator(sal_Bool(false)); // Is unsigned
+        // Localised Type Name -- TODO: implement (but can be null):
+        aRow[13] = new ORowSetValueDecorator();
+        aRow[16] = new ORowSetValueDecorator();             // Unused
+        aRow[17] = new ORowSetValueDecorator();             // Unused
+        aRow[18] = new ORowSetValueDecorator(sal_Int16(10));// Radix
 
+        // TODO: sort by DATA_TYPE
+
+        // SQL_TEXT
+        aRow[1] = new ORowSetValueDecorator(OUString("CHAR"));
+        aRow[2] = new ORowSetValueDecorator(getColumnTypeFromFBType(SQL_TEXT));
+        aRow[3] = new ORowSetValueDecorator(sal_Int16(32767)); // Prevision = max length
+        aRow[9] = new ORowSetValueDecorator(
+                sal_Int16(ColumnSearch::FULL)); // Searchable
+        aRow[11] = new ORowSetValueDecorator(sal_Bool(true)); // Can be money value
+        aRow[12] = new ORowSetValueDecorator(sal_Bool(false)); // Autoincrement
+        aRow[14] = ODatabaseMetaDataResultSet::get0Value(); // Minimum scale
+        aRow[15] = ODatabaseMetaDataResultSet::get0Value(); // Max scale
+        aResults.push_back(aRow);
+
+        // SQL_VARYING
+        aRow[1] = new ORowSetValueDecorator(OUString("VARCHAR"));
+        aRow[2] = new ORowSetValueDecorator(getColumnTypeFromFBType(SQL_VARYING));
+        aRow[3] = new ORowSetValueDecorator(sal_Int16(32767)); // Prevision = max length
+        aRow[9] = new ORowSetValueDecorator(
+                sal_Int16(ColumnSearch::FULL)); // Searchable
+        aRow[11] = new ORowSetValueDecorator(sal_Bool(true)); // Can be money value
+        aRow[12] = new ORowSetValueDecorator(sal_Bool(false)); // Autoincrement
+        aRow[14] = ODatabaseMetaDataResultSet::get0Value(); // Minimum scale
+        aRow[15] = ODatabaseMetaDataResultSet::get0Value(); // Max scale
+        aResults.push_back(aRow);
+
+        // Integer Types common
+        {
+            aRow[9] = new ORowSetValueDecorator(
+                sal_Int16(ColumnSearch::FULL)); // Searchable
+            aRow[11] = new ORowSetValueDecorator(sal_Bool(true)); // Can be money value
+            aRow[12] = new ORowSetValueDecorator(sal_Bool(true)); // Autoincrement
+            aRow[14] = ODatabaseMetaDataResultSet::get0Value(); // Minimum scale
+            aRow[15] = ODatabaseMetaDataResultSet::get0Value(); // Max scale
+        }
+        // SQL_SHORT
+        aRow[1] = new ORowSetValueDecorator(OUString("SMALLINT"));
+        aRow[2] = new ORowSetValueDecorator(getColumnTypeFromFBType(SQL_SHORT));
+        aRow[3] = new ORowSetValueDecorator(sal_Int16(5)); // Prevision
+        aResults.push_back(aRow);
+        // SQL_LONG
+        aRow[1] = new ORowSetValueDecorator(OUString("INTEGER"));
+        aRow[2] = new ORowSetValueDecorator(getColumnTypeFromFBType(SQL_LONG));
+        aRow[3] = new ORowSetValueDecorator(sal_Int16(10)); // Precision
+        aResults.push_back(aRow);
+        // SQL_INT64
+        aRow[1] = new ORowSetValueDecorator(OUString("BIGINT"));
+        aRow[2] = new ORowSetValueDecorator(getColumnTypeFromFBType(SQL_INT64));
+        aRow[3] = new ORowSetValueDecorator(sal_Int16(20)); // Precision
+        aResults.push_back(aRow);
+
+        // Decimal Types common
+        {
+            aRow[9] = new ORowSetValueDecorator(
+                sal_Int16(ColumnSearch::FULL)); // Searchable
+            aRow[11] = new ORowSetValueDecorator(sal_Bool(true)); // Can be money value
+            aRow[12] = new ORowSetValueDecorator(sal_Bool(true)); // Autoincrement
+        }
+        // SQL_FLOAT
+        aRow[1] = new ORowSetValueDecorator(OUString("FLOAT"));
+        aRow[2] = new ORowSetValueDecorator(getColumnTypeFromFBType(SQL_FLOAT));
+        aRow[3] = new ORowSetValueDecorator(sal_Int16(7)); // Precision
+        aRow[14] = new ORowSetValueDecorator(sal_Int16(1)); // Minimum scale
+        aRow[15] = new ORowSetValueDecorator(sal_Int16(7)); // Max scale
+        aResults.push_back(aRow);
+        // SQL_DOUBLE
+        aRow[1] = new ORowSetValueDecorator(OUString("REAL"));
+        aRow[2] = new ORowSetValueDecorator(getColumnTypeFromFBType(SQL_DOUBLE));
+        aRow[3] = new ORowSetValueDecorator(sal_Int16(15)); // Precision
+        aRow[14] = new ORowSetValueDecorator(sal_Int16(1)); // Minimum scale
+        aRow[15] = new ORowSetValueDecorator(sal_Int16(15)); // Max scale
+        aResults.push_back(aRow);
+//         // SQL_D_FLOAT
+//         aRow[1] = new ORowSetValueDecorator(getColumnTypeNameFromFBType(SQL_D_FLOAT));
+//         aRow[2] = new ORowSetValueDecorator(getColumnTypeFromFBType(SQL_D_FLOAT));
+//         aRow[3] = new ORowSetValueDecorator(sal_Int16(15)); // Precision
+//         aRow[14] = new ORowSetValueDecorator(sal_Int16(1)); // Minimum scale
+//         aRow[15] = new ORowSetValueDecorator(sal_Int16(15)); // Max scale
+//         aResults.push_back(aRow);
+        // TODO: no idea whether D_FLOAT corresponds to an sql type
+
+        // SQL_TIMESTAMP
+        // TODO: precision?
+        aRow[1] = new ORowSetValueDecorator(OUString("timestamp"));
+        aRow[2] = new ORowSetValueDecorator(getColumnTypeFromFBType(SQL_TIMESTAMP));
+        aRow[3] = new ORowSetValueDecorator(sal_Int32(8)); // Prevision = max length
+        aRow[9] = new ORowSetValueDecorator(
+                sal_Int16(ColumnSearch::FULL)); // Searchable
+        aRow[11] = new ORowSetValueDecorator(sal_Bool(false)); // Can be money value
+        aRow[12] = new ORowSetValueDecorator(sal_Bool(false)); // Autoincrement
+        aRow[14] = ODatabaseMetaDataResultSet::get0Value(); // Minimum scale
+        aRow[15] = ODatabaseMetaDataResultSet::get0Value(); // Max scale
+        aResults.push_back(aRow);
+
+        // SQL_TYPE_TIME
+        // TODO: precision?
+        aRow[1] = new ORowSetValueDecorator(OUString("TIME"));
+        aRow[2] = new ORowSetValueDecorator(getColumnTypeFromFBType(SQL_TYPE_TIME));
+        aRow[3] = new ORowSetValueDecorator(sal_Int32(8)); // Prevision = max length
+        aRow[9] = new ORowSetValueDecorator(
+                sal_Int16(ColumnSearch::FULL)); // Searchable
+        aRow[11] = new ORowSetValueDecorator(sal_Bool(false)); // Can be money value
+        aRow[12] = new ORowSetValueDecorator(sal_Bool(false)); // Autoincrement
+        aRow[14] = ODatabaseMetaDataResultSet::get0Value(); // Minimum scale
+        aRow[15] = ODatabaseMetaDataResultSet::get0Value(); // Max scale
+        aResults.push_back(aRow);
+
+        // SQL_TYPE_DATE
+        // TODO: precision?
+        aRow[1] = new ORowSetValueDecorator(OUString("DATE"));
+        aRow[2] = new ORowSetValueDecorator(getColumnTypeFromFBType(SQL_TYPE_DATE));
+        aRow[3] = new ORowSetValueDecorator(sal_Int32(8)); // Prevision = max length
+        aRow[9] = new ORowSetValueDecorator(
+                sal_Int16(ColumnSearch::FULL)); // Searchable
+        aRow[11] = new ORowSetValueDecorator(sal_Bool(false)); // Can be money value
+        aRow[12] = new ORowSetValueDecorator(sal_Bool(false)); // Autoincrement
+        aRow[14] = ODatabaseMetaDataResultSet::get0Value(); // Minimum scale
+        aRow[15] = ODatabaseMetaDataResultSet::get0Value(); // Max scale
+        aResults.push_back(aRow);
+
+        // SQL_BLOB
+        // TODO: precision?
+        aRow[1] = new ORowSetValueDecorator(OUString("BLOB"));
+        aRow[2] = new ORowSetValueDecorator(getColumnTypeFromFBType(SQL_BLOB));
+        aRow[3] = new ORowSetValueDecorator(sal_Int32(0)); // Prevision = max length
+        aRow[9] = new ORowSetValueDecorator(
+                sal_Int16(ColumnSearch::NONE)); // Searchable
+        aRow[11] = new ORowSetValueDecorator(sal_Bool(false)); // Can be money value
+        aRow[12] = new ORowSetValueDecorator(sal_Bool(false)); // Autoincrement
+        aRow[14] = ODatabaseMetaDataResultSet::get0Value(); // Minimum scale
+        aRow[15] = ODatabaseMetaDataResultSet::get0Value(); // Max scale
+        aResults.push_back(aRow);
+
+        // TODO: complete
+//     case SQL_ARRAY:
+//     case SQL_NULL:
+//     case SQL_QUAD:      // Is a "Blob ID" according to the docs
     }
-    pResultSet->setRows(aRows);
+    pResultSet->setRows(aResults);
     return xResultSet;
 }
 
