@@ -56,7 +56,6 @@ const sal_Int32 n_ConstDigestDecrypt = 1056; // 1024 + 32
 #define IS_INCONSISTENT_PROPERTY "IsInconsistent"
 #define MEDIATYPE_FALLBACK_USED_PROPERTY "MediaTypeFallbackUsed"
 
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

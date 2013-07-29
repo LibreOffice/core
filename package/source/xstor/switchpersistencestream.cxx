@@ -26,7 +26,6 @@
 
 using namespace ::com::sun::star;
 
-// ========================================================================
 struct SPStreamData_Impl
 {
     sal_Bool m_bInStreamBased;
@@ -42,7 +41,6 @@ struct SPStreamData_Impl
 
     sal_Bool m_bInOpen;
     sal_Bool m_bOutOpen;
-
 
     SPStreamData_Impl(
             sal_Bool bInStreamBased,
@@ -65,8 +63,6 @@ struct SPStreamData_Impl
     }
 };
 
-// ========================================================================
-// ------------------------------------------------------------------------
 SwitchablePersistenceStream::SwitchablePersistenceStream(
         const uno::Reference< uno::XComponentContext >& xContext,
         const uno::Reference< io::XStream >& xStream )
@@ -76,7 +72,6 @@ SwitchablePersistenceStream::SwitchablePersistenceStream(
     SwitchPersistenceTo( xStream );
 }
 
-// ------------------------------------------------------------------------
 SwitchablePersistenceStream::SwitchablePersistenceStream(
         const uno::Reference< uno::XComponentContext >& xContext,
         const uno::Reference< io::XInputStream >& xInputStream )
@@ -86,13 +81,11 @@ SwitchablePersistenceStream::SwitchablePersistenceStream(
     SwitchPersistenceTo( xInputStream );
 }
 
-// ------------------------------------------------------------------------
 SwitchablePersistenceStream::~SwitchablePersistenceStream()
 {
     CloseAll_Impl();
 }
 
-// ------------------------------------------------------------------------
 void SwitchablePersistenceStream::SwitchPersistenceTo( const uno::Reference< io::XStream >& xStream )
 {
     uno::Reference< io::XTruncate > xNewTruncate( xStream, uno::UNO_QUERY_THROW );
@@ -127,7 +120,6 @@ void SwitchablePersistenceStream::SwitchPersistenceTo( const uno::Reference< io:
                                             bInOpen, bOutOpen );
 }
 
-// ------------------------------------------------------------------------
 void SwitchablePersistenceStream::SwitchPersistenceTo( const uno::Reference< io::XInputStream >& xInputStream )
 {
     uno::Reference< io::XStream > xNewStream;
@@ -163,7 +155,6 @@ void SwitchablePersistenceStream::SwitchPersistenceTo( const uno::Reference< io:
 
 }
 
-// ------------------------------------------------------------------------
 void SwitchablePersistenceStream::CopyAndSwitchPersistenceTo( const uno::Reference< io::XStream >& xStream )
 {
     uno::Reference< io::XStream > xTargetStream = xStream;
@@ -210,7 +201,6 @@ void SwitchablePersistenceStream::CopyAndSwitchPersistenceTo( const uno::Referen
                                         bInOpen, bOutOpen );
 }
 
-// ------------------------------------------------------------------------
 void SwitchablePersistenceStream::CloseAll_Impl()
 {
     if ( m_pStreamData )
@@ -221,7 +211,6 @@ void SwitchablePersistenceStream::CloseAll_Impl()
 }
 
 // com::sun::star::io::XStream
-// ------------------------------------------------------------------------
 uno::Reference< io::XInputStream > SAL_CALL SwitchablePersistenceStream::getInputStream(  )
     throw (uno::RuntimeException)
 {
@@ -232,8 +221,6 @@ uno::Reference< io::XInputStream > SAL_CALL SwitchablePersistenceStream::getInpu
     return static_cast< io::XInputStream* >( this );
 }
 
-
-// ------------------------------------------------------------------------
 uno::Reference< io::XOutputStream > SAL_CALL SwitchablePersistenceStream::getOutputStream(  )
     throw (uno::RuntimeException)
 {
@@ -244,10 +231,7 @@ uno::Reference< io::XOutputStream > SAL_CALL SwitchablePersistenceStream::getOut
     return static_cast< io::XOutputStream* >( this );
 }
 
-
-
 // com::sun::star::io::XInputStream
-// ------------------------------------------------------------------------
 ::sal_Int32 SAL_CALL SwitchablePersistenceStream::readBytes( uno::Sequence< ::sal_Int8 >& aData, ::sal_Int32 nBytesToRead )
     throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException)
 {
@@ -263,8 +247,6 @@ uno::Reference< io::XOutputStream > SAL_CALL SwitchablePersistenceStream::getOut
     return m_pStreamData->m_xOrigInStream->readBytes( aData, nBytesToRead );
 }
 
-
-// ------------------------------------------------------------------------
 ::sal_Int32 SAL_CALL SwitchablePersistenceStream::readSomeBytes( uno::Sequence< ::sal_Int8 >& aData, ::sal_Int32 nMaxBytesToRead )
     throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException)
 {
@@ -280,7 +262,6 @@ uno::Reference< io::XOutputStream > SAL_CALL SwitchablePersistenceStream::getOut
     return m_pStreamData->m_xOrigInStream->readBytes( aData, nMaxBytesToRead );
 }
 
-// ------------------------------------------------------------------------
 void SAL_CALL SwitchablePersistenceStream::skipBytes( ::sal_Int32 nBytesToSkip )
     throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException)
 {
@@ -296,8 +277,6 @@ void SAL_CALL SwitchablePersistenceStream::skipBytes( ::sal_Int32 nBytesToSkip )
     m_pStreamData->m_xOrigInStream->skipBytes( nBytesToSkip );
 }
 
-
-// ------------------------------------------------------------------------
 ::sal_Int32 SAL_CALL SwitchablePersistenceStream::available(  )
     throw (io::NotConnectedException, io::IOException, uno::RuntimeException)
 {
@@ -313,8 +292,6 @@ void SAL_CALL SwitchablePersistenceStream::skipBytes( ::sal_Int32 nBytesToSkip )
     return m_pStreamData->m_xOrigInStream->available();
 }
 
-
-// ------------------------------------------------------------------------
 void SAL_CALL SwitchablePersistenceStream::closeInput()
     throw (io::NotConnectedException, io::IOException, uno::RuntimeException)
 {
@@ -328,10 +305,7 @@ void SAL_CALL SwitchablePersistenceStream::closeInput()
         CloseAll_Impl();
 }
 
-
-
 // com::sun::star::io::XOutputStream
-// ------------------------------------------------------------------------
 void SAL_CALL SwitchablePersistenceStream::writeBytes( const uno::Sequence< ::sal_Int8 >& aData )
     throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException)
 {
@@ -350,8 +324,6 @@ void SAL_CALL SwitchablePersistenceStream::writeBytes( const uno::Sequence< ::sa
     m_pStreamData->m_xOrigOutStream->writeBytes( aData );
 }
 
-
-// ------------------------------------------------------------------------
 void SAL_CALL SwitchablePersistenceStream::flush(  )
     throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException)
 {
@@ -373,8 +345,6 @@ void SAL_CALL SwitchablePersistenceStream::flush(  )
     m_pStreamData->m_xOrigOutStream->flush();
 }
 
-
-// ------------------------------------------------------------------------
 void SAL_CALL SwitchablePersistenceStream::closeOutput(  )
     throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException)
 {
@@ -388,10 +358,7 @@ void SAL_CALL SwitchablePersistenceStream::closeOutput(  )
         CloseAll_Impl();
 }
 
-
-
 // com::sun::star::io::XTruncate
-// ------------------------------------------------------------------------
 void SAL_CALL SwitchablePersistenceStream::truncate(  )
     throw (io::IOException, uno::RuntimeException)
 {
@@ -410,9 +377,7 @@ void SAL_CALL SwitchablePersistenceStream::truncate(  )
     m_pStreamData->m_xOrigTruncate->truncate();
 }
 
-
 // com::sun::star::io::XSeekable
-// ------------------------------------------------------------------------
 void SAL_CALL SwitchablePersistenceStream::seek( ::sal_Int64 location )
     throw (lang::IllegalArgumentException, io::IOException, uno::RuntimeException)
 {
@@ -428,8 +393,6 @@ void SAL_CALL SwitchablePersistenceStream::seek( ::sal_Int64 location )
     m_pStreamData->m_xOrigSeekable->seek( location );
 }
 
-
-// ------------------------------------------------------------------------
 ::sal_Int64 SAL_CALL SwitchablePersistenceStream::getPosition(  )
     throw (io::IOException, uno::RuntimeException)
 {
@@ -445,8 +408,6 @@ void SAL_CALL SwitchablePersistenceStream::seek( ::sal_Int64 location )
     return m_pStreamData->m_xOrigSeekable->getPosition();
 }
 
-
-// ------------------------------------------------------------------------
 ::sal_Int64 SAL_CALL SwitchablePersistenceStream::getLength(  )
     throw (io::IOException, uno::RuntimeException)
 {
@@ -462,7 +423,6 @@ void SAL_CALL SwitchablePersistenceStream::seek( ::sal_Int64 location )
     return m_pStreamData->m_xOrigSeekable->getLength();
 }
 
-// ------------------------------------------------------------------------
 void SAL_CALL SwitchablePersistenceStream::waitForCompletion()
     throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
 {

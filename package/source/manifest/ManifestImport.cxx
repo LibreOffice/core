@@ -31,8 +31,6 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star;
 using namespace std;
 
-
-// ---------------------------------------------------
 ManifestImport::ManifestImport( vector < Sequence < PropertyValue > > & rNewManVector )
 : bIgnoreEncryptData    ( sal_False )
 , nDerivedKeySize( 0 )
@@ -95,18 +93,15 @@ ManifestImport::ManifestImport( vector < Sequence < PropertyValue > > & rNewManV
     aStack.reserve( 10 );
 }
 
-// ---------------------------------------------------
 ManifestImport::~ManifestImport ( void )
 {
 }
 
-// ---------------------------------------------------
 void SAL_CALL ManifestImport::startDocument(  )
         throw( xml::sax::SAXException, uno::RuntimeException )
 {
 }
 
-// ---------------------------------------------------
 void SAL_CALL ManifestImport::endDocument(  )
         throw( xml::sax::SAXException, uno::RuntimeException )
 {
@@ -273,7 +268,6 @@ void ManifestImport::doStartKeyAlg(StringHashMap &rConvertedAttribs)
         bIgnoreEncryptData = sal_True;
 }
 
-// ---------------------------------------------------
 void SAL_CALL ManifestImport::startElement( const OUString& aName, const uno::Reference< xml::sax::XAttributeList >& xAttribs )
         throw( xml::sax::SAXException, uno::RuntimeException )
 {
@@ -344,7 +338,6 @@ namespace
     }
 }
 
-// ---------------------------------------------------
 void SAL_CALL ManifestImport::endElement( const OUString& aName )
     throw( xml::sax::SAXException, uno::RuntimeException )
 {
@@ -367,31 +360,26 @@ void SAL_CALL ManifestImport::endElement( const OUString& aName )
     }
 }
 
-// ---------------------------------------------------
 void SAL_CALL ManifestImport::characters( const OUString& /*aChars*/ )
         throw( xml::sax::SAXException, uno::RuntimeException )
 {
 }
 
-// ---------------------------------------------------
 void SAL_CALL ManifestImport::ignorableWhitespace( const OUString& /*aWhitespaces*/ )
         throw( xml::sax::SAXException, uno::RuntimeException )
 {
 }
 
-// ---------------------------------------------------
 void SAL_CALL ManifestImport::processingInstruction( const OUString& /*aTarget*/, const OUString& /*aData*/ )
         throw( xml::sax::SAXException, uno::RuntimeException )
 {
 }
 
-// ---------------------------------------------------
 void SAL_CALL ManifestImport::setDocumentLocator( const uno::Reference< xml::sax::XLocator >& /*xLocator*/ )
         throw( xml::sax::SAXException, uno::RuntimeException )
 {
 }
 
-// ---------------------------------------------------
 OUString ManifestImport::PushNameAndNamespaces( const OUString& aName, const uno::Reference< xml::sax::XAttributeList >& xAttribs, StringHashMap& o_aConvertedAttribs )
 {
     StringHashMap aNamespaces;
@@ -437,7 +425,6 @@ OUString ManifestImport::PushNameAndNamespaces( const OUString& aName, const uno
     return aConvertedName;
 }
 
-// ---------------------------------------------------
 OUString ManifestImport::ConvertNameWithNamespace( const OUString& aName, const StringHashMap& aNamespaces )
 {
     OUString aNsAlias;
@@ -464,7 +451,6 @@ OUString ManifestImport::ConvertNameWithNamespace( const OUString& aName, const 
     return aResult;
 }
 
-// ---------------------------------------------------
 OUString ManifestImport::ConvertName( const OUString& aName )
 {
     OUString aConvertedName;
