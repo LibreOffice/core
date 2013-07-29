@@ -263,11 +263,14 @@ def _uno_import( name, *optargs, **kwargs ):
     try:
 #       print "optargs = " + repr(optargs)
         return _g_delegatee( name, *optargs, **kwargs )
-    except ImportError:
+    except ImportError as e:
         # process optargs
         globals, locals, fromlist = list(optargs)[:3] + [kwargs.get('globals',{}), kwargs.get('locals',{}), kwargs.get('fromlist',[])][len(optargs):]
-        if not fromlist:
+        # from import form only, but skip if an uno lookup has already failed
+        if not fromlist or hasattr(e, '_uno_import_failed'):
             raise
+        # hang onto exception for possible use on subsequent uno lookup failure
+        py_import_exc = e
     modnames = name.split( "." )
     mod = None
     d = sys.modules
@@ -281,26 +284,55 @@ def _uno_import( name, *optargs, **kwargs ):
     RuntimeException = pyuno.getClass( "com.sun.star.uno.RuntimeException" )
     for x in fromlist:
        if x not in d:
+          failed = False
           if x.startswith( "typeOf" ):
              try: 
                 d[x] = pyuno.getTypeByName( name + "." + x[6:len(x)] )
-             except RuntimeException as e:
-                raise ImportError( "type " + name + "." + x[6:len(x)] +" is unknown" )
+             except RuntimeException:
+                failed = True
           else:
             try:
                 # check for structs, exceptions or interfaces
                 d[x] = pyuno.getClass( name + "." + x )
-            except RuntimeException as e:
+            except RuntimeException:
                 # check for enums 
                 try:
                    d[x] = Enum( name , x )
-                except RuntimeException as e2:
+                except RuntimeException:
                    # check for constants
                    try:
                       d[x] = getConstantByName( name + "." + x )
-                   except RuntimeException as e3:
-                      # no known uno type !
-                      raise ImportError( "type "+ name + "." +x + " is unknown" )
+                   except RuntimeException:
+                      failed = True
+
+          if failed:
+              # We have an import failure, but cannot distinguish between
+              # uno and non-uno errors as uno lookups are attempted for all
+              # "from xxx import yyy" imports following a python failure.
+              #
+              # The traceback from the original python exception is kept to
+              # pinpoint the actual failing location, but in Python 3 the
+              # original message is most likely unhelpful for uno failures,
+              # as it will most commonly be a missing top level module,
+              # like 'com'.  Our exception appends the uno lookup failure.
+              # This is more ambiguous, but it plus the traceback should be
+              # sufficient to identify a root cause for python or uno issues.
+              #
+              # Our exception is raised outside of the nested exception
+              # handlers above, to avoid Python 3 nested exception
+              # information for the RuntimeExceptions during lookups.
+              #
+              # Finally, a private attribute is used to prevent further
+              # processing if this failure was in a nested import.  That
+              # keeps the exception relevant to the primary failure point,
+              # preventing us from re-processing our own import errors.
+
+              uno_import_exc = ImportError(
+                  "%s (or '%s.%s' is unknown)" % (py_import_exc, name, x)
+                  ).with_traceback(py_import_exc.__traceback__)
+              uno_import_exc._uno_import_failed = True
+              raise uno_import_exc
+
     return mod
 
 # private function, don't use
