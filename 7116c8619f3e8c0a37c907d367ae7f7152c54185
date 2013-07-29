@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//9wM\u003d",
+        "filename": "sw/inc/txatbase.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-07-29T13:00:07Z",
+      "side": 1,
+      "message": "Given that the function casts the result to a specific class, I think that if either of these preconditions fails, the operation does not make sense and thus this should be a real assert(), in all these functions.",
+      "revId": "7116c8619f3e8c0a37c907d367ae7f7152c54185",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
