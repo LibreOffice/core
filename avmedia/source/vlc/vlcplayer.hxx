@@ -44,6 +44,8 @@ class VLCPlayer : public ::cppu::BaseMutex,
 public:
     VLCPlayer( const rtl::OUString& url );
 
+    const rtl::OUString& url() const;
+
     void SAL_CALL start();
     void SAL_CALL stop();
     ::sal_Bool SAL_CALL isPlaying();

@@ -21,10 +21,13 @@ Manager::~Manager()
 uno::Reference< media::XPlayer > SAL_CALL Manager::createPlayer( const rtl::OUString& rURL )
     throw (uno::RuntimeException)
 {
-    VLCPlayer* pPlayer( new VLCPlayer( rURL/*, mxMgr */ ) );
-    uno::Reference< media::XPlayer > xRet( pPlayer );
+    if ( !rURL.isEmpty() || (mPlayer.is() && dynamic_cast<VLCPlayer*>( mPlayer.get() )->url() != rURL))
+    {
+        VLCPlayer* pPlayer( new VLCPlayer( rURL/*, mxMgr */ ) );
+        mPlayer = uno::Reference< media::XPlayer >( pPlayer );
+    }
 
-    return xRet;
+    return mPlayer;
 }
 
 rtl::OUString SAL_CALL Manager::getImplementationName()

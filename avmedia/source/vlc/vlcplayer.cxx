@@ -14,11 +14,13 @@ const ::rtl::OUString AVMEDIA_VLC_PLAYER_IMPLEMENTATIONNAME = "com.sun.star.comp
 const ::rtl::OUString AVMEDIA_VLC_PLAYER_SERVICENAME = "com.sun.star.media.Player_VLC";
 
 const char * const VLC_ARGS[] = {
-    "-I",
+//    "-I",
     "-Vdummy",
-    "--ignore-config",
+    "--snapshot-format=png",
+//    "--ignore-config",
+    "--ffmpeg-threads",
     "--verbose=-1",
-    "--quiet"
+//    "--quiet"
 };
 
 const int MS_IN_SEC = 1000; // Millisec in sec
@@ -41,6 +43,11 @@ VLCPlayer::VLCPlayer( const rtl::OUString& url )
     , mPlayer( libvlc_media_player_new_from_media( mMedia.get() ), libvlc_media_player_release )
     , mUrl( url )
 {
+}
+
+const rtl::OUString& VLCPlayer::url() const
+{
+    return mUrl;
 }
 
 void SAL_CALL VLCPlayer::start()

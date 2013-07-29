@@ -42,6 +42,7 @@ public:
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxMgr;
+    ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer >  mPlayer;
 };
 
 }
