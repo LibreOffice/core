@@ -478,7 +478,7 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, SelFmtHdl)
         String sNm;
         // FIXME Yuk! we are creating the table styles ATM, but in the targetted
         // ideal, the table styles are created with the document
-        SwStyleNameMapper::GetUIName( RES_POOLCOLL_STANDARD, sNm );
+        sNm = SwStyleNameMapper::GetUIName( RES_POOLCOLL_STANDARD, sNm );
         SwTableFmt* pStyle = pShell->GetDoc()->FindTblFmtByName(sNm);
         if ( !pStyle )
             pStyle = pShell->GetDoc()->MakeTblFrmFmt(sNm, NULL);
@@ -491,7 +491,7 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, SelFmtHdl)
         aTmp.SetWidthHeight( sal_False );
 
         if( nOldIdx != nIndex )
-            m_pWndPreview->NotifyChange( aTmp );
+            m_pWndPreview->NotifyChange( *(SwTableAutoFmt*)0 );
         UpdateChecks( aTmp, sal_False );
     }
 
