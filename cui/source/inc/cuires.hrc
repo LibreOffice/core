@@ -114,7 +114,6 @@
 // autocor
 #define RID_OFAPAGE_AUTOCOMPLETE_OPTIONS (RID_OFA_START + 119)
 #define RID_OFAPAGE_AUTOCORR_OPTIONS    (RID_OFA_START + 102)
-#define RID_OFAPAGE_AUTOFMT_APPLY       (RID_OFA_START + 110)
 
 #define RID_OFAPAGE_AUTOCORR_QUOTE      (RID_OFA_START + 109)
 
@@ -419,6 +418,27 @@
 #define RID_SVXSTR_COL                                      (RID_SVX_START + 1202)
 #define RID_SVXSTR_AUTO_ENTRY                               (RID_SVX_START + 1203)
 #define RID_SVXDLG_CERTPATH                                 (RID_SVX_START + 1204)
+
+#define RID_SVXSTR_USE_REPLACE                              (RID_SVX_START + 1205)
+#define RID_SVXSTR_CPTL_STT_WORD                            (RID_SVX_START + 1206)
+#define RID_SVXSTR_CPTL_STT_SENT                            (RID_SVX_START + 1207)
+#define RID_SVXSTR_BOLD_UNDER                               (RID_SVX_START + 1208)
+#define RID_SVXSTR_NO_DBL_SPACES                            (RID_SVX_START + 1209)
+#define RID_SVXSTR_DETECT_URL                               (RID_SVX_START + 1210)
+#define RID_SVXSTR_DASH                                     (RID_SVX_START + 1211)
+#define RID_SVXSTR_CORRECT_ACCIDENTAL_CAPS_LOCK             (RID_SVX_START + 1212)
+#define RID_SVXSTR_NON_BREAK_SPACE                          (RID_SVX_START + 1213)
+#define RID_SVXSTR_ORDINAL                                  (RID_SVX_START + 1214)
+#define RID_SVXSTR_DEL_EMPTY_PARA                           (RID_SVX_START + 1215)
+#define RID_SVXSTR_USER_STYLE                               (RID_SVX_START + 1216)
+#define RID_SVXSTR_BULLET                                   (RID_SVX_START + 1217)
+#define RID_SVXSTR_RIGHT_MARGIN                             (RID_SVX_START + 1218)
+#define RID_SVXSTR_NUM                                      (RID_SVX_START + 1219)
+#define RID_SVXSTR_BORDER                                   (RID_SVX_START + 1220)
+#define RID_SVXSTR_CREATE_TABLE                             (RID_SVX_START + 1221)
+#define RID_SVXSTR_REPLACE_TEMPLATES                        (RID_SVX_START + 1222)
+#define RID_SVXSTR_DEL_SPACES_AT_STT_END                    (RID_SVX_START + 1223)
+#define RID_SVXSTR_DEL_SPACES_BETWEEN_LINES                 (RID_SVX_START + 1224)
 
 #endif
 

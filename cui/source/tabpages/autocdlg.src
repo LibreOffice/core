@@ -22,40 +22,6 @@
 #include "helpid.hrc"
 #include <svx/svxids.hrc> // SID_AUTOFORMAT
 
-#define COMMON_CLB_ENTRIES \
-    String ST_USE_REPLACE \
-    { \
-        Text [ en-US ] = "Use replacement table" ; \
-    }; \
-    String ST_CPTL_STT_WORD \
-    { \
-        Text [ en-US ] = "Correct TWo INitial CApitals" ; \
-    }; \
-    String ST_CPTL_STT_SENT \
-    { \
-        Text [ en-US ] = "Capitalize first letter of every sentence" ; \
-    }; \
-    String ST_BOLD_UNDER \
-    { \
-        Text [ en-US ] = "Automatic *bold* and _underline_" ; \
-    }; \
-    String STR_NO_DBL_SPACES \
-    { \
-        Text [ en-US ] = "Ignore double spaces" ; \
-    }; \
-    String ST_DETECT_URL \
-    { \
-        Text [ en-US ] = "URL Recognition" ; \
-    }; \
-    String ST_DASH \
-    { \
-        Text [ en-US ] = "Replace dashes" ; \
-    }; \
-    String ST_CORRECT_ACCIDENTAL_CAPS_LOCK \
-    { \
-        Text [ en-US ] = "Correct accidental use of cAPS LOCK key" ; \
-    };
-
 /**************************************************************************/
 /*                                                                        */
 /*  Beschreibung: Autokorrektur-Optionen                                  */
@@ -75,91 +41,6 @@ TabPage RID_OFAPAGE_AUTOCORR_OPTIONS
         Size = MAP_APPFONT ( 248 , 173 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
-    };
-    COMMON_CLB_ENTRIES
-};
-
-TabPage RID_OFAPAGE_AUTOFMT_APPLY
-{
-    HelpID = HID_OFAPAGE_AUTOFMT_OPTIONS ;
-    SVLook = TRUE ;
-    Hide = TRUE ;
-    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
-    Control CLB_SETTINGS
-    {
-        Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( 248 , 149 ) ;
-        Border = TRUE ;
-        TabStop = TRUE ;
-    };
-    PushButton PB_EDIT
-    {
-        HelpID = "cui:PushButton:RID_OFAPAGE_AUTOFMT_APPLY:PB_EDIT";
-        Pos = MAP_APPFONT ( 6 , 162 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ en-US ] = "~Edit..." ;
-        TabStop = TRUE ;
-    };
-    String STR_HEADER1
-    {
-        Text [ en-US ] = "[M]" ;
-    };
-    String STR_HEADER2
-    {
-        Text [ en-US ] = "[T]" ;
-    };
-    FixedText FT_HEADER1_EXPLANATION
-    {
-        Pos = MAP_APPFONT ( 80 , 159 ) ;
-        Size = MAP_APPFONT ( 174 , 8 ) ;
-        Text [ en-US ] = "[M]: Replace while modifying existing text" ;
-    };
-    FixedText FT_HEADER2_EXPLANATION
-    {
-        Pos = MAP_APPFONT ( 80 , 171 ) ;
-        Size = MAP_APPFONT ( 174 , 8 ) ;
-        Text [ en-US ] = "[T]: AutoFormat/AutoCorrect while typing" ;
-    };
-    COMMON_CLB_ENTRIES
-    String ST_DEL_EMPTY_PARA
-    {
-        Text [ en-US ] = "Remove blank paragraphs" ;
-    };
-    String ST_USER_STYLE
-    {
-        Text [ en-US ] = "Replace Custom Styles" ;
-    };
-    String ST_BULLET
-    {
-        Text [ en-US ] = "Replace bullets with: " ;
-    };
-    String ST_RIGHT_MARGIN
-    {
-        Text [ en-US ] = "Combine single line paragraphs if length greater than" ;
-    };
-    String STR_NUM
-    {
-        Text [ en-US ] = "Apply numbering - symbol: " ;
-    };
-    String STR_BORDER
-    {
-        Text [ en-US ] = "Apply border" ;
-    };
-    String STR_TABLE
-    {
-        Text [ en-US ] = "Create table" ;
-    };
-    String STR_REPLACE_TEMPLATES
-    {
-        Text [ en-US ] = "Apply Styles" ;
-    };
-    String STR_DEL_SPACES_AT_STT_END
-    {
-        Text [ en-US ] = "Delete spaces and tabs at beginning and end of paragraph";
-    };
-    String STR_DEL_SPACES_BETWEEN_LINES
-    {
-        Text [ en-US ] = "Delete spaces and tabs at end and start of line";
     };
 };
 
@@ -190,14 +71,6 @@ TabPage RID_OFAPAGE_AUTOCORR_QUOTE
     String STR_HEADER2
     {
         Text [ en-US ] = "[T]" ;
-    };
-    String ST_NON_BREAK_SPACE
-    {
-       Text [ en-US ] = "Add non breaking space before specific punctuation marks in french text" ;
-    };
-    String ST_ORDINAL
-    {
-        Text [ en-US ] = "Format ordinal numbers suffixes (1st -> 1^st)" ;
     };
     FixedLine FL_SINGLE
     {

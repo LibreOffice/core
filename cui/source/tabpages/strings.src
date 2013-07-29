@@ -147,5 +147,85 @@ String RID_SVXSTR_CHARNAME_TYPEFACE
 {
     Text [ en-US ] = "Typeface";
 };
+String RID_SVXSTR_USE_REPLACE
+{
+    Text [ en-US ] = "Use replacement table" ;
+};
+String RID_SVXSTR_CPTL_STT_WORD
+{
+    Text [ en-US ] = "Correct TWo INitial CApitals" ;
+};
+String RID_SVXSTR_CPTL_STT_SENT
+{
+    Text [ en-US ] = "Capitalize first letter of every sentence" ;
+};
+String RID_SVXSTR_BOLD_UNDER
+{
+    Text [ en-US ] = "Automatic *bold* and _underline_" ;
+};
+String RID_SVXSTR_NO_DBL_SPACES
+{
+    Text [ en-US ] = "Ignore double spaces" ;
+};
+String RID_SVXSTR_DETECT_URL
+{
+    Text [ en-US ] = "URL Recognition" ;
+};
+String RID_SVXSTR_DASH
+{
+    Text [ en-US ] = "Replace dashes" ;
+};
+String RID_SVXSTR_CORRECT_ACCIDENTAL_CAPS_LOCK
+{
+    Text [ en-US ] = "Correct accidental use of cAPS LOCK key" ;
+};
+String RID_SVXSTR_NON_BREAK_SPACE
+{
+    Text [ en-US ] = "Add non breaking space before specific punctuation marks in french text" ;
+};
+String RID_SVXSTR_ORDINAL
+{
+    Text [ en-US ] = "Format ordinal numbers suffixes (1st -> 1^st)" ;
+};
+String RID_SVXSTR_DEL_EMPTY_PARA
+{
+    Text [ en-US ] = "Remove blank paragraphs" ;
+};
+String RID_SVXSTR_USER_STYLE
+{
+    Text [ en-US ] = "Replace Custom Styles" ;
+};
+String RID_SVXSTR_BULLET
+{
+    Text [ en-US ] = "Replace bullets with: " ;
+};
+String RID_SVXSTR_RIGHT_MARGIN
+{
+    Text [ en-US ] = "Combine single line paragraphs if length greater than" ;
+};
+String RID_SVXSTR_NUM
+{
+    Text [ en-US ] = "Apply numbering - symbol: " ;
+};
+String RID_SVXSTR_BORDER
+{
+    Text [ en-US ] = "Apply border" ;
+};
+String RID_SVXSTR_CREATE_TABLE
+{
+    Text [ en-US ] = "Create table" ;
+};
+String RID_SVXSTR_REPLACE_TEMPLATES
+{
+    Text [ en-US ] = "Apply Styles" ;
+};
+String RID_SVXSTR_DEL_SPACES_AT_STT_END
+{
+    Text [ en-US ] = "Delete spaces and tabs at beginning and end of paragraph";
+};
+String RID_SVXSTR_DEL_SPACES_BETWEEN_LINES
+{
+    Text [ en-US ] = "Delete spaces and tabs at end and start of line";
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

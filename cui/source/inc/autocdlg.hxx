@@ -126,14 +126,8 @@ class OfaSwAutoFmtOptionsPage : public SfxTabPage
 {
     using TabPage::ActivatePage;
 
-    SvSimpleTableContainer m_aCheckLBContainer;
-    OfaACorrCheckListBox    aCheckLB;
-    PushButton      aEditPB;
-    FixedText       aHeader1Expl;
-    FixedText       aHeader2Expl;
-
-    String          sHeader1;
-    String          sHeader2;
+    OfaACorrCheckListBox*   m_pCheckLB;
+    PushButton*     m_pEditPB;
 
     String          sDeleteEmptyPara;
     String          sUseReplaceTbl;

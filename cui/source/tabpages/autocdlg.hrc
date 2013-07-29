@@ -49,25 +49,9 @@
 #define CB_SGL_TYPO                     57
 #define ST_STANDARD                     58
 
-#define PB_EDIT                         61
-#define ST_DEL_EMPTY_PARA               62
-#define ST_USER_STYLE                   67
-#define ST_BULLET                       68
-#define STR_DEL_SPACES_AT_STT_END       69
-#define STR_DEL_SPACES_BETWEEN_LINES    70
-
-#define ST_RIGHT_MARGIN                 74
-#define STR_NUM                         75
-#define STR_BORDER                      76
-#define STR_TABLE                       77
-#define STR_REPLACE_TEMPLATES           78
-#define FL_PRCNT                        79
-
 #define STR_HEADER                      90
 #define STR_HEADER1                     92
 #define STR_HEADER2                     93
-#define FT_HEADER1_EXPLANATION          94
-#define FT_HEADER2_EXPLANATION          95
 
 #define ED_RIGHT_MARGIN                 100
 #define BT_OK                           101
@@ -87,18 +71,8 @@
 #define LB_ENTRIES                      132
 #define PB_ENTRIES                      133
 
-#define ST_USE_REPLACE                  200
-#define ST_CPTL_STT_WORD                201
-#define ST_CPTL_STT_SENT                202
-#define ST_BOLD_UNDER                   203
-#define STR_NO_DBL_SPACES               204
-#define ST_DETECT_URL                   205
-#define ST_ORDINAL                      206
-#define ST_NON_BREAK_SPACE              207
-#define ST_DASH                         208
 #define FT_LANG                         209
 #define LB_LANG                         210
-#define ST_CORRECT_ACCIDENTAL_CAPS_LOCK 211
 
 #define CB_SMARTTAGS                    220
 #define FT_SMARTTAGS                    221
