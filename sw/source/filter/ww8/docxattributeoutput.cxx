@@ -5126,7 +5126,7 @@ void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
 
     OutputBorderOptions aOutputBorderOptions = lcl_getBoxBorderOptions();
 
-    if ( m_bOpenedSectPr )
+    if ( m_bOpenedSectPr && GetWritingHeaderFooter() == false)
     {
         // Inside a section
 
@@ -5330,6 +5330,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_pRedlineData( NULL ),
       m_nRedlineId( 0 ),
       m_bOpenedSectPr( false ),
+      m_bWritingHeaderFooter( false ),
       m_sFieldBkm( ),
       m_nNextMarkId( 0 ),
       m_bPostitStart(false),

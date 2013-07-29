@@ -195,6 +195,9 @@ bool DocxExport::DisallowInheritingOutlineNumbering( const SwFmt& rFmt )
 void DocxExport::WriteHeadersFooters( sal_uInt8 nHeadFootFlags,
         const SwFrmFmt& rFmt, const SwFrmFmt& rLeftFmt, const SwFrmFmt& rFirstPageFmt, sal_uInt8 /*nBreakCode*/ )
 {
+    // Turn ON flag for 'Writing Headers \ Footers'
+    m_pAttrOutput->SetWritingHeaderFooter( true );
+
     // headers
     if ( nHeadFootFlags & nsHdFtFlags::WW8_HEADER_EVEN )
         WriteHeaderFooter( rLeftFmt, true, "even" );
@@ -217,6 +220,9 @@ void DocxExport::WriteHeadersFooters( sal_uInt8 nHeadFootFlags,
 
     if ( nHeadFootFlags & ( nsHdFtFlags::WW8_FOOTER_EVEN | nsHdFtFlags::WW8_HEADER_EVEN ))
         settings.evenAndOddHeaders = true;
+
+    // Turn OFF flag for 'Writing Headers \ Footers'
+    m_pAttrOutput->SetWritingHeaderFooter( false );
 
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "DocxExport::WriteHeadersFooters() - nBreakCode introduced, but ignored\n" );
