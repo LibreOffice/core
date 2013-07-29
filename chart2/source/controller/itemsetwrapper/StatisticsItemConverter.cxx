@@ -539,7 +539,6 @@ bool StatisticsItemConverter::ApplySpecialItem(
             }
         }
         break;
-        break;
 
         case SCHATTR_REGRESSION_INTERCEPT_VALUE:
         {
