@@ -64,17 +64,17 @@ private:
 
 protected:
     SAL_DLLPRIVATE sal_uInt16       ImplGetMnemonicIndex( sal_Unicode c );
-    SAL_DLLPRIVATE sal_Unicode  ImplFindMnemonic( const XubString& rKey );
+    SAL_DLLPRIVATE sal_Unicode  ImplFindMnemonic( const OUString& rKey );
 
 public:
                         MnemonicGenerator();
 
-    void                RegisterMnemonic( const XubString& rKey );
-    sal_Bool                CreateMnemonic( XubString& rKey );
+    void                RegisterMnemonic( const OUString& rKey );
+    OUString            CreateMnemonic( const OUString& rKey );
     ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCharacterClassification > GetCharClass();
 
     // returns a string where all '~'-characters and CJK mnemonics of the form (~A) are completely removed
-    static String EraseAllMnemonicChars( const String& rStr );
+    static OUString EraseAllMnemonicChars( const OUString& rStr );
 };
 
 #endif // _SV_MNEMONIC_HXX

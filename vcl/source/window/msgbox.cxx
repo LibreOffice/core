@@ -351,14 +351,14 @@ void MessBox::ImplPosControls()
         // checkbox length including a temporary mnemonic, the correct auto mnemonic will be
         // generated later in the dialog (see init_show)
 
-        String aMnemonicString( maCheckBoxText );
+        OUString aMnemonicString( maCheckBoxText );
         if( GetSettings().GetStyleSettings().GetAutoMnemonic() )
         {
             if( aMnemonicString == GetNonMnemonicString( maCheckBoxText ) )
             {
                 // no mnemonic found -> create one
                 MnemonicGenerator aMnemonicGenerator;
-                aMnemonicGenerator.CreateMnemonic( aMnemonicString );
+                aMnemonicString = aMnemonicGenerator.CreateMnemonic( aMnemonicString );
             }
         }
 

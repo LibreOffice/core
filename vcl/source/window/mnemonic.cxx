@@ -64,12 +64,12 @@ sal_uInt16 MnemonicGenerator::ImplGetMnemonicIndex( sal_Unicode c )
 
 // -----------------------------------------------------------------------
 
-sal_Unicode MnemonicGenerator::ImplFindMnemonic( const XubString& rKey )
+sal_Unicode MnemonicGenerator::ImplFindMnemonic( const OUString& rKey )
 {
-    xub_StrLen nIndex = 0;
-    while ( (nIndex = rKey.Search( MNEMONIC_CHAR, nIndex )) != STRING_NOTFOUND )
+    sal_Int32 nIndex = 0;
+    while ( (nIndex = rKey.indexOf( MNEMONIC_CHAR, nIndex )) != -1 )
     {
-        sal_Unicode cMnemonic = rKey.GetChar( nIndex+1 );
+        sal_Unicode cMnemonic = rKey[ nIndex+1 ];
         if ( cMnemonic != MNEMONIC_CHAR )
             return cMnemonic;
         nIndex += 2;
@@ -80,7 +80,7 @@ sal_Unicode MnemonicGenerator::ImplFindMnemonic( const XubString& rKey )
 
 // -----------------------------------------------------------------------
 
-void MnemonicGenerator::RegisterMnemonic( const XubString& rKey )
+void MnemonicGenerator::RegisterMnemonic( const OUString& rKey )
 {
     const ::com::sun::star::lang::Locale& rLocale = Application::GetSettings().GetUILanguageTag().getLocale();
     uno::Reference < i18n::XCharacterClassification > xCharClass = GetCharClass();
@@ -89,7 +89,7 @@ void MnemonicGenerator::RegisterMnemonic( const XubString& rKey )
     if ( !xCharClass.is() )
         return;
 
-    XubString aKey = xCharClass->toUpper( rKey, 0, rKey.Len(), rLocale );
+    OUString aKey = xCharClass->toUpper( rKey, 0, rKey.getLength(), rLocale );
 
     // If we find a Mnemonic, set the flag. In other case count the
     // characters, because we need this to set most as possible
@@ -103,11 +103,11 @@ void MnemonicGenerator::RegisterMnemonic( const XubString& rKey )
     }
     else
     {
-        xub_StrLen nIndex = 0;
-        xub_StrLen nLen = aKey.Len();
+        sal_Int32 nIndex = 0;
+        sal_Int32 nLen = aKey.getLength();
         while ( nIndex < nLen )
         {
-            sal_Unicode c = aKey.GetChar( nIndex );
+            sal_Unicode c = aKey[ nIndex ];
 
             sal_uInt16 nMnemonicIndex = ImplGetMnemonicIndex( c );
             if ( nMnemonicIndex != MNEMONIC_INDEX_NOTFOUND )
@@ -123,22 +123,22 @@ void MnemonicGenerator::RegisterMnemonic( const XubString& rKey )
 
 // -----------------------------------------------------------------------
 
-sal_Bool MnemonicGenerator::CreateMnemonic( XubString& rKey )
+OUString MnemonicGenerator::CreateMnemonic( const OUString& _rKey )
 {
-    if ( !rKey.Len() || ImplFindMnemonic( rKey ) )
-        return sal_False;
+    if ( _rKey.isEmpty() || ImplFindMnemonic( _rKey ) )
+        return _rKey;
 
     const ::com::sun::star::lang::Locale& rLocale = Application::GetSettings().GetUILanguageTag().getLocale();
     uno::Reference < i18n::XCharacterClassification > xCharClass = GetCharClass();
 
     // Don't crash even when we don't have access to i18n service
     if ( !xCharClass.is() )
-        return sal_False;
+        return _rKey;
 
-    XubString aKey = xCharClass->toUpper( rKey, 0, rKey.Len(), rLocale );
+    OUString aKey = xCharClass->toUpper( _rKey, 0, _rKey.getLength(), rLocale );
 
     sal_Bool bChanged = sal_False;
-    xub_StrLen nLen = aKey.Len();
+    sal_Int32 nLen = aKey.getLength();
 
     bool bCJK = MsLangId::isCJK(Application::GetSettings().GetUILanguageTag().getLanguageType());
 
@@ -152,11 +152,11 @@ sal_Bool MnemonicGenerator::CreateMnemonic( XubString& rKey )
         bool bLatinOnly = true;
         bool bMnemonicIndexFound = false;
         sal_Unicode     c;
-        xub_StrLen      nIndex;
+        sal_Int32       nIndex;
 
         for( nIndex=0; nIndex < nLen; nIndex++ )
         {
-            c = aKey.GetChar( nIndex );
+            c = aKey[ nIndex ];
             if ( ((c >= 0x3000) && (c <= 0xD7FF)) ||    // cjk
                  ((c >= 0xFF61) && (c <= 0xFFDC)) )     // halfwidth forms
             {
@@ -167,20 +167,20 @@ sal_Bool MnemonicGenerator::CreateMnemonic( XubString& rKey )
                 bMnemonicIndexFound = true;
         }
         if( bLatinOnly && !bMnemonicIndexFound )
-            return sal_False;
+            return _rKey;
     }
 
-
+    OUString        rKey(_rKey);
     int             nCJK = 0;
-    sal_uInt16          nMnemonicIndex;
+    sal_uInt16      nMnemonicIndex;
     sal_Unicode     c;
-    xub_StrLen      nIndex = 0;
+    sal_Int32       nIndex = 0;
     if( !bCJK )
     {
         // 1) first try the first character of a word
         do
         {
-            c = aKey.GetChar( nIndex );
+            c = aKey[ nIndex ];
 
             if ( nCJK != 2 )
             {
@@ -201,7 +201,7 @@ sal_Bool MnemonicGenerator::CreateMnemonic( XubString& rKey )
                 if ( maMnemonics[nMnemonicIndex] )
                 {
                     maMnemonics[nMnemonicIndex] = 0;
-                    rKey.Insert( MNEMONIC_CHAR, nIndex );
+                    rKey = rKey.replaceAt( nIndex, 0, OUString(MNEMONIC_CHAR) );
                     bChanged = sal_True;
                     break;
                 }
@@ -211,7 +211,7 @@ sal_Bool MnemonicGenerator::CreateMnemonic( XubString& rKey )
             do
             {
                 nIndex++;
-                c = aKey.GetChar( nIndex );
+                c = aKey[ nIndex ];
                 if ( c == ' ' )
                     break;
             }
@@ -225,11 +225,11 @@ sal_Bool MnemonicGenerator::CreateMnemonic( XubString& rKey )
         {
             sal_uInt16      nBestCount = 0xFFFF;
             sal_uInt16      nBestMnemonicIndex = 0;
-            xub_StrLen  nBestIndex = 0;
+            sal_Int32       nBestIndex = 0;
             nIndex = 0;
             do
             {
-                c = aKey.GetChar( nIndex );
+                c = aKey[ nIndex ];
                 nMnemonicIndex = ImplGetMnemonicIndex( c );
                 if ( nMnemonicIndex != MNEMONIC_INDEX_NOTFOUND )
                 {
@@ -253,7 +253,7 @@ sal_Bool MnemonicGenerator::CreateMnemonic( XubString& rKey )
             if ( nBestCount != 0xFFFF )
             {
                 maMnemonics[nBestMnemonicIndex] = 0;
-                rKey.Insert( MNEMONIC_CHAR, nBestIndex );
+                rKey = rKey.replaceAt( nBestIndex, 0, OUString(MNEMONIC_CHAR) );
                 bChanged = sal_True;
             }
         }
@@ -262,7 +262,7 @@ sal_Bool MnemonicGenerator::CreateMnemonic( XubString& rKey )
         nCJK = 1;
 
     // 3) Add English Mnemonic for CJK Text
-    if ( !bChanged && (nCJK == 1) && rKey.Len() )
+    if ( !bChanged && (nCJK == 1) && !rKey.isEmpty() )
     {
         // Append Ascii Mnemonic
         for ( c = MNEMONIC_RANGE_2_START; c <= MNEMONIC_RANGE_2_END; c++ )
@@ -276,31 +276,29 @@ sal_Bool MnemonicGenerator::CreateMnemonic( XubString& rKey )
                     OUString aStr = OUStringBuffer().
                         append('(').append(MNEMONIC_CHAR).append(c).
                         append(')').makeStringAndClear();
-                    nIndex = rKey.Len();
+                    nIndex = rKey.getLength();
                     if( nIndex >= 2 )
                     {
-                        static const sal_Unicode cGreaterGreater[] = { 0xFF1E, 0xFF1E };
-                        if ( rKey.EqualsAscii( ">>", nIndex-2, 2 ) ||
-                            rKey.Equals( cGreaterGreater, nIndex-2, 2 ) )
+                        if ( ( rKey[nIndex-2] == '>'    && rKey[nIndex-1] == '>' ) ||
+                             ( rKey[nIndex-2] == 0xFF1E && rKey[nIndex-1] == 0xFF1E ) )
                             nIndex -= 2;
                     }
                     if( nIndex >= 3 )
                     {
-                        static const sal_Unicode cDotDotDot[] = { 0xFF0E, 0xFF0E, 0xFF0E };
-                        if ( rKey.EqualsAscii( "...", nIndex-3, 3 ) ||
-                            rKey.Equals( cDotDotDot, nIndex-3, 3 ) )
+                        if ( ( rKey[nIndex-3] == '.'    && rKey[nIndex-2] == '.'    && rKey[nIndex-1] == '.' ) ||
+                             ( rKey[nIndex-3] == 0xFF0E && rKey[nIndex-2] == 0xFF0E && rKey[nIndex-1] == 0xFF0E ) )
                             nIndex -= 3;
                     }
                     if( nIndex >= 1)
                     {
-                        sal_Unicode cLastChar = rKey.GetChar( nIndex-1 );
+                        sal_Unicode cLastChar = rKey[ nIndex-1 ];
                         if ( (cLastChar == ':') || (cLastChar == 0xFF1A) ||
                             (cLastChar == '.') || (cLastChar == 0xFF0E) ||
                             (cLastChar == '?') || (cLastChar == 0xFF1F) ||
                             (cLastChar == ' ') )
                             nIndex--;
                     }
-                    rKey.Insert( aStr, nIndex );
+                    rKey = rKey.replaceAt( nIndex, 0, aStr );
                     bChanged = sal_True;
                     break;
                 }
@@ -344,7 +342,7 @@ sal_Bool MnemonicGenerator::CreateMnemonic( XubString& rKey )
 //        while ( nIndex < nLen );
 //    }
 
-    return bChanged;
+    return rKey;
 }
 
 // -----------------------------------------------------------------------
@@ -358,25 +356,25 @@ uno::Reference< i18n::XCharacterClassification > MnemonicGenerator::GetCharClass
 
 // -----------------------------------------------------------------------
 
-String MnemonicGenerator::EraseAllMnemonicChars( const String& rStr )
+OUString MnemonicGenerator::EraseAllMnemonicChars( const OUString& rStr )
 {
-    String      aStr = rStr;
-    xub_StrLen  nLen = aStr.Len();
-    xub_StrLen  i    = 0;
+    OUString    aStr = rStr;
+    sal_Int32   nLen = aStr.getLength();
+    sal_Int32   i    = 0;
 
     while ( i < nLen )
     {
-        if ( aStr.GetChar( i ) == '~' )
+        if ( aStr[ i ] == '~' )
         {
             // check for CJK-style mnemonic
             if( i > 0 && (i+2) < nLen )
             {
-                sal_Unicode c = aStr.GetChar(i+1);
-                if( aStr.GetChar( i-1 ) == '(' &&
-                    aStr.GetChar( i+2 ) == ')' &&
+                sal_Unicode c = aStr[i+1];
+                if( aStr[ i-1 ] == '(' &&
+                    aStr[ i+2 ] == ')' &&
                     c >= MNEMONIC_RANGE_2_START && c <= MNEMONIC_RANGE_2_END )
                 {
-                    aStr.Erase( i-1, 4 );
+                    aStr = aStr.replaceAt( i-1, 4, "" );
                     nLen -= 4;
                     i--;
                     continue;
@@ -384,7 +382,7 @@ String MnemonicGenerator::EraseAllMnemonicChars( const String& rStr )
             }
 
             // remove standard mnemonics
-            aStr.Erase( i, 1 );
+            aStr = aStr.replaceAt( i, 1, "" );
             nLen--;
         }
         else

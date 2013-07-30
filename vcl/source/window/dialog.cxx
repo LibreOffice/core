@@ -221,9 +221,10 @@ void ImplWindowAutoMnemonic( Window* pWindow )
         pChild = pGetChild->ImplGetWindow();
         if ( ImplIsMnemonicCtrl( pChild ) )
         {
-            XubString aText = pChild->GetText();
-            if ( aMnemonicGenerator.CreateMnemonic( aText ) )
-                pChild->SetText( aText );
+            OUString aText = pChild->GetText();
+            OUString aNewText = aMnemonicGenerator.CreateMnemonic( aText );
+            if ( aText != aNewText )
+                pChild->SetText( aNewText );
         }
 
         pGetChild = nextLogicalChildOfParent(pWindow, pGetChild);

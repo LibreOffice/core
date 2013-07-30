@@ -341,10 +341,11 @@ void SvxIconChoiceCtrl_Impl::CreateAutoMnemonics( MnemonicGenerator* _pGenerator
     for( i = 0; i < nEntryCount; ++i )
     {
         SvxIconChoiceCtrlEntry* pEntry = GetEntry( i );
-        String                  aTxt = pEntry->GetText();
+        OUString                aTxt = pEntry->GetText();
 
-        if( _pGenerator->CreateMnemonic( aTxt ) )
-            pEntry->SetText( aTxt );
+        OUString aNewText = _pGenerator->CreateMnemonic( aTxt );
+        if( aNewText != aTxt )
+            pEntry->SetText( aNewText );
     }
 }
 

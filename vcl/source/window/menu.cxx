@@ -1023,7 +1023,7 @@ void Menu::CreateAutoMnemonics()
     {
         MenuItemData* pData = pItemList->GetDataFromPos( n );
         if ( ! (pData->nBits & MIB_NOSELECT ) )
-            aMnemonicGenerator.CreateMnemonic( pData->aText );
+            pData->aText = aMnemonicGenerator.CreateMnemonic( pData->aText );
     }
 }
 

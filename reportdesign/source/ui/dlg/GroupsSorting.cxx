@@ -985,9 +985,10 @@ OGroupsSortingDialog::OGroupsSortingDialog( Window* _pParent
     {
         pControls[i]->Show(sal_True);
         String sText = pControls[i]->GetText();
-        if ( aMnemonicGenerator.CreateMnemonic(sText) )
-            pControls[i]->SetText(sText);
-        sal_Int32 nTextWidth = GetTextWidth(sText);
+        OUString sNewText = aMnemonicGenerator.CreateMnemonic(sText);
+        if ( sText != sNewText )
+            pControls[i]->SetText(sNewText);
+        sal_Int32 nTextWidth = GetTextWidth(sNewText);
         nMaxTextWidth = ::std::max<sal_Int32>(nTextWidth,nMaxTextWidth);
     }
 
