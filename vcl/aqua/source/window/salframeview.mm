@@ -166,7 +166,7 @@ static AquaSalFrame* getMouseContainerFrame()
     if( bAllowFullScreen && [pNSWindow respondsToSelector: setCollectionBehavior])
     {
         const int bMode= (bAllowFullScreen ? NSWindowCollectionBehaviorFullScreenPrimary : NSWindowCollectionBehaviorFullScreenAuxiliary);
-        [pNSWindow performSelector:setCollectionBehavior withObject:(id)bMode];
+        [pNSWindow performSelector:setCollectionBehavior withObject:(id)(intptr_t)bMode];
     }
 
     // disable OSX>=10.7 window restoration until we support it directly
