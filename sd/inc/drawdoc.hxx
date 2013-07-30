@@ -30,6 +30,7 @@
 #include <unotools/charclass.hxx>
 #include <sot/storage.hxx>
 #include <rsc/rscsfx.hxx>
+#include <com/sun/star/xml/dom/XNode.hpp>
 
 #include <svx/svdundo.hxx>
 
@@ -187,6 +188,7 @@ private:
                         DECL_LINK(OnlineSpellEventHdl, EditStatus*);
 
     std::vector< OUString > maAnnotationAuthors;
+    std::vector<com::sun::star::uno::Reference<com::sun::star::xml::dom::XNode>> layoutinfo;
 
     bool                mbUseEmbedFonts;
 
@@ -257,7 +259,8 @@ public:
 
     bool IsStartWithPresentation() const;
     void SetStartWithPresentation( bool bStartWithPresentation );
-
+    void SetLayoutVector();
+    std::vector<com::sun::star::uno::Reference<com::sun::star::xml::dom::XNode>> GetLayoutVector();
     /** Insert pages into this document
 
         This method inserts whole pages into this document, either
