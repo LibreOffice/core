@@ -30,6 +30,7 @@
 #include <unotools/charclass.hxx>
 #include <sot/storage.hxx>
 #include <rsc/rscsfx.hxx>
+#include <com/sun/star/xml/dom/XNode.hpp>
 
 #include <svx/svdundo.hxx>
 
@@ -188,6 +189,7 @@ private:
                         DECL_LINK(OnlineSpellEventHdl, EditStatus*);
 
     std::vector< OUString > maAnnotationAuthors;
+    std::vector<com::sun::star::uno::Reference<com::sun::star::xml::dom::XNode>> layoutinfo;
 
     bool                mbUseEmbedFonts;
 
@@ -262,6 +264,9 @@ public:
     bool IsExitAfterPresenting() const;
     void SetExitAfterPresenting( bool bExitAfterPresenting );
 
+    void SetLayoutVector();
+    std::vector<com::sun::star::uno::Reference<com::sun::star::xml::dom::XNode>> GetLayoutVector();
+
     /** Insert pages into this document
 
         This method inserts whole pages into this document, either
@@ -307,7 +312,6 @@ public:
         Whether the replace operation should take the name from the new
         page, or preserve the old name
      */
-
     sal_Bool InsertBookmarkAsPage(const std::vector<OUString> &rBookmarkList,
                                   std::vector<OUString> *pExchangeList,
                               sal_Bool bLink, sal_Bool bReplace, sal_uInt16 nPgPos,
