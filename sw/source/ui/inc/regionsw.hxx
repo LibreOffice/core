@@ -252,20 +252,16 @@ public:
 
 class SwSectionIndentTabPage : public SfxTabPage
 {
-    FixedLine           aIndentFL;
-    FixedText           aBeforeFT;
-    MetricField         aBeforeMF;
-    FixedText           aAfterFT;
-    MetricField         aAfterMF;
-
-    SvxParaPrevWindow   aPreviewWin;
+    MetricField*       m_pBeforeMF;
+    MetricField*       m_pAfterMF;
+    SvxParaPrevWindow* m_pPreviewWin;
 
     DECL_LINK(IndentModifyHdl, void *);
 public:
     SwSectionIndentTabPage( Window *pParent, const SfxItemSet &rAttrSet );
     virtual ~SwSectionIndentTabPage();
 
-    virtual sal_Bool        FillItemSet( SfxItemSet& );
+    virtual sal_Bool    FillItemSet( SfxItemSet& );
     virtual void        Reset( const SfxItemSet& );
 
     static SfxTabPage*  Create( Window* pParent,

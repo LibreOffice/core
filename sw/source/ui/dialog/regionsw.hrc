@@ -90,14 +90,6 @@
 #define BMP_PROT_HIDE       3
 #define BMP_PROT_NO_HIDE    4
 
-//SwSectionIndentTabPage
-#define FL_INDENT           1
-#define FT_BEFORE           2
-#define MF_BEFORE           3
-#define FT_AFTER            4
-#define MF_AFTER            5
-#define WIN_PREVIEW         6
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

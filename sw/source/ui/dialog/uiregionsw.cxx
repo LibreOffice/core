@@ -2158,20 +2158,15 @@ void SwSectionPropertyTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage 
         ((SwSectionIndentTabPage&)rPage).SetWrtShell(rWrtSh);
 }
 
-SwSectionIndentTabPage::SwSectionIndentTabPage( Window *pParent, const SfxItemSet &rAttrSet ) :
-    SfxTabPage(pParent, SW_RES(TP_SECTION_INDENTS), rAttrSet),
-    aIndentFL(this,     SW_RES(FL_INDENT     )),
-    aBeforeFT(this,     SW_RES(FT_BEFORE     )),
-    aBeforeMF(this,     SW_RES(MF_BEFORE     )),
-    aAfterFT(this,      SW_RES(FT_AFTER      )),
-    aAfterMF(this,      SW_RES(MF_AFTER      )),
-    aPreviewWin(this,   SW_RES(WIN_PREVIEW   ))
+SwSectionIndentTabPage::SwSectionIndentTabPage(Window *pParent, const SfxItemSet &rAttrSet)
+    : SfxTabPage(pParent, "IndentPage", "modules/swriter/ui/indentpage.ui", rAttrSet)
 {
-    FreeResource();
+    get(m_pBeforeMF, "before");
+    get(m_pAfterMF, "after");
+    get(m_pPreviewWin, "preview");
     Link aLk = LINK(this, SwSectionIndentTabPage, IndentModifyHdl);
-    aBeforeMF.SetModifyHdl(aLk);
-    aAfterMF.SetModifyHdl(aLk);
-    aPreviewWin.SetAccessibleName(aIndentFL.GetText());
+    m_pBeforeMF->SetModifyHdl(aLk);
+    m_pAfterMF->SetModifyHdl(aLk);
 }
 
 SwSectionIndentTabPage::~SwSectionIndentTabPage()
@@ -2180,12 +2175,12 @@ SwSectionIndentTabPage::~SwSectionIndentTabPage()
 
 sal_Bool SwSectionIndentTabPage::FillItemSet( SfxItemSet& rSet)
 {
-    if(aBeforeMF.IsValueModified() ||
-            aAfterMF.IsValueModified())
+    if(m_pBeforeMF->IsValueModified() ||
+            m_pAfterMF->IsValueModified())
     {
         SvxLRSpaceItem aLRSpace(
-                static_cast< long >(aBeforeMF.Denormalize(aBeforeMF.GetValue(FUNIT_TWIP))) ,
-                static_cast< long >(aAfterMF.Denormalize(aAfterMF.GetValue(FUNIT_TWIP))), 0, 0, RES_LR_SPACE);
+                static_cast< long >(m_pBeforeMF->Denormalize(m_pBeforeMF->GetValue(FUNIT_TWIP))) ,
+                static_cast< long >(m_pAfterMF->Denormalize(m_pAfterMF->GetValue(FUNIT_TWIP))), 0, 0, RES_LR_SPACE);
         rSet.Put(aLRSpace);
     }
     return sal_True;
@@ -2195,8 +2190,8 @@ void SwSectionIndentTabPage::Reset( const SfxItemSet& rSet)
 {
     //this page doesn't show up in HTML mode
     FieldUnit aMetric = ::GetDfltMetric(sal_False);
-    SetMetric(aBeforeMF, aMetric);
-    SetMetric(aAfterMF , aMetric);
+    SetMetric(*m_pBeforeMF, aMetric);
+    SetMetric(*m_pAfterMF , aMetric);
 
     SfxItemState eItemState = rSet.GetItemState( RES_LR_SPACE );
     if ( eItemState >= SFX_ITEM_AVAILABLE )
@@ -2204,16 +2199,16 @@ void SwSectionIndentTabPage::Reset( const SfxItemSet& rSet)
         const SvxLRSpaceItem& rSpace =
             (const SvxLRSpaceItem&)rSet.Get( RES_LR_SPACE );
 
-        aBeforeMF.SetValue( aBeforeMF.Normalize(rSpace.GetLeft()), FUNIT_TWIP );
-        aAfterMF.SetValue( aAfterMF.Normalize(rSpace.GetRight()), FUNIT_TWIP );
+        m_pBeforeMF->SetValue( m_pBeforeMF->Normalize(rSpace.GetLeft()), FUNIT_TWIP );
+        m_pAfterMF->SetValue( m_pAfterMF->Normalize(rSpace.GetRight()), FUNIT_TWIP );
     }
     else
     {
-        aBeforeMF.SetEmptyFieldValue();
-        aAfterMF.SetEmptyFieldValue();
+        m_pBeforeMF->SetEmptyFieldValue();
+        m_pAfterMF->SetEmptyFieldValue();
     }
-    aBeforeMF.SaveValue();
-    aAfterMF.SaveValue();
+    m_pBeforeMF->SaveValue();
+    m_pAfterMF->SaveValue();
     IndentModifyHdl(0);
 }
 
@@ -2225,18 +2220,18 @@ SfxTabPage*  SwSectionIndentTabPage::Create( Window* pParent, const SfxItemSet& 
 void SwSectionIndentTabPage::SetWrtShell(SwWrtShell& rSh)
 {
     //set sensible values at the preview
-    aPreviewWin.SetAdjust(SVX_ADJUST_BLOCK);
-    aPreviewWin.SetLastLine(SVX_ADJUST_BLOCK);
+    m_pPreviewWin->SetAdjust(SVX_ADJUST_BLOCK);
+    m_pPreviewWin->SetLastLine(SVX_ADJUST_BLOCK);
     const SwRect& rPageRect = rSh.GetAnyCurRect( RECT_PAGE, 0 );
     Size aPageSize(rPageRect.Width(), rPageRect.Height());
-    aPreviewWin.SetSize(aPageSize);
+    m_pPreviewWin->SetSize(aPageSize);
 }
 
 IMPL_LINK_NOARG(SwSectionIndentTabPage, IndentModifyHdl)
 {
-    aPreviewWin.SetLeftMargin( static_cast< long >(aBeforeMF.Denormalize(aBeforeMF.GetValue(FUNIT_TWIP))) );
-    aPreviewWin.SetRightMargin( static_cast< long >(aAfterMF.Denormalize(aAfterMF.GetValue(FUNIT_TWIP))) );
-    aPreviewWin.Draw(sal_True);
+    m_pPreviewWin->SetLeftMargin( static_cast< long >(m_pBeforeMF->Denormalize(m_pBeforeMF->GetValue(FUNIT_TWIP))) );
+    m_pPreviewWin->SetRightMargin( static_cast< long >(m_pAfterMF->Denormalize(m_pAfterMF->GetValue(FUNIT_TWIP))) );
+    m_pPreviewWin->Draw(sal_True);
     return 0;
 }
 

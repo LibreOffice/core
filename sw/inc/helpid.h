@@ -433,7 +433,6 @@
 #define HID_PRINT_AS_MERGE                                      "SW_HID_PRINT_AS_MERGE"
 #define HID_MERGE_SOURCE_UNAVAILABLE                            "SW_HID_MERGE_SOURCE_UNAVAILABLE"
 #define HID_MODULE_TOOLBOX                                      "SW_HID_MODULE_TOOLBOX"
-#define HID_SECTION_INDENTS_PAGE                                "SW_HID_SECTION_INDENTS_PAGE"
 
 #define HID_MM_DOCSELECTPAGE                                    "SW_HID_MM_DOCSELECTPAGE"
 #define HID_MM_OUTPUTTYPEPAGE                                   "SW_HID_MM_OUTPUTTYPEPAGE"
