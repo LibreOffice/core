@@ -27,7 +27,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextSwitcher;
-import android.widget.TextView;
 import android.widget.ViewAnimator;
 
 import com.actionbarsherlock.app.SherlockFragment;
@@ -74,9 +73,10 @@ public class SlidesPagerFragment extends SherlockFragment implements ServiceConn
         ViewPager aSlidesPager = getSlidesPager();
 
         aSlidesPager.setAdapter(buildSlidesAdapter());
-        aSlidesPager.setCurrentItem(mCommunicationService.getSlideShow().getCurrentSlideIndex());
         aSlidesPager.setPageMargin(getSlidesMarginInPx());
         aSlidesPager.setOnPageChangeListener(this);
+
+        setUpCurrentSlide();
     }
 
     private ViewPager getSlidesPager() {
@@ -95,6 +95,12 @@ public class SlidesPagerFragment extends SherlockFragment implements ServiceConn
         DisplayMetrics aDisplayMetrics = getResources().getDisplayMetrics();
 
         return (int) TypedValue.applyDimension(aPxUnit, aSlideMarginInDp, aDisplayMetrics);
+    }
+
+    private void setUpCurrentSlide() {
+        SlideShow aSlideShow = mCommunicationService.getSlideShow();
+
+        getSlidesPager().setCurrentItem(aSlideShow.getCurrentSlideIndex());
     }
 
     @Override
@@ -172,16 +178,21 @@ public class SlidesPagerFragment extends SherlockFragment implements ServiceConn
     }
 
     private static final class IntentsReceiver extends BroadcastReceiver {
-        private final SlidesPagerFragment mSlidesGridFragment;
+        private final SlidesPagerFragment mSlidesPagerFragment;
 
         private IntentsReceiver(SlidesPagerFragment aSlidesGridFragment) {
-            mSlidesGridFragment = aSlidesGridFragment;
+            mSlidesPagerFragment = aSlidesGridFragment;
         }
 
         @Override
         public void onReceive(Context aContext, Intent aIntent) {
             if (Intents.Actions.SLIDE_PREVIEW.equals(aIntent.getAction())) {
-                mSlidesGridFragment.refreshSlidesPager();
+                mSlidesPagerFragment.refreshSlidesPager();
+                return;
+            }
+
+            if (Intents.Actions.SLIDE_CHANGED.equals(aIntent.getAction())) {
+                mSlidesPagerFragment.setUpCurrentSlide();
             }
         }
     }
@@ -189,6 +200,7 @@ public class SlidesPagerFragment extends SherlockFragment implements ServiceConn
     private IntentFilter buildIntentsReceiverFilter() {
         IntentFilter aIntentFilter = new IntentFilter();
         aIntentFilter.addAction(Intents.Actions.SLIDE_PREVIEW);
+        aIntentFilter.addAction(Intents.Actions.SLIDE_CHANGED);
 
         return aIntentFilter;
     }
