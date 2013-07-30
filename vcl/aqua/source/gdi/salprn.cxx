@@ -69,7 +69,11 @@ AquaSalInfoPrinter::AquaSalInfoPrinter( const SalPrinterQueueInfo& i_rQueue ) :
         mpPrintInfo = [pShared copy];
         [mpPrintInfo setPrinter: mpPrinter];
         mePageOrientation = ([mpPrintInfo orientation] == NSLandscapeOrientation) ? ORIENTATION_LANDSCAPE : ORIENTATION_PORTRAIT;
+#if MACOSX_SDK_VERSION >= 1090
+        [mpPrintInfo setOrientation: NSPaperOrientationPortrait];
+#else
         [mpPrintInfo setOrientation: NSPortraitOrientation];
+#endif
     }
 
     mpGraphics = new AquaSalGraphics();
