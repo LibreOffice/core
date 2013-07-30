@@ -31,6 +31,7 @@ class PopupMenu;
 class ScrollBar;
 class DateField;
 class TimeField;
+class VclExpander;
 class VclMultiLineEdit;
 
 class VCL_DLLPUBLIC VclBuilder: private boost::noncopyable
@@ -209,6 +210,8 @@ private:
         AtkMap m_aAtkInfo;
 
         std::vector<MnemonicWidgetMap> m_aMnemonicWidgetMaps;
+
+        std::vector<VclExpander*> m_aExpanderWidgets;
     };
 
     void loadTranslations(const LanguageTag &rLanguageTag, const OUString &rUri);

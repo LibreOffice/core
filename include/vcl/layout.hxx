@@ -525,6 +525,14 @@ public:
     {
         m_aDisclosureButton.Check(bExpanded);
     }
+    void set_label(const OUString& rLabel)
+    {
+        m_aDisclosureButton.SetText(rLabel);
+    }
+    OUString get_label() const
+    {
+        return m_aDisclosureButton.GetText();
+    }
     virtual void StateChanged(StateChangedType nType);
     void  SetExpandedHdl( const Link& rLink ) { maExpandedHdl = rLink; }
     const Link& GetExpandedHdl() const { return maExpandedHdl; }

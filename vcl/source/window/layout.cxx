@@ -1504,17 +1504,7 @@ void VclExpander::StateChanged(StateChangedType nType)
 
     if (nType == STATE_CHANGE_INITSHOW)
     {
-        //The label widget is the last (of two) children
         Window *pChild = get_child();
-        WindowImpl* pWindowImpl = ImplGetWindowImpl();
-        Window *pLabel = pChild != pWindowImpl->mpLastChild ? pWindowImpl->mpLastChild : NULL;
-        if (pLabel && pLabel->GetType() == WINDOW_FIXEDTEXT)
-        {
-            FixedText *pLabelWidget = static_cast<FixedText*>(pLabel);
-            if (!pLabelWidget->get_mnemonic_widget())
-                pLabelWidget->set_mnemonic_widget(&m_aDisclosureButton);
-        }
-
         if (pChild)
             pChild->Show(m_aDisclosureButton.IsChecked());
     }

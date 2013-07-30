@@ -411,6 +411,22 @@ VclBuilder::VclBuilder(Window *pParent, OUString sUIDir, OUString sUIFile, OStri
         delete_by_window(aI->first);
     }
 
+    //fdo#67378 merge the label into the disclosure button
+    for (std::vector<VclExpander*>::iterator aI = m_pParserState->m_aExpanderWidgets.begin(),
+        aEnd = m_pParserState->m_aExpanderWidgets.end(); aI != aEnd; ++aI)
+    {
+        VclExpander *pOne = *aI;
+
+        Window *pChild = pOne->get_child();
+        Window* pLabel = pOne->GetWindow(WINDOW_LASTCHILD);
+        if (pLabel && pLabel != pChild && pLabel->GetType() == WINDOW_FIXEDTEXT)
+        {
+            FixedText *pLabelWidget = static_cast<FixedText*>(pLabel);
+            pOne->set_label(pLabelWidget->GetText());
+            delete_by_window(pLabel);
+        }
+    }
+
     //drop maps, etc. that we don't need again
     delete m_pParserState;
 
@@ -1116,7 +1132,11 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
     else if (name == "GtkFrame")
         pWindow = new VclFrame(pParent);
     else if (name == "GtkExpander")
-        pWindow = new VclExpander(pParent);
+    {
+        VclExpander *pExpander = new VclExpander(pParent);
+        m_pParserState->m_aExpanderWidgets.push_back(pExpander);
+        pWindow = pExpander;
+    }
     else if (name == "GtkAlignment")
         pWindow = new VclAlignment(pParent);
     else if (name == "GtkButton")
