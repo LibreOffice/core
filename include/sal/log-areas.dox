@@ -377,11 +377,7 @@ certain functionality.
 
 @li @c dbaccess
 @li @c dbaccess.ui
-@li @c dbaccess.OGeneralPage
-
-@section dbaui
-
-@li @c dbaui.OGeneralPage
+@li @c dbaccess.ui.OGeneralPage
 
 @section svx
 
