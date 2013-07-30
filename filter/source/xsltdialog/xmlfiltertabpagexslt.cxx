@@ -27,7 +27,6 @@
 #include <svl/urihelper.hxx>
 
 #include "xmlfiltertabpagexslt.hxx"
-#include "xmlfiltertabpagexslt.hrc"
 #include "xmlfiltersettingsdialog.hxx"
 #include "xmlfilterhelpids.hrc"
 
@@ -36,26 +35,8 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
 
-XMLFilterTabPageXSLT::XMLFilterTabPageXSLT( Window* pParent, ResMgr& rResMgr ) :
-    TabPage( pParent, ResId( RID_XML_FILTER_TABPAGE_XSLT, rResMgr ) ),
-
-    maFTDocType( this, ResId( FT_XML_DOCTYPE, rResMgr ) ),
-    maEDDocType( this, ResId( ED_XML_DOCTYPE, rResMgr ) ),
-
-    maFTExportXSLT( this, ResId( FT_XML_EXPORT_XSLT, rResMgr ) ),
-    maEDExportXSLT( this, ResId( ED_XML_EXPORT_XSLT, rResMgr ), INET_PROT_FILE ),
-    maPBExprotXSLT( this, ResId( PB_XML_EXPORT_XSLT_BROWSE, rResMgr ) ),
-
-    maFTImportXSLT( this, ResId( FT_XML_IMPORT_XSLT, rResMgr ) ),
-    maEDImportXSLT( this, ResId( ED_XML_IMPORT_XSLT, rResMgr ), INET_PROT_FILE ),
-    maPBImportXSLT( this, ResId( PB_XML_IMPORT_XSLT_BROWSE, rResMgr ) ),
-
-    maFTImportTemplate( this, ResId( FT_XML_IMPORT_TEMPLATE, rResMgr ) ),
-    maEDImportTemplate( this, ResId( ED_XML_IMPORT_TEMPLATE, rResMgr ), INET_PROT_FILE ),
-    maPBImportTemplate( this, ResId( PB_XML_IMPORT_TEMPLATE_BROWSE, rResMgr ) ),
-
-    maFTNeedsXSLT2( this, ResId (FT_XML_NEEDS_XSLT2, rResMgr ) ),
-    maCBNeedsXSLT2( this, ResId (CB_XML_NEEDS_XSLT2, rResMgr ) ),
+XMLFilterTabPageXSLT::XMLFilterTabPageXSLT( Window* pParent) :
+    TabPage( pParent, "XmlFilterTabPageTransformation", "filter/ui/xmlfiltertabpagetransformation.ui" ),
 
     sHTTPSchema( "http://" ),
     sSHTTPSchema( "https://" ),
@@ -63,19 +44,27 @@ XMLFilterTabPageXSLT::XMLFilterTabPageXSLT( Window* pParent, ResMgr& rResMgr ) :
     sFTPSchema( "ftp://" ),
     sInstPath( "$(prog)/" )
 {
-    FreeResource();
+    get(m_pEDDocType,"doc");
+    get(m_pEDExportXSLT,"xsltexport");
+    get(m_pPBExprotXSLT,"browseexport");
+    get(m_pEDImportXSLT,"xsltimport");
+    get(m_pPBImportXSLT,"browseimport");
+    get(m_pEDImportTemplate,"tempimport");
+    get(m_pPBImportTemplate,"browsetemp");
+    get(m_pCBNeedsXSLT2,"filtercb");
+
 
     SvtPathOptions aOptions;
     sInstPath = aOptions.SubstituteVariable( sInstPath );
 
-    maPBExprotXSLT.SetClickHdl( LINK ( this, XMLFilterTabPageXSLT, ClickBrowseHdl_Impl ) );
-    maPBImportXSLT.SetClickHdl( LINK ( this, XMLFilterTabPageXSLT, ClickBrowseHdl_Impl ) );
-    maPBImportTemplate.SetClickHdl( LINK ( this, XMLFilterTabPageXSLT, ClickBrowseHdl_Impl ) );
+    m_pPBExprotXSLT->SetClickHdl( LINK ( this, XMLFilterTabPageXSLT, ClickBrowseHdl_Impl ) );
+    m_pPBImportXSLT->SetClickHdl( LINK ( this, XMLFilterTabPageXSLT, ClickBrowseHdl_Impl ) );
+    m_pPBImportTemplate->SetClickHdl( LINK ( this, XMLFilterTabPageXSLT, ClickBrowseHdl_Impl ) );
 
-    maEDExportXSLT.SetHelpId( HID_XML_FILTER_EXPORT_XSLT );
-    maEDImportXSLT.SetHelpId( HID_XML_FILTER_IMPORT_XSLT );
-    maEDImportTemplate.SetHelpId( HID_XML_FILTER_IMPORT_TEMPLATE );
-    maCBNeedsXSLT2.SetHelpId( HID_XML_FILTER_NEEDS_XSLT2 );
+    m_pEDExportXSLT->SetHelpId( HID_XML_FILTER_EXPORT_XSLT );
+    m_pEDImportXSLT->SetHelpId( HID_XML_FILTER_IMPORT_XSLT );
+    m_pEDImportTemplate->SetHelpId( HID_XML_FILTER_IMPORT_TEMPLATE );
+    m_pCBNeedsXSLT2->SetHelpId( HID_XML_FILTER_NEEDS_XSLT2 );
 }
 
 XMLFilterTabPageXSLT::~XMLFilterTabPageXSLT()
@@ -86,11 +75,11 @@ bool XMLFilterTabPageXSLT::FillInfo( filter_info_impl* pInfo )
 {
     if( pInfo )
     {
-        pInfo->maDocType = maEDDocType.GetText();
-        pInfo->maExportXSLT = GetURL( maEDExportXSLT );
-        pInfo->maImportXSLT = GetURL( maEDImportXSLT );
-        pInfo->maImportTemplate = GetURL( maEDImportTemplate );
-        pInfo->mbNeedsXSLT2 = maCBNeedsXSLT2.IsChecked();
+        pInfo->maDocType = m_pEDDocType->GetText();
+        pInfo->maExportXSLT = GetURL( m_pEDExportXSLT );
+        pInfo->maImportXSLT = GetURL( m_pEDImportXSLT );
+        pInfo->maImportTemplate = GetURL( m_pEDImportTemplate );
+        pInfo->mbNeedsXSLT2 = m_pCBNeedsXSLT2->IsChecked();
     }
 
     return true;
@@ -100,16 +89,16 @@ void XMLFilterTabPageXSLT::SetInfo(const filter_info_impl* pInfo)
 {
     if( pInfo )
     {
-        maEDDocType.SetText( pInfo->maDocType );
+        m_pEDDocType->SetText( pInfo->maDocType );
 
-        SetURL( maEDExportXSLT, pInfo->maExportXSLT );
-        SetURL( maEDImportXSLT, pInfo->maImportXSLT );
-        SetURL( maEDImportTemplate, pInfo->maImportTemplate );
-        maCBNeedsXSLT2.Check( pInfo->mbNeedsXSLT2 );
+        SetURL( m_pEDExportXSLT, pInfo->maExportXSLT );
+        SetURL( m_pEDImportXSLT, pInfo->maImportXSLT );
+        SetURL( m_pEDImportTemplate, pInfo->maImportTemplate );
+        m_pCBNeedsXSLT2->Check( pInfo->mbNeedsXSLT2 );
     }
 }
 
-void XMLFilterTabPageXSLT::SetURL( SvtURLBox& rURLBox, const OUString& rURL )
+void XMLFilterTabPageXSLT::SetURL( SvtURLBox* rURLBox, const OUString& rURL )
 {
     OUString aPath;
 
@@ -117,15 +106,15 @@ void XMLFilterTabPageXSLT::SetURL( SvtURLBox& rURLBox, const OUString& rURL )
     {
         osl::FileBase::getSystemPathFromFileURL( rURL, aPath );
 
-        rURLBox.SetBaseURL( rURL );
-        rURLBox.SetText( aPath );
+        rURLBox->SetBaseURL( rURL );
+        rURLBox->SetText( aPath );
     }
     else if( rURL.matchIgnoreAsciiCase( "http://" ) ||
              rURL.matchIgnoreAsciiCase( "https://" ) ||
              rURL.matchIgnoreAsciiCase( "ftp://" ) )
     {
-        rURLBox.SetBaseURL( rURL );
-        rURLBox.SetText( rURL );
+        rURLBox->SetBaseURL( rURL );
+        rURLBox->SetText( rURL );
     }
     else if( !rURL.isEmpty() )
     {
@@ -133,21 +122,21 @@ void XMLFilterTabPageXSLT::SetURL( SvtURLBox& rURLBox, const OUString& rURL )
         aURL = URIHelper::SmartRel2Abs( sInstPath, aURL, Link(), false );
         osl::FileBase::getSystemPathFromFileURL( aURL, aPath );
 
-        rURLBox.SetBaseURL( aURL );
-        rURLBox.SetText( aPath );
+        rURLBox->SetBaseURL( aURL );
+        rURLBox->SetText( aPath );
     }
     else
     {
-        rURLBox.SetBaseURL( sInstPath );
+        rURLBox->SetBaseURL( sInstPath );
         OUString aEmpty;
-        rURLBox.SetText( aEmpty );
+        rURLBox->SetText( aEmpty );
     }
 }
 
-OUString XMLFilterTabPageXSLT::GetURL( SvtURLBox& rURLBox )
+OUString XMLFilterTabPageXSLT::GetURL( SvtURLBox* rURLBox )
 {
     OUString aURL;
-    OUString aStrPath ( rURLBox.GetText() );
+    OUString aStrPath ( rURLBox->GetText() );
     if( aStrPath.matchIgnoreAsciiCase( "http://" ) ||
         aStrPath.matchIgnoreAsciiCase( "https://" ) ||
         aStrPath.matchIgnoreAsciiCase( "ftp://" ) )
@@ -166,30 +155,30 @@ IMPL_LINK ( XMLFilterTabPageXSLT, ClickBrowseHdl_Impl, PushButton *, pButton )
 {
     SvtURLBox* pURLBox;
 
-    if( pButton == &maPBExprotXSLT )
+    if( pButton == m_pPBExprotXSLT )
     {
-        pURLBox = &maEDExportXSLT;
+        pURLBox = m_pEDExportXSLT;
     }
-    else if( pButton == &maPBImportXSLT )
+    else if( pButton == m_pPBImportXSLT )
     {
-        pURLBox = &maEDImportXSLT;
+        pURLBox = m_pEDImportXSLT;
     }
     else
     {
-        pURLBox = &maEDImportTemplate;
+        pURLBox = m_pEDImportTemplate;
     }
 
     // Open Fileopen-Dialog
        ::sfx2::FileDialogHelper aDlg(
         com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0 );
 
-    aDlg.SetDisplayDirectory( GetURL( *pURLBox ) );
+    aDlg.SetDisplayDirectory( GetURL( pURLBox ) );
 
     if ( aDlg.Execute() == ERRCODE_NONE )
     {
         OUString aURL( aDlg.GetPath() );
 
-        SetURL( *pURLBox, aURL );
+        SetURL( pURLBox, aURL );
     }
 
     return( 0L );

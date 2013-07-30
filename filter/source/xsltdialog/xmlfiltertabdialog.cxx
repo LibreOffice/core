@@ -26,7 +26,6 @@
 #include "xmlfilterdialogstrings.hrc"
 #include "xmlfiltertabdialog.hxx"
 #include "xmlfiltercommon.hrc"
-#include "xmlfiltertabpagexslt.hrc"
 #include "xmlfiltertabpagebasic.hxx"
 #include "xmlfiltertabpagexslt.hxx"
 #include "xmlfiltersettingsdialog.hxx"
@@ -81,12 +80,12 @@ XMLFilterTabDialog::XMLFilterTabDialog( Window *pParent, ResMgr& rResMgr, const 
         aCtrlSiz = aSiz;
     }
 
-    mpXSLTPage = new XMLFilterTabPageXSLT( &maTabCtrl, mrResMgr );
+    mpXSLTPage = new XMLFilterTabPageXSLT( &maTabCtrl);
     mpXSLTPage->SetInfo( mpNewInfo );
 
     maTabCtrl.SetTabPage( RID_XML_FILTER_TABPAGE_XSLT, mpXSLTPage );
 
-    aSiz = mpXSLTPage->GetSizePixel();
+    aSiz = mpXSLTPage->GetOptimalSize();
     if ( aCtrlSiz.Width() < aSiz.Width() || aCtrlSiz.Height() < aSiz.Height() )
     {
         maTabCtrl.SetTabPageSizePixel( aSiz );
@@ -221,7 +220,7 @@ bool XMLFilterTabDialog::onOk()
             {
                 nErrorId = STR_ERROR_EXPORT_XSLT_NOT_FOUND;
                 nErrorPage = RID_XML_FILTER_TABPAGE_XSLT;
-                pFocusWindow = &(mpXSLTPage->maEDExportXSLT);
+                pFocusWindow = (mpXSLTPage->m_pEDExportXSLT);
             }
         }
     }
@@ -237,7 +236,7 @@ bool XMLFilterTabDialog::onOk()
             {
                 nErrorId = STR_ERROR_IMPORT_XSLT_NOT_FOUND;
                 nErrorPage = RID_XML_FILTER_TABPAGE_XSLT;
-                pFocusWindow = &(mpXSLTPage->maEDImportTemplate);
+                pFocusWindow = (mpXSLTPage->m_pEDImportTemplate);
             }
         }
     }
@@ -247,7 +246,7 @@ bool XMLFilterTabDialog::onOk()
     {
         nErrorId = STR_ERROR_EXPORT_XSLT_NOT_FOUND;
         nErrorPage = RID_XML_FILTER_TABPAGE_XSLT;
-        pFocusWindow = &(mpXSLTPage->maEDExportXSLT);
+        pFocusWindow = (mpXSLTPage->m_pEDExportXSLT);
     }
 
     if( 0 == nErrorId )
@@ -261,7 +260,7 @@ bool XMLFilterTabDialog::onOk()
             {
                 nErrorId = STR_ERROR_IMPORT_TEMPLATE_NOT_FOUND;
                 nErrorPage = RID_XML_FILTER_TABPAGE_XSLT;
-                pFocusWindow = &(mpXSLTPage->maEDImportTemplate);
+                pFocusWindow = (mpXSLTPage->m_pEDImportTemplate);
             }
         }
     }
