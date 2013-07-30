@@ -61,6 +61,7 @@ namespace sc {
     struct ColumnBlockPosition;
     struct RefUpdateContext;
     struct RefUpdateInsertTabContext;
+    struct RefUpdateDeleteTabContext;
 }
 
 class SfxItemSet;
@@ -516,7 +517,7 @@ public:
     void        UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY );
 
     void UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt );
-    void UpdateDeleteTab( SCTAB nTable, SCTAB nSheets = 1 );
+    void UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt );
     void        UpdateMoveTab(SCTAB nOldPos, SCTAB nNewPos, SCTAB nTabNo, ScProgress* pProgress );
     void        UpdateCompile( bool bForceIfNameInUse = false );
     void        SetTabNo(SCTAB nNewTab);

@@ -49,6 +49,7 @@ namespace sc {
     class SingleColumnSpanSet;
     struct RefUpdateContext;
     struct RefUpdateInsertTabContext;
+    struct RefUpdateDeleteTabContext;
 }
 
 class Fraction;
@@ -325,7 +326,7 @@ public:
 
     void UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt );
     void UpdateInsertTabOnlyCells( sc::RefUpdateInsertTabContext& rCxt );
-    void UpdateDeleteTab(SCTAB nDelPos, SCTAB nSheets = 1);
+    void UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt );
     void        UpdateMoveTab(SCTAB nOldPos, SCTAB nNewPos, SCTAB nTabNo);
     void        UpdateCompile( bool bForceIfNameInUse = false );
     void        UpdateTranspose( const ScRange& rSource, const ScAddress& rDest,

@@ -39,6 +39,7 @@
 #include "cellvalue.hxx"
 #include "editutil.hxx"
 #include "tokenarray.hxx"
+#include "refupdatecontext.hxx"
 
 using namespace formula;
 //------------------------------------------------------------------------
@@ -545,7 +546,10 @@ void ScConditionEntry::UpdateReference( UpdateRefMode eUpdateRefMode,
         else
         {
             if ( bDeleteTab )
-                pFormula1->AdjustReferenceOnDeletedTab(rRange.aStart.Tab(), static_cast<SCTAB>(-1*nDz), aSrcPos);
+            {
+                sc::RefUpdateDeleteTabContext aCxt(rRange.aStart.Tab(), -1*nDz);
+                pFormula1->AdjustReferenceOnDeletedTab(aCxt, aSrcPos);
+            }
             else
             {
                 ScCompiler aComp( mpDoc, aSrcPos, *pFormula1 );
@@ -567,7 +571,10 @@ void ScConditionEntry::UpdateReference( UpdateRefMode eUpdateRefMode,
         else
         {
             if ( bDeleteTab )
-                pFormula2->AdjustReferenceOnDeletedTab(rRange.aStart.Tab(), static_cast<SCTAB>(-1*nDz), aSrcPos);
+            {
+                sc::RefUpdateDeleteTabContext aCxt(rRange.aStart.Tab(), -1*nDz);
+                pFormula2->AdjustReferenceOnDeletedTab(aCxt, aSrcPos);
+            }
             else
             {
                 ScCompiler aComp( mpDoc, aSrcPos, *pFormula2);

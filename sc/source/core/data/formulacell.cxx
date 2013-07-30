@@ -2582,24 +2582,29 @@ void ScFormulaCell::UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt )
     // no StartListeningTo because the new sheets have not been inserted yet.
 }
 
-bool ScFormulaCell::UpdateDeleteTab(SCTAB nTable, SCTAB nSheets)
+bool ScFormulaCell::UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt )
 {
-    bool bPosChanged = ( aPos.Tab() >= nTable + nSheets ? true : false );
+    bool bPosChanged = (aPos.Tab() >= rCxt.mnDeletePos + rCxt.mnSheets);
     pCode->Reset();
     if (pDocument->IsClipOrUndo() || !pCode->GetNextReferenceRPN())
     {
         if (bPosChanged)
-            aPos.IncTab(-1*nSheets);
+            aPos.IncTab(-1*rCxt.mnSheets);
         return false;
     }
 
     EndListeningTo( pDocument );
     // IncTab _after_ EndListeningTo und _before_ Compiler UpdateDeleteTab!
     ScAddress aOldPos = aPos;
-    if ( bPosChanged )
-        aPos.IncTab(-1*nSheets);
+    if (bPosChanged)
+        aPos.IncTab(-1*rCxt.mnSheets);
 
-    return pCode->AdjustReferenceOnDeletedTab(nTable, nSheets, aOldPos);
+    sc::RefUpdateResult aRes = pCode->AdjustReferenceOnDeletedTab(rCxt, aOldPos);
+    if (aRes.mbNameModified)
+        // Re-compile after sheet(s) have been deleted.
+        bCompile = true;
+
+    return aRes.mbReferenceModified;
 }
 
 void ScFormulaCell::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos, SCTAB nTabNo )

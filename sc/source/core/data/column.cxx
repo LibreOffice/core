@@ -2438,6 +2438,7 @@ public:
 
 class DeleteTabUpdater
 {
+    sc::RefUpdateDeleteTabContext& mrCxt;
     sc::CellTextAttrStoreType& mrTextAttrs;
     sc::CellTextAttrStoreType::iterator miAttrPos;
     SCTAB mnDelPos;
@@ -2445,17 +2446,16 @@ class DeleteTabUpdater
     SCTAB mnTab;
     bool mbModified;
 public:
-    DeleteTabUpdater(sc::CellTextAttrStoreType& rTextAttrs, SCTAB nDelPos, SCTAB nSheets, SCTAB nTab) :
+    DeleteTabUpdater(sc::RefUpdateDeleteTabContext& rCxt, sc::CellTextAttrStoreType& rTextAttrs, SCTAB nTab) :
+        mrCxt(rCxt),
         mrTextAttrs(rTextAttrs),
         miAttrPos(rTextAttrs.begin()),
-        mnDelPos(nDelPos),
-        mnSheets(nSheets),
         mnTab(nTab),
         mbModified(false) {}
 
     void operator() (size_t, ScFormulaCell* pCell)
     {
-        pCell->UpdateDeleteTab(mnDelPos, mnSheets);
+        pCell->UpdateDeleteTab(mrCxt);
         mbModified = true;
     }
 
@@ -2890,15 +2890,15 @@ void ScColumn::UpdateInsertTabOnlyCells( sc::RefUpdateInsertTabContext& rCxt )
         CellStorageModified();
 }
 
-void ScColumn::UpdateDeleteTab(SCTAB nDelPos, SCTAB nSheets)
+void ScColumn::UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt )
 {
-    if (nTab > nDelPos)
+    if (nTab > rCxt.mnDeletePos)
     {
-        nTab -= nSheets;
+        nTab -= rCxt.mnSheets;
         pAttrArray->SetTab(nTab);
     }
 
-    DeleteTabUpdater aFunc(maCellTextAttrs, nDelPos, nSheets, nTab);
+    DeleteTabUpdater aFunc(rCxt, maCellTextAttrs, nTab);
     sc::ProcessFormulaEditText(maCells, aFunc);
     if (aFunc.isModified())
         CellStorageModified();

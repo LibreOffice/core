@@ -64,6 +64,9 @@ RefUpdateResult::RefUpdateResult(const RefUpdateResult& r) :
 RefUpdateInsertTabContext::RefUpdateInsertTabContext(SCTAB nInsertPos, SCTAB nSheets) :
     mnInsertPos(nInsertPos), mnSheets(nSheets) {}
 
+RefUpdateDeleteTabContext::RefUpdateDeleteTabContext(SCTAB nDeletePos, SCTAB nSheets) :
+    mnDeletePos(nDeletePos), mnSheets(nSheets) {}
+
 }
 
 
