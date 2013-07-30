@@ -330,7 +330,7 @@ namespace dbaui
     {
         // get the type from the entry data
         sal_uInt16 nSelected = _pBox->GetSelectEntryPos();
-        if (nSelected >= m_aURLPrefixes.size() )
+        if (nSelected < 0 || nSelected >= m_aURLPrefixes.size() )
         {
             SAL_WARN("dbaccess.ui.OGeneralPage", "Got out-of-range value '" << nSelected <<  "' from the DatasourceType selection ListBox's GetSelectEntryPos(): no corresponding URL prefix");
             return 0L;
