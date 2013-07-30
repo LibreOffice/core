@@ -1430,22 +1430,24 @@ ScAddress ScConditionEntry::GetValidSrcPos() const
             while ( ( t = static_cast<ScToken*>(pFormula->GetNextReference()) ) != NULL )
             {
                 ScSingleRefData& rRef1 = t->GetSingleRef();
-                if ( rRef1.IsTabRel() && !rRef1.IsTabDeleted() )
+                ScAddress aAbs = rRef1.toAbs(aSrcPos);
+                if (!rRef1.IsTabDeleted())
                 {
-                    if ( rRef1.nTab < nMinTab )
-                        nMinTab = rRef1.nTab;
-                    if ( rRef1.nTab > nMaxTab )
-                        nMaxTab = rRef1.nTab;
+                    if (aAbs.Tab() < nMinTab)
+                        nMinTab = aAbs.Tab();
+                    if (aAbs.Tab() > nMaxTab)
+                        nMaxTab = aAbs.Tab();
                 }
                 if ( t->GetType() == svDoubleRef )
                 {
                     ScSingleRefData& rRef2 = t->GetDoubleRef().Ref2;
-                    if ( rRef2.IsTabRel() && !rRef2.IsTabDeleted() )
+                    aAbs = rRef2.toAbs(aSrcPos);
+                    if (!rRef2.IsTabDeleted())
                     {
-                        if ( rRef2.nTab < nMinTab )
-                            nMinTab = rRef2.nTab;
-                        if ( rRef2.nTab > nMaxTab )
-                            nMaxTab = rRef2.nTab;
+                        if (aAbs.Tab() < nMinTab)
+                            nMinTab = aAbs.Tab();
+                        if (aAbs.Tab() > nMaxTab)
+                            nMaxTab = aAbs.Tab();
                     }
                 }
             }
