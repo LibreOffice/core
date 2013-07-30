@@ -7144,6 +7144,7 @@ if test "$with_system_clucene" = "yes"; then
     AC_MSG_RESULT([external])
     SYSTEM_CLUCENE=YES
     PKG_CHECK_MODULES(CLUCENE, libclucene-core)
+    CLUCENE_CFLAGS=[$(printf '%s' "$CLUCENE_CFLAGS" | sed -e 's@-I[^ ]*/CLucene/ext@@')]
     AC_LANG_PUSH([C++])
     save_CXXFLAGS=$CXXFLAGS
     save_CPPFLAGS=$CPPFLAGS
