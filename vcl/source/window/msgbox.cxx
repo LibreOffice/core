@@ -155,7 +155,7 @@ MessBox::MessBox( Window* pParent, WinBits nStyle,
     ImplInit( pParent, nStyle | WB_MOVEABLE | WB_HORZ | WB_CENTER );
     ImplInitButtons();
 
-    if (!rTitle.isEmpty())
+    if ( !rTitle.isEmpty() )
         SetText( rTitle );
 }
 
@@ -338,7 +338,7 @@ void MessBox::ImplPosControls()
     if ( aPageSize.Width() < nTitleWidth )
         aPageSize.Width() = nTitleWidth;
 
-    if (!maCheckBoxText.isEmpty())
+    if ( !maCheckBoxText.isEmpty() )
     {
         Size aMinCheckboxSize ( aMEditSize );
         if ( aPageSize.Width() < IMPL_MINSIZE_MSGBOX_WIDTH+80 )

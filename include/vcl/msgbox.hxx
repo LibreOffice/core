@@ -69,7 +69,7 @@ public:
     void                SetCheckBoxText( const OUString& rText ) { maCheckBoxText = rText;}
     const OUString&     GetCheckBoxText() const { return maCheckBoxText;}
     void                SetCheckBoxState( sal_Bool bCheck );
-    sal_Bool                GetCheckBoxState() const;
+    sal_Bool            GetCheckBoxState() const;
 
     virtual Size        GetOptimalSize() const;
 };
