@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//9pY\u003d",
+        "filename": "sw/source/core/swg/swblocks.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-07-30T14:19:02Z",
+      "side": 1,
+      "message": "This will give an error on 32bit platforms, because sal_Int32 is long there, and there\u0027s no min(long,int). This needs the original if() back, or casting of the 8 (yes, the sal_Int types are an annoyance like this).",
+      "revId": "e2fed3603a5065294b2e429648ba0e8e8d83b9e1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
