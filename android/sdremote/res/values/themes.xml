@@ -31,8 +31,8 @@
         <item name="android:navigationMode">tabMode</item>
         <item name="navigationMode">tabMode</item>
 
-        <item name="android:displayOptions">showTitle|showHome|useLogo</item>
-        <item name="displayOptions">showTitle|showHome|useLogo</item>
+        <item name="android:displayOptions">showHome|useLogo</item>
+        <item name="displayOptions">showHome|useLogo</item>
     </style>
 
     <style name="Theme.ImpressRemote.ComputerCreation" parent="Theme.ImpressRemote">

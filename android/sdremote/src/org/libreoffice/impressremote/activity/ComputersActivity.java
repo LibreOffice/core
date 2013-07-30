@@ -31,7 +31,19 @@ public class ComputersActivity extends SherlockFragmentActivity implements Actio
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setUpTitle();
         setUpContent();
+    }
+
+    private void setUpTitle() {
+        // Looks hacky but it seems to be the best way to set activity title
+        // different to application’s label. The other way is setting title
+        // to intents filter but it shows wrong label for recent apps screen.
+
+        ActionBar aActionBar = getSupportActionBar();
+
+        aActionBar.setTitle(R.string.title_computers);
+        aActionBar.setDisplayShowTitleEnabled(true);
     }
 
     private void setUpContent() {

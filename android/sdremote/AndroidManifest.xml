@@ -21,10 +21,9 @@
 
         <activity
             android:name=".activity.ComputersActivity"
-            android:label="@string/title_computers"
             android:theme="@style/Theme.ImpressRemote.Computers">
 
-            <intent-filter android:label="@string/application_name">
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
