@@ -1,0 +1,24 @@
+#!/bin/sh
+#
+# This file is part of the LibreOffice project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+# Run this from the source root dir to count:
+# a) the number of .ui files
+# b) the estimated amount of additional .ui files required
+
+converted=`ls */uiconfig/ui/*.ui */uiconfig/*/ui/*.ui|wc -l`
+echo $converted .ui files currently exist
+
+dialogs=`git grep -h Dialog -- *.src|grep -v DialogControl|grep -v HelpID|grep -v define|grep -v String|grep -v QuickHelpText|grep -v "Text \[ en-US \]"|grep -v HelpId|grep -v "Cancel-Button"|grep -v \"Dialog\"|grep -v "Dialog Controls" |grep -v .uno:|grep -v "//"|grep -v include|grep -v "paste region"|grep -v "Tabpage-Dialog"|sed -e 's/^ *//g' -e 's/ *$//g'|cut -d' ' -f2- |sort|uniq|wc -l`
+
+tabpages=`git grep -h TabPage -- *.src|grep -v DialogControl|grep -v HelpID|grep -v define|grep -v String|grep -v QuickHelpText|grep -v "Text \[ en-US \]"|grep -v HelpId|grep -v "Cancel-Button"|grep -v \"Dialog\"|grep -v "Dialog Controls" |grep -v .uno:|grep -v "//"|grep -v include|grep -v "paste region"|grep -v "Tabpage-Dialog"|sed -e 's/^ *//g' -e 's/ *$//g'|cut -d' ' -f2- |sort|uniq|wc -l`
+
+echo There are $dialogs unconverted dialogs
+echo There are $tabpages unconverted tabpages
+
+num=$(($dialogs + $tabpages))
+echo An estimated additional $num .ui are required
