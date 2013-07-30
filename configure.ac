@@ -182,7 +182,7 @@ if test -n "$with_android_ndk"; then
     fi
 
     case "$with_android_ndk_toolchain_version" in
-    4.6|4.7)
+    4.6|4.7|4.8)
         ANDROID_BINUTILS_DIR=$ANDROID_NDK_HOME/toolchains/$android_platform_prefix-$with_android_ndk_toolchain_version
         ANDROID_COMPILER_DIR=$ANDROID_BINUTILS_DIR
         ;;
