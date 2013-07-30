@@ -803,7 +803,7 @@ void SfxSingleTabDialog::setTabPage(SfxTabPage* pTabPage,
         if (!sTitle.isEmpty())
             SetText(sTitle);
 
-        // Dialog recieves the HelpId of TabPage if there is any
+        // Dialog receives the HelpId of TabPage if there is any
         OString sHelpId(pImpl->m_pSfxPage->GetHelpId());
         if (!sHelpId.isEmpty())
             SetHelpId(sHelpId);
@@ -873,7 +873,7 @@ void SfxNoLayoutSingleTabDialog::SetTabPage( SfxTabPage* pTabPage,
         // Set TabPage text in the Dialog
         SetText( pImpl->m_pSfxPage->GetText() );
 
-        // Dialog recieves the HelpId of TabPage
+        // Dialog receives the HelpId of TabPage
         SetHelpId( pImpl->m_pSfxPage->GetHelpId() );
         SetUniqueId( pImpl->m_pSfxPage->GetUniqueId() );
     }

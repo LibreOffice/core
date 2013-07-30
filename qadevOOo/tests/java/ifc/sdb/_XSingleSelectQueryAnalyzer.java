@@ -55,7 +55,7 @@ public class _XSingleSelectQueryAnalyzer extends MultiMethodTest {
     private XSingleSelectQueryComposer xComposer = null;
 
     /**
-     * Recieves the object relations:
+     * Receives the object relations:
     * <ul>
     *  <li><code>XSingleSelectQueryComposer xCompoer</code></li>
     * </ul> <p>

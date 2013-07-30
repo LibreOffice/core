@@ -42,11 +42,11 @@ class SW_DLLPUBLIC SwEnvItem : public SfxPoolItem
 {
 public:
 
-    OUString   aAddrText;       // text for reciever
+    OUString   aAddrText;       // text for receiver
     sal_Bool        bSend;           // sender?
     OUString   aSendText;       // text for sender
-    sal_Int32       lAddrFromLeft;   // left gap for reciever (twips)
-    sal_Int32       lAddrFromTop;    // upper gap for reciever (twips)
+    sal_Int32       lAddrFromLeft;   // left gap for receiver (twips)
+    sal_Int32       lAddrFromTop;    // upper gap for receiver (twips)
     sal_Int32       lSendFromLeft;   // left gap for sender (twips)
     sal_Int32       lSendFromTop;    // upper gap for sender (twips)
     sal_Int32       lWidth;          // envelope's width (twips)

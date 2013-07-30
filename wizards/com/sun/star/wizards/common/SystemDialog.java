@@ -348,7 +348,7 @@ public class SystemDialog
     }
 
     /**
-     * just like the other showMessageBox(...) method, but recieves a
+     * just like the other showMessageBox(...) method, but receives a
      * peer argument to use to create the message box.
      * @param xMSF
      * @param peer

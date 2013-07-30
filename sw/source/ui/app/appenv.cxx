@@ -164,7 +164,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
     aTmp += OUString::number( ++nTitleNo );
     xDocSh->SetTitle( aTmp );
 
-    // if applicable, copy the old Collections "Sender" and "Reciever" to
+    // if applicable, copy the old Collections "Sender" and "Receiver" to
     // a new document
     if ( pOldSh )
     {
@@ -312,7 +312,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
             pSh->StartAllAction();
             pSh->DoUndo(sal_False);
 
-            // Again, copy the new collections "Sender" and "Reciever" to
+            // Again, copy the new collections "Sender" and "Receiver" to
             // a new document
             if ( pOldSh )
             {
