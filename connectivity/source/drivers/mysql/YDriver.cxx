@@ -47,6 +47,15 @@ namespace connectivity
         }
     }
 
+    namespace
+    {
+        OUString getJavaDriverClass(
+            css::uno::Sequence<css::beans::PropertyValue> const & info)
+        {
+            return comphelper::NamedValueCollection(info).getOrDefault(
+                "JavaDriverClass", OUString("com.mysql.jdbc.Driver"));
+        }
+    }
 
     //====================================================================
     //= ODriverDelegator
@@ -157,9 +166,14 @@ namespace connectivity
             const PropertyValue* pEnd = pSupported + info.getLength();
 
             aProps.reserve(info.getLength() + 5);
+            bool jdc = false;
             for (;pSupported != pEnd; ++pSupported)
             {
                 aProps.push_back( *pSupported );
+                if (pSupported->Name == "JavaDriverClass")
+                {
+                    jdc = true;
+                }
             }
 
             if ( _eType == D_ODBC )
@@ -177,11 +191,14 @@ namespace connectivity
             }
             else if ( _eType == D_JDBC )
             {
-                aProps.push_back( PropertyValue(
-                                    ::rtl::OUString("JavaDriverClass")
-                                    ,0
-                                    ,makeAny(::rtl::OUString("com.mysql.jdbc.Driver"))
-                                    ,PropertyState_DIRECT_VALUE) );
+                if (!jdc)
+                {
+                    aProps.push_back( PropertyValue(
+                                          ::rtl::OUString("JavaDriverClass")
+                                          ,0
+                                          ,makeAny(::rtl::OUString("com.mysql.jdbc.Driver"))
+                                          ,PropertyState_DIRECT_VALUE) );
+                }
             }
             else
             {
@@ -230,10 +247,7 @@ namespace connectivity
         }
         else
         {
-            ::comphelper::NamedValueCollection aSettings( info );
-            ::rtl::OUString sDriverClass("com.mysql.jdbc.Driver");
-            sDriverClass = aSettings.getOrDefault( "JavaDriverClass", sDriverClass );
-
+            OUString sDriverClass(getJavaDriverClass(info));
             TJDBCDrivers::iterator aFind = m_aJdbcDrivers.find(sDriverClass);
             if ( aFind == m_aJdbcDrivers.end() )
                 aFind = m_aJdbcDrivers.insert(TJDBCDrivers::value_type(sDriverClass,lcl_loadDriver(m_xFactory,sCuttedUrl))).first;
@@ -319,7 +333,7 @@ namespace connectivity
     }
 
     //--------------------------------------------------------------------
-    Sequence< DriverPropertyInfo > SAL_CALL ODriverDelegator::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& /*info*/ ) throw (SQLException, RuntimeException)
+    Sequence< DriverPropertyInfo > SAL_CALL ODriverDelegator::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw (SQLException, RuntimeException)
     {
         ::std::vector< DriverPropertyInfo > aDriverInfo;
         if ( !acceptsURL(url) )
@@ -351,7 +365,7 @@ namespace connectivity
                     ::rtl::OUString("JavaDriverClass")
                     ,::rtl::OUString("The JDBC driver class name.")
                     ,sal_True
-                    ,::rtl::OUString("com.mysql.jdbc.Driver")
+                    ,getJavaDriverClass(info)
                     ,Sequence< ::rtl::OUString >())
                     );
         }
