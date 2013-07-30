@@ -369,6 +369,7 @@ xub_StrLen SwAttrIter::GetNextAttr( ) const
 static bool lcl_HasMergeableBorder(const SwFont& rFirst, const SwFont& rSecond)
 {
     return
+        rFirst.GetOrientation() == rSecond.GetOrientation() &&
         rFirst.GetTopBorder() == rSecond.GetTopBorder() &&
         rFirst.GetBottomBorder() == rSecond.GetBottomBorder() &&
         rFirst.GetLeftBorder() == rSecond.GetLeftBorder() &&

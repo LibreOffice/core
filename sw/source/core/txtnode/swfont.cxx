@@ -117,6 +117,98 @@ void SwFont::SetLeftBorder( const editeng::SvxBorderLine* pLeftBorder )
     aSub[SW_LATIN].pMagic = aSub[SW_CJK].pMagic = aSub[SW_CTL].pMagic = 0;
 }
 
+const boost::optional<editeng::SvxBorderLine>& SwFont::GetAbsTopBorder( const bool bVertLayout ) const
+{
+    switch( GetOrientation( bVertLayout ) )
+    {
+        case 0 :
+            return m_aTopBorder;
+            break;
+        case 900 :
+            return m_aRightBorder;
+            break;
+        case 1800 :
+            return m_aBottomBorder;
+            break;
+        case 2700 :
+            return m_aLeftBorder;
+            break;
+        default :
+            assert(false);
+            return m_aTopBorder;
+            break;
+    }
+}
+
+const boost::optional<editeng::SvxBorderLine>& SwFont::GetAbsBottomBorder( const bool bVertLayout ) const
+{
+    switch( GetOrientation( bVertLayout ) )
+    {
+        case 0 :
+            return m_aBottomBorder;
+            break;
+        case 900 :
+            return m_aLeftBorder;
+            break;
+        case 1800 :
+            return m_aTopBorder;
+            break;
+        case 2700 :
+            return m_aRightBorder;
+            break;
+        default :
+            assert(false);
+            return m_aBottomBorder;
+            break;
+    }
+}
+
+const boost::optional<editeng::SvxBorderLine>& SwFont::GetAbsLeftBorder( const bool bVertLayout ) const
+{
+    switch( GetOrientation( bVertLayout ) )
+    {
+        case 0 :
+            return m_aLeftBorder;
+            break;
+        case 900 :
+            return m_aTopBorder;
+            break;
+        case 1800 :
+            return m_aRightBorder;
+            break;
+        case 2700 :
+            return m_aBottomBorder;
+            break;
+        default :
+            assert(false);
+            return m_aLeftBorder;
+            break;
+    }
+}
+
+const boost::optional<editeng::SvxBorderLine>& SwFont::GetAbsRightBorder( const bool bVertLayout ) const
+{
+    switch( GetOrientation( bVertLayout ) )
+    {
+        case 0 :
+            return m_aRightBorder;
+            break;
+        case 900 :
+            return m_aBottomBorder;
+            break;
+        case 1800 :
+            return m_aLeftBorder;
+            break;
+        case 2700 :
+            return m_aTopBorder;
+            break;
+        default :
+            assert(false);
+            return m_aRightBorder;
+            break;
+    }
+}
+
 // maps directions for vertical layout
 sal_uInt16 MapDirection( sal_uInt16 nDir, const sal_Bool bVertFormat )
 {

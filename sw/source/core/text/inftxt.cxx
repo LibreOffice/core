@@ -661,15 +661,9 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
     SwDrawTextInfo aDrawInf( m_pFrm->getRootFrm()->GetCurrShell(), *m_pOut, pSI, rText, nStart, nLength,
                              rPor.Width(), bBullet );
 
-    if( m_pFnt->GetLeftBorder() )
-        aDrawInf.SetLeft( GetPaintRect().Left() + m_pFnt->GetLeftBorder().get().GetScaledWidth() );
-    else
-        aDrawInf.SetLeft( GetPaintRect().Left() );
 
-    if( m_pFnt->GetRightBorder() )
-        aDrawInf.SetRight( GetPaintRect().Right() - m_pFnt->GetRightBorder().get().GetScaledWidth() );
-    else
-        aDrawInf.SetRight( GetPaintRect().Right());
+    aDrawInf.SetLeft( GetPaintRect().Left() );
+    aDrawInf.SetRight( GetPaintRect().Right());
 
     aDrawInf.SetUnderFnt( m_pUnderFnt );
 
@@ -703,7 +697,23 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
     // Draw text next to the left border
     Point aFontPos(aPos);
     if( m_pFnt->GetLeftBorder() )
-       aFontPos.X() += m_pFnt->GetLeftBorder().get().GetScaledWidth();
+    {
+        switch( m_pFnt->GetOrientation(GetTxtFrm()->IsVertical()) )
+        {
+            case 0 :
+                aFontPos.X() += m_pFnt->GetLeftBorder().get().GetScaledWidth();
+                break;
+            case 900 :
+                aFontPos.Y() -= m_pFnt->GetLeftBorder().get().GetScaledWidth();
+                break;
+            case 1800 :
+                aFontPos.X() -= m_pFnt->GetLeftBorder().get().GetScaledWidth();
+                break;
+            case 2700 :
+                aFontPos.Y() += m_pFnt->GetLeftBorder().get().GetScaledWidth();
+                break;
+        }
+    }
 
     if( GetTxtFly()->IsOn() )
     {
@@ -1223,7 +1233,7 @@ void SwTxtPaintInfo::DrawBorder( const SwLinePortion &rPor ) const
     CalcRect( rPor, &aDrawArea );
     if ( aDrawArea.HasArea() )
     {
-        PaintCharacterBorder(*m_pFnt, aDrawArea);
+        PaintCharacterBorder(*m_pFnt, aDrawArea, GetTxtFrm()->IsVertical());
     }
 }
 

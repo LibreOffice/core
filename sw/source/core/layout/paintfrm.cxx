@@ -4765,33 +4765,41 @@ static void lcl_PaintTopBottomLine( const bool         _bTop,
 
 void PaintCharacterBorder(
     const SwFont& rFont,
-    const SwRect& rPaintArea )
+    const SwRect& rPaintArea,
+    const bool bVerticalLayout )
 {
+    // Init borders, after this initialization top, bottom, right and left means the
+    // absolute position
+    const boost::optional<editeng::SvxBorderLine>& aTopBorder = rFont.GetAbsTopBorder(bVerticalLayout);
+    const boost::optional<editeng::SvxBorderLine>& aBottomBorder = rFont.GetAbsBottomBorder(bVerticalLayout);
+    const boost::optional<editeng::SvxBorderLine>& aLeftBorder = rFont.GetAbsLeftBorder(bVerticalLayout);
+    const boost::optional<editeng::SvxBorderLine>& aRightBorder = rFont.GetAbsRightBorder(bVerticalLayout);
+
     SwRect aAlignedRect(rPaintArea);
     SwAlignRect(aAlignedRect, pGlobalShell);
 
-    if( rFont.GetTopBorder() )
+    if( aTopBorder )
     {
         Point aLeftTop (
             aAlignedRect.Left(),
             aAlignedRect.Top());
         Point aRightBottom (
             aAlignedRect.Right(),
-            aAlignedRect.Top() + rFont.GetTopBorder().get().GetScaledWidth());
+            aAlignedRect.Top() + aTopBorder.get().GetScaledWidth());
 
         lcl_MakeBorderLine(
             SwRect( aLeftTop, aRightBottom),
             false, true, false,
-            rFont.GetTopBorder().get(),
-            rFont.GetLeftBorder().get_ptr(),
-            rFont.GetRightBorder().get_ptr());
+            aTopBorder.get(),
+            aLeftBorder.get_ptr(),
+            aRightBorder.get_ptr());
     }
 
-    if( rFont.GetBottomBorder() )
+    if( aBottomBorder )
     {
         Point aLeftTop (
             aAlignedRect.Left(),
-            aAlignedRect.Bottom() - rFont.GetBottomBorder().get().GetScaledWidth());
+            aAlignedRect.Bottom() - aBottomBorder.get().GetScaledWidth());
         Point aRightBottom (
             aAlignedRect.Right(),
             aAlignedRect.Bottom());
@@ -4799,12 +4807,12 @@ void PaintCharacterBorder(
         lcl_MakeBorderLine(
             SwRect( aLeftTop, aRightBottom),
             false, false, false,
-            rFont.GetBottomBorder().get(),
-            rFont.GetLeftBorder().get_ptr(),
-            rFont.GetRightBorder().get_ptr());
+            aBottomBorder.get(),
+            aLeftBorder.get_ptr(),
+            aRightBorder.get_ptr());
     }
 
-    if( rFont.GetLeftBorder() )
+    if( aLeftBorder )
     {
         Point aLeftTop (
             aAlignedRect.Left(),
@@ -4816,12 +4824,12 @@ void PaintCharacterBorder(
         lcl_MakeBorderLine(
             SwRect( aLeftTop, aRightBottom),
             true, true, true,
-            rFont.GetLeftBorder().get(),
-            rFont.GetTopBorder().get_ptr(),
-            rFont.GetBottomBorder().get_ptr());
+            aLeftBorder.get(),
+            aTopBorder.get_ptr(),
+            aBottomBorder.get_ptr());
     }
 
-    if( rFont.GetRightBorder() )
+    if( aRightBorder )
     {
         Point aLeftTop (
             aAlignedRect.Right() - rFont.GetRightBorder().get().GetScaledWidth(),
@@ -4833,9 +4841,9 @@ void PaintCharacterBorder(
         lcl_MakeBorderLine(
             SwRect( aLeftTop, aRightBottom),
             true, false, true,
-            rFont.GetRightBorder().get(),
-            rFont.GetTopBorder().get_ptr(),
-            rFont.GetBottomBorder().get_ptr());
+            aRightBorder.get(),
+            aTopBorder.get_ptr(),
+            aBottomBorder.get_ptr());
     }
 }
 

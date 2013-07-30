@@ -176,17 +176,6 @@ public:
     void SetBackColor( Color* pNewColor );
     inline const Color* GetBackColor() const{ return pBackColor; }
 
-    // set/get borders
-    void SetTopBorder( const editeng::SvxBorderLine* pTopBorder );
-    void SetBottomBorder( const editeng::SvxBorderLine* pBottomBorder );
-    void SetRightBorder( const editeng::SvxBorderLine* pRightBorder );
-    void SetLeftBorder( const editeng::SvxBorderLine* pLeftBorder );
-
-    const boost::optional<editeng::SvxBorderLine>& GetTopBorder() const { return m_aTopBorder; }
-    const boost::optional<editeng::SvxBorderLine>& GetBottomBorder() const { return m_aBottomBorder; }
-    const boost::optional<editeng::SvxBorderLine>& GetRightBorder() const { return m_aRightBorder; }
-    const boost::optional<editeng::SvxBorderLine>& GetLeftBorder() const { return m_aLeftBorder; }
-
     inline void ChkMagic( ViewShell *pSh, sal_uInt8 nWhich )
         { if( !aSub[ nWhich ].pMagic ) GoMagic( pSh, nWhich ); }
     // uebernimmt die MagicNumber eines (hoffentlich ident.) Kollegen
@@ -373,6 +362,23 @@ public:
 
     inline void Invalidate()
         { bFntChg = bOrgChg = sal_True; }
+
+    // set/get borders
+    void SetTopBorder( const editeng::SvxBorderLine* pTopBorder );
+    void SetBottomBorder( const editeng::SvxBorderLine* pBottomBorder );
+    void SetRightBorder( const editeng::SvxBorderLine* pRightBorder );
+    void SetLeftBorder( const editeng::SvxBorderLine* pLeftBorder );
+
+    const boost::optional<editeng::SvxBorderLine>& GetTopBorder() const { return m_aTopBorder; }
+    const boost::optional<editeng::SvxBorderLine>& GetBottomBorder() const { return m_aBottomBorder; }
+    const boost::optional<editeng::SvxBorderLine>& GetRightBorder() const { return m_aRightBorder; }
+    const boost::optional<editeng::SvxBorderLine>& GetLeftBorder() const { return m_aLeftBorder; }
+
+    // Get borders which are at absolute positions
+    const boost::optional<editeng::SvxBorderLine>& GetAbsTopBorder( const bool bVertLayout ) const;
+    const boost::optional<editeng::SvxBorderLine>& GetAbsBottomBorder( const bool bVertLayout ) const;
+    const boost::optional<editeng::SvxBorderLine>& GetAbsRightBorder( const bool bVertLayout ) const;
+    const boost::optional<editeng::SvxBorderLine>& GetAbsLeftBorder( const bool bVertLayout ) const;
 };
 
 inline void SwFont::SetColor( const Color& rColor )
