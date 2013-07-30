@@ -21,6 +21,7 @@ $(eval $(call gb_UIConfig_add_uifiles,filter,\
 	filter/uiconfig/ui/xmlfiltersettings \
 	filter/uiconfig/ui/xmlfiltertabpagegeneral \
 	filter/uiconfig/ui/xmlfiltertabpagetransformation \
+	filter/uiconfig/ui/xsltfilterdialog \
 ))
 
 # vim: set noet sw=4 ts=4:

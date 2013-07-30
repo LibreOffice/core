@@ -42,7 +42,6 @@
 #include "xmlfiltertabdialog.hxx"
 #include "xmlfiltertestdialog.hxx"
 #include "xmlfilterjar.hxx"
-#include "xmlfilterhelpids.hrc"
 
 using namespace osl;
 using namespace com::sun::star::lang;

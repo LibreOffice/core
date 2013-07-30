@@ -25,29 +25,23 @@
 
 #include "xmlfilterdialogstrings.hrc"
 #include "xmlfiltertabdialog.hxx"
-#include "xmlfiltercommon.hrc"
 #include "xmlfiltertabpagebasic.hxx"
 #include "xmlfiltertabpagexslt.hxx"
 #include "xmlfiltersettingsdialog.hxx"
-#include "xmlfilterhelpids.hrc"
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::container;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
 
-XMLFilterTabDialog::XMLFilterTabDialog( Window *pParent, ResMgr& rResMgr, const Reference< XComponentContext >& rxContext, const filter_info_impl* pInfo ) :
-    TabDialog( pParent, ResId( DLG_XML_FILTER_TABDIALOG, rResMgr ) ),
-    mxContext( rxContext ),
-    mrResMgr( rResMgr ),
-    maTabCtrl( this, ResId( 1, rResMgr ) ),
-    maOKBtn( this ),
-    maCancelBtn( this ),
-    maHelpBtn( this )
+XMLFilterTabDialog::XMLFilterTabDialog(Window *pParent, ResMgr& rResMgr,
+    const Reference< XComponentContext >& rxContext, const filter_info_impl* pInfo)
+    : TabDialog(pParent, "XSLTFilterDialog","filter/ui/xsltfilterdialog.ui")
+    , mxContext(rxContext)
+    , mrResMgr(rResMgr)
 {
-    FreeResource();
-
-    maTabCtrl.SetHelpId( HID_XML_FILTER_TABPAGE_CTRL );
+    get(m_pOKBtn, "ok");
+    get(m_pTabCtrl, "tabcontrol");
 
     mpOldInfo = pInfo;
     mpNewInfo = new filter_info_impl( *mpOldInfo );
@@ -56,45 +50,24 @@ XMLFilterTabDialog::XMLFilterTabDialog( Window *pParent, ResMgr& rResMgr, const 
     aTitle = aTitle.replaceAll("%s", mpNewInfo->maFilterName);
     SetText( aTitle );
 
-    maTabCtrl.Show();
-    maOKBtn.Show();
-    maCancelBtn.Show();
-    maHelpBtn.Show();
+    m_pOKBtn->SetClickHdl( LINK( this, XMLFilterTabDialog, OkHdl ) );
 
-    maOKBtn.SetClickHdl( LINK( this, XMLFilterTabDialog, OkHdl ) );
+    m_pTabCtrl->SetActivatePageHdl( LINK( this, XMLFilterTabDialog, ActivatePageHdl ) );
+    m_pTabCtrl->SetDeactivatePageHdl( LINK( this, XMLFilterTabDialog, DeactivatePageHdl ) );
 
-    maTabCtrl.SetActivatePageHdl( LINK( this, XMLFilterTabDialog, ActivatePageHdl ) );
-    maTabCtrl.SetDeactivatePageHdl( LINK( this, XMLFilterTabDialog, DeactivatePageHdl ) );
-
-    mpBasicPage = new XMLFilterTabPageBasic(&maTabCtrl);
+    mpBasicPage = new XMLFilterTabPageBasic(m_pTabCtrl);
     mpBasicPage->SetInfo( mpNewInfo );
 
-    maTabCtrl.SetTabPage( RID_XML_FILTER_TABPAGE_BASIC, mpBasicPage );
+    m_nBasicPageId = m_pTabCtrl->GetPageId("general");
+    m_pTabCtrl->SetTabPage(m_nBasicPageId, mpBasicPage);
 
-    Size aSiz = mpBasicPage->GetOptimalSize();
-    Size aCtrlSiz = maTabCtrl.GetTabPageSizePixel();
-    // set size on TabControl only if smaller than TabPage
-    if ( aCtrlSiz.Width() < aSiz.Width() || aCtrlSiz.Height() < aSiz.Height() )
-    {
-        maTabCtrl.SetTabPageSizePixel( aSiz );
-        aCtrlSiz = aSiz;
-    }
-
-    mpXSLTPage = new XMLFilterTabPageXSLT( &maTabCtrl);
+    mpXSLTPage = new XMLFilterTabPageXSLT(m_pTabCtrl);
     mpXSLTPage->SetInfo( mpNewInfo );
 
-    maTabCtrl.SetTabPage( RID_XML_FILTER_TABPAGE_XSLT, mpXSLTPage );
+    m_nXSLTPageId = m_pTabCtrl->GetPageId("transformation");
+    m_pTabCtrl->SetTabPage(m_nXSLTPageId, mpXSLTPage);
 
-    aSiz = mpXSLTPage->GetOptimalSize();
-    if ( aCtrlSiz.Width() < aSiz.Width() || aCtrlSiz.Height() < aSiz.Height() )
-    {
-        maTabCtrl.SetTabPageSizePixel( aSiz );
-        aCtrlSiz = aSiz;
-    }
-
-    ActivatePageHdl( &maTabCtrl );
-
-    AdjustLayout();
+    ActivatePageHdl(m_pTabCtrl);
 }
 
 // -----------------------------------------------------------------------
@@ -136,7 +109,7 @@ bool XMLFilterTabDialog::onOk()
                 {
                     if( xFilterContainer->hasByName( mpNewInfo->maFilterName ) )
                     {
-                        nErrorPage = RID_XML_FILTER_TABPAGE_BASIC;
+                        nErrorPage = m_nBasicPageId;
                         nErrorId = STR_ERROR_FILTER_NAME_EXISTS;
                         pFocusWindow = (mpBasicPage->m_pEDFilterName);
                         aReplace1 = mpNewInfo->maFilterName;
@@ -191,7 +164,7 @@ bool XMLFilterTabDialog::onOk()
                                 pValues->Value >>= aInterfaceName;
                                 if( aInterfaceName == mpNewInfo->maInterfaceName )
                                 {
-                                    nErrorPage = RID_XML_FILTER_TABPAGE_BASIC;
+                                    nErrorPage = m_nBasicPageId;
                                     nErrorId = STR_ERROR_TYPE_NAME_EXISTS;
                                     pFocusWindow = (mpBasicPage->m_pEDInterfaceName);
                                     aReplace1 = mpNewInfo->maInterfaceName;
@@ -219,7 +192,7 @@ bool XMLFilterTabDialog::onOk()
             if( aRC != osl::File::E_None )
             {
                 nErrorId = STR_ERROR_EXPORT_XSLT_NOT_FOUND;
-                nErrorPage = RID_XML_FILTER_TABPAGE_XSLT;
+                nErrorPage = m_nXSLTPageId;
                 pFocusWindow = (mpXSLTPage->m_pEDExportXSLT);
             }
         }
@@ -235,7 +208,7 @@ bool XMLFilterTabDialog::onOk()
             if( aRC != osl::File::E_None )
             {
                 nErrorId = STR_ERROR_IMPORT_XSLT_NOT_FOUND;
-                nErrorPage = RID_XML_FILTER_TABPAGE_XSLT;
+                nErrorPage = m_nXSLTPageId;
                 pFocusWindow = (mpXSLTPage->m_pEDImportTemplate);
             }
         }
@@ -245,7 +218,7 @@ bool XMLFilterTabDialog::onOk()
     if((mpNewInfo->maImportXSLT.isEmpty()) && (mpNewInfo->maExportXSLT.isEmpty()) )
     {
         nErrorId = STR_ERROR_EXPORT_XSLT_NOT_FOUND;
-        nErrorPage = RID_XML_FILTER_TABPAGE_XSLT;
+        nErrorPage = m_nXSLTPageId;
         pFocusWindow = (mpXSLTPage->m_pEDExportXSLT);
     }
 
@@ -259,7 +232,7 @@ bool XMLFilterTabDialog::onOk()
             if( aRC != osl::File::E_None )
             {
                 nErrorId = STR_ERROR_IMPORT_TEMPLATE_NOT_FOUND;
-                nErrorPage = RID_XML_FILTER_TABPAGE_XSLT;
+                nErrorPage = m_nXSLTPageId;
                 pFocusWindow = (mpXSLTPage->m_pEDImportTemplate);
             }
         }
@@ -267,8 +240,8 @@ bool XMLFilterTabDialog::onOk()
 
     if( 0 != nErrorId )
     {
-        maTabCtrl.SetCurPageId( (sal_uInt16)nErrorPage );
-        ActivatePageHdl( &maTabCtrl );
+        m_pTabCtrl->SetCurPageId((sal_uInt16)nErrorPage);
+        ActivatePageHdl(m_pTabCtrl);
 
         ResId aResId( nErrorId, mrResMgr );
         OUString aMessage( aResId );

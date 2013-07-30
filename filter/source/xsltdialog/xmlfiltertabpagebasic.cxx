@@ -22,7 +22,6 @@
 #include "xmlfilterdialogstrings.hrc"
 #include "xmlfiltertabpagebasic.hxx"
 #include "xmlfiltersettingsdialog.hxx"
-#include "xmlfilterhelpids.hrc"
 
 XMLFilterTabPageBasic::XMLFilterTabPageBasic(Window* pParent)
     : TabPage(pParent, "XmlFilterTabPageGeneral", "filter/ui/xmlfiltertabpagegeneral.ui")

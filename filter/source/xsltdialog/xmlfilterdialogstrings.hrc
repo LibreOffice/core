@@ -20,7 +20,7 @@
 #ifndef _XMLFILTERDIALOGSTRINGS_HRC_
 #define _XMLFILTERDIALOGSTRINGS_HRC_
 
-#include "xmlfiltercommon.hrc"
+#include "filter.hrc"
 
 #define STR_COLUMN_HEADER_NAME                  (RID_XSLT_DIALOG_START + 0)
 #define STR_COLUMN_HEADER_TYPE                  (RID_XSLT_DIALOG_START + 1)

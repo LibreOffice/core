@@ -34,10 +34,8 @@ class XMLFilterTabPageXSLT;
 class XMLFilterTabDialog: public TabDialog
 {
 public:
-    XMLFilterTabDialog( Window *pParent, ResMgr& rResMgr, const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext, const filter_info_impl* pInfo );
+    XMLFilterTabDialog(Window *pParent, ResMgr& rResMgr, const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext, const filter_info_impl* pInfo);
     virtual ~XMLFilterTabDialog();
-
-    ResMgr& getResMgr() { return mrResMgr; }
 
     bool onOk();
 
@@ -55,10 +53,11 @@ private:
     const filter_info_impl* mpOldInfo;
     filter_info_impl* mpNewInfo;
 
-    TabControl      maTabCtrl;
-    OKButton        maOKBtn;
-    CancelButton    maCancelBtn;
-    HelpButton      maHelpBtn;
+    TabControl*     m_pTabCtrl;
+    OKButton*       m_pOKBtn;
+
+    sal_Int16 m_nBasicPageId;
+    sal_Int16 m_nXSLTPageId;
 
     XMLFilterTabPageBasic*  mpBasicPage;
     XMLFilterTabPageXSLT* mpXSLTPage;

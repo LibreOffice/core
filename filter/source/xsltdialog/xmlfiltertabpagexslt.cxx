@@ -28,7 +28,6 @@
 
 #include "xmlfiltertabpagexslt.hxx"
 #include "xmlfiltersettingsdialog.hxx"
-#include "xmlfilterhelpids.hrc"
 
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
