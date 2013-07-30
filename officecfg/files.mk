@@ -13,6 +13,7 @@ officecfg_XCSFILES := \
     LDAP \
     Office/Accelerators \
     Office/Addons \
+    Office/BasicIDE \
     Office/Calc \
     Office/CalcAddIns \
     Office/Canvas \

@@ -22,6 +22,8 @@
 #include <svtools/miscopt.hxx>
 #include <basidesh.hrc>
 #include <iostream>
+#include <officecfg/Office/BasicIDE.hxx>
+#include <boost/shared_ptr.hpp>
 
 namespace basctl
 {
@@ -40,12 +42,14 @@ CodeCompleteOptionsDlg::CodeCompleteOptionsDlg( Window* pWindow )
 
     pOkBtn->SetClickHdl( LINK( this, CodeCompleteOptionsDlg, OkHdl ) );
     pCancelBtn->SetClickHdl( LINK( this, CodeCompleteOptionsDlg, CancelHdl ) );
+    //LoadConfig();
 
     pCodeCompleteChk->Check( CodeCompleteOptions::IsCodeCompleteOn() );
     pAutocloseProcChk->Check( CodeCompleteOptions::IsProcedureAutoCompleteOn() );
     pAutocloseQuotesChk->Check( CodeCompleteOptions::IsAutoCloseQuotesOn() );
     pAutocloseParenChk->Check( CodeCompleteOptions::IsAutoCloseParenthesisOn() );
     pAutoCorrectSpellingChk->Check( CodeCompleteOptions::IsAutoCorrectSpellingOn() );
+
 }
 
 CodeCompleteOptionsDlg::~CodeCompleteOptionsDlg()
@@ -59,6 +63,8 @@ IMPL_LINK_NOARG(CodeCompleteOptionsDlg, OkHdl)
     CodeCompleteOptions::SetAutoCloseQuotesOn( pAutocloseQuotesChk->IsChecked() );
     CodeCompleteOptions::SetAutoCloseParenthesisOn( pAutocloseParenChk->IsChecked() );
     CodeCompleteOptions::SetAutoCorrectSpellingOn( pAutoCorrectSpellingChk->IsChecked() );
+
+    //SaveConfig();
     Close();
     return 0;
 }
@@ -72,6 +78,32 @@ IMPL_LINK_NOARG(CodeCompleteOptionsDlg, CancelHdl)
 short CodeCompleteOptionsDlg::Execute()
 {
     return ModalDialog::Execute();
+}
+
+void CodeCompleteOptionsDlg::LoadConfig()
+{
+    bool bProcClose = officecfg::Office::BasicIDE::Autocomplete::AutocloseProc::get();
+    bool bCodeCompleteOn = officecfg::Office::BasicIDE::Autocomplete::CodeComplete::get();
+    bool bParenClose = officecfg::Office::BasicIDE::Autocomplete::AutocloseParenthesis::get();
+    bool bQuoteClose = officecfg::Office::BasicIDE::Autocomplete::AutocloseDoubleQuotes::get();
+    bool bCorrect = officecfg::Office::BasicIDE::Autocomplete::AutoCorrectSpelling::get();
+
+    pCodeCompleteChk->Check( bCodeCompleteOn );
+    pAutocloseProcChk->Check( bProcClose );
+    pAutocloseQuotesChk->Check( bQuoteClose );
+    pAutocloseParenChk->Check( bParenClose );
+    pAutoCorrectSpellingChk->Check( bCorrect );
+}
+
+void CodeCompleteOptionsDlg::SaveConfig()
+{
+    boost::shared_ptr< comphelper::ConfigurationChanges > batch(comphelper::ConfigurationChanges::create());
+    officecfg::Office::BasicIDE::Autocomplete::AutocloseProc::set( pAutocloseProcChk->IsChecked(), batch );
+    officecfg::Office::BasicIDE::Autocomplete::CodeComplete::set( pCodeCompleteChk->IsChecked(), batch );
+    officecfg::Office::BasicIDE::Autocomplete::AutocloseParenthesis::set( pAutocloseParenChk->IsChecked(), batch );
+    officecfg::Office::BasicIDE::Autocomplete::AutocloseDoubleQuotes::set( pAutocloseQuotesChk->IsChecked(), batch );
+    officecfg::Office::BasicIDE::Autocomplete::AutoCorrectSpelling::set( pAutoCorrectSpellingChk->IsChecked(), batch );
+    batch->commit();
 }
 
 } // namespace basctl
