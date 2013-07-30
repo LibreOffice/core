@@ -433,17 +433,6 @@
     [super viewDidUnload];
 }
 
-#pragma mark - Reconnection
-
-- (void) needReconnect
-{
-    [self dismissViewControllerAnimated:YES completion:nil];
-    if (self.welcome_blocking_page.hidden == NO) {
-        [self setWelcomePageVisible:YES];
-    }
-}
-
-#pragma mark - Slide Control
 
 - (IBAction)nextSlideAction:(id)sender {
     
@@ -473,6 +462,17 @@
             [self.nextButton setAlpha:0.2];
         } completion:nil];
     }];
+}
+
+
+#pragma mark - Reconnection
+- (void) didReceiveDisconnection
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+    
+    if (self.welcome_blocking_page.isHidden == YES) {
+        [self setWelcomePageVisible:YES];
+    }
 }
 
 @end

@@ -7,6 +7,7 @@
  */
 
 #import <UIKit/UIKit.h>
+#import "CommunicationManager.h"
 
 #define OPTION_TIMER @"Timer auto-start"
 #define OPTION_POINTER @"Touch pointer"
@@ -16,5 +17,10 @@
 @interface slideShowPreviewTable_vc : UITableViewController <UITableViewDataSource, UITableViewDelegate>
 
 @property (strong, nonatomic) IBOutlet UITableView *optionsTable;
+@property (nonatomic, strong) CommunicationManager * comManager;
+@property (nonatomic, strong) id slideShowStartObserver;
+@property (nonatomic, strong) NSArray * optionsArray;
+
+-(IBAction)startPresentationAction:(id)sender;
 
 @end

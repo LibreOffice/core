@@ -123,6 +123,18 @@
     }
 }
 
+# pragma mark - System defaults
+
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
+{
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        return YES;
+    else {
+        return toInterfaceOrientation == UIInterfaceOrientationMaskPortrait;
+    }
+}
+
+
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
@@ -140,6 +152,7 @@
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    
     
     self.center = [NSNotificationCenter defaultCenter];
     self.comManager = [CommunicationManager sharedComManager];
@@ -221,14 +234,21 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    // Return when nothing should be done
+    if (self.comManager.state == CONNECTING ||
+        ([self.comManager.autoDiscoveryServers count] == 0 && indexPath.section == 0)) {
+        return;
+    }
+    
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     
-    if(self.comManager.state!=CONNECTING){
-        self.lastSpinningCellIndex = indexPath;
-        UIActivityIndicatorView *activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-        [activityView startAnimating];
-        [cell setAccessoryView:activityView];
-    }
+    // Setting up the spinner to the right cell
+    self.lastSpinningCellIndex = indexPath;
+    UIActivityIndicatorView *activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    [activityView startAnimating];
+    [cell setAccessoryView:activityView];
 
     if (indexPath.section == 1){
         NSLog(@"Connecting to %@:%@", [[self.comManager.servers objectAtIndex:indexPath.row] serverName], [[self.comManager.servers objectAtIndex:indexPath.row] serverAddress]);
@@ -237,8 +257,6 @@
         NSLog(@"Connecting to %@", [[self.comManager.autoDiscoveryServers objectAtIndex:indexPath.row] name]);
         [[self.comManager.autoDiscoveryServers objectAtIndex:indexPath.row] resolveWithTimeout:0.0];
     }
-    
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 - (void)viewDidUnload {
@@ -258,8 +276,12 @@
             sectionName = [NSString stringWithFormat:@"Custom connections"];
             break;
     }
-    
-    UILabel *sectionHeader = [[UILabel alloc] initWithFrame:CGRectMake(10, 10, 200, 40)];
+    UILabel *sectionHeader;
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+        sectionHeader = [[UILabel alloc] initWithFrame:CGRectMake(10, 10, 200, 40)];
+    } else {
+        sectionHeader = [[UILabel alloc] initWithFrame:CGRectMake(25, 10, 200, 40)];
+    }
     sectionHeader.backgroundColor = [UIColor clearColor];
     sectionHeader.font = [UIFont boldSystemFontOfSize:18];
     sectionHeader.textColor = [UIColor darkTextColor];

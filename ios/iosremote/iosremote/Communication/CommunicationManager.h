@@ -55,7 +55,6 @@ typedef enum ConnectionState : NSInteger ConnectionState;
 
 enum ConnectionState : NSInteger {
     DISCONNECTED,
-    SEARCHING,
     CONNECTING,
     CONNECTED
 };

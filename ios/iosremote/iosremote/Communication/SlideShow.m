@@ -9,7 +9,7 @@
 
 #import "SlideShow.h"
 #import "Base64.h"
-#import "slideShow_vc.h"
+#import "slideShow_vc_iphone.h"
 #import "UIImage+Resize.h"
 #import <dispatch/dispatch.h>
 
@@ -34,8 +34,15 @@
 dispatch_queue_t backgroundQueue;
 NSLock *dictLock;
 
+- (void) setDelegate:(id<AsyncLoadHorizontalTableDelegate>)delegate
+{
+    NSLog(@"setting slideshow delegate to a %@", [delegate class]);
+    _delegate = delegate;
+}
+
 - (SlideShow *) init{
     self = [super init];
+    NSLog(@"SlideShow got init");
     self.imagesDictionary = [[NSMutableDictionary alloc] init];
     self.notesDictionary = [[NSMutableDictionary alloc] init];
     self.loadBuffer = [[NSMutableDictionary alloc] init];
@@ -50,7 +57,7 @@ NSLock *dictLock;
      It then checks in the loadBuffer to see if there is a view waiting for this update in loadBuffer, if yes, it loads it up and remove the waiting entry.
      loadBuffer stores key-value pair with viewTag as a key and slideIndex as value. 
      For the same view, we only keep the last requested slide index on the waiting list.
-     It is thus indispensable to identify each view with an unique tag in its view controller. Here we use 0-10 to indentify central vc views and 11-N for swipe-in tableViewController which allows direct slide number change. 
+     It is thus indispensable to identify each view with an unique tag in its view controller. Here we use 0-20 to indentify central vc views and 21-N for swipe-in tableViewController which allows direct slide number change. 
      We handle lecturer's notes at the same time as an entry in the load buffer via an instrospection.
      */
     self.slideShowImageReadyObserver =[[NSNotificationCenter defaultCenter]
@@ -65,13 +72,25 @@ NSLock *dictLock;
                                                                   UIView * view;
                                                                   if ([tag integerValue] > 20)
                                                                       view = [[self.secondaryDelegate view] viewWithTag: [tag integerValue]];
-                                                                  else
+                                                                  else if ([tag integerValue] >= 0){
+                                                                      NSLog(@"Received image, try to load for tag:%d", [tag integerValue]);
                                                                       view = [[self.delegate view] viewWithTag:[tag integerValue]];
+                                                                      if (!view) {
+                                                                          if (!self.delegate) {
+                                                                              NSLog(@"Delegate nil");
+                                                                          } else if (![self.delegate view])
+                                                                              NSLog(@"view nil");
+                                                                      }
+                                                                      NSLog(@"Will load it into a %@", [view class]);
+                                                                  }
+                                                                  else
+                                                                      view = [[self.delegate horizontalTableView] viewWithTag:[tag integerValue]];
                                                                   if ([view isKindOfClass:[UIImageView class]]){
                                                                       UIImage *image = [self.imagesDictionary objectForKey:[self.loadBuffer objectForKey:tag]];
                                                                       if (image) {
-                                                                          image = [image resizedImage:view.frame.size interpolationQuality:kCGInterpolationDefault];
+//                                                                          image = [image resizedImage:view.frame.size interpolationQuality:kCGInterpolationDefault];
                                                                           dispatch_async(dispatch_get_main_queue(), ^{
+                                                                              NSLog(@"Setting image to tag: %ld", (long)[tag integerValue]);
                                                                              [(UIImageView *)view setImage:image];
                                                                           });
                                                                           [self.loadBuffer removeObjectForKey:tag];
@@ -90,7 +109,7 @@ NSLock *dictLock;
                                                                       UIImage *image = [self.imagesDictionary objectForKey:[self.loadBuffer objectForKey:tag]];
                                                                       if (image){
                                                                           UIImageView *imageView = (UIImageView *)[view viewWithTag:1];
-                                                                          image = [image resizedImage:imageView.frame.size interpolationQuality:kCGInterpolationDefault];
+//                                                                          image = [image resizedImage:imageView.frame.size interpolationQuality:kCGInterpolationDefault];
                                                                           dispatch_async(dispatch_get_main_queue(), ^{
                                                                               [imageView setImage:image];
                                                                           });
@@ -142,7 +161,7 @@ NSLock *dictLock;
     }
     if (![self.imagesDictionary objectForKey:[NSNumber numberWithUnsignedInt:index]])
     {
-        NSLog(@"Didn't find %u, putting into buffer", index);
+        NSLog(@"Didn't find %u, putting tag: %d into buffer", index, [view tag]);
         [self.loadBuffer setObject:[NSNumber numberWithInt:index ] forKey:[NSNumber numberWithInt:[view tag]]];
     }
     else{

@@ -86,7 +86,6 @@ NSLock *streamStatusLock;
 
 - (void)dealloc
 {
-    dispatch_release(backgroundQueue);
     [self stopConnectionTimeoutTimer];
 }
 
@@ -110,7 +109,7 @@ NSLock *streamStatusLock;
     
     // If not, generate one.
     if (!newPin) {
-        newPin = arc4random() % 9999;
+        newPin = arc4random() % 8999 + 1000;
         [userDefaluts setInteger:newPin forKey:self.name];
     }
     
@@ -188,17 +187,15 @@ int count = 0;
                 data = [[NSMutableData alloc] init];
             }
             uint8_t buf[1024];
-            unsigned int len = 0;
+            int len = 0;
             NSString *str;
             while (true) {
                 len = [(NSInputStream *)stream read:buf maxLength:1024];
-                if (len <= 0){
+                if (len <= 0) {
                     [self disconnect];
                     [self connect];
-                    NSLog(@"eroor");
                     break;
                 }
-                
                 [data appendBytes:(const void *)buf length:len];
                 if (len < 1024) {
                     // Potentially the end of a command

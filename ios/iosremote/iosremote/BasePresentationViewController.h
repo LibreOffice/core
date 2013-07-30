@@ -38,7 +38,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *clearButton;
 @property (weak, nonatomic) IBOutlet UILabel *timeLabel;
 
-// Reconnection
-- (void) needReconnect;
+//Reconnection
+- (void) didReceiveDisconnection;
 
 @end

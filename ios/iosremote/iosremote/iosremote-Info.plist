@@ -14,9 +14,16 @@
 		<dict>
 			<key>CFBundleIconFiles</key>
 			<array>
-				<string>ic_launcher.png</string>
-				<string>ic_launcher@2x.png</string>
+				<string>iosremote_iphone_icon.png</string>
+				<string>iosremote_iphone_icon@2x.png</string>
+				<string>iosremote_icon.png</string>
+				<string>iosremote_ipad_icon.png</string>
+				<string>iosremote_ipad_icon@2x.png</string>
+				<string>iosremote_ipad_icon@2x_3.png</string>
+				<string>iosremote_ipad_icon@2x_3.png</string>
 			</array>
+			<key>UIPrerenderedIcon</key>
+			<true/>
 		</dict>
 	</dict>
 	<key>CFBundleIdentifier</key>
@@ -37,10 +44,24 @@
 	<true/>
 	<key>UIMainStoryboardFile</key>
 	<string>iPhone_autoSize</string>
+	<key>UIMainStoryboardFile~ipad</key>
+	<string>iPad_autosize</string>
+	<key>UIPrerenderedIcon</key>
+	<true/>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>
 	</array>
+	<key>UIStatusBarTintParameters</key>
+	<dict>
+		<key>UINavigationBar</key>
+		<dict>
+			<key>Style</key>
+			<string>UIBarStyleDefault</string>
+			<key>Translucent</key>
+			<false/>
+		</dict>
+	</dict>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

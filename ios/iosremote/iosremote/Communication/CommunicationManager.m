@@ -72,10 +72,9 @@
                     [message show];
                 });
             } else {
-                NSLog(@"delegate type: %@", [self.delegate class]);
                 [[self.delegate navigationController] popToRootViewControllerAnimated:YES];
-                BasePresentationViewController * bpvc = [[(MainSplitViewController *)[self.delegate presentingViewController] viewControllers] objectAtIndex:1];
-                [bpvc needReconnect];
+                BasePresentationViewController *bpvc = [[(MainSplitViewController *)[self.delegate presentingViewController] viewControllers] objectAtIndex:1];
+                [bpvc didReceiveDisconnection];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Connection Lost"
                                                                       message:@"Oups, connection lost...Please try to reconnect to your computer. "

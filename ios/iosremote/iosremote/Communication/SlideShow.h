@@ -9,13 +9,20 @@
 
 #import <Foundation/Foundation.h>
 
+@protocol AsyncLoadHorizontalTableDelegate <NSObject>
+
+@optional @property (nonatomic, weak) UITableView * horizontalTableView;
+@property (nonatomic, strong) UIView * view;
+
+@end
+
 @class slideShowPreview_vc;
 
 @interface SlideShow : NSObject
 
 @property uint size;
 @property uint currentSlide;
-@property (nonatomic, strong) id delegate;
+@property (nonatomic, strong) id <AsyncLoadHorizontalTableDelegate> delegate;
 @property (nonatomic, strong) id secondaryDelegate;
 
 - (void) putImage: (NSString *)img AtIndex: (uint) index;

@@ -12,9 +12,22 @@
 
 @synthesize window = _window;
 
+- (NSUInteger)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window
+{
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        return UIInterfaceOrientationMaskAll;
+    else
+        return UIInterfaceOrientationMaskPortrait;
+}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     [TestFlight takeOff:@"cb645cf2-a557-481e-993a-6ad3aaeb06d0"];
+    
+    NSString *defaultsPath = [[NSBundle mainBundle] pathForResource:@"UserDefaults"
+                                                             ofType:@"plist"];
+    NSDictionary *appDefaults = [NSDictionary dictionaryWithContentsOfFile:defaultsPath];
+    [[NSUserDefaults standardUserDefaults] registerDefaults:appDefaults];
     
     // Override point for customization after application launch.
     /**
@@ -32,7 +45,7 @@
 //    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 //    self.window.rootViewController = [mainStoryboard instantiateInitialViewController];
 //    [self.window makeKeyAndVisible];
-
+    
     return YES;
 }
 

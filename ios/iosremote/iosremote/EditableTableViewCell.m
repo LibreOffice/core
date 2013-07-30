@@ -22,8 +22,9 @@
     {
         return nil;
     }
-    
-    CGRect bounds = [[self contentView] bounds];
+    CGRect bounds = self.contentView.bounds;
+    if (UI_USER_INTERFACE_IDIOM()==UIUserInterfaceIdiomPad)
+        bounds.size.width += 160;
     CGRect rect = CGRectInset(bounds, 20.0, 10.0);
     UITextField *textField = [[UITextField alloc] initWithFrame:rect];
     

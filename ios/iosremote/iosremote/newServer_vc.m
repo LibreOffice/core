@@ -19,6 +19,15 @@
 @synthesize nameCell = _nameCell;
 @synthesize addrCell = _addrCell;
 
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
+{
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        return YES;
+    else {
+        return toInterfaceOrientation == UIInterfaceOrientationMaskPortrait;
+    }
+}
+
 - (IBAction)save:(id)sender {
     NSString *serverName = [self.nameCell.textField text];
     NSString *serverAddr = [self.addrCell.textField text];
@@ -100,6 +109,10 @@
             }
         }
     }
+}
+
+- (BOOL)disablesAutomaticKeyboardDismissal {
+    return NO;
 }
 
 #pragma mark -
