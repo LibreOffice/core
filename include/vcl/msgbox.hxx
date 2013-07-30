@@ -38,12 +38,12 @@ class VCL_DLLPUBLIC MessBox : public ButtonDialog
 protected:
     VclMultiLineEdit*   mpVCLMultiLineEdit;
     FixedImage*         mpFixedImage;
-    XubString           maMessText;
+    OUString            maMessText;
     Image               maImage;
-    sal_Bool                mbHelpBtn;
+    sal_Bool            mbHelpBtn;
     CheckBox*           mpCheckBox;
-    XubString           maCheckBoxText;
-    sal_Bool                mbCheck;
+    OUString            maCheckBoxText;
+    sal_Bool            mbCheck;
 
     SAL_DLLPRIVATE void ImplInitMessBoxData();
     SAL_DLLPRIVATE void ImplInitButtons();
@@ -54,20 +54,20 @@ protected:
 
 public:
                         MessBox( Window* pParent, WinBits nStyle,
-                                 const XubString& rTitle, const XubString& rMessage );
+                                 const OUString& rTitle, const OUString& rMessage );
                         MessBox( Window* pParent, const ResId& rResId );
                         ~MessBox();
 
     virtual void        StateChanged( StateChangedType nStateChange );
 
-    void                SetMessText( const XubString& rText ) { maMessText = rText; }
-    const XubString&    GetMessText() const { return maMessText; }
+    void                SetMessText( const OUString& rText ) { maMessText = rText; }
+    const OUString&     GetMessText() const { return maMessText; }
 
     void                SetImage( const Image& rImage ) { maImage = rImage; }
     const Image&        GetImage() const { return maImage; }
 
-    void                SetCheckBoxText( const XubString& rText ) { maCheckBoxText = rText;}
-    const XubString&    GetCheckBoxText() const { return maCheckBoxText;}
+    void                SetCheckBoxText( const OUString& rText ) { maCheckBoxText = rText;}
+    const OUString&     GetCheckBoxText() const { return maCheckBoxText;}
     void                SetCheckBoxState( sal_Bool bCheck );
     sal_Bool                GetCheckBoxState() const;
 
@@ -101,7 +101,7 @@ private:
 
 public:
                         WarningBox( Window* pParent, WinBits nStyle,
-                                    const XubString& rMessage );
+                                    const OUString& rMessage );
                         WarningBox( Window* pParent, const ResId& rResId );
 
     void                SetDefaultCheckBoxText();
@@ -120,7 +120,7 @@ private:
 
 public:
                         ErrorBox( Window* pParent, WinBits nStyle,
-                                  const XubString& rMessage );
+                                  const OUString& rMessage );
                         ErrorBox( Window* pParent, const ResId& rResId );
 
     static Image        GetStandardImage();
@@ -137,7 +137,7 @@ private:
 
 public:
                         QueryBox( Window* pParent, WinBits nStyle,
-                                  const XubString& rMessage );
+                                  const OUString& rMessage );
                         QueryBox( Window* pParent, const ResId& rResId );
 
     void                SetDefaultCheckBoxText();

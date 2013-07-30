@@ -147,7 +147,7 @@ void MessBox::ImplInitButtons()
 // -----------------------------------------------------------------------
 
 MessBox::MessBox( Window* pParent, WinBits nStyle,
-                  const XubString& rTitle, const XubString& rMessage ) :
+                  const OUString& rTitle, const OUString& rMessage ) :
     ButtonDialog( WINDOW_MESSBOX ),
     maMessText( rMessage )
 {
@@ -155,7 +155,7 @@ MessBox::MessBox( Window* pParent, WinBits nStyle,
     ImplInit( pParent, nStyle | WB_MOVEABLE | WB_HORZ | WB_CENTER );
     ImplInitButtons();
 
-    if ( rTitle.Len() )
+    if (!rTitle.isEmpty())
         SetText( rTitle );
 }
 
@@ -221,7 +221,6 @@ void MessBox::ImplPosControls()
         }
     }
 
-    XubString       aMessText( maMessText );
     TextRectInfo    aTextInfo;
     Rectangle       aRect( 0, 0, 30000, 30000 );
     Rectangle       aFormatRect;
@@ -250,12 +249,8 @@ void MessBox::ImplPosControls()
         mpCheckBox = NULL;
     }
 
-
     // Message-Text um Tabs bereinigen
-    OUString   aTabStr("    ");
-    sal_uInt16      nIndex = 0;
-    while ( nIndex != STRING_NOTFOUND )
-        nIndex = aMessText.SearchAndReplace( OUString('\t'), aTabStr, nIndex );
+    OUString aMessText(maMessText.replaceAll("\t", "    "));
 
     // Wenn Fenster zu schmall, machen wir Dialog auch breiter
     if ( mpWindowImpl->mbFrame )
@@ -343,7 +338,7 @@ void MessBox::ImplPosControls()
     if ( aPageSize.Width() < nTitleWidth )
         aPageSize.Width() = nTitleWidth;
 
-    if ( maCheckBoxText.Len() )
+    if (!maCheckBoxText.isEmpty())
     {
         Size aMinCheckboxSize ( aMEditSize );
         if ( aPageSize.Width() < IMPL_MINSIZE_MSGBOX_WIDTH+80 )
@@ -481,7 +476,7 @@ void WarningBox::ImplInitWarningBoxData()
 // -----------------------------------------------------------------------
 
 WarningBox::WarningBox( Window* pParent, WinBits nStyle,
-                        const XubString& rMessage ) :
+                        const OUString& rMessage ) :
     MessBox( pParent, nStyle, ImplGetSVEmptyStr(), rMessage )
 {
     ImplInitWarningBoxData();
@@ -526,7 +521,7 @@ void ErrorBox::ImplInitErrorBoxData()
 // -----------------------------------------------------------------------
 
 ErrorBox::ErrorBox( Window* pParent, WinBits nStyle,
-                    const XubString& rMessage ) :
+                    const OUString& rMessage ) :
     MessBox( pParent, nStyle, ImplGetSVEmptyStr(), rMessage )
 {
     ImplInitErrorBoxData();
@@ -570,7 +565,7 @@ void QueryBox::ImplInitQueryBoxData()
 
 // -----------------------------------------------------------------------
 
-QueryBox::QueryBox( Window* pParent, WinBits nStyle, const XubString& rMessage ) :
+QueryBox::QueryBox( Window* pParent, WinBits nStyle, const OUString& rMessage ) :
     MessBox( pParent, nStyle, ImplGetSVEmptyStr(), rMessage )
 {
     ImplInitQueryBoxData();
