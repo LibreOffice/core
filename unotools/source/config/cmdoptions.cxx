@@ -264,7 +264,7 @@ void SvtCommandOptions_Impl::Notify( const Sequence< OUString >& )
     // Safe impossible cases.
     // We need values from ALL configuration keys.
     // Follow assignment use order of values in relation to our list of key names!
-    DBG_ASSERT( !(lNames.getLength()!=lValues.getLength()), "SvtCommandOptions_Impl::SvtCommandOptions_Impl()\nI miss some values of configuration keys!\n" );
+    DBG_ASSERT( !(lNames.getLength()!=lValues.getLength()), "SvtCommandOptions_Impl::Notify()\nI miss some values of configuration keys!\n" );
 
     // Copy values from list in right order to ouer internal member.
     // Attention: List for names and values have an internal construction pattern!
@@ -324,7 +324,7 @@ sal_Bool SvtCommandOptions_Impl::Lookup( SvtCommandOptions::CmdOption eCmdOption
             return m_aDisabledCommands.Lookup( aCommand );
         }
         default:
-            DBG_ASSERT( sal_False, "SvtCommandOptions_Impl::GetList()\nUnknown option type given!\n" );
+            DBG_ASSERT( sal_False, "SvtCommandOptions_Impl::Lookup()\nUnknown option type given!\n" );
     }
 
     return sal_False;
