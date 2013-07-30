@@ -128,6 +128,7 @@ postprocess_FILES_main := \
 	$(postprocess_XCS)/LDAP.xcs \
 	$(postprocess_XCS)/Office/Accelerators.xcs \
 	$(postprocess_XCS)/Office/Addons.xcs \
+	$(postprocess_XCS)/Office/BasicIDE.xcs \
 	$(postprocess_XCS)/Office/Calc.xcs \
 	$(postprocess_XCS)/Office/CalcAddIns.xcs \
 	$(postprocess_XCS)/Office/Canvas.xcs \
@@ -211,6 +212,7 @@ postprocess_FILES_main := \
 	$(postprocess_XCU)/Inet.xcu \
 	$(postprocess_XCU)/Interaction.xcu \
 	$(postprocess_XCU)/Office/Accelerators.xcu \
+	$(postprocess_XCU)/Office/BasicIDE.xcu \
 	$(postprocess_XCU)/Office/Calc.xcu \
 	$(postprocess_XCU)/Office/Canvas.xcu \
 	$(postprocess_XCU)/Office/Common.xcu \
