@@ -192,6 +192,13 @@ int count = 0;
             NSString *str;
             while (true) {
                 len = [(NSInputStream *)stream read:buf maxLength:1024];
+                if (len <= 0){
+                    [self disconnect];
+                    [self connect];
+                    NSLog(@"eroor");
+                    break;
+                }
+                
                 [data appendBytes:(const void *)buf length:len];
                 if (len < 1024) {
                     // Potentially the end of a command
