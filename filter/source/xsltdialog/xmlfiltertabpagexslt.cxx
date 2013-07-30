@@ -60,11 +60,6 @@ XMLFilterTabPageXSLT::XMLFilterTabPageXSLT( Window* pParent) :
     m_pPBExprotXSLT->SetClickHdl( LINK ( this, XMLFilterTabPageXSLT, ClickBrowseHdl_Impl ) );
     m_pPBImportXSLT->SetClickHdl( LINK ( this, XMLFilterTabPageXSLT, ClickBrowseHdl_Impl ) );
     m_pPBImportTemplate->SetClickHdl( LINK ( this, XMLFilterTabPageXSLT, ClickBrowseHdl_Impl ) );
-
-    m_pEDExportXSLT->SetHelpId( HID_XML_FILTER_EXPORT_XSLT );
-    m_pEDImportXSLT->SetHelpId( HID_XML_FILTER_IMPORT_XSLT );
-    m_pEDImportTemplate->SetHelpId( HID_XML_FILTER_IMPORT_TEMPLATE );
-    m_pCBNeedsXSLT2->SetHelpId( HID_XML_FILTER_NEEDS_XSLT2 );
 }
 
 XMLFilterTabPageXSLT::~XMLFilterTabPageXSLT()

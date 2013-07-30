@@ -54,6 +54,7 @@
             <property name="xalign">0</property>
             <property name="label" translatable="yes">_XSLT for export</property>
             <property name="use_underline">True</property>
+            <property name="mnemonic_widget">xsltexport</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -64,7 +65,7 @@
         </child>
         <child>
           <object class="GtkButton" id="browseexport">
-            <property name="label" translatable="yes">brows_e...</property>
+            <property name="label" translatable="yes">Brows_e...</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
@@ -84,6 +85,7 @@
             <property name="xalign">0</property>
             <property name="label" translatable="yes">XSLT _for import</property>
             <property name="use_underline">True</property>
+            <property name="mnemonic_widget">xsltimport</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -94,7 +96,7 @@
         </child>
         <child>
           <object class="GtkButton" id="browseimport">
-            <property name="label" translatable="yes">b_rowse...</property>
+            <property name="label" translatable="yes">B_rowse...</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
@@ -112,9 +114,9 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="xalign">0</property>
-            <property name="yalign">0</property>
             <property name="label" translatable="yes">Template for _import</property>
             <property name="use_underline">True</property>
+            <property name="mnemonic_widget">tempimport</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -125,7 +127,7 @@
         </child>
         <child>
           <object class="GtkButton" id="browsetemp">
-            <property name="label" translatable="yes">browse...</property>
+            <property name="label" translatable="yes">Browse...</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
