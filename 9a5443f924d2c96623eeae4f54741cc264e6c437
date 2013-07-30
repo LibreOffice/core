@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//9qo\u003d",
+        "filename": "sw/source/ui/misc/glosdoc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-07-30T13:13:46Z",
+      "side": 1,
+      "message": "I think this is incorrect, the argument now has SwGlossaries::GetExtension() appended which it didn\u0027t before.",
+      "revId": "9a5443f924d2c96623eeae4f54741cc264e6c437",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
