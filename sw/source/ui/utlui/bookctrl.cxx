@@ -89,7 +89,7 @@ void SwBookmarkControl::Paint( const UserDrawEvent&  )
 void SwBookmarkControl::Command( const CommandEvent& rCEvt )
 {
     if ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU &&
-            GetStatusBar().GetItemText( GetId() ).Len() )
+            !GetStatusBar().GetItemText( GetId() ).isEmpty() )
     {
         CaptureMouse();
         BookmarkPopup_Impl aPop;

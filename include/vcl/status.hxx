@@ -75,7 +75,7 @@ class VCL_DLLPUBLIC StatusBar : public Window
 private:
     ImplStatusItemList* mpItemList;
     ImplData*           mpImplData;
-    XubString           maPrgsTxt;
+    OUString            maPrgsTxt;
     Point               maPrgsTxtPos;
     Rectangle           maPrgsFrameRect;
     long                mnPrgsSize;
@@ -158,8 +158,8 @@ public:
 
     long                GetItemOffset( sal_uInt16 nItemId ) const;
 
-    void                SetItemText( sal_uInt16 nItemId, const XubString& rText );
-    const XubString&    GetItemText( sal_uInt16 nItemId ) const;
+    void                SetItemText( sal_uInt16 nItemId, const OUString& rText );
+    const OUString&    GetItemText( sal_uInt16 nItemId ) const;
 
     void                SetItemData( sal_uInt16 nItemId, void* pNewData );
     void*               GetItemData( sal_uInt16 nItemId ) const;
@@ -167,18 +167,18 @@ public:
     void                SetItemCommand( sal_uInt16 nItemId, const OUString& rCommand );
     const OUString      GetItemCommand( sal_uInt16 nItemId );
 
-    void                SetHelpText( sal_uInt16 nItemId, const XubString& rText );
-    const XubString&    GetHelpText( sal_uInt16 nItemId ) const;
+    void                SetHelpText( sal_uInt16 nItemId, const OUString& rText );
+    const OUString&    GetHelpText( sal_uInt16 nItemId ) const;
 
     using Window::SetQuickHelpText;
-    void                SetQuickHelpText( sal_uInt16 nItemId, const XubString& rText );
+    void                SetQuickHelpText( sal_uInt16 nItemId, const OUString& rText );
     using Window::GetQuickHelpText;
-    const XubString&    GetQuickHelpText( sal_uInt16 nItemId ) const;
+    const OUString&     GetQuickHelpText( sal_uInt16 nItemId ) const;
 
     void                SetHelpId( sal_uInt16 nItemId, const OString& rHelpId );
     OString             GetHelpId( sal_uInt16 nItemId ) const;
 
-    void                StartProgressMode( const XubString& rText );
+    void                StartProgressMode( const OUString& rText );
     void                SetProgressValue( sal_uInt16 nPercent );
     void                EndProgressMode();
     sal_Bool                IsProgressMode() const { return mbProgressMode; }
@@ -203,9 +203,9 @@ public:
     const Link&         GetDoubleClickHdl() const { return maDoubleClickHdl; }
 
     using Window::SetAccessibleName;
-    void                SetAccessibleName( sal_uInt16 nItemId, const XubString& rName );
+    void                SetAccessibleName( sal_uInt16 nItemId, const OUString& rName );
     using Window::GetAccessibleName;
-    const XubString&    GetAccessibleName( sal_uInt16 nItemId ) const;
+    const OUString&     GetAccessibleName( sal_uInt16 nItemId ) const;
 };
 
 #endif  // _SV_STATUS_HXX

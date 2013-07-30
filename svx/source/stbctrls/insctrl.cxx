@@ -73,7 +73,7 @@ void SvxInsertStatusBarControl::StateChanged( sal_uInt16 , SfxItemState eState,
 
 void SvxInsertStatusBarControl::Click()
 {
-    if ( !GetStatusBar().GetItemText( GetId() ).Len() )
+    if ( GetStatusBar().GetItemText( GetId() ).isEmpty() )
         return;
     bInsert = !bInsert;
     SfxBoolItem aIns( GetSlotId(), bInsert );

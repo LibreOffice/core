@@ -90,7 +90,7 @@ void SwTemplateControl::Paint( const UserDrawEvent&  )
 void SwTemplateControl::Command( const CommandEvent& rCEvt )
 {
     if ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU &&
-            GetStatusBar().GetItemText( GetId() ).Len() )
+            !GetStatusBar().GetItemText( GetId() ).isEmpty() )
     {
         CaptureMouse();
         SwTemplatePopup_Impl aPop;

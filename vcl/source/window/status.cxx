@@ -73,14 +73,14 @@ struct ImplStatusItem
     long                mnOffset;
     long                mnExtraWidth;
     long                mnX;
-    XubString           maText;
-    XubString           maHelpText;
-    XubString           maQuickHelpText;
-    OString        maHelpId;
+    OUString            maText;
+    OUString            maHelpText;
+    OUString            maQuickHelpText;
+    OString             maHelpId;
     void*               mpUserData;
-    sal_Bool                mbVisible;
-    XubString           maAccessibleName;
-    XubString           maCommand;
+    sal_Bool            mbVisible;
+    OUString            maAccessibleName;
+    OUString            maCommand;
 };
 
 // =======================================================================
@@ -1259,7 +1259,7 @@ long StatusBar::GetItemOffset( sal_uInt16 nItemId ) const
 
 // -----------------------------------------------------------------------
 
-void StatusBar::SetItemText( sal_uInt16 nItemId, const XubString& rText )
+void StatusBar::SetItemText( sal_uInt16 nItemId, const OUString& rText )
 {
     sal_uInt16 nPos = GetItemPos( nItemId );
 
@@ -1296,14 +1296,13 @@ void StatusBar::SetItemText( sal_uInt16 nItemId, const XubString& rText )
 
 // -----------------------------------------------------------------------
 
-const XubString& StatusBar::GetItemText( sal_uInt16 nItemId ) const
+const OUString& StatusBar::GetItemText( sal_uInt16 nItemId ) const
 {
     sal_uInt16 nPos = GetItemPos( nItemId );
 
-    if ( nPos != STATUSBAR_ITEM_NOTFOUND )
-        return (*mpItemList)[ nPos ]->maText;
+    assert( nPos != STATUSBAR_ITEM_NOTFOUND );
 
-    return ImplGetSVEmptyStr();
+    return (*mpItemList)[ nPos ]->maText;
 }
 
 // -----------------------------------------------------------------------
@@ -1386,7 +1385,7 @@ void StatusBar::RedrawItem( sal_uInt16 nItemId )
 
 // -----------------------------------------------------------------------
 
-void StatusBar::SetHelpText( sal_uInt16 nItemId, const XubString& rText )
+void StatusBar::SetHelpText( sal_uInt16 nItemId, const OUString& rText )
 {
     sal_uInt16 nPos = GetItemPos( nItemId );
 
@@ -1396,34 +1395,31 @@ void StatusBar::SetHelpText( sal_uInt16 nItemId, const XubString& rText )
 
 // -----------------------------------------------------------------------
 
-const XubString& StatusBar::GetHelpText( sal_uInt16 nItemId ) const
+const OUString& StatusBar::GetHelpText( sal_uInt16 nItemId ) const
 {
     sal_uInt16 nPos = GetItemPos( nItemId );
 
-    if ( nPos != STATUSBAR_ITEM_NOTFOUND )
-    {
-        ImplStatusItem* pItem = (*mpItemList)[ nPos ];
-        if ( !pItem->maHelpText.Len() && ( !pItem->maHelpId.isEmpty() || pItem->maCommand.Len() ))
-        {
-            Help* pHelp = Application::GetHelp();
-            if ( pHelp )
-            {
-                if ( pItem->maCommand.Len() )
-                    pItem->maHelpText = pHelp->GetHelpText( pItem->maCommand, this );
-                if ( !pItem->maHelpText.Len() && !pItem->maHelpId.isEmpty() )
-                    pItem->maHelpText = pHelp->GetHelpText( OStringToOUString( pItem->maHelpId, RTL_TEXTENCODING_UTF8 ), this );
-            }
-        }
+    assert ( nPos != STATUSBAR_ITEM_NOTFOUND );
 
-        return pItem->maHelpText;
+    ImplStatusItem* pItem = (*mpItemList)[ nPos ];
+    if ( pItem->maHelpText.isEmpty() && ( !pItem->maHelpId.isEmpty() || !pItem->maCommand.isEmpty() ))
+    {
+        Help* pHelp = Application::GetHelp();
+        if ( pHelp )
+        {
+            if ( !pItem->maCommand.isEmpty() )
+                pItem->maHelpText = pHelp->GetHelpText( pItem->maCommand, this );
+            if ( pItem->maHelpText.isEmpty() && !pItem->maHelpId.isEmpty() )
+                pItem->maHelpText = pHelp->GetHelpText( OStringToOUString( pItem->maHelpId, RTL_TEXTENCODING_UTF8 ), this );
+        }
     }
-    else
-        return ImplGetSVEmptyStr();
+
+    return pItem->maHelpText;
 }
 
 // -----------------------------------------------------------------------
 
-void StatusBar::SetQuickHelpText( sal_uInt16 nItemId, const XubString& rText )
+void StatusBar::SetQuickHelpText( sal_uInt16 nItemId, const OUString& rText )
 {
     sal_uInt16 nPos = GetItemPos( nItemId );
 
@@ -1433,17 +1429,14 @@ void StatusBar::SetQuickHelpText( sal_uInt16 nItemId, const XubString& rText )
 
 // -----------------------------------------------------------------------
 
-const XubString& StatusBar::GetQuickHelpText( sal_uInt16 nItemId ) const
+const OUString& StatusBar::GetQuickHelpText( sal_uInt16 nItemId ) const
 {
     sal_uInt16 nPos = GetItemPos( nItemId );
 
-    if ( nPos != STATUSBAR_ITEM_NOTFOUND )
-    {
-        ImplStatusItem* pItem = (*mpItemList)[ nPos ];
-        return pItem->maQuickHelpText;
-    }
+    assert ( nPos != STATUSBAR_ITEM_NOTFOUND );
 
-    return ImplGetSVEmptyStr();
+    ImplStatusItem* pItem = (*mpItemList)[ nPos ];
+    return pItem->maQuickHelpText;
 }
 
 // -----------------------------------------------------------------------
@@ -1475,7 +1468,7 @@ OString StatusBar::GetHelpId( sal_uInt16 nItemId ) const
     return aRet;
 }
 
-void StatusBar::StartProgressMode( const XubString& rText )
+void StatusBar::StartProgressMode( const OUString& rText )
 {
     DBG_ASSERT( !mbProgressMode, "StatusBar::StartProgressMode(): progress mode is active" );
 
@@ -1527,7 +1520,7 @@ void StatusBar::EndProgressMode()
     DBG_ASSERT( mbProgressMode, "StatusBar::EndProgressMode(): no progress mode" );
 
     mbProgressMode = sal_False;
-    maPrgsTxt.Erase();
+    maPrgsTxt = "";
 
     // Paint neu ausloesen um StatusBar wieder herzustellen
     SetFillColor( GetSettings().GetStyleSettings().GetFaceColor() );
@@ -1633,7 +1626,7 @@ Size StatusBar::CalcWindowSizePixel() const
 
 // -----------------------------------------------------------------------
 
-void StatusBar::SetAccessibleName( sal_uInt16 nItemId, const XubString& rName )
+void StatusBar::SetAccessibleName( sal_uInt16 nItemId, const OUString& rName )
 {
     sal_uInt16 nPos = GetItemPos( nItemId );
 
@@ -1651,14 +1644,13 @@ void StatusBar::SetAccessibleName( sal_uInt16 nItemId, const XubString& rName )
 
 // -----------------------------------------------------------------------
 
-const XubString& StatusBar::GetAccessibleName( sal_uInt16 nItemId ) const
+const OUString& StatusBar::GetAccessibleName( sal_uInt16 nItemId ) const
 {
     sal_uInt16 nPos = GetItemPos( nItemId );
 
-    if ( nPos != STATUSBAR_ITEM_NOTFOUND )
-        return (*mpItemList)[ nPos ]->maAccessibleName;
+    assert ( nPos != STATUSBAR_ITEM_NOTFOUND );
 
-    return ImplGetSVEmptyStr();
+    return (*mpItemList)[ nPos ]->maAccessibleName;
 }
 
 // -----------------------------------------------------------------------
