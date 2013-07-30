@@ -553,7 +553,7 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
             }
 
         }
-        else if ( pThread->maPipe.create( aPipeIdent.getStr(), osl_Pipe_OPEN, rSecurity )) // Connection not successfull, now we try to create
+        else if ( pThread->maPipe.create( aPipeIdent.getStr(), osl_Pipe_CREATE, rSecurity )) // Connection not successfull, now we try to create
         {
             // Pipe created
             nPipeMode = PIPEMODE_CREATED;
