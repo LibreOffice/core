@@ -1604,6 +1604,12 @@ void DbGridControl::setDataSource(const Reference< XRowSet >& _xCursor, sal_uInt
     if (nCurPos == BROWSER_INVALIDID || nCurPos >= ColCount())
         nCurPos = 0;
 
+    // Column zero is a valid choice and guaranteed to exist,
+    // but invisible to the user; if we have at least one
+    // user-visible column, go to that one.
+    if (nCurPos == 0 && ColCount() > 1)
+        nCurPos = 1;
+
     // there are rows so go to the selected current column
     if (nRecordCount)
         GoToRowColumnId(0, GetColumnId(nCurPos));
