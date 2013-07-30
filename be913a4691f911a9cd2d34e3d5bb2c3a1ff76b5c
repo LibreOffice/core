@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//9r0\u003d",
+        "filename": "sw/inc/txatbase.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-07-30T11:55:17Z",
+      "side": 1,
+      "message": "Sorry, this is backwards now, assert() says that the condition should be true for the code to be correct, like OSL_ENSURE and unlike SAL_WARN_IF.",
+      "revId": "be913a4691f911a9cd2d34e3d5bb2c3a1ff76b5c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
