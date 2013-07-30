@@ -209,30 +209,37 @@ namespace
     //on being sorted with SortFont
     bool isPreviouslyDuplicateOrObsoleted(FcFontSet *pFSet, int i)
     {
-        if (i == 0)
-            return false;
-
         const FcPattern *a = pFSet->fonts[i];
-        const FcPattern *b = pFSet->fonts[i-1];
-
-        if (compareFontNames(a, b) != 0)
-            return false;
 
         FcPattern* pTestPatternA = FcPatternDuplicate(a);
         FcPatternDel(pTestPatternA, FC_FILE);
         FcPatternDel(pTestPatternA, FC_CHARSET);
         FcPatternDel(pTestPatternA, FC_CAPABILITY);
         FcPatternDel(pTestPatternA, FC_FONTVERSION);
+        FcPatternDel(pTestPatternA, FC_LANG);
 
-        FcPattern* pTestPatternB = FcPatternDuplicate(b);
-        FcPatternDel(pTestPatternB, FC_FILE);
-        FcPatternDel(pTestPatternB, FC_CHARSET);
-        FcPatternDel(pTestPatternB, FC_CAPABILITY);
-        FcPatternDel(pTestPatternB, FC_FONTVERSION);
+        bool bIsDup(false);
 
-        bool bIsDup = FcPatternEqual(pTestPatternA, pTestPatternB);
+        // fdo#66715: loop for case of several font files for same font
+        for (int j = i - 1; 0 <= j && !bIsDup; --j)
+        {
+            const FcPattern *b = pFSet->fonts[j];
 
-        FcPatternDestroy(pTestPatternB);
+            if (compareFontNames(a, b) != 0)
+                break;
+
+            FcPattern* pTestPatternB = FcPatternDuplicate(b);
+            FcPatternDel(pTestPatternB, FC_FILE);
+            FcPatternDel(pTestPatternB, FC_CHARSET);
+            FcPatternDel(pTestPatternB, FC_CAPABILITY);
+            FcPatternDel(pTestPatternB, FC_FONTVERSION);
+            FcPatternDel(pTestPatternB, FC_LANG);
+
+            bIsDup = FcPatternEqual(pTestPatternA, pTestPatternB);
+
+            FcPatternDestroy(pTestPatternB);
+        }
+
         FcPatternDestroy(pTestPatternA);
 
         return bIsDup;
