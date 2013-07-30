@@ -410,6 +410,7 @@ DATASOURCE_TYPE ODsnTypeCollection::determineType(const OUString& _rDsn) const
         KnownPrefix( "sdbc:flat:",          DST_FLAT,               false ),
         KnownPrefix( "sdbc:odbc:",          DST_ODBC,               false ),
         KnownPrefix( "sdbc:dbase:",         DST_DBASE,              false ),
+        KnownPrefix( "sdbc:firebird:",      DST_FIREBIRD,           false ),
         KnownPrefix( "sdbc:mysql:odbc:",    DST_MYSQL_ODBC,         false ),
         KnownPrefix( "sdbc:mysql:jdbc:",    DST_MYSQL_JDBC,         false ),
         KnownPrefix( "sdbc:mysql:mysqlc:",  DST_MYSQL_NATIVE,       false ),
