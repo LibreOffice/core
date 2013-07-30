@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//9q8\u003d",
+        "filename": "package/source/xstor/owriteablestream.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-07-30T13:04:09Z",
+      "side": 0,
+      "message": "Please do not remove these. It is useful to know why there\u0027s the seemingly superfluous }.",
+      "revId": "7874295626be8a3cbbb8fafc02f0dbda06f6d761",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
