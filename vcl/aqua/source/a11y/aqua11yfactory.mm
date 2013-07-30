@@ -155,6 +155,30 @@ static bool enabled = false;
         #endif
         {
             [ dAllWrapper setObject: aWrapper forKey: nKey ];
+            /* fdo#67410: Accessibility notifications are not delivered on NSView subclasses that do not
+               "reasonably" participate in NSView hierarchy (perhaps the only important point is
+               that the view is a transitive subview of the NSWindow's content view, but I
+               did not try to verify that).
+
+               So let the superview-subviews relationship mirror the AXParent-AXChildren relationship.
+            */
+            id parent = [aWrapper accessibilityAttributeValue:NSAccessibilityParentAttribute];
+            if (parent) {
+                if ([parent isKindOfClass:[NSView class]]) {
+                    // SAL_DEBUG("Wrapper INIT: " << [[aWrapper description] UTF8String] << " ==> " << [[parent description] UTF8String]);
+                    NSView *parentView = (NSView *)parent;
+                    [parentView addSubview:aWrapper positioned:NSWindowBelow relativeTo:nil];
+                } else if ([parent isKindOfClass:NSClassFromString(@"SalFrameWindow")]) {
+                    NSWindow *window = (NSWindow *)parent;
+                    NSView *salView = [window contentView];
+                    // SAL_DEBUG("Wrapper INIT SAL: " << [[aWrapper description] UTF8String] << " ==> " << [[salView description] UTF8String]);
+                    [salView addSubview:aWrapper positioned:NSWindowBelow relativeTo:nil];
+                } else {
+                    // SAL_DEBUG("Wrapper INIT: !! " << [[aWrapper description] UTF8String] << " !==>! " << [[parent description] UTF8String] << "!!");
+                }
+            } else {
+                // SAL_DEBUG("Wrapper INIT: " << [[aWrapper description] UTF8String] << " ==> NO PARENT");
+            }
         }
     }
     return aWrapper;
@@ -169,6 +193,9 @@ static bool enabled = false;
     // TODO: when RADIO_BUTTON search for associated RadioGroup-wrapper and delete that as well
     AquaA11yWrapper * theWrapper = [ AquaA11yFactory wrapperForAccessibleContext: rxAccessibleContext createIfNotExists: NO ];
     if ( theWrapper != nil ) {
+        if (![theWrapper isKindOfClass:NSClassFromString(@"SalFrameView")]) {
+            [theWrapper removeFromSuperview];
+        }
         [ [ AquaA11yFactory allWrapper ] removeObjectForKey: [ AquaA11yFactory keyForAccessibleContext: rxAccessibleContext ] ];
         [ theWrapper release ];
     }
