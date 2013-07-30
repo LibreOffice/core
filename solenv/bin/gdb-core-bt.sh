@@ -27,7 +27,7 @@ then
         rm "$GDBCOMMANDFILE"
         echo
         exit 0
-    elif [ $EXITCODE -ge 128 ]; then
+    elif [ "$EXITCODE" -ge 128 ]; then
         echo
         echo "No core file identified in directory ${COREDIR}"
         echo "To show backtraces for crashes during test execution,"
