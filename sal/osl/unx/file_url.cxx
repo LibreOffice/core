@@ -283,7 +283,8 @@ oslFileError SAL_CALL osl_getSystemPathFromFileURL( rtl_uString *ustrFileURL, rt
     OSL_ASSERT( !findWrongUsage( pTmp->buffer, pTmp->length ) );
     */
 
-    *pustrSystemPath = pTmp;
+    rtl_uString_assign ( pustrSystemPath, pTmp );
+    rtl_uString_release ( pTmp );
     return osl_File_E_None;
 }
 
