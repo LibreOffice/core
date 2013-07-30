@@ -29,6 +29,21 @@
  
          if test "x$supports_anon_versioning" = xyes; then
            archive_expsym_cmds='echo "{ global:" > $output_objdir/$libname.ver~
+--- misc/build/fontconfig-2.8.0/fontconfig/fontconfig.h
++++ misc/build/fontconfig-2.8.0/fontconfig/fontconfig.h
+@@ -113,9 +113,9 @@
+ #define FC_DECORATIVE	    "decorative"	/* Bool - true if style is a decorative variant */
+ #define FC_LCD_FILTER	    "lcdfilter"		/* Int */
+ 
+-#define FC_CACHE_SUFFIX		    ".cache-"FC_CACHE_VERSION
+-#define FC_DIR_CACHE_FILE	    "fonts.cache-"FC_CACHE_VERSION
+-#define FC_USER_CACHE_FILE	    ".fonts.cache-"FC_CACHE_VERSION
++#define FC_CACHE_SUFFIX		    ".cache-" FC_CACHE_VERSION
++#define FC_DIR_CACHE_FILE	    "fonts.cache-" FC_CACHE_VERSION
++#define FC_USER_CACHE_FILE	    ".fonts.cache-" FC_CACHE_VERSION
+ 
+ /* Adjust outline rasterizer */
+ #define FC_CHAR_WIDTH	    "charwidth"	/* Int */
 --- misc/build/fontconfig-2.8.0/src/fcxml.c
 +++ misc/build/fontconfig-2.8.0/src/fcxml.c
 @@ -1123,6 +1123,7 @@
