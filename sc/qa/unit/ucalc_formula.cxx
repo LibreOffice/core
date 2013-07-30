@@ -1051,13 +1051,16 @@ void Test::testFormulaRefUpdateNamedExpression()
 
     // Insert a new sheet before the current.
     m_pDoc->InsertTab(0, "New");
-    m_pDoc->CalcAll();
     OUString aName;
     m_pDoc->GetName(1, aName);
     CPPUNIT_ASSERT_EQUAL(OUString("Formula"), aName);
-    CPPUNIT_ASSERT_EQUAL(43.0, m_pDoc->GetValue(ScAddress(2,7,1)));
+    m_pDoc->SetValue(ScAddress(3,9,1), 10);
+    CPPUNIT_ASSERT_EQUAL(33.0, m_pDoc->GetValue(ScAddress(2,7,1)));
 
     m_pDoc->DeleteTab(0);
+
+    m_pDoc->SetValue(ScAddress(3,9,0), 11);
+    CPPUNIT_ASSERT_EQUAL(34.0, m_pDoc->GetValue(ScAddress(2,7,0)));
 
     m_pDoc->DeleteTab(0);
 }
