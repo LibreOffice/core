@@ -945,17 +945,28 @@ void ScValidationDataList::CompileXML()
         (*it)->CompileXML();
 }
 
-void ScValidationDataList::UpdateReference( UpdateRefMode eUpdateRefMode,
-                                const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
+void ScValidationDataList::UpdateReference( sc::RefUpdateContext& rCxt )
 {
     for( iterator it = begin(); it != end(); ++it )
-        (*it)->UpdateReference( eUpdateRefMode, rRange, nDx, nDy, nDz);
+        (*it)->UpdateReference(rCxt);
 }
 
-void ScValidationDataList::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos )
+void ScValidationDataList::UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt )
 {
-    for( iterator it = begin(); it != end(); ++it )
-        (*it)->UpdateMoveTab( nOldPos, nNewPos );
+    for (iterator it = begin(); it != end(); ++it)
+        (*it)->UpdateInsertTab(rCxt);
+}
+
+void ScValidationDataList::UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt )
+{
+    for (iterator it = begin(); it != end(); ++it)
+        (*it)->UpdateDeleteTab(rCxt);
+}
+
+void ScValidationDataList::UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt )
+{
+    for (iterator it = begin(); it != end(); ++it)
+        (*it)->UpdateMoveTab(rCxt);
 }
 
 sal_Bool ScValidationDataList::operator==( const ScValidationDataList& r ) const

@@ -108,6 +108,8 @@ struct RefUpdateMoveTabContext
     UpdatedRangeNames maUpdatedNames;
 
     RefUpdateMoveTabContext(SCTAB nOldPos, SCTAB nNewPos);
+
+    SCTAB getNewTab(SCTAB nOldTab) const;
 };
 
 }

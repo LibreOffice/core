@@ -40,6 +40,15 @@ class ScFormulaCell;
 class ScTokenArray;
 struct ScRefCellValue;
 
+namespace sc {
+
+struct RefUpdateContext;
+struct RefUpdateInsertTabContext;
+struct RefUpdateDeleteTabContext;
+struct RefUpdateMoveTabContext;
+
+}
+
 //  nOptions Flags
 #define SC_COND_NOBLANKS    1
 
@@ -111,9 +120,10 @@ public:
     virtual ~ScFormatEntry() {}
 
     virtual condformat::ScFormatEntryType GetType() const = 0;
-    virtual void UpdateReference( UpdateRefMode eUpdateRefMode,
-                                const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz ) = 0;
-    virtual void UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos ) = 0;
+    virtual void UpdateReference( sc::RefUpdateContext& rCxt ) = 0;
+    virtual void UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt ) = 0;
+    virtual void UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt ) = 0;
+    virtual void UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt ) = 0;
 
     virtual ScFormatEntry* Clone( ScDocument* pDoc = NULL ) const = 0;
 
@@ -217,9 +227,10 @@ public:
 
     void            CompileAll();
     void            CompileXML();
-    void            UpdateReference( UpdateRefMode eUpdateRefMode,
-                                const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
-    void            UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos );
+    virtual void UpdateReference( sc::RefUpdateContext& rCxt );
+    virtual void UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt );
+    virtual void UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt );
+    virtual void UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt );
 
     void            SourceChanged( const ScAddress& rChanged );
 
@@ -343,9 +354,10 @@ public:
     void SetStyleName( const OUString& rStyleName );
 
     virtual condformat::ScFormatEntryType GetType() const { return condformat::DATE; }
-    virtual void UpdateReference( UpdateRefMode, const ScRange&,
-            SCsCOL, SCsROW, SCsTAB ) {}
-    virtual void UpdateMoveTab( SCTAB, SCTAB ) {}
+    virtual void UpdateReference( sc::RefUpdateContext& ) {}
+    virtual void UpdateInsertTab( sc::RefUpdateInsertTabContext& ) {}
+    virtual void UpdateDeleteTab( sc::RefUpdateDeleteTabContext& ) {}
+    virtual void UpdateMoveTab( sc::RefUpdateMoveTabContext& ) {}
 
     virtual ScFormatEntry* Clone( ScDocument* pDoc = NULL ) const;
 
@@ -397,10 +409,11 @@ public:
 
     void            CompileAll();
     void            CompileXML();
-    void            UpdateReference( UpdateRefMode eUpdateRefMode,
-                                const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz, bool bCopyAsMove = false );
+    void UpdateReference( sc::RefUpdateContext& rCxt, bool bCopyAsMove = false );
+    void UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt );
+    void UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt );
+    void UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt );
     void            DeleteArea( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
-    void            UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos );
     void            RenameCellStyle( const OUString& rOld, const OUString& rNew );
 
     void            SourceChanged( const ScAddress& rAddr );
@@ -461,10 +474,11 @@ public:
 
     void    CompileAll();
     void    CompileXML();
-    void    UpdateReference( UpdateRefMode eUpdateRefMode,
-                                const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
+    void UpdateReference( sc::RefUpdateContext& rCxt );
+    void UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt );
+    void UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt );
+    void UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt );
     void    RenameCellStyle( const OUString& rOld, const OUString& rNew );
-    void    UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos );
     void    DeleteArea( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
 
     void    SourceChanged( const ScAddress& rAddr );

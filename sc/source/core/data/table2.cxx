@@ -712,7 +712,13 @@ void ScTable::CopyConditionalFormat( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCRO
         ScConditionalFormat* pNewFormat = itr->Clone(pDocument);
 
         pNewFormat->AddRange(aIntersectedRange);
-        pNewFormat->UpdateReference(URM_COPY, aNewRange, nDx, nDy, pTable->nTab - nTab, true);
+        sc::RefUpdateContext aRefCxt(*pDocument);
+        aRefCxt.meMode = URM_COPY;
+        aRefCxt.maRange = aNewRange;
+        aRefCxt.mnColDelta = nDx;
+        aRefCxt.mnRowDelta = nDy;
+        aRefCxt.mnTabDelta = pTable->nTab - nTab;
+        pNewFormat->UpdateReference(aRefCxt, true);
 
         sal_uLong nMax = 0;
         for(ScConditionalFormatList::const_iterator itrCond = mpCondFormatList->begin();

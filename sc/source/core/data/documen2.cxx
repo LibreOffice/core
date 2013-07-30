@@ -728,7 +728,7 @@ bool ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos, ScProgress* pProgress )
                     0,0,nOldPos, MAXCOL,MAXROW,nOldPos, 0,0,nDz );
             UpdateRefAreaLinks( URM_REORDER, aSourceRange, 0,0,nDz );
             if ( pValidationList )
-                pValidationList->UpdateMoveTab( nOldPos, nNewPos );
+                pValidationList->UpdateMoveTab(aCxt);
             if ( pUnoBroadcaster )
                 pUnoBroadcaster->Broadcast( ScUpdateRefHint( URM_REORDER,
                             aSourceRange, 0,0,nDz ) );
@@ -783,8 +783,9 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
     else
         bValid = !GetTable( aName, nDummy );
 
-    bool bOldAutoCalc = GetAutoCalc();
-    SetAutoCalc( false );   // Mehrfachberechnungen vermeiden
+    sc::AutoCalcSwitch aACSwitch(*this, false);
+    sc::RefUpdateInsertTabContext aCxt(nNewPos, 1);
+
     if (bValid)
     {
         if (nNewPos >= static_cast<SCTAB>(maTabs.size()))
@@ -798,7 +799,6 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
             {
                 SetNoListening( true );
 
-                sc::RefUpdateInsertTabContext aCxt(nNewPos, 1);
                 ScRange aRange( 0,0,nNewPos, MAXCOL,MAXROW,MAXTAB );
                 xColNameRanges->UpdateReference( URM_INSDEL, this, aRange, 0,0,1 );
                 xRowNameRanges->UpdateReference( URM_INSDEL, this, aRange, 0,0,1 );
@@ -835,8 +835,9 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
                     if (*it && it != maTabs.begin()+nOldPos && it != maTabs.begin()+nNewPos)
                         (*it)->StartAllListeners();
 
-                if ( pValidationList )
-                    pValidationList->UpdateReference( URM_INSDEL, aRange, 0,0,1 );
+                if (pValidationList)
+                    pValidationList->UpdateInsertTab(aCxt);
+
                 // sheet names of references may not be valid until sheet is copied
                 pChartListenerCollection->UpdateScheduledSeriesRanges();
             }
@@ -844,12 +845,12 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
                 bValid = false;
         }
     }
+
     if (bValid)
     {
-
         SetNoListening( true );     // noch nicht bei CopyToTable/Insert
-        sc::CopyToDocContext aCxt(*this);
-        maTabs[nOldPos]->CopyToTable(aCxt, 0, 0, MAXCOL, MAXROW, IDF_ALL, (pOnlyMarked != NULL),
+        sc::CopyToDocContext aCopyDocCxt(*this);
+        maTabs[nOldPos]->CopyToTable(aCopyDocCxt, 0, 0, MAXCOL, MAXROW, IDF_ALL, (pOnlyMarked != NULL),
                                         maTabs[nNewPos], pOnlyMarked );
         maTabs[nNewPos]->SetTabBgColor(maTabs[nOldPos]->GetTabBgColor());
 
@@ -871,12 +872,10 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
         maTabs[nNewPos]->StartAllListeners();
 
         ScConditionalFormatList* pNewList = new ScConditionalFormatList(*maTabs[nOldPos]->GetCondFormList());
-        pNewList->UpdateReference(URM_COPY, ScRange( 0, 0, nNewPos , MAXCOL, MAXROW,
-                                        nNewPos), 0, 0, nDz);
+        pNewList->UpdateReference(aRefCxt);
         maTabs[nNewPos]->SetCondFormList( pNewList );
 
         SetDirty();
-        SetAutoCalc( bOldAutoCalc );
 
         if (pDrawLayer)
             DrawCopyPage( static_cast<sal_uInt16>(nOldPos), static_cast<sal_uInt16>(nNewPos) );
@@ -894,8 +893,7 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
         maTabs[nNewPos]->SetLayoutRTL(maTabs[nOldPos]->IsLayoutRTL());
         maTabs[nNewPos]->SetLoadingRTL(maTabs[nOldPos]->IsLoadingRTL());
     }
-    else
-        SetAutoCalc( bOldAutoCalc );
+
     return bValid;
 }
 

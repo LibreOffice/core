@@ -494,114 +494,73 @@ void ScConditionEntry::SetFormula2( const ScTokenArray& rArray )
     }
 }
 
-static void lcl_CondUpdateInsertTab( ScTokenArray& rCode, SCTAB nInsTab, bool& rChanged, SCTAB nTabs )
+void ScConditionEntry::UpdateReference( sc::RefUpdateContext& rCxt )
 {
-    //  Insert table: only update absolute table references.
-    //  (Similar to ScCompiler::UpdateInsertTab with bIsName=true, result is the same as for named ranges)
-    //  For deleting, ScCompiler::UpdateDeleteTab is used because of the handling of invalid references.
-
-    rCode.Reset();
-    ScToken* p = static_cast<ScToken*>(rCode.GetNextReference());
-    while( p )
-    {
-        ScSingleRefData& rRef1 = p->GetSingleRef();
-        if (!rRef1.IsTabRel() && nInsTab <= rRef1.Tab())
-        {
-            rRef1.SetAbsTab(rRef1.Tab() + nTabs);
-            rChanged = true;
-        }
-        if( p->GetType() == svDoubleRef )
-        {
-            ScSingleRefData& rRef2 = p->GetDoubleRef().Ref2;
-            if (!rRef2.IsTabRel() && nInsTab <= rRef2.Tab())
-            {
-                rRef2.SetAbsTab(rRef2.Tab() + nTabs);
-                rChanged = true;
-            }
-        }
-        p = static_cast<ScToken*>(rCode.GetNextReference());
-    }
-}
-
-void ScConditionEntry::UpdateReference( UpdateRefMode eUpdateRefMode,
-                                const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
-{
-    bool bInsertTab = ( eUpdateRefMode == URM_INSDEL && nDz >= 1 );
-    bool bDeleteTab = ( eUpdateRefMode == URM_INSDEL && nDz <= -1 );
     if(pCondFormat)
         aSrcPos = pCondFormat->GetRange().Combine().aStart;
     ScAddress aOldSrcPos = aSrcPos;
     bool bChangedPos = false;
-    if(eUpdateRefMode == URM_INSDEL && rRange.In(aSrcPos))
+    if (rCxt.meMode == URM_INSDEL && rCxt.maRange.In(aSrcPos))
     {
-        aSrcPos.Move(nDx, nDy, nDz);
+        aSrcPos.Move(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta);
         bChangedPos = aSrcPos != aOldSrcPos;
     }
 
     if (pFormula1)
     {
-        bool bChanged1 = false;
-        if ( bInsertTab )
-            lcl_CondUpdateInsertTab( *pFormula1, rRange.aStart.Tab(), bChanged1, nDz );
-        else
-        {
-            if ( bDeleteTab )
-            {
-                sc::RefUpdateDeleteTabContext aCxt(rRange.aStart.Tab(), -1*nDz);
-                pFormula1->AdjustReferenceOnDeletedTab(aCxt, aSrcPos);
-            }
-            else
-            {
-                ScCompiler aComp( mpDoc, aSrcPos, *pFormula1 );
-                aComp.SetGrammar(mpDoc->GetGrammar());
-                bool bSizeChanged;
-                aComp.UpdateReference( eUpdateRefMode, aOldSrcPos, rRange, nDx,
-                        nDy, nDz, bChanged1, bSizeChanged );
-            }
-        }
-
-        if (bChanged1 || bChangedPos)
+        sc::RefUpdateResult aRes = pFormula1->AdjustReferenceInName(rCxt, aOldSrcPos);
+        if (aRes.mbReferenceModified || bChangedPos)
             DELETEZ(pFCell1);       // is created again in IsValid
     }
     if (pFormula2)
     {
-        bool bChanged2 = false;
-        if ( bInsertTab )
-            lcl_CondUpdateInsertTab( *pFormula2, rRange.aStart.Tab(), bChanged2, nDz );
-        else
-        {
-            if ( bDeleteTab )
-            {
-                sc::RefUpdateDeleteTabContext aCxt(rRange.aStart.Tab(), -1*nDz);
-                pFormula2->AdjustReferenceOnDeletedTab(aCxt, aSrcPos);
-            }
-            else
-            {
-                ScCompiler aComp( mpDoc, aSrcPos, *pFormula2);
-                aComp.SetGrammar(mpDoc->GetGrammar());
-                bool bSizeChanged;
-                aComp.UpdateReference( eUpdateRefMode, aOldSrcPos, rRange, nDx,
-                        nDy, nDz, bChanged2, bSizeChanged );
-            }
-        }
-
-        if (bChanged2 || bChangedPos)
+        sc::RefUpdateResult aRes = pFormula2->AdjustReferenceInName(rCxt, aOldSrcPos);
+        if (aRes.mbReferenceModified || bChangedPos)
             DELETEZ(pFCell2);       // is created again in IsValid
     }
 }
 
-void ScConditionEntry::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos )
+void ScConditionEntry::UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt )
 {
-    sc::RefUpdateMoveTabContext aCxt(nOldPos, nNewPos);
     if (pFormula1)
     {
-        pFormula1->AdjustReferenceOnMovedTab(aCxt, aSrcPos);
+        pFormula1->AdjustReferenceOnInsertedTab(rCxt, aSrcPos);
         DELETEZ(pFCell1);
     }
 
     if (pFormula2)
     {
-        pFormula2->AdjustReferenceOnMovedTab(aCxt, aSrcPos);
+        pFormula2->AdjustReferenceOnInsertedTab(rCxt, aSrcPos);
+        DELETEZ(pFCell2);
+    }
+}
+
+void ScConditionEntry::UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt )
+{
+    if (pFormula1)
+    {
+        pFormula1->AdjustReferenceOnDeletedTab(rCxt, aSrcPos);
+        DELETEZ(pFCell1);
+    }
+
+    if (pFormula2)
+    {
+        pFormula2->AdjustReferenceOnDeletedTab(rCxt, aSrcPos);
+        DELETEZ(pFCell2);
+    }
+}
+
+void ScConditionEntry::UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt )
+{
+    if (pFormula1)
+    {
+        pFormula1->AdjustReferenceOnMovedTab(rCxt, aSrcPos);
+        DELETEZ(pFCell1);
+    }
+
+    if (pFormula2)
+    {
+        pFormula2->AdjustReferenceOnMovedTab(rCxt, aSrcPos);
         DELETEZ(pFCell2);
     }
 }
@@ -1988,16 +1947,64 @@ void ScConditionalFormat::CompileXML()
             static_cast<ScCondFormatEntry&>(*itr).CompileXML();
 }
 
-void ScConditionalFormat::UpdateReference( UpdateRefMode eUpdateRefMode,
-                                const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz, bool bCopyAsMove )
+void ScConditionalFormat::UpdateReference( sc::RefUpdateContext& rCxt, bool bCopyAsMove )
 {
     for(CondFormatContainer::iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
-        itr->UpdateReference(eUpdateRefMode, rRange, nDx, nDy, nDz);
+        itr->UpdateReference(rCxt);
 
-    if( eUpdateRefMode == URM_COPY && bCopyAsMove )
-        maRanges.UpdateReference( URM_MOVE, pDoc, rRange, nDx, nDy, nDz );
+    if (rCxt.meMode == URM_COPY && bCopyAsMove)
+        maRanges.UpdateReference(URM_MOVE, pDoc, rCxt.maRange, rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta);
     else
-        maRanges.UpdateReference( eUpdateRefMode, pDoc, rRange, nDx, nDy, nDz );
+        maRanges.UpdateReference(rCxt.meMode, pDoc, rCxt.maRange, rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta);
+}
+
+void ScConditionalFormat::UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt )
+{
+    for (CondFormatContainer::iterator it = maEntries.begin(); it != maEntries.end(); ++it)
+        it->UpdateInsertTab(rCxt);
+}
+
+void ScConditionalFormat::UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt )
+{
+    for (CondFormatContainer::iterator it = maEntries.begin(); it != maEntries.end(); ++it)
+        it->UpdateDeleteTab(rCxt);
+}
+
+void ScConditionalFormat::UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt )
+{
+    size_t n = maRanges.size();
+    SCTAB nMinTab = std::min<SCTAB>(rCxt.mnOldPos, rCxt.mnNewPos);
+    SCTAB nMaxTab = std::max<SCTAB>(rCxt.mnOldPos, rCxt.mnNewPos);
+    for(size_t i = 0; i < n; ++i)
+    {
+        ScRange* pRange = maRanges[i];
+        SCTAB nTab = pRange->aStart.Tab();
+        if(nTab < nMinTab || nTab > nMaxTab)
+        {
+            continue;
+        }
+
+        if (nTab == rCxt.mnOldPos)
+        {
+            pRange->aStart.SetTab(rCxt.mnNewPos);
+            pRange->aEnd.SetTab(rCxt.mnNewPos);
+            continue;
+        }
+
+        if (rCxt.mnNewPos < rCxt.mnOldPos)
+        {
+            pRange->aStart.IncTab();
+            pRange->aEnd.IncTab();
+        }
+        else
+        {
+            pRange->aStart.IncTab(-1);
+            pRange->aEnd.IncTab(-1);
+        }
+    }
+
+    for (CondFormatContainer::iterator it = maEntries.begin(); it != maEntries.end(); ++it)
+        it->UpdateMoveTab(rCxt);
 }
 
 void ScConditionalFormat::DeleteArea( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
@@ -2015,43 +2022,6 @@ void ScConditionalFormat::RenameCellStyle(const OUString& rOld, const OUString& 
             if(rFormat.GetStyle() == rOld)
                 rFormat.UpdateStyleName( rNew );
         }
-}
-
-void ScConditionalFormat::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos )
-{
-    size_t n = maRanges.size();
-    SCTAB nMinTab = std::min<SCTAB>(nOldPos, nNewPos);
-    SCTAB nMaxTab = std::max<SCTAB>(nOldPos, nNewPos);
-    for(size_t i = 0; i < n; ++i)
-    {
-        ScRange* pRange = maRanges[i];
-        SCTAB nTab = pRange->aStart.Tab();
-        if(nTab < nMinTab || nTab > nMaxTab)
-        {
-            continue;
-        }
-
-        if(nTab == nOldPos)
-        {
-            pRange->aStart.SetTab(nNewPos);
-            pRange->aEnd.SetTab(nNewPos);
-            continue;
-        }
-
-        if(nNewPos < nOldPos)
-        {
-            pRange->aStart.IncTab();
-            pRange->aEnd.IncTab();
-        }
-        else
-        {
-            pRange->aStart.IncTab(-1);
-            pRange->aEnd.IncTab(-1);
-        }
-    }
-
-    for(CondFormatContainer::iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
-        itr->UpdateMoveTab( nOldPos, nNewPos );
 }
 
 void ScConditionalFormat::SourceChanged( const ScAddress& rAddr )
@@ -2177,13 +2147,12 @@ void ScConditionalFormatList::CompileXML()
         itr->CompileXML();
 }
 
-void ScConditionalFormatList::UpdateReference( UpdateRefMode eUpdateRefMode,
-                                const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
+void ScConditionalFormatList::UpdateReference( sc::RefUpdateContext& rCxt )
 {
     for( iterator itr = begin(); itr != end(); ++itr)
-        itr->UpdateReference( eUpdateRefMode, rRange, nDx, nDy, nDz );
+        itr->UpdateReference(rCxt);
 
-    if( eUpdateRefMode == URM_INSDEL )
+    if (rCxt.meMode == URM_INSDEL)
     {
         // need to check which must be deleted
         iterator itr = begin();
@@ -2197,16 +2166,28 @@ void ScConditionalFormatList::UpdateReference( UpdateRefMode eUpdateRefMode,
     }
 }
 
+void ScConditionalFormatList::UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt )
+{
+    for (iterator it = begin(); it != end(); ++it)
+        it->UpdateInsertTab(rCxt);
+}
+
+void ScConditionalFormatList::UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt )
+{
+    for (iterator it = begin(); it != end(); ++it)
+        it->UpdateDeleteTab(rCxt);
+}
+
+void ScConditionalFormatList::UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt )
+{
+    for (iterator it = begin(); it != end(); ++it)
+        it->UpdateMoveTab(rCxt);
+}
+
 void ScConditionalFormatList::RenameCellStyle( const OUString& rOld, const OUString& rNew )
 {
     for( iterator itr = begin(); itr != end(); ++itr)
         itr->RenameCellStyle(rOld,rNew);
-}
-
-void ScConditionalFormatList::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos )
-{
-    for( iterator itr = begin(); itr != end(); ++itr)
-        itr->UpdateMoveTab( nOldPos, nNewPos );
 }
 
 bool ScConditionalFormatList::CheckAllEntries()

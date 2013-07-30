@@ -70,6 +70,30 @@ RefUpdateDeleteTabContext::RefUpdateDeleteTabContext(SCTAB nDeletePos, SCTAB nSh
 RefUpdateMoveTabContext::RefUpdateMoveTabContext(SCTAB nOldPos, SCTAB nNewPos) :
     mnOldPos(nOldPos), mnNewPos(nNewPos) {}
 
+SCTAB RefUpdateMoveTabContext::getNewTab(SCTAB nOldTab) const
+{
+    // Sheets below the lower bound or above the uppper bound will not change.
+    SCTAB nLowerBound = std::min(mnOldPos, mnNewPos);
+    SCTAB nUpperBound = std::max(mnOldPos, mnNewPos);
+
+    if (nOldTab < nLowerBound || nUpperBound < nOldTab)
+        // Outside the boundary. Nothing to adjust.
+        return nOldTab;
+
+    if (nOldTab == mnOldPos)
+        return mnNewPos;
+
+    // It's somewhere in between.
+    if (mnOldPos < mnNewPos)
+    {
+        // Moving a sheet to the right. The rest of the sheets shifts to the left.
+        return nOldTab - 1;
+    }
+
+    // Moving a sheet to the left. The rest of the sheets shifts to the right.
+    return nOldTab + 1;
+}
+
 }
 
 

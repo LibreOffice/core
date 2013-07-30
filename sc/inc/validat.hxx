@@ -26,6 +26,12 @@
 
 namespace ValidListType = ::com::sun::star::sheet::TableValidationVisibility;
 
+namespace sc {
+
+struct RefUpdateContext;
+
+}
+
 class ScPatternAttr;
 class ScTokenArray;
 class ScTypedStrData;
@@ -191,9 +197,10 @@ public:
     ScValidationData* GetData( sal_uInt32 nKey );
 
     void    CompileXML();
-    void    UpdateReference( UpdateRefMode eUpdateRefMode,
-                                const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
-    void    UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos );
+    void UpdateReference( sc::RefUpdateContext& rCxt );
+    void UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt );
+    void UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt );
+    void UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt );
 
     sal_Bool    operator==( const ScValidationDataList& r ) const;      // for ref-undo
 };

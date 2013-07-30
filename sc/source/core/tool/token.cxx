@@ -2794,33 +2794,13 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnInsertedTab( sc::RefUpdateIns
 
 namespace {
 
-bool adjustTabOnMove( ScAddress& rPos, SCTAB nOldPos, SCTAB nNewPos )
+bool adjustTabOnMove( ScAddress& rPos, sc::RefUpdateMoveTabContext& rCxt )
 {
-    // Sheets below the lower bound or above the uppper bound will not change.
-    SCTAB nLowerBound = std::min(nOldPos, nNewPos);
-    SCTAB nUpperBound = std::max(nOldPos, nNewPos);
-
-    if (rPos.Tab() < nLowerBound || nUpperBound < rPos.Tab())
-        // Outside the boundary. Nothing to adjust.
+    SCTAB nNewTab = rCxt.getNewTab(rPos.Tab());
+    if (nNewTab == rPos.Tab())
         return false;
 
-    if (rPos.Tab() == nOldPos)
-    {
-        rPos.SetTab(nNewPos);
-        return true;
-    }
-
-    // It's somewhere in between.
-    if (nOldPos < nNewPos)
-    {
-        // Moving a sheet to the right. The rest of the sheets shifts to the left.
-        rPos.IncTab(-1);
-    }
-    else
-    {
-        // Moving a sheet to the left. The rest of the sheets shifts to the right.
-        rPos.IncTab();
-    }
+    rPos.SetTab(nNewTab);
     return true;
 }
 
@@ -2833,7 +2813,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMovedTab( sc::RefUpdateMoveTa
         return aRes;
 
     ScAddress aNewPos = rOldPos;
-    if (adjustTabOnMove(aNewPos, rCxt.mnOldPos, rCxt.mnNewPos))
+    if (adjustTabOnMove(aNewPos, rCxt))
         aRes.mbReferenceModified = true;
 
     FormulaToken** p = pCode;
@@ -2847,7 +2827,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMovedTab( sc::RefUpdateMoveTa
                 ScToken* pToken = static_cast<ScToken*>(*p);
                 ScSingleRefData& rRef = pToken->GetSingleRef();
                 ScAddress aAbs = rRef.toAbs(rOldPos);
-                if (adjustTabOnMove(aAbs, rCxt.mnOldPos, rCxt.mnNewPos))
+                if (adjustTabOnMove(aAbs, rCxt))
                     aRes.mbReferenceModified = true;
                 rRef.SetAddress(aAbs, aNewPos);
             }
@@ -2857,9 +2837,9 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMovedTab( sc::RefUpdateMoveTa
                 ScToken* pToken = static_cast<ScToken*>(*p);
                 ScComplexRefData& rRef = pToken->GetDoubleRef();
                 ScRange aAbs = rRef.toAbs(rOldPos);
-                if (adjustTabOnMove(aAbs.aStart, rCxt.mnOldPos, rCxt.mnNewPos))
+                if (adjustTabOnMove(aAbs.aStart, rCxt))
                     aRes.mbReferenceModified = true;
-                if (adjustTabOnMove(aAbs.aEnd, rCxt.mnOldPos, rCxt.mnNewPos))
+                if (adjustTabOnMove(aAbs.aEnd, rCxt))
                     aRes.mbReferenceModified = true;
                 rRef.SetRange(aAbs, aNewPos);
             }

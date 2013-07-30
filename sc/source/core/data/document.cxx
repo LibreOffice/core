@@ -501,8 +501,9 @@ bool ScDocument::InsertTab( SCTAB nPos, const OUString& rName,
                     if ( *it )
                         (*it)->StartAllListeners();
 
-                if ( pValidationList )
-                    pValidationList->UpdateReference( URM_INSDEL, aRange, 0,0,1 );
+                if (pValidationList)
+                    pValidationList->UpdateInsertTab(aCxt);
+
                 // sheet names of references are not valid until sheet is inserted
                 if ( pChartListenerCollection )
                     pChartListenerCollection->UpdateScheduledSeriesRanges();
@@ -587,8 +588,9 @@ bool ScDocument::InsertTabs( SCTAB nPos, const std::vector<OUString>& rNames,
                     if ( *it )
                         (*it)->StartAllListeners();
 
-                if ( pValidationList )
-                    pValidationList->UpdateReference( URM_INSDEL, aRange, 0,0,nNewSheets );
+                if (pValidationList)
+                    pValidationList->UpdateInsertTab(aCxt);
+
                 // sheet names of references are not valid until sheet is inserted
                 if ( pChartListenerCollection )
                     pChartListenerCollection->UpdateScheduledSeriesRanges();
@@ -650,8 +652,8 @@ bool ScDocument::DeleteTab( SCTAB nTab )
                     pDetOpList->UpdateReference( this, URM_INSDEL, aRange, 0,0,-1 );
                 UpdateChartRef( URM_INSDEL, 0,0,nTab, MAXCOL,MAXROW,MAXTAB, 0,0,-1 );
                 UpdateRefAreaLinks( URM_INSDEL, aRange, 0,0,-1 );
-                if ( pValidationList )
-                    pValidationList->UpdateReference( URM_INSDEL, aRange, 0,0,-1 );
+                if (pValidationList)
+                    pValidationList->UpdateDeleteTab(aCxt);
                 if ( pUnoBroadcaster )
                     pUnoBroadcaster->Broadcast( ScUpdateRefHint( URM_INSDEL, aRange, 0,0,-1 ) );
 
@@ -738,8 +740,8 @@ bool ScDocument::DeleteTabs( SCTAB nTab, SCTAB nSheets )
                     pDetOpList->UpdateReference( this, URM_INSDEL, aRange, 0,0,-1*nSheets );
                 UpdateChartRef( URM_INSDEL, 0,0,nTab, MAXCOL,MAXROW,MAXTAB, 0,0,-1*nSheets );
                 UpdateRefAreaLinks( URM_INSDEL, aRange, 0,0,-1*nSheets );
-                if ( pValidationList )
-                    pValidationList->UpdateReference( URM_INSDEL, aRange, 0,0,-1*nSheets );
+                if (pValidationList)
+                    pValidationList->UpdateDeleteTab(aCxt);
                 if ( pUnoBroadcaster )
                     pUnoBroadcaster->Broadcast( ScUpdateRefHint( URM_INSDEL, aRange, 0,0,-1*nSheets ) );
 

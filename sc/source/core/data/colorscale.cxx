@@ -245,20 +245,40 @@ void ScColorScaleEntry::UpdateMoveTab( SCTAB nOldTab, SCTAB nNewTab, SCTAB nTabN
     }
 }
 
-void ScColorScaleEntry::UpdateReference(
-    ScDocument* pDoc, UpdateRefMode eUpdateRefMode, const ScRange& rRange,
-    SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
+void ScColorScaleEntry::UpdateReference( sc::RefUpdateContext& rCxt )
 {
     if (!mpCell)
         return;
 
-    sc::RefUpdateContext aCxt(*pDoc);
-    aCxt.meMode = eUpdateRefMode;
-    aCxt.maRange = rRange;
-    aCxt.mnColDelta = nDx;
-    aCxt.mnRowDelta = nDy;
-    aCxt.mnTabDelta = nDz;
-    mpCell->UpdateReference(aCxt);
+    mpCell->UpdateReference(rCxt);
+    mpListener.reset(new ScFormulaListener(mpCell.get()));
+}
+
+void ScColorScaleEntry::UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt )
+{
+    if (!mpCell)
+        return;
+
+    mpCell->UpdateInsertTab(rCxt);
+    mpListener.reset(new ScFormulaListener(mpCell.get()));
+}
+
+void ScColorScaleEntry::UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt )
+{
+    if (!mpCell)
+        return;
+
+    mpCell->UpdateDeleteTab(rCxt);
+    mpListener.reset(new ScFormulaListener(mpCell.get()));
+}
+
+void ScColorScaleEntry::UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt )
+{
+    if (!mpCell)
+        return;
+
+    SCTAB nTabNo = rCxt.getNewTab(mpCell->aPos.Tab());
+    mpCell->UpdateMoveTab(rCxt, nTabNo);
     mpListener.reset(new ScFormulaListener(mpCell.get()));
 }
 
@@ -574,22 +594,28 @@ Color* ScColorScaleFormat::GetColor( const ScAddress& rAddr ) const
     return new Color(aColor);
 }
 
-void ScColorScaleFormat::UpdateMoveTab(SCTAB nOldTab, SCTAB nNewTab)
+void ScColorScaleFormat::UpdateReference( sc::RefUpdateContext& rCxt )
 {
-    SCTAB nThisTab = GetRange().front()->aStart.Tab();
     for(iterator itr = begin(); itr != end(); ++itr)
-    {
-        itr->UpdateMoveTab(nOldTab, nNewTab, nThisTab);
-    }
+        itr->UpdateReference(rCxt);
 }
 
-void ScColorScaleFormat::UpdateReference( UpdateRefMode eUpdateRefMode,
-            const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
+void ScColorScaleFormat::UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt )
 {
-    for(iterator itr = begin(); itr != end(); ++itr)
-    {
-        itr->UpdateReference(mpDoc, eUpdateRefMode, rRange, nDx, nDy, nDz);
-    }
+    for (iterator it = begin(); it != end(); ++it)
+        it->UpdateInsertTab(rCxt);
+}
+
+void ScColorScaleFormat::UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt )
+{
+    for (iterator it = begin(); it != end(); ++it)
+        it->UpdateDeleteTab(rCxt);
+}
+
+void ScColorScaleFormat::UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt )
+{
+    for (iterator it = begin(); it != end(); ++it)
+        it->UpdateMoveTab(rCxt);
 }
 
 bool ScColorScaleFormat::NeedsRepaint() const
@@ -698,11 +724,28 @@ condformat::ScFormatEntryType ScDataBarFormat::GetType() const
     return condformat::DATABAR;
 }
 
-void ScDataBarFormat::UpdateReference( UpdateRefMode eRefMode,
-            const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
+void ScDataBarFormat::UpdateReference( sc::RefUpdateContext& rCxt )
 {
-    mpFormatData->mpUpperLimit->UpdateReference( mpDoc, eRefMode, rRange, nDx, nDy, nDz );
-    mpFormatData->mpLowerLimit->UpdateReference( mpDoc, eRefMode, rRange, nDx, nDy, nDz );
+    mpFormatData->mpUpperLimit->UpdateReference(rCxt);
+    mpFormatData->mpLowerLimit->UpdateReference(rCxt);
+}
+
+void ScDataBarFormat::UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt )
+{
+    mpFormatData->mpUpperLimit->UpdateInsertTab(rCxt);
+    mpFormatData->mpLowerLimit->UpdateInsertTab(rCxt);
+}
+
+void ScDataBarFormat::UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt )
+{
+    mpFormatData->mpUpperLimit->UpdateDeleteTab(rCxt);
+    mpFormatData->mpLowerLimit->UpdateDeleteTab(rCxt);
+}
+
+void ScDataBarFormat::UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt )
+{
+    mpFormatData->mpUpperLimit->UpdateMoveTab(rCxt);
+    mpFormatData->mpLowerLimit->UpdateMoveTab(rCxt);
 }
 
 bool ScDataBarFormat::NeedsRepaint() const
@@ -740,13 +783,6 @@ void ScDataBarFormat::DataChanged(const ScRange& rRange)
     {
         mpDoc->RepaintRange(GetRange());
     }
-}
-
-void ScDataBarFormat::UpdateMoveTab(SCTAB nOldTab, SCTAB nNewTab)
-{
-    SCTAB nThisTab = GetRange().front()->aStart.Tab();
-    mpFormatData->mpUpperLimit->UpdateMoveTab(nOldTab, nNewTab, nThisTab);
-    mpFormatData->mpLowerLimit->UpdateMoveTab(nOldTab, nNewTab, nThisTab);
 }
 
 double ScDataBarFormat::getMin(double nMin, double nMax) const
@@ -1001,20 +1037,35 @@ void ScIconSetFormat::DataChanged( const ScRange& )
 {
 }
 
-void ScIconSetFormat::UpdateMoveTab( SCTAB nOldTab, SCTAB nNewTab )
+void ScIconSetFormat::UpdateReference( sc::RefUpdateContext& rCxt )
 {
     for(iterator itr = begin(); itr != end(); ++itr)
     {
-        itr->UpdateMoveTab(nOldTab, nNewTab, 0);
+        itr->UpdateReference(rCxt);
     }
 }
 
-void ScIconSetFormat::UpdateReference( UpdateRefMode eUpdateRefMode,
-        const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
+void ScIconSetFormat::UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt )
 {
     for(iterator itr = begin(); itr != end(); ++itr)
     {
-        itr->UpdateReference( mpDoc, eUpdateRefMode, rRange, nDx, nDy, nDz );
+        itr->UpdateInsertTab(rCxt);
+    }
+}
+
+void ScIconSetFormat::UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt )
+{
+    for(iterator itr = begin(); itr != end(); ++itr)
+    {
+        itr->UpdateDeleteTab(rCxt);
+    }
+}
+
+void ScIconSetFormat::UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt )
+{
+    for(iterator itr = begin(); itr != end(); ++itr)
+    {
+        itr->UpdateMoveTab(rCxt);
     }
 }
 

@@ -1564,7 +1564,7 @@ void ScTable::UpdateReference(
         SetStreamValid(false);
 
     if(mpCondFormatList)
-        mpCondFormatList->UpdateReference(eUpdateRefMode, rCxt.maRange, nDx, nDy, nDz);
+        mpCondFormatList->UpdateReference(rCxt);
 }
 
 void ScTable::UpdateTranspose( const ScRange& rSource, const ScAddress& rDest,
@@ -1593,11 +1593,7 @@ void ScTable::UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt )
         mpRangeName->UpdateInsertTab(rCxt, nTab);
 
     if (mpCondFormatList)
-    {
-        mpCondFormatList->UpdateReference(
-            URM_INSDEL, ScRange(0, 0, rCxt.mnInsertPos, MAXCOL, MAXROW, rCxt.mnInsertPos+rCxt.mnSheets-1),
-            0, 0, rCxt.mnSheets);
-    }
+        mpCondFormatList->UpdateInsertTab(rCxt);
 
     for (SCCOL i=0; i <= MAXCOL; i++) aCol[i].UpdateInsertTab(rCxt);
 
@@ -1618,11 +1614,7 @@ void ScTable::UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt )
         mpRangeName->UpdateDeleteTab(rCxt, nTab);
 
     if (mpCondFormatList)
-    {
-        mpCondFormatList->UpdateReference(
-            URM_INSDEL, ScRange(0,0, rCxt.mnDeletePos, MAXCOL, MAXROW, rCxt.mnDeletePos+rCxt.mnSheets-1),
-            0, 0, -1*rCxt.mnSheets);
-    }
+        mpCondFormatList->UpdateDeleteTab(rCxt);
 
     for (SCCOL i = 0; i <= MAXCOL; ++i)
         aCol[i].UpdateDeleteTab(rCxt);
@@ -1642,7 +1634,7 @@ void ScTable::UpdateMoveTab(
         pDBDataNoName->UpdateMoveTab(rCxt.mnOldPos, rCxt.mnNewPos);
 
     if(mpCondFormatList)
-        mpCondFormatList->UpdateMoveTab(rCxt.mnOldPos, rCxt.mnNewPos);
+        mpCondFormatList->UpdateMoveTab(rCxt);
 
     for ( SCCOL i=0; i <= MAXCOL; i++ )
     {
