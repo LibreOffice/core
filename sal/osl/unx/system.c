@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include "system.h"
 
 #ifdef NO_PTHREAD_RTL
@@ -140,7 +142,19 @@ struct hostent *gethostbyname_r(const char *name, struct hostent *result,
  */
 int macxp_resolveAlias(char *path, int buflen)
 {
+#if HAVE_FEATURE_MACOSX_SANDBOX
+  /* Avoid unnecessary messages in the system.log:
+   *
+   * kernel[0]: Sandbox: soffice(57342) deny file-read-data /Users
+   * kernel[0]: Sandbox: soffice(57342) deny file-read-data /Users/tml
+   *
+   * etc. It is quite unlikely anyway, I hope, that anything except
+   * the last component of a path name would be a bookmark.
+   */
+  char *unprocessedPath = path + strlen(path) - 1;
+#else
   char *unprocessedPath = path;
+#endif
 
   if ( *unprocessedPath == '/' )
       unprocessedPath++;
