@@ -256,6 +256,13 @@ sal_Bool SfxAppEvent_Impl( const OUString& rCmd, const OUString& rEvent,
         if ( rCmd.getLength() - start >= 2 )
         {
             // Transform into the ApplicationEvent Format
+            //TODO: I /assume/ that rCmd should match the syntax of
+            // <http://msdn.microsoft.com/en-us/library/ms648995.aspx>
+            // "WM_DDE_EXECUTE message" but does not (handle commands enclosed
+            // in [...]; handle commas separating multiple arguments; handle
+            // double "", ((, )), [[, ]] in quoted arguments); see also the mail
+            // thread starting at <http://lists.freedesktop.org/archives/
+            // libreoffice/2013-July/054779.html> "DDE on Windows."
             std::vector<OUString> aData;
             for ( sal_Int32 n = start; n < rCmd.getLength() - 1; )
             {
