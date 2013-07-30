@@ -2403,6 +2403,7 @@ public:
 
 class InsertTabUpdater
 {
+    sc::RefUpdateInsertTabContext& mrCxt;
     sc::CellTextAttrStoreType& mrTextAttrs;
     sc::CellTextAttrStoreType::iterator miAttrPos;
     SCTAB mnTab;
@@ -2411,17 +2412,16 @@ class InsertTabUpdater
     bool mbModified;
 
 public:
-    InsertTabUpdater(sc::CellTextAttrStoreType& rTextAttrs, SCTAB nTab, SCTAB nInsPos, SCTAB nNewSheets) :
+    InsertTabUpdater(sc::RefUpdateInsertTabContext& rCxt, sc::CellTextAttrStoreType& rTextAttrs, SCTAB nTab) :
+        mrCxt(rCxt),
         mrTextAttrs(rTextAttrs),
         miAttrPos(rTextAttrs.begin()),
         mnTab(nTab),
-        mnInsPos(nInsPos),
-        mnNewSheets(nNewSheets),
         mbModified(false) {}
 
     void operator() (size_t /*nRow*/, ScFormulaCell* pCell)
     {
-        pCell->UpdateInsertTab(mnInsPos, mnNewSheets);
+        pCell->UpdateInsertTab(mrCxt);
         mbModified = true;
     }
 
@@ -2871,20 +2871,20 @@ void ScColumn::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY )
 }
 
 
-void ScColumn::UpdateInsertTab(SCTAB nInsPos, SCTAB nNewSheets)
+void ScColumn::UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt )
 {
-    if (nTab >= nInsPos)
+    if (nTab >= rCxt.mnInsertPos)
     {
-        nTab += nNewSheets;
+        nTab += rCxt.mnSheets;
         pAttrArray->SetTab(nTab);
     }
 
-    UpdateInsertTabOnlyCells(nInsPos, nNewSheets);
+    UpdateInsertTabOnlyCells(rCxt);
 }
 
-void ScColumn::UpdateInsertTabOnlyCells(SCTAB nInsPos, SCTAB nNewSheets)
+void ScColumn::UpdateInsertTabOnlyCells( sc::RefUpdateInsertTabContext& rCxt )
 {
-    InsertTabUpdater aFunc(maCellTextAttrs, nTab, nInsPos, nNewSheets);
+    InsertTabUpdater aFunc(rCxt, maCellTextAttrs, nTab);
     sc::ProcessFormulaEditText(maCells, aFunc);
     if (aFunc.isModified())
         CellStorageModified();

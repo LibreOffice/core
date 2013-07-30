@@ -11,20 +11,7 @@
 
 namespace sc {
 
-RefUpdateContext::RefUpdateContext(ScDocument& rDoc) :
-    mrDoc(rDoc), meMode(URM_INSDEL), mnColDelta(0), mnRowDelta(0), mnTabDelta(0) {}
-
-bool RefUpdateContext::isInserted() const
-{
-    return (meMode == URM_INSDEL) && (mnColDelta > 0 || mnRowDelta > 0 || mnTabDelta > 0);
-}
-
-bool RefUpdateContext::isDeleted() const
-{
-    return (meMode == URM_INSDEL) && (mnColDelta < 0 || mnRowDelta < 0 || mnTabDelta < 0);
-}
-
-void RefUpdateContext::setUpdatedName(SCTAB nTab, sal_uInt16 nIndex)
+void UpdatedRangeNames::setUpdatedName(SCTAB nTab, sal_uInt16 nIndex)
 {
     UpdatedNamesType::iterator it = maUpdatedNames.find(nTab);
     if (it == maUpdatedNames.end())
@@ -45,7 +32,7 @@ void RefUpdateContext::setUpdatedName(SCTAB nTab, sal_uInt16 nIndex)
     rIndices.insert(nIndex);
 }
 
-bool RefUpdateContext::isNameUpdated(SCTAB nTab, sal_uInt16 nIndex) const
+bool UpdatedRangeNames::isNameUpdated(SCTAB nTab, sal_uInt16 nIndex) const
 {
     UpdatedNamesType::const_iterator it = maUpdatedNames.find(nTab);
     if (it == maUpdatedNames.end())
@@ -55,11 +42,27 @@ bool RefUpdateContext::isNameUpdated(SCTAB nTab, sal_uInt16 nIndex) const
     return rIndices.count(nIndex) > 0;
 }
 
+RefUpdateContext::RefUpdateContext(ScDocument& rDoc) :
+    mrDoc(rDoc), meMode(URM_INSDEL), mnColDelta(0), mnRowDelta(0), mnTabDelta(0) {}
+
+bool RefUpdateContext::isInserted() const
+{
+    return (meMode == URM_INSDEL) && (mnColDelta > 0 || mnRowDelta > 0 || mnTabDelta > 0);
+}
+
+bool RefUpdateContext::isDeleted() const
+{
+    return (meMode == URM_INSDEL) && (mnColDelta < 0 || mnRowDelta < 0 || mnTabDelta < 0);
+}
+
 RefUpdateResult::RefUpdateResult() : mbValueChanged(false), mbReferenceModified(false), mbNameModified(false) {}
 RefUpdateResult::RefUpdateResult(const RefUpdateResult& r) :
     mbValueChanged(r.mbValueChanged),
     mbReferenceModified(r.mbReferenceModified),
     mbNameModified(r.mbNameModified) {}
+
+RefUpdateInsertTabContext::RefUpdateInsertTabContext(SCTAB nInsertPos, SCTAB nSheets) :
+    mnInsertPos(nInsertPos), mnSheets(nSheets) {}
 
 }
 

@@ -2481,7 +2481,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
                         nTab = rOldPos.Tab();
 
                     // Check if this named expression has been modified.
-                    if (rCxt.isNameUpdated(nTab, pToken->GetIndex()))
+                    if (rCxt.maUpdatedNames.isNameUpdated(nTab, pToken->GetIndex()))
                         aRes.mbNameModified = true;
                 }
             }
@@ -2724,12 +2724,12 @@ bool ScTokenArray::AdjustReferenceOnDeletedTab( SCTAB nDelPos, SCTAB nSheets, co
     return bRefChanged;
 }
 
-bool ScTokenArray::AdjustReferenceOnInsertedTab( SCTAB nInsPos, SCTAB nSheets, const ScAddress& rOldPos )
+sc::RefUpdateResult ScTokenArray::AdjustReferenceOnInsertedTab( sc::RefUpdateInsertTabContext& rCxt, const ScAddress& rOldPos )
 {
-    bool bRefChanged = false;
+    sc::RefUpdateResult aRes;
     ScAddress aNewPos = rOldPos;
-    if (nInsPos <= rOldPos.Tab())
-        aNewPos.IncTab(nSheets);
+    if (rCxt.mnInsertPos <= rOldPos.Tab())
+        aNewPos.IncTab(rCxt.mnSheets);
 
     FormulaToken** p = pCode;
     FormulaToken** pEnd = p + static_cast<size_t>(nLen);
@@ -2741,25 +2741,39 @@ bool ScTokenArray::AdjustReferenceOnInsertedTab( SCTAB nInsPos, SCTAB nSheets, c
             {
                 ScToken* pToken = static_cast<ScToken*>(*p);
                 ScSingleRefData& rRef = pToken->GetSingleRef();
-                if (adjustSingleRefOnInsertedTab(rRef, nInsPos, nSheets, rOldPos, aNewPos))
-                    bRefChanged = true;
+                if (adjustSingleRefOnInsertedTab(rRef, rCxt.mnInsertPos, rCxt.mnSheets, rOldPos, aNewPos))
+                    aRes.mbReferenceModified = true;
             }
             break;
             case svDoubleRef:
             {
                 ScToken* pToken = static_cast<ScToken*>(*p);
                 ScComplexRefData& rRef = pToken->GetDoubleRef();
-                if (adjustSingleRefOnInsertedTab(rRef.Ref1, nInsPos, nSheets, rOldPos, aNewPos))
-                    bRefChanged = true;
-                if (adjustSingleRefOnInsertedTab(rRef.Ref2, nInsPos, nSheets, rOldPos, aNewPos))
-                    bRefChanged = true;
+                if (adjustSingleRefOnInsertedTab(rRef.Ref1, rCxt.mnInsertPos, rCxt.mnSheets, rOldPos, aNewPos))
+                    aRes.mbReferenceModified = true;
+                if (adjustSingleRefOnInsertedTab(rRef.Ref2, rCxt.mnInsertPos, rCxt.mnSheets, rOldPos, aNewPos))
+                    aRes.mbReferenceModified = true;
             }
             break;
+            case svIndex:
+            {
+                const formula::FormulaToken* pToken = *p;
+                if (pToken->GetOpCode() == ocName)
+                {
+                    SCTAB nTab = -1;
+                    if (!pToken->IsGlobal())
+                        nTab = rOldPos.Tab();
+
+                    // Check if this named expression has been modified.
+                    if (rCxt.maUpdatedNames.isNameUpdated(nTab, pToken->GetIndex()))
+                        aRes.mbNameModified = true;
+                }
+            }
             default:
                 ;
         }
     }
-    return bRefChanged;
+    return aRes;
 }
 
 namespace {

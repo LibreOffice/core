@@ -273,12 +273,10 @@ void ScRangeData::UpdateSymbol( OUStringBuffer& rBuffer, const ScAddress& rPos,
 
 void ScRangeData::UpdateReference( sc::RefUpdateContext& rCxt, SCTAB nLocalTab )
 {
-    OUString aStr;
-    rCxt.maRange.Format(aStr, SCR_ABS_3D, pDoc);
     sc::RefUpdateResult aRes = pCode->AdjustReferenceInName(rCxt, aPos);
     bModified = aRes.mbReferenceModified;
     if (aRes.mbReferenceModified)
-        rCxt.setUpdatedName(nLocalTab, nIndex);
+        rCxt.maUpdatedNames.setUpdatedName(nLocalTab, nIndex);
 }
 
 void ScRangeData::UpdateTranspose( const ScRange& rSource, const ScAddress& rDest )
@@ -407,9 +405,6 @@ void ScRangeData::UpdateTabRef(SCTAB nOldTable, TabRefUpdateMode eMode, SCTAB nN
 
     switch (eMode)
     {
-        case Insert:
-            pCode->AdjustReferenceOnInsertedTab(nOldTable, nNewSheets, aPos);
-        break;
         case Delete:
             pCode->AdjustReferenceOnDeletedTab(nOldTable, nNewSheets, aPos);
         break;
@@ -423,6 +418,12 @@ void ScRangeData::UpdateTabRef(SCTAB nOldTable, TabRefUpdateMode eMode, SCTAB nN
     }
 }
 
+void ScRangeData::UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt, SCTAB nLocalTab )
+{
+    sc::RefUpdateResult aRes = pCode->AdjustReferenceOnInsertedTab(rCxt, aPos);
+    if (aRes.mbReferenceModified)
+        rCxt.maUpdatedNames.setUpdatedName(nLocalTab, nIndex);
+}
 
 void ScRangeData::MakeValidName( String& rName )
 {
@@ -721,6 +722,13 @@ void ScRangeName::UpdateReference(sc::RefUpdateContext& rCxt, SCTAB nLocalTab )
     DataType::iterator itr = maData.begin(), itrEnd = maData.end();
     for (; itr != itrEnd; ++itr)
         itr->second->UpdateReference(rCxt, nLocalTab);
+}
+
+void ScRangeName::UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt, SCTAB nLocalTab )
+{
+    DataType::iterator itr = maData.begin(), itrEnd = maData.end();
+    for (; itr != itrEnd; ++itr)
+        itr->second->UpdateInsertTab(rCxt, nLocalTab);
 }
 
 void ScRangeName::UpdateTabRef(SCTAB nTable, ScRangeData::TabRefUpdateMode eMode, SCTAB nNewTable, SCTAB nNewSheets)

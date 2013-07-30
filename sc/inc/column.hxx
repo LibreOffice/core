@@ -48,6 +48,7 @@ namespace sc {
     struct ColumnBlockPosition;
     class SingleColumnSpanSet;
     struct RefUpdateContext;
+    struct RefUpdateInsertTabContext;
 }
 
 class Fraction;
@@ -322,8 +323,8 @@ public:
      */
     bool UpdateReference( const sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc = NULL );
 
-    void UpdateInsertTab(SCTAB nInsPos, SCTAB nNewSheets = 1);
-    void UpdateInsertTabOnlyCells(SCTAB nInsPos, SCTAB nNewSheets = 1);
+    void UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt );
+    void UpdateInsertTabOnlyCells( sc::RefUpdateInsertTabContext& rCxt );
     void UpdateDeleteTab(SCTAB nDelPos, SCTAB nSheets = 1);
     void        UpdateMoveTab(SCTAB nOldPos, SCTAB nNewPos, SCTAB nTabNo);
     void        UpdateCompile( bool bForceIfNameInUse = false );

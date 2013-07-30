@@ -33,6 +33,7 @@ namespace sc {
 class StartListeningContext;
 class EndListeningContext;
 struct RefUpdateContext;
+struct RefUpdateInsertTabContext;
 
 }
 
@@ -209,7 +210,7 @@ public:
 
     void            UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY );
 
-    void            UpdateInsertTab(SCTAB nTable, SCTAB nNewSheets = 1);
+    void UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt );
     void            UpdateInsertTabAbs(SCTAB nTable);
     bool UpdateDeleteTab(SCTAB nTable, SCTAB nSheets = 1);
     void            UpdateMoveTab(SCTAB nOldPos, SCTAB nNewPos, SCTAB nTabNo);

@@ -60,6 +60,7 @@ namespace sc {
     class ColumnSpanSet;
     struct ColumnBlockPosition;
     struct RefUpdateContext;
+    struct RefUpdateInsertTabContext;
 }
 
 class SfxItemSet;
@@ -514,7 +515,7 @@ public:
 
     void        UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY );
 
-    void        UpdateInsertTab(SCTAB nTable, SCTAB nNewSheets = 1);
+    void UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt );
     void UpdateDeleteTab( SCTAB nTable, SCTAB nSheets = 1 );
     void        UpdateMoveTab(SCTAB nOldPos, SCTAB nNewPos, SCTAB nTabNo, ScProgress* pProgress );
     void        UpdateCompile( bool bForceIfNameInUse = false );

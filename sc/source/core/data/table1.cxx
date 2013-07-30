@@ -1580,27 +1580,28 @@ void ScTable::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY )
         aCol[i].UpdateGrow( rArea, nGrowX, nGrowY );
 }
 
-void ScTable::UpdateInsertTab(SCTAB nTable, SCTAB nNewSheets)
+void ScTable::UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt )
 {
-    if (nTab >= nTable)
+    if (nTab >= rCxt.mnInsertPos)
     {
-        nTab += nNewSheets;
+        nTab += rCxt.mnSheets;
         if (pDBDataNoName)
             pDBDataNoName->UpdateMoveTab(nTab - 1 ,nTab);
     }
-    for (SCCOL i=0; i <= MAXCOL; i++) aCol[i].UpdateInsertTab(nTable, nNewSheets);
+    for (SCCOL i=0; i <= MAXCOL; i++) aCol[i].UpdateInsertTab(rCxt);
 
     if (mpRangeName)
-    {
-        mpRangeName->UpdateTabRef(nTable, ScRangeData::Insert, 0, nNewSheets);
-        mpRangeName->UpdateTabRef(nTable, ScRangeData::Insert);
-    }
+        mpRangeName->UpdateInsertTab(rCxt, nTab);
 
     if (IsStreamValid())
         SetStreamValid(false);
 
-    if(mpCondFormatList)
-        mpCondFormatList->UpdateReference( URM_INSDEL, ScRange(0,0, nTable, MAXCOL, MAXROW, nTable+nNewSheets-1),0,0, nNewSheets);
+    if (mpCondFormatList)
+    {
+        mpCondFormatList->UpdateReference(
+            URM_INSDEL, ScRange(0, 0, rCxt.mnInsertPos, MAXCOL, MAXROW, rCxt.mnInsertPos+rCxt.mnSheets-1),
+            0, 0, rCxt.mnSheets);
+    }
 }
 
 void ScTable::UpdateDeleteTab( SCTAB nTable, SCTAB nSheets )

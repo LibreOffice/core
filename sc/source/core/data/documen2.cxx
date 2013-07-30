@@ -812,9 +812,10 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
                     pUnoBroadcaster->Broadcast( ScUpdateRefHint( URM_INSDEL, aRange, 0,0,1 ) );
 
                 SCTAB i;
+                sc::RefUpdateInsertTabContext aCxt(nNewPos, 1);
                 for (TableContainer::iterator it = maTabs.begin(); it != maTabs.end(); ++it)
                     if (*it && it != (maTabs.begin() + nOldPos))
-                        (*it)->UpdateInsertTab(nNewPos);
+                        (*it)->UpdateInsertTab(aCxt);
                 maTabs.push_back(NULL);
                 for (i = static_cast<SCTAB>(maTabs.size())-1; i > nNewPos; i--)
                     maTabs[i] = maTabs[i - 1];
@@ -841,9 +842,9 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
     }
     if (bValid)
     {
-        sc::CopyToDocContext aCxt(*this);
 
         SetNoListening( true );     // noch nicht bei CopyToTable/Insert
+        sc::CopyToDocContext aCxt(*this);
         maTabs[nOldPos]->CopyToTable(aCxt, 0, 0, MAXCOL, MAXROW, IDF_ALL, (pOnlyMarked != NULL),
                                         maTabs[nNewPos], pOnlyMarked );
         maTabs[nNewPos]->SetTabBgColor(maTabs[nOldPos]->GetTabBgColor());
@@ -855,8 +856,9 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
         aRefCxt.mnTabDelta = nDz;
         maTabs[nNewPos]->UpdateReference(aRefCxt, NULL);
 
+        sc::RefUpdateInsertTabContext aInsTabCxt(nNewPos, 1);
         maTabs[nNewPos]->UpdateInsertTabAbs(nNewPos); // alle abs. um eins hoch!!
-        maTabs[nOldPos]->UpdateInsertTab(nNewPos);
+        maTabs[nOldPos]->UpdateInsertTab(aInsTabCxt);
 
         maTabs[nOldPos]->UpdateCompile();
         maTabs[nNewPos]->UpdateCompile( true ); //  maybe already compiled in Clone, but used names need recompilation

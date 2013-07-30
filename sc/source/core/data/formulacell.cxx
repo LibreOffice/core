@@ -2556,14 +2556,14 @@ bool ScFormulaCell::UpdateReference(
     return false;
 }
 
-void ScFormulaCell::UpdateInsertTab(SCTAB nTable, SCTAB nNewSheets)
+void ScFormulaCell::UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt )
 {
-    bool bPosChanged = (nTable <= aPos.Tab());
+    bool bPosChanged = (rCxt.mnInsertPos <= aPos.Tab());
     pCode->Reset();
     if (pDocument->IsClipOrUndo() || !pCode->GetNextReferenceRPN())
     {
         if (bPosChanged)
-            aPos.IncTab(nNewSheets);
+            aPos.IncTab(rCxt.mnSheets);
 
         return;
     }
@@ -2572,9 +2572,13 @@ void ScFormulaCell::UpdateInsertTab(SCTAB nTable, SCTAB nNewSheets)
     ScAddress aOldPos = aPos;
     // IncTab _after_ EndListeningTo and _before_ Compiler UpdateInsertTab!
     if (bPosChanged)
-        aPos.IncTab(nNewSheets);
+        aPos.IncTab(rCxt.mnSheets);
 
-    pCode->AdjustReferenceOnInsertedTab(nTable, nNewSheets, aOldPos);
+    sc::RefUpdateResult aRes = pCode->AdjustReferenceOnInsertedTab(rCxt, aOldPos);
+    if (aRes.mbNameModified)
+        // Re-compile after new sheet(s) have been inserted.
+        bCompile = true;
+
     // no StartListeningTo because the new sheets have not been inserted yet.
 }
 

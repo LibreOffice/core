@@ -20,11 +20,28 @@ class ScDocument;
 
 namespace sc {
 
-struct RefUpdateContext
+/**
+ * Keep track of all named expressions that have been updated during
+ * reference update.
+ */
+class UpdatedRangeNames
 {
     typedef boost::unordered_set<sal_uInt16> NameIndicesType;
     typedef boost::unordered_map<SCTAB, NameIndicesType> UpdatedNamesType;
 
+    UpdatedNamesType maUpdatedNames;
+
+public:
+    void setUpdatedName(SCTAB nTab, sal_uInt16 nIndex);
+    bool isNameUpdated(SCTAB nTab, sal_uInt16 nIndex) const;
+};
+
+/**
+ * Context for reference update during shifting, moving or copying of cell
+ * ranges.
+ */
+struct RefUpdateContext
+{
     ScDocument& mrDoc;
 
     /**
@@ -48,17 +65,12 @@ struct RefUpdateContext
     /** Amount and direction of movement in the sheet direction. */
     SCTAB mnTabDelta;
 
-    /** All named expressions that have been updated during this reference
-     *  update run. */
-    UpdatedNamesType maUpdatedNames;
+    UpdatedRangeNames maUpdatedNames;
 
     RefUpdateContext(ScDocument& rDoc);
 
     bool isInserted() const;
     bool isDeleted() const;
-
-    void setUpdatedName(SCTAB nTab, sal_uInt16 nIndex);
-    bool isNameUpdated(SCTAB nTab, sal_uInt16 nIndex) const;
 };
 
 struct RefUpdateResult
@@ -69,6 +81,15 @@ struct RefUpdateResult
 
     RefUpdateResult();
     RefUpdateResult(const RefUpdateResult& r);
+};
+
+struct RefUpdateInsertTabContext
+{
+    SCTAB mnInsertPos;
+    SCTAB mnSheets;
+    UpdatedRangeNames maUpdatedNames;
+
+    RefUpdateInsertTabContext(SCTAB nInsertPos, SCTAB nSheets);
 };
 
 }
