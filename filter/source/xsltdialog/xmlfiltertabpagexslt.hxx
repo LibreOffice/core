@@ -33,7 +33,7 @@ class filter_info_impl;
 class XMLFilterTabPageXSLT : public TabPage
 {
 public:
-    XMLFilterTabPageXSLT( Window* pParent, ResMgr& rResMgr );
+    XMLFilterTabPageXSLT( Window* pParent);
     virtual ~XMLFilterTabPageXSLT();
 
     bool FillInfo( filter_info_impl* pInfo );
@@ -41,27 +41,23 @@ public:
 
     DECL_LINK( ClickBrowseHdl_Impl, PushButton * );
 
-    FixedText       maFTDocType;
-    Edit            maEDDocType;
 
-    FixedText       maFTExportXSLT;
-    SvtURLBox       maEDExportXSLT;
-    PushButton      maPBExprotXSLT;
+    Edit*            m_pEDDocType;
 
-    FixedText       maFTImportXSLT;
-    SvtURLBox       maEDImportXSLT;
-    PushButton      maPBImportXSLT;
+    SvtURLBox*       m_pEDExportXSLT;
+    PushButton*      m_pPBExprotXSLT;
 
-    FixedText       maFTImportTemplate;
-    SvtURLBox       maEDImportTemplate;
-    PushButton      maPBImportTemplate;
+    SvtURLBox*       m_pEDImportXSLT;
+    PushButton*      m_pPBImportXSLT;
 
-    FixedText       maFTNeedsXSLT2;
-    CheckBox	    maCBNeedsXSLT2;
+    SvtURLBox*       m_pEDImportTemplate;
+    PushButton*      m_pPBImportTemplate;
+
+    CheckBox*        m_pCBNeedsXSLT2;
 
 private:
-    void SetURL( SvtURLBox& rURLBox, const OUString& rURL );
-    OUString GetURL( SvtURLBox& rURLBox );
+    void SetURL( SvtURLBox *rURLBox, const OUString& rURL );
+    OUString GetURL( SvtURLBox* rURLBox );
 
     OUString sHTTPSchema;
     OUString sSHTTPSchema;

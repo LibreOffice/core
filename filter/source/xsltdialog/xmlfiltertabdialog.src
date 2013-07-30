@@ -18,7 +18,6 @@
  */
 
 #include "xmlfiltercommon.hrc"
-#include "xmlfiltertabpagexslt.hrc"
 #include "xmlfilterhelpids.hrc"
 
 TabDialog DLG_XML_FILTER_TABDIALOG
