@@ -41,6 +41,9 @@ private:
     DECL_LINK(OkHdl, void*);
     DECL_LINK(CancelHdl, void*);
 
+    void LoadConfig();
+    void SaveConfig();
+
 public:
     CodeCompleteOptionsDlg( Window* pWindow );
     ~CodeCompleteOptionsDlg();
