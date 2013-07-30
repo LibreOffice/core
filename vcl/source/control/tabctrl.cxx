@@ -45,9 +45,9 @@ struct ImplTabItem
 {
     sal_uInt16          mnId;
     TabPage*            mpTabPage;
-    String              maText;
-    String              maFormatText;
-    String              maHelpText;
+    OUString            maText;
+    OUString            maFormatText;
+    OUString            maHelpText;
     OString             maHelpId;
     OString             maTabName;
     Rectangle           maRect;
@@ -285,7 +285,7 @@ Size TabControl::ImplGetItemSize( ImplTabItem* pItem, long nMaxWidth )
     if( !!pItem->maTabImage )
     {
         aImageSize = pItem->maTabImage.GetSizePixel();
-        if( pItem->maFormatText.Len() )
+        if( !pItem->maFormatText.isEmpty() )
             aImageSize.Width() += GetTextHeight()/4;
     }
     aSize.Width() += aImageSize.Width();
@@ -307,8 +307,8 @@ Size TabControl::ImplGetItemSize( ImplTabItem* pItem, long nMaxWidth )
 
     // For languages with short names (e.g. Chinese), because the space is
     // normally only one pixel per char
-    if ( pItem->maFormatText.Len() < TAB_EXTRASPACE_X )
-        aSize.Width() += TAB_EXTRASPACE_X-pItem->maFormatText.Len();
+    if ( !pItem->maFormatText.isEmpty() < TAB_EXTRASPACE_X )
+        aSize.Width() += TAB_EXTRASPACE_X-pItem->maFormatText.getLength();
 
     // shorten Text if needed
     if ( aSize.Width()+4 >= nMaxWidth )
@@ -317,20 +317,20 @@ Size TabControl::ImplGetItemSize( ImplTabItem* pItem, long nMaxWidth )
         pItem->maFormatText += aAppendStr;
         do
         {
-            pItem->maFormatText.Erase( pItem->maFormatText.Len()-aAppendStr.getLength()-1, 1 );
+            pItem->maFormatText = pItem->maFormatText.replaceAt( pItem->maFormatText.getLength()-aAppendStr.getLength()-1, 1, "" );
             aSize.Width() = GetCtrlTextWidth( pItem->maFormatText );
             aSize.Width() += aImageSize.Width();
             aSize.Width() += TAB_TABOFFSET_X*2;
         }
-        while ( (aSize.Width()+4 >= nMaxWidth) && (pItem->maFormatText.Len() > aAppendStr.getLength()) );
+        while ( (aSize.Width()+4 >= nMaxWidth) && (pItem->maFormatText.getLength() > aAppendStr.getLength()) );
         if ( aSize.Width()+4 >= nMaxWidth )
         {
-            pItem->maFormatText.Assign( '.' );
+            pItem->maFormatText = ".";
             aSize.Width() = 1;
         }
     }
 
-    if( pItem->maFormatText.Len() == 0 )
+    if( pItem->maFormatText.isEmpty() )
     {
         if( aSize.Height() < aImageSize.Height()+4 ) //leave space for focus rect
             aSize.Height() = aImageSize.Height()+4;
@@ -699,11 +699,11 @@ void TabControl::ImplShowFocus()
     if( !! rItem.maTabImage )
     {
         aImageSize = rItem.maTabImage.GetSizePixel();
-        if( rItem.maFormatText.Len() )
+        if( !rItem.maFormatText.isEmpty() )
             aImageSize.Width() += GetTextHeight()/4;
     }
 
-    if( rItem.maFormatText.Len() )
+    if( !rItem.maFormatText.isEmpty() )
     {
         // show focus around text
         aRect.Left()   = aRect.Left()+aImageSize.Width()+((aTabSize.Width()-nTextWidth-aImageSize.Width())/2)-nOff-1-1;
@@ -900,12 +900,12 @@ void TabControl::ImplDrawItem( ImplTabItem* pItem, const Rectangle& rCurRect, bo
     if( !! pItem->maTabImage )
     {
         aImageSize = pItem->maTabImage.GetSizePixel();
-        if( pItem->maFormatText.Len() )
+        if( !pItem->maFormatText.isEmpty() )
             aImageSize.Width() += GetTextHeight()/4;
     }
     long nXPos = aRect.Left()+((aTabSize.Width()-nTextWidth-aImageSize.Width())/2)-nOff-nOff3;
     long nYPos = aRect.Top()+((aTabSize.Height()-nTextHeight)/2)-nOff3;
-    if( pItem->maFormatText.Len() )
+    if( !pItem->maFormatText.isEmpty() )
     {
         sal_uInt16 nStyle = TEXT_DRAW_MNEMONIC;
         if( ! pItem->mbEnabled )
@@ -1344,8 +1344,8 @@ void TabControl::RequestHelp( const HelpEvent& rHEvt )
     {
         if ( rHEvt.GetMode() & HELPMODE_BALLOON )
         {
-            XubString aStr = GetHelpText( nItemId );
-            if ( aStr.Len() )
+            OUString aStr = GetHelpText( nItemId );
+            if ( !aStr.isEmpty() )
             {
                 Rectangle aItemRect = ImplGetTabRect( GetPagePos( nItemId ) );
                 Point aPt = OutputToScreenPixel( aItemRect.TopLeft() );
@@ -1375,7 +1375,7 @@ void TabControl::RequestHelp( const HelpEvent& rHEvt )
         if ( rHEvt.GetMode() & (HELPMODE_QUICK | HELPMODE_BALLOON) )
         {
             ImplTabItem* pItem = ImplGetItem( nItemId );
-            const XubString& rStr = pItem->maText;
+            const OUString& rStr = pItem->maText;
             if ( rStr != pItem->maFormatText )
             {
                 Rectangle aItemRect = ImplGetTabRect( GetPagePos( nItemId ) );
@@ -1385,7 +1385,7 @@ void TabControl::RequestHelp( const HelpEvent& rHEvt )
                 aPt = OutputToScreenPixel( aItemRect.BottomRight() );
                 aItemRect.Right()  = aPt.X();
                 aItemRect.Bottom() = aPt.Y();
-                if ( rStr.Len() )
+                if ( !rStr.isEmpty() )
                 {
                     if ( rHEvt.GetMode() & HELPMODE_BALLOON )
                         Help::ShowBalloon( this, aItemRect.Center(), aItemRect, rStr );
@@ -1399,9 +1399,9 @@ void TabControl::RequestHelp( const HelpEvent& rHEvt )
         if ( rHEvt.GetMode() & HELPMODE_QUICK )
         {
             ImplTabItem* pItem = ImplGetItem( nItemId );
-            const XubString& rHelpText = pItem->maHelpText;
+            const OUString& rHelpText = pItem->maHelpText;
             // show tooltip if not text but image is set and helptext is available
-            if ( rHelpText.Len() > 0 && pItem->maText.Len() == 0 && !!pItem->maTabImage )
+            if ( !rHelpText.isEmpty() && pItem->maText.isEmpty() && !!pItem->maTabImage )
             {
                 Rectangle aItemRect = ImplGetTabRect( GetPagePos( nItemId ) );
                 Point aPt = OutputToScreenPixel( aItemRect.TopLeft() );
@@ -1645,7 +1645,7 @@ void TabControl::InsertPage( const ResId& rResId, sal_uInt16 nPos )
         nItemId = sal::static_int_cast<sal_uInt16>(ReadLongRes());
 
     // Text
-    XubString aTmpStr;
+    OUString aTmpStr;
     if( nObjMask & RSC_TABCONTROLITEM_TEXT )
         aTmpStr = ReadStringRes();
     InsertPage( nItemId, aTmpStr, nPos );
@@ -1660,7 +1660,7 @@ void TabControl::InsertPage( const ResId& rResId, sal_uInt16 nPos )
 
 // -----------------------------------------------------------------------
 
-void TabControl::InsertPage( sal_uInt16 nPageId, const XubString& rText,
+void TabControl::InsertPage( sal_uInt16 nPageId, const OUString& rText,
                              sal_uInt16 nPos )
 {
     DBG_ASSERT( nPageId, "TabControl::InsertPage(): PageId == 0" );
@@ -1984,7 +1984,7 @@ TabPage* TabControl::GetTabPage( sal_uInt16 nPageId ) const
 
 // -----------------------------------------------------------------------
 
-void TabControl::SetPageText( sal_uInt16 nPageId, const XubString& rText )
+void TabControl::SetPageText( sal_uInt16 nPageId, const OUString& rText )
 {
     ImplTabItem* pItem = ImplGetItem( nPageId );
 
@@ -2007,45 +2007,41 @@ void TabControl::SetPageText( sal_uInt16 nPageId, const XubString& rText )
 
 // -----------------------------------------------------------------------
 
-XubString TabControl::GetPageText( sal_uInt16 nPageId ) const
+OUString TabControl::GetPageText( sal_uInt16 nPageId ) const
 {
     ImplTabItem* pItem = ImplGetItem( nPageId );
 
-    if ( pItem )
-        return pItem->maText;
-    else
-        return ImplGetSVEmptyStr();
+    assert( pItem );
+
+    return pItem->maText;
 }
 
 // -----------------------------------------------------------------------
 
-void TabControl::SetHelpText( sal_uInt16 nPageId, const XubString& rText )
+void TabControl::SetHelpText( sal_uInt16 nPageId, const OUString& rText )
 {
     ImplTabItem* pItem = ImplGetItem( nPageId );
 
-    if ( pItem )
-        pItem->maHelpText = rText;
+    assert( pItem );
+
+    pItem->maHelpText = rText;
 }
 
 // -----------------------------------------------------------------------
 
-const XubString& TabControl::GetHelpText( sal_uInt16 nPageId ) const
+const OUString& TabControl::GetHelpText( sal_uInt16 nPageId ) const
 {
     ImplTabItem* pItem = ImplGetItem( nPageId );
 
-    if ( pItem )
+    assert( pItem );
+
+    if ( pItem->maHelpText.isEmpty() && !pItem->maHelpId.isEmpty() )
     {
-        if ( !pItem->maHelpText.Len() && !pItem->maHelpId.isEmpty() )
-        {
-            Help* pHelp = Application::GetHelp();
-            if ( pHelp )
-                pItem->maHelpText = pHelp->GetHelpText( OStringToOUString( pItem->maHelpId, RTL_TEXTENCODING_UTF8 ), this );
-        }
-
-        return pItem->maHelpText;
+        Help* pHelp = Application::GetHelp();
+        if ( pHelp )
+            pItem->maHelpText = pHelp->GetHelpText( OStringToOUString( pItem->maHelpId, RTL_TEXTENCODING_UTF8 ), this );
     }
-    else
-        return ImplGetSVEmptyStr();
+    return pItem->maHelpText;
 }
 
 // -----------------------------------------------------------------------

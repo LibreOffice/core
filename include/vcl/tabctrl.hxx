@@ -122,7 +122,7 @@ public:
 
     void                InsertPage( const ResId& rResId,
                                     sal_uInt16 nPos = TAB_APPEND );
-    void                InsertPage( sal_uInt16 nPageId, const XubString& rText,
+    void                InsertPage( sal_uInt16 nPageId, const OUString& rText,
                                     sal_uInt16 nPos = TAB_APPEND );
     void                RemovePage( sal_uInt16 nPageId );
     void                Clear();
@@ -148,11 +148,11 @@ public:
     void                SetTabPage( sal_uInt16 nPageId, TabPage* pPage );
     TabPage*            GetTabPage( sal_uInt16 nPageId ) const;
 
-    void                SetPageText( sal_uInt16 nPageId, const XubString& rText );
-    XubString           GetPageText( sal_uInt16 nPageId ) const;
+    void                SetPageText( sal_uInt16 nPageId, const OUString& rText );
+    OUString            GetPageText( sal_uInt16 nPageId ) const;
 
-    void                SetHelpText( sal_uInt16 nPageId, const XubString& rText );
-    const XubString&    GetHelpText( sal_uInt16 nPageId ) const;
+    void                SetHelpText( sal_uInt16 nPageId, const OUString& rText );
+    const OUString&     GetHelpText( sal_uInt16 nPageId ) const;
 
     void                SetHelpId( sal_uInt16 nPageId, const OString& rId ) const;
     OString             GetHelpId( sal_uInt16 nPageId ) const;
