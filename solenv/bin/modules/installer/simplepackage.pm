@@ -424,7 +424,10 @@ sub create_package
                 # participate in the signing and their validity can be
                 # guaranteed.
 
-                $systemcall = "codesign --sign $ENV{'MACOSX_CODESIGNING_IDENTITY'} --force -v -v -v $localtempdir/$folder/$volume_name_classic_app.app";
+                $entitlements = '';
+                $entitlements = "--entitlements $ENV{'BUILDDIR'}/lo.xcent" if defined($ENV{'ENABLE_MACOSX_SANDBOX'});
+
+                $systemcall = "codesign --sign $ENV{'MACOSX_CODESIGNING_IDENTITY'} --force $entitlements -v -v -v $localtempdir/$folder/$volume_name_classic_app.app";
                 print "... $systemcall ...\n";
                 my $returnvalue = system($systemcall);
                 $infoline = "Systemcall: $systemcall\n";
