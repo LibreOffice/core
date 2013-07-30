@@ -2504,24 +2504,22 @@ public:
 
 class MoveTabUpdater
 {
+    sc::RefUpdateMoveTabContext& mrCxt;
     sc::CellTextAttrStoreType& mrTextAttrs;
     sc::CellTextAttrStoreType::iterator miAttrPos;
     SCTAB mnTab;
-    SCTAB mnOldPos;
-    SCTAB mnNewPos;
     bool mbModified;
 public:
-    MoveTabUpdater(sc::CellTextAttrStoreType& rTextAttrs, SCTAB nTab, SCTAB nOldPos, SCTAB nNewPos) :
+    MoveTabUpdater(sc::RefUpdateMoveTabContext& rCxt, sc::CellTextAttrStoreType& rTextAttrs, SCTAB nTab) :
+        mrCxt(rCxt),
         mrTextAttrs(rTextAttrs),
         miAttrPos(rTextAttrs.begin()),
         mnTab(nTab),
-        mnOldPos(nOldPos),
-        mnNewPos(nNewPos),
         mbModified(false) {}
 
     void operator() (size_t /*nRow*/, ScFormulaCell* pCell)
     {
-        pCell->UpdateMoveTab(mnOldPos, mnNewPos, mnTab);
+        pCell->UpdateMoveTab(mrCxt, mnTab);
         mbModified = true;
     }
 
@@ -2912,12 +2910,12 @@ void ScColumn::UpdateInsertTabAbs(SCTAB nNewPos)
         CellStorageModified();
 }
 
-void ScColumn::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos, SCTAB nTabNo )
+void ScColumn::UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt, SCTAB nTabNo )
 {
     nTab = nTabNo;
     pAttrArray->SetTab( nTabNo );
 
-    MoveTabUpdater aFunc(maCellTextAttrs, nTab, nOldPos, nNewPos);
+    MoveTabUpdater aFunc(rCxt, maCellTextAttrs, nTab);
     sc::ProcessFormulaEditText(maCells, aFunc);
     if (aFunc.isModified())
         CellStorageModified();

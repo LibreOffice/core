@@ -1588,13 +1588,9 @@ void ScTable::UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt )
         if (pDBDataNoName)
             pDBDataNoName->UpdateMoveTab(nTab - 1 ,nTab);
     }
-    for (SCCOL i=0; i <= MAXCOL; i++) aCol[i].UpdateInsertTab(rCxt);
 
     if (mpRangeName)
         mpRangeName->UpdateInsertTab(rCxt, nTab);
-
-    if (IsStreamValid())
-        SetStreamValid(false);
 
     if (mpCondFormatList)
     {
@@ -1602,6 +1598,11 @@ void ScTable::UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt )
             URM_INSDEL, ScRange(0, 0, rCxt.mnInsertPos, MAXCOL, MAXROW, rCxt.mnInsertPos+rCxt.mnSheets-1),
             0, 0, rCxt.mnSheets);
     }
+
+    for (SCCOL i=0; i <= MAXCOL; i++) aCol[i].UpdateInsertTab(rCxt);
+
+    if (IsStreamValid())
+        SetStreamValid(false);
 }
 
 void ScTable::UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt )
@@ -1613,14 +1614,8 @@ void ScTable::UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt )
             pDBDataNoName->UpdateMoveTab(nTab + 1,nTab);
     }
 
-    for (SCCOL i = 0; i <= MAXCOL; ++i)
-        aCol[i].UpdateDeleteTab(rCxt);
-
     if (mpRangeName)
         mpRangeName->UpdateDeleteTab(rCxt, nTab);
-
-    if (IsStreamValid())
-        SetStreamValid(false);
 
     if (mpCondFormatList)
     {
@@ -1628,29 +1623,36 @@ void ScTable::UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt )
             URM_INSDEL, ScRange(0,0, rCxt.mnDeletePos, MAXCOL, MAXROW, rCxt.mnDeletePos+rCxt.mnSheets-1),
             0, 0, -1*rCxt.mnSheets);
     }
+
+    for (SCCOL i = 0; i <= MAXCOL; ++i)
+        aCol[i].UpdateDeleteTab(rCxt);
+
+    if (IsStreamValid())
+        SetStreamValid(false);
 }
 
-void ScTable::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos, SCTAB nTabNo,
-        ScProgress* pProgress )
+void ScTable::UpdateMoveTab(
+    sc::RefUpdateMoveTabContext& rCxt, SCTAB nTabNo, ScProgress* pProgress )
 {
     nTab = nTabNo;
+    if (mpRangeName)
+        mpRangeName->UpdateMoveTab(rCxt, nTab);
+
+    if (pDBDataNoName)
+        pDBDataNoName->UpdateMoveTab(rCxt.mnOldPos, rCxt.mnNewPos);
+
+    if(mpCondFormatList)
+        mpCondFormatList->UpdateMoveTab(rCxt.mnOldPos, rCxt.mnNewPos);
+
     for ( SCCOL i=0; i <= MAXCOL; i++ )
     {
-        aCol[i].UpdateMoveTab( nOldPos, nNewPos, nTabNo );
+        aCol[i].UpdateMoveTab(rCxt, nTabNo);
         if (pProgress)
             pProgress->SetState(pProgress->GetState() + aCol[i].GetCodeCount());
     }
 
-    if (mpRangeName)
-        mpRangeName->UpdateTabRef(nOldPos, ScRangeData::Move, nNewPos);
-
     if (IsStreamValid())
         SetStreamValid(false);
-   if (pDBDataNoName)
-        pDBDataNoName->UpdateMoveTab(nOldPos, nNewPos);
-
-    if(mpCondFormatList)
-        mpCondFormatList->UpdateMoveTab(nOldPos, nNewPos);
 }
 
 void ScTable::UpdateCompile( bool bForceIfNameInUse )

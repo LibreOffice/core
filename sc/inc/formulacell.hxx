@@ -35,6 +35,7 @@ class EndListeningContext;
 struct RefUpdateContext;
 struct RefUpdateInsertTabContext;
 struct RefUpdateDeleteTabContext;
+struct RefUpdateMoveTabContext;
 
 }
 
@@ -214,7 +215,7 @@ public:
     void UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt );
     void            UpdateInsertTabAbs(SCTAB nTable);
     bool UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt );
-    void            UpdateMoveTab(SCTAB nOldPos, SCTAB nNewPos, SCTAB nTabNo);
+    void UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt, SCTAB nTabNo );
     void            UpdateRenameTab(SCTAB nTable, const OUString& rName);
     bool            TestTabRefAbs(SCTAB nTable);
     void            UpdateCompile( bool bForceIfNameInUse = false );

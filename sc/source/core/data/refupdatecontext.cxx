@@ -67,6 +67,9 @@ RefUpdateInsertTabContext::RefUpdateInsertTabContext(SCTAB nInsertPos, SCTAB nSh
 RefUpdateDeleteTabContext::RefUpdateDeleteTabContext(SCTAB nDeletePos, SCTAB nSheets) :
     mnDeletePos(nDeletePos), mnSheets(nSheets) {}
 
+RefUpdateMoveTabContext::RefUpdateMoveTabContext(SCTAB nOldPos, SCTAB nNewPos) :
+    mnOldPos(nOldPos), mnNewPos(nNewPos) {}
+
 }
 
 

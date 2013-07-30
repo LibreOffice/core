@@ -50,6 +50,7 @@ namespace sc {
     struct RefUpdateContext;
     struct RefUpdateInsertTabContext;
     struct RefUpdateDeleteTabContext;
+    struct RefUpdateMoveTabContext;
 }
 
 class Fraction;
@@ -327,7 +328,7 @@ public:
     void UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt );
     void UpdateInsertTabOnlyCells( sc::RefUpdateInsertTabContext& rCxt );
     void UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt );
-    void        UpdateMoveTab(SCTAB nOldPos, SCTAB nNewPos, SCTAB nTabNo);
+    void UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt, SCTAB nTabNo );
     void        UpdateCompile( bool bForceIfNameInUse = false );
     void        UpdateTranspose( const ScRange& rSource, const ScAddress& rDest,
                                     ScDocument* pUndoDoc );

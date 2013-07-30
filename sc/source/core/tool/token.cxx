@@ -2794,7 +2794,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnInsertedTab( sc::RefUpdateIns
 
 namespace {
 
-void adjustTabOnMove( ScAddress& rPos, SCTAB nOldPos, SCTAB nNewPos )
+bool adjustTabOnMove( ScAddress& rPos, SCTAB nOldPos, SCTAB nNewPos )
 {
     // Sheets below the lower bound or above the uppper bound will not change.
     SCTAB nLowerBound = std::min(nOldPos, nNewPos);
@@ -2802,12 +2802,12 @@ void adjustTabOnMove( ScAddress& rPos, SCTAB nOldPos, SCTAB nNewPos )
 
     if (rPos.Tab() < nLowerBound || nUpperBound < rPos.Tab())
         // Outside the boundary. Nothing to adjust.
-        return;
+        return false;
 
     if (rPos.Tab() == nOldPos)
     {
         rPos.SetTab(nNewPos);
-        return;
+        return true;
     }
 
     // It's somewhere in between.
@@ -2821,17 +2821,20 @@ void adjustTabOnMove( ScAddress& rPos, SCTAB nOldPos, SCTAB nNewPos )
         // Moving a sheet to the left. The rest of the sheets shifts to the right.
         rPos.IncTab();
     }
+    return true;
 }
 
 }
 
-void ScTokenArray::AdjustReferenceOnMovedTab( SCTAB nOldPos, SCTAB nNewPos, const ScAddress& rOldPos )
+sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMovedTab( sc::RefUpdateMoveTabContext& rCxt, const ScAddress& rOldPos )
 {
-    if (nOldPos == nNewPos)
-        return;
+    sc::RefUpdateResult aRes;
+    if (rCxt.mnOldPos == rCxt.mnNewPos)
+        return aRes;
 
     ScAddress aNewPos = rOldPos;
-    adjustTabOnMove(aNewPos, nOldPos, nNewPos);
+    if (adjustTabOnMove(aNewPos, rCxt.mnOldPos, rCxt.mnNewPos))
+        aRes.mbReferenceModified = true;
 
     FormulaToken** p = pCode;
     FormulaToken** pEnd = p + static_cast<size_t>(nLen);
@@ -2844,9 +2847,9 @@ void ScTokenArray::AdjustReferenceOnMovedTab( SCTAB nOldPos, SCTAB nNewPos, cons
                 ScToken* pToken = static_cast<ScToken*>(*p);
                 ScSingleRefData& rRef = pToken->GetSingleRef();
                 ScAddress aAbs = rRef.toAbs(rOldPos);
-                adjustTabOnMove(aAbs, nOldPos, nNewPos);
+                if (adjustTabOnMove(aAbs, rCxt.mnOldPos, rCxt.mnNewPos))
+                    aRes.mbReferenceModified = true;
                 rRef.SetAddress(aAbs, aNewPos);
-
             }
             break;
             case svDoubleRef:
@@ -2854,15 +2857,34 @@ void ScTokenArray::AdjustReferenceOnMovedTab( SCTAB nOldPos, SCTAB nNewPos, cons
                 ScToken* pToken = static_cast<ScToken*>(*p);
                 ScComplexRefData& rRef = pToken->GetDoubleRef();
                 ScRange aAbs = rRef.toAbs(rOldPos);
-                adjustTabOnMove(aAbs.aStart, nOldPos, nNewPos);
-                adjustTabOnMove(aAbs.aEnd, nOldPos, nNewPos);
+                if (adjustTabOnMove(aAbs.aStart, rCxt.mnOldPos, rCxt.mnNewPos))
+                    aRes.mbReferenceModified = true;
+                if (adjustTabOnMove(aAbs.aEnd, rCxt.mnOldPos, rCxt.mnNewPos))
+                    aRes.mbReferenceModified = true;
                 rRef.SetRange(aAbs, aNewPos);
+            }
+            break;
+            case svIndex:
+            {
+                const formula::FormulaToken* pToken = *p;
+                if (pToken->GetOpCode() == ocName)
+                {
+                    SCTAB nTab = -1;
+                    if (!pToken->IsGlobal())
+                        nTab = rOldPos.Tab();
+
+                    // Check if this named expression has been modified.
+                    if (rCxt.maUpdatedNames.isNameUpdated(nTab, pToken->GetIndex()))
+                        aRes.mbNameModified = true;
+                }
             }
             break;
             default:
                 ;
         }
     }
+
+    return aRes;
 }
 
 #if DEBUG_FORMULA_COMPILER

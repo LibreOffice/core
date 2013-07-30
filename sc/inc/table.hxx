@@ -62,6 +62,7 @@ namespace sc {
     struct RefUpdateContext;
     struct RefUpdateInsertTabContext;
     struct RefUpdateDeleteTabContext;
+    struct RefUpdateMoveTabContext;
 }
 
 class SfxItemSet;
@@ -518,7 +519,7 @@ public:
 
     void UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt );
     void UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt );
-    void        UpdateMoveTab(SCTAB nOldPos, SCTAB nNewPos, SCTAB nTabNo, ScProgress* pProgress );
+    void UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt, SCTAB nTabNo, ScProgress* pProgress );
     void        UpdateCompile( bool bForceIfNameInUse = false );
     void        SetTabNo(SCTAB nNewTab);
     void        FindRangeNamesInUse(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
@@ -828,7 +829,6 @@ public:
 
     void SetRangeName(ScRangeName* pNew);
     ScRangeName* GetRangeName() const;
-    void        UpdateMoveTab(SCTAB nOldPos,SCTAB nNewPos);
 
     ScConditionalFormatList* GetCondFormList();
     const ScConditionalFormatList* GetCondFormList() const;

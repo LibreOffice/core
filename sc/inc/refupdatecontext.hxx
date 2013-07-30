@@ -101,6 +101,15 @@ struct RefUpdateDeleteTabContext
     RefUpdateDeleteTabContext(SCTAB nInsertPos, SCTAB nSheets);
 };
 
+struct RefUpdateMoveTabContext
+{
+    SCTAB mnOldPos;
+    SCTAB mnNewPos;
+    UpdatedRangeNames maUpdatedNames;
+
+    RefUpdateMoveTabContext(SCTAB nOldPos, SCTAB nNewPos);
+};
+
 }
 
 #endif

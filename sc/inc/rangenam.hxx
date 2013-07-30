@@ -37,6 +37,7 @@ namespace sc {
     struct RefUpdateContext;
     struct RefUpdateInsertTabContext;
     struct RefUpdateDeleteTabContext;
+    struct RefUpdateMoveTabContext;
 }
 
 typedef sal_uInt16 RangeType;
@@ -74,8 +75,6 @@ private:
     void CompileRangeData( const OUString& rSymbol, bool bSetError );
     void InitCode();
 public:
-
-    enum TabRefUpdateMode { Insert = 1, Delete = 2, Move = 3 };
 
     typedef ::std::map<sal_uInt16, sal_uInt16> IndexMap;
 
@@ -142,9 +141,9 @@ public:
     SC_DLLPUBLIC bool           IsValidReference( ScRange& rRef ) const;
     bool                        IsRangeAtBlock( const ScRange& ) const;
 
-    void UpdateTabRef(SCTAB nOldTable, TabRefUpdateMode eMode, SCTAB nNewTable, SCTAB nNewSheets);
     void UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt, SCTAB nLocalTab = -1 );
     void UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt, SCTAB nLocalTab = -1 );
+    void UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt, SCTAB nLocalTab = -1 );
 
     void            ValidateTabRefs();
 
@@ -195,7 +194,7 @@ public:
     void UpdateReference( sc::RefUpdateContext& rCxt, SCTAB nLocalTab = -1 );
     void UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt, SCTAB nLocalTab = -1 );
     void UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt, SCTAB nLocalTab = -1 );
-    void UpdateTabRef(SCTAB nTable, ScRangeData::TabRefUpdateMode eMode, SCTAB nNewTable = 0, SCTAB nNewSheets = 1);
+    void UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt, SCTAB nLocalTab = -1 );
     void UpdateTranspose(const ScRange& rSource, const ScAddress& rDest);
     void UpdateGrow(const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY);
 

@@ -87,6 +87,7 @@
 #include "formulacell.hxx"
 #include "clipcontext.hxx"
 #include "refupdatecontext.hxx"
+#include "scopetools.hxx"
 
 using namespace com::sun::star;
 
@@ -700,8 +701,8 @@ bool ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos, ScProgress* pProgress )
     {
         if (maTabs[nOldPos])
         {
-            bool bOldAutoCalc = GetAutoCalc();
-            SetAutoCalc( false );   // Mehrfachberechnungen vermeiden
+            sc::AutoCalcSwitch aACSwitch(*this, false);
+
             SetNoListening( true );
             if (nNewPos == SC_TAB_APPEND || nNewPos >= nTabCount)
                 nNewPos = nTabCount-1;
@@ -709,10 +710,13 @@ bool ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos, ScProgress* pProgress )
             //  Referenz-Updaterei
             //! mit UpdateReference zusammenfassen!
 
+            sc::RefUpdateMoveTabContext aCxt(nOldPos, nNewPos);
+
             SCsTAB nDz = ((SCsTAB)nNewPos) - (SCsTAB)nOldPos;
             ScRange aSourceRange( 0,0,nOldPos, MAXCOL,MAXROW,nOldPos );
             if (pRangeName)
-                pRangeName->UpdateTabRef(nOldPos, ScRangeData::Move, nNewPos);
+                pRangeName->UpdateMoveTab(aCxt);
+
             pDBCollection->UpdateMoveTab( nOldPos, nNewPos );
             xColNameRanges->UpdateReference( URM_REORDER, this, aSourceRange, 0,0,nDz );
             xRowNameRanges->UpdateReference( URM_REORDER, this, aSourceRange, 0,0,nDz );
@@ -735,7 +739,7 @@ bool ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos, ScProgress* pProgress )
             TableContainer::iterator it = maTabs.begin();
             for (SCTAB i = 0; i < nTabCount; i++)
                 if (maTabs[i])
-                    maTabs[i]->UpdateMoveTab( nOldPos, nNewPos, i, pProgress );
+                    maTabs[i]->UpdateMoveTab(aCxt, i, pProgress);
             it = maTabs.begin();
             for (; it != maTabs.end(); ++it)
                 if (*it)
@@ -748,7 +752,6 @@ bool ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos, ScProgress* pProgress )
             // sheet names of references may not be valid until sheet is moved
             pChartListenerCollection->UpdateScheduledSeriesRanges();
             SetDirty();
-            SetAutoCalc( bOldAutoCalc );
 
             if (pDrawLayer)
                 DrawMovePage( static_cast<sal_uInt16>(nOldPos), static_cast<sal_uInt16>(nNewPos) );
@@ -795,11 +798,13 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
             {
                 SetNoListening( true );
 
+                sc::RefUpdateInsertTabContext aCxt(nNewPos, 1);
                 ScRange aRange( 0,0,nNewPos, MAXCOL,MAXROW,MAXTAB );
                 xColNameRanges->UpdateReference( URM_INSDEL, this, aRange, 0,0,1 );
                 xRowNameRanges->UpdateReference( URM_INSDEL, this, aRange, 0,0,1 );
                 if (pRangeName)
-                    pRangeName->UpdateTabRef(nNewPos, ScRangeData::Insert);
+                    pRangeName->UpdateInsertTab(aCxt);
+
                 pDBCollection->UpdateReference(
                                     URM_INSDEL, 0,0,nNewPos, MAXCOL,MAXROW,MAXTAB, 0,0,1 );
                 if (pDPCollection)
@@ -812,7 +817,6 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
                     pUnoBroadcaster->Broadcast( ScUpdateRefHint( URM_INSDEL, aRange, 0,0,1 ) );
 
                 SCTAB i;
-                sc::RefUpdateInsertTabContext aCxt(nNewPos, 1);
                 for (TableContainer::iterator it = maTabs.begin(); it != maTabs.end(); ++it)
                     if (*it && it != (maTabs.begin() + nOldPos))
                         (*it)->UpdateInsertTab(aCxt);

@@ -592,15 +592,16 @@ void ScConditionEntry::UpdateReference( UpdateRefMode eUpdateRefMode,
 
 void ScConditionEntry::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos )
 {
+    sc::RefUpdateMoveTabContext aCxt(nOldPos, nNewPos);
     if (pFormula1)
     {
-        pFormula1->AdjustReferenceOnMovedTab(nOldPos, nNewPos, aSrcPos);
+        pFormula1->AdjustReferenceOnMovedTab(aCxt, aSrcPos);
         DELETEZ(pFCell1);
     }
 
     if (pFormula2)
     {
-        pFormula2->AdjustReferenceOnMovedTab(nOldPos, nNewPos, aSrcPos);
+        pFormula2->AdjustReferenceOnMovedTab(aCxt, aSrcPos);
         DELETEZ(pFCell2);
     }
 }

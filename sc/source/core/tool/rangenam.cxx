@@ -397,24 +397,6 @@ bool ScRangeData::IsValidReference( ScRange& rRange ) const
     return false;
 }
 
-void ScRangeData::UpdateTabRef(SCTAB nOldTable, TabRefUpdateMode eMode, SCTAB nNewTable, SCTAB nNewSheets)
-{
-    pCode->Reset();
-    if (!pCode->GetNextReference())
-        return;
-
-    switch (eMode)
-    {
-        case Move:
-            pCode->AdjustReferenceOnMovedTab(nOldTable, nNewTable, aPos);
-        break;
-        default:
-        {
-            OSL_FAIL("ScRangeName::UpdateTabRef: Unknown Flag");
-        }
-    }
-}
-
 void ScRangeData::UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt, SCTAB nLocalTab )
 {
     sc::RefUpdateResult aRes = pCode->AdjustReferenceOnInsertedTab(rCxt, aPos);
@@ -425,6 +407,13 @@ void ScRangeData::UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt, SCTAB nL
 void ScRangeData::UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt, SCTAB nLocalTab )
 {
     sc::RefUpdateResult aRes = pCode->AdjustReferenceOnDeletedTab(rCxt, aPos);
+    if (aRes.mbReferenceModified)
+        rCxt.maUpdatedNames.setUpdatedName(nLocalTab, nIndex);
+}
+
+void ScRangeData::UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt, SCTAB nLocalTab )
+{
+    sc::RefUpdateResult aRes = pCode->AdjustReferenceOnMovedTab(rCxt, aPos);
     if (aRes.mbReferenceModified)
         rCxt.maUpdatedNames.setUpdatedName(nLocalTab, nIndex);
 }
@@ -742,11 +731,11 @@ void ScRangeName::UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt, SCTAB nL
         itr->second->UpdateDeleteTab(rCxt, nLocalTab);
 }
 
-void ScRangeName::UpdateTabRef(SCTAB nTable, ScRangeData::TabRefUpdateMode eMode, SCTAB nNewTable, SCTAB nNewSheets)
+void ScRangeName::UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt, SCTAB nLocalTab )
 {
     DataType::iterator itr = maData.begin(), itrEnd = maData.end();
     for (; itr != itrEnd; ++itr)
-        itr->second->UpdateTabRef(nTable, eMode, nNewTable, nNewSheets);
+        itr->second->UpdateMoveTab(rCxt, nLocalTab);
 }
 
 void ScRangeName::UpdateTranspose(const ScRange& rSource, const ScAddress& rDest)
