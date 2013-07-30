@@ -177,8 +177,6 @@ private:
     void createUniqueFolderName(INetURLObject* pURL);
     ::dbaccess::DATASOURCE_TYPE VerifyDataSourceType(const ::dbaccess::DATASOURCE_TYPE _DatabaseType) const;
 
-    OUString getDefaultDatabaseType() const;
-
     void updateTypeDependentStates();
     sal_Bool callSaveAsDialog();
     sal_Bool IsConnectionUrlRequired();
