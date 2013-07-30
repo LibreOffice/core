@@ -42,13 +42,13 @@ CodeCompleteOptionsDlg::CodeCompleteOptionsDlg( Window* pWindow )
 
     pOkBtn->SetClickHdl( LINK( this, CodeCompleteOptionsDlg, OkHdl ) );
     pCancelBtn->SetClickHdl( LINK( this, CodeCompleteOptionsDlg, CancelHdl ) );
-    //LoadConfig();
+    LoadConfig();
 
-    pCodeCompleteChk->Check( CodeCompleteOptions::IsCodeCompleteOn() );
+    /*pCodeCompleteChk->Check( CodeCompleteOptions::IsCodeCompleteOn() );
     pAutocloseProcChk->Check( CodeCompleteOptions::IsProcedureAutoCompleteOn() );
     pAutocloseQuotesChk->Check( CodeCompleteOptions::IsAutoCloseQuotesOn() );
     pAutocloseParenChk->Check( CodeCompleteOptions::IsAutoCloseParenthesisOn() );
-    pAutoCorrectSpellingChk->Check( CodeCompleteOptions::IsAutoCorrectSpellingOn() );
+    pAutoCorrectSpellingChk->Check( CodeCompleteOptions::IsAutoCorrectSpellingOn() );*/
 
 }
 
@@ -64,7 +64,7 @@ IMPL_LINK_NOARG(CodeCompleteOptionsDlg, OkHdl)
     CodeCompleteOptions::SetAutoCloseParenthesisOn( pAutocloseParenChk->IsChecked() );
     CodeCompleteOptions::SetAutoCorrectSpellingOn( pAutoCorrectSpellingChk->IsChecked() );
 
-    //SaveConfig();
+    SaveConfig();
     Close();
     return 0;
 }
