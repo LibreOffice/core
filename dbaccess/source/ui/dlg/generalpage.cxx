@@ -65,20 +65,24 @@ namespace dbaui
         ,m_eLastMessage                 ( smNone )
         ,m_bDisplayingInvalid           ( sal_False )
         ,m_bInitTypeList                ( true )
+        ,m_bInitEmbeddedDBList          ( true )
         ,m_pDatasourceType              ( NULL )
+        ,m_pEmbeddedDBType              ( NULL )
         ,m_pCollection                  ( NULL )
     {
         get( m_pDatasourceType, "datasourceType" );
+        get( m_pEmbeddedDBType, "embeddeddbList" );
         get( m_pSpecialMessage, "specialMessage" );
 
         // extract the datasource type collection from the item set
         DbuTypeCollectionItem* pCollectionItem = PTR_CAST(DbuTypeCollectionItem, _rItems.GetItem(DSID_TYPECOLLECTION));
         if (pCollectionItem)
             m_pCollection = pCollectionItem->getCollection();
-        OSL_ENSURE(m_pCollection, "OGeneralPage::OGeneralPage : really need a DSN type collection !");
+        SAL_WARN_IF(!m_pCollection, "dbaaccess", "OGeneralPage::OGeneralPage : really need a DSN type collection !");
 
         // do some knittings
         m_pDatasourceType->SetSelectHdl(LINK(this, OGeneralPage, OnDatasourceTypeSelected));
+        m_pEmbeddedDBType->SetSelectHdl(LINK(this, OGeneralPage, OnEmbeddedDBTypeSelected));
     }
 
     //-------------------------------------------------------------------------
@@ -148,6 +152,46 @@ namespace dbaui
     }
 
     //-------------------------------------------------------------------------
+    void OGeneralPage::initializeEmbeddedDBList()
+    {
+        if ( m_bInitEmbeddedDBList )
+        {
+            m_bInitEmbeddedDBList = false;
+             m_pEmbeddedDBType->Clear();
+
+            if ( m_pCollection )
+            {
+                DisplayedTypes aDisplayedTypes;
+
+                ::dbaccess::ODsnTypeCollection::TypeIterator aEnd = m_pCollection->end();
+                for (   ::dbaccess::ODsnTypeCollection::TypeIterator aTypeLoop =  m_pCollection->begin();
+                        aTypeLoop != aEnd;
+                        ++aTypeLoop
+                    )
+                {
+                    const OUString sURLPrefix = aTypeLoop.getURLPrefix();
+                    if ( !sURLPrefix.isEmpty() )
+                    {
+                        OUString sDisplayName = aTypeLoop.getDisplayName();
+                        if ( m_pEmbeddedDBType->GetEntryPos( sDisplayName ) == LISTBOX_ENTRY_NOTFOUND
+                            && m_pCollection->isEmbeddedDatabase( sURLPrefix ) )
+                        {
+                            aDisplayedTypes.push_back( DisplayedTypes::value_type( sURLPrefix, sDisplayName ) );
+                        }
+                    }
+                }
+                ::std::sort( aDisplayedTypes.begin(), aDisplayedTypes.end(), DisplayedTypeLess() );
+                DisplayedTypes::const_iterator aDisplayEnd = aDisplayedTypes.end();
+                for (   DisplayedTypes::const_iterator loop = aDisplayedTypes.begin();
+                        loop != aDisplayEnd;
+                        ++loop
+                    )
+                    insertEmbeddedDBTypeEntryData( loop->eType, loop->sDisplayName );
+            }
+        }
+    }
+
+    //-------------------------------------------------------------------------
     void OGeneralPage::setParentTitle(const OUString&)
     {
     }
@@ -192,8 +236,10 @@ namespace dbaui
     void OGeneralPage::implInitControls( const SfxItemSet& _rSet, sal_Bool _bSaveValue )
     {
         initializeTypeList();
+        initializeEmbeddedDBList();
 
         m_pDatasourceType->SelectEntry( getDatasourceName( _rSet ) );
+        m_pEmbeddedDBType->SelectEntry( getEmbeddedDBName( _rSet ) );
 
         // notify our listener that our type selection has changed (if so)
         // FIXME: how to detect that it did not changed? (fdo#62937)
@@ -204,6 +250,55 @@ namespace dbaui
         switchMessage( m_eCurrentSelection );
 
         OGenericAdministrationPage::implInitControls( _rSet, _bSaveValue );
+    }
+
+    //-------------------------------------------------------------------------
+    OUString OGeneralPage::getEmbeddedDBName( const SfxItemSet& _rSet )
+    {
+        // first check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
+        sal_Bool bValid, bReadonly;
+        getFlags( _rSet, bValid, bReadonly );
+
+        // if the selection is invalid, disable everything
+        String sName,sConnectURL;
+        m_bDisplayingInvalid = !bValid;
+        if ( bValid )
+        {
+            // collect some items and some values
+            SFX_ITEMSET_GET( _rSet, pNameItem, SfxStringItem, DSID_NAME, sal_True );
+            SFX_ITEMSET_GET( _rSet, pUrlItem, SfxStringItem, DSID_CONNECTURL, sal_True );
+            assert( pUrlItem );
+            assert( pNameItem );
+            sName = pNameItem->GetValue();
+            sConnectURL = pUrlItem->GetValue();
+        }
+
+        m_eNotSupportedKnownType =  ::dbaccess::DST_UNKNOWN;
+        implSetCurrentType(  OUString() );
+
+        // compare the DSN prefix with the registered ones
+        OUString sDisplayName;
+
+        if (m_pCollection && bValid)
+        {
+            implSetCurrentType( m_pCollection->getEmbeddedDatabase() );
+            sDisplayName = m_pCollection->getTypeDisplayName( m_eCurrentSelection );
+        }
+
+        // select the correct datasource type
+        if  (  m_pCollection->isEmbeddedDatabase( m_eCurrentSelection )
+            &&  ( LISTBOX_ENTRY_NOTFOUND == m_pEmbeddedDBType->GetEntryPos( sDisplayName ) )
+            )
+        {   // this indicates it's really a type which is known in general, but not supported on the current platform
+            // show a message saying so
+            //  eSpecialMessage = smUnsupportedType;
+            insertDatasourceTypeEntryData( m_eCurrentSelection, sDisplayName );
+            // remember this type so we can show the special message again if the user selects this
+            // type again (without changing the data source)
+            m_eNotSupportedKnownType = m_pCollection->determineType( m_eCurrentSelection );
+        }
+
+        return sDisplayName;
     }
 
     //-------------------------------------------------------------------------
@@ -221,8 +316,8 @@ namespace dbaui
             // collect some items and some values
             SFX_ITEMSET_GET( _rSet, pNameItem, SfxStringItem, DSID_NAME, sal_True );
             SFX_ITEMSET_GET( _rSet, pUrlItem, SfxStringItem, DSID_CONNECTURL, sal_True );
-            OSL_ENSURE( pUrlItem, "OGeneralPage::getDatasourceName: missing the type attribute !" );
-            OSL_ENSURE( pNameItem, "OGeneralPage::getDatasourceName: missing the type attribute !" );
+            assert( pUrlItem );
+            assert( pNameItem );
             sName = pNameItem->GetValue();
             sConnectURL = pUrlItem->GetValue();
         }
@@ -295,6 +390,16 @@ namespace dbaui
     }
 
     // -----------------------------------------------------------------------
+    void OGeneralPage::insertEmbeddedDBTypeEntryData(const OUString& _sType, String sDisplayName)
+    {
+        // insert a (temporary) entry
+        sal_uInt16 nPos = m_pEmbeddedDBType->InsertEntry(sDisplayName);
+        if ( nPos >= m_aEmbeddedURLPrefixes.size() )
+            m_aEmbeddedURLPrefixes.resize(nPos+1);
+        m_aEmbeddedURLPrefixes[nPos] = _sType;
+    }
+
+    // -----------------------------------------------------------------------
     void OGeneralPage::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
     {
         _rControlList.push_back( new ODisableWrapper<FixedText>( m_pSpecialMessage ) );
@@ -323,6 +428,27 @@ namespace dbaui
             // this ensures that our type selection link will be called, even if the new is is the same as the
             // current one
         OGenericAdministrationPage::Reset(_rCoreAttrs);
+    }
+
+    //-------------------------------------------------------------------------
+    IMPL_LINK( OGeneralPage, OnEmbeddedDBTypeSelected, ListBox*, _pBox )
+    {
+        // get the type from the entry data
+        sal_uInt16 nSelected = _pBox->GetSelectEntryPos();
+        if (nSelected >= m_aEmbeddedURLPrefixes.size() )
+        {
+            SAL_WARN("dbaui.OGeneralPage", "Got out-of-range value '" << nSelected <<  "' from the DatasourceType selection ListBox's GetSelectEntryPos(): no corresponding URL prefix");
+            return 0L;
+        }
+        const OUString sURLPrefix = m_aEmbeddedURLPrefixes[ nSelected ];
+
+        setParentTitle( sURLPrefix );
+        // let the impl method do all the stuff
+        onTypeSelected( sURLPrefix );
+        // tell the listener we were modified
+        callModifiedHdl();
+        // outta here
+        return 0L;
     }
 
     //-------------------------------------------------------------------------
@@ -406,6 +532,7 @@ namespace dbaui
         ,m_pRB_CreateDatabase           ( NULL )
         ,m_pRB_OpenExistingDatabase     ( NULL )
         ,m_pRB_ConnectDatabase          ( NULL )
+        ,m_pFT_EmbeddedDBLabel          ( NULL )
         ,m_pFT_DocListLabel             ( NULL )
         ,m_pLB_DocumentList             ( NULL )
         ,m_pPB_OpenDatabase             ( NULL )
@@ -416,6 +543,7 @@ namespace dbaui
         get( m_pRB_CreateDatabase, "createDatabase" );
         get( m_pRB_OpenExistingDatabase, "openExistingDatabase" );
         get( m_pRB_ConnectDatabase, "connectDatabase" );
+        get( m_pFT_EmbeddedDBLabel, "embeddeddbLabel" );
         get( m_pFT_DocListLabel, "docListLabel" );
         get( m_pLB_DocumentList, "documentList" );
         get( m_pPB_OpenDatabase, "openDatabase" );
@@ -445,7 +573,7 @@ namespace dbaui
             m_pRB_CreateDatabase->Check();
 
         // do some knittings
-        m_pRB_CreateDatabase->SetClickHdl( LINK( this, OGeneralPageWizard, OnSetupModeSelected ) );
+        m_pRB_CreateDatabase->SetClickHdl( LINK( this, OGeneralPageWizard, OnCreateDatabaseModeSelected ) );
         m_pRB_ConnectDatabase->SetClickHdl( LINK( this, OGeneralPageWizard, OnSetupModeSelected ) );
         m_pRB_OpenExistingDatabase->SetClickHdl( LINK( this, OGeneralPageWizard, OnSetupModeSelected ) );
         m_pLB_DocumentList->SetSelectHdl( LINK( this, OGeneralPageWizard, OnDocumentSelected ) );
@@ -487,6 +615,7 @@ namespace dbaui
 
         if ( !bValid || bReadonly )
         {
+            m_pFT_EmbeddedDBLabel->Enable( false );
             m_pDatasourceType->Enable( false );
             m_pPB_OpenDatabase->Enable( false );
             m_pFT_DocListLabel->Enable( false );
@@ -494,6 +623,7 @@ namespace dbaui
         }
         else
         {
+            m_aControlDependencies.enableOnRadioCheck( *m_pRB_CreateDatabase, *m_pEmbeddedDBType, *m_pFT_EmbeddedDBLabel );
             m_aControlDependencies.enableOnRadioCheck( *m_pRB_ConnectDatabase, *m_pDatasourceType );
             m_aControlDependencies.enableOnRadioCheck( *m_pRB_OpenExistingDatabase, *m_pPB_OpenDatabase, *m_pFT_DocListLabel, *m_pLB_DocumentList );
         }
@@ -508,6 +638,7 @@ namespace dbaui
     //-------------------------------------------------------------------------
     OUString OGeneralPageWizard::getDatasourceName(const SfxItemSet& _rSet)
     {
+        // Sets jdbc as the default selected databse on startup.
         if (m_pRB_CreateDatabase->IsChecked() )
             return m_pCollection->getTypeDisplayName( OUString( "jdbc:" ) );
 
@@ -587,6 +718,15 @@ namespace dbaui
             aDocument.sFilter = m_pLB_DocumentList->GetSelectedDocumentFilter();
         }
         return aDocument;
+    }
+
+    //-------------------------------------------------------------------------
+    IMPL_LINK( OGeneralPageWizard, OnCreateDatabaseModeSelected, RadioButton*, /*_pBox*/ )
+    {
+        if ( m_aCreationModeHandler.IsSet() )
+            m_aCreationModeHandler.Call( this );
+        OnEmbeddedDBTypeSelected(m_pEmbeddedDBType);
+        return 1L;
     }
 
     //-------------------------------------------------------------------------

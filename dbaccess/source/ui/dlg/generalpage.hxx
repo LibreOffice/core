@@ -58,17 +58,22 @@ namespace dbaui
         Link                m_aTypeSelectHandler;   /// to be called if a new type is selected
         sal_Bool            m_bDisplayingInvalid : 1;   // the currently displayed data source is deleted
         bool                m_bInitTypeList : 1;
+        bool                m_bInitEmbeddedDBList : 1;
         bool                approveDatasourceType( const OUString& _sURLPrefix, OUString& _inout_rDisplayName );
         void                insertDatasourceTypeEntryData( const OUString& _sType, String sDisplayName );
+        void                insertEmbeddedDBTypeEntryData( const OUString& _sType, String sDisplayName );
 
     protected:
         ListBox*            m_pDatasourceType;
+        ListBox*            m_pEmbeddedDBType;
 
         ::dbaccess::ODsnTypeCollection*
                             m_pCollection;  /// the DSN type collection instance
 
         ::std::vector< OUString>
                             m_aURLPrefixes;
+        ::std::vector< OUString>
+                            m_aEmbeddedURLPrefixes;
 
     public:
         /// set a handler which gets called every time the user selects a new type
@@ -83,6 +88,7 @@ namespace dbaui
 
         virtual void implInitControls( const SfxItemSet& _rSet, sal_Bool _bSaveValue );
         virtual OUString getDatasourceName( const SfxItemSet& _rSet );
+        virtual OUString getEmbeddedDBName( const SfxItemSet& _rSet );
         virtual bool approveDatasourceType( ::dbaccess::DATASOURCE_TYPE eType, OUString& _inout_rDisplayName );
 
         // <method>OGenericAdministrationPage::fillControls</method>
@@ -92,6 +98,7 @@ namespace dbaui
 
         void onTypeSelected(const OUString& _sURLPrefix);
         void initializeTypeList();
+        void initializeEmbeddedDBList();
 
         void implSetCurrentType( const OUString& _eType );
 
@@ -101,6 +108,7 @@ namespace dbaui
         virtual void setParentTitle( const OUString& _sURLPrefix );
 
         DECL_LINK(OnDatasourceTypeSelected, ListBox*);
+        DECL_LINK(OnEmbeddedDBTypeSelected, ListBox*);
     };
 
     //=========================================================================
@@ -149,6 +157,7 @@ namespace dbaui
         RadioButton*            m_pRB_OpenExistingDatabase;
         RadioButton*            m_pRB_ConnectDatabase;
 
+        FixedText*              m_pFT_EmbeddedDBLabel;
         FixedText*              m_pFT_DocListLabel;
         OpenDocumentListBox*    m_pLB_DocumentList;
         OpenDocumentButton*     m_pPB_OpenDatabase;
@@ -182,6 +191,7 @@ namespace dbaui
         virtual bool approveDatasourceType( ::dbaccess::DATASOURCE_TYPE eType, OUString& _inout_rDisplayName );
 
     protected:
+        DECL_LINK( OnCreateDatabaseModeSelected, RadioButton* );
         DECL_LINK( OnSetupModeSelected, RadioButton* );
         DECL_LINK( OnDocumentSelected, ListBox* );
         DECL_LINK( OnOpenDocument, PushButton* );

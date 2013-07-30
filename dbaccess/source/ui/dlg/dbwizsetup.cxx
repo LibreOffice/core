@@ -337,7 +337,7 @@ void ODbTypeWizDialogSetup::activateDatabasePath()
     {
     case OGeneralPageWizard::eCreateNew:
     {
-        sal_Int32 nCreateNewDBIndex = m_pCollection->getIndexOf( m_pCollection->getEmbeddedDatabase() );
+        sal_Int32 nCreateNewDBIndex = m_pCollection->getIndexOf( m_pGeneralPage->GetSelectedType() );
         if ( nCreateNewDBIndex == -1 )
             nCreateNewDBIndex = m_pCollection->getIndexOf( OUString("sdbc:dbase:") );
         OSL_ENSURE( nCreateNewDBIndex != -1, "ODbTypeWizDialogSetup::activateDatabasePath: the GeneralPage should have prevented this!" );
@@ -802,28 +802,10 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
     }
 
     //-------------------------------------------------------------------------
-    OUString ODbTypeWizDialogSetup::getDefaultDatabaseType() const
-    {
-        OUString sEmbeddedURL = m_pCollection->getEmbeddedDatabase();
-        ::connectivity::DriversConfig aDriverConfig(getORB());
-        try
-        {
-        if ( aDriverConfig.getDriverFactoryName(sEmbeddedURL).isEmpty() || !m_pImpl->getDriver(sEmbeddedURL).is() )
-            sEmbeddedURL = OUString("sdbc:dbase:");
-        }
-        catch(const Exception&)
-        {
-            sEmbeddedURL = OUString("sdbc:dbase:");
-        }
-
-        return sEmbeddedURL;
-    }
-
-    //-------------------------------------------------------------------------
     void ODbTypeWizDialogSetup::CreateDatabase()
     {
         OUString sUrl;
-        OUString eType = getDefaultDatabaseType();
+        OUString eType = m_pGeneralPage->GetSelectedType();
         if ( m_pCollection->isEmbeddedDatabase(eType) )
         {
             sUrl = eType;
