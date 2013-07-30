@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="org.libreoffice.impressremote"
           android:versionCode="8"
-          android:versionName="1.0.6+ Impress Remote"
+          android:versionName="1.1"
           android:installLocation="auto">
 
     <uses-permission
