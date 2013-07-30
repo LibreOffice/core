@@ -16,6 +16,24 @@
       "revId": "9a5443f924d2c96623eeae4f54741cc264e6c437",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//9po\u003d",
+        "filename": "sw/source/ui/misc/glosdoc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1000094
+      },
+      "writtenOn": "2013-07-30T14:03:00Z",
+      "side": 1,
+      "message": "Original code also appended SwGlossaries::GetExtension() to sNewFileName (line 242).\nI\u0027m a little surprised by the simplification that was possible in this function, so I really appreciate further verification of this code.",
+      "parentUuid": "AAAAXn//9qo\u003d",
+      "revId": "9a5443f924d2c96623eeae4f54741cc264e6c437",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
