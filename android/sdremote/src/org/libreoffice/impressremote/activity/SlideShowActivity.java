@@ -20,6 +20,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 
+import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
@@ -167,8 +168,10 @@ public class SlideShowActivity extends SherlockFragmentActivity implements Servi
             return;
         }
 
-        getSupportActionBar().setTitle(buildSlideShowProgress());
-        getSupportActionBar().setSubtitle(buildSlideShowTimerProgress());
+        ActionBar aActionBar = getSupportActionBar();
+
+        aActionBar.setTitle(buildSlideShowProgress());
+        aActionBar.setSubtitle(buildSlideShowTimerProgress());
     }
 
     private boolean isServiceBound() {
@@ -307,21 +310,29 @@ public class SlideShowActivity extends SherlockFragmentActivity implements Servi
         Timer aTimer = mCommunicationService.getSlideShow().getTimer();
 
         if (aTimer.isSet()) {
-            int aTimerLength = aTimer.getMinutesLeft();
-
-            DialogFragment aFragment = TimerEditingDialog.newInstance(aTimerLength);
-            aFragment.show(getSupportFragmentManager(), TimerEditingDialog.TAG);
-
-            pauseTimer();
+            callEditingTimer(aTimer);
         }
         else {
-            DialogFragment aFragment = TimerSettingDialog.newInstance();
-            aFragment.show(getSupportFragmentManager(), TimerSettingDialog.TAG);
+            callSettingTimer();
         }
+    }
+
+    private void callEditingTimer(Timer aTimer) {
+        int aTimerLength = aTimer.getMinutesLeft();
+
+        DialogFragment aFragment = TimerEditingDialog.newInstance(aTimerLength);
+        aFragment.show(getSupportFragmentManager(), TimerEditingDialog.TAG);
+
+        pauseTimer();
     }
 
     private void pauseTimer() {
         mCommunicationService.getSlideShow().getTimer().pause();
+    }
+
+    private void callSettingTimer() {
+        DialogFragment aFragment = TimerSettingDialog.newInstance();
+        aFragment.show(getSupportFragmentManager(), TimerSettingDialog.TAG);
     }
 
     private void stopSlideShow() {

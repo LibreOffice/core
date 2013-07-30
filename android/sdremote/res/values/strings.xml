@@ -46,4 +46,7 @@
         <item quantity="other">%d minutes left</item>
     </plurals>
 
+    <string name="description_pager_slide">Slide preview</string>
+    <string name="description_grid_slide">Slide preview</string>
+
 </resources>

@@ -50,7 +50,7 @@ public class SlidesGridFragment extends SherlockFragment implements ServiceConne
     }
 
     private void bindService() {
-        Intent aServiceIntent = new Intent(getActivity(), CommunicationService.class);
+        Intent aServiceIntent = Intents.buildCommunicationServiceIntent(getActivity());
         getActivity().bindService(aServiceIntent, this, Context.BIND_AUTO_CREATE);
     }
 

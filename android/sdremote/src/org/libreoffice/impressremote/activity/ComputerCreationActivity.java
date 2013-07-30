@@ -34,10 +34,10 @@ public class ComputerCreationActivity extends SherlockFragmentActivity implement
     }
 
     private void setUpActionBar() {
-        View aView = buildCustomActionBarView();
-        ActionBar.LayoutParams aLayoutParams = buildCustomActionBarLayoutParams();
+        View aActionBarView = buildCustomActionBarView();
+        ActionBar.LayoutParams aActionBarParams = buildCustomActionBarLayoutParams();
 
-        getSupportActionBar().setCustomView(aView, aLayoutParams);
+        getSupportActionBar().setCustomView(aActionBarView, aActionBarParams);
 
         getCancelButton().setOnClickListener(this);
         getSaveButton().setOnClickListener(this);
@@ -45,8 +45,7 @@ public class ComputerCreationActivity extends SherlockFragmentActivity implement
 
     private View buildCustomActionBarView() {
         Context aContext = getSupportActionBar().getThemedContext();
-        LayoutInflater aInflater = (LayoutInflater) aContext.getSystemService(
-            LAYOUT_INFLATER_SERVICE);
+        LayoutInflater aInflater = LayoutInflater.from(aContext);
 
         return aInflater.inflate(R.layout.action_bar_computer_creation, null);
     }
@@ -90,11 +89,10 @@ public class ComputerCreationActivity extends SherlockFragmentActivity implement
         }
 
         if (TextUtils.isEmpty(aName)) {
-            finish(aIpAddress, aIpAddress);
+            aName = aIpAddress;
         }
-        else {
-            finish(aIpAddress, aName);
-        }
+
+        finish(aIpAddress, aName);
     }
 
     private String getText(EditText aEdit) {
@@ -114,8 +112,7 @@ public class ComputerCreationActivity extends SherlockFragmentActivity implement
     }
 
     private void finish(String aIpAddress, String aName) {
-        Intent aIntent = Intents
-            .buildComputerCreationResultIntent(aIpAddress, aName);
+        Intent aIntent = Intents.buildComputerCreationResultIntent(aIpAddress, aName);
         setResult(Activity.RESULT_OK, aIntent);
 
         finish();

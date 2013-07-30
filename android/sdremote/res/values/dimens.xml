@@ -10,7 +10,6 @@
     <dimen name="padding_slides_pager">16dp</dimen>
     <dimen name="padding_slide">4dp</dimen>
     <dimen name="padding_header_underline">4dp</dimen>
-    <dimen name="padding_slides_pager_layout">8dp</dimen>
     <dimen name="padding_header">8dp</dimen>
     <dimen name="padding_slide_notes">8dp</dimen>
 

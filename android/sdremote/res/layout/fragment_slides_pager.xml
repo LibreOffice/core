@@ -40,7 +40,7 @@
                 android:textStyle="bold"
                 android:textColor="@color/background_header"
                 android:drawableBottom="@drawable/underline_header"
-                android:drawablePadding="4dp"
+                android:drawablePadding="@dimen/padding_header_underline"
                 android:paddingLeft="@dimen/padding_header"
                 android:paddingTop="@dimen/padding_header"
                 android:gravity="left"

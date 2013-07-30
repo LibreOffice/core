@@ -2,5 +2,6 @@
 <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/image_slide_preview"
     android:scaleType="fitCenter"
+    android:contentDescription="@string/description_pager_slide"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"/>

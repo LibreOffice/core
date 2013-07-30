@@ -27,15 +27,14 @@ public class LicensesActivity extends SherlockActivity {
         setContentView(R.layout.activity_licenses);
 
         setUpHomeButton();
-
-        setUpLicenses();
+        setUpContent();
     }
 
     private void setUpHomeButton() {
         getSupportActionBar().setHomeButtonEnabled(true);
     }
 
-    private void setUpLicenses() {
+    private void setUpContent() {
         getLicensesView().loadUrl(buildLicensesUri());
     }
 

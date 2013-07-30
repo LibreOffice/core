@@ -9,11 +9,12 @@
 package org.libreoffice.impressremote.activity;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.Fragment;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.MenuItem;
 import org.libreoffice.impressremote.fragment.ComputerConnectionFragment;
+import org.libreoffice.impressremote.util.FragmentOperator;
 import org.libreoffice.impressremote.util.Intents;
 import org.libreoffice.impressremote.communication.Server;
 
@@ -23,21 +24,18 @@ public class ComputerConnectionActivity extends SherlockFragmentActivity {
         super.onCreate(savedInstanceState);
 
         setUpHomeButton();
-
-        setUpComputerConnectionFragment(extractReceivedComputer());
+        setUpFragment();
     }
 
     private void setUpHomeButton() {
         getSupportActionBar().setHomeButtonEnabled(true);
     }
 
-    private void setUpComputerConnectionFragment(Server aComputer) {
-        FragmentTransaction aTransaction = getSupportFragmentManager().beginTransaction();
+    private void setUpFragment() {
+        Server aComputer = extractReceivedComputer();
+        Fragment aFragment = ComputerConnectionFragment.newInstance(aComputer);
 
-        aTransaction.replace(android.R.id.content, ComputerConnectionFragment
-            .newInstance(aComputer));
-
-        aTransaction.commit();
+        FragmentOperator.addFragment(this, aFragment);
     }
 
     private Server extractReceivedComputer() {
