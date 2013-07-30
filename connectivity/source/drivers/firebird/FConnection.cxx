@@ -207,7 +207,13 @@ void OConnection::construct(const ::rtl::OUString& url, const Sequence< Property
         *dpb++ = FIREBIRD_SQL_DIALECT;
         // Do any more dpbBuffer additions here
 
-        if (!m_bIsEmbedded) // TODO: || m_bIsLocalFile
+        if (m_bIsEmbedded)  // TODO: || m_bIsLocalFile
+        {
+            *dpb++ = isc_dpb_trusted_auth;
+            *dpb++ = 1; // Length of data
+            *dpb++ = 1; // TRUE
+        }
+        else
         {
             // TODO: parse password from connection string as needed?
         }
