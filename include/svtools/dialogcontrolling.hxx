@@ -157,6 +157,7 @@ namespace svt
                 disabled when it's unchecked
         */
         void    enableOnRadioCheck( RadioButton& _rRadio, Window& _rDependentWindow );
+        void    enableOnRadioCheck( RadioButton& _rRadio, Window& _rDependentWindow1, Window& _rDependentWindow2 );
         void    enableOnRadioCheck( RadioButton& _rRadio, Window& _rDependentWindow1, Window& _rDependentWindow2, Window& _rDependentWindow3 );
         void    enableOnRadioCheck( RadioButton& _rRadio, Window& _rDependentWindow1, Window& _rDependentWindow2, Window& _rDependentWindow3, Window& _rDependentWindow4, Window& _rDependentWindow5 );
 
