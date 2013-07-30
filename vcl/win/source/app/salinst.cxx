@@ -1055,7 +1055,7 @@ void WinSalInstance::AddToRecentDocumentList(const OUString& rFileUrl, const OUS
             {
                 IShellItem* pShellItem = NULL;
 
-                HRESULT hr = pSHCreateItemFromParsingName ( system_path.getStr(), NULL, IID_PPV_ARGS(&pShellItem) );
+                HRESULT hr = pSHCreateItemFromParsingName ( (PCWSTR) system_path.getStr(), NULL, IID_PPV_ARGS(&pShellItem) );
 
                 if ( SUCCEEDED(hr) && pShellItem )
                 {
@@ -1088,9 +1088,14 @@ void WinSalInstance::AddToRecentDocumentList(const OUString& rFileUrl, const OUS
                         OUString sApplicationID("TheDocumentFoundation.LibreOffice.");
                         sApplicationID += sApplicationName;
 
-                        SHARDAPPIDINFO info;
+                        typedef struct {
+                            IShellItem *psi;
+                            PCWSTR     pszAppID;
+                        } DummyShardAppIDInfo;
+
+                        DummyShardAppIDInfo info;
                         info.psi = pShellItem;
-                        info.pszAppID = sApplicationID.getStr();
+                        info.pszAppID = (PCWSTR) sApplicationID.getStr();
 
                         SHAddToRecentDocs ( SHARD_APPIDINFO, &info );
                         return;
@@ -1098,8 +1103,8 @@ void WinSalInstance::AddToRecentDocumentList(const OUString& rFileUrl, const OUS
                 }
             }
         }
-        // For whatever reason, we could not use the SHARD_APPIDNFO semantics
-        SHAddToRecentDocs(SHARD_PATHW, system_path.getStr());
+        // For whatever reason, we could not use the SHARD_APPIDINFO semantics
+        SHAddToRecentDocs(SHARD_PATHW, (PCWSTR) system_path.getStr());
     }
 }
 
