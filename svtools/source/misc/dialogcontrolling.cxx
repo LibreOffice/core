@@ -181,6 +181,15 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
+    void ControlDependencyManager::enableOnRadioCheck( RadioButton& _rRadio, Window& _rDependentWindow1, Window& _rDependentWindow2 )
+    {
+        PDialogController pController( new RadioDependentEnabler( _rRadio ) );
+        pController->addDependentWindow( _rDependentWindow1 );
+        pController->addDependentWindow( _rDependentWindow2 );
+        m_pImpl->aControllers.push_back( pController );
+    }
+
+    //---------------------------------------------------------------------
     void ControlDependencyManager::enableOnRadioCheck( RadioButton& _rRadio, Window& _rDependentWindow1, Window& _rDependentWindow2, Window& _rDependentWindow3 )
     {
         PDialogController pController( new RadioDependentEnabler( _rRadio ) );
