@@ -68,6 +68,24 @@
       "revId": "1d49dde211331380532c95931ee2f24437e820df",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//9oI\u003d",
+        "filename": "sw/source/filter/xml/wrtxml.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 590,
+      "author": {
+        "id": 1000107
+      },
+      "writtenOn": "2013-07-30T20:54:03Z",
+      "side": 1,
+      "message": "Ok, if itsn\u0027t required, then without \"\".",
+      "parentUuid": "AAAAXn//9rI\u003d",
+      "revId": "1d49dde211331380532c95931ee2f24437e820df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
