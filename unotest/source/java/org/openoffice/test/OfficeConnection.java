@@ -104,6 +104,7 @@ public final class OfficeConnection {
         throws InterruptedException, com.sun.star.uno.Exception
     {
         boolean cleanTermination = false;
+        int code = 0;
         try {
             boolean desktopTerminated = true;
             if (process != null) {
@@ -140,7 +141,6 @@ public final class OfficeConnection {
                     process.destroy();
                 }
             }
-            int code = 0;
             if (process != null) {
                 code = process.waitFor();
             }
@@ -165,7 +165,7 @@ public final class OfficeConnection {
                         ProcessBuilder pb = new ProcessBuilder(
                             postprocesscommand,
                             sofficeArg.substring("path:".length()) + ".bin",
-                            workdir);
+                            workdir, String.valueOf(code));
                         Process postprocess = pb.start();
                         Forward ppoutForward = new Forward(
                             postprocess.getInputStream(), System.out);
@@ -173,7 +173,7 @@ public final class OfficeConnection {
                         Forward pperrForward = new Forward(
                             postprocess.getErrorStream(), System.err);
                         pperrForward.start();
-                        int code = postprocess.waitFor();
+                        code = postprocess.waitFor();
                         if (code != 0) {
                             throw new PostprocessFailedException(code);
                         }
