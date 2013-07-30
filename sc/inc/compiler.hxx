@@ -441,11 +441,6 @@ public:
     static void MoveRelWrap( ScTokenArray& rArr, ScDocument* pDoc, const ScAddress& rPos,
                              SCCOL nMaxCol, SCROW nMaxRow );
 
-    void UpdateReference( UpdateRefMode eUpdateRefMode,
-                                  const ScAddress& rOldPos, const ScRange&,
-                                  SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
-                                  bool& rChanged, bool& rRefSizeChanged );
-
     /** If the character is allowed as first character in sheet names or
         references, includes '$' and '?'. */
     static inline bool IsCharWordChar( String const & rStr,
