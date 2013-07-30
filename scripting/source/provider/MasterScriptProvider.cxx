@@ -696,7 +696,9 @@ MasterScriptProvider::hasByName( const OUString& aName ) throw (RuntimeException
 
             result = xCont->hasByName( aName );
         }
-        else
+        // If this is a document provider then we shouldn't
+        // have a PackageProvider
+        else if (!m_xModel.is())
         {
             throw RuntimeException( "PackageMasterScriptProvider is unitialised",
                                         Reference< XInterface >() );
