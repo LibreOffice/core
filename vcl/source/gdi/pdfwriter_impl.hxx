@@ -836,9 +836,9 @@ i12626
     /* TODO: remove rText as soon as SalLayout will change so that rText is not necessary anymore */
     void drawVerticalGlyphs( const std::vector<PDFGlyph>& rGlyphs, OStringBuffer& rLine, const Point& rAlignOffset, const Matrix3& rRotScale, double fAngle, double fXScale, double fSkew, sal_Int32 nFontHeight );
     void drawHorizontalGlyphs( const std::vector<PDFGlyph>& rGlyphs, OStringBuffer& rLine, const Point& rAlignOffset, double fAngle, double fXScale, double fSkew, sal_Int32 nFontHeight, sal_Int32 nPixelFontHeight );
-    void drawLayout( SalLayout& rLayout, const String& rText, bool bTextLines );
-    void drawRelief( SalLayout& rLayout, const String& rText, bool bTextLines );
-    void drawShadow( SalLayout& rLayout, const String& rText, bool bTextLines );
+    void drawLayout( SalLayout& rLayout, const OUString& rText, bool bTextLines );
+    void drawRelief( SalLayout& rLayout, const OUString& rText, bool bTextLines );
+    void drawShadow( SalLayout& rLayout, const OUString& rText, bool bTextLines );
 
     /*  writes differences between graphics stack and current real PDF
      *   state to the file
@@ -1195,12 +1195,12 @@ public:
     }
 
     /* actual drawing functions */
-    void drawText( const Point& rPos, const String& rText, xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN, bool bTextLines = true );
-    void drawTextArray( const Point& rPos, const String& rText, const sal_Int32* pDXArray = NULL, xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN, bool bTextLines = true );
-    void drawStretchText( const Point& rPos, sal_uLong nWidth, const String& rText,
+    void drawText( const Point& rPos, const OUString& rText, xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN, bool bTextLines = true );
+    void drawTextArray( const Point& rPos, const OUString& rText, const sal_Int32* pDXArray = NULL, xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN, bool bTextLines = true );
+    void drawStretchText( const Point& rPos, sal_uLong nWidth, const OUString& rText,
                           xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN,
                           bool bTextLines = true  );
-    void drawText( const Rectangle& rRect, const String& rOrigStr, sal_uInt16 nStyle, bool bTextLines = true  );
+    void drawText( const Rectangle& rRect, const OUString& rOrigStr, sal_uInt16 nStyle, bool bTextLines = true  );
     void drawTextLine( const Point& rPos, long nWidth, FontStrikeout eStrikeout, FontUnderline eUnderline, FontUnderline eOverline, bool bUnderlineAbove );
     void drawWaveTextLine( OStringBuffer& aLine, long nWidth, FontUnderline eTextLine, Color aColor, bool bIsAbove );
     void drawStraightTextLine( OStringBuffer& aLine, long nWidth, FontUnderline eTextLine, Color aColor, bool bIsAbove );
@@ -1268,8 +1268,8 @@ public:
     bool setStructureAttribute( enum PDFWriter::StructAttribute eAttr, enum PDFWriter::StructAttributeValue eVal );
     bool setStructureAttributeNumerical( enum PDFWriter::StructAttribute eAttr, sal_Int32 nValue );
     void setStructureBoundingBox( const Rectangle& rRect );
-    void setActualText( const String& rText );
-    void setAlternateText( const String& rText );
+    void setActualText( const OUString& rText );
+    void setAlternateText( const OUString& rText );
 
     // transitional effects
     void setAutoAdvanceTime( sal_uInt32 nSeconds, sal_Int32 nPageNr = -1 );
@@ -1279,7 +1279,7 @@ public:
     sal_Int32 createControl( const PDFWriter::AnyWidget& rControl, sal_Int32 nPageNr = -1 );
 
     // additional streams
-    void addStream( const String& rMimeType, PDFOutputStream* pStream, bool bCompress );
+    void addStream( const OUString& rMimeType, PDFOutputStream* pStream, bool bCompress );
 
     // helper: eventually begin marked content sequence and
     // emit a comment in debug case

@@ -161,47 +161,47 @@ void doTestCode()
     aWriter.DrawText( aRect, String( "Link annot 1" ) );
     sal_Int32 nFirstLink = aWriter.CreateLink( aRect );
     PDFNote aNote;
-    aNote.Title = String( "A small test note" );
-    aNote.Contents = String( "There is no business like show business like no business i know. Everything about it is appealing." );
+    aNote.Title = "A small test note";
+    aNote.Contents = "There is no business like show business like no business i know. Everything about it is appealing.";
     aWriter.CreateNote( Rectangle( Point( aRect.Right(), aRect.Top() ), Size( 6000, 3000 ) ), aNote );
 
     Rectangle aTargetRect( Point( 3000, 23000 ), Size( 12000, 6000 ) );
     aWriter.SetFillColor( Color( COL_LIGHTGREEN ) );
     aWriter.DrawRect( aTargetRect );
-    aWriter.DrawText( aTargetRect, String( "Dest second link" ) );
+    aWriter.DrawText( aTargetRect, "Dest second link" );
     sal_Int32 nSecondDest = aWriter.CreateDest( aTargetRect );
 
     aWriter.BeginStructureElement( PDFWriter::Section );
     aWriter.BeginStructureElement( PDFWriter::Heading );
-    aWriter.DrawText( Point(4500, 9000), String( "A small structure test" ) );
+    aWriter.DrawText( Point(4500, 9000), "A small structure test" );
     aWriter.EndStructureElement();
     aWriter.BeginStructureElement( PDFWriter::Paragraph );
     aWriter.SetStructureAttribute( PDFWriter::WritingMode, PDFWriter::LrTb );
     aWriter.SetStructureAttribute( PDFWriter::TextDecorationType, PDFWriter::Underline );
     aWriter.DrawText( Rectangle( Point( 4500, 10000 ), Size( 12000, 6000 ) ),
-                      String( "It was the best of PDF, it was the worst of PDF ... or so. This is a pretty nonsensical text to denote a paragraph. I suggest you stop reading it. Because if you read on you might get bored. So continue on your on risk. Hey, you're still here ? Why do you continue to read this as it is of no use at all ? OK, it's your time, but still... . Woah, i even get bored writing this, so let's end this here and now." ),
+                     "It was the best of PDF, it was the worst of PDF ... or so. This is a pretty nonsensical text to denote a paragraph. I suggest you stop reading it. Because if you read on you might get bored. So continue on your on risk. Hey, you're still here ? Why do you continue to read this as it is of no use at all ? OK, it's your time, but still... . Woah, i even get bored writing this, so let's end this here and now.",
                       TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK
                       );
-    aWriter.SetActualText( String( "It was the best of PDF, it was the worst of PDF ... or so. This is a pretty nonsensical text to denote a paragraph. I suggest you stop reading it. Because if you read on you might get bored. So continue on your on risk. Hey, you're still here ? Why do you continue to read this as it is of no use at all ? OK, it's your time, but still... . Woah, i even get bored writing this, so let's end this here and now." ) );
-    aWriter.SetAlternateText( String( "This paragraph contains some lengthy nonsense to test structural element emission of PDFWriter." ) );
+    aWriter.SetActualText( "It was the best of PDF, it was the worst of PDF ... or so. This is a pretty nonsensical text to denote a paragraph. I suggest you stop reading it. Because if you read on you might get bored. So continue on your on risk. Hey, you're still here ? Why do you continue to read this as it is of no use at all ? OK, it's your time, but still... . Woah, i even get bored writing this, so let's end this here and now." );
+    aWriter.SetAlternateText( "This paragraph contains some lengthy nonsense to test structural element emission of PDFWriter." );
     aWriter.EndStructureElement();
     aWriter.BeginStructureElement( PDFWriter::Paragraph );
     aWriter.SetStructureAttribute( PDFWriter::WritingMode, PDFWriter::LrTb );
     aWriter.DrawText( Rectangle( Point( 4500, 19000 ), Size( 12000, 1000 ) ),
-                      String( "This paragraph is nothing special either but ends on the next page structurewise" ),
+                      "This paragraph is nothing special either but ends on the next page structurewise",
                       TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK
                       );
 
     aWriter.NewPage( 595, 842 );
     // test AddStream interface
-    aWriter.AddStream( String( "text/plain" ), new PDFTestOutputStream(), true );
+    aWriter.AddStream( "text/plain", new PDFTestOutputStream(), true );
     // set transitional mode
     aWriter.SetPageTransition( PDFWriter::WipeRightToLeft, 1500 );
     aWriter.SetMapMode( MapMode( MAP_100TH_MM ) );
     aWriter.SetTextColor( Color( COL_BLACK ) );
     aWriter.SetFont( Font( String( "Times" ), Size( 0, 500 ) ) );
     aWriter.DrawText( Rectangle( Point( 4500, 1500 ), Size( 12000, 3000 ) ),
-                      String( "Here's where all things come to an end ... well at least the paragaph from the last page." ),
+                      "Here's where all things come to an end ... well at least the paragaph from the last page.",
                       TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK
                       );
     aWriter.EndStructureElement();
@@ -211,13 +211,13 @@ void doTestCode()
     aWriter.BeginStructureElement( PDFWriter::NonStructElement );
     aWriter.DrawRect( aRect );
     aWriter.BeginStructureElement( PDFWriter::Paragraph );
-    aWriter.DrawText( aRect, String( "Link annot 2" ) );
+    aWriter.DrawText( aRect, "Link annot 2" );
     sal_Int32 nSecondLink = aWriter.CreateLink( aRect );
 
     aWriter.SetFillColor( Color( COL_LIGHTGREEN ) );
     aWriter.BeginStructureElement( PDFWriter::ListItem );
     aWriter.DrawRect( aTargetRect );
-    aWriter.DrawText( aTargetRect, String( "Dest first link" ) );
+    aWriter.DrawText( aTargetRect, "Dest first link" );
     sal_Int32 nFirstDest = aWriter.CreateDest( aTargetRect );
     // enable structure
     aWriter.EndStructureElement();
@@ -226,7 +226,7 @@ void doTestCode()
     aWriter.EndStructureElement();
     aWriter.BeginStructureElement( PDFWriter::Figure );
     aWriter.BeginStructureElement( PDFWriter::Caption );
-    aWriter.DrawText( Point( 4500, 9000 ), String( "Some drawing stuff inside the structure" ) );
+    aWriter.DrawText( Point( 4500, 9000 ), "Some drawing stuff inside the structure" );
     aWriter.EndStructureElement();
 
     // test clipping
@@ -258,7 +258,7 @@ void doTestCode()
     aWriter.DrawEllipse( aTranspRect );
     aWriter.SetTextColor( Color( COL_LIGHTBLUE ) );
     aWriter.DrawText( aTranspRect,
-                      String( "Some transparent text" ),
+                      "Some transparent text",
                       TEXT_DRAW_CENTER | TEXT_DRAW_VCENTER | TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK );
 
     aWriter.EndTransparencyGroup( aTranspRect, 50 );
@@ -282,7 +282,7 @@ void doTestCode()
     aWriter.DrawEllipse( aTranspRect );
     aWriter.SetTextColor( Color( COL_LIGHTBLUE ) );
     aWriter.DrawText( aTranspRect,
-                      String( "Some transparent text" ),
+                      "Some transparent text",
                       TEXT_DRAW_CENTER | TEXT_DRAW_VCENTER | TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK );
     aTranspRect = Rectangle( Point( 1500, 16500 ), Size( 4800, 3000 ) );
     aWriter.SetFillColor( Color( COL_LIGHTRED ) );
@@ -330,7 +330,7 @@ void doTestCode()
     aWriter.SetTextColor( Color( COL_BLACK ) );
     aRect = Rectangle( Point( 4500, 6000 ), Size( 6000, 1500 ) );
     aWriter.DrawRect( aRect );
-    aWriter.DrawText( aRect, String( "www.heise.de" ) );
+    aWriter.DrawText( aRect, "www.heise.de" );
     sal_Int32 nURILink = aWriter.CreateLink( aRect );
     aWriter.SetLinkURL( nURILink, OUString( "http://www.heise.de" ) );
 
@@ -1873,17 +1873,17 @@ void PDFWriterImpl::computeDocumentIdentifier( std::vector< sal_uInt8 >& o_rIden
     //build the document id
     OString aInfoValuesOut;
     OStringBuffer aID( 1024 );
-    if( i_rDocInfo.Title.Len() )
+    if( !i_rDocInfo.Title.isEmpty() )
         appendUnicodeTextString( i_rDocInfo.Title, aID );
-    if( i_rDocInfo.Author.Len() )
+    if( !i_rDocInfo.Author.isEmpty() )
         appendUnicodeTextString( i_rDocInfo.Author, aID );
-    if( i_rDocInfo.Subject.Len() )
+    if( !i_rDocInfo.Subject.isEmpty() )
         appendUnicodeTextString( i_rDocInfo.Subject, aID );
-    if( i_rDocInfo.Keywords.Len() )
+    if( !i_rDocInfo.Keywords.isEmpty() )
         appendUnicodeTextString( i_rDocInfo.Keywords, aID );
-    if( i_rDocInfo.Creator.Len() )
+    if( !i_rDocInfo.Creator.isEmpty() )
         appendUnicodeTextString( i_rDocInfo.Creator, aID );
-    if( i_rDocInfo.Producer.Len() )
+    if( !i_rDocInfo.Producer.isEmpty() )
         appendUnicodeTextString( i_rDocInfo.Producer, aID );
 
     TimeValue aTVal, aGMT;
@@ -4607,7 +4607,7 @@ bool PDFWriterImpl::emitNoteAnnotations()
         aLine.append( "\n" );
 
         // optional title
-        if( rNote.m_aContents.Title.Len() )
+        if( !rNote.m_aContents.Title.isEmpty() )
         {
             aLine.append( "/T" );
             appendUnicodeTextStringEncrypt( rNote.m_aContents.Title, rNote.m_nObject, aLine );
@@ -5743,7 +5743,7 @@ bool PDFWriterImpl::emitCatalog()
     }
 // viewer preferences, if we had some, then emit
     if( m_aContext.HideViewerToolbar ||
-        ( m_aContext.Version > PDFWriter::PDF_1_3 && m_aContext.DocumentInfo.Title.Len() && m_aContext.DisplayPDFDocumentTitle ) ||
+        ( m_aContext.Version > PDFWriter::PDF_1_3 && !m_aContext.DocumentInfo.Title.isEmpty() && m_aContext.DisplayPDFDocumentTitle ) ||
         m_aContext.HideViewerMenubar ||
         m_aContext.HideViewerWindowControls || m_aContext.FitWindow ||
         m_aContext.CenterWindow || (m_aContext.FirstPageLeft  &&  m_aContext.PageLayout == PDFWriter::ContinuousFacing ) ||
@@ -5760,7 +5760,7 @@ bool PDFWriterImpl::emitCatalog()
             aLine.append( "/FitWindow true\n" );
         if( m_aContext.CenterWindow )
             aLine.append( "/CenterWindow true\n" );
-        if( m_aContext.Version > PDFWriter::PDF_1_3 && m_aContext.DocumentInfo.Title.Len() && m_aContext.DisplayPDFDocumentTitle )
+        if( m_aContext.Version > PDFWriter::PDF_1_3 && !m_aContext.DocumentInfo.Title.isEmpty() && m_aContext.DisplayPDFDocumentTitle )
             aLine.append( "/DisplayDocTitle true\n" );
         if( m_aContext.FirstPageLeft &&  m_aContext.PageLayout == PDFWriter::ContinuousFacing )
             aLine.append( "/Direction/R2L\n" );
@@ -5896,7 +5896,7 @@ bool PDFWriterImpl::emitSignature()
     aLine.append( aContentFiller.makeStringAndClear() );
     aLine.append( ">\n/Type/Sig/SubFilter/adbe.pkcs7.detached");
 
-    if( m_aContext.DocumentInfo.Author.Len() )
+    if( !m_aContext.DocumentInfo.Author.isEmpty() )
     {
         aLine.append( "/Name" );
         appendUnicodeTextStringEncrypt( m_aContext.DocumentInfo.Author, m_nSignatureObject, aLine );
@@ -6162,37 +6162,37 @@ sal_Int32 PDFWriterImpl::emitInfoDict( )
         aLine.append( nObject );
         aLine.append( " 0 obj\n"
                       "<<" );
-        if( m_aContext.DocumentInfo.Title.Len() )
+        if( !m_aContext.DocumentInfo.Title.isEmpty() )
         {
             aLine.append( "/Title" );
             appendUnicodeTextStringEncrypt( m_aContext.DocumentInfo.Title, nObject, aLine );
             aLine.append( "\n" );
         }
-        if( m_aContext.DocumentInfo.Author.Len() )
+        if( !m_aContext.DocumentInfo.Author.isEmpty() )
         {
             aLine.append( "/Author" );
             appendUnicodeTextStringEncrypt( m_aContext.DocumentInfo.Author, nObject, aLine );
             aLine.append( "\n" );
         }
-        if( m_aContext.DocumentInfo.Subject.Len() )
+        if( !m_aContext.DocumentInfo.Subject.isEmpty() )
         {
             aLine.append( "/Subject" );
             appendUnicodeTextStringEncrypt( m_aContext.DocumentInfo.Subject, nObject, aLine );
             aLine.append( "\n" );
         }
-        if( m_aContext.DocumentInfo.Keywords.Len() )
+        if( !m_aContext.DocumentInfo.Keywords.isEmpty() )
         {
             aLine.append( "/Keywords" );
             appendUnicodeTextStringEncrypt( m_aContext.DocumentInfo.Keywords, nObject, aLine );
             aLine.append( "\n" );
         }
-        if( m_aContext.DocumentInfo.Creator.Len() )
+        if( !m_aContext.DocumentInfo.Creator.isEmpty() )
         {
             aLine.append( "/Creator" );
             appendUnicodeTextStringEncrypt( m_aContext.DocumentInfo.Creator, nObject, aLine );
             aLine.append( "\n" );
         }
-        if( m_aContext.DocumentInfo.Producer.Len() )
+        if( !m_aContext.DocumentInfo.Producer.isEmpty() )
         {
             aLine.append( "/Producer" );
             appendUnicodeTextStringEncrypt( m_aContext.DocumentInfo.Producer, nObject, aLine );
@@ -6451,13 +6451,13 @@ sal_Int32 PDFWriterImpl::emitDocumentMetadata()
         aMetadataStream.append( "   <pdfaid:conformance>A</pdfaid:conformance>\n" );
         aMetadataStream.append( "  </rdf:Description>\n" );
 //... Dublin Core properties go here
-        if( m_aContext.DocumentInfo.Title.Len() ||
-            m_aContext.DocumentInfo.Author.Len() ||
-            m_aContext.DocumentInfo.Subject.Len() )
+        if( !m_aContext.DocumentInfo.Title.isEmpty() ||
+            !m_aContext.DocumentInfo.Author.isEmpty() ||
+            !m_aContext.DocumentInfo.Subject.isEmpty() )
         {
             aMetadataStream.append( "  <rdf:Description rdf:about=\"\"\n" );
             aMetadataStream.append( "      xmlns:dc=\"http://purl.org/dc/elements/1.1/\">\n" );
-            if( m_aContext.DocumentInfo.Title.Len() )
+            if( !m_aContext.DocumentInfo.Title.isEmpty() )
             {
 // this is according to PDF/A-1, technical corrigendum 1 (2007-04-01)
                 aMetadataStream.append( "   <dc:title>\n" );
@@ -6470,7 +6470,7 @@ sal_Int32 PDFWriterImpl::emitDocumentMetadata()
                 aMetadataStream.append( "    </rdf:Alt>\n" );
                 aMetadataStream.append( "   </dc:title>\n" );
             }
-            if( m_aContext.DocumentInfo.Author.Len() )
+            if( !m_aContext.DocumentInfo.Author.isEmpty() )
             {
                 aMetadataStream.append( "   <dc:creator>\n" );
                 aMetadataStream.append( "    <rdf:Seq>\n" );
@@ -6482,7 +6482,7 @@ sal_Int32 PDFWriterImpl::emitDocumentMetadata()
                 aMetadataStream.append( "    </rdf:Seq>\n" );
                 aMetadataStream.append( "   </dc:creator>\n" );
             }
-            if( m_aContext.DocumentInfo.Subject.Len() )
+            if( !m_aContext.DocumentInfo.Subject.isEmpty() )
             {
 // this is according to PDF/A-1, technical corrigendum 1 (2007-04-01)
                 aMetadataStream.append( "   <dc:description>\n" );
@@ -6499,12 +6499,12 @@ sal_Int32 PDFWriterImpl::emitDocumentMetadata()
         }
 
 //... PDF properties go here
-        if( m_aContext.DocumentInfo.Producer.Len() ||
-            m_aContext.DocumentInfo.Keywords.Len() )
+        if( !m_aContext.DocumentInfo.Producer.isEmpty() ||
+            !m_aContext.DocumentInfo.Keywords.isEmpty() )
         {
             aMetadataStream.append( "  <rdf:Description rdf:about=\"\"\n" );
             aMetadataStream.append( "     xmlns:pdf=\"http://ns.adobe.com/pdf/1.3/\">\n" );
-            if( m_aContext.DocumentInfo.Producer.Len() )
+            if( !m_aContext.DocumentInfo.Producer.isEmpty() )
             {
                 aMetadataStream.append( "   <pdf:Producer>" );
                 OUString aProducer;
@@ -6512,7 +6512,7 @@ sal_Int32 PDFWriterImpl::emitDocumentMetadata()
                 aMetadataStream.append( OUStringToOString( aProducer , RTL_TEXTENCODING_UTF8 )  );
                 aMetadataStream.append( "</pdf:Producer>\n" );
             }
-            if( m_aContext.DocumentInfo.Keywords.Len() )
+            if( !m_aContext.DocumentInfo.Keywords.isEmpty() )
             {
                 aMetadataStream.append( "   <pdf:Keywords>" );
                 OUString aKeywords;
@@ -6525,7 +6525,7 @@ sal_Int32 PDFWriterImpl::emitDocumentMetadata()
 
         aMetadataStream.append( "  <rdf:Description rdf:about=\"\"\n" );
         aMetadataStream.append( "    xmlns:xmp=\"http://ns.adobe.com/xap/1.0/\">\n" );
-        if( m_aContext.DocumentInfo.Creator.Len() )
+        if( !m_aContext.DocumentInfo.Creator.isEmpty() )
         {
             aMetadataStream.append( "   <xmp:CreatorTool>" );
             OUString aCreator;
@@ -7148,7 +7148,7 @@ void PDFWriterImpl::registerGlyphs( int nGlyphs,
     }
 }
 
-void PDFWriterImpl::drawRelief( SalLayout& rLayout, const String& rText, bool bTextLines )
+void PDFWriterImpl::drawRelief( SalLayout& rLayout, const OUString& rText, bool bTextLines )
 {
     push( PUSH_ALL );
 
@@ -7195,7 +7195,7 @@ void PDFWriterImpl::drawRelief( SalLayout& rLayout, const String& rText, bool bT
     pop();
 }
 
-void PDFWriterImpl::drawShadow( SalLayout& rLayout, const String& rText, bool bTextLines )
+void PDFWriterImpl::drawShadow( SalLayout& rLayout, const OUString& rText, bool bTextLines )
 {
     Font aSaveFont = m_aCurrentPDFState.m_aFont;
     Color aSaveTextLineColor = m_aCurrentPDFState.m_aTextLineColor;
@@ -7408,7 +7408,7 @@ void PDFWriterImpl::drawHorizontalGlyphs(
     }
 }
 
-void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bTextLines )
+void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool bTextLines )
 {
     // relief takes precedence over shadow (see outdev3.cxx)
     if(  m_aCurrentPDFState.m_aFont.GetRelief() != RELIEF_NONE )
@@ -7436,7 +7436,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
     bool bVertical = m_aCurrentPDFState.m_aFont.IsVertical();
     int nGlyphs;
     int nIndex = 0;
-    int nMinCharPos = 0, nMaxCharPos = rText.Len()-1;
+    int nMinCharPos = 0, nMaxCharPos = rText.getLength()-1;
     double fXScale = 1.0;
     double fSkew = 0.0;
     sal_Int32 nPixelFontHeight = m_pReferenceDevice->mpFontEntry->maFontSelData.mnHeight;
@@ -7574,7 +7574,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
             else if( pCharPosAry[i] >= nMinCharPos && pCharPosAry[i] <= nMaxCharPos )
             {
                 int nChars = 1;
-                aUnicodes.push_back( rText.GetChar( sal::static_int_cast<xub_StrLen>(pCharPosAry[i]) ) );
+                aUnicodes.push_back( rText[ sal::static_int_cast<xub_StrLen>(pCharPosAry[i]) ] );
                 pUnicodesPerGlyph[i] = 1;
                 // try to handle ligatures and such
                 if( i < nGlyphs-1 )
@@ -7588,7 +7588,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
                         nChars = 1;
                     pUnicodesPerGlyph[i] = nChars;
                     for( int n = 1; n < nChars; n++ )
-                        aUnicodes.push_back( rText.GetChar( sal::static_int_cast<xub_StrLen>(pCharPosAry[i]+n) ) );
+                        aUnicodes.push_back( rText[ sal::static_int_cast<xub_StrLen>(pCharPosAry[i]+n) ] );
                 }
                 // #i36691# hack that is needed because currently the pGlyphs[]
                 // argument is ignored for embeddable fonts and so the layout
@@ -7837,7 +7837,7 @@ void PDFWriterImpl::drawEmphasisMark( long nX, long nY,
     }
 }
 
-void PDFWriterImpl::drawText( const Point& rPos, const String& rText, xub_StrLen nIndex, xub_StrLen nLen, bool bTextLines )
+void PDFWriterImpl::drawText( const Point& rPos, const OUString& rText, xub_StrLen nIndex, xub_StrLen nLen, bool bTextLines )
 {
     MARK( "drawText" );
 
@@ -7853,7 +7853,7 @@ void PDFWriterImpl::drawText( const Point& rPos, const String& rText, xub_StrLen
     }
 }
 
-void PDFWriterImpl::drawTextArray( const Point& rPos, const String& rText, const sal_Int32* pDXArray, xub_StrLen nIndex, xub_StrLen nLen, bool bTextLines )
+void PDFWriterImpl::drawTextArray( const Point& rPos, const OUString& rText, const sal_Int32* pDXArray, xub_StrLen nIndex, xub_StrLen nLen, bool bTextLines )
 {
     MARK( "drawText with array" );
 
@@ -7869,7 +7869,7 @@ void PDFWriterImpl::drawTextArray( const Point& rPos, const String& rText, const
     }
 }
 
-void PDFWriterImpl::drawStretchText( const Point& rPos, sal_uLong nWidth, const String& rText, xub_StrLen nIndex, xub_StrLen nLen, bool bTextLines )
+void PDFWriterImpl::drawStretchText( const Point& rPos, sal_uLong nWidth, const OUString& rText, xub_StrLen nIndex, xub_StrLen nLen, bool bTextLines )
 {
     MARK( "drawStretchText" );
 
@@ -7885,7 +7885,7 @@ void PDFWriterImpl::drawStretchText( const Point& rPos, sal_uLong nWidth, const 
     }
 }
 
-void PDFWriterImpl::drawText( const Rectangle& rRect, const String& rOrigStr, sal_uInt16 nStyle, bool bTextLines )
+void PDFWriterImpl::drawText( const Rectangle& rRect, const OUString& rOrigStr, sal_uInt16 nStyle, bool bTextLines )
 {
     long        nWidth          = rRect.GetWidth();
     long        nHeight         = rRect.GetHeight();
@@ -7911,7 +7911,7 @@ void PDFWriterImpl::drawText( const Rectangle& rRect, const String& rOrigStr, sa
     long        nTextHeight     = m_pReferenceDevice->GetTextHeight();
     xub_StrLen  nMnemonicPos    = STRING_NOTFOUND;
 
-    String aStr = rOrigStr;
+    OUString aStr = rOrigStr;
     if ( nStyle & TEXT_DRAW_MNEMONIC )
         aStr = m_pReferenceDevice->GetNonMnemonicString( aStr, nMnemonicPos );
 
@@ -7941,7 +7941,7 @@ void PDFWriterImpl::drawText( const Rectangle& rRect, const String& rOrigStr, sa
                     nFormatLines = nLines-1;
 
                     pLineInfo = aMultiLineInfo.GetLine( nFormatLines );
-                    aLastLine = convertLineEnd(aStr.Copy(pLineInfo->GetIndex()), LINEEND_LF);
+                    aLastLine = convertLineEnd(aStr.copy(pLineInfo->GetIndex()), LINEEND_LF);
                     // replace line feed by space
                     aLastLine = aLastLine.replace('\n', ' ');
                     aLastLine = m_pReferenceDevice->GetEllipsisString( aLastLine, nWidth, nStyle );
@@ -8382,15 +8382,15 @@ void PDFWriterImpl::drawStrikeoutChar( const Point& rPos, long nWidth, FontStrik
     //See qadevOOo/testdocs/StrikeThrough.odt for examples if you need
     //to tweak this
 
-    OUString aStrikeoutChar = eStrikeout == STRIKEOUT_SLASH ? OUString("/") : OUString("X");
-    String aStrikeout = aStrikeoutChar;
+    OUString aStrikeoutChar = eStrikeout == STRIKEOUT_SLASH ? "/" : "X";
+    OUString aStrikeout = aStrikeoutChar;
     while( m_pReferenceDevice->GetTextWidth( aStrikeout ) < nWidth )
-        aStrikeout.Append( aStrikeout );
+        aStrikeout += aStrikeout;
 
     // do not get broader than nWidth modulo 1 character
     while( m_pReferenceDevice->GetTextWidth( aStrikeout ) >= nWidth )
-        aStrikeout.Erase( 0, 1 );
-    aStrikeout.Append( aStrikeoutChar );
+        aStrikeout = aStrikeout.replaceAt( 0, 1, "" );
+    aStrikeout += aStrikeoutChar;
     sal_Bool bShadow = m_aCurrentPDFState.m_aFont.IsShadow();
     if ( bShadow )
     {
@@ -8421,7 +8421,7 @@ void PDFWriterImpl::drawStrikeoutChar( const Point& rPos, long nWidth, FontStrik
     }
 
     intersectClipRegion( aRect );
-    drawText( rPos, aStrikeout, 0, aStrikeout.Len(), false );
+    drawText( rPos, aStrikeout, 0, aStrikeout.getLength(), false );
     pop();
 
     m_pReferenceDevice->SetLayoutMode( nOrigTLM );
@@ -11573,7 +11573,7 @@ void PDFWriterImpl::setStructureBoundingBox( const Rectangle& rRect )
     }
 }
 
-void PDFWriterImpl::setActualText( const String& rText )
+void PDFWriterImpl::setActualText( const OUString& rText )
 {
     if( m_aContext.Tagged && m_nCurrentStructElement > 0 && m_bEmitStructure )
     {
@@ -11581,7 +11581,7 @@ void PDFWriterImpl::setActualText( const String& rText )
     }
 }
 
-void PDFWriterImpl::setAlternateText( const String& rText )
+void PDFWriterImpl::setAlternateText( const OUString& rText )
 {
     if( m_aContext.Tagged && m_nCurrentStructElement > 0 && m_bEmitStructure )
     {
@@ -11921,13 +11921,13 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
     return nNewWidget;
 }
 
-void PDFWriterImpl::addStream( const String& rMimeType, PDFOutputStream* pStream, bool bCompress )
+void PDFWriterImpl::addStream( const OUString& rMimeType, PDFOutputStream* pStream, bool bCompress )
 {
     if( pStream )
     {
         m_aAdditionalStreams.push_back( PDFAddStream() );
         PDFAddStream& rStream = m_aAdditionalStreams.back();
-        rStream.m_aMimeType = rMimeType.Len()
+        rStream.m_aMimeType = !rMimeType.isEmpty()
                               ? OUString( rMimeType )
                               : OUString( "application/octet-stream"  );
         rStream.m_pStream = pStream;

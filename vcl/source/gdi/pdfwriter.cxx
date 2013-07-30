@@ -63,7 +63,7 @@ void PDFWriter::SetFont( const Font& rFont )
     pImplementation->setFont( rFont );
 }
 
-void PDFWriter::DrawText( const Point& rPos, const String& rText )
+void PDFWriter::DrawText( const Point& rPos, const OUString& rText )
 {
     pImplementation->drawText( rPos, rText );
 }
@@ -81,7 +81,7 @@ void PDFWriter::DrawTextLine(
 
 void PDFWriter::DrawTextArray(
                               const Point& rStartPt,
-                              const XubString& rStr,
+                              const OUString& rStr,
                               const sal_Int32* pDXAry,
                               xub_StrLen nIndex,
                               xub_StrLen nLen )
@@ -92,7 +92,7 @@ void PDFWriter::DrawTextArray(
 void PDFWriter::DrawStretchText(
                                 const Point& rStartPt,
                                 sal_uLong nWidth,
-                                const XubString& rStr,
+                                const OUString& rStr,
                                 xub_StrLen nIndex,
                                 xub_StrLen nLen )
 {
@@ -101,7 +101,7 @@ void PDFWriter::DrawStretchText(
 
 void PDFWriter::DrawText(
                          const Rectangle& rRect,
-                         const XubString& rStr,
+                         const OUString& rStr,
                          sal_uInt16 nStyle )
 {
     pImplementation->drawText( rRect, rStr, nStyle );
@@ -405,12 +405,12 @@ void PDFWriter::SetStructureBoundingBox( const Rectangle& rRect )
     pImplementation->setStructureBoundingBox( rRect );
 }
 
-void PDFWriter::SetActualText( const String& rText )
+void PDFWriter::SetActualText( const OUString& rText )
 {
     pImplementation->setActualText( rText );
 }
 
-void PDFWriter::SetAlternateText( const String& rText )
+void PDFWriter::SetAlternateText( const OUString& rText )
 {
     pImplementation->setAlternateText( rText );
 }
@@ -434,7 +434,7 @@ PDFOutputStream::~PDFOutputStream()
 {
 }
 
-void PDFWriter::AddStream( const String& rMimeType, PDFOutputStream* pStream, bool bCompress )
+void PDFWriter::AddStream( const OUString& rMimeType, PDFOutputStream* pStream, bool bCompress )
 {
     pImplementation->addStream( rMimeType, pStream, bCompress );
 }

@@ -64,8 +64,8 @@ class PDFWriterImpl;
 
 struct PDFNote
 {
-    String          Title;          // optional title for the popup containing the note
-    String          Contents;       // contents of the note
+    OUString          Title;          // optional title for the popup containing the note
+    OUString          Contents;       // contents of the note
 };
 
 class VCL_DLLPUBLIC PDFOutputStream
@@ -549,12 +549,12 @@ The following structure describes the permissions used in PDF security
 
     struct PDFDocInfo
     {
-        String          Title;          // document title
-        String          Author;         // document author
-        String          Subject;        // subject
-        String          Keywords;       // keywords
-        String          Creator;        // application that created the original document
-        String          Producer;       // OpenOffice
+        OUString          Title;          // document title
+        OUString          Author;         // document author
+        OUString          Subject;        // subject
+        OUString          Keywords;       // keywords
+        OUString          Creator;        // application that created the original document
+        OUString          Producer;       // OpenOffice
     };
 
     enum ColorMode
@@ -763,22 +763,22 @@ The following structure describes the permissions used in PDF security
 
 
     /* actual drawing functions */
-    void                DrawText( const Point& rPos, const String& rText );
+    void                DrawText( const Point& rPos, const OUString& rText );
 
     void                DrawTextLine( const Point& rPos, long nWidth,
                                       FontStrikeout eStrikeout,
                                       FontUnderline eUnderline,
                                       FontUnderline eOverline,
                                       sal_Bool bUnderlineAbove = sal_False );
-    void                DrawTextArray( const Point& rStartPt, const XubString& rStr,
+    void                DrawTextArray( const Point& rStartPt, const OUString& rStr,
                                        const sal_Int32* pDXAry = NULL,
                                        xub_StrLen nIndex = 0,
                                        xub_StrLen nLen = STRING_LEN );
     void                DrawStretchText( const Point& rStartPt, sal_uLong nWidth,
-                                         const XubString& rStr,
+                                         const OUString& rStr,
                                          xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN );
     void                DrawText( const Rectangle& rRect,
-                                  const XubString& rStr, sal_uInt16 nStyle = 0 );
+                                  const OUString& rStr, sal_uInt16 nStyle = 0 );
 
     void                DrawPixel( const Point& rPt, const Color& rColor );
     void                DrawPixel( const Point& rPt )
@@ -1224,7 +1224,7 @@ The following structure describes the permissions used in PDF security
     @param rText
     contains the complete logical text the structural element displays.
      */
-    void SetActualText( const String& rText );
+    void SetActualText( const OUString& rText );
 
     /** set the Alt attribute of a strutural element
 
@@ -1235,7 +1235,7 @@ The following structure describes the permissions used in PDF security
     @param rText
     contains the replacement text for the structural element
     */
-    void SetAlternateText( const String& rText );
+    void SetAlternateText( const OUString& rText );
 
     /** Sets the time in seconds a page will appear before the next
         page is shown automatically
@@ -1296,7 +1296,7 @@ The following structure describes the permissions used in PDF security
     @param bCompress
     specifies whether the stream should be flate encoded by PDFWriter or not
     */
-    void AddStream( const String& rMimeType, PDFOutputStream* pStream, bool bCompress );
+    void AddStream( const OUString& rMimeType, PDFOutputStream* pStream, bool bCompress );
 
 };
 
