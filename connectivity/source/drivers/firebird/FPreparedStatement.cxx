@@ -128,8 +128,10 @@ void OPreparedStatement::ensurePrepared()
 //             m_nNumParams = isc_vax_integer(aResultBuffer+3, aVarLength);
 //         }
 //     }
-    mallocSQLVAR(m_pInSqlda);
-    evaluateStatusVector(m_statusVector, m_sSqlStatement, *this);
+    if (!aErr)
+        mallocSQLVAR(m_pInSqlda);
+    else
+        evaluateStatusVector(m_statusVector, m_sSqlStatement, *this);
 }
 
 OPreparedStatement::~OPreparedStatement()
