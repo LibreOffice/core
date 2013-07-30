@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//9pA\u003d",
+        "filename": "sw/source/core/bastyp/init.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-07-30T14:40:30Z",
+      "side": 1,
+      "message": "Note that these can be usually written simpler as just \"\" instead of OUString().",
+      "revId": "484543a02872f2b3929ba7b969a0f7d2ced93e69",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
