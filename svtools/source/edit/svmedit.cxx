@@ -20,7 +20,6 @@
 
 
 #include "unoiface.hxx"
-#include <vcl/builder.hxx>
 #include <svtools/textwindowpeer.hxx>
 
 
@@ -32,11 +31,6 @@ MultiLineEdit::MultiLineEdit( Window* pParent, WinBits nWinStyle )
 MultiLineEdit::MultiLineEdit( Window* pParent, const ResId& rResId )
     : VclMultiLineEdit( pParent,rResId )
 {
-}
-
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeMultiLineEdit(Window *pParent, VclBuilder::stringmap &)
-{
-    return new MultiLineEdit(pParent);
 }
 
 // virtual

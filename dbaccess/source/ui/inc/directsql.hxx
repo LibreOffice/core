@@ -52,13 +52,13 @@ namespace dbaui
         ::osl::Mutex    m_aMutex;
 
         MultiLineEditSyntaxHighlight*    m_pSQL;
-        PushButton*      m_pExecute;
-        ListBox*        m_pSQLHistory;
-        MultiLineEdit*   m_pStatus;
-        CheckBox*       m_pShowOutput;
-        MultiLineEdit*   m_pOutput;
-        HelpButton*      m_pHelp;
-        PushButton*      m_pClose;
+        PushButton*       m_pExecute;
+        ListBox*          m_pSQLHistory;
+        VclMultiLineEdit* m_pStatus;
+        CheckBox*         m_pShowOutput;
+        VclMultiLineEdit* m_pOutput;
+        HelpButton*       m_pHelp;
+        PushButton*       m_pClose;
 
         typedef ::std::deque< String >  StringQueue;
         StringQueue     m_aStatementHistory;    // previous statements

@@ -95,7 +95,7 @@
 #define DLG_INDEXDESIGN                 RID_DIALOG_START + 19
     // FREE
 #define DLG_DATABASE_USERADMIN          RID_DIALOG_START + 21
-#define DLG_DIRECTSQL                   RID_DIALOG_START + 22
+    // FREE
 #define DLG_PASSWORD                    RID_DIALOG_START + 23
 #define DLG_DOMAINPASSWORD              RID_DIALOG_START + 24
 #define DLG_DATABASE_ADVANCED           RID_DIALOG_START + 26

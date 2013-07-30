@@ -227,9 +227,6 @@
     <glade-widget-class title="Frame Selector" name="svxlo-SvxFrameSelector"
                         generic-name="Frame Border Preview Window" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
-    <glade-widget-class title="MultiLine Edit" name="svtlo-MultiLineEdit"
-                        generic-name="MultiLineEdit" parent="GtkTextView"
-                        icon-name="widget-gtk-textview"/>
     <glade-widget-class title="MultiLine Edit" name="svtlo-MultiLineEditSyntaxHighlight"
                         generic-name="MultiLineEdit" parent="GtkTextView"
                         icon-name="widget-gtk-textview"/>

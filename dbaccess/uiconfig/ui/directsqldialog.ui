@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
+  <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkDialog" id="DirectSQLDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
@@ -36,7 +37,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
-                <property name="has_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
               </object>
@@ -126,6 +126,8 @@
                             <property name="label">_Execute</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="can_default">True</property>
+                            <property name="has_default">True</property>
                             <property name="receives_default">True</property>
                             <property name="use_underline">True</property>
                           </object>
@@ -145,9 +147,10 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBox" id="sqlhistory">
+                      <object class="VclComboBoxText" id="sqlhistory">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="max_width_chars">60</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -206,9 +209,18 @@
                 <property name="top_padding">6</property>
                 <property name="left_padding">12</property>
                 <child>
-                  <object class="svtlo-MultiLineEdit" id="status:border">
+                  <object class="GtkScrolledWindow" id="scrolledwindow2">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="vscrollbar_policy">always</property>
+                    <property name="shadow_type">in</property>
+                    <child>
+                      <object class="GtkTextView" id="status:border">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="editable">False</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
@@ -243,9 +255,19 @@
                 <property name="top_padding">6</property>
                 <property name="left_padding">12</property>
                 <child>
-                  <object class="svtlo-MultiLineEdit" id="output:border">
+                  <object class="GtkScrolledWindow" id="scrolledwindow1">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="hscrollbar_policy">always</property>
+                    <property name="vscrollbar_policy">always</property>
+                    <property name="shadow_type">in</property>
+                    <child>
+                      <object class="GtkTextView" id="output:border">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="editable">False</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
