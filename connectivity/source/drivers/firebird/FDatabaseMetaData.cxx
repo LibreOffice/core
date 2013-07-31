@@ -242,15 +242,75 @@ sal_Bool SAL_CALL ODatabaseMetaData::storesUpperCaseIdentifiers()
     return sal_True;
 }
 
-// -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::supportsAlterTableWithAddColumn(  ) throw(SQLException, RuntimeException)
+// ---- SQL Feature Support ---------------------------------------------------
+sal_Bool SAL_CALL ODatabaseMetaData::supportsAlterTableWithAddColumn()
+    throw(SQLException, RuntimeException)
+{
+    return sal_True;
+}
+
+sal_Bool SAL_CALL ODatabaseMetaData::supportsAlterTableWithDropColumn()
+    throw(SQLException, RuntimeException)
+{
+    return sal_True;
+}
+
+sal_Bool SAL_CALL ODatabaseMetaData::supportsPositionedDelete()
+    throw(SQLException, RuntimeException)
+{
+    return sal_True;
+}
+
+sal_Bool SAL_CALL ODatabaseMetaData::supportsPositionedUpdate()
+    throw(SQLException, RuntimeException)
+{
+    return sal_True;
+}
+
+sal_Bool SAL_CALL ODatabaseMetaData::supportsOuterJoins()
+    throw(SQLException, RuntimeException)
+{
+    return sal_True;
+}
+
+sal_Bool SAL_CALL ODatabaseMetaData::supportsSelectForUpdate()
+    throw(SQLException, RuntimeException)
+{
+    return sal_True;
+}
+
+sal_Bool SAL_CALL ODatabaseMetaData::allTablesAreSelectable()
+    throw(SQLException, RuntimeException)
+{
+    // TODO: true if embedded, but unsure about remote server
+    return sal_True;
+}
+
+sal_Bool SAL_CALL ODatabaseMetaData::supportsConvert(sal_Int32 fromType,
+                                                     sal_Int32 toType)
+    throw(SQLException, RuntimeException)
+{
+    (void) fromType;
+    (void) toType;
+    return sal_False;
+}
+
+sal_Bool SAL_CALL ODatabaseMetaData::supportsTypeConversion()
+    throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::supportsAlterTableWithDropColumn(  ) throw(SQLException, RuntimeException)
+
+sal_Bool SAL_CALL ODatabaseMetaData::supportsColumnAliasing()
+    throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return sal_True;
+}
+
+sal_Bool SAL_CALL ODatabaseMetaData::supportsTableCorrelationNames()
+    throw(SQLException, RuntimeException)
+{
+    return sal_True;
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxIndexLength(  ) throw(SQLException, RuntimeException)
@@ -293,16 +353,6 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsDataManipulationTransactionsOnly(  
 sal_Bool SAL_CALL ODatabaseMetaData::supportsDataDefinitionAndDataManipulationTransactions(  ) throw(SQLException, RuntimeException)
 {
     return sal_True;
-}
-// -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::supportsPositionedDelete(  ) throw(SQLException, RuntimeException)
-{
-    return sal_False;
-}
-// -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::supportsPositionedUpdate(  ) throw(SQLException, RuntimeException)
-{
-    return sal_False;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::supportsOpenStatementsAcrossRollback(  ) throw(SQLException, RuntimeException)
@@ -361,11 +411,6 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsSchemasInTableDefinitions(  ) throw
     return sal_False;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::supportsOuterJoins(  ) throw(SQLException, RuntimeException)
-{
-    return sal_False;
-}
-// -------------------------------------------------------------------------
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxStatements(  ) throw(SQLException, RuntimeException)
 {
     sal_Int32 nValue = 0; // 0 means no limit
@@ -399,16 +444,6 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsStoredProcedures(  ) throw(SQLExcep
     return sal_True;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::supportsSelectForUpdate(  ) throw(SQLException, RuntimeException)
-{
-    return sal_False;
-}
-// -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::allTablesAreSelectable(  ) throw(SQLException, RuntimeException)
-{
-    return sal_False;
-}
-// -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::isReadOnly(  ) throw(SQLException, RuntimeException)
 {
     return m_pConnection->isReadOnly();
@@ -424,30 +459,8 @@ sal_Bool SAL_CALL ODatabaseMetaData::usesLocalFilePerTable(  ) throw(SQLExceptio
     return sal_False;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::supportsTypeConversion(  ) throw(SQLException, RuntimeException)
-{
-    return sal_False;
-}
-// -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::nullPlusNonNullIsNull(  ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
-}
-// -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::supportsColumnAliasing(  ) throw(SQLException, RuntimeException)
-{
-    return sal_False;
-}
-// -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::supportsTableCorrelationNames(  ) throw(SQLException, RuntimeException)
-{
-    return sal_False;
-}
-// -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::supportsConvert( sal_Int32 fromType, sal_Int32 toType ) throw(SQLException, RuntimeException)
-{
-    (void) fromType;
-    (void) toType;
     return sal_False;
 }
 // -------------------------------------------------------------------------
