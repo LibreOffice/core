@@ -23,6 +23,14 @@ namespace connectivity
     {
 
         /**
+         * Make sure an identifier is safe to use within the databse. Currently
+         * firebird seems to return identifiers with 93 character (instead of
+         * 31). Use this to avoid issues when using the identifier in other
+         * sql queries.
+         */
+        void sanitizeIdentifier(::rtl::OUString& rIdentifier);
+
+        /**
          * Evaluate a firebird status vector and throw exceptions as necessary.
          * The content of the status vector is included in the thrown exception.
          */

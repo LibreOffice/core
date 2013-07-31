@@ -19,6 +19,12 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::uno;
 
+void firebird::sanitizeIdentifier(OUString& rIdentifier)
+{
+    if (rIdentifier.getLength() > 31)
+        rIdentifier = rIdentifier.copy(0, 31);
+}
+
 void firebird::evaluateStatusVector(ISC_STATUS_ARRAY& aStatusVector,
                                     const OUString& aCause,
                                     const uno::Reference< XInterface >& _rxContext)

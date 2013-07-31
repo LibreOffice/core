@@ -1067,11 +1067,13 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumnPrivileges(
         // 3. TABLE_NAME
         {
             OUString sTableName = xRow->getString(1);
+            sanitizeIdentifier(sTableName);
             aCurrentRow.push_back(new ORowSetValueDecorator(sTableName));
         }
         // 3. COLUMN_NAME
         {
             OUString sColumnName = xRow->getString(6);
+            sanitizeIdentifier(sColumnName);
             aCurrentRow.push_back(new ORowSetValueDecorator(sColumnName));
         }
         // 4. GRANTOR
@@ -1180,13 +1182,15 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
     {
         // 3. TABLE_NAME
         {
-            OUString aTableName = xRow->getString(1);
-            aCurrentRow[3] = new ORowSetValueDecorator(aTableName);
+            OUString sTableName = xRow->getString(1);
+            sanitizeIdentifier(sTableName);
+            aCurrentRow[3] = new ORowSetValueDecorator(sTableName);
         }
         // 4. Column Name
         {
-            OUString aColumnName = xRow->getString(2);
-            aCurrentRow[4] = new ORowSetValueDecorator(aColumnName);
+            OUString sColumnName = xRow->getString(2);
+            sanitizeIdentifier(sColumnName);
+            aCurrentRow[4] = new ORowSetValueDecorator(sColumnName);
         }
 
         // 5. Datatype
@@ -1348,7 +1352,8 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
     {
         ODatabaseMetaDataResultSet::ORow aCurrentRow(3);
 
-        OUString aTableName             = xRow->getString(1);
+        OUString sTableName             = xRow->getString(1);
+        sanitizeIdentifier(sTableName);
         sal_Int16 systemFlag            = xRow->getShort(2);
         sal_Int16 tableType             = xRow->getShort(3);
         uno::Reference< XBlob > xBlob   = xRow->getBlob(4);
@@ -1383,7 +1388,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
         // TABLE_CAT (catalog) may be null -- thus we omit it.
         // TABLE_SCHEM (schema) may be null -- thus we omit it.
         // TABLE_NAME
-        aCurrentRow.push_back(new ORowSetValueDecorator(aTableName));
+        aCurrentRow.push_back(new ORowSetValueDecorator(sTableName));
         // TABLE_TYPE
         aCurrentRow.push_back(new ORowSetValueDecorator(aTableType));
         // REMARKS
@@ -1599,6 +1604,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
         // 3. TABLE_NAME
         {
             OUString sTableName = xRow->getString(1);
+            sanitizeIdentifier(sTableName);
             aCurrentRow.push_back(new ORowSetValueDecorator(sTableName));
         }
         // 4. GRANTOR

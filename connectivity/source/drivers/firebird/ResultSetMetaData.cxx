@@ -85,9 +85,11 @@ OUString SAL_CALL OResultSetMetaData::getColumnName(sal_Int32 column)
     throw(SQLException, RuntimeException)
 {
     verifyValidColumn(column);
-    return OUString(m_pSqlda->sqlvar[column-1].sqlname,
+    OUString sRet(m_pSqlda->sqlvar[column-1].sqlname,
                     m_pSqlda->sqlvar[column-1].sqlname_length,
                     RTL_TEXTENCODING_UTF8);
+    sanitizeIdentifier(sRet);
+    return sRet;
 }
 
 OUString SAL_CALL OResultSetMetaData::getTableName(sal_Int32 column)
