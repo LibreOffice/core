@@ -72,6 +72,7 @@ private:
 
 protected:
     sal_Bool RefreshFromDoc( OUString aURL );
+    void RestoreLastSelection();
 
     SvTreeListEntry* FindEntry ( String aStrName );
     void ClearTree();
@@ -88,7 +89,7 @@ public:
 
     sal_Bool MoveTo ( Point aNewPos );
     void RefreshTree ( String aStrURL );
-    void SelectEntry ( String aStrMark );
+    bool SelectEntry(String aStrMark);
 
     sal_Bool ConnectToDialog( sal_Bool bDoit = sal_True );
 

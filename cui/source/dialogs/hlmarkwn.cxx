@@ -17,14 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/wrkwin.hxx>
 #include <dialmgr.hxx>
 #include <sfx2/docfile.hxx>
+#include <unotools/viewoptions.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/wrkwin.hxx>
 
 // UNO-Stuff
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
@@ -138,7 +140,6 @@ SvxHlinkDlgMarkWnd::SvxHlinkDlgMarkWnd( SvxHyperlinkTabPageBase *pParent )
                             WB_HSCROLL | WB_HASBUTTONSATROOT );
 
     maLbTree.SetAccessibleName(String(CUI_RES(STR_MARK_TREE)));
-
 }
 
 SvxHlinkDlgMarkWnd::~SvxHlinkDlgMarkWnd()
@@ -200,6 +201,68 @@ sal_Bool SvxHlinkDlgMarkWnd::ConnectToDialog( sal_Bool bDoit )
     return bOldStatus;
 }
 
+namespace
+{
+    void SelectPath(SvTreeListEntry *pEntry, SvxHlmarkTreeLBox &rLbTree,
+        std::deque<OUString> &rLastSelectedPath)
+    {
+        OUString sTitle(rLastSelectedPath.front());
+        rLastSelectedPath.pop_front();
+        if (sTitle.isEmpty())
+            return;
+        while (pEntry)
+        {
+            if (sTitle == rLbTree.GetEntryText(pEntry))
+            {
+                rLbTree.Select(pEntry);
+                rLbTree.MakeVisible(pEntry);
+                if (!rLastSelectedPath.empty())
+                {
+                    rLbTree.Expand(pEntry);
+                    SelectPath(rLbTree.FirstChild(pEntry), rLbTree, rLastSelectedPath);
+                }
+                break;
+            }
+            pEntry = rLbTree.NextSibling(pEntry);
+        }
+    }
+}
+
+#define TG_SETTING_MANAGER  "TargetInDocument"
+#define TG_SETTING_LASTMARK "LastSelectedMark"
+#define TG_SETTING_LASTPATH "LastSelectedPath"
+
+void SvxHlinkDlgMarkWnd::RestoreLastSelection()
+{
+    bool bSelectedEntry = false;
+
+    OUString sLastSelectedMark;
+    std::deque<OUString> aLastSelectedPath;
+    SvtViewOptions aViewSettings( E_DIALOG, TG_SETTING_MANAGER );
+    if (aViewSettings.Exists())
+    {
+        //Maybe we might want to have some sort of mru list and keep a mapping
+        //per document, rather than the current reuse of "the last thing
+        //selected, regardless of the document"
+        aViewSettings.GetUserItem(TG_SETTING_LASTMARK) >>= sLastSelectedMark;
+        uno::Sequence<OUString> aTmp;
+        aViewSettings.GetUserItem(TG_SETTING_LASTPATH) >>= aTmp;
+        aLastSelectedPath = comphelper::sequenceToContainer< std::deque<OUString> >(aTmp);
+    }
+    //fallback to previous entry selected the last
+    //time we executed this dialog. First see if
+    //the exact mark exists and re-use that
+    if (!sLastSelectedMark.isEmpty())
+        bSelectedEntry = SelectEntry(sLastSelectedMark);
+    //Otherwise just select the closest path available
+    //now to what was available at dialog close time
+    if (!bSelectedEntry && !aLastSelectedPath.empty())
+    {
+        std::deque<OUString> aTmpSelectedPath(aLastSelectedPath);
+        SelectPath(maLbTree.First(), maLbTree, aTmpSelectedPath);
+    }
+}
+
 /*************************************************************************
 |*
 |* Interface to refresh tree
@@ -222,11 +285,16 @@ void SvxHlinkDlgMarkWnd::RefreshTree ( String aStrURL )
     if( !RefreshFromDoc ( aUStrURL ) )
         maLbTree.Invalidate();
 
+    bool bSelectedEntry = false;
+
     if ( nPos != STRING_NOTFOUND )
     {
         String aStrMark = aStrURL.Copy ( nPos+1 );
-        SelectEntry ( aStrMark );
+        bSelectedEntry = SelectEntry(aStrMark);
     }
+
+    if (!bSelectedEntry)
+        RestoreLastSelection();
 
     LeaveWait();
 
@@ -425,7 +493,7 @@ void SvxHlinkDlgMarkWnd::ClearTree()
 
 /*************************************************************************
 |*
-|* Find Entry for Strng
+|* Find Entry for String
 |*
 |************************************************************************/
 
@@ -452,14 +520,14 @@ SvTreeListEntry* SvxHlinkDlgMarkWnd::FindEntry ( String aStrName )
 |*
 |************************************************************************/
 
-void SvxHlinkDlgMarkWnd::SelectEntry ( String aStrMark )
+bool SvxHlinkDlgMarkWnd::SelectEntry(String aStrMark)
 {
     SvTreeListEntry* pEntry = FindEntry ( aStrMark );
-    if ( pEntry )
-    {
-        maLbTree.Select ( pEntry );
-        maLbTree.MakeVisible ( pEntry );
-    }
+    if (!pEntry)
+        return false;
+    maLbTree.Select ( pEntry );
+    maLbTree.MakeVisible ( pEntry );
+    return true;
 }
 
 /*************************************************************************
@@ -494,10 +562,40 @@ IMPL_LINK_NOARG(SvxHlinkDlgMarkWnd, ClickApplyHdl_Impl)
 
 IMPL_LINK_NOARG(SvxHlinkDlgMarkWnd, ClickCloseHdl_Impl)
 {
+    SvTreeListEntry* pEntry = maLbTree.GetCurEntry();
+    if ( pEntry )
+    {
+        TargetData* pUserData = (TargetData *) pEntry->GetUserData();
+        OUString sLastSelectedMark = pUserData->aUStrLinkname;
+
+        std::deque<OUString> aLastSelectedPath;
+        if (pEntry)
+        {
+            //If the bottommost entry is expanded but nothing
+            //underneath it is selected leave a dummy entry
+            if (maLbTree.IsExpanded(pEntry))
+                aLastSelectedPath.push_front(OUString());
+            while (pEntry)
+            {
+                aLastSelectedPath.push_front(maLbTree.GetEntryText(pEntry));
+                pEntry = maLbTree.GetParent(pEntry);
+            }
+        }
+
+        uno::Sequence< beans::NamedValue > aSettings(2);
+        aSettings[0].Name = TG_SETTING_LASTMARK;
+        aSettings[0].Value <<= sLastSelectedMark;
+        aSettings[1].Name = TG_SETTING_LASTPATH;
+        aSettings[1].Value <<= comphelper::containerToSequence<OUString>(aLastSelectedPath);
+
+        // write
+        SvtViewOptions aViewSettings( E_DIALOG, TG_SETTING_MANAGER );
+        aViewSettings.SetUserData( aSettings );
+    }
+
     Close();
 
     return( 0L );
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
