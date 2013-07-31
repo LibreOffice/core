@@ -42,6 +42,7 @@ VLCPlayer::VLCPlayer( const rtl::OUString& url )
     , mMedia( InitMedia( url, mInstance ), libvlc_media_release )
     , mPlayer( libvlc_media_player_new_from_media( mMedia.get() ), libvlc_media_player_release )
     , mUrl( url )
+    , mPlaybackLoop( false )
 {
 }
 
@@ -98,13 +99,38 @@ double SAL_CALL VLCPlayer::getRate()
     return libvlc_media_player_get_rate( mPlayer.get() );
 }
 
+namespace
+{
+    void EventHandler( const libvlc_event_t *evemt, void *pData )
+    {
+        switch (evemt->type)
+        {
+        case libvlc_MediaPlayerEndReached:
+            boost::shared_ptr<libvlc_media_player_t> player = *static_cast< boost::shared_ptr<libvlc_media_player_t>* >( pData );
+            libvlc_media_player_stop( player.get() );
+            libvlc_media_player_play( player.get() )
+            break;
+        }
+    }
+}
+
 void SAL_CALL VLCPlayer::setPlaybackLoop( ::sal_Bool bSet )
 {
+    ::osl::MutexGuard aGuard(m_aMutex);
+    mPlaybackLoop = bSet;
+
+    libvlc_event_manager_t *manager = libvlc_media_player_event_manager( mPlayer.get() );
+
+    if ( bSet )
+        libvlc_event_attach( manager, libvlc_MediaPlayerEndReached, EventHandler, &mPlayer );
+    else
+        libvlc_event_detach( manager, libvlc_MediaPlayerEndReached, EventHandler, &mPlayer );
 }
 
 ::sal_Bool SAL_CALL VLCPlayer::isPlaybackLoop()
 {
-    return false;
+    ::osl::MutexGuard aGuard(m_aMutex);
+    return mPlaybackLoop;
 }
 
 void SAL_CALL VLCPlayer::setVolumeDB( ::sal_Int16 nDB )

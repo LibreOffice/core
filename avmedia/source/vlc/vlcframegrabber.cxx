@@ -34,7 +34,7 @@ namespace
 {
     void EventHandler( const libvlc_event_t *evemt, void *pData )
     {
-        switch (evemt->type)
+        switch ( evemt->type )
         {
         case libvlc_MediaPlayerPaused:
             osl::Condition *condition = static_cast<osl::Condition*>( pData );
@@ -53,7 +53,7 @@ namespace
     libvlc_event_attach( manager, libvlc_MediaPlayerPaused, EventHandler, &condition );
 
     libvlc_audio_set_mute( player, true );
-    if (libvlc_media_player_play( player ) == -1)
+    if ( libvlc_media_player_play( player ) == -1 )
     {
         std::cerr << "Couldn't play" << std::endl;
     }

@@ -41,6 +41,7 @@ class VLCPlayer : public ::cppu::BaseMutex,
     boost::shared_ptr<libvlc_media_t> mMedia;
     boost::shared_ptr<libvlc_media_player_t> mPlayer;
     const rtl::OUString mUrl;
+    bool mPlaybackLoop;
 public:
     VLCPlayer( const rtl::OUString& url );
 
