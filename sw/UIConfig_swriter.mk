@@ -87,6 +87,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/footendnotedialog \
 	sw/uiconfig/swriter/ui/footnotepage \
 	sw/uiconfig/swriter/ui/footnoteareapage \
+	sw/uiconfig/swriter/ui/footnotesendnotestabpage \
 	sw/uiconfig/swriter/ui/frmaddpage \
 	sw/uiconfig/swriter/ui/frmurlpage \
 	sw/uiconfig/swriter/ui/indexentry \

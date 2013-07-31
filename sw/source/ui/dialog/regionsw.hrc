@@ -24,38 +24,18 @@
 
 #define CB_DDE                  1
 #define CB_DISMISS              2
-#define CB_END_AT_TXTEND        3
-#define CB_END_NUM              4
 #define CB_FILE                 5
-#define CB_FTN_AT_TXTEND        6
-#define CB_FTN_NUM              7
 #define CB_HIDE                 8
 #define CB_PASSWD               9
 #define CB_PROTECT             10
-#define CB_FTN_NUM_FMT         11
-#define CB_END_NUM_FMT         12
 #define ED_CONDITION           13
-#define ED_END_PREFIX          14
-#define ED_END_SUFFIX          15
 #define ED_FILE                16
-#define ED_FTN_PREFIX          17
-#define ED_FTN_SUFFIX          18
 #define ED_RANAME              19
 #define ED_RNAME               20
 #define FT_CONDITION           21
-#define FLD_END_OFFSET         23
-#define FLD_FTN_OFFSET         24
 #define FT_DDE                 25
-#define FT_END_OFFSET          26
-#define FT_END_PREFIX          27
-#define FT_END_SUFFIX          28
 #define FT_FILE                29
-#define FT_FTN_OFFSET          30
-#define FT_FTN_PREFIX          31
-#define FT_FTN_SUFFIX          32
 #define FT_SUBREG              34
-#define LB_END_NUMVIEW         36
-#define LB_FTN_NUMVIEW         37
 #define LB_SUBREG              38
 #define PB_CANCEL              39
 #define PB_FILE                40
@@ -69,8 +49,6 @@
 #define FL_PROTECT             49
 #define FL_HIDE                50
 #define PB_PASSWD              51
-#define FL_END                 52
-#define FL_FTN                 53
 #define IL_BITMAPS              54
 // #114856# edit in readonly sections
 #define FL_PROPERTIES           56
