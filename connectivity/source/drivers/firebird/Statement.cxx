@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "FDriver.hxx"
-#include "FStatement.hxx"
-#include "FConnection.hxx"
-#include "FResultSet.hxx"
+#include "Connection.hxx"
+#include "Driver.hxx"
+#include "ResultSet.hxx"
+#include "Statement.hxx"
 #include "Util.hxx"
 
 #include <comphelper/sequence.hxx>
@@ -28,10 +28,10 @@
 #include <osl/thread.h>
 #include <rtl/ustrbuf.hxx>
 
+#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/sdbc/FetchDirection.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
 
 using namespace connectivity::firebird;
 

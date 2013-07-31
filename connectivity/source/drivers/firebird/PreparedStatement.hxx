@@ -20,7 +20,7 @@
 #ifndef CONNECTIVITY_FIREBIRD_PREPAREDSTATEMENT_HXX
 #define CONNECTIVITY_FIREBIRD_PREPAREDSTATEMENT_HXX
 
-#include "FStatement.hxx"
+#include "Statement.hxx"
 
 #include <cppuhelper/implbase5.hxx>
 

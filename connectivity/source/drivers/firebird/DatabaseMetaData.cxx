@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "FDatabaseMetaData.hxx"
-#include "FDatabaseMetaDataResultSet.hxx"
+#include "DatabaseMetaData.hxx"
 #include "Util.hxx"
 
 #include <ibase.h>
 #include <rtl/ustrbuf.hxx>
+#include <FDatabaseMetaDataResultSet.hxx>
 
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>

@@ -20,7 +20,8 @@
 #ifndef CONNECTIVITY_FIREBIRD_DATABASEMETADATA_HXX
 #define CONNECTIVITY_FIREBIRD_DATABASEMETADATA_HXX
 
-#include "FConnection.hxx"
+#include "Connection.hxx"
+
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <cppuhelper/implbase1.hxx>
 

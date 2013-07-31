@@ -21,27 +21,27 @@
 #define CONNECTIVITY_FIREBIRD_CONNECTION_HXX
 
 #include "Blob.hxx"
+#include "SubComponent.hxx"
 
-#include <com/sun/star/sdbc/SQLWarning.hpp>
+#include <ibase.h>
+
+#include <connectivity/CommonTools.hxx>
+#include <connectivity/OSubComponent.hxx>
+#include <cppuhelper/compbase4.hxx>
+#include <cppuhelper/weakref.hxx>
+#include <map>
+#include <OTypeInfo.hxx>
+
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/document/DocumentEvent.hpp>
 #include <com/sun/star/document/XDocumentEventListener.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
-#include "connectivity/OSubComponent.hxx"
-#include "connectivity/CommonTools.hxx"
-#include "FSubComponent.hxx"
-
-#include "OTypeInfo.hxx"
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <com/sun/star/sdbc/XWarningsSupplier.hpp>
+#include <com/sun/star/sdbc/SQLWarning.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
-#include <cppuhelper/compbase4.hxx>
-#include <cppuhelper/weakref.hxx>
-#include <map>
-
-#include <ibase.h>
+#include <com/sun/star/sdbc/XWarningsSupplier.hpp>
 
 namespace connectivity
 {

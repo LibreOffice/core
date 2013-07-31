@@ -38,14 +38,14 @@ $(eval $(call gb_Library_set_componentfile,firebird_sdbc,connectivity/source/dri
 
 $(eval $(call gb_Library_add_exception_objects,firebird_sdbc,\
     connectivity/source/drivers/firebird/Blob \
-    connectivity/source/drivers/firebird/FConnection \
-    connectivity/source/drivers/firebird/FDatabaseMetaData \
-    connectivity/source/drivers/firebird/FDriver \
-    connectivity/source/drivers/firebird/FPreparedStatement \
-    connectivity/source/drivers/firebird/FResultSet \
-    connectivity/source/drivers/firebird/FResultSetMetaData \
-    connectivity/source/drivers/firebird/FServices \
-    connectivity/source/drivers/firebird/FStatement \
+    connectivity/source/drivers/firebird/Connection \
+    connectivity/source/drivers/firebird/DatabaseMetaData \
+    connectivity/source/drivers/firebird/Driver \
+    connectivity/source/drivers/firebird/PreparedStatement \
+    connectivity/source/drivers/firebird/ResultSet \
+    connectivity/source/drivers/firebird/ResultSetMetaData \
+    connectivity/source/drivers/firebird/Services \
+    connectivity/source/drivers/firebird/Statement \
     connectivity/source/drivers/firebird/StatementCommonBase \
     connectivity/source/drivers/firebird/Util \
 ))

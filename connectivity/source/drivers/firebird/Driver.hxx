@@ -20,10 +20,11 @@
 #ifndef CONNECTIVITY_FIREBIRD_DRIVER_HXX
 #define CONNECTIVITY_FIREBIRD_DRIVER_HXX
 
+#include "Connection.hxx"
+
 #include <com/sun/star/sdbc/XDriver.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/compbase2.hxx>
-#include "FConnection.hxx"
 
 namespace connectivity
 {

@@ -17,10 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sal/types.h>
-#include "FDriver.hxx"
+#include "Driver.hxx"
+
 #include <cppuhelper/factory.hxx>
 #include <osl/diagnose.h>
+#include <sal/types.h>
 
 using namespace connectivity::firebird;
 using ::rtl::OUString;

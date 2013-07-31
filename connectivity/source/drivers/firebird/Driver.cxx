@@ -17,8 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "FDriver.hxx"
-#include "FConnection.hxx"
+#include "Connection.hxx"
+#include "Driver.hxx"
+
 #include "connectivity/dbexception.hxx"
 #include "resource/common_res.hrc"
 #include "resource/hsqldb_res.hrc"

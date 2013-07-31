@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "FConnection.hxx"
-#include "FDatabaseMetaData.hxx"
-#include "FDriver.hxx"
-#include "FPreparedStatement.hxx"
-#include "FStatement.hxx"
+#include "Connection.hxx"
+#include "DatabaseMetaData.hxx"
+#include "Driver.hxx"
+#include "PreparedStatement.hxx"
+#include "Statement.hxx"
 #include "Util.hxx"
 
 

@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "FConnection.hxx"
-#include "FPreparedStatement.hxx"
-#include "FResultSetMetaData.hxx"
-#include "FResultSet.hxx"
+#include "Connection.hxx"
+#include "PreparedStatement.hxx"
+#include "ResultSet.hxx"
+#include "ResultSetMetaData.hxx"
 #include "Util.hxx"
 
 #include <comphelper/sequence.hxx>

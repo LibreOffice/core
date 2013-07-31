@@ -17,18 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "FResultSet.hxx"
-#include "FResultSetMetaData.hxx"
+#include "ResultSet.hxx"
+#include "ResultSetMetaData.hxx"
 #include "Util.hxx"
 
-#include <propertyids.hxx>
-#include <TConnection.hxx>
-
-#include <connectivity/dbexception.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/typeprovider.hxx>
+#include <connectivity/dbexception.hxx>
+#include <propertyids.hxx>
 #include <rtl/string.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <TConnection.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>

@@ -20,7 +20,7 @@
 #ifndef CONNECTIVITY_FIREBIRD_RESULTSETMETADATA_HXX
 #define CONNECTIVITY_FIREBIRD_RESULTSETMETADATA_HXX
 
-#include "FConnection.hxx"
+#include "Connection.hxx"
 
 #include <ibase.h>
 

@@ -20,12 +20,13 @@
 #ifndef CONNECTIVITY_FIREBIRD_SUBCOMPONENT_HXX
 #define CONNECTIVITY_FIREBIRD_SUBCOMPONENT_HXX
 
-#include <cppuhelper/weak.hxx>
 #include <cppuhelper/interfacecontainer.h>
-#include <com/sun/star/lang/DisposedException.hpp>
 #include <cppuhelper/propshlp.hxx>
-#include <osl/mutex.hxx>
+#include <cppuhelper/weak.hxx>
 #include <osl/diagnose.h>
+#include <osl/mutex.hxx>
+
+#include <com/sun/star/lang/DisposedException.hpp>
 
 namespace cppu {
     class IPropertyArrayHelper;

@@ -8,7 +8,7 @@
  */
 
 #include "Blob.hxx"
-#include "FConnection.hxx"
+#include "Connection.hxx"
 #include "Util.hxx"
 
 #include "connectivity/dbexception.hxx"
