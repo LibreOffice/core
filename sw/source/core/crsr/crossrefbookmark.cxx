@@ -21,6 +21,14 @@
 #include <crossrefbookmark.hxx>
 #include <ndtxt.hxx>
 
+namespace
+{
+
+const char CrossRefHeadingBookmark_NamePrefix[] = "__RefHeading__";
+const char CrossRefNumItemBookmark_NamePrefix[] = "__RefNumPara__";
+
+}
+
 namespace sw { namespace mark
 {
     CrossRefBookmark::CrossRefBookmark(const SwPaM& rPaM,
@@ -60,8 +68,6 @@ namespace sw { namespace mark
         return *static_cast<SwPosition*>(NULL);
     }
 
-    const char CrossRefHeadingBookmark_NamePrefix[] = "__RefHeading__";
-
     CrossRefHeadingBookmark::CrossRefHeadingBookmark(const SwPaM& rPaM,
         const KeyCode& rCode,
         const OUString& rName,
@@ -73,8 +79,6 @@ namespace sw { namespace mark
     {
         return rName.match(CrossRefHeadingBookmark_NamePrefix);
     }
-
-    const char CrossRefNumItemBookmark_NamePrefix[] = "__RefNumPara__";
 
     CrossRefNumItemBookmark::CrossRefNumItemBookmark(const SwPaM& rPaM,
         const KeyCode& rCode,
