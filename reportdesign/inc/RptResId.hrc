@@ -39,7 +39,6 @@
 
 // Dialog Control Id's -----------------------------------------------------------
 #define RID_GROUPS_SORTING              ( RID_DIALOG_START + 0 )
-#define RID_PAGENUMBERS                 ( RID_DIALOG_START + 1 )
 #define RID_DATETIME_DLG                ( RID_DIALOG_START + 2 )
 #define RID_CONDFORMAT                  ( RID_DIALOG_START + 3 )
 #define WIN_CONDITION                   ( RID_DIALOG_START + 4 )
