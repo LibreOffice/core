@@ -548,22 +548,24 @@ void ScRangeData::ValidateTabRefs()
     while ( ( t = static_cast<ScToken*>(pCode->GetNextReference()) ) != NULL )
     {
         ScSingleRefData& rRef1 = t->GetSingleRef();
+        ScAddress aAbs = rRef1.toAbs(aPos);
         if ( rRef1.IsTabRel() && !rRef1.IsTabDeleted() )
         {
-            if ( rRef1.nTab < nMinTab )
-                nMinTab = rRef1.nTab;
-            if ( rRef1.nTab > nMaxTab )
-                nMaxTab = rRef1.nTab;
+            if (aAbs.Tab() < nMinTab)
+                nMinTab = aAbs.Tab();
+            if (aAbs.Tab() > nMaxTab)
+                nMaxTab = aAbs.Tab();
         }
         if ( t->GetType() == svDoubleRef )
         {
             ScSingleRefData& rRef2 = t->GetDoubleRef().Ref2;
+            aAbs = rRef2.toAbs(aPos);
             if ( rRef2.IsTabRel() && !rRef2.IsTabDeleted() )
             {
-                if ( rRef2.nTab < nMinTab )
-                    nMinTab = rRef2.nTab;
-                if ( rRef2.nTab > nMaxTab )
-                    nMaxTab = rRef2.nTab;
+                if (aAbs.Tab() < nMinTab)
+                    nMinTab = aAbs.Tab();
+                if (aAbs.Tab() > nMaxTab)
+                    nMaxTab = aAbs.Tab();
             }
         }
     }
@@ -575,19 +577,41 @@ void ScRangeData::ValidateTabRefs()
         //  The formulas that use the name are not changed by this
 
         SCTAB nMove = nMinTab;
+        ScAddress aOldPos = aPos;
         aPos.SetTab( aPos.Tab() - nMove );
 
         pCode->Reset();
         while ( ( t = static_cast<ScToken*>(pCode->GetNextReference()) ) != NULL )
         {
-            ScSingleRefData& rRef1 = t->GetSingleRef();
-            if ( rRef1.IsTabRel() && !rRef1.IsTabDeleted() )
-                rRef1.nTab = sal::static_int_cast<SCsTAB>( rRef1.nTab - nMove );
-            if ( t->GetType() == svDoubleRef )
+            switch (t->GetType())
             {
-                ScSingleRefData& rRef2 = t->GetDoubleRef().Ref2;
-                if ( rRef2.IsTabRel() && !rRef2.IsTabDeleted() )
-                    rRef2.nTab = sal::static_int_cast<SCsTAB>( rRef2.nTab - nMove );
+                case svSingleRef:
+                {
+                    ScSingleRefData& rRef = t->GetSingleRef();
+                    if (!rRef.IsTabDeleted())
+                    {
+                        ScAddress aAbs = rRef.toAbs(aOldPos);
+                        rRef.SetAddress(aAbs, aPos);
+                    }
+                }
+                break;
+                case svDoubleRef:
+                {
+                    ScComplexRefData& rRef = t->GetDoubleRef();
+                    if (!rRef.Ref1.IsTabDeleted())
+                    {
+                        ScAddress aAbs = rRef.Ref1.toAbs(aOldPos);
+                        rRef.Ref1.SetAddress(aAbs, aPos);
+                    }
+                    if (!rRef.Ref2.IsTabDeleted())
+                    {
+                        ScAddress aAbs = rRef.Ref2.toAbs(aOldPos);
+                        rRef.Ref2.SetAddress(aAbs, aPos);
+                    }
+                }
+                break;
+                default:
+                    ;
             }
         }
     }

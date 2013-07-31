@@ -1068,8 +1068,8 @@ struct ConventionXL
 
         rDocName.Erase();
         OUString aTmp;
-        if (rRef.IsTabDeleted() ||
-            !rComp.GetDoc()->GetName( rRef.nTab, aTmp ))
+        ScAddress aAbs = rRef.toAbs(rComp.GetPos());
+        if (rRef.IsTabDeleted() || !rComp.GetDoc()->GetName(aAbs.Tab(), aTmp))
         {
             rTabName = ScGlobal::GetRscString( STR_NO_REF_TABLE );
             return false;
@@ -1320,7 +1320,7 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
                 return;
             }
 
-            if( aRef.Ref1.nRow == 0 && aRef.Ref2.nRow >= MAXROW )
+            if (aAbs1.Row() == 0 && aAbs2.Row() >= MAXROW)
             {
                 if (!aRef.Ref1.IsColRel())
                     rBuf.append(sal_Unicode( '$' ));

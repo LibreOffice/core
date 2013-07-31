@@ -1477,7 +1477,7 @@ bool ScConditionEntry::MarkUsedExternalReferences() const
     {
         ScTokenArray* pFormula = nPass ? pFormula2 : pFormula1;
         if (pFormula)
-            bAllMarked = mpDoc->MarkUsedExternalReferences( *pFormula);
+            bAllMarked = mpDoc->MarkUsedExternalReferences(*pFormula, aSrcPos);
     }
     return bAllMarked;
 }

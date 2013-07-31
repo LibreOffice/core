@@ -28,6 +28,7 @@
 /// Single reference (one address) into the sheet
 struct SC_DLLPUBLIC ScSingleRefData
 {
+private:
     SCsCOL  nCol;       ///< Absolute values
     SCsROW  nRow;
     SCsTAB  nTab;
@@ -51,6 +52,7 @@ struct SC_DLLPUBLIC ScSingleRefData
         } Flags;
     };
 
+public:
     /// No default ctor, because used in ScRawToken union, set InitFlags!
     inline  void InitFlags() { mnFlagValue = 0; }    ///< all FALSE
     /// InitAddress: InitFlags and set address
@@ -58,6 +60,8 @@ struct SC_DLLPUBLIC ScSingleRefData
     void InitAddress( SCCOL nCol, SCROW nRow, SCTAB nTab );
     /// InitAddressRel: InitFlags and set address, everything relative to rPos
     void InitAddressRel( const ScAddress& rAdr, const ScAddress& rPos );
+    sal_uInt8 FlagValue() const;
+
     inline  void SetColRel( bool bVal ) { Flags.bColRel = (bVal ? true : false ); }
     inline  bool IsColRel() const{ return Flags.bColRel; }
     inline  void SetRowRel( bool bVal ) { Flags.bRowRel = (bVal ? true : false ); }
@@ -89,6 +93,9 @@ struct SC_DLLPUBLIC ScSingleRefData
     inline  bool IsRelName() const          { return Flags.bRelName; }
 
     bool Valid() const;
+    bool ColValid() const;
+    bool RowValid() const;
+    bool TabValid() const;
     /// In external references nTab is -1
     bool ValidExternal() const;
 
@@ -141,8 +148,6 @@ struct ScComplexRefData
     SC_DLLPUBLIC ScRange toAbs( const ScAddress& rPos ) const;
     void SetRange( const ScRange& rRange, const ScAddress& rPos );
 
-    /// Absolute references have to be up-to-date when calling this!
-    void PutInOrder();
     inline bool operator==( const ScComplexRefData& r ) const
         { return Ref1 == r.Ref1 && Ref2 == r.Ref2; }
     /** Enlarge range if reference passed is not within existing range.

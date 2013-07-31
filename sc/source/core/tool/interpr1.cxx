@@ -2571,14 +2571,14 @@ void ScInterpreter::ScCellExternal()
     SCCOL nCol;
     SCROW nRow;
     SCTAB nTab;
-    aRef.nTab = 0; // external ref has a tab index of -1, which SingleRefToVars() don't like.
+    aRef.SetAbsTab(0); // external ref has a tab index of -1, which SingleRefToVars() don't like.
     SingleRefToVars(aRef, nCol, nRow, nTab);
     if (nGlobalError)
     {
         PushIllegalParameter();
         return;
     }
-    aRef.nTab = -1; // revert the value.
+    aRef.SetAbsTab(-1); // revert the value.
 
     ScCellKeywordTranslator::transKeyword(aInfoType, ScGlobal::GetLocale(), ocCell);
     ScExternalRefManager* pRefMgr = pDok->GetExternalRefManager();
@@ -4047,8 +4047,9 @@ void ScInterpreter::ScRows()
                 String aTabName;
                 ScComplexRefData aRef;
                 PopExternalDoubleRef( nFileId, aTabName, aRef);
-                nVal += static_cast<sal_uLong>(aRef.Ref2.nTab - aRef.Ref1.nTab + 1) *
-                    static_cast<sal_uLong>(aRef.Ref2.nRow - aRef.Ref1.nRow + 1);
+                ScRange aAbs = aRef.toAbs(aPos);
+                nVal += static_cast<sal_uLong>(aAbs.aEnd.Tab() - aAbs.aStart.Tab() + 1) *
+                    static_cast<sal_uLong>(aAbs.aEnd.Row() - aAbs.aStart.Row() + 1);
             }
             break;
             default:
@@ -4100,7 +4101,8 @@ void ScInterpreter::ScTables()
                     String aTabName;
                     ScComplexRefData aRef;
                     PopExternalDoubleRef( nFileId, aTabName, aRef);
-                    nVal += static_cast<sal_uLong>(aRef.Ref2.nTab - aRef.Ref1.nTab + 1);
+                    ScRange aAbs = aRef.toAbs(aPos);
+                    nVal += static_cast<sal_uLong>(aAbs.aEnd.Tab() - aAbs.aStart.Tab() + 1);
                 }
                 break;
                 default:

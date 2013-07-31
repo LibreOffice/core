@@ -720,9 +720,8 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
 
                 if( nExtSheet <= 0 )
                 {   // in current Workbook
-                    aSRD.nTab = static_cast<SCTAB>(nTabFirst);
-                    aSRD.SetFlag3D( sal_True );
-                    aSRD.SetTabRel( false );
+                    aSRD.SetAbsTab(nTabFirst);
+                    aSRD.SetFlag3D(true);
 
                     ExcRelToScRel( nRow, nCol, aSRD, bRangeName );
 
@@ -741,7 +740,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
                     if( nTabLast != nTabFirst )
                     {
                         aCRD.Ref1 = aCRD.Ref2 = aSRD;
-                        aCRD.Ref2.nTab = static_cast<SCTAB>(nTabLast);
+                        aCRD.Ref2.SetAbsTab(nTabLast);
                         aCRD.Ref2.SetTabDeleted( !ValidTab(static_cast<SCTAB>(nTabLast)) );
                         aStack << aPool.Store( aCRD );
                     }
@@ -789,12 +788,10 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
                     ScSingleRefData&    rR1 = aCRD.Ref1;
                     ScSingleRefData&    rR2 = aCRD.Ref2;
 
-                    rR1.nTab = static_cast<SCTAB>(nTabFirst);
-                    rR2.nTab = static_cast<SCTAB>(nTabLast);
-                    rR1.SetFlag3D( sal_True );
-                    rR1.SetTabRel( false );
+                    rR1.SetAbsTab(nTabFirst);
+                    rR2.SetAbsTab(nTabLast);
+                    rR1.SetFlag3D(true);
                     rR2.SetFlag3D( nTabFirst != nTabLast );
-                    rR2.SetTabRel( false );
 
                     ExcRelToScRel( nRowFirst, nColFirst, aCRD.Ref1, bRangeName );
                     ExcRelToScRel( nRowLast, nColLast, aCRD.Ref2, bRangeName );
@@ -886,7 +883,8 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal
 
     ScSingleRefData aSRD;
     ScComplexRefData    aCRD;
-    aCRD.Ref1.nTab = aCRD.Ref2.nTab = aEingPos.Tab();
+    aCRD.Ref1.SetAbsTab(aEingPos.Tab());
+    aCRD.Ref2.SetAbsTab(aEingPos.Tab());
 
     bExternName = false;
 
@@ -1178,10 +1176,9 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal
 
                 if( nExtSheet <= 0 )
                 {// in current Workbook
-                    sal_Bool b3D = ( static_cast<SCTAB>(nTabFirst) != aEingPos.Tab() ) || bRangeName;
-                    aSRD.nTab = static_cast<SCTAB>(nTabFirst);
+                    bool b3D = ( static_cast<SCTAB>(nTabFirst) != aEingPos.Tab() ) || bRangeName;
+                    aSRD.SetAbsTab(nTabFirst);
                     aSRD.SetFlag3D( b3D );
-                    aSRD.SetTabRel( false );
 
                     ExcRelToScRel( nRow, nCol, aSRD, bRangeName );
 
@@ -1235,12 +1232,10 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal
                     ScSingleRefData &rR1 = aCRD.Ref1;
                     ScSingleRefData &rR2 = aCRD.Ref2;
 
-                    rR1.nTab = static_cast<SCTAB>(nTabFirst);
-                    rR2.nTab = static_cast<SCTAB>(nTabLast);
+                    rR1.SetAbsTab(nTabFirst);
+                    rR2.SetAbsTab(nTabLast);
                     rR1.SetFlag3D( ( static_cast<SCTAB>(nTabFirst) != aEingPos.Tab() ) || bRangeName );
-                    rR1.SetTabRel( false );
                     rR2.SetFlag3D( ( static_cast<SCTAB>(nTabLast) != aEingPos.Tab() ) || bRangeName );
-                    rR2.SetTabRel( false );
 
                     ExcRelToScRel( nRowFirst, nColFirst, aCRD.Ref1, bRangeName );
                     ExcRelToScRel( nRowLast, nColLast, aCRD.Ref2, bRangeName );

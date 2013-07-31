@@ -913,7 +913,7 @@ void ScFormulaCell::CalcAfterLoad()
 
 bool ScFormulaCell::MarkUsedExternalReferences()
 {
-    return pCode && pDocument->MarkUsedExternalReferences( *pCode);
+    return pCode && pDocument->MarkUsedExternalReferences(*pCode, aPos);
 }
 
 
@@ -2630,56 +2630,56 @@ void ScFormulaCell::UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt, SCTAB nTab
 
 void ScFormulaCell::UpdateInsertTabAbs(SCTAB nTable)
 {
-    if( !pDocument->IsClipOrUndo() )
+    if (pDocument->IsClipOrUndo())
+        return;
+
+    pCode->Reset();
+    ScToken* p = static_cast<ScToken*>(pCode->GetNextReferenceRPN());
+    while (p)
     {
-        pCode->Reset();
-        ScToken* p = static_cast<ScToken*>(pCode->GetNextReferenceRPN());
-        while( p )
+        ScSingleRefData& rRef1 = p->GetSingleRef();
+        if (!rRef1.IsTabRel() && nTable <= rRef1.Tab())
+            rRef1.IncTab(1);
+        if (p->GetType() == formula::svDoubleRef)
         {
-            ScSingleRefData& rRef1 = p->GetSingleRef();
-            if( !rRef1.IsTabRel() && (SCsTAB) nTable <= rRef1.nTab )
-                rRef1.nTab++;
-            if( p->GetType() == formula::svDoubleRef )
-            {
-                ScSingleRefData& rRef2 = p->GetDoubleRef().Ref2;
-                if( !rRef2.IsTabRel() && (SCsTAB) nTable <= rRef2.nTab )
-                    rRef2.nTab++;
-            }
-            p = static_cast<ScToken*>(pCode->GetNextReferenceRPN());
+            ScSingleRefData& rRef2 = p->GetDoubleRef().Ref2;
+            if (!rRef2.IsTabRel() && nTable <= rRef2.Tab())
+                rRef2.IncTab(1);
         }
+        p = static_cast<ScToken*>(pCode->GetNextReferenceRPN());
     }
 }
 
 bool ScFormulaCell::TestTabRefAbs(SCTAB nTable)
 {
+    if (pDocument->IsClipOrUndo())
+        return false;
+
     bool bRet = false;
-    if( !pDocument->IsClipOrUndo() )
+    pCode->Reset();
+    ScToken* p = static_cast<ScToken*>(pCode->GetNextReferenceRPN());
+    while (p)
     {
-        pCode->Reset();
-        ScToken* p = static_cast<ScToken*>(pCode->GetNextReferenceRPN());
-        while( p )
+        ScSingleRefData& rRef1 = p->GetSingleRef();
+        if (!rRef1.IsTabRel())
         {
-            ScSingleRefData& rRef1 = p->GetSingleRef();
-            if( !rRef1.IsTabRel() )
+            if (nTable != rRef1.Tab())
+                bRet = true;
+            else if (nTable != aPos.Tab())
+                rRef1.SetAbsTab(aPos.Tab());
+        }
+        if (p->GetType() == formula::svDoubleRef)
+        {
+            ScSingleRefData& rRef2 = p->GetDoubleRef().Ref2;
+            if (!rRef2.IsTabRel())
             {
-                if( (SCsTAB) nTable != rRef1.nTab )
+                if(nTable != rRef2.Tab())
                     bRet = true;
                 else if (nTable != aPos.Tab())
-                    rRef1.nTab = aPos.Tab();
+                    rRef2.SetAbsTab(aPos.Tab());
             }
-            if( p->GetType() == formula::svDoubleRef )
-            {
-                ScSingleRefData& rRef2 = p->GetDoubleRef().Ref2;
-                if( !rRef2.IsTabRel() )
-                {
-                    if( (SCsTAB) nTable != rRef2.nTab )
-                        bRet = true;
-                    else if (nTable != aPos.Tab())
-                        rRef2.nTab = aPos.Tab();
-                }
-            }
-            p = static_cast<ScToken*>(pCode->GetNextReferenceRPN());
         }
+        p = static_cast<ScToken*>(pCode->GetNextReferenceRPN());
     }
     return bRet;
 }

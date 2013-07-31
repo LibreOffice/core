@@ -511,7 +511,7 @@ bool ScToken::TextEqual( const FormulaToken& _rToken ) const
 
         //  memcmp doesn't work because of the alignment byte after bFlags.
         //  After SmartRelAbs only absolute parts have to be compared.
-        return aRange1 == aRange2 && aTemp1.Ref1.mnFlagValue == aTemp2.Ref1.mnFlagValue && aTemp1.Ref2.mnFlagValue == aTemp2.Ref2.mnFlagValue;
+        return aRange1 == aRange2 && aTemp1.Ref1.FlagValue() == aTemp2.Ref1.FlagValue() && aTemp1.Ref2.FlagValue() == aTemp2.Ref2.FlagValue();
     }
     else
         return *this == _rToken;     // else normal operator==
@@ -1226,7 +1226,8 @@ bool ScTokenArray::AddFormulaToken(const com::sun::star::sheet::FormulaToken& _a
                                     lcl_ExternalRefToCalc( aComplRef.Ref1, aApiCRef.Reference1 );
                                     lcl_ExternalRefToCalc( aComplRef.Ref2, aApiCRef.Reference2 );
                                     // NOTE: This assumes that cached sheets are in consecutive order!
-                                    aComplRef.Ref2.nTab = aComplRef.Ref1.nTab + static_cast<SCsTAB>(aApiCRef.Reference2.Sheet - aApiCRef.Reference1.Sheet);
+                                    aComplRef.Ref2.SetAbsTab(
+                                        aComplRef.Ref1.Tab() + static_cast<SCTAB>(aApiCRef.Reference2.Sheet - aApiCRef.Reference1.Sheet));
                                     AddExternalDoubleReference( nFileId, aTabName, aComplRef );
                                 }
                                 else
@@ -1384,9 +1385,9 @@ size_t HashSingleRef( const ScSingleRefData& rRef )
 {
     size_t nVal = 0;
 
-    nVal += rRef.Flags.bColRel;
-    nVal += (rRef.Flags.bRowRel << 1);
-    nVal += (rRef.Flags.bTabRel << 2);
+    nVal += rRef.IsColRel();
+    nVal += (rRef.IsRowRel() << 1);
+    nVal += (rRef.IsTabRel() << 2);
 
     return nVal;
 }
@@ -2100,7 +2101,7 @@ void ScTokenArray::ReadjustAbsolute3DReferences( const ScDocument* pOldDoc, cons
                 {
                     OUString aTabName;
                     sal_uInt16 nFileId;
-                    GetExternalTableData(pOldDoc, pNewDoc, rRef1.nTab, aTabName, nFileId);
+                    GetExternalTableData(pOldDoc, pNewDoc, rRef1.Tab(), aTabName, nFileId);
                     pCode[j]->DecRef();
                     ScExternalDoubleRefToken* pToken = new ScExternalDoubleRefToken(nFileId, aTabName, rRef);
                     pToken->IncRef();
@@ -2119,7 +2120,7 @@ void ScTokenArray::ReadjustAbsolute3DReferences( const ScDocument* pOldDoc, cons
                 {
                     OUString aTabName;
                     sal_uInt16 nFileId;
-                    GetExternalTableData(pOldDoc, pNewDoc, rRef.nTab, aTabName, nFileId);
+                    GetExternalTableData(pOldDoc, pNewDoc, rRef.Tab(), aTabName, nFileId);
                     //replace with ScExternalSingleRefToken and adjust references
                     pCode[j]->DecRef();
                     ScExternalSingleRefToken* pToken = new ScExternalSingleRefToken(nFileId, aTabName, rRef);

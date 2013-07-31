@@ -308,7 +308,7 @@ ConvErr QProToSc::Convert( const ScTokenArray*& pArray, sal_uInt16 /*nLen*/, con
                 maIn >> nCol >> nPage >> nRelBits;
                 ReadSRD( aCRD.Ref2, nPage, nCol, nRelBits );
                 // Sheet name of second corner is not displayed if identical
-                if (aCRD.Ref1.IsFlag3D() && aCRD.Ref1.nTab == aCRD.Ref2.nTab &&
+                if (aCRD.Ref1.IsFlag3D() && aCRD.Ref1.Tab() == aCRD.Ref2.Tab() &&
                         aCRD.Ref1.IsTabRel() == aCRD.Ref2.IsTabRel())
                     aCRD.Ref2.SetFlag3D( false);
                 aStack << aPool.Store( aCRD );

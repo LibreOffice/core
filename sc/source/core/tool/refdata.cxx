@@ -40,6 +40,11 @@ void ScSingleRefData::InitAddressRel( const ScAddress& rAdr, const ScAddress& rP
     SetAddress(rAdr, rPos);
 }
 
+sal_uInt8 ScSingleRefData::FlagValue() const
+{
+    return mnFlagValue;
+}
+
 void ScSingleRefData::SetAbsCol( SCCOL nVal )
 {
     Flags.bColRel = false;
@@ -137,16 +142,60 @@ bool ScSingleRefData::IsDeleted() const
 
 bool ScSingleRefData::Valid() const
 {
-    return  nCol >= 0 && nCol <= MAXCOL &&
-            nRow >= 0 && nRow <= MAXROW &&
-            nTab >= 0 && nTab <= MAXTAB;
+    return ColValid() && RowValid() && TabValid();
+}
+
+bool ScSingleRefData::ColValid() const
+{
+    if (Flags.bColRel)
+    {
+        if (nRelCol < -MAXCOL || MAXCOL < nRelCol)
+            return false;
+    }
+    else
+    {
+        if (nCol < 0 || MAXCOL < nCol)
+            return false;
+    }
+
+    return true;
+}
+
+bool ScSingleRefData::RowValid() const
+{
+    if (Flags.bRowRel)
+    {
+        if (nRelRow < -MAXROW || MAXROW < nRelRow)
+            return false;
+    }
+    else
+    {
+        if (nRow < 0 || MAXROW < nRow)
+            return false;
+    }
+
+    return true;
+}
+
+bool ScSingleRefData::TabValid() const
+{
+    if (Flags.bTabRel)
+    {
+        if (nRelTab < -MAXTAB || MAXTAB < nRelTab)
+            return false;
+    }
+    else
+    {
+        if (nTab < 0 || MAXTAB < nTab)
+            return false;
+    }
+
+    return true;
 }
 
 bool ScSingleRefData::ValidExternal() const
 {
-    return  nCol >= 0 && nCol <= MAXCOL &&
-            nRow >= 0 && nRow <= MAXROW &&
-            nTab == -1;
+    return ColValid() && RowValid() && nTab == -1;
 }
 
 ScAddress ScSingleRefData::toAbs( const ScAddress& rPos ) const
@@ -240,103 +289,6 @@ void ScSingleRefData::Dump( int nIndent ) const
 }
 #endif
 
-static void lcl_putInOrder( ScSingleRefData & rRef1, ScSingleRefData & rRef2 )
-{
-    SCCOL nCol1, nCol2;
-    SCROW nRow1, nRow2;
-    SCTAB nTab1, nTab2;
-    bool bTmp;
-    sal_uInt8 nRelState1, nRelState2;
-    if ( rRef1.Flags.bRelName )
-        nRelState1 =
-            ((rRef1.Flags.bTabRel & 0x01) << 2)
-            | ((rRef1.Flags.bRowRel & 0x01) << 1)
-            | ((rRef1.Flags.bColRel & 0x01));
-    else
-        nRelState1 = 0;
-    if ( rRef2.Flags.bRelName )
-        nRelState2 =
-            ((rRef2.Flags.bTabRel & 0x01) << 2)
-            | ((rRef2.Flags.bRowRel & 0x01) << 1)
-            | ((rRef2.Flags.bColRel & 0x01));
-    else
-        nRelState2 = 0;
-    if ( (nCol1 = rRef1.nCol) > (nCol2 = rRef2.nCol) )
-    {
-        rRef1.nCol = nCol2;
-        rRef2.nCol = nCol1;
-        nCol1 = rRef1.nRelCol;
-        rRef1.nRelCol = rRef2.nRelCol;
-        rRef2.nRelCol = nCol1;
-        if ( rRef1.Flags.bRelName && rRef1.Flags.bColRel )
-            nRelState2 |= 1;
-        else
-            nRelState2 &= ~1;
-        if ( rRef2.Flags.bRelName && rRef2.Flags.bColRel )
-            nRelState1 |= 1;
-        else
-            nRelState1 &= ~1;
-        bTmp = rRef1.Flags.bColRel;
-        rRef1.Flags.bColRel = rRef2.Flags.bColRel;
-        rRef2.Flags.bColRel = bTmp;
-        bTmp = rRef1.Flags.bColDeleted;
-        rRef1.Flags.bColDeleted = rRef2.Flags.bColDeleted;
-        rRef2.Flags.bColDeleted = bTmp;
-    }
-    if ( (nRow1 = rRef1.nRow) > (nRow2 = rRef2.nRow) )
-    {
-        rRef1.nRow = nRow2;
-        rRef2.nRow = nRow1;
-        nRow1 = rRef1.nRelRow;
-        rRef1.nRelRow = rRef2.nRelRow;
-        rRef2.nRelRow = nRow1;
-        if ( rRef1.Flags.bRelName && rRef1.Flags.bRowRel )
-            nRelState2 |= 2;
-        else
-            nRelState2 &= ~2;
-        if ( rRef2.Flags.bRelName && rRef2.Flags.bRowRel )
-            nRelState1 |= 2;
-        else
-            nRelState1 &= ~2;
-        bTmp = rRef1.Flags.bRowRel;
-        rRef1.Flags.bRowRel = rRef2.Flags.bRowRel;
-        rRef2.Flags.bRowRel = bTmp;
-        bTmp = rRef1.Flags.bRowDeleted;
-        rRef1.Flags.bRowDeleted = rRef2.Flags.bRowDeleted;
-        rRef2.Flags.bRowDeleted = bTmp;
-    }
-    if ( (nTab1 = rRef1.nTab) > (nTab2 = rRef2.nTab) )
-    {
-        rRef1.nTab = nTab2;
-        rRef2.nTab = nTab1;
-        nTab1 = rRef1.nRelTab;
-        rRef1.nRelTab = rRef2.nRelTab;
-        rRef2.nRelTab = nTab1;
-        if ( rRef1.Flags.bRelName && rRef1.Flags.bTabRel )
-            nRelState2 |= 4;
-        else
-            nRelState2 &= ~4;
-        if ( rRef2.Flags.bRelName && rRef2.Flags.bTabRel )
-            nRelState1 |= 4;
-        else
-            nRelState1 &= ~4;
-        bTmp = rRef1.Flags.bTabRel;
-        rRef1.Flags.bTabRel = rRef2.Flags.bTabRel;
-        rRef2.Flags.bTabRel = bTmp;
-        bTmp = rRef1.Flags.bTabDeleted;
-        rRef1.Flags.bTabDeleted = rRef2.Flags.bTabDeleted;
-        rRef2.Flags.bTabDeleted = bTmp;
-    }
-    rRef1.Flags.bRelName = ( nRelState1 ? sal_True : false );
-    rRef2.Flags.bRelName = ( nRelState2 ? sal_True : false );
-}
-
-
-void ScComplexRefData::PutInOrder()
-{
-    lcl_putInOrder( Ref1, Ref2);
-}
-
 ScComplexRefData& ScComplexRefData::Extend( const ScSingleRefData & rRef, const ScAddress & rPos )
 {
     ScRange aAbsRange = toAbs(rPos);
@@ -383,10 +335,7 @@ bool ScComplexRefData::Valid() const
 
 bool ScComplexRefData::ValidExternal() const
 {
-    return Ref1.ValidExternal() &&
-        Ref2.nCol >= 0 && Ref2.nCol <= MAXCOL &&
-        Ref2.nRow >= 0 && Ref2.nRow <= MAXROW &&
-        Ref2.nTab >= Ref1.nTab;
+    return Ref1.ValidExternal() && Ref2.ColValid() && Ref2.RowValid() && Ref1.Tab() <= Ref2.Tab();
 }
 
 ScRange ScComplexRefData::toAbs( const ScAddress& rPos ) const

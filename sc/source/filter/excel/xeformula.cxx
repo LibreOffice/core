@@ -1792,8 +1792,17 @@ inline bool lclIsRefDel2D( const ScComplexRefData& rRefData )
 
 SCTAB XclExpFmlaCompImpl::GetScTab( const ScSingleRefData& rRefData ) const
 {
-    bool bInvTab = rRefData.IsTabDeleted() || (!mxData->mpScBasePos && IsInGlobals() && rRefData.IsTabRel());
-    return bInvTab ? SCTAB_INVALID : static_cast< SCTAB >( rRefData.nTab );
+    if (rRefData.IsTabDeleted())
+        return SCTAB_INVALID;
+
+    if (!rRefData.IsTabRel())
+        // absolute address
+        return rRefData.Tab();
+
+    if (!mxData->mpScBasePos)
+        return SCTAB_INVALID;
+
+    return rRefData.toAbs(*mxData->mpScBasePos).Tab();
 }
 
 bool XclExpFmlaCompImpl::IsRef2D( const ScSingleRefData& rRefData ) const
@@ -2050,7 +2059,7 @@ void XclExpFmlaCompImpl::ProcessExternalRangeRef( const XclExpScToken& rTokData 
 
         // 1-based EXTERNSHEET index and 0-based Excel sheet indexes
         sal_uInt16 nExtSheet, nFirstSBTab, nLastSBTab;
-        sal_uInt16 nTabSpan = static_cast< sal_uInt16 >( aRefData.Ref2.nTab - aRefData.Ref1.nTab + 1 );
+        sal_uInt16 nTabSpan = static_cast<sal_uInt16>(aRefData.Ref2.Tab() - aRefData.Ref1.Tab() + 1);
         mxData->mpLinkMgr->FindExtSheet( nFileId, rTabName, nTabSpan, nExtSheet, nFirstSBTab, nLastSBTab, GetNewRefLogEntry() );
         // write the token
         sal_uInt8 nBaseId = lclIsRefDel2D( aRefData ) ? EXC_TOKID_AREAERR3D : EXC_TOKID_AREA3D;

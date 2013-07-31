@@ -352,11 +352,12 @@ private:
             if (!ScRefTokenHelper::getDoubleRefDataFromToken(aOldData, pOldToken))
                 continue;
 
-            if (aData.Ref1.nTab != aOldData.Ref1.nTab || aData.Ref2.nTab != aOldData.Ref2.nTab)
+            ScRange aOld = aOldData.toAbs(rPos), aNew = aData.toAbs(rPos);
+
+            if (aNew.aStart.Tab() != aOld.aStart.Tab() || aNew.aEnd.Tab() != aOld.aEnd.Tab())
                 // Sheet ranges differ.
                 continue;
 
-            ScRange aOld = aOldData.toAbs(rPos), aNew = aData.toAbs(rPos);
             if (aOld.In(aNew))
                 // This new range is part of an existing range.  Skip it.
                 return;

@@ -647,7 +647,7 @@ public:
     SC_DLLPUBLIC ScExternalRefManager* GetExternalRefManager() const;
     bool            IsInExternalReferenceMarking() const;
     void            MarkUsedExternalReferences();
-    bool            MarkUsedExternalReferences( ScTokenArray & rArr );
+    bool MarkUsedExternalReferences( ScTokenArray& rArr, const ScAddress& rPos );
 
     /** Returns the pool containing external formula parsers. Creates the pool
         on first call. */

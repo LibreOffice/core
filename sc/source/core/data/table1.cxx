@@ -1464,7 +1464,6 @@ void ScTable::UpdateReference(
         iMax = MAXCOL;
     }
 
-    ScRange aRange = rCxt.maRange;
     UpdateRefMode eUpdateRefMode = rCxt.meMode;
     SCCOL nDx = rCxt.mnColDelta;
     SCROW nDy = rCxt.mnRowDelta;

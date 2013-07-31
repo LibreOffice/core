@@ -459,7 +459,9 @@ bool ScTokenConversion::ConvertToTokenSequence( ScDocument& rDoc,
                         rDoc.GetExternalRefManager()->getCacheTable( rToken.GetIndex(), rToken.GetString(), false, &nCacheId );
                         aComplRef.Reference1.Sheet = static_cast< sal_Int32 >( nCacheId );
                         // NOTE: This assumes that cached sheets are in consecutive order!
-                        aComplRef.Reference2.Sheet = aComplRef.Reference1.Sheet + (static_cast<const ScToken&>(rToken).GetSingleRef2().nTab - static_cast<const ScToken&>(rToken).GetSingleRef().nTab);
+                        aComplRef.Reference2.Sheet =
+                            aComplRef.Reference1.Sheet +
+                            (static_cast<const ScToken&>(rToken).GetSingleRef2().Tab() - static_cast<const ScToken&>(rToken).GetSingleRef().Tab());
                         sheet::ExternalReference aExtRef;
                         aExtRef.Index = rToken.GetIndex();
                         aExtRef.Reference <<= aComplRef;

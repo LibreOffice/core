@@ -295,7 +295,7 @@ void ScDocument::InsertTableOp(const ScTabOpParam& rParam,      // Mehrfachopera
 
 namespace {
 
-bool setCacheTableReferenced(ScToken& rToken, ScExternalRefManager& rRefMgr)
+bool setCacheTableReferenced(ScToken& rToken, ScExternalRefManager& rRefMgr, const ScAddress& rPos)
 {
     switch (rToken.GetType())
     {
@@ -305,7 +305,8 @@ bool setCacheTableReferenced(ScToken& rToken, ScExternalRefManager& rRefMgr)
         case svExternalDoubleRef:
         {
             const ScComplexRefData& rRef = rToken.GetDoubleRef();
-            size_t nSheets = rRef.Ref2.nTab - rRef.Ref1.nTab + 1;
+            ScRange aAbs = rRef.toAbs(rPos);
+            size_t nSheets = aAbs.aEnd.Tab() - aAbs.aStart.Tab() + 1;
             return rRefMgr.setCacheTableReferenced(
                     rToken.GetIndex(), rToken.GetString(), nSheets);
         }
@@ -322,7 +323,7 @@ bool setCacheTableReferenced(ScToken& rToken, ScExternalRefManager& rRefMgr)
 
 }
 
-bool ScDocument::MarkUsedExternalReferences( ScTokenArray & rArr )
+bool ScDocument::MarkUsedExternalReferences( ScTokenArray& rArr, const ScAddress& rPos )
 {
     if (!rArr.GetLen())
         return false;
@@ -338,7 +339,7 @@ bool ScDocument::MarkUsedExternalReferences( ScTokenArray & rArr )
             if (!pRefMgr)
                 pRefMgr = GetExternalRefManager();
 
-            bAllMarked = setCacheTableReferenced(*t, *pRefMgr);
+            bAllMarked = setCacheTableReferenced(*t, *pRefMgr, rPos);
         }
         else if (t->GetType() == svIndex)
         {
@@ -357,7 +358,7 @@ bool ScDocument::MarkUsedExternalReferences( ScTokenArray & rArr )
                 if (!pRefMgr)
                     pRefMgr = GetExternalRefManager();
 
-                bAllMarked = setCacheTableReferenced(*t, *pRefMgr);
+                bAllMarked = setCacheTableReferenced(*t, *pRefMgr, rPos);
             }
         }
     }

@@ -989,8 +989,8 @@ void XclExpExtName::WriteAddData( XclExpStream& rStrm )
                 if (r1.IsTabRel() || r2.IsTabRel())
                     break;
 
-                sal_uInt16 nTab1 = r1.nTab;
-                sal_uInt16 nTab2 = r2.nTab;
+                sal_uInt16 nTab1 = r1.Tab();
+                sal_uInt16 nTab2 = r2.Tab();
                 bool bCol1Rel = r1.IsColRel();
                 bool bRow1Rel = r1.IsRowRel();
                 bool bCol2Rel = r2.IsColRel();
