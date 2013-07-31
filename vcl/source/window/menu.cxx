@@ -113,11 +113,11 @@ struct MenuItemData
     MenuItemBits    nBits;                  // MenuItem-Bits
     Menu*           pSubMenu;               // Pointer to SubMenu
     Menu*           pAutoSubMenu;           // Pointer to SubMenu from Resource
-    OUString        aText;                  // Menu-Text
-    OUString        aHelpText;              // Help-String
-    OUString        aTipHelpText;           // TipHelp-String (eg, expanded filenames)
-    OUString        aCommandStr;            // CommandString
-    OUString        aHelpCommandStr;        // Help command string (to reference external help)
+    XubString       aText;                  // Menu-Text
+    XubString       aHelpText;              // Help-String
+    XubString       aTipHelpText;           // TipHelp-String (eg, expanded filenames)
+    XubString       aCommandStr;            // CommandString
+    XubString       aHelpCommandStr;        // Help command string (to reference external help)
     OString         sIdent;
     OString         aHelpId;                // Help-Id
     sal_uLong           nUserValue;             // User value
@@ -130,15 +130,15 @@ struct MenuItemData
     sal_Bool            bMirrorMode;
     long            nItemImageAngle;
     Size            aSz;                    // only temporarily valid
-    OUString        aAccessibleName;        // accessible name
-    OUString        aAccessibleDescription; // accessible description
+    XubString       aAccessibleName;        // accessible name
+    XubString       aAccessibleDescription; // accessible description
 
     SalMenuItem*    pSalMenuItem;           // access to native menu
 
                     MenuItemData() :
                         pSubMenu(NULL), pAutoSubMenu(NULL), nItemImageAngle(0), pSalMenuItem ( NULL )
                     {}
-                    MenuItemData( const OUString& rStr, const Image& rImage ) :
+                    MenuItemData( const XubString& rStr, const Image& rImage ) :
                         pSubMenu(NULL),
                         pAutoSubMenu(NULL),
                         aText( rStr ),
@@ -181,7 +181,7 @@ public:
                         sal_uInt16 nId,
                         MenuItemType eType,
                         MenuItemBits nBits,
-                        const OUString& rStr,
+                        const XubString& rStr,
                         const Image& rImage,
                         Menu* pMenu,
                         size_t nPos,
@@ -229,7 +229,7 @@ MenuItemData* MenuItemList::Insert(
     sal_uInt16 nId,
     MenuItemType eType,
     MenuItemBits nBits,
-    const OUString& rStr,
+    const XubString& rStr,
     const Image& rImage,
     Menu* pMenu,
     size_t nPos,
@@ -292,7 +292,7 @@ void MenuItemList::InsertSeparator(const OString &rIdent, size_t nPos)
     aSalMIData.eType = MENUITEM_SEPARATOR;
     aSalMIData.nBits = 0;
     aSalMIData.pMenu = NULL;
-    aSalMIData.aText = "";
+    aSalMIData.aText = XubString();
     aSalMIData.aImage = Image();
 
     // Native-support: returns NULL if not supported
@@ -370,11 +370,11 @@ MenuItemData* MenuItemList::SearchItem(
             MenuItemData* pData = maItemList[ rPos ];
             if ( pData->bEnabled )
             {
-                sal_Int32 n = pData->aText.indexOf( '~' );
-                if ( n != -1 )
+                sal_uInt16 n = pData->aText.Search( '~' );
+                if ( n != STRING_NOTFOUND )
                 {
                     KeyCode mnKeyCode;
-                    sal_Unicode mnUnicode = pData->aText[n+1];
+                    sal_Unicode mnUnicode = pData->aText.GetChar(n+1);
                     Window* pDefWindow = ImplGetDefaultWindow();
                     if(  (  pDefWindow
                          && pDefWindow->ImplGetFrame()->MapUnicodeToKeyCode( mnUnicode,
@@ -430,15 +430,15 @@ size_t MenuItemList::GetItemCount( KeyCode aKeyCode ) const
         MenuItemData* pData = maItemList[ --nPos ];
         if ( pData->bEnabled )
         {
-            sal_Int32 n = pData->aText.indexOf( '~' );
-            if ( n != -1 )
+            sal_uInt16 n = pData->aText.Search( '~' );
+            if ( n != STRING_NOTFOUND )
             {
                 KeyCode mnKeyCode;
                 // if MapUnicodeToKeyCode fails or is unsupported we try the pure ascii mapping of the keycodes
                 // so we have working shortcuts when ascii mnemonics are used
                 Window* pDefWindow = ImplGetDefaultWindow();
                 if(  (  pDefWindow
-                     && pDefWindow->ImplGetFrame()->MapUnicodeToKeyCode( pData->aText[n+1],
+                     && pDefWindow->ImplGetFrame()->MapUnicodeToKeyCode( pData->aText.GetChar(n+1),
                          Application::GetSettings().GetUILanguageTag().getLanguageType(), mnKeyCode )
                      && aKeyCode.GetCode() == mnKeyCode.GetCode()
                      )
@@ -741,7 +741,7 @@ public:
     Size            MinCloseButtonSize();
 
     // add an arbitrary button to the menubar (will appear next to closer)
-    sal_uInt16              AddMenuBarButton( const Image&, const Link&, const OUString&, sal_uInt16 nPos );
+    sal_uInt16              AddMenuBarButton( const Image&, const Link&, const String&, sal_uInt16 nPos );
     void                SetMenuBarButtonHighlightHdl( sal_uInt16 nId, const Link& );
     Rectangle           GetMenuBarButtonRectPixel( sal_uInt16 nId );
     void                RemoveMenuBarButton( sal_uInt16 nId );
@@ -769,7 +769,7 @@ static void ImplSetMenuItemData( MenuItemData* pData )
     // convert data
     if ( !pData->aImage )
         pData->eType = MENUITEM_STRING;
-    else if ( pData->aText.isEmpty() )
+    else if ( !pData->aText.Len() )
         pData->eType = MENUITEM_IMAGE;
     else
         pData->eType = MENUITEM_STRINGIMAGE;
@@ -810,7 +810,7 @@ static bool ImplHandleHelpEvent( Window* pMenuWindow, Menu* pMenu, sal_uInt16 nH
             aPos = rHEvt.GetMousePosPixel();
 
         Rectangle aRect( aPos, Size() );
-        if( !pMenu->GetHelpText( nId ).isEmpty() )
+        if( pMenu->GetHelpText( nId ).Len() )
             Help::ShowBalloon( pMenuWindow, aPos, pMenu->GetHelpText( nId ) );
         else
         {
@@ -841,12 +841,12 @@ static bool ImplHandleHelpEvent( Window* pMenuWindow, Menu* pMenu, sal_uInt16 nH
         {
             // is an id available, then call help with the id, otherwise
             // use help-index
-            OUString aCommand = pMenu->GetItemCommand( nId );
+            String aCommand = pMenu->GetItemCommand( nId );
             OString aHelpId(  pMenu->GetHelpId( nId ) );
             if( aHelpId.isEmpty() )
                 aHelpId = OOO_HELP_INDEX;
 
-            if ( !aCommand.isEmpty() )
+            if ( aCommand.Len() )
                 pHelp->Start( aCommand, NULL );
             else
                 pHelp->Start( OStringToOUString( aHelpId, RTL_TEXTENCODING_UTF8 ), NULL );
@@ -1202,7 +1202,7 @@ void Menu::RemoveEventListener( const Link& rEventListener )
     maEventListeners.removeListener( rEventListener );
 }
 
-void Menu::InsertItem(sal_uInt16 nItemId, const OUString& rStr, MenuItemBits nItemBits,
+void Menu::InsertItem(sal_uInt16 nItemId, const XubString& rStr, MenuItemBits nItemBits,
     const OString &rIdent, sal_uInt16 nPos)
 {
     DBG_ASSERT( nItemId, "Menu::InsertItem(): ItemId == 0" );
@@ -1239,7 +1239,7 @@ void Menu::InsertItem(sal_uInt16 nItemId, const Image& rImage,
     SetItemImage( nItemId, rImage );
 }
 
-void Menu::InsertItem(sal_uInt16 nItemId, const OUString& rStr,
+void Menu::InsertItem(sal_uInt16 nItemId, const XubString& rStr,
     const Image& rImage, MenuItemBits nItemBits,
     const OString &rIdent, sal_uInt16 nPos)
 {
@@ -1270,7 +1270,7 @@ void Menu::InsertItem( const ResId& rResId, sal_uInt16 nPos )
     if ( nObjMask & RSC_MENUITEM_STATUS )
         nStatus = sal::static_int_cast<MenuItemBits>(ReadLongRes());
 
-    OUString aText;
+    String aText;
     if ( nObjMask & RSC_MENUITEM_TEXT )
         aText = ReadStringRes();
 
@@ -1280,7 +1280,7 @@ void Menu::InsertItem( const ResId& rResId, sal_uInt16 nPos )
         if ( !bSep )
         {
             Bitmap aBmp( ResId( (RSHEADER_TYPE*)GetClassRes(), *pMgr ) );
-            if ( !aText.isEmpty() )
+            if ( aText.Len() )
                 InsertItem( nItemId, aText, aBmp, nStatus, OString(), nPos );
             else
                 InsertItem( nItemId, aBmp, nStatus, OString(), nPos );
@@ -1292,7 +1292,7 @@ void Menu::InsertItem( const ResId& rResId, sal_uInt16 nPos )
     if ( bSep )
         InsertSeparator(OString(), nPos);
 
-    OUString aHelpText;
+    String aHelpText;
     if ( nObjMask & RSC_MENUITEM_HELPTEXT )
     {
         aHelpText = ReadStringRes();
@@ -1328,7 +1328,7 @@ void Menu::InsertItem( const ResId& rResId, sal_uInt16 nPos )
     }
     if ( nObjMask & RSC_MENUITEM_COMMAND )
     {
-        OUString aCommandStr = ReadStringRes();
+        String aCommandStr = ReadStringRes();
         if ( !bSep )
             SetItemCommand( nItemId, aCommandStr );
     }
@@ -1675,11 +1675,11 @@ KeyEvent Menu::GetActivationKey( sal_uInt16 nItemId ) const
     MenuItemData* pData = pItemList->GetData( nItemId );
     if( pData )
     {
-        sal_Int32 nPos = pData->aText.indexOf( '~' );
-        if( nPos != -1 && nPos < pData->aText.getLength()-1 )
+        sal_uInt16 nPos = pData->aText.Search( '~' );
+        if( nPos != STRING_NOTFOUND && nPos < pData->aText.Len()-1 )
         {
             sal_uInt16 nCode = 0;
-            sal_Unicode cAccel = pData->aText[ nPos+1 ];
+            sal_Unicode cAccel = pData->aText.GetChar( nPos+1 );
             if( cAccel >= 'a' && cAccel <= 'z' )
                 nCode = KEY_A + (cAccel-'a');
             else if( cAccel >= 'A' && cAccel <= 'Z' )
@@ -1837,7 +1837,7 @@ void Menu::ShowItem( sal_uInt16 nItemId, sal_Bool bVisible )
     }
 }
 
-void Menu::SetItemText( sal_uInt16 nItemId, const OUString& rStr )
+void Menu::SetItemText( sal_uInt16 nItemId, const XubString& rStr )
 {
     size_t          nPos;
     MenuItemData*   pData = pItemList->GetData( nItemId, nPos );
@@ -1845,7 +1845,7 @@ void Menu::SetItemText( sal_uInt16 nItemId, const OUString& rStr )
     if ( !pData )
         return;
 
-    if ( rStr != pData->aText )
+    if ( !rStr.Equals( pData->aText ) )
     {
         pData->aText = rStr;
         ImplSetMenuItemData( pData );
@@ -1866,7 +1866,7 @@ void Menu::SetItemText( sal_uInt16 nItemId, const OUString& rStr )
     }
 }
 
-OUString Menu::GetItemText( sal_uInt16 nItemId ) const
+XubString Menu::GetItemText( sal_uInt16 nItemId ) const
 {
     size_t          nPos;
     MenuItemData*   pData = pItemList->GetData( nItemId, nPos );
@@ -1997,7 +1997,7 @@ const OUString Menu::GetItemCommand( sal_uInt16 nItemId ) const
     return OUString();
 }
 
-void Menu::SetHelpCommand( sal_uInt16 nItemId, const OUString& rStr )
+void Menu::SetHelpCommand( sal_uInt16 nItemId, const XubString& rStr )
 {
     MenuItemData* pData = pItemList->GetData( nItemId );
 
@@ -2005,16 +2005,17 @@ void Menu::SetHelpCommand( sal_uInt16 nItemId, const OUString& rStr )
         pData->aHelpCommandStr = rStr;
 }
 
-const OUString& Menu::GetHelpCommand( sal_uInt16 nItemId ) const
+const XubString& Menu::GetHelpCommand( sal_uInt16 nItemId ) const
 {
     MenuItemData* pData = pItemList->GetData( nItemId );
 
-    assert ( pData );
-
-    return pData->aHelpCommandStr;
+    if ( pData )
+        return pData->aHelpCommandStr;
+    else
+        return ImplGetSVEmptyStr();
 }
 
-void Menu::SetHelpText( sal_uInt16 nItemId, const OUString& rStr )
+void Menu::SetHelpText( sal_uInt16 nItemId, const XubString& rStr )
 {
     MenuItemData* pData = pItemList->GetData( nItemId );
 
@@ -2022,35 +2023,38 @@ void Menu::SetHelpText( sal_uInt16 nItemId, const OUString& rStr )
         pData->aHelpText = rStr;
 }
 
-const OUString& Menu::ImplGetHelpText( sal_uInt16 nItemId ) const
+const XubString& Menu::ImplGetHelpText( sal_uInt16 nItemId ) const
 {
     MenuItemData* pData = pItemList->GetData( nItemId );
 
-    assert ( pData );
-
-    if ( pData->aHelpText.isEmpty() &&
-         (( !pData->aHelpId.isEmpty()  ) || ( !pData->aCommandStr.isEmpty() )))
+    if ( pData )
     {
-        Help* pHelp = Application::GetHelp();
-        if ( pHelp )
+        if ( !pData->aHelpText.Len() &&
+             (( !pData->aHelpId.isEmpty()  ) || ( pData->aCommandStr.Len() )))
         {
-            if ( !pData->aCommandStr.isEmpty() )
-                pData->aHelpText = pHelp->GetHelpText( pData->aCommandStr, NULL );
+            Help* pHelp = Application::GetHelp();
+            if ( pHelp )
+            {
+                if ( pData->aCommandStr.Len() )
+                    pData->aHelpText = pHelp->GetHelpText( pData->aCommandStr, NULL );
 
-            if( pData->aHelpText.isEmpty() && !pData->aHelpId.isEmpty() )
-                pData->aHelpText = pHelp->GetHelpText( OStringToOUString( pData->aHelpId, RTL_TEXTENCODING_UTF8 ), NULL );
+                if( !pData->aHelpText.Len() && !pData->aHelpId.isEmpty() )
+                    pData->aHelpText = pHelp->GetHelpText( OStringToOUString( pData->aHelpId, RTL_TEXTENCODING_UTF8 ), NULL );
+            }
         }
-    }
 
-    return pData->aHelpText;
+        return pData->aHelpText;
+    }
+    else
+        return ImplGetSVEmptyStr();
 }
 
-const OUString& Menu::GetHelpText( sal_uInt16 nItemId ) const
+const XubString& Menu::GetHelpText( sal_uInt16 nItemId ) const
 {
     return ImplGetHelpText( nItemId );
 }
 
-void Menu::SetTipHelpText( sal_uInt16 nItemId, const OUString& rStr )
+void Menu::SetTipHelpText( sal_uInt16 nItemId, const XubString& rStr )
 {
     MenuItemData* pData = pItemList->GetData( nItemId );
 
@@ -2058,13 +2062,14 @@ void Menu::SetTipHelpText( sal_uInt16 nItemId, const OUString& rStr )
         pData->aTipHelpText = rStr;
 }
 
-const OUString& Menu::GetTipHelpText( sal_uInt16 nItemId ) const
+const XubString& Menu::GetTipHelpText( sal_uInt16 nItemId ) const
 {
     MenuItemData* pData = pItemList->GetData( nItemId );
 
-    assert ( pData );
-
-    return pData->aTipHelpText;
+    if ( pData )
+        return pData->aTipHelpText;
+    else
+        return ImplGetSVEmptyStr();
 }
 
 void Menu::SetHelpId( sal_uInt16 nItemId, const OString& rHelpId )
@@ -2471,7 +2476,7 @@ Size Menu::ImplCalcSize( Window* pWin )
             // Accel
             if ( !bIsMenuBar && pData->aAccelKey.GetCode() && !ImplAccelDisabled() )
             {
-                OUString aName = pData->aAccelKey.GetName();
+                String aName = pData->aAccelKey.GetName();
                 long nAccWidth = pWin->GetTextWidth( aName );
                 nAccWidth += nExtra;
                 nWidth += nAccWidth;
@@ -2592,20 +2597,20 @@ static void ImplPaintCheckBackground( Window* i_pWindow, const Rectangle& i_rRec
     }
 }
 
-static OUString getShortenedString( const OUString& i_rLong, Window* i_pWin, long i_nMaxWidth )
+static String getShortenedString( const String& i_rLong, Window* i_pWin, long i_nMaxWidth )
 {
-    sal_Int32 nPos = STRING_NOTFOUND;
-    OUString aNonMnem( OutputDevice::GetNonMnemonicString( i_rLong, nPos ) );
+    xub_StrLen nPos = STRING_NOTFOUND;
+    String aNonMnem( OutputDevice::GetNonMnemonicString( i_rLong, nPos ) );
     aNonMnem = i_pWin->GetEllipsisString( aNonMnem, i_nMaxWidth, TEXT_DRAW_CENTERELLIPSIS );
     // re-insert mnemonic
     if( nPos != STRING_NOTFOUND )
     {
-        if( nPos < aNonMnem.getLength() && i_rLong[nPos+1] == aNonMnem[nPos] )
+        if( nPos < aNonMnem.Len() && i_rLong.GetChar(nPos+1) == aNonMnem.GetChar(nPos) )
         {
-            OUStringBuffer aBuf( i_rLong.getLength() );
-            aBuf.append( aNonMnem.copy( 0, nPos) );
+            OUStringBuffer aBuf( i_rLong.Len() );
+            aBuf.append( aNonMnem.GetBuffer(), nPos );
             aBuf.append( sal_Unicode('~') );
-            aBuf.append( aNonMnem.copy(nPos) );
+            aBuf.append( aNonMnem.GetBuffer()+nPos );
             aNonMnem = aBuf.makeStringAndClear();
         }
     }
@@ -2836,15 +2841,15 @@ void Menu::ImplPaint( Window* pWin, sal_uInt16 nBorder, long nStartY, MenuItemDa
                     long nMaxItemTextWidth = aOutSz.Width() - aTmpPos.X() - nExtra - nOuterSpaceX;
                     if( !bIsMenuBar && pData->aAccelKey.GetCode() && !ImplAccelDisabled() )
                     {
-                        OUString aAccText = pData->aAccelKey.GetName();
+                        XubString aAccText = pData->aAccelKey.GetName();
                         nMaxItemTextWidth -= pWin->GetTextWidth( aAccText ) + 3*nExtra;
                     }
                     if( !bIsMenuBar && pData->pSubMenu )
                     {
                         nMaxItemTextWidth -= nFontHeight - nExtra;
                     }
-                    OUString aItemText( getShortenedString( pData->aText, pWin, nMaxItemTextWidth ) );
-                    pWin->DrawCtrlText( aTmpPos, aItemText, 0, aItemText.getLength(), nStyle, pVector, pDisplayText );
+                    String aItemText( getShortenedString( pData->aText, pWin, nMaxItemTextWidth ) );
+                    pWin->DrawCtrlText( aTmpPos, aItemText, 0, aItemText.Len(), nStyle, pVector, pDisplayText );
                     if( bSetTmpBackground )
                         pWin->SetBackground();
                 }
@@ -2852,14 +2857,14 @@ void Menu::ImplPaint( Window* pWin, sal_uInt16 nBorder, long nStartY, MenuItemDa
                 // Accel
                 if ( !bLayout && !bIsMenuBar && pData->aAccelKey.GetCode() && !ImplAccelDisabled() )
                 {
-                    OUString aAccText = pData->aAccelKey.GetName();
+                    XubString aAccText = pData->aAccelKey.GetName();
                     aTmpPos.X() = aOutSz.Width() - pWin->GetTextWidth( aAccText );
                     aTmpPos.X() -= 4*nExtra;
 
                     aTmpPos.X() -= nOuterSpaceX;
                     aTmpPos.Y() = aPos.Y();
                     aTmpPos.Y() += nTextOffsetY;
-                    pWin->DrawCtrlText( aTmpPos, aAccText, 0, aAccText.getLength(), nTextStyle );
+                    pWin->DrawCtrlText( aTmpPos, aAccText, 0, aAccText.Len(), nTextStyle );
                 }
 
                 // SubMenu?
@@ -3188,19 +3193,19 @@ Rectangle Menu::GetBoundingRectangle( sal_uInt16 nPos ) const
     return aRet;
 }
 
-void Menu::SetAccessibleName( sal_uInt16 nItemId, const OUString& rStr )
+void Menu::SetAccessibleName( sal_uInt16 nItemId, const XubString& rStr )
 {
     size_t        nPos;
     MenuItemData* pData = pItemList->GetData( nItemId, nPos );
 
-    if ( pData && rStr != pData->aAccessibleName )
+    if ( pData && !rStr.Equals( pData->aAccessibleName ) )
     {
         pData->aAccessibleName = rStr;
         ImplCallEventListeners( VCLEVENT_MENU_ACCESSIBLENAMECHANGED, nPos );
     }
 }
 
-OUString Menu::GetAccessibleName( sal_uInt16 nItemId ) const
+XubString Menu::GetAccessibleName( sal_uInt16 nItemId ) const
 {
     MenuItemData* pData = pItemList->GetData( nItemId );
 
@@ -3463,7 +3468,7 @@ sal_Bool MenuBar::HandleMenuCommandEvent( Menu *pMenu, sal_uInt16 nCommandEventI
         return sal_False;
 }
 
-sal_uInt16 MenuBar::AddMenuBarButton( const Image& i_rImage, const Link& i_rLink, const OUString& i_rToolTip, sal_uInt16 i_nPos )
+sal_uInt16 MenuBar::AddMenuBarButton( const Image& i_rImage, const Link& i_rLink, const String& i_rToolTip, sal_uInt16 i_nPos )
 {
     return pWindow ? static_cast<MenuBarWindow*>(pWindow)->AddMenuBarButton( i_rImage, i_rLink, i_rToolTip, i_nPos ) : 0;
 }
@@ -6040,7 +6045,7 @@ void MenuBarWindow::GetFocus()
     return xAcc;
 }
 
-sal_uInt16 MenuBarWindow::AddMenuBarButton( const Image& i_rImage, const Link& i_rLink, const OUString& i_rToolTip, sal_uInt16 i_nPos )
+sal_uInt16 MenuBarWindow::AddMenuBarButton( const Image& i_rImage, const Link& i_rLink, const String& i_rToolTip, sal_uInt16 i_nPos )
 {
     // find first free button id
     sal_uInt16 nId = IID_DOCUMENTCLOSE;

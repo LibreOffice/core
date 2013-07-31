@@ -6142,7 +6142,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
 
     long        nTextHeight     = rTargetDevice.GetTextHeight();
     TextAlign   eAlign          = rTargetDevice.GetTextAlign();
-    sal_Int32   nMnemonicPos    = STRING_NOTFOUND;
+    xub_StrLen  nMnemonicPos    = STRING_NOTFOUND;
 
     OUString aStr = rOrigStr;
     if ( nStyle & TEXT_DRAW_MNEMONIC )
@@ -6718,7 +6718,7 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const OUString& rStr,
         nLen = rStr.getLength() - nIndex;
 
     OUString   aStr = rStr;
-    sal_Int32  nMnemonicPos = STRING_NOTFOUND;
+    xub_StrLen  nMnemonicPos = STRING_NOTFOUND;
 
     long        nMnemonicX = 0;
     long        nMnemonicY = 0;
@@ -6832,14 +6832,14 @@ long OutputDevice::GetCtrlTextWidth( const OUString& rStr,
 
     if ( nStyle & TEXT_DRAW_MNEMONIC )
     {
-        sal_Int32  nMnemonicPos;
+        xub_StrLen  nMnemonicPos;
         OUString   aStr = GetNonMnemonicString( rStr, nMnemonicPos );
         if ( nMnemonicPos != STRING_NOTFOUND )
         {
             if ( nMnemonicPos < nIndex )
                 nIndex--;
             else if ( (nLen < STRING_LEN) &&
-                      (nMnemonicPos >= nIndex) && ((sal_uLong)nMnemonicPos < (sal_uLong)(nIndex+nLen)) )
+                      (nMnemonicPos >= nIndex) && (nMnemonicPos < (sal_uLong)(nIndex+nLen)) )
                 nLen--;
         }
         return GetTextWidth( aStr, nIndex, nLen );
@@ -6848,27 +6848,27 @@ long OutputDevice::GetCtrlTextWidth( const OUString& rStr,
         return GetTextWidth( rStr, nIndex, nLen );
 }
 
-OUString OutputDevice::GetNonMnemonicString( const OUString& rStr, sal_Int32& rMnemonicPos )
+OUString OutputDevice::GetNonMnemonicString( const OUString& rStr, xub_StrLen& rMnemonicPos )
 {
-    OUString   aStr    = rStr;
-    sal_Int32  nLen    = aStr.getLength();
-    sal_Int32  i       = 0;
+    String   aStr    = rStr;
+    xub_StrLen  nLen    = aStr.Len();
+    xub_StrLen  i       = 0;
 
     rMnemonicPos = STRING_NOTFOUND;
     while ( i < nLen )
     {
-        if ( aStr[ i ] == '~' )
+        if ( aStr.GetChar( i ) == '~' )
         {
-            if ( aStr[ i+1 ] != '~' )
+            if ( aStr.GetChar( i+1 ) != '~' )
             {
                 if ( rMnemonicPos == STRING_NOTFOUND )
                     rMnemonicPos = i;
-                aStr = aStr.replaceAt( i, 1, "" );
+                aStr.Erase( i, 1 );
                 nLen--;
             }
             else
             {
-                aStr = aStr.replaceAt( i, 1, "" );
+                aStr.Erase( i, 1 );
                 nLen--;
                 i++;
             }

@@ -629,9 +629,9 @@ public:
     long                GetCtrlTextWidth( const OUString& rStr, xub_StrLen nIndex = 0,
                                           xub_StrLen nLen = STRING_LEN,
                                           sal_uInt16 nStyle = TEXT_DRAW_MNEMONIC ) const;
-    static OUString    GetNonMnemonicString( const OUString& rStr, sal_Int32& rMnemonicPos );
+    static OUString    GetNonMnemonicString( const OUString& rStr, xub_StrLen& rMnemonicPos );
     static OUString    GetNonMnemonicString( const OUString& rStr )
-                            { sal_Int32 nDummy; return GetNonMnemonicString( rStr, nDummy ); }
+                            { xub_StrLen nDummy; return GetNonMnemonicString( rStr, nDummy ); }
 
     sal_Bool                GetTextBoundRect( Rectangle& rRect,
                             const OUString& rStr, xub_StrLen nBase = 0, xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN,

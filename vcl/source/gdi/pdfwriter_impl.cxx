@@ -7909,7 +7909,7 @@ void PDFWriterImpl::drawText( const Rectangle& rRect, const OUString& rOrigStr, 
     Point       aPos            = rRect.TopLeft();
 
     long        nTextHeight     = m_pReferenceDevice->GetTextHeight();
-    sal_Int32   nMnemonicPos    = STRING_NOTFOUND;
+    xub_StrLen  nMnemonicPos    = STRING_NOTFOUND;
 
     OUString aStr = rOrigStr;
     if ( nStyle & TEXT_DRAW_MNEMONIC )

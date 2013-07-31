@@ -588,7 +588,7 @@ ContextMenuHelper::completeMenuProperties(
                 else
                     pMenu->SetItemImage( nId, Image() );
 
-                if ( pMenu->GetItemText( nId ).isEmpty() )
+                if ( pMenu->GetItemText( nId ).Len() == 0 )
                 {
                     OUString aLabel( getLabelFromCommandURL( aCmdURL ));
                     pMenu->SetItemText( nId, aLabel );

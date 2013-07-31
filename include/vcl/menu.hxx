@@ -164,7 +164,7 @@ protected:
     SAL_DLLPRIVATE void             ImplFillLayoutData() const;
     SAL_DLLPRIVATE SalMenu*         ImplGetSalMenu() { return mpSalMenu; }
     SAL_DLLPRIVATE void             ImplSetSalMenu( SalMenu *pMenu );
-    SAL_DLLPRIVATE const OUString&  ImplGetHelpText( sal_uInt16 nItemId ) const;
+    SAL_DLLPRIVATE const XubString& ImplGetHelpText( sal_uInt16 nItemId ) const;
 
     // returns native check and option menu symbol height in rCheckHeight and rRadioHeight
     // return value is maximum width and height of checkboxes and radiobuttons
@@ -194,7 +194,7 @@ public:
     virtual void        Select();
     virtual void        RequestHelp( const HelpEvent& rHEvt );
 
-    void                InsertItem( sal_uInt16 nItemId, const OUString& rStr,
+    void                InsertItem( sal_uInt16 nItemId, const XubString& rStr,
                                     MenuItemBits nItemBits = 0,
                                     const OString &rIdent = OString(),
                                     sal_uInt16 nPos = MENU_APPEND );
@@ -203,7 +203,7 @@ public:
                                     const OString &rIdent = OString(),
                                     sal_uInt16 nPos = MENU_APPEND );
     void                InsertItem( sal_uInt16 nItemId,
-                                    const OUString& rString, const Image& rImage,
+                                    const XubString& rString, const Image& rImage,
                                     MenuItemBits nItemBits = 0,
                                     const OString &rIdent = OString(),
                                     sal_uInt16 nPos = MENU_APPEND );
@@ -267,8 +267,8 @@ public:
     void                RemoveDisabledEntries( sal_Bool bCheckPopups = sal_True, sal_Bool bRemoveEmptyPopups = sal_False );
     sal_Bool            HasValidEntries( sal_Bool bCheckPopups = sal_True );
 
-    void                SetItemText( sal_uInt16 nItemId, const OUString& rStr );
-    OUString            GetItemText( sal_uInt16 nItemId ) const;
+    void                SetItemText( sal_uInt16 nItemId, const XubString& rStr );
+    XubString           GetItemText( sal_uInt16 nItemId ) const;
 
     void                SetItemImage( sal_uInt16 nItemId, const Image& rImage );
     Image               GetItemImage( sal_uInt16 nItemId ) const;
@@ -280,14 +280,14 @@ public:
     void                SetItemCommand( sal_uInt16 nItemId, const OUString& rCommand );
     const OUString      GetItemCommand( sal_uInt16 nItemId ) const;
 
-    void                SetHelpText( sal_uInt16 nItemId, const OUString& rString );
-    const OUString&     GetHelpText( sal_uInt16 nItemId ) const;
+    void                SetHelpText( sal_uInt16 nItemId, const XubString& rString );
+    const XubString&    GetHelpText( sal_uInt16 nItemId ) const;
 
-    void                SetTipHelpText( sal_uInt16 nItemId, const OUString& rString );
-    const OUString&     GetTipHelpText( sal_uInt16 nItemId ) const;
+    void                SetTipHelpText( sal_uInt16 nItemId, const XubString& rString );
+    const XubString&    GetTipHelpText( sal_uInt16 nItemId ) const;
 
-    void                SetHelpCommand( sal_uInt16 nItemId, const OUString& rString );
-    const OUString&     GetHelpCommand( sal_uInt16 nItemId ) const;
+    void                SetHelpCommand( sal_uInt16 nItemId, const XubString& rString );
+    const XubString&    GetHelpCommand( sal_uInt16 nItemId ) const;
 
     void                SetHelpId( sal_uInt16 nItemId, const OString& rHelpId );
     OString        GetHelpId( sal_uInt16 nItemId ) const;
@@ -343,8 +343,8 @@ public:
 
     Window*             GetWindow() const { return pWindow; }
 
-    void                SetAccessibleName( sal_uInt16 nItemId, const OUString& rStr );
-    OUString            GetAccessibleName( sal_uInt16 nItemId ) const;
+    void                SetAccessibleName( sal_uInt16 nItemId, const XubString& rStr );
+    XubString           GetAccessibleName( sal_uInt16 nItemId ) const;
 
     // returns whether the item a position nItemPos is highlighted or not.
     bool  IsHighlighted( sal_uInt16 nItemPos ) const;
@@ -420,7 +420,7 @@ public:
     // add an arbitrary button to the menubar (will appear next to closer)
     // passed link will be call with a MenuBarButtonCallbackArg on press
     // passed string will be set as tooltip
-    sal_uInt16          AddMenuBarButton( const Image&, const Link&, const OUString&, sal_uInt16 nPos = 0 );
+    sal_uInt16          AddMenuBarButton( const Image&, const Link&, const String&, sal_uInt16 nPos = 0 );
     // set the highlight link for additional button with ID nId
     // highlight link will be called with a MenuBarButtonHighlightArg
     // the bHighlight member of that struct shall contain the new state
