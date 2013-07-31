@@ -60,6 +60,7 @@ $(eval $(call gb_Library_use_libraries,sfx,\
     cppuhelper \
     drawinglayer \
     fwe \
+	fwi \
     i18nlangtag \
     sal \
     sax \
@@ -129,6 +130,7 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/config/evntconf \
     sfx2/source/control/bindings \
     sfx2/source/control/ctrlitem \
+    sfx2/source/control/droptargetlistener \
     sfx2/source/control/minfitem \
     sfx2/source/control/msg \
     sfx2/source/control/msgpool \
@@ -150,6 +152,8 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/control/thumbnailview \
     sfx2/source/control/unoctitm \
     sfx2/source/dialog/alienwarn \
+    sfx2/source/dialog/backingcomp \
+    sfx2/source/dialog/backingwindow \
     sfx2/source/dialog/basedlgs \
     sfx2/source/dialog/checkin \
     sfx2/source/dialog/dialoghelper \

@@ -83,7 +83,6 @@ namespace framework{
 #define IMPLEMENTATIONNAME_MODULEMANAGER                        DECLARE_ASCII("com.sun.star.comp.framework.ModuleManager"           )
 #define IMPLEMENTATIONNAME_MODULEUICONFIGURATIONMANAGERSUPPLIER DECLARE_ASCII("com.sun.star.comp.framework.ModuleUIConfigurationManagerSupplier" )
 #define IMPLEMENTATIONNAME_MENUBARFACTORY                       DECLARE_ASCII("com.sun.star.comp.framework.MenuBarFactory"          )
-#define IMPLEMENTATIONNAME_STARTMODULE                          DECLARE_ASCII("com.sun.star.comp.framework.BackingComp"             )
 #define IMPLEMENTATIONNAME_WINDOWSTATECONFIGURATION             DECLARE_ASCII("com.sun.star.comp.framework.WindowStateConfiguration" )
 #define IMPLEMENTATIONNAME_TOOLBARFACTORY                       DECLARE_ASCII("com.sun.star.comp.framework.ToolBarFactory"          )
 #define IMPLEMENTATIONNAME_ADDONSTOOLBARFACTORY                 DECLARE_ASCII("com.sun.star.comp.framework.AddonsToolBarFactory"    )

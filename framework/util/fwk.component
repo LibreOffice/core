@@ -28,9 +28,6 @@
   <implementation name="com.sun.star.comp.framework.AutoRecovery">
     <service name="com.sun.star.frame.AutoRecovery"/>
   </implementation>
-  <implementation name="com.sun.star.comp.framework.BackingComp">
-    <service name="com.sun.star.frame.StartModule"/>
-  </implementation>
   <implementation name="com.sun.star.comp.framework.ControlMenuController">
     <service name="com.sun.star.frame.PopupMenuController"/>
   </implementation>

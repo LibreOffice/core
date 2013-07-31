@@ -19,6 +19,9 @@
 
 <component loader="com.sun.star.loader.SharedLibrary" prefix="sfx"
     xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.sfx2.BackingComp">
+    <service name="com.sun.star.frame.StartModule"/>
+  </implementation>
   <implementation name="SfxDocumentMetaData">
     <service name="com.sun.star.document.DocumentProperties"/>
   </implementation>
