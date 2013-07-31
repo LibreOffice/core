@@ -443,66 +443,22 @@ public:
 
     /** If the character is allowed as first character in sheet names or
         references, includes '$' and '?'. */
-    static inline bool IsCharWordChar( String const & rStr,
-                                       xub_StrLen nPos,
-                                       const formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_OOO )
-        {
-            sal_Unicode c = rStr.GetChar( nPos );
-            sal_Unicode cLast = nPos > 0 ? rStr.GetChar(nPos-1) : 0;
-            if (c < 128)
-            {
-                return pConventions[eConv] ? (pConventions[eConv]->getCharTableFlags(c, cLast) & SC_COMPILER_C_CHAR_WORD) == SC_COMPILER_C_CHAR_WORD :
-                    false;   // no convention => assume invalid
-            }
-            else
-                return ScGlobal::pCharClass->isLetterNumeric( rStr, nPos );
-        }
+    static bool IsCharWordChar(
+        String const & rStr, xub_StrLen nPos,
+        const formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_OOO );
 
     /** If the character is allowed in sheet names, thus may be part of a
         reference, includes '$' and '?' and such. */
-    static inline bool IsWordChar( String const & rStr,
-                                   xub_StrLen nPos,
-                                   const formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_OOO )
-        {
-            sal_Unicode c = rStr.GetChar( nPos );
-            sal_Unicode cLast = nPos > 0 ? rStr.GetChar(nPos-1) : 0;
-            if (c < 128)
-            {
-                return pConventions[eConv] ? (pConventions[eConv]->getCharTableFlags(c, cLast) & SC_COMPILER_C_WORD) == SC_COMPILER_C_WORD :
-                    false;   // convention not known => assume invalid
-            }
-            else
-                return ScGlobal::pCharClass->isLetterNumeric( rStr, nPos );
-        }
+    static bool IsWordChar(
+        String const & rStr, xub_StrLen nPos,
+        const formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_OOO );
 
     /** If the character is allowed as tested by nFlags (SC_COMPILER_C_...
         bits) for all known address conventions. If more than one bit is given
         in nFlags, all bits must match. If bTestLetterNumeric is false and
         char>=128, no LetterNumeric test is done and false is returned. */
-    static inline bool IsCharFlagAllConventions( String const & rStr,
-                                                 xub_StrLen nPos,
-                                                 sal_uLong nFlags,
-                                                 bool bTestLetterNumeric = true )
-        {
-            sal_Unicode c = rStr.GetChar( nPos );
-            sal_Unicode cLast = nPos > 0 ? rStr.GetChar( nPos-1 ) : 0;
-            if (c < 128)
-            {
-                for ( int nConv = formula::FormulaGrammar::CONV_UNSPECIFIED;
-                        ++nConv < formula::FormulaGrammar::CONV_LAST; )
-                {
-                    if (pConventions[nConv] &&
-                            ((pConventions[nConv]->getCharTableFlags(c, cLast) & nFlags) != nFlags))
-                        return false;
-                    // convention not known => assume valid
-                }
-                return true;
-            }
-            else if (bTestLetterNumeric)
-                return ScGlobal::pCharClass->isLetterNumeric( rStr, nPos );
-            else
-                return false;
-        }
+    static bool IsCharFlagAllConventions(
+        String const & rStr, xub_StrLen nPos, sal_uLong nFlags, bool bTestLetterNumeric = true );
 
 private:
     // FormulaCompiler
