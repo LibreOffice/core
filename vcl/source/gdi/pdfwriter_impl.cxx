@@ -8382,7 +8382,7 @@ void PDFWriterImpl::drawStrikeoutChar( const Point& rPos, long nWidth, FontStrik
     //See qadevOOo/testdocs/StrikeThrough.odt for examples if you need
     //to tweak this
 
-    OUString aStrikeoutChar = eStrikeout == STRIKEOUT_SLASH ? "/" : "X";
+    OUString aStrikeoutChar = eStrikeout == STRIKEOUT_SLASH ? OUString( "/" ) : OUString( "X" );
     OUString aStrikeout = aStrikeoutChar;
     while( m_pReferenceDevice->GetTextWidth( aStrikeout ) < nWidth )
         aStrikeout += aStrikeout;
