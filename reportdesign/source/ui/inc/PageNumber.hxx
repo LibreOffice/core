@@ -37,23 +37,17 @@ class OReportController;
 \************************************************************************/
 class OPageNumberDialog :   public ModalDialog
 {
-    FixedLine                               m_aFormat;
-    RadioButton                             m_aPageN;
-    RadioButton                             m_aPageNofM;
+    RadioButton*                            m_pPageN;
+    RadioButton*                            m_pPageNofM;
 
-    FixedLine                               m_aPosition;
-    RadioButton                             m_aTopPage;
-    RadioButton                             m_aBottomPage;
-    FixedLine                               m_aMisc;
-    FixedText                               m_aAlignment;
-    ListBox                                 m_aAlignmentLst;
+    RadioButton*                            m_pTopPage;
+    RadioButton*                            m_pBottomPage;
+    ListBox*                                m_pAlignmentLst;
 
-    CheckBox                                m_aShowNumberOnFirstPage;
-    FixedLine                               m_aFl1;
-    OKButton                                m_aPB_OK;
-    CancelButton                            m_aPB_CANCEL;
-    HelpButton                              m_aPB_Help;
-
+    CheckBox*                               m_pShowNumberOnFirstPage;
+    OKButton*                               m_pPB_OK;
+    CancelButton*                           m_pPB_CANCEL;
+    HelpButton*                             m_pPB_Help;
 
     ::rptui::OReportController*             m_pController;
     ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition>
