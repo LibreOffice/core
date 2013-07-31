@@ -1040,6 +1040,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumnPrivileges(
 
     while( rs->next() )
     {
+        // TODO: avoid reallocations here.
         ODatabaseMetaDataResultSet::ORow aCurrentRow;
         aCurrentRow.reserve(9);
 
@@ -1152,34 +1153,34 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
     uno::Reference< XRow > xRow( rs, UNO_QUERY_THROW );
 
     ODatabaseMetaDataResultSet::ORows aResults;
+    ODatabaseMetaDataResultSet::ORow aCurrentRow(19);
+
+    aCurrentRow[0] =  new ORowSetValueDecorator(); // Unused -- numbering starts from 0
+    aCurrentRow[1] =  new ORowSetValueDecorator(); // Catalog - can be null
+    aCurrentRow[2] =  new ORowSetValueDecorator(); // Schema - can be null
+    aCurrentRow[8] =  new ORowSetValueDecorator(); // Unused
+    aCurrentRow[10] = new ORowSetValueDecorator(sal_Int32(10)); // Radix: fixed in FB
+    aCurrentRow[14] = new ORowSetValueDecorator(); // Unused
+    aCurrentRow[15] = new ORowSetValueDecorator(); // Unused
 
     while( rs->next() )
     {
-        ODatabaseMetaDataResultSet::ORow aCurrentRow;
-        aCurrentRow.reserve(19);
-
-        // 0. EMPTY
-        aCurrentRow.push_back(new ORowSetValueDecorator());
-        // 1. TABLE_CAT (catalog) may be null
-        aCurrentRow.push_back(new ORowSetValueDecorator());
-        // 2. TABLE_SCHEM (schema) may be null
-        aCurrentRow.push_back(new ORowSetValueDecorator());
         // 3. TABLE_NAME
         {
             OUString aTableName = xRow->getString(1);
-            aCurrentRow.push_back(new ORowSetValueDecorator(aTableName));
+            aCurrentRow[3] = new ORowSetValueDecorator(aTableName);
         }
         // 4. Column Name
         {
             OUString aColumnName = xRow->getString(2);
-            aCurrentRow.push_back(new ORowSetValueDecorator(aColumnName));
+            aCurrentRow[4] = new ORowSetValueDecorator(aColumnName);
         }
 
         // 5. Datatype
         short aType = getFBTypeFromBlrType(xRow->getShort(6));
-        aCurrentRow.push_back(new ORowSetValueDecorator(getColumnTypeFromFBType(aType)));
+        aCurrentRow[5] = new ORowSetValueDecorator(getColumnTypeFromFBType(aType));
         // 6. Typename (SQL_*)
-        aCurrentRow.push_back(new ORowSetValueDecorator(getColumnTypeNameFromFBType(aType)));
+        aCurrentRow[6] = new ORowSetValueDecorator(getColumnTypeNameFromFBType(aType));
 
         // 7. Column Sizes
         {
@@ -1208,23 +1209,21 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
                     // TODO: implement.
                     break;
             }
-            aCurrentRow.push_back(new ORowSetValueDecorator(aColumnSize));
+            aCurrentRow[7] = new ORowSetValueDecorator(aColumnSize);
         }
-        // 8. Unused
-        aCurrentRow.push_back(new ORowSetValueDecorator());
+
         // 9. Decimal Digits
         // TODO: implement
-        aCurrentRow.push_back(new ORowSetValueDecorator(sal_Int32(0)));
-        // 10. Radix
-        aCurrentRow.push_back(new ORowSetValueDecorator(sal_Int32(10)));
+        aCurrentRow[9] = new ORowSetValueDecorator(sal_Int32(0));
+
         // 11. Nullable
         if (xRow->getShort(9))
         {
-            aCurrentRow.push_back(new ORowSetValueDecorator(ColumnValue::NO_NULLS));
+            aCurrentRow[11] = new ORowSetValueDecorator(ColumnValue::NO_NULLS);
         }
         else
         {
-            aCurrentRow.push_back(new ORowSetValueDecorator(ColumnValue::NULLABLE));
+            aCurrentRow[11] = new ORowSetValueDecorator(ColumnValue::NULLABLE);
         }
         // 12. Comments -- may be omitted
         {
@@ -1237,7 +1236,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
                                         aBlobLength,
                                         RTL_TEXTENCODING_UTF8);
             }
-            aCurrentRow.push_back(new ORowSetValueDecorator(aDescription));
+            aCurrentRow[12] = new ORowSetValueDecorator(aDescription);
         }
         // 13. Default --  may be omitted.
         {
@@ -1246,40 +1245,37 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
             {
                 // TODO: Implement
             }
-            aCurrentRow.push_back(new ORowSetValueDecorator());
+            aCurrentRow[13] = new ORowSetValueDecorator();
         }
-        // 14. Unused
-        aCurrentRow.push_back(new ORowSetValueDecorator());
-        // 15. Unused
-        aCurrentRow.push_back(new ORowSetValueDecorator());
+
         // 16. Bytes in Column for char
         if (aType == SQL_TEXT)
         {
-            aCurrentRow.push_back(new ORowSetValueDecorator(xRow->getShort(7)));
+            aCurrentRow[16] = new ORowSetValueDecorator(xRow->getShort(7));
         }
         else if (aType == SQL_VARYING)
         {
-            aCurrentRow.push_back(new ORowSetValueDecorator(sal_Int32(32767)));
+            aCurrentRow[16] = new ORowSetValueDecorator(sal_Int32(32767));
         }
         else
         {
-            aCurrentRow.push_back(new ORowSetValueDecorator(sal_Int32(0)));
+            aCurrentRow[16] = new ORowSetValueDecorator(sal_Int32(0));
         }
         // 17. Index of column
         {
-            short aColumnNumber = xRow->getShort(5);
+            short nColumnNumber = xRow->getShort(5);
             // Firebird stores column numbers beginning with 0 internally
             // SDBC expects column numbering to begin with 1.
-            aCurrentRow.push_back(new ORowSetValueDecorator(sal_Int32(aColumnNumber + 1)));
+            aCurrentRow[17] = new ORowSetValueDecorator(sal_Int32(nColumnNumber + 1));
         }
         // 18. Is nullable
         if (xRow->getShort(9))
         {
-            aCurrentRow.push_back(new ORowSetValueDecorator(OUString("NO")));
+            aCurrentRow[18] = new ORowSetValueDecorator(OUString("NO"));
         }
         else
         {
-            aCurrentRow.push_back(new ORowSetValueDecorator(OUString("YES")));
+            aCurrentRow[18] = new ORowSetValueDecorator(OUString("YES"));
         }
 
         aResults.push_back(aCurrentRow);
