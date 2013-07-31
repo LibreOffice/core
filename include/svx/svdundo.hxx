@@ -41,12 +41,9 @@ class SdrLayerAdmin;
 class SdrObjGeoData;
 class OutlinerParaObject;
 
-//************************************************************
-//   SdrUndoAction
-//
-// Abstrakte Basisklasse fuer alle UndoActions der DrawingEngine
-//
-//************************************************************
+/**
+ * Abstract base class (ABC) for all UndoActions of DrawingEngine
+ */
 
 class SVX_DLLPUBLIC SdrUndoAction : public SfxUndoAction
 {
@@ -72,22 +69,19 @@ public:
     virtual void SdrRepeat(SdrView& rView);
 };
 
-//************************************************************
-//   SdrUndoGroup
-//
-// Zusammenfassung beliebig vieler einzelner UndoActions zu einer einzigen
-// UndoAction. Beim Undo() werden die Einzelactions rueckwaets aufgerufen
-// (die zuletzt angehaengte zuerst...), beim Redo() dagegen entspricht die
-// Aufrufreihenfolge der Einfuegereihenfolge.
-//
-//************************************************************
+/**
+ * Aggregation of arbitrarily many UndoActions to a single UndoAction.
+ * Undo() executes the single UndoActions backwards (LIFO, first the last
+ * ones attached), Redo() executes the UndoActions in the order they were
+ * added (FIFO).
+ */
 
 class SVX_DLLPUBLIC SdrUndoGroup : public SdrUndoAction
 {
 protected:
     std::vector<SdrUndoAction*> aBuf;
 
-    // Beschreibung der Action, nicht expandiert (beinhaltet %O)
+    // No expanded description of the Action (contains %O)
     OUString                    aComment;
     OUString                    aObjDescription;
 
@@ -116,12 +110,9 @@ public:
     SdrRepeatFunc GetRepeatFunction() const { return eFunction; }
 };
 
-//************************************************************
-//   SdrUndoObj
-//
-// Abstrakte Basisklasse fuer alle UndoActions die mit Objekten zu tun haben.
-//
-//************************************************************
+/**
+ * Abstract base class for all UndoActions that handle objects.
+ */
 
 class SVX_DLLPUBLIC SdrUndoObj : public SdrUndoAction
 {
@@ -139,14 +130,11 @@ protected:
     void ImpShowPageOfThisObject();
 };
 
-//************************************************************
-//   SdrUndoAttrObj
-//
-// Aenderung der Objektattribute.
-// Action direkt vor dem Setzen der neuen Attribute konstruieren.
-// Auch fuer StyleSheets
-//
-//************************************************************
+/**
+ * Changing the object attributes.
+ * Create Action right before setting the new attributes.
+ * Also for StyleSheets.
+ */
 
 class SVX_DLLPUBLIC SdrUndoAttrObj : public SdrUndoObj
 {
@@ -155,22 +143,22 @@ protected:
     SfxItemSet*                 pRedoSet;
     SfxItemSet*                 pRepeatSet;
 
-    // oder besser den StyleSheetNamen merken?
+    // FIXME: Or should we better remember the StyleSheetNames?
     rtl::Reference< SfxStyleSheetBase > mxUndoStyleSheet;
     rtl::Reference< SfxStyleSheetBase > mxRedoStyleSheet;
     bool                        bStyleSheet;
     bool                        bHaveToTakeRedoSet;
 
-    // Bei Zuweisung von TextItems auf ein Zeichenobjekt mit Text:
+    // When assigning TextItems to a drawing object with text:
     OutlinerParaObject*         pTextUndo;
     // #i8508#
     // The text rescue mechanism needs also to be implemented for redo actions.
     OutlinerParaObject*         pTextRedo;
 
-    // Wenn sich um ein Gruppenobjekt handelt:
+    // If we have a group object:
     SdrUndoGroup*               pUndoGroup;
 
-    // helper to ensure StyleSheet is in pool (provided by SdrModel from SdrObject)
+    // Helper to ensure StyleSheet is in pool (provided by SdrModel from SdrObject)
     void ensureStyleSheetInStyleSheetPool(SfxStyleSheetBasePool& rStyleSheetPool, SfxStyleSheet& rSheet);
 
 public:
@@ -186,18 +174,15 @@ public:
     virtual bool CanSdrRepeat(SdrView& rView) const;
 };
 
-//************************************************************
-//   SdrUndoMoveObj
-//
-// Blosses verschieben eines Objektes.
-// Action direkt vor dem Verschieben konstruieren.
-//
-//************************************************************
+/**
+ * Only moving of an object.
+ * Create Action right before moving.
+ */
 
 class SVX_DLLPUBLIC SdrUndoMoveObj : public SdrUndoObj
 {
 protected:
-    Size                        aDistance;     // Entfernung, um die verschoben wird
+    Size                        aDistance;     // Distance by which we move
 
 public:
     SdrUndoMoveObj(SdrObject& rNewObj): SdrUndoObj(rNewObj) {}
@@ -217,20 +202,17 @@ public:
     virtual bool CanSdrRepeat(SdrView& rView) const;
 };
 
-//************************************************************
-//   SdrUndoGeoObj
-//
-// Aenderung der Geometrie eines Objektes.
-// Action direkt vor der geometrischen Transformation konstruieren.
-//
-//************************************************************
+/**
+ * Changing the geometry of an object.
+ * Create Action right before the geometric transformation.
+ */
 
 class SVX_DLLPUBLIC SdrUndoGeoObj : public SdrUndoObj
 {
 protected:
     SdrObjGeoData*              pUndoGeo;
     SdrObjGeoData*              pRedoGeo;
-    // Wenn sich um ein Gruppenobjekt handelt:
+    // If we have a group object:
     SdrUndoGroup*               pUndoGroup;
 
 public:
@@ -243,13 +225,10 @@ public:
     virtual OUString GetComment() const;
 };
 
-//************************************************************
-//   SdrUndoObjList
-//
-// Manipulationen an einer ObjList: Neues Obj, DeleteObj, SetObjZLevel, Grouping, ...
-// Abstrakte Basisklasse.
-//
-//************************************************************
+/**
+ * Manipulation of an ObjList: New Object, DeleteObj, SetObjZLevel, Grouping, ...
+ * Abstract base class.
+ */
 
 class SVX_DLLPUBLIC SdrUndoObjList : public SdrUndoObj {
     class ObjListListener;
@@ -260,11 +239,11 @@ private:
 
 protected:
     SdrObjList*                 pObjList;
-    SdrView*                    pView;      // um bei ObjDel, Undo die
-    SdrPageView*                pPageView;  // Selektion widerherstellen zu koennen
+    SdrView*                    pView;      // To be able to re-create the selection for a
+    SdrPageView*                pPageView;  // for a ObjDel, Undo
     sal_uInt32                      nOrdNum;
-    // Bei einem Undo/Redo findet moeglicherweise Uebereignung des Objektes
-    // statt. Im Dtor wird das Obj deleted, wenn bOwner==TRUE
+    // It's possible that the object is re-assigned during a Undo/Redo.
+    // The object is deleted in the dtor, if bOwner==TRUE
     ObjListListener*            m_pListener;
 
 protected:
@@ -280,14 +259,12 @@ private:
     void SetOrdNum(sal_uInt32 nOrdNum_);
 };
 
-//************************************************************
-//   SdrUndoRemoveObj
-//
-// Entfernen Objekts aus einer Objektliste. Innerhalb einer UndoGroup
-// mit korrospondierenden Inserts zu verwenden.
-// Action vor dem entfernen aus der ObjList konstruieren.
-//
-//************************************************************
+/**
+ * Removing an Object from an ObjectList.
+ * To be used with corresponding Inserts within a UndoGroup.
+ *
+ * Create Action before removing from the ObjList.
+ */
 
 class SVX_DLLPUBLIC SdrUndoRemoveObj : public SdrUndoObjList
 {
@@ -299,14 +276,11 @@ public:
     virtual void Redo();
 };
 
-//************************************************************
-//   SdrUndoInsertObj
-//
-// Einfuegen Objekts in eine Objektliste. Innerhalb einer UndoGroup
-// mit korrospondierenden Removes zu verwenden.
-// Action vor dem entfernen aus der ObjList konstruieren.
-//
-//************************************************************
+/**
+ * Inserting Objects into a ObjectList.
+ * Use with corresponding Removes within an UndoGroup.
+ * Create Action before removal from ObjList.
+ */
 
 class SVX_DLLPUBLIC SdrUndoInsertObj : public SdrUndoObjList
 {
@@ -318,13 +292,10 @@ public:
     virtual void Redo();
 };
 
-//************************************************************
-//   SdrUndoDelObj
-//
-// Loeschen eines Objekts.
-// Action vor dem entfernen aus der ObjList konstruieren.
-//
-//************************************************************
+/**
+ * Deleting an Object.
+ * Create Action before removing from ObjList.
+ */
 
 class SVX_DLLPUBLIC SdrUndoDelObj : public SdrUndoRemoveObj
 {
@@ -342,13 +313,10 @@ public:
     virtual bool CanSdrRepeat(SdrView& rView) const;
 };
 
-//************************************************************
-//   SdrUndoNewObj
-//
-// Einfuegen eines neuen Objektes.
-// Action nach dem einfuegen in die ObjList konstruieren.
-//
-//************************************************************
+/**
+ * Inserting a NEW Object.
+ * Create Actio after insertion into the ObjList.
+ */
 
 class SVX_DLLPUBLIC SdrUndoNewObj : public SdrUndoInsertObj
 {
@@ -364,13 +332,10 @@ public:
     static  OUString GetComment(const SdrObject& _rForObject);
 };
 
-//************************************************************
-//   SdrUndoReplaceObj
-//
-// Austausch eines Objektes.
-// Action vor dem Replace an der ObjList konstruieren.
-//
-//************************************************************
+/**
+ * Replacing an Object.
+ * Create Action before Replace in ObjList.
+ */
 
 class SVX_DLLPUBLIC SdrUndoReplaceObj : public SdrUndoObj
 {
@@ -396,13 +361,10 @@ public:
     void SetOldOwner(bool bNew);
 };
 
-//************************************************************
-//   SdrUndoCopyObj
-//
-// Kopieren eines Objekts
-// Action nach dem einfuegen in die ObjList konstruieren.
-//
-//************************************************************
+/**
+ * Copying an Object.
+ * Create Action before inserting into the ObjList.
+ */
 
 class SdrUndoCopyObj : public SdrUndoNewObj
 {
@@ -412,10 +374,6 @@ public:
 
     virtual OUString GetComment() const;
 };
-
-//************************************************************
-//   SdrUndoObjOrdNum
-//************************************************************
 
 class SdrUndoObjOrdNum : public SdrUndoObj
 {
@@ -448,10 +406,6 @@ public:
     virtual void Redo();
 };
 
-//************************************************************
-//   SdrUndoObjSetText
-//************************************************************
-
 class SVX_DLLPUBLIC SdrUndoObjSetText : public SdrUndoObj
 {
 protected:
@@ -478,7 +432,10 @@ public:
     virtual bool CanSdrRepeat(SdrView& rView) const;
 };
 
-// Implement Title/Description Elements UI for Writer text frames, graphics and embedded objects (#i73249#)
+/**
+ * Implement Title/Description Elements UI for Writer
+ * text frames, graphics and embedded objects (#i73249#)
+ */
 class SdrUndoObjStrAttr : public SdrUndoObj
 {
 public:
@@ -511,12 +468,9 @@ public:
  * Layer
  */
 
-//************************************************************
-//   SdrUndoLayer
-//
-// Abstrakte Basisklasse fuer alle UndoActions die mit SdrLayer zu tun haben.
-//
-//************************************************************
+/**
+ * Abstract base class for all UndoActions that have something to do with SdrLayer.
+ */
 
 class SdrUndoLayer : public SdrUndoAction
 {
@@ -531,12 +485,10 @@ protected:
     virtual ~SdrUndoLayer();
 };
 
-//************************************************************
-//   SdrUndoNewLayer
-//
-// Einfuegen eines neuen Layer. Action nach dem Einfuegen konstruieren.
-//
-//************************************************************
+/**
+ * Inserting a new Layer.
+ * Create Action after Insertion.
+ */
 
 class SdrUndoNewLayer : public SdrUndoLayer
 {
@@ -550,12 +502,10 @@ public:
     virtual OUString GetComment() const;
 };
 
-//************************************************************
-//   SdrUndoDelLayer
-//
-// Loeschen eines Layer. Action vor dem Remove konstruieren
-//
-//************************************************************
+/**
+ * Deleting a Layer.
+ * Create Action before the Remove.
+ */
 
 class SdrUndoDelLayer : public SdrUndoLayer
 {
@@ -569,12 +519,10 @@ public:
     virtual OUString GetComment() const;
 };
 
-//************************************************************
-//   SdrUndoMoveLayer
-//
-// Verschieben eines Layer. Action vor dem Verschieben konstruieren.
-//
-//************************************************************
+/**
+ * Moving a Layer.
+ * Create Action before the Move.
+ */
 
 class SdrUndoMoveLayer : public SdrUndoLayer
 {
@@ -595,12 +543,9 @@ public:
  * Pages
  */
 
-//************************************************************
-//   SdrUndoPage
-//
-// Abstrakte Basisklasse fuer alle UndoActions die mit SdrPages zu tun haben.
-//
-//************************************************************
+/**
+ * ABC for all UndoActions that have something to do with SdrPages.
+ */
 
 class SVX_DLLPUBLIC SdrUndoPage : public SdrUndoAction
 {
@@ -618,21 +563,17 @@ protected:
     void ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, String& rStr, sal_uInt16 n=0, bool bRepeat = false) const;
 };
 
-//************************************************************
-//   SdrUndoPageList
-//
-// Manipulationen an einer PageList: Neue Page, DeletePage, MovePage(ChangePageNum)
-// Abstrakte Basisklasse.
-//
-//************************************************************
+/**
+ * ABC for manipulation of a PageList: New Page, DeletePage, MovePage (ChangePageNum).
+ */
 
 class SVX_DLLPUBLIC SdrUndoPageList : public SdrUndoPage
 {
 protected:
     sal_uInt16                      nPageNum;
 
-    // Bei einem Undo/Redo findet moeglicherweise Uebereignung der Page
-    // statt. Im Dtor wird die Page deleted, wenn bItsMine==TRUE
+    // It's possible that the object is re-assigned during a Undo/Redo.
+    // The Page is deleted in the dtor, if bItsMine==TRUE
     bool                        bItsMine;
 
 protected:
@@ -640,18 +581,15 @@ protected:
     virtual ~SdrUndoPageList();
 };
 
-//************************************************************
-//   SdrUndoDelPage
-//
-// Loeschen einer Page.
-// Action vor dem entfernen aus der List konstruieren.
-//
-//************************************************************
+/**
+ * Deleting a Page.
+ * Create Action before removing from the List.
+ */
 
 class SVX_DLLPUBLIC SdrUndoDelPage : public SdrUndoPageList
 {
-    // Beim loeschen einer MasterPage merke ich mir in dieser UndoGroup
-    // alle Beziehungen der Zeichenseiten zu der geloeschten MasterPage
+    // When deleting a MasterPage, we remember all relations of the
+    // Character Page with the MasterPage in this UndoGroup.
     SdrUndoGroup*               pUndoGroup;
 
 public:
@@ -668,13 +606,10 @@ public:
     virtual bool CanSdrRepeat(SdrView& rView) const;
 };
 
-//************************************************************
-//   SdrUndoNewPage
-//
-// Einfuegen einer neuen Page.
-// Action nach dem einfuegen in die Liste konstruieren.
-//
-//************************************************************
+/**
+ * Inserting a new Page.
+ * Create Action after inserting into the List.
+ */
 
 class SVX_DLLPUBLIC SdrUndoNewPage : public SdrUndoPageList
 {
@@ -687,13 +622,10 @@ public:
     virtual OUString GetComment() const;
 };
 
-//************************************************************
-//   SdrUndoCopyPage
-//
-// Kopieren einer Page
-// Action nach dem einfuegen in die Liste konstruieren.
-//
-//************************************************************
+/**
+ * Copying a Page.
+ * Create Action after inserting into the List.
+ */
 
 class SdrUndoCopyPage : public SdrUndoNewPage
 {
@@ -707,13 +639,10 @@ public:
     virtual bool CanSdrRepeat(SdrView& rView) const;
 };
 
-//************************************************************
-//   SdrUndoSetPageNum
-//
-// Verschieben der Page innerhalb der Liste
-// Action vor dem Verschieben der Page konstruieren.
-//
-//************************************************************
+/**
+ * Moving a Page within the List.
+ * Create Action before moving the Page.
+ */
 
 class SVX_DLLPUBLIC SdrUndoSetPageNum : public SdrUndoPage
 {
@@ -736,13 +665,10 @@ public:
  * Masterpages
  */
 
-//************************************************************
-//   SdrUndoPageMasterPage
-//
-// Abstrakte Basisklasse fuer alle UndoActions die mit
-// MasterPage-Beziehungen zu tun haben.
-//
-//************************************************************
+/**
+ * ABC for all UndoActions that have something to do with
+ * MasterPage relationships.
+ */
 
 class SdrUndoPageMasterPage : public SdrUndoPage
 {
@@ -758,13 +684,10 @@ public:
     SVX_DLLPUBLIC virtual ~SdrUndoPageMasterPage();
 };
 
-//************************************************************
-//   SdrUndoPageRemoveMasterPage
-//
-// Entfernen einer MasterPage von einer Zeichenseite.
-// Action vor dem Entfernen des MasterPageDescriptors erzeugen.
-//
-//************************************************************
+/**
+ * Removal of a MasterPage from a Character Page.
+ * Create Action before removing the MasterPageDescriptor.
+ */
 
 class SdrUndoPageRemoveMasterPage : public SdrUndoPageMasterPage
 {
@@ -777,13 +700,10 @@ public:
     virtual OUString GetComment() const;
 };
 
-//************************************************************
-//   SdrUndoPageChangeMasterPage
-//
-// Aenderung des MasterPageDescriptors (z.B. Aendern der VisibleLayer).
-// Action vor der Aenderung am MasterPageDescriptor erzeugen.
-//
-//************************************************************
+/**
+ * Changing the MasterPageDescriptor (e.g. change of the VisibleLayer).
+ * Create Action before changing the MasterPageDescriptors.
+ */
 
 class SVX_DLLPUBLIC SdrUndoPageChangeMasterPage : public SdrUndoPageMasterPage
 {
@@ -803,14 +723,15 @@ public:
 
 ///////////////////////////////////////////////////////////////////////
 
-/** the SdrUndoFactory can be set and retrieved from the SdrModel.
-    It is used by the drawing layer implementations to create undo actions.
-    It can be used by applications to create application specific undo actions.
-*/
+/**
+ * The SdrUndoFactory can be set and retrieved from the SdrModel.
+ * It is used by the drawing layer implementations to create undo actions.
+ * It can be used by applications to create application specific undo actions.
+ */
 class SVX_DLLPUBLIC SdrUndoFactory
 {
 public:
-    // shapes
+    // Shapes
     virtual ~SdrUndoFactory();
     virtual SdrUndoAction* CreateUndoMoveObject( SdrObject& rObject );
     virtual SdrUndoAction* CreateUndoMoveObject( SdrObject& rObject, const Size& rDist );
@@ -834,18 +755,18 @@ public:
                                                     String sOldStr,
                                                     String sNewStr );
 
-    // layer
+    // Layer
     virtual SdrUndoAction* CreateUndoNewLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel);
     virtual SdrUndoAction* CreateUndoDeleteLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel);
     virtual SdrUndoAction* CreateUndoMoveLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel, sal_uInt16 nNeuPos1);
 
-    // page
+    // Page
     virtual SdrUndoAction*  CreateUndoDeletePage(SdrPage& rPage);
     virtual SdrUndoAction* CreateUndoNewPage(SdrPage& rPage);
     virtual SdrUndoAction* CreateUndoCopyPage(SdrPage& rPage);
     virtual SdrUndoAction* CreateUndoSetPageNum(SdrPage& rNewPg, sal_uInt16 nOldPageNum1, sal_uInt16 nNewPageNum1);
 
-    // master page
+    // Master page
     virtual SdrUndoAction* CreateUndoPageRemoveMasterPage(SdrPage& rChangedPage);
     virtual SdrUndoAction* CreateUndoPageChangeMasterPage(SdrPage& rChangedPage);
 };

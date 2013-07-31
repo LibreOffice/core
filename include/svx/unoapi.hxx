@@ -35,51 +35,57 @@ class SvxNumBulletItem;
 class SfxItemPool;
 class String;
 
-/** creates a StarOffice API wrapper with the given type and inventor
-    Deprecated: This will be replaced with a function returning XShape.
-*/
+/**
+ * Creates a StarOffice API wrapper with the given type and inventor
+ * Deprecated: This will be replaced with a function returning XShape.
+ */
 SVX_DLLPUBLIC SvxShape* CreateSvxShapeByTypeAndInventor( sal_uInt16 nType, sal_uInt32 nInventor ) throw();
 
-/** returns a StarOffice API wrapper for the given SdrObject */
+/** Returns a StarOffice API wrapper for the given SdrObject */
 SVX_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > GetXShapeForSdrObject( SdrObject* pObj ) throw ();
 
-/** returns the SdrObject from the given StarOffice API wrapper */
+/** Returns the SdrObject from the given StarOffice API wrapper */
 SVX_DLLPUBLIC SdrObject* GetSdrObjectFromXShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape ) throw() ;
 
-/** returns a StarOffice API wrapper for the given SdrPage */
+/** Returns a StarOffice API wrapper for the given SdrPage */
 SVX_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > GetXDrawPageForSdrPage( SdrPage* pPage ) throw ();
 
-/** returns the SdrPage from the given StarOffice API wrapper */
+/** Returns the SdrPage from the given StarOffice API wrapper */
 SVX_DLLPUBLIC SdrPage* GetSdrPageFromXDrawPage( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > xDrawPage ) throw() ;
 
-/** returns the SvxNumBulletItem with the given name from the pool or a null if there is no item
-    with that name
-*/
+/**
+ * Returns the SvxNumBulletItem with the given name from the pool or a null if there is no item with that name
+ */
 SvxNumBulletItem* SvxGetNumBulletItemByName( SfxItemPool* pPool, const OUString& aName ) throw();
 
-/** maps the vcl MapUnit enum to a API constant MeasureUnit.
-    Returns false if conversion is not supported.
-*/
+/**
+ * Maps the vcl MapUnit enum to a API constant MeasureUnit.
+ * Returns false if conversion is not supported.
+ */
 SVX_DLLPUBLIC sal_Bool SvxMapUnitToMeasureUnit( const short nVcl, short& eApi ) throw();
 
-/** maps the API constant MeasureUnit to a vcl MapUnit enum.
-    Returns false if conversion is not supported.
-*/
+/**
+ * Maps the API constant MeasureUnit to a vcl MapUnit enum.
+ * Returns false if conversion is not supported.
+ */
 SVX_DLLPUBLIC sal_Bool SvxMeasureUnitToFieldUnit( const short eApi, short& nVcl ) throw();
 
-/** maps the vcl MapUnit enum to a API constant MeasureUnit.
-    Returns false if conversion is not supported.
-*/
+/**
+ * Maps the vcl MapUnit enum to a API constant MeasureUnit.
+ * Returns false if conversion is not supported.
+ */
 SVX_DLLPUBLIC sal_Bool SvxFieldUnitToMeasureUnit( const short nVcl, short& eApi ) throw();
 
-/** if the given name is a predefined name for the current language it is replaced by
-    the corresponding api name.
+/**
+ * If the given name is a predefined name for the current language it is replaced by
+ * the corresponding API name.
 */
 SVX_DLLPUBLIC SAL_WARN_UNUSED_RESULT OUString
     SvxUnogetApiNameForItem(const sal_Int16 nWhich, const OUString& rInternalName) throw();
 
-/** if the given name is a predefined api name it is replaced by the predefined name
-    for the current language.
+/**
+ * If the given name is a predefined API name it is replaced by the predefined name
+ * for the current language.
 */
 SVX_DLLPUBLIC SAL_WARN_UNUSED_RESULT OUString
     SvxUnogetInternalNameForItem(const sal_Int16 nWhich, const OUString& rApiName) throw();

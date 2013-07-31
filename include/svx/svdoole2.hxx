@@ -62,7 +62,7 @@ protected:
     Graphic*                    pGraphic;
     String                      aProgName;
 
-    // wg. Kompatibilitaet erstmal am SdrTextObj
+    // Due to compatibility at SdrTextObj for now
     bool                        bFrame:1;
     bool                        bInDestruction:1;
     // #i118524#
@@ -94,13 +94,13 @@ public:
     bool isUiActive() const;
     void SetAspect( sal_Int64 nAspect );
 
-    // Ein OLE-Zeichenobjekt kann eine StarView-Grafik beinhalten.
-    // Diese wird angezeigt, wenn das OLE-Objekt leer ist.
+    // An OLE graphic object can contain a StarView graphic,
+    // which will be displayed if the OLE object is empty.
     void        SetGraphic(const Graphic* pGrf);
-    const Graphic* GetGraphic() const;
+    const       Graphic* GetGraphic() const;
     void        GetNewReplacement();
 
-    // the original size of the object ( size of the icon for iconified object )
+    // The original size of the object (size of the icon for iconified object)
     // no conversion is done if no target mode is provided
     Size        GetOrigObjSize( MapMode* pTargetMapMode = NULL ) const;
 
@@ -113,8 +113,8 @@ public:
     String      GetPersistName() const;
     void        SetPersistName( const String& rPersistName );
 
-    // Einem SdrOle2Obj kann man ein Applikationsnamen verpassen, den man
-    // spaeter wieder abfragen kann (SD braucht das fuer Praesentationsobjekte).
+    // One can add an application name to a SdrOle2Obj, which can be queried for
+    // later on (SD needs this for presentation objects).
     void SetProgName(const String& rNam) { aProgName=rNam; }
     const String& GetProgName() const { return aProgName; }
     bool IsEmpty() const;
