@@ -13,7 +13,7 @@ ifneq ($(OS),WNT)
 ifneq ($(OS),MACOSX)
 $(eval $(call gb_Module_add_targets,sysui,\
 	CustomTarget_share \
-	CustomTarget_slackware \
+	$(if $(filter LINUX,$(OS)),CustomTarget_slackware) \
 	Package_share \
 	Package_desktop \
 	$(if $(filter rpm,$(PKGFORMAT)),CustomTarget_rpm) \
