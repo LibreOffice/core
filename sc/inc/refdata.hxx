@@ -29,12 +29,9 @@
 struct SC_DLLPUBLIC ScSingleRefData
 {
 private:
-    SCsCOL  nCol;       ///< Absolute values
-    SCsROW  nRow;
-    SCsTAB  nTab;
-    SCsCOL  nRelCol;    ///< Values relative to the position
-    SCsROW  nRelRow;
-    SCsTAB  nRelTab;
+    SCCOL mnCol;
+    SCROW mnRow;
+    SCTAB mnTab;
 
     union
     {

@@ -27,9 +27,9 @@ void ScSingleRefData::InitAddress( const ScAddress& rAdr )
 void ScSingleRefData::InitAddress( SCCOL nColP, SCROW nRowP, SCTAB nTabP )
 {
     InitFlags();
-    nCol = nColP;
-    nRow = nRowP;
-    nTab = nTabP;
+    mnCol = nColP;
+    mnRow = nRowP;
+    mnTab = nTabP;
 }
 
 void ScSingleRefData::InitAddressRel( const ScAddress& rAdr, const ScAddress& rPos )
@@ -48,66 +48,57 @@ sal_uInt8 ScSingleRefData::FlagValue() const
 void ScSingleRefData::SetAbsCol( SCCOL nVal )
 {
     Flags.bColRel = false;
-    nCol = nVal;
+    mnCol = nVal;
 }
 
 void ScSingleRefData::SetRelCol( SCCOL nVal )
 {
     Flags.bColRel = true;
-    nRelCol = nVal;
+    mnCol = nVal;
 }
 
 void ScSingleRefData::IncCol( SCCOL nInc )
 {
-    if (Flags.bColRel)
-        nRelCol += nInc;
-    else
-        nCol += nInc;
+    mnCol += nInc;
 }
 
 void ScSingleRefData::SetAbsRow( SCROW nVal )
 {
     Flags.bRowRel = false;
-    nRow = nVal;
+    mnRow = nVal;
 }
 
 void ScSingleRefData::SetRelRow( SCROW nVal )
 {
     Flags.bRowRel = true;
-    nRelRow = nVal;
+    mnRow = nVal;
 }
 
 void ScSingleRefData::IncRow( SCROW nInc )
 {
-    if (Flags.bRowRel)
-        nRelRow += nInc;
-    else
-        nRow += nInc;
+    mnRow += nInc;
 }
 
 void ScSingleRefData::SetAbsTab( SCTAB nVal )
 {
     Flags.bTabRel = false;
-    nTab = nVal;
+    mnTab = nVal;
 }
 
 void ScSingleRefData::SetRelTab( SCTAB nVal )
 {
     Flags.bTabRel = true;
-    nRelTab = nVal;
+    mnTab = nVal;
 }
 
 void ScSingleRefData::IncTab( SCTAB nInc )
 {
-    if (Flags.bTabRel)
-        nRelTab += nInc;
-    else
-        nTab += nInc;
+    mnTab += nInc;
 }
 
 void ScSingleRefData::SetColDeleted( bool bVal )
 {
-    Flags.bColDeleted = (bVal ? true : false );
+    Flags.bColDeleted = bVal;
 }
 
 bool ScSingleRefData::IsColDeleted() const
@@ -117,7 +108,7 @@ bool ScSingleRefData::IsColDeleted() const
 
 void ScSingleRefData::SetRowDeleted( bool bVal )
 {
-    Flags.bRowDeleted = (bVal ? true : false );
+    Flags.bRowDeleted = bVal;
 }
 
 bool ScSingleRefData::IsRowDeleted() const
@@ -127,7 +118,7 @@ bool ScSingleRefData::IsRowDeleted() const
 
 void ScSingleRefData::SetTabDeleted( bool bVal )
 {
-    Flags.bTabDeleted = (bVal ? true : false );
+    Flags.bTabDeleted = bVal;
 }
 
 bool ScSingleRefData::IsTabDeleted() const
@@ -149,12 +140,12 @@ bool ScSingleRefData::ColValid() const
 {
     if (Flags.bColRel)
     {
-        if (nRelCol < -MAXCOL || MAXCOL < nRelCol)
+        if (mnCol < -MAXCOL || MAXCOL < mnCol)
             return false;
     }
     else
     {
-        if (nCol < 0 || MAXCOL < nCol)
+        if (mnCol < 0 || MAXCOL < mnCol)
             return false;
     }
 
@@ -165,12 +156,12 @@ bool ScSingleRefData::RowValid() const
 {
     if (Flags.bRowRel)
     {
-        if (nRelRow < -MAXROW || MAXROW < nRelRow)
+        if (mnRow < -MAXROW || MAXROW < mnRow)
             return false;
     }
     else
     {
-        if (nRow < 0 || MAXROW < nRow)
+        if (mnRow < 0 || MAXROW < mnRow)
             return false;
     }
 
@@ -181,12 +172,12 @@ bool ScSingleRefData::TabValid() const
 {
     if (Flags.bTabRel)
     {
-        if (nRelTab < -MAXTAB || MAXTAB < nRelTab)
+        if (mnTab < -MAXTAB || MAXTAB < mnTab)
             return false;
     }
     else
     {
-        if (nTab < 0 || MAXTAB < nTab)
+        if (mnTab < 0 || MAXTAB < mnTab)
             return false;
     }
 
@@ -195,14 +186,14 @@ bool ScSingleRefData::TabValid() const
 
 bool ScSingleRefData::ValidExternal() const
 {
-    return ColValid() && RowValid() && nTab == -1;
+    return ColValid() && RowValid() && mnTab == -1;
 }
 
 ScAddress ScSingleRefData::toAbs( const ScAddress& rPos ) const
 {
-    SCCOL nRetCol = Flags.bColRel ? nRelCol + rPos.Col() : nCol;
-    SCROW nRetRow = Flags.bRowRel ? nRelRow + rPos.Row() : nRow;
-    SCTAB nRetTab = Flags.bTabRel ? nRelTab + rPos.Tab() : nTab;
+    SCCOL nRetCol = Flags.bColRel ? mnCol + rPos.Col() : mnCol;
+    SCROW nRetRow = Flags.bRowRel ? mnRow + rPos.Row() : mnRow;
+    SCTAB nRetTab = Flags.bTabRel ? mnTab + rPos.Tab() : mnTab;
 
     ScAddress aAbs(ScAddress::INITIALIZE_INVALID);
 
@@ -221,48 +212,45 @@ ScAddress ScSingleRefData::toAbs( const ScAddress& rPos ) const
 void ScSingleRefData::SetAddress( const ScAddress& rAddr, const ScAddress& rPos )
 {
     if (Flags.bColRel)
-        nRelCol = rAddr.Col() - rPos.Col();
+        mnCol = rAddr.Col() - rPos.Col();
     else
-        nCol = rAddr.Col();
+        mnCol = rAddr.Col();
 
     if (Flags.bRowRel)
-        nRelRow = rAddr.Row() - rPos.Row();
+        mnRow = rAddr.Row() - rPos.Row();
     else
-        nRow = rAddr.Row();
+        mnRow = rAddr.Row();
 
     if (Flags.bTabRel)
-        nRelTab = rAddr.Tab() - rPos.Tab();
+        mnTab = rAddr.Tab() - rPos.Tab();
     else
-        nTab = rAddr.Tab();
+        mnTab = rAddr.Tab();
 }
 
 SCROW ScSingleRefData::Row() const
 {
     if (Flags.bRowDeleted)
         return -1;
-    return Flags.bRowRel ? nRelRow : nRow;
+    return mnRow;
 }
 
 SCCOL ScSingleRefData::Col() const
 {
     if (Flags.bColDeleted)
         return -1;
-    return Flags.bColRel ? nRelCol : nCol;
+    return mnCol;
 }
 
 SCTAB ScSingleRefData::Tab() const
 {
     if (Flags.bTabDeleted)
         return -1;
-    return Flags.bTabRel ? nRelTab : nTab;
+    return mnTab;
 }
 
 bool ScSingleRefData::operator==( const ScSingleRefData& r ) const
 {
-    return mnFlagValue == r.mnFlagValue &&
-        (Flags.bColRel ? nRelCol == r.nRelCol : nCol == r.nCol) &&
-        (Flags.bRowRel ? nRelRow == r.nRelRow : nRow == r.nRow) &&
-        (Flags.bTabRel ? nRelTab == r.nRelTab : nTab == r.nTab);
+    return mnFlagValue == r.mnFlagValue && mnCol == r.mnCol && mnRow == r.mnRow && mnTab == r.mnTab;
 }
 
 bool ScSingleRefData::operator!=( const ScSingleRefData& r ) const
@@ -283,8 +271,7 @@ void ScSingleRefData::Dump( int nIndent ) const
     cout << aIndent << "deleted column: " << (IsColDeleted()?"yes":"no")
          << "  row : " << (IsRowDeleted()?"yes":"no") << "  sheet: "
          << (IsTabDeleted()?"yes":"no") << endl;
-    cout << aIndent << "absolute pos column: " << nCol << "  row: " << nRow << "  sheet: " << nTab << endl;
-    cout << aIndent << "relative pos column: " << nRelCol << "  row: " << nRelRow << "  sheet: " << nRelTab << endl;
+    cout << aIndent << "column: " << mnCol << "  row: " << mnRow << "  sheet: " << mnTab << endl;
     cout << aIndent << "3d ref: " << (IsFlag3D()?"yes":"no") << endl;
 }
 #endif
