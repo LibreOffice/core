@@ -1449,15 +1449,64 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getImportedKeys(
     (void) table;
     return NULL;
 }
-// -------------------------------------------------------------------------
+
 uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getPrimaryKeys(
-    const Any& catalog, const OUString& schema, const OUString& table ) throw(SQLException, RuntimeException)
+        const Any& aCatalog,
+        const OUString& sSchema,
+        const OUString& sTable)
+    throw(SQLException, RuntimeException)
 {
-    SAL_WARN("connectivity.firebird", "Not yet implemented");
-    (void) catalog;
-    (void) schema;
-    (void) table;
-    return NULL;
+    (void) aCatalog;
+    (void) sSchema;
+    SAL_INFO("connectivity.firebird", "getPrimaryKeys() with "
+             "Table: " << sTable);
+
+    OUStringBuffer aQueryBuf("SELECT "
+        "constr.RDB$RELATION_NAME, "    // 1. Table Name
+        "inds.RDB$FIELD_NAME, "         // 2. Column Name
+        "inds.RDB$SORT_ORDER, "         // 3. Sequence Number
+        "constr.RDB$CONSTRAINT_NAME, "  // 4 Constraint name
+        "FROM RDB$RELATION_FIELDS constr "
+        "JOIN RDB$INDEX_SEGMENTS inds "
+        "on (constr.RDB$INDEX_NAME = inds.RDB$INDEX_NAME) ");
+
+    OUString sAppend = "WHERE constr.RDB$RELATION_NAME = '%' ";
+    aQueryBuf.append(sAppend.replaceAll("%", sTable));
+
+    aQueryBuf.append("AND constr.RDB$CONSTRAINT_TYPE = 'PRIMARY KEY' "
+                    "ORDER BY inds.RDB$FIELD_NAME");
+
+    OUString sQuery = aQueryBuf.makeStringAndClear();
+
+    uno::Reference< XStatement > xStatement = m_pConnection->createStatement();
+    uno::Reference< XResultSet > xRs = xStatement->executeQuery(sQuery);
+    uno::Reference< XRow > xRow( xRs, UNO_QUERY_THROW );
+
+    ODatabaseMetaDataResultSet::ORows aResults;
+    ODatabaseMetaDataResultSet::ORow aCurrentRow(7);
+
+    aCurrentRow[0] =  new ORowSetValueDecorator(); // Unused -- numbering starts from 0
+    aCurrentRow[1] =  new ORowSetValueDecorator(); // Catalog - can be null
+    aCurrentRow[2] =  new ORowSetValueDecorator(); // Schema - can be null
+
+    while(xRs->next())
+    {
+        // 3. Table Name
+        aCurrentRow[3] = new ORowSetValueDecorator(xRow->getString(1));
+        // 4. Column Name
+        aCurrentRow[4] = new ORowSetValueDecorator(xRow->getString(2));
+        // 5. KEY_SEQ (which key in the sequence)
+        aCurrentRow[5] = new ORowSetValueDecorator(xRow->getShort(3));
+        // 6. Primary Key Name
+        aCurrentRow[6] = new ORowSetValueDecorator(xRow->getString(4));
+
+        aResults.push_back(aCurrentRow);
+    }
+    ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTables);
+    uno::Reference< XResultSet > xResultSet = pResultSet;
+    pResultSet->setRows( aResults );
+
+    return xResultSet;
 }
 // -------------------------------------------------------------------------
 uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getIndexInfo(
