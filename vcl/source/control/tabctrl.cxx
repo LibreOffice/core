@@ -307,7 +307,7 @@ Size TabControl::ImplGetItemSize( ImplTabItem* pItem, long nMaxWidth )
 
     // For languages with short names (e.g. Chinese), because the space is
     // normally only one pixel per char
-    if ( pItem->maFormatText.Len() < TAB_EXTRASPACE_X )
+    if ( pItem->maFormatText.getLength() < TAB_EXTRASPACE_X )
         aSize.Width() += TAB_EXTRASPACE_X-pItem->maFormatText.getLength();
 
     // shorten Text if needed
