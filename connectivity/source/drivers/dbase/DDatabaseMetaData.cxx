@@ -65,8 +65,7 @@ Reference< XResultSet > ODbaseDatabaseMetaData::impl_getTypeInfo_throw(  )
     static ODatabaseMetaDataResultSet::ORows aRows;
     if(aRows.empty())
     {
-        ODatabaseMetaDataResultSet::ORow aRow;
-        aRow.reserve(18);
+        ODatabaseMetaDataResultSet::ORow aRow(19);
 
         aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
         aRow.push_back(new ORowSetValueDecorator(OUString("VARCHAR")));
