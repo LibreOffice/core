@@ -17,16 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "services/backingcomp.hxx"
+#include "backingcomp.hxx"
 
 #include "backingwindow.hxx"
 
-#include <threadhelp/readguard.hxx>
-#include <threadhelp/writeguard.hxx>
-#include <classes/droptargetlistener.hxx>
-#include <targets.h>
-#include <properties.h>
-#include <services.h>
+#include <sfx2/droptargetlistener.hxx>
 
 #include <helpid.hrc>
 
@@ -58,16 +53,18 @@
 
 #include <unotools/bootstrap.hxx>
 
-namespace framework
-{
+const char SERVICENAME_FRAMECONTROLLER[] = "com.sun.star.frame.Controller";
+const char IMPLEMENTATIONNAME_STARTMODULE[] = "com.sun.star.comp.sfx2.BackingComp";
+const char FRAME_PROPNAME_LAYOUTMANAGER[] = "LayoutManager";
+const char HID_BACKINGWINDOW[] = "FWK_HID_BACKINGWINDOW";
+const char SPECIALTARGET_MENUBAR[] = "_menubar";
 
 //_______________________________________________
 
 //_______________________________________________
 
 BackingComp::BackingComp( const css::uno::Reference< css::uno::XComponentContext >& xContext )
-    : ThreadHelpBase    (&Application::GetSolarMutex()                  )
-    , m_xContext        (xContext                                          )
+    : m_xContext(xContext)
 {
 }
 
@@ -116,10 +113,9 @@ css::uno::Any SAL_CALL BackingComp::queryInterface( /*IN*/ const css::uno::Type&
     if (!aResult.hasValue())
     {
         /* SAFE { */
-        ReadGuard aReadLock(m_aLock);
+        SolarMutexGuard aGuard;
         if (m_xWindow.is())
             aResult = m_xWindow->queryInterface(aType);
-        aReadLock.unlock();
         /* } SAFE */
     }
 
@@ -177,10 +173,8 @@ css::uno::Sequence< css::uno::Type > SAL_CALL BackingComp::getTypes()
         if (!pTypeCollection)
         {
             /* LOCAL SAFE { */
-            ReadGuard aReadLock(m_aLock);
+            SolarMutexGuard aGuard;
             css::uno::Reference< css::lang::XTypeProvider > xProvider(m_xWindow, css::uno::UNO_QUERY);
-            aReadLock.unlock();
-            /* } LOCAL SAFE */
 
             css::uno::Sequence< css::uno::Type > lWindowTypes;
             if (xProvider.is())
@@ -195,6 +189,7 @@ css::uno::Sequence< css::uno::Type > SAL_CALL BackingComp::getTypes()
                     lWindowTypes);
 
             pTypeCollection = &aTypeCollection;
+            /* } LOCAL SAFE */
         }
         /* } GLOBAL SAFE */
     }
@@ -307,7 +302,7 @@ css::uno::Sequence< OUString > SAL_CALL BackingComp::getSupportedServiceNames()
 
 OUString BackingComp::impl_getStaticImplementationName()
 {
-    return IMPLEMENTATIONNAME_STARTMODULE;
+    return OUString( IMPLEMENTATIONNAME_STARTMODULE );
 }
 
 //_______________________________________________
@@ -439,7 +434,7 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
     throw (css::uno::RuntimeException)
 {
     /* SAFE */
-    WriteGuard aWriteLock(m_aLock);
+    SolarMutexGuard aGuard;
 
     // check some required states
     if (m_xFrame.is())
@@ -459,7 +454,7 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
     m_xFrame = xFrame;
 
     // establish drag&drop mode
-    ::framework::DropTargetListener* pDropListener = new ::framework::DropTargetListener( m_xContext, m_xFrame);
+    DropTargetListener* pDropListener = new DropTargetListener( m_xContext, m_xFrame);
     m_xDropTargetListener = css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >(static_cast< ::cppu::OWeakObject* >(pDropListener), css::uno::UNO_QUERY);
 
     css::uno::Reference< css::awt::XToolkit2 > xToolkit = css::awt::Toolkit::create( m_xContext );
@@ -489,7 +484,7 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
     if (xLayoutManager.is())
     {
         xLayoutManager->lock();
-        xLayoutManager->createElement( DECLARE_ASCII( "private:resource/menubar/menubar"     ));
+        xLayoutManager->createElement("private:resource/menubar/menubar");
         xLayoutManager->unlock();
     }
 
@@ -504,7 +499,6 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
     if( pBack )
         pBack->setOwningFrame( m_xFrame );
 
-    aWriteLock.unlock();
     /* } SAFE */
 }
 
@@ -580,7 +574,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL BackingComp::getFrame()
     throw (css::uno::RuntimeException)
 {
     /* SAFE { */
-    ReadGuard aReadLock(m_aLock);
+    SolarMutexGuard aGuard;
     return m_xFrame;
     /* } SAFE */
 }
@@ -631,7 +625,7 @@ void SAL_CALL BackingComp::disposing( /*IN*/ const css::lang::EventObject& aEven
     // keyPressed() for further details.
 
     /* SAFE { */
-    WriteGuard aWriteLock(m_aLock);
+    SolarMutexGuard aGuard;
 
     if (!aEvent.Source.is() || aEvent.Source!=m_xWindow || !m_xWindow.is())
         throw css::uno::RuntimeException(
@@ -640,7 +634,6 @@ void SAL_CALL BackingComp::disposing( /*IN*/ const css::lang::EventObject& aEven
 
     m_xWindow = css::uno::Reference< css::awt::XWindow >();
 
-    aWriteLock.unlock();
     /* } SAFE */
 }
 
@@ -658,11 +651,11 @@ void SAL_CALL BackingComp::dispose()
     throw(css::uno::RuntimeException)
 {
     /* SAFE { */
-    WriteGuard aWriteLock(m_aLock);
+    SolarMutexGuard aGuard;
 
     // kill the menu
     css::util::URL aURL;
-    aURL.Complete = DECLARE_ASCII(".uno:close");
+    aURL.Complete = OUString(".uno:close");
     css::uno::Reference< css::util::XURLTransformer > xParser = css::util::URLTransformer::create(m_xContext);
     if (xParser.is())
         xParser->parseStrict(aURL);
@@ -706,7 +699,6 @@ void SAL_CALL BackingComp::dispose()
     m_xFrame.clear();
     m_xContext.clear();
 
-    aWriteLock.unlock();
     /* } SAFE */
 }
 
@@ -769,7 +761,7 @@ void SAL_CALL BackingComp::initialize( /*IN*/ const css::uno::Sequence< css::uno
     throw(css::uno::Exception, css::uno::RuntimeException)
 {
     /* SAFE { */
-    WriteGuard aWriteLock(m_aLock);
+    SolarMutexGuard aGuard;
 
     if (m_xWindow.is())
         throw css::uno::Exception(
@@ -806,7 +798,6 @@ void SAL_CALL BackingComp::initialize( /*IN*/ const css::uno::Sequence< css::uno
 
     m_xWindow->setVisible(sal_True);
 
-    aWriteLock.unlock();
     /* } SAFE */
 }
 
@@ -836,7 +827,5 @@ void SAL_CALL BackingComp::keyReleased( /*IN*/ const css::awt::KeyEvent& )
         So it will be handled twice! document => backing mode => exit app ...
      */
 }
-
-} // namespace framework
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

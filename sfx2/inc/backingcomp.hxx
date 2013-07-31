@@ -17,12 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __FRAMEWORK_SERVICES_BACKINGCOMP_HXX_
-#define __FRAMEWORK_SERVICES_BACKINGCOMP_HXX_
-
-#include <threadhelp/threadhelpbase.hxx>
-#include <general.h>
-#include <stdtypes.h>
+#ifndef __SFX2_DIALOG_BACKINGCOMP_HXX_
+#define __SFX2_DIALOG_BACKINGCOMP_HXX_
 
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -44,9 +40,6 @@
 //__________________________________________
 // definition
 
-namespace framework
-{
-
 //__________________________________________
 /**
     implements the backing component.
@@ -64,15 +57,12 @@ class BackingComp : public  css::lang::XTypeProvider
                   , public  css::lang::XInitialization
                   , public  css::frame::XController  // => XComponent
                   , public  css::awt::XKeyListener // => XEventListener
-                  // attention! Must be the first base class to guarantee right initialize lock ...
-                  , private ThreadHelpBase
                   , public  ::cppu::OWeakObject
 {
     //______________________________________
     // member
 
     private:
-
         /** the global uno service manager.
             Must be used to create own needed services. */
         css::uno::Reference< css::uno::XComponentContext > m_xContext;
@@ -143,8 +133,6 @@ class BackingComp : public  css::lang::XTypeProvider
         static css::uno::Reference< css::lang::XSingleServiceFactory > SAL_CALL impl_createFactory                 ( const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR );
 };
 
-} // namespace framework
-
-#endif // __FRAMEWORK_SERVICES_BACKINGCOMP_HXX_
+#endif // __SFX2_DIALOG_BACKINGCOMP_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
