@@ -28,7 +28,6 @@
 #include <string.h>
 #include <stdlib.h>
 
-
 #include <bparr.hxx>
 
 using namespace std;

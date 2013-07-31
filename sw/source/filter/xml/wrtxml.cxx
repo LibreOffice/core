@@ -501,7 +501,7 @@ bool SwXMLWriter::WriteThroughComponent(
     OSL_ENSURE( NULL != pStreamName, "Need stream name!" );
     OSL_ENSURE( NULL != pServiceName, "Need service name!" );
 
-    SAL_INFO( "sw.filter", "SwXMLWriter::WriteThroughComponent : stream " << pStreamName << "\"" );
+    SAL_INFO( "sw.filter", "SwXMLWriter::WriteThroughComponent : stream " << pStreamName );
     // open stream
     bool bRet = false;
     try
