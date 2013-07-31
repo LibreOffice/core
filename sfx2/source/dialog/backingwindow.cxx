@@ -18,7 +18,6 @@
  */
 
 #include "backingwindow.hxx"
-#include <services.h>
 
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
@@ -45,7 +44,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
-using namespace framework;
 
 const char RECENT_FILE_LIST[] =   ".uno:RecentFileList";
 
@@ -57,6 +55,7 @@ const char BASE_URL[] =           "private:factory/sdatabase?Interactive";
 const char MATH_URL[] =           "private:factory/smath";
 const char TEMPLATE_URL[] =       "slot:5500";
 const char OPEN_URL[] =           ".uno:Open";
+const char SERVICENAME_CFGREADACCESS[] = "com.sun.star.configuration.ConfigurationAccess";
 
 const int nItemId_Extensions = 1;
 const int nItemId_Info = 3;
@@ -74,11 +73,11 @@ const int nPaddingBottom = 30;
 
 const int nLogoHeight = 150;
 
-BackingWindow::BackingWindow( Window* i_pParent ) :
-    Window( i_pParent ),
-    mbInitControls( false ),
-    mnHideExternalLinks( 0 ),
-    mpAccExec( NULL )
+BackingWindow::BackingWindow( Window* i_pParent )
+    : Window( i_pParent )
+    , mbInitControls( false )
+    , mnHideExternalLinks( 0 )
+    , mpAccExec( NULL )
 {
     m_pUIBuilder = new VclBuilder(this, getUIRootDir(),
       "modules/StartModule/ui/startcenter.ui",
@@ -687,5 +686,4 @@ Size BackingWindow::GetOptimalSize() const
 
     return Window::GetOptimalSize();
 }
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab:*/

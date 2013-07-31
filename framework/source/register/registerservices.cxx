@@ -40,7 +40,6 @@
 #include <services/modulemanager.hxx>
 #include <jobs/jobexecutor.hxx>
 #include <jobs/jobdispatch.hxx>
-#include <services/backingcomp.hxx>
 #include <services/layoutmanager.hxx>
 #include <uifactory/uielementfactorymanager.hxx>
 #include <uifactory/uicontrollerfactory.hxx>
@@ -79,7 +78,6 @@ COMPONENTGETFACTORY ( fwk,
                         IFFACTORY( ::framework::Frame                                   )   else
                         IFFACTORY( ::framework::JobExecutor                             )   else
                         IFFACTORY( ::framework::JobDispatch                             )   else
-                        IFFACTORY( ::framework::BackingComp                             )   else
                         IFFACTORY( ::framework::LayoutManager                           )   else
                         IFFACTORY( ::framework::UIElementFactoryManager                 )   else
                         IFFACTORY( ::framework::PopupMenuControllerFactory              )   else
