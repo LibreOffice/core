@@ -39,16 +39,15 @@ CodeCompleteOptionsDlg::CodeCompleteOptionsDlg( Window* pWindow )
     get(pAutocloseParenChk, "autoclose_paren");
     get(pAutocloseQuotesChk, "autoclose_quotes");
     get(pAutoCorrectSpellingChk, "autocorrect_spelling");
+    get(pUseExtendedTypesChk, "extendedtypes_enable");
 
     pOkBtn->SetClickHdl( LINK( this, CodeCompleteOptionsDlg, OkHdl ) );
     pCancelBtn->SetClickHdl( LINK( this, CodeCompleteOptionsDlg, CancelHdl ) );
-    LoadConfig();
 
-    /*pCodeCompleteChk->Check( CodeCompleteOptions::IsCodeCompleteOn() );
-    pAutocloseProcChk->Check( CodeCompleteOptions::IsProcedureAutoCompleteOn() );
-    pAutocloseQuotesChk->Check( CodeCompleteOptions::IsAutoCloseQuotesOn() );
-    pAutocloseParenChk->Check( CodeCompleteOptions::IsAutoCloseParenthesisOn() );
-    pAutoCorrectSpellingChk->Check( CodeCompleteOptions::IsAutoCorrectSpellingOn() );*/
+    pCodeCompleteChk->SetToggleHdl( LINK(this, CodeCompleteOptionsDlg, CodeCompleteHdl) );
+    pUseExtendedTypesChk->SetToggleHdl( LINK(this, CodeCompleteOptionsDlg, ExtendedTypesHdl) );
+
+    LoadConfig();
 
 }
 
@@ -63,6 +62,7 @@ IMPL_LINK_NOARG(CodeCompleteOptionsDlg, OkHdl)
     CodeCompleteOptions::SetAutoCloseQuotesOn( pAutocloseQuotesChk->IsChecked() );
     CodeCompleteOptions::SetAutoCloseParenthesisOn( pAutocloseParenChk->IsChecked() );
     CodeCompleteOptions::SetAutoCorrectSpellingOn( pAutoCorrectSpellingChk->IsChecked() );
+    CodeCompleteOptions::SetExtendedTypeDeclaration( pAutoCorrectSpellingChk->IsChecked() );
 
     SaveConfig();
     Close();
@@ -75,6 +75,18 @@ IMPL_LINK_NOARG(CodeCompleteOptionsDlg, CancelHdl)
     return 0;
 }
 
+IMPL_LINK_NOARG(CodeCompleteOptionsDlg, ExtendedTypesHdl)
+{
+    pCodeCompleteChk->Check( pUseExtendedTypesChk->IsChecked() );
+    return 0;
+}
+
+IMPL_LINK_NOARG(CodeCompleteOptionsDlg, CodeCompleteHdl)
+{
+    pUseExtendedTypesChk->Check( pCodeCompleteChk->IsChecked() );
+    return 0;
+}
+
 short CodeCompleteOptionsDlg::Execute()
 {
     return ModalDialog::Execute();
@@ -83,6 +95,7 @@ short CodeCompleteOptionsDlg::Execute()
 void CodeCompleteOptionsDlg::LoadConfig()
 {
     bool bProcClose = officecfg::Office::BasicIDE::Autocomplete::AutocloseProc::get();
+    bool bExtended = officecfg::Office::BasicIDE::Autocomplete::UseExtended::get();
     bool bCodeCompleteOn = officecfg::Office::BasicIDE::Autocomplete::CodeComplete::get();
     bool bParenClose = officecfg::Office::BasicIDE::Autocomplete::AutocloseParenthesis::get();
     bool bQuoteClose = officecfg::Office::BasicIDE::Autocomplete::AutocloseDoubleQuotes::get();
@@ -93,13 +106,15 @@ void CodeCompleteOptionsDlg::LoadConfig()
     pAutocloseQuotesChk->Check( bQuoteClose );
     pAutocloseParenChk->Check( bParenClose );
     pAutoCorrectSpellingChk->Check( bCorrect );
+    pUseExtendedTypesChk->Check( bExtended );
 }
 
 void CodeCompleteOptionsDlg::SaveConfig()
 {
-    boost::shared_ptr< comphelper::ConfigurationChanges > batch(comphelper::ConfigurationChanges::create());
+    boost::shared_ptr< comphelper::ConfigurationChanges > batch( comphelper::ConfigurationChanges::create() );
     officecfg::Office::BasicIDE::Autocomplete::AutocloseProc::set( pAutocloseProcChk->IsChecked(), batch );
     officecfg::Office::BasicIDE::Autocomplete::CodeComplete::set( pCodeCompleteChk->IsChecked(), batch );
+    officecfg::Office::BasicIDE::Autocomplete::UseExtended::set( pUseExtendedTypesChk->IsChecked(), batch );
     officecfg::Office::BasicIDE::Autocomplete::AutocloseParenthesis::set( pAutocloseParenChk->IsChecked(), batch );
     officecfg::Office::BasicIDE::Autocomplete::AutocloseDoubleQuotes::set( pAutocloseQuotesChk->IsChecked(), batch );
     officecfg::Office::BasicIDE::Autocomplete::AutoCorrectSpelling::set( pAutoCorrectSpellingChk->IsChecked(), batch );

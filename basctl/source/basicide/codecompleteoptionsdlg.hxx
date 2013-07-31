@@ -37,9 +37,12 @@ private:
     CheckBox* pAutocloseParenChk;
     CheckBox* pAutocloseQuotesChk;
     CheckBox* pAutoCorrectSpellingChk;
+    CheckBox* pUseExtendedTypesChk;
 
     DECL_LINK(OkHdl, void*);
     DECL_LINK(CancelHdl, void*);
+    DECL_LINK(ExtendedTypesHdl, void*);
+    DECL_LINK(CodeCompleteHdl, void*);
 
     void LoadConfig();
     void SaveConfig();

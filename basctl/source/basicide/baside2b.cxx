@@ -752,6 +752,7 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
                             pCodeCompleteWnd->Show();
                             pCodeCompleteWnd->ResizeListBox();
                             pCodeCompleteWnd->SelectFirstEntry();
+                            pEditView->GetWindow()->GrabFocus();
                         }
                     }
                 }
@@ -2611,7 +2612,7 @@ long CodeCompleteListBox::PreNotify( NotifyEvent& rNEvt )
                     {
                         TextPaM aEnd(pCodeCompleteWindow->aTextSelection.GetEnd().GetPara(), pCodeCompleteWindow->GetTextSelection().GetEnd().GetIndex() + aFuncBuffer.getLength());
                         TextPaM aStart(pCodeCompleteWindow->aTextSelection.GetEnd().GetPara(), pCodeCompleteWindow->GetTextSelection().GetEnd().GetIndex() + aFuncBuffer.getLength()-1);
-                        aFuncBuffer.stripEnd(aFuncBuffer[aFuncBuffer.getLength()-1]);
+                        aFuncBuffer = aFuncBuffer.remove(aFuncBuffer.getLength()-1, 1);
                         pCodeCompleteWindow->pParent->GetEditView()->SetSelection(TextSelection(aStart, aEnd));
                         pCodeCompleteWindow->pParent->GetEditView()->DeleteSelected();
                         SetVisibleEntries();
@@ -2695,9 +2696,27 @@ void CodeCompleteWindow::ResizeListBox()
         Size aSize = pListBox->CalcSize( aLongestEntry.getLength(), std::min( (sal_uInt16) 4, pListBox->GetEntryCount()) );
         const Font& aFont = pListBox->GetUnzoomedControlPointFont();
 
+        Rectangle aVisArea( pParent->GetEditView()->GetStartDocPos(), pParent->GetOutputSizePixel() );
         aSize.setHeight( aFont.GetSize().getHeight() * 16 );
         aSize.setWidth( pListBox->CalcSize(aLongestEntry.getLength(), pListBox->GetEntryCount()).getWidth() );
+        Point aBottomPoint = aVisArea.BottomRight();
+        Point aTopPoint = aVisArea.TopRight();
+        long nYDiff = std::abs((aBottomPoint.Y() - aTopPoint.Y()) - GetPosPixel().Y());
 
+        if( (nYDiff + aFont.GetSize().getHeight()) < aSize.Height() )
+        {//bottom part is clipped, fix the visibility by placing it over the line (not under)
+            //std::cerr << "clipped at the bottom" << std::endl;
+            Point aPos = GetPosPixel();
+            aPos.Y() = aPos.Y() - (aSize.getHeight() + aFont.GetSize().getHeight());
+            SetPosPixel(aPos);
+        }
+        long nXDiff = std::abs(aTopPoint.X() - GetPosPixel().X());
+        if( nXDiff < aSize.Width() )
+        {//clipped at the right side, move it a bit left
+            Point aPos = GetPosPixel();
+            aPos.X() = aPos.X() - aSize.Width() + nXDiff;
+            SetPosPixel(aPos);
+        }
         pListBox->SetSizePixel( aSize );
         aSize.setWidth( aSize.getWidth() + 1 );
         aSize.setHeight( aSize.getHeight() + 1 );

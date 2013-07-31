@@ -1795,6 +1795,7 @@ void SbModule::GetCodeCompleteDataFromParse(CodeCompleteDataCache& aCache)
     for( sal_uInt16 i = 0; i < pPool->GetSize(); ++i )
     {
         SbiSymDef* pSymDef = pPool->Get(i);
+        //std::cerr << "i: " << i << ", type: " << pSymDef->GetType() << std::endl;
         if( pSymDef->GetType() == SbxOBJECT )
         {
             if( !pParser->aGblStrings.Find( pSymDef->GetTypeId() ).isEmpty() )
@@ -1809,6 +1810,7 @@ void SbModule::GetCodeCompleteDataFromParse(CodeCompleteDataCache& aCache)
         for(sal_uInt16 j = 0; j < pChildPool.GetSize(); ++j )
         {
             SbiSymDef* pChildSymDef = pChildPool.Get(j);
+            //std::cerr << "j: " << j << ", type: " << pChildSymDef->GetType() << std::endl;
             if( pChildSymDef->GetType() == SbxOBJECT )
             {
                 if( !pParser->aGblStrings.Find( pChildSymDef->GetTypeId() ).isEmpty() )
