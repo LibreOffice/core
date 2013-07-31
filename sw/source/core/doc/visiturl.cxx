@@ -56,32 +56,36 @@ void SwURLStateChanged::Notify( SfxBroadcaster& , const SfxHint& rHint )
             (sBkmk = pIURL->GetMark()).Insert( INET_MARK_TOKEN, 0 );
 
         bool bAction = false, bUnLockView = false;
-        const SwFmtINetFmt* pItem;
-        const SwTxtINetFmt* pTxtAttr;
-        const SwTxtNode* pTxtNd;
-        sal_uInt32 n, nMaxItems = pDoc->GetAttrPool().GetItemCount2( RES_TXTATR_INETFMT );
-        for( n = 0; n < nMaxItems; ++n )
-            if( 0 != (pItem = (SwFmtINetFmt*)pDoc->GetAttrPool().GetItem2(
-                RES_TXTATR_INETFMT, n ) ) &&
-                ( pItem->GetValue() == sURL ||
-                    ( sBkmk.Len() && pItem->GetValue() == sBkmk )) &&
-                0 != ( pTxtAttr = pItem->GetTxtINetFmt()) &&
-                0 != ( pTxtNd = pTxtAttr->GetpTxtNode() ) )
+        sal_uInt32 nMaxItems = pDoc->GetAttrPool().GetItemCount2( RES_TXTATR_INETFMT );
+        for( sal_uInt32 n = 0; n < nMaxItems; ++n )
+        {
+            const SwFmtINetFmt* pItem = (SwFmtINetFmt*)pDoc->GetAttrPool().GetItem2(RES_TXTATR_INETFMT, n );
+            if( pItem != 0 &&
+                ( pItem->GetValue() == sURL || ( sBkmk.Len() && pItem->GetValue() == sBkmk )))
             {
-                if( !bAction && pESh )
+                const SwTxtINetFmt* pTxtAttr = pItem->GetTxtINetFmt();
+                if (pTxtAttr != 0)
                 {
-                    pESh->StartAllAction();
-                    bAction = true;
-                    bUnLockView = !pESh->IsViewLocked();
-                    pESh->LockView( sal_True );
+                    const SwTxtNode* pTxtNd = pTxtAttr->GetpTxtNode();
+                    if (pTxtNd != 0)
+                    {
+                        if( !bAction && pESh )
+                        {
+                            pESh->StartAllAction();
+                            bAction = true;
+                            bUnLockView = !pESh->IsViewLocked();
+                            pESh->LockView( sal_True );
+                        }
+                        const_cast<SwTxtINetFmt*>(pTxtAttr)->SetVisitedValid( false );
+                        const SwTxtAttr* pAttr = pTxtAttr;
+                        SwUpdateAttr aUpdateAttr( *pAttr->GetStart(),
+                                                  *pAttr->GetEnd(),
+                                                  RES_FMT_CHG );
+                        ((SwTxtNode*)pTxtNd)->ModifyNotification( &aUpdateAttr, &aUpdateAttr );
+                    }
                 }
-                const_cast<SwTxtINetFmt*>(pTxtAttr)->SetVisitedValid( false );
-                const SwTxtAttr* pAttr = pTxtAttr;
-                SwUpdateAttr aUpdateAttr( *pAttr->GetStart(),
-                                          *pAttr->GetEnd(),
-                                          RES_FMT_CHG );
-                ((SwTxtNode*)pTxtNd)->ModifyNotification( &aUpdateAttr, &aUpdateAttr );
             }
+        }
 
         if( bAction )
             pESh->EndAllAction();
