@@ -203,7 +203,7 @@ SwCallLink::~SwCallLink()
 
             if( g_pBreakIt->GetBreakIter().is() )
             {
-                const String& rTxt = ((SwTxtNode*)pCNd)->GetTxt();
+                const OUString rTxt = ((SwTxtNode*)pCNd)->GetTxt();
                 if( !nCmp ||
                     g_pBreakIt->GetBreakIter()->getScriptType( rTxt, nCmp )
                      != g_pBreakIt->GetBreakIter()->getScriptType( rTxt, nCmp - 1 ))
