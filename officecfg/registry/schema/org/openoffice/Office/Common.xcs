@@ -6138,7 +6138,7 @@
           implicitly, which is recognized if the option is set.</desc>
           <label>detect system's high contrast</label>
         </info>
-        <value>true</value>
+        <value>false</value>
       </prop>
       <prop oor:name="IsForPagePreviews" oor:type="xs:boolean" oor:nillable="false">
         <info>

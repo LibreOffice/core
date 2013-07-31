@@ -625,6 +625,8 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, sal_Bool bCallHdl
 
     rSettings.SetStyleSettings( aStyleSettings );
 
+    bool bForceHCMode = false;
+
     // auto detect HC mode; if the system already set it to "yes"
     // (see above) then accept that
     if( !rSettings.GetStyleSettings().GetHighContrastMode() )
@@ -641,20 +643,19 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, sal_Bool bCallHdl
         }
         if( bAutoHCMode )
         {
-            if( rSettings.GetStyleSettings().GetFaceColor().IsDark()
-             || rSettings.GetStyleSettings().GetWindowColor().IsDark() )
-            {
-                aStyleSettings = rSettings.GetStyleSettings();
-                aStyleSettings.SetHighContrastMode( sal_True );
-                aStyleSettings.SetSymbolsStyle( STYLE_SYMBOLS_HICONTRAST );
-                rSettings.SetStyleSettings( aStyleSettings );
-            }
+            if( rSettings.GetStyleSettings().GetFaceColor().IsDark() ||
+                rSettings.GetStyleSettings().GetWindowColor().IsDark() )
+                bForceHCMode = true;
         }
     }
 
     static const char* pEnvHC = getenv( "SAL_FORCE_HC" );
     if( pEnvHC && *pEnvHC )
+        bForceHCMode = true;
+
+    if( bForceHCMode )
     {
+        aStyleSettings = rSettings.GetStyleSettings();
         aStyleSettings.SetHighContrastMode( sal_True );
         aStyleSettings.SetSymbolsStyle( STYLE_SYMBOLS_HICONTRAST );
         rSettings.SetStyleSettings( aStyleSettings );
