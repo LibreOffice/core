@@ -170,11 +170,11 @@ extern "C" { static void SAL_CALL thisModule() {} }
 
 #else
 
-extern "C" bool GetSpecialCharsForEdit( Window* i_pParent, const Font& i_rFont, String& o_rOutString );
+extern "C" bool GetSpecialCharsForEdit( Window* i_pParent, const Font& i_rFont, OUString& o_rOutString );
 
 #endif
 
-String GetSpecialCharsForEdit(Window* pParent, const Font& rFont)
+OUString GetSpecialCharsForEdit(Window* pParent, const Font& rFont)
 {
     static bool bDetermineFunction = false;
     static PFunc_getSpecialCharsForEdit pfunc_getSpecialCharsForEdit = 0;

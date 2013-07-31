@@ -46,7 +46,7 @@ struct Impl_IMEInfos;
 #define EDIT_NOLIMIT                STRING_LEN
 #define EDIT_UPDATEDATA_TIMEOUT     350
 
-typedef XubString (*FncGetSpecialChars)( Window* pWin, const Font& rFont );
+typedef OUString (*FncGetSpecialChars)( Window* pWin, const Font& rFont );
 
 // --------
 // - Edit -

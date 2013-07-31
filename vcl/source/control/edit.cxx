@@ -1586,9 +1586,9 @@ sal_Bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
             if ( pImplFncGetSpecialChars )
             {
                 Selection aSaveSel = GetSelection(); // if someone changes the selection in Get/LoseFocus, e.g. URL bar
-                XubString aChars = pImplFncGetSpecialChars( this, GetFont() );
+                OUString aChars = pImplFncGetSpecialChars( this, GetFont() );
                 SetSelection( aSaveSel );
-                if ( aChars.Len() )
+                if ( !aChars.isEmpty() )
                 {
                     ImplInsertText( aChars );
                     ImplModified();
@@ -2176,9 +2176,9 @@ void Edit::Command( const CommandEvent& rCEvt )
                 break;
             case SV_MENU_EDIT_INSERTSYMBOL:
                 {
-                    XubString aChars = pImplFncGetSpecialChars( this, GetFont() );
+                    OUString aChars = pImplFncGetSpecialChars( this, GetFont() );
                     SetSelection( aSaveSel );
-                    if ( aChars.Len() )
+                    if ( !aChars.isEmpty() )
                     {
                         ImplInsertText( aChars );
                         ImplModified();
