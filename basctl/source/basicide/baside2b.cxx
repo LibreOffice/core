@@ -611,6 +611,7 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
                 if( nLine+1 == pEditEngine->GetParagraphCount() )
                 { //append to the end
                     OUString sText("\nEnd ");
+                    std::cerr << "sProcType: " << sProcType << std::endl;
                     if( sProcType.equalsIgnoreAsciiCase("function") )
                         sText += OUString( "Function\n" );
                     if( sProcType.equalsIgnoreAsciiCase("sub") )
@@ -633,12 +634,22 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
                             {
                                 if( sStr1.equalsIgnoreAsciiCase("sub") )
                                 {
-                                    pEditView->InsertText( OUString ( "\nEnd Sub\n" ) );
+                                    OUString sText("\nEnd ");
+                                    if( sProcType.equalsIgnoreAsciiCase("function") )
+                                        sText += OUString( "Function\n" );
+                                    if( sProcType.equalsIgnoreAsciiCase("sub") )
+                                        sText += OUString( "Sub\n" );
+                                    pEditView->InsertText( sText );
                                     break;
                                 }
                                 if( sStr1.equalsIgnoreAsciiCase("function") )
                                 {
-                                    pEditView->InsertText( OUString ( "\nEnd Function\n" ) );
+                                    OUString sText("\nEnd ");
+                                    if( sProcType.equalsIgnoreAsciiCase("function") )
+                                        sText += OUString( "Function\n" );
+                                    if( sProcType.equalsIgnoreAsciiCase("sub") )
+                                        sText += OUString( "Sub\n" );
+                                    pEditView->InsertText( sText );
                                     break;
                                 }
                                 if( sStr1.equalsIgnoreAsciiCase("end") )
