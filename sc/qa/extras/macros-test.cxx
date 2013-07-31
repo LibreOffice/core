@@ -79,7 +79,9 @@ void ScMacrosTest::testMSP()
     Sequence< uno::Any > aParams;
 
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+
     CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
+    ScDocShell* xDocSh = static_cast<ScDocShell*>(pFoundShell);
 
     pFoundShell->CallXScript(xComponent, sUrl, aParams, aRet, aOutParamIndex,aOutParam);
     OUString sResult;
