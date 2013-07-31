@@ -10,6 +10,7 @@
 #import "SlideShow.h"
 #import "Base64.h"
 #import "slideShow_vc_iphone.h"
+#import "UIImageView+setImageAnimated.h"
 #import <dispatch/dispatch.h>
 
 @interface SlideShow()
@@ -90,7 +91,7 @@ NSLock *dictLock;
 //                                                                          image = [image resizedImage:view.frame.size interpolationQuality:kCGInterpolationDefault];
                                                                           dispatch_async(dispatch_get_main_queue(), ^{
                                                                               NSLog(@"Setting image to tag: %ld", (long)[tag integerValue]);
-                                                                             [(UIImageView *)view setImage:image];
+                                                                             [(UIImageView *)view setImage:image animated:YES];
                                                                           });
                                                                           [self.loadBuffer removeObjectForKey:tag];
                                                                       }
@@ -108,9 +109,8 @@ NSLock *dictLock;
                                                                       UIImage *image = [self.imagesDictionary objectForKey:[self.loadBuffer objectForKey:tag]];
                                                                       if (image){
                                                                           UIImageView *imageView = (UIImageView *)[view viewWithTag:1];
-//                                                                          image = [image resizedImage:imageView.frame.size interpolationQuality:kCGInterpolationDefault];
                                                                           dispatch_async(dispatch_get_main_queue(), ^{
-                                                                              [imageView setImage:image];
+                                                                              [imageView setImage:image animated:YES];
                                                                           });
                                                                           [self.loadBuffer removeObjectForKey:tag];
                                                                       }

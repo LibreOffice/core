@@ -51,6 +51,7 @@
 		57DF0A85178FFFAB008B2D3D /* iPhone_autosize.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 57DF0A83178FFFAB008B2D3D /* iPhone_autosize.storyboard */; };
 		57FE71E31785C61400B50125 /* pinValidation_vc.m in Sources */ = {isa = PBXBuildFile; fileRef = 57FE71E21785C61400B50125 /* pinValidation_vc.m */; };
 		57FE71E917861A9000B50125 /* slideShowPreviewTable_vc.m in Sources */ = {isa = PBXBuildFile; fileRef = 57FE71E817861A9000B50125 /* slideShowPreviewTable_vc.m */; };
+		8C0323AB17A943720037432E /* UIImageView+setImageAnimated.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C0323AA17A943720037432E /* UIImageView+setImageAnimated.m */; };
 		8C0DC83A17A4177C0099E5AE /* nextButton_pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C0DC83617A4177C0099E5AE /* nextButton_pressed.png */; };
 		8C0DC83B17A4177C0099E5AE /* nextButton_pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C0DC83717A4177C0099E5AE /* nextButton_pressed@2x.png */; };
 		8C0DC83C17A4177C0099E5AE /* previousButton_pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C0DC83817A4177C0099E5AE /* previousButton_pressed.png */; };
@@ -151,6 +152,8 @@
 		57FE71E21785C61400B50125 /* pinValidation_vc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = pinValidation_vc.m; path = iosremote/Communication/pinValidation_vc.m; sourceTree = "<group>"; };
 		57FE71E717861A9000B50125 /* slideShowPreviewTable_vc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = slideShowPreviewTable_vc.h; sourceTree = "<group>"; };
 		57FE71E817861A9000B50125 /* slideShowPreviewTable_vc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = slideShowPreviewTable_vc.m; sourceTree = "<group>"; };
+		8C0323A917A943720037432E /* UIImageView+setImageAnimated.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImageView+setImageAnimated.h"; path = "iosremote/UIImageView+setImageAnimated.h"; sourceTree = "<group>"; };
+		8C0323AA17A943720037432E /* UIImageView+setImageAnimated.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImageView+setImageAnimated.m"; path = "iosremote/UIImageView+setImageAnimated.m"; sourceTree = "<group>"; };
 		8C0DC83617A4177C0099E5AE /* nextButton_pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = nextButton_pressed.png; sourceTree = "<group>"; };
 		8C0DC83717A4177C0099E5AE /* nextButton_pressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "nextButton_pressed@2x.png"; sourceTree = "<group>"; };
 		8C0DC83817A4177C0099E5AE /* previousButton_pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = previousButton_pressed.png; sourceTree = "<group>"; };
@@ -419,6 +422,8 @@
 				8C26E5CF17A58703007DA4B7 /* HorizontalSlideCell.m */,
 				8C26E5D517A68154007DA4B7 /* stopWatch.h */,
 				8C26E5D617A68154007DA4B7 /* stopWatch.m */,
+				8C0323A917A943720037432E /* UIImageView+setImageAnimated.h */,
+				8C0323AA17A943720037432E /* UIImageView+setImageAnimated.m */,
 			);
 			name = Support;
 			sourceTree = "<group>";
@@ -635,6 +640,7 @@
 				8C26E5C917A5731D007DA4B7 /* autoDismissKeyboardNavigationViewController.m in Sources */,
 				8C26E5D017A58703007DA4B7 /* HorizontalSlideCell.m in Sources */,
 				8C26E5D717A68154007DA4B7 /* stopWatch.m in Sources */,
+				8C0323AB17A943720037432E /* UIImageView+setImageAnimated.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
