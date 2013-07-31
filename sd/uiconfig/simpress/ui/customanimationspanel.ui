@@ -171,11 +171,18 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="sdlo-PropertyControl" id="effect_property_list">
+                  <object class="GtkBox" id="placeholder">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="vexpand">True</property>
+                    <property name="spacing">6</property>
+                    <child>
+                      <object class="sdlo-PropertyControl" id="effect_property_list">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="hexpand">True</property>
+                        <property name="vexpand">True</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>

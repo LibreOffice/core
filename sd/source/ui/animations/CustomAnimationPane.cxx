@@ -174,6 +174,7 @@ CustomAnimationPane::CustomAnimationPane( ::Window* pParent, ViewShellBase& rBas
     get(mpFTStart, "start_effect");
     get(mpLBStart, "start_effect_list");
     get(mpFTProperty, "effect_property");
+    get(mpPlaceholderBox, "placeholder");
     get(mpLBProperty, "effect_property_list");
     get(mpPBPropertyMore, "more_properties");
 
@@ -538,7 +539,7 @@ void CustomAnimationPane::updateControls()
                 pSubControl = mpLBProperty->getSubControl();
                 if( !pSubControl || (pSubControl->getControlType() != mnPropertyType) )
                 {
-                    pSubControl = PropertySubControl::create( mnPropertyType, this, aValue, pEffect->getPresetId(), LINK( this, CustomAnimationPane, implPropertyHdl ) );
+                    pSubControl = PropertySubControl::create( mnPropertyType, mpPlaceholderBox, aValue, pEffect->getPresetId(), LINK( this, CustomAnimationPane, implPropertyHdl ) );
                     mpLBProperty->setSubControl( pSubControl );
                 }
                 else

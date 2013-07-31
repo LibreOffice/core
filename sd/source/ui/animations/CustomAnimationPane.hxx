@@ -23,6 +23,7 @@
 #include <com/sun/star/drawing/XDrawView.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <vcl/dialog.hxx>
+#include <vcl/layout.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
 #include <sfx2/sidebar/ControlFactory.hxx>
 #include "CustomAnimationPreset.hxx"
@@ -133,6 +134,7 @@ private:
     FixedText*  mpFTStart;
     ListBox*    mpLBStart;
     FixedText*  mpFTProperty;
+    VclHBox*    mpPlaceholderBox;
     PropertyControl*    mpLBProperty;
     PushButton* mpPBPropertyMore;
     FixedText*  mpFTSpeed;
