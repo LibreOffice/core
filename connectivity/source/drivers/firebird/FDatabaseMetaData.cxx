@@ -819,8 +819,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
 
         // Common data
         aRow[4] = ODatabaseMetaDataResultSet::getQuoteValue(); // Literal quote marks
-        aRow[5] = ODatabaseMetaDataResultSet::getQuoteValue(); // Literal quote marks
-        aRow[6] = new ORowSetValueDecorator();               // Create Params
+        aRow[5] = ODatabaseMetaDataResultSet::getQuoteValue(); // Literal quote marks             // Create Params
         aRow[7] = new ORowSetValueDecorator(sal_Bool(true)); // Nullable
         aRow[8] = new ORowSetValueDecorator(sal_Bool(true)); // Case sensitive
         aRow[10] = new ORowSetValueDecorator(sal_Bool(false)); // Is unsigned
@@ -836,6 +835,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
         aRow[1] = new ORowSetValueDecorator(OUString("CHAR"));
         aRow[2] = new ORowSetValueDecorator(getColumnTypeFromFBType(SQL_TEXT));
         aRow[3] = new ORowSetValueDecorator(sal_Int16(32767)); // Prevision = max length
+        aRow[6] = new ORowSetValueDecorator(OUString("length"));
         aRow[9] = new ORowSetValueDecorator(
                 sal_Int16(ColumnSearch::FULL)); // Searchable
         aRow[11] = new ORowSetValueDecorator(sal_Bool(true)); // Can be money value
@@ -848,6 +848,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
         aRow[1] = new ORowSetValueDecorator(OUString("VARCHAR"));
         aRow[2] = new ORowSetValueDecorator(getColumnTypeFromFBType(SQL_VARYING));
         aRow[3] = new ORowSetValueDecorator(sal_Int16(32767)); // Prevision = max length
+        aRow[6] = new ORowSetValueDecorator(OUString("length"));
         aRow[9] = new ORowSetValueDecorator(
                 sal_Int16(ColumnSearch::FULL)); // Searchable
         aRow[11] = new ORowSetValueDecorator(sal_Bool(true)); // Can be money value
@@ -858,6 +859,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
 
         // Integer Types common
         {
+            aRow[6] = new ORowSetValueDecorator();
             aRow[9] = new ORowSetValueDecorator(
                 sal_Int16(ColumnSearch::FULL)); // Searchable
             aRow[11] = new ORowSetValueDecorator(sal_Bool(true)); // Can be money value
@@ -883,6 +885,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
 
         // Decimal Types common
         {
+            aRow[6] = new ORowSetValueDecorator();
             aRow[9] = new ORowSetValueDecorator(
                 sal_Int16(ColumnSearch::FULL)); // Searchable
             aRow[11] = new ORowSetValueDecorator(sal_Bool(true)); // Can be money value
@@ -916,6 +919,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
         aRow[1] = new ORowSetValueDecorator(OUString("timestamp"));
         aRow[2] = new ORowSetValueDecorator(getColumnTypeFromFBType(SQL_TIMESTAMP));
         aRow[3] = new ORowSetValueDecorator(sal_Int32(8)); // Prevision = max length
+        aRow[6] = new ORowSetValueDecorator();
         aRow[9] = new ORowSetValueDecorator(
                 sal_Int16(ColumnSearch::FULL)); // Searchable
         aRow[11] = new ORowSetValueDecorator(sal_Bool(false)); // Can be money value
@@ -929,6 +933,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
         aRow[1] = new ORowSetValueDecorator(OUString("TIME"));
         aRow[2] = new ORowSetValueDecorator(getColumnTypeFromFBType(SQL_TYPE_TIME));
         aRow[3] = new ORowSetValueDecorator(sal_Int32(8)); // Prevision = max length
+        aRow[6] = new ORowSetValueDecorator();
         aRow[9] = new ORowSetValueDecorator(
                 sal_Int16(ColumnSearch::FULL)); // Searchable
         aRow[11] = new ORowSetValueDecorator(sal_Bool(false)); // Can be money value
@@ -942,6 +947,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
         aRow[1] = new ORowSetValueDecorator(OUString("DATE"));
         aRow[2] = new ORowSetValueDecorator(getColumnTypeFromFBType(SQL_TYPE_DATE));
         aRow[3] = new ORowSetValueDecorator(sal_Int32(8)); // Prevision = max length
+        aRow[6] = new ORowSetValueDecorator();
         aRow[9] = new ORowSetValueDecorator(
                 sal_Int16(ColumnSearch::FULL)); // Searchable
         aRow[11] = new ORowSetValueDecorator(sal_Bool(false)); // Can be money value
@@ -955,6 +961,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
         aRow[1] = new ORowSetValueDecorator(OUString("BLOB"));
         aRow[2] = new ORowSetValueDecorator(getColumnTypeFromFBType(SQL_BLOB));
         aRow[3] = new ORowSetValueDecorator(sal_Int32(0)); // Prevision = max length
+        aRow[6] = new ORowSetValueDecorator();
         aRow[9] = new ORowSetValueDecorator(
                 sal_Int16(ColumnSearch::NONE)); // Searchable
         aRow[11] = new ORowSetValueDecorator(sal_Bool(false)); // Can be money value
