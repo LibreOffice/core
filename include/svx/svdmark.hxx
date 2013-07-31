@@ -37,25 +37,25 @@ class SdrPageView;
 typedef std::set<sal_uInt16> SdrUShortCont;
 
 
-// Alles was eine View ueber ein markiertes Objekt wissen muss
+// Everything a View needs to know about a selected object
 class SVX_DLLPUBLIC SdrMark : public sdr::ObjectUser
 {
 protected:
-    SdrObject*                                          mpSelectedSdrObject;    // the seleceted object
+    SdrObject*                                          mpSelectedSdrObject; // the selected object
     SdrPageView*                                        mpPageView;
-    SdrUShortCont*                                      mpPoints;     // Markierte Punkte
-    SdrUShortCont*                                      mpLines;      // Markierte Linienabschnitte
-    SdrUShortCont*                                      mpGluePoints; // Markierte Klebepunkte (deren Id's)
-    sal_Bool                                            mbCon1;       // fuer Connectoren
-    sal_Bool                                            mbCon2;       // fuer Connectoren
-    sal_uInt16                                          mnUser;       // z.B. fuer CopyObjects, mitkopieren von Edges
+    SdrUShortCont*                                      mpPoints;     // Selected Points
+    SdrUShortCont*                                      mpLines;      // Selected Line
+    SdrUShortCont*                                      mpGluePoints; // Selected Gluepoints (their Id's)
+    sal_Bool                                            mbCon1;       // for Connectors
+    sal_Bool                                            mbCon2;       // for Connectors
+    sal_uInt16                                          mnUser;       // E.g. for CopyObjects, also copy Edges
 
 public:
     explicit SdrMark(SdrObject* pNewObj = 0L, SdrPageView* pNewPageView = 0L);
     SdrMark(const SdrMark& rMark);
     virtual ~SdrMark();
 
-    // derived from ObjectUser
+    // Derived from ObjectUser
     virtual void ObjectInDestruction(const SdrObject& rObject);
 
     SdrMark& operator=(const SdrMark& rMark);
@@ -233,8 +233,8 @@ public:
         mbGluePointNameOk = sal_False;
     }
 
-    // Eine verbale Beschreibung der markierten Objekte z.B.:
-    // "27 Linien", "12 Objekte", "Polygon" oder auch "Kein Objekt"
+    // A verbal description of selected objects e.g.:
+    // "27 Lines", "12 Objects", "Polygon" or even "Not an object"
     const String& GetMarkDescription() const;
     const String& GetPointMarkDescription() const
     {
@@ -246,7 +246,7 @@ public:
         return GetPointMarkDescription(sal_True);
     }
 
-    // pPage=0L: Die Markierungen aller! Seiten beruecksichtigen
+    // pPage=0L: Selection of everything! Respect Pages
     sal_Bool TakeBoundRect(SdrPageView* pPageView, Rectangle& rRect) const;
     sal_Bool TakeSnapRect(SdrPageView* pPageView, Rectangle& rRect) const;
 

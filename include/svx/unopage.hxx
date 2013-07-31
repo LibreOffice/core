@@ -49,15 +49,12 @@ class SvxShape;
 class SvxShapeGroup;
 class SvxShapeConnector;
 
-/***********************************************************************
-* Macros fuer Umrechnung Twips<->100tel mm                             *
-***********************************************************************/
+/**
+* Macros to convert Twips<->100tel mm
+*/
 #define TWIPS_TO_MM(val) ((val * 127 + 36) / 72)
 #define MM_TO_TWIPS(val) ((val * 72 + 63) / 127)
 
-/***********************************************************************
-*                                                                      *
-***********************************************************************/
 class SVX_DLLPUBLIC SvxDrawPage : public ::cppu::WeakAggImplHelper5< ::com::sun::star::drawing::XDrawPage,
                                                ::com::sun::star::drawing::XShapeGrouper,
                                                ::com::sun::star::lang::XServiceInfo,
@@ -86,22 +83,20 @@ class SVX_DLLPUBLIC SvxDrawPage : public ::cppu::WeakAggImplHelper5< ::com::sun:
     SdrPage* GetSdrPage() const { return mpPage; }
     void ChangeModel( SdrModel* pNewModel );
 
-    // Erzeugen eines SdrObjects und Einfugen in die SdrPage
+    // Creation of a SdrObject and insertion into the SdrPage
     SdrObject *CreateSdrObject( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape ) throw();
 
-    // Typ und Inventor bestimmen
+    // Determine Type and Inventor
     void GetTypeAndInventor( sal_uInt16& rType, sal_uInt32& rInventor, const OUString& aName ) const throw();
 
-    // Erzeugen eines SdrObjects anhand einer Description. Kann von
-    // abgeleiteten Klassen dazu benutzt werden, eigene Shapes zu
-    // unterstuetzen (z.B. Controls)
+    // Creating a SdrObject using it's Description.
+    // Can be used by derived classes to support their owen Shapes (e.g. Controls).
     virtual SdrObject *_CreateSdrObject( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape ) throw();
 
     static SvxShape* CreateShapeByTypeAndInventor( sal_uInt16 nType, sal_uInt32 nInventor, SdrObject *pObj = NULL, SvxDrawPage *pPage = NULL ) throw();
 
-    // Die folgende Methode wird gerufen, wenn ein SvxShape-Objekt angelegt
-    // werden soll. abgeleitete Klassen koennen hier eine Ableitung oder
-    // ein ein SvxShape aggregierenden Objekt anlegen.
+    // The following method is called if a SvxShape object is to be created.
+    // Derived classes can create a derivation or an SvxShape aggregating object.
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > _CreateShape( SdrObject *pObj ) const throw();
 
     UNO3_GETIMPLEMENTATION_DECL( SvxDrawPage )

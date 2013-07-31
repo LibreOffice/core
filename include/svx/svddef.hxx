@@ -24,24 +24,24 @@
 
 /*************************************************************************/
 // SdrItemPool V2, 09-11-1995:
-//      7 neue Items fuer XLineAttrSetItem
-//      7 neue Items fuer XFillAttrSetItem
-//      8 neue Items fuer SdrShadowSetItem
-//      5 neue Items fuer SdrCaptionSetItem
-//     25 neue Items fuer SdrMiscSetItem
-//      6 neue Items fuer SdrNotPersist
+//      7 new Items for XLineAttrSetItem
+//      7 new Items for XFillAttrSetItem
+//      8 new Items for SdrShadowSetItem
+//      5 new Items for SdrCaptionSetItem
+//     25 new Items for SdrMiscSetItem
+//      6 new Items for SdrNotPersist
 // SdrItemPool V3, 29-02-1996
-//     17 neue Items fuer XFillAttrSetItem (Bitmapfuellungen) (von KA)
+//     17 new Items for XFillAttrSetItem (Bitmapfill)
 // SdrItemPool V4, 10-08-1996
-//     45 neue Items fuer Edge und Measure (Verbinder und Bemassungsobjekt) (von Joe)
+//     45 new Items for Edge and Measure (Connector and Measuring object)
 // SdrItemPool V4+, 18-10-1996
-//      8 neue Items fuer CircItems
-//     18 neue Items fuer NotPersist+Umbau dort
+//      8 new Items for CircItems
+//     18 new Items for NotPersist + Refactoring there
 // SdrItemPool V4++, 13-11-1996
-//      2 neue Items fuer NotPersist+(MoveX/Y)
+//      2 new Items for NotPersist+(MoveX/Y)
 // SdrItemPool V4+++, 07-06-1999
-//     15 neue Items fuer NotPersist (Reserve)
-//     15 neue Items fuer GrafItems
+//     15 new Items for NotPersist (Reserve)
+//     15 new Items for GrafItems
 //
 //   WhichMapping:
 //     V1 Range = 1000..1065  (66)
@@ -50,7 +50,7 @@
 //     V4 Range = 1000..1185 (186) (45 neue Whiches)
 //     Map V2:  10           6          20           4          11           6           9
 //     V1:  1000..1009, 1010..1015, 1016..1035, 1036..1039, 1040..1050, 1051..1056  1057..1065
-//     V2:  1000..1009, 1017..1022, 1030..1049, 1050..1053, 1062..1072, 1078..1083, 1109..1117, und hinten noch 6 neue dran
+//     V2:  1000..1009, 1017..1022, 1030..1049, 1050..1053, 1062..1072, 1078..1083, 1109..1117, and 6 new ones appended at the end
 //          |<------------ XOut ------------>|  |<----------- SvDraw ----------->
 //     Map V3:
 //     V2:  1000..1029, 1030..1123
@@ -145,10 +145,10 @@
 #define SDRATTR_MEASURESCALE             (SDRATTR_MEASURE_FIRST+13) /*   1160 */ /* Pool V4 */
 #define SDRATTR_MEASURESHOWUNIT          (SDRATTR_MEASURE_FIRST+14) /*   1161 */ /* Pool V4 */
 #define SDRATTR_MEASUREFORMATSTRING      (SDRATTR_MEASURE_FIRST+15) /*   1162 */ /* Pool V4 */
-#define SDRATTR_MEASURETEXTAUTOANGLE     (SDRATTR_MEASURE_FIRST+16) /*   1163 */ /* Pool V4, Nachtrag 25-9-1996 */
-#define SDRATTR_MEASURETEXTAUTOANGLEVIEW (SDRATTR_MEASURE_FIRST+17) /*   1164 */ /* Pool V4, Nachtrag 25-9-1996  */
-#define SDRATTR_MEASURETEXTISFIXEDANGLE  (SDRATTR_MEASURE_FIRST+18) /*   1165 */ /* Pool V4, Nachtrag 25-9-1996  */
-#define SDRATTR_MEASURETEXTFIXEDANGLE    (SDRATTR_MEASURE_FIRST+19) /*   1166 */ /* Pool V4, Nachtrag 25-9-1996  */
+#define SDRATTR_MEASURETEXTAUTOANGLE     (SDRATTR_MEASURE_FIRST+16) /*   1163 */ /* Pool V4, Correction 25-9-1996 */
+#define SDRATTR_MEASURETEXTAUTOANGLEVIEW (SDRATTR_MEASURE_FIRST+17) /*   1164 */ /* Pool V4, Correction 25-9-1996  */
+#define SDRATTR_MEASURETEXTISFIXEDANGLE  (SDRATTR_MEASURE_FIRST+18) /*   1165 */ /* Pool V4, Correction 25-9-1996  */
+#define SDRATTR_MEASURETEXTFIXEDANGLE    (SDRATTR_MEASURE_FIRST+19) /*   1166 */ /* Pool V4, Correction 25-9-1996  */
 #define SDRATTR_MEASUREDECIMALPLACES     (SDRATTR_MEASURE_FIRST+20) /*   1167 */ /* Pool V4 */
 #define SDRATTR_MEASURE_LAST             (SDRATTR_MEASUREDECIMALPLACES) /* 1170   */ /* Pool V4 */
 

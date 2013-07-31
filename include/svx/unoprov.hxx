@@ -28,9 +28,9 @@
 class SvxItemPropertySet;
 class SfxItemPool;
 
-/***********************************************************************
-* class UHashMap                                                       *
-***********************************************************************/
+/**
+ * class UHashMap
+ */
 
 #define UHASHMAP_NOTFOUND sal::static_int_cast< sal_uInt32 >(~0)
 class UHashMap
@@ -42,9 +42,9 @@ public:
     static ::com::sun::star::uno::Sequence< OUString > getServiceNames();
 };
 
-/***********************************************************************
-* Soriterer                                                            *
-***********************************************************************/
+/**
+ * Sorter
+ */
 
 #define SVXMAP_SHAPE                0
 #define SVXMAP_CONNECTOR            1
@@ -73,9 +73,11 @@ public:
 #define SVXMAP_TABLE                24
 #define SVXMAP_PAGE                 25
 #define SVXMAP_END                  26  // last+1 !
-/***********************************************************************
-* SvxUnoPropertyMapProvider                                            *
-***********************************************************************/
+
+/**
+ * SvxUnoPropertyMapProvider
+ */
+
 class SVX_DLLPUBLIC SvxUnoPropertyMapProvider
 {
     SfxItemPropertyMapEntry* aMapArr[SVXMAP_END];
@@ -87,9 +89,9 @@ public:
     const SvxItemPropertySet* GetPropertySet(sal_uInt16 nPropertyId, SfxItemPool& rPool);
 };
 
-/***********************************************************************
-* Globals                                                              *
-***********************************************************************/
+/**
+ * Globals
+ */
 
 const sal_Int16 OBJ_OLE2_APPLET = 100;
 const sal_Int16 OBJ_OLE2_PLUGIN = 101;
@@ -98,9 +100,9 @@ const sal_Int16 OBJ_OLE2_PLUGIN = 101;
 
 #include <editeng/unoipset.hxx>
 
-/***********************************************************************
-* class SvxPropertySetInfoPool                                         *
-***********************************************************************/
+/**
+ * class SvxPropertySetInfoPool
+ */
 
 const sal_Int32 SVXUNO_SERVICEID_COM_SUN_STAR_DRAWING_DEFAULTS = 0;
 const sal_Int32 SVXUNO_SERVICEID_COM_SUN_STAR_DRAWING_DEFAULTS_WRITER = 1;

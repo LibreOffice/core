@@ -41,19 +41,19 @@ struct SVX_DLLPUBLIC SdrDragStatUserData
 
 class SVX_DLLPUBLIC SdrDragStat {
 protected:
-    SdrHdl*  pHdl;      // Der Handle an dem der User zottelt
+    SdrHdl*  pHdl;      // The Handle for the User
     SdrView* pView;
     SdrPageView* pPageView;
-    std::vector<Point*> aPnts;    // Alle bisherigen Punkte: [0]=Start, [Count()-2]=Prev
-    Point     aRef1;     // Referenzpunkt: Resize-Fixpunkt, (Drehachse,
-    Point     aRef2;     // Spiegelachse, ...)
-    Point     aPos0;     // Position beim letzten Event
-    Point     aRealPos0; // Position beim letzten Event
-    Point     aRealNow;  // Aktuelle Dragposition ohne Snap, Ortho und Limit
-    Point     aRealLast; // RealPos des letzten Punkts (fuer MinMoved)
+    std::vector<Point*> aPnts; // All previous Points: [0]=Start, [Count()-2]=Prev
+    Point     aRef1;     // Referencepoint: Resize fixed point, (axis of rotation,
+    Point     aRef2;     // axis of reflection, ...)
+    Point     aPos0;     // Position at the last Event
+    Point     aRealPos0; // Position at the last Event
+    Point     aRealNow;  // Current dragging position without Snap, Ortho and Limit
+    Point     aRealLast; // RealPos of the last Point (for MinMoved)
     Rectangle aActionRect;
 
-    // Reserve fuer kompatible Erweiterungen, die sonst inkompatibel wuerden.
+    // Backup for compatible extensions which otherwise would become incompatible
     Point     aReservePoint1;
     Point     aReservePoint2;
     Point     aReservePoint3;
@@ -139,8 +139,7 @@ public:
     bool         IsNoSnap() const                     { return bWantNoSnap; }
     void         SetNoSnap(bool bOn = true)           { bWantNoSnap=bOn; }
 
-    // And here the Obj say which Ortho (if there is one)
-    // can be usefully applied to him.
+    // And here the Obj say which Ortho (if there is one) can be usefully applied to him.
     // Ortho4 means Ortho in four directions (for Rect and CIRT)
     bool         IsOrtho4Possible() const             { return bOrtho4; }
     void         SetOrtho4Possible(bool bOn = true)   { bOrtho4=bOn; }
@@ -175,7 +174,7 @@ public:
     const Rectangle& GetActionRect() const             { return aActionRect; }
     void             SetActionRect(const Rectangle& rR) { aActionRect=rR; }
 
-    // also considering 1stPointAsCenter
+    // Also considering 1stPointAsCenter
     void TakeCreateRect(Rectangle& rRect) const;
 };
 

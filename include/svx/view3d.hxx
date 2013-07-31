@@ -26,39 +26,37 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include "svx/svxdllapi.h"
 
-//************************************************************
-//   Vorausdeklarationen
-//************************************************************
+/*
+ * Forward declarations
+ */
 
 class E3dObject;
 class E3dScene;
 class Impl3DMirrorConstructOverlay;
 
-/*************************************************************************
-|*
-|* Ableitung von SdrView zur Bearbeitung von 3D-Objekten
-|*
-\************************************************************************/
+/**
+ * Derived class of SdrView to edit 3D objects.
+ */
 
 class SVX_DLLPUBLIC E3dView : public SdrView
 {
 protected:
     E3dDefaultAttributes        a3DDefaultAttr;
-    MouseEvent                  aMouseEvent;                    // Die Parameter der letzten Events (Mouse, Keyboard)
-    Color                       aDefaultLightColor;             // dito mit den Farben
+    MouseEvent                  aMouseEvent;                    // The parameters of the last Events (Mouse, Keyboard)
+    Color                       aDefaultLightColor;             // The paramaters for the last colors
     Color                       aDefaultAmbientColor;
 
-    double                      fDefaultScaleX;                 // Verzerrungen
+    double                      fDefaultScaleX;                 // Scaling
     double                      fDefaultScaleY;
     double                      fDefaultScaleZ;
-    double                      fDefaultRotateX;                // und Drehungen
+    double                      fDefaultRotateX;                // and Rotation
     double                      fDefaultRotateY;
     double                      fDefaultRotateZ;
-    double                      fDefaultExtrusionDeepth;        // Extrusionstiefe
-    double                      fDefaultLightIntensity;         // Intensitaeten der beiden (notwendigen) Licht-
-    double                      fDefaultAmbientIntensity;       // quellen
-    long                        nHDefaultSegments;              // wieviele HSegmente braucht mein Lathe-Ojekt
-    long                        nVDefaultSegments;              // wieviele VSegmente braucht mein Lathe-Ojekt
+    double                      fDefaultExtrusionDeepth;        // Extrusion depth
+    double                      fDefaultLightIntensity;         // Intensity of the two (necessary) light sources.
+    double                      fDefaultAmbientIntensity;
+    long                        nHDefaultSegments;              // Amount of HSegments required by the Lathe object
+    long                        nVDefaultSegments;              // Amount of VSegments required by the Lathe object
 
     E3dDragConstraint           eDragConstraint;
 
@@ -83,24 +81,22 @@ public:
     E3dView(SdrModel* pModel, OutputDevice* pOut = 0L);
     virtual ~E3dView();
 
-    // Alle markierten Objekte auf dem angegebenen OutputDevice ausgeben.
+    // Output all marked Objects on the given OutputDevice.
     virtual void DrawMarkedObj(OutputDevice& rOut) const;
 
-    // Zugriff auf die Default-Attribute
+    // Access to the default attributes.
     E3dDefaultAttributes& Get3DDefaultAttributes() { return a3DDefaultAttr; }
     virtual sal_Bool BegDragObj(const Point& rPnt, OutputDevice* pOut = NULL, SdrHdl* pHdl = NULL, short nMinMov = -3, SdrDragMethod* pForcedMeth = NULL);
     virtual void CheckPossibilities();
 
-    // Event setzen/rausruecken
+    // Get/Set Event
     void SetMouseEvent(const MouseEvent& rNew) { aMouseEvent = rNew; }
     const MouseEvent& GetMouseEvent() { return aMouseEvent; }
 
-    // Model holen ueberladen, da bei einzelnen 3D Objekten noch eine Szene
-    // untergeschoben werden muss
+    // Override getting the model, as we need to supply a Scene together with individual 3D Objects.
     virtual SdrModel* GetMarkedObjModel() const;
 
-    // Bei Paste muss - falls in eine Scene eingefuegt wird - die
-    // Objekte der Szene eingefuegt werden, die Szene selbst aber nicht
+    // On Paste: We need to insert the objects of the Scene, but not the Scene itself
     using SdrView::Paste;
     virtual sal_Bool Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* pLst=NULL, sal_uInt32 nOptions=0);
 
@@ -110,14 +106,13 @@ public:
     bool IsConvertTo3DObjPossible() const;
     void ConvertMarkedObjTo3D(bool bExtrude=true, basegfx::B2DPoint aPnt1 = basegfx::B2DPoint(0.0, 0.0), basegfx::B2DPoint aPnt2 = basegfx::B2DPoint(0.0, 1.0));
 
-    // Nachtraeglichhe Korrekturmoeglichkeit um alle Extrudes in einer
-    // bestimmten Tiefensortierung anzulegen
+    // Means to create all Extrudes in a certain depth order.
     void DoDepthArrange(E3dScene* pScene, double fDepth);
     void ConvertMarkedToPolyObj(sal_Bool bLineToArea);
     E3dScene* SetCurrent3DObj(E3dObject* p3DObj);
     void Start3DCreation();
 
-    // migration of overlay
+    // Migration of overlay
     bool Is3DRotationCreationActive() const { return (0L != mpMirrorOverlay); }
 
     virtual void MovAction(const Point& rPnt);
@@ -261,6 +256,6 @@ public:
     void Set3DAttributes(const SfxItemSet& rAttr, E3dScene* pInScene = NULL, sal_Bool bOnly3DAttr=sal_False);
 };
 
-#endif          // _E3D_VIEW3D_HXX
+#endif // _E3D_VIEW3D_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
