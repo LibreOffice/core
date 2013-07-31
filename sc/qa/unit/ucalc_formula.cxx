@@ -1064,6 +1064,24 @@ void Test::testFormulaRefUpdateNamedExpression()
     CPPUNIT_ASSERT_EQUAL(34.0, m_pDoc->GetValue(ScAddress(2,7,0)));
 #endif
 
+    // Clear all and start over.
+    clearRange(m_pDoc, ScRange(0,0,0,100,100,0));
+    pGlobalNames->clear();
+
+    pName = new ScRangeData(
+        m_pDoc, "MyRange", "$B$1:$C$6", ScAddress(0,0,0), RT_NAME, formula::FormulaGrammar::GRAM_NATIVE);
+    bInserted = pGlobalNames->insert(pName);
+    CPPUNIT_ASSERT_MESSAGE("Failed to insert a new name.", bInserted);
+    pName->GetSymbol(aExpr);
+    CPPUNIT_ASSERT_EQUAL(OUString("$B$1:$C$6"), aExpr);
+
+    // Insert range of cells to shift right. The range partially overlaps the named range.
+    m_pDoc->InsertCol(ScRange(2,4,0,3,8,0));
+
+    // This should not alter the range.
+    pName->GetSymbol(aExpr);
+    CPPUNIT_ASSERT_EQUAL(OUString("$B$1:$C$6"), aExpr);
+
     m_pDoc->DeleteTab(0);
 }
 
