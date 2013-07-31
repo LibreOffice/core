@@ -61,7 +61,7 @@ extern sdecl::ServiceDecl const serviceDecl;
 
 namespace
 {
-    static struct ::cppu::ImplementationEntry s_aServiceEntries[] =
+    static const struct ::cppu::ImplementationEntry s_aServiceEntries[] =
     {
         {
             ::svt::uno::Wizard::Create,

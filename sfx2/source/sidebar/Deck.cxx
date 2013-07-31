@@ -361,7 +361,7 @@ const char* GetWindowClassification (const Window* pWindow)
     }
     else
     {
-        static char msWindow[] = "window";
+        static const char msWindow[] = "window";
         return msWindow;
     }
 }

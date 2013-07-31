@@ -25,9 +25,9 @@ struct TokenTable { SbiToken t; const char *s; };
 
 static short nToken;                    // number of tokens
 
-static TokenTable* pTokTable;
+static const TokenTable* pTokTable;
 
-static TokenTable aTokTable_Basic [] = {
+static const TokenTable aTokTable_Basic [] = {
     { CAT,      "&" },
     { MUL,      "*" },
     { PLUS,     "+" },
@@ -220,7 +220,7 @@ SbiTokenizer::SbiTokenizer( const OUString& rSrc, StarBASIC* pb )
     bEos = bKeywords = bErrorIsSymbol = true;
     if( !nToken )
     {
-        TokenTable *tp;
+        const TokenTable *tp;
         for( nToken = 0, tp = pTokTable; tp->t; nToken++, tp++ )
         {}
     }
@@ -297,7 +297,7 @@ const OUString& SbiTokenizer::Symbol( SbiToken t )
     default:
         break;
     }
-    TokenTable* tp = pTokTable;
+    const TokenTable* tp = pTokTable;
     for( short i = 0; i < nToken; i++, tp++ )
     {
         if( tp->t == t )
@@ -336,7 +336,7 @@ SbiToken SbiTokenizer::Next()
         bEos = IsEoln( eCurTok );
         return eCurTok;
     }
-    TokenTable *tp;
+    const TokenTable *tp;
 
     if( !NextSym() )
     {

@@ -1331,7 +1331,7 @@ static bool lcl_isLeapYear(const sal_uInt32 nYear)
 static sal_uInt16
 lcl_MaxDaysPerMonth(const sal_Int32 nMonth, const sal_Int32 nYear)
 {
-    static sal_uInt16 s_MaxDaysPerMonth[12] =
+    static const sal_uInt16 s_MaxDaysPerMonth[12] =
         { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
     OSL_ASSERT(0 < nMonth && nMonth <= 12);
     if ((2 == nMonth) && lcl_isLeapYear(nYear))

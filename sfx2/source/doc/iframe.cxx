@@ -77,7 +77,7 @@ IFrameWindow_Impl::IFrameWindow_Impl( Window *pParent, sal_Bool bHasBorder, WinB
 
 const SfxItemPropertyMapEntry* lcl_GetIFramePropertyMap_Impl()
 {
-    static SfxItemPropertyMapEntry aIFramePropertyMap_Impl[] =
+    static const SfxItemPropertyMapEntry aIFramePropertyMap_Impl[] =
     {
         { MAP_CHAR_LEN("FrameIsAutoBorder"),    WID_FRAME_IS_AUTO_BORDER,   &::getBooleanCppuType(), PROPERTY_UNBOUND, 0 },
         { MAP_CHAR_LEN("FrameIsAutoScroll"),    WID_FRAME_IS_AUTO_SCROLL,   &::getBooleanCppuType(), PROPERTY_UNBOUND, 0 },

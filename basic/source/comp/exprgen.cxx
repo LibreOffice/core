@@ -28,7 +28,7 @@ typedef struct {
         SbiOpcode eOp;                  // Opcode
 } OpTable;
 
-static OpTable aOpTable [] = {
+static const OpTable aOpTable [] = {
     { EXPON,_EXP },
     { MUL,  _MUL },
     { DIV,  _DIV },
@@ -156,7 +156,7 @@ void SbiExprNode::Gen( RecursiveMode eRecMode )
         {
             pRight->Gen();
         }
-        for( OpTable* p = aOpTable; p->eTok != NIL; p++ )
+        for( const OpTable* p = aOpTable; p->eTok != NIL; p++ )
         {
             if( p->eTok == eTok )
             {

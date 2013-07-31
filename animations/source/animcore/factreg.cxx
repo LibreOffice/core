@@ -40,7 +40,7 @@ using namespace animcore;
     0, 0\
 }\
 
-static struct ImplementationEntry g_entries[] =
+static const struct ImplementationEntry g_entries[] =
 {
     IMPLEMENTATION_ENTRY( PAR ),
     IMPLEMENTATION_ENTRY( SEQ ),

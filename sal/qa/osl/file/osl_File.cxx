@@ -6198,9 +6198,9 @@ namespace osl_Directory
 #ifdef WNT
 
         //##########################################
-        char* get_unused_drive_letter()
+        const char* get_unused_drive_letter()
         {
-            static char m_aBuff[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            static const char m_aBuff[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
             DWORD ld = GetLogicalDrives();
             DWORD i = 4;
@@ -6218,7 +6218,7 @@ namespace osl_Directory
         //##########################################
         void at_invalid_logical_drive()
         {
-            char* drv = get_unused_drive_letter();
+            const char* drv = get_unused_drive_letter();
             char buff[PATH_BUFFER_SIZE];
             memset(buff, 0, sizeof(buff));
 

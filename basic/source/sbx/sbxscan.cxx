@@ -288,7 +288,7 @@ SbxError SbxValue::ScanNumIntnl( const OUString& rSrc, double& nVal, bool bSingl
 }
 
 
-static double roundArray[] = {
+static const double roundArray[] = {
     5.0e+0, 0.5e+0, 0.5e-1, 0.5e-2, 0.5e-3, 0.5e-4, 0.5e-5, 0.5e-6, 0.5e-7,
     0.5e-8, 0.5e-9, 0.5e-10,0.5e-11,0.5e-12,0.5e-13,0.5e-14,0.5e-15 };
 

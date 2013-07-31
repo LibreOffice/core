@@ -38,7 +38,7 @@ struct SbiStatement {
 #define Y   sal_True
 #define N   sal_False
 
-static SbiStatement StmntTable [] = {
+static const SbiStatement StmntTable [] = {
 { ATTRIBUTE, &SbiParser::Attribute, Y, Y, }, // ATTRIBUTE
 { CALL,     &SbiParser::Call,       N, Y, }, // CALL
 { CLOSE,    &SbiParser::Close,      N, Y, }, // CLOSE
@@ -409,7 +409,7 @@ bool SbiParser::Parse()
 
         // statement parsers
 
-        SbiStatement* p;
+        const SbiStatement* p;
         for( p = StmntTable; p->eTok != NIL; p++ )
             if( p->eTok == eCurTok )
                 break;
