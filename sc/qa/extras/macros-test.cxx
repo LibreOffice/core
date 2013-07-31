@@ -39,11 +39,13 @@ public:
 
     void testStarBasic();
     void testVba();
+    void testMSP();
     CPPUNIT_TEST_SUITE(ScMacrosTest);
 #if !defined(MACOSX)
     //enable this test if you want to play with star basic macros in unit tests
     //works but does nothing useful yet
     CPPUNIT_TEST(testStarBasic);
+    CPPUNIT_TEST(testMSP);
     CPPUNIT_TEST(testVba);
 #endif
 
@@ -52,6 +54,44 @@ public:
 private:
     uno::Reference<uno::XInterface> m_xCalcComponent;
 };
+
+// I suppose you could say this test doesn't really belong here, OTOH
+// we need a full document to run the test ( it related originally to an
+// imported Excel VBA macro ) It's convenient and fast to unit test
+// this the problem this way. Perhaps in the future there will be some sort
+// of slowcheck tests ( requiring a full document environment in the scripting
+// module, we could move the test there then ) - relates to fdo#67547
+void ScMacrosTest::testMSP()
+{
+    const OUString aFileNameBase("MasterScriptProviderProblem.ods");
+    OUString aFileName;
+    createFileURL(aFileNameBase, aFileName);
+    std::cout << "MasterScriptProviderProblem (fdo#67547) test" << std::endl;
+    uno::Reference< com::sun::star::lang::XComponent > xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to load MasterScriptProviderProblem.ods", xComponent.is());
+
+    OUString aURL("vnd.sun.Star.script:Standard.Module1.TestMSP?language=Basic&location=document");
+    String sUrl = aURL;
+    Any aRet;
+    Sequence< sal_Int16 > aOutParamIndex;
+    Sequence< Any > aOutParam;
+    Sequence< uno::Any > aParams;
+
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
+    ScDocShell* xDocSh = static_cast<ScDocShell*>(pFoundShell);
+    ScDocument* pDoc = xDocSh->GetDocument();
+
+    pFoundShell->CallXScript(xComponent, sUrl, aParams, aRet, aOutParamIndex,aOutParam);
+    OUString sResult;
+    aRet >>= sResult;
+
+    std::cout << "Result is " << sResult << std::endl;
+    CPPUNIT_ASSERT_MESSAGE("TestMSP ( for fdo#67547) failed", sResult == "OK" );
+    xDocSh->DoClose();
+}
 
 void ScMacrosTest::testStarBasic()
 {
