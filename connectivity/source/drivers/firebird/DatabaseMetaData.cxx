@@ -1012,7 +1012,8 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumnPrivileges(
              "Table: " << sTable
              << " & ColumnNamePattern: " << sColumnNamePattern);
 
-    ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTables);
+    ODatabaseMetaDataResultSet* pResultSet = new
+        ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eColumnPrivileges);
     uno::Reference< XResultSet > xResultSet = pResultSet;
     uno::Reference< XStatement > statement = m_pConnection->createStatement();
 
@@ -1297,7 +1298,8 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
 
         aResults.push_back(aCurrentRow);
     }
-    ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTables);
+    ODatabaseMetaDataResultSet* pResultSet = new
+            ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eColumns);
     uno::Reference< XResultSet > xResultSet = pResultSet;
     pResultSet->setRows( aResults );
 
@@ -1318,7 +1320,8 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
     SAL_INFO("connectivity.firebird", "getTables() with "
              "TableNamePattern: " << tableNamePattern);
 
-    ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTables);
+    ODatabaseMetaDataResultSet* pResultSet = new
+        ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTables);
     uno::Reference< XResultSet > xResultSet = pResultSet;
     uno::Reference< XStatement > statement = m_pConnection->createStatement();
 
@@ -1510,7 +1513,8 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getPrimaryKeys(
 
         aResults.push_back(aCurrentRow);
     }
-    ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTables);
+    ODatabaseMetaDataResultSet* pResultSet = new
+            ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::ePrimaryKeys);
     uno::Reference< XResultSet > xResultSet = pResultSet;
     pResultSet->setRows( aResults );
 
@@ -1553,7 +1557,8 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
     SAL_INFO("connectivity.firebird", "getTablePrivileges() with "
              "TableNamePattern: " << sTableNamePattern);
 
-    ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTables);
+    ODatabaseMetaDataResultSet* pResultSet = new
+        ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTablePrivileges);
     uno::Reference< XResultSet > xResultSet = pResultSet;
     uno::Reference< XStatement > statement = m_pConnection->createStatement();
 
