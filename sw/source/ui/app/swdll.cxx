@@ -18,7 +18,6 @@
  */
 
 #include <svx/svdobj.hxx>
-#include <rtl/logfile.hxx>
 
 #include "globdoc.hrc"
 
@@ -77,8 +76,6 @@ namespace SwGlobals
 
 SwDLL::SwDLL()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDLL" );
-
     // the SdModule must be created
     SwModule** ppShlPtr = (SwModule**) GetAppData(SHL_WRITER);
     if ( *ppShlPtr )
@@ -117,8 +114,7 @@ SwDLL::SwDLL()
 
     SdrObjFactory::InsertMakeObjectHdl( LINK( &aSwObjectFactory, SwObjectFactory, MakeObject ) );
 
-    RTL_LOGFILE_CONTEXT_TRACE( aLog, "Init Core/UI/Filter" );
-
+    SAL_INFO( "sw.ui", "Init Core/UI/Filter" );
     // Initialisation of Statics
     ::_InitCore();
     filters_.reset(new sw::Filters);
