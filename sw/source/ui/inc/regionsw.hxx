@@ -207,33 +207,31 @@ public:
 
 class SwSectionFtnEndTabPage : public SfxTabPage
 {
-    FixedLine       aFtnFL;
-    CheckBox        aFtnNtAtTextEndCB;
+    CheckBox*        pFtnNtAtTextEndCB;
 
-    CheckBox        aFtnNtNumCB;
-    FixedText       aFtnOffsetLbl;
-    NumericField    aFtnOffsetFld;
+    CheckBox*        pFtnNtNumCB;
+    FixedText*       pFtnOffsetLbl;
+    NumericField*    pFtnOffsetFld;
 
-    CheckBox        aFtnNtNumFmtCB;
-    FixedText       aFtnPrefixFT;
-    Edit            aFtnPrefixED;
-    SwNumberingTypeListBox   aFtnNumViewBox;
-    FixedText       aFtnSuffixFT;
-    Edit            aFtnSuffixED;
+    CheckBox*        pFtnNtNumFmtCB;
+    FixedText*       pFtnPrefixFT;
+    Edit*            pFtnPrefixED;
+    SwNumberingTypeListBox*   pFtnNumViewBox;
+    FixedText*       pFtnSuffixFT;
+    Edit*            pFtnSuffixED;
 
-    FixedLine       aEndFL;
-    CheckBox        aEndNtAtTextEndCB;
+    CheckBox*        pEndNtAtTextEndCB;
 
-    CheckBox        aEndNtNumCB;
-    FixedText       aEndOffsetLbl;
-    NumericField    aEndOffsetFld;
+    CheckBox*        pEndNtNumCB;
+    FixedText*       pEndOffsetLbl;
+    NumericField*    pEndOffsetFld;
 
-    CheckBox        aEndNtNumFmtCB;
-    FixedText       aEndPrefixFT;
-    Edit            aEndPrefixED;
-    SwNumberingTypeListBox   aEndNumViewBox;
-    FixedText       aEndSuffixFT;
-    Edit            aEndSuffixED;
+    CheckBox*        pEndNtNumFmtCB;
+    FixedText*       pEndPrefixFT;
+    Edit*            pEndPrefixED;
+    SwNumberingTypeListBox*   pEndNumViewBox;
+    FixedText*       pEndSuffixFT;
+    Edit*            pEndSuffixED;
 
 
     DECL_LINK( FootEndHdl, CheckBox * );
