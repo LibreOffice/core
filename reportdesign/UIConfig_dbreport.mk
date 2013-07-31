@@ -36,5 +36,6 @@ $(eval $(call gb_UIConfig_add_toolbarfiles,modules/dbreport,\
 
 $(eval $(call gb_UIConfig_add_uifiles,modules/dbreport,\
 	reportdesign/uiconfig/dbreport/ui/pagenumberdialog \
+	reportdesign/uiconfig/dbreport/ui/datetimedialog \
 ))
 # vim: set noet sw=4 ts=4:
