@@ -101,11 +101,11 @@ KeyCode::KeyCode( const ResId& rResId )
 
 // -----------------------------------------------------------------------
 
-XubString KeyCode::GetName( Window* pWindow ) const
+OUString KeyCode::GetName( Window* pWindow ) const
 {
     if ( !pWindow )
         pWindow = ImplGetDefaultWindow();
-    return pWindow ? XubString( pWindow->ImplGetFrame()->GetKeyName( GetFullCode() ) ) : XubString();
+    return pWindow ? pWindow->ImplGetFrame()->GetKeyName( GetFullCode() ) : "";
 }
 
 // -----------------------------------------------------------------------

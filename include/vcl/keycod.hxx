@@ -70,7 +70,7 @@ public:
     sal_uInt16      GetGroup() const
                     { return (nCode & KEYGROUP_TYPE); }
 
-    XubString   GetName( Window* pWindow = NULL ) const;
+    OUString        GetName( Window* pWindow = NULL ) const;
 
     sal_Bool        IsFunction() const
                     { return ((eFunc != KEYFUNC_DONTKNOW) ? sal_True : sal_False); }
