@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "DateTime.hxx"
-#include "DateTime.hrc"
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <tools/debug.hxx>
 #include "RptResId.hrc"
@@ -52,23 +51,21 @@ DBG_NAME( rpt_ODateTimeDialog )
 ODateTimeDialog::ODateTimeDialog( Window* _pParent
                                            ,const uno::Reference< report::XSection >& _xHoldAlive
                                            ,OReportController* _pController)
-    : ModalDialog( _pParent, ModuleRes(RID_DATETIME_DLG) )
-    ,m_aDate(this,           ModuleRes(CB_DATE      ) )
-    ,m_aFTDateFormat(this,   ModuleRes(FT_DATE_FORMAT   ) )
-    ,m_aDateListBox(this,    ModuleRes(LB_DATE_TYPE ) )
-    ,m_aFL0(this,            ModuleRes(FL_SEPARATOR0        ) )
-    ,m_aTime(this,           ModuleRes(CB_TIME      ) )
-    ,m_aFTTimeFormat(this,   ModuleRes(FT_TIME_FORMAT ) )
-    ,m_aTimeListBox(this,    ModuleRes(LB_TIME_TYPE ) )
-    ,m_aFL1(this,         ModuleRes(FL_SEPARATOR1) )
-    ,m_aPB_OK(this,     ModuleRes(PB_OK))
-    ,m_aPB_CANCEL(this, ModuleRes(PB_CANCEL))
-    ,m_aPB_Help(this,   ModuleRes(PB_HELP))
+    : ModalDialog( _pParent, "DateTimeDialog" , "modules/dbreport/ui/datetimedialog.ui" )
+
     ,m_aDateControlling()
     ,m_aTimeControlling()
     ,m_pController(_pController)
     ,m_xHoldAlive(_xHoldAlive)
 {
+    get(m_pDate,"date");
+    get(m_pFTDateFormat,"datelistbox_label");
+    get(m_pDateListBox,"datelistbox");
+    get(m_pTime,"time");
+    get(m_pFTTimeFormat,"timelistbox_label");
+    get(m_pTimeListBox,"timelistbox");
+    get(m_pPB_OK,"ok");
+
     DBG_CTOR( rpt_ODateTimeDialog,NULL);
 
     try
@@ -83,29 +80,28 @@ ODateTimeDialog::ODateTimeDialog( Window* _pParent
     {
     }
 
-    m_aDateListBox.SetDropDownLineCount(20);
-    m_aDateListBox.SelectEntryPos(0);
+    m_pDateListBox->SetDropDownLineCount(20);
+    m_pDateListBox->SelectEntryPos(0);
 
-    m_aTimeListBox.SetDropDownLineCount(20);
-    m_aTimeListBox.SelectEntryPos(0);
+    m_pTimeListBox->SetDropDownLineCount(20);
+    m_pTimeListBox->SelectEntryPos(0);
 
     // use nice enhancement, to toggle enable/disable if a checkbox is checked or not
-    m_aDateControlling.enableOnCheckMark( m_aDate, m_aFTDateFormat, m_aDateListBox);
-    m_aTimeControlling.enableOnCheckMark( m_aTime, m_aFTTimeFormat, m_aTimeListBox);
+    m_aDateControlling.enableOnCheckMark( *m_pDate, *m_pFTDateFormat, *m_pDateListBox);
+    m_aTimeControlling.enableOnCheckMark( *m_pTime, *m_pFTTimeFormat, *m_pTimeListBox);
 
-    CheckBox* pCheckBoxes[] = { &m_aDate,&m_aTime};
+    CheckBox* pCheckBoxes[] = { m_pDate,m_pTime};
     for ( size_t i = 0 ; i < sizeof(pCheckBoxes)/sizeof(pCheckBoxes[0]); ++i)
         pCheckBoxes[i]->SetClickHdl(LINK(this,ODateTimeDialog,CBClickHdl));
 
-    FreeResource();
 }
 // -----------------------------------------------------------------------------
     void ODateTimeDialog::InsertEntry(sal_Int16 _nNumberFormatId)
     {
         const bool bTime = util::NumberFormat::TIME == _nNumberFormatId;
-        ListBox* pListBox = &m_aDateListBox;
+        ListBox* pListBox = m_pDateListBox;
         if ( bTime )
-            pListBox = &m_aTimeListBox;
+            pListBox = m_pTimeListBox;
 
         const uno::Reference< util::XNumberFormatter> xNumberFormatter = m_pController->getReportNumberFormatter();
         const uno::Reference< util::XNumberFormats> xFormats = xNumberFormatter->getNumberFormatsSupplier()->getNumberFormats();
@@ -128,7 +124,7 @@ short ODateTimeDialog::Execute()
 {
     DBG_CHKTHIS( rpt_ODateTimeDialog,NULL);
     short nRet = ModalDialog::Execute();
-    if ( nRet == RET_OK && (m_aDate.IsChecked() || m_aTime.IsChecked()) )
+    if ( nRet == RET_OK && (m_pDate->IsChecked() || m_pTime->IsChecked()) )
     {
         try
         {
@@ -138,10 +134,10 @@ short ODateTimeDialog::Execute()
             aValues[nLength++].Value <<= m_xHoldAlive;
 
             aValues[nLength].Name = PROPERTY_TIME_STATE;
-            aValues[nLength++].Value <<= m_aTime.IsChecked();
+            aValues[nLength++].Value <<= m_pTime->IsChecked();
 
             aValues[nLength].Name = PROPERTY_DATE_STATE;
-            aValues[nLength++].Value <<= m_aDate.IsChecked();
+            aValues[nLength++].Value <<= m_pDate->IsChecked();
 
             aValues[nLength].Name = PROPERTY_FORMATKEYDATE;
             aValues[nLength++].Value <<= getFormatKey(sal_True);
@@ -150,14 +146,14 @@ short ODateTimeDialog::Execute()
             aValues[nLength++].Value <<= getFormatKey(sal_False);
 
             sal_Int32 nWidth = 0;
-            if ( m_aDate.IsChecked() )
+            if ( m_pDate->IsChecked() )
             {
-                String sDateFormat = m_aDateListBox.GetEntry( m_aDateListBox.GetSelectEntryPos() );
+                String sDateFormat = m_pDateListBox->GetEntry( m_pDateListBox->GetSelectEntryPos() );
                 nWidth = LogicToLogic(PixelToLogic(Size(GetCtrlTextWidth(sDateFormat),0)).Width(),GetMapMode().GetMapUnit(),MAP_100TH_MM);
             }
-            if ( m_aTime.IsChecked() )
+            if ( m_pTime->IsChecked() )
             {
-                String sDateFormat = m_aTimeListBox.GetEntry( m_aTimeListBox.GetSelectEntryPos() );
+                String sDateFormat = m_pTimeListBox->GetEntry( m_pTimeListBox->GetSelectEntryPos() );
                 nWidth = ::std::max<sal_Int32>(LogicToLogic(PixelToLogic(Size(GetCtrlTextWidth(sDateFormat),0)).Width(),GetMapMode().GetMapUnit(),MAP_100TH_MM),nWidth);
             }
 
@@ -207,17 +203,17 @@ IMPL_LINK( ODateTimeDialog, CBClickHdl, CheckBox*, _pBox )
    (void)_pBox;
     DBG_CHKTHIS( rpt_ODateTimeDialog,NULL);
 
-     if ( _pBox == &m_aDate || _pBox == &m_aTime)
+     if ( _pBox == m_pDate || _pBox == m_pTime)
      {
-         sal_Bool bDate = m_aDate.IsChecked();
-        sal_Bool bTime = m_aTime.IsChecked();
+         sal_Bool bDate = m_pDate->IsChecked();
+        sal_Bool bTime = m_pTime->IsChecked();
         if (!bDate && !bTime)
         {
-            m_aPB_OK.Disable();
+            m_pPB_OK->Disable();
         }
         else
         {
-            m_aPB_OK.Enable();
+            m_pPB_OK->Enable();
         }
     }
     return 1L;
@@ -229,11 +225,11 @@ sal_Int32 ODateTimeDialog::getFormatKey(sal_Bool _bDate) const
     sal_Int32 nFormatKey;
     if ( _bDate )
     {
-         nFormatKey = static_cast<sal_Int32>(reinterpret_cast<sal_IntPtr>(m_aDateListBox.GetEntryData( m_aDateListBox.GetSelectEntryPos() )));
+         nFormatKey = static_cast<sal_Int32>(reinterpret_cast<sal_IntPtr>(m_pDateListBox->GetEntryData( m_pDateListBox->GetSelectEntryPos() )));
     }
     else
     {
-         nFormatKey = static_cast<sal_Int32>(reinterpret_cast<sal_IntPtr>(m_aTimeListBox.GetEntryData( m_aTimeListBox.GetSelectEntryPos() )));
+         nFormatKey = static_cast<sal_Int32>(reinterpret_cast<sal_IntPtr>(m_pTimeListBox->GetEntryData( m_pTimeListBox->GetSelectEntryPos() )));
     }
     return nFormatKey;
 }

@@ -40,17 +40,15 @@ class OReportController;
 \************************************************************************/
 class ODateTimeDialog : public ModalDialog
 {
-    CheckBox                                m_aDate;
-    FixedText                               m_aFTDateFormat;
-    ListBox                                 m_aDateListBox;
-    FixedLine                               m_aFL0;
-    CheckBox                                m_aTime;
-    FixedText                               m_aFTTimeFormat;
-    ListBox                                 m_aTimeListBox;
-    FixedLine                               m_aFL1;
-    OKButton                                m_aPB_OK;
-    CancelButton                            m_aPB_CANCEL;
-    HelpButton                              m_aPB_Help;
+    CheckBox*                                m_pDate;
+    FixedText*                               m_pFTDateFormat;
+    ListBox*                                 m_pDateListBox;
+    CheckBox*                                m_pTime;
+    FixedText*                               m_pFTTimeFormat;
+    ListBox*                                 m_pTimeListBox;
+    OKButton*                                m_pPB_OK;
+    CancelButton*                            m_pPB_CANCEL;
+    HelpButton*                              m_pPB_Help;
 
 
     svt::ControlDependencyManager           m_aDateControlling;
