@@ -45,12 +45,13 @@ $(eval $(call gb_CustomTarget_register_targets,setup_native/scripts,\
 $(scripts_WORKDIR)/getuid.so.stripped: $(call gb_Library_get_target,getuid)
 	cp $< $@
 	/usr/ccs/bin/strip $@
+
 $(scripts_WORKDIR)/install: $(SRCDIR)/setup_native/scripts/install_solaris.sh $(scripts_WORKDIR)/getuid.so.stripped
-	$(PERL) -w $(SRCDIR)/setup_native/scripts/install_create.pl $< $@
+	$(PERL) -w $(SRCDIR)/setup_native/scripts/install_create.pl $^ $@
 	chmod 775 $@
 
 $(scripts_WORKDIR)/uninstall: $(SRCDIR)/setup_native/scripts/uninstall_solaris.sh $(scripts_WORKDIR)/getuid.so.stripped
-	$(PERL) -w $(SRCDIR)/setup_native/scripts/install_create.pl $< $@
+	$(PERL) -w $(SRCDIR)/setup_native/scripts/install_create.pl $^ $@
 	chmod 775 $@
 endif
 
