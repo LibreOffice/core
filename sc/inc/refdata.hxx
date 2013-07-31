@@ -62,12 +62,12 @@ public:
     void InitAddressRel( const ScAddress& rAdr, const ScAddress& rPos );
     sal_uInt8 FlagValue() const;
 
-    inline  void SetColRel( bool bVal ) { Flags.bColRel = (bVal ? true : false ); }
-    inline  bool IsColRel() const{ return Flags.bColRel; }
-    inline  void SetRowRel( bool bVal ) { Flags.bRowRel = (bVal ? true : false ); }
-    inline  bool IsRowRel() const { return Flags.bRowRel; }
-    inline  void SetTabRel( bool bVal ) { Flags.bTabRel = (bVal ? true : false ); }
-    inline  bool IsTabRel() const       { return Flags.bTabRel; }
+    void SetColRel( bool bVal ) { Flags.bColRel = bVal; }
+    bool IsColRel() const { return Flags.bColRel; }
+    void SetRowRel( bool bVal ) { Flags.bRowRel = bVal; }
+    bool IsRowRel() const { return Flags.bRowRel; }
+    void SetTabRel( bool bVal ) { Flags.bTabRel = bVal; }
+    bool IsTabRel() const { return Flags.bTabRel; }
 
     void SetAbsCol( SCCOL nVal );
     void SetRelCol( SCCOL nVal );
@@ -87,10 +87,10 @@ public:
     bool IsTabDeleted() const;
     bool IsDeleted() const;
 
-    inline  void SetFlag3D( bool bVal ) { Flags.bFlag3D = (bVal ? true : false ); }
-    inline  bool IsFlag3D() const       { return Flags.bFlag3D; }
-    inline  void SetRelName( bool bVal )    { Flags.bRelName = (bVal ? true : false ); }
-    inline  bool IsRelName() const          { return Flags.bRelName; }
+    void SetFlag3D( bool bVal ) { Flags.bFlag3D = bVal; }
+    bool IsFlag3D() const { return Flags.bFlag3D; }
+    void SetRelName( bool bVal ) { Flags.bRelName = bVal; }
+    bool IsRelName() const { return Flags.bRelName; }
 
     bool Valid() const;
     bool ColValid() const;
@@ -105,8 +105,8 @@ public:
     SCCOL Col() const;
     SCTAB Tab() const;
 
-            bool operator==( const ScSingleRefData& ) const;
-            bool operator!=( const ScSingleRefData& ) const;
+    bool operator==( const ScSingleRefData& ) const;
+    bool operator!=( const ScSingleRefData& ) const;
 
 #if DEBUG_FORMULA_COMPILER
     void Dump( int nIndent = 0 ) const;
