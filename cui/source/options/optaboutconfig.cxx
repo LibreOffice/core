@@ -95,9 +95,21 @@ void CuiAboutConfigTabPage::Reset( const SfxItemSet& )
    m_pDefaultBtn->Enable(sal_False);
    m_pEditBtn->Enable(sal_False);
 
-   Reference< XNameAccess > xConfigAccess = getConfigAccess( sRootNodePath, sal_False );
+   OUString array[ 3 ] = {
+           "/org.openoffice.Office.Common",
+           "/org.openoffice.Office.Math",
+           "/org.openoffice.Office.Addons" };
 
-   FillItems( xConfigAccess, sRootNodePath );
+    for (sal_Int16 nInd = 0; nInd < 3 ; ++nInd )
+    {
+        sRootNodePath = array[nInd];
+        Reference< XNameAccess > xConfigAccess = getConfigAccess( sRootNodePath, sal_False );
+        FillItems( xConfigAccess, sRootNodePath );
+    }
+
+   //Reference< XNameAccess > xConfigAccess = getConfigAccess( sRootNodePath, sal_False );
+
+   //FillItems( xConfigAccess, sRootNodePath );
 }
 
 void CuiAboutConfigTabPage::FillItems( Reference< XNameAccess >xNameAccess, OUString sPath)
