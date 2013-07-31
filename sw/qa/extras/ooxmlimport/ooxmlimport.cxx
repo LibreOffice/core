@@ -948,7 +948,7 @@ void Test::testN779627()
 void Test::testFdo55187()
 {
     // 0x010d was imported as a newline.
-    getParagraph(1, OUString("lupčka", 7, RTL_TEXTENCODING_UTF8));
+    getParagraph(1, OUString("lup\xc4\x8dka", 7, RTL_TEXTENCODING_UTF8));
 }
 
 void Test::testN780563()

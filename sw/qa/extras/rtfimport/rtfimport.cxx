@@ -547,7 +547,7 @@ void Test::testFdo45394()
     uno::Reference<text::XText> xHeaderText = getProperty< uno::Reference<text::XText> >(getStyles("PageStyles")->getByName(DEFAULT_STYLE), "HeaderText");
     OUString aActual = xHeaderText->getString();
     // Encoding in the header was wrong.
-    OUString aExpected("ПК РИК", 11, RTL_TEXTENCODING_UTF8);
+    OUString aExpected("\xd0\x9f\xd0\x9a \xd0\xa0\xd0\x98\xd0\x9a", 11, RTL_TEXTENCODING_UTF8);
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
@@ -574,7 +574,7 @@ void Test::testFdo45182()
     uno::Reference<container::XIndexAccess> xFootnotes(xFootnotesSupplier->getFootnotes(), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xTextRange(xFootnotes->getByIndex(0), uno::UNO_QUERY);
     // Encoding in the footnote was wrong.
-    OUString aExpected("živností", 10, RTL_TEXTENCODING_UTF8);
+    OUString aExpected("\xc5\xbeivnost\xc3\xad", 10, RTL_TEXTENCODING_UTF8);
     CPPUNIT_ASSERT_EQUAL(aExpected, xTextRange->getString());
 }
 
@@ -622,7 +622,7 @@ void Test::testFdo48023()
     uno::Reference<text::XTextRange> xTextRange = getRun(getParagraph(1), 1);
 
     // Implicit encoding detection based on locale was missing
-    OUString aExpected("Программист", 22, RTL_TEXTENCODING_UTF8);
+    OUString aExpected("\xd0\x9f\xd1\x80\xd0\xbe\xd0\xb3\xd1\x80\xd0\xb0\xd0\xbc\xd0\xbc\xd0\xb8\xd1\x81\xd1\x82", 22, RTL_TEXTENCODING_UTF8);
     CPPUNIT_ASSERT_EQUAL(aExpected, xTextRange->getString());
 }
 
@@ -644,7 +644,7 @@ void Test::testFdo44211()
 {
     uno::Reference<text::XTextRange> xTextRange = getRun(getParagraph(1), 1);
 
-    OUString aExpected("ąčę", 6, RTL_TEXTENCODING_UTF8);
+    OUString aExpected("\xc4\x85\xc4\x8d\xc4\x99", 6, RTL_TEXTENCODING_UTF8);
     CPPUNIT_ASSERT_EQUAL(aExpected, xTextRange->getString());
 }
 
@@ -833,7 +833,7 @@ void Test::testFdo49892()
 
 void Test::testFdo48446()
 {
-    OUString aExpected("Имя", 6, RTL_TEXTENCODING_UTF8);
+    OUString aExpected("\xd0\x98\xd0\xbc\xd1\x8f", 6, RTL_TEXTENCODING_UTF8);
     getParagraph(1, aExpected);
 }
 
@@ -1007,7 +1007,7 @@ void Test::testFdo56512()
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xTextRange(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
-    OUString aExpected("עוסק מורשה ", 20, RTL_TEXTENCODING_UTF8);
+    OUString aExpected("\xd7\xa2\xd7\x95\xd7\xa1\xd7\xa7 \xd7\x9e\xd7\x95\xd7\xa8\xd7\xa9\xd7\x94 ", 20, RTL_TEXTENCODING_UTF8);
     CPPUNIT_ASSERT_EQUAL(aExpected, xTextRange->getString());
 }
 
