@@ -1492,7 +1492,10 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getPrimaryKeys(
     while(xRs->next())
     {
         // 3. Table Name
-        aCurrentRow[3] = new ORowSetValueDecorator(xRow->getString(1));
+        if (xRs->getRow() == 1) // Table name doesn't change, so only retrieve once
+        {
+            aCurrentRow[3] = new ORowSetValueDecorator(xRow->getString(1));
+        }
         // 4. Column Name
         aCurrentRow[4] = new ORowSetValueDecorator(xRow->getString(2));
         // 5. KEY_SEQ (which key in the sequence)
