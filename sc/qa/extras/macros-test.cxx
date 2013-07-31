@@ -82,7 +82,6 @@ void ScMacrosTest::testMSP()
 
     CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
     ScDocShell* xDocSh = static_cast<ScDocShell*>(pFoundShell);
-    ScDocument* pDoc = xDocSh->GetDocument();
 
     pFoundShell->CallXScript(xComponent, sUrl, aParams, aRet, aOutParamIndex,aOutParam);
     OUString sResult;
