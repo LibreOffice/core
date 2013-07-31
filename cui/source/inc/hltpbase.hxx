@@ -140,7 +140,7 @@ public:
     virtual void DoApply ();
     virtual void SetOnlineMode( sal_Bool bEnable );
     virtual void SetInitFocus();
-    virtual void SetMarkStr ( String& aStrMark );
+    virtual void SetMarkStr ( const String& aStrMark );
     virtual void Reset( const SfxItemSet& );
     virtual sal_Bool FillItemSet( SfxItemSet& );
     virtual void ActivatePage( const SfxItemSet& rItemSet );

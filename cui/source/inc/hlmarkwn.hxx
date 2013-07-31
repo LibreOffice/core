@@ -66,7 +66,7 @@ private:
 
     SvxHyperlinkTabPageBase* mpParent;
 
-    String          maStrLastURL;
+    OUString        maStrLastURL;
 
     sal_uInt16          mnError;
 
@@ -74,7 +74,7 @@ protected:
     sal_Bool RefreshFromDoc( OUString aURL );
     void RestoreLastSelection();
 
-    SvTreeListEntry* FindEntry ( String aStrName );
+    SvTreeListEntry* FindEntry(OUString aStrName);
     void ClearTree();
     int FillTree( ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > xLinks, SvTreeListEntry* pParentEntry =NULL );
 
@@ -88,8 +88,8 @@ public:
     ~SvxHlinkDlgMarkWnd();
 
     sal_Bool MoveTo ( Point aNewPos );
-    void RefreshTree ( String aStrURL );
-    bool SelectEntry(String aStrMark);
+    void RefreshTree(OUString aStrURL);
+    bool SelectEntry(OUString aStrMark);
 
     sal_Bool ConnectToDialog( sal_Bool bDoit = sal_True );
 

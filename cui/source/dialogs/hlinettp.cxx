@@ -465,7 +465,7 @@ void SvxHyperlinkInternetTp::RefreshMarkWindow()
 |*
 |************************************************************************/
 
-void SvxHyperlinkInternetTp::SetMarkStr ( String& aStrMark )
+void SvxHyperlinkInternetTp::SetMarkStr ( const String& aStrMark )
 {
     String aStrURL ( maCbbTarget.GetText() );
 

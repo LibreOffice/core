@@ -308,7 +308,7 @@ sal_Bool SvxHyperlinkTabPageBase::AskApply ()
 }
 
 // This method would be called from bookmark-window to set new mark-string
-void SvxHyperlinkTabPageBase::SetMarkStr ( String& /*aStrMark*/ )
+void SvxHyperlinkTabPageBase::SetMarkStr ( const String& /*aStrMark*/ )
 {
     // default-implemtation : do nothing
 }

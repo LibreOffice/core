@@ -341,7 +341,7 @@ IMPL_LINK_NOARG(SvxHyperlinkDocTp, LostFocusPathHdl_Impl)
 |*
 |************************************************************************/
 
-void SvxHyperlinkDocTp::SetMarkStr ( String& aStrMark )
+void SvxHyperlinkDocTp::SetMarkStr ( const String& aStrMark )
 {
     maEdTarget.SetText ( aStrMark );
 

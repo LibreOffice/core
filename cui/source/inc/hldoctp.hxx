@@ -76,7 +76,7 @@ public:
 
     static  IconChoicePage* Create( Window* pWindow, const SfxItemSet& rItemSet );
 
-    virtual void        SetMarkStr ( String& aStrMark );
+    virtual void        SetMarkStr ( const String& aStrMark );
 
     virtual void        SetInitFocus();
 };

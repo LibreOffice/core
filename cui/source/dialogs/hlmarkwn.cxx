@@ -53,13 +53,13 @@ using namespace ::rtl;
 
 struct TargetData
 {
-    OUString        aUStrLinkname;
-    sal_Bool        bIsTarget;
+    OUString aUStrLinkname;
+    bool     bIsTarget;
 
-    TargetData ( OUString aUStrLName, sal_Bool bTarget )
-        :   bIsTarget ( bTarget )
+    TargetData (OUString aUStrLName, bool bTarget)
+        : bIsTarget(bTarget)
     {
-        if ( bIsTarget )
+        if (bIsTarget)
             aUStrLinkname = aUStrLName;
     }
 };
@@ -269,7 +269,7 @@ void SvxHlinkDlgMarkWnd::RestoreLastSelection()
 |*
 |************************************************************************/
 
-void SvxHlinkDlgMarkWnd::RefreshTree ( String aStrURL )
+void SvxHlinkDlgMarkWnd::RefreshTree (OUString aStrURL)
 {
     OUString aUStrURL;
 
@@ -277,19 +277,19 @@ void SvxHlinkDlgMarkWnd::RefreshTree ( String aStrURL )
 
     ClearTree();
 
-    xub_StrLen nPos = aStrURL.Search ( sal_Unicode('#') );
+    sal_Int32 nPos = aStrURL.indexOf('#');
 
-    if( nPos != 0 )
-        aUStrURL = OUString( aStrURL );
+    if (nPos != 0)
+        aUStrURL = aStrURL;
 
-    if( !RefreshFromDoc ( aUStrURL ) )
+    if (!RefreshFromDoc(aUStrURL))
         maLbTree.Invalidate();
 
     bool bSelectedEntry = false;
 
-    if ( nPos != STRING_NOTFOUND )
+    if ( nPos != -1 )
     {
-        String aStrMark = aStrURL.Copy ( nPos+1 );
+        OUString aStrMark = aStrURL.copy(nPos+1);
         bSelectedEntry = SelectEntry(aStrMark);
     }
 
@@ -307,7 +307,7 @@ void SvxHlinkDlgMarkWnd::RefreshTree ( String aStrURL )
 |*
 |************************************************************************/
 
-sal_Bool SvxHlinkDlgMarkWnd::RefreshFromDoc( OUString aURL )
+sal_Bool SvxHlinkDlgMarkWnd::RefreshFromDoc(OUString aURL)
 {
     mnError = LERR_NOERROR;
 
@@ -497,7 +497,7 @@ void SvxHlinkDlgMarkWnd::ClearTree()
 |*
 |************************************************************************/
 
-SvTreeListEntry* SvxHlinkDlgMarkWnd::FindEntry ( String aStrName )
+SvTreeListEntry* SvxHlinkDlgMarkWnd::FindEntry (OUString aStrName)
 {
     sal_Bool bFound=sal_False;
     SvTreeListEntry* pEntry = maLbTree.First();
@@ -505,7 +505,7 @@ SvTreeListEntry* SvxHlinkDlgMarkWnd::FindEntry ( String aStrName )
     while ( pEntry && !bFound )
     {
         TargetData* pUserData = ( TargetData * ) pEntry->GetUserData ();
-        if ( aStrName == String( pUserData->aUStrLinkname ) )
+        if (aStrName == pUserData->aUStrLinkname)
             bFound = sal_True;
         else
             pEntry = maLbTree.Next( pEntry );
@@ -520,13 +520,13 @@ SvTreeListEntry* SvxHlinkDlgMarkWnd::FindEntry ( String aStrName )
 |*
 |************************************************************************/
 
-bool SvxHlinkDlgMarkWnd::SelectEntry(String aStrMark)
+bool SvxHlinkDlgMarkWnd::SelectEntry(OUString aStrMark)
 {
-    SvTreeListEntry* pEntry = FindEntry ( aStrMark );
+    SvTreeListEntry* pEntry = FindEntry(aStrMark);
     if (!pEntry)
         return false;
-    maLbTree.Select ( pEntry );
-    maLbTree.MakeVisible ( pEntry );
+    maLbTree.Select(pEntry);
+    maLbTree.MakeVisible (pEntry);
     return true;
 }
 
@@ -546,8 +546,7 @@ IMPL_LINK_NOARG(SvxHlinkDlgMarkWnd, ClickApplyHdl_Impl)
 
         if ( pData->bIsTarget )
         {
-            String aStrMark ( pData->aUStrLinkname );
-            mpParent->SetMarkStr ( aStrMark );
+            mpParent->SetMarkStr(pData->aUStrLinkname);
         }
     }
 
