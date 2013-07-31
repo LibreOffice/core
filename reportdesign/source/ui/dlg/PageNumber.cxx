@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "PageNumber.hxx"
-#include "PageNumber.hrc"
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <tools/debug.hxx>
 #include "RptResId.hrc"
@@ -44,29 +43,21 @@ DBG_NAME( rpt_OPageNumberDialog )
 OPageNumberDialog::OPageNumberDialog( Window* _pParent
                                            ,const uno::Reference< report::XReportDefinition >& _xHoldAlive
                                            ,OReportController* _pController)
-    : ModalDialog( _pParent, ModuleRes(RID_PAGENUMBERS) )
-    ,m_aFormat(this, ModuleRes(FL_FORMAT) )
-    ,m_aPageN(this, ModuleRes(RB_PAGE_N) )
-    ,m_aPageNofM(this, ModuleRes(RB_PAGE_N_OF_M) )
-    ,m_aPosition(this, ModuleRes(FL_POSITION) )
-    ,m_aTopPage(this, ModuleRes(RB_PAGE_TOPPAGE) )
-    ,m_aBottomPage(this, ModuleRes(RB_PAGE_BOTTOMPAGE) )
-    ,m_aMisc(this, ModuleRes(FL_MISC) )
-    ,m_aAlignment(this, ModuleRes(FL_ALIGNMENT) )
-    ,m_aAlignmentLst(this, ModuleRes(LST_ALIGNMENT) )
-    ,m_aShowNumberOnFirstPage(this, ModuleRes(CB_SHOWNUMBERONFIRSTPAGE) )
-    ,m_aFl1(this,       ModuleRes(FL_SEPARATOR1))
-    ,m_aPB_OK(this,     ModuleRes(PB_OK))
-    ,m_aPB_CANCEL(this, ModuleRes(PB_CANCEL))
-    ,m_aPB_Help(this,   ModuleRes(PB_HELP))
+    : ModalDialog( _pParent, "PageNumberDialog" , "modules/dbreport/ui/pagenumberdialog.ui" )
     ,m_pController(_pController)
     ,m_xHoldAlive(_xHoldAlive)
 {
+    get(m_pPageN,"pagen");
+    get(m_pPageNofM,"pagenofm");
+    get(m_pTopPage,"toppage");
+    get(m_pBottomPage,"bottompage");
+    get(m_pAlignmentLst,"alignment");
+    get(m_pShowNumberOnFirstPage,"shownumberonfirstpage");
+
     DBG_CTOR( rpt_OPageNumberDialog,NULL);
 
-    m_aShowNumberOnFirstPage.Hide();
+    m_pShowNumberOnFirstPage->Hide();
 
-    FreeResource();
 }
 
 //------------------------------------------------------------------------
@@ -86,7 +77,7 @@ short OPageNumberDialog::Execute()
             sal_Int32 nPosX = 0;
             sal_Int32 nPos2X = 0;
             awt::Size aRptSize = getStyleProperty<awt::Size>(m_xHoldAlive,PROPERTY_PAPERSIZE);
-            switch ( m_aAlignmentLst.GetSelectEntryPos() )
+            switch ( m_pAlignmentLst->GetSelectEntryPos() )
             {
                 case 0: // left
                     nPosX = getStyleProperty<sal_Int32>(m_xHoldAlive,PROPERTY_LEFTMARGIN);
@@ -105,7 +96,7 @@ short OPageNumberDialog::Execute()
                 default:
                     break;
             }
-            if ( m_aAlignmentLst.GetSelectEntryPos() > 2 )
+            if ( m_pAlignmentLst->GetSelectEntryPos() > 2 )
                 nPosX = nPos2X;
 
             sal_Int32 nLength = 0;
@@ -114,10 +105,10 @@ short OPageNumberDialog::Execute()
             aValues[nLength++].Value <<= awt::Point(nPosX,0);
 
             aValues[nLength].Name = PROPERTY_PAGEHEADERON;
-            aValues[nLength++].Value <<= m_aTopPage.IsChecked();
+            aValues[nLength++].Value <<= m_pTopPage->IsChecked();
 
             aValues[nLength].Name = PROPERTY_STATE;
-            aValues[nLength++].Value <<= m_aPageNofM.IsChecked();
+            aValues[nLength++].Value <<= m_pPageNofM->IsChecked();
 
             m_pController->executeChecked(SID_INSERT_FLD_PGNUMBER,aValues);
         }
