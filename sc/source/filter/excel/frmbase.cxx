@@ -108,15 +108,15 @@ void _ScRangeListTabs::Append( const ScRange& aCRD, SCTAB nTab, bool b )
         else if (a.aEnd.Row() < 0)
             a.aEnd.SetRow(0);
     }
+#if 0 // no members 'Ref1' or 'Ref2' in 'ScRange'
     else
     {
-#if 0 // no members 'Ref1' or 'Ref2' in 'ScRange'
         OSL_ENSURE( ValidTab(a.Ref1.nTab),
             "-_ScRangeListTabs::Append(): Luegen haben kurze Abstuerze!" );
         OSL_ENSURE( a.Ref1.nTab == a.Ref2.nTab,
             "+_ScRangeListTabs::Append(): 3D-Ranges werden in SC nicht unterstuetzt!" );
-#endif
     }
+#endif
 
     if( nTab == SCTAB_MAX)
         return;
