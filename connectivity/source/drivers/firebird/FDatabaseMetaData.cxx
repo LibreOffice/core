@@ -1401,6 +1401,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getProcedureColumns(
     const Any& catalog, const OUString& schemaPattern,
     const OUString& procedureNamePattern, const OUString& columnNamePattern ) throw(SQLException, RuntimeException)
 {
+    SAL_WARN("connectivity.firebird", "Not yet implemented");
     (void) catalog;
     (void) schemaPattern;
     (void) procedureNamePattern;
@@ -1412,6 +1413,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getProcedures(
     const Any& catalog, const OUString& schemaPattern,
     const OUString& procedureNamePattern ) throw(SQLException, RuntimeException)
 {
+    SAL_WARN("connectivity.firebird", "Not yet implemented");
     (void) catalog;
     (void) schemaPattern;
     (void) procedureNamePattern;
@@ -1421,6 +1423,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getProcedures(
 uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getVersionColumns(
     const Any& catalog, const OUString& schema, const OUString& table ) throw(SQLException, RuntimeException)
 {
+    SAL_WARN("connectivity.firebird", "Not yet implemented");
     (void) catalog;
     (void) schema;
     (void) table;
@@ -1430,6 +1433,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getVersionColumns(
 uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getExportedKeys(
     const Any& catalog, const OUString& schema, const OUString& table ) throw(SQLException, RuntimeException)
 {
+    SAL_WARN("connectivity.firebird", "Not yet implemented");
     (void) catalog;
     (void) schema;
     (void) table;
@@ -1439,6 +1443,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getExportedKeys(
 uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getImportedKeys(
     const Any& catalog, const OUString& schema, const OUString& table ) throw(SQLException, RuntimeException)
 {
+    SAL_WARN("connectivity.firebird", "Not yet implemented");
     (void) catalog;
     (void) schema;
     (void) table;
@@ -1448,6 +1453,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getImportedKeys(
 uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getPrimaryKeys(
     const Any& catalog, const OUString& schema, const OUString& table ) throw(SQLException, RuntimeException)
 {
+    SAL_WARN("connectivity.firebird", "Not yet implemented");
     (void) catalog;
     (void) schema;
     (void) table;
@@ -1529,7 +1535,9 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
 
     while( rs->next() )
     {
-        ODatabaseMetaDataResultSet::ORow aCurrentRow(7);
+        // TODO: avoid reallocations
+        ODatabaseMetaDataResultSet::ORow aCurrentRow;
+        aCurrentRow.reserve(7);
 
         // 1. TABLE_CAT
         aCurrentRow.push_back(new ORowSetValueDecorator());
