@@ -819,7 +819,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
 
         // Common data
         aRow[4] = ODatabaseMetaDataResultSet::getQuoteValue(); // Literal quote marks
-        aRow[5] = ODatabaseMetaDataResultSet::getQuoteValue(); // Literal quote marks             // Create Params
+        aRow[5] = ODatabaseMetaDataResultSet::getQuoteValue(); // Literal quote marks
         aRow[7] = new ORowSetValueDecorator(sal_Bool(true)); // Nullable
         aRow[8] = new ORowSetValueDecorator(sal_Bool(true)); // Case sensitive
         aRow[10] = new ORowSetValueDecorator(sal_Bool(false)); // Is unsigned
@@ -835,7 +835,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
         aRow[1] = new ORowSetValueDecorator(OUString("CHAR"));
         aRow[2] = new ORowSetValueDecorator(getColumnTypeFromFBType(SQL_TEXT));
         aRow[3] = new ORowSetValueDecorator(sal_Int16(32767)); // Prevision = max length
-        aRow[6] = new ORowSetValueDecorator(OUString("length"));
+        aRow[6] = new ORowSetValueDecorator(OUString("length")); // Create Params
         aRow[9] = new ORowSetValueDecorator(
                 sal_Int16(ColumnSearch::FULL)); // Searchable
         aRow[11] = new ORowSetValueDecorator(sal_Bool(true)); // Can be money value
@@ -848,7 +848,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
         aRow[1] = new ORowSetValueDecorator(OUString("VARCHAR"));
         aRow[2] = new ORowSetValueDecorator(getColumnTypeFromFBType(SQL_VARYING));
         aRow[3] = new ORowSetValueDecorator(sal_Int16(32767)); // Prevision = max length
-        aRow[6] = new ORowSetValueDecorator(OUString("length"));
+        aRow[6] = new ORowSetValueDecorator(OUString("length")); // Create Params
         aRow[9] = new ORowSetValueDecorator(
                 sal_Int16(ColumnSearch::FULL)); // Searchable
         aRow[11] = new ORowSetValueDecorator(sal_Bool(true)); // Can be money value
@@ -859,7 +859,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
 
         // Integer Types common
         {
-            aRow[6] = new ORowSetValueDecorator();
+            aRow[6] = new ORowSetValueDecorator(); // Create Params
             aRow[9] = new ORowSetValueDecorator(
                 sal_Int16(ColumnSearch::FULL)); // Searchable
             aRow[11] = new ORowSetValueDecorator(sal_Bool(true)); // Can be money value
@@ -885,7 +885,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
 
         // Decimal Types common
         {
-            aRow[6] = new ORowSetValueDecorator();
+            aRow[6] = new ORowSetValueDecorator(); // Create Params
             aRow[9] = new ORowSetValueDecorator(
                 sal_Int16(ColumnSearch::FULL)); // Searchable
             aRow[11] = new ORowSetValueDecorator(sal_Bool(true)); // Can be money value
@@ -919,7 +919,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
         aRow[1] = new ORowSetValueDecorator(OUString("timestamp"));
         aRow[2] = new ORowSetValueDecorator(getColumnTypeFromFBType(SQL_TIMESTAMP));
         aRow[3] = new ORowSetValueDecorator(sal_Int32(8)); // Prevision = max length
-        aRow[6] = new ORowSetValueDecorator();
+        aRow[6] = new ORowSetValueDecorator(); // Create Params
         aRow[9] = new ORowSetValueDecorator(
                 sal_Int16(ColumnSearch::FULL)); // Searchable
         aRow[11] = new ORowSetValueDecorator(sal_Bool(false)); // Can be money value
@@ -933,7 +933,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
         aRow[1] = new ORowSetValueDecorator(OUString("TIME"));
         aRow[2] = new ORowSetValueDecorator(getColumnTypeFromFBType(SQL_TYPE_TIME));
         aRow[3] = new ORowSetValueDecorator(sal_Int32(8)); // Prevision = max length
-        aRow[6] = new ORowSetValueDecorator();
+        aRow[6] = new ORowSetValueDecorator(); // Create Params
         aRow[9] = new ORowSetValueDecorator(
                 sal_Int16(ColumnSearch::FULL)); // Searchable
         aRow[11] = new ORowSetValueDecorator(sal_Bool(false)); // Can be money value
@@ -947,7 +947,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
         aRow[1] = new ORowSetValueDecorator(OUString("DATE"));
         aRow[2] = new ORowSetValueDecorator(getColumnTypeFromFBType(SQL_TYPE_DATE));
         aRow[3] = new ORowSetValueDecorator(sal_Int32(8)); // Prevision = max length
-        aRow[6] = new ORowSetValueDecorator();
+        aRow[6] = new ORowSetValueDecorator(); // Create Params
         aRow[9] = new ORowSetValueDecorator(
                 sal_Int16(ColumnSearch::FULL)); // Searchable
         aRow[11] = new ORowSetValueDecorator(sal_Bool(false)); // Can be money value
@@ -961,7 +961,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
         aRow[1] = new ORowSetValueDecorator(OUString("BLOB"));
         aRow[2] = new ORowSetValueDecorator(getColumnTypeFromFBType(SQL_BLOB));
         aRow[3] = new ORowSetValueDecorator(sal_Int32(0)); // Prevision = max length
-        aRow[6] = new ORowSetValueDecorator();
+        aRow[6] = new ORowSetValueDecorator(); // Create Params
         aRow[9] = new ORowSetValueDecorator(
                 sal_Int16(ColumnSearch::NONE)); // Searchable
         aRow[11] = new ORowSetValueDecorator(sal_Bool(false)); // Can be money value
@@ -1040,8 +1040,11 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumnPrivileges(
 
     while( rs->next() )
     {
-        ODatabaseMetaDataResultSet::ORow aCurrentRow(8);
+        ODatabaseMetaDataResultSet::ORow aCurrentRow;
+        aCurrentRow.reserve(9);
 
+        // 0. Empty
+        aCurrentRow.push_back(new ORowSetValueDecorator());
         // 1. TABLE_CAT
         aCurrentRow.push_back(new ORowSetValueDecorator());
         // 2. TABLE_SCHEM
@@ -1144,9 +1147,6 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
 
     OUString query = queryBuf.makeStringAndClear();
 
-    SAL_INFO("connectivity.firebird", "Retrieving columns with " <<
-                OUStringToOString(query,RTL_TEXTENCODING_UTF8).getStr());
-
     uno::Reference< XStatement > statement = m_pConnection->createStatement();
     uno::Reference< XResultSet > rs = statement->executeQuery(query.getStr());
     uno::Reference< XRow > xRow( rs, UNO_QUERY_THROW );
@@ -1155,8 +1155,11 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
 
     while( rs->next() )
     {
-        ODatabaseMetaDataResultSet::ORow aCurrentRow(18);
+        ODatabaseMetaDataResultSet::ORow aCurrentRow;
+        aCurrentRow.reserve(19);
 
+        // 0. EMPTY
+        aCurrentRow.push_back(new ORowSetValueDecorator());
         // 1. TABLE_CAT (catalog) may be null
         aCurrentRow.push_back(new ORowSetValueDecorator());
         // 2. TABLE_SCHEM (schema) may be null
