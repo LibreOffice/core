@@ -32,6 +32,12 @@
             </info>
             <value>false</value>
         </prop>
+        <prop oor:name="UseExtended" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+                <desc>Sets the usage of extended types on/off. Default is false.</desc>
+            </info>
+            <value>false</value>
+        </prop>
         <prop oor:name="AutocloseParenthesis" oor:type="xs:boolean" oor:nillable="false">
             <info>
                 <desc>Sets the autoclose parenthesis on/off. Default is false.</desc>

@@ -20,6 +20,7 @@
 #include <basic/codecompletecache.hxx>
 #include <iostream>
 #include <rtl/instance.hxx>
+#include <officecfg/Office/BasicIDE.hxx>
 
 namespace
 {
@@ -27,12 +28,17 @@ namespace
 }
 
 CodeCompleteOptions::CodeCompleteOptions()
-: bIsCodeCompleteOn( false ),
+/*: bIsCodeCompleteOn( false ),
 bIsProcedureAutoCompleteOn( false ),
 bIsAutoCloseQuotesOn( false ),
 bIsAutoCloseParenthesisOn( false ),
-bIsAutoCorrectSpellingOn( false )
+bIsAutoCorrectSpellingOn( false )*/
 {
+    bIsAutoCorrectSpellingOn = officecfg::Office::BasicIDE::Autocomplete::AutoCorrectSpelling::get();
+    bIsAutoCloseParenthesisOn = officecfg::Office::BasicIDE::Autocomplete::AutocloseParenthesis::get();
+    bIsAutoCloseQuotesOn = officecfg::Office::BasicIDE::Autocomplete::AutocloseDoubleQuotes::get();
+    bIsProcedureAutoCompleteOn = officecfg::Office::BasicIDE::Autocomplete::AutocloseProc::get();
+    bIsCodeCompleteOn = officecfg::Office::BasicIDE::Autocomplete::CodeComplete::get();
 }
 
 bool CodeCompleteOptions::IsCodeCompleteOn()
@@ -48,6 +54,11 @@ void CodeCompleteOptions::SetCodeCompleteOn( const bool& b )
 bool CodeCompleteOptions::IsExtendedTypeDeclaration()
 {
     return CodeCompleteOptions::IsCodeCompleteOn();
+}
+
+void CodeCompleteOptions::SetExtendedTypeDeclaration( const bool& b )
+{
+    CodeCompleteOptions::SetCodeCompleteOn( b );
 }
 
 bool CodeCompleteOptions::IsProcedureAutoCompleteOn()

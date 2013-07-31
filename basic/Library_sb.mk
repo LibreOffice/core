@@ -29,6 +29,10 @@ $(eval $(call gb_Library_set_include,sb,\
 
 $(eval $(call gb_Library_use_external,sb,boost_headers))
 
+$(eval $(call gb_Library_use_custom_headers,sb,\
+	officecfg/registry \
+))
+
 $(eval $(call gb_Library_use_sdk_api,sb))
 $(eval $(call gb_Library_use_api,sb,oovbaapi))
 

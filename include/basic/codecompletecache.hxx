@@ -53,7 +53,9 @@ public:
 
     static bool IsCodeCompleteOn();
     static void SetCodeCompleteOn( const bool& b );
+
     static bool IsExtendedTypeDeclaration();
+    static void SetExtendedTypeDeclaration( const bool& b );
 
     static bool IsProcedureAutoCompleteOn();
     static void SetProcedureAutoCompleteOn( const bool& b );
@@ -66,7 +68,6 @@ public:
 
     static bool IsAutoCorrectSpellingOn();
     static void SetAutoCorrectSpellingOn( const bool& b );
-
 };
 
 class BASIC_DLLPUBLIC CodeCompleteDataCache
