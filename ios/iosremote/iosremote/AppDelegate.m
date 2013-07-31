@@ -22,7 +22,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    [TestFlight takeOff:@"cb645cf2-a557-481e-993a-6ad3aaeb06d0"];
+    [TestFlight takeOff:@"29f8d6f9-de56-4866-bd70-15b5305f812e"];
     
     NSString *defaultsPath = [[NSBundle mainBundle] pathForResource:@"UserDefaults"
                                                              ofType:@"plist"];

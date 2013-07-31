@@ -10,7 +10,6 @@
 #import "SlideShow.h"
 #import "Base64.h"
 #import "slideShow_vc_iphone.h"
-#import "UIImage+Resize.h"
 #import <dispatch/dispatch.h>
 
 @interface SlideShow()

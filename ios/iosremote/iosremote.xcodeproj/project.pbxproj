@@ -11,9 +11,6 @@
 		5711026D1794127E007D343B /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 571102691794127E007D343B /* README.md */; };
 		5711026E1794127E007D343B /* release_notes.md in Resources */ = {isa = PBXBuildFile; fileRef = 5711026A1794127E007D343B /* release_notes.md */; };
 		571102701794128E007D343B /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5711026F1794128E007D343B /* libz.dylib */; };
-		5711027B17946186007D343B /* UIImage+Alpha.m in Sources */ = {isa = PBXBuildFile; fileRef = 5711027617946185007D343B /* UIImage+Alpha.m */; };
-		5711027C17946186007D343B /* UIImage+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = 5711027817946186007D343B /* UIImage+Resize.m */; };
-		5711027D17946186007D343B /* UIImage+RoundedCorner.m in Sources */ = {isa = PBXBuildFile; fileRef = 5711027A17946186007D343B /* UIImage+RoundedCorner.m */; };
 		571BFAD1178AADA200EF1BDB /* more_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 571BFAD0178AADA200EF1BDB /* more_icon.png */; };
 		571D4807178B2F080063D93B /* timer_clear_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 571D4805178B2F080063D93B /* timer_clear_btn.png */; };
 		571D4808178B2F080063D93B /* timer_start_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 571D4806178B2F080063D93B /* timer_start_btn.png */; };
@@ -94,12 +91,6 @@
 		5711026A1794127E007D343B /* release_notes.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = release_notes.md; sourceTree = "<group>"; };
 		5711026B1794127E007D343B /* TestFlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestFlight.h; sourceTree = "<group>"; };
 		5711026F1794128E007D343B /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
-		5711027517946185007D343B /* UIImage+Alpha.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Alpha.h"; sourceTree = "<group>"; };
-		5711027617946185007D343B /* UIImage+Alpha.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Alpha.m"; sourceTree = "<group>"; };
-		5711027717946186007D343B /* UIImage+Resize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Resize.h"; sourceTree = "<group>"; };
-		5711027817946186007D343B /* UIImage+Resize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Resize.m"; sourceTree = "<group>"; };
-		5711027917946186007D343B /* UIImage+RoundedCorner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+RoundedCorner.h"; sourceTree = "<group>"; };
-		5711027A17946186007D343B /* UIImage+RoundedCorner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+RoundedCorner.m"; sourceTree = "<group>"; };
 		571BFAD0178AADA200EF1BDB /* more_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = more_icon.png; path = iosremote/more_icon.png; sourceTree = "<group>"; };
 		571D4805178B2F080063D93B /* timer_clear_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = timer_clear_btn.png; path = iosremote/timer_clear_btn.png; sourceTree = "<group>"; };
 		571D4806178B2F080063D93B /* timer_start_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = timer_start_btn.png; path = iosremote/timer_start_btn.png; sourceTree = "<group>"; };
@@ -127,7 +118,7 @@
 		57B1529E176486C300EECC67 /* CommandTransmitter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CommandTransmitter.m; path = iosremote/Communication/CommandTransmitter.m; sourceTree = "<group>"; };
 		57B7625B17621E42007703F6 /* SlideShow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SlideShow.h; path = iosremote/Communication/SlideShow.h; sourceTree = "<group>"; };
 		57B7625C17621E42007703F6 /* SlideShow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SlideShow.m; path = iosremote/Communication/SlideShow.m; sourceTree = "<group>"; };
-		57C6E3EF175E06E800E8BC5F /* Impress .app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Impress .app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		57C6E3EF175E06E800E8BC5F /* Impress.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Impress.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		57C6E3F2175E06E800E8BC5F /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		57C6E3F4175E06E800E8BC5F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		57C6E3F6175E06E800E8BC5F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -241,20 +232,6 @@
 			path = TestFlightSDK1.2.6;
 			sourceTree = "<group>";
 		};
-		5711027417946185007D343B /* UIImage-categories */ = {
-			isa = PBXGroup;
-			children = (
-				5711027517946185007D343B /* UIImage+Alpha.h */,
-				5711027617946185007D343B /* UIImage+Alpha.m */,
-				5711027717946186007D343B /* UIImage+Resize.h */,
-				5711027817946186007D343B /* UIImage+Resize.m */,
-				5711027917946186007D343B /* UIImage+RoundedCorner.h */,
-				5711027A17946186007D343B /* UIImage+RoundedCorner.m */,
-			);
-			name = "UIImage-categories";
-			path = "iosremote/UIImage-categories";
-			sourceTree = "<group>";
-		};
 		571BFAD2178AB7BA00EF1BDB /* slideShow */ = {
 			isa = PBXGroup;
 			children = (
@@ -340,7 +317,7 @@
 		57C6E3F0175E06E800E8BC5F /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				57C6E3EF175E06E800E8BC5F /* Impress .app */,
+				57C6E3EF175E06E800E8BC5F /* Impress.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -385,7 +362,6 @@
 			children = (
 				8C1A170717A28DE800B4BB3C /* Models */,
 				8C1A170617A28DDF00B4BB3C /* Support */,
-				5711027417946185007D343B /* UIImage-categories */,
 				8C1A170517A28B0E00B4BB3C /* Library */,
 				8C1A170417A28AFD00B4BB3C /* Controllers */,
 				8C1A170317A28AC900B4BB3C /* Application */,
@@ -531,9 +507,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		57C6E3EE175E06E800E8BC5F /* Impress  */ = {
+		57C6E3EE175E06E800E8BC5F /* Impress */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 57C6E415175E06E800E8BC5F /* Build configuration list for PBXNativeTarget "Impress " */;
+			buildConfigurationList = 57C6E415175E06E800E8BC5F /* Build configuration list for PBXNativeTarget "Impress" */;
 			buildPhases = (
 				57C6E3EB175E06E800E8BC5F /* Sources */,
 				57C6E3EC175E06E800E8BC5F /* Frameworks */,
@@ -543,9 +519,9 @@
 			);
 			dependencies = (
 			);
-			name = "Impress ";
+			name = Impress;
 			productName = iosremote;
-			productReference = 57C6E3EF175E06E800E8BC5F /* Impress .app */;
+			productReference = 57C6E3EF175E06E800E8BC5F /* Impress.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -570,7 +546,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				57C6E3EE175E06E800E8BC5F /* Impress  */,
+				57C6E3EE175E06E800E8BC5F /* Impress */,
 			);
 		};
 /* End PBXProject section */
@@ -649,9 +625,6 @@
 				57701739178AC83E00B99793 /* SWRevealViewController.m in Sources */,
 				57701742178B0A6900B99793 /* slideShowSwipeInList_iphone.m in Sources */,
 				57DC7012178E16A40050FC58 /* UIViewTransitionCategory.m in Sources */,
-				5711027B17946186007D343B /* UIImage+Alpha.m in Sources */,
-				5711027C17946186007D343B /* UIImage+Resize.m in Sources */,
-				5711027D17946186007D343B /* UIImage+RoundedCorner.m in Sources */,
 				8CAD658517A2E84A00CFB661 /* MainSplitViewController.m in Sources */,
 				8CAD658817A2EDB200CFB661 /* slideShowPreviewTable_vc_ipad.m in Sources */,
 				8CAD658C17A2F02000CFB661 /* slideShowPreviewTable_vc_iphone.m in Sources */,
@@ -734,8 +707,8 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Siqi Liu (SS3MXKAL2F)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -744,7 +717,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "141469F2-2E5D-43DA-9152-98C3F3CFEF69";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -772,6 +745,8 @@
 		57C6E417175E06E800E8BC5F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "iosremote/iosremote-Prefix.pch";
 				INFOPLIST_FILE = "iosremote/iosremote-Info.plist";
@@ -782,6 +757,8 @@
 					"\"$(SRCROOT)/TestFlightSDK1.2.6\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
@@ -799,7 +776,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		57C6E415175E06E800E8BC5F /* Build configuration list for PBXNativeTarget "Impress " */ = {
+		57C6E415175E06E800E8BC5F /* Build configuration list for PBXNativeTarget "Impress" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				57C6E416175E06E800E8BC5F /* Debug */,

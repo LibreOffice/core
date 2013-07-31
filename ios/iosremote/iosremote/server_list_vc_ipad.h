@@ -1,10 +1,10 @@
+// -*- Mode: ObjC; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 //
-//  server_list_vc_ipad.h
-//  iosremote
+// This file is part of the LibreOffice project.
 //
-//  Created by Siqi Liu on 7/26/13.
-//  Copyright (c) 2013 libreoffice. All rights reserved.
-//
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #import "serverList_vc.h"
 
