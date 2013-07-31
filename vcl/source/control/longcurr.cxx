@@ -48,7 +48,7 @@ static BigInt ImplPower10( sal_uInt16 n )
     return nValue;
 }
 
-static XubString ImplGetCurr( const LocaleDataWrapper& rLocaleDataWrapper, const BigInt &rNumber, sal_uInt16 nDigits, const String& rCurrSymbol, sal_Bool bShowThousandSep )
+static OUString ImplGetCurr( const LocaleDataWrapper& rLocaleDataWrapper, const BigInt &rNumber, sal_uInt16 nDigits, const OUString& rCurrSymbol, sal_Bool bShowThousandSep )
 {
     DBG_ASSERT( nDigits < 10, "LongCurrency may only have 9 decimal places" );
 
@@ -70,7 +70,7 @@ static XubString ImplGetCurr( const LocaleDataWrapper& rLocaleDataWrapper, const
     if ( rNumber.IsNeg() )
         aFraction *= -1;
 
-    XubString aTemplate = rLocaleDataWrapper.getCurr( (long)aFraction, nDigits, rCurrSymbol, bShowThousandSep );
+    OUStringBuffer aTemplate = rLocaleDataWrapper.getCurr( (long)aFraction, nDigits, rCurrSymbol, bShowThousandSep );
     while( !aInteger.IsZero() )
     {
         aFraction  = aInteger;
@@ -79,19 +79,19 @@ static XubString ImplGetCurr( const LocaleDataWrapper& rLocaleDataWrapper, const
         if( !aInteger.IsZero() )
             aFraction += aTmp;
 
-        XubString aFractionStr = rLocaleDataWrapper.getNum( (long)aFraction, 0 );
+        OUString aFractionStr = rLocaleDataWrapper.getNum( (long)aFraction, 0 );
 
-        xub_StrLen nSPos = aTemplate.Search( '1' );
-        if ( aFractionStr.Len() == 1 )
-            aTemplate.SetChar( nSPos, aFractionStr.GetChar( 0 ) );
+        sal_Int32 nSPos = aTemplate.indexOf( '1' );
+        if ( aFractionStr.getLength() == 1 )
+            aTemplate[ nSPos ] = aFractionStr[0];
         else
         {
-            aTemplate.Erase( nSPos, 1 );
-            aTemplate.Insert( aFractionStr, nSPos );
+            aTemplate.remove( nSPos, 1 );
+            aTemplate.insert( nSPos, aFractionStr  );
         }
     }
 
-    return aTemplate;
+    return aTemplate.makeStringAndClear();
 }
 
 static bool ImplNumericProcessKeyInput( Edit*, const KeyEvent& rKEvt,
@@ -117,30 +117,30 @@ static bool ImplNumericProcessKeyInput( Edit*, const KeyEvent& rKEvt,
     }
 }
 
-static bool ImplNumericGetValue( const XubString& rStr, BigInt& rValue,
+static bool ImplNumericGetValue( const OUString& rStr, BigInt& rValue,
                                  sal_uInt16 nDecDigits, const LocaleDataWrapper& rLocaleDataWrapper,
                                  sal_Bool bCurrency = sal_False )
 {
-    XubString aStr = rStr;
-    XubString aStr1;
+    OUString aStr = rStr;
+    OUStringBuffer aStr1;
     OUStringBuffer aStr2;
-    sal_uInt16 nDecPos;
+    sal_Int32 nDecPos;
     sal_Bool bNegative = sal_False;
 
     // On empty string
-    if ( !rStr.Len() )
+    if ( rStr.isEmpty() )
         return false;
 
     // Trim leading and trailing spaces
     aStr = string::strip(aStr, ' ');
 
     // Find decimal sign's position
-    nDecPos = aStr.Search( rLocaleDataWrapper.getNumDecimalSep() );
+    nDecPos = aStr.indexOf( rLocaleDataWrapper.getNumDecimalSep() );
 
-    if ( nDecPos != STRING_NOTFOUND )
+    if ( nDecPos != -1 )
     {
-        aStr1 = aStr.Copy( 0, nDecPos );
-        aStr2.append(aStr.Copy(nDecPos+1));
+        aStr1 = aStr.copy( 0, nDecPos );
+        aStr2.append(aStr.copy(nDecPos+1));
     }
     else
         aStr1 = aStr;
@@ -148,32 +148,32 @@ static bool ImplNumericGetValue( const XubString& rStr, BigInt& rValue,
     // Negative?
     if ( bCurrency )
     {
-        if ( (aStr.GetChar( 0 ) == '(') && (aStr.GetChar( aStr.Len()-1 ) == ')') )
+        if ( (aStr[ 0 ] == '(') && (aStr[ aStr.getLength()-1 ] == ')') )
             bNegative = sal_True;
         if ( !bNegative )
         {
-            for (xub_StrLen i=0; i < aStr.Len(); i++ )
+            for (sal_Int32 i=0; i < aStr.getLength(); i++ )
             {
-                if ( (aStr.GetChar( i ) >= '0') && (aStr.GetChar( i ) <= '9') )
+                if ( (aStr[ i ] >= '0') && (aStr[ i ] <= '9') )
                     break;
-                else if ( aStr.GetChar( i ) == '-' )
+                else if ( aStr[ i ] == '-' )
                 {
                     bNegative = sal_True;
                     break;
                 }
             }
         }
-        if ( !bNegative && bCurrency && aStr.Len() )
+        if ( !bNegative && bCurrency && !aStr.isEmpty() )
         {
             sal_uInt16 nFormat = rLocaleDataWrapper.getCurrNegativeFormat();
             if ( (nFormat == 3) || (nFormat == 6)  ||
                  (nFormat == 7) || (nFormat == 10) )
             {
-                for (xub_StrLen i = (sal_uInt16)(aStr.Len()-1); i > 0; i++ )
+                for (sal_Int32 i = aStr.getLength()-1; i > 0; i++ )
                 {
-                    if ( (aStr.GetChar( i ) >= '0') && (aStr.GetChar( i ) <= '9') )
+                    if ( (aStr[ i ] >= '0') && (aStr[ i ] <= '9') )
                         break;
-                    else if ( aStr.GetChar( i ) == '-' )
+                    else if ( aStr[ i ] == '-' )
                     {
                         bNegative = sal_True;
                         break;
@@ -184,19 +184,19 @@ static bool ImplNumericGetValue( const XubString& rStr, BigInt& rValue,
     }
     else
     {
-        if ( aStr1.GetChar( 0 ) == '-' )
+        if ( aStr1[ 0 ] == '-' )
             bNegative = sal_True;
     }
 
     // delete unwanted characters
-    for (xub_StrLen i=0; i < aStr1.Len(); )
+    for (sal_Int32 i=0; i < aStr1.getLength(); )
     {
-        if ( (aStr1.GetChar( i ) >= '0') && (aStr1.GetChar( i ) <= '9') )
+        if ( (aStr1[ i ] >= '0') && (aStr1[ i ] <= '9') )
             i++;
         else
-            aStr1.Erase( i, 1 );
+            aStr1.remove( i, 1 );
     }
-    for (sal_Int32 i=0; i < aStr2.getLength();)
+    for (sal_Int32 i=0; i < aStr2.getLength(); )
     {
         if ((aStr2[i] >= '0') && (aStr2[i] <= '9'))
             ++i;
@@ -204,13 +204,13 @@ static bool ImplNumericGetValue( const XubString& rStr, BigInt& rValue,
             aStr2.remove(i, 1);
     }
 
-    if (!aStr1.Len() && aStr2.isEmpty())
+    if ( aStr1.isEmpty() && aStr2.isEmpty())
         return false;
 
-    if ( !aStr1.Len() )
-        aStr1.Insert( '0' );
+    if ( aStr1.isEmpty() )
+        aStr1 = "0";
     if ( bNegative )
-        aStr1.Insert( '-', 0 );
+        aStr1.insert( 0, '-');
 
     // Cut down decimal part and round while doing so
     bool bRound = false;
@@ -223,7 +223,7 @@ static bool ImplNumericGetValue( const XubString& rStr, BigInt& rValue,
     if (aStr2.getLength() < nDecDigits)
         string::padToLength(aStr2, nDecDigits, '0');
 
-    aStr  = aStr1;
+    aStr  = aStr1.makeStringAndClear();
     aStr += aStr2.makeStringAndClear();
 
     // check range
@@ -248,15 +248,15 @@ static bool ImplLongCurrencyProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
     return ImplNumericProcessKeyInput( pEdit, rKEvt, sal_False, bUseThousandSep, rLocaleDataWrapper  );
 }
 
-inline bool ImplLongCurrencyGetValue( const XubString& rStr, BigInt& rValue,
+inline bool ImplLongCurrencyGetValue( const OUString& rStr, BigInt& rValue,
                                       sal_uInt16 nDecDigits, const LocaleDataWrapper& rLocaleDataWrapper )
 {
     return ImplNumericGetValue( rStr, rValue, nDecDigits, rLocaleDataWrapper, sal_True );
 }
 
-bool ImplLongCurrencyReformat( const XubString& rStr, BigInt nMin, BigInt nMax,
+bool ImplLongCurrencyReformat( const OUString& rStr, BigInt nMin, BigInt nMax,
                                sal_uInt16 nDecDigits,
-                               const LocaleDataWrapper& rLocaleDataWrapper, String& rOutStr,
+                               const LocaleDataWrapper& rLocaleDataWrapper, OUString& rOutStr,
                                LongCurrencyFormatter& rFormatter )
 {
     BigInt nValue;
@@ -312,13 +312,13 @@ LongCurrencyFormatter::~LongCurrencyFormatter()
 {
 }
 
-void LongCurrencyFormatter::SetCurrencySymbol( const String& rStr )
+void LongCurrencyFormatter::SetCurrencySymbol( const OUString& rStr )
 {
     maCurrencySymbol= rStr;
     ReformatAll();
 }
 
-String LongCurrencyFormatter::GetCurrencySymbol() const
+OUString LongCurrencyFormatter::GetCurrencySymbol() const
 {
     return !maCurrencySymbol.isEmpty() ? maCurrencySymbol : GetLocaleDataWrapper().getCurrSymbol();
 }
@@ -341,7 +341,7 @@ void LongCurrencyFormatter::SetUserValue( BigInt nNewValue )
     if ( !GetField() )
         return;
 
-    XubString aStr = ImplGetCurr( GetLocaleDataWrapper(), nNewValue, GetDecimalDigits(), GetCurrencySymbol(), IsUseThousandSep() );
+    OUString aStr = ImplGetCurr( GetLocaleDataWrapper(), nNewValue, GetDecimalDigits(), GetCurrencySymbol(), IsUseThousandSep() );
     if ( GetField()->HasFocus() )
     {
         Selection aSelection = GetField()->GetSelection();
@@ -379,13 +379,13 @@ void LongCurrencyFormatter::Reformat()
     if ( GetField()->GetText().isEmpty() && ImplGetEmptyFieldValue() )
         return;
 
-    XubString aStr;
+    OUString aStr;
     bool bOK = ImplLongCurrencyReformat( GetField()->GetText(), mnMin, mnMax,
                                          GetDecimalDigits(), GetLocaleDataWrapper(), aStr, *this );
     if ( !bOK )
         return;
 
-    if ( aStr.Len() )
+    if ( !aStr.isEmpty() )
     {
         GetField()->SetText( aStr );
         MarkToBeReformatted( sal_False );
@@ -436,8 +436,8 @@ void ImplNewLongCurrencyFieldValue( LongCurrencyField* pField, BigInt nNewValue 
 {
     Selection aSelect = pField->GetSelection();
     aSelect.Justify();
-    XubString aText = pField->GetText();
-    bool bLastSelected = ((xub_StrLen)aSelect.Max() == aText.Len());
+    OUString aText = pField->GetText();
+    bool bLastSelected = aSelect.Max() == aText.getLength();
 
     BigInt nOldLastValue  = pField->mnLastValue;
     pField->SetUserValue( nNewValue );
@@ -590,7 +590,7 @@ void LongCurrencyBox::Modify()
 
 void LongCurrencyBox::ReformatAll()
 {
-    XubString aStr;
+    OUString aStr;
     SetUpdateMode( sal_False );
     sal_uInt16 nEntryCount = GetEntryCount();
     for ( sal_uInt16 i=0; i < nEntryCount; i++ )

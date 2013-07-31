@@ -33,7 +33,7 @@ class LocaleDataWrapper;
 class VCL_DLLPUBLIC LongCurrencyFormatter : public FormatterBase
 {
 private:
-    SAL_DLLPRIVATE friend bool ImplLongCurrencyReformat( const XubString&, BigInt, BigInt, sal_uInt16, const LocaleDataWrapper&, XubString&, LongCurrencyFormatter& );
+    SAL_DLLPRIVATE friend bool ImplLongCurrencyReformat( const OUString&, BigInt, BigInt, sal_uInt16, const LocaleDataWrapper&, OUString&, LongCurrencyFormatter& );
     SAL_DLLPRIVATE void        ImpInit();
 
 protected:
@@ -42,7 +42,7 @@ protected:
     BigInt                  mnMin;
     BigInt                  mnMax;
     BigInt                  mnCorrectedValue;
-    OUString           maCurrencySymbol;
+    OUString                maCurrencySymbol;
     sal_uInt16              mnType;
     sal_uInt16              mnDecimalDigits;
     sal_Bool                mbThousandSep;
@@ -57,8 +57,8 @@ public:
     void                    SetUseThousandSep( sal_Bool b );
     sal_Bool                    IsUseThousandSep() const { return mbThousandSep; }
 
-    void                    SetCurrencySymbol( const String& rStr );
-    String                  GetCurrencySymbol() const;
+    void                    SetCurrencySymbol( const OUString& rStr );
+    OUString                GetCurrencySymbol() const;
 
     void                    SetMin( BigInt nNewMin );
     BigInt                  GetMin() const { return mnMin; }
