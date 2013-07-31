@@ -89,20 +89,20 @@ void CuiAboutConfigTabPage::InsertEntry( OUString& rProp, OUString&  rStatus, OU
 
 void CuiAboutConfigTabPage::Reset( const SfxItemSet& )
 {
-   OUString sRootNodePath = "/";
-   pPrefBox->Clear();
+    OUString sRootNodePath = "/";
+    pPrefBox->Clear();
 
-   m_pDefaultBtn->Enable(sal_False);
-   m_pEditBtn->Enable(sal_False);
+    m_pDefaultBtn->Enable(sal_False);
+    m_pEditBtn->Enable(sal_False);
 
-   OUString array[ 3 ] = {
+    const char* entries[] = {
            "/org.openoffice.Office.Common",
            "/org.openoffice.Office.Math",
            "/org.openoffice.Office.Addons" };
 
-    for (sal_Int16 nInd = 0; nInd < 3 ; ++nInd )
+    for (size_t nInd = 0; nInd < SAL_N_ELEMENTS(entries); ++nInd )
     {
-        sRootNodePath = array[nInd];
+        sRootNodePath = OUString::createFromAscii( entries[nInd] );
         Reference< XNameAccess > xConfigAccess = getConfigAccess( sRootNodePath, sal_False );
         FillItems( xConfigAccess, sRootNodePath );
     }
