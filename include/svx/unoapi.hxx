@@ -57,14 +57,6 @@ SVX_DLLPUBLIC SdrPage* GetSdrPageFromXDrawPage( ::com::sun::star::uno::Reference
 */
 SvxNumBulletItem* SvxGetNumBulletItemByName( SfxItemPool* pPool, const OUString& aName ) throw();
 
-/** maps the API constant MeasureUnit to a vcl MapUnit enum.
-    Returns false if conversion is not supported.
-
-    @cl: for warnings01 I found out that this method never worked so I thin
-         it is not used at all
-sal_Bool SvxMeasureUnitToMapUnit( const short eApi, short& nVcl ) throw();
-*/
-
 /** maps the vcl MapUnit enum to a API constant MeasureUnit.
     Returns false if conversion is not supported.
 */
