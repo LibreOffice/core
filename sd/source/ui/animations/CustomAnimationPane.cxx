@@ -833,10 +833,6 @@ void CustomAnimationPane::UpdateLook (void)
         ::sfx2::sidebar::Theme::GetWallpaper(
             ::sfx2::sidebar::Theme::Paint_PanelBackground));
     SetBackground(aBackground);
-    /*if (mpFLModify != NULL)
-        mpFLModify->SetBackground(aBackground);
-    if (mpFLEffect != NULL)
-        mpFLEffect->SetBackground(aBackground);*/
     if (mpFTStart != NULL)
         mpFTStart->SetBackground(aBackground);
     if (mpFTProperty != NULL)
@@ -845,10 +841,6 @@ void CustomAnimationPane::UpdateLook (void)
         mpFTSpeed->SetBackground(aBackground);
     if (mpFTChangeOrder != NULL)
         mpFTChangeOrder->SetBackground(aBackground);
-    /*if (mpFLSeparator1 != NULL)
-        mpFLSeparator1->SetBackground(aBackground);
-    if (mpFLSeparator2 != NULL)
-        mpFLSeparator2->SetBackground(aBackground);*/
 }
 
 
