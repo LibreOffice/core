@@ -63,8 +63,8 @@ namespace vcl_sal {
     // ====================================================================
     //
     // CAUTION CAUTION CAUTION
-    // every string value in the replacements tables must be in UTF8
-    // be careful with your editor !
+    // Every string value in the replacements tables must be in UTF-8
+    // but with the UTF-8 bytes encoded, not as such! Be careful!
     //
     // ====================================================================
 
