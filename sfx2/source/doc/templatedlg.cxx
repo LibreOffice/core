@@ -53,6 +53,7 @@
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/FolderPicker.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
 
 #include "doc.hrc"
 #include "templatedlg.hrc"
@@ -750,13 +751,15 @@ IMPL_LINK(SfxTemplateManagerDlg, OpenTemplateHdl, ThumbnailViewItem*, pItem)
 {
     if (!mbIsSaveMode)
     {
-        uno::Sequence< PropertyValue > aArgs(3);
+        uno::Sequence< PropertyValue > aArgs(4);
         aArgs[0].Name = "AsTemplate";
         aArgs[0].Value <<= sal_True;
         aArgs[1].Name = "MacroExecutionMode";
         aArgs[1].Value <<= MacroExecMode::USE_CONFIG;
         aArgs[2].Name = "UpdateDocMode";
         aArgs[2].Value <<= UpdateDocMode::ACCORDING_TO_CONFIG;
+        aArgs[3].Name = "InteractionHandler";
+        aArgs[3].Value <<= task::InteractionHandler::createWithParent( ::comphelper::getProcessComponentContext(), 0 );
 
         TemplateViewItem *pTemplateItem = static_cast<TemplateViewItem*>(pItem);
 
