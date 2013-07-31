@@ -12,7 +12,6 @@ $(eval $(call gb_Module_Module,sysui))
 ifneq ($(OS),WNT)
 $(eval $(call gb_Module_add_targets,sysui,\
 	CustomTarget_share \
-	CustomTarget_slackware \
 	Package_share \
 	Package_desktop \
 	$(if $(filter rpm,$(PKGFORMAT)),CustomTarget_rpm) \
