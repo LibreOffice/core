@@ -28,8 +28,6 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include <rtl/logfile.hxx>
-
 #include <bparr.hxx>
 
 using namespace std;
@@ -107,10 +105,6 @@ namespace /* private */
         for (sal_uLong i = 0; i < bparr.Count(); i++)
             delete bparr[i];
     }
-
-#ifdef TIMELOG
-    RTL_LOGFILE_CONTEXT(logFile, "BigPtrArray performance measures" );
-#endif
 }
 
 class BigPtrArrayUnittest : public CppUnit::TestFixture
@@ -144,7 +138,7 @@ public:
         printMethodName("test_insert_entries_at_front\n");
 
 #ifdef TIMELOG
-        RTL_LOGFILE_CONTEXT_TRACE(logFile, "START: test_insert_entries_at_front");
+        SAL_INFO( "sw.core", "START: test_insert_entries_at_front" );
 #endif
 
         BigPtrArray bparr;
@@ -161,7 +155,7 @@ public:
         }
 
 #ifdef TIMELOG
-        RTL_LOGFILE_CONTEXT_TRACE(logFile, "END: test_insert_entries_at_front");
+        SAL_INFO( "sw.core", "END: test_insert_entries_at_front" );
 #endif
 
         for (sal_uLong i = 0, j = NUM_ENTRIES - 1; i < NUM_ENTRIES; i++, j--)
@@ -188,7 +182,7 @@ public:
         printMethodName("test_insert_entries_in_the_middle\n");
 
 #ifdef TIMELOG
-        RTL_LOGFILE_CONTEXT_TRACE(logFile, "START: test_insert_entries_in_the_middle");
+        SAL_INFO( "sw.core", "START: test_insert_entries_in_the_middle" );
 #endif
 
         BigPtrArray bparr;
@@ -201,7 +195,7 @@ public:
         bparr.Insert(new BigPtrEntryMock(NUM_ENTRIES), bparr.Count() / 2);
 
 #ifdef TIMELOG
-        RTL_LOGFILE_CONTEXT_TRACE(logFile, "END: test_insert_entries_in_the_middle");
+        SAL_INFO( "sw.core", "END: test_insert_entries_in_the_middle" );
 #endif
 
         CPPUNIT_ASSERT_MESSAGE
@@ -225,7 +219,7 @@ public:
         printMethodName("test_insert_at_already_used_index\n");
 
 #ifdef TIMELOG
-        RTL_LOGFILE_CONTEXT_TRACE(logFile, "START: test_insert_at_already_used_index");
+        SAL_INFO( "sw.core", "START: test_insert_at_already_used_index" );
 #endif
 
         BigPtrArray bparr;
@@ -239,7 +233,7 @@ public:
             bparr.Insert(new BigPtrEntryMock(j), i);
 
 #ifdef TIMELOG
-        RTL_LOGFILE_CONTEXT_TRACE(logFile, "END: test_insert_at_already_used_index");
+        SAL_INFO( "sw.core", "END: test_insert_at_already_used_index" );
 #endif
 
         CPPUNIT_ASSERT_MESSAGE
@@ -300,7 +294,7 @@ public:
         printMethodName("test_remove_at_front\n");
 
 #ifdef TIMELOG
-        RTL_LOGFILE_CONTEXT_TRACE(logFile, "START: test_remove_at_front");
+        SAL_INFO( "sw.core", "START: test_remove_at_front" );
 #endif
 
         BigPtrArray bparr;
@@ -340,7 +334,7 @@ public:
         }
 
 #ifdef TIMELOG
-        RTL_LOGFILE_CONTEXT_TRACE(logFile, "END: test_remove_at_front");
+        SAL_INFO( "sw.core", "END: test_remove_at_front" );
 #endif
     }
 
@@ -389,7 +383,7 @@ public:
         printMethodName("test_remove_in_the_middle\n");
 
 #ifdef TIMELOG
-        RTL_LOGFILE_CONTEXT_TRACE(logFile, "START: test_remove_in_the_middle");
+        SAL_INFO( "sw.core", "START: test_remove_in_the_middle" );
 #endif
 
         BigPtrArray bparr;
@@ -429,7 +423,7 @@ public:
             dumpBigPtrArray(bparr);
         }
 #ifdef TIMELOG
-        RTL_LOGFILE_CONTEXT_TRACE(logFile, "END: test_remove_in_the_middle");
+        SAL_INFO( "sw.core", "END: test_remove_in_the_middle" );
 #endif
     }
 
@@ -790,14 +784,14 @@ public:
         startString_ += methodName;
         endString_ += methodName;
 #ifdef TIMELOG
-        RTL_LOGFILE_CONTEXT_TRACE(logFile, startString_.c_str());
+        SAL_INFO( "sw.core", "END: test_remove_in_the_middle" );
 #endif
     }
 
     ~PerformanceTracer()
     {
 #ifdef TIMELOG
-        RTL_LOGFILE_CONTEXT_TRACE(logFile, endString_.c_str());
+        SAL_INFO( "sw.core", "END: test_remove_in_the_middle" );
 #endif
     }
 

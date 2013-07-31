@@ -42,7 +42,6 @@
 #include <swmodule.hxx>
 #include <modcfg.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <rtl/logfile.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <fchrfmt.hxx>
 #include <frmatr.hxx>

@@ -28,7 +28,6 @@
 #include <comphelper/processfactory.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
-#include <rtl/logfile.hxx>
 #include <rtl/random.h>
 #include <sfx2/printer.hxx>
 #include <sfx2/docfile.hxx>
@@ -321,8 +320,6 @@ SwDoc::SwDoc()
 
     mbStartIdleTimer(false)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDoc::SwDoc" );
-
     // COMPATIBILITY FLAGS START
 
     // Note: Any non-hidden compatibility flag should obtain its default

@@ -46,7 +46,6 @@
 #include <swerror.h>
 #include <wrtxml.hxx>
 #include <statstr.hrc>
-#include <rtl/logfile.hxx>
 
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/makesequence.hxx>
@@ -502,10 +501,7 @@ bool SwXMLWriter::WriteThroughComponent(
     OSL_ENSURE( NULL != pStreamName, "Need stream name!" );
     OSL_ENSURE( NULL != pServiceName, "Need service name!" );
 
-    RTL_LOGFILE_TRACE_AUTHOR1( "sw", "mb93740",
-                               "SwXMLWriter::WriteThroughComponent : stream %s",
-                               pStreamName );
-
+    SAL_INFO( "sw.filter", "SwXMLWriter::WriteThroughComponent : stream " << pStreamName );
     // open stream
     bool bRet = false;
     try
@@ -570,13 +566,9 @@ bool SwXMLWriter::WriteThroughComponent(
     OSL_ENSURE( xComponent.is(), "Need component!" );
     OSL_ENSURE( NULL != pServiceName, "Need component name!" );
 
-    RTL_LOGFILE_CONTEXT_AUTHOR( aFilterLog, "sw", "mb93740",
-                                "SwXMLWriter::WriteThroughComponent" );
-
     // get component
     uno::Reference< xml::sax::XWriter > xSaxWriter = xml::sax::Writer::create(rxContext);
-    RTL_LOGFILE_CONTEXT_TRACE( aFilterLog, "SAX-Writer created" );
-
+    SAL_INFO( "sw.filter", "SAX-Writer created" );
     // connect XML writer to output stream
     xSaxWriter->setOutputStream( xOutputStream );
 
@@ -595,13 +587,12 @@ bool SwXMLWriter::WriteThroughComponent(
             "can't instantiate export filter component" );
     if( !xExporter.is() )
         return false;
-    RTL_LOGFILE_CONTEXT_TRACE1( aFilterLog, "%s instantiated.", pServiceName );
-
+    SAL_INFO( "sw.filter", pServiceName << " instantiated." );
     // connect model and filter
     xExporter->setSourceDocument( xComponent );
 
     // filter!
-    RTL_LOGFILE_CONTEXT_TRACE( aFilterLog, "call filter()" );
+    SAL_INFO( "sw.filter", "call filter()" );
     uno::Reference<XFilter> xFilter( xExporter, UNO_QUERY );
     return xFilter->filter( rMediaDesc );
 }
