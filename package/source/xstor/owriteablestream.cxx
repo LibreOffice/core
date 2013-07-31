@@ -91,7 +91,7 @@ void StaticAddLog( const OUString& aMessage )
         // No log
     }
 }
-}
+} // namespace package
 
 namespace
 {
