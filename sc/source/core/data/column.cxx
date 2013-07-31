@@ -2407,8 +2407,6 @@ class InsertTabUpdater
     sc::CellTextAttrStoreType& mrTextAttrs;
     sc::CellTextAttrStoreType::iterator miAttrPos;
     SCTAB mnTab;
-    SCTAB mnInsPos;
-    SCTAB mnNewSheets;
     bool mbModified;
 
 public:
@@ -2441,8 +2439,6 @@ class DeleteTabUpdater
     sc::RefUpdateDeleteTabContext& mrCxt;
     sc::CellTextAttrStoreType& mrTextAttrs;
     sc::CellTextAttrStoreType::iterator miAttrPos;
-    SCTAB mnDelPos;
-    SCTAB mnSheets;
     SCTAB mnTab;
     bool mbModified;
 public:
