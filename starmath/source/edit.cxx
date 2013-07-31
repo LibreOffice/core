@@ -755,16 +755,16 @@ void SmEditWindow::InsertCommand(sal_uInt16 nCommand)
 
         nEndIndex += aSelection.nEndPos;
 
-        // remove right space of current symbol if there already one
+        // remove right space of current symbol if there already is one
         if (nEndIndex < aCurrentFormula.getLength() &&
             aCurrentFormula[nEndIndex] == ' ')
             aText = aText.trim();
 
-        // put an space before put a new command when necessary(if we're not in the begin of a line)
+        // put a space before a new command if not in the beginning of a line
         if (aSelection.nStartPos > 0 && aCurrentFormula[nStartIndex - 1] != ' ')
-            aText = " " + aText;
-
-        pEditView->InsertText(aText);
+            pEditView->InsertText(" " + aText);
+        else
+            pEditView->InsertText(aText);
 
         // Remember start of the selection and move the cursor there afterwards.
         aSelection.nEndPara = aSelection.nStartPara;
@@ -975,7 +975,30 @@ void SmEditWindow::InsertText(const OUString& rText)
     OSL_ENSURE( pEditView, "EditView missing" );
     if (pEditView)
     {
-        pEditView->InsertText(rText);
+        // Note: Insertion of a space in front of commands is done here and
+        // in SmEditWindow::InsertCommand.
+        ESelection aSelection = pEditView->GetSelection();
+        OUString aCurrentFormula = pEditView->GetEditEngine()->GetText();
+        sal_Int32 nStartIndex = 0;
+        sal_Int32 nEndIndex = 0;
+
+        // get the start position (when we get a multi line formula)
+        for (sal_Int32 nParaPos = 0; nParaPos < aSelection.nStartPara; nParaPos++)
+             nStartIndex = aCurrentFormula.indexOf("\n", nStartIndex) + 1;
+
+        nStartIndex += aSelection.nStartPos;
+
+        // get the end position (when we get a multi line formula)
+        for (sal_Int32 nParaPos = 0; nParaPos < aSelection.nEndPara; nParaPos++)
+             nEndIndex = aCurrentFormula.indexOf("\n", nEndIndex) + 1;
+
+        nEndIndex += aSelection.nEndPos;
+
+        // put a space before a new command if not in the beginning of a line
+        if (aSelection.nStartPos > 0 && aCurrentFormula[nStartIndex - 1] != ' ')
+            pEditView->InsertText(" " + rText);
+        else
+            pEditView->InsertText(rText);
         aModifyTimer.Start();
         StartCursorMove();
     }
