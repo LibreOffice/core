@@ -46,7 +46,7 @@ void _ScRangeListTabs::Append( const ScAddress& aSRD, SCTAB nTab, const bool b )
     }
     else
     {
-        OSL_ENSURE( ValidTab(a.nTab), "-_ScRangeListTabs::Append(): A lie has no crash!" );
+        OSL_ENSURE( ValidTab(a.Tab()), "-_ScRangeListTabs::Append(): A lie has no crash!" );
     }
 
     if( nTab == SCTAB_MAX)
