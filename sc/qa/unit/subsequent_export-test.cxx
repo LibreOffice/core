@@ -29,6 +29,7 @@
 #include "scitems.hxx"
 #include "document.hxx"
 #include "cellform.hxx"
+#include "tabprotection.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -52,6 +53,7 @@ public:
     void testDataBarExportODS();
     void testDataBarExportXLSX();
     void testMiscRowHeightExport();
+    void testSheetProtectionXLSX();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -63,6 +65,8 @@ public:
     CPPUNIT_TEST(testColorScaleExportODS);
     CPPUNIT_TEST(testColorScaleExportXLSX);
     CPPUNIT_TEST(testMiscRowHeightExport);
+    CPPUNIT_TEST(testSheetProtectionXLSX);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -290,6 +294,34 @@ void ScExportTest::testMiscRowHeightExport()
         { "miscemptyrepeatedrowheights.", ODS, XLS, SAL_N_ELEMENTS(EmptyRepeatRowData), EmptyRepeatRowData },
     };
     miscRowHeightsTest( aTestValues, SAL_N_ELEMENTS(aTestValues) );
+}
+
+void ScExportTest::testSheetProtectionXLSX()
+{
+    ScDocShellRef xShell = loadDoc("ProtecteSheet1234Pass.", XLSX);
+    CPPUNIT_ASSERT(xShell.Is());
+
+    ScDocShellRef xDocSh = saveAndReload(xShell, XLSX);
+    CPPUNIT_ASSERT(xDocSh.Is());
+
+    ScDocument* pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    const ScTableProtection* pTabProtect = pDoc->GetTabProtection(0);
+    CPPUNIT_ASSERT(pTabProtect);
+    if ( pTabProtect )
+    {
+        Sequence<sal_Int8> aHash = pTabProtect->getPasswordHash(PASSHASH_XL);
+        // check has
+        if (aHash.getLength() >= 2)
+        {
+            CPPUNIT_ASSERT( (sal_uInt8)aHash[0] == 204 );
+            CPPUNIT_ASSERT( (sal_uInt8)aHash[1] == 61 );
+        }
+        // we could flesh out this check I guess
+        CPPUNIT_ASSERT ( pTabProtect->isOptionEnabled( ScTableProtection::OBJECTS ) );
+        CPPUNIT_ASSERT ( pTabProtect->isOptionEnabled( ScTableProtection::SCENARIOS ) );
+    }
+    xDocSh->DoClose();
 }
 
 ScExportTest::ScExportTest()
