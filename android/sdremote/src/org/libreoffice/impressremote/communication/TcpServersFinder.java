@@ -33,7 +33,7 @@ import org.libreoffice.impressremote.util.Intents;
 
 class TcpServersFinder implements ServersFinder, Runnable {
     private static final int SEARCH_DELAY_IN_SECONDS = 10;
-    private static final int BLOCKING_TIMEOUT_IN_MILLISECONDS = 1000 * 10;
+    private static final int BLOCKING_TIMEOUT_IN_SECONDS = 10;
 
     private static final int SEARCH_RESULT_BUFFER_SIZE = 1024;
 
@@ -74,7 +74,7 @@ class TcpServersFinder implements ServersFinder, Runnable {
     private void setUpSearchSocket() {
         try {
             mSearchSocket = new DatagramSocket();
-            mSearchSocket.setSoTimeout(BLOCKING_TIMEOUT_IN_MILLISECONDS);
+            mSearchSocket.setSoTimeout((int) TimeUnit.SECONDS.toMillis(BLOCKING_TIMEOUT_IN_SECONDS));
         } catch (SocketException e) {
             throw new RuntimeException("Unable to open search socket.");
         }

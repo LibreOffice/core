@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -26,7 +27,7 @@ import org.libreoffice.impressremote.util.BluetoothOperator;
 import org.libreoffice.impressremote.util.Intents;
 
 class BluetoothServersFinder extends BroadcastReceiver implements ServersFinder, Runnable {
-    private static final int SEARCH_DELAY_IN_MILLISECONDS = 1000 * 10;
+    private static final int SEARCH_DELAY_IN_SECONDS = 10;
 
     private final Context mContext;
 
@@ -102,7 +103,7 @@ class BluetoothServersFinder extends BroadcastReceiver implements ServersFinder,
         }
 
         Handler aHandler = new Handler();
-        aHandler.postDelayed(this, SEARCH_DELAY_IN_MILLISECONDS);
+        aHandler.postDelayed(this, TimeUnit.SECONDS.toMillis(SEARCH_DELAY_IN_SECONDS));
     }
 
     @Override
