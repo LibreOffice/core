@@ -671,7 +671,7 @@
 #define SID_BASICIDE_ARG_DOCUMENT_MODEL     ( SID_BASICIDE_START + 51 )
 #define SID_BASICIDE_MANAGE_LANG            ( SID_BASICIDE_START + 52 )
 #define SID_BASICIDE_CURRENT_LANG           ( SID_BASICIDE_START + 53 )
-#define SID_BASICIDE_CODECOMPLETITION       ( SID_BASICIDE_START + 54 )
+#define SID_BASICIDE_IDEOPTIONS             ( SID_BASICIDE_START + 54 )
 
 // SlotIds for Apps --------------------------------------------------------
 #define FN_PARAM                            (SID_SW_START + 1100)

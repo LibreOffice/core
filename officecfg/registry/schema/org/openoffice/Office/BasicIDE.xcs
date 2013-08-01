@@ -56,9 +56,9 @@
             </info>
             <value>false</value>
         </prop>
-        <prop oor:name="AutoCorrectSpelling" oor:type="xs:boolean" oor:nillable="false">
+        <prop oor:name="AutoCorrectKeywords" oor:type="xs:boolean" oor:nillable="false">
             <info>
-                <desc>Sets the auto correct spelling on/off. Default is false.</desc>
+                <desc>Sets the auto correction of keywords on/off. Default is false.</desc>
             </info>
             <value>false</value>
         </prop>

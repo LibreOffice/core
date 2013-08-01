@@ -510,7 +510,7 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
 
     if( (rKEvt.GetKeyCode().GetCode() == KEY_SPACE ||
         rKEvt.GetKeyCode().GetCode() == KEY_TAB ||
-        rKEvt.GetKeyCode().GetCode() == KEY_RETURN ) && CodeCompleteOptions::IsAutoCorrectSpellingOn() )
+        rKEvt.GetKeyCode().GetCode() == KEY_RETURN ) && CodeCompleteOptions::IsAutoCorrectKeywordsOn() )
     {
         TextSelection aSel = GetEditView()->GetSelection();
         sal_uLong nLine =  aSel.GetStart().GetPara();
@@ -611,7 +611,6 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
                 if( nLine+1 == pEditEngine->GetParagraphCount() )
                 { //append to the end
                     OUString sText("\nEnd ");
-                    std::cerr << "sProcType: " << sProcType << std::endl;
                     if( sProcType.equalsIgnoreAsciiCase("function") )
                         sText += OUString( "Function\n" );
                     if( sProcType.equalsIgnoreAsciiCase("sub") )
@@ -686,7 +685,7 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
 
             OUString sBaseName = aVect[0];//variable name
             OUString sVarType = aCodeCompleteCache.GetVarType( sBaseName );
-            if( !sVarType.isEmpty() && CodeCompleteOptions::IsAutoCorrectSpellingOn() )//correct variable name
+            if( !sVarType.isEmpty() && CodeCompleteOptions::IsAutoCorrectKeywordsOn() )//correct variable name
             {
                 TextPaM aStart(nLine, aSel.GetStart().GetIndex() - sBaseName.getLength() );
                 TextSelection sTextSelection(aStart, TextPaM(nLine, aSel.GetStart().GetIndex()));

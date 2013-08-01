@@ -3819,7 +3819,7 @@ SfxVoidItem MatchGroup SID_BASICIDE_MATCHGROUP
     GroupId = GID_MACRO;
 ]
 
-SfxVoidItem CodeCompleteOptionsDialog SID_BASICIDE_CODECOMPLETITION
+SfxVoidItem BasicIDEOptionsDialog SID_BASICIDE_IDEOPTIONS
 
 [
     /* flags: */
