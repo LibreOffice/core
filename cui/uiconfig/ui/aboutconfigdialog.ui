@@ -96,7 +96,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="svxcorelo-SvxSimpleTableContainer" id="preferences">
+                  <object class="svtlo-SvSimpleTableContainer" id="preferences">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>

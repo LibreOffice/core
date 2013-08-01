@@ -24,7 +24,7 @@ class CuiAboutConfigTabPage;
 class CuiAboutConfigTabPage : public SfxTabPage
 {
 private:
-    SvxSimpleTableContainer* m_pPrefCtrl;
+    SvSimpleTableContainer* m_pPrefCtrl;
     PushButton* m_pDefaultBtn;
     PushButton* m_pEditBtn;
 

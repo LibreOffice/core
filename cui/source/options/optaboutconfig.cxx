@@ -37,7 +37,7 @@ CuiAboutConfigTabPage::CuiAboutConfigTabPage( Window* pParent, const SfxItemSet&
     get(m_pDefaultBtn,"default");
     get(m_pEditBtn, "edit");
 
-    m_pPrefCtrl = get<SvxSimpleTableContainer>("preferences");
+    m_pPrefCtrl = get<SvSimpleTableContainer>("preferences");
 
     Size aControlSize(200,200);
     m_pPrefCtrl->set_width_request(aControlSize.Width());
