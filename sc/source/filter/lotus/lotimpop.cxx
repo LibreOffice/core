@@ -55,9 +55,10 @@ LOTUS_ROOT::LOTUS_ROOT( ScDocument* pDocP, CharSet eQ )
         eFirstType( Lotus_X),
         eActType( Lotus_X),
         pRngNmBffWK3( new RangeNameBufferWK3),
-        pFontBuff( new LotusFontBuffer),
-        pAttrTable( new LotAttrTable)
+        pFontBuff( new LotusFontBuffer)
 {
+    pLotusRoot = this; // #122841# the singleton global var is already needed for LotAttrTable
+    pAttrTable = new LotAttrTable;
 }
 
 
