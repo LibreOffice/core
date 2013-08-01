@@ -15,10 +15,14 @@ public final class BluetoothOperator {
     }
 
     public static boolean isAvailable() {
-        return BluetoothAdapter.getDefaultAdapter() != null;
+        return getAdapter() != null;
     }
 
     public static BluetoothAdapter getAdapter() {
+        // TODO: should be acquired other way on Jelly Bean MR2
+        // Look at the BluetoothAdapter’s docs for details.
+        // It will require to use the latest version of SDK to get needed constant.
+
         return BluetoothAdapter.getDefaultAdapter();
     }
 }

@@ -11,12 +11,12 @@ package org.libreoffice.impressremote.communication;
 import java.util.List;
 
 import android.app.Service;
-import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
 
+import org.libreoffice.impressremote.util.BluetoothOperator;
 import org.libreoffice.impressremote.util.Intents;
 
 public class CommunicationService extends Service implements Runnable, MessagesListener, Timer.TimerListener {
@@ -37,13 +37,13 @@ public class CommunicationService extends Service implements Runnable, MessagesL
     private IBinder mBinder;
 
     private ServersManager mServersManager;
-    private static boolean gWasBluetoothEnabled = false;
-    private static boolean gWasBluetoothEnabledFetched = false;
 
     private ServerConnection mServerConnection;
 
     private MessagesReceiver mMessagesReceiver;
     private CommandsTransmitter mCommandsTransmitter;
+
+    private boolean mBluetoothWasEnabled;
 
     private SlideShow mSlideShow;
 
@@ -59,6 +59,8 @@ public class CommunicationService extends Service implements Runnable, MessagesL
         mBinder = new CBinder();
 
         mServersManager = new ServersManager(this);
+
+        mBluetoothWasEnabled = false;
 
         mSlideShow = new SlideShow(new Timer(this));
 
@@ -163,13 +165,11 @@ public class CommunicationService extends Service implements Runnable, MessagesL
     public void startSearch() {
         mState = State.SEARCHING;
 
-        if (BluetoothAdapter.getDefaultAdapter() != null) {
-            if (!gWasBluetoothEnabledFetched) {
-                gWasBluetoothEnabled = BluetoothAdapter.getDefaultAdapter().isEnabled();
-                gWasBluetoothEnabledFetched = true;
+        if (BluetoothOperator.isAvailable()) {
+            mBluetoothWasEnabled = BluetoothOperator.getAdapter().isEnabled();
 
-                if (!gWasBluetoothEnabled)
-                    BluetoothAdapter.getDefaultAdapter().enable();
+            if (!BluetoothOperator.getAdapter().isEnabled()) {
+                BluetoothOperator.getAdapter().enable();
             }
         }
 
@@ -179,9 +179,10 @@ public class CommunicationService extends Service implements Runnable, MessagesL
     public void stopSearch() {
         mServersManager.stopServersSearch();
 
-        if (BluetoothAdapter.getDefaultAdapter() != null) {
-            if (!gWasBluetoothEnabled)
-                BluetoothAdapter.getDefaultAdapter().disable();
+        if (BluetoothOperator.isAvailable()) {
+            if (!mBluetoothWasEnabled) {
+                BluetoothOperator.getAdapter().disable();
+            }
         }
     }
 

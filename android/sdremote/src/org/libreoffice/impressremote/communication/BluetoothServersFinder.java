@@ -24,10 +24,9 @@ import android.support.v4.content.LocalBroadcastManager;
 
 import org.libreoffice.impressremote.util.BluetoothOperator;
 import org.libreoffice.impressremote.util.Intents;
-import org.libreoffice.impressremote.communication.Server.Protocol;
 
 class BluetoothServersFinder extends BroadcastReceiver implements ServersFinder, Runnable {
-    private static final int SEARCH_DELAY_IN_MILLISECONDS = 1000 * 5;
+    private static final int SEARCH_DELAY_IN_MILLISECONDS = 1000 * 10;
 
     private final Context mContext;
 
@@ -49,55 +48,53 @@ class BluetoothServersFinder extends BroadcastReceiver implements ServersFinder,
             return;
         }
 
-        setUpSearchResultsReceiver();
+        setUpBluetoothActionsReceiver();
+
+        if (!BluetoothOperator.getAdapter().isEnabled()) {
+            return;
+        }
 
         BluetoothOperator.getAdapter().startDiscovery();
     }
 
-    private void setUpSearchResultsReceiver() {
-        IntentFilter aSearchResultsFilter = new IntentFilter();
-        aSearchResultsFilter.addAction(BluetoothDevice.ACTION_FOUND);
-        aSearchResultsFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+    private void setUpBluetoothActionsReceiver() {
+        IntentFilter aBluetoothActionsFilter = new IntentFilter();
+        aBluetoothActionsFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
+        aBluetoothActionsFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+        aBluetoothActionsFilter.addAction(BluetoothDevice.ACTION_FOUND);
 
-        mContext.registerReceiver(this, aSearchResultsFilter);
+        mContext.registerReceiver(this, aBluetoothActionsFilter);
     }
 
     @Override
     public void onReceive(Context aContext, Intent aIntent) {
-        if (BluetoothDevice.ACTION_FOUND.equals(aIntent.getAction())) {
-            BluetoothDevice aBluetoothDevice = aIntent
-                .getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+        if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(aIntent.getAction())) {
+            switch (aIntent.getIntExtra(BluetoothAdapter.EXTRA_STATE, 0)) {
+                case BluetoothAdapter.STATE_ON:
+                    BluetoothOperator.getAdapter().startDiscovery();
+                    return;
 
-            addServer(buildServer(aBluetoothDevice));
-            callUpdatingServersList();
-
-            return;
+                default:
+                    return;
+            }
         }
 
         if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(aIntent.getAction())) {
             startDiscoveryDelayed();
+            return;
         }
-    }
 
-    private void addServer(Server aServer) {
-        mServers.put(aServer.getAddress(), aServer);
-    }
+        if (BluetoothDevice.ACTION_FOUND.equals(aIntent.getAction())) {
+            BluetoothDevice aBluetoothDevice = aIntent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
 
-    private Server buildServer(BluetoothDevice aBluetoothDevice) {
-        String aServerAddress = aBluetoothDevice.getAddress();
-        String aServerName = aBluetoothDevice.getName();
-
-        return new Server(Protocol.BLUETOOTH, aServerAddress, aServerName);
-    }
-
-    private void callUpdatingServersList() {
-        Intent aIntent = Intents.buildServersListChangedIntent();
-        LocalBroadcastManager.getInstance(mContext).sendBroadcast(aIntent);
+            addServer(buildServer(aBluetoothDevice));
+            callUpdatingServersList();
+        }
     }
 
     private void startDiscoveryDelayed() {
         // Start discovery again after a small delay.
-        // but check whether device is on in case the user manually
+        // Check whether device is on in case the user manually
         // disabled bluetooth
 
         if (!BluetoothOperator.getAdapter().isEnabled()) {
@@ -113,18 +110,34 @@ class BluetoothServersFinder extends BroadcastReceiver implements ServersFinder,
         BluetoothOperator.getAdapter().startDiscovery();
     }
 
+    private void addServer(Server aServer) {
+        mServers.put(aServer.getAddress(), aServer);
+    }
+
+    private Server buildServer(BluetoothDevice aBluetoothDevice) {
+        String aServerAddress = aBluetoothDevice.getAddress();
+        String aServerName = aBluetoothDevice.getName();
+
+        return Server.newBluetoothInstance(aServerAddress, aServerName);
+    }
+
+    private void callUpdatingServersList() {
+        Intent aIntent = Intents.buildServersListChangedIntent();
+        LocalBroadcastManager.getInstance(mContext).sendBroadcast(aIntent);
+    }
+
     @Override
     public void stopSearch() {
         if (!BluetoothOperator.isAvailable()) {
             return;
         }
 
-        tearDownSearchResultsReceiver();
+        tearDownBluetoothActionsReceiver();
 
         BluetoothOperator.getAdapter().cancelDiscovery();
     }
 
-    private void tearDownSearchResultsReceiver() {
+    private void tearDownBluetoothActionsReceiver() {
         try {
             mContext.unregisterReceiver(this);
         } catch (IllegalArgumentException e) {
