@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//9kY\u003d",
+        "filename": "sw/source/core/unocore/unoidx.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2631,
+      "author": {
+        "id": 1000094
+      },
+      "writtenOn": "2013-08-01T09:51:29Z",
+      "side": 1,
+      "message": "FillUIName can leave aString \"as is\" in some cases, so in any iteration it could possibly keep the result value of the previous one. It is not clear if this is the desired behaviour or just an oversight.",
+      "revId": "caaf08489c1a896257c670c74c21faad501f6c7c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//9kc\u003d",
+        "filename": "sw/source/core/unocore/unoidx.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2669,
+      "author": {
+        "id": 1000094
+      },
+      "writtenOn": "2013-08-01T09:51:29Z",
+      "side": 1,
+      "message": "FillProgName behaves like FillUIName, so the same considerations of the comment above apply also here.",
+      "revId": "caaf08489c1a896257c670c74c21faad501f6c7c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//9kM\u003d",
+        "filename": "sw/source/core/unocore/unostyle.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 796,
+      "author": {
+        "id": 1000094
+      },
+      "writtenOn": "2013-08-01T09:51:29Z",
+      "side": 1,
+      "message": "aString is not cleared at avery iteration: desired behaviour or oversight?",
+      "revId": "caaf08489c1a896257c670c74c21faad501f6c7c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//9kI\u003d",
+        "filename": "sw/source/filter/xml/xmlfmt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 411,
+      "author": {
+        "id": 1000094
+      },
+      "writtenOn": "2013-08-01T09:51:29Z",
+      "side": 1,
+      "message": "sName is not cleared at avery iteration: desired behaviour or oversight?",
+      "revId": "caaf08489c1a896257c670c74c21faad501f6c7c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//9kE\u003d",
+        "filename": "sw/source/ui/uno/unotxvw.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 569,
+      "author": {
+        "id": 1000094
+      },
+      "writtenOn": "2013-08-01T09:51:29Z",
+      "side": 1,
+      "message": "aString is not cleared at avery iteration: desired behaviour or oversight?",
+      "revId": "caaf08489c1a896257c670c74c21faad501f6c7c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
