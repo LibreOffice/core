@@ -764,10 +764,32 @@ void SwGrfShell::ExecuteRotation(SfxRequest &rReq)
     aTransform.rotate(aRotation);
     rShell.ReRead(aEmptyStr, aEmptyStr, (const Graphic*) &aGraphic);
 
-    SwFlyFrmAttrMgr aManager( false, &rShell, rShell.IsFrmSelected() ? FRMMGR_TYPE_NONE : FRMMGR_TYPE_GRF);
+    SwFlyFrmAttrMgr aManager(false, &rShell, rShell.IsFrmSelected() ? FRMMGR_TYPE_NONE : FRMMGR_TYPE_GRF);
     Size aSize(aManager.GetSize().Height(), aManager.GetSize().Width());
     aManager.SetSize(aSize);
     aManager.UpdateFlyFrm();
+
+    SfxItemSet aSet( rShell.GetAttrPool(), RES_GRFATR_CROPGRF, RES_GRFATR_CROPGRF );
+    rShell.GetCurAttr( aSet );
+    SwCropGrf aCrop( (const SwCropGrf&) aSet.Get(RES_GRFATR_CROPGRF) );
+    Rectangle aCropRectangle(aCrop.GetLeft(),  aCrop.GetTop(), aCrop.GetRight(), aCrop.GetBottom());
+
+    if (rReq.GetSlot() == SID_ROTATE_GRAPHIC_LEFT)
+    {
+        aCrop.SetLeft(   aCropRectangle.Top()    );
+        aCrop.SetTop(    aCropRectangle.Right()  );
+        aCrop.SetRight(  aCropRectangle.Bottom() );
+        aCrop.SetBottom( aCropRectangle.Left()   );
+    }
+    else if (rReq.GetSlot() == SID_ROTATE_GRAPHIC_RIGHT)
+    {
+        aCrop.SetLeft(   aCropRectangle.Bottom() );
+        aCrop.SetTop(    aCropRectangle.Left()   );
+        aCrop.SetRight(  aCropRectangle.Top()    );
+        aCrop.SetBottom( aCropRectangle.Right()  );
+    }
+
+    rShell.SetAttr(aCrop);
 
     rShell.EndUndo(UNDO_END);
     rShell.EndAllAction();
