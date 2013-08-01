@@ -21,7 +21,7 @@
 #include "helpid.hrc"
 #include <cuires.hrc>
 #include "optdict.hrc"
-
+/*
  // RID_SFXDLG_EDITDICT ---------------------------------------------------
 ModalDialog RID_SFXDLG_EDITDICT
 {
@@ -123,10 +123,7 @@ ModalDialog RID_SFXDLG_EDITDICT
         Border = TRUE ;
         TabStop = TRUE ;
     };
-    String STR_MODIFY
-    {
-        Text [ en-US ] = "~Replace" ;
-    };
+
 
 
 
@@ -143,12 +140,16 @@ ModalDialog RID_SFXDLG_EDITDICT
 
         Text [ en-US ] = "~Close" ;
     };
-};
+};*/
 
  // Strings ---------------------------------------------------------------
 String RID_SVXSTR_OPT_DOUBLE_DICTS
 {
     Text [ en-US ] = "The specified name already exists.\nPlease enter a new name." ;
+};
+String STR_MODIFY
+{
+    Text [ en-US ] = "~Replace" ;
 };
  // RID_SFXQB_SET_LANGUAGE ------------------------------------------------
 QueryBox RID_SFXQB_SET_LANGUAGE
