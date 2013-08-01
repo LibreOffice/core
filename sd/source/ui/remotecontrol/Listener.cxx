@@ -59,6 +59,7 @@ void Listener::init( const css::uno::Reference< css::presentation::XSlideShowCon
     }
     else
     {
+        SAL_INFO( "sdremote", "Listener::init but no controller - so no preview push queued" );
     }
 }
 

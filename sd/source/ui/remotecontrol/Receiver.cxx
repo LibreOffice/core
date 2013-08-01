@@ -15,7 +15,6 @@
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 
-
 #include <comphelper/processfactory.hxx>
 #include <osl/file.hxx>
 #include <rtl/ustrbuf.hxx>

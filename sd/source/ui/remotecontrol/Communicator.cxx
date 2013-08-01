@@ -106,6 +106,9 @@ void Communicator::execute()
             aCommand.clear();
         }
     }
+
+    SAL_INFO ("sdremote", "Exiting transmission loop\n");
+
     disposeListener();
 
     pTransmitter->notifyFinished();
@@ -113,6 +116,7 @@ void Communicator::execute()
     pTransmitter = NULL;
 
     delete mpSocket;
+
 
     RemoteServer::removeCommunicator( this );
 }

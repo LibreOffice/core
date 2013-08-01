@@ -171,6 +171,7 @@ void RemoteServer::execute()
             delete pSocket;
         }
     }
+    SAL_INFO( "sdremote", "shutting down RemoteServer" );
     spServer = NULL; // Object is destroyed when Thread::execute() ends.
 }
 

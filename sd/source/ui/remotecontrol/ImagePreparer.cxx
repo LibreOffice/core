@@ -51,6 +51,7 @@ ImagePreparer::ImagePreparer(
  :  xController( rxController ),
     pTransmitter( aTransmitter )
 {
+    SAL_INFO( "sdremote", "ImagePreparer - start" );
     SetTimeout( 50 );
     mnSendingSlide = 0;
     Start();
@@ -58,14 +59,15 @@ ImagePreparer::ImagePreparer(
 
 ImagePreparer::~ImagePreparer()
 {
+    SAL_INFO( "sdremote", "ImagePreparer - stop" );
     Stop();
 }
 
 void ImagePreparer::Timeout()
 {
     sal_uInt32 aSlides = xController->getSlideCount();
-//    fprintf( stderr, "ImagePreparer: %d %d %d\n", xController->isRunning(),
-//             (int)mnSendingSlide, (int)aSlides);
+    SAL_INFO( "sdremote", "ImagePreparer " << xController->isRunning() <<
+              " sending slide " << mnSendingSlide << " of " << aSlides );
     if ( xController->isRunning() && // not stopped/disposed of.
          mnSendingSlide < aSlides )
     {
