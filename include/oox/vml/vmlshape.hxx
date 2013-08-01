@@ -59,6 +59,7 @@ struct OOX_DLLPUBLIC ShapeTypeModel
 {
     OUString     maShapeId;              ///< Unique identifier of the shape.
     OUString     maShapeName;            ///< Name of the shape, if present.
+    OUString     maShapeOriginalId;      ///< Original shape ID, if present.
     OptValue< sal_Int32 > moShapeType;          ///< Builtin shape type identifier.
 
     OptValue< Int32Pair > moCoordPos;           ///< Top-left position of coordinate system for children scaling.

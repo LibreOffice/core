@@ -166,7 +166,20 @@ void VMLExport::AddShape( sal_uInt32 nShapeType, sal_uInt32 nShapeFlags, sal_uIn
     m_nShapeType = nShapeType;
     m_nShapeFlags = nShapeFlags;
 
-    m_pShapeAttrList->add( XML_id, ShapeIdString( nShapeId ) );
+    // If shape is a watermark object - should keep the original shape's name
+    // because Microsoft detects if it is a watermark by the actual name
+    if (m_pSdrObject->GetWatermarkType() == WATERMARK_TYPE_NONE)
+    {
+        // Not a watermark object
+        m_pShapeAttrList->add( XML_id, ShapeIdString( nShapeId ) );
+    }
+    else
+    {
+        // A watermark object - store the original shape ID also ('o:spid')
+        m_pShapeAttrList->add( XML_id, OUStringToOString(m_pSdrObject->GetName(), RTL_TEXTENCODING_UTF8) );
+        if (!m_pSdrObject->GetShapeOriginalID().isEmpty())
+            m_pShapeAttrList->add( FSNS(XML_o, XML_spid), OUStringToOString(m_pSdrObject->GetShapeOriginalID(), RTL_TEXTENCODING_UTF8) );
+    }
 }
 
 static void impl_AddArrowHead( sax_fastparser::FastAttributeList *pAttrList, sal_Int32 nElement, sal_uInt32 nValue )
@@ -327,7 +340,10 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
     else
     {
         Rectangle aRect(rRect);
-        if (m_pNdTopLeft)
+
+        // For watermark export - we need original rRect value.
+        // So only if the shape's name is empty - we change the value of aRect
+        if (m_pNdTopLeft && m_pSdrObject->GetWatermarkType() == WATERMARK_TYPE_NONE)
         {
             aRect = m_pSdrObject->GetSnapRect();
             aRect -= *m_pNdTopLeft;
