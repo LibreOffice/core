@@ -514,7 +514,7 @@ void XclExpSheetProtection::SaveXml( XclExpXmlStream& rStrm )
         {
             nHash = ((aHash[0] << 8) & 0xFFFF);
             nHash |= (aHash[1] & 0xFF);
-            sHash = OString::valueOf( nHash, 16 );
+            sHash = OString::valueOf( static_cast<sal_Int32>(nHash), 16 );
         }
         sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
         rWorksheet->singleElement( XML_sheetProtection,
