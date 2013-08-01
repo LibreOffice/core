@@ -142,7 +142,7 @@ typedef std::vector<DfltBoxAttrMap_t *> DfltBoxAttrList_t;
 
 static void
 lcl_SetDfltBoxAttr(SwTableBox& rBox, DfltBoxAttrList_t & rBoxFormatArr,
-        sal_uInt8 const nId, SwTableAutoFormat const*const pAutoFormat = 0)
+        sal_uInt8 const nId, SwTableAutoFormat const*const /*pAutoFormat*/ = 0)
 {
     DfltBoxAttrMap_t * pMap = rBoxFormatArr[ nId ];
     if (!pMap)
@@ -165,16 +165,11 @@ lcl_SetDfltBoxAttr(SwTableBox& rBox, DfltBoxAttrList_t & rBoxFormatArr,
         pNewTableBoxFormat = pDoc->MakeTableBoxFormat();
         pNewTableBoxFormat->SetFormatAttr( pBoxFrameFormat->GetAttrSet().Get( RES_FRM_SIZE ) );
 
-        if( pAutoFormat )
-            pAutoFormat->UpdateToSet( nId, (SfxItemSet&)pNewTableBoxFormat->GetAttrSet(),
-                                    SwTableAutoFormat::UPDATE_BOX,
-                                    pDoc->GetNumberFormatter( sal_True ) );
-        else
-            ::lcl_SetDfltBoxAttr( *pNewTableBoxFormat, nId );
+        ::lcl_SetDfltBoxAttr( *pNewTableBoxFormat, nId );
 
         (*pMap)[pBoxFrameFormat] = pNewTableBoxFormat;
     }
-    rBox.ChgFrameFormat( pNewTableBoxFormat );
+    rBox.ChgFrameFormat( new SwTableBoxFormat( *pNewTableBoxFormat) );
 }
 
 static SwTableBoxFormat *lcl_CreateDfltBoxFormat( SwDoc &rDoc, std::vector<SwTableBoxFormat*> &rBoxFormatArr,
@@ -461,7 +456,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTableOpts,
     SwTableLines& rLines = rNdTable.GetTabLines();
     for( sal_uInt16 n = 0; n < nRows; ++n )
     {
-        SwTableLine* pLine = new SwTableLine( pLineFormat, nCols, 0 );
+        SwTableLine* pLine = new SwTableLine( new SwTableLineFormat( *pLineFormat ), nCols, 0 );
         rLines.insert( rLines.begin() + n, pLine );
         SwTableBoxes& rBoxes = pLine->GetTabBoxes();
         for( sal_uInt16 i = 0; i < nCols; ++i )
@@ -470,10 +465,10 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTableOpts,
             if( bDfltBorders )
             {
                 sal_uInt8 nBoxId = (i < nCols - 1 ? 0 : 1) + (n ? 2 : 0 );
-                pBoxF = ::lcl_CreateDfltBoxFormat( *this, aBoxFormatArr, nCols, nBoxId);
+                pBoxF = new SwTableBoxFormat( *::lcl_CreateDfltBoxFormat( *this, aBoxFormatArr, nCols, nBoxId) );
             }
             else
-                pBoxF = pBoxFormat;
+                pBoxF = new SwTableBoxFormat( *pBoxFormat );
 
             // For AutoFormat on input: the columns are set when inserting the Table
             // The Array contains the columns positions and not their widths!
@@ -497,6 +492,9 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTableOpts,
             aNdIdx += 3; // StartNode, TextNode, EndNode  == 3 Nodes
         }
     }
+
+    SwTableFormat::AssignLineParents( pTableStyle, rNdTable );
+
     // Insert Frms
     GetNodes().GoNext( &aNdIdx ); // Go to the next ContentNode
     pTableNd->MakeFrms( &aNdIdx );
@@ -739,8 +737,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTableOpts,
                 else
                 {
                     bChgSz = 0 == (*aBoxFormatArr2)[ nId ];
-                    pBoxF = ::lcl_CreateDfltBoxFormat( *this, *aBoxFormatArr2,
-                                                    USHRT_MAX, nId );
+                    pBoxF = new SwTableBoxFormat ( *::lcl_CreateDfltBoxFormat( *this, *aBoxFormatArr2, USHRT_MAX, nId ) );
                     if( bChgSz )
                         pBoxF->SetFormatAttr( pBox->GetFrameFormat()->GetFrmSize() );
                     pBox->ChgFrameFormat( pBoxF );
@@ -749,7 +746,9 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTableOpts,
         }
     }
 
-    // Check the boxes for numbers
+    SwTableFormat::AssignLineParents( pTableStyle, rNdTable );
+
+    // Check the Boxes' for Numbers
     if( IsInsTableFormatNum() )
     {
         for (size_t nBoxes = rNdTable.GetTabSortBoxes().size(); nBoxes; )

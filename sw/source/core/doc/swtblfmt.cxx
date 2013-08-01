@@ -271,6 +271,8 @@ void SwTableFormat::RestoreTableProperties( SwTableFormat* pSrcFormat, SwTable &
     else
         pTableStyle->Remove( pHardFormat );
 
+    AssignLineParents( pSrcFormat, table );
+
     SwEditShell *pShell = pDoc->GetEditShell();
     pDoc->SetRowSplit( *pShell->getShellCrsr( false ), SwFormatRowSplit( bRowSplit ) );
 
@@ -284,6 +286,99 @@ SwTableFormat* SwTableFormat::StoreTableProperties( const SwTable &table )
         return NULL;
 
     return (SwTableFormat*)pHardFormat->GetRegisteredIn();
+}
+
+void SwTableFormat::AssignLineParents( SwTableFormat* pSrcFormat, SwTable &rTable )
+{
+    sal_uInt16 nLines = rTable.GetTabLines().size();
+    for( sal_uInt16 n = 0; n < nLines; ++n )
+    {
+        SwTableLineFormat* pLineFormat = (SwTableLineFormat*)rTable.GetTabLines()[ n ]->GetFrameFormat();
+        SwTableLineFormat* pFormat = 0;
+
+        if( pSrcFormat )
+        {
+            if( !n )
+                pFormat = pSrcFormat->GetFirstLineFormat();
+            else if( n == nLines - 1 )
+                pFormat = pSrcFormat->GetLastLineFormat();
+            else if( n & 1 )
+                pFormat = pSrcFormat->GetEvenLineFormat();
+            else
+                pFormat = pSrcFormat->GetOddLineFormat();
+        }
+
+        if( pFormat )
+            pLineFormat->RegisterToFormat( *pFormat );
+        else if( pLineFormat->GetRegisteredIn() )
+            ((SwTableLineFormat*)pLineFormat->GetRegisteredIn())->Remove( pLineFormat );
+
+        AssignBoxParents( pFormat, *rTable.GetTabLines()[ n ] );
+    }
+}
+
+void SwTableFormat::AssignBoxParents( SwTableLineFormat* pSrcLineFormat, SwTableLine &rLine )
+{
+    sal_uInt16 nBoxes = rLine.GetTabBoxes().size();
+    for( sal_uInt16 n = 0; n < nBoxes; ++n )
+    {
+        SwTableBoxFormat* pBoxFormat = (SwTableBoxFormat*)rLine.GetTabBoxes()[ n ]->GetFrameFormat();
+        SwTableBoxFormat* pFormat = 0;
+
+        if( pSrcLineFormat )
+        {
+            if( !n )
+                pFormat = pSrcLineFormat->GetFirstBoxFormat();
+            else if( n == nBoxes - 1 )
+                pFormat = pSrcLineFormat->GetLastBoxFormat();
+            else if( n & 1 )
+                pFormat = pSrcLineFormat->GetEvenBoxFormat();
+            else
+                pFormat = pSrcLineFormat->GetOddBoxFormat();
+        }
+
+        if( pFormat )
+            pBoxFormat->RegisterToFormat( *pFormat );
+        else if( pBoxFormat->GetRegisteredIn() )
+            ((SwTableBoxFormat*)pBoxFormat->GetRegisteredIn())->Remove( pBoxFormat );
+
+
+        if( rLine.GetTabBoxes()[ n ]->GetTabLines().size() )
+            AssignLineParents_Complex( pSrcLineFormat, pFormat, *rLine.GetTabBoxes()[ n ] );
+    }
+}
+
+void SwTableFormat::AssignLineParents_Complex( SwTableLineFormat* pSrcLineFormat, SwTableBoxFormat* pSrcBoxFormat, SwTableBox& rBox )
+{
+    sal_uInt16 nLines = rBox.GetTabLines().size();
+    for( sal_uInt16 n = 0; n < nLines; ++n )
+    {
+        SwTableLineFormat* pLineFormat = (SwTableLineFormat*)rBox.GetTabLines()[ n ]->GetFrameFormat();
+
+        if( pSrcLineFormat )
+            pLineFormat->RegisterToFormat( *pSrcLineFormat );
+        else
+            ((SwTableLineFormat*)pLineFormat->GetRegisteredIn())->Remove( pLineFormat );
+
+        AssignBoxParents_Complex( pSrcLineFormat, pSrcBoxFormat, *rBox.GetTabLines()[ n ] );
+    }
+}
+
+void SwTableFormat::AssignBoxParents_Complex( SwTableLineFormat* pSrcLineFormat, SwTableBoxFormat* pSrcBoxFormat, SwTableLine& rLine )
+{
+    sal_uInt16 nBoxes = rLine.GetTabBoxes().size();
+    for( sal_uInt16 n = 0; n < nBoxes; ++n )
+    {
+        SwTableBoxFormat* pBoxFormat = (SwTableBoxFormat*)rLine.GetTabBoxes()[ n ]->GetFrameFormat();
+
+        if( pSrcBoxFormat )
+            pBoxFormat->RegisterToFormat( *pSrcBoxFormat );
+        else
+            ((SwTableBoxFormat*)pBoxFormat->GetRegisteredIn())->Remove( pBoxFormat );
+
+        if( rLine.GetTabBoxes()[ n ]->GetTabLines().size() )
+            AssignLineParents_Complex( pSrcLineFormat, pSrcBoxFormat, *rLine.GetTabBoxes()[ n ] );
+    }
 }
 
 SwTableLineFormat::SwTableLineFormat( SwAttrPool& rPool, const sal_Char* pFormatNm,
