@@ -10,5 +10,6 @@
 #import "slideShowPreviewTable_vc.h"
 
 @interface slideShowPreviewTable_vc_iphone : slideShowPreviewTable_vc
+@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 
 @end

@@ -22,6 +22,7 @@
 
 @property uint size;
 @property uint currentSlide;
+//@property (nonatomic, strong) NSString * title;
 @property (nonatomic, strong) id <AsyncLoadHorizontalTableDelegate> delegate;
 @property (nonatomic, strong) id secondaryDelegate;
 
@@ -29,5 +30,8 @@
 - (void) putNotes: (NSString *)notes AtIndex: (uint) index;
 
 - (void) getContentAtIndex: (uint) index forView: (UIView*) view;
+
+- (NSString *) title;
+- (void) setTitle:(NSString *)title;
 
 @end

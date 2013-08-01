@@ -24,6 +24,8 @@
 #define MSG_PAIRING_STARTED @"PAIRING_STARTED"
 #define MSG_PAIRING_SUCCESSFUL @"PAIRING_SUCCESSFUL"
 
+#define SLIDESHOW_INFO_RECEIVED @"SLIDE_INFO_RECEIVED"
+
 /**
  * Notify the UI that the service has connected to a server AND a slideshow
  * is running.

@@ -17,5 +17,6 @@
 @interface slideShowPreviewTable_vc_ipad : slideShowPreviewTable_vc
 
 @property (strong, nonatomic) id <MainSplitViewControllerProtocol> delegate;
+@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 
 @end

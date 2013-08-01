@@ -21,6 +21,8 @@
 @property (nonatomic, strong) id slideShowStartObserver;
 @property (nonatomic, strong) NSArray * optionsArray;
 
+@property (nonatomic, strong) id titleObserver;
+
 -(IBAction)startPresentationAction:(id)sender;
 
 @end

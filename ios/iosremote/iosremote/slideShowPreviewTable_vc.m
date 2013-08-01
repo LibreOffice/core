@@ -23,6 +23,7 @@
 @synthesize startButton = _startButton;
 @synthesize optionsTable = _optionsTable;
 @synthesize optionsArray = _optionsArray;
+@synthesize titleObserver = _titleObserver;
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
 {

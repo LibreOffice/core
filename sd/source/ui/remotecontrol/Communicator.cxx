@@ -11,6 +11,10 @@
 
 #include <com/sun/star/frame/Desktop.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/documentinfo.hxx>
+#include <comphelper/mediadescriptor.hxx>
+#include <rtl/string.hxx>
+#include <rtl/strbuf.hxx>
 
 #include "Communicator.hxx"
 #include "Listener.hxx"
@@ -70,6 +74,13 @@ void Communicator::execute()
             pTransmitter->addMessage( "slideshow_finished\n\n",
                                       Transmitter::PRIORITY_HIGH );
         }
+
+        OStringBuffer aBuffer;
+            aBuffer.append( "slideshow_info\n" )
+                .append( OUStringToOString( ::comphelper::DocumentInfo::getDocumentTitle( xFrame->getController()->getModel() ), RTL_TEXTENCODING_UTF8 ) )
+               .append("\n\n");
+
+        pTransmitter->addMessage( aBuffer.makeStringAndClear(), Transmitter::PRIORITY_LOW );
     }
     catch (uno::RuntimeException &)
     {

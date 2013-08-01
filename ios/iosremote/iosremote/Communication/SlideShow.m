@@ -33,6 +33,17 @@
 
 dispatch_queue_t backgroundQueue;
 NSLock *dictLock;
+NSString *sTitle;
+
+- (NSString *) title
+{
+    return sTitle;
+}
+
+- (void) setTitle:(NSString *)title
+{
+    sTitle = title;
+}
 
 - (void) setDelegate:(id<AsyncLoadHorizontalTableDelegate>)delegate
 {

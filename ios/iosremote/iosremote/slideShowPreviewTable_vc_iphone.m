@@ -18,6 +18,18 @@
     self.optionsArray = [NSArray arrayWithObjects:OPTION_TIMER, OPTION_POINTER, nil];
     self.comManager = [CommunicationManager sharedComManager];
     self.comManager.delegate = self;
+    
+    
+    if (self.comManager.interpreter.slideShow)
+        [self.titleLabel setText:[self.comManager.interpreter.slideShow title]];
+    
+    [[NSNotificationCenter defaultCenter] addObserverForName:SLIDESHOW_INFO_RECEIVED object:self.titleObserver queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
+        [self.titleLabel setText:self.comManager.interpreter.slideShow.title];
+        if (!self.titleLabel) {
+            NSLog(@"TitleLabel nil");
+        }
+        NSLog(@"Received: %@", self.comManager.interpreter.slideShow.title);
+    }];
 }
 
 - (void) viewDidAppear:(BOOL)animated
@@ -36,4 +48,8 @@
                                                                                 }];
 }
 
+- (void)viewDidUnload {
+    [self setTitleLabel:nil];
+    [super viewDidUnload];
+}
 @end

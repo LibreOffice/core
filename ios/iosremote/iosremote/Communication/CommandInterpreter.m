@@ -69,9 +69,17 @@ dispatch_queue_t backgroundQueue;
         self.slideShow = [[SlideShow alloc] init];
         [[NSNotificationCenter defaultCenter] postNotificationName:STATUS_CONNECTED_NOSLIDESHOW object:nil];
         marker = 2;
+    }  else if([instruction isEqualToString:@"slideshow_info"]){
+        NSLog(@"Interpreter: slideshow_info");
+        NSString * title = [command objectAtIndex:1];
+        NSLog(@"title: %@", title);
+        [self.slideShow setTitle:title];
+        [[NSNotificationCenter defaultCenter] postNotificationName:SLIDESHOW_INFO_RECEIVED
+                                                            object:nil];
+        marker = 3;
     } else {
         if ([instruction isEqualToString:@"slide_updated"]) {
-            NSLog(@"Interpreter: slide_updated");
+            NSLog(@"Interpret   er: slide_updated");
             uint newSlideNumber = [[command objectAtIndex:1] integerValue];
             [self.slideShow setCurrentSlide:newSlideNumber];
 
