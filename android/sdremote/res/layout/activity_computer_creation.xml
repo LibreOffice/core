@@ -22,12 +22,4 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
-    <TextView
-        style="?textAppearanceSmall"
-        android:text="@string/message_name_notice"
-        android:gravity="center_horizontal"
-        android:paddingTop="@dimen/padding_vertical_notice"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
 </LinearLayout>
