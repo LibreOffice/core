@@ -29,7 +29,6 @@
 #include <svx/xoutbmp.hxx>
 #include <dialmgr.hxx>
 #include <cuires.hrc>
-#include <cuiimapdlg.hrc>
 #include <cuiimapwnd.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdorect.hxx>
@@ -50,36 +49,26 @@
 \************************************************************************/
 
 URLDlg::URLDlg( Window* pWindow, const String& rURL, const String& rAlternativeText, const String& rDescription, const String& rTarget, const String& rName, TargetList& rTargetList )
-: ModalDialog( pWindow, CUI_RES( RID_SVXDLG_IMAPURL ) )
-, maFtURL( this, CUI_RES( FT_URL1 ) )
-, maEdtURL( this, CUI_RES( EDT_URL ) )
-, maFtTarget( this, CUI_RES( FT_TARGET ) )
-, maCbbTargets( this, CUI_RES( CBB_TARGETS ) )
-, maFtName( this, CUI_RES( FT_NAME ) )
-, maEdtName( this, CUI_RES( EDT_NAME ) )
-, maFtAlternativeText( this, CUI_RES( FT_URLDESCRIPTION ) )
-, maEdtAlternativeText( this, CUI_RES( EDT_URLDESCRIPTION ) )
-, maFtDescription( this, CUI_RES( FT_DESCRIPTION ) )
-, maEdtDescription( this, CUI_RES( EDT_DESCRIPTION ) )
-, maFlURL( this, CUI_RES( FL_URL ) )
-, maBtnHelp( this, CUI_RES( BTN_HELP1 ) )
-, maBtnOk( this, CUI_RES( BTN_OK1 ) )
-, maBtnCancel( this, CUI_RES( BTN_CANCEL1 ) )
+: ModalDialog(pWindow, "IMapDialog", "cui/ui/cuiimapdlg.ui")
 {
-    FreeResource();
+    get(m_pEdtURL, "urlentry");
+    get(m_pCbbTargets, "frameCB");
+    get(m_pEdtName, "nameentry");
+    get(m_pEdtAlternativeText, "textentry");
+    get(m_pEdtDescription, "descTV");
 
-    maEdtURL.SetText( rURL );
-    maEdtAlternativeText.SetText( rAlternativeText );
-    maEdtDescription.SetText( rDescription );
-    maEdtName.SetText( rName );
+    m_pEdtURL->SetText( rURL );
+    m_pEdtAlternativeText->SetText( rAlternativeText );
+    m_pEdtDescription->SetText( rDescription );
+    m_pEdtName->SetText( rName );
 
     for( size_t i = 0, n = rTargetList.size(); i < n; ++i )
-        maCbbTargets.InsertEntry( *rTargetList[ i ] );
+        m_pCbbTargets->InsertEntry( *rTargetList[ i ] );
 
     if( !rTarget.Len() )
-        maCbbTargets.SetText( OUString("_self") );
+        m_pCbbTargets->SetText( OUString("_self") );
     else
-        maCbbTargets.SetText( rTarget );
+        m_pCbbTargets->SetText( rTarget );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

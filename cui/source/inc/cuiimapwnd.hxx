@@ -33,20 +33,11 @@
 
 class URLDlg : public ModalDialog
 {
-    FixedText           maFtURL;
-    Edit                maEdtURL;
-    FixedText           maFtTarget;
-    ComboBox            maCbbTargets;
-    FixedText           maFtName;
-    Edit                maEdtName;
-    FixedText           maFtAlternativeText;
-    Edit                maEdtAlternativeText;
-    FixedText           maFtDescription;
-    MultiLineEdit       maEdtDescription;
-    FixedLine           maFlURL;
-    HelpButton          maBtnHelp;
-    OKButton            maBtnOk;
-    CancelButton        maBtnCancel;
+    Edit*                m_pEdtURL;
+    ComboBox*            m_pCbbTargets;
+    Edit*                m_pEdtName;
+    Edit*                m_pEdtAlternativeText;
+    VclMultiLineEdit*       m_pEdtDescription;
 
 public:
 
@@ -55,11 +46,11 @@ public:
                                 const String& rTarget, const String& rName,
                                 TargetList& rTargetList );
 
-    String              GetURL() const { return maEdtURL.GetText(); }
-    String              GetAltText() const { return maEdtAlternativeText.GetText(); }
-    String              GetDesc() const { return maEdtDescription.GetText(); }
-    String              GetTarget() const { return maCbbTargets.GetText(); }
-    String              GetName() const { return maEdtName.GetText(); }
+    String              GetURL() const { return m_pEdtURL->GetText(); }
+    String              GetAltText() const { return m_pEdtAlternativeText->GetText(); }
+    String              GetDesc() const { return m_pEdtDescription->GetText(); }
+    String              GetTarget() const { return m_pCbbTargets->GetText(); }
+    String              GetName() const { return m_pEdtName->GetText(); }
 };
 
 #endif
