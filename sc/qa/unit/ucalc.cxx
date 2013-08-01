@@ -218,6 +218,7 @@ public:
     void testDataArea();
     void testAutofilter();
     void testCopyPaste();
+    void testCopyPasteRelativeFormula();
     void testMergedCells();
     void testUpdateReference();
 
@@ -322,6 +323,7 @@ public:
     CPPUNIT_TEST(testToggleRefFlag);
     CPPUNIT_TEST(testAutofilter);
     CPPUNIT_TEST(testCopyPaste);
+    CPPUNIT_TEST(testCopyPasteRelativeFormula);
     CPPUNIT_TEST(testMergedCells);
     CPPUNIT_TEST(testUpdateReference);
     CPPUNIT_TEST(testJumpToPrecedentsDependents);
@@ -5961,6 +5963,40 @@ void Test::testCopyPaste()
     CPPUNIT_ASSERT_MESSAGE("Formula should be correct again", aString == aFormulaString);
 
     m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testCopyPasteRelativeFormula()
+{
+    m_pDoc->InsertTab(0, "Formula");
+
+    AutoCalcSwitch aACSwitch(m_pDoc, true);
+
+    // Insert values to A2 and A4.
+    m_pDoc->SetValue(ScAddress(0,1,0), 1);
+    m_pDoc->SetValue(ScAddress(0,3,0), 2);
+
+    // Insert formula to B4.
+    m_pDoc->SetString(ScAddress(1,3,0), "=A4");
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(1,3,0)));
+
+    // Select and copy B3:B4 to the clipboard.
+    ScRange aRange(1,2,0,1,3,0);
+    ScClipParam aClipParam(aRange, false);
+    ScMarkData aMark;
+    aMark.SetMarkArea(aRange);
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMark);
+
+    // Paste it to B1:B2.
+    sal_uInt16 nFlags = IDF_ALL;
+    ScRange aDestRange(1,0,0,1,1,0);
+    aMark.SetMarkArea(aDestRange);
+    m_pDoc->CopyFromClip(aDestRange, aMark, nFlags, NULL, &aClipDoc);
+
+    // B2 references A2, so the value should be 1.
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(1,1,0)));
+
     m_pDoc->DeleteTab(0);
 }
 
