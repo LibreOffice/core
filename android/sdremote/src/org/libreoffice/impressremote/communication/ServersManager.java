@@ -9,6 +9,8 @@
 package org.libreoffice.impressremote.communication;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 
 import java.util.List;
@@ -19,7 +21,7 @@ import android.content.Context;
 
 import org.libreoffice.impressremote.util.Preferences;
 
-class ServersManager {
+class ServersManager implements Comparator<Server> {
     private final Context mContext;
 
     private final ServersFinder mBluetoothServersFinder;
@@ -53,7 +55,11 @@ class ServersManager {
         aServers.addAll(mTcpServersFinder.getServers());
         aServers.addAll(getManualAddedTcpServers());
 
-        return filterBlacklistedServers(aServers);
+        aServers = filterBlacklistedServers(aServers);
+
+        Collections.sort(aServers, this);
+
+        return aServers;
     }
 
     private List<Server> getManualAddedTcpServers() {
@@ -87,6 +93,14 @@ class ServersManager {
         }
 
         return aFilteredServers;
+    }
+
+    @Override
+    public int compare(Server aFirstServer, Server aSecondServer) {
+        String aFirstServerName = aFirstServer.getName();
+        String aSecondServerName = aSecondServer.getName();
+
+        return aFirstServerName.compareToIgnoreCase(aSecondServerName);
     }
 
     public void addTcpServer(String aAddress, String aName) {
