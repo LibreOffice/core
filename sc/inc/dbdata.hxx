@@ -58,6 +58,7 @@ private:
     bool            bDoSize;
     bool            bKeepFmt;
     bool            bStripData;
+    bool            bHasFormatting;
 
     /// QueryParam
     bool            bIsAdvanced;        ///< true if created by advanced filter
@@ -107,6 +108,7 @@ public:
     void        SetKeepFmt(bool bSet)           { bKeepFmt = bSet; }
     bool        IsStripData() const             { return bStripData; }
     void        SetStripData(bool bSet)         { bStripData = bSet; }
+    bool        HasFormatting()                 { return bHasFormatting; }
 
     OUString GetSourceString() const;
     OUString GetOperations() const;

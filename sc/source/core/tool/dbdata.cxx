@@ -71,7 +71,8 @@ ScDBData::ScDBData( const OUString& rName,
     bDBSelection(false),
     nIndex      (0),
     bAutoFilter (false),
-    bModified   (false)
+    bModified   (false),
+    bHasFormatting(false)
 {
     aUpper = ScGlobal::pCharClass->uppercase(aUpper);
 }
@@ -99,7 +100,8 @@ ScDBData::ScDBData( const ScDBData& rData ) :
     bDBSelection        (rData.bDBSelection),
     nIndex              (rData.nIndex),
     bAutoFilter         (rData.bAutoFilter),
-    bModified           (rData.bModified)
+    bModified           (rData.bModified),
+    bHasFormatting      (rData.bHasFormatting)
 {
 }
 
@@ -126,7 +128,8 @@ ScDBData::ScDBData( const OUString& rName, const ScDBData& rData ) :
     bDBSelection        (rData.bDBSelection),
     nIndex              (rData.nIndex),
     bAutoFilter         (rData.bAutoFilter),
-    bModified           (rData.bModified)
+    bModified           (rData.bModified),
+    bHasFormatting      (rData.bHasFormatting)
 {
     aUpper = ScGlobal::pCharClass->uppercase(aUpper);
 }
@@ -155,6 +158,7 @@ ScDBData& ScDBData::operator= (const ScDBData& rData)
     bDBSelection        = rData.bDBSelection;
     nIndex              = rData.nIndex;
     bAutoFilter         = rData.bAutoFilter;
+    bHasFormatting      = rData.bHasFormatting;
 
     return *this;
 }
@@ -410,6 +414,7 @@ void ScDBData::SetImportParam(const ScImportParam& rImportParam)
 //Methods to get and set ScDBDataFormatting instance
 void ScDBData::SetTableFormatting( const ScDBDataFormatting& rTableFormatData )
 {
+    bHasFormatting = true;
     mpTableFormatData.reset( new ScDBDataFormatting( rTableFormatData ) );
 }
 

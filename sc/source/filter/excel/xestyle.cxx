@@ -3235,8 +3235,7 @@ XclExpTableStyles::XclExpTableStyles( const XclExpRoot& rRoot, XclExpDxfs& rDxfs
             the named DBs for table style information.
             */
             ScDBDataFormatting aDBFormatting;
-            (*itr).GetTableFormatting( aDBFormatting );
-            if( &(aDBFormatting)!=NULL )//Probably non-standard?
+            if( (*itr).HasFormatting() )
             {
                 miCount++;
                 maStyleContainer.push_back( new XclExpTableStyle( rRoot, aDBFormatting, rDxfs ) );
