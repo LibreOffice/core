@@ -64,7 +64,6 @@ XclExpXmlDBDataColumns::XclExpXmlDBDataColumns( const XclExpRoot& rRoot, ScDBDat
     aRange.GetVars( anCol1, anRow1, anTab1, anCol2, anRow2, anTab2 );
     anTotalCols = (anCol2 - anCol1) + 1; //addressing starts from 0
     // Needs special handling for different tab ranges
-    //miCount = anTotalCols;
     OUString aColName = "Column";
     for( int i = 1; i <= anTotalCols; i++ )
     {
@@ -112,7 +111,6 @@ void XclExpXmlDBDataTable::SaveXml( XclExpXmlStream& rStrm )
 XclExpXmlDBDataTables::XclExpXmlDBDataTables( const XclExpRoot& rRoot )
     : XclExpRoot( rRoot )
 {
-    int nCount = 0;
     ScDBCollection* pDBCollection = rRoot.GetDoc().GetDBCollection();
     if( pDBCollection )
     {
@@ -121,8 +119,7 @@ XclExpXmlDBDataTables::XclExpXmlDBDataTables( const XclExpRoot& rRoot )
         ScDBCollection::NamedDBs::iterator itrEnd = aNamedDBs.end();
         for(; itr!= itrEnd; ++itr)
         {
-            ++nCount;
-            maDBDataTableContainer.push_back( new XclExpXmlDBDataTable( rRoot, *itr, nCount ) );
+            maDBDataTableContainer.push_back( new XclExpXmlDBDataTable( rRoot, *itr, (maDBDataTableContainer.size() + 1) ) );// Tables are ID'ed 1 - based
         }
     }
 }
