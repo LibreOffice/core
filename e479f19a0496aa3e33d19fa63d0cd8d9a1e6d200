@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//9jI\u003d",
+        "filename": "dbaccess/source/ui/dlg/generalpage.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-08-01T16:33:15Z",
+      "side": 1,
+      "message": "Please do not use obsolete OSL_ENSURE in new code. Checks should be either assert(), as here, or SAL_WARN_IF.",
+      "revId": "e479f19a0496aa3e33d19fa63d0cd8d9a1e6d200",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
