@@ -6,7 +6,6 @@
 
     <ImageView
         android:id="@+id/image_slide_preview"
-        android:scaleType="centerCrop"
         android:adjustViewBounds="true"
         android:background="@drawable/background_grid_slide"
         android:contentDescription="@string/description_grid_slide"

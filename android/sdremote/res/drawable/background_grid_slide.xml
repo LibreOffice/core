@@ -12,6 +12,6 @@
         android:left="1dp"
         android:top="1dp"
         android:right="1dp"
-        android:bottom="1.5dp"/>
+        android:bottom="1dp"/>
 
 </shape>
