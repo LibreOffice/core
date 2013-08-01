@@ -462,29 +462,12 @@ const OUString& SfxItemPool::GetName() const
 
 SfxItemPresentation SfxItemPool::GetPresentation
 (
-    const SfxPoolItem&  rItem,      /*  IN: <SfxPoolItem>, dessen textuelle
-                                            Wert-Darstellung geliefert werden
-                                            soll */
-    SfxItemPresentation ePresent,   /*  IN: gew"unschte Art der Darstellung;
-                                            siehe <SfxItemPresentation> */
-    SfxMapUnit          eMetric,    /*  IN: gew"unschte Ma\seinheit der Darstellung */
-    OUString&           rText,      /*  OUT: textuelle Darstellung von 'rItem' */
+    const SfxPoolItem&  rItem,
+    SfxItemPresentation ePresent,
+    SfxMapUnit          eMetric,
+    OUString&           rText,
     const IntlWrapper * pIntlWrapper
 )   const
-
-/*  [Beschreibung]
-
-    "Uber diese virtuelle Methode k"onnen textuelle Darstellungen der
-    von der jeweilige SfxItemPool-Subklasse verwalteten SfxPoolItems
-    angefordert werden.
-
-    In Ableitungen sollte diese Methode "uberladen werden und auf
-    SfxPoolItems reagiert werden, die bei <SfxPoolItem::GetPresentation()const>
-    keine vollst"andige Information liefern k"onnen.
-
-    Die Basisklasse liefert die unver"anderte Presentation von 'rItem'.
-*/
-
 {
     DBG_CHKTHIS(SfxItemPool, 0);
     return rItem.GetPresentation(

@@ -151,6 +151,31 @@ public:
 
     virtual SfxMapUnit              GetMetric( sal_uInt16 nWhich ) const;
     void                            SetDefaultMetric( SfxMapUnit eNewMetric );
+
+    /** Request string representation of pool items
+
+        This virtual function produces a string representation, of
+        from the respective SfxItemPool subclass' known SfxPoolItems.
+
+        Subclasses, please overwrite this method, and handle
+        SfxPoolItems that don't return useful/complete information on
+        SfxPoolItem::GetPresentation()
+
+        This baseclass yields the unmodified string representation of
+        rItem.
+
+        @param[in] rItem
+        SfxPoolItem to query the string representation of
+
+        @param[in] ePresent
+        requested kind of representation - see SfxItemPresentation
+
+        @param[in] eMetric
+        requested unit of measure of the representation
+
+        @param[out] rText
+        string representation of 'rItem'
+    */
     virtual SfxItemPresentation     GetPresentation( const SfxPoolItem& rItem,
                                         SfxItemPresentation ePresentation,
                                         SfxMapUnit          ePresentationMetric,
