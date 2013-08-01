@@ -619,6 +619,7 @@ String STR_POOLCOLL_TOX_AUTHORITIES1
 String STR_POOLCOLL_DOC_TITEL
 {
     Text [ en-US ] = "Title" ;
+    Text [ x-comment ] = "Document title style, not to be confused with Heading style" ;
 };
 String STR_POOLCOLL_DOC_SUBTITEL
 {
