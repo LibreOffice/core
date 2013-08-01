@@ -61,11 +61,6 @@ ScRangeManagerTable::ScRangeManagerTable( SvSimpleTableContainer& rParent, boost
     Init();
     ShowTable();
     SetSelectionMode(MULTIPLE_SELECTION);
-    if (GetEntryCount())
-    {
-        SetCurEntry(GetEntryOnPos(0));
-        CheckForFormulaString();
-    }
     SetScrolledHdl( LINK( this, ScRangeManagerTable, ScrollHdl ) );
     void* pNull = NULL;
     HeaderEndDragHdl(pNull);
@@ -76,6 +71,20 @@ void ScRangeManagerTable::Resize()
     SvSimpleTable::Resize();
     if (isInitialLayout(this))
         setColWidths();
+}
+
+void ScRangeManagerTable::StateChanged( StateChangedType nStateChange )
+{
+    SvSimpleTable::StateChanged(nStateChange);
+
+    if (nStateChange == STATE_CHANGE_INITSHOW)
+    {
+        if (GetEntryCount())
+        {
+            SetCurEntry(GetEntryOnPos(0));
+            CheckForFormulaString();
+        }
+    }
 }
 
 void ScRangeManagerTable::setColWidths()

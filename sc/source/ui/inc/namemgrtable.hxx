@@ -55,6 +55,7 @@ public:
     virtual ~ScRangeManagerTable();
 
     virtual void Resize();
+    virtual void StateChanged( StateChangedType nStateChange );
 
     void addEntry( const ScRangeNameLine& rLine, bool bSetCurEntry = true );
     void DeleteSelectedEntries();
