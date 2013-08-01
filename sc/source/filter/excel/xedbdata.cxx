@@ -84,6 +84,19 @@ void XclExpXmlDBDataColumns::SaveXml( XclExpXmlStream& rStrm )
 }
 
 // ============================================================================
+XclExpXmlDBDataAutoFilter::XclExpXmlDBDataAutoFilter( const XclExpRoot& rRoot, ScRange& rRange )
+    : XclExpRoot( rRoot ),
+      maRange( rRange )
+{
+}
+
+void XclExpXmlDBDataAutoFilter::SaveXml( XclExpXmlStream& rStrm )
+{
+    sax_fastparser::FSHelperPtr& rDBDataTable = rStrm.GetCurrentStream();
+    rDBDataTable->singleElement( XML_autoFilter, XML_ref, XclXmlUtils::ToOString( maRange ).getStr(), FSEND);
+}
+
+// ============================================================================
 XclExpXmlDBDataTable::XclExpXmlDBDataTable(const XclExpRoot& rRoot, ScDBData& rDBData, int nTableId )
     : XclExpRoot( rRoot ),
       mnTableId( nTableId )
@@ -96,11 +109,13 @@ XclExpXmlDBDataTable::XclExpXmlDBDataTable(const XclExpRoot& rRoot, ScDBData& rD
     mbTotalsRowShown = false; // Not supported yet in ScDBData
     rDBData.GetArea( maRange );
     maStyleInfo.reset( new XclExpXmlDBDataStyleInfo( rRoot, aDBFormatting) );
+    maAutoFilter.reset( new XclExpXmlDBDataAutoFilter( rRoot, maRange ) );
 }
 void XclExpXmlDBDataTable::SaveXml( XclExpXmlStream& rStrm )
 {
     sax_fastparser::FSHelperPtr& rDBDataTable = rStrm.GetCurrentStream();
     rDBDataTable->startElement( XML_table,  XML_id, OString::number( mnTableId ).getStr(), XML_name, OUStringToOString( maName, RTL_TEXTENCODING_UTF8 ).getStr(), XML_displayName, OUStringToOString( maDisplayName, RTL_TEXTENCODING_UTF8 ).getStr(), XML_ref, XclXmlUtils::ToOString( maRange ).getStr() ,FSEND);
+    maAutoFilter->SaveXml( rStrm );
     maTableColumns->SaveXml( rStrm );
     maStyleInfo->SaveXml( rStrm );
     rDBDataTable->endElement( XML_table );

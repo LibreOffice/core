@@ -61,6 +61,16 @@ private:
 };
 
 // ============================================================================
+class XclExpXmlDBDataAutoFilter : public XclExpRecordBase, protected XclExpRoot
+{
+public:
+    XclExpXmlDBDataAutoFilter( const XclExpRoot& rRoot, ScRange& pRange );
+    virtual void SaveXml( XclExpXmlStream& rStrm );
+private:
+    ScRange maRange;
+};
+
+// ============================================================================
 class XclExpXmlDBDataTable : public XclExpRecordBase, protected XclExpRoot
 {
 public:
@@ -69,8 +79,10 @@ public:
 private:
     typedef boost::scoped_ptr < XclExpXmlDBDataColumns > DBDataTableColumns;
     typedef boost::scoped_ptr < XclExpXmlDBDataStyleInfo > DBDataStyleInfo;
+    typedef boost::scoped_ptr < XclExpXmlDBDataAutoFilter > DBDataAutoFilter;
     DBDataTableColumns maTableColumns;
     DBDataStyleInfo maStyleInfo;
+    DBDataAutoFilter maAutoFilter;
     int mnTableId;
     OUString maName;
     OUString maDisplayName;
