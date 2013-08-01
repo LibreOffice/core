@@ -70,6 +70,7 @@ private:
     HelpButton* mpHelpButton;
 
     CustomAnimationCreateTabPage* mpTabPages[5];
+    sal_Int16 mnEntranceId, mnEmphasisId, mnExitId, mnMPathId, mnMiscId;
 };
 
 }

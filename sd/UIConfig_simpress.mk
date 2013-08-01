@@ -80,6 +80,8 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/simpress,\
 	sd/uiconfig/simpress/ui/optimpressgeneralpage \
 	sd/uiconfig/simpress/ui/prntopts \
 	sd/uiconfig/simpress/ui/customanimationspanel \
+	sd/uiconfig/simpress/ui/customanimationcreatedialog \
+	sd/uiconfig/simpress/ui/customanimationcreatetab \
 ))
 
 # vim: set noet sw=4 ts=4:

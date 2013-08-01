@@ -64,14 +64,13 @@ const int EXIT = 2;
 const int MOTIONPATH = 3;
 const int MISCEFFECTS = 4;
 
-//extern void fillDurationComboBox( ComboBox* pBox );
-
 // --------------------------------------------------------------------
 
 class CategoryListBox : public ListBox
 {
 public:
     CategoryListBox( Window* pParent, const ResId& rResId );
+    CategoryListBox( Window* pParent );
     ~CategoryListBox();
 
     virtual void        MouseButtonUp( const MouseEvent& rMEvt );
@@ -93,6 +92,18 @@ CategoryListBox::CategoryListBox( Window* pParent, const ResId& rResId )
 {
     EnableUserDraw( sal_True );
     SetDoubleClickHdl( LINK( this, CategoryListBox, implDoubleClickHdl ) );
+}
+
+CategoryListBox::CategoryListBox( Window* pParent )
+: ListBox( pParent, WB_TABSTOP | WB_BORDER )
+{
+    EnableUserDraw( sal_True );
+    SetDoubleClickHdl( LINK( this, CategoryListBox, implDoubleClickHdl ) );
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeCategoryListBox( Window *pParent )
+{
+    return new CategoryListBox( pParent );
 }
 
 CategoryListBox::~CategoryListBox()
@@ -180,6 +191,8 @@ public:
     bool getIsPreview() const;
     void setIsPreview( bool bIsPreview );
 
+    bool getId() const;
+
     bool select( const OUString& rsPresetId );
 
 private:
@@ -193,10 +206,12 @@ private:
 private:
     CategoryListBox*    mpLBEffects;
     FixedText*  mpFTSpeed;
-    ComboBox*   mpCBSpeed;
+    ListBox*   mpCBSpeed;
     CheckBox*   mpCBXPReview;
 
     CustomAnimationCreateDialog*        mpParent;
+
+    sal_uInt16 mnId;
 
     sal_uInt16 mnCurvePathPos;
     sal_uInt16 mnPolygonPathPos;
@@ -227,20 +242,21 @@ bool ImplStlEffectCategorySortHelper::operator()( const CustomAnimationPresetPtr
 }
 
 CustomAnimationCreateTabPage::CustomAnimationCreateTabPage( Window* pParent, CustomAnimationCreateDialog* pDialogParent, int nTabId, const PresetCategoryList& rCategoryList, bool bHasText )
-: TabPage( pParent, SdResId( RID_TP_CUSTOMANIMATION_ENTRANCE ) )
+: TabPage( pParent, "CustomAnimationCreateTab", "modules/simpress/ui/customanimationcreatetab.ui" )
 , mpParent( pDialogParent )
+, mnId( nTabId )
 , mnCurvePathPos( LISTBOX_ENTRY_NOTFOUND )
 , mnPolygonPathPos( LISTBOX_ENTRY_NOTFOUND )
 , mnFreeformPathPos( LISTBOX_ENTRY_NOTFOUND )
 {
-    mpLBEffects = new CategoryListBox( this, SdResId( LB_EFFECTS ) );
-    mpFTSpeed = new FixedText( this, SdResId( FT_SPEED ) );
-    mpCBSpeed = new ComboBox( this, SdResId( CB_SPEED ) );
-    mpCBXPReview = new CheckBox( this, SdResId( CBX_PREVIEW ) );
+    get( mpLBEffects, "effect_list" );
+    mpLBEffects->set_height_request( mpLBEffects->GetTextHeight() * 16 );
+
+    get( mpFTSpeed, "effect_speed_label" );
+    get( mpCBSpeed, "effect_speed_list" );
+    get( mpCBXPReview, "auto_preview" );
 
     String sMotionPathLabel( SdResId( STR_USERPATH ) );
-
-    FreeResource();
 
     sal_uInt16 nFirstEffect = LISTBOX_ENTRY_NOTFOUND;
 
@@ -286,8 +302,6 @@ CustomAnimationCreateTabPage::CustomAnimationCreateTabPage( Window* pParent, Cus
 
     mpLBEffects->SelectEntryPos( nFirstEffect );
 
-    //fillDurationComboBox( mpCBSpeed );
-
     if( nFirstEffect != LISTBOX_ENTRY_NOTFOUND )
         onSelectEffect();
 
@@ -298,11 +312,6 @@ CustomAnimationCreateTabPage::CustomAnimationCreateTabPage( Window* pParent, Cus
 CustomAnimationCreateTabPage::~CustomAnimationCreateTabPage()
 {
     clearEffects();
-
-    delete mpLBEffects;
-    delete mpFTSpeed;
-    delete mpCBSpeed;
-    delete mpCBXPReview;
 }
 
 IMPL_LINK( CustomAnimationCreateTabPage, implSelectHdl, Control*, pControl )
@@ -467,6 +476,11 @@ void CustomAnimationCreateTabPage::setIsPreview( bool bIsPreview )
     mpCBXPReview->Check( bIsPreview ? sal_True : sal_False );
 }
 
+bool CustomAnimationCreateTabPage::getId() const
+{
+    return mnId;
+}
+
 bool CustomAnimationCreateTabPage::select( const OUString& rsPresetId )
 {
     sal_uInt16 nPos = mpLBEffects->GetEntryCount();
@@ -490,37 +504,39 @@ bool CustomAnimationCreateTabPage::select( const OUString& rsPresetId )
 // --------------------------------------------------------------------
 
 CustomAnimationCreateDialog::CustomAnimationCreateDialog( Window* pParent, CustomAnimationPane* pPane, const std::vector< ::com::sun::star::uno::Any >& rTargets, bool bHasText, const OUString& rsPresetId, double fDuration  )
-:   TabDialog( pParent, SdResId( DLG_CUSTOMANIMATION_CREATE ) )
+:   TabDialog( pParent, "CustomAnimationCreate", "modules/simpress/ui/customanimationcreatedialog.ui" )
 ,   mpPane( pPane )
 ,   mrTargets( rTargets )
 ,   mfDuration( fDuration )
 {
-    mpTabControl = new TabControl( this, SdResId( 1 ) );
-    mpOKButton = new OKButton(this, SdResId( 1 ) ) ;
-    mpCancelButton = new CancelButton(this, SdResId( 1 ) );
-    mpHelpButton = new HelpButton(this, SdResId( 1 ) );
-
-    FreeResource();
+    get( mpTabControl, "tabs" );
 
     SdOptions* pOptions = SD_MOD()->GetSdOptions(DOCUMENT_TYPE_IMPRESS);
     mbIsPreview = pOptions->IsPreviewNewEffects();
 
+    mnEntranceId = mpTabControl->GetPageId("entrance");
+    mnEmphasisId = mpTabControl->GetPageId("emphasis");
+    mnExitId = mpTabControl->GetPageId("exit");
+    mnMPathId = mpTabControl->GetPageId("motion_paths");
+    mnMiscId = mpTabControl->GetPageId("misc_effects");
+
+    //FIXME: Figure out what to do w/ those help IDs
     const CustomAnimationPresets& rPresets = CustomAnimationPresets::getCustomAnimationPresets();
-    mpTabPages[ENTRANCE] = new CustomAnimationCreateTabPage( mpTabControl, this, ENTRANCE, rPresets.getEntrancePresets(), bHasText );
-    mpTabPages[ENTRANCE]->SetHelpId( HID_SD_CUSTOMANIMATIONDIALOG_ENTRANCE );
-    mpTabControl->SetTabPage( RID_TP_CUSTOMANIMATION_ENTRANCE, mpTabPages[ENTRANCE] );
-    mpTabPages[EMPHASIS] = new CustomAnimationCreateTabPage( mpTabControl, this, EMPHASIS, rPresets.getEmphasisPresets(), bHasText );
-    mpTabPages[EMPHASIS]->SetHelpId( HID_SD_CUSTOMANIMATIONDIALOG_EMPHASIS );
-    mpTabControl->SetTabPage( RID_TP_CUSTOMANIMATION_EMPHASIS, mpTabPages[EMPHASIS] );
-    mpTabPages[EXIT] = new CustomAnimationCreateTabPage( mpTabControl, this, EXIT, rPresets.getExitPresets(), bHasText );
-    mpTabPages[EXIT]->SetHelpId( HID_SD_CUSTOMANIMATIONDIALOG_EXIT );
-    mpTabControl->SetTabPage( RID_TP_CUSTOMANIMATION_EXIT, mpTabPages[EXIT] );
-    mpTabPages[MOTIONPATH] = new CustomAnimationCreateTabPage( mpTabControl, this, MOTIONPATH, rPresets.getMotionPathsPresets(), bHasText );
-    mpTabPages[MOTIONPATH]->SetHelpId( HID_SD_CUSTOMANIMATIONDIALOG_MOTIONPATH );
-    mpTabControl->SetTabPage( RID_TP_CUSTOMANIMATION_MOTIONPATH, mpTabPages[MOTIONPATH] );
-    mpTabPages[MISCEFFECTS] = new CustomAnimationCreateTabPage( mpTabControl, this, MISCEFFECTS, rPresets.getMiscPresets(), bHasText );
-    mpTabPages[MISCEFFECTS]->SetHelpId( HID_SD_CUSTOMANIMATIONDIALOG_MISCEFFECTS );
-    mpTabControl->SetTabPage( RID_TP_CUSTOMANIMATION_MISCEFFECTS, mpTabPages[MISCEFFECTS] );
+    mpTabPages[ENTRANCE] = new CustomAnimationCreateTabPage( mpTabControl, this, mnEntranceId, rPresets.getEntrancePresets(), bHasText );
+    //mpTabPages[ENTRANCE]->SetHelpId( HID_SD_CUSTOMANIMATIONDIALOG_ENTRANCE );
+    mpTabControl->SetTabPage( mnEntranceId, mpTabPages[ENTRANCE] );
+    mpTabPages[EMPHASIS] = new CustomAnimationCreateTabPage( mpTabControl, this, mnEmphasisId, rPresets.getEmphasisPresets(), bHasText );
+    //mpTabPages[EMPHASIS]->SetHelpId( HID_SD_CUSTOMANIMATIONDIALOG_EMPHASIS );
+    mpTabControl->SetTabPage( mnEmphasisId, mpTabPages[EMPHASIS] );
+    mpTabPages[EXIT] = new CustomAnimationCreateTabPage( mpTabControl, this, mnExitId, rPresets.getExitPresets(), bHasText );
+    //mpTabPages[EXIT]->SetHelpId( HID_SD_CUSTOMANIMATIONDIALOG_EXIT );
+    mpTabControl->SetTabPage( mnExitId, mpTabPages[EXIT] );
+    mpTabPages[MOTIONPATH] = new CustomAnimationCreateTabPage( mpTabControl, this, mnMPathId, rPresets.getMotionPathsPresets(), bHasText );
+    //mpTabPages[MOTIONPATH]->SetHelpId( HID_SD_CUSTOMANIMATIONDIALOG_MOTIONPATH );
+    mpTabControl->SetTabPage( mnMPathId, mpTabPages[MOTIONPATH] );
+    mpTabPages[MISCEFFECTS] = new CustomAnimationCreateTabPage( mpTabControl, this, mnMiscId, rPresets.getMiscPresets(), bHasText );
+    //mpTabPages[MISCEFFECTS]->SetHelpId( HID_SD_CUSTOMANIMATIONDIALOG_MISCEFFECTS );
+    mpTabControl->SetTabPage( mnMiscId, mpTabPages[MISCEFFECTS] );
 
     getCurrentPage()->setDuration( mfDuration );
     getCurrentPage()->setIsPreview( mbIsPreview );
@@ -537,7 +553,7 @@ CustomAnimationCreateDialog::CustomAnimationCreateDialog( Window* pParent, Custo
         {
             if( mpTabPages[i]->select( rsPresetId ) )
             {
-                mpTabControl->SetCurPageId( RID_TP_CUSTOMANIMATION_ENTRANCE + i );
+                mpTabControl->SetCurPageId( mpTabPages[i]->getId() );
                 break;
             }
         }
@@ -557,23 +573,18 @@ CustomAnimationCreateDialog::~CustomAnimationCreateDialog()
     delete mpTabPages[MOTIONPATH];
     delete mpTabPages[MISCEFFECTS];
 
-    delete mpTabControl;
-    delete mpOKButton;
-    delete mpCancelButton;
-    delete mpHelpButton;
 }
 
 CustomAnimationCreateTabPage* CustomAnimationCreateDialog::getCurrentPage() const
 {
-    switch( mpTabControl->GetCurPageId() )
+    sal_Int16 curPageId = mpTabControl->GetCurPageId();
+
+    for( sal_uInt16 i = ENTRANCE; i <= MOTIONPATH; i++ )
     {
-    case RID_TP_CUSTOMANIMATION_ENTRANCE:   return mpTabPages[ENTRANCE];
-    case RID_TP_CUSTOMANIMATION_EMPHASIS:   return mpTabPages[EMPHASIS];
-    case RID_TP_CUSTOMANIMATION_EXIT:       return mpTabPages[EXIT];
-    case RID_TP_CUSTOMANIMATION_MISCEFFECTS:return mpTabPages[MISCEFFECTS];
-    default:
-                                            return mpTabPages[MOTIONPATH];
+        if( mpTabPages[i]->getId() == curPageId )
+            return mpTabPages[i];
     }
+    return mpTabPages[MOTIONPATH];
 }
 
 PathKind CustomAnimationCreateDialog::getCreatePathKind() const
