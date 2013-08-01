@@ -2821,4 +2821,9 @@ String STR_ObjNamePluralFONTWORK
     Text [ en-US ] = "font works" ;
 };
 
+String SIP_SA_OBJECTOPTIONALSHAPEID
+{
+    Text [ en-US ] = "Optional Shape ID";
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

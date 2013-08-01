@@ -2478,6 +2478,17 @@ bool SvxShape::setPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
         break;
     }
 
+    case SDRATTR_OBJECTOPTIONALSHAPEID:
+    {
+        OUString aName;
+        if( rValue >>= aName )
+        {
+            mpObj->SetOptionalShapeID( aName );
+            return true;
+        }
+        break;
+    }
+
     // #i68101#
     case OWN_ATTR_MISC_OBJ_TITLE:
     {
@@ -2873,6 +2884,13 @@ bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
     case SDRATTR_OBJECTNAME:
     {
         OUString aName( mpObj->GetName() );
+        rValue <<= aName;
+        break;
+    }
+
+    case SDRATTR_OBJECTOPTIONALSHAPEID:
+    {
+        OUString aName( mpObj->GetOptionalShapeID() );
         rValue <<= aName;
         break;
     }

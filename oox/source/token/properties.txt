@@ -322,6 +322,7 @@ NumberingType
 Offset
 Opaque
 OpCodeMap
+OptionalShapeId
 Orientation
 OutputPosition
 OverlapSequence

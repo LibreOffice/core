@@ -1500,6 +1500,8 @@ public:
     String GetSnippet(const String &rStr, xub_StrLen nAktPos,
         xub_StrLen nLen) const;
     const SwFmtDrop& GetSwFmtDrop() const { return mrSwFmtDrop; }
+
+    bool IsWatermarkFrame();
 };
 
 /// Class to collect and output the styles table.

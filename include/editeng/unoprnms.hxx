@@ -162,6 +162,7 @@
 #define UNO_NAME_MISC_OBJ_LAYERID               "LayerID"
 #define UNO_NAME_MISC_OBJ_LAYERNAME             "LayerName"
 #define UNO_NAME_MISC_OBJ_NAME                  "Name"
+#define UNO_NAME_MISC_OBJ_OPTIONAL_SHAPE_ID     "OptionalShapeId"
 #define UNO_NAME_MISC_OBJ_ROTATEANGLE           "RotateAngle"
 #define UNO_NAME_MISC_OBJ_SHEARANGLE            "ShearAngle"
 #define UNO_NAME_MISC_OBJ_ROTATION_POINT_X      "RotationPointX"
