@@ -223,8 +223,8 @@ SvxShapeKind SdrObjectCreatorInventorToSvxShapeKind(sal_uInt16 nIdent, sal_uInt3
                 // SdrObject, map
                 case OBJ_GRUP: return SvxShapeKind_Group;
                 case OBJ_RECT: return SvxShapeKind_Rectangle;
-                case OBJ_CIRC: return SvxShapeKind_Circle;
-                case OBJ_POLY: return SvxShapeKind_Path;
+                case OBJ_CIRC: return SvxShapeKind_Circle;  // and removed old ones (OBJ_SECT, OBJ_CARC, OBJ_CCUT)
+                case OBJ_POLY: return SvxShapeKind_Path;    // and removed old ones (OBJ_LINE, OBJ_PLIN, OBJ_PATHLINE, OBJ_PATHFILL, OBJ_FREELINE, OBJ_FREEFILL, OBJ_PATHPOLY, OBJ_PATHPLIN)
                 case OBJ_TEXT:
                 case OBJ_TITLETEXT:
                 case OBJ_OUTLINETEXT:
@@ -254,7 +254,7 @@ void SvxShapeKindToSdrObjectCreatorInventor(SvxShapeKind aSvxShapeKind, sal_uInt
         case SvxShapeKind_None: nIdent = OBJ_NONE; nInvent = SdrInventor; break;              // OBJ_NONE
         case SvxShapeKind_Group: nIdent = OBJ_GRUP; nInvent = SdrInventor; break;             // OBJ_GRUP
         case SvxShapeKind_Rectangle: nIdent = OBJ_RECT; nInvent = SdrInventor; break;         // OBJ_RECT
-        case SvxShapeKind_Circle: nIdent = OBJ_CIRC; nInvent = SdrInventor; break;            // OBJ_CIRC
+        case SvxShapeKind_Circle: nIdent = OBJ_CIRC; nInvent = SdrInventor; break;            // OBJ_CIRC and removed old ones (OBJ_SECT, OBJ_CARC, OBJ_CCUT)
         case SvxShapeKind_Path: nIdent = OBJ_POLY; nInvent = SdrInventor; break;              // OBJ_POLY and removed old ones (OBJ_LINE, OBJ_PLIN, OBJ_PATHLINE, OBJ_PATHFILL, OBJ_FREELINE, OBJ_FREEFILL, OBJ_PATHPOLY, OBJ_PATHPLIN)
         case SvxShapeKind_Text: nIdent = OBJ_TEXT; nInvent = SdrInventor; break;              // OBJ_TEXT, OBJ_TITLETEXT, OBJ_OUTLINETEXT
         case SvxShapeKind_Graphic: nIdent = OBJ_GRAF; nInvent = SdrInventor; break;           // OBJ_GRAF
@@ -1485,6 +1485,63 @@ OUString SAL_CALL SvxShape::getShapeType() throw(uno::RuntimeException)
     if(!maShapeType.getLength())
     {
         OUString aName;
+
+        if(SvxShapeKind_Path == mpImpl->meSvxShapeKind && mpObj.is())
+        {
+            const SdrPathObj* pSdrPathObj = dynamic_cast< const SdrPathObj* >(mpObj.get());
+
+            if(pSdrPathObj)
+            {
+                // SvxShapeKinds are reduced, there is only one remaining type for
+                // path data, the SvxShapeKind_Path. Thus, the old types are all mapped
+                // to that SvxShapeKind (see also aTypeNameToSvxShapeKindMapper).
+                //
+                // "LineShape"
+                // "PolyPolygonShape"
+                // "PolyLineShape"
+                // "OpenBezierShape"
+                // "ClosedBezierShape"
+                //
+                // Some are not used in export resp. mapped to existing ones, see also:
+                // XMLShapeExport::ImpCalcShapeType in xmloff:
+                //
+                // OpenFreeHandShape -> OpenBezierShape
+                // ClosedFreeHandShape -> ClosedBezierShape
+                // PolyPolygonPathShape -> same as PolyPolygonShape
+                // PolyLinePathShape -> same as PolyLineShape
+
+                const SdrPathObjType aSdrPathObjType(pSdrPathObj->getSdrPathObjType());
+
+                switch(aSdrPathObjType)
+                {
+                    case PathType_Line:
+                    {
+                        return ::rtl::OUString::createFromAscii("com.sun.star.drawing.LineShape");
+                    }
+                    case PathType_OpenPolygon:
+                    {
+                        return ::rtl::OUString::createFromAscii("com.sun.star.drawing.PolyLineShape");
+                    }
+                    case PathType_ClosedPolygon:
+                    {
+                        return ::rtl::OUString::createFromAscii("com.sun.star.drawing.PolyPolygonShape");
+                        break;
+                    }
+                    case PathType_OpenBezier:
+                    {
+                        return ::rtl::OUString::createFromAscii("com.sun.star.drawing.OpenBezierShape");
+                        break;
+                    }
+                    case PathType_ClosedBezier:
+                    {
+                        return ::rtl::OUString::createFromAscii("com.sun.star.drawing.ClosedBezierShape");
+                        break;
+                    }
+                }
+
+                OSL_ENSURE(false, "SvxShapeKind_Path could not be mapped to uno class type (!)");
+            }
+        }
 
         if(getNameForSvxShapeType(aName, mpImpl->meSvxShapeKind))
         {

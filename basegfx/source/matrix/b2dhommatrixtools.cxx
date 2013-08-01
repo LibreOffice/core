@@ -27,37 +27,12 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <stringconversiontools.hxx>
 
 ///////////////////////////////////////////////////////////////////////////////
 
 namespace basegfx
 {
-    ::rtl::OUString exportToSvg( const B2DHomMatrix& rMatrix )
-    {
-        rtl::OUStringBuffer aStrBuf;
-        aStrBuf.appendAscii("matrix(");
-
-        aStrBuf.append(rMatrix.get(0,0));
-        aStrBuf.appendAscii(", ");
-
-        aStrBuf.append(rMatrix.get(1,0));
-        aStrBuf.appendAscii(", ");
-
-        aStrBuf.append(rMatrix.get(0,1));
-        aStrBuf.appendAscii(", ");
-
-        aStrBuf.append(rMatrix.get(1,1));
-        aStrBuf.appendAscii(", ");
-
-        aStrBuf.append(rMatrix.get(0,2));
-        aStrBuf.appendAscii(", ");
-
-        aStrBuf.append(rMatrix.get(1,2));
-        aStrBuf.appendAscii(")");
-
-        return aStrBuf.makeStringAndClear();
-    }
-
     namespace tools
     {
         void createSinCosOrthogonal(double& o_rSin, double& o_rCos, double fRadiant)
@@ -461,6 +436,46 @@ namespace basegfx
             return aRetval;
         }
 
+        /// special for the case to map from source range to target range
+        B2DHomMatrix createSourceRangeTargetRangeTransform(
+            const B2DRange& rSourceRange,
+            const B2DRange& rTargetRange)
+        {
+            B2DHomMatrix aRetval;
+
+            if(&rSourceRange == &rTargetRange)
+            {
+                return aRetval;
+            }
+
+            if(!fTools::equalZero(rSourceRange.getMinX()) || !fTools::equalZero(rSourceRange.getMinY()))
+            {
+                aRetval.set(0, 2, -rSourceRange.getMinX());
+                aRetval.set(1, 2, -rSourceRange.getMinY());
+            }
+
+            const double fSourceW(rSourceRange.getWidth());
+            const double fSourceH(rSourceRange.getHeight());
+            const bool bDivX(!fTools::equalZero(fSourceW) && !fTools::equal(fSourceW, 1.0));
+            const bool bDivY(!fTools::equalZero(fSourceH) && !fTools::equal(fSourceH, 1.0));
+            const double fScaleX(bDivX ? rTargetRange.getWidth() / fSourceW : rTargetRange.getWidth());
+            const double fScaleY(bDivY ? rTargetRange.getHeight() / fSourceH : rTargetRange.getHeight());
+
+            if(!fTools::equalZero(fScaleX) || !fTools::equalZero(fScaleY))
+            {
+                aRetval.scale(fScaleX, fScaleY);
+            }
+
+            if(!fTools::equalZero(rTargetRange.getMinX()) || !fTools::equalZero(rTargetRange.getMinY()))
+            {
+                aRetval.translate(
+                    rTargetRange.getMinX(),
+                    rTargetRange.getMinY());
+            }
+
+            return aRetval;
+        }
+
         /* tooling methods for converting API matrices (drawing::HomogenMatrix3)
            to B2DHomMatrix
          */
@@ -496,7 +511,6 @@ namespace basegfx
             rMatrixOut.Line3.Column2 = rMatrixIn.get(2, 1);
             rMatrixOut.Line3.Column3 = rMatrixIn.get(2, 2);
         }
-
     } // end of namespace tools
 } // end of namespace basegfx
 

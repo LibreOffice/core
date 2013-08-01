@@ -502,9 +502,8 @@ bool MotionPathTag::MouseButtonDown( const MouseEvent& rMEvt, SmartHdl& rHdl )
                 if(bNewObj)
                     aPt = mrView.GetSnapPos(aPt);
 
-                bool bClosed0(mpPathObj->IsClosedObj());
-
-                sal_uInt32 nInsPointNum = mpPathObj->InsPointOld(Point(basegfx::fround(aPt.getX()), basegfx::fround(aPt.getY())), bNewObj);
+                const bool bClosed0(mpPathObj->IsClosedObj());
+                const sal_uInt32 nInsPointNum(mpPathObj->InsPointOld(aPt, bNewObj));
 
                 if(bClosed0 != mpPathObj->IsClosedObj())
                 {

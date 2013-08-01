@@ -19,10 +19,9 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_basegfx.hxx"
+
 #include <basegfx/polygon/b3dpolypolygontools.hxx>
 #include <basegfx/range/b3drange.hxx>
 #include <basegfx/polygon/b3dpolypolygon.hxx>

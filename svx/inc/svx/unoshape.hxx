@@ -111,7 +111,7 @@ enum SvxShapeKind
     SvxShapeKind_None,              // OBJ_NONE
     SvxShapeKind_Group,             // OBJ_GRUP
     SvxShapeKind_Rectangle,         // OBJ_RECT
-    SvxShapeKind_Circle,            // OBJ_CIRC
+    SvxShapeKind_Circle,            // OBJ_CIRC and removed old ones (OBJ_SECT, OBJ_CARC, OBJ_CCUT)
     SvxShapeKind_Path,              // OBJ_POLY and removed old ones (OBJ_LINE, OBJ_PLIN, OBJ_PATHLINE, OBJ_PATHFILL, OBJ_FREELINE, OBJ_FREEFILL, OBJ_PATHPOLY, OBJ_PATHPLIN)
     SvxShapeKind_Text,              // OBJ_TEXT, OBJ_TITLETEXT, OBJ_OUTLINETEXT
     SvxShapeKind_Graphic,           // OBJ_GRAF

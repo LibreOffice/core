@@ -282,6 +282,11 @@ namespace sdr
         {
         }
 
+        Selection::~Selection()
+        {
+            Stop();
+        }
+
         void Selection::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
         {
             const SdrBaseHint* pSdrHint = dynamic_cast< const SdrBaseHint* >(&rHint);

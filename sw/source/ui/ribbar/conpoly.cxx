@@ -130,7 +130,7 @@ sal_Bool ConstPolygon::MouseButtonUp(const MouseEvent& rMEvt)
 void ConstPolygon::Activate(const sal_uInt16 nSlotId)
 {
     SdrObjectCreationInfo aSdrObjectCreationInfo;
-    bool bSet(false);
+    bool bSet(true);
 
     switch (nSlotId)
     {
@@ -151,6 +151,7 @@ void ConstPolygon::Activate(const sal_uInt16 nSlotId)
             break;
 
         default:
+            bSet = false;
             break;
     }
 
@@ -162,5 +163,4 @@ void ConstPolygon::Activate(const sal_uInt16 nSlotId)
     SwDrawBase::Activate(nSlotId);
 }
 
-
-
+// eof

@@ -343,9 +343,8 @@ namespace sdr
             if(!pTargetStyleSheet)
             {
                 // use correct default stylesheet #119287#
-                // this should not happen, all SDrObjects should have a default StyleSheet, so cloning
-                // one without is an error. Still add one, but assert user
-                OSL_ENSURE(false, "Cloning SdrObject without SfxStyleSheet, all should have a default StyleSheet (!)");
+                // As long as Writer and Calc use no StyleSheets for SdrObjects it may be okay to have none, so
+                // just try to get the model default
                 const SdrGrafObj* pIsSdrGrafObj = dynamic_cast< const SdrGrafObj* >(&GetSdrObject());
                 const SdrOle2Obj* pIsSdrOle2Obj = dynamic_cast< const SdrOle2Obj* >(&GetSdrObject());
 

@@ -19,17 +19,15 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_basegfx.hxx"
+
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <osl/diagnose.h>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <rtl/instance.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-
 #include <functional>
 #include <vector>
 #include <algorithm>

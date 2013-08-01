@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
@@ -39,12 +37,6 @@
 #include <svx/svdview.hxx>  // fuer MovCreate bei Freihandlinien
 #include <svx/svdglob.hxx>  // Stringcache
 #include <svx/svdstr.hrc>   // Objektname
-
-#ifdef _MSC_VER
-#pragma optimize ("",off)
-#pragma warning(disable: 4748) // "... because optimizations are disabled ..."
-#endif
-
 #include <svx/xlnwtit.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/xflclit.hxx>
@@ -89,6 +81,8 @@ inline sal_uInt16 GetNextPnt(sal_uInt16 nPnt, sal_uInt16 nPntMax, bool bClosed)
     if (nPnt>nPntMax || (bClosed && nPnt>=nPntMax)) nPnt=0;
     return nPnt;
 }
+
+//////////////////////////////////////////////////////////////////////////////
 
 struct ImpSdrPathDragData  : public SdrDragStatUserData
 {
@@ -221,7 +215,7 @@ void ImpSdrPathDragData::ResetPoly(const SdrPathObj& rPO)
     aXP[4]=aTmpXP[nNextNextPnt0];  aXP.SetFlags(4,aTmpXP.GetFlags(nNextNextPnt0));
 }
 
-/*************************************************************************/
+//////////////////////////////////////////////////////////////////////////////
 
 struct ImpPathCreateUser  : public SdrDragStatUserData
 {
@@ -369,7 +363,7 @@ XPolygon ImpPathCreateUser::GetLinePoly() const
     return aXP;
 }
 
-/*************************************************************************/
+//////////////////////////////////////////////////////////////////////////////
 
 class ImpPathForDragAndCreate
 {
@@ -1613,7 +1607,7 @@ Pointer ImpPathForDragAndCreate::GetCreatePointer() const
     return Pointer(POINTER_CROSS);
 }
 
-/*************************************************************************/
+//////////////////////////////////////////////////////////////////////////////
 
 SdrPathObjGeoData::SdrPathObjGeoData()
 {
@@ -1624,100 +1618,143 @@ SdrPathObjGeoData::~SdrPathObjGeoData()
 }
 
 //////////////////////////////////////////////////////////////////////////////
-// DrawContact section
 
-void SdrPathObj::impAdaptTransformation()
+void SdrPathObj::impSetPathPolyPolygonWithTransformationAdaption(const basegfx::B2DPolyPolygon& rNew)
 {
-    basegfx::B2DHomMatrix aHelpMatrix;
-
-    if(maPathPolygon.count())
+    // nothing to adapt when geometry does not change
+    if(getB2DPolyPolygonInObjectCoordinates() == rNew)
     {
-        if(isLine())
-        {
-            // create unit transformation so that (0,0) is 1st point and (1,0) is 2nd point
-            const basegfx::B2DPoint aPointA(maPathPolygon.getB2DPolygon(0).getB2DPoint(0));
-            const basegfx::B2DPoint aPointB(maPathPolygon.getB2DPolygon(0).getB2DPoint(1));
-            const basegfx::B2DVector aDelta(aPointB - aPointA);
-
-            aHelpMatrix = basegfx::tools::createScaleRotateTranslateB2DHomMatrix(
-                basegfx::B2DTuple(aDelta.getLength(), 0.0),
-                atan2(aDelta.getY(), aDelta.getX()),
-                aPointA);
-        }
-        else
-        {
-            // get range
-            basegfx::B2DRange aRange(maPathPolygon.getB2DRange());
-
-            if(!aRange.isEmpty())
-            {
-                // break up current transformation
-                basegfx::B2DTuple aScale;
-                basegfx::B2DTuple aTranslate;
-                double fRotate, fShearX;
-                getSdrObjectTransformation().decompose(aScale, aTranslate, fRotate, fShearX);
-
-                // to keep mirrorX, mirrorY, rotation and shear, create a transformation
-                // containing those values
-                if(basegfx::fTools::less(aScale.getX(), 0.0))
-                {
-                    aHelpMatrix.scale(-1.0, 1.0);
-                    aScale.setX(-1.0);
-                }
-
-                if(basegfx::fTools::less(aScale.getY(), 0.0))
-                {
-                    aHelpMatrix.scale(1.0, -1.0);
-                    aScale.setY(-1.0);
-                }
-
-                if(!basegfx::fTools::equalZero(fShearX))
-                {
-                    aHelpMatrix.shearX(fShearX);
-                }
-
-                if(!basegfx::fTools::equalZero(fRotate))
-                {
-                    aHelpMatrix.rotate(fRotate);
-                }
-
-                if(!aHelpMatrix.isIdentity())
-                {
-                    // create inverse from it and back-transform polygon
-                    basegfx::B2DPolyPolygon aBackTransformed(maPathPolygon);
-                    basegfx::B2DHomMatrix aInverseHelpMatrix(aHelpMatrix);
-                    aInverseHelpMatrix.invert();
-                    aBackTransformed.transform(aInverseHelpMatrix);
-
-                    // update range
-                    aRange = aBackTransformed.getB2DRange();
-
-                    // extract scale and translate. Transform topLeft from it back
-                    // to transformed state to get original topLeft (rotation center).
-                    // Be careful not to delete mirrorings
-                    aTranslate = aHelpMatrix * aRange.getMinimum();
-                    aScale *= aRange.getRange();
-                }
-                else
-                {
-                    // extract translate and scale straightforward
-                    aTranslate = aRange.getMinimum();
-                    aScale = aRange.getRange();
-                }
-
-                // create new transformation
-                aHelpMatrix = basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
-                    aScale,
-                    fShearX,
-                    fRotate,
-                    aTranslate);
-            }
-        }
+        return;
     }
 
-    // set adapted transformation, but do not change the
-    // polygon data; that IS the defining part in this case
-    maSdrObjectTransformation = aHelpMatrix;
+    static bool bRsetCoordinateSystemAfterWasLine(true);
+
+    if(bRsetCoordinateSystemAfterWasLine && isLine())
+    {
+        // the SdrPathObj has two basic states, line and other. Line is for two points
+        // and no bezier, it uses a specialized geometry (unified line from 0.0, to 1.0)
+        // and a specialized transformation which shows the rotation of the line what is
+        // wanted.
+        // When a third point is added that mode is left and the regular one entered, in
+        // this conversion when using the code below keeping the rotation of the former
+        // line object. This is not wrong and works as intended, but is irritating for the
+        // user, e.g:
+        // - when drawing a freehand or multi-line (non-bezier) polygon, it will be rotated
+        //   after construction due to keeping the rotation of the first added line
+        // - this is also used e.g. in contour editors where it is not wanted
+        // - it is different from the behaviour of AOO before
+        // For this reason this is disabled and the old behaviour activated by adding this
+        // case to esp. change back to the most trivial transformation in the transition
+        // between line status and other. To try out the also possible new alternative,
+        // change the value of bRsetCoordinateSystemAfterWasLine to false.
+        const basegfx::B2DRange aRangeNewGeometry(rNew.getB2DRange());
+
+        maPathPolyPolygon = rNew;
+        maSdrObjectTransformation.setB2DHomMatrix(
+            basegfx::tools::createScaleTranslateB2DHomMatrix(
+                aRangeNewGeometry.getRange(),
+                aRangeNewGeometry.getMinimum()));
+        return;
+    }
+
+    // set new geometry
+    maPathPolyPolygon = rNew;
+
+    if(!rNew.areControlPointsUsed()
+        && 1 == rNew.count()
+        && 2 == rNew.getB2DPolygon(0).count())
+    {
+        // new geometry is a non-curved line, create unit transformation so that (0,0) is
+        // 1st point and (1,0) is 2nd point
+        const basegfx::B2DPoint aPointA(rNew.getB2DPolygon(0).getB2DPoint(0));
+        const basegfx::B2DPoint aPointB(rNew.getB2DPolygon(0).getB2DPoint(1));
+        const basegfx::B2DVector aDelta(aPointB - aPointA);
+
+        maSdrObjectTransformation.setB2DHomMatrix(
+            basegfx::tools::createScaleRotateTranslateB2DHomMatrix(
+                basegfx::B2DTuple(aDelta.getLength(), 1.0),
+                atan2(aDelta.getY(), aDelta.getX()),
+                aPointA));
+        return;
+    }
+
+    // get range of the target geometry
+    const basegfx::B2DRange aRangeNewGeometry(rNew.getB2DRange());
+
+    if(aRangeNewGeometry.isEmpty())
+    {
+        // no geometry, set default
+        maSdrObjectTransformation.setB2DHomMatrix(basegfx::B2DHomMatrix());
+        return;
+    }
+
+    if(basegfx::fTools::equalZero(aRangeNewGeometry.getWidth()) && basegfx::fTools::equalZero(aRangeNewGeometry.getHeight()))
+    {
+        // single point geometry, use translation
+        maSdrObjectTransformation.setB2DHomMatrix(
+            basegfx::tools::createTranslateB2DHomMatrix(
+                aRangeNewGeometry.getMinimum()));
+        return;
+    }
+
+    // break up current transformation
+    basegfx::B2DTuple aScale;
+    basegfx::B2DTuple aTranslate;
+    double fRotate, fShearX;
+
+    maSdrObjectTransformation.getB2DHomMatrix().decompose(aScale, aTranslate, fRotate, fShearX);
+
+    // to preserve mirrorX, mirrorY, rotation and shear, create a transformation
+    // containing those values in aHelpMatrix
+    basegfx::B2DHomMatrix aHelpMatrix;
+
+    if(basegfx::fTools::less(aScale.getX(), 0.0))
+    {
+        aHelpMatrix.scale(-1.0, 1.0);
+    }
+
+    if(basegfx::fTools::less(aScale.getY(), 0.0))
+    {
+        aHelpMatrix.scale(1.0, -1.0);
+    }
+
+    if(!basegfx::fTools::equalZero(fShearX))
+    {
+        aHelpMatrix.shearX(fShearX);
+    }
+
+    if(!basegfx::fTools::equalZero(fRotate))
+    {
+        aHelpMatrix.rotate(fRotate);
+    }
+
+    if(!aHelpMatrix.isIdentity())
+    {
+        // create inverse from it and back-transform polygon
+        basegfx::B2DPolyPolygon aBackTransformed(rNew);
+        basegfx::B2DHomMatrix aInverseHelpMatrix(aHelpMatrix);
+
+        aInverseHelpMatrix.invert();
+        aBackTransformed.transform(aInverseHelpMatrix);
+
+        // get range of new geometry in unit coordinates
+        const basegfx::B2DRange aUnitRange(aBackTransformed.getB2DRange());
+        const basegfx::B2DHomMatrix aNewTransform(
+            basegfx::tools::createScaleTranslateB2DHomMatrix(
+                aUnitRange.getRange(),
+                aUnitRange.getMinimum()));
+
+        maSdrObjectTransformation.setB2DHomMatrix(
+            aHelpMatrix * aNewTransform);
+    }
+    else
+    {
+        // use translate and scale straightforward from new geometry
+        maSdrObjectTransformation.setB2DHomMatrix(
+            basegfx::tools::createScaleTranslateB2DHomMatrix(
+                aRangeNewGeometry.getRange(),
+                aRangeNewGeometry.getMinimum()));
+    }
 }
 
 sdr::contact::ViewContact* SdrPathObj::CreateObjectSpecificViewContact()
@@ -1729,10 +1766,10 @@ SdrPathObj::SdrPathObj(
     SdrModel& rSdrModel,
     const basegfx::B2DPolyPolygon& rPathPoly)
 :   SdrTextObj(rSdrModel),
-    maPathPolygon(rPathPoly),
+    maPathPolyPolygon(),
     mpDAC(0)
 {
-    impAdaptTransformation();
+    impSetPathPolyPolygonWithTransformationAdaption(rPathPoly);
 }
 
 SdrPathObj::~SdrPathObj()
@@ -1752,7 +1789,7 @@ void SdrPathObj::copyDataFromSdrObject(const SdrObject& rSource)
             SdrTextObj::copyDataFromSdrObject(rSource);
 
             // copy local data
-            maPathPolygon = pSource->getB2DPolyPolygonInObjectCoordinates();
+            maPathPolyPolygon = pSource->getB2DPolyPolygonInObjectCoordinates();
         }
         else
         {
@@ -1778,9 +1815,9 @@ bool SdrPathObj::IsClosedObj() const
 
 void SdrPathObj::ImpSetClosed(bool bClose)
 {
-    for(sal_uInt32 a(0); a < maPathPolygon.count(); a++)
+    for(sal_uInt32 a(0); a < getB2DPolyPolygonInObjectCoordinates().count(); a++)
     {
-        basegfx::B2DPolygon aCandidate(maPathPolygon.getB2DPolygon(a));
+        basegfx::B2DPolygon aCandidate(getB2DPolyPolygonInObjectCoordinates().getB2DPolygon(a));
 
         if(bClose != aCandidate.isClosed())
         {
@@ -1796,9 +1833,9 @@ void SdrPathObj::ImpSetClosed(bool bClose)
                 basegfx::tools::closeWithGeometryChange(aCandidate);
             }
 
-            // no need to use impAdaptTransformation here,
-            // the geometry gets not changed in it's dimensions
-            maPathPolygon.setB2DPolygon(a, aCandidate);
+            // no need to adapt transformation here, the geometry gets not changed
+            // in it's dimensions by triggering open/closed state
+            maPathPolyPolygon.setB2DPolygon(a, aCandidate);
         }
     }
 }
@@ -2100,8 +2137,6 @@ void SdrPathObj::GetPlusHdl(SdrHdlList& rHdlList, const SdrObject& rSdrObject, c
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
 SdrPathObjType SdrPathObj::getSdrPathObjType() const
 {
     if(isLine())
@@ -2109,9 +2144,9 @@ SdrPathObjType SdrPathObj::getSdrPathObjType() const
         return PathType_Line;
     }
 
-    if(maPathPolygon.isClosed())
+    if(getB2DPolyPolygonInObjectCoordinates().isClosed())
     {
-        if(maPathPolygon.areControlPointsUsed())
+        if(getB2DPolyPolygonInObjectCoordinates().areControlPointsUsed())
         {
             return PathType_ClosedBezier;
         }
@@ -2122,7 +2157,7 @@ SdrPathObjType SdrPathObj::getSdrPathObjType() const
     }
     else
     {
-        if(maPathPolygon.areControlPointsUsed())
+        if(getB2DPolyPolygonInObjectCoordinates().areControlPointsUsed())
         {
             return PathType_OpenBezier;
         }
@@ -2212,8 +2247,6 @@ basegfx::B2DPolyPolygon SdrPathObj::getSpecialDragPoly(const SdrDragStat& rDrag)
 
     return aRetval;
 }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
 bool SdrPathObj::BegCreate(SdrDragStat& rDrag)
 {
@@ -2383,35 +2416,34 @@ void SdrPathObj::SetObjectPoint(const basegfx::B2DPoint& rPnt, sal_uInt32 nHdlNu
     if(PolyPolygonEditor::GetRelativePolyPoint(getB2DPolyPolygonInObjectCoordinates(), nHdlNum, nPoly, nPnt))
     {
         basegfx::B2DPolygon aNewPolygon(getB2DPolyPolygonInObjectCoordinates().getB2DPolygon(nPoly));
-        const basegfx::B2DRange aRangeBefore(aNewPolygon.getB2DRange());
-        aNewPolygon.setB2DPoint(nPnt, rPnt);
-        const basegfx::B2DRange aRangeAfter(aNewPolygon.getB2DRange());
-        maPathPolygon.setB2DPolygon(nPoly, aNewPolygon);
 
-        if(aRangeBefore != aRangeAfter)
+        if(rPnt != aNewPolygon.getB2DPoint(nPnt))
         {
-            // need to adapt when geometric size has changed
-            impAdaptTransformation();
+            basegfx::B2DPolyPolygon aNewPathPolyPolygon(getB2DPolyPolygonInObjectCoordinates());
+            aNewPolygon.setB2DPoint(nPnt, rPnt);
+            aNewPathPolyPolygon.setB2DPolygon(nPoly, aNewPolygon);
+
+            // set geometry and adapt transformation
+            impSetPathPolyPolygonWithTransformationAdaption(aNewPathPolyPolygon);
         }
     }
 }
 
-sal_uInt32 SdrPathObj::InsPointOld(const Point& rPos, sal_Bool bNewObj)
+sal_uInt32 SdrPathObj::InsPointOld(const basegfx::B2DPoint& rPos, bool bNewObj)
 {
     sal_uInt32 nNewHdl;
 
     if(bNewObj)
     {
-        nNewHdl = InsPoint(rPos, sal_True);
+        nNewHdl = InsPoint(rPos, true);
     }
     else
     {
         // look for smallest distance data
-        const basegfx::B2DPoint aTestPoint(rPos.X(), rPos.Y());
         sal_uInt32 nSmallestPolyIndex(0L);
         sal_uInt32 nSmallestEdgeIndex(0L);
         double fSmallestCut;
-        basegfx::tools::getSmallestDistancePointToPolyPolygon(getB2DPolyPolygonInObjectCoordinates(), aTestPoint, nSmallestPolyIndex, nSmallestEdgeIndex, fSmallestCut);
+        basegfx::tools::getSmallestDistancePointToPolyPolygon(getB2DPolyPolygonInObjectCoordinates(), rPos, nSmallestPolyIndex, nSmallestEdgeIndex, fSmallestCut);
 
         // create old polygon index from it
         sal_uInt32 nPolyIndex(nSmallestEdgeIndex);
@@ -2421,50 +2453,48 @@ sal_uInt32 SdrPathObj::InsPointOld(const Point& rPos, sal_Bool bNewObj)
             nPolyIndex += getB2DPolyPolygonInObjectCoordinates().getB2DPolygon(a).count();
         }
 
-        nNewHdl = InsPoint(rPos, sal_False);
+        nNewHdl = InsPoint(rPos, false);
     }
 
     return nNewHdl;
 }
 
-sal_uInt32 SdrPathObj::InsPoint(const Point& rPos, sal_Bool bNewObj)
+sal_uInt32 SdrPathObj::InsPoint(const basegfx::B2DPoint& rPos, bool bNewObj)
 {
     sal_uInt32 nNewHdl;
+    basegfx::B2DPolyPolygon aNewPathPolyPolygon(getB2DPolyPolygonInObjectCoordinates());
 
     if(bNewObj)
     {
         basegfx::B2DPolygon aNewPoly;
-        const basegfx::B2DPoint aPoint(rPos.X(), rPos.Y());
-        aNewPoly.append(aPoint);
+        aNewPoly.append(rPos);
         aNewPoly.setClosed(isClosed());
-        maPathPolygon.append(aNewPoly);
-        impAdaptTransformation();
+        aNewPathPolyPolygon.append(aNewPoly);
+        impSetPathPolyPolygonWithTransformationAdaption(aNewPathPolyPolygon);
         nNewHdl = getB2DPolyPolygonInObjectCoordinates().allPointCount();
     }
     else
     {
         // look for smallest distance data
-        const basegfx::B2DPoint aTestPoint(rPos.X(), rPos.Y());
         sal_uInt32 nSmallestPolyIndex(0L);
         sal_uInt32 nSmallestEdgeIndex(0L);
-        double fSmallestCut;
-        basegfx::tools::getSmallestDistancePointToPolyPolygon(getB2DPolyPolygonInObjectCoordinates(), aTestPoint, nSmallestPolyIndex, nSmallestEdgeIndex, fSmallestCut);
+        double fSmallestCut(0.0);
+        basegfx::tools::getSmallestDistancePointToPolyPolygon(getB2DPolyPolygonInObjectCoordinates(), rPos, nSmallestPolyIndex, nSmallestEdgeIndex, fSmallestCut);
         basegfx::B2DPolygon aCandidate(getB2DPolyPolygonInObjectCoordinates().getB2DPolygon(nSmallestPolyIndex));
-        const basegfx::B2DRange aRangeBefore(aCandidate.getB2DRange());
         const bool bBefore(!aCandidate.isClosed() && 0L == nSmallestEdgeIndex && 0.0 == fSmallestCut);
         const bool bAfter(!aCandidate.isClosed() && aCandidate.count() == nSmallestEdgeIndex + 2L && 1.0 == fSmallestCut);
 
         if(bBefore)
         {
             // before first point
-            aCandidate.insert(0L, aTestPoint);
+            aCandidate.insert(0L, rPos);
 
             if(aCandidate.areControlPointsUsed())
             {
                 if(aCandidate.isNextControlPointUsed(1))
                 {
-                    aCandidate.setNextControlPoint(0, interpolate(aTestPoint, aCandidate.getB2DPoint(1), (1.0 / 3.0)));
-                    aCandidate.setPrevControlPoint(1, interpolate(aTestPoint, aCandidate.getB2DPoint(1), (2.0 / 3.0)));
+                    aCandidate.setNextControlPoint(0, interpolate(rPos, aCandidate.getB2DPoint(1), (1.0 / 3.0)));
+                    aCandidate.setPrevControlPoint(1, interpolate(rPos, aCandidate.getB2DPoint(1), (2.0 / 3.0)));
                 }
             }
 
@@ -2473,14 +2503,14 @@ sal_uInt32 SdrPathObj::InsPoint(const Point& rPos, sal_Bool bNewObj)
         else if(bAfter)
         {
             // after last point
-            aCandidate.append(aTestPoint);
+            aCandidate.append(rPos);
 
             if(aCandidate.areControlPointsUsed())
             {
                 if(aCandidate.isPrevControlPointUsed(aCandidate.count() - 2))
                 {
-                    aCandidate.setNextControlPoint(aCandidate.count() - 2, interpolate(aCandidate.getB2DPoint(aCandidate.count() - 2), aTestPoint, (1.0 / 3.0)));
-                    aCandidate.setPrevControlPoint(aCandidate.count() - 1, interpolate(aCandidate.getB2DPoint(aCandidate.count() - 2), aTestPoint, (2.0 / 3.0)));
+                    aCandidate.setNextControlPoint(aCandidate.count() - 2, interpolate(aCandidate.getB2DPoint(aCandidate.count() - 2), rPos, (1.0 / 3.0)));
+                    aCandidate.setPrevControlPoint(aCandidate.count() - 1, interpolate(aCandidate.getB2DPoint(aCandidate.count() - 2), rPos, (2.0 / 3.0)));
                 }
             }
 
@@ -2512,11 +2542,11 @@ sal_uInt32 SdrPathObj::InsPoint(const Point& rPos, sal_Bool bNewObj)
 
                 // split and insert hit point
                 aBezier.split(fSmallestCut, &aBezierA, &aBezierB);
-                aCandidate.insert(nSmallestEdgeIndex + 1, aTestPoint);
+                aCandidate.insert(nSmallestEdgeIndex + 1, rPos);
 
                 // since we inserted hit point and not split point, we need to add an offset
                 // to the control points to get the C1 continuity we want to achieve
-                const basegfx::B2DVector aOffset(aTestPoint - aBezierA.getEndPoint());
+                const basegfx::B2DVector aOffset(rPos - aBezierA.getEndPoint());
                 aCandidate.setNextControlPoint(nSmallestEdgeIndex, aBezierA.getControlPointA() + aOffset);
                 aCandidate.setPrevControlPoint(nSmallestEdgeIndex + 1, aBezierA.getControlPointB() + aOffset);
                 aCandidate.setNextControlPoint(nSmallestEdgeIndex + 1, aBezierB.getControlPointA() + aOffset);
@@ -2524,25 +2554,19 @@ sal_uInt32 SdrPathObj::InsPoint(const Point& rPos, sal_Bool bNewObj)
             }
             else
             {
-                aCandidate.insert(nSmallestEdgeIndex + 1L, aTestPoint);
+                aCandidate.insert(nSmallestEdgeIndex + 1L, rPos);
             }
 
             nNewHdl = nSmallestEdgeIndex + 1L;
         }
 
-        const basegfx::B2DRange aRangeAfter(aCandidate.getB2DRange());
-        maPathPolygon.setB2DPolygon(nSmallestPolyIndex, aCandidate);
+        aNewPathPolyPolygon.setB2DPolygon(nSmallestPolyIndex, aCandidate);
+        impSetPathPolyPolygonWithTransformationAdaption(aNewPathPolyPolygon);
 
         // create old polygon index from it
         for(sal_uInt32 a(0L); a < nSmallestPolyIndex; a++)
         {
             nNewHdl += getB2DPolyPolygonInObjectCoordinates().getB2DPolygon(a).count();
-        }
-
-        if(aRangeBefore != aRangeAfter)
-        {
-            // need to adapt when geometric size has changed
-            impAdaptTransformation();
         }
     }
 
@@ -2646,19 +2670,19 @@ void SdrPathObj::SaveGeoData(SdrObjGeoData& rGeo) const
 {
     SdrTextObj::SaveGeoData(rGeo);
     SdrPathObjGeoData& rPGeo = (SdrPathObjGeoData&) rGeo;
-    rPGeo.maPathPolygon = getB2DPolyPolygonInObjectCoordinates();
+    rPGeo.maPathPolyPolygon = getB2DPolyPolygonInObjectCoordinates();
 }
 
 void SdrPathObj::RestGeoData(const SdrObjGeoData& rGeo)
 {
     SdrTextObj::RestGeoData(rGeo);
-    SdrPathObjGeoData& rPGeo=(SdrPathObjGeoData&)rGeo;
-    maPathPolygon=rPGeo.maPathPolygon;
+    SdrPathObjGeoData& rPGeo = (SdrPathObjGeoData&)rGeo;
+    maPathPolyPolygon = rPGeo.maPathPolyPolygon;
 }
 
-basegfx::B2DPolyPolygon SdrPathObj::getB2DPolyPolygonInObjectCoordinates() const
+const basegfx::B2DPolyPolygon& SdrPathObj::getB2DPolyPolygonInObjectCoordinates() const
 {
-    return maPathPolygon;
+    return maPathPolyPolygon;
 }
 
 void SdrPathObj::setB2DPolyPolygonInObjectCoordinates(const basegfx::B2DPolyPolygon& rPathPoly)
@@ -2666,29 +2690,9 @@ void SdrPathObj::setB2DPolyPolygonInObjectCoordinates(const basegfx::B2DPolyPoly
     if(getB2DPolyPolygonInObjectCoordinates() != rPathPoly)
     {
         const SdrObjectChangeBroadcaster aSdrObjectChangeBroadcaster(*this);
-        maPathPolygon=rPathPoly;
-        impAdaptTransformation();
+        impSetPathPolyPolygonWithTransformationAdaption(rPathPoly);
         SetChanged();
     }
-}
-
-basegfx::B2DPolyPolygon SdrPathObj::getB2DPolyPolygonInNormalizedCoordinates() const
-{
-    basegfx::B2DHomMatrix aInverse(getSdrObjectTransformation());
-    basegfx::B2DPolyPolygon aRetval(getB2DPolyPolygonInObjectCoordinates());
-
-    aInverse.invert();
-    aRetval.transform(aInverse);
-
-    return aRetval;
-}
-
-void SdrPathObj::setB2DPolyPolygonInNormalizedCoordinates(const basegfx::B2DPolyPolygon& rPathPoly)
-{
-    basegfx::B2DPolyPolygon aNew(rPathPoly);
-
-    aNew.transform(getSdrObjectTransformation());
-    setB2DPolyPolygonInObjectCoordinates(aNew);
 }
 
 void SdrPathObj::ToggleClosed()
@@ -2722,51 +2726,51 @@ void SdrPathObj::impDeleteDAC() const
 
 void SdrPathObj::setSdrObjectTransformation(const basegfx::B2DHomMatrix& rTransformation)
 {
-    if(isLine())
+    if(rTransformation != maSdrObjectTransformation.getB2DHomMatrix())
     {
-        // call parent
-        SdrTextObj::setSdrObjectTransformation(rTransformation);
-
-        // apply new transformation to (0,0) and (1,0) to create the polygon data
-        basegfx::B2DPolygon aLine;
-
-        aLine.append(rTransformation * basegfx::B2DPoint(0.0, 0.0));
-        aLine.append(rTransformation * basegfx::B2DPoint(1.0, 0.0));
-        maPathPolygon = basegfx::B2DPolyPolygon(aLine);
-    }
-    else
-    {
-        // remember current ObjectTransformation
-        basegfx::B2DHomMatrix aOldObjectTransformation(getSdrObjectTransformation());
-
-        // call parent
-        SdrTextObj::setSdrObjectTransformation(rTransformation);
-
-        // need to adapt the object-coordinate representation of maPathPolygon
-        const basegfx::B2DHomMatrix aNewObjectTransformation(getSdrObjectTransformation());
-
-        if(aOldObjectTransformation != aNewObjectTransformation)
+        if(isLine())
         {
-            aOldObjectTransformation.invert();
-            aOldObjectTransformation = aNewObjectTransformation * aOldObjectTransformation;
-            maPathPolygon.transform(aOldObjectTransformation);
+            // apply new transformation to (0,0) and (1,0) to create the polygon data
+            basegfx::B2DPolygon aLine;
+
+            aLine.append(rTransformation * basegfx::B2DPoint(0.0, 0.0));
+            aLine.append(rTransformation * basegfx::B2DPoint(1.0, 0.0));
+            maPathPolyPolygon = basegfx::B2DPolyPolygon(aLine);
+        }
+        else
+        {
+            if(getB2DPolyPolygonInObjectCoordinates().count())
+            {
+                // need to adapt the object-coordinate representation of maPathPolyPolygon.
+                // take out old and apply new transformation
+                basegfx::B2DHomMatrix aCombined(maSdrObjectTransformation.getB2DHomMatrix());
+
+                aCombined.invert();
+                aCombined = rTransformation * aCombined;
+                maPathPolyPolygon.transform(aCombined);
+            }
         }
     }
+
+    // call parent
+    SdrTextObj::setSdrObjectTransformation(rTransformation);
 }
 
 bool SdrPathObj::isClosed() const
 {
-    return maPathPolygon.isClosed();
+    return getB2DPolyPolygonInObjectCoordinates().isClosed();
 }
 
 bool SdrPathObj::isLine() const
 {
-    return (1 == maPathPolygon.count() && 2 == maPathPolygon.getB2DPolygon(0).count());
+    return !getB2DPolyPolygonInObjectCoordinates().areControlPointsUsed()
+        && 1 == getB2DPolyPolygonInObjectCoordinates().count()
+        && 2 == getB2DPolyPolygonInObjectCoordinates().getB2DPolygon(0).count();
 }
 
 bool SdrPathObj::isBezier() const
 {
-    return maPathPolygon.areControlPointsUsed();
+    return getB2DPolyPolygonInObjectCoordinates().areControlPointsUsed();
 }
 
 //////////////////////////////////////////////////////////////////////////////

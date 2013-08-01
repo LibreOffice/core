@@ -104,6 +104,7 @@ namespace sdr
         public:
             /// constructor
             Selection(SdrView& rSdrView);
+            virtual ~Selection();
 
             /// test if selection change is pending
             bool isSelectionChangePending() const;

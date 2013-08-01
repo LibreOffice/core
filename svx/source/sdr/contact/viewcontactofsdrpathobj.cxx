@@ -77,12 +77,8 @@ namespace sdr
 
             // prepare object transformation and unit polygon (direct model data)
             basegfx::B2DHomMatrix aObjectMatrix;
-            const bool bIsLine(
-                !aUnitPolyPolygon.areControlPointsUsed()
-                && 1 == nPolyCount
-                && 2 == aUnitPolyPolygon.getB2DPolygon(0).count());
 
-            if(bIsLine)
+            if(GetPathObj().isLine())
             {
                 // special handling for single line mode (2 points)
                 const basegfx::B2DPolygon aSubPolygon(aUnitPolyPolygon.getB2DPolygon(0));
@@ -104,9 +100,13 @@ namespace sdr
             }
             else
             {
-                // get transformation and unit polygon
-                aUnitPolyPolygon = GetPathObj().getB2DPolyPolygonInNormalizedCoordinates();
+                // get transformation in unified coordinates
                 aObjectMatrix = GetPathObj().getSdrObjectTransformation();
+                aUnitPolyPolygon = GetPathObj().getB2DPolyPolygonInObjectCoordinates();
+
+                basegfx::B2DHomMatrix aInverse(aObjectMatrix);
+                aInverse.invert();
+                aUnitPolyPolygon.transform(aInverse);
             }
 
             // create primitive. Always create primitives to allow the decomposition of

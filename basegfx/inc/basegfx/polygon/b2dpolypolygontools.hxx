@@ -139,23 +139,32 @@ namespace basegfx
         bool importFromSvgD( B2DPolyPolygon&        o_rPolyPoly,
                              const ::rtl::OUString& rSvgDAttribute );
 
-        /** Read poly-polygon from SVG.
+        /** Export poly-polygon to SVG.
 
-            This function imports a poly-polygon from an SVG points
-            attribute (a plain list of coordinate pairs).
+            This function exports a poly-polygon into an SVG-D
+            statement. Currently, output of relative point sequences
+            is not yet supported (might cause slightly larger output)
 
-            @param o_rPoly
-            The output polygon. Note that svg:points can only define a
-            single polygon
+            @param rPolyPoly
+            The poly-polygon to export
 
-            @param rSvgPointsAttribute
-            A valid SVG points attribute string
+            @param bUseRelativeCoordinates
+            When true, all coordinate values are exported as relative
+            to the current position. This tends to save some space,
+            since fewer digits needs to be written.
 
-            @return true, if the string was successfully parsed
+            @param bDetectQuadraticBeziers
+            When true, the export tries to detect cubic bezier
+            segments in the input polygon, which can be represented by
+            quadratic bezier segments. Note that the generated string
+            causes versions prior to OOo2.0 to crash.
+
+            @return the generated SVG-D statement (the XML d attribute
+            value alone, without any "<path ...>" or "d="...")
          */
-        bool importFromSvgPoints( B2DPolygon&            o_rPoly,
-                                  const ::rtl::OUString& rSvgPointsAttribute );
-
+        ::rtl::OUString exportToSvgD( const B2DPolyPolygon& rPolyPoly,
+                                      bool                  bUseRelativeCoordinates=true,
+                                      bool                  bDetectQuadraticBeziers=true );
 
         // grow for polyPolygon. Move all geometry in each point in the direction of the normal in that point
         // with the given amount. Value may be negative.
@@ -213,33 +222,6 @@ namespace basegfx
             points are ignored.
          */
         bool isRectangle( const B2DPolyPolygon& rPoly );
-
-        /** Export poly-polygon to SVG.
-
-            This function exports a poly-polygon into an SVG-D
-            statement. Currently, output of relative point sequences
-            is not yet supported (might cause slightly larger output)
-
-            @param rPolyPoly
-            The poly-polygon to export
-
-            @param bUseRelativeCoordinates
-            When true, all coordinate values are exported as relative
-            to the current position. This tends to save some space,
-            since fewer digits needs to be written.
-
-            @param bDetectQuadraticBeziers
-            When true, the export tries to detect cubic bezier
-            segments in the input polygon, which can be represented by
-            quadratic bezier segments. Note that the generated string
-            causes versions prior to OOo2.0 to crash.
-
-            @return the generated SVG-D statement (the XML d attribute
-            value alone, without any "<path ...>" or "d="...")
-         */
-        ::rtl::OUString exportToSvgD( const B2DPolyPolygon& rPolyPoly,
-                                      bool                  bUseRelativeCoordinates=true,
-                                      bool                  bDetectQuadraticBeziers=true );
 
         // #i76891# Try to remove existing curve segments if they are simply edges
         B2DPolyPolygon simplifyCurveSegments(const B2DPolyPolygon& rCandidate);

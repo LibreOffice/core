@@ -40,7 +40,7 @@ class ImpPathForDragAndCreate;
 class SdrPathObjGeoData : public SdrObjGeoData
 {
 public:
-    basegfx::B2DPolyPolygon maPathPolygon;
+    basegfx::B2DPolyPolygon maPathPolyPolygon;
 
     SdrPathObjGeoData();
     virtual ~SdrPathObjGeoData();
@@ -67,13 +67,13 @@ class SVX_DLLPUBLIC SdrPathObj : public SdrTextObj
 private:
     friend class ImpPathForDragAndCreate;
 
-protected:
-    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
-
     // the geometry data in object coordinates. This means that it is not
     // in normalized form. To get it in normalized form You need to transform
     // with the inverse of the object matrix
-    basegfx::B2DPolyPolygon     maPathPolygon;
+    basegfx::B2DPolyPolygon     maPathPolyPolygon;
+
+protected:
+    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
 
     // for isolation of old Drag/Create code
     ImpPathForDragAndCreate*    mpDAC;
@@ -84,9 +84,12 @@ protected:
     ImpPathForDragAndCreate& impGetDAC(const SdrView& rView) const;
     void impDeleteDAC() const;
 
-    // helper for adapting the object transformation when the geometry
-    // (maPathPolygon) in world coordinates has changed
-    void impAdaptTransformation();
+    // helper to adapt transformation to changed gometry, needs to be called every time
+    // when maPathPolyPolygon changes. It ensures that the transformation is adapted in
+    // a way that the geometry in logic coordinates (0, 0, 1, 1) exactly fits so that the
+    // object tramsformation is correct in the sense of always transforming the object
+    // to object coordinates
+    void impSetPathPolyPolygonWithTransformationAdaption(const basegfx::B2DPolyPolygon& maNew);
 
     virtual ~SdrPathObj();
 
@@ -150,22 +153,20 @@ public:
     virtual void SetObjectPoint(const basegfx::B2DPoint& rPnt, sal_uInt32 nHdlNum);
 
     // insert point
-    sal_uInt32 InsPointOld(const Point& rPos, sal_Bool bNewObj);
-    sal_uInt32 InsPoint(const Point& rPos, sal_Bool bNewObj);
+    sal_uInt32 InsPointOld(const basegfx::B2DPoint& rPos, bool bNewObj);
+    sal_uInt32 InsPoint(const basegfx::B2DPoint& rPos, bool bNewObj);
 
     // split at tis point
     SdrObject* RipPoint(sal_uInt32 nHdlNum, sal_uInt32& rNewPt0Index);
 
     virtual SdrObject* DoConvertToPolygonObject(bool bBezier, bool bAddText) const;
+
+    // get/setSdrObjectTransformation
     virtual void setSdrObjectTransformation(const basegfx::B2DHomMatrix& rTransformation);
 
     // get/set polygon data in object coordiates
-    basegfx::B2DPolyPolygon getB2DPolyPolygonInObjectCoordinates() const;
+    const basegfx::B2DPolyPolygon& getB2DPolyPolygonInObjectCoordinates() const;
     void setB2DPolyPolygonInObjectCoordinates(const basegfx::B2DPolyPolygon& rPathPoly);
-
-    // get/set polygon data in normalized coordiates
-    basegfx::B2DPolyPolygon getB2DPolyPolygonInNormalizedCoordinates() const;
-    void setB2DPolyPolygonInNormalizedCoordinates(const basegfx::B2DPolyPolygon& rPathPoly);
 
     // helpers for states
     bool isClosed() const;

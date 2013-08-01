@@ -549,6 +549,38 @@ namespace basegfx
             com::sun::star::drawing::PointSequence& rPointSequenceRetval,
             com::sun::star::drawing::FlagSequence& rFlagSequenceRetval);
 
+        /** Read poly-polygon from SVG.
+
+            This function imports a poly-polygon from an SVG points
+            attribute (a plain list of coordinate pairs).
+
+            @param o_rPoly
+            The output polygon. Note that svg:points can only define a
+            single polygon
+
+            @param rSvgPointsAttribute
+            A valid SVG points attribute string
+
+            @return true, if the string was successfully parsed
+         */
+        bool importFromSvgPoints( B2DPolygon&            o_rPoly,
+                                  const ::rtl::OUString& rSvgPointsAttribute );
+
+        /** Write poly-polygon to SVG.
+
+            This function imports a non-bezier polygon to SVG points
+            (a plain list of coordinate pairs).
+
+            @param rPoly
+            The polygon to export
+
+            @param rSvgPointsAttribute
+            A valid SVG points attribute string
+
+            @return true, if the string was successfully parsed
+         */
+        ::rtl::OUString exportToSvgPoints( const B2DPolygon& rPoly );
+
     } // end of namespace tools
 } // end of namespace basegfx
 

@@ -29,6 +29,7 @@
 #include <basegfx/vector/b2dvector.hxx>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
 #include <basegfx/point/b2dpoint.hxx>
+#include <basegfx/range/b2drange.hxx>
 
 namespace rtl { class OUString; }
 
@@ -159,6 +160,11 @@ namespace basegfx
                 rPoint.getX(), rPoint.getY(),
                 fRadiant);
         }
+
+        /// special for the case to map from source range to target range
+        B2DHomMatrix createSourceRangeTargetRangeTransform(
+            const B2DRange& rSourceRange,
+            const B2DRange& rTargetRange);
 
         /* tooling methods for converting API matrices (drawing::HomogenMatrix3)
            to B2DHomMatrix
@@ -386,9 +392,6 @@ namespace basegfx
                 return !(fTools::equalZero(maTranslate.getX()) && fTools::equalZero(maTranslate.getY())); }
         };
     } // end of namespace tools
-
-    /// Returns a string with svg's "matrix(m00,m10,m01,m11,m02,m12)" representation
-    ::rtl::OUString exportToSvg( const B2DHomMatrix& rMatrix );
 
 } // end of namespace basegfx
 

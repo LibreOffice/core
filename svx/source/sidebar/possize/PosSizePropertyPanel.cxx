@@ -81,7 +81,6 @@ PosSizePropertyPanel::PosSizePropertyPanel(
     mpFtFlip(new FixedText(this, SVX_RES(FT_FLIP))),
     mpFlipTbxBackground(sfx2::sidebar::ControlFactory::CreateToolBoxBackground(this)),
     mpFlipTbx(sfx2::sidebar::ControlFactory::CreateToolBox(mpFlipTbxBackground.get(), SVX_RES(TBX_FLIP))),
-    maRect(),
     mpView(0),
     mlOldWidth(1),
     mlOldHeight(1),
@@ -202,20 +201,17 @@ void PosSizePropertyPanel::ShowMenu (void)
 
 namespace
 {
-    bool hasText(const SdrView& rSdrView)
+    bool hasSingeObjectWithTextSelected(const SdrView& rSdrView)
     {
-        const SdrMarkList& rMarkList = rSdrView.GetMarkedObjectList();
+        SdrObject* pObj = rSdrView.getSelectedIfSingle();
 
-        if(1 == rMarkList.GetMarkCount())
+        if(pObj)
         {
-            const SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
             const SdrObjKind eKind((SdrObjKind)pObj->GetObjIdentifier());
 
             if((pObj->GetObjInventor() == SdrInventor) && (OBJ_TEXT == eKind || OBJ_TITLETEXT == eKind || OBJ_OUTLINETEXT == eKind))
             {
-                const SdrTextObj* pSdrTextObj = dynamic_cast< const SdrTextObj* >(pObj);
-
-                if(pSdrTextObj && pSdrTextObj->HasText())
+                if(pObj->HasText())
                 {
                     return true;
                 }
@@ -308,8 +304,8 @@ void PosSizePropertyPanel::Initialize()
 
     if ( mpView != NULL )
     {
-        maUIScale = mpView->GetModel()->GetUIScale();
-        mbAdjustEnabled = hasText(*mpView);
+        maUIScale = mpView->getSdrModelFromSdrView().GetUIScale();
+        mbAdjustEnabled = hasSingeObjectWithTextSelected(*mpView);
     }
 
     mePoolUnit = maTransfWidthControl.GetCoreMetric();
@@ -775,7 +771,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
     if ( mpView == NULL )
         return;
 
-    mbAdjustEnabled = hasText(*mpView);
+    mbAdjustEnabled = hasSingeObjectWithTextSelected(*mpView);
 
     // Pool unit and dialog unit may have changed, make sure that we
     // have the current values.
@@ -999,16 +995,16 @@ void PosSizePropertyPanel::NotifyItemUpdate(
     }
 
     const sal_Int32 nCombinedContext(maContext.GetCombinedContext_DI());
-    const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
+    const SdrObjectVector aMarkList(mpView->getSelectedSdrObjectVectorFromSdrMarkView());
 
-    switch (rMarkList.GetMarkCount())
+    switch (aMarkList.size())
     {
         case 0:
             break;
 
         case 1:
         {
-            const SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+            const SdrObject* pObj = aMarkList[0];
             const SdrObjKind eKind((SdrObjKind)pObj->GetObjIdentifier());
 
             if(((nCombinedContext == CombinedEnumContext(Application_DrawImpress, Context_Draw)
@@ -1030,9 +1026,9 @@ void PosSizePropertyPanel::NotifyItemUpdate(
             sal_uInt16 nMarkObj = 0;
             bool isNoEdge = true;
 
-            while(isNoEdge && rMarkList.GetMark(nMarkObj))
+            while(isNoEdge && nMarkObj < aMarkList.size())
             {
-                const SdrObject* pObj = rMarkList.GetMark(nMarkObj)->GetMarkedSdrObj();
+                const SdrObject* pObj = aMarkList[nMarkObj++];
                 const SdrObjKind eKind((SdrObjKind)pObj->GetObjIdentifier());
 
                 if(((nCombinedContext == CombinedEnumContext(Application_DrawImpress, Context_Draw)
@@ -1043,7 +1039,6 @@ void PosSizePropertyPanel::NotifyItemUpdate(
                     isNoEdge = false;
                     break;
                 }
-                nMarkObj++;
             }
 
             if(!isNoEdge)
@@ -1090,7 +1085,7 @@ void PosSizePropertyPanel::executeSize()
 {
     if ( mpMtrWidth->IsValueModified() || mpMtrHeight->IsValueModified())
     {
-        Fraction aUIScale = mpView->GetModel()->GetUIScale();
+        Fraction aUIScale = mpView->getSdrModelFromSdrView().GetUIScale();
 
         // get Width
         double nWidth = (double)mpMtrWidth->GetValue( meDlgUnit );
@@ -1137,26 +1132,20 @@ void PosSizePropertyPanel::executePosX()
     if ( mpMtrPosX->IsValueModified())
     {
         long lX = GetCoreValue( *mpMtrPosX, mePoolUnit );
-        if( mbMtrPosXMirror )
+
+        if( mbMtrPosXMirror ) // TTTT: Check if needed and what it does
+        {
             lX = -lX;
-        long lY = GetCoreValue( *mpMtrPosY, mePoolUnit );
+        }
 
-        Size aPageSize;
-        Rectangle aRect;
-        maRect = mpView->GetAllMarkedRect();
-        aRect = mpView->GetAllMarkedRect();
+        const Fraction aUIScale(mpView->getSdrModelFromSdrView().GetUIScale());
 
-        Fraction aUIScale = mpView->GetModel()->GetUIScale();
         lX += maAnchorPos.X();
         lX = Fraction( lX ) * aUIScale;
-        lY += maAnchorPos.Y();
-        lY = Fraction( lY ) * aUIScale;
 
-        SfxInt32Item aPosXItem( SID_ATTR_TRANSFORM_POS_X,(sal_uInt32) lX);
-        SfxInt32Item aPosYItem( SID_ATTR_TRANSFORM_POS_Y,(sal_uInt32) lY);
+        const SfxInt32Item aPosXItem( SID_ATTR_TRANSFORM_POS_X,(sal_uInt32) lX);
 
-        GetBindings()->GetDispatcher()->Execute(
-            SID_ATTR_TRANSFORM, SFX_CALLMODE_RECORD, &aPosXItem, 0L );
+        GetBindings()->GetDispatcher()->Execute(SID_ATTR_TRANSFORM, SFX_CALLMODE_RECORD, &aPosXItem, 0L);
     }
 }
 
@@ -1166,25 +1155,15 @@ void PosSizePropertyPanel::executePosY()
 {
     if ( mpMtrPosY->IsValueModified() )
     {
-        long lX = GetCoreValue( *mpMtrPosX, mePoolUnit );
         long lY = GetCoreValue( *mpMtrPosY, mePoolUnit );
+        const Fraction aUIScale = mpView->getSdrModelFromSdrView().GetUIScale();
 
-        Size aPageSize;
-        Rectangle aRect;
-        maRect = mpView->GetAllMarkedRect();
-        aRect = mpView->GetAllMarkedRect();
-
-        Fraction aUIScale = mpView->GetModel()->GetUIScale();
-        lX += maAnchorPos.X();
-        lX = Fraction( lX ) * aUIScale;
         lY += maAnchorPos.Y();
         lY = Fraction( lY ) * aUIScale;
 
-        SfxInt32Item aPosXItem( SID_ATTR_TRANSFORM_POS_X,(sal_uInt32) lX);
-        SfxInt32Item aPosYItem( SID_ATTR_TRANSFORM_POS_Y,(sal_uInt32) lY);
+        const SfxInt32Item aPosYItem( SID_ATTR_TRANSFORM_POS_Y,(sal_uInt32) lY);
 
-        GetBindings()->GetDispatcher()->Execute(
-            SID_ATTR_TRANSFORM, SFX_CALLMODE_RECORD, &aPosYItem, 0L );
+        GetBindings()->GetDispatcher()->Execute(SID_ATTR_TRANSFORM, SFX_CALLMODE_RECORD, &aPosYItem, 0L);
     }
 }
 

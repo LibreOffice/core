@@ -749,13 +749,11 @@ bool SdrDragView::ImpBegInsObjPoint(bool bIdxZwang, sal_uInt32 /*nIdx*/, const b
 
         if(bIdxZwang)
         {
-            const Point aOldPoint(basegfx::fround(aPt.getX()), basegfx::fround(aPt.getY()));
-            mnInsPointNum = pMarkedPath->InsPoint(aOldPoint, bNewObj);
+            mnInsPointNum = pMarkedPath->InsPoint(aPt, bNewObj);
         }
         else
         {
-            const Point aOldPoint(basegfx::fround(aPt.getX()), basegfx::fround(aPt.getY()));
-            mnInsPointNum = pMarkedPath->InsPointOld(aOldPoint, bNewObj);
+            mnInsPointNum = pMarkedPath->InsPointOld(aPt, bNewObj);
         }
 
         if(bClosed0 != pMarkedPath->IsClosedObj())
