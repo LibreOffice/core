@@ -24,10 +24,10 @@
 
 CommandExtTextInputData::CommandExtTextInputData( const OUString& rText,
                                                   const sal_uInt16* pTextAttr,
-                                                  xub_StrLen nCursorPos,
+                                                  sal_Int32 nCursorPos,
                                                   sal_uInt16 nCursorFlags,
-                                                  xub_StrLen nDeltaStart,
-                                                  xub_StrLen nOldTextLen,
+                                                  sal_Int32 nDeltaStart,
+                                                  sal_Int32 nOldTextLen,
                                                   sal_Bool bOnlyCursor ) :
     maText( rText )
 {

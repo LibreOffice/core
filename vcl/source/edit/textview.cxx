@@ -957,7 +957,7 @@ void TextView::Command( const CommandEvent& rCEvt )
                          ( nNewIMETextLen < mpImpl->mpTextEngine->mpIMEInfos->aOldTextAfterStartPos.Len() ) )
                     {
                         // restore old characters
-                        sal_uInt16 nRestore = nOldIMETextLen - nNewIMETextLen;
+                        sal_Int32 nRestore = nOldIMETextLen - nNewIMETextLen;
                         TextPaM aPaM( mpImpl->mpTextEngine->mpIMEInfos->aPos );
                         aPaM.GetIndex() = aPaM.GetIndex() + nNewIMETextLen;
                         mpImpl->mpTextEngine->ImpInsertText( aPaM, mpImpl->mpTextEngine->mpIMEInfos->aOldTextAfterStartPos.Copy( nNewIMETextLen, nRestore ) );

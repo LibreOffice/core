@@ -426,7 +426,7 @@ void ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
                          ( nNewIMETextLen < mpIMEInfos->aOldTextAfterStartPos.Len() ) )
                     {
                         // restore old characters
-                        sal_uInt16 nRestore = nOldIMETextLen - nNewIMETextLen;
+                        sal_Int32 nRestore = nOldIMETextLen - nNewIMETextLen;
                         EditPaM aPaM( mpIMEInfos->aPos );
                         aPaM.GetIndex() = aPaM.GetIndex() + nNewIMETextLen;
                         ImpInsertText( aPaM, mpIMEInfos->aOldTextAfterStartPos.Copy( nNewIMETextLen, nRestore ) );
