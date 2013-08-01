@@ -79,6 +79,7 @@
 #include "xecontent.hxx"
 
 #include "xcl97rec.hxx"
+#include "tabprotection.hxx"
 
 using namespace ::oox;
 
@@ -494,6 +495,49 @@ XclExpProtection::XclExpProtection(bool bValue) :
 {
 }
 
+XclExpSheetProtection::XclExpSheetProtection(bool bValue, SCTAB nTab ) :
+    XclExpProtection( bValue),
+    mnTab(nTab)
+{
+}
+
+void XclExpSheetProtection::SaveXml( XclExpXmlStream& rStrm )
+{
+   ScDocument& rDoc = rStrm.GetRoot().GetDoc();
+   const ScTableProtection* pTabProtect = rDoc.GetTabProtection(mnTab);
+   if ( pTabProtect )
+   {
+        Sequence<sal_Int8> aHash = pTabProtect->getPasswordHash(PASSHASH_XL);
+        sal_uInt16 nHash(0x0000);
+        OString sHash;
+        if (aHash.getLength() >= 2)
+        {
+            nHash = ((aHash[0] << 8) & 0xFFFF);
+            nHash |= (aHash[1] & 0xFF);
+            sHash = OString::valueOf( nHash, 16 );
+        }
+        sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
+        rWorksheet->singleElement( XML_sheetProtection,
+            XML_sheet,  XclXmlUtils::ToPsz( true ),
+            XML_password, sHash.getStr(),
+            XML_objects, pTabProtect->isOptionEnabled( ScTableProtection::OBJECTS ) ? XclXmlUtils::ToPsz( true ) : NULL,
+            XML_scenarios, pTabProtect->isOptionEnabled( ScTableProtection::SCENARIOS ) ? XclXmlUtils::ToPsz( true ) : NULL,
+            XML_formatCells, pTabProtect->isOptionEnabled( ScTableProtection::FORMAT_CELLS ) ? NULL : XclXmlUtils::ToPsz( true ),
+            XML_formatColumns, pTabProtect->isOptionEnabled( ScTableProtection::FORMAT_COLUMNS ) ? NULL : XclXmlUtils::ToPsz( true ),
+            XML_formatRows, pTabProtect->isOptionEnabled( ScTableProtection::FORMAT_ROWS ) ? NULL : XclXmlUtils::ToPsz( true ),
+            XML_insertColumns, pTabProtect->isOptionEnabled( ScTableProtection::INSERT_COLUMNS ) ? NULL : XclXmlUtils::ToPsz( true ),
+            XML_insertRows, pTabProtect->isOptionEnabled( ScTableProtection::INSERT_ROWS ) ? NULL : XclXmlUtils::ToPsz( true ),
+            XML_insertHyperlinks, pTabProtect->isOptionEnabled( ScTableProtection::INSERT_HYPERLINKS ) ? NULL : XclXmlUtils::ToPsz( true ),
+            XML_deleteColumns, pTabProtect->isOptionEnabled( ScTableProtection::DELETE_COLUMNS ) ? NULL : XclXmlUtils::ToPsz( true ),
+            XML_deleteRows, pTabProtect->isOptionEnabled( ScTableProtection::DELETE_ROWS ) ? NULL : XclXmlUtils::ToPsz( true ),
+            XML_selectLockedCells, pTabProtect->isOptionEnabled( ScTableProtection::SELECT_LOCKED_CELLS ) ? XclXmlUtils::ToPsz( true ) : NULL,
+            XML_sort, pTabProtect->isOptionEnabled( ScTableProtection::SORT ) ? NULL : XclXmlUtils::ToPsz( true ),
+            XML_autoFilter, pTabProtect->isOptionEnabled( ScTableProtection::AUTOFILTER ) ? NULL : XclXmlUtils::ToPsz( true ),
+            XML_pivotTables, pTabProtect->isOptionEnabled( ScTableProtection::PIVOT_TABLES ) ? NULL : XclXmlUtils::ToPsz( true ),
+            XML_selectUnlockedCells, pTabProtect->isOptionEnabled( ScTableProtection::SELECT_UNLOCKED_CELLS ) ? XclXmlUtils::ToPsz( true ) : NULL,
+            FSEND );
+    }
+}
 // ============================================================================
 
 XclExpPassHash::XclExpPassHash(const Sequence<sal_Int8>& aHash) :

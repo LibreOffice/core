@@ -593,6 +593,11 @@ void ExcTable::FillAsXmlTable( SCTAB nCodeNameIdx )
     // conditional formats
     Add( new XclExpCondFormatBuffer( GetRoot(), xExtLst ) );
 
+    ScDocument& rDoc = GetDoc();
+    const ScTableProtection* pTabProtect = rDoc.GetTabProtection(mnScTab);
+    if (pTabProtect && pTabProtect->isProtected())
+        Add( new XclExpSheetProtection(true, mnScTab) );
+
     if( HasVbaStorage() )
         if( nCodeNameIdx < GetExtDocOptions().GetCodeNameCount() )
             Add( new XclCodename( GetExtDocOptions().GetCodeName( nCodeNameIdx ) ) );
