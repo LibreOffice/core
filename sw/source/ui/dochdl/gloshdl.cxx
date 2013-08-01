@@ -736,7 +736,7 @@ sal_Bool SwGlossaryHdl::ImportGlossaries( const OUString& rName )
         pMed->UseInteractionHandler( sal_True );
         if( !aMatcher.GuessFilter( *pMed, &pFilter, sal_False ) )
         {
-            SwTextBlocks *pGlossary;
+            SwTextBlocks *pGlossary = NULL;
             pMed->SetFilter( pFilter );
             Reader* pR = SwReaderWriter::GetReader( pFilter->GetUserData() );
             if( pR && 0 != ( pGlossary = pCurGrp ? pCurGrp
