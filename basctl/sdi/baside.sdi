@@ -36,7 +36,7 @@ shell basctl_Shell
         ExecMethod  = ExecuteCurrent;
     ]
 
-    SID_BASICIDE_CODECOMPLETITION
+    SID_BASICIDE_IDEOPTIONS
     [
         StateMethod = GetState;
         ExecMethod  = ExecuteCurrent;

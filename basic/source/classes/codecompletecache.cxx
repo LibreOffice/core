@@ -28,17 +28,13 @@ namespace
 }
 
 CodeCompleteOptions::CodeCompleteOptions()
-/*: bIsCodeCompleteOn( false ),
-bIsProcedureAutoCompleteOn( false ),
-bIsAutoCloseQuotesOn( false ),
-bIsAutoCloseParenthesisOn( false ),
-bIsAutoCorrectSpellingOn( false )*/
 {
-    bIsAutoCorrectSpellingOn = officecfg::Office::BasicIDE::Autocomplete::AutoCorrectSpelling::get();
+    bIsAutoCorrectKeywordsOn = officecfg::Office::BasicIDE::Autocomplete::AutoCorrectKeywords::get();
     bIsAutoCloseParenthesisOn = officecfg::Office::BasicIDE::Autocomplete::AutocloseParenthesis::get();
     bIsAutoCloseQuotesOn = officecfg::Office::BasicIDE::Autocomplete::AutocloseDoubleQuotes::get();
     bIsProcedureAutoCompleteOn = officecfg::Office::BasicIDE::Autocomplete::AutocloseProc::get();
     bIsCodeCompleteOn = officecfg::Office::BasicIDE::Autocomplete::CodeComplete::get();
+    bExtendedTypeDeclarationOn = officecfg::Office::BasicIDE::Autocomplete::UseExtended::get();
 }
 
 bool CodeCompleteOptions::IsCodeCompleteOn()
@@ -53,12 +49,12 @@ void CodeCompleteOptions::SetCodeCompleteOn( const bool& b )
 
 bool CodeCompleteOptions::IsExtendedTypeDeclaration()
 {
-    return CodeCompleteOptions::IsCodeCompleteOn();
+    return theCodeCompleteOptions::get().aMiscOptions.IsExperimentalMode() && theCodeCompleteOptions::get().bExtendedTypeDeclarationOn;
 }
 
 void CodeCompleteOptions::SetExtendedTypeDeclaration( const bool& b )
 {
-    CodeCompleteOptions::SetCodeCompleteOn( b );
+    theCodeCompleteOptions::get().bExtendedTypeDeclarationOn = b;
 }
 
 bool CodeCompleteOptions::IsProcedureAutoCompleteOn()
@@ -91,14 +87,14 @@ void CodeCompleteOptions::SetAutoCloseParenthesisOn( const bool& b )
     theCodeCompleteOptions::get().bIsAutoCloseParenthesisOn = b;
 }
 
-bool CodeCompleteOptions::IsAutoCorrectSpellingOn()
+bool CodeCompleteOptions::IsAutoCorrectKeywordsOn()
 {
-    return theCodeCompleteOptions::get().aMiscOptions.IsExperimentalMode() && theCodeCompleteOptions::get().bIsAutoCorrectSpellingOn;
+    return theCodeCompleteOptions::get().aMiscOptions.IsExperimentalMode() && theCodeCompleteOptions::get().bIsAutoCorrectKeywordsOn;
 }
 
-void CodeCompleteOptions::SetAutoCorrectSpellingOn( const bool& b )
+void CodeCompleteOptions::SetAutoCorrectKeywordsOn( const bool& b )
 {
-    theCodeCompleteOptions::get().bIsAutoCorrectSpellingOn = b;
+    theCodeCompleteOptions::get().bIsAutoCorrectKeywordsOn = b;
 }
 
 std::ostream& operator<< (std::ostream& aStream, const CodeCompleteDataCache& aCache)

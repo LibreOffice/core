@@ -18,21 +18,4 @@
  -->
  <!DOCTYPE oor:component-data SYSTEM "../../../../component-update.dtd">
 <oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:install="http://openoffice.org/2004/installation" oor:name="BasicIDE" oor:package="org.openoffice.Office">
-    <!--<node oor:name="Autocomplete" oor:op="replace">
-        <prop oor:name="CodeComplete">
-            <value>false</value>
-        </prop>
-        <prop oor:name="AutocloseParenthesis">
-            <value>false</value>
-        </prop>
-        <prop oor:name="AutocloseDoubleQuotes">
-            <value>false</value>
-        </prop>
-        <prop oor:name="AutocloseProc">
-            <value>false</value>
-        </prop>
-        <prop oor:name="AutoCorrectSpelling">
-            <value>false</value>
-        </prop>
-    </node>!-->
 </oor:component-data>
