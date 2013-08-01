@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//9hc\u003d",
+        "filename": "sw/source/filter/html/htmlcss1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1741,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-08-01T22:45:33Z",
+      "side": 1,
+      "message": "here and elsewhere, OUString has a constructor\nOUString(const sal_Char*, length, encoding)\n\nactually OStringtoOUString() is just a wrapper around it...\nsee include/rtl/ustring.hxx\n\nbut imo make the things just harder/more complicated to read",
+      "revId": "582e59d067915cd6c5ea73e9a436971b9cd32a9a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//9hQ\u003d",
+        "filename": "sw/source/filter/html/parcss1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-08-01T22:45:33Z",
+      "side": 1,
+      "message": "I kow it is conteer intuitive, but here you want\nsTmpBuffer.toString()\n\nThe \u0027optimization\u0027 of makeStringAndClear() works against you here because the buffer was pre-allocated at 1024 (MAX_LEN define) .. and makeStringAndClear will keep that buffer as is...\nso that is 1K of memory for each string no matter what.\ntoString() yes will re-allocate the buffer.. but it will reallocate it at the proper size based on the actual content... the trade-off of 1K of memory for saving an alloc is not a good one here (most string will be _way_ smaller than 1K)",
+      "revId": "582e59d067915cd6c5ea73e9a436971b9cd32a9a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//9hY\u003d",
+        "filename": "sw/source/filter/html/parcss1.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-08-01T22:45:33Z",
+      "side": 1,
+      "message": "that may be a bit scary\nlook at LOOP_CHECK and macro like that\nin the associated source\nespecially nOldPos....",
+      "revId": "582e59d067915cd6c5ea73e9a436971b9cd32a9a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
