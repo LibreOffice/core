@@ -1150,8 +1150,7 @@ void ScColumn::BroadcastInArea( SCROW nRow1, SCROW nRow2 )
 
     SCROW nRow;
     SCSIZE nIndex;
-    if (!Search(nRow1, nIndex))
-        return;
+    Search(nRow1, nIndex);
 
     while ( nIndex < maItems.size() && (nRow = maItems[nIndex].nRow) <= nRow2 )
     {
