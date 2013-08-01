@@ -1183,9 +1183,9 @@ AC_ARG_ENABLE(firebird-sdbc,
 ,enable_firebird_sdbc=yes)
 
 AC_ARG_ENABLE(coretext,
-    AS_HELP_STRING([--enable-coretext],
-        [Use CoreText framework on Mac (instead of ATSU).
-        Known to not work properly, use only if you plan to work on that.]),
+    AS_HELP_STRING([--disable-coretext],
+        [Don't use CoreText on Mac (but the obsolete ATSU instead).
+         In a 64-bit LibreOffice CoreText is by necessity always used.]),
 )
 
 AC_ARG_ENABLE(winegcc,
