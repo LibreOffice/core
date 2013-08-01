@@ -77,7 +77,7 @@ void RemoteServer::execute()
 {
     SAL_INFO( "sdremote", "RemoteServer::execute called" );
     uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
-    if (!xContext.is() || !officecfg::Office::Common::Misc::ExperimentalMode::get(xContext))
+    if (!xContext.is()/* || !officecfg::Office::Common::Misc::ExperimentalMode::get(xContext)*/)
     {
         SAL_INFO("sdremote", "not in experimental mode, disabling TCP server");
         spServer = NULL;
@@ -314,7 +314,7 @@ void SdDLL::RegisterRemotes()
     // Disable unless in experimental mode for now
     SAL_INFO( "sdremote", "SdDLL::RegisterRemotes called" );
     uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
-    if ( xContext.is() && !officecfg::Office::Impress::Misc::Start::EnableSdremote::get( xContext ) )
+    if ( xContext.is() /* && !officecfg::Office::Impress::Misc::Start::EnableSdremote::get( xContext ) */)
         return;
 
     sd::RemoteServer::setup();
