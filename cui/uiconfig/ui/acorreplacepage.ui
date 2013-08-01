@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
   <!-- interface-requires LibreOffice 1.0 -->
+  <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkGrid" id="AcorReplacePage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -91,20 +91,6 @@
       </packing>
     </child>
     <child>
-      <object class="svtlo-SvTabListBox" id="tabview:border">
-        <property name="visible">True</property>
-        <property name="can_focus">True</property>
-        <property name="hexpand">True</property>
-        <property name="vexpand">True</property>
-      </object>
-      <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">2</property>
-        <property name="width">3</property>
-        <property name="height">1</property>
-      </packing>
-    </child>
-    <child>
       <object class="GtkButtonBox" id="buttonbox1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -161,6 +147,21 @@
         <property name="top_attach">1</property>
         <property name="width">1</property>
         <property name="height">2</property>
+      </packing>
+    </child>
+    <child>
+      <object class="svtlo-SvTabListBox" id="tabview:border">
+        <property name="width_request">1</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="hexpand">True</property>
+        <property name="vexpand">True</property>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">2</property>
+        <property name="width">3</property>
+        <property name="height">1</property>
       </packing>
     </child>
     <child>
