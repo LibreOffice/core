@@ -64,7 +64,7 @@ XclExpXmlDBDataColumns::XclExpXmlDBDataColumns( const XclExpRoot& rRoot, ScDBDat
     aRange.GetVars( anCol1, anRow1, anTab1, anCol2, anRow2, anTab2 );
     anTotalCols = (anCol2 - anCol1) + 1; //addressing starts from 0
     // Needs special handling for different tab ranges
-    miCount = anTotalCols;
+    //miCount = anTotalCols;
     OUString aColName = "Column";
     for( int i = 1; i <= anTotalCols; i++ )
     {
@@ -76,7 +76,7 @@ XclExpXmlDBDataColumns::XclExpXmlDBDataColumns( const XclExpRoot& rRoot, ScDBDat
 void XclExpXmlDBDataColumns::SaveXml( XclExpXmlStream& rStrm )
 {
    sax_fastparser::FSHelperPtr& rDBDataTable = rStrm.GetCurrentStream();
-   rDBDataTable->startElement( XML_tableColumns, XML_count, OString::number( miCount ).getStr(), FSEND );
+   rDBDataTable->startElement( XML_tableColumns, XML_count, OString::number( maDBDataColumnContainer.size() ).getStr(), FSEND );
     for ( DBDataColumnContainer::iterator itr = maDBDataColumnContainer.begin(); itr != maDBDataColumnContainer.end(); ++itr )
     {
         itr->SaveXml( rStrm );
@@ -112,7 +112,7 @@ void XclExpXmlDBDataTable::SaveXml( XclExpXmlStream& rStrm )
 XclExpXmlDBDataTables::XclExpXmlDBDataTables( const XclExpRoot& rRoot )
     : XclExpRoot( rRoot )
 {
-    miCount = 0;
+    int nCount = 0;
     ScDBCollection* pDBCollection = rRoot.GetDoc().GetDBCollection();
     if( pDBCollection )
     {
@@ -121,8 +121,8 @@ XclExpXmlDBDataTables::XclExpXmlDBDataTables( const XclExpRoot& rRoot )
         ScDBCollection::NamedDBs::iterator itrEnd = aNamedDBs.end();
         for(; itr!= itrEnd; ++itr)
         {
-            ++miCount;
-            maDBDataTableContainer.push_back( new XclExpXmlDBDataTable( rRoot, *itr, miCount ) );
+            ++nCount;
+            maDBDataTableContainer.push_back( new XclExpXmlDBDataTable( rRoot, *itr, nCount ) );
         }
     }
 }
@@ -130,7 +130,7 @@ XclExpXmlDBDataTables::XclExpXmlDBDataTables( const XclExpRoot& rRoot )
 void XclExpXmlDBDataTables::SaveXml( XclExpXmlStream& rStrm )
 {
     // We only make the table folder is we do have any DB Data to write in
-    if( miCount != 0 )
+    if( maDBDataTableContainer.size() != 0 )
     {
         //Now parse through each of the DB Datas making an xml for each.
         int i = 1;

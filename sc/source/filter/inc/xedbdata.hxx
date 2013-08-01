@@ -58,7 +58,6 @@ public:
 private:
     typedef boost::ptr_vector< XclExpXmlDBDataColumn > DBDataColumnContainer;
     DBDataColumnContainer maDBDataColumnContainer;
-    int miCount;
 };
 
 // ============================================================================
@@ -88,7 +87,6 @@ public:
 private:
     typedef boost::ptr_vector< XclExpXmlDBDataTable > DBDataTableContainer;
     DBDataTableContainer maDBDataTableContainer;
-    int miCount;
 };
 
 #endif
