@@ -331,8 +331,10 @@ certain functionality.
 
 @li @c sw
 @li @c sw.core - Writer core
+@li @c sw.doc
 @li @c sw.docx
 @li @c sw.envelp
+@li @c sw.filter
 @li @c sw.level2
 @li @c sw.rtf - .rtf export filter
 @li @c sw.ui
