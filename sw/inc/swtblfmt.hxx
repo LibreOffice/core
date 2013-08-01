@@ -124,6 +124,11 @@ public:
     static void RestoreTableProperties( SwTableFmt* pSrcFmt, SwTable &table );
     static SwTableFmt* StoreTableProperties( const SwTable &table );
 
+    static void AssignLineParents( SwTableFmt* pSrcFmt, SwTable &table );
+    static void AssignBoxParents( SwTableLineFmt* pSrcLineFmt, SwTableLine &line );
+    static void AssignLineParents_Complex( SwTableLineFmt* pSrcLineFmt, SwTableBoxFmt* pSrcBoxFmt, SwTableBox& rBox );
+    static void AssignBoxParents_Complex( SwTableLineFmt* pSrcLineFmt, SwTableBoxFmt* pSrcBoxFmt, SwTableLine& rLine );
+
     sal_Bool Load( SvStream& rStream, const SwAfVersions& rVersions, SwDoc* pDoc, sal_uInt16 nVal );
 
     TYPEINFO();     // Already in base class Content.

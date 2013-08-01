@@ -269,6 +269,8 @@ void SwTableFmt::RestoreTableProperties( SwTableFmt* pSrcFmt, SwTable &table )
     else
         pTableStyle->Remove( pHardFmt );
 
+    AssignLineParents( pSrcFmt, table );
+
     SwEditShell *pShell = pDoc->GetEditShell();
     pDoc->SetRowSplit( *pShell->getShellCrsr( false ), SwFmtRowSplit( bRowSplit ) );
 
@@ -282,6 +284,99 @@ SwTableFmt* SwTableFmt::StoreTableProperties( const SwTable &table )
         return NULL;
 
     return (SwTableFmt*)pHardFmt->GetRegisteredIn();
+}
+
+void SwTableFmt::AssignLineParents( SwTableFmt* pSrcFmt, SwTable &rTable )
+{
+    sal_uInt16 nLines = rTable.GetTabLines().size();
+    for( sal_uInt16 n = 0; n < nLines; ++n )
+    {
+        SwTableLineFmt* pLineFmt = (SwTableLineFmt*)rTable.GetTabLines()[ n ]->GetFrmFmt();
+        SwTableLineFmt* pFmt = 0;
+
+        if( pSrcFmt )
+        {
+            if( !n )
+                pFmt = pSrcFmt->GetFirstLineFmt();
+            else if( n == nLines - 1 )
+                pFmt = pSrcFmt->GetLastLineFmt();
+            else if( n & 1 )
+                pFmt = pSrcFmt->GetEvenLineFmt();
+            else
+                pFmt = pSrcFmt->GetOddLineFmt();
+        }
+
+        if( pFmt )
+            pLineFmt->RegisterToFormat( *pFmt );
+        else if( pLineFmt->GetRegisteredIn() )
+            ((SwTableLineFmt*)pLineFmt->GetRegisteredIn())->Remove( pLineFmt );
+
+        AssignBoxParents( pFmt, *rTable.GetTabLines()[ n ] );
+    }
+}
+
+void SwTableFmt::AssignBoxParents( SwTableLineFmt* pSrcLineFmt, SwTableLine &rLine )
+{
+    sal_uInt16 nBoxes = rLine.GetTabBoxes().size();
+    for( sal_uInt16 n = 0; n < nBoxes; ++n )
+    {
+        SwTableBoxFmt* pBoxFmt = (SwTableBoxFmt*)rLine.GetTabBoxes()[ n ]->GetFrmFmt();
+        SwTableBoxFmt* pFmt = 0;
+
+        if( pSrcLineFmt )
+        {
+            if( !n )
+                pFmt = pSrcLineFmt->GetFirstBoxFmt();
+            else if( n == nBoxes - 1 )
+                pFmt = pSrcLineFmt->GetLastBoxFmt();
+            else if( n & 1 )
+                pFmt = pSrcLineFmt->GetEvenBoxFmt();
+            else
+                pFmt = pSrcLineFmt->GetOddBoxFmt();
+        }
+
+        if( pFmt )
+            pBoxFmt->RegisterToFormat( *pFmt );
+        else if( pBoxFmt->GetRegisteredIn() )
+            ((SwTableBoxFmt*)pBoxFmt->GetRegisteredIn())->Remove( pBoxFmt );
+
+
+        if( rLine.GetTabBoxes()[ n ]->GetTabLines().size() )
+            AssignLineParents_Complex( pSrcLineFmt, pFmt, *rLine.GetTabBoxes()[ n ] );
+    }
+}
+
+void SwTableFmt::AssignLineParents_Complex( SwTableLineFmt* pSrcLineFmt, SwTableBoxFmt* pSrcBoxFmt, SwTableBox& rBox )
+{
+    sal_uInt16 nLines = rBox.GetTabLines().size();
+    for( sal_uInt16 n = 0; n < nLines; ++n )
+    {
+        SwTableLineFmt* pLineFmt = (SwTableLineFmt*)rBox.GetTabLines()[ n ]->GetFrmFmt();
+
+        if( pSrcLineFmt )
+            pLineFmt->RegisterToFormat( *pSrcLineFmt );
+        else
+            ((SwTableLineFmt*)pLineFmt->GetRegisteredIn())->Remove( pLineFmt );
+
+        AssignBoxParents_Complex( pSrcLineFmt, pSrcBoxFmt, *rBox.GetTabLines()[ n ] );
+    }
+}
+
+void SwTableFmt::AssignBoxParents_Complex( SwTableLineFmt* pSrcLineFmt, SwTableBoxFmt* pSrcBoxFmt, SwTableLine& rLine )
+{
+    sal_uInt16 nBoxes = rLine.GetTabBoxes().size();
+    for( sal_uInt16 n = 0; n < nBoxes; ++n )
+    {
+        SwTableBoxFmt* pBoxFmt = (SwTableBoxFmt*)rLine.GetTabBoxes()[ n ]->GetFrmFmt();
+
+        if( pSrcBoxFmt )
+            pBoxFmt->RegisterToFormat( *pSrcBoxFmt );
+        else
+            ((SwTableBoxFmt*)pBoxFmt->GetRegisteredIn())->Remove( pBoxFmt );
+
+        if( rLine.GetTabBoxes()[ n ]->GetTabLines().size() )
+            AssignLineParents_Complex( pSrcLineFmt, pSrcBoxFmt, *rLine.GetTabBoxes()[ n ] );
+    }
 }
 
 SwTableLineFmt::SwTableLineFmt( SwAttrPool& rPool, const sal_Char* pFmtNm,

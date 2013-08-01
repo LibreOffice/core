@@ -162,16 +162,11 @@ lcl_SetDfltBoxAttr(SwTableBox& rBox, DfltBoxAttrList_t & rBoxFmtArr,
         pNewTableBoxFmt = pDoc->MakeTableBoxFmt();
         pNewTableBoxFmt->SetFmtAttr( pBoxFrmFmt->GetAttrSet().Get( RES_FRM_SIZE ) );
 
-        if( pAutoFmt )
-            pAutoFmt->UpdateToSet( nId, (SfxItemSet&)pNewTableBoxFmt->GetAttrSet(),
-                                    SwTableAutoFmt::UPDATE_BOX,
-                                    pDoc->GetNumberFormatter( sal_True ) );
-        else
-            ::lcl_SetDfltBoxAttr( *pNewTableBoxFmt, nId );
+        ::lcl_SetDfltBoxAttr( *pNewTableBoxFmt, nId );
 
         (*pMap)[pBoxFrmFmt] = pNewTableBoxFmt;
     }
-    rBox.ChgFrmFmt( pNewTableBoxFmt );
+    rBox.ChgFrmFmt( new SwTableBoxFmt( *pNewTableBoxFmt) );
 }
 
 static SwTableBoxFmt *lcl_CreateDfltBoxFmt( SwDoc &rDoc, std::vector<SwTableBoxFmt*> &rBoxFmtArr,
@@ -459,7 +454,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
     SwTableLines& rLines = pNdTbl->GetTabLines();
     for( sal_uInt16 n = 0; n < nRows; ++n )
     {
-        SwTableLine* pLine = new SwTableLine( pLineFmt, nCols, 0 );
+        SwTableLine* pLine = new SwTableLine( new SwTableLineFmt( *pLineFmt ), nCols, 0 );
         rLines.insert( rLines.begin() + n, pLine );
         SwTableBoxes& rBoxes = pLine->GetTabBoxes();
         for( sal_uInt16 i = 0; i < nCols; ++i )
@@ -468,10 +463,10 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
             if( bDfltBorders )
             {
                 sal_uInt8 nBoxId = (i < nCols - 1 ? 0 : 1) + (n ? 2 : 0 );
-                pBoxF = ::lcl_CreateDfltBoxFmt( *this, aBoxFmtArr, nCols, nBoxId);
+                pBoxF = new SwTableBoxFmt( *::lcl_CreateDfltBoxFmt( *this, aBoxFmtArr, nCols, nBoxId) );
             }
             else
-                pBoxF = pBoxFmt;
+                pBoxF = new SwTableBoxFmt( *pBoxFmt );
 
             // For AutoFormat on input: the columns are set when inserting the Table
             // The Array contains the columns positions and not their widths!
@@ -495,6 +490,9 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
             aNdIdx += 3; // StartNode, TextNode, EndNode  == 3 Nodes
         }
     }
+
+    SwTableFmt::AssignLineParents( pTableStyle, *pNdTbl );
+
     // Insert Frms
     GetNodes().GoNext( &aNdIdx ); // Go to the next ContentNode
     pTblNd->MakeFrms( &aNdIdx );
@@ -739,8 +737,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTblOpts,
                 else
                 {
                     bChgSz = 0 == (*aBoxFmtArr2)[ nId ];
-                    pBoxF = ::lcl_CreateDfltBoxFmt( *this, *aBoxFmtArr2,
-                                                    USHRT_MAX, nId );
+                    pBoxF = new SwTableBoxFmt ( *::lcl_CreateDfltBoxFmt( *this, *aBoxFmtArr2, USHRT_MAX, nId ) );
                     if( bChgSz )
                         pBoxF->SetFmtAttr( pBox->GetFrmFmt()->GetFrmSize() );
                     pBox->ChgFrmFmt( pBoxF );
@@ -748,6 +745,8 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTblOpts,
             }
         }
     }
+
+    SwTableFmt::AssignLineParents( pTableStyle, *pNdTbl );
 
     // Check the Boxes' for Numbers
     if( IsInsTblFormatNum() )
