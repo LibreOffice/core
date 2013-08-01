@@ -905,30 +905,9 @@ static std::ostream &operator<<(std::ostream &s, NSPoint point) {
     return self;
 }
 
-// TODO: hard-coded like the role descriptions. is there a better way?
 -(NSString *)accessibilityActionDescription:(NSString *)action {
     AX_SAL_DEBUG("[" << self << " accessibilityActionDescription:" << action << "]");
-    if ( [ action isEqualToString: NSAccessibilityConfirmAction ] ) {
-        return @"confirm";
-    } else if ( [ action isEqualToString: NSAccessibilityDecrementAction ] ) {
-        return @"decrement";
-    } else if ( [ action isEqualToString: NSAccessibilityDeleteAction ] ) {
-        return @"delete";
-    } else if ( [ action isEqualToString: NSAccessibilityIncrementAction ] ) {
-        return @"increment";
-    } else if ( [ action isEqualToString: NSAccessibilityPickAction ] ) {
-        return @"pick";
-    } else if ( [ action isEqualToString: NSAccessibilityPressAction ] ) {
-        return @"press";
-    } else if ( [ action isEqualToString: NSAccessibilityCancelAction ] ) {
-        return @"cancel";
-    } else if ( [ action isEqualToString: NSAccessibilityRaiseAction ] ) {
-        return @"raise";
-    } else if ( [ action isEqualToString: NSAccessibilityShowMenuAction ] ) {
-        return @"show menu";
-    } else {
-        return [ NSString string ];
-    }
+    return NSAccessibilityActionDescription(action);
 }
 
 -(AquaA11yWrapper *)actionResponder {
