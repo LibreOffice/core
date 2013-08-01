@@ -109,7 +109,7 @@ void setupMethodStubs( functor_vector_type& res )
     aPoly3.Rotate( aPoly3.GetBoundRect().Center(),
                    900 );
 
-    const String      aString("This is a test");
+    const OUString    aString("This is a test");
     const LineInfo    aLineInfo(LINE_SOLID,5);
 
     // unfortunately, VDevs have inaccessible copy constructors
@@ -139,7 +139,7 @@ void setupMethodStubs( functor_vector_type& res )
     aMtf.AddAction( new MetaFillColorAction(Color(COL_RED),sal_True) );
     aMtf.AddAction( new MetaRectAction(aRect) );
 
-    /* void DrawTextArray( const Point& rStartPt, const XubString& rStr,
+    /* void DrawTextArray( const Point& rStartPt, const OUString& rStr,
                                        const sal_Int32* pDXAry = NULL,
                                        xub_StrLen nIndex = 0,
                                        xub_StrLen nLen = STRING_LEN );
@@ -149,7 +149,7 @@ void setupMethodStubs( functor_vector_type& res )
         boost::bind(
             &OutputDevice::DrawTextArray,
             _1,
-            aPt1, aString, (const sal_Int32*)0, (sal_uInt16)0, aString.Len() ));
+            aPt1, aString, (const sal_Int32*)0, (sal_uInt16)0, aString.getLength() ));
 
     /* void DrawPixel( const Point& rPt, const Color& rColor ); */
     add(res,
