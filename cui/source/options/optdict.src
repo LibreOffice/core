@@ -20,135 +20,15 @@
 #include <sfx2/sfx.hrc>
 #include "helpid.hrc"
 #include <cuires.hrc>
-#include "optdict.hrc"
-
- // RID_SFXDLG_EDITDICT ---------------------------------------------------
-ModalDialog RID_SFXDLG_EDITDICT
-{
-    HelpId = HID_OPTIONS_DICT_EDIT ;
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT( 270, 161 );
-
-    Text [ en-US ] = "Edit Custom Dictionary" ;
-
-    Moveable = TRUE ;
-    FixedText FT_BOOK
-    {
-        Pos = MAP_APPFONT ( 12 , 10 ) ;
-        Size = MAP_APPFONT ( 86 , 10 ) ;
-        Text [ en-US ] = "~Book" ;
-    };
-    ListBox LB_ALLDICTS
-    {
-        HelpID = "cui:ListBox:RID_SFXDLG_EDITDICT:LB_ALLDICTS";
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 100 , 9 ) ;
-        Size = MAP_APPFONT ( 103 , 62 ) ;
-        DropDown = TRUE ;
-    };
-    FixedText FT_DICTLANG
-    {
-        Pos = MAP_APPFONT ( 12 , 26 ) ;
-        Size = MAP_APPFONT ( 86 , 10 ) ;
-        Text [ en-US ] = "~Language" ;
-    };
-    ListBox LB_DICTLANG
-    {
-        HelpID = "cui:ListBox:RID_SFXDLG_EDITDICT:LB_DICTLANG";
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 100 , 25 ) ;
-        Size = MAP_APPFONT ( 103 , 66 ) ;
-        DropDown = TRUE ;
-    };
-
-    FixedLine GB_EDITDICTS
-    {
-        Pos = MAP_APPFONT( 1, 1 );
-        Size = MAP_APPFONT( 268, 138 );
-        Hide=TRUE;
-    };
-
-    FixedText FT_WORD
-    {
-        Pos = MAP_APPFONT ( 13 , 46 ) ;
-        Size = MAP_APPFONT ( 40 , 8 ) ;
-        Text [ en-US ] = "~Word";
-    };
-    Edit ED_WORD
-    {
-        HelpID = "cui:Edit:RID_SFXDLG_EDITDICT:ED_WORD";
-        Pos = MAP_APPFONT ( 12 , 56 ) ;
-        Size = MAP_APPFONT ( 71 , 12 ) ;
-        Border = TRUE ;
-        TabStop = TRUE ;
-    };
-    FixedText FT_REPLACE
-    {
-        Pos = MAP_APPFONT ( 84 , 46 ) ;
-        Size = MAP_APPFONT ( 60 , 8 ) ;
-        Text [ en-US ] = "Replace ~By:";
-    };
-
-    Edit ED_REPLACE
-    {
-        HelpID = "cui:Edit:RID_SFXDLG_EDITDICT:ED_REPLACE";
-        Pos = MAP_APPFONT ( 83 , 56 ) ;
-        Size = MAP_APPFONT ( 120 , 12 ) ;
-        Border = TRUE ;
-        TabStop = TRUE ;
-    };
-
-    PushButton PB_NEW_REPLACE
-    {
-        HelpID = "cui:PushButton:RID_SFXDLG_EDITDICT:PB_NEW_REPLACE";
-        Pos = MAP_APPFONT ( 209 , 56 ) ;
-        Size = MAP_APPFONT ( 55 , 12 ) ;
-        TabStop = TRUE ;
-        Text [ en-US ] = "~New" ;
-    };
-    PushButton PB_DELETE_REPLACE
-    {
-        HelpID = "cui:PushButton:RID_SFXDLG_EDITDICT:PB_DELETE_REPLACE";
-        Pos = MAP_APPFONT ( 209 , 71 ) ;
-        Size = MAP_APPFONT ( 55 , 12 ) ;
-        TabStop = TRUE ;
-        Text [ en-US ] = "~Delete" ;
-    };
-    Control TLB_REPLACE
-    {
-        HelpId = HID_OPTIONS_DICT_EDIT_ENTRIES_LIST;
-        Pos = MAP_APPFONT ( 12 , 71 ) ;
-        Size = MAP_APPFONT ( 191 , 58 ) ;
-        Border = TRUE ;
-        TabStop = TRUE ;
-    };
-    String STR_MODIFY
-    {
-        Text [ en-US ] = "~Replace" ;
-    };
-
-
-
-    HelpButton BTN_EDITHELP
-    {
-        Pos = MAP_APPFONT( 145, 143 );
-        Size = MAP_APPFONT( 55, 14 );
-    };
-
-    CancelButton BTN_EDITCLOSE
-    {
-        Pos = MAP_APPFONT ( 209 , 143 ) ;
-        Size = MAP_APPFONT ( 55 , 14 ) ;
-
-        Text [ en-US ] = "~Close" ;
-    };
-};
 
  // Strings ---------------------------------------------------------------
 String RID_SVXSTR_OPT_DOUBLE_DICTS
 {
     Text [ en-US ] = "The specified name already exists.\nPlease enter a new name." ;
+};
+String STR_MODIFY
+{
+    Text [ en-US ] = "~Replace" ;
 };
  // RID_SFXQB_SET_LANGUAGE ------------------------------------------------
 QueryBox RID_SFXQB_SET_LANGUAGE

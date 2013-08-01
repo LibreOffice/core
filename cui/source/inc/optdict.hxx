@@ -82,6 +82,8 @@ class SvxDictEdit : public Edit
     public:
                     SvxDictEdit(Window* pParent, const ResId& rResId) :
                         Edit(pParent, rResId), bSpaces(sal_False){}
+                    SvxDictEdit(Window* pParent, WinBits aWB) :
+                        Edit(pParent, aWB), bSpaces(sal_False){}
 
     void            SetActionHdl( const Link& rLink )
                                 { aActionLink = rLink;}
@@ -98,22 +100,19 @@ class SvxEditDictionaryDialog : public ModalDialog
 {
 private:
 
-    FixedText               aBookFT;
-    ListBox                 aAllDictsLB;
-    FixedText               aLangFT;
-    SvxLanguageBox          aLangLB;
+    ListBox*                 pAllDictsLB;
+    FixedText*               pLangFT;
+    SvxLanguageBox*          pLangLB;
 
-    FixedText               aWordFT;
-    SvxDictEdit             aWordED;
-    FixedText               aReplaceFT;
-    SvxDictEdit             aReplaceED;
-    SvTabListBox            aWordsLB;
-    PushButton              aNewReplacePB;
-    PushButton              aDeletePB;
-    FixedLine                aEditDictsBox;
+    SvxDictEdit*             pWordED;
+    FixedText*               pReplaceFT;
+    SvxDictEdit*             pReplaceED;
+    SvTabListBox*            pWordsLB;
+    PushButton*              pNewReplacePB;
+    PushButton*              pDeletePB;
 
-    HelpButton              aHelpBtn;
-    CancelButton            aCloseBtn;
+    HelpButton*              pHelpBtn;
+    CancelButton*            pCloseBtn;
     String                  sModify;
     String                  sNew;
     DecorationView          aDecoView;
@@ -148,7 +147,7 @@ private:
 
 protected:
 
-    virtual void    Paint( const Rectangle& rRect );
+//    virtual void    Paint( const Rectangle& rRect );
 
 public:
     SvxEditDictionaryDialog( Window* pParent,
@@ -157,7 +156,7 @@ public:
                 ::com::sun::star::linguistic2::XSpellChecker1> &xSpl );
     ~SvxEditDictionaryDialog();
 
-    sal_uInt16 GetSelectedDict() {return aAllDictsLB.GetSelectEntryPos();}
+    sal_uInt16 GetSelectedDict() {return pAllDictsLB->GetSelectEntryPos();}
 };
 
 #endif

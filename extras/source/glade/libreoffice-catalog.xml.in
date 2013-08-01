@@ -305,6 +305,9 @@
     <glade-widget-class title="Ruby Edit" name="svxlo-RubyEdit"
                         generic-name="RubyEdit" parent="GtkEntry"
                         icon-name="widget-gtk-textentry"/>
+    <glade-widget-class title="Dictionary Edit" name="cuilo-SvxDictEdit"
+                        generic-name="SvxDictEdit" parent="GtkEntry"
+                        icon-name="widget-gtk-textentry"/>
     <glade-widget-class title="AutoCorrect Edit" name="cuilo-AutoCorrEdit"
                         generic-name="AutoCorrEdit" parent="GtkEntry"
                         icon-name="widget-gtk-textentry"/>
