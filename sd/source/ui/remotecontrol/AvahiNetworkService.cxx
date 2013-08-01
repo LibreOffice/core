@@ -20,6 +20,8 @@
 #include <avahi-common/timeval.h>
 #include <avahi-common/thread-watch.h>
 
+#include <sal/log.hxx>
+
 #include "AvahiNetworkService.hxx"
 #include "ZeroconfService.hxx"
 
@@ -41,7 +43,7 @@ static void entry_group_callback(AvahiEntryGroup *g, AvahiEntryGroupState state,
     switch (state) {
         case AVAHI_ENTRY_GROUP_ESTABLISHED :
             /* The entry group has been established successfully */
-            SAL_INFO( "sdremote.wifi", "Service " << avahiService->getName().c_str() << " successfully established." );
+            SAL_INFO( "sdremote.wifi", "Service " << avahiService->getName() << " successfully established." );
             break;
 
         case AVAHI_ENTRY_GROUP_COLLISION : {
