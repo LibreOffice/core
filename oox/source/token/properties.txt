@@ -426,6 +426,7 @@ ShadowFormat
 ShadowTransparence
 ShadowXDistance
 ShadowYDistance
+ShapeOriginalId
 Show
 ShowBorder
 ShowCharts

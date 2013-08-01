@@ -95,6 +95,7 @@
 #include <svx/sxsalitm.hxx>
 #include <svx/sxsiitm.hxx>
 #include <svx/sxsoitm.hxx>
+#include <svx/sxspiditm.hxx>
 #include <svx/sxtraitm.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
@@ -212,6 +213,7 @@ SdrItemPool::SdrItemPool(
     mppLocalPoolDefaults[SDRATTR_LAYERID        -SDRATTR_START]=new SdrLayerIdItem;
     mppLocalPoolDefaults[SDRATTR_LAYERNAME      -SDRATTR_START]=new SdrLayerNameItem;
     mppLocalPoolDefaults[SDRATTR_OBJECTNAME     -SDRATTR_START]=new SdrObjectNameItem;
+    mppLocalPoolDefaults[SDRATTR_OBJECTSHAPEORIGINALID   -SDRATTR_START]=new SdrObjectShapeOriginalIdItem;
     mppLocalPoolDefaults[SDRATTR_ALLPOSITIONX   -SDRATTR_START]=new SdrAllPositionXItem;
     mppLocalPoolDefaults[SDRATTR_ALLPOSITIONY   -SDRATTR_START]=new SdrAllPositionYItem;
     mppLocalPoolDefaults[SDRATTR_ALLSIZEWIDTH   -SDRATTR_START]=new SdrAllSizeWidthItem;
@@ -564,6 +566,7 @@ void SdrItemPool::TakeItemName(sal_uInt16 nWhich, OUString& rItemName)
         case SDRATTR_LAYERID        : nResId = SIP_SA_LAYERID;break;
         case SDRATTR_LAYERNAME      : nResId = SIP_SA_LAYERNAME;break;
         case SDRATTR_OBJECTNAME     : nResId = SIP_SA_OBJECTNAME;break;
+        case SDRATTR_OBJECTSHAPEORIGINALID  : nResId = SIP_SA_OBJECTSHAPEORIGINALID;break;
         case SDRATTR_ALLPOSITIONX   : nResId = SIP_SA_ALLPOSITIONX;break;
         case SDRATTR_ALLPOSITIONY   : nResId = SIP_SA_ALLPOSITIONY;break;
         case SDRATTR_ALLSIZEWIDTH   : nResId = SIP_SA_ALLSIZEWIDTH;break;
