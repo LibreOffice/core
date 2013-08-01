@@ -191,6 +191,14 @@ class XclExpProtection : public XclExpBoolRecord
         XclExpProtection(bool bValue);
 };
 
+class XclExpSheetProtection : public XclExpProtection
+{
+    SCTAB                   mnTab;
+    public:
+        XclExpSheetProtection(bool bValue, SCTAB nTab);
+    virtual void            SaveXml( XclExpXmlStream& rStrm );
+};
+
 class XclExpPassHash : public XclExpRecord
 {
 public:
