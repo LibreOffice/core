@@ -420,7 +420,7 @@ public:
     // add an arbitrary button to the menubar (will appear next to closer)
     // passed link will be call with a MenuBarButtonCallbackArg on press
     // passed string will be set as tooltip
-    sal_uInt16          AddMenuBarButton( const Image&, const Link&, const String&, sal_uInt16 nPos = 0 );
+    sal_uInt16          AddMenuBarButton( const Image&, const Link&, const OUString&, sal_uInt16 nPos = 0 );
     // set the highlight link for additional button with ID nId
     // highlight link will be called with a MenuBarButtonHighlightArg
     // the bHighlight member of that struct shall contain the new state
