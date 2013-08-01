@@ -68,6 +68,7 @@
 #include "xeescher.hxx"
 #include "xepivot.hxx"
 #include "XclExpChangeTrack.hxx"
+#include "xedbdata.hxx"
 
 #include <math.h>
 
@@ -313,6 +314,7 @@ void ExcTable::FillAsHeader( ExcBoundsheetList& rBoundsheetList )
     if( GetOutput() != EXC_OUTPUT_BINARY )
     {
         aRecList.AppendNewRecord( new XclExpXmlStyleSheet( *this ) );
+        aRecList.AppendNewRecord( new XclExpXmlDBDataTables( *this ) );
     }
     else
     {

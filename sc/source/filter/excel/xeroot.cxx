@@ -37,6 +37,7 @@
 #include "xename.hxx"
 #include "xepivot.hxx"
 #include "xestyle.hxx"
+#include "xedbdata.hxx"
 #include "xeroot.hxx"
 
 #include "excrecds.hxx"  // for filter manager
@@ -167,6 +168,12 @@ XclExpTableStyles& XclExpRoot::GetTableStyles() const
     return *mrExpData.mxTableStyles;
 }
 
+XclExpXmlDBDataTables& XclExpRoot::GetDBDataTables() const
+{
+    OSL_ENSURE( mrExpData.mxDBDataTables, "XclExpRoot::GetDBDataTables - missingobject (wrong BIFF)");
+    return *mrExpData.mxDBDataTables;
+}
+
 XclExpPivotTableManager& XclExpRoot::GetPivotTableManager() const
 {
     OSL_ENSURE( mrExpData.mxPTableMgr, "XclExpRoot::GetPivotTableManager - missing object (wrong BIFF?)" );
@@ -213,6 +220,7 @@ void XclExpRoot::InitializeGlobals()
         mrExpData.mxLocLinkMgr = mrExpData.mxGlobLinkMgr;
         mrExpData.mxDxfs.reset( new XclExpDxfs( GetRoot() ) );
         mrExpData.mxTableStyles.reset( new XclExpTableStyles( GetRoot(), GetDxfs() ) );
+        mrExpData.mxDBDataTables.reset( new XclExpXmlDBDataTables( GetRoot() ) );
     }
 
     if( GetOutput() == EXC_OUTPUT_XML_2007 )
@@ -291,6 +299,7 @@ XclExpRecordRef XclExpRoot::CreateRecord( sal_uInt16 nRecId ) const
         case EXC_ID_NAME:           xRec = mrExpData.mxNameMgr;     break;
         case EXC_ID_DXFS:           xRec = mrExpData.mxDxfs;        break;
         case EXC_ID_TABLESTYLES:     xRec = mrExpData.mxTableStyles; break;
+        case EXC_ID_DBDATATABLES:   xRec = mrExpData.mxDBDataTables;break;
     }
     OSL_ENSURE( xRec, "XclExpRoot::CreateRecord - unknown record ID or missing object" );
     return xRec;

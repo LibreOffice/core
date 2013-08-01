@@ -23,15 +23,20 @@
 #include "dbdata.hxx"
 #include "xeroot.hxx"
 #include "xerecord.hxx"
+#include "address.hxx"
 #include <boost/shared_ptr.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
+
+const sal_uInt16 EXC_ID_DBDATATABLES = 0x11A01;
 
 class XclExpXmlDBDataStyleInfo : public XclExpRecordBase, protected XclExpRoot
 {
 public:
     XclExpXmlDBDataStyleInfo( const XclExpRoot& rRoot, ScDBDataFormatting& rDBDataFormatting );
     virtual void SaveXml( XclExpXmlStream& rStrm );
+private:
+    ScDBDataFormatting maDBDataFormatting;
 };
 // ===========================================================================
 class XclExpXmlDBDataColumn : public XclExpRecordBase, protected XclExpRoot
@@ -39,6 +44,9 @@ class XclExpXmlDBDataColumn : public XclExpRecordBase, protected XclExpRoot
 public:
     XclExpXmlDBDataColumn( const XclExpRoot& rRoot, int iID, OUString& rName );
     virtual void SaveXml( XclExpXmlStream& rStrm );
+private:
+    OUString maName;
+    int miID;
 };
 
 // ===========================================================================
@@ -57,13 +65,18 @@ private:
 class XclExpXmlDBDataTable : public XclExpRecordBase, protected XclExpRoot
 {
 public:
-    XclExpXmlDBDataTable( const XclExpRoot& rRoot, ScDBData& rDBData );
+    XclExpXmlDBDataTable( const XclExpRoot& rRoot, ScDBData& rDBData, int nTableId );
     virtual void SaveXml( XclExpXmlStream& rStrm );
 private:
     typedef boost::scoped_ptr < XclExpXmlDBDataColumns > DBDataTableColumns;
     typedef boost::scoped_ptr < XclExpXmlDBDataStyleInfo > DBDataStyleInfo;
     DBDataTableColumns maTableColumns;
     DBDataStyleInfo maStyleInfo;
+    int mnTableId;
+    OUString maName;
+    OUString maDisplayName;
+    ScRange maRange;
+    bool mbTotalsRowShown;
 };
 
 // ============================================================================

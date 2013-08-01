@@ -52,6 +52,7 @@ class XclExpFilterManager;
 class XclExpPivotTableManager;
 class XclExpDxfs;
 class XclExpTableStyles;
+class XclExpXmlDBDataTables;
 
 /** Stores global buffers and data needed for Excel export filter. */
 struct XclExpRootData : public XclRootData
@@ -73,7 +74,7 @@ struct XclExpRootData : public XclRootData
     typedef boost::shared_ptr< XclExpPivotTableManager >   XclExpPTableMgrRef;
     typedef boost::shared_ptr< XclExpDxfs >                XclExpDxfsRef;
     typedef boost::shared_ptr< XclExpTableStyles >         XclExpTableStylesRef;
-
+    typedef boost::shared_ptr< XclExpXmlDBDataTables >     XclExpXmlDBDataTablesRef;
     XclExpTabInfoRef    mxTabInfo;          /// Calc->Excel sheet index conversion.
     XclExpAddrConvRef   mxAddrConv;         /// The address converter.
     XclExpFmlaCompRef   mxFmlaComp;         /// The formula compiler.
@@ -92,6 +93,7 @@ struct XclExpRootData : public XclRootData
     XclExpPTableMgrRef  mxPTableMgr;        /// All pivot tables and pivot caches.
     XclExpDxfsRef       mxDxfs;             /// All delta formatting entries
     XclExpTableStylesRef   mxTableStyles;      /// All table styles for table formatting
+    XclExpXmlDBDataTablesRef mxDBDataTables;    /// All DBData exported as tables
 
     ScCompiler::OpCodeMapPtr  mxOpCodeMap;  /// mapping between op-codes and names
 
@@ -150,6 +152,8 @@ public:
     XclExpDxfs&          GetDxfs() const;
     /** Returns the Table styles list*/
     XclExpTableStyles&  GetTableStyles() const;
+    /** Returns the tables i.e, DBData */
+    XclExpXmlDBDataTables& GetDBDataTables() const;
     /** Returns the op-code mapping */
     ScCompiler::OpCodeMapPtr  GetOpCodeMap() const;
 
