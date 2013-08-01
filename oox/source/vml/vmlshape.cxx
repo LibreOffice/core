@@ -320,14 +320,20 @@ Reference< XShape > ShapeBase::convertAndInsert( const Reference< XShapes >& rxS
             {
                 // set imported or generated shape name (not supported by form controls)
                 PropertySet aShapeProp( xShape );
+
                 if( aShapeProp.hasProperty( PROP_Name ) )
                     aShapeProp.setProperty( PROP_Name, getShapeName() );
+
+                if( aShapeProp.hasProperty( PROP_ShapeOriginalId ) )
+                    aShapeProp.setProperty( PROP_ShapeOriginalId, maTypeModel.maShapeOriginalId );
+
                 Reference< XControlShape > xControlShape( xShape, uno::UNO_QUERY );
                 if ( xControlShape.is() && !getTypeModel().mbVisible )
                 {
                     PropertySet aControlShapeProp( xControlShape->getControl() );
                     aControlShapeProp.setProperty( PROP_EnableVisible, uno::makeAny( sal_False ) );
                 }
+
                 /*  Notify the drawing that a new shape has been inserted. For
                     convenience, pass the rectangle that contains position and
                     size of the shape. */

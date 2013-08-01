@@ -43,6 +43,7 @@
 #include <editeng/tstpitem.hxx>
 #include "svl/urihelper.hxx"
 #include <svl/whiter.hxx>
+#include <svx/svdobj.hxx>
 #include <fmtpdsc.hxx>
 #include <fmtfsize.hxx>
 #include <fmtornt.hxx>
@@ -506,6 +507,27 @@ void SwWW8AttrIter::OutAttr( xub_StrLen nSwPos, bool bRuby )
     }
 }
 
+/* Check whether it is a watermark object or not.
+   If the shape's id (shapename) contains the string "PowerPlusWaterMakrObject" - this is text watermark object.
+*/
+bool SwWW8AttrIter::IsWatermarkFrame()
+{
+    if (maFlyFrms.size() != 1)
+        return false;
+
+    while ( maFlyIter != maFlyFrms.end() )
+    {
+        const SdrObject* pSdrObj = maFlyIter->GetFrmFmt().FindRealSdrObject();
+        SdrWatermarkType eWatermarkType = pSdrObj->GetWatermarkType();
+        if (eWatermarkType == WATERMARK_TYPE_PICTURE || eWatermarkType == WATERMARK_TYPE_TEXT)
+                return true;
+
+        ++maFlyIter;
+    }
+
+    return false;
+}
+
 void SwWW8AttrIter::OutFlys(xub_StrLen nSwPos)
 {
     /*
@@ -522,7 +544,26 @@ void SwWW8AttrIter::OutFlys(xub_StrLen nSwPos)
             break;
         else
         {
-            m_rExport.AttrOutput().OutputFlyFrame( *maFlyIter );
+            const SdrObject* pSdrObj = maFlyIter->GetFrmFmt().FindRealSdrObject();
+            SdrWatermarkType eWatermarkType = pSdrObj->GetWatermarkType();
+            if (eWatermarkType == WATERMARK_TYPE_PICTURE || eWatermarkType == WATERMARK_TYPE_TEXT)
+            {
+                // This is a watermark object. Should be written ONLY in the header
+                if(m_rExport.nTxtTyp == TXT_HDFT)
+                {
+                    // Should write a watermark in the header
+                    m_rExport.AttrOutput().OutputFlyFrame( *maFlyIter );
+                }
+                else
+                {
+                    // Should not write watermark object in the main body text
+                }
+            }
+            else
+            {
+                // This is not a watermark object - write normally
+                m_rExport.AttrOutput().OutputFlyFrame( *maFlyIter );
+            }
             ++maFlyIter;
         }
     }
@@ -1739,6 +1780,14 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
         SwNodeIndex aLastIdx(rNode.GetNodes().GetEndOfContent());
         if (aNextIdx == aLastIdx)
             bLastCR = true;
+    }
+
+    // In order to make sure watermark is stored in 'header.xml', check nTxtTyp.
+    // if it is document.xml, don't write the tags (watermark should be only in the 'header')
+    SwWW8AttrIter aWatermarkAttrIter( *this, rNode );
+    if (( TXT_HDFT != nTxtTyp) && aWatermarkAttrIter.IsWatermarkFrame())
+    {
+        return;
     }
 
     AttrOutput().StartParagraph( pTextNodeInfo );

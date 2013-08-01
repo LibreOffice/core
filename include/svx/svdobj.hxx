@@ -153,6 +153,11 @@ enum SdrUserCallType {SDRUSERCALL_MOVEONLY,         // Nur verschoben, Groesse u
                       SDRUSERCALL_CHILD_INSERTED,   // Ein Child einer Gruppe hat sich veraendert
                       SDRUSERCALL_CHILD_REMOVED};   // Ein Child einer Gruppe hat sich veraendert
 
+enum SdrWatermarkType   {   WATERMARK_TYPE_NONE       = 0,  // Not a Watermark object
+                            WATERMARK_TYPE_TEXT       = 1,  // Text-Watermark object
+                            WATERMARK_TYPE_PICTURE    = 2   // Picture-Watermark object
+                        };
+
 //************************************************************
 //   Hilfsklasse SdrObjUserCall
 //************************************************************
@@ -382,6 +387,7 @@ protected:
     SdrModel*                   pModel;
     SdrObjUserCall*             pUserCall;
     SdrObjPlusData*             pPlusData;    // Broadcaster, UserData, Konnektoren, ... (Das ist der Bitsack)
+    SdrWatermarkType            eWatermarkType;  // Object's watermark type
 
     sal_uInt32                  nOrdNum;      // Rangnummer des Obj in der Liste
 
@@ -432,6 +438,8 @@ protected:
     // in this case the following member is initialized as nonempty rectangle
     Rectangle                   maBLIPSizeRectangle;
 
+    OUString                    msShapeOriginalId;
+
     // global static ItemPool for not-yet-insetred items
 private:
     static SdrItemPool*         mpGlobalItemPool;
@@ -443,9 +451,17 @@ public:
     void SetRelativeHeight( double nValue ) { mnRelativeHeight.reset( nValue ); }
     boost::optional<double> GetRelativeWidth( ) const { return mnRelativeWidth; }
     boost::optional<double> GetRelativeHeight( ) const { return mnRelativeHeight; }
+
     // evil calc grid/shape drawlayer syncing
     Point GetGridOffset() const { return aGridOffset; }
     void SetGridOffset( const Point& rGridOffset ){ aGridOffset = rGridOffset; }
+
+    SdrWatermarkType GetWatermarkType() const                   {   return eWatermarkType;            }
+    void SetWatermarkType( SdrWatermarkType rWatermarkType )    {   eWatermarkType = rWatermarkType;  }
+
+    OUString GetShapeOriginalID() const                         {   return msShapeOriginalId;         }
+    void SetShapeOriginalID( const OUString rStr )              {   msShapeOriginalId = rStr;         }
+
 protected:
     void ImpDeleteUserData();
     SdrObjUserData* ImpGetMacroUserData() const;

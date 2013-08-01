@@ -320,18 +320,19 @@
 
 
 #define SHAPE_DESCRIPTOR_PROPERTIES \
-    { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_LAYERID),      SDRATTR_LAYERID                 , &::getCppuType((const sal_Int16*)0),          0,  0}, \
-    { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_LAYERNAME),    SDRATTR_LAYERNAME               , &::getCppuType((const OUString*)0),    0,  0}, \
-    { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_MOVEPROTECT),  SDRATTR_OBJMOVEPROTECT          , &::getBooleanCppuType(),                      0,  0}, \
-    { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_NAME),         SDRATTR_OBJECTNAME              , &::getCppuType((const OUString*)0),    0,  0}, \
-    { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_PRINTABLE),    SDRATTR_OBJPRINTABLE            , &::getBooleanCppuType(),                      0,  0}, \
-    { MAP_CHAR_LEN("Visible"),                      SDRATTR_OBJVISIBLE              , &::getBooleanCppuType(),                      0,  0}, \
-    { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_SIZEPROTECT),  SDRATTR_OBJSIZEPROTECT          , &::getBooleanCppuType(),                      0,  0},\
-    { MAP_CHAR_LEN("UINameSingular"),               OWN_ATTR_UINAME_SINGULAR        , &::getCppuType((const OUString*)0),    ::com::sun::star::beans::PropertyAttribute::READONLY,   0}, \
-    { MAP_CHAR_LEN("UINamePlural"),                 OWN_ATTR_UINAME_PLURAL          , &::getCppuType((const OUString*)0),    ::com::sun::star::beans::PropertyAttribute::READONLY,   0}, \
+    { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_LAYERID),           SDRATTR_LAYERID                 , &::getCppuType((const sal_Int16*)0),          0,  0}, \
+    { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_LAYERNAME),         SDRATTR_LAYERNAME               , &::getCppuType((const OUString*)0),    0,  0}, \
+    { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_MOVEPROTECT),       SDRATTR_OBJMOVEPROTECT          , &::getBooleanCppuType(),                      0,  0}, \
+    { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_NAME),              SDRATTR_OBJECTNAME              , &::getCppuType((const OUString*)0),    0,  0}, \
+    { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_SHAPE_ORIGINAL_ID), SDRATTR_OBJECTSHAPEORIGINALID   , &::getCppuType((const OUString*)0),    0,  0}, \
+    { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_PRINTABLE),         SDRATTR_OBJPRINTABLE            , &::getBooleanCppuType(),                      0,  0}, \
+    { MAP_CHAR_LEN("Visible"),                           SDRATTR_OBJVISIBLE              , &::getBooleanCppuType(),                      0,  0}, \
+    { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_SIZEPROTECT),       SDRATTR_OBJSIZEPROTECT          , &::getBooleanCppuType(),                      0,  0},\
+    { MAP_CHAR_LEN("UINameSingular"),                    OWN_ATTR_UINAME_SINGULAR        , &::getCppuType((const OUString*)0),    ::com::sun::star::beans::PropertyAttribute::READONLY,   0}, \
+    { MAP_CHAR_LEN("UINamePlural"),                      OWN_ATTR_UINAME_PLURAL          , &::getCppuType((const OUString*)0),    ::com::sun::star::beans::PropertyAttribute::READONLY,   0}, \
     /* #i68101# */ \
-    { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_TITLE),        OWN_ATTR_MISC_OBJ_TITLE         , &::getCppuType((const OUString*)0),    0,  0}, \
-    { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_DESCRIPTION),  OWN_ATTR_MISC_OBJ_DESCRIPTION   , &::getCppuType((const OUString*)0),    0,  0},
+    { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_TITLE),             OWN_ATTR_MISC_OBJ_TITLE         , &::getCppuType((const OUString*)0),    0,  0}, \
+    { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_DESCRIPTION),       OWN_ATTR_MISC_OBJ_DESCRIPTION   , &::getCppuType((const OUString*)0),    0,  0},
 
 #define LINKTARGET_PROPERTIES \
     { MAP_CHAR_LEN(UNO_NAME_LINKDISPLAYNAME),   OWN_ATTR_LDNAME             , &::getCppuType((const OUString*)0),    ::com::sun::star::beans::PropertyAttribute::READONLY, 0}, \

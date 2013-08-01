@@ -283,7 +283,10 @@ ShapeTypeContext::ShapeTypeContext( ContextHandler2Helper& rParent, ShapeType& r
     OSL_ENSURE( !mrTypeModel.maShapeId.isEmpty(), "ShapeTypeContext::ShapeTypeContext - missing shape identifier" );
     // if the o:spid attribute exists, the id attribute contains the user-defined shape name
     if( bHasOspid )
+    {
         mrTypeModel.maShapeName = rAttribs.getXString( XML_id, OUString() );
+        mrTypeModel.maShapeOriginalId = rAttribs.getString( O_TOKEN( spid ), OUString() );
+    }
     // builtin shape type identifier
     mrTypeModel.moShapeType = rAttribs.getInteger( O_TOKEN( spt ) );
 

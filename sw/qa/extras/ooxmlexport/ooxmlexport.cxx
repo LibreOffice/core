@@ -109,6 +109,7 @@ public:
     void testFdo67013();
     void testParaShadow();
     void testTableFloatingMargins();
+    void testTextWatermark();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -200,6 +201,7 @@ void Test::run()
         {"fdo67013.docx", &Test::testFdo67013},
         {"para-shadow.docx", &Test::testParaShadow},
         {"table-floating-margins.docx", &Test::testTableFloatingMargins},
+        {"textWatermark.docx", &Test::testTextWatermark},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -1173,6 +1175,30 @@ void Test::testTableFloatingMargins()
         // Paragraph bottom margin wasn't 0 in the A1 cell of the floating table.
         xmlDocPtr pXmlDoc = parseExport();
         assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:pict/v:rect/v:textbox/w:txbxContent/w:tbl/w:tr[1]/w:tc[1]/w:p/w:pPr/w:spacing", "after", "0");
+    }
+}
+
+void Test::testTextWatermark()
+{
+    // The problem was that the watermark ID was not preserved,
+    // and Word uses the object ID to identify if it is a watermark.
+    // It has to have the 'PowerPlusWaterMarkObject' string in it
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xTextRange(xDraws->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Airplane"), xTextRange->getString());
+
+    // Check the watermark ID
+    OUString aValue;
+    uno::Reference<drawing::XShape> xShape(xDraws->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
+    xPropertySet->getPropertyValue("Name") >>= aValue;
+    /*if (!aValue.isEmpty())
+        CPPUNIT_ASSERT_EQUAL(OUString("PowerPlusWaterMarkObject93701315"), aValue);    */
+
+    if (aValue != OUString("PowerPlusWaterMarkObject93701315") && aValue != OUString("PowerPlusWaterMarkObject93701316"))
+    {
+        CPPUNIT_ASSERT_EQUAL(OUString("PowerPlusWaterMarkObject93701315 \\ PowerPlusWaterMarkObject93701316"), aValue);
     }
 }
 

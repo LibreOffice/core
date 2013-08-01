@@ -159,44 +159,45 @@
 #define SDRATTR_CIRC_LAST               (SDRATTR_CIRCENDANGLE)     /*   1178 */ /* Pool V4+ */
 
 // Only for Interfaceing, not yet implemented. / * + * V4 /
-#define SDRATTR_NOTPERSIST_FIRST    (SDRATTR_CIRC_LAST + 1)          /* 1180   */ /* 1172   */ /* 1127   */ /* 1110   */ /* Pool V1: 1058 */
-#define SDRATTR_OBJMOVEPROTECT      (SDRATTR_NOTPERSIST_FIRST+ 0)  /*   1180  sal_Bool,   def=sal_False */
-#define SDRATTR_OBJSIZEPROTECT      (SDRATTR_NOTPERSIST_FIRST+ 1)  /*   1181  sal_Bool,   def=sal_False */
-#define SDRATTR_OBJPRINTABLE        (SDRATTR_NOTPERSIST_FIRST+ 2)  /*   1182  sal_Bool,   def=sal_True  */
-#define SDRATTR_LAYERID             (SDRATTR_NOTPERSIST_FIRST+ 3)  /*   1183  sal_uInt16, def=0     */
-#define SDRATTR_LAYERNAME           (SDRATTR_NOTPERSIST_FIRST+ 4)  /*   1184  String, def=""    */
-#define SDRATTR_OBJECTNAME          (SDRATTR_NOTPERSIST_FIRST+ 5)  /*   1185  String, def=""    */
-#define SDRATTR_ALLPOSITIONX        (SDRATTR_NOTPERSIST_FIRST+ 6)  /*   1186  long,   def=0     */
-#define SDRATTR_ALLPOSITIONY        (SDRATTR_NOTPERSIST_FIRST+ 7)  /*   1187  long,   def=0     */
-#define SDRATTR_ALLSIZEWIDTH        (SDRATTR_NOTPERSIST_FIRST+ 8)  /*   1188  long,   def=0     */
-#define SDRATTR_ALLSIZEHEIGHT       (SDRATTR_NOTPERSIST_FIRST+ 9)  /*   1189  long,   def=0     */
-#define SDRATTR_ONEPOSITIONX        (SDRATTR_NOTPERSIST_FIRST+10)  /*   1190  long,   def=0     */
-#define SDRATTR_ONEPOSITIONY        (SDRATTR_NOTPERSIST_FIRST+11)  /*   1191  long,   def=0     */
-#define SDRATTR_ONESIZEWIDTH        (SDRATTR_NOTPERSIST_FIRST+12)  /*   1192  long,   def=0     */
-#define SDRATTR_ONESIZEHEIGHT       (SDRATTR_NOTPERSIST_FIRST+13)  /*   1193  long,   def=0     */
-#define SDRATTR_LOGICSIZEWIDTH      (SDRATTR_NOTPERSIST_FIRST+14)  /*   1194  long,   def=0     */
-#define SDRATTR_LOGICSIZEHEIGHT     (SDRATTR_NOTPERSIST_FIRST+15)  /*   1195  long,   def=0     */
-#define SDRATTR_ROTATEANGLE         (SDRATTR_NOTPERSIST_FIRST+16)  /*   1196  long,   def=0     */
-#define SDRATTR_SHEARANGLE          (SDRATTR_NOTPERSIST_FIRST+17)  /*   1197  long,   def=0     */
-#define SDRATTR_MOVEX               (SDRATTR_NOTPERSIST_FIRST+18)  /*   1198  long,   def=0     */
-#define SDRATTR_MOVEY               (SDRATTR_NOTPERSIST_FIRST+19)  /*   1199  long,   def=0     */
-#define SDRATTR_RESIZEXONE          (SDRATTR_NOTPERSIST_FIRST+20)  /*   1200  long,   def=0     */
-#define SDRATTR_RESIZEYONE          (SDRATTR_NOTPERSIST_FIRST+21)  /*   1201  long,   def=0     */
-#define SDRATTR_ROTATEONE           (SDRATTR_NOTPERSIST_FIRST+22)  /*   1202  long,   def=0     */
-#define SDRATTR_HORZSHEARONE        (SDRATTR_NOTPERSIST_FIRST+23)  /*   1203  long,   def=0     */
-#define SDRATTR_VERTSHEARONE        (SDRATTR_NOTPERSIST_FIRST+24)  /*   1204  long,   def=0     */
-#define SDRATTR_RESIZEXALL          (SDRATTR_NOTPERSIST_FIRST+25)  /*   1205  long,   def=0     */
-#define SDRATTR_RESIZEYALL          (SDRATTR_NOTPERSIST_FIRST+26)  /*   1206  long,   def=0     */
-#define SDRATTR_ROTATEALL           (SDRATTR_NOTPERSIST_FIRST+27)  /*   1207  long,   def=0     */
-#define SDRATTR_HORZSHEARALL        (SDRATTR_NOTPERSIST_FIRST+28)  /*   1208  long,   def=0     */
-#define SDRATTR_VERTSHEARALL        (SDRATTR_NOTPERSIST_FIRST+29)  /*   1209  long,   def=0     */
-#define SDRATTR_TRANSFORMREF1X      (SDRATTR_NOTPERSIST_FIRST+30)  /*   1210  long,   def=0     */
-#define SDRATTR_TRANSFORMREF1Y      (SDRATTR_NOTPERSIST_FIRST+31)  /*   1211  long,   def=0     */
-#define SDRATTR_TRANSFORMREF2X      (SDRATTR_NOTPERSIST_FIRST+32)  /*   1212  long,   def=0     */
-#define SDRATTR_TRANSFORMREF2Y      (SDRATTR_NOTPERSIST_FIRST+33)  /*   1213  long,   def=0     */
-#define SDRATTR_TEXTDIRECTION       (SDRATTR_NOTPERSIST_FIRST+34)  /*   1214 V4+++  long,   def=0     */
-#define SDRATTR_OBJVISIBLE          (SDRATTR_NOTPERSIST_FIRST+35)
-#define SDRATTR_NOTPERSIST_LAST     (SDRATTR_OBJVISIBLE)           /*   1228 V4+++*/ /* 1213*/  /*  1085 */ /*  1040 */ /*  1123 */ /* Pool V1: 1065 */
+#define SDRATTR_NOTPERSIST_FIRST        (SDRATTR_CIRC_LAST + 1)          /* 1180   */ /* 1172   */ /* 1127   */ /* 1110   */ /* Pool V1: 1058 */
+#define SDRATTR_OBJMOVEPROTECT          (SDRATTR_NOTPERSIST_FIRST+ 0)  /*   1180  sal_Bool,   def=sal_False */
+#define SDRATTR_OBJSIZEPROTECT          (SDRATTR_NOTPERSIST_FIRST+ 1)  /*   1181  sal_Bool,   def=sal_False */
+#define SDRATTR_OBJPRINTABLE            (SDRATTR_NOTPERSIST_FIRST+ 2)  /*   1182  sal_Bool,   def=sal_True  */
+#define SDRATTR_LAYERID                 (SDRATTR_NOTPERSIST_FIRST+ 3)  /*   1183  sal_uInt16, def=0     */
+#define SDRATTR_LAYERNAME               (SDRATTR_NOTPERSIST_FIRST+ 4)  /*   1184  String, def=""    */
+#define SDRATTR_OBJECTNAME              (SDRATTR_NOTPERSIST_FIRST+ 5)  /*   1185  String, def=""    */
+#define SDRATTR_ALLPOSITIONX            (SDRATTR_NOTPERSIST_FIRST+ 6)  /*   1186  long,   def=0     */
+#define SDRATTR_ALLPOSITIONY            (SDRATTR_NOTPERSIST_FIRST+ 7)  /*   1187  long,   def=0     */
+#define SDRATTR_ALLSIZEWIDTH            (SDRATTR_NOTPERSIST_FIRST+ 8)  /*   1188  long,   def=0     */
+#define SDRATTR_ALLSIZEHEIGHT           (SDRATTR_NOTPERSIST_FIRST+ 9)  /*   1189  long,   def=0     */
+#define SDRATTR_ONEPOSITIONX            (SDRATTR_NOTPERSIST_FIRST+10)  /*   1190  long,   def=0     */
+#define SDRATTR_ONEPOSITIONY            (SDRATTR_NOTPERSIST_FIRST+11)  /*   1191  long,   def=0     */
+#define SDRATTR_ONESIZEWIDTH            (SDRATTR_NOTPERSIST_FIRST+12)  /*   1192  long,   def=0     */
+#define SDRATTR_ONESIZEHEIGHT           (SDRATTR_NOTPERSIST_FIRST+13)  /*   1193  long,   def=0     */
+#define SDRATTR_LOGICSIZEWIDTH          (SDRATTR_NOTPERSIST_FIRST+14)  /*   1194  long,   def=0     */
+#define SDRATTR_LOGICSIZEHEIGHT         (SDRATTR_NOTPERSIST_FIRST+15)  /*   1195  long,   def=0     */
+#define SDRATTR_ROTATEANGLE             (SDRATTR_NOTPERSIST_FIRST+16)  /*   1196  long,   def=0     */
+#define SDRATTR_SHEARANGLE              (SDRATTR_NOTPERSIST_FIRST+17)  /*   1197  long,   def=0     */
+#define SDRATTR_MOVEX                   (SDRATTR_NOTPERSIST_FIRST+18)  /*   1198  long,   def=0     */
+#define SDRATTR_MOVEY                   (SDRATTR_NOTPERSIST_FIRST+19)  /*   1199  long,   def=0     */
+#define SDRATTR_RESIZEXONE              (SDRATTR_NOTPERSIST_FIRST+20)  /*   1200  long,   def=0     */
+#define SDRATTR_RESIZEYONE              (SDRATTR_NOTPERSIST_FIRST+21)  /*   1201  long,   def=0     */
+#define SDRATTR_ROTATEONE               (SDRATTR_NOTPERSIST_FIRST+22)  /*   1202  long,   def=0     */
+#define SDRATTR_HORZSHEARONE            (SDRATTR_NOTPERSIST_FIRST+23)  /*   1203  long,   def=0     */
+#define SDRATTR_VERTSHEARONE            (SDRATTR_NOTPERSIST_FIRST+24)  /*   1204  long,   def=0     */
+#define SDRATTR_RESIZEXALL              (SDRATTR_NOTPERSIST_FIRST+25)  /*   1205  long,   def=0     */
+#define SDRATTR_RESIZEYALL              (SDRATTR_NOTPERSIST_FIRST+26)  /*   1206  long,   def=0     */
+#define SDRATTR_ROTATEALL               (SDRATTR_NOTPERSIST_FIRST+27)  /*   1207  long,   def=0     */
+#define SDRATTR_HORZSHEARALL            (SDRATTR_NOTPERSIST_FIRST+28)  /*   1208  long,   def=0     */
+#define SDRATTR_VERTSHEARALL            (SDRATTR_NOTPERSIST_FIRST+29)  /*   1209  long,   def=0     */
+#define SDRATTR_TRANSFORMREF1X          (SDRATTR_NOTPERSIST_FIRST+30)  /*   1210  long,   def=0     */
+#define SDRATTR_TRANSFORMREF1Y          (SDRATTR_NOTPERSIST_FIRST+31)  /*   1211  long,   def=0     */
+#define SDRATTR_TRANSFORMREF2X          (SDRATTR_NOTPERSIST_FIRST+32)  /*   1212  long,   def=0     */
+#define SDRATTR_TRANSFORMREF2Y          (SDRATTR_NOTPERSIST_FIRST+33)  /*   1213  long,   def=0     */
+#define SDRATTR_TEXTDIRECTION           (SDRATTR_NOTPERSIST_FIRST+34)  /*   1214 V4+++  long,   def=0     */
+#define SDRATTR_OBJVISIBLE              (SDRATTR_NOTPERSIST_FIRST+35)
+#define SDRATTR_OBJECTSHAPEORIGINALID   (SDRATTR_NOTPERSIST_FIRST+ 36)
+#define SDRATTR_NOTPERSIST_LAST         (SDRATTR_OBJECTSHAPEORIGINALID)/*   1228 V4+++*/ /* 1213*/  /*  1085 */ /*  1040 */ /*  1123 */ /* Pool V1: 1065 */
 // no SetItem for this
 
 #define SDRATTR_GRAF_FIRST          (SDRATTR_NOTPERSIST_LAST+1)     /*  1229 V4+++*/
