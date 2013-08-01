@@ -41,7 +41,7 @@ static void entry_group_callback(AvahiEntryGroup *g, AvahiEntryGroupState state,
     switch (state) {
         case AVAHI_ENTRY_GROUP_ESTABLISHED :
             /* The entry group has been established successfully */
-            std::cerr << "Service " << avahiService->getName().c_str() << " successfully established.\n";
+            SAL_INFO( "sdremote.wifi", "Service " << avahiService->getName().c_str() << " successfully established." );
             break;
 
         case AVAHI_ENTRY_GROUP_COLLISION : {
@@ -52,7 +52,7 @@ static void entry_group_callback(AvahiEntryGroup *g, AvahiEntryGroupState state,
             n = avahi_alternative_service_name(avahiService->getName().c_str());
             avahiService->setName(n);
 
-            std::cerr << "Service name collision, renaming service to " << avahiService->getName() << std::endl;
+            SAL_INFO( "sdremote.wifi", "Service name collision, renaming service to " << avahiService->getName() );
 
             /* And recreate the services */
             create_services(avahi_entry_group_get_client(g));

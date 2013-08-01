@@ -103,6 +103,7 @@ certain functionality.
 @li @c sd.slideshow
 @li @c sdremote
 @li @c sdremote.bluetooth
+@li @c sdremote.wifi
 
 @section editeng
 
