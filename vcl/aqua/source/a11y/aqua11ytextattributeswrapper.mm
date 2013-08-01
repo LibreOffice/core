@@ -222,12 +222,12 @@ using namespace ::rtl;
             [ string beginEditing ];
             // add default attributes for whole string
             Sequence < PropertyValue > defaultAttributes = [ wrapper accessibleTextAttributes ] -> getDefaultAttributes ( emptySequence );
-            [ AquaA11yTextAttributesWrapper applyAttributesFrom: defaultAttributes toString: string forRange: [ origRange rangeValue ] storeDefaultsTo: wrapper getDefaultsFrom: nil ];
+            [ AquaA11yTextAttributesWrapper applyAttributesFrom: defaultAttributes toString: string forRange: NSMakeRange ( 0, len ) storeDefaultsTo: wrapper getDefaultsFrom: nil ];
             // add attributes for attribute run(s)
             while ( currentIndex < endIndex ) {
                 TextSegment textSegment = [ wrapper accessibleText ] -> getTextAtIndex ( currentIndex, AccessibleTextType::ATTRIBUTE_RUN );
                 int endOfRange = endIndex > textSegment.SegmentEnd ? textSegment.SegmentEnd : endIndex;
-                NSRange rangeForAttributeRun = NSMakeRange ( currentIndex, endOfRange - currentIndex );
+                NSRange rangeForAttributeRun = NSMakeRange ( currentIndex - loc , endOfRange - currentIndex );
                 // add run attributes
                 Sequence < PropertyValue > attributes = [ wrapper accessibleTextAttributes ] -> getRunAttributes ( currentIndex, emptySequence );
                 [ AquaA11yTextAttributesWrapper applyAttributesFrom: attributes toString: string forRange: rangeForAttributeRun storeDefaultsTo: nil getDefaultsFrom: wrapper ];
