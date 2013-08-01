@@ -2598,6 +2598,20 @@ bool adjustSingleRefInName(
     return bChanged;
 }
 
+bool adjustDoubleRefInName(
+    ScComplexRefData& rRef, const sc::RefUpdateContext& rCxt, const ScAddress& rPos )
+{
+    bool bRefChanged = false;
+
+    if (adjustSingleRefInName(rRef.Ref1, rCxt, rPos))
+        bRefChanged = true;
+
+    if (adjustSingleRefInName(rRef.Ref2, rCxt, rPos))
+        bRefChanged = true;
+
+    return bRefChanged;
+}
+
 }
 
 sc::RefUpdateResult ScTokenArray::AdjustReferenceInName(
@@ -2623,10 +2637,26 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceInName(
             {
                 ScToken* pToken = static_cast<ScToken*>(*p);
                 ScComplexRefData& rRef = pToken->GetDoubleRef();
-                if (adjustSingleRefInName(rRef.Ref1, rCxt, rPos))
-                    aRes.mbReferenceModified = true;
-                if (adjustSingleRefInName(rRef.Ref2, rCxt, rPos))
-                    aRes.mbReferenceModified = true;
+                ScRange aAbs = rRef.toAbs(rPos);
+                if (rCxt.maRange.In(aAbs))
+                {
+                    // This range is entirely within the shifted region.
+                    if (adjustDoubleRefInName(rRef, rCxt, rPos))
+                        aRes.mbReferenceModified = true;
+                }
+                else if (rCxt.maRange.Intersects(aAbs))
+                {
+                    if (rCxt.mnColDelta && rCxt.maRange.aStart.Row() <= aAbs.aStart.Row() && aAbs.aEnd.Row() <= rCxt.maRange.aEnd.Row())
+                    {
+                        if (adjustDoubleRefInName(rRef, rCxt, rPos))
+                            aRes.mbReferenceModified = true;
+                    }
+                    if (rCxt.mnRowDelta && rCxt.maRange.aStart.Col() <= aAbs.aStart.Col() && aAbs.aEnd.Col() <= rCxt.maRange.aEnd.Col())
+                    {
+                        if (adjustDoubleRefInName(rRef, rCxt, rPos))
+                            aRes.mbReferenceModified = true;
+                    }
+                }
             }
             break;
             default:
