@@ -27,7 +27,7 @@ import org.libreoffice.impressremote.util.Intents;
 import org.libreoffice.impressremote.communication.Server.Protocol;
 
 class BluetoothServersFinder extends BroadcastReceiver implements ServersFinder, Runnable {
-    private static final int SEARCH_DELAY_IN_MILLISECONDS = 1000 * 10;
+    private static final int SEARCH_DELAY_IN_MILLISECONDS = 1000 * 5;
 
     private final Context mContext;
 

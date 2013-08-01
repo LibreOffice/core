@@ -37,6 +37,8 @@ public class CommunicationService extends Service implements Runnable, MessagesL
     private IBinder mBinder;
 
     private ServersManager mServersManager;
+    private static boolean gWasBluetoothEnabled = false;
+    private static boolean gWasBluetoothEnabledFetched = false;
 
     private ServerConnection mServerConnection;
 
@@ -162,7 +164,13 @@ public class CommunicationService extends Service implements Runnable, MessagesL
         mState = State.SEARCHING;
 
         if (BluetoothAdapter.getDefaultAdapter() != null) {
-            BluetoothAdapter.getDefaultAdapter().enable();
+            if (!gWasBluetoothEnabledFetched) {
+                gWasBluetoothEnabled = BluetoothAdapter.getDefaultAdapter().isEnabled();
+                gWasBluetoothEnabledFetched = true;
+
+                if (!gWasBluetoothEnabled)
+                    BluetoothAdapter.getDefaultAdapter().enable();
+            }
         }
 
         mServersManager.startServersSearch();
@@ -172,7 +180,8 @@ public class CommunicationService extends Service implements Runnable, MessagesL
         mServersManager.stopServersSearch();
 
         if (BluetoothAdapter.getDefaultAdapter() != null) {
-            BluetoothAdapter.getDefaultAdapter().disable();
+            if (!gWasBluetoothEnabled)
+                BluetoothAdapter.getDefaultAdapter().disable();
         }
     }
 
