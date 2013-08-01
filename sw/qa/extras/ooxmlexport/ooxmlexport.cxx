@@ -109,6 +109,7 @@ public:
     void testFdo67013();
     void testParaShadow();
     void testTableFloatingMargins();
+    void testTextWatermark();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -200,11 +201,21 @@ void Test::run()
         {"fdo67013.docx", &Test::testFdo67013},
         {"para-shadow.docx", &Test::testParaShadow},
         {"table-floating-margins.docx", &Test::testTableFloatingMargins},
+        {"textWatermark.docx", &Test::testTextWatermark},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
         "math-escape.docx",
         "math-mso2k7.docx",
+        "textWatermark.docx", // Document has even page Watermark object.
+                              // But when exporting - if the header is shared LO doesn't write the even header.
+                              // See sw/source/filter/ww8/wrtw8sty.cxx:SectionProperties() function.
+                              // if titlePage is set - 'first page' header is written.
+                              // And if (!pPd->IsHeaderShared), 'even' header is written.
+                              // So, in this specific DOCX file - only the default header
+                              // is exported back, so import/export doc's first shape IDs are not equal.
+                              // (there is a shape in 'even' header, a shape in 'odd' header and a shape in 'default' header.
+                              // Only the one in 'default' header is written back to the DOCX.
     };
     std::vector<const char*> vBlacklist(aBlacklist, aBlacklist + SAL_N_ELEMENTS(aBlacklist));
     header();
@@ -1174,6 +1185,26 @@ void Test::testTableFloatingMargins()
         xmlDocPtr pXmlDoc = parseExport();
         assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:pict/v:rect/v:textbox/w:txbxContent/w:tbl/w:tr[1]/w:tc[1]/w:p/w:pPr/w:spacing", "after", "0");
     }
+}
+
+void Test::testTextWatermark()
+{
+    // The problem was that the watermark ID was not preserved,
+    // and Word uses the object ID to identify if it is a watermark.
+    // It has to have the 'PowerPlusWaterMarkObject' string in it
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xTextRange(xDraws->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Airplane"), xTextRange->getString());
+
+    // Check the watermark ID
+    OUString aValue;
+    uno::Reference<drawing::XShape> xShape(xDraws->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
+    xPropertySet->getPropertyValue("Name") >>= aValue;
+    //if (aValue != OUString("PowerPlusWaterMarkObject93701315") && aValue != OUString("PowerPlusWaterMarkObject93701316"))
+    //    CPPUNIT_ASSERT_EQUAL(OUString("PowerPlusWaterMarkObject93701315 \\ PowerPlusWaterMarkObject93701316"), aValue);
+    CPPUNIT_ASSERT_EQUAL(OUString("PowerPlusWaterMarkObject93701316"), aValue);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

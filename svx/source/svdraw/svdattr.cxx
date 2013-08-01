@@ -95,6 +95,7 @@
 #include <svx/sxsalitm.hxx>
 #include <svx/sxsiitm.hxx>
 #include <svx/sxsoitm.hxx>
+#include <svx/sxspiditm.hxx>
 #include <svx/sxtraitm.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
@@ -212,6 +213,7 @@ SdrItemPool::SdrItemPool(
     mppLocalPoolDefaults[SDRATTR_LAYERID        -SDRATTR_START]=new SdrLayerIdItem;
     mppLocalPoolDefaults[SDRATTR_LAYERNAME      -SDRATTR_START]=new SdrLayerNameItem;
     mppLocalPoolDefaults[SDRATTR_OBJECTNAME     -SDRATTR_START]=new SdrObjectNameItem;
+    mppLocalPoolDefaults[SDRATTR_OBJECTSHAPEORIGINALID   -SDRATTR_START]=new SdrObjectShapeOriginalIdItem;
     mppLocalPoolDefaults[SDRATTR_ALLPOSITIONX   -SDRATTR_START]=new SdrAllPositionXItem;
     mppLocalPoolDefaults[SDRATTR_ALLPOSITIONY   -SDRATTR_START]=new SdrAllPositionYItem;
     mppLocalPoolDefaults[SDRATTR_ALLSIZEWIDTH   -SDRATTR_START]=new SdrAllSizeWidthItem;
@@ -557,41 +559,42 @@ void SdrItemPool::TakeItemName(sal_uInt16 nWhich, OUString& rItemName)
         case SDRATTR_CIRCSTARTANGLE: nResId = SIP_SA_CIRCSTARTANGLE;break;
         case SDRATTR_CIRCENDANGLE  : nResId = SIP_SA_CIRCENDANGLE;break;
 
-        case SDRATTR_OBJMOVEPROTECT : nResId = SIP_SA_OBJMOVEPROTECT;break;
-        case SDRATTR_OBJSIZEPROTECT : nResId = SIP_SA_OBJSIZEPROTECT;break;
-        case SDRATTR_OBJPRINTABLE   : nResId = SIP_SA_OBJPRINTABLE;break;
-        case SDRATTR_OBJVISIBLE     : nResId = SIP_SA_OBJVISIBLE;break;
-        case SDRATTR_LAYERID        : nResId = SIP_SA_LAYERID;break;
-        case SDRATTR_LAYERNAME      : nResId = SIP_SA_LAYERNAME;break;
-        case SDRATTR_OBJECTNAME     : nResId = SIP_SA_OBJECTNAME;break;
-        case SDRATTR_ALLPOSITIONX   : nResId = SIP_SA_ALLPOSITIONX;break;
-        case SDRATTR_ALLPOSITIONY   : nResId = SIP_SA_ALLPOSITIONY;break;
-        case SDRATTR_ALLSIZEWIDTH   : nResId = SIP_SA_ALLSIZEWIDTH;break;
-        case SDRATTR_ALLSIZEHEIGHT  : nResId = SIP_SA_ALLSIZEHEIGHT;break;
-        case SDRATTR_ONEPOSITIONX   : nResId = SIP_SA_ONEPOSITIONX;break;
-        case SDRATTR_ONEPOSITIONY   : nResId = SIP_SA_ONEPOSITIONY;break;
-        case SDRATTR_ONESIZEWIDTH   : nResId = SIP_SA_ONESIZEWIDTH;break;
-        case SDRATTR_ONESIZEHEIGHT  : nResId = SIP_SA_ONESIZEHEIGHT;break;
-        case SDRATTR_LOGICSIZEWIDTH : nResId = SIP_SA_LOGICSIZEWIDTH;break;
-        case SDRATTR_LOGICSIZEHEIGHT: nResId = SIP_SA_LOGICSIZEHEIGHT;break;
-        case SDRATTR_ROTATEANGLE    : nResId = SIP_SA_ROTATEANGLE;break;
-        case SDRATTR_SHEARANGLE     : nResId = SIP_SA_SHEARANGLE;break;
-        case SDRATTR_MOVEX          : nResId = SIP_SA_MOVEX;break;
-        case SDRATTR_MOVEY          : nResId = SIP_SA_MOVEY;break;
-        case SDRATTR_RESIZEXONE     : nResId = SIP_SA_RESIZEXONE;break;
-        case SDRATTR_RESIZEYONE     : nResId = SIP_SA_RESIZEYONE;break;
-        case SDRATTR_ROTATEONE      : nResId = SIP_SA_ROTATEONE;break;
-        case SDRATTR_HORZSHEARONE   : nResId = SIP_SA_HORZSHEARONE;break;
-        case SDRATTR_VERTSHEARONE   : nResId = SIP_SA_VERTSHEARONE;break;
-        case SDRATTR_RESIZEXALL     : nResId = SIP_SA_RESIZEXALL;break;
-        case SDRATTR_RESIZEYALL     : nResId = SIP_SA_RESIZEYALL;break;
-        case SDRATTR_ROTATEALL      : nResId = SIP_SA_ROTATEALL;break;
-        case SDRATTR_HORZSHEARALL   : nResId = SIP_SA_HORZSHEARALL;break;
-        case SDRATTR_VERTSHEARALL   : nResId = SIP_SA_VERTSHEARALL;break;
-        case SDRATTR_TRANSFORMREF1X : nResId = SIP_SA_TRANSFORMREF1X;break;
-        case SDRATTR_TRANSFORMREF1Y : nResId = SIP_SA_TRANSFORMREF1Y;break;
-        case SDRATTR_TRANSFORMREF2X : nResId = SIP_SA_TRANSFORMREF2X;break;
-        case SDRATTR_TRANSFORMREF2Y : nResId = SIP_SA_TRANSFORMREF2Y;break;
+        case SDRATTR_OBJMOVEPROTECT         : nResId = SIP_SA_OBJMOVEPROTECT;break;
+        case SDRATTR_OBJSIZEPROTECT         : nResId = SIP_SA_OBJSIZEPROTECT;break;
+        case SDRATTR_OBJPRINTABLE           : nResId = SIP_SA_OBJPRINTABLE;break;
+        case SDRATTR_OBJVISIBLE             : nResId = SIP_SA_OBJVISIBLE;break;
+        case SDRATTR_LAYERID                : nResId = SIP_SA_LAYERID;break;
+        case SDRATTR_LAYERNAME              : nResId = SIP_SA_LAYERNAME;break;
+        case SDRATTR_OBJECTNAME             : nResId = SIP_SA_OBJECTNAME;break;
+        case SDRATTR_OBJECTSHAPEORIGINALID  : nResId = SIP_SA_OBJECTSHAPEORIGINALID;break;
+        case SDRATTR_ALLPOSITIONX           : nResId = SIP_SA_ALLPOSITIONX;break;
+        case SDRATTR_ALLPOSITIONY           : nResId = SIP_SA_ALLPOSITIONY;break;
+        case SDRATTR_ALLSIZEWIDTH           : nResId = SIP_SA_ALLSIZEWIDTH;break;
+        case SDRATTR_ALLSIZEHEIGHT          : nResId = SIP_SA_ALLSIZEHEIGHT;break;
+        case SDRATTR_ONEPOSITIONX           : nResId = SIP_SA_ONEPOSITIONX;break;
+        case SDRATTR_ONEPOSITIONY           : nResId = SIP_SA_ONEPOSITIONY;break;
+        case SDRATTR_ONESIZEWIDTH           : nResId = SIP_SA_ONESIZEWIDTH;break;
+        case SDRATTR_ONESIZEHEIGHT          : nResId = SIP_SA_ONESIZEHEIGHT;break;
+        case SDRATTR_LOGICSIZEWIDTH         : nResId = SIP_SA_LOGICSIZEWIDTH;break;
+        case SDRATTR_LOGICSIZEHEIGHT        : nResId = SIP_SA_LOGICSIZEHEIGHT;break;
+        case SDRATTR_ROTATEANGLE            : nResId = SIP_SA_ROTATEANGLE;break;
+        case SDRATTR_SHEARANGLE             : nResId = SIP_SA_SHEARANGLE;break;
+        case SDRATTR_MOVEX                  : nResId = SIP_SA_MOVEX;break;
+        case SDRATTR_MOVEY                  : nResId = SIP_SA_MOVEY;break;
+        case SDRATTR_RESIZEXONE             : nResId = SIP_SA_RESIZEXONE;break;
+        case SDRATTR_RESIZEYONE             : nResId = SIP_SA_RESIZEYONE;break;
+        case SDRATTR_ROTATEONE              : nResId = SIP_SA_ROTATEONE;break;
+        case SDRATTR_HORZSHEARONE           : nResId = SIP_SA_HORZSHEARONE;break;
+        case SDRATTR_VERTSHEARONE           : nResId = SIP_SA_VERTSHEARONE;break;
+        case SDRATTR_RESIZEXALL             : nResId = SIP_SA_RESIZEXALL;break;
+        case SDRATTR_RESIZEYALL             : nResId = SIP_SA_RESIZEYALL;break;
+        case SDRATTR_ROTATEALL              : nResId = SIP_SA_ROTATEALL;break;
+        case SDRATTR_HORZSHEARALL           : nResId = SIP_SA_HORZSHEARALL;break;
+        case SDRATTR_VERTSHEARALL           : nResId = SIP_SA_VERTSHEARALL;break;
+        case SDRATTR_TRANSFORMREF1X         : nResId = SIP_SA_TRANSFORMREF1X;break;
+        case SDRATTR_TRANSFORMREF1Y         : nResId = SIP_SA_TRANSFORMREF1Y;break;
+        case SDRATTR_TRANSFORMREF2X         : nResId = SIP_SA_TRANSFORMREF2X;break;
+        case SDRATTR_TRANSFORMREF2Y         : nResId = SIP_SA_TRANSFORMREF2Y;break;
 
         case SDRATTR_GRAFRED            : nResId = SIP_SA_GRAFRED;break;
         case SDRATTR_GRAFGREEN          : nResId = SIP_SA_GRAFGREEN;break;

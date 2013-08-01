@@ -102,6 +102,7 @@
 #include <svx/sxrooitm.hxx>
 #include <svx/sxsaitm.hxx>
 #include <svx/sxsoitm.hxx>
+#include <svx/sxspiditm.hxx>
 #include <svx/sxtraitm.hxx>
 #include <svx/unopage.hxx>
 #include <svx/unoshape.hxx>
@@ -438,6 +439,8 @@ SdrObject::SdrObject()
     ,mpSvxShape( NULL )
     ,maWeakUnoShape()
     ,mbDoNotInsertIntoPageAutomatically(false)
+    ,eWatermarkType(WATERMARK_TYPE_NONE)
+    ,msShapeOriginalId()
 {
     DBG_CTOR(SdrObject,NULL);
     bVirtObj         =false;
@@ -786,6 +789,13 @@ void SdrObject::SetName(const OUString& rStr)
         SetChanged();
         BroadcastObjectChange();
     }
+
+    // Check if the shape's name contains one of these strings.
+    // If so - it is a watermark (That is how Microsoft Word detects watermarks, by their name)
+    if (rStr.match(OUString("PowerPlusWaterMarkObject")))
+        eWatermarkType = WATERMARK_TYPE_TEXT;
+    if (rStr.match(OUString("WordPictureWatermark")))
+        eWatermarkType = WATERMARK_TYPE_PICTURE;
 }
 
 OUString SdrObject::GetName() const
@@ -1087,6 +1097,8 @@ SdrObject& SdrObject::operator=(const SdrObject& rObj)
         pPlusData->pBroadcast=NULL;
     }
     aGridOffset = rObj.aGridOffset;
+    eWatermarkType = rObj.eWatermarkType;
+    msShapeOriginalId = rObj.msShapeOriginalId;
     return *this;
 }
 
