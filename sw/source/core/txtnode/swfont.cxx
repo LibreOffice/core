@@ -645,12 +645,10 @@ SwFont::SwFont( const SwAttrSet* pAttrSet,
         aSub[SW_CTL].SetWeight( pAttrSet->GetCTLWeight().GetWeight() );
         aSub[SW_CTL].SetLanguage( pAttrSet->GetCTLLanguage().GetLanguage() );
     }
-
-    const FontUnderline eUnderline = pAttrSet->GetUnderline().GetLineStyle();
     if ( pAttrSet->GetCharHidden().GetValue() )
         SetUnderline( UNDERLINE_DOTTED );
     else
-        SetUnderline( eUnderline );
+        SetUnderline( pAttrSet->GetUnderline().GetLineStyle() );
     SetUnderColor( pAttrSet->GetUnderline().GetColor() );
     SetOverline( pAttrSet->GetOverline().GetLineStyle() );
     SetOverColor( pAttrSet->GetOverline().GetColor() );
