@@ -2715,9 +2715,9 @@ void CodeCompleteWindow::ResizeListBox()
 
         if( (nYDiff + aFont.GetSize().getHeight()) < aSize.Height() )
         {//bottom part is clipped, fix the visibility by placing it over the line (not under)
-            //std::cerr << "clipped at the bottom" << std::endl;
             Point aPos = GetPosPixel();
-            aPos.Y() = aPos.Y() - (aSize.getHeight() + aFont.GetSize().getHeight());
+            Font aParFont = pParent->GetEditEngine()->GetFont();
+            aPos.Y() = aPos.Y() - (aSize.getHeight() + aParFont.GetSize().getHeight()+5);
             SetPosPixel(aPos);
         }
         long nXDiff = std::abs(aTopPoint.X() - GetPosPixel().X());
