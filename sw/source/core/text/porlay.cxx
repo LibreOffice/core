@@ -27,6 +27,7 @@
 #include "porfly.hxx"   // SwFlyCntPortion
 #include <porrst.hxx>   // SwHangingPortion
 #include <pormulti.hxx> // SwMultiPortion
+#include <pordrop.hxx> // SwDropPortion
 #include <breakit.hxx>
 #include <unicode/uchar.h>
 #include <com/sun/star/i18n/ScriptType.hpp>
@@ -368,6 +369,14 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
                         bHasBlankPortion = true;
                         continue;
                     }
+                }
+
+                // Ignore drop portion height
+                if( pPos->IsDropPortion() && static_cast<SwDropPortion*>(pPos)->GetLines() > 1)
+                {
+                    pLast = pPos;
+                    pPos = pPos->GetPortion();
+                    continue;
                 }
 
                 bHasOnlyBlankPortions = false;

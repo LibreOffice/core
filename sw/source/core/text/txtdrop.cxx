@@ -281,6 +281,7 @@ void SwDropPortion::PaintTxt( const SwTxtPaintInfo &rInf ) const
 
     const SwDropPortionPart* pCurrPart = GetPart();
     const xub_StrLen nOldLen = GetLen();
+    const KSHORT nOldWidth = Width();
     const KSHORT nOldAscent = GetAscent();
 
     const SwTwips nBasePosY  = rInf.Y();
@@ -294,6 +295,7 @@ void SwDropPortion::PaintTxt( const SwTxtPaintInfo &rInf ) const
     while ( pCurrPart )
     {
         ((SwDropPortion*)this)->SetLen( pCurrPart->GetLen() );
+        ((SwDropPortion*)this)->Width( pCurrPart->GetWidth() );
         ((SwTxtPaintInfo&)rInf).SetLen( pCurrPart->GetLen() );
         SwFontSave aFontSave( rInf, &pCurrPart->GetFont() );
 
@@ -305,6 +307,7 @@ void SwDropPortion::PaintTxt( const SwTxtPaintInfo &rInf ) const
     }
 
     ((SwTxtPaintInfo&)rInf).Y( nBasePosY );
+    ((SwDropPortion*)this)->Width( nOldWidth );
     ((SwDropPortion*)this)->SetLen( nOldLen );
     ((SwDropPortion*)this)->SetAscent( nOldAscent );
 }
@@ -601,7 +604,7 @@ SwDropPortion *SwTxtFormatter::NewDropPortion( SwTxtFormatInfo &rInf )
     while ( nNextChg  < nPorLen )
     {
         // check for attribute changes and if the portion has to split:
-        Seek( nNextChg );
+        SeekAndChgAttrIter( nNextChg, rInf.GetOut() );
 
         // the font is deleted in the destructor of the drop portion part
         SwFont* pTmpFnt = new SwFont( *rInf.GetFont() );
@@ -737,7 +740,7 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTxtFormatInfo &rInf )
     OSL_ENSURE( pDrop->GetPart(),"DropPortion without part during font calculation");
 
     SwDropPortionPart* pCurrPart = pDrop->GetPart();
-    const bool bUseCache = ! pCurrPart->GetFollow();
+    const bool bUseCache = ! pCurrPart->GetFollow() && !pCurrPart->GetFont().HasBorder();
     xub_StrLen nIdx = rInf.GetIdx();
     XubString aStr( rInf.GetTxt(), nIdx, pCurrPart->GetLen() );
 
@@ -884,6 +887,18 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTxtFormatInfo &rInf )
                 // reset font size and proportion
                 rFnt.SetSize( aOldSize, rFnt.GetActual() );
                 rFnt.SetProportion( nOldProp );
+
+                // Modify the bounding rectangle with the borders
+                if( rFnt.GetTopBorder() )
+                {
+                    aRect.setHeight(aRect.GetHeight() + rFnt.GetTopBorder().get().GetScaledWidth());
+                    aRect.setY(aRect.getY() - rFnt.GetTopBorder().get().GetScaledWidth());
+                }
+
+                if( rFnt.GetBottomBorder() )
+                {
+                    aRect.setHeight(aRect.GetHeight() + rFnt.GetBottomBorder().get().GetScaledWidth());
+                }
 
                 if ( bFirstGlyphRect )
                 {

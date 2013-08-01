@@ -379,6 +379,8 @@ public:
     const boost::optional<editeng::SvxBorderLine>& GetAbsBottomBorder( const bool bVertLayout ) const;
     const boost::optional<editeng::SvxBorderLine>& GetAbsRightBorder( const bool bVertLayout ) const;
     const boost::optional<editeng::SvxBorderLine>& GetAbsLeftBorder( const bool bVertLayout ) const;
+
+    bool HasBorder() const;
 };
 
 inline void SwFont::SetColor( const Color& rColor )
@@ -826,6 +828,11 @@ inline void SwSubFont::SetVertical( const sal_uInt16 nDir, const sal_Bool bVertF
     pMagic = 0;
     Font::SetVertical( bVertFormat );
     Font::SetOrientation( nDir );
+}
+
+inline bool SwFont::HasBorder() const
+{
+    return m_aTopBorder || m_aBottomBorder || m_aLeftBorder || m_aRightBorder;
 }
 
 

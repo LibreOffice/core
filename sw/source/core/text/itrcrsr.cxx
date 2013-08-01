@@ -29,6 +29,7 @@
 #include <editeng/adjustitem.hxx>
 #include <editeng/lspcitem.hxx>
 #include <editeng/lrspitem.hxx>
+#include <editeng/borderline.hxx>
 #include <frmatr.hxx>
 #include <pagedesc.hxx> // SwPageDesc
 #include <tgrditem.hxx>
@@ -925,9 +926,28 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
 
                         // Shift the cursor with the right border width
                         // Note: nX remains positive because GetTxtSize() also include the width of the right border
-                        if( GetInfo().GetFont()->GetRightBorder() && aInf.GetIdx() < nOfst && nOfst < aInf.GetIdx() + pPor->GetLen() )
+                        if( aInf.GetIdx() < nOfst && nOfst < aInf.GetIdx() + pPor->GetLen() )
+                        {
+                            // Find the current drop portion part and use its right border
+                            if( pPor->IsDropPortion() )
+                            {
+                                SwDropPortion* pDrop = static_cast<SwDropPortion*>(pPor);
+                                const SwDropPortionPart* pCurrPart = pDrop->GetPart();
+                                sal_Int16 nSumLength = 0;
+                                while( pCurrPart && (nSumLength += pCurrPart->GetLen()) < nOfst - aInf.GetIdx() )
+                                {
+                                    pCurrPart = pCurrPart->GetFollow();
+                                }
+                                if( pCurrPart && nSumLength != nOfst - aInf.GetIdx() && pCurrPart->GetFont().GetRightBorder() )
+                                {
+                                    nX -= pCurrPart->GetFont().GetRightBorder().get().GetScaledWidth();
+                                }
+                            }
+                            else if(GetInfo().GetFont()->GetRightBorder())
+                            {
                                 nX -= GetInfo().GetFont()->GetRightBorder().get().GetScaledWidth();
-
+                            }
+                         }
                     }
                     bWidth = sal_False;
                     break;
@@ -1088,7 +1108,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                 if ( pCMS->pSpecialPos )
                 {
                     // apply attributes to font
-                    Seek( nOfst );
+                    SeekAndChgAttrIter( nOfst, aInf.GetOut() );
                     lcl_GetCharRectInsideField( aInf, *pOrig, *pCMS, *pPor );
                 }
             }
@@ -1617,9 +1637,33 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
                                          aSizeInf.GetIdx(),
                                          pPor->GetLen() );
 
+                // Drop portion works like a multi portion, just its parts are not portions
+                if( pPor->IsDropPortion() )
+                {
+                    SwDropPortion* pDrop = static_cast<SwDropPortion*>(pPor);
+                    const SwDropPortionPart* pCurrPart = pDrop->GetPart();
+                    sal_uInt16 nSumWidth = 0;
+                    sal_uInt16 nSumBorderWidth = 0;
+                    // Shift offset with the right and left border of previous parts and left border of actual one
+                    while( pCurrPart && nSumWidth <= nX - nCurrStart )
+                    {
+                        nSumWidth += pCurrPart->GetWidth();
+                        if( pCurrPart->GetFont().GetLeftBorder() )
+                        {
+                            nSumBorderWidth += pCurrPart->GetFont().GetLeftBorder().get().GetScaledWidth();
+                        }
+                        if( nSumWidth <= nX - nCurrStart && pCurrPart->GetFont().GetRightBorder() )
+                        {
+                            nSumBorderWidth += pCurrPart->GetFont().GetRightBorder().get().GetScaledWidth();
+                        }
+                        pCurrPart = pCurrPart->GetFollow();
+                    }
+                    nX = std::max(0, nX - nSumBorderWidth);
+                }
                 // Shift the offset with the left border width
-                if( GetInfo().GetFont()->GetLeftBorder() )
+                else if (GetInfo().GetFont()->GetLeftBorder() )
                     nX = std::max(0, nX - GetInfo().GetFont()->GetLeftBorder().get().GetScaledWidth());
+
 
                 aDrawInf.SetOfst( nX );
 
