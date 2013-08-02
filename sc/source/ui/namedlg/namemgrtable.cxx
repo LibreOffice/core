@@ -75,7 +75,7 @@ void ScRangeManagerTable::Resize()
 
 void ScRangeManagerTable::StateChanged( StateChangedType nStateChange )
 {
-    SvSimpleTable::StateChanged(nStateChange);
+    SvxSimpleTable::StateChanged(nStateChange);
 
     if (nStateChange == STATE_CHANGE_INITSHOW)
     {
