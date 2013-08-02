@@ -384,6 +384,11 @@ String STR_CUSTOMANIMATION_LIST_HELPTEXT
     Text [ en-US ] = "First select the slide element and then click 'Add...' to add an animation effect.";
 };
 
+String STR_CUSTOMANIMATION_USERPATH
+{
+    Text [ en-US ] = "User paths";
+};
+
 Image IMG_CUSTOMANIMATION_ON_CLICK
 {
     ImageBitmap = Bitmap { File = "click_16.png" ; };

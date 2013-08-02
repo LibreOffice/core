@@ -206,7 +206,7 @@ private:
 private:
     CategoryListBox*    mpLBEffects;
     FixedText*  mpFTSpeed;
-    ListBox*   mpCBSpeed;
+    ListBox*    mpCBSpeed;
     CheckBox*   mpCBXPReview;
 
     CustomAnimationCreateDialog*        mpParent;
@@ -256,7 +256,7 @@ CustomAnimationCreateTabPage::CustomAnimationCreateTabPage( Window* pParent, Cus
     get( mpCBSpeed, "effect_speed_list" );
     get( mpCBXPReview, "auto_preview" );
 
-    String sMotionPathLabel( SdResId( STR_USERPATH ) );
+    String sMotionPathLabel( SdResId( STR_CUSTOMANIMATION_USERPATH ) );
 
     sal_uInt16 nFirstEffect = LISTBOX_ENTRY_NOTFOUND;
 
