@@ -2088,12 +2088,17 @@ sal_Bool SwLayIdle::_DoIdleJob( const SwCntntFrm *pCnt, IdleJobType eJob )
             }
             case SMART_TAGS : // SMARTTAGS
             {
-                const SwRect aRepaint( ((SwTxtFrm*)pCnt)->SmartTagScan( pCntntNode, nTxtPos ) );
-                bPageValid = bPageValid && !pTxtNode->IsSmartTagDirty();
-                if( !bPageValid )
-                    bAllValid = sal_False;
-                if ( aRepaint.HasArea() )
-                    pImp->GetShell()->InvalidateWindows( aRepaint );
+                try {
+                    const SwRect aRepaint( ((SwTxtFrm*)pCnt)->SmartTagScan( pCntntNode, nTxtPos ) );
+                    bPageValid = bPageValid && !pTxtNode->IsSmartTagDirty();
+                    if( !bPageValid )
+                        bAllValid = sal_False;
+                    if ( aRepaint.HasArea() )
+                        pImp->GetShell()->InvalidateWindows( aRepaint );
+                } catch( const ::com::sun::star::uno::RuntimeException& e) {
+                    // #i122885# handle smarttag problems gracefully and provide diagnostics
+                    SAL_WARN( "sw.core", "SMART_TAGS Exception:" << e.Message);
+                }
                 if ( Application::AnyInput( VCL_INPUT_MOUSEANDKEYBOARD|VCL_INPUT_OTHER|VCL_INPUT_PAINT ) )
                     return sal_True;
                 break;
