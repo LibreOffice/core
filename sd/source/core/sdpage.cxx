@@ -1238,7 +1238,7 @@ Reference<XElement> getRootElement()
 }
 
 //read the information from XML file(traversing from layout node)
-void readLayoutPropFromFile(const Reference<XElement>& root, const rtl::OUString& sLayoutType, const rtl::OUString& sPresObjKind, sal_Int32 propvalue[])
+void readLayoutPropFromFile(const Reference<XElement>& root, const rtl::OUString& sLayoutType, const rtl::OUString& sPresObjKind, double propvalue[])
 {
     long presobjsize;
     long layoutlistsize;
@@ -1367,7 +1367,7 @@ static void CalcAutoLayoutRectangles( SdPage& rPage, int nLayout, Rectangle* rRe
     int presobjsize;
     rtl::OUString sLayoutAttName;
     rtl::OUString sPresObjKindAttName;
-    sal_Int32 propvalue[4];
+    double propvalue[4];
 
     if( rPage.GetPageKind() != PK_HANDOUT )
     {
@@ -1406,7 +1406,8 @@ static void CalcAutoLayoutRectangles( SdPage& rPage, int nLayout, Rectangle* rRe
     Point       aLayoutPos( aLayoutRect.TopLeft() );
     Size        aTempSize;
     Point       aTempPnt;
-
+    aTempSize = aLayoutSize;
+    aTempPnt = aLayoutPos;
     sal_Bool    bRightToLeft = ( rPage.GetModel() && static_cast< SdDrawDocument* >( rPage.GetModel() )->GetDefaultWritingMode() == ::com::sun::star::text::WritingMode_RL_TB );
 
     parseXml(); //calling this for temporary reference,have to use it somewhere else.
@@ -1432,28 +1433,47 @@ static void CalcAutoLayoutRectangles( SdPage& rPage, int nLayout, Rectangle* rRe
                 {
                     Reference<XNamedNodeMap> presObjAttributes = presobj->getAttributes();
 
-                    Reference<XNode> presObjPosX = presObjAttributes->getNamedItem("layout-pos-x");
-                    rtl::OUString sValue = presObjPosX->getNodeValue();
-                    propvalue[0] = sValue.toInt32();
+                    Reference<XNode> presObjSizeHeight = presObjAttributes->getNamedItem("title-shape-relative-height");
+                    rtl::OUString sValue = presObjSizeHeight->getNodeValue();
+                    propvalue[0] = sValue.toDouble();
 
-                    Reference<XNode> presObjPosY = presObjAttributes->getNamedItem("layout-pos-y");
-                    sValue = presObjPosY->getNodeValue();
-                    propvalue[1] = sValue.toInt32();
-
-                    Reference<XNode> presObjSizeHeight = presObjAttributes->getNamedItem("layout-size-height");
-                    sValue = presObjSizeHeight->getNodeValue();
-                    propvalue[2] = sValue.toInt32();
-
-                    Reference<XNode> presObjSizeWidth = presObjAttributes->getNamedItem("layout-size-width");
+                    Reference<XNode> presObjSizeWidth = presObjAttributes->getNamedItem("title-shape-relative-width");
                     sValue = presObjSizeWidth->getNodeValue();
-                    propvalue[3] = sValue.toInt32();
+                    propvalue[1] = sValue.toDouble();
 
-                    aLayoutPos.X() = propvalue[0];
-                    aLayoutPos.Y() = propvalue[1];
-                    aLayoutSize.Height() = propvalue[2];
-                    aLayoutSize.Width() = propvalue[3];
-                    rRectangle[count] = Rectangle (aLayoutPos, aLayoutSize);
-                    count=count+1;
+                    Reference<XNode> presObjPos = presObjAttributes->getNamedItem("title-shape-relative-pos");
+                    sValue = presObjPos->getNodeValue();
+                    propvalue[2] = sValue.toDouble();
+
+                    Reference<XNode> presObjBool = presObjAttributes->getNamedItem("boolx");
+                    sValue = presObjBool->getNodeValue();
+                    propvalue[3] = sValue.toDouble();
+
+                    if(count==0)
+                    {
+                        Size aTitleSize ( aTitleRect.GetSize() );
+                        aTitleSize.Height() = sal_Int32(aTitleSize.Height() * propvalue[0]);
+                        aTitleSize.Width() = sal_Int32(aTitleSize.Width() * propvalue[1]);
+                        if(propvalue[3]==1)
+                            aTitlePos.X() = sal_Int32(aTitlePos.X() +(aTitleSize.Width() * propvalue[2]));
+                        else
+                            aTitlePos.Y() = sal_Int32(aTitlePos.Y() + (aTitleSize.Height() * propvalue[2]));
+                        rRectangle[count] = Rectangle (aTitlePos, aTitleSize);
+                        count = count+1;
+                    }
+                    else
+                    {
+                        aLayoutSize = aTempSize;//to regain fixed layout size
+                        aLayoutPos = aTempPnt;
+                        aLayoutSize.Height() = sal_Int32(aLayoutSize.Height() * propvalue[0]);
+                        aLayoutSize.Width() = sal_Int32(aLayoutSize.Width() * propvalue[1]);
+                        if(propvalue[3]==1)
+                            aLayoutPos.X() = sal_Int32(aLayoutPos.X() +(aLayoutSize.Width() * propvalue[2]));
+                        else
+                            aLayoutPos.Y() = sal_Int32(aLayoutPos.Y() + (aLayoutSize.Height() * propvalue[2]));
+                        rRectangle[count] = Rectangle (aLayoutPos, aLayoutSize);
+                        count=count+1;
+                    }
                 }
             }
             break;
@@ -1549,27 +1569,6 @@ static void CalcAutoLayoutRectangles( SdPage& rPage, int nLayout, Rectangle* rRe
         // aLayoutSize.Width() = long (aLayoutSize.Width() / 0.488);
         // rRectangle[3] = Rectangle (aLayoutPos, aLayoutSize);
         // break;
-        readLayoutPropFromFile(root, "AUTOLAYOUT_TITLE_CONTENT_2CONTENT" ,"PRESOBJ_OUTLINE1" ,propvalue);
-        aLayoutPos.X() = propvalue[0];
-        aLayoutPos.Y() = propvalue[1];
-        aLayoutSize.Height() = propvalue[2];
-        aLayoutSize.Width() = propvalue[3];
-        rRectangle[1] = Rectangle (aLayoutPos, aLayoutSize);
-
-        readLayoutPropFromFile(root, "AUTOLAYOUT_TITLE_CONTENT_2CONTENT" ,"PRESOBJ_OUTLINE2" ,propvalue);
-        aLayoutPos.X() = propvalue[0];
-        aLayoutPos.Y() = propvalue[1];
-        aLayoutSize.Height() = propvalue[2];
-        aLayoutSize.Width() = propvalue[3];
-        rRectangle[2] = Rectangle (aLayoutPos, aLayoutSize);
-
-        readLayoutPropFromFile(root, "AUTOLAYOUT_TITLE_CONTENT_2CONTENT" ,"PRESOBJ_OUTLINE3" ,propvalue);
-        aLayoutPos.X() = propvalue[0];
-        aLayoutPos.Y() = propvalue[1];
-        aLayoutSize.Height() = propvalue[2];
-        aLayoutSize.Width() = propvalue[3];
-        rRectangle[3] = Rectangle (aLayoutPos, aLayoutSize);
-        break;
     case 6: // title, 4 shapes
     {
         // sal_uLong nX = long (aLayoutPos.X());
