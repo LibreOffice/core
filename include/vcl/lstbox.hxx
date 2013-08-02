@@ -122,11 +122,11 @@ public:
 
     virtual void        Clear();
 
-    virtual sal_uInt16      GetEntryPos( const OUString& rStr ) const;
-    virtual sal_uInt16      GetEntryPos( const void* pData ) const;
-            Image       GetEntryImage( sal_uInt16 nPos ) const;
-    virtual OUString    GetEntry( sal_uInt16 nPos ) const;
-    virtual sal_uInt16      GetEntryCount() const;
+    sal_uInt16          GetEntryPos( const OUString& rStr ) const;
+    virtual sal_uInt16  GetEntryPos( const void* pData ) const;
+    Image               GetEntryImage( sal_uInt16 nPos ) const;
+    OUString            GetEntry( sal_uInt16 nPos ) const;
+    virtual sal_uInt16  GetEntryCount() const;
 
     virtual void        SelectEntry( const OUString& rStr, sal_Bool bSelect = sal_True );
     virtual void        SelectEntryPos( sal_uInt16 nPos, sal_Bool bSelect = sal_True );
