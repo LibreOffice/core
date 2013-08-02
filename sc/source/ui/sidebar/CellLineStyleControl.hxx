@@ -32,7 +32,7 @@ private:
     CellAppearancePropertyPanel&       mrCellAppearancePropertyPanel;
     PushButton                         maPushButtonMoreOptions;
     CellLineStyleValueSet              maCellLineStyleValueSet;
-    XubString*                         mpStr;
+    OUString                           maStr[CELL_LINE_STYLE_ENTRIES];
 
     /// bitfield
     bool                               mbVSfocus : 1;
@@ -45,7 +45,6 @@ private:
 
 public:
     CellLineStyleControl(Window* pParent, CellAppearancePropertyPanel& rPanel);
-    virtual ~CellLineStyleControl(void);
 
     void GetFocus();
     void SetLineStyleSelect(sal_uInt16 out, sal_uInt16 in, sal_uInt16 dis);

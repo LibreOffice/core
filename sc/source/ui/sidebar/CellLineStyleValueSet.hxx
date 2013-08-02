@@ -21,6 +21,8 @@
 #include <svtools/valueset.hxx>
 #include <vcl/image.hxx>
 
+#define CELL_LINE_STYLE_ENTRIES 9
+
 namespace sc { namespace sidebar {
 
 class CellLineStyleValueSet : public ValueSet
@@ -28,14 +30,14 @@ class CellLineStyleValueSet : public ValueSet
 private:
     VirtualDevice*  pVDev;
     sal_uInt16      nSelItem;
-    XubString*      strUnit;
+    OUString        maStrUnit[CELL_LINE_STYLE_ENTRIES];
     Image           imgCus;
     bool            bCusEnable;
 public:
     CellLineStyleValueSet( Window* pParent, const ResId& rResId);
     virtual ~CellLineStyleValueSet();
 
-    void SetUnit(XubString* str);
+    void SetUnit(const OUString* str);
     void SetSelItem(sal_uInt16 nSel);
     sal_uInt16 GetSelItem();
     void SetImage(Image img);

@@ -27,7 +27,6 @@ CellLineStyleValueSet::CellLineStyleValueSet( Window* pParent, const ResId& rRes
     nSelItem(0),
     bCusEnable(false)
 {
-    strUnit = new XubString[9];
     SetColCount( 1 );
     SetLineCount( 9);
 }
@@ -35,14 +34,13 @@ CellLineStyleValueSet::CellLineStyleValueSet( Window* pParent, const ResId& rRes
 CellLineStyleValueSet::~CellLineStyleValueSet()
 {
     delete pVDev;
-    delete[] strUnit;
 }
 
-void CellLineStyleValueSet::SetUnit(XubString* str)
+void CellLineStyleValueSet::SetUnit(const OUString* str)
 {
-    for(int i = 0; i < 9; i++)
+    for (int i = 0; i < CELL_LINE_STYLE_ENTRIES; ++i)
     {
-        strUnit[i] = str[i];
+        maStrUnit[i] = str[i];
     }
 }
 
@@ -121,7 +119,7 @@ void CellLineStyleValueSet::UserDraw( const UserDrawEvent& rUDEvt )
 
     pDev->SetFont(aFont);
     Point aStart(aBLPos.X() + nRectWidth * 7 / 9 - 5 , aBLPos.Y() + nRectHeight/6);
-    pDev->DrawText(aStart, strUnit[ nItemId - 1 ]); //can't set TEXT_DRAW_ENDELLIPSIS here, or the text will disapear
+    pDev->DrawText(aStart, maStrUnit[nItemId - 1]); //can't set TEXT_DRAW_ENDELLIPSIS here, or the text will disapear
 
     //draw line
     if( nSelItem ==  nItemId )
