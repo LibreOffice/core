@@ -408,32 +408,59 @@ sal_Bool SAL_CALL ODatabaseMetaData::
 {
     return sal_True;
 }
-// -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::supportsOpenStatementsAcrossRollback(  ) throw(SQLException, RuntimeException)
+//----- Transaction Support --------------------------------------------------
+sal_Bool SAL_CALL ODatabaseMetaData::supportsTransactions()
+    throw(SQLException, RuntimeException)
+{
+    return sal_True;
+}
+
+sal_Bool SAL_CALL ODatabaseMetaData::supportsOpenStatementsAcrossRollback()
+    throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::supportsOpenStatementsAcrossCommit(  ) throw(SQLException, RuntimeException)
+
+sal_Bool SAL_CALL ODatabaseMetaData::supportsOpenStatementsAcrossCommit()
+    throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::supportsOpenCursorsAcrossCommit(  ) throw(SQLException, RuntimeException)
+
+sal_Bool SAL_CALL ODatabaseMetaData::supportsOpenCursorsAcrossCommit()
+    throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::supportsOpenCursorsAcrossRollback(  ) throw(SQLException, RuntimeException)
+
+sal_Bool SAL_CALL ODatabaseMetaData::supportsOpenCursorsAcrossRollback()
+    throw(SQLException, RuntimeException)
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::supportsTransactionIsolationLevel( sal_Int32 level ) throw(SQLException, RuntimeException)
+
+sal_Bool SAL_CALL ODatabaseMetaData::supportsMultipleTransactions()
+    throw(SQLException, RuntimeException)
 {
-    (void) level;
-    return sal_False;
+    return sal_True;
 }
+
+sal_Bool SAL_CALL ODatabaseMetaData::supportsTransactionIsolationLevel(
+        sal_Int32 aLevel)
+    throw(SQLException, RuntimeException)
+{
+    return  aLevel == TransactionIsolation::READ_UNCOMMITTED
+           || aLevel == TransactionIsolation::READ_COMMITTED
+           || aLevel == TransactionIsolation::REPEATABLE_READ
+           || aLevel == TransactionIsolation::SERIALIZABLE;
+}
+
+sal_Int32 SAL_CALL ODatabaseMetaData::getDefaultTransactionIsolation()
+    throw(SQLException, RuntimeException)
+{
+    return TransactionIsolation::REPEATABLE_READ;
+}
+
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::supportsANSI92FullSQL(  ) throw(SQLException, RuntimeException)
 {
@@ -460,11 +487,6 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getMaxProcedureNameLength(  ) throw(SQLExc
 {
     sal_Int32 nValue = 31; // TODO: confirm
     return nValue;
-}
-
-sal_Bool SAL_CALL ODatabaseMetaData::supportsTransactions(  ) throw(SQLException, RuntimeException)
-{
-    return sal_True;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::allProceduresAreCallable(  ) throw(SQLException, RuntimeException)
@@ -519,10 +541,6 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsGroupByUnrelated(  ) throw(SQLExcep
     return sal_False;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::supportsMultipleTransactions(  ) throw(SQLException, RuntimeException)
-{
-    return sal_True;
-}
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::supportsMultipleResultSets(  ) throw(SQLException, RuntimeException)
 {
@@ -643,11 +661,6 @@ OUString SAL_CALL ODatabaseMetaData::getProcedureTerm(  ) throw(SQLException, Ru
 sal_Int32 SAL_CALL ODatabaseMetaData::getDriverMajorVersion(  ) throw(RuntimeException)
 {
     return 1;
-}
-// -------------------------------------------------------------------------
-sal_Int32 SAL_CALL ODatabaseMetaData::getDefaultTransactionIsolation(  ) throw(SQLException, RuntimeException)
-{
-    return TransactionIsolation::NONE;
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL ODatabaseMetaData::getDriverMinorVersion(  ) throw(RuntimeException)
