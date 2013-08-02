@@ -114,6 +114,55 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInPrivilegeDefinitions() th
     return sal_False;
 }
 
+//----- Schema Info -- UNSUPPORTED --------------------------------------------
+sal_Bool SAL_CALL ODatabaseMetaData::supportsSchemasInProcedureCalls()
+    throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+
+sal_Bool SAL_CALL ODatabaseMetaData::supportsSchemasInPrivilegeDefinitions()
+    throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+
+sal_Bool SAL_CALL ODatabaseMetaData::supportsSchemasInDataManipulation()
+    throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+
+sal_Bool SAL_CALL ODatabaseMetaData::supportsSchemasInIndexDefinitions()
+    throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+
+sal_Bool SAL_CALL ODatabaseMetaData::supportsSchemasInTableDefinitions()
+    throw(SQLException, RuntimeException)
+{
+    return sal_False;
+}
+
+sal_Int32 SAL_CALL ODatabaseMetaData::getMaxSchemaNameLength()
+    throw(SQLException, RuntimeException)
+{
+    return -1;
+}
+
+OUString SAL_CALL ODatabaseMetaData::getSchemaTerm()
+    throw(SQLException, RuntimeException)
+{
+    return OUString();
+}
+
+uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getSchemas()
+    throw(SQLException, RuntimeException)
+{
+    return 0;
+}
+
 //----- Max Sizes/Lengths -----------------------------------------------------
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxBinaryLiteralLength() throw(SQLException, RuntimeException)
 {
@@ -334,23 +383,28 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsDifferentTableCorrelationNames(  ) 
 {
     return sal_False;
 }
-// -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::dataDefinitionIgnoredInTransactions(  ) throw(SQLException, RuntimeException)
+// ---- Data definition stuff -------------------------------------------------
+sal_Bool SAL_CALL ODatabaseMetaData::dataDefinitionIgnoredInTransactions()
+    throw(SQLException, RuntimeException)
 {
-    return sal_True;
+    return sal_False;
 }
-// -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::dataDefinitionCausesTransactionCommit(  ) throw(SQLException, RuntimeException)
+
+sal_Bool SAL_CALL ODatabaseMetaData::dataDefinitionCausesTransactionCommit()
+    throw(SQLException, RuntimeException)
 {
-    return sal_True;
+    return sal_False;
 }
-// -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::supportsDataManipulationTransactionsOnly(  ) throw(SQLException, RuntimeException)
+
+sal_Bool SAL_CALL ODatabaseMetaData::supportsDataManipulationTransactionsOnly()
+    throw(SQLException, RuntimeException)
 {
-    return sal_True;
+    return sal_False;
 }
-// -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::supportsDataDefinitionAndDataManipulationTransactions(  ) throw(SQLException, RuntimeException)
+
+sal_Bool SAL_CALL ODatabaseMetaData::
+        supportsDataDefinitionAndDataManipulationTransactions()
+    throw(SQLException, RuntimeException)
 {
     return sal_True;
 }
@@ -381,11 +435,6 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsTransactionIsolationLevel( sal_Int3
     return sal_False;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::supportsSchemasInDataManipulation(  ) throw(SQLException, RuntimeException)
-{
-    return sal_False;
-}
-// -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::supportsANSI92FullSQL(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
@@ -401,16 +450,6 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsIntegrityEnhancementFacility(  ) th
     return sal_False;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::supportsSchemasInIndexDefinitions(  ) throw(SQLException, RuntimeException)
-{
-    return sal_False;
-}
-// -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::supportsSchemasInTableDefinitions(  ) throw(SQLException, RuntimeException)
-{
-    return sal_False;
-}
-// -------------------------------------------------------------------------
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxStatements(  ) throw(SQLException, RuntimeException)
 {
     sal_Int32 nValue = 0; // 0 means no limit
@@ -420,12 +459,6 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getMaxStatements(  ) throw(SQLException, R
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxProcedureNameLength(  ) throw(SQLException, RuntimeException)
 {
     sal_Int32 nValue = 31; // TODO: confirm
-    return nValue;
-}
-// -------------------------------------------------------------------------
-sal_Int32 SAL_CALL ODatabaseMetaData::getMaxSchemaNameLength(  ) throw(SQLException, RuntimeException)
-{
-    sal_Int32 nValue = -1; // 0 means no limit
     return nValue;
 }
 
@@ -536,16 +569,6 @@ sal_Bool SAL_CALL ODatabaseMetaData::nullsAreSortedLow(  ) throw(SQLException, R
     return sal_False;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::supportsSchemasInProcedureCalls(  ) throw(SQLException, RuntimeException)
-{
-    return sal_False;
-}
-// -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::supportsSchemasInPrivilegeDefinitions(  ) throw(SQLException, RuntimeException)
-{
-    return sal_False;
-}
-// -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::supportsCorrelatedSubqueries(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
@@ -612,12 +635,6 @@ OUString SAL_CALL ODatabaseMetaData::getDatabaseProductName(  ) throw(SQLExcepti
 }
 // -------------------------------------------------------------------------
 OUString SAL_CALL ODatabaseMetaData::getProcedureTerm(  ) throw(SQLException, RuntimeException)
-{
-    OUString aValue;
-    return aValue;
-}
-// -------------------------------------------------------------------------
-OUString SAL_CALL ODatabaseMetaData::getSchemaTerm(  ) throw(SQLException, RuntimeException)
 {
     OUString aValue;
     return aValue;
@@ -990,12 +1007,6 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
     }
     pResultSet->setRows(aResults);
     return xResultSet;
-}
-
-uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getSchemas()
-    throw(SQLException, RuntimeException)
-{
-    return NULL;
 }
 
 uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumnPrivileges(
