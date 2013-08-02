@@ -24,6 +24,10 @@
 #include <rtl/ustrbuf.hxx>
 #include <strimp.hxx>
 
+#if USE_SDT_PROBES
+#define RTL_LOG_STRING_BITS         16
+#endif
+
 void SAL_CALL rtl_uStringbuffer_newFromStr_WithLength( rtl_uString ** newStr,
                                                        const sal_Unicode * value,
                                                        sal_Int32 count)

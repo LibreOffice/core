@@ -20,6 +20,11 @@
 #ifndef INCLUDED_RTL_SOURCE_STRIMP_HXX
 #define INCLUDED_RTL_SOURCE_STRIMP_HXX
 
+#include <config_probes.h>
+#if USE_SDT_PROBES
+#include <sys/sdt.h>
+#endif
+
 #include <osl/interlck.h>
 
 #include "sal/types.h"
@@ -46,8 +51,21 @@ sal_Int16 rtl_ImplGetDigit( sal_Unicode ch, sal_Int16 nRadix );
 sal_Bool rtl_ImplIsWhitespace( sal_Unicode c );
 
 // string lifetime instrumentation / diagnostics
+#if USE_SDT_PROBES
+#  define PROBE_SNAME(n,b) n ## _ ## b
+#  define PROBE_NAME(n,b) PROBE_SNAME(n,b)
+#  define PROBE_NEW PROBE_NAME (new_string,RTL_LOG_STRING_BITS)
+#  define PROBE_DEL PROBE_NAME (delete_string,RTL_LOG_STRING_BITS)
+#  define RTL_LOG_STRING_NEW(s) \
+    DTRACE_PROBE4(libreoffice, PROBE_NEW, s, \
+                  (s)->refCount, (s)->length, (s)->buffer)
+#  define RTL_LOG_STRING_DELETE(s) \
+    DTRACE_PROBE4(libreoffice, PROBE_DEL, s, \
+                  (s)->refCount, (s)->length, (s)->buffer)
+#else
 #  define RTL_LOG_STRING_NEW(s)
 #  define RTL_LOG_STRING_DELETE(s)
+#endif /* USE_SDT_PROBES */
 
 #endif /* INCLUDED_RTL_SOURCE_STRIMP_HXX */
 
