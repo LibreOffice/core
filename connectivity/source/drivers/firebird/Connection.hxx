@@ -112,6 +112,7 @@ namespace connectivity
             void                    buildTypeInfo() throw( ::com::sun::star::sdbc::SQLException);
 
             void                    setupTransaction();
+            void                    clearStatements();
         public:
             virtual void construct( const ::rtl::OUString& url,
                                     const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info)

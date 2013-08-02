@@ -421,6 +421,7 @@ void OConnection::setupTransaction()
     // is lost...
     if (m_transactionHandle)
     {
+        clearStatements();
         isc_rollback_transaction(status_vector, &m_transactionHandle);
     }
 
@@ -454,9 +455,6 @@ void OConnection::setupTransaction()
 
     isc_start_transaction(status_vector, &m_transactionHandle, 1, &m_DBHandler,
                           (unsigned short) sizeof(isc_tpb), isc_tpb);
-
-    //TODO: transmit to open statements?
-
 }
 
 isc_tr_handle& OConnection::getTransaction()
@@ -478,6 +476,7 @@ void SAL_CALL OConnection::commit() throw(SQLException, RuntimeException)
 
     if (!m_bAutoCommit && m_transactionHandle)
     {
+        clearStatements();
         isc_commit_transaction(status_vector, &m_transactionHandle);
     }
 }
@@ -613,6 +612,7 @@ void SAL_CALL OConnection::documentEventOccured( const DocumentEvent& _Event )
 {
     if (_Event.EventName == "OnSave" || _Event.EventName == "OnSaveAs")
     {
+        commit(); // Commit and close transaction
         if ( m_bIsEmbedded && m_xEmbeddedStorage.is() )
         {
             SAL_INFO("connectivity.firebird", "Writing .fdb into .odb" );
@@ -698,13 +698,7 @@ void OConnection::disposing()
 
     MutexGuard aGuard(m_aMutex);
 
-    for (OWeakRefArray::iterator i = m_aStatements.begin(); m_aStatements.end() != i; ++i)
-    {
-        Reference< XComponent > xComp(i->get(), UNO_QUERY);
-        if (xComp.is())
-            xComp->dispose();
-    }
-    m_aStatements.clear();
+    clearStatements();
 
     m_bClosed   = sal_True;
     m_xMetaData = ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XDatabaseMetaData>();
@@ -734,4 +728,15 @@ void OConnection::disposing()
     cppu::WeakComponentImplHelperBase::disposing();
 }
 
+void OConnection::clearStatements()
+{
+    MutexGuard aGuard(m_aMutex);
+    for (OWeakRefArray::iterator i = m_aStatements.begin(); m_aStatements.end() != i; ++i)
+    {
+        Reference< XComponent > xComp(i->get(), UNO_QUERY);
+        if (xComp.is())
+            xComp->dispose();
+    }
+    m_aStatements.clear();
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
