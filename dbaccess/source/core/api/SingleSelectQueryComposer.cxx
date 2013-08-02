@@ -1591,6 +1591,9 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
     const OUString aQuote    = m_xMetaData->getIdentifierQuoteString();
     getColumns();
 
+    // TODO: if this is called for HAVING, check that the column is a GROUP BY column
+    //       or that it is an aggregate function
+
     if ( m_aCurrentColumns[SelectColumns] && m_aCurrentColumns[SelectColumns]->hasByName(aName) )
     {
         Reference<XPropertySet> xColumn;
