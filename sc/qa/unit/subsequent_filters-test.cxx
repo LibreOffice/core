@@ -46,6 +46,7 @@
 #include "scitems.hxx"
 #include "docsh.hxx"
 #include "editutil.hxx"
+#include "cellvalue.hxx"
 
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
@@ -277,6 +278,12 @@ void ScFiltersTest::testBasicCellContentODS()
     CPPUNIT_ASSERT_EQUAL(12345.0, fVal);
     aStr = pDoc->GetString(1, 3, 0); // B4
     CPPUNIT_ASSERT_EQUAL(OUString("A < B"), aStr);
+
+    // Numeric value of 0.
+    ScRefCellValue aCell;
+    aCell.assign(*pDoc, ScAddress(1,4,0)); // B5
+    CPPUNIT_ASSERT_MESSAGE("This cell must be numeric.", aCell.meType == CELLTYPE_VALUE);
+    CPPUNIT_ASSERT_EQUAL(0.0, aCell.mfValue);
 
     xDocSh->DoClose();
 }
