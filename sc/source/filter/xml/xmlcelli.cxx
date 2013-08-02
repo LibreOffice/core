@@ -51,6 +51,7 @@
 #include "stringutil.hxx"
 #include "tokenarray.hxx"
 #include "scmatrix.hxx"
+#include "documentimport.hxx"
 
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmltoken.hxx>
@@ -1050,10 +1051,10 @@ void ScXMLTableRowCellContext::PutTextCell( const ScAddress& rCurrentPos,
     }
     else //regular text cells
     {
-        ScDocument* pDoc = rXMLImport.GetDocument();
+        ScDocumentImport& rDoc = rXMLImport.GetDoc();
         if (maStringValue)
         {
-            pDoc->SetTextCell(rCurrentPos, *maStringValue);
+            rDoc.setStringCell(rCurrentPos, *maStringValue);
             bDoIncrement = true;
         }
         else if (mbEditEngineHasText)
@@ -1061,9 +1062,7 @@ void ScXMLTableRowCellContext::PutTextCell( const ScAddress& rCurrentPos,
             if (maFields.empty() && maFormats.empty() && mpEditEngine->GetParagraphCount() == 1)
             {
                 // This is a normal text without format runs.
-                ScSetStringParam aParam;
-                aParam.setTextInput();
-                pDoc->SetString(rCurrentPos, mpEditEngine->GetText(), &aParam);
+                rDoc.setStringCell(rCurrentPos, mpEditEngine->GetText());
             }
             else
             {
@@ -1083,13 +1082,13 @@ void ScXMLTableRowCellContext::PutTextCell( const ScAddress& rCurrentPos,
                 // This edit engine uses the SfxItemPool instance returned
                 // from pDoc->GetEditPool() to create the text object, which
                 // is a prerequisite for using this constructor of ScEditCell.
-                pDoc->SetEditText(rCurrentPos, mpEditEngine->CreateTextObject());
+                rDoc.setEditCell(rCurrentPos, mpEditEngine->CreateTextObject());
             }
             bDoIncrement = true;
         }
         else if ( nCurrentCol > 0 && pOUText && !pOUText->isEmpty() )
         {
-            pDoc->SetTextCell(rCurrentPos, *pOUText);
+            rDoc.setStringCell(rCurrentPos, *pOUText);
             bDoIncrement = true;
         }
         else
@@ -1123,10 +1122,7 @@ void ScXMLTableRowCellContext::PutValueCell( const ScAddress& rCurrentPos )
         // style's number format is latin-only. If the cell uses a different
         // format, the script type will be reset when the style is applied.
 
-        ScDocument* pDoc = rXMLImport.GetDocument();
-        pDoc->SetValue(rCurrentPos, fValue);
-        if ( rXMLImport.IsLatinDefaultStyle() )
-            pDoc->SetScriptType(rCurrentPos, SCRIPTTYPE_LATIN);
+        rXMLImport.GetDoc().setNumericCell(rCurrentPos, fValue);
     }
     rXMLImport.ProgressBarIncrement(false);
 }
@@ -1324,13 +1320,13 @@ void ScXMLTableRowCellContext::AddNonFormulaCell( const ScAddress& rCellPos )
 void ScXMLTableRowCellContext::PutFormulaCell( const ScAddress& rCellPos )
 {
     ScDocument* pDoc = rXMLImport.GetDocument();
+    ScDocumentImport& rDoc = rXMLImport.GetDoc();
 
     OUString aText = maFormula->first;
     OUString aFormulaNmsp = maFormula->second;
 
     ::boost::scoped_ptr<ScExternalRefManager::ApiGuard> pExtRefGuard (
             new ScExternalRefManager::ApiGuard(pDoc));
-
 
     if ( !aText.isEmpty() )
     {
@@ -1342,18 +1338,17 @@ void ScXMLTableRowCellContext::PutFormulaCell( const ScAddress& rCellPos )
             if( (eGrammar == formula::FormulaGrammar::GRAM_EXTERNAL) && !aFormulaNmsp.isEmpty() )
                 pCode->AddStringXML( aFormulaNmsp );
 
-            pDoc->IncXMLImportedFormulaCount( aText.getLength() );
+            rDoc.getDoc().IncXMLImportedFormulaCount( aText.getLength() );
             ScFormulaCell* pNewCell = new ScFormulaCell(pDoc, rCellPos, pCode.get(), eGrammar, MM_NONE);
             SetFormulaCell(pNewCell);
-            pNewCell = pDoc->SetFormulaCell(rCellPos, pNewCell);
-            if (pNewCell)
-                pNewCell->SetNeedNumberFormat( true );
+            rDoc.setFormulaCell(rCellPos, pNewCell);
+            pNewCell->SetNeedNumberFormat( true );
         }
         else if ( aText[0] == '\'' && aText.getLength() > 1 )
         {
             //  for bEnglish, "'" at the beginning is always interpreted as text
             //  marker and stripped
-            pDoc->SetTextCell(rCellPos, aText.copy(1));
+            rDoc.setStringCell(rCellPos, aText.copy(1));
         }
         else
         {
@@ -1361,11 +1356,11 @@ void ScXMLTableRowCellContext::PutFormulaCell( const ScAddress& rCellPos )
             sal_uInt32 nEnglish = pFormatter->GetStandardIndex(LANGUAGE_ENGLISH_US);
             double fVal;
             if ( pFormatter->IsNumberFormat( aText, nEnglish, fVal ) )
-                pDoc->SetValue(rCellPos, fVal);
+                rDoc.setNumericCell(rCellPos, fVal);
             //the (english) number format will not be set
             //search matching local format and apply it
             else
-                pDoc->SetTextCell(rCellPos, aText);
+                rDoc.setStringCell(rCellPos, aText);
         }
     }
 }

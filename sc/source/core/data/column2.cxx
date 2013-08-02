@@ -1626,41 +1626,6 @@ void ScColumn::CopyCellTextAttrsToDocument(SCROW nRow1, SCROW nRow2, ScColumn& r
     }
 }
 
-namespace {
-
-class CellTextAttrInitializer
-{
-    sc::CellTextAttrStoreType maAttrs;
-    sc::CellTextAttrStoreType::iterator miPos;
-public:
-    CellTextAttrInitializer() : maAttrs(MAXROWCOUNT), miPos(maAttrs.begin()) {}
-
-    void operator() (const sc::CellStoreType::value_type& node)
-    {
-        if (node.type == sc::element_type_empty)
-            return;
-
-        // Fill with default values for non-empty cell segments.
-        std::vector<sc::CellTextAttr> aDefaults(node.size);
-        miPos = maAttrs.set(miPos, node.position, aDefaults.begin(), aDefaults.end());
-    }
-
-    void swap(sc::CellTextAttrStoreType& rAttrs)
-    {
-        maAttrs.swap(rAttrs);
-    }
-};
-
-}
-
-void ScColumn::ResetCellTextAttrs()
-{
-    CellTextAttrInitializer aFunc;
-    std::for_each(maCells.begin(), maCells.end(), aFunc);
-    aFunc.swap(maCellTextAttrs);
-    CellStorageModified();
-}
-
 void ScColumn::SwapCellTextAttrs( SCROW nRow1, SCROW nRow2 )
 {
     typedef std::pair<sc::CellTextAttrStoreType::iterator,size_t> PosType;

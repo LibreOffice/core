@@ -53,6 +53,7 @@
 class ScMyStyleNumberFormats;
 class XMLNumberFormatAttributesExportHelper;
 class ScEditEngineDefaulter;
+class ScDocumentImport;
 
 enum ScXMLDocTokens
 {
@@ -802,6 +803,7 @@ class ScXMLImport: public SvXMLImport, boost::noncopyable
     CellTypeMap             aCellTypeMap;
 
     ScDocument*             pDoc;
+    boost::scoped_ptr<ScDocumentImport> mpDocImport;
     boost::scoped_ptr<ScCompiler> mpComp; // For error-checking of cached string cell values.
     boost::scoped_ptr<ScEditEngineDefaulter> mpEditEngine;
     mutable boost::scoped_ptr<ScXMLEditAttributeMap> mpEditAttrMap;
@@ -935,7 +937,6 @@ class ScXMLImport: public SvXMLImport, boost::noncopyable
     bool                    bRemoveLastChar;
     bool                    bNullDateSetted;
     bool                    bSelfImportingXMLSet;
-    bool                    bLatinDefaultStyle;     // latin-only number format in default style?
     bool                    bFromWrapper;           // called from ScDocShell / ScXMLImportWrapper?
     bool mbHasNewCondFormatData;
 
@@ -976,6 +977,8 @@ public:
     virtual void SetStatistics(
         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue> & i_rStats);
 
+    ScDocumentImport& GetDoc();
+
     inline ScDocument*          GetDocument()           { return pDoc; }
     inline const ScDocument*    GetDocument() const     { return pDoc; }
 
@@ -983,8 +986,6 @@ public:
 
     sal_uInt16 GetStyleFamilyMask() const { return nStyleFamilyMask; }
     bool IsStylesOnlyMode() const { return !bLoadDoc; }
-
-    bool IsLatinDefaultStyle() const  { return bLatinDefaultStyle; }
 
     sal_Int16 GetCellType(const OUString& rStrValue) const;
 

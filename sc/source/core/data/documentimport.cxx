@@ -15,13 +15,15 @@
 #include "docoptio.hxx"
 #include "globalnames.hxx"
 #include "mtvelements.hxx"
+#include "tokenarray.hxx"
 
 struct ScDocumentImportImpl
 {
     ScDocument& mrDoc;
     sc::ColumnBlockPositionSet maBlockPosSet;
+    sal_uInt16 mnDefaultScriptNumeric;
 
-    ScDocumentImportImpl(ScDocument& rDoc) : mrDoc(rDoc), maBlockPosSet(rDoc) {}
+    ScDocumentImportImpl(ScDocument& rDoc) : mrDoc(rDoc), maBlockPosSet(rDoc), mnDefaultScriptNumeric(SC_SCRIPTTYPE_UNKNOWN) {}
 };
 
 ScDocumentImport::ScDocumentImport(ScDocument& rDoc) : mpImpl(new ScDocumentImportImpl(rDoc)) {}
@@ -38,6 +40,11 @@ ScDocument& ScDocumentImport::getDoc()
 const ScDocument& ScDocumentImport::getDoc() const
 {
     return mpImpl->mrDoc;
+}
+
+void ScDocumentImport::setDefaultNumericScript(sal_uInt16 nScript)
+{
+    mpImpl->mnDefaultScriptNumeric = nScript;
 }
 
 SCTAB ScDocumentImport::getSheetIndex(const OUString& rName) const
@@ -78,8 +85,39 @@ void ScDocumentImport::setAutoInput(const ScAddress& rPos, const OUString& rStr)
     if (!pTab)
         return;
 
-    pTab->aCol[rPos.Col()].SetString(
-        rPos.Row(), rPos.Tab(), rStr, mpImpl->mrDoc.GetAddressConvention());
+    sc::ColumnBlockPosition* pBlockPos =
+        mpImpl->maBlockPosSet.getBlockPosition(rPos.Tab(), rPos.Col());
+
+    if (!pBlockPos)
+        return;
+
+    ScCellValue aCell;
+    pTab->aCol[rPos.Col()].ParseString(
+        aCell, rPos.Row(), rPos.Tab(), rStr, mpImpl->mrDoc.GetAddressConvention(), NULL);
+
+    sc::CellStoreType& rCells = pTab->aCol[rPos.Col()].maCells;
+    switch (aCell.meType)
+    {
+        case CELLTYPE_STRING:
+            // string is copied.
+            pBlockPos->miCellPos = rCells.set(pBlockPos->miCellPos, rPos.Row(), *aCell.mpString);
+        break;
+        case CELLTYPE_EDIT:
+            // Cell takes the ownership of the text object.
+            pBlockPos->miCellPos = rCells.set(pBlockPos->miCellPos, rPos.Row(), aCell.mpEditText);
+            aCell.mpEditText = NULL;
+        break;
+        case CELLTYPE_VALUE:
+            pBlockPos->miCellPos = rCells.set(pBlockPos->miCellPos, rPos.Row(), aCell.mfValue);
+        break;
+        case CELLTYPE_FORMULA:
+            // This formula cell instance is directly placed in the document without copying.
+            pBlockPos->miCellPos = rCells.set(pBlockPos->miCellPos, rPos.Row(), aCell.mpFormula);
+            aCell.mpFormula = NULL;
+        break;
+        default:
+            pBlockPos->miCellPos = rCells.set_empty(pBlockPos->miCellPos, rPos.Row(), rPos.Row());
+    }
 }
 
 void ScDocumentImport::setNumericCell(const ScAddress& rPos, double fVal)
@@ -88,7 +126,14 @@ void ScDocumentImport::setNumericCell(const ScAddress& rPos, double fVal)
     if (!pTab)
         return;
 
-    pTab->aCol[rPos.Col()].SetValue(rPos.Row(), fVal);
+    sc::ColumnBlockPosition* pBlockPos =
+        mpImpl->maBlockPosSet.getBlockPosition(rPos.Tab(), rPos.Col());
+
+    if (!pBlockPos)
+        return;
+
+    sc::CellStoreType& rCells = pTab->aCol[rPos.Col()].maCells;
+    pBlockPos->miCellPos = rCells.set(pBlockPos->miCellPos, rPos.Row(), fVal);
 }
 
 void ScDocumentImport::setStringCell(const ScAddress& rPos, const OUString& rStr)
@@ -97,7 +142,30 @@ void ScDocumentImport::setStringCell(const ScAddress& rPos, const OUString& rStr
     if (!pTab)
         return;
 
-    pTab->aCol[rPos.Col()].SetRawString(rPos.Row(), rStr);
+    sc::ColumnBlockPosition* pBlockPos =
+        mpImpl->maBlockPosSet.getBlockPosition(rPos.Tab(), rPos.Col());
+
+    if (!pBlockPos)
+        return;
+
+    sc::CellStoreType& rCells = pTab->aCol[rPos.Col()].maCells;
+    pBlockPos->miCellPos = rCells.set(pBlockPos->miCellPos, rPos.Row(), rStr);
+}
+
+void ScDocumentImport::setEditCell(const ScAddress& rPos, EditTextObject* pEditText)
+{
+    ScTable* pTab = mpImpl->mrDoc.FetchTable(rPos.Tab());
+    if (!pTab)
+        return;
+
+    sc::ColumnBlockPosition* pBlockPos =
+        mpImpl->maBlockPosSet.getBlockPosition(rPos.Tab(), rPos.Col());
+
+    if (!pBlockPos)
+        return;
+
+    sc::CellStoreType& rCells = pTab->aCol[rPos.Col()].maCells;
+    pBlockPos->miCellPos = rCells.set(pBlockPos->miCellPos, rPos.Row(), pEditText);
 }
 
 void ScDocumentImport::setFormulaCell(
@@ -107,8 +175,15 @@ void ScDocumentImport::setFormulaCell(
     if (!pTab)
         return;
 
-    pTab->aCol[rPos.Col()].SetFormulaCell(
-        rPos.Row(), new ScFormulaCell(&mpImpl->mrDoc, rPos, rFormula, eGrammar));
+    sc::ColumnBlockPosition* pBlockPos =
+        mpImpl->maBlockPosSet.getBlockPosition(rPos.Tab(), rPos.Col());
+
+    if (!pBlockPos)
+        return;
+
+    sc::CellStoreType& rCells = pTab->aCol[rPos.Col()].maCells;
+    pBlockPos->miCellPos =
+        rCells.set(pBlockPos->miCellPos, rPos.Row(), new ScFormulaCell(&mpImpl->mrDoc, rPos, rFormula, eGrammar));
 }
 
 void ScDocumentImport::setFormulaCell(const ScAddress& rPos, const ScTokenArray& rArray)
@@ -117,8 +192,133 @@ void ScDocumentImport::setFormulaCell(const ScAddress& rPos, const ScTokenArray&
     if (!pTab)
         return;
 
-    pTab->aCol[rPos.Col()].SetFormulaCell(
-        rPos.Row(), new ScFormulaCell(&mpImpl->mrDoc, rPos, &rArray));
+    sc::ColumnBlockPosition* pBlockPos =
+        mpImpl->maBlockPosSet.getBlockPosition(rPos.Tab(), rPos.Col());
+
+    if (!pBlockPos)
+        return;
+
+    sc::CellStoreType& rCells = pTab->aCol[rPos.Col()].maCells;
+    pBlockPos->miCellPos =
+        rCells.set(pBlockPos->miCellPos, rPos.Row(), new ScFormulaCell(&mpImpl->mrDoc, rPos, &rArray));
+}
+
+void ScDocumentImport::setFormulaCell(const ScAddress& rPos, ScFormulaCell* pCell)
+{
+    ScTable* pTab = mpImpl->mrDoc.FetchTable(rPos.Tab());
+    if (!pTab)
+        return;
+
+    sc::ColumnBlockPosition* pBlockPos =
+        mpImpl->maBlockPosSet.getBlockPosition(rPos.Tab(), rPos.Col());
+
+    if (!pBlockPos)
+        return;
+
+    sc::CellStoreType& rCells = pTab->aCol[rPos.Col()].maCells;
+    pBlockPos->miCellPos =
+        rCells.set(pBlockPos->miCellPos, rPos.Row(), pCell);
+}
+
+void ScDocumentImport::setMatrixCells(
+    const ScRange& rRange, const ScTokenArray& rArray, formula::FormulaGrammar::Grammar eGram)
+{
+    const ScAddress& rBasePos = rRange.aStart;
+
+    ScTable* pTab = mpImpl->mrDoc.FetchTable(rBasePos.Tab());
+    if (!pTab)
+        return;
+
+    sc::ColumnBlockPosition* pBlockPos =
+        mpImpl->maBlockPosSet.getBlockPosition(rBasePos.Tab(), rBasePos.Col());
+
+    if (!pBlockPos)
+        return;
+
+    sc::CellStoreType& rCells = pTab->aCol[rBasePos.Col()].maCells;
+
+    // Set the master cell.
+    ScFormulaCell* pCell = new ScFormulaCell(&mpImpl->mrDoc, rBasePos, &rArray, eGram, MM_FORMULA);
+
+    pBlockPos->miCellPos =
+        rCells.set(pBlockPos->miCellPos, rBasePos.Row(), pCell);
+
+    // Set the reference cells.
+    ScSingleRefData aRefData;
+    aRefData.InitFlags();
+    aRefData.SetColRel(true);
+    aRefData.SetRowRel(true);
+    aRefData.SetTabRel(true);
+    aRefData.SetAddress(rBasePos, rBasePos);
+
+    ScTokenArray aArr; // consists only of one single reference token.
+    ScToken* t = static_cast<ScToken*>(aArr.AddMatrixSingleReference(aRefData));
+
+    ScAddress aPos = rBasePos;
+    for (SCROW nRow = rRange.aStart.Row()+1; nRow <= rRange.aEnd.Row(); ++nRow)
+    {
+        // Token array must be cloned so that each formula cell receives its own copy.
+        aPos.SetRow(nRow);
+        // Reference in each cell must point to the origin cell relative to the current cell.
+        aRefData.SetAddress(rBasePos, aPos);
+        t->GetSingleRef() = aRefData;
+        boost::scoped_ptr<ScTokenArray> pTokArr(aArr.Clone());
+        pCell = new ScFormulaCell(&mpImpl->mrDoc, aPos, pTokArr.get(), eGram, MM_REFERENCE);
+        pBlockPos->miCellPos =
+            rCells.set(pBlockPos->miCellPos, aPos.Row(), pCell);
+    }
+
+    for (SCCOL nCol = rRange.aStart.Col()+1; nCol <= rRange.aEnd.Col(); ++nCol)
+    {
+        pBlockPos = mpImpl->maBlockPosSet.getBlockPosition(rBasePos.Tab(), nCol);
+        if (!pBlockPos)
+            return;
+
+        sc::CellStoreType& rColCells = pTab->aCol[nCol].maCells;
+
+        aPos.SetCol(nCol);
+        for (SCROW nRow = rRange.aStart.Row(); nRow <= rRange.aEnd.Row(); ++nRow)
+        {
+            aPos.SetRow(nRow);
+            aRefData.SetAddress(rBasePos, aPos);
+            t->GetSingleRef() = aRefData;
+            boost::scoped_ptr<ScTokenArray> pTokArr(aArr.Clone());
+            pCell = new ScFormulaCell(&mpImpl->mrDoc, aPos, pTokArr.get(), eGram, MM_REFERENCE);
+            pBlockPos->miCellPos =
+                rColCells.set(pBlockPos->miCellPos, aPos.Row(), pCell);
+        }
+    }
+}
+
+namespace {
+
+class CellTextAttrInitializer
+{
+    sc::CellTextAttrStoreType maAttrs;
+    sc::CellTextAttrStoreType::iterator miPos;
+    sal_uInt16 mnScriptNumeric;
+public:
+    CellTextAttrInitializer(sal_uInt16 nScriptNumeric) : maAttrs(MAXROWCOUNT), miPos(maAttrs.begin()), mnScriptNumeric(nScriptNumeric) {}
+
+    void operator() (const sc::CellStoreType::value_type& node)
+    {
+        if (node.type == sc::element_type_empty)
+            return;
+
+        // Fill with default values for non-empty cell segments.
+        sc::CellTextAttr aDefault;
+        if (node.type == sc::element_type_numeric)
+            aDefault.mnScriptType = mnScriptNumeric;
+        std::vector<sc::CellTextAttr> aDefaults(node.size, aDefault);
+        miPos = maAttrs.set(miPos, node.position, aDefaults.begin(), aDefaults.end());
+    }
+
+    void swap(sc::CellTextAttrStoreType& rAttrs)
+    {
+        maAttrs.swap(rAttrs);
+    }
+};
+
 }
 
 void ScDocumentImport::finalize()
@@ -134,11 +334,16 @@ void ScDocumentImport::finalize()
         ScColumn* pCol = &rTab.aCol[0];
         ScColumn* pColEnd = pCol + static_cast<size_t>(MAXCOLCOUNT);
         for (; pCol != pColEnd; ++pCol)
-        {
-            ScColumn& rCol = *pCol;
-            rCol.ResetCellTextAttrs();
-        }
+            initColumn(*pCol);
     }
+}
+
+void ScDocumentImport::initColumn(ScColumn& rCol)
+{
+    CellTextAttrInitializer aFunc(mpImpl->mnDefaultScriptNumeric);
+    std::for_each(rCol.maCells.begin(), rCol.maCells.end(), aFunc);
+    aFunc.swap(rCol.maCellTextAttrs);
+    rCol.CellStorageModified();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

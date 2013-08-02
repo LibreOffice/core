@@ -17,9 +17,12 @@
 
 #include <boost/noncopyable.hpp>
 
+class EditTextObject;
 class ScDocument;
+class ScColumn;
 class ScAddress;
 class ScTokenArray;
+class ScFormulaCell;
 struct ScDocumentImportImpl;
 
 /**
@@ -42,6 +45,8 @@ public:
     ScDocument& getDoc();
     const ScDocument& getDoc() const;
 
+    void setDefaultNumericScript(sal_uInt16 nScript);
+
     /**
      * @param rName sheet name.
      *
@@ -57,10 +62,18 @@ public:
     void setAutoInput(const ScAddress& rPos, const OUString& rStr);
     void setNumericCell(const ScAddress& rPos, double fVal);
     void setStringCell(const ScAddress& rPos, const OUString& rStr);
+    void setEditCell(const ScAddress& rPos, EditTextObject* pEditText);
     void setFormulaCell(const ScAddress& rPos, const OUString& rFormula, formula::FormulaGrammar::Grammar eGrammar);
     void setFormulaCell(const ScAddress& rPos, const ScTokenArray& rArray);
+    void setFormulaCell(const ScAddress& rPos, ScFormulaCell* pCell);
+
+    void setMatrixCells(
+        const ScRange& rRange, const ScTokenArray& rArray, formula::FormulaGrammar::Grammar eGrammar);
 
     void finalize();
+
+private:
+    void initColumn(ScColumn& rCol);
 };
 
 #endif

@@ -66,6 +66,7 @@
 #include "externalrefmgr.hxx"
 #include "editutil.hxx"
 #include "editattributemap.hxx"
+#include "documentimport.hxx"
 
 #include <comphelper/extract.hxx>
 
@@ -2073,7 +2074,6 @@ ScXMLImport::ScXMLImport(
     bRemoveLastChar(false),
     bNullDateSetted(false),
     bSelfImportingXMLSet(false),
-    bLatinDefaultStyle(false),
     bFromWrapper(false),
     mbHasNewCondFormatData(false)
 {
@@ -2314,6 +2314,11 @@ void ScXMLImport::SetStatistics(
     }
 }
 
+ScDocumentImport& ScXMLImport::GetDoc()
+{
+    return *mpDocImport;
+}
+
 sal_Int16 ScXMLImport::GetCellType(const OUString& rStrValue) const
 {
     CellTypeMap::const_iterator itr = aCellTypeMap.find(rStrValue);
@@ -2420,7 +2425,7 @@ void ScXMLImport::ExamineDefaultStyle()
 
                 sal_uInt8 nScript = pDoc->GetStringScriptType( aDecSep );
                 if ( nScript == 0 || nScript == SCRIPTTYPE_LATIN )
-                    bLatinDefaultStyle = true;
+                    mpDocImport->setDefaultNumericScript(SCRIPTTYPE_LATIN);
             }
         }
     }
@@ -2928,6 +2933,7 @@ throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::R
     if (!pDoc)
         throw lang::IllegalArgumentException();
 
+    mpDocImport.reset(new ScDocumentImport(*pDoc));
     mpComp.reset(new ScCompiler(pDoc, ScAddress()));
     mpComp->SetGrammar(formula::FormulaGrammar::GRAM_ODFF);
 
@@ -3198,6 +3204,8 @@ throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeE
     {
         if (GetModel().is())
         {
+            mpDocImport->finalize();
+
             uno::Reference<document::XViewDataSupplier> xViewDataSupplier(GetModel(), uno::UNO_QUERY);
             if (xViewDataSupplier.is())
             {

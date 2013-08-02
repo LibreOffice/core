@@ -136,6 +136,11 @@ friend class sc::ColumnSpanSet;
     ScColumn(const ScColumn&); // disabled
     ScColumn& operator= (const ScColumn&); // disabled
 
+    bool ParseString(
+        ScCellValue& rCell,
+        SCROW nRow, SCTAB nTab, const String& rString, formula::FormulaGrammar::AddressConvention eConv,
+        ScSetStringParam* pParam );
+
 public:
                 ScColumn();
                 ~ScColumn();
@@ -522,12 +527,6 @@ private:
     void CellStorageModified();
 
     void CopyCellTextAttrsToDocument(SCROW nRow1, SCROW nRow2, ScColumn& rDestCol) const;
-
-    /**
-     * Clear and re-populate the cell text attribute array from the non-empty
-     * cells stored in the cell array.
-     */
-    void ResetCellTextAttrs();
 
     void SwapCellTextAttrs( SCROW nRow1, SCROW nRow2 );
 };
