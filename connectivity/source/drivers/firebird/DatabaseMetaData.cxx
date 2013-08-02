@@ -1501,9 +1501,9 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getPrimaryKeys(
     OUStringBuffer aQueryBuf("SELECT "
         "constr.RDB$RELATION_NAME, "    // 1. Table Name
         "inds.RDB$FIELD_NAME, "         // 2. Column Name
-        "inds.RDB$SORT_ORDER, "         // 3. Sequence Number
-        "constr.RDB$CONSTRAINT_NAME, "  // 4 Constraint name
-        "FROM RDB$RELATION_FIELDS constr "
+        "inds.RDB$FIELD_POSITION, "     // 3. Sequence Number
+        "constr.RDB$CONSTRAINT_NAME "   // 4 Constraint name
+        "FROM RDB$RELATION_CONSTRAINTS constr "
         "JOIN RDB$INDEX_SEGMENTS inds "
         "on (constr.RDB$INDEX_NAME = inds.RDB$INDEX_NAME) ");
 
