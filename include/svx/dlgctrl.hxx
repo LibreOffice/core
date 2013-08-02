@@ -321,6 +321,7 @@ public:
     void SelectEntryByList(const XDashList* pList, const String& rStr, const XDash& rDash, sal_uInt16 nDist = 0);
 };
 
+
 /************************************************************************/
 
 class SVX_DLLPUBLIC LineEndLB : public ListBox
@@ -390,6 +391,7 @@ private:
 
 public:
     SvxXLinePreview( Window* pParent, const ResId& rResId );
+    SvxXLinePreview( Window* pParent );
     virtual ~SvxXLinePreview();
 
     void SetLineAttributes(const SfxItemSet& rItemSet);

@@ -67,8 +67,8 @@
       </properties>
     </glade-widget-class>
 
-    <glade-widget-class title="Color ListBox" name="svtlo-ColorListBox"
-                        generic-name="Color ListBox" parent="GtkComboBox"
+    <glade-widget-class title="Svt Color ListBox" name="svtlo-ColorListBox"
+                        generic-name="Svt Color ListBox" parent="GtkComboBox"
                         icon-name="widget-gtk-combobox">
       <properties>
         <property save="True" query="False" id="dropdown" default="True" name="Use DropDown">
@@ -79,8 +79,8 @@
       </properties>
     </glade-widget-class>
 
-    <glade-widget-class title="Other Color ListBox" name="svxlo-ColorLB"
-                        generic-name="Other Color ListBox" parent="GtkComboBox"
+    <glade-widget-class title="Svx Color ListBox" name="svxlo-ColorLB"
+                        generic-name="Svx Color ListBox" parent="GtkComboBox"
                         icon-name="widget-gtk-combobox">
       <properties>
         <property save="True" query="False" id="dropdown" default="True" name="Use DropDown">
@@ -151,7 +151,31 @@
       </properties>
     </glade-widget-class>
 
-    <glade-widget-class title="Line ListBox" name="svtlo-LineListBox"
+    <glade-widget-class title="Svx Line End ListBox" name="svxlo-LineEndLB"
+                        generic-name="Line End ListBox" parent="GtkComboBox"
+                        icon-name="widget-gtk-combobox">
+      <properties>
+        <property save="True" query="False" id="dropdown" default="True" name="Use DropDown">
+          <parameter-spec>
+            <type>GParamBoolean</type>
+          </parameter-spec>
+        </property>
+      </properties>
+    </glade-widget-class>
+
+    <glade-widget-class title="Svx Line ListBox" name="svxlo-LineLB"
+                        generic-name="Line ListBox" parent="GtkComboBox"
+                        icon-name="widget-gtk-combobox">
+      <properties>
+        <property save="True" query="False" id="dropdown" default="True" name="Use DropDown">
+          <parameter-spec>
+            <type>GParamBoolean</type>
+          </parameter-spec>
+        </property>
+      </properties>
+    </glade-widget-class>
+
+    <glade-widget-class title="Svt Line ListBox" name="svtlo-LineListBox"
                         generic-name="Line ListBox" parent="GtkComboBox"
                         icon-name="widget-gtk-combobox">
       <properties>
@@ -217,6 +241,9 @@
                         icon-name="widget-gtk-drawingarea"/>
     <glade-widget-class title="Rectangle Preview" name="svxlo-SvxXRectPreview"
                         generic-name="Rectangle Preview Window" parent="GtkDrawingArea"
+                        icon-name="widget-gtk-drawingarea"/>
+    <glade-widget-class title="SvxXLinePreview" name="svxlo-SvxXLinePreview"
+                        generic-name="Line Preview Window" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
     <glade-widget-class title="Shadow Preview" name="svxlo-SvxXShadowPreview"
                         generic-name="Shadow Preview Window" parent="GtkDrawingArea"
