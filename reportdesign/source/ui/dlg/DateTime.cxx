@@ -53,10 +53,10 @@ ODateTimeDialog::ODateTimeDialog( Window* _pParent
                                            ,OReportController* _pController)
     : ModalDialog( _pParent, "DateTimeDialog" , "modules/dbreport/ui/datetimedialog.ui" )
 
-    ,m_aDateControlling()
-    ,m_aTimeControlling()
-    ,m_pController(_pController)
-    ,m_xHoldAlive(_xHoldAlive)
+    , m_aDateControlling()
+    , m_aTimeControlling()
+    , m_pController(_pController)
+    , m_xHoldAlive(_xHoldAlive)
 {
     get(m_pDate,"date");
     get(m_pFTDateFormat,"datelistbox_label");
@@ -76,23 +76,21 @@ ODateTimeDialog::ODateTimeDialog( Window* _pParent
         InsertEntry(util::NumberFormat::DATE);
         InsertEntry(util::NumberFormat::TIME);
     }
-    catch(uno::Exception&)
+    catch (const uno::Exception&)
     {
     }
 
-    m_pDateListBox->SetDropDownLineCount(20);
     m_pDateListBox->SelectEntryPos(0);
 
-    m_pTimeListBox->SetDropDownLineCount(20);
     m_pTimeListBox->SelectEntryPos(0);
 
     // use nice enhancement, to toggle enable/disable if a checkbox is checked or not
     m_aDateControlling.enableOnCheckMark( *m_pDate, *m_pFTDateFormat, *m_pDateListBox);
     m_aTimeControlling.enableOnCheckMark( *m_pTime, *m_pFTTimeFormat, *m_pTimeListBox);
 
-    CheckBox* pCheckBoxes[] = { m_pDate,m_pTime};
-    for ( size_t i = 0 ; i < sizeof(pCheckBoxes)/sizeof(pCheckBoxes[0]); ++i)
-        pCheckBoxes[i]->SetClickHdl(LINK(this,ODateTimeDialog,CBClickHdl));
+    CheckBox* aCheckBoxes[] = { m_pDate,m_pTime};
+    for ( size_t i = 0 ; i < SAL_N_ELEMENTS(aCheckBoxes); ++i)
+        aCheckBoxes[i]->SetClickHdl(LINK(this,ODateTimeDialog,CBClickHdl));
 
 }
 // -----------------------------------------------------------------------------
@@ -165,7 +163,7 @@ short ODateTimeDialog::Execute()
 
             m_pController->executeChecked(SID_DATETIME,aValues);
         }
-        catch(uno::Exception&)
+        catch (const uno::Exception&)
         {
             nRet = RET_NO;
         }
