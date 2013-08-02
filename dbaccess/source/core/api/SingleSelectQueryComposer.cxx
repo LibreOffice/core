@@ -1332,8 +1332,8 @@ OUString OSingleSelectQueryComposer::getTableAlias(const Reference< XPropertySet
         column->getPropertyValue(PROPERTY_NAME)         >>= aColumnName;
 
         Sequence< OUString> aNames(m_pTables->getElementNames());
-        const OUString* pBegin   = aNames.getConstArray();
-        const OUString* pEnd     = pBegin + aNames.getLength();
+        const OUString* pBegin     = aNames.getConstArray();
+        const OUString* const pEnd = pBegin + aNames.getLength();
 
         if(aTable.isEmpty())
         { // we haven't found a table name, now we must search every table for this column
