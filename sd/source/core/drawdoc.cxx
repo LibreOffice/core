@@ -1058,12 +1058,7 @@ void SdDrawDocument::SetLayoutVector()
     for(int index=0; index<layoutlistsize ;index++)
     {
         Reference<XNode> layoutnode = layoutlist->item(index);      //get i'th layout element
-        layoutinfo.push_back(layoutnode);
+        malayoutinfo.push_back(layoutnode);
     }
-}
-
-std::vector<Reference<XNode>> GetLayoutVector()
-{
-    return layoutinfo;
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

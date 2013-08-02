@@ -188,7 +188,7 @@ private:
                         DECL_LINK(OnlineSpellEventHdl, EditStatus*);
 
     std::vector< OUString > maAnnotationAuthors;
-    std::vector<com::sun::star::uno::Reference<com::sun::star::xml::dom::XNode>> layoutinfo;
+    std::vector<com::sun::star::uno::Reference<com::sun::star::xml::dom::XNode>> malayoutinfo;
 
     bool                mbUseEmbedFonts;
 
@@ -260,7 +260,7 @@ public:
     bool IsStartWithPresentation() const;
     void SetStartWithPresentation( bool bStartWithPresentation );
     void SetLayoutVector();
-    std::vector<com::sun::star::uno::Reference<com::sun::star::xml::dom::XNode>> GetLayoutVector();
+    inline std::vector<com::sun::star::uno::Reference<com::sun::star::xml::dom::XNode>>& GetLayoutVector(){ return malayoutinfo; }
     /** Insert pages into this document
 
         This method inserts whole pages into this document, either

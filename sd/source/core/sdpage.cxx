@@ -1190,53 +1190,6 @@ static const LayoutDescriptor& GetLayoutDescriptor( AutoLayout eLayout )
     return aLayouts[ eLayout - AUTOLAYOUT__START ];
 }
 
-#define EXPAND_PROTOCOL "vnd.sun.star.expand:"
-//to get the root element of the xml file
-Reference<XElement> getRootElement()
-{
-    const Reference<css::uno::XComponentContext> xContext(comphelper_getProcessComponentContext());
-    Reference< XMultiServiceFactory > xServiceFactory(xContext->getServiceManager(), UNO_QUERY_THROW );
-    Reference< util::XMacroExpander > xMacroExpander =util::theMacroExpander::get(xContext);
-    Reference< XMultiServiceFactory > xConfigProvider =configuration::theDefaultProvider::get( xContext );
-
-    Any propValue = uno::makeAny(
-        beans::PropertyValue(
-            "nodepath", -1,
-            uno::makeAny( OUString( "/org.openoffice.Office.Impress/Misc" )),
-            beans::PropertyState_DIRECT_VALUE ) );
-
-    Reference<container::XNameAccess> xNameAccess(
-        xConfigProvider->createInstanceWithArguments(
-            "com.sun.star.configuration.ConfigurationAccess",
-            Sequence<Any>( &propValue, 1 ) ), UNO_QUERY_THROW );
-    Sequence< rtl::OUString > aFiles;
-    xNameAccess->getByName( "LayoutListFiles" ) >>= aFiles;
-    rtl::OUString aURL;
-    for( sal_Int32 i=0; i<aFiles.getLength(); ++i )
-    {
-        aURL = aFiles[i];
-        if( aURL.startsWith( EXPAND_PROTOCOL ) )
-        {
-            // cut protocol
-            rtl::OUString aMacro( aURL.copy( sizeof ( EXPAND_PROTOCOL ) -1 ) );
-            // decode uric class chars
-            aMacro = rtl::Uri::decode( aMacro, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
-            // expand macro string
-            aURL = xMacroExpander->expandMacros( aMacro );
-        }
-    }
-    if( aURL.startsWith( "file://" ) )
-    {
-        rtl::OUString aSysPath;
-        if( osl_getSystemPathFromFileURL( aURL.pData, &aSysPath.pData ) == osl_File_E_None )
-            aURL = aSysPath;
-    }
-    const Reference<XDocumentBuilder> xDocBuilder(css::xml::dom::DocumentBuilder::create(comphelper::getComponentContext(xServiceFactory)));
-    const Reference<XDocument> xDoc = xDocBuilder->parseURI(aURL);
-    const Reference<XElement> xRoot = xDoc->getDocumentElement();
-    return xRoot;//this loops seems to work only once,so temporary returning the root element
-}
-
 rtl::OUString enumtoString(AutoLayout aut)
 {
     rtl::OUString retstr;
@@ -1283,19 +1236,6 @@ rtl::OUString enumtoString(AutoLayout aut)
     return retstr;
 }
 
-void parseXml()
-{
-    int layoutlistsize;
-    const Reference<XElement> root= getRootElement();//get the root element of my xml file
-    const Reference<XNodeList> layoutlist = root->getElementsByTagName("layout");
-    layoutlistsize=layoutlist->getLength();
-    for(int index=0; index<layoutlistsize ;index++)
-    {
-        Reference<XNode> layoutnode = layoutlist->item(index);      //get i'th layout element
-        layoutinfo.push_back(layoutnode);
-    }
-}
-
 static void CalcAutoLayoutRectangles( SdPage& rPage, int nLayout, Rectangle* rRectangle ,const rtl::OUString& autolayout)
 {
     Rectangle aTitleRect;
@@ -1304,6 +1244,7 @@ static void CalcAutoLayoutRectangles( SdPage& rPage, int nLayout, Rectangle* rRe
     rtl::OUString sLayoutAttName;
     rtl::OUString sPresObjKindAttName;
     double propvalue[4];
+    std::vector<Reference<XNode>> malayoutinfo;
 
     if( rPage.GetPageKind() != PK_HANDOUT )
     {
@@ -1335,8 +1276,6 @@ static void CalcAutoLayoutRectangles( SdPage& rPage, int nLayout, Rectangle* rRe
     for(i=0; i< PRESOBJPROP; i++)
         propvalue[i]=0;
 
-    const Reference<XElement> root= getRootElement();//get the root element of my xml file
-
     Point       aTitlePos( aTitleRect.TopLeft() );
     Size        aLayoutSize( aLayoutRect.GetSize() );
     Point       aLayoutPos( aLayoutRect.TopLeft() );
@@ -1346,10 +1285,10 @@ static void CalcAutoLayoutRectangles( SdPage& rPage, int nLayout, Rectangle* rRe
     aTempPnt = aLayoutPos;
     sal_Bool    bRightToLeft = ( rPage.GetModel() && static_cast< SdDrawDocument* >( rPage.GetModel() )->GetDefaultWritingMode() == ::com::sun::star::text::WritingMode_RL_TB );
 
-    parseXml(); //calling this for temporary reference,have to use it somewhere else.
-    for(size_t y=0; y < layoutinfo.size(); y++) //loop through vector of Xnodes
+    malayoutinfo = static_cast< SdDrawDocument* >( rPage.GetModel() )->GetLayoutVector(); //getting vector from "SdDrawDocument"
+    for(size_t y=0; y < malayoutinfo.size(); y++) //loop through vector of Xnodes
     {
-        Reference<XNode> layoutnode = layoutinfo[y];      //get i'th layout element
+        Reference<XNode> layoutnode = malayoutinfo[y];      //get i'th layout element
         Reference<XNamedNodeMap> layoutattrlist =layoutnode->getAttributes();
         Reference<XNode> layoutattr = layoutattrlist->getNamedItem("type");
         sLayoutAttName=layoutattr->getNodeValue();              //get the attribute value of layout(i.e it's type)
