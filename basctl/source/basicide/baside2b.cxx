@@ -508,11 +508,13 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
     // see if there is an accelerator to be processed first
     bool bDone = SfxViewShell::Current()->KeyInput( rKEvt );
 
-    //sal_Unicode aChar = rKEvt.GetKeyCode().GetCode();
-    if( pCodeCompleteWnd->IsVisible() )
+    if( pCodeCompleteWnd->IsVisible() && CodeCompleteOptions::IsCodeCompleteOn() )
     {
         std::cerr << "EditorWindow::KeyInput" << std::endl;
         pCodeCompleteWnd->GetListBox()->KeyInput(rKEvt);
+        if( rKEvt.GetKeyCode().GetCode() == KEY_UP
+            || rKEvt.GetKeyCode().GetCode() == KEY_DOWN )
+            return;
     }
 
     if( (rKEvt.GetKeyCode().GetCode() == KEY_SPACE ||
@@ -2552,7 +2554,7 @@ CodeCompleteListBox::CodeCompleteListBox( CodeCompleteWindow* pPar )
 pCodeCompleteWindow( pPar )
 {
     SetDoubleClickHdl(LINK(this, CodeCompleteListBox, ImplDoubleClickHdl));
-    //SetSelectHdl(LINK(this, CodeCompleteListBox, ImplSelectionChangeHdl));
+    SetSelectHdl(LINK(this, CodeCompleteListBox, ImplSelectHdl));
 }
 
 IMPL_LINK_NOARG(CodeCompleteListBox, ImplDoubleClickHdl)
@@ -2561,11 +2563,11 @@ IMPL_LINK_NOARG(CodeCompleteListBox, ImplDoubleClickHdl)
     return 0;
 }
 
-/*IMPL_LINK_NOARG(CodeCompleteListBox, ImplSelectionChangeHdl)
-{
+IMPL_LINK_NOARG(CodeCompleteListBox, ImplSelectHdl)
+{//give back the focus to the parent
     pCodeCompleteWindow->pParent->GrabFocus();
     return 0;
-}*/
+}
 
 void CodeCompleteListBox::InsertSelectedEntry()
 {
@@ -2603,65 +2605,6 @@ void CodeCompleteListBox::InsertSelectedEntry()
     }
 }
 
-long CodeCompleteListBox::PreNotify( NotifyEvent& rNEvt )
-{
-    if( rNEvt.GetType() == EVENT_KEYINPUT )
-    {
-        std::cerr << "CodeCompleteListBox::PreNotify" << std::endl;
-        KeyEvent aKeyEvt = *rNEvt.GetKeyEvent();
-        sal_Unicode aChar = aKeyEvt.GetKeyCode().GetCode();
-        if( ( aChar >= KEY_A ) && ( aChar <= KEY_Z ) )
-        {
-            pCodeCompleteWindow->pParent->GetEditView()->InsertText( OUString(aKeyEvt.GetCharCode()) );
-            aFuncBuffer.append(aKeyEvt.GetCharCode());
-            SetVisibleEntries();
-            //pCodeCompleteWindow->pParent->GetEditView()->GetWindow()->GrabFocus();
-            return 0;
-        }
-        else
-        {
-            switch( aChar )
-            {
-                case KEY_ESCAPE: // hide, do nothing
-                    pCodeCompleteWindow->ClearAndHide();
-                    return 0;
-                case KEY_TAB: case KEY_SPACE:
-                /* space, tab the user probably have typed in the whole
-                 * procedure name: hide the window, and insert the tab/space
-                 */
-                    pCodeCompleteWindow->pParent->GetEditView()->InsertText( OUString(aKeyEvt.GetCharCode()) );
-                    pCodeCompleteWindow->Hide();
-                    pCodeCompleteWindow->pParent->GetEditView()->SetSelection( pCodeCompleteWindow->pParent->GetEditView()->CursorEndOfLine(pCodeCompleteWindow->GetTextSelection().GetStart()) );
-                    pCodeCompleteWindow->pParent->GrabFocus();
-                    return 0;
-                case KEY_BACKSPACE: case KEY_DELETE:
-                    if( aFuncBuffer.toString() != OUString("") )
-                    {
-                        TextPaM aEnd(pCodeCompleteWindow->aTextSelection.GetEnd().GetPara(), pCodeCompleteWindow->GetTextSelection().GetEnd().GetIndex() + aFuncBuffer.getLength());
-                        TextPaM aStart(pCodeCompleteWindow->aTextSelection.GetEnd().GetPara(), pCodeCompleteWindow->GetTextSelection().GetEnd().GetIndex() + aFuncBuffer.getLength()-1);
-                        aFuncBuffer = aFuncBuffer.remove(aFuncBuffer.getLength()-1, 1);
-                        pCodeCompleteWindow->pParent->GetEditView()->SetSelection(TextSelection(aStart, aEnd));
-                        pCodeCompleteWindow->pParent->GetEditView()->DeleteSelected();
-                        SetVisibleEntries();
-                    }
-                    else
-                    {
-                        pCodeCompleteWindow->ClearAndHide();
-                    }
-                    return 0;
-                case KEY_RETURN:
-                    InsertSelectedEntry();
-                    return 0;
-                /*case KEY_UP: case KEY_DOWN:
-                std::cerr << "up/down ke in PreNotify" << std::endl;
-                break;*/
-            }
-        }
-    }
-    //pCodeCompleteWindow->pParent->GrabFocus();
-    return ListBox::PreNotify( rNEvt );
-}
-
 void CodeCompleteListBox::SetVisibleEntries()
 {
     for(sal_uInt16 i=0; i< GetEntryCount(); ++i)
@@ -2678,11 +2621,9 @@ void CodeCompleteListBox::SetVisibleEntries()
 void CodeCompleteListBox::KeyInput( const KeyEvent& rKeyEvt )
 {
     std::cerr << "CodeCompleteListBox::KeyInput" << std::endl;
-    //pCodeCompleteWindow->pParent->GetEditView()->KeyInput( rKeyEvt );
     sal_Unicode aChar = rKeyEvt.GetKeyCode().GetCode();
     if( ( aChar >= KEY_A ) && ( aChar <= KEY_Z ) )
     {
-        //pCodeCompleteWindow->pParent->GetEditView()->InsertText( OUString(rKeyEvt.GetCharCode()) );
         aFuncBuffer.append(rKeyEvt.GetCharCode());
         SetVisibleEntries();
     }
@@ -2711,6 +2652,15 @@ void CodeCompleteListBox::KeyInput( const KeyEvent& rKeyEvt )
                 break;
             case KEY_RETURN:
                 InsertSelectedEntry();
+                break;
+            case KEY_UP: case KEY_DOWN:
+                std::cerr << "up/down ke in CodeCompleteListBox::KeyInput" << std::endl;
+                //GrabFocus();
+                NotifyEvent nEvt( EVENT_KEYINPUT, NULL, &rKeyEvt );
+                PreNotify(nEvt);
+                //pCodeCompleteWindow->pParent->GrabFocus();
+                //SetVisibleEntries();
+                //pCodeCompleteWindow->pParent->GrabFocus();
                 break;
         }
     }
