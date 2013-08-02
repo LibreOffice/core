@@ -33,11 +33,8 @@
 
 #define FL_CONTENT              10
 
-#define TSB_HELP                11
 #define FT_TITLE                12
 #define EDT_TITLE               13
-#define FT_INPUTHELP            14
-#define EDT_INPUTHELP           15
 
 #define TSB_SHOW                21
 #define FT_ACTION               22
