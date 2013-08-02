@@ -254,12 +254,9 @@ public:
 class ScTPValidationHelp : public SfxTabPage
 {
 private:
-    TriStateBox     aTsbHelp;
-    FixedLine       aFlContent;
-    FixedText       aFtTitle;
-    Edit            aEdtTitle;
-    FixedText       aFtInputHelp;
-    MultiLineEdit   aEdInputHelp;
+    TriStateBox*     pTsbHelp;
+    Edit*            pEdtTitle;
+    MultiLineEdit*   pEdInputHelp;
 
     void    Init();
 
