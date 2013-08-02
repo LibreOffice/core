@@ -158,10 +158,10 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
     bFormulaTextResult(false),
     mbPossibleErrorCell(false),
     mbCheckWithCompilerForError(false),
-    mbEditEngineHasText(false)
+    mbEditEngineHasText(false),
+    mbHasFormatRuns(false)
 {
     rtl::math::setNan(&fValue); // NaN by default
-    mpEditEngine->Clear();
 
     rXMLImport.SetRemoveLastChar(false);
     rXMLImport.GetTables().AddColumn(bTempIsCovered);
@@ -354,6 +354,7 @@ void ScXMLTableRowCellContext::PushParagraphSpan(const OUString& rSpan, const OU
 
 void ScXMLTableRowCellContext::PushParagraphField(SvxFieldData* pData, const OUString& rStyleName)
 {
+    mbHasFormatRuns = true;
     maFields.push_back(new Field(pData));
     Field& rField = maFields.back();
 
@@ -396,6 +397,7 @@ void ScXMLTableRowCellContext::PushFormat(sal_Int32 nBegin, sal_Int32 nEnd, cons
 
     const ScXMLEditAttributeMap& rEditAttrMap = GetScImport().GetEditAttributeMap();
 
+    mbHasFormatRuns = true;
     maFormats.push_back(new ParaFormat(*mpEditEngine));
     ParaFormat& rFmt = maFormats.back();
     rFmt.maSelection.nStartPara = rFmt.maSelection.nEndPara = mnCurParagraph;
@@ -591,6 +593,14 @@ void ScXMLTableRowCellContext::PushFormat(sal_Int32 nBegin, sal_Int32 nEnd, cons
         rFmt.maItemSet.Put(*pPoolItem);
 }
 
+OUString ScXMLTableRowCellContext::GetFirstParagraph() const
+{
+    if (maFirstParagraph.isEmpty())
+        return mpEditEngine->GetText(0);
+
+    return maFirstParagraph;
+}
+
 void ScXMLTableRowCellContext::PushParagraphFieldDate(const OUString& rStyleName)
 {
     PushParagraphField(new SvxDateField, rStyleName);
@@ -619,10 +629,22 @@ void ScXMLTableRowCellContext::PushParagraphEnd()
     // EditEngine always has at least one paragraph even when its content is empty.
 
     if (mbEditEngineHasText)
+    {
+        if (!maFirstParagraph.isEmpty())
+        {
+            mpEditEngine->SetText(maFirstParagraph);
+            maFirstParagraph = OUString();
+        }
         mpEditEngine->InsertParagraph(mpEditEngine->GetParagraphCount(), maParagraph.makeStringAndClear());
-    else
+    }
+    else if (mbHasFormatRuns)
     {
         mpEditEngine->SetText(maParagraph.makeStringAndClear());
+        mbEditEngineHasText = true;
+    }
+    else if (mnCurParagraph == 0)
+    {
+        maFirstParagraph = maParagraph.makeStringAndClear();
         mbEditEngineHasText = true;
     }
 
@@ -1018,7 +1040,7 @@ void ScXMLTableRowCellContext::PutTextCell( const ScAddress& rCurrentPos,
             if (maStringValue)
                 aCellString = *maStringValue;
             else if (mbEditEngineHasText)
-                aCellString = mpEditEngine->GetText(0);
+                aCellString = GetFirstParagraph();
             else if ( nCurrentCol > 0 && pOUText && !pOUText->isEmpty() )
                 aCellString = *pOUText;
             else
@@ -1059,10 +1081,10 @@ void ScXMLTableRowCellContext::PutTextCell( const ScAddress& rCurrentPos,
         }
         else if (mbEditEngineHasText)
         {
-            if (maFields.empty() && maFormats.empty() && mpEditEngine->GetParagraphCount() == 1)
+            if (!maFirstParagraph.isEmpty())
             {
                 // This is a normal text without format runs.
-                rDoc.setStringCell(rCurrentPos, mpEditEngine->GetText());
+                rDoc.setStringCell(rCurrentPos, maFirstParagraph);
             }
             else
             {
@@ -1441,7 +1463,8 @@ void ScXMLTableRowCellContext::HasSpecialCaseFormulaText()
     if (!mbEditEngineHasText || mbNewValueType)
         return;
 
-    OUString aStr = mpEditEngine->GetText(0);
+    OUString aStr = GetFirstParagraph();
+
     if (aStr.isEmpty() || aStr.startsWith("Err:"))
         mbPossibleErrorCell = true;
     else if (aStr.startsWith("#"))
@@ -1463,7 +1486,7 @@ void ScXMLTableRowCellContext::EndElement()
     HasSpecialCaseFormulaText();
     if( bFormulaTextResult && (mbPossibleErrorCell || mbCheckWithCompilerForError) )
     {
-        maStringValue.reset(mpEditEngine->GetText(0));
+        maStringValue.reset(GetFirstParagraph());
         nCellType = util::NumberFormat::TEXT;
     }
 
