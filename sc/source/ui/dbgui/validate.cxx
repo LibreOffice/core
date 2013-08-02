@@ -686,17 +686,13 @@ ScTPValidationHelp::ScTPValidationHelp( Window*         pParent,
                                           const SfxItemSet& rArgSet )
 
     :   SfxTabPage      ( pParent,
-                          ScResId( TP_VALIDATION_INPUTHELP ),
-                          rArgSet ),
-        aTsbHelp        ( this, ScResId( TSB_HELP ) ),
-        aFlContent      ( this, ScResId( FL_CONTENT ) ),
-        aFtTitle        ( this, ScResId( FT_TITLE ) ),
-        aEdtTitle       ( this, ScResId( EDT_TITLE ) ),
-        aFtInputHelp    ( this, ScResId( FT_INPUTHELP ) ),
-        aEdInputHelp    ( this, ScResId( EDT_INPUTHELP ) )
+                          "ValidationHelpTabPage" , "modules/scalc/ui/validationhelptabpage.ui" ,
+                          rArgSet )
 {
+    get(pTsbHelp,"tsbhelp");
+    get(pEdtTitle,"title");
+    get(pEdInputHelp,"inputhelp");
     Init();
-    FreeResource();
 }
 
 // -----------------------------------------------------------------------
@@ -709,7 +705,7 @@ ScTPValidationHelp::~ScTPValidationHelp()
 
 void ScTPValidationHelp::Init()
 {
-    aTsbHelp.EnableTriState( false );
+    pTsbHelp->EnableTriState( false );
 }
 
 //------------------------------------------------------------------------
@@ -734,28 +730,28 @@ void ScTPValidationHelp::Reset( const SfxItemSet& rArgSet )
     const SfxPoolItem* pItem;
 
     if ( rArgSet.GetItemState( FID_VALID_SHOWHELP, sal_True, &pItem ) == SFX_ITEM_SET )
-        aTsbHelp.SetState( ((const SfxBoolItem*)pItem)->GetValue() ? STATE_CHECK : STATE_NOCHECK );
+        pTsbHelp->SetState( ((const SfxBoolItem*)pItem)->GetValue() ? STATE_CHECK : STATE_NOCHECK );
     else
-        aTsbHelp.SetState( STATE_NOCHECK );
+        pTsbHelp->SetState( STATE_NOCHECK );
 
     if ( rArgSet.GetItemState( FID_VALID_HELPTITLE, sal_True, &pItem ) == SFX_ITEM_SET )
-        aEdtTitle.SetText( ((const SfxStringItem*)pItem)->GetValue() );
+        pEdtTitle->SetText( ((const SfxStringItem*)pItem)->GetValue() );
     else
-        aEdtTitle.SetText( EMPTY_STRING );
+        pEdtTitle->SetText( EMPTY_STRING );
 
     if ( rArgSet.GetItemState( FID_VALID_HELPTEXT, sal_True, &pItem ) == SFX_ITEM_SET )
-        aEdInputHelp.SetText( ((const SfxStringItem*)pItem)->GetValue() );
+        pEdInputHelp->SetText( ((const SfxStringItem*)pItem)->GetValue() );
     else
-        aEdInputHelp.SetText( EMPTY_STRING );
+        pEdInputHelp->SetText( EMPTY_STRING );
 }
 
 // -----------------------------------------------------------------------
 
 sal_Bool ScTPValidationHelp::FillItemSet( SfxItemSet& rArgSet )
 {
-    rArgSet.Put( SfxBoolItem( FID_VALID_SHOWHELP, aTsbHelp.GetState() == STATE_CHECK ) );
-    rArgSet.Put( SfxStringItem( FID_VALID_HELPTITLE, aEdtTitle.GetText() ) );
-    rArgSet.Put( SfxStringItem( FID_VALID_HELPTEXT, aEdInputHelp.GetText() ) );
+    rArgSet.Put( SfxBoolItem( FID_VALID_SHOWHELP, pTsbHelp->GetState() == STATE_CHECK ) );
+    rArgSet.Put( SfxStringItem( FID_VALID_HELPTITLE, pEdtTitle->GetText() ) );
+    rArgSet.Put( SfxStringItem( FID_VALID_HELPTEXT, pEdInputHelp->GetText() ) );
 
     return sal_True;
 }

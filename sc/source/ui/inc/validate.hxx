@@ -25,6 +25,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
+#include <vcl/vclmedit.hxx>
 #include <svtools/svmedit.hxx>
 
 #include "anyrefdg.hxx"
@@ -254,12 +255,9 @@ public:
 class ScTPValidationHelp : public SfxTabPage
 {
 private:
-    TriStateBox     aTsbHelp;
-    FixedLine       aFlContent;
-    FixedText       aFtTitle;
-    Edit            aEdtTitle;
-    FixedText       aFtInputHelp;
-    MultiLineEdit   aEdInputHelp;
+    TriStateBox*      pTsbHelp;
+    Edit*             pEdtTitle;
+    VclMultiLineEdit* pEdInputHelp;
 
     void    Init();
 
