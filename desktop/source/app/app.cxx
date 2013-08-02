@@ -1926,7 +1926,11 @@ sal_Bool Desktop::InitializeQuickstartMode( const Reference< XComponentContext >
         // #i105753# the following if was invented for performance
         // unfortunately this broke the Mac behavior which is to always run
         // in quickstart mode since Mac applications do not usually quit
-        // when the last document closes
+        // when the last document closes.
+        // Note that this claim that on OS X we "always run in quickstart mode"
+        // has nothing to do with (quick) *starting* (i.e. starting automatically
+        // when the user logs in), though, but with not quitting when no documents
+        // are open.
         #ifndef MACOSX
         if ( bQuickstart )
         #endif
