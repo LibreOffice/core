@@ -69,7 +69,7 @@ protected:
     SAL_DLLPRIVATE void    ImplInit( Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE WinBits ImplInitStyle( WinBits nStyle );
     SAL_DLLPRIVATE void    ImplLoadRes( const ResId& rResId );
-    sal_Bool                IsDropDownBox() const { return mpFloatWin ? sal_True : sal_False; }
+    sal_Bool               IsDropDownBox() const { return mpFloatWin ? sal_True : sal_False; }
 
 protected:
     explicit            ListBox( WindowType nType );
@@ -105,7 +105,7 @@ public:
 
     Rectangle           GetDropDownPosSizePixel() const;
 
-    void AdaptDropDownLineCountToMaximum();
+    void                AdaptDropDownLineCountToMaximum();
     void                SetDropDownLineCount( sal_uInt16 nLines );
     sal_uInt16          GetDropDownLineCount() const;
 
@@ -150,61 +150,61 @@ public:
         to change the internal behaviour of the ListBox implementation
         for specific entries.
     */
-    void            SetEntryFlags( sal_uInt16 nPos, long nFlags );
+    void                SetEntryFlags( sal_uInt16 nPos, long nFlags );
 
     /** this methods gets the current combination of flags from the
         LISTBOX_ENTRY_FLAG_* defines from the given entry.
         See description of the possible LISTBOX_ENTRY_FLAG_* flags
         for details.
     */
-    long            GetEntryFlags( sal_uInt16 nPos ) const;
+    long                GetEntryFlags( sal_uInt16 nPos ) const;
 
-    void            SetTopEntry( sal_uInt16 nPos );
+    void                SetTopEntry( sal_uInt16 nPos );
     sal_uInt16          GetTopEntry() const;
 
-    void            SaveValue() { mnSaveValue = GetSelectEntryPos(); }
+    void                SaveValue() { mnSaveValue = GetSelectEntryPos(); }
     sal_uInt16          GetSavedValue() const { return mnSaveValue; }
 
-    void            SetSeparatorPos( sal_uInt16 n = LISTBOX_ENTRY_NOTFOUND );
+    void                SetSeparatorPos( sal_uInt16 n = LISTBOX_ENTRY_NOTFOUND );
     sal_uInt16          GetSeparatorPos() const;
 
     sal_Bool            IsTravelSelect() const;
     sal_Bool            IsInDropDown() const;
-    void            ToggleDropDown();
+    void                ToggleDropDown();
 
-    void            EnableMultiSelection( sal_Bool bMulti, sal_Bool bStackSelection );
-    void            EnableMultiSelection( sal_Bool bMulti );
+    void                EnableMultiSelection( sal_Bool bMulti, sal_Bool bStackSelection );
+    void                EnableMultiSelection( sal_Bool bMulti );
     sal_Bool            IsMultiSelectionEnabled() const;
 
-    void            SetReadOnly( sal_Bool bReadOnly = sal_True );
+    void                SetReadOnly( sal_Bool bReadOnly = sal_True );
     sal_Bool            IsReadOnly() const;
 
-    Rectangle       GetBoundingRectangle( sal_uInt16 nItem ) const;
+    Rectangle           GetBoundingRectangle( sal_uInt16 nItem ) const;
 
-    void            SetUserItemSize( const Size& rSz );
+    void                SetUserItemSize( const Size& rSz );
 
-    void            EnableUserDraw( sal_Bool bUserDraw );
+    void                EnableUserDraw( sal_Bool bUserDraw );
 
-    void            DrawEntry( const UserDrawEvent& rEvt, sal_Bool bDrawImage, sal_Bool bDrawText, sal_Bool bDrawTextAtImagePos = sal_False );
+    void                DrawEntry( const UserDrawEvent& rEvt, sal_Bool bDrawImage, sal_Bool bDrawText, sal_Bool bDrawTextAtImagePos = sal_False );
 
-    void            SetSelectHdl( const Link& rLink )       { maSelectHdl = rLink; }
-    const Link&     GetSelectHdl() const                    { return maSelectHdl; }
-    void            SetDoubleClickHdl( const Link& rLink )  { maDoubleClickHdl = rLink; }
-    const Link&     GetDoubleClickHdl() const               { return maDoubleClickHdl; }
+    void                SetSelectHdl( const Link& rLink )       { maSelectHdl = rLink; }
+    const Link&         GetSelectHdl() const                    { return maSelectHdl; }
+    void                SetDoubleClickHdl( const Link& rLink )  { maDoubleClickHdl = rLink; }
+    const Link&         GetDoubleClickHdl() const               { return maDoubleClickHdl; }
 
-    Size            CalcSubEditSize() const;    //size of area inside lstbox, i.e. no scrollbar/dropdown
-    Size            CalcMinimumSize() const;    //size of lstbox area, i.e. including scrollbar/dropdown
-    virtual Size    GetOptimalSize() const;
-    Size            CalcAdjustedSize( const Size& rPrefSize ) const;
-    Size            CalcSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const;
-    void            GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines ) const;
+    Size                CalcSubEditSize() const;    //size of area inside lstbox, i.e. no scrollbar/dropdown
+    Size                CalcMinimumSize() const;    //size of lstbox area, i.e. including scrollbar/dropdown
+    virtual Size        GetOptimalSize() const;
+    Size                CalcAdjustedSize( const Size& rPrefSize ) const;
+    Size                CalcSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const;
+    void                GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines ) const;
 
     sal_uInt16          GetDisplayLineCount() const;
 
-    void            EnableMirroring();
+    void                EnableMirroring();
 
-    bool GetEdgeBlending() const { return mbEdgeBlending; }
-    void SetEdgeBlending(bool bNew);
+    bool                GetEdgeBlending() const { return mbEdgeBlending; }
+    void                SetEdgeBlending(bool bNew);
 
     /** checks whether a certain point lies within the bounds of
         a listbox item and returns the item as well as the character position
@@ -245,7 +245,7 @@ public:
 private:
     // Bei MultiListBox nicht erlaubt...
     void            SaveValue();
-    sal_uInt16          GetSavedValue();
+    sal_uInt16      GetSavedValue();
 
 public:
     explicit        MultiListBox( Window* pParent, WinBits nStyle = 0 );
