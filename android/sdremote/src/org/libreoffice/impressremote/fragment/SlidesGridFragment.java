@@ -24,6 +24,7 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.actionbarsherlock.app.SherlockFragment;
+import org.libreoffice.impressremote.communication.SlideShow;
 import org.libreoffice.impressremote.util.Intents;
 import org.libreoffice.impressremote.R;
 import org.libreoffice.impressremote.adapter.SlidesGridAdapter;
@@ -63,15 +64,29 @@ public class SlidesGridFragment extends SherlockFragment implements ServiceConne
     }
 
     private void setUpSlidesGrid() {
-        SlidesGridAdapter aSlidesGridAdapter = new SlidesGridAdapter(getActivity(),
-            mCommunicationService.getSlideShow());
+        if (!isAdded()) {
+            return;
+        }
 
-        getSlidesGrid().setAdapter(aSlidesGridAdapter);
-        getSlidesGrid().setOnItemClickListener(this);
+        GridView aSlidesGrid = getSlidesGrid();
+
+        aSlidesGrid.setAdapter(buildSlidesAdapter());
+        aSlidesGrid.setOnItemClickListener(this);
     }
 
     private GridView getSlidesGrid() {
         return (GridView) getView().findViewById(R.id.grid_slides);
+    }
+
+    private SlidesGridAdapter buildSlidesAdapter() {
+        SlideShow aSlideShow = mCommunicationService.getSlideShow();
+
+        return new SlidesGridAdapter(getActivity(), aSlideShow);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> aAdapterView, View aView, int aPosition, long aId) {
+        mCommunicationService.getTransmitter().setCurrentSlide(aPosition);
     }
 
     @Override
@@ -93,11 +108,6 @@ public class SlidesGridFragment extends SherlockFragment implements ServiceConne
         getBroadcastManager().registerReceiver(mIntentsReceiver, aIntentFilter);
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> aAdapterView, View aView, int aPosition, long aId) {
-        mCommunicationService.getTransmitter().setCurrentSlide(aPosition);
-    }
-
     private static final class IntentsReceiver extends BroadcastReceiver {
         private final SlidesGridFragment mSlidesGridFragment;
 
@@ -109,7 +119,6 @@ public class SlidesGridFragment extends SherlockFragment implements ServiceConne
         public void onReceive(Context aContext, Intent aIntent) {
             if (Intents.Actions.SLIDE_SHOW_RUNNING.equals(aIntent.getAction())) {
                 mSlidesGridFragment.refreshSlidesGrid();
-
                 return;
             }
 

@@ -75,14 +75,6 @@ public class SlideShow {
     public Timer getTimer() {
         return mTimer;
     }
-
-    public void cleanUp() {
-        mSlidesCount = 0;
-        mCurrentSlideIndex = 0;
-
-        mSlidePreviewsBytes.clear();
-        mSlideNotes.clear();
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

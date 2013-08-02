@@ -45,6 +45,7 @@ public class CommunicationService extends Service implements Runnable, MessagesL
 
     private boolean mBluetoothWasEnabled;
 
+    private Timer mTimer;
     private SlideShow mSlideShow;
 
     private Thread mThread;
@@ -62,7 +63,8 @@ public class CommunicationService extends Service implements Runnable, MessagesL
 
         mBluetoothWasEnabled = false;
 
-        mSlideShow = new SlideShow(new Timer(this));
+        mTimer = new Timer(this);
+        mSlideShow = new SlideShow(mTimer);
 
         mThread = new Thread(this);
         mThread.start();
@@ -247,7 +249,7 @@ public class CommunicationService extends Service implements Runnable, MessagesL
 
     @Override
     public void onSlideShowStart(int aSlidesCount, int aCurrentSlideIndex) {
-        mSlideShow.cleanUp();
+        mSlideShow = new SlideShow(mTimer);
         mSlideShow.setSlidesCount(aSlidesCount);
 
         Intent aIntent = Intents.buildSlideShowRunningIntent();
@@ -258,7 +260,7 @@ public class CommunicationService extends Service implements Runnable, MessagesL
 
     @Override
     public void onSlideShowFinish() {
-        mSlideShow.cleanUp();
+        mSlideShow = new SlideShow(mTimer);
 
         Intent aIntent = Intents.buildSlideShowStoppedIntent();
         LocalBroadcastManager.getInstance(this).sendBroadcast(aIntent);

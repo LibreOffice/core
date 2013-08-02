@@ -385,17 +385,13 @@ public class SlideShowActivity extends SherlockFragmentActivity implements Servi
 
         stopTimer();
 
-        disconnectComputer();
+        // TODO: disconnect computer
 
         unbindService();
     }
 
     private void stopTimer() {
         mCommunicationService.getSlideShow().getTimer().stop();
-    }
-
-    private void disconnectComputer() {
-        mCommunicationService.disconnect();
     }
 
     private void unbindService() {

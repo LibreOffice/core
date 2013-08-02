@@ -21,8 +21,6 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.Html;
 import android.text.TextUtils;
-import android.util.DisplayMetrics;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,10 +68,14 @@ public class SlidesPagerFragment extends SherlockFragment implements ServiceConn
     }
 
     private void setUpSlidesPager() {
+        if (!isAdded()) {
+            return;
+        }
+
         ViewPager aSlidesPager = getSlidesPager();
 
         aSlidesPager.setAdapter(buildSlidesAdapter());
-        aSlidesPager.setPageMargin(getSlidesMarginInPx());
+        aSlidesPager.setPageMargin(getSlidesMargin());
         aSlidesPager.setOnPageChangeListener(this);
 
         setUpCurrentSlide();
@@ -89,12 +91,8 @@ public class SlidesPagerFragment extends SherlockFragment implements ServiceConn
         return new SlidesPagerAdapter(getActivity(), aSlideShow);
     }
 
-    private int getSlidesMarginInPx() {
-        int aPxUnit = TypedValue.COMPLEX_UNIT_PX;
-        float aSlideMarginInDp = getResources().getDimension(R.dimen.margin_slide);
-        DisplayMetrics aDisplayMetrics = getResources().getDisplayMetrics();
-
-        return (int) TypedValue.applyDimension(aPxUnit, aSlideMarginInDp, aDisplayMetrics);
+    private int getSlidesMargin() {
+        return getResources().getDimensionPixelSize(R.dimen.margin_slide);
     }
 
     private void setUpCurrentSlide() {
@@ -186,21 +184,33 @@ public class SlidesPagerFragment extends SherlockFragment implements ServiceConn
 
         @Override
         public void onReceive(Context aContext, Intent aIntent) {
-            if (Intents.Actions.SLIDE_PREVIEW.equals(aIntent.getAction())) {
-                mSlidesPagerFragment.refreshSlidesPager();
+            if (Intents.Actions.SLIDE_SHOW_RUNNING.equals(aIntent.getAction())) {
+                mSlidesPagerFragment.setUpSlidesPager();
+                return;
+            }
+
+            if (Intents.Actions.SLIDE_SHOW_STOPPED.equals(aIntent.getAction())) {
+                mSlidesPagerFragment.setUpSlidesPager();
                 return;
             }
 
             if (Intents.Actions.SLIDE_CHANGED.equals(aIntent.getAction())) {
                 mSlidesPagerFragment.setUpCurrentSlide();
+                return;
+            }
+
+            if (Intents.Actions.SLIDE_PREVIEW.equals(aIntent.getAction())) {
+                mSlidesPagerFragment.refreshSlidesPager();
             }
         }
     }
 
     private IntentFilter buildIntentsReceiverFilter() {
         IntentFilter aIntentFilter = new IntentFilter();
-        aIntentFilter.addAction(Intents.Actions.SLIDE_PREVIEW);
+        aIntentFilter.addAction(Intents.Actions.SLIDE_SHOW_RUNNING);
+        aIntentFilter.addAction(Intents.Actions.SLIDE_SHOW_STOPPED);
         aIntentFilter.addAction(Intents.Actions.SLIDE_CHANGED);
+        aIntentFilter.addAction(Intents.Actions.SLIDE_PREVIEW);
 
         return aIntentFilter;
     }
