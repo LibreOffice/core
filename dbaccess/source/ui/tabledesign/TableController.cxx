@@ -774,6 +774,8 @@ void OTableController::appendPrimaryKey(Reference<XKeysSupplier>& _rxSup,sal_Boo
     OSL_ENSURE(_rxSup.is(),"No XKeysSupplier!");
     Reference<XIndexAccess> xKeys(_rxSup->getKeys(),UNO_QUERY);
     Reference<XPropertySet> xProp;
+    if (!xKeys.is())
+        return;
     const sal_Int32 nCount = xKeys->getCount();
     for(sal_Int32 i=0;i< nCount ;++i)
     {
