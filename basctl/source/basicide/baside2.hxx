@@ -76,6 +76,7 @@ void setTextEngineText (ExtTextEngine&, OUString const&);
 
 class EditorWindow : public Window, public SfxListener
 {
+friend class CodeCompleteListBox;
 private:
     class ChangesListener;
 
@@ -475,6 +476,7 @@ private:
 class CodeCompleteListBox: public ListBox
 {
 friend class CodeCompleteWindow;
+friend class EditorWindow;
 private:
     OUStringBuffer aFuncBuffer;
     /* a buffer to build up function name when typing
@@ -489,9 +491,12 @@ public:
     void InsertSelectedEntry(); //insert the selected entry
 
     DECL_LINK(ImplDoubleClickHdl, void*);
+    //DECL_LINK(ImplSelectionChangeHdl, void*);
 
     virtual long PreNotify( NotifyEvent& rNEvt );
 
+protected:
+    virtual void KeyInput( const KeyEvent& rKeyEvt );
 };
 
 class CodeCompleteWindow: public Window
@@ -519,6 +524,9 @@ public:
      * clears if typed anything, then hides
      * the window, clear internal variables
      * */
+    OUStringBuffer& GetListBoxBuffer();
+    void SetVisibleEntries(); // sets the visible entries based on aFuncBuffer variable
+    CodeCompleteListBox* GetListBox(){return pListBox;}
 
 };
 
