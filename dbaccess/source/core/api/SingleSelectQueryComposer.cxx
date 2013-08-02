@@ -1353,7 +1353,8 @@ OUString OSingleSelectQueryComposer::getTableAlias(const Reference< XPropertySet
         {
             aComposedName = ::dbtools::composeTableName( m_xMetaData, aCatalog, aSchema, aTable, sal_False, ::dbtools::eInDataManipulation );
 
-            // first check if this is the table we want to or has it a tablealias
+            // Is this the right case for the table name?
+            // Else, look for it with different case, if applicable.
 
             if(!m_pTables->hasByName(aComposedName))
             {
