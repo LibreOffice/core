@@ -7337,14 +7337,14 @@ if test "$with_system_jpeg" = "yes"; then
     AC_CHECK_LIB(jpeg, jpeg_resync_to_restart, [ JPEG3RDLIB=-ljpeg ],
     [AC_MSG_CHECKING(jpeg library not found or fuctional)], [])
     AC_MSG_CHECKING([[libjpeg supports JERR_BAD_CROP_SPEC (jpeg-7 API)]])
-	AC_COMPILE_IFELSE([ AC_LANG_SOURCE(
-			  [[
+    AC_COMPILE_IFELSE([ AC_LANG_SOURCE(
+              [[
 #include <stdio.h>
 #include <jerror.h>
 int main(int c, char**v) { printf("%d\n", JERR_BAD_CROP_SPEC); return 0; }
-			  ]]) ],
-			  [AC_MSG_RESULT(yes)],
-		          [AC_MSG_RESULT(no)
+              ]]) ],
+              [AC_MSG_RESULT(yes)],
+                  [AC_MSG_RESULT(no)
                            AC_MSG_ERROR(jpeg library version >= 7 or jpeg-turbo version >= 1.1 required)
                           ])
     libo_MINGW_CHECK_DLL([libjpeg])
@@ -8207,7 +8207,7 @@ if test "x$enable_firebird_sdbc" = "xyes"; then
         dnl dnl HP-UX atomic routines are in atomic library, not standard C library.
         dnl dnl If we can't find atomic routines in vendor library, look for atomic_ops.
         dnl AC_SEARCH_LIBS(atomic_inc, atomic,,
-        dnl 	AC_CHECK_LIB(atomic_ops, main))
+        dnl     AC_CHECK_LIB(atomic_ops, main))
 
         dnl dnl check for tommath presence
         dnl save_LIBS=$LIBS
@@ -9750,12 +9750,12 @@ if test  "$test_gtk" = "yes"; then
 
     AC_MSG_CHECKING([whether to enable the systray quickstarter])
         if test "x$enable_systray" = "xyes"; then
-        AC_MSG_RESULT([yes])
+            AC_MSG_RESULT([yes])
             PKG_CHECK_MODULES( GTK210, gtk+-2.0 >= 2.10.0,
                             [ ENABLE_SYSTRAY_GTK="TRUE" ],
                             [ ENABLE_SYSTRAY_GTK="" ])
         else
-        AC_MSG_RESULT([no])
+            AC_MSG_RESULT([no])
         fi
 
         AC_MSG_CHECKING([whether to enable Gtk print dialog support])
