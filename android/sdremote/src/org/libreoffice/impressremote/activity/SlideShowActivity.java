@@ -46,15 +46,23 @@ public class SlideShowActivity extends SherlockFragmentActivity implements Servi
     private IntentsReceiver mIntentsReceiver;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onCreate(Bundle aSavedInstanceState) {
+        super.onCreate(aSavedInstanceState);
 
-        mMode = Mode.PAGER;
+        mMode = loadMode(aSavedInstanceState);
 
         setUpHomeButton();
         setUpFragment();
 
         bindService();
+    }
+
+    private Mode loadMode(Bundle aSavedInstanceState) {
+        if (aSavedInstanceState == null) {
+            return Mode.PAGER;
+        }
+
+        return (Mode) aSavedInstanceState.getSerializable("MODE");
     }
 
     private void setUpHomeButton() {
@@ -131,6 +139,7 @@ public class SlideShowActivity extends SherlockFragmentActivity implements Servi
             if (Intents.Actions.TIMER_STARTED.equals(aIntent.getAction())) {
                 int aMinutesLength = aIntent.getIntExtra(Intents.Extras.MINUTES, 0);
                 mSlideShowActivity.startTimer(aMinutesLength);
+                mSlideShowActivity.setUpSlideShowInformation();
                 return;
             }
 
@@ -208,8 +217,6 @@ public class SlideShowActivity extends SherlockFragmentActivity implements Servi
 
         aTimer.setMinutesLength(aMinutesLength);
         aTimer.start();
-
-        setUpSlideShowInformation();
     }
 
     private void resumeTimer() {
@@ -358,8 +365,23 @@ public class SlideShowActivity extends SherlockFragmentActivity implements Servi
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle aOutState) {
+        super.onSaveInstanceState(aOutState);
+
+        saveMode(aOutState);
+    }
+
+    private void saveMode(Bundle aOutState) {
+        aOutState.putSerializable("MODE", mMode);
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
+
+        if (!isServiceBound()) {
+            return;
+        }
 
         stopTimer();
 
@@ -373,18 +395,10 @@ public class SlideShowActivity extends SherlockFragmentActivity implements Servi
     }
 
     private void disconnectComputer() {
-        if (!isServiceBound()) {
-            return;
-        }
-
         mCommunicationService.disconnect();
     }
 
     private void unbindService() {
-        if (!isServiceBound()) {
-            return;
-        }
-
         unbindService(this);
     }
 
