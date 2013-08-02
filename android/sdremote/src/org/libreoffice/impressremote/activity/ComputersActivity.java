@@ -27,6 +27,14 @@ import org.libreoffice.impressremote.util.Intents;
 import org.libreoffice.impressremote.R;
 
 public class ComputersActivity extends SherlockFragmentActivity implements ActionBar.TabListener, ViewPager.OnPageChangeListener {
+    private static final class TabsIndices {
+        private TabsIndices() {
+        }
+
+        public static final int BLUETOOTH = 0;
+        public static final int WIFI = 1;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,12 +55,16 @@ public class ComputersActivity extends SherlockFragmentActivity implements Actio
     }
 
     private void setUpContent() {
-        if (BluetoothOperator.isAvailable()) {
+        if (areMultipleComputersTypesAvailable()) {
             setUpComputersLists();
         }
         else {
             setUpComputersList();
         }
+    }
+
+    private boolean areMultipleComputersTypesAvailable() {
+        return BluetoothOperator.isAvailable();
     }
 
     private void setUpComputersLists() {
@@ -65,8 +77,8 @@ public class ComputersActivity extends SherlockFragmentActivity implements Actio
     private void setUpTabs() {
         ActionBar aActionBar = getSupportActionBar();
 
-        aActionBar.addTab(buildActionBarTab(R.string.title_bluetooth));
-        aActionBar.addTab(buildActionBarTab(R.string.title_wifi));
+        aActionBar.addTab(buildActionBarTab(R.string.title_bluetooth), TabsIndices.BLUETOOTH);
+        aActionBar.addTab(buildActionBarTab(R.string.title_wifi), TabsIndices.WIFI);
     }
 
     private ActionBar.Tab buildActionBarTab(int aTitleResourceId) {
@@ -81,10 +93,16 @@ public class ComputersActivity extends SherlockFragmentActivity implements Actio
     @Override
     public void onTabSelected(ActionBar.Tab aTab, FragmentTransaction aTransaction) {
         getComputersPager().setCurrentItem(aTab.getPosition());
+
+        refreshActionBarMenu();
     }
 
     private ViewPager getComputersPager() {
         return (ViewPager) findViewById(R.id.pager_computers);
+    }
+
+    private void refreshActionBarMenu() {
+        supportInvalidateOptionsMenu();
     }
 
     @Override
@@ -130,6 +148,29 @@ public class ComputersActivity extends SherlockFragmentActivity implements Actio
         getSupportMenuInflater().inflate(R.menu.menu_action_bar_computers, aMenu);
 
         return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu aMenu) {
+        if (!areMultipleComputersTypesAvailable()) {
+            return super.onPrepareOptionsMenu(aMenu);
+        }
+
+        MenuItem aComputerAddingMenuItem = aMenu.findItem(R.id.menu_add_computer);
+
+        switch (getSupportActionBar().getSelectedNavigationIndex()) {
+            case TabsIndices.BLUETOOTH:
+                aComputerAddingMenuItem.setVisible(false);
+                break;
+
+            case TabsIndices.WIFI:
+                aComputerAddingMenuItem.setVisible(true);
+
+            default:
+                break;
+        }
+
+        return super.onPrepareOptionsMenu(aMenu);
     }
 
     @Override
