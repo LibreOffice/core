@@ -75,6 +75,27 @@ public class ComputerConnectionFragment extends SherlockFragment implements Serv
     }
 
     @Override
+    public void onViewStateRestored(Bundle aSavedInstanceState) {
+        super.onViewStateRestored(aSavedInstanceState);
+
+        if (aSavedInstanceState == null) {
+            return;
+        }
+
+        loadLayout(aSavedInstanceState);
+    }
+
+    private void loadLayout(Bundle aSavedInstanceState) {
+        int aLayoutIndex = aSavedInstanceState.getInt("LAYOUT");
+
+        getViewAnimator().setDisplayedChild(aLayoutIndex);
+    }
+
+    private ViewAnimator getViewAnimator() {
+        return (ViewAnimator) getView().findViewById(R.id.view_animator);
+    }
+
+    @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
@@ -89,7 +110,6 @@ public class ComputerConnectionFragment extends SherlockFragment implements Serv
     @Override
     public void onServiceConnected(ComponentName aComponentName, IBinder aBinder) {
         CommunicationService.CBinder aServiceBinder = (CommunicationService.CBinder) aBinder;
-
         mCommunicationService = aServiceBinder.getService();
 
         connectToComputer();
@@ -181,7 +201,7 @@ public class ComputerConnectionFragment extends SherlockFragment implements Serv
     }
 
     private void showPinValidationLayout() {
-        ViewAnimator aViewAnimator = (ViewAnimator) getView().findViewById(R.id.view_animator);
+        ViewAnimator aViewAnimator = getViewAnimator();
         LinearLayout aValidationLayout = (LinearLayout) getView().findViewById(R.id.layout_pin_validation);
 
         aViewAnimator.setDisplayedChild(aViewAnimator.indexOfChild(aValidationLayout));
@@ -215,7 +235,7 @@ public class ComputerConnectionFragment extends SherlockFragment implements Serv
     }
 
     private void showErrorMessageLayout() {
-        ViewAnimator aViewAnimator = (ViewAnimator) getView().findViewById(R.id.view_animator);
+        ViewAnimator aViewAnimator = getViewAnimator();
         LinearLayout aMessageLayout = (LinearLayout) getView().findViewById(R.id.layout_error_message);
 
         aViewAnimator.setDisplayedChild(aViewAnimator.indexOfChild(aMessageLayout));
@@ -240,9 +260,7 @@ public class ComputerConnectionFragment extends SherlockFragment implements Serv
             return false;
         }
 
-        ViewAnimator aViewAnimator = (ViewAnimator) getView().findViewById(R.id.view_animator);
-
-        return aViewAnimator.getCurrentView().getId() == R.id.layout_error_message;
+        return getViewAnimator().getCurrentView().getId() == R.id.layout_error_message;
     }
 
     @Override
@@ -260,7 +278,7 @@ public class ComputerConnectionFragment extends SherlockFragment implements Serv
     }
 
     private void showProgressBar() {
-        ViewAnimator aViewAnimator = (ViewAnimator) getView().findViewById(R.id.view_animator);
+        ViewAnimator aViewAnimator = getViewAnimator();
         ProgressBar aProgressBar = (ProgressBar) getView().findViewById(R.id.progress_bar);
 
         aViewAnimator.setDisplayedChild(aViewAnimator.indexOfChild(aProgressBar));
@@ -280,6 +298,19 @@ public class ComputerConnectionFragment extends SherlockFragment implements Serv
             // Receiver not registered.
             // Fixed in Honeycomb: Android’s issue #6191.
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle aOutState) {
+        super.onSaveInstanceState(aOutState);
+
+        saveLayout(aOutState);
+    }
+
+    private void saveLayout(Bundle aOutState) {
+        int aLayoutIndex = getViewAnimator().getDisplayedChild();
+
+        aOutState.putInt("LAYOUT", aLayoutIndex);
     }
 
     @Override
