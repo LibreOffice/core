@@ -325,16 +325,19 @@ public class SlideShowActivity extends SherlockFragmentActivity implements Servi
     }
 
     private void callEditingTimer(Timer aTimer) {
-        int aTimerLength = aTimer.getMinutesLeft();
-
-        DialogFragment aFragment = TimerEditingDialog.newInstance(aTimerLength);
+        DialogFragment aFragment = buildTimerEditingDialog(aTimer);
         aFragment.show(getSupportFragmentManager(), TimerEditingDialog.TAG);
 
-        pauseTimer();
+        aTimer.pause();
     }
 
-    private void pauseTimer() {
-        mCommunicationService.getSlideShow().getTimer().pause();
+    private DialogFragment buildTimerEditingDialog(Timer aTimer) {
+        if (aTimer.isTimeUp()) {
+            return TimerEditingDialog.newInstance(aTimer.getMinutesLength());
+        }
+        else {
+            return TimerEditingDialog.newInstance(aTimer.getMinutesLeft());
+        }
     }
 
     private void callSettingTimer() {
