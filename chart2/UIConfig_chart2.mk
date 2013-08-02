@@ -30,6 +30,7 @@ $(eval $(call gb_UIConfig_add_toolbarfiles,modules/schart,\
 ))
 
 $(eval $(call gb_UIConfig_add_uifiles,modules/schart,\
+	chart2/uiconfig/ui/attributedialog \
 	chart2/uiconfig/ui/insertaxisdlg \
 	chart2/uiconfig/ui/insertgriddlg \
 	chart2/uiconfig/ui/smoothlinesdlg \

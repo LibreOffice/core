@@ -335,7 +335,7 @@ SchAttribTabDlg::SchAttribTabDlg(Window* pParent,
                                  const ViewElementListProvider* pViewElementListProvider,
                                  const uno::Reference< util::XNumberFormatsSupplier >& xNumberFormatsSupplier
                                  )
-    : SfxTabDialog(pParent, SchResId(DLG_OBJECT_PROPERTIES), pAttr)
+    : SfxTabDialog(pParent, "AttributeDialog", "modules/schart/ui/attributedialog.ui", pAttr)
     , eObjectType(pDialogParameter->getObjectType())
     , nDlgType(nNoArrowNoShadowDlg)
     , nPageType(0)
@@ -347,8 +347,6 @@ SchAttribTabDlg::SchAttribTabDlg(Window* pParent,
     , m_fAxisMinorStepWidthForErrorBarDecimals(0.1)
     , m_bOKPressed(false)
 {
-    FreeResource();
-
     NumberFormatterWrapper aNumberFormatterWrapper( xNumberFormatsSupplier );
     m_pNumberFormatter = aNumberFormatterWrapper.getSvNumberFormatter();
 

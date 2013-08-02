@@ -32,7 +32,6 @@
 #define DLG_LEGEND          835
 #define DLG_TITLE           834
 #define DLG_3D_VIEW         752
-#define DLG_OBJECT_PROPERTIES 903
 #define DLG_SPLINE_PROPERTIES 904
 #define DLG_DATA_TRENDLINE  841
 #define DLG_DATA_YERRORBAR  842
