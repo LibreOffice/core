@@ -94,7 +94,7 @@ gb_CXXFLAGS += $(CXXFLAGS_CXX11)
 #When we are using 4.6.0 we can use gcc pragmas to selectively silence auto_ptr
 #warnings in isolation, but for <= 4.5.X we need to globally disable
 #deprecation
-ifeq ($(gb_GccLess460),1)
+ifeq ($(HAVE_GCC_PRAGMA_OPERATOR),)
 gb_CXXFLAGS += -Wno-deprecated-declarations
 endif
 endif

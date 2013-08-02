@@ -21,6 +21,9 @@ Any change in this header will cause a rebuild of almost everything.
 #define HAVE_GCC_BUILTIN_ATOMIC 0
 #define HAVE_GCC_PRAGMA_DIAGNOSTIC_MODIFY 0
 #define HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE 0
+/* _Pragma */
+#define HAVE_GCC_PRAGMA_OPERATOR 0
+#define HAVE_GCC_DEPRECATED_MESSAGE 0
 #define HAVE_THREADSAFE_STATICS 0
 #define HAVE_SYSLOG_H 0
 /* Compiler supports __attribute__((warn_unused)). */

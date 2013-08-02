@@ -5718,6 +5718,17 @@ if test "$GCC" = "yes"; then
         ], [AC_MSG_RESULT([no])])
     CFLAGS=$save_CFLAGS
 
+    AC_MSG_CHECKING([whether $CC supports __attribute__((deprecated(message)))])
+    save_CFLAGS=$CFLAGS
+    CFLAGS="$CFLAGS -Werror"
+    AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+            __attribute__((deprecated(test))) void f();
+        ])], [
+            AC_DEFINE([HAVE_GCC_DEPRECATED_MESSAGE],[1])
+            AC_MSG_RESULT([yes])
+        ], [AC_MSG_RESULT([no])])
+    CFLAGS=$save_CFLAGS
+
     AC_MSG_CHECKING([whether $CXX declares __cxa_allocate_exception in cxxabi.h])
     AC_LANG_PUSH([C++])
     AC_COMPILE_IFELSE([AC_LANG_SOURCE([
@@ -6085,6 +6096,25 @@ if test "$HAVE_CXX11" = "TRUE"; then
         AC_DEFINE([HAVE_CXX11_PERFECT_FORWARDING])
     fi
 fi
+
+HAVE_GCC_PRAGMA_OPERATOR=
+dnl _Pragma support (may require C++11)
+if test "$GCC" = "yes"; then
+    AC_MSG_CHECKING([whether $CXX supports _Pragma operator])
+    AC_LANG_PUSH([C++])
+    save_CXXFLAGS=$CXXFLAGS
+    CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11 -Werror"
+    AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+            _Pragma("GCC diagnostic ignored \"-Wformat\"")
+        ])], [
+            AC_DEFINE([HAVE_GCC_PRAGMA_OPERATOR],[1])
+            HAVE_GCC_PRAGMA_OPERATOR=1
+            AC_MSG_RESULT([yes])
+        ], [AC_MSG_RESULT([no])])
+    AC_LANG_POP([C++])
+    CXXFLAGS=$save_CXXFLAGS
+fi
+AC_SUBST(HAVE_GCC_PRAGMA_OPERATOR)
 
 dnl ===================================================================
 dnl system stl sanity tests
