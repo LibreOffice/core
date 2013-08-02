@@ -65,6 +65,7 @@ class ScXMLTableRowCellContext : public ScXMLImportContext
     boost::optional<OUString> maContentValidationName;
 
     ScEditEngineDefaulter* mpEditEngine;
+    OUString maFirstParagraph; /// unformatted first paragraph, for better performance.
     OUStringBuffer maParagraph;
     sal_Int32 mnCurParagraph;
 
@@ -92,6 +93,7 @@ class ScXMLTableRowCellContext : public ScXMLImportContext
     bool mbPossibleErrorCell;
     bool mbCheckWithCompilerForError;
     bool mbEditEngineHasText;
+    bool mbHasFormatRuns;
 
     sal_Int16 GetCellType(const OUString& sOUValue) const;
 
@@ -123,6 +125,8 @@ class ScXMLTableRowCellContext : public ScXMLImportContext
     void PushParagraphField(SvxFieldData* pData, const OUString& rStyleName);
 
     void PushFormat(sal_Int32 nBegin, sal_Int32 nEnd, const OUString& rStyleName);
+
+    OUString GetFirstParagraph() const;
 
 public:
 
