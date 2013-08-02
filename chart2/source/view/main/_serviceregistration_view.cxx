@@ -21,7 +21,7 @@
 
 #include "ChartView.hxx"
 
-static struct ::cppu::ImplementationEntry g_entries_chart2_view[] =
+static const struct ::cppu::ImplementationEntry g_entries_chart2_view[] =
 {
     {
           ::chart::ChartView::create

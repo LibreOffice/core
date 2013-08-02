@@ -32,7 +32,7 @@
 
 namespace
 {
-static struct ::cppu::ImplementationEntry g_entries_chart2_charttypes[] =
+static const struct ::cppu::ImplementationEntry g_entries_chart2_charttypes[] =
 {
     {
           ::chart::AreaChartType::create
@@ -119,7 +119,7 @@ static struct ::cppu::ImplementationEntry g_entries_chart2_charttypes[] =
 
 } // anonymous namespace
 
-struct ::cppu::ImplementationEntry *
+const struct ::cppu::ImplementationEntry *
     ChartTypeEntriesForServiceRegistration::getImplementationEntries()
 {
     return g_entries_chart2_charttypes;

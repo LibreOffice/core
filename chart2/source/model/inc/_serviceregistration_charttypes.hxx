@@ -24,7 +24,7 @@
 class ChartTypeEntriesForServiceRegistration
 {
 public:
-    static struct ::cppu::ImplementationEntry*
+    static const struct ::cppu::ImplementationEntry*
         getImplementationEntries();
 };
 

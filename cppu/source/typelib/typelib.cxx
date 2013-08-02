@@ -2544,7 +2544,7 @@ extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_setCacheSize( sal_Int32 nNewSize
 }
 
 
-static sal_Bool s_aAssignableFromTab[11][11] =
+static const sal_Bool s_aAssignableFromTab[11][11] =
 {
                          /* from CH,BO,BY,SH,US,LO,UL,HY,UH,FL,DO */
 /* TypeClass_CHAR */            { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },

@@ -29,7 +29,7 @@
 #include "InternalDataProvider.hxx"
 #include "charttoolsdllapi.hxx"
 
-static struct ::cppu::ImplementationEntry g_entries_chart2_tools[] =
+static const struct ::cppu::ImplementationEntry g_entries_chart2_tools[] =
 {
     {
           ::chart::LabeledDataSequence::create

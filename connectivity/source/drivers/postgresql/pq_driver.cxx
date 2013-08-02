@@ -304,7 +304,7 @@ void OOneInstanceComponentFactory::disposing()
 
 }
 
-static struct cppu::ImplementationEntry g_entries[] =
+static const struct cppu::ImplementationEntry g_entries[] =
 {
     {
         pq_sdbc_driver::DriverCreateInstance, pq_sdbc_driver::DriverGetImplementationName,

@@ -36,7 +36,7 @@
 
 #include "_serviceregistration_charttypes.hxx"
 
-static struct ::cppu::ImplementationEntry g_entries_chart2_model[] =
+static const struct ::cppu::ImplementationEntry g_entries_chart2_model[] =
 {
     {
           ::chart::ChartModel::create

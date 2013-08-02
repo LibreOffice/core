@@ -732,7 +732,7 @@ void log( ConnectionSettings *settings, sal_Int32 level, const char *str )
 
 
 
-static struct cppu::ImplementationEntry g_entries[] =
+static const struct cppu::ImplementationEntry g_entries[] =
 {
     {
         pq_sdbc_driver::ConnectionCreateInstance, pq_sdbc_driver::ConnectionGetImplementationName,

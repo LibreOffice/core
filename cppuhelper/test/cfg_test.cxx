@@ -189,7 +189,7 @@ static Reference< XInterface > SAL_CALL ServiceImpl1_create(
 
 } // namespace cfg_test
 
-static struct ImplementationEntry g_entries[] =
+static const struct ImplementationEntry g_entries[] =
 {
     {
         ::cfg_test::ServiceImpl0_create, ::cfg_test::impl0_getImplementationName,

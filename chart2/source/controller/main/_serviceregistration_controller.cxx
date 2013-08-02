@@ -27,7 +27,7 @@
 #include "ShapeToolbarController.hxx"
 #include <cppuhelper/implementationentry.hxx>
 
-static struct ::cppu::ImplementationEntry g_entries_chart2_controller[] =
+static const struct ::cppu::ImplementationEntry g_entries_chart2_controller[] =
 {
     {
           ::chart::ChartController::create
