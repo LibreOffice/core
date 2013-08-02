@@ -18,27 +18,6 @@
  */
 
 #define TAB_CONTROL 1
-#define LB_COLOR 1
-#define FT_COLOR 1
-#define LB_LINE_STYLE 2
-#define FT_LINE_STYLE 3
-#define FT_LINE_WIDTH 2
-#define MTR_FLD_LINE_WIDTH 1
-#define TSB_INVISIBLE 1
-#define FL_LINE 1
-#define FL_LINE_ENDS 2
-#define FT_LINE_ENDS_STYLE 5
-#define FT_LINE_ENDS_WIDTH 6
-#define LB_START_STYLE 3
-#define LB_END_STYLE 4
-
-#define STR_STYLE (LB_END_STYLE+1)
-#define STR_LB_START_STYLE  30
-#define STR_LB_END_STYLE    31
-#define STR_MTR_FLD_START_WIDTH 32
-#define STR_MTR_FLD_END_WIDTH   33
-#define STR_CENTER_START    34
-#define STR_CENTER_END      35
 #define STR_START_TYPE      36
 #define STR_END_TYPE        37
 #define STR_START_NUM       38
@@ -46,8 +25,6 @@
 #define STR_START_LENGTH    40
 #define STR_END_LENGTH      41
 
-#define MTR_FLD_START_WIDTH 3
-#define MTR_FLD_END_WIDTH 2
 #define CBX_SYNCHRONIZE 1
 #define CTL_POSITION 2
 #define FT_POSITION 9
@@ -75,40 +52,7 @@
 #define LB_LINEENDS 1
 #define FL_TIP 1
 #define FI_TIP 10
-#define TSB_CENTER_START 4
-#define TSB_CENTER_END 5
-#define FT_TRANSPARENT 10
-#define MTR_LINE_TRANSPARENT 5
-#define FL_SEPARATOR 4
 #define FT_LINE_END_STYLE 11
 #define FT_TITLE 12
-
-// #116827#
-#define FL_EDGE_STYLE 5
-#define FT_EDGE_STYLE 13
-#define LB_EDGE_STYLE 5
-
-// since LO3.6
-#define FT_CAP_STYLE 14
-#define LB_CAP_STYLE 6
-// not sure about IAccessibility2, add it nevertheless
-#define STR_LB_CAP_STYLE 42
-
-//Symbole (fuer StarChart)
-#define FT_SYMBOL_WIDTH     20
-#define FT_SYMBOL_HEIGHT    21
-#define MF_SYMBOL_WIDTH     22
-#define MF_SYMBOL_HEIGHT    23
-#define CB_SYMBOL_RATIO     24
-#define FL_SYMBOL_FORMAT    25
-#define MB_SYMBOL_BITMAP    26
-
-
-#define MN_GRAPHIC_DLG     1
-#define MN_GALLERY         2
-#define MN_SYMBOLS         3
-#define MN_SYMBOLS_NONE    4
-#define MN_SYMBOLS_AUTO    5
-#define MN_GALLERY_ENTRY 100
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

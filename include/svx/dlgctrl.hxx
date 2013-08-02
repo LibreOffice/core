@@ -321,6 +321,7 @@ public:
     void SelectEntryByList(const XDashList* pList, const String& rStr, const XDash& rDash, sal_uInt16 nDist = 0);
 };
 
+
 /************************************************************************/
 
 class SVX_DLLPUBLIC LineEndLB : public ListBox
@@ -340,6 +341,7 @@ public:
 //////////////////////////////////////////////////////////////////////////////
 
 class SdrObject;
+class SdrPathObj;
 class SdrModel;
 
 class SvxPreviewBase : public Control
@@ -380,9 +382,9 @@ public:
 class SVX_DLLPUBLIC SvxXLinePreview : public SvxPreviewBase
 {
 private:
-    SdrObject*                                      mpLineObjA;
-    SdrObject*                                      mpLineObjB;
-    SdrObject*                                      mpLineObjC;
+    SdrPathObj*                                     mpLineObjA;
+    SdrPathObj*                                     mpLineObjB;
+    SdrPathObj*                                     mpLineObjC;
 
     Graphic*                                        mpGraphic;
     sal_Bool                                        mbWithSymbol;
@@ -390,6 +392,7 @@ private:
 
 public:
     SvxXLinePreview( Window* pParent, const ResId& rResId );
+    SvxXLinePreview( Window* pParent );
     virtual ~SvxXLinePreview();
 
     void SetLineAttributes(const SfxItemSet& rItemSet);
@@ -399,6 +402,7 @@ public:
     void ResizeSymbol( const Size& s );
 
     virtual void Paint( const Rectangle& rRect );
+    virtual void Resize();
 };
 
 /*************************************************************************

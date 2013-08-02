@@ -87,36 +87,32 @@ class SvxLineTabPage : public SvxTabPage
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
 private:
-    FixedLine           aFlLine;
-    FixedText           aFtLineStyle;
-    LineLB              aLbLineStyle;
-    FixedText           aFtColor;
-    ColorLB             aLbColor;
-    FixedText           aFtLineWidth;
-    MetricField         aMtrLineWidth;
-    FixedText           aFtTransparent;
-    MetricField         aMtrTransparent;
-    FixedLine           aFlLineEnds;
-    LineEndLB           aLbStartStyle;
-    MetricField         aMtrStartWidth;
-    TriStateBox         aTsbCenterStart;
-    FixedText           aFtLineEndsStyle;
-    LineEndLB           aLbEndStyle;
-    FixedText           aFtLineEndsWidth;
-    MetricField         aMtrEndWidth;
-    TriStateBox         aTsbCenterEnd;
-    CheckBox            aCbxSynchronize;
-    FixedLine           aFLSeparator;
-    SvxXLinePreview     aCtlPreview;
+    VclBox*             m_pBoxStyle;
+    LineLB*             m_pLbLineStyle;
+    ColorLB*            m_pLbColor;
+    MetricField*        m_pMtrLineWidth;
+    MetricField*        m_pMtrTransparent;
+
+    VclFrame*           m_pFlLineEnds;
+    VclBox*             m_pBoxArrowStyles;
+    LineEndLB*          m_pLbStartStyle;
+    VclBox*             m_pBoxStart;
+    MetricField*        m_pMtrStartWidth;
+    TriStateBox*        m_pTsbCenterStart;
+    VclBox*             m_pBoxEnd;
+    LineEndLB*          m_pLbEndStyle;
+    MetricField*        m_pMtrEndWidth;
+    TriStateBox*        m_pTsbCenterEnd;
+    CheckBox*           m_pCbxSynchronize;
+    SvxXLinePreview*    m_pCtlPreview;
 
     // #116827#
-    FixedLine           maFLEdgeStyle;
-    FixedText           maFTEdgeStyle;
-    LineEndLB           maLBEdgeStyle;
+    VclFrame*           m_pFLEdgeStyle;
+    VclGrid*            m_pGridEdgeCaps;
+    ListBox*            m_pLBEdgeStyle;
 
     // LineCaps
-    FixedText           maFTCapStyle;
-    LineEndLB           maLBCapStyle;
+    ListBox*             m_pLBCapStyle;
 
     //#58425# symbols on a line (e. g. StarChart) ->
     /** a list of symbols to be shown in menu. Symbol at position SID_ATTR_SYMBOLTYPE is to be shown in preview.
@@ -129,13 +125,12 @@ private:
     long                nSymbolType;
     /// attributes for the shown symbols; only necessary if not equal to line properties
     SfxItemSet*         pSymbolAttr;
-    FixedLine           aFlSymbol;
-    MenuButton          aSymbolMB;
-    FixedText           aSymbolWidthFT;
-    MetricField         aSymbolWidthMF;
-    FixedText           aSymbolHeightFT;
-    MetricField         aSymbolHeightMF;
-    CheckBox            aSymbolRatioCB;
+    VclFrame*           m_pFlSymbol;
+    VclGrid*            m_pGridIconSize;
+    MenuButton*         m_pSymbolMB;
+    MetricField*        m_pSymbolWidthMF;
+    MetricField*        m_pSymbolHeightMF;
+    CheckBox*           m_pSymbolRatioCB;
     std::vector<OUString> aGrfNames;
     SvxBmpItemInfoList  aGrfBrushItems;
     sal_Bool            bLastWidthModified;
