@@ -673,7 +673,12 @@ void CellAppearancePropertyPanel::NotifyItemUpdate(
         UpdateControlState();
         break;
     case SID_SCGRIDSHOW:
-        if(eState >= SFX_ITEM_DEFAULT)
+    {
+        if(eState == SFX_ITEM_DEFAULT)
+        {
+            mpCBXShowGrid->Check(true);
+        }
+        else if(eState > SFX_ITEM_DEFAULT)
         {
             const SfxBoolItem* pItem = dynamic_cast< const SfxBoolItem* >(pState);
 
@@ -687,7 +692,8 @@ void CellAppearancePropertyPanel::NotifyItemUpdate(
                     mpCBXShowGrid->Check(false);
             }
         }
-        break;
+    }
+    break;
     }
 }
 
