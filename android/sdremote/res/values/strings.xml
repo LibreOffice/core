@@ -32,7 +32,7 @@
     <string name="message_impress_wifi_enabling">You should enable experimental features at “Tools → Options → LibreOffice → Advanced” as well.</string>
     <string name="message_impress_pairing_check">If you have Bluetooth pairing issues check instructions related to your desktop OS.</string>
     <string name="message_ip_address_validation">Type in a valid IP address.</string>
-    <string name="message_time_is_up">Time is up</string>
+    <string name="message_time_is_up">Time is up!</string>
 
     <string name="hint_ip_address">IP address</string>
     <string name="hint_name">Name (optional)</string>
