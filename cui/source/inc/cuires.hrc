@@ -237,10 +237,6 @@
 #define RID_SVXSTR_HYPERDLG_FORM_BUTTON     (RID_SVX_START +  813)
 #define RID_SVXSTR_HYPERDLG_FROM_TEXT       (RID_SVX_START +  814)
 
-// imap dialog
-#define RID_SVX_IMAPDLG_START               (RID_SVX_START + 100)
-#define RID_SVXDLG_IMAPURL                  (RID_SVX_IMAPDLG_START + 2)
-
 // hangulhanja
 #define RID_SVX_MDLG_HANGULHANJA            (RID_SVX_START +  1 )
 #define RID_SVX_MDLG_HANGULHANJA_OPT        ( RID_SVX_START +  4 )

@@ -56,6 +56,8 @@ URLDlg::URLDlg( Window* pWindow, const String& rURL, const String& rAlternativeT
     get(m_pEdtName, "nameentry");
     get(m_pEdtAlternativeText, "textentry");
     get(m_pEdtDescription, "descTV");
+    m_pEdtDescription->set_height_request(m_pEdtDescription->GetTextHeight() * 5);
+    m_pEdtDescription->set_width_request(m_pEdtDescription->approximate_char_width() * 60);
 
     m_pEdtURL->SetText( rURL );
     m_pEdtAlternativeText->SetText( rAlternativeText );
