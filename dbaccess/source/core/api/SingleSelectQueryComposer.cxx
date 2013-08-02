@@ -541,21 +541,29 @@ OUString OSingleSelectQueryComposer::impl_getColumnName_throw(const Reference< X
             throw SQLException(DBACORE_RESSTRING(RID_STR_COLUMN_NOT_VALID),*this,SQLSTATE_GENERAL,1000,makeAny(aErr) );
         }
 
-    OUString aName, aNewName;
+    OUString aName;
     column->getPropertyValue(PROPERTY_NAME)         >>= aName;
 
+    const OUString aQuote  = m_xMetaData->getIdentifierQuoteString();
+
+    if ( m_aCurrentColumns[SelectColumns] &&
+         m_aCurrentColumns[SelectColumns]->hasByName(aName) )
+    {
+        // It is a column from the SELECT list, use it as such.
+        return ::dbtools::quoteName(aQuote,aName);
+    }
+
+    // Nope, it is an unrelated column.
+    // Is that supported?
     if ( bOrderBy &&
-         !m_xMetaData->supportsOrderByUnrelated() &&
-         m_aCurrentColumns[SelectColumns] &&
-         !m_aCurrentColumns[SelectColumns]->hasByName(aName) )
+         !m_xMetaData->supportsOrderByUnrelated() )
     {
         OUString sError(DBACORE_RESSTRING(RID_STR_COLUMN_MUST_VISIBLE));
         throw SQLException(sError.replaceAll("%name", aName),*this,SQLSTATE_GENERAL,1000,Any() );
     }
 
-    const OUString aQuote  = m_xMetaData->getIdentifierQuoteString();
-    aNewName = ::dbtools::quoteName(aQuote,aName);
-    return aNewName;
+    // We need to refer to it by its "real" name, that is by schemaName.tableName.columnNameInTable
+    return impl_getColumnRealName_throw(column, false);
 }
 
 void SAL_CALL OSingleSelectQueryComposer::appendOrderByColumn( const Reference< XPropertySet >& column, sal_Bool ascending ) throw(SQLException, RuntimeException)
