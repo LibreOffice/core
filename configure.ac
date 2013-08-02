@@ -1136,8 +1136,8 @@ AC_ARG_ENABLE(macosx-code-signing,
 AC_ARG_ENABLE(macosx-sandbox,
     AS_HELP_STRING([--enable-macosx-sandbox],
         [Make the app bundle run in a sandbox. Requires code signing.
-         The default is to not do this. Experimental work in progress,
-         don't use unless you are working on this.]),
+         Is required by apps distributed in the Mac App Store, and implies
+         adherence to App Store rules.]),
 ,)
 
 AC_ARG_WITH(macosx-bundle-identifier,
@@ -2431,6 +2431,37 @@ fi
 AC_SUBST(ENABLE_LTO)
 
 dnl ===================================================================
+dnl Java support enable
+dnl ===================================================================
+AC_MSG_CHECKING([whether to build with Java support])
+if test "$with_java" != "no"; then
+    if test "$DISABLE_SCRIPTING" = TRUE; then
+        AC_MSG_RESULT([no, overridden by --disable-scripting])
+        SOLAR_JAVA=""
+        with_java=no
+    else
+        AC_MSG_RESULT([yes])
+        SOLAR_JAVA="TRUE"
+    fi
+else
+    AC_MSG_RESULT([no])
+    SOLAR_JAVA=""
+fi
+
+AC_SUBST(SOLAR_JAVA)
+
+dnl SOLAR_JAVA="YES" (yes, silly name, should rename) indicates whether we
+dnl want there to be *run-time* (and build-time) support for Java extensions in the
+dnl built LibreOffice.
+
+dnl SOLAR_JAVA="BUILD" is claimed to indicate build-time only support
+dnl (no runtime support). It doesn't seem to ever be set to this
+dnl value, though, and everywhere SOLAR_JAVA is only checked for being
+dnl empty or non-empty.
+
+dnl SOLAR_JAVA="" indicate no java support at all
+
+dnl ===================================================================
 dnl  Test the Solaris compiler version
 dnl ===================================================================
 if test "$_os" = "SunOS"; then
@@ -2731,6 +2762,8 @@ if test $_os = Darwin; then
 
     if test -z "$MACOSX_CODESIGNING_IDENTITY" -a "$enable_macosx_sandbox" = yes; then
         AC_MSG_ERROR([OS X sandboxing requires code signing])
+    elif test -n "$SOLAR_JAVA" -a "$enable_macosx_sandbox" = yes; then
+        AC_MSG_ERROR([OS X sandboxing (actually App Store rules) disallows use of Java])
     elif test -n "$MACOSX_CODESIGNING_IDENTITY" -a "$enable_macosx_sandbox" = yes; then
         ENABLE_MACOSX_SANDBOX=YES
         AC_DEFINE(HAVE_FEATURE_MACOSX_SANDBOX)
@@ -6241,37 +6274,6 @@ else
     AC_MSG_RESULT([no])
 fi
 AC_SUBST(BUILD_VER_STRING)
-
-dnl ===================================================================
-dnl Java support enable
-dnl ===================================================================
-AC_MSG_CHECKING([whether to build with Java support])
-if test "$with_java" != "no"; then
-    if test "$DISABLE_SCRIPTING" = TRUE; then
-        AC_MSG_RESULT([no, overridden by --disable-scripting])
-        SOLAR_JAVA=""
-        with_java=no
-    else
-        AC_MSG_RESULT([yes])
-        SOLAR_JAVA="TRUE"
-    fi
-else
-    AC_MSG_RESULT([no])
-    SOLAR_JAVA=""
-fi
-
-AC_SUBST(SOLAR_JAVA)
-
-dnl SOLAR_JAVA="YES" (yes, silly name, should rename) indicates whether we
-dnl want there to be *run-time* (and build-time) support for Java extensions in the
-dnl built LibreOffice.
-
-dnl SOLAR_JAVA="BUILD" is claimed to indicate build-time only support
-dnl (no runtime support). It doesn't seem to ever be set to this
-dnl value, though, and everywhere SOLAR_JAVA is only checked for being
-dnl empty or non-empty.
-
-dnl SOLAR_JAVA="" indicate no java support at all
 
 JITC_PROCESSOR_TYPE=""
 if test "$_os" = "Linux" -a "$host_cpu" = "powerpc"; then
