@@ -136,7 +136,7 @@ public:
     virtual sal_uInt16  GetSelectEntryPos( sal_uInt16 nSelIndex = 0 ) const;
 
     virtual bool        IsEntrySelected(const OUString& rStr) const;
-    virtual sal_Bool        IsEntryPosSelected( sal_uInt16 nPos ) const;
+    virtual sal_Bool    IsEntryPosSelected( sal_uInt16 nPos ) const;
     virtual void        SetNoSelection();
 
     void                SetEntryData( sal_uInt16 nPos, void* pNewData );
@@ -250,6 +250,7 @@ private:
 public:
     explicit        MultiListBox( Window* pParent, WinBits nStyle = 0 );
     explicit        MultiListBox( Window* pParent, const ResId& rResId );
+
 };
 
 #endif  // _SV_LSTBOX_HXX
