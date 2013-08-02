@@ -31,6 +31,8 @@
 #include "tabprotection.hxx"
 #include "tokenarray.hxx"
 #include "convuno.hxx"
+#include "documentimport.hxx"
+
 #include <svx/svdpage.hxx>
 
 #include <sax/tools/converter.hxx>
@@ -279,19 +281,13 @@ void ScMyTables::AddMatrixRange(
 
     maMatrixRangeList.Append(aScRange);
 
-    ScDocument* pDoc = rImport.GetDocument();
-    ScMarkData aMark;
-    aMark.SetMarkArea( aScRange );
-    aMark.SelectTable( aScRange.aStart.Tab(), sal_True );
+    ScDocumentImport& rDoc = rImport.GetDoc();
     boost::scoped_ptr<ScTokenArray> pCode(new ScTokenArray);
     pCode->AddStringXML( rFormula );
     if( (eGrammar == formula::FormulaGrammar::GRAM_EXTERNAL) && !rFormulaNmsp.isEmpty() )
         pCode->AddStringXML( rFormulaNmsp );
-    pDoc->InsertMatrixFormula(
-        nStartColumn, nStartRow,
-        nEndColumn, nEndRow,
-        aMark, EMPTY_OUSTRING, pCode.get(), eGrammar, false );
-    pDoc->IncXMLImportedFormulaCount( rFormula.getLength() );
+    rDoc.setMatrixCells(aScRange, *pCode, eGrammar);
+    rDoc.getDoc().IncXMLImportedFormulaCount( rFormula.getLength() );
 }
 
 bool ScMyTables::IsPartOfMatrix(const ScAddress& rScAddress) const
