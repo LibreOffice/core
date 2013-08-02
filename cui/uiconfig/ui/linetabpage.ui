@@ -12,9 +12,7 @@
       <object class="GtkBox" id="box2">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="margin_left">12</property>
-        <property name="margin_top">6</property>
-        <property name="spacing">12</property>
+        <property name="spacing">18</property>
         <child>
           <object class="GtkFrame" id="FL_LINE">
             <property name="visible">True</property>
@@ -123,6 +121,7 @@
                           <object class="GtkSpinButton" id="MTR_FLD_LINE_WIDTH:0cm">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="halign">start</property>
                             <property name="invisible_char">•</property>
                             <property name="adjustment">adjustmentWIDTH</property>
                             <property name="digits">2</property>
@@ -152,6 +151,7 @@
                           <object class="GtkSpinButton" id="MTR_LINE_TRANSPARENT:0%">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="halign">start</property>
                             <property name="invisible_char">•</property>
                             <property name="adjustment">adjustmentPERCENT</property>
                           </object>
@@ -300,6 +300,7 @@
                                   <object class="GtkSpinButton" id="MTR_FLD_START_WIDTH:0cm">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
+                                    <property name="halign">start</property>
                                     <property name="invisible_char">•</property>
                                     <property name="invisible_char_set">True</property>
                                     <property name="adjustment">adjustmentWIDTH</property>
@@ -361,6 +362,7 @@
                                   <object class="GtkSpinButton" id="MTR_FLD_END_WIDTH:0cm">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
+                                    <property name="halign">start</property>
                                     <property name="invisible_char">•</property>
                                     <property name="invisible_char_set">True</property>
                                     <property name="adjustment">adjustmentWIDTH</property>
@@ -619,7 +621,7 @@
                               <packing>
                                 <property name="left_attach">0</property>
                                 <property name="top_attach">2</property>
-                                <property name="width">1</property>
+                                <property name="width">2</property>
                                 <property name="height">1</property>
                               </packing>
                             </child>
@@ -637,9 +639,6 @@
                                 <property name="width">1</property>
                                 <property name="height">1</property>
                               </packing>
-                            </child>
-                            <child>
-                              <placeholder/>
                             </child>
                             <child>
                               <object class="GtkSpinButton" id="MF_SYMBOL_HEIGHT:0cm">
@@ -689,12 +688,13 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
+            <property name="pack_type">end</property>
             <property name="position">1</property>
           </packing>
         </child>
       </object>
       <packing>
-        <property name="expand">False</property>
+        <property name="expand">True</property>
         <property name="fill">True</property>
         <property name="position">0</property>
       </packing>
@@ -722,14 +722,14 @@
     <property name="page_increment">10</property>
   </object>
   <object class="GtkAdjustment" id="adjustmentWIDTH">
-    <property name="upper">50</property>
-    <property name="step_increment">0.050000000000000003</property>
-    <property name="page_increment">10</property>
+    <property name="upper">5</property>
+    <property name="step_increment">0.10000000000000001</property>
+    <property name="page_increment">1</property>
   </object>
   <object class="GtkAdjustment" id="adjustmentWIDTH_SYMBOL">
-    <property name="upper">1999</property>
+    <property name="upper">19.989999999999998</property>
     <property name="step_increment">0.050000000000000003</property>
-    <property name="page_increment">10</property>
+    <property name="page_increment">1</property>
   </object>
   <object class="GtkListStore" id="liststoreCAP_STYLE">
     <columns>
@@ -822,5 +822,11 @@
         <property name="use_underline">True</property>
       </object>
     </child>
+  </object>
+  <object class="GtkSizeGroup" id="sizegroup1">
+    <widgets>
+      <widget name="MTR_FLD_LINE_WIDTH:0cm"/>
+      <widget name="MTR_LINE_TRANSPARENT:0%"/>
+    </widgets>
   </object>
 </interface>
