@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include "sal/config.h"
 
 #if defined MACOSX
@@ -43,19 +45,19 @@ extern "C" {
 void sal_initGlobalTimer();
 
 void sal_detail_initialize(int argc, char ** argv) {
-#if defined MACOSX
-    // On Mac OS X, soffice can restart itself via exec (see restartOnMac in
-    // desktop/source/app/app.cxx), which leaves all file descriptors open,
-    // which in turn can have unwanted effects (see
+#if defined MACOSX && !HAVE_FEATURE_MACOSX_SANDBOX
+    // On OS X when not sandboxed, soffice can restart itself via exec (see
+    // restartOnMac in desktop/source/app/app.cxx), which leaves all file
+    // descriptors open, which in turn can have unwanted effects (see
     // <https://bugs.freedesktop.org/show_bug.cgi?id=50603> "Unable to update
-    // LibreOffice without resetting user profile").  But closing fds in
+    // LibreOffice without resetting user profile"). But closing fds in
     // restartOnMac before calling exec does not work, as additional threads
     // might still be running then, which can still use those fds and cause
-    // crashes.  Therefore, the simples solution is to close fds at process
+    // crashes. Therefore, the simplest solution is to close fds at process
     // start (as early as possible, so that no other threads have been created
     // yet that might already have opened some fds); this is done for all kinds
     // of processes here, not just soffice, but hopefully none of our processes
-    // rely on being spawned with certain fds already open.  Unfortunately, Mac
+    // rely on being spawned with certain fds already open. Unfortunately, Mac
     // OS X appears to have no better interface to close all fds (like
     // closefrom):
     long openMax = sysconf(_SC_OPEN_MAX);
