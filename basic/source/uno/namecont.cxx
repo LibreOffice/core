@@ -1870,21 +1870,6 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
             DBG_UNHANDLED_EXCEPTION();
             return;
         }
-
-        // open the source storage which might be used to copy yet-unmodified libraries
-        try
-        {
-            if ( mxStorage->hasByName( maLibrariesDir ) || bInplaceStorage )
-            {
-                xSourceLibrariesStor = mxStorage->openStorageElement( maLibrariesDir,
-                                                   bInplaceStorage ? embed::ElementModes::READWRITE : embed::ElementModes::READ );
-            }
-        }
-        catch( const uno::Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION();
-            return;
-        }
     }
 
     int iArray = 0;
@@ -1984,6 +1969,21 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
     // then we need to clean up the temporary storage we used for this
     if ( bInplaceStorage && !sTempTargetStorName.isEmpty() )
     {
+        // open the source storage which might be used to copy yet-unmodified libraries
+        try
+        {
+            if ( mxStorage->hasByName( maLibrariesDir ) || bInplaceStorage )
+            {
+                xSourceLibrariesStor = mxStorage->openStorageElement( maLibrariesDir,
+                                                   bInplaceStorage ? embed::ElementModes::READWRITE : embed::ElementModes::READ );
+            }
+        }
+        catch( const uno::Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+            return;
+        }
+
         SAL_WARN_IF(
             !xSourceLibrariesStor.is(), "basic",
             ("SfxLibrariesContainer::storeLibraries_impl: unexpected: we should"
