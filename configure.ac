@@ -5322,6 +5322,54 @@ if test "$ENABLE_VALGRIND" = FALSE; then
 fi
 AC_SUBST([VALGRIND_CFLAGS])
 
+
+dnl ===================================================================
+dnl Check if SDT probes (for systemtap, gdb, dtrace) are available
+dnl ===================================================================
+
+# We need at least the sys/sdt.h include header.
+AC_CHECK_HEADER([sys/sdt.h], [SDT_H_FOUND='TRUE'], [SDT_H_FOUND='FALSE'])
+if test "$SDT_H_FOUND" = "TRUE"; then
+  # Found sys/sdt.h header, now make sure the c++ compiler works.
+  # Old g++ versions had problems with probes in constructors/destructors.
+  AC_MSG_CHECKING([working sys/sdt.h and c++ support])
+  AC_LANG_PUSH([C++])
+  AC_LINK_IFELSE([AC_LANG_PROGRAM([[
+    #include <sys/sdt.h>
+    class ProbeClass
+    {
+    private:
+      int& ref;
+      const char *name;
+
+    public:
+      ProbeClass(int& v, const char *n) : ref(v), name(n)
+      {
+        DTRACE_PROBE2(_test_, cons, name, ref);
+      }
+
+      void method(int min)
+      {
+        DTRACE_PROBE3(_test_, meth, name, ref, min);
+        ref -= min;
+      }
+
+      ~ProbeClass()
+      {
+        DTRACE_PROBE2(_test_, dest, name, ref);
+      }
+    };
+  ]],[[
+    int i = 64;
+    DTRACE_PROBE1(_test_, call, i);
+    ProbeClass inst = ProbeClass(i, "call");
+    inst.method(24);
+  ]])], [AC_MSG_RESULT([yes]); AC_DEFINE([USE_SDT_PROBES])],
+        [AC_MSG_RESULT([no, sdt.h or c++ compiler too old])])
+  AC_LANG_POP([C++])
+fi
+AC_CONFIG_HEADERS([config_host/config_probes.h])
+
 dnl ===================================================================
 dnl Compiler plugins
 dnl ===================================================================

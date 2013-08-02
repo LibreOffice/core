@@ -69,6 +69,10 @@ static rtl_uString const aImplEmpty_rtl_uString =
 #define IMPL_RTL_INTERN
 static void internRelease (rtl_uString *pThis);
 
+#if USE_SDT_PROBES
+#define RTL_LOG_STRING_BITS         16
+#endif
+
 /* ======================================================================= */
 
 /* Include String/UString template code */
