@@ -404,6 +404,11 @@ void ScXMLTableRowCellContext::PushFormat(sal_Int32 nBegin, sal_Int32 nEnd, cons
     rFmt.maSelection.nStartPos = nBegin;
     rFmt.maSelection.nEndPos = nEnd;
 
+    // Store the used text styles for export.
+    ScSheetSaveData* pSheetData = ScModelObj::getImplementation(rXMLImport.GetModel())->GetSheetSaveData();
+    ScAddress aCellPos = rXMLImport.GetTables().GetCurrentCellPos();
+    pSheetData->AddTextStyle(rStyleName, aCellPos, rFmt.maSelection);
+
     boost::scoped_ptr<SfxPoolItem> pPoolItem;
     sal_uInt16 nLastItemID = EE_CHAR_END + 1;
 
