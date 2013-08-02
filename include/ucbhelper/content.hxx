@@ -670,6 +670,7 @@ public:
       * @param rCommentVersion contains the comment to use for checkin operations
       * @param rResultURL is a hacky way to get the update URL after the operation in
       *        case there was a change (introduced for the checkin operation)
+      * @param rDocumentId is the document Id ( in case of CMIS ).
       */
     sal_Bool
     transferContent( const Content& rSourceContent,
@@ -679,7 +680,8 @@ public:
                      const OUString & rMimeType = OUString( ),
                      bool bMajorVersion = false,
                      const OUString & rCommentVersion = OUString( ),
-                     OUString* pResultURL = NULL )
+                     OUString* pResultURL = NULL,
+                     const OUString & rDocumentId = OUString( ) )
         throw( ::com::sun::star::ucb::CommandAbortedException,
                ::com::sun::star::uno::RuntimeException,
                ::com::sun::star::uno::Exception );

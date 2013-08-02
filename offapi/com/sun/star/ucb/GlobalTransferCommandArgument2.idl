@@ -15,13 +15,17 @@
 module com { module sun { module star { module ucb {
 
 /** This struct extends the one for transfers arguments by adding a Mime
-    type property to it.
+    type and a Document Id property to it.
   */
 struct GlobalTransferCommandArgument2 : GlobalTransferCommandArgument
 {
     /** contains the MIME type of the source object.
       */
     string MimeType;
+
+   /** contains the DocumentId of the source object.
+      */
+    string DocumentId;
 };
 
 

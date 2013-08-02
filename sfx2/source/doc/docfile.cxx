@@ -1960,6 +1960,9 @@ void SfxMedium::Transfer_Impl()
             OUString aFileName;
             Any aAny = aDestContent.getPropertyValue("Title");
             aAny >>= aFileName;
+            aAny = aDestContent.getPropertyValue( OUString("ObjectId" ) );
+            OUString sObjectId;
+            aAny >>= sObjectId;
             if ( aFileName.isEmpty() )
                 aFileName = GetURLObject().getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
 
@@ -2024,7 +2027,7 @@ void SfxMedium::Transfer_Impl()
                     }
                     OUString sResultURL;
                     if (!aTransferContent.transferContent( aSourceContent, eOperation,
-                                aFileName, nNameClash, aMimeType, bMajor, sComment, &sResultURL ))
+                                aFileName, nNameClash, aMimeType, bMajor, sComment, &sResultURL, sObjectId))
                         pImp->m_eError = ERRCODE_IO_GENERAL;
                     else if ( !sResultURL.isEmpty( ) )  // Likely to happen only for checkin
                         SwitchDocumentToFile( sResultURL );

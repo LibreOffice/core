@@ -962,7 +962,8 @@ sal_Bool Content::transferContent( const Content& rSourceContent,
                                    const OUString & rMimeType,
                                    bool bMajorVersion,
                                    const OUString & rVersionComment,
-                                   OUString* pResultURL )
+                                   OUString* pResultURL,
+                                   const OUString & rDocumentId )
     throw( CommandAbortedException, RuntimeException, Exception )
 {
     Reference< XUniversalContentBroker > pBroker(
@@ -1015,7 +1016,8 @@ sal_Bool Content::transferContent( const Content& rSourceContent,
                                             getURL(),   // TargetFolderURL,
                                             rTitle,
                                             nNameClashAction,
-                                            rMimeType );
+                                            rMimeType,
+                                            rDocumentId );
         aCommand.Argument <<= aTransferArg;
     }
     else

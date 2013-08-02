@@ -1364,6 +1364,7 @@ void globalTransfer_(
     ucb::InsertCommandArgument2 aArg;
     aArg.Data = xInputStream;
     aArg.MimeType = rContext.aArg.MimeType;
+    aArg.DocumentId = rContext.aArg.DocumentId;
 
     switch ( rContext.aArg.NameClash )
     {
@@ -1614,7 +1615,8 @@ void globalTransfer_(
                             ->getContentIdentifier(), // TargetURL
                         OUString(),              // NewTitle;
                         rContext.aArg.NameClash,
-                        rContext.aArg.MimeType );
+                        rContext.aArg.MimeType,
+                        rContext.aArg.DocumentId);
 
                 TransferCommandContext aSubCtx(
                         rContext.m_xContext,

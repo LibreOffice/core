@@ -21,6 +21,11 @@ struct InsertCommandArgument2 : InsertCommandArgument
     /** contains the MIME type of the document to insert
      */
     string MimeType;
+
+   /** contains the Document Id of the document to insert
+     */
+    string DocumentId;
+
 };
 
 

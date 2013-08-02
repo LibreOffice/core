@@ -601,6 +601,32 @@ namespace cmis
                     else
                         xRow->appendVoid( rProp );
                 }
+                else if ( rProp.Name == "ObjectId" )
+                {
+                    OUString sId;
+                    try
+                    {
+                        sId = STD_TO_OUSTR( getObject( xEnv )->getId() );
+                    }
+                    catch ( const libcmis::Exception& )
+                    {
+                        if ( !m_pObjectProps.empty() )
+                        {
+                            map< string, libcmis::PropertyPtr >::iterator it = m_pObjectProps.find( "cmis:objectId" );
+                            if ( it != m_pObjectProps.end( ) )
+                            {
+                                vector< string > values = it->second->getStrings( );
+                                if ( !values.empty() )
+                                    sId = STD_TO_OUSTR( values.front( ) );
+                            }
+                        }
+                    }
+
+                    if ( !sId.isEmpty( ) )
+                        xRow->appendString( rProp, sId );
+                    else
+                        xRow->appendVoid( rProp );
+                }
                 else if ( rProp.Name == "TitleOnServer" )
                 {
                     string path;
@@ -1121,29 +1147,42 @@ namespace cmis
 
             if ( pFolder != NULL )
             {
-                map< string, libcmis::PropertyPtr >::iterator it = m_pObjectProps.find( "cmis:name" );
-                if ( it == m_pObjectProps.end( ) )
-                {
-                    ucbhelper::cancelCommandExecution( uno::makeAny
-                        ( uno::RuntimeException( "Missing name property",
-                            static_cast< cppu::OWeakObject * >( this ) ) ),
-                        xEnv );
-                }
-                string newName = it->second->getStrings( ).front( );
-                string newPath = pFolder->getPath( );
-                if ( newPath[ newPath.size( ) - 1 ] != '/' )
-                    newPath += "/";
-                newPath += newName;
-
                 libcmis::ObjectPtr object;
+                string newPath;
+                if ( m_sObjectId.isEmpty( ) )
+                {
+                    map< string, libcmis::PropertyPtr >::iterator it = m_pObjectProps.find( "cmis:name" );
+                    if ( it == m_pObjectProps.end( ) )
+                    {
+                        ucbhelper::cancelCommandExecution( uno::makeAny
+                            ( uno::RuntimeException( "Missing name property",
+                                static_cast< cppu::OWeakObject * >( this ) ) ),
+                            xEnv );
+                    }
+                    string newName = it->second->getStrings( ).front( );
+                    newPath = pFolder->getPath( );
+                    if ( newPath[ newPath.size( ) - 1 ] != '/' )
+                        newPath += "/";
+                    newPath += newName;
+
+                    try
+                    {
+                        object = getSession( xEnv )->getObjectByPath( newPath );
+                        sNewPath = STD_TO_OUSTR( newPath );
+                    }
+                    catch ( const libcmis::Exception& )
+                    {
+                        // Nothing matched the path
+                    }
+                }
+                else
                 try
                 {
-                    object = getSession( xEnv )->getObjectByPath( newPath );
-                    sNewPath = STD_TO_OUSTR( newPath );
+                    object = getSession( xEnv )->getObject( OUSTR_TO_STDSTR( m_sObjectId) );
                 }
-                catch ( const libcmis::Exception& )
+                catch ( libcmis::Exception& )
                 {
-                    // Nothing matched the path
+                    // Continue
                 }
 
                 if ( NULL != object.get( ) )
@@ -1401,6 +1440,9 @@ namespace cmis
             beans::Property( OUString( "Title" ),
                 -1, getCppuType( static_cast< const OUString * >( 0 ) ),
                 beans::PropertyAttribute::BOUND ),
+            beans::Property( OUString( "ObjectId" ),
+                -1, getCppuType( static_cast< const OUString * >( 0 ) ),
+                beans::PropertyAttribute::BOUND ),
             beans::Property( OUString( "TitleOnServer" ),
                 -1, getCppuType( static_cast< const OUString * >( 0 ) ),
                 beans::PropertyAttribute::BOUND ),
@@ -1648,6 +1690,8 @@ namespace cmis
                 arg.Data = insertArg.Data;
                 arg.ReplaceExisting = insertArg.ReplaceExisting;
             }
+            // store the document id
+            m_sObjectId = arg.DocumentId;
             insert( arg.Data, arg.ReplaceExisting, arg.MimeType, xEnv );
         }
         else if ( aCommand.Name == "delete" )
