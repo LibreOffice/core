@@ -111,8 +111,6 @@ private:
     PushButton*              pNewReplacePB;
     PushButton*              pDeletePB;
 
-    HelpButton*              pHelpBtn;
-    CancelButton*            pCloseBtn;
     String                  sModify;
     String                  sNew;
     DecorationView          aDecoView;
