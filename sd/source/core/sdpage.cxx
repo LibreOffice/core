@@ -1237,70 +1237,6 @@ Reference<XElement> getRootElement()
     return xRoot;//this loops seems to work only once,so temporary returning the root element
 }
 
-//read the information from XML file(traversing from layout node)
-void readLayoutPropFromFile(const Reference<XElement>& root, const rtl::OUString& sLayoutType, const rtl::OUString& sPresObjKind, double propvalue[])
-{
-    long presobjsize;
-    long layoutlistsize;
-    rtl::OUString sLayoutAttName;
-    rtl::OUString sPresObjKindAttName;
-    bool bnoprop=true;                   //use it to skip the remaining loop ,once propvalue is obtained
-    const Reference<XNodeList> layoutlist = root->getElementsByTagName("layout");
-    layoutlistsize=layoutlist->getLength();
-
-    for( long i=0; i<layoutlistsize ;i++)
-    {
-        if(bnoprop)
-        {
-            Reference<XNode> layoutnode = layoutlist->item(i);      //get i'th layout element
-            Reference<XNamedNodeMap> layoutattrlist =layoutnode->getAttributes();
-            Reference<XNode> layoutattr = layoutattrlist->getNamedItem("type");
-            sLayoutAttName=layoutattr->getNodeValue();              //get the attribute value of layout(i.e it's type)
-
-            if(sLayoutAttName==sLayoutType)//check string comparision func                      //compare it with the given parameter of the function
-            {
-                Reference<XNodeList> layoutchildrens = layoutnode->getChildNodes();
-                presobjsize = layoutchildrens->getLength();         //get the length of that of the layout(number of pres objects)
-                for( long j=0; j< presobjsize ; j++)
-                {
-                    rtl::OUString nodename;
-                    Reference<XNode> presobj = layoutchildrens->item(j);    //get the j'th presobj for that layout
-                    nodename=presobj->getNodeName();
-                    if(nodename=="presobj")//check whether children is blank 'text-node' or 'presobj' node
-                    {
-                        Reference<XNamedNodeMap> presObjAttributes = presobj->getAttributes();
-                        Reference<XNode> presObjKindAttr = presObjAttributes->getNamedItem("kind");
-                        sPresObjKindAttName = presObjKindAttr->getNodeValue();  //get the value of it's presobj kind
-                        if(sPresObjKindAttName==sPresObjKind)
-                        {
-                            Reference<XNode> presObjPosX = presObjAttributes->getNamedItem("layout-pos-x");
-                            rtl::OUString sValue = presObjPosX->getNodeValue();
-                            propvalue[0] = sValue.toDouble();
-                            Reference<XNode> presObjPosY = presObjAttributes->getNamedItem("layout-pos-y");
-                            sValue = presObjPosY->getNodeValue();
-                            propvalue[1] = sValue.toDouble();
-                            Reference<XNode> presObjSizeHeight = presObjAttributes->getNamedItem("layout-size-height");
-                            sValue = presObjSizeHeight->getNodeValue();
-                            propvalue[2] = sValue.toDouble();
-                            Reference<XNode> presObjSizeWidth = presObjAttributes->getNamedItem("layout-size-width");
-                            sValue = presObjSizeWidth->getNodeValue();
-                            propvalue[3] = sValue.toDouble();
-                            bnoprop=false;
-                            break;
-                        }
-                        else
-                            continue;
-                    }
-                }
-            }
-            else
-                continue;
-        }
-        else
-            break;
-    }
-}
-
 rtl::OUString enumtoString(AutoLayout aut)
 {
     rtl::OUString retstr;
@@ -1486,19 +1422,6 @@ static void CalcAutoLayoutRectangles( SdPage& rPage, int nLayout, Rectangle* rRe
         break; // do nothing
     case 1: // title, 2 shapes
     case 9: // title, 2 vertical shapes
-        readLayoutPropFromFile(root, "AUTOLAYOUT_TITLE_2VTEXT" ,"PRESOBJ_OUTLINE1" ,propvalue);
-        aLayoutPos.X() = propvalue[0];
-        aLayoutPos.Y() = propvalue[1];
-        aLayoutSize.Height() = propvalue[2];
-        aLayoutSize.Width() = propvalue[3];
-        rRectangle[1] = Rectangle (aLayoutPos, aLayoutSize);
-
-        readLayoutPropFromFile(root, "AUTOLAYOUT_TITLE_2VTEXT" ,"PRESOBJ_OUTLINE2" ,propvalue);
-        aLayoutPos.X() = propvalue[0];
-        aLayoutPos.Y() = propvalue[1];
-        aLayoutSize.Height() = propvalue[2];
-        aLayoutSize.Width() = propvalue[3];
-        rRectangle[2] = Rectangle (aLayoutPos, aLayoutSize);
 
         if( bRightToLeft && (nLayout != 9) )
             ::std::swap( rRectangle[1], rRectangle[2] );
@@ -1586,34 +1509,6 @@ static void CalcAutoLayoutRectangles( SdPage& rPage, int nLayout, Rectangle* rRe
         // aLayoutPos.X() = nX;
         // rRectangle[4] = Rectangle (aLayoutPos, aLayoutSize);
         // break;
-        readLayoutPropFromFile(root, "AUTOLAYOUT_TITLE_4SCONTENT" ,"PRESOBJ_OUTLINE1" ,propvalue);
-        aLayoutPos.X() = propvalue[0];
-        aLayoutPos.Y() = propvalue[1];
-        aLayoutSize.Height() = propvalue[2];
-        aLayoutSize.Width() = propvalue[3];
-        rRectangle[1] = Rectangle (aLayoutPos, aLayoutSize);
-
-        readLayoutPropFromFile(root, "AUTOLAYOUT_TITLE_4SCONTENT" ,"PRESOBJ_OUTLINE2" ,propvalue);
-        aLayoutPos.X() = propvalue[0];
-        aLayoutPos.Y() = propvalue[1];
-        aLayoutSize.Height() = propvalue[2];
-        aLayoutSize.Width() = propvalue[3];
-        rRectangle[2] = Rectangle (aLayoutPos, aLayoutSize);
-
-        readLayoutPropFromFile(root, "AUTOLAYOUT_TITLE_4SCONTENT" ,"PRESOBJ_OUTLINE3" ,propvalue);
-        aLayoutPos.X() = propvalue[0];
-        aLayoutPos.Y() = propvalue[1];
-        aLayoutSize.Height() = propvalue[2];
-        aLayoutSize.Width() = propvalue[3];
-        rRectangle[3] = Rectangle (aLayoutPos, aLayoutSize);
-
-        readLayoutPropFromFile(root, "AUTOLAYOUT_TITLE_4SCONTENT" ,"PRESOBJ_OUTLINE4" ,propvalue);
-        aLayoutPos.X() = propvalue[0];
-        aLayoutPos.Y() = propvalue[1];
-        aLayoutSize.Height() = propvalue[2];
-        aLayoutSize.Width() = propvalue[3];
-        rRectangle[4] = Rectangle (aLayoutPos, aLayoutSize);
-        break;
     }
     case 7: // vertical title, shape above shape
     {
