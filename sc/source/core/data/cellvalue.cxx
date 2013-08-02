@@ -16,6 +16,7 @@
 #include "stringutil.hxx"
 #include "editutil.hxx"
 #include "tokenarray.hxx"
+#include "column.hxx"
 #include "formula/token.hxx"
 
 namespace {
@@ -182,6 +183,41 @@ void ScCellValue::clear()
     mfValue = 0.0;
 }
 
+void ScCellValue::set( double fValue )
+{
+    clear();
+    meType = CELLTYPE_VALUE;
+    mfValue = fValue;
+}
+
+void ScCellValue::set( const OUString& rStr )
+{
+    clear();
+    meType = CELLTYPE_STRING;
+    mpString = new OUString(rStr);
+}
+
+void ScCellValue::set( const EditTextObject& rEditText )
+{
+    clear();
+    meType = CELLTYPE_EDIT;
+    mpEditText = rEditText.Clone();
+}
+
+void ScCellValue::set( const ScFormulaCell& rFormula )
+{
+    clear();
+    meType = CELLTYPE_FORMULA;
+    mpFormula = rFormula.Clone();
+}
+
+void ScCellValue::set( ScFormulaCell* pFormula )
+{
+    clear();
+    meType = CELLTYPE_FORMULA;
+    mpFormula = pFormula;
+}
+
 void ScCellValue::assign( const ScDocument& rDoc, const ScAddress& rPos )
 {
     clear();
@@ -334,6 +370,36 @@ void ScCellValue::release( ScDocument& rDoc, const ScAddress& rPos )
         break;
         default:
             rDoc.SetEmptyCell(rPos);
+    }
+
+    meType = CELLTYPE_NONE;
+    mfValue = 0.0;
+}
+
+void ScCellValue::release( ScColumn& rColumn, SCROW nRow )
+{
+    switch (meType)
+    {
+        case CELLTYPE_STRING:
+        {
+            // Currently, string cannot be placed without copying.
+            rColumn.SetRawString(nRow, *mpString);
+            delete mpString;
+        }
+        break;
+        case CELLTYPE_EDIT:
+            // Cell takes the ownership of the text object.
+            rColumn.SetEditText(nRow, mpEditText);
+        break;
+        case CELLTYPE_VALUE:
+            rColumn.SetValue(nRow, mfValue);
+        break;
+        case CELLTYPE_FORMULA:
+            // This formula cell instance is directly placed in the document without copying.
+            rColumn.SetFormulaCell(nRow, mpFormula);
+        break;
+        default:
+            rColumn.Delete(nRow);
     }
 
     meType = CELLTYPE_NONE;

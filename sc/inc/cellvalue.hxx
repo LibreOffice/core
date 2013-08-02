@@ -13,6 +13,7 @@
 #include "global.hxx"
 
 class ScDocument;
+class ScColumn;
 class ScFormulaCell;
 class EditTextObject;
 class ScBaseCell;
@@ -42,6 +43,12 @@ struct SC_DLLPUBLIC ScCellValue
 
     void clear();
 
+    void set( double fValue );
+    void set( const OUString& rStr );
+    void set( const EditTextObject& rEditText );
+    void set( const ScFormulaCell& rFormula );
+    void set( ScFormulaCell* pFormula );
+
     /**
      * Take cell value from specified position in specified document.
      */
@@ -65,6 +72,8 @@ struct SC_DLLPUBLIC ScCellValue
      * copying.  After this call, the value gets cleared.
      */
     void release( ScDocument& rDoc, const ScAddress& rPos );
+
+    void release( ScColumn& rColumn, SCROW nRow );
 
     bool hasString() const;
 

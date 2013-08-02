@@ -76,6 +76,7 @@ struct ScSetStringParam;
 struct ScColWidthParam;
 class ScColumnTextWidthIterator;
 struct ScFormulaCellGroup;
+struct ScCellValue;
 struct ScRefCellValue;
 class ScDocumentImport;
 
@@ -155,6 +156,11 @@ friend class ScDocumentImport;
 
     std::vector<ColEntry>::iterator Search( SCROW nRow );
     std::vector<ColEntry>::const_iterator Search( SCROW nRow ) const;
+
+    bool ParseString(
+        ScCellValue& rCell,
+        SCROW nRow, SCTAB nTab, const String& rString, formula::FormulaGrammar::AddressConvention eConv,
+        ScSetStringParam* pParam );
 
 public:
                 ScColumn();
@@ -287,6 +293,7 @@ public:
     void SetFormula( SCROW nRow, const OUString& rFormula, formula::FormulaGrammar::Grammar eGram );
     void SetFormulaCell( SCROW nRow, ScFormulaCell* pCell );
 
+    void SetRawString( SCROW nRow, const OUString& rStr );
     void        SetValue( SCROW nRow, const double& rVal);
     void        SetError( SCROW nRow, const sal_uInt16 nError);
 
