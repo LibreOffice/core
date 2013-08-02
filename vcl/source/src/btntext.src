@@ -66,6 +66,11 @@ String SV_BUTTONTEXT_HELP
     Text [ en-US ] = "~Help";
 };
 
+String SV_BUTTONTEXT_CLOSE
+{
+    Text [ en-US ] = "~Close";
+};
+
 String SV_BUTTONTEXT_MORE
 {
     Text [ en-US ] = "~More";

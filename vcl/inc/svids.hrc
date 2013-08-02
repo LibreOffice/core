@@ -145,7 +145,7 @@
 #define SV_BUTTONTEXT_NO                    10103
 #define SV_BUTTONTEXT_RETRY                 10104
 #define SV_BUTTONTEXT_HELP                  10105
-#define SV_BUTTONTEXT_CLOSE                 SV_HELPTEXT_CLOSE
+#define SV_BUTTONTEXT_CLOSE                 10106
 #define SV_BUTTONTEXT_MORE                  10107
 #define SV_BUTTONTEXT_IGNORE                10108
 #define SV_BUTTONTEXT_ABORT                 10109
