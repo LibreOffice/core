@@ -515,4 +515,27 @@ namespace basegfx
 } // end of namespace basegfx
 
 ///////////////////////////////////////////////////////////////////////////////
+
+namespace basegfx
+{
+    namespace tools
+    {
+        void B2DHomMatrixBufferedOnDemandDecompose::impDecompose()
+        {
+            maB2DHomMatrix.decompose(maScale, maTranslate, mfRotate, mfShearX);
+
+            if(maScale.getX() < 0.0 && maScale.getY() < 0.0)
+            {
+                // mirrored in X and Y, same as rotated by 180 degrees; prefer rotation
+                maScale.setX(-maScale.getX());
+                maScale.setY(-maScale.getY());
+                mfRotate = fmod(mfRotate + F_PI, F_2PI);
+            }
+
+            mbDecomposed = true;
+        }
+    } // end of namespace tools
+} // end of namespace basegfx
+
+///////////////////////////////////////////////////////////////////////////////
 // eof

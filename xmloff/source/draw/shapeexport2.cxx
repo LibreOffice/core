@@ -161,12 +161,14 @@ void XMLShapeExport::ImpExportNewTrans_FeaturesAndWrite(::basegfx::B2DTuple& rTR
     }
 
     // write positive svg:width
-    mrExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, FRound(aTRScale.getX()));
+    mrExport.GetMM100UnitConverter().convertDouble(sStringBuffer, aTRScale.getX(), true);
+    //mrExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, FRound(aTRScale.getX()));
     aStr = sStringBuffer.makeStringAndClear();
     mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_WIDTH, aStr);
 
     // write positive svg:height
-    mrExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, FRound(aTRScale.getY()));
+    mrExport.GetMM100UnitConverter().convertDouble(sStringBuffer, aTRScale.getY(), true);
+    //mrExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, FRound(aTRScale.getY()));
     aStr = sStringBuffer.makeStringAndClear();
     mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_HEIGHT, aStr);
 
@@ -232,7 +234,8 @@ void XMLShapeExport::ImpExportNewTrans_FeaturesAndWrite(::basegfx::B2DTuple& rTR
         if(nFeatures & SEF_EXPORT_X)
         {
             // svg: x
-            mrExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, FRound(rTRTranslate.getX()));
+            mrExport.GetMM100UnitConverter().convertDouble(sStringBuffer, rTRTranslate.getX(), true);
+            //mrExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, FRound(rTRTranslate.getX()));
             aStr = sStringBuffer.makeStringAndClear();
             mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_X, aStr);
         }
@@ -240,7 +243,8 @@ void XMLShapeExport::ImpExportNewTrans_FeaturesAndWrite(::basegfx::B2DTuple& rTR
         if(nFeatures & SEF_EXPORT_Y)
         {
             // svg: y
-            mrExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, FRound(rTRTranslate.getY()));
+            mrExport.GetMM100UnitConverter().convertDouble(sStringBuffer, rTRTranslate.getY(), true);
+            //mrExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, FRound(rTRTranslate.getY()));
             aStr = sStringBuffer.makeStringAndClear();
             mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_Y, aStr);
         }

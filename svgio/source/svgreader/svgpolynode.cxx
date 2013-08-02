@@ -24,7 +24,7 @@
 
 #include <svgio/svgreader/svgpolynode.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
-#include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 

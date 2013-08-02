@@ -1467,6 +1467,9 @@ void SdXMLPathShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
                     }
                 }
 
+                // Add, set Style and properties from base shape
+                AddShape(pService);
+
                 // #89344# test for mxShape.is() and not for mxShapes.is() to support
                 // shape import helper classes WITHOUT XShapes (member mxShapes). This
                 // is used by the writer.

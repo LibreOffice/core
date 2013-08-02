@@ -1627,9 +1627,31 @@ void SdrPathObj::impSetPathPolyPolygonWithTransformationAdaption(const basegfx::
         return;
     }
 
-    static bool bRsetCoordinateSystemAfterWasLine(true);
+    // remember if this was a line before geometry change
+    static bool bResetCoordinateSystemAfterWasLine(true);
+    const bool bWasLineAndReset(bResetCoordinateSystemAfterWasLine && isLine());
 
-    if(bRsetCoordinateSystemAfterWasLine && isLine())
+    // in all other cases, set new geometry
+    maPathPolyPolygon = rNew;
+
+    if(isLine())
+    {
+        // new geometry is a non-curved line, create unit transformation so that (0,0) is
+        // 1st point and (1,0) is 2nd point
+        const basegfx::B2DPoint aPointA(rNew.getB2DPolygon(0).getB2DPoint(0));
+        const basegfx::B2DPoint aPointB(rNew.getB2DPolygon(0).getB2DPoint(1));
+        const basegfx::B2DVector aDelta(aPointB - aPointA);
+
+        maSdrObjectTransformation.setB2DHomMatrix(
+            basegfx::tools::createScaleRotateTranslateB2DHomMatrix(
+                basegfx::B2DTuple(aDelta.getLength(), 1.0),
+                atan2(aDelta.getY(), aDelta.getX()),
+                aPointA));
+        return;
+    }
+
+
+    if(bWasLineAndReset)
     {
         // the SdrPathObj has two basic states, line and other. Line is for two points
         // and no bezier, it uses a specialized geometry (unified line from 0.0, to 1.0)
@@ -1646,35 +1668,13 @@ void SdrPathObj::impSetPathPolyPolygonWithTransformationAdaption(const basegfx::
         // For this reason this is disabled and the old behaviour activated by adding this
         // case to esp. change back to the most trivial transformation in the transition
         // between line status and other. To try out the also possible new alternative,
-        // change the value of bRsetCoordinateSystemAfterWasLine to false.
+        // change the value of bResetCoordinateSystemAfterWasLine to false.
         const basegfx::B2DRange aRangeNewGeometry(rNew.getB2DRange());
 
-        maPathPolyPolygon = rNew;
         maSdrObjectTransformation.setB2DHomMatrix(
             basegfx::tools::createScaleTranslateB2DHomMatrix(
                 aRangeNewGeometry.getRange(),
                 aRangeNewGeometry.getMinimum()));
-        return;
-    }
-
-    // set new geometry
-    maPathPolyPolygon = rNew;
-
-    if(!rNew.areControlPointsUsed()
-        && 1 == rNew.count()
-        && 2 == rNew.getB2DPolygon(0).count())
-    {
-        // new geometry is a non-curved line, create unit transformation so that (0,0) is
-        // 1st point and (1,0) is 2nd point
-        const basegfx::B2DPoint aPointA(rNew.getB2DPolygon(0).getB2DPoint(0));
-        const basegfx::B2DPoint aPointB(rNew.getB2DPolygon(0).getB2DPoint(1));
-        const basegfx::B2DVector aDelta(aPointB - aPointA);
-
-        maSdrObjectTransformation.setB2DHomMatrix(
-            basegfx::tools::createScaleRotateTranslateB2DHomMatrix(
-                basegfx::B2DTuple(aDelta.getLength(), 1.0),
-                atan2(aDelta.getY(), aDelta.getX()),
-                aPointA));
         return;
     }
 
@@ -2167,7 +2167,7 @@ SdrPathObjType SdrPathObj::getSdrPathObjType() const
         }
     }
 
-    // default
+    // default; unreachable but safe
     return PathType_Line;
 }
 

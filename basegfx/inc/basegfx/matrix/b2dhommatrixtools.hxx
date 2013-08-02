@@ -187,10 +187,10 @@ namespace basegfx
         class B2DHomMatrixBufferedDecompose
         {
         private:
-            B2DVector              maScale;
+            B2DVector               maScale;
             B2DPoint                maTranslate;
-            double                 mfRotate;
-            double                 mfShearX;
+            double                  mfRotate;
+            double                  mfShearX;
 
         public:
             B2DHomMatrixBufferedDecompose(const B2DHomMatrix& rB2DHomMatrix = B2DHomMatrix())
@@ -236,12 +236,13 @@ namespace basegfx
             bool                    mbDecomposed : 1;
             bool                    mbCombined : 1;
 
+            void impDecompose();
+
             void impCheckDecompose()
             {
                 if(!mbDecomposed)
                 {
-                    maB2DHomMatrix.decompose(maScale, maTranslate, mfRotate, mfShearX);
-                    mbDecomposed = true;
+                    impDecompose();
                 }
             }
 

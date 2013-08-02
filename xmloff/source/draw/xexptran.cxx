@@ -143,6 +143,13 @@ void Imp_PutNumberChar(OUString& rStr, sal_Int32 nValue)
     rStr += OUString(sStringBuffer.makeStringAndClear());
 }
 
+void Imp_PutDoubleChar(OUString& rStr, double fValue)
+{
+    OUStringBuffer sStringBuffer;
+    SvXMLUnitConverter::convertDouble(sStringBuffer, fValue);
+    rStr += OUString(sStringBuffer.makeStringAndClear());
+}
+
 void Imp_PutNumberCharWithSpace(OUString& rStr, sal_Int32 nValue)
 {
     const sal_Int32 aLen(rStr.getLength());
@@ -1295,16 +1302,16 @@ const OUString& SdXMLImExViewBox::GetExportString()
     OUString aNewString;
     OUString aEmptySpace(sal_Unicode(' '));
 
-    Imp_PutNumberChar(aNewString, mfX);
+    Imp_PutDoubleChar(aNewString, mfX);
     aNewString += aEmptySpace;
 
-    Imp_PutNumberChar(aNewString, mfY);
+    Imp_PutDoubleChar(aNewString, mfY);
     aNewString += aEmptySpace;
 
-    Imp_PutNumberChar(aNewString, mfW);
+    Imp_PutDoubleChar(aNewString, mfW);
     aNewString += aEmptySpace;
 
-    Imp_PutNumberChar(aNewString, mfH);
+    Imp_PutDoubleChar(aNewString, mfH);
 
     // set new string
     msString = aNewString;
