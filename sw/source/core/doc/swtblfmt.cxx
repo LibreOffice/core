@@ -265,11 +265,15 @@ void SwTableFormat::RestoreTableProperties( SwTableFormat* pSrcFormat, SwTable &
     if( pSrcFormat )
     {
         pHardFormat->RegisterToFormat( *pSrcFormat );
+        pHardFormat->GetAttrSet().SetParent( &pSrcFormat->GetAttrSet() );
         bRowSplit = pSrcFormat->GetRowSplit();
         nRepeatHeading = pSrcFormat->GetRepeatHeading();
     }
     else
+    {
         pTableStyle->Remove( pHardFormat );
+        pHardFormat->GetAttrSet().SetParent( NULL );
+    }
 
     AssignLineParents( pSrcFormat, table );
 
@@ -309,9 +313,15 @@ void SwTableFormat::AssignLineParents( SwTableFormat* pSrcFormat, SwTable &rTabl
         }
 
         if( pFormat )
+        {
             pLineFormat->RegisterToFormat( *pFormat );
+            pLineFormat->GetAttrSet().SetParent( &pFormat->GetAttrSet() );
+        }
         else if( pLineFormat->GetRegisteredIn() )
+        {
             ((SwTableLineFormat*)pLineFormat->GetRegisteredIn())->Remove( pLineFormat );
+            pLineFormat->GetAttrSet().SetParent( NULL );
+        }
 
         AssignBoxParents( pFormat, *rTable.GetTabLines()[ n ] );
     }
@@ -338,10 +348,15 @@ void SwTableFormat::AssignBoxParents( SwTableLineFormat* pSrcLineFormat, SwTable
         }
 
         if( pFormat )
+        {
             pBoxFormat->RegisterToFormat( *pFormat );
+            pBoxFormat->GetAttrSet().SetParent( &pFormat->GetAttrSet() );
+        }
         else if( pBoxFormat->GetRegisteredIn() )
+        {
             ((SwTableBoxFormat*)pBoxFormat->GetRegisteredIn())->Remove( pBoxFormat );
-
+            pBoxFormat->GetAttrSet().SetParent( NULL );
+        }
 
         if( rLine.GetTabBoxes()[ n ]->GetTabLines().size() )
             AssignLineParents_Complex( pSrcLineFormat, pFormat, *rLine.GetTabBoxes()[ n ] );
@@ -356,9 +371,15 @@ void SwTableFormat::AssignLineParents_Complex( SwTableLineFormat* pSrcLineFormat
         SwTableLineFormat* pLineFormat = (SwTableLineFormat*)rBox.GetTabLines()[ n ]->GetFrameFormat();
 
         if( pSrcLineFormat )
+        {
             pLineFormat->RegisterToFormat( *pSrcLineFormat );
+            pLineFormat->GetAttrSet().SetParent( &pSrcLineFormat->GetAttrSet() );
+        }
         else
+        {
             ((SwTableLineFormat*)pLineFormat->GetRegisteredIn())->Remove( pLineFormat );
+            pLineFormat->GetAttrSet().SetParent( NULL );
+        }
 
         AssignBoxParents_Complex( pSrcLineFormat, pSrcBoxFormat, *rBox.GetTabLines()[ n ] );
     }
@@ -372,9 +393,15 @@ void SwTableFormat::AssignBoxParents_Complex( SwTableLineFormat* pSrcLineFormat,
         SwTableBoxFormat* pBoxFormat = (SwTableBoxFormat*)rLine.GetTabBoxes()[ n ]->GetFrameFormat();
 
         if( pSrcBoxFormat )
+        {
             pBoxFormat->RegisterToFormat( *pSrcBoxFormat );
+            pBoxFormat->GetAttrSet().SetParent( &pSrcBoxFormat->GetAttrSet() );
+        }
         else
+        {
             ((SwTableBoxFormat*)pBoxFormat->GetRegisteredIn())->Remove( pBoxFormat );
+            pBoxFormat->GetAttrSet().SetParent( NULL );
+        }
 
         if( rLine.GetTabBoxes()[ n ]->GetTabLines().size() )
             AssignLineParents_Complex( pSrcLineFormat, pSrcBoxFormat, *rLine.GetTabBoxes()[ n ] );

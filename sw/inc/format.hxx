@@ -117,6 +117,7 @@ public:
 
     /// For querying the attribute array.
     inline const SwAttrSet& GetAttrSet() const { return m_aSet; }
+    inline       SwAttrSet& GetAttrSet()       { return m_aSet; }
 
     /** Das Doc wird jetzt am SwAttrPool gesetzt. Dadurch hat man es immer
        im Zugriff. */
