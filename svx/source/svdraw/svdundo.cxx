@@ -255,9 +255,9 @@ void SdrUndoAttrObj::ensureStyleSheetInStyleSheetPool(SfxStyleSheetBasePool& rSt
     {
         // re-insert remembered style which was removed in the meantime. To do this
         // without assertion, do it without parent and set parent after insertion
-        const UniString aParent(rSheet.GetParent());
+        const OUString aParent(rSheet.GetParent());
 
-        rSheet.SetParent(UniString());
+        rSheet.SetParent(OUString());
         rStyleSheetPool.Insert(&rSheet);
         rSheet.SetParent(aParent);
     }
