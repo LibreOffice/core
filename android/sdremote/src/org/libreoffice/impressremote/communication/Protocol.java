@@ -18,21 +18,6 @@ final class Protocol {
 
     public static final String CHARSET = "UTF-8";
 
-    public static final class Pin {
-        private Pin() {
-        }
-
-        private static final int NUMBERS_COUNT = 4;
-
-        public static String generate() {
-            Random aRandomGenerator = new Random();
-            int aMaximumPin = (int) Math.pow(10, NUMBERS_COUNT) - 1;
-            int aPinNumber = aRandomGenerator.nextInt(aMaximumPin);
-
-            return String.format("%04d", aPinNumber);
-        }
-    }
-
     public static final class Ports {
         private Ports() {
         }
@@ -89,6 +74,47 @@ final class Protocol {
             String aCommand = TextUtils.join(DELIMITER_PARAMETER, aParameters);
 
             return prepareCommand(aCommand);
+        }
+    }
+
+    public static final class Pin {
+        private static final int NUMBERS_COUNT = 4;
+
+        private Pin() {
+        }
+
+        public static String generate() {
+            return new Pin().generatePinText();
+        }
+
+        private String generatePinText() {
+            int aPin = preventLeadingZeros(generatePinNumber());
+
+            return String.format(buildPinFormat(), aPin);
+        }
+
+        private int generatePinNumber() {
+            int aMaximumPin = (int) Math.pow(10, NUMBERS_COUNT) - 1;
+
+            return new Random().nextInt(aMaximumPin);
+        }
+
+        private int preventLeadingZeros(int aPin) {
+            // Pin cannot have leading zeros.
+            // LibreOffice Impress doesn’t allow to enter leading zeros.
+            // Bug exists at least at LibreOffice 4.1.
+
+            int aMinimumPin = (int) Math.pow(10, NUMBERS_COUNT - 1);
+
+            if (aPin >= aMinimumPin) {
+                return aPin;
+            }
+
+            return aPin + aMinimumPin;
+        }
+
+        private String buildPinFormat() {
+            return String.format("%%0%sd", Integer.toString(NUMBERS_COUNT));
         }
     }
 }
