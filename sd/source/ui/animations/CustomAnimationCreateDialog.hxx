@@ -65,9 +65,6 @@ private:
     bool mbIsPreview;
 
     TabControl* mpTabControl;
-    OKButton* mpOKButton;
-    CancelButton* mpCancelButton;
-    HelpButton* mpHelpButton;
 
     CustomAnimationCreateTabPage* mpTabPages[5];
     sal_Int16 mnEntranceId, mnEmphasisId, mnExitId, mnMPathId, mnMiscId;
