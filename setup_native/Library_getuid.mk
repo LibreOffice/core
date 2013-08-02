@@ -14,6 +14,14 @@ $(eval $(call gb_Library_add_defs,getuid,\
     -D_GNU_SOURCE \
 ))
 endif
+
+# the library is used by LD_PRELOAD; make sure that we see the symbols ;-)
+ifeq ($(COM),GCC)
+$(eval $(call gb_Library_add_cflags,getuid,\
+    -fvisibility=default \
+))
+endif
+
 $(eval $(call gb_Library_add_cobjects,getuid,\
     setup_native/scripts/source/getuid \
 ))

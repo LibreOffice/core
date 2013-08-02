@@ -194,7 +194,7 @@ sub get_path_for_library
 {
     my ($includepatharrayref) = @_;
 
-    my $getuidlibraryname = "getuid.so";
+    my $getuidlibraryname = "libgetuid.so";
 
     my $getuidlibraryref = "";
 
