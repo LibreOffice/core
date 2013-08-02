@@ -411,7 +411,6 @@ linux-gnu*|k*bsd*-gnu*)
     test_kde=yes
     test_kde4=yes
     test_freetype=yes
-    test_unix_quickstarter=yes
     _os=Linux
     ;;
 
@@ -585,7 +584,6 @@ linux-android*)
     test_kde4=no
     test_randr=no
     test_xrender=no
-    test_unix_quickstarter=no
     _os=Android
 
     if test -z "$with_android_ndk"; then
