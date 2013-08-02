@@ -491,9 +491,7 @@ public:
     void InsertSelectedEntry(); //insert the selected entry
 
     DECL_LINK(ImplDoubleClickHdl, void*);
-    //DECL_LINK(ImplSelectionChangeHdl, void*);
-
-    virtual long PreNotify( NotifyEvent& rNEvt );
+    DECL_LINK(ImplSelectHdl, void*);
 
 protected:
     virtual void KeyInput( const KeyEvent& rKeyEvt );
