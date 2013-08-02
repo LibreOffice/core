@@ -1924,7 +1924,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
                             << rLib.aName << "\". Exception: "
                             << comphelper::anyToString(aError));
                     #endif
-                    return;
+                    throw;
                 }
             }
 
@@ -1954,6 +1954,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
                     {
                         DBG_UNHANDLED_EXCEPTION();
                         // TODO: error handling
+                        throw;
                     }
                 }
             }
@@ -2033,6 +2034,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
         catch( const Exception& )
         {
             DBG_UNHANDLED_EXCEPTION();
+            throw;
         }
     }
 
@@ -2384,7 +2386,7 @@ void SAL_CALL SfxLibraryContainer::loadLibrary( const OUString& Name )
                         << "\". Exception: "
                         << comphelper::anyToString(aError));
             #endif
-                return;
+                throw;
             }
         }
 
@@ -2418,12 +2420,7 @@ void SAL_CALL SfxLibraryContainer::loadLibrary( const OUString& Name )
                     aFile = aElementName;
                     aFile += ".";
                     aFile += maLibElementFileExtension;
-                    try
-                    {
-                        xElementStream = xLibraryStor->openStreamElement( aFile, embed::ElementModes::READ );
-                    }
-                    catch(const uno::Exception& )
-                    {}
+                    xElementStream = xLibraryStor->openStreamElement( aFile, embed::ElementModes::READ );
                 }
 
                 if ( xElementStream.is() )
@@ -2436,7 +2433,7 @@ void SAL_CALL SfxLibraryContainer::loadLibrary( const OUString& Name )
                         "basic",
                         "couldn't open library element stream - attempted to"
                             " open library \"" << Name << '"');
-                    return;
+                    throw RuntimeException("couln't open library element stream", *this);
                 }
             }
             else
