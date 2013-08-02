@@ -746,12 +746,17 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsResultSetType(sal_Int32 setType)
             return sal_False;
     }
 }
-// -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::supportsResultSetConcurrency( sal_Int32 setType, sal_Int32 concurrency ) throw(SQLException, RuntimeException)
+
+sal_Bool SAL_CALL ODatabaseMetaData::supportsResultSetConcurrency(
+        sal_Int32 aResultSetType,
+        sal_Int32 aConcurrency)
+    throw(SQLException, RuntimeException)
 {
-    (void) setType;
-    (void) concurrency;
-    return sal_False;
+    if (aResultSetType == ResultSetType::FORWARD_ONLY
+        && aConcurrency == ResultSetConcurrency::READ_ONLY)
+        return sal_True;
+    else
+        return sal_False;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::ownUpdatesAreVisible( sal_Int32 setType ) throw(SQLException, RuntimeException)
