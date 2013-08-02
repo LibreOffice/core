@@ -610,6 +610,11 @@ void SAL_CALL OConnection::clearWarnings(  ) throw(SQLException, RuntimeExceptio
 void SAL_CALL OConnection::documentEventOccured( const DocumentEvent& _Event )
                                                         throw(RuntimeException)
 {
+    MutexGuard aGuard(m_aMutex);
+
+    if (!m_bIsEmbedded)
+        return;
+
     if (_Event.EventName == "OnSave" || _Event.EventName == "OnSaveAs")
     {
         commit(); // Commit and close transaction
