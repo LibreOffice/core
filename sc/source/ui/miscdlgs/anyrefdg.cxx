@@ -112,7 +112,7 @@ void ScFormulaReferenceHelper::enableInput( bool bEnable )
     }
 }
 // -----------------------------------------------------------------------------
-void ScFormulaReferenceHelper::ShowSimpleReference( const XubString& rStr )
+void ScFormulaReferenceHelper::ShowSimpleReference(const OUString& rStr)
 {
     if( bEnableColorRef )
     {
@@ -172,7 +172,7 @@ bool ScFormulaReferenceHelper::ParseWithNames( ScRangeList& rRanges, const Strin
     return !bError;
 }
 // -----------------------------------------------------------------------------
-void ScFormulaReferenceHelper::ShowFormulaReference( const XubString& rStr )
+void ScFormulaReferenceHelper::ShowFormulaReference(const OUString& rStr)
 {
     if( bEnableColorRef)
     {
@@ -251,20 +251,20 @@ void ScFormulaReferenceHelper::HideReference( bool bDoneRefMode )
     }
 }
 // -----------------------------------------------------------------------------
-void ScFormulaReferenceHelper::ShowReference( const XubString& rStr )
+void ScFormulaReferenceHelper::ShowReference(const OUString& rStr)
 {
     if( bEnableColorRef )
     {
-        if( rStr.Search('(')!=STRING_NOTFOUND ||
-            rStr.Search('+')!=STRING_NOTFOUND ||
-            rStr.Search('*')!=STRING_NOTFOUND ||
-            rStr.Search('-')!=STRING_NOTFOUND ||
-            rStr.Search('/')!=STRING_NOTFOUND ||
-            rStr.Search('&')!=STRING_NOTFOUND ||
-            rStr.Search('<')!=STRING_NOTFOUND ||
-            rStr.Search('>')!=STRING_NOTFOUND ||
-            rStr.Search('=')!=STRING_NOTFOUND ||
-            rStr.Search('^')!=STRING_NOTFOUND)
+        if( rStr.indexOf('(') != -1 ||
+            rStr.indexOf('+') != -1 ||
+            rStr.indexOf('*') != -1 ||
+            rStr.indexOf('-') != -1 ||
+            rStr.indexOf('/') != -1 ||
+            rStr.indexOf('&') != -1 ||
+            rStr.indexOf('<') != -1 ||
+            rStr.indexOf('>') != -1 ||
+            rStr.indexOf('=') != -1 ||
+            rStr.indexOf('^') != -1 )
         {
             ShowFormulaReference(rStr);
         }
@@ -1014,9 +1014,9 @@ void ScRefHandler::HideReference( sal_Bool bDoneRefMode )
     m_aHelper.HideReference( bDoneRefMode );
 }
 // -----------------------------------------------------------------------------
-void ScRefHandler::ShowReference( const XubString& rStr )
+void ScRefHandler::ShowReference(const OUString& rStr)
 {
-    m_aHelper.ShowReference( rStr );
+    m_aHelper.ShowReference(rStr);
 }
 // -----------------------------------------------------------------------------
 void ScRefHandler::ReleaseFocus( formula::RefEdit* pEdit, formula::RefButton* pButton )

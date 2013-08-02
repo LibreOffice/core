@@ -28,7 +28,7 @@ namespace formula
     class FORMULA_DLLPUBLIC SAL_NO_VTABLE IControlReferenceHandler
     {
     public:
-        virtual void ShowReference(const String& _sRef) = 0;
+        virtual void ShowReference(const OUString& _sRef) = 0;
         virtual void HideReference( sal_Bool bDoneRefMode = sal_True ) = 0;
         virtual void ReleaseFocus( RefEdit* pEdit, RefButton* pButton = NULL ) = 0;
         virtual void ToggleCollapsed( RefEdit* pEdit, RefButton* pButton = NULL ) = 0;

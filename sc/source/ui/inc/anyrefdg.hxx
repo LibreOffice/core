@@ -75,12 +75,12 @@ public:
     ScFormulaReferenceHelper(IAnyRefDialog* _pDlg,SfxBindings* _pBindings);
     ~ScFormulaReferenceHelper();
 
-    void                ShowSimpleReference( const XubString& rStr );
-    void                ShowFormulaReference( const XubString& rStr );
+    void                ShowSimpleReference(const OUString& rStr);
+    void                ShowFormulaReference(const OUString& rStr);
     bool                ParseWithNames( ScRangeList& rRanges, const String& rStr, ScDocument* pDoc );
     void                Init();
 
-    void                ShowReference( const XubString& rStr );
+    void                ShowReference(const OUString& rStr);
     void                ReleaseFocus( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL );
     void                HideReference( bool bDoneRefMode = true );
     void                RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL );
@@ -136,8 +136,8 @@ protected:
 
     virtual void        RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL );
     virtual void        RefInputDone( sal_Bool bForced = false );
-    void                ShowSimpleReference( const XubString& rStr );
-    void                ShowFormulaReference( const XubString& rStr );
+    void                ShowSimpleReference(const OUString& rStr);
+    void                ShowFormulaReference(const OUString& rStr);
 
     bool                ParseWithNames( ScRangeList& rRanges, const String& rStr, ScDocument* pDoc );
 
@@ -155,7 +155,7 @@ public:
     virtual sal_Bool        IsTableLocked() const;
     virtual sal_Bool        IsDocAllowed( SfxObjectShell* pDocSh ) const;
 
-    virtual void        ShowReference( const XubString& rStr );
+    virtual void        ShowReference(const OUString& rStr);
     virtual void        HideReference( sal_Bool bDoneRefMode = sal_True );
 
     virtual void        ToggleCollapsed( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL );

@@ -173,7 +173,7 @@ IFunctionManager* FormulaDialog::getFunctionManager()
     return m_aFunctionManager.get();
 }
 // -----------------------------------------------------------------------------
-void FormulaDialog::ShowReference(const String& /*_sRef*/)
+void FormulaDialog::ShowReference(const OUString& /*_sRef*/)
 {
 }
 // -----------------------------------------------------------------------------

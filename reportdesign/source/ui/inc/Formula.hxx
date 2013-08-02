@@ -87,7 +87,7 @@ public:
     virtual ::std::auto_ptr<formula::FormulaTokenArray> convertToTokenArray(const ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken >& _aTokenList);
 
     // IControlReferenceHandler
-    virtual void ShowReference(const String& _sRef);
+    virtual void ShowReference(const OUString& _sRef);
     virtual void HideReference( sal_Bool bDoneRefMode = sal_True );
     virtual void ReleaseFocus( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL );
     virtual void ToggleCollapsed( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL );

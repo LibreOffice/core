@@ -86,7 +86,7 @@ public:
     virtual sal_Bool    Close();
 
     // sc::IAnyRefDialog
-    virtual void ShowReference(const String& _sRef);
+    virtual void ShowReference(const OUString& _sRef);
     virtual void HideReference( sal_Bool bDoneRefMode = sal_True );
     virtual void SetReference( const ScRange& rRef, ScDocument* pD );
 

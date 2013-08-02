@@ -497,7 +497,7 @@ void ScFormulaDlg::showReference(const String& _sFormula)
 {
     ShowReference(_sFormula);
 }
-void ScFormulaDlg::ShowReference(const String& _sFormula)
+void ScFormulaDlg::ShowReference(const OUString& _sFormula)
 {
     m_aHelper.ShowReference(_sFormula);
 }
