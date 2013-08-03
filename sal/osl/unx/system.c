@@ -169,12 +169,15 @@ int macxp_resolveAlias(char *path, int buflen)
       CFStringRef cfpath = CFStringCreateWithCString( NULL, path, kCFStringEncodingUTF8 );
       CFURLRef cfurl = CFURLCreateWithFileSystemPath( NULL, cfpath, kCFURLPOSIXPathStyle, false );
       CFRelease( cfpath );
-      CFErrorRef cferror;
+      CFErrorRef cferror = NULL;
       CFDataRef cfbookmark = CFURLCreateBookmarkDataFromFile( NULL, cfurl, &cferror );
       CFRelease( cfurl );
       if ( cfbookmark == NULL )
       {
-          CFRelease( cferror );
+          if(cferror)
+          {
+              CFRelease( cferror );
+          }
       }
       else
       {
