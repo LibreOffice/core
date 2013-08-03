@@ -2665,7 +2665,7 @@ class UpdateSubTotalHandler
 
     void update(double fVal, bool bVal)
     {
-        if (!mrData.bError)
+        if (mrData.bError)
             return;
 
         switch (mrData.eFunc)
