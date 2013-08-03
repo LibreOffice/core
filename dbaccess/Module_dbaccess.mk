@@ -37,6 +37,11 @@ $(eval $(call gb_Module_add_check_targets,dbaccess,\
 ))
 endif
 
+$(eval $(call gb_Module_add_check_targets,dbaccess,\
+	CppunitTest_dbaccess_dialog_save \
+))
+
+
 # disable test because it still fails in some situations
 #    CppunitTest_dbaccess_macros_test \
 #
