@@ -22,20 +22,18 @@ import android.content.Context;
 import org.libreoffice.impressremote.util.Preferences;
 
 class ServersManager implements Comparator<Server> {
-    private final Context mContext;
-
     private final ServersFinder mBluetoothServersFinder;
     private final ServersFinder mTcpServersFinder;
 
     private final Set<Server> mBlacklistedServers;
+    private final Preferences mSavedServersPreferences;
 
     public ServersManager(Context aContext) {
-        mContext = aContext;
-
-        mBluetoothServersFinder = new BluetoothServersFinder(mContext);
-        mTcpServersFinder = new TcpServersFinder(mContext);
+        mBluetoothServersFinder = new BluetoothServersFinder(aContext);
+        mTcpServersFinder = new TcpServersFinder(aContext);
 
         mBlacklistedServers = new HashSet<Server>();
+        mSavedServersPreferences = Preferences.getSavedServersInstance(aContext);
     }
 
     public void startServersSearch() {
@@ -63,8 +61,7 @@ class ServersManager implements Comparator<Server> {
     }
 
     private List<Server> getManualAddedTcpServers() {
-        Map<String, ?> aServersEntries = Preferences
-            .getAll(mContext, Preferences.Locations.STORED_SERVERS);
+        Map<String, ?> aServersEntries = mSavedServersPreferences.getAll();
 
         return buildTcpServers(aServersEntries);
     }
@@ -104,8 +101,7 @@ class ServersManager implements Comparator<Server> {
     }
 
     public void addTcpServer(String aAddress, String aName) {
-        Preferences.set(mContext, Preferences.Locations.STORED_SERVERS,
-            aAddress, aName);
+        mSavedServersPreferences.set(aAddress, aName);
     }
 
     public void removeServer(Server aServer) {
@@ -129,8 +125,7 @@ class ServersManager implements Comparator<Server> {
     }
 
     private void removeManualAddedServer(Server aServer) {
-        Preferences.remove(mContext, Preferences.Locations.STORED_SERVERS,
-            aServer.getAddress());
+        mSavedServersPreferences.remove(aServer.getAddress());
     }
 
     private void blacklistServer(Server aServer) {

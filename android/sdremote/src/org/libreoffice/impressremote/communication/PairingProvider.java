@@ -15,10 +15,10 @@ import android.os.Build;
 import org.libreoffice.impressremote.util.Preferences;
 
 final class PairingProvider {
-    private final Context mContext;
+    private final Preferences mAuthorizedServersPreferences;
 
     private PairingProvider(Context aContext) {
-        mContext = aContext;
+        mAuthorizedServersPreferences = Preferences.getAuthorizedServersInstance(aContext);
     }
 
     public static boolean isPairingNecessary(Server aServer) {
@@ -46,17 +46,11 @@ final class PairingProvider {
     }
 
     private String getSavedPin(Server aServer) {
-        String aLocation = Preferences.Locations.AUTHORIZED_REMOTES;
-        String aServerAddress = aServer.getAddress();
-
-        return Preferences.getString(mContext, aLocation, aServerAddress);
+        return mAuthorizedServersPreferences.get(aServer.getAddress());
     }
 
     private void savePin(Server aServer, String aPin) {
-        String aLocation = Preferences.Locations.AUTHORIZED_REMOTES;
-        String aServerAddress = aServer.getAddress();
-
-        Preferences.set(mContext, aLocation, aServerAddress, aPin);
+        mAuthorizedServersPreferences.set(aServer.getAddress(), aPin);
     }
 
     public static String getPairingDeviceName(Context aContext) {

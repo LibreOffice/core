@@ -14,45 +14,46 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 public final class Preferences {
-    public static final class Locations {
+    private static final class Locations {
         private Locations() {
         }
 
-        public static final String AUTHORIZED_REMOTES = "sdremote_authorisedremotes";
-        public static final String STORED_SERVERS = "sdremote_storedServers";
+        public static final String AUTHORIZED_SERVERS = "authorized_servers";
+        public static final String SAVED_SERVERS = "saved_servers";
     }
 
-    private Preferences() {
+    private final SharedPreferences mPreferences;
+
+    public static Preferences getAuthorizedServersInstance(Context aContext) {
+        return new Preferences(aContext, Locations.AUTHORIZED_SERVERS);
     }
 
-    private static SharedPreferences getPreferences(Context aContext, String aLocation) {
+    private Preferences(Context aContext, String aLocation) {
+        mPreferences = getPreferences(aContext, aLocation);
+    }
+
+    private SharedPreferences getPreferences(Context aContext, String aLocation) {
         return aContext.getSharedPreferences(aLocation, Context.MODE_PRIVATE);
     }
 
-    public static Map<String, ?> getAll(Context aContext, String aLocation) {
-        return getPreferences(aContext, aLocation).getAll();
+    public static Preferences getSavedServersInstance(Context aContext) {
+        return new Preferences(aContext, Locations.SAVED_SERVERS);
     }
 
-    public static String getString(Context aContext, String aLocation, String aKey) {
-        return getPreferences(aContext, aLocation).getString(aKey, null);
+    public Map<String, ?> getAll() {
+        return mPreferences.getAll();
     }
 
-    public static void set(Context aContext, String aLocation, String aKey, String aValue) {
-        SharedPreferences.Editor aPreferencesEditor = getPreferences(aContext,
-            aLocation).edit();
-
-        aPreferencesEditor.putString(aKey, aValue);
-
-        aPreferencesEditor.commit();
+    public String get(String aKey) {
+        return mPreferences.getString(aKey, null);
     }
 
-    public static void remove(Context aContext, String aLocation, String aKey) {
-        SharedPreferences.Editor aPreferencesEditor = getPreferences(aContext,
-            aLocation).edit();
+    public void set(String aKey, String aValue) {
+        mPreferences.edit().putString(aKey, aValue).commit();
+    }
 
-        aPreferencesEditor.remove(aKey);
-
-        aPreferencesEditor.commit();
+    public void remove(String aKey) {
+        mPreferences.edit().remove(aKey).commit();
     }
 }
 
