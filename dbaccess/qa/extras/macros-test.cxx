@@ -80,6 +80,7 @@ void DBAccessTest::setUp()
     // This is a bit of a fudge, we do this to ensure that ScGlobals::ensure,
     // which is a private symbol to us, gets called
     mxDesktop = com::sun::star::frame::Desktop::create( comphelper::getComponentContext(getMultiServiceFactory()) );
+    CPPUNIT_ASSERT(mxDesktop.is());
 }
 
 void DBAccessTest::tearDown()

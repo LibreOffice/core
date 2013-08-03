@@ -9,7 +9,6 @@
 
 #include <sal/config.h>
 #include <test/unoapi_test.hxx>
-#include <unotest/macros_test.hxx>
 #include <rtl/strbuf.hxx>
 #include <osl/file.hxx>
 
@@ -81,7 +80,8 @@ void ScMacrosTest::testMSP()
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
 
     CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
-    ScDocShell* xDocSh = static_cast<ScDocShell*>(pFoundShell);
+    ScDocShell* xDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
+    CPPUNIT_ASSERT(xDocSh != NULL);
 
     pFoundShell->CallXScript(xComponent, sUrl, aParams, aRet, aOutParamIndex,aOutParam);
     OUString sResult;
