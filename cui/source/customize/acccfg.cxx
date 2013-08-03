@@ -88,7 +88,7 @@ static OUString MEDIATYPE_PROPNAME               ("MediaType"                   
 static OUString MEDIATYPE_UICONFIG               ("application/vnd.sun.xml.ui.configuration");
 
 //-----------------------------------------------
-static sal_uInt16 KEYCODE_ARRAY[] =
+static const sal_uInt16 KEYCODE_ARRAY[] =
 {
     KEY_F1       ,
     KEY_F2       ,
@@ -600,7 +600,7 @@ static sal_uInt16 KEYCODE_ARRAY[] =
     KEY_DELETE    | KEY_SHIFT | KEY_MOD1 | KEY_MOD2
 };
 
-static sal_uInt16 KEYCODE_ARRAY_SIZE = SAL_N_ELEMENTS(KEYCODE_ARRAY);
+static const sal_uInt16 KEYCODE_ARRAY_SIZE = SAL_N_ELEMENTS(KEYCODE_ARRAY);
 
 //-----------------------------------------------
 // seems to be needed to layout the list box, which shows all

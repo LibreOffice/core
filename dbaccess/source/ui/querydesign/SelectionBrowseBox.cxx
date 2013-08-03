@@ -2166,7 +2166,7 @@ long OSelectionBrowseBox::GetRealRow(long nRowId) const
     OSL_ENSURE(nErg <= long(m_bVisibleRow.size()),"nErg kann nicht groesser als BROW_ROW_CNT sein!");
     return i;
 }
-static long nVisibleRowMask[] =
+static const long nVisibleRowMask[] =
                     {
                             0x0001,
                             0x0002,

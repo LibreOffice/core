@@ -91,7 +91,7 @@
 #define SID_FM_IMAGEBUTTON                  (SID_FMSLOTS_START + 12)
 #define SID_FM_FILECONTROL                  (SID_FMSLOTS_START + 13)
 
-static sal_Int16 nConvertSlots[] =
+static const sal_Int16 nConvertSlots[] =
 {
     SID_FM_CONVERTTO_EDIT,
     SID_FM_CONVERTTO_BUTTON,
@@ -115,7 +115,7 @@ static sal_Int16 nConvertSlots[] =
     SID_FM_CONVERTTO_SPINBUTTON
 };
 
-static sal_Int16 nCreateSlots[] =
+static const sal_Int16 nCreateSlots[] =
 {
     SID_FM_EDIT,
     SID_FM_PUSHBUTTON,
@@ -139,7 +139,7 @@ static sal_Int16 nCreateSlots[] =
     SID_FM_SPINBUTTON
 };
 
-const char* aCommands[] =
+static const char* aCommands[] =
 {
     ".uno:ConvertToEdit",
     ".uno:ConvertToButton",

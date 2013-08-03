@@ -25,7 +25,7 @@
 #include "OfficeFilePicker.hxx"
 #include "OfficeFolderPicker.hxx"
 
-static cppu::ImplementationEntry g_entries[] =
+static const cppu::ImplementationEntry g_entries[] =
 {
     {
         SvtFilePicker::impl_createInstance,

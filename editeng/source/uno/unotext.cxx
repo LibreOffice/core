@@ -949,7 +949,7 @@ beans::PropertyState SAL_CALL SvxUnoTextRangeBase::getPropertyState( const OUStr
     return _getPropertyState( PropertyName, -1 );
 }
 
-static sal_uInt16 aSvxUnoFontDescriptorWhichMap[] = { EE_CHAR_FONTINFO, EE_CHAR_FONTHEIGHT, EE_CHAR_ITALIC,
+static const sal_uInt16 aSvxUnoFontDescriptorWhichMap[] = { EE_CHAR_FONTINFO, EE_CHAR_FONTHEIGHT, EE_CHAR_ITALIC,
                                                   EE_CHAR_UNDERLINE, EE_CHAR_WEIGHT, EE_CHAR_STRIKEOUT,
                                                   EE_CHAR_WLM, 0 };
 
@@ -968,7 +968,7 @@ beans::PropertyState SAL_CALL SvxUnoTextRangeBase::_getPropertyState(const SfxIt
             {
             case WID_FONTDESC:
                 {
-                    sal_uInt16* pWhichId = aSvxUnoFontDescriptorWhichMap;
+                    const sal_uInt16* pWhichId = aSvxUnoFontDescriptorWhichMap;
                     SfxItemState eTempItemState;
                     while( *pWhichId )
                     {
@@ -1115,7 +1115,7 @@ sal_Bool SvxUnoTextRangeBase::_getOnePropertyStates(const SfxItemSet* pSet, cons
         {
             case WID_FONTDESC:
                 {
-                    sal_uInt16* pWhichId = aSvxUnoFontDescriptorWhichMap;
+                    const sal_uInt16* pWhichId = aSvxUnoFontDescriptorWhichMap;
                     SfxItemState eTempItemState;
                     while( *pWhichId )
                     {

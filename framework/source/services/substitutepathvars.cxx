@@ -130,7 +130,7 @@ struct TableEntry
 // Table with valid operating system strings
 // Name of the os as char* and the length
 // of the string
-static TableEntry aOSTable[OS_COUNT] =
+static const TableEntry aOSTable[OS_COUNT] =
 {
     { "WINDOWS"     ,       7       },
     { "UNIX"        ,       4       },
@@ -142,7 +142,7 @@ static TableEntry aOSTable[OS_COUNT] =
 // Table with valid environment variables
 // Name of the environment type as a char* and
 // the length of the string.
-static TableEntry aEnvTable[ET_COUNT] =
+static const TableEntry aEnvTable[ET_COUNT] =
 {
     { "HOST"        ,       4       },
     { "YPDOMAIN"    ,       8       },
@@ -155,7 +155,7 @@ static TableEntry aEnvTable[ET_COUNT] =
 // Priority table for the environment types. Lower numbers define
 // a higher priority. Equal numbers has the same priority that means
 // that the first match wins!!
-static sal_Int16 aEnvPrioTable[ET_COUNT] =
+static const sal_Int16 aEnvPrioTable[ET_COUNT] =
 {
     1,      // ET_HOST
     2,      // ET_IPDOMAIN
@@ -166,7 +166,7 @@ static sal_Int16 aEnvPrioTable[ET_COUNT] =
 };
 
 // Table with all fixed/predefined variables supported.
-static FixedVariable aFixedVarTable[] =
+static const FixedVariable aFixedVarTable[] =
 {
     { VARIABLE_INST,        PREDEFVAR_INST,         REPLACELENGTH_INST,     true                       },
     { VARIABLE_PROG,        PREDEFVAR_PROG,         REPLACELENGTH_PROG,     true                       },

@@ -189,7 +189,7 @@ static Sequence< OUString > FolderPicker_getSupportedServiceNames()
 /*
  * Implementation entries.
  */
-static cppu::ImplementationEntry g_entries[] =
+static const cppu::ImplementationEntry g_entries[] =
 {
     {
         FilePicker_createInstance,

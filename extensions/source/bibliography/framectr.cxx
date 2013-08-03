@@ -76,7 +76,7 @@ struct CacheDispatchInfo
 
 // Attention: commands must be sorted by command groups. Implementation is dependent
 // on this!!
-static DispatchInfo SupportedCommandsArray[] =
+static const DispatchInfo SupportedCommandsArray[] =
 {
     { ".uno:Undo"               ,   frame::CommandGroup::EDIT       , sal_False },
     { ".uno:Cut"                ,   frame::CommandGroup::EDIT       , sal_False },

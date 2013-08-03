@@ -6487,7 +6487,7 @@ struct ClsIDs {
     const sal_Char* pSvrName;
     const sal_Char* pDspName;
 };
-static ClsIDs aClsIDs[] = {
+static const ClsIDs aClsIDs[] = {
 
     { 0x000212F0, "MSWordArt",          "Microsoft Word Art"            },
     { 0x000212F0, "MSWordArt.2",        "Microsoft Word Art 2.0"        },
@@ -6651,7 +6651,7 @@ sal_Bool SvxMSDffManager::ConvertToOle2( SvStream& rStm, sal_uInt32 nReadLen,
                 xOle10Stm = SotStorageStreamRef();
 
                 // set the compobj stream
-                ClsIDs* pIds;
+                const ClsIDs* pIds;
                 for( pIds = aClsIDs; pIds->nId; pIds++ )
                 {
                     if( aSvrName == OUString::createFromAscii(pIds->pSvrName) )
