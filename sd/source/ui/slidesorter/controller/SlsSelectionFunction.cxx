@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "controller/SlsSelectionFunction.hxx"
 
 #include "SlideSorter.hxx"
@@ -439,7 +438,7 @@ sal_Bool SelectionFunction::KeyInput (const KeyEvent& rEvent)
                     mpModeHandler->SetCurrentPage(pDescriptor);
                     mpModeHandler->SwitchView(pDescriptor);
                 }
-                else
+                else if (pViewShell->GetDispatcher() != NULL)
                 {
                     pViewShell->GetDispatcher()->Execute(
                         SID_INSERTPAGE,
