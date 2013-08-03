@@ -557,12 +557,10 @@ class ScriptBrowseNode( unohelper.Base, XBrowseNode , XPropertySet, XInvocation,
                 mod.__dict__[GLOBAL_SCRIPTCONTEXT_NAME] = self.provCtx.scriptContext
                 exec(code, mod.__dict__)
                 values = mod.__dict__.get( CALLABLE_CONTAINER_NAME , None )
-                log.debug("values : %s" % values)
                 if not values:
                     values = mod.__dict__.values()
                     
                 for i in values:
-                    log.debug("one value %s" % i)
                     if isScript( i ):
                         i()
                         break
@@ -1102,7 +1100,6 @@ if LogLevel.use >= LogLevel.DEBUG2:
         log.log( LogLevel.DEBUG2, "sys.path contains '%s'" % path  )
     for module in sys.modules:
         log.log( LogLevel.DEBUG2, "sys.modules contains '%s'" % module  )
-
 
 log.debug( "pythonscript finished intializing" )
 
