@@ -34,20 +34,29 @@ class LogLevel:
     NONE = 0   # production level
     ERROR = 1  # for script developers
     DEBUG = 2  # for script framework developers
+    DEBUG2 = 3  # for script framework developers debugging
 
 PYSCRIPT_LOG_ENV = "PYSCRIPT_LOG_LEVEL"
 PYSCRIPT_LOG_STDOUT_ENV = "PYSCRIPT_LOG_STDOUT"
 
 # Configuration ----------------------------------------------------
 LogLevel.use = LogLevel.NONE
-if os.environ.get(PYSCRIPT_LOG_ENV) == "ERROR":
+
+env_log_value = os.environ.get(PYSCRIPT_LOG_ENV,"NONE")
+
+
+if env_log_value == "ERROR":
     LogLevel.use = LogLevel.ERROR
-elif os.environ.get(PYSCRIPT_LOG_ENV) == "DEBUG":
+elif (env_log_value == "DEBUG"):
     LogLevel.use = LogLevel.DEBUG
+else :
+    LogLevel.use = int(env_log_value)
+
 
 # True, writes to stdout (difficult on windows)
 # False, writes to user/Scripts/python/log.txt
-LOG_STDOUT = os.environ.get(PYSCRIPT_LOG_STDOUT_ENV, "1") != "0"
+env_stdout_value =os.environ.get(PYSCRIPT_LOG_STDOUT_ENV, "1")
+LOG_STDOUT =  env_stdout_value != "0"
 
 ENABLE_EDIT_DIALOG=False                    # offers a minimal editor for editing.
 #-------------------------------------------------------------------
@@ -72,15 +81,22 @@ def logLevel2String( level ):
 def getLogTarget():
     ret = sys.stdout
     if not LOG_STDOUT:
+        systemPath=None
         try:
             pathSubst = uno.getComponentContext().ServiceManager.createInstance(
                 "com.sun.star.util.PathSubstitution" )
             userInstallation =  pathSubst.getSubstituteVariableValue( "user" )
             if len( userInstallation ) > 0:
                 systemPath = uno.fileUrlToSystemPath( userInstallation + "/Scripts/python/log.txt" )
-                ret = file( systemPath , "a" )
+                ret = open( systemPath , "a" )
+                if LogLevel.use >= LogLevel.DEBUG:
+                    debugstr="Logfile: %s opened successfully at log level %d\n" % (systemPath, LogLevel.use)
+                    print(debugstr) # for stdout
+                    ret.write(debugstr)
+                    #log.debug(debugstr)
+
         except:
-            print("Exception during creation of pythonscript logfile: "+ lastException2String() + "\n, delagating log to stdout\n")
+            print("Exception during creation of pythonscript logfile: %s\n, with the file %s delagating log to stdout\n" % (lastException2String(),systemPath))
     return ret
   
 class Logger(LogLevel):
@@ -109,7 +125,7 @@ class Logger(LogLevel):
                     " [" +
                     logLevel2String( level ) +
                     "] " +
-                    encfile(msg) +
+                    str(encfile(msg)) +
                     "\n" )
                 self.target.flush()
             except:
@@ -118,6 +134,9 @@ class Logger(LogLevel):
 log = Logger( getLogTarget() )
 
 log.debug( "pythonscript loading" )
+log.debug ("ENV %s=%s" %( PYSCRIPT_LOG_ENV, env_log_value))
+log.debug ("ENV %s=%s" %( PYSCRIPT_LOG_STDOUT_ENV, env_stdout_value))
+
 
 #from com.sun.star.lang import typeOfXServiceInfo, typeOfXTypeProvider
 from com.sun.star.uno import RuntimeException
@@ -538,10 +557,12 @@ class ScriptBrowseNode( unohelper.Base, XBrowseNode , XPropertySet, XInvocation,
                 mod.__dict__[GLOBAL_SCRIPTCONTEXT_NAME] = self.provCtx.scriptContext
                 exec(code, mod.__dict__)
                 values = mod.__dict__.get( CALLABLE_CONTAINER_NAME , None )
+                log.debug("values : %s" % values)
                 if not values:
                     values = mod.__dict__.values()
                     
                 for i in values:
+                    log.debug("one value %s" % i)
                     if isScript( i ):
                         i()
                         break
@@ -1073,6 +1094,14 @@ g_ImplementationHelper.addImplementation( \
 	PythonScriptProvider,g_implName, \
     ("com.sun.star.script.provider.LanguageScriptProvider",
      "com.sun.star.script.provider.ScriptProviderFor"+ LANGUAGENAME,),)
+
+
+if LogLevel.use >= LogLevel.DEBUG2:
+    # for debugging we will iterate over modules and path
+    for path in sys.path:
+        log.log( LogLevel.DEBUG2, "sys.path contains '%s'" % path  )
+    for module in sys.modules:
+        log.log( LogLevel.DEBUG2, "sys.modules contains '%s'" % module  )
 
 
 log.debug( "pythonscript finished intializing" )
