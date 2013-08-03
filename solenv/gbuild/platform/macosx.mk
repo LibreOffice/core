@@ -71,6 +71,11 @@ gb_COMPILERDEFS += \
 
 endif
 
+ifneq ($(filter 1060,$(MACOSX_SDK_VERSION)),)
+gb_COMPILERNOOPTFLAGS := -O0 -fstrict-overflow
+
+endif
+
 ifeq ($(HAVE_GCC_NO_LONG_DOUBLE),TRUE)
 gb_CXXFLAGS += -Wno-long-double
 endif
