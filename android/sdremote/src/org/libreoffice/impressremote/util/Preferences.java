@@ -20,6 +20,7 @@ public final class Preferences {
 
         public static final String AUTHORIZED_SERVERS = "authorized_servers";
         public static final String SAVED_SERVERS = "saved_servers";
+        public static final String APPLICATION_STATES = "application_states";
     }
 
     private final SharedPreferences mPreferences;
@@ -40,16 +41,28 @@ public final class Preferences {
         return new Preferences(aContext, Locations.SAVED_SERVERS);
     }
 
+    public static Preferences getApplicationStatesInstance(Context aContext) {
+        return new Preferences(aContext, Locations.APPLICATION_STATES);
+    }
+
     public Map<String, ?> getAll() {
         return mPreferences.getAll();
     }
 
-    public String get(String aKey) {
+    public String getString(String aKey) {
         return mPreferences.getString(aKey, null);
     }
 
-    public void set(String aKey, String aValue) {
+    public int getInt(String aKey) {
+        return mPreferences.getInt(aKey, 0);
+    }
+
+    public void setString(String aKey, String aValue) {
         mPreferences.edit().putString(aKey, aValue).commit();
+    }
+
+    public void setInt(String aKey, int aValue) {
+        mPreferences.edit().putInt(aKey, aValue).commit();
     }
 
     public void remove(String aKey) {

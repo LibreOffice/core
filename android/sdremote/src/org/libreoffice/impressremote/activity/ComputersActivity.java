@@ -25,6 +25,7 @@ import org.libreoffice.impressremote.util.BluetoothOperator;
 import org.libreoffice.impressremote.util.FragmentOperator;
 import org.libreoffice.impressremote.util.Intents;
 import org.libreoffice.impressremote.R;
+import org.libreoffice.impressremote.util.Preferences;
 
 public class ComputersActivity extends SherlockFragmentActivity implements ActionBar.TabListener, ViewPager.OnPageChangeListener {
     private static final class TabsIndices {
@@ -72,6 +73,8 @@ public class ComputersActivity extends SherlockFragmentActivity implements Actio
 
         setUpTabs();
         setUpComputersPager();
+
+        setUpSavedTab();
     }
 
     private void setUpTabs() {
@@ -137,6 +140,14 @@ public class ComputersActivity extends SherlockFragmentActivity implements Actio
     public void onPageScrollStateChanged(int aPosition) {
     }
 
+    private void setUpSavedTab() {
+        getSupportActionBar().setSelectedNavigationItem(loadTabIndex());
+    }
+
+    private int loadTabIndex() {
+        return Preferences.getApplicationStatesInstance(this).getInt("saved_tab");
+    }
+
     private void setUpComputersList() {
         Fragment aComputersFragment = ComputersFragment.newInstance(ComputersFragment.Type.WIFI);
 
@@ -188,6 +199,19 @@ public class ComputersActivity extends SherlockFragmentActivity implements Actio
     private void callLicensesActivity() {
         Intent aIntent = Intents.buildLicensesIntent(this);
         startActivity(aIntent);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        saveTabIndex();
+    }
+
+    private void saveTabIndex() {
+        int aTabIndex = getSupportActionBar().getSelectedNavigationIndex();
+
+        Preferences.getApplicationStatesInstance(this).setInt("saved_tab", aTabIndex);
     }
 }
 

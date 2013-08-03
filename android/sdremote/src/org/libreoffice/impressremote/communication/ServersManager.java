@@ -101,7 +101,7 @@ class ServersManager implements Comparator<Server> {
     }
 
     public void addTcpServer(String aAddress, String aName) {
-        mSavedServersPreferences.set(aAddress, aName);
+        mSavedServersPreferences.setString(aAddress, aName);
     }
 
     public void removeServer(Server aServer) {

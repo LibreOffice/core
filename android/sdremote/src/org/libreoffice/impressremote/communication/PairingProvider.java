@@ -46,11 +46,11 @@ final class PairingProvider {
     }
 
     private String getSavedPin(Server aServer) {
-        return mAuthorizedServersPreferences.get(aServer.getAddress());
+        return mAuthorizedServersPreferences.getString(aServer.getAddress());
     }
 
     private void savePin(Server aServer, String aPin) {
-        mAuthorizedServersPreferences.set(aServer.getAddress(), aPin);
+        mAuthorizedServersPreferences.setString(aServer.getAddress(), aPin);
     }
 
     public static String getPairingDeviceName(Context aContext) {
