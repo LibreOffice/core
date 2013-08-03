@@ -379,32 +379,7 @@ void SfxPickList::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
             case SFX_EVENT_OPENDOC:
             {
-                SfxMedium *pMed = pDocSh->GetMedium();
-                if( !pMed )
-                    return;
-
-                // Unnamed Documents and embedded-Documents not in History
-                if ( !pDocSh->HasName() ||
-                     SFX_CREATE_MODE_STANDARD != pDocSh->GetCreateMode() )
-                    return;
-
-                // Help not in History
-                INetURLObject aURL( pDocSh->IsDocShared() ? pDocSh->GetSharedFileURL() : OUString( pMed->GetOrigURL() ) );
-                if ( aURL.GetProtocol() == INET_PROT_VND_SUN_STAR_HELP )
-                    return;
-
-                OUString  aTitle = pDocSh->GetTitle(SFX_TITLE_PICKLIST);
-                OUString  aFilter;
-                const SfxFilter* pFilter = pMed->GetOrigFilter();
-                if ( pFilter )
-                    aFilter = pFilter->GetFilterName();
-
-                // add to svtool history options
-                SvtHistoryOptions().AppendItem( eHISTORY,
-                        aURL.GetURLNoPass( INetURLObject::NO_DECODE ),
-                        aFilter,
-                        aTitle,
-                        OUString() );
+                AddDocumentToPickList(pDocSh);
             }
             break;
 
