@@ -105,7 +105,7 @@ ODateModel::ODateModel(const Reference<XComponentContext>& _rxFactory)
     try
     {
         if ( m_xAggregateSet.is() )
-            m_xAggregateSet->setPropertyValue( PROPERTY_DATEMIN, makeAny( (sal_Int32)( ::Date( 1, 1, 1800 ).GetDate() ) ) );
+            m_xAggregateSet->setPropertyValue( PROPERTY_DATEMIN, makeAny(util::Date(1, 1, 1800)) );
     }
     catch( const Exception& )
     {
@@ -170,7 +170,7 @@ OUString SAL_CALL ODateModel::getServiceName() throw ( ::com::sun::star::uno::Ru
 void ODateModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
     BEGIN_DESCRIBE_PROPERTIES( 4, OEditBaseModel )
-        DECL_PROP3(DEFAULT_DATE,            sal_Int32,              BOUND, MAYBEDEFAULT, MAYBEVOID);
+        DECL_PROP3(DEFAULT_DATE,            util::Date,             BOUND, MAYBEDEFAULT, MAYBEVOID);
         DECL_PROP1(TABINDEX,                sal_Int16,              BOUND);
         DECL_PROP1(FORMATKEY,               sal_Int32,              TRANSIENT);
         DECL_IFACE_PROP2(FORMATSSUPPLIER,   XNumberFormatsSupplier, READONLY, TRANSIENT);
@@ -276,44 +276,21 @@ sal_Bool ODateModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
 }
 
 //------------------------------------------------------------------------------
-void ODateModel::impl_translateControlValueToUNODate( Any& _rUNOValue ) const
-{
-    _rUNOValue = getControlValue();
-    if ( _rUNOValue.hasValue() )
-    {
-        sal_Int32 nDate = 0;
-        OSL_VERIFY( _rUNOValue >>= nDate );
-        _rUNOValue <<= DBTypeConversion::toDate( nDate );
-    }
-}
-
-//------------------------------------------------------------------------------
 Any ODateModel::translateControlValueToExternalValue( ) const
 {
-    Any aExternalValue;
-    impl_translateControlValueToUNODate( aExternalValue );
-    return aExternalValue;
+    return getControlValue();
 }
 
 //------------------------------------------------------------------------------
 Any ODateModel::translateExternalValueToControlValue( const Any& _rExternalValue ) const
 {
-    Any aControlValue;
-    if ( _rExternalValue.hasValue() )
-    {
-        util::Date aDate;
-        OSL_VERIFY( _rExternalValue >>= aDate );
-        aControlValue <<= DBTypeConversion::toINT32( aDate );
-    }
-    return aControlValue;
+    return _rExternalValue;
 }
 
 //------------------------------------------------------------------------------
 Any ODateModel::translateControlValueToValidatableValue( ) const
 {
-    Any aValidatableValue;
-    impl_translateControlValueToUNODate( aValidatableValue );
-    return aValidatableValue;
+    return getControlValue();
 }
 
 //------------------------------------------------------------------------------
@@ -323,8 +300,7 @@ Any ODateModel::translateDbColumnToControlValue()
     if (m_xColumn->wasNull())
         m_aSaveValue.clear();
     else
-        // the aggregated set expects an Int32 as value ...
-        m_aSaveValue <<= DBTypeConversion::toINT32(aDate);
+        m_aSaveValue <<= aDate;
 
     return m_aSaveValue;
 }

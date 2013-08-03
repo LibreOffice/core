@@ -20,6 +20,7 @@
 #define __com_sun_star_awt_XTimeField_idl__
 
 #include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/util/Time.idl>
 
 
 
@@ -37,54 +38,54 @@ published interface XTimeField: com::sun::star::uno::XInterface
         where HH are hours, MM are minutes, SS are seconds and
         nnnnnnnnn are nanoseconds.</p>
      */
-    void setTime( [in] hyper Time );
+    void setTime( [in] com::sun::star::util::Time Time );
 
 
     /** returns the time value which is currently displayed in the time field.
      */
-    hyper getTime();
+    com::sun::star::util::Time getTime();
 
 
     /** sets the minimum time value that can be entered by the user.
      */
-    void setMin( [in] hyper Time );
+    void setMin( [in] com::sun::star::util::Time Time );
 
 
     /** returns the currently set minimum time value that can be entered by
         the user.
      */
-    hyper getMin();
+    com::sun::star::util::Time getMin();
 
 
     /** sets the maximum time value that can be entered by the user.
      */
-    void setMax( [in] hyper Time );
+    void setMax( [in] com::sun::star::util::Time Time );
 
 
     /** returns the currently set maximum time value that can be entered by
         the user.
      */
-    hyper getMax();
+    com::sun::star::util::Time getMax();
 
 
     /** sets the first value to be set on POS1 key.
      */
-    void setFirst( [in] hyper Time );
+    void setFirst( [in] com::sun::star::util::Time Time );
 
 
     /** returns the currently set first value which is set on POS1 key.
      */
-    hyper getFirst();
+    com::sun::star::util::Time getFirst();
 
 
     /** sets the last value to be set on END key.
      */
-    void setLast( [in] hyper Time );
+    void setLast( [in] com::sun::star::util::Time Time );
 
 
     /** returns the currently set last value which is set on END key.
      */
-    hyper getLast();
+    com::sun::star::util::Time getLast();
 
 
     /** sets an empty value for the time.

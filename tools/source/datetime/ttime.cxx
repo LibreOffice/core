@@ -140,6 +140,14 @@ Time::Time( const Time& rTime )
 
 Time::Time( sal_uInt32 nHour, sal_uInt32 nMin, sal_uInt32 nSec, sal_uInt64 nNanoSec )
 {
+    init(nHour, nMin, nSec, nNanoSec);
+}
+Time::Time( const ::com::sun::star::util::Time &_rTime )
+{
+    init(_rTime.Hours, _rTime.Minutes, _rTime.Seconds, _rTime.NanoSeconds);
+}
+void Time::init( sal_uInt32 nHour, sal_uInt32 nMin, sal_uInt32 nSec, sal_uInt64 nNanoSec )
+{
     // normalize time
     nSec     += nNanoSec / nanoSecInSec;
     nNanoSec %= nanoSecInSec;

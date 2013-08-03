@@ -3246,8 +3246,8 @@ uno::Reference< beans::XPropertySetInfo > UnoControlDateFieldModel::getPropertyS
 UnoDateFieldControl::UnoDateFieldControl()
     :UnoSpinFieldControl()
 {
-    mnFirst = Date( 1, 1, 1900 ).GetDate();
-    mnLast = Date( 31, 12, 2200 ).GetDate();
+    mnFirst = util::Date( 1, 1, 1900 );
+    mnLast = util::Date( 31, 12, 2200 );
     mbLongFormat = 2;
 }
 
@@ -3323,43 +3323,43 @@ void UnoDateFieldControl::textChanged( const awt::TextEvent& e ) throw(uno::Runt
         GetTextListeners().textChanged( e );
 }
 
-void UnoDateFieldControl::setDate( sal_Int32 Date ) throw(uno::RuntimeException)
+void UnoDateFieldControl::setDate( const util::Date& Date ) throw(uno::RuntimeException)
 {
     uno::Any aAny;
     aAny <<= Date;
     ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_DATE ), aAny, sal_True );
 }
 
-sal_Int32 UnoDateFieldControl::getDate() throw(uno::RuntimeException)
+util::Date UnoDateFieldControl::getDate() throw(uno::RuntimeException)
 {
-    return ImplGetPropertyValue_INT32( BASEPROPERTY_DATE );
+    return ImplGetPropertyValue_Date( BASEPROPERTY_DATE );
 }
 
-void UnoDateFieldControl::setMin( sal_Int32 Date ) throw(uno::RuntimeException)
+void UnoDateFieldControl::setMin( const util::Date& Date ) throw(uno::RuntimeException)
 {
     uno::Any aAny;
     aAny <<= Date;
     ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_DATEMIN ), aAny, sal_True );
 }
 
-sal_Int32 UnoDateFieldControl::getMin() throw(uno::RuntimeException)
+util::Date UnoDateFieldControl::getMin() throw(uno::RuntimeException)
 {
-    return ImplGetPropertyValue_INT32( BASEPROPERTY_DATEMIN );
+    return ImplGetPropertyValue_Date( BASEPROPERTY_DATEMIN );
 }
 
-void UnoDateFieldControl::setMax( sal_Int32 Date ) throw(uno::RuntimeException)
+void UnoDateFieldControl::setMax( const util::Date& Date ) throw(uno::RuntimeException)
 {
     uno::Any aAny;
     aAny <<= Date;
     ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_DATEMAX ), aAny, sal_True );
 }
 
-sal_Int32 UnoDateFieldControl::getMax() throw(uno::RuntimeException)
+util::Date UnoDateFieldControl::getMax() throw(uno::RuntimeException)
 {
-    return ImplGetPropertyValue_INT32( BASEPROPERTY_DATEMAX );
+    return ImplGetPropertyValue_Date( BASEPROPERTY_DATEMAX );
 }
 
-void UnoDateFieldControl::setFirst( sal_Int32 Date ) throw(uno::RuntimeException)
+void UnoDateFieldControl::setFirst( const util::Date& Date ) throw(uno::RuntimeException)
 {
     mnFirst = Date;
     if ( getPeer().is() )
@@ -3369,12 +3369,12 @@ void UnoDateFieldControl::setFirst( sal_Int32 Date ) throw(uno::RuntimeException
     }
 }
 
-sal_Int32 UnoDateFieldControl::getFirst() throw(uno::RuntimeException)
+util::Date UnoDateFieldControl::getFirst() throw(uno::RuntimeException)
 {
     return mnFirst;
 }
 
-void UnoDateFieldControl::setLast( sal_Int32 Date ) throw(uno::RuntimeException)
+void UnoDateFieldControl::setLast( const util::Date& Date ) throw(uno::RuntimeException)
 {
     mnLast = Date;
     if ( getPeer().is() )
@@ -3384,7 +3384,7 @@ void UnoDateFieldControl::setLast( sal_Int32 Date ) throw(uno::RuntimeException)
     }
 }
 
-sal_Int32 UnoDateFieldControl::getLast() throw(uno::RuntimeException)
+util::Date UnoDateFieldControl::getLast() throw(uno::RuntimeException)
 {
     return mnLast;
 }
@@ -3488,8 +3488,8 @@ uno::Reference< beans::XPropertySetInfo > UnoControlTimeFieldModel::getPropertyS
 UnoTimeFieldControl::UnoTimeFieldControl()
     :UnoSpinFieldControl()
 {
-    mnFirst = Time( 0, 0 ).GetTime();
-    mnLast = Time( 23, 59, 59, 99 ).GetTime();
+    mnFirst = util::Time( 0, 0, 0, 0, false );
+    mnLast = util::Time( 999999999, 59, 59, 23, false );
 }
 
 OUString UnoTimeFieldControl::GetComponentServiceName()
@@ -3539,43 +3539,43 @@ void UnoTimeFieldControl::textChanged( const awt::TextEvent& e ) throw(uno::Runt
         GetTextListeners().textChanged( e );
 }
 
-void UnoTimeFieldControl::setTime( sal_Int64 Time ) throw(uno::RuntimeException)
+void UnoTimeFieldControl::setTime( const util::Time& Time ) throw(uno::RuntimeException)
 {
     uno::Any aAny;
     aAny <<= Time;
     ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_TIME ), aAny, sal_True );
 }
 
-sal_Int64 UnoTimeFieldControl::getTime() throw(uno::RuntimeException)
+util::Time UnoTimeFieldControl::getTime() throw(uno::RuntimeException)
 {
-    return ImplGetPropertyValue_INT64( BASEPROPERTY_TIME );
+    return ImplGetPropertyValue_Time( BASEPROPERTY_TIME );
 }
 
-void UnoTimeFieldControl::setMin( sal_Int64 Time ) throw(uno::RuntimeException)
+void UnoTimeFieldControl::setMin( const util::Time& Time ) throw(uno::RuntimeException)
 {
     uno::Any aAny;
     aAny <<= Time;
     ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_TIMEMIN ), aAny, sal_True );
 }
 
-sal_Int64 UnoTimeFieldControl::getMin() throw(uno::RuntimeException)
+util::Time UnoTimeFieldControl::getMin() throw(uno::RuntimeException)
 {
-    return ImplGetPropertyValue_INT64( BASEPROPERTY_TIMEMIN );
+    return ImplGetPropertyValue_Time( BASEPROPERTY_TIMEMIN );
 }
 
-void UnoTimeFieldControl::setMax( sal_Int64 Time ) throw(uno::RuntimeException)
+void UnoTimeFieldControl::setMax( const util::Time& Time ) throw(uno::RuntimeException)
 {
     uno::Any aAny;
     aAny <<= Time;
     ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_TIMEMAX ), aAny, sal_True );
 }
 
-sal_Int64 UnoTimeFieldControl::getMax() throw(uno::RuntimeException)
+util::Time UnoTimeFieldControl::getMax() throw(uno::RuntimeException)
 {
-    return ImplGetPropertyValue_INT64( BASEPROPERTY_TIMEMAX );
+    return ImplGetPropertyValue_Time( BASEPROPERTY_TIMEMAX );
 }
 
-void UnoTimeFieldControl::setFirst( sal_Int64 Time ) throw(uno::RuntimeException)
+void UnoTimeFieldControl::setFirst( const util::Time& Time ) throw(uno::RuntimeException)
 {
     mnFirst = Time;
     if ( getPeer().is() )
@@ -3585,12 +3585,12 @@ void UnoTimeFieldControl::setFirst( sal_Int64 Time ) throw(uno::RuntimeException
     }
 }
 
-sal_Int64 UnoTimeFieldControl::getFirst() throw(uno::RuntimeException)
+util::Time UnoTimeFieldControl::getFirst() throw(uno::RuntimeException)
 {
     return mnFirst;
 }
 
-void UnoTimeFieldControl::setLast( sal_Int64 Time ) throw(uno::RuntimeException)
+void UnoTimeFieldControl::setLast( const util::Time& Time ) throw(uno::RuntimeException)
 {
     mnLast = Time;
     if ( getPeer().is() )
@@ -3600,7 +3600,7 @@ void UnoTimeFieldControl::setLast( sal_Int64 Time ) throw(uno::RuntimeException)
     }
 }
 
-sal_Int64 UnoTimeFieldControl::getLast() throw(uno::RuntimeException)
+util::Time UnoTimeFieldControl::getLast() throw(uno::RuntimeException)
 {
     return mnLast;
 }

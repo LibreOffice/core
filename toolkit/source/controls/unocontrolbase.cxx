@@ -26,6 +26,8 @@
 
 #include <tools/debug.hxx>
 
+using namespace com::sun::star;
+
 //  ----------------------------------------------------
 //  class UnoControlBase
 //  ----------------------------------------------------
@@ -162,6 +164,16 @@ double UnoControlBase::ImplGetPropertyValue_DOUBLE( sal_uInt16 nProp )
 OUString UnoControlBase::ImplGetPropertyValue_UString( sal_uInt16 nProp )
 {
     return ImplGetPropertyValueClass<OUString>(nProp);
+}
+
+util::Date UnoControlBase::ImplGetPropertyValue_Date( sal_uInt16 nProp )
+{
+    return ImplGetPropertyValueClass<util::Date>(nProp);
+}
+
+util::Time UnoControlBase::ImplGetPropertyValue_Time( sal_uInt16 nProp )
+{
+    return ImplGetPropertyValueClass<util::Time>(nProp);
 }
 
 ::com::sun::star::awt::Size UnoControlBase::Impl_getMinimumSize()
