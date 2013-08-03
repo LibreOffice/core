@@ -135,7 +135,7 @@ void ConverterTest::testDuration()
             "PT9.999999999999999999999999999999S", "PT9.999999999S" );
     doTest( util::Duration(true , 0, 0, 9999, 0, 0, 0, 0), "-P9999D" );
     doTest( util::Duration(true , 7, 6, 5, 4, 3, 2,  10000000),
-            "-P7Y6M5DT4H3M2.01S", "-P7Y6M5DT4H3M2.010000000S" );
+            "-P7Y6M5DT4H3M2.01000S", "-P7Y6M5DT4H3M2.010000000S" );
     doTest( util::Duration(false, 0, 6, 0, 0, 3, 0, 0), "P6MT3M" );
     doTest( util::Duration(false, 0, 0, 0, 0, 0, 0, 0), "P0D" );
     doTestDurationF("1Y1M");        // invalid: no ^P
