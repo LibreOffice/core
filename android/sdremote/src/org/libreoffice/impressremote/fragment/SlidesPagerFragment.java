@@ -200,7 +200,9 @@ public class SlidesPagerFragment extends SherlockFragment implements ServiceConn
             }
 
             if (Intents.Actions.SLIDE_PREVIEW.equals(aIntent.getAction())) {
-                mSlidesPagerFragment.refreshSlidesPager();
+                int aSlideIndex = aIntent.getIntExtra(Intents.Extras.SLIDE_INDEX, 0);
+
+                mSlidesPagerFragment.refreshSlide(aSlideIndex);
             }
         }
     }
@@ -219,6 +221,30 @@ public class SlidesPagerFragment extends SherlockFragment implements ServiceConn
         Context aContext = getActivity().getApplicationContext();
 
         return LocalBroadcastManager.getInstance(aContext);
+    }
+
+    private void refreshSlide(int aSlideIndex) {
+        // Refresh only loaded slides to avoid images blinking on large slides count.
+        // There is no way to invalidate only a certain slide.
+
+        int aCurrentSlideIndex = mCommunicationService.getSlideShow().getCurrentSlideIndex();
+
+        if (aSlideIndex == aCurrentSlideIndex) {
+            refreshSlidesPager();
+            return;
+        }
+
+        int aSlidesOffscreenCount = getSlidesPager().getOffscreenPageLimit();
+
+        if (aSlideIndex < aCurrentSlideIndex - aSlidesOffscreenCount) {
+            return;
+        }
+
+        if (aSlideIndex > aCurrentSlideIndex + aSlidesOffscreenCount) {
+            return;
+        }
+
+        refreshSlidesPager();
     }
 
     private void refreshSlidesPager() {

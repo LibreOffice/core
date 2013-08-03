@@ -85,7 +85,7 @@ public class SlidesPagerAdapter extends PagerAdapter {
 
     @Override
     public int getItemPosition(Object aObject) {
-        // TODO: think about it, seems like a hack
+        // There seems no other way to update slides with notifyDataSetChanged.
 
         return POSITION_NONE;
     }
