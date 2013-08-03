@@ -817,7 +817,7 @@ public:
                                   SCCOL nCol2, SCROW nRow2, const ScMarkData& rMark);
 
     SC_DLLPUBLIC OUString GetString( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
-    OUString GetString( const ScAddress& rPos ) const;
+    SC_DLLPUBLIC OUString GetString( const ScAddress& rPos ) const;
 
     /**
      * Return a pointer to the string object stored in string cell.

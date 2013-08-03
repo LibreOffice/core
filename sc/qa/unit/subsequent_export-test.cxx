@@ -28,9 +28,13 @@
 #include "cellform.hxx"
 #include "formulacell.hxx"
 #include "tokenarray.hxx"
+#include "editutil.hxx"
 
 #include "svx/svdoole2.hxx"
 #include "tabprotection.hxx"
+#include "editeng/wghtitem.hxx"
+#include "editeng/postitem.hxx"
+#include "editeng/editdata.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -55,6 +59,7 @@ public:
     void testDataBarExportXLSX();
     void testMiscRowHeightExport();
     void testNamedRangeBugfdo62729();
+    void testRichTextExportODS();
 
     void testInlineArrayXLS();
     void testEmbeddedChartXLS();
@@ -72,6 +77,7 @@ public:
     CPPUNIT_TEST(testColorScaleExportXLSX);
     CPPUNIT_TEST(testMiscRowHeightExport);
     CPPUNIT_TEST(testNamedRangeBugfdo62729);
+//  CPPUNIT_TEST(testRichTextExportODS); This currently fails.
     CPPUNIT_TEST(testInlineArrayXLS);
     CPPUNIT_TEST(testEmbeddedChartXLS);
     CPPUNIT_TEST(testFormulaReferenceXLS);
@@ -330,6 +336,64 @@ void ScExportTest::testNamedRangeBugfdo62729()
     pNames = pDoc->GetRangeName();
     //after reload should still have a named range
     CPPUNIT_ASSERT(pNames->size() == 1 );
+
+    xDocSh->DoClose();
+}
+
+void ScExportTest::testRichTextExportODS()
+{
+    // Start with an empty document, put one edit text cell, and make sure it
+    // survives the save and reload.
+    ScDocShellRef xNewDocSh = loadDoc("empty.", ODS);
+    ScDocument* pDoc = xNewDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    CPPUNIT_ASSERT_MESSAGE("This document should at least have one sheet.", pDoc->GetTableCount() > 0);
+
+    // Insert an edit text cell.
+    OUString aCellText("Bold and Italic");
+    ScFieldEditEngine& rEE = pDoc->GetEditEngine();
+    rEE.SetText(aCellText);
+    ESelection aSel;
+    aSel.nStartPara = aSel.nEndPara = 0;
+
+    {
+        // Set the 'Bold' part bold.
+        SfxItemSet aItemSet = rEE.GetEmptyItemSet();
+        aSel.nStartPos = 0;
+        aSel.nEndPos = 4;
+        SvxWeightItem aWeight(WEIGHT_BOLD, ATTR_FONT_WEIGHT);
+        aItemSet.Put(aWeight);
+        rEE.QuickSetAttribs(aItemSet, aSel);
+    }
+
+    {
+        // Set the 'Italic' part italic.
+        SfxItemSet aItemSet = rEE.GetEmptyItemSet();
+        SvxPostureItem aItalic(ITALIC_NORMAL, ATTR_FONT_POSTURE);
+        aItemSet.Put(aItalic);
+        aSel.nStartPos = 9;
+        aSel.nEndPos = 15;
+        rEE.QuickSetAttribs(aItemSet, aSel);
+    }
+
+    // Set this edit text to cell B2.
+    pDoc->SetEditText(ScAddress(1,1,0), rEE.CreateTextObject());
+    const EditTextObject* pEditText = pDoc->GetEditText(ScAddress(1,1,0));
+    CPPUNIT_ASSERT_MESSAGE("B2 should be an edit text.", pEditText);
+
+    // Now, save and reload this document.
+    ScDocShellRef xDocSh = saveAndReload(xNewDocSh, ODS);
+    xNewDocSh->DoClose();
+    CPPUNIT_ASSERT(xDocSh.Is());
+    pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    CPPUNIT_ASSERT_MESSAGE("Reloaded document should at least have one sheet.", pDoc->GetTableCount() > 0);
+
+    // Make sure the content of B2 is still intact.
+    CPPUNIT_ASSERT_EQUAL(aCellText, pDoc->GetString(ScAddress(1,1,0)));
+
+    pEditText = pDoc->GetEditText(ScAddress(1,1,0));
+    CPPUNIT_ASSERT_MESSAGE("B2 should be an edit text.", pEditText);
 
     xDocSh->DoClose();
 }
