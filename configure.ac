@@ -9995,13 +9995,17 @@ OPENCL_LIBS=
 OPENCL_CFLAGS=
 ENABLE_OPENCL=
 AC_MSG_CHECKING([OpenCL])
-if test \( -z "$with_opencl_sdk" -o "$with_opencl_sdk" = yes \) -a $_os = Darwin; then
-   # OS X
-   AC_MSG_RESULT([yes, always on OS X])
-   ENABLE_OPENCL=TRUE
-   OPENCL_CFLAGS=
-   OPENCL_LIBS="-framework OpenCL"
-   AC_DEFINE(HAVE_FEATURE_OPENCL)
+if test \( -z "$with_opencl_sdk" -o "$with_opencl_sdk" = yes \) -a $_os = Darwin ; then
+    # OS X
+    if test "$with_open_sdk" = yes -o "$with_macosx_sdk" != "10.6" ; then
+        AC_MSG_RESULT([yes, always on OS X])
+        ENABLE_OPENCL=TRUE
+        OPENCL_CFLAGS=
+        OPENCL_LIBS="-framework OpenCL"
+        AC_DEFINE(HAVE_FEATURE_OPENCL)
+    else
+        AC_MSG_RESULT([no])
+    fi
 elif test -z "$with_opencl_sdk" -o "$with_opencl_sdk" = no; then
     AC_MSG_RESULT([no])
 else
@@ -10028,49 +10032,49 @@ AC_SUBST(ENABLE_OPENCL)
 # presenter minimizer extension?
 AC_MSG_CHECKING([whether to build the Presentation Minimizer extension])
 if test "x$enable_ext_presenter_minimizer" != "xno" -a "x$enable_extension_integration" != "xno"; then
-   AC_MSG_RESULT([yes])
-   ENABLE_MINIMIZER=YES
+    AC_MSG_RESULT([yes])
+    ENABLE_MINIMIZER=YES
 else
-   AC_MSG_RESULT([no])
-   ENABLE_MINIMIZER=NO
-   SCPDEFS="$SCPDEFS -DWITHOUT_EXTENSION_MINIMIZER"
+    AC_MSG_RESULT([no])
+    ENABLE_MINIMIZER=NO
+    SCPDEFS="$SCPDEFS -DWITHOUT_EXTENSION_MINIMIZER"
 fi
 AC_SUBST(ENABLE_MINIMIZER)
 
 # pdf import?
 AC_MSG_CHECKING([whether to build the PDF import])
 if test "$_os" != Android -a "$_os" != iOS -a "$ENABLE_PDFIMPORT" != FALSE; then
-  AC_MSG_RESULT([yes])
-  ENABLE_PDFIMPORT=TRUE
+    AC_MSG_RESULT([yes])
+    ENABLE_PDFIMPORT=TRUE
 
-  dnl ===================================================================
-  dnl Check for system poppler
-  dnl ===================================================================
-  AC_MSG_CHECKING([which pdf backend to use])
-  if test "$with_system_poppler" = "yes"; then
-      AC_MSG_RESULT([external])
-      SYSTEM_POPPLER=YES
-      PKG_CHECK_MODULES( POPPLER, poppler >= 0.8.0 )
-      AC_LANG_PUSH([C++])
-      save_CXXFLAGS=$CXXFLAGS
-      save_CPPFLAGS=$CPPFLAGS
-      CXXFLAGS="$CXXFLAGS $POPPLER_CFLAGS"
-      CPPFLAGS="$CPPFLAGS $POPPLER_CFLAGS"
-      AC_CHECK_HEADER([cpp/poppler-version.h], [],
+    dnl ===================================================================
+    dnl Check for system poppler
+    dnl ===================================================================
+    AC_MSG_CHECKING([which pdf backend to use])
+    if test "$with_system_poppler" = "yes"; then
+        AC_MSG_RESULT([external])
+        SYSTEM_POPPLER=YES
+        PKG_CHECK_MODULES( POPPLER, poppler >= 0.8.0 )
+        AC_LANG_PUSH([C++])
+        save_CXXFLAGS=$CXXFLAGS
+        save_CPPFLAGS=$CPPFLAGS
+        CXXFLAGS="$CXXFLAGS $POPPLER_CFLAGS"
+        CPPFLAGS="$CPPFLAGS $POPPLER_CFLAGS"
+        AC_CHECK_HEADER([cpp/poppler-version.h], [],
                    [AC_MSG_ERROR([cpp/poppler-version.h not found. Install poppler])], [])
-      CXXFLAGS=$save_CXXFLAGS
-      CPPFLAGS=$save_CPPFLAGS
-      AC_LANG_POP([C++])
-      libo_MINGW_CHECK_DLL([libpoppler])
-      POPPLER_CFLAGS=$(printf '%s' "$POPPLER_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
-  else
-      AC_MSG_RESULT([internal])
-      SYSTEM_POPPLER=NO
-      BUILD_TYPE="$BUILD_TYPE POPPLER"
-  fi
+        CXXFLAGS=$save_CXXFLAGS
+        CPPFLAGS=$save_CPPFLAGS
+        AC_LANG_POP([C++])
+        libo_MINGW_CHECK_DLL([libpoppler])
+        POPPLER_CFLAGS=$(printf '%s' "$POPPLER_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
+    else
+        AC_MSG_RESULT([internal])
+        SYSTEM_POPPLER=NO
+        BUILD_TYPE="$BUILD_TYPE POPPLER"
+    fi
 else
-  AC_MSG_RESULT([no])
-  ENABLE_PDFIMPORT=FALSE
+    AC_MSG_RESULT([no])
+    ENABLE_PDFIMPORT=FALSE
 fi
 AC_SUBST(ENABLE_PDFIMPORT)
 AC_SUBST(SYSTEM_POPPLER)
@@ -10079,16 +10083,16 @@ AC_SUBST(POPPLER_LIBS)
 
 AC_MSG_CHECKING([whether to build the Wiki Publisher extension])
 if test "x$enable_ext_wiki_publisher" = "xyes" -a "x$enable_extension_integration" != "xno" -a "$with_java" != "no"; then
-  AC_MSG_RESULT([yes])
-  ENABLE_MEDIAWIKI=YES
-  BUILD_TYPE="$BUILD_TYPE XSLTML"
-  if test  "x$with_java" = "xno"; then
-    AC_MSG_ERROR([Wiki Publisher requires Java! Enable Java if you want to build it.])
-  fi
+    AC_MSG_RESULT([yes])
+    ENABLE_MEDIAWIKI=YES
+    BUILD_TYPE="$BUILD_TYPE XSLTML"
+    if test  "x$with_java" = "xno"; then
+        AC_MSG_ERROR([Wiki Publisher requires Java! Enable Java if you want to build it.])
+    fi
 else
-  AC_MSG_RESULT([no])
-  ENABLE_MEDIAWIKI=NO
-  SCPDEFS="$SCPDEFS -DWITHOUT_EXTENSION_MEDIAWIKI"
+    AC_MSG_RESULT([no])
+    ENABLE_MEDIAWIKI=NO
+    SCPDEFS="$SCPDEFS -DWITHOUT_EXTENSION_MEDIAWIKI"
 fi
 AC_SUBST(ENABLE_MEDIAWIKI)
 
