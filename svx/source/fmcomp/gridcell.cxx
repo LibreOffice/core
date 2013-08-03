@@ -42,7 +42,8 @@
 #include <com/sun/star/sdbc/XStatement.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-#include <com/sun/star/util/XNumberFormatter.hpp>
+#include <com/sun/star/util/Time.hpp>
+#include <com/sun/star/util/Date.hpp>
 
 #include <comphelper/extract.hxx>
 #include <comphelper/numbers.hxx>
@@ -2250,8 +2251,10 @@ void DbDateField::implAdjustGenericFieldSetting( const Reference< XPropertySet >
     if ( m_pWindow && _rxModel.is() )
     {
         sal_Int16   nFormat     = getINT16( _rxModel->getPropertyValue( FM_PROP_DATEFORMAT ) );
-        sal_Int32   nMin        = getINT32( _rxModel->getPropertyValue( FM_PROP_DATEMIN ) );
-        sal_Int32   nMax        = getINT32( _rxModel->getPropertyValue( FM_PROP_DATEMAX ) );
+        util::Date  aMin;
+        OSL_VERIFY( _rxModel->getPropertyValue( FM_PROP_DATEMIN ) >>= aMin );
+        util::Date  aMax;
+        OSL_VERIFY( _rxModel->getPropertyValue( FM_PROP_DATEMAX ) >>= aMax );
         sal_Bool    bStrict     = getBOOL( _rxModel->getPropertyValue( FM_PROP_STRICTFORMAT ) );
 
         Any  aCentury = _rxModel->getPropertyValue( FM_PROP_DATE_SHOW_CENTURY );
@@ -2264,14 +2267,14 @@ void DbDateField::implAdjustGenericFieldSetting( const Reference< XPropertySet >
         }
 
         static_cast< DateField* >( m_pWindow )->SetExtDateFormat( (ExtDateFieldFormat)nFormat );
-        static_cast< DateField* >( m_pWindow )->SetMin( nMin );
-        static_cast< DateField* >( m_pWindow )->SetMax( nMax );
+        static_cast< DateField* >( m_pWindow )->SetMin( aMin );
+        static_cast< DateField* >( m_pWindow )->SetMax( aMax );
         static_cast< DateField* >( m_pWindow )->SetStrictFormat( bStrict );
         static_cast< DateField* >( m_pWindow )->EnableEmptyFieldValue( sal_True );
 
         static_cast< DateField* >( m_pPainter )->SetExtDateFormat( (ExtDateFieldFormat)nFormat );
-        static_cast< DateField* >( m_pPainter )->SetMin( nMin );
-        static_cast< DateField* >( m_pPainter )->SetMax( nMax );
+        static_cast< DateField* >( m_pPainter )->SetMin( aMin );
+        static_cast< DateField* >( m_pPainter )->SetMax( aMax );
         static_cast< DateField* >( m_pPainter )->SetStrictFormat( bStrict );
         static_cast< DateField* >( m_pPainter )->EnableEmptyFieldValue( sal_True );
     }
@@ -2321,9 +2324,9 @@ void DbDateField::updateFromModel( Reference< XPropertySet > _rxModel )
 {
     OSL_ENSURE( _rxModel.is() && m_pWindow, "DbDateField::updateFromModel: invalid call!" );
 
-    sal_Int32 nDate = 0;
-    if ( _rxModel->getPropertyValue( FM_PROP_DATE ) >>= nDate )
-        static_cast< DateField* >( m_pWindow )->SetDate( ::Date( nDate ) );
+    util::Date aDate;
+    if ( _rxModel->getPropertyValue( FM_PROP_DATE ) >>= aDate )
+        static_cast< DateField* >( m_pWindow )->SetDate( ::Date( aDate ) );
     else
         static_cast< DateField* >( m_pWindow )->SetText( OUString() );
 }
@@ -2334,7 +2337,7 @@ sal_Bool DbDateField::commitControl()
     OUString aText(m_pWindow->GetText());
     Any aVal;
     if (!aText.isEmpty())
-        aVal <<= (sal_Int32)static_cast<DateField*>(m_pWindow)->GetDate().GetDate();
+        aVal <<= static_cast<DateField*>(m_pWindow)->GetDate().GetUNODate();
     else
         aVal.clear();
 
@@ -2369,19 +2372,21 @@ void DbTimeField::implAdjustGenericFieldSetting( const Reference< XPropertySet >
     if ( m_pWindow && _rxModel.is() )
     {
         sal_Int16   nFormat     = getINT16( _rxModel->getPropertyValue( FM_PROP_TIMEFORMAT ) );
-        sal_Int64   nMin        = getINT64( _rxModel->getPropertyValue( FM_PROP_TIMEMIN ) );
-        sal_Int64   nMax        = getINT64( _rxModel->getPropertyValue( FM_PROP_TIMEMAX ) );
+        util::Time  aMin;
+        OSL_VERIFY( _rxModel->getPropertyValue( FM_PROP_TIMEMIN ) >>= aMin );
+        util::Time  aMax;
+        OSL_VERIFY( _rxModel->getPropertyValue( FM_PROP_TIMEMAX ) >>= aMax );
         sal_Bool    bStrict     = getBOOL( _rxModel->getPropertyValue( FM_PROP_STRICTFORMAT ) );
 
         static_cast< TimeField* >( m_pWindow )->SetExtFormat( (ExtTimeFieldFormat)nFormat );
-        static_cast< TimeField* >( m_pWindow )->SetMin( nMin );
-        static_cast< TimeField* >( m_pWindow )->SetMax( nMax );
+        static_cast< TimeField* >( m_pWindow )->SetMin( aMin );
+        static_cast< TimeField* >( m_pWindow )->SetMax( aMax );
         static_cast< TimeField* >( m_pWindow )->SetStrictFormat( bStrict );
         static_cast< TimeField* >( m_pWindow )->EnableEmptyFieldValue( sal_True );
 
         static_cast< TimeField* >( m_pPainter )->SetExtFormat( (ExtTimeFieldFormat)nFormat );
-        static_cast< TimeField* >( m_pPainter )->SetMin( nMin );
-        static_cast< TimeField* >( m_pPainter )->SetMax( nMax );
+        static_cast< TimeField* >( m_pPainter )->SetMin( aMin );
+        static_cast< TimeField* >( m_pPainter )->SetMax( aMax );
         static_cast< TimeField* >( m_pPainter )->SetStrictFormat( bStrict );
         static_cast< TimeField* >( m_pPainter )->EnableEmptyFieldValue( sal_True );
     }
@@ -2431,9 +2436,9 @@ void DbTimeField::updateFromModel( Reference< XPropertySet > _rxModel )
 {
     OSL_ENSURE( _rxModel.is() && m_pWindow, "DbTimeField::updateFromModel: invalid call!" );
 
-    sal_Int64 nTime = 0;
-    if ( _rxModel->getPropertyValue( FM_PROP_DATE ) >>= nTime )
-        static_cast< TimeField* >( m_pWindow )->SetTime( ::Time( nTime ) );
+    util::Time aTime;
+    if ( _rxModel->getPropertyValue( FM_PROP_DATE ) >>= aTime )
+        static_cast< TimeField* >( m_pWindow )->SetTime( ::Time( aTime ) );
     else
         static_cast< TimeField* >( m_pWindow )->SetText( OUString() );
 }
@@ -2444,7 +2449,7 @@ sal_Bool DbTimeField::commitControl()
     OUString aText(m_pWindow->GetText());
     Any aVal;
     if (!aText.isEmpty())
-        aVal <<= (sal_Int64)static_cast<TimeField*>(m_pWindow)->GetTime().GetTime();
+        aVal <<= static_cast<TimeField*>(m_pWindow)->GetTime().GetUNOTime();
     else
         aVal.clear();
 

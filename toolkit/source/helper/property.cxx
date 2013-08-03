@@ -39,6 +39,8 @@
 #include <com/sun/star/view/SelectionType.hpp>
 #include <com/sun/star/style/VerticalAlignment.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
+#include <com/sun/star/util/Date.hpp>
+#include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/resource/XStringResourceResolver.hpp>
@@ -54,6 +56,8 @@ using ::com::sun::star::awt::XDevice;
 using ::com::sun::star::awt::FontDescriptor;
 using ::com::sun::star::style::VerticalAlignment;
 using ::com::sun::star::graphic::XGraphic;
+
+using namespace com::sun::star;
 
 struct ImplPropertyInfo
 {
@@ -119,10 +123,10 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
             DECL_PROP_2     ( "Closeable",              CLOSEABLE,          bool,               BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "CurrencySymbol",         CURRENCYSYMBOL,     OUString,    BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "CustomUnitText",         CUSTOMUNITTEXT,     OUString,    BOUND, MAYBEDEFAULT ),
-            DECL_DEP_PROP_3 ( "Date",                   DATE,               sal_Int32,          BOUND, MAYBEDEFAULT, MAYBEVOID ),
+            DECL_DEP_PROP_3 ( "Date",                   DATE,               util::Date,          BOUND, MAYBEDEFAULT, MAYBEVOID ),
             DECL_PROP_2     ( "DateFormat",             EXTDATEFORMAT,      sal_Int16,          BOUND, MAYBEDEFAULT ),
-            DECL_PROP_2     ( "DateMax",                DATEMAX,            sal_Int32,          BOUND, MAYBEDEFAULT ),
-            DECL_PROP_2     ( "DateMin",                DATEMIN,            sal_Int32,          BOUND, MAYBEDEFAULT ),
+            DECL_PROP_2     ( "DateMax",                DATEMAX,            util::Date,          BOUND, MAYBEDEFAULT ),
+            DECL_PROP_2     ( "DateMin",                DATEMIN,            util::Date,          BOUND, MAYBEDEFAULT ),
             DECL_PROP_3     ( "DateShowCentury",        DATESHOWCENTURY,    bool,               BOUND, MAYBEDEFAULT, MAYBEVOID ),
             DECL_PROP_2     ( "DecimalAccuracy",        DECIMALACCURACY,    sal_Int16,          BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "DefaultButton",          DEFAULTBUTTON,      bool,               BOUND, MAYBEDEFAULT ),
@@ -231,10 +235,10 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
             DECL_PROP_2     ( "Text",                   TEXT,                   OUString, BOUND, MAYBEDEFAULT ),
             DECL_PROP_3     ( "TextColor",              TEXTCOLOR,              sal_Int32,      BOUND, MAYBEDEFAULT, MAYBEVOID ),
             DECL_PROP_3     ( "TextLineColor",          TEXTLINECOLOR,          sal_Int32,      BOUND, MAYBEDEFAULT, MAYBEVOID ),
-            DECL_DEP_PROP_3 ( "Time",                   TIME,                   sal_Int64,      BOUND, MAYBEDEFAULT, MAYBEVOID ),
+            DECL_DEP_PROP_3 ( "Time",                   TIME,                   util::Time,      BOUND, MAYBEDEFAULT, MAYBEVOID ),
             DECL_PROP_2     ( "TimeFormat",             EXTTIMEFORMAT,          sal_Int16,      BOUND, MAYBEDEFAULT ),
-            DECL_PROP_2     ( "TimeMax",                TIMEMAX,                sal_Int64,      BOUND, MAYBEDEFAULT ),
-            DECL_PROP_2     ( "TimeMin",                TIMEMIN,                sal_Int64,      BOUND, MAYBEDEFAULT ),
+            DECL_PROP_2     ( "TimeMax",                TIMEMAX,                util::Time,      BOUND, MAYBEDEFAULT ),
+            DECL_PROP_2     ( "TimeMin",                TIMEMIN,                util::Time,      BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "Title",                  TITLE,                  OUString, BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "Toggle",                 TOGGLE,                 bool,           BOUND, MAYBEDEFAULT ),
             DECL_PROP_3     ( "TreatAsNumber",          TREATASNUMBER,          bool,           BOUND, MAYBEDEFAULT,TRANSIENT ),

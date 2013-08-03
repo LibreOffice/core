@@ -23,6 +23,7 @@
 #include <rtl/ustrbuf.hxx>
 
 #include <com/sun/star/util/DateTime.hpp>
+#include <com/sun/star/util/Date.hpp>
 
 #include <sax/tools/converter.hxx>
 
@@ -37,6 +38,7 @@ namespace xmloff
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::uno::makeAny;
     using ::com::sun::star::util::DateTime;
+    using ::com::sun::star::util::Date;
 
     //==================================================================================================================
     //= VCLDateHandler
@@ -56,14 +58,13 @@ namespace xmloff
     //------------------------------------------------------------------------------------------------------------------
     OUString VCLDateHandler::getAttributeValue( const Any& i_propertyValue ) const
     {
-        sal_Int32 nVCLDate(0);
-        OSL_VERIFY( i_propertyValue >>= nVCLDate );
-        ::Date aVCLDate( nVCLDate );
+        Date aDate;
+        OSL_VERIFY( i_propertyValue >>= aDate );
 
         DateTime aDateTime; // default-inited to 0
-        aDateTime.Day = aVCLDate.GetDay();
-        aDateTime.Month = aVCLDate.GetMonth();
-        aDateTime.Year = aVCLDate.GetYear();
+        aDateTime.Day = aDate.Day;
+        aDateTime.Month = aDate.Month;
+        aDateTime.Year = aDate.Year;
 
         OUStringBuffer aBuffer;
         ::sax::Converter::convertDateTime( aBuffer, aDateTime, 0, false );
@@ -73,25 +74,27 @@ namespace xmloff
     //------------------------------------------------------------------------------------------------------------------
     bool VCLDateHandler::getPropertyValues( const OUString i_attributeValue, PropertyValues& o_propertyValues ) const
     {
-        sal_Int32 nVCLDate(0);
-
         DateTime aDateTime;
+        Date aDate;
         if (::sax::Converter::parseDateTime( aDateTime, 0, i_attributeValue ))
         {
-            ::Date aVCLDate( aDateTime.Day, aDateTime.Month, aDateTime.Year );
-            nVCLDate = aVCLDate.GetDate();
+            aDate.Day = aDateTime.Day;
+            aDate.Month = aDateTime.Month;
+            aDate.Year = aDateTime.Year;
         }
         else
         {
             // compatibility format, before we wrote those values in XML-schema compatible form
+            sal_Int32 nVCLDate(0);
             if (!::sax::Converter::convertNumber(nVCLDate, i_attributeValue))
             {
                 OSL_ENSURE( false, "VCLDateHandler::getPropertyValues: unknown date format (no XML-schema date, no legacy integer)!" );
                 return false;
             }
+            aDate = ::Date(nVCLDate).GetUNODate();
         }
 
-        const Any aPropertyValue( makeAny( nVCLDate ) );
+        const Any aPropertyValue( makeAny( aDate ) );
 
         OSL_ENSURE( o_propertyValues.size() == 1, "VCLDateHandler::getPropertyValues: date strings represent exactly one property - not more, not less!" );
         for (   PropertyValues::iterator prop = o_propertyValues.begin();

@@ -20,6 +20,7 @@
 #define __com_sun_star_awt_XDateField_idl__
 
 #include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/util/Date.idl>
 
 
 
@@ -36,54 +37,54 @@ published interface XDateField: com::sun::star::uno::XInterface
         <p>The date value must be specified in the format
         YYYYMMDD.</p>
      */
-    void setDate( [in] long Date );
+    void setDate( [in] ::com::sun::star::util::Date Date );
 
 
     /** returns the date value which is currently displayed in the date field.
      */
-    long getDate();
+    ::com::sun::star::util::Date getDate();
 
 
     /** sets the minimum date value that can be entered by the user.
      */
-    void setMin( [in] long Date );
+    void setMin( [in] ::com::sun::star::util::Date Date );
 
 
     /** returns the currently set minimum date value that can be entered by
         the user.
      */
-    long getMin();
+    ::com::sun::star::util::Date getMin();
 
 
     /** sets the maximum date value that can be entered by the user.
      */
-    void setMax( [in] long Date );
+    void setMax( [in] ::com::sun::star::util::Date Date );
 
 
     /** returns the currently set maximum date value that can be entered by
         the user.
      */
-    long getMax();
+    ::com::sun::star::util::Date getMax();
 
 
     /** sets the first value to be set on POS1 key.
      */
-    void setFirst( [in] long Date );
+    void setFirst( [in] ::com::sun::star::util::Date Date );
 
 
     /** returns the currently set first value which is set on POS1 key.
      */
-    long getFirst();
+    ::com::sun::star::util::Date getFirst();
 
 
     /** sets the last value to be set on END key.
      */
-    void setLast( [in] long Date );
+    void setLast( [in] ::com::sun::star::util::Date Date );
 
 
     /** returns the currently set last value which is set on END key.
      */
-    long getLast();
+    ::com::sun::star::util::Date getLast();
 
 
     /** determines if the long date format is to be used.

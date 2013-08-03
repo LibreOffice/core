@@ -1081,8 +1081,8 @@ class UnoDateFieldControl : public UnoSpinFieldControl,
                             public ::com::sun::star::awt::XDateField
 {
 private:
-    sal_Int32       mnFirst;
-    sal_Int32       mnLast;
+    ::com::sun::star::util::Date       mnFirst;
+    ::com::sun::star::util::Date       mnLast;
     sal_Bool        mbLongFormat;
 public:
                             UnoDateFieldControl();
@@ -1103,16 +1103,16 @@ public:
     void SAL_CALL textChanged( const ::com::sun::star::awt::TextEvent& rEvent ) throw(::com::sun::star::uno::RuntimeException);
 
     //XDateField
-    void SAL_CALL setDate( sal_Int32 Date ) throw(::com::sun::star::uno::RuntimeException);
-    sal_Int32 SAL_CALL getDate(  ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL setMin( sal_Int32 Date ) throw(::com::sun::star::uno::RuntimeException);
-    sal_Int32 SAL_CALL getMin(  ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL setMax( sal_Int32 Date ) throw(::com::sun::star::uno::RuntimeException);
-    sal_Int32 SAL_CALL getMax(  ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL setFirst( sal_Int32 Date ) throw(::com::sun::star::uno::RuntimeException);
-    sal_Int32 SAL_CALL getFirst(  ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL setLast( sal_Int32 Date ) throw(::com::sun::star::uno::RuntimeException);
-    sal_Int32 SAL_CALL getLast(  ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL setDate( const ::com::sun::star::util::Date& Date ) throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::util::Date SAL_CALL getDate(  ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL setMin( const ::com::sun::star::util::Date& Date ) throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::util::Date SAL_CALL getMin(  ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL setMax( const ::com::sun::star::util::Date& Date ) throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::util::Date SAL_CALL getMax(  ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL setFirst( const ::com::sun::star::util::Date& Date ) throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::util::Date SAL_CALL getFirst(  ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL setLast( const ::com::sun::star::util::Date& Date ) throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::util::Date SAL_CALL getLast(  ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL setLongFormat( sal_Bool bLong ) throw(::com::sun::star::uno::RuntimeException);
     sal_Bool SAL_CALL isLongFormat(  ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL setEmpty(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -1157,8 +1157,8 @@ class UnoTimeFieldControl : public UnoSpinFieldControl,
                             public ::com::sun::star::awt::XTimeField
 {
 private:
-    sal_Int32       mnFirst;
-    sal_Int32       mnLast;
+    ::com::sun::star::util::Time       mnFirst;
+    ::com::sun::star::util::Time       mnLast;
 
 public:
                         UnoTimeFieldControl();
@@ -1179,16 +1179,16 @@ public:
     void SAL_CALL textChanged( const ::com::sun::star::awt::TextEvent& rEvent ) throw(::com::sun::star::uno::RuntimeException);
 
     //XTimeField
-    void SAL_CALL setTime( sal_Int64 Time ) throw(::com::sun::star::uno::RuntimeException);
-    sal_Int64 SAL_CALL getTime(  ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL setMin( sal_Int64 Time ) throw(::com::sun::star::uno::RuntimeException);
-    sal_Int64 SAL_CALL getMin(  ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL setMax( sal_Int64 Time ) throw(::com::sun::star::uno::RuntimeException);
-    sal_Int64 SAL_CALL getMax(  ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL setFirst( sal_Int64 Time ) throw(::com::sun::star::uno::RuntimeException);
-    sal_Int64 SAL_CALL getFirst(  ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL setLast( sal_Int64 Time ) throw(::com::sun::star::uno::RuntimeException);
-    sal_Int64 SAL_CALL getLast(  ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL setTime( const ::com::sun::star::util::Time& Time ) throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::util::Time SAL_CALL getTime(  ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL setMin( const ::com::sun::star::util::Time& Time ) throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::util::Time SAL_CALL getMin(  ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL setMax( const ::com::sun::star::util::Time& Time ) throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::util::Time SAL_CALL getMax(  ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL setFirst( const ::com::sun::star::util::Time& Time ) throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::util::Time SAL_CALL getFirst(  ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL setLast( const ::com::sun::star::util::Time& Time ) throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::util::Time SAL_CALL getLast(  ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL setEmpty(  ) throw(::com::sun::star::uno::RuntimeException);
     sal_Bool SAL_CALL isEmpty(  ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL setStrictFormat( sal_Bool bStrict ) throw(::com::sun::star::uno::RuntimeException);
