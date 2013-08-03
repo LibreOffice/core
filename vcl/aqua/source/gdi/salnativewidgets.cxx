@@ -31,6 +31,10 @@
 #include <Carbon/Carbon.h>
 #include "postmac.h"
 
+#ifndef NSAppKitVersionNumber10_7
+#define NSAppKitVersionNumber10_7 1138
+#endif
+
 class AquaBlinker : public Timer
 {
     AquaSalFrame*       mpFrame;
