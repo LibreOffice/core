@@ -46,7 +46,6 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
-#include "comphelper/configurationhelper.hxx"
 
 #include <svtools/addresstemplate.hxx>
 #include <svtools/miscopt.hxx>
