@@ -168,7 +168,7 @@ published service UnoControlTimeFieldModel
 
     /** specifies the time displayed in the control.
      */
-    [property] long Time;
+    [property] hyper Time;
 
 
     /** specifies the format of the displayed time.
@@ -187,12 +187,12 @@ published service UnoControlTimeFieldModel
 
     /** specifies the maximum time that can be entered.
      */
-    [property] long TimeMax;
+    [property] hyper TimeMax;
 
 
     /** specifies the minimum time that can be entered.
      */
-    [property] long TimeMin;
+    [property] hyper TimeMin;
 
     /** denotes the writing mode used in the control, as specified in the
         com::sun::star::text::WritingMode2 constants group.
