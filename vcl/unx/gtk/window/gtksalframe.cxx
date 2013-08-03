@@ -660,8 +660,10 @@ gboolean ensure_dbus_setup( gpointer data )
 
             item = g_menu_item_new(sNew.getStr(), "app.New");
             g_menu_append_item( firstsubmenu, item );
+            g_object_unref(item);
 
             g_menu_append_section( menu, NULL, G_MENU_MODEL(firstsubmenu));
+            g_object_unref(firstsubmenu);
 
             GMenu *secondsubmenu = g_menu_new ();
 
@@ -670,8 +672,11 @@ gboolean ensure_dbus_setup( gpointer data )
 
             item = g_menu_item_new(sPreferences.getStr(), "app.OptionsTreeDialog");
             g_menu_append_item( secondsubmenu, item );
+            g_object_unref(item);
 
             g_menu_append_section( menu, NULL, G_MENU_MODEL(secondsubmenu));
+            g_object_unref(secondsubmenu);
+
             GMenu *thirdsubmenu = g_menu_new ();
 
             OString sHelp(OUStringToOString(ResId(SV_BUTTONTEXT_HELP, *pMgr).toString(),
@@ -679,19 +684,23 @@ gboolean ensure_dbus_setup( gpointer data )
 
             item = g_menu_item_new(sHelp.getStr(), "app.HelpIndex");
             g_menu_append_item( thirdsubmenu, item );
+            g_object_unref(item);
 
             OString sAbout(OUStringToOString(ResId(SV_STDTEXT_ABOUT, *pMgr).toString(),
                 RTL_TEXTENCODING_UTF8).replaceFirst("~", "_"));
 
             item = g_menu_item_new(sAbout.getStr(), "app.About");
             g_menu_append_item( thirdsubmenu, item );
+            g_object_unref(item);
 
             OString sQuit(OUStringToOString(ResId(SV_MENU_MAC_QUITAPP, *pMgr).toString(),
                 RTL_TEXTENCODING_UTF8).replaceFirst("~", "_"));
 
             item = g_menu_item_new(sQuit.getStr(), "app.Quit");
             g_menu_append_item( thirdsubmenu, item );
+            g_object_unref(item);
             g_menu_append_section( menu, NULL, G_MENU_MODEL(thirdsubmenu));
+            g_object_unref(thirdsubmenu);
 
             GSimpleActionGroup *group = g_simple_action_group_new ();
             g_simple_action_group_add_entries (group, app_entries, G_N_ELEMENTS (app_entries), NULL);
