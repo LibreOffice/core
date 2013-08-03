@@ -760,8 +760,8 @@ void SwTxtFormatter::CalcAscent( SwTxtFormatInfo &rInf, SwLinePortion *pPor )
         // independent from hard attribute values
         SwFont* pFldFnt = ((SwFldPortion*)pPor)->pFnt;
         SwFontSave aSave( rInf, pFldFnt );
-        ((SwFldPortion*)pPor)->Height( pFldFnt->GetHeight( rInf.GetVsh(), *rInf.GetOut() ) );
-        ((SwFldPortion*)pPor)->SetAscent( pFldFnt->GetAscent( rInf.GetVsh(), *rInf.GetOut() ) );
+        pPor->Height( rInf.GetTxtHeight() );
+        pPor->SetAscent( rInf.GetAscent() );
     }
     // #i89179#
     // tab portion representing the list tab of a list label gets the

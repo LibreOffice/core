@@ -93,6 +93,7 @@ void SwExpandPortion::Paint( const SwTxtPaintInfo &rInf ) const
     SwTxtSlot aDiffTxt( &rInf, this, true, true );
 
     rInf.DrawBackBrush( *this );
+    rInf.DrawBorder( *this );
 
     // do we have to repaint a post it portion?
     if( rInf.OnWin() && pPortion && !pPortion->Width() )
