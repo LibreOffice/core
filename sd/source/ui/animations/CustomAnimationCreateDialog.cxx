@@ -25,6 +25,7 @@
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
 
+#include <vcl/builder.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
@@ -36,7 +37,6 @@
 #include <unotools/viewoptions.hxx>
 #include <com/sun/star/presentation/EffectNodeType.hpp>
 #include "CustomAnimationCreateDialog.hxx"
-#include "CustomAnimationCreateDialog.hrc"
 #include "CustomAnimation.hrc"
 #include "CustomAnimationPane.hxx"
 #include "optsitem.hxx"
@@ -101,7 +101,7 @@ CategoryListBox::CategoryListBox( Window* pParent )
     SetDoubleClickHdl( LINK( this, CategoryListBox, implDoubleClickHdl ) );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeCategoryListBox( Window *pParent )
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeCategoryListBox(Window *pParent, VclBuilder::stringmap &)
 {
     return new CategoryListBox( pParent );
 }
@@ -520,22 +520,16 @@ CustomAnimationCreateDialog::CustomAnimationCreateDialog( Window* pParent, Custo
     mnMPathId = mpTabControl->GetPageId("motion_paths");
     mnMiscId = mpTabControl->GetPageId("misc_effects");
 
-    //FIXME: Figure out what to do w/ those help IDs
     const CustomAnimationPresets& rPresets = CustomAnimationPresets::getCustomAnimationPresets();
     mpTabPages[ENTRANCE] = new CustomAnimationCreateTabPage( mpTabControl, this, mnEntranceId, rPresets.getEntrancePresets(), bHasText );
-    //mpTabPages[ENTRANCE]->SetHelpId( HID_SD_CUSTOMANIMATIONDIALOG_ENTRANCE );
     mpTabControl->SetTabPage( mnEntranceId, mpTabPages[ENTRANCE] );
     mpTabPages[EMPHASIS] = new CustomAnimationCreateTabPage( mpTabControl, this, mnEmphasisId, rPresets.getEmphasisPresets(), bHasText );
-    //mpTabPages[EMPHASIS]->SetHelpId( HID_SD_CUSTOMANIMATIONDIALOG_EMPHASIS );
     mpTabControl->SetTabPage( mnEmphasisId, mpTabPages[EMPHASIS] );
     mpTabPages[EXIT] = new CustomAnimationCreateTabPage( mpTabControl, this, mnExitId, rPresets.getExitPresets(), bHasText );
-    //mpTabPages[EXIT]->SetHelpId( HID_SD_CUSTOMANIMATIONDIALOG_EXIT );
     mpTabControl->SetTabPage( mnExitId, mpTabPages[EXIT] );
     mpTabPages[MOTIONPATH] = new CustomAnimationCreateTabPage( mpTabControl, this, mnMPathId, rPresets.getMotionPathsPresets(), bHasText );
-    //mpTabPages[MOTIONPATH]->SetHelpId( HID_SD_CUSTOMANIMATIONDIALOG_MOTIONPATH );
     mpTabControl->SetTabPage( mnMPathId, mpTabPages[MOTIONPATH] );
     mpTabPages[MISCEFFECTS] = new CustomAnimationCreateTabPage( mpTabControl, this, mnMiscId, rPresets.getMiscPresets(), bHasText );
-    //mpTabPages[MISCEFFECTS]->SetHelpId( HID_SD_CUSTOMANIMATIONDIALOG_MISCEFFECTS );
     mpTabControl->SetTabPage( mnMiscId, mpTabPages[MISCEFFECTS] );
 
     getCurrentPage()->setDuration( mfDuration );
@@ -657,8 +651,7 @@ Window * lcl_GetTopmostParent( Window * pWindow )
 
 void CustomAnimationCreateDialog::setPosition()
 {
-    SvtViewOptions aDlgOpt(
-        E_TABDIALOG, OUString::number(DLG_CUSTOMANIMATION_CREATE));
+    SvtViewOptions aDlgOpt(E_TABDIALOG, OStringToOUString(GetHelpId(), RTL_TEXTENCODING_UTF8));
     if ( aDlgOpt.Exists() )
     {
         SetWindowState( OUStringToOString(aDlgOpt.GetWindowState(),
@@ -685,8 +678,7 @@ void CustomAnimationCreateDialog::setPosition()
 void CustomAnimationCreateDialog::storePosition()
 {
     // save settings (screen position and current page)
-    SvtViewOptions aDlgOpt(
-        E_TABDIALOG, OUString::number(DLG_CUSTOMANIMATION_CREATE));
+    SvtViewOptions aDlgOpt(E_TABDIALOG, OStringToOUString(GetHelpId(), RTL_TEXTENCODING_UTF8));
     aDlgOpt.SetWindowState(OStringToOUString(
         GetWindowState(WINDOWSTATE_MASK_POS), RTL_TEXTENCODING_ASCII_US));
 }
