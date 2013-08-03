@@ -1705,8 +1705,8 @@ SvTreeListEntry* OfaQuoteTabPage::CreateEntry(String& rTxt, sal_uInt16 nCol)
 
     if ( !pCheckButtonData )
     {
-        pCheckButtonData = new SvLBoxButtonData( &aSwCheckLB );
-        aSwCheckLB.SetCheckButtonData( pCheckButtonData );
+        pCheckButtonData = new SvLBoxButtonData(m_pSwCheckLB);
+        m_pSwCheckLB->SetCheckButtonData(pCheckButtonData);
     }
 
     pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), 0));
@@ -1727,55 +1727,42 @@ SvTreeListEntry* OfaQuoteTabPage::CreateEntry(String& rTxt, sal_uInt16 nCol)
     return pEntry;
 }
 
-OfaQuoteTabPage::OfaQuoteTabPage( Window* pParent, const SfxItemSet& rSet ) :
-    SfxTabPage(pParent, CUI_RES( RID_OFAPAGE_AUTOCORR_QUOTE ), rSet),
-    aCheckLB            (this, CUI_RES(CLB_SETTINGS     )),
-    m_aSwCheckLBContainer(this, CUI_RES(CLB_SETTINGS)),
-    aSwCheckLB(m_aSwCheckLBContainer),
-    sHeader1            (CUI_RESSTR( STR_HEADER1           )),
-    sHeader2            (CUI_RESSTR( STR_HEADER2           )),
-    sNonBrkSpace        (CUI_RESSTR( RID_SVXSTR_NON_BREAK_SPACE )),
-    sOrdinal            (CUI_RESSTR( RID_SVXSTR_ORDINAL )),
-    pCheckButtonData    ( NULL ),
-
-    aSingleFL           (this, CUI_RES(FL_SINGLE         )),
-    aSingleTypoCB       (this, CUI_RES(CB_SGL_TYPO     )),
-    aSglStartQuoteFT    (this, CUI_RES(FT_SGL_STARTQUOTE )),
-    aSglStartQuotePB    (this, CUI_RES(PB_SGL_STARTQUOTE )),
-    aSglStartExFT       (this, CUI_RES(FT_SGSTEX       )),
-    aSglEndQuoteFT      (this, CUI_RES(FT_SGL_ENDQUOTE   )),
-    aSglEndQuotePB      (this, CUI_RES(PB_SGL_ENDQUOTE   )),
-    aSglEndExFT         (this, CUI_RES(FT_SGENEX       )),
-    aSglStandardPB      (this, CUI_RES(PB_SGL_STD      )),
-
-    aDoubleFL           (this, CUI_RES(FL_DOUBLE       )),
-    aTypoCB             (this, CUI_RES(CB_TYPO         )),
-    aStartQuoteFT       (this, CUI_RES(FT_STARTQUOTE   )),
-    aStartQuotePB       (this, CUI_RES(PB_STARTQUOTE   )),
-    aDblStartExFT       (this, CUI_RES(FT_DBSTEX       )),
-    aEndQuoteFT         (this, CUI_RES(FT_ENDQUOTE     )),
-    aEndQuotePB         (this, CUI_RES(PB_ENDQUOTE     )),
-    aDblEndExFT         (this, CUI_RES(FT_DBECEX       )),
-    aDblStandardPB      (this, CUI_RES(PB_DBL_STD      )),
-
-    sStartQuoteDlg  (CUI_RES(STR_CHANGE_START)),
-    sEndQuoteDlg    (CUI_RES(STR_CHANGE_END)),
-
-    sStandard(CUI_RES(ST_STANDARD))
+OfaQuoteTabPage::OfaQuoteTabPage(Window* pParent, const SfxItemSet& rSet)
+    : SfxTabPage(pParent, "ApplyLocalizedPage", "cui/ui/applylocalizedpage.ui", rSet)
+    , sNonBrkSpace(CUI_RESSTR(RID_SVXSTR_NON_BREAK_SPACE))
+    , sOrdinal(CUI_RESSTR(RID_SVXSTR_ORDINAL))
+    , pCheckButtonData(NULL)
 {
-    aSglStandardPB.SetAccessibleName(String(CUI_RES(STR_PB_SGL_STD) ) );
-    aDblStandardPB.SetAccessibleName(String(CUI_RES(STR_PB_DBL_STD) ) );
-    aStartQuotePB.SetAccessibleName( String(CUI_RES(STR_PB_DBL_START) ));
-    aEndQuotePB.SetAccessibleName(String(CUI_RES(STR_PB_DBL_END) ));
-    aSglStartQuotePB.SetAccessibleName(String(CUI_RES(STR_PB_SGL_START) ));
-    aSglEndQuotePB.SetAccessibleName(String(CUI_RES(STR_PB_SGL_END) ) );
+    get(m_pCheckLB, "checklist");
 
-    FreeResource();
+    SvSimpleTableContainer *pListContainer = get<SvSimpleTableContainer>("list");
+    Size aControlSize(252 , 85);
+    aControlSize = LogicToPixel(aControlSize, MAP_APPFONT);
+    pListContainer->set_width_request(aControlSize.Width());
+    pListContainer->set_height_request(aControlSize.Height());
+    m_pSwCheckLB = new OfaACorrCheckListBox(*pListContainer),
+
+    get(m_pSingleTypoCB, "singlereplace");
+    get(m_pSglStartQuotePB, "startsingle");
+    get(m_pSglStartExFT, "singlestartex");
+    get(m_pSglEndQuotePB, "endsingle");
+    get(m_pSglEndExFT, "singleendex");
+    get(m_pSglStandardPB, "defaultsingle");
+
+    get(m_pDoubleTypoCB, "doublereplace");
+    get(m_pDblStartQuotePB, "startdouble");
+    get(m_pDblStartExFT, "doublestartex");
+    get(m_pDblEndQuotePB, "enddouble");
+    get(m_pDblEndExFT, "doubleendex");
+    get(m_pDblStandardPB, "defaultdouble");
+
+    using comphelper::string::strip;
+
+    m_sStartQuoteDlg = strip(get<FixedText>("startquoteft")->GetText(), ':');
+    m_sEndQuoteDlg = strip(get<FixedText>("endquoteft")->GetText(), ':');
+    m_sStandard = get<FixedText>("singlestartex")->GetText();
 
     sal_Bool bShowSWOptions = sal_False;
-
-    aCheckLB.SetHelpId( HID_OFAPAGE_QUOTE_CLB );
-    aSwCheckLB.SetHelpId( HID_OFAPAGE_QUOTE_SW_CLB );
 
     SFX_ITEMSET_ARG( &rSet, pItem, SfxBoolItem, SID_AUTO_CORRECT_DLG, sal_False );
     if ( pItem && pItem->GetValue() )
@@ -1788,44 +1775,34 @@ OfaQuoteTabPage::OfaQuoteTabPage( Window* pParent, const SfxItemSet& rSet ) :
             3, 0, 20, 40
         };
 
-        aSwCheckLB.SetStyle(aSwCheckLB.GetStyle() | WB_HSCROLL| WB_VSCROLL);
+        m_pSwCheckLB->SetStyle(m_pSwCheckLB->GetStyle() | WB_HSCROLL| WB_VSCROLL);
 
-        aSwCheckLB.SvSimpleTable::SetTabs(aStaticTabs);
-        String sHeader( sHeader1 );
+        m_pSwCheckLB->SvSimpleTable::SetTabs(aStaticTabs);
+        String sHeader(get<Window>("m")->GetText());
         sHeader += '\t';
-        sHeader += sHeader2;
+        sHeader += get<Window>("t")->GetText();
         sHeader += '\t';
-        aSwCheckLB.InsertHeaderEntry( sHeader, HEADERBAR_APPEND,
+        m_pSwCheckLB->InsertHeaderEntry( sHeader, HEADERBAR_APPEND,
                         HIB_CENTER | HIB_VCENTER | HIB_FIXEDPOS | HIB_FIXED);
-        aCheckLB.Hide( sal_True );
+        m_pCheckLB->Hide(true);
     }
     else
     {
-        aSwCheckLB.HideTable( );
+        m_pSwCheckLB->HideTable();
     }
 
-    aStartQuotePB.SetClickHdl(LINK(this,    OfaQuoteTabPage, QuoteHdl));
-    aEndQuotePB.SetClickHdl(LINK(this,      OfaQuoteTabPage, QuoteHdl));
-    aSglStartQuotePB.SetClickHdl(LINK(this, OfaQuoteTabPage, QuoteHdl));
-    aSglEndQuotePB.SetClickHdl(LINK(this,   OfaQuoteTabPage, QuoteHdl));
-    aDblStandardPB.SetClickHdl(LINK(this,   OfaQuoteTabPage, StdQuoteHdl));
-    aSglStandardPB.SetClickHdl(LINK(this,   OfaQuoteTabPage, StdQuoteHdl));
-
-    aSglStartQuotePB.SetAccessibleRelationLabeledBy( &aSglStartQuoteFT );
-    aSglEndQuotePB.SetAccessibleRelationLabeledBy( &aSglEndQuoteFT );
-    aSglStartQuotePB.SetAccessibleRelationMemberOf( &aSingleFL );
-    aSglEndQuotePB.SetAccessibleRelationMemberOf( &aSingleFL );
-    aStartQuotePB.SetAccessibleRelationLabeledBy( &aStartQuoteFT );
-    aEndQuotePB.SetAccessibleRelationLabeledBy( &aEndQuoteFT );
-    aStartQuotePB.SetAccessibleRelationMemberOf( &aDoubleFL );
-    aEndQuotePB.SetAccessibleRelationMemberOf( &aDoubleFL );
-    aSglStandardPB.SetAccessibleRelationMemberOf(&aSingleFL);
-    aDblStandardPB.SetAccessibleRelationMemberOf(&aDoubleFL);
+    m_pDblStartQuotePB->SetClickHdl(LINK(this,    OfaQuoteTabPage, QuoteHdl));
+    m_pDblEndQuotePB->SetClickHdl(LINK(this,      OfaQuoteTabPage, QuoteHdl));
+    m_pSglStartQuotePB->SetClickHdl(LINK(this, OfaQuoteTabPage, QuoteHdl));
+    m_pSglEndQuotePB->SetClickHdl(LINK(this,   OfaQuoteTabPage, QuoteHdl));
+    m_pDblStandardPB->SetClickHdl(LINK(this,   OfaQuoteTabPage, StdQuoteHdl));
+    m_pSglStandardPB->SetClickHdl(LINK(this,   OfaQuoteTabPage, StdQuoteHdl));
 }
 
 OfaQuoteTabPage::~OfaQuoteTabPage()
 {
-    delete( pCheckButtonData );
+    delete pCheckButtonData;
+    delete m_pSwCheckLB;
 }
 
 SfxTabPage* OfaQuoteTabPage::Create( Window* pParent,
@@ -1840,33 +1817,33 @@ sal_Bool OfaQuoteTabPage::FillItemSet( SfxItemSet&  )
 
     long nFlags = pAutoCorrect->GetFlags();
 
-    if ( aCheckLB.IsVisible( ) )
+    if (m_pCheckLB->IsVisible())
     {
         sal_uInt16 nPos = 0;
-        pAutoCorrect->SetAutoCorrFlag(AddNonBrkSpace,       aCheckLB.IsChecked(nPos++));
-        pAutoCorrect->SetAutoCorrFlag(ChgOrdinalNumber,     aCheckLB.IsChecked(nPos++));
+        pAutoCorrect->SetAutoCorrFlag(AddNonBrkSpace, m_pCheckLB->IsChecked(nPos++));
+        pAutoCorrect->SetAutoCorrFlag(ChgOrdinalNumber, m_pCheckLB->IsChecked(nPos++));
     }
 
     sal_Bool bModified = sal_False;
-    if ( aSwCheckLB.IsVisible( ) )
+    if (m_pSwCheckLB->IsVisible())
     {
         SvxSwAutoFmtFlags *pOpt = &pAutoCorrect->GetSwFlags();
 
-        sal_Bool bCheck = aSwCheckLB.IsChecked(ADD_NONBRK_SPACE, CBCOL_FIRST);
+        sal_Bool bCheck = m_pSwCheckLB->IsChecked(ADD_NONBRK_SPACE, CBCOL_FIRST);
         bModified |= pOpt->bAddNonBrkSpace != bCheck;
         pOpt->bAddNonBrkSpace = bCheck;
         pAutoCorrect->SetAutoCorrFlag(AddNonBrkSpace,
-                            aSwCheckLB.IsChecked(ADD_NONBRK_SPACE, CBCOL_SECOND));
+                            m_pSwCheckLB->IsChecked(ADD_NONBRK_SPACE, CBCOL_SECOND));
 
-        bCheck = aSwCheckLB.IsChecked(REPLACE_1ST, CBCOL_FIRST);
+        bCheck = m_pSwCheckLB->IsChecked(REPLACE_1ST, CBCOL_FIRST);
         bModified |= pOpt->bChgOrdinalNumber != bCheck;
         pOpt->bChgOrdinalNumber = bCheck;
         pAutoCorrect->SetAutoCorrFlag(ChgOrdinalNumber,
-                        aSwCheckLB.IsChecked(REPLACE_1ST, CBCOL_SECOND));
+                        m_pSwCheckLB->IsChecked(REPLACE_1ST, CBCOL_SECOND));
     }
 
-    pAutoCorrect->SetAutoCorrFlag(ChgQuotes,        aTypoCB.IsChecked());
-    pAutoCorrect->SetAutoCorrFlag(ChgSglQuotes,     aSingleTypoCB.IsChecked());
+    pAutoCorrect->SetAutoCorrFlag(ChgQuotes, m_pDoubleTypoCB->IsChecked());
+    pAutoCorrect->SetAutoCorrFlag(ChgSglQuotes, m_pSingleTypoCB->IsChecked());
     sal_Bool bReturn = nFlags != pAutoCorrect->GetFlags();
     if(cStartQuote != pAutoCorrect->GetStartDoubleQuote())
     {
@@ -1913,55 +1890,55 @@ void OfaQuoteTabPage::Reset( const SfxItemSet& )
     const long nFlags = pAutoCorrect->GetFlags();
 
     // Initialize the Sw options
-    if ( aSwCheckLB.IsVisible( ) )
+    if (m_pSwCheckLB->IsVisible())
     {
         SvxSwAutoFmtFlags *pOpt = &pAutoCorrect->GetSwFlags();
 
-        aSwCheckLB.SetUpdateMode( sal_False );
-        aSwCheckLB.Clear();
+        m_pSwCheckLB->SetUpdateMode( sal_False );
+        m_pSwCheckLB->Clear();
 
-        aSwCheckLB.GetModel()->Insert(CreateEntry(sNonBrkSpace,       CBCOL_BOTH ));
-        aSwCheckLB.GetModel()->Insert(CreateEntry(sOrdinal,           CBCOL_BOTH ));
+        m_pSwCheckLB->GetModel()->Insert(CreateEntry(sNonBrkSpace, CBCOL_BOTH ));
+        m_pSwCheckLB->GetModel()->Insert(CreateEntry(sOrdinal, CBCOL_BOTH ));
 
-        aSwCheckLB.CheckEntryPos( ADD_NONBRK_SPACE, CBCOL_FIRST,    pOpt->bAddNonBrkSpace );
-        aSwCheckLB.CheckEntryPos( ADD_NONBRK_SPACE, CBCOL_SECOND,   0 != (nFlags & AddNonBrkSpace) );
-        aSwCheckLB.CheckEntryPos( REPLACE_1ST,      CBCOL_FIRST,    pOpt->bChgOrdinalNumber );
-        aSwCheckLB.CheckEntryPos( REPLACE_1ST,      CBCOL_SECOND,   0 != (nFlags & ChgOrdinalNumber) );
+        m_pSwCheckLB->CheckEntryPos( ADD_NONBRK_SPACE, CBCOL_FIRST,    pOpt->bAddNonBrkSpace );
+        m_pSwCheckLB->CheckEntryPos( ADD_NONBRK_SPACE, CBCOL_SECOND,   0 != (nFlags & AddNonBrkSpace) );
+        m_pSwCheckLB->CheckEntryPos( REPLACE_1ST, CBCOL_FIRST,    pOpt->bChgOrdinalNumber );
+        m_pSwCheckLB->CheckEntryPos( REPLACE_1ST, CBCOL_SECOND,   0 != (nFlags & ChgOrdinalNumber) );
 
-        aSwCheckLB.SetUpdateMode( sal_True );
+        m_pSwCheckLB->SetUpdateMode( sal_True );
     }
 
     // Initialize the non Sw options
-    if ( aCheckLB.IsVisible( ) )
+    if (m_pCheckLB->IsVisible())
     {
-        aCheckLB.SetUpdateMode( sal_False );
-        aCheckLB.Clear( );
+        m_pCheckLB->SetUpdateMode(false);
+        m_pCheckLB->Clear();
 
-        aCheckLB.InsertEntry( sNonBrkSpace );
-        aCheckLB.InsertEntry( sOrdinal );
+        m_pCheckLB->InsertEntry( sNonBrkSpace );
+        m_pCheckLB->InsertEntry( sOrdinal );
 
         sal_uInt16 nPos = 0;
-        aCheckLB.CheckEntryPos( nPos++, 0 != (nFlags & AddNonBrkSpace) );
-        aCheckLB.CheckEntryPos( nPos++, 0 != (nFlags & ChgOrdinalNumber) );
+        m_pCheckLB->CheckEntryPos( nPos++, 0 != (nFlags & AddNonBrkSpace) );
+        m_pCheckLB->CheckEntryPos( nPos++, 0 != (nFlags & ChgOrdinalNumber) );
 
-        aCheckLB.SetUpdateMode( sal_True );
+        m_pCheckLB->SetUpdateMode(true);
     }
 
     // Initialize the quote stuffs
-    aTypoCB             .Check(0 != (nFlags & ChgQuotes));
-    aSingleTypoCB       .Check(0 != (nFlags & ChgSglQuotes));
-    aTypoCB             .SaveValue();
-    aSingleTypoCB       .SaveValue();
+    m_pDoubleTypoCB->Check(0 != (nFlags & ChgQuotes));
+    m_pSingleTypoCB->Check(0 != (nFlags & ChgSglQuotes));
+    m_pDoubleTypoCB->SaveValue();
+    m_pSingleTypoCB->SaveValue();
 
     cStartQuote = pAutoCorrect->GetStartDoubleQuote();
     cEndQuote = pAutoCorrect->GetEndDoubleQuote();
     cSglStartQuote = pAutoCorrect->GetStartSingleQuote();
     cSglEndQuote = pAutoCorrect->GetEndSingleQuote();
 
-    aSglStartExFT .SetText(ChangeStringExt_Impl(cSglStartQuote));
-    aSglEndExFT   .SetText(ChangeStringExt_Impl(cSglEndQuote));
-    aDblStartExFT .SetText(ChangeStringExt_Impl(cStartQuote));
-    aDblEndExFT   .SetText(ChangeStringExt_Impl(cEndQuote));
+    m_pSglStartExFT->SetText(ChangeStringExt_Impl(cSglStartQuote));
+    m_pSglEndExFT->SetText(ChangeStringExt_Impl(cSglEndQuote));
+    m_pDblStartExFT->SetText(ChangeStringExt_Impl(cStartQuote));
+    m_pDblEndExFT->SetText(ChangeStringExt_Impl(cEndQuote));
 }
 
 #define SGL_START       0
@@ -1973,17 +1950,17 @@ void OfaQuoteTabPage::Reset( const SfxItemSet& )
 IMPL_LINK( OfaQuoteTabPage, QuoteHdl, PushButton*, pBtn )
 {
     sal_uInt16 nMode = SGL_START;
-    if(pBtn == &aSglEndQuotePB)
+    if (pBtn == m_pSglEndQuotePB)
         nMode = SGL_END;
-    else if(pBtn == &aStartQuotePB)
+    else if (pBtn == m_pDblStartQuotePB)
         nMode = DBL_START;
-    else if(pBtn == &aEndQuotePB)
+    else if (pBtn == m_pDblEndQuotePB)
         nMode = DBL_END;
     // start character selection dialog
     SvxCharacterMap* pMap = new SvxCharacterMap( this, sal_True );
     pMap->SetCharFont( OutputDevice::GetDefaultFont(DEFAULTFONT_LATIN_TEXT,
                         LANGUAGE_ENGLISH_US, DEFAULTFONT_FLAGS_ONLYONE, 0 ));
-    pMap->SetText(nMode < SGL_END ? sStartQuoteDlg  :  sEndQuoteDlg );
+    pMap->SetText(nMode < SGL_END ? m_sStartQuoteDlg  : m_sEndQuoteDlg );
     sal_UCS4 cDlg;
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
     LanguageType eLang = Application::GetSettings().GetLanguageTag().getLanguageType();
@@ -2024,19 +2001,19 @@ IMPL_LINK( OfaQuoteTabPage, QuoteHdl, PushButton*, pBtn )
         {
             case SGL_START:
                 cSglStartQuote = cNewChar;
-                aSglStartExFT.SetText(ChangeStringExt_Impl(cNewChar));
+                m_pSglStartExFT->SetText(ChangeStringExt_Impl(cNewChar));
             break;
             case SGL_END:
                 cSglEndQuote = cNewChar;
-                aSglEndExFT.SetText(ChangeStringExt_Impl(cNewChar));
+                m_pSglEndExFT->SetText(ChangeStringExt_Impl(cNewChar));
             break;
             case DBL_START:
                 cStartQuote = cNewChar;
-                aDblStartExFT.SetText(ChangeStringExt_Impl(cNewChar));
+                m_pDblStartExFT->SetText(ChangeStringExt_Impl(cNewChar));
             break;
             case DBL_END:
                 cEndQuote = cNewChar;
-                aDblEndExFT.SetText(ChangeStringExt_Impl(cNewChar));
+                m_pDblEndExFT->SetText(ChangeStringExt_Impl(cNewChar));
             break;
         }
     }
@@ -2047,20 +2024,20 @@ IMPL_LINK( OfaQuoteTabPage, QuoteHdl, PushButton*, pBtn )
 
 IMPL_LINK( OfaQuoteTabPage, StdQuoteHdl, PushButton*, pBtn )
 {
-    if(pBtn == &aDblStandardPB)
+    if (pBtn == m_pDblStandardPB)
     {
         cStartQuote = 0;
-        aDblStartExFT.SetText(ChangeStringExt_Impl(0));
+        m_pDblStartExFT->SetText(ChangeStringExt_Impl(0));
         cEndQuote = 0;
-        aDblEndExFT.SetText(ChangeStringExt_Impl(0));
+        m_pDblEndExFT->SetText(ChangeStringExt_Impl(0));
 
     }
     else
     {
         cSglStartQuote = 0;
-        aSglStartExFT.SetText(ChangeStringExt_Impl(0));
+        m_pSglStartExFT->SetText(ChangeStringExt_Impl(0));
         cSglEndQuote = 0;
-        aSglEndExFT.SetText(ChangeStringExt_Impl(0));
+        m_pSglEndExFT->SetText(ChangeStringExt_Impl(0));
     }
     return 0;
 }
@@ -2069,8 +2046,8 @@ IMPL_LINK( OfaQuoteTabPage, StdQuoteHdl, PushButton*, pBtn )
 
 String OfaQuoteTabPage::ChangeStringExt_Impl( sal_UCS4 cChar )
 {
-    if( !cChar )
-        return sStandard;
+    if (!cChar)
+        return m_sStandard;
 
     // convert codepoint value to unicode-hex string
     sal_UCS4 aStrCodes[32] = { 0, ' ', '(', 'U', '+', '0' };

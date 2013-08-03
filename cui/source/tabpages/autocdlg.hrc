@@ -25,34 +25,6 @@
 
 #define CLB_SETTINGS                    1
 
-#define CB_TYPO                         11
-#define FT_STARTQUOTE                   12
-#define PB_STARTQUOTE                   13
-#define FT_ENDQUOTE                     14
-#define PB_ENDQUOTE                     15
-
-#define STR_CHANGE_START                41
-#define STR_CHANGE_END                  42
-
-#define FT_SGL_STARTQUOTE               45
-#define PB_SGL_STARTQUOTE               46
-#define FT_SGL_ENDQUOTE                 47
-#define PB_SGL_ENDQUOTE                 48
-#define PB_SGL_STD                      49
-#define PB_DBL_STD                      50
-#define FL_SINGLE                       51
-#define FL_DOUBLE                       52
-#define FT_SGSTEX                       53
-#define FT_SGENEX                       54
-#define FT_DBSTEX                       55
-#define FT_DBECEX                       56
-#define CB_SGL_TYPO                     57
-#define ST_STANDARD                     58
-
-#define STR_HEADER                      90
-#define STR_HEADER1                     92
-#define STR_HEADER2                     93
-
 #define ED_RIGHT_MARGIN                 100
 #define BT_OK                           101
 #define BT_CANCEL                       102

@@ -339,43 +339,34 @@ class OfaQuoteTabPage : public SfxTabPage
 
 private:
     /// For anything but writer
-    SvxCheckListBox aCheckLB;
+    SvxCheckListBox* m_pCheckLB;
 
     /// Just for writer
-    SvSimpleTableContainer m_aSwCheckLBContainer;
-    OfaACorrCheckListBox    aSwCheckLB;
-    String          sHeader1;
-    String          sHeader2;
+    OfaACorrCheckListBox*   m_pSwCheckLB;
 
     String          sNonBrkSpace;
     String          sOrdinal;
 
     SvLBoxButtonData*   pCheckButtonData;
 
-    FixedLine   aSingleFL;
-    CheckBox    aSingleTypoCB;
-    FixedText   aSglStartQuoteFT;
-    PushButton  aSglStartQuotePB;
-    FixedText   aSglStartExFT;
-    FixedText   aSglEndQuoteFT;
-    PushButton  aSglEndQuotePB;
-    FixedText   aSglEndExFT;
-    PushButton  aSglStandardPB;
+    CheckBox*   m_pSingleTypoCB;
+    PushButton* m_pSglStartQuotePB;
+    FixedText*  m_pSglStartExFT;
+    PushButton* m_pSglEndQuotePB;
+    FixedText*  m_pSglEndExFT;
+    PushButton* m_pSglStandardPB;
 
-    FixedLine   aDoubleFL;
-    CheckBox    aTypoCB;
-    FixedText   aStartQuoteFT;
-    PushButton  aStartQuotePB;
-    FixedText   aDblStartExFT;
-    FixedText   aEndQuoteFT;
-    PushButton  aEndQuotePB;
-    FixedText   aDblEndExFT;
-    PushButton  aDblStandardPB;
+    CheckBox*   m_pDoubleTypoCB;
+    PushButton* m_pDblStartQuotePB;
+    FixedText*  m_pDblStartExFT;
+    PushButton* m_pDblEndQuotePB;
+    FixedText*  m_pDblEndExFT;
+    PushButton* m_pDblStandardPB;
 
-    String      sStartQuoteDlg;
-    String      sEndQuoteDlg;
+    OUString    m_sStartQuoteDlg;
+    OUString    m_sEndQuoteDlg;
 
-    String      sStandard;
+    OUString    m_sStandard;
 
 
     sal_UCS4    cSglStartQuote;

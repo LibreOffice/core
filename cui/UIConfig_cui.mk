@@ -15,6 +15,7 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/acorexceptpage \
 	cui/uiconfig/ui/acorreplacepage \
 	cui/uiconfig/ui/applyautofmtpage \
+	cui/uiconfig/ui/applylocalizedpage \
 	cui/uiconfig/ui/areadialog \
 	cui/uiconfig/ui/areatabpage \
 	cui/uiconfig/ui/asiantypography \
