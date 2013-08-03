@@ -21,6 +21,7 @@
 
 #include "tools/toolsdllapi.h"
 #include <tools/solar.h>
+#include <com/sun/star/util/Time.hpp>
 
 class ResId;
 
@@ -34,6 +35,8 @@ class TOOLS_DLLPUBLIC SAL_WARN_UNUSED Time
 {
 private:
     sal_Int64       nTime;
+    void            init( sal_uInt32 nHour, sal_uInt32 nMin,
+                          sal_uInt32 nSec, sal_uInt64 nNanoSec);
 
 public:
     enum TimeInitSystem
@@ -66,11 +69,13 @@ public:
                     Time( const ResId & rResId );
                     Time( sal_Int64 _nTime ) { Time::nTime = _nTime; }
                     Time( const Time& rTime );
+                    Time( const ::com::sun::star::util::Time& rTime );
                     Time( sal_uInt32 nHour, sal_uInt32 nMin,
                           sal_uInt32 nSec = 0, sal_uInt64 nNanoSec = 0 );
 
     void            SetTime( sal_Int64 nNewTime ) { nTime = nNewTime; }
     sal_Int64       GetTime() const { return nTime; }
+    ::com::sun::star::util::Time GetUNOTime() const { return ::com::sun::star::util::Time(GetNanoSec(),GetSec(),GetMin(),GetHour(),false); }
 
     void            SetHour( sal_uInt16 nNewHour );
     void            SetMin( sal_uInt16 nNewMin );

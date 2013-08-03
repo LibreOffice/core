@@ -63,6 +63,10 @@ using namespace ::com::sun::star::lang          ;
 using namespace ::com::sun::star::util          ;
 using namespace ::com::sun::star::frame         ;
 
+using ::Date;
+using ::Time;
+using ::DateTime;
+
 // license file name
 static const char *szLicensePath = "/share/readme";
 #ifdef UNX

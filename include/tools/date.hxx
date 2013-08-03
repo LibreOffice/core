@@ -21,6 +21,8 @@
 
 #include "tools/toolsdllapi.h"
 #include <tools/solar.h>
+#include <com/sun/star/util/Date.hpp>
+#include <sal/log.hxx>
 
 class ResId;
 
@@ -32,6 +34,10 @@ class TOOLS_DLLPUBLIC SAL_WARN_UNUSED Date
 {
 private:
     sal_uInt32      nDate;
+    void            init( sal_uInt16 nDay, sal_uInt16 nMonth, sal_uInt16 nYear )
+                        { nDate = (   sal_uInt32( nDay   % 100 ) ) +
+                                  ( ( sal_uInt32( nMonth % 100 ) ) * 100 ) +
+                                  ( ( sal_uInt32( nYear  % 10000 ) ) * 10000); }
 
 public:
     enum DateInitSystem
@@ -53,12 +59,16 @@ public:
                     Date( const Date& rDate )
                         { nDate = rDate.nDate; }
                     Date( sal_uInt16 nDay, sal_uInt16 nMonth, sal_uInt16 nYear )
-                        { nDate = (   sal_uInt32( nDay   % 100 ) ) +
-                                  ( ( sal_uInt32( nMonth % 100 ) ) * 100 ) +
-                                  ( ( sal_uInt32( nYear  % 10000 ) ) * 10000); }
+                        { init(nDay, nMonth, nYear); }
+                    Date( const ::com::sun::star::util::Date& _rDate )
+                    {
+                        SAL_WARN_IF(_rDate.Year < 0, "tools.datetime", "Negative year in css::util::Date to ::Date conversion");
+                        init(_rDate.Day, _rDate.Month, _rDate.Year);
+                    }
 
     void            SetDate( sal_uInt32 nNewDate ) { nDate = nNewDate; }
     sal_uInt32      GetDate() const { return nDate; }
+    ::com::sun::star::util::Date GetUNODate() const { return ::com::sun::star::util::Date(GetDay(), GetMonth(), GetYear()); }
 
     void            SetDay( sal_uInt16 nNewDay );
     void            SetMonth( sal_uInt16 nNewMonth );

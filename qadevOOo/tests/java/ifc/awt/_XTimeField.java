@@ -22,6 +22,7 @@ package ifc.awt;
 import lib.MultiMethodTest;
 
 import com.sun.star.awt.XTimeField;
+import com.sun.star.util.Time;
 
 /**
 * Testing <code>com.sun.star.awt.XTimeField</code>
@@ -62,12 +63,12 @@ public class _XTimeField extends MultiMethodTest {
         requiredMethod("getTime()") ;
 
         boolean result = true ;
-        oObj.setTime(11150000) ;
+        oObj.setTime(new Time(0, (short)0, (short)15, (short)11, false));
 
-        result = oObj.getTime() == 11150000 ;
+        result = oObj.getTime() == new Time(0, (short)0, (short)15, (short)11, false) ;
 
         if (! result ) {
-            System.out.println("Getting "+oObj.getTime()+ " expected 11150000");
+            System.out.println("Getting " + oObj.getTime() + " expected 11:15");
         }
 
         tRes.tested("setTime()", result) ;
@@ -96,9 +97,9 @@ public class _XTimeField extends MultiMethodTest {
     public void _setMin() {
 
         boolean result = true ;
-        oObj.setMin(4978) ;
+        oObj.setMin(new Time(0, (short)14, (short)18, (short)6, false));
 
-        result = oObj.getMin() == 4978 ;
+        result = oObj.getMin() == new Time(0, (short)14, (short)18, (short)6, false) ;
 
         tRes.tested("setMin()", result) ;
     }
@@ -126,9 +127,9 @@ public class _XTimeField extends MultiMethodTest {
     public void _setMax() {
 
         boolean result = true ;
-        oObj.setMax(27856) ;
+        oObj.setMax(new Time(855447, (short)31, (short)23, (short)22, false)) ;
 
-        result = oObj.getMax() == 27856 ;
+        result = oObj.getMax() == new Time(855447, (short)31, (short)23, (short)22, false) ;
 
         tRes.tested("setMax()", result) ;
     }
@@ -156,12 +157,12 @@ public class _XTimeField extends MultiMethodTest {
     public void _setFirst() {
 
         boolean result = true ;
-        oObj.setFirst(5118) ;
+        oObj.setFirst(new Time(0, (short)0, (short)30, (short)7, false)) ;
 
-        result = oObj.getFirst() == 5118 ;
+        result = oObj.getFirst() == new Time(0, (short)0, (short)30, (short)7, false);
 
         if (!result) {
-            log.println("Set to " + 5118 + " but returned " + oObj.getFirst()) ;
+            log.println("Set to 07:30 but returned " + oObj.getFirst()) ;
         }
 
         tRes.tested("setFirst()", result) ;
@@ -174,7 +175,7 @@ public class _XTimeField extends MultiMethodTest {
     public void _getFirst() {
 
         boolean result = true ;
-        long val = oObj.getFirst() ;
+        com.sun.star.util.Time val = oObj.getFirst() ;
 
         log.println("getFirst() = " + val) ;
 
@@ -192,12 +193,12 @@ public class _XTimeField extends MultiMethodTest {
     public void _setLast() {
 
         boolean result = true ;
-        oObj.setLast(23450) ;
+        oObj.setLast(new Time(500000, (short)31, (short)30, (short)18, false)) ;
 
-        result = oObj.getLast() == 23450 ;
+        result = oObj.getLast() == new Time(500000, (short)31, (short)30, (short)18, false);
 
         if (!result) {
-            log.println("Set to " + 23450 + " but returned " + oObj.getLast()) ;
+            log.println("Set to 18:30:31.5 but returned " + oObj.getLast()) ;
         }
 
         tRes.tested("setLast()", result) ;
@@ -210,7 +211,7 @@ public class _XTimeField extends MultiMethodTest {
     public void _getLast() {
 
         boolean result = true ;
-        long val = oObj.getLast() ;
+        com.sun.star.util.Time val = oObj.getLast() ;
 
         log.println("getLast() = " + val) ;
 

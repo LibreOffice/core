@@ -95,6 +95,8 @@ import com.sun.star.uno.XComponentContext;
 import com.sun.star.util.XMacroExpander;
 import com.sun.star.util.XNumberFormats;
 import com.sun.star.util.XNumberFormatsSupplier;
+import com.sun.star.util.Date;
+import com.sun.star.util.Time;
 
 
 // Anregung von DV:
@@ -150,7 +152,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
             oUnoDialogSample.insertProgressBar(106, 44, 100, 100);
             oUnoDialogSample.insertHorizontalFixedLine(106, 58, 100, "My FixedLine");
             oUnoDialogSample.insertEditField(oUnoDialogSample, oUnoDialogSample, 106, 72, 60);
-            oUnoDialogSample.insertTimeField(106, 96, 50, 0, 170000, 1000);
+            oUnoDialogSample.insertTimeField(106, 96, 50, new Time(0,(short)0,(short)0,(short)10,false), new Time((short)0,(short)0,(short)0,(short)0,false), new Time((short)0,(short)0,(short)0,(short)17,false));
             oUnoDialogSample.insertDateField(oUnoDialogSample, 166, 96, 50);
             oUnoDialogSample.insertGroupBox(102, 124, 70, 100);
             oUnoDialogSample.insertPatternField(106, 136, 50);
@@ -627,7 +629,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
         return xTextComponent;
     }
 
-    public XPropertySet insertTimeField(int _nPosX, int _nPosY, int _nWidth, long _nTime, long _nTimeMin, long _nTimeMax){
+    public XPropertySet insertTimeField(int _nPosX, int _nPosY, int _nWidth, Time _aTime, Time _aTimeMin, Time _aTimeMax){
         XPropertySet xTFModelPSet = null;
         try{
             // create a unique name by means of an own implementation...
@@ -649,9 +651,9 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
             // The following properties may also be set with XMultiPropertySet but we
             // use the XPropertySet interface merely for reasons of demonstration
             xTFModelPSet.setPropertyValue("TimeFormat", new Short((short) 5));
-            xTFModelPSet.setPropertyValue("TimeMin", new Long(_nTimeMin));
-            xTFModelPSet.setPropertyValue("TimeMax", new Long(_nTimeMax));
-            xTFModelPSet.setPropertyValue("Time", new Long(_nTime));
+            xTFModelPSet.setPropertyValue("TimeMin", _aTimeMin);
+            xTFModelPSet.setPropertyValue("TimeMax", _aTimeMax);
+            xTFModelPSet.setPropertyValue("Time", _aTime);
         } catch (com.sun.star.uno.Exception ex) {
             /* perform individual exception handling here.
              * Possible exception types are:
@@ -691,9 +693,9 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
             // The following properties may also be set with XMultiPropertySet but we
             // use the XPropertySet interface merely for reasons of demonstration
             xDFModelPSet.setPropertyValue("DateFormat", new Short((short) 7));
-            xDFModelPSet.setPropertyValue("DateMin", new Integer(20070401));
-            xDFModelPSet.setPropertyValue("DateMax", new Integer(20070501));
-            xDFModelPSet.setPropertyValue("Date", new Integer(20000415));
+            xDFModelPSet.setPropertyValue("DateMin", new Date((short)1, (short)4, (short)2007));
+            xDFModelPSet.setPropertyValue("DateMax", new Date((short)1, (short)5, (short)2007));
+            xDFModelPSet.setPropertyValue("Date", new Date((short)15, (short)4, (short)2000));
             Object oDFControl = m_xDlgContainer.getControl(sName);
 
             // add a SpinListener that is notified on each change of the controlvalue...

@@ -23,6 +23,7 @@
 #include <rtl/ustrbuf.hxx>
 
 #include <com/sun/star/util/Duration.hpp>
+#include <com/sun/star/util/Time.hpp>
 
 #include <sax/tools/converter.hxx>
 
@@ -37,6 +38,7 @@ namespace xmloff
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::uno::makeAny;
     using ::com::sun::star::util::Duration;
+    using ::com::sun::star::util::Time;
 
     //==================================================================================================================
     //= VCLTimeHandler
@@ -56,15 +58,14 @@ namespace xmloff
     //------------------------------------------------------------------------------------------------------------------
     OUString VCLTimeHandler::getAttributeValue( const Any& i_propertyValue ) const
     {
-        sal_Int64 nVCLTime(0);
-        OSL_VERIFY( i_propertyValue >>= nVCLTime );
-        ::Time aVCLTime( nVCLTime );
+        Time aTime;
+        OSL_VERIFY( i_propertyValue >>= aTime );
 
         Duration aDuration; // default-inited to 0
-        aDuration.Hours = aVCLTime.GetHour();
-        aDuration.Minutes = aVCLTime.GetMin();
-        aDuration.Seconds = aVCLTime.GetSec();
-        aDuration.NanoSeconds = aVCLTime.GetNanoSec();
+        aDuration.Hours = aTime.Hours;
+        aDuration.Minutes = aTime.Minutes;
+        aDuration.Seconds = aTime.Seconds;
+        aDuration.NanoSeconds = aTime.NanoSeconds;
 
         OUStringBuffer aBuffer;
         ::sax::Converter::convertDuration( aBuffer, aDuration );
@@ -74,18 +75,18 @@ namespace xmloff
     //------------------------------------------------------------------------------------------------------------------
     bool VCLTimeHandler::getPropertyValues( const OUString i_attributeValue, PropertyValues& o_propertyValues ) const
     {
-        sal_Int64 nVCLTime(0);
-
         Duration aDuration;
+        Time aTime;
         if (::sax::Converter::convertDuration( aDuration, i_attributeValue ))
         {
-            ::Time aVCLTime(aDuration.Hours, aDuration.Minutes,
-                            aDuration.Seconds, aDuration.NanoSeconds);
-            nVCLTime = aVCLTime.GetTime();
+            aTime = Time(aDuration.NanoSeconds, aDuration.Seconds,
+                         aDuration.Minutes, aDuration.Hours,
+                         false);
         }
         else
         {
             // compatibility format, before we wrote those values in XML-schema compatible form
+            sal_Int64 nVCLTime(0);
             if (!::sax::Converter::convertNumber64(nVCLTime, i_attributeValue))
             {
                 OSL_ENSURE( false, "VCLTimeHandler::getPropertyValues: unknown time format (no XML-schema time, no legacy integer)!" );
@@ -93,9 +94,10 @@ namespace xmloff
             }
             // legacy integer was in centiseconds
             nVCLTime *= ::Time::nanoPerCenti;
+            aTime = ::Time(nVCLTime).GetUNOTime();
         }
 
-        const Any aPropertyValue( makeAny( nVCLTime ) );
+        const Any aPropertyValue( makeAny( aTime ) );
 
         OSL_ENSURE( o_propertyValues.size() == 1, "VCLTimeHandler::getPropertyValues: time strings represent exactly one property - not more, not less!" );
         for (   PropertyValues::iterator prop = o_propertyValues.begin();

@@ -19,6 +19,7 @@
 #ifndef __com_sun_star_awt_UnoControlDateFieldModel_idl__
 #define __com_sun_star_awt_UnoControlDateFieldModel_idl__
 
+#include <com/sun/star/util/Date.idl>
 #include <com/sun/star/awt/FontDescriptor.idl>
 #include <com/sun/star/awt/UnoControlModel.idl>
 
@@ -67,7 +68,7 @@ published service UnoControlDateFieldModel
 
         <p>The date must be specified in the format YYYYMMDD.</p>
      */
-    [property] long Date;
+    [property] ::com::sun::star::util::Date Date;
 
 
     /** specifies the format of the displayed date.
@@ -92,12 +93,12 @@ published service UnoControlDateFieldModel
 
     /** specifies the maximum date that can be entered.
      */
-    [property] long DateMax;
+    [property] ::com::sun::star::util::Date DateMax;
 
 
     /** specifies the minimum date that can be entered.
      */
-    [property] long DateMin;
+    [property] ::com::sun::star::util::Date DateMin;
 
 
     /** specifies, if the date century is displayed.
