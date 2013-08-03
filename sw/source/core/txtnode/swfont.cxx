@@ -337,7 +337,7 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
     delete pBackColor;
     pBackColor = NULL;
 
-    m_aTopBorder = m_aBottomBorder = m_aRightBorder = m_aLeftBorder = boost::none;
+    RemoveBorders();
 
     if( pAttrSet )
     {
@@ -520,10 +520,10 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_BOX,
             sal_True, &pItem ))
         {
-            m_aTopBorder = *((SvxBoxItem*)pItem)->GetTop();
-            m_aBottomBorder = *((SvxBoxItem*)pItem)->GetBottom();
-            m_aRightBorder = *((SvxBoxItem*)pItem)->GetRight();
-            m_aLeftBorder = *((SvxBoxItem*)pItem)->GetLeft();
+            SetTopBorder(((SvxBoxItem*)pItem)->GetTop());
+            SetBottomBorder(((SvxBoxItem*)pItem)->GetBottom());
+            SetRightBorder(((SvxBoxItem*)pItem)->GetRight());
+            SetLeftBorder(((SvxBoxItem*)pItem)->GetLeft());
         }
         const SfxPoolItem* pTwoLinesItem = 0;
         if( SFX_ITEM_SET ==
@@ -687,13 +687,13 @@ SwFont::SwFont( const SwAttrSet* pAttrSet,
     if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_BOX,
         sal_True, &pItem ))
     {
-        m_aTopBorder = *((SvxBoxItem*)pItem)->GetTop();
-        m_aBottomBorder = *((SvxBoxItem*)pItem)->GetBottom();
-        m_aRightBorder = *((SvxBoxItem*)pItem)->GetRight();
-        m_aLeftBorder = *((SvxBoxItem*)pItem)->GetLeft();
+        SetTopBorder(((SvxBoxItem*)pItem)->GetTop());
+        SetBottomBorder(((SvxBoxItem*)pItem)->GetBottom());
+        SetRightBorder(((SvxBoxItem*)pItem)->GetRight());
+        SetLeftBorder(((SvxBoxItem*)pItem)->GetLeft());
     }
     else
-        m_aTopBorder = m_aBottomBorder = m_aRightBorder = m_aLeftBorder = boost::none;
+        RemoveBorders();
 
     const SvxTwoLinesItem& rTwoLinesItem = pAttrSet->Get2Lines();
     if ( ! rTwoLinesItem.GetValue() )

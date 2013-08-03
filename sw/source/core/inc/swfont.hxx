@@ -381,6 +381,7 @@ public:
     const boost::optional<editeng::SvxBorderLine>& GetAbsLeftBorder( const bool bVertLayout ) const;
 
     bool HasBorder() const;
+    void RemoveBorders();
 };
 
 inline void SwFont::SetColor( const Color& rColor )
@@ -835,6 +836,10 @@ inline bool SwFont::HasBorder() const
     return m_aTopBorder || m_aBottomBorder || m_aLeftBorder || m_aRightBorder;
 }
 
+inline void SwFont::RemoveBorders()
+{
+    m_aTopBorder = m_aBottomBorder = m_aLeftBorder = m_aRightBorder = boost::none;
+}
 
 /*************************************************************************
  *                      class SwUnderlineFont
