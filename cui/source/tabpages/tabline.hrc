@@ -48,11 +48,5 @@
 #define BTN_DELETE 3
 #define BTN_LOAD   5
 #define BTN_SAVE   6
-#define EDT_NAME 1
-#define LB_LINEENDS 1
-#define FL_TIP 1
-#define FI_TIP 10
-#define FT_LINE_END_STYLE 11
-#define FT_TITLE 12
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

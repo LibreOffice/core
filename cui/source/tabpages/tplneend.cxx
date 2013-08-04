@@ -54,23 +54,12 @@ SvxLineEndDefTabPage::SvxLineEndDefTabPage
     const SfxItemSet& rInAttrs
 ) :
 
-    SfxTabPage( pParent, CUI_RES( RID_SVXPAGE_LINEEND_DEF ), rInAttrs ),
-
-    aFlTip              ( this, CUI_RES( FL_TIP ) ),
-    aFTTitle            ( this, CUI_RES( FT_TITLE ) ),
-    aEdtName            ( this, CUI_RES( EDT_NAME ) ),
-    aFTLineEndStyle     ( this, CUI_RES( FT_LINE_END_STYLE ) ),
-    aLbLineEnds         ( this, CUI_RES( LB_LINEENDS ) ),
-    aBtnAdd             ( this, CUI_RES( BTN_ADD ) ),
-    aBtnModify          ( this, CUI_RES( BTN_MODIFY ) ),
-    aBtnDelete          ( this, CUI_RES( BTN_DELETE ) ),
-    aBtnLoad            ( this, CUI_RES( BTN_LOAD ) ),
-    aBtnSave            ( this, CUI_RES( BTN_SAVE ) ),
-    aFiTip              ( this, CUI_RES( FI_TIP ) ),
-    aCtlPreview         ( this, CUI_RES( CTL_PREVIEW ) ),
-
+    SfxTabPage( pParent
+              , "LineEndPage"
+              , "cui/ui/lineendstabpage.ui"
+              , rInAttrs ),
     rOutAttrs           ( rInAttrs ),
-    pPolyObj( NULL ),
+    pPolyObj            ( NULL ),
 
     pXPool              ( (XOutdevItemPool*) rInAttrs.GetPool() ),
     aXLStyle            ( XLINE_SOLID ),
@@ -78,9 +67,16 @@ SvxLineEndDefTabPage::SvxLineEndDefTabPage
     aXColor             ( String(), COL_BLACK ),
     aXLineAttr          ( pXPool ),
     rXLSet              ( aXLineAttr.GetItemSet() ),
-    pLineEndList( NULL )
+    pLineEndList        ( NULL )
 {
-    FreeResource();
+    get(m_pEdtName,"EDT_NAME");
+    get(m_pLbLineEnds,"LB_LINEENDS");
+    get(m_pBtnAdd,"BTN_ADD");
+    get(m_pBtnModify,"BTN_MODIFY");
+    get(m_pBtnDelete,"BTN_DELETE");
+    get(m_pBtnLoad,"BTN_LOAD");
+    get(m_pBtnSave,"BTN_SAVE");
+    get(m_pCtlPreview,"CTL_PREVIEW");
 
     // this page needs ExchangeSupport
     SetExchangeSupport();
@@ -88,29 +84,20 @@ SvxLineEndDefTabPage::SvxLineEndDefTabPage
     rXLSet.Put( aXLStyle );
     rXLSet.Put( aXWidth );
     rXLSet.Put( aXColor );
-    rXLSet.Put( XLineStartWidthItem( aCtlPreview.GetOutputSize().Height()  / 2 ) );
-    rXLSet.Put( XLineEndWidthItem( aCtlPreview.GetOutputSize().Height() / 2 ) );
+    rXLSet.Put( XLineStartWidthItem( m_pCtlPreview->GetOutputSize().Height()  / 2 ) );
+    rXLSet.Put( XLineEndWidthItem( m_pCtlPreview->GetOutputSize().Height() / 2 ) );
 
     // #i34740#
-    aCtlPreview.SetLineAttributes(aXLineAttr.GetItemSet());
+    m_pCtlPreview->SetLineAttributes(aXLineAttr.GetItemSet());
 
-    aBtnAdd.SetClickHdl(
-        LINK( this, SvxLineEndDefTabPage, ClickAddHdl_Impl ) );
-    aBtnModify.SetClickHdl(
-        LINK( this, SvxLineEndDefTabPage, ClickModifyHdl_Impl ) );
-    aBtnDelete.SetClickHdl(
-        LINK( this, SvxLineEndDefTabPage, ClickDeleteHdl_Impl ) );
-    aBtnLoad.SetClickHdl(
-        LINK( this, SvxLineEndDefTabPage, ClickLoadHdl_Impl ) );
-    aBtnSave.SetClickHdl(
-        LINK( this, SvxLineEndDefTabPage, ClickSaveHdl_Impl ) );
+    m_pBtnAdd->SetClickHdl( LINK( this, SvxLineEndDefTabPage, ClickAddHdl_Impl ) );
+    m_pBtnModify->SetClickHdl( LINK( this, SvxLineEndDefTabPage, ClickModifyHdl_Impl ) );
+    m_pBtnDelete->SetClickHdl( LINK( this, SvxLineEndDefTabPage, ClickDeleteHdl_Impl ) );
+    m_pBtnLoad->SetClickHdl( LINK( this, SvxLineEndDefTabPage, ClickLoadHdl_Impl ) );
+    m_pBtnSave->SetClickHdl( LINK( this, SvxLineEndDefTabPage, ClickSaveHdl_Impl ) );
 
-    aLbLineEnds.SetSelectHdl(
-        LINK( this, SvxLineEndDefTabPage, SelectLineEndHdl_Impl ) );
+    m_pLbLineEnds->SetSelectHdl( LINK( this, SvxLineEndDefTabPage, SelectLineEndHdl_Impl ) );
 
-    aBtnAdd.SetAccessibleRelationMemberOf(&aFlTip);
-    aBtnModify.SetAccessibleRelationMemberOf(&aFlTip);
-    aBtnDelete.SetAccessibleRelationMemberOf(&aFlTip);
 }
 
 //------------------------------------------------------------------------
@@ -123,7 +110,7 @@ SvxLineEndDefTabPage::~SvxLineEndDefTabPage()
 
 void SvxLineEndDefTabPage::Construct()
 {
-    aLbLineEnds.Fill( pLineEndList );
+    m_pLbLineEnds->Fill( pLineEndList );
 
     bool bCreateArrowPossible = true;
 
@@ -144,7 +131,7 @@ void SvxLineEndDefTabPage::Construct()
     }
 
     if( !bCreateArrowPossible )
-        aBtnAdd.Disable();
+        m_pBtnAdd->Disable();
 }
 
 // -----------------------------------------------------------------------
@@ -158,7 +145,7 @@ void SvxLineEndDefTabPage::ActivatePage( const SfxItemSet& )
         {
             if( *pPosLineEndLb != LISTBOX_ENTRY_NOTFOUND )
             {
-                aLbLineEnds.SelectEntryPos( *pPosLineEndLb );
+                m_pLbLineEnds->SelectEntryPos( *pPosLineEndLb );
                 SelectLineEndHdl_Impl( this );
             }
             INetURLObject   aURL( pLineEndList->GetPath() );
@@ -187,22 +174,21 @@ int SvxLineEndDefTabPage::DeactivatePage( SfxItemSet* _pSet )
 
 void SvxLineEndDefTabPage::CheckChanges_Impl()
 {
-    sal_uInt16 nPos = aLbLineEnds.GetSelectEntryPos();
+    sal_uInt16 nPos = m_pLbLineEnds->GetSelectEntryPos();
 
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        String aString = aEdtName.GetText();
+        OUString aString = m_pEdtName->GetText();
 
-        if( aString != aLbLineEnds.GetSelectEntry() )
+        if( aString != m_pLbLineEnds->GetSelectEntry() )
         {
-            QueryBox aQueryBox( GetParentDialog(), WinBits( WB_YES_NO | WB_DEF_NO ),
-                CUI_RESSTR( RID_SVXSTR_ASK_CHANGE_LINEEND ) );
+            QueryBox aQueryBox( GetParentDialog(), WinBits( WB_YES_NO | WB_DEF_NO ), CUI_RESSTR( RID_SVXSTR_ASK_CHANGE_LINEEND ) );
 
             if ( aQueryBox.Execute() == RET_YES )
                 ClickModifyHdl_Impl( this );
         }
     }
-    nPos = aLbLineEnds.GetSelectEntryPos();
+    nPos = m_pLbLineEnds->GetSelectEntryPos();
 
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
         *pPosLineEndLb = nPos;
@@ -218,7 +204,7 @@ sal_Bool SvxLineEndDefTabPage::FillItemSet( SfxItemSet& rSet )
         {
             CheckChanges_Impl();
 
-            long nPos = aLbLineEnds.GetSelectEntryPos();
+            long nPos = m_pLbLineEnds->GetSelectEntryPos();
             XLineEndEntry* pEntry = pLineEndList->GetLineEnd( nPos );
 
             rSet.Put( XLineStartItem( pEntry->GetName(), pEntry->GetLineEnd() ) );
@@ -232,45 +218,44 @@ sal_Bool SvxLineEndDefTabPage::FillItemSet( SfxItemSet& rSet )
 
 void SvxLineEndDefTabPage::Reset( const SfxItemSet& )
 {
-    aLbLineEnds.SelectEntryPos( 0 );
+    m_pLbLineEnds->SelectEntryPos( 0 );
 
     // Update lineend
     if( pLineEndList->Count() > 0 )
     {
-        int nPos = aLbLineEnds.GetSelectEntryPos();
+        int nPos = m_pLbLineEnds->GetSelectEntryPos();
 
         XLineEndEntry* pEntry = pLineEndList->GetLineEnd( nPos );
 
-        aEdtName.SetText( aLbLineEnds.GetSelectEntry() );
+        m_pEdtName->SetText( m_pLbLineEnds->GetSelectEntry() );
 
-        rXLSet.Put( XLineStartItem( String(), pEntry->GetLineEnd() ) );
-        rXLSet.Put( XLineEndItem( String(), pEntry->GetLineEnd() ) );
+        rXLSet.Put( XLineStartItem( OUString(), pEntry->GetLineEnd() ) );
+        rXLSet.Put( XLineEndItem( OUString(), pEntry->GetLineEnd() ) );
 
         // #i34740#
-        aCtlPreview.SetLineAttributes(aXLineAttr.GetItemSet());
+        m_pCtlPreview->SetLineAttributes(aXLineAttr.GetItemSet());
 
-        aCtlPreview.Invalidate();
+        m_pCtlPreview->Invalidate();
     }
 
     // determine button state
     if( pLineEndList->Count() )
     {
-        aBtnModify.Enable();
-        aBtnDelete.Enable();
-        aBtnSave.Enable();
+        m_pBtnModify->Enable();
+        m_pBtnDelete->Enable();
+        m_pBtnSave->Enable();
     }
     else
     {
-        aBtnModify.Disable();
-        aBtnDelete.Disable();
-        aBtnSave.Disable();
+        m_pBtnModify->Disable();
+        m_pBtnDelete->Disable();
+        m_pBtnSave->Disable();
     }
 }
 
 // -----------------------------------------------------------------------
 
-SfxTabPage* SvxLineEndDefTabPage::Create( Window* pWindow,
-                const SfxItemSet& rSet )
+SfxTabPage* SvxLineEndDefTabPage::Create( Window* pWindow, const SfxItemSet& rSet )
 {
     return( new SvxLineEndDefTabPage( pWindow, rSet ) );
 }
@@ -281,19 +266,19 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, SelectLineEndHdl_Impl)
 {
     if( pLineEndList->Count() > 0 )
     {
-        int nPos = aLbLineEnds.GetSelectEntryPos();
+        int nPos = m_pLbLineEnds->GetSelectEntryPos();
 
         XLineEndEntry* pEntry = pLineEndList->GetLineEnd( nPos );
 
-        aEdtName.SetText( aLbLineEnds.GetSelectEntry() );
+        m_pEdtName->SetText( m_pLbLineEnds->GetSelectEntry() );
 
-        rXLSet.Put( XLineStartItem( String(), pEntry->GetLineEnd() ) );
-        rXLSet.Put( XLineEndItem( String(), pEntry->GetLineEnd() ) );
+        rXLSet.Put( XLineStartItem( OUString(), pEntry->GetLineEnd() ) );
+        rXLSet.Put( XLineEndItem( OUString(), pEntry->GetLineEnd() ) );
 
         // #i34740#
-        aCtlPreview.SetLineAttributes(aXLineAttr.GetItemSet());
+        m_pCtlPreview->SetLineAttributes(aXLineAttr.GetItemSet());
 
-        aCtlPreview.Invalidate();
+        m_pCtlPreview->Invalidate();
 
         // Is not set before, in order to only take the new style,
         // if there is an entry selected in the ListBox
@@ -306,7 +291,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, SelectLineEndHdl_Impl)
 
 long SvxLineEndDefTabPage::ChangePreviewHdl_Impl( void* )
 {
-    aCtlPreview.Invalidate();
+    m_pCtlPreview->Invalidate();
     return( 0L );
 }
 
@@ -314,13 +299,13 @@ long SvxLineEndDefTabPage::ChangePreviewHdl_Impl( void* )
 
 IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickModifyHdl_Impl)
 {
-    sal_uInt16 nPos = aLbLineEnds.GetSelectEntryPos();
+    sal_uInt16 nPos = m_pLbLineEnds->GetSelectEntryPos();
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         ResMgr& rMgr = CUI_MGR();
-        String aDesc( ResId( RID_SVXSTR_DESC_LINEEND, rMgr ) );
-        String aName( aEdtName.GetText() );
+        OUString aDesc( ResId( RID_SVXSTR_DESC_LINEEND, rMgr ) );
+        String aName( m_pEdtName->GetText() );
         long nCount = pLineEndList->Count();
         sal_Bool bDifferent = sal_True;
 
@@ -332,8 +317,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickModifyHdl_Impl)
         // if yes, repeat and demand a new name
         if ( !bDifferent )
         {
-            WarningBox aWarningBox( GetParentDialog(), WinBits( WB_OK ),
-                String( ResId( RID_SVXSTR_WARN_NAME_DUPLICATE, rMgr ) ) );
+            WarningBox aWarningBox( GetParentDialog(), WinBits( WB_OK ), OUString( ResId( RID_SVXSTR_WARN_NAME_DUPLICATE, rMgr ) ) );
             aWarningBox.SetHelpId( HID_WARN_NAME_DUPLICATE );
             aWarningBox.Execute();
 
@@ -367,12 +351,12 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickModifyHdl_Impl)
         {
             const XLineEndEntry* pEntry = pLineEndList->GetLineEnd( nPos );
 
-            aEdtName.SetText( aName );
+            m_pEdtName->SetText( aName );
 
             const XLineEndEntry aEntry(pEntry->GetLineEnd(), aName);
 
-            aLbLineEnds.Modify( aEntry, nPos, pLineEndList->GetUiBitmap( nPos ) );
-            aLbLineEnds.SelectEntryPos( nPos );
+            m_pLbLineEnds->Modify( aEntry, nPos, pLineEndList->GetUiBitmap( nPos ) );
+            m_pLbLineEnds->SelectEntryPos( nPos );
 
             *pnLineEndListState |= CT_MODIFIED;
 
@@ -415,16 +399,15 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickAddHdl_Impl)
         basegfx::B2DRange aNewRange(basegfx::tools::getRange(aNewPolyPolygon));
 
         // normalize
-        aNewPolyPolygon.transform(basegfx::tools::createTranslateB2DHomMatrix(
-            -aNewRange.getMinX(), -aNewRange.getMinY()));
+        aNewPolyPolygon.transform(basegfx::tools::createTranslateB2DHomMatrix( -aNewRange.getMinX(), -aNewRange.getMinY()));
 
         SdrObject::Free( pConvPolyObj );
 
         XLineEndEntry* pEntry;
 
         ResMgr& rMgr = CUI_MGR();
-        String aNewName( SVX_RES( RID_SVXSTR_LINEEND ) );
-        String aDesc( ResId( RID_SVXSTR_DESC_LINEEND, rMgr ) );
+        OUString aNewName( SVX_RES( RID_SVXSTR_LINEEND ) );
+        OUString aDesc( ResId( RID_SVXSTR_DESC_LINEEND, rMgr ) );
         String aName;
 
         long nCount = pLineEndList->Count();
@@ -469,8 +452,8 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickAddHdl_Impl)
                 pLineEndList->Insert( pEntry, nLineEndCount );
 
                 // add to the ListBox
-                aLbLineEnds.Append( *pEntry, pLineEndList->GetUiBitmap( nLineEndCount ) );
-                aLbLineEnds.SelectEntryPos( aLbLineEnds.GetEntryCount() - 1 );
+                m_pLbLineEnds->Append( *pEntry, pLineEndList->GetUiBitmap( nLineEndCount ) );
+                m_pLbLineEnds->SelectEntryPos( m_pLbLineEnds->GetEntryCount() - 1 );
 
                 *pnLineEndListState |= CT_MODIFIED;
 
@@ -478,7 +461,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickAddHdl_Impl)
             }
             else
             {
-                WarningBox aBox( GetParentDialog(), WinBits( WB_OK ),String( ResId( RID_SVXSTR_WARN_NAME_DUPLICATE, rMgr ) ) );
+                WarningBox aBox( GetParentDialog(), WinBits( WB_OK ), OUString( ResId( RID_SVXSTR_WARN_NAME_DUPLICATE, rMgr ) ) );
                 aBox.SetHelpId( HID_WARN_NAME_DUPLICATE );
                 aBox.Execute();
             }
@@ -486,14 +469,14 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickAddHdl_Impl)
         delete pDlg;
     }
     else
-        aBtnAdd.Disable();
+        m_pBtnAdd->Disable();
 
     // determine button state
     if ( pLineEndList->Count() )
     {
-        aBtnModify.Enable();
-        aBtnDelete.Enable();
-        aBtnSave.Enable();
+        m_pBtnModify->Enable();
+        m_pBtnDelete->Enable();
+        m_pBtnSave->Enable();
     }
     return( 0L );
 }
@@ -502,18 +485,17 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickAddHdl_Impl)
 
 IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickDeleteHdl_Impl)
 {
-    sal_uInt16 nPos = aLbLineEnds.GetSelectEntryPos();
+    sal_uInt16 nPos = m_pLbLineEnds->GetSelectEntryPos();
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        QueryBox aQueryBox( GetParentDialog(), WinBits( WB_YES_NO | WB_DEF_NO ),
-            String( CUI_RES( RID_SVXSTR_ASK_DEL_LINEEND ) ) );
+        QueryBox aQueryBox( GetParentDialog(), WinBits( WB_YES_NO | WB_DEF_NO ), OUString( CUI_RES( RID_SVXSTR_ASK_DEL_LINEEND ) ) );
 
         if ( aQueryBox.Execute() == RET_YES )
         {
             delete pLineEndList->Remove( nPos );
-            aLbLineEnds.RemoveEntry( nPos );
-            aLbLineEnds.SelectEntryPos( 0 );
+            m_pLbLineEnds->RemoveEntry( nPos );
+            m_pLbLineEnds->SelectEntryPos( 0 );
 
             SelectLineEndHdl_Impl( this );
             *pPageType = 0; // LineEnd shall not be taken over
@@ -526,9 +508,9 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickDeleteHdl_Impl)
     // determine button state
     if( !pLineEndList->Count() )
     {
-        aBtnModify.Disable();
-        aBtnDelete.Disable();
-        aBtnSave.Disable();
+        m_pBtnModify->Disable();
+        m_pBtnDelete->Disable();
+        m_pBtnSave->Disable();
     }
     return( 0L );
 }
@@ -542,8 +524,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickLoadHdl_Impl)
 
     if ( *pnLineEndListState & CT_MODIFIED )
     {
-        nReturn = WarningBox( GetParentDialog(), WinBits( WB_YES_NO_CANCEL ),
-            String( ResId( RID_SVXSTR_WARN_TABLE_OVERWRITE, rMgr ) ) ).Execute();
+        nReturn = WarningBox( GetParentDialog(), WinBits( WB_YES_NO_CANCEL ), OUString( ResId( RID_SVXSTR_WARN_TABLE_OVERWRITE, rMgr ) ) ).Execute();
 
         if ( nReturn == RET_YES )
             pLineEndList->Save();
@@ -551,10 +532,8 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickLoadHdl_Impl)
 
     if ( nReturn != RET_CANCEL )
     {
-        ::sfx2::FileDialogHelper aDlg(
-            com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
-            0 );
-        String aStrFilterType( "*.soe" );
+        ::sfx2::FileDialogHelper aDlg(com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0 );
+        OUString aStrFilterType( "*.soe" );
         aDlg.AddFilter( aStrFilterType, aStrFilterType );
         INetURLObject aFile( SvtPathOptions().GetPalettePath() );
         aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::NO_DECODE ) );
@@ -567,15 +546,14 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickLoadHdl_Impl)
             aPathURL.removeSegment();
             aPathURL.removeFinalSlash();
 
-            XLineEndListRef pLeList = XPropertyList::CreatePropertyList(
-                XLINE_END_LIST, aPathURL.GetMainURL( INetURLObject::NO_DECODE ) )->AsLineEndList();
+            XLineEndListRef pLeList = XPropertyList::CreatePropertyList(XLINE_END_LIST, aPathURL.GetMainURL( INetURLObject::NO_DECODE ) )->AsLineEndList();
             pLeList->SetName( aURL.getName() );
             if( pLeList->Load() )
             {
                 pLineEndList = pLeList;
                 ( (SvxLineTabDialog*) GetParentDialog() )->SetNewLineEndList( pLineEndList );
-                aLbLineEnds.Clear();
-                aLbLineEnds.Fill( pLineEndList );
+                m_pLbLineEnds->Clear();
+                m_pLbLineEnds->Fill( pLineEndList );
                 Reset( rOutAttrs );
 
                 pLineEndList->SetName( aURL.getName() );
@@ -584,23 +562,22 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickLoadHdl_Impl)
                 *pnLineEndListState &= ~CT_MODIFIED;
             }
             else
-                ErrorBox( GetParentDialog(), WinBits( WB_OK ),
-                    String( ResId( RID_SVXSTR_READ_DATA_ERROR, rMgr ) ) ).Execute();
+                ErrorBox( GetParentDialog(), WinBits( WB_OK ), OUString( ResId( RID_SVXSTR_READ_DATA_ERROR, rMgr ) ) ).Execute();
         }
     }
 
     // determine button state
     if ( pLineEndList->Count() )
     {
-        aBtnModify.Enable();
-        aBtnDelete.Enable();
-        aBtnSave.Enable();
+        m_pBtnModify->Enable();
+        m_pBtnDelete->Enable();
+        m_pBtnSave->Enable();
     }
     else
     {
-        aBtnModify.Disable();
-        aBtnDelete.Disable();
-        aBtnSave.Disable();
+        m_pBtnModify->Disable();
+        m_pBtnDelete->Disable();
+        m_pBtnSave->Disable();
     }
     return( 0L );
 }
@@ -609,9 +586,8 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickLoadHdl_Impl)
 
 IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickSaveHdl_Impl)
 {
-    ::sfx2::FileDialogHelper aDlg(
-        com::sun::star::ui::dialogs::TemplateDescription::FILESAVE_SIMPLE, 0 );
-    String aStrFilterType( "*.soe" );
+    ::sfx2::FileDialogHelper aDlg( com::sun::star::ui::dialogs::TemplateDescription::FILESAVE_SIMPLE, 0 );
+    OUString aStrFilterType( "*.soe" );
     aDlg.AddFilter( aStrFilterType, aStrFilterType );
 
     INetURLObject aFile( SvtPathOptions().GetPalettePath() );
@@ -622,7 +598,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickSaveHdl_Impl)
         aFile.Append( pLineEndList->GetName() );
 
         if( aFile.getExtension().isEmpty() )
-            aFile.SetExtension( OUString("soe") );
+            aFile.SetExtension( "soe" );
     }
 
     aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::NO_DECODE ) );
@@ -644,8 +620,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickSaveHdl_Impl)
         }
         else
         {
-            ErrorBox( GetParentDialog(), WinBits( WB_OK ),
-                String( CUI_RES( RID_SVXSTR_WRITE_DATA_ERROR ) ) ).Execute();
+            ErrorBox( GetParentDialog(), WinBits( WB_OK ), OUString( CUI_RES( RID_SVXSTR_WRITE_DATA_ERROR ) ) ).Execute();
         }
     }
     return( 0L );
@@ -657,10 +632,10 @@ void SvxLineEndDefTabPage::DataChanged( const DataChangedEvent& rDCEvt )
 
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
-        sal_uInt16 nOldSelect = aLbLineEnds.GetSelectEntryPos();
-        aLbLineEnds.Clear();
-        aLbLineEnds.Fill( pLineEndList );
-        aLbLineEnds.SelectEntryPos( nOldSelect );
+        sal_uInt16 nOldSelect = m_pLbLineEnds->GetSelectEntryPos();
+        m_pLbLineEnds->Clear();
+        m_pLbLineEnds->Fill( pLineEndList );
+        m_pLbLineEnds->SelectEntryPos( nOldSelect );
     }
 }
 
