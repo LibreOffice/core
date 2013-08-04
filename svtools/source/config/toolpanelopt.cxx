@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svtools/toolpanelopt.hxx>
+#include <toolpanelopt.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/configitem.hxx>
 #include <tools/debug.hxx>
@@ -28,7 +28,7 @@
 #include <rtl/instance.hxx>
 #include "itemholder2.hxx"
 
-#include <svtools/imgdef.hxx>
+#include <imgdef.hxx>
 #include <vcl/svapp.hxx>
 
 #include <list>

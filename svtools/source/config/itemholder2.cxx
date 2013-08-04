@@ -24,15 +24,15 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 
-#include <svtools/accessibilityoptions.hxx>
-#include <svtools/apearcfg.hxx>
-#include <svtools/menuoptions.hxx>
-#include <svtools/colorcfg.hxx>
-#include <svtools/fontsubstconfig.hxx>
-#include <svtools/helpopt.hxx>
-#include <svtools/printoptions.hxx>
+#include <accessibilityoptions.hxx>
+#include <apearcfg.hxx>
+#include <menuoptions.hxx>
+#include <colorcfg.hxx>
+#include <fontsubstconfig.hxx>
+#include <helpopt.hxx>
+#include <printoptions.hxx>
 #include <unotools/options.hxx>
-#include <svtools/miscopt.hxx>
+#include <miscopt.hxx>
 
 
 #include <tools/debug.hxx>

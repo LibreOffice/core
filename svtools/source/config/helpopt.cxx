@@ -18,7 +18,7 @@
  */
 
 
-#include <svtools/helpopt.hxx>
+#include <helpopt.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/configitem.hxx>
 #include <tools/debug.hxx>

@@ -18,9 +18,9 @@
  */
 
 #include <tools/debug.hxx>
-#include <svtools/brwbox.hxx>
+#include <brwbox.hxx>
 #include "datwin.hxx"
-#include <svtools/colorcfg.hxx>
+#include <colorcfg.hxx>
 #include <vcl/salgtype.hxx>
 
 #include <tools/multisel.hxx>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svtools/brwbox.hxx>
-#include <svtools/AccessibleBrowseBoxObjType.hxx>
+#include <brwbox.hxx>
+#include <AccessibleBrowseBoxObjType.hxx>
 #include <tools/debug.hxx>
 #include <tools/multisel.hxx>
 #include "datwin.hxx"

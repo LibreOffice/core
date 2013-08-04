@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svtools/treelistbox.hxx>
-#include <svtools/svlbitm.hxx>
-#include "svtools/treelistentry.hxx"
-#include "svtools/viewdataentry.hxx"
+#include <treelistbox.hxx>
+#include <svlbitm.hxx>
+#include "treelistentry.hxx"
+#include "viewdataentry.hxx"
 #include <vcl/svapp.hxx>
 #include <vcl/button.hxx>
 #include <vcl/decoview.hxx>

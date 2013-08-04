@@ -20,11 +20,11 @@
 #ifndef _SFXDATWIN_HXX
 #define _SFXDATWIN_HXX
 
-#include <svtools/brwbox.hxx>
-#include <svtools/brwhead.hxx>
+#include <brwbox.hxx>
+#include <brwhead.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/image.hxx>
-#include <svtools/transfer.hxx>
+#include <transfer.hxx>
 #include <vector>
 
 //===================================================================

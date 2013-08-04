@@ -18,8 +18,8 @@
  */
 
 
-#include <svtools/brwhead.hxx>
-#include <svtools/brwbox.hxx>
+#include <brwhead.hxx>
+#include <brwbox.hxx>
 
 //===================================================================
 

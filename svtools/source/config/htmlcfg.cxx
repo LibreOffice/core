@@ -18,8 +18,8 @@
  */
 
 
-#include <svtools/htmlcfg.hxx>
-#include <svtools/parhtml.hxx>
+#include <htmlcfg.hxx>
+#include <parhtml.hxx>
 #include <unotools/syslocale.hxx>
 #include <tools/debug.hxx>
 #include <tools/link.hxx>

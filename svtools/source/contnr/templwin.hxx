@@ -25,8 +25,8 @@
 #include <vcl/window.hxx>
 #include <svtools/headbar.hxx>
 #include <svtools/fileview.hxx>
-#include <svtools/ivctrl.hxx>
-#include <svtools/svmedit2.hxx>
+#include <ivctrl.hxx>
+#include <svmedit2.hxx>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 
