@@ -415,6 +415,10 @@
                         generic-name="Cursor Reference Edit" parent="foruilo-RefEdit"
                         icon-name="widget-gtk-textentry"/>
 
+    <glade-widget-class title="Condition Edit" name="swlo-ConditionEdit"
+                        generic-name="Condition Edit" parent="GtkEntry"
+                        icon-name="widget-gtk-textentry"/>
+
     <glade-widget-class title="Text View" name="sclo-ScEditWindow"
                         generic-name="Text View" parent="GtkTextView"
                         icon-name="widget-gtk-textentry"/>

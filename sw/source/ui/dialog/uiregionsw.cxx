@@ -1535,52 +1535,48 @@ short   SwInsertSectionTabDialog::Ok()
 }
 
 SwInsertSectionTabPage::SwInsertSectionTabPage(
-                            Window *pParent, const SfxItemSet &rAttrSet) :
-    SfxTabPage( pParent, SW_RES(TP_INSERT_SECTION), rAttrSet ),
-    aNameFL       ( this, SW_RES( FL_NAME ) ),
-    aCurName            ( this, SW_RES( ED_RNAME ) ),
-    aLinkFL             ( this, SW_RES( FL_LINK ) ),
-    aFileCB             ( this, SW_RES( CB_FILE ) ),
-    aDDECB              ( this, SW_RES( CB_DDE ) ) ,
-    aDDECommandFT       ( this, SW_RES( FT_DDE ) ) ,
-    aFileNameFT         ( this, SW_RES( FT_FILE ) ) ,
-    aFileNameED         ( this, SW_RES( ED_FILE ) ),
-    aFilePB             ( this, SW_RES( PB_FILE ) ),
-    aSubRegionFT        ( this, SW_RES( FT_SUBREG ) ) ,
-    aSubRegionED        ( this, SW_RES( LB_SUBREG ) ) ,
-
-    aProtectFL          ( this, SW_RES( FL_PROTECT ) ),
-    aProtectCB          ( this, SW_RES( CB_PROTECT ) ),
-    aPasswdCB           ( this, SW_RES( CB_PASSWD ) ),
-    aPasswdPB           ( this, SW_RES( PB_PASSWD ) ),
-
-    aHideFL             ( this, SW_RES( FL_HIDE ) ),
-    aHideCB             ( this, SW_RES( CB_HIDE ) ),
-    aConditionFT             ( this, SW_RES( FT_CONDITION ) ),
-    aConditionED        ( this, SW_RES( ED_CONDITION ) ),
-    // edit in readonly sections
-    aPropertiesFL       ( this, SW_RES( FL_PROPERTIES ) ),
-    aEditInReadonlyCB   ( this, SW_RES( CB_EDIT_IN_READONLY ) ),
-
-    m_pWrtSh(0),
-    m_pDocInserter(NULL),
-    m_pOldDefDlgParent(NULL)
+                            Window *pParent, const SfxItemSet &rAttrSet)
+    : SfxTabPage(pParent, "SectionPage",
+        "modules/swriter/ui/sectionpage.ui", rAttrSet)
+    , m_pWrtSh(0)
+    , m_pDocInserter(NULL)
+    , m_pOldDefDlgParent(NULL)
 {
-    FreeResource();
-
-    aProtectCB.SetClickHdl  ( LINK( this, SwInsertSectionTabPage, ChangeProtectHdl));
-    aPasswdCB.SetClickHdl   ( LINK( this, SwInsertSectionTabPage, ChangePasswdHdl));
-    aPasswdPB.SetClickHdl   ( LINK( this, SwInsertSectionTabPage, ChangePasswdHdl));
-    aHideCB.SetClickHdl     ( LINK( this, SwInsertSectionTabPage, ChangeHideHdl));
+    get(m_pCurName, "sectionnames");
+    m_pCurName->SetStyle(m_pCurName->GetStyle() | WB_SORT);
+    m_pCurName->set_height_request(m_pCurName->GetTextHeight() * 12);
+    get(m_pFileCB, "link");
+    get(m_pDDECB, "dde");
+    get(m_pDDECommandFT, "ddelabel");
+    get(m_pFileNameFT, "filelabel");
+    get(m_pFileNameED, "filename");
+    get(m_pFilePB, "selectfile");
+    get(m_pSubRegionFT, "sectionlabel");
+    get(m_pSubRegionED, "sectionname");
+    m_pSubRegionED->SetStyle(m_pSubRegionED->GetStyle() | WB_SORT);
+    get(m_pProtectCB, "protect");
+    get(m_pPasswdCB, "withpassword");
+    get(m_pPasswdPB, "selectpassword");
+    get(m_pHideCB, "hide");
+    get(m_pConditionFT, "condlabel");
+    get(m_pConditionED, "withcond");
     // edit in readonly sections
-    aEditInReadonlyCB.SetClickHdl       ( LINK( this, SwInsertSectionTabPage, ChangeEditInReadonlyHdl));
-    aFileCB.SetClickHdl     ( LINK( this, SwInsertSectionTabPage, UseFileHdl ));
-    aFilePB.SetClickHdl     ( LINK( this, SwInsertSectionTabPage, FileSearchHdl ));
-    aCurName.SetModifyHdl   ( LINK( this, SwInsertSectionTabPage, NameEditHdl));
-    aDDECB.SetClickHdl      ( LINK( this, SwInsertSectionTabPage, DDEHdl ));
-    ChangeProtectHdl(&aProtectCB);
-    aPasswdPB.SetAccessibleRelationMemberOf(&aProtectFL);
-    aSubRegionED.EnableAutocomplete( sal_True, sal_True );
+    get(m_pEditInReadonlyCB, "editable");
+
+
+
+    m_pProtectCB->SetClickHdl  ( LINK( this, SwInsertSectionTabPage, ChangeProtectHdl));
+    m_pPasswdCB->SetClickHdl   ( LINK( this, SwInsertSectionTabPage, ChangePasswdHdl));
+    m_pPasswdPB->SetClickHdl   ( LINK( this, SwInsertSectionTabPage, ChangePasswdHdl));
+    m_pHideCB->SetClickHdl     ( LINK( this, SwInsertSectionTabPage, ChangeHideHdl));
+    // edit in readonly sections
+    m_pEditInReadonlyCB->SetClickHdl       ( LINK( this, SwInsertSectionTabPage, ChangeEditInReadonlyHdl));
+    m_pFileCB->SetClickHdl     ( LINK( this, SwInsertSectionTabPage, UseFileHdl ));
+    m_pFilePB->SetClickHdl     ( LINK( this, SwInsertSectionTabPage, FileSearchHdl ));
+    m_pCurName->SetModifyHdl   ( LINK( this, SwInsertSectionTabPage, NameEditHdl));
+    m_pDDECB->SetClickHdl      ( LINK( this, SwInsertSectionTabPage, DDEHdl ));
+    ChangeProtectHdl(m_pProtectCB);
+    m_pSubRegionED->EnableAutocomplete( sal_True, sal_True );
 }
 
 SwInsertSectionTabPage::~SwInsertSectionTabPage()
@@ -1595,53 +1591,53 @@ void    SwInsertSectionTabPage::SetWrtShell(SwWrtShell& rSh)
     bool bWeb = 0 != PTR_CAST(SwWebDocShell, m_pWrtSh->GetView().GetDocShell());
     if(bWeb)
     {
-        aHideCB         .Hide();
-        aConditionED    .Hide();
-        aConditionFT    .Hide();
-        aDDECB           .Hide();
-        aDDECommandFT    .Hide();
+        m_pHideCB->Hide();
+        m_pConditionED->Hide();
+        m_pConditionFT->Hide();
+        m_pDDECB->Hide();
+        m_pDDECommandFT->Hide();
     }
 
-    lcl_FillSubRegionList( *m_pWrtSh, aSubRegionED, &aCurName );
+    lcl_FillSubRegionList(*m_pWrtSh, *m_pSubRegionED, m_pCurName);
 
     SwSectionData *const pSectionData =
         static_cast<SwInsertSectionTabDialog*>(GetTabDialog())
             ->GetSectionData();
     if (pSectionData) // something set?
     {
-        aCurName.SetText(
+        m_pCurName->SetText(
             rSh.GetUniqueSectionName(& pSectionData->GetSectionName()));
-        aProtectCB.Check( 0 != pSectionData->IsProtectFlag() );
+        m_pProtectCB->Check( 0 != pSectionData->IsProtectFlag() );
         m_sFileName = pSectionData->GetLinkFileName();
         m_sFilePasswd = pSectionData->GetLinkFilePassword();
-        aFileCB.Check( 0 != m_sFileName.Len() );
-        aFileNameED.SetText( m_sFileName );
-        UseFileHdl( &aFileCB );
+        m_pFileCB->Check( 0 != m_sFileName.Len() );
+        m_pFileNameED->SetText( m_sFileName );
+        UseFileHdl(m_pFileCB);
     }
     else
     {
-        aCurName.SetText( rSh.GetUniqueSectionName() );
+        m_pCurName->SetText( rSh.GetUniqueSectionName() );
     }
 }
 
 sal_Bool SwInsertSectionTabPage::FillItemSet( SfxItemSet& )
 {
-    SwSectionData aSection(CONTENT_SECTION, aCurName.GetText());
-    aSection.SetCondition(aConditionED.GetText());
-    sal_Bool bProtected = aProtectCB.IsChecked();
+    SwSectionData aSection(CONTENT_SECTION, m_pCurName->GetText());
+    aSection.SetCondition(m_pConditionED->GetText());
+    sal_Bool bProtected = m_pProtectCB->IsChecked();
     aSection.SetProtectFlag(bProtected);
-    aSection.SetHidden(aHideCB.IsChecked());
+    aSection.SetHidden(m_pHideCB->IsChecked());
     // edit in readonly sections
-    aSection.SetEditInReadonlyFlag(aEditInReadonlyCB.IsChecked());
+    aSection.SetEditInReadonlyFlag(m_pEditInReadonlyCB->IsChecked());
 
     if(bProtected)
     {
         aSection.SetPassword(m_aNewPasswd);
     }
-    String sFileName = aFileNameED.GetText();
-    String sSubRegion = aSubRegionED.GetText();
-    sal_Bool bDDe = aDDECB.IsChecked();
-    if(aFileCB.IsChecked() && (sFileName.Len() || sSubRegion.Len() || bDDe))
+    String sFileName = m_pFileNameED->GetText();
+    String sSubRegion = m_pSubRegionED->GetText();
+    sal_Bool bDDe = m_pDDECB->IsChecked();
+    if(m_pFileCB->IsChecked() && (sFileName.Len() || sSubRegion.Len() || bDDe))
     {
         String aLinkFile;
         if( bDDe )
@@ -1677,7 +1673,7 @@ sal_Bool SwInsertSectionTabPage::FillItemSet( SfxItemSet& )
         aSection.SetLinkFileName(aLinkFile);
         if(aLinkFile.Len())
         {
-            aSection.SetType( aDDECB.IsChecked() ?
+            aSection.SetType( m_pDDECB->IsChecked() ?
                                     DDE_LINK_SECTION :
                                         FILE_LINK_SECTION);
         }
@@ -1699,8 +1695,8 @@ SfxTabPage* SwInsertSectionTabPage::Create( Window* pParent,
 IMPL_LINK( SwInsertSectionTabPage, ChangeHideHdl, CheckBox *, pBox )
 {
     sal_Bool bHide = pBox->IsChecked();
-    aConditionED.Enable(bHide);
-    aConditionFT.Enable(bHide);
+    m_pConditionED->Enable(bHide);
+    m_pConditionFT->Enable(bHide);
     return 0;
 }
 
@@ -1712,15 +1708,15 @@ IMPL_LINK_NOARG(SwInsertSectionTabPage, ChangeEditInReadonlyHdl)
 IMPL_LINK( SwInsertSectionTabPage, ChangeProtectHdl, CheckBox *, pBox )
 {
     sal_Bool bCheck = pBox->IsChecked();
-    aPasswdCB.Enable(bCheck);
-    aPasswdPB.Enable(bCheck);
+    m_pPasswdCB->Enable(bCheck);
+    m_pPasswdPB->Enable(bCheck);
     return 0;
 }
 
 IMPL_LINK( SwInsertSectionTabPage, ChangePasswdHdl, Button *, pButton )
 {
-    sal_Bool bChange = pButton == &aPasswdPB;
-    sal_Bool bSet = bChange ? bChange : aPasswdCB.IsChecked();
+    sal_Bool bChange = pButton == m_pPasswdPB;
+    sal_Bool bSet = bChange ? bChange : m_pPasswdCB->IsChecked();
     if(bSet)
     {
         if(!m_aNewPasswd.getLength() || bChange)
@@ -1740,7 +1736,7 @@ IMPL_LINK( SwInsertSectionTabPage, ChangePasswdHdl, Button *, pButton )
                 }
             }
             else if(!bChange)
-                aPasswdCB.Check(sal_False);
+                m_pPasswdCB->Check(sal_False);
         }
     }
     else
@@ -1750,8 +1746,8 @@ IMPL_LINK( SwInsertSectionTabPage, ChangePasswdHdl, Button *, pButton )
 
 IMPL_LINK_NOARG_INLINE_START(SwInsertSectionTabPage, NameEditHdl)
 {
-    String  aName=aCurName.GetText();
-    GetTabDialog()->GetOKButton().Enable(aName.Len() && aCurName.GetEntryPos( aName ) == USHRT_MAX);
+    String  aName=m_pCurName->GetText();
+    GetTabDialog()->GetOKButton().Enable(aName.Len() && m_pCurName->GetEntryPos( aName ) == USHRT_MAX);
     return 0;
 }
 IMPL_LINK_NOARG_INLINE_END(SwInsertSectionTabPage, NameEditHdl)
@@ -1766,22 +1762,22 @@ IMPL_LINK( SwInsertSectionTabPage, UseFileHdl, CheckBox *, pBox )
     }
 
     sal_Bool bFile = pBox->IsChecked();
-    aFileNameFT.Enable(bFile);
-    aFileNameED.Enable(bFile);
-    aFilePB.Enable(bFile);
-    aSubRegionFT.Enable(bFile);
-    aSubRegionED.Enable(bFile);
-    aDDECommandFT.Enable(bFile);
-    aDDECB.Enable(bFile);
+    m_pFileNameFT->Enable(bFile);
+    m_pFileNameED->Enable(bFile);
+    m_pFilePB->Enable(bFile);
+    m_pSubRegionFT->Enable(bFile);
+    m_pSubRegionED->Enable(bFile);
+    m_pDDECommandFT->Enable(bFile);
+    m_pDDECB->Enable(bFile);
     if( bFile )
     {
-        aFileNameED.GrabFocus();
-        aProtectCB.Check( sal_True );
+        m_pFileNameED->GrabFocus();
+        m_pProtectCB->Check( sal_True );
     }
     else
     {
-        aDDECB.Check(sal_False);
-        DDEHdl(&aDDECB);
+        m_pDDECB->Check(sal_False);
+        DDEHdl(m_pDDECB);
     }
     return 0;
 }
@@ -1800,26 +1796,26 @@ IMPL_LINK_NOARG(SwInsertSectionTabPage, FileSearchHdl)
 IMPL_LINK( SwInsertSectionTabPage, DDEHdl, CheckBox*, pBox )
 {
     sal_Bool bDDE = pBox->IsChecked();
-    sal_Bool bFile = aFileCB.IsChecked();
-    aFilePB.Enable(!bDDE && bFile);
+    sal_Bool bFile = m_pFileCB->IsChecked();
+    m_pFilePB->Enable(!bDDE && bFile);
     if(bDDE)
     {
-        aFileNameFT.Hide();
-        aDDECommandFT.Enable(bDDE);
-        aDDECommandFT.Show();
-        aSubRegionFT.Hide();
-        aSubRegionED.Hide();
-        aFileNameED.SetAccessibleName(aDDECommandFT.GetText());
+        m_pFileNameFT->Hide();
+        m_pDDECommandFT->Enable(bDDE);
+        m_pDDECommandFT->Show();
+        m_pSubRegionFT->Hide();
+        m_pSubRegionED->Hide();
+        m_pFileNameED->SetAccessibleName(m_pDDECommandFT->GetText());
     }
     else
     {
-        aDDECommandFT.Hide();
-        aFileNameFT.Enable(bFile);
-        aFileNameFT.Show();
-        aSubRegionFT.Show();
-        aSubRegionED.Show();
-        aSubRegionED.Enable(bFile);
-        aFileNameED.SetAccessibleName(aFileNameFT.GetText());
+        m_pDDECommandFT->Hide();
+        m_pFileNameFT->Enable(bFile);
+        m_pFileNameFT->Show();
+        m_pSubRegionFT->Show();
+        m_pSubRegionED->Show();
+        m_pSubRegionED->Enable(bFile);
+        m_pFileNameED->SetAccessibleName(m_pFileNameFT->GetText());
     }
     return 0;
 }
@@ -1836,9 +1832,9 @@ IMPL_LINK( SwInsertSectionTabPage, DlgClosedHdl, sfx2::FileDialogHelper *, _pFil
             const SfxPoolItem* pItem;
             if ( SFX_ITEM_SET == pMedium->GetItemSet()->GetItemState( SID_PASSWORD, sal_False, &pItem ) )
                 m_sFilePasswd = ( (SfxStringItem*)pItem )->GetValue();
-            aFileNameED.SetText( INetURLObject::decode(
+            m_pFileNameED->SetText( INetURLObject::decode(
                 m_sFileName, INET_HEX_ESCAPE, INetURLObject::DECODE_UNAMBIGUOUS, RTL_TEXTENCODING_UTF8 ) );
-            ::lcl_ReadSections( *pMedium, aSubRegionED );
+            ::lcl_ReadSections(*pMedium, *m_pSubRegionED);
             delete pMedium;
         }
     }

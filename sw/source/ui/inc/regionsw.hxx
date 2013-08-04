@@ -144,38 +144,32 @@ public:
 *************************************************************************/
 class SwInsertSectionTabPage : public SfxTabPage
 {
-    FixedLine       aNameFL;
-    ComboBox        aCurName;
+    ComboBox*       m_pCurName;
 
-    FixedLine       aLinkFL;
-    CheckBox        aFileCB;
-    CheckBox        aDDECB;
-    FixedText       aDDECommandFT;
-    FixedText       aFileNameFT;
-    Edit            aFileNameED;
-    PushButton      aFilePB;
-    FixedText       aSubRegionFT;
-    ComboBox        aSubRegionED;
+    CheckBox*       m_pFileCB;
+    CheckBox*       m_pDDECB;
+    FixedText*      m_pDDECommandFT;
+    FixedText*      m_pFileNameFT;
+    Edit*           m_pFileNameED;
+    PushButton*     m_pFilePB;
+    FixedText*      m_pSubRegionFT;
+    ComboBox*       m_pSubRegionED;
 
-    FixedLine       aProtectFL;
-    CheckBox        aProtectCB;
-    CheckBox        aPasswdCB;
-    PushButton      aPasswdPB;
+    CheckBox*       m_pProtectCB;
+    CheckBox*       m_pPasswdCB;
+    PushButton*     m_pPasswdPB;
 
-    FixedLine       aHideFL;
-    CheckBox        aHideCB;
-    FixedText       aConditionFT;
-    ConditionEdit   aConditionED;
+    CheckBox*       m_pHideCB;
+    FixedText*      m_pConditionFT;
+    ConditionEdit*  m_pConditionED;
 
     // #114856# edit in readonly sections
-    FixedLine       aPropertiesFL;
-    CheckBox        aEditInReadonlyCB;
+    CheckBox*       m_pEditInReadonlyCB;
 
     String          m_sFileName;
     String          m_sFilterName;
     String          m_sFilePasswd;
 
-//  SwFmtCol*       pCols;
     ::com::sun::star::uno::Sequence <sal_Int8 > m_aNewPasswd;
     SwWrtShell*             m_pWrtSh;
     sfx2::DocumentInserter* m_pDocInserter;

@@ -128,6 +128,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/rowheight \
 	sw/uiconfig/swriter/ui/saveashtmldialog \
 	sw/uiconfig/swriter/ui/savelabeldialog \
+	sw/uiconfig/swriter/ui/sectionpage \
 	sw/uiconfig/swriter/ui/sidebarpage \
 	sw/uiconfig/swriter/ui/sidebarwrap \
 	sw/uiconfig/swriter/ui/sortdialog \
