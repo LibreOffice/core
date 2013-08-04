@@ -112,7 +112,6 @@
 
 // autocor
 #define RID_OFAPAGE_AUTOCOMPLETE_OPTIONS (RID_OFA_START + 119)
-#define RID_OFAPAGE_AUTOCORR_OPTIONS    (RID_OFA_START + 102)
 
 // options
 #define RID_SVXSTR_DIAGRAM_ROW                              (RID_SVX_START + 1162)

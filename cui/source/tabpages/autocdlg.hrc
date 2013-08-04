@@ -23,8 +23,6 @@
 
 // defines ------------------------------------------------------------------
 
-#define CLB_SETTINGS                    1
-
 #define ED_RIGHT_MARGIN                 100
 #define BT_OK                           101
 #define BT_CANCEL                       102

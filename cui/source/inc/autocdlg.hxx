@@ -94,22 +94,21 @@ class OfaAutocorrOptionsPage : public SfxTabPage
     using TabPage::ActivatePage;
 
 private:
-    SvxCheckListBox aCheckLB;
+    SvxCheckListBox *m_pCheckLB;
 
-    String      sInput;
-    String      sDoubleCaps;
-    String      sStartCap;
-    String      sBoldUnderline;
-    String      sURL;
-    String      sNoDblSpaces;
-    String      sDash;
-    String      sNonBrkSpace;
-    String      sFirst;
-    String      sAccidentalCaps;
+    OUString m_sInput;
+    OUString m_sDoubleCaps;
+    OUString m_sStartCap;
+    OUString m_sBoldUnderline;
+    OUString m_sURL;
+    OUString m_sNoDblSpaces;
+    OUString m_sDash;
+    OUString m_sNonBrkSpace;
+    OUString m_sFirst;
+    OUString m_sAccidentalCaps;
 
 public:
-                        OfaAutocorrOptionsPage( Window* pParent, const SfxItemSet& rSet );
-                        ~OfaAutocorrOptionsPage();
+    OfaAutocorrOptionsPage(Window* pParent, const SfxItemSet& rSet);
 
     static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);

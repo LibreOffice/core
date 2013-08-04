@@ -175,27 +175,18 @@ IMPL_LINK(OfaAutoCorrDlg, SelectLanguageHdl, ListBox*, pBox)
     return 0;
 }
 
-OfaAutocorrOptionsPage::OfaAutocorrOptionsPage( Window* pParent,
-                                                const SfxItemSet& rSet ) :
-    SfxTabPage(pParent, CUI_RES( RID_OFAPAGE_AUTOCORR_OPTIONS ), rSet),
-    aCheckLB            (this, CUI_RES(CLB_SETTINGS )),
-
-    sInput              (CUI_RES(RID_SVXSTR_USE_REPLACE     )),
-    sDoubleCaps         (CUI_RES(RID_SVXSTR_CPTL_STT_WORD     )),
-    sStartCap           (CUI_RES(RID_SVXSTR_CPTL_STT_SENT     )),
-    sBoldUnderline      (CUI_RES(RID_SVXSTR_BOLD_UNDER        )),
-    sURL                (CUI_RES(RID_SVXSTR_DETECT_URL        )),
-    sNoDblSpaces        (CUI_RES(RID_SVXSTR_NO_DBL_SPACES    )),
-    sDash               (CUI_RES(RID_SVXSTR_DASH              )),
-    sAccidentalCaps     (CUI_RES(RID_SVXSTR_CORRECT_ACCIDENTAL_CAPS_LOCK))
+OfaAutocorrOptionsPage::OfaAutocorrOptionsPage(Window* pParent, const SfxItemSet& rSet)
+    : SfxTabPage(pParent, "AutocorrectOptionsPage", "cui/ui/acoroptionspage.ui", rSet)
+    , m_sInput(CUI_RESSTR(RID_SVXSTR_USE_REPLACE))
+    , m_sDoubleCaps(CUI_RESSTR(RID_SVXSTR_CPTL_STT_WORD))
+    , m_sStartCap(CUI_RESSTR(RID_SVXSTR_CPTL_STT_SENT))
+    , m_sBoldUnderline(CUI_RESSTR(RID_SVXSTR_BOLD_UNDER))
+    , m_sURL(CUI_RESSTR(RID_SVXSTR_DETECT_URL))
+    , m_sNoDblSpaces(CUI_RESSTR(RID_SVXSTR_NO_DBL_SPACES))
+    , m_sDash(CUI_RESSTR(RID_SVXSTR_DASH))
+    , m_sAccidentalCaps(CUI_RESSTR(RID_SVXSTR_CORRECT_ACCIDENTAL_CAPS_LOCK))
 {
-    FreeResource();
-
-    aCheckLB.SetHelpId(HID_OFAPAGE_AUTOCORR_CLB);
-}
-
-OfaAutocorrOptionsPage::~OfaAutocorrOptionsPage()
-{
+    get(m_pCheckLB, "checklist");
 }
 
 SfxTabPage* OfaAutocorrOptionsPage::Create( Window* pParent,
@@ -210,14 +201,14 @@ sal_Bool OfaAutocorrOptionsPage::FillItemSet( SfxItemSet& )
     long nFlags = pAutoCorrect->GetFlags();
 
     sal_uInt16 nPos = 0;
-    pAutoCorrect->SetAutoCorrFlag(Autocorrect,          aCheckLB.IsChecked(nPos++));
-    pAutoCorrect->SetAutoCorrFlag(CptlSttWrd,           aCheckLB.IsChecked(nPos++));
-    pAutoCorrect->SetAutoCorrFlag(CptlSttSntnc,         aCheckLB.IsChecked(nPos++));
-    pAutoCorrect->SetAutoCorrFlag(ChgWeightUnderl,      aCheckLB.IsChecked(nPos++));
-    pAutoCorrect->SetAutoCorrFlag(SetINetAttr,          aCheckLB.IsChecked(nPos++));
-    pAutoCorrect->SetAutoCorrFlag(ChgToEnEmDash,        aCheckLB.IsChecked(nPos++));
-    pAutoCorrect->SetAutoCorrFlag(IgnoreDoubleSpace,    aCheckLB.IsChecked(nPos++));
-    pAutoCorrect->SetAutoCorrFlag(CorrectCapsLock,      aCheckLB.IsChecked(nPos++));
+    pAutoCorrect->SetAutoCorrFlag(Autocorrect,          m_pCheckLB->IsChecked(nPos++));
+    pAutoCorrect->SetAutoCorrFlag(CptlSttWrd,           m_pCheckLB->IsChecked(nPos++));
+    pAutoCorrect->SetAutoCorrFlag(CptlSttSntnc,         m_pCheckLB->IsChecked(nPos++));
+    pAutoCorrect->SetAutoCorrFlag(ChgWeightUnderl,      m_pCheckLB->IsChecked(nPos++));
+    pAutoCorrect->SetAutoCorrFlag(SetINetAttr,          m_pCheckLB->IsChecked(nPos++));
+    pAutoCorrect->SetAutoCorrFlag(ChgToEnEmDash,        m_pCheckLB->IsChecked(nPos++));
+    pAutoCorrect->SetAutoCorrFlag(IgnoreDoubleSpace,    m_pCheckLB->IsChecked(nPos++));
+    pAutoCorrect->SetAutoCorrFlag(CorrectCapsLock,      m_pCheckLB->IsChecked(nPos++));
 
     sal_Bool bReturn = nFlags != pAutoCorrect->GetFlags();
     if(bReturn )
@@ -239,29 +230,29 @@ void OfaAutocorrOptionsPage::Reset( const SfxItemSet& )
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
     const long nFlags = pAutoCorrect->GetFlags();
 
-    aCheckLB.SetUpdateMode(sal_False);
-    aCheckLB.Clear();
+    m_pCheckLB->SetUpdateMode(sal_False);
+    m_pCheckLB->Clear();
 
-    aCheckLB.InsertEntry(sInput);
-    aCheckLB.InsertEntry(sDoubleCaps);
-    aCheckLB.InsertEntry(sStartCap);
-    aCheckLB.InsertEntry(sBoldUnderline);
-    aCheckLB.InsertEntry(sURL);
-    aCheckLB.InsertEntry(sDash);
-    aCheckLB.InsertEntry(sNoDblSpaces);
-    aCheckLB.InsertEntry(sAccidentalCaps);
+    m_pCheckLB->InsertEntry(m_sInput);
+    m_pCheckLB->InsertEntry(m_sDoubleCaps);
+    m_pCheckLB->InsertEntry(m_sStartCap);
+    m_pCheckLB->InsertEntry(m_sBoldUnderline);
+    m_pCheckLB->InsertEntry(m_sURL);
+    m_pCheckLB->InsertEntry(m_sDash);
+    m_pCheckLB->InsertEntry(m_sNoDblSpaces);
+    m_pCheckLB->InsertEntry(m_sAccidentalCaps);
 
     sal_uInt16 nPos = 0;
-    aCheckLB.CheckEntryPos( nPos++, 0 != (nFlags & Autocorrect) );
-    aCheckLB.CheckEntryPos( nPos++, 0 != (nFlags & CptlSttWrd) );
-    aCheckLB.CheckEntryPos( nPos++, 0 != (nFlags & CptlSttSntnc) );
-    aCheckLB.CheckEntryPos( nPos++, 0 != (nFlags & ChgWeightUnderl) );
-    aCheckLB.CheckEntryPos( nPos++, 0 != (nFlags & SetINetAttr) );
-    aCheckLB.CheckEntryPos( nPos++, 0 != (nFlags & ChgToEnEmDash) );
-    aCheckLB.CheckEntryPos( nPos++, 0 != (nFlags & IgnoreDoubleSpace) );
-    aCheckLB.CheckEntryPos( nPos++, 0 != (nFlags & CorrectCapsLock) );
+    m_pCheckLB->CheckEntryPos( nPos++, 0 != (nFlags & Autocorrect) );
+    m_pCheckLB->CheckEntryPos( nPos++, 0 != (nFlags & CptlSttWrd) );
+    m_pCheckLB->CheckEntryPos( nPos++, 0 != (nFlags & CptlSttSntnc) );
+    m_pCheckLB->CheckEntryPos( nPos++, 0 != (nFlags & ChgWeightUnderl) );
+    m_pCheckLB->CheckEntryPos( nPos++, 0 != (nFlags & SetINetAttr) );
+    m_pCheckLB->CheckEntryPos( nPos++, 0 != (nFlags & ChgToEnEmDash) );
+    m_pCheckLB->CheckEntryPos( nPos++, 0 != (nFlags & IgnoreDoubleSpace) );
+    m_pCheckLB->CheckEntryPos( nPos++, 0 != (nFlags & CorrectCapsLock) );
 
-    aCheckLB.SetUpdateMode(sal_True);
+    m_pCheckLB->SetUpdateMode(sal_True);
 }
 
 /*********************************************************************/

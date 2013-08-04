@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.0 -->
+  <!-- interface-requires LibreOffice 1.0 -->
+  <object class="GtkBox" id="AutocorrectOptionsPage">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="hexpand">True</property>
+    <property name="vexpand">True</property>
+    <property name="border_width">6</property>
+    <property name="orientation">vertical</property>
+    <child>
+      <object class="svxcorelo-SvxCheckListBox" id="checklist:border">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="hexpand">True</property>
+        <property name="vexpand">True</property>
+        <child internal-child="selection">
+          <object class="GtkTreeSelection" id="Check List Box-selection1"/>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">0</property>
+      </packing>
+    </child>
+  </object>
+</interface>

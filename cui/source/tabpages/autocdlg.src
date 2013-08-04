@@ -24,28 +24,6 @@
 
 /**************************************************************************/
 /*                                                                        */
-/*  Beschreibung: Autokorrektur-Optionen                                  */
-/*                                                                        */
-/**************************************************************************/
-TabPage RID_OFAPAGE_AUTOCORR_OPTIONS
-{
-    HelpId = HID_OFAPAGE_AUTOCORR_OPTIONS ;
-    OutputSize = TRUE ;
-    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
-    Hide = TRUE ;
-    SVLook = TRUE ;
-    Text [ en-US ] = "Settings" ;
-    Control CLB_SETTINGS
-    {
-        Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( 248 , 173 ) ;
-        Border = TRUE ;
-        TabStop = TRUE ;
-    };
-};
-
-/**************************************************************************/
-/*                                                                        */
 /*  Beschreibung: automatische Wortergänzung                              */
 /*                                                                        */
 /**************************************************************************/
