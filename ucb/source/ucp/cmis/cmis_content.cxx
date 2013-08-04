@@ -1139,10 +1139,10 @@ namespace cmis
             OUString sNewPath;
 
             // Try to get the object from the server if there is any
-            libcmis::Folder* pFolder = NULL;
+            libcmis::FolderPtr pFolder;
             try
             {
-                pFolder = dynamic_cast< libcmis::Folder* >( getObject( xEnv ).get( ) );
+                pFolder = boost::dynamic_pointer_cast< libcmis::Folder >( getObject( xEnv ) );
             }
             catch ( const libcmis::Exception& )
             {
@@ -1260,12 +1260,13 @@ namespace cmis
                     }
                 }
 
-                if ( !sNewPath.isEmpty( ) )
+                if ( !sNewPath.isEmpty( ) || !m_sObjectId.isEmpty( ) )
                 {
                     // Update the current content: it's no longer transient
                     m_sObjectPath = sNewPath;
                     URL aUrl( m_sURL );
                     aUrl.setObjectPath( m_sObjectPath );
+                    aUrl.setObjectId( m_sObjectId );
                     m_sURL = aUrl.asString( );
                     m_pObject.reset( );
                     m_pObjectType.reset( );
@@ -1876,7 +1877,7 @@ namespace cmis
         list< uno::Reference< ucb::XContent > > results;
         SAL_INFO( "cmisucp", "Content::getChildren() " << m_sURL );
 
-        libcmis::Folder* pFolder = dynamic_cast< libcmis::Folder* >( getObject( uno::Reference< ucb::XCommandEnvironment >() ).get( ) );
+        libcmis::FolderPtr pFolder = boost::dynamic_pointer_cast< libcmis::Folder >( getObject( uno::Reference< ucb::XCommandEnvironment >() ) );
         if ( NULL != pFolder )
         {
             // Get the children from pObject
