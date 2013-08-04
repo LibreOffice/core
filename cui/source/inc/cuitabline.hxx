@@ -332,18 +332,14 @@ class SvxLineEndDefTabPage : public SfxTabPage
     using TabPage::DeactivatePage;
 
 private:
-    FixedLine           aFlTip;
-    FixedText           aFTTitle;
-    Edit                aEdtName;
-    FixedText           aFTLineEndStyle;
-    LineEndLB           aLbLineEnds;
-    PushButton          aBtnAdd;
-    PushButton          aBtnModify;
-    PushButton          aBtnDelete;
-    ImageButton         aBtnLoad;
-    ImageButton         aBtnSave;
-    FixedInfo           aFiTip;
-    SvxXLinePreview     aCtlPreview;
+    Edit*                m_pEdtName;
+    LineEndLB*           m_pLbLineEnds;
+    PushButton*          m_pBtnAdd;
+    PushButton*          m_pBtnModify;
+    PushButton*          m_pBtnDelete;
+    PushButton*          m_pBtnLoad;
+    PushButton*          m_pBtnSave;
+    SvxXLinePreview*     m_pCtlPreview;
 
     const SfxItemSet&   rOutAttrs;
     const SdrObject*    pPolyObj;
