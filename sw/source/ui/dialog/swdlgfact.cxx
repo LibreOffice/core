@@ -859,22 +859,10 @@ AbstractSplitTableDialog * SwAbstractDialogFactory_Impl::CreateSplitTblDialog ( 
     return new AbstractSplitTableDialog_Impl( new SwSplitTblDlg( pParent, rSh) );
 }
 
-AbstractSwSelGlossaryDlg * SwAbstractDialogFactory_Impl::CreateSwSelGlossaryDlg ( Window * pParent, const String &rShortName, int nResId )
+AbstractSwSelGlossaryDlg * SwAbstractDialogFactory_Impl::CreateSwSelGlossaryDlg(Window * pParent, const String &rShortName)
 {
-    SwSelGlossaryDlg* pDlg=NULL;
-    switch ( nResId )
-    {
-        case DLG_SEL_GLOS :
-            pDlg = new SwSelGlossaryDlg( pParent, rShortName);
-            break;
-
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractSwSelGlossaryDlg_Impl( pDlg );
-    return 0;
+    SwSelGlossaryDlg* pDlg = new SwSelGlossaryDlg(pParent, rShortName);
+    return new AbstractSwSelGlossaryDlg_Impl(pDlg);
 }
 
 AbstractSwAutoFormatDlg * SwAbstractDialogFactory_Impl::CreateSwAutoFormatDlg(Window* pParent,

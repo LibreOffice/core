@@ -93,6 +93,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/indexentry \
 	sw/uiconfig/swriter/ui/inputfielddialog \
 	sw/uiconfig/swriter/ui/indentpage \
+	sw/uiconfig/swriter/ui/insertautotextdialog \
 	sw/uiconfig/swriter/ui/insertbookmark \
 	sw/uiconfig/swriter/ui/insertbreak \
 	sw/uiconfig/swriter/ui/insertcaption \

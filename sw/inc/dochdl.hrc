@@ -27,7 +27,6 @@
 #define MSG_CLPBRD_FORMAT_ERROR     (RC_DOCHDL_BEGIN + 4)
 #define MSG_UPDATE_NEW_GLOS_FMT     (RC_DOCHDL_BEGIN + 5)
 
-#define DLG_SEL_GLOS                (RC_DOCHDL_BEGIN + 6)
 #define STR_NO_TABLE                (RC_DOCHDL_BEGIN + 7)
 
 #define STR_PRIVATETEXT             (RC_DOCHDL_BEGIN + 8)

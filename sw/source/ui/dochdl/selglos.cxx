@@ -21,31 +21,19 @@
 
 #include "selglos.hxx"
 
-#include "selglos.hrc"
 #include "dochdl.hrc"
-#include <vcl/msgbox.hxx>
-
-// STATIC DATA -----------------------------------------------------------
-
-
-// CTOR / DTOR -----------------------------------------------------------
+#include <vcl/layout.hxx>
 
 SwSelGlossaryDlg::SwSelGlossaryDlg(Window * pParent, const OUString &rShortName)
-    : ModalDialog(pParent, SW_RES(DLG_SEL_GLOS)),
-    aGlosBox(this, SW_RES( LB_GLOS)),
-    aGlosFL(this, SW_RES( FL_GLOS)),
-    aOKBtn(this, SW_RES( BT_OK)),
-    aCancelBtn(this, SW_RES( BT_CANCEL)),
-    aHelpBtn(this, SW_RES(BT_HELP))
+    : ModalDialog(pParent, "InsertAutoTextDialog",
+        "modules/swriter/ui/insertautotextdialog.ui")
 {
-    aGlosFL.SetText(aGlosFL.GetText() + rShortName);
-    FreeResource();
-
-    aGlosBox.SetDoubleClickHdl(LINK(this, SwSelGlossaryDlg, DoubleClickHdl));
+    VclFrame *pFrame(get<VclFrame>("frame"));
+    pFrame->set_label(pFrame->get_label() + rShortName);
+    get(m_pGlosBox, "treeview");
+    m_pGlosBox->set_height_request(m_pGlosBox->GetTextHeight() * 10);
+    m_pGlosBox->SetDoubleClickHdl(LINK(this, SwSelGlossaryDlg, DoubleClickHdl));
 }
-
-// overload dtor
-SwSelGlossaryDlg::~SwSelGlossaryDlg() {}
 
 IMPL_LINK(SwSelGlossaryDlg, DoubleClickHdl, ListBox*, /*pBox*/)
 {

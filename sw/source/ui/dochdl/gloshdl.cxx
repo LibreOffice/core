@@ -454,7 +454,7 @@ sal_Bool SwGlossaryHdl::Expand( const OUString& rShortName,
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-                AbstractSwSelGlossaryDlg* pDlg = pFact->CreateSwSelGlossaryDlg( 0, aShortName, DLG_SEL_GLOS );
+                AbstractSwSelGlossaryDlg* pDlg = pFact->CreateSwSelGlossaryDlg(0, aShortName);
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 for(sal_uInt16 i = 0; i < aFoundArr.size(); ++i)
                 {

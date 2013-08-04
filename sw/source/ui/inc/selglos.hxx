@@ -29,31 +29,25 @@
 class SwSelGlossaryDlg : public ModalDialog
 {
 protected:
-    ListBox         aGlosBox;
-    FixedLine       aGlosFL;
-    OKButton        aOKBtn;
-    CancelButton    aCancelBtn;
-    HelpButton      aHelpBtn;
+    ListBox*  m_pGlosBox;
 
     DECL_LINK(DoubleClickHdl, ListBox*);
 public:
     SwSelGlossaryDlg(Window * pParent, const OUString &rShortName);
-    ~SwSelGlossaryDlg();
-    void InsertGlos(const OUString &rRegion, const OUString &rGlosName);    // inline
-    sal_uInt16 GetSelectedIdx() const;  // inline
-    void SelectEntryPos(sal_uInt16 nIdx);   // inline
+    void InsertGlos(const OUString &rRegion, const OUString &rGlosName)
+    {
+        const OUString aTmp = rRegion + ":" + rGlosName;
+        m_pGlosBox->InsertEntry(aTmp);
+    }
+    sal_uInt16 GetSelectedIdx() const
+    {
+        return m_pGlosBox->GetSelectEntryPos();
+    }
+    void SelectEntryPos(sal_uInt16 nIdx)
+    {
+        m_pGlosBox->SelectEntryPos(nIdx);
+    }
 };
-
-inline void SwSelGlossaryDlg::InsertGlos(const OUString &rRegion,
-                                const OUString &rGlosName)
-{
-    const OUString aTmp = rRegion + ":" + rGlosName;
-    aGlosBox.InsertEntry( aTmp );
-}
-inline sal_uInt16 SwSelGlossaryDlg::GetSelectedIdx() const
-{   return aGlosBox.GetSelectEntryPos(); }
-inline void SwSelGlossaryDlg::SelectEntryPos(sal_uInt16 nIdx)
-{   aGlosBox.SelectEntryPos(nIdx); }
 
 #endif
 
