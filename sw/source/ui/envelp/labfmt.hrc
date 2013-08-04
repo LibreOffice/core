@@ -58,7 +58,6 @@
 #define PB_OK           6
 #define PB_CANCEL       7
 #define PB_HELP         8
-#define MB_QUERY        9
 
 // global resources ********************************************************
 

@@ -601,8 +601,6 @@ SwSaveLabelDlg::SwSaveLabelDlg(SwLabFmtPage* pParent, SwLabRec& rRec) :
     aCancelPB(this, SW_RES(PB_CANCEL )),
     aHelpPB(this,   SW_RES(PB_HELP      )),
 
-    aQueryMB(this,  SW_RES(MB_QUERY )),
-
     bSuccess(false),
     pLabPage(pParent),
     rLabRec(rRec)
@@ -635,15 +633,17 @@ IMPL_LINK_NOARG(SwSaveLabelDlg, OkHdl)
             MessageDialog(this, "CannotSaveLabelDialog", "modules/swriter/ui/cannotsavelabeldialog.ui").Execute();
             return 0;
         }
-        String sTmp(aQueryMB.GetMessText());
-        String sQuery(sTmp);
-        sQuery.SearchAndReplace(OUString("%1"), sMake);
-        sQuery.SearchAndReplace(OUString("%2"), sType);
-        aQueryMB.SetMessText(sQuery);
 
-        short eRet = aQueryMB.Execute();
-        aQueryMB.SetMessText(sTmp);
-        if(RET_YES != eRet)
+        MessageDialog aQuery(this, "QuerySaveLabelDialog",
+            "modules/swriter/ui/querysavelabeldialog.ui");
+
+        aQuery.set_primary_text(aQuery.get_primary_text().
+            replaceAll("%1", sMake).replaceAll("%2", sType));
+        aQuery.set_secondary_text(aQuery.get_secondary_text().
+            replaceAll("%1", sMake).replaceAll("%2", sType));
+        sal_uInt16 eRet = aQuery.Execute();
+
+        if (RET_YES != eRet)
             return 0;
     }
     rLabRec.aType = sType;

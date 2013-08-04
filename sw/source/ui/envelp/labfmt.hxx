@@ -149,8 +149,6 @@ class SwSaveLabelDlg : public ModalDialog
     CancelButton    aCancelPB;
     HelpButton      aHelpPB;
 
-    QueryBox        aQueryMB;
-
     bool        bSuccess;
     SwLabFmtPage*   pLabPage;
     SwLabRec&       rLabRec;
