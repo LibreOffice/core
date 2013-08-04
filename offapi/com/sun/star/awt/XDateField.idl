@@ -33,9 +33,6 @@ published interface XDateField: com::sun::star::uno::XInterface
 {
 
     /** sets the date value which is displayed in the date field.
-
-        <p>The date value must be specified in the format
-        YYYYMMDD.</p>
      */
     void setDate( [in] ::com::sun::star::util::Date Date );
 

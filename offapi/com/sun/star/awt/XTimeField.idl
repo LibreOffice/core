@@ -33,10 +33,6 @@ published interface XTimeField: com::sun::star::uno::XInterface
 {
 
     /** sets the time value which is displayed in the time field.
-
-        <p>The time value must be specified in the format HHMMSSnnnnnnnnn,
-        where HH are hours, MM are minutes, SS are seconds and
-        nnnnnnnnn are nanoseconds.</p>
      */
     void setTime( [in] com::sun::star::util::Time Time );
 
