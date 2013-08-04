@@ -782,4 +782,13 @@ unchanged:
  
  clean:;		rm -f $(OBJS)
  
+unchanged:
+--- firebird.orig/builds/posix/make.rules	2013-08-04 19:06:02.208552600 +0900
++++ firebird/builds/posix/make.rules	2013-08-04 19:13:59.981368500 +0900
+@@ -116,4 +116,4 @@
+ # Rules for making resource files
+ 
+ $(GEN_ROOT)/%.res: $(SRC_ROOT)/%.rc
+-	windres --output-format=coff --include-dir=$(<D) $< $@
++	windres --output-format=coff --include-dir=$(<D) --target=pe-i386 $< $@
 only in patch2:
