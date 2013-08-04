@@ -1871,18 +1871,21 @@ short MessageDialog::Execute()
                 break;
             case VCL_BUTTONS_OK:
                 pBtn = new OKButton(pButtonBox);
+                pBtn->SetStyle(pBtn->GetStyle() & WB_DEFBUTTON);
                 pBtn->Show();
                 m_aOwnedButtons.push_back(pBtn);
                 m_aResponses[pBtn] = RET_OK;
                 break;
             case VCL_BUTTONS_CLOSE:
                 pBtn = new CloseButton(pButtonBox);
+                pBtn->SetStyle(pBtn->GetStyle() & WB_DEFBUTTON);
                 pBtn->Show();
                 m_aOwnedButtons.push_back(pBtn);
                 m_aResponses[pBtn] = RET_CLOSE;
                 break;
             case VCL_BUTTONS_CANCEL:
                 pBtn = new CancelButton(pButtonBox);
+                pBtn->SetStyle(pBtn->GetStyle() & WB_DEFBUTTON);
                 m_aOwnedButtons.push_back(pBtn);
                 m_aResponses[pBtn] = RET_CANCEL;
                 break;
@@ -1894,6 +1897,7 @@ short MessageDialog::Execute()
                 m_aResponses[pBtn] = RET_YES;
 
                 pBtn = new PushButton(pButtonBox);
+                pBtn->SetStyle(pBtn->GetStyle() & WB_DEFBUTTON);
                 pBtn->SetText(Button::GetStandardText(BUTTON_NO));
                 pBtn->Show();
                 m_aOwnedButtons.push_back(pBtn);
@@ -1906,6 +1910,7 @@ short MessageDialog::Execute()
                 m_aResponses[pBtn] = RET_OK;
 
                 pBtn = new CancelButton(pButtonBox);
+                pBtn->SetStyle(pBtn->GetStyle() & WB_DEFBUTTON);
                 pBtn->Show();
                 m_aOwnedButtons.push_back(pBtn);
                 m_aResponses[pBtn] = RET_CANCEL;
