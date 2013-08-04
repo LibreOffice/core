@@ -235,6 +235,15 @@ End
         REG_VALUE_LNG(disp_name) \
     End
 
+#define REGISTRY_ENTRY_APPUSERMODELID(name,modid,doc_type) \
+    RegistryItem CONCAT3(gid_Regitem_Openoffice_,name,AppUserModelID) \
+        ParentID = PREDEFINED_HKEY_CLASSES_ROOT; \
+        ModuleID = modid; \
+        ComponentCondition = "VersionNT >= 600"; \
+        Subkey = STRING(AppUserModelID); \
+        Value = STRING(CONCAT2(TheDocumentFoundation.LibreOffice.,doc_type)); \
+    End
+
 #define REGISTRY_ENTRY_ICON(name,modid,icon_id) \
     RegistryItem CONCAT3(gid_Regitem_Openoffice_,name,_Defaulticon) \
         ParentID = PREDEFINED_HKEY_CLASSES_ROOT; \
@@ -324,6 +333,7 @@ End
     REGISTRY_ENTRY_OPEN_WITH(name,cond,doc_type,modid,key) \
     CONDITIONAL_REGISTRY_ENTRY_EXT(name,cond,key) \
     REGISTRY_ENTRY_DOC(name,modid,disp_name) \
+    REGISTRY_ENTRY_APPUSERMODELID(name,modid,doc_type) \
     REGISTRY_ENTRY_ICON(name,modid,icon_id) \
     REGISTRY_ENTRY_SHELL(name,default,modid) \
     REGISTRY_ENTRY_NEW_CMD(name,modid,app) \
@@ -338,6 +348,7 @@ End
     REGISTRY_ENTRY_OPEN_WITH_TMPL(name,cond,doc_type,modid,key) \
     CONDITIONAL_REGISTRY_ENTRY_EXT(name,cond,key) \
     REGISTRY_ENTRY_DOC(name,modid,disp_name) \
+    REGISTRY_ENTRY_APPUSERMODELID(name,modid,doc_type) \
     REGISTRY_ENTRY_ICON(name,modid,icon_id) \
     REGISTRY_ENTRY_SHELL(name,default,modid) \
     REGISTRY_ENTRY_NEW_CMD(name,modid,app) \
