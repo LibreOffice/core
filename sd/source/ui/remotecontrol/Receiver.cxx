@@ -16,14 +16,23 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/anytostring.hxx>
+#include "cppuhelper/exc_hlp.hxx"
 #include <osl/file.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/presentation/SlideShow.hpp>
 
 using namespace sd;
 using namespace ::com::sun::star;
 using namespace ::osl;
 using namespace std;
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::presentation;
+using namespace ::com::sun::star::beans;
 
 Receiver::Receiver( Transmitter *aTransmitter )
 {
@@ -61,6 +70,7 @@ void Receiver::executeCommand( const std::vector<OString> &aCommand )
 {
     uno::Reference<presentation::XSlideShowController> xSlideShowController;
     uno::Reference<presentation::XPresentation2> xPresentation;
+    uno::Reference<presentation::XSlideShow> xSlideShow;
     try {
         uno::Reference< frame::XDesktop2 > xFramesSupplier = frame::Desktop::create( ::comphelper::getProcessComponentContext() );
         uno::Reference< frame::XFrame > xFrame ( xFramesSupplier->getActiveFrame(), uno::UNO_QUERY_THROW );
@@ -70,6 +80,8 @@ void Receiver::executeCommand( const std::vector<OString> &aCommand )
         // Throws an exception if now slideshow running
         xSlideShowController =  uno::Reference<presentation::XSlideShowController>(
            xPresentation->getController(), uno::UNO_QUERY_THROW );
+        xSlideShow = uno::Reference<presentation::XSlideShow>(
+            xSlideShowController->getSlideShow(), uno::UNO_QUERY_THROW );
     }
     catch (uno::RuntimeException &)
     {
@@ -120,12 +132,43 @@ void Receiver::executeCommand( const std::vector<OString> &aCommand )
     }
     else if (aCommand[0].equals( "pointer_started" ))
     {
-        // xSlideShowController->setPointerMode(true);
+        std::cerr << "pointer_started" << std::endl;
+        SolarMutexGuard aSolarGuard;
+        if (xSlideShow.is()) try
+        {
+            std::cerr << "pointer_started in the is" << std::endl;
+            xSlideShow->setProperty(
+                        beans::PropertyValue( "PointerVisible" ,
+                            -1,
+                            makeAny( true ),
+                            beans::PropertyState_DIRECT_VALUE ) );
+        }
+        catch ( Exception& )
+        {
+            SAL_WARN( "sd.slideshow", "sd::SlideShowImpl::setPointerMode(), "
+                "exception caught: " << comphelper::anyToString( cppu::getCaughtException() ));
+        }
         SAL_INFO( "sdremote", "Pointer started, we display the pointer on screen" );
     }
     else if (aCommand[0].equals( "pointer_dismissed" ))
     {
-        // xSlideShowController->setPointerMode(false);
+        std::cerr << "pointer_dismissed" << std::endl;
+        SolarMutexGuard aSolarGuard;
+        if (xSlideShow.is()) try
+        {
+            std::cerr << "pointer_dismissed in the is" << std::endl;
+            xSlideShow->setProperty(
+                        beans::PropertyValue( "PointerVisible" ,
+                            -1,
+                            makeAny( false ),
+                            beans::PropertyState_DIRECT_VALUE ) );
+        }
+        catch ( Exception& )
+        {
+            SAL_WARN( "sd.slideshow", "sd::SlideShowImpl::setPointerMode(), "
+                "exception caught: " << comphelper::anyToString( cppu::getCaughtException() ));
+        }
+
         SAL_INFO( "sdremote", "Pointer dismissed, we hide the pointer on screen" );
     }
     else if (aCommand[0].equals( "pointer_coordination" ))
@@ -135,8 +178,23 @@ void Receiver::executeCommand( const std::vector<OString> &aCommand )
 
         SAL_INFO( "sdremote", "Pointer at ("<<x<<","<<y<<")" );
         const ::com::sun::star::geometry::RealPoint2D pos(x,y);
-        // Same problem here...
-        // xSlideShowController->setPointerPosition(pos);
+        std::cerr << "Pointer at ("<<pos.X<<","<<pos.Y<<")" << std::endl;
+
+        SolarMutexGuard aSolarGuard;
+        if (xSlideShow.is()) try
+        {
+            std::cerr << "pointer_coordination in the is" << std::endl;
+            xSlideShow->setProperty(
+                        beans::PropertyValue( "PointerPosition" ,
+                            -1,
+                            makeAny( pos ),
+                            beans::PropertyState_DIRECT_VALUE ) );
+        }
+        catch ( Exception& )
+        {
+            SAL_WARN( "sd.slideshow", "sd::SlideShowImpl::setPointerPosition(), "
+                "exception caught: " << comphelper::anyToString( cppu::getCaughtException() ));
+        }
     }
     else if ( aCommand[0].equals( "presentation_resume" ) )
     {

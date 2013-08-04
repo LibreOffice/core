@@ -28,6 +28,7 @@
 #include <basegfx/vector/b2dvector.hxx>
 
 #include <com/sun/star/rendering/XCanvas.hpp>
+#include "com/sun/star/uno/Reference.hxx"
 
 #include "pointersymbol.hxx"
 #include "eventmultiplexer.hxx"
@@ -51,8 +52,8 @@ PointerSymbolSharedPtr PointerSymbol::create( const uno::Reference<rendering::XB
 {
     PointerSymbolSharedPtr pRet(
         new PointerSymbol( xBitmap,
-                        rScreenUpdater,
-                        rViewContainer ));
+                           rScreenUpdater,
+                           rViewContainer ));
 
     rEventMultiplexer.addViewHandler( pRet );
 
@@ -100,8 +101,20 @@ void PointerSymbol::setVisible( const bool bVisible )
     }
 }
 
+basegfx::B2DPoint PointerSymbol::calcSpritePos( UnoViewSharedPtr const & rView ) const
+{
+    const uno::Reference<rendering::XBitmap> xBitmap( rView->getCanvas()->getUNOCanvas(),
+                                                      uno::UNO_QUERY_THROW );
+    const geometry::IntegerSize2D realSize( xBitmap->getSize() );
+    return basegfx::B2DPoint(
+        // pos.X pos.Y are given in 0..1, beginning from the upper left corner of the currentSlide.
+        std::min<sal_Int32>( 0, LEFT_BORDER_SPACE ),
+        std::max<sal_Int32>( 0, realSize.Height * 1 - mxBitmap->getSize().Height
+                                                - LOWER_BORDER_SPACE ) );
+}
+
 basegfx::B2DPoint PointerSymbol::calcSpritePos(
-    UnoViewSharedPtr const & rView, const ::com::sun::star::geometry::RealPoint2D& pos) const
+    UnoViewSharedPtr const & rView, const ::com::sun::star::geometry::RealPoint2D pos) const
 {
     const uno::Reference<rendering::XBitmap> xBitmap( rView->getCanvas()->getUNOCanvas(),
                                                       uno::UNO_QUERY_THROW );
@@ -195,7 +208,7 @@ void PointerSymbol::viewsChanged()
     }
 }
 
-void PointerSymbol::viewsChanged(const ::com::sun::star::geometry::RealPoint2D& pos)
+void PointerSymbol::viewsChanged(const ::com::sun::star::geometry::RealPoint2D pos)
 {
     // reposition sprites on all views
     ViewsVecT::const_iterator       aIter( maViews.begin() );
@@ -210,6 +223,6 @@ void PointerSymbol::viewsChanged(const ::com::sun::star::geometry::RealPoint2D& 
 }
 
 } // namespace internal
-} // namespace presentation
+} // namespace slideshow
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

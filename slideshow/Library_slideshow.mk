@@ -142,6 +142,7 @@ $(eval $(call gb_Library_add_exception_objects,slideshow,\
     slideshow/source/engine/unoviewcontainer \
     slideshow/source/engine/usereventqueue \
     slideshow/source/engine/waitsymbol \
+    slideshow/source/engine/pointersymbol \
     slideshow/source/engine/wakeupevent \
 ))
 

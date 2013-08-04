@@ -14,6 +14,8 @@
 #include <com/sun/star/rendering/XBitmap.hpp>
 #include <cppcanvas/customsprite.hxx>
 
+#include "com/sun/star/uno/Reference.hxx"
+
 #include "vieweventhandler.hxx"
 #include "screenupdater.hxx"
 #include "eventmultiplexer.hxx"
@@ -23,6 +25,8 @@
 #include <boost/bind.hpp>
 #include <boost/utility.hpp> // for noncopyable
 #include <vector>
+
+using namespace com::sun::star;
 
 namespace slideshow {
 namespace internal {
@@ -49,7 +53,8 @@ public:
     void hide() { setVisible(false); }
     /** Use this method to update the pointer's position
     */
-    virtual void viewsChanged(const ::com::sun::star::geometry::RealPoint2D& pos);
+    void setVisible( const bool bVisible );
+    virtual void viewsChanged(const ::com::sun::star::geometry::RealPoint2D pos);
 
 private:
     PointerSymbol( const ::com::sun::star::uno::Reference<
@@ -63,9 +68,9 @@ private:
     virtual void viewChanged( const UnoViewSharedPtr& rView );
     virtual void viewsChanged();
 
-    void setVisible( const bool bVisible );
 
-    basegfx::B2DPoint calcSpritePos( UnoViewSharedPtr const & rView, const ::com::sun::star::geometry::RealPoint2D& pos = ::com::sun::star::geometry::RealPoint2D(0, 0) ) const;
+    ::basegfx::B2DPoint calcSpritePos( UnoViewSharedPtr const & rView, const ::com::sun::star::geometry::RealPoint2D pos ) const;
+    ::basegfx::B2DPoint calcSpritePos( UnoViewSharedPtr const & rView ) const;
 
     template <typename func_type>
     void for_each_sprite( func_type const & func ) const

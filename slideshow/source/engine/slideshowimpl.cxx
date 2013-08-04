@@ -95,6 +95,7 @@
 #include "waitsymbol.hxx"
 #include "effectrewinder.hxx"
 #include "framerate.hxx"
+#include "pointersymbol.hxx"
 
 #include <boost/noncopyable.hpp>
 #include <boost/bind.hpp>
@@ -459,6 +460,8 @@ private:
     boost::shared_ptr<RehearseTimingsActivity> mpRehearseTimingsActivity;
     boost::shared_ptr<WaitSymbol>           mpWaitSymbol;
 
+    boost::shared_ptr<PointerSymbol>        mpPointerSymbol;
+
     /// the current slide transition sound object:
     SoundPlayerSharedPtr                    mpCurrentSlideTransitionSound;
 
@@ -579,6 +582,7 @@ SlideShowImpl::SlideShowImpl(
       mpListener(),
       mpRehearseTimingsActivity(),
       mpWaitSymbol(),
+      mpPointerSymbol(),
       mpCurrentSlideTransitionSound(),
       mxComponentContext( xContext ),
       mxOptionalTransitionFactory(),
@@ -653,6 +657,7 @@ void SlideShowImpl::disposing()
     }
 
     mpWaitSymbol.reset();
+    mpPointerSymbol.reset();
 
     if( mpRehearseTimingsActivity )
     {
@@ -1775,6 +1780,37 @@ sal_Bool SlideShowImpl::setProperty( beans::PropertyValue const& rProperty )
                                            maViewContainer );
 
         return true;
+    }
+
+    if ( rProperty.Name == "PointerSymbolBitmap" )
+    {
+        uno::Reference<rendering::XBitmap> xBitmap;
+        if (! (rProperty.Value >>= xBitmap))
+            return false;
+
+        mpPointerSymbol = PointerSymbol::create( xBitmap,
+                                           maScreenUpdater,
+                                           maEventMultiplexer,
+                                           maViewContainer );
+
+        return true;
+    }
+
+    if ( rProperty.Name == "PointerVisible" )
+    {
+        bool visible;
+        rProperty.Value >>= visible;
+        mpPointerSymbol->setVisible(visible);
+    }
+
+    if ( rProperty.Name == "PointerPosition")
+    {
+        ::com::sun::star::geometry::RealPoint2D pos;
+        if (! (rProperty.Value >>= pos))
+            return false;
+
+        std::cerr<<"Received pos at :(" << pos.X << ","<<pos.Y << ")" << std::endl;
+        mpPointerSymbol->viewsChanged(pos);
     }
 
     if (rProperty.Name.equalsAsciiL(
