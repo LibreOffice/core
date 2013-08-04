@@ -253,13 +253,14 @@ void Test::testN751117()
     xPropertySet->getPropertyValue("LineEndName") >>= aValue;
     CPPUNIT_ASSERT(aValue.indexOf("Arrow") != -1);
 
+    // Rotating & Flipping will cause the angle to change from 90 degrees to 270 degrees
     sal_Int32 nValue = 0;
     xPropertySet->getPropertyValue("RotateAngle") >>= nValue;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(90 * 100), nValue);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(270 * 100), nValue);
 
     uno::Reference<drawing::XShape> xShape(xPropertySet, uno::UNO_QUERY);
     awt::Size aActualSize(xShape->getSize());
-    CPPUNIT_ASSERT(aActualSize.Width < 0);
+    CPPUNIT_ASSERT(aActualSize.Width > 0);
 
     // The second shape should be a line
     uno::Reference<lang::XServiceInfo> xServiceInfo(xDraws->getByIndex(1), uno::UNO_QUERY);

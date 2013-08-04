@@ -110,6 +110,7 @@ public:
     void testTableFloating();
     void testTableFloatingMargins();
     void testFdo44689_start_page_7();
+    void testFdo67737();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -196,6 +197,7 @@ void Test::run()
         {"table-floating.docx", &Test::testTableFloating},
         {"table-floating-margins.docx", &Test::testTableFloatingMargins},
         {"fdo44689_start_page_7.docx", &Test::testFdo44689_start_page_7},
+        {"fdo67737.docx", &Test::testFdo67737},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -1191,6 +1193,28 @@ void Test::testFdo44689_start_page_7()
     // The problem was that the import & export process did not analyze the 'start from page' attribute of a section
     uno::Reference<beans::XPropertySet> xPara(getParagraph(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(7), getProperty<sal_Int16>(xPara, "PageNumberOffset"));
+}
+
+void Test::testFdo67737()
+{
+    // The problem was that imported shapes did not import and render the 'flip:x' and 'flip:y' attributes
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+    uno::Reference<drawing::XShape> xArrow;
+    xDrawPage->getByIndex(0) >>= xArrow;
+    uno::Sequence<beans::PropertyValue> aProps = getProperty< uno::Sequence<beans::PropertyValue> >(xArrow, "CustomShapeGeometry");
+    for (int i = 0; i < aProps.getLength(); ++i)
+    {
+        const beans::PropertyValue& rProp = aProps[i];
+        if (rProp.Name == "MirroredY")
+        {
+            CPPUNIT_ASSERT_EQUAL( true, bool(rProp.Value.get<sal_Bool>()) );
+            return;
+        }
+    }
+
+    // Shouldn't reach here
+    CPPUNIT_FAIL("Did not find MirroredY=true property");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
