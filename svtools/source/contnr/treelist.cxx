@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "svtools/treelist.hxx"
-#include "svtools/treelistentry.hxx"
-#include "svtools/viewdataentry.hxx"
+#include "treelist.hxx"
+#include "treelistentry.hxx"
+#include "viewdataentry.hxx"
 #include "osl/diagnose.h"
 
 #include <stdio.h>

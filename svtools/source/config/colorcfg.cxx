@@ -18,7 +18,7 @@
  */
 
 
-#include <svtools/colorcfg.hxx>
+#include <colorcfg.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/lang/Locale.hpp>

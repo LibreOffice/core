@@ -30,9 +30,9 @@
 #include <vcl/mnemonic.hxx>
 #include <vcl/controllayout.hxx>
 
-#include <svtools/ivctrl.hxx>
+#include <ivctrl.hxx>
 #include "imivctl.hxx"
-#include <svtools/svmedit.hxx>
+#include <svmedit.hxx>
 
 #include <algorithm>
 #include <memory>

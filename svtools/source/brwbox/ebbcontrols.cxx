@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svtools/editbrowsebox.hxx>
+#include <editbrowsebox.hxx>
 #include <vcl/decoview.hxx>
-#include <svtools/fmtfield.hxx>
+#include <fmtfield.hxx>
 #include <vcl/xtextedt.hxx>
 
 #include <algorithm>

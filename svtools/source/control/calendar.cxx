@@ -33,9 +33,9 @@
 #include <com/sun/star/i18n/CalendarDisplayIndex.hpp>
 #include <com/sun/star/i18n/CalendarFieldIndex.hpp>
 
-#include <svtools/svtools.hrc>
-#include <svtools/svtresid.hxx>
-#include <svtools/calendar.hxx>
+#include <svtools.hrc>
+#include <svtresid.hxx>
+#include <calendar.hxx>
 
 // =======================================================================
 

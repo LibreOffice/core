@@ -19,17 +19,17 @@
 
 #include "fileview.hxx"
 #include "sal/config.h"
-#include "svtools/treelistentry.hxx"
+#include "treelistentry.hxx"
 #include <svtools/fileview.hxx>
-#include <svtools/svtresid.hxx>
-#include <svtools/imagemgr.hxx>
+#include <svtresid.hxx>
+#include <imagemgr.hxx>
 #include <svtools/headbar.hxx>
-#include <svtools/svtabbx.hxx>
-#include <svtools/svtools.hrc>
-#include "svtools/viewdataentry.hxx"
+#include <svtabbx.hxx>
+#include <svtools.hrc>
+#include "viewdataentry.hxx"
 #include "fileview.hrc"
 #include "contentenumeration.hxx"
-#include <svtools/AccessibleBrowseBoxObjType.hxx>
+#include <AccessibleBrowseBoxObjType.hxx>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
