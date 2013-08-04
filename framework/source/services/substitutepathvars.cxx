@@ -41,7 +41,10 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/bootstrap.hxx>
 
-#include <comphelper/configurationhelper.hxx>
+#include <officecfg/Office/Paths.hxx>
+
+#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
+
 
 #include <string.h>
 
@@ -673,23 +676,11 @@ OUString SubstitutePathVariables::ConvertOSLtoUCBURL( const OUString& aOSLCompli
 
 OUString SubstitutePathVariables::GetWorkPath() const
 {
-        OUString aWorkPath;
-
-    try
-    {
-        ::comphelper::ConfigurationHelper::readDirectKey(
-                            m_xContext,
-                            OUString("org.openoffice.Office.Paths"),
-                            OUString("Paths/Work"),
-                            OUString("WritePath"),
-                            ::comphelper::ConfigurationHelper::E_READONLY) >>= aWorkPath;
-    }
-    catch(const RuntimeException &)
-    {
-    }
-
-    // fallback in case config layer does not return an useable work dir value.
-    if (aWorkPath.isEmpty())
+    OUString aWorkPath;
+    css::uno::Reference< css::container::XHierarchicalNameAccess > xPaths(officecfg::Office::Paths::Paths::get(m_xContext), css::uno::UNO_QUERY_THROW);
+    OUString xWork;
+    if (!(xPaths->getByHierarchicalName("['Work']/WritePath") >>= xWork))
+        // fallback in case config layer does not return an useable work dir value.
         aWorkPath = GetWorkVariableValue();
 
     return aWorkPath;
@@ -698,27 +689,16 @@ OUString SubstitutePathVariables::GetWorkPath() const
 OUString SubstitutePathVariables::GetWorkVariableValue() const
 {
     OUString aWorkPath;
-
-    try
+    boost::optional<OUString> x(officecfg::Office::Paths::Variables::Work::get(m_xContext));
+    if (!x)
     {
-        ::comphelper::ConfigurationHelper::readDirectKey(
-                            m_xContext,
-                            OUString("org.openoffice.Office.Paths"),
-                            OUString("Variables"),
-                            OUString("Work"),
-                            ::comphelper::ConfigurationHelper::E_READONLY) >>= aWorkPath;
-    }
-    catch(const RuntimeException &)
-    {
-    }
-
-    // fallback to $HOME in case platform dependend config layer does not return
-    // an usuable work dir value.
-    if (aWorkPath.isEmpty())
-    {
+        // fallback to $HOME in case platform dependend config layer does not return
+        // an usuable work dir value.
         osl::Security aSecurity;
         aSecurity.getHomeDir( aWorkPath );
     }
+    else
+        aWorkPath = x.get();
     return ConvertOSLtoUCBURL( aWorkPath );
 }
 
