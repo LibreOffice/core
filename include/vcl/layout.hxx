@@ -463,6 +463,7 @@ public:
     {
     }
     void set_label(const OUString &rLabel);
+    OUString get_label() const;
     virtual Window *get_child();
     virtual const Window *get_child() const;
     Window *get_label_widget();

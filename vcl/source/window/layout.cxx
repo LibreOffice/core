@@ -1323,6 +1323,13 @@ void VclFrame::set_label(const OUString &rLabel)
     pLabel->SetText(rLabel);
 }
 
+OUString VclFrame::get_label() const
+{
+    const Window *pLabel = get_label_widget();
+    assert(pLabel);
+    return pLabel->GetText();
+}
+
 OUString VclFrame::getDefaultAccessibleName() const
 {
     const Window *pLabel = get_label_widget();
