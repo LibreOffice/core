@@ -104,6 +104,7 @@ public:
     void testFdo66781();
     void testFdo60990();
     void testFdo65718();
+    void testFdo67737();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -184,6 +185,7 @@ void Test::run()
         {"fdo66781.docx", &Test::testFdo66781},
         {"fdo60990.odt", &Test::testFdo60990},
         {"fdo65718.docx", &Test::testFdo65718},
+        {"fdo67737.docx", &Test::testFdo67737},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -1086,6 +1088,28 @@ void Test::testFdo65718()
     // So I had to add the hack of the '+1' to make the test-case pass
     CPPUNIT_ASSERT_EQUAL(sal_Int32( EMU_TO_MM100(114300) + 1 ), getProperty<sal_Int32>(xPropertySet, "LeftMargin") );
     CPPUNIT_ASSERT_EQUAL(sal_Int32( EMU_TO_MM100(114300) + 1), getProperty<sal_Int32>(xPropertySet, "RightMargin") );
+}
+
+void Test::testFdo67737()
+{
+    // The problem was that imported shapes did not import and render the 'flip:x' and 'flip:y' attributes
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+    uno::Reference<drawing::XShape> xArrow;
+    xDrawPage->getByIndex(0) >>= xArrow;
+    uno::Sequence<beans::PropertyValue> aProps = getProperty< uno::Sequence<beans::PropertyValue> >(xArrow, "CustomShapeGeometry");
+    for (int i = 0; i < aProps.getLength(); ++i)
+    {
+        const beans::PropertyValue& rProp = aProps[i];
+        if (rProp.Name == "MirroredY")
+        {
+            CPPUNIT_ASSERT_EQUAL( true, bool(rProp.Value.get<sal_Bool>()) );
+            return;
+        }
+    }
+
+    // Shouldn't reach here
+    CPPUNIT_FAIL("Did not find MirroredY=true property");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

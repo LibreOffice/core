@@ -126,6 +126,9 @@ private:
     /// Create an OString representing the id from a numerical id.
     static OString ShapeIdString( sal_uInt32 nId );
 
+    /// Add flip X and\or flip Y
+    void AddFlipXY( );
+
     /// Add starting and ending point of a line to the m_pShapeAttrList.
     void AddLineDimensions( const Rectangle& rRectangle );
 
