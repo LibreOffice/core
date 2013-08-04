@@ -494,6 +494,7 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
 {
     awt::Rectangle aShapeRect(rShapeRect);
     boost::optional<sal_Int32> oRotation;
+    bool bFlipX = false, bFlipY = false;
     if (!maTypeModel.maRotation.isEmpty())
         oRotation.reset(maTypeModel.maRotation.toInt32());
     if (!maTypeModel.maFlip.isEmpty())
@@ -504,11 +505,13 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
             aShapeRect.Width *= -1;
             if (oRotation)
                 oRotation.reset(360 - *oRotation);
+            bFlipX = true;
         }
         else if (maTypeModel.maFlip.equalsAscii("y"))
         {
             aShapeRect.Y += aShapeRect.Height;
             aShapeRect.Height *= -1;
+            bFlipY = true;
         }
     }
 
@@ -578,14 +581,31 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
     }
 
     PropertySet aPropertySet(xShape);
-    if (xShape.is() && oRotation)
+    if (xShape.is())
     {
-        // See DffPropertyReader::Fix16ToAngle(): in VML, positive rotation angles are clockwise, we have them as counter-clockwise.
-        // Additionally, VML type is 0..360, our is 0.36000.
-        aPropertySet.setAnyProperty(PROP_RotateAngle, makeAny(sal_Int32(NormAngle360((*oRotation) * -100))));
-        // If rotation is used, simple setPosition() is not enough.
-        aPropertySet.setAnyProperty(PROP_HoriOrientPosition, makeAny( aShapeRect.X ) );
-        aPropertySet.setAnyProperty(PROP_VertOrientPosition, makeAny( aShapeRect.Y ) );
+        if (oRotation)
+        {
+            // See DffPropertyReader::Fix16ToAngle(): in VML, positive rotation angles are clockwise, we have them as counter-clockwise.
+            // Additionally, VML type is 0..360, our is 0.36000.
+            aPropertySet.setAnyProperty(PROP_RotateAngle, makeAny(sal_Int32(NormAngle360((*oRotation) * -100))));
+            // If rotation is used, simple setPosition() is not enough.
+            aPropertySet.setAnyProperty(PROP_HoriOrientPosition, makeAny( aShapeRect.X ) );
+            aPropertySet.setAnyProperty(PROP_VertOrientPosition, makeAny( aShapeRect.Y ) );
+        }
+
+        // When flip has 'x' or 'y', the associated ShapeRect will be changed but direction change doesn't occur.
+        // It might occur internally in SdrObject of "sw" module, not here.
+        // The associated properties "PROP_MirroredX" and "PROP_MirroredY" have to be set here so that direction change will occur internally.
+        if (bFlipX || bFlipY)
+        {
+            if (bFlipX)
+                aPropertySet.setAnyProperty(PROP_MirroredX, makeAny( bFlipX ) );
+
+            if (bFlipY)
+                aPropertySet.setAnyProperty(PROP_MirroredY, makeAny( bFlipY ) );
+
+            aPropertySet.setAnyProperty(PROP_CustomShapeGeometry, makeAny( true ) );
+        }
     }
 
     lcl_SetAnchorType(aPropertySet, maTypeModel);

@@ -28,6 +28,7 @@
 #include <svx/svdotext.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <filter/msfilter/msdffimp.hxx>
+#include <filter/msfilter/escherex.hxx>
 
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
@@ -803,11 +804,12 @@ void VMLExport::AddLineDimensions( const Rectangle& rRectangle )
 
     m_pShapeStyle->append( "position:absolute" );
 
-    switch ( m_nShapeFlags & 0xC0 )
+    const sal_uInt32 nFlipHandV = SHAPEFLAG_FLIPH + SHAPEFLAG_FLIPV;
+    switch ( m_nShapeFlags & nFlipHandV )
     {
-        case 0x40: m_pShapeStyle->append( ";flip:y" ); break;
-        case 0x80: m_pShapeStyle->append( ";flip:x" ); break;
-        case 0xC0: m_pShapeStyle->append( ";flip:xy" ); break;
+        case SHAPEFLAG_FLIPH:   m_pShapeStyle->append( ";flip:x" );  break;
+        case SHAPEFLAG_FLIPV:   m_pShapeStyle->append( ";flip:y" );  break;
+        case (nFlipHandV):      m_pShapeStyle->append( ";flip:xy" ); break;
     }
 
     // the actual dimensions
@@ -861,6 +863,14 @@ void VMLExport::AddRectangleDimensions( OStringBuffer& rBuffer, const Rectangle&
             .append( ";top:" ).append( rRectangle.Top() )
             .append( ";width:" ).append( rRectangle.Right() - rRectangle.Left() )
             .append( ";height:" ).append( rRectangle.Bottom() - rRectangle.Top() );
+    }
+
+    const sal_uInt32 nFlipHandV = SHAPEFLAG_FLIPH + SHAPEFLAG_FLIPV;
+    switch ( m_nShapeFlags & nFlipHandV )
+    {
+        case SHAPEFLAG_FLIPH:   m_pShapeStyle->append( ";flip:x" );  break;
+        case SHAPEFLAG_FLIPV:   m_pShapeStyle->append( ";flip:y" );  break;
+        case (nFlipHandV):      m_pShapeStyle->append( ";flip:xy" ); break;
     }
 }
 

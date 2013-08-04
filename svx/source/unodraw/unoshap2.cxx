@@ -1903,13 +1903,18 @@ void SAL_CALL SvxCustomShape::setPropertyValue( const OUString& aPropertyName, c
 
     bool bCustomShapeGeometry = pObject && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CustomShapeGeometry" ) );
 
+    if ( pObject && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MirroredX" ) ) )
+        ((SdrObjCustomShape*)pObject)->SetMirroredX(true);
+    if ( pObject && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MirroredY" ) ) )
+        ((SdrObjCustomShape*)pObject)->SetMirroredY(true);
+
     sal_Bool bMirroredX = sal_False;
     sal_Bool bMirroredY = sal_False;
 
     if ( bCustomShapeGeometry )
     {
-        bMirroredX = ( ((SdrObjCustomShape*)pObject)->IsMirroredX() );
-        bMirroredY = ( ((SdrObjCustomShape*)pObject)->IsMirroredY() );
+        bMirroredX = ((SdrObjCustomShape*)pObject)->IsMirroredX();
+        bMirroredY = ((SdrObjCustomShape*)pObject)->IsMirroredY();
     }
 
     SvxShape::setPropertyValue( aPropertyName, aValue );
