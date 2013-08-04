@@ -589,42 +589,35 @@ IMPL_LINK_NOARG(SwLabFmtPage, SaveHdl)
     return 0;
 }
 
-SwSaveLabelDlg::SwSaveLabelDlg(SwLabFmtPage* pParent, SwLabRec& rRec) :
-    ModalDialog(pParent, SW_RES(DLG_SAVE_LABEL)),
-    aOptionsFL(this,SW_RES(FL_OPTIONS  )),
-    aMakeFT(this,   SW_RES(FT_MAKE     )),
-    aMakeCB(this,   SW_RES(CB_MAKE     )),
-    aTypeFT(this,   SW_RES(FT_TYPE     )),
-    aTypeED(this,   SW_RES(ED_TYPE     )),
-
-    aOKPB(this,     SW_RES(PB_OK     )),
-    aCancelPB(this, SW_RES(PB_CANCEL )),
-    aHelpPB(this,   SW_RES(PB_HELP      )),
-
-    bSuccess(false),
-    pLabPage(pParent),
-    rLabRec(rRec)
+SwSaveLabelDlg::SwSaveLabelDlg(SwLabFmtPage* pParent, SwLabRec& rRec)
+    : ModalDialog(pParent, "SaveLabelDialog",
+        "modules/swriter/ui/savelabeldialog.ui")
+    , bSuccess(false)
+    , pLabPage(pParent)
+    , rLabRec(rRec)
 {
-    FreeResource();
+    get(m_pMakeCB, "brand");
+    get(m_pTypeED, "type");
+    get(m_pOKPB, "ok");
 
-    aOKPB.SetClickHdl(LINK(this, SwSaveLabelDlg, OkHdl));
+    m_pOKPB->SetClickHdl(LINK(this, SwSaveLabelDlg, OkHdl));
     Link aLk(LINK(this, SwSaveLabelDlg, ModifyHdl));
-    aMakeCB.SetModifyHdl(aLk);
-    aTypeED.SetModifyHdl(aLk);
+    m_pMakeCB->SetModifyHdl(aLk);
+    m_pTypeED->SetModifyHdl(aLk);
 
     SwLabelConfig& rCfg = pLabPage->GetParentSwLabDlg()->GetLabelsConfig();
     const std::vector<OUString>& rMan = rCfg.GetManufacturers();
     for (sal_uInt16 i = 0; i < rMan.size(); i++)
     {
-        aMakeCB.InsertEntry(rMan[i]);
+        m_pMakeCB->InsertEntry(rMan[i]);
     }
 }
 
 IMPL_LINK_NOARG(SwSaveLabelDlg, OkHdl)
 {
     SwLabelConfig& rCfg = pLabPage->GetParentSwLabDlg()->GetLabelsConfig();
-    String sMake(aMakeCB.GetText());
-    String sType(aTypeED.GetText());
+    String sMake(m_pMakeCB->GetText());
+    String sType(m_pTypeED->GetText());
     if(rCfg.HasLabel(sMake, sType))
     {
         if ( rCfg.IsPredefinedLabel(sMake, sType) )
@@ -655,7 +648,7 @@ IMPL_LINK_NOARG(SwSaveLabelDlg, OkHdl)
 
 IMPL_LINK_NOARG(SwSaveLabelDlg, ModifyHdl)
 {
-    aOKPB.Enable(!aMakeCB.GetText().isEmpty() && !aTypeED.GetText().isEmpty());
+    m_pOKPB->Enable(!m_pMakeCB->GetText().isEmpty() && !m_pTypeED->GetText().isEmpty());
     return 0;
 }
 
@@ -663,8 +656,8 @@ bool SwSaveLabelDlg::GetLabel(SwLabItem& rItem)
 {
     if(bSuccess)
     {
-        rItem.aMake = aMakeCB.GetText();
-        rItem.aType = aTypeED.GetText();
+        rItem.aMake = m_pMakeCB->GetText();
+        rItem.aType = m_pTypeED->GetText();
         rItem.lHDist  = rLabRec.lHDist;
         rItem.lVDist  = rLabRec.lVDist;
         rItem.lWidth  = rLabRec.lWidth;

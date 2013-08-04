@@ -402,7 +402,6 @@
 
 #define HID_INSERT_INDEX_ENTRY_LEVEL_LB                         "SW_HID_INSERT_INDEX_ENTRY_LEVEL_LB"
 #define HID_BUSINESS_CARD_CONTENT                               "SW_HID_BUSINESS_CARD_CONTENT"
-#define HID_SAVE_LABEL_DLG                                      "SW_HID_SAVE_LABEL_DLG"
 #define HID_BUSINESS_FMT_PAGE                                   "SW_HID_BUSINESS_FMT_PAGE"
 #define HID_BUSINESS_FMT_PAGE_CONT                              "SW_HID_BUSINESS_FMT_PAGE_CONT"
 #define HID_BUSINESS_FMT_PAGE_SHEET                             "SW_HID_BUSINESS_FMT_PAGE_SHEET"

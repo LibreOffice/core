@@ -40,7 +40,6 @@
 #define DLG_MAILMERGE (RC_ENVELP_BEGIN + 8)
 
 #define DLG_SYNC_BTN  (RC_ENVELP_BEGIN + 9)
-#define DLG_SAVE_LABEL (RC_ENVELP_BEGIN + 10)
 
 // Bereiche -------------------------------------------------------------------
 

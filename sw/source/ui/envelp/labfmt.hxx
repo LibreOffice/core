@@ -139,15 +139,9 @@ public:
 
 class SwSaveLabelDlg : public ModalDialog
 {
-    FixedLine       aOptionsFL;
-    FixedText       aMakeFT;
-    ComboBox        aMakeCB;
-    FixedText       aTypeFT;
-    Edit            aTypeED;
-
-    OKButton        aOKPB;
-    CancelButton    aCancelPB;
-    HelpButton      aHelpPB;
+    ComboBox*   m_pMakeCB;
+    Edit*       m_pTypeED;
+    OKButton*   m_pOKPB;
 
     bool        bSuccess;
     SwLabFmtPage*   pLabPage;
@@ -159,11 +153,11 @@ class SwSaveLabelDlg : public ModalDialog
 public:
     SwSaveLabelDlg(SwLabFmtPage* pParent, SwLabRec& rRec);
 
-    void    SetLabel(const OUString& rMake, const OUString& rType)
-        {
-            aMakeCB.SetText(String(rMake));
-            aTypeED.SetText(String(rType));
-        }
+    void SetLabel(const OUString& rMake, const OUString& rType)
+    {
+        m_pMakeCB->SetText(rMake);
+        m_pTypeED->SetText(rType);
+    }
     bool GetLabel(SwLabItem& rItem);
 };
 #endif

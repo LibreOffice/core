@@ -50,15 +50,6 @@
 #define FI_MAKE      24
 #define FI_TYPE      25
 
-#define FL_OPTIONS      1
-#define FT_MAKE         2
-#define CB_MAKE         3
-#define FT_TYPE         4
-#define ED_TYPE         5
-#define PB_OK           6
-#define PB_CANCEL       7
-#define PB_HELP         8
-
 // global resources ********************************************************
 
 #define STR_HDIST    (RC_LABFMT_BEGIN +  1)
