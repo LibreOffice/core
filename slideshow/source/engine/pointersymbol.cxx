@@ -119,11 +119,15 @@ basegfx::B2DPoint PointerSymbol::calcSpritePos(
     const uno::Reference<rendering::XBitmap> xBitmap( rView->getCanvas()->getUNOCanvas(),
                                                       uno::UNO_QUERY_THROW );
     const geometry::IntegerSize2D realSize( xBitmap->getSize() );
-    return basegfx::B2DPoint(
+
+    basegfx::B2DPoint newPos(
         // pos.X pos.Y are given in 0..1, beginning from the upper left corner of the currentSlide.
-        std::min<sal_Int32>( realSize.Width * pos.X, LEFT_BORDER_SPACE ),
-        std::max<sal_Int32>( 0, realSize.Height * (1-pos.Y) - mxBitmap->getSize().Height
-                                                - LOWER_BORDER_SPACE ) );
+        realSize.Width * pos.X,
+        realSize.Height * pos.Y);
+
+    // std::cerr << "calcSpritePos : (" << newPos.getX() << ","<<newPos.getY() << ")" << std::endl;
+
+    return newPos;
 }
 
 void PointerSymbol::viewAdded( const UnoViewSharedPtr& rView )
@@ -215,9 +219,11 @@ void PointerSymbol::viewsChanged(const ::com::sun::star::geometry::RealPoint2D p
     ViewsVecT::const_iterator const aEnd ( maViews.end() );
     while( aIter != aEnd )
     {
-        if( aIter->second )
+        if( aIter->second ) {
             aIter->second->movePixel(
                 calcSpritePos( aIter->first, pos ));
+            mrScreenUpdater.requestImmediateUpdate();
+        }
         ++aIter;
     }
 }

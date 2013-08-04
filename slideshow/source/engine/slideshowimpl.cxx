@@ -1809,7 +1809,7 @@ sal_Bool SlideShowImpl::setProperty( beans::PropertyValue const& rProperty )
         if (! (rProperty.Value >>= pos))
             return false;
 
-        std::cerr<<"Received pos at :(" << pos.X << ","<<pos.Y << ")" << std::endl;
+        // std::cerr<<"Received pos at :(" << pos.X << ","<<pos.Y << ")" << std::endl;
         mpPointerSymbol->viewsChanged(pos);
     }
 
