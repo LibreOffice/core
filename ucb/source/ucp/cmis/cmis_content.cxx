@@ -730,7 +730,10 @@ namespace cmis
                 {
                     xRow->appendString( rProp, "" );
                 }
-
+                else if ( rProp.Name == "BaseURI" )
+                {
+                    xRow->appendString( rProp, m_aURL.getBindingUrl( ) );
+                }
                 else if ( rProp.Name == "CmisProperties" )
                 {
                     try
