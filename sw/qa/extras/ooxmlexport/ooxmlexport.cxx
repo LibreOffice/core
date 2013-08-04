@@ -109,6 +109,7 @@ public:
     void testFdo67013();
     void testParaShadow();
     void testTableFloatingMargins();
+    void testFdo67737();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -200,6 +201,7 @@ void Test::run()
         {"fdo67013.docx", &Test::testFdo67013},
         {"para-shadow.docx", &Test::testParaShadow},
         {"table-floating-margins.docx", &Test::testTableFloatingMargins},
+        {"fdo67737.docx", &Test::testFdo67737},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -1174,6 +1176,28 @@ void Test::testTableFloatingMargins()
         xmlDocPtr pXmlDoc = parseExport();
         assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:pict/v:rect/v:textbox/w:txbxContent/w:tbl/w:tr[1]/w:tc[1]/w:p/w:pPr/w:spacing", "after", "0");
     }
+}
+
+void Test::testFdo67737()
+{
+    // The problem was that imported shapes did not import and render the 'flip:x' and 'flip:y' attributes
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+    uno::Reference<drawing::XShape> xArrow;
+    xDrawPage->getByIndex(0) >>= xArrow;
+    uno::Sequence<beans::PropertyValue> aProps = getProperty< uno::Sequence<beans::PropertyValue> >(xArrow, "CustomShapeGeometry");
+    for (int i = 0; i < aProps.getLength(); ++i)
+    {
+        const beans::PropertyValue& rProp = aProps[i];
+        if (rProp.Name == "MirroredY")
+        {
+            CPPUNIT_ASSERT_EQUAL( true, bool(rProp.Value.get<sal_Bool>()) );
+            return;
+        }
+    }
+
+    // Shouldn't reach here
+    CPPUNIT_FAIL("Did not find MirroredY=true property");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
