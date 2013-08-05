@@ -28,7 +28,7 @@
 
 namespace psp
 {
-    VCL_DLLPUBLIC String GetCommandLineToken( int, const String& );
+    VCL_DLLPUBLIC OUString GetCommandLineToken( int, const OUString& );
     VCL_DLLPUBLIC OString GetCommandLineToken(int, const OString&);
     // gets one token of a unix command line style string
     // doublequote, singlequote and singleleftquote protect their respective
@@ -37,7 +37,7 @@ namespace psp
     VCL_DLLPUBLIC int GetCommandLineTokenCount(const OUString&);
     // returns number of tokens (zero if empty or whitespace only)
 
-    VCL_DLLPUBLIC String WhitespaceToSpace( const String&, bool bProtect = true );
+    VCL_DLLPUBLIC OUString WhitespaceToSpace( const OUString&, bool bProtect = true );
     VCL_DLLPUBLIC OString WhitespaceToSpace(const OString&, bool bProtect = true);
     // returns a string with multiple adjacent occurrences of whitespace
     // converted to a single space. if bProtect is sal_True (nonzero), then
@@ -46,7 +46,7 @@ namespace psp
 
 
     // parses the first double in the string; decimal is '.' only
-    VCL_DLLPUBLIC inline double StringToDouble( const String& rStr )
+    VCL_DLLPUBLIC inline double StringToDouble( const OUString& rStr )
     {
         return rtl::math::stringToDouble(rStr, sal_Unicode('.'), sal_Unicode(0));
     }

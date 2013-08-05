@@ -111,15 +111,15 @@ inline void CopyUntil( sal_Unicode*& pTo, const sal_Unicode*& pFrom, sal_Unicode
         pFrom++;
 }
 
-String GetCommandLineToken( int nToken, const String& rLine )
+OUString GetCommandLineToken( int nToken, const OUString& rLine )
 {
-    int nLen = rLine.Len();
+    sal_Int32 nLen = rLine.getLength();
     if( ! nLen )
-        return String();
+        return OUString();
 
     int nActualToken = 0;
     sal_Unicode* pBuffer = (sal_Unicode*)alloca( sizeof(sal_Unicode)*( nLen + 1 ) );
-    const sal_Unicode* pRun = rLine.GetBuffer();
+    const sal_Unicode* pRun = rLine.getStr();
     sal_Unicode* pLeap = NULL;
 
     while( *pRun && nActualToken <= nToken )
@@ -261,14 +261,14 @@ int GetCommandLineTokenCount(const OUString& rLine)
     return nTokenCount;
 }
 
-String WhitespaceToSpace( const String& rLine, bool bProtect )
+OUString WhitespaceToSpace( const OUString& rLine, bool bProtect )
 {
-    int nLen = rLine.Len();
+    sal_Int32 nLen = rLine.getLength();
     if( ! nLen )
-        return String();
+        return OUString();
 
     sal_Unicode *pBuffer = (sal_Unicode*)alloca( sizeof(sal_Unicode)*(nLen + 1) );
-    const sal_Unicode *pRun = rLine.GetBuffer();
+    const sal_Unicode *pRun = rLine.getStr();
     sal_Unicode *pLeap = pBuffer;
 
     while( *pRun )
