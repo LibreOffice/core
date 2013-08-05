@@ -1117,7 +1117,6 @@ Rectangle SdPage::GetLayoutRect() const
 const int MAX_PRESOBJS = 7; // maximum number of presentation objects per layout
 const int VERTICAL = 0x8000;
 const int PRESOBJPROP = 4;
-std::vector<Reference<XNode>> layoutinfo; //temporarily at global scope
 
 struct LayoutDescriptor
 {
@@ -1244,7 +1243,6 @@ static void CalcAutoLayoutRectangles( SdPage& rPage, int nLayout, Rectangle* rRe
     rtl::OUString sLayoutAttName;
     rtl::OUString sPresObjKindAttName;
     double propvalue[4];
-    std::vector<Reference<XNode>> malayoutinfo;
 
     if( rPage.GetPageKind() != PK_HANDOUT )
     {
@@ -1285,10 +1283,10 @@ static void CalcAutoLayoutRectangles( SdPage& rPage, int nLayout, Rectangle* rRe
     aTempPnt = aLayoutPos;
     sal_Bool    bRightToLeft = ( rPage.GetModel() && static_cast< SdDrawDocument* >( rPage.GetModel() )->GetDefaultWritingMode() == ::com::sun::star::text::WritingMode_RL_TB );
 
-    malayoutinfo = static_cast< SdDrawDocument* >( rPage.GetModel() )->GetLayoutVector(); //getting vector from "SdDrawDocument"
-    for(size_t y=0; y < malayoutinfo.size(); y++) //loop through vector of Xnodes
+    std::vector<Reference<XNode>>  &layoutinfo = static_cast< SdDrawDocument* >( rPage.GetModel() )->GetLayoutVector(); //getting vector from "SdDrawDocument" ,not sure about the correct mechanism
+    for(size_t y=0; y < layoutinfo.size(); y++) //loop through vector of Xnodes
     {
-        Reference<XNode> layoutnode = malayoutinfo[y];      //get i'th layout element
+        Reference<XNode> layoutnode = layoutinfo[y];      //get i'th layout element
         Reference<XNamedNodeMap> layoutattrlist =layoutnode->getAttributes();
         Reference<XNode> layoutattr = layoutattrlist->getNamedItem("type");
         sLayoutAttName=layoutattr->getNodeValue();              //get the attribute value of layout(i.e it's type)
