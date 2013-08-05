@@ -729,17 +729,14 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTableOpts,
             for( SwTableBoxes::size_type i = 0; i < nCols; ++i )
             {
                 SwTableBox* pBox = rBoxes[ i ];
-                bool bChgSz = false;
 
                 sal_uInt8 nId = (i < nCols - 1 ? 0 : 1) + (n ? 2 : 0 );
                 if( bUseBoxFormat )
                     ::lcl_SetDfltBoxAttr( *pBox, *aBoxFormatArr1, nId );
                 else
                 {
-                    bChgSz = 0 == (*aBoxFormatArr2)[ nId ];
                     pBoxF = new SwTableBoxFormat ( *::lcl_CreateDfltBoxFormat( *this, *aBoxFormatArr2, USHRT_MAX, nId ) );
-                    if( bChgSz )
-                        pBoxF->SetFormatAttr( pBox->GetFrameFormat()->GetFrmSize() );
+                    pBoxF->SetFormatAttr( pBox->GetFrameFormat()->GetFrmSize() );
                     pBox->ChgFrameFormat( pBoxF );
                 }
             }
