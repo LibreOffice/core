@@ -67,7 +67,7 @@ struct hwpeq {
   unsigned char flag;       // case sensitive?
 };
 
-static hwpeq eq_tbl[] = {
+static const hwpeq eq_tbl[] = {
   { "!=",       "\\equiv ", 0,  0   },
   { "#",        "\\\\",     0,  0   },
   { "+-",       "\\pm ",    0,  0   },
@@ -380,11 +380,11 @@ static hwpeq eq_tbl[] = {
   { "zeta",     NULL,       0,  EQ_CASE }
 };
 
-static hwpeq *lookup_eqn(char *str)
+static const hwpeq *lookup_eqn(char *str)
 {
-  static int    eqCount = SAL_N_ELEMENTS(eq_tbl);
+  static const int eqCount = SAL_N_ELEMENTS(eq_tbl);
   int       m, k, l = 0, r = eqCount;
-  hwpeq     *result = 0;
+  const hwpeq *result = 0;
 
   while( l < r ) {
     m = (l + r) / 2;
@@ -568,7 +568,7 @@ static int eq_word(MzString& outs, istream *strm, int status)
   MzString  token, white, state;
   int       result;
   char      keyword[256];
-  hwpeq     *eq;
+  const hwpeq *eq;
 
   next_token(white, token, strm);
   if (token.length() <= 0)
@@ -665,7 +665,7 @@ static char eq2ltxconv(MzString& sstr, istream *strm, const char *sentinel)
   MzString  white, token;
   char      key[256];
   int       ch, result;
-  hwpeq     *eq = 0;
+  const hwpeq *eq = 0;
 
   while( 0 != (result = next_token(white, token, strm)) ) {
     if( sentinel && (result == 1) && strchr(sentinel, token[0]) )
