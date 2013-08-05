@@ -627,6 +627,21 @@ void UnoControlModel::write( const ::com::sun::star::uno::Reference< ::com::sun:
                 OutStream->writeBoolean( aFD.WordLineMode );
                 OutStream->writeShort( aFD.Type );
             }
+            else if ( rType == cppu::UnoType<css::util::Date>::get() )
+            {
+                css::util::Date d;
+                rValue >>= d;
+                OutStream->writeLong(d.Day + 100 * d.Month + 10000 * d.Year);
+                    // YYYYMMDD
+            }
+            else if ( rType == cppu::UnoType<css::util::Time>::get() )
+            {
+                css::util::Time t;
+                rValue >>= t;
+                OutStream->writeLong(
+                    t.NanoSeconds / 1000000 + 100 * t.Seconds
+                    + 10000 * t.Minutes + 1000000 * t.Hours); // HHMMSShh
+            }
             else if ( rType == ::getCppuType((const ::com::sun::star::uno::Sequence< OUString>*)0 ) )
             {
                 ::com::sun::star::uno::Sequence< OUString> aSeq;
@@ -828,6 +843,19 @@ void UnoControlModel::read( const ::com::sun::star::uno::Reference< ::com::sun::
                     aFD.WordLineMode = InStream->readBoolean();
                     aFD.Type = InStream->readShort();
                     aValue <<= aFD;
+                }
+                else if ( *pType == cppu::UnoType<css::util::Date>::get() )
+                {
+                    sal_Int32 n = InStream->readLong(); // YYYYMMDD
+                    aValue <<= css::util::Date(
+                        n % 100, (n / 100) % 100, n / 10000);
+                }
+                else if ( *pType == cppu::UnoType<css::util::Time>::get() )
+                {
+                    sal_Int32 n = InStream->readLong(); // HHMMSShh
+                    aValue <<= css::util::Time(
+                        (n % 100) * 1000000, (n / 100) % 100, (n / 10000) % 100,
+                        n / 1000000, false);
                 }
                 else if ( *pType == ::getCppuType((const ::com::sun::star::uno::Sequence< OUString>*)0 ) )
                 {
