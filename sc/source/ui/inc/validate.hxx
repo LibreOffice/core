@@ -185,11 +185,11 @@ public:
 private:
     void                        Init();
 
-    String                      GetFirstFormula() const;
-    String                      GetSecondFormula() const;
+    OUString                      GetFirstFormula() const;
+    OUString                      GetSecondFormula() const;
 
     void                        SetFirstFormula( const OUString& rFmlaStr );
-    void                        SetSecondFormula( const String& rFmlaStr );
+    void                        SetSecondFormula( const OUString& rFmlaStr );
 
                                 DECL_LINK(SelectHdl, void *);
                                 DECL_LINK(CheckHdl, void *);
