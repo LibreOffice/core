@@ -637,6 +637,8 @@ void ScXMLTableRowCellContext::PushParagraphEnd()
     {
         if (!maFirstParagraph.isEmpty())
         {
+            // Flush the cached first paragraph first.
+            mpEditEngine->Clear();
             mpEditEngine->SetText(maFirstParagraph);
             maFirstParagraph = OUString();
         }
@@ -644,6 +646,7 @@ void ScXMLTableRowCellContext::PushParagraphEnd()
     }
     else if (mbHasFormatRuns)
     {
+        mpEditEngine->Clear();
         mpEditEngine->SetText(maParagraph.makeStringAndClear());
         mbEditEngineHasText = true;
     }
