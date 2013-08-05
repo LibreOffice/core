@@ -82,8 +82,8 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
         aSet.Put(SvxSizeItem(SID_ATTR_PAGE_SIZE, Size(nWidth, nWidth)));
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
         OSL_ENSURE(pFact, "Dialogdiet fail!");
-        AbstractInsertSectionTabDialog* aTabDlg = pFact->CreateInsertSectionTabDialog( DLG_INSERT_SECTION,
-                                                        &GetView().GetViewFrame()->GetWindow(), aSet , rSh);
+        AbstractInsertSectionTabDialog* aTabDlg = pFact->CreateInsertSectionTabDialog(
+            &GetView().GetViewFrame()->GetWindow(), aSet , rSh);
         OSL_ENSURE(aTabDlg, "Dialogdiet fail!");
         aTabDlg->Execute();
         rReq.Ignore();
@@ -195,8 +195,8 @@ IMPL_STATIC_LINK( SwWrtShell, InsertRegionDialog, SwSectionData*, pSect )
         aSet.Put(SvxSizeItem(SID_ATTR_PAGE_SIZE, Size(nWidth, nWidth)));
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
         OSL_ENSURE(pFact, "Dialogdiet fail!");
-        AbstractInsertSectionTabDialog* aTabDlg = pFact->CreateInsertSectionTabDialog( DLG_INSERT_SECTION,
-                                                        &pThis->GetView().GetViewFrame()->GetWindow(),aSet , *pThis);
+        AbstractInsertSectionTabDialog* aTabDlg = pFact->CreateInsertSectionTabDialog(
+            &pThis->GetView().GetViewFrame()->GetWindow(),aSet , *pThis);
         OSL_ENSURE(aTabDlg, "Dialogdiet fail!");
         aTabDlg->SetSectionData(*xSectionData);
         aTabDlg->Execute();

@@ -116,56 +116,6 @@ InfoBox REG_WRONG_PASSWD_REPEAT
     Message [ en-US ] = "The password has not been set." ;
 };
 
-TabDialog DLG_INSERT_SECTION
-{
-    HelpId = HID_INSERT_SECTION_DLG;
-    Text [ en-US ] = "Insert Section" ;
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    Moveable = TRUE ;
-    TabControl 1
-    {
-        OutputSize = TRUE ;
-        PageList =
-        {
-            PageItem
-            {
-                Identifier = TP_INSERT_SECTION;
-                PageResID = TP_INSERT_SECTION;
-                Text [ en-US ] = "Section";
-            };
-            PageItem
-            {
-                Identifier = TP_COLUMN ;
-                PageResID = TP_COLUMN ;
-                Text [ en-US ] = "Columns" ;
-            };
-            PageItem
-            {
-                Identifier = TP_SECTION_INDENTS;
-                PageResID = TP_SECTION_INDENTS;
-                Text [ en-US ] = "Indents" ;
-            };
-            PageItem
-            {
-                Identifier = TP_BACKGROUND ;
-                PageResID = TP_BACKGROUND ;
-                Text [ en-US ] = "Background" ;
-            };
-            PageItem
-            {
-                Identifier = TP_SECTION_FTNENDNOTES ;
-                PageResID = TP_SECTION_FTNENDNOTES ;
-                Text [ en-US ] = "Footnotes/Endnotes";
-            };
-        };
-    };
-    String ST_INSERT
-    {
-        Text [ en-US ] = "Insert" ;
-    };
-};
-
 TabDialog DLG_SECTION_PROPERTIES
 {
     HelpId = HID_SECTION_PROPERTIES_DLG;

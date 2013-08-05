@@ -1155,21 +1155,11 @@ AbstractEditRegionDlg * SwAbstractDialogFactory_Impl::CreateEditRegionDlg(Window
     return new AbstractEditRegionDlg_Impl( pDlg );
 }
 
-AbstractInsertSectionTabDialog * SwAbstractDialogFactory_Impl::CreateInsertSectionTabDialog( int nResId,
+AbstractInsertSectionTabDialog * SwAbstractDialogFactory_Impl::CreateInsertSectionTabDialog(
                                                     Window* pParent, const SfxItemSet& rSet, SwWrtShell& rSh) //add for SwInsertSectionTabDialog
 {
-    SwInsertSectionTabDialog* pDlg=NULL;
-    switch ( nResId )
-    {
-        case DLG_INSERT_SECTION :
-            pDlg = new SwInsertSectionTabDialog( pParent, rSet, rSh );
-            break;
-        default:
-            break;
-    }
-    if ( pDlg )
-        return new AbstractInsertSectionTabDialog_Impl( pDlg );
-    return 0;
+    SwInsertSectionTabDialog* pDlg = new SwInsertSectionTabDialog(pParent, rSet, rSh);
+    return new AbstractInsertSectionTabDialog_Impl(pDlg);
 }
 
 AbstractMarkFloatDlg * SwAbstractDialogFactory_Impl::CreateIndexMarkFloatDlg(

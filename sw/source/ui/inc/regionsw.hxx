@@ -267,6 +267,12 @@ class SwInsertSectionTabDialog : public SfxTabDialog
     SwWrtShell&     rWrtSh;
     ::std::auto_ptr<SwSectionData> m_pSectionData;
 
+    sal_uInt16 m_nSectionPageId;
+    sal_uInt16 m_nColumnPageId;
+    sal_uInt16 m_nBackPageId;
+    sal_uInt16 m_nNotePageId;
+    sal_uInt16 m_nIndentPage;
+
 protected:
     virtual void    PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
     virtual short   Ok();
