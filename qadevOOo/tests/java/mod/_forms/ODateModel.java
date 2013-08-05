@@ -140,7 +140,7 @@ public class ODateModel extends GenericModelTest {
 
         NamedValue Date = new NamedValue();
         Date.Name = "Date";
-        Date.Value = new Integer(DBTools.TST_DATE);
+        Date.Value = new com.sun.star.util.Date();
         super.m_propertiesToSet.add(Date);
 
         super.m_LCShape_Type = "FixedText";

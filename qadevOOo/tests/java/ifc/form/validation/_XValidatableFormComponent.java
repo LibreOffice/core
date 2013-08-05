@@ -110,11 +110,15 @@ public class _XValidatableFormComponent extends MultiMethodTest
 
             if (
                 testPropsNames[i].equals("Value")
-                    || testPropsNames[i].equals("Time")
                     || testPropsNames[i].equals("EffectiveValue")
             )
             {
                 oldValue = new Integer(10);
+            }
+            else if (testPropsNames[i].equals("Time"))
+            {
+                oldValue = new com.sun.star.util.Time(
+                    10, (short) 10, (short) 10, (short) 10, false);
             }
 
             Object newValue = ValueChanger.changePValue(oldValue);
