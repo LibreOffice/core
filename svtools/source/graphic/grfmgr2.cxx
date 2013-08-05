@@ -28,7 +28,7 @@
 #include <vcl/alpha.hxx>
 #include <vcl/virdev.hxx>
 #include "grfcache.hxx"
-#include <svtools/grfmgr.hxx>
+#include <grfmgr.hxx>
 
 // -----------
 // - defines -

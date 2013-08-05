@@ -20,7 +20,7 @@
 
 
 #include "unoiface.hxx"
-#include <svtools/textwindowpeer.hxx>
+#include <textwindowpeer.hxx>
 
 
 

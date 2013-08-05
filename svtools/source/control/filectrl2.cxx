@@ -19,7 +19,7 @@
 
 
 // this file contains code from filectrl.cxx which needs to be compiled with enabled exception hanling
-#include <svtools/filectrl.hxx>
+#include <filectrl.hxx>
 #include <com/sun/star/ui/dialogs/FilePicker.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <comphelper/processfactory.hxx>

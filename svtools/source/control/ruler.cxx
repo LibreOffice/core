@@ -23,7 +23,7 @@
 #include <tools/poly.hxx>
 #include <vcl/i18nhelp.hxx>
 
-#include <svtools/ruler.hxx>
+#include <ruler.hxx>
 
 // =======================================================================
 

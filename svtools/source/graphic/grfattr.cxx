@@ -19,7 +19,7 @@
 
 
 #include <tools/vcompat.hxx>
-#include <svtools/grfmgr.hxx>
+#include <grfmgr.hxx>
 
 // ---------------
 // - GraphicAttr -
