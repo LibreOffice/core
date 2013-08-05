@@ -954,21 +954,21 @@ void TextView::Command( const CommandEvent& rCEvt )
                     sal_Int32 nNewIMETextLen = pData->GetText().getLength();
 
                     if ( ( nOldIMETextLen > nNewIMETextLen ) &&
-                         ( nNewIMETextLen < mpImpl->mpTextEngine->mpIMEInfos->aOldTextAfterStartPos.Len() ) )
+                         ( nNewIMETextLen < mpImpl->mpTextEngine->mpIMEInfos->aOldTextAfterStartPos.getLength() ) )
                     {
                         // restore old characters
                         sal_Int32 nRestore = nOldIMETextLen - nNewIMETextLen;
                         TextPaM aPaM( mpImpl->mpTextEngine->mpIMEInfos->aPos );
                         aPaM.GetIndex() = aPaM.GetIndex() + nNewIMETextLen;
-                        mpImpl->mpTextEngine->ImpInsertText( aPaM, mpImpl->mpTextEngine->mpIMEInfos->aOldTextAfterStartPos.Copy( nNewIMETextLen, nRestore ) );
+                        mpImpl->mpTextEngine->ImpInsertText( aPaM, mpImpl->mpTextEngine->mpIMEInfos->aOldTextAfterStartPos.copy( nNewIMETextLen, nRestore ) );
                     }
                     else if ( ( nOldIMETextLen < nNewIMETextLen ) &&
-                              ( nOldIMETextLen < mpImpl->mpTextEngine->mpIMEInfos->aOldTextAfterStartPos.Len() ) )
+                              ( nOldIMETextLen < mpImpl->mpTextEngine->mpIMEInfos->aOldTextAfterStartPos.getLength() ) )
                     {
                         // overwrite
                         sal_uInt16 nOverwrite = nNewIMETextLen - nOldIMETextLen;
-                        if ( ( nOldIMETextLen + nOverwrite ) > mpImpl->mpTextEngine->mpIMEInfos->aOldTextAfterStartPos.Len() )
-                            nOverwrite = mpImpl->mpTextEngine->mpIMEInfos->aOldTextAfterStartPos.Len() - nOldIMETextLen;
+                        if ( ( nOldIMETextLen + nOverwrite ) > mpImpl->mpTextEngine->mpIMEInfos->aOldTextAfterStartPos.getLength() )
+                            nOverwrite = mpImpl->mpTextEngine->mpIMEInfos->aOldTextAfterStartPos.getLength() - nOldIMETextLen;
                         DBG_ASSERT( nOverwrite && (nOverwrite < 0xFF00), "IME Overwrite?!" );
                         TextPaM aPaM( mpImpl->mpTextEngine->mpIMEInfos->aPos );
                         aPaM.GetIndex() = aPaM.GetIndex() + nNewIMETextLen;

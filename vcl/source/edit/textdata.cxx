@@ -285,7 +285,7 @@ TextHint::TextHint( sal_uLong Id, sal_uLong nValue ) : SfxSimpleHint( Id )
     mnValue = nValue;
 }
 
-TEIMEInfos::TEIMEInfos( const TextPaM& rPos, const String& rOldTextAfterStartPos )
+TEIMEInfos::TEIMEInfos( const TextPaM& rPos, const OUString& rOldTextAfterStartPos )
 : aOldTextAfterStartPos( rOldTextAfterStartPos )
 {
     aPos = rPos;

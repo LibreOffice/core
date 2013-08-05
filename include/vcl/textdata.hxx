@@ -138,14 +138,14 @@ public:
 
 struct TEIMEInfos
 {
-    String  aOldTextAfterStartPos;
+    OUString    aOldTextAfterStartPos;
     sal_uInt16* pAttribs;
     TextPaM aPos;
     sal_uInt16  nLen;
     sal_Bool    bCursor;
     sal_Bool    bWasCursorOverwrite;
 
-            TEIMEInfos( const TextPaM& rPos, const String& rOldTextAfterStartPos );
+            TEIMEInfos( const TextPaM& rPos, const OUString& rOldTextAfterStartPos );
             ~TEIMEInfos();
 
     void    CopyAttribs( const sal_uInt16* pA, sal_uInt16 nL );
@@ -160,8 +160,8 @@ struct TEIMEInfos
 template <class T> class ToolsList : public ::std::vector< T >
 {
 public:
-    sal_uLong           Count() const { return static_cast<sal_uLong>(::std::vector< T >::size()); }
-    sal_uLong           GetPos( T pObject ) const { return ( ::std::find( this->begin(), this->end(), pObject ) ) - this->begin(); }
+    sal_uLong       Count() const { return static_cast<sal_uLong>(::std::vector< T >::size()); }
+    sal_uLong       GetPos( T pObject ) const { return ( ::std::find( this->begin(), this->end(), pObject ) ) - this->begin(); }
     T               GetObject( sal_uLong nIndex ) const { return (*this)[nIndex]; }
     void            Insert( T pObject, sal_uLong nPos ) { ::std::vector< T >::insert( this->begin()+nPos, pObject ); }
     void            Remove( sal_uLong nPos ) { ::std::vector< T >::erase( this->begin()+nPos ); }
