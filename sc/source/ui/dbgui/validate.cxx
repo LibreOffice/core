@@ -258,7 +258,7 @@ ScConditionMode lclGetCondModeFromPos( sal_uInt16 nLbPos )
 void lclGetFormulaFromStringList( OUString& rFmlaStr, const OUString& rStringList, sal_Unicode cFmlaSep )
 {
     rFmlaStr = "";
-    xub_StrLen nTokenCnt = comphelper::string::getTokenCount(rStringList, '\n');
+    sal_Int32 nTokenCnt = comphelper::string::getTokenCount(rStringList, '\n');
     for( sal_Int32 nToken = 0, nStringIx = 0; nToken < (sal_Int32) nTokenCnt; ++nToken )
     {
         OUString aToken( rStringList.getToken( 0, '\n', nStringIx ) );
@@ -333,9 +333,9 @@ ScTPValidationValue::ScTPValidationValue( Window* pParent, const SfxItemSet& rAr
     FreeResource();
 
     // list separator in formulas
-    String aListSep = ::ScCompiler::GetNativeSymbol( ocSep );
-    OSL_ENSURE( aListSep.Len() == 1, "ScTPValidationValue::ScTPValidationValue - list separator error" );
-    mcFmlaSep = aListSep.Len() ? aListSep.GetChar( 0 ) : ';';
+    OUString aListSep = ::ScCompiler::GetNativeSymbol( ocSep );
+    OSL_ENSURE( aListSep.getLength() == 1, "ScTPValidationValue::ScTPValidationValue - list separator error" );
+    mcFmlaSep = aListSep.getLength() ? aListSep[0] : ';';
     m_btnRef.Hide(); // cell range picker
 }
 
@@ -402,12 +402,12 @@ void ScTPValidationValue::Reset( const SfxItemSet& rArgSet )
     maCbSort.Check( nListType == ValidListType::SORTEDASCENDING );
 
     // *** formulas ***
-    String aFmlaStr;
+    OUString aFmlaStr;
     if ( rArgSet.GetItemState( FID_VALID_VALUE1, sal_True, &pItem ) == SFX_ITEM_SET )
         aFmlaStr = static_cast< const SfxStringItem* >( pItem )->GetValue();
     SetFirstFormula( aFmlaStr );
 
-    aFmlaStr.Erase();
+    aFmlaStr= "";
     if ( rArgSet.GetItemState( FID_VALID_VALUE2, sal_True, &pItem ) == SFX_ITEM_SET )
         aFmlaStr = static_cast< const SfxStringItem* >( pItem )->GetValue();
     SetSecondFormula( aFmlaStr );
@@ -433,7 +433,7 @@ sal_Bool ScTPValidationValue::FillItemSet( SfxItemSet& rArgSet )
     return sal_True;
 }
 
-String ScTPValidationValue::GetFirstFormula() const
+OUString ScTPValidationValue::GetFirstFormula() const
 {
     OUString aFmlaStr;
     if( maLbAllow.GetSelectEntryPos() == SC_VALIDDLG_ALLOW_LIST )
@@ -443,7 +443,7 @@ String ScTPValidationValue::GetFirstFormula() const
     return aFmlaStr;
 }
 
-String ScTPValidationValue::GetSecondFormula() const
+OUString ScTPValidationValue::GetSecondFormula() const
 {
     return maEdMax.GetText();
 }
@@ -467,7 +467,7 @@ void ScTPValidationValue::SetFirstFormula( const OUString& rFmlaStr )
     }
 }
 
-void ScTPValidationValue::SetSecondFormula( const String& rFmlaStr )
+void ScTPValidationValue::SetSecondFormula( const OUString& rFmlaStr )
 {
     maEdMax.SetText( rFmlaStr );
 }
