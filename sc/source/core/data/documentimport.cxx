@@ -252,23 +252,33 @@ namespace {
 
 class CellTextAttrInitializer
 {
-    sc::CellTextAttrStoreType maAttrs;
-    sc::CellTextAttrStoreType::iterator miPos;
-    sal_uInt16 mnScriptNumeric;
+    struct Impl
+    {
+        sc::CellTextAttrStoreType maAttrs;
+        sc::CellTextAttrStoreType::iterator miPos;
+        sal_uInt16 mnScriptNumeric;
+
+        Impl(const sal_uInt32 nMaxRowCount, const sal_uInt16 nScriptNumeric)
+            : maAttrs(nMaxRowCount), miPos(maAttrs.begin()), mnScriptNumeric(nScriptNumeric)
+        {}
+    };
+
+    boost::shared_ptr<Impl> mpImpl;
+
 public:
-    CellTextAttrInitializer(sal_uInt16 nScriptNumeric) : maAttrs(MAXROWCOUNT), miPos(maAttrs.begin()), mnScriptNumeric(nScriptNumeric) {}
+    CellTextAttrInitializer(sal_uInt16 nScriptNumeric) : mpImpl(new Impl(MAXROWCOUNT, nScriptNumeric)) {}
 
     void operator() (const ColEntry& rEntry)
     {
         sc::CellTextAttr aDefault;
         if (rEntry.pCell->GetCellType() == CELLTYPE_VALUE)
-            aDefault.mnScriptType = mnScriptNumeric;
-        miPos = maAttrs.set(miPos, rEntry.nRow, aDefault);
+            aDefault.mnScriptType = mpImpl->mnScriptNumeric;
+        mpImpl->miPos = mpImpl->maAttrs.set(mpImpl->miPos, rEntry.nRow, aDefault);
     }
 
     void swap(sc::CellTextAttrStoreType& rAttrs)
     {
-        maAttrs.swap(rAttrs);
+        mpImpl->maAttrs.swap(rAttrs);
     }
 };
 
