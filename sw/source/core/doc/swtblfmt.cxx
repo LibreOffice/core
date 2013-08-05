@@ -232,9 +232,9 @@ sal_uInt16 SwTableFormat::GetRepeatHeading() const
     return 0;
 }
 
-void SwTableFormat::RestoreTableProperties( SwTableFormat* pSrcFormat, SwTable &table )
+void SwTableFormat::RestoreTableProperties( SwTableFormat* pSrcFormat, SwTable &rTable )
 {
-    SwTableFormat *pHardFormat = table.GetFrameFormat();
+    SwTableFormat *pHardFormat = rTable.GetFrameFormat();
     if( !pHardFormat )
         return;
 
@@ -249,31 +249,41 @@ void SwTableFormat::RestoreTableProperties( SwTableFormat* pSrcFormat, SwTable &
     if( pSrcFormat )
     {
         pHardFormat->RegisterToFormat( *pSrcFormat );
-        pHardFormat->GetAttrSet().SetParent( &pSrcFormat->GetAttrSet() );
         bRowSplit = pSrcFormat->GetRowSplit();
         nRepeatHeading = pSrcFormat->GetRepeatHeading();
     }
     else
-    {
         pTableStyle->Remove( pHardFormat );
-        pHardFormat->GetAttrSet().SetParent( NULL );
-    }
 
-    AssignLineParents( pSrcFormat, table );
+    AssignFormatParents( pSrcFormat, rTable );
 
     SwEditShell *pShell = pDoc->GetEditShell();
     pDoc->SetRowSplit( *pShell->getShellCrsr( false ), SwFormatRowSplit( bRowSplit ) );
 
-    table.SetRowsToRepeat( nRepeatHeading );
+    rTable.SetRowsToRepeat( nRepeatHeading );
 }
 
-SwTableFormat* SwTableFormat::StoreTableProperties( const SwTable &table )
+SwTableFormat* SwTableFormat::StoreTableProperties( const SwTable &rTable )
 {
-    SwTableFormat *pHardFormat = table.GetFrameFormat();
+    SwTableFormat *pHardFormat = rTable.GetFrameFormat();
     if( !pHardFormat )
         return NULL;
 
     return (SwTableFormat*)pHardFormat->GetRegisteredIn();
+}
+
+void SwTableFormat::AssignFormatParents( SwTableFormat* pSrcFormat, SwTable &rTable )
+{
+    SwTableFormat *pHardFormat = rTable.GetFrameFormat();
+    if( !pHardFormat )
+        return;
+
+    if( pSrcFormat )
+        pHardFormat->GetAttrSet().SetParent( &pSrcFormat->GetAttrSet() );
+    else
+        pHardFormat->GetAttrSet().SetParent( NULL );
+
+    AssignLineParents( pSrcFormat, rTable );
 }
 
 void SwTableFormat::AssignLineParents( SwTableFormat* pSrcFormat, SwTable &rTable )

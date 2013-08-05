@@ -121,11 +121,12 @@ public:
     sal_Bool GetRowSplit() const;
     sal_uInt16 GetRepeatHeading() const;
 
-    static void RestoreTableProperties( SwTableFormat* pSrcFormat, SwTable &table );
-    static SwTableFormat* StoreTableProperties( const SwTable &table );
+    static void RestoreTableProperties( SwTableFormat* pSrcFormat, SwTable &rTable );
+    static SwTableFormat* StoreTableProperties( const SwTable &rTable );
 
-    static void AssignLineParents( SwTableFormat* pSrcFormat, SwTable &table );
-    static void AssignBoxParents( SwTableLineFormat* pSrcLineFormat, SwTableLine &line );
+    static void AssignFormatParents( SwTableFormat* pSrcFormat, SwTable &rTable );
+    static void AssignLineParents( SwTableFormat* pSrcFormat, SwTable &rTable );
+    static void AssignBoxParents( SwTableLineFormat* pSrcLineFormat, SwTableLine &rLine );
     static void AssignLineParents_Complex( SwTableLineFormat* pSrcLineFormat, SwTableBoxFormat* pSrcBoxFormat, SwTableBox& rBox );
     static void AssignBoxParents_Complex( SwTableLineFormat* pSrcLineFormat, SwTableBoxFormat* pSrcBoxFormat, SwTableLine& rLine );
 
