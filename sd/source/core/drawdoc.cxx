@@ -76,7 +76,6 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <rtl/ustring.hxx>
 #include <rtl/uri.hxx>
-#include <unotools/ucbstreamhelper.hxx>
 
 #include <editeng/outliner.hxx>
 #include "drawdoc.hxx"
@@ -1012,14 +1011,13 @@ sal_uInt16 SdDrawDocument::GetAnnotationAuthorIndex( const OUString& rAuthor )
     return idx;
 }
 
-#define EXPAND_PROTOCOL "vnd.sun.star.expand:"
 // to get the root element of the xml file
 Reference<XElement> getRoot()
 {
-    const Reference<css::uno::XComponentContext> xContext(comphelper_getProcessComponentContext());
-    Reference< XMultiServiceFactory > xServiceFactory(xContext->getServiceManager(), UNO_QUERY_THROW );
-    Reference< util::XMacroExpander > xMacroExpander =util::theMacroExpander::get(xContext);
-    Reference< XMultiServiceFactory > xConfigProvider =configuration::theDefaultProvider::get( xContext );
+    const Reference<css::uno::XComponentContext> xContext( comphelper_getProcessComponentContext() );
+    Reference< XMultiServiceFactory > xServiceFactory( xContext->getServiceManager() , UNO_QUERY_THROW );
+    Reference< util::XMacroExpander > xMacroExpander = util::theMacroExpander::get( xContext );
+    Reference< XMultiServiceFactory > xConfigProvider = configuration::theDefaultProvider::get( xContext );
 
     Any propValue = uno::makeAny(
         beans::PropertyValue(
@@ -1034,41 +1032,44 @@ Reference<XElement> getRoot()
     Sequence< rtl::OUString > aFiles;
     xNameAccess->getByName( "LayoutListFiles" ) >>= aFiles;
     rtl::OUString aURL;
-    for( sal_Int32 i=0; i<aFiles.getLength(); ++i )
+
+    for( sal_Int32 i=0; i < aFiles.getLength(); ++i )
     {
         aURL = aFiles[i];
-        if( aURL.startsWith( EXPAND_PROTOCOL ) )
+        if( aURL.startsWith( "vnd.sun.star.expand:" ) )
         {
             // cut protocol
-            rtl::OUString aMacro( aURL.copy( sizeof ( EXPAND_PROTOCOL ) -1 ) );
+            rtl::OUString aMacro( aURL.copy( sizeof ( "vnd.sun.star.expand:" ) -1 ) );
             // decode uric class chars
             aMacro = rtl::Uri::decode( aMacro, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
             // expand macro string
             aURL = xMacroExpander->expandMacros( aMacro );
         }
     }
+
     if( aURL.startsWith( "file://" ) )
     {
         rtl::OUString aSysPath;
         if( osl_getSystemPathFromFileURL( aURL.pData, &aSysPath.pData ) == osl_File_E_None )
             aURL = aSysPath;
     }
-    const Reference<XDocumentBuilder> xDocBuilder(css::xml::dom::DocumentBuilder::create(comphelper::getComponentContext(xServiceFactory)));
-    const Reference<XDocument> xDoc = xDocBuilder->parseURI(aURL);
+
+    const Reference<XDocumentBuilder> xDocBuilder( css::xml::dom::DocumentBuilder::create( comphelper::getComponentContext (xServiceFactory)) );
+    const Reference<XDocument> xDoc = xDocBuilder->parseURI( aURL );
     const Reference<XElement> xRoot = xDoc->getDocumentElement();
-    return xRoot;//this loops seems to work only once,so temporary returning the root element
+    return xRoot;                      //this loops seems to work only once,so returning the root element
 }
 
 void SdDrawDocument::SetLayoutVector()
 {
     int layoutlistsize;
-    const Reference<XElement> root= getRoot();//get the root element of my xml file
+    const Reference<XElement> root = getRoot();                     //get the root element of my xml file
     const Reference<XNodeList> layoutlist = root->getElementsByTagName("layout");
     layoutlistsize=layoutlist->getLength();
-    for(int index=0; index<layoutlistsize ;index++)
+    for(int index=0; index < layoutlistsize; index++)
     {
         Reference<XNode> layoutnode = layoutlist->item(index);      //get i'th layout element
-        malayoutinfo.push_back(layoutnode);
+        maLayoutInfo.push_back(layoutnode);
     }
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

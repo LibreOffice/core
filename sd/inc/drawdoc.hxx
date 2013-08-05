@@ -189,7 +189,7 @@ private:
                         DECL_LINK(OnlineSpellEventHdl, EditStatus*);
 
     std::vector< OUString > maAnnotationAuthors;
-    std::vector<com::sun::star::uno::Reference<com::sun::star::xml::dom::XNode>> malayoutinfo;
+    std::vector<com::sun::star::uno::Reference<com::sun::star::xml::dom::XNode>> maLayoutInfo;
 
     bool                mbUseEmbedFonts;
 
@@ -265,7 +265,7 @@ public:
     void SetExitAfterPresenting( bool bExitAfterPresenting );
 
     void SetLayoutVector();
-    inline std::vector<com::sun::star::uno::Reference<com::sun::star::xml::dom::XNode>>& GetLayoutVector(){ return malayoutinfo; }
+    std::vector<com::sun::star::uno::Reference<com::sun::star::xml::dom::XNode>> &GetLayoutVector() { return maLayoutInfo; }
 
     /** Insert pages into this document
 
