@@ -442,7 +442,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
 
     std::vector<SwTableBoxFmt*> aBoxFmtArr;
     SwTableBoxFmt* pBoxFmt = 0;
-    if( !bDfltBorders )
+    if( !bDfltBorders || pTAFmt )
     {
         pBoxFmt = MakeTableBoxFmt();
         pBoxFmt->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE, USHRT_MAX / nCols, 0 ));
@@ -460,7 +460,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
         for( sal_uInt16 i = 0; i < nCols; ++i )
         {
             SwTableBoxFmt *pBoxF;
-            if( bDfltBorders )
+            if( !pTAFmt && bDfltBorders )
             {
                 sal_uInt8 nBoxId = (i < nCols - 1 ? 0 : 1) + (n ? 2 : 0 );
                 pBoxF = new SwTableBoxFmt( *::lcl_CreateDfltBoxFmt( *this, aBoxFmtArr, nCols, nBoxId) );
