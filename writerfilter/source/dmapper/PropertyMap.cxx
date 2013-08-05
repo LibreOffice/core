@@ -843,6 +843,29 @@ uno::Reference<beans::XPropertySet> lcl_GetRangeProperties(bool bIsFirstSection,
     return xRangeProperties;
 }
 
+void SectionPropertyMap::HandleMarginsHeaderFooter(DomainMapper_Impl& rDM_Impl)
+{
+    if( m_nDzaGutter > 0 )
+    {
+        //todo: iGutterPos from DocProperties are missing
+        if( m_bGutterRTL )
+            m_nRightMargin += m_nDzaGutter;
+        else
+            m_nLeftMargin += m_nDzaGutter;
+    }
+    operator[]( PropertyDefinition( PROP_LEFT_MARGIN )) =  uno::makeAny( m_nLeftMargin  );
+    operator[]( PropertyDefinition( PROP_RIGHT_MARGIN )) = uno::makeAny( m_nRightMargin );
+
+    if (rDM_Impl.m_oBackgroundColor)
+        operator[](PropertyDefinition(PROP_BACK_COLOR )) = uno::makeAny(*rDM_Impl.m_oBackgroundColor);
+
+    /*** if headers/footers are available then the top/bottom margins of the
+      header/footer are copied to the top/bottom margin of the page
+      */
+    CopyLastHeaderFooter( false, rDM_Impl );
+    PrepareHeaderFooterProperties( false );
+}
+
 void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
 {
     PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
@@ -891,6 +914,10 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
                 try
                 {
                     xRangeProperties->setPropertyValue(rPropNameSupplier.GetName(PROP_PAGE_DESC_NAME), uno::makeAny(aName));
+                    uno::Reference<beans::XPropertySet> xPageStyle (rDM_Impl.GetPageStyles()->getByName(aName), uno::UNO_QUERY_THROW);
+                    HandleMarginsHeaderFooter(rDM_Impl);
+                    if (rDM_Impl.IsNewDoc())
+                        _ApplyProperties(xPageStyle);
                 }
                 catch( const uno::Exception& )
                 {
@@ -922,25 +949,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         //get the properties and create appropriate page styles
         uno::Reference< beans::XPropertySet > xFollowPageStyle = GetPageStyle( rDM_Impl.GetPageStyles(), rDM_Impl.GetTextFactory(), false );
 
-        if( m_nDzaGutter > 0 )
-        {
-            //todo: iGutterPos from DocProperties are missing
-            if( m_bGutterRTL )
-                m_nRightMargin += m_nDzaGutter;
-            else
-                m_nLeftMargin += m_nDzaGutter;
-        }
-        operator[]( PropertyDefinition( PROP_LEFT_MARGIN )) =  uno::makeAny( m_nLeftMargin  );
-        operator[]( PropertyDefinition( PROP_RIGHT_MARGIN )) = uno::makeAny( m_nRightMargin );
-
-        if (rDM_Impl.m_oBackgroundColor)
-            operator[](PropertyDefinition(PROP_BACK_COLOR )) = uno::makeAny(*rDM_Impl.m_oBackgroundColor);
-
-        /*** if headers/footers are available then the top/bottom margins of the
-            header/footer are copied to the top/bottom margin of the page
-          */
-        CopyLastHeaderFooter( false, rDM_Impl );
-        PrepareHeaderFooterProperties( false );
+        HandleMarginsHeaderFooter(rDM_Impl);
 
         const OUString sTrayIndex = rPropNameSupplier.GetName( PROP_PRINTER_PAPER_TRAY_INDEX );
         if( m_nPaperBin >= 0 )

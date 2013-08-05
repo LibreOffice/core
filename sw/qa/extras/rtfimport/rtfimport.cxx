@@ -158,6 +158,7 @@ public:
     void testFdo64637();
     void testN820504();
     void testFdo67365();
+    void testFdo67498();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -301,6 +302,7 @@ void Test::run()
         {"fdo64637.rtf", &Test::testFdo64637},
         {"n820504.rtf", &Test::testN820504},
         {"fdo67365.rtf", &Test::testFdo67365},
+        {"fdo67498.rtf", &Test::testFdo67498},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1468,6 +1470,12 @@ void Test::testFdo67365()
     uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A2"), uno::UNO_QUERY);
     // Paragraph was aligned to center, should be left.
     CPPUNIT_ASSERT_EQUAL(style::ParagraphAdjust_LEFT, static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(getParagraphOfText(1, xCell->getText()), "ParaAdjust")));
+}
+
+void Test::testFdo67498()
+{
+    // Left margin of the default page style wasn't set (was 2000).
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(TWIP_TO_MM100(5954)), getProperty<sal_Int32>(getStyles("PageStyles")->getByName(DEFAULT_STYLE), "LeftMargin"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
