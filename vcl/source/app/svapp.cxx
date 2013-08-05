@@ -1773,8 +1773,8 @@ void Application::EnableConsoleOnly()
 
 // -----------------------------------------------------------------------
 
-void Application::ShowNativeErrorBox(const String& sTitle  ,
-                                     const String& sMessage)
+void Application::ShowNativeErrorBox(const OUString& sTitle  ,
+                                     const OUString& sMessage)
 {
     int btn = ImplGetSalSystem()->ShowNativeMessageBox (
             sTitle,

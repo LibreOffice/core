@@ -338,8 +338,8 @@ public:
     /// used to see if Mac specific app init has been disabled
     static bool                 IsConsoleOnly();
 
-    static void                 ShowNativeErrorBox(const String& sTitle  ,
-                                                   const String& sMessage);
+    static void                 ShowNativeErrorBox(const OUString& sTitle  ,
+                                                   const OUString& sMessage);
 
     // IME Status Window Control:
 
