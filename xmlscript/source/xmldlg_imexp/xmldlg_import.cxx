@@ -34,6 +34,10 @@
 #include <com/sun/star/awt/PushButtonType.hpp>
 #include <com/sun/star/awt/VisualEffect.hpp>
 #include <com/sun/star/style/VerticalAlignment.hpp>
+#include <com/sun/star/util/Date.hpp>
+#include <com/sun/star/util/Time.hpp>
+#include <tools/date.hxx>
+#include <tools/time.hxx>
 
 #include <com/sun/star/script/XScriptEventsSupplier.hpp>
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
@@ -1189,6 +1193,40 @@ bool ImportContext::importDateFormatProperty(
         }
 
         _xControlModel->setPropertyValue( rPropName, makeAny( nFormat ) );
+        return true;
+    }
+    return false;
+}
+//__________________________________________________________________________________________________
+bool ImportContext::importTimeProperty(
+    OUString const & rPropName, OUString const & rAttrName,
+    Reference< xml::input::XAttributes > const & xAttributes )
+{
+    OUString aValue(
+        xAttributes->getValueByUidName(
+            _pImport->XMLNS_DIALOGS_UID, rAttrName ) );
+    if (!aValue.isEmpty())
+    {
+        ::Time aTTime(toInt32( aValue ) * ::Time::nanoPerCenti);
+        util::Time aUTime(aTTime.GetUNOTime());
+        _xControlModel->setPropertyValue( rPropName, makeAny( aUTime ) );
+        return true;
+    }
+    return false;
+}
+//__________________________________________________________________________________________________
+bool ImportContext::importDateProperty(
+    OUString const & rPropName, OUString const & rAttrName,
+    Reference< xml::input::XAttributes > const & xAttributes )
+{
+    OUString aValue(
+        xAttributes->getValueByUidName(
+            _pImport->XMLNS_DIALOGS_UID, rAttrName ) );
+    if (!aValue.isEmpty())
+    {
+        ::Date aTDate(toInt32( aValue ));
+        util::Date aUDate(aTDate.GetUNODate());
+        _xControlModel->setPropertyValue( rPropName, makeAny( aUDate ) );
         return true;
     }
     return false;

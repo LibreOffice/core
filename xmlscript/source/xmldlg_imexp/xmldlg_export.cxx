@@ -35,6 +35,10 @@
 #include <com/sun/star/awt/LineEndFormat.hpp>
 #include <com/sun/star/awt/PushButtonType.hpp>
 #include <com/sun/star/awt/VisualEffect.hpp>
+#include <com/sun/star/util/Date.hpp>
+#include <com/sun/star/util/Time.hpp>
+#include <tools/date.hxx>
+#include <tools/time.hxx>
 
 #include <com/sun/star/io/XPersistObject.hpp>
 
@@ -597,6 +601,50 @@ void ElementDescriptor::readDateFormatAttr( OUString const & rPropName, OUString
                 break;
             }
         }
+        else
+            OSL_FAIL( "### unexpected property type!" );
+    }
+}
+//__________________________________________________________________________________________________
+void ElementDescriptor::readDateAttr( OUString const & rPropName, OUString const & rAttrName )
+{
+    if (beans::PropertyState_DEFAULT_VALUE != _xPropState->getPropertyState( rPropName ))
+    {
+        Any a( _xProps->getPropertyValue( rPropName ) );
+        if (a.getValueTypeClass() == TypeClass_STRUCT && a.getValueType() == ::getCppuType( (util::Date*)0 ))
+        {
+            util::Date aUDate;
+            if (a >>= aUDate)
+            {
+                ::Date aTDate(aUDate);
+                addAttribute( rAttrName, OUString::valueOf( static_cast<sal_Int32>(aTDate.GetDate()) ) );
+            }
+            else
+                OSL_FAIL( "### internal error" );
+        }
+        else
+            OSL_FAIL( "### unexpected property type!" );
+    }
+}
+//__________________________________________________________________________________________________
+void ElementDescriptor::readTimeAttr( OUString const & rPropName, OUString const & rAttrName )
+{
+    if (beans::PropertyState_DEFAULT_VALUE != _xPropState->getPropertyState( rPropName ))
+    {
+        Any a( _xProps->getPropertyValue( rPropName ) );
+        if (a.getValueTypeClass() == TypeClass_STRUCT && a.getValueType() == ::getCppuType( (util::Time*)0 ))
+        {
+            util::Time aUTime;
+            if (a >>= aUTime)
+            {
+                ::Time aTTime(aUTime);
+                addAttribute( rAttrName, OUString::valueOf( aTTime.GetTime() / ::Time::nanoPerCenti ) );
+            }
+            else
+                OSL_FAIL( "### internal error" );
+        }
+        else
+            OSL_FAIL( "### unexpected property type!" );
     }
 }
 //__________________________________________________________________________________________________
@@ -632,6 +680,8 @@ void ElementDescriptor::readTimeFormatAttr( OUString const & rPropName, OUString
                 break;
             }
         }
+        else
+            OSL_FAIL( "### unexpected property type!" );
     }
 }
 //__________________________________________________________________________________________________
@@ -658,6 +708,8 @@ void ElementDescriptor::readAlignAttr( OUString const & rPropName, OUString cons
                 break;
             }
         }
+        else
+            OSL_FAIL( "### unexpected property type!" );
     }
 }
 //__________________________________________________________________________________________________
@@ -686,6 +738,8 @@ void ElementDescriptor::readVerticalAlignAttr( OUString const & rPropName, OUStr
                 break;
             }
         }
+        else
+            OSL_FAIL( "### unexpected property type!" );
     }
 }
 //__________________________________________________________________________________________________
@@ -738,6 +792,8 @@ void ElementDescriptor::readImageAlignAttr( OUString const & rPropName, OUString
                 break;
             }
         }
+        else
+            OSL_FAIL( "### unexpected property type!" );
     }
 }
 //__________________________________________________________________________________________________

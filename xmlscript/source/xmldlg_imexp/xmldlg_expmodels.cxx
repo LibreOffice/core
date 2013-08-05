@@ -737,9 +737,9 @@ void ElementDescriptor::readDateFieldModel( StyleBag * all_styles )
     readBoolAttr( "StrictFormat", XMLNS_DIALOGS_PREFIX ":strict-format" );
     readDateFormatAttr( "DateFormat", XMLNS_DIALOGS_PREFIX ":date-format" );
     readBoolAttr( "DateShowCentury", XMLNS_DIALOGS_PREFIX ":show-century" );
-    readLongAttr( "Date", XMLNS_DIALOGS_PREFIX ":value" );
-    readLongAttr( "DateMin", XMLNS_DIALOGS_PREFIX ":value-min" );
-    readLongAttr( "DateMax", XMLNS_DIALOGS_PREFIX ":value-max" );
+    readDateAttr( "Date", XMLNS_DIALOGS_PREFIX ":value" );
+    readDateAttr( "DateMin", XMLNS_DIALOGS_PREFIX ":value-min" );
+    readDateAttr( "DateMax", XMLNS_DIALOGS_PREFIX ":value-max" );
     readBoolAttr( "Spin", XMLNS_DIALOGS_PREFIX ":spin" );
     if (extract_throw<bool>( _xProps->getPropertyValue( "Repeat" ) ))
         readLongAttr( "RepeatDelay", XMLNS_DIALOGS_PREFIX ":repeat", true /* force */ );
@@ -815,9 +815,9 @@ void ElementDescriptor::readTimeFieldModel( StyleBag * all_styles )
     readBoolAttr( "HideInactiveSelection", XMLNS_DIALOGS_PREFIX ":hide-inactive-selection" );
     readBoolAttr( "StrictFormat", XMLNS_DIALOGS_PREFIX ":strict-format" );
     readTimeFormatAttr( "TimeFormat", XMLNS_DIALOGS_PREFIX ":time-format" );
-    readLongAttr( "Time", XMLNS_DIALOGS_PREFIX ":value" );
-    readLongAttr( "TimeMin", XMLNS_DIALOGS_PREFIX ":value-min" );
-    readLongAttr( "TimeMax", XMLNS_DIALOGS_PREFIX ":value-max" );
+    readTimeAttr( "Time", XMLNS_DIALOGS_PREFIX ":value" );
+    readTimeAttr( "TimeMin", XMLNS_DIALOGS_PREFIX ":value-min" );
+    readTimeAttr( "TimeMax", XMLNS_DIALOGS_PREFIX ":value-max" );
     readBoolAttr( "Spin", XMLNS_DIALOGS_PREFIX ":spin" );
     if (extract_throw<bool>( _xProps->getPropertyValue( "Repeat" ) ))
         readLongAttr( "RepeatDelay", XMLNS_DIALOGS_PREFIX ":repeat", true /* force */ );

@@ -636,9 +636,9 @@ void TimeFieldElement::endElement()
     ctx.importBooleanProperty( "StrictFormat", "strict-format", _xAttributes );
     ctx.importBooleanProperty("HideInactiveSelection","hide-inactive-selection", _xAttributes );
     ctx.importTimeFormatProperty( "TimeFormat", "time-format", _xAttributes );
-    ctx.importLongProperty( "Time", "value", _xAttributes );
-    ctx.importLongProperty( "TimeMin", "value-min", _xAttributes );
-    ctx.importLongProperty( "TimeMax", "value-max", _xAttributes );
+    ctx.importTimeProperty( "Time", "value", _xAttributes );
+    ctx.importTimeProperty( "TimeMin", "value-min", _xAttributes );
+    ctx.importTimeProperty( "TimeMax", "value-max", _xAttributes );
     ctx.importBooleanProperty( "Spin", "spin", _xAttributes );
     if (ctx.importLongProperty( "RepeatDelay", "repeat", _xAttributes ))
         ctx.getControlModel()->setPropertyValue("Repeat", makeAny(true) );
@@ -753,9 +753,9 @@ void DateFieldElement::endElement()
     ctx.importBooleanProperty( "HideInactiveSelection", "hide-inactive-selection", _xAttributes );
     ctx.importDateFormatProperty( "DateFormat", "date-format", _xAttributes );
     ctx.importBooleanProperty( "DateShowCentury", "show-century", _xAttributes );
-    ctx.importLongProperty( "Date", "value", _xAttributes );
-    ctx.importLongProperty( "DateMin", "value-min", _xAttributes );
-    ctx.importLongProperty( "DateMax", "value-max", _xAttributes );
+    ctx.importDateProperty( "Date", "value", _xAttributes );
+    ctx.importDateProperty( "DateMin", "value-min", _xAttributes );
+    ctx.importDateProperty( "DateMax", "value-max", _xAttributes );
     ctx.importBooleanProperty( "Spin", "spin", _xAttributes );
     if (ctx.importLongProperty( "RepeatDelay", "repeat", _xAttributes ))
         ctx.getControlModel()->setPropertyValue( "Repeat", makeAny(true) );

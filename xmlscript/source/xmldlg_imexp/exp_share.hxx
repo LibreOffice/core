@@ -137,7 +137,11 @@ public:
         OUString const & rPropName, OUString const & rAttrName );
     void readImagePositionAttr(
         OUString const & rPropName, OUString const & rAttrName );
+    void readDateAttr(
+        OUString const & rPropName, OUString const & rAttrName );
     void readDateFormatAttr(
+        OUString const & rPropName, OUString const & rAttrName );
+    void readTimeAttr(
         OUString const & rPropName, OUString const & rAttrName );
     void readTimeFormatAttr(
         OUString const & rPropName, OUString const & rAttrName );
