@@ -68,8 +68,8 @@ public class _XDateField extends MultiMethodTest {
 
         boolean result = true ;
         oObj.setDate(new Date((short)1, (short)1, (short)1900)) ;
-
-        result = oObj.getDate() == new Date((short)1, (short)1, (short)1900); ;
+        Date date = oObj.getDate();
+        result = date.Day == 1 && date.Month == 1 && date.Year == 1900;
 
         if (! result ) {
             System.out.println("getDate: " + oObj.getDate() + " , expected 1900-01-01");
@@ -102,8 +102,8 @@ public class _XDateField extends MultiMethodTest {
 
         boolean result = true ;
         oObj.setMin(new Date((short)5, (short)2, (short)1963));
-
-        result = oObj.getMin() == new Date((short)5, (short)2, (short)1963);
+        Date date = oObj.getMin();
+        result = date.Day == 5 && date.Month == 2 && date.Year == 1963;
 
         tRes.tested("setMin()", result) ;
     }
@@ -132,8 +132,8 @@ public class _XDateField extends MultiMethodTest {
 
         boolean result = true ;
         oObj.setMax(new Date((short)18, (short)9, (short)2117)) ;
-
-        result = oObj.getMax() == new Date((short)18, (short)9, (short)2117) ;
+        Date date = oObj.getMax();
+        result = date.Day == 18 && date.Month == 9 && date.Year == 2117;
 
         tRes.tested("setMax()", result) ;
     }
@@ -162,8 +162,8 @@ public class _XDateField extends MultiMethodTest {
 
         boolean result = true ;
         oObj.setFirst(new Date((short)7, (short)12, (short)1972)) ;
-
-        result = oObj.getFirst() == new Date((short)7, (short)12, (short)1972) ;
+        Date date = oObj.getFirst();
+        result = date.Day == 7 && date.Month == 12 && date.Year == 1972;
 
         if (!result) {
             log.println("Set to " + 5118 + " but returned " + oObj.getFirst()) ;
@@ -198,8 +198,8 @@ public class _XDateField extends MultiMethodTest {
 
         boolean result = true ;
         oObj.setLast(new Date((short)23, (short)8, (short)2053)) ;
-
-        result = oObj.getLast() == new Date((short)23, (short)8, (short)2053) ;
+        Date date = oObj.getLast();
+        result = date.Day == 23 && date.Month == 8 && date.Year == 2053;
 
         if (!result) {
             log.println("Set to 2053-08-23 but returned " + oObj.getLast()) ;
