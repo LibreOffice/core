@@ -25,7 +25,6 @@
 #include "document.hxx"
 #include "docsh.hxx"
 #include "scresid.hxx"
-#include "tpstat.hrc"
 
 #include "tpstat.hxx"
 
@@ -42,29 +41,25 @@ SfxTabPage* ScDocStatPage::Create( Window *pParent, const SfxItemSet& rSet )
 //------------------------------------------------------------------------
 
 ScDocStatPage::ScDocStatPage( Window *pParent, const SfxItemSet& rSet )
-    :   SfxTabPage( pParent, ScResId(RID_SCPAGE_STAT), rSet ),
-        aFlInfo         ( this, ScResId( FL_INFO ) ),
-        aFtTablesLbl    ( this, ScResId( FT_TABLES_LBL ) ),
-        aFtTables       ( this, ScResId( FT_TABLES ) ),
-        aFtCellsLbl     ( this, ScResId( FT_CELLS_LBL ) ),
-        aFtCells        ( this, ScResId( FT_CELLS ) ),
-        aFtPagesLbl     ( this, ScResId( FT_PAGES_LBL ) ),
-        aFtPages        ( this, ScResId( FT_PAGES ) )
+    :   SfxTabPage( pParent, "StatisticsInfopage", "modules/scalc/ui/statisticsinfopage.ui", rSet )
 {
+    get(m_pFlInfo,"document");
+    get(m_pFtTables,"nosheets");
+    get(m_pFtCells,"nocells");
+    get(m_pFtPages,"nopages");
     ScDocShell* pDocSh = PTR_CAST( ScDocShell, SfxObjectShell::Current() );
     ScDocStat   aDocStat;
 
     if ( pDocSh )
         pDocSh->GetDocStat( aDocStat );
 
-    String aInfo = aFlInfo.GetText();
+    String aInfo = m_pFlInfo->GetText();
     aInfo += aDocStat.aDocName;
-    aFlInfo     .SetText( aInfo );
-    aFtTables   .SetText( OUString::number( aDocStat.nTableCount ) );
-    aFtCells    .SetText( OUString::number( aDocStat.nCellCount ) );
-    aFtPages    .SetText( OUString::number( aDocStat.nPageCount ) );
+    m_pFlInfo     ->SetText( aInfo );
+    m_pFtTables   ->SetText( OUString::number( aDocStat.nTableCount ) );
+    m_pFtCells    ->SetText( OUString::number( aDocStat.nCellCount ) );
+    m_pFtPages    ->SetText( OUString::number( aDocStat.nPageCount ) );
 
-    FreeResource();
 }
 
 //------------------------------------------------------------------------

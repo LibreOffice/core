@@ -43,13 +43,10 @@ protected:
     virtual void    Reset      ( const SfxItemSet& rSet );
 
 private:
-    FixedLine       aFlInfo;
-    FixedText       aFtTablesLbl;
-    FixedInfo       aFtTables;
-    FixedText       aFtCellsLbl;
-    FixedInfo       aFtCells;
-    FixedText       aFtPagesLbl;
-    FixedInfo       aFtPages;
+    FixedText*       m_pFlInfo;
+    FixedText*       m_pFtTables;
+    FixedText*       m_pFtCells;
+    FixedText*       m_pFtPages;
 };
 
 
