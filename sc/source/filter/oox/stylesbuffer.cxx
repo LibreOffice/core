@@ -3463,7 +3463,7 @@ TableStyleRef StylesBuffer::getTableStyle( OUString& rTableStyleName )
     if(itr != maTableStyles.end())
         return *itr;
 
-    return 0;
+    return TableStyleRef();
 }
 
 
