@@ -67,7 +67,7 @@ private:
     TabControl* mpTabControl;
 
     CustomAnimationCreateTabPage* mpTabPages[5];
-    sal_Int16 mnEntranceId, mnEmphasisId, mnExitId, mnMPathId, mnMiscId;
+    sal_uInt16 mnEntranceId, mnEmphasisId, mnExitId, mnMPathId, mnMiscId;
 };
 
 }

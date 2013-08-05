@@ -180,7 +180,7 @@ void CategoryListBox::MouseButtonUp( const MouseEvent& rMEvt )
 class CustomAnimationCreateTabPage : public TabPage
 {
 public:
-    CustomAnimationCreateTabPage( Window* pParent, CustomAnimationCreateDialog* pDialogParent, int nTabId, const PresetCategoryList& rCategoryList, bool bHasText );
+    CustomAnimationCreateTabPage( Window* pParent, CustomAnimationCreateDialog* pDialogParent, sal_uInt16 nTabId, const PresetCategoryList& rCategoryList, bool bHasText );
     ~CustomAnimationCreateTabPage();
 
     PathKind getCreatePathKind() const;
@@ -241,7 +241,7 @@ bool ImplStlEffectCategorySortHelper::operator()( const CustomAnimationPresetPtr
     return mxCollator->compareString(p1->getLabel(), p2->getLabel()) == -1;
 }
 
-CustomAnimationCreateTabPage::CustomAnimationCreateTabPage( Window* pParent, CustomAnimationCreateDialog* pDialogParent, int nTabId, const PresetCategoryList& rCategoryList, bool bHasText )
+CustomAnimationCreateTabPage::CustomAnimationCreateTabPage( Window* pParent, CustomAnimationCreateDialog* pDialogParent, sal_uInt16 nTabId, const PresetCategoryList& rCategoryList, bool bHasText )
 : TabPage( pParent, "CustomAnimationCreateTab", "modules/simpress/ui/customanimationcreatetab.ui" )
 , mpParent( pDialogParent )
 , mnId( nTabId )
