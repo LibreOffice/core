@@ -43,14 +43,14 @@ TextSelection ExtTextEngine::MatchGroup( const TextPaM& rCursor ) const
     sal_uLong nParas = GetParagraphCount();
     if ( ( nPara < nParas ) && ( nPos < GetTextLen( nPara ) ) )
     {
-        sal_uInt16 nMatchChar = maGroupChars.Search( GetText( rCursor.GetPara() )[ nPos ] );
-        if ( nMatchChar != STRING_NOTFOUND )
+        sal_Int32 nMatchIndex = maGroupChars.indexOf( GetText( rCursor.GetPara() )[ nPos ] );
+        if ( nMatchIndex != -1 )
         {
-            if ( ( nMatchChar % 2 ) == 0 )
+            if ( ( nMatchIndex % 2 ) == 0 )
             {
                 // search forwards
-                sal_Unicode nSC = maGroupChars.GetChar( nMatchChar );
-                sal_Unicode nEC = maGroupChars.GetChar( nMatchChar+1 );
+                sal_Unicode nSC = maGroupChars[ nMatchIndex ];
+                sal_Unicode nEC = maGroupChars[ nMatchIndex+1 ];
 
                 sal_uInt16 nCur = nPos+1;
                 sal_uInt16 nLevel = 1;
@@ -85,8 +85,8 @@ TextSelection ExtTextEngine::MatchGroup( const TextPaM& rCursor ) const
             else
             {
                 // search backwards
-                sal_Unicode nEC = maGroupChars.GetChar( nMatchChar );
-                sal_Unicode nSC = maGroupChars.GetChar( nMatchChar-1 );
+                sal_Unicode nEC = maGroupChars[ nMatchIndex ];
+                sal_Unicode nSC = maGroupChars[ nMatchIndex-1 ];
 
                 sal_uInt16 nCur = rCursor.GetIndex()-1;
                 sal_uInt16 nLevel = 1;

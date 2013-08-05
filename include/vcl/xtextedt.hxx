@@ -33,35 +33,35 @@ namespace util {
 class VCL_DLLPUBLIC ExtTextEngine : public TextEngine
 {
 private:
-    String              maGroupChars;
+    OUString              maGroupChars;
 
 public:
                         ExtTextEngine();
                         ~ExtTextEngine();
 
-    const String&       GetGroupChars() const { return maGroupChars; }
-    void                SetGroupChars( const String& r ) { maGroupChars = r; }
+    const OUString&     GetGroupChars() const { return maGroupChars; }
+    void                SetGroupChars( const OUString& r ) { maGroupChars = r; }
     TextSelection       MatchGroup( const TextPaM& rCursor ) const;
 
-    sal_Bool                Search( TextSelection& rSel, const ::com::sun::star::util::SearchOptions& rSearchOptions, sal_Bool bForward = sal_True );
+    sal_Bool            Search( TextSelection& rSel, const ::com::sun::star::util::SearchOptions& rSearchOptions, sal_Bool bForward = sal_True );
 };
 
 class VCL_DLLPUBLIC ExtTextView : public TextView
 {
 protected:
-    sal_Bool                ImpIndentBlock( sal_Bool bRight );
+    sal_Bool            ImpIndentBlock( sal_Bool bRight );
 
 public:
                         ExtTextView( ExtTextEngine* pEng, Window* pWindow );
                         ~ExtTextView();
 
-    sal_Bool                MatchGroup();
+    sal_Bool            MatchGroup();
 
-    sal_Bool                Search( const ::com::sun::star::util::SearchOptions& rSearchOptions, sal_Bool bForward );
-    sal_uInt16              Replace( const ::com::sun::star::util::SearchOptions& rSearchOptions, sal_Bool bAll, sal_Bool bForward );
+    sal_Bool            Search( const ::com::sun::star::util::SearchOptions& rSearchOptions, sal_Bool bForward );
+    sal_uInt16          Replace( const ::com::sun::star::util::SearchOptions& rSearchOptions, sal_Bool bAll, sal_Bool bForward );
 
-    sal_Bool                IndentBlock();
-    sal_Bool                UnindentBlock();
+    sal_Bool            IndentBlock();
+    sal_Bool            UnindentBlock();
 };
 
 #endif // _XTEXTEDT_HXX
