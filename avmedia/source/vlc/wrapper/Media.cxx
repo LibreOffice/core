@@ -28,7 +28,7 @@ namespace VLC
     }
 
 
-Media::Media(const rtl::OUString& url, Instance& instance)
+Media::Media( const rtl::OUString& url, Instance& instance )
 {
     InitApiMap(VLC_MEDIA_API);
     mMedia = InitMedia( url, instance );

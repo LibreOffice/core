@@ -29,6 +29,7 @@
 
 #include "wrapper/Instance.hxx"
 #include "wrapper/Media.hxx"
+#include "wrapper/Player.hxx"
 
 namespace avmedia {
 namespace vlc {
@@ -41,7 +42,7 @@ class VLCPlayer : public ::cppu::BaseMutex,
 {
     VLC::Instance mInstance;
     VLC::Media mMedia;
-    boost::shared_ptr<libvlc_media_player_t> mPlayer;
+    VLC::Player mPlayer;
     const rtl::OUString mUrl;
     bool mPlaybackLoop;
 public:

@@ -16,10 +16,10 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _WRAPPER_MEDIA_HXX
-#define _WRAPPER_MEDIA_HXX
+#ifndef _WRAPPER_PLAYER_HXX
+#define _WRAPPER_PLAYER_HXX
 
-struct libvlc_media_t;
+struct libvlc_media_player_t;
 
 namespace rtl
 {
@@ -28,20 +28,43 @@ namespace rtl
 
 namespace VLC
 {
-    class Instance;
-    class Media
+    class Media;
+    class Player
     {
     public:
-        Media( const rtl::OUString& url, Instance& instance );
-        virtual ~Media();
+        Player(Media& media);
+        virtual ~Player();
 
-        inline operator libvlc_media_t*()
+        bool play();
+        void pause();
+        void stop();
+        void setTime( int time );
+        int getTime() const;
+        bool isPlaying() const;
+
+        int getLength() const;
+
+        float getRate() const;
+
+        void setVolume( int volume );
+        int getVolume() const;
+
+        void setMute( bool mute);
+        bool getMute() const;
+
+        void setXWindow( int id );
+
+        void takeSnapshot(const rtl::OUString& file);
+
+        bool hasVout() const;
+
+        inline operator libvlc_media_player_t*()
         {
-            return mMedia;
+            return mPlayer;
         }
 
     private:
-        libvlc_media_t *mMedia;
+        libvlc_media_player_t *mPlayer;
     };
 }
 

@@ -27,7 +27,7 @@ VLCPlayer::VLCPlayer( const rtl::OUString& url )
     : VLC_Base(m_aMutex)
     , mInstance( VLC_ARGS )
     , mMedia( url, mInstance )
-    , mPlayer( libvlc_media_player_new_from_media( mMedia ), libvlc_media_player_release )
+    , mPlayer( mMedia )
     , mUrl( url )
     , mPlaybackLoop( false )
 {
@@ -41,49 +41,49 @@ const rtl::OUString& VLCPlayer::url() const
 void SAL_CALL VLCPlayer::start()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    libvlc_media_player_play( mPlayer.get() );
+    mPlayer.play();
 }
 
 void SAL_CALL VLCPlayer::stop()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    libvlc_media_player_pause( mPlayer.get() );
+    mPlayer.pause();
 }
 
 ::sal_Bool SAL_CALL VLCPlayer::isPlaying()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    return (libvlc_media_player_is_playing( mPlayer.get() ) == 1);
+    return mPlayer.isPlaying();
 }
 
 double SAL_CALL VLCPlayer::getDuration()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    return static_cast<double>( libvlc_media_player_get_length( mPlayer.get() ) ) / MS_IN_SEC;
+    return static_cast<double>( mPlayer.getLength() ) / MS_IN_SEC;
 }
 
 void SAL_CALL VLCPlayer::setMediaTime( double fTime )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
-    if ( fTime < 0.00000001 && !libvlc_media_player_is_playing( mPlayer.get() ) )
+    if ( fTime < 0.00000001 && !mPlayer.isPlaying() )
     {
-        libvlc_media_player_stop( mPlayer.get() );
+        mPlayer.stop();
     }
 
-    libvlc_media_player_set_time( mPlayer.get(), fTime * MS_IN_SEC );
+    mPlayer.setTime( fTime * MS_IN_SEC );
 }
 
 double SAL_CALL VLCPlayer::getMediaTime()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    return static_cast<double>( libvlc_media_player_get_time( mPlayer.get() ) ) / MS_IN_SEC;
+    return static_cast<double>( mPlayer.getTime() ) / MS_IN_SEC;
 }
 
 double SAL_CALL VLCPlayer::getRate()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    return libvlc_media_player_get_rate( mPlayer.get() );
+    return mPlayer.getRate();
 }
 
 namespace
@@ -93,9 +93,10 @@ namespace
         switch (evemt->type)
         {
         case libvlc_MediaPlayerEndReached:
-            boost::shared_ptr<libvlc_media_player_t> player = *static_cast< boost::shared_ptr<libvlc_media_player_t>* >( pData );
-            libvlc_media_player_stop( player.get() );
-            libvlc_media_player_play( player.get() );
+            VLC::Player& player = *static_cast< VLC::Player* >( pData );
+
+            player.stop();
+            player.play();
             break;
         }
     }
@@ -106,7 +107,7 @@ void SAL_CALL VLCPlayer::setPlaybackLoop( ::sal_Bool bSet )
     ::osl::MutexGuard aGuard(m_aMutex);
     mPlaybackLoop = bSet;
 
-    libvlc_event_manager_t *manager = libvlc_media_player_event_manager( mPlayer.get() );
+    libvlc_event_manager_t *manager = libvlc_media_player_event_manager( mPlayer );
 
     if ( bSet )
         libvlc_event_attach( manager, libvlc_MediaPlayerEndReached, EventHandler, &mPlayer );
@@ -123,25 +124,25 @@ void SAL_CALL VLCPlayer::setPlaybackLoop( ::sal_Bool bSet )
 void SAL_CALL VLCPlayer::setVolumeDB( ::sal_Int16 nDB )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    libvlc_audio_set_volume( mPlayer.get(), static_cast<sal_Int16>( ( nDB + 40 ) * 10.0  / 4 ) );
+    mPlayer.setVolume( static_cast<sal_Int16>( ( nDB + 40 ) * 10.0  / 4 ) );
 }
 
 ::sal_Int16 SAL_CALL VLCPlayer::getVolumeDB()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    return static_cast<sal_Int16>( libvlc_audio_get_volume( mPlayer.get() ) / 10.0 * 4 - 40 );
+    return static_cast<sal_Int16>( mPlayer.getVolume() / 10.0 * 4 - 40 );
 }
 
 void SAL_CALL VLCPlayer::setMute( ::sal_Bool bSet )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    libvlc_audio_set_mute( mPlayer.get(), bSet );
+    mPlayer.setMute( bSet );
 }
 
 ::sal_Bool SAL_CALL VLCPlayer::isMute()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    return libvlc_audio_get_mute( mPlayer.get() );
+    return mPlayer.getMute();
 }
 
 css::awt::Size SAL_CALL VLCPlayer::getPreferredPlayerWindowSize()
@@ -189,7 +190,7 @@ uno::Reference< css::media::XPlayerWindow > SAL_CALL VLCPlayer::createPlayerWind
 #if defined(WIN32) && !defined(UNIX)
         //TODO: Not works, will be crashed
 #else
-        libvlc_media_player_set_xwindow( mPlayer.get(), winID );
+        mPlayer.setXWindow( winID );
 #endif
     }
 

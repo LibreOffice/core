@@ -25,7 +25,10 @@
 #include <cppuhelper/implbase2.hxx>
 #include "vlccommon.hxx"
 
-struct libvlc_media_player_t;
+namespace VLC
+{
+    class Player;
+}
 
 namespace avmedia {
 namespace vlc {
@@ -35,10 +38,10 @@ typedef ::cppu::WeakImplHelper2< ::com::sun::star::media::XFrameGrabber,
 
 class VLCFrameGrabber : public FrameGrabber_BASE
 {
-    boost::shared_ptr<libvlc_media_player_t> mPlayer;
+    VLC::Player& mPlayer;
     const rtl::OUString& mUrl;
 public:
-    SAL_CALL VLCFrameGrabber( boost::shared_ptr<libvlc_media_player_t>& player, const rtl::OUString& url );
+    SAL_CALL VLCFrameGrabber( VLC::Player& player, const rtl::OUString& url );
 
     ::com::sun::star::uno::Reference< css::graphic::XGraphic > SAL_CALL grabFrame( double fMediaTime );
 

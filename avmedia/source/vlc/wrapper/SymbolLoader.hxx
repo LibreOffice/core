@@ -39,8 +39,8 @@ namespace
         "libvlccore.so.5"
     };
 
-    template<size_t N> static bool
-    tryLink( oslModule &aModule, const char *pName, const ApiMap ( &pMap )[N] )
+    template<size_t N>
+    bool tryLink( oslModule &aModule, const ApiMap ( &pMap )[N] )
     {
         for (uint i = 0; i < N; ++i)
         {
@@ -70,7 +70,7 @@ bool InitApiMap( const ApiMap ( &pMap )[N]  )
         if( aModule == NULL)
             continue;
 
-        tryLink( aModule, libNames[ j ], pMap );
+        tryLink( aModule, pMap );
 
         osl_unloadModule( aModule );
     }
