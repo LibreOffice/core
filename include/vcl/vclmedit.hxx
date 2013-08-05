@@ -100,7 +100,7 @@ public:
                     { SetText( rStr ); SetSelection( rNewSelection ); }
     OUString        GetText() const;
     OUString        GetText( LineEnd aSeparator ) const;
-    String          GetTextLines( LineEnd aSeparator ) const;
+    OUString        GetTextLines( LineEnd aSeparator ) const;
 
     void            SetRightToLeft( sal_Bool bRightToLeft );
     sal_Bool            IsRightToLeft() const;

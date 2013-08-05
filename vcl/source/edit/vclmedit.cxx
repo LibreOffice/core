@@ -1180,7 +1180,7 @@ OUString VclMultiLineEdit::GetText( LineEnd aSeparator ) const
     return pImpVclMEdit->GetText( aSeparator );
 }
 
-String VclMultiLineEdit::GetTextLines(  LineEnd aSeparator ) const
+OUString VclMultiLineEdit::GetTextLines(  LineEnd aSeparator ) const
 {
     return pImpVclMEdit->GetTextLines( aSeparator );
 }
