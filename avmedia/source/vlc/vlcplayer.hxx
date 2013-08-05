@@ -27,6 +27,7 @@
 #include <com/sun/star/media/XPlayer.hpp>
 #include <cppuhelper/basemutex.hxx>
 
+#include "wrapper/Instance.hxx"
 
 namespace avmedia {
 namespace vlc {
@@ -37,7 +38,7 @@ typedef ::cppu::WeakComponentImplHelper2< ::com::sun::star::media::XPlayer,
 class VLCPlayer : public ::cppu::BaseMutex,
                   public VLC_Base
 {
-    boost::shared_ptr<libvlc_instance_t> mInstance;
+    VLC::Instance mInstance;
     boost::shared_ptr<libvlc_media_t> mMedia;
     boost::shared_ptr<libvlc_media_player_t> mPlayer;
     const rtl::OUString mUrl;

@@ -4,6 +4,7 @@
 #include "vlcplayer.hxx"
 #include "vlcwindow.hxx"
 #include "vlcframegrabber.hxx"
+#include "wrapper/Instance.hxx"
 
 using namespace ::com::sun::star;
 
@@ -14,31 +15,28 @@ const ::rtl::OUString AVMEDIA_VLC_PLAYER_IMPLEMENTATIONNAME = "com.sun.star.comp
 const ::rtl::OUString AVMEDIA_VLC_PLAYER_SERVICENAME = "com.sun.star.media.Player_VLC";
 
 const char * const VLC_ARGS[] = {
-//    "-I",
     "-Vdummy",
     "--snapshot-format=png",
-//    "--ignore-config",
     "--ffmpeg-threads",
     "--verbose=-1",
-//    "--quiet"
 };
 
 const int MS_IN_SEC = 1000; // Millisec in sec
 
 namespace
 {
-    libvlc_media_t* InitMedia( const rtl::OUString& url, boost::shared_ptr<libvlc_instance_t>& instance )
+    libvlc_media_t* InitMedia( const rtl::OUString& url, VLC::Instance& instance )
     {
         rtl::OString dest;
         url.convertToString(&dest, RTL_TEXTENCODING_UTF8, 0);
 
-        return libvlc_media_new_path(instance.get(), dest.getStr());
+        return libvlc_media_new_path(instance, dest.getStr());
     }
 }
 
 VLCPlayer::VLCPlayer( const rtl::OUString& url )
     : VLC_Base(m_aMutex)
-    , mInstance( libvlc_new( sizeof( VLC_ARGS ) / sizeof( VLC_ARGS[0] ), VLC_ARGS ), libvlc_release )
+    , mInstance( sizeof( VLC_ARGS ) / sizeof( VLC_ARGS[0] ), VLC_ARGS )
     , mMedia( InitMedia( url, mInstance ), libvlc_media_release )
     , mPlayer( libvlc_media_player_new_from_media( mMedia.get() ), libvlc_media_player_release )
     , mUrl( url )
@@ -108,7 +106,7 @@ namespace
         case libvlc_MediaPlayerEndReached:
             boost::shared_ptr<libvlc_media_player_t> player = *static_cast< boost::shared_ptr<libvlc_media_player_t>* >( pData );
             libvlc_media_player_stop( player.get() );
-            libvlc_media_player_play( player.get() )
+            libvlc_media_player_play( player.get() );
             break;
         }
     }
