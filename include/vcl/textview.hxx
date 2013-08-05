@@ -83,7 +83,7 @@ protected:
     void                ImpShowDDCursor();
 
     bool                ImplTruncateNewText( OUString& rNewText ) const;
-    sal_Bool                ImplCheckTextLen( const String& rNewText );
+    sal_Bool            ImplCheckTextLen( const OUString& rNewText );
 
     VirtualDevice*      GetVirtualDevice();
 
@@ -121,8 +121,8 @@ public:
     void                SetSelection( const TextSelection& rNewSel, sal_Bool bGotoCursor );
     sal_Bool                HasSelection() const;
 
-    String              GetSelected();
-    String              GetSelected( LineEnd aSeparator );
+    OUString            GetSelected();
+    OUString            GetSelected( LineEnd aSeparator );
     void                DeleteSelected();
 
     void                InsertText( const OUString& rNew, sal_Bool bSelect = sal_False );

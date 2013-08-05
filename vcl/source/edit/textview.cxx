@@ -63,14 +63,14 @@ class TETextDataObject :    public ::com::sun::star::datatransfer::XTransferable
 
 {
 private:
-    String          maText;
+    OUString        maText;
     SvMemoryStream  maHTMLStream;
 
 public:
-                    TETextDataObject( const String& rText );
+                    TETextDataObject( const OUString& rText );
                     ~TETextDataObject();
 
-    String&         GetText() { return maText; }
+    OUString&        GetText() { return maText; }
     SvMemoryStream& GetHTMLStream() { return maHTMLStream; }
 
     // ::com::sun::star::uno::XInterface
@@ -84,7 +84,7 @@ public:
     sal_Bool SAL_CALL isDataFlavorSupported( const ::com::sun::star::datatransfer::DataFlavor& aFlavor ) throw(::com::sun::star::uno::RuntimeException);
 };
 
-TETextDataObject::TETextDataObject( const String& rText ) : maText( rText )
+TETextDataObject::TETextDataObject( const OUString& rText ) : maText( rText )
 {
 }
 
@@ -1197,12 +1197,12 @@ void TextView::Paste()
     Paste( aClipboard );
 }
 
-String TextView::GetSelected()
+OUString TextView::GetSelected()
 {
     return GetSelected( GetSystemLineEnd() );
 }
 
-String TextView::GetSelected( LineEnd aSeparator )
+OUString TextView::GetSelected( LineEnd aSeparator )
 {
     return mpImpl->mpTextEngine->GetText( mpImpl->maSelection, aSeparator );
 }
@@ -1351,7 +1351,7 @@ void TextView::InsertText( const OUString& rStr, sal_Bool bSelect )
     do
     {
         sal_Int32 nChunkLen = nLen > 65534 ? 65534 : nLen;
-        String aChunk( rStr.copy( nPos, nChunkLen ) );
+        OUString aChunk( rStr.copy( nPos, nChunkLen ) );
 
         TextSelection aNewSel( mpImpl->maSelection );
 
@@ -1980,13 +1980,13 @@ bool TextView::ImplTruncateNewText( OUString& rNewText ) const
     return bTruncated;
 }
 
-sal_Bool TextView::ImplCheckTextLen( const String& rNewText )
+sal_Bool TextView::ImplCheckTextLen( const OUString& rNewText )
 {
     sal_Bool bOK = sal_True;
     if ( mpImpl->mpTextEngine->GetMaxTextLen() )
     {
         sal_uLong n = mpImpl->mpTextEngine->GetTextLen();
-        n += rNewText.Len();
+        n += rNewText.getLength();
         if ( n > mpImpl->mpTextEngine->GetMaxTextLen() )
         {
             // calculate how much text is being deleted
@@ -2077,7 +2077,7 @@ void TextView::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEv
 
         mpImpl->mpTextEngine->UndoActionStart();
 
-        String aText;
+        OUString aText;
         uno::Reference< datatransfer::XTransferable > xDataObj = rDTDE.Transferable;
         if ( xDataObj.is() )
         {
@@ -2092,8 +2092,8 @@ void TextView::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEv
             }
         }
 
-        if ( aText.Len() && ( aText.GetChar( aText.Len()-1 ) == LINE_SEP ) )
-            aText.Erase( aText.Len()-1 );
+        if ( !aText.isEmpty() && ( aText[ aText.getLength()-1 ] == LINE_SEP ) )
+            aText = aText.replaceAt( aText.getLength()-1, 1, "" );
 
         TextPaM aTempStart = mpImpl->maSelection.GetStart();
         if ( ImplCheckTextLen( aText ) )
