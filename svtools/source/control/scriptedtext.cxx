@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svtools/scriptedtext.hxx>
+#include <scriptedtext.hxx>
 #include <vector>
 #include <rtl/ustring.hxx>
 #include <vcl/outdev.hxx>

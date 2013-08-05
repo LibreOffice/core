@@ -19,11 +19,11 @@
 
 
 #include <stdio.h>
-#include <svtools/addresstemplate.hxx>
+#include <addresstemplate.hxx>
 #include "addresstemplate.hrc"
-#include <svtools/svtools.hrc>
-#include <svtools/helpid.hrc>
-#include <svtools/svtresid.hxx>
+#include <svtools.hrc>
+#include <helpid.hrc>
+#include <svtresid.hxx>
 #include <tools/debug.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/interaction.hxx>
@@ -47,7 +47,7 @@
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
-#include <svtools/localresaccess.hxx>
+#include <localresaccess.hxx>
 #include "svl/filenotation.hxx"
 #include <tools/urlobj.hxx>
 #include <algorithm>

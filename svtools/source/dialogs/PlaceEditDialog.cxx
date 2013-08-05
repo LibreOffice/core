@@ -11,7 +11,7 @@
 #include "ServerDetailsControls.hxx"
 
 #include <officecfg/Office/Common.hxx>
-#include <svtools/svtresid.hxx>
+#include <svtresid.hxx>
 #include <vcl/msgbox.hxx>
 
 using namespace boost;

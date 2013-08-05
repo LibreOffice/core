@@ -18,9 +18,9 @@
  */
 
 
-#include <svtools/svtresid.hxx>
-#include <svtools/svtools.hrc>
-#include <svtools/indexentryres.hxx>
+#include <svtresid.hxx>
+#include <svtools.hrc>
+#include <indexentryres.hxx>
 
 // -------------------------------------------------------------------------
 //

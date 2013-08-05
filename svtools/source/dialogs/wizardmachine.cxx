@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svtools/wizardmachine.hxx>
-#include <svtools/helpid.hrc>
+#include <wizardmachine.hxx>
+#include <helpid.hrc>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/msgbox.hxx>
-#include <svtools/svtresid.hxx>
-#include <svtools/svtools.hrc>
+#include <svtresid.hxx>
+#include <svtools.hrc>
 
 //.........................................................................
 namespace svt

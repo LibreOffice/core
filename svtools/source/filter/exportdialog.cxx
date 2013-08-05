@@ -25,8 +25,8 @@
 #include <tools/stream.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/FilterConfigItem.hxx>
-#include <svtools/svtools.hrc>
-#include <svtools/svtresid.hxx>
+#include <svtools.hrc>
+#include <svtresid.hxx>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>

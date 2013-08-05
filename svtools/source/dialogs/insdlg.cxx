@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svtools/insdlg.hxx>
-#include <svtools/sores.hxx>
-#include <svtools/svtresid.hxx>
+#include <insdlg.hxx>
+#include <sores.hxx>
+#include <svtresid.hxx>
 
 #include <unotools/configmgr.hxx>
 #include <comphelper/classids.hxx>
