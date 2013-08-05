@@ -1234,7 +1234,7 @@ void ApplyRectangularGradientAsBitmap( const SvxMSDffManager& rManager, SvStream
             }
 
             rSet.Put(XFillBmpTileItem(false));
-            rSet.Put(XFillBitmapItem(OUString(), Graphic(aBitmap)));
+            rSet.Put(XFillBitmapItem(OUString(), GraphicObject::Create(Graphic(aBitmap))));
         }
     }
 }
@@ -1356,12 +1356,12 @@ void DffPropertyReader::ApplyFillAttributes( SvStream& rIn, SfxItemSet& rSet, co
                             aGraf = Graphic( aXOBitmap.GetBitmap()  );
                         }
 
-                        rSet.Put(XFillBitmapItem(OUString(), aGraf));
+                        rSet.Put(XFillBitmapItem(OUString(), GraphicObject::Create(aGraf)));
                     }
                     else if ( eMSO_FillType == mso_fillTexture )
                     {
                         rSet.Put(XFillBmpTileItem(true));
-                        rSet.Put(XFillBitmapItem(OUString(), aGraf));
+                        rSet.Put(XFillBitmapItem(OUString(), GraphicObject::Create(aGraf)));
                         rSet.Put(XFillBmpSizeXItem(GetPropertyValue(DFF_Prop_fillWidth, 0) / 360));
                         rSet.Put(XFillBmpSizeYItem(GetPropertyValue(DFF_Prop_fillHeight, 0) / 360));
                         rSet.Put(XFillBmpSizeLogItem(true));

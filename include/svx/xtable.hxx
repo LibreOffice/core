@@ -153,15 +153,15 @@ public:
 class SVX_DLLPUBLIC XBitmapEntry : public XPropertyEntry
 {
 private:
-    GraphicObject   maGraphicObject;
+    rtl::Reference< GraphicObject > mxGraphicObject;
 
 public:
-    XBitmapEntry(const GraphicObject& rGraphicObject, const String& rName);
+    XBitmapEntry(const rtl::Reference< GraphicObject >& xGraphicObject, const String& rName);
     XBitmapEntry(const XBitmapEntry& rOther);
 
-    const GraphicObject& GetGraphicObject() const
+    rtl::Reference< GraphicObject > GetGraphicObject() const
     {
-        return maGraphicObject;
+        return mxGraphicObject;
     }
 };
 

@@ -112,8 +112,7 @@ SvxBulletItem::SvxBulletItem( sal_uInt16 _nWhich ) : SfxPoolItem( _nWhich )
 // -----------------------------------------------------------------------
 
 SvxBulletItem::SvxBulletItem( SvStream& rStrm, sal_uInt16 _nWhich ) :
-    SfxPoolItem( _nWhich ),
-    pGraphicObject( NULL )
+    SfxPoolItem( _nWhich )
 {
     rStrm >> nStyle;
 
@@ -140,7 +139,7 @@ SvxBulletItem::SvxBulletItem( SvStream& rStrm, sal_uInt16 _nWhich ) :
             nStyle = BS_NONE;
         }
         else
-            pGraphicObject = new GraphicObject( aBmp );
+            mxGraphicObject = GraphicObject::Create( aBmp );
     }
 
     //#fdo39428 SvStream no longer supports operator>>(long&)
@@ -170,7 +169,7 @@ SvxBulletItem::SvxBulletItem( SvStream& rStrm, sal_uInt16 _nWhich ) :
 SvxBulletItem::SvxBulletItem( const SvxBulletItem& rItem) : SfxPoolItem( rItem )
 {
     aFont           = rItem.aFont;
-    pGraphicObject  = ( rItem.pGraphicObject ? new GraphicObject( *rItem.pGraphicObject ) : NULL );
+    mxGraphicObject  = GraphicObject::Create( rItem.mxGraphicObject );
     aPrevText       = rItem.aPrevText;
     aFollowText     = rItem.aFollowText;
     nStart          = rItem.nStart;
@@ -186,8 +185,6 @@ SvxBulletItem::SvxBulletItem( const SvxBulletItem& rItem) : SfxPoolItem( rItem )
 
 SvxBulletItem::~SvxBulletItem()
 {
-    if( pGraphicObject )
-        delete pGraphicObject;
 }
 
 // -----------------------------------------------------------------------
@@ -217,7 +214,7 @@ void SvxBulletItem::SetDefaultFont_Impl()
 
 void SvxBulletItem::SetDefaults_Impl()
 {
-    pGraphicObject  = NULL;
+    mxGraphicObject  = rtl::Reference< GraphicObject >();
     nWidth          = 1200;  // 1.2cm
     nStart          = 1;
     nStyle          = BS_123;
@@ -290,12 +287,13 @@ int SvxBulletItem::operator==( const SfxPoolItem& rItem ) const
 
     if( nStyle == BS_BMP )
     {
-        if( ( pGraphicObject && !rBullet.pGraphicObject ) || ( !pGraphicObject && rBullet.pGraphicObject ) )
+        if( ( mxGraphicObject.is() && !rBullet.mxGraphicObject.is() ) ||
+            ( !mxGraphicObject.is() && rBullet.mxGraphicObject.is() ) )
             return 0;
 
-        if( ( pGraphicObject && rBullet.pGraphicObject ) &&
-            ( ( *pGraphicObject != *rBullet.pGraphicObject ) ||
-              ( pGraphicObject->GetPrefSize() != rBullet.pGraphicObject->GetPrefSize() ) ) )
+        if( ( mxGraphicObject.is() && rBullet.mxGraphicObject.is() ) &&
+            ( ( mxGraphicObject.get() != rBullet.mxGraphicObject.get() ) ||
+              ( mxGraphicObject->GetPrefSize() != rBullet.mxGraphicObject->GetPrefSize() ) ) )
         {
             return 0;
         }
@@ -310,13 +308,10 @@ SvStream& SvxBulletItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) c
 {
     // Correction for empty bitmap
     if( ( nStyle == BS_BMP ) &&
-        ( !pGraphicObject || ( GRAPHIC_NONE == pGraphicObject->GetType() ) || ( GRAPHIC_DEFAULT == pGraphicObject->GetType() ) ) )
+        ( !mxGraphicObject.is() || ( GRAPHIC_NONE == mxGraphicObject->GetType() ) || ( GRAPHIC_DEFAULT == mxGraphicObject->GetType() ) ) )
     {
-        if( pGraphicObject )
-        {
-            delete( const_cast< SvxBulletItem* >( this )->pGraphicObject );
-            const_cast< SvxBulletItem* >( this )->pGraphicObject = NULL;
-        }
+        if( mxGraphicObject.is() )
+            const_cast< SvxBulletItem* >( this )->mxGraphicObject.clear();
 
         const_cast< SvxBulletItem* >( this )->nStyle = BS_NONE;
     }
@@ -331,7 +326,7 @@ SvStream& SvxBulletItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) c
 
         // Small preliminary estimate of the size ...
         sal_uInt16 nFac = ( rStrm.GetCompressMode() != COMPRESSMODE_NONE ) ? 3 : 1;
-        const Bitmap aBmp( pGraphicObject->GetGraphic().GetBitmap() );
+        const Bitmap aBmp( mxGraphicObject->GetGraphic().GetBitmap() );
         sal_uLong nBytes = aBmp.GetSizeBytes();
         if ( nBytes < sal_uLong(0xFF00*nFac) )
         {
@@ -406,34 +401,26 @@ SfxItemPresentation SvxBulletItem::GetPresentation
 
 //------------------------------------------------------------------------
 
-const GraphicObject& SvxBulletItem::GetGraphicObject() const
+rtl::Reference< GraphicObject > SvxBulletItem::GetGraphicObject() const
 {
-    if( pGraphicObject )
-        return *pGraphicObject;
+    if( mxGraphicObject.is() )
+        return mxGraphicObject;
     else
     {
-        static const GraphicObject aDefaultObject;
-        return aDefaultObject;
+        static const rtl::Reference< GraphicObject > xDefaultObject = GraphicObject::Create();
+        return xDefaultObject;
     }
 }
 
 //------------------------------------------------------------------------
 
-void SvxBulletItem::SetGraphicObject( const GraphicObject& rGraphicObject )
+void SvxBulletItem::SetGraphicObject( const rtl::Reference< GraphicObject > &xGraphicObject )
 {
-    if( ( GRAPHIC_NONE == rGraphicObject.GetType() ) || ( GRAPHIC_DEFAULT == rGraphicObject.GetType() ) )
-    {
-        if( pGraphicObject )
-        {
-            delete pGraphicObject;
-            pGraphicObject = NULL;
-        }
-    }
+    if( GRAPHIC_NONE == xGraphicObject->GetType() ||
+        GRAPHIC_DEFAULT == xGraphicObject->GetType() )
+        mxGraphicObject.clear();
     else
-    {
-        delete pGraphicObject;
-        pGraphicObject = new GraphicObject( rGraphicObject );
-    }
+        mxGraphicObject = GraphicObject::Create( xGraphicObject );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

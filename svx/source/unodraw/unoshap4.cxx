@@ -147,8 +147,8 @@ bool SvxOle2Shape::setPropertyValueImpl( const OUString& rName, const SfxItemPro
         OUString aURL;
         if( rValue >>= aURL )
         {
-            GraphicObject aGrafObj( GraphicObject::CreateGraphicObjectFromURL( aURL ) );
-            static_cast<SdrOle2Obj*>(mpObj.get())->SetGraphic( &aGrafObj.GetGraphic() );
+            rtl::Reference< GraphicObject > xGrafObj( GraphicObject::CreateGraphicObjectFromURL( aURL ) );
+            static_cast<SdrOle2Obj*>(mpObj.get())->SetGraphic( &xGrafObj->GetGraphic() );
             return true;
         }
         break;
@@ -161,8 +161,8 @@ bool SvxOle2Shape::setPropertyValueImpl( const OUString& rName, const SfxItemPro
             SdrOle2Obj* pOle = dynamic_cast< SdrOle2Obj* >( mpObj.get() );
             if( pOle )
             {
-                GraphicObject aGrafObj( xGraphic );
-                const Graphic aGraphic( aGrafObj.GetGraphic() );
+                rtl::Reference< GraphicObject > xGrafObj( GraphicObject::Create( xGraphic ) );
+                const Graphic aGraphic( xGrafObj->GetGraphic() );
                 pOle->SetGraphicToObj( aGraphic, OUString() );
             }
             return true;
@@ -338,10 +338,10 @@ bool SvxOle2Shape::getPropertyValueImpl( const OUString& rName, const SfxItemPro
 
             if( pGraphic )
             {
-                GraphicObject aObj( *pGraphic );
+                rtl::Reference< GraphicObject > xObj( GraphicObject::Create( *pGraphic ) );
                 aURL = OUString( UNO_NAME_GRAPHOBJ_URLPREFIX);
-                aURL += OStringToOUString(aObj.GetUniqueID(),
-                    RTL_TEXTENCODING_ASCII_US);
+                aURL += OStringToOUString(xObj->GetUniqueID(),
+                                          RTL_TEXTENCODING_ASCII_US);
             }
         }
         rValue <<= aURL;

@@ -80,8 +80,8 @@ private:
 
     OUString aFileName;          // Wenn es sich um einen Link handelt, steht hier der Dateiname drin.
     OUString aFilterName;
-    GraphicObject*          pGraphic;           // Zur Beschleunigung von Bitmapausgaben, besonders von gedrehten.
-    GraphicObject*          mpReplacementGraphic;
+    rtl::Reference< GraphicObject> mxGraphic;           // Zur Beschleunigung von Bitmapausgaben, besonders von gedrehten.
+    rtl::Reference< GraphicObject> mxReplacementGraphic;
     SdrGraphicLink*         pGraphicLink;       // Und hier noch ein Pointer fuer gelinkte Grafiken
     bool                    bMirrored:1;        // True bedeutet, die Grafik ist horizontal, d.h. ueber die Y-Achse gespiegelt auszugeben.
 
@@ -110,9 +110,9 @@ public:
                             SdrGrafObj(const Graphic& rGrf, const Rectangle& rRect);
     virtual                 ~SdrGrafObj();
 
-    void                    SetGraphicObject( const GraphicObject& rGrfObj );
-    const GraphicObject&    GetGraphicObject(bool bForceSwapIn = false) const;
-    const GraphicObject*    GetReplacementGraphicObject() const;
+    void                    SetGraphicObject( const rtl::Reference< GraphicObject > & xGrfObj );
+    rtl::Reference< GraphicObject > GetGraphicObject(bool bForceSwapIn = false) const;
+    rtl::Reference< GraphicObject > GetReplacementGraphicObject() const;
 
     void                    NbcSetGraphic(const Graphic& rGrf);
     void                    SetGraphic(const Graphic& rGrf);

@@ -49,6 +49,7 @@ GalleryPreview::GalleryPreview( GalleryBrowser2* pParent, GalleryTheme* pTheme )
 
     SetHelpId( HID_GALLERY_WINDOW );
     InitSettings();
+    mxGraphicObj = GraphicObject::Create();
 }
 
 GalleryPreview::GalleryPreview( Window* pParent, const ResId & rResId  ) :
@@ -61,6 +62,7 @@ GalleryPreview::GalleryPreview( Window* pParent, const ResId & rResId  ) :
 
     SetHelpId( HID_GALLERY_PREVIEW );
     InitSettings();
+    mxGraphicObj = GraphicObject::Create();
 }
 
 GalleryPreview::~GalleryPreview()
@@ -142,15 +144,15 @@ void GalleryPreview::Paint( const Rectangle& rRect )
 {
     Window::Paint( rRect );
 
-    if( ImplGetGraphicCenterRect( aGraphicObj.GetGraphic(), aPreviewRect ) )
+    if( ImplGetGraphicCenterRect( mxGraphicObj->GetGraphic(), maPreviewRect ) )
     {
-        const Point aPos( aPreviewRect.TopLeft() );
-        const Size  aSize( aPreviewRect.GetSize() );
+        const Point aPos( maPreviewRect.TopLeft() );
+        const Size  aSize( maPreviewRect.GetSize() );
 
-        if( aGraphicObj.IsAnimated() )
-            aGraphicObj.StartAnimation( this, aPos, aSize );
+        if( mxGraphicObj->IsAnimated() )
+            mxGraphicObj->StartAnimation( this, aPos, aSize );
         else
-            aGraphicObj.Draw( this, aPos, aSize );
+            mxGraphicObj->Draw( this, aPos, aSize );
     }
 }
 

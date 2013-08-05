@@ -612,7 +612,7 @@ namespace drawinglayer
 
         attribute::SdrFillGraphicAttribute createNewSdrFillGraphicAttribute(const SfxItemSet& rSet)
         {
-            Graphic aGraphic(((const XFillBitmapItem&)(rSet.Get(XATTR_FILLBITMAP))).GetGraphicObject().GetGraphic());
+            Graphic aGraphic(((const XFillBitmapItem&)(rSet.Get(XATTR_FILLBITMAP))).GetGraphicObject()->GetGraphic());
 
             if(!(GRAPHIC_BITMAP == aGraphic.GetType() || GRAPHIC_GDIMETAFILE == aGraphic.GetType()))
             {

@@ -599,7 +599,8 @@ void ImpSdrGDIMetaFileImport::InsertObj(SdrObject* pObj, bool bScale)
                             aClipSize);
 
                         pObj->SetMergedItem(XFillStyleItem(XFILL_BITMAP));
-                        pObj->SetMergedItem(XFillBitmapItem(String(), Graphic(aClippedBitmap)));
+                        pObj->SetMergedItem(
+                                XFillBitmapItem(String(), GraphicObject::Create(Graphic(aClippedBitmap))));
                         pObj->SetMergedItem(XFillBmpTileItem(false));
                         pObj->SetMergedItem(XFillBmpStretchItem(true));
                     }

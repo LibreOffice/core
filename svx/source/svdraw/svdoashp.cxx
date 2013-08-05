@@ -342,8 +342,8 @@ SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const SfxItemS
         // bitmap and transparency like shadow
         if(bBitmapFillUsed)
         {
-            GraphicObject aGraphicObject(((XFillBitmapItem&)(rOriginalSet.Get(XATTR_FILLBITMAP))).GetGraphicObject());
-            const BitmapEx aBitmapEx(aGraphicObject.GetGraphic().GetBitmapEx());
+            rtl::Reference< GraphicObject > xGraphicObject(((XFillBitmapItem&)(rOriginalSet.Get(XATTR_FILLBITMAP))).GetGraphicObject());
+            const BitmapEx aBitmapEx(xGraphicObject->GetGraphic().GetBitmapEx());
             Bitmap aBitmap(aBitmapEx.GetBitmap());
 
             if(!aBitmap.IsEmpty())
@@ -379,21 +379,21 @@ SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const SfxItemS
                     {
                         if(aBitmapEx.IsAlpha())
                         {
-                            aGraphicObject.SetGraphic(Graphic(BitmapEx(aDestBitmap, aBitmapEx.GetAlpha())));
+                            xGraphicObject->SetGraphic(Graphic(BitmapEx(aDestBitmap, aBitmapEx.GetAlpha())));
                         }
                         else
                         {
-                            aGraphicObject.SetGraphic(Graphic(BitmapEx(aDestBitmap, aBitmapEx.GetMask())));
+                            xGraphicObject->SetGraphic(Graphic(BitmapEx(aDestBitmap, aBitmapEx.GetMask())));
                         }
                     }
                     else
                     {
-                        aGraphicObject.SetGraphic(Graphic(aDestBitmap));
+                        xGraphicObject->SetGraphic(Graphic(aDestBitmap));
                     }
                 }
             }
 
-            aTempSet.Put(XFillBitmapItem(aTempSet.GetPool(), aGraphicObject));
+            aTempSet.Put(XFillBitmapItem(aTempSet.GetPool(), xGraphicObject));
             aTempSet.Put(XFillTransparenceItem(nShadowTransparence));
         }
 

@@ -59,28 +59,28 @@ bool XBitmapList::Create()
     // white/white bitmap
     aStr.AppendAscii(" 1");
     aBitmap = createHistorical8x8FromArray(aArray, RGB_Color(COL_WHITE), RGB_Color(COL_WHITE));
-    Insert(new XBitmapEntry(Graphic(aBitmap), aStr));
+    Insert(new XBitmapEntry(GraphicObject::Create(Graphic(aBitmap)), aStr));
 
     // black/white bitmap
     aArray[ 0] = 1; aArray[ 9] = 1; aArray[18] = 1; aArray[27] = 1;
     aArray[36] = 1; aArray[45] = 1; aArray[54] = 1; aArray[63] = 1;
     aStr.SetChar(nLen, sal_Unicode('2'));
     aBitmap = createHistorical8x8FromArray(aArray, RGB_Color(COL_BLACK), RGB_Color(COL_WHITE));
-    Insert(new XBitmapEntry(Graphic(aBitmap), aStr));
+    Insert(new XBitmapEntry(GraphicObject::Create(Graphic(aBitmap)), aStr));
 
     // lightred/white bitmap
     aArray[ 7] = 1; aArray[14] = 1; aArray[21] = 1; aArray[28] = 1;
     aArray[35] = 1; aArray[42] = 1; aArray[49] = 1; aArray[56] = 1;
     aStr.SetChar(nLen, sal_Unicode('3'));
     aBitmap = createHistorical8x8FromArray(aArray, RGB_Color(COL_LIGHTRED), RGB_Color(COL_WHITE));
-    Insert(new XBitmapEntry(Graphic(aBitmap), aStr));
+    Insert(new XBitmapEntry(GraphicObject::Create(Graphic(aBitmap)), aStr));
 
     // lightblue/white bitmap
     aArray[24] = 1; aArray[25] = 1; aArray[26] = 1;
     aArray[29] = 1; aArray[30] = 1; aArray[31] = 1;
     aStr.SetChar(nLen, sal_Unicode('4'));
     aBitmap = createHistorical8x8FromArray(aArray, RGB_Color(COL_LIGHTBLUE), RGB_Color(COL_WHITE));
-    Insert(new XBitmapEntry(Graphic(aBitmap), aStr));
+    Insert(new XBitmapEntry(GraphicObject::Create(Graphic(aBitmap)), aStr));
 
     return sal_True;
 }

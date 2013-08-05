@@ -87,14 +87,14 @@ namespace sdr
             const GraphicAttr& rLocalGrafInfo) const
         {
             drawinglayer::primitive2d::Primitive2DSequence xRetval;
-            GraphicObject aEmptyGraphicObject;
+            rtl::Reference< GraphicObject > xEmptyGraphicObject = GraphicObject::Create();
             GraphicAttr aEmptyGraphicAttr;
 
             // SdrGrafPrimitive2D without content in original size which carries all eventual attributes and texts
             const drawinglayer::primitive2d::Primitive2DReference xReferenceA(new drawinglayer::primitive2d::SdrGrafPrimitive2D(
                 rObjectMatrix,
                 rAttribute,
-                aEmptyGraphicObject,
+                xEmptyGraphicObject,
                 aEmptyGraphicAttr));
             xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReferenceA, 1);
 
@@ -132,11 +132,11 @@ namespace sdr
                 aSmallerMatrix = basegfx::tools::createShearXRotateTranslateB2DHomMatrix(fShearX, fRotate, aTranslate)
                     * aSmallerMatrix;
 
-                const GraphicObject& rGraphicObject = GetGrafObject().GetGraphicObject(false);
+                rtl::Reference< GraphicObject > xGraphicObject = GetGrafObject().GetGraphicObject(false);
                 const drawinglayer::primitive2d::Primitive2DReference xReferenceB(new drawinglayer::primitive2d::SdrGrafPrimitive2D(
                     aSmallerMatrix,
                     drawinglayer::attribute::SdrLineFillShadowTextAttribute(),
-                    rGraphicObject,
+                    xGraphicObject,
                     rLocalGrafInfo));
 
                 drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(xRetval, xReferenceB);
@@ -150,14 +150,14 @@ namespace sdr
             const drawinglayer::attribute::SdrLineFillShadowTextAttribute& rAttribute) const
         {
             drawinglayer::primitive2d::Primitive2DSequence xRetval;
-            GraphicObject aEmptyGraphicObject;
+            rtl::Reference< GraphicObject > xEmptyGraphicObject = GraphicObject::Create();
             GraphicAttr aEmptyGraphicAttr;
 
             // SdrGrafPrimitive2D without content in original size which carries all eventual attributes and texts
             const drawinglayer::primitive2d::Primitive2DReference xReferenceA(new drawinglayer::primitive2d::SdrGrafPrimitive2D(
                 rObjectMatrix,
                 rAttribute,
-                aEmptyGraphicObject,
+                xEmptyGraphicObject,
                 aEmptyGraphicAttr));
             xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReferenceA, 1);
 
@@ -367,7 +367,7 @@ namespace sdr
                 aObjectRange.getMinX(), aObjectRange.getMinY()));
 
             // get the current, unchenged graphic obect from SdrGrafObj
-            const GraphicObject& rGraphicObject = GetGrafObject().GetGraphicObject(false);
+            rtl::Reference< GraphicObject > xGraphicObject = GetGrafObject().GetGraphicObject(false);
 
             if(visualisationUsesPresObj())
             {
@@ -392,7 +392,7 @@ namespace sdr
                     new drawinglayer::primitive2d::SdrGrafPrimitive2D(
                         aObjectMatrix,
                         aAttribute,
-                        rGraphicObject,
+                        xGraphicObject,
                         aLocalGrafInfo));
 
                 xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
@@ -418,14 +418,14 @@ namespace sdr
                 return false;
 
             // draft when swapped out
-            const GraphicObject& rGraphicObject = GetGrafObject().GetGraphicObject(false);
+            rtl::Reference< GraphicObject > xGraphicObject = GetGrafObject().GetGraphicObject(false);
             static bool bAllowReplacements(true);
 
-            if(rGraphicObject.IsSwappedOut() && bAllowReplacements)
+            if(xGraphicObject->IsSwappedOut() && bAllowReplacements)
                 return true;
 
             // draft when no graphic
-            if(GRAPHIC_NONE == rGraphicObject.GetType() || GRAPHIC_DEFAULT == rGraphicObject.GetType())
+            if(GRAPHIC_NONE == xGraphicObject->GetType() || GRAPHIC_DEFAULT == xGraphicObject->GetType())
                return true;
 
             return false;

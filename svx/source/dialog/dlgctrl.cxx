@@ -1366,7 +1366,7 @@ void BitmapLB::Fill( const XBitmapListRef &pList )
     for(long i(0); i < nCount; i++)
     {
         pEntry = pList->GetBitmap(i);
-        maBitmapEx = pEntry->GetGraphicObject().GetGraphic().GetBitmapEx();
+        maBitmapEx = pEntry->GetGraphicObject()->GetGraphic().GetBitmapEx();
         formatBitmapExToSize(maBitmapEx, aSize);
         InsertEntry(pEntry->GetName(), maBitmapEx);
     }
@@ -1379,7 +1379,7 @@ void BitmapLB::Fill( const XBitmapListRef &pList )
 
 void BitmapLB::Append(const Size& rSize, const XBitmapEntry& rEntry)
 {
-    maBitmapEx = rEntry.GetGraphicObject().GetGraphic().GetBitmapEx();
+    maBitmapEx = rEntry.GetGraphicObject()->GetGraphic().GetBitmapEx();
 
     if(!maBitmapEx.IsEmpty())
     {
@@ -1399,7 +1399,7 @@ void BitmapLB::Append(const Size& rSize, const XBitmapEntry& rEntry)
 void BitmapLB::Modify(const Size& rSize, const XBitmapEntry& rEntry, sal_uInt16 nPos)
 {
     RemoveEntry(nPos);
-    maBitmapEx = rEntry.GetGraphicObject().GetGraphic().GetBitmapEx();
+    maBitmapEx = rEntry.GetGraphicObject()->GetGraphic().GetBitmapEx();
 
     if(!maBitmapEx.IsEmpty())
     {
@@ -1431,7 +1431,7 @@ void FillAttrLB::Fill( const XBitmapListRef &pList )
     for(long i(0); i < nCount; i++)
     {
         pEntry = pList->GetBitmap( i );
-        maBitmapEx = pEntry->GetGraphicObject().GetGraphic().GetBitmapEx();
+        maBitmapEx = pEntry->GetGraphicObject()->GetGraphic().GetBitmapEx();
         formatBitmapExToSize(maBitmapEx, aSize);
         ListBox::InsertEntry(pEntry->GetName(), maBitmapEx);
     }

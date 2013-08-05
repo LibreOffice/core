@@ -1653,7 +1653,7 @@ bool GraphicObject::ImplRenderTileRecursive( VirtualDevice& rVDev, int nExponent
                                              sal_uLong nFlags, ImplTileInfo& rTileInfo )
 {
     // gets loaded with our tile bitmap
-    GraphicObject aTmpGraphic;
+    rtl::Reference< GraphicObject > xTmpGraphic;
 
     // stores a flag that renders the zero'th tile position
     // (i.e. (0,0)+rCurrPos) only if we're at the bottom of the
@@ -1677,7 +1677,7 @@ bool GraphicObject::ImplRenderTileRecursive( VirtualDevice& rVDev, int nExponent
     // check for recursion's end condition: LSB place reached?
     if( nMSBFactor == 1 )
     {
-        aTmpGraphic = *this;
+        xTmpGraphic = rtl::Reference< GraphicObject >( this );
 
         // set initial tile size -> orig size
         aTileInfo.aTileSizePixel = rTileSizePixel;
@@ -1692,7 +1692,7 @@ bool GraphicObject::ImplRenderTileRecursive( VirtualDevice& rVDev, int nExponent
         // extract generated tile -> see comment on the first loop below
         BitmapEx aTileBitmap( rVDev.GetBitmap( aTileInfo.aTileTopLeft, aTileInfo.aTileSizePixel ) );
 
-        aTmpGraphic = GraphicObject( aTileBitmap );
+        xTmpGraphic = GraphicObject::Create( aTileBitmap );
 
         // fill stripes left over from upstream levels:
         //
@@ -1719,7 +1719,7 @@ bool GraphicObject::ImplRenderTileRecursive( VirtualDevice& rVDev, int nExponent
             aCurrPos.Y() = aTileInfo.aTileTopLeft.Y();
             for( nX=0; nX < aTileInfo.nTilesEmptyX; nX += nMSBFactor )
             {
-                if( !aTmpGraphic.Draw( &rVDev, aCurrPos, aTileInfo.aTileSizePixel, pAttr, nFlags ) )
+                if( !xTmpGraphic->Draw( &rVDev, aCurrPos, aTileInfo.aTileSizePixel, pAttr, nFlags ) )
                     return false;
 
                 aCurrPos.X() += aTileInfo.aTileSizePixel.Width();
@@ -1740,7 +1740,7 @@ bool GraphicObject::ImplRenderTileRecursive( VirtualDevice& rVDev, int nExponent
             aCurrPos.Y() = aTileInfo.aNextTileTopLeft.Y();
             for( nY=0; nY < aTileInfo.nTilesEmptyY; nY += nMSBFactor )
             {
-                if( !aTmpGraphic.Draw( &rVDev, aCurrPos, aTileInfo.aTileSizePixel, pAttr, nFlags ) )
+                if( !xTmpGraphic->Draw( &rVDev, aCurrPos, aTileInfo.aTileSizePixel, pAttr, nFlags ) )
                     return false;
 
                 aCurrPos.Y() += aTileInfo.aTileSizePixel.Height();
@@ -1800,7 +1800,7 @@ bool GraphicObject::ImplRenderTileRecursive( VirtualDevice& rVDev, int nExponent
         {
             if( bNoFirstTileDraw )
                 bNoFirstTileDraw = false; // don't draw first tile position
-            else if( !aTmpGraphic.Draw( &rVDev, aCurrPos, aTileInfo.aTileSizePixel, pAttr, nFlags ) )
+            else if( !xTmpGraphic->Draw( &rVDev, aCurrPos, aTileInfo.aTileSizePixel, pAttr, nFlags ) )
                 return false;
 
             aCurrPos.X() += aTileInfo.aTileSizePixel.Width();
@@ -1879,10 +1879,10 @@ bool GraphicObject::ImplDrawTiled( OutputDevice* pOut, const Rectangle& rArea, c
             }
 
             // paint generated tile
-            GraphicObject aTmpGraphic( aTileBitmap );
-            bRet = aTmpGraphic.ImplDrawTiled( pOut, rArea,
-                                              aTileBitmap.GetSizePixel(),
-                                              rOffset, pAttr, nFlags, nTileCacheSize1D );
+            rtl::Reference< GraphicObject > xTmpGraphic = GraphicObject::Create( aTileBitmap );
+            bRet = xTmpGraphic->ImplDrawTiled( pOut, rArea,
+                                               aTileBitmap.GetSizePixel(),
+                                               rOffset, pAttr, nFlags, nTileCacheSize1D );
         }
     }
     else

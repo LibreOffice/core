@@ -538,7 +538,7 @@ namespace
         // create GraphicPrimitive2D
         const drawinglayer::primitive2d::Primitive2DReference aNewReference(new drawinglayer::primitive2d::GraphicPrimitive2D(
             aNewTransform,
-            rInfo.maBulletGraphicObject,
+            rInfo.mxBulletGraphicObject,
             aGraphicAttr));
 
         // embed in TextHierarchyBulletPrimitive2D

@@ -762,8 +762,8 @@ namespace vclcanvas
                 double               nShearX;
                 aMatrix.decompose( aScale, aOutputPos, nRotate, nShearX );
 
-                GraphicAttr             aGrfAttr;
-                GraphicObjectSharedPtr  pGrfObj;
+                GraphicAttr                    aGrfAttr;
+                rtl::Reference< GraphicObject> xGrfObj;
 
                 ::Size aBmpSize( aBmpEx.GetSizePixel() );
 
@@ -803,7 +803,7 @@ namespace vclcanvas
                     const double nAngleInTenthOfDegrees (3600.0 - nRotate * 3600.0 / (2*M_PI));
                     aGrfAttr.SetRotation( static_cast< sal_uInt16 >(::basegfx::fround(nAngleInTenthOfDegrees)) );
 
-                    pGrfObj.reset( new GraphicObject( aBmpEx ) );
+                    xGrfObj = GraphicObject::Create( aBmpEx );
                 }
                 else
                 {
@@ -828,7 +828,7 @@ namespace vclcanvas
                                                      renderState.DeviceColor,
                                                      tools::MODULATE_NONE );
 
-                    pGrfObj.reset( new GraphicObject( aBmpEx ) );
+                    xGrfObj = GraphicObject::Create( aBmpEx );
 
                     // clear scale values, generated bitmap already
                     // contains scaling
@@ -843,13 +843,13 @@ namespace vclcanvas
                 const ::Size  aSz( ::basegfx::fround( aScale.getX() * aBmpSize.Width() ),
                                    ::basegfx::fround( aScale.getY() * aBmpSize.Height() ) );
 
-                pGrfObj->Draw( &mpOutDev->getOutDev(),
+                xGrfObj->Draw( &mpOutDev->getOutDev(),
                                aPt,
                                aSz,
                                &aGrfAttr );
 
                 if( mp2ndOutDev )
-                    pGrfObj->Draw( &mp2ndOutDev->getOutDev(),
+                    xGrfObj->Draw( &mp2ndOutDev->getOutDev(),
                                    aPt,
                                    aSz,
                                    &aGrfAttr );
@@ -858,7 +858,7 @@ namespace vclcanvas
                 // display bitmap - return cache object, to retain
                 // that information.
                 return uno::Reference< rendering::XCachedPrimitive >(
-                    new CachedBitmap( pGrfObj,
+                    new CachedBitmap( xGrfObj,
                                       aPt,
                                       aSz,
                                       aGrfAttr,

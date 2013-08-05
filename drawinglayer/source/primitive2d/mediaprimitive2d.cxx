@@ -49,11 +49,11 @@ namespace drawinglayer
 
             if(GRAPHIC_BITMAP == maSnapshot.GetType() || GRAPHIC_GDIMETAFILE == maSnapshot.GetType())
             {
-                const GraphicObject aGraphicObject(maSnapshot);
+                const rtl::Reference< GraphicObject > xGraphicObject = GraphicObject::Create(maSnapshot);
                 const GraphicAttr aGraphicAttr;
                 xRetval.realloc(2);
                 xRetval[0] = xRefBackground;
-                xRetval[1] = Primitive2DReference(new GraphicPrimitive2D(getTransform(), aGraphicObject, aGraphicAttr));
+                xRetval[1] = Primitive2DReference(new GraphicPrimitive2D(getTransform(), xGraphicObject, aGraphicAttr));
             }
 
             if(getDiscreteBorder())

@@ -19,6 +19,7 @@
 #ifndef _SVX_BRSHITEM_HXX
 #define _SVX_BRSHITEM_HXX
 
+#include <rtl/ref.hxx>
 #include <svl/poolitem.hxx>
 #include <vcl/wall.hxx>
 #include <tools/link.hxx>
@@ -70,7 +71,7 @@ public:
 
     SvxBrushItem( const Graphic& rGraphic,
                   SvxGraphicPosition ePos, sal_uInt16 nWhich );
-    SvxBrushItem( const GraphicObject& rGraphicObj,
+    SvxBrushItem( const rtl::Reference< GraphicObject >& xGraphicObj,
                   SvxGraphicPosition ePos, sal_uInt16 nWhich );
     SvxBrushItem( const String& rLink, const String& rFilter,
                   SvxGraphicPosition ePos, sal_uInt16 nWhich );
@@ -107,14 +108,14 @@ public:
 
     sal_uInt32              GetShadingValue() const     { return nShadingValue; }
     const Graphic*          GetGraphic() const;
-    const GraphicObject*    GetGraphicObject() const;
+    rtl::Reference<GraphicObject> GetGraphicObject() const;
     const String*           GetGraphicLink() const      { return pStrLink; }
     const String*           GetGraphicFilter() const    { return pStrFilter; }
 
     void                SetShadingValue( const sal_uInt32 nNew );
     void                SetGraphicPos( SvxGraphicPosition eNew );
     void                SetGraphic( const Graphic& rNew );
-    void                SetGraphicObject( const GraphicObject& rNewObj );
+    void                SetGraphicObject( const rtl::Reference< GraphicObject> & xNewObj );
     void                SetGraphicLink( const String& rNew );
     void                SetGraphicFilter( const String& rNew );
 

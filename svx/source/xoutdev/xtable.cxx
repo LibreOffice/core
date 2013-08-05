@@ -115,15 +115,16 @@ XGradientEntry::XGradientEntry(const XGradientEntry& rOther)
 //////////////////////////////////////////////////////////////////////////////
 // class XBitmapEntry
 
-XBitmapEntry::XBitmapEntry(const GraphicObject& rGraphicObject, const String& rName)
+XBitmapEntry::XBitmapEntry(const rtl::Reference< GraphicObject >& xGraphicObject,
+                           const String& rName)
 :   XPropertyEntry(rName),
-    maGraphicObject(rGraphicObject)
+    mxGraphicObject(xGraphicObject)
 {
 }
 
 XBitmapEntry::XBitmapEntry(const XBitmapEntry& rOther)
 :   XPropertyEntry(rOther),
-    maGraphicObject(rOther.maGraphicObject)
+    mxGraphicObject(GraphicObject::Create(rOther.mxGraphicObject))
 {
 }
 

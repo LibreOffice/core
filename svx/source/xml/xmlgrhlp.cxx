@@ -96,17 +96,17 @@ public:
 
 SvXMLGraphicInputStream::SvXMLGraphicInputStream( const OUString& rGraphicId )
 {
-    GraphicObject   aGrfObject( OUStringToOString(rGraphicId, RTL_TEXTENCODING_ASCII_US) );
+    rtl::Reference< GraphicObject > xGrfObject( GraphicObject::Create( OUStringToOString(rGraphicId, RTL_TEXTENCODING_ASCII_US) ) );
 
     maTmp.EnableKillingFile();
 
-    if( aGrfObject.GetType() != GRAPHIC_NONE )
+    if( xGrfObject->GetType() != GRAPHIC_NONE )
     {
         SvStream* pStm = ::utl::UcbStreamHelper::CreateStream( maTmp.GetURL(), STREAM_WRITE | STREAM_TRUNC );
 
         if( pStm )
         {
-            Graphic         aGraphic( (Graphic&) aGrfObject.GetGraphic() );
+            Graphic         aGraphic( (Graphic&) xGrfObject->GetGraphic() );
             const GfxLink   aGfxLink( aGraphic.GetLink() );
             sal_Bool        bRet = sal_False;
 
@@ -210,7 +210,7 @@ private:
     ::utl::TempFile*                mpTmp;
     SvStream*                       mpOStm;
     Reference< XOutputStream >      mxStmWrapper;
-    GraphicObject                   maGrfObj;
+    rtl::Reference< GraphicObject > mxGrfObj;
     sal_Bool                        mbClosed;
 
                                     // not available
@@ -223,7 +223,7 @@ public:
     virtual                         ~SvXMLGraphicOutputStream();
 
     bool                            Exists() const { return mxStmWrapper.is(); }
-    const GraphicObject&            GetGraphicObject();
+    rtl::Reference< GraphicObject > GetGraphicObject();
 };
 
 SvXMLGraphicOutputStream::SvXMLGraphicOutputStream() :
@@ -274,9 +274,9 @@ void SAL_CALL SvXMLGraphicOutputStream::closeOutput()
     mbClosed = sal_True;
 }
 
-const GraphicObject& SvXMLGraphicOutputStream::GetGraphicObject()
+rtl::Reference< GraphicObject > SvXMLGraphicOutputStream::GetGraphicObject()
 {
-    if( mbClosed && ( maGrfObj.GetType() == GRAPHIC_NONE ) && mpOStm )
+    if( mbClosed && ( mxGrfObj->GetType() == GRAPHIC_NONE ) && mpOStm )
     {
         Graphic aGraphic;
 
@@ -334,15 +334,15 @@ const GraphicObject& SvXMLGraphicOutputStream::GetGraphicObject()
             }
         }
 
-        maGrfObj = aGraphic;
-        if( maGrfObj.GetType() != GRAPHIC_NONE )
+        mxGrfObj = GraphicObject::Create( aGraphic );
+        if( mxGrfObj->GetType() != GRAPHIC_NONE )
         {
             delete mpOStm, mpOStm = NULL;
             delete mpTmp, mpTmp = NULL;
         }
     }
 
-    return maGrfObj;
+    return mxGrfObj;
 }
 
 SvXMLGraphicHelper::SvXMLGraphicHelper( SvXMLGraphicHelperMode eCreateMode ) :
@@ -490,7 +490,7 @@ String SvXMLGraphicHelper::ImplGetGraphicMimeType( const String& rFileName ) con
 Graphic SvXMLGraphicHelper::ImplReadGraphic( const OUString& rPictureStorageName,
                                              const OUString& rPictureStreamName )
 {
-    Graphic             aGraphic;
+    Graphic aGraphic;
     SvxGraphicHelperStream_Impl aStream( ImplGetGraphicStream( rPictureStorageName, rPictureStreamName, sal_False ) );
     if( aStream.xStream.is() )
     {
@@ -507,15 +507,15 @@ sal_Bool SvXMLGraphicHelper::ImplWriteGraphic( const OUString& rPictureStorageNa
                                                const OUString& rGraphicId,
                                                bool bUseGfxLink )
 {
-    GraphicObject   aGrfObject( OUStringToOString(rGraphicId, RTL_TEXTENCODING_ASCII_US) );
+    rtl::Reference< GraphicObject > xGrfObject( GraphicObject::Create( OUStringToOString(rGraphicId, RTL_TEXTENCODING_ASCII_US) ) );
     sal_Bool        bRet = sal_False;
 
-    if( aGrfObject.GetType() != GRAPHIC_NONE )
+    if( xGrfObject->GetType() != GRAPHIC_NONE )
     {
         SvxGraphicHelperStream_Impl aStream( ImplGetGraphicStream( rPictureStorageName, rPictureStreamName, sal_False ) );
         if( aStream.xStream.is() )
         {
-            Graphic         aGraphic( (Graphic&) aGrfObject.GetGraphic() );
+            Graphic         aGraphic( (Graphic&) xGrfObject->GetGraphic() );
             const GfxLink   aGfxLink( aGraphic.GetLink() );
             const OUString  aMimeType( ImplGetGraphicMimeType( rPictureStreamName ) );
             uno::Any        aAny;
@@ -609,15 +609,15 @@ void SvXMLGraphicHelper::ImplInsertGraphicURL( const OUString& rURLStr, sal_uInt
 
         if( GRAPHICHELPER_MODE_READ == meCreateMode )
         {
-            const GraphicObject aObj( ImplReadGraphic( aPictureStorageName, aPictureStreamName ) );
+            rtl::Reference< GraphicObject > xObj( GraphicObject::Create( ImplReadGraphic( aPictureStorageName, aPictureStreamName ) ) );
 
-            if( aObj.GetType() != GRAPHIC_NONE )
+            if( xObj->GetType() != GRAPHIC_NONE )
             {
-                maGrfObjs.push_back( aObj );
+                maGrfObjs.push_back( xObj );
                 OUString aBaseURL(  XML_GRAPHICOBJECT_URL_BASE  );
 
                 rURLPair.second = aBaseURL;
-                rURLPair.second += OStringToOUString(aObj.GetUniqueID(),
+                rURLPair.second += OStringToOUString(xObj->GetUniqueID(),
                     RTL_TEXTENCODING_ASCII_US);
             }
             else
@@ -627,11 +627,11 @@ void SvXMLGraphicHelper::ImplInsertGraphicURL( const OUString& rURLStr, sal_uInt
         {
             const String        aGraphicObjectId( aPictureStreamName );
             const OString aAsciiObjectID(OUStringToOString(aGraphicObjectId, RTL_TEXTENCODING_ASCII_US));
-            const GraphicObject aGrfObject( aAsciiObjectID );
-            if( aGrfObject.GetType() != GRAPHIC_NONE )
+            rtl::Reference< GraphicObject > xGrfObject( GraphicObject::Create(aAsciiObjectID ) );
+            if( xGrfObject->GetType() != GRAPHIC_NONE )
             {
                 String          aStreamName( aGraphicObjectId );
-                Graphic         aGraphic( (Graphic&) aGrfObject.GetGraphic() );
+                Graphic         aGraphic( (Graphic&) xGrfObject->GetGraphic() );
                 const GfxLink   aGfxLink( aGraphic.GetLink() );
                 String          aExtension;
                 bool            bUseGfxLink( true );
@@ -670,14 +670,14 @@ void SvXMLGraphicHelper::ImplInsertGraphicURL( const OUString& rURLStr, sal_uInt
                 }
                 else
                 {
-                    if( aGrfObject.GetType() == GRAPHIC_BITMAP )
+                    if( xGrfObject->GetType() == GRAPHIC_BITMAP )
                     {
-                        if( aGrfObject.IsAnimated() )
+                        if( xGrfObject->IsAnimated() )
                             aExtension = String(  ".gif"  );
                         else
                             aExtension = String(  ".png"  );
                     }
-                    else if( aGrfObject.GetType() == GRAPHIC_GDIMETAFILE )
+                    else if( xGrfObject->GetType() == GRAPHIC_GDIMETAFILE )
                     {
                         // SJ: first check if this metafile is just a eps file, then we will store the eps instead of svm
                         GDIMetaFile& rMtf( (GDIMetaFile&)aGraphic.GetGDIMetaFile() );
@@ -868,9 +868,9 @@ OUString SAL_CALL SvXMLGraphicHelper::resolveOutputStream( const Reference< XOut
 
             if( pOStm )
             {
-                const GraphicObject& rGrfObj = pOStm->GetGraphicObject();
+                rtl::Reference< GraphicObject > xGrfObj = pOStm->GetGraphicObject();
                 const OUString aId(OStringToOUString(
-                    rGrfObj.GetUniqueID(), RTL_TEXTENCODING_ASCII_US));
+                    xGrfObj->GetUniqueID(), RTL_TEXTENCODING_ASCII_US));
 
                 if( !aId.isEmpty() )
                 {

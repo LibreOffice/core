@@ -71,8 +71,8 @@ namespace drawinglayer
                 aSuppressGraphicAttr.SetRotation(0);
                 aSuppressGraphicAttr.SetMirrorFlags(0);
 
-                const GraphicObject& rGraphicObject = getGraphicObject();
-                const Graphic aTransformedGraphic(rGraphicObject.GetTransformedGraphic(&aSuppressGraphicAttr));
+                rtl::Reference< GraphicObject > xGraphicObject = getGraphicObject();
+                const Graphic aTransformedGraphic(xGraphicObject->GetTransformedGraphic(&aSuppressGraphicAttr));
 
                 aRetval = create2DDecompositionOfGraphic(
                     aTransformedGraphic,
@@ -87,7 +87,7 @@ namespace drawinglayer
                         // is necessary since the crop values are relative to original bitmap size
                         const basegfx::B2DVector aObjectScale(aTransform * basegfx::B2DVector(1.0, 1.0));
                         const basegfx::B2DVector aCropScaleFactor(
-                            rGraphicObject.calculateCropScaling(
+                            xGraphicObject->calculateCropScaling(
                                 aObjectScale.getX(),
                                 aObjectScale.getY(),
                                 getGraphicAttr().GetLeftCrop(),
@@ -115,21 +115,21 @@ namespace drawinglayer
 
         GraphicPrimitive2D::GraphicPrimitive2D(
             const basegfx::B2DHomMatrix& rTransform,
-            const GraphicObject& rGraphicObject,
+            const rtl::Reference< GraphicObject >& xGraphicObject,
             const GraphicAttr& rGraphicAttr)
         :   BufferedDecompositionPrimitive2D(),
             maTransform(rTransform),
-            maGraphicObject(rGraphicObject),
+            mxGraphicObject(GraphicObject::Create(xGraphicObject)),
             maGraphicAttr(rGraphicAttr)
         {
         }
 
         GraphicPrimitive2D::GraphicPrimitive2D(
             const basegfx::B2DHomMatrix& rTransform,
-            const GraphicObject& rGraphicObject)
+            const rtl::Reference< GraphicObject >& xGraphicObject)
         :   BufferedDecompositionPrimitive2D(),
             maTransform(rTransform),
-            maGraphicObject(rGraphicObject),
+            mxGraphicObject(GraphicObject::Create(xGraphicObject)),
             maGraphicAttr()
         {
         }
@@ -141,7 +141,7 @@ namespace drawinglayer
                 const GraphicPrimitive2D& rCompare = (GraphicPrimitive2D&)rPrimitive;
 
                 return (getTransform() == rCompare.getTransform()
-                    && getGraphicObject() == rCompare.getGraphicObject()
+                    && *getGraphicObject().get() == *rCompare.getGraphicObject().get()
                     && getGraphicAttr() == rCompare.getGraphicAttr());
             }
 

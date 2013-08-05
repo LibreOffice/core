@@ -447,7 +447,6 @@ GalleryTransferable::GalleryTransferable( GalleryTheme* pTheme, sal_uIntPtr nObj
     mpTheme( pTheme ),
     meObjectKind( mpTheme->GetObjectKind( nObjectPos ) ),
     mnObjectPos( nObjectPos ),
-    mpGraphicObject( NULL ),
     mpImageMap( NULL ),
     mpURL( NULL )
 {
@@ -473,12 +472,12 @@ void GalleryTransferable::InitData( bool bLazy )
         {
             if( !bLazy )
             {
-                if( !mpGraphicObject )
+                if( !mxGraphicObject.is() )
                 {
                     Graphic aGraphic;
 
                     if( mpTheme->GetGraphic( mnObjectPos, aGraphic ) )
-                        mpGraphicObject = new GraphicObject( aGraphic );
+                        mxGraphicObject = GraphicObject::Create( aGraphic );
                 }
 
                 if( !mxModelStream.Is() )
@@ -508,12 +507,12 @@ void GalleryTransferable::InitData( bool bLazy )
                     delete mpURL, mpURL = NULL;
             }
 
-            if( ( SGA_OBJ_SOUND != meObjectKind ) && !mpGraphicObject )
+            if( ( SGA_OBJ_SOUND != meObjectKind ) && !mxGraphicObject.is() )
             {
                 Graphic aGraphic;
 
                 if( mpTheme->GetGraphic( mnObjectPos, aGraphic ) )
-                    mpGraphicObject = new GraphicObject( aGraphic );
+                    mxGraphicObject = GraphicObject::Create( aGraphic );
             }
         }
         break;
@@ -540,11 +539,11 @@ void GalleryTransferable::AddSupportedFormats()
         if( mpURL )
             AddFormat( FORMAT_FILE );
 
-        if( mpGraphicObject )
+        if( mxGraphicObject.is() )
         {
             AddFormat( SOT_FORMATSTR_ID_SVXB );
 
-            if( mpGraphicObject->GetType() == GRAPHIC_GDIMETAFILE )
+            if( mxGraphicObject->GetType() == GRAPHIC_GDIMETAFILE )
             {
                 AddFormat( FORMAT_GDIMETAFILE );
                 AddFormat( FORMAT_BITMAP );
@@ -580,17 +579,17 @@ sal_Bool GalleryTransferable::GetData( const datatransfer::DataFlavor& rFlavor )
     {
         bRet = SetString( mpURL->GetMainURL( INetURLObject::NO_DECODE ), rFlavor );
     }
-    else if( ( SOT_FORMATSTR_ID_SVXB == nFormat ) && mpGraphicObject )
+    else if( ( SOT_FORMATSTR_ID_SVXB == nFormat ) && mxGraphicObject.is() )
     {
-        bRet = SetGraphic( mpGraphicObject->GetGraphic(), rFlavor );
+        bRet = SetGraphic( mxGraphicObject->GetGraphic(), rFlavor );
     }
-    else if( ( FORMAT_GDIMETAFILE == nFormat ) && mpGraphicObject )
+    else if( ( FORMAT_GDIMETAFILE == nFormat ) && mxGraphicObject.is() )
     {
-        bRet = SetGDIMetaFile( mpGraphicObject->GetGraphic().GetGDIMetaFile(), rFlavor );
+        bRet = SetGDIMetaFile( mxGraphicObject->GetGraphic().GetGDIMetaFile(), rFlavor );
     }
-    else if( ( FORMAT_BITMAP == nFormat ) && mpGraphicObject )
+    else if( ( FORMAT_BITMAP == nFormat ) && mxGraphicObject.is() )
     {
-        bRet = SetBitmapEx( mpGraphicObject->GetGraphic().GetBitmapEx(), rFlavor );
+        bRet = SetBitmapEx( mxGraphicObject->GetGraphic().GetBitmapEx(), rFlavor );
     }
 
     return bRet;
@@ -631,7 +630,7 @@ void GalleryTransferable::DragFinished( sal_Int8 nDropAction )
 void GalleryTransferable::ObjectReleased()
 {
     mxModelStream.Clear();
-    delete mpGraphicObject, mpGraphicObject = NULL;
+    mxGraphicObject.clear();
     delete mpImageMap, mpImageMap = NULL;
     delete mpURL, mpURL = NULL;
 }

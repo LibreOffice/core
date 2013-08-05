@@ -691,7 +691,7 @@ void SdrMarkView::SetMarkHandles()
                             {
                                 // get crop scale
                                 const basegfx::B2DVector aCropScaleFactor(
-                                    pSdrGrafObj->GetGraphicObject().calculateCropScaling(
+                                    pSdrGrafObj->GetGraphicObject()->calculateCropScaling(
                                         aScale.getX(),
                                         aScale.getY(),
                                         rCrop.GetLeft(),
@@ -708,7 +708,7 @@ void SdrMarkView::SetMarkHandles()
                                 aHdl.AddHdl(
                                     new SdrCropViewHdl(
                                         aMatrix,
-                                        pSdrGrafObj->GetGraphicObject().GetGraphic(),
+                                        pSdrGrafObj->GetGraphicObject()->GetGraphic(),
                                         fCropLeft,
                                         fCropTop,
                                         fCropRight,

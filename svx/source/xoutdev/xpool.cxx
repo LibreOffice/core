@@ -85,7 +85,7 @@ XOutdevItemPool::XOutdevItemPool(
     mppLocalPoolDefaults[XATTR_FILLCOLOR                -XATTR_START] = new XFillColorItem   (aNullStr,aNullFillCol);
     mppLocalPoolDefaults[XATTR_FILLGRADIENT         -XATTR_START] = new XFillGradientItem(aNullGrad);
     mppLocalPoolDefaults[XATTR_FILLHATCH                -XATTR_START] = new XFillHatchItem   (this,aNullHatch);
-    mppLocalPoolDefaults[XATTR_FILLBITMAP               -XATTR_START] = new XFillBitmapItem  (this, aNullGraphic);
+    mppLocalPoolDefaults[XATTR_FILLBITMAP               -XATTR_START] = new XFillBitmapItem  (this, GraphicObject::Create(aNullGraphic));
     mppLocalPoolDefaults[XATTR_FILLTRANSPARENCE     -XATTR_START] = new XFillTransparenceItem;
     mppLocalPoolDefaults[XATTR_GRADIENTSTEPCOUNT        -XATTR_START] = new XGradientStepCountItem;
     mppLocalPoolDefaults[XATTR_FILLBMP_TILE         -XATTR_START] = new XFillBmpTileItem;

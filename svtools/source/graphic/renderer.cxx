@@ -319,10 +319,7 @@ void SAL_CALL GraphicRendererVCL::render( const uno::Reference< graphic::XGraphi
         const ::Graphic*                    pGraphic = ::unographic::Graphic::getImplementation( xIFace );
 
         if( pGraphic )
-        {
-            GraphicObject aGraphicObject( *pGraphic );
-            aGraphicObject.Draw( mpOutDev, maDestRect.TopLeft(), maDestRect.GetSize() );
-        }
+            GraphicObject::Create( *pGraphic )->Draw( mpOutDev, maDestRect.TopLeft(), maDestRect.GetSize() );
     }
 }
 

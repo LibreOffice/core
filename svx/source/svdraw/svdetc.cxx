@@ -321,7 +321,7 @@ bool GetDraftFillColor(const SfxItemSet& rSet, Color& rCol)
         }
         case XFILL_BITMAP:
         {
-            Bitmap aBitmap(((XFillBitmapItem&)rSet.Get(XATTR_FILLBITMAP)).GetGraphicObject().GetGraphic().GetBitmapEx().GetBitmap());
+            Bitmap aBitmap(((XFillBitmapItem&)rSet.Get(XATTR_FILLBITMAP)).GetGraphicObject()->GetGraphic().GetBitmapEx().GetBitmap());
             const Size aSize(aBitmap.GetSizePixel());
             const sal_uInt32 nWidth = aSize.Width();
             const sal_uInt32 nHeight = aSize.Height();

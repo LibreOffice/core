@@ -35,6 +35,8 @@
 
 #include <vcl/pdfextoutdevdata.hxx>
 
+#include <comphelper/servicedecl.hxx>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
@@ -42,6 +44,7 @@ using com::sun::star::uno::Reference;
 using com::sun::star::uno::XInterface;
 using com::sun::star::uno::UNO_QUERY;
 using com::sun::star::uno::Sequence;
+using com::sun::star::uno::RuntimeException;
 using com::sun::star::container::XNameContainer;
 using com::sun::star::beans::XPropertySet;
 
@@ -52,8 +55,8 @@ struct GrfSimpleCacheObj
     Graphic     maGraphic;
     GraphicAttr maAttr;
 
-                GrfSimpleCacheObj( const Graphic& rGraphic, const GraphicAttr& rAttr ) :
-                    maGraphic( rGraphic ), maAttr( rAttr ) {}
+    GrfSimpleCacheObj( const Graphic& rGraphic, const GraphicAttr& rAttr ) :
+        maGraphic( rGraphic ), maAttr( rAttr ) {}
 };
 
 TYPEINIT1_AUTOFACTORY( GraphicObject, SvDataCopyStream );
@@ -104,6 +107,52 @@ GraphicObject::GraphicObject( const OString& rUniqueID, const GraphicManager* pM
     ImplAssignGraphicData();
 }
 
+GraphicObject::GraphicObject( css::uno::Sequence< css::uno::Any > const & args,
+                              css::uno::Reference< css::uno::XComponentContext > const & )
+    throw( RuntimeException ) :
+    mpLink      ( NULL ),
+    mpUserData  ( NULL )
+{
+    ImplConstruct();
+    ImplAssignGraphicData();
+
+    if ( args.getLength() == 1 )
+    {
+        OUString sId;
+        if ( !( args[ 0 ] >>= sId ) || sId.isEmpty() )
+            throw css::lang::IllegalArgumentException();
+
+        OString bsId ( OUStringToOString ( sId, RTL_TEXTENCODING_UTF8 ) );
+        ImplSetGraphicManager( NULL, &bsId );
+    }
+    else
+        ImplSetGraphicManager( NULL );
+}
+
+css::uno::Reference< css::graphic::XGraphic > SAL_CALL GraphicObject::getGraphic()
+    throw( RuntimeException )
+{
+    SolarMutexGuard aSolarGuard;
+    return GetGraphic().GetXGraphic();
+}
+
+void SAL_CALL GraphicObject::setGraphic( const css::uno::Reference< css::graphic::XGraphic >& xGraphic )
+    throw( RuntimeException )
+{
+    SolarMutexGuard aSolarGuard;
+
+    Graphic aGraphic( xGraphic );
+    SetGraphic( aGraphic );
+}
+
+OUString SAL_CALL GraphicObject::getUniqueID()
+    throw( RuntimeException )
+{
+    SolarMutexGuard aSolarGuard;
+
+    return OStringToOUString(GetUniqueID(), RTL_TEXTENCODING_ASCII_US);
+}
+
 GraphicObject::~GraphicObject()
 {
     if( mpMgr )
@@ -146,7 +195,7 @@ void GraphicObject::ImplAssignGraphicData()
     mnAnimationLoopCount = ( mbAnimated ? maGraphic.GetAnimationLoopCount() : 0 );
 }
 
-void GraphicObject::ImplSetGraphicManager( const GraphicManager* pMgr, const OString* pID, const GraphicObject* pCopyObj )
+void GraphicObject::ImplSetGraphicManager( const GraphicManager* pMgr, const OString* pID, const rtl::Reference< GraphicObject > &xCopyObj )
 {
     if( !mpMgr || ( pMgr != mpMgr ) )
     {
@@ -181,7 +230,7 @@ void GraphicObject::ImplSetGraphicManager( const GraphicManager* pMgr, const OSt
             else
                 mpMgr = (GraphicManager*) pMgr;
 
-            mpMgr->ImplRegisterObj( *this, maGraphic, pID, pCopyObj );
+            mpMgr->ImplRegisterObj( *this, maGraphic, pID, xCopyObj );
         }
     }
 }
@@ -319,6 +368,9 @@ sal_Bool GraphicObject::ImplGetCropParams( OutputDevice* pOut, Point& rPt, Size&
 
 GraphicObject& GraphicObject::operator=( const GraphicObject& rGraphicObj )
 {
+    // FIXME: mmeeks this operator should be removed [!] ...
+    assert(false);
+
     if( &rGraphicObj != this )
     {
         mpMgr->ImplUnregisterObj( *this );
@@ -336,7 +388,8 @@ GraphicObject& GraphicObject::operator=( const GraphicObject& rGraphicObj )
         mbAutoSwapped = sal_False;
         mpMgr = rGraphicObj.mpMgr;
 
-        mpMgr->ImplRegisterObj( *this, maGraphic, NULL, &rGraphicObj );
+        mpMgr->ImplRegisterObj( *this, maGraphic, NULL,
+                                GraphicObject::Create( &rGraphicObj ) );
     }
 
     return *this;
@@ -734,7 +787,7 @@ const Graphic& GraphicObject::GetGraphic() const
     return maGraphic;
 }
 
-void GraphicObject::SetGraphic( const Graphic& rGraphic, const GraphicObject* pCopyObj )
+void GraphicObject::SetGraphic( const Graphic& rGraphic, const rtl::Reference< GraphicObject > &xCopyObj )
 {
     mpMgr->ImplUnregisterObj( *this );
 
@@ -747,7 +800,7 @@ void GraphicObject::SetGraphic( const Graphic& rGraphic, const GraphicObject* pC
     delete mpLink, mpLink = NULL;
     delete mpSimpleCache, mpSimpleCache = NULL;
 
-    mpMgr->ImplRegisterObj( *this, maGraphic, 0, pCopyObj);
+    mpMgr->ImplRegisterObj( *this, maGraphic, 0, xCopyObj);
 
     if( mpSwapOutTimer )
         mpSwapOutTimer->Start();
@@ -964,8 +1017,8 @@ Graphic GraphicObject::GetTransformedGraphic( const Size& rDestSize, const MapMo
         aTransGraphic.SetPrefMapMode( rDestMap );
     }
 
-    GraphicObject aGrfObj( aTransGraphic );
-    aTransGraphic = aGrfObj.GetTransformedGraphic( &rAttr );
+    rtl::Reference< GraphicObject > xGrfObj = GraphicObject::Create( aTransGraphic );
+    aTransGraphic = xGrfObj->GetTransformedGraphic( &rAttr );
 
     return aTransGraphic;
 }
@@ -1149,14 +1202,14 @@ SvStream& operator<<( SvStream& rOStm, const GraphicObject& rGraphicObj )
 
 #define UNO_NAME_GRAPHOBJ_URLPREFIX "vnd.sun.star.GraphicObject:"
 
-GraphicObject GraphicObject::CreateGraphicObjectFromURL( const OUString &rURL )
+rtl::Reference< GraphicObject > GraphicObject::CreateGraphicObjectFromURL( const OUString &rURL )
 {
     const String aURL( rURL ), aPrefix( RTL_CONSTASCII_USTRINGPARAM(UNO_NAME_GRAPHOBJ_URLPREFIX) );
     if( aURL.Search( aPrefix ) == 0 )
     {
         // graphic manager url
         OString aUniqueID(OUStringToOString(rURL.copy(sizeof(UNO_NAME_GRAPHOBJ_URLPREFIX) - 1), RTL_TEXTENCODING_UTF8));
-        return GraphicObject( aUniqueID );
+        return GraphicObject::Create( aUniqueID );
     }
     else
     {
@@ -1168,7 +1221,7 @@ GraphicObject GraphicObject::CreateGraphicObjectFromURL( const OUString &rURL )
                 GraphicConverter::Import( *pStream, aGraphic );
         }
 
-        return GraphicObject( aGraphic );
+        return GraphicObject::Create( aGraphic );
     }
 }
 
@@ -1240,6 +1293,14 @@ basegfx::B2DVector GraphicObject::calculateCropScaling(
     }
 
     return basegfx::B2DVector(fFactorX,fFactorY);
+}
+
+namespace unographic {
+    namespace sdecl = comphelper::service_decl;
+    sdecl::class_<GraphicObject, sdecl::with_args<true> > serviceBI;
+    extern sdecl::ServiceDecl const serviceDecl( serviceBI,
+                                                 "com.sun.star.graphic.GraphicObject",
+                                                 "com.sun.star.graphic.GraphicObject" );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

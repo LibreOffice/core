@@ -39,7 +39,7 @@ namespace drawinglayer
         private:
             ::basegfx::B2DHomMatrix                     maTransform;
             attribute::SdrLineFillShadowTextAttribute   maSdrLFSTAttribute;
-            GraphicObject                               maGraphicObject;
+            rtl::Reference< GraphicObject >             mxGraphicObject;
             GraphicAttr                                 maGraphicAttr;
 
         protected:
@@ -50,13 +50,13 @@ namespace drawinglayer
             SdrGrafPrimitive2D(
                 const ::basegfx::B2DHomMatrix& rTransform,
                 const attribute::SdrLineFillShadowTextAttribute& rSdrLFSTAttribute,
-                const GraphicObject& rGraphicObject,
+                const rtl::Reference< GraphicObject >& xGraphicObject,
                 const GraphicAttr& rGraphicAttr);
 
             // data access
             const ::basegfx::B2DHomMatrix& getTransform() const { return maTransform; }
             const attribute::SdrLineFillShadowTextAttribute& getSdrLFSTAttribute() const { return maSdrLFSTAttribute; }
-            const GraphicObject& getGraphicObject() const { return maGraphicObject; }
+            rtl::Reference< GraphicObject > getGraphicObject() const { return mxGraphicObject; }
             const GraphicAttr& getGraphicAttr() const { return maGraphicAttr; }
             bool isTransparent() const;
 

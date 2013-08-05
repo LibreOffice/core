@@ -20,6 +20,7 @@
 #ifndef _SVX_GALMISC_HXX_
 #define _SVX_GALMISC_HXX_
 
+#include <rtl/ref.hxx>
 #include <sot/storage.hxx>
 #include <tools/urlobj.hxx>
 #include <svtools/imap.hxx>
@@ -160,7 +161,7 @@ private:
     SgaObjKind                      meObjectKind;
     sal_uInt32                      mnObjectPos;
     SotStorageStreamRef             mxModelStream;
-    GraphicObject*                  mpGraphicObject;
+    rtl::Reference< GraphicObject > mxGraphicObject;
     ImageMap*                       mpImageMap;
     INetURLObject*                  mpURL;
 

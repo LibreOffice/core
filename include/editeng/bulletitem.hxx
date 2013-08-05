@@ -62,7 +62,7 @@
 class EDITENG_DLLPUBLIC SvxBulletItem : public SfxPoolItem
 {
     Font            aFont;
-    GraphicObject*  pGraphicObject;
+    rtl::Reference< GraphicObject > mxGraphicObject;
     String          aPrevText;
     String          aFollowText;
     sal_uInt16          nStart;
@@ -101,8 +101,8 @@ public:
     Font                GetFont() const { return aFont; }
     sal_uInt16              GetScale() const { return nScale; }
 
-    const GraphicObject& GetGraphicObject() const;
-    void                 SetGraphicObject( const GraphicObject& rGraphicObject );
+    rtl::Reference< GraphicObject > GetGraphicObject() const;
+    void                            SetGraphicObject( const rtl::Reference< GraphicObject > &xGraphicObject );
 
     void                SetSymbol( sal_Unicode c) { cSymbol = c; }
     void                SetPrevText( const String& rStr) { aPrevText = rStr;}

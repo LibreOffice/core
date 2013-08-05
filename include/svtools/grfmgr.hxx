@@ -20,8 +20,11 @@
 #ifndef _GRFMGR_HXX
 #define _GRFMGR_HXX
 
+#include <rtl/ref.hxx>
 #include <vcl/graph.hxx>
 #include <svtools/svtdllapi.h>
+#include <cppuhelper/implbase1.hxx>
+#include <com/sun/star/graphic/XGraphicObject.hpp>
 
 #define GRFMGR_DRAW_NOTCACHED               0x00000000UL
 #define GRFMGR_DRAW_CACHED                  0x00000001UL
@@ -154,12 +157,60 @@ public:
     friend SvStream& operator>>( SvStream& rIStm, GraphicAttr& rAttr );
 };
 
-class SVT_DLLPUBLIC GraphicObject : public SvDataCopyStream
+typedef ::cppu::WeakImplHelper1< css::graphic::XGraphicObject > GraphicObject_BASE;
+
+class SVT_DLLPUBLIC GraphicObject : public SvDataCopyStream, public GraphicObject_BASE
 {
     friend class GraphicManager;
+    sal_uInt32 nRefCount;
+
+public:
+    // XGraphicObject
+    virtual css::uno::Reference< css::graphic::XGraphic > SAL_CALL getGraphic()
+        throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setGraphic( const css::uno::Reference< css::graphic::XGraphic >& xGraphic )
+        throw (css::uno::RuntimeException);
+    OUString SAL_CALL getUniqueID() throw (css::uno::RuntimeException);
 
 private:
+    explicit GraphicObject( const GraphicManager* pMgr = NULL );
+    GraphicObject( const Graphic& rGraphic, const GraphicManager* pMgr );
+    GraphicObject( const GraphicObject& rCacheObj, const GraphicManager* pMgr );
+    GraphicObject& operator=( const GraphicObject& rCacheObj );
 
+    explicit GraphicObject( const OString& rUniqueID, const GraphicManager* pMgr );
+
+public: // only for internal access:
+    GraphicObject( css::uno::Sequence< css::uno::Any > const & args,
+                   css::uno::Reference< css::uno::XComponentContext > const & xComponentContext )
+        throw( css::uno::RuntimeException );
+    virtual ~GraphicObject();
+
+    static rtl::Reference< GraphicObject > Create( const GraphicManager* pMgr = NULL )
+    {
+        return rtl::Reference< GraphicObject >( new GraphicObject( pMgr ) );
+    }
+    static rtl::Reference< GraphicObject > Create( const Graphic& rGraphic, const GraphicManager* pMgr = NULL )
+    {
+        return rtl::Reference< GraphicObject >( new GraphicObject( rGraphic, pMgr ) );
+    }
+    static rtl::Reference< GraphicObject > Create( const GraphicObject& rCacheObj, const GraphicManager* pMgr = NULL )
+    {
+        return rtl::Reference< GraphicObject >( new GraphicObject( rCacheObj, pMgr ) );
+    }
+    static rtl::Reference< GraphicObject > Create( const rtl::Reference< GraphicObject > &xCacheObj, const GraphicManager* pMgr = NULL )
+    {
+        if( xCacheObj.is() )
+            return rtl::Reference< GraphicObject >( new GraphicObject( *xCacheObj.get(), pMgr ) );
+        else
+            return rtl::Reference< GraphicObject >();
+    }
+    static rtl::Reference< GraphicObject > Create( const OString& rUniqueID, const GraphicManager* pMgr = NULL )
+    {
+        return rtl::Reference< GraphicObject >( new GraphicObject( rUniqueID, pMgr ) );
+    }
+
+private:
     static GraphicManager*  mpGlobalMgr;
 
     Graphic                 maGraphic;
@@ -188,7 +239,8 @@ private:
     void                    SVT_DLLPRIVATE ImplSetGraphicManager(
                                 const GraphicManager* pMgr,
                                 const OString* pID = NULL,
-                                const GraphicObject* pCopyObj = NULL
+                                const rtl::Reference< GraphicObject > &xCopyObj =
+                                    rtl::Reference< GraphicObject > () );
                             );
     void                    SVT_DLLPRIVATE ImplAutoSwapIn();
     sal_Bool                SVT_DLLPRIVATE ImplIsAutoSwapped() const { return mbAutoSwapped; }
@@ -309,16 +361,8 @@ protected:
     virtual void            Assign( const SvDataCopyStream& );
 
 public:
-
                             TYPEINFO();
 
-                            GraphicObject( const GraphicManager* pMgr = NULL );
-                            GraphicObject( const Graphic& rGraphic, const GraphicManager* pMgr = NULL );
-                            GraphicObject( const GraphicObject& rCacheObj, const GraphicManager* pMgr = NULL );
-                            explicit GraphicObject( const OString& rUniqueID, const GraphicManager* pMgr = NULL );
-                            ~GraphicObject();
-
-    GraphicObject&          operator=( const GraphicObject& rCacheObj );
     sal_Bool                operator==( const GraphicObject& rCacheObj ) const;
     sal_Bool                operator!=( const GraphicObject& rCacheObj ) const { return !( *this == rCacheObj ); }
 
@@ -342,7 +386,7 @@ public:
     void                    ReleaseFromCache();
 
     const Graphic&          GetGraphic() const;
-    void                    SetGraphic( const Graphic& rGraphic, const GraphicObject* pCopyObj = 0);
+    void                    SetGraphic( const Graphic& rGraphic, const rtl::Reference< GraphicObject >& pCopyObj = rtl::Reference< GraphicObject >() );
     void                    SetGraphic( const Graphic& rGraphic, const String& rLink );
 
     /** Get graphic transformed according to given attributes
@@ -487,7 +531,7 @@ public:
     friend SvStream&        operator<<( SvStream& rOStm, const GraphicObject& rGraphicObj );
     friend SvStream&        operator>>( SvStream& rIStm, GraphicObject& rGraphicObj );
 
-    static GraphicObject    CreateGraphicObjectFromURL( const OUString &rURL );
+    static rtl::Reference< GraphicObject > CreateGraphicObjectFromURL( const OUString &rURL );
     // will inspect an object ( e.g. a control ) for any 'ImageURL'
     // properties and return these in a vector. Note: this implementation
     // will cater for XNameContainer objects and deepinspect any containees
@@ -580,7 +624,8 @@ private:
                             const GraphicObject& rObj,
                             Graphic& rSubstitute,
                             const OString* pID = NULL,
-                            const GraphicObject* pCopyObj = NULL
+                            const rtl::Reference< GraphicObject > &xCopyObj =
+                                rtl::Reference< GraphicObject > ()
                         );
     void SVT_DLLPRIVATE ImplUnregisterObj( const GraphicObject& rObj );
     inline sal_Bool SVT_DLLPRIVATE ImplHasObjects() const { return !maObjList.empty(); }

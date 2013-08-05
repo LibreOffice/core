@@ -61,7 +61,7 @@ namespace drawinglayer
 #endif
             if(GRAPHIC_NONE != aGraphic.GetType())
             {
-                const GraphicObject aGraphicObject(aGraphic);
+                const rtl::Reference<GraphicObject> xGraphicObject = GraphicObject::Create(aGraphic);
                 const GraphicAttr aGraphicAttr;
                 drawinglayer::primitive2d::Primitive2DSequence xOLEContent;
 
@@ -98,7 +98,7 @@ namespace drawinglayer
                         const drawinglayer::primitive2d::Primitive2DReference aGraphicPrimitive(
                             new drawinglayer::primitive2d::GraphicPrimitive2D(
                                 aInnerObjectMatrix,
-                                aGraphicObject,
+                                xGraphicObject,
                                 aGraphicAttr));
                         drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, aGraphicPrimitive);
                     }
@@ -109,7 +109,7 @@ namespace drawinglayer
                     const drawinglayer::primitive2d::Primitive2DReference aGraphicPrimitive(
                         new drawinglayer::primitive2d::GraphicPrimitive2D(
                             getObjectTransform(),
-                            aGraphicObject,
+                            xGraphicObject,
                             aGraphicAttr));
                     drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, aGraphicPrimitive);
                 }

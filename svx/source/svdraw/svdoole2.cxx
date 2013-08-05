@@ -674,7 +674,7 @@ class SdrOle2ObjImpl
 {
 public:
     // TODO/LATER: do we really need this pointer?
-    GraphicObject*  pGraphicObject;
+    rtl::Reference< GraphicObject > mxGraphicObject;
     String          aPersistName;       // name of object in persist
     SdrLightEmbeddedClient_Impl* pLightClient; // must be registered as client only using AddOwnLightClient() call
 
@@ -686,8 +686,7 @@ public:
     String maLinkURL;
 
     SdrOle2ObjImpl()
-    : pGraphicObject( NULL )
-    , pLightClient ( NULL )
+    : pLightClient ( NULL )
     // init to start situation, loading did not fail
     , mbLoadingOLEObjectFailed( false )
     , mbConnected( false )
@@ -780,7 +779,7 @@ void SdrOle2Obj::Init()
     mpImpl = new SdrOle2ObjImpl;
     pModifyListener = NULL;
     pGraphic=NULL;
-    mpImpl->pGraphicObject=NULL;
+    mpImpl->mxGraphicObject.clear();
     mpImpl->pLightClient = 0;
 
     xObjRef.Lock( sal_True );
@@ -798,7 +797,7 @@ SdrOle2Obj::~SdrOle2Obj()
 
     delete pGraphic;
 
-    delete mpImpl->pGraphicObject;
+    mpImpl->mxGraphicObject.clear();
 
     if(pModifyListener)
     {
@@ -843,14 +842,13 @@ void SdrOle2Obj::SetGraphic_Impl(const Graphic* pGrf)
     {
         delete pGraphic;
         pGraphic = NULL;
-        delete mpImpl->pGraphicObject;
-        mpImpl->pGraphicObject = NULL;
+        mpImpl->mxGraphicObject.clear();
     }
 
     if (pGrf!=NULL)
     {
         pGraphic = new Graphic(*pGrf);
-        mpImpl->pGraphicObject = new GraphicObject( *pGraphic );
+        mpImpl->mxGraphicObject = GraphicObject::Create( *pGraphic );
     }
 
     SetChanged();
@@ -1337,7 +1335,8 @@ SdrObject* SdrOle2Obj::createSdrGrafObjReplacement(bool bAddText, bool /* bUseHC
 
         // bitmap fill
         pClone->SetMergedItem(XFillStyleItem(XFILL_BITMAP));
-        pClone->SetMergedItem(XFillBitmapItem(String(), GetEmptyOLEReplacementGraphic()));
+        pClone->SetMergedItem(XFillBitmapItem(String(),
+                                              GraphicObject::Create(GetEmptyOLEReplacementGraphic())));
         pClone->SetMergedItem(XFillBmpTileItem(false));
         pClone->SetMergedItem(XFillBmpStretchItem(false));
 
@@ -1649,11 +1648,11 @@ SdrOle2Obj& SdrOle2Obj::operator=(const SdrOle2Obj& rObj)
             if( pGraphic )
             {
                 delete pGraphic;
-                delete mpImpl->pGraphicObject;
+                mpImpl->mxGraphicObject.clear();
             }
 
             pGraphic = new Graphic( *rOle2Obj.pGraphic );
-            mpImpl->pGraphicObject = new GraphicObject( *pGraphic );
+            mpImpl->mxGraphicObject = GraphicObject::Create( *pGraphic );
         }
 
         if( pModel && rObj.GetModel() && !IsEmptyPresObj() )

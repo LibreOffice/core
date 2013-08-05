@@ -147,18 +147,19 @@ uno::Sequence< sal_Int8 > SAL_CALL GraphicProvider::getImplementationId()
 
 uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadGraphicObject( const OUString& rResourceURL ) const
 {
-    uno::Reference< ::graphic::XGraphic >   xRet;
+    uno::Reference< ::graphic::XGraphic > xRet;
     if( rResourceURL.startsWith( UNO_NAME_GRAPHOBJ_URLPREFIX ) )
     {
         // graphic manager url
         String aTmpStr( rResourceURL.copy( sizeof( UNO_NAME_GRAPHOBJ_URLPREFIX ) - 1 ) );
         OString aUniqueID(OUStringToOString(aTmpStr,
             RTL_TEXTENCODING_UTF8));
-        GraphicObject aGrafObj(aUniqueID);
+
+        rtl::Reference< GraphicObject > xGrafObj = GraphicObject::Create( aUniqueID );
         // I don't call aGrafObj.GetXGraphic because it will call us back
         // into implLoadMemory ( with "private:memorygraphic" test )
         ::unographic::Graphic* pUnoGraphic = new ::unographic::Graphic;
-        pUnoGraphic->init( aGrafObj.GetGraphic() );
+        pUnoGraphic->init( xGrafObj->GetGraphic() );
         xRet = pUnoGraphic;
     }
     return xRet;

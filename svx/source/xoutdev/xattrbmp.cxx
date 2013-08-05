@@ -50,7 +50,7 @@ using namespace ::com::sun::star;
 
 XOBitmap::XOBitmap( const Bitmap& rBmp ) :
     eType           ( XBITMAP_IMPORT ),
-    aGraphicObject  ( rBmp ),
+    mxGraphicObject ( GraphicObject::Create( rBmp ) ),
     pPixelArray     ( NULL ),
     bGraphicDirty   ( sal_False )
 {
@@ -66,7 +66,7 @@ XOBitmap::XOBitmap( const XOBitmap& rXBmp ) :
     pPixelArray ( NULL )
 {
     eType = rXBmp.eType;
-    aGraphicObject = rXBmp.aGraphicObject;
+    mxGraphicObject = GraphicObject::Create( rXBmp.mxGraphicObject );
     aArraySize = rXBmp.aArraySize;
     aPixelColor = rXBmp.aPixelColor;
     aBckgrColor = rXBmp.aBckgrColor;
@@ -104,7 +104,7 @@ XOBitmap::~XOBitmap()
 XOBitmap& XOBitmap::operator=( const XOBitmap& rXBmp )
 {
     eType = rXBmp.eType;
-    aGraphicObject = rXBmp.aGraphicObject;
+    mxGraphicObject = GraphicObject::Create( rXBmp.mxGraphicObject );
     aArraySize = rXBmp.aArraySize;
     aPixelColor = rXBmp.aPixelColor;
     aBckgrColor = rXBmp.aBckgrColor;
@@ -132,7 +132,7 @@ XOBitmap& XOBitmap::operator=( const XOBitmap& rXBmp )
 int XOBitmap::operator==( const XOBitmap& rXOBitmap ) const
 {
     if( eType != rXOBitmap.eType      ||
-        aGraphicObject != rXOBitmap.aGraphicObject ||
+        *mxGraphicObject.get() != *rXOBitmap.mxGraphicObject.get() ||
         aArraySize != rXOBitmap.aArraySize     ||
         aPixelColor != rXOBitmap.aPixelColor ||
         aBckgrColor != rXOBitmap.aBckgrColor ||
@@ -161,7 +161,7 @@ int XOBitmap::operator==( const XOBitmap& rXOBitmap ) const
 
 Bitmap XOBitmap::GetBitmap() const
 {
-    return GetGraphicObject().GetGraphic().GetBitmap();
+    return GetGraphicObject()->GetGraphic().GetBitmap();
 }
 
 /*************************************************************************
@@ -170,12 +170,12 @@ Bitmap XOBitmap::GetBitmap() const
 |*
 *************************************************************************/
 
-const GraphicObject& XOBitmap::GetGraphicObject() const
+rtl::Reference< GraphicObject > XOBitmap::GetGraphicObject() const
 {
     if( bGraphicDirty )
-        ( (XOBitmap*) this )->Array2Bitmap();
+        const_cast< XOBitmap * >( this )->Array2Bitmap();
 
-    return aGraphicObject;
+    return mxGraphicObject;
 }
 
 /*************************************************************************
@@ -253,7 +253,7 @@ void XOBitmap::Array2Bitmap()
         }
     }
 
-    aGraphicObject = GraphicObject( aVD.GetBitmap( Point(), Size( nLines, nLines ) ) );
+    mxGraphicObject = GraphicObject::Create( aVD.GetBitmap( Point(), Size( nLines, nLines ) ) );
     bGraphicDirty = sal_False;
 }
 
@@ -264,9 +264,9 @@ TYPEINIT1_AUTOFACTORY(XFillBitmapItem, NameOrIndex);
 
 //////////////////////////////////////////////////////////////////////////////
 
-XFillBitmapItem::XFillBitmapItem(const XubString& rName, const GraphicObject& rGraphicObject)
+XFillBitmapItem::XFillBitmapItem(const XubString& rName, const rtl::Reference< GraphicObject >& xGraphicObject)
 :   NameOrIndex(XATTR_FILLBITMAP, rName),
-    maGraphicObject(rGraphicObject)
+    mxGraphicObject(GraphicObject::Create(xGraphicObject))
 {
 }
 
@@ -274,7 +274,7 @@ XFillBitmapItem::XFillBitmapItem(const XubString& rName, const GraphicObject& rG
 
 XFillBitmapItem::XFillBitmapItem(const XFillBitmapItem& rItem)
 :   NameOrIndex(rItem),
-    maGraphicObject(rItem.maGraphicObject)
+    mxGraphicObject(GraphicObject::Create(rItem.mxGraphicObject))
 {
 }
 
@@ -359,7 +359,7 @@ XFillBitmapItem::XFillBitmapItem(SvStream& rIn, sal_uInt16 nVer)
             Bitmap aBmp;
 
             ReadDIB(aBmp, rIn, true);
-            maGraphicObject = Graphic(aBmp);
+            mxGraphicObject = GraphicObject::Create(Graphic(aBmp));
         }
         else if(1 == nVer)
         {
@@ -373,7 +373,7 @@ XFillBitmapItem::XFillBitmapItem(SvStream& rIn, sal_uInt16 nVer)
                 Bitmap aBmp;
 
                 ReadDIB(aBmp, rIn, true);
-                maGraphicObject = Graphic(aBmp);
+                mxGraphicObject = GraphicObject::Create(Graphic(aBmp));
             }
             else if(XBITMAP_8X8 == iTmp)
             {
@@ -392,7 +392,7 @@ XFillBitmapItem::XFillBitmapItem(SvStream& rIn, sal_uInt16 nVer)
 
                 const Bitmap aBitmap(createHistorical8x8FromArray(aArray, aColorPix, aColorBack));
 
-                maGraphicObject = Graphic(aBitmap);
+                mxGraphicObject = GraphicObject::Create(Graphic(aBitmap));
             }
         }
         else if(2 == nVer)
@@ -400,16 +400,17 @@ XFillBitmapItem::XFillBitmapItem(SvStream& rIn, sal_uInt16 nVer)
             BitmapEx aBmpEx;
 
             ReadDIBBitmapEx(aBmpEx, rIn);
-            maGraphicObject = Graphic(aBmpEx);
+            mxGraphicObject = GraphicObject::Create(Graphic(aBmpEx));
         }
     }
 }
 
 //////////////////////////////////////////////////////////////////////////////
 
-XFillBitmapItem::XFillBitmapItem(SfxItemPool* /*pPool*/, const GraphicObject& rGraphicObject)
+XFillBitmapItem::XFillBitmapItem(SfxItemPool* /*pPool*/,
+                                 const rtl::Reference< GraphicObject >& xGraphicObject)
 :   NameOrIndex( XATTR_FILLBITMAP, -1),
-    maGraphicObject(rGraphicObject)
+    mxGraphicObject( GraphicObject::Create( xGraphicObject ) )
 {
 }
 
@@ -425,7 +426,7 @@ SfxPoolItem* XFillBitmapItem::Clone(SfxItemPool* /*pPool*/) const
 int XFillBitmapItem::operator==(const SfxPoolItem& rItem) const
 {
     return (NameOrIndex::operator==(rItem)
-        && maGraphicObject == ((const XFillBitmapItem&)rItem).maGraphicObject);
+        && *mxGraphicObject.get() == *((const XFillBitmapItem&)rItem).mxGraphicObject.get());
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -442,25 +443,23 @@ SvStream& XFillBitmapItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) cons
     NameOrIndex::Store(rOut, nItemVersion);
 
     if(!IsIndex())
-    {
-        WriteDIBBitmapEx(maGraphicObject.GetGraphic().GetBitmapEx(), rOut);
-    }
+        WriteDIBBitmapEx(mxGraphicObject->GetGraphic().GetBitmapEx(), rOut);
 
     return rOut;
 }
 
 //////////////////////////////////////////////////////////////////////////////
 
-const GraphicObject& XFillBitmapItem::GetGraphicObject() const
+rtl::Reference< GraphicObject > XFillBitmapItem::GetGraphicObject() const
 {
-    return maGraphicObject;
+    return mxGraphicObject;
 }
 
 //////////////////////////////////////////////////////////////////////////////
 
-void XFillBitmapItem::SetGraphicObject(const GraphicObject& rGraphicObject)
+void XFillBitmapItem::SetGraphicObject(const rtl::Reference< GraphicObject >& xGraphicObject)
 {
-    maGraphicObject = rGraphicObject;
+    mxGraphicObject = xGraphicObject;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -523,13 +522,13 @@ bool XFillBitmapItem::QueryValue(::com::sun::star::uno::Any& rVal, sal_uInt8 nMe
         aURL = OUString(
             UNO_NAME_GRAPHOBJ_URLPREFIX);
         aURL += OStringToOUString(
-            GetGraphicObject().GetUniqueID(),
+            GetGraphicObject()->GetUniqueID(),
             RTL_TEXTENCODING_ASCII_US);
     }
     if( nMemberId == MID_BITMAP ||
         nMemberId == 0  )
     {
-        xBmp.set(VCLUnoHelper::CreateBitmap(GetGraphicObject().GetGraphic().GetBitmapEx()));
+        xBmp.set(VCLUnoHelper::CreateBitmap(GetGraphicObject()->GetGraphic().GetBitmapEx()));
     }
 
     if( nMemberId == MID_NAME )
@@ -606,23 +605,21 @@ bool XFillBitmapItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt
     }
     if( bSetURL )
     {
-        maGraphicObject  = GraphicObject::CreateGraphicObjectFromURL(aURL);
+        mxGraphicObject = GraphicObject::CreateGraphicObjectFromURL(aURL);
 
         // #121194# Prefer GraphicObject over bitmap object if both are provided
-        if(bSetBitmap && GRAPHIC_NONE != maGraphicObject.GetType())
-        {
+        if(bSetBitmap && GRAPHIC_NONE != mxGraphicObject->GetType())
             bSetBitmap = false;
-        }
     }
     if( bSetBitmap )
     {
         if(xBmp.is())
         {
-            maGraphicObject = Graphic(VCLUnoHelper::GetBitmap(xBmp));
+            mxGraphicObject = GraphicObject::Create(Graphic(VCLUnoHelper::GetBitmap(xBmp)));
         }
         else if(xGraphic.is())
         {
-            maGraphicObject = Graphic(xGraphic);
+            mxGraphicObject = GraphicObject::Create(Graphic(xGraphic));
         }
     }
 
@@ -633,10 +630,10 @@ bool XFillBitmapItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt
 
 sal_Bool XFillBitmapItem::CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 )
 {
-    const GraphicObject& aGraphicObjectA(((XFillBitmapItem*)p1)->GetGraphicObject());
-    const GraphicObject& aGraphicObjectB(((XFillBitmapItem*)p2)->GetGraphicObject());
+    rtl::Reference< GraphicObject > xGraphicObjectA(((XFillBitmapItem*)p1)->GetGraphicObject());
+    rtl::Reference< GraphicObject > xGraphicObjectB(((XFillBitmapItem*)p2)->GetGraphicObject());
 
-    return aGraphicObjectA == aGraphicObjectB;
+    return *xGraphicObjectA.get() == *xGraphicObjectB.get();
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -654,7 +651,7 @@ XFillBitmapItem* XFillBitmapItem::checkForUniqueItem( SdrModel* pModel ) const
         // if the given name is not valid, replace it!
         if( aUniqueName != GetName() )
         {
-            return new XFillBitmapItem(aUniqueName, maGraphicObject);
+            return new XFillBitmapItem(aUniqueName, mxGraphicObject);
         }
     }
 

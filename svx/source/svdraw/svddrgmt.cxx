@@ -3693,14 +3693,14 @@ bool SdrDragCrop::EndSdrDrag(bool bCopy)
     if( !pObj || (pObj->GetGraphicType() == GRAPHIC_NONE) || (pObj->GetGraphicType() == GRAPHIC_DEFAULT) )
         return false;
 
-    const GraphicObject& rGraphicObject = pObj->GetGraphicObject();
+    rtl::Reference< GraphicObject> xGraphicObject = pObj->GetGraphicObject();
     const MapMode aMapMode100thmm(MAP_100TH_MM);
-    Size aGraphicSize(rGraphicObject.GetPrefSize());
+    Size aGraphicSize(xGraphicObject->GetPrefSize());
 
-    if( MAP_PIXEL == rGraphicObject.GetPrefMapMode().GetMapUnit() )
+    if( MAP_PIXEL == xGraphicObject->GetPrefMapMode().GetMapUnit() )
         aGraphicSize = Application::GetDefaultDevice()->PixelToLogic( aGraphicSize, aMapMode100thmm );
     else
-        aGraphicSize = Application::GetDefaultDevice()->LogicToLogic( aGraphicSize, rGraphicObject.GetPrefMapMode(), aMapMode100thmm);
+        aGraphicSize = Application::GetDefaultDevice()->LogicToLogic( aGraphicSize, xGraphicObject->GetPrefMapMode(), aMapMode100thmm);
 
     if( aGraphicSize.A() == 0 || aGraphicSize.B() == 0 )
         return false;

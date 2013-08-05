@@ -54,7 +54,7 @@ namespace drawinglayer
             basegfx::B2DHomMatrix                       maTransform;
 
             /// the GraphicObject with all it's content possibilities
-            GraphicObject                               maGraphicObject;
+            rtl::Reference< GraphicObject >             mxGraphicObject;
 
             /// The GraphicAttr with all it's modification possibilities
             GraphicAttr                                 maGraphicAttr;
@@ -67,15 +67,15 @@ namespace drawinglayer
             /// constructor(s)
             GraphicPrimitive2D(
                 const basegfx::B2DHomMatrix& rTransform,
-                const GraphicObject& rGraphicObject,
+                const rtl::Reference< GraphicObject >& xGraphicObject,
                 const GraphicAttr& rGraphicAttr);
             GraphicPrimitive2D(
                 const basegfx::B2DHomMatrix& rTransform,
-                const GraphicObject& rGraphicObject);
+                const rtl::Reference< GraphicObject >& xGraphicObject);
 
             /// data read access
             const basegfx::B2DHomMatrix& getTransform() const { return maTransform; }
-            const GraphicObject& getGraphicObject() const { return maGraphicObject; }
+            rtl::Reference< GraphicObject > getGraphicObject() const { return mxGraphicObject; }
             const GraphicAttr& getGraphicAttr() const { return maGraphicAttr; }
             bool isTransparent() const;
 
