@@ -288,13 +288,13 @@
                                                                   target:self
                                                                   action:@selector(handleBack:)];
     [backButton setTintColor:[UIColor redColor]];
-    self.revealViewController.navigationItem.leftBarButtonItem = backButton;
+    self.revealViewController.navigationItem.rightBarButtonItem = backButton;
 
     self.revealButtonItem = [[UIBarButtonItem alloc] initWithImage: [UIImage imageNamed:@"more_icon.png"]
                                                              style:UIBarButtonItemStyleBordered
                                                             target:self.revealViewController
                                                             action:@selector( revealToggle: )];
-    self.revealViewController.navigationItem.rightBarButtonItem = self.revealButtonItem;
+    self.revealViewController.navigationItem.leftBarButtonItem = self.revealButtonItem;
     [self.navigationController.navigationBar addGestureRecognizer: self.revealViewController.panGestureRecognizer];
 
     self.pointerCalibrationOn = NO;
