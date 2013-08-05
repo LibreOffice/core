@@ -24,7 +24,6 @@
 #include <sfx2/module.hxx>
 
 #include <cuires.hrc>
-#include "tabline.hrc"
 #include "svx/xattr.hxx"
 #include <svx/xpool.hxx>
 #include <svx/xtable.hxx>
