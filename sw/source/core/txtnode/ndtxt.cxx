@@ -1720,19 +1720,19 @@ void SwTxtNode::CopyText( SwTxtNode *const pDest,
 }
 
 
-OUString SwTxtNode::InsertText( const XubString & rStr, const SwIndex & rIdx,
+OUString SwTxtNode::InsertText( const OUString & rStr, const SwIndex & rIdx,
         const IDocumentContentOperations::InsertFlags nMode )
 {
     assert(rIdx <= m_Text.getLength()); // invalid index
 
     xub_StrLen aPos = rIdx.GetIndex();
     xub_StrLen nLen = m_Text.getLength() - aPos;
-    long const nOverflow(static_cast<long>(m_Text.getLength())
-            + static_cast<long>(rStr.Len()) - TXTNODE_MAX);
+    sal_Int32 const nOverflow(
+            m_Text.getLength() + rStr.getLength() - TXTNODE_MAX);
     SAL_WARN_IF(nOverflow > 0, "sw.core",
             "SwTxtNode::InsertText: node text with insertion > TXTNODE_MAX.");
     OUString const sInserted(
-            (nOverflow > 0) ? rStr.Copy(0, rStr.Len() - nOverflow) : rStr);
+        (nOverflow > 0) ? rStr.copy(0, rStr.getLength() - nOverflow) : rStr);
     if (sInserted.isEmpty())
     {
         return sInserted;
@@ -2686,7 +2686,8 @@ sal_Bool SwTxtNode::HasBullet() const
 
 // #128041# - introduce parameter <_bInclPrefixAndSuffixStrings>
 //i53420 added max outline parameter
-XubString SwTxtNode::GetNumString( const bool _bInclPrefixAndSuffixStrings, const unsigned int _nRestrictToThisLevel ) const
+OUString SwTxtNode::GetNumString( const bool _bInclPrefixAndSuffixStrings,
+        const unsigned int _nRestrictToThisLevel ) const
 {
     if (GetDoc()->IsClipBoard() && m_pNumStringCache.get())
     {
@@ -2710,7 +2711,7 @@ XubString SwTxtNode::GetNumString( const bool _bInclPrefixAndSuffixStrings, cons
         }
     }
 
-    return aEmptyStr;
+    return OUString();
 }
 
 long SwTxtNode::GetLeftMarginWithNum( sal_Bool bTxtLeft ) const
@@ -2963,7 +2964,7 @@ void SwTxtNode::Replace0xFF( XubString& rTxt, xub_StrLen& rTxtStt,
  * Expand fields
  *************************************************************************/
 // #i83479# - handling of new parameters
-XubString SwTxtNode::GetExpandTxt( const xub_StrLen nIdx,
+OUString SwTxtNode::GetExpandTxt(  const xub_StrLen nIdx,
                                    const xub_StrLen nLen,
                                    const bool bWithNum,
                                    const bool bAddSpaceAfterListLabelStr,
@@ -3306,7 +3307,7 @@ ModelToViewHelper::ModelToViewHelper(const SwTxtNode &rNode, int eMode)
         m_aMap.push_back( ConversionMapEntry( rNodeText.getLength()+1, m_aRetText.getLength()+1 ) );
 }
 
-XubString SwTxtNode::GetRedlineTxt( xub_StrLen nIdx, xub_StrLen nLen,
+OUString SwTxtNode::GetRedlineTxt( xub_StrLen nIdx, xub_StrLen nLen,
                                 sal_Bool bExpandFlds, sal_Bool bWithNum ) const
 {
     std::vector<sal_uInt16> aRedlArr;
@@ -3326,7 +3327,7 @@ XubString SwTxtNode::GetRedlineTxt( xub_StrLen nIdx, xub_StrLen nLen,
                 {
                     if( pREnd->nNode > nNdIdx )
                         // Absatz ist komplett geloescht
-                        return aEmptyStr;
+                        return OUString();
                     else if( pREnd->nNode == nNdIdx )
                     {
                         // von 0 bis nContent ist alles geloescht
@@ -3383,17 +3384,17 @@ XubString SwTxtNode::GetRedlineTxt( xub_StrLen nIdx, xub_StrLen nLen,
  *************************************************************************/
 
 void SwTxtNode::ReplaceText( const SwIndex& rStart, const xub_StrLen nDelLen,
-                             const XubString& rStr)
+                             const OUString & rStr)
 {
     assert( rStart.GetIndex() < m_Text.getLength()     // index out of bounds
          && rStart.GetIndex() + nDelLen <= m_Text.getLength());
 
-    long const nOverflow(static_cast<long>(m_Text.getLength())
-            + static_cast<long>(rStr.Len()) - nDelLen - TXTNODE_MAX);
+    long const nOverflow(
+            m_Text.getLength() + rStr.getLength() - nDelLen - TXTNODE_MAX);
     SAL_WARN_IF(nOverflow > 0, "sw.core",
             "SwTxtNode::ReplaceText: node text with insertion > TXTNODE_MAX.");
     OUString const sInserted(
-            (nOverflow > 0) ? rStr.Copy(0, rStr.Len() - nOverflow) : rStr);
+        (nOverflow > 0) ? rStr.copy(0, rStr.getLength() - nOverflow) : rStr);
     if (sInserted.isEmpty() && 0 == nDelLen)
     {
         return; // nothing to do
@@ -4200,17 +4201,8 @@ bool SwTxtNode::GetListTabStopPosition( long& nListTabStopPosition ) const
     return bListTanStopPositionProvided;
 }
 
-/** Retrieves the character following the list label, if the paragraph's
-    list level defines one.
-
-    @author OD
-
-    @return XubString - the list tab stop position
-*/
-XubString SwTxtNode::GetLabelFollowedBy() const
+OUString SwTxtNode::GetLabelFollowedBy() const
 {
-    XubString aLabelFollowedBy;
-
     const SwNumRule* pNumRule = GetNum() ? GetNum()->GetNumRule() : 0;
     if ( pNumRule && HasVisibleNumberingOrBullet() && GetActualListLevel() >= 0 )
     {
@@ -4221,14 +4213,12 @@ XubString SwTxtNode::GetLabelFollowedBy() const
             {
                 case SvxNumberFormat::LISTTAB:
                 {
-                    const sal_Unicode aTab = '\t';
-                    aLabelFollowedBy.Insert( aTab, 0 );
+                    return OUString("\t");
                 }
                 break;
                 case SvxNumberFormat::SPACE:
                 {
-                    const sal_Unicode aSpace = ' ';
-                    aLabelFollowedBy.Insert( aSpace, 0 );
+                    return OUString(" ");
                 }
                 break;
                 case SvxNumberFormat::NOTHING:
@@ -4244,7 +4234,7 @@ XubString SwTxtNode::GetLabelFollowedBy() const
         }
     }
 
-    return aLabelFollowedBy;
+    return OUString();
 }
 
 void SwTxtNode::CalcHiddenCharFlags() const

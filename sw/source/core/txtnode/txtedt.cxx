@@ -615,7 +615,7 @@ sal_Int32 clipIndexBounds(const OUString &rStr, sal_Int32 nPos)
  * einen leeren String.
  *************************************************************************/
 
-XubString SwTxtNode::GetCurWord( xub_StrLen nPos ) const
+OUString SwTxtNode::GetCurWord( xub_StrLen nPos ) const
 {
     assert(nPos <= m_Text.getLength()); // invalid index
 
@@ -1868,15 +1868,14 @@ void SwTxtNode::TransliterateText(
 }
 
 void SwTxtNode::ReplaceTextOnly( xub_StrLen nPos, xub_StrLen nLen,
-                                const XubString& rText,
+                                const OUString & rText,
                                 const Sequence<sal_Int32>& rOffsets )
 {
-    assert(static_cast<size_t>(m_Text.getLength()) +
-        static_cast<size_t>(rText.Len()) - nLen <= TXTNODE_MAX);
+    assert(m_Text.getLength() + rText.getLength() - nLen <= TXTNODE_MAX);
 
     m_Text = m_Text.replaceAt(nPos, nLen, rText);
 
-    xub_StrLen nTLen = rText.Len();
+    xub_StrLen nTLen = rText.getLength();
     const sal_Int32* pOffsets = rOffsets.getConstArray();
     // now look for no 1-1 mapping -> move the indizies!
     xub_StrLen nI, nMyOff;

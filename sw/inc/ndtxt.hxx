@@ -247,7 +247,7 @@ public:
     /// @param rStr text to insert; in case it does not fit into the limit of
     ///             TXTNODE_MAX, the longest prefix that fits is inserted
     /// @return the prefix of rStr that was actually inserted
-    OUString InsertText( const XubString & rStr, const SwIndex & rIdx,
+    OUString InsertText( const OUString & rStr, const SwIndex & rIdx,
                      const enum IDocumentContentOperations::InsertFlags nMode
                          = IDocumentContentOperations::INS_DEFAULT );
 
@@ -336,9 +336,10 @@ public:
     /// in case the replacement does not fit, it is partially inserted up to
     /// TXTNODE_MAX
     void ReplaceText( const SwIndex& rStart, const xub_StrLen nDelLen,
-            const XubString& rText );
-    void ReplaceTextOnly( xub_StrLen nPos, xub_StrLen nLen, const XubString& rText,
-                    const ::com::sun::star::uno::Sequence<sal_Int32>& rOffsets );
+            const OUString & rText );
+    void ReplaceTextOnly( xub_StrLen nPos, xub_StrLen nLen,
+            const OUString& rText,
+            const ::com::sun::star::uno::Sequence<sal_Int32>& rOffsets );
 
     /// Virtual methods from CntntNode.
     virtual SwCntntFrm *MakeFrm( SwFrm* );
@@ -387,7 +388,7 @@ public:
     SwTxtAttr *GetTxtAttrForCharAt( const xub_StrLen nIndex,
                        const RES_TXTATR nWhich = RES_TXTATR_END ) const;
 
-    XubString GetCurWord(xub_StrLen) const;
+    OUString GetCurWord(xub_StrLen) const;
     sal_uInt16 Spell(SwSpellArgs*);
     sal_uInt16 Convert( SwConversionArgs & );
 
@@ -466,7 +467,8 @@ public:
         level to which the output string must be restricted to. Default value is
         MAXLEVEL
     */
-    XubString GetNumString( const bool _bInclPrefixAndSuffixStrings = true, const unsigned int _nRestrictToThisLevel = MAXLEVEL ) const;
+    OUString GetNumString( const bool _bInclPrefixAndSuffixStrings = true,
+            const unsigned int _nRestrictToThisLevel = MAXLEVEL ) const;
 
     /**
        Returns the additional indents of this text node and its numbering.
@@ -663,9 +665,9 @@ public:
 
         @author OD
 
-        @return XubString - the list tab stop position
+        @return the list tab stop position as string
     */
-    XubString GetLabelFollowedBy() const;
+    OUString GetLabelFollowedBy() const;
 
     //
     // END OF BULLET/NUMBERING/OUTLINE STUFF:
@@ -690,7 +692,7 @@ public:
        add 5th optional parameter <bWithSpacesForLevel> indicating, if additional
        spaces are inserted in front of the expanded text string depending on
        the list level. */
-    XubString GetExpandTxt( const xub_StrLen nIdx = 0,
+    OUString GetExpandTxt(  const xub_StrLen nIdx = 0,
                             const xub_StrLen nLen = STRING_LEN,
                             const bool bWithNum = false,
                             const bool bAddSpaceAfterListLabelStr = false,
@@ -700,7 +702,7 @@ public:
                        sal_Bool bWithNum = sal_False, sal_Bool bWithFtn = sal_True,
                        sal_Bool bReplaceTabsWithSpaces = sal_False ) const;
 
-    XubString GetRedlineTxt( xub_StrLen nIdx = 0,
+    OUString GetRedlineTxt( xub_StrLen nIdx = 0,
                           xub_StrLen nLen = STRING_LEN,
                           sal_Bool bExpandFlds = sal_False,
                           sal_Bool bWithNum = sal_False ) const;

@@ -2379,7 +2379,7 @@ String SwDoc::getListItemText( const SwNodeNum& rNodeNum,
     return rNodeNum.GetTxtNode()
            ? rNodeNum.GetTxtNode()->GetExpandTxt( 0, STRING_LEN, bWithNumber,
                                                   bWithNumber, bWithSpacesForLevel )
-           : String();
+           : OUString();
 }
 
 void SwDoc::getListItems( tSortedNodeNumList& orNodeNumList ) const

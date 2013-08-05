@@ -421,7 +421,7 @@ String SwEditShell::GetCurWord()
     const SwTxtNode* pNd = rPaM.GetNode()->GetTxtNode();
     OUString aString = pNd ?
                      pNd->GetCurWord(rPaM.GetPoint()->nContent.GetIndex()) :
-                     aEmptyStr;
+                     OUString();
     return aString;
 }
 
