@@ -70,6 +70,31 @@ ScMatrixRef FormulaGroupInterpreterOpenCL::inverseMatrix(const ScMatrix& rMat)
     // the last, chained together in a single array.
     std::vector<double> aDoubles;
     rMat.GetDoubleArray(aDoubles);
+    float * fpOclMatrixSrc = NULL;
+    float * fpOclMatrixDst = NULL;
+    double * dpOclMatrixSrc = NULL;
+    double * dpOclMatrixDst = NULL;
+    uint nMatrixSize = nC * nR;
+    static OclCalc aOclCalc;
+    if ( aOclCalc.GetOpenclState() )
+    {
+        if ( aOclCalc.gpuEnv.mnKhrFp64Flag == 1 || aOclCalc.gpuEnv.mnAmdFp64Flag == 1 )
+        {
+            aOclCalc.CreateBuffer64Bits( dpOclMatrixSrc, dpOclMatrixDst, nMatrixSize );
+            for ( uint i = 0; i < nC; i++ )
+                for ( uint j = 0; j < nR; j++ )
+                    dpOclMatrixSrc[i*nC+j] = aDoubles[j*nR+i];
+            aOclCalc.OclHostMatrixInverse64Bits( "oclFormulaMtxInv", dpOclMatrixSrc, dpOclMatrixDst,aDoubles, nR );
+        }
+        else
+        {
+            aOclCalc.CreateBuffer32Bits( fpOclMatrixSrc, fpOclMatrixDst, nMatrixSize );
+            for ( uint i = 0; i < nC; i++ )
+                for ( uint j = 0; j < nR; j++ )
+                    fpOclMatrixSrc[i*nC+j] = (float) aDoubles[j*nR+i];
+            aOclCalc.OclHostMatrixInverse32Bits( "oclFormulaMtxInv", fpOclMatrixSrc, fpOclMatrixDst, aDoubles, nR );
+        }
+    }
 
     // TODO: Inverse this matrix and put the result back into xInv. Right now,
     // I'll just put the original, non-inversed matrix values back, just to
@@ -484,28 +509,35 @@ bool FormulaGroupInterpreterGroundwater::interpretCL(ScDocument& rDoc, const ScA
                                                      ScTokenArray& rCode)
 {
     generateRPNCode(rDoc, rTopPos, rCode);
-
+    double delta = 0.0;
     // Inputs: both of length xGroup->mnLength
-    OpCode eOp; // type of operation: ocAverage, ocMax, ocMin
-    const double *pArrayToSubtractOneElementFrom;
-    const double *pGroundWaterDataArray;
+    OpCode eOp = ocNone; // type of operation: ocAverage, ocMax, ocMin
+    const double *pArrayToSubtractOneElementFrom = NULL;
+    const double *pGroundWaterDataArray = NULL;
 
     const formula::FormulaToken* p = rCode.FirstRPN();
-    RETURN_IF_FAIL(p != NULL && p->GetOpCode() == ocPush && p->GetType() == formula::svDoubleVectorRef, "double vector ref expected");
+    if ( p->GetType() == formula::svDouble && !getenv("SC_LCPU") )
+    {
+        delta = p->GetDouble();
+        eOp = ocSub;
+    }
+    else
+    {
+        RETURN_IF_FAIL(p != NULL && p->GetOpCode() == ocPush && p->GetType() == formula::svDoubleVectorRef, "double vector ref expected");
+        // Get the range reference vector.
+        const formula::DoubleVectorRefToken* pDvr = static_cast<const formula::DoubleVectorRefToken*>(p);
+        const std::vector<const double*>& rArrays = pDvr->GetArrays();
+        RETURN_IF_FAIL(rArrays.size() == 1, "unexpectedly large double ref array");
+        RETURN_IF_FAIL(pDvr->GetArrayLength() == (size_t)xGroup->mnLength, "wrong double ref length");
+        RETURN_IF_FAIL(pDvr->IsStartFixed() && pDvr->IsEndFixed(), "non-fixed ranges )");
+        pGroundWaterDataArray = rArrays[0];
 
-    // Get the range reference vector.
-    const formula::DoubleVectorRefToken* pDvr = static_cast<const formula::DoubleVectorRefToken*>(p);
-    const std::vector<const double*>& rArrays = pDvr->GetArrays();
-    RETURN_IF_FAIL(rArrays.size() == 1, "unexpectedly large double ref array");
-    RETURN_IF_FAIL(pDvr->GetArrayLength() == (size_t)xGroup->mnLength, "wrong double ref length");
-    RETURN_IF_FAIL(pDvr->IsStartFixed() && pDvr->IsEndFixed(), "non-fixed ranges )");
-    pGroundWaterDataArray = rArrays[0];
-
-    // Function:
-    p = rCode.NextRPN();
-    RETURN_IF_FAIL(p != NULL, "no operator");
-    eOp = p->GetOpCode();
-    RETURN_IF_FAIL(eOp == ocAverage || eOp == ocMax || eOp == ocMin, "unexpected opcode - expected either average, max, or min");
+        // Function:
+        p = rCode.NextRPN();
+        RETURN_IF_FAIL(p != NULL, "no operator");
+        eOp = p->GetOpCode();
+        RETURN_IF_FAIL(eOp == ocAverage || eOp == ocMax || eOp == ocMin, "unexpected opcode - expected either average, max, or min");
+    }
 
     p = rCode.NextRPN();
     RETURN_IF_FAIL(p != NULL && p->GetOpCode() == ocPush && p->GetType() == formula::svSingleVectorRef, "single vector ref expected");
@@ -536,7 +568,7 @@ bool FormulaGroupInterpreterGroundwater::interpretCL(ScDocument& rDoc, const ScA
 
     double *pResult = ocl_calc.OclSimpleDeltaOperation( eOp, pGroundWaterDataArray,
                                                         pArrayToSubtractOneElementFrom,
-                                                        (size_t) xGroup->mnLength );
+                                                        (size_t) xGroup->mnLength, delta );
     RETURN_IF_FAIL(pResult != NULL, "buffer alloc / calculaton failed");
 
     // Insert the double data, in rResult[i] back into the document

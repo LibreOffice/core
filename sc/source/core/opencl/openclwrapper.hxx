@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef _OPENCL_WRAPPER_H_
-#define _OPENCL_WRAPPER_H_
+#ifndef SC_OPENCL_WRAPPER_H
+#define SC_OPENCL_WRAPPER_H
 
 #include <config_features.h>
 #include <formula/opcode.hxx>
@@ -44,6 +44,9 @@
 #define strcasecmp strcmp
 #endif
 #endif
+
+#include <cstdio>
+#include <vector>
 
 typedef unsigned int uint;
 
@@ -126,13 +129,15 @@ public:
     virtual int OclHostFormulaStatistics64Bits( const char* aKernelName, double *fpSrcData, uint *npStartPos, uint *npEndPos, double *&output, int outputSize )=0;
     virtual int OclHostFormulaCount64Bits( uint *npStartPos, uint *npEndPos, double *&dpOutput, int nSize)=0;
     virtual int OclHostFormulaSumProduct64Bits( double *fpSumProMergeLfData, double *fpSumProMergeRrData, uint *npSumSize, double *&dpOutput, int nSize )=0;
+    virtual int OclHostMatrixInverse64Bits( const char* aKernelName, double *dpOclMatrixSrc, double *dpOclMatrixDst, std::vector<double>& dpResult, uint nDim)=0;
 
     virtual int OclHostArithmeticOperator32Bits( const char* aKernelName, float *fpLeftData, float *fpRightData, double *rResult, int nRowSize )=0;
     virtual int OclHostFormulaStatistics32Bits( const char* aKernelName, float *fpSrcData, uint *npStartPos, uint *npEndPos, double *output, int outputSize )=0;
     virtual int OclHostFormulaCount32Bits( uint *npStartPos, uint *npEndPos, double *dpOutput, int nSize)=0;
     virtual int OclHostFormulaSumProduct32Bits( float *fpSumProMergeLfData, float *fpSumProMergeRrData, uint *npSumSize, double *dpOutput, int nSize )=0;
+    virtual int OclHostMatrixInverse32Bits( const char* aKernelName, float *fpOclMatrixSrc, float *fpOclMatrixDst, std::vector<double>& dpResult, uint nDim )=0;
 
-    virtual double *OclSimpleDeltaOperation( OpCode eOp, const double *pOpArray, const double *pSubtractSingle, size_t nElements )=0;
+    virtual double *OclSimpleDeltaOperation( OpCode eOp, const double *pOpArray, const double *pSubtractSingle, size_t nElements, double delta )=0;
 
 
 };
@@ -207,18 +212,20 @@ public:
     int OclHostFormulaStatistics64Bits( const char* aKernelName, double *fpSrcData, uint *npStartPos, uint *npEndPos, double *&output, int outputSize);
     int OclHostFormulaCount64Bits( uint *npStartPos, uint *npEndPos, double *&dpOutput, int nSize );
     int OclHostFormulaSumProduct64Bits( double *fpSumProMergeLfData, double *fpSumProMergeRrData, uint *npSumSize, double *&dpOutput, int nSize);
+    int OclHostMatrixInverse64Bits( const char* aKernelName, double *dpOclMatrixSrc, double *dpOclMatrixDst, std::vector<double>&dpResult, uint nDim );
 // for 32bits float
     int OclHostArithmeticOperator32Bits( const char* aKernelName, float *fpLeftData, float *fpRightData, double *rResult, int nRowSize );
     int OclHostFormulaStatistics32Bits( const char* aKernelName, float *fpSrcData, uint *npStartPos, uint *npEndPos, double *output, int outputSize);
     int OclHostFormulaCount32Bits( uint *npStartPos, uint *npEndPos, double *dpOutput, int nSize );
     int OclHostFormulaSumProduct32Bits( float *fpSumProMergeLfData, float *fpSumProMergeRrData, uint *npSumSize, double *dpOutput, int nSize );
+    int OclHostMatrixInverse32Bits( const char* aKernelName, float *fpOclMatrixSrc, float *fpOclMatrixDst, std::vector<double>& dpResult, uint nDim );
 // for groundwater
-    double *OclSimpleDeltaOperation( OpCode eOp, const double *pOpArray, const double *pSubtractSingle, size_t nElements );
+    double *OclSimpleDeltaOperation( OpCode eOp, const double *pOpArray, const double *pSubtractSingle, size_t nElements, double delta );
 
     ///////////////////////////////////////////////////////////////
-    int CreateBuffer64Bits( double *&fpSrcData, uint *&npStartPos, uint *&npEndPos, int nBufferSize );
-    int CreateBuffer64Bits( double *&fpLeftData, double *&fpRightData, int nBufferSize );
-    int CreateBuffer64Bits( double *&fpSumProMergeLfData, double *&fpSumProMergeRtData, uint *&npSumSize, int nMatixSize, int nBufferSize );
+    int CreateBuffer64Bits( double *&dpSrcData, uint *&npStartPos, uint *&npEndPos, int nBufferSize );
+    int CreateBuffer64Bits( double *&dpLeftData, double *&dpRightData, int nBufferSize );
+    int CreateBuffer64Bits( double *&dpSumProMergeLfData, double *&dpSumProMergeRtData, uint *&npSumSize, int nMatixSize, int nBufferSize );
     int CreateBuffer32Bits( float *&fpSrcData, uint *&npStartPos, uint *&npEndPos, int nBufferSize );
     int CreateBuffer32Bits( float *&fpLeftData, float *&fpRightData, int nBufferSize );
     int CreateBuffer32Bits( float *&fpSumProMergeLfData, float *&fpSumProMergeRtData, uint *&npSumSize, int nMatixSize, int nBufferSize );

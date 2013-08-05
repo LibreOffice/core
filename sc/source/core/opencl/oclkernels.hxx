@@ -50,35 +50,33 @@ __kernel void oclSignedDiv(__global fp_t *ltData,__global fp_t *rtData,__global 
     otData[id] = ltData[id] / rtData[id];
 }
 
-__kernel void oclFormulaMin(__global fp_t *input,__global int *start,__global int *end,__global fp_t *output)
+__kernel void oclFormulaMin(__global fp_t *input,__global uint *start,__global uint *end,__global fp_t *output)
 {
     const unsigned int id = get_global_id(0);
     unsigned int startFlag = start[id];
     unsigned int endFlag = end[id];
-    fp_t min = input[startFlag];
+    fp_t fMinVal = input[startFlag];
     for(int i=startFlag;i<=endFlag;i++)
     {
-        if(input[i]<min)
-            min = input[i];
+        fMinVal = fmin( fMinVal, input[i] );
     }
-    output[id] = min;
+    output[id] = fMinVal;
 }
 
-__kernel void oclFormulaMax(__global fp_t *input,__global int *start,__global int *end,__global fp_t *output)
+__kernel void oclFormulaMax(__global fp_t *input,__global uint *start,__global uint *end,__global fp_t *output)
 {
     const unsigned int id = get_global_id(0);
     unsigned int startFlag = start[id];
     unsigned int endFlag = end[id];
-    fp_t max = input[startFlag];
-    for(int i=startFlag;i<=endFlag;i++)
+    fp_t fMaxVal = input[startFlag];
+    for ( int i = startFlag; i <= endFlag; i++ )
     {
-        if(input[i]>max)
-            max = input[i];
+        fMaxVal = fmax( fMaxVal, input[i] );
     }
-    output[id] = max;
+    output[id] = fMaxVal;
 }
 //Sum
-__kernel void oclFormulaSum(__global fp_t *input,__global int *start,__global int *end,__global fp_t *output)
+__kernel void oclFormulaSum(__global fp_t *input,__global uint *start,__global uint *end,__global fp_t *output)
 {
     const unsigned int nId = get_global_id(0);
     fp_t fSum = 0.0;
@@ -87,13 +85,13 @@ __kernel void oclFormulaSum(__global fp_t *input,__global int *start,__global in
     output[nId] = fSum ;
 }
 //Count
-__kernel void oclFormulaCount(__global int *start,__global int *end,__global fp_t *output)
+__kernel void oclFormulaCount(__global uint *start,__global uint *end,__global fp_t *output)
 {
     const unsigned int nId = get_global_id(0);
     output[nId] = end[nId] - start[nId] + 1;
 }
 
-__kernel void oclFormulaAverage(__global fp_t *input,__global int *start,__global int *end,__global fp_t *output)
+__kernel void oclFormulaAverage(__global fp_t *input,__global uint *start,__global uint *end,__global fp_t *output)
 {
     const unsigned int id = get_global_id(0);
     fp_t sum=0.0;
@@ -103,7 +101,7 @@ __kernel void oclFormulaAverage(__global fp_t *input,__global int *start,__globa
 }
 
 //Sumproduct
-__kernel void oclFormulaSumproduct(__global fp_t *firstCol,__global int* npSumSize,__global fp_t *output,uint nMatixSize)
+__kernel void oclFormulaSumproduct(__global fp_t *firstCol,__global uint* npSumSize,__global fp_t *output,uint nMatixSize)
 {
     const unsigned int id = get_global_id(0);
     unsigned int nSumSize = npSumSize[id];
@@ -112,12 +110,6 @@ __kernel void oclFormulaSumproduct(__global fp_t *firstCol,__global int* npSumSi
         fSum += firstCol[i + nMatixSize * id];
     output[id] = fSum;
 }
-
-__kernel void oclFormulaMinverse(__global fp_t *data, const uint type)
-{
-
-}
-
 
 __kernel void oclAverageDelta(__global fp_t *values, __global fp_t *subtract, uint start, uint end, __global fp_t *output)
 {
@@ -139,7 +131,7 @@ __kernel void oclMaxDelta(__global fp_t *values, __global fp_t *subtract, uint s
 
     // Max
     fp_t fMaxVal = values[start];
-    for(int i=start+1;i < end;i++)
+    for ( int i = start + 1; i < end; i++ )
     {
         if(values[i]>fMaxVal)
             fMaxVal = values[i];
@@ -165,6 +157,51 @@ __kernel void oclMinDelta(__global fp_t *values, __global fp_t *subtract, uint s
     output[id] = fMinVal - subtract[id];
 }
 
+__kernel void oclSubDelta( fp_t ltData, __global fp_t *rtData, __global fp_t *outData )
+{
+    const unsigned int id = get_global_id(0);
+    outData[id] = ltData - rtData[id];
+}
+
+__kernel void oclFormulaMtxInv(__global fp_t * fpMatrixInput, __global fp_t * fpP, int nOffset, int nMax)
+{
+    //get the global id of the workitem
+    int nId = get_global_id(0);
+    int nDimension = get_global_size(0);
+    fp_t dMovebuffer;
+    dMovebuffer = fpMatrixInput[nOffset*nDimension+nId];
+    fpMatrixInput[nOffset*nDimension+nId] = fpMatrixInput[nMax*nDimension+nId];
+    fpMatrixInput[nMax*nDimension+nId] = dMovebuffer;
+
+    dMovebuffer = fpP[nOffset*nDimension+nId];
+    fpP[nOffset*nDimension+nId] = fpP[nMax*nDimension+nId];
+    fpP[nMax*nDimension+nId] = dMovebuffer;
+}
+__kernel void oclMatrixSolve(__global fp_t * fpMatrixInput,__global fp_t * fpMatrixOutput,__global fp_t * fpP,__global fp_t * fpY)
+{
+    int nId = get_global_id(0);
+    int nDimension = get_global_size(0);
+
+    for ( int yi=0; yi < nDimension; yi++ )
+    {
+        fp_t fsum = 0.0;
+        for ( int yj=0; yj < nDimension; yj++ )
+        {
+            fsum += fpMatrixInput[yi*nDimension+yj] * fpY[nId+yj*nDimension];
+        }
+
+        fpY[nId+yi*nDimension] = fpP[yi*nDimension+nId] - fsum;
+    }
+    for ( int xi = nDimension - 1; xi >= 0; xi-- )
+    {
+        fp_t fsum = 0.0;
+        for ( int xj = 0; xj < nDimension; xj++ )
+        {
+            fsum += fpMatrixInput[xi*nDimension+xj] * fpMatrixOutput[nId+nDimension*xj];
+        }
+        fpMatrixOutput[nId+xi*nDimension] = (fpY[xi*nDimension+nId] - fsum) / fpMatrixInput[xi*nDimension+xi];
+    }
+}
 
 );
 
