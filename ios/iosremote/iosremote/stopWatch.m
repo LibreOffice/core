@@ -26,14 +26,12 @@
 
 @synthesize lastInterval = _lastInterval;
 
-dispatch_queue_t backgroundQueue;
 
 - (stopWatch *) init
 {
     self = [super init];
     self.state = TIMER_STATE_CLEARED;
     self.set = NO;
-    backgroundQueue = dispatch_queue_create("com.libreoffice.iosremote", DISPATCH_QUEUE_CONCURRENT);
     
     return self;
 }
@@ -70,7 +68,6 @@ dispatch_queue_t backgroundQueue;
 
 - (void)updateTimer
 {
-    dispatch_async(backgroundQueue, ^(void) {
         // Create date from the elapsed time
         NSDate *currentDate = [NSDate date];
         NSTimeInterval timeInterval = [currentDate timeIntervalSinceDate:self.startDate] + self.lastInterval;
@@ -83,11 +80,8 @@ dispatch_queue_t backgroundQueue;
         
         // Format the elapsed time and set it to the label
         NSString *timeString = [dateFormatter stringFromDate:timerDate];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            self.timeLabel.text = timeString;
-            self.barItem.title = timeString;
-        });
-    });
+        self.timeLabel.text = timeString;
+        self.barItem.title = timeString;
 }
 
 
