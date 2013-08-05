@@ -2227,7 +2227,7 @@ sal_Bool SwLayIdle::_DoIdleJob( const SwCntntFrm *pCnt, IdleJobType eJob )
                         pImp->GetShell()->InvalidateWindows( aRepaint );
                 } catch( const ::com::sun::star::uno::RuntimeException& e) {
                     // #i122885# handle smarttag problems gracefully and provide diagnostics
-                    fprintf( stderr, "SMART_TAGS Exception: %s\n", rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
+                    DBG_WARNING( rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
                 }
                 if ( Application::AnyInput( INPUT_MOUSEANDKEYBOARD|INPUT_OTHER|INPUT_PAINT ) )
                     return sal_True;
