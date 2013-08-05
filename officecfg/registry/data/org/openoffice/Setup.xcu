@@ -335,7 +335,7 @@
           <value>swform</value>
         </prop>
         <prop oor:name="ooSetupFactoryUIName">
-          <value>Base: Database Form</value>
+          <value xml:lang="en-US">Base: Database Form</value>
         </prop>
         <prop oor:name="ooSetupFactoryWindowStateConfigRef">
           <value>WriterFormWindowState</value>
@@ -370,7 +370,7 @@
           <value>swreport</value>
         </prop>
         <prop oor:name="ooSetupFactoryUIName">
-          <value>Base: Report Design</value>
+          <value xml:lang="en-US">Base: Report Design</value>
         </prop>
         <prop oor:name="ooSetupFactoryWindowStateConfigRef">
           <value>WriterReportWindowState</value>
@@ -481,7 +481,7 @@
           <value>GenericCategories</value>
         </prop>
         <prop oor:name="ooSetupFactoryUIName">
-          <value>Base: Relation Design</value>
+          <value xml:lang="en-US">Base: Relation Design</value>
         </prop>
       </node>
       <node oor:name="com.sun.star.sdb.QueryDesign" oor:op="replace" install:module="base">
@@ -506,7 +506,7 @@
           <value>GenericCategories</value>
         </prop>
         <prop oor:name="ooSetupFactoryUIName">
-          <value>Base: Query Design</value>
+          <value xml:lang="en-US">Base: Query Design</value>
         </prop>
       </node>
       <node oor:name="com.sun.star.sdb.ViewDesign" oor:op="replace" install:module="base">
@@ -531,7 +531,7 @@
           <value>GenericCategories</value>
         </prop>
         <prop oor:name="ooSetupFactoryUIName">
-          <value>Base: View Design</value>
+          <value xml:lang="en-US">Base: View Design</value>
         </prop>
       </node>
       <node oor:name="com.sun.star.sdb.TableDesign" oor:op="replace" install:module="base">
@@ -556,7 +556,7 @@
           <value>GenericCategories</value>
         </prop>
         <prop oor:name="ooSetupFactoryUIName">
-          <value>Base: Table Design</value>
+          <value xml:lang="en-US">Base: Table Design</value>
         </prop>
       </node>
       <node oor:name="com.sun.star.sdb.DataSourceBrowser" oor:op="replace" install:module="base">
@@ -581,7 +581,7 @@
           <value>GenericCategories</value>
         </prop>
         <prop oor:name="ooSetupFactoryUIName">
-          <value>Base: Data View</value>
+          <value xml:lang="en-US">Base: Data View</value>
         </prop>
       </node>
       <node oor:name="com.sun.star.sdb.TableDataView" oor:op="replace" install:module="base">
@@ -606,7 +606,7 @@
           <value>GenericCategories</value>
         </prop>
         <prop oor:name="ooSetupFactoryUIName">
-          <value>Base: Table Data View</value>
+          <value xml:lang="en-US">Base: Table Data View</value>
         </prop>
       </node>
       <node oor:name="com.sun.star.frame.Bibliography" oor:op="replace">
@@ -773,7 +773,7 @@
           <value>GenericCategories</value>
         </prop>
         <prop oor:name="ooSetupFactoryUIName">
-          <value>Base: Oracle Report Builder</value>
+          <value xml:lang="en-US">Base: Oracle Report Builder</value>
         </prop>
       </node>
     </node>
