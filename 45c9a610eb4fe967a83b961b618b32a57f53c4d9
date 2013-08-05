@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//9Zs\u003d",
+        "filename": "sc/source/filter/xml/xmlcelli.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-08-05T14:23:25Z",
+      "side": 0,
+      "message": "When removing the Clear() here, shouldn\u0027t that be done _somewhere_ then when/before the EditEngine is actually used?",
+      "revId": "45c9a610eb4fe967a83b961b618b32a57f53c4d9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
