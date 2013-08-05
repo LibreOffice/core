@@ -806,12 +806,24 @@ public class ValueChanger {
         newVal.Value = changePValue(((PropertyValue)oldValue).Value);
         newValue = newVal;
     } else
+    if (oldValue instanceof com.sun.star.util.Date) {
+        com.sun.star.util.Date oldD = (com.sun.star.util.Date) oldValue;
+        com.sun.star.util.Date newD = new com.sun.star.util.Date();
+        newD.Day = (short) (oldD.Day+(short) 1);
+        newValue = newD;
+    } else
     if (oldValue instanceof com.sun.star.util.DateTime) {
         com.sun.star.util.DateTime oldDT = (com.sun.star.util.DateTime) oldValue;
         com.sun.star.util.DateTime newDT = new com.sun.star.util.DateTime();
         newDT.Day = (short) (oldDT.Day+(short) 1);
         newDT.Hours = (short) (oldDT.Hours+(short) 1);
         newValue = newDT;
+    } else
+    if (oldValue instanceof com.sun.star.util.Time) {
+        com.sun.star.util.Time oldT = (com.sun.star.util.Time) oldValue;
+        com.sun.star.util.Time newT = new com.sun.star.util.Time();
+        newT.Hours = (short) (oldT.Hours+(short) 1);
+        newValue = newT;
     } else
     if (oldValue instanceof com.sun.star.text.TableColumnSeparator) {
         com.sun.star.text.TableColumnSeparator oldTCS = (com.sun.star.text.TableColumnSeparator) oldValue;
