@@ -155,6 +155,7 @@ public:
     void testParaBottomMargin();
     void testN823655();
     void testN823675();
+    void testFdo67498();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -278,6 +279,7 @@ void Test::run()
         {"para-bottom-margin.rtf", &Test::testParaBottomMargin},
         {"n823655.rtf", &Test::testN823655},
         {"n823675.rtf", &Test::testN823675},
+        {"fdo67498.rtf", &Test::testFdo67498},
     };
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
     {
@@ -1298,6 +1300,12 @@ void Test::testN823675()
     }
     // This was empty, i.e. no font name was set for the bullet numbering.
     CPPUNIT_ASSERT_EQUAL(OUString("Symbol"), aFont.Name);
+}
+
+void Test::testFdo67498()
+{
+    // Left margin of the default page style wasn't set (was 2000).
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(TWIP_TO_MM100(5954)), getProperty<sal_Int32>(getStyles("PageStyles")->getByName(DEFAULT_STYLE), "LeftMargin"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
