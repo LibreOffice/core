@@ -444,7 +444,13 @@ public:
     bool importImagePositionProperty(
         OUString const & rPropName, OUString const & rAttrName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes );
+    bool importDateProperty(
+        OUString const & rPropName, OUString const & rAttrName,
+        css::uno::Reference<css::xml::input::XAttributes> const & xAttributes );
     bool importDateFormatProperty(
+        OUString const & rPropName, OUString const & rAttrName,
+        css::uno::Reference<css::xml::input::XAttributes> const & xAttributes );
+    bool importTimeProperty(
         OUString const & rPropName, OUString const & rAttrName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes );
     bool importTimeFormatProperty(
