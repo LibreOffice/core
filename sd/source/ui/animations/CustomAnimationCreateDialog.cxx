@@ -191,7 +191,7 @@ public:
     bool getIsPreview() const;
     void setIsPreview( bool bIsPreview );
 
-    bool getId() const;
+    sal_uInt16 getId() const;
 
     bool select( const OUString& rsPresetId );
 
@@ -476,7 +476,7 @@ void CustomAnimationCreateTabPage::setIsPreview( bool bIsPreview )
     mpCBXPReview->Check( bIsPreview ? sal_True : sal_False );
 }
 
-bool CustomAnimationCreateTabPage::getId() const
+sal_uInt16 CustomAnimationCreateTabPage::getId() const
 {
     return mnId;
 }
