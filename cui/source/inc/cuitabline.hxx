@@ -25,6 +25,11 @@
 
 class SvxLineTabDialog : public SfxTabDialog
 {
+    sal_uInt16            m_nLineTabPage;
+    sal_uInt16            m_nShadowTabPage;
+    sal_uInt16            m_nStyleTabPage;
+    sal_uInt16            m_nEndTabPage;
+
 private:
     SdrModel*           pDrawModel;
     const SdrObject*    pObj;
