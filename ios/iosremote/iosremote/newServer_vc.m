@@ -11,6 +11,7 @@
 #import "EditableTableViewCell.h"
 #import "serverList_vc.h"
 #import "Server.h"
+#import <SystemConfiguration/CaptiveNetwork.h>
 
 @implementation newServerViewController
 
@@ -32,8 +33,9 @@
     NSString *serverName = [self.nameCell.textField text];
     NSString *serverAddr = [self.addrCell.textField text];
     if ([serverAddr isValidIPAddress]) {
-        if (!serverName)
-            serverName = @"Computer";
+        if (!serverName) {
+            serverName = [[self fetchSSIDInfo] valueForKey:@"SSID"];
+        }
         NSLog(@"New server name:%@ ip:%@", serverName, serverAddr);
         [self.comManager addServersWithName:serverName AtAddress:serverAddr];
         [self.navigationController popViewControllerAnimated:YES];
@@ -59,6 +61,18 @@
 
 #pragma mark -
 #pragma mark UIViewController Methods
+
+- (id)fetchSSIDInfo {
+    NSArray *ifs = (__bridge_transfer id)CNCopySupportedInterfaces();
+    id info = nil;
+    NSLog(@"Obtaining Wifi SSID");
+    for (NSString *ifnam in ifs) {
+        info = (__bridge_transfer id)CNCopyCurrentNetworkInfo((__bridge CFStringRef)ifnam);
+        NSLog(@"%@ => %@", ifnam, info);
+        if (info && [info count]) { break; }
+    }
+    return info;
+}
 
 - (void)viewDidLoad
 {
@@ -207,11 +221,11 @@
     {
         case InformationSection:
         {
-            if ([indexPath row] == 0)
+            if ([indexPath row] == 1)
             {
                 cell = [self nameCell];
                 text = [self.server serverName];
-                placeholder = @"Server Name (optional)";
+                placeholder = @"Name (optional)";
                 keyboardType = UIKeyboardTypeDefault;
             }
             else

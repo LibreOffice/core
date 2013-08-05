@@ -62,6 +62,7 @@
 		8C0DC84517A4185A0099E5AE /* previousButton_normal@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C0DC84117A4185A0099E5AE /* previousButton_normal@2x.png */; };
 		8C0DC84717A45B160099E5AE /* libO_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C0DC84617A45B160099E5AE /* libO_icon.png */; };
 		8C0DC85117A512250099E5AE /* AppDelegate_ipad.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C0DC85017A512250099E5AE /* AppDelegate_ipad.m */; };
+		8C19F41D17B00899005BDB61 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C19F41C17B00899005BDB61 /* SystemConfiguration.framework */; };
 		8C1A16FB17A2853100B4BB3C /* iosremote_iphone_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C1A16FA17A2853100B4BB3C /* iosremote_iphone_icon@2x.png */; };
 		8C1A16FD17A2853700B4BB3C /* iosremote_iphone_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C1A16FC17A2853700B4BB3C /* iosremote_iphone_icon.png */; };
 		8C1A16FF17A2853F00B4BB3C /* iosremote_ipad_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C1A16FE17A2853F00B4BB3C /* iosremote_ipad_icon.png */; };
@@ -165,6 +166,7 @@
 		8C0DC84617A45B160099E5AE /* libO_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = libO_icon.png; sourceTree = "<group>"; };
 		8C0DC84F17A512250099E5AE /* AppDelegate_ipad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate_ipad.h; path = iosremote/AppDelegate_ipad.h; sourceTree = "<group>"; };
 		8C0DC85017A512250099E5AE /* AppDelegate_ipad.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate_ipad.m; path = iosremote/AppDelegate_ipad.m; sourceTree = "<group>"; };
+		8C19F41C17B00899005BDB61 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		8C1A16FA17A2853100B4BB3C /* iosremote_iphone_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iosremote_iphone_icon@2x.png"; sourceTree = "<group>"; };
 		8C1A16FC17A2853700B4BB3C /* iosremote_iphone_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iosremote_iphone_icon.png; sourceTree = "<group>"; };
 		8C1A16FE17A2853F00B4BB3C /* iosremote_ipad_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iosremote_ipad_icon.png; sourceTree = "<group>"; };
@@ -210,6 +212,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8C19F41D17B00899005BDB61 /* SystemConfiguration.framework in Frameworks */,
 				571102701794128E007D343B /* libz.dylib in Frameworks */,
 				57DC7007178D84490050FC58 /* CoreMotion.framework in Frameworks */,
 				BE9EBD071765BF0800283FD2 /* CoreImage.framework in Frameworks */,
@@ -307,6 +310,7 @@
 		57C6E3E6175E06E800E8BC5F = {
 			isa = PBXGroup;
 			children = (
+				8C19F41C17B00899005BDB61 /* SystemConfiguration.framework */,
 				8C1A170217A28AB900B4BB3C /* Shared */,
 				8C1A170917A28E6500B4BB3C /* iPhone */,
 				8C1A170817A28E5E00B4BB3C /* iPad */,
