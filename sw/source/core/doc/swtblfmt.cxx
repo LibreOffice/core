@@ -230,9 +230,9 @@ sal_uInt16 SwTableFmt::GetRepeatHeading() const
     return 0;
 }
 
-void SwTableFmt::RestoreTableProperties( SwTableFmt* pSrcFmt, SwTable &table )
+void SwTableFmt::RestoreTableProperties( SwTableFmt* pSrcFmt, SwTable &rTable )
 {
-    SwTableFmt *pHardFmt = table.GetTableFmt();
+    SwTableFmt *pHardFmt = rTable.GetTableFmt();
     if( !pHardFmt )
         return;
 
@@ -247,31 +247,41 @@ void SwTableFmt::RestoreTableProperties( SwTableFmt* pSrcFmt, SwTable &table )
     if( pSrcFmt )
     {
         pHardFmt->RegisterToFormat( *pSrcFmt );
-        pHardFmt->GetAttrSet().SetParent( &pSrcFmt->GetAttrSet() );
         bRowSplit = pSrcFmt->GetRowSplit();
         nRepeatHeading = pSrcFmt->GetRepeatHeading();
     }
     else
-    {
         pTableStyle->Remove( pHardFmt );
-        pHardFmt->GetAttrSet().SetParent( NULL );
-    }
 
-    AssignLineParents( pSrcFmt, table );
+    AssignFormatParents( pSrcFmt, rTable );
 
     SwEditShell *pShell = pDoc->GetEditShell();
     pDoc->SetRowSplit( *pShell->getShellCrsr( false ), SwFmtRowSplit( bRowSplit ) );
 
-    table.SetRowsToRepeat( nRepeatHeading );
+    rTable.SetRowsToRepeat( nRepeatHeading );
 }
 
-SwTableFmt* SwTableFmt::StoreTableProperties( const SwTable &table )
+SwTableFmt* SwTableFmt::StoreTableProperties( const SwTable &rTable )
 {
-    SwTableFmt *pHardFmt = table.GetTableFmt();
+    SwTableFmt *pHardFmt = rTable.GetTableFmt();
     if( !pHardFmt )
         return NULL;
 
     return (SwTableFmt*)pHardFmt->GetRegisteredIn();
+}
+
+void SwTableFmt::AssignFormatParents( SwTableFmt* pSrcFmt, SwTable &rTable )
+{
+    SwTableFmt *pHardFmt = rTable.GetTableFmt();
+    if( !pHardFmt )
+        return;
+
+    if( pSrcFmt )
+        pHardFmt->GetAttrSet().SetParent( &pSrcFmt->GetAttrSet() );
+    else
+        pHardFmt->GetAttrSet().SetParent( NULL );
+
+    AssignLineParents( pSrcFmt, rTable );
 }
 
 void SwTableFmt::AssignLineParents( SwTableFmt* pSrcFmt, SwTable &rTable )
