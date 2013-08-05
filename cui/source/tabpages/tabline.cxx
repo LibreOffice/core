@@ -25,7 +25,6 @@
 #include <svx/dialogs.hrc>
 
 #include <cuires.hrc>
-#include "tabline.hrc"
 
 #include "cuitabarea.hxx"
 #include "cuitabline.hxx"
@@ -44,7 +43,14 @@ SvxLineTabDialog::SvxLineTabDialog
     sal_Bool bHasObj
 ) :
 
-    SfxTabDialog    ( pParent, CUI_RES( RID_SVXDLG_LINE ), pAttr ),
+    SfxTabDialog    ( pParent
+                      , "LineDialog"
+                      , "cui/ui/linedialog.ui"
+                      , pAttr ),
+    m_nLineTabPage(0),
+    m_nShadowTabPage(0),
+    m_nStyleTabPage(0),
+    m_nEndTabPage(0),
     pDrawModel      ( pModel ),
     pObj            ( pSdrObj ),
     rOutAttrs       ( *pAttr ),
@@ -64,8 +70,6 @@ SvxLineTabDialog::SvxLineTabDialog
     nPosLineEndLb( 0 ),
     mbAreaTP( sal_False )
 {
-    FreeResource();
-
     bool bLineOnly = false;
     if( pObj && pObj->GetObjInventor() == SdrInventor )
     {
@@ -85,16 +89,16 @@ SvxLineTabDialog::SvxLineTabDialog
 
     }
 
-    AddTabPage( RID_SVXPAGE_LINE, SvxLineTabPage::Create, 0);
+    m_nLineTabPage = AddTabPage( "RID_SVXPAGE_LINE", SvxLineTabPage::Create, 0);
     if( bLineOnly )
-        AddTabPage( RID_SVXPAGE_SHADOW, SvxShadowTabPage::Create, 0 );
+        m_nShadowTabPage = AddTabPage( "RID_SVXPAGE_SHADOW", SvxShadowTabPage::Create, 0 );
     else
-        RemoveTabPage( RID_SVXPAGE_SHADOW );
+        RemoveTabPage( "RID_SVXPAGE_SHADOW" );
 
-    AddTabPage( RID_SVXPAGE_LINE_DEF, SvxLineDefTabPage::Create, 0);
-    AddTabPage( RID_SVXPAGE_LINEEND_DEF, SvxLineEndDefTabPage::Create, 0);
+    m_nStyleTabPage = AddTabPage( "RID_SVXPAGE_LINE_DEF", SvxLineDefTabPage::Create, 0);
+    m_nEndTabPage = AddTabPage( "RID_SVXPAGE_LINEEND_DEF", SvxLineEndDefTabPage::Create, 0);
 
-    SetCurPageId( RID_SVXPAGE_LINE );
+    SetCurPageId( "RID_SVXPAGE_LINE" );
 
     CancelButton& rBtnCancel = GetCancelButton();
     rBtnCancel.SetClickHdl( LINK( this, SvxLineTabDialog, CancelHdlImpl ) );
@@ -194,58 +198,53 @@ IMPL_LINK_NOARG_INLINE_END(SvxLineTabDialog, CancelHdlImpl)
 
 void SvxLineTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
-    switch( nId )
+    if( nId ==  m_nLineTabPage)
     {
-        case RID_SVXPAGE_LINE:
-            ( (SvxLineTabPage&) rPage ).SetColorList( pColorList );
-            ( (SvxLineTabPage&) rPage ).SetDashList( pDashList );
-            ( (SvxLineTabPage&) rPage ).SetLineEndList( pLineEndList );
-            ( (SvxLineTabPage&) rPage ).SetDlgType( nDlgType );
-            ( (SvxLineTabPage&) rPage ).SetPageType( nPageType );
-            ( (SvxLineTabPage&) rPage ).SetPosDashLb( &nPosDashLb );
-            ( (SvxLineTabPage&) rPage ).SetPosLineEndLb( &nPosLineEndLb );
-            ( (SvxLineTabPage&) rPage ).SetDashChgd( &nDashListState );
-            ( (SvxLineTabPage&) rPage ).SetLineEndChgd( &nLineEndListState );
-            ( (SvxLineTabPage&) rPage ).SetObjSelected( bObjSelected );
-            ( (SvxLineTabPage&) rPage ).Construct();
-            ( (SvxLineTabPage&) rPage ).SetColorChgd( &mnColorListState );
-            // ActivatePage() is not called the first time
-            ( (SvxLineTabPage&) rPage ).ActivatePage( rOutAttrs );
-        break;
-
-        case RID_SVXPAGE_LINE_DEF:
-            ( (SvxLineDefTabPage&) rPage ).SetDashList( pDashList );
-            ( (SvxLineDefTabPage&) rPage ).SetDlgType( &nDlgType );
-            ( (SvxLineDefTabPage&) rPage ).SetPageType( &nPageType );
-            ( (SvxLineDefTabPage&) rPage ).SetPosDashLb( &nPosDashLb );
-            ( (SvxLineDefTabPage&) rPage ).SetDashChgd( &nDashListState );
-            ( (SvxLineDefTabPage&) rPage ).SetObjSelected( bObjSelected );
-            ( (SvxLineDefTabPage&) rPage ).Construct();
-        break;
-
-        case RID_SVXPAGE_LINEEND_DEF:
-            ( (SvxLineEndDefTabPage&) rPage ).SetLineEndList( pLineEndList );
-            ( (SvxLineEndDefTabPage&) rPage ).SetPolyObj( pObj );
-            ( (SvxLineEndDefTabPage&) rPage ).SetDlgType( &nDlgType );
-            ( (SvxLineEndDefTabPage&) rPage ).SetPageType( &nPageType );
-            ( (SvxLineEndDefTabPage&) rPage ).SetPosLineEndLb( &nPosLineEndLb );
-            ( (SvxLineEndDefTabPage&) rPage ).SetLineEndChgd( &nLineEndListState );
-            ( (SvxLineEndDefTabPage&) rPage ).SetObjSelected( bObjSelected );
-            ( (SvxLineEndDefTabPage&) rPage ).Construct();
-        break;
-
-        case RID_SVXPAGE_SHADOW:
-        {
-            ( (SvxShadowTabPage&) rPage ).SetColorList( pColorList );
-            ( (SvxShadowTabPage&) rPage ).SetPageType( nPageType );
-            ( (SvxShadowTabPage&) rPage ).SetDlgType( nDlgType );
-            ( (SvxShadowTabPage&) rPage ).SetAreaTP( &mbAreaTP );
-            ( (SvxShadowTabPage&) rPage ).SetColorChgd( &mnColorListState );
-            ( (SvxShadowTabPage&) rPage ).Construct();
-        }
-        break;
+        ( (SvxLineTabPage&) rPage ).SetColorList( pColorList );
+        ( (SvxLineTabPage&) rPage ).SetDashList( pDashList );
+        ( (SvxLineTabPage&) rPage ).SetLineEndList( pLineEndList );
+        ( (SvxLineTabPage&) rPage ).SetDlgType( nDlgType );
+        ( (SvxLineTabPage&) rPage ).SetPageType( nPageType );
+        ( (SvxLineTabPage&) rPage ).SetPosDashLb( &nPosDashLb );
+        ( (SvxLineTabPage&) rPage ).SetPosLineEndLb( &nPosLineEndLb );
+        ( (SvxLineTabPage&) rPage ).SetDashChgd( &nDashListState );
+        ( (SvxLineTabPage&) rPage ).SetLineEndChgd( &nLineEndListState );
+        ( (SvxLineTabPage&) rPage ).SetObjSelected( bObjSelected );
+        ( (SvxLineTabPage&) rPage ).Construct();
+        ( (SvxLineTabPage&) rPage ).SetColorChgd( &mnColorListState );
+        // ActivatePage() is not called the first time
+        ( (SvxLineTabPage&) rPage ).ActivatePage( rOutAttrs );
+    }
+    else if(nId == m_nStyleTabPage)
+    {
+        ( (SvxLineDefTabPage&) rPage ).SetDashList( pDashList );
+        ( (SvxLineDefTabPage&) rPage ).SetDlgType( &nDlgType );
+        ( (SvxLineDefTabPage&) rPage ).SetPageType( &nPageType );
+        ( (SvxLineDefTabPage&) rPage ).SetPosDashLb( &nPosDashLb );
+        ( (SvxLineDefTabPage&) rPage ).SetDashChgd( &nDashListState );
+        ( (SvxLineDefTabPage&) rPage ).SetObjSelected( bObjSelected );
+        ( (SvxLineDefTabPage&) rPage ).Construct();
+    }
+    else if(nId == m_nEndTabPage)
+    {
+        ( (SvxLineEndDefTabPage&) rPage ).SetLineEndList( pLineEndList );
+        ( (SvxLineEndDefTabPage&) rPage ).SetPolyObj( pObj );
+        ( (SvxLineEndDefTabPage&) rPage ).SetDlgType( &nDlgType );
+        ( (SvxLineEndDefTabPage&) rPage ).SetPageType( &nPageType );
+        ( (SvxLineEndDefTabPage&) rPage ).SetPosLineEndLb( &nPosLineEndLb );
+        ( (SvxLineEndDefTabPage&) rPage ).SetLineEndChgd( &nLineEndListState );
+        ( (SvxLineEndDefTabPage&) rPage ).SetObjSelected( bObjSelected );
+        ( (SvxLineEndDefTabPage&) rPage ).Construct();
+    }
+    else if (nId == m_nShadowTabPage)
+    {
+        ( (SvxShadowTabPage&) rPage ).SetColorList( pColorList );
+        ( (SvxShadowTabPage&) rPage ).SetPageType( nPageType );
+        ( (SvxShadowTabPage&) rPage ).SetDlgType( nDlgType );
+        ( (SvxShadowTabPage&) rPage ).SetAreaTP( &mbAreaTP );
+        ( (SvxShadowTabPage&) rPage ).SetColorChgd( &mnColorListState );
+        ( (SvxShadowTabPage&) rPage ).Construct();
     }
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
