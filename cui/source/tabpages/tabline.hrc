@@ -25,28 +25,5 @@
 #define STR_START_LENGTH    40
 #define STR_END_LENGTH      41
 
-#define CBX_SYNCHRONIZE 1
-#define CTL_POSITION 2
-#define FT_POSITION 9
-#define CTL_PREVIEW 1
-#define FL_DEFINITION 1
-#define FT_NUMBER 3
-#define FT_DISTANCE 2
-#define FT_LENGTH 4
-#define LB_TYPE_1 3
-#define FT_TYPE 1
-#define LB_TYPE_2 1
-#define NUM_FLD_1 1
-#define NUM_FLD_2 2
-#define MTR_FLD_DISTANCE 1
-#define MTR_FLD_LENGTH_1 3
-#define MTR_FLD_LENGTH_2 4
-#define FT_LINESTYLE 10
-#define LB_LINESTYLES 2
-#define BTN_ADD 1
-#define BTN_MODIFY 2
-#define BTN_DELETE 3
-#define BTN_LOAD   5
-#define BTN_SAVE   6
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
