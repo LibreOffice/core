@@ -4683,11 +4683,12 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
         // get service provider
         uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
 
-        uno::Reference< linguistic2::XLinguServiceManager2> xLinguMgr = linguistic2::LinguServiceManager::create(xContext);
-        uno::Reference< linguistic2::XHyphenator > xHyph = xLinguMgr->getHyphenator();
-
-        i18n::LineBreakHyphenationOptions aHyphOptions( xHyph, uno::Sequence <beans::PropertyValue>(), 1 );
-        i18n::LineBreakUserOptions aUserOptions;
+        uno::Reference< linguistic2::XHyphenator > xHyph;
+        if ( nStyle & TEXT_DRAW_WORDBREAK )
+        {
+            uno::Reference< linguistic2::XLinguServiceManager2> xLinguMgr = linguistic2::LinguServiceManager::create(xContext);
+            xHyph = xLinguMgr->getHyphenator();
+        }
 
         sal_Int32 nPos = 0;
         sal_Int32 nLen = rStr.getLength();
@@ -4709,6 +4710,8 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
                     const com::sun::star::lang::Locale& rDefLocale(Application::GetSettings().GetUILanguageTag().getLocale());
                     xub_StrLen nSoftBreak = _rLayout.GetTextBreak( rStr, nWidth, nPos, nBreakPos - nPos );
                     DBG_ASSERT( nSoftBreak < nBreakPos, "Break?!" );
+                    i18n::LineBreakHyphenationOptions aHyphOptions( xHyph, uno::Sequence <beans::PropertyValue>(), 1 );
+                    i18n::LineBreakUserOptions aUserOptions;
                     i18n::LineBreakResults aLBR = xBI->getLineBreak( aText, nSoftBreak, rDefLocale, nPos, aHyphOptions, aUserOptions );
                     nBreakPos = (xub_StrLen)aLBR.breakIndex;
                     if ( nBreakPos <= nPos )
