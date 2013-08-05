@@ -57,6 +57,8 @@
                 <property name="can_focus">False</property>
                 <property name="xalign">0</property>
                 <property name="label" translatable="yes">Number of Pages:</property>
+                <property name="use_underline">True</property>
+                <property name="mnemonic_widget">nopages</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -86,6 +88,8 @@
                 <property name="can_focus">False</property>
                 <property name="xalign">0</property>
                 <property name="label" translatable="yes">Number of Cells:</property>
+                <property name="use_underline">True</property>
+                <property name="mnemonic_widget">nocells</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -115,6 +119,8 @@
                 <property name="can_focus">False</property>
                 <property name="xalign">0</property>
                 <property name="label" translatable="yes">Number of Sheets:</property>
+                <property name="use_underline">True</property>
+                <property name="mnemonic_widget">nosheets</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
