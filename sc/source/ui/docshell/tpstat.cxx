@@ -41,9 +41,8 @@ SfxTabPage* ScDocStatPage::Create( Window *pParent, const SfxItemSet& rSet )
 //------------------------------------------------------------------------
 
 ScDocStatPage::ScDocStatPage( Window *pParent, const SfxItemSet& rSet )
-    :   SfxTabPage( pParent, "StatisticsInfopage", "modules/scalc/ui/statisticsinfopage.ui", rSet )
+    :   SfxTabPage( pParent, "StatisticsInfoPage", "modules/scalc/ui/statisticsinfopage.ui", rSet )
 {
-    get(m_pFlInfo,"document");
     get(m_pFtTables,"nosheets");
     get(m_pFtCells,"nocells");
     get(m_pFtPages,"nopages");
@@ -53,9 +52,10 @@ ScDocStatPage::ScDocStatPage( Window *pParent, const SfxItemSet& rSet )
     if ( pDocSh )
         pDocSh->GetDocStat( aDocStat );
 
-    String aInfo = m_pFlInfo->GetText();
+    VclFrame *pFrame = get<VclFrame>("StatisticsInfoPage");
+    String aInfo = pFrame->get_label();
     aInfo += aDocStat.aDocName;
-    m_pFlInfo     ->SetText( aInfo );
+    pFrame->set_label(aInfo);
     m_pFtTables   ->SetText( OUString::number( aDocStat.nTableCount ) );
     m_pFtCells    ->SetText( OUString::number( aDocStat.nCellCount ) );
     m_pFtPages    ->SetText( OUString::number( aDocStat.nPageCount ) );
