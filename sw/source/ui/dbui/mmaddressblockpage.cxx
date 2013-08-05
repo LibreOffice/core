@@ -1450,7 +1450,7 @@ void AddressMultiLineEdit::SetText( const OUString& rStr )
     if(m_pParentDialog->m_eType == SwCustomizeAddressBlockDialog::ADDRESSBLOCK_NEW ||
             m_pParentDialog->m_eType == SwCustomizeAddressBlockDialog::ADDRESSBLOCK_EDIT)
     {
-        xub_StrLen nLastLen = pTextEngine->GetText(nParaCount - 1).Len();
+        sal_Int32 nLastLen = pTextEngine->GetText(nParaCount - 1).getLength();
         if(nLastLen)
         {
             TextPaM aPaM(nParaCount ? nParaCount - 1 : 0, nLastLen);

@@ -43,7 +43,7 @@ TextSelection ExtTextEngine::MatchGroup( const TextPaM& rCursor ) const
     sal_uLong nParas = GetParagraphCount();
     if ( ( nPara < nParas ) && ( nPos < GetTextLen( nPara ) ) )
     {
-        sal_uInt16 nMatchChar = maGroupChars.Search( GetText( rCursor.GetPara() ).GetChar( nPos ) );
+        sal_uInt16 nMatchChar = maGroupChars.Search( GetText( rCursor.GetPara() )[ nPos ] );
         if ( nMatchChar != STRING_NOTFOUND )
         {
             if ( ( nMatchChar % 2 ) == 0 )

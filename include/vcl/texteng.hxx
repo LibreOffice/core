@@ -224,10 +224,10 @@ public:
                         ~TextEngine();
 
     void                SetText( const OUString& rStr );
-    String              GetText( LineEnd aSeparator = LINEEND_LF ) const;
-    String              GetText( const TextSelection& rSel, LineEnd aSeparator = LINEEND_LF ) const;
-    String              GetTextLines( LineEnd aSeparator = LINEEND_LF ) const;
-    void                ReplaceText(const TextSelection& rSel, const String& rText);
+    OUString            GetText( LineEnd aSeparator = LINEEND_LF ) const;
+    OUString            GetText( const TextSelection& rSel, LineEnd aSeparator = LINEEND_LF ) const;
+    OUString            GetTextLines( LineEnd aSeparator = LINEEND_LF ) const;
+    void                ReplaceText(const TextSelection& rSel, const OUString& rText);
 
     sal_uLong               GetTextLen( LineEnd aSeparator = LINEEND_LF ) const;
     sal_uLong               GetTextLen( const TextSelection& rSel, LineEnd aSeparator = LINEEND_LF ) const;
@@ -238,12 +238,12 @@ public:
     sal_uInt16              GetDefTab() const;
 
     void                SetLeftMargin( sal_uInt16 n );
-    sal_uInt16              GetLeftMargin() const;
+    sal_uInt16          GetLeftMargin() const;
 
     void                SetUpdateMode( sal_Bool bUpdate );
-    sal_Bool                GetUpdateMode() const { return mbUpdate; }
+    sal_Bool            GetUpdateMode() const { return mbUpdate; }
 
-    sal_uInt16              GetViewCount() const;
+    sal_uInt16          GetViewCount() const;
     TextView*           GetView( sal_uInt16 nView ) const;
     void                InsertView( TextView* pTextView );
     void                RemoveView( TextView* pTextView );
@@ -251,25 +251,25 @@ public:
     void                SetActiveView( TextView* pView );
 
     void                SetMaxTextLen( sal_uLong nLen );
-    sal_uLong               GetMaxTextLen() const { return mnMaxTextLen; }
+    sal_uLong           GetMaxTextLen() const { return mnMaxTextLen; }
 
     void                SetMaxTextWidth( sal_uLong nWidth );
-    sal_uLong               GetMaxTextWidth() const { return mnMaxTextWidth; }
+    sal_uLong           GetMaxTextWidth() const { return mnMaxTextWidth; }
 
-    sal_uLong               GetTextHeight() const;
-    sal_uLong               CalcTextWidth();
-    sal_uInt16              GetCharHeight() const { return mnCharHeight; }
+    sal_uLong           GetTextHeight() const;
+    sal_uLong           CalcTextWidth();
+    sal_uInt16          GetCharHeight() const { return mnCharHeight; }
 
-    sal_uLong               GetParagraphCount() const;
-    String              GetText( sal_uLong nParagraph ) const;
-    sal_uInt16              GetTextLen( sal_uLong nParagraph ) const;
-    sal_uLong               GetTextHeight( sal_uLong nParagraph ) const;
+    sal_uLong           GetParagraphCount() const;
+    OUString            GetText( sal_uLong nParagraph ) const;
+    sal_uInt16          GetTextLen( sal_uLong nParagraph ) const;
+    sal_uLong           GetTextHeight( sal_uLong nParagraph ) const;
 
-    sal_uInt16              GetLineCount( sal_uLong nParagraph ) const;
-    sal_uInt16              GetLineLen( sal_uLong nParagraph, sal_uInt16 nLine ) const;
+    sal_uInt16          GetLineCount( sal_uLong nParagraph ) const;
+    sal_uInt16          GetLineLen( sal_uLong nParagraph, sal_uInt16 nLine ) const;
 
     void                SetRightToLeft( sal_Bool bR2L );
-    sal_Bool                IsRightToLeft() const { return mbRightToLeft; }
+    sal_Bool            IsRightToLeft() const { return mbRightToLeft; }
 
     sal_Bool            HasUndoManager() const { return mpUndoManager ? sal_True : sal_False; }
     ::svl::IUndoManager&
@@ -282,20 +282,20 @@ public:
     void                ResetUndo();
 
     void                EnableUndo( sal_Bool bEnable );
-    sal_Bool                IsUndoEnabled()             { return mbUndoEnabled; }
+    sal_Bool            IsUndoEnabled()             { return mbUndoEnabled; }
 
     void                SetModified( sal_Bool bModified )   { mbModified = bModified; }
-    sal_Bool                IsModified() const              { return mbModified; }
+    sal_Bool            IsModified() const              { return mbModified; }
 
-    sal_Bool                Read( SvStream& rInput, const TextSelection* pSel = NULL );
+    sal_Bool            Read( SvStream& rInput, const TextSelection* pSel = NULL );
 
-    sal_Bool                Write( SvStream& rOutput, const TextSelection* pSel = NULL, sal_Bool bHTML = sal_False );
+    sal_Bool            Write( SvStream& rOutput, const TextSelection* pSel = NULL, sal_Bool bHTML = sal_False );
 
     TextPaM             GetPaM( const Point& rDocPos, sal_Bool bSmart = sal_True );
     Rectangle           PaMtoEditCursor( const TextPaM& rPaM, sal_Bool bSpecial = sal_False );
-    String              GetWord( const TextPaM& rCursorPos, TextPaM* pStartOfWord = 0 );
+    OUString            GetWord( const TextPaM& rCursorPos, TextPaM* pStartOfWord = 0 );
 
-    sal_Bool                    HasAttrib( sal_uInt16 nWhich ) const;
+    sal_Bool            HasAttrib( sal_uInt16 nWhich ) const;
     const TextAttrib*       FindAttrib( const TextPaM& rPaM, sal_uInt16 nWhich ) const;
     const TextCharAttrib*   FindCharAttrib( const TextPaM& rPaM, sal_uInt16 nWhich ) const;
 
@@ -313,8 +313,8 @@ public:
     ::com::sun::star::lang::Locale  GetLocale();
     ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator > GetBreakIterator();
 
-    static sal_Bool         DoesKeyChangeText( const KeyEvent& rKeyEvent );
-    static sal_Bool         IsSimpleCharInput( const KeyEvent& rKeyEvent );
+    static sal_Bool     DoesKeyChangeText( const KeyEvent& rKeyEvent );
+    static sal_Bool     IsSimpleCharInput( const KeyEvent& rKeyEvent );
 };
 
 #endif // _TEXTENG_HXX

@@ -251,19 +251,19 @@ static inline const sal_Unicode* static_getLineEndText( LineEnd aLineEnd )
     return pRet;
 }
 
-void  TextEngine::ReplaceText(const TextSelection& rSel, const String& rText)
+void  TextEngine::ReplaceText(const TextSelection& rSel, const OUString& rText)
 {
     ImpInsertText( rSel, rText );
 }
 
-String TextEngine::GetText( LineEnd aSeparator ) const
+OUString TextEngine::GetText( LineEnd aSeparator ) const
 {
     return mpDoc->GetText( static_getLineEndText( aSeparator ) );
 }
 
-String TextEngine::GetTextLines( LineEnd aSeparator ) const
+OUString TextEngine::GetTextLines( LineEnd aSeparator ) const
 {
-    String aText;
+    OUString aText;
     sal_uLong nParas = mpTEParaPortions->Count();
     const sal_Unicode* pSep = static_getLineEndText( aSeparator );
     for ( sal_uLong nP = 0; nP < nParas; nP++ )
@@ -282,7 +282,7 @@ String TextEngine::GetTextLines( LineEnd aSeparator ) const
     return aText;
 }
 
-String TextEngine::GetText( sal_uLong nPara ) const
+OUString TextEngine::GetText( sal_uLong nPara ) const
 {
     return mpDoc->GetText( nPara );
 }
@@ -385,7 +385,7 @@ void TextEngine::ImpInitDoc()
     delete mpTEParaPortions;
     mpTEParaPortions = new TEParaPortions;
 
-    TextNode* pNode = new TextNode( String() );
+    TextNode* pNode = new TextNode( OUString() );
     mpDoc->GetNodes().Insert( pNode, 0 );
 
     TEParaPortion* pIniPortion = new TEParaPortion( pNode );
@@ -397,9 +397,9 @@ void TextEngine::ImpInitDoc()
     ImpParagraphInserted( 0 );
 }
 
-String TextEngine::GetText( const TextSelection& rSel, LineEnd aSeparator ) const
+OUString TextEngine::GetText( const TextSelection& rSel, LineEnd aSeparator ) const
 {
-    String aText;
+    OUString aText;
 
     if ( !rSel.HasRange() )
         return aText;
@@ -723,12 +723,12 @@ TextPaM TextEngine::ImpInsertText( sal_Unicode c, const TextSelection& rCurSel, 
                             pOldTxt[nChgPos] == pNewTxt[nChgPos] )
                         ++nChgPos;
 
-                    String aChgText( aNewText.copy( nChgPos ) );
+                    OUString aChgText( aNewText.copy( nChgPos ) );
 
                     // select text from first pos to be changed to current pos
                     TextSelection aSel( TextPaM( aPaM.GetPara(), (sal_uInt16) nChgPos ), aPaM );
 
-                    if (aChgText.Len())
+                    if (!aChgText.isEmpty())
                         // ImpInsertText implicitly handles undo...
                         return ImpInsertText( aSel, aChgText );
                     else
@@ -1346,7 +1346,7 @@ void TextEngine::UndoActionStart( sal_uInt16 nId )
 {
     if ( IsUndoEnabled() && !IsInUndo() )
     {
-        String aComment;
+        OUString aComment;
         GetUndoManager().EnterListAction( aComment, OUString(), nId );
     }
 }
@@ -2476,9 +2476,9 @@ sal_Bool TextEngine::CreateLines( sal_uLong nPara )
     return nOldLineCount != pTEParaPortion->GetLines().size();
 }
 
-String TextEngine::GetWord( const TextPaM& rCursorPos, TextPaM* pStartOfWord )
+OUString TextEngine::GetWord( const TextPaM& rCursorPos, TextPaM* pStartOfWord )
 {
-    String aWord;
+    OUString aWord;
     if ( rCursorPos.GetPara() < mpDoc->GetNodes().Count() )
     {
         TextSelection aSel( rCursorPos );
@@ -2569,19 +2569,19 @@ sal_Bool TextEngine::Write( SvStream& rOutput, const TextSelection* pSel, sal_Bo
         if ( nPara == aSel.GetEnd().GetPara() )
             nEndPos = aSel.GetEnd().GetIndex();
 
-        String aText;
+        OUStringBuffer aText;
         if ( !bHTML )
         {
-            aText = pNode->GetText().Copy( nStartPos, nEndPos-nStartPos );
+            aText = OUString( pNode->GetText().Copy( nStartPos, nEndPos-nStartPos ) );
         }
         else
         {
-            aText.AssignAscii( "<P STYLE=\"margin-bottom: 0cm\">" );
+            aText = "<P STYLE=\"margin-bottom: 0cm\">";
 
             if ( nStartPos == nEndPos )
             {
                 // Empty lines will be removed by Writer
-                aText.AppendAscii( "<BR>" );
+                aText.append( "<BR>" );
             }
             else
             {
@@ -2593,28 +2593,28 @@ sal_Bool TextEngine::Write( SvStream& rOutput, const TextSelection* pSel, sal_Bo
                     nTmpEnd = pAttr ? pAttr->GetStart() : nEndPos;
 
                     // Text before Attribute
-                    aText += pNode->GetText().Copy( nTmpStart, nTmpEnd-nTmpStart );
+                    aText.append( OUString( pNode->GetText().Copy( nTmpStart, nTmpEnd-nTmpStart ) ) );
 
                     if ( pAttr )
                     {
                         nTmpEnd = std::min( pAttr->GetEnd(), nEndPos );
 
                         // e.g. <A HREF="http://www.mopo.de/">Morgenpost</A>
-                        aText.AppendAscii( "<A HREF=\"" );
-                        aText += ((const TextAttribHyperLink&) pAttr->GetAttr() ).GetURL();
-                        aText.AppendAscii( "\">" );
+                        aText.append( "<A HREF=\"" );
+                        aText.append( ((const TextAttribHyperLink&) pAttr->GetAttr() ).GetURL() );
+                        aText.append( "\">" );
                         nTmpStart = pAttr->GetStart();
-                        aText += pNode->GetText().Copy( nTmpStart, nTmpEnd-nTmpStart );
-                        aText.AppendAscii( "</A>" );
+                        aText.append( pNode->GetText().Copy( nTmpStart, nTmpEnd-nTmpStart ) );
+                        aText.append( "</A>" );
 
                         nTmpStart = pAttr->GetEnd();
                     }
                 } while ( nTmpEnd < nEndPos );
             }
 
-            aText.AppendAscii( "</P>" );
+            aText.append( "</P>" );
         }
-        rOutput.WriteLine(OUStringToOString(aText,
+        rOutput.WriteLine(OUStringToOString(aText.makeStringAndClear(),
             rOutput.GetStreamCharSet()));
     }
 
@@ -2945,16 +2945,16 @@ void TextEngine::ImpInitWritingDirections( sal_uLong nPara )
     if ( pParaPortion->GetNode()->GetText().Len() )
     {
         const UBiDiLevel nBidiLevel = IsRightToLeft() ? 1 /*RTL*/ : 0 /*LTR*/;
-        String aText( pParaPortion->GetNode()->GetText() );
+        OUString aText( pParaPortion->GetNode()->GetText() );
 
         //
         // Bidi functions from icu 2.0
         //
         UErrorCode nError = U_ZERO_ERROR;
-        UBiDi* pBidi = ubidi_openSized( aText.Len(), 0, &nError );
+        UBiDi* pBidi = ubidi_openSized( aText.getLength(), 0, &nError );
         nError = U_ZERO_ERROR;
 
-        ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(aText.GetBuffer()), aText.Len(), nBidiLevel, NULL, &nError ); // UChar != sal_Unicode in MinGW
+        ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(aText.getStr()), aText.getLength(), nBidiLevel, NULL, &nError ); // UChar != sal_Unicode in MinGW
         nError = U_ZERO_ERROR;
 
         long nCount = ubidi_countRuns( pBidi, &nError );

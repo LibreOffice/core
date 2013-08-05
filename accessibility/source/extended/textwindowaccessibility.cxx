@@ -910,7 +910,7 @@ void Document::retrieveParagraphSelection(ParagraphImpl const * pParagraph,
             : static_cast< ::sal_Int32 >( aMinPaM.GetIndex() );
             // XXX numeric overflow
         *pEnd = nNumber < aMaxPaM.GetPara()
-            ? static_cast< ::sal_Int32 >( m_rEngine.GetText(static_cast< ::sal_uLong >(nNumber)).Len() )
+            ? static_cast< ::sal_Int32 >( m_rEngine.GetText(static_cast< ::sal_uLong >(nNumber)).getLength() )
             : static_cast< ::sal_Int32 >( aMaxPaM.GetIndex() );
             // XXX  numeric overflow (3x)
 
@@ -943,7 +943,7 @@ Document::retrieveCharacterBounds(ParagraphImpl const * pParagraph,
     ::osl::Guard< ::comphelper::IMutex > aExternalGuard(getExternalLock());
     ::osl::MutexGuard aInternalGuard(GetMutex());
     ::sal_uLong nNumber = static_cast< ::sal_uLong >(pParagraph->getNumber());
-    sal_Int32 nLength = m_rEngine.GetText(nNumber).Len();
+    sal_Int32 nLength = m_rEngine.GetText(nNumber).getLength();
         // XXX  numeric overflow
     if (nIndex < 0 || nIndex > nLength)
         throw css::lang::IndexOutOfBoundsException(
@@ -1011,7 +1011,7 @@ Document::retrieveCharacterAttributes(
     ::osl::MutexGuard aInternalGuard(GetMutex());
     ::sal_uLong nNumber = static_cast< ::sal_uLong >(pParagraph->getNumber());
         // XXX  numeric overflow
-    if (nIndex < 0 || nIndex >= m_rEngine.GetText(nNumber).Len())
+    if (nIndex < 0 || nIndex >= m_rEngine.GetText(nNumber).getLength())
         throw css::lang::IndexOutOfBoundsException(
             "textwindowaccessibility.cxx:"
             " Document::retrieveCharacterAttributes",
@@ -1139,7 +1139,7 @@ Document::retrieveRunAttributes(
     ::osl::MutexGuard aInternalGuard( GetMutex() );
     ::sal_uLong nNumber = static_cast< ::sal_uLong >( pParagraph->getNumber() );
         // XXX  numeric overflow
-    if ( Index < 0 || Index >= m_rEngine.GetText(nNumber).Len() )
+    if ( Index < 0 || Index >= m_rEngine.GetText(nNumber).getLength() )
         throw css::lang::IndexOutOfBoundsException(
             "textwindowaccessibility.cxx:"
             " Document::retrieveRunAttributes",
@@ -1174,7 +1174,7 @@ void Document::changeParagraphText(ParagraphImpl * pParagraph,
         ::sal_uLong nNumber = static_cast< ::sal_uLong >(pParagraph->getNumber());
             // XXX  numeric overflow
         if (nBegin < 0 || nBegin > nEnd
-            || nEnd > m_rEngine.GetText(nNumber).Len())
+            || nEnd > m_rEngine.GetText(nNumber).getLength())
             throw css::lang::IndexOutOfBoundsException(
                 "textwindowaccessibility.cxx:"
                 " Document::changeParagraphText",
@@ -1194,7 +1194,7 @@ void Document::copyParagraphText(ParagraphImpl const * pParagraph,
         ::sal_uLong nNumber = static_cast< ::sal_uLong >(pParagraph->getNumber());
             // XXX  numeric overflow
         if (nBegin < 0 || nBegin > nEnd
-            || nEnd > m_rEngine.GetText(nNumber).Len())
+            || nEnd > m_rEngine.GetText(nNumber).getLength())
             throw css::lang::IndexOutOfBoundsException(
                 "textwindowaccessibility.cxx:"
                 " Document::copyParagraphText",
@@ -1217,7 +1217,7 @@ void Document::changeParagraphAttributes(
         ::sal_uLong nNumber = static_cast< ::sal_uLong >(pParagraph->getNumber());
         // XXX  numeric overflow
         if (nBegin < 0 || nBegin > nEnd
-            || nEnd > m_rEngine.GetText(nNumber).Len())
+            || nEnd > m_rEngine.GetText(nNumber).getLength())
             throw css::lang::IndexOutOfBoundsException(
                 "textwindowaccessibility.cxx:"
                 " Document::changeParagraphAttributes",
@@ -1251,7 +1251,7 @@ void Document::changeParagraphSelection(ParagraphImpl * pParagraph,
         ::sal_uLong nNumber = static_cast< ::sal_uLong >(pParagraph->getNumber());
             // XXX  numeric overflow
         if (nBegin < 0 || nBegin > nEnd
-            || nEnd > m_rEngine.GetText(nNumber).Len())
+            || nEnd > m_rEngine.GetText(nNumber).getLength())
             throw css::lang::IndexOutOfBoundsException(
                 "textwindowaccessibility.cxx:"
                 " Document::changeParagraphSelection",
@@ -1275,7 +1275,7 @@ Document::retrieveParagraphLineBoundary( ParagraphImpl const * pParagraph,
     {
         ::osl::MutexGuard aInternalGuard( GetMutex() );
         ::sal_uLong nNumber = static_cast< ::sal_uLong >( pParagraph->getNumber() );
-        if ( nIndex < 0 || nIndex > m_rEngine.GetText( nNumber ).Len() )
+        if ( nIndex < 0 || nIndex > m_rEngine.GetText( nNumber ).getLength() )
             throw css::lang::IndexOutOfBoundsException(
                 "textwindowaccessibility.cxx:"
                 " Document::retrieveParagraphLineBoundary",
