@@ -62,12 +62,11 @@ public:
 	typedef typename STLP4_SLIST_EMUBASE<T,A> _super;
 	typedef typename _super::iterator slist_mit;
 	typedef typename _super::const_iterator slist_cit;
-#ifndef STLP4_SLIST_WITH_LIST
-	slist_mit insert( slist_cit aI, const T& rT) { return _super::insert_after( aI, rT); }
-#else
-private:
-	size_t size() const; // prevent use of slist::size() as forward_list doesn't have a size() method
-#endif
+
+private: // prevent the use of methods not available in forward_list
+	// signatures are intentionally mismatched to catch invocations
+	size_t size() const;
+	void insert( void) const;
 };
 
 }
