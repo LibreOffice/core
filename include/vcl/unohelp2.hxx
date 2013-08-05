@@ -37,13 +37,13 @@ namespace vcl { namespace unohelper {
                             public ::cppu::OWeakObject
     {
     private:
-        String          maText;
+        OUString        maText;
 
     public:
-                        TextDataObject( const String& rText );
+                        TextDataObject( const OUString& rText );
                         ~TextDataObject();
 
-        String&         GetString() { return maText; }
+        OUString&       GetString() { return maText; }
 
         // ::com::sun::star::uno::XInterface
         ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
@@ -57,7 +57,7 @@ namespace vcl { namespace unohelper {
 
         /// copies a given string to a given clipboard
         static  void    CopyStringTo(
-            const String& rContent,
+            const OUString& rContent,
             const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard >& rxClipboard
         );
     };

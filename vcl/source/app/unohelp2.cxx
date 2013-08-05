@@ -30,7 +30,7 @@ using namespace ::com::sun::star;
 
 namespace vcl { namespace unohelper {
 
-    TextDataObject::TextDataObject( const String& rText ) : maText( rText )
+    TextDataObject::TextDataObject( const OUString& rText ) : maText( rText )
     {
     }
 
@@ -38,7 +38,7 @@ namespace vcl { namespace unohelper {
     {
     }
 
-    void TextDataObject::CopyStringTo( const String& rContent,
+    void TextDataObject::CopyStringTo( const OUString& rContent,
         const uno::Reference< datatransfer::clipboard::XClipboard >& rxClipboard )
     {
         DBG_ASSERT( rxClipboard.is(), "TextDataObject::CopyStringTo: invalid clipboard!" );
