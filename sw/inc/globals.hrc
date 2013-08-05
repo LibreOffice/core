@@ -190,8 +190,6 @@
 #define TP_OPTCAPTION_PAGE          (RC_GLOBALS_BEGIN +  78)
 #define DLG_SVXTEST_NUM_BULLET      (RC_GLOBALS_BEGIN +  79)
 
-#define DLG_SECTION_PROPERTIES      (RC_GLOBALS_BEGIN +  87)
-
 #define DLG_MULTI_TOX               (RC_GLOBALS_BEGIN +  89)
 #define TP_TOX_SELECT               (RC_GLOBALS_BEGIN +  90)
 #define TP_TOX_ENTRY                (RC_GLOBALS_BEGIN +  91)
@@ -200,12 +198,10 @@
 #define DLG_ADD_IDX_STYLES          (RC_GLOBALS_BEGIN +  94)
 #define TP_PRIVATE_DATA             (RC_GLOBALS_BEGIN +  95)
 #define TP_BUSINESS_DATA            (RC_GLOBALS_BEGIN +  96)
-#define TP_SECTION_FTNENDNOTES      (RC_GLOBALS_BEGIN +  97)
 #define TP_CHAR_POS                 (RC_GLOBALS_BEGIN +  98)
 #define TP_CHAR_TWOLN               (RC_GLOBALS_BEGIN +  99)
 #define TP_PARA_ASIAN               (RC_GLOBALS_BEGIN +  100)
 #define TP_TEXTGRID_PAGE            (RC_GLOBALS_BEGIN +  101)
-#define TP_SECTION_INDENTS          (RC_GLOBALS_BEGIN +  102)
 #define TP_OPTCOMPATIBILITY_PAGE    (RC_GLOBALS_BEGIN +  103)
 #define TP_MAILCONFIG               (RC_GLOBALS_BEGIN +  104)
 //maximum: RC_GLOBALS_BEGIN +  120

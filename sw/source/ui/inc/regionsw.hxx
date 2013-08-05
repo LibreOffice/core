@@ -287,6 +287,12 @@ public:
 class SwSectionPropertyTabDialog : public SfxTabDialog
 {
     SwWrtShell& rWrtSh;
+
+    sal_uInt16 m_nColumnPageId;
+    sal_uInt16 m_nBackPageId;
+    sal_uInt16 m_nNotePageId;
+    sal_uInt16 m_nIndentPage;
+
 protected:
     virtual void    PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
 public:
