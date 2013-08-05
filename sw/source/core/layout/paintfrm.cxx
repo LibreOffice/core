@@ -4818,7 +4818,7 @@ void PaintCharacterBorder(
             aAlignedRect.Left(),
             aAlignedRect.Top());
         Point aRightBottom (
-            aAlignedRect.Left() + rFont.GetLeftBorder().get().GetScaledWidth(),
+            aAlignedRect.Left() + aLeftBorder.get().GetScaledWidth(),
             aAlignedRect.Bottom());
 
         lcl_MakeBorderLine(
@@ -4832,7 +4832,7 @@ void PaintCharacterBorder(
     if( aRightBorder )
     {
         Point aLeftTop (
-            aAlignedRect.Right() - rFont.GetRightBorder().get().GetScaledWidth(),
+            aAlignedRect.Right() - aRightBorder.get().GetScaledWidth(),
             aAlignedRect.Top());
         Point aRightBottom (
             aAlignedRect.Right(),
