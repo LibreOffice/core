@@ -22,14 +22,19 @@
 @synthesize startButton = _startButton;
 @synthesize clearButton = _clearButton;
 @synthesize timeLabel = _timeLabel;
+@synthesize barItem = _barItem;
 
 @synthesize lastInterval = _lastInterval;
+
+dispatch_queue_t backgroundQueue;
 
 - (stopWatch *) init
 {
     self = [super init];
     self.state = TIMER_STATE_CLEARED;
     self.set = NO;
+    backgroundQueue = dispatch_queue_create("com.libreoffice.iosremote", DISPATCH_QUEUE_CONCURRENT);
+    
     return self;
 }
 
@@ -65,19 +70,24 @@
 
 - (void)updateTimer
 {
-    // Create date from the elapsed time
-    NSDate *currentDate = [NSDate date];
-    NSTimeInterval timeInterval = [currentDate timeIntervalSinceDate:self.startDate] + self.lastInterval;
-    NSDate *timerDate = [NSDate dateWithTimeIntervalSince1970:timeInterval];
-    
-    // Create a date formatter
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"HH:mm:ss"];
-    [dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0.0]];
-    
-    // Format the elapsed time and set it to the label
-    NSString *timeString = [dateFormatter stringFromDate:timerDate];
-    self.timeLabel.text = timeString;
+    dispatch_async(backgroundQueue, ^(void) {
+        // Create date from the elapsed time
+        NSDate *currentDate = [NSDate date];
+        NSTimeInterval timeInterval = [currentDate timeIntervalSinceDate:self.startDate] + self.lastInterval;
+        NSDate *timerDate = [NSDate dateWithTimeIntervalSince1970:timeInterval];
+        
+        // Create a date formatter
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:@"HH:mm:ss"];
+        [dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0.0]];
+        
+        // Format the elapsed time and set it to the label
+        NSString *timeString = [dateFormatter stringFromDate:timerDate];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.timeLabel.text = timeString;
+            self.barItem.title = timeString;
+        });
+    });
 }
 
 
@@ -97,6 +107,7 @@
                                                                  selector:@selector(updateTimer)
                                                                  userInfo:nil
                                                                   repeats:YES];
+            [[NSRunLoop currentRunLoop] addTimer:self.stopWatchTimer forMode:NSRunLoopCommonModes];
             break;
         case TIMER_STATE_CLEARED:
             self.state = TIMER_STATE_RUNNING;
@@ -107,6 +118,7 @@
                                                                  selector:@selector(updateTimer)
                                                                  userInfo:nil
                                                                   repeats:YES];
+            [[NSRunLoop currentRunLoop] addTimer:self.stopWatchTimer forMode:NSRunLoopCommonModes];
             break;
         default:
             break;
@@ -142,6 +154,7 @@
     
     [self.startButton setImage:[UIImage imageNamed:@"timer_start_btn"] forState:UIControlStateNormal];
     [self updateTimer];
+    self.barItem.title = @"";
 }
 
 @end

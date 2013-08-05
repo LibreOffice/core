@@ -21,7 +21,6 @@
 
 @property (nonatomic, strong) CommunicationManager *comManager;
 @property (nonatomic, strong) SlideShow *slideshow;
-@property (nonatomic, strong) stopWatch *stopWatch;
 
 @end
 

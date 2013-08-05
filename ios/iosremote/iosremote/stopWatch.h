@@ -18,6 +18,7 @@
 @property (strong, nonatomic) NSTimer *stopWatchTimer;
 @property (strong, nonatomic) NSDate *startDate;
 @property BOOL set;
+@property (weak, nonatomic) UINavigationItem * barItem;
 
 - (stopWatch *) initWithStartButton:(UIButton *)startButton
                         ClearButton:(UIButton *)clearButton

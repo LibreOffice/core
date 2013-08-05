@@ -11,8 +11,10 @@
 #import "CommunicationManager.h"
 #import "SWRevealViewController.h"
 #import "CommandInterpreter.h"
+#import "stopWatch.h"
 #import "CommandTransmitter.h"
 #import "slideShowPreviewTable_vc.h"
+#import "slideShowSwipeInList_iphone.h"
 #import <QuartzCore/QuartzCore.h>
 #import <CoreMotion/CoreMotion.h>
 
@@ -317,11 +319,18 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+- (void) viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+}
+
 
 - (void) viewDidAppear:(BOOL)animated
 {
     NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
     NSOperationQueue *mainQueue = [NSOperationQueue mainQueue];
+    
+    [[(slideShowSwipeInList *)self.revealViewController.rearViewController stopWatch] setBarItem:self.navigationController.navigationBar.topItem];
 
     self.slideShowImageNoteReadyObserver =[center addObserverForName:MSG_SLIDE_CHANGED
                                                               object:nil
