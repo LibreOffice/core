@@ -64,8 +64,8 @@ public class _XTimeField extends MultiMethodTest {
 
         boolean result = true ;
         oObj.setTime(new Time(0, (short)0, (short)15, (short)11, false));
-
-        result = oObj.getTime() == new Time(0, (short)0, (short)15, (short)11, false) ;
+        Time time = oObj.getTime();
+        result = time.NanoSeconds == 0 && time.Seconds == 0 && time.Minutes == 15 && time.Hours == 11 && !time.IsUTC;
 
         if (! result ) {
             System.out.println("Getting " + oObj.getTime() + " expected 11:15");
@@ -98,8 +98,8 @@ public class _XTimeField extends MultiMethodTest {
 
         boolean result = true ;
         oObj.setMin(new Time(0, (short)14, (short)18, (short)6, false));
-
-        result = oObj.getMin() == new Time(0, (short)14, (short)18, (short)6, false) ;
+        Time time = oObj.getMin();
+        result = time.NanoSeconds == 0 && time.Seconds == 14 && time.Minutes == 18 && time.Hours == 6 && !time.IsUTC;
 
         tRes.tested("setMin()", result) ;
     }
@@ -128,8 +128,8 @@ public class _XTimeField extends MultiMethodTest {
 
         boolean result = true ;
         oObj.setMax(new Time(855447, (short)31, (short)23, (short)22, false)) ;
-
-        result = oObj.getMax() == new Time(855447, (short)31, (short)23, (short)22, false) ;
+        Time time = oObj.getMax();
+        result = time.NanoSeconds == 855447 && time.Seconds == 31 && time.Minutes == 23 && time.Hours == 22 && !time.IsUTC;
 
         tRes.tested("setMax()", result) ;
     }
@@ -158,8 +158,8 @@ public class _XTimeField extends MultiMethodTest {
 
         boolean result = true ;
         oObj.setFirst(new Time(0, (short)0, (short)30, (short)7, false)) ;
-
-        result = oObj.getFirst() == new Time(0, (short)0, (short)30, (short)7, false);
+        Time time = oObj.getFirst();
+        result = time.NanoSeconds == 0 && time.Seconds == 0 && time.Minutes == 30 && time.Hours == 7 && !time.IsUTC;
 
         if (!result) {
             log.println("Set to 07:30 but returned " + oObj.getFirst()) ;
@@ -194,8 +194,8 @@ public class _XTimeField extends MultiMethodTest {
 
         boolean result = true ;
         oObj.setLast(new Time(500000, (short)31, (short)30, (short)18, false)) ;
-
-        result = oObj.getLast() == new Time(500000, (short)31, (short)30, (short)18, false);
+        Time time = oObj.getLast();
+        result = time.NanoSeconds == 500000 && time.Seconds == 31 && time.Minutes == 30 && time.Hours == 18 && !time.IsUTC;
 
         if (!result) {
             log.println("Set to 18:30:31.5 but returned " + oObj.getLast()) ;
