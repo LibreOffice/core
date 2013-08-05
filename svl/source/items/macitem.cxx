@@ -31,30 +31,14 @@ TYPEINIT1_FACTORY(SvxMacroItem, SfxPoolItem, new SvxMacroItem(0));
 
 // -----------------------------------------------------------------------
 
-
-SjJSbxObjectBase::~SjJSbxObjectBase()
-{
-}
-
-SjJSbxObjectBase* SjJSbxObjectBase::Clone( void )
-{
-    return NULL;
-}
-
 SvxMacro::SvxMacro( const OUString &rMacName, const OUString &rLanguage)
     : aMacName( rMacName ), aLibName( rLanguage),
-      pFunctionObject(NULL), eType( EXTENDED_STYPE)
+      eType( EXTENDED_STYPE)
 {
     if ( rLanguage == SVX_MACRO_LANGUAGE_STARBASIC )
         eType=STARBASIC;
     else if ( rLanguage == SVX_MACRO_LANGUAGE_JAVASCRIPT )
         eType=JAVASCRIPT;
-}
-
-
-SvxMacro::~SvxMacro()
-{
-    delete pFunctionObject;
 }
 
 OUString SvxMacro::GetLanguage()const
@@ -75,16 +59,12 @@ OUString SvxMacro::GetLanguage()const
     return aLibName;
 }
 
-
-
 SvxMacro& SvxMacro::operator=( const SvxMacro& rBase )
 {
     if( this != &rBase )
     {
         aMacName = rBase.aMacName;
         aLibName = rBase.aLibName;
-        delete pFunctionObject;
-        pFunctionObject = rBase.pFunctionObject ? rBase.pFunctionObject->Clone() : NULL;
         eType = rBase.eType;
     }
     return *this;

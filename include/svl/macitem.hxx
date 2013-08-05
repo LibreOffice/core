@@ -47,23 +47,10 @@ enum ScriptType
     EXTENDED_STYPE
 };
 
-// Basisklasse fuer SjJSbxObject mit virtuellem Destruktor
-class SjJSbxObjectBase
-{
-public:
-    virtual ~SjJSbxObjectBase();
-    virtual SjJSbxObjectBase* Clone( void );
-    //virtual SjJSbxObjectBase& operator=( const SjJSbxObjectBase& rBase );
-};
-
-class SjJSbxObject;
-
 class SVL_DLLPUBLIC SvxMacro
 {
     OUString aMacName;
     OUString aLibName;
-    // Fuer JavaScript muss ein Function-Objekt gehalten werden
-    SjJSbxObjectBase* pFunctionObject;
     ScriptType eType;
 
 public:
@@ -73,9 +60,6 @@ public:
     SvxMacro( const OUString &rMacName, const OUString &rLibName,
                 ScriptType eType); //  = STARBASIC entfernt
 
-    SvxMacro( SjJSbxObjectBase* _pFunctionObject, const OUString &rSource );
-    ~SvxMacro();    // noetig fuer pFunctionObject
-
     const OUString &GetLibName() const        { return aLibName; }
     const OUString &GetMacName() const        { return aMacName; }
     OUString GetLanguage()const;
@@ -84,22 +68,12 @@ public:
 
     bool HasMacro() const { return !aMacName.isEmpty(); }
 
-#ifdef SOLAR_JAVA
-    // JavaScript-Function-Objekt holen
-    // ACHTUNG: Implementation in SJ, Source/JScript/sjimpl.cxx
-    SjJSbxObjectBase* GetFunctionObject( SjJSbxObject* pParent );
-#endif
-
     SvxMacro& operator=( const SvxMacro& rBase );
 };
 
 inline SvxMacro::SvxMacro( const OUString &rMacName, const OUString &rLibName,
                             ScriptType eTyp )
-    : aMacName( rMacName ), aLibName( rLibName ), pFunctionObject(NULL), eType( eTyp )
-{}
-
-inline SvxMacro::SvxMacro( SjJSbxObjectBase* _pFunctionObject, const OUString &rSource )
-    : aMacName( rSource ), pFunctionObject( _pFunctionObject ), eType( JAVASCRIPT )
+    : aMacName( rMacName ), aLibName( rLibName ), eType( eTyp )
 {}
 
 //Macro Table, zerstoert die Pointer im DTor!
