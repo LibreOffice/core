@@ -36,7 +36,7 @@ namespace
 
 VLCPlayer::VLCPlayer( const rtl::OUString& url )
     : VLC_Base(m_aMutex)
-    , mInstance( sizeof( VLC_ARGS ) / sizeof( VLC_ARGS[0] ), VLC_ARGS )
+    , mInstance( VLC_ARGS )
     , mMedia( InitMedia( url, mInstance ), libvlc_media_release )
     , mPlayer( libvlc_media_player_new_from_media( mMedia.get() ), libvlc_media_player_release )
     , mUrl( url )

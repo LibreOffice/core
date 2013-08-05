@@ -17,11 +17,11 @@ namespace VLC
         };
     }
 
-    Instance::Instance( int argc, const char * const *argv )
+    Instance::Instance( const char * const argv[] )
     {
         InitApiMap( VLC_INSTANCE_API );
 
-        mInstance = libvlc_new( argc, argv );
+        mInstance = libvlc_new( sizeof( argv ) / sizeof( argv[0] ), argv );
     }
 
     Instance::~Instance()
