@@ -23,22 +23,11 @@ const char * const VLC_ARGS[] = {
 
 const int MS_IN_SEC = 1000; // Millisec in sec
 
-namespace
-{
-    libvlc_media_t* InitMedia( const rtl::OUString& url, VLC::Instance& instance )
-    {
-        rtl::OString dest;
-        url.convertToString(&dest, RTL_TEXTENCODING_UTF8, 0);
-
-        return libvlc_media_new_path(instance, dest.getStr());
-    }
-}
-
 VLCPlayer::VLCPlayer( const rtl::OUString& url )
     : VLC_Base(m_aMutex)
     , mInstance( VLC_ARGS )
-    , mMedia( InitMedia( url, mInstance ), libvlc_media_release )
-    , mPlayer( libvlc_media_player_new_from_media( mMedia.get() ), libvlc_media_player_release )
+    , mMedia( url, mInstance )
+    , mPlayer( libvlc_media_player_new_from_media( mMedia ), libvlc_media_player_release )
     , mUrl( url )
     , mPlaybackLoop( false )
 {

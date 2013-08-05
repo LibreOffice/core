@@ -1,5 +1,4 @@
-#include <rtl/ustring.hxx>
-
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #include "Instance.hxx"
 #include "SymbolLoader.hxx"
 
@@ -7,8 +6,8 @@ namespace VLC
 {
     namespace
     {
-        libvlc_instance_t *(*libvlc_new) (int argc, const char * const *argv);
-        void (*libvlc_release) (libvlc_instance_t *p_instance);
+        libvlc_instance_t* ( *libvlc_new ) ( int argc, const char * const *argv );
+        void ( *libvlc_release ) ( libvlc_instance_t *p_instance );
 
         ApiMap VLC_INSTANCE_API[] =
         {
@@ -30,3 +29,4 @@ namespace VLC
     }
 
 }
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

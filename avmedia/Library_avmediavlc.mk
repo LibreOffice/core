@@ -12,9 +12,9 @@ $(eval $(call gb_Library_Library,avmediavlc))
 $(eval $(call gb_Library_set_componentfile,avmediavlc,avmedia/source/vlc/avmediavlc))
 
 $(eval $(call gb_Library_set_include,avmediavlc,\
-	$$(INCLUDE) \
-	-I$(SRCDIR)/avmedia/source/inc \
-	$(VLC_CFLAGS) \
+    $$(INCLUDE) \
+    -I$(SRCDIR)/avmedia/source/inc \
+    $(VLC_CFLAGS) \
 ))
 $(eval $(call gb_Library_add_libs,avmediavlc,$(VLC_LIBS)))
 
@@ -24,28 +24,29 @@ $(eval $(call gb_Library_use_sdk_api,avmediavlc))
 
 ifeq ($(OS),WNT)
 $(eval $(call gb_Library_add_defs,avmediavlc,\
-	-DWINNT
+    -DWINNT
 ))
 endif
 
 $(eval $(call gb_Library_use_libraries,avmediavlc,\
-	comphelper \
-	cppu \
-	cppuhelper \
-	sal \
-	tl \
-	vcl \
-	utl \
-	$(gb_UWINAPI) \
+    comphelper \
+    cppu \
+    cppuhelper \
+    sal \
+    tl \
+    vcl \
+    utl \
+    $(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,avmediavlc,\
-	avmedia/source/vlc/vlcmanager \
-	avmedia/source/vlc/vlcplayer \
-	avmedia/source/vlc/vlcuno \
-	avmedia/source/vlc/vlcwindow \
-	avmedia/source/vlc/vlcframegrabber \
-	avmedia/source/vlc/wrapper/Instance \
+    avmedia/source/vlc/vlcmanager \
+    avmedia/source/vlc/vlcplayer \
+    avmedia/source/vlc/vlcuno \
+    avmedia/source/vlc/vlcwindow \
+    avmedia/source/vlc/vlcframegrabber \
+    avmedia/source/vlc/wrapper/Instance \
+    avmedia/source/vlc/wrapper/Media \
 ))
 
 # vim: set noet sw=4 ts=4:
