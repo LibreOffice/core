@@ -216,7 +216,7 @@ published service ViewSettings
      */
     [optional, property] long RasterResolutionY;
 
-    /** If this property is <TRUE/>, hidden characters are displayed
+    /** If this property is `TRUE`, hidden characters are displayed
 
         @since OOo 3.0
      */
