@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//9Z4\u003d",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-08-05T13:15:53Z",
+      "side": 1,
+      "message": "How are these properties special, compared to the rest of properties like font color, strike-though, etc? Sounds like all those are not handled here. Or the spec says only these can appear here?",
+      "revId": "45a8e9b74535254b8f4c82dac647eaa6a56e350f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
