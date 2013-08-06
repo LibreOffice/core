@@ -1415,6 +1415,15 @@ DialogWindowLayout::DialogWindowLayout (Window* pParent, ObjectCatalog& rObjectC
     ShowPropertyBrowser();
 }
 
+DialogWindowLayout::~DialogWindowLayout()
+{
+    if (pPropertyBrowser != 0)
+    {
+        Remove(pPropertyBrowser);
+        delete pPropertyBrowser;
+    }
+}
+
 // shows the property browser (and creates if necessary)
 void DialogWindowLayout::ShowPropertyBrowser ()
 {
@@ -1449,18 +1458,6 @@ void DialogWindowLayout::UpdatePropertyBrowser ()
 {
     if (pPropertyBrowser)
         pPropertyBrowser->Update(GetShell());
-}
-
-// Removes the property browser from the layout.
-// Called by PropBrw when closed. It'll destroy itself.
-void DialogWindowLayout::RemovePropertyBrowser ()
-{
-    if (pPropertyBrowser)
-        Remove(pPropertyBrowser);
-    pPropertyBrowser = 0;
-    // refreshing the button state
-    if (SfxBindings* pBindings = GetBindingsPtr())
-        pBindings->Invalidate(SID_SHOW_PROPERTYBROWSER);
 }
 
 void DialogWindowLayout::Activating (BaseWindow& rChild)

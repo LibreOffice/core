@@ -199,7 +199,6 @@ PropBrw::~PropBrw()
 {
     if ( m_xBrowserController.is() )
         ImplDestroyController();
-    rLayout.RemovePropertyBrowser();
 
     DBG_DTOR(PropBrw,NULL);
 }

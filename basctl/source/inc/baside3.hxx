@@ -126,11 +126,11 @@ class DialogWindowLayout : public Layout
 {
 public:
     DialogWindowLayout (Window* pParent, ObjectCatalog&);
+    ~DialogWindowLayout();
 public:
     void ShowPropertyBrowser ();
     void UpdatePropertyBrowser ();
     void DisablePropertyBrowser ();
-    void RemovePropertyBrowser ();
 public:
     // Layout:
     virtual void Activating (BaseWindow&);
