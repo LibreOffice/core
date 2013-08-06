@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//9Vg\u003d",
+        "filename": "sc/source/core/data/documen4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2013-08-06T18:34:12Z",
+      "side": 1,
+      "message": "This if - else block is wrong. In the original code, when the absolute value of fDiff is less than fEps, it applies fEps, else if applies fDiff. But you\u0027ve changed it so that, even when the absolute value of fDiff is greater than fEps, it applies fEps if fDiff is negative.",
+      "revId": "2f90cdf56a452da7b5a1aeee38be933bf88cbd89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
