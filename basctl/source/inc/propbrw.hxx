@@ -51,8 +51,6 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
                     m_xContextDocument;
 
-    DialogWindowLayout& rLayout;
-
 protected:
     SdrView*        pView;
     virtual void Resize();

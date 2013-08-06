@@ -87,7 +87,6 @@ PropBrw::PropBrw (DialogWindowLayout& rLayout_):
     DockingWindow(&rLayout_),
     m_bInitialStateChange(true),
     m_xContextDocument(SfxViewShell::Current() ? SfxViewShell::Current()->GetCurrentDocument() : Reference<XModel>()),
-    rLayout(rLayout_),
     pView(0)
 {
     DBG_CTOR(PropBrw,NULL);
