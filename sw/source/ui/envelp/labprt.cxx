@@ -27,44 +27,36 @@
 #include "swuilabimp.hxx"
 
 #include <cmdid.h>
-#include <labprt.hrc>
 
-SwLabPrtPage::SwLabPrtPage(Window* pParent, const SfxItemSet& rSet) :
-
-    SfxTabPage(pParent, SW_RES(TP_LAB_PRT), rSet),
-
-    pPrinter( 0 ),
-    aFLDontKnow    (this, SW_RES(FL_DONTKNOW)),
-    aPageButton    (this, SW_RES(BTN_PAGE   )),
-    aSingleButton  (this, SW_RES(BTN_SINGLE )),
-    aColText       (this, SW_RES(TXT_COL    )),
-    aColField      (this, SW_RES(FLD_COL    )),
-    aRowText       (this, SW_RES(TXT_ROW    )),
-    aRowField      (this, SW_RES(FLD_ROW    )),
-    aSynchronCB    (this, SW_RES(CB_SYNCHRON)),
-    aFLPrinter     (this, SW_RES(FL_PRINTER )),
-    aPrinterInfo   (this, SW_RES(INF_PRINTER)),
-    aPrtSetup      (this, SW_RES(BTN_PRTSETUP))
-
+SwLabPrtPage::SwLabPrtPage(Window* pParent, const SfxItemSet& rSet)
+    : SfxTabPage(pParent, "LabelOptionsPage",
+        "modules/swriter/ui/labeloptionspage.ui", rSet)
+    , pPrinter(0)
 {
-    FreeResource();
+    get(m_pPageButton, "entirepage");
+    get(m_pSingleButton, "singlelabel");
+    get(m_pSingleGrid, "singlegrid");
+    get(m_pColField, "cols");
+    get(m_pRowField, "rows");
+    get(m_pSynchronCB, "synchronize");
+    get(m_pPrinterFrame, "printerframe");
+    get(m_pPrinterInfo, "printername");
+    get(m_pPrtSetup, "setup");
     SetExchangeSupport();
 
     // Install handlers
     Link aLk = LINK(this, SwLabPrtPage, CountHdl);
-    aPageButton  .SetClickHdl( aLk );
-    aSingleButton.SetClickHdl( aLk );
+    m_pPageButton->SetClickHdl( aLk );
+    m_pSingleButton->SetClickHdl( aLk );
 
-    aPrtSetup.SetClickHdl( aLk );
+    m_pPrtSetup->SetClickHdl( aLk );
 
     SvtCommandOptions aCmdOpts;
     if ( aCmdOpts.Lookup(
              SvtCommandOptions::CMDOPTION_DISABLED,
              OUString( "Print"  ) ) )
     {
-        aPrinterInfo.Hide();
-        aPrtSetup.Hide();
-        aFLPrinter.Hide();
+        m_pPrinterFrame->Hide();
     }
 }
 
@@ -75,7 +67,7 @@ SwLabPrtPage::~SwLabPrtPage()
 
 IMPL_LINK( SwLabPrtPage, CountHdl, Button *, pButton )
 {
-    if (pButton == &aPrtSetup)
+    if (pButton == m_pPrtSetup)
     {
         // Call printer setup
         if (!pPrinter)
@@ -86,20 +78,17 @@ IMPL_LINK( SwLabPrtPage, CountHdl, Button *, pButton )
         pDlg->Execute();
         delete pDlg;
         GrabFocus();
-        aPrinterInfo.SetText(pPrinter->GetName());
+        m_pPrinterInfo->SetText(pPrinter->GetName());
         return 0;
     }
-    const sal_Bool bEnable = pButton == &aSingleButton;
-    aColText .Enable(bEnable);
-    aColField.Enable(bEnable);
-    aRowText .Enable(bEnable);
-    aRowField.Enable(bEnable);
-    aSynchronCB.Enable(!bEnable);
+    const bool bEnable = pButton == m_pSingleButton;
+    m_pSingleGrid->Enable(bEnable);
+    m_pSynchronCB->Enable(!bEnable);
 
-    OSL_ENSURE(!bEnable || pButton == &aPageButton, "NewButton?" );
+    OSL_ENSURE(!bEnable || pButton == m_pPageButton, "NewButton?" );
     if ( bEnable )
     {
-        aColField.GrabFocus();
+        m_pColField->GrabFocus();
     }
     return 0;
 }
@@ -124,10 +113,10 @@ int SwLabPrtPage::DeactivatePage(SfxItemSet* _pSet)
 
 void SwLabPrtPage::FillItem(SwLabItem& rItem)
 {
-    rItem.bPage = aPageButton.IsChecked();
-    rItem.nCol  = (sal_uInt16) aColField.GetValue();
-    rItem.nRow  = (sal_uInt16) aRowField.GetValue();
-    rItem.bSynchron = aSynchronCB.IsChecked() && aSynchronCB.IsEnabled();
+    rItem.bPage = m_pPageButton->IsChecked();
+    rItem.nCol  = (sal_uInt16) m_pColField->GetValue();
+    rItem.nRow  = (sal_uInt16) m_pRowField->GetValue();
+    rItem.bSynchron = m_pSynchronCB->IsChecked() && m_pSynchronCB->IsEnabled();
 }
 
 sal_Bool SwLabPrtPage::FillItemSet(SfxItemSet& rSet)
@@ -145,38 +134,35 @@ void SwLabPrtPage::Reset(const SfxItemSet& )
     SwLabItem aItem;
     GetParentSwLabDlg()->GetLabItem(aItem);
 
-    aColField.SetValue   (aItem.nCol);
-    aRowField.SetValue   (aItem.nRow);
+    m_pColField->SetValue   (aItem.nCol);
+    m_pRowField->SetValue   (aItem.nRow);
 
     if (aItem.bPage)
     {
-        aPageButton.Check();
-        aPageButton.GetClickHdl().Call(&aPageButton);
+        m_pPageButton->Check();
+        m_pPageButton->GetClickHdl().Call(m_pPageButton);
     }
     else
     {
-        aSingleButton.GetClickHdl().Call(&aSingleButton);
-        aSingleButton.Check();
+        m_pSingleButton->GetClickHdl().Call(m_pSingleButton);
+        m_pSingleButton->Check();
     }
 
     if (pPrinter)
     {
         // show printer
-        aPrinterInfo.SetText(pPrinter->GetName());
+        m_pPrinterInfo->SetText(pPrinter->GetName());
     }
     else
-        aPrinterInfo.SetText(Printer::GetDefaultPrinterName());
+        m_pPrinterInfo->SetText(Printer::GetDefaultPrinterName());
 
-    aColField.SetMax(aItem.nCols);
-    aRowField.SetMax(aItem.nRows);
+    m_pColField->SetMax(aItem.nCols);
+    m_pRowField->SetMax(aItem.nRows);
 
-    aColField.SetLast(aColField.GetMax());
-    aRowField.SetLast(aRowField.GetMax());
+    m_pColField->SetLast(m_pColField->GetMax());
+    m_pRowField->SetLast(m_pRowField->GetMax());
 
-    aSynchronCB.Check(aItem.bSynchron);
+    m_pSynchronCB->Check(aItem.bSynchron);
 }
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

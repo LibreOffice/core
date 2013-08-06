@@ -19,10 +19,11 @@
 #ifndef _LABPRT_HXX
 #define _LABPRT_HXX
 
-#include <vcl/group.hxx>
-#include <vcl/field.hxx>
-#include <svtools/stdctrl.hxx>
 #include <vcl/button.hxx>
+#include <vcl/field.hxx>
+#include <vcl/group.hxx>
+#include <vcl/layout.hxx>
+#include <svtools/stdctrl.hxx>
 #include <sfx2/tabdlg.hxx>
 
 
@@ -35,18 +36,16 @@ class SwLabPrtPage : public SfxTabPage
 {
     Printer*      pPrinter;             // for the shaft setting - unfortunately
 
-    FixedLine     aFLDontKnow;
-    RadioButton   aPageButton;
-    RadioButton   aSingleButton;
-    FixedText     aColText;
-    NumericField  aColField;
-    FixedText     aRowText;
-    NumericField  aRowField;
-    CheckBox      aSynchronCB;
+    RadioButton*  m_pPageButton;
+    RadioButton*  m_pSingleButton;
+    VclContainer* m_pSingleGrid;
+    VclContainer* m_pPrinterFrame;
+    NumericField* m_pColField;
+    NumericField* m_pRowField;
+    CheckBox*     m_pSynchronCB;
 
-    FixedLine     aFLPrinter;
-    FixedInfo     aPrinterInfo;
-    PushButton    aPrtSetup;
+    FixedText*    m_pPrinterInfo;
+    PushButton*   m_pPrtSetup;
 
      SwLabPrtPage(Window* pParent, const SfxItemSet& rSet);
     ~SwLabPrtPage();

@@ -102,6 +102,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/insertsectiondialog \
 	sw/uiconfig/swriter/ui/insertscript \
 	sw/uiconfig/swriter/ui/inserttable \
+	sw/uiconfig/swriter/ui/labeloptionspage \
 	sw/uiconfig/swriter/ui/linenumbering \
 	sw/uiconfig/swriter/ui/mailconfigpage \
 	sw/uiconfig/swriter/ui/mailmergedialog \
