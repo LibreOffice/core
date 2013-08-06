@@ -1401,7 +1401,7 @@ public:
 
     bool DeleteTOX( const SwTOXBase& rTOXBase, bool bDelNodes = false );
     String GetUniqueTOXBaseName( const SwTOXType& rType,
-                                const String* pChkStr = 0 ) const;
+                                const String sChkStr ) const;
 
     bool SetTOXBaseName(const SwTOXBase& rTOXBase, const String& rName);
     void SetTOXBaseProtection(const SwTOXBase& rTOXBase, sal_Bool bProtect);

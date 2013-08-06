@@ -584,7 +584,7 @@ SwTOXBase& SwTOXBase::CopyTOXBase( SwDoc* pDoc, const SwTOXBase& rSource )
     if( !pDoc || pDoc->IsCopyIsMove() )
         aName = rSource.GetTOXName();
     else
-        aName = pDoc->GetUniqueTOXBaseName( *pType, &rSource.GetTOXName() );
+        aName = pDoc->GetUniqueTOXBaseName( *pType, rSource.GetTOXName() );
 
     return *this;
 }
