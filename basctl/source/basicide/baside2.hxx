@@ -53,6 +53,7 @@ class SvxSearchItem;
 
 #include <vcl/textdata.hxx>
 #include <basic/codecompletecache.hxx>
+#include "com/sun/star/reflection/XIdlClass.hpp"
 
 namespace com { namespace sun { namespace star { namespace beans {
     class XMultiPropertySet;
@@ -119,6 +120,8 @@ private:
     CodeCompleteDataCache aCodeCompleteCache;
     boost::scoped_ptr< CodeCompleteWindow > pCodeCompleteWnd;
     OUString GetActualSubName( sal_uLong nLine ); // gets the actual subroutine name according to line number
+    std::vector< OUString > GetXIdlClassMethods( ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlClass > xClass ) const;
+    std::vector< OUString > GetXIdlClassFields( ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlClass > xClass ) const;
 
 protected:
     virtual void    Paint( const Rectangle& );
