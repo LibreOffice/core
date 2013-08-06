@@ -211,21 +211,29 @@ void SAL_CALL OPreparedStatement::setString(sal_Int32 nParameterIndex,
     XSQLVAR* pVar = m_pInSqlda->sqlvar + (nParameterIndex - 1);
 
     int dtype = (pVar->sqltype & ~1); // drop flag bit for now
+
+    if (str.getLength() > pVar->sqllen)
+        str = str.copy(0, pVar->sqllen);
+
     switch (dtype) {
     case SQL_VARYING:
-        pVar->sqltype = SQL_TEXT;
-    case SQL_TEXT:
-        if (str.getLength() > pVar->sqllen)
-        { // Cut off overflow
-            memcpy(pVar->sqldata, str.getStr(), pVar->sqllen);
-        }
-        else
+    {
+        // First 2 bytes indicate string size
+        if (str.getLength() > (2^16)-1)
         {
-            memcpy(pVar->sqldata, str.getStr(), str.getLength());
-            // Fill remainder with spaces
-            // TODO: would 0 be better here for filling?
-            memset(pVar->sqldata + str.getLength(), ' ', pVar->sqllen - str.getLength());
+            str = str.copy(0, (2^16)-1);
         }
+        const short nLength = str.getLength();
+        memcpy(pVar->sqldata, &nLength, 2);
+        // Actual data
+        memcpy(pVar->sqldata + 2, str.getStr(), str.getLength());
+        break;
+    }
+    case SQL_TEXT:
+        memcpy(pVar->sqldata, str.getStr(), str.getLength());
+        // Fill remainder with spaces
+        // TODO: would 0 be better here for filling?
+        memset(pVar->sqldata + str.getLength(), ' ', pVar->sqllen - str.getLength());
         break;
     default:
         // TODO: sane error message
