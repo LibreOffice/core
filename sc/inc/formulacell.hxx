@@ -47,6 +47,7 @@ struct SC_DLLPUBLIC ScFormulaCellGroup
 {
     mutable size_t mnRefCount;
 
+    ScTokenArray* mpCode;
     SCROW mnStart;  // Start offset of that cell
     SCROW mnLength; // How many of these do we have ?
     bool mbInvariant;
@@ -77,6 +78,7 @@ enum ScMatrixMode {
 class SC_DLLPUBLIC ScFormulaCell : public SvtListener
 {
 private:
+    ScFormulaCellGroupRef mxGroup;       // re-factoring hack - group of formulae we're part of.
     ScFormulaResult aResult;
     formula::FormulaGrammar::Grammar  eTempGrammar;   // used between string (creation) and (re)compilation
     ScTokenArray*   pCode;              // The (new) token array
@@ -85,7 +87,6 @@ private:
     ScFormulaCell*  pNext;
     ScFormulaCell*  pPreviousTrack;
     ScFormulaCell*  pNextTrack;
-    ScFormulaCellGroupRef xGroup;       // re-factoring hack - group of formulae we're part of.
     sal_uInt16      nSeenInIteration;   // Iteration cycle in which the cell was last encountered
     sal_uInt8       cMatrixFlag;        // One of ScMatrixMode
     short           nFormatType;
@@ -145,6 +146,10 @@ public:
     ScFormulaCell( ScDocument*, const ScAddress&, const ScTokenArray* = NULL,
                     const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT,
                     sal_uInt8 = MM_NONE );
+
+    ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos, const ScFormulaCellGroupRef& xGroup,
+                   const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT,
+                   sal_uInt8 = MM_NONE );
 
     /** With formula string and grammar to compile with.
        formula::FormulaGrammar::GRAM_DEFAULT effectively isformula::FormulaGrammar::GRAM_NATIVE_UI that

@@ -101,56 +101,63 @@ void ImportExcel::Formula4()
 void ImportExcel::Formula(
     const XclAddress& rXclPos, sal_uInt16 nXF, sal_uInt16 nFormLen, double fCurVal, bool bShrFmla)
 {
-    ConvErr eErr = ConvOK;
 
     ScAddress aScPos( ScAddress::UNINITIALIZED );
-    if( GetAddressConverter().ConvertAddress( aScPos, rXclPos, GetCurrScTab(), true ) )
+    if (!GetAddressConverter().ConvertAddress(aScPos, rXclPos, GetCurrScTab(), true))
+        // Conversion failed.
+        return;
+
+    // Formula will be read next, length in nFormLen
+    const ScTokenArray* pResult = NULL;
+
+    pFormConv->Reset( aScPos );
+
+    if (bShrFmla)
     {
-        // Formula will be read next, length in nFormLen
-        const ScTokenArray* pResult = NULL;
-        bool bConvert = false;
+        // This is a shared formula. Get the token array from the shared formula pool.
+        pResult = pFormConv->GetShrFmla(maStrm, nFormLen);
+        if (!pResult)
+            return;
 
-        pFormConv->Reset( aScPos );
+        ScFormulaCell* pCell = new ScFormulaCell( pD, aScPos, pResult );
+        pD->EnsureTable(aScPos.Tab());
+        pCell = pD->SetFormulaCell(aScPos, pCell);
+        pCell->SetNeedNumberFormat(false);
+        if (!rtl::math::isNan(fCurVal))
+            pCell->SetResultDouble(fCurVal);
 
-        if( bShrFmla )
-            bConvert = !pFormConv->GetShrFmla( pResult, maStrm, nFormLen );
-        else
-            bConvert = true;
-
-        if( bConvert )
-            eErr = pFormConv->Convert( pResult, maStrm, nFormLen, true, FT_CellFormula);
-
-        ScFormulaCell* pCell = NULL;
-
-        if (pResult)
-        {
-            pCell = new ScFormulaCell( pD, aScPos, pResult );
-            pD->EnsureTable(aScPos.Tab());
-            pCell = pD->SetFormulaCell(aScPos, pCell);
-        }
-        else
-        {
-            CellType eCellType = pD->GetCellType(aScPos);
-            if( eCellType == CELLTYPE_FORMULA )
-            {
-                pCell = pD->GetFormulaCell(aScPos);
-                if( pCell )
-                    pCell->AddRecalcMode( RECALCMODE_ONLOAD_ONCE );
-            }
-        }
-
-        if (pCell)
-        {
-            pCell->SetNeedNumberFormat(false);
-            if( eErr != ConvOK )
-                ExcelToSc::SetError( *pCell, eErr );
-
-            if (!rtl::math::isNan(fCurVal))
-                pCell->SetResultDouble(fCurVal);
-        }
-
-        GetXFRangeBuffer().SetXF( aScPos, nXF );
+        GetXFRangeBuffer().SetXF(aScPos, nXF);
+        return;
     }
+
+    ConvErr eErr = pFormConv->Convert( pResult, maStrm, nFormLen, true, FT_CellFormula);
+
+    ScFormulaCell* pCell = NULL;
+
+    if (pResult)
+    {
+        pCell = new ScFormulaCell( pD, aScPos, pResult );
+        pD->EnsureTable(aScPos.Tab());
+        pCell = pD->SetFormulaCell(aScPos, pCell);
+    }
+    else
+    {
+        pCell = pD->GetFormulaCell(aScPos);
+        if (pCell)
+            pCell->AddRecalcMode( RECALCMODE_ONLOAD_ONCE );
+    }
+
+    if (pCell)
+    {
+        pCell->SetNeedNumberFormat(false);
+        if( eErr != ConvOK )
+            ExcelToSc::SetError( *pCell, eErr );
+
+        if (!rtl::math::isNan(fCurVal))
+            pCell->SetResultDouble(fCurVal);
+    }
+
+    GetXFRangeBuffer().SetXF(aScPos, nXF);
 }
 
 
@@ -1669,45 +1676,32 @@ const ScTokenArray* ExcelToSc::GetBoolErr( XclBoolError eType )
 
 // if a shared formula was found, stream seeks to first byte after <nFormulaLen>,
 // else stream pointer stays unchanged
-sal_Bool ExcelToSc::GetShrFmla( const ScTokenArray*& rpErgebnis, XclImpStream& aIn, sal_Size nFormulaLen )
+const ScTokenArray* ExcelToSc::GetShrFmla( XclImpStream& aIn, sal_Size nFormulaLen )
 {
-    sal_uInt8           nOp;
-    sal_Bool            bRet = sal_True;
+    if (!nFormulaLen)
+        return NULL;
 
-    if( nFormulaLen == 0 )
-        bRet = false;
-    else
+    aIn.PushPosition();
+
+    sal_uInt8 nOp;
+    aIn >> nOp;
+
+    if (nOp != 0x01)   // Shared Formula       [    277]
     {
-        aIn.PushPosition();
-
-        aIn >> nOp;
-
-        if( nOp == 0x01 )   // Shared Formula       [    277]
-        {
-            sal_uInt16 nCol, nRow;
-
-            aIn >> nRow >> nCol;
-
-            aStack << aPool.StoreName( GetOldRoot().pShrfmlaBuff->Find(
-                ScAddress(static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), GetCurrScTab())), true);
-
-            bRet = sal_True;
-        }
-        else
-            bRet = false;
-
         aIn.PopPosition();
+        return NULL;
     }
 
-    if( bRet )
-    {
-        aIn.Ignore( nFormulaLen );
-        rpErgebnis = aPool[ aStack.Get() ];
-    }
-    else
-        rpErgebnis = NULL;
+    sal_uInt16 nCol, nRow;
+    aIn >> nRow >> nCol;
 
-    return bRet;
+    aStack << aPool.StoreName( GetOldRoot().pShrfmlaBuff->Find(
+        ScAddress(static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), GetCurrScTab())), true);
+
+    aIn.PopPosition();
+
+    aIn.Ignore(nFormulaLen);
+    return aPool[aStack.Get()];
 }
 
 

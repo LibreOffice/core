@@ -384,6 +384,7 @@ void adjustDBRange(ScToken* pToken, ScDocument& rNewDoc, const ScDocument* pOldD
 
 ScFormulaCellGroup::ScFormulaCellGroup() :
     mnRefCount(0),
+    mpCode(NULL),
     mnStart(0),
     mnLength(0),
     mbInvariant(false),
@@ -393,6 +394,7 @@ ScFormulaCellGroup::ScFormulaCellGroup() :
 
 ScFormulaCellGroup::~ScFormulaCellGroup()
 {
+    delete mpCode;
 }
 
 // ============================================================================
@@ -445,6 +447,53 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
     cMatrixFlag ( cInd ),
     nFormatType ( NUMBERFORMAT_NUMBER ),
     bDirty( NULL != pArr ), // -> Because of the use of the Auto Pilot Function was: cInd != 0
+    bChanged( false ),
+    bRunning( false ),
+    bCompile( false ),
+    bSubTotal( false ),
+    bIsIterCell( false ),
+    bInChangeTrack( false ),
+    bTableOpDirty( false ),
+    bNeedListening( false ),
+    mbNeedsNumberFormat( false ),
+    aPos( rPos )
+{
+    // UPN-Array generation
+    if( pCode->GetLen() && !pCode->GetCodeError() && !pCode->GetCodeLen() )
+    {
+        ScCompiler aComp( pDocument, aPos, *pCode);
+        aComp.SetGrammar(eTempGrammar);
+        bSubTotal = aComp.CompileTokenArray();
+        nFormatType = aComp.GetNumFormatType();
+    }
+    else
+    {
+        pCode->Reset();
+        if ( pCode->GetNextOpCodeRPN( ocSubTotal ) )
+            bSubTotal = true;
+    }
+
+    if (bSubTotal)
+        pDocument->AddSubTotalCell(this);
+
+    pCode->GenHash();
+}
+
+ScFormulaCell::ScFormulaCell(
+    ScDocument* pDoc, const ScAddress& rPos, const ScFormulaCellGroupRef& xGroup,
+    const FormulaGrammar::Grammar eGrammar, sal_uInt8 cInd ) :
+    mxGroup(xGroup),
+    eTempGrammar( eGrammar),
+    pCode(xGroup->mpCode ? xGroup->mpCode : new ScTokenArray),
+    pDocument( pDoc ),
+    pPrevious(0),
+    pNext(0),
+    pPreviousTrack(0),
+    pNextTrack(0),
+    nSeenInIteration(0),
+    cMatrixFlag ( cInd ),
+    nFormatType ( NUMBERFORMAT_NUMBER ),
+    bDirty(false),
     bChanged( false ),
     bRunning( false ),
     bCompile( false ),
@@ -605,7 +654,9 @@ ScFormulaCell::~ScFormulaCell()
     if (pDocument->HasExternalRefManager())
         pDocument->GetExternalRefManager()->removeRefCell(this);
 
-    delete pCode;
+    if (!mxGroup || !mxGroup->mpCode)
+        // Formula token is not shared.
+        delete pCode;
 }
 
 ScFormulaCell* ScFormulaCell::Clone() const
@@ -1579,8 +1630,8 @@ void ScFormulaCell::SetDirty( bool bDirtyFlag )
 void ScFormulaCell::SetDirtyVar()
 {
     bDirty = true;
-    if (xGroup)
-        xGroup->meCalcState = sc::GroupCalcEnabled;
+    if (mxGroup)
+        mxGroup->meCalcState = sc::GroupCalcEnabled;
 
     // mark the sheet of this cell to be calculated
     //#FIXME do we need to revert this remnant of old fake vba events? pDocument->AddCalculateTable( aPos.Tab() );
@@ -2239,8 +2290,8 @@ bool ScFormulaCell::UpdateReferenceOnShift(
         // This formula cell itself is being shifted during cell range
         // insertion or deletion. Update its position.
         aPos.Move(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta);
-        if (xGroup && xGroup->mnStart == aOldPos.Row())
-            xGroup->mnStart += rCxt.mnRowDelta;
+        if (mxGroup && mxGroup->mnStart == aOldPos.Row())
+            mxGroup->mnStart += rCxt.mnRowDelta;
 
         bCellStateChanged = aPos != aOldPos;
     }
@@ -3074,12 +3125,12 @@ void            ScFormulaCell::SetNextTrack( ScFormulaCell* pF )       { pNextTr
 
 ScFormulaCellGroupRef ScFormulaCell::GetCellGroup()
 {
-    return xGroup;
+    return mxGroup;
 }
 
 void ScFormulaCell::SetCellGroup( const ScFormulaCellGroupRef &xRef )
 {
-    xGroup = xRef;
+    mxGroup = xRef;
 }
 
 ScFormulaCell::CompareState ScFormulaCell::CompareByTokenArray( ScFormulaCell& rOther ) const
@@ -3309,10 +3360,10 @@ bool ScFormulaCell::InterpretFormulaGroup()
     // import / insert / delete etc. and is integral to the data structures
     pDocument->RebuildFormulaGroups();
 
-    if (!xGroup || !pCode)
+    if (!mxGroup || !pCode)
         return false;
 
-    if (xGroup->meCalcState == sc::GroupCalcDisabled)
+    if (mxGroup->meCalcState == sc::GroupCalcDisabled)
         return false;
 
     switch (pCode->GetVectorState())
@@ -3328,28 +3379,28 @@ bool ScFormulaCell::InterpretFormulaGroup()
             return false;
     }
 
-    if (xGroup->mbInvariant)
+    if (mxGroup->mbInvariant)
         return InterpretInvariantFormulaGroup();
 
     sc::FormulaGroupContext aCxt;
     ScTokenArray aCode;
     ScAddress aTopPos = aPos;
-    aTopPos.SetRow(xGroup->mnStart);
+    aTopPos.SetRow(mxGroup->mnStart);
     GroupTokenConverter aConverter(aCxt, aCode, *pDocument, *this, aTopPos);
     if (!aConverter.convert(*pCode))
     {
-        xGroup->meCalcState = sc::GroupCalcDisabled;
+        mxGroup->meCalcState = sc::GroupCalcDisabled;
         return false;
     }
 
-    xGroup->meCalcState = sc::GroupCalcRunning;
-    if (!sc::FormulaGroupInterpreter::getStatic()->interpret(*pDocument, aTopPos, xGroup, aCode))
+    mxGroup->meCalcState = sc::GroupCalcRunning;
+    if (!sc::FormulaGroupInterpreter::getStatic()->interpret(*pDocument, aTopPos, mxGroup, aCode))
     {
-        xGroup->meCalcState = sc::GroupCalcDisabled;
+        mxGroup->meCalcState = sc::GroupCalcDisabled;
         return false;
     }
 
-    xGroup->meCalcState = sc::GroupCalcEnabled;
+    mxGroup->meCalcState = sc::GroupCalcEnabled;
     return true;
 }
 
@@ -3409,10 +3460,10 @@ bool ScFormulaCell::InterpretInvariantFormulaGroup()
         aResult.SetToken(aInterpreter.GetResultToken().get());
     }
 
-    for ( sal_Int32 i = 0; i < xGroup->mnLength; i++ )
+    for ( sal_Int32 i = 0; i < mxGroup->mnLength; i++ )
     {
         ScAddress aTmpPos = aPos;
-        aTmpPos.SetRow(xGroup->mnStart + i);
+        aTmpPos.SetRow(mxGroup->mnStart + i);
         ScFormulaCell* pCell = pDocument->GetFormulaCell(aTmpPos);
         assert( pCell != NULL );
 
@@ -3642,21 +3693,21 @@ void ScFormulaCell::EndListeningTo( sc::EndListeningContext& rCxt )
 
 bool ScFormulaCell::IsShared() const
 {
-    return xGroup.get() != NULL;
+    return mxGroup.get() != NULL;
 }
 
 bool ScFormulaCell::IsSharedInvariant() const
 {
-    return xGroup ? xGroup->mbInvariant : false;
+    return mxGroup ? mxGroup->mbInvariant : false;
 }
 
 SCROW ScFormulaCell::GetSharedTopRow() const
 {
-    return xGroup ? xGroup->mnStart : -1;
+    return mxGroup ? mxGroup->mnStart : -1;
 }
 SCROW ScFormulaCell::GetSharedLength() const
 {
-    return xGroup ? xGroup->mnLength : 0;
+    return mxGroup ? mxGroup->mnLength : 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
