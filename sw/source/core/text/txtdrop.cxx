@@ -891,13 +891,13 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTxtFormatInfo &rInf )
                 // Modify the bounding rectangle with the borders
                 if( rFnt.GetTopBorder() )
                 {
-                    aRect.setHeight(aRect.GetHeight() + rFnt.GetTopBorder().get().GetScaledWidth());
-                    aRect.setY(aRect.getY() - rFnt.GetTopBorder().get().GetScaledWidth());
+                    aRect.setHeight(aRect.GetHeight() + rFnt.GetTopBorderSpace());
+                    aRect.setY(aRect.getY() - rFnt.GetTopBorderSpace());
                 }
 
                 if( rFnt.GetBottomBorder() )
                 {
-                    aRect.setHeight(aRect.GetHeight() + rFnt.GetBottomBorder().get().GetScaledWidth());
+                    aRect.setHeight(aRect.GetHeight() + rFnt.GetBottomBorderSpace());
                 }
 
                 if ( bFirstGlyphRect )

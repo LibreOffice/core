@@ -940,12 +940,12 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                                 }
                                 if( pCurrPart && nSumLength != nOfst - aInf.GetIdx() && pCurrPart->GetFont().GetRightBorder() )
                                 {
-                                    nX -= pCurrPart->GetFont().GetRightBorder().get().GetScaledWidth();
+                                    nX -= pCurrPart->GetFont().GetRightBorderSpace();
                                 }
                             }
                             else if(GetInfo().GetFont()->GetRightBorder())
                             {
-                                nX -= GetInfo().GetFont()->GetRightBorder().get().GetScaledWidth();
+                                nX -= GetInfo().GetFont()->GetRightBorderSpace();
                             }
                          }
                     }
@@ -1650,11 +1650,11 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
                         nSumWidth += pCurrPart->GetWidth();
                         if( pCurrPart->GetFont().GetLeftBorder() )
                         {
-                            nSumBorderWidth += pCurrPart->GetFont().GetLeftBorder().get().GetScaledWidth();
+                            nSumBorderWidth += pCurrPart->GetFont().GetLeftBorderSpace();
                         }
                         if( nSumWidth <= nX - nCurrStart && pCurrPart->GetFont().GetRightBorder() )
                         {
-                            nSumBorderWidth += pCurrPart->GetFont().GetRightBorder().get().GetScaledWidth();
+                            nSumBorderWidth += pCurrPart->GetFont().GetRightBorderSpace();
                         }
                         pCurrPart = pCurrPart->GetFollow();
                     }
@@ -1662,7 +1662,7 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
                 }
                 // Shift the offset with the left border width
                 else if (GetInfo().GetFont()->GetLeftBorder() )
-                    nX = std::max(0, nX - GetInfo().GetFont()->GetLeftBorder().get().GetScaledWidth());
+                    nX = std::max(0, nX - GetInfo().GetFont()->GetLeftBorderSpace());
 
 
                 aDrawInf.SetOfst( nX );

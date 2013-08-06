@@ -136,6 +136,12 @@ class SwFont
     boost::optional<editeng::SvxBorderLine>     m_aRightBorder;
     boost::optional<editeng::SvxBorderLine>     m_aLeftBorder;
 
+    // border distance
+    sal_uInt16 m_nTopBorderDist;
+    sal_uInt16 m_nBottomBorderDist;
+    sal_uInt16 m_nRightBorderDist;
+    sal_uInt16 m_nLeftBorderDist;
+
     sal_uInt8       nToxCnt;        // Zaehlt die Schachtelungstiefe der Tox
     sal_uInt8       nRefCnt;        // Zaehlt die Schachtelungstiefe der Refs
     sal_uInt8        m_nMetaCount;   // count META/METAFIELD
@@ -379,6 +385,22 @@ public:
     const boost::optional<editeng::SvxBorderLine>& GetAbsBottomBorder( const bool bVertLayout ) const;
     const boost::optional<editeng::SvxBorderLine>& GetAbsRightBorder( const bool bVertLayout ) const;
     const boost::optional<editeng::SvxBorderLine>& GetAbsLeftBorder( const bool bVertLayout ) const;
+
+    void SetTopBorderDist( const sal_uInt16 nTopDist );
+    void SetBottomBorderDist( const sal_uInt16 nBottomDist );
+    void SetRightBorderDist( const sal_uInt16 nRightDist );
+    void SetLeftBorderDist( const sal_uInt16 nLeftDist );
+
+    sal_uInt16 GetTopBorderDist() const { return m_nTopBorderDist; }
+    sal_uInt16 GetBottomBorderDist() const { return m_nBottomBorderDist; }
+    sal_uInt16 GetRightBorderDist() const { return m_nRightBorderDist; }
+    sal_uInt16 GetLeftBorderDist() const { return m_nLeftBorderDist; }
+
+    // Return with the border width plus spacing
+    sal_uInt16 GetTopBorderSpace() const;
+    sal_uInt16 GetBottomBorderSpace() const;
+    sal_uInt16 GetRightBorderSpace() const;
+    sal_uInt16 GetLeftBorderSpace() const;
 
     bool HasBorder() const;
     void RemoveBorders();
@@ -831,6 +853,66 @@ inline void SwSubFont::SetVertical( const sal_uInt16 nDir, const sal_Bool bVertF
     Font::SetOrientation( nDir );
 }
 
+inline void SwFont::SetTopBorderDist( const sal_uInt16 nTopDist )
+{
+    m_nTopBorderDist = nTopDist;
+    bFntChg = sal_True;
+    aSub[SW_LATIN].pMagic = aSub[SW_CJK].pMagic = aSub[SW_CTL].pMagic = 0;
+}
+
+inline void SwFont::SetBottomBorderDist( const sal_uInt16 nBottomDist )
+{
+    m_nBottomBorderDist = nBottomDist;
+    bFntChg = sal_True;
+    aSub[SW_LATIN].pMagic = aSub[SW_CJK].pMagic = aSub[SW_CTL].pMagic = 0;
+}
+
+inline void SwFont::SetRightBorderDist( const sal_uInt16 nRightDist )
+{
+    m_nRightBorderDist = nRightDist;
+    bFntChg = sal_True;
+    aSub[SW_LATIN].pMagic = aSub[SW_CJK].pMagic = aSub[SW_CTL].pMagic = 0;
+}
+
+inline void SwFont::SetLeftBorderDist( const sal_uInt16 nLeftDist )
+{
+    m_nLeftBorderDist = nLeftDist;
+    bFntChg = sal_True;
+    aSub[SW_LATIN].pMagic = aSub[SW_CJK].pMagic = aSub[SW_CTL].pMagic = 0;
+}
+
+inline sal_uInt16 SwFont::GetTopBorderSpace() const
+{
+    if( m_aTopBorder )
+        return m_aTopBorder.get().GetScaledWidth() + m_nTopBorderDist;
+    else
+        return 0;
+}
+
+inline sal_uInt16 SwFont::GetBottomBorderSpace() const
+{
+    if( m_aBottomBorder )
+        return m_aBottomBorder.get().GetScaledWidth() + m_nBottomBorderDist;
+    else
+        return 0;
+}
+
+inline sal_uInt16 SwFont::GetRightBorderSpace() const
+{
+    if( m_aRightBorder )
+        return m_aRightBorder.get().GetScaledWidth() + m_nRightBorderDist;
+    else
+        return 0;
+}
+
+inline sal_uInt16 SwFont::GetLeftBorderSpace() const
+{
+    if( m_aLeftBorder )
+        return m_aLeftBorder.get().GetScaledWidth() + m_nLeftBorderDist;
+    else
+        return 0;
+}
+
 inline bool SwFont::HasBorder() const
 {
     return m_aTopBorder || m_aBottomBorder || m_aLeftBorder || m_aRightBorder;
@@ -839,6 +921,7 @@ inline bool SwFont::HasBorder() const
 inline void SwFont::RemoveBorders()
 {
     m_aTopBorder = m_aBottomBorder = m_aLeftBorder = m_aRightBorder = boost::none;
+    m_nTopBorderDist = m_nBottomBorderDist = m_nRightBorderDist = m_nLeftBorderDist = 0;
 }
 
 /*************************************************************************

@@ -82,7 +82,10 @@ void SwFont::SetTopBorder( const editeng::SvxBorderLine* pTopBorder )
     if( pTopBorder )
         m_aTopBorder = *pTopBorder;
     else
+    {
         m_aTopBorder = boost::none;
+        m_nTopBorderDist = 0;
+    }
     bFntChg = sal_True;
     aSub[SW_LATIN].pMagic = aSub[SW_CJK].pMagic = aSub[SW_CTL].pMagic = 0;
 }
@@ -92,7 +95,10 @@ void SwFont::SetBottomBorder( const editeng::SvxBorderLine* pBottomBorder )
     if( pBottomBorder )
         m_aBottomBorder = *pBottomBorder;
     else
+    {
         m_aBottomBorder = boost::none;
+        m_nBottomBorderDist = 0;
+    }
     bFntChg = sal_True;
     aSub[SW_LATIN].pMagic = aSub[SW_CJK].pMagic = aSub[SW_CTL].pMagic = 0;
 }
@@ -102,7 +108,10 @@ void SwFont::SetRightBorder( const editeng::SvxBorderLine* pRightBorder )
     if( pRightBorder )
         m_aRightBorder = *pRightBorder;
     else
+    {
         m_aRightBorder = boost::none;
+        m_nRightBorderDist = 0;
+    }
     bFntChg = sal_True;
     aSub[SW_LATIN].pMagic = aSub[SW_CJK].pMagic = aSub[SW_CTL].pMagic = 0;
 }
@@ -112,7 +121,10 @@ void SwFont::SetLeftBorder( const editeng::SvxBorderLine* pLeftBorder )
     if( pLeftBorder )
         m_aLeftBorder = *pLeftBorder;
     else
+    {
         m_aLeftBorder = boost::none;
+        m_nLeftBorderDist = 0;
+    }
     bFntChg = sal_True;
     aSub[SW_LATIN].pMagic = aSub[SW_CJK].pMagic = aSub[SW_CTL].pMagic = 0;
 }
@@ -520,10 +532,15 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_BOX,
             sal_True, &pItem ))
         {
-            SetTopBorder(((SvxBoxItem*)pItem)->GetTop());
-            SetBottomBorder(((SvxBoxItem*)pItem)->GetBottom());
-            SetRightBorder(((SvxBoxItem*)pItem)->GetRight());
-            SetLeftBorder(((SvxBoxItem*)pItem)->GetLeft());
+            const SvxBoxItem* pBoxItem = static_cast<const SvxBoxItem*>(pItem);
+            SetTopBorder(pBoxItem->GetTop());
+            SetBottomBorder(pBoxItem->GetBottom());
+            SetRightBorder(pBoxItem->GetRight());
+            SetLeftBorder(pBoxItem->GetLeft());
+            SetTopBorderDist(pBoxItem->GetDistance(BOX_LINE_TOP));
+            SetBottomBorderDist(pBoxItem->GetDistance(BOX_LINE_BOTTOM));
+            SetRightBorderDist(pBoxItem->GetDistance(BOX_LINE_RIGHT));
+            SetLeftBorderDist(pBoxItem->GetDistance(BOX_LINE_LEFT));
         }
         const SfxPoolItem* pTwoLinesItem = 0;
         if( SFX_ITEM_SET ==
@@ -548,6 +565,10 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
 
 SwFont::SwFont()
     : pBackColor(0)
+    , m_nTopBorderDist(0)
+    , m_nBottomBorderDist(0)
+    , m_nRightBorderDist(0)
+    , m_nLeftBorderDist(0)
     , nActual(SW_LATIN)
 {
 }
@@ -563,6 +584,10 @@ SwFont::SwFont( const SwFont &rFont )
     m_aBottomBorder = rFont.m_aBottomBorder;
     m_aRightBorder = rFont.m_aRightBorder;
     m_aLeftBorder = rFont.m_aLeftBorder;
+    m_nTopBorderDist = rFont.m_nTopBorderDist;
+    m_nBottomBorderDist = rFont.m_nBottomBorderDist;
+    m_nRightBorderDist = rFont.m_nRightBorderDist;
+    m_nLeftBorderDist = rFont.m_nLeftBorderDist;
     aUnderColor = rFont.GetUnderColor();
     aOverColor  = rFont.GetOverColor();
     nToxCnt = 0;
@@ -687,10 +712,15 @@ SwFont::SwFont( const SwAttrSet* pAttrSet,
     if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_BOX,
         sal_True, &pItem ))
     {
-        SetTopBorder(((SvxBoxItem*)pItem)->GetTop());
-        SetBottomBorder(((SvxBoxItem*)pItem)->GetBottom());
-        SetRightBorder(((SvxBoxItem*)pItem)->GetRight());
-        SetLeftBorder(((SvxBoxItem*)pItem)->GetLeft());
+        const SvxBoxItem* pBoxItem = static_cast<const SvxBoxItem*>(pItem);
+        SetTopBorder(pBoxItem->GetTop());
+        SetBottomBorder(pBoxItem->GetBottom());
+        SetRightBorder(pBoxItem->GetRight());
+        SetLeftBorder(pBoxItem->GetLeft());
+        SetTopBorderDist(pBoxItem->GetDistance(BOX_LINE_TOP));
+        SetBottomBorderDist(pBoxItem->GetDistance(BOX_LINE_BOTTOM));
+        SetRightBorderDist(pBoxItem->GetDistance(BOX_LINE_RIGHT));
+        SetLeftBorderDist(pBoxItem->GetDistance(BOX_LINE_LEFT));
     }
     else
         RemoveBorders();
@@ -738,6 +768,10 @@ SwFont& SwFont::operator=( const SwFont &rFont )
     m_aBottomBorder = rFont.m_aBottomBorder;
     m_aRightBorder = rFont.m_aRightBorder;
     m_aLeftBorder = rFont.m_aLeftBorder;
+    m_nTopBorderDist = rFont.m_nTopBorderDist;
+    m_nBottomBorderDist = rFont.m_nBottomBorderDist;
+    m_nRightBorderDist = rFont.m_nRightBorderDist;
+    m_nLeftBorderDist = rFont.m_nLeftBorderDist;
     aUnderColor = rFont.GetUnderColor();
     aOverColor  = rFont.GetOverColor();
     nToxCnt = 0;

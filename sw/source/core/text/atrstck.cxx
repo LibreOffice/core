@@ -745,11 +745,18 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, sal_Bool bPu
             break;
         }
         case RES_CHRATR_BOX:
-            rFnt.SetTopBorder( ((SvxBoxItem&)rItem).GetTop() );
-            rFnt.SetBottomBorder( ((SvxBoxItem&)rItem).GetBottom() );
-            rFnt.SetRightBorder( ((SvxBoxItem&)rItem).GetRight() );
-            rFnt.SetLeftBorder( ((SvxBoxItem&)rItem).GetLeft() );
+        {
+            const SvxBoxItem& aBoxItem = static_cast<const SvxBoxItem&>(rItem);
+            rFnt.SetTopBorder( aBoxItem.GetTop() );
+            rFnt.SetBottomBorder( aBoxItem.GetBottom() );
+            rFnt.SetRightBorder( aBoxItem.GetRight() );
+            rFnt.SetLeftBorder( aBoxItem.GetLeft() );
+            rFnt.SetTopBorderDist( aBoxItem.GetDistance(BOX_LINE_TOP) );
+            rFnt.SetBottomBorderDist( aBoxItem.GetDistance(BOX_LINE_BOTTOM) );
+            rFnt.SetRightBorderDist( aBoxItem.GetDistance(BOX_LINE_RIGHT) );
+            rFnt.SetLeftBorderDist( aBoxItem.GetDistance(BOX_LINE_LEFT) );
             break;
+        }
         case RES_CHRATR_OVERLINE :
             rFnt.SetOverline( ((SvxOverlineItem&)rItem).GetLineStyle() );
             rFnt.SetOverColor( ((SvxOverlineItem&)rItem).GetColor() );

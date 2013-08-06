@@ -375,7 +375,7 @@ KSHORT SwTxtSizeInfo::GetAscent() const
     sal_uInt16 nAscent = ((SwFont*)GetFont())->GetAscent( m_pVsh, *GetOut() );
 
     if( GetFont()->GetTopBorder() )
-        nAscent += GetFont()->GetTopBorder().get().GetScaledWidth();
+        nAscent += GetFont()->GetTopBorderSpace();
 
     return nAscent;
 }
@@ -387,9 +387,9 @@ KSHORT SwTxtSizeInfo::GetTxtHeight() const
     sal_uInt16 nHeight = ((SwFont*)GetFont())->GetHeight( m_pVsh, *GetOut() );
 
     if( GetFont()->GetTopBorder() )
-        nHeight += GetFont()->GetTopBorder().get().GetScaledWidth();
+        nHeight += GetFont()->GetTopBorderSpace();
     if( GetFont()->GetBottomBorder() )
-        nHeight += GetFont()->GetBottomBorder().get().GetScaledWidth();
+        nHeight += GetFont()->GetBottomBorderSpace();
 
     return nHeight;
 }
@@ -401,13 +401,13 @@ static void lcl_IncreaseSizeWithBorders(SwPosSize& rSize, const SwFont& rFont)
     sal_uInt16 nHeight = rSize.Height();
 
     if( rFont.GetTopBorder() )
-        nHeight += rFont.GetTopBorder().get().GetScaledWidth();
+        nHeight += rFont.GetTopBorderSpace();
     if( rFont.GetBottomBorder() )
-        nHeight += rFont.GetBottomBorder().get().GetScaledWidth();
+        nHeight += rFont.GetBottomBorderSpace();
     if( rFont.GetRightBorder() )
-        nWidth += rFont.GetRightBorder().get().GetScaledWidth();
+        nWidth += rFont.GetRightBorderSpace();
     if( rFont.GetLeftBorder() )
-        nWidth += rFont.GetLeftBorder().get().GetScaledWidth();
+        nWidth += rFont.GetLeftBorderSpace();
 
     rSize.Height(nHeight);
     rSize.Width(nWidth);
@@ -698,19 +698,20 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
     Point aFontPos(aPos);
     if( m_pFnt->GetLeftBorder() )
     {
+        const sal_uInt16 nLeftBorderSpace = m_pFnt->GetLeftBorderSpace();
         switch( m_pFnt->GetOrientation(GetTxtFrm()->IsVertical()) )
         {
             case 0 :
-                aFontPos.X() += m_pFnt->GetLeftBorder().get().GetScaledWidth();
+                aFontPos.X() += nLeftBorderSpace;
                 break;
             case 900 :
-                aFontPos.Y() -= m_pFnt->GetLeftBorder().get().GetScaledWidth();
+                aFontPos.Y() -= nLeftBorderSpace;
                 break;
             case 1800 :
-                aFontPos.X() -= m_pFnt->GetLeftBorder().get().GetScaledWidth();
+                aFontPos.X() -= nLeftBorderSpace;
                 break;
             case 2700 :
-                aFontPos.Y() += m_pFnt->GetLeftBorder().get().GetScaledWidth();
+                aFontPos.Y() += nLeftBorderSpace;
                 break;
         }
     }

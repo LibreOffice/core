@@ -114,9 +114,9 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
 
     // Decrease the line width with the right and left border width
     if( rInf.GetFont()->GetRightBorder() )
-        nLineWidth -= rInf.GetFont()->GetRightBorder().get().GetScaledWidth();
+        nLineWidth -= rInf.GetFont()->GetRightBorderSpace();
     if( rInf.GetFont()->GetLeftBorder() )
-        nLineWidth -= rInf.GetFont()->GetLeftBorder().get().GetScaledWidth();
+        nLineWidth -= rInf.GetFont()->GetLeftBorderSpace();
 
     const bool bUnbreakableNumberings = rInf.GetTxtFrm()->GetTxtNode()->
             getIDocumentSettingAccess()->get(IDocumentSettingAccess::UNBREAKABLE_NUMBERINGS);
