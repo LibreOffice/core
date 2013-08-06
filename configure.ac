@@ -12247,6 +12247,15 @@ AC_MSG_CHECKING([MPL subset])
 MPL_SUBSET=
 
 if test "$enable_mpl_subset" = "yes"; then
+   warn_report=false
+   if test "$enable_report_builder" != "no" -a "$with_java" != "no"; then
+        warn_report=true
+   elif test "x$ENABLE_REPORTBUILDER" = "xTRUE"; then
+        warn_report=true
+   fi
+   if test "$warn_report" = "true"; then
+        AC_MSG_ERROR([need to --disable-report-builder - extended database report builder.])
+   fi
    if test "x$enable_postgresql_sdbc" != "xno"; then
         AC_MSG_ERROR([need to --disable-postgresql-sdbc - the postgress database backend.])
    fi
