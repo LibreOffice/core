@@ -488,6 +488,7 @@ private:
     CodeCompleteWindow* pCodeCompleteWindow; // parent window
 
     void SetVisibleEntries(); // sets the visible entries based on aFuncBuffer variable
+    void HideAndRestoreFocus();
 
 public:
     CodeCompleteListBox( CodeCompleteWindow* pPar );
