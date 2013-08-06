@@ -2379,8 +2379,9 @@ SwNumRule* SwTxtNode::_GetNumRule(sal_Bool bInParent) const
     bool bNoNumRule = false;
     if ( pItem )
     {
-        String sNumRuleName = static_cast<const SwNumRuleItem *>(pItem)->GetValue();
-        if (sNumRuleName.Len() > 0)
+        OUString sNumRuleName =
+            static_cast<const SwNumRuleItem *>(pItem)->GetValue();
+        if (!sNumRuleName.isEmpty())
         {
             pRet = GetDoc()->FindNumRulePtr( sNumRuleName );
         }
@@ -3491,8 +3492,8 @@ namespace {
                               pNewValue ? pNewValue->Which() : 0 ;
         bool bNumRuleSet = false;
         bool bParagraphStyleChanged = false;
-        String sNumRule;
-        String sOldNumRule;
+        OUString sNumRule;
+        OUString sOldNumRule;
         switch ( nWhich )
         {
             case RES_FMT_CHG:
@@ -3585,7 +3586,7 @@ namespace {
         {
             if ( bNumRuleSet )
             {
-                if ( sNumRule.Len() == 0 )
+                if (sNumRule.isEmpty())
                 {
                     rTxtNode.RemoveFromList();
                     if ( bParagraphStyleChanged )
@@ -3598,7 +3599,7 @@ namespace {
                     rTxtNode.RemoveFromList();
                     // If new list style is the outline style, apply outline
                     // level as the list level.
-                    if ( sNumRule.EqualsAscii(SwNumRule::GetOutlineRuleName()) )
+                    if (sNumRule.equalsAscii(SwNumRule::GetOutlineRuleName()))
                     {
                         // #i70748#
                         OSL_ENSURE( rTxtNode.GetTxtColl()->IsAssignedToListLevelOfOutlineStyle(),
@@ -3627,7 +3628,7 @@ namespace {
                 }
             }
         }
-        else if ( sNumRule.Len() > 0 && !rTxtNode.IsInList() )
+        else if (!sNumRule.isEmpty() && !rTxtNode.IsInList())
         {
             rTxtNode.AddToList();
         }
@@ -3998,8 +3999,8 @@ void SwTxtNode::AddToList()
         return;
     }
 
-    const String sListId = GetListId();
-    if ( sListId.Len() > 0 )
+    const OUString sListId = GetListId();
+    if (!sListId.isEmpty())
     {
         SwList* pList = GetDoc()->getListByName( sListId );
         if ( pList == 0 )
@@ -4344,7 +4345,7 @@ namespace {
                                         dynamic_cast<const SfxStringItem&>(pItem);
                 OSL_ENSURE( pListIdItem.GetValue().getLength() > 0,
                         "<HandleSetAttrAtTxtNode(..)> - empty list id attribute not excepted. Serious defect -> please inform OD." );
-                const String sListIdOfTxtNode = rTxtNode.GetListId();
+                const OUString sListIdOfTxtNode = rTxtNode.GetListId();
                 if ( pListIdItem.GetValue() != sListIdOfTxtNode )
                 {
                     mbAddTxtNodeToList = true;
@@ -4454,7 +4455,7 @@ namespace {
         {
             const SfxStringItem* pListIdItem =
                                     dynamic_cast<const SfxStringItem*>(pItem);
-            const String sListIdOfTxtNode = mrTxtNode.GetListId();
+            const OUString sListIdOfTxtNode = mrTxtNode.GetListId();
             if ( pListIdItem &&
                  pListIdItem->GetValue() != sListIdOfTxtNode )
             {
