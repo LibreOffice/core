@@ -100,6 +100,13 @@ SvxLineEndDefTabPage::SvxLineEndDefTabPage
 
 }
 
+void SvxLineEndDefTabPage::Resize()
+{
+    rXLSet.Put(XLineStartWidthItem(m_pCtlPreview->GetOutputSize().Height()  / 2 ));
+    rXLSet.Put(XLineEndWidthItem(m_pCtlPreview->GetOutputSize().Height() / 2 ));
+    SfxTabPage::Resize();
+}
+
 //------------------------------------------------------------------------
 
 SvxLineEndDefTabPage::~SvxLineEndDefTabPage()

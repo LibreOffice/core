@@ -392,7 +392,8 @@ public:
 
     void    SetLineEndChgd( ChangeType* pIn ) { pnLineEndListState = pIn; }
 
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void Resize();
 };
 
 #endif // _CUI_TAB_LINE_HXX
