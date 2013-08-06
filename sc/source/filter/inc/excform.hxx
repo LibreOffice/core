@@ -63,7 +63,7 @@ public:
 
     void                GetDummy( const ScTokenArray*& );
     const ScTokenArray* GetBoolErr( XclBoolError );
-    const ScTokenArray* GetShrFmla( XclImpStream& rStrm, sal_Size nFormulaLen );
+    ScFormulaCellGroupRef GetSharedFormula( XclImpStream& rStrm, SCCOL nCol, sal_Size nFormulaLen );
 
     static void         SetError( ScFormulaCell& rCell, const ConvErr eErr );
 

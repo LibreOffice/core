@@ -26,6 +26,8 @@
 #include "xiroot.hxx"
 
 #include "rangenam.hxx"
+#include "formulacell.hxx"
+
 #include <boost/unordered_map.hpp>
 #include <list>
 
@@ -146,30 +148,21 @@ inline void NameBuffer::SetBase( sal_uInt16 nNewBase )
     nBase = nNewBase;
 }
 
-
-
-
+/**
+ * Store and manage shared formula tokens.
+ */
 class SharedFormulaBuffer : public ExcRoot
 {
-    struct ScAddressHashFunc : public std::unary_function< const ScAddress &, size_t >
-    {
-        size_t operator() (const ScAddress &addr) const;
-    };
-    typedef boost::unordered_map <ScAddress, sal_uInt16, ScAddressHashFunc> ShrfmlaHash;
-    typedef std::list <ScRange>                                  ShrfmlaList;
+    typedef boost::unordered_map<ScAddress, ScFormulaCellGroupRef, ScAddressHashFunctor> FormulaGroupsType;
 
-    ShrfmlaHash  index_hash;
-    ShrfmlaList  index_list;
-    size_t                  mnCurrIdx;
+    FormulaGroupsType maFormulaGroups;
 
 public:
     SharedFormulaBuffer( RootData* pRD );
     virtual ~SharedFormulaBuffer();
-    void                    Clear();
-    void                    Store( const ScRange& rRange, const ScTokenArray& );
-    sal_uInt16                  Find (const ScAddress & rAddress ) const;
-
-    static String           CreateName( const ScRange& );
+    void Clear();
+    void Store( const ScRange& rRange, const ScTokenArray& rArray );
+    ScFormulaCellGroupRef Find( const ScAddress& rRefPos ) const;
 };
 
 

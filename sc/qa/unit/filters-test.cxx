@@ -32,6 +32,8 @@
 #include "cellform.hxx"
 #include "drwlayer.hxx"
 #include "userdat.hxx"
+#include "formulacell.hxx"
+
 #include <svx/svdpage.hxx>
 
 using namespace ::com::sun::star;
@@ -344,6 +346,13 @@ void ScFiltersTest::testSharedFormulaXLS()
         double fCheck = i*10.0;
         CPPUNIT_ASSERT_EQUAL(fCheck, fVal);
     }
+
+    ScFormulaCell* pCell = pDoc->GetFormulaCell(ScAddress(1,18,0));
+    CPPUNIT_ASSERT_MESSAGE("This should be a formula cell.", pCell);
+    ScFormulaCellGroupRef xGroup = pCell->GetCellGroup();
+    CPPUNIT_ASSERT_MESSAGE("This cell should be a part of a cell group.", xGroup);
+    CPPUNIT_ASSERT_MESSAGE("Incorrect group geometry.", xGroup->mnStart == 2 && xGroup->mnLength == 17);
+
     xDocSh->DoClose();
 }
 

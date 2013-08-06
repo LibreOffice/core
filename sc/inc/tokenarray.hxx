@@ -62,6 +62,12 @@ public:
 
     ScFormulaVectorState GetVectorState() const;
 
+    /**
+     * If the array contains at least one relative row reference or named
+     * expression, it's variant. Otherwise invariant.
+     */
+    bool IsInvariant() const;
+
     /// Exactly and only one range (valid or deleted)
     bool IsReference( ScRange& rRange, const ScAddress& rPos ) const;
     /// Exactly and only one valid range (no #REF!s)

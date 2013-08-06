@@ -27,6 +27,7 @@
 #include "types.hxx"
 
 #include <set>
+#include <boost/noncopyable.hpp>
 
 namespace sc {
 
@@ -43,7 +44,7 @@ class ScProgress;
 class ScTokenArray;
 struct ScSimilarFormulaDelta;
 
-struct SC_DLLPUBLIC ScFormulaCellGroup
+struct SC_DLLPUBLIC ScFormulaCellGroup : boost::noncopyable
 {
     mutable size_t mnRefCount;
 
@@ -55,6 +56,8 @@ struct SC_DLLPUBLIC ScFormulaCellGroup
 
     ScFormulaCellGroup();
     ~ScFormulaCellGroup();
+
+    void setCode( const ScTokenArray& rCode );
 };
 
 inline void intrusive_ptr_add_ref(const ScFormulaCellGroup *p)

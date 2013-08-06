@@ -1474,6 +1474,42 @@ ScFormulaVectorState ScTokenArray::GetVectorState() const
     return meVectorState;
 }
 
+bool ScTokenArray::IsInvariant() const
+{
+    FormulaToken** p = pCode;
+    FormulaToken** pEnd = p + static_cast<size_t>(nLen);
+    for (; p != pEnd; ++p)
+    {
+        switch ((*p)->GetType())
+        {
+            case svSingleRef:
+            case svExternalSingleRef:
+            {
+                const ScToken* pT = static_cast<const ScToken*>(*p);
+                const ScSingleRefData& rRef = pT->GetSingleRef();
+                if (rRef.IsRowRel())
+                    return false;
+            }
+            break;
+            case svDoubleRef:
+            case svExternalDoubleRef:
+            {
+                const ScToken* pT = static_cast<const ScToken*>(*p);
+                const ScComplexRefData& rRef = pT->GetDoubleRef();
+                if (rRef.Ref1.IsRowRel() || rRef.Ref2.IsRowRel())
+                    return false;
+            }
+            break;
+            case svIndex:
+                return false;
+            default:
+                ;
+        }
+    }
+
+    return true;
+}
+
 bool ScTokenArray::IsReference( ScRange& rRange, const ScAddress& rPos ) const
 {
     return ImplGetReference(rRange, rPos, false);

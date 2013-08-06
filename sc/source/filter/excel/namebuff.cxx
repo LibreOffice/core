@@ -20,9 +20,6 @@
 
 #include "namebuff.hxx"
 
-#include <string.h>
-
-#include "rangenam.hxx"
 #include "document.hxx"
 #include "compiler.hxx"
 #include "scextopt.hxx"
@@ -32,6 +29,7 @@
 #include "xltools.hxx"
 #include "xiroot.hxx"
 
+#include <string.h>
 
 sal_uInt32 StringHashEntry::MakeHashCode( const String& r )
 {
@@ -70,84 +68,41 @@ void NameBuffer::operator <<( const String &rNewString )
     maHashes.push_back( new StringHashEntry( rNewString ) );
 }
 
+SharedFormulaBuffer::SharedFormulaBuffer( RootData* pRD ) : ExcRoot(pRD) {}
 
-#if OSL_DEBUG_LEVEL > 0
-sal_uInt16  nShrCnt;
-#endif
-
-
-size_t SharedFormulaBuffer::ScAddressHashFunc::operator() (const ScAddress &addr) const
-{
-    // Use something simple, it is just a hash.
-    return static_cast< sal_uInt16 >( addr.Row() ) | (static_cast< sal_uInt8 >( addr.Col() ) << 16);
-}
-
-const size_t nBase = 16384; // Range~ und Shared~ Dingens mit jeweils der Haelfte Ids
-SharedFormulaBuffer::SharedFormulaBuffer( RootData* pRD ) :
-    ExcRoot( pRD ),
-    mnCurrIdx (nBase)
-{
-#if OSL_DEBUG_LEVEL > 0
-    nShrCnt = 0;
-#endif
-}
-
-SharedFormulaBuffer::~SharedFormulaBuffer()
-{
-}
+SharedFormulaBuffer::~SharedFormulaBuffer() {}
 
 void SharedFormulaBuffer::Clear()
 {
-    index_hash.clear();
-    // do not clear index_list, index calculation depends on complete list size...
-    // do not change mnCurrIdx
+    maFormulaGroups.clear();
 }
 
-void SharedFormulaBuffer::Store( const ScRange& rRange, const ScTokenArray& rToken )
+void SharedFormulaBuffer::Store( const ScRange& rRange, const ScTokenArray& rArray )
 {
-    String          aName( CreateName( rRange.aStart ) );
+    SCROW nGroupLen = rRange.aEnd.Row() - rRange.aStart.Row() + 1;
+    for (SCCOL i = rRange.aStart.Col(); i <= rRange.aEnd.Col(); ++i)
+    {
+        // Create one group per column.
+        ScAddress aPos = rRange.aStart;
+        aPos.SetCol(i);
 
-    OSL_ENSURE( mnCurrIdx <= 0xFFFF, "*ShrfmlaBuffer::Store(): I'm getting sick...!" );
-
-    ScRangeData* pData = new ScRangeData( pExcRoot->pIR->GetDocPtr(), aName, rToken, rRange.aStart, RT_SHARED );
-    const ScAddress& rMaxPos = pExcRoot->pIR->GetMaxPos();
-    pData->SetMaxCol(rMaxPos.Col());
-    pData->SetMaxRow(rMaxPos.Row());
-    pData->SetIndex( static_cast< sal_uInt16 >( mnCurrIdx ) );
-    pExcRoot->pIR->GetNamedRanges().insert( pData );
-    index_hash[rRange.aStart] = static_cast< sal_uInt16 >( mnCurrIdx );
-    index_list.push_front (rRange);
-    ++mnCurrIdx;
+        ScFormulaCellGroupRef xNewGroup(new ScFormulaCellGroup);
+        xNewGroup->mnStart = rRange.aStart.Row();
+        xNewGroup->mnLength = nGroupLen;
+        xNewGroup->mpCode = rArray.Clone();
+        xNewGroup->mbInvariant = rArray.IsInvariant();
+        xNewGroup->setCode(rArray);
+        maFormulaGroups.insert(FormulaGroupsType::value_type(aPos, xNewGroup));
+    }
 }
 
-
-sal_uInt16 SharedFormulaBuffer::Find( const ScAddress & aAddr ) const
+ScFormulaCellGroupRef SharedFormulaBuffer::Find( const ScAddress& rRefPos ) const
 {
-    ShrfmlaHash::const_iterator hash = index_hash.find (aAddr);
-    if (hash != index_hash.end())
-        return hash->second;
+    FormulaGroupsType::const_iterator it = maFormulaGroups.find(rRefPos);
+    if (it == maFormulaGroups.end())
+        return ScFormulaCellGroupRef();
 
-    // It was not hashed on the top left corner ?  do a brute force search
-    unsigned int ind = nBase;
-    for (ShrfmlaList::const_iterator ptr = index_list.end(); ptr != index_list.begin() ; ind++)
-        if ((--ptr)->In (aAddr))
-            return static_cast< sal_uInt16 >( ind );
-    return static_cast< sal_uInt16 >( mnCurrIdx );
-}
-
-
-#define SHRFMLA_BASENAME    "SHARED_FORMULA_"
-
-String SharedFormulaBuffer::CreateName( const ScRange& r )
-{
-    OUString aName = SHRFMLA_BASENAME +
-                     OUString::number( r.aStart.Col() ) + "_" +
-                     OUString::number( r.aStart.Row() ) + "_" +
-                     OUString::number( r.aEnd.Col() )   + "_" +
-                     OUString::number( r.aEnd.Row() )   + "_" +
-                     OUString::number( r.aStart.Tab() );
-
-    return aName;
+    return it->second;
 }
 
 sal_Int16 ExtSheetBuffer::Add( const String& rFPAN, const String& rTN, const sal_Bool bSWB )

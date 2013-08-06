@@ -1075,6 +1075,14 @@ ScFormulaCell* ScDocument::SetFormulaCell( const ScAddress& rPos, ScFormulaCell*
     return maTabs[rPos.Tab()]->SetFormulaCell(rPos.Col(), rPos.Row(), pCell);
 }
 
+bool ScDocument::SetGroupFormulaCell( const ScAddress& rPos, ScFormulaCell* pCell )
+{
+    if (!TableExists(rPos.Tab()))
+        return false;
+
+    return maTabs[rPos.Tab()]->SetGroupFormulaCell(rPos.Col(), rPos.Row(), pCell);
+}
+
 void ScDocument::SetConsolidateDlgData( const ScConsolidateParam* pData )
 {
     delete pConsolidateDlgData;

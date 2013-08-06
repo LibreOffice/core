@@ -1453,6 +1453,14 @@ ScFormulaCell* ScTable::SetFormulaCell( SCCOL nCol, SCROW nRow, ScFormulaCell* p
     return aCol[nCol].SetFormulaCell(nRow, pCell);
 }
 
+bool ScTable::SetGroupFormulaCell( SCCOL nCol, SCROW nRow, ScFormulaCell* pCell )
+{
+    if (!ValidColRow(nCol, nRow))
+        return false;
+
+    return aCol[nCol].SetGroupFormulaCell(nRow, pCell);
+}
+
 void ScTable::SetValue( SCCOL nCol, SCROW nRow, const double& rVal )
 {
     if (ValidColRow(nCol, nRow))

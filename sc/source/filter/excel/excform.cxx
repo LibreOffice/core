@@ -101,7 +101,6 @@ void ImportExcel::Formula4()
 void ImportExcel::Formula(
     const XclAddress& rXclPos, sal_uInt16 nXF, sal_uInt16 nFormLen, double fCurVal, bool bShrFmla)
 {
-
     ScAddress aScPos( ScAddress::UNINITIALIZED );
     if (!GetAddressConverter().ConvertAddress(aScPos, rXclPos, GetCurrScTab(), true))
         // Conversion failed.
@@ -115,13 +114,18 @@ void ImportExcel::Formula(
     if (bShrFmla)
     {
         // This is a shared formula. Get the token array from the shared formula pool.
-        pResult = pFormConv->GetShrFmla(maStrm, nFormLen);
-        if (!pResult)
+        ScFormulaCellGroupRef xGroup = pFormConv->GetSharedFormula(maStrm, aScPos.Col(), nFormLen);
+        if (!xGroup)
             return;
 
-        ScFormulaCell* pCell = new ScFormulaCell( pD, aScPos, pResult );
+        ScFormulaCell* pCell = new ScFormulaCell(pD, aScPos, xGroup);
         pD->EnsureTable(aScPos.Tab());
-        pCell = pD->SetFormulaCell(aScPos, pCell);
+        bool bInserted = pD->SetGroupFormulaCell(aScPos, pCell);
+        if (!bInserted)
+        {
+            delete pCell;
+            return;
+        }
         pCell->SetNeedNumberFormat(false);
         if (!rtl::math::isNan(fCurVal))
             pCell->SetResultDouble(fCurVal);
@@ -1673,37 +1677,32 @@ const ScTokenArray* ExcelToSc::GetBoolErr( XclBoolError eType )
     return pErgebnis;
 }
 
-
-// if a shared formula was found, stream seeks to first byte after <nFormulaLen>,
-// else stream pointer stays unchanged
-const ScTokenArray* ExcelToSc::GetShrFmla( XclImpStream& aIn, sal_Size nFormulaLen )
+ScFormulaCellGroupRef ExcelToSc::GetSharedFormula( XclImpStream& aIn, SCCOL nCol, sal_Size nFormulaLen )
 {
     if (!nFormulaLen)
-        return NULL;
+        return ScFormulaCellGroupRef();
 
     aIn.PushPosition();
 
     sal_uInt8 nOp;
     aIn >> nOp;
 
-    if (nOp != 0x01)   // Shared Formula       [    277]
+    if (nOp != 0x01)   // must be PtgExp token.
     {
         aIn.PopPosition();
-        return NULL;
+        return ScFormulaCellGroupRef();
     }
 
-    sal_uInt16 nCol, nRow;
-    aIn >> nRow >> nCol;
+    sal_uInt16 nLeftCol, nRow;
+    aIn >> nRow >> nLeftCol;
 
-    aStack << aPool.StoreName( GetOldRoot().pShrfmlaBuff->Find(
-        ScAddress(static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), GetCurrScTab())), true);
+    ScAddress aRefPos(nCol, nRow, GetCurrScTab());
+    ScFormulaCellGroupRef xGroup = GetOldRoot().pShrfmlaBuff->Find(aRefPos);
 
     aIn.PopPosition();
-
     aIn.Ignore(nFormulaLen);
-    return aPool[aStack.Get()];
+    return xGroup;
 }
-
 
 void ExcelToSc::SetError( ScFormulaCell &rCell, const ConvErr eErr )
 {
