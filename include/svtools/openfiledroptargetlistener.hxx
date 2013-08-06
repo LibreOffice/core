@@ -30,31 +30,26 @@
 #include <sot/exchange.hxx>
 #include <tools/string.hxx>
 
+/** DropTargetListener that takes care of opening a file when it is dropped in the frame.
+*/
 class SVT_DLLPUBLIC OpenFileDropTargetListener : public ::cppu::WeakImplHelper1< ::com::sun::star::datatransfer::dnd::XDropTargetListener >
 {
-    //___________________________________________
-    // member
     private:
-
         /// uno service manager to create necessary services
         css::uno::Reference< css::uno::XComponentContext > m_xContext;
+
         /// weakreference to target frame (Don't use a hard reference. Owner can't delete us then!)
         css::uno::WeakReference< css::frame::XFrame > m_xTargetFrame;
+
         /// drag/drop info
         DataFlavorExVector* m_pFormats;
 
-    //___________________________________________
-    // c++ interface
     public:
+        OpenFileDropTargetListener( const css::uno::Reference< css::uno::XComponentContext >& xContext,
+                                    const css::uno::Reference< css::frame::XFrame >& xFrame );
+        ~OpenFileDropTargetListener();
 
-         OpenFileDropTargetListener( const css::uno::Reference< css::uno::XComponentContext >& xContext ,
-                             const css::uno::Reference< css::frame::XFrame >& xFrame                );
-        ~OpenFileDropTargetListener(                                                                        );
-
-    //___________________________________________
-    // uno interface
     public:
-
         // XEventListener
         virtual void SAL_CALL disposing        ( const css::lang::EventObject& Source ) throw(css::uno::RuntimeException);
 
@@ -65,15 +60,11 @@ class SVT_DLLPUBLIC OpenFileDropTargetListener : public ::cppu::WeakImplHelper1<
         virtual void SAL_CALL dragOver         ( const css::datatransfer::dnd::DropTargetDragEvent&      dtde  ) throw(css::uno::RuntimeException);
         virtual void SAL_CALL dropActionChanged( const css::datatransfer::dnd::DropTargetDragEvent&      dtde  ) throw(css::uno::RuntimeException);
 
-    //___________________________________________
-    // internal helper
     private:
-
-        void     implts_BeginDrag            ( const css::uno::Sequence< css::datatransfer::DataFlavor >& rSupportedDataFlavors );
-        void     implts_EndDrag              (                                                                                  );
-        sal_Bool implts_IsDropFormatSupported( SotFormatStringId nFormat                                                        );
-        void     implts_OpenFile             ( const String& rFilePath                                                          );
-
+        void     implts_BeginDrag( const css::uno::Sequence< css::datatransfer::DataFlavor >& rSupportedDataFlavors );
+        void     implts_EndDrag();
+        sal_Bool implts_IsDropFormatSupported( SotFormatStringId nFormat );
+        void     implts_OpenFile( const String& rFilePath );
 };
 
 #endif // SVTOOLS_DROPTARGETLISTENER_HXX
