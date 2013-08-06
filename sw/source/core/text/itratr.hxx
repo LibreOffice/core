@@ -57,18 +57,21 @@ private:
     SwRedlineItr *pRedln;
     xub_StrLen nStartIndex, nEndIndex, nPos;
     sal_uInt8 nPropFont;
-    void SeekFwd( const xub_StrLen nPos );
-    inline void SetFnt( SwFont* pNew ) { pFnt = pNew; }
     const void* aMagicNo[ SW_SCRIPTS ];
     MSHORT aFntIdx[ SW_SCRIPTS ];
     const SwTxtNode* m_pTxtNode;
+    /// previous seek remove left/right border of the current font during merge character border
+    bool m_bPrevSeekRemBorder;
+
+    void SeekFwd( const xub_StrLen nPos );
+    inline void SetFnt( SwFont* pNew ) { pFnt = pNew; }
 
 protected:
     void Chg( SwTxtAttr *pHt );
     void Rst( SwTxtAttr *pHt );
     void CtorInitAttrIter( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf, SwTxtFrm* pFrm = 0 );
     inline SwAttrIter(SwTxtNode* pTxtNode)
-        : pShell(0), pFnt(0), pHints(0), pAttrSet(0), pScriptInfo(0), pLastOut(0), nChgCnt(0), pRedln(0), nPropFont(0), m_pTxtNode(pTxtNode) {
+        : pShell(0), pFnt(0), pHints(0), pAttrSet(0), pScriptInfo(0), pLastOut(0), nChgCnt(0), pRedln(0), nPropFont(0), m_pTxtNode(pTxtNode), m_bPrevSeekRemBorder(false) {
             aMagicNo[SW_LATIN] = aMagicNo[SW_CJK] = aMagicNo[SW_CTL] = NULL;
         }
 
@@ -78,7 +81,7 @@ protected:
 public:
     // Constructor, destructor
     inline SwAttrIter( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf )
-        : pShell(0), pFnt(0), pHints(0), pScriptInfo(0), pLastOut(0), nChgCnt(0), pRedln(0),nPropFont(0), m_pTxtNode(&rTxtNode)
+        : pShell(0), pFnt(0), pHints(0), pScriptInfo(0), pLastOut(0), nChgCnt(0), pRedln(0),nPropFont(0), m_pTxtNode(&rTxtNode),m_bPrevSeekRemBorder(false)
         { CtorInitAttrIter( rTxtNode, rScrInf ); }
 
     virtual ~SwAttrIter();

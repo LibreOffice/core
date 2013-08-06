@@ -277,7 +277,7 @@ sal_Bool SwAttrIter::Seek( const xub_StrLen nNewPos )
 
     if( pHints )
     {
-        if( !nNewPos || nNewPos < nPos )
+        if( !nNewPos || nNewPos < nPos || m_bPrevSeekRemBorder )
         {
             if( pRedln )
                 pRedln->Clear( NULL );
@@ -385,7 +385,7 @@ bool SwAttrIter::MergeCharBorder( const bool bStart )
     const sal_Int32 nTmpStart = nStartIndex;
 
     // Check whether next neightbour has same border and height
-    if( aTmpFont.GetRightBorder() && pHints && nTmpStart < pHints->GetStartCount() )
+    if( aTmpFont.GetRightBorder() && pHints && nEndIndex < pHints->GetEndCount() )
     {
         ImplSeekAndChgAttrIter(GetNextAttr(), pLastOut);
         if( aTmpFont.GetHeight(pShell, *pLastOut) == pFnt->GetHeight(pShell, *pLastOut) &&
@@ -396,7 +396,7 @@ bool SwAttrIter::MergeCharBorder( const bool bStart )
     }
 
     // Check whether previous neightbour has same border and height
-    if( aTmpFont.GetLeftBorder() && nTmpStart > 1)
+    if( aTmpFont.GetLeftBorder() && nTmpStart > 0)
     {
         ImplSeekAndChgAttrIter(nActPos-1, pLastOut);
         if( aTmpFont.GetHeight(pShell, *pLastOut) == pFnt->GetHeight(pShell, *pLastOut) &&
@@ -420,7 +420,7 @@ bool SwAttrIter::MergeCharBorder( const bool bStart )
     if( bRemoveLeft )
         pFnt->SetLeftBorder(0);
 
-    return bRemoveLeft || bRemoveRight;
+    return (m_bPrevSeekRemBorder = bRemoveLeft || bRemoveRight);
 }
 
 class SwMinMaxArgs
