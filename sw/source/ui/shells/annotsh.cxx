@@ -1754,7 +1754,7 @@ void SwAnnotationShell::InsertSymbol(SfxRequest& rReq)
         pOLV->ShowCursor();
 
         rReq.AppendItem( SfxStringItem( GetPool().GetWhich(SID_CHARMAP), sSym ) );
-        if(aFont.GetName().Len())
+        if(!aFont.GetName().isEmpty())
             rReq.AppendItem( SfxStringItem( SID_ATTR_SPECIALCHAR, aFont.GetName() ) );
         rReq.Done();
     }

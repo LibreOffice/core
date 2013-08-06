@@ -288,8 +288,8 @@ public:
     FontItalic GetItalic() const { return aSub[nActual].GetItalic(); }
     LanguageType GetLanguage() const { return aSub[nActual].GetLanguage(); }
     FontAlign GetAlign() const { return aSub[nActual].GetAlign(); }
-    const XubString& GetName() const { return aSub[nActual].GetName(); }
-    const XubString& GetStyleName() const {return aSub[nActual].GetStyleName();}
+    const OUString& GetName() const { return aSub[nActual].GetName(); }
+    const OUString& GetStyleName() const {return aSub[nActual].GetStyleName();}
     FontFamily GetFamily() const { return aSub[nActual].GetFamily(); }
     FontPitch GetPitch() const { return aSub[nActual].GetPitch(); }
     rtl_TextEncoding GetCharSet() const { return aSub[nActual].GetCharSet(); }
@@ -300,11 +300,11 @@ public:
     sal_uInt16 GetPropWidth() const { return aSub[nActual].GetPropWidth(); }
     sal_uInt16 GetOrientation( const sal_Bool nVertLayout = sal_False ) const;
 
-    inline const XubString& GetName( const sal_uInt8 nWhich ) const
+    inline const OUString& GetName( const sal_uInt8 nWhich ) const
         { return aSub[nWhich].GetName(); }
     inline LanguageType GetLanguage( const sal_uInt8 nWhich ) const
         { return aSub[nWhich].GetLanguage(); }
-    inline const XubString& GetStyleName( const sal_uInt8 nWhich ) const
+    inline const OUString& GetStyleName( const sal_uInt8 nWhich ) const
         { return aSub[nWhich].GetStyleName(); }
     inline FontFamily GetFamily( const sal_uInt8 nWhich ) const
         { return aSub[nWhich].GetFamily(); }

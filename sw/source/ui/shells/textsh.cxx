@@ -1032,7 +1032,7 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
         rSh.Insert( aChars );
 
         // #108876# a font attribute has to be set always due to a guessed script type
-        if( aNewFont.GetName().Len() )
+        if( !aNewFont.GetName().isEmpty() )
         {
             SvxFontItem aNewFontItem( aFont );
             aNewFontItem.SetFamilyName( aNewFont.GetName());

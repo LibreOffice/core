@@ -4625,7 +4625,7 @@ Font PDFWriterImpl::replaceFont( const Font& rControlFont, const Font&  rAppSetF
     bool bAdjustSize = false;
 
     Font aFont( rControlFont );
-    if( ! aFont.GetName().Len() )
+    if( aFont.GetName().isEmpty() )
     {
         aFont = rAppSetFont;
         if( rControlFont.GetHeight() )

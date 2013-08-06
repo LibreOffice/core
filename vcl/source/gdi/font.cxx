@@ -249,7 +249,7 @@ Font::Font( const Font& rFont )
         mpImplFont->mnRefCount++;
 }
 
-Font::Font( const String& rFamilyName, const Size& rSize )
+Font::Font( const OUString& rFamilyName, const Size& rSize )
 {
     DBG_CTOR( Font, NULL );
 
@@ -258,7 +258,7 @@ Font::Font( const String& rFamilyName, const Size& rSize )
     mpImplFont->maSize       = rSize;
 }
 
-Font::Font( const String& rFamilyName, const String& rStyleName, const Size& rSize )
+Font::Font( const OUString& rFamilyName, const OUString& rStyleName, const Size& rSize )
 {
     DBG_CTOR( Font, NULL );
 
@@ -343,7 +343,7 @@ void Font::SetName( const OUString& rFamilyName )
     mpImplFont->maFamilyName = rFamilyName;
 }
 
-void Font::SetStyleName( const String& rStyleName )
+void Font::SetStyleName( const OUString& rStyleName )
 {
     DBG_CHKTHIS( Font, NULL );
 
@@ -618,7 +618,7 @@ sal_Bool Font::operator==( const Font& rFont ) const
 
 void Font::Merge( const Font& rFont )
 {
-    if ( rFont.GetName().Len() )
+    if ( !rFont.GetName().isEmpty() )
     {
         SetName( rFont.GetName() );
         SetStyleName( rFont.GetStyleName() );
@@ -988,9 +988,9 @@ sal_Bool Font::IsTransparent() const { return mpImplFont->mbTransparent; }
 
 FontAlign Font::GetAlign() const { return mpImplFont->meAlign; }
 
-const String& Font::GetName() const { return mpImplFont->maFamilyName; }
+const OUString& Font::GetName() const { return mpImplFont->maFamilyName; }
 
-const String& Font::GetStyleName() const { return mpImplFont->maStyleName; }
+const OUString& Font::GetStyleName() const { return mpImplFont->maStyleName; }
 
 const Size& Font::GetSize() const { return mpImplFont->maSize; }
 

@@ -1295,7 +1295,7 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
 
         if (!bSymbolFont)
         {
-            const bool bNameBeginsWithLatinText = rInfo.GetName().GetChar(0) <= 'z';
+            const bool bNameBeginsWithLatinText = rInfo.GetName()[0] <= 'z';
 
             if (bNameBeginsWithLatinText || !bUsingCorrectFont)
                 sSampleText = makeShortRepresentativeTextForSelectedFont(*rUDEvt.GetDevice());

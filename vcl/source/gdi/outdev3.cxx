@@ -523,7 +523,7 @@ Font OutputDevice::GetDefaultFont( sal_uInt16 nType, LanguageType eLang,
         }
 
         // No Name, than set all names
-        if ( !aFont.GetName().Len() )
+        if ( aFont.GetName().isEmpty() )
         {
             if ( nFlags & DEFAULTFONT_FLAGS_ONLYONE )
             {

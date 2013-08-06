@@ -48,8 +48,8 @@ private:
 public:
                         Font();
                         Font( const Font& );
-                        Font( const String& rFamilyName, const Size& );
-                        Font( const String& rFamilyName, const String& rStyleName, const Size& );
+                        Font( const OUString& rFamilyName, const Size& );
+                        Font( const OUString& rFamilyName, const OUString& rStyleName, const Size& );
                         Font( FontFamily eFamily, const Size& );
                         ~Font();
 
@@ -60,14 +60,14 @@ public:
     void                SetFillColor( const Color& );
     const Color&        GetFillColor() const;
     void                SetTransparent( sal_Bool bTransparent );
-    sal_Bool                IsTransparent() const;
+    sal_Bool            IsTransparent() const;
     void                SetAlign( FontAlign );
     FontAlign           GetAlign() const;
 
     void                SetName( const OUString& rFamilyName );
-    const String&       GetName() const;
-    void                SetStyleName( const String& rStyleName );
-    const String&       GetStyleName() const;
+    const OUString&     GetName() const;
+    void                SetStyleName( const OUString& rStyleName );
+    const OUString&     GetStyleName() const;
     void                SetSize( const Size& );
     const Size&         GetSize() const;
     void                SetHeight( long nHeight );
@@ -89,10 +89,10 @@ public:
     void                SetOrientation( short nLineOrientation );
     short               GetOrientation() const;
     void                SetVertical( sal_Bool bVertical );
-    sal_Bool                IsVertical() const;
+    sal_Bool            IsVertical() const;
     void                SetKerning( FontKerning nKerning );
     FontKerning         GetKerning() const;
-    sal_Bool                IsKerning() const;
+    sal_Bool            IsKerning() const;
 
     void                SetWeight( FontWeight );
     FontWeight          GetWeight() const;

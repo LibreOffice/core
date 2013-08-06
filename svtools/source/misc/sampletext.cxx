@@ -15,29 +15,29 @@
 
 bool isOpenSymbolFont(const Font &rFont)
 {
-    return rFont.GetName().EqualsIgnoreCaseAscii("starsymbol") ||
-           rFont.GetName().EqualsIgnoreCaseAscii("opensymbol");
+    return rFont.GetName().equalsIgnoreAsciiCase("starsymbol") ||
+           rFont.GetName().equalsIgnoreAsciiCase("opensymbol");
 }
 
 bool isSymbolFont(const Font &rFont)
 {
     return (rFont.GetCharSet() == RTL_TEXTENCODING_SYMBOL) ||
-            rFont.GetName().EqualsIgnoreCaseAscii("cmsy10") ||
-            rFont.GetName().EqualsIgnoreCaseAscii("cmex10") ||
-            rFont.GetName().EqualsIgnoreCaseAscii("feta26") ||
-            rFont.GetName().EqualsIgnoreCaseAscii("jsMath-cmsy10") ||
-            rFont.GetName().EqualsIgnoreCaseAscii("jsMath-cmex10") ||
-            rFont.GetName().EqualsIgnoreCaseAscii("msam10") ||
-            rFont.GetName().EqualsIgnoreCaseAscii("msbm10") ||
-            rFont.GetName().EqualsIgnoreCaseAscii("wasy10") ||
-            rFont.GetName().EqualsIgnoreCaseAscii("Denemo") ||
-            rFont.GetName().EqualsIgnoreCaseAscii("GlyphBasic1") ||
-            rFont.GetName().EqualsIgnoreCaseAscii("GlyphBasic2") ||
-            rFont.GetName().EqualsIgnoreCaseAscii("GlyphBasic3") ||
-            rFont.GetName().EqualsIgnoreCaseAscii("GlyphBasic4") ||
-            rFont.GetName().EqualsIgnoreCaseAscii("Letters Laughing") ||
-            rFont.GetName().EqualsIgnoreCaseAscii("MusiQwik") ||
-            rFont.GetName().EqualsIgnoreCaseAscii("MusiSync") ||
+            rFont.GetName().equalsIgnoreAsciiCase("cmsy10") ||
+            rFont.GetName().equalsIgnoreAsciiCase("cmex10") ||
+            rFont.GetName().equalsIgnoreAsciiCase("feta26") ||
+            rFont.GetName().equalsIgnoreAsciiCase("jsMath-cmsy10") ||
+            rFont.GetName().equalsIgnoreAsciiCase("jsMath-cmex10") ||
+            rFont.GetName().equalsIgnoreAsciiCase("msam10") ||
+            rFont.GetName().equalsIgnoreAsciiCase("msbm10") ||
+            rFont.GetName().equalsIgnoreAsciiCase("wasy10") ||
+            rFont.GetName().equalsIgnoreAsciiCase("Denemo") ||
+            rFont.GetName().equalsIgnoreAsciiCase("GlyphBasic1") ||
+            rFont.GetName().equalsIgnoreAsciiCase("GlyphBasic2") ||
+            rFont.GetName().equalsIgnoreAsciiCase("GlyphBasic3") ||
+            rFont.GetName().equalsIgnoreAsciiCase("GlyphBasic4") ||
+            rFont.GetName().equalsIgnoreAsciiCase("Letters Laughing") ||
+            rFont.GetName().equalsIgnoreAsciiCase("MusiQwik") ||
+            rFont.GetName().equalsIgnoreAsciiCase("MusiSync") ||
             isOpenSymbolFont(rFont);
 }
 

@@ -54,8 +54,8 @@ private:
     void                AskConfig();
 
     FontRefCount        mnRefCount;
-    String              maFamilyName;
-    String              maStyleName;
+    OUString            maFamilyName;
+    OUString            maStyleName;
     Size                maSize;
     Color               maColor;        // compatibility, now on output device
     Color               maFillColor;    // compatibility, now on output device
@@ -230,7 +230,7 @@ public:
 
 bool ParseCMAP( const unsigned char* pRawData, int nRawLength, CmapResult& );
 
-void UpdateAttributesFromPSName( const String& rPSName, ImplDevFontAttributes& );
+void UpdateAttributesFromPSName( const OUString& rPSName, ImplDevFontAttributes& );
 
 #endif // _SV_IMPFONT_HXX
 

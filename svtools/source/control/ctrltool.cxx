@@ -123,7 +123,7 @@ static int sortWeightValue(FontWeight eWeight)
     return 0; // eWeight == WEIGHT_NORMAL
 }
 
-static StringCompare ImplCompareFontInfo( ImplFontListFontInfo* pInfo1,
+static sal_Int32 ImplCompareFontInfo( ImplFontListFontInfo* pInfo1,
                                           ImplFontListFontInfo* pInfo2 )
 {
     //Sort non italic before italics
@@ -141,7 +141,7 @@ static StringCompare ImplCompareFontInfo( ImplFontListFontInfo* pInfo1,
     else if ( nWeight1 > nWeight2 )
         return COMPARE_GREATER;
 
-    return pInfo1->GetStyleName().CompareTo( pInfo2->GetStyleName() );
+    return pInfo1->GetStyleName().compareTo( pInfo2->GetStyleName() );
 }
 
 // =======================================================================
@@ -301,10 +301,10 @@ void FontList::ImplInsertFonts( OutputDevice* pDevice, sal_Bool bAll,
                 ImplFontListFontInfo*   pNewInfo = new ImplFontListFontInfo( aFontInfo, pDevice );
                 while ( pTemp )
                 {
-                    StringCompare eComp = ImplCompareFontInfo( pNewInfo, pTemp );
-                    if ( (eComp == COMPARE_LESS) || (eComp == COMPARE_EQUAL) )
+                    sal_Int32 eComp = ImplCompareFontInfo( pNewInfo, pTemp );
+                    if ( eComp <= 0 )
                     {
-                        if ( eComp == COMPARE_EQUAL )
+                        if ( eComp == 0 )
                         {
                             // Overwrite charset, because charset should match
                             // with the system charset
@@ -505,7 +505,7 @@ OUString FontList::GetStyleName(const FontInfo& rInfo) const
 
 OUString FontList::GetFontMapText( const FontInfo& rInfo ) const
 {
-    if ( !rInfo.GetName().Len() )
+    if ( rInfo.GetName().isEmpty() )
     {
         return OUString();
     }
@@ -777,7 +777,7 @@ const sal_IntPtr* FontList::GetSizeAry( const FontInfo& rInfo ) const
     }
 
     // Falls kein Name, dann Standardgroessen
-    if ( !rInfo.GetName().Len() )
+    if ( rInfo.GetName().isEmpty() )
         return aStdSizeAry;
 
     // Zuerst nach dem Fontnamen suchen um das Device dann von dem
