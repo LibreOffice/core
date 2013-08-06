@@ -573,6 +573,7 @@ linux-android*)
     enable_mpl_subset=yes
     enable_opengl=no
     enable_lpsolve=no
+    enable_report_builder=no
     with_theme="tango"
     test_cups=no
     test_dbus=no
@@ -7243,6 +7244,7 @@ if test $_os = iOS; then
     enable_lotuswordpro=no
     enable_neon=no
     enable_extension_integration=no
+    enable_report_builder=no
     with_theme="tango"
     with_ppds=no
 fi
