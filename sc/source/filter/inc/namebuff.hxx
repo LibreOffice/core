@@ -149,7 +149,7 @@ inline void NameBuffer::SetBase( sal_uInt16 nNewBase )
 
 
 
-class ShrfmlaBuffer : public ExcRoot
+class SharedFormulaBuffer : public ExcRoot
 {
     struct ScAddressHashFunc : public std::unary_function< const ScAddress &, size_t >
     {
@@ -163,14 +163,14 @@ class ShrfmlaBuffer : public ExcRoot
     size_t                  mnCurrIdx;
 
 public:
-                            ShrfmlaBuffer( RootData* pRD );
-    virtual                 ~ShrfmlaBuffer();
+    SharedFormulaBuffer( RootData* pRD );
+    virtual ~SharedFormulaBuffer();
     void                    Clear();
     void                    Store( const ScRange& rRange, const ScTokenArray& );
     sal_uInt16                  Find (const ScAddress & rAddress ) const;
 
     static String           CreateName( const ScRange& );
-    };
+};
 
 
 

@@ -76,14 +76,14 @@ sal_uInt16  nShrCnt;
 #endif
 
 
-size_t ShrfmlaBuffer::ScAddressHashFunc::operator() (const ScAddress &addr) const
+size_t SharedFormulaBuffer::ScAddressHashFunc::operator() (const ScAddress &addr) const
 {
     // Use something simple, it is just a hash.
     return static_cast< sal_uInt16 >( addr.Row() ) | (static_cast< sal_uInt8 >( addr.Col() ) << 16);
 }
 
 const size_t nBase = 16384; // Range~ und Shared~ Dingens mit jeweils der Haelfte Ids
-ShrfmlaBuffer::ShrfmlaBuffer( RootData* pRD ) :
+SharedFormulaBuffer::SharedFormulaBuffer( RootData* pRD ) :
     ExcRoot( pRD ),
     mnCurrIdx (nBase)
 {
@@ -92,18 +92,18 @@ ShrfmlaBuffer::ShrfmlaBuffer( RootData* pRD ) :
 #endif
 }
 
-ShrfmlaBuffer::~ShrfmlaBuffer()
+SharedFormulaBuffer::~SharedFormulaBuffer()
 {
 }
 
-void ShrfmlaBuffer::Clear()
+void SharedFormulaBuffer::Clear()
 {
     index_hash.clear();
     // do not clear index_list, index calculation depends on complete list size...
     // do not change mnCurrIdx
 }
 
-void ShrfmlaBuffer::Store( const ScRange& rRange, const ScTokenArray& rToken )
+void SharedFormulaBuffer::Store( const ScRange& rRange, const ScTokenArray& rToken )
 {
     String          aName( CreateName( rRange.aStart ) );
 
@@ -121,7 +121,7 @@ void ShrfmlaBuffer::Store( const ScRange& rRange, const ScTokenArray& rToken )
 }
 
 
-sal_uInt16 ShrfmlaBuffer::Find( const ScAddress & aAddr ) const
+sal_uInt16 SharedFormulaBuffer::Find( const ScAddress & aAddr ) const
 {
     ShrfmlaHash::const_iterator hash = index_hash.find (aAddr);
     if (hash != index_hash.end())
@@ -138,7 +138,7 @@ sal_uInt16 ShrfmlaBuffer::Find( const ScAddress & aAddr ) const
 
 #define SHRFMLA_BASENAME    "SHARED_FORMULA_"
 
-String ShrfmlaBuffer::CreateName( const ScRange& r )
+String SharedFormulaBuffer::CreateName( const ScRange& r )
 {
     OUString aName = SHRFMLA_BASENAME +
                      OUString::number( r.aStart.Col() ) + "_" +

@@ -30,7 +30,7 @@
 class ScRangeName;
 
 class RangeNameBufferWK3;
-class ShrfmlaBuffer;
+class SharedFormulaBuffer;
 class ExtNameBuff;
 class ExtSheetBuffer;
 class ExcelToSc;
@@ -51,7 +51,7 @@ struct RootData     // -> Inkarnation jeweils im ImportExcel-Objekt!
 {
     BiffTyp             eDateiTyp;              // feine Differenzierung
     ExtSheetBuffer*     pExtSheetBuff;
-    ShrfmlaBuffer*      pShrfmlaBuff;
+    SharedFormulaBuffer*      pShrfmlaBuff;
     ExtNameBuff*        pExtNameBuff;
     ExcelToSc*          pFmlaConverter;
     XclImpColRowSettings* pColRowBuff;        // Col/Row-Einstellungen 1 Tabelle
