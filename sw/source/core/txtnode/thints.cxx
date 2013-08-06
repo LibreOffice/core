@@ -1643,7 +1643,7 @@ bool SwTxtNode::TryCharSetExpandToNum(const SfxItemSet& aCharSet)
     if (!IsDefaultItem(&rInnerItem) &&  !IsInvalidItem(&rInnerItem))
         return bRet;
 
-    if ( !IsInList() && GetNumRule() && GetListId().Len() > 0 )
+    if (!IsInList() && GetNumRule() && !GetListId().isEmpty())
     {
         return bRet;
     }

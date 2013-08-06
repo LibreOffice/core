@@ -212,7 +212,7 @@ SwTxtNode::SwTxtNode( const SwNodeIndex &rWhere,
     if( pAutoAttr )
         SetAttr( *pAutoAttr );
 
-    if ( !IsInList() && GetNumRule() && GetListId().Len() > 0 )
+    if (!IsInList() && GetNumRule() && !GetListId().isEmpty())
     {
         // #i101516#
         // apply paragraph style's assigned outline style list level as
@@ -2613,7 +2613,7 @@ SwCntntNode* SwTxtNode::AppendNode( const SwPosition & rPos )
         pNew->ResetAttr( RES_PARATR_LIST_LEVEL );
     }
 
-    if ( !IsInList() && GetNumRule() && GetListId().Len() > 0 )
+    if (!IsInList() && GetNumRule() && !GetListId().isEmpty())
     {
         AddToList();
     }
@@ -4047,27 +4047,27 @@ bool SwTxtNode::IsFirstOfNumRule() const
     return bResult;
 }
 
-void SwTxtNode::SetListId( const String sListId )
+void SwTxtNode::SetListId(OUString const& rListId)
 {
     const SfxStringItem& rListIdItem =
             dynamic_cast<const SfxStringItem&>(GetAttr( RES_PARATR_LIST_ID ));
-    if ( rListIdItem.GetValue() != sListId )
+    if (rListIdItem.GetValue() != rListId)
     {
-        if ( sListId.Len() == 0 )
+        if (rListId.isEmpty())
         {
             ResetAttr( RES_PARATR_LIST_ID );
         }
         else
         {
-            SfxStringItem aNewListIdItem( RES_PARATR_LIST_ID, sListId );
+            SfxStringItem aNewListIdItem(RES_PARATR_LIST_ID, rListId);
             SetAttr( aNewListIdItem );
         }
     }
 }
 
-String SwTxtNode::GetListId() const
+OUString SwTxtNode::GetListId() const
 {
-    String sListId;
+    OUString sListId;
 
     const SfxStringItem& rListIdItem =
                 dynamic_cast<const SfxStringItem&>(GetAttr( RES_PARATR_LIST_ID ));
@@ -4075,7 +4075,7 @@ String SwTxtNode::GetListId() const
 
     // As long as no explicit list id attribute is set, use the list id of
     // the list, which has been created for the applied list style.
-    if ( sListId.Len() == 0 )
+    if (sListId.isEmpty())
     {
         SwNumRule* pRule = GetNumRule();
         if ( pRule )
@@ -4826,8 +4826,7 @@ namespace {
         {
             // check, if in spite of the reset of the list style or the list id
             // the paragraph still has to be added to a list.
-            if ( mrTxtNode.GetNumRule() &&
-                 mrTxtNode.GetListId().Len() > 0 )
+            if (mrTxtNode.GetNumRule() && !mrTxtNode.GetListId().isEmpty())
             {
                 // #i96062#
                 // If paragraph has no list level attribute set and list style

@@ -624,8 +624,8 @@ public:
      */
     bool HasVisibleNumberingOrBullet() const;
 
-    void SetListId( const String sListId );
-    String GetListId() const;
+    void SetListId(OUString const& rListId);
+    OUString GetListId() const;
 
     /** Determines, if the list level indent attributes can be applied to the
         paragraph.
