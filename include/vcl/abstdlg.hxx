@@ -59,9 +59,9 @@ public:
 class VCL_DLLPUBLIC AbstractPasswordToOpenModifyDialog : public VclAbstractDialog
 {
 public:
-    virtual String  GetPasswordToOpen() const   = 0;
-    virtual String  GetPasswordToModify() const = 0;
-    virtual bool    IsRecommendToOpenReadonly() const = 0;
+    virtual OUString  GetPasswordToOpen() const   = 0;
+    virtual OUString  GetPasswordToModify() const = 0;
+    virtual bool      IsRecommendToOpenReadonly() const = 0;
 };
 
 //-------------------------------------------------------------

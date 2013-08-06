@@ -989,11 +989,11 @@ Window * AbstractSvxPostItDialog_Impl::GetWindow()
     return (Window *)pDlg;
 }
 
-String AbstractPasswordToOpenModifyDialog_Impl::GetPasswordToOpen() const
+OUString AbstractPasswordToOpenModifyDialog_Impl::GetPasswordToOpen() const
 {
     return pDlg->GetPasswordToOpen();
 }
-String AbstractPasswordToOpenModifyDialog_Impl::GetPasswordToModify() const
+OUString AbstractPasswordToOpenModifyDialog_Impl::GetPasswordToModify() const
 {
     return pDlg->GetPasswordToModify();
 }

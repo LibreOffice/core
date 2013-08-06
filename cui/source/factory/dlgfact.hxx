@@ -569,9 +569,9 @@ class AbstractPasswordToOpenModifyDialog_Impl : public AbstractPasswordToOpenMod
 {
     DECL_ABSTDLG_BASE( AbstractPasswordToOpenModifyDialog_Impl, PasswordToOpenModifyDialog )
 
-    virtual String  GetPasswordToOpen() const;
-    virtual String  GetPasswordToModify() const;
-    virtual bool    IsRecommendToOpenReadonly() const;
+    virtual OUString  GetPasswordToOpen() const;
+    virtual OUString  GetPasswordToModify() const;
+    virtual bool      IsRecommendToOpenReadonly() const;
 };
 //for PasswordToOpenModifyDialog end
 
