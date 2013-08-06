@@ -888,8 +888,6 @@ sal_Bool SvxCSS1Parser::ParseStyleOption( const OUString& rIn,
 sal_Bool SvxCSS1Parser::GetEnum( const CSS1PropertyEnum *pPropTable,
                           const OUString &rValue, sal_uInt16& rEnum )
 {
-    OUString aValue( rValue.toAsciiLowerCase() );
-
     while( pPropTable->pName )
     {
         if( !rValue.equalsIgnoreAsciiCaseAscii( pPropTable->pName ) )
