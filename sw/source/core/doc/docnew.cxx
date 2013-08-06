@@ -313,6 +313,7 @@ SwDoc::SwDoc()
     mbClippedPictures(false),
     mbBackgroundParaOverDrawings(false),
     mbTabOverMargin(false),
+    mbSurroundTextWrapSmall(false),
     mbLastBrowseMode( false ),
     mn32DummyCompatabilityOptions1(0),
     mn32DummyCompatabilityOptions2(0),
