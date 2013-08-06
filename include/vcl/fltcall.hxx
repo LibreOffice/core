@@ -36,7 +36,7 @@ struct FltCallDialogParameter
     Window*     pWindow;
     ResMgr*     pResMgr;
     FieldUnit   eFieldUnit;
-    String      aFilterExt;
+    OUString    aFilterExt;
 
     // In and Out PropertySequence for all filter dialogs
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aFilterData;
