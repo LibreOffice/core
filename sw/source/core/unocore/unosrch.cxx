@@ -123,9 +123,9 @@ const uno::Sequence< beans::PropertyValue > SwSearchProperties_Impl::GetProperti
 
 void SwSearchProperties_Impl::FillItemSet(SfxItemSet& rSet, sal_Bool bIsValueSearch) const
 {
-    //
 
     SfxPoolItem* pBoxItem = 0,
+    *pCharBoxItem = 0,
     *pBreakItem = 0,
     *pAutoKernItem  = 0,
     *pWLineItem   = 0,
@@ -183,6 +183,11 @@ void SwSearchProperties_Impl::FillItemSet(SfxItemSet& rSet, sal_Bool bIsValueSea
                     if(!pBoxItem)
                         pBoxItem = rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone();
                     pTempItem = pBoxItem;
+                break;
+                case  RES_CHRATR_BOX:
+                    if(!pCharBoxItem)
+                        pCharBoxItem = rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone();
+                    pTempItem = pCharBoxItem;
                 break;
                 case  RES_BREAK:
                     if(!pBreakItem)
@@ -418,6 +423,7 @@ void SwSearchProperties_Impl::FillItemSet(SfxItemSet& rSet, sal_Bool bIsValueSea
         }
     }
     delete pBoxItem;
+    delete pCharBoxItem;
     delete pBreakItem;
     delete pAutoKernItem ;
     delete pWLineItem;

@@ -792,6 +792,16 @@ const SwPropNameTab aPropNameTab = {
 /* 0760 UNO_NAME_DEFAULT_PAGE_MODE */    {MAP_CHAR_LEN("DefaultPageMode")},
 /* 0761 UNO_NAME_CHAR_SHADING_VALUE */   {MAP_CHAR_LEN("CharShadingValue")},
 /* 0762 UNO_NAME_PARA_INTEROP_GRAB_BAG */   {MAP_CHAR_LEN("ParaInteropGrabBag")},
+/* 0763 UNO_NAME_CHAR_LEFT_BORDER */            {MAP_CHAR_LEN("CharLeftBorder")},
+/* 0764 UNO_NAME_CHAR_RIGHT_BORDER */           {MAP_CHAR_LEN("CharRightBorder")},
+/* 0765 UNO_NAME_CHAR_TOP_BORDER */             {MAP_CHAR_LEN("CharTopBorder")},
+/* 0766 UNO_NAME_CHAR_BOTTOM_BORDER*/           {MAP_CHAR_LEN("CharBottomBorder")},
+/* 0767 UNO_NAME_CHAR_BORDER_DISTANCE */        {MAP_CHAR_LEN("CharBorderDistance")},
+/* 0768 UNO_NAME_CHAR_LEFT_BORDER_DISTANCE */   {MAP_CHAR_LEN("CharLeftBorderDistance")},
+/* 0769 UNO_NAME_CHAR_RIGHT_BORDER_DISTANCE */  {MAP_CHAR_LEN("CharRightBorderDistance")},
+/* 0770 UNO_NAME_CHAR_TOP_BORDER_DISTANCE */    {MAP_CHAR_LEN("CharTopBorderDistance")},
+/* 0771 UNO_NAME_CHAR_BOTTOM_BORDER_DISTANCE */ {MAP_CHAR_LEN("CharBottomBorderDistance")},
+
 
 // new items in this array must match enum SwPropNameIds
 };
