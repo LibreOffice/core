@@ -38,7 +38,6 @@ class Size;
 
 class EDITENG_DLLPUBLIC SvxFont : public Font
 {
-    LanguageType eLang;         // Language
     SvxCaseMap   eCaseMap;      // Text Markup
     short nEsc;                 // Degree of Superscript/Subscript
     sal_uInt8  nPropr;          // Degree of reduction of the font height
@@ -64,10 +63,6 @@ public:
 
     inline SvxCaseMap GetCaseMap() const { return eCaseMap; }
     inline void    SetCaseMap( const SvxCaseMap eNew ) { eCaseMap = eNew; }
-
-    inline LanguageType GetLanguage() const { return eLang; }
-    inline void SetLanguage( const LanguageType eNewLan )
-        { eLang = eNewLan;  Font::SetLanguage(eNewLan); }
 
     // Is-Methods:
     inline sal_Bool IsCaseMap() const { return SVX_CASEMAP_NOT_MAPPED != eCaseMap; }

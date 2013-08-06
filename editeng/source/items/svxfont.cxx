@@ -39,7 +39,7 @@ SvxFont::SvxFont()
     nKern = nEsc = 0;
     nPropr = 100;
     eCaseMap = SVX_CASEMAP_NOT_MAPPED;
-    eLang = LANGUAGE_SYSTEM;
+    SetLanguage(LANGUAGE_SYSTEM);
 }
 
 SvxFont::SvxFont( const Font &rFont )
@@ -48,7 +48,7 @@ SvxFont::SvxFont( const Font &rFont )
     nKern = nEsc = 0;
     nPropr = 100;
     eCaseMap = SVX_CASEMAP_NOT_MAPPED;
-    eLang = LANGUAGE_SYSTEM;
+    SetLanguage(LANGUAGE_SYSTEM);
 }
 
 SvxFont::SvxFont( const SvxFont &rFont )
@@ -58,9 +58,8 @@ SvxFont::SvxFont( const SvxFont &rFont )
     nEsc  = rFont.GetEscapement();
     nPropr = rFont.GetPropr();
     eCaseMap = rFont.GetCaseMap();
-    eLang = rFont.GetLanguage();
+    SetLanguage(rFont.GetLanguage());
 }
-
 
 void SvxFont::DrawArrow( OutputDevice &rOut, const Rectangle& rRect,
     const Size& rSize, const Color& rCol, sal_Bool bLeft )
@@ -105,10 +104,10 @@ OUString SvxFont::CalcCaseMap(const OUString &rTxt) const
         return rTxt;
     OUString aTxt(rTxt);
     // I still have to get the language
-    const LanguageType eLng = LANGUAGE_DONTKNOW == eLang
-                            ? LANGUAGE_SYSTEM : eLang;
+    const LanguageType eLang = LANGUAGE_DONTKNOW == GetLanguage()
+                             ? LANGUAGE_SYSTEM : GetLanguage();
 
-    LanguageTag aLanguageTag( eLng);
+    LanguageTag aLanguageTag(eLang);
     CharClass aCharClass( aLanguageTag );
 
     switch( eCaseMap )
@@ -217,10 +216,10 @@ void SvxFont::DoOnCapitals(SvxDoCapitals &rDo, const xub_StrLen nPartLen) const
     // Test if string length differ between original and CaseMapped
     sal_Bool bCaseMapLengthDiffers(aTxt.Len() != rTxt.Len());
 
-    const LanguageType eLng = LANGUAGE_DONTKNOW == eLang
-                            ? LANGUAGE_SYSTEM : eLang;
+    const LanguageType eLang = LANGUAGE_DONTKNOW == GetLanguage()
+                             ? LANGUAGE_SYSTEM : GetLanguage();
 
-    LanguageTag aLanguageTag( eLng );
+    LanguageTag aLanguageTag(eLang);
     CharClass   aCharClass( aLanguageTag );
     String      aCharString;
 
@@ -579,7 +578,6 @@ SvxFont& SvxFont::operator=( const Font& rFont )
 SvxFont& SvxFont::operator=( const SvxFont& rFont )
 {
     Font::operator=( rFont );
-    eLang = rFont.eLang;
     eCaseMap = rFont.eCaseMap;
     nEsc = rFont.nEsc;
     nPropr = rFont.nPropr;
