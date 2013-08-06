@@ -73,11 +73,11 @@ public:
     sal_Int32   CompareString( const OUString& rStr1, const OUString& rStr2 ) const;
 
     sal_Bool    MatchString( const OUString& rStr1, const OUString& rStr2 ) const;
-    sal_Bool    MatchMnemonic( const String& rString, sal_Unicode cMnemonicChar ) const;
+    sal_Bool    MatchMnemonic( const OUString& rString, sal_Unicode cMnemonicChar ) const;
 
-    String      GetNum( long nNumber, sal_uInt16 nDecimals, sal_Bool bUseThousandSep = sal_True, sal_Bool bTrailingZeros = sal_True ) const;
+    OUString    GetNum( long nNumber, sal_uInt16 nDecimals, sal_Bool bUseThousandSep = sal_True, sal_Bool bTrailingZeros = sal_True ) const;
 
-    static String filterFormattingChars( const String& );
+    static OUString filterFormattingChars( const OUString& );
 };
 
 }   // namespace vcl

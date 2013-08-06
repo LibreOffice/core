@@ -97,11 +97,11 @@ inline bool is_formatting_mark( sal_Unicode c )
    Of course this copying around is not really good, but looking at i18npool, one more time
    will not hurt.
 */
-String vcl::I18nHelper::filterFormattingChars( const String& rStr )
+OUString vcl::I18nHelper::filterFormattingChars( const OUString& rStr )
 {
-    sal_Int32 nUnicodes = rStr.Len();
+    sal_Int32 nUnicodes = rStr.getLength();
     OUStringBuffer aBuf( nUnicodes );
-    const sal_Unicode* pStr = rStr.GetBuffer();
+    const sal_Unicode* pStr = rStr.getStr();
     while( nUnicodes-- )
     {
         if( ! is_formatting_mark( *pStr ) )
@@ -148,22 +148,22 @@ sal_Bool vcl::I18nHelper::MatchString( const OUString& rStr1, const OUString& rS
     return ImplGetTransliterationWrapper().isMatch( aStr1, aStr2 );
 }
 
-sal_Bool vcl::I18nHelper::MatchMnemonic( const String& rString, sal_Unicode cMnemonicChar ) const
+sal_Bool vcl::I18nHelper::MatchMnemonic( const OUString& rString, sal_Unicode cMnemonicChar ) const
 {
     ::osl::Guard< ::osl::Mutex > aGuard( ((vcl::I18nHelper*)this)->maMutex );
 
     sal_Bool bEqual = sal_False;
-    sal_uInt16 n = rString.Search( '~' );
-    if ( n != STRING_NOTFOUND )
+    sal_Int32 n = rString.indexOf( '~' );
+    if ( n != -1 )
     {
-        String aMatchStr( rString, n+1, STRING_LEN );   // not only one char, because of transliteration...
+        OUString aMatchStr = rString.copy( n+1 );   // not only one char, because of transliteration...
         bEqual = MatchString( OUString(cMnemonicChar), aMatchStr );
     }
     return bEqual;
 }
 
 
-String vcl::I18nHelper::GetNum( long nNumber, sal_uInt16 nDecimals, sal_Bool bUseThousandSep, sal_Bool bTrailingZeros ) const
+OUString vcl::I18nHelper::GetNum( long nNumber, sal_uInt16 nDecimals, sal_Bool bUseThousandSep, sal_Bool bTrailingZeros ) const
 {
     return ImplGetLocaleDataWrapper().getNum( nNumber, nDecimals, bUseThousandSep, bTrailingZeros );
 }

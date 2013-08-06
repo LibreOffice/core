@@ -57,15 +57,15 @@ void CellLineStyleControl::Initialize()
         maCellLineStyleValueSet.InsertItem(i);
     }
 
-    maStr[0] = GetSettings().GetLocaleI18nHelper().GetNum( 5, 2 ).AppendAscii("pt");
-    maStr[1] = GetSettings().GetLocaleI18nHelper().GetNum( 250, 2 ).AppendAscii("pt");
-    maStr[2] = GetSettings().GetLocaleI18nHelper().GetNum( 400, 2 ).AppendAscii("pt");
-    maStr[3] = GetSettings().GetLocaleI18nHelper().GetNum( 500, 2 ).AppendAscii("pt");
-    maStr[4] = GetSettings().GetLocaleI18nHelper().GetNum( 110, 2 ).AppendAscii("pt");
-    maStr[5] = GetSettings().GetLocaleI18nHelper().GetNum( 260, 2 ).AppendAscii("pt");
-    maStr[6] = GetSettings().GetLocaleI18nHelper().GetNum( 450, 2 ).AppendAscii("pt");
-    maStr[7] = GetSettings().GetLocaleI18nHelper().GetNum( 505, 2 ).AppendAscii("pt");
-    maStr[8] = GetSettings().GetLocaleI18nHelper().GetNum( 750, 2 ).AppendAscii("pt");
+    maStr[0] = GetSettings().GetLocaleI18nHelper().GetNum( 5, 2 ) + "pt";
+    maStr[1] = GetSettings().GetLocaleI18nHelper().GetNum( 250, 2 ) + "pt";
+    maStr[2] = GetSettings().GetLocaleI18nHelper().GetNum( 400, 2 ) + "pt";
+    maStr[3] = GetSettings().GetLocaleI18nHelper().GetNum( 500, 2 ) + "pt";
+    maStr[4] = GetSettings().GetLocaleI18nHelper().GetNum( 110, 2 ) + "pt";
+    maStr[5] = GetSettings().GetLocaleI18nHelper().GetNum( 260, 2 ) + "pt";
+    maStr[6] = GetSettings().GetLocaleI18nHelper().GetNum( 450, 2 ) + "pt";
+    maStr[7] = GetSettings().GetLocaleI18nHelper().GetNum( 505, 2 ) + "pt";
+    maStr[8] = GetSettings().GetLocaleI18nHelper().GetNum( 750, 2 ) + "pt";
     maCellLineStyleValueSet.SetUnit(&maStr[0]);
 
     for (sal_uInt16 i = 1; i <= CELL_LINE_STYLE_ENTRIES; ++i)
