@@ -27,7 +27,7 @@
 #include <helper/oframes.hxx>
 #include <helper/statusindicatorfactory.hxx>
 #include <framework/titlehelper.hxx>
-#include <classes/droptargetlistener.hxx>
+#include <svtools/openfiledroptargetlistener.hxx>
 #include <classes/taskcreator.hxx>
 #include <loadenv/targethelper.hxx>
 #include <framework/framelistanalyzer.hxx>
@@ -191,7 +191,7 @@ DEFINE_INIT_SERVICE                 (   Frame,
                                             //-------------------------------------------------------------------------------------------------------------
                                             // Initialize a the drop target listener.
                                             // We hold member as reference ... not as pointer too!
-                                            DropTargetListener* pDropListener = new DropTargetListener( m_xContext, this );
+                                            OpenFileDropTargetListener* pDropListener = new OpenFileDropTargetListener( m_xContext, this );
                                             m_xDropTargetListener = css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >( static_cast< ::cppu::OWeakObject* >(pDropListener), css::uno::UNO_QUERY );
 
                                             // Safe impossible cases

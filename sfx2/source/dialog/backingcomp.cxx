@@ -21,7 +21,7 @@
 
 #include "backingwindow.hxx"
 
-#include <sfx2/droptargetlistener.hxx>
+#include <svtools/openfiledroptargetlistener.hxx>
 
 #include <helpid.hrc>
 
@@ -454,7 +454,7 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
     m_xFrame = xFrame;
 
     // establish drag&drop mode
-    DropTargetListener* pDropListener = new DropTargetListener( m_xContext, m_xFrame);
+    OpenFileDropTargetListener* pDropListener = new OpenFileDropTargetListener( m_xContext, m_xFrame);
     m_xDropTargetListener = css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >(static_cast< ::cppu::OWeakObject* >(pDropListener), css::uno::UNO_QUERY);
 
     css::uno::Reference< css::awt::XToolkit2 > xToolkit = css::awt::Toolkit::create( m_xContext );

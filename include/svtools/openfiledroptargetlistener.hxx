@@ -17,8 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SXF_DROPTARGETLISTENER_HXX
-#define _SXF_DROPTARGETLISTENER_HXX
+#ifndef SVTOOLS_DROPTARGETLISTENER_HXX
+#define SVTOOLS_DROPTARGETLISTENER_HXX
+
+#include <svtools/svtdllapi.h>
 
 #include <com/sun/star/datatransfer/dnd/XDropTargetListener.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
@@ -28,7 +30,7 @@
 #include <sot/exchange.hxx>
 #include <tools/string.hxx>
 
-class DropTargetListener : public ::cppu::WeakImplHelper1< ::com::sun::star::datatransfer::dnd::XDropTargetListener >
+class SVT_DLLPUBLIC OpenFileDropTargetListener : public ::cppu::WeakImplHelper1< ::com::sun::star::datatransfer::dnd::XDropTargetListener >
 {
     //___________________________________________
     // member
@@ -45,9 +47,9 @@ class DropTargetListener : public ::cppu::WeakImplHelper1< ::com::sun::star::dat
     // c++ interface
     public:
 
-         DropTargetListener( const css::uno::Reference< css::uno::XComponentContext >& xContext ,
+         OpenFileDropTargetListener( const css::uno::Reference< css::uno::XComponentContext >& xContext ,
                              const css::uno::Reference< css::frame::XFrame >& xFrame                );
-        ~DropTargetListener(                                                                        );
+        ~OpenFileDropTargetListener(                                                                        );
 
     //___________________________________________
     // uno interface
@@ -72,8 +74,8 @@ class DropTargetListener : public ::cppu::WeakImplHelper1< ::com::sun::star::dat
         sal_Bool implts_IsDropFormatSupported( SotFormatStringId nFormat                                                        );
         void     implts_OpenFile             ( const String& rFilePath                                                          );
 
-}; // class DropTargetListener
+};
 
-#endif // _SXF_DROPTARGETLISTENER_HXX
+#endif // SVTOOLS_DROPTARGETLISTENER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

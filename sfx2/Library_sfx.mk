@@ -129,7 +129,6 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/config/evntconf \
     sfx2/source/control/bindings \
     sfx2/source/control/ctrlitem \
-    sfx2/source/control/droptargetlistener \
     sfx2/source/control/minfitem \
     sfx2/source/control/msg \
     sfx2/source/control/msgpool \

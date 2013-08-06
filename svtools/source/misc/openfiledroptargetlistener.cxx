@@ -17,11 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <classes/droptargetlistener.hxx>
-#include <threadhelp/readguard.hxx>
-#include <threadhelp/writeguard.hxx>
-#include <targets.h>
-#include <services.h>
+#include <svtools/openfiledroptargetlistener.hxx>
 
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
@@ -38,13 +34,12 @@
 #include <osl/file.hxx>
 #include <vcl/svapp.hxx>
 
-namespace framework
-{
+// Create a new task or recycle an existing one
+const char SPECIALTARGET_DEFAULT[] = "_default";
 
-DropTargetListener::DropTargetListener( const css::uno::Reference< css::uno::XComponentContext >& xContext,
+OpenFileDropTargetListener::OpenFileDropTargetListener( const css::uno::Reference< css::uno::XComponentContext >& xContext,
                                         const css::uno::Reference< css::frame::XFrame >&          xFrame  )
-        : ThreadHelpBase  ( &Application::GetSolarMutex() )
-        , m_xContext      ( xContext                      )
+        : m_xContext      ( xContext                      )
         , m_xTargetFrame  ( xFrame                        )
         , m_pFormats      ( new DataFlavorExVector        )
 {
@@ -52,7 +47,7 @@ DropTargetListener::DropTargetListener( const css::uno::Reference< css::uno::XCo
 
 // -----------------------------------------------------------------------------
 
-DropTargetListener::~DropTargetListener()
+OpenFileDropTargetListener::~OpenFileDropTargetListener()
 {
     m_xTargetFrame.clear();
     m_xContext.clear();
@@ -62,7 +57,7 @@ DropTargetListener::~DropTargetListener()
 
 // -----------------------------------------------------------------------------
 
-void SAL_CALL DropTargetListener::disposing( const css::lang::EventObject& ) throw( css::uno::RuntimeException )
+void SAL_CALL OpenFileDropTargetListener::disposing( const css::lang::EventObject& ) throw( css::uno::RuntimeException )
 {
     m_xTargetFrame.clear();
     m_xContext.clear();
@@ -70,7 +65,7 @@ void SAL_CALL DropTargetListener::disposing( const css::lang::EventObject& ) thr
 
 // -----------------------------------------------------------------------------
 
-void SAL_CALL DropTargetListener::drop( const css::datatransfer::dnd::DropTargetDropEvent& dtde ) throw( css::uno::RuntimeException )
+void SAL_CALL OpenFileDropTargetListener::drop( const css::datatransfer::dnd::DropTargetDropEvent& dtde ) throw( css::uno::RuntimeException )
 {
     const sal_Int8 nAction = dtde.DropAction;
 
@@ -105,7 +100,7 @@ void SAL_CALL DropTargetListener::drop( const css::datatransfer::dnd::DropTarget
 
 // -----------------------------------------------------------------------------
 
-void SAL_CALL DropTargetListener::dragEnter( const css::datatransfer::dnd::DropTargetDragEnterEvent& dtdee ) throw( css::uno::RuntimeException )
+void SAL_CALL OpenFileDropTargetListener::dragEnter( const css::datatransfer::dnd::DropTargetDragEnterEvent& dtdee ) throw( css::uno::RuntimeException )
 {
     try
     {
@@ -120,7 +115,7 @@ void SAL_CALL DropTargetListener::dragEnter( const css::datatransfer::dnd::DropT
 
 // -----------------------------------------------------------------------------
 
-void SAL_CALL DropTargetListener::dragExit( const css::datatransfer::dnd::DropTargetEvent& ) throw( css::uno::RuntimeException )
+void SAL_CALL OpenFileDropTargetListener::dragExit( const css::datatransfer::dnd::DropTargetEvent& ) throw( css::uno::RuntimeException )
 {
     try
     {
@@ -133,7 +128,7 @@ void SAL_CALL DropTargetListener::dragExit( const css::datatransfer::dnd::DropTa
 
 // -----------------------------------------------------------------------------
 
-void SAL_CALL DropTargetListener::dragOver( const css::datatransfer::dnd::DropTargetDragEvent& dtde ) throw( css::uno::RuntimeException )
+void SAL_CALL OpenFileDropTargetListener::dragOver( const css::datatransfer::dnd::DropTargetDragEvent& dtde ) throw( css::uno::RuntimeException )
 {
     try
     {
@@ -152,33 +147,34 @@ void SAL_CALL DropTargetListener::dragOver( const css::datatransfer::dnd::DropTa
 
 // -----------------------------------------------------------------------------
 
-void SAL_CALL DropTargetListener::dropActionChanged( const css::datatransfer::dnd::DropTargetDragEvent& ) throw( css::uno::RuntimeException )
+void SAL_CALL OpenFileDropTargetListener::dropActionChanged( const css::datatransfer::dnd::DropTargetDragEvent& ) throw( css::uno::RuntimeException )
 {
 }
 
-void DropTargetListener::implts_BeginDrag( const css::uno::Sequence< css::datatransfer::DataFlavor >& rSupportedDataFlavors )
+void OpenFileDropTargetListener::implts_BeginDrag( const css::uno::Sequence< css::datatransfer::DataFlavor >& rSupportedDataFlavors )
 {
     /* SAFE { */
-    WriteGuard aWriteLock(m_aLock);
+    SolarMutexGuard aGuard;
+
     m_pFormats->clear();
     TransferableDataHelper::FillDataFlavorExVector(rSupportedDataFlavors,*m_pFormats);
-    aWriteLock.unlock();
     /* } SAFE */
 }
 
-void DropTargetListener::implts_EndDrag()
+void OpenFileDropTargetListener::implts_EndDrag()
 {
     /* SAFE { */
-    WriteGuard aWriteLock(m_aLock);
+    SolarMutexGuard aGuard;
+
     m_pFormats->clear();
-    aWriteLock.unlock();
     /* } SAFE */
 }
 
-sal_Bool DropTargetListener::implts_IsDropFormatSupported( SotFormatStringId nFormat )
+sal_Bool OpenFileDropTargetListener::implts_IsDropFormatSupported( SotFormatStringId nFormat )
 {
     /* SAFE { */
-    ReadGuard aReadLock(m_aLock);
+    SolarMutexGuard aGuard;
+
     DataFlavorExVector::iterator aIter( m_pFormats->begin() ), aEnd( m_pFormats->end() );
     sal_Bool bRet = sal_False;
 
@@ -190,13 +186,12 @@ sal_Bool DropTargetListener::implts_IsDropFormatSupported( SotFormatStringId nFo
             aIter = aEnd;
         }
     }
-    aReadLock.unlock();
     /* } SAFE */
 
     return bRet;
 }
 
-void DropTargetListener::implts_OpenFile( const String& rFilePath )
+void OpenFileDropTargetListener::implts_OpenFile( const String& rFilePath )
 {
     OUString aFileURL;
     if ( !::utl::LocalFileHelper::ConvertPhysicalNameToURL( rFilePath, aFileURL ) )
@@ -210,11 +205,11 @@ void DropTargetListener::implts_OpenFile( const String& rFilePath )
 
     // open file
     /* SAFE { */
-    ReadGuard aReadLock(m_aLock);
+    SolarMutexGuard aGuard;
+
     css::uno::Reference< css::frame::XFrame >         xTargetFrame( m_xTargetFrame.get(), css::uno::UNO_QUERY );
     css::uno::Reference< css::util::XURLTransformer > xParser     ( css::util::URLTransformer::create(m_xContext) );
-    aReadLock.unlock();
-    /* } SAFE */
+
     if (xTargetFrame.is() && xParser.is())
     {
         css::util::URL aURL;
@@ -226,8 +221,7 @@ void DropTargetListener::implts_OpenFile( const String& rFilePath )
         if ( xDispatcher.is() )
             xDispatcher->dispatch( aURL, css::uno::Sequence < css::beans::PropertyValue >() );
     }
-}
-
+    /* } SAFE */
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

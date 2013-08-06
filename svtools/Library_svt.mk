@@ -179,6 +179,7 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/misc/itemdel \
     svtools/source/misc/langtab \
     svtools/source/misc/langhelp \
+    svtools/source/misc/openfiledroptargetlistener \
     svtools/source/misc/sampletext \
     svtools/source/misc/stringtransfer \
     svtools/source/misc/svtaccessiblefactory \
