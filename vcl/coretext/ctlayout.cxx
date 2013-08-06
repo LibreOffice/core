@@ -81,7 +81,6 @@ CTLayout::CTLayout( const CTTextStyle* pTextStyle )
 ,   mfCachedWidth( -1 )
 ,   mfBaseAdv( 0 )
 {
-    CFRetain( mpTextStyle->GetStyleDict() );
 }
 
 // -----------------------------------------------------------------------
@@ -92,7 +91,6 @@ CTLayout::~CTLayout()
         CFRelease( mpCTLine );
     if( mpAttrString )
         CFRelease( mpAttrString );
-    CFRelease( mpTextStyle->GetStyleDict() );
 }
 
 // -----------------------------------------------------------------------
@@ -115,6 +113,7 @@ bool CTLayout::LayoutText( ImplLayoutArgs& rArgs )
 
     // create the CoreText line layout
     CFStringRef aCFText = CFStringCreateWithCharactersNoCopy( NULL, rArgs.mpStr + mnMinCharPos, mnCharCount, kCFAllocatorNull );
+    // CFAttributedStringCreate copies the attribues parameter
     mpAttrString = CFAttributedStringCreate( NULL, aCFText, mpTextStyle->GetStyleDict() );
     mpCTLine = CTLineCreateWithAttributedString( mpAttrString );
     CFRelease( aCFText);
