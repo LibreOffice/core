@@ -1602,7 +1602,6 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
             "priv.RDB$PRIVILEGE, "      // 4
             "priv.RDB$GRANT_OPTION "    // 5 is Grantable
             "FROM RDB$USER_PRIVILEGES priv ");
-    // "WHERE (priv.RDB$USER = ?????????)"
 
     if (!sTableNamePattern.isEmpty())
     {
@@ -1624,45 +1623,25 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
     uno::Reference< XRow > xRow( rs, UNO_QUERY_THROW );
     ODatabaseMetaDataResultSet::ORows aResults;
 
+    ODatabaseMetaDataResultSet::ORow aRow(8);
+    aRow[0] = new ORowSetValueDecorator(); // Unused
+    aRow[1] = new ORowSetValueDecorator(); // TABLE_CAT unsupported
+    aRow[2] = new ORowSetValueDecorator(); // TABLE_SCHEM unussported.
+
     while( rs->next() )
     {
-        // TODO: avoid reallocations
-        ODatabaseMetaDataResultSet::ORow aCurrentRow;
-        aCurrentRow.reserve(7);
-
-        // 1. TABLE_CAT
-        aCurrentRow.push_back(new ORowSetValueDecorator());
-        // 2. TABLE_SCHEM
-        aCurrentRow.push_back(new ORowSetValueDecorator());
-
         // 3. TABLE_NAME
         {
             OUString sTableName = xRow->getString(1);
             sanitizeIdentifier(sTableName);
-            aCurrentRow.push_back(new ORowSetValueDecorator(sTableName));
+            aRow[3] = new ORowSetValueDecorator(sTableName);
         }
-        // 4. GRANTOR
-        {
-            OUString sGrantor = xRow->getString(2);
-            aCurrentRow.push_back(new ORowSetValueDecorator(sGrantor));
-        }
-        // 5. GRANTEE
-        {
-            OUString sGrantee = xRow->getString(3);
-            aCurrentRow.push_back(new ORowSetValueDecorator(sGrantee));
-        }
-        // 6. Privilege
-        {
-            OUString sPrivilege = xRow->getString(4);
-            aCurrentRow.push_back(new ORowSetValueDecorator(sPrivilege));
-        }
-        // 7. IS_GRANTABLE
-        {
-            sal_Bool bIsGrantable = xRow->getBoolean(5);
-            aCurrentRow.push_back(new ORowSetValueDecorator(bIsGrantable));
-        }
+        aRow[4] = new ORowSetValueDecorator(xRow->getString(2)); // 4. GRANTOR
+        aRow[5] = new ORowSetValueDecorator(xRow->getString(3)); // 5. GRANTEE
+        aRow[6] = new ORowSetValueDecorator(xRow->getString(4)); // 6. Privilege
+        aRow[7] = new ORowSetValueDecorator(xRow->getBoolean(5)); // 7. Is Grantable
 
-        aResults.push_back(aCurrentRow);
+        aResults.push_back(aRow);
     }
 
     pResultSet->setRows( aResults );
