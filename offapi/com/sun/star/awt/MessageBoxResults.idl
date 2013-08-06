@@ -22,11 +22,11 @@
 
 module com {  module sun {  module star {  module awt {
 
-/** These constants are used to specify a result of executing a <type>XMessageBox</type>.
+/** These constants are used to specify a result of executing a XMessageBox.
  */
 constants MessageBoxResults
 {
-    /** The user canceled the <type>XMessageBox</type>, by pressing "Cancel" or "Abort" button.
+    /** The user canceled the XMessageBox, by pressing "Cancel" or "Abort" button.
      */
     const short CANCEL  = 0;
 
