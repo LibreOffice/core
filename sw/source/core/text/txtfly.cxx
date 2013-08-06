@@ -1342,6 +1342,9 @@ SwRect SwTxtFly::AnchoredObjToRect( const SwAnchoredObject* pAnchoredObj,
 // Wrap only on sides with at least 2cm space for the text
 #define TEXT_MIN 1134
 
+// MS Word wraps on sides with even less space (value guessed).
+#define TEXT_MIN_SMALL 300
+
 // Wrap on both sides up to a frame width of 1.5cm
 #define FRAME_MAX 850
 
@@ -1398,9 +1401,12 @@ SwSurround SwTxtFly::_GetSurroundForTextWrap( const SwAnchoredObject* pAnchoredO
                 else
                     nRight = 0;
             }
-            if( nLeft < TEXT_MIN )
+            const int textMin = GetMaster()->GetNode()
+                ->getIDocumentSettingAccess()->get(IDocumentSettingAccess::SURROUND_TEXT_WRAP_SMALL )
+                ? TEXT_MIN_SMALL : TEXT_MIN;
+            if( nLeft < textMin )
                 nLeft = 0;
-            if( nRight < TEXT_MIN )
+            if( nRight < textMin )
                 nRight = 0;
             if( nLeft )
                 eSurroundForTextWrap = nRight ? SURROUND_PARALLEL : SURROUND_LEFT;

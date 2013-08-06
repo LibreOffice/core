@@ -580,6 +580,7 @@ private:
     bool mbClippedPictures;
     bool mbBackgroundParaOverDrawings;
     bool mbTabOverMargin;
+    bool mbSurroundTextWrapSmall;
 
     bool mbLastBrowseMode                           : 1;
 

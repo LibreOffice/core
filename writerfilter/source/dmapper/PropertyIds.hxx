@@ -295,6 +295,7 @@ enum PropertyIds
         ,PROP_SHADOW_FORMAT
         ,PROP_RELATIVE_WIDTH
         ,PROP_IS_WIDTH_RELATIVE
+        ,PROP_SURROUND_TEXT_WRAP_SMALL
     };
 struct PropertyNameSupplier_Impl;
 class PropertyNameSupplier
