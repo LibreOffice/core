@@ -288,7 +288,7 @@ public:
     static OUString ToOUString( const ScfUInt16Vec& rBuffer, sal_Int32 nStart = 0, sal_Int32 nLength = -1 );
     static OUString ToOUString( const String& s );
     static OUString ToOUString( ScDocument& rDocument, const ScAddress& rAddress,
-                                       ScTokenArray* pTokenArray, const ScCompiler::OpCodeMapPtr & xOpCodeMap );
+                                const ScTokenArray* pTokenArray, const ScCompiler::OpCodeMapPtr & xOpCodeMap );
     static OUString ToOUString( const XclExpString& s );
     static const char* ToPsz( bool b );
 

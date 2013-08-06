@@ -2987,10 +2987,30 @@ void ScFormulaCell::SetChanged(bool b)
     bChanged = b;
 }
 
-sal_uInt8       ScFormulaCell::GetMatrixFlag() const                   { return cMatrixFlag; }
-ScTokenArray*   ScFormulaCell::GetCode() const                         { return pCode; }
-bool            ScFormulaCell::IsRunning() const                       { return bRunning; }
-void            ScFormulaCell::SetRunning( bool bVal )                 { bRunning = bVal; }
+sal_uInt8 ScFormulaCell::GetMatrixFlag() const
+{
+    return cMatrixFlag;
+}
+
+ScTokenArray* ScFormulaCell::GetCode()
+{
+    return pCode;
+}
+
+const ScTokenArray* ScFormulaCell::GetCode() const
+{
+    return pCode;
+}
+
+bool ScFormulaCell::IsRunning() const
+{
+    return bRunning;
+}
+
+void ScFormulaCell::SetRunning( bool bVal )
+{
+    bRunning = bVal;
+}
 
 void ScFormulaCell::CompileDBFormula()
 {

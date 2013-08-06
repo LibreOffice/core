@@ -978,7 +978,7 @@ void lcl_AddCode( ScTokenArray& rArr, const ScFormulaCell* pCell )
 {
     rArr.AddOpCode(ocOpen);
 
-    ScTokenArray* pCode = pCell->GetCode();
+    ScTokenArray* pCode = const_cast<ScFormulaCell*>(pCell)->GetCode();
     if (pCode)
     {
         const formula::FormulaToken* pToken = pCode->First();

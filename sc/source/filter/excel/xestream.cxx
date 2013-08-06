@@ -845,10 +845,11 @@ OUString XclXmlUtils::ToOUString( const String& s )
     return OUString( s.GetBuffer(), s.Len() );
 }
 
-OUString XclXmlUtils::ToOUString( ScDocument& rDocument, const ScAddress& rAddress,
-        ScTokenArray* pTokenArray, const FormulaCompiler::OpCodeMapPtr & xOpCodeMap )
+OUString XclXmlUtils::ToOUString(
+    ScDocument& rDocument, const ScAddress& rAddress, const ScTokenArray* pTokenArray,
+    const FormulaCompiler::OpCodeMapPtr & xOpCodeMap )
 {
-    ScCompiler aCompiler( &rDocument, rAddress, *pTokenArray);
+    ScCompiler aCompiler( &rDocument, rAddress, const_cast<ScTokenArray&>(*pTokenArray));
     if (xOpCodeMap)
     {
         aCompiler.SetFormulaLanguage( xOpCodeMap );
