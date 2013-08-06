@@ -86,7 +86,7 @@ static void CheckParentsOnDelete( SbxObject* pObj, SbxArray* p )
         {
             pObj->EndListening( rRef->GetBroadcaster(), sal_True );
         }
-        // Did the element have more then one reference and still a Listener?
+        // does the element have more then one reference and still a Listener?
         if( rRef->GetRefCount() > 1 )
         {
             rRef->SetParent( NULL );
@@ -194,7 +194,7 @@ SbxVariable* SbxObject::FindUserData( sal_uInt32 nData )
         SbxObject* pCur = this;
         while( !pRes && pCur->pParent )
         {
-            // I myself was already searched through!
+            // I myself was already searched!
             sal_uInt16 nOwn = pCur->GetFlags();
             pCur->ResetFlag( SBX_EXTSEARCH );
             // I search already global!
@@ -256,9 +256,8 @@ SbxVariable* SbxObject::Find( const OUString& rName, SbxClassType t )
             pRes = pArray->Find( rName, t );
         }
     }
-    // ExtendedsSearch in the Object-Array?
-    // For objects and DontCare is the array of objects already
-    // searched through
+    // Extended Search in the Object-Array?
+    // For objects and DontCare the array of objects has already been searched
     if( !pRes && ( t == SbxCLASS_METHOD || t == SbxCLASS_PROPERTY ) )
         pRes = pObjs->Find( rName, t );
     // Search in the parents?
@@ -267,7 +266,7 @@ SbxVariable* SbxObject::Find( const OUString& rName, SbxClassType t )
         SbxObject* pCur = this;
         while( !pRes && pCur->pParent )
         {
-            // I myself was already searched through!
+            // I myself was already searched!
             sal_uInt16 nOwn = pCur->GetFlags();
             pCur->ResetFlag( SBX_EXTSEARCH );
             // I search already global!
@@ -292,7 +291,7 @@ SbxVariable* SbxObject::Find( const OUString& rName, SbxClassType t )
     return pRes;
 }
 
-// Abbreviated version: The parent-string will be searched through
+// Abbreviated version: The parent-string will be searched
 // The whole thing recursive, because Call() might be overloaded
 // Qualified names are allowed
 
@@ -301,7 +300,7 @@ sal_Bool SbxObject::Call( const OUString& rName, SbxArray* pParam )
     SbxVariable* pMeth = FindQualified( rName, SbxCLASS_DONTCARE);
     if( pMeth && pMeth->ISA(SbxMethod) )
     {
-        // FindQualified() might have been stroked!
+        // FindQualified() might have struck already!
         if( pParam )
         {
             pMeth->SetParameters( pParam );
@@ -336,9 +335,9 @@ void SbxObject::SetDfltProperty( const OUString& rName )
     SetModified( sal_True );
 }
 
-// Search of a already available variable. If she was located,
-// the index will be set, elsewise will be delivered the Count of the Array.
-// In any case it will be delivered the correct Array.
+// Search of an already available variable. If it was located,
+// the index will be set, otherwise the Count of the Array will be returned.
+// In any case the correct Array will be returned.
 
 SbxArray* SbxObject::FindVar( SbxVariable* pVar, sal_uInt16& nArrayIdx )
 {
@@ -618,8 +617,8 @@ static sal_Bool LoadArray( SvStream& rStrm, SbxObject* pThis, SbxArray* pArray )
 
 sal_Bool SbxObject::LoadData( SvStream& rStrm, sal_uInt16 nVer )
 {
-    // Help for the read in of old objects: just TRUE back,
-    // LoadPrivateData() had to set the default status up
+    // Help for the read in of old objects: just return TRUE,
+    // LoadPrivateData() has to set the default status up
     if( !nVer )
     {
         return sal_True;
@@ -629,7 +628,7 @@ sal_Bool SbxObject::LoadData( SvStream& rStrm, sal_uInt16 nVer )
     {
         return sal_False;
     }
-    // If  it contains no alien object, insert ourselves
+    // If it contains no alien object, insert ourselves
     if( aData.eType == SbxOBJECT && !aData.pObj )
     {
         aData.pObj = this;
@@ -734,7 +733,7 @@ OUString SbxObject::GenerateSource( const OUString &rLinePrefix,
             aSource += aPropName;
             aSource += " = ";
 
-            // Display the property value textual
+            // convert the property value to text
             switch ( xProp->GetType() )
             {
             case SbxEMPTY:
@@ -750,7 +749,7 @@ OUString SbxObject::GenerateSource( const OUString &rLinePrefix,
                 break;
 
             default:
-                // miscellaneous, such as e.g.numerary directly
+                // miscellaneous, such as e.g. numbers directly
                 aSource += xProp->GetOUString();
                 break;
             }

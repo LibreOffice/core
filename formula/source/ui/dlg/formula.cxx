@@ -370,7 +370,7 @@ FormulaDlg_Impl::~FormulaDlg_Impl()
 
 void FormulaDlg_Impl::StoreFormEditData(FormEditData* pData)
 {
-    if (pData) // it won't be destroyed over Close;
+    if (pData) // it won't be destroyed via Close
     {
         pData->SetFStart((xub_StrLen)pMEdit->GetSelection().Min());
         pData->SetSelection(pMEdit->GetSelection());
@@ -411,7 +411,7 @@ void FormulaDlg_Impl::PreNotify( NotifyEvent& rNEvt )
 
                 FormEditData* pData = m_pHelper->getFormEditData();
 
-                if (pData && !aTimer.IsActive()) // it won't be destroyed over Close;
+                if (pData && !aTimer.IsActive()) // won't be destroyed via Close
                 {
                     pData->SetUniqueId(aActivWinId);
                 }
@@ -466,7 +466,7 @@ xub_StrLen FormulaDlg_Impl::GetFunctionPos(xub_StrLen nPos)
 {
     const sal_Unicode sep = m_pHelper->getFunctionManager()->getSingleToken(IFunctionManager::eSep);
 
-    xub_StrLen nFuncPos=STRING_NOTFOUND;    //@ Testwise
+    xub_StrLen nFuncPos=STRING_NOTFOUND;
     sal_Bool   bFlag=sal_False;
     String aFormString = m_aFormulaHelper.GetCharClass()->uppercase(pMEdit->GetText());
 
@@ -1878,7 +1878,7 @@ IMPL_LINK_NOARG(FormulaDlg, UpdateFocusHdl)
 {
     FormEditData* pData = m_pImpl->m_pHelper->getFormEditData();
 
-    if (pData) // won't be destroyed over Close;
+    if (pData) // won't be destroyed via Close
     {
         m_pImpl->m_pHelper->setReferenceInput(pData);
         OString nUniqueId(pData->GetUniqueId());

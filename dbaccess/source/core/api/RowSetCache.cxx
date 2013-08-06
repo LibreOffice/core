@@ -1537,7 +1537,7 @@ void ORowSetCache::checkUpdateConditions(sal_Int32 columnIndex)
 sal_Bool ORowSetCache::checkInnerJoin(const ::connectivity::OSQLParseNode *pNode,const Reference< XConnection>& _xConnection,const OUString& _sUpdateTableName)
 {
     sal_Bool bOk = sal_False;
-    if (pNode->count() == 3 &&  // Ausdruck is geklammert
+    if (pNode->count() == 3 &&  // expression in parentheses
         SQL_ISPUNCTUATION(pNode->getChild(0),"(") &&
         SQL_ISPUNCTUATION(pNode->getChild(2),")"))
     {

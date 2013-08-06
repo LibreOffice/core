@@ -646,7 +646,7 @@ void ViewShell::LayoutIdle()
     SET_CURR_SHELL( this );
 
 #ifdef DBG_UTIL
-    // When Test5 has been printed, the IdleFormatter is ended.
+    // If Test5 has been set, the IdleFormatter is disabled.
     if( mpOpt->IsTest5() )
         return;
 #endif
@@ -1022,8 +1022,9 @@ void ViewShell::VisPortChgd( const SwRect &rRect)
         if( !nXDiff && !GetViewOptions()->getBrowseMode() &&
             (!Imp()->HasDrawView() || !Imp()->GetDrawView()->IsGridVisible() ) )
         {
-            //If possible, don't scroll the  pastures/meadows (?, German Wiese)
-            //Also limit the left and right side of the scroll range to the pages.
+            // If possible, don't scroll the application background
+            // (PaintDesktop).  Also limit the left and right side of
+            // the scroll range to the pages.
             const SwPageFrm *pPage = (SwPageFrm*)GetLayout()->Lower();  //swmod 071108//swmod 071225
             if ( pPage->Frm().Top() > pOldPage->Frm().Top() )
                 pPage = (SwPageFrm*)pOldPage;
@@ -1384,7 +1385,7 @@ void ViewShell::PaintDesktop( const SwRect &rRect )
     //Catch exceptions, so that it doesn't look so surprising.
     //Can e.g. happen during Idle.
     //Unfortunately we must at any rate Paint the rectangles next to the pages,
-    //as these are left open at VisPortChgd.
+    //as these are not painted at VisPortChgd.
     bool bBorderOnly = false;
     const SwRootFrm *pRoot = GetLayout();//swmod 080305
     if ( rRect.Top() > pRoot->Frm().Bottom() )

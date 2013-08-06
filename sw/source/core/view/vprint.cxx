@@ -376,12 +376,12 @@ SwDoc * ViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
         pPage->GetPageDesc()->GetName() ) : &pPrtDoc->GetPageDesc( (sal_uInt16)0 );
 
     if( !pFESh->IsTableMode() && pActCrsr->HasMark() )
-    {   // Am letzten Absatz die Absatzattribute richten:
+    {   // Tweak paragraph attributes of last paragraph
         SwNodeIndex aNodeIdx( *pPrtDoc->GetNodes().GetEndOfContent().StartOfSectionNode() );
         SwTxtNode* pTxtNd = pPrtDoc->GetNodes().GoNext( &aNodeIdx )->GetTxtNode();
         SwCntntNode *pLastNd =
             pActCrsr->GetCntntNode( (*pActCrsr->GetMark()) <= (*pActCrsr->GetPoint()) );
-        // Hier werden die Absatzattribute des ersten Absatzes uebertragen
+        // copy the paragraph attributes of the first paragraph
         if( pLastNd && pLastNd->IsTxtNode() )
             ((SwTxtNode*)pLastNd)->CopyCollFmt( *pTxtNd );
     }
@@ -389,7 +389,7 @@ SwDoc * ViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
     // fill it with the selected content
     pFESh->Copy( pPrtDoc );
 
-    // set the page template at the first paragraph
+    // set the page style at the first paragraph
     {
         SwNodeIndex aNodeIdx( *pPrtDoc->GetNodes().GetEndOfContent().StartOfSectionNode() );
         SwCntntNode* pCNd = pPrtDoc->GetNodes().GoNext( &aNodeIdx ); // go to 1st ContentNode
@@ -552,7 +552,6 @@ void ViewShell::PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, const SwPrintDat
         // document because the thumbnail creation will not trigger a complete
         // formatting of the document.
 
-        //#39275# now Meyer wants again a Clipping
         pOleOut->Push( PUSH_CLIPREGION );
         pOleOut->IntersectClipRegion( aSwRect.SVRect() );
         pSh->GetLayout()->Paint( aSwRect );

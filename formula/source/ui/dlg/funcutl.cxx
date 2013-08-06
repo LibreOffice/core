@@ -77,8 +77,8 @@ void ValWnd::SetValue( const OUString& rStrVal )
     if ( aStrValue != rStrVal )
     {
         aStrValue = rStrVal;
-        DrawRect( aRectOut );   // alten Text loeschen
-        Paint( aRectOut );      // and neu malen
+        DrawRect( aRectOut );   // delete old text
+        Paint( aRectOut );      // repaint
     }
 }
 

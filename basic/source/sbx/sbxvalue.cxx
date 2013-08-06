@@ -151,13 +151,13 @@ SbxValue& SbxValue::operator=( const SbxValue& r )
             // Readout the content of the variables
             SbxValues aNew;
             if( IsFixed() )
-                // firm: then the type had to match
+                // then the type has to match
                 aNew.eType = aData.eType;
             else if( r.IsFixed() )
-                // Source firm: take over the type
+                // Source fixed: copy the type
                 aNew.eType = SbxDataType( r.aData.eType & 0x0FFF );
             else
-                // both variant: then it is equal
+                // both variant: then don't care
                 aNew.eType = SbxVARIANT;
             if( r.Get( aNew ) )
                 Put( aNew );
@@ -252,9 +252,9 @@ SbxValue* SbxValue::TheRealValue( sal_Bool bObjInObjError ) const
 
                 // If this is an object and contains itself,
                 // we cannot access on it
-                // The old condition to set an error
-                // is not correct, because e.g. a regular variant variable with an object
-                // could be affected thereof, if another value should be assigned.
+                // The old condition to set an error is not correct,
+                // because e.g. a regular variant variable with an object
+                // could be affected if another value should be assigned.
                 // Therefore with flag.
                 if( bObjInObjError && !pDflt &&
                     ((SbxValue*) pObj)->aData.eType == SbxOBJECT &&
@@ -295,7 +295,7 @@ SbxValue* SbxValue::TheRealValue( sal_Bool bObjInObjError ) const
                     break;
                 }
             }
-            // Elsewise guess a SbxValue
+            // Otherwise guess a SbxValue
             SbxValue* pVal = PTR_CAST(SbxValue,p->aData.pObj);
             if( pVal )
                 p = pVal;
@@ -321,8 +321,7 @@ sal_Bool SbxValue::Get( SbxValues& rRes ) const
     }
     else
     {
-        // If there was asked for an object or a VARIANT, don't search
-        // the real values
+        // If an object or a VARIANT is requested, don't search the real values
         SbxValue* p = (SbxValue*) this;
         if( rRes.eType != SbxOBJECT && rRes.eType != SbxVARIANT )
             p = TheRealValue();
@@ -475,8 +474,7 @@ sal_Bool SbxValue::Put( const SbxValues& rVal )
         SetError( SbxERR_NOTIMP );
     else
     {
-        // If there was asked for an object, don't search
-        // the real values
+        // If an object is requested, don't search the real values
         SbxValue* p = this;
         if( rVal.eType != SbxOBJECT )
             p = TheRealValue( sal_False );  // Don't allow an error here
@@ -530,10 +528,10 @@ sal_Bool SbxValue::Put( const SbxValues& rVal )
                         // Delete only the value part!
                         p->SbxValue::Clear();
 
-                        // real allocation
+                        // real assignment
                         p->aData.pObj = rVal.pObj;
 
-                        // if necessary cont in Ref-Count
+                        // if necessary increment Ref-Count
                         if( p->aData.pObj && p->aData.pObj != p )
                         {
                             if ( p != this )
@@ -577,7 +575,7 @@ sal_Bool SbxValue::Put( const SbxValues& rVal )
 // From 1996-03-28:
 // Method to execute a pretreatment of the strings at special types.
 // In particular necessary for BASIC-IDE, so that
-// the output in the Watch-Window can be writen back with PutStringExt,
+// the output in the Watch-Window can be written back with PutStringExt,
 // if Float were declared with ',' as the decimal separator or BOOl
 // explicit with "TRUE" or "FALSE".
 // Implementation in ImpConvStringExt (SBXSCAN.CXX)
@@ -595,15 +593,15 @@ sal_Bool SbxValue::PutStringExt( const OUString& r )
     aRes.eType = SbxSTRING;
 
     // Only if really something was converted, take the copy,
-    // elsewise take the original (Unicode remain)
+    // otherwise take the original (Unicode remains)
     sal_Bool bRet;
     if( ImpConvStringExt( aStr, eTargetType ) )
         aRes.pOUString = (OUString*)&aStr;
     else
         aRes.pOUString = (OUString*)&r;
 
-    // #34939: Set a Fixed-Flag at Strings. which contain a number, and
-    // if this has a Num-Type, so that the type will not be changed
+    // #34939: For Strings which contain a number, and if this has a Num-Type,
+    // set a Fixed flag so that the type will not be changed
     sal_uInt16 nFlags_ = GetFlags();
     if( ( eTargetType >= SbxINTEGER && eTargetType <= SbxCURRENCY ) ||
         ( eTargetType >= SbxCHAR && eTargetType <= SbxUINT ) ||
@@ -618,8 +616,8 @@ sal_Bool SbxValue::PutStringExt( const OUString& r )
     Put( aRes );
     bRet = sal_Bool( !IsError() );
 
-    // If it throwed an error with FIXED, set it back
-    // (UI-Action should not cast an error, but only fail)
+    // If FIXED resulted in an error, set it back
+    // (UI-Action should not result in an error, but simply fail)
     if( !bRet )
         ResetError();
 
@@ -779,7 +777,7 @@ sal_Bool SbxValue::SetType( SbxDataType t )
         return sal_True;
     if( ( t & 0x0FFF ) == SbxVARIANT )
     {
-        // Trial to set the data type to Variant
+        // Try to set the data type to Variant
         ResetFlag( SBX_FIXED );
         if( IsFixed() )
         {
@@ -844,7 +842,7 @@ sal_Bool SbxValue::Convert( SbxDataType eTo )
         else
             return sal_True;
     }
-    // Converting from zero doesn't work. Once zero, always zero!
+    // Converting from null doesn't work. Once null, always null!
     if( aData.eType == SbxNULL )
     {
         SetError( SbxERR_CONVERSION ); return sal_False;
@@ -887,7 +885,7 @@ sal_Bool SbxValue::Compute( SbxOperator eOp, const SbxValue& rOp )
         SetError( SbxERR_PROP_READONLY );
     else if( !rOp.CanRead() )
         SetError( SbxERR_PROP_WRITEONLY );
-    // Special rule 1: If one operand is zero, the result is zero
+    // Special rule 1: If one operand is null, the result is null
     else if( eThisType == SbxNULL || eOpType == SbxNULL )
         SetType( SbxNULL );
     // Special rule 2: If the operand is Empty, the result is the 2. operand
@@ -895,7 +893,7 @@ sal_Bool SbxValue::Compute( SbxOperator eOp, const SbxValue& rOp )
     && !bVBAInterop
     )
         *this = rOp;
-    // 1996-2-13: Don't test already before Get upon SbxEMPTY
+    // 1996-2-13: Don't test for SbxEMPTY before Get
     else
     {
         SbxValues aL, aR;
@@ -1263,7 +1261,7 @@ sal_Bool SbxValue::Compare( SbxOperator eOp, const SbxValue& rOp ) const
     }
     else if( GetType() == SbxEMPTY && rOp.GetType() == SbxEMPTY )
         bRes = !bVBAInterop ? sal_True : ( eOp == SbxEQ ? sal_True : sal_False );
-    // Special rule 1: If an operand is zero, the result is FALSE
+    // Special rule 1: If an operand is null, the result is FALSE
     else if( GetType() == SbxNULL || rOp.GetType() == SbxNULL )
         bRes = sal_False;
     // Special rule 2: If both are variant and one is numeric
@@ -1304,7 +1302,7 @@ sal_Bool SbxValue::Compare( SbxOperator eOp, const SbxValue& rOp ) const
             }
         }
         // From 1995-12-19: If SbxSINGLE participate, then convert to SINGLE,
-        //              elsewise it shows a numeric error
+        //              otherwise it shows a numeric error
         else if( GetType() == SbxSINGLE || rOp.GetType() == SbxSINGLE )
         {
             aL.eType = aR.eType = SbxSINGLE;
@@ -1568,7 +1566,7 @@ sal_Bool SbxValue::LoadData( SvStream& r, sal_uInt16 )
             case SbxLONG:
                 r << aData.nLong; break;
             case SbxDATE:
-                // #49935: Save as double, elsewise an error during the read in
+                // #49935: Save as double, otherwise an error during the read in
                 ((SbxValue*)this)->aData.eType = (SbxDataType)( ( nType & 0xF000 ) | SbxDOUBLE );
                 write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(r, GetCoreString(), RTL_TEXTENCODING_ASCII_US);
                 ((SbxValue*)this)->aData.eType = (SbxDataType)nType;

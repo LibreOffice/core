@@ -25,7 +25,7 @@
 #include <rtl/ustrbuf.hxx>
 
 // The conversion of an item onto String was handled via the Put-Methods
-// of the several data types to avoid double code.
+// of the several data types to avoid duplicated code.
 
 OUString ImpGetString( const SbxValues* p )
 {
@@ -98,7 +98,7 @@ OUString ImpGetString( const SbxValues* p )
             break;
         }
         case SbxERROR:
-            // Here will be created the String "Error n"
+            // Here the String "Error n" is generated
             aRes = SbxRes( STRING_ERRORMSG );
             aRes += OUString( p->nUShort ); break;
         case SbxDATE:

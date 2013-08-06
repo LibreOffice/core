@@ -179,7 +179,7 @@ ViewShell::ViewShell( SwDoc& rDocument, Window *pWindow,
     const bool bIsDocModified( mpDoc->IsModified() );
     mpDoc->acquire();
     pOutput = mpOut;
-    Init( pNewOpt );    //verstellt ggf. das Outdev (InitPrt())
+    Init( pNewOpt );    // may change the Outdev (InitPrt())
     mpOut = pOutput;
 
     // OD 28.03.2003 #108470# - initialize print preview layout after layout

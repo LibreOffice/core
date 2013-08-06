@@ -2813,7 +2813,7 @@ SwFlyFrmFmt* SwWW8ImplReader::ConvertDrawTextToFly(SdrObject* &rpObject,
         // insert the text from nStartCp to nEndCp.
         //
         // More attributes can be used in a frame compared to the
-        // Edit-Enging, and it can contain field, OLEs or graphics...
+        // Edit-Engine, and it can contain field, OLEs or graphics...
         Rectangle aInnerDist(pRecord->nDxTextLeft, pRecord->nDyTextTop,
             pRecord->nDxTextRight, pRecord->nDyTextBottom);
 
@@ -2863,7 +2863,7 @@ SwFlyFrmFmt* SwWW8ImplReader::ConvertDrawTextToFly(SdrObject* &rpObject,
                 (((sal_uLong)pRecord->aTextId.nTxBxS) << 16) +
                 pRecord->aTextId.nSequence, 0, pRetFrmFmt);
 
-            // The Kontakt object has to be inserted into the draw page, so
+            // The Contact object has to be inserted into the draw page, so
             // SwWW8ImplReader::LoadDoc1() can determine the z-order.
             if (!rpOurNewObject->IsInserted())
             {
