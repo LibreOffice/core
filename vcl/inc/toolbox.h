@@ -112,6 +112,9 @@ struct ImplToolItem
     // returns sal_True if the toolbar item is currently clipped, which can happen for docked toolbars
     sal_Bool IsClipped() const;
 
+    // returns sal_True if the toolbar item is currently hidden i.e. they are unchecked in the toolbar Customize menu
+    sal_Bool IsItemHidden() const;
+
 private:
     void init(sal_uInt16 nItemId, ToolBoxItemBits nItemBits, sal_Bool bEmptyBtn);
 };
