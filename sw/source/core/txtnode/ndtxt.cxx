@@ -2894,8 +2894,8 @@ long SwTxtNode::GetLeftMarginForTabCalculation() const
 }
 
 static void
-Replace0xFF(SwTxtNode const& rNode, XubString& rTxt, xub_StrLen& rTxtStt,
-            xub_StrLen nEndPos, sal_Bool const bExpandFlds)
+Replace0xFF(SwTxtNode const& rNode, OUStringBuffer & rTxt, sal_Int32 & rTxtStt,
+            sal_Int32 nEndPos, sal_Bool const bExpandFlds)
 {
     if (rNode.GetpSwpHints())
     {
@@ -2903,8 +2903,8 @@ Replace0xFF(SwTxtNode const& rNode, XubString& rTxt, xub_StrLen& rTxtStt,
         for( int nSrchIter = 0; 2 > nSrchIter; ++nSrchIter,
                                 cSrchChr = CH_TXTATR_INWORD )
         {
-            xub_StrLen nPos = rTxt.Search( cSrchChr );
-            while( STRING_NOTFOUND != nPos && nPos < nEndPos )
+            sal_Int32 nPos = rTxt.indexOf(cSrchChr);
+            while (-1 != nPos && nPos < nEndPos)
             {
                 const SwTxtAttr* const pAttr =
                     rNode.GetTxtAttrForCharAt(rTxtStt + nPos);
@@ -2913,25 +2913,25 @@ Replace0xFF(SwTxtNode const& rNode, XubString& rTxt, xub_StrLen& rTxtStt,
                     switch( pAttr->Which() )
                     {
                     case RES_TXTATR_FIELD:
-                        rTxt.Erase( nPos, 1 );
+                        rTxt.remove(nPos, 1);
                         if( bExpandFlds )
                         {
-                            const XubString aExpand(
+                            const OUString aExpand(
                                 static_cast<SwTxtFld const*>(pAttr)->GetFld()
                                     .GetFld()->ExpandField(true));
-                            rTxt.Insert( aExpand, nPos );
-                            nPos = nPos + aExpand.Len();
-                            nEndPos = nEndPos + aExpand.Len();
-                            rTxtStt = rTxtStt - aExpand.Len();
+                            rTxt.insert(nPos, aExpand);
+                            nPos = nPos + aExpand.getLength();
+                            nEndPos = nEndPos + aExpand.getLength();
+                            rTxtStt = rTxtStt - aExpand.getLength();
                         }
                         ++rTxtStt;
                         break;
                     case RES_TXTATR_FTN:
-                        rTxt.Erase( nPos, 1 );
+                        rTxt.remove(nPos, 1);
                         if( bExpandFlds )
                         {
                             const SwFmtFtn& rFtn = pAttr->GetFtn();
-                            XubString sExpand;
+                            OUString sExpand;
                             if( rFtn.GetNumStr().Len() )
                                 sExpand = rFtn.GetNumStr();
                             else if( rFtn.IsEndNote() )
@@ -2940,21 +2940,21 @@ Replace0xFF(SwTxtNode const& rNode, XubString& rTxt, xub_StrLen& rTxtStt,
                             else
                                 sExpand = rNode.GetDoc()->GetFtnInfo().aFmt.
                                                 GetNumStr( rFtn.GetNumber() );
-                            rTxt.Insert( sExpand, nPos );
-                            nPos = nPos + sExpand.Len();
-                            nEndPos = nEndPos + sExpand.Len();
-                            rTxtStt = rTxtStt - sExpand.Len();
+                            rTxt.insert(nPos, sExpand);
+                            nPos = nPos + sExpand.getLength();
+                            nEndPos = nEndPos + sExpand.getLength();
+                            rTxtStt = rTxtStt - sExpand.getLength();
                         }
                         ++rTxtStt;
                         break;
                     default:
-                        rTxt.Erase( nPos, 1 );
+                        rTxt.remove(nPos, 1);
                         ++rTxtStt;
                     }
                 }
                 else
                     ++nPos, ++nEndPos;
-                nPos = rTxt.Search( cSrchChr, nPos );
+                nPos = rTxt.indexOf(cSrchChr, nPos);
             }
         }
     }
@@ -2971,10 +2971,10 @@ OUString SwTxtNode::GetExpandTxt(  const xub_StrLen nIdx,
                                    const bool bAddSpaceAfterListLabelStr,
                                    const bool bWithSpacesForLevel ) const
 {
-    XubString aTxt(
+    OUStringBuffer aTxt(
         (STRING_LEN == nLen) ? GetTxt().copy(nIdx) : GetTxt().copy(nIdx, nLen));
-    xub_StrLen nTxtStt = nIdx;
-    Replace0xFF(*this, aTxt, nTxtStt, aTxt.Len(), true);
+    sal_Int32 nTxtStt = nIdx;
+    Replace0xFF(*this, aTxt, nTxtStt, aTxt.getLength(), true);
     if( bWithNum )
     {
         XubString aListLabelStr = GetNumString();
@@ -2983,9 +2983,9 @@ OUString SwTxtNode::GetExpandTxt(  const xub_StrLen nIdx,
             if ( bAddSpaceAfterListLabelStr )
             {
                 const sal_Unicode aSpace = ' ';
-                aTxt.Insert( aSpace, 0 );
+                aTxt.insert(0, aSpace);
             }
-            aTxt.Insert( GetNumString(), 0 );
+            aTxt.insert(0, GetNumString());
         }
     }
 
@@ -2994,12 +2994,12 @@ OUString SwTxtNode::GetExpandTxt(  const xub_StrLen nIdx,
         const sal_Unicode aSpace = ' ';
         for (int nLevel = GetActualListLevel(); nLevel > 0; --nLevel)
         {
-            aTxt.Insert( aSpace , 0 );
-            aTxt.Insert( aSpace , 0 );
+            aTxt.insert(0, aSpace);
+            aTxt.insert(0, aSpace);
         }
     }
 
-    return aTxt;
+    return aTxt.makeStringAndClear();
 }
 
 sal_Bool SwTxtNode::GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx,
@@ -3354,9 +3354,11 @@ OUString SwTxtNode::GetRedlineTxt( xub_StrLen nIdx, xub_StrLen nLen,
         }
     }
 
-    XubString aTxt(nLen > GetTxt().getLength() ? GetTxt().copy(nIdx) : GetTxt().copy(nIdx, nLen));
+    OUStringBuffer aTxt((nLen > GetTxt().getLength())
+                ? GetTxt().copy(nIdx)
+                : GetTxt().copy(nIdx, nLen));
 
-    xub_StrLen nTxtStt = nIdx, nIdxEnd = nIdx + aTxt.Len();
+    sal_Int32 nTxtStt = nIdx, nIdxEnd = nIdx + aTxt.getLength();
     for( sal_uInt16 n = 0; n < aRedlArr.size(); n += 2 )
     {
         xub_StrLen nStt = aRedlArr[ n ], nEnd = aRedlArr[ n+1 ];
@@ -3366,18 +3368,18 @@ OUString SwTxtNode::GetRedlineTxt( xub_StrLen nIdx, xub_StrLen nLen,
             if( nStt < nIdx ) nStt = nIdx;
             if( nIdxEnd < nEnd ) nEnd = nIdxEnd;
             xub_StrLen nDelCnt = nEnd - nStt;
-            aTxt.Erase( nStt - nTxtStt, nDelCnt );
+            aTxt.remove(nStt - nTxtStt, nDelCnt);
             Replace0xFF(*this, aTxt, nTxtStt, nStt - nTxtStt, bExpandFlds);
             nTxtStt = nTxtStt + nDelCnt;
         }
         else if( nStt >= nIdxEnd )
             break;
     }
-    Replace0xFF(*this, aTxt, nTxtStt, aTxt.Len(), bExpandFlds);
+    Replace0xFF(*this, aTxt, nTxtStt, aTxt.getLength(), bExpandFlds);
 
     if( bWithNum )
-        aTxt.Insert( GetNumString(), 0 );
-    return aTxt;
+        aTxt.insert(0, GetNumString());
+    return aTxt.makeStringAndClear();
 }
 
 /*************************************************************************
