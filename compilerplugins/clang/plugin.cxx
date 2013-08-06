@@ -62,9 +62,9 @@ bool Plugin::ignoreLocation( SourceLocation loc )
     return true;
     }
 
-void Plugin::registerPlugin( Plugin* (*create)( CompilerInstance&, Rewriter& ), const char* optionName, bool isRewriter )
+void Plugin::registerPlugin( Plugin* (*create)( CompilerInstance&, Rewriter& ), const char* optionName, bool isRewriter, bool isPPCallback )
     {
-    PluginHandler::registerPlugin( create, optionName, isRewriter );
+    PluginHandler::registerPlugin( create, optionName, isRewriter, isPPCallback );
     }
 
 unordered_map< const Stmt*, const Stmt* > Plugin::parents;

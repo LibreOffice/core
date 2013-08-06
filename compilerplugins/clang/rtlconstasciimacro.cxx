@@ -39,6 +39,7 @@ class RtlConstAsciiMacro
         virtual void MacroExpands( const Token& macro, const MacroDirective* directive,
             SourceRange range, const MacroArgs* args ) override;
 #endif
+        enum { isPPCallback = true };
     private:
         map< SourceLocation, SourceLocation > expansions; // start location -> end location
         bool searchingForString;

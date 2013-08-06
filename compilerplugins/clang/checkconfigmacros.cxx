@@ -49,6 +49,7 @@ class CheckConfigMacros
         virtual void Defined( const Token& macroToken, const MacroDirective* info, SourceRange Range ) override;
 #endif
 #endif
+        enum { isPPCallback = true };
     private:
         void checkMacro( const Token& macroToken, SourceLocation location );
         std::set< string > configMacros;

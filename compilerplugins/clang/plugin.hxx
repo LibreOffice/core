@@ -47,6 +47,7 @@ class Plugin
         virtual ~Plugin();
         virtual void run() = 0;
         template< typename T > class Registration;
+        enum { isPPCallback = false };
         DiagnosticBuilder report( DiagnosticsEngine::Level level, StringRef message, SourceLocation loc = SourceLocation());
         static DiagnosticBuilder report( DiagnosticsEngine::Level level, StringRef message,
             CompilerInstance& compiler, SourceLocation loc = SourceLocation());
@@ -62,7 +63,7 @@ class Plugin
         const Stmt* parentStmt( const Stmt* stmt );
         Stmt* parentStmt( Stmt* stmt );
     private:
-        static void registerPlugin( Plugin* (*create)( CompilerInstance&, Rewriter& ), const char* optionName, bool isRewriter );
+        static void registerPlugin( Plugin* (*create)( CompilerInstance&, Rewriter& ), const char* optionName, bool isRewriter, bool isPPCallback );
         template< typename T > static Plugin* createHelper( CompilerInstance& compiler, Rewriter& rewriter );
         enum { isRewriter = false };
         static unordered_map< const Stmt*, const Stmt* > parents;
@@ -186,7 +187,7 @@ template< typename T >
 inline
 Plugin::Registration< T >::Registration( const char* optionName )
     {
-    registerPlugin( &T::template createHelper< T >, optionName, T::isRewriter );
+    registerPlugin( &T::template createHelper< T >, optionName, T::isRewriter, T::isPPCallback );
     }
 
 } // namespace

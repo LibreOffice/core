@@ -41,6 +41,7 @@ struct PluginData
     Plugin* object;
     const char* optionName;
     bool isRewriter;
+    bool isPPCallback;
     };
 
 const int MAX_PLUGINS = 100;
@@ -79,7 +80,7 @@ PluginHandler::~PluginHandler()
         if( plugins[ i ].object != NULL )
             {
             // PPCallbacks is owned by preprocessor object, don't delete those
-            if( dynamic_cast< PPCallbacks* >( plugins[ i ].object ) == NULL )
+            if( !plugins[ i ].isPPCallback )
                 delete plugins[ i ].object;
             }
     }
@@ -123,7 +124,7 @@ void PluginHandler::createPlugin( const string& name )
         report( DiagnosticsEngine::Fatal, "unknown plugin tool %0" ) << name;
     }
 
-void PluginHandler::registerPlugin( Plugin* (*create)( CompilerInstance&, Rewriter& ), const char* optionName, bool isRewriter )
+void PluginHandler::registerPlugin( Plugin* (*create)( CompilerInstance&, Rewriter& ), const char* optionName, bool isRewriter, bool isPPCallback )
     {
     assert( !pluginObjectsCreated );
     assert( pluginCount < MAX_PLUGINS );
@@ -131,6 +132,7 @@ void PluginHandler::registerPlugin( Plugin* (*create)( CompilerInstance&, Rewrit
     plugins[ pluginCount ].object = NULL;
     plugins[ pluginCount ].optionName = optionName;
     plugins[ pluginCount ].isRewriter = isRewriter;
+    plugins[ pluginCount ].isPPCallback = isPPCallback;
     ++pluginCount;
     }
 
