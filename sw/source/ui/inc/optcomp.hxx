@@ -44,8 +44,6 @@ private:
     SvtCompatibilityOptions m_aConfigItem;
     // text of the user entry
     String                  m_sUserEntry;
-    // text of the "use as default" querybox
-    String                  m_sUseAsDefaultQuery;
     // shell of the current document
     SwWrtShell*             m_pWrtShell;
     // impl object

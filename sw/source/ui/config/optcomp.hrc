@@ -30,7 +30,6 @@
 // the option strings
 
 #define STR_USERENTRY                   10
-#define STR_QRYBOX_USEASDEFAULT         11
 
 #define STR_COMP_OPTIONS_START          100
 #define STR_PRINTER_METRICS             (STR_COMP_OPTIONS_START + 0)

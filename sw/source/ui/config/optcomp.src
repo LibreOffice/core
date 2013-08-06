@@ -81,11 +81,6 @@ TabPage TP_OPTCOMPATIBILITY_PAGE
         Text [ en-US ] = "<User settings>";
     };
 
-    String STR_QRYBOX_USEASDEFAULT
-    {
-        Text [ en-US ] = "Do you want to change the compatibility options of the default template?\nThis will affect all new documents based on the default template.";
-    };
-
 // the option strings ----------------------------------------------------
 
     String STR_PRINTER_METRICS

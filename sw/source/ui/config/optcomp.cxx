@@ -29,7 +29,7 @@
 #include "optcomp.hrc"
 #include "globals.hrc"
 #include <unotools/configmgr.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>
@@ -112,7 +112,6 @@ SwCompatibilityOptPage::SwCompatibilityOptPage( Window* pParent, const SfxItemSe
     m_aResetPB          ( this, SW_RES( PB_RESET ) ),
     m_aDefaultPB        ( this, SW_RES( PB_DEFAULT ) ),
     m_sUserEntry        (       SW_RES( STR_USERENTRY ) ),
-    m_sUseAsDefaultQuery(       SW_RES( STR_QRYBOX_USEASDEFAULT ) ),
     m_pWrtShell         ( NULL ),
     m_pImpl             ( new SwCompatibilityOptPage_Impl ),
     m_nSavedOptions     ( 0 )
@@ -382,8 +381,9 @@ IMPL_LINK_NOARG(SwCompatibilityOptPage, SelectHdl)
 
 IMPL_LINK_NOARG(SwCompatibilityOptPage, UseAsDefaultHdl)
 {
-    QueryBox aBox( this, WinBits( WB_YES_NO | WB_DEF_YES ), m_sUseAsDefaultQuery );
-    if ( aBox.Execute() == RET_YES )
+    MessageDialog aQuery(this, "QueryDefaultCompatDialog",
+        "modules/swriter/ui/querydefaultcompatdialog.ui");
+    if (aQuery.Execute() == RET_YES)
     {
         for ( vector< CompatibilityItem >::iterator pItem = m_pImpl->m_aList.begin();
               pItem != m_pImpl->m_aList.end(); ++pItem )

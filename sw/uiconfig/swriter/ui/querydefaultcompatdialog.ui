@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.6 -->
-  <object class="GtkMessageDialog" id="QuerySaveLabelDialog">
+  <object class="GtkMessageDialog" id="QueryDefaultCompatDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Save label?</property>
+    <property name="title" translatable="yes">Use as default?</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <property name="skip_taskbar_hint">True</property>
     <property name="message_type">question</property>
     <property name="buttons">yes-no</property>
-    <property name="text" translatable="yes">A label named "%1 / %2" already exists. Do you want to replace it?</property>
-    <property name="secondary_text" translatable="yes">A label already exists with brand "%1" and type "%2". Replacing it will overwrite its contents.</property>
+    <property name="text" translatable="yes">Do you want to change the compatibility options of the default template?</property>
+    <property name="secondary_text" translatable="yes">This will affect all new documents based on the default template.</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="messagedialog-vbox">
         <property name="can_focus">False</property>
