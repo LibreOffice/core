@@ -30,6 +30,7 @@
 #include "wrapper/Instance.hxx"
 #include "wrapper/Media.hxx"
 #include "wrapper/Player.hxx"
+#include "wrapper/EventManager.hxx"
 
 namespace avmedia {
 namespace vlc {
@@ -43,6 +44,7 @@ class VLCPlayer : public ::cppu::BaseMutex,
     VLC::Instance mInstance;
     VLC::Media mMedia;
     VLC::Player mPlayer;
+    VLC::EventManager mEventManager;
     const rtl::OUString mUrl;
     bool mPlaybackLoop;
 public:
@@ -70,6 +72,9 @@ public:
     ::rtl::OUString SAL_CALL getImplementationName();
     ::sal_Bool SAL_CALL supportsService( const ::rtl::OUString& serviceName );
     ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames();
+
+private:
+    void replay();
 };
 
 }

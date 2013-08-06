@@ -1,3 +1,4 @@
+#include <boost/bind.hpp>
 #include <osl/conditn.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/bmpacc.hxx>
@@ -11,8 +12,7 @@
 #include "vlcframegrabber.hxx"
 #include "vlcplayer.hxx"
 #include "wrapper/Player.hxx"
-
-#include <vlc/libvlc_events.h>
+#include "wrapper/EventManager.hxx"
 
 using namespace ::com::sun::star;
 
@@ -30,26 +30,12 @@ SAL_CALL VLCFrameGrabber::VLCFrameGrabber( VLC::Player& player, const rtl::OUStr
 {
 }
 
-namespace
-{
-    void EventHandler( const libvlc_event_t *evemt, void *pData )
-    {
-        switch ( evemt->type )
-        {
-        case libvlc_MediaPlayerPaused:
-            osl::Condition *condition = static_cast<osl::Condition*>( pData );
-            condition->set();
-            break;
-        }
-    }
-}
-
 ::uno::Reference< css::graphic::XGraphic > SAL_CALL VLCFrameGrabber::grabFrame( double fMediaTime )
 {
     osl::Condition condition;
 
-    libvlc_event_manager_t *manager = libvlc_media_player_event_manager( mPlayer );
-    libvlc_event_attach( manager, libvlc_MediaPlayerPaused, EventHandler, &condition );
+    VLC::EventManager manager( mPlayer );
+    manager.onPaused(boost::bind(&osl::Condition::set, &condition));
 
     mPlayer.setMute( true );
 
@@ -69,7 +55,7 @@ namespace
         std::cerr << "Couldn't grab frame" << std::endl;
         mPlayer.setMute( false );
 
-        libvlc_event_detach( manager, libvlc_MediaPlayerPaused, EventHandler, &condition );
+        manager.onPaused();
         return ::uno::Reference< css::graphic::XGraphic >();
     }
 
@@ -80,7 +66,7 @@ namespace
     mPlayer.setMute( false );
     mPlayer.stop();
 
-    libvlc_event_detach( manager, libvlc_MediaPlayerPaused, EventHandler, &condition );
+    manager.onPaused();
 
     rtl::OUString url;
     utl::LocalFileHelper::ConvertPhysicalNameToURL( fileName, url );

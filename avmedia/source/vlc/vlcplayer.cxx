@@ -1,3 +1,4 @@
+#include <boost/bind.hpp>
 #include <vcl/syschild.hxx>
 #include <vcl/sysdata.hxx>
 
@@ -28,6 +29,7 @@ VLCPlayer::VLCPlayer( const rtl::OUString& url )
     , mInstance( VLC_ARGS )
     , mMedia( url, mInstance )
     , mPlayer( mMedia )
+    , mEventManager( mPlayer )
     , mUrl( url )
     , mPlaybackLoop( false )
 {
@@ -86,20 +88,10 @@ double SAL_CALL VLCPlayer::getRate()
     return mPlayer.getRate();
 }
 
-namespace
+void VLCPlayer::replay()
 {
-    void EventHandler( const libvlc_event_t *evemt, void *pData )
-    {
-        switch (evemt->type)
-        {
-        case libvlc_MediaPlayerEndReached:
-            VLC::Player& player = *static_cast< VLC::Player* >( pData );
-
-            player.stop();
-            player.play();
-            break;
-        }
-    }
+    mPlayer.stop();
+    mPlayer.play();
 }
 
 void SAL_CALL VLCPlayer::setPlaybackLoop( ::sal_Bool bSet )
@@ -107,12 +99,13 @@ void SAL_CALL VLCPlayer::setPlaybackLoop( ::sal_Bool bSet )
     ::osl::MutexGuard aGuard(m_aMutex);
     mPlaybackLoop = bSet;
 
-    libvlc_event_manager_t *manager = libvlc_media_player_event_manager( mPlayer );
+    //TODO: Fix it
+    return;
 
     if ( bSet )
-        libvlc_event_attach( manager, libvlc_MediaPlayerEndReached, EventHandler, &mPlayer );
+        mEventManager.onEndReached(boost::bind(&VLCPlayer::replay, this));
     else
-        libvlc_event_detach( manager, libvlc_MediaPlayerEndReached, EventHandler, &mPlayer );
+        mEventManager.onEndReached();
 }
 
 ::sal_Bool SAL_CALL VLCPlayer::isPlaybackLoop()

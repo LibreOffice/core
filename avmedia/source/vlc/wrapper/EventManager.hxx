@@ -16,30 +16,35 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+#ifndef _WRAPPER_EVENT_MANAGER_HXX
+#define _WRAPPER_EVENT_MANAGER_HXX
+#include <boost/function.hpp>
+#include "Player.hxx"
 
-#ifndef _VLCCOMMON_HXX
-#define _VLCCOMMON_HXX
+struct libvlc_event_manager_t;
+struct libvlc_event_t;
+namespace VLC
+{
+    class EventManager
+    {
+        friend void EventManagerEventHandler( const libvlc_event_t *event, void *pData );
+    public:
+        typedef boost::function<void()> Callback;
 
-#include <osl/mutex.hxx>
-#include <tools/stream.hxx>
-#include <tools/urlobj.hxx>
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/weak.hxx>
-#include <cppuhelper/factory.hxx>
+        EventManager(VLC::Player& player);
+        virtual ~EventManager();
 
-#include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/awt/Rectangle.hpp>
-#include <com/sun/star/awt/KeyModifier.hpp>
-#include <com/sun/star/awt/MouseButton.hpp>
-#include <com/sun/star/media/XManager.hpp>
-#include <com/sun/star/media/XPlayerWindow.hpp>
+        void onPaused(const Callback& callback = Callback());
+        void onEndReached(const Callback& callback = Callback());
 
-#endif // _VLCCOMMOM_HXX
+    private:
+        libvlc_event_manager_t *mManager;
+        boost::function<void()> mOnPaused;
+        boost::function<void()> mOnEndReached;
 
+        void registerSignal(int signal, const Callback& callback);
+    };
+}
+
+#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
