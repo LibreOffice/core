@@ -168,7 +168,7 @@ void SearchThread::ImplSearch( const INetURLObject& rStartURL,
                               ::std::find( rFormats.begin(),
                                            rFormats.end(),
                                            aDesc.GetImportFormatShortName(
-                                               aDesc.GetFileFormat() ).ToLowerAscii() )
+                                               aDesc.GetFileFormat() ).toAsciiLowerCase() )
                               != rFormats.end() ) ||
                             ::std::find( rFormats.begin(),
                                          rFormats.end(),

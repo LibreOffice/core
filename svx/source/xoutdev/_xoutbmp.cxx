@@ -236,7 +236,7 @@ sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, String& rFileName,
 
             if( GRFILTER_FORMAT_NOTFOUND != nFilter )
             {
-                aExt = rFilter.GetExportFormatShortName( nFilter ).ToLowerAscii();
+                aExt = rFilter.GetExportFormatShortName( nFilter ).toAsciiLowerCase();
 
                 if( bWriteTransGrf )
                 {

@@ -108,7 +108,7 @@ void GraphicDescriptor::init( const uno::Reference< io::XInputStream >& rxIStm, 
 
 void GraphicDescriptor::implCreate( SvStream& rIStm, const OUString* pURL )
 {
-    String aURL;
+    OUString aURL;
     if( pURL )
         aURL = *pURL;
     ::GraphicDescriptor aDescriptor( rIStm, &aURL );

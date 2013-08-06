@@ -123,14 +123,14 @@ class VCL_DLLPUBLIC GraphicDescriptor
 {
     SvStream*           pFileStm;
 
-    String              aPathExt;
+    OUString            aPathExt;
     Size                aPixSize;
     Size                aLogSize;
-    sal_uInt16              nBitsPerPixel;
-    sal_uInt16              nPlanes;
-    sal_uInt16              nFormat;
-    sal_Bool                bCompressed;
-    sal_Bool                bOwnStream;
+    sal_uInt16          nBitsPerPixel;
+    sal_uInt16          nPlanes;
+    sal_uInt16          nFormat;
+    sal_Bool            bCompressed;
+    sal_Bool            bOwnStream;
 
     void                ImpConstruct();
 
@@ -177,7 +177,7 @@ public:
         As some formats (Mtf's) do not have a unique header, it makes sense
         to supply the file name (incl. ext.), so that the format can be
         derived from the extension */
-    GraphicDescriptor( SvStream& rInStream, const String* pPath = NULL );
+    GraphicDescriptor( SvStream& rInStream, const OUString* pPath = NULL );
 
     virtual ~GraphicDescriptor();
 
@@ -206,7 +206,7 @@ public:
     sal_Bool            IsCompressed() const { return bCompressed; }
 
     /** @return filter number that is needed by the GraphFilter to read this format */
-    static String GetImportFormatShortName( sal_uInt16 nFormat );
+    static OUString GetImportFormatShortName( sal_uInt16 nFormat );
 };
 
 /** Information about errors during the GraphicFilter operation. */
@@ -227,7 +227,7 @@ private:
 
     void            ImplInit();
     sal_uLong           ImplSetError( sal_uLong nError, const SvStream* pStm = NULL );
-    sal_uInt16      ImpTestOrFindFormat( const String& rPath, SvStream& rStream, sal_uInt16& rFormat );
+    sal_uInt16      ImpTestOrFindFormat( const OUString& rPath, SvStream& rStream, sal_uInt16& rFormat );
 
                     DECL_LINK( FilterCallback, ConvertData* pData );
 
@@ -248,36 +248,36 @@ public:
     void            SetFilterPath( const OUString& rFilterPath ) { aFilterPath = rFilterPath; };
 
     sal_uInt16          GetImportFormatCount();
-    sal_uInt16          GetImportFormatNumber( const String& rFormatName );
-    sal_uInt16          GetImportFormatNumberForMediaType( const String& rMediaType );
-    sal_uInt16          GetImportFormatNumberForShortName( const String& rShortName );
-    sal_uInt16      GetImportFormatNumberForTypeName( const String& rType );
-    String          GetImportFormatName( sal_uInt16 nFormat );
-    String          GetImportFormatTypeName( sal_uInt16 nFormat );
-    String          GetImportFormatMediaType( sal_uInt16 nFormat );
-    String          GetImportFormatShortName( sal_uInt16 nFormat );
-    String          GetImportOSFileType( sal_uInt16 nFormat );
-    String          GetImportWildcard( sal_uInt16 nFormat, sal_Int32 nEntry = 0 );
+    sal_uInt16          GetImportFormatNumber( const OUString& rFormatName );
+    sal_uInt16          GetImportFormatNumberForMediaType( const OUString& rMediaType );
+    sal_uInt16          GetImportFormatNumberForShortName( const OUString& rShortName );
+    sal_uInt16      GetImportFormatNumberForTypeName( const OUString& rType );
+    OUString        GetImportFormatName( sal_uInt16 nFormat );
+    OUString        GetImportFormatTypeName( sal_uInt16 nFormat );
+    OUString        GetImportFormatMediaType( sal_uInt16 nFormat );
+    OUString        GetImportFormatShortName( sal_uInt16 nFormat );
+    OUString        GetImportOSFileType( sal_uInt16 nFormat );
+    OUString        GetImportWildcard( sal_uInt16 nFormat, sal_Int32 nEntry = 0 );
     sal_Bool            IsImportPixelFormat( sal_uInt16 nFormat );
 
     sal_uInt16          GetExportFormatCount();
-    sal_uInt16          GetExportFormatNumber( const String& rFormatName );
-    sal_uInt16          GetExportFormatNumberForMediaType( const String& rShortName );
-    sal_uInt16          GetExportFormatNumberForShortName( const String& rShortName );
-    String          GetExportInternalFilterName( sal_uInt16 nFormat );
-    sal_uInt16      GetExportFormatNumberForTypeName( const String& rType );
-    String          GetExportFormatName( sal_uInt16 nFormat );
-    String          GetExportFormatTypeName( sal_uInt16 nFormat );
-    String          GetExportFormatMediaType( sal_uInt16 nFormat );
-    String          GetExportFormatShortName( sal_uInt16 nFormat );
-    String          GetExportOSFileType( sal_uInt16 nFormat );
-    String          GetExportWildcard( sal_uInt16 nFormat, sal_Int32 nEntry = 0 );
+    sal_uInt16          GetExportFormatNumber( const OUString& rFormatName );
+    sal_uInt16          GetExportFormatNumberForMediaType( const OUString& rShortName );
+    sal_uInt16          GetExportFormatNumberForShortName( const OUString& rShortName );
+    OUString        GetExportInternalFilterName( sal_uInt16 nFormat );
+    sal_uInt16      GetExportFormatNumberForTypeName( const OUString& rType );
+    OUString        GetExportFormatName( sal_uInt16 nFormat );
+    OUString        GetExportFormatTypeName( sal_uInt16 nFormat );
+    OUString        GetExportFormatMediaType( sal_uInt16 nFormat );
+    OUString        GetExportFormatShortName( sal_uInt16 nFormat );
+    OUString        GetExportOSFileType( sal_uInt16 nFormat );
+    OUString        GetExportWildcard( sal_uInt16 nFormat, sal_Int32 nEntry = 0 );
     sal_Bool            IsExportPixelFormat( sal_uInt16 nFormat );
 
     sal_uInt16          ExportGraphic( const Graphic& rGraphic, const INetURLObject& rPath,
                                     sal_uInt16 nFormat = GRFILTER_FORMAT_DONTKNOW,
                                         const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >* pFilterData = NULL );
-    sal_uInt16          ExportGraphic( const Graphic& rGraphic, const String& rPath,
+    sal_uInt16          ExportGraphic( const Graphic& rGraphic, const OUString& rPath,
                                     SvStream& rOStm, sal_uInt16 nFormat = GRFILTER_FORMAT_DONTKNOW,
                                         const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >* pFilterData = NULL );
     long            GetExportGraphicHint() const { return nExpGraphHint; }
@@ -290,17 +290,17 @@ public:
                                    sal_uInt16 nFormat = GRFILTER_FORMAT_DONTKNOW,
                                    sal_uInt16 * pDeterminedFormat = NULL, sal_uInt32 nImportFlags = 0 );
 
-    sal_uInt16          CanImportGraphic( const String& rPath, SvStream& rStream,
+    sal_uInt16          CanImportGraphic( const OUString& rPath, SvStream& rStream,
                                       sal_uInt16 nFormat = GRFILTER_FORMAT_DONTKNOW,
                                       sal_uInt16 * pDeterminedFormat = NULL);
 
-    sal_uInt16          ImportGraphic( Graphic& rGraphic, const String& rPath,
+    sal_uInt16          ImportGraphic( Graphic& rGraphic, const OUString& rPath,
                                    SvStream& rStream,
                                    sal_uInt16 nFormat = GRFILTER_FORMAT_DONTKNOW,
                                    sal_uInt16 * pDeterminedFormat = NULL, sal_uInt32 nImportFlags = 0,
                                    WMF_EXTERNALHEADER *pExtHeader = NULL );
 
-    sal_uInt16          ImportGraphic( Graphic& rGraphic, const String& rPath,
+    sal_uInt16          ImportGraphic( Graphic& rGraphic, const OUString& rPath,
                                    SvStream& rStream,
                                    sal_uInt16 nFormat,
                                    sal_uInt16 * pDeterminedFormat, sal_uInt32 nImportFlags,
@@ -314,7 +314,7 @@ public:
 
     const Link      GetFilterCallback() const;
     static GraphicFilter& GetGraphicFilter();
-    static int      LoadGraphic( const String& rPath, const String& rFilter,
+    static int      LoadGraphic( const OUString& rPath, const OUString& rFilter,
                      Graphic& rGraphic,
                      GraphicFilter* pFilter = NULL,
                      sal_uInt16* pDeterminedFormat = NULL );

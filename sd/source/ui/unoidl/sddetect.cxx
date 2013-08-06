@@ -377,7 +377,7 @@ OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDes
                             // vector graphic?
                             pStm->Seek( STREAM_SEEK_TO_BEGIN );
 
-                            const String        aFileName( aMedium.GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) );
+                            const OUString      aFileName( aMedium.GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) );
                             GraphicDescriptor   aDesc( *pStm, &aFileName );
                             if( !aDesc.Detect( sal_False ) )
                             {

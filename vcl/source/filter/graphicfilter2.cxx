@@ -37,7 +37,7 @@ GraphicDescriptor::GraphicDescriptor( const INetURLObject& rPath ) :
     ImpConstruct();
 }
 
-GraphicDescriptor::GraphicDescriptor( SvStream& rInStream, const String* pPath) :
+GraphicDescriptor::GraphicDescriptor( SvStream& rInStream, const OUString* pPath) :
     pFileStm    ( &rInStream ),
     bOwnStream  ( sal_False )
 {
@@ -739,7 +739,7 @@ sal_Bool GraphicDescriptor::ImpDetectTIF( SvStream& rStm, sal_Bool bExtendedInfo
 
 sal_Bool GraphicDescriptor::ImpDetectXBM( SvStream&, sal_Bool )
 {
-    sal_Bool bRet = aPathExt.CompareToAscii( "xbm", 3 ) == COMPARE_EQUAL;
+    sal_Bool bRet = aPathExt.startsWith( "xbm" );
     if (bRet)
         nFormat = GFF_XBM;
 
@@ -748,7 +748,7 @@ sal_Bool GraphicDescriptor::ImpDetectXBM( SvStream&, sal_Bool )
 
 sal_Bool GraphicDescriptor::ImpDetectXPM( SvStream&, sal_Bool )
 {
-    sal_Bool bRet = aPathExt.CompareToAscii( "xpm", 3 ) == COMPARE_EQUAL;
+    sal_Bool bRet = aPathExt.startsWith( "xpm" );
     if (bRet)
         nFormat = GFF_XPM;
 
@@ -760,7 +760,7 @@ sal_Bool GraphicDescriptor::ImpDetectPBM( SvStream& rStm, sal_Bool )
     sal_Bool bRet = sal_False;
 
     // check file extension first, as this trumps the 2 ID bytes
-    if ( aPathExt.CompareToAscii( "pbm", 3 ) == COMPARE_EQUAL )
+    if ( aPathExt.startsWith( "pbm" ) )
         bRet = sal_True;
     else
     {
@@ -782,7 +782,7 @@ sal_Bool GraphicDescriptor::ImpDetectPGM( SvStream& rStm, sal_Bool )
 {
     sal_Bool bRet = sal_False;
 
-    if ( aPathExt.CompareToAscii( "pgm", 3 ) == COMPARE_EQUAL )
+    if ( aPathExt.startsWith( "pgm" ) )
         bRet = sal_True;
     else
     {
@@ -804,7 +804,7 @@ sal_Bool GraphicDescriptor::ImpDetectPPM( SvStream& rStm, sal_Bool )
 {
     sal_Bool bRet = sal_False;
 
-    if ( aPathExt.CompareToAscii( "ppm", 3 ) == COMPARE_EQUAL )
+    if ( aPathExt.startsWith( "ppm" ) )
         bRet = sal_True;
     else
     {
@@ -840,7 +840,7 @@ sal_Bool GraphicDescriptor::ImpDetectRAS( SvStream& rStm, sal_Bool )
 
 sal_Bool GraphicDescriptor::ImpDetectTGA( SvStream&, sal_Bool )
 {
-    sal_Bool bRet = aPathExt.CompareToAscii( "tga", 3 ) == COMPARE_EQUAL;
+    sal_Bool bRet = aPathExt.startsWith( "tga" );
     if (bRet)
         nFormat = GFF_TGA;
 
@@ -914,7 +914,7 @@ sal_Bool GraphicDescriptor::ImpDetectEPS( SvStream& rStm, sal_Bool )
     rStm.SeekRel( -4 );
     rStm.Read( &nFirstBytes, 20 );
 
-    if ( ( nFirstLong == 0xC5D0D3C6 ) || ( aPathExt.CompareToAscii( "eps", 3 ) == COMPARE_EQUAL ) ||
+    if ( ( nFirstLong == 0xC5D0D3C6 ) || aPathExt.startsWith( "eps" ) ||
         ( ImplSearchEntry( nFirstBytes, (sal_uInt8*)"%!PS-Adobe", 10, 10 )
             && ImplSearchEntry( &nFirstBytes[15], (sal_uInt8*)"EPS", 3, 3 ) ) )
     {
@@ -927,7 +927,7 @@ sal_Bool GraphicDescriptor::ImpDetectEPS( SvStream& rStm, sal_Bool )
 
 sal_Bool GraphicDescriptor::ImpDetectDXF( SvStream&, sal_Bool )
 {
-    sal_Bool bRet = aPathExt.CompareToAscii( "dxf", 3 ) == COMPARE_EQUAL;
+    sal_Bool bRet = aPathExt.startsWith( "dxf" );
     if (bRet)
         nFormat = GFF_DXF;
 
@@ -936,7 +936,7 @@ sal_Bool GraphicDescriptor::ImpDetectDXF( SvStream&, sal_Bool )
 
 sal_Bool GraphicDescriptor::ImpDetectMET( SvStream&, sal_Bool )
 {
-    sal_Bool bRet = aPathExt.CompareToAscii( "met", 3 ) == COMPARE_EQUAL;
+    sal_Bool bRet = aPathExt.startsWith( "met" );
     if (bRet)
         nFormat = GFF_MET;
 
@@ -947,7 +947,7 @@ extern bool isPCT(SvStream& rStream, sal_uLong nStreamPos, sal_uLong nStreamLen)
 
 sal_Bool GraphicDescriptor::ImpDetectPCT( SvStream& rStm, sal_Bool )
 {
-    sal_Bool bRet = aPathExt.CompareToAscii( "pct", 3 ) == COMPARE_EQUAL;
+    sal_Bool bRet = aPathExt.startsWith( "pct" );
     if (bRet)
         nFormat = GFF_PCT;
     else
@@ -968,7 +968,7 @@ sal_Bool GraphicDescriptor::ImpDetectPCT( SvStream& rStm, sal_Bool )
 sal_Bool GraphicDescriptor::ImpDetectSGF( SvStream& rStm, sal_Bool )
 {
     sal_Bool bRet = sal_False;
-    if( aPathExt.CompareToAscii( "sgf", 3 ) == COMPARE_EQUAL )
+    if( aPathExt.startsWith( "sgf" ) )
         bRet = sal_True;
     else
     {
@@ -992,7 +992,7 @@ sal_Bool GraphicDescriptor::ImpDetectSGF( SvStream& rStm, sal_Bool )
 
 sal_Bool GraphicDescriptor::ImpDetectSGV( SvStream&, sal_Bool )
 {
-    sal_Bool bRet = aPathExt.CompareToAscii( "sgv", 3 ) == COMPARE_EQUAL;
+    sal_Bool bRet = aPathExt.startsWith( "sgv" );
     if (bRet)
         nFormat = GFF_SGV;
 
@@ -1078,7 +1078,7 @@ sal_Bool GraphicDescriptor::ImpDetectSVM( SvStream& rStm, sal_Bool bExtendedInfo
 
 sal_Bool GraphicDescriptor::ImpDetectWMF( SvStream&, sal_Bool )
 {
-    sal_Bool bRet = aPathExt.CompareToAscii( "wmf",3 ) == COMPARE_EQUAL;
+    sal_Bool bRet = aPathExt.startsWith( "wmf" );
     if (bRet)
         nFormat = GFF_WMF;
 
@@ -1087,7 +1087,7 @@ sal_Bool GraphicDescriptor::ImpDetectWMF( SvStream&, sal_Bool )
 
 sal_Bool GraphicDescriptor::ImpDetectEMF( SvStream&, sal_Bool )
 {
-    sal_Bool bRet = aPathExt.CompareToAscii( "emf", 3 ) == COMPARE_EQUAL;
+    sal_Bool bRet = aPathExt.startsWith( "emf" );
     if (bRet)
         nFormat = GFF_EMF;
 
@@ -1096,14 +1096,14 @@ sal_Bool GraphicDescriptor::ImpDetectEMF( SvStream&, sal_Bool )
 
 sal_Bool GraphicDescriptor::ImpDetectSVG( SvStream& /*rStm*/, sal_Bool /*bExtendedInfo*/ )
 {
-    sal_Bool bRet = aPathExt.CompareToAscii( "svg", 3 ) == COMPARE_EQUAL;
+    sal_Bool bRet = aPathExt.startsWith( "svg" );
     if (bRet)
         nFormat = GFF_SVG;
 
     return bRet;
 }
 
-String GraphicDescriptor::GetImportFormatShortName( sal_uInt16 nFormat )
+OUString GraphicDescriptor::GetImportFormatShortName( sal_uInt16 nFormat )
 {
     const char *pKeyName = 0;
 

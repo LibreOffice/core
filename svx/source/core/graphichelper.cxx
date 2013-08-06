@@ -136,7 +136,7 @@ OUString GraphicHelper::ExportGraphic( const Graphic& rGraphic, const OUString& 
         // "wrong" extension?
         GetPreferedExtension( aExtension, rGraphic );
         for ( sal_uInt16 i = 0; i < nCount; ++i )
-            if ( aExtension == rGraphicFilter.GetExportFormatShortName( i ).ToLowerAscii() )
+            if ( aExtension == rGraphicFilter.GetExportFormatShortName( i ).toAsciiLowerCase() )
             {
                 nDefaultFilter =  i;
                 break;
