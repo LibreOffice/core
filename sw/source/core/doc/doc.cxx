@@ -192,6 +192,7 @@ bool SwDoc::get(/*[in]*/ DocumentSettingId id) const
         case CLIPPED_PICTURES: return mbClippedPictures;
         case BACKGROUND_PARA_OVER_DRAWINGS: return mbBackgroundParaOverDrawings;
         case TAB_OVER_MARGIN: return mbTabOverMargin;
+        case SURROUND_TEXT_WRAP_SMALL: return mbSurroundTextWrapSmall;
 
         case BROWSE_MODE: return mbLastBrowseMode; // Attention: normally the ViewShell has to be asked!
         case HTML_MODE: return mbHTMLMode;
@@ -346,6 +347,10 @@ void SwDoc::set(/*[in]*/ DocumentSettingId id, /*[in]*/ bool value)
 
         case TAB_OVER_MARGIN:
             mbTabOverMargin = value;
+            break;
+
+        case SURROUND_TEXT_WRAP_SMALL:
+            mbSurroundTextWrapSmall = value;
             break;
 
          // COMPATIBILITY FLAGS END

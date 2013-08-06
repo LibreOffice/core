@@ -77,6 +77,8 @@ namespace com { namespace sun { namespace star { namespace i18n { struct Forbidd
          CLIPPED_PICTURES,
          BACKGROUND_PARA_OVER_DRAWINGS,
          TAB_OVER_MARGIN,
+         // MS Word still wraps text around objects with less space than LO would.
+         SURROUND_TEXT_WRAP_SMALL,
          // COMPATIBILITY FLAGS END
 
          BROWSE_MODE,
