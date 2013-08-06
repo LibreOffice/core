@@ -19,14 +19,16 @@
 #ifndef _FMTSRNDENUM_HXX
 #define _FMTSRNDENUM_HXX
 
+#include <com/sun/star/text/WrapTextMode.hpp>
+
 enum SwSurround {
-    SURROUND_BEGIN,
-    SURROUND_NONE = SURROUND_BEGIN,
-    SURROUND_THROUGHT,
-    SURROUND_PARALLEL,
-    SURROUND_IDEAL,
-    SURROUND_LEFT,
-    SURROUND_RIGHT,
+    SURROUND_NONE = com::sun::star::text::WrapTextMode_NONE,
+    SURROUND_BEGIN = SURROUND_NONE,
+    SURROUND_THROUGHT = com::sun::star::text::WrapTextMode_THROUGHT,
+    SURROUND_PARALLEL = com::sun::star::text::WrapTextMode_PARALLEL,
+    SURROUND_IDEAL = com::sun::star::text::WrapTextMode_DYNAMIC,
+    SURROUND_LEFT = com::sun::star::text::WrapTextMode_LEFT,
+    SURROUND_RIGHT = com::sun::star::text::WrapTextMode_RIGHT,
     SURROUND_END
 };
 
