@@ -365,6 +365,13 @@ sal_Bool ImplToolItem::IsClipped() const
 }
 
 // -----------------------------------------------------------------------
+
+sal_Bool ImplToolItem::IsItemHidden() const
+{
+    return ( meType == TOOLBOXITEM_BUTTON && !mbVisible );
+}
+
+// -----------------------------------------------------------------------
 // -----------------------------------------------------------------------
 
 const OUString ToolBox::ImplConvertMenuString( const OUString& rStr )
@@ -2097,6 +2104,8 @@ void ToolBox::UpdateCustomMenu()
     // add menu items, starting from the end and inserting at pos 0
     if ( !mpData->m_aItems.empty() )
     {
+        // nStartPos will hold the number of clipped items appended from first loop
+        sal_uInt16 nSepPos = 0;
         for ( std::vector< ImplToolItem >::reverse_iterator it(mpData->m_aItems.rbegin());
                 it != mpData->m_aItems.rend(); ++it)
         {
@@ -2104,6 +2113,23 @@ void ToolBox::UpdateCustomMenu()
             {
                 sal_uInt16 id = it->mnId + TOOLBOX_MENUITEM_START;
                 pMenu->InsertItem( id, it->maText, it->maImage, 0, OString(), 0 );
+                pMenu->EnableItem( id, it->mbEnabled );
+                pMenu->CheckItem ( id, it->meState == STATE_CHECK );
+                nSepPos++;
+            }
+        }
+
+        // add a seperator below the inserted clipped-items
+        pMenu->InsertSeparator( OString(), nSepPos );
+
+        // now append the items that are explicitly disabled
+        for ( std::vector< ImplToolItem >::reverse_iterator it(mpData->m_aItems.rbegin());
+                it != mpData->m_aItems.rend(); ++it)
+        {
+            if( it->IsItemHidden() )
+            {
+                sal_uInt16 id = it->mnId + TOOLBOX_MENUITEM_START;
+                pMenu->InsertItem( id, it->maText, it->maImage, 0, OString(), nSepPos+1 );
                 pMenu->EnableItem( id, it->mbEnabled );
                 pMenu->CheckItem( id, it->meState == STATE_CHECK );
             }
