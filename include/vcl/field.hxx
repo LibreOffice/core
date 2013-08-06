@@ -290,7 +290,7 @@ public:
 
     virtual void            Reformat();
 
-    String                  GetCurrencySymbol() const;
+    OUString                GetCurrencySymbol() const;
 
     virtual void            SetValue( sal_Int64 nNewValue );
     virtual sal_Int64       GetValue() const;
