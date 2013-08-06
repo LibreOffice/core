@@ -90,17 +90,18 @@ sal_uInt16 SwDoc::GetTOIKeys( SwTOIKeyType eTyp, std::vector<String>& rArr ) con
     rArr.clear();
 
     // Look up all Primary and Secondary via the Pool
-    const SwTxtTOXMark* pMark;
-    const SfxPoolItem* pItem;
-    const SwTOXType* pTOXType;
-    sal_uInt32 i, nMaxItems = GetAttrPool().GetItemCount2( RES_TXTATR_TOXMARK );
-    for( i = 0; i < nMaxItems; ++i )
-        if( 0 != (pItem = GetAttrPool().GetItem2( RES_TXTATR_TOXMARK, i ) ) &&
-            0!= ( pTOXType = ((SwTOXMark*)pItem)->GetTOXType()) &&
-            TOX_INDEX == pTOXType->GetType() &&
-            0 != ( pMark = ((SwTOXMark*)pItem)->GetTxtTOXMark() ) &&
-            pMark->GetpTxtNd() &&
-            pMark->GetpTxtNd()->GetNodes().IsDocNodes() )
+    const sal_uInt32 nMaxItems = GetAttrPool().GetItemCount2( RES_TXTATR_TOXMARK );
+    for( sal_uInt32 i = 0; i < nMaxItems; ++i )
+    {
+        const SwTOXMark* pItem = (SwTOXMark*)GetAttrPool().GetItem2( RES_TXTATR_TOXMARK, i );
+        if( !pItem )
+            continue;
+        const SwTOXType* pTOXType = pItem->GetTOXType();
+        if ( !pTOXType || pTOXType->GetType()!=TOX_INDEX )
+            continue;
+        const SwTxtTOXMark* pMark = pItem->GetTxtTOXMark();
+        if ( pMark && pMark->GetpTxtNd() &&
+             pMark->GetpTxtNd()->GetNodes().IsDocNodes() )
         {
             const String* pStr;
             if( TOI_PRIMARY == eTyp )
@@ -111,6 +112,7 @@ sal_uInt16 SwDoc::GetTOIKeys( SwTOIKeyType eTyp, std::vector<String>& rArr ) con
             if( pStr->Len() )
                 rArr.push_back( *pStr );
         }
+    }
 
     return rArr.size();
 }
@@ -234,17 +236,26 @@ const SwTOXMark& SwDoc::GotoTOXMark( const SwTOXMark& rCurTOXMark,
     SwTOXMarks aMarks;
     SwTOXMark::InsertTOXMarks( aMarks, *pType );
 
-    const SwTOXMark* pTOXMark;
-    const SwCntntFrm* pCFrm;
-    Point aPt;
-    for( sal_Int32 nMark=0; nMark<(sal_Int32)aMarks.size(); nMark++ )
+    for( size_t nMark=0; nMark<aMarks.size(); ++nMark )
     {
-        pTOXMark = aMarks[nMark];
-        if( pTOXMark != &rCurTOXMark &&
-            0 != ( pMark = pTOXMark->GetTxtTOXMark()) &&
-            0 != ( pTOXSrc = pMark->GetpTxtNd() ) &&
-            0 != ( pCFrm = pTOXSrc->getLayoutFrm( GetCurrentLayout(), &aPt, 0, sal_False )) &&
-            ( bInReadOnly || !pCFrm->IsProtected() ))
+        const SwTOXMark* pTOXMark = aMarks[nMark];
+        if ( pTOXMark == &rCurTOXMark )
+            continue;
+
+        pMark = pTOXMark->GetTxtTOXMark();
+        if (!pMark)
+            continue;
+
+        pTOXSrc = pMark->GetpTxtNd();
+        if (!pTOXSrc)
+            continue;
+
+        Point aPt;
+        const SwCntntFrm* pCFrm = pTOXSrc->getLayoutFrm( GetCurrentLayout(), &aPt, 0, sal_False );
+        if (!pCFrm)
+            continue;
+
+        if ( bInReadOnly || !pCFrm->IsProtected() )
         {
             CompareNodeCntnt aAbsNew( pTOXSrc->GetIndex(), *pMark->GetStart() );
             switch( eDir )
@@ -331,8 +342,7 @@ const SwTOXBaseSection* SwDoc::InsertTableOf( const SwPosition& rPos,
 {
     GetIDocumentUndoRedo().StartUndo( UNDO_INSTOX, NULL );
 
-    String sSectNm( rTOX.GetTOXName() );
-    sSectNm = GetUniqueTOXBaseName( *rTOX.GetTOXType(), &sSectNm );
+    String sSectNm = GetUniqueTOXBaseName( *rTOX.GetTOXType(), rTOX.GetTOXName() );
     SwPaM aPam( rPos );
     SwSectionData aSectionData( TOX_CONTENT_SECTION, sSectNm );
     SwTOXBaseSection *const pNewSection = dynamic_cast<SwTOXBaseSection *>(
@@ -391,8 +401,7 @@ const SwTOXBaseSection* SwDoc::InsertTableOf( sal_uLong nSttNd, sal_uLong nEndNd
         pSectNd = pSectNd->StartOfSectionNode()->FindSectionNode();
     }
 
-    String sSectNm( rTOX.GetTOXName() );
-    sSectNm = GetUniqueTOXBaseName(*rTOX.GetTOXType(), &sSectNm);
+    String sSectNm = GetUniqueTOXBaseName(*rTOX.GetTOXType(), rTOX.GetTOXName());
 
     SwSectionData aSectionData( TOX_CONTENT_SECTION, sSectNm );
 
@@ -602,28 +611,27 @@ const SwTOXType* SwDoc::InsertTOXType( const SwTOXType& rTyp )
 }
 
 String SwDoc::GetUniqueTOXBaseName( const SwTOXType& rType,
-                                    const String* pChkStr ) const
+                                    const String sChkStr ) const
 {
-    sal_uInt16 n;
-    const SwSectionNode* pSectNd;
-    const SwSection* pSect;
-
-    if(pChkStr && !pChkStr->Len())
-        pChkStr = 0;
+    bool bUseChkStr = sChkStr.Len()>0;
     String aName( rType.GetTypeName() );
     xub_StrLen nNmLen = aName.Len();
 
     sal_uInt16 nNum = 0;
-    sal_uInt16 nTmp = 0;
-    sal_uInt16 nFlagSize = ( mpSectionFmtTbl->size() / 8 ) +2;
+    const sal_uInt16 nFlagSize = ( mpSectionFmtTbl->size() / 8 ) +2;
     sal_uInt8* pSetFlags = new sal_uInt8[ nFlagSize ];
     memset( pSetFlags, 0, nFlagSize );
 
-    for( n = 0; n < mpSectionFmtTbl->size(); ++n )
-        if( 0 != ( pSectNd = (*mpSectionFmtTbl)[ n ]->GetSectionNode( sal_False ) )&&
-             TOX_CONTENT_SECTION == (pSect = &pSectNd->GetSection())->GetType())
+    for( sal_uInt16 n = 0; n < mpSectionFmtTbl->size(); ++n )
+    {
+        const SwSectionNode *pSectNd = (*mpSectionFmtTbl)[ n ]->GetSectionNode( sal_False );
+        if ( !pSectNd )
+            continue;
+
+        const SwSection& aSect = pSectNd->GetSection();
+        if (aSect.GetType()==TOX_CONTENT_SECTION)
         {
-            const String& rNm = pSect->GetSectionName();
+            const String& rNm = aSect.GetSectionName();
             if( rNm.Match( aName ) == nNmLen )
             {
                 // Calculate number and set the Flag
@@ -631,27 +639,34 @@ String SwDoc::GetUniqueTOXBaseName( const SwTOXType& rType,
                 if( nNum-- && nNum < mpSectionFmtTbl->size() )
                     pSetFlags[ nNum / 8 ] |= (0x01 << ( nNum & 0x07 ));
             }
-            if( pChkStr && pChkStr->Equals( rNm ) )
-                pChkStr = 0;
+            if( bUseChkStr && sChkStr.Equals( rNm ) )
+                bUseChkStr = false;
         }
+    }
 
-    if( !pChkStr )
+    if( !bUseChkStr )
     {
         // All Numbers have been flagged accordingly, so get the right Number
         nNum = mpSectionFmtTbl->size();
-        for( n = 0; n < nFlagSize; ++n )
-            if( 0xff != ( nTmp = pSetFlags[ n ] ))
+        for( sal_uInt16 n = 0; n < nFlagSize; ++n )
+        {
+            sal_uInt16 nTmp = pSetFlags[ n ];
+            if( nTmp != 0xff )
             {
                 // so get the Number
                 nNum = n * 8;
                 while( nTmp & 1 )
-                    ++nNum, nTmp >>= 1;
+                {
+                    ++nNum;
+                    nTmp >>= 1;
+                }
                 break;
             }
+        }
     }
     delete [] pSetFlags;
-    if( pChkStr )
-        return *pChkStr;
+    if ( bUseChkStr )
+        return sChkStr;
     return aName += OUString::number( ++nNum );
 }
 
@@ -661,7 +676,7 @@ bool SwDoc::SetTOXBaseName(const SwTOXBase& rTOXBase, const String& rName)
                     "no TOXBaseSection!" );
     SwTOXBaseSection* pTOX = (SwTOXBaseSection*)&rTOXBase;
 
-    String sTmp = GetUniqueTOXBaseName(*rTOXBase.GetTOXType(), &rName);
+    String sTmp = GetUniqueTOXBaseName(*rTOXBase.GetTOXType(), rName);
     bool bRet = sTmp == rName;
     if(bRet)
     {
@@ -2282,19 +2297,25 @@ Range SwTOXBaseSection::GetKeyRange(const String& rStr, const String& rStrReadin
 bool SwTOXBase::IsTOXBaseInReadonly() const
 {
     const SwTOXBaseSection *pSect = dynamic_cast<const SwTOXBaseSection*>(this);
-    bool bRet = false;
-    const SwSectionNode* pSectNode;
-    if(pSect && pSect->GetFmt() &&
-            0 != (pSectNode = pSect->GetFmt()->GetSectionNode()))
-    {
-        const SwDocShell* pDocSh;
-        bRet = (0 != (pDocSh = pSectNode->GetDoc()->GetDocShell()) &&
-                                                    pDocSh->IsReadOnly()) ||
-            (0 != (pSectNode = pSectNode->StartOfSectionNode()->FindSectionNode())&&
-                    pSectNode->GetSection().IsProtectFlag());
+    if (!pSect || !pSect->GetFmt())
+        return false;
 
-    }
-    return bRet;
+    const SwSectionNode* pSectNode = pSect->GetFmt()->GetSectionNode();
+    if (!pSectNode)
+        return false;
+
+    const SwDocShell* pDocSh = pSectNode->GetDoc()->GetDocShell();
+    if (!pDocSh)
+        return false;
+
+    if (pDocSh->IsReadOnly())
+        return true;
+
+    pSectNode = pSectNode->StartOfSectionNode()->FindSectionNode();
+    if (!pSectNode)
+        return false;
+
+    return pSectNode->GetSection().IsProtectFlag();
 }
 
 const SfxItemSet* SwTOXBase::GetAttrSet() const
