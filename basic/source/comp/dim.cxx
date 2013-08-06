@@ -405,12 +405,9 @@ void SbiParser::DefVar( SbiOpcode eOp, bool bStatic )
             if( !bCompatible && !pDef->IsNew() )
             {
                 OUString aTypeName( aGblStrings.Find( pDef->GetTypeId() ) );
-                /*std::cerr <<"CodeCompleteOptions::IsExtendedTypeDeclaration():" << CodeCompleteOptions::IsExtendedTypeDeclaration() << std::endl;
-                std::cerr << "IsUnoInterface("<<aTypeName<<"):"<< IsUnoInterface(aTypeName) << std::endl;
-                std::cerr << "finally: " << (CodeCompleteOptions::IsExtendedTypeDeclaration() && !IsUnoInterface(aTypeName)) << std::endl;*/
                 if( rTypeArray->Find( aTypeName, SbxCLASS_OBJECT ) == NULL )
                 {
-                    if(!CodeCompleteOptions::IsExtendedTypeDeclaration())
+                    if(!CodeCompleteOptions::IsCodeCompleteOn())
                         Error( SbERR_UNDEF_TYPE, aTypeName );
                     else
                     {

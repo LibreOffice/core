@@ -510,10 +510,11 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
 
     if( pCodeCompleteWnd->IsVisible() && CodeCompleteOptions::IsCodeCompleteOn() )
     {
-        std::cerr << "EditorWindow::KeyInput" << std::endl;
+        //std::cerr << "EditorWindow::KeyInput" << std::endl;
         pCodeCompleteWnd->GetListBox()->KeyInput(rKEvt);
         if( rKEvt.GetKeyCode().GetCode() == KEY_UP
-            || rKEvt.GetKeyCode().GetCode() == KEY_DOWN )
+            || rKEvt.GetKeyCode().GetCode() == KEY_DOWN
+            || rKEvt.GetKeyCode().GetCode() == KEY_TAB )
             return;
     }
 
@@ -672,7 +673,8 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
         }
     }
 
-    if( rKEvt.GetKeyCode().GetCode() == KEY_POINT && CodeCompleteOptions::IsCodeCompleteOn() )
+    if( rKEvt.GetKeyCode().GetCode() == KEY_POINT &&
+        (CodeCompleteOptions::IsCodeCompleteOn() || CodeCompleteOptions::IsExtendedTypeDeclaration()) )
     {
         rModulWindow.UpdateModule();
         rModulWindow.GetSbModule()->GetCodeCompleteDataFromParse(aCodeCompleteCache);
@@ -688,7 +690,10 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
             for ( size_t i = 0; i < aPortions.size(); i++ )
             {
                 HighlightPortion& r = aPortions[i];
-                if( r.tokenType == 1 ) // extract the identifers(methods, base variable)
+                if( r.tokenType == 1 || r.tokenType == 9) // extract the identifers(methods, base variable)
+                /* an example: Dim aLocVar2 as com.sun.star.beans.PropertyValue
+                 * here, aLocVar2.Name, and PropertyValue's Name field is treated as a keyword(?!)
+                 * */
                     aVect.push_back( aLine.copy(r.nBegin, r.nEnd - r.nBegin) );
             }
 
@@ -716,39 +721,51 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
                     while( j != aVect.size() )
                     {
                         sMethName = aVect[j];
-                        Reference< reflection::XIdlMethod> xMethod = xClass->getMethod( sMethName );
-                        if( xMethod != NULL ) //method OK
+                        Reference< reflection::XIdlField> xField = xClass->getField( sMethName );
+                        if( xField != NULL )
                         {
-                            xClass = xMethod->getReturnType();
+                            xClass = xField->getType();
                             if( xClass == NULL )
+                            {
                                 break;
+                            }
                         }
                         else
                         {
-                            bReflect = false;
-                            break;
+                            if( CodeCompleteOptions::IsExtendedTypeDeclaration() )
+                            {
+                                Reference< reflection::XIdlMethod> xMethod = xClass->getMethod( sMethName );
+                                if( xMethod != NULL ) //method OK
+                                {
+                                    xClass = xMethod->getReturnType();
+                                    if( xClass == NULL )
+                                    {
+                                        break;
+                                    }
+                                }
+                                else
+                                {//nothing to reflect
+                                    bReflect = false;
+                                    break;
+                                }
+                            }
+                            else
+                            {// no extended types allowed
+                                bReflect = false;
+                                break;
+                            }
                         }
                         j++;
                     }
                     if( bReflect )
                     {
-                        Sequence< Reference< reflection::XIdlMethod > > aMethods = xClass->getMethods();
-                        Sequence< Reference< reflection::XIdlField > > aFields = xClass->getFields();
-                        std::vector< OUString > aEntryVect;
-
-                        if( aMethods.getLength() != 0 )
-                        {
-                            for(sal_Int32 l = 0; l < aMethods.getLength(); ++l)
-                            {
-                                aEntryVect.push_back(OUString(aMethods[l]->getName()));
-                            }
-                        }
-                        if( aFields.getLength() != 0 )
-                        {
-                            for(sal_Int32 l = 0; l < aFields.getLength(); ++l)
-                            {
-                                aEntryVect.push_back(OUString(aFields[l]->getName()));
-                            }
+                        std::vector< OUString > aEntryVect;//entries to be inserted into the list
+                        std::vector< OUString > aMethVect = GetXIdlClassMethods(xClass);//methods
+                        std::vector< OUString > aFieldVect = GetXIdlClassFields(xClass);//fields
+                        aEntryVect.insert(aEntryVect.end(), aFieldVect.begin(), aFieldVect.end() );
+                        if( CodeCompleteOptions::IsExtendedTypeDeclaration() )
+                        {// if extended types on, reflect classes, else just the structs (XIdlClass without methods)
+                            aEntryVect.insert(aEntryVect.end(), aMethVect.begin(), aMethVect.end() );
                         }
                         if( aEntryVect.size() > 0 )
                         {
@@ -772,7 +789,6 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
                             pCodeCompleteWnd->ResizeListBox();
                             pCodeCompleteWnd->SelectFirstEntry();
                             pEditView->GetWindow()->GrabFocus();
-                            //pEditView->EnableCursor( true );
                         }
                     }
                 }
@@ -820,6 +836,34 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
                 pBindings->Invalidate( SID_ATTR_INSERT );
         }
     }
+}
+
+std::vector< OUString > EditorWindow::GetXIdlClassMethods( Reference< reflection::XIdlClass > xClass ) const
+{
+    Sequence< Reference< reflection::XIdlMethod > > aMethods = xClass->getMethods();
+    std::vector< OUString > aRetVect;
+    if( aMethods.getLength() != 0 )
+    {
+        for(sal_Int32 l = 0; l < aMethods.getLength(); ++l)
+        {
+            aRetVect.push_back(OUString(aMethods[l]->getName()));
+        }
+    }
+    return aRetVect;
+}
+
+std::vector< OUString > EditorWindow::GetXIdlClassFields( Reference< reflection::XIdlClass > xClass ) const
+{
+    Sequence< Reference< reflection::XIdlField > > aFields = xClass->getFields();
+    std::vector< OUString > aRetVect;
+    if( aFields.getLength() != 0 )
+    {
+        for(sal_Int32 l = 0; l < aFields.getLength(); ++l)
+        {
+            aRetVect.push_back(OUString(aFields[l]->getName()));
+        }
+    }
+    return aRetVect;
 }
 
 void EditorWindow::Paint( const Rectangle& rRect )
@@ -2620,7 +2664,7 @@ void CodeCompleteListBox::SetVisibleEntries()
 
 void CodeCompleteListBox::KeyInput( const KeyEvent& rKeyEvt )
 {
-    std::cerr << "CodeCompleteListBox::KeyInput" << std::endl;
+    //std::cerr << "CodeCompleteListBox::KeyInput" << std::endl;
     sal_Unicode aChar = rKeyEvt.GetKeyCode().GetCode();
     if( ( aChar >= KEY_A ) && ( aChar <= KEY_Z ) )
     {
@@ -2654,13 +2698,9 @@ void CodeCompleteListBox::KeyInput( const KeyEvent& rKeyEvt )
                 InsertSelectedEntry();
                 break;
             case KEY_UP: case KEY_DOWN:
-                std::cerr << "up/down ke in CodeCompleteListBox::KeyInput" << std::endl;
-                //GrabFocus();
+                //std::cerr << "up/down ke in CodeCompleteListBox::KeyInput" << std::endl;
                 NotifyEvent nEvt( EVENT_KEYINPUT, NULL, &rKeyEvt );
                 PreNotify(nEvt);
-                //pCodeCompleteWindow->pParent->GrabFocus();
-                //SetVisibleEntries();
-                //pCodeCompleteWindow->pParent->GrabFocus();
                 break;
         }
     }
