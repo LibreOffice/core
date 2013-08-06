@@ -1730,12 +1730,7 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     for( n = 0; n < nLevel; ++n )
         maFallbackRuns[n].ResetPos();
     // get the next codepoint index that needs fallback
-    // and limit it to the minindex..endindex bounds
     int nActiveCharPos = nCharPos[0];
-    if( nActiveCharPos < mnMinCharPos)
-        nActiveCharPos = mnMinCharPos;
-    else if( nActiveCharPos >= rArgs.mnEndCharPos )
-        nActiveCharPos = rArgs.mnEndCharPos - 1;
     // get the end index of the active run
     int nLastRunEndChar = (vRtl[nActiveCharPos - mnMinCharPos])?
         rArgs.mnEndCharPos : rArgs.mnMinCharPos - 1;
@@ -1944,8 +1939,6 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
                 }
             }
         }
-//            if( !maFallbackRuns[i].PosIsInRun( nActiveCharPos ) )
-//                maFallbackRuns[i].NextRun();
     }
 
     mpLayouts[0]->Simplify( true );

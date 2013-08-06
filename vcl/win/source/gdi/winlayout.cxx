@@ -1739,8 +1739,9 @@ int UniscribeLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos,
     {
         // create and reset the new array
         mpGlyphs2Chars = new int[ mnGlyphCapacity ];
+        static const int CHARPOS_NONE = -1;
         for( int i = 0; i < mnGlyphCount; ++i )
-            mpGlyphs2Chars[i] = -1;
+            mpGlyphs2Chars[i] = CHARPOS_NONE;
         // calculate the char->glyph mapping
         for( nItem = 0; nItem < mnItemCount; ++nItem )
         {
@@ -1779,6 +1780,14 @@ int UniscribeLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos,
             {
                 int i = mpLogClusters[c] + rVI.mnMinGlyphPos;
                 mpGlyphs2Chars[i] = c;
+            }
+            // use a heuristic to fill the gaps in the glyphs2chars array
+            c = !rVI.IsRTL() ? rVI.mnMinCharPos : rVI.mnEndCharPos - 1;
+            for( int i = rVI.mnMinGlyphPos; i < rVI.mnEndGlyphPos; ++i ) {
+                if( mpGlyphs2Chars[i] == CHARPOS_NONE )
+                    mpGlyphs2Chars[i] = c;
+                else
+                    c = mpGlyphs2Chars[i];
             }
         }
     }
