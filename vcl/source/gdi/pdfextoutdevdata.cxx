@@ -637,7 +637,7 @@ void PDFExtOutDevData::PlayGlobalActions( PDFWriter& rWriter )
    all actions will be played after the last page was recorded
 */
 //--->i56629
-sal_Int32 PDFExtOutDevData::CreateNamedDest(const String& sDestName,  const Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType )
+sal_Int32 PDFExtOutDevData::CreateNamedDest(const OUString& sDestName,  const Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType )
 {
     mpGlobalSyncData->mActions.push_back( PDFExtOutDevDataSync::CreateNamedDest );
     mpGlobalSyncData->mParaOUStrings.push_back( sDestName );
@@ -775,12 +775,12 @@ void PDFExtOutDevData::SetStructureBoundingBox( const Rectangle& rRect )
     mpPageSyncData->PushAction( mrOutDev, PDFExtOutDevDataSync::SetStructureBoundingBox );
     mpPageSyncData->mParaRects.push_back( rRect );
 }
-void PDFExtOutDevData::SetActualText( const String& rText )
+void PDFExtOutDevData::SetActualText( const OUString& rText )
 {
     mpPageSyncData->PushAction( mrOutDev, PDFExtOutDevDataSync::SetActualText );
     mpPageSyncData->mParaOUStrings.push_back( rText );
 }
-void PDFExtOutDevData::SetAlternateText( const String& rText )
+void PDFExtOutDevData::SetAlternateText( const OUString& rText )
 {
     mpPageSyncData->PushAction( mrOutDev, PDFExtOutDevDataSync::SetAlternateText );
     mpPageSyncData->mParaOUStrings.push_back( rText );

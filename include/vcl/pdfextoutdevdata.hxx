@@ -202,7 +202,7 @@ public :
     the destination id (to be used in SetLinkDest) or
     -1 if page id does not exist
     */
-    sal_Int32 CreateNamedDest( const String& sDestName,  const Rectangle& rRect, sal_Int32 nPageNr = -1, PDFWriter::DestAreaType eType = PDFWriter::XYZ );
+    sal_Int32 CreateNamedDest( const OUString& sDestName,  const Rectangle& rRect, sal_Int32 nPageNr = -1, PDFWriter::DestAreaType eType = PDFWriter::XYZ );
 
     /** registers a destination for which a destinatin ID needs to be known immediately, instead of later on setting it via
         SetLinkDest.
@@ -445,7 +445,7 @@ public :
     @param rText
     contains the complete logical text the structural element displays.
      */
-    void SetActualText( const String& rText );
+    void SetActualText( const OUString& rText );
 
     /** set the Alt attribute of a strutural element
 
@@ -456,7 +456,7 @@ public :
     @param rText
     contains the replacement text for the structural element
     */
-    void SetAlternateText( const String& rText );
+    void SetAlternateText( const OUString& rText );
 
     /** Sets the transitional effect to be applied when the current page gets shown.
 
