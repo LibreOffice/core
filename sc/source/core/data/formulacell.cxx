@@ -3129,6 +3129,20 @@ ScFormulaCell*  ScFormulaCell::GetNextTrack() const                    { return 
 void            ScFormulaCell::SetPreviousTrack( ScFormulaCell* pF )   { pPreviousTrack = pF; }
 void            ScFormulaCell::SetNextTrack( ScFormulaCell* pF )       { pNextTrack = pF; }
 
+ScFormulaCellGroupRef ScFormulaCell::CreateCellGroup( SCROW nStart, SCROW nLen, bool bInvariant )
+{
+    if (mxGroup)
+        // You can't create a new group if the cell is already a part of a group.
+        return ScFormulaCellGroupRef();
+
+    mxGroup.reset(new ScFormulaCellGroup);
+    mxGroup->mnStart = nStart;
+    mxGroup->mbInvariant = bInvariant;
+    mxGroup->mnLength = nLen;
+    mxGroup->mpCode = pCode; // Move this to the shared location.
+    return mxGroup;
+}
+
 ScFormulaCellGroupRef ScFormulaCell::GetCellGroup()
 {
     return mxGroup;
@@ -3136,7 +3150,23 @@ ScFormulaCellGroupRef ScFormulaCell::GetCellGroup()
 
 void ScFormulaCell::SetCellGroup( const ScFormulaCellGroupRef &xRef )
 {
+    if (!xRef)
+    {
+        // Make this cell a non-grouped cell.
+        if (mxGroup)
+            pCode = mxGroup->mpCode->Clone();
+
+        mxGroup = xRef;
+        return;
+    }
+
+    // Group object has shared token array.
+    if (!mxGroup)
+        // Currently not shared. Delete the existing token array first.
+        delete pCode;
+
     mxGroup = xRef;
+    pCode = mxGroup->mpCode;
 }
 
 ScFormulaCell::CompareState ScFormulaCell::CompareByTokenArray( ScFormulaCell& rOther ) const
@@ -3711,9 +3741,20 @@ SCROW ScFormulaCell::GetSharedTopRow() const
 {
     return mxGroup ? mxGroup->mnStart : -1;
 }
+
 SCROW ScFormulaCell::GetSharedLength() const
 {
     return mxGroup ? mxGroup->mnLength : 0;
+}
+
+ScTokenArray* ScFormulaCell::GetSharedCode()
+{
+    return mxGroup ? mxGroup->mpCode : NULL;
+}
+
+const ScTokenArray* ScFormulaCell::GetSharedCode() const
+{
+    return mxGroup ? mxGroup->mpCode : NULL;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

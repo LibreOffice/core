@@ -9,6 +9,7 @@
 
 #include "sharedformula.hxx"
 #include "calcmacros.hxx"
+#include "tokenarray.hxx"
 
 namespace sc {
 
@@ -41,6 +42,7 @@ void SharedFormulaUtil::splitFormulaCellGroup(const CellStoreType::position_type
     xGroup2->mbInvariant = xGroup->mbInvariant;
     xGroup2->mnStart = nRow;
     xGroup2->mnLength = xGroup->mnStart + xGroup->mnLength - nRow;
+    xGroup2->mpCode = xGroup->mpCode->Clone();
 
     xGroup->mnLength = nRow - xGroup->mnStart;
 
@@ -110,12 +112,7 @@ void SharedFormulaUtil::joinFormulaCells(const CellStoreType::position_type& rPo
         else
         {
             // neither cells are shared.
-            xGroup1.reset(new ScFormulaCellGroup);
-            xGroup1->mnStart = nRow;
-            xGroup1->mbInvariant = (eState == ScFormulaCell::EqualInvariant);
-            xGroup1->mnLength = 2;
-
-            rCell1.SetCellGroup(xGroup1);
+            xGroup1 = rCell1.CreateCellGroup(nRow, 2, eState == ScFormulaCell::EqualInvariant);
             rCell2.SetCellGroup(xGroup1);
         }
     }
@@ -226,6 +223,7 @@ void SharedFormulaUtil::unshareFormulaCell(const CellStoreType::position_type& a
             xGroup2->mnStart = rCell.aPos.Row() + 1;
             xGroup2->mnLength = nLength2;
             xGroup2->mbInvariant = xGroup->mbInvariant;
+            xGroup2->mpCode = xGroup->mpCode->Clone();
 #if DEBUG_COLUMN_STORAGE
             if (xGroup2->mnStart + xGroup2->mnLength > it->position + it->size)
             {

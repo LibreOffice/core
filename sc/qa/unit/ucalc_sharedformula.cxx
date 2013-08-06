@@ -32,6 +32,7 @@ void Test::testSharedFormulas()
     CPPUNIT_ASSERT_MESSAGE("This cell is expected to be a shared formula cell.", pFC && pFC->IsShared());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(9), pFC->GetSharedTopRow());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(2), pFC->GetSharedLength());
+    CPPUNIT_ASSERT_MESSAGE("The token is expected to be shared.", pFC->GetCode() == pFC->GetSharedCode());
 
     aPos.SetRow(8); // B9
     m_pDoc->SetString(aPos, "=A9*2");
@@ -39,6 +40,7 @@ void Test::testSharedFormulas()
     CPPUNIT_ASSERT_MESSAGE("This cell is expected to be a shared formula cell.", pFC && pFC->IsShared());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(8), pFC->GetSharedTopRow());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(3), pFC->GetSharedLength());
+    CPPUNIT_ASSERT_MESSAGE("The token is expected to be shared.", pFC->GetCode() == pFC->GetSharedCode());
 
     aPos.SetRow(12); // B13
     m_pDoc->SetString(aPos, "=A13*2");
@@ -52,6 +54,7 @@ void Test::testSharedFormulas()
     CPPUNIT_ASSERT_MESSAGE("This cell is expected to be a shared formula cell.", pFC && pFC->IsShared());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(8), pFC->GetSharedTopRow());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(5), pFC->GetSharedLength());
+    CPPUNIT_ASSERT_MESSAGE("The token is expected to be shared.", pFC->GetCode() == pFC->GetSharedCode());
 
     // Insert formulas to B15:B16.
     aPos.SetRow(14); // B15
@@ -62,6 +65,7 @@ void Test::testSharedFormulas()
     CPPUNIT_ASSERT_MESSAGE("This cell is expected to be a shared formula cell.", pFC && pFC->IsShared());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(14), pFC->GetSharedTopRow());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(2), pFC->GetSharedLength());
+    CPPUNIT_ASSERT_MESSAGE("The token is expected to be shared.", pFC->GetCode() == pFC->GetSharedCode());
 
     // Insert a formula to B14, and B9:B16 should be shared.
     aPos.SetRow(13); // B14
@@ -70,6 +74,7 @@ void Test::testSharedFormulas()
     CPPUNIT_ASSERT_MESSAGE("This cell is expected to be a shared formula cell.", pFC && pFC->IsShared());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(8), pFC->GetSharedTopRow());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(8), pFC->GetSharedLength());
+    CPPUNIT_ASSERT_MESSAGE("The token is expected to be shared.", pFC->GetCode() == pFC->GetSharedCode());
 
     // Insert an incompatible formula to B12, to split the shared range to B9:B11 and B13:B16.
     aPos.SetRow(11); // B12
@@ -82,12 +87,14 @@ void Test::testSharedFormulas()
     CPPUNIT_ASSERT_MESSAGE("This cell is expected to be a shared formula cell.", pFC && pFC->IsShared());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(8), pFC->GetSharedTopRow());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(3), pFC->GetSharedLength());
+    CPPUNIT_ASSERT_MESSAGE("The token is expected to be shared.", pFC->GetCode() == pFC->GetSharedCode());
 
     aPos.SetRow(12); // B13
     pFC = m_pDoc->GetFormulaCell(aPos);
     CPPUNIT_ASSERT_MESSAGE("This cell is expected to be a shared formula cell.", pFC && pFC->IsShared());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(12), pFC->GetSharedTopRow());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(4), pFC->GetSharedLength());
+    CPPUNIT_ASSERT_MESSAGE("The token is expected to be shared.", pFC->GetCode() == pFC->GetSharedCode());
 
     // Extend B13:B16 to B13:B20.
     aPos.SetRow(16); // B17
@@ -103,6 +110,7 @@ void Test::testSharedFormulas()
     // B13:B20 shuld be shared.
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(12), pFC->GetSharedTopRow());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(8), pFC->GetSharedLength());
+    CPPUNIT_ASSERT_MESSAGE("The token is expected to be shared.", pFC->GetCode() == pFC->GetSharedCode());
 
     // Empty B19. This should split it into B13:B18, and B20 non-shared.
     aPos.SetRow(18);
@@ -113,6 +121,7 @@ void Test::testSharedFormulas()
     // B13:B18 should be shared.
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(12), pFC->GetSharedTopRow());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(6), pFC->GetSharedLength());
+    CPPUNIT_ASSERT_MESSAGE("The token is expected to be shared.", pFC->GetCode() == pFC->GetSharedCode());
     // B20 shold be non-shared.
     aPos.SetRow(19); // B20
     pFC = m_pDoc->GetFormulaCell(aPos);
@@ -132,6 +141,7 @@ void Test::testSharedFormulas()
     pFC = m_pDoc->GetFormulaCell(aPos);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(14), pFC->GetSharedTopRow());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(4), pFC->GetSharedLength());
+    CPPUNIT_ASSERT_MESSAGE("The token is expected to be shared.", pFC->GetCode() == pFC->GetSharedCode());
 
     // Set numeric value to B15, to make B16:B18 shared.
     aPos.SetRow(14);
@@ -141,6 +151,7 @@ void Test::testSharedFormulas()
     // B16:B18 should be shared.
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(15), pFC->GetSharedTopRow());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(3), pFC->GetSharedLength());
+    CPPUNIT_ASSERT_MESSAGE("The token is expected to be shared.", pFC->GetCode() == pFC->GetSharedCode());
 
     // Set string value to B16 to make B17:B18 shared.
     aPos.SetRow(15);
@@ -153,6 +164,7 @@ void Test::testSharedFormulas()
     // B17:B18 should be shared.
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(16), pFC->GetSharedTopRow());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(2), pFC->GetSharedLength());
+    CPPUNIT_ASSERT_MESSAGE("The token is expected to be shared.", pFC->GetCode() == pFC->GetSharedCode());
 
     // Set edit text to B17. Now B18 should be non-shared.
     ScFieldEditEngine& rEditEngine = m_pDoc->GetEditEngine();
@@ -191,6 +203,7 @@ void Test::testSharedFormulas()
     CPPUNIT_ASSERT_MESSAGE("B10 should be a formula cell.", pFC);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(1), pFC->GetSharedTopRow());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(9), pFC->GetSharedLength());
+    CPPUNIT_ASSERT_MESSAGE("The token is expected to be shared.", pFC->GetCode() == pFC->GetSharedCode());
 
     // Delete A4:B8. This should splite the grouping to B2:B3 and B9:B10.
     clearRange(m_pDoc, ScRange(0,3,0,1,7,0));
@@ -199,12 +212,14 @@ void Test::testSharedFormulas()
     CPPUNIT_ASSERT_MESSAGE("B2 should be a formula cell.", pFC);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(1), pFC->GetSharedTopRow());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(2), pFC->GetSharedLength());
+    CPPUNIT_ASSERT_MESSAGE("The token is expected to be shared.", pFC->GetCode() == pFC->GetSharedCode());
 
     aPos.SetRow(8);
     pFC = m_pDoc->GetFormulaCell(aPos);
     CPPUNIT_ASSERT_MESSAGE("B9 should be a formula cell.", pFC);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(8), pFC->GetSharedTopRow());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(2), pFC->GetSharedLength());
+    CPPUNIT_ASSERT_MESSAGE("The token is expected to be shared.", pFC->GetCode() == pFC->GetSharedCode());
 
     // Delete rows 4:8 and shift row 9 and below up to row 4.  This should
     // re-merge the two into a group of B2:B5.
@@ -214,6 +229,7 @@ void Test::testSharedFormulas()
     CPPUNIT_ASSERT_MESSAGE("B2 should be a formula cell.", pFC);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(1), pFC->GetSharedTopRow());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(4), pFC->GetSharedLength());
+    CPPUNIT_ASSERT_MESSAGE("The token is expected to be shared.", pFC->GetCode() == pFC->GetSharedCode());
 
     // Insert 2 rows at row 4, to split it into B2:B3 and B6:B7.
     m_pDoc->InsertRow(ScRange(0,3,0,MAXCOL,4,0));
@@ -221,12 +237,14 @@ void Test::testSharedFormulas()
     CPPUNIT_ASSERT_MESSAGE("B2 should be a formula cell.", pFC);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(1), pFC->GetSharedTopRow());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(2), pFC->GetSharedLength());
+    CPPUNIT_ASSERT_MESSAGE("The token is expected to be shared.", pFC->GetCode() == pFC->GetSharedCode());
 
     aPos.SetRow(5);
     pFC = m_pDoc->GetFormulaCell(aPos);
     CPPUNIT_ASSERT_MESSAGE("B6 should be a formula cell.", pFC);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(5), pFC->GetSharedTopRow());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(2), pFC->GetSharedLength());
+    CPPUNIT_ASSERT_MESSAGE("The token is expected to be shared.", pFC->GetCode() == pFC->GetSharedCode());
 
     m_pDoc->DeleteTab(0);
 }
@@ -245,6 +263,7 @@ void Test::testSharedFormulasCopyPaste()
     CPPUNIT_ASSERT_MESSAGE("B9 should be a formula cell.", pFC);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(0), pFC->GetSharedTopRow());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(10), pFC->GetSharedLength());
+    CPPUNIT_ASSERT_MESSAGE("The token is expected to be shared.", pFC->GetCode() == pFC->GetSharedCode());
 
     // Copy formulas in B6:B9 to the clipboard doc.
     ScRange aSrcRange(1,5,0,1,8,0); // B6:B9
@@ -254,6 +273,7 @@ void Test::testSharedFormulasCopyPaste()
     CPPUNIT_ASSERT_MESSAGE("B9 in the clip doc should be a formula cell.", pFC);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(5), pFC->GetSharedTopRow());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(4), pFC->GetSharedLength());
+    CPPUNIT_ASSERT_MESSAGE("The token is expected to be shared.", pFC->GetCode() == pFC->GetSharedCode());
 
     // Paste them to C2:C10.
     ScRange aDestRange(2,1,0,2,9,0);
@@ -266,6 +286,7 @@ void Test::testSharedFormulasCopyPaste()
     CPPUNIT_ASSERT_MESSAGE("C2 should be a formula cell.", pFC);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(1), pFC->GetSharedTopRow());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(9), pFC->GetSharedLength());
+    CPPUNIT_ASSERT_MESSAGE("The token is expected to be shared.", pFC->GetCode() == pFC->GetSharedCode());
 
     ScRange aRange(1,0,0,1,9,0); // B1:B10
     ScDocument* pUndoDoc = new ScDocument(SCDOCMODE_UNDO);
@@ -282,6 +303,7 @@ void Test::testSharedFormulasCopyPaste()
         CPPUNIT_ASSERT_MESSAGE("Must be a formula cell.", pFC);
         CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(0), pFC->GetSharedTopRow());
         CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(10), pFC->GetSharedLength());
+        CPPUNIT_ASSERT_MESSAGE("The token is expected to be shared.", pFC->GetCode() == pFC->GetSharedCode());
     }
 
     // Overwrite B1:B10.
@@ -302,6 +324,7 @@ void Test::testSharedFormulasCopyPaste()
         CPPUNIT_ASSERT_MESSAGE("This should be a formula cell.", pFC);
         CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(0), pFC->GetSharedTopRow());
         CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(10), pFC->GetSharedLength());
+        CPPUNIT_ASSERT_MESSAGE("The token is expected to be shared.", pFC->GetCode() == pFC->GetSharedCode());
     }
 
     m_pDoc->DeleteTab(0);

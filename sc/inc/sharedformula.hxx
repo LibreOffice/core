@@ -46,11 +46,7 @@ public:
             }
 
             // Create a new group.
-            xGroup.reset(new ScFormulaCellGroup);
-            xGroup->mnStart = pPrev->aPos.Row();
-            xGroup->mnLength = 2;
-            xGroup->mbInvariant = (eState == ScFormulaCell::EqualInvariant);
-            pPrev->SetCellGroup(xGroup);
+            xGroup = pPrev->CreateCellGroup(pPrev->aPos.Row(), 2, eState == ScFormulaCell::EqualInvariant);
             pCur->SetCellGroup(xGroup);
         }
     }
