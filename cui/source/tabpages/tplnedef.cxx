@@ -73,8 +73,11 @@ SvxLineDefTabPage::SvxLineDefTabPage
    get(m_pNumFldNumber1  ,"NUM_FLD_1");
    get(m_pNumFldNumber2  ,"NUM_FLD_2");
    get(m_pMtrLength1     ,"MTR_FLD_LENGTH_1");
+   m_pMtrLength1->SetCustomUnitText("%");
    get(m_pMtrLength2     ,"MTR_FLD_LENGTH_2");
+   m_pMtrLength2->SetCustomUnitText("%");
    get(m_pMtrDistance    ,"MTR_FLD_DISTANCE");
+   m_pMtrDistance->SetCustomUnitText("%");
    get(m_pCbxSynchronize ,"CBX_SYNCHRONIZE");
    get(m_pBtnAdd         ,"BTN_ADD");
    get(m_pBtnModify      ,"BTN_MODIFY");
