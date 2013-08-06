@@ -32,7 +32,7 @@ namespace vcl
     struct QuickSelectionEngine_Data
     {
         ISearchableStringList&              rEntryList;
-        String                              sCurrentSearchString;
+        OUString                            sCurrentSearchString;
         ::boost::optional< sal_Unicode >    aSingleSearchChar;
         Timer                               aSearchTimeout;
 
@@ -58,7 +58,7 @@ namespace vcl
     {
         static void lcl_reset( QuickSelectionEngine_Data& _data )
         {
-            _data.sCurrentSearchString.Erase();
+            _data.sCurrentSearchString = "";
             _data.aSingleSearchChar.reset();
             _data.aSearchTimeout.Stop();
         }
@@ -75,7 +75,7 @@ namespace vcl
         const vcl::I18nHelper& rI18nHelper = Application::GetSettings().GetLocaleI18nHelper();
         // TODO: do we really need the Window's settings here? The original code used it ...
 
-        String sEntryText;
+        OUString sEntryText;
         // get the "current + 1" entry
         StringEntryIdentifier pSearchEntry = _engineData.rEntryList.CurrentEntry( sEntryText );
         if ( pSearchEntry )
@@ -110,14 +110,14 @@ namespace vcl
 
         if ( ( c >= 32 ) && ( c != 127 ) && !_keyEvent.GetKeyCode().IsMod2() )
         {
-            m_pData->sCurrentSearchString += c;
+            m_pData->sCurrentSearchString += OUString(c);
             OSL_TRACE( "QuickSelectionEngine::HandleKeyEvent: searching for %s", OUStringToOString(m_pData->sCurrentSearchString, RTL_TEXTENCODING_UTF8).getStr() );
 
-            if ( m_pData->sCurrentSearchString.Len() == 1 )
+            if ( m_pData->sCurrentSearchString.getLength() == 1 )
             {   // first character in the search -> remmeber
                 m_pData->aSingleSearchChar.reset( c );
             }
-            else if ( m_pData->sCurrentSearchString.Len() > 1 )
+            else if ( m_pData->sCurrentSearchString.getLength() > 1 )
             {
                 if ( !!m_pData->aSingleSearchChar && ( *m_pData->aSingleSearchChar != c ) )
                     // we already have a "single char", but the current one is different -> reset

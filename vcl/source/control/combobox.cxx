@@ -1456,7 +1456,7 @@ void ComboBox::SelectEntryPos( sal_uInt16 nPos, sal_Bool bSelect)
 void ComboBox::SetNoSelection()
 {
     mpImplLB->SetNoSelection();
-    mpSubEdit->SetText( String() );
+    mpSubEdit->SetText( OUString() );
 }
 // -----------------------------------------------------------------------------
 Rectangle ComboBox::GetBoundingRectangle( sal_uInt16 nItem ) const

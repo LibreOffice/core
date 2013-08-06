@@ -326,14 +326,14 @@ protected:
     void            OnCurrentEntryChanged();
 
     // IMnemonicEntryList
-    virtual const void* FirstSearchEntry( String& _rEntryText ) const;
-    virtual const void* NextSearchEntry( const void* _pCurrentSearchEntry, String& _rEntryText ) const;
+    virtual const void* FirstSearchEntry( OUString& _rEntryText ) const;
+    virtual const void* NextSearchEntry( const void* _pCurrentSearchEntry, OUString& _rEntryText ) const;
     virtual void        SelectSearchEntry( const void* _pEntry );
     virtual void        ExecuteSearchEntry( const void* _pEntry ) const;
 
     // ISearchableStringList
-    virtual ::vcl::StringEntryIdentifier    CurrentEntry( String& _out_entryText ) const;
-    virtual ::vcl::StringEntryIdentifier    NextEntry( ::vcl::StringEntryIdentifier _currentEntry, String& _out_entryText ) const;
+    virtual ::vcl::StringEntryIdentifier    CurrentEntry( OUString& _out_entryText ) const;
+    virtual ::vcl::StringEntryIdentifier    NextEntry( ::vcl::StringEntryIdentifier _currentEntry, OUString& _out_entryText ) const;
     virtual void                            SelectEntry( ::vcl::StringEntryIdentifier _entry );
 
 public:

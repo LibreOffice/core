@@ -273,7 +273,7 @@ sal_uInt16 ImplEntryList::FindEntry( const OUString& rString, sal_Bool bSearchMR
     sal_uInt16 nEntries = maEntries.size();
     for ( sal_uInt16 n = bSearchMRUArea ? 0 : GetMRUCount(); n < nEntries; n++ )
     {
-        String aComp( vcl::I18nHelper::filterFormattingChars( maEntries[n].maStr ) );
+        OUString aComp( vcl::I18nHelper::filterFormattingChars( maEntries[n].maStr ) );
         if ( aComp == rString )
             return n;
     }
@@ -758,7 +758,7 @@ void ImplListBoxWindow::ImplCallSelect()
         // Insert the selected entry as MRU, if not already first MRU
         sal_uInt16 nSelected = GetEntryList()->GetSelectEntryPos( 0 );
         sal_uInt16 nMRUCount = GetEntryList()->GetMRUCount();
-        String aSelected = GetEntryList()->GetEntryText( nSelected );
+        OUString aSelected = GetEntryList()->GetEntryText( nSelected );
         sal_uInt16 nFirstMatchingEntryPos = GetEntryList()->FindEntry( aSelected, sal_True );
         if ( nFirstMatchingEntryPos || !nMRUCount )
         {
@@ -1704,7 +1704,7 @@ sal_Bool ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
 // -----------------------------------------------------------------------
 namespace
 {
-    static ::vcl::StringEntryIdentifier lcl_getEntry( const ImplEntryList& _rList, sal_uInt16 _nPos, String& _out_entryText )
+    static ::vcl::StringEntryIdentifier lcl_getEntry( const ImplEntryList& _rList, sal_uInt16 _nPos, OUString& _out_entryText )
     {
         OSL_PRECOND( ( _nPos != LISTBOX_ENTRY_NOTFOUND ), "lcl_getEntry: invalid position!" );
         sal_uInt16 nEntryCount( _rList.GetEntryCount() );
@@ -1725,13 +1725,13 @@ namespace
 }
 
 // -----------------------------------------------------------------------
-::vcl::StringEntryIdentifier ImplListBoxWindow::CurrentEntry( String& _out_entryText ) const
+::vcl::StringEntryIdentifier ImplListBoxWindow::CurrentEntry( OUString& _out_entryText ) const
 {
     return lcl_getEntry( *GetEntryList(), ( mnCurrentPos == LISTBOX_ENTRY_NOTFOUND ) ? 0 : mnCurrentPos + 1, _out_entryText );
 }
 
 // -----------------------------------------------------------------------
-::vcl::StringEntryIdentifier ImplListBoxWindow::NextEntry( ::vcl::StringEntryIdentifier _currentEntry, String& _out_entryText ) const
+::vcl::StringEntryIdentifier ImplListBoxWindow::NextEntry( ::vcl::StringEntryIdentifier _currentEntry, OUString& _out_entryText ) const
 {
     sal_uInt16 nNextPos = lcl_getEntryPos( _currentEntry ) + 1;
     return lcl_getEntry( *GetEntryList(), nNextPos, _out_entryText );

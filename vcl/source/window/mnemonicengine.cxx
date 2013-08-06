@@ -43,7 +43,7 @@ namespace vcl
 
             const vcl::I18nHelper& rI18nHelper = Application::GetSettings().GetUILocaleI18nHelper();
 
-            String sEntryText;
+            OUString sEntryText;
             const void* pSearchEntry = _rEntryList.FirstSearchEntry( sEntryText );
 
             const void* pFirstFoundEntry = NULL;

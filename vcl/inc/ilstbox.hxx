@@ -385,8 +385,8 @@ public:
 
 protected:
     // ISearchableStringList
-    virtual ::vcl::StringEntryIdentifier    CurrentEntry( String& _out_entryText ) const;
-    virtual ::vcl::StringEntryIdentifier    NextEntry( ::vcl::StringEntryIdentifier _currentEntry, String& _out_entryText ) const;
+    virtual ::vcl::StringEntryIdentifier    CurrentEntry( OUString& _out_entryText ) const;
+    virtual ::vcl::StringEntryIdentifier    NextEntry( ::vcl::StringEntryIdentifier _currentEntry, OUString& _out_entryText ) const;
     virtual void                            SelectEntry( ::vcl::StringEntryIdentifier _entry );
 };
 
