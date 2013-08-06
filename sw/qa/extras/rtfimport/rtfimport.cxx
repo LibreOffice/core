@@ -159,6 +159,7 @@ public:
     void testN820504();
     void testFdo67365();
     void testFdo67498();
+    void testFdo47440();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -303,6 +304,7 @@ void Test::run()
         {"n820504.rtf", &Test::testN820504},
         {"fdo67365.rtf", &Test::testFdo67365},
         {"fdo67498.rtf", &Test::testFdo67498},
+        {"fdo47440.rtf", &Test::testFdo47440},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1476,6 +1478,15 @@ void Test::testFdo67498()
 {
     // Left margin of the default page style wasn't set (was 2000).
     CPPUNIT_ASSERT_EQUAL(sal_Int32(TWIP_TO_MM100(5954)), getProperty<sal_Int32>(getStyles("PageStyles")->getByName(DEFAULT_STYLE), "LeftMargin"));
+}
+
+void Test::testFdo47440()
+{
+    // Vertical and horizontal orientation of the picture wasn't imported (was text::RelOrientation::FRAME).
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, getProperty<sal_Int16>(xDraws->getByIndex(0), "HoriOrientRelation"));
+    CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, getProperty<sal_Int16>(xDraws->getByIndex(0), "VertOrientRelation"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

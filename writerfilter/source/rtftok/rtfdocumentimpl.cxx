@@ -836,17 +836,20 @@ int RTFDocumentImpl::resolvePict(bool bInline)
         if (aAnchorWrapAttributes.size())
             aAnchorSprms.set(NS_ooxml::LN_EG_WrapType_wrapSquare, pAnchorWrapValue);
 
-        // See OOXMLFastContextHandler::positionOffset(), we can't just put values in an RTFValue.
+        // See OOXMLFastContextHandler::positionOffset(), we can't just put offset values in an RTFValue.
+        RTFSprms aPoshSprms;
+        if (m_aStates.top().aShape.nHoriOrientRelationToken > 0)
+            aPoshSprms.set(NS_ooxml::LN_CT_PosH_relativeFrom, RTFValue::Pointer_t(new RTFValue(m_aStates.top().aShape.nHoriOrientRelationToken)));
         if (m_aStates.top().aShape.nLeft > 0)
-        {
             writerfilter::dmapper::PositionHandler::setPositionOffset(OUString::number(MM100_TO_EMU(m_aStates.top().aShape.nLeft)), false);
-            aAnchorSprms.set(NS_ooxml::LN_CT_Anchor_positionH, RTFValue::Pointer_t(new RTFValue(RTFSprms())));
-        }
+        aAnchorSprms.set(NS_ooxml::LN_CT_Anchor_positionH, RTFValue::Pointer_t(new RTFValue(aPoshSprms)));
+
+        RTFSprms aPosvSprms;
+        if (m_aStates.top().aShape.nVertOrientRelationToken > 0)
+            aPosvSprms.set(NS_ooxml::LN_CT_PosV_relativeFrom, RTFValue::Pointer_t(new RTFValue(m_aStates.top().aShape.nVertOrientRelationToken)));
         if (m_aStates.top().aShape.nTop > 0)
-        {
             writerfilter::dmapper::PositionHandler::setPositionOffset(OUString::number(MM100_TO_EMU(m_aStates.top().aShape.nTop)), true);
-            aAnchorSprms.set(NS_ooxml::LN_CT_Anchor_positionV, RTFValue::Pointer_t(new RTFValue(RTFSprms())));
-        }
+        aAnchorSprms.set(NS_ooxml::LN_CT_Anchor_positionV, RTFValue::Pointer_t(new RTFValue(aPosvSprms)));
 
         aAnchorSprms.set(NS_ooxml::LN_CT_Anchor_docPr, pDocprValue);
         aAnchorSprms.set(NS_ooxml::LN_graphic_graphic, pGraphicValue);
@@ -2684,9 +2687,11 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                 break;
         case RTF_SHPBXPAGE:
                 m_aStates.top().aShape.nHoriOrientRelation = text::RelOrientation::PAGE_FRAME;
+                m_aStates.top().aShape.nHoriOrientRelationToken = NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromH_page;
                 break;
         case RTF_SHPBYPAGE:
                 m_aStates.top().aShape.nVertOrientRelation = text::RelOrientation::PAGE_FRAME;
+                m_aStates.top().aShape.nVertOrientRelationToken = NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromV_page;
                 break;
         case RTF_DPLINEHOLLOW:
                 m_aStates.top().aDrawingObject.nFLine = 0;
@@ -4855,6 +4860,8 @@ RTFShape::RTFShape()
     nBottom(0),
     nHoriOrientRelation(0),
     nVertOrientRelation(0),
+    nHoriOrientRelationToken(0),
+    nVertOrientRelationToken(0),
     nWrap(-1)
 {
 }

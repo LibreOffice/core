@@ -100,8 +100,10 @@ namespace writerfilter {
                 sal_Int32 nRight;
                 sal_Int32 nBottom;
                 boost::optional<sal_Int32> oZ; ///< Z-Order of the shape.
-                sal_Int16 nHoriOrientRelation;
-                sal_Int16 nVertOrientRelation;
+                sal_Int16 nHoriOrientRelation; ///< Horizontal text::RelOrientation for drawinglayer shapes.
+                sal_Int16 nVertOrientRelation; ///< Vertical text::RelOrientation for drawinglayer shapes.
+                sal_uInt32 nHoriOrientRelationToken; ///< Horizontal dmapper token for Writer pictures.
+                sal_uInt32 nVertOrientRelationToken; ///< Vertical dmapper token for Writer pictures.
                 int nWrap;
         };
 
