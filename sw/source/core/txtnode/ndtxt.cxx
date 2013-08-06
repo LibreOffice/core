@@ -2893,10 +2893,11 @@ long SwTxtNode::GetLeftMarginForTabCalculation() const
     return nLeftMarginForTabCalc;
 }
 
-void SwTxtNode::Replace0xFF( XubString& rTxt, xub_StrLen& rTxtStt,
-                            xub_StrLen nEndPos, sal_Bool bExpandFlds ) const
+static void
+Replace0xFF(SwTxtNode const& rNode, XubString& rTxt, xub_StrLen& rTxtStt,
+            xub_StrLen nEndPos, sal_Bool const bExpandFlds)
 {
-    if( GetpSwpHints() )
+    if (rNode.GetpSwpHints())
     {
         sal_Unicode cSrchChr = CH_TXTATR_BREAKWORD;
         for( int nSrchIter = 0; 2 > nSrchIter; ++nSrchIter,
@@ -2906,7 +2907,7 @@ void SwTxtNode::Replace0xFF( XubString& rTxt, xub_StrLen& rTxtStt,
             while( STRING_NOTFOUND != nPos && nPos < nEndPos )
             {
                 const SwTxtAttr* const pAttr =
-                    GetTxtAttrForCharAt( rTxtStt + nPos );
+                    rNode.GetTxtAttrForCharAt(rTxtStt + nPos);
                 if( pAttr )
                 {
                     switch( pAttr->Which() )
@@ -2934,10 +2935,10 @@ void SwTxtNode::Replace0xFF( XubString& rTxt, xub_StrLen& rTxtStt,
                             if( rFtn.GetNumStr().Len() )
                                 sExpand = rFtn.GetNumStr();
                             else if( rFtn.IsEndNote() )
-                                sExpand = GetDoc()->GetEndNoteInfo().aFmt.
+                                sExpand = rNode.GetDoc()->GetEndNoteInfo().aFmt.
                                                 GetNumStr( rFtn.GetNumber() );
                             else
-                                sExpand = GetDoc()->GetFtnInfo().aFmt.
+                                sExpand = rNode.GetDoc()->GetFtnInfo().aFmt.
                                                 GetNumStr( rFtn.GetNumber() );
                             rTxt.Insert( sExpand, nPos );
                             nPos = nPos + sExpand.Len();
@@ -2973,7 +2974,7 @@ OUString SwTxtNode::GetExpandTxt(  const xub_StrLen nIdx,
     XubString aTxt(
         (STRING_LEN == nLen) ? GetTxt().copy(nIdx) : GetTxt().copy(nIdx, nLen));
     xub_StrLen nTxtStt = nIdx;
-    Replace0xFF( aTxt, nTxtStt, aTxt.Len(), sal_True );
+    Replace0xFF(*this, aTxt, nTxtStt, aTxt.Len(), true);
     if( bWithNum )
     {
         XubString aListLabelStr = GetNumString();
@@ -3366,13 +3367,13 @@ OUString SwTxtNode::GetRedlineTxt( xub_StrLen nIdx, xub_StrLen nLen,
             if( nIdxEnd < nEnd ) nEnd = nIdxEnd;
             xub_StrLen nDelCnt = nEnd - nStt;
             aTxt.Erase( nStt - nTxtStt, nDelCnt );
-            Replace0xFF( aTxt, nTxtStt, nStt - nTxtStt, bExpandFlds );
+            Replace0xFF(*this, aTxt, nTxtStt, nStt - nTxtStt, bExpandFlds);
             nTxtStt = nTxtStt + nDelCnt;
         }
         else if( nStt >= nIdxEnd )
             break;
     }
-    Replace0xFF( aTxt, nTxtStt, aTxt.Len(), bExpandFlds );
+    Replace0xFF(*this, aTxt, nTxtStt, aTxt.Len(), bExpandFlds);
 
     if( bWithNum )
         aTxt.Insert( GetNumString(), 0 );

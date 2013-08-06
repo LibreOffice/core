@@ -141,9 +141,6 @@ class SW_DLLPUBLIC SwTxtNode: public SwCntntNode, public ::sfx2::Metadatable
     /// Create the specific AttrSet.
     SW_DLLPRIVATE virtual void NewAttrSet( SwAttrPool& );
 
-    SW_DLLPRIVATE void Replace0xFF( XubString& rTxt, xub_StrLen& rTxtStt,
-                        xub_StrLen nEndPos, sal_Bool bExpandFlds ) const;
-
     /// Optimization: Asking for information about hidden characters at SwScriptInfo
     /// updates these flags.
     inline bool IsCalcHiddenCharFlags() const
