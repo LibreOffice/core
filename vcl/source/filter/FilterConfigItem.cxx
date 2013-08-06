@@ -109,7 +109,7 @@ static bool ImpIsTreeAvailable( Reference< XMultiServiceFactory >& rXCfgProv, co
     return bAvailable;
 }
 
-void FilterConfigItem::ImpInitTree( const String& rSubTree )
+void FilterConfigItem::ImpInitTree( const OUString& rSubTree )
 {
     bModified = sal_False;
 

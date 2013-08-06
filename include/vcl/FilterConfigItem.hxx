@@ -45,7 +45,7 @@ class VCL_DLLPUBLIC FilterConfigItem
                         const OUString& rPropName,
                             sal_Bool bTestPropertyAvailability );
 
-    void     ImpInitTree( const String& rTree );
+    void     ImpInitTree( const OUString& rTree );
 
 
     static ::com::sun::star::beans::PropertyValue* GetPropertyValue(
