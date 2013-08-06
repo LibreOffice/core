@@ -58,7 +58,7 @@ using namespace ::com::sun::star::i18n;
 using ::com::sun::star::awt::FontDescriptor;
 
 
-#define UNOCONTROL_STREAMVERSION    (short)2
+#define UNOCONTROL_STREAMVERSION    (short)3
 
 static void lcl_ImplMergeFontProperty( FontDescriptor& rFD, sal_uInt16 nPropId, const Any& rValue )
 {
@@ -770,7 +770,24 @@ void UnoControlModel::read( const ::com::sun::star::uno::Reference< ::com::sun::
         sal_Bool bIsVoid = InStream->readBoolean();
         if ( !bIsVoid )
         {
-            if ( maData.find( nPropId ) != maData.end() )
+            if ( nVersion < 3 &&
+                 ( nPropId == BASEPROPERTY_TIME    ||
+                   nPropId == BASEPROPERTY_TIMEMAX ||
+                   nPropId == BASEPROPERTY_TIMEMIN ))
+            {
+                sal_Int64 n = InStream->readLong();
+                n *= ::Time::NanosPerCenti;
+                aValue <<= ::Time(n).getUNOTime();
+            }
+            else if ( nVersion < 3 &&
+                      ( nPropId == BASEPROPERTY_DATE    ||
+                        nPropId == BASEPROPERTY_DATEMIN ||
+                        nPropId == BASEPROPERTY_DATEMAX ))
+            {
+                sal_Int32 n = InStream->readLong();
+                aValue <<= ::Date(n).getUNODate();
+            }
+            else if ( maData.find( nPropId ) != maData.end() )
             {
                 const ::com::sun::star::uno::Type* pType = GetPropertyType( nPropId );
                 if ( *pType == ::getBooleanCppuType() )
