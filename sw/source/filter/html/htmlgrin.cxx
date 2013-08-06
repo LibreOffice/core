@@ -1150,12 +1150,12 @@ ANCHOR_SETEVENT:
         ('s' == aStrippedClass[0] || 'S' == aStrippedClass[0]) &&
         ('d' == aStrippedClass[1] || 'D' == aStrippedClass[1]) )
     {
-        if( aStrippedClass.equalsIgnoreAsciiCaseAscii( OOO_STRING_SVTOOLS_HTML_sdendnote_anc ) )
+        if( aStrippedClass.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_sdendnote_anc ) )
             bEnAnchor = sal_True;
-        else if( aStrippedClass.equalsIgnoreAsciiCaseAscii( OOO_STRING_SVTOOLS_HTML_sdfootnote_anc ) )
+        else if( aStrippedClass.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_sdfootnote_anc ) )
             bFtnAnchor = sal_True;
-        else if( aStrippedClass.equalsIgnoreAsciiCaseAscii( OOO_STRING_SVTOOLS_HTML_sdendnote_sym ) ||
-                 aStrippedClass.equalsIgnoreAsciiCaseAscii( OOO_STRING_SVTOOLS_HTML_sdfootnote_sym ) )
+        else if( aStrippedClass.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_sdendnote_sym ) ||
+                 aStrippedClass.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_sdfootnote_sym ) )
             bFtnEnSymbol = sal_True;
         if( bEnAnchor || bFtnAnchor || bFtnEnSymbol )
         {
