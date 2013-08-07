@@ -83,7 +83,7 @@ private:
     void                ImplWritePolygonRecord( const Polygon& rPoly, sal_Bool bClose );
     void                ImplWritePolyPolygonRecord( const PolyPolygon& rPolyPoly );
     void                ImplWriteBmpRecord( const Bitmap& rBmp, const Point& rPt, const Size& rSz, sal_uInt32 nROP );
-    void                ImplWriteTextRecord( const Point& rPos, const String rText, const sal_Int32* pDXArray, sal_uInt32 nWidth );
+    void                ImplWriteTextRecord( const Point& rPos, const OUString rText, const sal_Int32* pDXArray, sal_uInt32 nWidth );
 
     void                Impl_handleLineInfoPolyPolygons(const LineInfo& rInfo, const basegfx::B2DPolygon& rLinePolygon);
     void                ImplWrite( const GDIMetaFile& rMtf );

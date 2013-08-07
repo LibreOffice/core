@@ -503,7 +503,7 @@ void EMFWriter::ImplCheckTextAttr()
     if( mbTextChanged && ImplPrepareHandleSelect( mnTextHandle, TEXT_SELECT ) )
     {
         const Font&     rFont = maVDev.GetFont();
-        String          aFontName( rFont.GetName() );
+        OUString        aFontName( rFont.GetName() );
         sal_Int32       nWeight;
         sal_uInt16      i;
         sal_uInt8       nPitchAndFamily;
@@ -556,7 +556,7 @@ void EMFWriter::ImplCheckTextAttr()
         m_rStm << nPitchAndFamily;
 
         for( i = 0; i < 32; i++ )
-            m_rStm << (sal_Unicode) ( ( i < aFontName.Len() ) ? aFontName.GetChar( i ) : 0 );
+            m_rStm << (sal_Unicode) ( ( i < aFontName.getLength() ) ? aFontName[ i ] : 0 );
 
         // dummy elfFullName
         for( i = 0; i < 64; i++ )
@@ -870,9 +870,9 @@ void EMFWriter::ImplWriteBmpRecord( const Bitmap& rBmp, const Point& rPt,
     }
 }
 
-void EMFWriter::ImplWriteTextRecord( const Point& rPos, const String rText, const sal_Int32* pDXArray, sal_uInt32 nWidth )
+void EMFWriter::ImplWriteTextRecord( const Point& rPos, const OUString rText, const sal_Int32* pDXArray, sal_uInt32 nWidth )
 {
-    xub_StrLen nLen = rText.Len(), i;
+    sal_Int32 nLen = rText.getLength(), i;
 
     if( nLen )
     {
@@ -896,7 +896,7 @@ void EMFWriter::ImplWriteTextRecord( const Point& rPos, const String rText, cons
 
         if( nLen > 1 )
         {
-            nNormWidth = pDX[ nLen - 2 ] + maVDev.GetTextWidth( OUString(rText.GetChar( nLen - 1 )) );
+            nNormWidth = pDX[ nLen - 2 ] + maVDev.GetTextWidth( OUString(rText[ nLen - 1 ]) );
 
             if( nWidth && nNormWidth && ( nWidth != nNormWidth ) )
             {
@@ -920,7 +920,7 @@ void EMFWriter::ImplWriteTextRecord( const Point& rPos, const String rText, cons
 
         // write text
         for( i = 0; i < nLen; i++ )
-            m_rStm << (sal_Unicode)rText.GetChar( i );
+            m_rStm << (sal_Unicode)rText[ i ];
 
         // padding word
         if( nLen & 1 )
@@ -1353,7 +1353,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             case META_TEXT_ACTION:
             {
                 const MetaTextAction*   pA = (const MetaTextAction*) pAction;
-                const String            aText( pA->GetText(), pA->GetIndex(), pA->GetLen() );
+                const OUString          aText = pA->GetText().copy( pA->GetIndex(), pA->GetLen() );
 
                 ImplCheckTextAttr();
                 ImplWriteTextRecord( pA->GetPoint(), aText, NULL, 0 );
@@ -1363,7 +1363,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             case META_TEXTRECT_ACTION:
             {
                 const MetaTextRectAction*   pA = (const MetaTextRectAction*) pAction;
-                const String                aText( pA->GetText() );
+                const OUString              aText( pA->GetText() );
 
                 ImplCheckTextAttr();
                 ImplWriteTextRecord( pA->GetRect().TopLeft(), aText, NULL, 0 );
@@ -1373,7 +1373,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             case META_TEXTARRAY_ACTION:
             {
                 const MetaTextArrayAction*  pA = (const MetaTextArrayAction*) pAction;
-                const String                aText( pA->GetText(), pA->GetIndex(), pA->GetLen() );
+                const OUString              aText = pA->GetText().copy( pA->GetIndex(), pA->GetLen() );
 
                 ImplCheckTextAttr();
                 ImplWriteTextRecord( pA->GetPoint(), aText, pA->GetDXArray(), 0 );
@@ -1383,7 +1383,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             case META_STRETCHTEXT_ACTION:
             {
                 const MetaStretchTextAction*    pA = (const MetaStretchTextAction*) pAction;
-                const String                    aText( pA->GetText(), pA->GetIndex(), pA->GetLen() );
+                const OUString                  aText = pA->GetText().copy( pA->GetIndex(), pA->GetLen() );
 
                 ImplCheckTextAttr();
                 ImplWriteTextRecord( pA->GetPoint(), aText, NULL, pA->GetWidth() );
