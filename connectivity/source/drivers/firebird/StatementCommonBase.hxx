@@ -53,7 +53,7 @@ namespace connectivity
 
         {
         protected:
-            ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XResultSet>    m_xResultSet;   // The last ResultSet created
+            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>    m_xResultSet;   // The last ResultSet created
             //  for this Statement
 
             ::std::list< ::rtl::OUString>               m_aBatchList;

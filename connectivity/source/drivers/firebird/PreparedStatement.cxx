@@ -258,6 +258,7 @@ sal_Bool SAL_CALL OPreparedStatement::execute()
 
     MutexGuard aGuard( m_pConnection->getMutex() );
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
+
     ensurePrepared();
 
     ISC_STATUS aErr;
@@ -273,9 +274,12 @@ sal_Bool SAL_CALL OPreparedStatement::execute()
         evaluateStatusVector(m_statusVector, "isc_dsql_execute", *this);
     }
 
-    // TODO: check we actually got results -- ?
+    m_xResultSet = new OResultSet(m_pConnection,
+                                  uno::Reference< XInterface >(*this),
+                                  m_statementHandle,
+                                  m_pOutSqlda);
 
-    return sal_True;
+    return m_xResultSet.is();
     // TODO: implement handling of multiple ResultSets.
 }
 
@@ -295,12 +299,6 @@ Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery()
         // execute succeeded but no results
         throw SQLException(); // TODO: add message to exception
     }
-
-    uno::Reference< OResultSet > pResult(new OResultSet(m_pConnection,
-                                                        uno::Reference< XInterface >(*this),
-                                                        m_statementHandle,
-                                                        m_pOutSqlda));
-    m_xResultSet = pResult.get();
 
     return m_xResultSet;
 }

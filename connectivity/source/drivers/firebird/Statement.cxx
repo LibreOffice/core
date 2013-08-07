@@ -82,7 +82,6 @@ void SAL_CALL OStatement::release() throw()
 sal_Int32 SAL_CALL OStatement::executeUpdate(const OUString& sql)
     throw(SQLException, RuntimeException)
 {
-    // TODO: close ResultSet if existing -- so so in all 3 execute methods.
     MutexGuard aGuard(m_pConnection->getMutex());
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
@@ -133,12 +132,10 @@ uno::Reference< XResultSet > SAL_CALL OStatement::executeQuery(const OUString& s
             SAL_WARN("connectivity.firebird", "isc_dsql_execute failed" );
     }
 
-    uno::Reference< OResultSet > pResult(new OResultSet(m_pConnection,
-                                                        uno::Reference< XInterface >(*this),
-                                                        aStatementHandle,
-                                                        pOutSqlda));
-    //initializeResultSet( pResult.get() );
-     m_xResultSet = pResult.get();
+    m_xResultSet = new OResultSet(m_pConnection,
+                                  uno::Reference< XInterface >(*this),
+                                  aStatementHandle,
+                                  pOutSqlda);
 
     // TODO: deal with cleanup
 //    close();

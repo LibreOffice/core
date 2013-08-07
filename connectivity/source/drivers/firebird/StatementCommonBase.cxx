@@ -59,11 +59,10 @@ OStatementCommonBase::~OStatementCommonBase()
 
 void OStatementCommonBase::disposeResultSet()
 {
-    //free the cursor if alive
-//     uno::Reference< XComponent > xComp(m_xResultSet.get(), UNO_QUERY);
-//     if (xComp.is())
-//         xComp->dispose();
-//     m_xResultSet = uno::Reference< XResultSet>();
+    uno::Reference< XComponent > xComp(m_xResultSet.get(), UNO_QUERY);
+    if (xComp.is())
+        xComp->dispose();
+    m_xResultSet = uno::Reference< XResultSet>();
 }
 
 //-----------------------------------------------------------------------------
@@ -101,7 +100,7 @@ void SAL_CALL OStatementCommonBase::close(  ) throw(SQLException, RuntimeExcepti
     {
         MutexGuard aGuard(m_pConnection->getMutex());
         checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
-
+        disposeResultSet();
     }
     dispose();
 }
@@ -191,11 +190,11 @@ int OStatementCommonBase::prepareAndDescribeStatement(const OUString& sql,
 uno::Reference< XResultSet > SAL_CALL OStatementCommonBase::getResultSet() throw(SQLException, RuntimeException)
 {
     // TODO: verify we really can't support this
-    return uno::Reference< XResultSet >();
-//     MutexGuard aGuard( m_aMutex );
-//     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
+//     return uno::Reference< XResultSet >();
+    MutexGuard aGuard(m_pConnection->getMutex());
+    checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
-//     return m_xResultSet;
+    return m_xResultSet;
 }
 
 sal_Bool SAL_CALL OStatementCommonBase::getMoreResults() throw(SQLException, RuntimeException)
