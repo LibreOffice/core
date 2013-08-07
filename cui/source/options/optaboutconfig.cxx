@@ -20,6 +20,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 
+#include <vector>
 
 using namespace svx;
 using namespace ::com::sun::star;
@@ -91,6 +92,8 @@ void CuiAboutConfigTabPage::Reset( const SfxItemSet& )
 {
     OUString sRootNodePath = "/";
     pPrefBox->Clear();
+
+    VectorOfModified.clear();
 
     m_pDefaultBtn->Enable(sal_False);
     m_pEditBtn->Enable(sal_False);
@@ -264,6 +267,34 @@ Reference< XNameAccess > CuiAboutConfigTabPage::getConfigAccess( OUString sNodeP
     return xNameAccess;
 }
 
+sal_Bool CuiAboutConfigTabPage::CheckModified( beans::NamedValue& rProp )
+{
+    for( sal_uInt16 nInd = 0; nInd !=VectorOfModified.size(); ++nInd )
+    {
+        if( rProp.Name == VectorOfModified[nInd].Name && rProp.Value == VectorOfModified[nInd].Value )
+        {
+            //property modified before. assing reference to the modified value
+            //do your changes on this object. They will be saved later.
+            rProp = VectorOfModified[nInd];
+            return sal_True;
+        }
+    }
+
+    //property is not modified before.
+    return sal_False;
+}
+
+CuiAboutConfigValueDialog::CuiAboutConfigValueDialog( Window* pWindow, const OUString rValue )
+    :ModalDialog( pWindow, "AboutConfigValueDialog", "cui/ui/aboutconfigvaluedialog.ui" )
+{
+    get(m_pBtnOK, "ok");
+    get(m_pBtnCancel, "cancel");
+    get(m_pEDValue, "valuebox");
+
+    m_pEDValue->SetText( rValue );
+
+}
+
 IMPL_LINK( CuiAboutConfigTabPage, HeaderSelect_Impl, HeaderBar*, pBar )
 {
     if ( pBar && pBar->GetCurItemId() != ITEMID_TYPE )
@@ -295,18 +326,127 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl )
 {
     SvTreeListEntry* pEntry = pPrefBox->FirstSelected();
 
-    OUString sType = pPrefBox->GetEntryText( pEntry, 2 );
+    OUString sPath = pPrefBox->GetEntryText( pEntry, 0 );
+    //take config access with the path
+    Reference< XNameAccess > xNameAcc = getConfigAccess( sPath, sal_False );
+    Reference< XHierarchicalNameAccess > xHierarchical( xNameAcc, UNO_QUERY_THROW );
 
-    if( sType == OUString("boolean") )
+    beans::NamedValue property;
+    property.Name = sPath + OUString("/") + pPrefBox->GetEntryText( pEntry, 1);
+    //take as property
+    Any aProp = xHierarchical->getByHierarchicalName( pPrefBox->GetEntryText( pEntry, 1));
+
+    sal_Bool bOpenDialog;
+    OUString sDialogValue;
+    if( aProp.hasValue())
     {
-        //TODO: this is just cosmetic, take all needed value and handle them properly
-        OUString sValue = pPrefBox->GetEntryText( pEntry, 3 );
-            if (sValue == OUString("true"))
-                pPrefBox->SetEntryText( OUString("false"), pEntry, 3 );
-            else if(sValue == OUString("false"))
-                pPrefBox->SetEntryText( OUString("true"), pEntry, 3 );
+        switch (aProp.getValueType().getTypeClass())
+        {
+            case ::com::sun::star::uno::TypeClass_BOOLEAN :
+            {
+               sal_Bool bValue;
+               if( aProp >>= bValue)
+               {
+                   //TODO:Find a proper way to handle modified.
+                   property.Value = uno::makeAny( bValue );
+                   //if( CheckModified( property ))
+                   //{
+                       //property>>= bValue;
+                   //}
+                   //TODO:control from sequence if it exist
+                   bValue = !bValue;
+                   OUString sBool( OUString::valueOf( bValue ) );
+                   pPrefBox->SetEntryText( sBool, pEntry, 3 );
+
+                   bOpenDialog = sal_False;
+               }
+            }
+            break;
+
+            case ::com::sun::star::uno::TypeClass_UNSIGNED_SHORT :
+            case ::com::sun::star::uno::TypeClass_UNSIGNED_LONG :
+            case ::com::sun::star::uno::TypeClass_SHORT :
+            case ::com::sun::star::uno::TypeClass_LONG :
+            {
+                sal_Int32 nValue;
+                if( aProp >>= nValue )
+                {
+                    //TODO: control from sequence if it exist
+                    OUString sNumber( OUString::valueOf( nValue ) );
+
+                    sDialogValue = sNumber;
+                    bOpenDialog = sal_True;
+                }
+           }
+           break;
+
+           case ::com::sun::star::uno::TypeClass_STRING :
+           {
+
+                   //TODO: control from sequence if it exist
+                   OUString sString;
+                  if(aProp >>= sString)
+                  {
+                      sDialogValue = sString;
+                  }
+                    bOpenDialog = sal_True;
+           }
+           break;
+
+           case ::com::sun::star::uno::TypeClass_SEQUENCE :
+           {
+                   sDialogValue = OUString("");
+                   if( OUString("[]long") ==aProp.getValueTypeName() ||
+                           OUString("[]short")==aProp.getValueTypeName() )
+                   {
+                       uno::Sequence<sal_Int32> seqLong;
+                       if( aProp >>= seqLong )
+                       {
+                          for(sal_Int16 nInd=0;  nInd < seqLong.getLength(); ++nInd)
+                          {
+                              OUString sNumber( OUString::valueOf(seqLong[nInd]) );
+                              sDialogValue += sNumber;
+                              sDialogValue += OUString(",");
+                          }
+                      }
+                  }
+
+                  if( OUString("[]string") == aProp.getValueTypeName() )
+                  {
+                      uno::Sequence< OUString > seqOUString;
+                      if( aProp >>= seqOUString )
+                      {
+                          for( sal_Int16 nInd=0; nInd < seqOUString.getLength(); ++nInd )
+                          {
+                              sDialogValue += seqOUString[nInd] + OUString(",");
+                          }
+                      }
+                  }
+                   //TODO:control from sequence if it exist
+                   bOpenDialog = sal_True;
+           }
+           break;
+
+           default:
+           {
+               bOpenDialog = sal_False;
+           }
+           break;
+
+        }
+
+        if( bOpenDialog )
+        {
+            //CuiAboutConfigValueDialog* pValueDialog = new CuiAboutConfigValueDialog(0, sDialogValue);
+
+            //bool ret = pValueDialog->Execute();
+            //if( ret == RET_OK )
+            //{
+                //TODO: check modified?
+                //TODO: commit changes
+            //}
+        }
     }
-    //TODO: add other types
 
     return 0;
 

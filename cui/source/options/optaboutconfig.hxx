@@ -14,12 +14,16 @@
 #include <svtools/simptabl.hxx>
 #include "optHeaderTabListbox.hxx"
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
+#include <vcl/edit.hxx>
+#include <vector>
 
 namespace svx
 {
     class OptHeaderTabListBox;
 }
 class CuiAboutConfigTabPage;
+class CuiAboutConfigValueDialog;
 
 class CuiAboutConfigTabPage : public SfxTabPage
 {
@@ -28,9 +32,13 @@ private:
     PushButton* m_pDefaultBtn;
     PushButton* m_pEditBtn;
 
+    std::vector< com::sun::star::beans::NamedValue > VectorOfModified;
+
     ::svx::OptHeaderTabListBox* pPrefBox;
     CuiAboutConfigTabPage( Window* pParent, const SfxItemSet& rItemSet );
     ~CuiAboutConfigTabPage();
+
+    sal_Bool CheckModified( com::sun::star::beans::NamedValue& rProp );
 
     DECL_LINK( HeaderSelect_Impl, HeaderBar * );
     DECL_LINK( StandardHdl_Impl, void * );
@@ -42,6 +50,23 @@ public:
    void     FillItems( com::sun::star::uno::Reference < com::sun::star::container::XNameAccess > xNameAccess, OUString sPath);
    com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > getConfigAccess( OUString sNodePath, sal_Bool bUpdate );
 
+};
+
+class CuiAboutConfigValueDialog : public ModalDialog
+{
+private:
+    OKButton*            m_pBtnOK;
+    CancelButton*        m_pBtnCancel;
+
+    VclMultiLineEdit*    m_pEDValue;
+
+public:
+    CuiAboutConfigValueDialog( Window* pWindow, const OUString rValue );
+
+    OUString getValue()
+    {
+        return m_pEDValue->GetText();
+    }
 };
 
 #endif
