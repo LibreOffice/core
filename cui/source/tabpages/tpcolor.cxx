@@ -179,9 +179,9 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickLoadHdl_Impl)
             }
             else
             {
-                ErrorBox aErrorBox( mpTopDlg, WinBits( WB_OK ),
-                    String( ResId( RID_SVXSTR_READ_DATA_ERROR, rMgr ) ) );
-                aErrorBox.Execute();
+                MessageDialog( mpTopDlg
+                              ,"NoLoadedFileDialog"
+                              ,"cui/ui/querynoloadedfiledialog.ui").Execute();
             }
         }
     }

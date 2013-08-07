@@ -673,9 +673,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickLoadHdl_Impl)
 
     if ( nReturn != RET_CANCEL )
     {
-        ::sfx2::FileDialogHelper aDlg(
-            com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
-            0 );
+        ::sfx2::FileDialogHelper aDlg( com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,  0 );
         String aStrFilterType( "*.soh" );
         aDlg.AddFilter( aStrFilterType, aStrFilterType );
         INetURLObject aFile( SvtPathOptions().GetPalettePath() );
@@ -720,8 +718,9 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickLoadHdl_Impl)
                 *pnHatchingListState &= ~CT_MODIFIED;
             }
             else
-                ErrorBox( GetParentDialog(), WinBits( WB_OK ),
-                    String( ResId( RID_SVXSTR_READ_DATA_ERROR, rMgr ) ) ).Execute();
+                MessageDialog( GetParentDialog()
+                               ,"NoLoadedFileDialog"
+                               ,"cui/ui/querynoloadedfiledialog.ui").Execute();
         }
     }
 
@@ -745,8 +744,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickLoadHdl_Impl)
 
 IMPL_LINK_NOARG(SvxHatchTabPage, ClickSaveHdl_Impl)
 {
-    ::sfx2::FileDialogHelper aDlg(
-        com::sun::star::ui::dialogs::TemplateDescription::FILESAVE_SIMPLE, 0 );
+    ::sfx2::FileDialogHelper aDlg( com::sun::star::ui::dialogs::TemplateDescription::FILESAVE_SIMPLE, 0 );
     String aStrFilterType( "*.soh" );
     aDlg.AddFilter( aStrFilterType, aStrFilterType );
 
