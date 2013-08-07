@@ -54,9 +54,9 @@ FontCache::FontCache()
 {
     m_bDoFlush = false;
     m_aCacheFile = getOfficePath( UserPath );
-    if( m_aCacheFile.Len() )
+    if( !m_aCacheFile.isEmpty() )
     {
-        m_aCacheFile.AppendAscii( FONTCACHEFILE );
+        m_aCacheFile += FONTCACHEFILE;
         read();
     }
 }
@@ -92,7 +92,7 @@ void FontCache::clearCache()
 
 void FontCache::flush()
 {
-    if( ! m_bDoFlush || ! m_aCacheFile.Len() )
+    if( ! m_bDoFlush || m_aCacheFile.isEmpty() )
         return;
 
     SvFileStream aStream;

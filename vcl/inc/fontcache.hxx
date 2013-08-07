@@ -56,7 +56,7 @@ class VCL_PLUGIN_PUBLIC FontCache
 
     typedef boost::unordered_map< int, FontDir > FontCacheData;
     FontCacheData   m_aCache;
-    String          m_aCacheFile;
+    OUString        m_aCacheFile;
     bool            m_bDoFlush;
 
     void read();
