@@ -179,7 +179,7 @@ SdOptions* SdModule::GetSdOptions(DocumentType eDocType)
  * if the stream is opened for reading but does not exist, an 'empty'
  * RefObject is returned
  */
-SvStorageStreamRef SdModule::GetOptionStream( const String& rOptionName,
+SvStorageStreamRef SdModule::GetOptionStream( const OUString& rOptionName,
                                               SdOptionStreamMode eMode )
 {
     ::sd::DrawDocShell*     pDocSh = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current() );
@@ -188,7 +188,6 @@ SvStorageStreamRef SdModule::GetOptionStream( const String& rOptionName,
     if( pDocSh )
     {
         DocumentType    eType = pDocSh->GetDoc()->GetDocumentType();
-        String          aStmName;
 
         if( !xOptionStorage.Is() )
         {
@@ -202,10 +201,12 @@ SvStorageStreamRef SdModule::GetOptionStream( const String& rOptionName,
                 xOptionStorage = new SvStorage( pStm, sal_True );
         }
 
+        OUString        aStmName;
+
         if( DOCUMENT_TYPE_DRAW == eType )
-            aStmName.AssignAscii( "Draw_" );
+            aStmName = "Draw_";
         else
-            aStmName.AssignAscii( "Impress_" );
+            aStmName = "Impress_";
 
         aStmName += rOptionName;
 

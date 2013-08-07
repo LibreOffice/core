@@ -500,7 +500,7 @@ void SdModule::AddSummaryPage (SfxViewFrame* pViewFrame, SdDrawDocument* pDocume
     }
 }
 
-SfxFrame* SdModule::CreateFromTemplate( const String& rTemplatePath, const Reference< XFrame >& i_rFrame )
+SfxFrame* SdModule::CreateFromTemplate( const OUString& rTemplatePath, const Reference< XFrame >& i_rFrame )
 {
     SfxFrame* pFrame = 0;
 
@@ -551,9 +551,9 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
 
             //check whether we should load a template document
             const OUString aServiceName( "com.sun.star.presentation.PresentationDocument" );
-            String aStandardTemplate( SfxObjectFactory::GetStandardTemplate( aServiceName ) );
+            OUString aStandardTemplate( SfxObjectFactory::GetStandardTemplate( aServiceName ) );
 
-            if( aStandardTemplate.Len() > 0 )
+            if( !aStandardTemplate.isEmpty() )
             {
                 //load a template document
                 pFrame = CreateFromTemplate( aStandardTemplate, xTargetFrame );
