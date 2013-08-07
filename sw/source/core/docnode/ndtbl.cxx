@@ -743,7 +743,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTblOpts,
         }
     }
 
-    SwTableFmt::AssignLineParents( pTableStyle, *pNdTbl );
+    SwTableFmt::AssignFormatParents( pTableStyle, *pNdTbl );
 
     // Check the Boxes' for Numbers
     if( IsInsTblFormatNum() )
