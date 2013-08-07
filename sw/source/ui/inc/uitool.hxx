@@ -42,6 +42,17 @@ SW_DLLPUBLIC void SetMetric(MetricFormatter& rCtrl, FieldUnit eUnit);
 // fill BoxInfoAttribut
 SW_DLLPUBLIC void PrepareBoxInfo(SfxItemSet& rSet, const SwWrtShell& rSh);
 
+// Modes for attribute conversion
+#define CONV_ATTR_STD    1  // Standard character dialog
+#define CONV_ATTR_ENV    2  // Character dialog opened from envelope dialog
+
+// Convert character specific attributes to general ones used by tab pages
+SW_DLLPUBLIC void ConvertAttrCharToGen(SfxItemSet& rSet, sal_uInt8 nMode);
+
+// Convert general attributes to the corresponding character attributes
+// This method is used after executed a character dialog
+SW_DLLPUBLIC void ConvertAttrGenToChar(SfxItemSet& rSet, sal_uInt8 nMode);
+
 // SfxItemSets <-> PageDesc
 void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc );
 void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet);

@@ -568,24 +568,7 @@ IMPL_LINK_NOARG(ApplyStyle, ApplyHdl)
         SfxItemSet aTmpSet( *m_pDlg->GetOutputItemSet() );
         if( SFX_STYLE_FAMILY_CHAR == m_nFamily )
         {
-            const SfxPoolItem *pTmpBrush;
-            if( SFX_ITEM_SET == aTmpSet.GetItemState( RES_BACKGROUND,
-                sal_False, &pTmpBrush ) )
-            {
-                SvxBrushItem aTmpBrush( *((SvxBrushItem*)pTmpBrush) );
-                aTmpBrush.SetWhich( RES_CHRATR_BACKGROUND );
-                aTmpSet.Put( aTmpBrush );
-            }
-            aTmpSet.ClearItem( RES_BACKGROUND );
-
-            const SfxPoolItem *pTmpBox;
-            if( SFX_ITEM_SET == aTmpSet.GetItemState( RES_BOX, sal_False, &pTmpBox ) )
-            {
-                SvxBoxItem aTmpBox( *((SvxBoxItem*)pTmpBox) );
-                aTmpBox.SetWhich( RES_CHRATR_BOX );
-                aTmpSet.Put( aTmpBox );
-            }
-            aTmpSet.ClearItem( RES_BOX );
+            ::ConvertAttrGenToChar(aTmpSet, CONV_ATTR_STD);
         }
         m_xTmp->SetItemSet( aTmpSet );
 
@@ -743,27 +726,7 @@ sal_uInt16 SwDocShell::Edit(
     }
     else if( SFX_STYLE_FAMILY_CHAR == nFamily )
     {
-        SfxItemSet& rSet = xTmp->GetItemSet();
-        const SfxPoolItem *pTmpBrush;
-        if( SFX_ITEM_SET == rSet.GetItemState( RES_CHRATR_BACKGROUND,
-            sal_True, &pTmpBrush ) )
-        {
-            SvxBrushItem aTmpBrush( *((SvxBrushItem*)pTmpBrush) );
-            aTmpBrush.SetWhich( RES_BACKGROUND );
-            rSet.Put( aTmpBrush );
-        }
-        else
-            rSet.ClearItem(RES_BACKGROUND);
-
-        const SfxPoolItem *pTmpBox;
-        if( SFX_ITEM_SET == rSet.GetItemState( RES_CHRATR_BOX, sal_True, &pTmpBox ) )
-        {
-            SvxBoxItem aTmpBox( *((SvxBoxItem*)pTmpBox) );
-            aTmpBox.SetWhich( RES_BOX );
-            rSet.Put( aTmpBox );
-        }
-        else
-            rSet.ClearItem(RES_BOX);
+        ::ConvertAttrCharToGen(xTmp->GetItemSet(), CONV_ATTR_STD);
     }
     if (!bBasic)
     {
@@ -831,29 +794,7 @@ sal_uInt16 SwDocShell::Edit(
             ::SfxToSwPageDescAttr( *GetWrtShell(), xTmp->GetItemSet() );
         else
         {
-            SfxItemSet aTmpSet( xTmp->GetItemSet() );
-            if( SFX_STYLE_FAMILY_CHAR == nFamily )
-            {
-                const SfxPoolItem *pTmpBrush;
-                if( SFX_ITEM_SET == aTmpSet.GetItemState( RES_BACKGROUND,
-                    sal_False, &pTmpBrush ) )
-                {
-                    SvxBrushItem aTmpBrush( *((SvxBrushItem*)pTmpBrush) );
-                    aTmpBrush.SetWhich( RES_CHRATR_BACKGROUND );
-                    aTmpSet.Put( aTmpBrush );
-                }
-                aTmpSet.ClearItem( RES_BACKGROUND );
-
-                const SfxPoolItem *pTmpBox;
-                if( SFX_ITEM_SET == aTmpSet.GetItemState( RES_BOX, sal_False, &pTmpBox ) )
-                {
-                    SvxBoxItem aTmpBox( *((SvxBoxItem*)pTmpBox) );
-                    aTmpBox.SetWhich( RES_CHRATR_BOX );
-                    aTmpSet.Put( aTmpBox );
-                }
-                aTmpSet.ClearItem( RES_BOX );
-            }
-            xTmp->SetItemSet( aTmpSet );
+            ::ConvertAttrGenToChar(xTmp->GetItemSet(), CONV_ATTR_STD);
         }
         if(SFX_STYLE_FAMILY_PAGE == nFamily)
             pView->InvalidateRulerPos();

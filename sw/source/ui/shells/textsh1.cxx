@@ -168,29 +168,8 @@ void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const 
     }
         aCoreSet.Put( SfxUInt16Item( SID_ATTR_CHAR_WIDTH_FIT_TO_LINE,
                     rWrtSh.GetScalingOfSelectedText() ) );
-    // The CHRATR_BACKGROUND attribute will be converted for the
-    // dialogue in a RES_BACKGROUND and back again ...
-    const SfxPoolItem *pTmpBrush;
-    if( SFX_ITEM_SET == aCoreSet.GetItemState( RES_CHRATR_BACKGROUND, sal_True, &pTmpBrush ) )
-    {
-        SvxBrushItem aTmpBrush( *((SvxBrushItem*)pTmpBrush) );
-        aTmpBrush.SetWhich( RES_BACKGROUND );
-        aCoreSet.Put( aTmpBrush );
-    }
-    else
-        aCoreSet.ClearItem(RES_BACKGROUND);
 
-    // The CHRATR_BOX attribute will be converted for the
-    // dialogue in a RES_BOX and back again ...
-    const SfxPoolItem *pTmpBox;
-    if( SFX_ITEM_SET == aCoreSet.GetItemState( RES_CHRATR_BOX, sal_True, &pTmpBox ) )
-    {
-        SvxBoxItem aTmpBox( *((SvxBoxItem*)pTmpBox) );
-        aTmpBox.SetWhich( RES_BOX );
-        aCoreSet.Put( aTmpBox );
-    }
-    else
-        aCoreSet.ClearItem(RES_BOX);
+    ::ConvertAttrCharToGen(aCoreSet, CONV_ATTR_STD);
 
     // Setting the BoxInfo
     ::PrepareBoxInfo( aCoreSet, rWrtSh );
@@ -223,21 +202,7 @@ void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const 
     if ( pSet)
     {
         SfxItemSet aTmpSet( *pSet );
-        if( SFX_ITEM_SET == aTmpSet.GetItemState( RES_BACKGROUND, sal_False, &pTmpBrush ) )
-        {
-            SvxBrushItem aTmpBrush( *((SvxBrushItem*)pTmpBrush) );
-            aTmpBrush.SetWhich( RES_CHRATR_BACKGROUND );
-            aTmpSet.Put( aTmpBrush );
-        }
-        aTmpSet.ClearItem( RES_BACKGROUND );
-
-        if( SFX_ITEM_SET == aTmpSet.GetItemState( RES_BOX, sal_False, &pTmpBox ) )
-        {
-            SvxBoxItem aTmpBox( *((SvxBoxItem*)pTmpBox) );
-            aTmpBox.SetWhich( RES_CHRATR_BOX );
-            aTmpSet.Put( aTmpBox );
-        }
-        aTmpSet.ClearItem( RES_BOX );
+        ::ConvertAttrGenToChar(aTmpSet, CONV_ATTR_STD);
 
         const SfxPoolItem* pSelectionItem;
         sal_Bool bInsert = sal_False;

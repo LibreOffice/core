@@ -33,6 +33,7 @@
 #include <editeng/tstpitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/sizeitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <svx/pageitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <svl/style.hxx>
@@ -116,6 +117,65 @@ void PrepareBoxInfo(SfxItemSet& rSet, const SwWrtShell& rSh)
 
     rSet.Put(aBoxInfo);
 }
+
+void ConvertAttrCharToGen(SfxItemSet& rSet, sal_uInt8 nMode)
+{
+    // Background
+    {
+        const SfxPoolItem *pTmpBrush;
+        if( SFX_ITEM_SET == rSet.GetItemState( RES_CHRATR_BACKGROUND, sal_True, &pTmpBrush ) )
+        {
+            SvxBrushItem aTmpBrush( *((SvxBrushItem*)pTmpBrush) );
+            aTmpBrush.SetWhich( RES_BACKGROUND );
+            rSet.Put( aTmpBrush );
+        }
+        else
+            rSet.ClearItem(RES_BACKGROUND);
+    }
+
+    // Border
+    if( nMode == CONV_ATTR_STD )
+    {
+        const SfxPoolItem *pTmpBox;
+        if( SFX_ITEM_SET == rSet.GetItemState( RES_CHRATR_BOX, sal_True, &pTmpBox ) )
+        {
+            SvxBoxItem aTmpBox( *((SvxBoxItem*)pTmpBox) );
+            aTmpBox.SetWhich( RES_BOX );
+            rSet.Put( aTmpBox );
+        }
+        else
+            rSet.ClearItem(RES_BOX);
+    }
+}
+
+void ConvertAttrGenToChar(SfxItemSet& rSet, sal_uInt8 nMode)
+{
+    // Background
+    {
+        const SfxPoolItem *pTmpBrush;
+        if( SFX_ITEM_SET == rSet.GetItemState( RES_BACKGROUND, sal_False, &pTmpBrush ) )
+        {
+            SvxBrushItem aTmpBrush( *((SvxBrushItem*)pTmpBrush) );
+            aTmpBrush.SetWhich( RES_CHRATR_BACKGROUND );
+            rSet.Put( aTmpBrush );
+        }
+        rSet.ClearItem( RES_BACKGROUND );
+    }
+
+    // Border
+    if( nMode == CONV_ATTR_STD )
+    {
+        const SfxPoolItem *pTmpBox;
+        if( SFX_ITEM_SET == rSet.GetItemState( RES_BOX, sal_False, &pTmpBox ) )
+        {
+            SvxBoxItem aTmpBox( *((SvxBoxItem*)pTmpBox) );
+            aTmpBox.SetWhich( RES_CHRATR_BOX );
+            rSet.Put( aTmpBox );
+        }
+        rSet.ClearItem( RES_BOX );
+    }
+}
+
 
 // Fill header footer
 

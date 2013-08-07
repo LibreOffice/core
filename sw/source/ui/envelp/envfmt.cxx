@@ -287,20 +287,7 @@ IMPL_LINK( SwEnvFmtPage, EditHdl, MenuButton *, pButton )
 
             // In order for the background color not to get ironed over:
             SfxAllItemSet aTmpSet(*pCollSet);
-
-            // The CHRATR_BACKGROUND attribute gets transformed into a
-            // RES_BACKGROUND for the dialog and back again ...
-            const SfxPoolItem *pTmpBrush;
-
-            if( SFX_ITEM_SET == aTmpSet.GetItemState( RES_CHRATR_BACKGROUND,
-                sal_True, &pTmpBrush ) )
-            {
-                SvxBrushItem aTmpBrush( *((SvxBrushItem*)pTmpBrush) );
-                aTmpBrush.SetWhich( RES_BACKGROUND );
-                aTmpSet.Put( aTmpBrush );
-            }
-            else
-                aTmpSet.ClearItem( RES_BACKGROUND );
+            ::ConvertAttrCharToGen(aTmpSet, CONV_ATTR_ENV);
 
             SwAbstractDialogFactory* pFact = swui::GetFactory();
             OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
@@ -310,15 +297,7 @@ IMPL_LINK( SwEnvFmtPage, EditHdl, MenuButton *, pButton )
             if (pDlg->Execute() == RET_OK)
             {
                 SfxItemSet aOutputSet( *pDlg->GetOutputItemSet() );
-                if( SFX_ITEM_SET == aOutputSet.GetItemState( RES_BACKGROUND,
-                    sal_False, &pTmpBrush ) )
-                {
-                    SvxBrushItem aTmpBrush( *((SvxBrushItem*)pTmpBrush) );
-                    aTmpBrush.SetWhich( RES_CHRATR_BACKGROUND );
-                    pCollSet->Put( aTmpBrush );
-                }
-                aOutputSet.ClearItem( RES_BACKGROUND );
-                //pColl->SetAttr( aTmpSet );
+                ::ConvertAttrGenToChar(aOutputSet, CONV_ATTR_ENV);
                 pCollSet->Put(aOutputSet);
             }
             delete pDlg;
