@@ -124,6 +124,7 @@ private:
     CodeCompleteDataCache aCodeCompleteCache;
     boost::scoped_ptr< CodeCompleteWindow > pCodeCompleteWnd;
     OUString GetActualSubName( sal_uLong nLine ); // gets the actual subroutine name according to line number
+    void SetupAndShowCodeCompleteWnd(const std::vector< OUString >& aEntryVect, TextSelection aSel );
     void HandleAutoCorrect();
     void HandleAutoCloseParen();
     void HandleAutoCloseDoubleQuotes();
@@ -494,7 +495,7 @@ private:
      * */
     CodeCompleteWindow* pCodeCompleteWindow; // parent window
 
-    void SetVisibleEntries(); // sets the visible entries based on aFuncBuffer variable
+    void SetMatchingEntries(); // sets the visible entries based on aFuncBuffer variable
     void HideAndRestoreFocus();
 
 public:
@@ -533,8 +534,6 @@ public:
      * clears if typed anything, then hides
      * the window, clear internal variables
      * */
-    OUStringBuffer& GetListBoxBuffer();
-    void SetVisibleEntries(); // sets the visible entries based on aFuncBuffer variable
     CodeCompleteListBox* GetListBox(){return pListBox;}
 
 };

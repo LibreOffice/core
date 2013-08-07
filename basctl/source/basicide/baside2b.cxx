@@ -593,23 +593,24 @@ void EditorWindow::HandleAutoCorrect()
 
     HighlightPortions aPortions;
     aHighlighter.getHighlightPortions( nLine, aLine, aPortions );
-    if( aPortions.size() > 0 )
-    {
-        HighlightPortion& r = aPortions[aPortions.size()-1];
-        if( r.tokenType == 9 ) // correct the last entered keyword
-        {
-            OUString sStr = aLine.copy(r.nBegin, r.nEnd - r.nBegin);
-            if( !sStr.isEmpty() )
-            {
-                //capitalize first letter and replace
-                sStr = sStr.toAsciiLowerCase();
-                sStr = sStr.replaceAt( 0, 1, OUString(sStr[0]).toAsciiUpperCase() );
 
-                TextPaM aStart(nLine, aSel.GetStart().GetIndex() - sStr.getLength() );
-                TextSelection sTextSelection(aStart, TextPaM(nLine, aSel.GetStart().GetIndex()));
-                pEditEngine->ReplaceText( sTextSelection, sStr );
-                pEditView->SetSelection( aSel );
-            }
+    if( aPortions.size() == 0 )
+        return;
+
+    HighlightPortion& r = aPortions[aPortions.size()-1];
+    if( r.tokenType == 9 ) // correct the last entered keyword
+    {
+        OUString sStr = aLine.copy(r.nBegin, r.nEnd - r.nBegin);
+        if( !sStr.isEmpty() )
+        {
+            //capitalize first letter and replace
+            sStr = sStr.toAsciiLowerCase();
+            sStr = sStr.replaceAt( 0, 1, OUString(sStr[0]).toAsciiUpperCase() );
+
+            TextPaM aStart(nLine, aSel.GetStart().GetIndex() - sStr.getLength() );
+            TextSelection sTextSelection(aStart, TextPaM(nLine, aSel.GetStart().GetIndex()));
+            pEditEngine->ReplaceText( sTextSelection, sStr );
+            pEditView->SetSelection( aSel );
         }
     }
 }
@@ -637,15 +638,16 @@ void EditorWindow::HandleAutoCloseDoubleQuotes()
 
     HighlightPortions aPortions;
     aHighlighter.getHighlightPortions( nLine, aLine, aPortions );
-    if( aPortions.size() != 0 )
+
+    if( aPortions.size() == 0 )
+        return;
+
+    if( aLine.getLength() > 0 && aLine[aLine.getLength()-1] != '"' && (aPortions[aPortions.size()-1].tokenType != 4) )
     {
-        if( aLine.getLength() > 0 && aLine[aLine.getLength()-1] != '"' && (aPortions[aPortions.size()-1].tokenType != 4) )
-        {
-            GetEditView()->InsertText(OUString("\""));
-            //leave the cursor on it's place: inside the two double quotes
-            TextPaM aEnd(nLine, aSel.GetEnd().GetIndex());
-            GetEditView()->SetSelection( TextSelection( aEnd, aEnd ) );
-        }
+        GetEditView()->InsertText(OUString("\""));
+        //leave the cursor on it's place: inside the two double quotes
+        TextPaM aEnd(nLine, aSel.GetEnd().GetIndex());
+        GetEditView()->SetSelection( TextSelection( aEnd, aEnd ) );
     }
 }
 
@@ -654,75 +656,70 @@ void EditorWindow::HandleProcedureCompletition()
     TextSelection aSel = GetEditView()->GetSelection();
     sal_uLong nLine = aSel.GetStart().GetPara();
     OUString aLine( pEditEngine->GetText( nLine ) );
-    OUString sActSub = GetActualSubName( nLine );
 
     HighlightPortions aPortions;
     aHighlighter.getHighlightPortions( nLine, aLine, aPortions );
+
+    if( aPortions.size() == 0 )
+        return;
+
     OUString sProcType;
     OUString sProcName;
     bool bFoundType = false;
     bool bFoundName = false;
-    if( aPortions.size() != 0 )
+
+    for ( size_t i = 0; i < aPortions.size(); i++ )
     {
-        for ( size_t i = 0; i < aPortions.size(); i++ )
+        HighlightPortion& r = aPortions[i];
+        OUString sTokStr = aLine.copy(r.nBegin, r.nEnd - r.nBegin);
+
+        if( r.tokenType == 9 && ( sTokStr.equalsIgnoreAsciiCase("sub")
+            || sTokStr.equalsIgnoreAsciiCase("function")) )
         {
-            HighlightPortion& r = aPortions[i];
-            OUString sTokStr = aLine.copy(r.nBegin, r.nEnd - r.nBegin);
-            if( r.tokenType == 9 && ( sTokStr.equalsIgnoreAsciiCase("sub")
-                || sTokStr.equalsIgnoreAsciiCase("function")) )
-            {
-                sProcType = sTokStr;
-                bFoundType = true;
-            }
-            if( r.tokenType == 1 && bFoundType )
-            {
-                sProcName = sTokStr;
-                bFoundName = true;
-                break;
-            }
+            sProcType = sTokStr;
+            bFoundType = true;
         }
-        if( bFoundType && bFoundName )
-        {// found, search for end
-            OUString sText("\nEnd ");
-            if( sProcType.equalsIgnoreAsciiCase("function") )
-                sText += OUString( "Function\n" );
-            if( sProcType.equalsIgnoreAsciiCase("sub") )
-                sText += OUString( "Sub\n" );
+        if( r.tokenType == 1 && bFoundType )
+        {
+            sProcName = sTokStr;
+            bFoundName = true;
+            break;
+        }
+    }
 
-            if( nLine+1 == pEditEngine->GetParagraphCount() )
-            { //append to the end
-                pEditView->InsertText( sText );
-            }
-            else
-            {
-                for( sal_uLong i = nLine+1; i < pEditEngine->GetParagraphCount(); ++i )
+    if( !bFoundType || !bFoundName )
+        return;// no sub/function keyword or there is no identifier
+
+    OUString sText("\nEnd ");
+    if( sProcType.equalsIgnoreAsciiCase("function") )
+        sText += OUString( "Function\n" );
+    if( sProcType.equalsIgnoreAsciiCase("sub") )
+        sText += OUString( "Sub\n" );
+
+    if( nLine+1 == pEditEngine->GetParagraphCount() )
+        pEditView->InsertText( sText );//append to the end
+    else
+    {
+        for( sal_uLong i = nLine+1; i < pEditEngine->GetParagraphCount(); ++i )
+        {//searching forward for end token, or another sub/function definition
+            OUString aCurrLine = pEditEngine->GetText( i );
+            HighlightPortions aCurrPortions;
+            aHighlighter.getHighlightPortions( i, aCurrLine, aCurrPortions );
+
+            if( aCurrPortions.size() >= 3 )
+            {//at least 3 tokens: (sub|function) whitespace idetifier ....
+                HighlightPortion& r = aCurrPortions[0];
+                OUString sStr = aCurrLine.copy(r.nBegin, r.nEnd - r.nBegin);
+
+                if( r.tokenType == 9 )
                 {
-                    OUString aCurrLine = pEditEngine->GetText( i );
-                    HighlightPortions aCurrPortions;
-                    aHighlighter.getHighlightPortions( i, aCurrLine, aCurrPortions );
-                    if( aCurrPortions.size() >= 3 )
+                    if( sStr.equalsIgnoreAsciiCase("sub") || sStr.equalsIgnoreAsciiCase("function") )
                     {
-                        HighlightPortion& r1 = aCurrPortions[0];
-                        OUString sStr1 = aCurrLine.copy(r1.nBegin, r1.nEnd - r1.nBegin);
-
-                        if( r1.tokenType == 9 )
-                        {
-                            if( sStr1.equalsIgnoreAsciiCase("sub") )
-                            {
-                                pEditView->InsertText( sText );
-                                break;
-                            }
-                            if( sStr1.equalsIgnoreAsciiCase("function") )
-                            {
-                                pEditView->InsertText( sText );
-                                break;
-                            }
-                            if( sStr1.equalsIgnoreAsciiCase("end") )
-                            {
-                                break;
-                            }
-                        }
+                        pEditView->InsertText( sText );
+                        break;
                     }
+                    if( sStr.equalsIgnoreAsciiCase("end") )
+                        break;
                 }
             }
         }
@@ -776,29 +773,34 @@ void EditorWindow::HandleCodeCompletition()
             }
             if( aEntryVect.size() > 0 )
             {
-                // calculate position
-                Rectangle aRect = ( (TextEngine*) GetEditEngine() )->PaMtoEditCursor( aSel.GetEnd() , false );
-                long nViewYOffset = pEditView->GetStartDocPos().Y();
-                Point aPoint = aRect.BottomRight();
-                aPoint.Y() = (aPoint.Y() - nViewYOffset) + 2;
-                aSel.GetStart().GetIndex() += 1;
-                aSel.GetEnd().GetIndex() += 1;
-                pCodeCompleteWnd->ClearListBox();
-                pCodeCompleteWnd->SetTextSelection(aSel);
-                //fill the listbox
-                for(unsigned int l = 0; l < aEntryVect.size(); ++l)
-                {
-                    pCodeCompleteWnd->InsertEntry( aEntryVect[l] );
-                }
-                //show it
-                pCodeCompleteWnd->SetPosPixel( aPoint );
-                pCodeCompleteWnd->Show();
-                pCodeCompleteWnd->ResizeListBox();
-                pCodeCompleteWnd->SelectFirstEntry();
-                pEditView->GetWindow()->GrabFocus();
+                SetupAndShowCodeCompleteWnd( aEntryVect, aSel );
             }
         }
     }
+}
+
+void EditorWindow::SetupAndShowCodeCompleteWnd(const std::vector< OUString >& aEntryVect, TextSelection aSel )
+{
+    // calculate position
+    Rectangle aRect = ( (TextEngine*) GetEditEngine() )->PaMtoEditCursor( aSel.GetEnd() , false );
+    long nViewYOffset = pEditView->GetStartDocPos().Y();
+    Point aPoint = aRect.BottomRight();
+    aPoint.Y() = (aPoint.Y() - nViewYOffset) + 2;
+    aSel.GetStart().GetIndex() += 1;
+    aSel.GetEnd().GetIndex() += 1;
+    pCodeCompleteWnd->ClearListBox();
+    pCodeCompleteWnd->SetTextSelection(aSel);
+    //fill the listbox
+    for(unsigned int l = 0; l < aEntryVect.size(); ++l)
+    {
+        pCodeCompleteWnd->InsertEntry( aEntryVect[l] );
+    }
+    //show it
+    pCodeCompleteWnd->SetPosPixel( aPoint );
+    pCodeCompleteWnd->Show();
+    pCodeCompleteWnd->ResizeListBox();
+    pCodeCompleteWnd->SelectFirstEntry();
+    pEditView->GetWindow()->GrabFocus();
 }
 
 void EditorWindow::Paint( const Rectangle& rRect )
@@ -2578,7 +2580,7 @@ void CodeCompleteListBox::InsertSelectedEntry()
     }
 }
 
-void CodeCompleteListBox::SetVisibleEntries()
+void CodeCompleteListBox::SetMatchingEntries()
 {
     for(sal_uInt16 i=0; i< GetEntryCount(); ++i)
     {
@@ -2597,7 +2599,7 @@ void CodeCompleteListBox::KeyInput( const KeyEvent& rKeyEvt )
     if( ( aChar >= KEY_A ) && ( aChar <= KEY_Z ) )
     {
         aFuncBuffer.append(rKeyEvt.GetCharCode());
-        SetVisibleEntries();
+        SetMatchingEntries();
     }
     else
     {
@@ -2613,7 +2615,7 @@ void CodeCompleteListBox::KeyInput( const KeyEvent& rKeyEvt )
                 if( aFuncBuffer.toString() != OUString("") )
                 {
                     aFuncBuffer = aFuncBuffer.remove(aFuncBuffer.getLength()-1, 1);
-                    SetVisibleEntries();
+                    SetMatchingEntries();
                 }
                 else
                 {
@@ -2646,11 +2648,6 @@ pListBox( new CodeCompleteListBox(this) )
 {
     SetSizePixel( Size(151,151) ); //default, later it changes
     InitListBox();
-}
-
-OUStringBuffer& CodeCompleteWindow::GetListBoxBuffer()
-{
-    return pListBox->aFuncBuffer;
 }
 
 void CodeCompleteWindow::InitListBox()
@@ -2747,11 +2744,6 @@ void CodeCompleteWindow::ClearAndHide()
     Hide();
     ClearListBox();
     pParent->GrabFocus();
-}
-
-void CodeCompleteWindow::SetVisibleEntries()
-{
-    pListBox->SetVisibleEntries();
 }
 
 UnoTypeCodeCompletetor::UnoTypeCodeCompletetor( const std::vector< OUString >& aVect, const OUString& sVarType )
