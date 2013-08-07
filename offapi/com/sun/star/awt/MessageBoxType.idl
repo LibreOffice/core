@@ -20,7 +20,7 @@
 
 module com {  module sun {  module star {  module awt {
 
-/** specifies the type of a <type>XMessageBox</type>.
+/** specifies the type of a XMessageBox.
  */
 published enum MessageBoxType
 {
