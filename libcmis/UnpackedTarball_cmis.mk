@@ -13,14 +13,6 @@ $(eval $(call gb_UnpackedTarball_set_tarball,cmis,$(CMIS_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,cmis,0))
 
-$(eval $(call gb_UnpackedTarball_add_patches,cmis, \
-	libcmis/libcmis-0.3.0-warnings.patch \
-	libcmis/libcmis-0.3.0-win.patch \
-	libcmis/libcmis-0.3.0.patch \
-	libcmis/libcmis-0.3.0-proxy.patch \
-	libcmis/libcmis-0.3.0-lotus-live-fix.patch \
-))
-
 ifeq ($(OS)$(COM),WNTMSC)
 $(eval $(call gb_UnpackedTarball_add_patches,cmis,libcmis/boost-win.patch))
 endif
