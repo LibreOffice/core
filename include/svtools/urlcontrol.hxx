@@ -33,7 +33,7 @@ namespace svt
     //=====================================================================
     class SVT_DLLPUBLIC OFileURLControl : public SvtURLBox
     {
-    protected:
+    private:
         String      m_sPreservedText;
 
     public:
