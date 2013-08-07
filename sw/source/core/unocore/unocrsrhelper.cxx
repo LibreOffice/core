@@ -378,9 +378,9 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
             {
                 if( pAny )
                 {
-                    String sVal;
+                    OUString sVal;
                     SwStyleNameMapper::FillProgName(pFmt->GetName(), sVal, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, true );
-                    *pAny <<= OUString(sVal);
+                    *pAny <<= sVal;
                 }
             }
             else
@@ -902,7 +902,12 @@ void GetCurPageStyle(SwPaM& rPaM, String &rString)
         return; // TODO: is there an easy way to get it for tables/sections?
     const SwPageFrm* pPage = rPaM.GetCntntNode()->getLayoutFrm(rPaM.GetDoc()->GetCurrentLayout())->FindPageFrm();
     if(pPage)
-        SwStyleNameMapper::FillProgName( pPage->GetPageDesc()->GetName(), rString, nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC, true );
+    {
+        OUString tmp;
+        SwStyleNameMapper::FillProgName(pPage->GetPageDesc()->GetName(),
+            tmp, nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC, true);
+        rString = tmp;
+    }
 }
 
 /* --------------------------------------------------

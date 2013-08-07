@@ -676,9 +676,9 @@ bool SwFmtPageDesc::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
                 const SwPageDesc* pDesc = GetPageDesc();
                 if( pDesc )
                 {
-                    String aString;
+                    OUString aString;
                     SwStyleNameMapper::FillProgName(pDesc->GetName(), aString, nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC, true );
-                    rVal <<= OUString( aString );
+                    rVal <<= aString;
                 }
                 else
                     rVal.clear();

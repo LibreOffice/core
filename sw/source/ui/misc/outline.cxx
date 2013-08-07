@@ -169,7 +169,7 @@ SwOutlineTabDialog::SwOutlineTabDialog(Window* pParent, const SfxItemSet* pSwIte
     m_nNumPosId = AddTabPage("position", &SwNumPositionTabPage::Create, 0);
     m_nOutlineId = AddTabPage("numbering", &SwOutlineSettingsTabPage::Create, 0);
 
-    String sHeadline;
+    OUString sHeadline;
     sal_uInt16 i;
 
     for( i = 0; i < MAXLEVEL; ++i )
@@ -377,7 +377,7 @@ short SwOutlineTabDialog::Ok()
 
     for(i = 0; i < MAXLEVEL; ++i )
     {
-        String sHeadline;
+        OUString sHeadline;
         ::SwStyleNameMapper::FillUIName( static_cast< sal_uInt16 >(RES_POOLCOLL_HEADLINE1 + i),
                                          sHeadline );
         SwTxtFmtColl* pColl = rWrtSh.FindTxtFmtCollByName( sHeadline );

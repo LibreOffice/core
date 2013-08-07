@@ -221,7 +221,7 @@ throw (lang::IllegalArgumentException)
         {
             throw lang::IllegalArgumentException();
         }
-        String sStyle;
+        OUString sStyle;
         SwStyleNameMapper::FillUIName(uStyle, sStyle,
                 nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true);
         SwDocStyleSheet *const pStyle = static_cast<SwDocStyleSheet*>(
@@ -272,7 +272,7 @@ throw (lang::IllegalArgumentException)
         return;
     OUString uStyle;
     rAny >>= uStyle;
-    String sStyle;
+    OUString sStyle;
     SwStyleNameMapper::FillUIName(uStyle, sStyle,
             nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, true );
     SwDocStyleSheet *const pStyle = static_cast<SwDocStyleSheet*>(
@@ -315,14 +315,14 @@ SwUnoCursorHelper::SetPageDesc(
     {
         pNewDesc.reset(new SwFmtPageDesc());
     }
-    String sDescName;
+    OUString sDescName;
     SwStyleNameMapper::FillUIName(uDescName, sDescName,
             nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC, true);
     if (!pNewDesc->GetPageDesc() ||
         (pNewDesc->GetPageDesc()->GetName() != sDescName))
     {
         bool bPut = false;
-        if(sDescName.Len())
+        if (!sDescName.isEmpty())
         {
             SwPageDesc *const pPageDesc =
                 ::GetPageDescByName_Impl(rDoc, sDescName);
@@ -412,7 +412,7 @@ lcl_setDropcapCharStyle(SwPaM & rPam, SfxItemSet & rItemSet,
     {
         throw lang::IllegalArgumentException();
     }
-    String sStyle;
+    OUString sStyle;
     SwStyleNameMapper::FillUIName(uStyle, sStyle,
             nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true);
     SwDoc *const pDoc = rPam.GetDoc();
@@ -466,12 +466,12 @@ lcl_setRubyCharstyle(SfxItemSet & rItemSet, uno::Any const& rValue)
     {
         pRuby.reset(new SwFmtRuby(aEmptyStr));
     }
-    String sStyle;
+    OUString sStyle;
     SwStyleNameMapper::FillUIName(sTmp, sStyle,
             nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true );
     pRuby->SetCharFmtName(sStyle);
     pRuby->SetCharFmtId(0);
-    if (sStyle.Len() > 0)
+    if (!sStyle.isEmpty())
     {
         const sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(
                 sStyle, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT);

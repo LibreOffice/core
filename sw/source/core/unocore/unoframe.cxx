@@ -997,8 +997,9 @@ static SwFrmFmt *lcl_GetFrmFmt( const :: uno::Any& rValue, SwDoc *pDoc )
     {
         OUString uTemp;
         rValue >>= uTemp;
-        String sStyle;
-        SwStyleNameMapper::FillUIName(String (uTemp), sStyle, nsSwGetPoolIdFromName::GET_POOLID_FRMFMT, true);
+        OUString sStyle;
+        SwStyleNameMapper::FillUIName(uTemp, sStyle,
+                nsSwGetPoolIdFromName::GET_POOLID_FRMFMT, true);
         SwDocStyleSheet* pStyle =
                 (SwDocStyleSheet*)pDocSh->GetStyleSheetPool()->Find(sStyle,
                                                     SFX_STYLE_FAMILY_FRAME);

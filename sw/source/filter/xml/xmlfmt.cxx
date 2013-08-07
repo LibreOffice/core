@@ -400,7 +400,6 @@ void SwXMLTextStyleContext_Impl::Finish( sal_Bool bOverwrite )
         return;
 
     sal_uInt16 nCount = pConditions->size();
-    String aString;
     OUString sName;
     for( sal_uInt16 i = 0; i < nCount; i++ )
     {
@@ -408,11 +407,10 @@ void SwXMLTextStyleContext_Impl::Finish( sal_Bool bOverwrite )
         OUString aDisplayName(
             GetImport().GetStyleDisplayName( XML_STYLE_FAMILY_TEXT_PARAGRAPH,
                 pCond->GetApplyStyle() ) );
-        SwStyleNameMapper::FillUIName( aDisplayName,
-                                      aString,
+        SwStyleNameMapper::FillUIName(aDisplayName,
+                                      sName,
                                       nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL,
                                       true);
-        sName = aString;
         SwTxtFmtColl* pCondColl = pDoc->FindTxtFmtCollByName( sName );
         OSL_ENSURE( pCondColl,
             "SwXMLItemSetStyleContext_Impl::ConnectConditions: cond coll missing" );
@@ -638,7 +636,7 @@ void SwXMLItemSetStyleContext_Impl::ConnectPageDesc()
 
     SwDoc *pDoc = SwImport::GetDocFromXMLImport( GetSwImport() );
 
-    String sName;
+    OUString sName;
     // #i40788# - first determine the display name of the page style,
     // then map this name to the corresponding user interface name.
     sName = GetImport().GetStyleDisplayName( XML_STYLE_FAMILY_MASTER_PAGE,

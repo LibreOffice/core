@@ -601,7 +601,7 @@ void FillCharStyleListBox(ListBox& rToFill, SwDocShell* pDocSh, bool bSorted, bo
     pPool->SetSearchMask(SFX_STYLE_FAMILY_CHAR, SFXSTYLEBIT_ALL);
     SwDoc* pDoc = pDocSh->GetDoc();
     const SfxStyleSheetBase* pBase = pPool->First();
-    String sStandard;
+    OUString sStandard;
     SwStyleNameMapper::FillUIName( RES_POOLCOLL_STANDARD, sStandard );
     while(pBase)
     {

@@ -121,26 +121,32 @@ protected:
                             *pFrameProgMap,
                             *pNumRuleProgMap;
 
-    static void fillNameFromId ( sal_uInt16 nId, String &rName, bool bProgName );
-    static const String& getNameFromId ( sal_uInt16 nId, const String &rName, bool bProgName );
+    static void fillNameFromId(sal_uInt16 nId, OUString &rName, bool bProgName);
+    static const OUString& getNameFromId(sal_uInt16 nId, const OUString &rName,
+                                         bool bProgName);
     static const NameToIdHash& getHashTable ( SwGetPoolIdFromName, bool bProgName );
 
 public:
     // This gets the UI Name from the programmatic name
-    static const String& GetUIName ( const String& rName, SwGetPoolIdFromName );
-    static         void FillUIName ( const String& rName, String& rFillName, SwGetPoolIdFromName, bool bDisambiguate = false );
+    static const OUString& GetUIName(const OUString& rName, SwGetPoolIdFromName);
+    static         void FillUIName(const OUString& rName, OUString& rFillName,
+                            SwGetPoolIdFromName, bool bDisambiguate = false);
 
     // Get the programmatic Name from the UI name
-    static const String& GetProgName ( const String& rName, SwGetPoolIdFromName );
-    static         void FillProgName ( const String& rName, String& rFillName, SwGetPoolIdFromName, bool bDisambiguate = false );
+    static const OUString& GetProgName(const OUString& rName,
+                                       SwGetPoolIdFromName);
+    static         void FillProgName(const OUString& rName, OUString& rFillName,
+                            SwGetPoolIdFromName, bool bDisambiguate = false);
 
     // This gets the UI Name from the Pool ID
-    SW_DLLPUBLIC static          void FillUIName ( sal_uInt16 nId, String& rFillName );
-    SW_DLLPUBLIC static const String& GetUIName  ( sal_uInt16 nId, const String& rName );
+    SW_DLLPUBLIC static void FillUIName(sal_uInt16 nId, OUString& rFillName);
+    SW_DLLPUBLIC static const OUString& GetUIName(sal_uInt16 nId,
+                                                  const OUString& rName);
 
     // This gets the programmatic Name from the Pool ID
-    static          void FillProgName( sal_uInt16 nId, String& rFillName );
-    SW_DLLPUBLIC static const String& GetProgName ( sal_uInt16 nId, const String& rName );
+    static         void FillProgName(sal_uInt16 nId, OUString& rFillName);
+    SW_DLLPUBLIC static const OUString& GetProgName(sal_uInt16 nId,
+                                                    const OUString& rName);
 
     // This gets the PoolId from the UI Name
     SW_DLLPUBLIC static sal_uInt16 GetPoolIdFromUIName( const String& rName, SwGetPoolIdFromName );

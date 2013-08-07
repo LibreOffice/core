@@ -115,10 +115,10 @@ bool SwFmtCharFmt::GetInfo( SfxPoolItem& rInfo ) const
 }
 bool SwFmtCharFmt::QueryValue( uno::Any& rVal, sal_uInt8 ) const
 {
-    String sCharFmtName;
+    OUString sCharFmtName;
     if(GetCharFmt())
         SwStyleNameMapper::FillProgName(GetCharFmt()->GetName(), sCharFmtName,  nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true );
-    rVal <<= OUString( sCharFmtName );
+    rVal <<= sCharFmtName;
     return true;
 }
 bool SwFmtCharFmt::PutValue( const uno::Any& , sal_uInt8   )
@@ -306,22 +306,24 @@ bool SwFmtINetFmt::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         break;
         case MID_URL_VISITED_FMT:
         {
-            String sVal = aVisitedFmt;
-            if( !sVal.Len() && nVisitedId != 0 )
-                SwStyleNameMapper::FillUIName( nVisitedId, sVal );
-            if( sVal.Len() )
-                SwStyleNameMapper::FillProgName( sVal, sVal, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true );
-            rVal <<= OUString(sVal);
+            OUString sVal = aVisitedFmt;
+            if (sVal.isEmpty() && nVisitedId != 0)
+                SwStyleNameMapper::FillUIName(nVisitedId, sVal);
+            if (!sVal.isEmpty())
+                SwStyleNameMapper::FillProgName(sVal, sVal,
+                        nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true);
+            rVal <<= sVal;
         }
         break;
         case MID_URL_UNVISITED_FMT:
         {
-            String sVal = aINetFmt;
-            if( !sVal.Len() && nINetId != 0 )
-                SwStyleNameMapper::FillUIName( nINetId, sVal );
-            if( sVal.Len() )
-                SwStyleNameMapper::FillProgName( sVal, sVal, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true );
-            rVal <<= OUString(sVal);
+            OUString sVal = aINetFmt;
+            if (sVal.isEmpty() && nINetId != 0)
+                SwStyleNameMapper::FillUIName(nINetId, sVal);
+            if (!sVal.isEmpty())
+                SwStyleNameMapper::FillProgName(sVal, sVal,
+                        nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true);
+            rVal <<= sVal;
         }
         break;
         case MID_URL_HYPERLINKEVENTS:
@@ -390,7 +392,7 @@ bool SwFmtINetFmt::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId  )
             {
                 OUString sVal;
                 rVal >>= sVal;
-                String aString;
+                OUString aString;
                 SwStyleNameMapper::FillUIName( sVal, aString, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true );
                 aVisitedFmt = aString;
                 nVisitedId = SwStyleNameMapper::GetPoolIdFromUIName( aVisitedFmt,
@@ -401,7 +403,7 @@ bool SwFmtINetFmt::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId  )
             {
                 OUString sVal;
                 rVal >>= sVal;
-                String aString;
+                OUString aString;
                 SwStyleNameMapper::FillUIName( sVal, aString, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true );
                 aINetFmt = aString;
                 nINetId = SwStyleNameMapper::GetPoolIdFromUIName( aINetFmt, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
@@ -481,9 +483,9 @@ bool SwFmtRuby::QueryValue( uno::Any& rVal,
          case MID_RUBY_ADJUST:  rVal <<= (sal_Int16)nAdjustment;    break;
         case MID_RUBY_CHARSTYLE:
         {
-            String aString;
+            OUString aString;
             SwStyleNameMapper::FillProgName(sCharFmtName, aString, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true );
-            rVal <<= OUString ( aString );
+            rVal <<= aString;
         }
         break;
         case MID_RUBY_ABOVE:

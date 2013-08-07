@@ -87,7 +87,7 @@ void SwXMLExport::ExportFmt( const SwFmt& rFmt, enum XMLTokenEnum eFamily )
         if( SFX_ITEM_SET == rFmt.GetAttrSet().GetItemState( RES_PAGEDESC,
                                                             sal_False, &pItem ) )
         {
-            String sName;
+            OUString sName;
             const SwPageDesc *pPageDesc =
                 ((const SwFmtPageDesc *)pItem)->GetPageDesc();
             if( pPageDesc )

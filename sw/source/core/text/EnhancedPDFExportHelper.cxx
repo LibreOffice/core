@@ -172,9 +172,9 @@ bool lcl_IsHeadlineCell( const SwCellFrm& rCellFrm )
         const SwTxtNode* pTxtNode = static_cast<const SwTxtFrm*>(pCnt)->GetTxtNode();
         const SwFmt* pTxtFmt = pTxtNode->GetFmtColl();
 
-        String sStyleName;
+        OUString sStyleName;
         SwStyleNameMapper::FillProgName( pTxtFmt->GetName(), sStyleName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, true );
-        bRet = sStyleName.EqualsAscii(aTableHeadingName);
+        bRet = sStyleName.equalsAscii(aTableHeadingName);
     }
 
     return bRet;
@@ -1096,8 +1096,8 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                 const SwFmt* pTxtFmt = pTxtNd->GetFmtColl();
                 const SwFmt* pParentTxtFmt = pTxtFmt ? pTxtFmt->DerivedFrom() : NULL;
 
-                String sStyleName;
-                String sParentStyleName;
+                OUString sStyleName;
+                OUString sParentStyleName;
 
                 if ( pTxtFmt)
                     SwStyleNameMapper::FillProgName( pTxtFmt->GetName(), sStyleName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, true );
@@ -1113,7 +1113,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                 //
                 // Quotations: BlockQuote
                 //
-                if ( sStyleName.EqualsAscii(aQuotations) )
+                if (sStyleName.equalsAscii(aQuotations))
                 {
                     nPDFType = static_cast<sal_uInt16>(vcl::PDFWriter::BlockQuote);
                     aPDFType = OUString(aBlockQuoteString);
@@ -1122,7 +1122,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                 //
                 // Caption: Caption
                 //
-                else if ( sStyleName.EqualsAscii(aCaption) )
+                else if (sStyleName.equalsAscii(aCaption))
                 {
                     nPDFType = static_cast<sal_uInt16>(vcl::PDFWriter::Caption);
                     aPDFType = OUString(aCaptionString);
@@ -1131,16 +1131,16 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                 //
                 // Caption: Caption
                 //
-                else if ( sParentStyleName.EqualsAscii(aCaption) )
+                else if (sParentStyleName.equalsAscii(aCaption))
                 {
                     nPDFType = static_cast<sal_uInt16>(vcl::PDFWriter::Caption);
-                    aPDFType = sStyleName.Append(OUString(aCaptionString));
+                    aPDFType = sStyleName + aCaptionString;
                 }
 
                 //
                 // Heading: H
                 //
-                else if ( sStyleName.EqualsAscii(aHeading) )
+                else if (sStyleName.equalsAscii(aHeading))
                 {
                     nPDFType = static_cast<sal_uInt16>(vcl::PDFWriter::Heading);
                     aPDFType = OUString(aHString);
@@ -1388,7 +1388,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                 SwTxtAttr const*const pInetFmtAttr =
                     pNd->GetTxtAttrAt(rInf.GetIdx(), RES_TXTATR_INETFMT);
 
-                String sStyleName;
+                OUString sStyleName;
                 if ( !pInetFmtAttr )
                 {
                     ::std::vector<SwTxtAttr *> const charAttrs(
@@ -1407,12 +1407,12 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                     aPDFType = OUString(aLinkString);
                 }
                 // Check for Quote/Code character style:
-                else if ( sStyleName.EqualsAscii(aQuotation) )
+                else if (sStyleName.equalsAscii(aQuotation))
                 {
                     nPDFType = vcl::PDFWriter::Quote;
                     aPDFType = OUString(aQuoteString);
                 }
-                else if ( sStyleName.EqualsAscii(aSourceText) )
+                else if (sStyleName.equalsAscii(aSourceText))
                 {
                     nPDFType = vcl::PDFWriter::Code;
                     aPDFType = OUString(aCodeString);
@@ -1430,10 +1430,10 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                          0                 != rInf.GetFont()->GetEscapement() ||
                          SW_LATIN          != nFont ||
                          nCurrentLanguage  != nDefaultLang ||
-                         sStyleName.Len()  > 0 )
+                         !sStyleName.isEmpty())
                     {
                         nPDFType = vcl::PDFWriter::Span;
-                        if ( sStyleName.Len() > 0 )
+                        if (!sStyleName.isEmpty())
                             aPDFType = sStyleName;
                         else
                             aPDFType = OUString(aSpanString);

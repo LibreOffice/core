@@ -346,7 +346,7 @@ const SfxItemSet* SwTemplateDlg::GetRefreshedSet()
 void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
     // set style's and metric's names
-    String sNumCharFmt, sBulletCharFmt;
+    OUString sNumCharFmt, sBulletCharFmt;
     SwStyleNameMapper::FillUIName( RES_POOLCHR_NUM_LEVEL, sNumCharFmt);
     SwStyleNameMapper::FillUIName( RES_POOLCHR_BUL_LEVEL, sBulletCharFmt);
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
@@ -481,7 +481,7 @@ void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
             if(0 == (nHtmlMode & HTMLMODE_ON ))
             {
                 std::vector<OUString> aList;
-                String aNew;
+                OUString aNew;
                 SwStyleNameMapper::FillUIName( RES_POOLCOLL_TEXT, aNew );
                 aList.push_back( aNew );
                 if( pWrtShell )

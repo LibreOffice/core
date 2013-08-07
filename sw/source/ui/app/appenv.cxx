@@ -185,7 +185,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
     if(pOldSh )
     {
         const SwPageDesc& rCurPageDesc = pOldSh->GetPageDesc(pOldSh->GetCurPageDesc());
-        String sJacket;
+        OUString sJacket;
         SwStyleNameMapper::FillUIName( RES_POOLPAGE_JAKET, sJacket );
         bEnvChange = rCurPageDesc.GetName() == sJacket;
 

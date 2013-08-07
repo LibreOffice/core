@@ -2778,7 +2778,7 @@ void SwTOXEntryTabPage::SetWrtShell(SwWrtShell& rSh)
 
 String  SwTOXEntryTabPage::GetLevelHelp(sal_uInt16 nLevel) const
 {
-    String sRet;
+    OUString sRet;
     SwMultiTOXTabDialog* pTOXDlg = (SwMultiTOXTabDialog*)GetTabDialog();
     const CurTOXType aCurType = pTOXDlg->GetCurrentTOXType();
     if( TOX_INDEX == aCurType.eType )
@@ -2788,7 +2788,7 @@ String  SwTOXEntryTabPage::GetLevelHelp(sal_uInt16 nLevel) const
     else if( TOX_AUTHORITIES == aCurType.eType )
     {
         //wildcard -> show entry text
-        sRet = '*';
+        sRet = "*";
     }
     return sRet;
 }

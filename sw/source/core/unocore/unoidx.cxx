@@ -745,7 +745,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         break;
         case WID_MAIN_ENTRY_CHARACTER_STYLE_NAME:
         {
-            String aString;
+            OUString aString;
             SwStyleNameMapper::FillUIName(lcl_AnyToString(rValue),
                 aString, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true);
             rTOXBase.SetMainEntryCharStyle( aString );
@@ -781,7 +781,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         break;
         case WID_PARA_HEAD:
         {
-            String aString;
+            OUString aString;
             SwStyleNameMapper::FillUIName( lcl_AnyToString(rValue),
                 aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, true);
             bForm = true;
@@ -795,7 +795,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         break;
         case WID_PARA_SEP:
         {
-            String aString;
+            OUString aString;
             bForm = true;
             SwStyleNameMapper::FillUIName( lcl_AnyToString(rValue),
                 aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, true);
@@ -820,7 +820,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
             bForm = true;
             // in sdbcx::Index Label 1 begins at Pos 2 otherwise at Pos 1
             const sal_uInt16 nLPos = rTOXBase.GetType() == TOX_INDEX ? 2 : 1;
-            String aString;
+            OUString aString;
             SwStyleNameMapper::FillUIName( lcl_AnyToString(rValue),
                 aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, true);
             aForm.SetTemplate(nLPos + pEntry->nWID - WID_PARA_LEV1, aString );
@@ -1079,13 +1079,13 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
             break;
             case WID_MAIN_ENTRY_CHARACTER_STYLE_NAME:
             {
-                String aString;
+                OUString aString;
                 SwStyleNameMapper::FillProgName(
                         pTOXBase->GetMainEntryCharStyle(),
                         aString,
                         nsSwGetPoolIdFromName::GET_POOLID_CHRFMT,
                         true);
-                aRet <<= OUString( aString );
+                aRet <<= aString;
             }
             break;
             case WID_CREATE_FROM_TABLES:
@@ -1122,21 +1122,21 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
             case WID_PARA_HEAD:
             {
                 //Header steht an Pos 0
-                String aString;
+                OUString aString;
                 SwStyleNameMapper::FillProgName(rForm.GetTemplate( 0 ), aString,
                         nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, true );
-                aRet <<= OUString( aString );
+                aRet <<= aString;
             }
             break;
             case WID_PARA_SEP:
             {
-                String aString;
+                OUString aString;
                 SwStyleNameMapper::FillProgName(
                         rForm.GetTemplate( 1 ),
                         aString,
                         nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL,
                         true);
-                aRet <<= OUString( aString );
+                aRet <<= aString;
             }
             break;
             case WID_PARA_LEV1:
@@ -1152,13 +1152,13 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
             {
                 // in sdbcx::Index Label 1 begins at Pos 2 otherwise at Pos 1
                 sal_uInt16 nLPos = pTOXBase->GetType() == TOX_INDEX ? 2 : 1;
-                String aString;
+                OUString aString;
                 SwStyleNameMapper::FillProgName(
                         rForm.GetTemplate(nLPos + pEntry->nWID - WID_PARA_LEV1),
                         aString,
                         nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL,
                         true);
-                aRet <<= OUString( aString );
+                aRet <<= aString;
             }
             break;
             case WID_IS_RELATIVE_TABSTOPS:
@@ -2619,7 +2619,7 @@ throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
     const sal_Int32 nStyles = aSeq.getLength();
     const OUString* pStyles = aSeq.getConstArray();
     String sSetStyles;
-    String aString;
+    OUString aString;
     for(sal_Int32 i = 0; i < nStyles; i++)
     {
         if(i)
@@ -2658,7 +2658,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
     const sal_uInt16 nStyles = comphelper::string::getTokenCount(rStyles, TOX_STYLE_DELIMITER);
     uno::Sequence<OUString> aStyles(nStyles);
     OUString* pStyles = aStyles.getArray();
-    String aString;
+    OUString aString;
     for(sal_uInt16 i = 0; i < nStyles; i++)
     {
         SwStyleNameMapper::FillProgName(
@@ -2666,7 +2666,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
             aString,
             nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL,
             true);
-        pStyles[i] = OUString( aString );
+        pStyles[i] = aString;
     }
     uno::Any aRet(&aStyles, ::getCppuType((uno::Sequence<OUString>*)0));
     return aRet;
@@ -2796,7 +2796,7 @@ throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
             }
             else if ( pProperties[j].Name == "CharacterStyleName" )
             {
-                String sCharStyleName;
+                OUString sCharStyleName;
                 SwStyleNameMapper::FillUIName(
                         lcl_AnyToString(pProperties[j].Value),
                         sCharStyleName,
@@ -2961,7 +2961,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
 
     sal_uInt16 nTokenCount = 0;
     uno::Sequence< beans::PropertyValues > aRetSeq;
-    String aString;
+    OUString aString;
     while(aIt != aPattern.end()) // #i21237#
     {
         nTokenCount++;

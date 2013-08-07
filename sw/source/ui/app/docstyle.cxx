@@ -554,7 +554,7 @@ const OUString&  SwDocStyleSheet::GetParent() const
             return aEmptyOUStr;       // there's no parent
         }
 
-        String sTmp;
+        OUString sTmp;
         if( !pFmt )         // not yet there, so default Parent
         {
             sal_uInt16 i = SwStyleNameMapper::GetPoolIdFromUIName( aName, eGetType );

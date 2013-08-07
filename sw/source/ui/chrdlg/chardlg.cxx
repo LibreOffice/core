@@ -212,12 +212,12 @@ void SwCharURLPage::Reset(const SfxItemSet& rSet)
                                         RTL_TEXTENCODING_UTF8 ));
         m_pURLED->SaveValue();
         m_pNameED->SetText(pINetFmt->GetName());
-        String sEntry = pINetFmt->GetVisitedFmt();
-        if( !sEntry.Len() )
+        OUString sEntry = pINetFmt->GetVisitedFmt();
+        if (sEntry.isEmpty())
             SwStyleNameMapper::FillUIName( RES_POOLCHR_INET_VISIT, sEntry );
         m_pVisitedLB->SelectEntry(sEntry);
         sEntry = pINetFmt->GetINetFmt();
-        if(!sEntry.Len())
+        if (sEntry.isEmpty())
             SwStyleNameMapper::FillUIName( RES_POOLCHR_INET_NORMAL, sEntry );
         m_pNotVisitedLB->SelectEntry(sEntry);
 

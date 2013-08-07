@@ -376,11 +376,11 @@ bool lcl_SuffixIsUser ( const String & rString )
     return bRet;
 }
 
-void lcl_CheckSuffixAndDelete ( String & rString )
+static void lcl_CheckSuffixAndDelete(OUString & rString)
 {
     if (lcl_SuffixIsUser(rString))
     {
-        rString.Erase ( rString.Len() - 7, 7 );
+        rString = rString.copy(0, rString.getLength() - 7);
     }
 }
 
@@ -659,7 +659,8 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
     return *pHash;
 }
 // This gets the UI Name from the programmatic name
-const String& SwStyleNameMapper::GetUIName ( const String& rName, SwGetPoolIdFromName eFlags )
+const OUString& SwStyleNameMapper::GetUIName(const OUString& rName,
+                                             SwGetPoolIdFromName const eFlags)
 {
     sal_uInt16 nId = GetPoolIdFromProgName ( rName, eFlags );
     return nId != USHRT_MAX ? GetUIName( nId, rName ) : rName;
@@ -667,14 +668,17 @@ const String& SwStyleNameMapper::GetUIName ( const String& rName, SwGetPoolIdFro
 
 
 // Get the programmatic Name from the UI name
-const String& SwStyleNameMapper::GetProgName( const String& rName, SwGetPoolIdFromName eFlags )
+const OUString& SwStyleNameMapper::GetProgName(
+        const OUString& rName, SwGetPoolIdFromName const eFlags)
 {
     sal_uInt16 nId = GetPoolIdFromUIName ( rName, eFlags );
     return nId != USHRT_MAX ? GetProgName( nId, rName ) : rName;
 }
 
 // Get the programmatic name from the UI name in rName and put it into rFillName
-void SwStyleNameMapper::FillProgName ( const String& rName, String& rFillName, SwGetPoolIdFromName eFlags, bool bDisambiguate )
+void SwStyleNameMapper::FillProgName(
+        const OUString& rName, OUString& rFillName,
+        SwGetPoolIdFromName const eFlags, bool const bDisambiguate)
 {
     sal_uInt16 nId = GetPoolIdFromUIName ( rName, eFlags );
     if ( bDisambiguate && nId == USHRT_MAX )
@@ -687,23 +691,25 @@ void SwStyleNameMapper::FillProgName ( const String& rName, String& rFillName, S
         {
             // It isn't ...make sure the suffix isn't already " (user)"...if it is,
             // we need to add another one
-            if ( lcl_SuffixIsUser ( rFillName ) )
-                rFillName.AppendAscii ( RTL_CONSTASCII_STRINGPARAM ( " (user)" ) );
+            if (lcl_SuffixIsUser(rFillName))
+                rFillName += " (user)";
         }
         else
         {
             // It's in the programmatic name table...append suffix
-            rFillName.AppendAscii ( RTL_CONSTASCII_STRINGPARAM ( " (user)" ) );
+            rFillName += " (user)";
         }
     }
     else
     {
         // If we aren't trying to disambiguate, then just do a normal fill
-        fillNameFromId ( nId, rFillName, true);
+        fillNameFromId(nId, rFillName, true);
     }
 }
 // Get the UI name from the programmatic name in rName and put it into rFillName
-void SwStyleNameMapper::FillUIName ( const String& rName, String& rFillName, SwGetPoolIdFromName eFlags, bool bDisambiguate )
+void SwStyleNameMapper::FillUIName(
+        const OUString& rName, OUString& rFillName,
+        SwGetPoolIdFromName const eFlags, bool const bDisambiguate)
 {
     sal_uInt16 nId = GetPoolIdFromProgName ( rName, eFlags );
     if ( bDisambiguate && nId == USHRT_MAX )
@@ -715,11 +721,12 @@ void SwStyleNameMapper::FillUIName ( const String& rName, String& rFillName, SwG
     else
     {
         // If we aren't trying to disambiguate, then just do a normal fill
-        fillNameFromId ( nId, rFillName, false);
+        fillNameFromId(nId, rFillName, false);
     }
 }
 
-const String& SwStyleNameMapper::getNameFromId( sal_uInt16 nId, const String& rFillName, bool bProgName )
+const OUString& SwStyleNameMapper::getNameFromId(
+        sal_uInt16 const nId, const OUString& rFillName, bool const bProgName)
 {
     sal_uInt16 nStt = 0;
     const boost::ptr_vector<String>* pStrArr = 0;
@@ -802,34 +809,38 @@ const String& SwStyleNameMapper::getNameFromId( sal_uInt16 nId, const String& rF
         }
         break;
     }
-    return pStrArr ? (pStrArr->operator[] ( nId - nStt ) ) : rFillName;
+    //FIXME
+    return pStrArr ? reinterpret_cast<OUString const&>(pStrArr->operator[](nId - nStt)) : rFillName;
 }
 
-void SwStyleNameMapper::fillNameFromId( sal_uInt16 nId, String& rFillName, bool bProgName )
+void SwStyleNameMapper::fillNameFromId(
+        sal_uInt16 const nId, OUString& rFillName, bool bProgName)
 {
     rFillName = getNameFromId(nId, rFillName, bProgName);
 }
 
 // Get the UI Name from the pool ID
-void SwStyleNameMapper::FillUIName ( sal_uInt16 nId, String& rFillName )
+void SwStyleNameMapper::FillUIName(sal_uInt16 const nId, OUString& rFillName)
 {
-    fillNameFromId ( nId, rFillName, false );
+    fillNameFromId(nId, rFillName, false);
 }
 // Get the UI Name from the pool ID
-const String& SwStyleNameMapper::GetUIName ( sal_uInt16 nId, const String& rName )
+const OUString& SwStyleNameMapper::GetUIName(
+        sal_uInt16 const nId, const OUString& rName)
 {
-    return getNameFromId ( nId, rName, false );
+    return getNameFromId(nId, rName, false);
 }
 
 // Get the programmatic Name from the pool ID
-void SwStyleNameMapper::FillProgName ( sal_uInt16 nId, String& rFillName )
+void SwStyleNameMapper::FillProgName(sal_uInt16 nId, OUString& rFillName)
 {
-    fillNameFromId ( nId, rFillName, true );
+    fillNameFromId(nId, rFillName, true);
 }
 // Get the programmatic Name from the pool ID
-const String& SwStyleNameMapper::GetProgName ( sal_uInt16 nId, const String& rName )
+const OUString&
+SwStyleNameMapper::GetProgName(sal_uInt16 const nId, const OUString& rName)
 {
-    return getNameFromId ( nId, rName, true );
+    return getNameFromId(nId, rName, true);
 }
 // This gets the PoolId from the UI Name
 sal_uInt16 SwStyleNameMapper::GetPoolIdFromUIName( const String& rName, SwGetPoolIdFromName eFlags )

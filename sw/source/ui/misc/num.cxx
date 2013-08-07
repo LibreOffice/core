@@ -938,7 +938,7 @@ SwSvxNumBulletTabDialog::~SwSvxNumBulletTabDialog()
 void SwSvxNumBulletTabDialog::PageCreated(sal_uInt16 nPageId, SfxTabPage& rPage)
 {
     // set styles' names and metric
-    String sNumCharFmt, sBulletCharFmt;
+    OUString sNumCharFmt, sBulletCharFmt;
     SwStyleNameMapper::FillUIName( RES_POOLCHR_NUM_LEVEL, sNumCharFmt );
     SwStyleNameMapper::FillUIName( RES_POOLCHR_BUL_LEVEL, sBulletCharFmt );
 

@@ -415,10 +415,15 @@ SwCaptionOptPage::SwCaptionOptPage( Window* pParent, const SfxItemSet& rSet )
     Wallpaper   aBack( GetSettings().GetStyleSettings().GetWindowColor() );
     aPreview.SetBackground( aBack );
 
-    SwStyleNameMapper::FillUIName( RES_POOLCOLL_LABEL_ABB, sIllustration );
-    SwStyleNameMapper::FillUIName( RES_POOLCOLL_LABEL_TABLE, sTable );
-    SwStyleNameMapper::FillUIName( RES_POOLCOLL_LABEL_FRAME, sText );
-    SwStyleNameMapper::FillUIName( RES_POOLCOLL_LABEL_DRAWING, sDrawing );
+    OUString tmp1, tmp2, tmp3, tmp4; //FIXME
+    SwStyleNameMapper::FillUIName(RES_POOLCOLL_LABEL_ABB, tmp1);
+    SwStyleNameMapper::FillUIName(RES_POOLCOLL_LABEL_TABLE, tmp2);
+    SwStyleNameMapper::FillUIName(RES_POOLCOLL_LABEL_FRAME, tmp3);
+    SwStyleNameMapper::FillUIName(RES_POOLCOLL_LABEL_DRAWING, tmp4);
+    sIllustration = tmp1;
+    sTable = tmp2;
+    sText = tmp3;
+    sDrawing = tmp4;
 
     sal_uInt16 i, nCount;
     SwWrtShell *pSh = ::GetActiveWrtShell();

@@ -180,7 +180,7 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet& )
         pStyle = pStyleSheetPool->Next();
     }
 
-    String sStr;
+    OUString sStr;
     SwStyleNameMapper::FillUIName( static_cast< sal_uInt16 >(bEndNote ? RES_POOLCOLL_ENDNOTE
                            : RES_POOLCOLL_FOOTNOTE), sStr );
     if(LISTBOX_ENTRY_NOTFOUND == m_pParaTemplBox->GetEntryPos( sStr ) )

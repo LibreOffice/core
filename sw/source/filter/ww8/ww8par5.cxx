@@ -2783,7 +2783,7 @@ void SwWW8ImplReader::Read_SubF_Ruby( WW8ReadFieldParams& rReadParam)
         if (!pCharFmt)
         {
             SwCharFmt *pFmt=0;
-            String aNm;
+            OUString aNm;
             //Take this as the base name
             SwStyleNameMapper::FillUIName(RES_POOLCHR_RUBYTEXT,aNm);
             aNm+=OUString::number(aRubyCharFmts.size()+1);

@@ -551,7 +551,7 @@ Sequence< Sequence< PropertyValue > > SwXTextView::getRubyList( sal_Bool /*bAuto
     sal_uInt16 nCount = pDoc->FillRubyList( *rSh.GetCrsr(), aList, 0 );
     Sequence< Sequence< PropertyValue > > aRet(nCount);
     Sequence< PropertyValue >* pRet = aRet.getArray();
-    String aString;
+    OUString aString;
     for(sal_uInt16 n = 0; n < nCount; n++)
     {
         const SwRubyListEntry* pEntry = &aList[n];
@@ -567,7 +567,7 @@ Sequence< Sequence< PropertyValue > > SwXTextView::getRubyList( sal_Bool /*bAuto
         pValues[1].Value <<= OUString(rAttr.GetText());
         pValues[2].Name = OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_RUBY_CHAR_STYLE_NAME));
         SwStyleNameMapper::FillProgName(rAttr.GetCharFmtName(), aString, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true );
-        pValues[2].Value <<= OUString( aString );
+        pValues[2].Value <<= aString;
         pValues[3].Name = OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_RUBY_ADJUST));
         pValues[3].Value <<= (sal_Int16)rAttr.GetAdjustment();
         pValues[4].Name = OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_RUBY_IS_ABOVE));
@@ -620,10 +620,11 @@ void SAL_CALL SwXTextView::setRubyList(
             {
                 if((pProperties[nProp].Value >>= sTmp))
                 {
-                    String sName;
+                    OUString sName;
                     SwStyleNameMapper::FillUIName(sTmp, sName, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true );
-                    sal_uInt16 nPoolId = sName.Len() ?
-                        SwStyleNameMapper::GetPoolIdFromUIName( sName, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT ) : 0;
+                    sal_uInt16 nPoolId = sName.isEmpty() ? 0
+                        : SwStyleNameMapper::GetPoolIdFromUIName(sName,
+                                nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
 
                     pEntry->GetRubyAttr().SetCharFmtName( sName );
                     pEntry->GetRubyAttr().SetCharFmtId( nPoolId );

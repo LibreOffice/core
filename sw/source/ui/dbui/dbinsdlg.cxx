@@ -1569,15 +1569,15 @@ void SwInsertDBColAutoPilot::Commit()
     pValues[2].Value <<= aDBData.nCommandType;
     pValues[3].Value <<= OUString(aEdDbText.GetText());
 
-    String sTmp;
+    OUString sTmp;
     for( sal_uInt16 n = 0, nCnt = aLbTableCol.GetEntryCount(); n < nCnt; ++n )
-        ( sTmp += aLbTableCol.GetEntry( n ) ) += '\x0a';
+        (sTmp += aLbTableCol.GetEntry(n)) += "\x0a";
 
-    if( sTmp.Len() )
-        pValues[4].Value <<= OUString(sTmp);
+    if (!sTmp.isEmpty())
+        pValues[4].Value <<= sTmp;
 
     if( sNoTmpl != (sTmp = aLbDbParaColl.GetSelectEntry()) )
-        pValues[5].Value <<= OUString(sTmp);
+        pValues[5].Value <<= sTmp;
 
     if( pTAutoFmt )
         pValues[6].Value <<= OUString(pTAutoFmt->GetName());
@@ -1642,7 +1642,7 @@ void SwInsertDBColAutoPilot::Commit()
         }
         else
         {
-            pSubValues[4].Value <<= OUString(sTmp);
+            pSubValues[4].Value <<= sTmp;
             eLang = GetAppLanguage();
         }
 
