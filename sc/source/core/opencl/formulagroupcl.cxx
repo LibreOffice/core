@@ -262,6 +262,7 @@ bool FormulaGroupInterpreterOpenCL::interpret(ScDocument& rDoc, const ScAddress&
                         if( NULL==pArray )
                         {
                             fprintf(stderr,"Error: pArray is NULL!\n");
+                            free(rResult);
                             return false;
                         }
                         if(ocl_calc.GetOpenclState())
