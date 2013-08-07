@@ -22,8 +22,6 @@
 #include <swtypes.hxx>
 #include <swlbox.hxx>
 
-using namespace nsSwComboBoxStyle;
-
 
 //     Description: ListboxElement
 SwBoxEntry::SwBoxEntry() :
@@ -49,16 +47,14 @@ SwBoxEntry::SwBoxEntry(const SwBoxEntry& rOld) :
 {
 }
 
-SwComboBox::SwComboBox(Window* pParent, sal_uInt16 nStyleBits) :
-    ComboBox(pParent),
-    nStyle(nStyleBits)
+SwComboBox::SwComboBox(Window* pParent)
+    : ComboBox(pParent)
 {
     Init();
 }
 
-SwComboBox::SwComboBox(Window* pParent, const ResId& rId, sal_uInt16 nStyleBits) :
-    ComboBox(pParent, rId),
-    nStyle(nStyleBits)
+SwComboBox::SwComboBox(Window* pParent, const ResId& rId)
+    : ComboBox(pParent, rId)
 {
     Init();
 }
@@ -144,37 +140,5 @@ void SwComboBox::InsertSorted(SwBoxEntry* pEntry)
     sal_uInt16 nPos = ComboBox::GetEntryPos(pEntry->aName);
     aEntryLst.insert( aEntryLst.begin() + nPos, pEntry );
 }
-
-void SwComboBox::KeyInput( const KeyEvent& rKEvt )
-{
-    sal_uInt16 nChar = rKEvt.GetCharCode();
-
-    if(nStyle & CBS_FILENAME)
-    {
-#if defined UNX
-        if(nChar == '/' || nChar == ' ' )
-            return;
-#else
-        if(nChar == ':' || nChar == '\\' || nChar == '.' || nChar == ' ')
-            return;
-#endif
-    }
-    ComboBox::KeyInput(rKEvt);
-}
-
-// Convert text according to option
-OUString SwComboBox::GetText() const
-{
-    OUString aTxt( ComboBox::GetText() );
-
-    if(nStyle & CBS_LOWER)
-        aTxt = GetAppCharClass().lowercase( aTxt );
-    else if( nStyle & CBS_UPPER )
-        aTxt = GetAppCharClass().uppercase( aTxt );
-
-    return aTxt;
-}
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
