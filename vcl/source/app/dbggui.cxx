@@ -1343,7 +1343,7 @@ void DbgDialogTest( Window* pWindow )
                 if ( pChild->IsVisible() )
                 {
                     int aWidth=0;
-                    if( nAccelPos != STRING_NOTFOUND )
+                    if( nAccelPos != -1 )
                     {
                         aWidth = pChild->GetTextWidth( aText, 0, nAccelPos ) +
                                  pChild->GetTextWidth( aText, nAccelPos+1, aText.getLength() - nAccelPos - 1);
