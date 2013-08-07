@@ -48,6 +48,7 @@ OStatementCommonBase::OStatementCommonBase(OConnection* _pConnection)
     : OStatementCommonBase_Base(_pConnection->getMutex()),
       OPropertySetHelper(OStatementCommonBase_Base::rBHelper),
       m_pConnection(_pConnection),
+      m_aStatementHandle( 0 ),
       rBHelper(OStatementCommonBase_Base::rBHelper)
 {
     m_pConnection->acquire();
@@ -63,6 +64,28 @@ void OStatementCommonBase::disposeResultSet()
     if (xComp.is())
         xComp->dispose();
     m_xResultSet = uno::Reference< XResultSet>();
+}
+
+void OStatementCommonBase::freeStatementHandle()
+    throw (SQLException)
+{
+    if (m_aStatementHandle)
+    {
+        isc_dsql_free_statement(m_statusVector,
+                                &m_aStatementHandle,
+                                DSQL_drop);
+        try {
+            evaluateStatusVector(m_statusVector,
+                                 "isc_dsql_free_statement",
+                                 *this);
+        }
+        catch (SQLException e)
+        {
+            // we cannot throw any exceptions here anyway
+            SAL_WARN("connectivity.firebird",
+                     "isc_dsql_free_statement failed\n" << e.Message);
+        }
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -91,26 +114,29 @@ void SAL_CALL OStatementCommonBase::cancel(  ) throw(RuntimeException)
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
     // cancel the current sql statement
 }
-// -------------------------------------------------------------------------
 
-void SAL_CALL OStatementCommonBase::close(  ) throw(SQLException, RuntimeException)
+void SAL_CALL OStatementCommonBase::close()
+    throw(SQLException, RuntimeException)
 {
-    SAL_INFO("connectivity.firebird", "close().");
+    SAL_INFO("connectivity.firebird", "close");
 
     {
         MutexGuard aGuard(m_pConnection->getMutex());
         checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
         disposeResultSet();
+        freeStatementHandle();
     }
+
     dispose();
 }
 
 int OStatementCommonBase::prepareAndDescribeStatement(const OUString& sql,
-                                                 isc_stmt_handle& aStatementHandle,
-                                                 XSQLDA*& pOutSqlda,
-                                                 XSQLDA* pInSqlda)
+                                                      XSQLDA*& pOutSqlda,
+                                                      XSQLDA* pInSqlda)
 {
     MutexGuard aGuard(m_pConnection->getMutex());
+
+    freeStatementHandle();
 
     if (!pOutSqlda)
     {
@@ -123,7 +149,7 @@ int OStatementCommonBase::prepareAndDescribeStatement(const OUString& sql,
 
     aErr = isc_dsql_allocate_statement(m_statusVector,
                                        &m_pConnection->getDBHandle(),
-                                       &aStatementHandle);
+                                       &m_aStatementHandle);
 
     if (aErr)
     {
@@ -134,7 +160,7 @@ int OStatementCommonBase::prepareAndDescribeStatement(const OUString& sql,
     {
         aErr = isc_dsql_prepare(m_statusVector,
                                 &m_pConnection->getTransaction(),
-                                &aStatementHandle,
+                                &m_aStatementHandle,
                                 0,
                                 OUStringToOString(sql, RTL_TEXTENCODING_UTF8).getStr(),
                                 FIREBIRD_SQL_DIALECT,
@@ -149,7 +175,7 @@ int OStatementCommonBase::prepareAndDescribeStatement(const OUString& sql,
     else
     {
         aErr = isc_dsql_describe(m_statusVector,
-                                 &aStatementHandle,
+                                 &m_aStatementHandle,
                                  1,
                                  pOutSqlda);
     }
@@ -167,7 +193,7 @@ int OStatementCommonBase::prepareAndDescribeStatement(const OUString& sql,
         pOutSqlda = (XSQLDA*) malloc(XSQLDA_LENGTH(n));
         pOutSqlda->version = SQLDA_VERSION1;
         aErr = isc_dsql_describe(m_statusVector,
-                                 &aStatementHandle,
+                                 &m_aStatementHandle,
                                  1,
                                  pOutSqlda);
     }

@@ -110,12 +110,9 @@ uno::Reference< XResultSet > SAL_CALL OStatement::executeQuery(const OUString& s
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
     XSQLDA* pOutSqlda = 0;
-    isc_stmt_handle aStatementHandle = 0;
     int aErr = 0;
 
-
     aErr = prepareAndDescribeStatement(sql,
-                                       aStatementHandle,
                                        pOutSqlda);
     if (aErr)
     {
@@ -125,7 +122,7 @@ uno::Reference< XResultSet > SAL_CALL OStatement::executeQuery(const OUString& s
     {
         aErr = isc_dsql_execute(m_statusVector,
                                 &m_pConnection->getTransaction(),
-                                &aStatementHandle,
+                                &m_aStatementHandle,
                                 1,
                                 NULL);
         if (aErr)
@@ -134,7 +131,7 @@ uno::Reference< XResultSet > SAL_CALL OStatement::executeQuery(const OUString& s
 
     m_xResultSet = new OResultSet(m_pConnection,
                                   uno::Reference< XInterface >(*this),
-                                  aStatementHandle,
+                                  m_aStatementHandle,
                                   pOutSqlda);
 
     // TODO: deal with cleanup
@@ -142,7 +139,7 @@ uno::Reference< XResultSet > SAL_CALL OStatement::executeQuery(const OUString& s
 
     evaluateStatusVector(m_statusVector, sql, *this);
 
-    if (isDDLStatement(aStatementHandle))
+    if (isDDLStatement(m_aStatementHandle))
     {
         m_pConnection->commit();
     }

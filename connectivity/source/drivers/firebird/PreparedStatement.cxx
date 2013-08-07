@@ -54,7 +54,6 @@ OPreparedStatement::OPreparedStatement( OConnection* _pConnection,
     :OStatementCommonBase(_pConnection)
     ,m_aTypeInfo(_TypeInfo)
     ,m_sSqlStatement(sql)
-    ,m_statementHandle(0)
     ,m_pOutSqlda(0)
     ,m_pInSqlda(0)
 {
@@ -68,7 +67,7 @@ void OPreparedStatement::ensurePrepared()
     MutexGuard aGuard(m_pConnection->getMutex());
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
-    if (m_statementHandle)
+    if (m_aStatementHandle)
         return;
 
     ISC_STATUS aErr = 0;
@@ -81,17 +80,16 @@ void OPreparedStatement::ensurePrepared()
     } // TODO: free this on closing
 
     aErr = prepareAndDescribeStatement(m_sSqlStatement,
-                                       m_statementHandle,
                                        m_pOutSqlda,
                                        m_pInSqlda);
     if (aErr)
     {
         SAL_WARN("connectivity.firebird", "prepareAndDescribeStatement failed");
     }
-    else if (m_statementHandle)
+    else if (m_aStatementHandle)
     {
         isc_dsql_describe_bind(m_statusVector,
-                               &m_statementHandle,
+                               &m_aStatementHandle,
                                1,
                                m_pInSqlda);
     }
@@ -108,7 +106,7 @@ void OPreparedStatement::ensurePrepared()
         m_pInSqlda->version = SQLDA_VERSION1;
         m_pInSqlda->sqln = nItems;
         isc_dsql_describe_bind(m_statusVector,
-                               &m_statementHandle,
+                               &m_aStatementHandle,
                                1,
                                m_pInSqlda);
     }
@@ -117,7 +115,7 @@ void OPreparedStatement::ensurePrepared()
 //         };
 //         char aResultBuffer[8];
 //         isc_dsql_sql_info(m_statusVector,
-//                           &m_statementHandle,
+//                           &m_aStatementHandle,
 //                           sizeof(aItems),
 //                           aItems,
 //                           sizeof(aResultBuffer),
@@ -183,11 +181,6 @@ void SAL_CALL OPreparedStatement::close() throw(SQLException, RuntimeException)
 
     MutexGuard aGuard( m_pConnection->getMutex() );
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
-
-    if (m_statementHandle)
-    {
-        // TODO: implement
-    }
 
     OStatementCommonBase::close();
 }
@@ -265,7 +258,7 @@ sal_Bool SAL_CALL OPreparedStatement::execute()
 
     aErr = isc_dsql_execute(m_statusVector,
                                 &m_pConnection->getTransaction(),
-                                &m_statementHandle,
+                                &m_aStatementHandle,
                                 1,
                                 m_pInSqlda);
     if (aErr)
@@ -276,7 +269,7 @@ sal_Bool SAL_CALL OPreparedStatement::execute()
 
     m_xResultSet = new OResultSet(m_pConnection,
                                   uno::Reference< XInterface >(*this),
-                                  m_statementHandle,
+                                  m_aStatementHandle,
                                   m_pOutSqlda);
 
     return m_xResultSet.is();

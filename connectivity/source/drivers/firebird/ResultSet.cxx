@@ -265,21 +265,7 @@ void OResultSet::disposing(void)
 
     MutexGuard aGuard(m_pConnection->getMutex());
 
-    if (m_statementHandle)
-    {
-        isc_dsql_free_statement(m_statusVector,
-                                &m_statementHandle,
-                                DSQL_drop);
-        try {
-            evaluateStatusVector(m_statusVector, "isc_dsql_free_statement", *this);
-        }
-        catch (SQLException e)
-        {
-            // we cannot throw any exceptions here anyway
-            SAL_WARN("connectivity.firebird", "isc_dsql_free_statement failed\n" <<
-                     e.Message);
-        }
-    }
+    // TODO: free the sqlda
 
     m_xMetaData     = NULL;
 }

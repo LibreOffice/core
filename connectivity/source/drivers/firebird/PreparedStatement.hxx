@@ -69,7 +69,6 @@ namespace connectivity
             ::rtl::OUString                                                                 m_sSqlStatement;
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData >  m_xMetaData;
 
-            isc_stmt_handle m_statementHandle;
             XSQLDA*         m_pOutSqlda;
             XSQLDA*         m_pInSqlda;
             void checkParameterIndex(sal_Int32 nParameterIndex)

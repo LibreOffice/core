@@ -61,9 +61,12 @@ namespace connectivity
             OConnection*                                m_pConnection;
 
             ISC_STATUS_ARRAY                            m_statusVector;
-        protected:
+            isc_stmt_handle                             m_aStatementHandle;
 
+        protected:
             void disposeResultSet();
+            void freeStatementHandle()
+                throw (::com::sun::star::sdbc::SQLException);
 
             // OPropertyArrayUsageHelper
             virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
@@ -84,7 +87,6 @@ namespace connectivity
                                                                 sal_Int32 nHandle) const;
             virtual ~OStatementCommonBase();
             int prepareAndDescribeStatement(const OUString& sqlIn,
-                                                  isc_stmt_handle& aStatementHandle,
                                                   XSQLDA*& pOutSqlda,
                                                   XSQLDA* pInSqlda=0);
             bool isDDLStatement(isc_stmt_handle& aStatementHandle)
