@@ -3,7 +3,7 @@
   <!-- interface-requires gtk+ 3.6 -->
   <object class="GtkMessageDialog" id="QuerySaveLabelDialog">
     <property name="can_focus">False</property>
-    <property name="border_width">6</property>
+    <property name="border_width">12</property>
     <property name="title" translatable="yes">Save label?</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
@@ -16,7 +16,7 @@
       <object class="GtkBox" id="messagedialog-vbox">
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">2</property>
+        <property name="spacing">24</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="messagedialog-action_area">
             <property name="can_focus">False</property>

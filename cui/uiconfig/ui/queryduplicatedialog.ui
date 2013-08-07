@@ -3,7 +3,7 @@
   <!-- interface-requires gtk+ 3.6 -->
   <object class="GtkMessageDialog" id="DuplicateNameDialog">
     <property name="can_focus">False</property>
-    <property name="border_width">6</property>
+    <property name="border_width">12</property>
     <property name="title" translatable="yes">Duplicate name</property>
     <property name="type_hint">dialog</property>
     <property name="skip_taskbar_hint">True</property>
@@ -15,7 +15,7 @@
       <object class="GtkBox" id="messagedialog-vbox">
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">6</property>
+        <property name="spacing">24</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="messagedialog-action_area">
             <property name="can_focus">False</property>
