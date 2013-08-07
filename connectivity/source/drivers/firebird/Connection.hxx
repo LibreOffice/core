@@ -111,7 +111,7 @@ namespace connectivity
 
             void                    buildTypeInfo() throw( ::com::sun::star::sdbc::SQLException);
 
-            void                    setupTransaction();
+            void                    setupTransaction() throw(::com::sun::star::sdbc::SQLException);
             void                    clearStatements();
         public:
             virtual void construct( const ::rtl::OUString& url,
@@ -166,7 +166,7 @@ namespace connectivity
 
             ::rtl::OUString         getConnectionURL()  const { return m_sConnectionURL; }
             sal_Bool                isEmbedded()        const { return m_bIsEmbedded; }
-            isc_tr_handle&          getTransaction();
+            isc_tr_handle&          getTransaction() throw(::com::sun::star::sdbc::SQLException);
 
             /**
              * Create a new Blob tied to this connection. Blobs are tied to a

@@ -82,7 +82,7 @@ OConnection::OConnection(FirebirdDriver*    _pDriver)
                          m_pDriver(_pDriver),
                          m_bClosed(sal_False),
                          m_bUseOldDateFormat(sal_False),
-                         m_bAutoCommit(sal_True),
+                         m_bAutoCommit(sal_False),
                          m_bReadOnly(sal_False),
                          m_aTransactionIsolation(TransactionIsolation::REPEATABLE_READ),
                          m_DBHandler(0),
@@ -413,6 +413,7 @@ sal_Bool SAL_CALL OConnection::getAutoCommit() throw(SQLException, RuntimeExcept
 }
 
 void OConnection::setupTransaction()
+    throw (SQLException)
 {
     MutexGuard aGuard( m_aMutex );
     ISC_STATUS status_vector[20];
@@ -445,19 +446,32 @@ void OConnection::setupTransaction()
             assert( false ); // We must have a valid TransactionIsolation.
     }
 
-    static char isc_tpb[] = {
-        isc_tpb_version3,
-        (char) (m_bAutoCommit ? isc_tpb_autocommit : 0),
-        (char) (!m_bReadOnly ? isc_tpb_write : isc_tpb_read),
-        aTransactionIsolation,
-        isc_tpb_wait
-    };
+    // You cannot pass an empty tpb parameter so we have to do some pointer
+    // arithmetic to avoid problems. (i.e. aTPB[x] = 0 is invalid)
+    char aTPB[5];
+    char* pTPB = aTPB;
 
-    isc_start_transaction(status_vector, &m_transactionHandle, 1, &m_DBHandler,
-                          (unsigned short) sizeof(isc_tpb), isc_tpb);
+    *pTPB++ = isc_tpb_version3;
+    if (m_bAutoCommit)
+        *pTPB++ = isc_tpb_autocommit;
+    *pTPB++ = (!m_bReadOnly ? isc_tpb_write : isc_tpb_read);
+    *pTPB++ = aTransactionIsolation;
+    *pTPB++ = isc_tpb_wait;
+
+    isc_start_transaction(status_vector,
+                          &m_transactionHandle,
+                          1,
+                          &m_DBHandler,
+                          pTPB - aTPB, // bytes used in TPB
+                          aTPB);
+
+    evaluateStatusVector(status_vector,
+                         "isc_start_transaction",
+                         *this);
 }
 
 isc_tr_handle& OConnection::getTransaction()
+    throw (SQLException)
 {
     MutexGuard aGuard( m_aMutex );
     if (!m_transactionHandle)
