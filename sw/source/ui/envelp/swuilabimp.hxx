@@ -20,6 +20,7 @@
 #define _SWUILABIMP_HXX
 #include "labimp.hxx"
 #include <com/sun/star/text/XAutoTextContainer2.hpp>
+#include <vcl/layout.hxx>
 
 class SwLabPage : public SfxTabPage
 {
@@ -27,37 +28,28 @@ class SwLabPage : public SfxTabPage
     String        sActDBName;
     SwLabItem     aItem;
 
-    FixedLine     aWritingFL;
-    FixedText     aWritingText;
-    CheckBox      aAddrBox;
-    MultiLineEdit aWritingEdit;
-    FixedText     aDatabaseFT;
-    ListBox       aDatabaseLB;
-    FixedText     aTableFT;
-    ListBox       aTableLB;
-    ImageButton   aInsertBT;
-    FixedText     aDBFieldFT;
-    ListBox       aDBFieldLB;
-//  PushButton    aDatabaseButton;
+    VclContainer* m_pAddressFrame;
 
-    FixedLine     aFormatFL;
-    RadioButton   aContButton;
-    RadioButton   aSheetButton;
-    FixedText     aMakeText;
-    ListBox       aMakeBox;
-    FixedText     aTypeText;
-    ListBox       aTypeBox;
-    ListBox       aHiddenSortTypeBox;
-    FixedInfo     aFormatInfo;
+    CheckBox*         m_pAddrBox;
+    VclMultiLineEdit* m_pWritingEdit;
+    ListBox*          m_pDatabaseLB;
+    ListBox*          m_pTableLB;
+    PushButton*       m_pInsertBT;
+    ListBox*          m_pDBFieldLB;
+
+    RadioButton*      m_pContButton;
+    RadioButton*      m_pSheetButton;
+    ListBox*          m_pMakeBox;
+    ListBox*          m_pTypeBox;
+    ListBox*          m_pHiddenSortTypeBox;
+    FixedText*        m_pFormatInfo;
 
     sal_Bool        m_bLabel;
 
-     SwLabPage(Window* pParent, const SfxItemSet& rSet);
-    ~SwLabPage();
+    SwLabPage(Window* pParent, const SfxItemSet& rSet);
 
     DECL_LINK(AddrHdl, void *);
     DECL_LINK( DatabaseHdl, ListBox *pListBox );
-//    DECL_LINK( DatabaseButtonHdl, Button * );
     DECL_LINK(FieldHdl, void *);
     DECL_LINK(PageHdl, void *);
     DECL_LINK(MakeHdl, void *);

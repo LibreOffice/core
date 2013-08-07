@@ -144,7 +144,6 @@
 
 #define HID_FRM_STD                                             "SW_HID_FRM_STD"
 #define HID_GRF_EXT                                             "SW_HID_GRF_EXT"
-#define HID_LAB_LAB                                             "SW_HID_LAB_LAB"
 #define HID_ENV_PRT                                             "SW_HID_ENV_PRT"
 #define HID_LAB_FMT                                             "SW_HID_LAB_FMT"
 #define HID_ENV_ENV                                             "SW_HID_ENV_ENV"

@@ -24,25 +24,6 @@
 
 // local resources *********************************************************
 
-#define TXT_WRITING   1
-#define BOX_ADDR      2
-#define EDT_WRITING   3
-#define FT_DATABASE   4
-#define LB_DATABASE   5
-#define FT_TABLE      6
-#define LB_TABLE      7
-#define FL_WRITING   8
-#define BTN_CONT      9
-#define BTN_SHEET    10
-#define TXT_MAKE     11
-#define BOX_MAKE     12
-#define TXT_TYPE     13
-#define BOX_TYPE     14
-#define INF_FORMAT   15
-#define FL_FORMAT   16
-#define FT_DBFIELD   17
-#define LB_DBFIELD   18
-#define BTN_INSERT   19
 #define BTN_SYNC     20
 
 #define LB_AUTO_TEXT            3

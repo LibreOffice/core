@@ -225,47 +225,47 @@ Printer *SwLabDlg::GetPrt()
         return (NULL);
 }
 
-SwLabPage::SwLabPage(Window* pParent, const SfxItemSet& rSet) :
-    SfxTabPage(pParent, SW_RES(TP_LAB_LAB), rSet),
-    pNewDBMgr(NULL),
-    aItem          ((const SwLabItem&) rSet.Get(FN_LABEL)),
-
-    aWritingFL     (this, SW_RES(FL_WRITING)),
-    aWritingText   (this, SW_RES(TXT_WRITING)),
-    aAddrBox       (this, SW_RES(BOX_ADDR   )),
-    aWritingEdit   (this, SW_RES(EDT_WRITING)),
-    aDatabaseFT    (this, SW_RES(FT_DATABASE)),
-    aDatabaseLB    (this, SW_RES(LB_DATABASE)),
-    aTableFT       (this, SW_RES(FT_TABLE   )),
-    aTableLB       (this, SW_RES(LB_TABLE   )),
-    aInsertBT      (this, SW_RES(BTN_INSERT )),
-    aDBFieldFT     (this, SW_RES(FT_DBFIELD )),
-    aDBFieldLB     (this, SW_RES(LB_DBFIELD )),
-    aFormatFL      (this, SW_RES(FL_FORMAT )),
-    aContButton    (this, SW_RES(BTN_CONT   )),
-    aSheetButton   (this, SW_RES(BTN_SHEET  )),
-    aMakeText      (this, SW_RES(TXT_MAKE   )),
-    aMakeBox       (this, SW_RES(BOX_MAKE   )),
-    aTypeText      (this, SW_RES(TXT_TYPE   )),
-    aTypeBox       (this, SW_RES(BOX_TYPE   )),
-    aHiddenSortTypeBox(this, WB_SORT|WB_HIDE),
-    aFormatInfo    (this, SW_RES(INF_FORMAT ))
-   {
+SwLabPage::SwLabPage(Window* pParent, const SfxItemSet& rSet)
+    : SfxTabPage(pParent, "CardMediumPage",
+        "modules/swriter/ui/cardmediumpage.ui", rSet)
+    , pNewDBMgr(NULL)
+    , aItem((const SwLabItem&)rSet.Get(FN_LABEL))
+{
     WaitObject aWait( pParent );
 
-    FreeResource();
+    get(m_pAddressFrame, "addressframe");
+    get(m_pAddrBox, "address");
+    get(m_pWritingEdit, "textview");
+    m_pWritingEdit->set_height_request(m_pWritingEdit->GetTextHeight() * 10);
+    m_pWritingEdit->set_width_request(m_pWritingEdit->approximate_char_width() * 25);
+    get(m_pDatabaseLB, "database");
+    get(m_pTableLB, "table");
+    get(m_pInsertBT, "insert");
+    get(m_pDBFieldLB, "field");
+    get(m_pContButton, "continuous");
+    get(m_pSheetButton, "sheet");
+    get(m_pMakeBox, "brand");
+    get(m_pTypeBox, "type");
+    get(m_pFormatInfo, "formatinfo");
+    get(m_pHiddenSortTypeBox, "hiddentype");
+    m_pHiddenSortTypeBox->SetStyle(m_pHiddenSortTypeBox->GetStyle() | WB_SORT);
+
+    long nListBoxWidth = approximate_char_width() * 30;
+    m_pTableLB->set_width_request(nListBoxWidth);
+    m_pDatabaseLB->set_width_request(nListBoxWidth);
+    m_pDBFieldLB->set_width_request(nListBoxWidth);
+
     SetExchangeSupport();
 
-
     // Install handlers
-    aAddrBox       .SetClickHdl (LINK(this, SwLabPage, AddrHdl         ));
-    aDatabaseLB    .SetSelectHdl(LINK(this, SwLabPage, DatabaseHdl     ));
-    aTableLB       .SetSelectHdl(LINK(this, SwLabPage, DatabaseHdl     ));
-    aInsertBT      .SetClickHdl (LINK(this, SwLabPage, FieldHdl        ));
-    aContButton    .SetClickHdl (LINK(this, SwLabPage, PageHdl         ));
-    aSheetButton   .SetClickHdl (LINK(this, SwLabPage, PageHdl         ));
-    aMakeBox       .SetSelectHdl(LINK(this, SwLabPage, MakeHdl         ));
-    aTypeBox       .SetSelectHdl(LINK(this, SwLabPage, TypeHdl         ));
+    m_pAddrBox->SetClickHdl (LINK(this, SwLabPage, AddrHdl         ));
+    m_pDatabaseLB->SetSelectHdl(LINK(this, SwLabPage, DatabaseHdl     ));
+    m_pTableLB->SetSelectHdl(LINK(this, SwLabPage, DatabaseHdl     ));
+    m_pInsertBT->SetClickHdl (LINK(this, SwLabPage, FieldHdl        ));
+    m_pContButton->SetClickHdl (LINK(this, SwLabPage, PageHdl         ));
+    m_pSheetButton->SetClickHdl (LINK(this, SwLabPage, PageHdl         ));
+    m_pMakeBox->SetSelectHdl(LINK(this, SwLabPage, MakeHdl         ));
+    m_pTypeBox->SetSelectHdl(LINK(this, SwLabPage, TypeHdl         ));
 
     InitDatabaseBox();
 
@@ -275,111 +275,68 @@ SwLabPage::SwLabPage(Window* pParent, const SfxItemSet& rSet) :
     for(size_t i = 0; i < nCount; ++i)
     {
         OUString& rStr = GetParentSwLabDlg()->Makes()[i];
-        aMakeBox.InsertEntry( rStr );
+        m_pMakeBox->InsertEntry( rStr );
 
         if ( rStr == aItem.aLstMake)
             nLstGroup = i;
     }
 
-    aMakeBox.SelectEntryPos( nLstGroup );
-    aMakeBox.GetSelectHdl().Call( &aMakeBox );
-}
-
-SwLabPage::~SwLabPage()
-{
-}
-
-static void lcl_ChgYPos(Window& rWin, long nDiff)
-{
-    Point aTempPos(rWin.GetPosPixel());
-    aTempPos.Y() += nDiff;
-    rWin.SetPosPixel(aTempPos);
+    m_pMakeBox->SelectEntryPos( nLstGroup );
+    m_pMakeBox->GetSelectHdl().Call(m_pMakeBox);
 }
 
 void SwLabPage::SetToBusinessCard()
 {
     SetHelpId(HID_BUSINESS_FMT_PAGE);
-    aContButton.SetHelpId(HID_BUSINESS_FMT_PAGE_CONT);
-    aSheetButton.SetHelpId(HID_BUSINESS_FMT_PAGE_SHEET);
-    aMakeBox.SetHelpId(HID_BUSINESS_FMT_PAGE_BRAND);
-    aTypeBox.SetHelpId(HID_BUSINESS_FMT_PAGE_TYPE);
+    m_pContButton->SetHelpId(HID_BUSINESS_FMT_PAGE_CONT);
+    m_pSheetButton->SetHelpId(HID_BUSINESS_FMT_PAGE_SHEET);
+    m_pMakeBox->SetHelpId(HID_BUSINESS_FMT_PAGE_BRAND);
+    m_pTypeBox->SetHelpId(HID_BUSINESS_FMT_PAGE_TYPE);
     m_bLabel = sal_False;
-    aWritingText.Hide();
-    aAddrBox.Hide();
-    aWritingEdit.Hide();
-    aDatabaseFT.Hide();
-    aDatabaseLB.Hide();
-    aTableFT.Hide();
-    aTableLB.Hide();
-    aInsertBT.Hide();
-    aDBFieldFT.Hide();
-    aDBFieldLB.Hide();
-    aWritingFL.Hide();
-
-    //resize the form
-    Point aFLPos(aWritingFL.GetPosPixel());
-    long nDiffPos = aFormatFL.GetPosPixel().Y() - aFLPos.Y();
-    Size aFLSz(aFormatFL.GetSizePixel());
-    aFormatFL.SetPosSizePixel(aFLPos, aFLSz);
-
-    // move all controls up
-    lcl_ChgYPos(aContButton, -nDiffPos);
-    lcl_ChgYPos(aSheetButton, -nDiffPos);
-    lcl_ChgYPos(aMakeText, -nDiffPos);
-
-    lcl_ChgYPos(aTypeText, -nDiffPos);
-    lcl_ChgYPos(aFormatInfo, -nDiffPos);
-
-    Size aTmpSz(3, 3);
-    aTmpSz = LogicToPixel(aTmpSz, MAP_APPFONT);
-
-    lcl_ChgYPos(aMakeBox, - nDiffPos);
-    Point aLBPos(aMakeBox.GetPosPixel());
-    aLBPos.Y() += aMakeBox.GetSizePixel().Height() + aTmpSz.Height();
-    aTypeBox.SetPosPixel(aLBPos);
+    m_pAddressFrame->Hide();
 };
 
 IMPL_LINK_NOARG(SwLabPage, AddrHdl)
 {
     String aWriting;
 
-    if ( aAddrBox.IsChecked() )
+    if ( m_pAddrBox->IsChecked() )
         aWriting = convertLineEnd(MakeSender(), GetSystemLineEnd());
 
-    aWritingEdit.SetText( aWriting );
-    aWritingEdit.GrabFocus();
+    m_pWritingEdit->SetText( aWriting );
+    m_pWritingEdit->GrabFocus();
     return 0;
 }
 
 IMPL_LINK( SwLabPage, DatabaseHdl, ListBox *, pListBox )
 {
-    sActDBName = aDatabaseLB.GetSelectEntry();
+    sActDBName = m_pDatabaseLB->GetSelectEntry();
 
     WaitObject aObj( GetParentSwLabDlg() );
 
-    if (pListBox == &aDatabaseLB)
-        GetNewDBMgr()->GetTableNames(&aTableLB, sActDBName);
+    if (pListBox == m_pDatabaseLB)
+        GetNewDBMgr()->GetTableNames(m_pTableLB, sActDBName);
 
-    GetNewDBMgr()->GetColumnNames(&aDBFieldLB, sActDBName, aTableLB.GetSelectEntry());
+    GetNewDBMgr()->GetColumnNames(m_pDBFieldLB, sActDBName, m_pTableLB->GetSelectEntry());
     return 0;
 }
 
 IMPL_LINK_NOARG(SwLabPage, FieldHdl)
 {
-    OUString aStr("<" + OUString(aDatabaseLB.GetSelectEntry()) + "." +
-                  OUString(aTableLB.GetSelectEntry()) + "." +
-                  (aTableLB.GetEntryData(aTableLB.GetSelectEntryPos()) == 0 ? OUString("0") : OUString("1")) + "." +
-                  aDBFieldLB.GetSelectEntry() + ">");
-    aWritingEdit.ReplaceSelected(aStr);
-    Selection aSel = aWritingEdit.GetSelection();
-    aWritingEdit.GrabFocus();
-    aWritingEdit.SetSelection(aSel);
+    OUString aStr("<" + OUString(m_pDatabaseLB->GetSelectEntry()) + "." +
+                  OUString(m_pTableLB->GetSelectEntry()) + "." +
+                  (m_pTableLB->GetEntryData(m_pTableLB->GetSelectEntryPos()) == 0 ? OUString("0") : OUString("1")) + "." +
+                  m_pDBFieldLB->GetSelectEntry() + ">");
+    m_pWritingEdit->ReplaceSelected(aStr);
+    Selection aSel = m_pWritingEdit->GetSelection();
+    m_pWritingEdit->GrabFocus();
+    m_pWritingEdit->SetSelection(aSel);
     return 0;
 }
 
 IMPL_LINK_NOARG_INLINE_START(SwLabPage, PageHdl)
 {
-    aMakeBox.GetSelectHdl().Call( &aMakeBox );
+    m_pMakeBox->GetSelectHdl().Call(m_pMakeBox);
     return 0;
 }
 IMPL_LINK_NOARG_INLINE_END(SwLabPage, PageHdl)
@@ -388,15 +345,15 @@ IMPL_LINK_NOARG(SwLabPage, MakeHdl)
 {
     WaitObject aWait( GetParentSwLabDlg() );
 
-    aTypeBox.Clear();
-    aHiddenSortTypeBox.Clear();
+    m_pTypeBox->Clear();
+    m_pHiddenSortTypeBox->Clear();
     GetParentSwLabDlg()->TypeIds().clear();
 
-    const String aMake = aMakeBox.GetSelectEntry();
+    const String aMake = m_pMakeBox->GetSelectEntry();
     GetParentSwLabDlg()->ReplaceGroup( aMake );
     aItem.aLstMake = aMake;
 
-    const sal_Bool   bCont    = aContButton.IsChecked();
+    const sal_Bool   bCont    = m_pContButton->IsChecked();
     const sal_uInt16 nCount   = GetParentSwLabDlg()->Recs().size();
           sal_uInt16 nLstType = 0;
 
@@ -409,14 +366,14 @@ IMPL_LINK_NOARG(SwLabPage, MakeHdl)
         if ( GetParentSwLabDlg()->Recs()[i]->aType == sCustom )
         {
             bInsert = true;
-            aTypeBox.InsertEntry(aType );
+            m_pTypeBox->InsertEntry(aType );
         }
         else if ( GetParentSwLabDlg()->Recs()[i]->bCont == bCont )
         {
-            if ( aHiddenSortTypeBox.GetEntryPos(aType) == LISTBOX_ENTRY_NOTFOUND )
+            if ( m_pHiddenSortTypeBox->GetEntryPos(aType) == LISTBOX_ENTRY_NOTFOUND )
             {
                 bInsert = true;
-                aHiddenSortTypeBox.InsertEntry( aType );
+                m_pHiddenSortTypeBox->InsertEntry( aType );
             }
         }
         if(bInsert)
@@ -426,22 +383,22 @@ IMPL_LINK_NOARG(SwLabPage, MakeHdl)
                 nLstType = GetParentSwLabDlg()->TypeIds().size();
         }
     }
-    for(sal_uInt16 nEntry = 0; nEntry < aHiddenSortTypeBox.GetEntryCount(); nEntry++)
+    for(sal_uInt16 nEntry = 0; nEntry < m_pHiddenSortTypeBox->GetEntryCount(); nEntry++)
     {
-        aTypeBox.InsertEntry(aHiddenSortTypeBox.GetEntry(nEntry));
+        m_pTypeBox->InsertEntry(m_pHiddenSortTypeBox->GetEntry(nEntry));
     }
     if (nLstType)
-        aTypeBox.SelectEntry(aItem.aLstType);
+        m_pTypeBox->SelectEntry(aItem.aLstType);
     else
-        aTypeBox.SelectEntryPos(0);
-    aTypeBox.GetSelectHdl().Call( &aTypeBox );
+        m_pTypeBox->SelectEntryPos(0);
+    m_pTypeBox->GetSelectHdl().Call(m_pTypeBox);
     return 0;
 }
 
 IMPL_LINK_NOARG_INLINE_START(SwLabPage, TypeHdl)
 {
     DisplayFormat();
-    aItem.aType = aTypeBox.GetSelectEntry();
+    aItem.aType = m_pTypeBox->GetSelectEntry();
     return 0;
 }
 IMPL_LINK_NOARG_INLINE_END(SwLabPage, TypeHdl)
@@ -474,35 +431,35 @@ void SwLabPage::DisplayFormat()
     aText.AppendAscii( RTL_CONSTASCII_STRINGPARAM(" x "));
     aText += OUString::number( pRec->nRows );
     aText += ')';
-    aFormatInfo.SetText(aText);
+    m_pFormatInfo->SetText(aText);
 }
 
 SwLabRec* SwLabPage::GetSelectedEntryPos()
 {
-    String sSelEntry(aTypeBox.GetSelectEntry());
+    String sSelEntry(m_pTypeBox->GetSelectEntry());
 
-    return GetParentSwLabDlg()->GetRecord(sSelEntry, aContButton.IsChecked());
+    return GetParentSwLabDlg()->GetRecord(sSelEntry, m_pContButton->IsChecked());
 }
 
 void SwLabPage::InitDatabaseBox()
 {
     if( GetNewDBMgr() )
     {
-        aDatabaseLB.Clear();
+        m_pDatabaseLB->Clear();
         ::com::sun::star::uno::Sequence<OUString> aDataNames = SwNewDBMgr::GetExistingDatabaseNames();
         const OUString* pDataNames = aDataNames.getConstArray();
         for (long i = 0; i < aDataNames.getLength(); i++)
-            aDatabaseLB.InsertEntry(pDataNames[i]);
+            m_pDatabaseLB->InsertEntry(pDataNames[i]);
         String sDBName = sActDBName.GetToken( 0, DB_DELIM );
         String sTableName = sActDBName.GetToken( 1, DB_DELIM );
-        aDatabaseLB.SelectEntry(sDBName);
-        if( sDBName.Len() && GetNewDBMgr()->GetTableNames(&aTableLB, sDBName))
+        m_pDatabaseLB->SelectEntry(sDBName);
+        if( sDBName.Len() && GetNewDBMgr()->GetTableNames(m_pTableLB, sDBName))
         {
-            aTableLB.SelectEntry(sTableName);
-            GetNewDBMgr()->GetColumnNames(&aDBFieldLB, sActDBName, sTableName);
+            m_pTableLB->SelectEntry(sTableName);
+            GetNewDBMgr()->GetColumnNames(m_pDBFieldLB, sActDBName, sTableName);
         }
         else
-            aDBFieldLB.Clear();
+            m_pDBFieldLB->Clear();
     }
 }
 
@@ -526,18 +483,18 @@ int SwLabPage::DeactivatePage(SfxItemSet* _pSet)
 
 void SwLabPage::FillItem(SwLabItem& rItem)
 {
-    rItem.bAddr    = aAddrBox.IsChecked();
-    rItem.aWriting = aWritingEdit.GetText();
-    rItem.bCont    = aContButton.IsChecked();
-    rItem.aMake    = aMakeBox.GetSelectEntry();
-    rItem.aType    = aTypeBox.GetSelectEntry();
+    rItem.bAddr    = m_pAddrBox->IsChecked();
+    rItem.aWriting = m_pWritingEdit->GetText();
+    rItem.bCont    = m_pContButton->IsChecked();
+    rItem.aMake    = m_pMakeBox->GetSelectEntry();
+    rItem.aType    = m_pTypeBox->GetSelectEntry();
     rItem.sDBName  = sActDBName;
 
     SwLabRec* pRec = GetSelectedEntryPos();
     pRec->FillItem( rItem );
 
-    rItem.aLstMake = aMakeBox.GetSelectEntry();
-    rItem.aLstType = aTypeBox.GetSelectEntry();
+    rItem.aLstMake = m_pMakeBox->GetSelectEntry();
+    rItem.aLstType = m_pTypeBox->GetSelectEntry();
 }
 
 sal_Bool SwLabPage::FillItemSet(SfxItemSet& rSet)
@@ -555,38 +512,38 @@ void SwLabPage::Reset(const SfxItemSet& rSet)
 
     String aWriting(convertLineEnd(aItem.aWriting, GetSystemLineEnd()));
 
-    aAddrBox    .Check      ( aItem.bAddr );
-    aWritingEdit.SetText    ( aWriting );
+    m_pAddrBox->Check( aItem.bAddr );
+    m_pWritingEdit->SetText    ( aWriting );
 
     for(std::vector<OUString>::const_iterator i = GetParentSwLabDlg()->Makes().begin(); i != GetParentSwLabDlg()->Makes().end(); ++i)
     {
-        if(aMakeBox.GetEntryPos(String(*i)) == LISTBOX_ENTRY_NOTFOUND)
-            aMakeBox.InsertEntry(*i);
+        if(m_pMakeBox->GetEntryPos(String(*i)) == LISTBOX_ENTRY_NOTFOUND)
+            m_pMakeBox->InsertEntry(*i);
     }
 
-    aMakeBox    .SelectEntry( aItem.aMake );
+    m_pMakeBox->SelectEntry( aItem.aMake );
     //save the current type
     String sType(aItem.aType);
-    aMakeBox.GetSelectHdl().Call( &aMakeBox );
+    m_pMakeBox->GetSelectHdl().Call(m_pMakeBox);
     aItem.aType = sType;
     //#102806# a newly added make may not be in the type ListBox already
-    if (aTypeBox.GetEntryPos(String(aItem.aType)) == LISTBOX_ENTRY_NOTFOUND && !aItem.aMake.isEmpty())
+    if (m_pTypeBox->GetEntryPos(String(aItem.aType)) == LISTBOX_ENTRY_NOTFOUND && !aItem.aMake.isEmpty())
         GetParentSwLabDlg()->UpdateGroup( aItem.aMake );
-    if (aTypeBox.GetEntryPos(String(aItem.aType)) != LISTBOX_ENTRY_NOTFOUND)
+    if (m_pTypeBox->GetEntryPos(String(aItem.aType)) != LISTBOX_ENTRY_NOTFOUND)
     {
-        aTypeBox.SelectEntry(aItem.aType);
-        aTypeBox.GetSelectHdl().Call(&aTypeBox);
+        m_pTypeBox->SelectEntry(aItem.aType);
+        m_pTypeBox->GetSelectHdl().Call(m_pTypeBox);
     }
-    if (aDatabaseLB.GetEntryPos(sDBName) != LISTBOX_ENTRY_NOTFOUND)
+    if (m_pDatabaseLB->GetEntryPos(sDBName) != LISTBOX_ENTRY_NOTFOUND)
     {
-        aDatabaseLB.SelectEntry(sDBName);
-        aDatabaseLB.GetSelectHdl().Call(&aDatabaseLB);
+        m_pDatabaseLB->SelectEntry(sDBName);
+        m_pDatabaseLB->GetSelectHdl().Call(m_pDatabaseLB);
     }
 
     if (aItem.bCont)
-        aContButton .Check();
+        m_pContButton->Check();
     else
-        aSheetButton.Check();
+        m_pSheetButton->Check();
 }
 
 void SwVisitingCardPage::ClearUserData()
