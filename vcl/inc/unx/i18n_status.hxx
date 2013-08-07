@@ -54,13 +54,13 @@ class I18NStatus
 public:
     struct ChoiceData
     {
-        String  aString;
-        void*   pData;
+        OUString  aString;
+        void*     pData;
     };
 private:
     SalFrame*                       m_pParent;
     StatusWindow*                   m_pStatusWindow;
-    String                          m_aCurrentIM;
+    OUString                        m_aCurrentIM;
     ::std::vector< ChoiceData >     m_aChoices;
 
     I18NStatus();
@@ -79,7 +79,7 @@ public:
     SalFrame* getParent() const { return  m_pParent; }
     SalFrame* getStatusFrame() const;
 
-    void setStatusText( const String& rText );
+    void setStatusText( const OUString& rText );
 
     enum ShowReason { focus, presentation, contextmap };
     void show( bool bShow, ShowReason eReason );
@@ -87,7 +87,7 @@ public:
     const ::std::vector< ChoiceData >& getChoices() const { return m_aChoices; }
 
     // for SwitchIMCallback
-    void changeIM( const String& );
+    void changeIM( const OUString& );
 
     // External Control:
 

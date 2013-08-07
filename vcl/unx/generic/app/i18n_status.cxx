@@ -56,8 +56,8 @@ public:
     virtual ~StatusWindow();
 
     virtual void setPosition( SalFrame* );
-    virtual void setText( const String & ) = 0;
-    virtual String getText() const = 0;
+    virtual void setText( const OUString & ) = 0;
+    virtual OUString getText() const = 0;
     virtual void show( bool bShow, I18NStatus::ShowReason eReason ) = 0;
     virtual void toggle( bool bOn ) = 0;
 };
@@ -105,8 +105,8 @@ public:
     virtual ~XIMStatusWindow();
 
     virtual void setPosition( SalFrame* );
-    virtual void setText( const String & );
-    virtual String getText() const;
+    virtual void setText( const OUString & );
+    virtual OUString getText() const;
     virtual void show( bool bShow, I18NStatus::ShowReason eReason );
     virtual void toggle( bool bOn );
 
@@ -244,7 +244,7 @@ void XIMStatusWindow::setPosition( SalFrame* pParent )
     {
         if( pParent != m_pLastParent )
         {
-            setText( String() );
+            setText( OUString() );
             m_pLastParent = pParent;
             Show( sal_False, SHOW_NOACTIVATE );
         }
@@ -290,13 +290,13 @@ void XIMStatusWindow::show( bool bShow, I18NStatus::ShowReason eReason )
         m_nDelayedEvent = Application::PostUserEvent( LINK( this, XIMStatusWindow, DelayedShowHdl ) );
 }
 
-void XIMStatusWindow::setText( const String& rText )
+void XIMStatusWindow::setText( const OUString& rText )
 {
     m_aStatusText.SetText( rText );
     m_aWindowSize.Width() = m_aStatusText.GetTextWidth( rText )+8;
 }
 
-String XIMStatusWindow::getText() const
+OUString XIMStatusWindow::getText() const
 {
     return m_aStatusText.GetText();
 }
@@ -321,8 +321,8 @@ public:
     IIIMPStatusWindow( SalFrame* pParent, bool bOn ); // for initial position
     virtual ~IIIMPStatusWindow();
 
-    virtual void setText( const String & );
-    virtual String getText() const;
+    virtual void setText( const OUString & );
+    virtual OUString getText() const;
     virtual void show( bool bShow, I18NStatus::ShowReason eReason );
     virtual void toggle( bool bOn );
     void layout();
@@ -398,12 +398,12 @@ void IIIMPStatusWindow::DataChanged( const DataChangedEvent& )
     layout();
 }
 
-void IIIMPStatusWindow::setText( const String& rText )
+void IIIMPStatusWindow::setText( const OUString& rText )
 {
     m_aStatusBtn.SetText( rText );
 }
 
-String IIIMPStatusWindow::getText() const
+OUString IIIMPStatusWindow::getText() const
 {
     return m_aStatusBtn.GetText();
 }
@@ -580,22 +580,21 @@ void I18NStatus::show( bool bShow, ShowReason eReason )
 
 // --------------------------------------------------------------------------
 
-void I18NStatus::setStatusText( const String& rText )
+void I18NStatus::setStatusText( const OUString& rText )
 {
     if( m_pStatusWindow )
     {
         /*
          *  #93614# convert fullwidth ASCII forms to ascii
          */
-        int nChars = rText.Len()+1;
+        int nChars = rText.getLength()+1;
         sal_Unicode* pBuffer = (sal_Unicode*)alloca( nChars*sizeof( sal_Unicode ) );
-        const sal_Unicode* pCopy = rText.GetBuffer();
         for( int i = 0; i < nChars; i++ )
         {
-            if( pCopy[i] >=0xff00 && pCopy[i] <= 0xff5f )
-                pBuffer[i] = (pCopy[i] & 0xff) + 0x20;
+            if( rText[i] >=0xff00 && rText[i] <= 0xff5f )
+                pBuffer[i] = (rText[i] & 0xff) + 0x20;
             else
-                pBuffer[i] = pCopy[i];
+                pBuffer[i] = rText[i];
         }
         OUString aText( pBuffer );
         m_pStatusWindow->setText( aText );
@@ -618,7 +617,7 @@ void I18NStatus::setStatusText( const String& rText )
 
 // --------------------------------------------------------------------------
 
-void I18NStatus::changeIM( const String& rIM )
+void I18NStatus::changeIM( const OUString& rIM )
 {
     m_aCurrentIM = rIM;
 }
