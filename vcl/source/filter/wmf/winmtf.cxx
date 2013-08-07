@@ -1445,7 +1445,7 @@ void WinMtfOutput::DrawPolyBezier( Polygon& rPolygon, sal_Bool bTo, sal_Bool bRe
 }
 
 
-void WinMtfOutput::DrawText( Point& rPosition, String& rText, sal_Int32* pDXArry, sal_Bool bRecordPath, sal_Int32 nGfxMode )
+void WinMtfOutput::DrawText( Point& rPosition, OUString& rText, sal_Int32* pDXArry, sal_Bool bRecordPath, sal_Int32 nGfxMode )
 {
     UpdateClipRegion();
     rPosition = ImplMap( rPosition );
@@ -1454,7 +1454,7 @@ void WinMtfOutput::DrawText( Point& rPosition, String& rText, sal_Int32* pDXArry
 
     if ( pDXArry )
     {
-        sal_Int32 i, nSum, nLen = rText.Len();
+        sal_Int32 i, nSum, nLen = rText.getLength();
 
         for( i = 0, nSum = 0; i < nLen; i++ )
         {
@@ -1557,8 +1557,8 @@ void WinMtfOutput::DrawText( Point& rPosition, String& rText, sal_Int32* pDXArry
         aVDev.SetFont( maFont );
         if( pDXArry )
         {
-            sal_uInt32 nLen = rText.Len();
-            nTextWidth = aVDev.GetTextWidth( OUString(rText.GetChar( (sal_uInt16)( nLen - 1 ) )) );
+            sal_uInt32 nLen = rText.getLength();
+            nTextWidth = aVDev.GetTextWidth( OUString(rText[ nLen - 1 ]) );
             if( nLen > 1 )
                 nTextWidth += pDXArry[ nLen - 2 ];
         }
@@ -1601,7 +1601,7 @@ void WinMtfOutput::DrawText( Point& rPosition, String& rText, sal_Int32* pDXArry
             SolarMutexGuard aGuard;
             VirtualDevice aVDev;
 
-            pDX = new sal_Int32[ rText.Len() ];
+            pDX = new sal_Int32[ rText.getLength() ];
             aVDev.SetMapMode( MAP_100TH_MM );
             aVDev.SetFont( maLatestFont );
             aVDev.GetTextArray( rText, pDX, 0, STRING_LEN );

@@ -136,7 +136,7 @@ struct LOGFONTW
     sal_uInt8       lfClipPrecision;
     sal_uInt8       lfQuality;
     sal_uInt8       lfPitchAndFamily;
-    String      alfFaceName;
+    OUString        alfFaceName;
 };
 struct WMF_EXTERNALHEADER;
 
@@ -750,7 +750,7 @@ public:
                         );
     void                DrawText(
                             Point& rPosition,
-                            String& rString,
+                            OUString& rString,
                             sal_Int32* pDXArry = NULL,
                             sal_Bool bRecordPath = sal_False,
                             sal_Int32 nGraphicsMode = GM_COMPATIBLE

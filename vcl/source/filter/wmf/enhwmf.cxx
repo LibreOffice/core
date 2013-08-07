@@ -1193,7 +1193,8 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                 case EMR_EXTTEXTOUTW :
                 {
                     sal_Int32   nLeft, nTop, nRight, nBottom, ptlReferenceX, ptlReferenceY, nGfxMode, nXScale, nYScale;
-                    sal_uInt32  nCurPos, nLen, nOffString, nOptions, offDx;
+                    sal_uInt32  nCurPos, nOffString, nOptions, offDx;
+                    sal_Int32   nLen;
                     sal_Int32*  pDX = NULL;
 
                     nCurPos = pWMF->Tell() - 8;
@@ -1211,7 +1212,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                     DBG_ASSERT( ( nOptions & ( ETO_PDY | ETO_GLYPH_INDEX ) ) == 0, "SJ: ETO_PDY || ETO_GLYPH_INDEX in EMF" );
 
                     Point aPos( ptlReferenceX, ptlReferenceY );
-                    if ( nLen && ( nLen < SAL_MAX_UINT32 / sizeof(sal_Int32) ) )
+                    if ( nLen && nLen < static_cast<sal_Int32>( SAL_MAX_UINT32 / sizeof(sal_Int32) ) )
                     {
                         if ( offDx && (( nCurPos + offDx + nLen * 4 ) <= nNextPos ) )
                         {
@@ -1219,33 +1220,33 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                             if ( ( nLen * sizeof(sal_uInt32) ) <= ( nEndPos - pWMF->Tell() ) )
                             {
                                 pDX = new sal_Int32[ nLen ];
-                                sal_uInt32 i;
+                                sal_Int32 i;
                                 for ( i = 0; i < nLen; i++ )
                                     *pWMF >> pDX[ i ];
                             }
                         }
                         pWMF->Seek( nCurPos + nOffString );
-                        String aText;
+                        OUString aText;
                         if ( bFlag )
                         {
-                            if ( nLen <= ( nEndPos - pWMF->Tell() ) )
+                            if ( nLen <= static_cast<sal_Int32>( nEndPos - pWMF->Tell() ) )
                             {
                                 sal_Char* pBuf = new sal_Char[ nLen ];
                                 pWMF->Read( pBuf, nLen );
-                                aText = String( pBuf, (sal_uInt16)nLen, pOut->GetCharSet() );
+                                aText = OUString( pBuf, (sal_uInt16)nLen, pOut->GetCharSet() );
                                 delete[] pBuf;
 
-                                if ( aText.Len() != nLen )
+                                if ( aText.getLength() != nLen )
                                 {
                                     sal_uInt16 i, j;
                                     sal_Int32* pOldDx = pDX;
-                                    pDX = new sal_Int32[ aText.Len() ];
-                                    for ( i = 0, j = 0; i < aText.Len(); i++ )
+                                    pDX = new sal_Int32[ aText.getLength() ];
+                                    for ( i = 0, j = 0; i < aText.getLength(); i++ )
                                     {
-                                        sal_Unicode cUniChar = aText.GetChar(i);
+                                        sal_Unicode cUniChar = aText[i];
                                         OString aCharacter(&cUniChar, 1, pOut->GetCharSet());
                                         pDX[ i ] = 0;
-                                        for (sal_Int32 k = 0; ( k < aCharacter.getLength() ) && ( j < nLen ) && ( i < aText.Len() ); ++k)
+                                        for (sal_Int32 k = 0; ( k < aCharacter.getLength() ) && ( j < nLen ) && ( i < aText.getLength() ); ++k)
                                             pDX[ i ] += pOldDx[ j++ ];
                                     }
                                     delete[] pOldDx;

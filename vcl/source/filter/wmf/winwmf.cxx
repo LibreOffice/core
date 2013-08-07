@@ -454,7 +454,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
             {
                 char*   pChar = new char[ ( nLength + 1 ) &~ 1 ];
                 pWMF->Read( pChar, ( nLength + 1 ) &~ 1 );
-                String aText( pChar, nLength, pOut->GetCharSet() );
+                OUString aText( pChar, nLength, pOut->GetCharSet() );
                 delete[] pChar;
                 Point aPosition( ReadYX() );
                 pOut->DrawText( aPosition, aText );
@@ -495,8 +495,8 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                 }
                 char* pChar = new char[ ( nOriginalTextLen + 1 ) &~ 1 ];
                 pWMF->Read( pChar, ( nOriginalTextLen + 1 ) &~ 1 );
-                String aText( pChar, (sal_uInt16)nOriginalTextLen, pOut->GetCharSet() );// after this conversion the text may contain
-                nNewTextLen = aText.Len();                                              // less character (japanese version), so the
+                OUString aText( pChar, (sal_uInt16)nOriginalTextLen, pOut->GetCharSet() );// after this conversion the text may contain
+                nNewTextLen = aText.getLength();                                          // less character (japanese version), so the
                 delete[] pChar;                                                         // dxAry will not fit
 
                 if ( nNewTextLen )
@@ -518,7 +518,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                             *pWMF >> nDx;
                             if ( nNewTextLen != nOriginalTextLen )
                             {
-                                sal_Unicode nUniChar = aText.GetChar(i);
+                                sal_Unicode nUniChar = aText[i];
                                 OString aTmp(&nUniChar, 1, pOut->GetCharSet());
                                 if ( aTmp.getLength() > 1 )
                                 {
@@ -808,7 +808,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
             aLogFont.lfOrientation = lfOrientation;
             aLogFont.lfWeight = lfWeight;
 
-            CharSet eCharSet;
+            rtl_TextEncoding eCharSet;
             if ( ( aLogFont.lfCharSet == OEM_CHARSET ) || ( aLogFont.lfCharSet == DEFAULT_CHARSET ) )
                 eCharSet = osl_getThreadTextEncoding();
             else
@@ -817,7 +817,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                 eCharSet = osl_getThreadTextEncoding();
             if ( eCharSet == RTL_TEXTENCODING_SYMBOL )
                 eCharSet = RTL_TEXTENCODING_MS_1252;
-            aLogFont.alfFaceName = String( lfFaceName, eCharSet );
+            aLogFont.alfFaceName = OUString( lfFaceName, strlen(lfFaceName), eCharSet );
 
             pOut->CreateObject( GDI_FONT, new WinMtfFontStyle( aLogFont ) );
         }
@@ -934,7 +934,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                                             if ( Application::GetDefaultDevice()->IsFontAvailable( pOut->GetFont().GetName() ) )
                                             {
                                                 Point  aPt;
-                                                String aString;
+                                                OUString aString;
                                                 sal_uInt32  nStringLen, nDXCount;
                                                 sal_Int32* pDXAry = NULL;
                                                 SvMemoryStream aMemoryStream( nEscLen );
