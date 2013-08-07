@@ -87,6 +87,9 @@ namespace connectivity
                                                   isc_stmt_handle& aStatementHandle,
                                                   XSQLDA*& pOutSqlda,
                                                   XSQLDA* pInSqlda=0);
+            bool isDDLStatement(isc_stmt_handle& aStatementHandle)
+                throw (::com::sun::star::sdbc::SQLException);
+
         public:
 
             ::cppu::OBroadcastHelper& rBHelper;

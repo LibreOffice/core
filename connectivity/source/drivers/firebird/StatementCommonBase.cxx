@@ -321,4 +321,32 @@ uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OStatementC
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
 
+bool OStatementCommonBase::isDDLStatement(isc_stmt_handle& aStatementHandle)
+    throw (SQLException)
+{
+    ISC_STATUS_ARRAY aStatusVector;
+    ISC_STATUS aErr;
+
+    char aInfoItems[] = {isc_info_sql_stmt_type};
+    char aResultsBuffer[8];
+
+    aErr = isc_dsql_sql_info(aStatusVector,
+                             &aStatementHandle,
+                             sizeof(aInfoItems),
+                             aInfoItems,
+                             sizeof(aResultsBuffer),
+                             aResultsBuffer);
+
+    if (!aErr && aResultsBuffer[0] == isc_info_sql_stmt_type)
+    {
+        const short aBytes = (short) isc_vax_integer(aResultsBuffer+1, 2);
+        const short aStatementType = (short) isc_vax_integer(aResultsBuffer+3, aBytes);
+        if (aStatementType == isc_info_sql_stmt_ddl)
+            return true;
+    }
+    evaluateStatusVector(aStatusVector,
+                         "isc_dsq_sql_info",
+                         *this);
+    return false;
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -139,7 +139,14 @@ uno::Reference< XResultSet > SAL_CALL OStatement::executeQuery(const OUString& s
 
     // TODO: deal with cleanup
 //    close();
+
     evaluateStatusVector(m_statusVector, sql, *this);
+
+    if (isDDLStatement(aStatementHandle))
+    {
+        m_pConnection->commit();
+    }
+
     return m_xResultSet;
 }
 

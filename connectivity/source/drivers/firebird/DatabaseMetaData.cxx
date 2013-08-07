@@ -393,20 +393,20 @@ sal_Bool SAL_CALL ODatabaseMetaData::dataDefinitionIgnoredInTransactions()
 sal_Bool SAL_CALL ODatabaseMetaData::dataDefinitionCausesTransactionCommit()
     throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return sal_True;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsDataManipulationTransactionsOnly()
     throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return sal_True;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::
         supportsDataDefinitionAndDataManipulationTransactions()
     throw(SQLException, RuntimeException)
 {
-    return sal_True;
+    return sal_False;
 }
 //----- Transaction Support --------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::supportsTransactions()
