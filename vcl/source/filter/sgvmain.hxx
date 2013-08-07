@@ -322,9 +322,9 @@ public:
     sal_Bool        Sans;
     sal_Bool        Serf;
     sal_Bool        Fixd;
-    FontFamily  SVFamil;
-    CharSet     SVChSet;
-    String      SVFName;    // z.B. "Times New Roman" = 15 Chars
+    FontFamily      SVFamil;
+    CharSet         SVChSet;
+    OUString        SVFName;    // z.B. "Times New Roman" = 15 Chars
     sal_uInt16      SVWidth;    // Durchschnittliche Zeichenbreite in %
          SgfFontOne();
     void ReadOne(const OString& rID, OString& rDsc);
@@ -332,7 +332,7 @@ public:
 
 class SgfFontLst {
 public:
-    String      FNam;   // vollst�ndiger Filename des Inifiles
+    OUString    FNam;   // vollst�ndiger Filename des Inifiles
     SgfFontOne* pList;  // Listenanfang
     SgfFontOne* Last;   // Listenende
     sal_uInt32      LastID; // f�r schnelleren Zugriff bei Wiederholungen
@@ -340,7 +340,7 @@ public:
     bool        Tried;
                 SgfFontLst();
                 ~SgfFontLst();
-    void AssignFN(const String& rFName);
+    void AssignFN(const OUString& rFName);
     void ReadList();
     void RausList();
     SgfFontOne* GetFontDesc(sal_uInt32 ID);

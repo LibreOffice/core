@@ -519,7 +519,7 @@ sal_uInt16 SetTextContext(OutputDevice& rOut, ObjTextType& Atr, bool Kapt, sal_u
     Color  aColor;
     sal_uLong  Grad;
     sal_uLong  Brei;
-    String FNam;
+    OUString FNam;
     sal_uInt16 StdBrei=50;    // Durchschnittliche Zeichenbreite in % von Schriftgrad
     bool   bFit=(FitXMul!=1 || FitXDiv!=1 || FitYMul!=1 || FitYDiv!=1);
 
@@ -1204,7 +1204,7 @@ void SgfFontLst::RausList()
     LastLn=NULL;
 }
 
-void SgfFontLst::AssignFN(const String& rFName)
+void SgfFontLst::AssignFN(const OUString& rFName)
 {   FNam=rFName;   }
 
 void SgfFontLst::ReadList()
