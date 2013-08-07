@@ -54,7 +54,7 @@ public:
     NetWMAdaptor( SalDisplay* );
     virtual ~NetWMAdaptor();
 
-    virtual void setWMName( X11SalFrame* pFrame, const String& rWMName ) const;
+    virtual void setWMName( X11SalFrame* pFrame, const OUString& rWMName ) const;
     virtual void maximizeFrame( X11SalFrame* pFrame, bool bHorizontal = true, bool bVertical = true ) const;
     virtual void shade( X11SalFrame* pFrame, bool bToShaded ) const;
     virtual void setFrameTypeAndDecoration( X11SalFrame* pFrame, WMWindowType eType, int nDecorationFlags, X11SalFrame* pTransientFrame = NULL ) const;
@@ -250,7 +250,7 @@ WMAdaptor::WMAdaptor( SalDisplay* pDisplay ) :
     initAtoms();
     getNetWmName(); // try to discover e.g. Sawfish
 
-    if( m_aWMName.Len() == 0 )
+    if( m_aWMName.isEmpty() )
     {
         // check for ReflectionX wm (as it needs a workaround in Windows mode
         Atom aRwmRunning = XInternAtom( m_pDisplay, "RWM_RUNNING", True );
@@ -268,7 +268,7 @@ WMAdaptor::WMAdaptor( SalDisplay* pDisplay ) :
                                 &pProperty ) == 0 )
         {
             if( aRealType == aRwmRunning )
-                m_aWMName = String( RTL_CONSTASCII_USTRINGPARAM("ReflectionX" ) );
+                m_aWMName = "ReflectionX";
             XFree( pProperty );
         }
         else if( (aRwmRunning = XInternAtom( m_pDisplay, "_WRQ_WM_RUNNING", True )) != None &&
@@ -285,11 +285,11 @@ WMAdaptor::WMAdaptor( SalDisplay* pDisplay ) :
                                 &pProperty ) == 0 )
         {
             if( aRealType == XA_STRING )
-                m_aWMName = String( RTL_CONSTASCII_USTRINGPARAM( "ReflectionX Windows" ) );
+                m_aWMName = "ReflectionX Windows";
             XFree( pProperty );
         }
     }
-    if( m_aWMName.Len() == 0 )
+    if( m_aWMName.isEmpty() )
     {
         Atom aTTAPlatform = XInternAtom( m_pDisplay, "TTA_CLIENT_PLATFORM", True );
         if( aTTAPlatform != None &&
@@ -307,7 +307,7 @@ WMAdaptor::WMAdaptor( SalDisplay* pDisplay ) :
         {
             if( aRealType == XA_STRING )
             {
-                m_aWMName = String( RTL_CONSTASCII_USTRINGPARAM("Tarantella" ) );
+                m_aWMName = "Tarantella";
                 // #i62319# pretend that AlwaysOnTop works since
                 // the alwaysontop workaround in salframe.cxx results
                 // in a raise/lower loop on a Windows tarantella client
@@ -673,7 +673,7 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
                     }
                     if( strncmp( "_ICEWM_TRAY", pAtomNames[i], 11 ) == 0 )
                     {
-                        m_aWMName = String(RTL_CONSTASCII_USTRINGPARAM("IceWM" ));
+                        m_aWMName = "IceWM";
                         m_nWinGravity = NorthWestGravity;
                         m_nInitWinGravity = NorthWestGravity;
                     }
@@ -809,9 +809,9 @@ bool WMAdaptor::getNetWmName()
                                 )
                             {
                                 if (aRealType == m_aWMAtoms[ UTF8_STRING ])
-                                    m_aWMName = String( (sal_Char*)pProperty, nItems, RTL_TEXTENCODING_UTF8 );
+                                    m_aWMName = OUString( (sal_Char*)pProperty, nItems, RTL_TEXTENCODING_UTF8 );
                                 else if (aRealType == XA_STRING)
-                                    m_aWMName = String( (sal_Char*)pProperty, nItems, RTL_TEXTENCODING_ISO_8859_1 );
+                                    m_aWMName = OUString( (sal_Char*)pProperty, nItems, RTL_TEXTENCODING_ISO_8859_1 );
 
                                 XFree( pProperty );
                                 pProperty = NULL;
@@ -823,7 +823,7 @@ bool WMAdaptor::getNetWmName()
                             }
 
                             // if this is metacity, check for version to enable a legacy workaround
-                            if( m_aWMName.EqualsAscii( "Metacity" ) )
+                            if( m_aWMName.equalsAscii( "Metacity" ) )
                             {
                                 int nVersionMajor = 0, nVersionMinor = 0;
                                 Atom nVersionAtom = XInternAtom( m_pDisplay, "_METACITY_VERSION", True );
@@ -892,7 +892,7 @@ bool WMAdaptor::getWMshouldSwitchWorkspace() const
                                                  OUString( "ShouldSwitchWorkspace" ) ) );
         if( aSetting.isEmpty() )
         {
-            if( m_aWMName.EqualsAscii( "awesome" ) )
+            if( m_aWMName.equalsAscii( "awesome" ) )
             {
                 pWMA->m_bWMshouldSwitchWorkspace = false;
             }
@@ -979,7 +979,7 @@ void GnomeWMAdaptor::initAtoms()
  *       WM_ICON_NAME
  */
 
-void WMAdaptor::setWMName( X11SalFrame* pFrame, const String& rWMName ) const
+void WMAdaptor::setWMName( X11SalFrame* pFrame, const OUString& rWMName ) const
 {
     OString aTitle(OUStringToOString(rWMName,
         osl_getThreadTextEncoding()));
@@ -1086,7 +1086,7 @@ void WMAdaptor::setWMName( X11SalFrame* pFrame, const String& rWMName ) const
  *       WM_ICON_NAME
  *       _NET_WM_ICON_NAME
  */
-void NetWMAdaptor::setWMName( X11SalFrame* pFrame, const String& rWMName ) const
+void NetWMAdaptor::setWMName( X11SalFrame* pFrame, const OUString& rWMName ) const
 {
     WMAdaptor::setWMName( pFrame, rWMName );
 

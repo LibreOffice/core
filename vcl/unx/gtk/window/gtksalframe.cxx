@@ -1107,7 +1107,7 @@ static void lcl_set_accept_focus( GtkWindow* pWindow, gboolean bAccept, bool bBe
         XSetWMHints( pDisplay, aWindow, pHints );
         XFree( pHints );
 
-        if (GetGtkSalData()->GetGtkDisplay()->getWMAdaptor()->getWindowManagerName().EqualsAscii("compiz"))
+        if (GetGtkSalData()->GetGtkDisplay()->getWMAdaptor()->getWindowManagerName().equalsAscii("compiz"))
             return;
 
         /*  remove WM_TAKE_FOCUS protocol; this would usually be the

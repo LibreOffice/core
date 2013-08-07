@@ -143,7 +143,7 @@ public:
 protected:
     SalDisplay*             m_pSalDisplay;      // Display to use
     Display*                m_pDisplay;         // X Display of SalDisplay
-    String                  m_aWMName;
+    OUString                m_aWMName;
     Atom                    m_aWMAtoms[ NetAtomMax];
     int                     m_nDesktops;
     bool                    m_bEqualWorkAreas;
@@ -181,7 +181,7 @@ public:
      *  may return an empty string if the window manager could
      *  not be identified.
      */
-    const String& getWindowManagerName() const
+    const OUString& getWindowManagerName() const
     { return m_aWMName; }
 
     /*
@@ -213,7 +213,7 @@ public:
     /*
      *  sets window title
      */
-    virtual void setWMName( X11SalFrame* pFrame, const String& rWMName ) const;
+    virtual void setWMName( X11SalFrame* pFrame, const OUString& rWMName ) const;
 
     /*
      * set NET_WM_PID
