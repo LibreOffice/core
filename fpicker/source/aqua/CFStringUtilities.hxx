@@ -76,7 +76,7 @@ inline void DBG_PRINT_ENTRY(const char * classname, const char * methodname, con
 inline void DBG_PRINT_ENTRY(const char * classname, const char * methodname, const char* param1, const NSString* value1)
 {
     SAL_INFO("fpicker.aqua",">>> " << classname << "::" << methodname << PARAMFILLER << param1 << " =");
-    NSLog(value1);
+    NSLog(const_cast<NSString*>(value1));
 }
 #else
 inline void DBG_PRINT_ENTRY(const char * classname, const char * methodname, const char* param1, const NSString* /* value1 */)
@@ -117,7 +117,7 @@ inline void DBG_PRINT_ENTRY(const char * classname, const char * methodname, con
 {
     SAL_INFO("fpicker.aqua",">>> " << classname << "::" << methodname << PARAMFILLER << param1 << " = " << value1 << PARAMFILLER << param2 << " =" << value2);
 #if OSL_DEBUG_LEVEL > 1
-    NSLog(value2);
+    NSLog( const_cast<NSString*>(value2));
 #endif
 }
 
@@ -165,7 +165,7 @@ inline void DBG_PRINT_EXIT(const char * classname, const char * methodname, cons
 inline void DBG_PRINT_EXIT(const char * classname, const char * methodname, const NSString* retVal)
 {
     SAL_INFO("fpicker.aqua","<<< " << classname << "::" << methodname << PARAMFILLER << "returnValue = ");
-    NSLog(retVal);
+    NSLog(const_cast<NSString*>(retVal));
 }
 #else
 inline void DBG_PRINT_EXIT(const char * classname, const char * methodname, const NSString* /* retVal */ )
