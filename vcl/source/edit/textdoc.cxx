@@ -187,7 +187,7 @@ void TextCharAttribList::DeleteEmptyAttribs()
     mbHasEmptyAttribs = sal_False;
 }
 
-TextNode::TextNode( const String& rText ) :
+TextNode::TextNode( const OUString& rText ) :
     maText( rText )
 {
 }
@@ -248,7 +248,7 @@ void TextNode::ExpandAttribs( sal_uInt16 nIndex, sal_uInt16 nNew )
         }
 
         DBG_ASSERT( pAttrib->GetStart() <= pAttrib->GetEnd(), "Expand: Attribut verdreht!" );
-        DBG_ASSERT( ( pAttrib->GetEnd() <= maText.Len() ), "Expand: Attrib groesser als Absatz!" );
+        DBG_ASSERT( ( pAttrib->GetEnd() <= maText.getLength() ), "Expand: Attrib groesser als Absatz!" );
         DBG_ASSERT( !pAttrib->IsEmpty(), "Leeres Attribut nach ExpandAttribs?" );
     }
 
@@ -303,7 +303,7 @@ void TextNode::CollapsAttribs( sal_uInt16 nIndex, sal_uInt16 nDeleted )
         }
 
         DBG_ASSERT( pAttrib->GetStart() <= pAttrib->GetEnd(), "Collaps: Attribut verdreht!" );
-        DBG_ASSERT( ( pAttrib->GetEnd() <= maText.Len()) || bDelAttr, "Collaps: Attrib groesser als Absatz!" );
+        DBG_ASSERT( ( pAttrib->GetEnd() <= maText.getLength()) || bDelAttr, "Collaps: Attrib groesser als Absatz!" );
         if ( bDelAttr /* || pAttrib->IsEmpty() */ )
         {
             bResort = true;
@@ -319,31 +319,31 @@ void TextNode::CollapsAttribs( sal_uInt16 nIndex, sal_uInt16 nDeleted )
         maCharAttribs.ResortAttribs();
 }
 
-void TextNode::InsertText( sal_uInt16 nPos, const String& rText )
+void TextNode::InsertText( sal_uInt16 nPos, const OUString& rText )
 {
-    maText.Insert( rText, nPos );
-    ExpandAttribs( nPos, rText.Len() );
+    maText = maText.replaceAt( nPos, 0, rText );
+    ExpandAttribs( nPos, rText.getLength() );
 }
 
 void TextNode::InsertText( sal_uInt16 nPos, sal_Unicode c )
 {
-    maText.Insert( c, nPos );
+    maText = maText.replaceAt( nPos, 0, OUString(c) );
     ExpandAttribs( nPos, 1 );
 }
 
 void TextNode::RemoveText( sal_uInt16 nPos, sal_uInt16 nChars )
 {
-    maText.Erase( nPos, nChars );
+    maText = maText.replaceAt( nPos, nChars, "" );
     CollapsAttribs( nPos, nChars );
 }
 
 TextNode* TextNode::Split( sal_uInt16 nPos, sal_Bool bKeepEndingAttribs )
 {
-    String aNewText;
-    if ( nPos < maText.Len() )
+    OUString aNewText;
+    if ( nPos < maText.getLength() )
     {
-        aNewText = maText.Copy( nPos );
-        maText.Erase( nPos );
+        aNewText = maText.copy( nPos );
+        maText = maText.replaceAt( nPos, 1, "" );
     }
     TextNode* pNew = new TextNode( aNewText );
 
@@ -395,7 +395,7 @@ TextNode* TextNode::Split( sal_uInt16 nPos, sal_Bool bKeepEndingAttribs )
 
 void TextNode::Append( const TextNode& rNode )
 {
-    sal_uInt16 nOldLen = maText.Len();
+    sal_Int32 nOldLen = maText.getLength();
 
     maText += rNode.GetText();
 
@@ -466,15 +466,15 @@ OUString TextDoc::GetText( const sal_Unicode* pSep ) const
     if ( nLen > STRING_MAXLEN )
     {
         OSL_FAIL( "Text zu gross fuer String" );
-        return String();
+        return OUString();
     }
 
-    String aASCIIText;
+    OUString aASCIIText;
     sal_uLong nLastNode = nNodes-1;
     for ( sal_uLong nNode = 0; nNode < nNodes; nNode++ )
     {
         TextNode* pNode = maTextNodes.GetObject( nNode );
-        String aTmp( pNode->GetText() );
+        OUString aTmp( pNode->GetText() );
         aASCIIText += aTmp;
         if ( pSep && ( nNode != nLastNode ) )
             aASCIIText += pSep;
@@ -514,7 +514,7 @@ sal_uLong TextDoc::GetTextLen( const sal_Unicode* pSep, const TextSelection* pSe
             TextNode* pNode = maTextNodes.GetObject( nNode );
 
             sal_uInt16 nS = 0;
-            sal_uLong nE = pNode->GetText().Len();
+            sal_Int32 nE = pNode->GetText().getLength();
             if ( pSel && ( nNode == pSel->GetStart().GetPara() ) )
                 nS = pSel->GetStart().GetIndex();
             if ( pSel && ( nNode == pSel->GetEnd().GetPara() ) )
@@ -567,7 +567,7 @@ TextPaM TextDoc::InsertParaBreak( const TextPaM& rPaM, sal_Bool bKeepEndingAttri
 
 TextPaM TextDoc::ConnectParagraphs( TextNode* pLeft, TextNode* pRight )
 {
-    sal_uInt16 nPrevLen = pLeft->GetText().Len();
+    sal_Int32 nPrevLen = pLeft->GetText().getLength();
     pLeft->Append( *pRight );
 
     // the paragraph on the right vanishes
@@ -596,7 +596,7 @@ sal_Bool TextDoc::IsValidPaM( const TextPaM& rPaM )
         return sal_False;
     }
     TextNode * pNode = maTextNodes.GetObject( rPaM.GetPara() );
-    if ( rPaM.GetIndex() > pNode->GetText().Len() )
+    if ( rPaM.GetIndex() > pNode->GetText().getLength() )
     {
         OSL_FAIL( "PaM: Index out of range" );
         return sal_False;

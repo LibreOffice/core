@@ -168,7 +168,7 @@ void TextUndoDelPara::Undo()
 
     if ( GetView() )
     {
-        TextSelection aSel( TextPaM( mnPara, 0 ), TextPaM( mnPara, mpNode->GetText().Len() ) );
+        TextSelection aSel( TextPaM( mnPara, 0 ), TextPaM( mnPara, mpNode->GetText().getLength() ) );
         SetSelection( aSel );
     }
 }
@@ -190,7 +190,7 @@ void TextUndoDelPara::Redo()
     sal_uLong nParas = GetDoc()->GetNodes().Count();
     sal_uLong n = mnPara < nParas ? mnPara : (nParas-1);
     TextNode* pN = GetDoc()->GetNodes().GetObject( n );
-    TextPaM aPaM( n, pN->GetText().Len() );
+    TextPaM aPaM( n, pN->GetText().getLength() );
     SetSelection( aPaM );
 }
 

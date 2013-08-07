@@ -71,7 +71,7 @@ public:
 class TextNode
 {
 private:
-    String              maText;
+    OUString            maText;
     TextCharAttribList  maCharAttribs;
 
                         TextNode( const TextNode& ) {;}
@@ -80,15 +80,15 @@ protected:
     void                CollapsAttribs( sal_uInt16 nIndex, sal_uInt16 nDelChars );
 
 public:
-                        TextNode( const String& rText );
+                        TextNode( const OUString& rText );
 
 
-    const String&               GetText() const         { return maText; }
+    const OUString&     GetText() const         { return maText; }
 
     const TextCharAttribList&   GetCharAttribs() const  { return maCharAttribs; }
     TextCharAttribList&         GetCharAttribs()        { return maCharAttribs; }
 
-    void                InsertText( sal_uInt16 nPos, const String& rText );
+    void                InsertText( sal_uInt16 nPos, const OUString& rText );
     void                InsertText( sal_uInt16 nPos, sal_Unicode c );
     void                RemoveText( sal_uInt16 nPos, sal_uInt16 nChars );
 
@@ -121,14 +121,14 @@ public:
     TextPaM             InsertParaBreak( const TextPaM& rPaM, sal_Bool bKeepEndingAttribs );
     TextPaM             ConnectParagraphs( TextNode* pLeft, TextNode* pRight );
 
-    sal_uLong               GetTextLen( const sal_Unicode* pSep, const TextSelection* pSel = NULL ) const;
+    sal_uLong           GetTextLen( const sal_Unicode* pSep, const TextSelection* pSel = NULL ) const;
     OUString            GetText( const sal_Unicode* pSep ) const;
     OUString            GetText( sal_uLong nPara ) const;
 
     void                SetLeftMargin( sal_uInt16 n )   { mnLeftMargin = n; }
-    sal_uInt16              GetLeftMargin() const       { return mnLeftMargin; }
+    sal_uInt16          GetLeftMargin() const       { return mnLeftMargin; }
 
-    sal_Bool                IsValidPaM( const TextPaM& rPaM );
+    sal_Bool            IsValidPaM( const TextPaM& rPaM );
 };
 
 #endif // _TEXTDOC_HXX
