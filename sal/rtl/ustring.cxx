@@ -817,6 +817,8 @@ static void rtl_ustring_intern_internal( rtl_uString ** newStr,
 
     osl_releaseMutex( pPoolMutex );
 
+    RTL_LOG_STRING_INTERN_NEW(*newStr, str);
+
     if( can_return && *newStr != str )
     { /* we dupped, then found a match */
         rtl_freeMemory( str );
@@ -947,6 +949,7 @@ internRelease (rtl_uString *pThis)
     if ( SAL_STRING_REFCOUNT(
              osl_atomic_decrement( &(pThis->refCount) ) ) == 0)
     {
+        RTL_LOG_STRING_INTERN_DELETE(pThis);
         pPoolMutex = getInternMutex();
         osl_acquireMutex( pPoolMutex );
 
