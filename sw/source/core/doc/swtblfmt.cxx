@@ -282,6 +282,14 @@ void SwTableFmt::AssignFormatParents( SwTableFmt* pSrcFmt, SwTable &rTable )
         pHardFmt->GetAttrSet().SetParent( NULL );
 
     AssignLineParents( pSrcFmt, rTable );
+
+    SwIterator<SwTabFrm,SwFmt> aIter( *rTable.GetFrmFmt() );
+    for( SwTabFrm* pLast = aIter.First(); pLast; pLast = aIter.Next() )
+        if( pLast->GetTable() == &rTable )
+        {
+            pLast->InvalidateAll();
+            pLast->SetCompletePaint();
+        }
 }
 
 void SwTableFmt::AssignLineParents( SwTableFmt* pSrcFmt, SwTable &rTable )

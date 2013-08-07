@@ -51,6 +51,8 @@
 #include <frmfmt.hxx>
 #include <paratr.hxx>
 #include <swtable.hxx>
+#include <switerator.hxx>
+#include <tabfrm.hxx>
 
 struct SwAfVersions;
 
