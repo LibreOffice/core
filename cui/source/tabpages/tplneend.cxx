@@ -538,7 +538,9 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickLoadHdl_Impl)
 
     if ( *pnLineEndListState & CT_MODIFIED )
     {
-        nReturn = WarningBox( GetParentDialog(), WinBits( WB_YES_NO_CANCEL ), OUString( ResId( RID_SVXSTR_WARN_TABLE_OVERWRITE, rMgr ) ) ).Execute();
+        nReturn = MessageDialog( GetParentDialog()
+                                ,"AskSaveList"
+                                ,"cui/ui/querysavelistdialog.ui").Execute();
 
         if ( nReturn == RET_YES )
             pLineEndList->Save();
