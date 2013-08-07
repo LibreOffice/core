@@ -183,17 +183,17 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
         pValue = rData.m_aContext.getValue( pKey );
     if( pKey && pValue )
     {
-        if( pValue->m_aOption.EqualsIgnoreCaseAscii( "None" ) ||
-            pValue->m_aOption.EqualsIgnoreCaseAscii( "Simplex", 0, 7 )
+        if( pValue->m_aOption.equalsIgnoreAsciiCase( "None" ) ||
+            pValue->m_aOption.startsWithIgnoreAsciiCase( "Simplex" )
            )
         {
             pJobSetup->meDuplexMode = DUPLEX_OFF;
         }
-        else if( pValue->m_aOption.EqualsIgnoreCaseAscii( "DuplexNoTumble" ) )
+        else if( pValue->m_aOption.equalsIgnoreAsciiCase( "DuplexNoTumble" ) )
         {
             pJobSetup->meDuplexMode = DUPLEX_LONGEDGE;
         }
-        else if( pValue->m_aOption.EqualsIgnoreCaseAscii( "DuplexTumble" ) )
+        else if( pValue->m_aOption.equalsIgnoreAsciiCase( "DuplexTumble" ) )
         {
             pJobSetup->meDuplexMode = DUPLEX_SHORTEDGE;
         }

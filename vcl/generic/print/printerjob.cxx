@@ -760,9 +760,9 @@ bool PrinterJob::writeFeatureList( osl::File* pFile, const JobData& rJob, bool b
                     if( GetPostscriptLevel( &rJob ) == 1 )
                     {
                         bool bHavePS2 =
-                            ( pValue->m_aValue.SearchAscii( "<<" ) != STRING_NOTFOUND )
+                            ( pValue->m_aValue.indexOf( "<<" ) != -1 )
                             ||
-                            ( pValue->m_aValue.SearchAscii( ">>" ) != STRING_NOTFOUND );
+                            ( pValue->m_aValue.indexOf( ">>" ) != -1 );
                         if( bHavePS2 )
                             continue;
                     }
@@ -843,8 +843,8 @@ void PrinterJob::writeJobPatch( osl::File* pFile, const JobData& rJobData )
     for( int i = 0; i < nValueCount; i++ )
     {
         const PPDValue* pVal = pKey->getValue( i );
-        patch_order.push_back( pVal->m_aOption.ToInt32() );
-        if( patch_order.back() == 0 && ! pVal->m_aOption.EqualsAscii( "0" ) )
+        patch_order.push_back( pVal->m_aOption.toInt32() );
+        if( patch_order.back() == 0 && ! pVal->m_aOption.equalsAscii( "0" ) )
         {
             WritePS( pFile, "% Warning: left out JobPatchFile option \"" );
             OString aOption = OUStringToOString( pVal->m_aOption, RTL_TEXTENCODING_ASCII_US );

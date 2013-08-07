@@ -43,8 +43,8 @@ enum PPDValueType { eInvocation, eQuoted, eSymbol, eString, eNo };
 struct VCL_DLLPUBLIC PPDValue
 {
     PPDValueType    m_eType;
-    String          m_aOption;
-    String          m_aValue;
+    OUString        m_aOption;
+    OUString        m_aValue;
 };
 
 // ----------------------------------------------------------------------
@@ -60,7 +60,7 @@ class VCL_DLLPUBLIC PPDKey
     typedef ::boost::unordered_map< OUString, PPDValue, OUStringHash > hash_type;
     typedef ::std::vector< PPDValue* > value_type;
 
-    String              m_aKey;
+    OUString            m_aKey;
     hash_type           m_aValues;
     value_type          m_aOrderedValues;
     const PPDValue*     m_pDefaultValue;
@@ -77,22 +77,22 @@ private:
     int                 m_nOrderDependency;
     SetupType           m_eSetupType;
 
-    void eraseValue( const String& rOption );
+    void eraseValue( const OUString& rOption );
 public:
-    PPDKey( const String& rKey );
+    PPDKey( const OUString& rKey );
     ~PPDKey();
 
-    PPDValue*           insertValue( const String& rOption );
+    PPDValue*           insertValue( const OUString& rOption );
     int                 countValues() const
     { return m_aValues.size(); }
     // neither getValue will return the query option
-    const PPDValue*         getValue( int n ) const;
-    const PPDValue*         getValue( const String& rOption ) const;
-    const PPDValue*         getValueCaseInsensitive( const String& rOption ) const;
-    const PPDValue*         getDefaultValue() const { return m_pDefaultValue; }
+    const PPDValue*     getValue( int n ) const;
+    const PPDValue*     getValue( const OUString& rOption ) const;
+    const PPDValue*     getValueCaseInsensitive( const OUString& rOption ) const;
+    const PPDValue*     getDefaultValue() const { return m_pDefaultValue; }
     const PPDValue*     getQueryValue() const { return m_bQueryValue ? &m_aQueryValue : NULL; }
 
-    const String&       getKey() const { return m_aKey; }
+    const OUString&     getKey() const { return m_aKey; }
     bool                isUIKey() const { return m_bUIOption; }
     UIType              getUIType() const { return m_eUIType; }
     SetupType           getSetupType() const { return m_eSetupType; }
@@ -124,7 +124,7 @@ class VCL_DLLPUBLIC PPDParser
     typedef ::boost::unordered_map< OUString, PPDKey*, OUStringHash > hash_type;
     typedef ::std::vector< PPDKey* > value_type;
 
-    void insertKey( const String& rKey, PPDKey* pKey );
+    void insertKey( const OUString& rKey, PPDKey* pKey );
 public:
     struct PPDConstraint
     {
@@ -141,10 +141,10 @@ private:
     ::std::list< PPDConstraint >                m_aConstraints;
 
     // some identifying fields
-    String                                      m_aPrinterName;
-    String                                      m_aNickName;
+    OUString                                    m_aPrinterName;
+    OUString                                    m_aNickName;
     // the full path of the PPD file
-    String                                      m_aFile;
+    OUString                                    m_aFile;
     // some basic attributes
     bool                                        m_bColorDevice;
     bool                                        m_bType42Capable;
@@ -175,7 +175,7 @@ private:
     // translations
     PPDTranslator*                              m_pTranslator;
 
-    PPDParser( const String& rFile );
+    PPDParser( const OUString& rFile );
     ~PPDParser();
 
     void parseOrderDependency(const OString& rLine);
@@ -183,39 +183,39 @@ private:
     void parseConstraint(const OString& rLine);
     void parse( std::list< OString >& rLines );
 
-    String handleTranslation(const OString& i_rString, bool i_bIsGlobalized);
+    OUString handleTranslation(const OString& i_rString, bool i_bIsGlobalized);
 
-    static void scanPPDDir( const String& rDir );
+    static void scanPPDDir( const OUString& rDir );
     static void initPPDFiles();
-    static String getPPDFile( const String& rFile );
+    static OUString getPPDFile( const OUString& rFile );
 public:
-    static const PPDParser* getParser( const String& rFile );
-    static String getPPDPrinterName( const String& rFile );
+    static const PPDParser* getParser( const OUString& rFile );
+    static OUString getPPDPrinterName( const OUString& rFile );
     static void freeAll();
     static void getKnownPPDDrivers( std::list< OUString >& o_rDrivers, bool bRefresh = false );
 
-    const String&   getFilename() const { return m_aFile; }
+    const OUString& getFilename() const { return m_aFile; }
 
     const PPDKey*   getKey( int n ) const;
-    const PPDKey*   getKey( const String& rKey ) const;
+    const PPDKey*   getKey( const OUString& rKey ) const;
     int             getKeys() const { return m_aKeys.size(); }
     bool            hasKey( const PPDKey* ) const;
 
     const ::std::list< PPDConstraint >& getConstraints() const { return m_aConstraints; }
 
-    const String&   getPrinterName() const
-    { return m_aPrinterName.Len() ? m_aPrinterName : m_aNickName; }
-    const String&   getNickName() const
-    { return m_aNickName.Len() ? m_aNickName : m_aPrinterName; }
+    const OUString& getPrinterName() const
+    { return m_aPrinterName.isEmpty() ? m_aNickName : m_aPrinterName; }
+    const OUString& getNickName() const
+    { return m_aNickName.isEmpty() ? m_aPrinterName : m_aNickName; }
 
     bool            isColorDevice() const { return m_bColorDevice; }
     bool            isType42Capable() const { return m_bType42Capable; }
-    sal_uLong           getLanguageLevel() const { return m_nLanguageLevel; }
+    sal_uLong       getLanguageLevel() const { return m_nLanguageLevel; }
 
-    String          getDefaultPaperDimension() const;
+    OUString        getDefaultPaperDimension() const;
     void            getDefaultPaperDimension( int& rWidth, int& rHeight ) const
     { getPaperDimension( getDefaultPaperDimension(), rWidth, rHeight ); }
-    bool getPaperDimension( const String& rPaperName,
+    bool getPaperDimension( const OUString& rPaperName,
                             int& rWidth, int& rHeight ) const;
     // width and height in pt
     // returns false if paper not found
@@ -223,9 +223,9 @@ public:
     { return m_pPaperDimensions ? m_pPaperDimensions->countValues() : 0; }
 
     // match the best paper for width and height
-    String          matchPaper( int nWidth, int nHeight ) const;
+    OUString        matchPaper( int nWidth, int nHeight ) const;
 
-    bool getMargins( const String& rPaperName,
+    bool getMargins( const OUString& rPaperName,
                      int &rLeft, int& rRight,
                      int &rUpper, int& rLower ) const;
     // values in pt
@@ -233,13 +233,13 @@ public:
 
     // values int pt
 
-    String          getDefaultInputSlot() const;
+    OUString        getDefaultInputSlot() const;
     int             getInputSlots() const
     { return m_pInputSlots ? m_pInputSlots->countValues() : 0; }
 
     void            getDefaultResolution( int& rXRes, int& rYRes ) const;
     // values in dpi
-    void            getResolutionFromString( const String&, int&, int& ) const;
+    void            getResolutionFromString( const OUString&, int&, int& ) const;
     // helper function
 
     int             getDuplexTypes() const
@@ -247,7 +247,7 @@ public:
 
     int             getFonts() const
     { return m_pFontList ? m_pFontList->countValues() : 0; }
-    String          getFont( int ) const;
+    OUString        getFont( int ) const;
 
 
     OUString   translateKey( const OUString& i_rKey,

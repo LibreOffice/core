@@ -389,10 +389,10 @@ RTSDevicePage::RTSDevicePage( RTSDialog* pParent )
         {
             const PPDKey* pKey = m_pParent->m_aJobData.m_pParser->getKey( i );
             if( pKey->isUIKey()                                 &&
-                ! pKey->getKey().EqualsAscii( "PageSize" )      &&
-                ! pKey->getKey().EqualsAscii( "InputSlot" )     &&
-                ! pKey->getKey().EqualsAscii( "PageRegion" )    &&
-                ! pKey->getKey().EqualsAscii( "Duplex" )
+                ! pKey->getKey().equalsAscii( "PageSize" )      &&
+                ! pKey->getKey().equalsAscii( "InputSlot" )     &&
+                ! pKey->getKey().equalsAscii( "PageRegion" )    &&
+                ! pKey->getKey().equalsAscii( "Duplex" )
                 )
             {
                 String aEntry( m_pParent->m_aJobData.m_pParser->translateKey( pKey->getKey() ) );

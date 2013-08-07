@@ -1162,7 +1162,7 @@ void PrinterInfoManager::setDefaultPaper( PPDContext& rContext ) const
     for( int i = 0; i < nValues && ! pPaperVal; i++ )
     {
         const PPDValue* pVal = pPageSizeKey->getValue( i );
-        if( pVal->m_aOption.EqualsIgnoreCaseAscii( m_aSystemDefaultPaper.getStr() ) )
+        if( pVal->m_aOption.equalsIgnoreAsciiCase( m_aSystemDefaultPaper ) )
             pPaperVal = pVal;
     }
     if( pPaperVal )

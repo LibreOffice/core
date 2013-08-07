@@ -455,7 +455,7 @@ void SpaPrinterController::printPage( int ) const
     if( pPrintParser )
         aPrintText.append( pPrintParser->getPrinterName() );
     aPrintText.appendAscii( "\n: " );
-    INetURLObject aDriverPath( pPrintParser ? pPrintParser->getFilename() : String( "<undef>" ),
+    INetURLObject aDriverPath( pPrintParser ? pPrintParser->getFilename() : OUString( "<undef>" ),
                                INET_PROT_FILE, INetURLObject::ENCODE_ALL );
     aPrintText.append( aDriverPath.GetName() );
     aPrintText.appendAscii( "\n: " );

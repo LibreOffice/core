@@ -399,7 +399,7 @@ static osl::FileBase::RC resolveLink( const OUString& i_rURL, OUString& o_rResol
     return aRet;
 }
 
-void PPDParser::scanPPDDir( const String& rDir )
+void PPDParser::scanPPDDir( const OUString& rDir )
 {
     static struct suffix_t
     {
@@ -423,7 +423,7 @@ void PPDParser::scanPPDDir( const String& rDir )
             osl::FileStatus aStatus( osl_FileStatus_Mask_FileName );
             if( aItem.getFileStatus( aStatus ) == osl::FileBase::E_None )
             {
-                OUStringBuffer aURLBuf( rDir.Len() + 64 );
+                OUStringBuffer aURLBuf( rDir.getLength() + 64 );
                 aURLBuf.append( rDir );
                 aURLBuf.append( sal_Unicode( '/' ) );
                 aURLBuf.append( aStatus.getFileName() );
@@ -515,7 +515,7 @@ void PPDParser::getKnownPPDDrivers( std::list< OUString >& o_rDrivers, bool bRef
         o_rDrivers.push_back( it->first );
 }
 
-String PPDParser::getPPDFile( const String& rFile )
+OUString PPDParser::getPPDFile( const OUString& rFile )
 {
     INetURLObject aPPD( rFile, INET_PROT_FILE, INetURLObject::ENCODE_ALL );
     // someone might enter a full qualified name here
@@ -557,7 +557,7 @@ String PPDParser::getPPDFile( const String& rFile )
             aStream.Open( it->second );
     }
 
-    String aRet;
+    OUString aRet;
     if( aStream.IsOpen() )
     {
         OString aLine = aStream.ReadLine();
@@ -578,23 +578,23 @@ String PPDParser::getPPDFile( const String& rFile )
     return aRet;
 }
 
-String PPDParser::getPPDPrinterName( const String& rFile )
+OUString PPDParser::getPPDPrinterName( const OUString& rFile )
 {
-    String aPath = getPPDFile( rFile );
-    String aName;
+    OUString aPath = getPPDFile( rFile );
+    OUString aName;
 
     // read in the file
     PPDDecompressStream aStream( aPath );
     if( aStream.IsOpen() )
     {
-        String aCurLine;
+        OUString aCurLine;
         while( ! aStream.IsEof() && aStream.IsOpen() )
         {
             OString aByteLine = aStream.ReadLine();
             aCurLine = OStringToOUString(aByteLine, RTL_TEXTENCODING_MS_1252);
-            if( aCurLine.CompareIgnoreCaseToAscii( "*include:", 9 ) == COMPARE_EQUAL )
+            if( aCurLine.startsWithIgnoreAsciiCase( "*include:" ) )
             {
-                aCurLine.Erase( 0, 9 );
+                aCurLine.replaceAt( 0, 9, "" );
                 aCurLine = comphelper::string::stripStart(aCurLine, ' ');
                 aCurLine = comphelper::string::stripEnd(aCurLine, ' ');
                 aCurLine = comphelper::string::stripStart(aCurLine, '\t');
@@ -607,27 +607,27 @@ String PPDParser::getPPDPrinterName( const String& rFile )
                 aStream.Open( getPPDFile( aCurLine ) );
                 continue;
             }
-            if( aCurLine.CompareToAscii( "*ModelName:", 11 ) == COMPARE_EQUAL )
+            if( aCurLine.startsWith( "*ModelName:" ) )
             {
-                aName = aCurLine.GetToken( 1, '"' );
+                aName = aCurLine.getToken( 1, '"' );
                 break;
             }
-            else if( aCurLine.CompareToAscii( "*NickName:", 10 ) == COMPARE_EQUAL )
-                aName = aCurLine.GetToken( 1, '"' );
+            else if( aCurLine.startsWith( "*NickName:" ) )
+                aName = aCurLine.getToken( 1, '"' );
         }
     }
     return aName;
 }
 
-const PPDParser* PPDParser::getParser( const String& rFile )
+const PPDParser* PPDParser::getParser( const OUString& rFile )
 {
     static ::osl::Mutex aMutex;
     ::osl::Guard< ::osl::Mutex > aGuard( aMutex );
 
-    String aFile = rFile;
-    if( rFile.CompareToAscii( "CUPS:", 5 ) != COMPARE_EQUAL )
+    OUString aFile = rFile;
+    if( !rFile.startsWith( "CUPS:" ) )
         aFile = getPPDFile( rFile );
-    if( ! aFile.Len() )
+    if( aFile.isEmpty() )
     {
 #if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "Could not get printer PPD file \"%s\" !\n", OUStringToOString( rFile, osl_getThreadTextEncoding() ).getStr() );
@@ -641,7 +641,7 @@ const PPDParser* PPDParser::getParser( const String& rFile )
             return *it;
 
     PPDParser* pNewParser = NULL;
-    if( aFile.CompareToAscii( "CUPS:", 5 ) != COMPARE_EQUAL )
+    if( !aFile.startsWith( "CUPS:" ) )
         pNewParser = new PPDParser( aFile );
     else
     {
@@ -664,7 +664,7 @@ const PPDParser* PPDParser::getParser( const String& rFile )
     return pNewParser;
 }
 
-PPDParser::PPDParser( const String& rFile ) :
+PPDParser::PPDParser( const OUString& rFile ) :
         m_aFile( rFile ),
         m_bType42Capable( false ),
         m_aFileEncoding( RTL_TEXTENCODING_MS_1252 ),
@@ -792,7 +792,7 @@ PPDParser::PPDParser( const String& rFile ) :
     // fill in shortcuts
     const PPDKey* pKey;
 
-    m_pImageableAreas = getKey( String( RTL_CONSTASCII_USTRINGPARAM( "ImageableArea" ) ) );
+    m_pImageableAreas = getKey(  OUString( "ImageableArea" ) );
     if( m_pImageableAreas )
         m_pDefaultImageableArea = m_pImageableAreas->getDefaultValue();
     if (m_pImageableAreas == 0) {
@@ -806,7 +806,7 @@ PPDParser::PPDParser( const String& rFile ) :
             OUStringToOString(m_aFile, RTL_TEXTENCODING_UTF8).getStr());
     }
 
-    m_pPaperDimensions = getKey( String( RTL_CONSTASCII_USTRINGPARAM( "PaperDimension" ) ) );
+    m_pPaperDimensions = getKey( OUString( "PaperDimension" ) );
     if( m_pPaperDimensions )
         m_pDefaultPaperDimension = m_pPaperDimensions->getDefaultValue();
     if (m_pPaperDimensions == 0) {
@@ -820,7 +820,7 @@ PPDParser::PPDParser( const String& rFile ) :
             OUStringToOString(m_aFile, RTL_TEXTENCODING_UTF8).getStr());
     }
 
-    m_pResolutions = getKey( String( RTL_CONSTASCII_USTRINGPARAM( "Resolution" ) ) );
+    m_pResolutions = getKey( OUString( "Resolution" ) );
     if( m_pResolutions )
         m_pDefaultResolution = m_pResolutions->getDefaultValue();
     if (m_pResolutions == 0) {
@@ -834,7 +834,7 @@ PPDParser::PPDParser( const String& rFile ) :
             OUStringToOString(m_aFile, RTL_TEXTENCODING_UTF8).getStr());
     }
 
-    m_pInputSlots = getKey( String( RTL_CONSTASCII_USTRINGPARAM( "InputSlot" ) ) );
+    m_pInputSlots = getKey( OUString( "InputSlot" ) );
     if( m_pInputSlots )
         m_pDefaultInputSlot = m_pInputSlots->getDefaultValue();
     if (m_pInputSlots == 0) {
@@ -848,11 +848,11 @@ PPDParser::PPDParser( const String& rFile ) :
             OUStringToOString(m_aFile, RTL_TEXTENCODING_UTF8).getStr());
     }
 
-    m_pDuplexTypes = getKey( String( RTL_CONSTASCII_USTRINGPARAM( "Duplex" ) ) );
+    m_pDuplexTypes = getKey( OUString( "Duplex" ) );
     if( m_pDuplexTypes )
         m_pDefaultDuplexType = m_pDuplexTypes->getDefaultValue();
 
-    m_pFontList = getKey( String( RTL_CONSTASCII_USTRINGPARAM( "Font" ) ) );
+    m_pFontList = getKey( OUString( "Font" ) );
     if (m_pFontList == 0) {
         OSL_TRACE(
             OSL_LOG_PREFIX "Warning: no Font in %s\n",
@@ -860,17 +860,17 @@ PPDParser::PPDParser( const String& rFile ) :
     }
 
     // fill in direct values
-    if( (pKey = getKey( String( RTL_CONSTASCII_USTRINGPARAM( "ModelName" ) ) )) )
+    if( (pKey = getKey( OUString( "ModelName" ) )) )
         m_aPrinterName = pKey->getValue( 0 )->m_aValue;
-    if( (pKey = getKey( String( RTL_CONSTASCII_USTRINGPARAM( "NickName" ) ) )) )
+    if( (pKey = getKey( OUString( "NickName" ) )) )
         m_aNickName = pKey->getValue( 0 )->m_aValue;
-    if( (pKey = getKey( String( RTL_CONSTASCII_USTRINGPARAM( "ColorDevice" ) ) )) )
-        m_bColorDevice = pKey->getValue( 0 )->m_aValue.CompareIgnoreCaseToAscii( "true", 4 ) == COMPARE_EQUAL ? true : false;
+    if( (pKey = getKey( OUString( "ColorDevice" ) )) )
+        m_bColorDevice = pKey->getValue( 0 )->m_aValue.startsWithIgnoreAsciiCase( "true" );
 
-    if( (pKey = getKey( String( RTL_CONSTASCII_USTRINGPARAM( "LanguageLevel" ) ) )) )
-        m_nLanguageLevel = pKey->getValue( 0 )->m_aValue.ToInt32();
-    if( (pKey = getKey( String( RTL_CONSTASCII_USTRINGPARAM( "TTRasterizer" ) ) )) )
-        m_bType42Capable = pKey->getValue( 0 )->m_aValue.EqualsIgnoreCaseAscii( "Type42" ) ? true : false;
+    if( (pKey = getKey( OUString( "LanguageLevel" ) )) )
+        m_nLanguageLevel = pKey->getValue( 0 )->m_aValue.toInt32();
+    if( (pKey = getKey( OUString( "TTRasterizer" ) )) )
+        m_bType42Capable = pKey->getValue( 0 )->m_aValue.equalsIgnoreAsciiCase( "Type42" );
 }
 
 PPDParser::~PPDParser()
@@ -880,7 +880,7 @@ PPDParser::~PPDParser()
     delete m_pTranslator;
 }
 
-void PPDParser::insertKey( const String& rKey, PPDKey* pKey )
+void PPDParser::insertKey( const OUString& rKey, PPDKey* pKey )
 {
     m_aKeys[ rKey ] = pKey;
     m_aOrderedKeys.push_back( pKey );
@@ -891,7 +891,7 @@ const PPDKey* PPDParser::getKey( int n ) const
     return ((unsigned int)n < m_aOrderedKeys.size() && n >= 0) ? m_aOrderedKeys[n] : NULL;
 }
 
-const PPDKey* PPDParser::getKey( const String& rKey ) const
+const PPDKey* PPDParser::getKey( const OUString& rKey ) const
 {
     PPDParser::hash_type::const_iterator it = m_aKeys.find( rKey );
     return it != m_aKeys.end() ? it->second : NULL;
@@ -917,7 +917,7 @@ static sal_uInt8 getNibble( sal_Char cChar )
     return nRet;
 }
 
-String PPDParser::handleTranslation(const OString& i_rString, bool bIsGlobalized)
+OUString PPDParser::handleTranslation(const OString& i_rString, bool bIsGlobalized)
 {
     sal_Int32 nOrigLen = i_rString.getLength();
     OStringBuffer aTrans( nOrigLen );
@@ -970,7 +970,7 @@ void PPDParser::parse( ::std::list< OString >& rLines )
         if( aCurrentLine[1] == '%' )
             continue;
 
-        OString aKey = GetCommandLineToken( 0, comphelper::string::getToken(aCurrentLine, 0, ':') );
+        OString aKey = GetCommandLineToken( 0, aCurrentLine.getToken(0, ':') );
         sal_Int32 nPos = aKey.indexOf('/');
         if (nPos != -1)
             aKey = aKey.copy(0, nPos);
@@ -1017,45 +1017,45 @@ void PPDParser::parse( ::std::list< OString >& rLines )
             bQuery = true;
         }
 
-        String aUniKey(OStringToOUString(aKey, RTL_TEXTENCODING_MS_1252));
+        OUString aUniKey(OStringToOUString(aKey, RTL_TEXTENCODING_MS_1252));
         // handle CUPS extension for globalized PPDs
         /* FIXME-BCP47: really only ISO 639-1 two character language codes?
          * goodnight.. */
         bool bIsGlobalizedLine = false;
         com::sun::star::lang::Locale aTransLocale;
-        if( ( aUniKey.Len() > 3 && aUniKey.GetChar( 2 ) == '.' ) ||
-            ( aUniKey.Len() > 5 && aUniKey.GetChar( 2 ) == '_' && aUniKey.GetChar( 5 ) == '.' ) )
+        if( ( aUniKey.getLength() > 3 && aUniKey[ 2 ] == '.' ) ||
+            ( aUniKey.getLength() > 5 && aUniKey[ 2 ] == '_' && aUniKey[ 5 ] == '.' ) )
         {
-            if( aUniKey.GetChar( 2 ) == '.' )
+            if( aUniKey[ 2 ] == '.' )
             {
-                aTransLocale.Language = aUniKey.Copy( 0, 2 );
-                aUniKey = aUniKey.Copy( 3 );
+                aTransLocale.Language = aUniKey.copy( 0, 2 );
+                aUniKey = aUniKey.copy( 3 );
             }
             else
             {
-                aTransLocale.Language = aUniKey.Copy( 0, 2 );
-                aTransLocale.Country = aUniKey.Copy( 3, 2 );
-                aUniKey = aUniKey.Copy( 6 );
+                aTransLocale.Language = aUniKey.copy( 0, 2 );
+                aTransLocale.Country = aUniKey.copy( 3, 2 );
+                aUniKey = aUniKey.copy( 6 );
             }
             bIsGlobalizedLine = true;
         }
 
-        String aOption;
+        OUString aOption;
         nPos = aCurrentLine.indexOf(':');
         if( nPos != -1 )
         {
             aOption = OStringToOUString( aCurrentLine.copy( 1, nPos-1 ), RTL_TEXTENCODING_MS_1252 );
             aOption = GetCommandLineToken( 1, aOption );
-            int nTransPos = aOption.Search( '/' );
-            if( nTransPos != STRING_NOTFOUND )
-                aOption.Erase( nTransPos );
+            sal_Int32 nTransPos = aOption.indexOf( '/' );
+            if( nTransPos != -1 )
+                aOption = aOption.replaceAt( nTransPos, 1, "" );
         }
 
         PPDValueType eType = eNo;
-        String aValue;
+        OUString aValue;
         OUString aOptionTranslation;
         OUString aValueTranslation;
-        if( nPos != STRING_NOTFOUND )
+        if( nPos != -1 )
         {
             // found a colon, there may be an option
             OString aLine = aCurrentLine.copy( 1, nPos-1 );
@@ -1083,8 +1083,8 @@ void PPDParser::parse( ::std::list< OString >& rLines )
             // #i100644# handle a missing value (actually a broken PPD)
             if( aLine.isEmpty() )
             {
-                if( aOption.Len() &&
-                    aUniKey.CompareToAscii( "JCL", 3 ) != COMPARE_EQUAL )
+                if( !aOption.isEmpty() &&
+                    !aUniKey.startsWith( "JCL" ) )
                     eType = eInvocation;
                 else
                     eType = eQuoted;
@@ -1103,8 +1103,8 @@ void PPDParser::parse( ::std::list< OString >& rLines )
                     aValueTranslation = handleTranslation( aLine.copy( nTransPos+2 ), bIsGlobalizedLine );
                 }
                 // check for quoted value
-                if( aOption.Len() &&
-                    aUniKey.CompareToAscii( "JCL", 3 ) != COMPARE_EQUAL )
+                if( !aOption.isEmpty() &&
+                    !aUniKey.startsWith( "JCL" ) )
                     eType = eInvocation;
                 else
                     eType = eQuoted;
@@ -1138,7 +1138,7 @@ void PPDParser::parse( ::std::list< OString >& rLines )
         {
             // handle main key translations of form:
             // *ll_CC.Translation MainKeyword/translated text: ""
-            if( aUniKey.EqualsAscii( "Translation" ) )
+            if( aUniKey.equalsAscii( "Translation" ) )
             {
                 m_pTranslator->insertKey( aOption, aOptionTranslation, aTransLocale );
             }
@@ -1190,11 +1190,11 @@ void PPDParser::parse( ::std::list< OString >& rLines )
         OString aLine(*line);
         if (aLine.matchL(RTL_CONSTASCII_STRINGPARAM("*Default")))
         {
-            String aKey(OStringToOUString(aLine.copy(8), RTL_TEXTENCODING_MS_1252));
-            sal_uInt16 nPos = aKey.Search( ':' );
-            if( nPos != STRING_NOTFOUND )
+            OUString aKey(OStringToOUString(aLine.copy(8), RTL_TEXTENCODING_MS_1252));
+            sal_Int32 nPos = aKey.indexOf( ':' );
+            if( nPos != -1 )
             {
-                aKey.Erase( nPos );
+                aKey = aKey.replaceAt( nPos, 1, "" );
                 OUString aOption(OStringToOUString(
                     WhitespaceToSpace(aLine.copy(nPos+9)),
                     RTL_TEXTENCODING_MS_1252));
@@ -1229,7 +1229,7 @@ void PPDParser::parse( ::std::list< OString >& rLines )
 
 void PPDParser::parseOpenUI(const OString& rLine)
 {
-    String aTranslation;
+    OUString aTranslation;
     OString aKey = rLine;
 
     sal_Int32 nPos = aKey.indexOf(':');
@@ -1244,7 +1244,7 @@ void PPDParser::parseOpenUI(const OString& rLine)
     aKey = GetCommandLineToken( 1, aKey );
     aKey = aKey.copy(1);
 
-    String aUniKey(OStringToOUString(aKey, RTL_TEXTENCODING_MS_1252));
+    OUString aUniKey(OStringToOUString(aKey, RTL_TEXTENCODING_MS_1252));
     PPDParser::hash_type::const_iterator keyit = m_aKeys.find( aUniKey );
     PPDKey* pKey;
     if( keyit == m_aKeys.end() )
@@ -1277,10 +1277,10 @@ void PPDParser::parseOrderDependency(const OString& rLine)
 
     sal_Int32 nOrder = GetCommandLineToken( 0, aLine ).toInt32();
     OString aSetup = GetCommandLineToken( 1, aLine );
-    String aKey(OStringToOUString(GetCommandLineToken(2, aLine), RTL_TEXTENCODING_MS_1252));
-    if( aKey.GetChar( 0 ) != '*' )
+    OUString aKey(OStringToOUString(GetCommandLineToken(2, aLine), RTL_TEXTENCODING_MS_1252));
+    if( aKey[ 0 ] != '*' )
         return; // invalid order depency
-    aKey.Erase( 0, 1 );
+    aKey = aKey.replaceAt( 0, 1, "" );
 
     PPDKey* pKey;
     PPDParser::hash_type::const_iterator keyit = m_aKeys.find( aKey );
@@ -1311,16 +1311,16 @@ void PPDParser::parseConstraint( const OString& rLine )
 {
     bool bFailed = false;
 
-    String aLine(OStringToOUString(rLine, RTL_TEXTENCODING_MS_1252));
-    aLine.Erase(0, rLine.indexOf(':') + 1);
+    OUString aLine(OStringToOUString(rLine, RTL_TEXTENCODING_MS_1252));
+    aLine = aLine.replaceAt(0, rLine.indexOf(':') + 1, "");
     PPDConstraint aConstraint;
     int nTokens = GetCommandLineTokenCount( aLine );
     for( int i = 0; i < nTokens; i++ )
     {
-        String aToken = GetCommandLineToken( i, aLine );
-        if( aToken.GetChar( 0 ) == '*' )
+        OUString aToken = GetCommandLineToken( i, aLine );
+        if( aToken[ 0 ] == '*' )
         {
-            aToken.Erase( 0, 1 );
+            aToken = aToken.replaceAt( 0, 1, "" );
             if( aConstraint.m_pKey1 )
                 aConstraint.m_pKey2 = getKey( aToken );
             else
@@ -1355,16 +1355,16 @@ void PPDParser::parseConstraint( const OString& rLine )
         m_aConstraints.push_back( aConstraint );
 }
 
-String PPDParser::getDefaultPaperDimension() const
+OUString PPDParser::getDefaultPaperDimension() const
 {
     if( m_pDefaultPaperDimension )
         return m_pDefaultPaperDimension->m_aOption;
 
-    return String();
+    return OUString();
 }
 
 bool PPDParser::getMargins(
-                           const String& rPaperName,
+                           const OUString& rPaperName,
                            int& rLeft, int& rRight,
                            int& rUpper, int& rLower ) const
 {
@@ -1383,7 +1383,7 @@ bool PPDParser::getMargins(
 
     double ImLLx, ImLLy, ImURx, ImURy;
     double PDWidth, PDHeight;
-    String aArea = m_pImageableAreas->getValue( nImArea )->m_aValue;
+    OUString aArea = m_pImageableAreas->getValue( nImArea )->m_aValue;
     ImLLx = StringToDouble( GetCommandLineToken( 0, aArea ) );
     ImLLy = StringToDouble( GetCommandLineToken( 1, aArea ) );
     ImURx = StringToDouble( GetCommandLineToken( 2, aArea ) );
@@ -1400,7 +1400,7 @@ bool PPDParser::getMargins(
 }
 
 bool PPDParser::getPaperDimension(
-                                  const String& rPaperName,
+                                  const OUString& rPaperName,
                                   int& rWidth, int& rHeight ) const
 {
     if( ! m_pPaperDimensions )
@@ -1414,7 +1414,7 @@ bool PPDParser::getPaperDimension(
         return false;
 
     double PDWidth, PDHeight;
-    String aArea = m_pPaperDimensions->getValue( nPDim )->m_aValue;
+    OUString aArea = m_pPaperDimensions->getValue( nPDim )->m_aValue;
     PDWidth     = StringToDouble( GetCommandLineToken( 0, aArea ) );
     PDHeight    = StringToDouble( GetCommandLineToken( 1, aArea ) );
     rHeight = (int)(PDHeight + 0.5);
@@ -1423,10 +1423,10 @@ bool PPDParser::getPaperDimension(
     return true;
 }
 
-String PPDParser::matchPaper( int nWidth, int nHeight ) const
+OUString PPDParser::matchPaper( int nWidth, int nHeight ) const
 {
     if( ! m_pPaperDimensions )
-        return String();
+        return OUString();
 
     int nPDim = -1;
     double PDWidth, PDHeight;
@@ -1434,7 +1434,7 @@ String PPDParser::matchPaper( int nWidth, int nHeight ) const
 
     for( int i = 0; i < m_pPaperDimensions->countValues(); i++ )
     {
-        String aArea =  m_pPaperDimensions->getValue( i )->m_aValue;
+        OUString aArea =  m_pPaperDimensions->getValue( i )->m_aValue;
         PDWidth     = StringToDouble( GetCommandLineToken( 0, aArea ) );
         PDHeight    = StringToDouble( GetCommandLineToken( 1, aArea ) );
         PDWidth     /= (double)nWidth;
@@ -1460,40 +1460,40 @@ String PPDParser::matchPaper( int nWidth, int nHeight ) const
     {
         // swap portrait/landscape and try again
         bDontSwap = true;
-        String rRet = matchPaper( nHeight, nWidth );
+        OUString rRet = matchPaper( nHeight, nWidth );
         bDontSwap = false;
         return rRet;
     }
 
-    return nPDim != -1 ? m_pPaperDimensions->getValue( nPDim )->m_aOption : String();
+    return nPDim != -1 ? m_pPaperDimensions->getValue( nPDim )->m_aOption : OUString();
 }
 
-String PPDParser::getDefaultInputSlot() const
+OUString PPDParser::getDefaultInputSlot() const
 {
     if( m_pDefaultInputSlot )
         return m_pDefaultInputSlot->m_aValue;
-    return String();
+    return OUString();
 }
 
 void PPDParser::getResolutionFromString(
-                                        const String& rString,
+                                        const OUString& rString,
                                         int& rXRes, int& rYRes ) const
 {
-    int nDPIPos;
+    sal_Int32 nDPIPos;
 
     rXRes = rYRes = 300;
 
-    nDPIPos = rString.SearchAscii( "dpi" );
-    if( nDPIPos != STRING_NOTFOUND )
+    nDPIPos = rString.indexOf( "dpi" );
+    if( nDPIPos != -1 )
     {
-        int nPos = 0;
-        if( ( nPos = rString.Search( 'x' ) ) != STRING_NOTFOUND )
+        sal_Int32 nPos = 0;
+        if( ( nPos = rString.indexOf( 'x' ) ) != -1 )
         {
-            rXRes = rString.Copy( 0, nPos ).ToInt32();
-            rYRes = rString.GetToken( 1, 'x' ).Erase( nDPIPos - nPos - 1 ).ToInt32();
+            rXRes = rString.copy( 0, nPos ).toInt32();
+            rYRes = rString.getToken( 1, 'x' ).replaceAt( nDPIPos - nPos - 1, 1, "" ).toInt32();
         }
         else
-            rXRes = rYRes = rString.Copy( 0, nDPIPos ).ToInt32();
+            rXRes = rYRes = rString.copy( 0, nDPIPos ).toInt32();
     }
 }
 
@@ -1509,14 +1509,14 @@ void PPDParser::getDefaultResolution( int& rXRes, int& rYRes ) const
     rYRes = 300;
 }
 
-String PPDParser::getFont( int nFont ) const
+OUString PPDParser::getFont( int nFont ) const
 {
     if( ! m_pFontList )
-        return String();
+        return OUString();
 
     if( nFont >=0 && nFont < m_pFontList->countValues() )
         return m_pFontList->getValue( nFont )->m_aOption;
-    return String();
+    return OUString();
 }
 
 OUString PPDParser::translateKey( const OUString& i_rKey,
@@ -1542,7 +1542,7 @@ OUString PPDParser::translateOption( const OUString& i_rKey,
  *  PPDKey
  */
 
-PPDKey::PPDKey( const String& rKey ) :
+PPDKey::PPDKey( const OUString& rKey ) :
         m_aKey( rKey ),
         m_pDefaultValue( NULL ),
         m_bQueryValue( false ),
@@ -1568,7 +1568,7 @@ const PPDValue* PPDKey::getValue( int n ) const
 
 // -------------------------------------------------------------------
 
-const PPDValue* PPDKey::getValue( const String& rOption ) const
+const PPDValue* PPDKey::getValue( const OUString& rOption ) const
 {
     PPDKey::hash_type::const_iterator it = m_aValues.find( rOption );
     return it != m_aValues.end() ? &it->second : NULL;
@@ -1576,13 +1576,13 @@ const PPDValue* PPDKey::getValue( const String& rOption ) const
 
 // -------------------------------------------------------------------
 
-const PPDValue* PPDKey::getValueCaseInsensitive( const String& rOption ) const
+const PPDValue* PPDKey::getValueCaseInsensitive( const OUString& rOption ) const
 {
     const PPDValue* pValue = getValue( rOption );
     if( ! pValue )
     {
         for( size_t n = 0; n < m_aOrderedValues.size() && ! pValue; n++ )
-            if( m_aOrderedValues[n]->m_aOption.EqualsIgnoreCaseAscii( rOption ) )
+            if( m_aOrderedValues[n]->m_aOption.equalsIgnoreAsciiCase( rOption ) )
                 pValue = m_aOrderedValues[n];
     }
 
@@ -1591,7 +1591,7 @@ const PPDValue* PPDKey::getValueCaseInsensitive( const String& rOption ) const
 
 // -------------------------------------------------------------------
 
-void PPDKey::eraseValue( const String& rOption )
+void PPDKey::eraseValue( const OUString& rOption )
 {
     PPDKey::hash_type::iterator it = m_aValues.find( rOption );
     if( it == m_aValues.end() )
@@ -1610,7 +1610,7 @@ void PPDKey::eraseValue( const String& rOption )
 
 // -------------------------------------------------------------------
 
-PPDValue* PPDKey::insertValue( const String& rOption )
+PPDValue* PPDKey::insertValue( const OUString& rOption )
 {
     if( m_aValues.find( rOption ) != m_aValues.end() )
         return NULL;
@@ -1774,9 +1774,9 @@ bool PPDContext::resetValue( const PPDKey* pKey, bool bDefaultable )
     if( ! pKey || ! m_pParser || ! m_pParser->hasKey( pKey ) )
         return false;
 
-    const PPDValue* pResetValue = pKey->getValue( String( RTL_CONSTASCII_USTRINGPARAM( "None" ) ) );
+    const PPDValue* pResetValue = pKey->getValue( OUString( "None" ) );
     if( ! pResetValue )
-        pResetValue = pKey->getValue( String( RTL_CONSTASCII_USTRINGPARAM( "False" ) ) );
+        pResetValue = pKey->getValue( OUString( "False" ) );
     if( ! pResetValue && bDefaultable )
         pResetValue = pKey->getDefaultValue();
 
@@ -1801,7 +1801,7 @@ bool PPDContext::checkConstraints( const PPDKey* pKey, const PPDValue* pNewValue
 
     // None / False and the default can always be set, but be careful !
     // setting them might influence constrained values
-    if( pNewValue->m_aOption.EqualsAscii( "None" ) || pNewValue->m_aOption.EqualsAscii( "False" ) ||
+    if( pNewValue->m_aOption.equalsAscii( "None" ) || pNewValue->m_aOption.equalsAscii( "False" ) ||
         pNewValue == pKey->getDefaultValue() )
         return true;
 
@@ -1836,8 +1836,8 @@ bool PPDContext::checkConstraints( const PPDKey* pKey, const PPDValue* pNewValue
                     continue; // this should not happen, PPD broken
 
                 if( pKeyOption == pNewValue &&
-                    ! pOtherKeyOption->m_aOption.EqualsAscii( "None" ) &&
-                    ! pOtherKeyOption->m_aOption.EqualsAscii( "False" ) )
+                    ! pOtherKeyOption->m_aOption.equalsAscii( "None" ) &&
+                    ! pOtherKeyOption->m_aOption.equalsAscii( "False" ) )
                 {
                     // check if the other value can be reset and
                     // do so if possible
@@ -1850,8 +1850,8 @@ bool PPDContext::checkConstraints( const PPDKey* pKey, const PPDValue* pNewValue
             else if( pOtherKeyOption )
             {
                 if( getValue( pOtherKey ) == pOtherKeyOption &&
-                    ! pNewValue->m_aOption.EqualsAscii( "None" ) &&
-                    ! pNewValue->m_aOption.EqualsAscii( "False" ) )
+                    ! pNewValue->m_aOption.equalsAscii( "None" ) &&
+                    ! pNewValue->m_aOption.equalsAscii( "False" ) )
                     return false;
             }
             else
@@ -1863,10 +1863,10 @@ bool PPDContext::checkConstraints( const PPDKey* pKey, const PPDValue* pNewValue
         else
         {
             const PPDValue* pOtherValue = getValue( pOtherKey );
-            if( ! pOtherValue->m_aOption.EqualsAscii( "None" )  &&
-                ! pOtherValue->m_aOption.EqualsAscii( "False" )     &&
-                ! pNewValue->m_aOption.EqualsAscii( "None" )        &&
-                ! pNewValue->m_aOption.EqualsAscii( "False" ) )
+            if( ! pOtherValue->m_aOption.equalsAscii( "None" )  &&
+                ! pOtherValue->m_aOption.equalsAscii( "False" )     &&
+                ! pNewValue->m_aOption.equalsAscii( "None" )        &&
+                ! pNewValue->m_aOption.equalsAscii( "False" ) )
                 return false;
         }
     }
@@ -1962,7 +1962,7 @@ int PPDContext::getRenderResolution() const
     if( m_pParser )
     {
         int nDPIx = 300, nDPIy = 300;
-        const PPDKey* pKey = m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "Resolution" ) ) );
+        const PPDKey* pKey = m_pParser->getKey( OUString( "Resolution" ) );
         if( pKey )
         {
             const PPDValue* pValue = getValue( pKey );
@@ -1989,7 +1989,7 @@ void PPDContext::getPageSize( OUString& rPaper, int& rWidth, int& rHeight ) cons
     rHeight = 842;
     if( m_pParser )
     {
-        const PPDKey* pKey = m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) ) );
+        const PPDKey* pKey = m_pParser->getKey( OUString( "PageSize" ) );
         if( pKey )
         {
             const PPDValue* pValue = getValue( pKey );

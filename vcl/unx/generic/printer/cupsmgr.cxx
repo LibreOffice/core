@@ -618,7 +618,7 @@ void CUPSManager::getOptionsFromDocumentSetup( const JobData& rJob, bool bBanner
         {
             const PPDKey* pKey = aKeys[i];
             const PPDValue* pValue = rJob.m_aContext.getValue( pKey );
-            if(pValue && pValue->m_eType == eInvocation && pValue->m_aValue.Len() )
+            if(pValue && pValue->m_eType == eInvocation && !pValue->m_aValue.isEmpty() )
             {
                 OString aKey = OUStringToOString( pKey->getKey(), RTL_TEXTENCODING_ASCII_US );
                 OString aValue = OUStringToOString( pValue->m_aOption, RTL_TEXTENCODING_ASCII_US );
