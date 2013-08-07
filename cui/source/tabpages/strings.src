@@ -115,10 +115,6 @@ String RID_SVXSTR_DESC_LINEEND
 {
     Text [ en-US ] = "Please enter a name for the new arrowhead:" ;
 };
-String RID_SVXSTR_ASK_DEL_LINEEND
-{
-    Text [ en-US ] = "Do you want to delete the arrowhead?" ;
-};
 String RID_SVXSTR_ASK_CHANGE_LINEEND
 {
     Text [ en-US ] = "The arrowhead was modified without saving.\nWould you like to save the arrowhead now?" ;
