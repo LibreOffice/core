@@ -65,11 +65,11 @@ sal_Int32 FilterConfigCache::nIndTemplateName = -1;
 sal_Bool FilterConfigCache::FilterConfigCacheEntry::CreateFilterName( const OUString& rUserDataEntry )
 {
     bIsPixelFormat = bIsInternalFilter = sal_False;
-    sFilterName = String( rUserDataEntry );
+    sFilterName = rUserDataEntry;
     const char** pPtr;
     for ( pPtr = InternalPixelFilterNameList; *pPtr && ( bIsInternalFilter == sal_False ); pPtr++ )
     {
-        if ( sFilterName.EqualsIgnoreCaseAscii( *pPtr ) )
+        if ( sFilterName.equalsIgnoreAsciiCase( OUString(*pPtr, strlen(*pPtr), RTL_TEXTENCODING_ASCII_US) ) )
         {
             bIsInternalFilter = sal_True;
             bIsPixelFormat = sal_True;
@@ -77,31 +77,31 @@ sal_Bool FilterConfigCache::FilterConfigCacheEntry::CreateFilterName( const OUSt
     }
     for ( pPtr = InternalVectorFilterNameList; *pPtr && ( bIsInternalFilter == sal_False ); pPtr++ )
     {
-        if ( sFilterName.EqualsIgnoreCaseAscii( *pPtr ) )
+        if ( sFilterName.equalsIgnoreAsciiCase( OUString(*pPtr, strlen(*pPtr), RTL_TEXTENCODING_ASCII_US) ) )
             bIsInternalFilter = sal_True;
     }
     if ( !bIsInternalFilter )
     {
         for ( pPtr = ExternalPixelFilterNameList; *pPtr && ( bIsPixelFormat == sal_False ); pPtr++ )
         {
-            if ( sFilterName.EqualsIgnoreCaseAscii( *pPtr ) )
+            if ( sFilterName.equalsIgnoreAsciiCase( OUString(*pPtr, strlen(*pPtr), RTL_TEXTENCODING_ASCII_US) ) )
                 bIsPixelFormat = sal_True;
         }
         OUString sTemp(SVLIBRARY("?"));
         sal_Int32 nIndex = sTemp.indexOf(static_cast<sal_Unicode>('?'));
         sFilterName = sTemp.replaceAt(nIndex, 1, sFilterName);
     }
-    return sFilterName.Len() != 0;
+    return ! sFilterName.isEmpty();
 }
 
-String FilterConfigCache::FilterConfigCacheEntry::GetShortName()
+OUString FilterConfigCache::FilterConfigCacheEntry::GetShortName()
 {
-    String aShortName;
+    OUString aShortName;
     if ( lExtensionList.getLength() )
     {
         aShortName = lExtensionList[ 0 ];
-        if ( aShortName.SearchAscii( "*.", 0 ) == 0 )
-            aShortName.Erase( 0, 2 );
+        if ( aShortName.indexOf( "*." ) == 0 )
+            aShortName = aShortName.replaceAt( 0, 2, "" );
     }
     return aShortName;
 }
@@ -208,8 +208,8 @@ void FilterConfigCache::ImplInit()
 
             // The first extension will be used
             // to generate our internal FilterType ( BMP, WMF ... )
-            String aExtension( aEntry.GetShortName() );
-            if (aExtension.Len() != 3)
+            OUString aExtension( aEntry.GetShortName() );
+            if (aExtension.getLength() != 3)
                 continue;
 
             if ( aEntry.nFlags & 1 )
@@ -314,14 +314,14 @@ FilterConfigCache::~FilterConfigCache()
 {
 }
 
-String FilterConfigCache::GetImportFilterName( sal_uInt16 nFormat )
+OUString FilterConfigCache::GetImportFilterName( sal_uInt16 nFormat )
 {
     if( nFormat < aImport.size() )
         return aImport[ nFormat ].sFilterName;
-    return String::EmptyString();
+    return OUString("");
 }
 
-sal_uInt16 FilterConfigCache::GetImportFormatNumber( const String& rFormatName )
+sal_uInt16 FilterConfigCache::GetImportFormatNumber( const OUString& rFormatName )
 {
     CacheVector::const_iterator aIter, aEnd;
     for (aIter = aImport.begin(), aEnd = aImport.end(); aIter != aEnd; ++aIter)
@@ -333,7 +333,7 @@ sal_uInt16 FilterConfigCache::GetImportFormatNumber( const String& rFormatName )
 }
 
 /// get the index of the filter that matches this extension
-sal_uInt16 FilterConfigCache::GetImportFormatNumberForExtension( const String& rExt )
+sal_uInt16 FilterConfigCache::GetImportFormatNumberForExtension( const OUString& rExt )
 {
     CacheVector::const_iterator aIter, aEnd;
     for (aIter = aImport.begin(), aEnd = aImport.end(); aIter != aEnd; ++aIter)
@@ -347,7 +347,7 @@ sal_uInt16 FilterConfigCache::GetImportFormatNumberForExtension( const String& r
     return GRFILTER_FORMAT_NOTFOUND;
 }
 
-sal_uInt16 FilterConfigCache::GetImportFormatNumberForMediaType( const String& rMediaType )
+sal_uInt16 FilterConfigCache::GetImportFormatNumberForMediaType( const OUString& rMediaType )
 {
     CacheVector::const_iterator aIter, aEnd;
     for (aIter = aImport.begin(), aEnd = aImport.end(); aIter != aEnd; ++aIter)
@@ -358,19 +358,19 @@ sal_uInt16 FilterConfigCache::GetImportFormatNumberForMediaType( const String& r
     return sal::static_int_cast< sal_uInt16 >(aIter == aImport.end() ? GRFILTER_FORMAT_NOTFOUND : aIter - aImport.begin());
 }
 
-sal_uInt16 FilterConfigCache::GetImportFormatNumberForShortName( const String& rShortName )
+sal_uInt16 FilterConfigCache::GetImportFormatNumberForShortName( const OUString& rShortName )
 {
     CacheVector::const_iterator aEnd;
     CacheVector::iterator aIter;
     for (aIter = aImport.begin(), aEnd = aImport.end(); aIter != aEnd; ++aIter)
     {
-        if ( aIter->GetShortName().EqualsIgnoreCaseAscii( rShortName ) )
+        if ( aIter->GetShortName().equalsIgnoreAsciiCase( rShortName ) )
             break;
     }
     return sal::static_int_cast< sal_uInt16 >(aIter == aImport.end() ? GRFILTER_FORMAT_NOTFOUND : aIter - aImport.begin());
 }
 
-sal_uInt16 FilterConfigCache::GetImportFormatNumberForTypeName( const String& rType )
+sal_uInt16 FilterConfigCache::GetImportFormatNumberForTypeName( const OUString& rType )
 {
     CacheVector::const_iterator aIter, aEnd;
     for (aIter = aImport.begin(), aEnd = aImport.end(); aIter != aEnd; ++aIter)
@@ -381,53 +381,53 @@ sal_uInt16 FilterConfigCache::GetImportFormatNumberForTypeName( const String& rT
     return sal::static_int_cast< sal_uInt16 >(aIter == aImport.end() ? GRFILTER_FORMAT_NOTFOUND : aIter - aImport.begin());
 }
 
-String FilterConfigCache::GetImportFormatName( sal_uInt16 nFormat )
+OUString FilterConfigCache::GetImportFormatName( sal_uInt16 nFormat )
 {
     if( nFormat < aImport.size() )
         return aImport[ nFormat ].sUIName;
-    return String::EmptyString();
+    return OUString("");
 }
 
-String FilterConfigCache::GetImportFormatMediaType( sal_uInt16 nFormat )
+OUString FilterConfigCache::GetImportFormatMediaType( sal_uInt16 nFormat )
 {
     if( nFormat < aImport.size() )
         return aImport[ nFormat ].sMediaType;
-    return String::EmptyString();
+    return OUString("");
 }
 
-String FilterConfigCache::GetImportFormatShortName( sal_uInt16 nFormat )
+OUString FilterConfigCache::GetImportFormatShortName( sal_uInt16 nFormat )
 {
     if( nFormat < aImport.size() )
         return aImport[ nFormat ].GetShortName();
-    return String::EmptyString();
+    return OUString("");
 }
 
-String FilterConfigCache::GetImportFormatExtension( sal_uInt16 nFormat, sal_Int32 nEntry )
+OUString FilterConfigCache::GetImportFormatExtension( sal_uInt16 nFormat, sal_Int32 nEntry )
 {
     if ( (nFormat < aImport.size()) && (nEntry < aImport[ nFormat ].lExtensionList.getLength()) )
         return aImport[ nFormat ].lExtensionList[ nEntry ];
-    return String::EmptyString();
+    return OUString("");
 }
 
-String FilterConfigCache::GetImportFilterType( sal_uInt16 nFormat )
+OUString FilterConfigCache::GetImportFilterType( sal_uInt16 nFormat )
 {
     if( nFormat < aImport.size() )
         return aImport[ nFormat ].sType;
-    return String::EmptyString();
+    return OUString("");
 }
 
-String FilterConfigCache::GetImportFilterTypeName( sal_uInt16 nFormat )
+OUString FilterConfigCache::GetImportFilterTypeName( sal_uInt16 nFormat )
 {
     if( nFormat < aImport.size() )
         return aImport[ nFormat ].sFilterType;
-    return String::EmptyString();
+    return OUString("");
 }
 
-String FilterConfigCache::GetImportWildcard( sal_uInt16 nFormat, sal_Int32 nEntry )
+OUString FilterConfigCache::GetImportWildcard( sal_uInt16 nFormat, sal_Int32 nEntry )
 {
-    String aWildcard( GetImportFormatExtension( nFormat, nEntry ) );
-    if ( aWildcard.Len() )
-        aWildcard.Insert( OUString("*."), 0 );
+    OUString aWildcard( GetImportFormatExtension( nFormat, nEntry ) );
+    if ( !aWildcard.isEmpty() )
+        aWildcard = aWildcard.replaceAt( 0, 0, "*." );
     return aWildcard;
 }
 
@@ -443,14 +443,14 @@ sal_Bool FilterConfigCache::IsImportPixelFormat( sal_uInt16 nFormat )
 
 // ------------------------------------------------------------------------
 
-String FilterConfigCache::GetExportFilterName( sal_uInt16 nFormat )
+OUString FilterConfigCache::GetExportFilterName( sal_uInt16 nFormat )
 {
     if( nFormat < aExport.size() )
         return aExport[ nFormat ].sFilterName;
-    return String::EmptyString();
+    return OUString("");
 }
 
-sal_uInt16 FilterConfigCache::GetExportFormatNumber( const String& rFormatName )
+sal_uInt16 FilterConfigCache::GetExportFormatNumber( const OUString& rFormatName )
 {
     CacheVector::const_iterator aIter, aEnd;
     for (aIter = aExport.begin(), aEnd = aExport.end(); aIter != aEnd; ++aIter)
@@ -461,7 +461,7 @@ sal_uInt16 FilterConfigCache::GetExportFormatNumber( const String& rFormatName )
     return sal::static_int_cast< sal_uInt16 >(aIter == aExport.end() ? GRFILTER_FORMAT_NOTFOUND : aIter - aExport.begin());
 }
 
-sal_uInt16 FilterConfigCache::GetExportFormatNumberForMediaType( const String& rMediaType )
+sal_uInt16 FilterConfigCache::GetExportFormatNumberForMediaType( const OUString& rMediaType )
 {
     CacheVector::const_iterator aIter, aEnd;
     for (aIter = aExport.begin(), aEnd = aExport.end(); aIter != aEnd; ++aIter)
@@ -472,19 +472,19 @@ sal_uInt16 FilterConfigCache::GetExportFormatNumberForMediaType( const String& r
     return sal::static_int_cast< sal_uInt16 >(aIter == aExport.end() ? GRFILTER_FORMAT_NOTFOUND : aIter - aExport.begin());
 }
 
-sal_uInt16 FilterConfigCache::GetExportFormatNumberForShortName( const String& rShortName )
+sal_uInt16 FilterConfigCache::GetExportFormatNumberForShortName( const OUString& rShortName )
 {
     CacheVector::const_iterator aEnd;
     CacheVector::iterator aIter;
     for (aIter = aExport.begin(), aEnd = aExport.end(); aIter != aEnd; ++aIter)
     {
-        if ( aIter->GetShortName().EqualsIgnoreCaseAscii( rShortName ) )
+        if ( aIter->GetShortName().equalsIgnoreAsciiCase( rShortName ) )
             break;
     }
     return sal::static_int_cast< sal_uInt16 >(aIter == aExport.end() ? GRFILTER_FORMAT_NOTFOUND : aIter - aExport.begin());
 }
 
-sal_uInt16 FilterConfigCache::GetExportFormatNumberForTypeName( const String& rType )
+sal_uInt16 FilterConfigCache::GetExportFormatNumberForTypeName( const OUString& rType )
 {
     CacheVector::const_iterator aIter, aEnd;
     for (aIter = aExport.begin(), aEnd = aExport.end(); aIter != aEnd; ++aIter)
@@ -495,53 +495,53 @@ sal_uInt16 FilterConfigCache::GetExportFormatNumberForTypeName( const String& rT
     return sal::static_int_cast< sal_uInt16 >(aIter == aExport.end() ? GRFILTER_FORMAT_NOTFOUND : aIter - aExport.begin());
 }
 
-String FilterConfigCache::GetExportFormatName( sal_uInt16 nFormat )
+OUString FilterConfigCache::GetExportFormatName( sal_uInt16 nFormat )
 {
     if( nFormat < aExport.size() )
         return aExport[ nFormat ].sUIName;
-    return String::EmptyString();
+    return OUString("");
 }
 
-String FilterConfigCache::GetExportFormatMediaType( sal_uInt16 nFormat )
+OUString FilterConfigCache::GetExportFormatMediaType( sal_uInt16 nFormat )
 {
     if( nFormat < aExport.size() )
         return aExport[ nFormat ].sMediaType;
-    return String::EmptyString();
+    return OUString("");
 }
 
-String FilterConfigCache::GetExportFormatShortName( sal_uInt16 nFormat )
+OUString FilterConfigCache::GetExportFormatShortName( sal_uInt16 nFormat )
 {
     if( nFormat < aExport.size() )
         return aExport[ nFormat ].GetShortName();
-    return String::EmptyString();
+    return OUString("");
 }
 
-String FilterConfigCache::GetExportFormatExtension( sal_uInt16 nFormat, sal_Int32 nEntry )
+OUString FilterConfigCache::GetExportFormatExtension( sal_uInt16 nFormat, sal_Int32 nEntry )
 {
     if ( (nFormat < aExport.size()) && (nEntry < aExport[ nFormat ].lExtensionList.getLength()) )
         return aExport[ nFormat ].lExtensionList[ nEntry ];
-    return String::EmptyString();
+    return OUString("");
 }
 
-String FilterConfigCache::GetExportFilterTypeName( sal_uInt16 nFormat )
+OUString FilterConfigCache::GetExportFilterTypeName( sal_uInt16 nFormat )
 {
     if( nFormat < aExport.size() )
         return aExport[ nFormat ].sFilterType;
-    return String::EmptyString();
+    return OUString("");
 }
 
-String FilterConfigCache::GetExportInternalFilterName( sal_uInt16 nFormat )
+OUString FilterConfigCache::GetExportInternalFilterName( sal_uInt16 nFormat )
 {
     if( nFormat < aExport.size() )
         return aExport[ nFormat ].sInternalFilterName;
-    return String::EmptyString();
+    return OUString("");
 }
 
-String FilterConfigCache::GetExportWildcard( sal_uInt16 nFormat, sal_Int32 nEntry )
+OUString FilterConfigCache::GetExportWildcard( sal_uInt16 nFormat, sal_Int32 nEntry )
 {
-    String aWildcard( GetExportFormatExtension( nFormat, nEntry ) );
-    if ( aWildcard.Len() )
-        aWildcard.Insert( OUString("*."), 0 );
+    OUString aWildcard( GetExportFormatExtension( nFormat, nEntry ) );
+    if ( !aWildcard.isEmpty() )
+        aWildcard = aWildcard.replaceAt( 0, 0, "*." );
     return aWildcard;
 }
 

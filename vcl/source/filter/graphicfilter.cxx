@@ -796,12 +796,12 @@ sal_uInt16 GraphicFilter::ImpTestOrFindFormat( const OUString& rPath, SvStream& 
         aTmpStr = aTmpStr.toAsciiUpperCase();
         if( !ImpPeekGraphicFormat( rStream, aTmpStr, true ) )
             return GRFILTER_FORMATERROR;
-        if ( pConfig->GetImportFormatExtension( rFormat ).EqualsIgnoreCaseAscii( "pcd" ) )
+        if ( pConfig->GetImportFormatExtension( rFormat ).equalsIgnoreAsciiCase( "pcd" ) )
         {
             sal_Int32 nBase = 2;    // default Base0
-            if ( pConfig->GetImportFilterType( rFormat ).EqualsIgnoreCaseAscii( "pcd_Photo_CD_Base4" ) )
+            if ( pConfig->GetImportFilterType( rFormat ).equalsIgnoreAsciiCase( "pcd_Photo_CD_Base4" ) )
                 nBase = 1;
-            else if ( pConfig->GetImportFilterType( rFormat ).EqualsIgnoreCaseAscii( "pcd_Photo_CD_Base16" ) )
+            else if ( pConfig->GetImportFilterType( rFormat ).equalsIgnoreAsciiCase( "pcd_Photo_CD_Base16" ) )
                 nBase = 0;
             OUString aFilterConfigPath( "Office.Common/Filter/Graphic/Import/PCD" );
             FilterConfigItem aFilterConfigItem( aFilterConfigPath );
@@ -1803,7 +1803,7 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString
 
         for( sal_uInt16 i = 0; i < nFormatCount; i++ )
         {
-            if ( pConfig->GetExportFormatExtension( i ).EqualsIgnoreCaseAscii( aExt ) )
+            if ( pConfig->GetExportFormatExtension( i ).equalsIgnoreAsciiCase( aExt ) )
             {
                 nFormat=i;
                 break;

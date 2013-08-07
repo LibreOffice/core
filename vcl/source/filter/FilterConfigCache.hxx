@@ -48,12 +48,12 @@ class FilterConfigCache
         sal_Int32       nFileFormatVersion;
 
         // user data
-        String          sFilterName;
+        OUString        sFilterName;
         sal_Bool        bIsInternalFilter   : 1;
         sal_Bool        bIsPixelFormat      : 1;
 
         sal_Bool        CreateFilterName( const OUString& rUserDataEntry );
-        String          GetShortName( );
+        OUString        GetShortName( );
 
         static const char* InternalPixelFilterNameList[];
         static const char* InternalVectorFilterNameList[];
@@ -85,37 +85,37 @@ public:
 
     sal_uInt16  GetImportFormatCount() const
         { return sal::static_int_cast< sal_uInt16 >(aImport.size()); };
-    sal_uInt16  GetImportFormatNumber( const String& rFormatName );
-    sal_uInt16  GetImportFormatNumberForMediaType( const String& rMediaType );
-    sal_uInt16  GetImportFormatNumberForShortName( const String& rShortName );
-    sal_uInt16  GetImportFormatNumberForTypeName( const String& rType );
-    sal_uInt16  GetImportFormatNumberForExtension( const String& rExt );
-    String      GetImportFilterName( sal_uInt16 nFormat );
-    String      GetImportFormatName( sal_uInt16 nFormat );
-    String      GetImportFormatExtension( sal_uInt16 nFormat, sal_Int32 nEntry = 0);
-    String      GetImportFormatMediaType( sal_uInt16 nFormat );
-    String      GetImportFormatShortName( sal_uInt16 nFormat );
-    String      GetImportWildcard( sal_uInt16 nFormat, sal_Int32 nEntry );
-    String      GetImportFilterType( sal_uInt16 nFormat );
-    String      GetImportFilterTypeName( sal_uInt16 nFormat );
+    sal_uInt16  GetImportFormatNumber( const OUString& rFormatName );
+    sal_uInt16  GetImportFormatNumberForMediaType( const OUString& rMediaType );
+    sal_uInt16  GetImportFormatNumberForShortName( const OUString& rShortName );
+    sal_uInt16  GetImportFormatNumberForTypeName( const OUString& rType );
+    sal_uInt16  GetImportFormatNumberForExtension( const OUString& rExt );
+    OUString    GetImportFilterName( sal_uInt16 nFormat );
+    OUString    GetImportFormatName( sal_uInt16 nFormat );
+    OUString    GetImportFormatExtension( sal_uInt16 nFormat, sal_Int32 nEntry = 0);
+    OUString    GetImportFormatMediaType( sal_uInt16 nFormat );
+    OUString    GetImportFormatShortName( sal_uInt16 nFormat );
+    OUString    GetImportWildcard( sal_uInt16 nFormat, sal_Int32 nEntry );
+    OUString    GetImportFilterType( sal_uInt16 nFormat );
+    OUString    GetImportFilterTypeName( sal_uInt16 nFormat );
 
     sal_Bool    IsImportInternalFilter( sal_uInt16 nFormat );
     sal_Bool    IsImportPixelFormat( sal_uInt16 nFormat );
 
     sal_uInt16  GetExportFormatCount() const
         { return sal::static_int_cast< sal_uInt16 >(aExport.size()); };
-    sal_uInt16  GetExportFormatNumber( const String& rFormatName );
-    sal_uInt16  GetExportFormatNumberForMediaType( const String& rMediaType );
-    sal_uInt16  GetExportFormatNumberForShortName( const String& rShortName );
-    sal_uInt16  GetExportFormatNumberForTypeName( const String& rType );
-    String      GetExportFilterName( sal_uInt16 nFormat );
-    String      GetExportFormatName( sal_uInt16 nFormat );
-    String      GetExportFormatExtension( sal_uInt16 nFormat, sal_Int32 nEntry = 0 );
-    String      GetExportFormatMediaType( sal_uInt16 nFormat );
-    String      GetExportFormatShortName( sal_uInt16 nFormat );
-    String      GetExportWildcard( sal_uInt16 nFormat, sal_Int32 nEntry );
-    String      GetExportFilterTypeName( sal_uInt16 nFormat );
-    String      GetExportInternalFilterName( sal_uInt16 nFormat );
+    sal_uInt16  GetExportFormatNumber( const OUString& rFormatName );
+    sal_uInt16  GetExportFormatNumberForMediaType( const OUString& rMediaType );
+    sal_uInt16  GetExportFormatNumberForShortName( const OUString& rShortName );
+    sal_uInt16  GetExportFormatNumberForTypeName( const OUString& rType );
+    OUString    GetExportFilterName( sal_uInt16 nFormat );
+    OUString    GetExportFormatName( sal_uInt16 nFormat );
+    OUString    GetExportFormatExtension( sal_uInt16 nFormat, sal_Int32 nEntry = 0 );
+    OUString    GetExportFormatMediaType( sal_uInt16 nFormat );
+    OUString    GetExportFormatShortName( sal_uInt16 nFormat );
+    OUString    GetExportWildcard( sal_uInt16 nFormat, sal_Int32 nEntry );
+    OUString    GetExportFilterTypeName( sal_uInt16 nFormat );
+    OUString    GetExportInternalFilterName( sal_uInt16 nFormat );
 
     sal_Bool    IsExportInternalFilter( sal_uInt16 nFormat );
     sal_Bool    IsExportPixelFormat( sal_uInt16 nFormat );
