@@ -419,7 +419,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickAddHdl_Impl)
     {
         aName  = aNewName;
         aName += sal_Unicode(' ');
-        aName += OUString::valueOf( j++ );
+        aName += OUString::number( j++ );
         bDifferent = sal_True;
 
         for( long i = 0; i < nCount && bDifferent; i++ )
@@ -686,8 +686,6 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickLoadHdl_Impl)
                 MessageDialog( GetParentDialog()
                               ,"NoLoadedFileDialog"
                               ,"cui/ui/querynoloadedfiledialog.ui").Execute();
-//                 ErrorBox( GetParentDialog(), WinBits( WB_OK ),
-//                     String( ResId( RID_SVXSTR_READ_DATA_ERROR, rMgr ) ) ).Execute();
             }
         }
     }
