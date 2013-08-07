@@ -93,6 +93,7 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/querydeletedictionarydialog \
 	cui/uiconfig/ui/querydeletelineenddialog \
 	cui/uiconfig/ui/queryduplicatedialog \
+	cui/uiconfig/ui/querynoloadedfiledialog \
 	cui/uiconfig/ui/querysavelistdialog \
 	cui/uiconfig/ui/scriptorganizer \
 	cui/uiconfig/ui/securityoptionsdialog \
