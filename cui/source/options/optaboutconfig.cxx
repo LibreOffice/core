@@ -18,8 +18,11 @@
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/XProperty.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
+#include <com/sun/star/util/XChangesBatch.hpp>
 
+#include <vector>
 
 using namespace svx;
 using namespace ::com::sun::star;
@@ -30,6 +33,20 @@ using namespace com::sun::star::container;
 #define ITEMID_PROPERTY     2
 #define ITEMID_TYPE         3
 #define ITEMID_VALUE        4
+
+struct Prop_Impl
+{
+    OUString    Name;
+    OUString    Property;
+    Any         Value;
+
+    Prop_Impl( const OUString& sName, const OUString& sProperty, const Any& aValue )
+        : Name( sName )
+        , Property( sProperty )
+        , Value( aValue )
+    {
+    }
+};
 
 CuiAboutConfigTabPage::CuiAboutConfigTabPage( Window* pParent, const SfxItemSet& rItemSet )
     :SfxTabPage( pParent, "AboutConfig", "cui/ui/aboutconfigdialog.ui", rItemSet)
@@ -92,8 +109,10 @@ void CuiAboutConfigTabPage::Reset( const SfxItemSet& )
     OUString sRootNodePath = "/";
     pPrefBox->Clear();
 
+    VectorOfModified.clear();
+
     m_pDefaultBtn->Enable(sal_False);
-    m_pEditBtn->Enable(sal_False);
+    //m_pEditBtn->Enable(sal_False);
 
     const char* entries[] = {
            "/org.openoffice.Office.Common",
@@ -106,10 +125,35 @@ void CuiAboutConfigTabPage::Reset( const SfxItemSet& )
         Reference< XNameAccess > xConfigAccess = getConfigAccess( sRootNodePath, sal_False );
         FillItems( xConfigAccess, sRootNodePath );
     }
+}
 
-   //Reference< XNameAccess > xConfigAccess = getConfigAccess( sRootNodePath, sal_False );
+sal_Bool CuiAboutConfigTabPage::FillItemSet( SfxItemSet& )
+{
+    sal_Bool bModified = sal_False;
+    Reference< XNameAccess > xUpdateAccess = getConfigAccess( "/", sal_True );
+    //Reference< XNameReplace > xNameReplace( xUpdateAccess, UNO_QUERY_THROW );
 
-   //FillItems( xConfigAccess, sRootNodePath );
+    //if( !xNameReplace.is() )
+        //return bModified;
+
+    for( size_t nInd = 0; nInd < VectorOfModified.size(); ++nInd )
+    {
+        //beans::NamedValue aNamedValue = VectorOfModified[ nInd ];
+        Prop_Impl* aNamedValue = VectorOfModified[ nInd ];
+
+        xUpdateAccess = getConfigAccess( aNamedValue->Name , sal_True );
+        Reference< XNameReplace > xNameReplace( xUpdateAccess, UNO_QUERY_THROW );
+
+        xNameReplace->replaceByName( aNamedValue->Property, aNamedValue->Value );
+        bModified = sal_True;
+    }
+
+    Reference< util::XChangesBatch > xChangesBatch( xUpdateAccess, UNO_QUERY_THROW );
+
+    xChangesBatch->commitChanges();
+
+    return bModified;
+
 }
 
 void CuiAboutConfigTabPage::FillItems( Reference< XNameAccess >xNameAccess, OUString sPath)
@@ -221,7 +265,7 @@ void CuiAboutConfigTabPage::FillItems( Reference< XNameAccess >xNameAccess, OUSt
 
                     default:
                     {
-                        sValue = OUString("test");
+                        sValue = OUString("");
                     }
                 }
             }
@@ -264,6 +308,45 @@ Reference< XNameAccess > CuiAboutConfigTabPage::getConfigAccess( OUString sNodeP
     return xNameAccess;
 }
 
+//void CuiAboutConfigTabPage::AddToModifiedVector( beans::NamedValue& rProp )
+void CuiAboutConfigTabPage::AddToModifiedVector( Prop_Impl* rProp )
+{
+    bool isModifiedBefore = false;
+    //Check if value modified before
+    for( size_t nInd = 0; nInd < VectorOfModified.size() ; ++nInd )
+    {
+        if( rProp->Name == VectorOfModified[nInd]->Name && rProp->Value == VectorOfModified[nInd]->Value )
+        {
+            //property modified before. assing reference to the modified value
+            //do your changes on this object. They will be saved later.
+            VectorOfModified[nInd] = rProp;
+            isModifiedBefore = true;
+            break;
+        }
+    }
+
+    if( !isModifiedBefore )
+    {
+        VectorOfModified.push_back( rProp );
+    }
+    //property is not modified be
+}
+
+CuiAboutConfigValueDialog::CuiAboutConfigValueDialog( Window* pWindow, const OUString& rValue )
+    :ModalDialog( pWindow, "AboutConfigValueDialog", "cui/ui/aboutconfigvaluedialog.ui" )
+{
+    get(m_pBtnOK, "ok");
+    get(m_pBtnCancel, "cancel");
+    get(m_pEDValue, "valuebox");
+
+    m_pEDValue->SetText( rValue );
+
+}
+
+CuiAboutConfigValueDialog::~CuiAboutConfigValueDialog()
+{
+}
+
 IMPL_LINK( CuiAboutConfigTabPage, HeaderSelect_Impl, HeaderBar*, pBar )
 {
     if ( pBar && pBar->GetCurItemId() != ITEMID_TYPE )
@@ -295,18 +378,64 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl )
 {
     SvTreeListEntry* pEntry = pPrefBox->FirstSelected();
 
-    OUString sType = pPrefBox->GetEntryText( pEntry, 2 );
+    OUString sPropertyPath = pPrefBox->GetEntryText( pEntry, 0 );
+    OUString sPropertyName = pPrefBox->GetEntryText( pEntry, 1 );
+    OUString sPropertyType = pPrefBox->GetEntryText( pEntry, 2 );
+    OUString sPropertyValue = pPrefBox->GetEntryText( pEntry, 3 );
 
-    if( sType == OUString("boolean") )
+
+    //beans::NamedValue aProperty;
+
+    //aProperty.Name = sPropertyPath + OUString("/") + sPropertyName;
+
+    Prop_Impl* aProperty = new Prop_Impl( sPropertyPath, sPropertyName, makeAny( sPropertyValue ) );
+
+    bool bOpenDialog;
+    OUString sDialogValue;
+    OUString sNewValue;
+
+    if( sPropertyType == OUString( "boolean" ) )
     {
-        //TODO: this is just cosmetic, take all needed value and handle them properly
-        OUString sValue = pPrefBox->GetEntryText( pEntry, 3 );
-            if (sValue == OUString("true"))
-                pPrefBox->SetEntryText( OUString("false"), pEntry, 3 );
-            else if(sValue == OUString("false"))
-                pPrefBox->SetEntryText( OUString("true"), pEntry, 3 );
+        bool bValue;
+        if( sPropertyValue == OUString("true") )
+        {
+            sDialogValue = OUString("false");
+            bValue = false;
+        }
+        else
+        {
+            sDialogValue = OUString("true");
+            bValue = true;
+        }
+
+        aProperty->Value = uno::makeAny( bValue );
+        bOpenDialog = false;
+    }else// if ( sPropertyType == OUString( "string" ) )
+    {
+        //TODO: handle void etc.
+        sDialogValue = sPropertyValue;
+        bOpenDialog = true;
     }
-    //TODO: add other types
+
+
+    if( bOpenDialog )
+    {
+        CuiAboutConfigValueDialog* pValueDialog = new CuiAboutConfigValueDialog(0, sDialogValue);
+
+        bool ret = pValueDialog->Execute();
+        if( ret == RET_OK )
+        {
+            sNewValue = pValueDialog->getValue();
+            //TODO: parse the value according to the type?
+            aProperty->Value = uno::makeAny( sNewValue );
+            AddToModifiedVector( aProperty );
+
+            sDialogValue = sNewValue;
+        }
+    }
+
+    pPrefBox->SetEntryText( sDialogValue,  pEntry, 3 );
+    //TODO:update listbox value.
 
     return 0;
 
