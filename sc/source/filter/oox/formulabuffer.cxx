@@ -222,7 +222,7 @@ void FormulaBuffer::setCellFormulaValue( const ::com::sun::star::table::CellAddr
     cellFormulaValues[ rAddress.Sheet ].push_back( ValueAddressPair( rAddress, fValue ) );
 }
 
-void  FormulaBuffer::createSharedFormula( const ::com::sun::star::table::CellAddress& rAddress,  sal_Int32 nSharedId, const OUString& rTokenStr )
+void FormulaBuffer::createSharedFormula( const ::com::sun::star::table::CellAddress& rAddress,  sal_Int32 nSharedId, const OUString& rTokenStr )
 {
     ApiTokenSequence aTokens = getFormulaParser().importFormula( rAddress, rTokenStr );
     OUString aName = OUStringBuffer().appendAscii( RTL_CONSTASCII_STRINGPARAM( "__shared_" ) ).
