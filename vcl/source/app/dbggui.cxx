@@ -1557,9 +1557,9 @@ void DbgDialogTest( Window* pWindow )
 
 class DbgMessageBox : public ErrorBox
 {
-    String m_aMessage;
+    OUString m_aMessage;
     public:
-    DbgMessageBox( const String& rMessage ) :
+    DbgMessageBox( const OUString& rMessage ) :
        ErrorBox( NULL, WB_YES_NO_CANCEL | WB_DEF_NO, rMessage ),
        m_aMessage( rMessage )
     {
@@ -1722,7 +1722,7 @@ void DbgPrintWindow( const char* pLine )
         return;
     bIn = true;
 
-    SolarWindowPrinter aPrinter( String( pLine, RTL_TEXTENCODING_UTF8 ) );
+    SolarWindowPrinter aPrinter( OUString( pLine, strlen(pLine), RTL_TEXTENCODING_UTF8 ) );
     TimeValue aTimeout; aTimeout.Seconds = 2; aTimeout.Nanosec = 0;
     aPrinter.execute( aTimeout );
 

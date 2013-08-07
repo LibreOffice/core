@@ -876,9 +876,9 @@ void ComboBox::ImplUpdateFloatSelection()
     mpImplLB->SetCallSelectionChangedHdl( sal_False );
     if ( !IsMultiSelectionEnabled() )
     {
-        OUString   aSearchStr( mpSubEdit->GetText() );
-        sal_uInt16 nSelect = LISTBOX_ENTRY_NOTFOUND;
-        sal_Bool   bSelect = sal_True;
+        OUString        aSearchStr( mpSubEdit->GetText() );
+        sal_uInt16      nSelect = LISTBOX_ENTRY_NOTFOUND;
+        sal_Bool        bSelect = sal_True;
 
         if ( mpImplLB->GetCurrentPos() != LISTBOX_ENTRY_NOTFOUND )
         {

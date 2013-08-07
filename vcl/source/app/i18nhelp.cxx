@@ -125,8 +125,8 @@ sal_Int32 vcl::I18nHelper::CompareString( const OUString& rStr1, const OUString&
     }
 
 
-    String aStr1( filterFormattingChars(rStr1) );
-    String aStr2( filterFormattingChars(rStr2) );
+    OUString aStr1( filterFormattingChars(rStr1) );
+    OUString aStr2( filterFormattingChars(rStr2) );
     return ImplGetTransliterationWrapper().compareString( aStr1, aStr2 );
 }
 
@@ -143,8 +143,8 @@ sal_Bool vcl::I18nHelper::MatchString( const OUString& rStr1, const OUString& rS
         ((vcl::I18nHelper*)this)->mpTransliterationWrapper = NULL;
     }
 
-    String aStr1( filterFormattingChars(rStr1) );
-    String aStr2( filterFormattingChars(rStr2) );
+    OUString aStr1( filterFormattingChars(rStr1) );
+    OUString aStr2( filterFormattingChars(rStr2) );
     return ImplGetTransliterationWrapper().isMatch( aStr1, aStr2 );
 }
 

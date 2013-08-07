@@ -213,7 +213,7 @@ FieldUnitStringList* ImplGetFieldUnits()
             pSVData->maCtrlData.mpFieldUnitStrings->reserve( nUnits );
             for( sal_uInt32 i = 0; i < nUnits; i++ )
             {
-                std::pair< String, FieldUnit > aElement( aUnits.GetString(i), static_cast<FieldUnit>(aUnits.GetValue(i)) );
+                std::pair< OUString, FieldUnit > aElement( aUnits.GetString(i), static_cast<FieldUnit>(aUnits.GetValue(i)) );
                 pSVData->maCtrlData.mpFieldUnitStrings->push_back( aElement );
             }
         }
@@ -237,7 +237,7 @@ FieldUnitStringList* ImplGetCleanedFieldUnits()
                 OUString aUnit( (*pUnits)[i].first );
                 aUnit = comphelper::string::remove(aUnit, ' ');
                 aUnit = aUnit.toAsciiLowerCase();
-                std::pair< String, FieldUnit > aElement( aUnit, (*pUnits)[i].second );
+                std::pair< OUString, FieldUnit > aElement( aUnit, (*pUnits)[i].second );
                 pSVData->maCtrlData.mpCleanUnitStrings->push_back( aElement );
             }
         }

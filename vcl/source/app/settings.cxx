@@ -732,7 +732,7 @@ static BitmapEx readBitmapEx( const OUString& rPath )
 
     // import the image
     Graphic aGraphic;
-    if ( GraphicFilter::LoadGraphic( aPath, String(), aGraphic ) != GRFILTER_OK )
+    if ( GraphicFilter::LoadGraphic( aPath, OUString(), aGraphic ) != GRFILTER_OK )
         return BitmapEx();
 
     return aGraphic.GetBitmapEx();

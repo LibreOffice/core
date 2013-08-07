@@ -556,7 +556,7 @@ static Rectangle ImplCalcActionBounds( const MetaAction& rAct, const OutputDevic
             const OUString              aString( rTextAct.GetText().copy(rTextAct.GetIndex(), rTextAct.GetLen()) );
             const sal_Int32             nLen = aString.getLength();
 
-            if( nLen )
+            if( !aString.isEmpty() )
             {
                 // #105987# ImplLayout takes everything in logical coordinates
                 SalLayout* pSalLayout = rOut.ImplLayout( rTextAct.GetText(), rTextAct.GetIndex(),
@@ -587,7 +587,7 @@ static Rectangle ImplCalcActionBounds( const MetaAction& rAct, const OutputDevic
             // OutDev::DrawStretchText() code. Unfortunately, also in
             // this case, public outdev methods such as GetTextWidth()
             // don't provide enough info.
-            if( nLen )
+            if( !aString.isEmpty() )
             {
                 // #105987# ImplLayout takes everything in logical coordinates
                 SalLayout* pSalLayout = rOut.ImplLayout( rTextAct.GetText(), rTextAct.GetIndex(),
