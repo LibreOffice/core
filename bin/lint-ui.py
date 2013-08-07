@@ -14,11 +14,14 @@ import xml.etree.ElementTree as ET
 
 DEFAULT_WARNING_STR = 'Lint assertion failed'
 
-POSSIBLE_TOP_LEVEL_WIDGETS = ['GtkDialog', 'GtkBox', 'GtkFrame', 'GtkGrid']
+POSSIBLE_TOP_LEVEL_WIDGETS = ['GtkDialog', 'GtkMessageDialog', 'GtkBox', 'GtkFrame', 'GtkGrid']
 IGNORED_TOP_LEVEL_WIDGETS = ['GtkAdjustment', 'GtkImage', 'GtkListStore', 'GtkSizeGroup', 'GtkMenu', 'GtkTextBuffer']
 BORDER_WIDTH = '6'
 BUTTON_BOX_SPACING = '12'
 ALIGNMENT_TOP_PADDING = '6'
+#https://developer.gnome.org/hig-book/3.0/windows-alert.html.en#alert-spacing
+MESSAGE_BOX_SPACING = '24'
+MESSAGE_BORDER_WIDTH = '12'
 
 def lint_assert(predicate, warning=DEFAULT_WARNING_STR):
     if not predicate:
@@ -36,13 +39,22 @@ def check_top_level_widget(element):
         lint_assert(False, "No border_width set on top level widget. Should probably be " + BORDER_WIDTH)
     if len(border_width_properties) == 1:
         border_width = border_width_properties[0]
-        lint_assert(border_width.text == BORDER_WIDTH,
-                    "Top level 'border_width' property should be " + BORDER_WIDTH)
+        if widget_type == "GtkMessageDialog":
+            lint_assert(border_width.text == MESSAGE_BORDER_WIDTH,
+                        "Top level 'border_width' property should be " + MESSAGE_BORDER_WIDTH)
+        else:
+            lint_assert(border_width.text == BORDER_WIDTH,
+                        "Top level 'border_width' property should be " + BORDER_WIDTH)
 
 def check_button_box_spacing(element):
     spacing = element.findall("property[@name='spacing']")[0]
     lint_assert(spacing.text == BUTTON_BOX_SPACING,
                 "Button box 'spacing' should be " + BUTTON_BOX_SPACING)
+
+def check_message_box_spacing(element):
+    spacing = element.findall("property[@name='spacing']")[0]
+    lint_assert(spacing.text == MESSAGE_BOX_SPACING,
+                "Button box 'spacing' should be " + MESSAGE_BOX_SPACING)
 
 def check_frames(root):
     frames = [element for element in root.findall('.//object') if element.attrib['class'] == 'GtkFrame']
@@ -78,10 +90,15 @@ def main():
 
     # TODO - only do this if we have a GtkDialog?
     # check button box spacing
-    button_box = top_level_widget.findall("child[@id='dialog-vbox1']")
+    button_box = top_level_widget.findall("./child/object[@id='dialog-vbox1']")
     if len(button_box) > 0:
         element = button_box[0]
         check_button_box_spacing(element)
+
+    message_box = top_level_widget.findall("./child/object[@id='messagedialog-vbox']")
+    if len(message_box) > 0:
+        element = message_box[0]
+        check_message_box_spacing(element)
 
     check_frames(root)
 
