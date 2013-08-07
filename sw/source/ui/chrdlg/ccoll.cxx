@@ -162,7 +162,8 @@ int SwCondCollItem::operator==( const SfxPoolItem& rItem) const
     OSL_ENSURE( SfxPoolItem::operator==(rItem), "different types" );
     sal_Bool bReturn = sal_True;
     for(sal_uInt16 i = 0; i < COND_COMMAND_COUNT; i++)
-        if(sStyles[i] != ((SwCondCollItem&)rItem).sStyles[i])
+        if (m_sStyles[i] !=
+                static_cast<SwCondCollItem const&>(rItem).m_sStyles[i])
         {
             bReturn = sal_False;
             break;
@@ -171,15 +172,16 @@ int SwCondCollItem::operator==( const SfxPoolItem& rItem) const
     return bReturn;
 }
 
-const String&   SwCondCollItem::GetStyle(sal_uInt16 nPos) const
+OUString SwCondCollItem::GetStyle(sal_uInt16 const nPos) const
 {
-    return nPos < COND_COMMAND_COUNT ? sStyles[nPos] : aEmptyStr;
+    return (nPos < COND_COMMAND_COUNT) ? m_sStyles[nPos] : OUString();
 }
 
-void SwCondCollItem::SetStyle(const String* pStyle, sal_uInt16 nPos)
+void
+SwCondCollItem::SetStyle(OUString const*const pStyle, sal_uInt16 const nPos)
 {
     if( nPos < COND_COMMAND_COUNT )
-        sStyles[nPos] = pStyle ? *pStyle : aEmptyStr;
+        m_sStyles[nPos] = (pStyle) ? *pStyle : OUString();
 }
 
 const CommandStruct* SwCondCollItem::GetCmds()

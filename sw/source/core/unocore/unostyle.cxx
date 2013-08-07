@@ -1918,8 +1918,7 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
                         break;
                     }
 
-                    String tmp(aStyleName); //FIXME
-                    aCondItem.SetStyle( &tmp, nIdx);
+                    aCondItem.SetStyle(&aStyleName, nIdx);
                 }
                 else
                     bFailed = sal_True;
