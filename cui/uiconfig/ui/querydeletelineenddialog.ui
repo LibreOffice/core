@@ -9,7 +9,8 @@
     <property name="skip_taskbar_hint">True</property>
     <property name="message_type">question</property>
     <property name="buttons">yes-no</property>
-    <property name="text" translatable="yes">Do you want to delete the arrowhead ?</property>
+    <property name="text" translatable="yes">Do you really want to delete the arrowhead ?</property>
+    <property name="secondary_text" translatable="yes">This action cannot be undone.</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="messagedialog-vbox">
         <property name="can_focus">False</property>
