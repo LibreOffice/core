@@ -492,6 +492,9 @@ void SAL_CALL OConnection::commit() throw(SQLException, RuntimeException)
     {
         clearStatements();
         isc_commit_transaction(status_vector, &m_transactionHandle);
+        evaluateStatusVector(status_vector,
+                             "isc_commit_transaction",
+                             *this);
     }
 }
 
