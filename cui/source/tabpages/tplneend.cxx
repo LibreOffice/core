@@ -188,7 +188,9 @@ void SvxLineEndDefTabPage::CheckChanges_Impl()
 
         if( aString != m_pLbLineEnds->GetSelectEntry() )
         {
-            QueryBox aQueryBox( GetParentDialog(), WinBits( WB_YES_NO | WB_DEF_NO ), CUI_RESSTR( RID_SVXSTR_ASK_CHANGE_LINEEND ) );
+            MessageDialog aQueryBox( GetParentDialog()
+                                    ,"AskChangeLineEndDialog"
+                                    ,"cui/ui/querychangelineenddialog.ui");
 
             if ( aQueryBox.Execute() == RET_YES )
                 ClickModifyHdl_Impl( this );
