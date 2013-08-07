@@ -419,7 +419,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickAddHdl_Impl)
     {
         aName  = aNewName;
         aName += sal_Unicode(' ');
-        aName += OUString::valueOf( j++ );
+        aName += OUString::number( j++ );
         bDifferent = sal_True;
 
         for( long i = 0; i < nCount && bDifferent; i++ )

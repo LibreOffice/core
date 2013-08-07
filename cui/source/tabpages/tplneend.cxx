@@ -328,7 +328,6 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickModifyHdl_Impl)
             MessageDialog aWarningBox( GetParentDialog()
                                       ,"DuplicateNameDialog"
                                       ,"cui/ui/queryduplicatedialog.ui");
-//             aWarningBox.SetHelpId( HID_WARN_NAME_DUPLICATE );
             aWarningBox.Execute();
 
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
@@ -474,7 +473,6 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickAddHdl_Impl)
                 MessageDialog aBox( GetParentDialog()
                                    ,"DuplicateNameDialog"
                                    ,"cui/ui/queryduplicatedialog.ui");
-                //aBox.SetHelpId( HID_WARN_NAME_DUPLICATE );
                 aBox.Execute();
             }
         }

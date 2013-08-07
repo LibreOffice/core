@@ -589,8 +589,10 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickAddHdl_Impl)
         }
         else
         {
-            WarningBox aBox( GetParentDialog(), WinBits( WB_OK ),OUString( ResId( RID_SVXSTR_WARN_NAME_DUPLICATE, rMgr ) ) );
-            aBox.SetHelpId( HID_WARN_NAME_DUPLICATE );
+
+            MessageDialog aBox( GetParentDialog()
+                                ,"DuplicateNameDialog"
+                                ,"cui/ui/queryduplicatedialog.ui");
             aBox.Execute();
         }
     }
@@ -667,8 +669,9 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickModifyHdl_Impl)
             }
             else
             {
-                WarningBox aBox( GetParentDialog(), WinBits( WB_OK ), OUString( ResId( RID_SVXSTR_WARN_NAME_DUPLICATE, rMgr ) ) );
-                aBox.SetHelpId( HID_WARN_NAME_DUPLICATE );
+                MessageDialog aBox( GetParentDialog()
+                                   ,"DuplicateNameDialog"
+                                   ,"cui/ui/queryduplicatedialog.ui");
                 aBox.Execute();
             }
         }
@@ -685,7 +688,9 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickDeleteHdl_Impl)
 
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        QueryBox aQueryBox( GetParentDialog(), WinBits( WB_YES_NO | WB_DEF_NO ), OUString( CUI_RES( RID_SVXSTR_ASK_DEL_LINESTYLE ) ) );
+        MessageDialog aQueryBox( GetParentDialog()
+                                ,"AskDelLineStyleDialog"
+                                ,"cui/ui/querydeletelinestyledialog.ui");
 
         if ( aQueryBox.Execute() == RET_YES )
         {
@@ -721,7 +726,9 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickLoadHdl_Impl)
 
     if ( *pnDashListState & CT_MODIFIED )
     {
-        nReturn = WarningBox( GetParentDialog(), WinBits( WB_YES_NO_CANCEL ), OUString( ResId( RID_SVXSTR_WARN_TABLE_OVERWRITE, rMgr ) ) ).Execute();
+        nReturn = MessageDialog( GetParentDialog()
+                                ,"AskSaveList"
+                                ,"cui/ui/querysavelistdialog.ui").Execute();
 
         if ( nReturn == RET_YES )
             pDashList->Save();
@@ -762,7 +769,9 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickLoadHdl_Impl)
             }
             else
                 //aIStream.Close();
-                ErrorBox( GetParentDialog(), WinBits( WB_OK ), OUString( ResId( RID_SVXSTR_READ_DATA_ERROR, rMgr ) ) ).Execute();
+                MessageDialog( GetParentDialog()
+                              ,"NoLoadedFileDialog"
+                              ,"cui/ui/querynoloadedfiledialog.ui").Execute();
         }
     }
 

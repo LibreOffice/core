@@ -51,10 +51,6 @@ String RID_SVXSTR_DESC_LINESTYLE
 {
     Text [ en-US ] = "Please enter a name for the line style:" ;
 };
-String RID_SVXSTR_ASK_DEL_LINESTYLE
-{
-    Text [ en-US ] = "Do you want to delete the line style?" ;
-};
 String RID_SVXSTR_ASK_CHANGE_LINESTYLE
 {
     Text [ en-US ] = "The line style was modified without saving. \nModify the selected line style or add a new line style." ;
