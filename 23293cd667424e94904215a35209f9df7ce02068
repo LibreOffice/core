@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//9Tw\u003d",
+        "filename": "cui/source/options/optaboutconfig.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-08-07T18:27:08Z",
+      "side": 1,
+      "message": "Why a 16 bit integer here?\n(worth checking in the whole file for other, similar cases) ;)",
+      "revId": "23293cd667424e94904215a35209f9df7ce02068",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//9Ts\u003d",
+        "filename": "cui/source/options/optaboutconfig.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-08-07T18:27:08Z",
+      "side": 1,
+      "message": "sal_Bool is a rather nasty type (ok, we have to use it for UNO interfaces) - best use plain bool if you can.",
+      "revId": "23293cd667424e94904215a35209f9df7ce02068",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
