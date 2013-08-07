@@ -1185,9 +1185,9 @@ ImplDevFontAttributes GenPspGraphics::Info2DevFontAttributes( const psp::FastPri
     for(; it != rInfo.m_aAliases.end(); ++it )
     {
         if( bHasMapNames )
-            aDFA.maMapNames.Append( ';' );
-        aDFA.maMapNames.Append( (*it).getStr() );
-    bHasMapNames = true;
+            aDFA.maMapNames += OUString(';');
+        aDFA.maMapNames += *it;
+        bHasMapNames = true;
     }
 
 #if OSL_DEBUG_LEVEL > 2

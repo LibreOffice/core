@@ -432,9 +432,9 @@ Font OutputDevice::GetDefaultFont( sal_uInt16 nType, LanguageType eLang,
             LanguageTag( eLang ));
 
     utl::DefaultFontConfiguration& rDefaults = utl::DefaultFontConfiguration::get();
-    String aSearch = rDefaults.getUserInterfaceFont( aLanguageTag ); // ensure a fallback
-    String aDefault = rDefaults.getDefaultFont( aLanguageTag, nType );
-    if( aDefault.Len() )
+    OUString aSearch = rDefaults.getUserInterfaceFont( aLanguageTag ); // ensure a fallback
+    OUString aDefault = rDefaults.getDefaultFont( aLanguageTag, nType );
+    if( !aDefault.isEmpty() )
         aSearch = aDefault;
 
     Font aFont;
@@ -488,7 +488,7 @@ Font OutputDevice::GetDefaultFont( sal_uInt16 nType, LanguageType eLang,
             break;
     }
 
-    if ( aSearch.Len() )
+    if ( !aSearch.isEmpty() )
     {
         aFont.SetHeight( 12 ); // corresponds to nDefaultHeight
         aFont.SetWeight( WEIGHT_NORMAL );
@@ -533,7 +533,7 @@ Font OutputDevice::GetDefaultFont( sal_uInt16 nType, LanguageType eLang,
                 if( !pOutDev )
                 {
                     sal_Int32 nIndex = 0;
-                    aFont.SetName( aSearch.GetToken( 0, ';', nIndex ) );
+                    aFont.SetName( aSearch.getToken( 0, ';', nIndex ) );
                 }
                 else
                 {
@@ -1237,7 +1237,7 @@ void ImplDevFontList::InitGenericGlyphFallback( void ) const
         }
 
         // test if the glyph fallback candidate font is available and scalable
-        String aTokenName( *ppNames, RTL_TEXTENCODING_UTF8 );
+        OUString aTokenName( *ppNames, strlen(*ppNames), RTL_TEXTENCODING_UTF8 );
         ImplDevFontListData* pFallbackFont = FindFontFamily( aTokenName );
         if( !pFallbackFont )
             continue;
@@ -1450,7 +1450,7 @@ ImplDevFontListData* ImplDevFontList::ImplFindByAliasName(const OUString& rSearc
      return NULL;
 }
 
-ImplDevFontListData* ImplDevFontList::FindFontFamily( const String& rFontName ) const
+ImplDevFontListData* ImplDevFontList::FindFontFamily( const OUString& rFontName ) const
 {
     // normalize the font family name and
     OUString aName = rFontName;
@@ -1501,7 +1501,7 @@ ImplDevFontListData* ImplDevFontList::ImplFindBySubstFontAttr( const utl::FontNa
         const FontWeight eSearchWeight = rFontAttr.Weight;
         const FontWidth  eSearchWidth  = rFontAttr.Width;
         const FontItalic eSearchSlant  = ITALIC_DONTKNOW;
-        const String aSearchName;
+        const OUString aSearchName;
         pFoundData = ImplFindByAttributes( nSearchType,
             eSearchWeight, eSearchWidth, eSearchSlant, aSearchName );
         if( pFoundData )
@@ -1524,7 +1524,7 @@ void ImplDevFontList::InitMatchData() const
     DevFontList::const_iterator it = maDevFontList.begin();
     for(; it != maDevFontList.end(); ++it )
     {
-        const String& rSearchName = (*it).first;
+        const OUString& rSearchName = (*it).first;
         ImplDevFontListData* pEntry = (*it).second;
 
         pEntry->InitMatchData( rFontSubst, rSearchName );
@@ -1613,17 +1613,17 @@ ImplDevFontListData* ImplDevFontList::ImplFindByAttributes( sal_uLong nSearchTyp
         // test SYMBOL attributes
         if ( nSearchType & IMPL_FONT_ATTR_SYMBOL )
         {
-            const String& rSearchName = it->first;
+            const OUString& rSearchName = it->first;
             // prefer some special known symbol fonts
-            if ( rSearchName.EqualsAscii( "starsymbol" ) )
+            if ( rSearchName.equalsAscii( "starsymbol" ) )
                 nTestMatch += 10000000*6+(10000*3);
-            else if ( rSearchName.EqualsAscii( "opensymbol" ) )
+            else if ( rSearchName.equalsAscii( "opensymbol" ) )
                 nTestMatch += 10000000*6;
-            else if ( rSearchName.EqualsAscii( "starbats" )
-            ||        rSearchName.EqualsAscii( "wingdings" )
-            ||        rSearchName.EqualsAscii( "monotypesorts" )
-            ||        rSearchName.EqualsAscii( "dingbats" )
-            ||        rSearchName.EqualsAscii( "zapfdingbats" ) )
+            else if ( rSearchName.equalsAscii( "starbats" )
+            ||        rSearchName.equalsAscii( "wingdings" )
+            ||        rSearchName.equalsAscii( "monotypesorts" )
+            ||        rSearchName.equalsAscii( "dingbats" )
+            ||        rSearchName.equalsAscii( "zapfdingbats" ) )
                 nTestMatch += 10000000*5;
             else if ( pData->mnTypeFaces & IMPL_DEVFONT_SYMBOL )
                 nTestMatch += 10000000*4;
@@ -1894,7 +1894,7 @@ ImplDevFontListData* ImplDevFontList::FindDefaultFont() const
     // UNICODE, SANSSERIF, SERIF or FIXED default font lists
     const DefaultFontConfiguration& rDefaults = DefaultFontConfiguration::get();
     LanguageTag aLanguageTag( OUString( "en"));
-    String aFontname = rDefaults.getDefaultFont( aLanguageTag, DEFAULTFONT_SANS_UNICODE );
+    OUString aFontname = rDefaults.getDefaultFont( aLanguageTag, DEFAULTFONT_SANS_UNICODE );
     ImplDevFontListData* pFoundData = ImplFindByTokenNames( aFontname );
     if( pFoundData )
         return pFoundData;
@@ -1973,7 +1973,7 @@ ImplGetDevFontList* ImplDevFontList::GetDevFontList() const
     return pGetDevFontList;
 }
 
-ImplGetDevSizeList* ImplDevFontList::GetDevSizeList( const String& rFontName ) const
+ImplGetDevSizeList* ImplDevFontList::GetDevSizeList( const OUString& rFontName ) const
 {
     ImplGetDevSizeList* pGetDevSizeList = new ImplGetDevSizeList( rFontName );
 
@@ -1992,7 +1992,7 @@ ImplGetDevSizeList* ImplDevFontList::GetDevSizeList( const String& rFontName ) c
 }
 
 FontSelectPatternAttributes::FontSelectPatternAttributes( const Font& rFont,
-    const String& rSearchName, const Size& rSize, float fExactHeight )
+    const OUString& rSearchName, const Size& rSize, float fExactHeight )
     : maSearchName( rSearchName )
     , mnWidth( rSize.Width() )
     , mnHeight( rSize.Height() )
@@ -2024,7 +2024,7 @@ FontSelectPatternAttributes::FontSelectPatternAttributes( const Font& rFont,
 }
 
 FontSelectPattern::FontSelectPattern( const Font& rFont,
-    const String& rSearchName, const Size& rSize, float fExactHeight)
+    const OUString& rSearchName, const Size& rSize, float fExactHeight)
     : FontSelectPatternAttributes(rFont, rSearchName, rSize, fExactHeight)
     , mpFontData( NULL )
     , mpFontEntry( NULL )
@@ -2208,7 +2208,7 @@ ImplFontCache::~ImplFontCache()
 ImplFontEntry* ImplFontCache::GetFontEntry( ImplDevFontList* pFontList,
     const Font& rFont, const Size& rSize, float fExactHeight, ImplDirectFontSubstitution* pDevSpecific )
 {
-    String aSearchName = rFont.GetName();
+    OUString aSearchName = rFont.GetName();
 
     // initialize internal font request object
     FontSelectPattern aFontSelData( rFont, aSearchName, rSize, fExactHeight );
@@ -2374,10 +2374,10 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( FontSelectPattern& rFSD,
         // Until features are properly supported, they are appended to the
         // font name, so we need to strip them off so the font is found.
         sal_Int32 nFeat = aSearchName.indexOf(grutils::GrFeatureParser::FEAT_PREFIX);
-        String aOrigName = rFSD.maTargetName;
-        String aBaseFontName(aSearchName, 0, (nFeat != -1)?nFeat:aSearchName.getLength());
-        if (nFeat != -1 && -1 !=
-            aSearchName.indexOf(grutils::GrFeatureParser::FEAT_ID_VALUE_SEPARATOR, nFeat))
+        OUString aOrigName = rFSD.maTargetName;
+        OUString aBaseFontName = aSearchName.copy( 0, (nFeat != -1) ? nFeat : aSearchName.getLength() );
+        if (nFeat != -1 &&
+            -1 != aSearchName.indexOf(grutils::GrFeatureParser::FEAT_ID_VALUE_SEPARATOR, nFeat))
         {
             aSearchName = aBaseFontName;
             rFSD.maTargetName = aBaseFontName;
@@ -2694,7 +2694,7 @@ ImplFontEntry* ImplFontCache::GetGlyphFallbackFont( ImplDevFontList* pFontList,
         // override the font name
         rFontSelData.SetFamilyName( pFallbackData->GetFamilyName() );
         // clear the cached normalized name
-        rFontSelData.maSearchName = String();
+        rFontSelData.maSearchName = OUString();
     }
 
     // get device font without doing device specific substitutions
@@ -2842,12 +2842,12 @@ void OutputDevice::ImplInitFontList() const
     }
     if( meOutDevType == OUTDEV_WINDOW && ! mpFontList->Count() )
     {
-        String aError( "Application error: no fonts and no vcl resource found on your system" );
+        OUString aError( "Application error: no fonts and no vcl resource found on your system" );
         ResMgr* pMgr = ImplGetResMgr();
         if( pMgr )
         {
-            String aResStr(ResId(SV_ACCESSERROR_NO_FONTS, *pMgr).toString());
-            if( aResStr.Len() )
+            OUString aResStr(ResId(SV_ACCESSERROR_NO_FONTS, *pMgr).toString());
+            if( !aResStr.isEmpty() )
                 aError = aResStr;
         }
         Application::Abort( aError );
@@ -4739,11 +4739,11 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
                             {
                                 // #104415# May happen, because getLineBreak may differ from getWordBoudary with DICTIONARY_WORD
                                 // DBG_ASSERT( nWordEnd >= nMaxBreakPos, "Hyph: Break?" );
-                                String aWord( aText, nWordStart, nWordLen );
+                                OUString aWord = aText.copy( nWordStart, nWordLen );
                                 sal_uInt16 nMinTrail = static_cast<sal_uInt16>(nWordEnd-nSoftBreak+1);  //+1: Before the "broken off" char
                                 uno::Reference< linguistic2::XHyphenatedWord > xHyphWord;
                                 if (xHyph.is())
-                                    xHyphWord = xHyph->hyphenate( aWord, rDefLocale, aWord.Len() - nMinTrail, uno::Sequence< beans::PropertyValue >() );
+                                    xHyphWord = xHyph->hyphenate( aWord, rDefLocale, aWord.getLength() - nMinTrail, uno::Sequence< beans::PropertyValue >() );
                                 if (xHyphWord.is())
                                 {
                                     sal_Bool bAlternate = xHyphWord->isAlternativeSpelling();
@@ -4757,7 +4757,7 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
                                         }
                                         else
                                         {
-                                            String aAlt( xHyphWord->getHyphenatedWord() );
+                                            OUString aAlt( xHyphWord->getHyphenatedWord() );
 
                                             // We can have two cases:
                                             // 1) "packen" turns into "pak-ken"
@@ -4774,14 +4774,14 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
                                             // TODO: The whole junk will be made easier by a function in
                                             // the Hyphenator, as soon as AMA adds it.
                                             sal_uInt16 nAltStart = _nWordLen - 1;
-                                            sal_uInt16 nTxtStart = nAltStart - (aAlt.Len() - aWord.Len());
+                                            sal_uInt16 nTxtStart = nAltStart - (aAlt.getLength() - aWord.getLength());
                                             sal_uInt16 nTxtEnd = nTxtStart;
                                             sal_uInt16 nAltEnd = nAltStart;
 
                                             // The area between nStart and nEnd is the difference
                                             // between AlternativString and OriginalString
-                                            while( nTxtEnd < aWord.Len() && nAltEnd < aAlt.Len() &&
-                                                   aWord.GetChar(nTxtEnd) != aAlt.GetChar(nAltEnd) )
+                                            while( nTxtEnd < aWord.getLength() && nAltEnd < aAlt.getLength() &&
+                                                   aWord[nTxtEnd] != aAlt[nAltEnd] )
                                             {
                                                 ++nTxtEnd;
                                                 ++nAltEnd;
@@ -4789,7 +4789,7 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
 
                                             // If a char was added, we notice it now:
                                             if( nAltEnd > nTxtEnd && nAltStart == nAltEnd &&
-                                                aWord.GetChar( nTxtEnd ) == aAlt.GetChar(nAltEnd) )
+                                                aWord[ nTxtEnd ] == aAlt[nAltEnd] )
                                             {
                                                 ++nAltEnd;
                                                 ++nTxtStart;
@@ -4799,7 +4799,7 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
                                             DBG_ASSERT( ( nAltEnd - nAltStart ) == 1, "Alternate: Wrong assumption!" );
 
                                             if ( nTxtEnd > nTxtStart )
-                                                cAlternateReplChar = aAlt.GetChar( nAltStart );
+                                                cAlternateReplChar = aAlt[ nAltStart ];
 
                                             nBreakPos = nWordStart + nTxtStart;
                                             if ( cAlternateReplChar )
@@ -4860,9 +4860,9 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
     for ( sal_uInt16 nL = 0; nL < rLineInfo.Count(); nL++ )
     {
         ImplTextLineInfo* pLine = rLineInfo.GetLine( nL );
-        String aLine( rStr, pLine->GetIndex(), pLine->GetLen() );
-        DBG_ASSERT( aLine.Search( '\r' ) == STRING_NOTFOUND, "ImplGetTextLines - Found CR!" );
-        DBG_ASSERT( aLine.Search( '\n' ) == STRING_NOTFOUND, "ImplGetTextLines - Found LF!" );
+        OUString aLine = rStr.copy( pLine->GetIndex(), pLine->GetLen() );
+        DBG_ASSERT( aLine.indexOf( '\r' ) == -1, "ImplGetTextLines - Found CR!" );
+        DBG_ASSERT( aLine.indexOf( '\n' ) == -1, "ImplGetTextLines - Found LF!" );
     }
 #endif
 

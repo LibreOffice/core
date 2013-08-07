@@ -95,7 +95,7 @@ private:
 class ImplDevFontAttributes : public ImplFontAttributes
 {
 public: // TODO: create matching interface class
-    const String&      GetAliasNames() const     { return maMapNames; }
+    const OUString&    GetAliasNames() const     { return maMapNames; }
     int                GetQuality() const        { return mnQuality; }
     bool               IsRotatable() const       { return mbOrientation; }
     bool               IsDeviceFont() const      { return mbDevice; }
@@ -103,7 +103,7 @@ public: // TODO: create matching interface class
     bool               IsSubsettable() const     { return mbSubsettable; }
 
 public: // TODO: hide members behind accessor methods
-    String             maMapNames;       // List of family name aliass separated with ';'
+    OUString           maMapNames;       // List of family name aliass separated with ';'
     int                mnQuality;        // Quality (used when similar fonts compete)
     bool               mbOrientation;    // true: physical font can be rotated
     bool               mbDevice;         // true: built in font
@@ -159,7 +159,7 @@ friend class ImplDevFontListData;
 class FontSelectPatternAttributes : public ImplFontAttributes
 {
 public:
-                        FontSelectPatternAttributes( const Font&, const String& rSearchName,
+                        FontSelectPatternAttributes( const Font&, const OUString& rSearchName,
                             const Size&, float fExactHeight );
                         FontSelectPatternAttributes( const PhysicalFontFace&, const Size&,
                             float fExactHeight, int nOrientation, bool bVertical );
@@ -189,7 +189,7 @@ public:
 class FontSelectPattern : public FontSelectPatternAttributes
 {
 public:
-                        FontSelectPattern( const Font&, const String& rSearchName,
+                        FontSelectPattern( const Font&, const OUString& rSearchName,
                             const Size&, float fExactHeight );
 #ifdef WNT
 // ifdeffed to prevent it going into unusedcode.easy
@@ -216,7 +216,7 @@ private:
     mutable bool            mbMatchData;    // true if matching attributes are initialized
     bool                    mbMapNames;     // true if MapNames are available
 
-    typedef boost::unordered_map<const String, ImplDevFontListData*,FontNameHash> DevFontList;
+    typedef boost::unordered_map<const OUString, ImplDevFontListData*,FontNameHash> DevFontList;
     DevFontList             maDevFontList;
 
     ImplPreMatchFontSubstitution* mpPreMatchHook;       // device specific prematch substitution
@@ -232,7 +232,7 @@ public:
     int                     Count() const { return maDevFontList.size(); }
 
     // find the device font
-    ImplDevFontListData*    FindFontFamily( const String& rFontName ) const;
+    ImplDevFontListData*    FindFontFamily( const OUString& rFontName ) const;
     ImplDevFontListData*    ImplFindByFont( FontSelectPattern&, bool bPrinter, ImplDirectFontSubstitution* ) const;
     ImplDevFontListData*    ImplFindBySearchName( const OUString& ) const;
 
@@ -247,7 +247,7 @@ public:
     // misc utilities
     ImplDevFontList*        Clone( bool bScalable, bool bEmbeddable ) const;
     ImplGetDevFontList*     GetDevFontList() const;
-    ImplGetDevSizeList*     GetDevSizeList( const String& rFontName ) const;
+    ImplGetDevSizeList*     GetDevSizeList( const OUString& rFontName ) const;
 
     ImplDevFontListData*    ImplFindByTokenNames(const OUString& rTokenStr) const;
 
