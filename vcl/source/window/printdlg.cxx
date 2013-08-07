@@ -75,8 +75,8 @@ PrintDialog::PrintPreviewWindow::PrintPreviewWindow( Window* i_pParent )
     maHorzDim.Show();
     maVertDim.Show();
 
-    maHorzDim.SetText( String( "2.0in" ) );
-    maVertDim.SetText( String( "2.0in" ) );
+    maHorzDim.SetText( OUString( "2.0in" ) );
+    maVertDim.SetText( OUString( "2.0in" ) );
 }
 
 PrintDialog::PrintPreviewWindow::~PrintPreviewWindow()
@@ -230,7 +230,7 @@ void PrintDialog::PrintPreviewWindow::setPreview( const GDIMetaFile& i_rNewPrevi
         nDigits = 2;
     }
     Size aLogicPaperSize( LogicToLogic( i_rOrigSize, MapMode( MAP_100TH_MM ), MapMode( eUnit ) ) );
-    String aNumText( rLocWrap.getNum( aLogicPaperSize.Width(), nDigits ) );
+    OUString aNumText( rLocWrap.getNum( aLogicPaperSize.Width(), nDigits ) );
     aBuf.append( aNumText );
     aBuf.appendAscii( eUnit == MAP_MM ? "mm" : "in" );
     if( !i_rPaperName.isEmpty() )
@@ -618,7 +618,7 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterCont
     {
         // fall back to last printer
         SettingsConfigItem* pItem = SettingsConfigItem::get();
-        String aValue( pItem->getValue( OUString( "PrintDialog"  ),
+        OUString aValue( pItem->getValue( OUString( "PrintDialog"  ),
                                         OUString( "LastPrinter"  ) ) );
         if( maJobPage.mpPrinters->GetEntryPos( aValue ) != LISTBOX_ENTRY_NOTFOUND )
         {
@@ -1261,9 +1261,9 @@ void PrintDialog::updatePrinterText()
     }
     else
     {
-        maJobPage.mpLocationTxt->SetText( String() );
-        maJobPage.mpCommentTxt->SetText( String() );
-        maJobPage.mpStatusTxt->SetText( String() );
+        maJobPage.mpLocationTxt->SetText( OUString() );
+        maJobPage.mpCommentTxt->SetText( OUString() );
+        maJobPage.mpStatusTxt->SetText( OUString() );
     }
 }
 
@@ -1484,7 +1484,7 @@ IMPL_LINK( PrintDialog, SelectHdl, ListBox*, pBox )
 {
     if(  pBox == maJobPage.mpPrinters )
     {
-        String aNewPrinter( pBox->GetSelectEntry() );
+        OUString aNewPrinter( pBox->GetSelectEntry() );
         // set new printer
         maPController->setPrinter( boost::shared_ptr<Printer>( new Printer( aNewPrinter ) ) );
         maPController->resetPrinterOptions( maOptionsPage.mpToFileBox->IsChecked() );

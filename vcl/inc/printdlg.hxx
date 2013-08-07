@@ -270,7 +270,7 @@ namespace vcl
 
     class PrintProgressDialog : public ModelessDialog
     {
-        String              maStr;
+        OUString            maStr;
         FixedText           maText;
         CancelButton        maButton;
 
