@@ -307,9 +307,18 @@ public:
     void finalizeDrawingImport();
 
     void                setCellFormula( const ::com::sun::star::table::CellAddress& rTokenAddress, const OUString&  );
-    void                setCellFormula( const ::com::sun::star::table::CellAddress& rTokenAddress, sal_Int32  );
+
+    void setCellFormula(
+        const com::sun::star::table::CellAddress& rAddr, sal_Int32 nSharedId,
+        const OUString& rCellValue, sal_Int32 nValueType );
+
     void                setCellArrayFormula( const ::com::sun::star::table::CellRangeAddress& rRangeAddress, const ::com::sun::star::table::CellAddress& rTokenAddress, const OUString&  );
-    void                createSharedFormulaMapEntry( const ::com::sun::star::table::CellAddress& rAddress, sal_Int32 nSharedId, const OUString& rTokens );
+
+    void createSharedFormulaMapEntry(
+        const com::sun::star::table::CellAddress& rAddress,
+        const com::sun::star::table::CellRangeAddress& rRange,
+        sal_Int32 nSharedId, const OUString& rTokens );
+
     void                setCellFormulaValue( const ::com::sun::star::table::CellAddress& rAddress,
                             double fValue  );
 private:

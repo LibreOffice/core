@@ -157,7 +157,7 @@ void SheetDataContext::onCharacters( const OUString& rChars )
         case XLS_TOKEN( f ):
             if( maFmlaData.mnFormulaType != XML_TOKEN_INVALID )
             {
-                  maFormulaStr = rChars;
+                maFormulaStr = rChars;
             }
         break;
     }
@@ -187,10 +187,9 @@ void SheetDataContext::onEndElement()
                 if( maFmlaData.mnSharedId >= 0 )
                 {
                     if( mbValidRange && maFmlaData.isValidSharedRef( maCellData.maCellAddr ) )
-                    {
-                        createSharedFormulaMapEntry( maCellData.maCellAddr, maFmlaData.mnSharedId, maFormulaStr );
-                    }
-                    setCellFormula( maCellData.maCellAddr, maFmlaData.mnSharedId );
+                        createSharedFormulaMapEntry(maCellData.maCellAddr, maFmlaData.maFormulaRef, maFmlaData.mnSharedId, maFormulaStr);
+
+                    setCellFormula(maCellData.maCellAddr, maFmlaData.mnSharedId, maCellValue, maCellData.mnCellType);
                     mrSheetData.setCellFormat( maCellData );
                 }
                 else

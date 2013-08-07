@@ -156,7 +156,7 @@ public:
 
     /** Returns a reference to the specified spreadsheet in the document model. */
     ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheet >
-                        getSheetFromDoc( sal_Int16 nSheet ) const;
+                        getSheetFromDoc( sal_Int32 nSheet ) const;
     /** Returns a reference to the specified spreadsheet in the document model. */
     ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheet >
                         getSheetFromDoc( const OUString& rSheet ) const;

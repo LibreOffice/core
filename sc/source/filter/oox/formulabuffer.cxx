@@ -22,14 +22,25 @@
 #include "autonamecache.hxx"
 #include "tokenuno.hxx"
 #include "tokenarray.hxx"
+#include "oox/token/tokens.hxx"
 
-namespace oox {
-namespace xls {
-
+using namespace com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::container;
+
+namespace oox { namespace xls {
+
+FormulaBuffer::FormulaBuffer::SharedFormulaEntry::SharedFormulaEntry(
+    const table::CellAddress& rAddr, const table::CellRangeAddress& rRange,
+    const OUString& rTokenStr, sal_Int32 nSharedId ) :
+    maAddress(rAddr), maRange(rRange), maTokenStr(rTokenStr), mnSharedId(nSharedId) {}
+
+FormulaBuffer::FormulaBuffer::SharedFormulaDesc::SharedFormulaDesc(
+    const com::sun::star::table::CellAddress& rAddr, sal_Int32 nSharedId,
+    const OUString& rCellValue, sal_Int32 nValueType ) :
+    maAddress(rAddr), mnSharedId(nSharedId), maCellValue(rCellValue), mnValueType(nValueType) {}
 
 FormulaBuffer::FormulaBuffer( const WorkbookHelper& rHelper ) : WorkbookHelper( rHelper )
 {
@@ -55,43 +66,13 @@ void FormulaBuffer::finalizeImport()
     ScDocument& rDoc = getScDocument();
     Reference< XIndexAccess > xSheets( getDocument()->getSheets(), UNO_QUERY_THROW );
     rDoc.SetAutoNameCache( new ScAutoNameCache( &rDoc ) );
-    for ( sal_Int16 nTab = 0, nElem = xSheets->getCount(); nTab < nElem; ++nTab )
+    for ( sal_Int32 nTab = 0, nElem = xSheets->getCount(); nTab < nElem; ++nTab )
     {
         double fPosition = static_cast< double> (nTab + 1) /static_cast<double>(nElem);
         xFormulaBar->setPosition( fPosition );
         mxCurrSheet = getSheetFromDoc( nTab );
-        // process shared Formula
-        SheetToFormulaEntryMap::iterator sharedIt = sharedFormulas.find( nTab );
-        if ( sharedIt != sharedFormulas.end() )
-        {
-            // shared id ( to create the special shared names from )
-            std::vector<SharedFormulaEntry>& rSharedFormulas = sharedIt->second;
-            for ( std::vector<SharedFormulaEntry>::iterator it = rSharedFormulas.begin(), it_end = rSharedFormulas.end(); it != it_end; ++it )
-            {
-                 createSharedFormula( it->maAddress, it->mnSharedId, it->maTokenStr );
-            }
-        }
-        // now process any defined shared formulae
-        SheetToSharedFormulaid::iterator formulDescIt = sharedFormulaIds.find( nTab );
-        SheetToSharedIdToTokenIndex::iterator tokensIt = tokenIndexes.find( nTab );
-        if ( formulDescIt != sharedFormulaIds.end() && tokensIt !=  tokenIndexes.end() )
-        {
-            SharedIdToTokenIndex& rTokenIdMap = tokensIt->second;
-            std::vector< SharedFormulaDesc >& rVector = formulDescIt->second;
-            for ( std::vector< SharedFormulaDesc >::iterator it = rVector.begin(), it_end = rVector.end(); it != it_end; ++it )
-            {
-                // see if we have a
-                // resolved tokenId
-                CellAddress& rAddress = it->first;
-                sal_Int32& rnSharedId = it->second;
-                SharedIdToTokenIndex::iterator itTokenId =  rTokenIdMap.find( rnSharedId );
-                if ( itTokenId != rTokenIdMap.end() )
-                {
-                    ApiTokenSequence aTokens =  getFormulaParser().convertNameToFormula( itTokenId->second );
-                    applyCellFormula( rDoc, aTokens, rAddress );
-                }
-            }
-        }
+
+        applySharedFormulas(nTab);
 
         FormulaDataMap::iterator cellIt = cellFormulas.find( nTab );
         if ( cellIt != cellFormulas.end() )
@@ -155,6 +136,157 @@ void FormulaBuffer::applyCellFormulaValues( const std::vector< ValueAddressPair 
         }
     }
 }
+
+namespace {
+
+class SharedFormulaGroups
+{
+    struct Key
+    {
+        sal_Int32 mnId;
+        sal_Int32 mnCol;
+
+        Key(sal_Int32 nId, sal_Int32 nCol) : mnId(nId), mnCol(nCol) {}
+
+        bool operator== ( const Key& rOther ) const
+        {
+            return mnId == rOther.mnId && mnCol == rOther.mnCol;
+        }
+
+        bool operator!= ( const Key& rOther ) const
+        {
+            return !operator==(rOther);
+        }
+    };
+
+    struct KeyHash
+    {
+        size_t operator() ( const Key& rKey ) const
+        {
+            double nVal = rKey.mnId;
+            nVal *= 256.0;
+            nVal += rKey.mnCol;
+            return static_cast<size_t>(nVal);
+        }
+    };
+
+    typedef boost::unordered_map<Key, ScFormulaCellGroupRef, KeyHash> StoreType;
+    StoreType maStore;
+public:
+
+    void set( sal_Int32 nSharedId, sal_Int32 nCol, const ScFormulaCellGroupRef& xGroup )
+    {
+        Key aKey(nSharedId, nCol);
+        maStore.insert(StoreType::value_type(aKey, xGroup));
+    }
+
+    ScFormulaCellGroupRef get( sal_Int32 nSharedId, sal_Int32 nCol ) const
+    {
+        Key aKey(nSharedId, nCol);
+        StoreType::const_iterator it = maStore.find(aKey);
+        return it == maStore.end() ? ScFormulaCellGroupRef() : it->second;
+    }
+};
+
+}
+
+void FormulaBuffer::applySharedFormulas( sal_Int32 nTab )
+{
+    SheetToFormulaEntryMap::const_iterator itShared = sharedFormulas.find(nTab);
+    if (itShared == sharedFormulas.end())
+        // There is no shared formulas for this sheet.
+        return;
+
+    SheetToSharedFormulaid::const_iterator itCells = sharedFormulaIds.find(nTab);
+    if (itCells == sharedFormulaIds.end())
+        // There is no formula cells that use shared formulas for this sheet.
+        return;
+
+    const std::vector<SharedFormulaEntry>& rSharedFormulas = itShared->second;
+    const std::vector<SharedFormulaDesc>& rCells = itCells->second;
+
+    ScDocument& rDoc = getScDocument();
+
+    SharedFormulaGroups aGroups;
+    {
+        // Process shared formulas first.
+        std::vector<SharedFormulaEntry>::const_iterator it = rSharedFormulas.begin(), itEnd = rSharedFormulas.end();
+        for (; it != itEnd; ++it)
+        {
+            const table::CellAddress& rAddr = it->maAddress;
+            const table::CellRangeAddress& rRange = it->maRange;
+            sal_Int32 nId = it->mnSharedId;
+            const OUString& rTokenStr = it->maTokenStr;
+
+            ScAddress aPos;
+            ScUnoConversion::FillScAddress(aPos, rAddr);
+            ScCompiler aComp(&rDoc, aPos);
+            aComp.SetGrammar(formula::FormulaGrammar::GRAM_ENGLISH_XL_OOX);
+            ScTokenArray* pArray = aComp.CompileString(rTokenStr);
+            if (pArray)
+            {
+                for (sal_Int32 nCol = rRange.StartColumn; nCol <= rRange.EndColumn; ++nCol)
+                {
+                    // Create one group per column, since Calc doesn't support
+                    // shared formulas across multiple columns.
+                    ScFormulaCellGroupRef xNewGroup(new ScFormulaCellGroup);
+                    xNewGroup->mnStart = rRange.StartRow;
+                    xNewGroup->mnLength = rRange.EndRow - rRange.StartRow;
+                    xNewGroup->setCode(*pArray);
+                    aGroups.set(nId, nCol, xNewGroup);
+                }
+            }
+        }
+    }
+
+    {
+        // Process formulas that use shared formulas.
+        std::vector<SharedFormulaDesc>::const_iterator it = rCells.begin(), itEnd = rCells.end();
+        for (; it != itEnd; ++it)
+        {
+            const table::CellAddress& rAddr = it->maAddress;
+
+            ScFormulaCellGroupRef xGroup = aGroups.get(it->mnSharedId, rAddr.Column);
+            if (!xGroup)
+                continue;
+
+            ScAddress aPos;
+            ScUnoConversion::FillScAddress(aPos, rAddr);
+            ScFormulaCell* pCell = new ScFormulaCell(&rDoc, aPos, xGroup);
+
+            bool bInserted = rDoc.SetGroupFormulaCell(aPos, pCell);
+            if (!bInserted)
+            {
+                // Insertion failed.
+                delete pCell;
+                continue;
+            }
+
+            pCell->StartListeningTo(&rDoc);
+
+            if (it->maCellValue.isEmpty())
+            {
+                // No cached cell value. Mark it for re-calculation.
+                pCell->SetDirty(true);
+                continue;
+            }
+
+            // Set cached formula results. For now, we only use numeric
+            // results. Find out how to utilize cached results of other types.
+            switch (it->mnValueType)
+            {
+                case XML_n:
+                    // numeric value.
+                    pCell->SetResultDouble(it->maCellValue.toDouble());
+                break;
+                default:
+                    // Mark it for re-calculation.
+                    pCell->SetDirty(true);
+            }
+        }
+    }
+}
+
 // bound to need this somewhere else, if so probably need to move it to
 // worksheethelper or somewhere else more suitable
 void StartCellListening( sal_Int16 nSheet, sal_Int32 nRow, sal_Int32 nCol, ScDocument& rDoc )
@@ -193,10 +325,12 @@ void FormulaBuffer::applyArrayFormulas( const std::vector< TokenRangeAddressItem
     }
 }
 
-void FormulaBuffer::createSharedFormulaMapEntry( const ::com::sun::star::table::CellAddress& rAddress, sal_Int32 nSharedId, const OUString& rTokens )
+void FormulaBuffer::createSharedFormulaMapEntry(
+    const table::CellAddress& rAddress, const table::CellRangeAddress& rRange,
+    sal_Int32 nSharedId, const OUString& rTokens )
 {
     std::vector<SharedFormulaEntry>& rSharedFormulas = sharedFormulas[ rAddress.Sheet ];
-    SharedFormulaEntry aEntry( rAddress, rTokens, nSharedId );
+    SharedFormulaEntry aEntry(rAddress, rRange, rTokens, nSharedId);
     rSharedFormulas.push_back( aEntry );
 }
 
@@ -205,9 +339,11 @@ void FormulaBuffer::setCellFormula( const ::com::sun::star::table::CellAddress& 
     cellFormulas[ rAddress.Sheet ].push_back( TokenAddressItem( rTokenStr, rAddress ) );
 }
 
-void FormulaBuffer::setCellFormula( const ::com::sun::star::table::CellAddress& rAddress, sal_Int32 nSharedId )
+void FormulaBuffer::setCellFormula(
+    const table::CellAddress& rAddress, sal_Int32 nSharedId, const OUString& rCellValue, sal_Int32 nValueType )
 {
-    sharedFormulaIds[ rAddress.Sheet ].push_back( SharedFormulaDesc( rAddress, nSharedId ) );
+    sharedFormulaIds[rAddress.Sheet].push_back(
+        SharedFormulaDesc(rAddress, nSharedId, rCellValue, nValueType));
 }
 
 void FormulaBuffer::setCellArrayFormula( const ::com::sun::star::table::CellRangeAddress& rRangeAddress, const ::com::sun::star::table::CellAddress& rTokenAddress, const OUString& rTokenStr )
@@ -222,21 +358,6 @@ void FormulaBuffer::setCellFormulaValue( const ::com::sun::star::table::CellAddr
     cellFormulaValues[ rAddress.Sheet ].push_back( ValueAddressPair( rAddress, fValue ) );
 }
 
-void FormulaBuffer::createSharedFormula( const ::com::sun::star::table::CellAddress& rAddress,  sal_Int32 nSharedId, const OUString& rTokenStr )
-{
-    ApiTokenSequence aTokens = getFormulaParser().importFormula( rAddress, rTokenStr );
-    OUString aName = OUStringBuffer().appendAscii( RTL_CONSTASCII_STRINGPARAM( "__shared_" ) ).
-        append( static_cast< sal_Int32 >( rAddress.Sheet + 1 ) ).
-        append( sal_Unicode( '_' ) ).append( nSharedId ).
-        append( OUString("_0") ).makeStringAndClear();
-    ScRangeData* pScRangeData  = createNamedRangeObject( aName, aTokens, 0  );
+}}
 
-    pScRangeData->SetType(RT_SHARED);
-    sal_Int32 nTokenIndex = static_cast< sal_Int32 >( pScRangeData->GetIndex() );
-
-        // store the token index in the map
-   tokenIndexes[  rAddress.Sheet ][ nSharedId ] = nTokenIndex;
-}
-} // namespace xls
-} // namespace oox
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

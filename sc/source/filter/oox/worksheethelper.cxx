@@ -1602,9 +1602,11 @@ void WorksheetHelper::setCellFormula( const ::com::sun::star::table::CellAddress
     getFormulaBuffer().setCellFormula( rTokenAddress,  rTokenStr );
 }
 
-void WorksheetHelper::setCellFormula( const ::com::sun::star::table::CellAddress& rTokenAddress, sal_Int32 nSharedId )
+void WorksheetHelper::setCellFormula(
+    const ::com::sun::star::table::CellAddress& rAddr, sal_Int32 nSharedId,
+    const OUString& rCellValue, sal_Int32 nValueType )
 {
-    getFormulaBuffer().setCellFormula( rTokenAddress,  nSharedId );
+    getFormulaBuffer().setCellFormula(rAddr, nSharedId, rCellValue, nValueType);
 }
 
 void WorksheetHelper::setCellArrayFormula( const ::com::sun::star::table::CellRangeAddress& rRangeAddress, const ::com::sun::star::table::CellAddress& rTokenAddress, const OUString& rTokenStr )
@@ -1612,9 +1614,10 @@ void WorksheetHelper::setCellArrayFormula( const ::com::sun::star::table::CellRa
     getFormulaBuffer().setCellArrayFormula( rRangeAddress,  rTokenAddress, rTokenStr );
 }
 
-void WorksheetHelper::createSharedFormulaMapEntry(  const ::com::sun::star::table::CellAddress& rAddress, sal_Int32 nSharedId, const OUString& rTokens )
+void WorksheetHelper::createSharedFormulaMapEntry(
+    const table::CellAddress& rAddress, const table::CellRangeAddress& rRange, sal_Int32 nSharedId, const OUString& rTokens )
 {
-    getFormulaBuffer().createSharedFormulaMapEntry( rAddress, nSharedId, rTokens );
+    getFormulaBuffer().createSharedFormulaMapEntry(rAddress, rRange, nSharedId, rTokens);
 }
 
 // ============================================================================

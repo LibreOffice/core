@@ -89,8 +89,6 @@ void SharedFormulaBuffer::Store( const ScRange& rRange, const ScTokenArray& rArr
         ScFormulaCellGroupRef xNewGroup(new ScFormulaCellGroup);
         xNewGroup->mnStart = rRange.aStart.Row();
         xNewGroup->mnLength = nGroupLen;
-        xNewGroup->mpCode = rArray.Clone();
-        xNewGroup->mbInvariant = rArray.IsInvariant();
         xNewGroup->setCode(rArray);
         maFormulaGroups.insert(FormulaGroupsType::value_type(aPos, xNewGroup));
     }

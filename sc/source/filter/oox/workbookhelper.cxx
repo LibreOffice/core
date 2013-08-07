@@ -740,7 +740,7 @@ Reference< XSpreadsheetDocument > WorkbookHelper::getDocument() const
     return mrBookGlob.getDocument();
 }
 
-Reference< XSpreadsheet > WorkbookHelper::getSheetFromDoc( sal_Int16 nSheet ) const
+Reference< XSpreadsheet > WorkbookHelper::getSheetFromDoc( sal_Int32 nSheet ) const
 {
     Reference< XSpreadsheet > xSheet;
     try
