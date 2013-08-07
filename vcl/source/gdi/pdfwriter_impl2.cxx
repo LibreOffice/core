@@ -834,14 +834,14 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                 case( META_TEXT_ACTION ):
                 {
                     const MetaTextAction* pA = (const MetaTextAction*) pAction;
-                    m_rOuterFace.DrawText( pA->GetPoint(), String( pA->GetText(), pA->GetIndex(), pA->GetLen() ) );
+                    m_rOuterFace.DrawText( pA->GetPoint(), pA->GetText().copy( pA->GetIndex(), pA->GetLen() ) );
                 }
                 break;
 
                 case( META_TEXTRECT_ACTION ):
                 {
                     const MetaTextRectAction* pA = (const MetaTextRectAction*) pAction;
-                    m_rOuterFace.DrawText( pA->GetRect(), String( pA->GetText() ), pA->GetStyle() );
+                    m_rOuterFace.DrawText( pA->GetRect(), pA->GetText(), pA->GetStyle() );
                 }
                 break;
 

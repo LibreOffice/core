@@ -151,14 +151,14 @@ void doTestCode()
     aWriter.SetLineColor( Color( COL_LIGHTGREEN ) );
     aWriter.DrawRect( Rectangle( Point( 2000, 200 ), Size( 8000, 3000 ) ), 5000, 2000 );
 
-    aWriter.SetFont( Font( String( "Times" ), Size( 0, 500 ) ) );
+    aWriter.SetFont( Font( OUString( "Times" ), Size( 0, 500 ) ) );
     aWriter.SetTextColor( Color( COL_BLACK ) );
     aWriter.SetLineColor( Color( COL_BLACK ) );
     aWriter.SetFillColor( Color( COL_LIGHTBLUE ) );
 
     Rectangle aRect( Point( 5000, 5000 ), Size( 6000, 3000 ) );
     aWriter.DrawRect( aRect );
-    aWriter.DrawText( aRect, String( "Link annot 1" ) );
+    aWriter.DrawText( aRect, OUString( "Link annot 1" ) );
     sal_Int32 nFirstLink = aWriter.CreateLink( aRect );
     PDFNote aNote;
     aNote.Title = "A small test note";
@@ -199,7 +199,7 @@ void doTestCode()
     aWriter.SetPageTransition( PDFWriter::WipeRightToLeft, 1500 );
     aWriter.SetMapMode( MapMode( MAP_100TH_MM ) );
     aWriter.SetTextColor( Color( COL_BLACK ) );
-    aWriter.SetFont( Font( String( "Times" ), Size( 0, 500 ) ) );
+    aWriter.SetFont( Font( OUString( "Times" ), Size( 0, 500 ) ) );
     aWriter.DrawText( Rectangle( Point( 4500, 1500 ), Size( 12000, 3000 ) ),
                       "Here's where all things come to an end ... well at least the paragaph from the last page.",
                       TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK
@@ -326,7 +326,7 @@ void doTestCode()
 
     aWriter.NewPage( 595, 842 );
     aWriter.SetMapMode( MapMode( MAP_100TH_MM ) );
-    aWriter.SetFont( Font( String( "Times" ), Size( 0, 500 ) ) );
+    aWriter.SetFont( Font( OUString( "Times" ), Size( 0, 500 ) ) );
     aWriter.SetTextColor( Color( COL_BLACK ) );
     aRect = Rectangle( Point( 4500, 6000 ), Size( 6000, 1500 ) );
     aWriter.DrawRect( aRect );
@@ -397,7 +397,7 @@ void doTestCode()
     aRB1.BorderColor = Color( COL_LIGHTGREEN );
     aRB1.BackgroundColor = Color( COL_LIGHTBLUE );
     aRB1.TextColor = Color( COL_LIGHTRED );
-    aRB1.TextFont = Font( String( "Courier" ), Size( 0, 800 ) );
+    aRB1.TextFont = Font( OUString( "Courier" ), Size( 0, 800 ) );
     aWriter.CreateControl( aRB1 );
 
     PDFWriter::RadioButtonWidget aRB2;
@@ -1757,7 +1757,7 @@ void PDFWriterImpl::PDFPage::appendWaveLine( sal_Int32 nWidth, sal_Int32 nY, sal
     m_aStructure[0].m_nParentElement    = 0;
 
     Font aFont;
-    aFont.SetName( String( "Times" ) );
+    aFont.SetName( OUString( "Times" ) );
     aFont.SetSize( Size( 0, 12 ) );
 
     GraphicsState aState;
@@ -2310,7 +2310,7 @@ void PDFWriterImpl::endPage()
 
         // reset the default font
         Font aFont;
-        aFont.SetName( String( "Times" ) );
+        aFont.SetName( OUString( "Times" ) );
         aFont.SetSize( Size( 0, 12 ) );
 
         m_aCurrentPDFState = m_aGraphicsStack.front();
@@ -4713,7 +4713,7 @@ void PDFWriterImpl::createDefaultPushButtonAppearance( PDFWidget& rButton, const
     // (that is before endRedirect())
     OStringBuffer aDA( 256 );
     appendNonStrokingColor( replaceColor( rWidget.TextColor, rSettings.GetButtonTextColor() ), aDA );
-    Font aDummyFont( String( "Helvetica" ), aFont.GetSize() );
+    Font aDummyFont( OUString( "Helvetica" ), aFont.GetSize() );
     sal_Int32 nDummyBuiltin = getBestBuiltinFont( aDummyFont );
     aDA.append( ' ' );
     aDA.append( m_aBuiltinFonts[nDummyBuiltin].getNameObject() );
@@ -4975,7 +4975,7 @@ void PDFWriterImpl::createDefaultCheckBoxAppearance( PDFWidget& rBox, const PDFW
 
     OStringBuffer aDA( 256 );
     appendNonStrokingColor( replaceColor( rWidget.TextColor, rSettings.GetRadioCheckTextColor() ), aDA );
-    sal_Int32 nBest = getBestBuiltinFont( Font( String( "ZapfDingbats" ), aFont.GetSize() ) );
+    sal_Int32 nBest = getBestBuiltinFont( Font( OUString( "ZapfDingbats" ), aFont.GetSize() ) );
     aDA.append( ' ' );
     aDA.append( m_aBuiltinFonts[nBest].getNameObject() );
     aDA.append( " 0 Tf" );
@@ -5100,7 +5100,7 @@ void PDFWriterImpl::createDefaultRadioButtonAppearance( PDFWidget& rBox, const P
 
     OStringBuffer aDA( 256 );
     appendNonStrokingColor( replaceColor( rWidget.TextColor, rSettings.GetRadioCheckTextColor() ), aDA );
-    sal_Int32 nBest = getBestBuiltinFont( Font( String( "ZapfDingbats" ), aFont.GetSize() ) );
+    sal_Int32 nBest = getBestBuiltinFont( Font( OUString( "ZapfDingbats" ), aFont.GetSize() ) );
     aDA.append( ' ' );
     aDA.append( m_aBuiltinFonts[nBest].getNameObject() );
     aDA.append( " 0 Tf" );

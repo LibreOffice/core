@@ -293,17 +293,17 @@ SvStream& operator>>( SvStream& rIStream, JobSetup& rJobSetup )
                     rIStream.Seek( nFirstPos + sizeof( ImplOldJobSetupData ) + 4 + sizeof( Impl364JobSetupData ) + pJobData->mnDriverDataLen );
                     while( rIStream.Tell() < nFirstPos + nLen )
                     {
-                        String aKey = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rIStream, RTL_TEXTENCODING_UTF8);
-                        String aValue = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rIStream, RTL_TEXTENCODING_UTF8);
-                        if( aKey.EqualsAscii( "COMPAT_DUPLEX_MODE" ) )
+                        OUString aKey = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rIStream, RTL_TEXTENCODING_UTF8);
+                        OUString aValue = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rIStream, RTL_TEXTENCODING_UTF8);
+                        if( aKey.equalsAscii( "COMPAT_DUPLEX_MODE" ) )
                         {
-                            if( aValue.EqualsAscii( "DUPLEX_UNKNOWN" ) )
+                            if( aValue.equalsAscii( "DUPLEX_UNKNOWN" ) )
                                 pJobData->meDuplexMode = DUPLEX_UNKNOWN;
-                            else if( aValue.EqualsAscii( "DUPLEX_OFF" ) )
+                            else if( aValue.equalsAscii( "DUPLEX_OFF" ) )
                                 pJobData->meDuplexMode = DUPLEX_OFF;
-                            else if( aValue.EqualsAscii( "DUPLEX_SHORTEDGE" ) )
+                            else if( aValue.equalsAscii( "DUPLEX_SHORTEDGE" ) )
                                 pJobData->meDuplexMode = DUPLEX_SHORTEDGE;
-                            else if( aValue.EqualsAscii( "DUPLEX_LONGEDGE" ) )
+                            else if( aValue.equalsAscii( "DUPLEX_LONGEDGE" ) )
                                 pJobData->meDuplexMode = DUPLEX_LONGEDGE;
                         }
                         else

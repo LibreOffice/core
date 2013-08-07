@@ -36,7 +36,7 @@ VclAbstractDialogFactory* VclAbstractDialogFactory::Create()
     FuncPtrCreateDialogFactory fp = 0;
 #ifndef DISABLE_DYNLOADING
     static ::osl::Module aDialogLibrary;
-    if ( aDialogLibrary.is() || aDialogLibrary.loadRelative( &thisModule, String( CUI_DLL_NAME  ),
+    if ( aDialogLibrary.is() || aDialogLibrary.loadRelative( &thisModule, OUString( CUI_DLL_NAME  ),
                                                              SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_LAZY ) )
         fp = ( VclAbstractDialogFactory* (SAL_CALL*)() )
             aDialogLibrary.getFunctionSymbol( OUString("CreateDialogFactory") );

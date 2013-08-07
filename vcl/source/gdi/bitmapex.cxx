@@ -94,7 +94,7 @@ BitmapEx::BitmapEx( const ResId& rResId ) :
     pResMgr->ReadLong();
     pResMgr->ReadLong();
 
-    const String aFileName( pResMgr->ReadString() );
+    const OUString aFileName( pResMgr->ReadString() );
     OUString aCurrentSymbolsStyle = Application::GetSettings().GetStyleSettings().GetCurrentSymbolsStyleName();
 
     if( !aImageTree->loadImage( aFileName, aCurrentSymbolsStyle, *this, true ) )

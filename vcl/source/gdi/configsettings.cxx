@@ -68,7 +68,7 @@ void SettingsConfigItem::Commit()
 
     for( group = m_aSettings.begin(); group != m_aSettings.end(); ++group )
     {
-        String aKeyName( group->first );
+        OUString aKeyName( group->first );
         /*sal_Bool bAdded =*/ AddNode( OUString(), aKeyName );
         Sequence< PropertyValue > aValues( group->second.size() );
         PropertyValue* pValues = aValues.getArray();
@@ -76,9 +76,9 @@ void SettingsConfigItem::Commit()
         SmallOUStrMap::const_iterator it;
         for( it = group->second.begin(); it != group->second.end(); ++it )
         {
-            String aName( aKeyName );
-            aName.Append( '/' );
-            aName.Append( String( it->first ) );
+            OUString aName( aKeyName );
+            aName +=  OUString('/');
+            aName += it->first;
             pValues[nIndex].Name    = aName;
             pValues[nIndex].Handle  = 0;
             pValues[nIndex].Value <<= it->second;
@@ -110,16 +110,16 @@ void SettingsConfigItem::getValues()
                  OUStringToOString( aNames.getConstArray()[j], RTL_TEXTENCODING_ASCII_US ).getStr()
                  );
 #endif
-        String aKeyName( aNames.getConstArray()[j] );
+        OUString aKeyName( aNames.getConstArray()[j] );
         Sequence< OUString > aKeys( GetNodeNames( aKeyName ) );
         Sequence< OUString > aSettingsKeys( aKeys.getLength() );
         const OUString* pFrom = aKeys.getConstArray();
         OUString* pTo = aSettingsKeys.getArray();
         for( int m = 0; m < aKeys.getLength(); m++ )
         {
-            String aName( aKeyName );
-            aName.Append( '/' );
-            aName.Append( String( pFrom[m] ) );
+            OUString aName( aKeyName );
+            aName += OUString('/');
+            aName += pFrom[m];
             pTo[m] = aName;
         }
         Sequence< Any > aValues( GetProperties( aSettingsKeys ) );

@@ -1404,14 +1404,14 @@ sal_Bool ImpGraphic::ImplSwapIn()
 
     if( ImplIsSwapOut() )
     {
-        String aSwapURL;
+        OUString aSwapURL;
 
         if( mpSwapFile )
             aSwapURL = mpSwapFile->aSwapURL.GetMainURL( INetURLObject::NO_DECODE );
         else
             aSwapURL = maDocFileURLStr;
 
-        if( aSwapURL.Len() )
+        if( !aSwapURL.isEmpty() )
         {
             SvStream* pIStm = NULL;
             try

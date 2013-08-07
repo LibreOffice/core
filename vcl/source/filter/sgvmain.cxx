@@ -708,10 +708,10 @@ void BmapType::Draw(OutputDevice& rOut)
 {
     //ifstream aInp;
     unsigned char   nSgfTyp;
-    sal_uInt16          nVersion;
-    String          aStr(
+    sal_uInt16      nVersion;
+    OUString        aStr(
         reinterpret_cast< char const * >(&Filename[ 1 ]),
-        (xub_StrLen)Filename[ 0 ], RTL_TEXTENCODING_UTF8 );
+        (sal_Int32)Filename[ 0 ], RTL_TEXTENCODING_UTF8 );
     INetURLObject   aFNam( aStr );
 
     SvStream* pInp = ::utl::UcbStreamHelper::CreateStream( aFNam.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ );

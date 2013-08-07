@@ -527,9 +527,9 @@ void Control::DrawControlText( OutputDevice& _rTargetDevice, Rectangle& _io_rRec
     if ( !_pVector )
     {
         static MetricVector aCharRects;
-        static String sDisplayText;
+        static OUString sDisplayText;
         aCharRects.clear();
-        sDisplayText = String();
+        sDisplayText = OUString();
         _pVector = &aCharRects;
         _pDisplayText = &sDisplayText;
     }

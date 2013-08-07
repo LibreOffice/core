@@ -510,7 +510,7 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
     if( pJobNameVal )
         pJobNameVal->Value >>= aJobName;
 
-    pController->getPrinter()->StartJob( String( aJobName ), pController );
+    pController->getPrinter()->StartJob( aJobName, pController );
 
     pController->resetPaperToLastConfigured();
 

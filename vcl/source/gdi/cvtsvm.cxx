@@ -258,9 +258,9 @@ void ImplWriteRasterOpAction( SvStream& rOStm, sal_Int16 nRasterOp )
     rOStm << (sal_Int16) GDI_RASTEROP_ACTION << (sal_Int32) 6 << nRasterOp;
 }
 
-sal_Bool ImplWriteUnicodeComment( SvStream& rOStm, const String& rString )
+sal_Bool ImplWriteUnicodeComment( SvStream& rOStm, const OUString& rString )
 {
-    xub_StrLen nStringLen = rString.Len();
+    sal_Int32 nStringLen = rString.getLength();
     if ( nStringLen )
     {
         sal_uInt32  nSize = ( nStringLen << 1 ) + 4;
@@ -786,7 +786,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     ImplReadColor( rIStm, aActionColor ); aFont.SetColor( aActionColor );
                     ImplReadColor( rIStm, aActionColor ); aFont.SetFillColor( aActionColor );
                     rIStm.Read( aName, 32 );
-                    aFont.SetName( String( aName, rIStm.GetStreamCharSet() ) );
+                    aFont.SetName( OUString( aName, strlen(aName), rIStm.GetStreamCharSet() ) );
                     rIStm >> nWidth >> nHeight;
                     rIStm >> nCharOrient >> nLineOrient;
                     rIStm >> nCharSet >> nFamily >> nPitch >> nAlign >> nWeight >> nUnderline >> nStrikeout;
@@ -1681,7 +1681,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             case( META_TEXT_ACTION ):
             {
                 MetaTextAction* pAct = (MetaTextAction*) pAction;
-                String          aUniText( pAct->GetText() );
+                OUString        aUniText( pAct->GetText() );
                 OString aText(OUStringToOString(aUniText,
                     rActualCharSet));
                 const sal_uLong nStrLen = aText.getLength();
@@ -1705,7 +1705,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 MetaTextArrayAction*    pAct = (MetaTextArrayAction*)pAction;
                 OString aText(OUStringToOString(pAct->GetText(),
                     rActualCharSet));
-                String                  aUniText( pAct->GetText(), pAct->GetIndex(), pAct->GetLen() );
+                OUString                aUniText = pAct->GetText().copy( pAct->GetIndex(), pAct->GetLen() );
                 sal_uLong               nAryLen;
                 sal_uLong               nLen = pAct->GetLen();
                 const sal_uLong         nTextLen = aText.getLength();
@@ -1746,7 +1746,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             case( META_STRETCHTEXT_ACTION ):
             {
                 MetaStretchTextAction*  pAct = (MetaStretchTextAction*) pAction;
-                String                  aUniText( pAct->GetText() );
+                OUString                aUniText( pAct->GetText() );
                 OString aText(OUStringToOString(aUniText,
                     rActualCharSet));
                 const sal_uLong nStrLen = aText.getLength();

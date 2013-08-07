@@ -4326,16 +4326,16 @@ void ToolBox::RequestHelp( const HelpEvent& rHEvt )
         }
         else if ( rHEvt.GetMode() & HELPMODE_EXTENDED )
         {
-            String aCommand = GetItemCommand( nItemId );
+            OUString aCommand = GetItemCommand( nItemId );
             OString  aHelpId( GetHelpId( nItemId ) );
 
-            if ( aCommand.Len() || !aHelpId.isEmpty() )
+            if ( !aCommand.isEmpty() || !aHelpId.isEmpty() )
             {
                 // If help is available then trigger it
                 Help* pHelp = Application::GetHelp();
                 if ( pHelp )
                 {
-                    if ( aCommand.Len() )
+                    if ( !aCommand.isEmpty() )
                         pHelp->Start( aCommand, this );
                     else if ( !aHelpId.isEmpty() )
                         pHelp->Start( OStringToOUString( aHelpId, RTL_TEXTENCODING_UTF8 ), this );

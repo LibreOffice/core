@@ -2330,7 +2330,7 @@ bool CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
     rFSInfo.m_nCapHeight = rFSInfo.m_nAscent;           // for top-flat capital letters
 
     rFSInfo.m_nFontType = rEmitter.mbPfbSubset ? FontSubsetInfo::TYPE1_PFB : FontSubsetInfo::TYPE1_PFA;
-    rFSInfo.m_aPSName   = String( rEmitter.maSubsetName, RTL_TEXTENCODING_UTF8 );
+    rFSInfo.m_aPSName   = OUString( rEmitter.maSubsetName, strlen(rEmitter.maSubsetName), RTL_TEXTENCODING_UTF8 );
 
     return true;
 }

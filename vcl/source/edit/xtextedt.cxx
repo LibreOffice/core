@@ -360,10 +360,10 @@ sal_Bool ExtTextView::ImpIndentBlock( sal_Bool bRight )
         else
         {
             // remove Tabs/Blanks
-            String aText = GetTextEngine()->GetText( nPara );
-            if ( aText.Len() && (
-                    ( aText.GetChar( 0 ) == '\t' ) ||
-                    ( aText.GetChar( 0 ) == ' ' ) ) )
+            OUString aText = GetTextEngine()->GetText( nPara );
+            if ( !aText.isEmpty() && (
+                    ( aText[ 0 ] == '\t' ) ||
+                    ( aText[ 0 ] == ' ' ) ) )
             {
                 GetTextEngine()->ImpDeleteText( TextSelection( TextPaM( nPara, 0 ), TextPaM( nPara, 1 ) ) );
                 bDone = sal_True;

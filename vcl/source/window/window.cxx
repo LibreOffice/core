@@ -409,7 +409,7 @@ bool Window::ImplCheckUIFont( const Font& rFont )
         return true;
 
     // create a text string using the localized text of important buttons
-    String aTestText;
+    OUString aTestText;
     static const StandardButtonType aTestButtons[] =
     {
         BUTTON_OK, BUTTON_CANCEL, BUTTON_CLOSE, BUTTON_ABORT,
@@ -420,13 +420,13 @@ bool Window::ImplCheckUIFont( const Font& rFont )
     const int nTestButtonCount = SAL_N_ELEMENTS(aTestButtons);
     for( int n = 0; n < nTestButtonCount; ++n )
     {
-        String aButtonStr = Button::GetStandardText( aTestButtons[n] );
+        OUString aButtonStr = Button::GetStandardText( aTestButtons[n] );
         // #i115432# ignore mnemonic+accelerator part of each string
         // TODO: use a string filtering method when it becomes available
-        const int nLen = aButtonStr.Len();
+        const sal_Int32 nLen = aButtonStr.getLength();
         bool bInside = false;
         for( int i = 0; i < nLen; ++i ) {
-            const sal_Unicode c = aButtonStr.GetChar( i );
+            const sal_Unicode c = aButtonStr[ i ];
             if( (c == '('))
                 bInside = true;
             if( (c == ')'))
@@ -434,14 +434,14 @@ bool Window::ImplCheckUIFont( const Font& rFont )
             if( (c == '~')
             ||  (c == '(') || (c == ')')
             || ((c >= 'A') && (c <= 'Z') && bInside) )
-                aButtonStr.SetChar( i, ' ' );
+                aButtonStr = aButtonStr.replaceAt( i, 1, " " );
         }
         // append sanitized button text to test string
-        aTestText.Append( aButtonStr );
+        aTestText += aButtonStr;
     }
 
     const int nFirstChar = HasGlyphs( rFont, aTestText );
-    const bool bUIFontOk = (nFirstChar >= aTestText.Len());
+    const bool bUIFontOk = (nFirstChar >= aTestText.getLength());
     return bUIFontOk;
 }
 
@@ -460,7 +460,7 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, sal_Bool bCallHdl
 
     // WTF, what makes Andale Sans UI a suitable cross-platform fallback font?
 
-    String aUserInterfaceFont;
+    OUString aUserInterfaceFont;
     bool bUseSystemFont = rSettings.GetStyleSettings().GetUseSystemUIFonts();
 
     // check whether system UI font can display a typical UI text
@@ -470,27 +470,27 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, sal_Bool bCallHdl
     if ( !bUseSystemFont )
     {
         ImplInitFontList();
-        String aConfigFont = utl::DefaultFontConfiguration::get().getUserInterfaceFont( rSettings.GetUILanguageTag() );
+        OUString aConfigFont = utl::DefaultFontConfiguration::get().getUserInterfaceFont( rSettings.GetUILanguageTag() );
         sal_Int32 nIndex = 0;
         while( nIndex != -1 )
         {
-            String aName( aConfigFont.GetToken( 0, ';', nIndex ) );
-            if ( aName.Len() && mpWindowImpl->mpFrameData->mpFontList->FindFontFamily( aName ) )
+            OUString aName( aConfigFont.getToken( 0, ';', nIndex ) );
+            if ( !aName.isEmpty() && mpWindowImpl->mpFrameData->mpFontList->FindFontFamily( aName ) )
             {
                 aUserInterfaceFont = aConfigFont;
                 break;
             }
         }
 
-        if ( ! aUserInterfaceFont.Len() )
+        if ( aUserInterfaceFont.isEmpty() )
         {
-            String aFallbackFont ("Andale Sans UI" );
+            OUString aFallbackFont ("Andale Sans UI" );
             if ( mpWindowImpl->mpFrameData->mpFontList->FindFontFamily( aFallbackFont ) )
                 aUserInterfaceFont = aFallbackFont;
         }
     }
 
-    if ( !bUseSystemFont && aUserInterfaceFont.Len() )
+    if ( !bUseSystemFont && !aUserInterfaceFont.isEmpty() )
     {
         StyleSettings aStyleSettings = rSettings.GetStyleSettings();
         Font aFont = aStyleSettings.GetAppFont();
@@ -4925,23 +4925,23 @@ void Window::RequestHelp( const HelpEvent& rHEvt )
             if ( ImplGetParent() && !ImplIsOverlapWindow() )
                 aPos = ImplGetParent()->OutputToScreenPixel( aPos );
             Rectangle   aRect( aPos, GetSizePixel() );
-            String      aHelpText;
-            if ( rStr.getLength() )
+            OUString      aHelpText;
+            if ( !rStr.isEmpty() )
                 aHelpText = GetHelpText();
             Help::ShowQuickHelp( this, aRect, rStr, aHelpText, QUICKHELP_CTRLTEXT );
         }
     }
     else
     {
-        String aStrHelpId( OStringToOUString( GetHelpId(), RTL_TEXTENCODING_UTF8 ) );
-        if ( aStrHelpId.Len() == 0 && ImplGetParent() )
+        OUString aStrHelpId( OStringToOUString( GetHelpId(), RTL_TEXTENCODING_UTF8 ) );
+        if ( aStrHelpId.isEmpty() && ImplGetParent() )
             ImplGetParent()->RequestHelp( rHEvt );
         else
         {
             Help* pHelp = Application::GetHelp();
             if ( pHelp )
             {
-                if( aStrHelpId.Len() > 0 )
+                if( !aStrHelpId.isEmpty() )
                     pHelp->Start( aStrHelpId, this );
                 else
                     pHelp->Start( OUString( OOO_HELP_INDEX  ), this );
@@ -7917,7 +7917,7 @@ void Window::SetText( const OUString& rStr )
 
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
-    String oldTitle( mpWindowImpl->maText );
+    OUString oldTitle( mpWindowImpl->maText );
     mpWindowImpl->maText = rStr;
 
     if ( mpWindowImpl->mpBorderWindow )
@@ -7993,8 +7993,8 @@ const OUString& Window::GetHelpText() const
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
-    String aStrHelpId( OStringToOUString( GetHelpId(), RTL_TEXTENCODING_UTF8 ) );
-    bool bStrHelpId = (aStrHelpId.Len() > 0);
+    OUString aStrHelpId( OStringToOUString( GetHelpId(), RTL_TEXTENCODING_UTF8 ) );
+    bool bStrHelpId = !aStrHelpId.isEmpty();
 
     if ( !mpWindowImpl->maHelpText.getLength() && bStrHelpId )
     {
@@ -9006,7 +9006,7 @@ void Window::SetAccessibleDescription( const OUString& rDescription )
 
 OUString Window::GetAccessibleDescription() const
 {
-    String aAccessibleDescription;
+    OUString aAccessibleDescription;
     if ( mpWindowImpl->mpAccessibleInfos && mpWindowImpl->mpAccessibleInfos->pAccessibleDescription )
     {
         aAccessibleDescription = *mpWindowImpl->mpAccessibleInfos->pAccessibleDescription;

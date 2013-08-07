@@ -119,9 +119,9 @@ public:
 
     sal_Bool        IsInsertMode() const;
 
-    void        InsertText( const String& rStr );
-    String      GetSelected() const;
-    String      GetSelected( LineEnd aSeparator ) const;
+    void        InsertText( const OUString& rStr );
+    OUString    GetSelected() const;
+    OUString    GetSelected( LineEnd aSeparator ) const;
 
     void        SetSelection( const Selection& rSelection );
     const Selection& GetSelection() const;
@@ -132,8 +132,8 @@ public:
 
     void        SetText( const OUString& rStr );
     OUString    GetText() const;
-    String      GetText( LineEnd aSeparator ) const;
-    String      GetTextLines( LineEnd aSeparator ) const;
+    OUString    GetText( LineEnd aSeparator ) const;
+    OUString    GetTextLines( LineEnd aSeparator ) const;
 
     void        Resize();
     void        GetFocus();
@@ -387,17 +387,17 @@ xub_StrLen ImpVclMEdit::GetMaxTextLen() const
         mpTextWindow->GetTextEngine()->GetMaxTextLen());
 }
 
-void ImpVclMEdit::InsertText( const String& rStr )
+void ImpVclMEdit::InsertText( const OUString& rStr )
 {
     mpTextWindow->GetTextView()->InsertText( rStr );
 }
 
-String ImpVclMEdit::GetSelected() const
+OUString ImpVclMEdit::GetSelected() const
 {
     return mpTextWindow->GetTextView()->GetSelected();
 }
 
-String ImpVclMEdit::GetSelected( LineEnd aSeparator ) const
+OUString ImpVclMEdit::GetSelected( LineEnd aSeparator ) const
 {
     return mpTextWindow->GetTextView()->GetSelected( aSeparator );
 }
@@ -510,12 +510,12 @@ OUString ImpVclMEdit::GetText() const
     return mpTextWindow->GetTextEngine()->GetText();
 }
 
-String ImpVclMEdit::GetText( LineEnd aSeparator ) const
+OUString ImpVclMEdit::GetText( LineEnd aSeparator ) const
 {
     return mpTextWindow->GetTextEngine()->GetText( aSeparator );
 }
 
-String ImpVclMEdit::GetTextLines( LineEnd aSeparator ) const
+OUString ImpVclMEdit::GetTextLines( LineEnd aSeparator ) const
 {
     return mpTextWindow->GetTextEngine()->GetTextLines( aSeparator );
 }
@@ -567,17 +567,17 @@ void ImpVclMEdit::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 void ImpVclMEdit::SetSelection( const Selection& rSelection )
 {
-    String aText = mpTextWindow->GetTextEngine()->GetText();
+    OUString aText = mpTextWindow->GetTextEngine()->GetText();
 
     Selection aNewSelection( rSelection );
     if ( aNewSelection.Min() < 0 )
         aNewSelection.Min() = 0;
-    else if ( aNewSelection.Min() > aText.Len() )
-        aNewSelection.Min() = aText.Len();
+    else if ( aNewSelection.Min() > aText.getLength() )
+        aNewSelection.Min() = aText.getLength();
     if ( aNewSelection.Max() < 0 )
         aNewSelection.Max() = 0;
-    else if ( aNewSelection.Max() > aText.Len() )
-        aNewSelection.Max() = aText.Len();
+    else if ( aNewSelection.Max() > aText.getLength() )
+        aNewSelection.Max() = aText.getLength();
 
     long nEnd = std::max( aNewSelection.Min(), aNewSelection.Max() );
     TextSelection aTextSel;
@@ -591,7 +591,7 @@ void ImpVclMEdit::SetSelection( const Selection& rSelection )
         if ( x == aNewSelection.Max() )
             aTextSel.GetEnd() = TextPaM( nPara, nChar );
 
-        if ( ( x < aText.Len() ) && ( aText.GetChar( x ) == '\n' ) )
+        if ( ( x < aText.getLength() ) && ( aText[ x ] == '\n' ) )
         {
             nPara++;
             nChar = 0;
@@ -1137,7 +1137,7 @@ void VclMultiLineEdit::ReplaceSelected( const OUString& rStr )
 
 void VclMultiLineEdit::DeleteSelected()
 {
-    pImpVclMEdit->InsertText( String() );
+    pImpVclMEdit->InsertText( OUString() );
 }
 
 OUString VclMultiLineEdit::GetSelected() const

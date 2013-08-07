@@ -968,8 +968,8 @@ static long ImplHandleKey( Window* pWindow, sal_uInt16 nSVEvent,
     {
         if( Application::GetSettings().GetMiscSettings().GetEnableLocalizedDecimalSep() )
         {
-            String aSep( pWindow->GetSettings().GetLocaleDataWrapper().getNumDecimalSep() );
-            nCharCode = (sal_uInt16) aSep.GetChar(0);
+            OUString aSep( pWindow->GetSettings().GetLocaleDataWrapper().getNumDecimalSep() );
+            nCharCode = (sal_uInt16) aSep[0];
         }
     }
 

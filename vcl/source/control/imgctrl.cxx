@@ -99,8 +99,8 @@ void ImageControl::ImplDraw( OutputDevice& rDev, sal_uLong nDrawFlags, const Poi
     const Rectangle aDrawRect( rPos, rSize );
     if ( !*pImage )
     {
-        String  sText( GetText() );
-        if ( !sText.Len() )
+        OUString  sText( GetText() );
+        if ( sText.isEmpty() )
             return;
 
         WinBits nWinStyle = GetStyle();

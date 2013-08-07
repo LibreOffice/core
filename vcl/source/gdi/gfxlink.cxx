@@ -350,7 +350,7 @@ ImpSwap::ImpSwap( sal_uInt8* pData, sal_uLong nDataSize ) :
                 if( bError )
                 {
                     osl_removeFile( maURL.pData );
-                    maURL = String();
+                    maURL = "";
                 }
             }
         }

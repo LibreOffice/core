@@ -1035,13 +1035,13 @@ static sal_uInt16 ImplCutMonthFromString( OUString& rStr, const CalendarWrapper&
     // search for a month' name
     for ( sal_uInt16 i=1; i <= 12; i++ )
     {
-        String aMonthName = rCalendarWrapper.getMonths()[i-1].FullName;
+        OUString aMonthName = rCalendarWrapper.getMonths()[i-1].FullName;
         // long month name?
         if ( ImplCutMonthName( rStr, aMonthName ) )
             return i;
 
         // short month name?
-        String aAbbrevMonthName = rCalendarWrapper.getMonths()[i-1].AbbrevName;
+        OUString aAbbrevMonthName = rCalendarWrapper.getMonths()[i-1].AbbrevName;
         if ( ImplCutMonthName( rStr, aAbbrevMonthName ) )
             return i;
     }

@@ -1115,15 +1115,15 @@ Window* Window::GetParentLabeledBy( const Window* ) const
 
 // -----------------------------------------------------------------------
 
-static sal_Unicode getAccel( const String& rStr )
+static sal_Unicode getAccel( const OUString& rStr )
 {
     sal_Unicode nChar = 0;
-    sal_uInt16 nPos = 0;
+    sal_Int32 nPos = 0;
     do
     {
-        nPos = rStr.Search( '~', nPos );
-        if( nPos != STRING_NOTFOUND && nPos < rStr.Len() )
-            nChar = rStr.GetChar( ++nPos );
+        nPos = rStr.indexOf( '~', nPos );
+        if( nPos != -1 && nPos < rStr.getLength() )
+            nChar = rStr[ ++nPos ];
         else
             nChar = 0;
     } while( nChar == '~' );

@@ -577,13 +577,13 @@ void FixedLine::ImplInitSettings( sal_Bool bFont,
 void FixedLine::ImplDraw( bool bLayout )
 {
     Size                    aOutSize = GetOutputSizePixel();
-    String                  aText = GetText();
+    OUString                aText = GetText();
     WinBits                 nWinStyle = GetStyle();
     MetricVector*           pVector = bLayout ? &mpControlData->mpLayoutData->m_aUnicodeBoundRects : NULL;
     OUString*               pDisplayText = bLayout ? &mpControlData->mpLayoutData->m_aDisplayText : NULL;
 
     DecorationView aDecoView( this );
-    if ( !aText.Len() )
+    if ( aText.isEmpty() )
     {
         if( !pVector )
         {

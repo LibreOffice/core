@@ -97,7 +97,7 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
 
     pJobSetup->mnPaperBin = 0xffff;
     if( rData.m_pParser )
-        pKey                    = rData.m_pParser->getKey( String( "InputSlot"  ) );
+        pKey                    = rData.m_pParser->getKey( OUString( "InputSlot"  ) );
     if( pKey )
         pValue                  = rData.m_aContext.getValue( pKey );
     if( pKey && pValue )
@@ -117,7 +117,7 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
 
     pJobSetup->meDuplexMode = DUPLEX_UNKNOWN;
     if( rData.m_pParser )
-        pKey = rData.m_pParser->getKey( String( "Duplex"  ) );
+        pKey = rData.m_pParser->getKey( OUString( "Duplex"  ) );
     if( pKey )
         pValue = rData.m_aContext.getValue( pKey );
     if( pKey && pValue )
@@ -231,8 +231,8 @@ void SvpSalInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
         sal_Int32 nIndex = 0;
         while( nIndex != -1 )
         {
-            String aToken( rInfo.m_aFeatures.getToken( 0, ',', nIndex ) );
-            if( aToken.CompareToAscii( "pdf=", 4 ) == COMPARE_EQUAL )
+            OUString aToken( rInfo.m_aFeatures.getToken( 0, ',', nIndex ) );
+            if( aToken.startsWith( "pdf=" ) )
             {
                 pInfo->maLocation = getPdfDir( rInfo );
                 break;
