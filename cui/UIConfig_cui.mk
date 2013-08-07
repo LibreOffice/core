@@ -92,6 +92,7 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/querydeletechartcolordialog \
 	cui/uiconfig/ui/querydeletedictionarydialog \
 	cui/uiconfig/ui/querydeletelineenddialog \
+	cui/uiconfig/ui/queryduplicatedialog \
 	cui/uiconfig/ui/scriptorganizer \
 	cui/uiconfig/ui/securityoptionsdialog \
 	cui/uiconfig/ui/select_persona_dialog \
