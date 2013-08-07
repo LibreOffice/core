@@ -325,8 +325,10 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickModifyHdl_Impl)
         // if yes, repeat and demand a new name
         if ( !bDifferent )
         {
-            WarningBox aWarningBox( GetParentDialog(), WinBits( WB_OK ), OUString( ResId( RID_SVXSTR_WARN_NAME_DUPLICATE, rMgr ) ) );
-            aWarningBox.SetHelpId( HID_WARN_NAME_DUPLICATE );
+            MessageDialog aWarningBox( GetParentDialog()
+                                      ,"DuplicateNameDialog"
+                                      ,"cui/ui/queryduplicatedialog.ui");
+//             aWarningBox.SetHelpId( HID_WARN_NAME_DUPLICATE );
             aWarningBox.Execute();
 
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
@@ -426,7 +428,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickAddHdl_Impl)
         {
             aName = aNewName;
             aName += sal_Unicode(' ');
-            aName += OUString::valueOf( j++ );
+            aName += OUString::number( j++ );
             bDifferent = sal_True;
 
             for( long i = 0; i < nCount && bDifferent; i++ )
@@ -469,8 +471,10 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickAddHdl_Impl)
             }
             else
             {
-                WarningBox aBox( GetParentDialog(), WinBits( WB_OK ), OUString( ResId( RID_SVXSTR_WARN_NAME_DUPLICATE, rMgr ) ) );
-                aBox.SetHelpId( HID_WARN_NAME_DUPLICATE );
+                MessageDialog aBox( GetParentDialog()
+                                   ,"DuplicateNameDialog"
+                                   ,"cui/ui/queryduplicatedialog.ui");
+                //aBox.SetHelpId( HID_WARN_NAME_DUPLICATE );
                 aBox.Execute();
             }
         }
