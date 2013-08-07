@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.6 -->
-  <object class="GtkMessageDialog" id="AskSaveList">
+  <object class="GtkMessageDialog" id="NoLoadedFileDialog">
     <property name="can_focus">False</property>
     <property name="border_width">12</property>
-    <property name="title" translatable="yes">Save list?</property>
+    <property name="title" translatable="yes">No loaded file</property>
     <property name="type_hint">dialog</property>
     <property name="skip_taskbar_hint">True</property>
-    <property name="message_type">warning</property>
-    <property name="buttons">ok-cancel</property>
-    <property name="text" translatable="yes">The list was modified without saving.</property>
-    <property name="secondary_text" translatable="yes">Would you like to save the list now?</property>
+    <property name="message_type">error</property>
+    <property name="buttons">ok</property>
+    <property name="text" translatable="yes">The file could not be loaded!</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="messagedialog-vbox">
         <property name="can_focus">False</property>

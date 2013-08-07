@@ -578,7 +578,9 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickLoadHdl_Impl)
                 *pnLineEndListState &= ~CT_MODIFIED;
             }
             else
-                ErrorBox( GetParentDialog(), WinBits( WB_OK ), OUString( ResId( RID_SVXSTR_READ_DATA_ERROR, rMgr ) ) ).Execute();
+                MessageDialog( GetParentDialog()
+                              ,"NoLoadedFileDialog"
+                              ,"cui/ui/querynoloadedfiledialog.ui").Execute();
         }
     }
 
