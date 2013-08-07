@@ -77,6 +77,13 @@ namespace connectivity
             virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL
                 getTypes()
                 throw(::com::sun::star::uno::RuntimeException);
+            // XCloseable
+            virtual void SAL_CALL close()
+                throw(::com::sun::star::sdbc::SQLException,
+                      ::com::sun::star::uno::RuntimeException);
+            // OComponentHelper
+            virtual void SAL_CALL disposing();
+
 
         };
     }

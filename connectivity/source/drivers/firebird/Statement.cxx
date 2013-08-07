@@ -181,4 +181,13 @@ uno::Sequence< Type > SAL_CALL OStatement::getTypes()
                            OStatementCommonBase::getTypes());
 }
 
+void SAL_CALL OStatement::close() throw(SQLException, RuntimeException)
+{
+    OStatementCommonBase::close();
+}
+
+void SAL_CALL OStatement::disposing()
+{
+    close();
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

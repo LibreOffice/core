@@ -154,7 +154,12 @@ namespace connectivity
                       ::com::sun::star::uno::RuntimeException);
 
             // XCloseable
-            virtual void SAL_CALL close(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL close()
+                throw(::com::sun::star::sdbc::SQLException,
+                      ::com::sun::star::uno::RuntimeException);
+            // OComponentHelper
+            virtual void SAL_CALL disposing();
+
             // XResultSetMetaDataSupplier
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData > SAL_CALL getMetaData(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 

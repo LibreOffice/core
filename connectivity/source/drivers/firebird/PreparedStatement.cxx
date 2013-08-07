@@ -177,12 +177,12 @@ Reference< XResultSetMetaData > SAL_CALL OPreparedStatement::getMetaData()
 
 void SAL_CALL OPreparedStatement::close() throw(SQLException, RuntimeException)
 {
-    SAL_INFO("connectivity.firebird", "close()");
-
-    MutexGuard aGuard( m_pConnection->getMutex() );
-    checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
-
     OStatementCommonBase::close();
+}
+
+void SAL_CALL OPreparedStatement::disposing()
+{
+    close();
 }
 
 void SAL_CALL OPreparedStatement::setString(sal_Int32 nParameterIndex,
