@@ -154,10 +154,10 @@ private:
     void WMFRecord_DeleteObject(sal_uInt16 nObjectHandle);
     void WMFRecord_Ellipse(const Rectangle & rRect);
     void WMFRecord_Escape( sal_uInt32 nEsc, sal_uInt32 nLen, const sal_Int8* pData );
-    bool WMFRecord_Escape_Unicode( const Point& rPoint, const String& rStr, const sal_Int32 * pDXAry );
-    void WMFRecord_ExtTextOut(const Point & rPoint, const String & rString, const sal_Int32 * pDXAry);
+    bool WMFRecord_Escape_Unicode( const Point& rPoint, const OUString& rStr, const sal_Int32 * pDXAry );
+    void WMFRecord_ExtTextOut(const Point & rPoint, const OUString & rString, const sal_Int32 * pDXAry);
 
-    void TrueExtTextOut(const Point & rPoint, const String & rString,
+    void TrueExtTextOut(const Point & rPoint, const OUString & rString,
         const OString& rByteString, const sal_Int32 * pDXAry);
     void TrueTextOut(const Point & rPoint, const OString& rString);
     void WMFRecord_LineTo(const Point & rPoint);
@@ -180,7 +180,7 @@ private:
     void WMFRecord_SetWindowExt(const Size & rSize);
     void WMFRecord_SetWindowOrg(const Point & rPoint);
     void WMFRecord_StretchDIB(const Point & rPoint, const Size & rSize, const Bitmap & rBitmap, sal_uInt32 nROP = 0UL );
-    void WMFRecord_TextOut(const Point & rPoint, const String & rString);
+    void WMFRecord_TextOut(const Point & rPoint, const OUString & rString);
     void WMFRecord_EndOfFile();
     void WMFRecord_IntersectClipRect( const Rectangle& rRect);
 

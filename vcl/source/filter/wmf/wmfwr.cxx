@@ -419,17 +419,17 @@ void WMFWriter::WMFRecord_Escape( sal_uInt32 nEsc, sal_uInt32 nLen, const sal_In
 /* if return value is true, then a complete unicode string and also a polygon replacement has been written,
     so there is no more action necessary
 */
-bool WMFWriter::WMFRecord_Escape_Unicode( const Point& rPoint, const String& rUniStr, const sal_Int32* pDXAry )
+bool WMFWriter::WMFRecord_Escape_Unicode( const Point& rPoint, const OUString& rUniStr, const sal_Int32* pDXAry )
 {
     bool bEscapeUsed = false;
 
-    sal_uInt32 i, nStringLen = rUniStr.Len();
+    sal_uInt32 i, nStringLen = rUniStr.getLength();
     if ( nStringLen )
     {
         // first we will check if a comment is necessary
         if ( aSrcFont.GetCharSet() != RTL_TEXTENCODING_SYMBOL )     // symbol is always byte character, so there is no unicode loss
         {
-            const sal_Unicode* pBuf = rUniStr.GetBuffer();
+            const sal_Unicode* pBuf = rUniStr.getStr();
             const rtl_TextEncoding aTextEncodingOrg = aSrcFont.GetCharSet();
             OString aByteStr(OUStringToOString(rUniStr, aTextEncodingOrg));
             OUString aUniStr2(OStringToOUString(aByteStr, aTextEncodingOrg));
@@ -442,7 +442,7 @@ bool WMFWriter::WMFRecord_Escape_Unicode( const Point& rPoint, const String& rUn
 
             if  ( i != nStringLen )                             // after conversion the characters are not original,
             {                                                   // try again, with determining a better charset from unicode char
-                pBuf = rUniStr.GetBuffer();
+                pBuf = rUniStr.getStr();
                 const sal_Unicode* pCheckChar = pBuf;
                 rtl_TextEncoding aTextEncoding = getBestMSEncodingByChar(*pCheckChar); // try the first character
                 for ( i = 1; i < nStringLen; i++)
@@ -493,7 +493,7 @@ bool WMFWriter::WMFRecord_Escape_Unicode( const Point& rPoint, const String& rUn
                                   << static_cast<sal_Int32>(aPt.Y())
                                   << nStringLen;
                     for ( i = 0; i < nStringLen; i++ )
-                        aMemoryStream << rUniStr.GetChar( (sal_uInt16)i );
+                        aMemoryStream << rUniStr[ i ];
                     aMemoryStream << nDXCount;
                     for ( i = 0; i < nDXCount; i++ )
                         aMemoryStream << pDXAry[ i ];
@@ -518,9 +518,9 @@ bool WMFWriter::WMFRecord_Escape_Unicode( const Point& rPoint, const String& rUn
 }
 
 void WMFWriter::WMFRecord_ExtTextOut( const Point & rPoint,
-    const String & rString, const sal_Int32 * pDXAry )
+    const OUString & rString, const sal_Int32 * pDXAry )
 {
-    sal_uInt16 nOriginalTextLen = rString.Len();
+    sal_Int32 nOriginalTextLen = rString.getLength();
 
     if ( (nOriginalTextLen <= 1) || (pDXAry == NULL) )
     {
@@ -532,7 +532,7 @@ void WMFWriter::WMFRecord_ExtTextOut( const Point & rPoint,
     TrueExtTextOut(rPoint,rString,aByteString,pDXAry);
 }
 
-void WMFWriter::TrueExtTextOut( const Point & rPoint, const String & rString,
+void WMFWriter::TrueExtTextOut( const Point & rPoint, const OUString & rString,
     const OString& rByteString, const sal_Int32 * pDXAry )
 {
     WriteRecordHeader( 0, W_META_EXTTEXTOUT );
@@ -543,7 +543,7 @@ void WMFWriter::TrueExtTextOut( const Point & rPoint, const String & rString,
     if ( nNewTextLen & 1 )
         *pWMF << (sal_uInt8)0;
 
-    sal_uInt16 nOriginalTextLen = rString.Len();
+    sal_Int32 nOriginalTextLen = rString.getLength();
     sal_Int16* pConvertedDXAry = new sal_Int16[ nOriginalTextLen ];
     sal_Int32 j = 0;
     pConvertedDXAry[ j++ ] = (sal_Int16)ScaleWidth( pDXAry[ 0 ] );
@@ -557,7 +557,7 @@ void WMFWriter::TrueExtTextOut( const Point & rPoint, const String & rString,
         *pWMF << nDx;
         if ( nOriginalTextLen < nNewTextLen )
         {
-            sal_Unicode nUniChar = rString.GetChar(i);
+            sal_Unicode nUniChar = rString[i];
             OString aTemp(&nUniChar, 1, aSrcFont.GetCharSet());
             j = aTemp.getLength();
             while ( --j > 0 )
@@ -815,7 +815,7 @@ void WMFWriter::WMFRecord_StretchDIB( const Point & rPoint, const Size & rSize,
 }
 
 
-void WMFWriter::WMFRecord_TextOut(const Point & rPoint, const String & rStr)
+void WMFWriter::WMFRecord_TextOut(const Point & rPoint, const OUString & rStr)
 {
     rtl_TextEncoding eChrSet = aSrcFont.GetCharSet();
     OString aString(OUStringToOString(rStr, eChrSet));
@@ -1169,7 +1169,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 case META_TEXTRECT_ACTION:
                 {
                     const MetaTextRectAction * pA = (const MetaTextRectAction*)pMA;
-                    String aTemp( pA->GetText() );
+                    OUString aTemp( pA->GetText() );
                     aSrcLineInfo = LineInfo();
                     SetAllAttr();
 
@@ -1182,7 +1182,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 case META_TEXT_ACTION:
                 {
                     const MetaTextAction * pA = (const MetaTextAction*) pMA;
-                    String aTemp( pA->GetText(), pA->GetIndex(), pA->GetLen() );
+                    OUString aTemp = pA->GetText().copy( pA->GetIndex(), pA->GetLen() );
                     aSrcLineInfo = LineInfo();
                     SetAllAttr();
                     if ( !WMFRecord_Escape_Unicode( pA->GetPoint(), aTemp, NULL ) )
@@ -1194,7 +1194,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 {
                     const MetaTextArrayAction* pA = (const MetaTextArrayAction*) pMA;
 
-                    String aTemp( pA->GetText(), pA->GetIndex(), pA->GetLen() );
+                    OUString aTemp = pA->GetText().copy( pA->GetIndex(), pA->GetLen() );
                     aSrcLineInfo = LineInfo();
                     SetAllAttr();
                     if ( !WMFRecord_Escape_Unicode( pA->GetPoint(), aTemp, pA->GetDXArray() ) )
@@ -1205,13 +1205,13 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 case META_STRETCHTEXT_ACTION:
                 {
                     const MetaStretchTextAction* pA = (const MetaStretchTextAction *) pMA;
-                    String aTemp( pA->GetText(), pA->GetIndex(), pA->GetLen() );
+                    OUString aTemp = pA->GetText().copy( pA->GetIndex(), pA->GetLen() );
 
                     sal_uInt16 nLen,i;
                     sal_Int32 nNormSize;
 
                     pVirDev->SetFont( aSrcFont );
-                    nLen = aTemp.Len();
+                    nLen = aTemp.getLength();
                     sal_Int32* pDXAry = nLen ? new sal_Int32[ nLen ] : NULL;
                     nNormSize = pVirDev->GetTextArray( aTemp, pDXAry );
                     for ( i = 0; i < ( nLen - 1 ); i++ )
