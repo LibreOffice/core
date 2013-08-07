@@ -569,13 +569,23 @@ Any SAL_CALL OResultSet::getObject( sal_Int32 columnIndex, const uno::Reference<
 
 // -------------------------------------------------------------------------
 
-void SAL_CALL OResultSet::close(  ) throw(SQLException, RuntimeException)
+void SAL_CALL OResultSet::close() throw(SQLException, RuntimeException)
 {
     SAL_INFO("connectivity.firebird", "close().");
 
     {
         MutexGuard aGuard(m_pConnection->getMutex());
         checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
+        ISC_STATUS_ARRAY aStatusVector;
+        ISC_STATUS aErr;
+        aErr = isc_dsql_free_statement(aStatusVector,
+                                       &m_statementHandle,
+                                       DSQL_drop);
+        if (aErr)
+            evaluateStatusVector(aStatusVector,
+                                 "isc_dsql_free_statement",
+                                 *this);
 
     }
     dispose();
