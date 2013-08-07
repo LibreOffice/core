@@ -522,279 +522,28 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
         rKEvt.GetKeyCode().GetCode() == KEY_TAB ||
         rKEvt.GetKeyCode().GetCode() == KEY_RETURN ) && CodeCompleteOptions::IsAutoCorrectKeywordsOn() )
     {
-        TextSelection aSel = GetEditView()->GetSelection();
-        sal_uLong nLine =  aSel.GetStart().GetPara();
-        OUString aLine( pEditEngine->GetText( nLine ) ); // the line being modified
-
-        HighlightPortions aPortions;
-        aHighlighter.getHighlightPortions( nLine, aLine, aPortions );
-        if( aPortions.size() > 0 )
-        {
-            HighlightPortion& r = aPortions[aPortions.size()-1];
-            if( r.tokenType == 9 ) // correct the last entered keyword
-            {
-                OUString sStr = aLine.copy(r.nBegin, r.nEnd - r.nBegin);
-                if( !sStr.isEmpty() )
-                {
-                    //capitalize first letter and replace
-                    sStr = sStr.toAsciiLowerCase();
-                    sStr = sStr.replaceAt( 0, 1, OUString(sStr[0]).toAsciiUpperCase() );
-
-                    TextPaM aStart(nLine, aSel.GetStart().GetIndex() - sStr.getLength() );
-                    TextSelection sTextSelection(aStart, TextPaM(nLine, aSel.GetStart().GetIndex()));
-                    pEditEngine->ReplaceText( sTextSelection, sStr );
-                    pEditView->SetSelection( aSel );
-                }
-            }
-        }
+        HandleAutoCorrect();
     }
 
     if( rKEvt.GetCharCode() == '"' && CodeCompleteOptions::IsAutoCloseQuotesOn() )
     {//autoclose double quotes
-        TextSelection aSel = GetEditView()->GetSelection();
-        sal_uLong nLine =  aSel.GetStart().GetPara();
-        OUString aLine( pEditEngine->GetText( nLine ) ); // the line being modified
-
-        HighlightPortions aPortions;
-        aHighlighter.getHighlightPortions( nLine, aLine, aPortions );
-        if( aPortions.size() != 0 )
-        {
-            if( aLine.getLength() > 0 && aLine[aLine.getLength()-1] != '"' && (aPortions[aPortions.size()-1].tokenType != 4) )
-            {
-                GetEditView()->InsertText(OUString("\""));
-                //leave the cursor on it's place: inside the two double quotes
-                TextPaM aEnd(nLine, aSel.GetEnd().GetIndex());
-                GetEditView()->SetSelection( TextSelection( aEnd, aEnd ) );
-            }
-        }
+        HandleAutoCloseDoubleQuotes();
     }
 
     if( rKEvt.GetCharCode() == '(' && CodeCompleteOptions::IsAutoCloseParenthesisOn() )
     {//autoclose parenthesis
-        TextSelection aSel = GetEditView()->GetSelection();
-        sal_uLong nLine =  aSel.GetStart().GetPara();
-        OUString aLine( pEditEngine->GetText( nLine ) ); // the line being modified
-
-        if( aLine.getLength() > 0 && aLine[aSel.GetEnd().GetIndex()-1] != '(' )
-        {
-            GetEditView()->InsertText(OUString(")"));
-            //leave the cursor on it's place: inside the parenthesis
-            TextPaM aEnd(nLine, aSel.GetEnd().GetIndex());
-            GetEditView()->SetSelection( TextSelection( aEnd, aEnd ) );
-        }
+        HandleAutoCloseParen();
     }
 
     if( rKEvt.GetKeyCode().GetCode() == KEY_RETURN && CodeCompleteOptions::IsProcedureAutoCompleteOn() )
     {//autoclose implementation
-        TextSelection aSel = GetEditView()->GetSelection();
-        sal_uLong nLine = aSel.GetStart().GetPara();
-        OUString aLine( pEditEngine->GetText( nLine ) );
-        OUString sActSub = GetActualSubName( nLine );
-
-        HighlightPortions aPortions;
-        aHighlighter.getHighlightPortions( nLine, aLine, aPortions );
-        OUString sProcType;
-        OUString sProcName;
-        bool bFoundType = false;
-        bool bFoundName = false;
-        if( aPortions.size() != 0 )
-        {
-            for ( size_t i = 0; i < aPortions.size(); i++ )
-            {
-                HighlightPortion& r = aPortions[i];
-                OUString sTokStr = aLine.copy(r.nBegin, r.nEnd - r.nBegin);
-                if( r.tokenType == 9 && ( sTokStr.equalsIgnoreAsciiCase("sub")
-                    || sTokStr.equalsIgnoreAsciiCase("function")) )
-                {
-                    sProcType = sTokStr;
-                    bFoundType = true;
-                }
-                if( r.tokenType == 1 && bFoundType )
-                {
-                    sProcName = sTokStr;
-                    bFoundName = true;
-                    break;
-                }
-            }
-            if( bFoundType && bFoundName )
-            {// found, search for end
-                if( nLine+1 == pEditEngine->GetParagraphCount() )
-                { //append to the end
-                    OUString sText("\nEnd ");
-                    if( sProcType.equalsIgnoreAsciiCase("function") )
-                        sText += OUString( "Function\n" );
-                    if( sProcType.equalsIgnoreAsciiCase("sub") )
-                        sText += OUString( "Sub\n" );
-                    pEditView->InsertText( sText );
-                }
-                else
-                {
-                    for( sal_uLong i = nLine+1; i < pEditEngine->GetParagraphCount(); ++i )
-                    {
-                        OUString aCurrLine = pEditEngine->GetText( i );
-                        HighlightPortions aCurrPortions;
-                        aHighlighter.getHighlightPortions( i, aCurrLine, aCurrPortions );
-                        if( aCurrPortions.size() >= 3 )
-                        {
-                            HighlightPortion& r1 = aCurrPortions[0];
-                            OUString sStr1 = aCurrLine.copy(r1.nBegin, r1.nEnd - r1.nBegin);
-
-                            if( r1.tokenType == 9 )
-                            {
-                                if( sStr1.equalsIgnoreAsciiCase("sub") )
-                                {
-                                    OUString sText("\nEnd ");
-                                    if( sProcType.equalsIgnoreAsciiCase("function") )
-                                        sText += OUString( "Function\n" );
-                                    if( sProcType.equalsIgnoreAsciiCase("sub") )
-                                        sText += OUString( "Sub\n" );
-                                    pEditView->InsertText( sText );
-                                    break;
-                                }
-                                if( sStr1.equalsIgnoreAsciiCase("function") )
-                                {
-                                    OUString sText("\nEnd ");
-                                    if( sProcType.equalsIgnoreAsciiCase("function") )
-                                        sText += OUString( "Function\n" );
-                                    if( sProcType.equalsIgnoreAsciiCase("sub") )
-                                        sText += OUString( "Sub\n" );
-                                    pEditView->InsertText( sText );
-                                    break;
-                                }
-                                if( sStr1.equalsIgnoreAsciiCase("end") )
-                                {
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
+       HandleProcedureCompletition();
     }
 
     if( rKEvt.GetKeyCode().GetCode() == KEY_POINT &&
         (CodeCompleteOptions::IsCodeCompleteOn() || CodeCompleteOptions::IsExtendedTypeDeclaration()) )
     {
-        rModulWindow.UpdateModule();
-        rModulWindow.GetSbModule()->GetCodeCompleteDataFromParse(aCodeCompleteCache);
-        TextSelection aSel = GetEditView()->GetSelection();
-        sal_uLong nLine =  aSel.GetStart().GetPara();
-        OUString aLine( pEditEngine->GetText( nLine ) ); // the line being modified
-        std::vector< OUString > aVect;
-
-        HighlightPortions aPortions;
-        aHighlighter.getHighlightPortions( nLine, aLine, aPortions );
-        if( aPortions.size() != 0 )
-        {
-            for ( size_t i = 0; i < aPortions.size(); i++ )
-            {
-                HighlightPortion& r = aPortions[i];
-                if( r.tokenType == 1 || r.tokenType == 9) // extract the identifers(methods, base variable)
-                /* an example: Dim aLocVar2 as com.sun.star.beans.PropertyValue
-                 * here, aLocVar2.Name, and PropertyValue's Name field is treated as a keyword(?!)
-                 * */
-                    aVect.push_back( aLine.copy(r.nBegin, r.nEnd - r.nBegin) );
-            }
-
-            OUString sBaseName = aVect[0];//variable name
-            OUString sVarType = aCodeCompleteCache.GetVarType( sBaseName );
-            if( !sVarType.isEmpty() && CodeCompleteOptions::IsAutoCorrectKeywordsOn() )//correct variable name
-            {
-                TextPaM aStart(nLine, aSel.GetStart().GetIndex() - sBaseName.getLength() );
-                TextSelection sTextSelection(aStart, TextPaM(nLine, aSel.GetStart().GetIndex()));
-                pEditEngine->ReplaceText( sTextSelection, aCodeCompleteCache.GetCorrectCaseVarName(sBaseName) );
-                pEditView->SetSelection( aSel );
-            }
-
-            Reference< lang::XMultiServiceFactory > xFactory( comphelper::getProcessServiceFactory(), UNO_SET_THROW );
-            Reference< reflection::XIdlReflection > xRefl( xFactory->createInstance("com.sun.star.reflection.CoreReflection"), UNO_QUERY_THROW );
-
-            if( xRefl.is() )
-            {
-                Reference< reflection::XIdlClass > xClass = xRefl->forName(sVarType);//get the base class for reflection
-                if( xClass != NULL )
-                {
-                    unsigned int j = 1;
-                    OUString sMethName;
-                    bool bReflect = true;
-                    while( j != aVect.size() )
-                    {
-                        sMethName = aVect[j];
-                        Reference< reflection::XIdlField> xField = xClass->getField( sMethName );
-                        if( xField != NULL )
-                        {
-                            xClass = xField->getType();
-                            if( xClass == NULL )
-                            {
-                                break;
-                            }
-                        }
-                        else
-                        {
-                            if( CodeCompleteOptions::IsExtendedTypeDeclaration() )
-                            {
-                                Reference< reflection::XIdlMethod> xMethod = xClass->getMethod( sMethName );
-                                if( xMethod != NULL ) //method OK
-                                {
-                                    xClass = xMethod->getReturnType();
-                                    if( xClass == NULL )
-                                    {
-                                        break;
-                                    }
-                                }
-                                else
-                                {//nothing to reflect
-                                    bReflect = false;
-                                    break;
-                                }
-                            }
-                            else
-                            {// no extended types allowed
-                                bReflect = false;
-                                break;
-                            }
-                        }
-                        j++;
-                    }
-                    if( bReflect )
-                    {
-                        std::vector< OUString > aEntryVect;//entries to be inserted into the list
-                        std::vector< OUString > aMethVect = GetXIdlClassMethods(xClass);//methods
-                        std::vector< OUString > aFieldVect = GetXIdlClassFields(xClass);//fields
-                        aEntryVect.insert(aEntryVect.end(), aFieldVect.begin(), aFieldVect.end() );
-                        if( CodeCompleteOptions::IsExtendedTypeDeclaration() )
-                        {// if extended types on, reflect classes, else just the structs (XIdlClass without methods)
-                            aEntryVect.insert(aEntryVect.end(), aMethVect.begin(), aMethVect.end() );
-                        }
-                        if( aEntryVect.size() > 0 )
-                        {
-                            // calculate position
-                            Rectangle aRect = ( (TextEngine*) GetEditEngine() )->PaMtoEditCursor( aSel.GetEnd() , false );
-                            long nViewYOffset = pEditView->GetStartDocPos().Y();
-                            Point aPoint = aRect.BottomRight();
-                            aPoint.Y() = aPoint.Y() - nViewYOffset;
-                            aPoint.Y() += 2;
-                            aSel.GetStart().GetIndex() += 1;
-                            aSel.GetEnd().GetIndex() += 1;
-                            pCodeCompleteWnd->ClearListBox();
-                            pCodeCompleteWnd->SetTextSelection(aSel);
-                            //fill the listbox
-                            for(unsigned int l = 0; l < aEntryVect.size(); ++l)
-                            {
-                                pCodeCompleteWnd->InsertEntry( aEntryVect[l] );
-                            }
-                            //show it
-                            pCodeCompleteWnd->SetPosPixel( aPoint );
-                            pCodeCompleteWnd->Show();
-                            pCodeCompleteWnd->ResizeListBox();
-                            pCodeCompleteWnd->SelectFirstEntry();
-                            pEditView->GetWindow()->GrabFocus();
-                        }
-                    }
-                }
-            }
-        }
+        HandleCodeCompletition();
     }
     if ( !bDone && ( !TextEngine::DoesKeyChangeText( rKEvt ) || ImpCanModify()  ) )
     {
@@ -835,6 +584,273 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
             }
             if ( rKEvt.GetKeyCode().GetCode() == KEY_INSERT )
                 pBindings->Invalidate( SID_ATTR_INSERT );
+        }
+    }
+}
+
+void EditorWindow::HandleAutoCorrect()
+{
+    TextSelection aSel = GetEditView()->GetSelection();
+    sal_uLong nLine =  aSel.GetStart().GetPara();
+    OUString aLine( pEditEngine->GetText( nLine ) ); // the line being modified
+
+    HighlightPortions aPortions;
+    aHighlighter.getHighlightPortions( nLine, aLine, aPortions );
+    if( aPortions.size() > 0 )
+    {
+        HighlightPortion& r = aPortions[aPortions.size()-1];
+        if( r.tokenType == 9 ) // correct the last entered keyword
+        {
+            OUString sStr = aLine.copy(r.nBegin, r.nEnd - r.nBegin);
+            if( !sStr.isEmpty() )
+            {
+                //capitalize first letter and replace
+                sStr = sStr.toAsciiLowerCase();
+                sStr = sStr.replaceAt( 0, 1, OUString(sStr[0]).toAsciiUpperCase() );
+
+                TextPaM aStart(nLine, aSel.GetStart().GetIndex() - sStr.getLength() );
+                TextSelection sTextSelection(aStart, TextPaM(nLine, aSel.GetStart().GetIndex()));
+                pEditEngine->ReplaceText( sTextSelection, sStr );
+                pEditView->SetSelection( aSel );
+            }
+        }
+    }
+}
+
+void EditorWindow::HandleAutoCloseParen()
+{
+    TextSelection aSel = GetEditView()->GetSelection();
+    sal_uLong nLine =  aSel.GetStart().GetPara();
+    OUString aLine( pEditEngine->GetText( nLine ) ); // the line being modified
+
+    if( aLine.getLength() > 0 && aLine[aSel.GetEnd().GetIndex()-1] != '(' )
+    {
+        GetEditView()->InsertText(OUString(")"));
+        //leave the cursor on it's place: inside the parenthesis
+        TextPaM aEnd(nLine, aSel.GetEnd().GetIndex());
+        GetEditView()->SetSelection( TextSelection( aEnd, aEnd ) );
+    }
+}
+
+void EditorWindow::HandleAutoCloseDoubleQuotes()
+{
+    TextSelection aSel = GetEditView()->GetSelection();
+    sal_uLong nLine =  aSel.GetStart().GetPara();
+    OUString aLine( pEditEngine->GetText( nLine ) ); // the line being modified
+
+    HighlightPortions aPortions;
+    aHighlighter.getHighlightPortions( nLine, aLine, aPortions );
+    if( aPortions.size() != 0 )
+    {
+        if( aLine.getLength() > 0 && aLine[aLine.getLength()-1] != '"' && (aPortions[aPortions.size()-1].tokenType != 4) )
+        {
+            GetEditView()->InsertText(OUString("\""));
+            //leave the cursor on it's place: inside the two double quotes
+            TextPaM aEnd(nLine, aSel.GetEnd().GetIndex());
+            GetEditView()->SetSelection( TextSelection( aEnd, aEnd ) );
+        }
+    }
+}
+
+void EditorWindow::HandleProcedureCompletition()
+{
+    TextSelection aSel = GetEditView()->GetSelection();
+    sal_uLong nLine = aSel.GetStart().GetPara();
+    OUString aLine( pEditEngine->GetText( nLine ) );
+    OUString sActSub = GetActualSubName( nLine );
+
+    HighlightPortions aPortions;
+    aHighlighter.getHighlightPortions( nLine, aLine, aPortions );
+    OUString sProcType;
+    OUString sProcName;
+    bool bFoundType = false;
+    bool bFoundName = false;
+    if( aPortions.size() != 0 )
+    {
+        for ( size_t i = 0; i < aPortions.size(); i++ )
+        {
+            HighlightPortion& r = aPortions[i];
+            OUString sTokStr = aLine.copy(r.nBegin, r.nEnd - r.nBegin);
+            if( r.tokenType == 9 && ( sTokStr.equalsIgnoreAsciiCase("sub")
+                || sTokStr.equalsIgnoreAsciiCase("function")) )
+            {
+                sProcType = sTokStr;
+                bFoundType = true;
+            }
+            if( r.tokenType == 1 && bFoundType )
+            {
+                sProcName = sTokStr;
+                bFoundName = true;
+                break;
+            }
+        }
+        if( bFoundType && bFoundName )
+        {// found, search for end
+            OUString sText("\nEnd ");
+            if( sProcType.equalsIgnoreAsciiCase("function") )
+                sText += OUString( "Function\n" );
+            if( sProcType.equalsIgnoreAsciiCase("sub") )
+                sText += OUString( "Sub\n" );
+
+            if( nLine+1 == pEditEngine->GetParagraphCount() )
+            { //append to the end
+                pEditView->InsertText( sText );
+            }
+            else
+            {
+                for( sal_uLong i = nLine+1; i < pEditEngine->GetParagraphCount(); ++i )
+                {
+                    OUString aCurrLine = pEditEngine->GetText( i );
+                    HighlightPortions aCurrPortions;
+                    aHighlighter.getHighlightPortions( i, aCurrLine, aCurrPortions );
+                    if( aCurrPortions.size() >= 3 )
+                    {
+                        HighlightPortion& r1 = aCurrPortions[0];
+                        OUString sStr1 = aCurrLine.copy(r1.nBegin, r1.nEnd - r1.nBegin);
+
+                        if( r1.tokenType == 9 )
+                        {
+                            if( sStr1.equalsIgnoreAsciiCase("sub") )
+                            {
+                                pEditView->InsertText( sText );
+                                break;
+                            }
+                            if( sStr1.equalsIgnoreAsciiCase("function") )
+                            {
+                                pEditView->InsertText( sText );
+                                break;
+                            }
+                            if( sStr1.equalsIgnoreAsciiCase("end") )
+                            {
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+void EditorWindow::HandleCodeCompletition()
+{
+    rModulWindow.UpdateModule();
+    rModulWindow.GetSbModule()->GetCodeCompleteDataFromParse(aCodeCompleteCache);
+    TextSelection aSel = GetEditView()->GetSelection();
+    sal_uLong nLine =  aSel.GetStart().GetPara();
+    OUString aLine( pEditEngine->GetText( nLine ) ); // the line being modified
+    std::vector< OUString > aVect;
+
+    HighlightPortions aPortions;
+    aHighlighter.getHighlightPortions( nLine, aLine, aPortions );
+    if( aPortions.size() != 0 )
+    {
+        for ( size_t i = 0; i < aPortions.size(); i++ )
+        {
+            HighlightPortion& r = aPortions[i];
+            if( r.tokenType == 1 || r.tokenType == 9) // extract the identifers(methods, base variable)
+            /* an example: Dim aLocVar2 as com.sun.star.beans.PropertyValue
+             * here, aLocVar2.Name, and PropertyValue's Name field is treated as a keyword(?!)
+             * */
+                aVect.push_back( aLine.copy(r.nBegin, r.nEnd - r.nBegin) );
+        }
+
+        OUString sBaseName = aVect[0];//variable name
+        OUString sVarType = aCodeCompleteCache.GetVarType( sBaseName );
+        if( !sVarType.isEmpty() && CodeCompleteOptions::IsAutoCorrectKeywordsOn() )//correct variable name
+        {
+            TextPaM aStart(nLine, aSel.GetStart().GetIndex() - sBaseName.getLength() );
+            TextSelection sTextSelection(aStart, TextPaM(nLine, aSel.GetStart().GetIndex()));
+            pEditEngine->ReplaceText( sTextSelection, aCodeCompleteCache.GetCorrectCaseVarName(sBaseName) );
+            pEditView->SetSelection( aSel );
+        }
+
+        Reference< lang::XMultiServiceFactory > xFactory( comphelper::getProcessServiceFactory(), UNO_SET_THROW );
+        Reference< reflection::XIdlReflection > xRefl( xFactory->createInstance("com.sun.star.reflection.CoreReflection"), UNO_QUERY_THROW );
+
+        if( xRefl.is() )
+        {
+            Reference< reflection::XIdlClass > xClass = xRefl->forName(sVarType);//get the base class for reflection
+            if( xClass != NULL )
+            {
+                unsigned int j = 1;
+                OUString sMethName;
+                bool bReflect = true;
+                while( j != aVect.size() )
+                {
+                    sMethName = aVect[j];
+                    Reference< reflection::XIdlField> xField = xClass->getField( sMethName );
+                    if( xField != NULL )
+                    {
+                        xClass = xField->getType();
+                        if( xClass == NULL )
+                        {
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        if( CodeCompleteOptions::IsExtendedTypeDeclaration() )
+                        {
+                            Reference< reflection::XIdlMethod> xMethod = xClass->getMethod( sMethName );
+                            if( xMethod != NULL ) //method OK
+                            {
+                                xClass = xMethod->getReturnType();
+                                if( xClass == NULL )
+                                {
+                                    break;
+                                }
+                            }
+                            else
+                            {//nothing to reflect
+                                bReflect = false;
+                                break;
+                            }
+                        }
+                        else
+                        {// no extended types allowed
+                            bReflect = false;
+                            break;
+                        }
+                    }
+                    j++;
+                }
+                if( bReflect )
+                {
+                    std::vector< OUString > aEntryVect;//entries to be inserted into the list
+                    std::vector< OUString > aMethVect = GetXIdlClassMethods(xClass);//methods
+                    std::vector< OUString > aFieldVect = GetXIdlClassFields(xClass);//fields
+                    aEntryVect.insert(aEntryVect.end(), aFieldVect.begin(), aFieldVect.end() );
+                    if( CodeCompleteOptions::IsExtendedTypeDeclaration() )
+                    {// if extended types on, reflect classes, else just the structs (XIdlClass without methods)
+                        aEntryVect.insert(aEntryVect.end(), aMethVect.begin(), aMethVect.end() );
+                    }
+                    if( aEntryVect.size() > 0 )
+                    {
+                        // calculate position
+                        Rectangle aRect = ( (TextEngine*) GetEditEngine() )->PaMtoEditCursor( aSel.GetEnd() , false );
+                        long nViewYOffset = pEditView->GetStartDocPos().Y();
+                        Point aPoint = aRect.BottomRight();
+                        aPoint.Y() = aPoint.Y() - nViewYOffset;
+                        aPoint.Y() += 2;
+                        aSel.GetStart().GetIndex() += 1;
+                        aSel.GetEnd().GetIndex() += 1;
+                        pCodeCompleteWnd->ClearListBox();
+                        pCodeCompleteWnd->SetTextSelection(aSel);
+                        //fill the listbox
+                        for(unsigned int l = 0; l < aEntryVect.size(); ++l)
+                        {
+                            pCodeCompleteWnd->InsertEntry( aEntryVect[l] );
+                        }
+                        //show it
+                        pCodeCompleteWnd->SetPosPixel( aPoint );
+                        pCodeCompleteWnd->Show();
+                        pCodeCompleteWnd->ResizeListBox();
+                        pCodeCompleteWnd->SelectFirstEntry();
+                        pEditView->GetWindow()->GrabFocus();
+                    }
+                }
+            }
         }
     }
 }
@@ -2659,7 +2675,6 @@ void CodeCompleteListBox::SetVisibleEntries()
 
 void CodeCompleteListBox::KeyInput( const KeyEvent& rKeyEvt )
 {
-    //std::cerr << "CodeCompleteListBox::KeyInput" << std::endl;
     sal_Unicode aChar = rKeyEvt.GetKeyCode().GetCode();
     if( ( aChar >= KEY_A ) && ( aChar <= KEY_Z ) )
     {
@@ -2768,8 +2783,9 @@ void CodeCompleteWindow::ResizeListBox()
         const Font& aFont = pListBox->GetUnzoomedControlPointFont();
 
         Rectangle aVisArea( pParent->GetEditView()->GetStartDocPos(), pParent->GetOutputSizePixel() );
-        Size aSize = pListBox->CalcSize( nColumns+1, nLines );
-        aSize.setWidth(nWidth+5);
+        Size aSize = pListBox->GetOptimalSize();//this sets the correct width
+        aSize.setHeight( pListBox->CalcSize( nColumns, nLines ).getHeight() );
+
         Point aBottomPoint = aVisArea.BottomRight();
         Point aTopPoint = aVisArea.TopRight();
         long nYDiff = std::abs((aBottomPoint.Y() - aTopPoint.Y()) - GetPosPixel().Y());

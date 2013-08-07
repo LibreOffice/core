@@ -122,6 +122,11 @@ private:
     OUString GetActualSubName( sal_uLong nLine ); // gets the actual subroutine name according to line number
     std::vector< OUString > GetXIdlClassMethods( ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlClass > xClass ) const;
     std::vector< OUString > GetXIdlClassFields( ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlClass > xClass ) const;
+    void HandleAutoCorrect();
+    void HandleAutoCloseParen();
+    void HandleAutoCloseDoubleQuotes();
+    void HandleCodeCompletition();
+    void HandleProcedureCompletition();
 
 protected:
     virtual void    Paint( const Rectangle& );
