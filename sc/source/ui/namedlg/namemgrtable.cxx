@@ -143,7 +143,7 @@ void ScRangeManagerTable::Init()
         for (ScRangeName::const_iterator it = pLocalRangeName->begin();
                 it != pLocalRangeName->end(); ++it)
         {
-            if (!it->second->HasType(RT_DATABASE) && !it->second->HasType(RT_SHARED))
+            if (!it->second->HasType(RT_DATABASE))
             {
                 aLine.aName = it->second->GetName();
                 addEntry(aLine, false);

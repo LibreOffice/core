@@ -765,15 +765,9 @@ void XclTokenArrayHelper::ConvertStringToList( ScTokenArray& rScTokArr, sal_Unic
 
 // shared formulas ------------------------------------------------------------
 
-const ScTokenArray* XclTokenArrayHelper::GetSharedFormula( const XclRoot& rRoot, const ScTokenArray& rScTokArr )
+const ScTokenArray* XclTokenArrayHelper::GetSharedFormula( const XclRoot& /*rRoot*/, const ScTokenArray& /*rScTokArr*/ )
 {
-    if( rScTokArr.GetLen() == 1 )
-        if( const FormulaToken* pScToken = rScTokArr.GetArray()[ 0 ] )
-            if( pScToken->GetOpCode() == ocName )
-                if( ScRangeData* pData = rRoot.GetNamedRanges().findByIndex( pScToken->GetIndex() ) )
-                    if( pData->HasType( RT_SHARED ) )
-                        return pData->GetCode();
-    return 0;
+    return NULL;
 }
 
 // multiple operations --------------------------------------------------------

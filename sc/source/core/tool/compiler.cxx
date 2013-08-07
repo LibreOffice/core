@@ -4302,12 +4302,7 @@ void ScCompiler::CreateStringFromIndex(OUStringBuffer& rBuffer,FormulaToken* _pT
         {
             ScRangeData* pData = GetRangeData( *_pTokenP);
             if (pData)
-            {
-                if (pData->HasType(RT_SHARED))
-                    pData->UpdateSymbol( aBuffer, aPos, GetGrammar());
-                else
-                    aBuffer.append(pData->GetName());
-            }
+                aBuffer.append(pData->GetName());
         }
         break;
         case ocDBArea:

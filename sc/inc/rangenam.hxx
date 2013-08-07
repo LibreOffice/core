@@ -51,8 +51,6 @@ typedef sal_uInt16 RangeType;
 #define RT_ABSAREA          ((RangeType)0x0020)
 #define RT_REFAREA          ((RangeType)0x0040)
 #define RT_ABSPOS           ((RangeType)0x0080)
-#define RT_SHARED           ((RangeType)0x0100)
-#define RT_SHAREDMOD        ((RangeType)0x0200)
 
 class ScRangeData
 {

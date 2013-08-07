@@ -82,7 +82,7 @@ static bool lcl_UserVisibleName(const ScRangeData& rData)
 {
     //! als Methode an ScRangeData
 
-    return !rData.HasType(RT_DATABASE) && !rData.HasType(RT_SHARED);
+    return !rData.HasType(RT_DATABASE);
 }
 
 ScNamedRangeObj::ScNamedRangeObj( rtl::Reference< ScNamedRangesObj > xParent, ScDocShell* pDocSh, const String& rNm, Reference<container::XNamed> xSheet):
@@ -378,7 +378,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScNamedRangeObj::getPropertySet
 }
 
 void SAL_CALL ScNamedRangeObj::setPropertyValue(
-                        const OUString& rPropertyName, const uno::Any& aValue )
+                        const OUString& rPropertyName, const uno::Any& /*aValue*/ )
                 throw(beans::UnknownPropertyException, beans::PropertyVetoException,
                         lang::IllegalArgumentException, lang::WrappedTargetException,
                         uno::RuntimeException)
@@ -386,12 +386,7 @@ void SAL_CALL ScNamedRangeObj::setPropertyValue(
     SolarMutexGuard aGuard;
     if ( rPropertyName == SC_UNONAME_ISSHAREDFMLA )
     {
-        bool bIsShared = false;
-        if( aValue >>= bIsShared )
-        {
-            sal_uInt16 nNewType = bIsShared ? RT_SHARED : RT_NAME;
-            Modify_Impl( NULL, NULL, NULL, NULL, &nNewType,formula::FormulaGrammar::GRAM_PODF_A1 );
-        }
+        // Ignore this.
     }
 }
 
@@ -417,8 +412,8 @@ uno::Any SAL_CALL ScNamedRangeObj::getPropertyValue( const OUString& rPropertyNa
     }
     else if ( rPropertyName == SC_UNONAME_ISSHAREDFMLA )
     {
-        if( ScRangeData* pData = GetRangeData_Impl() )
-            aRet <<= static_cast< bool >( pData->HasType( RT_SHARED ) );
+        if (GetRangeData_Impl())
+            aRet <<= false;
     }
     return aRet;
 }

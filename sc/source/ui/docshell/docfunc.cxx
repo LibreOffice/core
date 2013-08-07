@@ -5073,7 +5073,7 @@ sal_Bool ScDocFunc::InsertNameList( const ScAddress& rStartPos, sal_Bool bApi )
     for (ScRangeName::iterator itr = itrLocalBeg; itr != itrLocalEnd; ++itr)
     {
         const ScRangeData& r = *itr->second;
-        if (!r.HasType(RT_DATABASE) && !r.HasType(RT_SHARED))
+        if (!r.HasType(RT_DATABASE))
             ++nValidCount;
     }
     ScRangeName* pList = pDoc->GetRangeName();
@@ -5081,7 +5081,7 @@ sal_Bool ScDocFunc::InsertNameList( const ScAddress& rStartPos, sal_Bool bApi )
     for (ScRangeName::iterator itr = itrBeg; itr != itrEnd; ++itr)
     {
         const ScRangeData& r = *itr->second;
-        if (!r.HasType(RT_DATABASE) && !r.HasType(RT_SHARED) && !pLocalList->findByUpperName(r.GetUpperName()))
+        if (!r.HasType(RT_DATABASE) && !pLocalList->findByUpperName(r.GetUpperName()))
             ++nValidCount;
     }
 
@@ -5110,13 +5110,13 @@ sal_Bool ScDocFunc::InsertNameList( const ScAddress& rStartPos, sal_Bool bApi )
             for (ScRangeName::iterator itr = itrLocalBeg; itr != itrLocalEnd; ++itr)
             {
                 ScRangeData& r = *itr->second;
-                if (!r.HasType(RT_DATABASE) && !r.HasType(RT_SHARED))
+                if (!r.HasType(RT_DATABASE))
                     ppSortArray[j++] = &r;
             }
             for (ScRangeName::iterator itr = itrBeg; itr != itrEnd; ++itr)
             {
                 ScRangeData& r = *itr->second;
-                if (!r.HasType(RT_DATABASE) && !r.HasType(RT_SHARED) && !pLocalList->findByUpperName(itr->first))
+                if (!r.HasType(RT_DATABASE) && !pLocalList->findByUpperName(itr->first))
                     ppSortArray[j++] = &r;
             }
 #ifndef ICC
