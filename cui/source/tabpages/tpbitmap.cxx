@@ -754,8 +754,9 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickLoadHdl_Impl)
 
     if ( *pnBitmapListState & CT_MODIFIED )
     {
-        nReturn = WarningBox( GetParentDialog(), WinBits( WB_YES_NO_CANCEL ),
-            String( ResId( RID_SVXSTR_WARN_TABLE_OVERWRITE, rMgr ) ) ).Execute();
+        nReturn = MessageDialog( GetParentDialog()
+                                ,"AskSaveList"
+                                ,"cui/ui/querysavelistdialog.ui").Execute();
 
         if ( nReturn == RET_YES )
             pBitmapList->Save();
@@ -763,9 +764,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickLoadHdl_Impl)
 
     if ( nReturn != RET_CANCEL )
     {
-        ::sfx2::FileDialogHelper aDlg(
-            com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
-            0 );
+        ::sfx2::FileDialogHelper aDlg( com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0 );
         String aStrFilterType( "*.sob" );
         aDlg.AddFilter( aStrFilterType, aStrFilterType );
         INetURLObject aFile( SvtPathOptions().GetPalettePath() );

@@ -137,8 +137,9 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickLoadHdl_Impl)
 
     if( IsModified() && GetList()->Count() > 0 )
     {
-        nReturn = WarningBox( mpTopDlg, WinBits( WB_YES_NO_CANCEL ),
-                    String( ResId( RID_SVXSTR_WARN_TABLE_OVERWRITE, rMgr ) ) ).Execute();
+        nReturn = MessageDialog( GetParentDialog()
+                                ,"AskSaveList"
+                                ,"cui/ui/querysavelistdialog.ui").Execute();
 
         if ( nReturn == RET_YES )
             GetList()->Save();
@@ -146,9 +147,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickLoadHdl_Impl)
 
     if ( nReturn != RET_CANCEL )
     {
-        ::sfx2::FileDialogHelper aDlg(
-            css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
-            0 );
+        ::sfx2::FileDialogHelper aDlg( css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0 );
         String aStrFilterType( XPropertyList::GetDefaultExtFilter( meType ) );
         aDlg.AddFilter( aStrFilterType, aStrFilterType );
 
