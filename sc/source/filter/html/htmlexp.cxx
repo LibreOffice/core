@@ -69,9 +69,9 @@
 #include <unotools/syslocale.hxx>
 
 
-// ohne sc.hrc: error C2679: binary '=' : no operator defined which takes a
+// Without sc.hrc: error C2679: binary '=' : no operator defined which takes a
 // right-hand operand of type 'const class String (__stdcall *)(class ScResId)'
-// bei
+// at
 // const String aStrTable( ScResId( SCSTR_TABLE ) ); aStrOut = aStrTable;
 // ?!???
 #include "sc.hrc"
@@ -111,7 +111,7 @@ const sal_Char ScHTMLExport::sIndentSource[nIndentMax+1] =
     "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t";
 
 //========================================================================
-// Makros fuer HTML-Export
+// Macros for HTML export
 //========================================================================
 #define TAG_ON( tag )       HTMLOutFuncs::Out_AsciiTag( rStrm, tag )
 #define TAG_OFF( tag )      HTMLOutFuncs::Out_AsciiTag( rStrm, tag, false )
@@ -199,7 +199,7 @@ static void lcl_AddStamp( String& rStr, const String& rName,
 static OString lcl_makeHTMLColorTriplet(const Color& rColor)
 {
     OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM("\"#"));
-    // <font COLOR="#00FF40">hallo</font>
+    // <font COLOR="#00FF40">hello</font>
     sal_Char    buf[64];
     sal_Char*   p = buf;
     p += sprintf( p, "%02X", rColor.GetRed() );
@@ -251,7 +251,7 @@ ScHTMLExport::ScHTMLExport( SvStream& rStrmP, const String& rBaseURL, ScDocument
             nUsedTables++;
     }
 
-    // Content-Id fuer Mail-Export?
+    // Content-Id for Mail export?
     SfxObjectShell* pDocSh = pDoc->GetDocumentShell();
     if ( pDocSh )
     {
@@ -277,7 +277,7 @@ sal_uInt16 ScHTMLExport::GetFontSizeNumber( sal_uInt16 nHeight )
     for ( sal_uInt16 j=SC_HTML_FONTSIZES-1; j>0; j-- )
     {
         if( nHeight > (nFontSize[j] + nFontSize[j-1]) / 2 )
-        {   // der naechstgelegene
+        {   // The one next to it
             nSize = j+1;
             break;
         }
@@ -298,7 +298,7 @@ sal_uInt16 ScHTMLExport::ToPixel( sal_uInt16 nVal )
     {
         nVal = (sal_uInt16)pAppWin->LogicToPixel(
                     Size( nVal, nVal ), MapMode( MAP_TWIP ) ).Width();
-        if( !nVal )     // wo ein Twip ist sollte auch ein Pixel sein
+        if( !nVal ) // If there's a Twip there should also be a Pixel
             nVal = 1;
     }
     return nVal;
@@ -309,7 +309,7 @@ Size ScHTMLExport::MMToPixel( const Size& rSize )
 {
     Size aSize( rSize );
     aSize = pAppWin->LogicToPixel( rSize, MapMode( MAP_100TH_MM ) );
-    // wo etwas ist sollte auch ein Pixel sein
+    // If there's something there should also be a Pixel
     if ( !aSize.Width() && rSize.Width() )
         aSize.Width() = 1;
     if ( !aSize.Height() && rSize.Height() )
@@ -382,8 +382,8 @@ void ScHTMLExport::WriteHeader()
         rStrm << '\"';
     }
     else
-    {   // Fontliste, VCL: Semikolon als Separator,
-        // CSS1: Komma als Separator und jeder einzelne Fontname quoted
+    {   // Fontlist, VCL: Semicolon as separator
+        // CSS1: Comma as separator and every single font name quoted
         const String& rList = aHTMLStyle.aFontFamilyName;
         for ( sal_Int32 j = 0, nPos = 0; j < (sal_Int32) nFonts; j++ )
         {
@@ -561,7 +561,7 @@ void ScHTMLExport::WriteBody()
     const SfxItemSet& rSet = PageDefaults( bAll ? 0 : aRange.aStart.Tab() );
     const SvxBrushItem* pBrushItem = (const SvxBrushItem*)&rSet.Get( ATTR_BACKGROUND );
 
-    // default Textfarbe schwarz
+    // default text color black
     rStrm << '<' << OOO_STRING_SVTOOLS_HTML_body << ' ' << OOO_STRING_SVTOOLS_HTML_O_text << "=\"#000000\"";
 
     if ( bAll && GPOS_NONE != pBrushItem->GetGraphicPos() )
@@ -569,17 +569,17 @@ void ScHTMLExport::WriteBody()
         const String* pLink = pBrushItem->GetGraphicLink();
         String aGrfNm;
 
-        // embeddete Grafik -> via WriteGraphic schreiben
+        // Embedded graphic -> write using WriteGraphic
         if( !pLink )
         {
             const Graphic* pGrf = pBrushItem->GetGraphic();
             if( pGrf )
             {
-                // Grafik als (JPG-)File speichern
+                // Save graphic as (JPG) file
                 aGrfNm = aStreamPath;
                 sal_uInt16 nErr = XOutBitmap::WriteGraphic( *pGrf, aGrfNm,
                     String("JPG"), XOUTBMP_USE_NATIVE_IF_POSSIBLE );
-                if( !nErr )     // fehlerhaft, da ist nichts auszugeben
+                if( !nErr ) // Contains errors, as we have nothing to output
                 {
                     aGrfNm = URIHelper::SmartRel2Abs(
                             INetURLObject(aBaseURL),
@@ -681,7 +681,7 @@ void ScHTMLExport::WriteTables()
 
                 OUT_HR();
 
-                // Anker festlegen:
+                // Write anchor
                 rStrm << "<A NAME=\"table"
                     << OString::number(nTab).getStr()
                     << "\">";
@@ -813,7 +813,7 @@ void ScHTMLExport::WriteTables()
                 IncIndent(-1);
             TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_tablerow );
         }
-        // Uncomment later
+        // TODO: Uncomment later
         // IncIndent(-1); TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_tbody );
 
         IncIndent(-1); TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_table );
@@ -871,7 +871,7 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
                     break;  // for
                 }
                 else
-                    return ;        // ist ein Col/RowSpan, Overlapped
+                    return ; // Is a Col/RowSpan, Overlapped
             }
         }
     }
@@ -992,7 +992,7 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
 
     Color aBgColor;
     if ( rBrushItem.GetColor().GetTransparency() == 255 )
-        aBgColor = aHTMLStyle.aBackgroundColor;     // keine ungewollte Hintergrundfarbe
+        aBgColor = aHTMLStyle.aBackgroundColor; // No unwanted background color
     else
         aBgColor = rBrushItem.GetColor();
 
@@ -1096,7 +1096,7 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
                 aStr.append(aTmpStr);
             }
             else
-            {   // Fontliste, VCL: Semikolon als Separator, HTML: Komma
+            {   // Font list, VCL: Semicolon as separator, HTML: Comma
                 const String& rList = rFontItem.GetFamilyName();
                 for ( sal_Int32 j = 0, nPos = 0; j < (sal_Int32)nFonts; j++ )
                 {
@@ -1148,7 +1148,7 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
     {
         if ( aStrOut.isEmpty() )
         {
-            TAG_ON( OOO_STRING_SVTOOLS_HTML_linebreak );        // keine komplett leere Zelle
+            TAG_ON( OOO_STRING_SVTOOLS_HTML_linebreak ); // No completely empty line
         }
         else
         {
@@ -1264,7 +1264,7 @@ sal_Bool ScHTMLExport::CopyLocalFileToINet( String& rFileNm,
     {
         if( pFileNameMap )
         {
-            // wurde die Datei schon verschoben
+            // Did we already move the file?
             std::map<String, String>::iterator it = pFileNameMap->find( rFileNm );
             if( it != pFileNameMap->end() )
             {
@@ -1301,7 +1301,7 @@ sal_Bool ScHTMLExport::CopyLocalFileToINet( String& rFileNm,
                 aCpy << aTmp;
             }
 
-            // uebertragen
+            // Take over
             aMedium.Close();
             aMedium.Commit();
 
@@ -1349,7 +1349,5 @@ void ScHTMLExport::IncIndent( short nVal )
         nIndent = nIndentMax;
     sIndent[nIndent] = 0;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
