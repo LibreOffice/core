@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SWSTYLENAMEMAPPER_HXX
-#define _SWSTYLENAMEMAPPER_HXX
+#ifndef SWSTYLENAMEMAPPER_HXX
+#define SWSTYLENAMEMAPPER_HXX
 
 #include <sal/types.h>
 #include <tools/string.hxx>
@@ -27,7 +27,7 @@
 #include <boost/unordered_map.hpp>
 #include <stringhash.hxx>
 
-#include <boost/ptr_container/ptr_vector.hpp>
+#include <vector>
 
 /** This class holds all data about the names of styles used in the user
  * interface (UI names...these are localised into different languages).
@@ -86,7 +86,7 @@ class SwStyleNameMapper
 
 protected:
     // UI Name tables
-    static boost::ptr_vector<OUString> *pTextUINameArray,
+    static ::std::vector<OUString> *pTextUINameArray,
                             *pListsUINameArray,
                             *pExtraUINameArray,
                             *pRegisterUINameArray,
@@ -166,29 +166,29 @@ public:
                     const OUString& rExtraUIName);
     static const OUString GetSpecialExtraUIName(const OUString& rExtraProgName);
 
-    static const boost::ptr_vector<OUString>& GetTextUINameArray();
-    static const boost::ptr_vector<OUString>& GetListsUINameArray();
-    static const boost::ptr_vector<OUString>& GetExtraUINameArray();
-    static const boost::ptr_vector<OUString>& GetRegisterUINameArray();
-    static const boost::ptr_vector<OUString>& GetDocUINameArray();
-    static const boost::ptr_vector<OUString>& GetHTMLUINameArray();
-    static const boost::ptr_vector<OUString>& GetFrmFmtUINameArray();
-    static const boost::ptr_vector<OUString>& GetChrFmtUINameArray();
-    static const boost::ptr_vector<OUString>& GetHTMLChrFmtUINameArray();
-    static const boost::ptr_vector<OUString>& GetPageDescUINameArray();
-    static const boost::ptr_vector<OUString>& GetNumRuleUINameArray();
+    static const ::std::vector<OUString>& GetTextUINameArray();
+    static const ::std::vector<OUString>& GetListsUINameArray();
+    static const ::std::vector<OUString>& GetExtraUINameArray();
+    static const ::std::vector<OUString>& GetRegisterUINameArray();
+    static const ::std::vector<OUString>& GetDocUINameArray();
+    static const ::std::vector<OUString>& GetHTMLUINameArray();
+    static const ::std::vector<OUString>& GetFrmFmtUINameArray();
+    static const ::std::vector<OUString>& GetChrFmtUINameArray();
+    static const ::std::vector<OUString>& GetHTMLChrFmtUINameArray();
+    static const ::std::vector<OUString>& GetPageDescUINameArray();
+    static const ::std::vector<OUString>& GetNumRuleUINameArray();
 
-    static const boost::ptr_vector<OUString>& GetTextProgNameArray();
-    static const boost::ptr_vector<OUString>& GetListsProgNameArray();
-    static const boost::ptr_vector<OUString>& GetExtraProgNameArray();
-    static const boost::ptr_vector<OUString>& GetRegisterProgNameArray();
-    static const boost::ptr_vector<OUString>& GetDocProgNameArray();
-    static const boost::ptr_vector<OUString>& GetHTMLProgNameArray();
-    static const boost::ptr_vector<OUString>& GetFrmFmtProgNameArray();
-    static const boost::ptr_vector<OUString>& GetChrFmtProgNameArray();
-    static const boost::ptr_vector<OUString>& GetHTMLChrFmtProgNameArray();
-    static const boost::ptr_vector<OUString>& GetPageDescProgNameArray();
-    static const boost::ptr_vector<OUString>& GetNumRuleProgNameArray();
+    static const ::std::vector<OUString>& GetTextProgNameArray();
+    static const ::std::vector<OUString>& GetListsProgNameArray();
+    static const ::std::vector<OUString>& GetExtraProgNameArray();
+    static const ::std::vector<OUString>& GetRegisterProgNameArray();
+    static const ::std::vector<OUString>& GetDocProgNameArray();
+    static const ::std::vector<OUString>& GetHTMLProgNameArray();
+    static const ::std::vector<OUString>& GetFrmFmtProgNameArray();
+    static const ::std::vector<OUString>& GetChrFmtProgNameArray();
+    static const ::std::vector<OUString>& GetHTMLChrFmtProgNameArray();
+    static const ::std::vector<OUString>& GetPageDescProgNameArray();
+    static const ::std::vector<OUString>& GetNumRuleProgNameArray();
 };
 #endif // _NAME_MAPPER_HXX
 

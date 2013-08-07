@@ -16,15 +16,16 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _DOCSTYLE_HXX
-#define _DOCSTYLE_HXX
+#ifndef SW_DOCSTYLE_HXX
+#define SW_DOCSTYLE_HXX
 
 #include <rtl/ref.hxx>
 
 #include <svl/style.hxx>
 #include <svl/itemset.hxx>
 #include "swdllapi.h"
-#include <boost/ptr_container/ptr_vector.hpp>
+
+#include <vector>
 
 class SwDoc;
 class SwDocStyleSheetPool;
@@ -156,7 +157,7 @@ class SwStyleSheetIterator : public SfxStyleSheetIterator, public SfxListener
     sal_uInt16              nLastPos;
     sal_Bool                bFirstCalled;
 
-    void                AppendStyleList(const boost::ptr_vector<OUString>& rLst,
+    void                AppendStyleList(const ::std::vector<OUString>& rLst,
                                         sal_Bool    bUsed,
                                         sal_Bool    bTestHidden,
                                         bool        bOnlyHidden,

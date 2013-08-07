@@ -2810,7 +2810,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::Find(const OUString& rName)
     return 0;
 }
 
-void SwStyleSheetIterator::AppendStyleList(const boost::ptr_vector<OUString>& rList,
+void SwStyleSheetIterator::AppendStyleList(const ::std::vector<OUString>& rList,
                                             sal_Bool bTestUsed, sal_Bool bTestHidden, bool bOnlyHidden,
                                             sal_uInt16 nSection, char cType )
 {

@@ -27,7 +27,7 @@
 
 extern ResMgr* pSwResMgr;
 // Initialise UI names to 0
-boost::ptr_vector<OUString> *SwStyleNameMapper::pTextUINameArray = 0,
+::std::vector<OUString> *SwStyleNameMapper::pTextUINameArray = 0,
                 *SwStyleNameMapper::pListsUINameArray = 0,
                 *SwStyleNameMapper::pExtraUINameArray = 0,
                 *SwStyleNameMapper::pRegisterUINameArray = 0,
@@ -308,28 +308,29 @@ const struct SwTableEntry NumRuleProgNameTable [] =
 };
 #undef ENTRY
 
-static boost::ptr_vector<OUString>*
+static ::std::vector<OUString>*
 lcl_NewUINameArray(sal_uInt16 nStt, sal_uInt16 const nEnd)
 {
-    boost::ptr_vector<OUString> *const pNameArray = new boost::ptr_vector<OUString>;
+    ::std::vector<OUString> *const pNameArray = new ::std::vector<OUString>;
     pNameArray->reserve(nEnd - nStt);
     while( nStt < nEnd )
     {
         const ResId rRId( nStt, *pSwResMgr );
-        pNameArray->push_back(new OUString(rRId));
+        pNameArray->push_back(OUString(rRId));
         ++nStt;
     }
     return pNameArray;
 }
 
-static boost::ptr_vector<OUString>*
+static ::std::vector<OUString>*
 lcl_NewProgNameArray(const SwTableEntry *pTable, sal_uInt8 const nCount)
 {
-    boost::ptr_vector<OUString> *const pProgNameArray = new boost::ptr_vector<OUString>;
+    ::std::vector<OUString> *const pProgNameArray = new ::std::vector<OUString>;
     pProgNameArray->reserve(nCount);
     while (pTable->nLength)
     {
-        pProgNameArray->push_back(new OUString(pTable->pChar, pTable->nLength, RTL_TEXTENCODING_ASCII_US));
+        pProgNameArray->push_back(OUString(
+                pTable->pChar, pTable->nLength, RTL_TEXTENCODING_ASCII_US));
         pTable++;
     }
     return pProgNameArray;
@@ -338,7 +339,7 @@ lcl_NewProgNameArray(const SwTableEntry *pTable, sal_uInt8 const nCount)
 static OUString
 lcl_GetSpecialExtraName(const OUString& rExtraName, const bool bIsUIName )
 {
-    const boost::ptr_vector<OUString>& rExtraArr = bIsUIName
+    const ::std::vector<OUString>& rExtraArr = bIsUIName
         ? SwStyleNameMapper::GetExtraUINameArray()
         : SwStyleNameMapper::GetExtraProgNameArray();
     static const sal_uInt16 nIds[] =
@@ -392,7 +393,7 @@ static void lcl_CheckSuffixAndDelete(OUString & rString)
 const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlags, bool bProgName )
 {
     NameToIdHash *pHash = 0;
-    const boost::ptr_vector<OUString> *pStrings;
+    const ::std::vector<OUString> *pStrings = 0;
 
     switch ( eFlags )
     {
@@ -732,7 +733,7 @@ const OUString& SwStyleNameMapper::getNameFromId(
         sal_uInt16 const nId, const OUString& rFillName, bool const bProgName)
 {
     sal_uInt16 nStt = 0;
-    const boost::ptr_vector<OUString>* pStrArr = 0;
+    const ::std::vector<OUString>* pStrArr = 0;
 
     switch( (USER_FMT | COLL_GET_RANGE_BITS | POOLGRP_NOCOLLID) & nId )
     {
@@ -861,7 +862,7 @@ sal_uInt16 SwStyleNameMapper::GetPoolIdFromProgName(
     return aIter != rHashMap.end() ? (*aIter).second : USHRT_MAX;
 }
 
-const boost::ptr_vector<OUString>& SwStyleNameMapper::GetTextUINameArray()
+const ::std::vector<OUString>& SwStyleNameMapper::GetTextUINameArray()
 {
     if (!pTextUINameArray)
         pTextUINameArray = lcl_NewUINameArray( RC_POOLCOLL_TEXT_BEGIN,
@@ -869,7 +870,7 @@ const boost::ptr_vector<OUString>& SwStyleNameMapper::GetTextUINameArray()
     return *pTextUINameArray;
 }
 
-const boost::ptr_vector<OUString>& SwStyleNameMapper::GetListsUINameArray()
+const ::std::vector<OUString>& SwStyleNameMapper::GetListsUINameArray()
 {
     if (!pListsUINameArray)
         pListsUINameArray = lcl_NewUINameArray( RC_POOLCOLL_LISTS_BEGIN,
@@ -877,7 +878,7 @@ const boost::ptr_vector<OUString>& SwStyleNameMapper::GetListsUINameArray()
     return *pListsUINameArray;
 }
 
-const boost::ptr_vector<OUString>& SwStyleNameMapper::GetExtraUINameArray()
+const ::std::vector<OUString>& SwStyleNameMapper::GetExtraUINameArray()
 {
     if (!pExtraUINameArray)
         pExtraUINameArray = lcl_NewUINameArray( RC_POOLCOLL_EXTRA_BEGIN,
@@ -885,7 +886,7 @@ const boost::ptr_vector<OUString>& SwStyleNameMapper::GetExtraUINameArray()
     return *pExtraUINameArray;
 }
 
-const boost::ptr_vector<OUString>& SwStyleNameMapper::GetRegisterUINameArray()
+const ::std::vector<OUString>& SwStyleNameMapper::GetRegisterUINameArray()
 {
     if (!pRegisterUINameArray)
         pRegisterUINameArray = lcl_NewUINameArray( RC_POOLCOLL_REGISTER_BEGIN,
@@ -893,7 +894,7 @@ const boost::ptr_vector<OUString>& SwStyleNameMapper::GetRegisterUINameArray()
     return *pRegisterUINameArray;
 }
 
-const boost::ptr_vector<OUString>& SwStyleNameMapper::GetDocUINameArray()
+const ::std::vector<OUString>& SwStyleNameMapper::GetDocUINameArray()
 {
     if (!pDocUINameArray)
         pDocUINameArray = lcl_NewUINameArray( RC_POOLCOLL_DOC_BEGIN,
@@ -901,7 +902,7 @@ const boost::ptr_vector<OUString>& SwStyleNameMapper::GetDocUINameArray()
     return *pDocUINameArray;
 }
 
-const boost::ptr_vector<OUString>& SwStyleNameMapper::GetHTMLUINameArray()
+const ::std::vector<OUString>& SwStyleNameMapper::GetHTMLUINameArray()
 {
     if (!pHTMLUINameArray)
         pHTMLUINameArray = lcl_NewUINameArray( RC_POOLCOLL_HTML_BEGIN,
@@ -909,7 +910,7 @@ const boost::ptr_vector<OUString>& SwStyleNameMapper::GetHTMLUINameArray()
     return *pHTMLUINameArray;
 }
 
-const boost::ptr_vector<OUString>& SwStyleNameMapper::GetFrmFmtUINameArray()
+const ::std::vector<OUString>& SwStyleNameMapper::GetFrmFmtUINameArray()
 {
     if (!pFrmFmtUINameArray)
         pFrmFmtUINameArray = lcl_NewUINameArray( RC_POOLFRMFMT_BEGIN,
@@ -917,7 +918,7 @@ const boost::ptr_vector<OUString>& SwStyleNameMapper::GetFrmFmtUINameArray()
     return *pFrmFmtUINameArray;
 }
 
-const boost::ptr_vector<OUString>& SwStyleNameMapper::GetChrFmtUINameArray()
+const ::std::vector<OUString>& SwStyleNameMapper::GetChrFmtUINameArray()
 {
     if (!pChrFmtUINameArray)
         pChrFmtUINameArray = lcl_NewUINameArray( RC_POOLCHRFMT_BEGIN,
@@ -925,7 +926,7 @@ const boost::ptr_vector<OUString>& SwStyleNameMapper::GetChrFmtUINameArray()
     return *pChrFmtUINameArray;
 }
 
-const boost::ptr_vector<OUString>& SwStyleNameMapper::GetHTMLChrFmtUINameArray()
+const ::std::vector<OUString>& SwStyleNameMapper::GetHTMLChrFmtUINameArray()
 {
     if (!pHTMLChrFmtUINameArray)
         pHTMLChrFmtUINameArray = lcl_NewUINameArray( RC_POOLCHRFMT_HTML_BEGIN,
@@ -933,7 +934,7 @@ const boost::ptr_vector<OUString>& SwStyleNameMapper::GetHTMLChrFmtUINameArray()
     return *pHTMLChrFmtUINameArray;
 }
 
-const boost::ptr_vector<OUString>& SwStyleNameMapper::GetPageDescUINameArray()
+const ::std::vector<OUString>& SwStyleNameMapper::GetPageDescUINameArray()
 {
     if (!pPageDescUINameArray)
         pPageDescUINameArray = lcl_NewUINameArray( RC_POOLPAGEDESC_BEGIN,
@@ -941,7 +942,7 @@ const boost::ptr_vector<OUString>& SwStyleNameMapper::GetPageDescUINameArray()
     return *pPageDescUINameArray;
 }
 
-const boost::ptr_vector<OUString>& SwStyleNameMapper::GetNumRuleUINameArray()
+const ::std::vector<OUString>& SwStyleNameMapper::GetNumRuleUINameArray()
 {
     if (!pNumRuleUINameArray)
         pNumRuleUINameArray = lcl_NewUINameArray( RC_POOLNUMRULE_BEGIN,
@@ -949,7 +950,7 @@ const boost::ptr_vector<OUString>& SwStyleNameMapper::GetNumRuleUINameArray()
     return *pNumRuleUINameArray;
 }
 
-const boost::ptr_vector<OUString>& SwStyleNameMapper::GetTextProgNameArray()
+const ::std::vector<OUString>& SwStyleNameMapper::GetTextProgNameArray()
 {
     if (!pTextProgNameArray)
         pTextProgNameArray = lcl_NewProgNameArray(TextProgNameTable,
@@ -957,7 +958,7 @@ const boost::ptr_vector<OUString>& SwStyleNameMapper::GetTextProgNameArray()
     return *pTextProgNameArray;
 }
 
-const boost::ptr_vector<OUString>& SwStyleNameMapper::GetListsProgNameArray()
+const ::std::vector<OUString>& SwStyleNameMapper::GetListsProgNameArray()
 {
     if (!pListsProgNameArray)
         pListsProgNameArray = lcl_NewProgNameArray( ListsProgNameTable,
@@ -965,7 +966,7 @@ const boost::ptr_vector<OUString>& SwStyleNameMapper::GetListsProgNameArray()
     return *pListsProgNameArray;
 }
 
-const boost::ptr_vector<OUString>& SwStyleNameMapper::GetExtraProgNameArray()
+const ::std::vector<OUString>& SwStyleNameMapper::GetExtraProgNameArray()
 {
     if (!pExtraProgNameArray)
         pExtraProgNameArray = lcl_NewProgNameArray( ExtraProgNameTable,
@@ -973,7 +974,7 @@ const boost::ptr_vector<OUString>& SwStyleNameMapper::GetExtraProgNameArray()
     return *pExtraProgNameArray;
 }
 
-const boost::ptr_vector<OUString>& SwStyleNameMapper::GetRegisterProgNameArray()
+const ::std::vector<OUString>& SwStyleNameMapper::GetRegisterProgNameArray()
 {
     if (!pRegisterProgNameArray)
         pRegisterProgNameArray = lcl_NewProgNameArray( RegisterProgNameTable,
@@ -981,7 +982,7 @@ const boost::ptr_vector<OUString>& SwStyleNameMapper::GetRegisterProgNameArray()
     return *pRegisterProgNameArray;
 }
 
-const boost::ptr_vector<OUString>& SwStyleNameMapper::GetDocProgNameArray()
+const ::std::vector<OUString>& SwStyleNameMapper::GetDocProgNameArray()
 {
     if (!pDocProgNameArray)
         pDocProgNameArray = lcl_NewProgNameArray( DocProgNameTable,
@@ -989,7 +990,7 @@ const boost::ptr_vector<OUString>& SwStyleNameMapper::GetDocProgNameArray()
     return *pDocProgNameArray;
 }
 
-const boost::ptr_vector<OUString>& SwStyleNameMapper::GetHTMLProgNameArray()
+const ::std::vector<OUString>& SwStyleNameMapper::GetHTMLProgNameArray()
 {
     if (!pHTMLProgNameArray)
         pHTMLProgNameArray = lcl_NewProgNameArray( HTMLProgNameTable,
@@ -997,7 +998,7 @@ const boost::ptr_vector<OUString>& SwStyleNameMapper::GetHTMLProgNameArray()
     return *pHTMLProgNameArray;
 }
 
-const boost::ptr_vector<OUString>& SwStyleNameMapper::GetFrmFmtProgNameArray()
+const ::std::vector<OUString>& SwStyleNameMapper::GetFrmFmtProgNameArray()
 {
     if (!pFrmFmtProgNameArray)
         pFrmFmtProgNameArray = lcl_NewProgNameArray( FrmFmtProgNameTable,
@@ -1005,7 +1006,7 @@ const boost::ptr_vector<OUString>& SwStyleNameMapper::GetFrmFmtProgNameArray()
     return *pFrmFmtProgNameArray;
 }
 
-const boost::ptr_vector<OUString>& SwStyleNameMapper::GetChrFmtProgNameArray()
+const ::std::vector<OUString>& SwStyleNameMapper::GetChrFmtProgNameArray()
 {
     if (!pChrFmtProgNameArray)
         pChrFmtProgNameArray = lcl_NewProgNameArray( ChrFmtProgNameTable,
@@ -1013,7 +1014,7 @@ const boost::ptr_vector<OUString>& SwStyleNameMapper::GetChrFmtProgNameArray()
     return *pChrFmtProgNameArray;
 }
 
-const boost::ptr_vector<OUString>& SwStyleNameMapper::GetHTMLChrFmtProgNameArray()
+const ::std::vector<OUString>& SwStyleNameMapper::GetHTMLChrFmtProgNameArray()
 {
     if (!pHTMLChrFmtProgNameArray)
         pHTMLChrFmtProgNameArray = lcl_NewProgNameArray( HTMLChrFmtProgNameTable,
@@ -1021,7 +1022,7 @@ const boost::ptr_vector<OUString>& SwStyleNameMapper::GetHTMLChrFmtProgNameArray
     return *pHTMLChrFmtProgNameArray;
 }
 
-const boost::ptr_vector<OUString>& SwStyleNameMapper::GetPageDescProgNameArray()
+const ::std::vector<OUString>& SwStyleNameMapper::GetPageDescProgNameArray()
 {
     if (!pPageDescProgNameArray)
         pPageDescProgNameArray = lcl_NewProgNameArray( PageDescProgNameTable,
@@ -1029,7 +1030,7 @@ const boost::ptr_vector<OUString>& SwStyleNameMapper::GetPageDescProgNameArray()
     return *pPageDescProgNameArray;
 }
 
-const boost::ptr_vector<OUString>& SwStyleNameMapper::GetNumRuleProgNameArray()
+const ::std::vector<OUString>& SwStyleNameMapper::GetNumRuleProgNameArray()
 {
     if (!pNumRuleProgNameArray)
         pNumRuleProgNameArray = lcl_NewProgNameArray( NumRuleProgNameTable,

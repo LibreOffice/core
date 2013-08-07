@@ -565,7 +565,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         bool bSetValue = true;
         if( rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_SUB_TYPE)))
         {
-            const boost::ptr_vector<OUString>& rExtraArr(
+            const ::std::vector<OUString>& rExtraArr(
                     SwStyleNameMapper::GetExtraUINameArray());
             OUString sTypeName = pType->GetName();
             static sal_uInt16 nIds[] =
