@@ -17,6 +17,7 @@ $(eval $(call gb_UnpackedTarball_fix_end_of_line,jfreereport_libformula,\
 
 $(eval $(call gb_UnpackedTarball_add_patches,jfreereport_libformula,\
 	jfreereport/patches/common_build.patch \
+	jfreereport/patches/libformula-time-notz.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
