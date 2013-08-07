@@ -1336,10 +1336,11 @@ LanguageTag::Extraction LanguageTag::simpleExtract( const OUString& rBcp47,
     ::std::vector< OUString > aFallbacks( LanguageTag( rReference).getFallbackStrings());
     aFallbacks.erase( aFallbacks.begin());  // first is full BCP47, we already checked that
     ::std::vector< ::std::vector< OUString > > aListFallbacks( rList.size());
-    for (it = rList.begin(); it != rList.end(); ++it)
+    size_t i = 0;
+    for (it = rList.begin(); it != rList.end(); ++it, ++i)
     {
         ::std::vector< OUString > aTmp( LanguageTag( *it).getFallbackStrings());
-        aListFallbacks.push_back( aTmp);
+        aListFallbacks[i] = aTmp;
     }
     for (::std::vector< OUString >::const_iterator rfb( aFallbacks.begin()); rfb != aFallbacks.end(); ++rfb)
     {
