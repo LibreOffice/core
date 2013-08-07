@@ -56,15 +56,25 @@ sal_Bool rtl_ImplIsWhitespace( sal_Unicode c );
 #  define PROBE_NAME(n,b) PROBE_SNAME(n,b)
 #  define PROBE_NEW PROBE_NAME (new_string,RTL_LOG_STRING_BITS)
 #  define PROBE_DEL PROBE_NAME (delete_string,RTL_LOG_STRING_BITS)
+#  define PROBE_INTERN_NEW PROBE_NAME (new_string_intern,RTL_LOG_STRING_BITS)
+#  define PROBE_INTERN_DEL PROBE_NAME (delete_string_intern,RTL_LOG_STRING_BITS)
 #  define RTL_LOG_STRING_NEW(s) \
     DTRACE_PROBE4(libreoffice, PROBE_NEW, s, \
                   (s)->refCount, (s)->length, (s)->buffer)
 #  define RTL_LOG_STRING_DELETE(s) \
     DTRACE_PROBE4(libreoffice, PROBE_DEL, s, \
                   (s)->refCount, (s)->length, (s)->buffer)
+#  define RTL_LOG_STRING_INTERN_NEW(s,o) \
+    DTRACE_PROBE5(libreoffice, PROBE_INTERN_NEW, s, \
+                  (s)->refCount, (s)->length, (s)->buffer, o)
+#  define RTL_LOG_STRING_INTERN_DELETE(s) \
+    DTRACE_PROBE4(libreoffice, PROBE_INTERN_DEL, s, \
+                  (s)->refCount, (s)->length, (s)->buffer)
 #else
 #  define RTL_LOG_STRING_NEW(s)
 #  define RTL_LOG_STRING_DELETE(s)
+#  define RTL_LOG_STRING_INTERN_NEW(s,o)
+#  define RTL_LOG_STRING_INTERN_DELETE(s)
 #endif /* USE_SDT_PROBES */
 
 #endif /* INCLUDED_RTL_SOURCE_STRIMP_HXX */
