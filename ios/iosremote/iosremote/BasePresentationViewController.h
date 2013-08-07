@@ -38,6 +38,9 @@
 @property (weak, nonatomic) IBOutlet UIButton *clearButton;
 @property (weak, nonatomic) IBOutlet UILabel *timeLabel;
 
+@property (weak, nonatomic) IBOutlet UIButton *gearButton;
+- (IBAction)popOverUp:(id)sender;
+
 //Reconnection
 - (void) didReceiveDisconnection;
 

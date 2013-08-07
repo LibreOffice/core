@@ -6,6 +6,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 #import "slideShow_vc_iphone.h"
+#import "PopoverView.h"
 #import "SlideShow.h"
 #import "UIViewTransitionCategory.h"
 #import "CommunicationManager.h"
@@ -24,7 +25,7 @@
 #define TOUCH_POINTER_VIEW 3
 #define CURRENT_SLIDE_NOTES 4
 
-@interface slideShow_vc ()
+@interface slideShow_vc () <PopoverViewDelegate>
 
 @property (nonatomic, strong) CommunicationManager *comManager;
 @property (nonatomic, strong) id slideShowImageNoteReadyObserver;
@@ -284,12 +285,11 @@
     [self.slideshow getContentAtIndex:self.slideshow.currentSlide forView:self.touchPointerImage];
     [self.slideNumber setText:[NSString stringWithFormat:@"%u/%u", [self.slideshow currentSlide]+1, [self.slideshow size]]];
 
-
-    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Stop Presentation"
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear_transparent_bg"]
                                                                    style:UIBarButtonItemStyleBordered
                                                                   target:self
-                                                                  action:@selector(handleBack:)];
-    [backButton setTintColor:[UIColor redColor]];
+                                                                  action:@selector(popOverStart:)];
+    
     self.revealViewController.navigationItem.rightBarButtonItem = backButton;
 
     self.revealButtonItem = [[UIBarButtonItem alloc] initWithImage: [UIImage imageNamed:@"more_icon.png"]
@@ -313,10 +313,13 @@
     }
 }
 
-- (void) handleBack:(id)sender
+- (void) popOverStart:(id)sender
 {
-    [self.comManager.transmitter stopPresentation];
-    [self.navigationController popViewControllerAnimated:YES];
+    if (!isBlank) {
+        [PopoverView showPopoverAtPoint: CGPointMake(self.navigationController.view.frame.size.width - 20, 0) inView:self.view withTitle:@"More" withStringArray:[NSArray arrayWithObjects:@"Stop Presentation", @"Restart", @"Blank Screen", nil] delegate:self];
+    } else {
+        [PopoverView showPopoverAtPoint: CGPointMake(self.navigationController.view.frame.size.width - 20, 0) inView:self.view withTitle:@"More" withStringArray:[NSArray arrayWithObjects:@"Stop Presentation", @"Restart", @"Resume from blank screen", nil] delegate:self];
+    }
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -399,6 +402,7 @@
     [super viewDidUnload];
 }
 
+#pragma mark - Slides Control
 - (IBAction)nextSlideAction:(id)sender {
     [[self.comManager transmitter] nextTransition];
 }
@@ -406,5 +410,34 @@
 - (IBAction)previousSlideAction:(id)sender {
     [[self.comManager transmitter] previousTransition];
 }
+
+static BOOL isBlank = NO;
+#pragma mark - PopOver delegates
+- (void) popoverView:(PopoverView *)popoverView didSelectItemAtIndex:(NSInteger)index
+{
+    [popoverView dismiss];
+    switch (index) {
+        case 0:
+            // Stop Presentation
+            [self.comManager.transmitter stopPresentation];
+            [self.navigationController popViewControllerAnimated:YES];
+            break;
+        case 1:
+            [self.comManager.transmitter gotoSlide:0];
+            break;
+        case 2:
+            if (!isBlank) {
+                [self.comManager.transmitter blankScreen];
+            } else {
+                [self.comManager.transmitter resume];
+            }
+            isBlank = !isBlank;
+            break;
+        default:
+            NSLog(@"Pop over didSelectItemAtIndex out of bound, should not happen");
+            break;
+    }
+}
+
 
 @end

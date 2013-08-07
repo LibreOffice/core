@@ -57,13 +57,6 @@ dispatch_queue_t backgroundQueue;
 	self.comManager = [CommunicationManager sharedComManager];
     self.slideshow.secondaryDelegate = self;
     
-    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Stop Presentation"
-                                                                   style:UIBarButtonItemStyleBordered
-                                                                  target:self
-                                                                  action:@selector(handleBack:)];
-    [backButton setTintColor:[UIColor redColor]];
-    self.navigationItem.leftBarButtonItem = backButton;
-    
     NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
     NSOperationQueue *mainQueue = [NSOperationQueue mainQueue];
     self.slideChangedObserver =[center addObserverForName:MSG_SLIDE_CHANGED

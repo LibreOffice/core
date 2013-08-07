@@ -13,6 +13,7 @@
 #import "CommandInterpreter.h"
 #import "SlideShow.h"
 #import "MainSplitViewController.h"
+#import "UIViewController+LibOStyling.h"
 
 @interface slideShowPreviewTable_vc_ipad ()
 
@@ -56,6 +57,10 @@
         }
         NSLog(@"Received: %@", self.comManager.interpreter.slideShow.title);
     }];
+    
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Connect" style:UIBarButtonItemStyleBordered target:self action:@selector(handleBack)];
+    [backButton setBackgroundImage:[UIImage imageNamed:@"backButton"] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+    self.navigationItem.leftBarButtonItem = backButton;
 }
 
 - (void) viewDidAppear:(BOOL)animated

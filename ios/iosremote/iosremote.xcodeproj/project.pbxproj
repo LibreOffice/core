@@ -63,7 +63,26 @@
 		8C0DC84717A45B160099E5AE /* libO_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C0DC84617A45B160099E5AE /* libO_icon.png */; };
 		8C0DC85117A512250099E5AE /* AppDelegate_ipad.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C0DC85017A512250099E5AE /* AppDelegate_ipad.m */; };
 		8C19F41D17B00899005BDB61 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C19F41C17B00899005BDB61 /* SystemConfiguration.framework */; };
-		8C1A16FB17A2853100B4BB3C /* iosremote_iphone_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C1A16FA17A2853100B4BB3C /* iosremote_iphone_icon@2x.png */; };
+		8C19F41F17B02A8A005BDB61 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C19F41E17B02A8A005BDB61 /* QuartzCore.framework */; };
+		8C19F42417B02C7A005BDB61 /* PopoverView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C19F42117B02AA9005BDB61 /* PopoverView.m */; };
+		8C19F42717B04E7C005BDB61 /* navBarBackground@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C19F42517B04E7C005BDB61 /* navBarBackground@2x.png */; };
+		8C19F42817B04E7C005BDB61 /* navBarBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C19F42617B04E7C005BDB61 /* navBarBackground.png */; };
+		8C19F42F17B05089005BDB61 /* LibONavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C19F42E17B05089005BDB61 /* LibONavigationController.m */; };
+		8C19F43017B0518A005BDB61 /* UINavigationController+Theme.h in Sources */ = {isa = PBXBuildFile; fileRef = 8C19F42917B04EC6005BDB61 /* UINavigationController+Theme.h */; };
+		8C19F43117B0518A005BDB61 /* UINavigationController+Theme.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C19F42A17B04EC6005BDB61 /* UINavigationController+Theme.m */; };
+		8C19F43317B056B3005BDB61 /* navBarButtonNormal@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C19F43217B056B3005BDB61 /* navBarButtonNormal@2x.png */; };
+		8C19F43617B10D49005BDB61 /* UIViewController+LibOStyling.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C19F43517B10D49005BDB61 /* UIViewController+LibOStyling.m */; };
+		8C19F43917B145AD005BDB61 /* backButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C19F43717B145AD005BDB61 /* backButton.png */; };
+		8C19F43A17B145AD005BDB61 /* backButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C19F43817B145AD005BDB61 /* backButton@2x.png */; };
+		8C19F43E17B1D935005BDB61 /* add.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C19F43C17B1D935005BDB61 /* add.png */; };
+		8C19F44117B1E961005BDB61 /* gear.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C19F43F17B1E961005BDB61 /* gear.png */; };
+		8C19F44217B1E961005BDB61 /* gear@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C19F44017B1E961005BDB61 /* gear@2x.png */; };
+		8C19F44517B1F21B005BDB61 /* gear_pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C19F44317B1F21B005BDB61 /* gear_pressed.png */; };
+		8C19F44617B1F21B005BDB61 /* gear_pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C19F44417B1F21B005BDB61 /* gear_pressed@2x.png */; };
+		8C19F44717B1FB51005BDB61 /* iosremote_iphone_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C1A16FA17A2853100B4BB3C /* iosremote_iphone_icon@2x.png */; };
+		8C19F44A17B1FEFE005BDB61 /* gear_transparent_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C19F44817B1FEFD005BDB61 /* gear_transparent_bg.png */; };
+		8C19F44B17B1FEFE005BDB61 /* gear_transparent_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C19F44917B1FEFE005BDB61 /* gear_transparent_bg@2x.png */; };
+		8C19F44D17B20427005BDB61 /* add@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C19F44C17B20426005BDB61 /* add@2x.png */; };
 		8C1A16FD17A2853700B4BB3C /* iosremote_iphone_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C1A16FC17A2853700B4BB3C /* iosremote_iphone_icon.png */; };
 		8C1A16FF17A2853F00B4BB3C /* iosremote_ipad_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C1A16FE17A2853F00B4BB3C /* iosremote_ipad_icon.png */; };
 		8C1A170117A2854300B4BB3C /* iosremote_ipad_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C1A170017A2854300B4BB3C /* iosremote_ipad_icon@2x.png */; };
@@ -167,6 +186,32 @@
 		8C0DC84F17A512250099E5AE /* AppDelegate_ipad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate_ipad.h; path = iosremote/AppDelegate_ipad.h; sourceTree = "<group>"; };
 		8C0DC85017A512250099E5AE /* AppDelegate_ipad.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate_ipad.m; path = iosremote/AppDelegate_ipad.m; sourceTree = "<group>"; };
 		8C19F41C17B00899005BDB61 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		8C19F41E17B02A8A005BDB61 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		8C19F42017B02AA9005BDB61 /* PopoverView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PopoverView.h; sourceTree = "<group>"; };
+		8C19F42117B02AA9005BDB61 /* PopoverView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PopoverView.m; sourceTree = "<group>"; };
+		8C19F42217B02C2E005BDB61 /* PopoverView_Configuration.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PopoverView_Configuration.h; sourceTree = "<group>"; };
+		8C19F42317B02C2E005BDB61 /* PopoverViewCompatibility.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PopoverViewCompatibility.h; sourceTree = "<group>"; };
+		8C19F42517B04E7C005BDB61 /* navBarBackground@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "navBarBackground@2x.png"; sourceTree = "<group>"; };
+		8C19F42617B04E7C005BDB61 /* navBarBackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = navBarBackground.png; sourceTree = "<group>"; };
+		8C19F42917B04EC6005BDB61 /* UINavigationController+Theme.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UINavigationController+Theme.h"; sourceTree = "<group>"; };
+		8C19F42A17B04EC6005BDB61 /* UINavigationController+Theme.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UINavigationController+Theme.m"; sourceTree = "<group>"; };
+		8C19F42B17B04EC6005BDB61 /* UIBarButtonItem+Theme.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIBarButtonItem+Theme.h"; sourceTree = "<group>"; };
+		8C19F42C17B04EC6005BDB61 /* UIBarButtonItem+Theme.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIBarButtonItem+Theme.m"; sourceTree = "<group>"; };
+		8C19F42D17B05089005BDB61 /* LibONavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LibONavigationController.h; path = iosremote/LibONavigationController.h; sourceTree = "<group>"; };
+		8C19F42E17B05089005BDB61 /* LibONavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LibONavigationController.m; path = iosremote/LibONavigationController.m; sourceTree = "<group>"; };
+		8C19F43217B056B3005BDB61 /* navBarButtonNormal@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "navBarButtonNormal@2x.png"; path = "iosremote/navBarButtonNormal@2x.png"; sourceTree = "<group>"; };
+		8C19F43417B10D48005BDB61 /* UIViewController+LibOStyling.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIViewController+LibOStyling.h"; path = "iosremote/UIViewController+LibOStyling.h"; sourceTree = "<group>"; };
+		8C19F43517B10D49005BDB61 /* UIViewController+LibOStyling.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIViewController+LibOStyling.m"; path = "iosremote/UIViewController+LibOStyling.m"; sourceTree = "<group>"; };
+		8C19F43717B145AD005BDB61 /* backButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = backButton.png; path = iosremote/backButton.png; sourceTree = "<group>"; };
+		8C19F43817B145AD005BDB61 /* backButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "backButton@2x.png"; path = "iosremote/backButton@2x.png"; sourceTree = "<group>"; };
+		8C19F43C17B1D935005BDB61 /* add.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = add.png; path = iosremote/add.png; sourceTree = "<group>"; };
+		8C19F43F17B1E961005BDB61 /* gear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = gear.png; path = iosremote/gear.png; sourceTree = "<group>"; };
+		8C19F44017B1E961005BDB61 /* gear@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "gear@2x.png"; path = "iosremote/gear@2x.png"; sourceTree = "<group>"; };
+		8C19F44317B1F21B005BDB61 /* gear_pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = gear_pressed.png; path = iosremote/gear_pressed.png; sourceTree = "<group>"; };
+		8C19F44417B1F21B005BDB61 /* gear_pressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "gear_pressed@2x.png"; path = "iosremote/gear_pressed@2x.png"; sourceTree = "<group>"; };
+		8C19F44817B1FEFD005BDB61 /* gear_transparent_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = gear_transparent_bg.png; path = iosremote/gear_transparent_bg.png; sourceTree = "<group>"; };
+		8C19F44917B1FEFE005BDB61 /* gear_transparent_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "gear_transparent_bg@2x.png"; path = "iosremote/gear_transparent_bg@2x.png"; sourceTree = "<group>"; };
+		8C19F44C17B20426005BDB61 /* add@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "add@2x.png"; path = "iosremote/add@2x.png"; sourceTree = "<group>"; };
 		8C1A16FA17A2853100B4BB3C /* iosremote_iphone_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iosremote_iphone_icon@2x.png"; sourceTree = "<group>"; };
 		8C1A16FC17A2853700B4BB3C /* iosremote_iphone_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iosremote_iphone_icon.png; sourceTree = "<group>"; };
 		8C1A16FE17A2853F00B4BB3C /* iosremote_ipad_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iosremote_ipad_icon.png; sourceTree = "<group>"; };
@@ -212,6 +257,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8C19F41F17B02A8A005BDB61 /* QuartzCore.framework in Frameworks */,
 				8C19F41D17B00899005BDB61 /* SystemConfiguration.framework in Frameworks */,
 				571102701794128E007D343B /* libz.dylib in Frameworks */,
 				57DC7007178D84490050FC58 /* CoreMotion.framework in Frameworks */,
@@ -261,6 +307,19 @@
 		57AEEDAA1788D7B2007F4F97 /* Ressources */ = {
 			isa = PBXGroup;
 			children = (
+				8C19F44C17B20426005BDB61 /* add@2x.png */,
+				8C19F44817B1FEFD005BDB61 /* gear_transparent_bg.png */,
+				8C19F44917B1FEFE005BDB61 /* gear_transparent_bg@2x.png */,
+				8C19F44317B1F21B005BDB61 /* gear_pressed.png */,
+				8C19F44417B1F21B005BDB61 /* gear_pressed@2x.png */,
+				8C19F43F17B1E961005BDB61 /* gear.png */,
+				8C19F44017B1E961005BDB61 /* gear@2x.png */,
+				8C19F43C17B1D935005BDB61 /* add.png */,
+				8C19F43717B145AD005BDB61 /* backButton.png */,
+				8C19F43817B145AD005BDB61 /* backButton@2x.png */,
+				8C19F43217B056B3005BDB61 /* navBarButtonNormal@2x.png */,
+				8C19F42517B04E7C005BDB61 /* navBarBackground@2x.png */,
+				8C19F42617B04E7C005BDB61 /* navBarBackground.png */,
 				8C26E5D117A5AFE8007DA4B7 /* slideshowRail.png */,
 				8C26E5D217A5AFE8007DA4B7 /* slideshowRail@2x.png */,
 				8C0DC84617A45B160099E5AE /* libO_icon.png */,
@@ -310,6 +369,7 @@
 		57C6E3E6175E06E800E8BC5F = {
 			isa = PBXGroup;
 			children = (
+				8C19F41E17B02A8A005BDB61 /* QuartzCore.framework */,
 				8C19F41C17B00899005BDB61 /* SystemConfiguration.framework */,
 				8C1A170217A28AB900B4BB3C /* Shared */,
 				8C1A170917A28E6500B4BB3C /* iPhone */,
@@ -415,6 +475,10 @@
 		8C1A170617A28DDF00B4BB3C /* Support */ = {
 			isa = PBXGroup;
 			children = (
+				8C19F42017B02AA9005BDB61 /* PopoverView.h */,
+				8C19F42217B02C2E005BDB61 /* PopoverView_Configuration.h */,
+				8C19F42317B02C2E005BDB61 /* PopoverViewCompatibility.h */,
+				8C19F42117B02AA9005BDB61 /* PopoverView.m */,
 				57B152971764703500EECC67 /* Base64.h */,
 				57B152981764703500EECC67 /* Base64.m */,
 				57CFED9717838FDC00E82E05 /* EditableTableViewCell.h */,
@@ -428,6 +492,14 @@
 				8C26E5D617A68154007DA4B7 /* stopWatch.m */,
 				8C0323A917A943720037432E /* UIImageView+setImageAnimated.h */,
 				8C0323AA17A943720037432E /* UIImageView+setImageAnimated.m */,
+				8C19F42917B04EC6005BDB61 /* UINavigationController+Theme.h */,
+				8C19F42A17B04EC6005BDB61 /* UINavigationController+Theme.m */,
+				8C19F42B17B04EC6005BDB61 /* UIBarButtonItem+Theme.h */,
+				8C19F42C17B04EC6005BDB61 /* UIBarButtonItem+Theme.m */,
+				8C19F42D17B05089005BDB61 /* LibONavigationController.h */,
+				8C19F42E17B05089005BDB61 /* LibONavigationController.m */,
+				8C19F43417B10D48005BDB61 /* UIViewController+LibOStyling.h */,
+				8C19F43517B10D49005BDB61 /* UIViewController+LibOStyling.m */,
 			);
 			name = Support;
 			sourceTree = "<group>";
@@ -585,7 +657,6 @@
 				57DF0A85178FFFAB008B2D3D /* iPhone_autosize.storyboard in Resources */,
 				5711026D1794127E007D343B /* README.md in Resources */,
 				5711026E1794127E007D343B /* release_notes.md in Resources */,
-				8C1A16FB17A2853100B4BB3C /* iosremote_iphone_icon@2x.png in Resources */,
 				8C1A16FD17A2853700B4BB3C /* iosremote_iphone_icon.png in Resources */,
 				8C1A16FF17A2853F00B4BB3C /* iosremote_ipad_icon.png in Resources */,
 				8C1A170117A2854300B4BB3C /* iosremote_ipad_icon@2x.png in Resources */,
@@ -606,6 +677,20 @@
 				8C26E5C617A5539D007DA4B7 /* UserDefaults.plist in Resources */,
 				8C26E5D317A5AFE8007DA4B7 /* slideshowRail.png in Resources */,
 				8C26E5D417A5AFE8007DA4B7 /* slideshowRail@2x.png in Resources */,
+				8C19F42717B04E7C005BDB61 /* navBarBackground@2x.png in Resources */,
+				8C19F42817B04E7C005BDB61 /* navBarBackground.png in Resources */,
+				8C19F43317B056B3005BDB61 /* navBarButtonNormal@2x.png in Resources */,
+				8C19F43917B145AD005BDB61 /* backButton.png in Resources */,
+				8C19F43A17B145AD005BDB61 /* backButton@2x.png in Resources */,
+				8C19F43E17B1D935005BDB61 /* add.png in Resources */,
+				8C19F44117B1E961005BDB61 /* gear.png in Resources */,
+				8C19F44217B1E961005BDB61 /* gear@2x.png in Resources */,
+				8C19F44517B1F21B005BDB61 /* gear_pressed.png in Resources */,
+				8C19F44617B1F21B005BDB61 /* gear_pressed@2x.png in Resources */,
+				8C19F44717B1FB51005BDB61 /* iosremote_iphone_icon@2x.png in Resources */,
+				8C19F44A17B1FEFE005BDB61 /* gear_transparent_bg.png in Resources */,
+				8C19F44B17B1FEFE005BDB61 /* gear_transparent_bg@2x.png in Resources */,
+				8C19F44D17B20427005BDB61 /* add@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -616,6 +701,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8C19F43017B0518A005BDB61 /* UINavigationController+Theme.h in Sources */,
+				8C19F43117B0518A005BDB61 /* UINavigationController+Theme.m in Sources */,
+				8C19F42417B02C7A005BDB61 /* PopoverView.m in Sources */,
 				57C6E3FF175E06E800E8BC5F /* main.m in Sources */,
 				57C6E403175E06E800E8BC5F /* AppDelegate.m in Sources */,
 				57C6E42E175E076900E8BC5F /* Client.m in Sources */,
@@ -645,6 +733,8 @@
 				8C26E5D017A58703007DA4B7 /* HorizontalSlideCell.m in Sources */,
 				8C26E5D717A68154007DA4B7 /* stopWatch.m in Sources */,
 				8C0323AB17A943720037432E /* UIImageView+setImageAnimated.m in Sources */,
+				8C19F42F17B05089005BDB61 /* LibONavigationController.m in Sources */,
+				8C19F43617B10D49005BDB61 /* UIViewController+LibOStyling.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

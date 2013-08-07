@@ -7,7 +7,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #import "AppDelegate.h"
-
+#import "UINavigationController+Theme.h"
 @implementation AppDelegate
 
 @synthesize window = _window;
@@ -38,14 +38,27 @@
 //        mainStoryboard = [UIStoryboard storyboardWithName:@"iPhone_autolayout" bundle:nil];
 //        NSLog(@"loading autolayout storyboard");
 //    } else {
-//        mainStoryboard = [UIStoryboard storyboardWithName:@"iPhone_autosize" bundle:nil];
+//      UIStoryboard * mainStoryboard = [UIStoryboard storyboardWithName:@"iPhone_autosize" bundle:nil];
 //        NSLog(@"Doesn't support autolayout, loading autosize");
 //    }
 //
 //    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 //    self.window.rootViewController = [mainStoryboard instantiateInitialViewController];
+//    [(UINavigationController *)self.window.rootViewController loadTheme];
 //    [self.window makeKeyAndVisible];
+    [[UIBarButtonItem appearanceWhenContainedIn:[UINavigationBar class], nil]
+     setBackgroundImage:[UIImage imageNamed:@"navBarButtonNormal"] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
     
+    NSDictionary *attributes = [NSDictionary dictionaryWithObjects:
+                                [NSArray arrayWithObjects: [UIFont boldSystemFontOfSize:15], [UIColor colorWithRed:1.0 green:0.231372549 blue:0.188235294 alpha:1.0], [UIColor clearColor], nil]
+                                                           forKeys: [NSArray arrayWithObjects:UITextAttributeFont, UITextAttributeTextColor, UITextAttributeTextShadowColor, nil]];
+    [[UIBarButtonItem appearance] setTitleTextAttributes:attributes
+                                                forState:UIControlStateNormal];
+    attributes = [NSDictionary dictionaryWithObjects:
+                  [NSArray arrayWithObjects: [UIFont boldSystemFontOfSize:15], [UIColor grayColor], [UIColor clearColor], nil]
+                                             forKeys: [NSArray arrayWithObjects:UITextAttributeFont, UITextAttributeTextColor, UITextAttributeTextShadowColor, nil]];
+    [[UIBarButtonItem appearance] setTitleTextAttributes:attributes
+                                                forState:UIControlStateHighlighted];
     return YES;
 }
 

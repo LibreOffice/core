@@ -110,7 +110,6 @@
          didRemoveService:(NSNetService *)aNetService
                moreComing:(BOOL)moreComing
 {
-    NSLog(@"Did remove");
     [self.comManager.autoDiscoveryServers removeObject:aNetService];
     
     if(!moreComing)
@@ -158,6 +157,9 @@
     self.comManager = [CommunicationManager sharedComManager];
     self.serverTable.dataSource = self;
     self.serverTable.delegate = self;
+    
+    [self setTitle:@"Impress Remote"];
+    
 }
 
 - (void) viewDidAppear:(BOOL)animated

@@ -33,6 +33,9 @@ typedef NSUInteger ServerAttribute;
 @property (nonatomic, strong) EditableTableViewCell *nameCell;
 @property (nonatomic, strong) EditableTableViewCell *addrCell;
 @property (nonatomic, strong) CommunicationManager *comManager;
+
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *saveButton;
+
 - (IBAction)save:(id)sender;
 
 - (EditableTableViewCell *)newDetailCellWithTag:(NSInteger)tag;

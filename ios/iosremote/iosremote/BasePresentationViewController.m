@@ -15,6 +15,7 @@
 #import "HorizontalSlideCell.h"
 #import "MainSplitViewController.h"
 #import "stopWatch.h"
+#import "PopoverView.h"
 
 #import "ControlVariables.h"
 
@@ -25,7 +26,7 @@
 #define CURRENT_SLIDE_IMAGEVIEW 19
 #define CURRENT_SLIDE_NOTES 18
 
-@interface BasePresentationViewController ()
+@interface BasePresentationViewController () <PopoverViewDelegate>
 
 @property (nonatomic, strong) CommunicationManager *comManager;
 @property (nonatomic, strong) id slideShowImageNoteReadyObserver;
@@ -430,6 +431,7 @@
     [self setClearButton:nil];
     [self setTimeLabel:nil];
     [self setWelcome_label:nil];
+    [self setGearButton:nil];
     [super viewDidUnload];
 }
 
@@ -464,6 +466,50 @@
     }];
 }
 
+static BOOL isBlank = NO;
+#pragma mark - Popover toggle
+- (IBAction)popOverUp:(id)sender {
+    if (!isBlank) {
+        [PopoverView showPopoverAtPoint:self.gearButton.frame.origin inView:self.view withStringArray:
+         [NSArray arrayWithObjects:@"Stop Presentation", @"Restart", @"Blank Screen", nil]
+                               delegate:self];
+    } else {
+        [PopoverView showPopoverAtPoint:self.gearButton.frame.origin inView:self.view withStringArray:
+         [NSArray arrayWithObjects:@"Stop Presentation", @"Restart", @"Resume from blank Screen", nil]
+                               delegate:self];
+    }
+    [UIView animateWithDuration:0.24 animations:^{
+        [self.gearButton setCenter:CGPointMake(self.gearButton.center.x - 20, self.gearButton.center.y)];
+    }];
+}
+
+- (void)popoverView:(PopoverView *)popoverView didSelectItemAtIndex:(NSInteger)index
+{
+    [popoverView dismiss];
+    switch (index) {
+        case 0:
+            [self.comManager.transmitter stopPresentation];
+            break;
+        case 1:
+            [self.comManager.transmitter gotoSlide:0];
+        case 2:
+            if (!isBlank){
+                [self.comManager.transmitter blankScreen];
+            } else {
+                [self.comManager.transmitter resume];
+            }
+            isBlank = !isBlank;
+        default:
+            break;
+    }
+}
+
+- (void) popoverViewDidDismiss:(PopoverView *)popoverView
+{
+    [UIView animateWithDuration:0.24 animations:^{
+        [self.gearButton setCenter:CGPointMake(self.gearButton.center.x + 20, self.gearButton.center.y)];
+    }];
+}
 
 #pragma mark - Reconnection
 - (void) didReceiveDisconnection

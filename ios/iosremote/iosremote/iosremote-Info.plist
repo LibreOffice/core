@@ -15,12 +15,12 @@
 			<key>CFBundleIconFiles</key>
 			<array>
 				<string>iosremote_iphone_icon.png</string>
-				<string>iosremote_iphone_icon@2x.png</string>
 				<string>iosremote_icon.png</string>
 				<string>iosremote_ipad_icon.png</string>
 				<string>iosremote_ipad_icon@2x.png</string>
 				<string>iosremote_ipad_icon@2x_3.png</string>
 				<string>iosremote_ipad_icon@2x_3.png</string>
+				<string>iosremote_iphone_icon@2x.png</string>
 			</array>
 			<key>UIPrerenderedIcon</key>
 			<true/>

@@ -9,6 +9,7 @@
 #import "newServer_vc.h"
 #import "CommunicationManager.h"
 #import "EditableTableViewCell.h"
+#import "UIViewController+LibOStyling.h"
 #import "serverList_vc.h"
 #import "Server.h"
 #import <SystemConfiguration/CaptiveNetwork.h>
@@ -74,11 +75,23 @@
     return info;
 }
 
+- (void) handleBack
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 - (void)viewDidLoad
 {
     self.comManager = [CommunicationManager sharedComManager];
     [self setNameCell: [self newDetailCellWithTag:ServerName]];
     [self setAddrCell: [self newDetailCellWithTag:ServerAddr]];
+    
+    [self setTitle:@"New Server"];
+    
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStyleBordered target:self action:@selector(handleBack)];
+    [backButton setBackgroundImage:[UIImage imageNamed:@"backButton"] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+    self.navigationItem.leftBarButtonItem = backButton;
+    
 }
 
 //  Override this method to automatically place the insertion point in the
@@ -137,7 +150,7 @@
 //
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
 {
-    if ([textField tag] == ServerAddr)
+    if ([textField tag] == ServerName)
     {
         [textField setReturnKeyType:UIReturnKeyDone];
     }
@@ -244,5 +257,9 @@
     return cell;
 }
 
+- (void)viewDidUnload {
+    [self setSaveButton:nil];
+    [super viewDidUnload];
+}
 @end
 
