@@ -299,7 +299,7 @@ void GtkSalMenu::ImplUpdate( gboolean bRecurse )
             g_lo_menu_insert_in_section( pLOMenu, nSection, nItemPos, "EMPTY STRING" );
 
         // Get internal menu item values.
-        String aText = pVCLMenu->GetItemText( nId );
+        OUString aText = pVCLMenu->GetItemText( nId );
         sal_Bool itemEnabled = pVCLMenu->IsItemEnabled( nId );
         KeyCode nAccelKey = pVCLMenu->GetAccelKey( nId );
         sal_Bool itemChecked = pVCLMenu->IsItemChecked( nId );
@@ -658,7 +658,7 @@ GtkSalMenu* GtkSalMenu::GetMenuForItemCommand( gchar* aCommand, gboolean bGetSub
     {
         GtkSalMenuItem *pSalItem = maItems[ nPos ];
 
-        String aItemCommand = mpVCLMenu->GetItemCommand( pSalItem->mnId );
+        OUString aItemCommand = mpVCLMenu->GetItemCommand( pSalItem->mnId );
         gchar* aItemCommandStr = (gchar*) OUStringToOString( aItemCommand, RTL_TEXTENCODING_UTF8 ).getStr();
 
         if ( g_strcmp0( aItemCommandStr, aCommand ) == 0 )

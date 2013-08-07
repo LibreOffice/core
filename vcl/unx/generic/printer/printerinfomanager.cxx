@@ -230,7 +230,7 @@ void PrinterInfoManager::initialize()
     m_aGlobalDefaults = PrinterInfo();
 
     // need a parser for the PPDContext. generic printer should do.
-    m_aGlobalDefaults.m_pParser = PPDParser::getParser( String( RTL_CONSTASCII_USTRINGPARAM( "SGENPRT" ) ) );
+    m_aGlobalDefaults.m_pParser = PPDParser::getParser( OUString( "SGENPRT" ) );
     m_aGlobalDefaults.m_aContext.setParser( m_aGlobalDefaults.m_pParser );
     m_aGlobalDefaults.m_bPerformFontSubstitution = true;
     m_bDisableCUPS = false;
@@ -249,7 +249,7 @@ void PrinterInfoManager::initialize()
     for( print_dir_it = aDirList.begin(); print_dir_it != aDirList.end(); ++print_dir_it )
     {
         INetURLObject aFile( *print_dir_it, INET_PROT_FILE, INetURLObject::ENCODE_ALL );
-        aFile.Append( String( RTL_CONSTASCII_USTRINGPARAM( PRINT_FILENAME ) ) );
+        aFile.Append( OUString( PRINT_FILENAME ) );
         Config aConfig( aFile.PathToFileName() );
         if( aConfig.HasGroup( GLOBAL_DEFAULTS_GROUP ) )
         {
@@ -346,7 +346,7 @@ void PrinterInfoManager::initialize()
     {
         INetURLObject aDir( *print_dir_it, INET_PROT_FILE, INetURLObject::ENCODE_ALL );
         INetURLObject aFile( aDir );
-        aFile.Append( String( RTL_CONSTASCII_USTRINGPARAM( PRINT_FILENAME ) ) );
+        aFile.Append( OUString( PRINT_FILENAME ) );
 
         // check directory validity
         OUString aUniPath;
@@ -578,8 +578,8 @@ void PrinterInfoManager::initialize()
     // merge paper and font substitution from default printer,
     // all else from global defaults
     PrinterInfo aMergeInfo( m_aGlobalDefaults );
-    aMergeInfo.m_aDriverName    = String( RTL_CONSTASCII_USTRINGPARAM( "SGENPRT" ) );
-    aMergeInfo.m_aFeatures      = String( RTL_CONSTASCII_USTRINGPARAM( "autoqueue" ) );
+    aMergeInfo.m_aDriverName    = "SGENPRT";
+    aMergeInfo.m_aFeatures      = "autoqueue";
 
     if( !m_aDefaultPrinter.isEmpty() )
     {
@@ -587,8 +587,8 @@ void PrinterInfoManager::initialize()
         aMergeInfo.m_bPerformFontSubstitution = aDefaultInfo.m_bPerformFontSubstitution;
         fillFontSubstitutions( aMergeInfo );
 
-        const PPDKey* pDefKey           = aDefaultInfo.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) ) );
-        const PPDKey* pMergeKey         = aMergeInfo.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) ) );
+        const PPDKey* pDefKey           = aDefaultInfo.m_pParser->getKey( OUString( "PageSize" ) );
+        const PPDKey* pMergeKey         = aMergeInfo.m_pParser->getKey( OUString( "PageSize" ) );
         const PPDValue* pDefValue       = aDefaultInfo.m_aContext.getValue( pDefKey );
         const PPDValue* pMergeValue     = pMergeKey ? pMergeKey->getValue( pDefValue->m_aOption ) : NULL;
         if( pMergeKey && pMergeValue )
@@ -598,16 +598,16 @@ void PrinterInfoManager::initialize()
     getSystemPrintQueues();
     for( ::std::list< SystemPrintQueue >::iterator it = m_aSystemPrintQueues.begin(); it != m_aSystemPrintQueues.end(); ++it )
     {
-        String aPrinterName( RTL_CONSTASCII_USTRINGPARAM( "<" ) );
-        aPrinterName += String( it->m_aQueue );
-        aPrinterName.Append( '>' );
+        OUString aPrinterName( "<" );
+        aPrinterName += it->m_aQueue;
+        aPrinterName += ">";
 
         if( m_aPrinters.find( aPrinterName ) != m_aPrinters.end() )
             // probably user made this one permanent in padmin
             continue;
 
-        String aCmd( m_aSystemPrintCommand );
-        aCmd.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "(PRINTER)" ) ), it->m_aQueue );
+        OUString aCmd( m_aSystemPrintCommand );
+        aCmd = aCmd.replaceAll( "(PRINTER)", it->m_aQueue );
 
         Printer aPrinter;
 
@@ -1070,11 +1070,11 @@ void PrinterInfoManager::getSystemPrintCommands( std::list< OUString >& rCommand
 
     std::list< SystemPrintQueue >::const_iterator it;
     rCommands.clear();
-    String aPrinterConst( RTL_CONSTASCII_USTRINGPARAM( "(PRINTER)" ) );
+    OUString aPrinterConst( "(PRINTER)" );
     for( it = m_aSystemPrintQueues.begin(); it != m_aSystemPrintQueues.end(); ++it )
     {
-        String aCmd( m_aSystemPrintCommand );
-        aCmd.SearchAndReplace( aPrinterConst, it->m_aQueue );
+        OUString aCmd( m_aSystemPrintCommand );
+        aCmd = aCmd.replaceAll( aPrinterConst, it->m_aQueue );
         rCommands.push_back( aCmd );
     }
 }
@@ -1138,7 +1138,7 @@ void PrinterInfoManager::setDefaultPaper( PPDContext& rContext ) const
     if(  ! rContext.getParser() )
         return;
 
-    const PPDKey* pPageSizeKey = rContext.getParser()->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) ) );
+    const PPDKey* pPageSizeKey = rContext.getParser()->getKey( OUString( "PageSize" ) );
     if( ! pPageSizeKey )
         return;
 

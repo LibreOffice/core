@@ -513,7 +513,7 @@ StatusDrawCallback (XIC, XPointer, XIMStatusDrawCallbackStruct *call_data)
 {
     if( call_data->type == XIMTextType )
     {
-        String aText;
+        OUString aText;
         if( call_data->data.text )
         {
             // XIM with text
@@ -538,7 +538,7 @@ StatusDrawCallback (XIC, XPointer, XIMStatusDrawCallbackStruct *call_data)
                 }
             }
             if( nLength )
-                aText = String( pMBString, nLength, osl_getThreadTextEncoding() );
+                aText = OUString( pMBString, nLength, osl_getThreadTextEncoding() );
         }
         ::vcl::I18NStatus::get().setStatusText( aText );
     }

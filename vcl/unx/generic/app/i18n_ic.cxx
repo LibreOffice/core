@@ -47,7 +47,7 @@ static void sendEmptyCommit( SalFrame* pFrame )
     SalExtTextInputEvent aEmptyEv;
     aEmptyEv.mnTime             = 0;
     aEmptyEv.mpTextAttr         = 0;
-    aEmptyEv.maText             = String();
+    aEmptyEv.maText             = "";
     aEmptyEv.mnCursorPos        = 0;
     aEmptyEv.mnCursorFlags      = 0;
     aEmptyEv.mnDeltaStart       = 0;

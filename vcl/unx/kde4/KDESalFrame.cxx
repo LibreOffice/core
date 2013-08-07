@@ -90,7 +90,7 @@ static Font toFont( const QFont &rQFont, const ::com::sun::star::lang::Locale& r
     QFontInfo qFontInfo( rQFont );
 
     // set family name
-    aInfo.m_aFamilyName = String( (const char *) rQFont.family().toUtf8(), RTL_TEXTENCODING_UTF8 );
+    aInfo.m_aFamilyName = OUString( (const char *) rQFont.family().toUtf8(), strlen( (const char *) rQFont.family().toUtf8() ), RTL_TEXTENCODING_UTF8 );
 
     // set italic
     aInfo.m_eItalic = ( qFontInfo.italic()? ITALIC_NORMAL: ITALIC_NONE );

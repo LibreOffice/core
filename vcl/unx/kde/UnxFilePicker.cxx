@@ -918,7 +918,7 @@ void UnxFilePicker::sendAppendControlCommand( sal_Int16 nControlId )
         aBuffer.appendAscii( " ", 1 );
         appendEscaped( aBuffer, aType );
         aBuffer.appendAscii( " ", 1 );
-        appendEscaped( aBuffer, m_pResMgr? String( ResId( nTitleId, *m_pResMgr ) ): String() );
+        appendEscaped( aBuffer, m_pResMgr? OUString( ResId( nTitleId, *m_pResMgr ) ): OUString() );
 
         sendCommand( aBuffer.makeStringAndClear() );
     }

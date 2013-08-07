@@ -789,23 +789,23 @@ void SalDisplay::ModifierMapping()
 
 OUString SalDisplay::GetKeyName( sal_uInt16 nKeyCode ) const
 {
-    String aStrMap;
-    String aCustomKeyName;
+    OUString aStrMap;
+    OUString aCustomKeyName;
 
     if( nKeyCode & KEY_MOD1 )
         aStrMap += GetKeyNameFromKeySym( nCtrlKeySym_ );
 
     if( nKeyCode & KEY_MOD2 )
     {
-        if( aStrMap.Len() )
-            aStrMap += '+';
+        if( !aStrMap.isEmpty() )
+            aStrMap += "+";
         aStrMap += GetKeyNameFromKeySym( nMod1KeySym_ );
     }
 
     if( nKeyCode & KEY_SHIFT )
     {
-        if( aStrMap.Len() )
-            aStrMap += '+';
+        if( !aStrMap.isEmpty() )
+            aStrMap += "+";
         aStrMap += GetKeyNameFromKeySym( nShiftKeySym_ );
     }
     nKeyCode &= 0x0FFF;
@@ -903,10 +903,10 @@ OUString SalDisplay::GetKeyName( sal_uInt16 nKeyCode ) const
             nKeySym = GetServerVendor() == vendor_sun ? SunXK_Cut   : XK_L10;
             break;
         case KEY_ADD:
-            aCustomKeyName = '+';
+            aCustomKeyName = "+";
             break;
         case KEY_SUBTRACT:
-            aCustomKeyName = '-';
+            aCustomKeyName = "-";
             break;
         case KEY_MULTIPLY:
             nKeySym = XK_asterisk;
@@ -915,7 +915,7 @@ OUString SalDisplay::GetKeyName( sal_uInt16 nKeyCode ) const
             nKeySym = XK_slash;
             break;
         case KEY_POINT:
-            aCustomKeyName = '.';
+            aCustomKeyName = ".";
             break;
         case KEY_COMMA:
             nKeySym = XK_comma;
@@ -942,13 +942,13 @@ OUString SalDisplay::GetKeyName( sal_uInt16 nKeyCode ) const
             nKeySym = XK_grave;
             break;
         case KEY_BRACKETLEFT:
-            aCustomKeyName = '[';
+            aCustomKeyName = "[";
             break;
         case KEY_BRACKETRIGHT:
-            aCustomKeyName = ']';
+            aCustomKeyName = "]";
             break;
         case KEY_SEMICOLON:
-            aCustomKeyName = ';';
+            aCustomKeyName = ";";
             break;
 
         default:
@@ -958,26 +958,26 @@ OUString SalDisplay::GetKeyName( sal_uInt16 nKeyCode ) const
 
     if( nKeySym )
     {
-        String aKeyName = GetKeyNameFromKeySym( nKeySym );
-        if( aKeyName.Len() )
+        OUString aKeyName = GetKeyNameFromKeySym( nKeySym );
+        if( !aKeyName.isEmpty() )
         {
-            if( aStrMap.Len() )
-                aStrMap += '+';
+            if( !aStrMap.isEmpty() )
+                aStrMap += "+";
             aStrMap += aKeyName;
         }
         else
-            aStrMap.Erase();
+            aStrMap = "";
     }
-    else if (aCustomKeyName.Len())
+    else if (!aCustomKeyName.isEmpty())
     {
         // For semicolumn, bracket left and bracket right, it's better to use
         // their keys than their names. (fdo#32891)
-        if (aStrMap.Len())
-            aStrMap += '+';
+        if (!aStrMap.isEmpty())
+            aStrMap += "+";
         aStrMap += aCustomKeyName;
     }
     else
-        aStrMap.Erase();
+        aStrMap = "";
 
     return aStrMap;
 }

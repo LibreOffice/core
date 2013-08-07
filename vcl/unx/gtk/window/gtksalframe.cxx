@@ -3907,7 +3907,7 @@ void GtkSalFrame::IMHandler::sendEmptyCommit()
     SalExtTextInputEvent aEmptyEv;
     aEmptyEv.mnTime             = 0;
     aEmptyEv.mpTextAttr         = 0;
-    aEmptyEv.maText             = String();
+    aEmptyEv.maText             = "";
     aEmptyEv.mnCursorPos        = 0;
     aEmptyEv.mnCursorFlags      = 0;
     aEmptyEv.mnDeltaStart       = 0;
@@ -4100,7 +4100,7 @@ void GtkSalFrame::IMHandler::signalIMCommit( GtkIMContext* CONTEXT_ARG, gchar* p
 
         pThis->m_aInputEvent.mnTime             = 0;
         pThis->m_aInputEvent.mpTextAttr         = 0;
-        pThis->m_aInputEvent.maText             = String( pText, RTL_TEXTENCODING_UTF8 );
+        pThis->m_aInputEvent.maText             = OUString( pText, strlen(pText), RTL_TEXTENCODING_UTF8 );
         pThis->m_aInputEvent.mnCursorPos        = pThis->m_aInputEvent.maText.getLength();
         pThis->m_aInputEvent.mnCursorFlags      = 0;
         pThis->m_aInputEvent.mnDeltaStart       = 0;
@@ -4144,7 +4144,7 @@ void GtkSalFrame::IMHandler::signalIMCommit( GtkIMContext* CONTEXT_ARG, gchar* p
         if( ! aDel.isDeleted() )
         {
             // reset input event
-            pThis->m_aInputEvent.maText = String();
+            pThis->m_aInputEvent.maText = "";
             pThis->m_aInputEvent.mnCursorPos = 0;
             pThis->updateIMSpotLocation();
         }
@@ -4187,7 +4187,7 @@ void GtkSalFrame::IMHandler::signalIMPreeditChanged( GtkIMContext*, gpointer im_
 
     bool bEndPreedit = (!pText || !*pText) && pThis->m_aInputEvent.mpTextAttr != NULL;
     pThis->m_aInputEvent.mnTime             = 0;
-    pThis->m_aInputEvent.maText             = String( pText, RTL_TEXTENCODING_UTF8 );
+    pThis->m_aInputEvent.maText             = OUString( pText, strlen(pText), RTL_TEXTENCODING_UTF8 );
     pThis->m_aInputEvent.mnCursorPos        = nCursorPos;
     pThis->m_aInputEvent.mnCursorFlags      = 0;
     pThis->m_aInputEvent.mnDeltaStart       = 0;

@@ -57,17 +57,17 @@ void JobData::setCollate( bool bCollate )
     const PPDParser* pParser = m_aContext.getParser();
     if( pParser )
     {
-        const PPDKey* pKey = pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "Collate" ) ) );
+        const PPDKey* pKey = pParser->getKey( OUString( "Collate" ) );
         if( pKey )
         {
             const PPDValue* pVal = NULL;
             if( bCollate )
-                pVal = pKey->getValue( String( RTL_CONSTASCII_USTRINGPARAM( "True" ) ) );
+                pVal = pKey->getValue( OUString( "True" ) );
             else
             {
-                pVal = pKey->getValue( String( RTL_CONSTASCII_USTRINGPARAM( "False" ) ) );
+                pVal = pKey->getValue( OUString( "False" ) );
                 if( ! pVal )
-                    pVal = pKey->getValue( String( RTL_CONSTASCII_USTRINGPARAM( "None" ) ) );
+                    pVal = pKey->getValue( OUString( "None" ) );
             }
             m_aContext.setValue( pKey, pVal );
         }
@@ -81,7 +81,7 @@ bool JobData::setPaper( int i_nWidth, int i_nHeight )
     {
         OUString aPaper( m_pParser->matchPaper( i_nWidth, i_nHeight ) );
 
-        const PPDKey*   pKey = m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) ) );
+        const PPDKey*   pKey = m_pParser->getKey( OUString( "PageSize" ) );
         const PPDValue* pValue = pKey ? pKey->getValueCaseInsensitive( aPaper ) : NULL;
 
         bSuccess = pKey && pValue && m_aContext.setValue( pKey, pValue, false );
@@ -94,7 +94,7 @@ bool JobData::setPaperBin( int i_nPaperBin )
     bool bSuccess = false;
     if( m_pParser )
     {
-        const PPDKey*   pKey = m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "InputSlot" ) ) );
+        const PPDKey*   pKey = m_pParser->getKey( OUString( "InputSlot" ) );
         const PPDValue* pValue = pKey ? pKey->getValue( i_nPaperBin ) : NULL;
 
         bSuccess = pKey && pValue && m_aContext.setValue( pKey, pValue, false );

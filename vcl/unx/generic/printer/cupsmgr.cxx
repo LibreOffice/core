@@ -517,7 +517,7 @@ const PPDParser* CUPSManager::createCUPSParser( const OUString& rPrinter )
     if( ! pNewParser )
     {
         // get the default PPD
-        pNewParser = PPDParser::getParser( String( RTL_CONSTASCII_USTRINGPARAM( "SGENPRT" ) ) );
+        pNewParser = PPDParser::getParser( OUString( "SGENPRT" ) );
 
         PrinterInfo& rInfo = m_aPrinters[ aPrinter ].m_aInfo;
 
