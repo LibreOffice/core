@@ -239,10 +239,10 @@ class ImplBorderWindowView
 public:
     virtual                 ~ImplBorderWindowView();
 
-    virtual sal_Bool            MouseMove( const MouseEvent& rMEvt );
-    virtual sal_Bool            MouseButtonDown( const MouseEvent& rMEvt );
-    virtual sal_Bool            Tracking( const TrackingEvent& rTEvt );
-    virtual String          RequestHelp( const Point& rPos, Rectangle& rHelpRect );
+    virtual sal_Bool        MouseMove( const MouseEvent& rMEvt );
+    virtual sal_Bool        MouseButtonDown( const MouseEvent& rMEvt );
+    virtual sal_Bool        Tracking( const TrackingEvent& rTEvt );
+    virtual OUString        RequestHelp( const Point& rPos, Rectangle& rHelpRect );
 
     virtual void            Init( OutputDevice* pDev, long nWidth, long nHeight ) = 0;
     virtual void            GetBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder,
@@ -252,11 +252,11 @@ public:
     virtual Rectangle       GetMenuRect() const;
 
     void                    ImplInitTitle( ImplBorderFrameData* pData );
-    sal_uInt16                  ImplHitTest( ImplBorderFrameData* pData, const Point& rPos );
-    sal_Bool                    ImplMouseMove( ImplBorderFrameData* pData, const MouseEvent& rMEvt );
-    sal_Bool                    ImplMouseButtonDown( ImplBorderFrameData* pData, const MouseEvent& rMEvt );
-    sal_Bool                    ImplTracking( ImplBorderFrameData* pData, const TrackingEvent& rTEvt );
-    String                  ImplRequestHelp( ImplBorderFrameData* pData, const Point& rPos, Rectangle& rHelpRect );
+    sal_uInt16              ImplHitTest( ImplBorderFrameData* pData, const Point& rPos );
+    sal_Bool                ImplMouseMove( ImplBorderFrameData* pData, const MouseEvent& rMEvt );
+    sal_Bool                ImplMouseButtonDown( ImplBorderFrameData* pData, const MouseEvent& rMEvt );
+    sal_Bool                ImplTracking( ImplBorderFrameData* pData, const TrackingEvent& rTEvt );
+    OUString                ImplRequestHelp( ImplBorderFrameData* pData, const Point& rPos, Rectangle& rHelpRect );
     long                    ImplCalcTitleWidth( const ImplBorderFrameData* pData ) const;
 };
 
@@ -325,10 +325,10 @@ public:
                             ImplStdBorderWindowView( ImplBorderWindow* pBorderWindow );
                             ~ImplStdBorderWindowView();
 
-    virtual sal_Bool            MouseMove( const MouseEvent& rMEvt );
-    virtual sal_Bool            MouseButtonDown( const MouseEvent& rMEvt );
-    virtual sal_Bool            Tracking( const TrackingEvent& rTEvt );
-    virtual String          RequestHelp( const Point& rPos, Rectangle& rHelpRect );
+    virtual sal_Bool        MouseMove( const MouseEvent& rMEvt );
+    virtual sal_Bool        MouseButtonDown( const MouseEvent& rMEvt );
+    virtual sal_Bool        Tracking( const TrackingEvent& rTEvt );
+    virtual OUString        RequestHelp( const Point& rPos, Rectangle& rHelpRect );
     virtual Rectangle       GetMenuRect() const;
 
     virtual void            Init( OutputDevice* pDev, long nWidth, long nHeight );

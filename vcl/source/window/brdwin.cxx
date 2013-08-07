@@ -181,9 +181,9 @@ sal_Bool ImplBorderWindowView::Tracking( const TrackingEvent& )
 
 // -----------------------------------------------------------------------
 
-String ImplBorderWindowView::RequestHelp( const Point&, Rectangle& )
+OUString ImplBorderWindowView::RequestHelp( const Point&, Rectangle& )
 {
-    return String();
+    return OUString();
 }
 
 // -----------------------------------------------------------------------
@@ -925,12 +925,12 @@ sal_Bool ImplBorderWindowView::ImplTracking( ImplBorderFrameData* pData, const T
 
 // -----------------------------------------------------------------------
 
-String ImplBorderWindowView::ImplRequestHelp( ImplBorderFrameData* pData,
+OUString ImplBorderWindowView::ImplRequestHelp( ImplBorderFrameData* pData,
                                               const Point& rPos,
                                               Rectangle& rHelpRect )
 {
     sal_uInt16 nHelpId = 0;
-    String aHelpStr;
+    OUString aHelpStr;
     sal_uInt16 nHitTest = ImplHitTest( pData, rPos );
     if ( nHitTest )
     {
@@ -1470,7 +1470,7 @@ sal_Bool ImplStdBorderWindowView::Tracking( const TrackingEvent& rTEvt )
 
 // -----------------------------------------------------------------------
 
-String ImplStdBorderWindowView::RequestHelp( const Point& rPos, Rectangle& rHelpRect )
+OUString ImplStdBorderWindowView::RequestHelp( const Point& rPos, Rectangle& rHelpRect )
 {
     return ImplRequestHelp( &maFrameData, rPos, rHelpRect );
 }
@@ -2021,10 +2021,10 @@ void ImplBorderWindow::RequestHelp( const HelpEvent& rHEvt )
     {
         Point       aMousePosPixel = ScreenToOutputPixel( rHEvt.GetMousePosPixel() );
         Rectangle   aHelpRect;
-        String      aHelpStr( mpBorderView->RequestHelp( aMousePosPixel, aHelpRect ) );
+        OUString    aHelpStr( mpBorderView->RequestHelp( aMousePosPixel, aHelpRect ) );
 
         // Rechteck ermitteln
-        if ( aHelpStr.Len() )
+        if ( !aHelpStr.isEmpty() )
         {
             aHelpRect.SetPos( OutputToScreenPixel( aHelpRect.TopLeft() ) );
             if ( rHEvt.GetMode() & HELPMODE_BALLOON )
