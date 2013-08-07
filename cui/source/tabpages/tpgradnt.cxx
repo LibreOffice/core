@@ -683,8 +683,9 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickLoadHdl_Impl)
             else
             {
                 LeaveWait();
-                ErrorBox( GetParentDialog(), WinBits( WB_OK ),
-                    String( ResId( RID_SVXSTR_READ_DATA_ERROR, rMgr ) ) ).Execute();
+                MessageDialog( GetParentDialog()
+                              ,"NoLoadedFileDialog"
+                              ,"cui/ui/querynoloadedfiledialog.ui").Execute();
             }
         }
     }
