@@ -983,7 +983,7 @@ void PatternBox::ReformatAll()
     for ( sal_uInt16 i=0; i < nEntryCount; i++ )
     {
         aStr = ImplPatternReformat( GetEntry( i ), GetEditMask(), GetLiteralMask(), GetFormatFlags() );
-        RemoveEntry( i );
+        RemoveEntryAt(i);
         InsertEntry( aStr, i );
     }
     PatternFormatter::Reformat();
@@ -2157,7 +2157,7 @@ void DateBox::ReformatAll()
     for ( sal_uInt16 i=0; i < nEntryCount; i++ )
     {
         ImplDateReformat( GetEntry( i ), aStr, GetFieldSettings() );
-        RemoveEntry( i );
+        RemoveEntryAt(i);
         InsertEntry( aStr, i );
     }
     DateFormatter::Reformat();
@@ -3155,7 +3155,7 @@ void TimeBox::ReformatAll()
     for ( sal_uInt16 i=0; i < nEntryCount; i++ )
     {
         ImplTimeReformat( GetEntry( i ), aStr );
-        RemoveEntry( i );
+        RemoveEntryAt(i);
         InsertEntry( aStr, i );
     }
     TimeFormatter::Reformat();

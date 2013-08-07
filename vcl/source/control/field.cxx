@@ -283,7 +283,7 @@ static void ImplUpdateSeparators( const String& rOldDecSep, const String& rNewDe
                 aText = pCombo->GetEntry( i );
                 void* pEntryData = pCombo->GetEntryData( i );
                 ImplUpdateSeparatorString( aText, rOldDecSep, rNewDecSep, rOldThSep, rNewThSep );
-                pCombo->RemoveEntry( i );
+                pCombo->RemoveEntryAt(i);
                 pCombo->InsertEntry( aText, i );
                 pCombo->SetEntryData( i, pEntryData );
             }
@@ -1089,7 +1089,7 @@ void NumericBox::ReformatAll()
     for ( sal_uInt16 i=0; i < nEntryCount; i++ )
     {
         ImplNumericReformat( GetEntry( i ), nValue, aStr );
-        RemoveEntry( i );
+        RemoveEntryAt(i);
         InsertEntry( aStr, i );
     }
     NumericFormatter::Reformat();
@@ -2026,7 +2026,7 @@ void MetricBox::ReformatAll()
     for ( sal_uInt16 i=0; i < nEntryCount; i++ )
     {
         ImplMetricReformat( GetEntry( i ), nValue, aStr );
-        RemoveEntry( i );
+        RemoveEntryAt(i);
         InsertEntry( aStr, i );
     }
     MetricFormatter::Reformat();
@@ -2409,7 +2409,7 @@ void CurrencyBox::ReformatAll()
     for ( sal_uInt16 i=0; i < nEntryCount; i++ )
     {
         ImplCurrencyReformat( GetEntry( i ), aStr );
-        RemoveEntry( i );
+        RemoveEntryAt(i);
         InsertEntry( aStr, i );
     }
     CurrencyFormatter::Reformat();

@@ -1547,7 +1547,7 @@ void SvxSearchDialog::Remember_Impl( const String &rStr,sal_Bool _bSearch )
     // delete oldest entry at maximum occupancy (ListBox and Array)
     if(REMEMBER_SIZE < pArr->size())
     {
-        pListBox->RemoveEntry( sal_uInt16(REMEMBER_SIZE - 1) );
+        pListBox->RemoveEntryAt(static_cast<sal_uInt16>(REMEMBER_SIZE - 1));
         (*pArr)[REMEMBER_SIZE - 1] = rStr;
         pArr->erase(pArr->begin() + REMEMBER_SIZE - 1);
     }

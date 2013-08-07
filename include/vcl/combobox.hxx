@@ -128,11 +128,11 @@ public:
     virtual void    SetText( const OUString& rStr );
     virtual void    SetText( const OUString& rStr, const Selection& rNewSelection );
 
-    sal_uInt16      InsertEntry( const OUString& rStr, sal_uInt16 nPos = COMBOBOX_APPEND );
-    sal_uInt16      InsertEntry( const OUString& rStr, const Image& rImage, sal_uInt16 nPos = COMBOBOX_APPEND );
+    virtual sal_uInt16 InsertEntry(const OUString& rStr, sal_uInt16 nPos = COMBOBOX_APPEND);
+    void            InsertEntryWithImage( const OUString& rStr, const Image& rImage, sal_uInt16 nPos = COMBOBOX_APPEND );
 
     void            RemoveEntry( const OUString& rStr );
-    void            RemoveEntry( sal_uInt16 nPos );
+    virtual void    RemoveEntryAt(sal_uInt16 nPos);
 
     void            Clear();
 

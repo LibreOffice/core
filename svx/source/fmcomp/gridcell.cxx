@@ -4550,7 +4550,7 @@ void SAL_CALL FmXComboBoxCell::removeItems( sal_Int16 _Pos, sal_Int16 _Count ) t
     if ( m_pComboBox )
     {
         for ( sal_uInt16 n = _Count; n; )
-            m_pComboBox->RemoveEntry( _Pos + (--n) );
+            m_pComboBox->RemoveEntryAt( _Pos + (--n) );
     }
 }
 

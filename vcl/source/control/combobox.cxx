@@ -921,7 +921,7 @@ void ComboBox::ImplUpdateFloatSelection()
 
 // -----------------------------------------------------------------------
 
-sal_uInt16 ComboBox::InsertEntry( const OUString& rStr, sal_uInt16 nPos )
+sal_uInt16 ComboBox::InsertEntry(const OUString& rStr, sal_uInt16 const nPos)
 {
     sal_uInt16 nRealPos = mpImplLB->InsertEntry( nPos + mpImplLB->GetEntryList()->GetMRUCount(), rStr );
     nRealPos = sal::static_int_cast<sal_uInt16>(nRealPos - mpImplLB->GetEntryList()->GetMRUCount());
@@ -931,24 +931,24 @@ sal_uInt16 ComboBox::InsertEntry( const OUString& rStr, sal_uInt16 nPos )
 
 // -----------------------------------------------------------------------
 
-sal_uInt16 ComboBox::InsertEntry( const OUString& rStr, const Image& rImage, sal_uInt16 nPos )
+void ComboBox::InsertEntryWithImage(
+        const OUString& rStr, const Image& rImage, sal_uInt16 const nPos)
 {
     sal_uInt16 nRealPos = mpImplLB->InsertEntry( nPos + mpImplLB->GetEntryList()->GetMRUCount(), rStr, rImage );
     nRealPos = sal::static_int_cast<sal_uInt16>(nRealPos - mpImplLB->GetEntryList()->GetMRUCount());
     CallEventListeners( VCLEVENT_COMBOBOX_ITEMADDED, (void*) sal_IntPtr(nRealPos) );
-    return nRealPos;
 }
 
 // -----------------------------------------------------------------------
 
 void ComboBox::RemoveEntry( const OUString& rStr )
 {
-    RemoveEntry( GetEntryPos( rStr ) );
+    RemoveEntryAt(GetEntryPos(rStr));
 }
 
 // -----------------------------------------------------------------------
 
-void ComboBox::RemoveEntry( sal_uInt16 nPos )
+void ComboBox::RemoveEntryAt(sal_uInt16 const nPos)
 {
     mpImplLB->RemoveEntry( nPos + mpImplLB->GetEntryList()->GetMRUCount() );
     CallEventListeners( VCLEVENT_COMBOBOX_ITEMREMOVED, (void*) sal_IntPtr(nPos) );

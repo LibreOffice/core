@@ -598,7 +598,7 @@ void LongCurrencyBox::ReformatAll()
         ImplLongCurrencyReformat( GetEntry( i ), mnMin, mnMax,
                                   GetDecimalDigits(), GetLocaleDataWrapper(),
                                   aStr, *this );
-        RemoveEntry( i );
+        RemoveEntryAt(i);
         InsertEntry( aStr, i );
     }
     LongCurrencyFormatter::Reformat();

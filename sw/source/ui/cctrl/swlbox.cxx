@@ -79,19 +79,25 @@ SwComboBox::~SwComboBox()
 {
 }
 
-void SwComboBox::InsertEntry(const SwBoxEntry& rEntry)
+void SwComboBox::InsertSwEntry(const SwBoxEntry& rEntry)
 {
     InsertSorted(new SwBoxEntry(rEntry));
 }
 
-void SwComboBox::RemoveEntry(sal_uInt16 nPos)
+sal_uInt16 SwComboBox::InsertEntry(const OUString& rStr, sal_uInt16)
+{
+    InsertSwEntry(SwBoxEntry(rStr));
+    return 0;
+}
+
+void SwComboBox::RemoveEntryAt(sal_uInt16 const nPos)
 {
     if(nPos >= aEntryLst.size())
         return;
 
     // Remove old element
     SwBoxEntry* pEntry = &aEntryLst[nPos];
-    ComboBox::RemoveEntry(nPos);
+    ComboBox::RemoveEntryAt(nPos);
 
     // Don't add new entries to the list
     if(pEntry->bNew)
@@ -106,12 +112,12 @@ void SwComboBox::RemoveEntry(sal_uInt16 nPos)
     }
 }
 
-sal_uInt16 SwComboBox::GetEntryPos(const SwBoxEntry& rEntry) const
+sal_uInt16 SwComboBox::GetSwEntryPos(const SwBoxEntry& rEntry) const
 {
     return ComboBox::GetEntryPos(rEntry.aName);
 }
 
-const SwBoxEntry& SwComboBox::GetEntry(sal_uInt16 nPos) const
+const SwBoxEntry& SwComboBox::GetSwEntry(sal_uInt16 const nPos) const
 {
     if(nPos < aEntryLst.size())
         return aEntryLst[nPos];

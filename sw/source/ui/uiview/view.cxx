@@ -239,7 +239,7 @@ void SwView::SelectShell()
     }
     m_pLastTableFormat = pCurTableFmt;
 
-    //SEL_TBL and SEL_TBL_CELLS can be changed!
+    //SEL_TBL and SEL_TBL_CELLS can be ORed!
     int nNewSelectionType = (m_pWrtShell->GetSelectionType()
                                 & ~nsSelectionType::SEL_TBL_CELLS);
 

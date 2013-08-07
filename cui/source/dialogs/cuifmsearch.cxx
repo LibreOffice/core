@@ -344,7 +344,7 @@ IMPL_LINK_NOARG(FmSearchDialog, OnClickedSearchAgain)
         // the remove/insert makes sure that a) the OUString does not appear twice and
         // that b) the last searched strings are at the beginning and limit the list length
         while (m_cmbSearchText.GetEntryCount() > MAX_HISTORY_ENTRIES)
-            m_cmbSearchText.RemoveEntry(m_cmbSearchText.GetEntryCount()-1);
+            m_cmbSearchText.RemoveEntryAt(m_cmbSearchText.GetEntryCount()-1);
 
         // take out the 'overflow' hint
         m_ftHint.SetText(OUString());

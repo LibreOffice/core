@@ -84,7 +84,7 @@ void LimitBox::ReformatAll()
     ///First entry is All, which do not need numeric reformat
     if ( GetEntryCount() > 0 )
     {
-        RemoveEntry( 0 );
+        RemoveEntryAt( 0 );
         NumericBox::ReformatAll();
         InsertValue( ALL_INT, 0);
     }

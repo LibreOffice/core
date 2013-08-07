@@ -641,7 +641,7 @@ IMPL_LINK_NOARG(SwCaptionOptPage, ShowEntryHdl)
         InsCaptionOpt* pOpt = (InsCaptionOpt*)pSelEntry->GetUserData();
 
         aCategoryBox.Clear();
-        aCategoryBox.InsertEntry(String(m_sNone)); //FIXME
+        aCategoryBox.InsertEntry(m_sNone);
         if (pSh)
         {
             sal_uInt16 nCount = pMgr->GetFldTypeCount();
@@ -651,15 +651,15 @@ IMPL_LINK_NOARG(SwCaptionOptPage, ShowEntryHdl)
                 SwFieldType *pType = pMgr->GetFldType( USHRT_MAX, i );
                 if( pType->Which() == RES_SETEXPFLD &&
                     ((SwSetExpFieldType *) pType)->GetType() & nsSwGetSetExpType::GSE_SEQ )
-                    aCategoryBox.InsertEntry(SwBoxEntry(pType->GetName()));
+                    aCategoryBox.InsertSwEntry(SwBoxEntry(pType->GetName()));
             }
         }
         else
         {
-            aCategoryBox.InsertEntry(SwBoxEntry(m_sIllustration));
-            aCategoryBox.InsertEntry(SwBoxEntry(m_sTable));
-            aCategoryBox.InsertEntry(SwBoxEntry(m_sText));
-            aCategoryBox.InsertEntry(SwBoxEntry(m_sDrawing));
+            aCategoryBox.InsertSwEntry(SwBoxEntry(m_sIllustration));
+            aCategoryBox.InsertSwEntry(SwBoxEntry(m_sTable));
+            aCategoryBox.InsertSwEntry(SwBoxEntry(m_sText));
+            aCategoryBox.InsertSwEntry(SwBoxEntry(m_sDrawing));
         }
 
         if(pOpt->GetCategory().Len())
@@ -679,7 +679,7 @@ IMPL_LINK_NOARG(SwCaptionOptPage, ShowEntryHdl)
                 case TABLE_CAP:         nPos = 2;   break;
                 case FRAME_CAP:         nPos = 3;   break;
             }
-            aCategoryBox.SetText(aCategoryBox.GetEntry(nPos).GetName());
+            aCategoryBox.SetText(aCategoryBox.GetSwEntry(nPos).GetName());
         }
 
         for (sal_uInt16 i = 0; i < aFormatBox.GetEntryCount(); i++)

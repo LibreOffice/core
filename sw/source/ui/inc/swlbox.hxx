@@ -75,13 +75,10 @@ class SW_DLLPUBLIC SwComboBox : public ComboBox
     SW_DLLPRIVATE void InsertSorted(SwBoxEntry* pEntry);
     SW_DLLPRIVATE void Init();
 
-    using ComboBox::InsertEntry;
-    using ComboBox::RemoveEntry;
+    using Window::GetStyle;
     using Window::SetStyle;
 
 public:
-
-    using ComboBox::GetEntryPos;
 
     SwComboBox(Window* pParent,
                sal_uInt16 nStyleBits = nsSwComboBoxStyle::CBS_ALL);
@@ -89,22 +86,22 @@ public:
                sal_uInt16 nStyleBits = nsSwComboBoxStyle::CBS_ALL);
     ~SwComboBox();
 
-    virtual void            KeyInput( const KeyEvent& rKEvt );
+    virtual void            KeyInput(const KeyEvent& rKEvt) SAL_OVERRIDE;
 
-    void                    InsertEntry(const SwBoxEntry&);
-    sal_uInt16                  InsertEntry( const XubString& rStr, sal_uInt16 = 0)
-                            {        InsertEntry( SwBoxEntry( rStr ) ); return 0;    }
+    void                    InsertSwEntry(const SwBoxEntry&);
+    virtual sal_uInt16      InsertEntry(const OUString& rStr, sal_uInt16 = 0) SAL_OVERRIDE;
 
-    void                    RemoveEntry(sal_uInt16 nPos);
+    virtual void            RemoveEntryAt(sal_uInt16 nPos) SAL_OVERRIDE;
 
-    sal_uInt16                  GetEntryPos(const SwBoxEntry& rEntry) const;
-    const SwBoxEntry&       GetEntry(sal_uInt16) const;
+    sal_uInt16              GetSwEntryPos(const SwBoxEntry& rEntry) const;
+    const SwBoxEntry&       GetSwEntry(sal_uInt16) const;
 
     sal_uInt16                  GetRemovedCount() const;
     const SwBoxEntry&       GetRemovedEntry(sal_uInt16 nPos) const;
 
-    sal_uInt16                  GetStyle() const            { return nStyle;    }
-    void                    SetStyle(const sal_uInt16 nSt)  { nStyle = nSt;     }
+    // FIXME ??? what is this
+    sal_uInt16                  GetSwStyle() const            { return nStyle;    }
+    void                    SetSwStyle(const sal_uInt16 nSt)  { nStyle = nSt;     }
 
     OUString                GetText() const;
 };

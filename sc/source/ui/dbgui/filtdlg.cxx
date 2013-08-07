@@ -611,7 +611,7 @@ void ScFilterDlg::UpdateHdrInValueList( size_t nList )
     else                    // Omit entry
     {
         if (bWasThere)
-            pValList->RemoveEntry(nListPos);
+            pValList->RemoveEntryAt(nListPos);
     }
 }
 

@@ -1043,7 +1043,7 @@ void SearchTabPage_Impl::RememberSearchText( const String& rSearchText )
     {
         if ( rSearchText == aSearchED.GetEntry(i) )
         {
-            aSearchED.RemoveEntry(i);
+            aSearchED.RemoveEntryAt(i);
             break;
         }
     }

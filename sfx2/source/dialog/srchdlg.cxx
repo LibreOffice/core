@@ -136,7 +136,7 @@ IMPL_LINK_NOARG(SearchDialog, FindHdl)
     String sSrchTxt = m_aSearchEdit.GetText();
     sal_uInt16 nPos = m_aSearchEdit.GetEntryPos( sSrchTxt );
     if ( nPos > 0 && nPos != COMBOBOX_ENTRY_NOTFOUND )
-        m_aSearchEdit.RemoveEntry( nPos );
+        m_aSearchEdit.RemoveEntryAt(nPos);
     if ( nPos > 0 )
         m_aSearchEdit.InsertEntry( sSrchTxt, 0 );
     m_aFindHdl.Call( this );

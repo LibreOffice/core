@@ -147,7 +147,7 @@ void FindTextFieldControl::Remember_Impl(const String& rStr)
     }
 
     if (nCount == REMEMBER_SIZE)
-        RemoveEntry(REMEMBER_SIZE-1);
+        RemoveEntryAt(REMEMBER_SIZE-1);
 
     InsertEntry(rStr, 0);
 }

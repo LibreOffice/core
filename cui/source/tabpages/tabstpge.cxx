@@ -542,7 +542,7 @@ IMPL_LINK_NOARG(SvxTabulatorTabPage, DelHdl_Impl)
     }
 
     // Delete Tab
-    m_pTabBox->RemoveEntry( nPos );
+    m_pTabBox->RemoveEntryAt(nPos);
     aNewTabs.Remove( nPos );
 
     // Reset aAktTab

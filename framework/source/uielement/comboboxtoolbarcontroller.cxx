@@ -350,7 +350,7 @@ void ComboboxToolbarController::executeControlCommand( const ::com::sun::star::f
                 if ( rControlCommand.Arguments[i].Value >>= nPos )
                 {
                     if ( nPos < sal_Int32( m_pComboBox->GetEntryCount() ))
-                        m_pComboBox->RemoveEntry( sal_uInt16( nPos ));
+                        m_pComboBox->RemoveEntryAt(sal_uInt16(nPos));
                 }
                 break;
             }

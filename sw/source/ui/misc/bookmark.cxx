@@ -75,7 +75,7 @@ IMPL_LINK_NOARG(SwInsertBookmarkDlg, DeleteHdl)
     // remove text marks from the ComboBox
 
     for (sal_uInt16 i = m_pBookmarkBox->GetSelectEntryCount(); i; i-- )
-        m_pBookmarkBox->RemoveEntry(m_pBookmarkBox->GetSelectEntryPos(i - 1));
+        m_pBookmarkBox->RemoveEntryAt(m_pBookmarkBox->GetSelectEntryPos(i - 1));
 
     m_pBookmarkBox->SetText(aEmptyStr);
     m_pDeleteBtn->Enable(sal_False);   // no further entries there
@@ -105,7 +105,8 @@ void SwInsertBookmarkDlg::Apply()
     // insert text mark
     SwBoxEntry  aTmpEntry(m_pBookmarkBox->GetText(), 0 );
 
-    if ( !m_pBookmarkBox->GetText().isEmpty() && (m_pBookmarkBox->GetEntryPos(aTmpEntry) == COMBOBOX_ENTRY_NOTFOUND) )
+    if (!m_pBookmarkBox->GetText().isEmpty() &&
+        (m_pBookmarkBox->GetSwEntryPos(aTmpEntry) == COMBOBOX_ENTRY_NOTFOUND))
     {
         String sEntry(comphelper::string::remove(m_pBookmarkBox->GetText(),
             m_pBookmarkBox->GetMultiSelectionSeparator()));
@@ -143,7 +144,10 @@ SwInsertBookmarkDlg::SwInsertBookmarkDlg( Window *pParent, SwWrtShell &rS, SfxRe
         ++ppBookmark)
     {
         if(IDocumentMarkAccess::BOOKMARK == IDocumentMarkAccess::GetType(**ppBookmark))
-            m_pBookmarkBox->InsertEntry( SwBoxEntry( ppBookmark->get()->GetName(), nId++ ) );
+        {
+            m_pBookmarkBox->InsertSwEntry(
+                    SwBoxEntry(ppBookmark->get()->GetName(), nId++));
+        }
     }
 
     sRemoveWarning = String(SW_RES(STR_REMOVE_WARNING));

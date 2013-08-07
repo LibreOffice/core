@@ -217,7 +217,7 @@ IMPL_LINK( BreakPointDialog, ButtonHdl, Button *, pButton )
         if ( pBrk )
         {
             delete m_aModifiedBreakPointList.remove( pBrk );
-            aComboBox.RemoveEntry( nEntry );
+            aComboBox.RemoveEntryAt(nEntry);
             if ( nEntry && !( nEntry < aComboBox.GetEntryCount() ) )
                 nEntry--;
             aComboBox.SetText( aComboBox.GetEntry( nEntry ) );

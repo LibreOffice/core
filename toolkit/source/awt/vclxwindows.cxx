@@ -4283,7 +4283,7 @@ void VCLXComboBox::removeItems( sal_Int16 nPos, sal_Int16 nCount ) throw(::com::
     if ( pBox )
     {
         for ( sal_uInt16 n = nCount; n; )
-            pBox->RemoveEntry( nPos + (--n) );
+            pBox->RemoveEntryAt( nPos + (--n) );
     }
 }
 
@@ -4553,7 +4553,7 @@ void SAL_CALL VCLXComboBox::listItemInserted( const ItemListEvent& i_rEvent ) th
     ENSURE_OR_RETURN_VOID( pComboBox, "VCLXComboBox::listItemInserted: no ComboBox?!" );
     ENSURE_OR_RETURN_VOID( ( i_rEvent.ItemPosition >= 0 ) && ( i_rEvent.ItemPosition <= sal_Int32( pComboBox->GetEntryCount() ) ),
         "VCLXComboBox::listItemInserted: illegal (inconsistent) item position!" );
-    pComboBox->InsertEntry(
+    pComboBox->InsertEntryWithImage(
         i_rEvent.ItemText.IsPresent ? i_rEvent.ItemText.Value : OUString(),
         i_rEvent.ItemImageURL.IsPresent ? lcl_getImageFromURL( i_rEvent.ItemImageURL.Value ) : Image(),
         i_rEvent.ItemPosition );
@@ -4569,7 +4569,7 @@ void SAL_CALL VCLXComboBox::listItemRemoved( const ItemListEvent& i_rEvent ) thr
     ENSURE_OR_RETURN_VOID( ( i_rEvent.ItemPosition >= 0 ) && ( i_rEvent.ItemPosition < sal_Int32( pComboBox->GetEntryCount() ) ),
         "VCLXComboBox::listItemRemoved: illegal (inconsistent) item position!" );
 
-    pComboBox->RemoveEntry( i_rEvent.ItemPosition );
+    pComboBox->RemoveEntryAt( i_rEvent.ItemPosition );
 }
 
 void SAL_CALL VCLXComboBox::listItemModified( const ItemListEvent& i_rEvent ) throw (RuntimeException)
@@ -4587,8 +4587,8 @@ void SAL_CALL VCLXComboBox::listItemModified( const ItemListEvent& i_rEvent ) th
     const OUString sNewText = i_rEvent.ItemText.IsPresent ? i_rEvent.ItemText.Value : OUString( pComboBox->GetEntry( i_rEvent.ItemPosition ) );
     const Image aNewImage( i_rEvent.ItemImageURL.IsPresent ? lcl_getImageFromURL( i_rEvent.ItemImageURL.Value ) : pComboBox->GetEntryImage( i_rEvent.ItemPosition  ) );
 
-    pComboBox->RemoveEntry( i_rEvent.ItemPosition );
-    pComboBox->InsertEntry( sNewText, aNewImage, i_rEvent.ItemPosition );
+    pComboBox->RemoveEntryAt( i_rEvent.ItemPosition );
+    pComboBox->InsertEntryWithImage(sNewText, aNewImage, i_rEvent.ItemPosition);
 }
 
 void SAL_CALL VCLXComboBox::allItemsRemoved( const EventObject& i_rEvent ) throw (RuntimeException)
@@ -4634,7 +4634,8 @@ void SAL_CALL VCLXComboBox::itemListChanged( const EventObject& i_rEvent ) throw
         {
             aLocalizationKey = xStringResourceResolver->resolveString(aLocalizationKey.copy( 1 ));
         }
-        pComboBox->InsertEntry( aLocalizationKey, lcl_getImageFromURL( aItems[i].Second ) );
+        pComboBox->InsertEntryWithImage(aLocalizationKey,
+                lcl_getImageFromURL(aItems[i].Second));
     }
 }
 void SAL_CALL VCLXComboBox::disposing( const EventObject& i_rEvent ) throw (RuntimeException)
