@@ -663,8 +663,9 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickLoadHdl_Impl)
 
     if ( *pnHatchingListState & CT_MODIFIED )
     {
-        nReturn = WarningBox( GetParentDialog(), WinBits( WB_YES_NO_CANCEL ),
-            String( ResId( RID_SVXSTR_WARN_TABLE_OVERWRITE, rMgr ) ) ).Execute();
+        nReturn = MessageDialog( GetParentDialog()
+                                ,"AskSaveList"
+                                ,"cui/ui/querysavelistdialog.ui").Execute();
 
         if ( nReturn == RET_YES )
             pHatchingList->Save();
