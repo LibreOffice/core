@@ -20,6 +20,7 @@
 #include <editsh.hxx>
 #include <swtable.hxx>
 #include <swtblfmt.hxx>
+#include <tabfrm.hxx>
 
 SwTableFormat::SwTableFormat( SwAttrPool& rPool, const sal_Char* pFormatNm,
                     SwFrameFormat *pDrvdFrm )
@@ -284,6 +285,14 @@ void SwTableFormat::AssignFormatParents( SwTableFormat* pSrcFormat, SwTable &rTa
         pHardFormat->GetAttrSet().SetParent( NULL );
 
     AssignLineParents( pSrcFormat, rTable );
+
+    SwIterator<SwTabFrm,SwFormat> aIter( *rTable.GetFrameFormat() );
+    for( SwTabFrm* pLast = aIter.First(); pLast; pLast = aIter.Next() )
+        if( pLast->GetTable() == &rTable )
+        {
+            pLast->InvalidateAll();
+            pLast->SetCompletePaint();
+        }
 }
 
 void SwTableFormat::AssignLineParents( SwTableFormat* pSrcFormat, SwTable &rTable )
