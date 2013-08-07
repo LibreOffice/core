@@ -59,7 +59,7 @@ public:
 
 public: // TODO: make subsetter results private and provide accessor methods instead
         // subsetter-provided subset details needed by e.g. Postscript or PDF
-    String      m_aPSName;
+    OUString    m_aPSName;
     int         m_nAscent; ///< all metrics in PS font units
     int         m_nDescent;
     int         m_nCapHeight;
