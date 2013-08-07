@@ -149,39 +149,9 @@ uno::Reference< XResultSet > SAL_CALL OStatement::executeQuery(const OUString& s
 sal_Bool SAL_CALL OStatement::execute(const OUString& sql)
     throw(SQLException, RuntimeException)
 {
-    SAL_INFO("connectivity.firebird", "executeQuery(). "
-             "Got called with sql: " << sql);
-
-    MutexGuard aGuard(m_pConnection->getMutex());
-    checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
-
-    XSQLDA* pOutSqlda = 0;
-    isc_stmt_handle aStatementHandle = 0;
-    int aErr = 0;
-
-    aErr = prepareAndDescribeStatement(sql,
-                                       aStatementHandle,
-                                       pOutSqlda);
-
-    if (aErr)
-    {
-        SAL_WARN("connectivity.firebird", "prepareAndDescribeStatement failed" );
-    }
-    else
-    {
-        aErr = isc_dsql_execute(m_statusVector,
-                                &m_pConnection->getTransaction(),
-                                &aStatementHandle,
-                                1,
-                                NULL);
-        if (aErr)
-            SAL_WARN("connectivity.firebird", "isc_dsql_execute failed" );
-    }
-
-    evaluateStatusVector(m_statusVector, sql, *this);
-
-    // returns true when a resultset is available
-    return sal_False;
+    uno::Reference< XResultSet > xResults = executeQuery(sql);
+    return xResults.is();
+    // TODO: what if we have multiple results?
 }
 
 uno::Reference< XConnection > SAL_CALL OStatement::getConnection()
