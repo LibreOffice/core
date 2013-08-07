@@ -492,6 +492,7 @@ static BOOL isBlank = NO;
             break;
         case 1:
             [self.comManager.transmitter gotoSlide:0];
+            break;
         case 2:
             if (!isBlank){
                 [self.comManager.transmitter blankScreen];
@@ -499,6 +500,7 @@ static BOOL isBlank = NO;
                 [self.comManager.transmitter resume];
             }
             isBlank = !isBlank;
+            break;
         default:
             break;
     }

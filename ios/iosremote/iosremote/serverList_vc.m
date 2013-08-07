@@ -288,7 +288,7 @@
     sectionHeader.font = [UIFont boldSystemFontOfSize:18];
     sectionHeader.textColor = [UIColor darkTextColor];
     sectionHeader.text = sectionName;
-    
+    sectionHeader 
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.bounds.size.width, [self tableView:tableView heightForHeaderInSection:section])];
     [view addSubview:sectionHeader];
     
