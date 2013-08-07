@@ -143,12 +143,6 @@ public:
                             const ::com::sun::star::table::CellRangeAddress& rRange,
                             const DataTableModel& rModel );
 
-    /** Creates a named range with a special name for a shared formula with the
-        specified base address and formula definition (BIFF only). */
-    void                createSharedFormula(
-                            const ::com::sun::star::table::CellAddress& rCellAddr,
-                            const ApiTokenSequence& rTokens );
-
     /** Sets default cell formatting for the specified range of rows. */
     void                setRowFormat( sal_Int32 nRow, sal_Int32 nXfId, bool bCustomFormat );
     /** Merges the cells in the passed cell range. */
@@ -173,9 +167,6 @@ private:
                             const ::com::sun::star::table::CellAddress& rCellAddr,
                             const ApiTokenSequence& rTokens );
 
-    /** Creates a named range with a special name for a shared formula with the
-        specified base address and formula definition. */
-    void                createSharedFormula( const BinAddress& rMapKey, const ApiTokenSequence& rTokens );
     /** Creates a formula token array representing the shared formula with the
         passed identifier. */
     ApiTokenSequence    resolveSharedFormula( const BinAddress& rMapKey ) const;

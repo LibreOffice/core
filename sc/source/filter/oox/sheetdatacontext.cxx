@@ -578,16 +578,9 @@ void SheetDataContext::importDataTable( SequenceInputStream& rStrm )
     }
 }
 
-void SheetDataContext::importSharedFmla( SequenceInputStream& rStrm )
+void SheetDataContext::importSharedFmla( SequenceInputStream& /*rStrm*/ )
 {
-    if( readFormulaRef( rStrm ) && maFmlaData.isValidSharedRef( maCellData.maCellAddr ) )
-    {
-        ApiTokenSequence aTokens = mrFormulaParser.importFormula( maCellData.maCellAddr, FORMULATYPE_SHAREDFORMULA, rStrm );
-        mrSheetData.createSharedFormula( maCellData.maCellAddr, aTokens );
-    }
 }
-
-// ============================================================================
 
 } // namespace xls
 } // namespace oox

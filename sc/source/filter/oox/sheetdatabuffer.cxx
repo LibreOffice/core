@@ -276,11 +276,6 @@ void SheetDataBuffer::createTableOperation( const CellRangeAddress& rRange, cons
     maTableOperations.push_back( TableOperation( rRange, rModel ) );
 }
 
-void SheetDataBuffer::createSharedFormula( const CellAddress& rCellAddr, const ApiTokenSequence& rTokens )
-{
-    createSharedFormula( BinAddress( rCellAddr ), rTokens );
-}
-
 void SheetDataBuffer::setRowFormat( sal_Int32 nRow, sal_Int32 nXfId, bool bCustomFormat )
 {
     // set row formatting
@@ -552,33 +547,6 @@ void SheetDataBuffer::setCellFormula( const CellAddress& rCellAddr, const ApiTok
     {
         putFormulaTokens( rCellAddr, rTokens );
     }
-}
-
-void SheetDataBuffer::createSharedFormula( const BinAddress& rMapKey, const ApiTokenSequence& rTokens )
-{
-    // create the defined name that will represent the shared formula
-    OUString aName = OUStringBuffer().appendAscii( RTL_CONSTASCII_STRINGPARAM( "__shared_" ) ).
-        append( static_cast< sal_Int32 >( getSheetIndex() + 1 ) ).
-        append( sal_Unicode( '_' ) ).append( rMapKey.mnRow ).
-        append( sal_Unicode( '_' ) ).append( rMapKey.mnCol ).makeStringAndClear();
-    ScRangeData* pScRangeData = createNamedRangeObject( aName, rTokens, 0 );
-    pScRangeData->SetType(RT_SHARED);
-
-    // get and store the token index of the defined name
-    OSL_ENSURE( maSharedFormulas.count( rMapKey ) == 0, "SheetDataBuffer::createSharedFormula - shared formula exists already" );
-    sal_Int32 nTokenIndex = static_cast< sal_Int32 >( pScRangeData->GetIndex() );
-    if( nTokenIndex >= 0 ) try
-    {
-        // store the token index in the map
-        maSharedFormulas[ rMapKey ] = nTokenIndex;
-        // retry to insert a pending shared formula cell
-        if( mbPendingSharedFmla )
-            setCellFormula( maSharedFmlaAddr, resolveSharedFormula( maSharedBaseAddr ) );
-    }
-    catch( Exception& )
-    {
-    }
-    mbPendingSharedFmla = false;
 }
 
 ApiTokenSequence SheetDataBuffer::resolveSharedFormula( const BinAddress& rMapKey ) const
