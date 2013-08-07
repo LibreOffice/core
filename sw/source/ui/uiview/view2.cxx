@@ -297,7 +297,8 @@ sal_Bool SwView::InsertGraphicDlg( SfxRequest& rReq )
 
     // pool formats
     //
-    const boost::ptr_vector<String>& rFrmPoolArr(SwStyleNameMapper::GetFrmFmtUINameArray());
+    const boost::ptr_vector<OUString>& rFrmPoolArr(
+            SwStyleNameMapper::GetFrmFmtUINameArray());
     for( i = 0; i < rFrmPoolArr.size(); ++i )
     {
         aFormats.push_back(rFrmPoolArr[i]);

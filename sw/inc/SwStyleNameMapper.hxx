@@ -76,7 +76,8 @@
 class String;
 struct SwTableEntry;
 
-typedef ::boost::unordered_map < const String*, sal_uInt16, StringHash, StringEq > NameToIdHash;
+typedef ::boost::unordered_map<const OUString, sal_uInt16, OUStringHash>
+    NameToIdHash;
 
 class SwStyleNameMapper
 {
@@ -85,7 +86,7 @@ class SwStyleNameMapper
 
 protected:
     // UI Name tables
-    static boost::ptr_vector<String> *pTextUINameArray,
+    static boost::ptr_vector<OUString> *pTextUINameArray,
                             *pListsUINameArray,
                             *pExtraUINameArray,
                             *pRegisterUINameArray,
@@ -149,42 +150,45 @@ public:
                                                     const OUString& rName);
 
     // This gets the PoolId from the UI Name
-    SW_DLLPUBLIC static sal_uInt16 GetPoolIdFromUIName( const String& rName, SwGetPoolIdFromName );
+    SW_DLLPUBLIC static sal_uInt16 GetPoolIdFromUIName(const OUString& rName,
+                                                       SwGetPoolIdFromName);
 
     // Get the Pool ID from the programmatic name
-    static sal_uInt16 GetPoolIdFromProgName( const String& rName, SwGetPoolIdFromName );
+    static sal_uInt16 GetPoolIdFromProgName(const OUString& rName,
+                                            SwGetPoolIdFromName);
 
     // used to convert the 4 special ExtraProg/UINames for
     // RES_POOLCOLL_LABEL_DRAWING,  RES_POOLCOLL_LABEL_ABB,
     // RES_POOLCOLL_LABEL_TABLE, RES_POOLCOLL_LABEL_FRAME
     // forth and back.
     // Non-matching names remain unchanged.
-    SW_DLLPUBLIC static const String GetSpecialExtraProgName( const String& rExtraUIName );
-    static const String GetSpecialExtraUIName( const String& rExtraProgName );
+    SW_DLLPUBLIC static const OUString GetSpecialExtraProgName(
+                    const OUString& rExtraUIName);
+    static const OUString GetSpecialExtraUIName(const OUString& rExtraProgName);
 
-    static const boost::ptr_vector<String>& GetTextUINameArray();
-    static const boost::ptr_vector<String>& GetListsUINameArray();
-    static const boost::ptr_vector<String>& GetExtraUINameArray();
-    static const boost::ptr_vector<String>& GetRegisterUINameArray();
-    static const boost::ptr_vector<String>& GetDocUINameArray();
-    static const boost::ptr_vector<String>& GetHTMLUINameArray();
-    static const boost::ptr_vector<String>& GetFrmFmtUINameArray();
-    static const boost::ptr_vector<String>& GetChrFmtUINameArray();
-    static const boost::ptr_vector<String>& GetHTMLChrFmtUINameArray();
-    static const boost::ptr_vector<String>& GetPageDescUINameArray();
-    static const boost::ptr_vector<String>& GetNumRuleUINameArray();
+    static const boost::ptr_vector<OUString>& GetTextUINameArray();
+    static const boost::ptr_vector<OUString>& GetListsUINameArray();
+    static const boost::ptr_vector<OUString>& GetExtraUINameArray();
+    static const boost::ptr_vector<OUString>& GetRegisterUINameArray();
+    static const boost::ptr_vector<OUString>& GetDocUINameArray();
+    static const boost::ptr_vector<OUString>& GetHTMLUINameArray();
+    static const boost::ptr_vector<OUString>& GetFrmFmtUINameArray();
+    static const boost::ptr_vector<OUString>& GetChrFmtUINameArray();
+    static const boost::ptr_vector<OUString>& GetHTMLChrFmtUINameArray();
+    static const boost::ptr_vector<OUString>& GetPageDescUINameArray();
+    static const boost::ptr_vector<OUString>& GetNumRuleUINameArray();
 
-    static const boost::ptr_vector<String>& GetTextProgNameArray();
-    static const boost::ptr_vector<String>& GetListsProgNameArray();
-    static const boost::ptr_vector<String>& GetExtraProgNameArray();
-    static const boost::ptr_vector<String>& GetRegisterProgNameArray();
-    static const boost::ptr_vector<String>& GetDocProgNameArray();
-    static const boost::ptr_vector<String>& GetHTMLProgNameArray();
-    static const boost::ptr_vector<String>& GetFrmFmtProgNameArray();
-    static const boost::ptr_vector<String>& GetChrFmtProgNameArray();
-    static const boost::ptr_vector<String>& GetHTMLChrFmtProgNameArray();
-    static const boost::ptr_vector<String>& GetPageDescProgNameArray();
-    static const boost::ptr_vector<String>& GetNumRuleProgNameArray();
+    static const boost::ptr_vector<OUString>& GetTextProgNameArray();
+    static const boost::ptr_vector<OUString>& GetListsProgNameArray();
+    static const boost::ptr_vector<OUString>& GetExtraProgNameArray();
+    static const boost::ptr_vector<OUString>& GetRegisterProgNameArray();
+    static const boost::ptr_vector<OUString>& GetDocProgNameArray();
+    static const boost::ptr_vector<OUString>& GetHTMLProgNameArray();
+    static const boost::ptr_vector<OUString>& GetFrmFmtProgNameArray();
+    static const boost::ptr_vector<OUString>& GetChrFmtProgNameArray();
+    static const boost::ptr_vector<OUString>& GetHTMLChrFmtProgNameArray();
+    static const boost::ptr_vector<OUString>& GetPageDescProgNameArray();
+    static const boost::ptr_vector<OUString>& GetNumRuleProgNameArray();
 };
 #endif // _NAME_MAPPER_HXX
 

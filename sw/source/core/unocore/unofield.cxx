@@ -565,8 +565,9 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         bool bSetValue = true;
         if( rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_SUB_TYPE)))
         {
-            const boost::ptr_vector<String>& rExtraArr(SwStyleNameMapper::GetExtraUINameArray());
-            String sTypeName = pType->GetName();
+            const boost::ptr_vector<OUString>& rExtraArr(
+                    SwStyleNameMapper::GetExtraUINameArray());
+            OUString sTypeName = pType->GetName();
             static sal_uInt16 nIds[] =
             {
                 RES_POOLCOLL_LABEL_DRAWING - RES_POOLCOLL_EXTRA_BEGIN,

@@ -2477,8 +2477,8 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
             }
 
             aLst.Append( cCHAR, pFmt == rDoc.GetDfltCharFmt()
-                        ? SwStyleNameMapper::GetTextUINameArray()[ RES_POOLCOLL_STANDARD -
-                                                RES_POOLCOLL_TEXT_BEGIN ]
+                        ? String(SwStyleNameMapper::GetTextUINameArray()[ RES_POOLCOLL_STANDARD -
+                                                RES_POOLCOLL_TEXT_BEGIN ])
                         : pFmt->GetName() );
         }
 
@@ -2810,7 +2810,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::Find(const OUString& rName)
     return 0;
 }
 
-void SwStyleSheetIterator::AppendStyleList(const boost::ptr_vector<String>& rList,
+void SwStyleSheetIterator::AppendStyleList(const boost::ptr_vector<OUString>& rList,
                                             sal_Bool bTestUsed, sal_Bool bTestHidden, bool bOnlyHidden,
                                             sal_uInt16 nSection, char cType )
 {
