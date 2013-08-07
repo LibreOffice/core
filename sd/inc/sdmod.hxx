@@ -94,7 +94,7 @@ public:
     void                    GetState(SfxItemSet&);
 
     SdOptions*              GetSdOptions(DocumentType eDocType);
-    SD_DLLPUBLIC SvStorageStreamRef     GetOptionStream( const String& rOptionName, SdOptionStreamMode eMode );
+    SD_DLLPUBLIC SvStorageStreamRef     GetOptionStream( const OUString& rOptionName, SdOptionStreamMode eMode );
 
     sal_Bool                    GetWaterCan() const { return bWaterCan; }
     void                    SetWaterCan( sal_Bool bWC ) { bWaterCan = bWC; }
@@ -146,7 +146,7 @@ private:
 
     static void ChangeMedium( ::sd::DrawDocShell* pDocShell, SfxViewFrame* pViewFrame, const sal_Int32 eMedium );
     static SfxFrame* CreateEmptyDocument( DocumentType eDocType, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rFrame );
-    static SfxFrame* CreateFromTemplate( const String& rTemplatePath, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rFrame );
+    static SfxFrame* CreateFromTemplate( const OUString& rTemplatePath, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rFrame );
 
     /** The resource container controls the lifetime of some singletons.
     */
