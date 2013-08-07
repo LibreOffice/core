@@ -48,13 +48,10 @@
 #include <vcl/help.hxx>
 
 #include <vector>
-#include "com/sun/star/reflection/XIdlReflection.hpp"
-#include <comphelper/namedvaluecollection.hxx>
-#include <comphelper/processfactory.hxx>
-#include <comphelper/configurationhelper.hxx>
 #include "com/sun/star/reflection/XInterfaceMemberTypeDescription.hpp"
 #include "com/sun/star/reflection/XIdlMethod.hpp"
 #include "com/sun/star/reflection/XIdlField.hpp"
+#include "com/sun/star/uno/Exception.hpp"
 
 namespace basctl
 {
@@ -744,7 +741,7 @@ void EditorWindow::HandleCodeCompletition()
     HighlightPortions aPortions;
     aHighlighter.getHighlightPortions( nLine, aLine, aPortions );
     if( aPortions.size() != 0 )
-    {
+    {//use the syntax highlighter to grab out nested reflection calls, eg. aVar.aMethod("aa").aOtherMethod ..
         for ( size_t i = 0; i < aPortions.size(); i++ )
         {
             HighlightPortion& r = aPortions[i];
@@ -765,122 +762,43 @@ void EditorWindow::HandleCodeCompletition()
             pEditView->SetSelection( aSel );
         }
 
-        Reference< lang::XMultiServiceFactory > xFactory( comphelper::getProcessServiceFactory(), UNO_SET_THROW );
-        Reference< reflection::XIdlReflection > xRefl( xFactory->createInstance("com.sun.star.reflection.CoreReflection"), UNO_QUERY_THROW );
+        UnoTypeCodeCompletetor aTypeCompletor( aVect, sVarType );
 
-        if( xRefl.is() )
+        if( aTypeCompletor.CanCodeComplete() )
         {
-            Reference< reflection::XIdlClass > xClass = xRefl->forName(sVarType);//get the base class for reflection
-            if( xClass != NULL )
+            std::vector< OUString > aEntryVect;//entries to be inserted into the list
+            std::vector< OUString > aFieldVect = aTypeCompletor.GetXIdlClassFields();//fields
+            aEntryVect.insert(aEntryVect.end(), aFieldVect.begin(), aFieldVect.end() );
+            if( CodeCompleteOptions::IsExtendedTypeDeclaration() )
+            {// if extended types on, reflect classes, else just the structs (XIdlClass without methods)
+                std::vector< OUString > aMethVect = aTypeCompletor.GetXIdlClassMethods();//methods
+                aEntryVect.insert(aEntryVect.end(), aMethVect.begin(), aMethVect.end() );
+            }
+            if( aEntryVect.size() > 0 )
             {
-                unsigned int j = 1;
-                OUString sMethName;
-                bool bReflect = true;
-                while( j != aVect.size() )
+                // calculate position
+                Rectangle aRect = ( (TextEngine*) GetEditEngine() )->PaMtoEditCursor( aSel.GetEnd() , false );
+                long nViewYOffset = pEditView->GetStartDocPos().Y();
+                Point aPoint = aRect.BottomRight();
+                aPoint.Y() = (aPoint.Y() - nViewYOffset) + 2;
+                aSel.GetStart().GetIndex() += 1;
+                aSel.GetEnd().GetIndex() += 1;
+                pCodeCompleteWnd->ClearListBox();
+                pCodeCompleteWnd->SetTextSelection(aSel);
+                //fill the listbox
+                for(unsigned int l = 0; l < aEntryVect.size(); ++l)
                 {
-                    sMethName = aVect[j];
-                    Reference< reflection::XIdlField> xField = xClass->getField( sMethName );
-                    if( xField != NULL )
-                    {
-                        xClass = xField->getType();
-                        if( xClass == NULL )
-                        {
-                            break;
-                        }
-                    }
-                    else
-                    {
-                        if( CodeCompleteOptions::IsExtendedTypeDeclaration() )
-                        {
-                            Reference< reflection::XIdlMethod> xMethod = xClass->getMethod( sMethName );
-                            if( xMethod != NULL ) //method OK
-                            {
-                                xClass = xMethod->getReturnType();
-                                if( xClass == NULL )
-                                {
-                                    break;
-                                }
-                            }
-                            else
-                            {//nothing to reflect
-                                bReflect = false;
-                                break;
-                            }
-                        }
-                        else
-                        {// no extended types allowed
-                            bReflect = false;
-                            break;
-                        }
-                    }
-                    j++;
+                    pCodeCompleteWnd->InsertEntry( aEntryVect[l] );
                 }
-                if( bReflect )
-                {
-                    std::vector< OUString > aEntryVect;//entries to be inserted into the list
-                    std::vector< OUString > aMethVect = GetXIdlClassMethods(xClass);//methods
-                    std::vector< OUString > aFieldVect = GetXIdlClassFields(xClass);//fields
-                    aEntryVect.insert(aEntryVect.end(), aFieldVect.begin(), aFieldVect.end() );
-                    if( CodeCompleteOptions::IsExtendedTypeDeclaration() )
-                    {// if extended types on, reflect classes, else just the structs (XIdlClass without methods)
-                        aEntryVect.insert(aEntryVect.end(), aMethVect.begin(), aMethVect.end() );
-                    }
-                    if( aEntryVect.size() > 0 )
-                    {
-                        // calculate position
-                        Rectangle aRect = ( (TextEngine*) GetEditEngine() )->PaMtoEditCursor( aSel.GetEnd() , false );
-                        long nViewYOffset = pEditView->GetStartDocPos().Y();
-                        Point aPoint = aRect.BottomRight();
-                        aPoint.Y() = aPoint.Y() - nViewYOffset;
-                        aPoint.Y() += 2;
-                        aSel.GetStart().GetIndex() += 1;
-                        aSel.GetEnd().GetIndex() += 1;
-                        pCodeCompleteWnd->ClearListBox();
-                        pCodeCompleteWnd->SetTextSelection(aSel);
-                        //fill the listbox
-                        for(unsigned int l = 0; l < aEntryVect.size(); ++l)
-                        {
-                            pCodeCompleteWnd->InsertEntry( aEntryVect[l] );
-                        }
-                        //show it
-                        pCodeCompleteWnd->SetPosPixel( aPoint );
-                        pCodeCompleteWnd->Show();
-                        pCodeCompleteWnd->ResizeListBox();
-                        pCodeCompleteWnd->SelectFirstEntry();
-                        pEditView->GetWindow()->GrabFocus();
-                    }
-                }
+                //show it
+                pCodeCompleteWnd->SetPosPixel( aPoint );
+                pCodeCompleteWnd->Show();
+                pCodeCompleteWnd->ResizeListBox();
+                pCodeCompleteWnd->SelectFirstEntry();
+                pEditView->GetWindow()->GrabFocus();
             }
         }
     }
-}
-
-std::vector< OUString > EditorWindow::GetXIdlClassMethods( Reference< reflection::XIdlClass > xClass ) const
-{
-    Sequence< Reference< reflection::XIdlMethod > > aMethods = xClass->getMethods();
-    std::vector< OUString > aRetVect;
-    if( aMethods.getLength() != 0 )
-    {
-        for(sal_Int32 l = 0; l < aMethods.getLength(); ++l)
-        {
-            aRetVect.push_back(OUString(aMethods[l]->getName()));
-        }
-    }
-    return aRetVect;
-}
-
-std::vector< OUString > EditorWindow::GetXIdlClassFields( Reference< reflection::XIdlClass > xClass ) const
-{
-    Sequence< Reference< reflection::XIdlField > > aFields = xClass->getFields();
-    std::vector< OUString > aRetVect;
-    if( aFields.getLength() != 0 )
-    {
-        for(sal_Int32 l = 0; l < aFields.getLength(); ++l)
-        {
-            aRetVect.push_back(OUString(aFields[l]->getName()));
-        }
-    }
-    return aRetVect;
 }
 
 void EditorWindow::Paint( const Rectangle& rRect )
@@ -2777,7 +2695,7 @@ void CodeCompleteWindow::ResizeListBox()
                     aLongestEntry = pListBox->GetEntry( i );
             }
         }
-        long nWidth = GetTextWidth(aLongestEntry);
+        //long nWidth = GetTextWidth(aLongestEntry);
         sal_uInt16 nColumns = aLongestEntry.getLength();
         sal_uInt16 nLines = std::min( (sal_uInt16) 6, pListBox->GetEntryCount() );
         const Font& aFont = pListBox->GetUnzoomedControlPointFont();
@@ -2834,6 +2752,122 @@ void CodeCompleteWindow::ClearAndHide()
 void CodeCompleteWindow::SetVisibleEntries()
 {
     pListBox->SetVisibleEntries();
+}
+
+UnoTypeCodeCompletetor::UnoTypeCodeCompletetor( const std::vector< OUString >& aVect, const OUString& sVarType )
+: bCanComplete( true )
+{
+    if( aVect.size() == 0 || sVarType.isEmpty() )
+    {
+        bCanComplete = false;//invalid parameters, nothing to code complete
+        return;
+    }
+
+    try
+    {
+        xFactory = Reference< lang::XMultiServiceFactory >( comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
+        xRefl = Reference< reflection::XIdlReflection >( xFactory->createInstance("com.sun.star.reflection.CoreReflection"), UNO_QUERY_THROW );
+        if( xRefl.is() )
+            xClass = xRefl->forName( sVarType );//get the base class for reflection
+    }
+    catch( const Exception& ex)
+    {
+        bCanComplete = false;
+        return;
+    }
+
+    unsigned int j = 1;//start from aVect[1]: aVect[0] is the variable name
+    OUString sMethName;
+    while( j != aVect.size() )
+    {
+        sMethName = aVect[j];
+
+        if( !CheckField(sMethName) )//check field
+            break;
+        else
+        {
+            if( CodeCompleteOptions::IsExtendedTypeDeclaration() )
+            {// if extended types on, check methods
+                if( !CheckMethod(sMethName) )
+                {
+                    bCanComplete = false;
+                    break;
+                }
+            }
+            bCanComplete = false;
+            break;
+        }
+        j++;
+    }
+}
+
+std::vector< OUString > UnoTypeCodeCompletetor::GetXIdlClassMethods() const
+{
+
+    std::vector< OUString > aRetVect;
+    if( bCanComplete )
+    {
+        Sequence< Reference< reflection::XIdlMethod > > aMethods = xClass->getMethods();
+        if( aMethods.getLength() != 0 )
+        {
+            for(sal_Int32 l = 0; l < aMethods.getLength(); ++l)
+            {
+                aRetVect.push_back(OUString(aMethods[l]->getName()));
+            }
+        }
+    }
+    return aRetVect;//this is empty when cannot code complete
+}
+
+std::vector< OUString > UnoTypeCodeCompletetor::GetXIdlClassFields() const
+{
+
+    std::vector< OUString > aRetVect;
+    if( bCanComplete )
+    {
+        Sequence< Reference< reflection::XIdlField > > aFields = xClass->getFields();
+        if( aFields.getLength() != 0 )
+        {
+            for(sal_Int32 l = 0; l < aFields.getLength(); ++l)
+            {
+                aRetVect.push_back(OUString(aFields[l]->getName()));
+            }
+        }
+    }
+    return aRetVect;//this is empty when cannot code complete
+}
+
+bool UnoTypeCodeCompletetor::CanCodeComplete() const
+{
+    return bCanComplete;
+}
+
+bool UnoTypeCodeCompletetor::CheckField( const OUString& sFieldName )
+{
+    Reference< reflection::XIdlField> xField = xClass->getField( sFieldName );
+    if( xField != NULL )
+    {
+        xClass = xField->getType();
+        if( xClass == NULL )
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool UnoTypeCodeCompletetor::CheckMethod( const OUString& sMethName )
+{
+    Reference< reflection::XIdlMethod> xMethod = xClass->getMethod( sMethName );
+    if( xMethod != NULL ) //method OK
+    {
+        xClass = xMethod->getReturnType();
+        if( xClass == NULL )
+        {
+            return true;
+        }
+    }
+    return false;
 }
 
 } // namespace basctl
