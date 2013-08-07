@@ -58,9 +58,6 @@ using namespace ::com::sun::star::uno;
 
 static BOOL isPopupMenuOpen = NO;
 
-
-#if 0
-
 static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
     return s << [[obj description] UTF8String];
 }
@@ -68,11 +65,7 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
 static std::ostream &operator<<(std::ostream &s, NSPoint point) {
     return s << NSStringFromPoint(point);
 }
-#define AX_SAL_DEBUG(...) SAL_DEBUG(__VA_ARGS__)
 
-#else
-#define AX_SAL_DEBUG(...)
-#endif
 
 @implementation AquaA11yWrapper : NSView
 
@@ -684,7 +677,7 @@ static std::ostream &operator<<(std::ostream &s, NSPoint point) {
 #pragma mark Accessibility Protocol
 
 -(id)accessibilityAttributeValue:(NSString *)attribute {
-    AX_SAL_DEBUG("[" << self << " accessibilityAttributeValue:" << attribute << "]");
+    SAL_INFO("vcl.a11y", "[" << self << " accessibilityAttributeValue:" << attribute << "]");
     // #i90575# guard NSAccessibility protocol against unwanted access
     if ( isPopupMenuOpen ) {
         return nil;
@@ -714,7 +707,7 @@ static std::ostream &operator<<(std::ostream &s, NSPoint point) {
 }
 
 -(BOOL)accessibilityIsIgnored {
-    AX_SAL_DEBUG("[" << self << " accessibilityIsIgnored]");
+    SAL_INFO("vcl.a11y", "[" << self << " accessibilityIsIgnored]");
     // #i90575# guard NSAccessibility protocol against unwanted access
     if ( isPopupMenuOpen ) {
         return NO;
@@ -738,7 +731,7 @@ static std::ostream &operator<<(std::ostream &s, NSPoint point) {
 }
 
 -(NSArray *)accessibilityAttributeNames {
-    AX_SAL_DEBUG("[" << self << " accessibilityAttributeNames]");
+    SAL_INFO("vcl.a11y", "[" << self << " accessibilityAttributeNames]");
     // #i90575# guard NSAccessibility protocol against unwanted access
     if ( isPopupMenuOpen ) {
         return nil;
@@ -819,7 +812,7 @@ static std::ostream &operator<<(std::ostream &s, NSPoint point) {
 }
 
 -(BOOL)accessibilityIsAttributeSettable:(NSString *)attribute {
-    AX_SAL_DEBUG("[" << self << " accessibilityAttributeIsSettable:" << attribute << "]");
+    SAL_INFO("vcl.a11y", "[" << self << " accessibilityAttributeIsSettable:" << attribute << "]");
     BOOL isSettable = NO;
     if ( [ self accessibleText ] != nil ) {
         isSettable = [ AquaA11yTextWrapper isAttributeSettable: attribute forElement: self ];
@@ -837,7 +830,7 @@ static std::ostream &operator<<(std::ostream &s, NSPoint point) {
 }
 
 -(NSArray *)accessibilityParameterizedAttributeNames {
-    AX_SAL_DEBUG("[" << self << " accessibilityParameterizedAttributeNames]");
+    SAL_INFO("vcl.a11y", "[" << self << " accessibilityParameterizedAttributeNames]");
     NSMutableArray * attributeNames = [ [ NSMutableArray alloc ] init ];
     // Special Attributes depending on interface
     if ( [ self accessibleText ] != nil ) {
@@ -847,7 +840,7 @@ static std::ostream &operator<<(std::ostream &s, NSPoint point) {
 }
 
 -(id)accessibilityAttributeValue:(NSString *)attribute forParameter:(id)parameter {
-    AX_SAL_DEBUG("[" << self << " accessibilityAttributeValue:" << attribute << " forParameter:" << parameter << "]");
+    SAL_INFO("vcl.a11y", "[" << self << " accessibilityAttributeValue:" << attribute << " forParameter:" << parameter << "]");
     SEL methodSelector = [ self selectorForAttribute: attribute asGetter: YES withGetterParameter: YES ];
     if ( [ self respondsToSelector: methodSelector ] ) {
         return [ self performSelector: methodSelector withObject: parameter ];
@@ -857,14 +850,14 @@ static std::ostream &operator<<(std::ostream &s, NSPoint point) {
 
 -(BOOL)accessibilitySetOverrideValue:(id)value forAttribute:(NSString *)attribute
 {
-    AX_SAL_DEBUG("[" << self << " accessibilitySetOverrideValue:" << value << " forAttribute:" << attribute << "]");
+    SAL_INFO("vcl.a11y", "[" << self << " accessibilitySetOverrideValue:" << value << " forAttribute:" << attribute << "]");
     (void)value;
     (void)attribute;
     return NO; // TODO
 }
 
 -(void)accessibilitySetValue:(id)value forAttribute:(NSString *)attribute {
-    AX_SAL_DEBUG("[" << self << " accessibilitySetValue:" << value << " forAttribute:" << attribute << "]");
+    SAL_INFO("vcl.a11y", "[" << self << " accessibilitySetValue:" << value << " forAttribute:" << attribute << "]");
     SEL methodSelector = [ self selectorForAttribute: attribute asGetter: NO withGetterParameter: NO ];
     if ( [ AquaA11yComponentWrapper respondsToSelector: methodSelector ] ) {
         [ AquaA11yComponentWrapper performSelector: methodSelector withObject: self withObject: value ];
@@ -881,7 +874,7 @@ static std::ostream &operator<<(std::ostream &s, NSPoint point) {
 }
 
 -(id)accessibilityFocusedUIElement {
-    AX_SAL_DEBUG("[" << self << " accessibilityFocusedUIElement]");
+    SAL_INFO("vcl.a11y", "[" << self << " accessibilityFocusedUIElement]");
     // #i90575# guard NSAccessibility protocol against unwanted access
     if ( isPopupMenuOpen ) {
         return nil;
@@ -906,7 +899,7 @@ static std::ostream &operator<<(std::ostream &s, NSPoint point) {
 }
 
 -(NSString *)accessibilityActionDescription:(NSString *)action {
-    AX_SAL_DEBUG("[" << self << " accessibilityActionDescription:" << action << "]");
+    SAL_INFO("vcl.a11y", "[" << self << " accessibilityActionDescription:" << action << "]");
     return NSAccessibilityActionDescription(action);
 }
 
@@ -938,7 +931,7 @@ static std::ostream &operator<<(std::ostream &s, NSPoint point) {
 }
 
 -(void)accessibilityPerformAction:(NSString *)action {
-    AX_SAL_DEBUG("[" << self << " accessibilityPerformAction:" << action << "]");
+    SAL_INFO("vcl.a11y", "[" << self << " accessibilityPerformAction:" << action << "]");
     AquaA11yWrapper * actionResponder = [ self actionResponder ];
     if ( actionResponder != nil ) {
         [ AquaA11yActionWrapper doAction: action ofElement: actionResponder ];
@@ -946,7 +939,7 @@ static std::ostream &operator<<(std::ostream &s, NSPoint point) {
 }
 
 -(NSArray *)accessibilityActionNames {
-    AX_SAL_DEBUG("[" << self << " accessibilityActionNames]");
+    SAL_INFO("vcl.a11y", "[" << self << " accessibilityActionNames]");
     NSArray * actionNames = nil;
     AquaA11yWrapper * actionResponder = [ self actionResponder ];
     if ( actionResponder != nil ) {
@@ -1029,7 +1022,7 @@ Reference < XAccessibleContext > hitTestRunner ( com::sun::star::awt::Point poin
 }
 
 -(id)accessibilityHitTest:(NSPoint)point {
-    AX_SAL_DEBUG("[" << self << " accessibilityHitTest:" << point << "]");
+    SAL_INFO("vcl.a11y", "[" << self << " accessibilityHitTest:" << point << "]");
     static id wrapper = nil;
     if ( nil != wrapper ) {
         [ wrapper release ];
