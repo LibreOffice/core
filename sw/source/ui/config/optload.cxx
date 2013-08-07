@@ -398,16 +398,16 @@ SwCaptionOptPage::SwCaptionOptPage( Window* pParent, const SfxItemSet& rSet )
     aCharStyleLB    (this, SW_RES(LB_CHARSTYLE  )),
     aApplyBorderCB  (this, SW_RES(CB_APPLYBORDER)),
 
-    sSWTable        (SW_RES(STR_TABLE           )),
-    sSWFrame        (SW_RES(STR_FRAME           )),
-    sSWGraphic      (SW_RES(STR_GRAPHIC         )),
-    sOLE            (SW_RES(STR_OLE             )),
+    m_sSWTable      (SW_RES(STR_TABLE           )),
+    m_sSWFrame      (SW_RES(STR_FRAME           )),
+    m_sSWGraphic    (SW_RES(STR_GRAPHIC         )),
+    m_sOLE          (SW_RES(STR_OLE             )),
 
-    sBegin          (SW_RESSTR(STR_BEGINNING            )),
-    sEnd            (SW_RESSTR(STR_END                  )),
-    sAbove          (SW_RESSTR(STR_ABOVE                )),
-    sBelow          (SW_RESSTR(STR_CP_BELOW             )),
-    sNone           (SW_RESSTR( STR_CATEGORY_NONE )),
+    m_sBegin        (SW_RESSTR(STR_BEGINNING            )),
+    m_sEnd          (SW_RESSTR(STR_END                  )),
+    m_sAbove        (SW_RESSTR(STR_ABOVE                )),
+    m_sBelow        (SW_RESSTR(STR_CP_BELOW             )),
+    m_sNone         (SW_RESSTR( STR_CATEGORY_NONE )),
 
     pMgr            (new SwFldMgr()),
     bHTMLMode(sal_False)
@@ -415,15 +415,10 @@ SwCaptionOptPage::SwCaptionOptPage( Window* pParent, const SfxItemSet& rSet )
     Wallpaper   aBack( GetSettings().GetStyleSettings().GetWindowColor() );
     aPreview.SetBackground( aBack );
 
-    OUString tmp1, tmp2, tmp3, tmp4; //FIXME
-    SwStyleNameMapper::FillUIName(RES_POOLCOLL_LABEL_ABB, tmp1);
-    SwStyleNameMapper::FillUIName(RES_POOLCOLL_LABEL_TABLE, tmp2);
-    SwStyleNameMapper::FillUIName(RES_POOLCOLL_LABEL_FRAME, tmp3);
-    SwStyleNameMapper::FillUIName(RES_POOLCOLL_LABEL_DRAWING, tmp4);
-    sIllustration = tmp1;
-    sTable = tmp2;
-    sText = tmp3;
-    sDrawing = tmp4;
+    SwStyleNameMapper::FillUIName(RES_POOLCOLL_LABEL_ABB, m_sIllustration);
+    SwStyleNameMapper::FillUIName(RES_POOLCOLL_LABEL_TABLE, m_sTable);
+    SwStyleNameMapper::FillUIName(RES_POOLCOLL_LABEL_FRAME, m_sText);
+    SwStyleNameMapper::FillUIName(RES_POOLCOLL_LABEL_DRAWING, m_sDrawing);
 
     sal_uInt16 i, nCount;
     SwWrtShell *pSh = ::GetActiveWrtShell();
@@ -548,11 +543,11 @@ void SwCaptionOptPage::Reset( const SfxItemSet& rSet)
 
     // Writer objects
     sal_uInt16 nPos = 0;
-    aCheckLB.InsertEntry(sSWTable);
+    aCheckLB.InsertEntry(m_sSWTable);
     SetOptions(nPos++, TABLE_CAP);
-    aCheckLB.InsertEntry(sSWFrame);
+    aCheckLB.InsertEntry(m_sSWFrame);
     SetOptions(nPos++, FRAME_CAP);
-    aCheckLB.InsertEntry(sSWGraphic);
+    aCheckLB.InsertEntry(m_sSWGraphic);
     SetOptions(nPos++, GRAPHIC_CAP);
 
     // get Productname and -version
@@ -568,10 +563,11 @@ void SwCaptionOptPage::Reset( const SfxItemSet& rSet)
     for ( sal_uLong i = 0; i < aObjS.Count(); ++i )
     {
         const SvGlobalName &rOleId = aObjS[i].GetClassName();
-        const String* pClassName = &aObjS[i].GetHumanName();
-        if ( rOleId == SvGlobalName( SO3_OUT_CLASSID ) )
-            pClassName = &sOLE;
-        String sClass( *pClassName );
+        String sClass;
+        if (rOleId == SvGlobalName(SO3_OUT_CLASSID))
+            sClass = aObjS[i].GetHumanName();
+        else
+            sClass = m_sOLE;
         // don't show product version
         sClass.SearchAndReplace( sComplete, sWithoutVersion );
         aCheckLB.InsertEntry( sClass );
@@ -645,7 +641,7 @@ IMPL_LINK_NOARG(SwCaptionOptPage, ShowEntryHdl)
         InsCaptionOpt* pOpt = (InsCaptionOpt*)pSelEntry->GetUserData();
 
         aCategoryBox.Clear();
-        aCategoryBox.InsertEntry( sNone );
+        aCategoryBox.InsertEntry(String(m_sNone)); //FIXME
         if (pSh)
         {
             sal_uInt16 nCount = pMgr->GetFldTypeCount();
@@ -660,16 +656,16 @@ IMPL_LINK_NOARG(SwCaptionOptPage, ShowEntryHdl)
         }
         else
         {
-            aCategoryBox.InsertEntry(SwBoxEntry(sIllustration));
-            aCategoryBox.InsertEntry(SwBoxEntry(sTable));
-            aCategoryBox.InsertEntry(SwBoxEntry(sText));
-            aCategoryBox.InsertEntry(SwBoxEntry(sDrawing));
+            aCategoryBox.InsertEntry(SwBoxEntry(m_sIllustration));
+            aCategoryBox.InsertEntry(SwBoxEntry(m_sTable));
+            aCategoryBox.InsertEntry(SwBoxEntry(m_sText));
+            aCategoryBox.InsertEntry(SwBoxEntry(m_sDrawing));
         }
 
         if(pOpt->GetCategory().Len())
             aCategoryBox.SetText(pOpt->GetCategory());
         else
-            aCategoryBox.SetText( sNone );
+            aCategoryBox.SetText(m_sNone);
         if (pOpt->GetCategory().Len() &&
             aCategoryBox.GetEntryPos(OUString(pOpt->GetCategory())) == COMBOBOX_ENTRY_NOTFOUND)
             aCategoryBox.InsertEntry(pOpt->GetCategory());
@@ -702,12 +698,12 @@ IMPL_LINK_NOARG(SwCaptionOptPage, ShowEntryHdl)
             case GRAPHIC_CAP:
             case TABLE_CAP:
             case OLE_CAP:
-                aPosBox.InsertEntry(sAbove);
-                aPosBox.InsertEntry(sBelow);
+                aPosBox.InsertEntry(m_sAbove);
+                aPosBox.InsertEntry(m_sBelow);
                 break;
             case FRAME_CAP:
-                aPosBox.InsertEntry(sBegin);
-                aPosBox.InsertEntry(sEnd);
+                aPosBox.InsertEntry(m_sBegin);
+                aPosBox.InsertEntry(m_sEnd);
                 break;
         }
         aPosBox.SelectEntryPos(pOpt->GetPos());
@@ -752,7 +748,7 @@ void SwCaptionOptPage::SaveEntry(SvTreeListEntry* pEntry)
 
         pOpt->UseCaption() = aCheckLB.IsChecked((sal_uInt16)aCheckLB.GetModel()->GetAbsPos(pEntry));
         String aName( aCategoryBox.GetText() );
-        if(aName == sNone)
+        if (aName == m_sNone)
             pOpt->SetCategory(aEmptyStr);
         else
             pOpt->SetCategory(comphelper::string::strip(aName, ' '));
@@ -780,7 +776,7 @@ IMPL_LINK_NOARG(SwCaptionOptPage, ModifyHdl)
     PushButton *pBtn = pDlg ? pDlg->GetOKButton() : NULL;
     if (pBtn)
         pBtn->Enable(sFldTypeName.Len() != 0);
-    sal_Bool bEnable = aCategoryBox.IsEnabled() && sFldTypeName != sNone;
+    sal_Bool bEnable = aCategoryBox.IsEnabled() && sFldTypeName != m_sNone;
 
     aFormatText.Enable(bEnable);
     aFormatBox.Enable(bEnable);
@@ -819,7 +815,7 @@ void SwCaptionOptPage::DrawSample()
 {
     String aStr;
 
-    if( aCategoryBox.GetText() != OUString(sNone))
+    if( aCategoryBox.GetText() != m_sNone)
     {
         //#i61007# order of captions
         bool bOrderNumberingFirst = aLbCaptionOrder.GetSelectEntryPos() == 1;

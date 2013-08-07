@@ -134,22 +134,22 @@ private:
     ListBox         aCharStyleLB;
     CheckBox        aApplyBorderCB;
 
-    String          sSWTable;
-    String          sSWFrame;
-    String          sSWGraphic;
-    String          sOLE;
+    OUString        m_sSWTable;
+    OUString        m_sSWFrame;
+    OUString        m_sSWGraphic;
+    OUString        m_sOLE;
 
-    String          sIllustration;
-    String          sTable;
-    String          sText;
-    String          sDrawing;
+    OUString        m_sIllustration;
+    OUString        m_sTable;
+    OUString        m_sText;
+    OUString        m_sDrawing;
 
-    String          sBegin;
-    String          sEnd;
-    String          sAbove;
-    String          sBelow;
+    OUString        m_sBegin;
+    OUString        m_sEnd;
+    OUString        m_sAbove;
+    OUString        m_sBelow;
 
-    String          sNone;
+    OUString        m_sNone;
 
     SwFldMgr        *pMgr;
     bool            bHTMLMode;
