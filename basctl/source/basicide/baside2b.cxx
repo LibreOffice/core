@@ -2654,7 +2654,6 @@ void CodeCompleteWindow::InitListBox()
 {
     pListBox->SetSizePixel( Size(150,150) ); //default, this will adopt the line length
     pListBox->Show();
-    pListBox->GrabFocus();
     pListBox->EnableQuickSelection( false );
 }
 
@@ -2692,7 +2691,6 @@ void CodeCompleteWindow::ResizeListBox()
                     aLongestEntry = pListBox->GetEntry( i );
             }
         }
-        //long nWidth = GetTextWidth(aLongestEntry);
         sal_uInt16 nColumns = aLongestEntry.getLength();
         sal_uInt16 nLines = std::min( (sal_uInt16) 6, pListBox->GetEntryCount() );
         const Font& aFont = pListBox->GetUnzoomedControlPointFont();
@@ -2712,6 +2710,7 @@ void CodeCompleteWindow::ResizeListBox()
             aPos.Y() = aPos.Y() - (aSize.getHeight() + aParFont.GetSize().getHeight()+5);
             SetPosPixel(aPos);
         }
+
         long nXDiff = std::abs(aTopPoint.X() - GetPosPixel().X());
         if( nXDiff < aSize.Width() )
         {//clipped at the right side, move it a bit left
@@ -2723,7 +2722,6 @@ void CodeCompleteWindow::ResizeListBox()
         aSize.setWidth( aSize.getWidth() + 1 );
         aSize.setHeight( aSize.getHeight() + 1 );
         SetSizePixel( aSize );
-        pListBox->GrabFocus();
     }
 }
 
