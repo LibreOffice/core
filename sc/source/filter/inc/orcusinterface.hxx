@@ -12,6 +12,9 @@
 
 #include "address.hxx"
 #include "documentimport.hxx"
+
+#include "sharedformulagroups.hxx"
+
 #include "rtl/strbuf.hxx"
 
 #define __ORCUS_STATIC_LIB
@@ -68,6 +71,7 @@ class ScOrcusSheet : public orcus::spreadsheet::iface::import_sheet
     ScDocumentImport& mrDoc;
     SCTAB mnTab;
     ScOrcusFactory& mrFactory;
+    sc::SharedFormulaGroups maFormulaGroups;
 
     typedef std::map<size_t, ScRangeData*> SharedFormulaContainer;
     SharedFormulaContainer maSharedFormulas;

@@ -16,6 +16,7 @@
 #include "globalnames.hxx"
 #include "docoptio.hxx"
 #include "globstr.hrc"
+#include "compiler.hxx"
 
 #include "formula/token.hxx"
 #include "tools/datetime.hxx"
@@ -256,7 +257,7 @@ formula::FormulaGrammar::Grammar getCalcGrammarFromOrcus( os::formula_grammar_t 
             break;
         case orcus::spreadsheet::xlsx_2007:
         case orcus::spreadsheet::xlsx_2010:
-            eGrammar = formula::FormulaGrammar::GRAM_ENGLISH_XL_A1;
+            eGrammar = formula::FormulaGrammar::GRAM_ENGLISH_XL_OOX;
             break;
         case orcus::spreadsheet::gnumeric:
             eGrammar = formula::FormulaGrammar::GRAM_ENGLISH_XL_A1;
@@ -265,6 +266,55 @@ formula::FormulaGrammar::Grammar getCalcGrammarFromOrcus( os::formula_grammar_t 
 
     return eGrammar;
 }
+
+class SharedFormulaGroups
+{
+    struct Key
+    {
+        sal_Int32 mnId;
+        sal_Int32 mnCol;
+
+        Key(sal_Int32 nId, sal_Int32 nCol) : mnId(nId), mnCol(nCol) {}
+
+        bool operator== ( const Key& rOther ) const
+        {
+            return mnId == rOther.mnId && mnCol == rOther.mnCol;
+        }
+
+        bool operator!= ( const Key& rOther ) const
+        {
+            return !operator==(rOther);
+        }
+    };
+
+    struct KeyHash
+    {
+        size_t operator() ( const Key& rKey ) const
+        {
+            double nVal = rKey.mnId;
+            nVal *= 256.0;
+            nVal += rKey.mnCol;
+            return static_cast<size_t>(nVal);
+        }
+    };
+
+    typedef boost::unordered_map<Key, ScFormulaCellGroupRef, KeyHash> StoreType;
+    StoreType maStore;
+public:
+
+    void set( sal_Int32 nSharedId, sal_Int32 nCol, const ScFormulaCellGroupRef& xGroup )
+    {
+        Key aKey(nSharedId, nCol);
+        maStore.insert(StoreType::value_type(aKey, xGroup));
+    }
+
+    ScFormulaCellGroupRef get( sal_Int32 nSharedId, sal_Int32 nCol ) const
+    {
+        Key aKey(nSharedId, nCol);
+        StoreType::const_iterator it = maStore.find(aKey);
+        return it == maStore.end() ? ScFormulaCellGroupRef() : it->second;
+    }
+};
 
 }
 
@@ -291,57 +341,76 @@ void ScOrcusSheet::set_formula_result(os::row_t row, os::col_t col, const char* 
 }
 
 void ScOrcusSheet::set_shared_formula(
-    os::row_t row, os::col_t col, os::formula_grammar_t grammar, size_t sindex,
-    const char* p_formula, size_t n_formula)
+    os::row_t /*row*/, os::col_t /*col*/, os::formula_grammar_t /*grammar*/, size_t /*sindex*/,
+    const char* /*p_formula*/, size_t /*n_formula*/)
 {
-    OUString aFormula( p_formula, n_formula, RTL_TEXTENCODING_UTF8 );
-    formula::FormulaGrammar::Grammar eGrammar =  getCalcGrammarFromOrcus( grammar );
-    ScRangeName* pRangeName = mrDoc.getDoc().GetRangeName();
-
-    OUString aName("shared_");
-    aName += OUString::valueOf(sal_Int32(pRangeName->size()));
-    ScRangeData* pSharedFormula = new ScRangeData(&mrDoc.getDoc(), aName, aFormula, ScAddress(col, row, mnTab), RT_SHARED, eGrammar);
-    if(pRangeName->insert(pSharedFormula))
-    {
-        maSharedFormulas.insert( std::pair<size_t, ScRangeData*>(sindex, pSharedFormula) );
-        ScTokenArray aArr;
-        aArr.AddToken( formula::FormulaIndexToken( ocName, pSharedFormula->GetIndex() ) );
-        mrDoc.setFormulaCell(ScAddress(col,row,mnTab), aArr);
-        cellInserted();
-    }
+    // TODO: We need to revise this interface in orcus.
 }
 
 void ScOrcusSheet::set_shared_formula(
     os::row_t row, os::col_t col, os::formula_grammar_t grammar, size_t sindex,
-    const char* p_formula, size_t n_formula, const char* /*p_range*/, size_t /*n_range*/)
+    const char* p_formula, size_t n_formula, const char* p_range, size_t n_range)
 {
-    OUString aFormula( p_formula, n_formula, RTL_TEXTENCODING_UTF8 );
-    formula::FormulaGrammar::Grammar eGrammar = getCalcGrammarFromOrcus( grammar );
-    ScRangeName* pRangeName = mrDoc.getDoc().GetRangeName();
+    ScAddress aPos(col, row, mnTab);
+    OUString aFormula(p_formula, n_formula, RTL_TEXTENCODING_UTF8);
+    OUString aRangeStr(p_range, n_range, RTL_TEXTENCODING_UTF8);
+    formula::FormulaGrammar::Grammar eGram = getCalcGrammarFromOrcus(grammar);
+    formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::extractRefConvention(eGram);
 
-    OUString aName("shared_");
-    aName += OUString::valueOf(sal_Int32(pRangeName->size()));
-    ScRangeData* pSharedFormula = new ScRangeData(&mrDoc.getDoc(), aName, aFormula, ScAddress(col, row, mnTab), RT_SHARED, eGrammar);
-    if(pRangeName->insert(pSharedFormula))
+    // Convert the shared formula range.
+    ScRange aRange;
+    sal_uInt16 nRes = aRange.Parse(aRangeStr, &mrDoc.getDoc(), eConv);
+    if (!(nRes & SCA_VALID))
+        // Conversion failed.
+        return;
+
+    // Compile the formula expression into tokens.
+    ScCompiler aComp(&mrDoc.getDoc(), aPos);
+    aComp.SetGrammar(eGram);
+    ScTokenArray* pArray = aComp.CompileString(aFormula);
+    if (!pArray)
+        // Tokenization failed.
+        return;
+
+    for (sal_Int32 nCol = aRange.aStart.Col(); nCol <= aRange.aEnd.Col(); ++nCol)
     {
-        maSharedFormulas.insert( std::pair<size_t, ScRangeData*>(sindex, pSharedFormula) );
-        ScTokenArray aArr;
-        aArr.AddToken( formula::FormulaIndexToken( ocName, pSharedFormula->GetIndex() ) );
-        mrDoc.setFormulaCell(ScAddress(col,row,mnTab), aArr);
-        cellInserted();
+        // Create one group per column, since Calc doesn't support shared
+        // formulas across multiple columns.
+        ScFormulaCellGroupRef xNewGroup(new ScFormulaCellGroup);
+        xNewGroup->mnStart = aRange.aStart.Row();
+        xNewGroup->mnLength = aRange.aEnd.Row() - aRange.aStart.Row() + 1;
+        xNewGroup->setCode(*pArray);
+        maFormulaGroups.set(sindex, nCol, xNewGroup);
     }
+
+    ScFormulaCellGroupRef xGroup = maFormulaGroups.get(sindex, aPos.Col());
+    if (!xGroup)
+        return;
+
+    ScFormulaCell* pCell = new ScFormulaCell(&mrDoc.getDoc(), aPos, xGroup);
+    mrDoc.setFormulaCell(aPos, pCell);
+    cellInserted();
+
+    // For now, orcus doesn't support setting cached result. Mark it for re-calculation.
+    pCell->SetDirty(true);
+    pCell->StartListeningTo(&mrDoc.getDoc());
 }
 
 void ScOrcusSheet::set_shared_formula(os::row_t row, os::col_t col, size_t sindex)
 {
-    if(maSharedFormulas.find(sindex) == maSharedFormulas.end())
+    ScAddress aPos(col, row, mnTab);
+
+    ScFormulaCellGroupRef xGroup = maFormulaGroups.get(sindex, aPos.Col());
+    if (!xGroup)
         return;
 
-    ScRangeData* pSharedFormula = maSharedFormulas.find(sindex)->second;
-    ScTokenArray aArr;
-    aArr.AddToken( formula::FormulaIndexToken( ocName, pSharedFormula->GetIndex() ) );
-    mrDoc.setFormulaCell(ScAddress(col,row,mnTab), aArr);
+    ScFormulaCell* pCell = new ScFormulaCell(&mrDoc.getDoc(), aPos, xGroup);
+    mrDoc.setFormulaCell(aPos, pCell);
     cellInserted();
+
+    // For now, orcus doesn't support setting cached result. Mark it for re-calculation.
+    pCell->SetDirty(true);
+    pCell->StartListeningTo(&mrDoc.getDoc());
 }
 
 void ScOrcusSheet::set_array_formula(

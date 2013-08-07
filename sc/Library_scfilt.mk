@@ -133,6 +133,7 @@ $(eval $(call gb_Library_add_exception_objects,scfilt,\
 	sc/source/filter/ftools/fapihelper \
 	sc/source/filter/ftools/fprogressbar \
 	sc/source/filter/ftools/ftools \
+	sc/source/filter/ftools/sharedformulagroups \
 	sc/source/filter/html/htmlexp \
 	sc/source/filter/html/htmlexp2 \
 	sc/source/filter/html/htmlimp \

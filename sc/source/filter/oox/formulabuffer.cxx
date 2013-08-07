@@ -22,6 +22,7 @@
 #include "autonamecache.hxx"
 #include "tokenuno.hxx"
 #include "tokenarray.hxx"
+#include "sharedformulagroups.hxx"
 #include "oox/token/tokens.hxx"
 
 using namespace com::sun::star;
@@ -137,59 +138,6 @@ void FormulaBuffer::applyCellFormulaValues( const std::vector< ValueAddressPair 
     }
 }
 
-namespace {
-
-class SharedFormulaGroups
-{
-    struct Key
-    {
-        sal_Int32 mnId;
-        sal_Int32 mnCol;
-
-        Key(sal_Int32 nId, sal_Int32 nCol) : mnId(nId), mnCol(nCol) {}
-
-        bool operator== ( const Key& rOther ) const
-        {
-            return mnId == rOther.mnId && mnCol == rOther.mnCol;
-        }
-
-        bool operator!= ( const Key& rOther ) const
-        {
-            return !operator==(rOther);
-        }
-    };
-
-    struct KeyHash
-    {
-        size_t operator() ( const Key& rKey ) const
-        {
-            double nVal = rKey.mnId;
-            nVal *= 256.0;
-            nVal += rKey.mnCol;
-            return static_cast<size_t>(nVal);
-        }
-    };
-
-    typedef boost::unordered_map<Key, ScFormulaCellGroupRef, KeyHash> StoreType;
-    StoreType maStore;
-public:
-
-    void set( sal_Int32 nSharedId, sal_Int32 nCol, const ScFormulaCellGroupRef& xGroup )
-    {
-        Key aKey(nSharedId, nCol);
-        maStore.insert(StoreType::value_type(aKey, xGroup));
-    }
-
-    ScFormulaCellGroupRef get( sal_Int32 nSharedId, sal_Int32 nCol ) const
-    {
-        Key aKey(nSharedId, nCol);
-        StoreType::const_iterator it = maStore.find(aKey);
-        return it == maStore.end() ? ScFormulaCellGroupRef() : it->second;
-    }
-};
-
-}
-
 void FormulaBuffer::applySharedFormulas( sal_Int32 nTab )
 {
     SheetToFormulaEntryMap::const_iterator itShared = sharedFormulas.find(nTab);
@@ -207,7 +155,7 @@ void FormulaBuffer::applySharedFormulas( sal_Int32 nTab )
 
     ScDocument& rDoc = getScDocument();
 
-    SharedFormulaGroups aGroups;
+    sc::SharedFormulaGroups aGroups;
     {
         // Process shared formulas first.
         std::vector<SharedFormulaEntry>::const_iterator it = rSharedFormulas.begin(), itEnd = rSharedFormulas.end();
@@ -231,7 +179,7 @@ void FormulaBuffer::applySharedFormulas( sal_Int32 nTab )
                     // shared formulas across multiple columns.
                     ScFormulaCellGroupRef xNewGroup(new ScFormulaCellGroup);
                     xNewGroup->mnStart = rRange.StartRow;
-                    xNewGroup->mnLength = rRange.EndRow - rRange.StartRow;
+                    xNewGroup->mnLength = rRange.EndRow - rRange.StartRow + 1;
                     xNewGroup->setCode(*pArray);
                     aGroups.set(nId, nCol, xNewGroup);
                 }
