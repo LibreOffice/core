@@ -167,15 +167,13 @@ Window* ImplGetDefaultWindow()
 
 // -----------------------------------------------------------------------
 
-#define VCL_CREATERESMGR_NAME( Name )   #Name
-
 ResMgr* ImplGetResMgr()
 {
     ImplSVData* pSVData = ImplGetSVData();
     if ( !pSVData->mpResMgr )
     {
         LanguageTag aLocale( Application::GetSettings().GetUILanguageTag());
-        pSVData->mpResMgr = ResMgr::SearchCreateResMgr( VCL_CREATERESMGR_NAME( vcl ), aLocale );
+        pSVData->mpResMgr = ResMgr::SearchCreateResMgr( "vcl", aLocale );
 
         static bool bMessageOnce = false;
         if( !pSVData->mpResMgr && ! bMessageOnce )

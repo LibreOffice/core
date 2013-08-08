@@ -3121,7 +3121,7 @@ bool HtmlExport::checkForExistingFiles()
 
         if( bFound )
         {
-            ResMgr *pResMgr = CREATERESMGR( dbw );
+            ResMgr *pResMgr = ResMgr::CreateResMgr( "dbw" );
             if( pResMgr )
             {
                 ResId aResId( 4077, *pResMgr );
