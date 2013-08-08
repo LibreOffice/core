@@ -131,7 +131,6 @@ void SvxColorTabPage::UpdateTableName()
 
 IMPL_LINK_NOARG(SvxColorTabPage, ClickLoadHdl_Impl)
 {
-    ResMgr& rMgr = CUI_MGR();
     sal_uInt16 nReturn = RET_YES;
     bool bLoaded = false;
 

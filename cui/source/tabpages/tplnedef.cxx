@@ -721,7 +721,6 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickDeleteHdl_Impl)
 
 IMPL_LINK_NOARG(SvxLineDefTabPage, ClickLoadHdl_Impl)
 {
-    ResMgr& rMgr = CUI_MGR();
     sal_uInt16 nReturn = RET_YES;
 
     if ( *pnDashListState & CT_MODIFIED )
