@@ -34,7 +34,7 @@ namespace svt
     class SVT_DLLPUBLIC OFileURLControl : public SvtURLBox
     {
     private:
-        String      m_sPreservedText;
+        OUString      m_sPreservedText;
 
     public:
         OFileURLControl(Window* _pParent, const ResId& _rId);
