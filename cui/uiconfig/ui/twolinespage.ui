@@ -2,6 +2,40 @@
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
   <!-- interface-requires LibreOffice 1.0 -->
+  <object class="GtkListStore" id="liststore1">
+    <columns>
+      <!-- column-name gchararray1 -->
+      <column type="gchararray"/>
+      <!-- column-name gint1 -->
+      <column type="gint"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">(None)</col>
+        <col id="1">0</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">(</col>
+        <col id="1">1</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">[</col>
+        <col id="1">2</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">&lt;</col>
+        <col id="1">3</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">{</col>
+        <col id="1">4</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Other Characters...</col>
+        <col id="1">5</col>
+      </row>
+    </data>
+  </object>
   <object class="GtkListStore" id="liststore2">
     <columns>
       <!-- column-name gchararray1 -->
@@ -128,7 +162,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkTreeView" id="startbracket">
+                  <object class="GtkTreeView" id="startbracket:border">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="model">liststore1</property>
@@ -145,7 +179,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkTreeView" id="endbracket">
+                  <object class="GtkTreeView" id="endbracket:border">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="model">liststore2</property>
@@ -210,39 +244,5 @@
         <property name="position">2</property>
       </packing>
     </child>
-  </object>
-  <object class="GtkListStore" id="liststore1">
-    <columns>
-      <!-- column-name gchararray1 -->
-      <column type="gchararray"/>
-      <!-- column-name gint1 -->
-      <column type="gint"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">(None)</col>
-        <col id="1">0</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">(</col>
-        <col id="1">1</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">[</col>
-        <col id="1">2</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">&lt;</col>
-        <col id="1">3</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">{</col>
-        <col id="1">4</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Other Characters...</col>
-        <col id="1">5</col>
-      </row>
-    </data>
   </object>
 </interface>
