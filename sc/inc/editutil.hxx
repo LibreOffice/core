@@ -55,9 +55,11 @@ public:
 
     /// Retrieves string with paragraphs delimited by spaces
     static OUString GetSpaceDelimitedString( const EditEngine& rEngine );
+    static OUString GetSpaceDelimitedString( const EditTextObject& rEdit );
 
     /// Retrieves string with paragraphs delimited by new lines ('\n').
     static OUString GetMultilineString( const EditEngine& rEngine );
+    static OUString GetMultilineString( const EditTextObject& rEdit );
 
     /** Retrieves string with paragraphs delimited by new lines ('\n').
 

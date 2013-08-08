@@ -29,7 +29,7 @@
 #include <editeng/flditem.hxx>
 #include <editeng/numitem.hxx>
 #include <editeng/justifyitem.hxx>
-#include "editeng/editobj.hxx"
+#include <editeng/editobj.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
 #include <svl/inethist.hxx>
@@ -81,14 +81,37 @@ static OUString lcl_GetDelimitedString( const EditEngine& rEngine, const sal_Cha
     return aRet.makeStringAndClear();
 }
 
+static OUString lcl_GetDelimitedString( const EditTextObject& rEdit, const sal_Char c )
+{
+    sal_Int32 nParCount = rEdit.GetParagraphCount();
+    OUStringBuffer aRet( nParCount * 80 );
+    for (sal_Int32 nPar=0; nPar<nParCount; nPar++)
+    {
+        if (nPar > 0)
+            aRet.append(c);
+        aRet.append( rEdit.GetText( nPar ));
+    }
+    return aRet.makeStringAndClear();
+}
+
 OUString ScEditUtil::GetSpaceDelimitedString( const EditEngine& rEngine )
 {
     return lcl_GetDelimitedString(rEngine, ' ');
 }
 
+OUString ScEditUtil::GetSpaceDelimitedString( const EditTextObject& rEdit )
+{
+    return lcl_GetDelimitedString(rEdit, ' ');
+}
+
 OUString ScEditUtil::GetMultilineString( const EditEngine& rEngine )
 {
     return lcl_GetDelimitedString(rEngine, '\n');
+}
+
+OUString ScEditUtil::GetMultilineString( const EditTextObject& rEdit )
+{
+    return lcl_GetDelimitedString(rEdit, '\n');
 }
 
 OUString ScEditUtil::GetString( const EditTextObject& rEditText, const ScDocument* pDoc )
