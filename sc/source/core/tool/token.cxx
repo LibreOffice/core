@@ -1347,6 +1347,9 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
                 ;
         }
     }
+
+    if (eOp == ocName)
+        meVectorState = FormulaVectorDisabled;
 }
 
 bool ScTokenArray::ImplGetReference( ScRange& rRange, const ScAddress& rPos, bool bValidOnly ) const

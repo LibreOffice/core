@@ -3366,32 +3366,6 @@ public:
                     mrGroupTokens.AddToken(aTok);
                 }
                 break;
-                case svIndex:
-                {
-                    // Named range.
-                    ScRangeName* pNames = mrDoc.GetRangeName();
-                    if (!pNames)
-                        // This should never fail.
-                        return false;
-
-                    ScRangeData* pRange = pNames->findByIndex(p->GetIndex());
-                    if (!pRange)
-                        // No named range exists by that index.
-                        return false;
-
-                    ScTokenArray* pNamedTokens = pRange->GetCode();
-                    if (!pNamedTokens)
-                        // This named range is empty.
-                        return false;
-
-                    mrGroupTokens.AddOpCode(ocOpen);
-
-                    if (!convert(*pNamedTokens))
-                        return false;
-
-                    mrGroupTokens.AddOpCode(ocClose);
-                }
-                break;
                 default:
                     mrGroupTokens.AddToken(*pToken);
             }
