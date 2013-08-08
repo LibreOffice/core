@@ -85,7 +85,7 @@ class SwTransferable : public TransferableHelper
     static SwTransferable* GetSwTransferable( const TransferableDataHelper& rData );
     static void SetSelInShell( SwWrtShell& , sal_Bool , const Point* );
     static sal_Bool _CheckForURLOrLNKFile( TransferableDataHelper& rData,
-                                String& rFileName, String* pTitle = 0 );
+                                OUString& rFileName, OUString* pTitle = 0 );
     static int _TestAllowedFormat( const TransferableDataHelper& rData,
                                         sal_uLong nFormat, sal_uInt16 nDestination );
 

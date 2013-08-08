@@ -1072,7 +1072,7 @@ sal_Int8 SdPageObjsTLB::ExecuteDrop( const ExecuteDropEvent& rEvt )
             if( pNavWin && ( pNavWin == mpParent ) )
             {
                 TransferableDataHelper  aDataHelper( rEvt.maDropEvent.Transferable );
-                String                  aFile;
+                OUString                aFile;
 
                 if( aDataHelper.GetString( FORMAT_FILE, aFile ) &&
                     ( (SdNavigatorWin*) mpParent)->InsertFile( aFile ) )

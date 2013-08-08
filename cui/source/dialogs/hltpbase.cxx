@@ -88,7 +88,7 @@ sal_Int8 SvxHyperURLBox::AcceptDrop( const AcceptDropEvent& /* rEvt */ )
 sal_Int8 SvxHyperURLBox::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
     TransferableDataHelper  aDataHelper( rEvt.maDropEvent.Transferable );
-    String                  aString;
+    OUString                aString;
     sal_Int8                nRet = DND_ACTION_NONE;
 
     if( aDataHelper.GetString( FORMAT_STRING, aString ) )

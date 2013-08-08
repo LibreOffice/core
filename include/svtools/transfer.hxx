@@ -316,9 +316,6 @@ public:
     ::com::sun::star::uno::Any  GetAny( SotFormatStringId nFormat ) const;
     ::com::sun::star::uno::Any  GetAny( const ::com::sun::star::datatransfer::DataFlavor& rFlavor ) const;
 
-    sal_Bool                    GetString( SotFormatStringId nFormat, String& rStr );
-    sal_Bool                    GetString( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, String& rStr );
-
     sal_Bool                    GetString( SotFormatStringId nFormat, OUString& rStr );
     sal_Bool                    GetString( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, OUString& rStr );
 
@@ -501,8 +498,8 @@ public:
     void                CopyINetImage( const INetImage& rINtImg );
     void                CopyImageMap( const ImageMap& rImgMap );
     void                CopyGraphic( const Graphic& rGrf );
-    void                CopyString( const String& rStr );
-    void                CopyString( sal_uInt16 nFmt, const String& rStr );
+    void                CopyString( const OUString& rStr );
+    void                CopyString( sal_uInt16 nFmt, const OUString& rStr );
     void                CopyAny( sal_uInt16 nFmt, const ::com::sun::star::uno::Any& rAny );
 
     void                CopyByteString( sal_uLong nFormatId, const OString& rStr );

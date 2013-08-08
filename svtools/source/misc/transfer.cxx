@@ -845,7 +845,7 @@ sal_Bool TransferableHelper::SetImageMap( const ImageMap& rIMap, const ::com::su
     SvMemoryStream aMemStm( 8192, 8192 );
 
     aMemStm.SetVersion( SOFFICE_FILEFORMAT_50 );
-    rIMap.Write( aMemStm, String() );
+    rIMap.Write( aMemStm, OUString() );
     maAny <<= Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( aMemStm.GetData() ), aMemStm.Seek( STREAM_SEEK_TO_END ) );
 
     return( maAny.hasValue() );
@@ -943,8 +943,8 @@ sal_Bool TransferableHelper::SetINetBookmark( const INetBookmark& rBmk,
 
         case SOT_FORMATSTR_ID_FILECONTENT:
         {
-            String aStr( RTL_CONSTASCII_USTRINGPARAM( "[InternetShortcut]\x0aURL=" ) );
-            maAny <<= OUString( aStr += rBmk.GetURL() );
+            OUString aStr( "[InternetShortcut]\x0aURL=" );
+            maAny <<= ( aStr += rBmk.GetURL() );
         }
         break;
 #endif
@@ -975,7 +975,7 @@ sal_Bool TransferableHelper::SetINetImage( const INetImage& rINtImg,
 
 sal_Bool TransferableHelper::SetObject( void* pUserObject, sal_uInt32 nUserObjectId, const DataFlavor& rFlavor )
 {
-    SotStorageStreamRef xStm( new SotStorageStream( String() ) );
+    SotStorageStreamRef xStm( new SotStorageStream( OUString() ) );
 
     xStm->SetVersion( SOFFICE_FILEFORMAT_50 );
 
@@ -1623,30 +1623,6 @@ Any TransferableDataHelper::GetAny( const DataFlavor& rFlavor ) const
 
 // -----------------------------------------------------------------------------
 
-sal_Bool TransferableDataHelper::GetString( SotFormatStringId nFormat, String& rStr )
-{
-    OUString aOUString;
-    sal_Bool        bRet = GetString( nFormat, aOUString );
-
-    rStr = aOUString;
-
-    return bRet;
-}
-
-// -----------------------------------------------------------------------------
-
-sal_Bool TransferableDataHelper::GetString( const DataFlavor& rFlavor, String& rStr )
-{
-    OUString aOUString;
-    sal_Bool        bRet = GetString( rFlavor, aOUString );
-
-    rStr = aOUString;
-
-    return bRet;
-}
-
-// -----------------------------------------------------------------------------
-
 sal_Bool TransferableDataHelper::GetString( SotFormatStringId nFormat, OUString& rStr )
 {
     DataFlavor aFlavor;
@@ -1932,7 +1908,7 @@ sal_Bool TransferableDataHelper::GetImageMap( const ::com::sun::star::datatransf
 
     if( bRet )
     {
-        rIMap.Read( *xStm, String() );
+        rIMap.Read( *xStm, OUString() );
         bRet = ( xStm->GetError() == ERRCODE_NONE );
     }
 
@@ -1976,7 +1952,7 @@ sal_Bool TransferableDataHelper::GetINetBookmark( const ::com::sun::star::datatr
         case( SOT_FORMATSTR_ID_SOLK ):
         case( SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR ):
         {
-            String aString;
+            OUString aString;
             if( GetString( rFlavor, aString ) )
             {
                 if( SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR == nFormat )
@@ -1986,32 +1962,32 @@ sal_Bool TransferableDataHelper::GetINetBookmark( const ::com::sun::star::datatr
                 }
                 else
                 {
-                    String      aURL, aDesc;
-                    sal_uInt16  nStart = aString.Search( '@' ), nLen = (sal_uInt16) aString.ToInt32();
+                    OUString    aURL, aDesc;
+                    sal_Int32   nStart = aString.indexOf( '@' ), nLen = aString.toInt32();
 
-                    if( !nLen && aString.GetChar( 0 ) != '0' )
+                    if( !nLen && aString[ 0 ] != '0' )
                     {
                         DBG_WARNING( "SOLK: 1. len=0" );
                     }
-                    if( nStart == STRING_NOTFOUND || nLen > aString.Len() - nStart - 3 )
+                    if( nStart == -1 || nLen > aString.getLength() - nStart - 3 )
                     {
                         DBG_WARNING( "SOLK: 1. illegal start or wrong len" );
                     }
-                    aURL = aString.Copy( nStart + 1, nLen );
+                    aURL = aString.copy( nStart + 1, nLen );
 
-                    aString.Erase( 0, nStart + 1 + nLen );
-                    nStart = aString.Search( '@' );
-                    nLen = (sal_uInt16) aString.ToInt32();
+                    aString = aString.replaceAt( 0, nStart + 1 + nLen, "" );
+                    nStart = aString.indexOf( '@' );
+                    nLen = aString.toInt32();
 
-                    if( !nLen && aString.GetChar( 0 ) != '0' )
+                    if( !nLen && aString[ 0 ] != '0' )
                     {
                         DBG_WARNING( "SOLK: 2. len=0" );
                     }
-                    if( nStart == STRING_NOTFOUND || nLen > aString.Len() - nStart - 1 )
+                    if( nStart == -1 || nLen > aString.getLength() - nStart - 1 )
                     {
                         DBG_WARNING( "SOLK: 2. illegal start or wrong len" );
                     }
-                    aDesc = aString.Copy( nStart+1, nLen );
+                    aDesc = aString.copy( nStart+1, nLen );
 
                     rBmk = INetBookmark( aURL, aDesc );
                     bRet = sal_True;

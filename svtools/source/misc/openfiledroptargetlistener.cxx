@@ -87,7 +87,7 @@ void SAL_CALL OpenFileDropTargetListener::drop( const css::datatransfer::dnd::Dr
             }
 
             // then, if necessary, the file format
-            String aFilePath;
+            OUString aFilePath;
             if ( !bFormatFound && aHelper.GetString( SOT_FORMAT_FILE, aFilePath ) )
                 implts_OpenFile( aFilePath );
         }

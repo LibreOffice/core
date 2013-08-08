@@ -520,7 +520,7 @@ void TransferDataContainer::CopyImageMap( const ImageMap& rImgMap )
 {
     SvMemoryStream aMemStm( 8192, 8192 );
     aMemStm.SetVersion( SOFFICE_FILEFORMAT_50 );
-    rImgMap.Write( aMemStm, String() );
+    rImgMap.Write( aMemStm, OUString() );
     CopyAnyData( SOT_FORMATSTR_ID_SVIM, (sal_Char*)aMemStm.GetData(),
                     aMemStm.Seek( STREAM_SEEK_TO_END ) );
 }
@@ -547,9 +547,9 @@ void TransferDataContainer::CopyGraphic( const Graphic& rGrf )
 
 // -----------------------------------------------------------------------------
 
-void TransferDataContainer::CopyString( sal_uInt16 nFmt, const String& rStr )
+void TransferDataContainer::CopyString( sal_uInt16 nFmt, const OUString& rStr )
 {
-    if( rStr.Len() )
+    if( !rStr.isEmpty() )
     {
         TDataCntnrEntry_Impl aEntry;
         aEntry.nId = nFmt;
@@ -562,7 +562,7 @@ void TransferDataContainer::CopyString( sal_uInt16 nFmt, const String& rStr )
 
 // -----------------------------------------------------------------------------
 
-void TransferDataContainer::CopyString( const String& rStr )
+void TransferDataContainer::CopyString( const OUString& rStr )
 {
     CopyString( SOT_FORMAT_STRING, rStr );
 }

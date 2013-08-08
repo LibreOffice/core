@@ -1417,13 +1417,13 @@ int SwTransferable::PasteData( TransferableDataHelper& rData,
 
         case EXCHG_OUT_ACTION_INSERT_HYPERLINK:
             {
-                String sURL, sDesc;
+                OUString sURL, sDesc;
                 if( SOT_FORMAT_FILE == nFormat )
                 {
-                    if( rData.GetString( nFormat, sURL ) && sURL.Len() )
+                    if( rData.GetString( nFormat, sURL ) && !sURL.isEmpty() )
                     {
                         SwTransferable::_CheckForURLOrLNKFile( rData, sURL, &sDesc );
-                        if( !sDesc.Len() )
+                        if( sDesc.isEmpty() )
                             sDesc = sURL;
                         nRet = 1;
                     }
@@ -1911,7 +1911,7 @@ int SwTransferable::_PasteTargetURL( TransferableDataHelper& rData,
     {
         if( aINetImg.GetImageURL().Len() && bInsertGRF )
         {
-            String sURL( aINetImg.GetImageURL() );
+            OUString sURL( aINetImg.GetImageURL() );
             SwTransferable::_CheckForURLOrLNKFile( rData, sURL );
 
             //!!! check at FileSystem - only then it make sense to test graphics !!!
@@ -2106,7 +2106,7 @@ int SwTransferable::_PasteDDE( TransferableDataHelper& rData,
 
     SwDDEFieldType* pDDETyp = (SwDDEFieldType*)pTyp;
 
-    String aExpand;
+    OUString aExpand;
     if( rData.GetString( FORMAT_STRING, aExpand ))
     {
         do {            // middle checked loop
@@ -2114,7 +2114,7 @@ int SwTransferable::_PasteDDE( TransferableDataHelper& rData,
             // When data comes from a spreadsheet, we add a DDE-table
             if( ( rData.HasFormat( SOT_FORMATSTR_ID_SYLK ) ||
                   rData.HasFormat( SOT_FORMATSTR_ID_SYLK_BIGCAPS ) ) &&
-                aExpand.Len() &&
+                !aExpand.isEmpty() &&
                  ( 1 < comphelper::string::getTokenCount(aExpand, '\n') ||
                        comphelper::string::getTokenCount(aExpand, '\t') ) )
             {
@@ -2248,10 +2248,10 @@ int SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
 
     case SOT_FORMAT_FILE:
         {
-            String sTxt;
+            OUString sTxt;
             if( 0 != ( nRet = rData.GetString( nFmt, sTxt ) ) )
             {
-                String sDesc;
+                OUString sDesc;
                 SwTransferable::_CheckForURLOrLNKFile( rData, sTxt, &sDesc );
 
                 aBkmk = INetBookmark(
@@ -2417,10 +2417,10 @@ int SwTransferable::_PasteAsHyperlink( TransferableDataHelper& rData,
                                         SwWrtShell& rSh, sal_uLong nFmt )
 {
     int nRet = 0;
-    String sFile;
-    if( rData.GetString( nFmt, sFile ) && sFile.Len() )
+    OUString sFile;
+    if( rData.GetString( nFmt, sFile ) && !sFile.isEmpty() )
     {
-        String sDesc;
+        OUString sDesc;
         SwTransferable::_CheckForURLOrLNKFile( rData, sFile, &sDesc );
 
         // first, make the URL absolute
@@ -2449,7 +2449,7 @@ int SwTransferable::_PasteAsHyperlink( TransferableDataHelper& rData,
         default:
             {
                 rSh.InsertURL( SwFmtINetFmt( sFile, OUString() ),
-                                sDesc.Len() ? sDesc : sFile );
+                                sDesc.isEmpty() ? sFile : sDesc);
             }
         }
         nRet = sal_True;
@@ -2468,8 +2468,8 @@ int SwTransferable::_PasteFileName( TransferableDataHelper& rData,
         nRet |= SWTRANSFER_GRAPHIC_INSERTED;
     if( !nRet )
     {
-        String sFile, sDesc;
-        if( rData.GetString( nFmt, sFile ) && sFile.Len() )
+        OUString sFile, sDesc;
+        if( rData.GetString( nFmt, sFile ) && !sFile.isEmpty() )
         {
             INetURLObject aMediaURL;
 
@@ -2536,7 +2536,7 @@ int SwTransferable::_PasteFileName( TransferableDataHelper& rData,
                     default:
                         {
                             rSh.InsertURL( SwFmtINetFmt( sFile, OUString() ),
-                                            sDesc.Len() ? sDesc : sFile );
+                                            sDesc.isEmpty() ? sFile : sDesc );
                         }
                     }
                     nRet = sal_True;
@@ -2552,8 +2552,8 @@ int SwTransferable::_PasteDBData( TransferableDataHelper& rData,
                                     const Point* pDragPt, sal_Bool bMsg )
 {
     int nRet = 0;
-    String sTxt;
-    if( rData.GetString( nFmt, sTxt ) && sTxt.Len() )
+    OUString sTxt;
+    if( rData.GetString( nFmt, sTxt ) && !sTxt.isEmpty() )
     {
         sal_uInt16 nWh = SOT_FORMATSTR_ID_SBA_CTRLDATAEXCHANGE == nFmt
                     ? 0
@@ -2690,7 +2690,7 @@ int SwTransferable::_PasteFileList( TransferableDataHelper& rData,
 }
 
 sal_Bool SwTransferable::_CheckForURLOrLNKFile( TransferableDataHelper& rData,
-                                        String& rFileName, String* pTitle )
+                                        OUString& rFileName, OUString* pTitle )
 {
     sal_Bool bIsURLFile = sal_False;
     INetBookmark aBkmk;
@@ -2703,10 +2703,10 @@ sal_Bool SwTransferable::_CheckForURLOrLNKFile( TransferableDataHelper& rData,
     }
     else
     {
-        xub_StrLen nLen = rFileName.Len();
-        if( 4 < nLen && '.' == rFileName.GetChar( nLen - 4 ))
+        sal_Int32 nLen = rFileName.getLength();
+        if( 4 < nLen && '.' == rFileName[ nLen - 4 ])
         {
-            String sExt( rFileName.Copy( nLen - 3 ));
+            String sExt( rFileName.copy( nLen - 3 ));
             if( sExt.EqualsIgnoreCaseAscii( "url" ))
             {
                 OSL_ENSURE( !&rFileName, "how do we read today .URL - Files?" );

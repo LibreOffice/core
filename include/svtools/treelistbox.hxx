@@ -125,7 +125,6 @@ public:
     void    SetPos( long nNewPos) { nPos = nNewPos; }
     long    GetPos() const { return nPos; }
     long    CalcOffset( long nItemLength, long nTabWidth );
-    // long CalcOffset( const String&, const OutputDevice& );
     sal_Bool    IsEditable() const { return (sal_Bool)((nFlags & SV_LBOXTAB_EDITABLE)!=0); }
     sal_Bool    IsPushable() const { return (sal_Bool)((nFlags & SV_LBOXTAB_PUSHABLE)!=0); }
 };

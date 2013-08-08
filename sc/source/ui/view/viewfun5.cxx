@@ -583,7 +583,7 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
     }
     else if ( nFormatId == SOT_FORMAT_FILE )
     {
-        String aFile;
+        OUString aFile;
         if ( aDataHelper.GetString( nFormatId, aFile ) )
             bRet = PasteFile( aPos, aFile, bLink );
     }
@@ -638,21 +638,21 @@ bool ScViewFunc::PasteLink( const uno::Reference<datatransfer::XTransferable>& r
     sal_uInt16 nRows = 1;
     if ( aDataHelper.HasFormat( SOT_FORMAT_STRING ) )
     {
-        String aDataStr;
+        OUString aDataStr;
         if ( aDataHelper.GetString( SOT_FORMAT_STRING, aDataStr ) )
         {
             //  get size from string the same way as in ScDdeLink::DataChanged
 
             aDataStr = convertLineEnd(aDataStr, LINEEND_LF);
-            xub_StrLen nLen = aDataStr.Len();
-            if (nLen && aDataStr.GetChar(nLen-1) == '\n')
-                aDataStr.Erase(nLen-1);
+            sal_Int32 nLen = aDataStr.getLength();
+            if (nLen && aDataStr[nLen-1] == '\n')
+                aDataStr = aDataStr.copy(0, nLen-1);
 
-            if (aDataStr.Len())
+            if (!aDataStr.isEmpty())
             {
                 nRows = comphelper::string::getTokenCount(aDataStr, '\n');
-                String aLine = aDataStr.GetToken( 0, '\n' );
-                if (aLine.Len())
+                OUString aLine = aDataStr.getToken( 0, '\n' );
+                if (!aLine.isEmpty())
                     nCols = comphelper::string::getTokenCount(aLine, '\t');
             }
         }
