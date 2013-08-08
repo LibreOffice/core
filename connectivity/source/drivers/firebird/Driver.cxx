@@ -32,6 +32,7 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
+using namespace com::sun::star::sdbcx;
 
 using namespace ::osl;
 
@@ -81,8 +82,9 @@ rtl::OUString FirebirdDriver::getImplementationName_Static() throw(RuntimeExcept
 Sequence< OUString > FirebirdDriver::getSupportedServiceNames_Static() throw (RuntimeException)
 {
     // TODO: add com.sun.star.sdbcx.Driver once all sdbc functionality is implemented
-    Sequence< OUString > aSNS( 1 );
+    Sequence< OUString > aSNS( 2 );
     aSNS[0] = OUString("com.sun.star.sdbc.Driver");
+    aSNS[0] = OUString("com.sun.star.sdbcx.Driver");
     return aSNS;
 }
 
@@ -167,6 +169,26 @@ sal_Int32 SAL_CALL FirebirdDriver::getMinorVersion(  ) throw(RuntimeException)
     return 0;
 }
 
+//----- XDataDefinitionSupplier
+uno::Reference< XTablesSupplier > SAL_CALL FirebirdDriver::getDataDefinitionByConnection(
+                                    const uno::Reference< XConnection >& rxConnection)
+    throw(SQLException, RuntimeException)
+{
+    (void) rxConnection;
+    // TODO: IMPLEMENT ME
+    return 0;
+}
+
+uno::Reference< XTablesSupplier > SAL_CALL FirebirdDriver::getDataDefinitionByURL(
+                    const OUString& rsURL,
+                    const uno::Sequence< PropertyValue >& rInfo)
+    throw(SQLException, RuntimeException)
+{
+    (void) rsURL;
+    (void) rInfo;
+    // TODO: IMPLEMENT ME
+    return 0;
+}
 
 namespace connectivity
 {
