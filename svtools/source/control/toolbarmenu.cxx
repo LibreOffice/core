@@ -540,7 +540,7 @@ void ToolbarMenu::enableEntry( int nEntryId, bool bEnable )
 
 // --------------------------------------------------------------------
 
-void ToolbarMenu::setEntryText( int nEntryId, const String& rStr )
+void ToolbarMenu::setEntryText( int nEntryId, const OUString& rStr )
 {
     ToolbarMenuEntry* pEntry = implSearchEntry( nEntryId );
     if( pEntry && pEntry->maText != rStr )
@@ -793,14 +793,14 @@ void ToolbarMenu::LoseFocus()
 
 // --------------------------------------------------------------------
 
-void ToolbarMenu::appendEntry( int nEntryId, const String& rStr, MenuItemBits nItemBits )
+void ToolbarMenu::appendEntry( int nEntryId, const OUString& rStr, MenuItemBits nItemBits )
 {
     appendEntry( new ToolbarMenuEntry( *this, nEntryId, rStr, nItemBits ) );
 }
 
 // --------------------------------------------------------------------
 
-void ToolbarMenu::appendEntry( int nEntryId, const String& rStr, const Image& rImage, MenuItemBits nItemBits )
+void ToolbarMenu::appendEntry( int nEntryId, const OUString& rStr, const Image& rImage, MenuItemBits nItemBits )
 {
     appendEntry( new ToolbarMenuEntry( *this, nEntryId, rImage, rStr, nItemBits ) );
 }

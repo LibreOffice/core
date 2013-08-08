@@ -66,8 +66,8 @@ public:
     virtual void    GetFocus();
     virtual void    LoseFocus();
 
-    void            appendEntry( int nEntryId, const String& rStr, MenuItemBits nItemBits = 0 );
-    void            appendEntry( int nEntryId, const String& rStr, const Image& rImage, MenuItemBits nItemBits = 0 );
+    void            appendEntry( int nEntryId, const OUString& rStr, MenuItemBits nItemBits = 0 );
+    void            appendEntry( int nEntryId, const OUString& rStr, const Image& rImage, MenuItemBits nItemBits = 0 );
     void            appendEntry( int nEntryId, Control* pControl, MenuItemBits nItemBits = 0 );
     void            appendSeparator();
 
@@ -78,7 +78,7 @@ public:
 
     void            enableEntry( int nEntryId, bool bEnable = true );
 
-    void            setEntryText( int nEntryId, const String& rStr );
+    void            setEntryText( int nEntryId, const OUString& rStr );
 
     void            setEntryImage( int nEntryId, const Image& rImage );
 
