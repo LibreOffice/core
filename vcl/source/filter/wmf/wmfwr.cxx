@@ -26,7 +26,6 @@
 #include <tools/helpers.hxx>
 #include <tools/tenccvt.hxx>
 #include <osl/endian.h>
-#include <i18nutil/unicode.hxx> //unicode::getUnicodeScriptType
 #include <vcl/dibtools.hxx>
 #include <vcl/metric.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
