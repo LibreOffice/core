@@ -31,7 +31,6 @@
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/filedlghelper.hxx>
 #include <svl/urihelper.hxx>
-#include <svl/cntwids.hrc>
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
 #include <unotools/bootstrap.hxx>

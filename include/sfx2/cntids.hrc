@@ -20,7 +20,6 @@
 #ifndef _CNTIDS_HRC
 #define _CNTIDS_HRC
 
-#include <svl/cntwids.hrc>
 #include <svl/solar.hrc>
 
 // Slot-ID's -----------------------------------------------------------------
