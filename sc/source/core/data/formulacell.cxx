@@ -3279,6 +3279,49 @@ class GroupTokenConverter
     ScDocument& mrDoc;
     ScFormulaCell& mrCell;
     const ScAddress& mrPos;
+
+    bool isSelfReferenceRelative(const ScAddress& rRefPos, SCROW nRelRow)
+    {
+        if (rRefPos.Col() != mrPos.Col())
+            return false;
+
+        SCROW nLen = mrCell.GetCellGroup()->mnLength;
+        SCROW nEndRow = mrPos.Row() + nLen - 1;
+
+        if (nRelRow < 0)
+        {
+            SCROW nTest = nEndRow;
+            nTest += nRelRow;
+            if (nTest >= mrPos.Row())
+                return true;
+        }
+        else if (nRelRow > 0)
+        {
+            SCROW nTest = mrPos.Row(); // top row.
+            nTest += nRelRow;
+            if (nTest <= nEndRow)
+                return true;
+        }
+
+        return false;
+    }
+
+    bool isSelfReferenceAbsolute(const ScAddress& rRefPos)
+    {
+        if (rRefPos.Col() != mrPos.Col())
+            return false;
+
+        SCROW nLen = mrCell.GetCellGroup()->mnLength;
+        SCROW nEndRow = mrPos.Row() + nLen - 1;
+
+        if (rRefPos.Row() < mrPos.Row())
+            return false;
+
+        if (rRefPos.Row() > nEndRow)
+            return false;
+
+        return true;
+    }
 public:
     GroupTokenConverter(sc::FormulaGroupContext& rCxt, ScTokenArray& rGroupTokens, ScDocument& rDoc, ScFormulaCell& rCell, const ScAddress& rPos) :
         mrCxt(rCxt), mrGroupTokens(rGroupTokens), mrDoc(rDoc), mrCell(rCell), mrPos(rPos) {}
@@ -3302,6 +3345,7 @@ public:
             // absolute reference state for row directions.
 
             const ScToken* pToken = static_cast<const ScToken*>(p);
+            SCROW nLen = mrCell.GetCellGroup()->mnLength;
             switch (pToken->GetType())
             {
                 case svSingleRef:
@@ -3310,20 +3354,26 @@ public:
                     ScAddress aRefPos = aRef.toAbs(mrPos);
                     if (aRef.IsRowRel())
                     {
+                        if (isSelfReferenceRelative(aRefPos, aRef.Row()))
+                            return false;
+
                         // Fetch double array guarantees that the length of the
                         // returned array equals or greater than the requested
                         // length.
 
-                        const double* pArray = mrDoc.FetchDoubleArray(mrCxt, aRefPos, mrCell.GetCellGroup()->mnLength);
+                        const double* pArray = mrDoc.FetchDoubleArray(mrCxt, aRefPos, nLen);
                         if (!pArray)
                             return false;
 
-                        formula::SingleVectorRefToken aTok(pArray, mrCell.GetCellGroup()->mnLength);
+                        formula::SingleVectorRefToken aTok(pArray, nLen);
                         mrGroupTokens.AddToken(aTok);
                     }
                     else
                     {
                         // Absolute row reference.
+                        if (isSelfReferenceAbsolute(aRefPos))
+                            return false;
+
                         formula::FormulaTokenRef pNewToken = mrDoc.ResolveStaticReference(aRefPos);
                         if (!pNewToken)
                             return false;
@@ -3337,6 +3387,23 @@ public:
                     ScComplexRefData aRef = pToken->GetDoubleRef();
                     ScRange aAbs = aRef.toAbs(mrCell.aPos);
 
+                    // Check for self reference.
+                    if (aRef.Ref1.IsRowRel())
+                    {
+                        if (isSelfReferenceRelative(aAbs.aStart, aRef.Ref1.Row()))
+                            return false;
+                    }
+                    else if (isSelfReferenceAbsolute(aAbs.aStart))
+                        return false;
+
+                    if (aRef.Ref2.IsRowRel())
+                    {
+                        if (isSelfReferenceRelative(aAbs.aEnd, aRef.Ref2.Row()))
+                            return false;
+                    }
+                    else if (isSelfReferenceAbsolute(aAbs.aEnd))
+                        return false;
+
                     // Row reference is relative.
                     bool bAbsFirst = !aRef.Ref1.IsRowRel();
                     bool bAbsLast = !aRef.Ref2.IsRowRel();
@@ -3344,7 +3411,7 @@ public:
                     size_t nCols = aAbs.aEnd.Col() - aAbs.aStart.Col() + 1;
                     std::vector<const double*> aArrays;
                     aArrays.reserve(nCols);
-                    SCROW nArrayLength = mrCell.GetCellGroup()->mnLength;
+                    SCROW nArrayLength = nLen;
                     SCROW nRefRowSize = aAbs.aEnd.Row() - aAbs.aStart.Row() + 1;
                     if (!bAbsLast)
                     {
@@ -3364,6 +3431,32 @@ public:
 
                     formula::DoubleVectorRefToken aTok(aArrays, nArrayLength, nRefRowSize, bAbsFirst, bAbsLast);
                     mrGroupTokens.AddToken(aTok);
+                }
+                break;
+                case svIndex:
+                {
+                    // Named range.
+                    ScRangeName* pNames = mrDoc.GetRangeName();
+                    if (!pNames)
+                        // This should never fail.
+                        return false;
+
+                    ScRangeData* pRange = pNames->findByIndex(p->GetIndex());
+                    if (!pRange)
+                        // No named range exists by that index.
+                        return false;
+
+                    ScTokenArray* pNamedTokens = pRange->GetCode();
+                    if (!pNamedTokens)
+                        // This named range is empty.
+                        return false;
+
+                    mrGroupTokens.AddOpCode(ocOpen);
+
+                    if (!convert(*pNamedTokens))
+                        return false;
+
+                    mrGroupTokens.AddOpCode(ocClose);
                 }
                 break;
                 default:
