@@ -167,7 +167,6 @@
 #define HID_OPTCAPTION_PAGE                                     "SW_HID_OPTCAPTION_PAGE"
 #define HID_TP_TOX_SELECT                                       "SW_HID_TP_TOX_SELECT"
 #define HID_TP_TOX_ENTRY                                        "SW_HID_TP_TOX_ENTRY"
-#define HID_TOX_STYLES_PAGE                                     "SW_HID_TOX_STYLES_PAGE"
 #define HID_TP_VISITING_CARDS                                   "SW_HID_TP_VISITING_CARDS"
 #define HID_DLG_ADD_IDX_STYLES                                  "SW_HID_DLG_ADD_IDX_STYLES"
 #define HID_ADD_STYLES_TLB                                      "SW_HID_ADD_STYLES_TLB"

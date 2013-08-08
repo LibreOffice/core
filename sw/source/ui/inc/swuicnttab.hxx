@@ -463,14 +463,11 @@ public:
 
 class SwTOXStylesTabPage : public SfxTabPage
 {
-    FixedLine       aFormatFL;
-    FixedText       aLevelFT2;
-    ListBox         aLevelLB;
-    ImageButton     aAssignBT;
-    FixedText       aTemplateFT;
-    ListBox         aParaLayLB;
-    PushButton      aStdBT;
-    PushButton      aEditStyleBT;
+    ListBox*        m_pLevelLB;
+    PushButton*     m_pAssignBT;
+    ListBox*        m_pParaLayLB;
+    PushButton*     m_pStdBT;
+    PushButton*     m_pEditStyleBT;
 
     SwForm*         m_pCurrentForm;
 

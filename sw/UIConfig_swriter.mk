@@ -140,6 +140,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/splittable \
 	sw/uiconfig/swriter/ui/statisticsinfopage \
 	sw/uiconfig/swriter/ui/stringinput \
+	sw/uiconfig/swriter/ui/tocstylespage \
 	sw/uiconfig/swriter/ui/tablecolumnpage \
 	sw/uiconfig/swriter/ui/tableproperties \
 	sw/uiconfig/swriter/ui/tabletextflowpage \

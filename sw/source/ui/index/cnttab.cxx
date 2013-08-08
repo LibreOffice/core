@@ -3648,33 +3648,28 @@ void SwTokenWindow::GetFocus()
     }
 }
 
-SwTOXStylesTabPage::SwTOXStylesTabPage(Window* pParent, const SfxItemSet& rAttrSet ) :
-    SfxTabPage(pParent, SW_RES(TP_TOX_STYLES), rAttrSet),
-    aFormatFL(this,     SW_RES(FL_FORMAT  )),
-    aLevelFT2(this,     SW_RES(FT_LEVEL  )),
-    aLevelLB(this,      SW_RES(LB_LEVEL  )),
-    aAssignBT(this,     SW_RES(BT_ASSIGN  )),
-    aTemplateFT(this,   SW_RES(FT_TEMPLATE)),
-    aParaLayLB(this,    SW_RES(LB_PARALAY )),
-    aStdBT(this,        SW_RES(BT_STD    )),
-    aEditStyleBT(this,  SW_RES(BT_EDIT_STYLE    )),
-    m_pCurrentForm(0)
+SwTOXStylesTabPage::SwTOXStylesTabPage(Window* pParent, const SfxItemSet& rAttrSet )
+    : SfxTabPage(pParent, "TocStylesPage", "modules/swriter/ui/tocstylespage.ui", rAttrSet)
+    , m_pCurrentForm(0)
 {
-    FreeResource();
+    get(m_pLevelLB, "levels");
+    get(m_pAssignBT, "assign");
+    get(m_pParaLayLB, "styles");
+    m_pParaLayLB->SetStyle(m_pParaLayLB->GetStyle() | WB_SORT);
+    get(m_pStdBT, "default");
+    get(m_pEditStyleBT, "edit");
+    long nHeight = m_pLevelLB->GetTextHeight() * 16;
+    m_pLevelLB->set_height_request(nHeight);
+    m_pParaLayLB->set_height_request(nHeight);
 
     SetExchangeSupport( sal_True );
 
-    aEditStyleBT.SetClickHdl   (LINK(   this, SwTOXStylesTabPage, EditStyleHdl));
-    aAssignBT.SetClickHdl      (LINK(   this, SwTOXStylesTabPage, AssignHdl));
-    aStdBT.SetClickHdl         (LINK(   this, SwTOXStylesTabPage, StdHdl));
-    aParaLayLB.SetSelectHdl    (LINK(   this, SwTOXStylesTabPage, EnableSelectHdl));
-    aLevelLB.SetSelectHdl      (LINK(   this, SwTOXStylesTabPage, EnableSelectHdl));
-    aParaLayLB.SetDoubleClickHdl(LINK(  this, SwTOXStylesTabPage, DoubleClickHdl));
-
-    aStdBT.SetAccessibleRelationMemberOf(&aFormatFL);
-    aAssignBT.SetAccessibleRelationMemberOf(&aFormatFL);
-    aEditStyleBT.SetAccessibleRelationMemberOf(&aFormatFL);
-
+    m_pEditStyleBT->SetClickHdl   (LINK(   this, SwTOXStylesTabPage, EditStyleHdl));
+    m_pAssignBT->SetClickHdl      (LINK(   this, SwTOXStylesTabPage, AssignHdl));
+    m_pStdBT->SetClickHdl         (LINK(   this, SwTOXStylesTabPage, StdHdl));
+    m_pParaLayLB->SetSelectHdl    (LINK(   this, SwTOXStylesTabPage, EnableSelectHdl));
+    m_pLevelLB->SetSelectHdl(LINK(this, SwTOXStylesTabPage, EnableSelectHdl));
+    m_pParaLayLB->SetDoubleClickHdl(LINK(  this, SwTOXStylesTabPage, DoubleClickHdl));
 }
 
 SwTOXStylesTabPage::~SwTOXStylesTabPage()
@@ -3682,21 +3677,21 @@ SwTOXStylesTabPage::~SwTOXStylesTabPage()
     delete m_pCurrentForm;
 }
 
-sal_Bool    SwTOXStylesTabPage::FillItemSet( SfxItemSet& )
+sal_Bool SwTOXStylesTabPage::FillItemSet( SfxItemSet& )
 {
     return sal_True;
 }
 
-void    SwTOXStylesTabPage::Reset( const SfxItemSet& rSet )
+void SwTOXStylesTabPage::Reset( const SfxItemSet& rSet )
 {
     ActivatePage(rSet);
 }
 
-void    SwTOXStylesTabPage::ActivatePage( const SfxItemSet& )
+void SwTOXStylesTabPage::ActivatePage( const SfxItemSet& )
 {
     m_pCurrentForm = new SwForm(GetForm());
-    aParaLayLB.Clear();
-    aLevelLB.Clear();
+    m_pParaLayLB->Clear();
+    m_pLevelLB->Clear();
 
     // not hyperlink for user directories
 
@@ -3713,7 +3708,7 @@ void    SwTOXStylesTabPage::ActivatePage( const SfxItemSet& )
         aStr += m_pCurrentForm->GetTemplate( 0 );
         aStr += aDeliEnd;
     }
-    aLevelLB.InsertEntry(aStr);
+    m_pLevelLB->InsertEntry(aStr);
 
     for( i=1; i < nSize; ++i )
     {
@@ -3735,7 +3730,7 @@ void    SwTOXStylesTabPage::ActivatePage( const SfxItemSet& )
             aCpy += m_pCurrentForm->GetTemplate( i );
             aCpy += aDeliEnd;
         }
-        aLevelLB.InsertEntry( aCpy );
+        m_pLevelLB->InsertEntry( aCpy );
     }
 
     // initialise templates
@@ -3745,18 +3740,18 @@ void    SwTOXStylesTabPage::ActivatePage( const SfxItemSet& )
 
     for( i = 0; i < nSz; ++i )
         if( !(pColl = &rSh.GetTxtFmtColl( i ))->IsDefault() )
-            aParaLayLB.InsertEntry( pColl->GetName() );
+            m_pParaLayLB->InsertEntry( pColl->GetName() );
 
     // query pool collections and set them for the directory
     for( i = 0; i < m_pCurrentForm->GetFormMax(); ++i )
     {
         aStr = m_pCurrentForm->GetTemplate( i );
         if( aStr.Len() &&
-            LISTBOX_ENTRY_NOTFOUND == aParaLayLB.GetEntryPos( aStr ))
-            aParaLayLB.InsertEntry( aStr );
+            LISTBOX_ENTRY_NOTFOUND == m_pParaLayLB->GetEntryPos( aStr ))
+            m_pParaLayLB->InsertEntry( aStr );
     }
 
-    EnableSelectHdl(&aParaLayLB);
+    EnableSelectHdl(m_pParaLayLB);
 }
 
 int     SwTOXStylesTabPage::DeactivatePage( SfxItemSet* /*pSet*/  )
@@ -3773,9 +3768,9 @@ SfxTabPage* SwTOXStylesTabPage::Create( Window* pParent,
 
 IMPL_LINK( SwTOXStylesTabPage, EditStyleHdl, Button *, pBtn )
 {
-    if( LISTBOX_ENTRY_NOTFOUND != aParaLayLB.GetSelectEntryPos())
+    if( LISTBOX_ENTRY_NOTFOUND != m_pParaLayLB->GetSelectEntryPos())
     {
-        SfxStringItem aStyle(SID_STYLE_EDIT, aParaLayLB.GetSelectEntry());
+        SfxStringItem aStyle(SID_STYLE_EDIT, m_pParaLayLB->GetSelectEntry());
         SfxUInt16Item aFamily(SID_STYLE_FAMILY, SFX_STYLE_FAMILY_PARA);
         Window* pDefDlgParent = Application::GetDefDialogParent();
         Application::SetDefDialogParent( pBtn );
@@ -3792,26 +3787,26 @@ IMPL_LINK( SwTOXStylesTabPage, EditStyleHdl, Button *, pBtn )
  --------------------------------------------------------------------*/
 IMPL_LINK_NOARG(SwTOXStylesTabPage, AssignHdl)
 {
-    sal_uInt16 nLevPos   = aLevelLB.GetSelectEntryPos();
-    sal_uInt16 nTemplPos = aParaLayLB.GetSelectEntryPos();
+    sal_uInt16 nLevPos   = m_pLevelLB->GetSelectEntryPos();
+    sal_uInt16 nTemplPos = m_pParaLayLB->GetSelectEntryPos();
     if(nLevPos   != LISTBOX_ENTRY_NOTFOUND &&
        nTemplPos != LISTBOX_ENTRY_NOTFOUND)
     {
-        String aStr(aLevelLB.GetEntry(nLevPos));
+        String aStr(m_pLevelLB->GetEntry(nLevPos));
         sal_uInt16 nDelPos = aStr.Search(aDeliStart);
         if(nDelPos != STRING_NOTFOUND)
             aStr.Erase(nDelPos-1);
         aStr += ' ';
         aStr += aDeliStart;
-        aStr += aParaLayLB.GetSelectEntry();
+        aStr += m_pParaLayLB->GetSelectEntry();
 
-        m_pCurrentForm->SetTemplate(nLevPos, aParaLayLB.GetSelectEntry());
+        m_pCurrentForm->SetTemplate(nLevPos, m_pParaLayLB->GetSelectEntry());
 
         aStr += aDeliEnd;
 
-        aLevelLB.RemoveEntry(nLevPos);
-        aLevelLB.InsertEntry(aStr, nLevPos);
-        aLevelLB.SelectEntry(aStr);
+        m_pLevelLB->RemoveEntry(nLevPos);
+        m_pLevelLB->InsertEntry(aStr, nLevPos);
+        m_pLevelLB->SelectEntry(aStr);
         Modify();
     }
     return 0;
@@ -3819,15 +3814,15 @@ IMPL_LINK_NOARG(SwTOXStylesTabPage, AssignHdl)
 
 IMPL_LINK_NOARG(SwTOXStylesTabPage, StdHdl)
 {
-    sal_uInt16 nPos = aLevelLB.GetSelectEntryPos();
+    sal_uInt16 nPos = m_pLevelLB->GetSelectEntryPos();
     if(nPos != LISTBOX_ENTRY_NOTFOUND)
-    {   String aStr(aLevelLB.GetEntry(nPos));
+    {   String aStr(m_pLevelLB->GetEntry(nPos));
         sal_uInt16 nDelPos = aStr.Search(aDeliStart);
         if(nDelPos != STRING_NOTFOUND)
             aStr.Erase(nDelPos-1);
-        aLevelLB.RemoveEntry(nPos);
-        aLevelLB.InsertEntry(aStr, nPos);
-        aLevelLB.SelectEntry(aStr);
+        m_pLevelLB->RemoveEntry(nPos);
+        m_pLevelLB->InsertEntry(aStr, nPos);
+        m_pLevelLB->SelectEntry(aStr);
         m_pCurrentForm->SetTemplate(nPos, aEmptyStr);
         Modify();
     }
@@ -3836,12 +3831,12 @@ IMPL_LINK_NOARG(SwTOXStylesTabPage, StdHdl)
 
 IMPL_LINK_NOARG_INLINE_START(SwTOXStylesTabPage, DoubleClickHdl)
 {
-    String aTmpName( aParaLayLB.GetSelectEntry() );
+    String aTmpName( m_pParaLayLB->GetSelectEntry() );
     SwWrtShell& rSh = ((SwMultiTOXTabDialog*)GetTabDialog())->GetWrtShell();
 
-    if(aParaLayLB.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND &&
-       (aLevelLB.GetSelectEntryPos() == 0 || SwMultiTOXTabDialog::IsNoNum(rSh, aTmpName)))
-        AssignHdl(&aAssignBT);
+    if(m_pParaLayLB->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND &&
+       (m_pLevelLB->GetSelectEntryPos() == 0 || SwMultiTOXTabDialog::IsNoNum(rSh, aTmpName)))
+        AssignHdl(m_pAssignBT);
     return 0;
 }
 IMPL_LINK_NOARG_INLINE_END(SwTOXStylesTabPage, DoubleClickHdl)
@@ -3851,14 +3846,14 @@ IMPL_LINK_NOARG_INLINE_END(SwTOXStylesTabPage, DoubleClickHdl)
  --------------------------------------------------------------------*/
 IMPL_LINK_NOARG(SwTOXStylesTabPage, EnableSelectHdl)
 {
-    aStdBT.Enable(aLevelLB.GetSelectEntryPos()  != LISTBOX_ENTRY_NOTFOUND);
+    m_pStdBT->Enable(m_pLevelLB->GetSelectEntryPos()  != LISTBOX_ENTRY_NOTFOUND);
 
     SwWrtShell& rSh = ((SwMultiTOXTabDialog*)GetTabDialog())->GetWrtShell();
-    String aTmpName(aParaLayLB.GetSelectEntry());
-    aAssignBT.Enable(aParaLayLB.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND &&
-                     LISTBOX_ENTRY_NOTFOUND != aLevelLB.GetSelectEntryPos() &&
-       (aLevelLB.GetSelectEntryPos() == 0 || SwMultiTOXTabDialog::IsNoNum(rSh, aTmpName)));
-    aEditStyleBT.Enable(aParaLayLB.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND );
+    String aTmpName(m_pParaLayLB->GetSelectEntry());
+    m_pAssignBT->Enable(m_pParaLayLB->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND &&
+                     LISTBOX_ENTRY_NOTFOUND != m_pLevelLB->GetSelectEntryPos() &&
+       (m_pLevelLB->GetSelectEntryPos() == 0 || SwMultiTOXTabDialog::IsNoNum(rSh, aTmpName)));
+    m_pEditStyleBT->Enable(m_pParaLayLB->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND );
     return 0;
 }
 

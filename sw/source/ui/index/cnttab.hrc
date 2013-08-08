@@ -24,12 +24,8 @@
 
 #define LB_ENTRY       20
 #define ED_ENTRY       22
-#define BT_STD         26
 #define FL_ENTRY       28
 #define LB_LEVEL       29
-#define FT_TEMPLATE    30
-#define LB_PARALAY     31
-#define BT_ASSIGN      32
 #define FL_FORMAT      33
 #define BT_EDIT_STYLE       40
 #define CB_CASE             43
