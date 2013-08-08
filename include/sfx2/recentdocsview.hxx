@@ -24,6 +24,18 @@ struct LoadRecentFile
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >      xDispatch;
 };
 
+
+enum APPLICATION_FILTER
+{
+    FILTER_NONE,
+    FILTER_WRITER,
+    FILTER_CALC,
+    FILTER_IMPRESS,
+    FILTER_DRAW,
+    FILTER_DATABASE,
+    FILTER_MATH,
+};
+
 class SFX2_DLLPUBLIC RecentDocsView :   protected ::comphelper::OBaseMutex,
                                         public ThumbnailView
 {
@@ -36,22 +48,26 @@ public:
 
     virtual Size GetOptimalSize() const;
 
-    void SetThumbnailSize(long ThumbnailWidth, long ThumbnailHeight);
-    void SetHeight(long Height);
+    void SetThumbnailSize(long thumbnailSize);
+    long GetThumbnailSize();
+    void SetFilter(APPLICATION_FILTER filter);
 
     DECL_STATIC_LINK( RecentDocsView, ExecuteHdl_Impl, LoadRecentFile* );
+
+    static bool isFilteredExtension(APPLICATION_FILTER filter, const OUString &rExt);
+    static BitmapEx getDefaultThumbnail(const OUString &rExt);
 
 protected:
     virtual void OnItemDblClicked(ThumbnailViewItem *pItem);
 
-    long    mnItemMaxWidth;
-    long    mnItemMaxHeight;
+    bool isUnfilteredFile(const OUString &rURL);
+
+    APPLICATION_FILTER mFilter;
+
+    long    mnItemMaxSize;
+    long    mnTextHeight;
     long    mnItemPadding;
     long    mnItemMaxTextLength;
-    long    mnItemThumbnailMaxHeight;
-    long    mnItemMaxHeightSub;
-
-    long mnHeight;
 
     int     mnMaxThumbnailItems;
 };
