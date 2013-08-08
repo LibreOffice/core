@@ -22,6 +22,7 @@ $(eval $(call gb_CppunitTest_use_api,writerperfect_stream,\
 $(eval $(call gb_CppunitTest_use_ure,writerperfect_stream))
 
 $(eval $(call gb_CppunitTest_use_externals,writerperfect_stream,\
+	boost_headers \
 	wpd \
 ))
 
