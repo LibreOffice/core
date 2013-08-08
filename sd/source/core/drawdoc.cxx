@@ -77,6 +77,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <rtl/ustring.hxx>
 #include <rtl/uri.hxx>
+#include <osl/file.h>
 
 #include <editeng/outliner.hxx>
 #include "drawdoc.hxx"
@@ -1019,6 +1020,7 @@ Reference<XElement> getRoot()
         xConfigProvider->createInstanceWithArguments(
             "com.sun.star.configuration.ConfigurationAccess",
             Sequence<Any>( &propValue, 1 ) ), UNO_QUERY_THROW );
+
     Sequence< rtl::OUString > aFiles;
     xNameAccess->getByName( "LayoutListFiles" ) >>= aFiles;
     rtl::OUString aURL;
@@ -1044,7 +1046,7 @@ Reference<XElement> getRoot()
             aURL = aSysPath;
     }
 
-    const Reference<XDocumentBuilder> xDocBuilder( css::xml::dom::DocumentBuilder::create( comphelper::getComponentContext (xServiceFactory)) );
+    const Reference<XDocumentBuilder> xDocBuilder( css::xml::dom::DocumentBuilder::create( comphelper::getComponentContext (xServiceFactory) ) );
     const Reference<XDocument> xDoc = xDocBuilder->parseURI( aURL );
     const Reference<XElement> xRoot = xDoc->getDocumentElement();
     return xRoot;                      //this loops seems to work only once,so returning the root element

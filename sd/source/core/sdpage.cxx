@@ -1227,6 +1227,9 @@ rtl::OUString enumtoString(AutoLayout aut)
         case AUTOLAYOUT_TITLE_2CONTENT_OVER_CONTENT:
         retstr="AUTOLAYOUT_TITLE_2CONTENT_OVER_CONTENT";
         break;
+        case AUTOLAYOUT_TITLE_2CONTENT:
+        retstr="AUTOLAYOUT_TITLE_2CONTENT";
+        break;
         default:
         retstr="unknown";
         break;
@@ -1314,12 +1317,12 @@ static void CalcAutoLayoutRectangles( SdPage& rPage, int nLayout, Rectangle* rRe
                     sValue = presObjSizeWidth->getNodeValue();
                     propvalue[1] = sValue.toDouble();
 
-                    Reference<XNode> presObjPos = presObjAttributes->getNamedItem("title-shape-relative-pos");
-                    sValue = presObjPos->getNodeValue();
+                    Reference<XNode> presObjPosX = presObjAttributes->getNamedItem("title-shape-relative-posX");
+                    sValue = presObjPosX->getNodeValue();
                     propvalue[2] = sValue.toDouble();
 
-                    Reference<XNode> presObjBool = presObjAttributes->getNamedItem("boolx");
-                    sValue = presObjBool->getNodeValue();
+                    Reference<XNode> presObjPosY = presObjAttributes->getNamedItem("title-shape-relative-posY");
+                    sValue = presObjPosY->getNodeValue();
                     propvalue[3] = sValue.toDouble();
 
                     if(count==0)
@@ -1327,23 +1330,19 @@ static void CalcAutoLayoutRectangles( SdPage& rPage, int nLayout, Rectangle* rRe
                         Size aTitleSize ( aTitleRect.GetSize() );
                         aTitleSize.Height() = sal_Int32(aTitleSize.Height() * propvalue[0]);
                         aTitleSize.Width() = sal_Int32(aTitleSize.Width() * propvalue[1]);
-                        if(propvalue[3]==1)
-                            aTitlePos.X() = sal_Int32(aTitlePos.X() +(aTitleSize.Width() * propvalue[2]));
-                        else
-                            aTitlePos.Y() = sal_Int32(aTitlePos.Y() + (aTitleSize.Height() * propvalue[2]));
+                        aTitlePos.X() = sal_Int32(aTitlePos.X() +(aTitleSize.Width() * propvalue[2]));
+                        aTitlePos.Y() = sal_Int32(aTitlePos.Y() + (aTitleSize.Height() * propvalue[3]));
                         rRectangle[count] = Rectangle (aTitlePos, aTitleSize);
                         count = count+1;
                     }
                     else
                     {
-                        aLayoutSize = aTempSize;//to regain fixed layout size
-                        aLayoutPos = aTempPnt;
+                        aLayoutSize = aTempSize; //to re-gain fixed layout size
+                        aLayoutPos = aTempPnt;  //to re-gain fixed layout pos
                         aLayoutSize.Height() = sal_Int32(aLayoutSize.Height() * propvalue[0]);
                         aLayoutSize.Width() = sal_Int32(aLayoutSize.Width() * propvalue[1]);
-                        if(propvalue[3]==1)
-                            aLayoutPos.X() = sal_Int32(aLayoutPos.X() +(aLayoutSize.Width() * propvalue[2]));
-                        else
-                            aLayoutPos.Y() = sal_Int32(aLayoutPos.Y() + (aLayoutSize.Height() * propvalue[2]));
+                        aLayoutPos.X() = sal_Int32(aLayoutPos.X() +(aLayoutSize.Width() * propvalue[2]));
+                        aLayoutPos.Y() = sal_Int32(aLayoutPos.Y() + (aLayoutSize.Height() * propvalue[3]));
                         rRectangle[count] = Rectangle (aLayoutPos, aLayoutSize);
                         count=count+1;
                     }
@@ -1360,59 +1359,59 @@ static void CalcAutoLayoutRectangles( SdPage& rPage, int nLayout, Rectangle* rRe
     case 1: // title, 2 shapes
     case 9: // title, 2 vertical shapes
 
-        if( bRightToLeft && (nLayout != 9) )
-            ::std::swap( rRectangle[1], rRectangle[2] );
+        // if( bRightToLeft && (nLayout != 9) )
+        //     ::std::swap( rRectangle[1], rRectangle[2] );
         break;
     case 2: // title, shape, 2 shapes
-        aTempPnt = aLayoutPos;
-        aTempSize = aLayoutSize;
-        aLayoutSize.Height() = long (aLayoutSize.Height() * 0.477);
-        aLayoutSize.Width() = long (aLayoutSize.Width() * 0.488);
-        aLayoutPos.X() = long (aLayoutPos.X() + aLayoutSize.Width() * 1.05);
-        rRectangle[2] = Rectangle (aLayoutPos, aLayoutSize);
+        // aTempPnt = aLayoutPos;
+        // aTempSize = aLayoutSize;
+        // aLayoutSize.Height() = long (aLayoutSize.Height() * 0.477);
+        // aLayoutSize.Width() = long (aLayoutSize.Width() * 0.488);
+        // aLayoutPos.X() = long (aLayoutPos.X() + aLayoutSize.Width() * 1.05);
+        // rRectangle[2] = Rectangle (aLayoutPos, aLayoutSize);
 
-        aLayoutPos.Y() = long (aLayoutPos.Y() + aLayoutSize.Height() * 1.095);
-        rRectangle[3] = Rectangle (aLayoutPos, aLayoutSize);
+        // aLayoutPos.Y() = long (aLayoutPos.Y() + aLayoutSize.Height() * 1.095);
+        // rRectangle[3] = Rectangle (aLayoutPos, aLayoutSize);
 
-        aLayoutPos = aTempPnt;
-        aLayoutSize = aTempSize;
-        aLayoutSize.Width() = long (aLayoutSize.Width() * 0.488);
-        rRectangle[1] = Rectangle (aLayoutPos, aLayoutSize);
+        // aLayoutPos = aTempPnt;
+        // aLayoutSize = aTempSize;
+        // aLayoutSize.Width() = long (aLayoutSize.Width() * 0.488);
+        // rRectangle[1] = Rectangle (aLayoutPos, aLayoutSize);
 
-        if( bRightToLeft )
-        {
-            ::std::swap( rRectangle[1].Left(), rRectangle[2].Left() );
-            rRectangle[3].Left() = rRectangle[2].Left();
-        }
+        // if( bRightToLeft )
+        // {
+        //     ::std::swap( rRectangle[1].Left(), rRectangle[2].Left() );
+        //     rRectangle[3].Left() = rRectangle[2].Left();
+        // }
         break;
     case 3: // title, 2 shapes, shape
-        aTempPnt = aLayoutPos;
-        aTempSize = aLayoutSize;
-        aLayoutSize.Height() = long (aLayoutSize.Height() * 0.477);
-        aLayoutSize.Width() = long (aLayoutSize.Width() * 0.488);
-        rRectangle[1] = Rectangle (aLayoutPos, aLayoutSize);
+        // aTempPnt = aLayoutPos;
+        // aTempSize = aLayoutSize;
+        // aLayoutSize.Height() = long (aLayoutSize.Height() * 0.477);
+        // aLayoutSize.Width() = long (aLayoutSize.Width() * 0.488);
+        // rRectangle[1] = Rectangle (aLayoutPos, aLayoutSize);
 
-        aLayoutPos.Y() = long (aLayoutPos.Y() + aLayoutSize.Height() * 1.095);
-        rRectangle[2] = Rectangle (aLayoutPos, aLayoutSize);
+        // aLayoutPos.Y() = long (aLayoutPos.Y() + aLayoutSize.Height() * 1.095);
+        // rRectangle[2] = Rectangle (aLayoutPos, aLayoutSize);
 
-        aLayoutPos = aTempPnt;
-        aLayoutSize = aTempSize;
-        aLayoutSize.Width() = long (aLayoutSize.Width() * 0.488);
-        aLayoutPos.X() = long (aLayoutPos.X() + aLayoutSize.Width() * 1.05);
-        rRectangle[3] = Rectangle (aLayoutPos, aLayoutSize);
+        // aLayoutPos = aTempPnt;
+        // aLayoutSize = aTempSize;
+        // aLayoutSize.Width() = long (aLayoutSize.Width() * 0.488);
+        // aLayoutPos.X() = long (aLayoutPos.X() + aLayoutSize.Width() * 1.05);
+        // rRectangle[3] = Rectangle (aLayoutPos, aLayoutSize);
 
-        if( bRightToLeft )
-        {
-            ::std::swap( rRectangle[1].Left(), rRectangle[2].Left() );
-            rRectangle[3].Left() = rRectangle[2].Left();
-        }
+        // if( bRightToLeft )
+        // {
+        //     ::std::swap( rRectangle[1].Left(), rRectangle[2].Left() );
+        //     rRectangle[3].Left() = rRectangle[2].Left();
+        // }
         break;
     case 4: // title, shape above shape
-        aLayoutSize.Height() = long (aLayoutSize.Height() * 0.477);
-        rRectangle[1] = Rectangle (aLayoutPos, aLayoutSize);
+        // aLayoutSize.Height() = long (aLayoutSize.Height() * 0.477);
+        // rRectangle[1] = Rectangle (aLayoutPos, aLayoutSize);
 
-        aLayoutPos.Y() = long (aLayoutPos.Y() + aLayoutSize.Height() * 1.095);
-        rRectangle[2] = Rectangle (aLayoutPos, aLayoutSize);
+        // aLayoutPos.Y() = long (aLayoutPos.Y() + aLayoutSize.Height() * 1.095);
+        // rRectangle[2] = Rectangle (aLayoutPos, aLayoutSize);
         break;
 
     case 5: // title, 2 shapes above shape
@@ -1428,7 +1427,7 @@ static void CalcAutoLayoutRectangles( SdPage& rPage, int nLayout, Rectangle* rRe
         // aLayoutPos.Y() = long (aLayoutPos.Y() + aLayoutSize.Height() * 1.095);
         // aLayoutSize.Width() = long (aLayoutSize.Width() / 0.488);
         // rRectangle[3] = Rectangle (aLayoutPos, aLayoutSize);
-        // break;
+        break;
     case 6: // title, 4 shapes
     {
         // sal_uLong nX = long (aLayoutPos.X());
@@ -1445,7 +1444,7 @@ static void CalcAutoLayoutRectangles( SdPage& rPage, int nLayout, Rectangle* rRe
 
         // aLayoutPos.X() = nX;
         // rRectangle[4] = Rectangle (aLayoutPos, aLayoutSize);
-        // break;
+        break;
     }
     case 7: // vertical title, shape above shape
     {
@@ -1491,26 +1490,26 @@ static void CalcAutoLayoutRectangles( SdPage& rPage, int nLayout, Rectangle* rRe
     }
     case 11: // title, 6 shapes
     {
-        sal_uLong nX = long (aLayoutPos.X());
+        // sal_uLong nX = long (aLayoutPos.X());
 
-        aLayoutSize.Height() = long (aLayoutSize.Height() * 0.477);
-        aLayoutSize.Width()  = long (aLayoutSize.Width() * 0.322);
-        rRectangle[1] = Rectangle (aLayoutPos, aLayoutSize);
+        // aLayoutSize.Height() = long (aLayoutSize.Height() * 0.477);
+        // aLayoutSize.Width()  = long (aLayoutSize.Width() * 0.322);
+        // rRectangle[1] = Rectangle (aLayoutPos, aLayoutSize);
 
-        aLayoutPos.X() = long (nX + aLayoutSize.Width() * 1.05);
-        rRectangle[2] = Rectangle (aLayoutPos, aLayoutSize);
+        // aLayoutPos.X() = long (nX + aLayoutSize.Width() * 1.05);
+        // rRectangle[2] = Rectangle (aLayoutPos, aLayoutSize);
 
-        aLayoutPos.X() = long (nX + aLayoutSize.Width() * 2 * 1.05);
-        rRectangle[3] = Rectangle (aLayoutPos, aLayoutSize);
+        // aLayoutPos.X() = long (nX + aLayoutSize.Width() * 2 * 1.05);
+        // rRectangle[3] = Rectangle (aLayoutPos, aLayoutSize);
 
-        aLayoutPos.Y() = long (aLayoutPos.Y() + aLayoutSize.Height() * 1.095);
-        rRectangle[4] = Rectangle (aLayoutPos, aLayoutSize);
+        // aLayoutPos.Y() = long (aLayoutPos.Y() + aLayoutSize.Height() * 1.095);
+        // rRectangle[4] = Rectangle (aLayoutPos, aLayoutSize);
 
-        aLayoutPos.X() = long (nX + aLayoutSize.Width() * 1.05);
-        rRectangle[5] = Rectangle (aLayoutPos, aLayoutSize);
+        // aLayoutPos.X() = long (nX + aLayoutSize.Width() * 1.05);
+        // rRectangle[5] = Rectangle (aLayoutPos, aLayoutSize);
 
-        aLayoutPos.X() = nX;
-        rRectangle[6] = Rectangle (aLayoutPos, aLayoutSize);
+        // aLayoutPos.X() = nX;
+        // rRectangle[6] = Rectangle (aLayoutPos, aLayoutSize);
 
         break;
     }
