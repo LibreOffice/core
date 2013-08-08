@@ -2550,34 +2550,33 @@ IMPL_LINK_NOARG(CodeCompleteListBox, ImplSelectHdl)
     return 0;
 }
 
+ExtTextView* CodeCompleteListBox::GetParentEditView()
+{
+    return pCodeCompleteWindow->pParent->GetEditView();
+}
+
 void CodeCompleteListBox::InsertSelectedEntry()
 {
     if( !aFuncBuffer.toString().isEmpty() )
     {
         // if the user typed in something: remove, and insert
-        TextPaM aEnd(pCodeCompleteWindow->aTextSelection.GetEnd().GetPara(), pCodeCompleteWindow->GetTextSelection().GetEnd().GetIndex() + aFuncBuffer.getLength());
-        TextPaM aStart(pCodeCompleteWindow->aTextSelection.GetEnd().GetPara(), pCodeCompleteWindow->GetTextSelection().GetEnd().GetIndex() );
-        pCodeCompleteWindow->pParent->GetEditView()->SetSelection(TextSelection(aStart, aEnd));
-        pCodeCompleteWindow->pParent->GetEditView()->DeleteSelected();
+        TextPaM aEnd( GetParentEditView()->CursorEndOfLine(pCodeCompleteWindow->GetTextSelection().GetEnd()) );
+        GetParentEditView()->SetSelection(TextSelection(pCodeCompleteWindow->GetTextSelection().GetStart(), aEnd ) );
+        GetParentEditView()->DeleteSelected();
 
         if( !((OUString) GetEntry( GetSelectEntryPos() )).isEmpty() )
         {//if the user selected something
-            pCodeCompleteWindow->pParent->GetEditView()->InsertText( (OUString) GetEntry(GetSelectEntryPos()), sal_True );
-            HideAndRestoreFocus();
-        }
-        else
-        {
-            HideAndRestoreFocus();
+            GetParentEditView()->InsertText( (OUString) GetEntry(GetSelectEntryPos()), sal_True );
         }
     }
     else
     {
         if( !((OUString) GetEntry( GetSelectEntryPos() )).isEmpty() )
         {//if the user selected something
-            pCodeCompleteWindow->pParent->GetEditView()->InsertText( (OUString) GetEntry(GetSelectEntryPos()), sal_True );
-            HideAndRestoreFocus();
+            GetParentEditView()->InsertText( (OUString) GetEntry(GetSelectEntryPos()), sal_True );
         }
     }
+    HideAndRestoreFocus();
 }
 
 void CodeCompleteListBox::SetMatchingEntries()
@@ -2593,10 +2592,12 @@ void CodeCompleteListBox::SetMatchingEntries()
     }
 }
 
+
 void CodeCompleteListBox::KeyInput( const KeyEvent& rKeyEvt )
 {
     sal_Unicode aChar = rKeyEvt.GetKeyCode().GetCode();
-    if( ( aChar >= KEY_A ) && ( aChar <= KEY_Z ) )
+    if( (( aChar >= KEY_A ) && ( aChar <= KEY_Z ))
+        || ((aChar >= KEY_0) && (aChar <= KEY_9)) )
     {
         aFuncBuffer.append(rKeyEvt.GetCharCode());
         SetMatchingEntries();
@@ -2608,19 +2609,58 @@ void CodeCompleteListBox::KeyInput( const KeyEvent& rKeyEvt )
             case KEY_ESCAPE: // hide, do nothing
                 HideAndRestoreFocus();
                 break;
-            case KEY_TAB: case KEY_SPACE:
+            case KEY_TAB:
+                if( !aFuncBuffer.isEmpty() )
+                {
+                    sal_uInt16 nInd = GetSelectEntryPos();
+                    if( nInd+1 != LISTBOX_ENTRY_NOTFOUND )
+                    {//if there is something selected
+                        bool bFound = false;
+                        if( nInd == GetEntryCount() )
+                            nInd = 0;
+                        for( sal_uInt16 i = nInd+1; i != GetEntryCount(); ++i )
+                        {
+                            OUString sEntry = (OUString) GetEntry(i);
+                            if( sEntry.startsWithIgnoreAsciiCase( aFuncBuffer.toString() ) )
+                            {
+                                SelectEntry( sEntry );
+                                bFound = true;
+                                break;
+                            }
+                        }
+                        if( !bFound )
+                            SetMatchingEntries();
+
+                        TextPaM aEnd( GetParentEditView()->CursorEndOfLine(pCodeCompleteWindow->GetTextSelection().GetEnd()) );
+                        GetParentEditView()->SetSelection(TextSelection(pCodeCompleteWindow->GetTextSelection().GetStart(), aEnd ) );
+                        GetParentEditView()->DeleteSelected();
+                        GetParentEditView()->InsertText( GetSelectEntry(), sal_False );
+                    }
+                }
+                break;
+            case KEY_SPACE:
                 HideAndRestoreFocus();
                 break;
             case KEY_BACKSPACE: case KEY_DELETE:
-                if( aFuncBuffer.toString() != OUString("") )
+                if( !aFuncBuffer.toString().isEmpty() )
                 {
+                    //if there was something inserted by tab: add it to aFuncBuffer
+                    TextSelection aSel( GetParentEditView()->GetSelection() );
+                    TextPaM aEnd( GetParentEditView()->CursorEndOfLine(pCodeCompleteWindow->GetTextSelection().GetEnd()) );
+                    GetParentEditView()->SetSelection(TextSelection(pCodeCompleteWindow->GetTextSelection().GetStart(), aEnd ) );
+                    OUString aTabInsertedStr( ((OUString)GetParentEditView()->GetSelected()) );
+                    GetParentEditView()->SetSelection( aSel );
+
+                    if( !aTabInsertedStr.isEmpty() && aTabInsertedStr != aFuncBuffer.toString() )
+                    {
+                        aFuncBuffer.makeStringAndClear();
+                        aFuncBuffer = aFuncBuffer.append(aTabInsertedStr);
+                    }
                     aFuncBuffer = aFuncBuffer.remove(aFuncBuffer.getLength()-1, 1);
                     SetMatchingEntries();
                 }
                 else
-                {
                     pCodeCompleteWindow->ClearAndHide();
-                }
                 break;
             case KEY_RETURN:
                 InsertSelectedEntry();
@@ -2637,7 +2677,7 @@ void CodeCompleteListBox::KeyInput( const KeyEvent& rKeyEvt )
 void CodeCompleteListBox::HideAndRestoreFocus()
 {
     pCodeCompleteWindow->Hide();
-    pCodeCompleteWindow->pParent->GetEditView()->SetSelection( pCodeCompleteWindow->pParent->GetEditView()->CursorEndOfLine(pCodeCompleteWindow->GetTextSelection().GetStart()) );
+    GetParentEditView()->SetSelection( GetParentEditView()->CursorEndOfLine(pCodeCompleteWindow->GetTextSelection().GetStart()) );
     pCodeCompleteWindow->pParent->GrabFocus();
 }
 
