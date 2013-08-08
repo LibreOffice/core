@@ -88,8 +88,7 @@ $(foreach pkgformat,$(5),\
 	) \
 	$(4) \
 	-format $(pkgformat) \
-	$(if $(filter TRUE,$(VERBOSE)),-verbose, \
-		$(if $(findstring s,$(MAKEFLAGS)),-quiet)) \
+	$(if $(VERBOSE)$(verbose),-verbose,-quiet) \
 )
 endef
 
