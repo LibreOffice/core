@@ -73,9 +73,15 @@ const ScAutoNameAddresses& ScAutoNameCache::GetNameOccurrences( const String& rN
                     const EditTextObject* p = aIter.getEditText();
                     if (p)
                     {
-                        ScFieldEditEngine& rEngine = pDoc->GetEditEngine();
-                        rEngine.SetText(*p);
-                        aStr = ScEditUtil::GetMultilineString(rEngine); // string with line separators between paragraphs
+                        sal_Int32 nParCount = p->GetParagraphCount();
+                        OUStringBuffer aRet( nParCount * 80 );
+                        for (sal_Int32 nPar=0; nPar<nParCount; nPar++)
+                        {
+                            if (nPar > 0)
+                                aRet.append('\n');
+                            aRet.append( p->GetText( nPar ));
+                        }
+                        aStr = aRet.makeStringAndClear();
                     }
                 }
                 break;
