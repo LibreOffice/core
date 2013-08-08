@@ -804,6 +804,8 @@ void ScOutputData::DrawDocumentBackground()
 
 namespace {
 
+static const double lclCornerRectTransparency = 40.0;
+
 void drawDataBars( const ScDataBarInfo* pOldDataBarInfo, OutputDevice* pDev, const Rectangle& rRect)
 {
     long nPosZero = 0;
@@ -2096,7 +2098,7 @@ void ScOutputData::DrawRefMark( SCCOL nRefStartX, SCROW nRefStartY,
             }
             if ( bHandle && bRight && bBottom )
             {
-                mpDev->SetLineColor();
+                mpDev->SetLineColor( rColor );
                 mpDev->SetFillColor( rColor );
 
                 const sal_Int32 aRadius = 4;
@@ -2112,10 +2114,15 @@ void ScOutputData::DrawRefMark( SCCOL nRefStartX, SCROW nRefStartY,
                 sal_Int32 aRectMinY2 = nMinY + aRadius;
 
                 // Draw corner rectangles
-                mpDev->DrawRect( Rectangle( aRectMaxX1, aRectMaxY1, aRectMaxX2, aRectMaxY2 ) );
-                mpDev->DrawRect( Rectangle( aRectMinX1, aRectMinY1, aRectMinX2, aRectMinY2 ) );
-                mpDev->DrawRect( Rectangle( aRectMinX1, aRectMaxY1, aRectMinX2, aRectMaxY2 ) );
-                mpDev->DrawRect( Rectangle( aRectMaxX1, aRectMinY1, aRectMaxX2, aRectMinY2 ) );
+                Rectangle aLowerRight( aRectMaxX1, aRectMaxY1, aRectMaxX2, aRectMaxY2 );
+                Rectangle aUpperLeft ( aRectMinX1, aRectMinY1, aRectMinX2, aRectMinY2 );
+                Rectangle aLowerLeft ( aRectMinX1, aRectMaxY1, aRectMinX2, aRectMaxY2 );
+                Rectangle aUpperRight( aRectMaxX1, aRectMinY1, aRectMaxX2, aRectMinY2 );
+
+                mpDev->DrawTransparent( PolyPolygon( Polygon( aLowerRight ) ), lclCornerRectTransparency );
+                mpDev->DrawTransparent( PolyPolygon( Polygon( aUpperLeft  ) ), lclCornerRectTransparency );
+                mpDev->DrawTransparent( PolyPolygon( Polygon( aLowerLeft  ) ), lclCornerRectTransparency );
+                mpDev->DrawTransparent( PolyPolygon( Polygon( aUpperRight ) ), lclCornerRectTransparency );
             }
         }
     }
