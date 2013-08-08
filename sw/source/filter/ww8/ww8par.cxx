@@ -1948,6 +1948,8 @@ void SwWW8ImplReader::Read_HdFt(int nSect, const SwPageDesc *pPrev,
                     : pPD->GetMaster();
 
                 SwFrmFmt* pHdFtFmt;
+                // If we have empty first page header and footer.
+                bool bNoFirst = !(grpfIhdt & WW8_HEADER_FIRST) && !(grpfIhdt & WW8_FOOTER_FIRST);
                 if (bFooter)
                 {
                     bIsFooter = true;
@@ -1956,7 +1958,7 @@ void SwWW8ImplReader::Read_HdFt(int nSect, const SwPageDesc *pPrev,
                         pPD->GetMaster().SetFmtAttr(SwFmtFooter(true));
                     if (bUseLeft)
                         pPD->GetLeft().SetFmtAttr(SwFmtFooter(true));
-                    if (bUseFirst)
+                    if (bUseFirst || (rSection.maSep.fTitlePage && bNoFirst))
                         pPD->GetFirst().SetFmtAttr(SwFmtFooter(true));
                     pHdFtFmt = const_cast<SwFrmFmt*>(rFmt.GetFooter().GetFooterFmt());
                 }
@@ -1968,7 +1970,7 @@ void SwWW8ImplReader::Read_HdFt(int nSect, const SwPageDesc *pPrev,
                         pPD->GetMaster().SetFmtAttr(SwFmtHeader(true));
                     if (bUseLeft)
                         pPD->GetLeft().SetFmtAttr(SwFmtHeader(true));
-                    if (bUseFirst)
+                    if (bUseFirst || (rSection.maSep.fTitlePage && bNoFirst))
                         pPD->GetFirst().SetFmtAttr(SwFmtHeader(true));
                     pHdFtFmt = const_cast<SwFrmFmt*>(rFmt.GetHeader().GetHeaderFmt());
                 }

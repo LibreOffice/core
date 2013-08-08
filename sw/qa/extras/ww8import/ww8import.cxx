@@ -47,6 +47,7 @@ public:
     void testN757118();
     void testN757905();
     void testAllGapsWord();
+    void testN823651();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -68,6 +69,7 @@ void Test::run()
         {"n757118.doc", &Test::testN757118},
         {"n757905.doc", &Test::testN757905},
         {"all_gaps_word.doc", &Test::testAllGapsWord},
+        {"n823651.doc", &Test::testN823651},
     };
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
     {
@@ -224,6 +226,14 @@ void Test::testAllGapsWord()
     borderTest.testTheBorders(mxComponent);
 }
 
+
+void Test::testN823651()
+{
+    // Character height was 10pt instead of 7.5pt in the header.
+    uno::Reference<beans::XPropertySet> xStyle(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = getProperty< uno::Reference<text::XTextRange> >(xStyle, "HeaderTextFirst")->getText();
+    CPPUNIT_ASSERT_EQUAL(7.5f, getProperty<float>(getParagraphOfText(1, xText), "CharHeight"));
+}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 
