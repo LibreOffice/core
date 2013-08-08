@@ -2776,7 +2776,7 @@ static void ParseCSS1_border_style( const CSS1Expression *pExpr,
     while( n<4 && pExpr && !pExpr->GetOp() )
     {
         sal_uInt16 nLine = n==0 || n==2 ? BOX_LINE_BOTTOM : BOX_LINE_LEFT;
-        sal_uInt16 nValue;
+        sal_uInt16 nValue = 0;
         if( CSS1_IDENT==pExpr->GetType() &&
             SvxCSS1Parser::GetEnum( aBorderStyleTable, pExpr->GetString(),
                                     nValue ) )
