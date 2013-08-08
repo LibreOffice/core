@@ -74,17 +74,9 @@ void OStatementCommonBase::freeStatementHandle()
         isc_dsql_free_statement(m_statusVector,
                                 &m_aStatementHandle,
                                 DSQL_drop);
-        try {
-            evaluateStatusVector(m_statusVector,
-                                 "isc_dsql_free_statement",
-                                 *this);
-        }
-        catch (SQLException e)
-        {
-            // we cannot throw any exceptions here anyway
-            SAL_WARN("connectivity.firebird",
-                     "isc_dsql_free_statement failed\n" << e.Message);
-        }
+        evaluateStatusVector(m_statusVector,
+                             "isc_dsql_free_statement",
+                             *this);
     }
 }
 
@@ -130,9 +122,10 @@ void SAL_CALL OStatementCommonBase::close()
     dispose();
 }
 
-int OStatementCommonBase::prepareAndDescribeStatement(const OUString& sql,
+void OStatementCommonBase::prepareAndDescribeStatement(const OUString& sql,
                                                       XSQLDA*& pOutSqlda,
                                                       XSQLDA* pInSqlda)
+    throw (SQLException)
 {
     MutexGuard aGuard(m_pConnection->getMutex());
 
@@ -145,48 +138,43 @@ int OStatementCommonBase::prepareAndDescribeStatement(const OUString& sql,
         pOutSqlda->sqln = 10;
     }
 
-    int aErr = 0;
+    ISC_STATUS aErr = 0;
 
     aErr = isc_dsql_allocate_statement(m_statusVector,
                                        &m_pConnection->getDBHandle(),
                                        &m_aStatementHandle);
 
     if (aErr)
-    {
-        SAL_WARN("connectivity.firebird", "isc_dsql_allocate_statement failed");
-        return aErr;
-    }
-    else
-    {
-        aErr = isc_dsql_prepare(m_statusVector,
-                                &m_pConnection->getTransaction(),
-                                &m_aStatementHandle,
-                                0,
-                                OUStringToOString(sql, RTL_TEXTENCODING_UTF8).getStr(),
-                                FIREBIRD_SQL_DIALECT,
-                                pInSqlda);
-    }
+        evaluateStatusVector(m_statusVector,
+                             "isc_dsql_allocate_statement",
+                             *this);
+
+    aErr = isc_dsql_prepare(m_statusVector,
+                            &m_pConnection->getTransaction(),
+                            &m_aStatementHandle,
+                            0,
+                            OUStringToOString(sql, RTL_TEXTENCODING_UTF8).getStr(),
+                            FIREBIRD_SQL_DIALECT,
+                            pInSqlda);
 
     if (aErr)
-    {
-        SAL_WARN("connectivity.firebird", "isc_dsql_prepare failed");
-        return aErr;
-    }
-    else
-    {
-        aErr = isc_dsql_describe(m_statusVector,
-                                 &m_aStatementHandle,
-                                 1,
-                                 pOutSqlda);
-    }
+        evaluateStatusVector(m_statusVector,
+                             "isc_dsql_prepare",
+                             *this);
+
+    aErr = isc_dsql_describe(m_statusVector,
+                             &m_aStatementHandle,
+                             1,
+                             pOutSqlda);
+
+
+    if (aErr)
+        evaluateStatusVector(m_statusVector,
+                             "isc_dsql_describe",
+                             *this);
 
     // Ensure we have enough space in pOutSqlda
-    if (aErr)
-    {
-        SAL_WARN("connectivity.firebird", "isc_dsql_describe failed");
-        return aErr;
-    }
-    else if (!aErr && (pOutSqlda->sqld > pOutSqlda->sqln))
+    if (pOutSqlda->sqld > pOutSqlda->sqln)
     {
         int n = pOutSqlda->sqld;
         free(pOutSqlda);
@@ -200,16 +188,11 @@ int OStatementCommonBase::prepareAndDescribeStatement(const OUString& sql,
 
     // Process each XSQLVAR parameter structure in the output XSQLDA
     if (aErr)
-    {
-        SAL_WARN("connectivity.firebird","isc_dsql_describe failed when resizing pOutSqlda");
-        return aErr;
-    }
-    else
-    {
-        mallocSQLVAR(pOutSqlda);
-    }
+        evaluateStatusVector(m_statusVector,
+                             "isc_dsql_describe",
+                             *this);
 
-    return aErr;
+    mallocSQLVAR(pOutSqlda);
 }
 
 // ---- XMultipleResults - UNSUPPORTED ----------------------------------------

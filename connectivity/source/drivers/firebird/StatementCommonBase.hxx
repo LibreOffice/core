@@ -86,9 +86,12 @@ namespace connectivity
                                                                 ::com::sun::star::uno::Any& rValue,
                                                                 sal_Int32 nHandle) const;
             virtual ~OStatementCommonBase();
-            int prepareAndDescribeStatement(const OUString& sqlIn,
-                                                  XSQLDA*& pOutSqlda,
-                                                  XSQLDA* pInSqlda=0);
+
+            void prepareAndDescribeStatement(const OUString& sqlIn,
+                                             XSQLDA*& pOutSqlda,
+                                             XSQLDA* pInSqlda=0)
+                throw (::com::sun::star::sdbc::SQLException);
+
             bool isDDLStatement(isc_stmt_handle& aStatementHandle)
                 throw (::com::sun::star::sdbc::SQLException);
 

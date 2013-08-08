@@ -110,24 +110,18 @@ uno::Reference< XResultSet > SAL_CALL OStatement::executeQuery(const OUString& s
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
     XSQLDA* pOutSqlda = 0;
-    int aErr = 0;
+    ISC_STATUS aErr = 0;
 
-    aErr = prepareAndDescribeStatement(sql,
-                                       pOutSqlda);
+    prepareAndDescribeStatement(sql,
+                                pOutSqlda);
+
+    aErr = isc_dsql_execute(m_statusVector,
+                            &m_pConnection->getTransaction(),
+                            &m_aStatementHandle,
+                            1,
+                            NULL);
     if (aErr)
-    {
-        SAL_WARN("connectivity.firebird", "prepareAndDescribeStatement failed");
-    }
-    else
-    {
-        aErr = isc_dsql_execute(m_statusVector,
-                                &m_pConnection->getTransaction(),
-                                &m_aStatementHandle,
-                                1,
-                                NULL);
-        if (aErr)
-            SAL_WARN("connectivity.firebird", "isc_dsql_execute failed" );
-    }
+        SAL_WARN("connectivity.firebird", "isc_dsql_execute failed");
 
     m_xResultSet = new OResultSet(m_pConnection,
                                   uno::Reference< XInterface >(*this),
@@ -135,14 +129,11 @@ uno::Reference< XResultSet > SAL_CALL OStatement::executeQuery(const OUString& s
                                   pOutSqlda);
 
     // TODO: deal with cleanup
-//    close();
 
     evaluateStatusVector(m_statusVector, sql, *this);
 
     if (isDDLStatement(m_aStatementHandle))
-    {
         m_pConnection->commit();
-    }
 
     return m_xResultSet;
 }

@@ -79,20 +79,15 @@ void OPreparedStatement::ensurePrepared()
         m_pInSqlda->sqln = 10;
     } // TODO: free this on closing
 
-    aErr = prepareAndDescribeStatement(m_sSqlStatement,
-                                       m_pOutSqlda,
-                                       m_pInSqlda);
-    if (aErr)
-    {
-        SAL_WARN("connectivity.firebird", "prepareAndDescribeStatement failed");
-    }
-    else if (m_aStatementHandle)
-    {
-        isc_dsql_describe_bind(m_statusVector,
-                               &m_aStatementHandle,
-                               1,
+    prepareAndDescribeStatement(m_sSqlStatement,
+                               m_pOutSqlda,
                                m_pInSqlda);
-    }
+
+
+    aErr = isc_dsql_describe_bind(m_statusVector,
+                                  &m_aStatementHandle,
+                                  1,
+                                  m_pInSqlda);
 
     if (aErr)
     {
