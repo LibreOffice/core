@@ -817,6 +817,18 @@ static const FunctionData saFuncTableOdf[] =
     { "CHISQINV",               0,                      NOID,   NOID,   2,  2,  V, { VR }, FUNCFLAG_MACROCALLODF }
 };
 
+/** Functions defined by calc, but not in OpenFormula nor supported by Excel. */
+static const FunctionData saFuncTableOOoLO[] =
+{
+    { "ORG.OPENOFFICE.WEEKS",       "ORG.OPENOFFICE.WEEKS",       NOID,   NOID,   3,  3,  V, { VR }, FUNCFLAG_MACROCALL_NEW | FUNCFLAG_EXTERNAL },
+    { "ORG.OPENOFFICE.MONTHS",      "ORG.OPENOFFICE.MONTHS",      NOID,   NOID,   3,  3,  V, { VR }, FUNCFLAG_MACROCALL_NEW | FUNCFLAG_EXTERNAL },
+    { "ORG.OPENOFFICE.YEARS",       "ORG.OPENOFFICE.YEARS",       NOID,   NOID,   3,  3,  V, { VR }, FUNCFLAG_MACROCALL_NEW | FUNCFLAG_EXTERNAL },
+    { "ORG.OPENOFFICE.ISLEAPYEAR",  "ORG.OPENOFFICE.ISLEAPYEAR",  NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW | FUNCFLAG_EXTERNAL },
+    { "ORG.OPENOFFICE.DAYSINMONTH", "ORG.OPENOFFICE.DAYSINMONTH", NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW | FUNCFLAG_EXTERNAL },
+    { "ORG.OPENOFFICE.DAYSINYEAR",  "ORG.OPENOFFICE.DAYSINYEAR",  NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW | FUNCFLAG_EXTERNAL },
+    { "ORG.OPENOFFICE.WEEKSINYEAR", "ORG.OPENOFFICE.WEEKSINYEAR", NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW | FUNCFLAG_EXTERNAL },
+    { "ORG.OPENOFFICE.ROT13",       "ORG.OPENOFFICE.ROT13",       NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW | FUNCFLAG_EXTERNAL }
+};
 // ----------------------------------------------------------------------------
 
 const sal_Unicode API_TOKEN_OPEN            = '(';
@@ -937,6 +949,7 @@ FunctionProviderImpl::FunctionProviderImpl( FilterType eFilter, BiffType eBiff, 
     initFuncs( saFuncTableOox, STATIC_ARRAY_END( saFuncTableOox ), nMaxParam, bImportFilter, eFilter );
     initFuncs( saFuncTable2013, STATIC_ARRAY_END( saFuncTable2013 ), nMaxParam, bImportFilter, eFilter );
     initFuncs( saFuncTableOdf, STATIC_ARRAY_END( saFuncTableOdf ), nMaxParam, bImportFilter, eFilter );
+    initFuncs( saFuncTableOOoLO, STATIC_ARRAY_END( saFuncTableOOoLO ), nMaxParam, bImportFilter, eFilter );
 }
 
 void FunctionProviderImpl::initFunc( const FunctionData& rFuncData, sal_uInt8 nMaxParam )
