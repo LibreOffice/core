@@ -307,6 +307,12 @@ int OpenclDevice::GeneratBinFromKernelSource( cl_program program, const char * c
             binaries[i] = (char*) malloc( sizeof(char) * binarySizes[i] );
             if ( binaries[i] == NULL )
             {
+                for ( unsigned int j = 0; j < i ; j++)
+                {
+                    if (binaries[j])
+                        free(binaries[j]);
+                }
+                free(binaries);
                 return 0;
             }
         }
@@ -513,12 +519,14 @@ int OpenclDevice::CompileKernelFile( GPUEnv *gpuInfo, const char *buildOption )
         b_error |= fseek( fd, 0, SEEK_SET ) < 0;
         if ( b_error )
         {
+            free(mpArryDevsID);
             return 0;
         }
 
         binary = (char*) malloc( length + 2 );
         if ( !binary )
         {
+            free(mpArryDevsID);
             return 0;
         }
 
@@ -531,7 +539,12 @@ int OpenclDevice::CompileKernelFile( GPUEnv *gpuInfo, const char *buildOption )
         // grab the handles to all of the devices in the context.
         clStatus = clGetContextInfo( gpuInfo->mpContext, CL_CONTEXT_DEVICES,
                        sizeof( cl_device_id ) * numDevices, mpArryDevsID, NULL );
-        CHECK_OPENCL( clStatus, "clGetContextInfo" );
+        if (clStatus != CL_SUCCESS)
+        {
+            fprintf (stderr, "OpenCL error code is %d at " SAL_DETAIL_WHERE " when clGetContextInfo .\n", clStatus);
+            free(binary);
+            return 0;
+        }
 
         fprintf(stderr, "Create kernel from binary\n");
         gpuInfo->mpArryPrograms[idx] = clCreateProgramWithBinary( gpuInfo->mpContext,numDevices,
