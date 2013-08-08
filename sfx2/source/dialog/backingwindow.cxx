@@ -80,7 +80,7 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     mpAccExec( NULL )
 {
     m_pUIBuilder = new VclBuilder(this, getUIRootDir(),
-      "modules/StartModule/ui/startcenter.ui",
+      "sfx/ui/startcenter.ui",
       "StartCenter" );
     get(mpWriterButton,    "writer");
     get(mpCalcButton,      "calc");

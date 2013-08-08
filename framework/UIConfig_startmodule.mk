@@ -21,8 +21,4 @@ $(eval $(call gb_UIConfig_add_toolbarfiles,modules/StartModule,\
 	framework/uiconfig/startmodule/toolbar/standardbar \
 ))
 
-$(eval $(call gb_UIConfig_add_uifiles,modules/StartModule,\
-	framework/uiconfig/startmodule/ui/startcenter \
-))
-
 # vim: set noet sw=4 ts=4:
