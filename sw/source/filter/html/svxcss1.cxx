@@ -412,7 +412,7 @@ void SvxCSS1PropertyInfo::DestroyBorderInfos()
 
 void SvxCSS1PropertyInfo::Clear()
 {
-    aId.Erase();
+    aId = "";
     bTopMargin = bBottomMargin = sal_False;
     bLeftMargin = bRightMargin = bTextIndent = sal_False;
     nLeftMargin = nRightMargin = 0;
@@ -662,15 +662,12 @@ void SvxCSS1PropertyInfo::SetBoxItem( SfxItemSet& rItemSet,
     DestroyBorderInfos();
 }
 
-SvxCSS1MapEntry::SvxCSS1MapEntry( const String& rKey, const SfxItemSet& rItemSet,
+SvxCSS1MapEntry::SvxCSS1MapEntry( const OUString& rKey, const SfxItemSet& rItemSet,
                                   const SvxCSS1PropertyInfo& rProp ) :
-    aKey( rKey ),
+    aKey( rKey.toAsciiUpperCase() ),
     aItemSet( rItemSet ),
     aPropInfo( rProp )
-{
-    // TODO: ToUpperAscii
-    aKey.ToUpperAscii();
-}
+{}
 
 sal_Bool SvxCSS1Parser::StyleParsed( const CSS1Selector * /*pSelector*/,
                                  SfxItemSet& /*rItemSet*/,
@@ -888,6 +885,8 @@ sal_Bool SvxCSS1Parser::ParseStyleOption( const OUString& rIn,
 sal_Bool SvxCSS1Parser::GetEnum( const CSS1PropertyEnum *pPropTable,
                           const OUString &rValue, sal_uInt16& rEnum )
 {
+    OUString aValue( rValue.toAsciiLowerCase() );
+
     while( pPropTable->pName )
     {
         if( !rValue.equalsIgnoreAsciiCaseAscii( pPropTable->pName ) )
@@ -1086,7 +1085,7 @@ static void ParseCSS1_font_family( const CSS1Expression *pExpr,
 {
     OSL_ENSURE( pExpr, "no expression" );
 
-    String aName, aStyleName;
+    OUString aName, aStyleName;
     FontFamily eFamily = FAMILY_DONTKNOW;
     FontPitch ePitch = PITCH_DONTKNOW;
     rtl_TextEncoding eEnc = rParser.GetDfltEncoding();
@@ -1098,7 +1097,7 @@ static void ParseCSS1_font_family( const CSS1Expression *pExpr,
         CSS1Token eType = pExpr->GetType();
         if( CSS1_IDENT==eType || CSS1_STRING==eType )
         {
-            String aIdent( pExpr->GetString() );
+            OUString aIdent( pExpr->GetString() );
 
             if( CSS1_IDENT==eType )
             {
@@ -1108,12 +1107,12 @@ static void ParseCSS1_font_family( const CSS1Expression *pExpr,
                 while( pNext && !pNext->GetOp() &&
                        CSS1_IDENT==pNext->GetType() )
                 {
-                    (aIdent += ' ') += pNext->GetString();
+                    aIdent += " " + pNext->GetString();
                     pExpr = pNext;
                     pNext = pExpr->GetNext();
                 }
             }
-            if( aIdent.Len() )
+            if( !aIdent.isEmpty() )
             {
                 if( !bFound && pFList )
                 {
@@ -1130,7 +1129,7 @@ static void ParseCSS1_font_family( const CSS1Expression *pExpr,
                     }
                 }
                 if( !bFirst )
-                    aName += ';';
+                    aName += ";";
                 aName += aIdent;
             }
         }
@@ -1139,7 +1138,7 @@ static void ParseCSS1_font_family( const CSS1Expression *pExpr,
         bFirst = sal_False;
     }
 
-    if( aName.Len() && !rParser.IsIgnoreFontFamily() )
+    if( !aName.isEmpty() && !rParser.IsIgnoreFontFamily() )
     {
         SvxFontItem aFont( eFamily, aName, aStyleName, ePitch,
                             eEnc, aItemIds.nFont );
@@ -1239,7 +1238,7 @@ static void ParseCSS1_font_style( const CSS1Expression *pExpr,
         if( (CSS1_IDENT==pExpr->GetType() || CSS1_STRING==pExpr->GetType()) &&
             !pExpr->GetOp() )
         {
-            const String& rValue = pExpr->GetString();
+            const OUString& rValue = pExpr->GetString();
             // erstmal pruefen, ob es ein Italic-Wert oder 'normal' ist
             sal_uInt16 nItalic;
             if( SvxCSS1Parser::GetEnum( aFontStyleTable, rValue, nItalic ) )
@@ -1254,7 +1253,7 @@ static void ParseCSS1_font_style( const CSS1Expression *pExpr,
                 bPosture = sal_True;
             }
             else if( !bCaseMap &&
-                     rValue.EqualsIgnoreCaseAscii(sCSS1_PV_small_caps) )
+                     rValue.equalsIgnoreAsciiCaseAscii(sCSS1_PV_small_caps) )
             {
                 eCaseMap = SVX_CASEMAP_KAPITAELCHEN;
                 bCaseMap = sal_True;
@@ -1477,7 +1476,7 @@ static void ParseCSS1_background( const CSS1Expression *pExpr,
     OSL_ENSURE( pExpr, "no expression" );
 
     Color aColor;
-    String aURL;
+    OUString aURL;
 
     sal_Bool bColor = sal_False, bTransparent = sal_False;
     SvxGraphicPosition eRepeat = GPOS_TILED;
@@ -1544,8 +1543,8 @@ static void ParseCSS1_background( const CSS1Expression *pExpr,
         case CSS1_STRING:       // Wegen MS-IE
             {
                 sal_uInt16 nEnum;
-                const String &rValue = pExpr->GetString();
-                if( rValue.EqualsIgnoreCaseAscii( sCSS1_PV_transparent ) )
+                const OUString &rValue = pExpr->GetString();
+                if( rValue.equalsIgnoreAsciiCaseAscii( sCSS1_PV_transparent ) )
                 {
                     bTransparent = sal_True;
                 }
@@ -1583,14 +1582,14 @@ static void ParseCSS1_background( const CSS1Expression *pExpr,
     if( bTransparent )
     {
         bColor = sal_False;
-        aURL.Erase();
+        aURL = "";
     }
 
     // repeat hat prio gegenueber einer Position
     if( GPOS_NONE == eRepeat )
         eRepeat = ePos;
 
-    if( bTransparent || bColor || aURL.Len() )
+    if( bTransparent || bColor || !aURL.isEmpty() )
     {
         SvxBrushItem aBrushItem( aItemIds.nBrush );
 
@@ -1599,7 +1598,7 @@ static void ParseCSS1_background( const CSS1Expression *pExpr,
         else if( bColor )
             aBrushItem.SetColor( aColor );
 
-        if( aURL.Len() )
+        if( !aURL.isEmpty() )
         {
             aBrushItem.SetGraphicLink( URIHelper::SmartRel2Abs( INetURLObject( rParser.GetBaseURL()), aURL, Link(), false ) );
             aBrushItem.SetGraphicPos( eRepeat );
@@ -1628,7 +1627,7 @@ static void ParseCSS1_background_color( const CSS1Expression *pExpr,
     case CSS1_IDENT:
     case CSS1_HEXCOLOR:
     case CSS1_STRING:       // Wegen MS-IE
-        if( pExpr->GetString().EqualsIgnoreCaseAscii( sCSS1_PV_transparent ) )
+        if( pExpr->GetString().equalsIgnoreAsciiCaseAscii( sCSS1_PV_transparent ) )
         {
             bTransparent = sal_True;
         }
@@ -1740,7 +1739,7 @@ static void ParseCSS1_font( const CSS1Expression *pExpr,
         if( CSS1_IDENT==pExpr->GetType() ||
             CSS1_STRING==pExpr->GetType() )
         {
-            const String& rValue = pExpr->GetString();
+            const OUString& rValue = pExpr->GetString();
 
             sal_uInt16 nEnum;
 
@@ -1862,7 +1861,7 @@ static void ParseCSS1_letter_spacing( const CSS1Expression *pExpr,
 
     case CSS1_IDENT:
     case CSS1_STRING: // Vorschtshalber auch MS-IE
-        if( pExpr->GetString().EqualsIgnoreCaseAscii(sCSS1_PV_normal) )
+        if( pExpr->GetString().equalsIgnoreAsciiCaseAscii(sCSS1_PV_normal) )
         {
             rItemSet.Put( SvxKerningItem( (short)0, aItemIds.nKerning ) );
         }
@@ -1893,14 +1892,13 @@ static void ParseCSS1_text_decoration( const CSS1Expression *pExpr,
     while( pExpr && (pExpr->GetType() == CSS1_IDENT ||
                      pExpr->GetType() == CSS1_STRING) && !pExpr->GetOp() )
     {
-        String aValue = pExpr->GetString();
-        aValue.ToLowerAscii();
+        OUString aValue = pExpr->GetString().toAsciiLowerCase();
         sal_Bool bKnown = sal_False;
 
-        switch( aValue.GetChar( 0 ) )
+        switch( aValue[0] )
         {
         case 'n':
-            if( aValue.EqualsAscii( sCSS1_PV_none ) )
+            if( aValue.equalsAscii( sCSS1_PV_none ) )
             {
                 bUnderline = sal_True;
                 eUnderline = UNDERLINE_NONE;
@@ -1919,7 +1917,7 @@ static void ParseCSS1_text_decoration( const CSS1Expression *pExpr,
             break;
 
         case 'u':
-            if( aValue.EqualsAscii( sCSS1_PV_underline ) )
+            if( aValue.equalsAscii( sCSS1_PV_underline ) )
             {
                 bUnderline = sal_True;
                 eUnderline = UNDERLINE_SINGLE;
@@ -1929,7 +1927,7 @@ static void ParseCSS1_text_decoration( const CSS1Expression *pExpr,
             break;
 
         case 'o':
-            if( aValue.EqualsAscii( sCSS1_PV_overline ) )
+            if( aValue.equalsAscii( sCSS1_PV_overline ) )
             {
                 bOverline = sal_True;
                 eOverline = UNDERLINE_SINGLE;
@@ -1939,7 +1937,7 @@ static void ParseCSS1_text_decoration( const CSS1Expression *pExpr,
             break;
 
         case 'l':
-            if( aValue.EqualsAscii( sCSS1_PV_line_through ) )
+            if( aValue.equalsAscii( sCSS1_PV_line_through ) )
             {
                 bCrossedOut = sal_True;
                 eCrossedOut = STRIKEOUT_SINGLE;
@@ -1949,7 +1947,7 @@ static void ParseCSS1_text_decoration( const CSS1Expression *pExpr,
             break;
 
         case 'b':
-            if( aValue.EqualsAscii( sCSS1_PV_blink ) )
+            if( aValue.equalsAscii( sCSS1_PV_blink ) )
             {
                 bBlink = sal_True;
                 bBlinkOn = sal_True;
@@ -2572,7 +2570,7 @@ static void ParseCSS1_border_xxx( const CSS1Expression *pExpr,
 
         case CSS1_IDENT:
             {
-                const String& rValue = pExpr->GetString();
+                const OUString& rValue = pExpr->GetString();
                 sal_uInt16 nValue;
                 if( SvxCSS1Parser::GetEnum( aBorderWidthTable, rValue, nValue ) )
                 {
@@ -2776,7 +2774,7 @@ static void ParseCSS1_border_style( const CSS1Expression *pExpr,
     while( n<4 && pExpr && !pExpr->GetOp() )
     {
         sal_uInt16 nLine = n==0 || n==2 ? BOX_LINE_BOTTOM : BOX_LINE_LEFT;
-        sal_uInt16 nValue = 0;
+        sal_uInt16 nValue;
         if( CSS1_IDENT==pExpr->GetType() &&
             SvxCSS1Parser::GetEnum( aBorderStyleTable, pExpr->GetString(),
                                     nValue ) )
@@ -2873,7 +2871,7 @@ static void ParseCSS1_length( const CSS1Expression *pExpr,
     switch( pExpr->GetType() )
     {
     case CSS1_IDENT:
-        if( pExpr->GetString().EqualsIgnoreCaseAscii( sCSS1_PV_auto ) )
+        if( pExpr->GetString().equalsIgnoreAsciiCaseAscii( sCSS1_PV_auto ) )
         {
             rLength = 0;
             rLengthType = SVX_CSS1_LTYPE_AUTO;

@@ -1236,22 +1236,21 @@ CSS1Expression::~CSS1Expression()
     delete pNext;
 }
 
-sal_Bool CSS1Expression::GetURL( String& rURL  ) const
+sal_Bool CSS1Expression::GetURL( OUString& rURL  ) const
 {
     OSL_ENSURE( CSS1_URL==eType, "CSS1-Ausruck ist keine Farbe URL" );
 
-    OSL_ENSURE( aValue.CompareIgnoreCaseToAscii( sCSS1_url, 3 ) ==
-                                        COMPARE_EQUAL &&
-                aValue.Len() > 5 &&
-                '(' == aValue.GetChar(3) &&
-                ')' == aValue.GetChar(aValue.Len()-1),
+    OSL_ENSURE( aValue.startsWith( OUString( sCSS1_url, 3, RTL_TEXTENCODING_ASCII_US ) ) &&
+                aValue.getLength() > 5 &&
+                '(' == aValue[3] &&
+                ')' == aValue[aValue.getLength()-1],
                 "keine gueltiges URL(...)" );
 
     sal_Bool bRet = sal_False;
 
-    if( aValue.Len() > 5 )
+    if( aValue.getLength() > 5 )
     {
-        rURL = aValue.Copy( 4, aValue.Len()-5 );
+        rURL = aValue.copy( 4, aValue.getLength() - 5 );
         rURL = comphelper::string::strip(rURL, ' ');
         bRet = sal_True;
     }
@@ -1274,41 +1273,40 @@ sal_Bool CSS1Expression::GetColor( Color &rColor ) const
         {
             sal_uInt8 aColors[3] = { 0, 0, 0 };
 
-            OSL_ENSURE( aValue.CompareIgnoreCaseToAscii( sCSS1_rgb, 3 )
-                                            == COMPARE_EQUAL &&
-                        aValue.Len() > 5 &&
-                        '(' == aValue.GetChar( 3 ) &&
-                        ')' == aValue.GetChar( aValue.Len()-1),
+            OSL_ENSURE( aValue.startsWith( OUString( sCSS1_rgb, 3, RTL_TEXTENCODING_ASCII_US ) ) &&
+                        aValue.getLength() > 5 &&
+                        '(' == aValue[3] &&
+                        ')' == aValue[aValue.getLength()-1],
                         "keine gueltiges RGB(...)" );
 
-            String aColorStr( aValue.Copy( 4, aValue.Len()-1 ) );
+            OUString aColorStr( aValue.copy( 4, aValue.getLength()-1 ) );
 
-            xub_StrLen nPos = 0;
+            sal_Int32 nPos = 0;
             sal_uInt16 nCol = 0;
 
-            while( nCol < 3 && nPos < aColorStr.Len() )
+            while( nCol < 3 && nPos < aColorStr.getLength() )
             {
                 sal_Unicode c;
-                while( nPos < aColorStr.Len() &&
-                        ((c=aColorStr.GetChar(nPos)) == ' ' || c == '\t' ||
+                while( nPos < aColorStr.getLength() &&
+                        ((c=aColorStr[nPos]) == ' ' || c == '\t' ||
                         c == '\n' || c== '\r' ) )
                     nPos++;
 
-                xub_StrLen nEnd = aColorStr.Search( ',', nPos );
-                String aNumber;
-                if( STRING_NOTFOUND==nEnd )
+                sal_Int32 nEnd = aColorStr.indexOf( ',', nPos );
+                OUString aNumber;
+                if( nEnd == -1 )
                 {
-                    aNumber = aColorStr.Copy(nPos);
-                    nPos = aColorStr.Len();
+                    aNumber = aColorStr.copy(nPos);
+                    nPos = aColorStr.getLength();
                 }
                 else
                 {
-                    aNumber = aColorStr.Copy( nPos, nEnd-nPos );
+                    aNumber = aColorStr.copy( nPos, nEnd-nPos );
                     nPos = nEnd+1;
                 }
 
-                sal_uInt16 nNumber = (sal_uInt16)aNumber.ToInt32();
-                if( aNumber.Search('%') != STRING_NOTFOUND )
+                sal_uInt16 nNumber = (sal_uInt16)aNumber.toInt32();
+                if( aNumber.indexOf('%') >= 0 )
                 {
                     if( nNumber > 100 )
                         nNumber = 100;
@@ -1333,26 +1331,25 @@ sal_Bool CSS1Expression::GetColor( Color &rColor ) const
     case CSS1_IDENT:
     case CSS1_STRING:
         {
-            String aTmp( aValue );
-            aTmp.ToUpperAscii();
+            OUString aTmp( aValue.toAsciiUpperCase() );
             nColor = GetHTMLColor( aTmp );
             bRet = nColor != SAL_MAX_UINT32;
         }
-        if( bRet || CSS1_STRING != eType || !aValue.Len() ||
-            aValue.GetChar( 0 )!='#' )
+        if( bRet || CSS1_STRING != eType || aValue.isEmpty() ||
+            aValue[0] != '#' )
             break;
 
     case CSS1_HEXCOLOR:
         {
             // HACK fuer MS-IE: DIe Farbe kann auch in einem String stehen
-            xub_StrLen nOffset = CSS1_STRING==eType ? 1 : 0;
-            sal_Bool bDouble = aValue.Len()-nOffset == 3;
-            xub_StrLen i = nOffset, nEnd = (bDouble ? 3 : 6) + nOffset;
+            sal_Int32 nOffset = CSS1_STRING==eType ? 1 : 0;
+            sal_Bool bDouble = aValue.getLength()-nOffset == 3;
+            sal_Int32 i = nOffset, nEnd = (bDouble ? 3 : 6) + nOffset;
 
             nColor = 0;
             for( ; i<nEnd; i++ )
             {
-                sal_Unicode c = (i<aValue.Len() ? aValue.GetChar(i)
+                sal_Unicode c = (i<aValue.getLength() ? aValue[i]
                                                          : '0' );
                 if( c >= '0' && c <= '9' )
                     c -= 48;

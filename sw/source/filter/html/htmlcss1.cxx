@@ -738,9 +738,9 @@ sal_Bool SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
     {
         if( !pNext ||
             (CSS1_SELTYPE_PSEUDO == pNext->GetType() &&
-            (pNext->GetString().EqualsIgnoreCaseAscii(sCSS1_left) ||
-             pNext->GetString().EqualsIgnoreCaseAscii(sCSS1_right) ||
-             pNext->GetString().EqualsIgnoreCaseAscii(sCSS1_first)) ) )
+            (pNext->GetString().equalsIgnoreAsciiCaseAscii(sCSS1_left) ||
+             pNext->GetString().equalsIgnoreAsciiCaseAscii(sCSS1_right) ||
+             pNext->GetString().equalsIgnoreAsciiCaseAscii(sCSS1_first)) ) )
         {
             OUString aName;
             if( pNext )
@@ -861,9 +861,9 @@ sal_Bool SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
              ('s' == aClass[0] || 'S' == aClass[0]) )
     {
         sal_uInt16 nPoolFmtId = 0;
-        if( aClass.equalsIgnoreAsciiCase(OOO_STRING_SVTOOLS_HTML_sdendnote_sym) )
+        if( aClass.equalsIgnoreAsciiCaseAscii(OOO_STRING_SVTOOLS_HTML_sdendnote_sym) )
             nPoolFmtId = RES_POOLCHR_ENDNOTE;
-        else if( aClass.equalsIgnoreAsciiCase(OOO_STRING_SVTOOLS_HTML_sdfootnote_sym) )
+        else if( aClass.equalsIgnoreAsciiCaseAscii(OOO_STRING_SVTOOLS_HTML_sdfootnote_sym) )
             nPoolFmtId = RES_POOLCHR_FOOTNOTE;
         if( nPoolFmtId )
         {
@@ -909,9 +909,9 @@ sal_Bool SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
         if( aClass.getLength() >= 9 &&
             ('s' == aClass[0] || 'S' == aClass[0]) )
         {
-            if( aClass.equalsIgnoreAsciiCase(OOO_STRING_SVTOOLS_HTML_sdendnote) )
+            if( aClass.equalsIgnoreAsciiCaseAscii(OOO_STRING_SVTOOLS_HTML_sdendnote) )
                 nPoolCollId = RES_POOLCOLL_ENDNOTE;
-            else if( aClass.equalsIgnoreAsciiCase(OOO_STRING_SVTOOLS_HTML_sdfootnote) )
+            else if( aClass.equalsIgnoreAsciiCaseAscii(OOO_STRING_SVTOOLS_HTML_sdfootnote) )
                 nPoolCollId = RES_POOLCOLL_FOOTNOTE;
 
             if( nPoolCollId )
@@ -994,7 +994,7 @@ sal_Bool SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
     {
         if( !pNext ||
             (CSS1_SELTYPE_PSEUDO==eNextType &&
-             pNext->GetString().EqualsIgnoreCaseAscii(sCSS1_first_letter) &&
+             pNext->GetString().equalsIgnoreAsciiCaseAscii(sCSS1_first_letter) &&
              SVX_ADJUST_LEFT == rPropInfo.eFloat) )
         {
             // Entweder kein zusammengesetzter Selektor oder
@@ -1277,12 +1277,12 @@ SwTxtFmtColl *SwCSS1Parser::GetTxtFmtColl( sal_uInt16 nTxtColl,
     if( RES_POOLCOLL_TEXT == nTxtColl && aClass.getLength() >= 9 &&
         ('s' == aClass[0] || 'S' == aClass[0] ) )
     {
-        if( aClass.equalsIgnoreAsciiCase(OOO_STRING_SVTOOLS_HTML_sdendnote) )
+        if( aClass.equalsIgnoreAsciiCaseAscii(OOO_STRING_SVTOOLS_HTML_sdendnote) )
         {
             nTxtColl = RES_POOLCOLL_ENDNOTE;
             aClass = aEmptyStr;
         }
-        else if( aClass.equalsIgnoreAsciiCase(OOO_STRING_SVTOOLS_HTML_sdfootnote) )
+        else if( aClass.equalsIgnoreAsciiCaseAscii(OOO_STRING_SVTOOLS_HTML_sdfootnote) )
         {
             nTxtColl = RES_POOLCOLL_FOOTNOTE;
             aClass = aEmptyStr;

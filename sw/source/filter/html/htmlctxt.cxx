@@ -454,7 +454,7 @@ sal_Bool SwHTMLParser::DoPositioning( SfxItemSet &rItemSet,
         InsertFlyFrame( aFrmItemSet, pContext, rPropInfo.aId,
                         CONTEXT_FLAGS_ABSPOS );
         pContext->SetPopStack( sal_True );
-        rPropInfo.aId.Erase();
+        rPropInfo.aId = "";
         bRet = sal_True;
     }
 
@@ -686,7 +686,7 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
         pItem = aIter.NextItem();
     }
 
-    if( rPropInfo.aId.Len() )
+    if( !rPropInfo.aId.isEmpty() )
         InsertBookmark( rPropInfo.aId );
 }
 
