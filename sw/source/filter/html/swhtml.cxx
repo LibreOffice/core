@@ -5196,7 +5196,7 @@ void SwHTMLParser::InsertLineBreak()
                 aBreakItem = (const SvxFmtBreakItem &)aItemSet.Get( RES_BREAK );
                 bBreakItem = sal_True;
             }
-            if( aPropInfo.aId.Len() )
+            if( !aPropInfo.aId.isEmpty() )
                 InsertBookmark( aPropInfo.aId );
         }
     }
@@ -5395,7 +5395,8 @@ void SwHTMLParser::InsertHorzRule()
 
 void SwHTMLParser::ParseMoreMetaOptions()
 {
-    String aName, aContent;
+    String aName;
+    OUString aContent;
     sal_Bool bHTTPEquiv = sal_False;
 
     const HTMLOptions& rHTMLOptions = GetOptions();

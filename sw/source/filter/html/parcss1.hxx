@@ -93,19 +93,19 @@ enum CSS1SelectorType
 class CSS1Selector
 {
     CSS1SelectorType eType;     // Art des Selektors
-    String aSelector;           // der Selektor selbst
+    OUString aSelector;           // der Selektor selbst
     CSS1Selector *pNext;        // die naechste Komponente
 
 public:
 
-    CSS1Selector( CSS1SelectorType eTyp, const String &rSel )
+    CSS1Selector( CSS1SelectorType eTyp, const OUString &rSel )
         : eType(eTyp), aSelector( rSel ), pNext( 0 )
     {}
 
     ~CSS1Selector();
 
     CSS1SelectorType GetType() const { return eType; }
-    const String& GetString() const { return aSelector; }
+    const OUString& GetString() const { return aSelector; }
 
     void SetNext( CSS1Selector *pNxt ) { pNext = pNxt; }
     const CSS1Selector *GetNext() const { return pNext; }
@@ -124,38 +124,38 @@ struct CSS1Expression
 {
     sal_Unicode cOp;        // Art der Verkuepfung mit dem Vorgaenger
     CSS1Token eType;        // der Typ des Wertes
-    String aValue;          // und sein Wert als String
+    OUString aValue;          // und sein Wert als String
     double nValue;          // und als Zahl (TWIPs fuer LENGTH)
     CSS1Expression *pNext;  // die naechste Komponente
 
 public:
 
-    CSS1Expression( CSS1Token eTyp, const String &rVal,
+    CSS1Expression( CSS1Token eTyp, const OUString &rVal,
                     double nVal, sal_Unicode cO = 0 )
         : cOp(cO), eType(eTyp), aValue(rVal), nValue(nVal), pNext(0)
     {}
 
     ~CSS1Expression();
 
-    inline void Set( CSS1Token eTyp, const String &rVal, double nVal,
+    inline void Set( CSS1Token eTyp, const OUString &rVal, double nVal,
                      sal_Unicode cO = 0 );
 
     CSS1Token GetType() const { return eType; }
-    const String& GetString() const { return aValue; }
+    const OUString& GetString() const { return aValue; }
     double GetNumber() const { return nValue; }
     inline sal_uInt32 GetULength() const;
     inline sal_Int32 GetSLength() const;
     sal_Unicode GetOp() const { return cOp; }
 
 
-    sal_Bool GetURL( String& rURL ) const;
+    sal_Bool GetURL( OUString& rURL ) const;
     sal_Bool GetColor( Color &rRGB ) const;
 
     void SetNext( CSS1Expression *pNxt ) { pNext = pNxt; }
     const CSS1Expression *GetNext() const { return pNext; }
 };
 
-inline void CSS1Expression::Set( CSS1Token eTyp, const String &rVal,
+inline void CSS1Expression::Set( CSS1Token eTyp, const OUString &rVal,
                                  double nVal, sal_Unicode cO )
 {
     cOp = cO; eType = eTyp; aValue = rVal; nValue = nVal; pNext = 0;

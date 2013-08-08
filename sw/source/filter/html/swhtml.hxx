@@ -786,8 +786,8 @@ private:
                         SfxItemSet& rCSS1ItemSet,
                         SvxCSS1PropertyInfo& rCSS1PropInfo,
                         const SvxMacroTableDtor& rMacroTbl,
-                        const std::vector<String>& rUnoMacroTbl,
-                        const std::vector<String>& rUnoMacroParamTbl,
+                        const std::vector<OUString>& rUnoMacroTbl,
+                        const std::vector<OUString>& rUnoMacroParamTbl,
                         sal_Bool bSetPropSet = sal_True,
                         sal_Bool bHidden = sal_False );
     void SetControlSize( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rShape, const Size& rTextSz,
@@ -856,9 +856,9 @@ private:
     void InsertLineBreak();
     void InsertHorzRule();
 
-    void FillEndNoteInfo( const String& rContent );
-    void FillFootNoteInfo( const String& rContent );
-    void InsertFootEndNote( const String& rName, sal_Bool bEndNote, sal_Bool bFixed );
+    void FillEndNoteInfo( const OUString& rContent );
+    void FillFootNoteInfo( const OUString& rContent );
+    void InsertFootEndNote( const OUString& rName, sal_Bool bEndNote, sal_Bool bFixed );
     void FinishFootEndNote();
     void InsertFootEndNoteText();
     SwNodeIndex *GetFootEndNoteSection( const String& rName );

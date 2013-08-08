@@ -62,7 +62,7 @@ const sal_Char *SwHTMLWriter::GetNumFormat( sal_uInt16 nFmt )
 
 extern bool swhtml_css1atr_equalFontItems( const SfxPoolItem& r1, const SfxPoolItem& r2 );
 static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
-                                 const SwTxtNode& rTxtNd, xub_StrLen nFldPos )
+                                 const SwTxtNode& rTxtNd, sal_Int32 nFldPos )
 {
     SwHTMLWriter & rHTMLWrt = (SwHTMLWriter&)rWrt;
 
@@ -73,12 +73,12 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
     const sal_Char *pTypeStr=0, // TYPE
                       *pSubStr=0,   // SUBTYPE
                    *pFmtStr=0;  // FORMAT (SW)
-    String aValue;              // VALUE (SW)
+    OUString aValue;              // VALUE (SW)
     sal_Bool bNumFmt=sal_False;         // SDNUM (Number-Formatter-Format)
     sal_Bool bNumValue=sal_False;       // SDVAL (Number-Formatter-Value)
     double dNumValue = 0.0;     // SDVAL (Number-Formatter-Value)
     sal_Bool bFixed=sal_False;          // SDFIXED
-    String aName;               // NAME (CUSTOM)
+    OUString aName;               // NAME (CUSTOM)
 
     switch( nField )
     {
@@ -148,8 +148,8 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
                 }
                 else
                 {
-                    const String& rValue = pFld->GetPar2();
-                    short nValue = (short)rValue.ToInt32();
+                    const OUString& rValue = pFld->GetPar2();
+                    short nValue = (short)rValue.toInt32();
                     if( (eSubType == PG_NEXT && nValue!=1) ||
                         (eSubType == PG_PREV && nValue!=-1) ||
                         (eSubType == PG_RANDOM && nValue!=0) )
@@ -273,7 +273,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
             sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_format).
                 append('=').append(pFmtStr);
         }
-        if( aName.Len() )
+        if( !aName.isEmpty() )
         {
             sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_name).
                 append(RTL_CONSTASCII_STRINGPARAM("=\""));
@@ -281,7 +281,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
             HTMLOutFuncs::Out_String( rWrt.Strm(), aName, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
             sOut.append('\"');
         }
-        if( aValue.Len() )
+        if( !aValue.isEmpty() )
         {
             sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_value).
                 append(RTL_CONSTASCII_STRINGPARAM("=\""));
@@ -306,17 +306,17 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
     }
 
     // Inhalt des Feldes ausgeben
-    String const sExpand( pFld->ExpandField(true) );
+    OUString const sExpand( pFld->ExpandField(true) );
     sal_Bool bNeedsCJKProcessing = sal_False;
-    if( sExpand.Len() )
+    if( !sExpand.isEmpty() )
     {
         sal_uInt16 nScriptType = g_pBreakIt->GetBreakIter()->getScriptType( sExpand, 0 );
-        xub_StrLen nPos = (xub_StrLen)g_pBreakIt->GetBreakIter()->endOfScript( sExpand, 0,
+        sal_Int32 nPos = g_pBreakIt->GetBreakIter()->endOfScript( sExpand, 0,
                                                           nScriptType );
 
         sal_uInt16 nScript =
             SwHTMLWriter::GetCSS1ScriptForScriptType( nScriptType );
-        if( nPos < sExpand.Len() || nScript != rHTMLWrt.nCSS1Script )
+        if( nPos < sExpand.getLength() || nScript != rHTMLWrt.nCSS1Script )
         {
             bNeedsCJKProcessing = sal_True;
         }
@@ -358,15 +358,15 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
             break;
         }
 
-        xub_StrLen nPos = 0;
+        sal_Int32 nPos = 0;
         do
         {
             sal_uInt16 nScriptType = g_pBreakIt->GetBreakIter()->getScriptType( sExpand, nPos );
             sal_uInt16 nScript =
                 SwHTMLWriter::GetCSS1ScriptForScriptType( nScriptType );
-            xub_StrLen nEndPos = (xub_StrLen)g_pBreakIt->GetBreakIter()->endOfScript(
+            sal_Int32 nEndPos = g_pBreakIt->GetBreakIter()->endOfScript(
                                     sExpand, nPos, nScriptType );
-            xub_StrLen nChunkLen = nEndPos - nPos;
+            sal_Int32 nChunkLen = nEndPos - nPos;
             if( nScript != CSS1_OUTMODE_ANY_SCRIPT &&
                 /* #108791# */ nScript != rHTMLWrt.nCSS1Script )
             {
@@ -396,7 +396,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
                     }
                 }
 
-                HTMLOutFuncs::Out_String( rWrt.Strm(), sExpand.Copy( nPos, nChunkLen ),
+                HTMLOutFuncs::Out_String( rWrt.Strm(), sExpand.copy( nPos, nChunkLen ),
                     rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
 
                 rHTMLWrt.bTagOn = sal_False;
@@ -406,12 +406,12 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
             }
             else
             {
-                HTMLOutFuncs::Out_String( rWrt.Strm(), sExpand.Copy( nPos, nChunkLen ),
+                HTMLOutFuncs::Out_String( rWrt.Strm(), sExpand.copy( nPos, nChunkLen ),
                     rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
             }
             nPos = nEndPos;
         }
-        while( nPos < sExpand.Len() );
+        while( nPos < sExpand.getLength() );
     }
     else
     {
@@ -442,7 +442,7 @@ Writer& OutHTML_SwFmtFld( Writer& rWrt, const SfxPoolItem& rHt )
         else if (pFldTyp->GetName() != "HTML_OFF")
             return rWrt;
 
-        String rTxt(comphelper::string::strip(pFld->GetPar2(), ' '));
+        OUString rTxt(comphelper::string::strip(pFld->GetPar2(), ' '));
         rWrt.Strm() << '<';
         if( !bOn )
             rWrt.Strm() << '/';
@@ -456,18 +456,18 @@ Writer& OutHTML_SwFmtFld( Writer& rWrt, const SfxPoolItem& rHt )
     {
         // Kommentare werden im ANSI-Zeichensetz, aber mit System-Zeilen-
         // Umbruechen gesschrieben.
-        const String& rComment = pFld->GetPar2();
+        const OUString& rComment = pFld->GetPar2();
         sal_Bool bWritten = sal_False;
 
-        if( (rComment.Len() >= 6 && '<' == rComment.GetChar(0) &&
-            '>' == rComment.GetChar(rComment.Len()-1) &&
-            rComment.Copy( 1, 4 ).EqualsIgnoreCaseAscii(OOO_STRING_SVTOOLS_HTML_meta)) ||
-              (rComment.Len() >= 7 &&
-             rComment.Copy( 0, 4 ).EqualsAscii( "<!--" ) &&
-             rComment.Copy( rComment.Len()-3, 3 ).EqualsAscii( "-->" )) )
+        if( (rComment.getLength() >= 6 && '<' == rComment[0] &&
+            '>' == rComment[rComment.getLength()-1] &&
+            rComment.copy( 1, 4 ).equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_meta) ) ||
+              (rComment.getLength() >= 7 &&
+             rComment.startsWith( "<!--" ) &&
+             rComment.endsWith( "-->" )) )
         {
             // META-Tags direkt ausgeben
-            String sComment(convertLineEnd(rComment, GetSystemLineEnd()));
+            OUString sComment(convertLineEnd(rComment, GetSystemLineEnd()));
             // TODO: HTML-Tags are written without entitities, that for,
             // characters not contained in the destination encoding are lost!
             OString sTmp(OUStringToOString(sComment,
@@ -475,12 +475,12 @@ Writer& OutHTML_SwFmtFld( Writer& rWrt, const SfxPoolItem& rHt )
             rWrt.Strm() << sTmp.getStr();
             bWritten = sal_True;
         }
-        else if( rComment.Len() >= 7 &&
-                 '>' == rComment.GetChar(rComment.Len()-1) &&
-                 rComment.Copy(0,5).EqualsIgnoreCaseAscii("HTML:") )
+        else if( rComment.getLength() >= 7 &&
+                 '>' == rComment[rComment.getLength()-1] &&
+                 rComment.startsWithIgnoreAsciiCase( "HTML:" ) )
         {
-            String sComment(comphelper::string::stripStart(rComment.Copy(5), ' '));
-            if( '<' == sComment.GetChar(0) )
+            OUString sComment(comphelper::string::stripStart(rComment.copy(5), ' '));
+            if( '<' == sComment[0] )
             {
                 sComment = convertLineEnd(sComment, GetSystemLineEnd());
                 // TODO: HTML-Tags are written without entitities, that for,
@@ -496,7 +496,7 @@ Writer& OutHTML_SwFmtFld( Writer& rWrt, const SfxPoolItem& rHt )
 
         if( !bWritten )
         {
-            String sComment(convertLineEnd(rComment, GetSystemLineEnd()));
+            OUString sComment(convertLineEnd(rComment, GetSystemLineEnd()));
             OStringBuffer sOut;
             // TODO: ???
             sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_comment)
@@ -513,7 +513,7 @@ Writer& OutHTML_SwFmtFld( Writer& rWrt, const SfxPoolItem& rHt )
 
         sal_Bool bURL = ((const SwScriptField *)pFld)->IsCodeURL();
         const OUString& rType = pFld->GetPar1();
-        String aContents, aURL;
+        OUString aContents, aURL;
         if(bURL)
             aURL = pFld->GetPar2();
         else

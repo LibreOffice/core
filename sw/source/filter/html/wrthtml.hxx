@@ -619,7 +619,7 @@ Writer& OutHTML_FrmFmtOLENodeGrf( Writer& rWrt, const SwFrmFmt& rFmt,
 
 Writer& OutHTML_SwTxtNode( Writer&, const SwCntntNode& );
 Writer& OutHTML_SwTblNode( Writer& , SwTableNode &, const SwFrmFmt *,
-                           const String* pCaption=0, sal_Bool bTopCaption=sal_False );
+                           const OUString* pCaption=0, sal_Bool bTopCaption=sal_False );
 
 Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt, const SwDrawFrmFmt& rFmt,
                                      const SdrObject& rSdrObj, sal_Bool bInCntnr );
@@ -630,7 +630,7 @@ Writer& OutHTML_HeaderFooter( Writer& rWrt, const SwFrmFmt& rFrmFmt,
                               sal_Bool bHeader );
 
 Writer& OutHTML_Image( Writer&, const SwFrmFmt& rFmt,
-                       Graphic& rGraphic, const String& rAlternateTxt,
+                       Graphic& rGraphic, const OUString& rAlternateTxt,
                        const Size& rRealSize, sal_uInt32 nFrmOpts,
                        const sal_Char *pMarkType = 0,
                        const ImageMap *pGenImgMap = 0 );

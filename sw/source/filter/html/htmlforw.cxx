@@ -138,25 +138,25 @@ static void lcl_html_outEvents( SvStream& rStrm,
     for( sal_Int32 i = 0; i < nCount; i++ )
     {
         ScriptType eScriptType = EXTENDED_STYPE;
-        String aScriptType( pDescs[i].ScriptType );
-        if( aScriptType.EqualsIgnoreCaseAscii(SVX_MACRO_LANGUAGE_JAVASCRIPT) )
+        OUString aScriptType( pDescs[i].ScriptType );
+        if( aScriptType.equalsIgnoreAsciiCase(SVX_MACRO_LANGUAGE_JAVASCRIPT) )
             eScriptType = JAVASCRIPT;
-        else if( aScriptType.EqualsIgnoreCaseAscii(SVX_MACRO_LANGUAGE_STARBASIC ) )
+        else if( aScriptType.equalsIgnoreAsciiCase(SVX_MACRO_LANGUAGE_STARBASIC ) )
             eScriptType = STARBASIC;
         if( JAVASCRIPT != eScriptType && !bCfgStarBasic )
             continue;
 
-        String sListener( pDescs[i].ListenerType );
-        xub_StrLen nTok = comphelper::string::getTokenCount(sListener, '.');
+        OUString sListener( pDescs[i].ListenerType );
+        sal_Int32 nTok = comphelper::string::getTokenCount(sListener, '.');
         if( nTok )
-            sListener = sListener.GetToken( nTok-1, '.' );
-        String sMethod( pDescs[i].EventMethod );
+            sListener = sListener.getToken( nTok-1, '.' );
+        OUString sMethod( pDescs[i].EventMethod );
 
         const sal_Char *pOpt = 0;
         for( sal_uInt16 j=0; aEventListenerTable[j]; j++ )
         {
-            if( sListener.EqualsAscii( aEventListenerTable[j] ) &&
-                sMethod.EqualsAscii( aEventMethodTable[j] ) )
+            if( sListener.equalsAscii( aEventListenerTable[j] ) &&
+                sMethod.equalsAscii( aEventMethodTable[j] ) )
             {
                 pOpt = (STARBASIC==eScriptType ? aEventSDOptionTable
                                                : aEventOptionTable)[j];
@@ -1128,7 +1128,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
                 Font aFixedFont( OutputDevice::GetDefaultFont(
                                     DEFAULTFONT_FIXED, LANGUAGE_ENGLISH_US,
                                     DEFAULTFONT_FLAGS_ONLYONE ) );
-                String aFName( *(OUString*)aTmp.getValue() );
+                OUString aFName( *(OUString*)aTmp.getValue() );
                 if( !bEdit || aFName != aFixedFont.GetName() )
                 {
                     FontFamily eFamily = FAMILY_DONTKNOW;
@@ -1289,15 +1289,15 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
     {
         // In TextAreas duerfen keine zusaetzlichen Spaces oder LF exportiert
         // werden!
-        String sVal;
+        OUString sVal;
         aTmp = xPropSet->getPropertyValue(
         OUString("DefaultText") );
         if( aTmp.getValueType() == ::getCppuType((const OUString*)0)&&
             !((OUString*)aTmp.getValue())->isEmpty() )
         {
-            sVal = String( *(OUString*)aTmp.getValue() );
+            sVal = *(OUString*)aTmp.getValue();
         }
-        if( sVal.Len() )
+        if( !sVal.isEmpty() )
         {
             sVal = convertLineEnd(sVal, LINEEND_LF);
             sal_Int32 nPos = 0;
@@ -1305,7 +1305,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
             {
                 if( nPos )
                     rWrt.Strm() << SwHTMLWriter::sNewLine;
-                String aLine = sVal.GetToken( 0, 0x0A, nPos );
+                OUString aLine = sVal.getToken( 0, 0x0A, nPos );
                 HTMLOutFuncs::Out_String( rWrt.Strm(), aLine,
                                         rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
             }

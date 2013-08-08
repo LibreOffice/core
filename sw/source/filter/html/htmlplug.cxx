@@ -1022,7 +1022,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         sOut.append(OOO_STRING_SVTOOLS_HTML_embed);
 
         OUString aStr;
-        String aURL;
+        OUString aURL;
         aAny = xSet->getPropertyValue("PluginURL");
         if( (aAny >>= aStr) && !aStr.isEmpty() )
         {
@@ -1030,7 +1030,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
                       aStr);
         }
 
-        if( aURL.Len() )
+        if( !aURL.isEmpty() )
         {
             sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_src)
                 .append("=\"");
@@ -1075,8 +1075,8 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         aAny = xSet->getPropertyValue("AppletCodeBase");
         if( (aAny >>= aCd) && !aCd.isEmpty() )
         {
-            String sCodeBase( URIHelper::simpleNormalizedMakeRelative(rWrt.GetBaseURL(), aCd) );
-            if( sCodeBase.Len() )
+            OUString sCodeBase( URIHelper::simpleNormalizedMakeRelative(rWrt.GetBaseURL(), aCd) );
+            if( !sCodeBase.isEmpty() )
             {
                 sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_codebase)
                     .append("=\"");
@@ -1159,11 +1159,11 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         while( i > 0 )
         {
             const SvCommand& rCommand = aCommands[ --i ];
-            const String& rName = rCommand.GetCommand();
+            const OUString& rName = rCommand.GetCommand();
             sal_uInt16 nType = SwApplet_Impl::GetOptionType( rName, sal_True );
             if( SWHTML_OPTTYPE_TAG == nType )
             {
-                const String& rValue = rCommand.GetArgument();
+                const OUString& rValue = rCommand.GetArgument();
                 rWrt.Strm() << ' ';
                 HTMLOutFuncs::Out_String( rWrt.Strm(), rName, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
                 rWrt.Strm() << "=\"";
@@ -1183,8 +1183,8 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         while( ii > 0  )
         {
             const SvCommand& rCommand = aCommands[ aParams[--ii] ];
-            const String& rName = rCommand.GetCommand();
-            const String& rValue = rCommand.GetArgument();
+            const OUString& rName = rCommand.GetCommand();
+            const OUString& rValue = rCommand.GetArgument();
             rHTMLWrt.OutNewLine();
             OStringBuffer sBuf;
             sBuf.append('<').append(OOO_STRING_SVTOOLS_HTML_param)
@@ -1216,11 +1216,11 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         for( size_t i = 0; i < aCommands.size(); i++ )
         {
             const SvCommand& rCommand = aCommands[ i ];
-            const String& rName = rCommand.GetCommand();
+            const OUString& rName = rCommand.GetCommand();
 
             if( SwApplet_Impl::GetOptionType( rName, sal_False ) == SWHTML_OPTTYPE_TAG )
             {
-                const String& rValue = rCommand.GetArgument();
+                const OUString& rValue = rCommand.GetArgument();
                 rWrt.Strm() << ' ';
                 HTMLOutFuncs::Out_String( rWrt.Strm(), rName, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
                 rWrt.Strm() << "=\"";

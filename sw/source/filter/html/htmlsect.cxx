@@ -364,8 +364,8 @@ void SwHTMLParser::NewDivision( int nToken )
         pCntxt->SetSpansSection( sal_True );
 
         // keine text::Bookmarks mit dem gleichen Namen wie Bereiche einfuegen
-        if( aPropInfo.aId.Len() && aPropInfo.aId==aName )
-            aPropInfo.aId.Erase();
+        if( !aPropInfo.aId.isEmpty() && aPropInfo.aId==aName )
+            aPropInfo.aId = "";
     }
     else
     {
@@ -644,7 +644,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
         if( nCols < 2 )
         {
             aFlyName = aId;
-            aPropInfo.aId.Erase();
+            aPropInfo.aId = "";
         }
 
         InsertFlyFrame( aFrmItemSet, pCntxt, aFlyName, CONTEXT_FLAGS_ABSPOS );
@@ -753,8 +753,8 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
         pCntxt->SetSpansSection( sal_True );
 
         // Insert a bookmark if its name differs from the section's name only.
-        if( aPropInfo.aId.Len() && aPropInfo.aId==aName )
-            aPropInfo.aId.Erase();
+        if( !aPropInfo.aId.isEmpty() && aPropInfo.aId==aName )
+            aPropInfo.aId = "";
     }
 
     // Additional attributes must be set as hard ones.

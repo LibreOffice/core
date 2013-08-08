@@ -97,7 +97,7 @@ struct HTMLTableOptions
     Color aBorderColor;
     Color aBGColor;
 
-    String aBGImage, aStyle, aId, aClass, aDir;
+    OUString aBGImage, aStyle, aId, aClass, aDir;
 
     HTMLTableOptions( const HTMLOptions& rOptions, SvxAdjust eParentAdjust );
 };
@@ -378,9 +378,9 @@ typedef std::vector<SdrObject *> SdrObjects;
 
 class HTMLTable
 {
-    String aId;
-    String aStyle;
-    String aClass;
+    OUString aId;
+    OUString aStyle;
+    OUString aClass;
     String aDir;
 
     SdrObjects *pResizeDrawObjs;// SDR objects
@@ -642,9 +642,9 @@ public:
 
     void SetBGBrush( const SvxBrushItem& rBrush ) { delete pBGBrush; pBGBrush = new SvxBrushItem( rBrush ); }
 
-    const String& GetId() const { return aId; }
-    const String& GetClass() const { return aClass; }
-    const String& GetStyle() const { return aStyle; }
+    const OUString& GetId() const { return aId; }
+    const OUString& GetClass() const { return aClass; }
+    const OUString& GetStyle() const { return aStyle; }
     const String& GetDirection() const { return aDir; }
 
     void IncBoxCount() { nBoxes++; }
@@ -5246,7 +5246,7 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
         HTMLTableOptions *pTblOptions =
             new HTMLTableOptions( GetOptions(), eParentAdjust );
 
-        if( pTblOptions->aId.Len() )
+        if( !pTblOptions->aId.isEmpty() )
             InsertBookmark( pTblOptions->aId );
 
         HTMLTable *pCurTable = new HTMLTable( this, pTable,

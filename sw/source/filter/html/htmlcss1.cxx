@@ -241,8 +241,7 @@ void SwCSS1Parser::SetLinkCharFmts()
         bBodyVLinkSet |= bColorSet;
     }
 
-    OUString sTmp = OUString( OOO_STRING_SVTOOLS_HTML_anchor ) + ":" +
-                        OUString( sCSS1_link, sizeof(sCSS1_link), RTL_TEXTENCODING_ASCII_US );
+    OUString sTmp = OUString( OOO_STRING_SVTOOLS_HTML_anchor ) + ":" + "link";
 
     pStyleEntry = GetTag( sTmp );
     if( pStyleEntry )
@@ -256,8 +255,7 @@ void SwCSS1Parser::SetLinkCharFmts()
         bBodyLinkSet |= bColorSet;
     }
 
-    sTmp = OUString( OOO_STRING_SVTOOLS_HTML_anchor ) + ":" +
-            OUString( sCSS1_visited, sizeof(sCSS1_visited) ,RTL_TEXTENCODING_ASCII_US );
+    sTmp = OUString( OOO_STRING_SVTOOLS_HTML_anchor ) + ":" + "visited";
 
     pStyleEntry = GetTag( sTmp );
     if( pStyleEntry )
@@ -738,9 +736,9 @@ sal_Bool SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
     {
         if( !pNext ||
             (CSS1_SELTYPE_PSEUDO == pNext->GetType() &&
-            (pNext->GetString().EqualsIgnoreCaseAscii(sCSS1_left) ||
-             pNext->GetString().EqualsIgnoreCaseAscii(sCSS1_right) ||
-             pNext->GetString().EqualsIgnoreCaseAscii(sCSS1_first)) ) )
+            (pNext->GetString().equalsIgnoreAsciiCase( "left" ) ||
+             pNext->GetString().equalsIgnoreAsciiCase( "right" ) ||
+             pNext->GetString().equalsIgnoreAsciiCase( "first" ) ) ) )
         {
             OUString aName;
             if( pNext )
@@ -787,13 +785,13 @@ sal_Bool SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
                 switch( aPseudo[0] )
                 {
                     case 'l':
-                        if( aPseudo.equalsAscii( sCSS1_link ) )
+                        if( aPseudo == "link" )
                         {
                             bInsert = sal_True;
                         }
                         break;
                     case 'v':
-                        if( aPseudo.equalsAscii( sCSS1_visited ) )
+                        if( aPseudo == "visited" )
                         {
                             bInsert = sal_True;
                         }
@@ -994,7 +992,7 @@ sal_Bool SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
     {
         if( !pNext ||
             (CSS1_SELTYPE_PSEUDO==eNextType &&
-             pNext->GetString().EqualsIgnoreCaseAscii(sCSS1_first_letter) &&
+             pNext->GetString().equalsIgnoreAsciiCase( "first-letter" ) &&
              SVX_ADJUST_LEFT == rPropInfo.eFloat) )
         {
             // Entweder kein zusammengesetzter Selektor oder
@@ -1545,8 +1543,7 @@ void SwCSS1Parser::FillDropCap( SwFmtDrop& rDrop,
         {
             do
             {
-                aName = OUString( sCSS1_first_letter, sizeof(sCSS1_first_letter) ,RTL_TEXTENCODING_ASCII_US ) +
-                        " " + OUString::number( (sal_Int32)(++nDropCapCnt) );
+                aName = OUString( "first-letter" ) + " " + OUString::number( (sal_Int32)(++nDropCapCnt) );
             }
             while( pDoc->FindCharFmtByName(aName) );
         }
@@ -1867,7 +1864,7 @@ sal_Bool SwCSS1Parser::ParseStyleSheet( const OUString& rIn )
 
     }
 
-    pPageEntry = GetPage( OUString::createFromAscii(sCSS1_first), sal_True );
+    pPageEntry = GetPage( "first", sal_True );
     if( pPageEntry )
     {
         SetPageDescAttrs( GetFirstPageDesc(sal_True), pPageEntry->GetItemSet(),
@@ -1875,7 +1872,7 @@ sal_Bool SwCSS1Parser::ParseStyleSheet( const OUString& rIn )
         bSetFirstPageDesc = sal_True;
     }
 
-    pPageEntry = GetPage( OUString::createFromAscii(sCSS1_right), sal_True );
+    pPageEntry = GetPage( "right", sal_True );
     if( pPageEntry )
     {
         SetPageDescAttrs( GetRightPageDesc(sal_True), pPageEntry->GetItemSet(),
@@ -1883,7 +1880,7 @@ sal_Bool SwCSS1Parser::ParseStyleSheet( const OUString& rIn )
         bSetRightPageDesc = sal_True;
     }
 
-    pPageEntry = GetPage( OUString::createFromAscii(sCSS1_left), sal_True );
+    pPageEntry = GetPage( "left", sal_True );
     if( pPageEntry )
         SetPageDescAttrs( GetLeftPageDesc(sal_True), pPageEntry->GetItemSet(),
                           pPageEntry->GetPropertyInfo() );

@@ -192,9 +192,9 @@ class SwHTMLForm_Impl
     uno::Reference< beans::XPropertySet >           xFCompPropSet;
     uno::Reference< drawing::XShape >               xShape;
 
-    String                      sText;
-    std::vector<String>         aStringList;
-    std::vector<String>         aValueList;
+    OUString                    sText;
+    std::vector<OUString>         aStringList;
+    std::vector<OUString>         aValueList;
     std::vector<sal_uInt16>     aSelectedList;
 
 public:
@@ -241,16 +241,16 @@ public:
     void SetShape( const uno::Reference< drawing::XShape >& r ) { xShape = r; }
     void ReleaseShape() { xShape = 0; }
 
-    String& GetText() { return sText; }
+    OUString& GetText() { return sText; }
     void EraseText() { sText = aEmptyStr; }
 
-    std::vector<String>& GetStringList() { return aStringList; }
+    std::vector<OUString>& GetStringList() { return aStringList; }
     void EraseStringList()
     {
         aStringList.clear();
     }
 
-    std::vector<String>& GetValueList() { return aValueList; }
+    std::vector<OUString>& GetValueList() { return aValueList; }
     void EraseValueList()
     {
         aValueList.clear();
@@ -806,9 +806,9 @@ void SwHTMLParser::SetControlSize( const uno::Reference< drawing::XShape >& rSha
 static void lcl_html_setEvents(
         const uno::Reference< script::XEventAttacherManager > & rEvtMn,
         sal_uInt32 nPos, const SvxMacroTableDtor& rMacroTbl,
-        const std::vector<String>& rUnoMacroTbl,
-        const std::vector<String>& rUnoMacroParamTbl,
-        const String& rType )
+        const std::vector<OUString>& rUnoMacroTbl,
+        const std::vector<OUString>& rUnoMacroParamTbl,
+        const OUString& rType )
 {
     // Erstmal muss die Anzahl der Events ermittelt werden ...
     sal_Int32 nEvents = 0;
@@ -824,13 +824,13 @@ static void lcl_html_setEvents(
     }
     for( i=0; i< rUnoMacroTbl.size(); i++ )
     {
-        const String& rStr(rUnoMacroTbl[i]);
+        const OUString& rStr(rUnoMacroTbl[i]);
         sal_Int32 nIndex = 0;
-        if( !rStr.GetToken( 0, '-', nIndex ).Len() || -1 == nIndex )
+        if( rStr.getToken( 0, '-', nIndex ).isEmpty() || -1 == nIndex )
             continue;
-        if( !rStr.GetToken( 0, '-', nIndex ).Len() || -1 == nIndex )
+        if( rStr.getToken( 0, '-', nIndex ).isEmpty() || -1 == nIndex )
             continue;
-        if( nIndex < rStr.Len() )
+        if( nIndex < rStr.getLength() )
             nEvents++;
     }
 
@@ -857,18 +857,18 @@ static void lcl_html_setEvents(
 
     for( i=0; i< rUnoMacroTbl.size(); ++i )
     {
-        const String& rStr = rUnoMacroTbl[i];
+        const OUString& rStr = rUnoMacroTbl[i];
         sal_Int32 nIndex = 0;
-        String sListener( rStr.GetToken( 0, '-', nIndex ) );
-        if( !sListener.Len() || -1 == nIndex )
+        OUString sListener( rStr.getToken( 0, '-', nIndex ) );
+        if( sListener.isEmpty() || -1 == nIndex )
             continue;
 
-        String sMethod( rStr.GetToken( 0, '-', nIndex ) );
-        if( !sMethod.Len() || -1 == nIndex )
+        OUString sMethod( rStr.getToken( 0, '-', nIndex ) );
+        if( sMethod.isEmpty() || -1 == nIndex )
             continue;
 
-        String sCode( rStr.Copy( nIndex ) );
-        if( !sCode.Len() )
+        OUString sCode( rStr.copy( nIndex ) );
+        if( sCode.isEmpty() )
             continue;
 
         script::ScriptEventDescriptor& rDesc = pDescs[nEvent++];
@@ -880,18 +880,15 @@ static void lcl_html_setEvents(
 
         if(!rUnoMacroParamTbl.empty())
         {
-            String sSearch( sListener );
-            sSearch += '-';
-            sSearch += sMethod;
-            sSearch += '-';
-            xub_StrLen nLen = sSearch.Len();
+            OUString sSearch( sListener );
+            sSearch += "-" +sMethod + "-";
+            sal_Int32 nLen = sSearch.getLength();
             for(size_t j = 0; j < rUnoMacroParamTbl.size(); ++j)
             {
-                const String& rParam = rUnoMacroParamTbl[j];
-                if( rParam.CompareTo( sSearch, nLen ) == COMPARE_EQUAL &&
-                    rParam.Len() > nLen )
+                const OUString& rParam = rUnoMacroParamTbl[j];
+                if( rParam.startsWith( sSearch ) && rParam.getLength() > nLen )
                 {
-                    rDesc.AddListenerParam = rParam.Copy(nLen);
+                    rDesc.AddListenerParam = rParam.copy(nLen);
                     break;
                 }
             }
@@ -900,24 +897,20 @@ static void lcl_html_setEvents(
     rEvtMn->registerScriptEvents( nPos, aDescs );
 }
 
-static void lcl_html_getEvents( const String& rOption, const String& rValue,
-                                std::vector<String>& rUnoMacroTbl,
-                                std::vector<String>& rUnoMacroParamTbl )
+static void lcl_html_getEvents( const OUString& rOption, const OUString& rValue,
+                                std::vector<OUString>& rUnoMacroTbl,
+                                std::vector<OUString>& rUnoMacroParamTbl )
 {
-    if( rOption.CompareIgnoreCaseToAscii( OOO_STRING_SVTOOLS_HTML_O_sdevent,
-                            sizeof(OOO_STRING_SVTOOLS_HTML_O_sdevent)-1 ) == COMPARE_EQUAL )
+    if( rOption.startsWithIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_O_sdevent ) )
     {
-        String aEvent(rOption.Copy(sizeof(OOO_STRING_SVTOOLS_HTML_O_sdevent)-1));
-        aEvent += '-';
-        aEvent += rValue;
+        OUString aEvent( rOption.copy( strlen( OOO_STRING_SVTOOLS_HTML_O_sdevent ) ) );
+        aEvent += "-" + rValue;
         rUnoMacroTbl.push_back(aEvent);
     }
-    else if( rOption.CompareIgnoreCaseToAscii( OOO_STRING_SVTOOLS_HTML_O_sdaddparam,
-                            sizeof(OOO_STRING_SVTOOLS_HTML_O_sdaddparam)-1 ) == COMPARE_EQUAL )
+    else if( rOption.startsWithIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_O_sdaddparam ) )
     {
-        String aParam(rOption.Copy( sizeof(OOO_STRING_SVTOOLS_HTML_O_sdaddparam)-1 ) );
-        aParam += '-';
-        aParam += rValue;
+        OUString aParam( rOption.copy( strlen( OOO_STRING_SVTOOLS_HTML_O_sdaddparam ) ) );
+        aParam += "-" + rValue;
         rUnoMacroParamTbl.push_back(aParam);
     }
 }
@@ -927,8 +920,8 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
         const uno::Reference< beans::XPropertySet > & rFCompPropSet,
         const Size& rSize, sal_Int16 eVertOri, sal_Int16 eHoriOri,
         SfxItemSet& rCSS1ItemSet, SvxCSS1PropertyInfo& rCSS1PropInfo,
-        const SvxMacroTableDtor& rMacroTbl, const std::vector<String>& rUnoMacroTbl,
-        const std::vector<String>& rUnoMacroParamTbl, sal_Bool bSetFCompPropSet,
+        const SvxMacroTableDtor& rMacroTbl, const std::vector<OUString>& rUnoMacroTbl,
+        const std::vector<OUString>& rUnoMacroParamTbl, sal_Bool bSetFCompPropSet,
         sal_Bool bHidden )
 {
     uno::Reference< drawing::XShape >  xShape;
@@ -1321,11 +1314,11 @@ void SwHTMLParser::NewForm( sal_Bool bAppend )
     sal_uInt16 nEncType = FormSubmitEncoding_URL;
     sal_uInt16 nMethod = FormSubmitMethod_GET;
     SvxMacroTableDtor aMacroTbl;
-    std::vector<String> aUnoMacroTbl;
-    std::vector<String> aUnoMacroParamTbl;
+    std::vector<OUString> aUnoMacroTbl;
+    std::vector<OUString> aUnoMacroParamTbl;
     SvKeyValueIterator *pHeaderAttrs = pFormImpl->GetHeaderAttrs();
     ScriptType eDfltScriptType = GetScriptType( pHeaderAttrs );
-    const String& rDfltScriptType = GetScriptTypeString( pHeaderAttrs );
+    const OUString& rDfltScriptType = GetScriptTypeString( pHeaderAttrs );
 
     const HTMLOptions& rHTMLOptions = GetOptions();
     for (size_t i = rHTMLOptions.size(); i; )
@@ -1482,8 +1475,8 @@ void SwHTMLParser::InsertInput()
     String sImgSrc, aId, aClass, aStyle, sText;
     String sName;
     SvxMacroTableDtor aMacroTbl;
-    std::vector<String> aUnoMacroTbl;
-    std::vector<String> aUnoMacroParamTbl;
+    std::vector<OUString> aUnoMacroTbl;
+    std::vector<OUString> aUnoMacroParamTbl;
     sal_uInt16 nSize = 0;
     sal_Int16 nMaxLen = 0;
     sal_Int16 nChecked = STATE_NOCHECK;
@@ -1981,8 +1974,8 @@ void SwHTMLParser::NewTextArea()
     String sName;
     sal_Int32 nTabIndex = TABINDEX_MAX + 1;
     SvxMacroTableDtor aMacroTbl;
-    std::vector<String> aUnoMacroTbl;
-    std::vector<String> aUnoMacroParamTbl;
+    std::vector<OUString> aUnoMacroTbl;
+    std::vector<OUString> aUnoMacroParamTbl;
     sal_uInt16 nRows = 0, nCols = 0;
     sal_uInt16 nWrap = HTML_WM_OFF;
     sal_Bool bDisabled = sal_False;
@@ -2138,7 +2131,7 @@ void SwHTMLParser::NewTextArea()
                                     aTmp );
     }
 
-    OSL_ENSURE( !pFormImpl->GetText().Len(), "Text ist nicht leer!" );
+    OSL_ENSURE( pFormImpl->GetText().isEmpty(), "Text ist nicht leer!" );
 
     if( !nCols )
         nCols = 20;
@@ -2201,7 +2194,7 @@ void SwHTMLParser::EndTextArea()
         pFormImpl->GetFCompPropSet();
 
     Any aTmp;
-    aTmp <<= OUString(pFormImpl->GetText());
+    aTmp <<= pFormImpl->GetText();
     rPropSet->setPropertyValue("DefaultText",
                                 aTmp );
     pFormImpl->EraseText();
@@ -2227,7 +2220,7 @@ void SwHTMLParser::InsertTextAreaText( sal_uInt16 nToken )
     OSL_ENSURE( pFormImpl && pFormImpl->GetFCompPropSet().is(),
             "TextArea fehlt" );
 
-    String& rText = pFormImpl->GetText();
+    OUString& rText = pFormImpl->GetText();
     switch( nToken)
     {
     case HTML_TEXTTOKEN:
@@ -2235,17 +2228,17 @@ void SwHTMLParser::InsertTextAreaText( sal_uInt16 nToken )
         break;
     case HTML_NEWPARA:
         if( !bTAIgnoreNewPara )
-            rText += '\n';    // das ist hier richtig!!!
+            rText += "\n";    // das ist hier richtig!!!
         break;
     default:
-        rText += '<';
+        rText += "<";
         rText += sSaveToken;
         if( aToken.Len() )
         {
-            rText += ' ';
+            rText += " ";
             rText += aToken;
         }
-        rText += '>';
+        rText += ">";
     }
 
     bTAIgnoreNewPara = sal_False;
@@ -2270,8 +2263,8 @@ void SwHTMLParser::NewSelect()
     String sName;
     sal_Int32 nTabIndex = TABINDEX_MAX + 1;
     SvxMacroTableDtor aMacroTbl;
-    std::vector<String> aUnoMacroTbl;
-    std::vector<String> aUnoMacroParamTbl;
+    std::vector<OUString> aUnoMacroTbl;
+    std::vector<OUString> aUnoMacroParamTbl;
     sal_Bool bMultiple = sal_False;
     sal_Bool bDisabled = sal_False;
     nSelectEntryCnt = 1;
@@ -2576,7 +2569,7 @@ void SwHTMLParser::InsertSelectOption()
             "kein Select-Control" );
 
     bLBEntrySelected = sal_False;
-    String aValue;
+    OUString aValue;
 
     const HTMLOptions& rHTMLOptions = GetOptions();
     for (size_t i = rHTMLOptions.size(); i; )
@@ -2592,8 +2585,8 @@ void SwHTMLParser::InsertSelectOption()
             break;
         case HTML_O_VALUE:
             aValue = rOption.GetString();
-            if( !aValue.Len() )
-                aValue.AssignAscii( "$$$empty$$$" );
+            if( aValue.isEmpty() )
+                aValue = "$$$empty$$$";
             break;
         }
     }
@@ -2615,12 +2608,12 @@ void SwHTMLParser::InsertSelectText()
 
     if(!pFormImpl->GetStringList().empty())
     {
-        String& rText = pFormImpl->GetStringList().back();
+        OUString& rText = pFormImpl->GetStringList().back();
 
         if( aToken.Len() && ' '==aToken.GetChar( 0 ) )
         {
-            xub_StrLen nLen = rText.Len();
-            if( !nLen || ' '==rText.GetChar( nLen-1 ))
+            sal_Int32 nLen = rText.getLength();
+            if( !nLen || ' '==rText[nLen-1])
                 aToken.Erase( 0, 1 );
         }
         if( aToken.Len() )
