@@ -72,11 +72,7 @@ const ScAutoNameAddresses& ScAutoNameCache::GetNameOccurrences( const String& rN
                 {
                     const EditTextObject* p = aIter.getEditText();
                     if (p)
-                    {
-                        ScFieldEditEngine& rEngine = pDoc->GetEditEngine();
-                        rEngine.SetText(*p);
-                        aStr = ScEditUtil::GetMultilineString(rEngine); // string with line separators between paragraphs
-                    }
+                        aStr = ScEditUtil::GetMultilineString(*p); // string with line separators between paragraphs
                 }
                 break;
                 case CELLTYPE_NONE:

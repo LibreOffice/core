@@ -348,15 +348,7 @@ OUString SAL_CALL ScHeaderFooterTextObj::getString() throw(uno::RuntimeException
         pData = rContentObj.GetRightEditObject();
     if (pData)
     {
-        // for pure text, no font info is needed in pool defaults
-        ScHeaderEditEngine aEditEngine( EditEngine::CreatePool(), sal_True );
-
-        ScHeaderFieldData aData;
-        FillDummyFieldData( aData );
-        aEditEngine.SetData( aData );
-
-        aEditEngine.SetText(*pData);
-        aRet = ScEditUtil::GetSpaceDelimitedString( aEditEngine );
+        aRet = ScEditUtil::GetSpaceDelimitedString( *pData );
     }
     return aRet;
 }
