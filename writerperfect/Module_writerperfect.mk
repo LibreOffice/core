@@ -55,4 +55,10 @@ endif
 endif
 endif
 
+ifneq (,$(SYSTEM_WPD))
+$(eval $(call gb_Module_add_check_targets,writerperfect,\
+	CppunitTest_writerperfect_stream \
+))
+endif
+
 # vim: set noet sw=4 ts=4:
