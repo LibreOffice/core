@@ -490,6 +490,7 @@ friend class CodeCompleteWindow;
 friend class EditorWindow;
 private:
     OUStringBuffer aFuncBuffer;
+    OUString aPrevStr;
     /* a buffer to build up function name when typing
      * a function name, used for showing/hiding listbox values
      * */
@@ -497,6 +498,7 @@ private:
 
     void SetMatchingEntries(); // sets the visible entries based on aFuncBuffer variable
     void HideAndRestoreFocus();
+    ExtTextView* GetParentEditView();
 
 public:
     CodeCompleteListBox( CodeCompleteWindow* pPar );
