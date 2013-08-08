@@ -89,7 +89,7 @@ public:
 
     void setHighlight (bool state);
 
-    void setEditTitle (bool edit, bool bChangeFocus = true);
+    virtual void setEditTitle (bool edit, bool bChangeFocus = true);
     void updateTitleEditSize ();
     virtual void setTitle (const OUString& rTitle);
 
