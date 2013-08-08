@@ -446,7 +446,7 @@ void SwHTMLWriter::OutFrmFmt( sal_uInt8 nMode, const SwFrmFmt& rFrmFmt,
                             : OOO_STRING_SVTOOLS_HTML_span;
         sOut.append('<').append(pCntnrStr).append(' ')
             .append(OOO_STRING_SVTOOLS_HTML_O_class).append("=\"")
-            .append(sCSS1_class_abs_pos).append('\"');
+            .append("sd-abs-pos").append('\"');
         Strm() << sOut.makeStringAndClear().getStr();
 
         // Fuer Nicht-Zeichenobekte eine Breite ausgeben
@@ -813,7 +813,7 @@ OString SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
 }
 
 Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
-                       Graphic& rGraphic, const String& rAlternateTxt,
+                       Graphic& rGraphic, const OUString& rAlternateTxt,
                        const Size &rRealSize, sal_uInt32 nFrmOpts,
                        const sal_Char *pMarkType,
                        const ImageMap *pAltImgMap )
@@ -847,19 +847,18 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
         pIMap = pURLItem->GetMap();
     }
 
-    String aIMapName;
+    OUString aIMapName;
     if( pIMap )
     {
         // den Namen eindeutig machen
         aIMapName = pIMap->GetName();
-        String aNameBase;
-        if( aIMapName.Len() )
+        OUString aNameBase;
+        if( !aIMapName.isEmpty() )
             aNameBase = aIMapName;
         else
-            aNameBase.AssignAscii( OOO_STRING_SVTOOLS_HTML_map );
-        if( !aIMapName.Len() )
-            (aIMapName = aNameBase)
-                += OUString::number( rHTMLWrt.nImgMapCnt );
+            aNameBase = OOO_STRING_SVTOOLS_HTML_map;
+        if( aIMapName.isEmpty() )
+            aIMapName = aNameBase + OUString::number( rHTMLWrt.nImgMapCnt );
 
         sal_Bool bFound;
         do
@@ -869,7 +868,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
             {
                 // TODO: Unicode: Comparison is case insensitive for ASCII
                 // characters only now!
-                if( aIMapName.EqualsIgnoreCaseAscii(rHTMLWrt.aImgMapNames[i]) )
+                if( aIMapName.equalsIgnoreAsciiCase( rHTMLWrt.aImgMapNames[i] ) )
                 {
                     bFound = sal_True;
                     break;
@@ -878,8 +877,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
             if( bFound )
             {
                 rHTMLWrt.nImgMapCnt++;
-                (aIMapName = aNameBase)
-                    += OUString::number( rHTMLWrt.nImgMapCnt );
+                aIMapName = aNameBase + OUString::number( rHTMLWrt.nImgMapCnt );
             }
 
         } while( bFound );
@@ -988,9 +986,9 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
 
     if( pURLItem || pMacItem )
     {
-        String aMapURL;
-        String aName;
-        String aTarget;
+        OUString aMapURL;
+        OUString aName;
+        OUString aTarget;
         if( pURLItem )
         {
             aMapURL = pURLItem->GetURL();
@@ -999,12 +997,12 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
         }
         sal_Bool bEvents = pMacItem && !pMacItem->GetMacroTable().empty();
 
-        if( aMapURL.Len() || aName.Len() || aTarget.Len() || bEvents )
+        if( !aMapURL.isEmpty() || !aName.isEmpty() || !aTarget.isEmpty() || bEvents )
         {
             sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_anchor);
 
             // Ein HREF nur Ausgaben, wenn es einen Link oder Makros gibt
-            if( aMapURL.Len() || bEvents )
+            if( !aMapURL.isEmpty() || bEvents )
             {
                 sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_href).
                     append("=\"");
@@ -1013,7 +1011,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
                 sOut.append('\"');
             }
 
-            if( aName.Len() )
+            if( !aName.isEmpty() )
             {
                 sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_name).
                     append("=\"");
@@ -1023,7 +1021,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
                 sOut.append('\"');
             }
 
-            if( aTarget.Len() )
+            if( !aTarget.isEmpty() )
             {
                 sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_target).
                     append("=\"");
@@ -1172,7 +1170,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_ismap);
         rWrt.Strm() << sOut.makeStringAndClear().getStr();
     }
-    if( aIMapName.Len() )
+    if( !aIMapName.isEmpty() )
     {
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_usemap).
             append("=\"#");
@@ -1295,7 +1293,7 @@ static Writer& OutHTML_FrmFmtTableNode( Writer& rWrt, const SwFrmFmt& rFrmFmt )
     sal_uLong nStt = rFlyCntnt.GetCntntIdx()->GetIndex()+1;
     sal_uLong nEnd = rHTMLWrt.pDoc->GetNodes()[nStt-1]->EndOfSectionIndex();
 
-    String aCaption;
+    OUString aCaption;
     sal_Bool bTopCaption = sal_False;
 
     // Nicht const, weil GetTable spater mal nicht const ist

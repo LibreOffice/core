@@ -90,7 +90,7 @@ public:
 
     void Write( SwHTMLWriter& rWrt, sal_Int16 eAlign=text::HoriOrientation::NONE,
                 sal_Bool bTHead=sal_False, const SwFrmFmt *pFrmFmt=0,
-                const String *pCaption=0, sal_Bool bTopCaption=sal_False,
+                const OUString *pCaption=0, sal_Bool bTopCaption=sal_False,
                 sal_uInt16 nHSpace=0, sal_uInt16 nVSpace=0 ) const;
 };
 
@@ -570,7 +570,7 @@ void SwHTMLWrtTable::OutTableCells( SwHTMLWriter& rWrt,
 
 void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
                             sal_Bool bTHead, const SwFrmFmt *pFrmFmt,
-                            const String *pCaption, sal_Bool bTopCaption,
+                            const OUString *pCaption, sal_Bool bTopCaption,
                             sal_uInt16 nHSpace, sal_uInt16 nVSpace ) const
 {
     sal_uInt16 nRow;
@@ -739,7 +739,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
     rWrt.IncIndentLevel(); // Inhalte von Table einruecken
 
     // Ueberschrift ausgeben
-    if( pCaption && pCaption->Len() )
+    if( pCaption && !pCaption->isEmpty() )
     {
         rWrt.OutNewLine(); // <CAPTION> in neue Zeile
         OStringBuffer sOutStr(RTL_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_caption));
@@ -899,7 +899,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
 
 Writer& OutHTML_SwTblNode( Writer& rWrt, SwTableNode & rNode,
                            const SwFrmFmt *pFlyFrmFmt,
-                           const String *pCaption, sal_Bool bTopCaption )
+                           const OUString *pCaption, sal_Bool bTopCaption )
 {
 
     SwTable& rTbl = rNode.GetTable();

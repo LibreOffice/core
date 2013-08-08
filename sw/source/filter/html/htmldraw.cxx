@@ -834,7 +834,7 @@ Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
     Outliner aOutliner(0, OUTLINERMODE_TEXTOBJECT);
     aOutliner.SetUpdateMode( sal_False );
     aOutliner.SetText( *pOutlinerParaObj );
-    String aText( aOutliner.GetText( aOutliner.GetParagraph(0),
+    OUString aText( aOutliner.GetText( aOutliner.GetParagraph(0),
                                      aOutliner.GetParagraphCount() ) );
     HTMLOutFuncs::Out_String( rWrt.Strm(), aText,
                                 rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
