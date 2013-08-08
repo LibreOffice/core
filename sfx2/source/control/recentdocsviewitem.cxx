@@ -9,16 +9,17 @@
 
 #include <sfx2/recentdocsviewitem.hxx>
 
-#include <sfx2/sfxresid.hxx>
-#include "../doc/doc.hrc"
-
 #include <sfx2/templateabstractview.hxx>
+#include <sfx2/recentdocsview.hxx>
 #include <tools/urlobj.hxx>
 
 RecentDocsViewItem::RecentDocsViewItem(ThumbnailView &rView, const OUString &rURL, const OUString &rTitle)
     : ThumbnailViewItem(rView)
 {
+    RecentDocsView& rRecentView = dynamic_cast<RecentDocsView&>(rView);
+    long nThumbnailSize = rRecentView.GetThumbnailSize();
     OUString aTitle = rTitle;
+
     if( !aTitle.getLength() )
     {
         // If we have no title, get filename from the URL
@@ -30,17 +31,12 @@ RecentDocsViewItem::RecentDocsViewItem(ThumbnailView &rView, const OUString &rUR
     if( aThumbnail.IsEmpty() )
     {
         // Use the default thumbnail if we have nothing else
-        aThumbnail = TemplateAbstractView::getDefaultThumbnail(rURL);
-    }
-    if( aThumbnail.IsEmpty() )
-    {
-        // Last fallback
-        aThumbnail = BitmapEx ( SfxResId( SFX_THUMBNAIL_TEXT ) );
+        aThumbnail = RecentDocsView::getDefaultThumbnail(rURL);
     }
 
     maURL = rURL;
     maTitle = aTitle;
-    maPreview1 = TemplateAbstractView::scaleImg(aThumbnail, 150, 150);
+    maPreview1 = TemplateAbstractView::scaleImg(aThumbnail, nThumbnailSize, nThumbnailSize);
 }
 
 void RecentDocsViewItem::setEditTitle (bool edit, bool bChangeFocus)

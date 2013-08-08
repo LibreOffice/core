@@ -22,6 +22,7 @@
 #include <comphelper/configurationhelper.hxx>
 #include <sfx2/templateabstractview.hxx>
 #include <sfx2/app.hxx>
+#include <sfx2/sfxresid.hxx>
 #include <unotools/historyoptions.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/svapp.hxx>
@@ -29,6 +30,8 @@
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
+
+#include <sfx2/sfx.hrc>
 
 using namespace ::com::sun::star;
 using namespace com::sun::star::uno;
@@ -40,17 +43,16 @@ static const char SFX_REFERER_USER[] = "private:user";
 
 RecentDocsView::RecentDocsView( Window* pParent )
     : ThumbnailView(pParent)
-    , mnItemMaxWidth(130)
-    , mnItemMaxHeight(130)
-    , mnItemPadding(0)
+    , mFilter(FILTER_NONE)
+    , mnItemMaxSize(100)
+    , mnTextHeight(30)
+    , mnItemPadding(5)
     , mnItemMaxTextLength(30)
-    , mnItemThumbnailMaxHeight(150)
-    , mnItemMaxHeightSub(160)
-    , mnHeight(260)
     , mnMaxThumbnailItems(50)
 {
+    SetStyle(GetStyle() | WB_VSCROLL);
     setItemMaxTextLength( mnItemMaxTextLength );
-    setItemDimensions( mnItemMaxWidth, mnItemThumbnailMaxHeight, mnItemMaxHeight - mnItemThumbnailMaxHeight, mnItemPadding );
+    setItemDimensions( mnItemMaxSize, mnItemMaxSize, mnTextHeight, mnItemPadding );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeRecentDocsView(Window *pParent, VclBuilder::stringmap &)
@@ -60,6 +62,71 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeRecentDocsView(Window *pPar
 
 RecentDocsView::~RecentDocsView()
 {
+}
+
+bool RecentDocsView::isFilteredExtension(APPLICATION_FILTER filter, const OUString &rExt)
+{
+    bool bRet = true;
+
+    if (filter == FILTER_WRITER)
+    {
+        bRet = rExt == "odt" || rExt == "doc" || rExt == "docx" ||
+            rExt == "rtf" || rExt == "txt";
+    }
+    else if (filter == FILTER_CALC)
+    {
+        bRet = rExt == "ods" || rExt == "xls" || rExt == "xlsx";
+    }
+    else if (filter == FILTER_IMPRESS)
+    {
+        bRet = rExt == "odp" || rExt == "pps" || rExt == "ppt" ||
+            rExt == "pptx";
+    }
+    else if (filter == FILTER_DRAW)
+    {
+        bRet = rExt == "odg";
+    }
+    else if (filter == FILTER_DATABASE)
+    {
+        bRet = rExt == "odb";
+    }
+    else if (filter == FILTER_MATH)
+    {
+        bRet = rExt == "odf";
+    }
+
+    return bRet;
+}
+
+bool RecentDocsView::isUnfilteredFile(const OUString &rURL)
+{
+    INetURLObject aUrl(rURL);
+    return isFilteredExtension(mFilter, aUrl.getExtension());
+}
+
+BitmapEx RecentDocsView::getDefaultThumbnail(const OUString &rURL)
+{
+    BitmapEx aImg;
+    INetURLObject aUrl(rURL);
+    OUString aExt = aUrl.getExtension();
+
+    if ( isFilteredExtension( FILTER_WRITER, aExt) )
+        aImg = BitmapEx ( SfxResId( SFX_FILE_THUMBNAIL_TEXT ) );
+    else if ( isFilteredExtension( FILTER_CALC, aExt) )
+        aImg = BitmapEx ( SfxResId( SFX_FILE_THUMBNAIL_SHEET ) );
+    else if ( isFilteredExtension( FILTER_IMPRESS, aExt) )
+        aImg = BitmapEx ( SfxResId( SFX_FILE_THUMBNAIL_PRESENTATION ) );
+    else if ( isFilteredExtension( FILTER_DRAW, aExt) )
+        aImg = BitmapEx ( SfxResId( SFX_FILE_THUMBNAIL_DRAWING ) );
+    else if ( isFilteredExtension( FILTER_DATABASE, aExt) )
+        aImg = BitmapEx ( SfxResId( SFX_FILE_THUMBNAIL_DATABASE ) );
+    else if ( isFilteredExtension( FILTER_MATH, aExt) )
+        aImg = BitmapEx ( SfxResId( SFX_FILE_THUMBNAIL_MATH ) );
+    else
+        // fallback
+        aImg = BitmapEx ( SfxResId( SFX_FILE_THUMBNAIL_DEFAULT ) );
+
+    return aImg;
 }
 
 void RecentDocsView::insertItem(const OUString &rURL, const OUString &rTitle)
@@ -92,7 +159,10 @@ void RecentDocsView::loadRecentDocs()
                 a >>= aTitle;
         }
 
-        insertItem(aURL, aTitle);
+        if( isUnfilteredFile(aURL) )
+        {
+            insertItem(aURL, aTitle);
+        }
     }
 
     CalculateItemPositions();
@@ -146,21 +216,25 @@ void RecentDocsView::OnItemDblClicked(ThumbnailViewItem *pItem)
     }
 }
 
-void RecentDocsView::SetThumbnailSize(long ThumbnailWidth, long ThumbnailHeight)
+void RecentDocsView::SetThumbnailSize(long thumbnailSize)
 {
-    mnItemMaxWidth = ThumbnailWidth;
-    mnItemMaxHeight = ThumbnailHeight;
-    setItemDimensions( mnItemMaxWidth, mnItemThumbnailMaxHeight, mnItemMaxHeight - mnItemThumbnailMaxHeight, mnItemPadding );
+    mnItemMaxSize = thumbnailSize;
+    setItemDimensions( mnItemMaxSize, mnItemMaxSize, mnTextHeight, mnItemPadding );
 }
 
-void RecentDocsView::SetHeight(long Height)
+long RecentDocsView::GetThumbnailSize()
 {
-    mnHeight = Height;
+    return mnItemMaxSize;
+}
+
+void RecentDocsView::SetFilter(APPLICATION_FILTER filter)
+{
+    mFilter = filter;
 }
 
 Size RecentDocsView::GetOptimalSize() const
 {
-    return Size(Window::GetOptimalSize().Width(), mnHeight);
+    return Window::GetOptimalSize();
 }
 
 IMPL_STATIC_LINK_NOINSTANCE( RecentDocsView, ExecuteHdl_Impl, LoadRecentFile*, pLoadRecentFile )

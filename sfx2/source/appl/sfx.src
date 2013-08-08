@@ -59,4 +59,39 @@ Bitmap ( SFX_THUMBNAIL_DRAWING )
     File = "otg_96_8.png";
 };
 
+Bitmap ( SFX_FILE_THUMBNAIL_TEXT )
+{
+    File = "odt_48_8.png";
+};
+
+Bitmap ( SFX_FILE_THUMBNAIL_SHEET )
+{
+    File = "ods_48_8.png";
+};
+
+Bitmap ( SFX_FILE_THUMBNAIL_PRESENTATION )
+{
+    File = "odp_48_8.png";
+};
+
+Bitmap ( SFX_FILE_THUMBNAIL_DRAWING )
+{
+    File = "odg_48_8.png";
+};
+
+Bitmap ( SFX_FILE_THUMBNAIL_DATABASE )
+{
+    File = "odb_48_8.png";
+};
+
+Bitmap ( SFX_FILE_THUMBNAIL_MATH )
+{
+    File = "odf_48_8.png";
+};
+
+Bitmap ( SFX_FILE_THUMBNAIL_DEFAULT )
+{
+    File = "mainapp_48_8.png";
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

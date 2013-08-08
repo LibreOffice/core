@@ -29,6 +29,8 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/layout.hxx>
 
+#include <sfx2/recentdocsview.hxx>
+
 #include <svtools/acceleratorexecute.hxx>
 #include <unotools/moduleoptions.hxx>
 
@@ -72,12 +74,18 @@ class BackingWindow
     PushButton*                     mpDBButton;
     PushButton*                     mpMathButton;
     PushButton*                     mpTemplateButton;
-
+/*
     PushButton*                     mpExtensionsButton;
     PushButton*                     mpInfoButton;
     PushButton*                     mpTplRepButton;
-
-    VclGrid*                        mpStartCenterContainer;
+*/
+    RecentDocsView*                 mpAllRecentThumbnails;
+    RecentDocsView*                 mpWriterRecentThumbnails;
+    RecentDocsView*                 mpCalcRecentThumbnails;
+    RecentDocsView*                 mpImpressRecentThumbnails;
+    RecentDocsView*                 mpDrawRecentThumbnails;
+    RecentDocsView*                 mpDatabaseRecentThumbnails;
+    RecentDocsView*                 mpMathRecentThumbnails;
 
     BitmapEx                        maBackgroundLeft;
     BitmapEx                        maBackgroundMiddle;
@@ -89,13 +97,10 @@ class BackingWindow
     sal_Int32                       mnHideExternalLinks;
     svt::AcceleratorExecute*        mpAccExec;
 
-    int                             mnSCWidth;
-    int                             mnSCHeight;
-
     void setupButton( PushButton* pButton, const OUString& rURL, const std::set<OUString>& rURLS,
                       SvtModuleOptions& rOpt, SvtModuleOptions::EModule eMod );
 
-    void setupExternalLink( PushButton* pButton );
+//    void setupExternalLink( PushButton* pButton );
 
     void dispatchURL( const OUString& i_rURL,
                       const OUString& i_rTarget = OUString( "_default" ),
@@ -104,12 +109,11 @@ class BackingWindow
                       );
 
     DECL_LINK( ClickHdl, Button* );
-    DECL_LINK( ExtLinkClickHdl, Button* );
+//    DECL_LINK( ExtLinkClickHdl, Button* );
     DECL_LINK( ActivateHdl, Button* );
     DECL_LINK( WindowEventListener, VclSimpleEvent* );
 
     void initControls();
-    void initBackground();
     void prepareRecentFileMenu();
 
 public:
