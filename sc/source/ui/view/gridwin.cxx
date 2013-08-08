@@ -1765,9 +1765,11 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
     // Reihenfolge passend zum angezeigten Cursor:
     //  RangeFinder, AutoFill, PageBreak, Drawing
 
-    bool bCorner;
-    bool bFound = HitRangeFinder(rMEvt.GetPosPixel(), bCorner, &nRFIndex, &nRFAddX, &nRFAddY);
-    bRFSize = bCorner;
+    RfCorner rCorner = NONE;
+    bool bFound = HitRangeFinder(rMEvt.GetPosPixel(), rCorner, &nRFIndex, &nRFAddX, &nRFAddY);
+    bRFSize = (rCorner != NONE);
+    aRFSelectedCorned = rCorner;
+
     if (bFound)
     {
         bRFMouse = true;        // die anderen Variablen sind oben initialisiert
@@ -2545,10 +2547,10 @@ void ScGridWindow::MouseMove( const MouseEvent& rMEvt )
 
         //  Range-Finder
 
-        bool bCorner;
-        if ( HitRangeFinder( rMEvt.GetPosPixel(), bCorner ) )
+        RfCorner rCorner = NONE;
+        if ( HitRangeFinder( rMEvt.GetPosPixel(), rCorner ) )
         {
-            if (bCorner)
+            if (rCorner != NONE)
                 SetPointer( Pointer( POINTER_CROSS ) );
             else
                 SetPointer( Pointer( POINTER_HAND ) );
@@ -4702,8 +4704,8 @@ Point ScGridWindow::GetMousePosPixel() const  { return aCurMousePos; }
 
 //------------------------------------------------------------------------
 
-bool ScGridWindow::HitRangeFinder( const Point& rMouse, bool& rCorner,
-                                sal_uInt16* pIndex, SCsCOL* pAddX, SCsROW* pAddY )
+bool ScGridWindow::HitRangeFinder( const Point& rMouse, RfCorner& rCorner,
+                                sal_uInt16* pIndex, SCsCOL* pAddX, SCsROW* pAddY)
 {
     bool bFound = false;
     ScInputHandler* pHdl = SC_MOD()->GetInputHdl( pViewData->GetViewShell() );
@@ -4724,36 +4726,74 @@ bool ScGridWindow::HitRangeFinder( const Point& rMouse, bool& rCorner,
             //  zusammengefasste (einzeln/Bereich) ???
             ScAddress aAddr( nPosX, nPosY, nTab );
 
-            Point aNext = pViewData->GetScrPos( nPosX, nPosY, eWhich, true );
+            Point aCellStart = pViewData->GetScrPos( nPosX, nPosY, eWhich, true );
+            Point aCellEnd = aCellStart;
             long nSizeXPix;
             long nSizeYPix;
             pViewData->GetMergeSizePixel( nPosX, nPosY, nSizeXPix, nSizeYPix );
-            aNext.X() += nSizeXPix * nLayoutSign;
-            aNext.Y() += nSizeYPix;
 
-            bool bCornerHor;
+            aCellEnd.X() += nSizeXPix * nLayoutSign;
+            aCellEnd.Y() += nSizeYPix;
+
+            bool bCornerHorizontalRight;
+            bool bCornerHorizontalLeft;
             if ( bLayoutRTL )
-                bCornerHor = ( rMouse.X() >= aNext.X() && rMouse.X() <= aNext.X() + 8 );
+            {
+                bCornerHorizontalRight = ( rMouse.X() >= aCellEnd.X()       && rMouse.X() <= aCellEnd.X() + 8 );
+                bCornerHorizontalLeft  = ( rMouse.X() >= aCellStart.X() - 8 && rMouse.X() <= aCellStart.X() );
+            }
             else
-                bCornerHor = ( rMouse.X() >= aNext.X() - 8 && rMouse.X() <= aNext.X() );
+            {
+                bCornerHorizontalRight = ( rMouse.X() >= aCellEnd.X() - 8 && rMouse.X() <= aCellEnd.X() );
+                bCornerHorizontalLeft  = ( rMouse.X() >= aCellStart.X()   && rMouse.X() <= aCellStart.X() + 8 );
+            }
 
-            bool bCellCorner = ( bCornerHor &&
-                                 rMouse.Y() >= aNext.Y() - 8 && rMouse.Y() <= aNext.Y() );
+            bool bCornerVerticalDown = rMouse.Y() >= aCellEnd.Y() - 8  && rMouse.Y() <= aCellEnd.Y();
+            bool bCornerVerticalUp   = rMouse.Y() >= aCellStart.Y()    && rMouse.Y() <= aCellStart.Y() + 8;
+
             //  corner is hit only if the mouse is within the cell
-
             sal_uInt16 nCount = (sal_uInt16)pRangeFinder->Count();
             for (sal_uInt16 i=nCount; i;)
             {
-                //  rueckwaerts suchen, damit der zuletzt gepaintete Rahmen gefunden wird
+                //  search backwards so that the last repainted frame is found
                 --i;
                 ScRangeFindData* pData = pRangeFinder->GetObject(i);
                 if ( pData->aRef.In(aAddr) )
                 {
-                    if (pIndex) *pIndex = i;
-                    if (pAddX)  *pAddX = nPosX - pData->aRef.aStart.Col();
-                    if (pAddY)  *pAddY = nPosY - pData->aRef.aStart.Row();
-                    bFound = sal_True;
-                    rCorner = ( bCellCorner && aAddr == pData->aRef.aEnd );
+                    if (pIndex)
+                        *pIndex = i;
+                    if (pAddX)
+                        *pAddX = nPosX - pData->aRef.aStart.Col();
+                    if (pAddY)
+                        *pAddY = nPosY - pData->aRef.aStart.Row();
+
+                    bFound = true;
+
+                    rCorner = NONE;
+
+                    ScAddress aEnd = pData->aRef.aEnd;
+                    ScAddress aStart = pData->aRef.aStart;
+
+                    if ( bCornerHorizontalLeft && bCornerVerticalUp &&
+                         aAddr == aStart)
+                    {
+                        rCorner = LEFT_UP;
+                    }
+                    else if (bCornerHorizontalRight && bCornerVerticalDown &&
+                             aAddr == aEnd)
+                    {
+                        rCorner = RIGHT_DOWN;
+                    }
+                    else if (bCornerHorizontalRight && bCornerVerticalUp &&
+                             aAddr == ScAddress(aEnd.Col(), aStart.Row(), aStart.Tab()))
+                    {
+                        rCorner = RIGHT_UP;
+                    }
+                    else if (bCornerHorizontalLeft && bCornerVerticalDown &&
+                             aAddr == ScAddress(aStart.Col(), aEnd.Row(), aStart.Tab()))
+                    {
+                        rCorner = LEFT_DOWN;
+                    }
                     break;
                 }
             }
@@ -4972,8 +5012,27 @@ void ScGridWindow::RFMouseMove( const MouseEvent& rMEvt, sal_Bool bUp )
     ScRange aNew = aOld;
     if ( bRFSize )
     {
-        aNew.aEnd.SetCol((SCCOL)nPosX);
-        aNew.aEnd.SetRow((SCROW)nPosY);
+        switch (aRFSelectedCorned)
+        {
+            case LEFT_UP:
+                aNew.aStart.SetCol((SCCOL)nPosX);
+                aNew.aStart.SetRow((SCROW)nPosY);
+                break;
+            case LEFT_DOWN:
+                aNew.aStart.SetCol((SCCOL)nPosX);
+                aNew.aEnd.SetRow((SCROW)nPosY);
+                break;
+            case RIGHT_UP:
+                aNew.aEnd.SetCol((SCCOL)nPosX);
+                aNew.aStart.SetRow((SCROW)nPosY);
+                break;
+            case RIGHT_DOWN:
+                aNew.aEnd.SetCol((SCCOL)nPosX);
+                aNew.aEnd.SetRow((SCROW)nPosY);
+                break;
+            default:
+                break;
+        }
     }
     else
     {

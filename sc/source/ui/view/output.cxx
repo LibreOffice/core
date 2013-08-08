@@ -2013,8 +2013,8 @@ void ScOutputData::DrawRefMark( SCCOL nRefStartX, SCROW nRefStartY,
     {
         long nMinX = nScrX;
         long nMinY = nScrY;
-        long nMaxX = nScrX+nScrW-1;
-        long nMaxY = nScrY+nScrH-1;
+        long nMaxX = nScrX + nScrW - 1;
+        long nMaxY = nScrY + nScrH - 1;
         if ( bLayoutRTL )
         {
             long nTemp = nMinX;
@@ -2086,19 +2086,36 @@ void ScOutputData::DrawRefMark( SCCOL nRefStartX, SCROW nRefStartY,
             else
             {
                 if (bTop)
-                    mpDev->DrawLine( Point( nMinX,nMinY ), Point( nMaxX,nMinY ) );
+                    mpDev->DrawLine( Point( nMinX, nMinY ), Point( nMaxX, nMinY ) );
                 if (bBottom)
-                    mpDev->DrawLine( Point( nMinX,nMaxY ), Point( nMaxX,nMaxY ) );
+                    mpDev->DrawLine( Point( nMinX, nMaxY ), Point( nMaxX, nMaxY ) );
                 if (bLeft)
-                    mpDev->DrawLine( Point( nMinX,nMinY ), Point( nMinX,nMaxY ) );
+                    mpDev->DrawLine( Point( nMinX, nMinY ), Point( nMinX, nMaxY ) );
                 if (bRight)
-                    mpDev->DrawLine( Point( nMaxX,nMinY ), Point( nMaxX,nMaxY ) );
+                    mpDev->DrawLine( Point( nMaxX, nMinY ), Point( nMaxX, nMaxY ) );
             }
             if ( bHandle && bRight && bBottom )
             {
                 mpDev->SetLineColor();
                 mpDev->SetFillColor( rColor );
-                mpDev->DrawRect( Rectangle( nMaxX-3*nLayoutSign, nMaxY-3, nMaxX+nLayoutSign, nMaxY+1 ) );
+
+                const sal_Int32 aRadius = 4;
+
+                sal_Int32 aRectMaxX1 = nMaxX - nLayoutSign * aRadius;
+                sal_Int32 aRectMaxX2 = nMaxX + nLayoutSign;
+                sal_Int32 aRectMinX1 = nMinX - nLayoutSign;
+                sal_Int32 aRectMinX2 = nMinX + nLayoutSign * aRadius;
+
+                sal_Int32 aRectMaxY1 = nMaxY - aRadius;
+                sal_Int32 aRectMaxY2 = nMaxY + 1;
+                sal_Int32 aRectMinY1 = nMinY - 1;
+                sal_Int32 aRectMinY2 = nMinY + aRadius;
+
+                // Draw corner rectangles
+                mpDev->DrawRect( Rectangle( aRectMaxX1, aRectMaxY1, aRectMaxX2, aRectMaxY2 ) );
+                mpDev->DrawRect( Rectangle( aRectMinX1, aRectMinY1, aRectMinX2, aRectMinY2 ) );
+                mpDev->DrawRect( Rectangle( aRectMinX1, aRectMaxY1, aRectMinX2, aRectMaxY2 ) );
+                mpDev->DrawRect( Rectangle( aRectMaxX1, aRectMinY1, aRectMaxX2, aRectMinY2 ) );
             }
         }
     }

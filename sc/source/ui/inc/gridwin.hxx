@@ -82,6 +82,16 @@ class ScGridWindow : public Window, public DropTargetHelper, public DragSourceHe
     friend class ScFilterListBox;
 
 private:
+
+    enum RfCorner
+    {
+        NONE,
+        LEFT_UP,
+        RIGHT_UP,
+        LEFT_DOWN,
+        RIGHT_DOWN
+    };
+
     // #114409#
     ::sdr::overlay::OverlayObjectList*              mpOOCursors;
     ::sdr::overlay::OverlayObjectList*              mpOOSelection;
@@ -171,6 +181,8 @@ private:
 
     Rectangle               aInvertRect;
 
+    RfCorner                aRFSelectedCorned;
+
     bool                    bEEMouse:1;               // Edit Engine has mouse
     bool                    bDPMouse:1;               // DataPilot D&D (new Pivot table)
     bool                    bRFMouse:1;               // RangeFinder drag
@@ -255,7 +267,7 @@ private:
     bool            GetEditUrlOrError( bool bSpellErr, const Point& rPos,
                                        String* pName=0, String* pUrl=0, String* pTarget=0 );
 
-    bool            HitRangeFinder( const Point& rMouse, bool& rCorner, sal_uInt16* pIndex = NULL,
+    bool            HitRangeFinder( const Point& rMouse, RfCorner& rCorner, sal_uInt16* pIndex = NULL,
                                     SCsCOL* pAddX = NULL, SCsROW* pAddY = NULL );
 
     sal_uInt16          HitPageBreak( const Point& rMouse, ScRange* pSource = NULL,
