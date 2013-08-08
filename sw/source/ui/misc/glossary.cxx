@@ -919,7 +919,7 @@ DragDropMode SwGlTreeListBox::NotifyStartDrag(
         eRet = SV_DRAGDROP_NONE;
     else
     {
-        SwGlossaryDlg* pDlg = (SwGlossaryDlg*)Window::GetParent();
+        SwGlossaryDlg* pDlg = (SwGlossaryDlg*)GetParentDialog();
         SvTreeListEntry* pParent = GetParent(pEntry);
 
         GroupUserData* pGroupData = (GroupUserData*)pParent->GetUserData();
@@ -967,7 +967,7 @@ sal_Bool  SwGlTreeListBox::NotifyMoving(   SvTreeListEntry*  pTarget,
     sal_Bool bRet = sal_False;
     if(pDestParent != pSrcParent)
     {
-        SwGlossaryDlg* pDlg = (SwGlossaryDlg*)Window::GetParent();
+        SwGlossaryDlg* pDlg = (SwGlossaryDlg*)GetParentDialog();
         SwWait aWait( *pDlg->pSh->GetView().GetDocShell(), sal_True );
 
         GroupUserData* pGroupData = (GroupUserData*)pSrcParent->GetUserData();
@@ -1013,7 +1013,7 @@ sal_Bool  SwGlTreeListBox::NotifyCopying(   SvTreeListEntry*  pTarget,
     sal_Bool bRet = sal_False;
     if(pDestParent != pSrcParent)
     {
-        SwGlossaryDlg* pDlg = (SwGlossaryDlg*)Window::GetParent();
+        SwGlossaryDlg* pDlg = (SwGlossaryDlg*)GetParentDialog();
         SwWait aWait( *pDlg->pSh->GetView().GetDocShell(), sal_True );
 
         GroupUserData* pGroupData = (GroupUserData*)pSrcParent->GetUserData();
