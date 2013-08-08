@@ -21,6 +21,7 @@ my $destfile;
 my $config_stamp;
 my $lastcompletelangiso_var;
 my $completelangiso_var = $ENV{COMPLETELANGISO_VAR};
+my $help_langs_var = $ENV{HELP_LANGS};
 
 if ( !defined $completelangiso_var) {
     print STDERR "ERROR: No language defined!\n";
@@ -33,13 +34,15 @@ if (!args_require_build()) {
 }
 
 my @completelangiso = split " +", $completelangiso_var;
-my @helplangs = split " +", $ENV{HELP_LANGS};
+my @helplangs = split " +", $help_langs_var;
 
 open OUTFILE, ">$outfile" or die "$0 ERROR: cannot open $outfile for writing!\n";
 
 print OUTFILE "// generated file, do not edit\n\n";
 print OUTFILE "// languages used for last time generation\n";
 print OUTFILE "// completelangiso: $completelangiso_var\n\n";
+print OUTFILE "// help_langs: $help_langs_var\n\n";
+write_ITERATE_ALL_LANG();
 write_ALL_LANG();
 write_OTHER_LANGS();
 write_DIR_ISOLANGUAGE_ALL_LANG_2();
@@ -56,6 +59,38 @@ write_FILE_ALL_LANG_LETTER();
 close OUTFILE;
 
 rename $outfile, $destfile;
+
+sub write_ITERATE_ALL_LANG
+{
+    print OUTFILE "#define ITERATE_ALL_LANG_FILE(gid,dir,macro,name,ext) ";
+    foreach $lang (@helplangs) {
+        my $shortlang = $lang;
+        $shortlang = "en" if $shortlang eq "en-US";
+        my $speciallang = $lang;
+        $speciallang =~ s/-/_/;
+        print OUTFILE "\\\nFile CONCAT3(gid_File_,gid,_$speciallang)";
+        print OUTFILE "\\\n\tDir = CONCAT3(gid_Dir_,dir,_$speciallang);";
+        print OUTFILE "\\\n\tmacro;";
+        print OUTFILE "\\\n\tName = STRING(CONCAT3(name,_$lang,ext)); ";
+        print OUTFILE "\\\nEnd ";
+        print OUTFILE "\\\n";
+    }
+    print OUTFILE "\n\n";
+
+    print OUTFILE "#define ITERATE_ALL_LANG_DIR_LPROJ(gid,parent) ";
+    foreach $lang (@helplangs) {
+        my $shortlang = $lang;
+        $shortlang = "en" if $shortlang eq "en-US";
+        my $speciallang = $lang;
+        $speciallang =~ s/-/_/;
+        print OUTFILE "\\\nDirectory CONCAT3(gid_Dir_,gid,_$speciallang)";
+        print OUTFILE "\\\n\tParentID = CONCAT2(gid_Dir_,parent);";
+        print OUTFILE "\\\n\tDosName = \"$shortlang.lproj\"; ";
+        print OUTFILE "\\\nEnd ";
+        print OUTFILE "\\\n";
+    }
+    print OUTFILE "\n\n";
+}
 
 sub write_ALL_LANG
 {
