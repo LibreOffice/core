@@ -187,7 +187,7 @@ namespace svt
         void    defaultButton(PushButton* _pNewDefButton);
 
         /// set the base of the title to use - the title of the current page is appended
-        void            setTitleBase(const String& _rTitleBase);
+        void            setTitleBase(const OUString& _rTitleBase);
 
         /// determines whether there is a next state to which we can advance
         virtual bool    canAdvance() const;
@@ -273,7 +273,7 @@ namespace svt
         /** skip a state
 
             The method behaves as if from the current state, <arg>_nSteps</arg> <method>travelNext</method>s were
-            called, but without actually creating or displaying the íntermediate pages. Only the
+            called, but without actually creating or displaying the \EDntermediate pages. Only the
             (<arg>_nSteps</arg> + 1)th page is created.
 
             The skipped states appear in the state history, so <method>travelPrevious</method> will make use of them.
@@ -293,7 +293,7 @@ namespace svt
 
             The method behaves as if from the current state, <method>travelNext</method>s were called
             successively, until <arg>_nTargetState</arg> is reached, but without actually creating or
-            displaying the íntermediate pages.
+            displaying the \EDntermediate pages.
 
             The skipped states appear in the state history, so <method>travelPrevious</method> will make use of them.
 

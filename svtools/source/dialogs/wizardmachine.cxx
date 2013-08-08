@@ -92,7 +92,7 @@ namespace svt
     //=====================================================================
     struct WizardMachineImplData : public WizardTypes
     {
-        String                          sTitleBase;         // the base for the title
+        OUString                        sTitleBase;         // the base for the title
         ::std::stack< WizardState >     aStateHistory;      // the history of all states (used for implementing "Back")
 
         WizardState                     nFirstUnknownPage;
@@ -240,7 +240,7 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
-    void OWizardMachine::setTitleBase(const String& _rTitleBase)
+    void OWizardMachine::setTitleBase(const OUString& _rTitleBase)
     {
         m_pImpl->sTitleBase = _rTitleBase;
         implUpdateTitle();
