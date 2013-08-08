@@ -265,7 +265,7 @@ namespace svt { namespace table
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    String UnoGridColumnFacade::getName() const
+    OUString UnoGridColumnFacade::getName() const
     {
         OUString sName;
         ENSURE_OR_RETURN( m_xGridColumn.is(), "UnoGridColumnFacade: already disposed!", sName );
@@ -281,7 +281,7 @@ namespace svt { namespace table
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void UnoGridColumnFacade::setName( const String& _rName )
+    void UnoGridColumnFacade::setName( const OUString& _rName )
     {
         ENSURE_OR_RETURN_VOID( m_xGridColumn.is(), "UnoGridColumnFacade: already disposed!" );
         try
@@ -295,7 +295,7 @@ namespace svt { namespace table
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    String UnoGridColumnFacade::getHelpText() const
+    OUString UnoGridColumnFacade::getHelpText() const
     {
         OUString sHelpText;
         ENSURE_OR_RETURN( m_xGridColumn.is(), "UnoGridColumnFacade: already disposed!", sHelpText );
@@ -311,7 +311,7 @@ namespace svt { namespace table
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void UnoGridColumnFacade::setHelpText( const String& i_helpText )
+    void UnoGridColumnFacade::setHelpText( const OUString& i_helpText )
     {
         ENSURE_OR_RETURN_VOID( m_xGridColumn.is(), "UnoGridColumnFacade: already disposed!" );
         try

@@ -200,21 +200,21 @@ namespace svt { namespace table
 
             @see setName
         */
-        virtual String      getName() const = 0;
+        virtual OUString      getName() const = 0;
 
         /** sets a new name for the column
 
             @see getName
         */
-        virtual void        setName( const String& _rName ) = 0;
+        virtual void        setName( const OUString& _rName ) = 0;
 
         /** retrieves the help text to be displayed for the column.
         */
-        virtual String      getHelpText() const = 0;
+        virtual OUString      getHelpText() const = 0;
 
         /** sets a new the help text to be displayed for the column.
         */
-        virtual void        setHelpText( const String& i_helpText ) = 0;
+        virtual void        setHelpText( const OUString& i_helpText ) = 0;
 
         /** determines whether the column can be interactively resized
 
