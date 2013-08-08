@@ -1143,7 +1143,7 @@ ANCHOR_SETEVENT:
     _HTMLAttrContext *pCntxt = new _HTMLAttrContext( HTML_ANCHOR_ON );
 
     sal_Bool bEnAnchor = sal_False, bFtnAnchor = sal_False, bFtnEnSymbol = sal_False;
-    String aFtnName;
+    OUString aFtnName;
     OUString aStrippedClass( aClass );
     SwCSS1Parser::GetScriptFromClass( aStrippedClass, sal_False );
     if( aStrippedClass.getLength() >=9  && bHasHRef && sHRef.Len() > 1 &&
