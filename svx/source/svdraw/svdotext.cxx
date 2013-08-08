@@ -601,6 +601,7 @@ void SdrTextObj::ImpSetContourPolygon( SdrOutliner& rOutliner, Rectangle& rAncho
     {
         // Take line width into account.
         // When doing the hit test, avoid this. (Performance!)
+        pContourPolyPolygon = new basegfx::B2DPolyPolygon();
 
         // test if shadow needs to be avoided for TakeContour()
         const SfxItemSet& rSet = GetObjectItemSet();
@@ -636,6 +637,7 @@ void SdrTextObj::ImpSetContourPolygon( SdrOutliner& rOutliner, Rectangle& rAncho
     }
 
     rOutliner.SetPolygon(aXorPolyPolygon, pContourPolyPolygon);
+    delete pContourPolyPolygon;
 }
 
 void SdrTextObj::TakeUnrotatedSnapRect(Rectangle& rRect) const
