@@ -27,7 +27,7 @@
 
 #include <connectivity/CommonTools.hxx>
 #include <connectivity/OSubComponent.hxx>
-#include <cppuhelper/compbase4.hxx>
+#include <cppuhelper/compbase5.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <map>
 #include <OTypeInfo.hxx>
@@ -42,17 +42,19 @@
 #include <com/sun/star/sdbc/SQLWarning.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XWarningsSupplier.hpp>
+#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 
 namespace connectivity
 {
     namespace firebird
     {
 
-        typedef ::cppu::WeakComponentImplHelper4<   ::com::sun::star::sdbc::XConnection,
-                                                ::com::sun::star::sdbc::XWarningsSupplier,
-                                                ::com::sun::star::lang::XServiceInfo,
-                                                ::com::sun::star::document::XDocumentEventListener
-                                            > OConnection_BASE;
+        typedef ::cppu::WeakComponentImplHelper5< ::com::sun::star::document::XDocumentEventListener,
+                                                  ::com::sun::star::lang::XServiceInfo,
+                                                  ::com::sun::star::sdbc::XConnection,
+                                                  ::com::sun::star::sdbc::XWarningsSupplier,
+                                                  ::com::sun::star::sdbcx::XTablesSupplier
+                                                > OConnection_BASE;
 
         class OStatementCommonBase;
         class FirebirdDriver;
@@ -158,6 +160,13 @@ namespace connectivity
             virtual void SAL_CALL documentEventOccured( const ::com::sun::star::document::DocumentEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
             // css.lang.XEventListener
             virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
+
+            // XTablesSupplier
+            ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
+                getTables()
+                throw(::com::sun::star::uno::RuntimeException);
+
+
 
             inline ::rtl::OUString  getUserName()       const { return m_sUser; }
             inline isc_db_handle&    getDBHandle()       { return m_DBHandler; }

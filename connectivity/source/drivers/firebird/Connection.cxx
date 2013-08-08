@@ -22,8 +22,8 @@
 #include "Driver.hxx"
 #include "PreparedStatement.hxx"
 #include "Statement.hxx"
+#include "Tables.hxx"
 #include "Util.hxx"
-
 
 #include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
@@ -760,5 +760,14 @@ void OConnection::clearStatements()
             xComp->dispose();
     }
     m_aStatements.clear();
+}
+
+//----- XTablesSupplier ------------------------------------------------------
+uno::Reference< XNameAccess > OConnection::getTables()
+    throw (RuntimeException)
+{
+    // TODO: IMPLEMENT ME PROPERLY
+    //return new Tables();
+    return 0;
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
