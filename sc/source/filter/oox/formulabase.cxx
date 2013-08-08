@@ -817,6 +817,18 @@ static const FunctionData saFuncTableOdf[] =
     { "CHISQINV",               0,                      NOID,   NOID,   2,  2,  V, { VR }, FUNCFLAG_MACROCALLODF }
 };
 
+/** Functions defined by calc, but not in OpenFormula nor supported by Excel. */
+static const FunctionData saFuncTableOOoLO[] =
+{
+    { "ORG.OPENOFFICE.WEEKS",        0,                 NOID,   NOID,   3,  3,  V, { VR }, FUNCFLAG_MACROCALLODF },
+    { "ORG.OPENOFFICE.MONTHS",       0,                 NOID,   NOID,   3,  3,  V, { VR }, FUNCFLAG_MACROCALLODF },
+    { "ORG.OPENOFFICE.YEARS",        0,                 NOID,   NOID,   3,  3,  V, { VR }, FUNCFLAG_MACROCALLODF },
+    { "ORG.OPENOFFICE.ISLEAPYEAR",   0,                 NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALLODF },
+    { "ORG.OPENOFFICE.DAYSINMONTH",  0,                 NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALLODF },
+    { "ORG.OPENOFFICE.DAYSINYEAR",   0,                 NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALLODF },
+    { "ORG.OPENOFFICE.WEEKSINYEAR",  0,                 NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALLODF },
+    { "ORG.OPENOFFICE.ROT13",        0,                 NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALLODF }
+};
 // ----------------------------------------------------------------------------
 
 const sal_Unicode API_TOKEN_OPEN            = '(';
@@ -937,6 +949,7 @@ FunctionProviderImpl::FunctionProviderImpl( FilterType eFilter, BiffType eBiff, 
     initFuncs( saFuncTableOox, STATIC_ARRAY_END( saFuncTableOox ), nMaxParam, bImportFilter, eFilter );
     initFuncs( saFuncTable2013, STATIC_ARRAY_END( saFuncTable2013 ), nMaxParam, bImportFilter, eFilter );
     initFuncs( saFuncTableOdf, STATIC_ARRAY_END( saFuncTableOdf ), nMaxParam, bImportFilter, eFilter );
+    initFuncs( saFuncTableOOoLO, STATIC_ARRAY_END( saFuncTableOOoLO ), nMaxParam, bImportFilter, eFilter );
 }
 
 void FunctionProviderImpl::initFunc( const FunctionData& rFuncData, sal_uInt8 nMaxParam )
