@@ -143,7 +143,7 @@ int WPXSvInputStreamImpl::seek(long offset, WPX_SEEK_TYPE seekType)
         tmpOffset = 0;
         retVal = -1;
     }
-    if (offset > mnLength)
+    if (tmpOffset > mnLength)
     {
         tmpOffset = mnLength;
         retVal = -1;
