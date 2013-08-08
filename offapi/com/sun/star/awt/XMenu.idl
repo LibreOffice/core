@@ -48,7 +48,7 @@ published interface XMenu: com::sun::star::uno::XInterface
 
     /** inserts an item into the menu.
         <p>The item is appended if the position is greater than or equal to
-        <member>getItemCount()</member> or if it is negative.</p>
+        getItemCount() or if it is negative.</p>
 
         @param nItemId
             specifies the ID of the menu item to be insterted.
