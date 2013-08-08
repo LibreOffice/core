@@ -715,7 +715,7 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
     sal_Bool bStartValue = sal_False;
     if( !bSameRule && rInfo.GetDepth() )
     {
-        String aName( rInfo.GetNumRule()->GetName() );
+        OUString aName( rInfo.GetNumRule()->GetName() );
         if( 0 != rWrt.aNumRuleNames.count( aName ) )
         {
             // The rule has been applied before

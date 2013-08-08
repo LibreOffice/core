@@ -65,111 +65,111 @@ typedef void (*FnParseCSS1Prop)( const CSS1Expression *pExpr,
 
 static CSS1PropertyEnum const aFontSizeTable[] =
 {
-    { sCSS1_PV_xx_small,    0                   },
-    { sCSS1_PV_x_small,     1                   },
-    { sCSS1_PV_small,       2                   },
-    { sCSS1_PV_medium,      3                   },
-    { sCSS1_PV_large,       4                   },
-    { sCSS1_PV_x_large,     5                   },
-    { sCSS1_PV_xx_large,    6                   },
+    { "xx-small",    0                   },
+    { "x-small",     1                   },
+    { "small",       2                   },
+    { "medium",      3                   },
+    { "large",       4                   },
+    { "x-large",     5                   },
+    { "xx-large",    6                   },
     { 0,                    0                   }
 };
 
 static CSS1PropertyEnum const aFontFamilyTable[] =
 {
-    { sCSS1_PV_serif,       FAMILY_ROMAN        },
-    { sCSS1_PV_sans_serif,  FAMILY_SWISS        },
-    { sCSS1_PV_cursive,     FAMILY_SCRIPT       },
-    { sCSS1_PV_fantasy,     FAMILY_DECORATIVE   },
-    { sCSS1_PV_monospace,   FAMILY_MODERN       },
+    { "serif",       FAMILY_ROMAN        },
+    { "sans-serif",  FAMILY_SWISS        },
+    { "cursive",     FAMILY_SCRIPT       },
+    { "fantasy",     FAMILY_DECORATIVE   },
+    { "monospace",   FAMILY_MODERN       },
     { 0,                    0                   }
 };
 
 static CSS1PropertyEnum const aFontWeightTable[] =
 {
-    { sCSS1_PV_extra_light, WEIGHT_NORMAL       }, // WEIGHT_ULTRALIGHT (OBS)
-    { sCSS1_PV_light,       WEIGHT_NORMAL       }, // WEIGHT_LIGHT (OBSOLETE)
-    { sCSS1_PV_demi_light,  WEIGHT_NORMAL       }, // WEIGHT_SEMILIGHT (OBS)
-    { sCSS1_PV_medium,      WEIGHT_NORMAL       }, // WEIGHT_MEDIUM (OBS)
-    { sCSS1_PV_normal,      WEIGHT_NORMAL       }, // WEIGHT_MEDIUM
-    { sCSS1_PV_demi_bold,   WEIGHT_NORMAL       }, // WEIGHT_SEMIBOLD (OBS)
-    { sCSS1_PV_bold,        WEIGHT_BOLD         }, // WEIGHT_BOLD (OBSOLETE)
-    { sCSS1_PV_extra_bold,  WEIGHT_BOLD         }, // WEIGHT_ULTRABOLD (OBS)
-    { sCSS1_PV_bolder,      WEIGHT_BOLD         },
-    { sCSS1_PV_lighter,     WEIGHT_NORMAL       },
+    { "extra-light", WEIGHT_NORMAL       }, // WEIGHT_ULTRALIGHT (OBS)
+    { "light",       WEIGHT_NORMAL       }, // WEIGHT_LIGHT (OBSOLETE)
+    { "demi-light",  WEIGHT_NORMAL       }, // WEIGHT_SEMILIGHT (OBS)
+    { "medium",      WEIGHT_NORMAL       }, // WEIGHT_MEDIUM (OBS)
+    { "normal",      WEIGHT_NORMAL       }, // WEIGHT_MEDIUM
+    { "demi-bold",   WEIGHT_NORMAL       }, // WEIGHT_SEMIBOLD (OBS)
+    { "bold",        WEIGHT_BOLD         }, // WEIGHT_BOLD (OBSOLETE)
+    { "extra-bold",  WEIGHT_BOLD         }, // WEIGHT_ULTRABOLD (OBS)
+    { "bolder",      WEIGHT_BOLD         },
+    { "lighter",     WEIGHT_NORMAL       },
     { 0,                    0                   }
 };
 
 static CSS1PropertyEnum const aFontStyleTable[] =
 {
-    { sCSS1_PV_normal,      ITALIC_NONE         },
-    { sCSS1_PV_italic,      ITALIC_NORMAL       },
-    { sCSS1_PV_oblique,     ITALIC_NORMAL       },
+    { "normal",      ITALIC_NONE         },
+    { "italic",      ITALIC_NORMAL       },
+    { "oblique",     ITALIC_NORMAL       },
     { 0,                    0                   }
 };
 
 static CSS1PropertyEnum const aFontVariantTable[] =
 {
-    { sCSS1_PV_normal,      SVX_CASEMAP_NOT_MAPPED      },
-    { sCSS1_PV_small_caps,  SVX_CASEMAP_KAPITAELCHEN    },
+    { "normal",      SVX_CASEMAP_NOT_MAPPED      },
+    { "small-caps",  SVX_CASEMAP_KAPITAELCHEN    },
     { 0,                    0                   }
 };
 
 static CSS1PropertyEnum const aTextTransformTable[] =
 {
-    { sCSS1_PV_uppercase,  SVX_CASEMAP_VERSALIEN },
-    { sCSS1_PV_lowercase,  SVX_CASEMAP_GEMEINE   },
-    { sCSS1_PV_capitalize, SVX_CASEMAP_TITEL     },
+    { "uppercase",  SVX_CASEMAP_VERSALIEN },
+    { "lowercase",  SVX_CASEMAP_GEMEINE   },
+    { "capitalize", SVX_CASEMAP_TITEL     },
     { 0,                   0                     }
 };
 
 static CSS1PropertyEnum const aDirectionTable[] =
 {
-    { sCSS1_PV_ltr,         FRMDIR_HORI_LEFT_TOP        },
-    { sCSS1_PV_rtl,         FRMDIR_HORI_RIGHT_TOP       },
-    { sCSS1_PV_inherit,     FRMDIR_ENVIRONMENT          },
+    { "ltr",         FRMDIR_HORI_LEFT_TOP        },
+    { "rtl",         FRMDIR_HORI_RIGHT_TOP       },
+    { "inherit",     FRMDIR_ENVIRONMENT          },
     { 0,                    0                   }
 };
 
 static CSS1PropertyEnum const aBGRepeatTable[] =
 {
-    { sCSS1_PV_repeat,      GPOS_TILED                  },
-    { sCSS1_PV_repeat_x,    GPOS_TILED                  },
-    { sCSS1_PV_repeat_y,    GPOS_TILED                  },
-    { sCSS1_PV_no_repeat,   GPOS_NONE                   },
+    { "repeat",      GPOS_TILED                  },
+    { "repeat-x",    GPOS_TILED                  },
+    { "repeat-y",    GPOS_TILED                  },
+    { "no-repeat",   GPOS_NONE                   },
     { 0,                    0                           }
 };
 
 static CSS1PropertyEnum const aBGHoriPosTable[] =
 {
-    { sCSS1_PV_left,        GPOS_LT                 },
-    { sCSS1_PV_center,      GPOS_MT                 },
-    { sCSS1_PV_right,       GPOS_RT                 },
+    { "left",        GPOS_LT                 },
+    { "center",      GPOS_MT                 },
+    { "right",       GPOS_RT                 },
     { 0,                    0                       }
 };
 
 static CSS1PropertyEnum const aBGVertPosTable[] =
 {
-    { sCSS1_PV_top,         GPOS_LT                 },
-    { sCSS1_PV_middle,      GPOS_LM                 },
-    { sCSS1_PV_bottom,      GPOS_LB                 },
+    { "top",         GPOS_LT                 },
+    { "middle",      GPOS_LM                 },
+    { "bottom",      GPOS_LB                 },
     { 0,                    0                       }
 };
 
 static CSS1PropertyEnum const aTextAlignTable[] =
 {
-    { sCSS1_PV_left,        SVX_ADJUST_LEFT     },
-    { sCSS1_PV_center,      SVX_ADJUST_CENTER   },
-    { sCSS1_PV_right,       SVX_ADJUST_RIGHT    },
-    { sCSS1_PV_justify,     SVX_ADJUST_BLOCK    },
+    { "left",        SVX_ADJUST_LEFT     },
+    { "center",      SVX_ADJUST_CENTER   },
+    { "right",       SVX_ADJUST_RIGHT    },
+    { "justify",     SVX_ADJUST_BLOCK    },
     { 0,                    0                   }
 };
 
 static CSS1PropertyEnum const aBorderWidthTable[] =
 {
-    { sCSS1_PV_thin,        0   },  // DEF_LINE_WIDTH_0 / DEF_DOUBLE_LINE0
-    { sCSS1_PV_medium,      1   },  // DEF_LINE_WIDTH_1 / DEF_DOUBLE_LINE1
-    { sCSS1_PV_thick,       2   },  // DEF_LINE_WIDTH_2 / DEF_DOUBLE_LINE2
+    { "thin",        0   },  // DEF_LINE_WIDTH_0 / DEF_DOUBLE_LINE0
+    { "medium",      1   },  // DEF_LINE_WIDTH_1 / DEF_DOUBLE_LINE1
+    { "thick",       2   },  // DEF_LINE_WIDTH_2 / DEF_DOUBLE_LINE2
     { 0,                    0   }
 };
 
@@ -177,50 +177,50 @@ enum CSS1BorderStyle { CSS1_BS_NONE, CSS1_BS_SINGLE, CSS1_BS_DOUBLE, CSS1_BS_DOT
 
 static CSS1PropertyEnum const aBorderStyleTable[] =
 {
-    { sCSS1_PV_none,        CSS1_BS_NONE        },
-    { sCSS1_PV_dotted,      CSS1_BS_DOTTED      },
-    { sCSS1_PV_dashed,      CSS1_BS_DASHED      },
-    { sCSS1_PV_solid,       CSS1_BS_SINGLE      },
-    { sCSS1_PV_double,      CSS1_BS_DOUBLE      },
-    { sCSS1_PV_groove,      CSS1_BS_GROOVE      },
-    { sCSS1_PV_ridge,       CSS1_BS_RIDGE       },
-    { sCSS1_PV_inset,       CSS1_BS_INSET       },
-    { sCSS1_PV_outset,      CSS1_BS_OUTSET      },
+    { "none",        CSS1_BS_NONE        },
+    { "dotted",      CSS1_BS_DOTTED      },
+    { "dashed",      CSS1_BS_DASHED      },
+    { "solid",       CSS1_BS_SINGLE      },
+    { "double",      CSS1_BS_DOUBLE      },
+    { "groove",      CSS1_BS_GROOVE      },
+    { "ridge",       CSS1_BS_RIDGE       },
+    { "inset",       CSS1_BS_INSET       },
+    { "inset",      CSS1_BS_OUTSET      },
     { 0,                    0                   }
 };
 
 static CSS1PropertyEnum const aFloatTable[] =
 {
-    { sCSS1_PV_left,    SVX_ADJUST_LEFT         },
-    { sCSS1_PV_right,   SVX_ADJUST_RIGHT        },
-    { sCSS1_PV_none,    SVX_ADJUST_END          },
+    { "left",    SVX_ADJUST_LEFT         },
+    { "right",   SVX_ADJUST_RIGHT        },
+    { "none",    SVX_ADJUST_END          },
     { 0,                0                       }
 };
 
 static CSS1PropertyEnum const aPositionTable[] =
 {
-    { sCSS1_PV_absolute,    SVX_CSS1_POS_ABSOLUTE   },
-    { sCSS1_PV_relative,    SVX_CSS1_POS_RELATIVE   },
-    { sCSS1_PV_static,      SVX_CSS1_POS_STATIC     },
+    { "absolute",    SVX_CSS1_POS_ABSOLUTE   },
+    { "relative",    SVX_CSS1_POS_RELATIVE   },
+    { "static",      SVX_CSS1_POS_STATIC     },
     { 0,                    0                       }
 };
 
 // Feature: PrintExt
 static CSS1PropertyEnum const aSizeTable[] =
 {
-    { sCSS1_PV_auto,        SVX_CSS1_STYPE_AUTO         },
-    { sCSS1_PV_landscape,   SVX_CSS1_STYPE_LANDSCAPE    },
-    { sCSS1_PV_portrait,    SVX_CSS1_STYPE_PORTRAIT     },
+    { "auto",        SVX_CSS1_STYPE_AUTO         },
+    { "landscape",   SVX_CSS1_STYPE_LANDSCAPE    },
+    { "portrait",    SVX_CSS1_STYPE_PORTRAIT     },
     { 0,                    0                           }
 };
 
 static CSS1PropertyEnum const aPageBreakTable[] =
 {
-    { sCSS1_PV_auto,        SVX_CSS1_PBREAK_AUTO        },
-    { sCSS1_PV_always,      SVX_CSS1_PBREAK_ALWAYS      },
-    { sCSS1_PV_avoid,       SVX_CSS1_PBREAK_AVOID       },
-    { sCSS1_PV_left,        SVX_CSS1_PBREAK_LEFT        },
-    { sCSS1_PV_right,       SVX_CSS1_PBREAK_RIGHT       },
+    { "auto",        SVX_CSS1_PBREAK_AUTO        },
+    { "always",      SVX_CSS1_PBREAK_ALWAYS      },
+    { "avoid",       SVX_CSS1_PBREAK_AVOID       },
+    { "left",        SVX_CSS1_PBREAK_LEFT        },
+    { "right",       SVX_CSS1_PBREAK_RIGHT       },
     { 0,                    0                           }
 };
 
@@ -412,7 +412,7 @@ void SvxCSS1PropertyInfo::DestroyBorderInfos()
 
 void SvxCSS1PropertyInfo::Clear()
 {
-    aId.Erase();
+    aId = "";
     bTopMargin = bBottomMargin = sal_False;
     bLeftMargin = bRightMargin = bTextIndent = sal_False;
     nLeftMargin = nRightMargin = 0;
@@ -662,15 +662,12 @@ void SvxCSS1PropertyInfo::SetBoxItem( SfxItemSet& rItemSet,
     DestroyBorderInfos();
 }
 
-SvxCSS1MapEntry::SvxCSS1MapEntry( const String& rKey, const SfxItemSet& rItemSet,
+SvxCSS1MapEntry::SvxCSS1MapEntry( const OUString& rKey, const SfxItemSet& rItemSet,
                                   const SvxCSS1PropertyInfo& rProp ) :
-    aKey( rKey ),
+    aKey( rKey.toAsciiUpperCase() ),
     aItemSet( rItemSet ),
     aPropInfo( rProp )
-{
-    // TODO: ToUpperAscii
-    aKey.ToUpperAscii();
-}
+{}
 
 sal_Bool SvxCSS1Parser::StyleParsed( const CSS1Selector * /*pSelector*/,
                                  SfxItemSet& /*rItemSet*/,
@@ -1086,7 +1083,7 @@ static void ParseCSS1_font_family( const CSS1Expression *pExpr,
 {
     OSL_ENSURE( pExpr, "no expression" );
 
-    String aName, aStyleName;
+    OUString aName, aStyleName;
     FontFamily eFamily = FAMILY_DONTKNOW;
     FontPitch ePitch = PITCH_DONTKNOW;
     rtl_TextEncoding eEnc = rParser.GetDfltEncoding();
@@ -1098,7 +1095,7 @@ static void ParseCSS1_font_family( const CSS1Expression *pExpr,
         CSS1Token eType = pExpr->GetType();
         if( CSS1_IDENT==eType || CSS1_STRING==eType )
         {
-            String aIdent( pExpr->GetString() );
+            OUString aIdent( pExpr->GetString() );
 
             if( CSS1_IDENT==eType )
             {
@@ -1108,12 +1105,12 @@ static void ParseCSS1_font_family( const CSS1Expression *pExpr,
                 while( pNext && !pNext->GetOp() &&
                        CSS1_IDENT==pNext->GetType() )
                 {
-                    (aIdent += ' ') += pNext->GetString();
+                    aIdent += " " + pNext->GetString();
                     pExpr = pNext;
                     pNext = pExpr->GetNext();
                 }
             }
-            if( aIdent.Len() )
+            if( !aIdent.isEmpty() )
             {
                 if( !bFound && pFList )
                 {
@@ -1130,7 +1127,7 @@ static void ParseCSS1_font_family( const CSS1Expression *pExpr,
                     }
                 }
                 if( !bFirst )
-                    aName += ';';
+                    aName += ";";
                 aName += aIdent;
             }
         }
@@ -1139,7 +1136,7 @@ static void ParseCSS1_font_family( const CSS1Expression *pExpr,
         bFirst = sal_False;
     }
 
-    if( aName.Len() && !rParser.IsIgnoreFontFamily() )
+    if( !aName.isEmpty() && !rParser.IsIgnoreFontFamily() )
     {
         SvxFontItem aFont( eFamily, aName, aStyleName, ePitch,
                             eEnc, aItemIds.nFont );
@@ -1239,7 +1236,7 @@ static void ParseCSS1_font_style( const CSS1Expression *pExpr,
         if( (CSS1_IDENT==pExpr->GetType() || CSS1_STRING==pExpr->GetType()) &&
             !pExpr->GetOp() )
         {
-            const String& rValue = pExpr->GetString();
+            const OUString& rValue = pExpr->GetString();
             // erstmal pruefen, ob es ein Italic-Wert oder 'normal' ist
             sal_uInt16 nItalic;
             if( SvxCSS1Parser::GetEnum( aFontStyleTable, rValue, nItalic ) )
@@ -1254,7 +1251,7 @@ static void ParseCSS1_font_style( const CSS1Expression *pExpr,
                 bPosture = sal_True;
             }
             else if( !bCaseMap &&
-                     rValue.EqualsIgnoreCaseAscii(sCSS1_PV_small_caps) )
+                     rValue.equalsIgnoreAsciiCase( "small-caps" ) )
             {
                 eCaseMap = SVX_CASEMAP_KAPITAELCHEN;
                 bCaseMap = sal_True;
@@ -1477,7 +1474,7 @@ static void ParseCSS1_background( const CSS1Expression *pExpr,
     OSL_ENSURE( pExpr, "no expression" );
 
     Color aColor;
-    String aURL;
+    OUString aURL;
 
     sal_Bool bColor = sal_False, bTransparent = sal_False;
     SvxGraphicPosition eRepeat = GPOS_TILED;
@@ -1544,8 +1541,8 @@ static void ParseCSS1_background( const CSS1Expression *pExpr,
         case CSS1_STRING:       // Wegen MS-IE
             {
                 sal_uInt16 nEnum;
-                const String &rValue = pExpr->GetString();
-                if( rValue.EqualsIgnoreCaseAscii( sCSS1_PV_transparent ) )
+                const OUString &rValue = pExpr->GetString();
+                if( rValue.equalsIgnoreAsciiCase( "transparent" ) )
                 {
                     bTransparent = sal_True;
                 }
@@ -1583,14 +1580,14 @@ static void ParseCSS1_background( const CSS1Expression *pExpr,
     if( bTransparent )
     {
         bColor = sal_False;
-        aURL.Erase();
+        aURL = "";
     }
 
     // repeat hat prio gegenueber einer Position
     if( GPOS_NONE == eRepeat )
         eRepeat = ePos;
 
-    if( bTransparent || bColor || aURL.Len() )
+    if( bTransparent || bColor || !aURL.isEmpty() )
     {
         SvxBrushItem aBrushItem( aItemIds.nBrush );
 
@@ -1599,7 +1596,7 @@ static void ParseCSS1_background( const CSS1Expression *pExpr,
         else if( bColor )
             aBrushItem.SetColor( aColor );
 
-        if( aURL.Len() )
+        if( !aURL.isEmpty() )
         {
             aBrushItem.SetGraphicLink( URIHelper::SmartRel2Abs( INetURLObject( rParser.GetBaseURL()), aURL, Link(), false ) );
             aBrushItem.SetGraphicPos( eRepeat );
@@ -1628,7 +1625,7 @@ static void ParseCSS1_background_color( const CSS1Expression *pExpr,
     case CSS1_IDENT:
     case CSS1_HEXCOLOR:
     case CSS1_STRING:       // Wegen MS-IE
-        if( pExpr->GetString().EqualsIgnoreCaseAscii( sCSS1_PV_transparent ) )
+        if( pExpr->GetString().equalsIgnoreAsciiCase( "transparent" ) )
         {
             bTransparent = sal_True;
         }
@@ -1740,7 +1737,7 @@ static void ParseCSS1_font( const CSS1Expression *pExpr,
         if( CSS1_IDENT==pExpr->GetType() ||
             CSS1_STRING==pExpr->GetType() )
         {
-            const String& rValue = pExpr->GetString();
+            const OUString& rValue = pExpr->GetString();
 
             sal_uInt16 nEnum;
 
@@ -1862,7 +1859,7 @@ static void ParseCSS1_letter_spacing( const CSS1Expression *pExpr,
 
     case CSS1_IDENT:
     case CSS1_STRING: // Vorschtshalber auch MS-IE
-        if( pExpr->GetString().EqualsIgnoreCaseAscii(sCSS1_PV_normal) )
+        if( pExpr->GetString().equalsIgnoreAsciiCase( "normal" ) )
         {
             rItemSet.Put( SvxKerningItem( (short)0, aItemIds.nKerning ) );
         }
@@ -1893,14 +1890,13 @@ static void ParseCSS1_text_decoration( const CSS1Expression *pExpr,
     while( pExpr && (pExpr->GetType() == CSS1_IDENT ||
                      pExpr->GetType() == CSS1_STRING) && !pExpr->GetOp() )
     {
-        String aValue = pExpr->GetString();
-        aValue.ToLowerAscii();
+        OUString aValue = pExpr->GetString().toAsciiLowerCase();
         sal_Bool bKnown = sal_False;
 
-        switch( aValue.GetChar( 0 ) )
+        switch( aValue[0] )
         {
         case 'n':
-            if( aValue.EqualsAscii( sCSS1_PV_none ) )
+            if( aValue == "none" )
             {
                 bUnderline = sal_True;
                 eUnderline = UNDERLINE_NONE;
@@ -1919,7 +1915,7 @@ static void ParseCSS1_text_decoration( const CSS1Expression *pExpr,
             break;
 
         case 'u':
-            if( aValue.EqualsAscii( sCSS1_PV_underline ) )
+            if( aValue == "underline" )
             {
                 bUnderline = sal_True;
                 eUnderline = UNDERLINE_SINGLE;
@@ -1929,7 +1925,7 @@ static void ParseCSS1_text_decoration( const CSS1Expression *pExpr,
             break;
 
         case 'o':
-            if( aValue.EqualsAscii( sCSS1_PV_overline ) )
+            if( aValue == "overline" )
             {
                 bOverline = sal_True;
                 eOverline = UNDERLINE_SINGLE;
@@ -1939,7 +1935,7 @@ static void ParseCSS1_text_decoration( const CSS1Expression *pExpr,
             break;
 
         case 'l':
-            if( aValue.EqualsAscii( sCSS1_PV_line_through ) )
+            if( aValue == "line-through" )
             {
                 bCrossedOut = sal_True;
                 eCrossedOut = STRIKEOUT_SINGLE;
@@ -1949,7 +1945,7 @@ static void ParseCSS1_text_decoration( const CSS1Expression *pExpr,
             break;
 
         case 'b':
-            if( aValue.EqualsAscii( sCSS1_PV_blink ) )
+            if( aValue == "blink" )
             {
                 bBlink = sal_True;
                 bBlinkOn = sal_True;
@@ -2572,7 +2568,7 @@ static void ParseCSS1_border_xxx( const CSS1Expression *pExpr,
 
         case CSS1_IDENT:
             {
-                const String& rValue = pExpr->GetString();
+                const OUString& rValue = pExpr->GetString();
                 sal_uInt16 nValue;
                 if( SvxCSS1Parser::GetEnum( aBorderWidthTable, rValue, nValue ) )
                 {
@@ -2873,7 +2869,7 @@ static void ParseCSS1_length( const CSS1Expression *pExpr,
     switch( pExpr->GetType() )
     {
     case CSS1_IDENT:
-        if( pExpr->GetString().EqualsIgnoreCaseAscii( sCSS1_PV_auto ) )
+        if( pExpr->GetString().equalsIgnoreAsciiCase( "auto" ) )
         {
             rLength = 0;
             rLengthType = SVX_CSS1_LTYPE_AUTO;
