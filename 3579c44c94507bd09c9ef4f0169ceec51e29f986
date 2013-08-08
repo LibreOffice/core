@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//9Qs\u003d",
+        "filename": "sc/source/core/opencl/openclwrapper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-08-08T11:52:51Z",
+      "side": 1,
+      "message": "you may be doing free(NULL) here\nsee line 321",
+      "revId": "3579c44c94507bd09c9ef4f0169ceec51e29f986",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
