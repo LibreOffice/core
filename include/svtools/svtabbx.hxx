@@ -37,9 +37,9 @@ struct TabListBoxEventData
 {
     SvTreeListEntry*    m_pEntry;
     sal_uInt16          m_nColumn;
-    String          m_sOldText;
+    OUString            m_sOldText;
 
-    TabListBoxEventData( SvTreeListEntry* pEntry, sal_uInt16 nColumn, const String& rOldText ) :
+    TabListBoxEventData( SvTreeListEntry* pEntry, sal_uInt16 nColumn, const OUString& rOldText ) :
         m_pEntry( pEntry ), m_nColumn( nColumn ), m_sOldText( rOldText ) {}
 };
 
@@ -58,9 +58,9 @@ protected:
     virtual void                SetTabs();
     virtual void                InitEntry(SvTreeListEntry*, const OUString&, const Image&, const Image&, SvLBoxButtonKind);
 
-    String                      GetTabEntryText( sal_uLong nPos, sal_uInt16 nCol ) const;
-    SvTreeListEntry*                GetEntryOnPos( sal_uLong _nEntryPos ) const;
-    SvTreeListEntry*                GetChildOnPos( SvTreeListEntry* _pParent, sal_uLong _nEntryPos, sal_uLong& _rPos ) const;
+    OUString                    GetTabEntryText( sal_uLong nPos, sal_uInt16 nCol ) const;
+    SvTreeListEntry*            GetEntryOnPos( sal_uLong _nEntryPos ) const;
+    SvTreeListEntry*            GetChildOnPos( SvTreeListEntry* _pParent, sal_uLong _nEntryPos, sal_uLong& _rPos ) const;
 
 public:
     SvTabListBox( Window* pParent, WinBits = WB_BORDER );

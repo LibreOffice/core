@@ -443,7 +443,7 @@ const sal_Unicode* SvTabListBox::GetToken( const sal_Unicode* pPtr, sal_uInt16& 
     return pPtr;
 }
 
-String SvTabListBox::GetTabEntryText( sal_uLong nPos, sal_uInt16 nCol ) const
+OUString SvTabListBox::GetTabEntryText( sal_uLong nPos, sal_uInt16 nCol ) const
 {
     SvTreeListEntry* pEntry = SvTreeListBox::GetEntry( nPos );
     DBG_ASSERT( pEntry, "GetTabEntryText(): Invalid entry " );
