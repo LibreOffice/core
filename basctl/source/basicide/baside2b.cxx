@@ -507,7 +507,6 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
 
     if( pCodeCompleteWnd->IsVisible() && CodeCompleteOptions::IsCodeCompleteOn() )
     {
-        //std::cerr << "EditorWindow::KeyInput" << std::endl;
         pCodeCompleteWnd->GetListBox()->KeyInput(rKEvt);
         if( rKEvt.GetKeyCode().GetCode() == KEY_UP
             || rKEvt.GetKeyCode().GetCode() == KEY_DOWN
@@ -733,28 +732,31 @@ void EditorWindow::HandleCodeCompletition()
     TextSelection aSel = GetEditView()->GetSelection();
     sal_uLong nLine =  aSel.GetStart().GetPara();
     OUString aLine( pEditEngine->GetText( nLine ) ); // the line being modified
-    std::vector< OUString > aVect;
+    std::vector< OUString > aVect; //vector to hold the base variable+methods for the nested reflection
 
     HighlightPortions aPortions;
     aHighlighter.getHighlightPortions( nLine, aLine, aPortions );
-    if( aPortions.size() != 0 )
+    if( aPortions.size() > 0 )
     {//use the syntax highlighter to grab out nested reflection calls, eg. aVar.aMethod("aa").aOtherMethod ..
-        for ( size_t i = 0; i < aPortions.size(); i++ )
+        for( auto aIt = aPortions.crbegin(); aIt != aPortions.crend(); ++aIt )
         {
-            HighlightPortion& r = aPortions[i];
-            if( r.tokenType == 1 || r.tokenType == 9) // extract the identifers(methods, base variable)
+            HighlightPortion r = *aIt;
+            if( r.tokenType == 2 ) // a whitespace: stop; if there is no ws, it goes to the beginning of the line
+                break;
+            if( r.tokenType == 1 || r.tokenType == 9 ) // extract the identifers(methods, base variable)
             /* an example: Dim aLocVar2 as com.sun.star.beans.PropertyValue
              * here, aLocVar2.Name, and PropertyValue's Name field is treated as a keyword(?!)
              * */
-                aVect.push_back( aLine.copy(r.nBegin, r.nEnd - r.nBegin) );
+                aVect.insert( aVect.begin(), aLine.copy(r.nBegin, r.nEnd - r.nBegin) );
         }
 
         OUString sBaseName = aVect[0];//variable name
         OUString sVarType = aCodeCompleteCache.GetVarType( sBaseName );
-        if( !sVarType.isEmpty() && CodeCompleteOptions::IsAutoCorrectKeywordsOn() )//correct variable name
-        {
-            TextPaM aStart(nLine, aSel.GetStart().GetIndex() - sBaseName.getLength() );
-            TextSelection sTextSelection(aStart, TextPaM(nLine, aSel.GetStart().GetIndex()));
+        if( !sVarType.isEmpty() && CodeCompleteOptions::IsAutoCorrectKeywordsOn() )
+        {//correct variable name
+            TextPaM aStart(nLine, aLine.indexOf(sBaseName) );
+            TextPaM aEnd(nLine, aLine.indexOf(sBaseName) + sBaseName.getLength() );
+            TextSelection sTextSelection(aStart, aEnd);
             pEditEngine->ReplaceText( sTextSelection, aCodeCompleteCache.GetCorrectCaseVarName(sBaseName) );
             pEditView->SetSelection( aSel );
         }
@@ -772,14 +774,12 @@ void EditorWindow::HandleCodeCompletition()
                 aEntryVect.insert(aEntryVect.end(), aMethVect.begin(), aMethVect.end() );
             }
             if( aEntryVect.size() > 0 )
-            {
                 SetupAndShowCodeCompleteWnd( aEntryVect, aSel );
-            }
         }
     }
 }
 
-void EditorWindow::SetupAndShowCodeCompleteWnd(const std::vector< OUString >& aEntryVect, TextSelection aSel )
+void EditorWindow::SetupAndShowCodeCompleteWnd( const std::vector< OUString >& aEntryVect, TextSelection aSel )
 {
     // calculate position
     Rectangle aRect = ( (TextEngine*) GetEditEngine() )->PaMtoEditCursor( aSel.GetEnd() , false );
@@ -2760,7 +2760,7 @@ UnoTypeCodeCompletetor::UnoTypeCodeCompletetor( const std::vector< OUString >& a
         if( xRefl.is() )
             xClass = xRefl->forName( sVarType );//get the base class for reflection
     }
-    catch( const Exception& ex)
+    catch( const Exception& ex )
     {
         bCanComplete = false;
         return;
@@ -2768,32 +2768,34 @@ UnoTypeCodeCompletetor::UnoTypeCodeCompletetor( const std::vector< OUString >& a
 
     unsigned int j = 1;//start from aVect[1]: aVect[0] is the variable name
     OUString sMethName;
+
     while( j != aVect.size() )
     {
         sMethName = aVect[j];
 
-        if( !CheckField(sMethName) )//check field
-            break;
+        if( CodeCompleteOptions::IsExtendedTypeDeclaration() )
+        {
+            if( !CheckMethod(sMethName) && !CheckField(sMethName) )
+            {
+                bCanComplete = false;
+                break;
+            }
+        }
         else
         {
-            if( CodeCompleteOptions::IsExtendedTypeDeclaration() )
-            {// if extended types on, check methods
-                if( !CheckMethod(sMethName) )
-                {
-                    bCanComplete = false;
-                    break;
-                }
+            if( !CheckField(sMethName) )
+            {
+                bCanComplete = false;
+                break;
             }
-            bCanComplete = false;
-            break;
         }
-        j++;
+
+        ++j;
     }
 }
 
 std::vector< OUString > UnoTypeCodeCompletetor::GetXIdlClassMethods() const
 {
-
     std::vector< OUString > aRetVect;
     if( bCanComplete )
     {
@@ -2802,7 +2804,7 @@ std::vector< OUString > UnoTypeCodeCompletetor::GetXIdlClassMethods() const
         {
             for(sal_Int32 l = 0; l < aMethods.getLength(); ++l)
             {
-                aRetVect.push_back(OUString(aMethods[l]->getName()));
+                aRetVect.push_back( OUString(aMethods[l]->getName()) );
             }
         }
     }
@@ -2811,7 +2813,6 @@ std::vector< OUString > UnoTypeCodeCompletetor::GetXIdlClassMethods() const
 
 std::vector< OUString > UnoTypeCodeCompletetor::GetXIdlClassFields() const
 {
-
     std::vector< OUString > aRetVect;
     if( bCanComplete )
     {
@@ -2820,7 +2821,7 @@ std::vector< OUString > UnoTypeCodeCompletetor::GetXIdlClassFields() const
         {
             for(sal_Int32 l = 0; l < aFields.getLength(); ++l)
             {
-                aRetVect.push_back(OUString(aFields[l]->getName()));
+                aRetVect.push_back( OUString(aFields[l]->getName()) );
             }
         }
     }
@@ -2833,12 +2834,12 @@ bool UnoTypeCodeCompletetor::CanCodeComplete() const
 }
 
 bool UnoTypeCodeCompletetor::CheckField( const OUString& sFieldName )
-{
+{// modifies xClass!!!
     Reference< reflection::XIdlField> xField = xClass->getField( sFieldName );
     if( xField != NULL )
     {
         xClass = xField->getType();
-        if( xClass == NULL )
+        if( xClass != NULL )
         {
             return true;
         }
@@ -2847,12 +2848,12 @@ bool UnoTypeCodeCompletetor::CheckField( const OUString& sFieldName )
 }
 
 bool UnoTypeCodeCompletetor::CheckMethod( const OUString& sMethName )
-{
+{// modifies xClass!!!
     Reference< reflection::XIdlMethod> xMethod = xClass->getMethod( sMethName );
-    if( xMethod != NULL ) //method OK
+    if( xMethod != NULL ) //method OK, check return type
     {
         xClass = xMethod->getReturnType();
-        if( xClass == NULL )
+        if( xClass != NULL )
         {
             return true;
         }
