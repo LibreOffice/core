@@ -535,15 +535,14 @@ public:
      * the window, clear internal variables
      * */
     CodeCompleteListBox* GetListBox(){return pListBox;}
-
 };
 
 class UnoTypeCodeCompletetor
 {
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xFactory;
-    ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlReflection > xRefl;
-    ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlClass > xClass;
+    ::css::uno::Reference< ::css::lang::XMultiServiceFactory > xFactory;
+    ::css::uno::Reference< ::css::reflection::XIdlReflection > xRefl;
+    ::css::uno::Reference< ::css::reflection::XIdlClass > xClass;
     bool bCanComplete;
 
     bool CheckField( const OUString& sFieldName );
