@@ -738,9 +738,9 @@ sal_Bool SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
     {
         if( !pNext ||
             (CSS1_SELTYPE_PSEUDO == pNext->GetType() &&
-            (pNext->GetString().EqualsIgnoreCaseAscii(sCSS1_left) ||
-             pNext->GetString().EqualsIgnoreCaseAscii(sCSS1_right) ||
-             pNext->GetString().EqualsIgnoreCaseAscii(sCSS1_first)) ) )
+            (pNext->GetString().equalsIgnoreAsciiCaseAscii(sCSS1_left) ||
+             pNext->GetString().equalsIgnoreAsciiCaseAscii(sCSS1_right) ||
+             pNext->GetString().equalsIgnoreAsciiCaseAscii(sCSS1_first)) ) )
         {
             OUString aName;
             if( pNext )
@@ -994,7 +994,7 @@ sal_Bool SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
     {
         if( !pNext ||
             (CSS1_SELTYPE_PSEUDO==eNextType &&
-             pNext->GetString().EqualsIgnoreCaseAscii(sCSS1_first_letter) &&
+             pNext->GetString().equalsIgnoreAsciiCaseAscii(sCSS1_first_letter) &&
              SVX_ADJUST_LEFT == rPropInfo.eFloat) )
         {
             // Entweder kein zusammengesetzter Selektor oder

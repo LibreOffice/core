@@ -101,7 +101,7 @@ class SvxCSS1PropertyInfo
 
 public:
 
-    String aId;             // ID fuer Bookmarks, Rahmen etc.
+    OUString aId;             // ID fuer Bookmarks, Rahmen etc.
 
     sal_Bool bTopMargin : 1;
     sal_Bool bBottomMargin : 1;
@@ -154,7 +154,7 @@ public:
 
 class SvxCSS1MapEntry
 {
-    String aKey;
+    OUString aKey;
     SfxItemSet aItemSet;
     SvxCSS1PropertyInfo aPropInfo;
 
@@ -164,7 +164,7 @@ public:
         aItemSet( rPool, pWhichMap )
     {}
 
-    SvxCSS1MapEntry( const String& rKey, const SfxItemSet& rItemSet,
+    SvxCSS1MapEntry( const OUString& rKey, const SfxItemSet& rItemSet,
                      const SvxCSS1PropertyInfo& rProp );
 
 
@@ -174,9 +174,9 @@ public:
     const SvxCSS1PropertyInfo& GetPropertyInfo() const { return aPropInfo; }
     SvxCSS1PropertyInfo& GetPropertyInfo() { return aPropInfo; }
 
-    const String& GetKey()  const { return aKey; }
+    const OUString& GetKey()  const { return aKey; }
     // TODO: ToUpperAscii -> ???
-    void SetKey( const String& rKey ) { aKey = rKey; aKey.ToUpperAscii(); }
+    void SetKey( const OUString& rKey ) { aKey = rKey.toAsciiUpperCase(); }
 
     friend sal_Bool operator==( const SvxCSS1MapEntry& rE1,
                             const SvxCSS1MapEntry& rE2 );
