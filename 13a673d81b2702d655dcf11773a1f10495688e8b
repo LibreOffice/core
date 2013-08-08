@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//9Rc\u003d",
+        "filename": "sw/source/filter/html/htmlfldw.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 464,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-08-08T11:33:16Z",
+      "side": 1,
+      "message": "didn\u0027t you lose the \u0027IgnoreCase\u0027 property here ?",
+      "revId": "13a673d81b2702d655dcf11773a1f10495688e8b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//9RY\u003d",
+        "filename": "sw/source/filter/html/htmlfldw.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 480,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-08-08T11:33:16Z",
+      "side": 1,
+      "message": "same here you are dropping the \u0027IgnoreCase\u0027 aspect of it",
+      "revId": "13a673d81b2702d655dcf11773a1f10495688e8b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//9RQ\u003d",
+        "filename": "sw/source/filter/html/htmlfly.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 871,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-08-08T11:33:16Z",
+      "side": 1,
+      "message": "again droping the IgnoreCase property",
+      "revId": "13a673d81b2702d655dcf11773a1f10495688e8b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//9RM\u003d",
+        "filename": "sw/source/filter/html/htmlform.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 906,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-08-08T11:33:16Z",
+      "side": 1,
+      "message": "sizeof(a) -1 when a is a c-string constant is basically strlen(a)\nso that seems like another startsWithIgnoreAsciiCase()\nsame below",
+      "revId": "13a673d81b2702d655dcf11773a1f10495688e8b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//9RI\u003d",
+        "filename": "sw/source/filter/html/htmlforw.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1298,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-08-08T11:33:16Z",
+      "side": 1,
+      "message": "why the OUString(OUString()) here ?\n*(OUSting*) is a OUString already",
+      "revId": "13a673d81b2702d655dcf11773a1f10495688e8b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//9RE\u003d",
+        "filename": "sw/source/filter/html/htmlftn.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-08-08T11:33:16Z",
+      "side": 1,
+      "message": "NO, we tend to use -1 as a End of String indicator (see indexOf functions for instance)\nlet\u0027s keep it consistent.\nIf you ever find yourself needing SAL_MAX_INT32, stop, that is prolly wrong :-)",
+      "revId": "13a673d81b2702d655dcf11773a1f10495688e8b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//9RA\u003d",
+        "filename": "sw/source/filter/html/svxcss1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 888,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-08-08T11:33:16Z",
+      "side": 1,
+      "message": "??? why is that (I can\u0027t see any code below where you exploit\nthat, so what is the point of adding it ?",
+      "revId": "13a673d81b2702d655dcf11773a1f10495688e8b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
