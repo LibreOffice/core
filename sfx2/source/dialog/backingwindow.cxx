@@ -61,18 +61,6 @@ const int nItemId_Extensions = 1;
 const int nItemId_Info = 3;
 const int nItemId_TplRep = 4;
 
-const int nShadowTop = 30;
-const int nShadowLeft = 30;
-const int nShadowRight = 30;
-const int nShadowBottom = 30;
-
-const int nPaddingTop = 30;
-const int nPaddingLeft = 50;
-const int nPaddingRight = 50;
-const int nPaddingBottom = 30;
-
-const int nLogoHeight = 150;
-
 BackingWindow::BackingWindow( Window* i_pParent ) :
     Window( i_pParent ),
     mbInitControls( false ),
@@ -96,6 +84,13 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     get(mpTplRepButton,     "add_temp");
 
     get(mpStartCenterContainer, "sccontainer");
+
+    get( mpRecentFilesThumbnails,  "recent_thumbnails");
+
+    mpRecentFilesThumbnails->SetStyle(mpRecentFilesThumbnails->GetStyle() | WB_VSCROLL);
+    mpRecentFilesThumbnails->SetThumbnailSize( 150, 150 );
+    mpRecentFilesThumbnails->Show();
+    mpRecentFilesThumbnails->loadRecentDocs();
 
     try
     {
@@ -242,37 +237,6 @@ void BackingWindow::prepareRecentFileMenu()
 void BackingWindow::initBackground()
 {
     SetBackground();
-
-    // scale middle segment
-    Size aMiddleSize;
-    if( !! maBackgroundMiddle )
-        aMiddleSize = maBackgroundMiddle.GetSizePixel();
-
-    // load middle segment
-    Application::LoadBrandBitmap ("shell/backing_space", maBackgroundMiddle);
-
-    // and scale it to previous size
-    if( aMiddleSize.Width() && aMiddleSize.Height() )
-        maBackgroundMiddle.Scale( aMiddleSize );
-
-    if( GetSettings().GetLayoutRTL() )
-    {
-        // replace images by RTL versions
-        Application::LoadBrandBitmap ("shell/backing_rtl_right", maBackgroundLeft);
-        Application::LoadBrandBitmap ("shell/backing_rtl_left", maBackgroundRight);
-    }
-    else
-    {
-        Application::LoadBrandBitmap ("shell/backing_left", maBackgroundLeft);
-        Application::LoadBrandBitmap ("shell/backing_right", maBackgroundRight);
-    }
-
-    mpOpenButton->SetMenuMode( MENUBUTTON_MENUMODE_TIMED );
-    mpOpenButton->SetActivateHdl( LINK( this, BackingWindow, ActivateHdl ) );
-
-    // this will be moved to somewhere saner later
-    mnSCWidth = 780;
-    mnSCHeight = maBackgroundLeft.GetSizePixel().Height();
 }
 
 void BackingWindow::initControls()
@@ -321,6 +285,9 @@ void BackingWindow::initControls()
     setupExternalLink( mpInfoButton );
     setupExternalLink( mpTplRepButton );
 
+    mpOpenButton->SetMenuMode( MENUBUTTON_MENUMODE_TIMED );
+    mpOpenButton->SetActivateHdl( LINK( this, BackingWindow, ActivateHdl ) );
+
     Resize();
 
     mpWriterButton->GrabFocus();
@@ -364,10 +331,7 @@ void BackingWindow::Paint( const Rectangle& )
     Wallpaper aBack( svtools::ColorConfig().GetColorValue(::svtools::APPBACKGROUND).nColor );
     Region aClip( Rectangle( Point( 0, 0 ), GetOutputSizePixel() ) );
 
-    Rectangle aBmpRect(Point((GetOutputSizePixel().Width()-mnSCWidth)/2,
-                             (GetOutputSizePixel().Height()-mnSCHeight)/2),
-                       Size(mnSCWidth,mnSCHeight));
-    aClip.Exclude( aBmpRect );
+    aClip.Exclude( maStartCentButtons );
 
     Push( PUSH_CLIPREGION );
     IntersectClipRegion( aClip );
@@ -376,28 +340,12 @@ void BackingWindow::Paint( const Rectangle& )
 
     VirtualDevice aDev( *this );
     aDev.EnableRTL( IsRTLEnabled() );
-    aDev.SetOutputSizePixel( aBmpRect.GetSize() );
-    Point aOffset( Point( 0, 0 ) - aBmpRect.TopLeft());
+    aDev.SetOutputSizePixel( maStartCentButtons.GetSize() );
+    Point aOffset( Point( 0, 0 ) - maStartCentButtons.TopLeft());
     aDev.DrawWallpaper( Rectangle( aOffset, GetOutputSizePixel() ), aBack );
 
-    maBackgroundMiddle.Scale(
-        Size(mnSCWidth - maBackgroundLeft.GetSizePixel().Width() - maBackgroundRight.GetSizePixel().Width(),
-        maBackgroundMiddle.GetSizePixel().Height()),
-        BMP_SCALE_FAST);
-
-    // draw bitmap
-    Point aTL( 0, 0 );
-    aDev.DrawBitmapEx( aTL, maBackgroundLeft );
-    aTL.X() += maBackgroundLeft.GetSizePixel().Width();
-    if( !!maBackgroundMiddle )
-    {
-        aDev.DrawBitmapEx( aTL, maBackgroundMiddle );
-        aTL.X() += maBackgroundMiddle.GetSizePixel().Width();
-    }
-    aDev.DrawBitmapEx( aTL, maBackgroundRight );
-
-    DrawOutDev( aBmpRect.TopLeft(), aBmpRect.GetSize(),
-                Point( 0, 0 ), aBmpRect.GetSize(),
+    DrawOutDev( maStartCentButtons.TopLeft(), maStartCentButtons.GetSize(),
+                Point( 0, 0 ), maStartCentButtons.GetSize(),
                 aDev );
 }
 
@@ -416,71 +364,6 @@ long BackingWindow::Notify( NotifyEvent& rNEvt )
         const KeyCode& rKeyCode(pEvt->GetKeyCode());
         if( pEvt && mpAccExec->execute(rKeyCode) )
             return 1;
-
-        // #i110344# extrawurst: specialized arrow key control
-        if( rKeyCode.GetModifier() == 0 )
-        {
-            if( rKeyCode.GetCode() == KEY_RIGHT )
-            {
-                if( mpWriterButton->HasFocus() )
-                    mpDrawButton->GrabFocus();
-                else if( mpCalcButton->HasFocus() )
-                    mpDBButton->GrabFocus();
-                else if( mpImpressButton->HasFocus() )
-                    mpMathButton->GrabFocus();
-                else if( mpOpenButton->HasFocus() )
-                    mpTemplateButton->GrabFocus();
-                return 1;
-            }
-            else if( rKeyCode.GetCode() == KEY_LEFT )
-            {
-                if( mpDrawButton->HasFocus() )
-                    mpWriterButton->GrabFocus();
-                else if( mpDBButton->HasFocus() )
-                    mpCalcButton->GrabFocus();
-                else if( mpMathButton->HasFocus() )
-                    mpImpressButton->GrabFocus();
-                else if( mpTemplateButton->HasFocus() )
-                    mpOpenButton->GrabFocus();
-                return 1;
-            }
-            else if( rKeyCode.GetCode() == KEY_UP )
-            {
-                // first column
-                if( mpOpenButton->HasFocus() )
-                    mpImpressButton->GrabFocus();
-                else if( mpImpressButton->HasFocus() )
-                    mpCalcButton->GrabFocus();
-                else if( mpCalcButton->HasFocus() )
-                    mpWriterButton->GrabFocus();
-                // second column
-                else if( mpTemplateButton->HasFocus() )
-                    mpMathButton->GrabFocus();
-                else if( mpMathButton->HasFocus() )
-                    mpDBButton->GrabFocus();
-                else if( mpDBButton->HasFocus() )
-                    mpDrawButton->GrabFocus();
-                return 1;
-            }
-            else if( rKeyCode.GetCode() == KEY_DOWN )
-            {
-                // first column
-                if( mpWriterButton->HasFocus() )
-                    mpCalcButton->GrabFocus();
-                else if( mpCalcButton->HasFocus() )
-                    mpImpressButton->GrabFocus();
-                else if( mpImpressButton->HasFocus() )
-                    mpOpenButton->GrabFocus();
-                // second column
-                else if( mpDrawButton->HasFocus() )
-                    mpDBButton->GrabFocus();
-                else if( mpDBButton->HasFocus() )
-                    mpMathButton->GrabFocus();
-                else if( mpMathButton->HasFocus() )
-                    mpTemplateButton->GrabFocus();
-                return 1;
-            }
-        }
     }
 
     return Window::Notify( rNEvt );
@@ -495,11 +378,8 @@ void BackingWindow::setOwningFrame( const com::sun::star::uno::Reference< com::s
 
 void BackingWindow::Resize()
 {
-    maStartCentButtons = Rectangle(
-                        Point((GetOutputSizePixel().Width()-mnSCWidth)/2 + nShadowTop + nPaddingTop,
-                              (GetOutputSizePixel().Height()-mnSCHeight)/2 + nShadowLeft + nPaddingLeft + nLogoHeight),
-                        Size(mnSCWidth - nShadowLeft - nShadowRight - nPaddingLeft - nPaddingRight,
-                             mnSCHeight - nShadowTop - nShadowBottom - nPaddingTop - nPaddingBottom - nLogoHeight));
+    maStartCentButtons = Rectangle( Point(0, 0), GetOutputSizePixel() );
+
     if (isLayoutEnabled(this))
         VclContainer::setLayoutAllocation(*GetWindow(WINDOW_FIRSTCHILD),
             maStartCentButtons.TopLeft(), maStartCentButtons.GetSize());

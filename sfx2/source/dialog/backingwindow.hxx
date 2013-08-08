@@ -29,6 +29,8 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/layout.hxx>
 
+#include <sfx2/recentdocsview.hxx>
+
 #include <svtools/acceleratorexecute.hxx>
 #include <unotools/moduleoptions.hxx>
 
@@ -79,6 +81,8 @@ class BackingWindow
 
     VclGrid*                        mpStartCenterContainer;
 
+    RecentDocsView*                 mpRecentFilesThumbnails;
+
     BitmapEx                        maBackgroundLeft;
     BitmapEx                        maBackgroundMiddle;
     BitmapEx                        maBackgroundRight;
@@ -88,9 +92,6 @@ class BackingWindow
     bool                            mbInitControls;
     sal_Int32                       mnHideExternalLinks;
     svt::AcceleratorExecute*        mpAccExec;
-
-    int                             mnSCWidth;
-    int                             mnSCHeight;
 
     void setupButton( PushButton* pButton, const OUString& rURL, const std::set<OUString>& rURLS,
                       SvtModuleOptions& rOpt, SvtModuleOptions::EModule eMod );
