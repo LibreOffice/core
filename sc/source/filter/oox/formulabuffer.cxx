@@ -33,12 +33,12 @@ using namespace ::com::sun::star::container;
 
 namespace oox { namespace xls {
 
-FormulaBuffer::FormulaBuffer::SharedFormulaEntry::SharedFormulaEntry(
+FormulaBuffer::SharedFormulaEntry::SharedFormulaEntry(
     const table::CellAddress& rAddr, const table::CellRangeAddress& rRange,
     const OUString& rTokenStr, sal_Int32 nSharedId ) :
     maAddress(rAddr), maRange(rRange), maTokenStr(rTokenStr), mnSharedId(nSharedId) {}
 
-FormulaBuffer::FormulaBuffer::SharedFormulaDesc::SharedFormulaDesc(
+FormulaBuffer::SharedFormulaDesc::SharedFormulaDesc(
     const com::sun::star::table::CellAddress& rAddr, sal_Int32 nSharedId,
     const OUString& rCellValue, sal_Int32 nValueType ) :
     maAddress(rAddr), mnSharedId(nSharedId), maCellValue(rCellValue), mnValueType(nValueType) {}
