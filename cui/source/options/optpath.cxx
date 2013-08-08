@@ -115,9 +115,9 @@ static Handle2CfgNameMapping_Impl const Hdl2CfgMap_Impl[] =
     { SvtPathOptions::PATH_TEMP,        "Temp" },
     { SvtPathOptions::PATH_TEMPLATE,    "Template" },
     { SvtPathOptions::PATH_WORK,        "Work" },
+    { SvtPathOptions::PATH_DICTIONARY,        "Dictionary" },
 #if OSL_DEBUG_LEVEL > 1
     { SvtPathOptions::PATH_LINGUISTIC,        "Linguistic" },
-    { SvtPathOptions::PATH_DICTIONARY,        "Dictionary" },
 #endif
     { USHRT_MAX, NULL }
 };
@@ -302,9 +302,9 @@ void SvxPathTabPage::Reset( const SfxItemSet& )
             case SvtPathOptions::PATH_GRAPHIC:
             case SvtPathOptions::PATH_TEMP:
             case SvtPathOptions::PATH_TEMPLATE:
+            case SvtPathOptions::PATH_DICTIONARY:
 #if OSL_DEBUG_LEVEL > 1
             case SvtPathOptions::PATH_LINGUISTIC:
-            case SvtPathOptions::PATH_DICTIONARY:
 #endif
             case SvtPathOptions::PATH_WORK:
             {
