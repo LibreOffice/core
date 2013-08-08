@@ -35,6 +35,7 @@ public:
     void testN816603();
     void testN816593();
     void testPageBorder();
+    void testN823651();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -61,6 +62,7 @@ void Test::run()
         {"n816603.doc", &Test::testN816603},
         {"n816593.doc", &Test::testN816593},
         {"page-border.doc", &Test::testPageBorder},
+        {"n823651.doc", &Test::testN823651},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -280,6 +282,14 @@ void Test::testPageBorder()
     // Page border was missing (LineWidth was 0), due to wrong interpretation of pgbApplyTo.
     table::BorderLine2 aBorder = getProperty<table::BorderLine2>(getStyles("PageStyles")->getByName(DEFAULT_STYLE), "TopBorder");
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(TWIP_TO_MM100(6 * 20)), aBorder.LineWidth);
+}
+
+void Test::testN823651()
+{
+    // Character height was 10pt instead of 7.5pt in the header.
+    uno::Reference<beans::XPropertySet> xStyle(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = getProperty< uno::Reference<text::XTextRange> >(xStyle, "HeaderTextFirst")->getText();
+    CPPUNIT_ASSERT_EQUAL(7.5f, getProperty<float>(getParagraphOfText(1, xText), "CharHeight"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
