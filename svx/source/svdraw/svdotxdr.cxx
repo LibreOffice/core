@@ -95,14 +95,4 @@ bool SdrTextObj::BckCreate(SdrDragStat& /*rStat*/)
     return true;
 }
 
-Pointer SdrTextObj::GetCreatePointer(const SdrView& /*rSdrView*/) const
-{
-    if (IsTextFrame())
-    {
-        return Pointer(POINTER_DRAW_TEXT);
-    }
-
-    return Pointer(POINTER_CROSS);
-}
-
 // eof

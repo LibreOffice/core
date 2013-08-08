@@ -1213,7 +1213,7 @@ IMPL_LINK( SlideTransitionPane, ApplyToAllButtonClicked, void *, EMPTYARG )
     ::sd::slidesorter::SharedPageSelection pPages (
         new ::sd::slidesorter::SlideSorterViewShell::PageSelection());
 
-    sal_uInt16 nPageCount = mpDrawDoc->GetSdPageCount( PK_STANDARD );
+    sal_uInt32 nPageCount = mpDrawDoc->GetSdPageCount( PK_STANDARD );
     pPages->reserve( nPageCount );
     for( sal_uInt32 i=0; i<nPageCount; ++i )
     {

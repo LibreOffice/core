@@ -1198,81 +1198,49 @@ bool SvxShapePolyPolygon::setPropertyValueImpl( const ::rtl::OUString& rName, co
         }
         case OWN_ATTR_BASE_GEOMETRY:
         {
-            if( rValue.getValue() )
+            if( rValue.getValue() && mpObj.is() )
             {
+                basegfx::B2DPolyPolygon aNewPolyPolygon;
+
                 if( rValue.getValueType() == ::getCppuType(( const drawing::PointSequenceSequence*)0))
                 {
-                    if( mpObj.is() )
-                    {
-                        // get polygpon data
-                        basegfx::B2DPolyPolygon aNewPolyPolygon(
-                            basegfx::tools::UnoPointSequenceSequenceToB2DPolyPolygon(
-                                *(const drawing::PointSequenceSequence*)rValue.getValue()));
-
-                        if(aNewPolyPolygon.count())
-                        {
-                            // migrate to pool metric
-                            ForceMetricToItemPoolMetric(aNewPolyPolygon);
-
-                            // BaseGeometry means the polygon is just scaled, but has no position, mirroring, shear
-                            // or rotation. Apply these current values from the object
-                            const basegfx::B2DHomMatrix aNoScaleTrans(
-                                basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
-                                    basegfx::B2DVector(mpObj->isMirroredX() ? -1.0 : 1.0, mpObj->isMirroredY() ? -1.0 : 1.0),
-                                    mpObj->getSdrObjectShearX(),
-                                    mpObj->getSdrObjectRotate(),
-                                    mpObj->getSdrObjectTranslate()));
-
-                            aNewPolyPolygon.transform(aNoScaleTrans);
-
-                            // position relative to anchor
-                            if(isWriterAnchorUsed())
-                            {
-                                aNewPolyPolygon.transform(basegfx::tools::createTranslateB2DHomMatrix(mpObj->GetAnchorPos()));
-                            }
-                        }
-
-                        // set at object
-                        SetPolygon(aNewPolyPolygon);
-                    }
-                    return true;
+                    // get polygpon data from PointSequenceSequence
+                    aNewPolyPolygon = basegfx::tools::UnoPointSequenceSequenceToB2DPolyPolygon(
+                        *(const drawing::PointSequenceSequence*)rValue.getValue());
                 }
                 else if( rValue.getValueType() == ::getCppuType(( const drawing::PolyPolygonBezierCoords*)0))
                 {
-                    if( mpObj.is() )
-                    {
-                        // get polygpon data
-                        basegfx::B2DPolyPolygon aNewPolyPolygon(
-                            basegfx::tools::UnoPolyPolygonBezierCoordsToB2DPolyPolygon(
-                                *(const drawing::PolyPolygonBezierCoords*)rValue.getValue()));
-
-                        if(aNewPolyPolygon.count())
-                        {
-                            // migrate to pool metric
-                            ForceMetricToItemPoolMetric(aNewPolyPolygon);
-
-                            // BaseGeometry means the polygon is just scaled, but has no position, shear
-                            // or rotation. Apply these current values from the object
-                            const basegfx::B2DHomMatrix aNoScaleTrans(
-                                basegfx::tools::createShearXRotateTranslateB2DHomMatrix(
-                                    mpObj->getSdrObjectShearX(),
-                                    mpObj->getSdrObjectRotate(),
-                                    mpObj->getSdrObjectTranslate()));
-
-                            aNewPolyPolygon.transform(aNoScaleTrans);
-
-                            // position relative to anchor
-                            if(isWriterAnchorUsed())
-                            {
-                                aNewPolyPolygon.transform(basegfx::tools::createTranslateB2DHomMatrix(mpObj->GetAnchorPos()));
-                            }
-                        }
-
-                        // set at object
-                        SetPolygon(aNewPolyPolygon);
-                    }
-                    return true;
+                    // get polygpon data from PolyPolygonBezierCoords
+                    aNewPolyPolygon = basegfx::tools::UnoPolyPolygonBezierCoordsToB2DPolyPolygon(
+                        *(const drawing::PolyPolygonBezierCoords*)rValue.getValue());
                 }
+
+                if(aNewPolyPolygon.count())
+                {
+                    // migrate to pool metric
+                    ForceMetricToItemPoolMetric(aNewPolyPolygon);
+
+                    // BaseGeometry means the polygon is just scaled, but has no position, mirroring, shear
+                    // or rotation. Apply these current values from the object
+                    const basegfx::B2DHomMatrix aNoScaleTrans(
+                        basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
+                            basegfx::B2DVector(mpObj->isMirroredX() ? -1.0 : 1.0, mpObj->isMirroredY() ? -1.0 : 1.0),
+                            mpObj->getSdrObjectShearX(),
+                            mpObj->getSdrObjectRotate(),
+                            mpObj->getSdrObjectTranslate()));
+
+                    aNewPolyPolygon.transform(aNoScaleTrans);
+
+                    // position relative to anchor
+                    if(isWriterAnchorUsed())
+                    {
+                        aNewPolyPolygon.transform(basegfx::tools::createTranslateB2DHomMatrix(mpObj->GetAnchorPos()));
+                    }
+                }
+
+                // set at object and return
+                SetPolygon(aNewPolyPolygon);
+                return true;
             }
             break;
         }

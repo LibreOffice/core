@@ -343,7 +343,7 @@ sal_Int32 Clipboard::PasteTransferable (sal_Int32 nInsertPosition)
     SdTransferable* pClipTransferable = SD_MOD()->pTransferClip;
     model::SlideSorterModel& rModel (mrSlideSorter.GetModel());
     bool bMergeMasterPages = !pClipTransferable->HasSourceDoc (rModel.GetDocument());
-    sal_uInt16 nInsertIndex (rModel.GetCoreIndex(nInsertPosition));
+    sal_uInt32 nInsertIndex (rModel.GetCoreIndex(nInsertPosition));
     sal_Int32 nInsertPageCount (0);
     if (pClipTransferable->HasPageBookmarks())
     {
@@ -567,7 +567,7 @@ void Clipboard::CreateSlideTransferable (
         if (pTransferableDocument == NULL)
             break;
         bool bIsMasterPage(false);
-        const sal_uInt16 nPageIndex (pTransferableDocument->GetPageByName(sBookmark, bIsMasterPage));
+        const sal_uInt32 nPageIndex (pTransferableDocument->GetPageByName(sBookmark, bIsMasterPage));
         if (nPageIndex == SDRPAGE_NOTFOUND)
             break;
 
@@ -912,7 +912,7 @@ void Clipboard::Abort (void)
 
 
 
-sal_uInt16 Clipboard::DetermineInsertPosition (const SdTransferable& )
+sal_uInt32 Clipboard::DetermineInsertPosition (const SdTransferable& )
 {
     // Tell the model to move the dragged pages behind the one with the
     // index nInsertionIndex which first has to be transformed into an index
@@ -930,11 +930,11 @@ sal_uInt16 Clipboard::DetermineInsertPosition (const SdTransferable& )
 
 
 
-sal_uInt16 Clipboard::InsertSlides (
+sal_uInt32 Clipboard::InsertSlides (
     const SdTransferable& rTransferable,
-    sal_uInt16 nInsertPosition)
+    sal_uInt32 nInsertPosition)
 {
-    sal_uInt16 nInsertedPageCount = ViewClipboard::InsertSlides (
+    sal_uInt32 nInsertedPageCount = ViewClipboard::InsertSlides (
         rTransferable,
         nInsertPosition);
 
@@ -943,7 +943,7 @@ sal_uInt16 Clipboard::InsertSlides (
     maPagesToSelect.clear();
     SdDrawDocument* pDocument = mrSlideSorter.GetModel().GetDocument();
     if (pDocument != NULL)
-        for (sal_Int32 i=0; i<=nInsertedPageCount; i+=2)
+        for (sal_uInt32 i=0; i<=nInsertedPageCount; i+=2)
             maPagesToSelect.push_back(
                 dynamic_cast<SdPage*>(pDocument->GetPage(nInsertPosition+i)));
 

@@ -543,8 +543,8 @@ uno::Reference< drawing::XLayer > SAL_CALL SdLayerManager::insertNewByIndex( sal
     if( mpModel->mpDoc )
     {
         SdrLayerAdmin& rLayerAdmin = mpModel->mpDoc->GetModelLayerAdmin();
-        sal_uInt16 nLayerCnt = rLayerAdmin.GetLayerCount();
-        sal_uInt16 nLayer = nLayerCnt - 2 + 1;
+        sal_uInt32 nLayerCnt = rLayerAdmin.GetLayerCount();
+        sal_uInt32 nLayer = nLayerCnt - 2 + 1;
         String aLayerName;
 
         // Ueberpruefung auf schon vorhandene Namen
@@ -697,7 +697,7 @@ uno::Sequence< OUString > SAL_CALL SdLayerManager::getElementNames()
         throw lang::DisposedException();
 
     SdrLayerAdmin& rLayerAdmin = mpModel->mpDoc->GetModelLayerAdmin();
-    const sal_uInt16 nLayerCount = rLayerAdmin.GetLayerCount();
+    const sal_uInt32 nLayerCount = rLayerAdmin.GetLayerCount();
 
     uno::Sequence< OUString > aSeq( nLayerCount );
 

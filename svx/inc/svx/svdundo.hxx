@@ -419,12 +419,12 @@ class SdrUndoLayer : public SdrUndoAction
 protected:
     SdrLayer*                   mpLayer;
     SdrLayerAdmin&              mrLayerAdmin;
-    sal_uInt16                  mnLayerNum;
+    sal_uInt32                  mnLayerNum;
 
     /// bitfield
     bool                        mbItsMine : 1;
 
-    SdrUndoLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel);
+    SdrUndoLayer(sal_uInt32 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel);
 public:
     virtual ~SdrUndoLayer();
 };
@@ -434,7 +434,7 @@ public:
 class SdrUndoNewLayer : public SdrUndoLayer
 {
 public:
-    SdrUndoNewLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel)
+    SdrUndoNewLayer(sal_uInt32 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel)
     :   SdrUndoLayer(nLayerNum, rNewLayerAdmin, rNewModel)
     {
     }
@@ -451,7 +451,7 @@ public:
 class SdrUndoDelLayer : public SdrUndoLayer
 {
 public:
-    SdrUndoDelLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel)
+    SdrUndoDelLayer(sal_uInt32 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel)
     :   SdrUndoLayer(nLayerNum, rNewLayerAdmin, rNewModel)
 {
         mbItsMine = true;
@@ -656,8 +656,8 @@ public:
     virtual SdrUndoAction* CreateUndoObjectStrAttr( SdrObject& rObject, SdrUndoObjStrAttr::ObjStrAttrType eObjStrAttrType, String sOldStr, String sNewStr );
 
     // layer
-    virtual SdrUndoAction* CreateUndoNewLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel);
-    virtual SdrUndoAction* CreateUndoDeleteLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel);
+    virtual SdrUndoAction* CreateUndoNewLayer(sal_uInt32 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel);
+    virtual SdrUndoAction* CreateUndoDeleteLayer(sal_uInt32 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel);
 //  virtual SdrUndoAction* CreateUndoMoveLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel, sal_uInt16 nNeuPos1);
 
     // page

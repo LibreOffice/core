@@ -1536,15 +1536,15 @@ void NormalModeHandler::RangeSelect (const model::SharedPageDescriptor& rpDescri
     {
         // Select all pages between the anchor and the given one, including
         // the two.
-        const sal_uInt16 nAnchorIndex ((pAnchor->GetPage()->GetPageNumber()-1) / 2);
-        const sal_uInt16 nOtherIndex ((rpDescriptor->GetPage()->GetPageNumber()-1) / 2);
+        const sal_uInt32 nAnchorIndex ((pAnchor->GetPage()->GetPageNumber()-1) / 2);
+        const sal_uInt32 nOtherIndex ((rpDescriptor->GetPage()->GetPageNumber()-1) / 2);
 
         // Iterate over all pages in the range.  Start with the anchor
         // page.  This way the PageSelector will recognize it again as
         // anchor (the first selected page after a DeselectAllPages()
         // becomes the anchor.)
-        const sal_uInt16 nStep ((nAnchorIndex < nOtherIndex) ? +1 : -1);
-        sal_uInt16 nIndex (nAnchorIndex);
+        const sal_uInt32 nStep ((nAnchorIndex < nOtherIndex) ? +1 : -1);
+        sal_uInt32 nIndex (nAnchorIndex);
         while (true)
         {
             rSelector.SelectPage(nIndex);

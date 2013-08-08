@@ -211,7 +211,7 @@ void FuOutlineBullet::SetCurrentBulletsNumbering(SfxRequest& rReq)
     }
     nIdx--;
 
-    sal_uInt32 nNumItemId = SID_ATTR_NUMBERING_RULE;
+    sal_uInt16 nNumItemId = SID_ATTR_NUMBERING_RULE;
     const SfxPoolItem* pTmpItem = GetNumBulletItem( aNewAttr, nNumItemId );
     SvxNumRule* pNumRule = NULL;
     if ( pTmpItem )
@@ -316,7 +316,7 @@ void FuOutlineBullet::SetCurrentBulletsNumbering(SfxRequest& rReq)
     rReq.Done();
 }
 
-const SfxPoolItem* FuOutlineBullet::GetNumBulletItem(SfxItemSet& aNewAttr, sal_uInt32& nNumItemId)
+const SfxPoolItem* FuOutlineBullet::GetNumBulletItem(SfxItemSet& aNewAttr, sal_uInt16& nNumItemId)
 {
     //SvxNumBulletItem* pRetItem = NULL;
     const SfxPoolItem* pTmpItem = NULL;

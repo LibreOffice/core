@@ -1354,11 +1354,6 @@ basegfx::B2DPolyPolygon SdrObject::TakeCreatePoly(const SdrDragStat& rDrag) cons
     return basegfx::B2DPolyPolygon(basegfx::tools::createPolygonFromRect(rDrag.TakeCreateRange()));
 }
 
-Pointer SdrObject::GetCreatePointer(const SdrView& /*rSdrView*/) const
-{
-    return Pointer(POINTER_CROSS);
-}
-
 void SdrObject::SetAnchorPos(const basegfx::B2DPoint& rPnt)
 {
     if(!rPnt.equalZero() && !mpPlusData)

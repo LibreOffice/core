@@ -789,7 +789,7 @@ void SdrPageView::SetPageOrigin(const basegfx::B2DPoint& rOrg)
     }
 }
 
-void SdrPageView::ImpInvalidateHelpLineArea(sal_uInt16 nNum) const
+void SdrPageView::ImpInvalidateHelpLineArea(sal_uInt32 nNum) const
 {
     if(GetView().IsHlplVisible() && nNum < maHelpLines.GetCount())
     {

@@ -624,11 +624,11 @@ void ViewTabBar::UpdateActiveButton (void)
     if (xView.is())
     {
         Reference<XResourceId> xViewId (xView->getResourceId());
-        for (sal_uInt16 nIndex=0; nIndex<maTabBarButtons.size(); ++nIndex)
+        for (sal_uInt32 nIndex=0; nIndex<maTabBarButtons.size(); ++nIndex)
         {
             if (maTabBarButtons[nIndex].ResourceId->compareTo(xViewId) == 0)
             {
-                mpTabControl->SetCurPageId(nIndex+1);
+                mpTabControl->SetCurPageId(static_cast< sal_uInt16 >(nIndex+1));
                 mpTabControl->::TabControl::ActivatePage();
                 break;
             }
@@ -647,18 +647,21 @@ void ViewTabBar::UpdateTabBarButtons (void)
     for (iTab=maTabBarButtons.begin(),nIndex=1; iTab!=maTabBarButtons.end(); ++iTab,++nIndex)
     {
         // Create a new tab when there are not enough.
+        const sal_uInt16 nIndex16(static_cast< sal_uInt16 >(nIndex));
         if (nPageCount < nIndex)
-            mpTabControl->InsertPage(nIndex, iTab->ButtonLabel);
+            mpTabControl->InsertPage(nIndex16, iTab->ButtonLabel);
 
         // Update the tab.
-        mpTabControl->SetPageText(nIndex, iTab->ButtonLabel);
-        mpTabControl->SetHelpText(nIndex, iTab->HelpText);
-        mpTabControl->SetTabPage(nIndex, mpTabPage.get());
+        mpTabControl->SetPageText(nIndex16, iTab->ButtonLabel);
+        mpTabControl->SetHelpText(nIndex16, iTab->HelpText);
+        mpTabControl->SetTabPage(nIndex16, mpTabPage.get());
     }
 
     // Delete tabs that are no longer used.
     for (; nIndex<=nPageCount; ++nIndex)
-        mpTabControl->RemovePage(nIndex);
+    {
+        mpTabControl->RemovePage(static_cast< sal_uInt16 >(nIndex));
+    }
 
     mpTabPage->Hide();
 }

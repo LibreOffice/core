@@ -19,10 +19,9 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
+
 #include "xexptran.hxx"
 #include <tools/debug.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -237,7 +236,7 @@ double Imp_GetDoubleChar(const OUString& rStr, sal_Int32& rPos, const sal_Int32 
     if(sNumberString.getLength())
     {
         if(bLookForUnits)
-            rConv.convertDouble(fRetval, sNumberString.makeStringAndClear(), true);
+            rConv.convertDoubleAndUnit(fRetval, sNumberString.makeStringAndClear());
         else
             rConv.convertDouble(fRetval, sNumberString.makeStringAndClear());
     }
@@ -251,7 +250,7 @@ void Imp_PutDoubleChar(OUString& rStr, const SvXMLUnitConverter& rConv, double f
     OUStringBuffer sStringBuffer;
 
     if(bConvertUnits)
-        rConv.convertDouble(sStringBuffer, fValue, true);
+        rConv.convertDoubleAndUnit(sStringBuffer, fValue);
     else
         rConv.convertDouble(sStringBuffer, fValue);
 

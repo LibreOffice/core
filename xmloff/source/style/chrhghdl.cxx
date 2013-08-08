@@ -58,7 +58,7 @@ sal_Bool XMLCharHeightHdl::importXML( const OUString& rStrImpValue, uno::Any& rV
     if( rStrImpValue.indexOf( sal_Unicode('%') ) == -1 )
     {
         MapUnit eSrcUnit = SvXMLExportHelper::GetUnitFromString( rStrImpValue, MAP_POINT );
-        if( SvXMLUnitConverter::convertDouble( fSize, rStrImpValue, eSrcUnit, MAP_POINT ))
+        if( SvXMLUnitConverter::convertDoubleAndUnit( fSize, rStrImpValue, eSrcUnit, MAP_POINT ))
         {
             rValue <<= (float)fSize;
             return sal_True;
@@ -75,7 +75,7 @@ sal_Bool XMLCharHeightHdl::exportXML( OUString& rStrExpValue, const uno::Any& rV
     float fSize = 0;
     if( rValue >>= fSize )
     {
-        SvXMLUnitConverter::convertDouble( aOut, (double)fSize, sal_True, MAP_POINT, MAP_POINT );
+        SvXMLUnitConverter::convertDoubleAndUnit( aOut, (double)fSize, sal_True, MAP_POINT, MAP_POINT );
         aOut.append( sal_Unicode('p'));
         aOut.append( sal_Unicode('t'));
     }

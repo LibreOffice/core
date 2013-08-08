@@ -1438,6 +1438,8 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
                                     bFoundNoGraphicObj = true;
                                     break;
                                 }
+                                default:
+                                    break;
                             }
                         }
                         else

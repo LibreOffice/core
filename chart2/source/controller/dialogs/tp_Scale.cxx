@@ -334,7 +334,7 @@ void ScaleTabPage::EnableControls()
     {
         //transport value from one to other control
         if( bWasDateAxis )
-            lcl_setValue( aFmtFldStepMain, m_aMt_MainDateStep.GetValue() );
+            lcl_setValue( aFmtFldStepMain, static_cast< double >(m_aMt_MainDateStep.GetValue()));
         else
             m_aMt_MainDateStep.SetValue( static_cast<sal_Int32>(aFmtFldStepMain.GetValue()) );
     }
@@ -542,18 +542,18 @@ void ScaleTabPage::Reset(const SfxItemSet& rInAttrs)
     if (rInAttrs.GetItemState(SCHATTR_AXIS_TIME_RESOLUTION,sal_True, &pPoolItem) == SFX_ITEM_SET)
     {
         m_nTimeResolution = ((const SfxInt32Item*)pPoolItem)->GetValue();
-        m_aLB_TimeResolution.SelectEntryPos( m_nTimeResolution );
+        m_aLB_TimeResolution.SelectEntryPos(static_cast< sal_uInt16 >(m_nTimeResolution));
     }
 
     if (rInAttrs.GetItemState(SCHATTR_AXIS_MAIN_TIME_UNIT,sal_True, &pPoolItem) == SFX_ITEM_SET)
     {
         m_nMainTimeUnit = ((const SfxInt32Item*)pPoolItem)->GetValue();
-        m_aLB_MainTimeUnit.SelectEntryPos( m_nMainTimeUnit );
+        m_aLB_MainTimeUnit.SelectEntryPos(static_cast< sal_uInt16 >(m_nMainTimeUnit));
     }
     if (rInAttrs.GetItemState(SCHATTR_AXIS_HELP_TIME_UNIT,sal_True, &pPoolItem) == SFX_ITEM_SET)
     {
         m_nHelpTimeUnit = ((const SfxInt32Item*)pPoolItem)->GetValue();
-        m_aLB_HelpTimeUnit.SelectEntryPos( m_nHelpTimeUnit );
+        m_aLB_HelpTimeUnit.SelectEntryPos(static_cast< sal_uInt16 >(m_nHelpTimeUnit));
     }
 
     EnableControls();

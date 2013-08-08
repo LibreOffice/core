@@ -628,7 +628,7 @@ void SdrPaintView::PostPaint()
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // #define SVX_REPAINT_TIMER_TEST
 
-void SdrPaintView::CompleteRedraw(OutputDevice* pOut, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector)
+void SdrPaintView::CompleteRedraw(OutputDevice* pOut, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector) const
 {
 #ifdef SVX_REPAINT_TIMER_TEST
 #define REMEMBERED_TIMES_COUNT  (10)
@@ -761,7 +761,7 @@ void SdrPaintView::CompleteRedraw(OutputDevice* pOut, const Region& rReg, sdr::c
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // #i72889#
 
-SdrPaintWindow* SdrPaintView::BeginCompleteRedraw(OutputDevice* pOut)
+SdrPaintWindow* SdrPaintView::BeginCompleteRedraw(OutputDevice* pOut) const
 {
     OSL_ENSURE(pOut, "SdrPaintView::BeginCompleteRedraw: No OutDev (!)");
     SdrPaintWindow* pPaintWindow = FindPaintWindow(*pOut);
@@ -783,7 +783,7 @@ SdrPaintWindow* SdrPaintView::BeginCompleteRedraw(OutputDevice* pOut)
     return pPaintWindow;
 }
 
-void SdrPaintView::DoCompleteRedraw(SdrPaintWindow& rPaintWindow, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector)
+void SdrPaintView::DoCompleteRedraw(SdrPaintWindow& rPaintWindow, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector) const
 {
     // redraw all PageViews with the target. This may expand the RedrawRegion
     // at the PaintWindow, plus taking care of FormLayer expansion
@@ -793,7 +793,7 @@ void SdrPaintView::DoCompleteRedraw(SdrPaintWindow& rPaintWindow, const Region& 
     }
 }
 
-void SdrPaintView::EndCompleteRedraw(SdrPaintWindow& rPaintWindow, bool bPaintFormLayer)
+void SdrPaintView::EndCompleteRedraw(SdrPaintWindow& rPaintWindow, bool bPaintFormLayer) const
 {
     if(rPaintWindow.getTemporaryTarget())
     {
@@ -814,7 +814,7 @@ void SdrPaintView::EndCompleteRedraw(SdrPaintWindow& rPaintWindow, bool bPaintFo
         // early and paint text edit to window.
         if(IsTextEdit() && GetSdrPageView())
         {
-            static_cast< SdrView* >(this)->TextEditDrawing(rPaintWindow);
+            static_cast< const SdrView* >(this)->TextEditDrawing(rPaintWindow);
         }
 
         // draw Overlay, also to PreRender device if exists
@@ -827,7 +827,7 @@ void SdrPaintView::EndCompleteRedraw(SdrPaintWindow& rPaintWindow, bool bPaintFo
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-SdrPaintWindow* SdrPaintView::BeginDrawLayers(OutputDevice* pOut, const Region& rReg, bool bDisableIntersect)
+SdrPaintWindow* SdrPaintView::BeginDrawLayers(OutputDevice* pOut, const Region& rReg, bool bDisableIntersect) const
 {
     // #i74769# use BeginCompleteRedraw() as common base
     SdrPaintWindow* pPaintWindow = BeginCompleteRedraw(pOut);
@@ -904,7 +904,7 @@ SdrPaintWindow* SdrPaintView::BeginDrawLayers(OutputDevice* pOut, const Region& 
     return pPaintWindow;
 }
 
-void SdrPaintView::EndDrawLayers(SdrPaintWindow& rPaintWindow, bool bPaintFormLayer)
+void SdrPaintView::EndDrawLayers(SdrPaintWindow& rPaintWindow, bool bPaintFormLayer) const
 {
     // #i74769# use EndCompleteRedraw() as common base
     EndCompleteRedraw(rPaintWindow, bPaintFormLayer);

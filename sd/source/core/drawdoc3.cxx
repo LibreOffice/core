@@ -2120,11 +2120,11 @@ void SdDrawDocument::Merge(SdrModel& rSourceModel,
                bool bMergeMasterPages, bool bAllMasterPages,
                bool bUndo, bool bTreadSourceAsConst)
 {
-    sal_uInt16 nMasterPageCount = GetMasterPageCount();
+    sal_uInt32 nMasterPageCount = GetMasterPageCount();
     SdrModel::Merge( rSourceModel, nFirstPageNum, nLastPageNum, nDestPos, bMergeMasterPages, bAllMasterPages, bUndo, bTreadSourceAsConst );
 
     // add style family for each new master page
-    for( sal_uInt16 nMaster = nMasterPageCount; nMaster < GetMasterPageCount(); nMaster++ )
+    for( sal_uInt32 nMaster = nMasterPageCount; nMaster < GetMasterPageCount(); nMaster++ )
     {
         SdPage* pPage = static_cast< SdPage* >( GetMasterPage( nMaster ) );
         if( pPage && pPage->IsMasterPage() && (pPage->GetPageKind() == PK_STANDARD) )

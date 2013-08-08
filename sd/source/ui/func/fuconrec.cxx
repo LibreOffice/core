@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 
@@ -54,7 +52,6 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <svx/svdlegacy.hxx>
-
 #include "sdresid.hxx"
 #include "View.hxx"
 #include "sdpage.hxx"
@@ -63,6 +60,7 @@
 #include "drawdoc.hxx"
 #include "res_bmp.hrc"
 #include "glob.hrc"
+#include <svx/sdrobjecttools.hxx>
 
 namespace sd {
 
@@ -851,12 +849,16 @@ SdrObject* FuConstructRectangle::CreateDefaultObject(const sal_uInt16 nID, const
 
                 if(pSdrPathObj)
                 {
-                    const double fYMiddle((aRange.getMinY() + aRange.getMaxY()) * 0.5);
+                    initializeDefaultSdrPathObjByObjectType(*pSdrPathObj, DefaultSdrPathObjType_Line, rRange, false);
+                    //pSdrPathObj->initializeDefaultSdrPathObjBySlotID(nID, aRange);
 
-                    ::basegfx::B2DPolygon aB2DPolygon;
-                    aB2DPolygon.append(::basegfx::B2DPoint(aStart.getX(), fYMiddle));
-                    aB2DPolygon.append(::basegfx::B2DPoint(aEnd.getX(), fYMiddle));
-                    pSdrPathObj->setB2DPolyPolygonInObjectCoordinates(::basegfx::B2DPolyPolygon(aB2DPolygon));
+                    // TTTT
+                    //const double fYMiddle((aRange.getMinY() + aRange.getMaxY()) * 0.5);
+                    //
+                    //::basegfx::B2DPolygon aB2DPolygon;
+                    //aB2DPolygon.append(::basegfx::B2DPoint(aStart.getX(), fYMiddle));
+                    //aB2DPolygon.append(::basegfx::B2DPoint(aEnd.getX(), fYMiddle));
+                    //pSdrPathObj->setB2DPolyPolygonInObjectCoordinates(::basegfx::B2DPolyPolygon(aB2DPolygon));
                 }
                 else
                 {

@@ -29,6 +29,7 @@
 namespace sd {
 
 class DrawViewShell;
+class Window;
 
 /************************************************************************
 |*
@@ -46,13 +47,13 @@ public:
         DrawViewShell* pShell);
     virtual ~ClientView (void);
 
-    virtual void CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0L);
+    virtual void CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0L) const;
 
     // Wenn die View kein Invalidate() an den Fenstern durchfuehren soll, muss
     // man diese beiden folgenden Methoden ueberladen und entsprechend anders
     // reagieren.
-    virtual void InvalidateOneWin(::Window& rWin);
-    virtual void InvalidateOneWin(::Window& rWin, const basegfx::B2DRange& rRange);
+    virtual void InvalidateOneWin(::Window& rWin) const;
+    virtual void InvalidateOneWin(::Window& rWin, const ::basegfx::B2DRange& rRange) const;
 };
 
 } // end of namespace sd

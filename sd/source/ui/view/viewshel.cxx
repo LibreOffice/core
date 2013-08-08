@@ -725,15 +725,19 @@ bool ViewShell::HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWi
                 {
                     if( !GetDocSh()->IsUIActive() )
                     {
-                        const long  nOldZoom = GetActiveWindow()->GetZoom();
-                        long        nNewZoom;
+                        const double fOldZoom(GetActiveWindow()->GetZoom());
+                        double fNewZoom;
 
                         if( pData->GetDelta() < 0L )
-                            nNewZoom = Max( (long) pWin->GetMinZoom(), (long)(nOldZoom - DELTA_ZOOM) );
+                        {
+                            fNewZoom = std::max( pWin->GetMinZoom(), fOldZoom - DELTA_ZOOM);
+                        }
                         else
-                            nNewZoom = Min( (long) pWin->GetMaxZoom(), (long)(nOldZoom + DELTA_ZOOM) );
+                        {
+                            fNewZoom = std::min( pWin->GetMaxZoom(), fOldZoom + DELTA_ZOOM);
+                        }
 
-                        SetZoom( nNewZoom );
+                        SetZoom( basegfx::fround(fNewZoom) );
                         Invalidate( SID_ATTR_ZOOM );
                         Invalidate( SID_ATTR_ZOOMSLIDER );
 

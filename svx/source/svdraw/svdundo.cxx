@@ -1391,7 +1391,7 @@ String SdrUndoObjStrAttr::GetComment() const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-SdrUndoLayer::SdrUndoLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel)
+SdrUndoLayer::SdrUndoLayer(sal_uInt32 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel)
 :   SdrUndoAction(rNewModel),
     mpLayer(rNewLayerAdmin.GetLayer(nLayerNum)),
     mrLayerAdmin(rNewLayerAdmin),
@@ -1869,12 +1869,12 @@ SdrUndoAction* SdrUndoFactory::CreateUndoObjectStrAttr( SdrObject& rObject, SdrU
 }
 
 // layer
-SdrUndoAction* SdrUndoFactory::CreateUndoNewLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel)
+SdrUndoAction* SdrUndoFactory::CreateUndoNewLayer(sal_uInt32 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel)
 {
     return new SdrUndoNewLayer( nLayerNum, rNewLayerAdmin, rNewModel );
 }
 
-SdrUndoAction* SdrUndoFactory::CreateUndoDeleteLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel)
+SdrUndoAction* SdrUndoFactory::CreateUndoDeleteLayer(sal_uInt32 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel)
 {
     return new SdrUndoDelLayer( nLayerNum, rNewLayerAdmin, rNewModel );
 }

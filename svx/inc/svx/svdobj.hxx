@@ -603,9 +603,6 @@ public:
     virtual bool BckCreate(SdrDragStat& rStat);
     virtual void BrkCreate(SdrDragStat& rStat);
 
-    // damit holt man sich den Pointer, der das Createn dieses Objekts symbolisiert
-    virtual Pointer GetCreatePointer(const SdrView& rSdrView) const;
-
     // Polygon das waehrend des Erzeugens aufgezogen wird
     virtual basegfx::B2DPolyPolygon TakeCreatePoly(const SdrDragStat& rDrag) const;
 

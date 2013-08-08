@@ -210,7 +210,7 @@ void CurrentSlideManager::SetCurrentSlideAtViewShellBase (const SharedPageDescri
         {
             sal_uInt32 nPageNumber = (rpDescriptor->GetPage()->GetPageNumber()-1)/2;
             pDrawViewShell->SwitchPage(nPageNumber);
-            pDrawViewShell->GetPageTabControl()->SetCurPageId(nPageNumber+1);
+            pDrawViewShell->GetPageTabControl()->SetCurPageId(static_cast< sal_uInt16 >(nPageNumber + 1));
         }
     }
 }
@@ -229,8 +229,8 @@ void CurrentSlideManager::SetCurrentSlideAtTabControl (const SharedPageDescripto
             ::boost::dynamic_pointer_cast<DrawViewShell>(pBase->GetMainViewShell()));
         if (pDrawViewShell)
         {
-            sal_uInt32 nPageNumber = (rpDescriptor->GetPage()->GetPageNumber()-1)/2;
-            pDrawViewShell->GetPageTabControl()->SetCurPageId(sal_uInt16(nPageNumber+1));
+            const sal_uInt32 nPageNumber = (rpDescriptor->GetPage()->GetPageNumber()-1)/2;
+            pDrawViewShell->GetPageTabControl()->SetCurPageId(static_cast< sal_uInt16 >(nPageNumber + 1));
         }
     }
 }

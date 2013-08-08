@@ -194,7 +194,7 @@ private:
     bool            mbNoAttribs;       // Gliederungsmodus
     Rectangle       maVisArea;         // Sichtbarer Bereich
     PageKind        mePageKind;        // Seitentyp (Standard, Notizen, Handzettel)
-    sal_uInt16          mnSelectedPage;    // Selektierte Seite
+    sal_uInt32      mnSelectedPage;    // Selektierte Seite
     PageKind        mePageKindOnLoad;
     sal_uInt32      mnSelectedPageOnLoad;
     EditMode        meStandardEditMode; // Editmode im Zeichenmodus (Page/MasterPage)

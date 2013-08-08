@@ -271,7 +271,7 @@ private:
 
 protected:
     bool ImpCanConvTextToCurve() const;
-    SdrObject* ImpConvertMakeObj(const basegfx::B2DPolyPolygon& rPolyPolygon, bool bClosed, bool bBezier, bool bNoSetAttr = sal_False) const;
+    SdrObject* ImpConvertMakeObj(const basegfx::B2DPolyPolygon& rPolyPolygon, bool bBezier, bool bNoSetAttr = sal_False) const;
     SdrObject* ImpConvertAddText(SdrObject* pObj, bool bBezier) const;
     void ImpSetTextStyleSheetListeners();
     void ImpSetCharStretching(SdrOutliner& rOutliner, const basegfx::B2DRange& rTextRange, const basegfx::B2DRange& rAnchorRange) const;
@@ -421,7 +421,6 @@ public:
     virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
     virtual bool BckCreate(SdrDragStat& rStat);
     virtual void BrkCreate(SdrDragStat& rStat);
-    virtual Pointer GetCreatePointer(const SdrView& rSdrView) const;
 
     virtual bool HasTextEdit() const;
     virtual bool BegTextEdit(SdrOutliner& rOutl);

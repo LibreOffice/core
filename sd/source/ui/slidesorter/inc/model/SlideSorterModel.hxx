@@ -151,7 +151,7 @@ public:
         the n*2+1 magic.  Only when a special model is set, like a custom
         slide show, then the returned value is different.
     */
-    sal_uInt16 GetCoreIndex (const sal_Int32 nIndex) const;
+    sal_uInt32 GetCoreIndex (const sal_Int32 nIndex) const;
 
     /** Call this method after the document has changed its structure.  This
         will get the model in sync with the SdDrawDocument.  This method

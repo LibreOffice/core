@@ -67,7 +67,7 @@ SlideTransitionPanel::~SlideTransitionPanel (void)
 
 
 
-css::ui::LayoutSize SlideTransitionPanel::GetHeightForWidth (const sal_Int32 nWidth)
+css::ui::LayoutSize SlideTransitionPanel::GetHeightForWidth (const sal_Int32 /*nWidth*/)
 {
     const sal_Int32 nMinimumHeight(getSlideTransitionPanelMinimumHeight(mpWrappedControl.get()));
     return css::ui::LayoutSize(nMinimumHeight,-1, nMinimumHeight);

@@ -586,7 +586,7 @@ SdPage* OutlineView::InsertSlideForParagraph( Paragraph* pPara )
     {
         nExample = nTarget - 1;
 
-        sal_uInt16 nPageCount = mpDoc->GetSdPageCount( PK_STANDARD );
+        sal_uInt32 nPageCount = mpDoc->GetSdPageCount( PK_STANDARD );
         if( nExample >= nPageCount )
             nExample = nPageCount - 1;
     }
@@ -965,11 +965,13 @@ IMPL_LINK( OutlineView, StatusEventHdl, EditStatus *, EMPTYARG )
 
     if (!aVis.IsEmpty())        // nicht beim Oeffnen
     {
-        const Size aTextSize(OUTLINE_PAPERWIDTH, mpOutliner->GetTextHeight() + pWin->GetLogicVector().getY());
+        const basegfx::B2DVector aTextSize(
+            OUTLINE_PAPERWIDTH,
+            mpOutliner->GetTextHeight() + pWin->GetLogicVector().getY());
 
         mpOutlineViewShell->InitWindows(
             basegfx::B2DPoint(0.0, 0.0),
-            basegfx::B2DVector(aTextSize.Width(), aTextSize.Height()),
+            aTextSize,
             basegfx::B2DPoint(aVis.Left(), aVis.Top()));
         mpOutlineViewShell->UpdateScrollBars();
     }
@@ -1842,7 +1844,7 @@ void OutlineView::TryToMergeUndoActions()
                 pEditUndo = dynamic_cast< EditUndo* >(pListAction->aUndoActions[--nAction].pAction);
             }
 
-            sal_uInt16 nEditPos = nAction; // we need this later to remove the merged undo actions
+            size_t nEditPos = nAction; // we need this later to remove the merged undo actions
 
             // make sure it is the only EditUndo action in the top undo list
             while( pEditUndo && nAction )
@@ -1895,8 +1897,8 @@ void OutlineView::TryToMergeUndoActions()
 
                             if( pSourceList && pDestinationList )
                             {
-                                sal_uInt16 nCount = pSourceList->aUndoActions.size();
-                                sal_uInt16 nDestAction = pDestinationList->aUndoActions.size();
+                                size_t nCount = pSourceList->aUndoActions.size();
+                                size_t nDestAction = pDestinationList->aUndoActions.size();
                                 while( nCount-- )
                                 {
                                     SfxUndoAction* pTemp = pSourceList->aUndoActions[0].pAction;

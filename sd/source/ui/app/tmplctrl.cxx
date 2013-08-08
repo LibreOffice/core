@@ -135,7 +135,7 @@ void SdTemplateControl::Command( const CommandEvent& rCEvt )
         {
             const sal_uInt32 nMasterCount = pDoc->GetMasterSdPageCount(PK_STANDARD);
 
-            sal_uInt32 nCount = 0;
+            sal_uInt16 nCount = 0;
             for( sal_uInt32 nPage = 0; nPage < nMasterCount; ++nPage )
             {
                 SdPage* pMaster = pDoc->GetMasterSdPage(nPage, PK_STANDARD);

@@ -571,7 +571,7 @@ sal_Bool ImplSdPPTImport::Import()
 
         for ( sal_uInt32 nMasterNum = 0; nMasterNum < nMasterAnz; nMasterNum++ )
         {
-            SetPageNum( nMasterNum, PPT_MASTERPAGE );
+            SetPageNum( static_cast< sal_uInt16 >(nMasterNum), PPT_MASTERPAGE );
             SdPage* pPage = (SdPage*)MakeBlancPage( true );
             if ( pPage )
             {
@@ -733,7 +733,7 @@ sal_Bool ImplSdPPTImport::Import()
     sal_uInt32 i;
     for ( i = 0; i < mpDoc->GetMasterPageCount() && ( (pMPage = (SdPage*)mpDoc->GetMasterPage( i )) != 0 ); i++ )
     {
-        SetPageNum( i, PPT_MASTERPAGE );
+        SetPageNum( static_cast< sal_uInt16 >(i), PPT_MASTERPAGE );
         /////////////////////////////////////////////
         // importing master page objects           //
         /////////////////////////////////////////////
@@ -1047,14 +1047,14 @@ sal_Bool ImplSdPPTImport::Import()
             pSdrModel->InsertPage( pPage );
 
             // #i37397#, trying to set the title master for the first page
-            sal_uInt16 nMaster, nMasterCount = pSdrModel->GetMasterPageCount();
+            sal_uInt32 nMaster, nMasterCount = pSdrModel->GetMasterPageCount();
             SdPage* pFoundMaster = NULL;
             for ( nMaster = 1; nMaster < nMasterCount; nMaster++ )
             {
                 SdPage* pMaster = static_cast<SdPage*>( pSdrModel->GetMasterPage( nMaster ) );
                 if ( pMaster->GetPageKind() == PK_STANDARD )
                 {
-                    SetPageNum( nMaster, PPT_MASTERPAGE );
+                    SetPageNum( static_cast< sal_uInt16 >(nMaster), PPT_MASTERPAGE );
                     if ( !pFoundMaster )
                         pFoundMaster = pMaster;
                     else if ( GetSlideLayoutAtom()->eLayout == PPT_LAYOUT_TITLEMASTERSLIDE )
@@ -1088,7 +1088,7 @@ sal_Bool ImplSdPPTImport::Import()
             ////////////////////
             // set AutoLayout //
             ////////////////////
-            SetPageNum( i, PPT_SLIDEPAGE );
+            SetPageNum( static_cast< sal_uInt16 >(i), PPT_SLIDEPAGE );
             SdPage* pPage = mpDoc->GetSdPage( i, PK_STANDARD );
             AutoLayout eAutoLayout = AUTOLAYOUT_NONE;
             const PptSlideLayoutAtom* pSlideLayout = GetSlideLayoutAtom();
@@ -2396,7 +2396,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                             break;
                     }
                 }
-// [Bug 119962] Placeholder in ppt file created by MS 2007 is lost if load in Impress 
+// [Bug 119962] Placeholder in ppt file created by MS 2007 is lost if load in Impress
                 unsigned int nParaCount = pTextObj->Count();
                 PPTParagraphObj *pFirstPara = nParaCount == 0 ? NULL : pTextObj->First();
                 unsigned int nFirstParaTextcount = pFirstPara == NULL ? 0 : pFirstPara->GetTextSize();

@@ -1288,7 +1288,7 @@ Pointer SdrView::GetPreferedPointer(const basegfx::B2DPoint& rMousePos, const Ou
 {
     if(GetCreateObj())
     {
-        return GetCreateObj()->GetCreatePointer(*this);
+        return getCreatePointer();
     }
 
     if(mpCurrentSdrDragMethod)

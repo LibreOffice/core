@@ -69,7 +69,7 @@ CustomAnimationPanel::~CustomAnimationPanel (void)
 
 
 
-css::ui::LayoutSize CustomAnimationPanel::GetHeightForWidth (const sal_Int32 nWidth)
+css::ui::LayoutSize CustomAnimationPanel::GetHeightForWidth (const sal_Int32 /*nWidth*/)
 {
     const sal_Int32 nMinimumHeight(getCustomAnimationPanelMinimumHeight(mpWrappedControl.get()));
     return css::ui::LayoutSize(nMinimumHeight,-1, nMinimumHeight);

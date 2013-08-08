@@ -1256,13 +1256,13 @@ void SdrModel::TakeUnitStr(FieldUnit eUnit, XubString& rStr)
     }
 }
 
-void SdrModel::TakeMetricStr(long nVal, XubString& rStr, bool bNoUnitChars, sal_Int32 nNumDigits) const
+void SdrModel::TakeMetricStr(double fVal, XubString& rStr, bool bNoUnitChars, sal_Int32 nNumDigits) const
 {
     // change to double precision usage to not lose decimal places after comma
-    const bool bNegative(nVal < 0);
+    const bool bNegative(fVal < 0.0);
     SvtSysLocale aSysLoc;
     const LocaleDataWrapper& rLoc(aSysLoc.GetLocaleData());
-    double fLocalValue(double(nVal) * double(maUIUnitScale));
+    double fLocalValue(fVal * double(maUIUnitScale));
 
     if(bNegative)
     {

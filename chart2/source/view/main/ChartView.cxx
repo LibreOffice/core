@@ -711,7 +711,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
                         if (n3DRelativeHeightOldValue != n3DRelativeHeight)
                             xPropertySet->setPropertyValue( C2U("3DRelativeHeight"), uno::makeAny(n3DRelativeHeight) );
                     }
-                    catch(const uno::Exception& e){}
+                    catch(const uno::Exception& /*e*/){}
                 }
             }
 
@@ -1632,7 +1632,11 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& 
     {
         //if( !bIsPieOrDonut )
         //    aConsumedOuterRect = ::basegfx::B2IRectangle( ShapeFactory::getRectangleOfShape(xBoundingShape) );
-        aUsedOuterRect = awt::Rectangle( aConsumedOuterRect.getMinX(), aConsumedOuterRect.getMinY(), aConsumedOuterRect.getWidth(), aConsumedOuterRect.getHeight() );
+        aUsedOuterRect = awt::Rectangle(
+            basegfx::fround(aConsumedOuterRect.getMinX()),
+            basegfx::fround(aConsumedOuterRect.getMinY()),
+            basegfx::fround(aConsumedOuterRect.getWidth()),
+            basegfx::fround(aConsumedOuterRect.getHeight()));
     }
     else
         aUsedOuterRect = awt::Rectangle( rAvailablePos.X, rAvailablePos.Y, rAvailableSize.Width, rAvailableSize.Height );
@@ -1652,7 +1656,11 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& 
         else
         {
             ::basegfx::B2IRectangle aConsumedInnerRect = aVDiagram.getCurrentRectangle();
-            m_aResultingDiagramRectangleExcludingAxes = awt::Rectangle( aConsumedInnerRect.getMinX(), aConsumedInnerRect.getMinY(), aConsumedInnerRect.getWidth(), aConsumedInnerRect.getHeight() );
+            m_aResultingDiagramRectangleExcludingAxes = awt::Rectangle(
+                basegfx::fround(aConsumedInnerRect.getMinX()),
+                basegfx::fround(aConsumedInnerRect.getMinY()),
+                basegfx::fround(aConsumedInnerRect.getWidth()),
+                basegfx::fround(aConsumedInnerRect.getHeight()));
         }
     }
     else
@@ -1662,7 +1670,11 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& 
         else
         {
             ::basegfx::B2IRectangle aConsumedInnerRect = aVDiagram.getCurrentRectangle();
-            m_aResultingDiagramRectangleExcludingAxes = awt::Rectangle( aConsumedInnerRect.getMinX(), aConsumedInnerRect.getMinY(), aConsumedInnerRect.getWidth(), aConsumedInnerRect.getHeight() );
+            m_aResultingDiagramRectangleExcludingAxes = awt::Rectangle(
+                basegfx::fround(aConsumedInnerRect.getMinX()),
+                basegfx::fround(aConsumedInnerRect.getMinY()),
+                basegfx::fround(aConsumedInnerRect.getWidth()),
+                basegfx::fround(aConsumedInnerRect.getHeight()));
         }
     }
 

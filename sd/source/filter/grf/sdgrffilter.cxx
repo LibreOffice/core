@@ -222,13 +222,14 @@ sal_Bool SdGRFFilter::Import()
 
             SdPage*     pPage = mrDocument.GetSdPage( 0, PK_STANDARD );
             Point       aPos;
-            const basegfx::B2DVector& rPageScale = pPage->GetPageScale();
-            Size aPagSize(basegfx::fround(rPageScale.getX()), basegfx::fround(rPageScale.getY()));
-            Size        aGrfSize( OutputDevice::LogicToLogic( aGraphic.GetPrefSize(),
-                                  aGraphic.GetPrefMapMode(), MAP_100TH_MM ) );
-
-            aPagSize.Width() -= pPage->GetLeftPageBorder() + pPage->GetRightPageBorder();
-            aPagSize.Height() -= pPage->GetTopPageBorder() + pPage->GetBottomPageBorder();
+            const Size aPagSize(
+                basegfx::fround(pPage->GetInnerPageScale().getX()),
+                basegfx::fround(pPage->GetInnerPageScale().getY()));
+            Size aGrfSize(
+                OutputDevice::LogicToLogic(
+                    aGraphic.GetPrefSize(),
+                    aGraphic.GetPrefMapMode(),
+                    MAP_100TH_MM ) );
 
             // scale to fit page
             if ( ( ( aGrfSize.Height() > aPagSize.Height() ) || ( aGrfSize.Width() > aPagSize.Width() ) ) &&
@@ -240,19 +241,19 @@ sal_Bool SdGRFFilter::Import()
                 // Grafik an Pagesize anpassen (skaliert)
                 if( fGrfWH < fWinWH )
                 {
-                    aGrfSize.Width() = (long) ( aPagSize.Height() * fGrfWH );
+                    aGrfSize.Width() = basegfx::fround( aPagSize.Height() * fGrfWH );
                     aGrfSize.Height() = aPagSize.Height();
                 }
                 else if( fGrfWH > 0.F )
                 {
                     aGrfSize.Width() = aPagSize.Width();
-                    aGrfSize.Height()= (long) ( aPagSize.Width() / fGrfWH );
+                    aGrfSize.Height()= basegfx::fround( aPagSize.Width() / fGrfWH );
                 }
             }
 
             // Ausgaberechteck fuer Grafik setzen
-            aPos.X() = ( ( aPagSize.Width() - aGrfSize.Width() ) >> 1 ) + pPage->GetLeftPageBorder();
-            aPos.Y() = ( ( aPagSize.Height() - aGrfSize.Height() ) >> 1 )  + pPage->GetTopPageBorder();
+            aPos.X() = ( ( aPagSize.Width() - aGrfSize.Width() ) >> 1 ) + basegfx::fround(pPage->GetLeftPageBorder());
+            aPos.Y() = ( ( aPagSize.Height() - aGrfSize.Height() ) >> 1 )  + basegfx::fround(pPage->GetTopPageBorder());
 
             SdrGrafObj* pNewSdrGraf = new SdrGrafObj(
                     pPage->getSdrModelFromSdrPage(),

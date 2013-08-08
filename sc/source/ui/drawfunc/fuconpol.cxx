@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
@@ -28,12 +26,11 @@
 #include "tabvwsh.hxx"
 #include "sc.hrc"
 #include "drawview.hxx"
-
-// #98185# Create default drawing objects via keyboard
 #include <svx/svdopath.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <svx/svdlegacy.hxx>
+#include <svx/sdrobjecttools.hxx>
 
 //  Pixelabstand zum Schliessen von Freihand-Zeichnungen
 #ifndef CLOSE_PIXDIST
@@ -247,106 +244,143 @@ void FuConstPolygon::Deactivate()
 // #98185# Create default drawing objects via keyboard
 SdrObject* FuConstPolygon::CreateDefaultObject(const sal_uInt16 nID, const basegfx::B2DRange& rRange)
 {
-    // case SID_DRAW_POLYGON:
-    // case SID_DRAW_POLYGON_NOFILL:
-    // case SID_DRAW_BEZIER_NOFILL:
-    // case SID_DRAW_FREELINE_NOFILL:
+    SdrPathObj* pRetval = dynamic_cast< SdrPathObj* >(
+        SdrObjFactory::MakeNewObject(
+            pView->getSdrModelFromSdrView(),
+            pView->getSdrObjectCreationInfo()));
 
-    SdrObject* pObj = SdrObjFactory::MakeNewObject(
-        pView->getSdrModelFromSdrView(),
-        pView->getSdrObjectCreationInfo());
-
-    if(pObj)
+    if(pRetval)
     {
-        SdrPathObj* pSdrPathObj = dynamic_cast< SdrPathObj* >(pObj);
+        DefaultSdrPathObjType eType(DefaultSdrPathObjType_Line);
+        bool bClosed(false);
 
-        if(pSdrPathObj)
+        switch(nID)
         {
-            basegfx::B2DPolyPolygon aPoly;
-
-            switch(nID)
-            {
-                case SID_DRAW_BEZIER_NOFILL:
-                {
-                    basegfx::B2DPolygon aInnerPoly;
-
-                    aInnerPoly.append(basegfx::B2DPoint(rRange.getMinX(), rRange.getMaxY()));
-
-                    const basegfx::B2DPoint aCenterBottom(rRange.getCenterX(), rRange.getMaxY());
-                    aInnerPoly.appendBezierSegment(
-                        aCenterBottom,
-                        aCenterBottom,
-                        rRange.getCenter());
-
-                    const basegfx::B2DPoint aCenterTop(rRange.getCenterX(), rRange.getMinY());
-                    aInnerPoly.appendBezierSegment(
-                        aCenterTop,
-                        aCenterTop,
-                        basegfx::B2DPoint(rRange.getMaxX(), rRange.getMinY()));
-
-                    aPoly.append(aInnerPoly);
-                    break;
-                }
-                case SID_DRAW_FREELINE_NOFILL:
-                {
-                    basegfx::B2DPolygon aInnerPoly;
-
-                    aInnerPoly.append(basegfx::B2DPoint(rRange.getMinX(), rRange.getMaxY()));
-
-                    aInnerPoly.appendBezierSegment(
-                        rRange.getMinimum(),
-                        basegfx::B2DPoint(rRange.getCenterX(), rRange.getMinY()),
-                        rRange.getCenter());
-
-                    aInnerPoly.appendBezierSegment(
-                        basegfx::B2DPoint(rRange.getCenterX(), rRange.getMaxY()),
-                        basegfx::B2DPoint(rRange.getMaxX(), rRange.getMaxY()),
-                        basegfx::B2DPoint(rRange.getMaxX(), rRange.getMinY()));
-
-                    aPoly.append(aInnerPoly);
-                    break;
-                }
-                case SID_DRAW_POLYGON:
-                case SID_DRAW_POLYGON_NOFILL:
-                {
-                    basegfx::B2DPolygon aInnerPoly;
-                    const double fWdt(rRange.getWidth());
-                    const double fHgt(rRange.getHeight());
-
-                    aInnerPoly.append(basegfx::B2DPoint(rRange.getMinX(), rRange.getMaxY()));
-                    aInnerPoly.append(basegfx::B2DPoint(rRange.getMinX() + fWdt * 0.3, rRange.getMinY() + fHgt * 0.7));
-                    aInnerPoly.append(basegfx::B2DPoint(rRange.getMinX(), rRange.getMinY() + fHgt * 0.15));
-                    aInnerPoly.append(basegfx::B2DPoint(rRange.getMinX() + fWdt * 0.65, rRange.getMinY()));
-                    aInnerPoly.append(basegfx::B2DPoint(rRange.getMinX() + fWdt, rRange.getMinY() + fHgt * 0.3));
-                    aInnerPoly.append(basegfx::B2DPoint(rRange.getMinX() + fWdt * 0.8, rRange.getMinY() + fHgt * 0.5));
-                    aInnerPoly.append(basegfx::B2DPoint(rRange.getMinX() + fWdt * 0.8, rRange.getMinY() + fHgt * 0.75));
-                    aInnerPoly.append(basegfx::B2DPoint(rRange.getMaxY(), rRange.getMaxX()));
-
-                    if(SID_DRAW_POLYGON_NOFILL == nID)
-                    {
-                        aInnerPoly.append(basegfx::B2DPoint(rRange.getCenterX(), rRange.getMaxY()));
-                    }
-                    else
-                    {
-                        aInnerPoly.setClosed(true);
-                    }
-
-                    aPoly.append(aInnerPoly);
-                    break;
-                }
-            }
-
-            pSdrPathObj->setB2DPolyPolygonInObjectCoordinates(aPoly);
-        }
-        else
-        {
-            DBG_ERROR("Object is NO path object");
+            case SID_DRAW_BEZIER_NOFILL:
+                eType = DefaultSdrPathObjType_Bezier;
+                break;
+            case SID_DRAW_FREELINE_NOFILL:
+                eType = DefaultSdrPathObjType_Freeline;
+                break;
+            case SID_DRAW_POLYGON:
+                eType = DefaultSdrPathObjType_Polygon;
+                bClosed = true;
+                break;
+            case SID_DRAW_POLYGON_NOFILL:
+                eType = DefaultSdrPathObjType_Polygon;
+                break;
         }
 
-        sdr::legacy::SetLogicRange(*pObj, rRange);
+        initializeDefaultSdrPathObjByObjectType(*pRetval, eType, rRange, bClosed);
+    }
+    else
+    {
+        OSL_ENSURE(false, "Could not create default path object (!)");
     }
 
-    return pObj;
+    return pRetval;
+
+    // TTTT
+//  // case SID_DRAW_POLYGON:
+//  // case SID_DRAW_POLYGON_NOFILL:
+//  // case SID_DRAW_BEZIER_NOFILL:
+//  // case SID_DRAW_FREELINE_NOFILL:
+//
+//  SdrObject* pObj = SdrObjFactory::MakeNewObject(
+//      pView->getSdrModelFromSdrView(),
+//      pView->getSdrObjectCreationInfo());
+//
+//  if(pObj)
+//  {
+//      SdrPathObj* pSdrPathObj = dynamic_cast< SdrPathObj* >(pObj);
+//
+//      if(pSdrPathObj)
+//      {
+//          basegfx::B2DPolyPolygon aPoly;
+//
+//          switch(nID)
+//          {
+//              case SID_DRAW_BEZIER_NOFILL:
+//              {
+//                  basegfx::B2DPolygon aInnerPoly;
+//
+//                  aInnerPoly.append(basegfx::B2DPoint(rRange.getMinX(), rRange.getMaxY()));
+//
+//                  const basegfx::B2DPoint aCenterBottom(rRange.getCenterX(), rRange.getMaxY());
+//                  aInnerPoly.appendBezierSegment(
+//                      aCenterBottom,
+//                      aCenterBottom,
+//                      rRange.getCenter());
+//
+//                  const basegfx::B2DPoint aCenterTop(rRange.getCenterX(), rRange.getMinY());
+//                  aInnerPoly.appendBezierSegment(
+//                      aCenterTop,
+//                      aCenterTop,
+//                      basegfx::B2DPoint(rRange.getMaxX(), rRange.getMinY()));
+//
+//                  aPoly.append(aInnerPoly);
+//                  break;
+//              }
+//              case SID_DRAW_FREELINE_NOFILL:
+//              {
+//                  basegfx::B2DPolygon aInnerPoly;
+//
+//                  aInnerPoly.append(basegfx::B2DPoint(rRange.getMinX(), rRange.getMaxY()));
+//
+//                  aInnerPoly.appendBezierSegment(
+//                      rRange.getMinimum(),
+//                      basegfx::B2DPoint(rRange.getCenterX(), rRange.getMinY()),
+//                      rRange.getCenter());
+//
+//                  aInnerPoly.appendBezierSegment(
+//                      basegfx::B2DPoint(rRange.getCenterX(), rRange.getMaxY()),
+//                      basegfx::B2DPoint(rRange.getMaxX(), rRange.getMaxY()),
+//                      basegfx::B2DPoint(rRange.getMaxX(), rRange.getMinY()));
+//
+//                  aPoly.append(aInnerPoly);
+//                  break;
+//              }
+//              case SID_DRAW_POLYGON:
+//              case SID_DRAW_POLYGON_NOFILL:
+//              {
+//                  basegfx::B2DPolygon aInnerPoly;
+//                  const double fWdt(rRange.getWidth());
+//                  const double fHgt(rRange.getHeight());
+//
+//                  aInnerPoly.append(basegfx::B2DPoint(rRange.getMinX(), rRange.getMaxY()));
+//                  aInnerPoly.append(basegfx::B2DPoint(rRange.getMinX() + fWdt * 0.3, rRange.getMinY() + fHgt * 0.7));
+//                  aInnerPoly.append(basegfx::B2DPoint(rRange.getMinX(), rRange.getMinY() + fHgt * 0.15));
+//                  aInnerPoly.append(basegfx::B2DPoint(rRange.getMinX() + fWdt * 0.65, rRange.getMinY()));
+//                  aInnerPoly.append(basegfx::B2DPoint(rRange.getMinX() + fWdt, rRange.getMinY() + fHgt * 0.3));
+//                  aInnerPoly.append(basegfx::B2DPoint(rRange.getMinX() + fWdt * 0.8, rRange.getMinY() + fHgt * 0.5));
+//                  aInnerPoly.append(basegfx::B2DPoint(rRange.getMinX() + fWdt * 0.8, rRange.getMinY() + fHgt * 0.75));
+//                  aInnerPoly.append(basegfx::B2DPoint(rRange.getMaxY(), rRange.getMaxX()));
+//
+//                  if(SID_DRAW_POLYGON_NOFILL == nID)
+//                  {
+//                      aInnerPoly.append(basegfx::B2DPoint(rRange.getCenterX(), rRange.getMaxY()));
+//                  }
+//                  else
+//                  {
+//                      aInnerPoly.setClosed(true);
+//                  }
+//
+//                  aPoly.append(aInnerPoly);
+//                  break;
+//              }
+//          }
+//
+//          pSdrPathObj->setB2DPolyPolygonInObjectCoordinates(aPoly);
+//      }
+//      else
+//      {
+//          DBG_ERROR("Object is NO path object");
+//      }
+//
+//      sdr::legacy::SetLogicRange(*pObj, rRange);
+//  }
+//
+//  return pObj;
 }
 
 // eof

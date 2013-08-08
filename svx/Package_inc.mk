@@ -526,3 +526,4 @@ $(eval $(call gb_Package_add_file,svx_inc,inc/svx/sdrselection.hxx,svx/sdrselect
 $(eval $(call gb_Package_add_file,svx_inc,inc/svx/sdrobjectfactory.hxx,svx/sdrobjectfactory.hxx))
 $(eval $(call gb_Package_add_file,svx_inc,inc/svx/svdlegacy.hxx,svx/svdlegacy.hxx))
 $(eval $(call gb_Package_add_file,svx_inc,inc/svx/globaldrawitempool.hxx,svx/globaldrawitempool.hxx))
+$(eval $(call gb_Package_add_file,svx_inc,inc/svx/sdrobjecttools.hxx,svx/sdrobjecttools.hxx))

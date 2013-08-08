@@ -2444,13 +2444,6 @@ bool SdrTableObj::BckCreate(SdrDragStat& /*rStat*/)
 
 // --------------------------------------------------------------------
 
-Pointer SdrTableObj::GetCreatePointer(const SdrView& /*rSdrView*/) const
-{
-    return Pointer(POINTER_CROSS);
-}
-
-// --------------------------------------------------------------------
-
 void SdrTableObj::createCell( CellRef& xNewCell )
 {
     xNewCell = Cell::create( *this, 0 );

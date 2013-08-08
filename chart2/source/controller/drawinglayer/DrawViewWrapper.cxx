@@ -286,11 +286,11 @@ void DrawViewWrapper::setMarkHandleProvider( MarkHandleProvider* pMarkHandleProv
     m_pMarkHandleProvider = pMarkHandleProvider;
 }
 
-void DrawViewWrapper::CompleteRedraw(OutputDevice* pOut, const Region& rReg, sdr::contact::ViewObjectContactRedirector* /* pRedirector */)
+void DrawViewWrapper::CompleteRedraw(OutputDevice* pOut, const Region& rReg, sdr::contact::ViewObjectContactRedirector* /* pRedirector */) const
 {
     svtools::ColorConfig aColorConfig;
     Color aFillColor = Color( aColorConfig.GetColorValue( svtools::DOCCOLOR ).nColor );
-    this->SetApplicationBackgroundColor(aFillColor);
+    const_cast< DrawViewWrapper* >(this)->SetApplicationBackgroundColor(aFillColor);
     this->E3dView::CompleteRedraw( pOut, rReg );
 }
 

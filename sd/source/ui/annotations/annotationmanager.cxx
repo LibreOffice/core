@@ -381,7 +381,7 @@ void AnnotationManagerImpl::InsertAnnotation()
            AnnotationVector aAnnotations( pPage->getAnnotations() );
            if( !aAnnotations.empty() )
            {
-               const int page_width = pPage->GetPageScale().getX();
+               const int page_width = basegfx::fround(pPage->GetPageScale().getX());
             const int width = 1000;
             const int height = 800;
             Rectangle aTagRect;
@@ -1209,7 +1209,7 @@ SdPage* AnnotationManagerImpl::GetNextPage( SdPage* pPage, bool bForeward )
         }
         else
         {
-            if( nPageNum == (mpDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS) ? 0 : 1 )
+            if( nPageNum == sal_uInt32(mpDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS) ? 0 : 1 )
             {
                 // we reached beginning of master pages, start with end if pages
                 return mpDoc->GetSdPage( mpDoc->GetSdPageCount(PK_STANDARD)-1, PK_STANDARD );

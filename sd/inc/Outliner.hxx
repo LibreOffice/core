@@ -224,7 +224,7 @@ private:
     bool mbMatchMayExist;
 
     /// The number of pages in the current view.
-    sal_uInt16 mnPageCount;
+    sal_uInt32 mnPageCount;
 
     /// Number of objects on the current page / in the current selection.
     sal_Int32 mnObjectCount;

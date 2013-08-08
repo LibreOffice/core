@@ -74,8 +74,8 @@ public:
     sal_uInt16              ChangePagesPerRow( sal_uInt16 nNum );
     sal_uInt16              GetPagesPerRow() const { return nPagesPerRow; }
 
-    virtual void        InvalidateOneWin( ::Window& rWin );
-    virtual void        InvalidateOneWin( ::Window& rWin, const basegfx::B2DRange& rRange );
+    virtual void        InvalidateOneWin( ::Window& rWin ) const;
+    virtual void        InvalidateOneWin( ::Window& rWin, const ::basegfx::B2DRange& rRange ) const;
 
     void                SetAllowInvalidate( bool bFlag );
     bool                IsInvalidateAllowed() const;

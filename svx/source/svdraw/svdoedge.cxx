@@ -2276,11 +2276,6 @@ basegfx::B2DPolyPolygon SdrEdgeObj::TakeCreatePoly(const SdrDragStat& /*rStatDra
     return basegfx::B2DPolyPolygon(maEdgeTrack);
 }
 
-Pointer SdrEdgeObj::GetCreatePointer(const SdrView& /*rSdrView*/) const
-{
-    return Pointer(POINTER_DRAW_CONNECT);
-}
-
 void SdrEdgeObj::FindConnector(
     const basegfx::B2DPoint& rPt,
     const SdrView& rSdrView,
@@ -2489,7 +2484,7 @@ void SdrEdgeObj::setSdrObjectTransformation(const basegfx::B2DHomMatrix& rTransf
 
 SdrObject* SdrEdgeObj::DoConvertToPolygonObject(bool bBezier, bool bAddText) const
 {
-    SdrObject* pRet = ImpConvertMakeObj(basegfx::B2DPolyPolygon(maEdgeTrack), false, bBezier);
+    SdrObject* pRet = ImpConvertMakeObj(basegfx::B2DPolyPolygon(maEdgeTrack), bBezier);
 
     if(bAddText)
     {

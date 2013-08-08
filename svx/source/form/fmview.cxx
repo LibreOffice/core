@@ -476,7 +476,7 @@ void FmFormView::RemoveControlContainer(const Reference< ::com::sun::star::awt::
 }
 
 // -----------------------------------------------------------------------------
-SdrPaintWindow* FmFormView::BeginCompleteRedraw(OutputDevice* pOut)
+SdrPaintWindow* FmFormView::BeginCompleteRedraw(OutputDevice* pOut) const
 {
     SdrPaintWindow* pPaintWindow = E3dView::BeginCompleteRedraw( pOut );
     pImpl->suspendTabOrderUpdate();
@@ -484,7 +484,7 @@ SdrPaintWindow* FmFormView::BeginCompleteRedraw(OutputDevice* pOut)
 }
 
 // -----------------------------------------------------------------------------
-void FmFormView::EndCompleteRedraw( SdrPaintWindow& rPaintWindow, bool bPaintFormLayer )
+void FmFormView::EndCompleteRedraw( SdrPaintWindow& rPaintWindow, bool bPaintFormLayer ) const
 {
     E3dView::EndCompleteRedraw( rPaintWindow, bPaintFormLayer );
     pImpl->resumeTabOrderUpdate();

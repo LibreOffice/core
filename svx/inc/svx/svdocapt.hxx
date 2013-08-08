@@ -121,7 +121,6 @@ public:
     virtual bool BckCreate(SdrDragStat& rStat);
     virtual void BrkCreate(SdrDragStat& rStat);
     virtual basegfx::B2DPolyPolygon TakeCreatePoly(const SdrDragStat& rDrag) const;
-    virtual Pointer GetCreatePointer(const SdrView& rSdrView) const;
 
     virtual sal_uInt32 GetSnapPointCount() const;
     virtual basegfx::B2DPoint GetSnapPoint(sal_uInt32 i) const;

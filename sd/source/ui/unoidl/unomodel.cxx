@@ -2517,7 +2517,7 @@ void SAL_CALL SdDrawPagesAccess::remove( const uno::Reference< drawing::XDrawPag
 
     SdDrawDocument& rDoc = *mpModel->mpDoc;
 
-    sal_uInt16 nPageCount = rDoc.GetSdPageCount( PK_STANDARD );
+    const sal_uInt32 nPageCount(rDoc.GetSdPageCount( PK_STANDARD ));
     if( nPageCount > 1 )
     {
         // pPage von xPage besorgen und dann die Id (nPos )ermitteln
@@ -2990,10 +2990,9 @@ SdPage* SdDocLinkTargets::FindPage( const OUString& rName ) const throw()
     if( mpDoc == NULL )
         return NULL;
 
-    const sal_uInt16 nMaxPages = mpDoc->GetPageCount();
-    const sal_uInt16 nMaxMasterPages = mpDoc->GetMasterPageCount();
-
-    sal_uInt16 nPage;
+    const sal_uInt32 nMaxPages = mpDoc->GetPageCount();
+    const sal_uInt32 nMaxMasterPages = mpDoc->GetMasterPageCount();
+    sal_uInt32 nPage;
     SdPage* pPage;
 
     const String aName( rName );

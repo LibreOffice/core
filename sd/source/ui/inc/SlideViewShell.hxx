@@ -144,7 +144,7 @@ public:
 
     /** On activation the preview is turned off.
     */
-    virtual void Activate (bool IsMDIActivate);
+    virtual void Activate (sal_Bool IsMDIActivate);
 
 protected:
     virtual Size    GetOptimalSizePixel() const;

@@ -549,7 +549,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                         double fExtrusionBrightness = 0;
                                         if ( rProp.Value >>= fExtrusionBrightness )
                                         {
-                                            rUnitConverter.convertDouble( aStrBuffer, fExtrusionBrightness, sal_False, MAP_RELATIVE, MAP_RELATIVE );
+                                            rUnitConverter.convertDoubleAndUnit( aStrBuffer, fExtrusionBrightness, sal_False, MAP_RELATIVE, MAP_RELATIVE );
                                             aStrBuffer.append( (sal_Unicode)'%' );
                                             aStr = aStrBuffer.makeStringAndClear();
                                             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_BRIGHTNESS, aStr );
@@ -564,7 +564,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                             double fDepth = 0;
                                             if ( aDepthParaPair.First.Value >>= fDepth )
                                             {
-                                                rExport.GetMM100UnitConverter().convertDouble( aStrBuffer, fDepth, sal_True );
+                                                rExport.GetMM100UnitConverter().convertDoubleAndUnit(aStrBuffer, fDepth);
                                                 ExportParameter( aStrBuffer, aDepthParaPair.Second );
                                                 aStr = aStrBuffer.makeStringAndClear();
                                                 rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_DEPTH, aStr );
@@ -577,7 +577,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                         double fExtrusionDiffusion = 0;
                                         if ( rProp.Value >>= fExtrusionDiffusion )
                                         {
-                                            rUnitConverter.convertDouble( aStrBuffer, fExtrusionDiffusion, sal_False, MAP_RELATIVE, MAP_RELATIVE );
+                                            rUnitConverter.convertDoubleAndUnit( aStrBuffer, fExtrusionDiffusion, sal_False, MAP_RELATIVE, MAP_RELATIVE );
                                             aStrBuffer.append( (sal_Unicode)'%' );
                                             aStr = aStrBuffer.makeStringAndClear();
                                             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_DIFFUSION, aStr );
@@ -620,7 +620,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                         double fExtrusionFirstLightLevel = 0;
                                         if ( rProp.Value >>= fExtrusionFirstLightLevel )
                                         {
-                                            rUnitConverter.convertDouble( aStrBuffer, fExtrusionFirstLightLevel, sal_False, MAP_RELATIVE, MAP_RELATIVE );
+                                            rUnitConverter.convertDoubleAndUnit( aStrBuffer, fExtrusionFirstLightLevel, sal_False, MAP_RELATIVE, MAP_RELATIVE );
                                             aStrBuffer.append( (sal_Unicode)'%' );
                                             aStr = aStrBuffer.makeStringAndClear();
                                             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_FIRST_LIGHT_LEVEL, aStr );
@@ -632,7 +632,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                         double fExtrusionSecondLightLevel = 0;
                                         if ( rProp.Value >>= fExtrusionSecondLightLevel )
                                         {
-                                            rUnitConverter.convertDouble( aStrBuffer, fExtrusionSecondLightLevel, sal_False, MAP_RELATIVE, MAP_RELATIVE );
+                                            rUnitConverter.convertDoubleAndUnit( aStrBuffer, fExtrusionSecondLightLevel, sal_False, MAP_RELATIVE, MAP_RELATIVE );
                                             aStrBuffer.append( (sal_Unicode)'%' );
                                             aStr = aStrBuffer.makeStringAndClear();
                                             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_SECOND_LIGHT_LEVEL, aStr );
@@ -726,7 +726,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                         double fExtrusionShininess = 0;
                                         if ( rProp.Value >>= fExtrusionShininess )
                                         {
-                                            rUnitConverter.convertDouble( aStrBuffer, fExtrusionShininess, sal_False, MAP_RELATIVE, MAP_RELATIVE );
+                                            rUnitConverter.convertDoubleAndUnit( aStrBuffer, fExtrusionShininess, sal_False, MAP_RELATIVE, MAP_RELATIVE );
                                             aStrBuffer.append( (sal_Unicode)'%' );
                                             aStr = aStrBuffer.makeStringAndClear();
                                             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_SHININESS, aStr );
@@ -750,7 +750,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                         double fExtrusionSpecularity = 0;
                                         if ( rProp.Value >>= fExtrusionSpecularity )
                                         {
-                                            rUnitConverter.convertDouble( aStrBuffer, fExtrusionSpecularity, sal_False, MAP_RELATIVE, MAP_RELATIVE );
+                                            rUnitConverter.convertDoubleAndUnit( aStrBuffer, fExtrusionSpecularity, sal_False, MAP_RELATIVE, MAP_RELATIVE );
                                             aStrBuffer.append( (sal_Unicode)'%' );
                                             aStr = aStrBuffer.makeStringAndClear();
                                             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_SPECULARITY, aStr );

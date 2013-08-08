@@ -312,7 +312,7 @@ void SAL_CALL ModuleController::requestResource (const OUString& rsResourceURL)
                         iFactory->second,
                         aArguments);
                 }
-                catch(Exception&e)
+                catch(Exception& /*e*/)
                 {
                     OSL_TRACE("caught exception while creating factory.");
                 }

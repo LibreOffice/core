@@ -250,7 +250,7 @@ bool SdrTextObj::ImpCanConvTextToCurve() const
     return !IsOutlText();
 }
 
-SdrObject* SdrTextObj::ImpConvertMakeObj(const basegfx::B2DPolyPolygon& rPolyPolygon, bool bClosed, bool bBezier, bool bNoSetAttr) const
+SdrObject* SdrTextObj::ImpConvertMakeObj(const basegfx::B2DPolyPolygon& rPolyPolygon, bool bBezier, bool bNoSetAttr) const
 {
     basegfx::B2DPolyPolygon aB2DPolyPolygon(rPolyPolygon);
 
@@ -262,14 +262,14 @@ SdrObject* SdrTextObj::ImpConvertMakeObj(const basegfx::B2DPolyPolygon& rPolyPol
 
     SdrPathObj* pPathObj = new SdrPathObj(getSdrModelFromSdrObject(), aB2DPolyPolygon);
 
-    if(bBezier)
-    {
-        // create bezier curves
-        pPathObj->setB2DPolyPolygonInObjectCoordinates(basegfx::tools::expandToCurve(pPathObj->getB2DPolyPolygonInObjectCoordinates()));
-    }
-
     if(pPathObj)
     {
+        if(bBezier)
+        {
+            // create bezier curves
+            pPathObj->setB2DPolyPolygonInObjectCoordinates(basegfx::tools::expandToCurve(pPathObj->getB2DPolyPolygonInObjectCoordinates()));
+        }
+
         pPathObj->SetAnchorPos(GetAnchorPos());
         pPathObj->SetLayer(GetLayer());
 

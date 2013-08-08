@@ -879,7 +879,7 @@ bool DrawDocShell::GotoBookmark(const String& rBookmark)
                 // by using the API because this takes care of all the
                 // little things to be done.  Especially writing the view
                 // data to the frame view (see bug #107803#).
-                sal_uInt16 nSdPgNum = (nPageNumber - 1) / 2;
+                sal_uInt32 nSdPgNum = (nPageNumber - 1) / 2;
                 Reference<drawing::XDrawView> xController (rBase.GetController(), UNO_QUERY);
                 if (xController.is())
                 {

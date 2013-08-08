@@ -416,7 +416,7 @@ void SdPageObjsTLB::Fill( const SdDrawDocument* pInDoc, bool bAllPages, const St
 
     // first insert all pages including objects
     sal_uInt16 nPage = 0;
-    const sal_uInt16 nMaxPages = mpDoc->GetPageCount();
+    const sal_uInt32 nMaxPages = mpDoc->GetPageCount();
 
     while( nPage < nMaxPages )
     {
@@ -437,7 +437,7 @@ void SdPageObjsTLB::Fill( const SdDrawDocument* pInDoc, bool bAllPages, const St
     if( mbShowAllPages )
     {
         nPage = 0;
-        const sal_uInt16 nMaxMasterPages = mpDoc->GetMasterPageCount();
+        const sal_uInt32 nMaxMasterPages = mpDoc->GetMasterPageCount();
 
         while( nPage < nMaxMasterPages )
         {
@@ -645,7 +645,7 @@ bool SdPageObjsTLB::IsEqualToDoc( const SdDrawDocument* pInDoc )
 
     // Alle Pages incl. Objekte vergleichen
     sal_uInt16 nPage = 0;
-    const sal_uInt16 nMaxPages = mpDoc->GetPageCount();
+    const sal_uInt32 nMaxPages = mpDoc->GetPageCount();
 
     while( nPage < nMaxPages )
     {
@@ -760,7 +760,7 @@ void SdPageObjsTLB::RequestingChilds( SvLBoxEntry* pFileEntry )
 
             // only insert all "normal" ? slides with objects
             sal_uInt16 nPage = 0;
-            const sal_uInt16 nMaxPages = mpBookmarkDoc->GetPageCount();
+            const sal_uInt32 nMaxPages = mpBookmarkDoc->GetPageCount();
 
             while( nPage < nMaxPages )
             {

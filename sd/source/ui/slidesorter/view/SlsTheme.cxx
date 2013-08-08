@@ -40,20 +40,20 @@ const static ColorData White = 0xffffff;
 
 
 
-ColorData ChangeLuminance (const ColorData aColorData, const int nValue)
+ColorData ChangeLuminance (const ColorData aColorData, const sal_uInt8 nValue)
 {
     Color aColor (aColorData);
     if (nValue > 0)
         aColor.IncreaseLuminance(nValue);
     else
-        aColor.DecreaseLuminance(-nValue);
+        aColor.DecreaseLuminance(nValue);
     return aColor.GetColor();
 }
 
 ColorData HGBAdapt (
     const ColorData aColorData,
-    const sal_Int32 nNewSaturation,
-    const sal_Int32 nNewBrightness)
+    const sal_Int16 nNewSaturation,
+    const sal_Int16 nNewBrightness)
 {
     sal_uInt16 nHue (0);
     sal_uInt16 nSaturation (0);
@@ -376,13 +376,16 @@ void Theme::SetGradient (
     rGradient.mnSaturationOverride = nSaturationOverride;
     rGradient.mnBrightnessOverride = nBrightnessOverride;
     const ColorData aColor (nSaturationOverride>=0 || nBrightnessOverride>=0
-        ? HGBAdapt(aBaseColor, nSaturationOverride, nBrightnessOverride)
+        ? HGBAdapt(
+            aBaseColor,
+            static_cast< sal_uInt16 >(nSaturationOverride),
+            static_cast< sal_uInt16 >(nBrightnessOverride))
         : aBaseColor);
 
-    rGradient.maFillColor1 = ChangeLuminance(aColor, nFillStartOffset);
-    rGradient.maFillColor2 = ChangeLuminance(aColor, nFillEndOffset);
-    rGradient.maBorderColor1 = ChangeLuminance(aColor, nBorderStartOffset);
-    rGradient.maBorderColor2 = ChangeLuminance(aColor, nBorderEndOffset);
+    rGradient.maFillColor1 = ChangeLuminance(aColor, static_cast< sal_uInt8 >(nFillStartOffset));
+    rGradient.maFillColor2 = ChangeLuminance(aColor, static_cast< sal_uInt8 >(nFillEndOffset));
+    rGradient.maBorderColor1 = ChangeLuminance(aColor, static_cast< sal_uInt8 >(nBorderStartOffset));
+    rGradient.maBorderColor2 = ChangeLuminance(aColor, static_cast< sal_uInt8 >(nBorderEndOffset));
 
     rGradient.mnFillOffset1 = nFillStartOffset;
     rGradient.mnFillOffset2 = nFillEndOffset;

@@ -497,7 +497,7 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
 |*
 \************************************************************************/
 
-void View::CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector /*=0L*/)
+void View::CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector /*=0L*/) const
 {
     // ausfuehren ??
     if (mnLockRedrawSmph == 0)
@@ -536,7 +536,9 @@ void View::CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, sdr::contac
     else
     {
         if (!mpLockedRedraws)
-            mpLockedRedraws = new List;
+        {
+            const_cast< View* >(this)->mpLockedRedraws = new List;
+        }
 
         SdViewRedrawRec* pRec = new SdViewRedrawRec;
         pRec->mpOut = pOutDev;

@@ -72,7 +72,7 @@ public:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessible >& rxParent,
         ::sd::slidesorter::SlideSorter& rSlideSorter,
-        sal_uInt16 nPageNumber);
+        sal_uInt32 nPageNumber);
     ~AccessibleSlideSorterObject (void);
 
     /** Return the page that is made accessible by the called object.
@@ -81,7 +81,7 @@ public:
 
     /** The page number as given to the constructor.
     */
-    sal_uInt16 GetPageNumber (void) const;
+    sal_uInt32 GetPageNumber (void) const;
 
     void FireAccessibleEvent (
         short nEventId,
@@ -217,7 +217,7 @@ public:
 private:
     ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible> mxParent;
-    sal_uInt16 mnPageNumber;
+    sal_uInt32 mnPageNumber;
     ::sd::slidesorter::SlideSorter& mrSlideSorter;
     sal_uInt32 mnClientId;
 

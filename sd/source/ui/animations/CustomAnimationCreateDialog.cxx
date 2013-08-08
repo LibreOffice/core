@@ -557,11 +557,11 @@ CustomAnimationCreateDialog::CustomAnimationCreateDialog( Window* pParent, Custo
     // select current preset if available
     if( rsPresetId.getLength() != 0 )
     {
-        for( sal_uInt16 i = ENTRANCE; i <= MOTIONPATH; i++ )
+        for( sal_uInt32 i = ENTRANCE; i <= MOTIONPATH; i++ )
         {
             if( mpTabPages[i]->select( rsPresetId ) )
             {
-                mpTabControl->SetCurPageId( RID_TP_CUSTOMANIMATION_ENTRANCE + i );
+                mpTabControl->SetCurPageId( static_cast< sal_uInt16 >(RID_TP_CUSTOMANIMATION_ENTRANCE + i ));
                 break;
             }
         }

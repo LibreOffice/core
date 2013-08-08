@@ -185,7 +185,7 @@ void SdrPaintWindow::impCreateOverlayManager()
     }
 }
 
-SdrPaintWindow::SdrPaintWindow(SdrPaintView& rNewPaintView, OutputDevice& rOut)
+SdrPaintWindow::SdrPaintWindow(const SdrPaintView& rNewPaintView, OutputDevice& rOut)
 :   mrOutputDevice(rOut),
     mrPaintView(rNewPaintView),
     mpOverlayManager(0),

@@ -66,7 +66,7 @@ void PanelBase::Dispose (void)
 
 
 
-css::ui::LayoutSize PanelBase::GetHeightForWidth (const sal_Int32 nWidth)
+css::ui::LayoutSize PanelBase::GetHeightForWidth (const sal_Int32 /*nWidth*/)
 {
     sal_Int32 nHeight (0);
     if (ProvideWrappedControl())

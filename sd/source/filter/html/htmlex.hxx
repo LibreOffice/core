@@ -208,7 +208,7 @@ class HtmlExport
     bool CopyFile( const String& rSourceFile, const String& rDestPath );
     bool CopyScript( const String& rPath, const String& rSource, const String& rDest, bool bUnix = false );
 
-    void InitProgress( sal_uInt16 nProgrCount );
+    void InitProgress( sal_uInt32 nProgrCount );
     void ResetProgress();
 
     String WriteMetaCharset() const;

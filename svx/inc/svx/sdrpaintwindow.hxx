@@ -71,7 +71,7 @@ private:
     OutputDevice&                                       mrOutputDevice;
 
     // the SdrPaintView this window belongs to
-    SdrPaintView&                                       mrPaintView;
+    const SdrPaintView&                                 mrPaintView;
 
     // the new OverlayManager for the new OverlayObjects. Test add here, will
     // replace the IAOManager as soon as it works.
@@ -91,11 +91,11 @@ private:
     void impCreateOverlayManager();
 
 public:
-    SdrPaintWindow(SdrPaintView& rNewPaintView, OutputDevice& rOut);
+    SdrPaintWindow(const SdrPaintView& rNewPaintView, OutputDevice& rOut);
     ~SdrPaintWindow();
 
     // data read accesses
-    SdrPaintView& GetPaintView() const { return mrPaintView; }
+    const SdrPaintView& GetPaintView() const { return mrPaintView; }
     OutputDevice& GetOutputDevice() const { return mrOutputDevice; }
 
     // OVERLAYMANAGER

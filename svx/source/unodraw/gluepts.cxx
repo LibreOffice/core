@@ -233,7 +233,7 @@ sal_Int32 SAL_CALL SvxUnoGluePointAccess::insert( const uno::Any& aElement ) thr
             {
                 SdrGluePoint aSdrGlue;
                 convert( aUnoGlue, aSdrGlue );
-                sal_uInt16 nId = pList->Insert( aSdrGlue );
+                sal_uInt32 nId = pList->Insert( aSdrGlue );
 
                 // only repaint, no objectchange
                 mpObject->ActionChanged();
@@ -255,8 +255,8 @@ void SAL_CALL SvxUnoGluePointAccess::removeByIdentifier( sal_Int32 Identifier ) 
         const sal_uInt16 nId = (sal_uInt16)(Identifier - NON_USER_DEFINED_GLUE_POINTS) + 1;
 
         SdrGluePointList* pList = const_cast<SdrGluePointList*>(mpObject->GetGluePointList());
-        const sal_uInt16 nCount = pList ? pList->GetCount() : 0;
-        sal_uInt16 i;
+        const sal_uInt32 nCount = pList ? pList->GetCount() : 0;
+        sal_uInt32 i;
 
         for( i = 0; i < nCount; i++ )
         {
@@ -287,8 +287,8 @@ void SAL_CALL SvxUnoGluePointAccess::replaceByIdentifer( sal_Int32 Identifier, c
         const sal_uInt16 nId = (sal_uInt16)( Identifier - NON_USER_DEFINED_GLUE_POINTS ) + 1;
 
         SdrGluePointList* pList = const_cast< SdrGluePointList* >( mpObject->GetGluePointList() );
-        const sal_uInt16 nCount = pList ? pList->GetCount() : 0;
-        sal_uInt16 i;
+        const sal_uInt32 nCount = pList ? pList->GetCount() : 0;
+        sal_uInt32 i;
         for( i = 0; i < nCount; i++ )
         {
             if( (*pList)[i].GetId() == nId )
@@ -327,8 +327,9 @@ uno::Any SAL_CALL SvxUnoGluePointAccess::getByIdentifier( sal_Int32 Identifier )
             const sal_uInt16 nId = (sal_uInt16)( Identifier - NON_USER_DEFINED_GLUE_POINTS ) + 1;
 
             const SdrGluePointList* pList = mpObject->GetGluePointList();
-            const sal_uInt16 nCount = pList ? pList->GetCount() : 0;
-            for( sal_uInt16 i = 0; i < nCount; i++ )
+            const sal_uInt32 nCount = pList ? pList->GetCount() : 0;
+
+            for( sal_uInt32 i = 0; i < nCount; i++ )
             {
                 const SdrGluePoint& rTempPoint = (*pList)[i];
                 if( rTempPoint.GetId() == nId )
@@ -354,18 +355,17 @@ uno::Sequence< sal_Int32 > SAL_CALL SvxUnoGluePointAccess::getIdentifiers() thro
     if( mpObject.is() )
     {
         const SdrGluePointList* pList = mpObject->GetGluePointList();
-        const sal_uInt16 nCount = pList ? pList->GetCount() : 0;
-
-        sal_uInt16 i;
+        const sal_uInt32 nCount = pList ? pList->GetCount() : 0;
+        sal_uInt32 i;
 
         uno::Sequence< sal_Int32 > aIdSequence( nCount + NON_USER_DEFINED_GLUE_POINTS );
         sal_Int32 *pIdentifier = aIdSequence.getArray();
 
         for( i = 0; i < NON_USER_DEFINED_GLUE_POINTS; i++ )
-            *pIdentifier++ = (sal_Int32)i;
+            *pIdentifier++ = i;
 
         for( i = 0; i < nCount; i++ )
-            *pIdentifier++ = (sal_Int32) ( (*pList)[i].GetId() + NON_USER_DEFINED_GLUE_POINTS ) - 1;
+            *pIdentifier++ = ( (*pList)[i].GetId() + NON_USER_DEFINED_GLUE_POINTS ) - 1;
 
         return aIdSequence;
     }

@@ -157,7 +157,7 @@ public:
     bool PickHelpLine(const basegfx::B2DPoint& rPnt, double fTol, sal_uInt32& rnHelpLineNum) const;
 
     // Verschieben einer vorhandenen Hilfslinie. nHelpLineNum von PickHelpLine verwenden.
-    bool BegDragHelpLine(sal_uInt16 nHelpLineNum);
+    bool BegDragHelpLine(sal_uInt32 nHelpLineNum);
     // Interaktives einfuegen einer neuen Hilfslinie
     bool BegDragHelpLine(const basegfx::B2DPoint& rPnt, SdrHelpLineKind eNewKind);
     Pointer GetDraggedHelpLinePointer() const;

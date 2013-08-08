@@ -648,11 +648,6 @@ basegfx::B2DPolyPolygon SdrCaptionObj::TakeCreatePoly(const SdrDragStat& /*rDrag
     return aRetval;
 }
 
-Pointer SdrCaptionObj::GetCreatePointer(const SdrView& /*rSdrView*/) const
-{
-    return Pointer(POINTER_DRAW_CAPTION);
-}
-
 void SdrCaptionObj::setSdrObjectTransformation(const basegfx::B2DHomMatrix& rTransformation)
 {
     SdrRectObj::setSdrObjectTransformation(rTransformation);
@@ -722,7 +717,7 @@ void SdrCaptionObj::RestGeoData(const SdrObjGeoData& rGeo)
 SdrObject* SdrCaptionObj::DoConvertToPolygonObject(bool bBezier, bool bAddText) const
 {
     SdrObject* pRect = SdrRectObj::DoConvertToPolygonObject(bBezier, bAddText);
-    SdrObject* pTail = ImpConvertMakeObj(basegfx::B2DPolyPolygon(aTailPoly.getB2DPolygon()), false, bBezier);
+    SdrObject* pTail = ImpConvertMakeObj(basegfx::B2DPolyPolygon(aTailPoly.getB2DPolygon()), bBezier);
     SdrObject* pRet= (pTail) ? pTail : pRect;
 
     if(pTail && pRect)

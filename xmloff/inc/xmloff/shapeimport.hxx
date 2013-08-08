@@ -253,14 +253,26 @@ class SvXMLShapeContext : public SvXMLImportContext
 {
 protected:
     com::sun::star::uno::Reference< com::sun::star::drawing::XShape >   mxShape;
-    sal_Bool                                                            mbTemporaryShape;
     rtl::OUString                                                       msHyperlink;
 
-public:
-    SvXMLShapeContext( SvXMLImport& rImp, sal_uInt16 nPrfx,
-        const ::rtl::OUString& rLName, sal_Bool bTemporaryShape ) : SvXMLImportContext( rImp, nPrfx, rLName ), mbTemporaryShape(bTemporaryShape) {}
+    /// bitfield
+    bool                mbTemporaryShape : 1;
 
-    const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& getShape() const { return mxShape; }
+public:
+    SvXMLShapeContext(
+        SvXMLImport& rImp,
+        sal_uInt16 nPrfx,
+        const ::rtl::OUString& rLName,
+        bool bTemporaryShape )
+    :   SvXMLImportContext( rImp, nPrfx, rLName ),
+        mbTemporaryShape(bTemporaryShape)
+    {
+    }
+
+    const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& getShape() const
+    {
+        return mxShape;
+    }
 
     void setHyperlink( const ::rtl::OUString& rHyperlink );
 };
@@ -322,7 +334,7 @@ public:
         SvXMLImport& rImport, sal_uInt16 nPrefix, const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
-        sal_Bool bTemporaryShape = sal_False);
+        bool bTemporaryShape = false);
 
     SvXMLShapeContext* CreateFrameChildContext(
         SvXMLImport& rImport, sal_uInt16 nPrefix, const rtl::OUString& rLocalName,

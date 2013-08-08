@@ -89,7 +89,7 @@ public:
     virtual bool IsOpenCloseMarkedObjectsPossible() const;
     virtual SdrObjClosedKind GetMarkedObjectsClosedState() const;
 
-    void MovePath( int nDX, int nDY );
+    void MovePath( double fDX, double fDY );
     bool OnDelete();
     bool OnTabHandles( const KeyEvent& rKEvt );
     bool OnMarkHandle( const KeyEvent& rKEvt );

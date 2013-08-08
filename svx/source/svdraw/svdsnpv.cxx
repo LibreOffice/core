@@ -670,7 +670,7 @@ bool SdrSnapView::PickHelpLine(const basegfx::B2DPoint& rPnt, double fTol, sal_u
 }
 
 // start HelpLine drag for new HelpLine
-bool SdrSnapView::BegDragHelpLine(sal_uInt16 nHelpLineNum)
+bool SdrSnapView::BegDragHelpLine(sal_uInt32 nHelpLineNum)
 {
     bool bRet(false);
 

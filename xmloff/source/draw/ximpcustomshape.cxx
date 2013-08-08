@@ -125,7 +125,7 @@ void GetDistance( std::vector< com::sun::star::beans::PropertyValue >& rDest,
 {
     double fAttrDouble;
     MapUnit eSrcUnit( SvXMLExportHelper::GetUnitFromString( rValue, MAP_100TH_MM ) );
-    if ( SvXMLUnitConverter::convertDouble( fAttrDouble, rValue, eSrcUnit, MAP_100TH_MM ) )
+    if ( SvXMLUnitConverter::convertDoubleAndUnit( fAttrDouble, rValue, eSrcUnit, MAP_100TH_MM ) )
     {
         beans::PropertyValue aProp;
         aProp.Name = EASGet( eDestProp );

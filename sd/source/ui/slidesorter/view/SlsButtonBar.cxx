@@ -71,6 +71,7 @@ public:
     /** Set the preview bounding box, the maximal area in which to display
         buttons.  A call to this method triggers a call to Layout().
     */
+    virtual ~BackgroundTheme();
     void SetPreviewBoundingBox (const Rectangle& rPreviewBoundingBox);
     Button::IconSize GetIconSize (void) const;
 
@@ -104,6 +105,7 @@ namespace {
         RectangleBackgroundTheme(
             const ::boost::shared_ptr<Theme>& rpTheme,
             const ::std::vector<SharedButton>& rButtons);
+        virtual ~RectangleBackgroundTheme();
         virtual BitmapEx CreateBackground (
             const OutputDevice& rTemplateDevice,
             const bool bIsButtonDown) const;
@@ -125,6 +127,7 @@ namespace {
         BitmapBackgroundTheme(
             const ::boost::shared_ptr<Theme>& rpTheme,
             const ::std::vector<SharedButton>& rButtons);
+        virtual ~BitmapBackgroundTheme();
         virtual BitmapEx CreateBackground (
             const OutputDevice& rTemplateDevice,
             const bool bIsButtonDown) const;
@@ -804,6 +807,11 @@ ButtonBar::BackgroundTheme::BackgroundTheme (
 
 
 
+ButtonBar::BackgroundTheme::~BackgroundTheme()
+{
+}
+
+
 
 void ButtonBar::BackgroundTheme::SetPreviewBoundingBox (const Rectangle& rPreviewBoundingBox)
 {
@@ -873,6 +881,12 @@ RectangleBackgroundTheme::RectangleBackgroundTheme (
 {
 }
 
+
+
+
+RectangleBackgroundTheme::~RectangleBackgroundTheme()
+{
+}
 
 
 
@@ -990,6 +1004,12 @@ BitmapBackgroundTheme::BitmapBackgroundTheme (
 {
 }
 
+
+
+
+BitmapBackgroundTheme::~BitmapBackgroundTheme()
+{
+}
 
 
 

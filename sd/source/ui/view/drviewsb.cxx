@@ -98,8 +98,8 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
             }
 
             SdrLayerAdmin& rLayerAdmin = GetDoc()->GetModelLayerAdmin();
-            sal_uInt16 nLayerCnt = rLayerAdmin.GetLayerCount();
-            sal_uInt16 nLayer = nLayerCnt - 2 + 1;
+            sal_uInt32 nLayerCnt = rLayerAdmin.GetLayerCount();
+            sal_uInt32 nLayer = nLayerCnt - 2 + 1;
             String aLayerName ( SdResId(STR_LAYER) ), aLayerTitle, aLayerDesc;
             aLayerName += String::CreateFromInt32( (sal_Int32)nLayer );
             bool bIsVisible = false;
@@ -190,7 +190,7 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
             String aPrevLayer = mpDrawView->GetActiveLayer();
             String aName;
             SdrLayer* pLayer;
-            sal_uInt16 nPrevLayer = 0;
+            sal_uInt32 nPrevLayer = 0;
             nLayerCnt = rLayerAdmin.GetLayerCount();
 
             for ( nLayer = 0; nLayer < nLayerCnt; nLayer++ )
@@ -201,7 +201,7 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
                 if ( aPrevLayer == aName )
                 {
 //                    nPrevLayer = nLayer;
-                    nPrevLayer = Max(nLayer, (sal_uInt16) 4);
+                    nPrevLayer = std::max(nLayer, sal_uInt32(4));
                 }
             }
 
@@ -770,7 +770,7 @@ bool DrawViewShell::RenameSlide( sal_uInt32 nPageId, const String & rName  )
     if( bSuccess )
     {
         // user edited page names may be changed by the page so update control
-        maTabControl.SetPageText( nPageId, rName );
+        maTabControl.SetPageText( static_cast< sal_uInt16 >(nPageId), rName );
 
         // set document to modified state
         GetDoc()->SetChanged( true );

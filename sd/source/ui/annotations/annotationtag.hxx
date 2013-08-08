@@ -62,7 +62,7 @@ public:
     virtual void CheckPossibilities();
     virtual bool MarkPoints(const basegfx::B2DRange* pRange, bool bUnmark);
 
-    void Move( int nDX, int nDY );
+    void Move( double fDX, double fDY );
     bool OnMove( const KeyEvent& rKEvt );
 
     // ---

@@ -60,7 +60,7 @@ protected:
 private:
     Rectangle       maOldVisArea;
 
-    virtual void Activate (bool bIsMDIActivate);
+    virtual void Activate (sal_Bool bIsMDIActivate);
     virtual void Paint (const Rectangle& rRect, ::sd::Window* pWin);
 };
 

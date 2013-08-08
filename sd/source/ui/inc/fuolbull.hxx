@@ -60,7 +60,7 @@ private:
 
     void SetCurrentBulletsNumbering(SfxRequest& rReq);
 
-    const SfxPoolItem* GetNumBulletItem(SfxItemSet& aNewAttr, sal_uInt32& nNumItemId);
+    const SfxPoolItem* GetNumBulletItem(SfxItemSet& aNewAttr, sal_uInt16& nNumItemId);
 };
 
 

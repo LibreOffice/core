@@ -138,7 +138,6 @@ public:
     virtual bool BckCreate(SdrDragStat& rStat);
     virtual void BrkCreate(SdrDragStat& rStat);
     virtual basegfx::B2DPolyPolygon TakeCreatePoly(const SdrDragStat& rDrag) const;
-    virtual Pointer GetCreatePointer(const SdrView& rSdrView) const;
 
     // during drag or create, allow accessing the so-far created/modified polyPolygon
     basegfx::B2DPolyPolygon getObjectPolyPolygon(const SdrDragStat& rDrag) const;

@@ -382,7 +382,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
             if (!mpView->IsTextEdit() && !bSlideShow && !mpDocSh->IsUIActive())
             {
                 // Zoom vergroessern
-                mpViewShell->SetZoom(mpWindow->GetZoom() * 3 / 2);
+                mpViewShell->SetZoom(basegfx::fround(mpWindow->GetZoom() * (3.0 / 2.0)));
 
                 DrawViewShell* pDrawViewShell = dynamic_cast< DrawViewShell* >(mpViewShell);
 
@@ -401,7 +401,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
             if (!mpView->IsTextEdit() && !bSlideShow && !mpDocSh->IsUIActive())
             {
                 // Zoom verringern
-                mpViewShell->SetZoom(mpWindow->GetZoom() * 2 / 3);
+                mpViewShell->SetZoom(basegfx::fround(mpWindow->GetZoom() * (2.0 / 3.0)));
 
                 DrawViewShell* pDrawViewShell = dynamic_cast< DrawViewShell* >(mpViewShell);
 

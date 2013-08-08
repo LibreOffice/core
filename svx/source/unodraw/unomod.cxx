@@ -711,8 +711,7 @@ void SAL_CALL SvxUnoDrawPagesAccess::remove( const uno::Reference< drawing::XDra
         throw(uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
-
-    sal_uInt16 nPageCount = mrModel.mpDoc->GetPageCount();
+    const sal_uInt32 nPageCount = mrModel.mpDoc->GetPageCount();
     if( nPageCount > 1 )
     {
         // pPage von xPage besorgen und dann die Id (nPos )ermitteln

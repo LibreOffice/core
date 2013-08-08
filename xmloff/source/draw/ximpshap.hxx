@@ -36,6 +36,8 @@
 #include <xmloff/shapeimport.hxx>
 #include <xmloff/xmlmultiimagehelper.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/point/b2dpoint.hxx>
+#include <basegfx/vector/b2dvector.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // common shape context
@@ -57,14 +59,8 @@ protected:
     rtl::OUString               maShapeName;
     rtl::OUString               maThumbnailURL;
 
-    /// whether to restore list context (#91964#)
-    bool                        mbListContextPushed;
-
     sal_uInt16                  mnStyleFamily;
     sal_uInt16                  mnClass;
-    sal_Bool                    mbIsPlaceholder;
-    bool                        mbClearDefaultAttributes;
-    sal_Bool                    mbIsUserTransformed;
     sal_Int32                   mnZOrder;
     rtl::OUString               maShapeId;
     rtl::OUString               maLayerName;
@@ -74,12 +70,22 @@ protected:
     rtl::OUString               maShapeDescription;
 
     SdXMLImExTransform2D        mnTransform;
-    com::sun::star::awt::Size   maSize;
-    com::sun::star::awt::Point  maPosition;
+    basegfx::B2DVector          maObjectSize;
+    basegfx::B2DPoint           maObjectPosition;
+    //com::sun::star::awt::Size   maSize;
+    //com::sun::star::awt::Point  maPosition;
     basegfx::B2DHomMatrix       maUsedTransformation;
 
-    bool                        mbVisible;
-    bool                        mbPrintable;
+    /// bitfield
+    bool                        mbVisible : 1;
+    bool                        mbPrintable : 1;
+
+    /// whether to restore list context (#91964#)
+    bool                        mbListContextPushed : 1;
+
+    bool                        mbIsPlaceholder : 1;
+    bool                        mbClearDefaultAttributes : 1;
+    bool                        mbIsUserTransformed : 1;
 
     /** if bSupportsStyle is false, auto styles will be set but not a style */
     void SetStyle( bool bSupportsStyle = true );
@@ -103,7 +109,7 @@ public:
         const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
-        sal_Bool bTemporaryShape);
+        bool bTemporaryShape);
     virtual ~SdXMLShapeContext();
 
     virtual void StartElement(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList);
@@ -131,7 +137,7 @@ public:
         const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
-        sal_Bool bTemporaryShape);
+        bool bTemporaryShape);
     virtual ~SdXMLRectShapeContext();
     virtual void StartElement(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList);
 
@@ -144,17 +150,18 @@ public:
 
 class SdXMLLineShapeContext : public SdXMLShapeContext
 {
-    sal_Int32                   mnX1;
-    sal_Int32                   mnY1;
-    sal_Int32                   mnX2;
-    sal_Int32                   mnY2;
+private:
+    double              mfX1;
+    double              mfY1;
+    double              mfX2;
+    double              mfY2;
 
 public:
     SdXMLLineShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
-        sal_Bool bTemporaryShape);
+        bool bTemporaryShape);
     virtual ~SdXMLLineShapeContext();
     virtual void StartElement(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList);
 
@@ -167,12 +174,12 @@ public:
 
 class SdXMLEllipseShapeContext : public SdXMLShapeContext
 {
-    sal_Int32                   mnCX;
-    sal_Int32                   mnCY;
-    sal_Int32                   mnRX;
-    sal_Int32                   mnRY;
+    double                      mfCX;
+    double                      mfCY;
+    double                      mfRX;
+    double                      mfRY;
 
-    sal_uInt16                      meKind;
+    sal_uInt16                  meKind;
     sal_Int32                   mnStartAngle;
     sal_Int32                   mnEndAngle;
 public:
@@ -180,7 +187,7 @@ public:
         const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
-        sal_Bool bTemporaryShape);
+        bool bTemporaryShape);
     virtual ~SdXMLEllipseShapeContext();
     virtual void StartElement(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList);
 
@@ -195,13 +202,15 @@ class SdXMLPolygonShapeContext : public SdXMLShapeContext
 {
     rtl::OUString               maPoints;
     rtl::OUString               maViewBox;
-    sal_Bool                    mbClosed;
+    bool                        mbClosed;
 
 public:
     SdXMLPolygonShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
-        com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes, sal_Bool bClosed, sal_Bool bTemporaryShape);
+        com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
+        bool bClosed,
+        bool bTemporaryShape);
     virtual ~SdXMLPolygonShapeContext();
     virtual void StartElement(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList);
 
@@ -216,14 +225,14 @@ class SdXMLPathShapeContext : public SdXMLShapeContext
 {
     rtl::OUString               maD;
     rtl::OUString               maViewBox;
-    sal_Bool                    mbClosed;
+    bool                        mbClosed;
 
 public:
     SdXMLPathShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
-        sal_Bool bTemporaryShape);
+        bool bTemporaryShape);
     virtual ~SdXMLPathShapeContext();
     virtual void StartElement(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList);
 
@@ -243,7 +252,7 @@ public:
         const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
-        sal_Bool bTemporaryShape);
+        bool bTemporaryShape);
     virtual ~SdXMLTextBoxShapeContext();
     virtual void StartElement(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList);
 
@@ -264,7 +273,7 @@ public:
         const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
-        sal_Bool bTemporaryShape);
+        bool bTemporaryShape);
     virtual ~SdXMLControlShapeContext();
     virtual void StartElement(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList);
 
@@ -299,7 +308,7 @@ public:
         const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
-        sal_Bool bTemporaryShape);
+        bool bTemporaryShape);
     virtual ~SdXMLConnectorShapeContext();
     virtual void StartElement(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList);
 
@@ -321,7 +330,7 @@ public:
         const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
-        sal_Bool bTemporaryShape);
+        bool bTemporaryShape);
     virtual ~SdXMLMeasureShapeContext();
     virtual void StartElement(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList);
     virtual void EndElement();
@@ -342,7 +351,7 @@ public:
         const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
-        sal_Bool bTemporaryShape);
+        bool bTemporaryShape);
     virtual ~SdXMLPageShapeContext();
     virtual void StartElement(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList);
 
@@ -364,7 +373,7 @@ public:
         const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
-        sal_Bool bTemporaryShape);
+        bool bTemporaryShape);
     virtual ~SdXMLCaptionShapeContext();
     virtual void StartElement(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList);
 
@@ -389,7 +398,7 @@ public:
         const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
-        sal_Bool bTemporaryShape);
+        bool bTemporaryShape);
     virtual ~SdXMLGraphicObjectShapeContext();
 
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
@@ -417,7 +426,7 @@ public:
         const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
-        sal_Bool bTemporaryShape);
+        bool bTemporaryShape);
     virtual ~SdXMLChartShapeContext();
 
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
@@ -444,7 +453,7 @@ public:
         const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
-        sal_Bool bTemporaryShape);
+        bool bTemporaryShape);
     virtual ~SdXMLObjectShapeContext();
 
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
@@ -476,7 +485,7 @@ public:
         const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
-        sal_Bool bTemporaryShape);
+        bool bTemporaryShape);
     virtual ~SdXMLAppletShapeContext();
 
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
@@ -506,7 +515,7 @@ public:
         const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
-        sal_Bool bTemporaryShape);
+        bool bTemporaryShape);
     virtual ~SdXMLPluginShapeContext();
 
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
@@ -533,7 +542,7 @@ public:
         const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
-        sal_Bool bTemporaryShape);
+        bool bTemporaryShape);
     virtual ~SdXMLFloatingFrameShapeContext();
 
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
@@ -563,7 +572,7 @@ public:
         const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
-        sal_Bool bTemporaryShape);
+        bool bTemporaryShape);
     virtual ~SdXMLFrameShapeContext();
 
     virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName,
@@ -590,7 +599,7 @@ public:
     SdXMLCustomShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
-        sal_Bool bTemporaryShape);
+        bool bTemporaryShape);
     virtual ~SdXMLCustomShapeContext();
 
     virtual void StartElement( const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList );

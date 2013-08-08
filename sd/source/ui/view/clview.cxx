@@ -69,9 +69,10 @@ ClientView::~ClientView()
 |*
 \************************************************************************/
 
-void ClientView::InvalidateOneWin(::Window& rWin)
+void ClientView::InvalidateOneWin(::Window& rWin) const
 {
     Region aRegion;
+
     CompleteRedraw(&rWin, aRegion);
 }
 
@@ -82,7 +83,7 @@ void ClientView::InvalidateOneWin(::Window& rWin)
 |*
 \************************************************************************/
 
-void ClientView::InvalidateOneWin(::Window& rWin, const basegfx::B2DRange& rRange)
+void ClientView::InvalidateOneWin(::Window& rWin, const ::basegfx::B2DRange& rRange) const
 {
     if(!rRange.isEmpty())
     {
@@ -101,7 +102,7 @@ void ClientView::InvalidateOneWin(::Window& rWin, const basegfx::B2DRange& rRang
 |*
 \************************************************************************/
 
-void ClientView::CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector )
+void ClientView::CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector ) const
 {
     DrawView::CompleteRedraw(pOutDev, rReg, pRedirector);
 }

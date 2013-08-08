@@ -293,13 +293,13 @@ sal_Int8 TabControl::ExecuteDrop( const ExecuteDropEvent& rEvt )
                 if (pDrViewSh->IsSwitchPageAllowed())
                 {
                     // 1. Create a copy.
-                    sal_uInt16 nPageNumOfCopy = pDoc->DuplicatePage (GetCurPageId() - 1);
+                    sal_uInt32 nPageNumOfCopy = pDoc->DuplicatePage (GetCurPageId() - 1);
                     // 2. Move page.  For this first switch to the copy:
                     // MovePages operates on the currently selected page(s).
                     pDrViewSh->SwitchPage (nPageNumOfCopy);
                     // Adapt target page id when necessary, i.e. page copy
                     // has been inserted in front of the target page.
-                    sal_uInt16 nPageNum = nPageId;
+                    sal_uInt32 nPageNum = nPageId;
                     if ((nPageNumOfCopy <= nPageNum) && (nPageNum != (sal_uInt16)-1))
                         nPageNum += 1;
                     if (pDoc->MovePages(nPageNum))
@@ -309,7 +309,7 @@ sal_Int8 TabControl::ExecuteDrop( const ExecuteDropEvent& rEvt )
                         // be executed after the still pending ones.
                         if (nPageNumOfCopy >= nPageNum || (nPageNum == (sal_uInt16)-1))
                             nPageNum += 1;
-                        SetCurPageId (GetPageId(nPageNum));
+                        SetCurPageId(GetPageId(static_cast< sal_uInt16 >(nPageNum)));
                         SfxDispatcher* pDispatcher = pDrViewSh->GetViewFrame()->GetDispatcher();
                         pDispatcher->Execute(SID_SWITCHPAGE,
                             SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);

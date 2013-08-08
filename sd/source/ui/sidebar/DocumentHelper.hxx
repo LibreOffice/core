@@ -78,7 +78,7 @@ private:
     static SdPage* AddMasterPage (
         SdDrawDocument& rTargetDocument,
         SdPage* pMasterPage,
-        sal_uInt16 nInsertionIndex);
+        sal_uInt32 nInsertionIndex);
     static SdPage* ProvideMasterPage (
         SdDrawDocument& rTargetDocument,
         SdPage* pMasterPage,

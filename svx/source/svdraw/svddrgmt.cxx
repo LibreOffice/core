@@ -2711,7 +2711,7 @@ void SdrDragCrook::TakeSdrDragComment(XubString& rStr) const
 
         if(nVal < 0)
         {
-            nVal += 36000.0;
+            nVal += 36000;
         }
 
         if(mbAtCenter)

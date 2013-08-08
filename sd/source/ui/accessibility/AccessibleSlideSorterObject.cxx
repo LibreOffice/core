@@ -58,7 +58,7 @@ namespace accessibility {
 AccessibleSlideSorterObject::AccessibleSlideSorterObject(
     const Reference<XAccessible>& rxParent,
     ::sd::slidesorter::SlideSorter& rSlideSorter,
-    sal_uInt16 nPageNumber)
+    sal_uInt32 nPageNumber)
     : AccessibleSlideSorterObjectBase(::sd::MutexOwner::maMutex),
       mxParent(rxParent),
       mnPageNumber(nPageNumber),
@@ -79,7 +79,7 @@ AccessibleSlideSorterObject::~AccessibleSlideSorterObject (void)
 
 
 
-sal_uInt16 AccessibleSlideSorterObject::GetPageNumber (void) const
+sal_uInt32 AccessibleSlideSorterObject::GetPageNumber (void) const
 {
     return mnPageNumber;
 }
@@ -265,7 +265,7 @@ Reference<XAccessibleStateSet> SAL_CALL
         // Conditional states.
         if (mrSlideSorter.GetController().GetPageSelector().IsPageSelected(mnPageNumber))
             pStateSet->AddState(AccessibleStateType::SELECTED);
-        if (mrSlideSorter.GetController().GetFocusManager().GetFocusedPageIndex() == mnPageNumber)
+        if (mrSlideSorter.GetController().GetFocusManager().GetFocusedPageIndex() == static_cast< sal_Int32 >(mnPageNumber))
             if (mrSlideSorter.GetController().GetFocusManager().IsFocusShowing())
                 pStateSet->AddState(AccessibleStateType::FOCUSED);
     }

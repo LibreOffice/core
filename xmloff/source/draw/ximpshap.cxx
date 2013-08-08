@@ -149,21 +149,36 @@ SdXMLShapeContext::SdXMLShapeContext(
     const OUString& rLocalName,
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes,
-    sal_Bool bTemporaryShape)
-:   SvXMLShapeContext( rImport, nPrfx, rLocalName, bTemporaryShape )
-,   mxShapes( rShapes )
-,   mxAttrList(xAttrList)
-,   mbListContextPushed( false )
-,   mnStyleFamily(XML_STYLE_FAMILY_SD_GRAPHICS_ID)
-,   mbIsPlaceholder(sal_False)
-,   mbClearDefaultAttributes( true )
-,   mbIsUserTransformed(sal_False)
-,   mnZOrder(-1)
-,   maSize(1, 1)
-,   maPosition(0, 0)
-,   maUsedTransformation()
-,   mbVisible(true)
-,   mbPrintable(true)
+    bool bTemporaryShape)
+:   SvXMLShapeContext( rImport, nPrfx, rLocalName, bTemporaryShape ),
+    mxShapes( rShapes ),
+    mxCursor(),
+    mxOldCursor(),
+    mxAttrList(xAttrList),
+    mxGluePoints(),
+    mxLockable(),
+    maDrawStyleName(),
+    maTextStyleName(),
+    maPresentationClass(),
+    maShapeName(),
+    maThumbnailURL(),
+    mnStyleFamily(XML_STYLE_FAMILY_SD_GRAPHICS_ID),
+    mnClass(0),
+    mnZOrder(-1),
+    maShapeId(),
+    maLayerName(),
+    maShapeTitle(),
+    maShapeDescription(),
+    mnTransform(),
+    maObjectSize(1.0, 1.0),
+    maObjectPosition(0.0, 0.0),
+    maUsedTransformation(),
+    mbVisible(true),
+    mbPrintable(true),
+    mbListContextPushed(false),
+    mbIsPlaceholder(false),
+    mbClearDefaultAttributes(true),
+    mbIsUserTransformed(false)
 {
 }
 
@@ -537,26 +552,24 @@ void SdXMLShapeContext::SetTransformation()
     if(mxShape.is())
     {
         uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
+
         if(xPropSet.is())
         {
             maUsedTransformation.identity();
 
-            if(maSize.Width != 1 || maSize.Height != 1)
+            if(!basegfx::fTools::equal(maObjectSize.getX(), 1.0) || !basegfx::fTools::equal(maObjectSize.getY(), 1.0))
             {
                 // take care there are no zeros used by error
-                if(0 == maSize.Width)
-                    maSize.Width = 1;
-                if(0 == maSize.Height)
-                    maSize.Height = 1;
-
                 // set global size. This should always be used.
-                maUsedTransformation.scale(maSize.Width, maSize.Height);
+                maUsedTransformation.scale(
+                    basegfx::fTools::equalZero(maObjectSize.getX()) ? 1.0 : maObjectSize.getX(),
+                    basegfx::fTools::equalZero(maObjectSize.getY()) ? 1.0 : maObjectSize.getY());
             }
 
-            if(maPosition.X != 0 || maPosition.Y != 0)
+            if(!basegfx::fTools::equalZero(maObjectPosition.getX()) || !basegfx::fTools::equalZero(maObjectPosition.getY()))
             {
                 // if global position is used, add it to transformation
-                maUsedTransformation.translate(maPosition.X, maPosition.Y);
+                maUsedTransformation.translate(maObjectPosition.getX(), maObjectPosition.getY());
             }
 
             if(mnTransform.NeedsAction())
@@ -567,20 +580,20 @@ void SdXMLShapeContext::SetTransformation()
                 // rotate used herein is applied around the (0,0) position
                 // of the PAGE object !!!
                 ::basegfx::B2DHomMatrix aMat;
+
                 mnTransform.GetFullTransform(aMat);
 
                 // now add to transformation
-                maUsedTransformation *= aMat;
+                maUsedTransformation = aMat * maUsedTransformation;
             }
 
             // now set transformation for this object
-            uno::Any aAny;
             drawing::HomogenMatrix3 aMatrix;
             basegfx::tools::B2DHomMatrixToUnoHomogenMatrix3(maUsedTransformation, aMatrix);
+            uno::Any aAny;
             aAny <<= aMatrix;
 
-            xPropSet->setPropertyValue(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("Transformation")), aAny);
+            xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Transformation")), aAny);
         }
     }
 }
@@ -847,19 +860,31 @@ void SdXMLShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::OUStr
     {
         if( IsXMLToken( rLocalName, XML_X ) )
         {
-            GetImport().GetMM100UnitConverter().convertMeasure(maPosition.X, rValue);
+            //GetImport().GetMM100UnitConverter().convertMeasure(maPosition.X, rValue);
+            double fValue(0.0);
+            GetImport().GetMM100UnitConverter().convertDoubleAndUnit(fValue, rValue);
+            maObjectPosition.setX(fValue);
         }
         else if( IsXMLToken( rLocalName, XML_Y ) )
         {
-            GetImport().GetMM100UnitConverter().convertMeasure(maPosition.Y, rValue);
+            //GetImport().GetMM100UnitConverter().convertMeasure(maPosition.Y, rValue);
+            double fValue(0.0);
+            GetImport().GetMM100UnitConverter().convertDoubleAndUnit(fValue, rValue);
+            maObjectPosition.setY(fValue);
         }
         else if( IsXMLToken( rLocalName, XML_WIDTH ) )
         {
-            GetImport().GetMM100UnitConverter().convertMeasure(maSize.Width, rValue);
+            //GetImport().GetMM100UnitConverter().convertMeasure(maSize.Width, rValue);
+            double fValue(0.0);
+            GetImport().GetMM100UnitConverter().convertDoubleAndUnit(fValue, rValue);
+            maObjectSize.setX(fValue);
         }
         else if( IsXMLToken( rLocalName, XML_HEIGHT ) )
         {
-            GetImport().GetMM100UnitConverter().convertMeasure(maSize.Height, rValue);
+            //GetImport().GetMM100UnitConverter().convertMeasure(maSize.Height, rValue);
+            double fValue(0.0);
+            GetImport().GetMM100UnitConverter().convertDoubleAndUnit(fValue, rValue);
+            maObjectSize.setY(fValue);
         }
         else if( IsXMLToken( rLocalName, XML_TRANSFORM ) )
         {
@@ -916,7 +941,7 @@ SdXMLRectShapeContext::SdXMLRectShapeContext(
     const OUString& rLocalName,
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes,
-    sal_Bool bTemporaryShape)
+    bool bTemporaryShape)
 :   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
     mnRadius( 0L )
 {
@@ -988,12 +1013,12 @@ SdXMLLineShapeContext::SdXMLLineShapeContext(
     const OUString& rLocalName,
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes,
-    sal_Bool bTemporaryShape)
+    bool bTemporaryShape)
 :   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
-    mnX1( 0L ),
-    mnY1( 0L ),
-    mnX2( 1L ),
-    mnY2( 1L )
+    mfX1( 0.0 ),
+    mfY1( 0.0 ),
+    mfX2( 1.0 ),
+    mfY2( 1.0 )
 {
 }
 
@@ -1012,22 +1037,26 @@ void SdXMLLineShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::O
     {
         if( IsXMLToken( rLocalName, XML_X1 ) )
         {
-            GetImport().GetMM100UnitConverter().convertMeasure(mnX1, rValue);
+            // GetImport().GetMM100UnitConverter().convertMeasure(mnX1, rValue);
+            GetImport().GetMM100UnitConverter().convertDoubleAndUnit(mfX1, rValue);
             return;
         }
         if( IsXMLToken( rLocalName, XML_Y1 ) )
         {
-            GetImport().GetMM100UnitConverter().convertMeasure(mnY1, rValue);
+            //GetImport().GetMM100UnitConverter().convertMeasure(mnY1, rValue);
+            GetImport().GetMM100UnitConverter().convertDoubleAndUnit(mfY1, rValue);
             return;
         }
         if( IsXMLToken( rLocalName, XML_X2 ) )
         {
-            GetImport().GetMM100UnitConverter().convertMeasure(mnX2, rValue);
+            //GetImport().GetMM100UnitConverter().convertMeasure(mnX2, rValue);
+            GetImport().GetMM100UnitConverter().convertDoubleAndUnit(mfX2, rValue);
             return;
         }
         if( IsXMLToken( rLocalName, XML_Y2 ) )
         {
-            GetImport().GetMM100UnitConverter().convertMeasure(mnY2, rValue);
+            //GetImport().GetMM100UnitConverter().convertMeasure(mnY2, rValue);
+            GetImport().GetMM100UnitConverter().convertDoubleAndUnit(mfY2, rValue);
             return;
         }
     }
@@ -1065,9 +1094,9 @@ void SdXMLLineShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
             awt::Point* pInnerSequence = pOuterSequence->getArray();
             uno::Any aAny;
 
-            *pInnerSequence = awt::Point(mnX1, mnY1);
+            *pInnerSequence = awt::Point(basegfx::fround(mfX1), basegfx::fround(mfY1));
             pInnerSequence++;
-            *pInnerSequence = awt::Point(mnX2, mnY2);
+            *pInnerSequence = awt::Point(basegfx::fround(mfX2), basegfx::fround(mfY2));
 
             aAny <<= aPolyPoly;
             xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Geometry")), aAny);
@@ -1105,12 +1134,12 @@ SdXMLEllipseShapeContext::SdXMLEllipseShapeContext(
     const OUString& rLocalName,
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes,
-    sal_Bool bTemporaryShape)
+    bool bTemporaryShape)
 :   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
-    mnCX( 0L ),
-    mnCY( 0L ),
-    mnRX( 1L ),
-    mnRY( 1L ),
+    mfCX( 0.0 ),
+    mfCY( 0.0 ),
+    mfRX( 1.0 ),
+    mfRY( 1.0 ),
     meKind( drawing::CircleKind_FULL ),
     mnStartAngle( 0 ),
     mnEndAngle( 0 )
@@ -1132,29 +1161,34 @@ void SdXMLEllipseShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl
     {
         if( IsXMLToken( rLocalName, XML_RX ) )
         {
-            GetImport().GetMM100UnitConverter().convertMeasure(mnRX, rValue);
+            // GetImport().GetMM100UnitConverter().convertMeasure(mnRX, rValue);
+            GetImport().GetMM100UnitConverter().convertDoubleAndUnit(mfRX, rValue);
             return;
         }
         if( IsXMLToken( rLocalName, XML_RY ) )
         {
-            GetImport().GetMM100UnitConverter().convertMeasure(mnRY, rValue);
+            // GetImport().GetMM100UnitConverter().convertMeasure(mnRY, rValue);
+            GetImport().GetMM100UnitConverter().convertDoubleAndUnit(mfRY, rValue);
             return;
         }
         if( IsXMLToken( rLocalName, XML_CX ) )
         {
-            GetImport().GetMM100UnitConverter().convertMeasure(mnCX, rValue);
+            // GetImport().GetMM100UnitConverter().convertMeasure(mnCX, rValue);
+            GetImport().GetMM100UnitConverter().convertDoubleAndUnit(mfCX, rValue);
             return;
         }
         if( IsXMLToken( rLocalName, XML_CY ) )
         {
-            GetImport().GetMM100UnitConverter().convertMeasure(mnCY, rValue);
+            // GetImport().GetMM100UnitConverter().convertMeasure(mnCY, rValue);
+            GetImport().GetMM100UnitConverter().convertDoubleAndUnit(mfCY, rValue);
             return;
         }
         if( IsXMLToken( rLocalName, XML_R ) )
         {
             // single radius, it's a circle and both radii are the same
-            GetImport().GetMM100UnitConverter().convertMeasure(mnRX, rValue);
-            mnRY = mnRX;
+            // GetImport().GetMM100UnitConverter().convertMeasure(mnRX, rValue);
+            GetImport().GetMM100UnitConverter().convertDoubleAndUnit(mfRX, rValue);
+            mfRY = mfRX;
             return;
         }
     }
@@ -1200,13 +1234,16 @@ void SdXMLEllipseShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
         SetStyle();
         SetLayer();
 
-        if(mnCX != 0 || mnCY != 0 || mnRX != 1 || mnRY != 1)
+        if(!basegfx::fTools::equalZero(mfCX)
+            || !basegfx::fTools::equalZero(mfCY)
+            || !basegfx::fTools::equalZero(mfRX)
+            || !basegfx::fTools::equalZero(mfRY))
         {
             // #121972# center/radius is used, put to pos and size
-            maSize.Width = 2 * mnRX;
-            maSize.Height = 2 * mnRY;
-            maPosition.X = mnCX - mnRX;
-            maPosition.Y = mnCY - mnRY;
+            maObjectSize.setX(2.0 * mfRX);
+            maObjectSize.setY(2.0 * mfRY);
+            maObjectPosition.setX(mfCX - mfRX);
+            maObjectPosition.setY(mfCY - mfRY);
         }
 
         // set pos, size, shear and rotate
@@ -1241,7 +1278,9 @@ SdXMLPolygonShapeContext::SdXMLPolygonShapeContext(
     sal_uInt16 nPrfx,
     const OUString& rLocalName,
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
-    uno::Reference< drawing::XShapes >& rShapes, sal_Bool bClosed, sal_Bool bTemporaryShape)
+    uno::Reference< drawing::XShapes >& rShapes,
+    bool bClosed,
+    bool bTemporaryShape)
 :   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
     mbClosed( bClosed )
 {
@@ -1305,10 +1344,9 @@ void SdXMLPolygonShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
 
                 // TTTT: Is this correct? It overrides ViewBox stuff; OTOH it makes no
                 // sense to have the geometry content size different from object size
-                if(maSize.Width != 0 && maSize.Height !=0)
+                if(!basegfx::fTools::equalZero(maObjectSize.getX()) && !basegfx::fTools::equalZero(maObjectSize.getY()))
                 {
-                    aSize.setX(maSize.Width);
-                    aSize.setY(maSize.Height);
+                    aSize = maObjectSize;
                 }
 
                 basegfx::B2DPolygon aPolygon;
@@ -1368,7 +1406,7 @@ SdXMLPathShapeContext::SdXMLPathShapeContext(
     const OUString& rLocalName,
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes,
-    sal_Bool bTemporaryShape)
+    bool bTemporaryShape)
 :   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
     mbClosed( sal_True )
 {
@@ -1414,10 +1452,9 @@ void SdXMLPathShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
 
         // TTTT: Is this correct? It overrides ViewBox stuff; OTOH it makes no
         // sense to have the geometry content size different from object size
-        if(maSize.Width != 0 && maSize.Height !=0)
+        if(!basegfx::fTools::equalZero(maObjectSize.getX()) && !basegfx::fTools::equalZero(maObjectSize.getY()))
         {
-            aSize.setX(maSize.Width);
-            aSize.setY(maSize.Height);
+            aSize = maObjectSize;
         }
 
         basegfx::B2DPolyPolygon aPolyPolygon;
@@ -1610,7 +1647,7 @@ SdXMLTextBoxShapeContext::SdXMLTextBoxShapeContext(
     const OUString& rLocalName,
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes,
-    sal_Bool bTemporaryShape)
+    bool bTemporaryShape)
 :   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
     mnRadius(0)
 {
@@ -1782,7 +1819,7 @@ SdXMLControlShapeContext::SdXMLControlShapeContext(
     const OUString& rLocalName,
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes,
-    sal_Bool bTemporaryShape)
+    bool bTemporaryShape)
 :   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape )
 {
 }
@@ -1854,7 +1891,7 @@ SdXMLConnectorShapeContext::SdXMLConnectorShapeContext(
     const OUString& rLocalName,
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes,
-    sal_Bool bTemporaryShape)
+    bool bTemporaryShape)
 :   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
     maStart(0,0),
     maEnd(1,1),
@@ -2145,7 +2182,7 @@ SdXMLMeasureShapeContext::SdXMLMeasureShapeContext(
     const OUString& rLocalName,
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes,
-    sal_Bool bTemporaryShape)
+    bool bTemporaryShape)
 :   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
     maStart(0,0),
     maEnd(1,1)
@@ -2258,7 +2295,7 @@ SdXMLPageShapeContext::SdXMLPageShapeContext(
     const OUString& rLocalName,
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes,
-    sal_Bool bTemporaryShape)
+    bool bTemporaryShape)
 :   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ), mnPageNumber(0)
 {
     mbClearDefaultAttributes = false;
@@ -2353,7 +2390,7 @@ SdXMLCaptionShapeContext::SdXMLCaptionShapeContext(
     const OUString& rLocalName,
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes,
-    sal_Bool bTemporaryShape)
+    bool bTemporaryShape)
 :   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
     // #86616# for correct edge rounding import mnRadius needs to be initialized
     mnRadius( 0L )
@@ -2456,7 +2493,7 @@ SdXMLGraphicObjectShapeContext::SdXMLGraphicObjectShapeContext(
     const OUString& rLocalName,
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes,
-    sal_Bool bTemporaryShape)
+    bool bTemporaryShape)
 :   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
     maURL(),
     mbLateAddToIdentifierMapper(false)
@@ -2633,7 +2670,7 @@ SdXMLChartShapeContext::SdXMLChartShapeContext(
     const OUString& rLocalName,
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes,
-    sal_Bool bTemporaryShape)
+    bool bTemporaryShape)
 :   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
     mpChartContext( NULL )
 {
@@ -2738,10 +2775,10 @@ SvXMLImportContext * SdXMLChartShapeContext::CreateChildContext( sal_uInt16 nPre
 //////////////////////////////////////////////////////////////////////////////
 
 SdXMLObjectShapeContext::SdXMLObjectShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const rtl::OUString& rLocalName,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
-        com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
-        sal_Bool bTemporaryShape)
+    const rtl::OUString& rLocalName,
+    const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
+    com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
+    bool bTemporaryShape)
 : SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape )
 {
 }
@@ -2955,10 +2992,10 @@ SvXMLImportContext* SdXMLObjectShapeContext::CreateChildContext(
 //////////////////////////////////////////////////////////////////////////////
 
 SdXMLAppletShapeContext::SdXMLAppletShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const rtl::OUString& rLocalName,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
-        com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
-        sal_Bool bTemporaryShape)
+    const rtl::OUString& rLocalName,
+    const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
+    com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
+    bool bTemporaryShape)
 : SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
   mbIsScript( sal_False )
 {
@@ -3024,10 +3061,10 @@ void SdXMLAppletShapeContext::EndElement()
     {
         uno::Any aAny;
 
-        if ( maSize.Width && maSize.Height )
+        if(!basegfx::fTools::equalZero(maObjectSize.getX()) && !basegfx::fTools::equalZero(maObjectSize.getY()))
         {
             // the visual area for applet must be set on loading
-            awt::Rectangle aRect( 0, 0, maSize.Width, maSize.Height );
+            awt::Rectangle aRect(0, 0, basegfx::fround(maObjectSize.getX()), basegfx::fround(maObjectSize.getY()));
             aAny <<= aRect;
             xProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "VisibleArea" ) ), aAny );
         }
@@ -3118,10 +3155,10 @@ SvXMLImportContext * SdXMLAppletShapeContext::CreateChildContext( sal_uInt16 p_n
 //////////////////////////////////////////////////////////////////////////////
 
 SdXMLPluginShapeContext::SdXMLPluginShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const rtl::OUString& rLocalName,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
-        com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
-        sal_Bool bTemporaryShape) :
+    const rtl::OUString& rLocalName,
+    const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
+    com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
+    bool bTemporaryShape) :
 SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
 mbMedia( false )
 {
@@ -3230,14 +3267,14 @@ void SdXMLPluginShapeContext::EndElement()
     {
         uno::Any aAny;
 
-        if ( maSize.Width && maSize.Height )
+        if(!basegfx::fTools::equalZero(maObjectSize.getX()) && !basegfx::fTools::equalZero(maObjectSize.getY()))
         {
             const rtl::OUString sVisibleArea( RTL_CONSTASCII_USTRINGPARAM( "VisibleArea" ) );
             uno::Reference< beans::XPropertySetInfo > aXPropSetInfo( xProps->getPropertySetInfo() );
             if ( !aXPropSetInfo.is() || aXPropSetInfo->hasPropertyByName( sVisibleArea ) )
             {
                 // the visual area for a plugin must be set on loading
-                awt::Rectangle aRect( 0, 0, maSize.Width, maSize.Height );
+                awt::Rectangle aRect(0, 0, basegfx::fround(maObjectSize.getX()), basegfx::fround(maObjectSize.getY()));
                 aAny <<= aRect;
                 xProps->setPropertyValue( sVisibleArea, aAny );
             }
@@ -3388,10 +3425,10 @@ SvXMLImportContext * SdXMLPluginShapeContext::CreateChildContext( sal_uInt16 p_n
 //////////////////////////////////////////////////////////////////////////////
 
 SdXMLFloatingFrameShapeContext::SdXMLFloatingFrameShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const rtl::OUString& rLocalName,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
-        com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
-        sal_Bool bTemporaryShape)
+    const rtl::OUString& rLocalName,
+    const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
+    com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
+    bool bTemporaryShape)
 : SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape )
 {
 }
@@ -3466,10 +3503,10 @@ void SdXMLFloatingFrameShapeContext::EndElement()
 
     if( xProps.is() )
     {
-        if ( maSize.Width && maSize.Height )
+        if(!basegfx::fTools::equalZero(maObjectSize.getX()) && !basegfx::fTools::equalZero(maObjectSize.getY()))
         {
             // the visual area for a floating frame must be set on loading
-            awt::Rectangle aRect( 0, 0, maSize.Width, maSize.Height );
+            awt::Rectangle aRect(0, 0, basegfx::fround(maObjectSize.getX()), basegfx::fround(maObjectSize.getY()));
             uno::Any aAny;
             aAny <<= aRect;
             xProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "VisibleArea" ) ), aAny );
@@ -3483,10 +3520,10 @@ void SdXMLFloatingFrameShapeContext::EndElement()
 //////////////////////////////////////////////////////////////////////////////
 
 SdXMLFrameShapeContext::SdXMLFrameShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const rtl::OUString& rLocalName,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
-        com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
-        sal_Bool bTemporaryShape)
+    const rtl::OUString& rLocalName,
+    const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
+    com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
+    bool bTemporaryShape)
 : SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
     multiImageImportHelper(),
     mbSupportsReplacement( sal_False ),
@@ -3755,7 +3792,7 @@ SdXMLCustomShapeContext::SdXMLCustomShapeContext(
     const OUString& rLocalName,
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes,
-    sal_Bool bTemporaryShape)
+    bool bTemporaryShape)
 :   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape )
 {
 }

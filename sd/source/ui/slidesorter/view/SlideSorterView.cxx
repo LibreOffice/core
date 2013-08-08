@@ -719,7 +719,7 @@ static double gnLastFrameStart = 0;
 void SlideSorterView::CompleteRedraw (
     OutputDevice* pDevice,
     const Region& rPaintArea,
-    sdr::contact::ViewObjectContactRedirector* pRedirector)
+    sdr::contact::ViewObjectContactRedirector* pRedirector) const
 {
     (void)pRedirector;
 #ifdef DEBUG_TIMING
@@ -742,13 +742,13 @@ void SlideSorterView::CompleteRedraw (
     {
         mrSlideSorter.GetContentWindow()->IncrementLockCount();
         if (mpLayeredDevice->HandleMapModeChange())
-            DeterminePageObjectVisibilities();
+            const_cast< SlideSorterView* >(this)->DeterminePageObjectVisibilities();
         mpLayeredDevice->Repaint(rPaintArea);
         mrSlideSorter.GetContentWindow()->DecrementLockCount();
     }
     else
     {
-        maRedrawRegion.Union(rPaintArea);
+        const_cast< SlideSorterView* >(this)->maRedrawRegion.Union(rPaintArea);
     }
 
 #ifdef DEBUG_TIMING

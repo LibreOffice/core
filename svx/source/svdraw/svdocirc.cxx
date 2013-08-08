@@ -724,20 +724,6 @@ basegfx::B2DPolyPolygon SdrCircObj::TakeCreatePoly(const SdrDragStat& rDrag) con
     }
 }
 
-Pointer SdrCircObj::GetCreatePointer(const SdrView& /*rSdrView*/) const
-{
-    switch (meSdrCircleObjType)
-    {
-        case CircleType_Circle: return Pointer(POINTER_DRAW_ELLIPSE);
-        case CircleType_Sector: return Pointer(POINTER_DRAW_PIE);
-        case CircleType_Arc: return Pointer(POINTER_DRAW_ARC);
-        case CircleType_Segment: return Pointer(POINTER_DRAW_CIRCLECUT);
-        default: break;
-    }
-
-    return Pointer(POINTER_CROSS);
-}
-
 SdrObjGeoData* SdrCircObj::NewGeoData() const
 {
     return new SdrCircObjGeoData;
@@ -809,14 +795,13 @@ basegfx::B2DPoint SdrCircObj::GetSnapPoint(sal_uInt32 i) const
 
 SdrObject* SdrCircObj::DoConvertToPolygonObject(bool bBezier, bool bAddText) const
 {
-    const bool bCanBeFilled(CircleType_Arc != meSdrCircleObjType);
     const basegfx::B2DPolygon aCircPolygon(
         ImpCalcXPolyCirc(
             GetSdrCircleObjType(),
             getSdrObjectTransformation(),
             GetStartAngle(),
             GetEndAngle()));
-    SdrObject* pRet = ImpConvertMakeObj(basegfx::B2DPolyPolygon(aCircPolygon), bCanBeFilled, bBezier);
+    SdrObject* pRet = ImpConvertMakeObj(basegfx::B2DPolyPolygon(aCircPolygon), bBezier);
 
     if(bAddText)
     {

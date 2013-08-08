@@ -542,7 +542,7 @@ Bitmap PageObjectPainter::CreateBackgroundBitmap(
             else
             {
                 Color aColor (aTopColor);
-                aColor.Merge(aBottomColor, 255 * (nY2-nY) / (nY2-nY1));
+                aColor.Merge(aBottomColor, static_cast< sal_uInt8 >(255 * (nY2-nY) / (nY2-nY1)));
                 aBitmapDevice.SetLineColor(aColor);
             }
             aBitmapDevice.DrawLine(

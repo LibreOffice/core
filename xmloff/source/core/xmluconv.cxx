@@ -19,10 +19,9 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
+
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/Time.hpp>
@@ -706,16 +705,13 @@ sal_Bool SvXMLUnitConverter::convertNumber64( sal_Int64& rValue,
 }
 
 /** convert double number to string (using ::rtl::math) */
-void SvXMLUnitConverter::convertDouble(::rtl::OUStringBuffer& rBuffer,
-    double fNumber, sal_Bool bWriteUnits) const
+void SvXMLUnitConverter::convertDoubleAndUnit(::rtl::OUStringBuffer& rBuffer, double fNumber) const
 {
-    SvXMLUnitConverter::convertDouble(rBuffer, fNumber,
-        bWriteUnits, meCoreMeasureUnit, meXMLMeasureUnit);
+    SvXMLUnitConverter::convertDoubleAndUnit(rBuffer, fNumber, true, meCoreMeasureUnit, meXMLMeasureUnit);
 }
 
 /** convert double number to string (using ::rtl::math) */
-void SvXMLUnitConverter::convertDouble( ::rtl::OUStringBuffer& rBuffer,
-    double fNumber, sal_Bool bWriteUnits, MapUnit eCoreUnit, MapUnit eDstUnit)
+void SvXMLUnitConverter::convertDoubleAndUnit( ::rtl::OUStringBuffer& rBuffer, double fNumber, sal_Bool bWriteUnits, MapUnit eCoreUnit, MapUnit eDstUnit)
 {
     if(MAP_RELATIVE == eCoreUnit)
     {
@@ -743,25 +739,15 @@ void SvXMLUnitConverter::convertDouble( ::rtl::OUStringBuffer& rBuffer, double f
 }
 
 /** convert string to double number (using ::rtl::math) */
-sal_Bool SvXMLUnitConverter::convertDouble(double& rValue,
-    const ::rtl::OUString& rString, sal_Bool bLookForUnits) const
+sal_Bool SvXMLUnitConverter::convertDoubleAndUnit(double& rValue, const ::rtl::OUString& rString) const
 {
-    if(bLookForUnits)
-    {
-        MapUnit eSrcUnit = SvXMLExportHelper::GetUnitFromString(rString, meCoreMeasureUnit);
+    const MapUnit eSrcUnit(SvXMLExportHelper::GetUnitFromString(rString, meCoreMeasureUnit));
 
-        return SvXMLUnitConverter::convertDouble(rValue, rString,
-            eSrcUnit, meCoreMeasureUnit);
-    }
-    else
-    {
-        return SvXMLUnitConverter::convertDouble(rValue, rString);
-    }
+    return SvXMLUnitConverter::convertDoubleAndUnit(rValue, rString, eSrcUnit, meCoreMeasureUnit);
 }
 
 /** convert string to double number (using ::rtl::math) */
-sal_Bool SvXMLUnitConverter::convertDouble(double& rValue,
-    const ::rtl::OUString& rString, MapUnit eSrcUnit, MapUnit eCoreUnit)
+sal_Bool SvXMLUnitConverter::convertDoubleAndUnit(double& rValue, const ::rtl::OUString& rString, MapUnit eSrcUnit, MapUnit eCoreUnit)
 {
     rtl_math_ConversionStatus eStatus;
     rValue = ::rtl::math::stringToDouble( rString, (sal_Unicode)('.'), (sal_Unicode)(','), &eStatus, NULL );
@@ -1465,11 +1451,11 @@ sal_Bool SvXMLUnitConverter::convertPosition3D( drawing::Position3D& rPosition,
     if ( !lcl_getPositions(rValue,aContentX,aContentY,aContentZ) )
         return sal_False;
 
-    if ( !convertDouble( rPosition.PositionX, aContentX, sal_True ) )
+    if ( !convertDoubleAndUnit( rPosition.PositionX, aContentX ) )
         return sal_False;
-    if ( !convertDouble( rPosition.PositionY, aContentY, sal_True ) )
+    if ( !convertDoubleAndUnit( rPosition.PositionY, aContentY ) )
         return sal_False;
-    return convertDouble( rPosition.PositionZ, aContentZ, sal_True );
+    return convertDoubleAndUnit( rPosition.PositionZ, aContentZ );
 }
 
 /** convert Position3D to string */
@@ -1477,11 +1463,11 @@ void SvXMLUnitConverter::convertPosition3D( OUStringBuffer &rBuffer,
                                            const drawing::Position3D& rPosition )
 {
     rBuffer.append( sal_Unicode('(') );
-    convertDouble( rBuffer, rPosition.PositionX, sal_True );
+    convertDoubleAndUnit(rBuffer, rPosition.PositionX);
     rBuffer.append( sal_Unicode(' ') );
-    convertDouble( rBuffer, rPosition.PositionY, sal_True );
+    convertDoubleAndUnit(rBuffer, rPosition.PositionY);
     rBuffer.append( sal_Unicode(' ') );
-    convertDouble( rBuffer, rPosition.PositionZ, sal_True );
+    convertDoubleAndUnit(rBuffer, rPosition.PositionZ);
     rBuffer.append( sal_Unicode(')') );
 }
 

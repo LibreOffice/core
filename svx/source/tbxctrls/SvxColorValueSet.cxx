@@ -71,7 +71,7 @@ void SvxColorValueSet::addEntriesForXColorList(const XColorListSharedPtr aXColor
 
         if(pEntry)
         {
-            InsertItem(nStartIndex, pEntry->GetColor(), pEntry->GetName());
+            InsertItem(static_cast< sal_uInt16 >(nStartIndex), pEntry->GetColor(), pEntry->GetName());
         }
         else
         {
@@ -87,7 +87,7 @@ Size SvxColorValueSet::layoutAllVisible(sal_uInt32 nEntryCount)
         nEntryCount++;
     }
 
-    const sal_uInt32 nRowCount(ceil(double(nEntryCount)/getColumnCount()));
+    const sal_uInt32 nRowCount(basegfx::fround(ceil(double(nEntryCount)/getColumnCount())));
     const Size aItemSize(getEntryEdgeLength() - 2, getEntryEdgeLength() - 2);
     const WinBits aWinBits(GetStyle() & ~WB_VSCROLL);
 
@@ -100,8 +100,8 @@ Size SvxColorValueSet::layoutAllVisible(sal_uInt32 nEntryCount)
         SetStyle(aWinBits);
     }
 
-    SetColCount(getColumnCount());
-    SetLineCount(std::min(nRowCount, getMaxRowCount()));
+    SetColCount(static_cast< sal_uInt16 >(getColumnCount()));
+    SetLineCount(static_cast< sal_uInt16 >(std::min(nRowCount, getMaxRowCount())));
     SetItemWidth(aItemSize.Width());
     SetItemHeight(aItemSize.Height());
 
@@ -121,11 +121,11 @@ Size SvxColorValueSet::layoutToGivenHeight(sal_uInt32 nHeight, sal_uInt32 nEntry
     // get size whith all fields disabled
     const WinBits aWinBitsNoScrollNoFields(GetStyle() & ~(WB_VSCROLL|WB_NAMEFIELD|WB_NONEFIELD));
     SetStyle(aWinBitsNoScrollNoFields);
-    const Size aSizeNoScrollNoFields(CalcWindowSizePixel(aItemSize, getColumnCount()));
+    const Size aSizeNoScrollNoFields(CalcWindowSizePixel(aItemSize, static_cast< sal_uInt16 >(getColumnCount())));
 
     // get size with all needed fields
     SetStyle(aWinBits);
-    Size aNewSize(CalcWindowSizePixel(aItemSize, getColumnCount()));
+    Size aNewSize(CalcWindowSizePixel(aItemSize, static_cast< sal_uInt16 >(getColumnCount())));
 
     // evtl. activate vertical scroll
     const bool bAdaptHeight(static_cast< sal_uInt32 >(aNewSize.Height()) > nHeight);
@@ -133,7 +133,7 @@ Size SvxColorValueSet::layoutToGivenHeight(sal_uInt32 nHeight, sal_uInt32 nEntry
     if(bAdaptHeight)
     {
         SetStyle(aWinBits|WB_VSCROLL);
-        aNewSize = CalcWindowSizePixel(aItemSize, getColumnCount());
+        aNewSize = CalcWindowSizePixel(aItemSize, static_cast< sal_uInt16 >(getColumnCount()));
     }
 
     // calculate field height and available height for requested height
@@ -149,8 +149,8 @@ Size SvxColorValueSet::layoutToGivenHeight(sal_uInt32 nHeight, sal_uInt32 nEntry
 
     SetItemWidth(aItemSize.Width());
     SetItemHeight(aItemSize.Height());
-    SetColCount(getColumnCount());
-    SetLineCount(nLineCount);
+    SetColCount(static_cast< sal_uInt16 >(getColumnCount()));
+    SetLineCount(static_cast< sal_uInt16 >(nLineCount));
 
     return aNewSize;
 }

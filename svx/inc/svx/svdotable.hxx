@@ -248,7 +248,6 @@ public:
 
     virtual bool BckCreate(SdrDragStat& rStat);
     virtual void BrkCreate(SdrDragStat& rStat);
-    virtual Pointer GetCreatePointer(const SdrView& rSdrView) const;
 
     virtual bool BegTextEdit(SdrOutliner& rOutl);
     virtual void EndTextEdit(SdrOutliner& rOutl);

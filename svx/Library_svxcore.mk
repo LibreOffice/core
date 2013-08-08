@@ -302,6 +302,7 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/svdraw/sdrhittesthelper \
     svx/source/svdraw/sdrmasterpagedescriptor \
     svx/source/svdraw/sdrpagewindow \
+    svx/source/svdraw/sdrobjecttools \
     svx/source/svdraw/sdrpaintwindow \
     svx/source/svdraw/selectioncontroller \
     svx/source/svdraw/svdattr \

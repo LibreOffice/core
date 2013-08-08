@@ -422,7 +422,7 @@ bool AnnotationTag::Command( const CommandEvent& rCEvt )
     return false;
 }
 
-void AnnotationTag::Move( int nDX, int nDY )
+void AnnotationTag::Move( double fDX, double fDY )
 {
     if( mxAnnotation.is() )
     {
@@ -430,8 +430,8 @@ void AnnotationTag::Move( int nDX, int nDY )
             mrManager.GetDoc()->BegUndo( String( SdResId( STR_ANNOTATION_UNDO_MOVE ) ) );
 
         RealPoint2D aPosition( mxAnnotation->getPosition() );
-        aPosition.X += (double)nDX / 100.0;
-        aPosition.Y += (double)nDY / 100.0;
+        aPosition.X += fDX / 100.0;
+        aPosition.Y += fDY / 100.0;
         mxAnnotation->setPosition( aPosition );
 
         if( mrManager.GetDoc()->IsUndoEnabled() )
@@ -443,15 +443,15 @@ void AnnotationTag::Move( int nDX, int nDY )
 
 bool AnnotationTag::OnMove( const KeyEvent& rKEvt )
 {
-    long nX = 0;
-    long nY = 0;
+    double fX = 0.0;
+    double fY = 0.0;
 
     switch( rKEvt.GetKeyCode().GetCode() )
     {
-    case KEY_UP:    nY = -1; break;
-    case KEY_DOWN:  nY =  1; break;
-    case KEY_LEFT:  nX = -1; break;
-    case KEY_RIGHT: nX =  1; break;
+    case KEY_UP:    fY = -1.0; break;
+    case KEY_DOWN:  fY =  1.0; break;
+    case KEY_LEFT:  fX = -1.0; break;
+    case KEY_RIGHT: fX =  1.0; break;
     default: break;
     }
 
@@ -459,20 +459,20 @@ bool AnnotationTag::OnMove( const KeyEvent& rKEvt )
     {
         OutputDevice* pOut = mrView.GetViewShell()->GetActiveWindow();
         Size aLogicSizeOnePixel = (pOut) ? pOut->PixelToLogic(Size(1,1)) : Size(100, 100);
-        nX *= aLogicSizeOnePixel.Width();
-        nY *= aLogicSizeOnePixel.Height();
+        fX *= aLogicSizeOnePixel.Width();
+        fY *= aLogicSizeOnePixel.Height();
     }
     else
     {
         // old, fixed move distance
-        nX *= 100;
-        nY *= 100;
+        fX *= 100.0;
+        fY *= 100.0;
     }
 
-    if( nX || nY )
+    if( !basegfx::fTools::equalZero(fX) || !basegfx::fTools::equalZero(fY) )
     {
         // move the annotation
-        Move( nX, nY );
+        Move( fX, fY );
     }
 
     return true;

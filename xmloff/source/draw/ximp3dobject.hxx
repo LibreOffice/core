@@ -54,7 +54,7 @@ public:
         const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
-        sal_Bool bTemporaryShape);
+        bool bTemporaryShape);
     virtual ~SdXML3DObjectContext();
 
     virtual void StartElement(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList);
@@ -76,7 +76,7 @@ public:
         const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
-        sal_Bool bTemporaryShape);
+        bool bTemporaryShape);
     virtual ~SdXML3DCubeObjectShapeContext();
 
     virtual void StartElement(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList);
@@ -98,7 +98,7 @@ public:
         const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
-        sal_Bool bTemporaryShape);
+        bool bTemporaryShape);
     virtual ~SdXML3DSphereObjectShapeContext();
 
     virtual void StartElement(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList);
@@ -118,7 +118,7 @@ public:
         const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
-        sal_Bool bTemporaryShape);
+        bool bTemporaryShape);
     virtual ~SdXML3DPolygonBasedShapeContext();
 
     virtual void StartElement(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList);
@@ -135,7 +135,7 @@ public:
         const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
-        sal_Bool bTemporaryShape);
+        bool bTemporaryShape);
     virtual ~SdXML3DLatheObjectShapeContext();
 
     virtual void StartElement(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList);
@@ -152,7 +152,7 @@ public:
         const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
-        sal_Bool bTemporaryShape);
+        bool bTemporaryShape);
     virtual ~SdXML3DExtrudeObjectShapeContext();
 
     virtual void StartElement(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList);

@@ -294,7 +294,7 @@ sal_Int32 SlideSorterModel::GetIndex (const SdrPage* pPage) const
     ::osl::MutexGuard aGuard (maMutex);
 
     // First try to guess the right index.
-    sal_Int16 nNumber ((pPage->GetPageNumber()-1)/2);
+    sal_Int32 nNumber ((pPage->GetPageNumber()-1)/2);
     SharedPageDescriptor pDescriptor (GetPageDescriptor(nNumber, false));
     if (pDescriptor.get() != NULL
         && pDescriptor->GetPage() == pPage)
@@ -327,7 +327,7 @@ sal_Int32 SlideSorterModel::GetIndex (const SdrPage* pPage) const
 
 
 
-sal_uInt16 SlideSorterModel::GetCoreIndex (const sal_Int32 nIndex) const
+sal_uInt32 SlideSorterModel::GetCoreIndex (const sal_Int32 nIndex) const
 {
     SharedPageDescriptor pDescriptor (GetPageDescriptor(nIndex));
     if (pDescriptor)

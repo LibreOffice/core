@@ -105,7 +105,7 @@ Sequence<rtl::OUString> SAL_CALL PanelFactory_getSupportedServiceNames (void)
 //----- PanelFactory --------------------------------------------------------
 
 PanelFactory::PanelFactory(
-        const css::uno::Reference<css::uno::XComponentContext>& rxContext)
+        const css::uno::Reference<css::uno::XComponentContext>& /*rxContext*/)
     : PanelFactoryInterfaceBase(m_aMutex)
 {
 }

@@ -394,7 +394,6 @@ public:
     bool EndCreate(SdrDragStat& rDrag, SdrCreateCmd eCmd);
     bool BckCreate(SdrDragStat& rDrag);
     void BrkCreate(SdrDragStat& rDrag);
-    Pointer GetCreatePointer() const;
 
     // helping stuff
     bool isClosed() const { return PathType_ClosedPolygon == mePathType || PathType_ClosedBezier == mePathType; }
@@ -1579,34 +1578,6 @@ basegfx::B2DPolyPolygon ImpPathForDragAndCreate::TakeDragPolyPolygon(const SdrDr
     return aRetval;
 }
 
-Pointer ImpPathForDragAndCreate::GetCreatePointer() const
-{
-    if(isFreeHand())
-    {
-        return Pointer(POINTER_DRAW_FREEHAND);
-    }
-
-    switch(mePathType)
-    {
-        case PathType_Line:
-        {
-            return Pointer(POINTER_DRAW_LINE);
-        }
-        case PathType_OpenPolygon:
-        case PathType_ClosedPolygon:
-        {
-            return Pointer(POINTER_DRAW_POLYGON);
-        }
-        case PathType_OpenBezier:
-        case PathType_ClosedBezier:
-        {
-            return Pointer(POINTER_DRAW_BEZIER);
-        }
-    }
-
-    return Pointer(POINTER_CROSS);
-}
-
 //////////////////////////////////////////////////////////////////////////////
 
 SdrPathObjGeoData::SdrPathObjGeoData()
@@ -1627,7 +1598,22 @@ void SdrPathObj::impSetPathPolyPolygonWithTransformationAdaption(const basegfx::
         return;
     }
 
-    // remember if this was a line before geometry change
+    // the SdrPathObj has two basic states, line and other. Line is for two points
+    // and no bezier, it uses a specialized geometry (unified line from 0.0, to 1.0)
+    // and a specialized transformation which shows the rotation of the line what is
+    // wanted.
+    // When a third point is added that mode is left and the regular one entered, in
+    // this conversion when using the code below keeping the rotation of the former
+    // line object. This is not wrong and works as intended, but is irritating for the
+    // user, e.g:
+    // - when drawing a freehand or multi-line (non-bezier) polygon, it will be rotated
+    //   after construction due to keeping the rotation of the first added line
+    // - this is also used e.g. in contour editors where it is not wanted
+    // - it is different from the behaviour of AOO before
+    // For this reason this is disabled and the old behaviour activated by adding this
+    // case to esp. change back to the most trivial transformation in the transition
+    // between line status and other. To try out the also possible new alternative,
+    // change the value of bResetCoordinateSystemAfterWasLine to false.
     static bool bResetCoordinateSystemAfterWasLine(true);
     const bool bWasLineAndReset(bResetCoordinateSystemAfterWasLine && isLine());
 
@@ -1647,34 +1633,6 @@ void SdrPathObj::impSetPathPolyPolygonWithTransformationAdaption(const basegfx::
                 basegfx::B2DTuple(aDelta.getLength(), 1.0),
                 atan2(aDelta.getY(), aDelta.getX()),
                 aPointA));
-        return;
-    }
-
-
-    if(bWasLineAndReset)
-    {
-        // the SdrPathObj has two basic states, line and other. Line is for two points
-        // and no bezier, it uses a specialized geometry (unified line from 0.0, to 1.0)
-        // and a specialized transformation which shows the rotation of the line what is
-        // wanted.
-        // When a third point is added that mode is left and the regular one entered, in
-        // this conversion when using the code below keeping the rotation of the former
-        // line object. This is not wrong and works as intended, but is irritating for the
-        // user, e.g:
-        // - when drawing a freehand or multi-line (non-bezier) polygon, it will be rotated
-        //   after construction due to keeping the rotation of the first added line
-        // - this is also used e.g. in contour editors where it is not wanted
-        // - it is different from the behaviour of AOO before
-        // For this reason this is disabled and the old behaviour activated by adding this
-        // case to esp. change back to the most trivial transformation in the transition
-        // between line status and other. To try out the also possible new alternative,
-        // change the value of bResetCoordinateSystemAfterWasLine to false.
-        const basegfx::B2DRange aRangeNewGeometry(rNew.getB2DRange());
-
-        maSdrObjectTransformation.setB2DHomMatrix(
-            basegfx::tools::createScaleTranslateB2DHomMatrix(
-                aRangeNewGeometry.getRange(),
-                aRangeNewGeometry.getMinimum()));
         return;
     }
 
@@ -1698,37 +1656,43 @@ void SdrPathObj::impSetPathPolyPolygonWithTransformationAdaption(const basegfx::
     }
 
     // break up current transformation
-    basegfx::B2DTuple aScale;
-    basegfx::B2DTuple aTranslate;
-    double fRotate, fShearX;
+    basegfx::B2DTuple aScale(1.0, 1.0);
+    basegfx::B2DTuple aTranslate(0.0, 0.0);
+    double fRotate(0.0), fShearX(0.0);
 
-    maSdrObjectTransformation.getB2DHomMatrix().decompose(aScale, aTranslate, fRotate, fShearX);
+    if(!bWasLineAndReset)
+    {
+        maSdrObjectTransformation.getB2DHomMatrix().decompose(aScale, aTranslate, fRotate, fShearX);
+    }
 
     // to preserve mirrorX, mirrorY, rotation and shear, create a transformation
     // containing those values in aHelpMatrix
     basegfx::B2DHomMatrix aHelpMatrix;
 
-    if(basegfx::fTools::less(aScale.getX(), 0.0))
+    if(!bWasLineAndReset)
     {
-        aHelpMatrix.scale(-1.0, 1.0);
+        if(basegfx::fTools::less(aScale.getX(), 0.0))
+        {
+            aHelpMatrix.scale(-1.0, 1.0);
+        }
+
+        if(basegfx::fTools::less(aScale.getY(), 0.0))
+        {
+            aHelpMatrix.scale(1.0, -1.0);
+        }
+
+        if(!basegfx::fTools::equalZero(fShearX))
+        {
+            aHelpMatrix.shearX(fShearX);
+        }
+
+        if(!basegfx::fTools::equalZero(fRotate))
+        {
+            aHelpMatrix.rotate(fRotate);
+        }
     }
 
-    if(basegfx::fTools::less(aScale.getY(), 0.0))
-    {
-        aHelpMatrix.scale(1.0, -1.0);
-    }
-
-    if(!basegfx::fTools::equalZero(fShearX))
-    {
-        aHelpMatrix.shearX(fShearX);
-    }
-
-    if(!basegfx::fTools::equalZero(fRotate))
-    {
-        aHelpMatrix.rotate(fRotate);
-    }
-
-    if(!aHelpMatrix.isIdentity())
+    if(!bWasLineAndReset && !aHelpMatrix.isIdentity())
     {
         // create inverse from it and back-transform polygon
         basegfx::B2DPolyPolygon aBackTransformed(rNew);
@@ -2356,11 +2320,6 @@ basegfx::B2DPolyPolygon SdrPathObj::getDragPolyPolygon(const SdrDragStat& rDrag)
     return aRetval;
 }
 
-Pointer SdrPathObj::GetCreatePointer(const SdrView& rSdrView) const
-{
-    return impGetDAC(rSdrView).GetCreatePointer();
-}
-
 sal_uInt32 SdrPathObj::GetSnapPointCount() const
 {
     return getB2DPolyPolygonInObjectCoordinates().allPointCount();
@@ -2629,7 +2588,7 @@ SdrObject* SdrPathObj::DoConvertToPolygonObject(bool bBezier, bool bAddText) con
 
     SdrObject* pRet = bHideContour ?
         0 :
-        ImpConvertMakeObj(getB2DPolyPolygonInObjectCoordinates(), isClosed(), bBezier);
+        ImpConvertMakeObj(getB2DPolyPolygonInObjectCoordinates(), bBezier);
 
     SdrPathObj* pPath = dynamic_cast< SdrPathObj* >( pRet);
 

@@ -84,10 +84,10 @@ public:
         page, is cloned and inserted into mrDocument.  The necessary styles
         are copied as well.
     */
-    static SdPage* AddMasterPage (
-        SdDrawDocument* pTargetDocument,
-        SdPage* pMasterPage,
-        sal_uInt16 nInsertionIndex);
+    //static SdPage* AddMasterPage (
+    //    SdDrawDocument* pTargetDocument,
+    //    SdPage* pMasterPage,
+    //    sal_uInt32 nInsertionIndex);
 
     virtual Size GetPreferredSize (void);
     virtual sal_Int32 GetPreferredWidth (sal_Int32 nHeight);

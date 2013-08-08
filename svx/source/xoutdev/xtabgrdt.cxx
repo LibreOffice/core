@@ -216,7 +216,7 @@ Bitmap XGradientList::CreateBitmapForUI(long nIndex)
             }
         }
 
-        const sal_uInt16 nSteps((rSize.Width() + rSize.Height()) / 3);
+        const sal_uInt16 nSteps(static_cast< sal_uInt16 >((rSize.Width() + rSize.Height()) / 3));
         const drawinglayer::attribute::FillGradientAttribute aFillGradient(
             aGradientStyle,
             (double)rGradient.GetBorder() * 0.01,

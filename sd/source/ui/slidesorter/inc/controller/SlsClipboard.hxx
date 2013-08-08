@@ -106,12 +106,12 @@ public:
     void Abort (void);
 
 protected:
-    virtual sal_uInt16 DetermineInsertPosition (
+    virtual sal_uInt32 DetermineInsertPosition (
         const SdTransferable& rTransferable);
 
-    virtual sal_uInt16 InsertSlides (
+    virtual sal_uInt32 InsertSlides (
         const SdTransferable& rTransferable,
-        sal_uInt16 nInsertPosition);
+        sal_uInt32 nInsertPosition);
 
 private:
     SlideSorter& mrSlideSorter;

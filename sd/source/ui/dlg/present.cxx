@@ -230,7 +230,7 @@ void SdStartPresentationDlg::InitMonitorSettings()
 
                 // Store display index together with name.
                 const sal_uInt32 nEntryIndex (maLBMonitor.GetEntryCount()-1);
-                maLBMonitor.SetEntryData(nEntryIndex, (void*)nDisplay);
+                maLBMonitor.SetEntryData(static_cast< sal_uInt16 >(nEntryIndex), (void*)nDisplay);
 
                 // Remember the index of the default selection.
                 if (nDefaultSelectedDisplay == nDisplay)
@@ -245,7 +245,7 @@ void SdStartPresentationDlg::InitMonitorSettings()
             {
                 maLBMonitor.InsertEntry( msAllMonitors );
                 const sal_uInt32 nEntryIndex (maLBMonitor.GetEntryCount()-1);
-                maLBMonitor.SetEntryData(nEntryIndex, (void*)-1);
+                maLBMonitor.SetEntryData(static_cast< sal_uInt16 >(nEntryIndex), (void*)-1);
                 if (nDefaultSelectedDisplay == -1)
                     nSelectedIndex = nEntryIndex;
             }

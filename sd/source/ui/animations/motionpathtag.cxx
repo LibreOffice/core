@@ -453,12 +453,13 @@ void MotionPathTag::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 
 // --------------------------------------------------------------------
 
-void MotionPathTag::MovePath( int nDX, int nDY )
+void MotionPathTag::MovePath( double fDX, double fDY )
 {
-    if( mpPathObj )
+    if(mpPathObj)
     {
-        sdr::legacy::MoveSdrObject(*mpPathObj, Size( nDX, nDY ) );
-        mrView.SetMarkHandles();
+        mpPathObj->setSdrObjectTransformation(basegfx::tools::createTranslateB2DHomMatrix(fDX, fDY) * mpPathObj->getSdrObjectTransformation());
+        // sdr::legacy::MoveSdrObject(*mpPathObj, Size( nDX, nDY ) );
+        mrView.SetMarkHandles(); // TTTT: Neded?
     }
 }
 
@@ -717,33 +718,33 @@ bool MotionPathTag::OnMarkHandle( const KeyEvent& rKEvt )
 
 bool MotionPathTag::OnMove( const KeyEvent& rKEvt )
 {
-    long nX = 0;
-    long nY = 0;
+    double fX = 0.0;
+    double fY = 0.0;
 
     switch( rKEvt.GetKeyCode().GetCode() )
     {
-    case KEY_UP:    nY = -1; break;
-    case KEY_DOWN:  nY =  1; break;
-    case KEY_LEFT:  nX = -1; break;
-    case KEY_RIGHT: nX =  1; break;
-    default: break;
+        case KEY_UP:    fY = -1.0; break;
+        case KEY_DOWN:  fY =  1.0; break;
+        case KEY_LEFT:  fX = -1.0; break;
+        case KEY_RIGHT: fX =  1.0; break;
+        default: break;
     }
 
     if(rKEvt.GetKeyCode().IsMod2())
     {
         OutputDevice* pOut = mrView.GetViewShell()->GetActiveWindow();
         Size aLogicSizeOnePixel = (pOut) ? pOut->PixelToLogic(Size(1,1)) : Size(100, 100);
-        nX *= aLogicSizeOnePixel.Width();
-        nY *= aLogicSizeOnePixel.Height();
+        fX *= aLogicSizeOnePixel.Width();
+        fY *= aLogicSizeOnePixel.Height();
     }
     else
     {
         // old, fixed move distance
-        nX *= 100;
-        nY *= 100;
+        fX *= 100.0;
+        fY *= 100.0;
     }
 
-    if( nX || nY )
+    if( !basegfx::fTools::equalZero(fX) || !basegfx::fTools::equalZero(fY) )
     {
         // in point edit mode move the handle with the focus
         const SdrHdlList& rHdlList = mrView.GetHdlList();
@@ -751,9 +752,9 @@ bool MotionPathTag::OnMove( const KeyEvent& rKEvt )
 
         if(pHdl)
         {
-            // now move the Handle (nX, nY)
+            // now move the Handle (fX, fY)
             const basegfx::B2DPoint aStartPoint(pHdl->getPosition());
-            const basegfx::B2DPoint aEndPoint(aStartPoint + basegfx::B2DPoint(nX, nY));
+            const basegfx::B2DPoint aEndPoint(aStartPoint + basegfx::B2DPoint(fX, fY));
 
             // start dragging
             rtl::Reference< MotionPathTag > xTag( this );
@@ -797,7 +798,7 @@ bool MotionPathTag::OnMove( const KeyEvent& rKEvt )
         else
         {
             // move the path
-            MovePath( nX, nY );
+            MovePath( fX, fY );
         }
     }
 

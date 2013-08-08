@@ -238,6 +238,11 @@ FrameView* DrawDocShell::GetFrameView()
     return(pFrameView);
 }
 
+sd::ViewShell* DrawDocShell::GetViewShell()
+{
+    return mpViewShell;
+}
+
 /*************************************************************************
 |*
 |* Groesse der ersten Seite zurueckgeben

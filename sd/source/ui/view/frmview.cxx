@@ -444,8 +444,8 @@ static OUString createHelpLinesString( const SdrHelpLineList& rHelpLines )
 {
     ::rtl::OUStringBuffer aLines;
 
-    const sal_uInt16 nCount = rHelpLines.GetCount();
-    for( sal_uInt16 nHlpLine = 0; nHlpLine < nCount; nHlpLine++ )
+    const sal_uInt32 nCount = rHelpLines.GetCount();
+    for( sal_uInt32 nHlpLine = 0; nHlpLine < nCount; nHlpLine++ )
     {
         const SdrHelpLine& rHelpLine = rHelpLines[nHlpLine];
         const basegfx::B2DPoint& rPos = rHelpLine.GetPos();

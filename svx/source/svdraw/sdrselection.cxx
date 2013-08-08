@@ -354,6 +354,8 @@ namespace sdr
                         }
                         break;
                     }
+                    default:
+                        break;
                 }
             }
         }

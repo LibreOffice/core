@@ -494,7 +494,6 @@ void DrawViewShell::ScannerEvent( const ::com::sun::star::lang::EventObject& )
                     const ::vos::OGuard aGuard( Application::GetSolarMutex() );
                     SdrPage& rPage = mpDrawView->GetSdrPageView()->getSdrPageFromSdrPageView();
                     Size                aBmpSize( aScanBmp.GetPrefSize() );
-                    Size aPageSize(basegfx::fround(rPage.GetPageScale().getX()), basegfx::fround(rPage.GetPageScale().getY()));
                     const MapMode       aMap100( MAP_100TH_MM );
 
                     if( !aBmpSize.Width() || !aBmpSize.Height() )
@@ -505,8 +504,9 @@ void DrawViewShell::ScannerEvent( const ::com::sun::star::lang::EventObject& )
                     else
                         aBmpSize = OutputDevice::LogicToLogic( aBmpSize, aScanBmp.GetPrefMapMode(), aMap100 );
 
-                    aPageSize.Width() -= rPage.GetLeftPageBorder() + rPage.GetRightPageBorder();
-                    aPageSize.Height() -= rPage.GetTopPageBorder() + rPage.GetBottomPageBorder();
+                    const Size aPageSize(
+                        basegfx::fround(rPage.GetInnerPageScale().getX()),
+                        basegfx::fround(rPage.GetInnerPageScale().getY()));
 
                     if( ( ( aBmpSize.Height() > aPageSize.Height() ) || ( aBmpSize.Width() > aPageSize.Width() ) ) && aBmpSize.Height() && aPageSize.Height() )
                     {
@@ -526,7 +526,9 @@ void DrawViewShell::ScannerEvent( const ::com::sun::star::lang::EventObject& )
                     }
 
                     Point aPnt ( ( aPageSize.Width() - aBmpSize.Width() ) >> 1, ( aPageSize.Height() - aBmpSize.Height() ) >> 1 );
-                    aPnt += Point( rPage.GetLeftPageBorder(), rPage.GetTopPageBorder() );
+                    aPnt += Point(
+                        basegfx::fround(rPage.GetLeftPageBorder()),
+                        basegfx::fround(rPage.GetTopPageBorder()) );
                     SdrGrafObj* pGrafObj = NULL;
                     bool bInsertNewObject = true;
                     SdrGrafObj* pTargetObj = dynamic_cast< SdrGrafObj* >(GetView()->getSelectedIfSingle());

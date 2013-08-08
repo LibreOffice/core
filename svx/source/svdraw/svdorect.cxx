@@ -460,16 +460,6 @@ basegfx::B2DPolyPolygon SdrRectObj::TakeCreatePoly(const SdrDragStat& rDrag) con
     return basegfx::B2DPolyPolygon(aUnitOutline);
 }
 
-Pointer SdrRectObj::GetCreatePointer(const SdrView& /*rSdrView*/) const
-{
-    if (IsTextFrame())
-    {
-        return Pointer(POINTER_DRAW_TEXT);
-    }
-
-    return Pointer(POINTER_DRAW_RECT);
-}
-
 bool SdrRectObj::DoMacro(const SdrObjMacroHitRec& rRec)
 {
     return SdrTextObj::DoMacro(rRec);
@@ -491,7 +481,7 @@ SdrObject* SdrRectObj::DoConvertToPolygonObject(bool bBezier, bool bAddText) con
     // when used with bAddText==false from other converters
     if((bAddText && !IsTextFrame()) || HasFill() || HasLine())
     {
-        pRet = ImpConvertMakeObj(aPolyPolygon, true, bBezier);
+        pRet = ImpConvertMakeObj(aPolyPolygon, bBezier);
     }
 
     if(bAddText)

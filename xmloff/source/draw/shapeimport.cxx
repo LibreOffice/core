@@ -19,23 +19,15 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
 
 #include <tools/debug.hxx>
-
 #include <com/sun/star/text/PositionLayoutDir.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
-
 #include "unointerfacetouniqueidentifiermapper.hxx"
-
 #include <list>
-
-#ifndef _XMLOFF_SHAPEIMPORT_HXX
 #include <xmloff/shapeimport.hxx>
-#endif
 #include <xmloff/xmltkmap.hxx>
 #include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
@@ -47,7 +39,6 @@
 #include "ximp3dobject.hxx"
 #include "ximpgrp.hxx"
 #include "ximplink.hxx"
-
 #include <map>
 #include <vector>
 
@@ -789,7 +780,7 @@ SvXMLShapeContext* XMLShapeImportHelper::CreateGroupChildContext(
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes,
-    sal_Bool bTemporaryShape)
+    bool bTemporaryShape)
 {
     SdXMLShapeContext *pContext = 0L;
 
@@ -889,7 +880,7 @@ SvXMLShapeContext* XMLShapeImportHelper::CreateGroupChildContext(
         case XML_TOK_GROUP_CUSTOM_SHAPE:
         {
             // draw:customshape
-            pContext = new SdXMLCustomShapeContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes, sal_False );
+            pContext = new SdXMLCustomShapeContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes, false );
             break;
         }
          case XML_TOK_GROUP_A:

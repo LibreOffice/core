@@ -52,7 +52,7 @@ public:
     virtual ~DrawView (void);
 
     virtual void handleSelectionChange();
-    void CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0L);
+    void CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0L) const;
 
     virtual bool SetAttributes(const SfxItemSet& rSet, bool bReplaceAll = false);
 
@@ -66,7 +66,7 @@ public:
     virtual void MakeVisibleAtView(const basegfx::B2DRange& rRange, ::Window& rWin);
     virtual void HideSdrPage();
 
-    void    PresPaint(const Region& rRegion);
+    void    PresPaint(const Region& rRegion) const;
 
     virtual void DeleteMarked(); // from SdrView
 

@@ -721,7 +721,6 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
                     aVDev.SetDrawMode( aVDev.GetDrawMode() | DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT );
                 aVDev.EnableOutput( sal_False );
                 aMtf.Record( &aVDev );
-                Size aNewSize;
 
                 // create a view
                 SdrView*        pView;
@@ -738,6 +737,7 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
                 pView->SetBordVisible( sal_False );
                 pView->SetPageVisible( sal_False );
                 pView->ShowSdrPage( *pPage );
+                Size aNewSize(0, 0);
 
                 if ( pView && pPage )
                 {
@@ -745,9 +745,12 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
                     pView->SetPageVisible( sal_False );
                     pView->ShowSdrPage( *pPage );
 
-                    const Point aNewOrg( pPage->GetLeftPageBorder(), pPage->GetTopPageBorder() );
-                    aNewSize = Size( aSize.Width() - pPage->GetLeftPageBorder() - pPage->GetRightPageBorder(),
-                                          aSize.Height() - pPage->GetTopPageBorder() - pPage->GetBottomPageBorder() );
+                    const Point aNewOrg(
+                        basegfx::fround(pPage->GetLeftPageBorder()),
+                        basegfx::fround(pPage->GetTopPageBorder()));
+                    aNewSize = Size(
+                        basegfx::fround(pPage->GetInnerPageScale().getX()),
+                        basegfx::fround(pPage->GetInnerPageScale().getY()));
                     const Rectangle aClipRect( aNewOrg, aNewSize );
                     MapMode         aVMap( aMap );
 

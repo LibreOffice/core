@@ -234,7 +234,7 @@ protected:
     XGradientListSharedPtr  maGradientList;
     XBitmapListSharedPtr    maBitmapList;
 
-    sal_uInt16                      mnHandoutPageCount;
+    sal_uInt32                      mnHandoutPageCount;
 
     /// bitfield
     bool                            mbDeletePool : 1;        // zum Aufraeumen von pMyPool ab 303a
@@ -257,8 +257,8 @@ public:
     virtual ~SdrModel();
     void ClearModel(bool bCalledFromDestructor);
 
-    sal_uInt16 getHandoutPageCount() const { return mnHandoutPageCount; }
-    void setHandoutPageCount( sal_uInt16 nHandoutPageCount ) { mnHandoutPageCount = nHandoutPageCount; }
+    sal_uInt32 getHandoutPageCount() const { return mnHandoutPageCount; }
+    void setHandoutPageCount( sal_uInt32 nHandoutPageCount ) { mnHandoutPageCount = nHandoutPageCount; }
 
     const SvNumberFormatter& GetNumberFormatter() const;
 
@@ -350,7 +350,7 @@ public:
     const Fraction& GetUIScale() const { return maUIScale; }
 
     static void TakeUnitStr(FieldUnit eUnit, String& rStr);
-    void TakeMetricStr(long nVal, String& rStr, bool bNoUnitChars = false, sal_Int32 nNumDigits = -1) const;
+    void TakeMetricStr(double fVal, String& rStr, bool bNoUnitChars = false, sal_Int32 nNumDigits = -1) const;
     void TakeWinkStr(long nWink, String& rStr, bool bNoDegChar = false) const;
     void TakePercentStr(const Fraction& rVal, String& rStr, bool bNoPercentChar = false) const;
 

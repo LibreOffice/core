@@ -879,9 +879,11 @@ namespace {
             const Size aPrintSize(rPrinter.GetOutputSize());
 
             const sal_Int32 nPageWidth (aPageSize.Width() + mnGap
-                - pPageToPrint->GetLeftPageBorder() - pPageToPrint->GetRightPageBorder());
+                - basegfx::fround(pPageToPrint->GetLeftPageBorder())
+                - basegfx::fround(pPageToPrint->GetRightPageBorder()));
             const sal_Int32 nPageHeight (aPageSize.Height() + mnGap
-                - pPageToPrint->GetTopPageBorder() - pPageToPrint->GetBottomPageBorder());
+                - basegfx::fround(pPageToPrint->GetTopPageBorder())
+                - basegfx::fround(pPageToPrint->GetBottomPageBorder()));
             if (nPageWidth<=0 || nPageHeight<=0)
                 return;
 
@@ -925,8 +927,8 @@ namespace {
     {
     public:
         BookletPrinterPage (
-            const sal_uInt16 nFirstPageIndex,
-            const sal_uInt16 nSecondPageIndex,
+            const sal_uInt32 nFirstPageIndex,
+            const sal_uInt32 nSecondPageIndex,
             const Point& rFirstOffset,
             const Point& rSecondOffset,
             const PageKind ePageKind,
@@ -1725,14 +1727,14 @@ private:
 
         long nPageH = aOutRect.GetHeight();
 
-        for (sal_uInt16
+        for (sal_uInt32
                  nIndex=0,
                  nCount=mrBase.GetDocument()->GetSdPageCount(PK_STANDARD);
              nIndex < nCount;
              )
         {
             pOutliner->Clear();
-            pOutliner->SetFirstPageNumber(nIndex+1);
+            pOutliner->SetFirstPageNumber(static_cast< sal_uInt16 >(nIndex+1));
 
             Paragraph* pPara = NULL;
             sal_Int32 nH (0);
@@ -1920,8 +1922,8 @@ private:
                 ++nShapeCount;
         }
 
-        const sal_uInt16 nPageCount = mrBase.GetDocument()->GetSdPageCount(PK_STANDARD);
-        const sal_uInt16 nHandoutPageCount = nShapeCount ? (nPageCount + nShapeCount - 1) / nShapeCount : 0;
+        const sal_uInt32 nPageCount = mrBase.GetDocument()->GetSdPageCount(PK_STANDARD);
+        const sal_uInt32 nHandoutPageCount = nShapeCount ? (nPageCount + nShapeCount - 1) / nShapeCount : 0;
         pViewShell->SetPrintedHandoutPageCount( nHandoutPageCount );
         mrBase.GetDocument()->setHandoutPageCount( nHandoutPageCount );
 
@@ -2008,7 +2010,7 @@ private:
         pViewShell->WriteFrameViewData();
         Point aPtZero;
 
-        for (sal_uInt16
+        for (sal_uInt32
                  nIndex=0,
                  nCount=mrBase.GetDocument()->GetSdPageCount(PK_STANDARD);
              nIndex < nCount;
@@ -2047,8 +2049,8 @@ private:
                 rInfo.msPageString = ::rtl::OUString();
             rInfo.msPageString += rInfo.msTimeDate;
 
-            long aPageWidth   = aPageSize.Width() - pPage->GetLeftPageBorder() - pPage->GetRightPageBorder();
-            long aPageHeight  = aPageSize.Height() - pPage->GetTopPageBorder() - pPage->GetBottomPageBorder();
+            const long aPageWidth(basegfx::fround(pPage->GetInnerPageScale().getX()));
+            const long aPageHeight(basegfx::fround(pPage->GetInnerPageScale().getY()));
             // Bugfix zu 44530:
             // Falls implizit umgestellt wurde (Landscape/Portrait)
             // wird dies beim Kacheln, bzw. aufteilen (Poster) beruecksichtigt
@@ -2134,8 +2136,8 @@ private:
         }
 
         // create vector of pages to print
-        ::std::vector< sal_uInt16 > aPageVector;
-        for (sal_uInt16
+        ::std::vector< sal_uInt32 > aPageVector;
+        for (sal_uInt32
                  nIndex=0,
                  nCount=mrBase.GetDocument()->GetSdPageCount(ePageKind);
              nIndex < nCount;
@@ -2147,14 +2149,14 @@ private:
         }
 
         // create pairs of pages to print on each page
-        typedef ::std::vector< ::std::pair< sal_uInt16, sal_uInt16 > > PairVector;
+        typedef ::std::vector< ::std::pair< sal_uInt32, sal_uInt32 > > PairVector;
         PairVector aPairVector;
         if ( ! aPageVector.empty())
         {
             sal_uInt32 nFirstIndex = 0, nLastIndex = aPageVector.size() - 1;
 
             if( aPageVector.size() & 1 )
-                aPairVector.push_back( ::std::make_pair( (sal_uInt16) 65535, aPageVector[ nFirstIndex++ ] ) );
+                aPairVector.push_back( ::std::make_pair( (sal_uInt32) 0xffffffff, aPageVector[ nFirstIndex++ ] ) );
             else
                 aPairVector.push_back( ::std::make_pair( aPageVector[ nLastIndex-- ], aPageVector[ nFirstIndex++ ] ) );
 
@@ -2177,7 +2179,7 @@ private:
             if ((!bIsIndexOdd && mpOptions->IsPrintFrontPage())
                 || (bIsIndexOdd && mpOptions->IsPrintBackPage()))
             {
-                const ::std::pair<sal_uInt16, sal_uInt16> aPair (aPairVector[nIndex]);
+                const ::std::pair<sal_uInt32, sal_uInt32> aPair (aPairVector[nIndex]);
                 Point aSecondOffset (aOffset);
                 if (rInfo.meOrientation == ORIENTATION_LANDSCAPE)
                     aSecondOffset.X() += aAdjustedPrintSize.Width() / 2;
@@ -2296,9 +2298,13 @@ private:
             // keep the page content at its position if it fits, otherwise
             // move it to the printable area
             const long nPageWidth (
-                rInfo.maPageSize.Width() - rPage.GetLeftPageBorder() - rPage.GetRightPageBorder());
+                rInfo.maPageSize.Width()
+                - basegfx::fround(rPage.GetLeftPageBorder())
+                - basegfx::fround(rPage.GetRightPageBorder()));
             const long nPageHeight (
-                rInfo.maPageSize.Height() - rPage.GetTopPageBorder() - rPage.GetBottomPageBorder());
+                rInfo.maPageSize.Height()
+                - basegfx::fround(rPage.GetTopPageBorder())
+                - basegfx::fround(rPage.GetBottomPageBorder()));
             #if 0
             Point aOrigin (
                 nPageWidth < rInfo.maPrintSize.Width() ? -aPageOffset.X() : 0,

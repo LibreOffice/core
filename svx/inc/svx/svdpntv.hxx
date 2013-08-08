@@ -326,7 +326,7 @@ public:
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // used internally for Draw/Impress/sch/chart2
-    virtual void CompleteRedraw(OutputDevice* pOut, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0);
+    virtual void CompleteRedraw(OutputDevice* pOut, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0) const;
 
     // #i72889# used from CompleteRedraw() implementation internally, added to be able to do a complete redraw in single steps
     //
@@ -336,16 +336,16 @@ public:
     // DoCompleteRedraw draws the DrawingLayer hierarchy then.
     // EndCompleteRedraw does the necessary refreshes, evtl. paints text edit and overlay and evtl destroys the
     // SdrPaintWindow again. This means: the SdrPaintWindow is no longer safe after this closing call.
-    virtual SdrPaintWindow* BeginCompleteRedraw(OutputDevice* pOut);
-    virtual void DoCompleteRedraw(SdrPaintWindow& rPaintWindow, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0);
-    virtual void EndCompleteRedraw(SdrPaintWindow& rPaintWindow, bool bPaintFormLayer);
+    virtual SdrPaintWindow* BeginCompleteRedraw(OutputDevice* pOut) const;
+    virtual void DoCompleteRedraw(SdrPaintWindow& rPaintWindow, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0) const;
+    virtual void EndCompleteRedraw(SdrPaintWindow& rPaintWindow, bool bPaintFormLayer) const;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // used for the other applications basctl/sc/sw which call DrawLayer at PageViews
     // #i74769# Interface change to use common BeginCompleteRedraw/EndCompleteRedraw
     // #i76114# bDisableIntersect disables intersecting rReg with the Window's paint region
-    SdrPaintWindow* BeginDrawLayers(OutputDevice* pOut, const Region& rReg, bool bDisableIntersect = false);
-    void EndDrawLayers(SdrPaintWindow& rPaintWindow, bool bPaintFormLayer);
+    SdrPaintWindow* BeginDrawLayers(OutputDevice* pOut, const Region& rReg, bool bDisableIntersect = false) const;
+    void EndDrawLayers(SdrPaintWindow& rPaintWindow, bool bPaintFormLayer) const;
 
     bool IsPageVisible() const { return mbPageVisible; }             // Seite (weisse Flaeche) malen oder nicht
     bool IsPageBorderVisible() const { return mbPageBorderVisible; } // Seite (weisse Flaeche) malen oder nicht

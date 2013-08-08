@@ -146,7 +146,7 @@ void DrawViewShell::UIDeactivated( SfxInPlaceClient* pCli )
 |*
 \************************************************************************/
 
-void DrawViewShell::Deactivate(sal_Bool bIsMDIActivate)
+void DrawViewShell::Deactivate(sal_Bool /*bIsMDIActivate*/)
 {
     // Do not forward to ViewShell::Deactivate() to prevent a context change.
 }
@@ -356,7 +356,7 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
     {
         ViewShellManager::UpdateLock aLock (GetViewShellBase().GetViewShellManager());
 
-        sal_uInt16 nActualPageNum = 0;
+        sal_uInt32 nActualPageNum = 0;
 
         GetViewShellBase().GetDrawController().FireChangeEditMode (eEMode == EM_MASTERPAGE);
         GetViewShellBase().GetDrawController().FireChangeLayerMode (bIsLayerModeActive);
@@ -413,7 +413,7 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
             {
                 pPage = GetDoc()->GetSdPage(i, mePageKind);
                 aPageName = pPage->GetName();
-                maTabControl.InsertPage(i + 1, aPageName);
+                maTabControl.InsertPage(static_cast< sal_uInt16 >(i + 1), aPageName);
 
                 if ( pPage->IsSelected() && nActualPageNum == 0 )
                 {
@@ -421,7 +421,7 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
                 }
             }
 
-            maTabControl.SetCurPageId(nActualPageNum + 1);
+            maTabControl.SetCurPageId(static_cast< sal_uInt16 >(nActualPageNum + 1));
 
             SwitchPage(nActualPageNum);
         }
@@ -449,7 +449,7 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
                 String aLayoutName(pMaster->GetLayoutName());
                 aLayoutName.Erase(aLayoutName.SearchAscii(SD_LT_SEPARATOR));
 
-                maTabControl.InsertPage(i + 1, aLayoutName);
+                maTabControl.InsertPage(static_cast< sal_uInt16 >(i + 1), aLayoutName);
 
                 if (&(mpActualPage->TRG_GetMasterPage()) == pMaster)
                 {
@@ -457,7 +457,7 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
                 }
             }
 
-            maTabControl.SetCurPageId(nActualMasterPageNum + 1);
+            maTabControl.SetCurPageId(static_cast< sal_uInt16 >(nActualMasterPageNum + 1));
             SwitchPage(nActualMasterPageNum);
         }
 
@@ -478,7 +478,9 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
             // Set the tab control only for draw pages.  For master page
             // this has been done already above.
             if (meEditMode == EM_PAGE)
-                maTabControl.SetCurPageId (nActualPageNum + 1);
+            {
+                maTabControl.SetCurPageId(static_cast< sal_uInt16 >(nActualPageNum + 1));
+            }
         }
         /*AF: The LayerDialogChildWindow is not used anymore (I hope).
         if (GetViewFrame()->KnowsChildWindow(
@@ -731,7 +733,7 @@ void DrawViewShell::ResetActualPage()
             GetDoc()->SetSelected(pPage, i == nCurrentPage);
         }
 
-        maTabControl.SetCurPageId(nCurrentPage + 1);
+        maTabControl.SetCurPageId(static_cast< sal_uInt16 >(nCurrentPage + 1));
     }
     else // EM_MASTERPAGE
     {
@@ -751,7 +753,7 @@ void DrawViewShell::ResetActualPage()
                 nActualMasterPageNum = i;
         }
 
-        maTabControl.SetCurPageId(nActualMasterPageNum + 1);
+        maTabControl.SetCurPageId(static_cast< sal_uInt16 >(nActualMasterPageNum + 1));
         SwitchPage(nActualMasterPageNum);
     }
 
@@ -1121,7 +1123,7 @@ bool DrawViewShell::SwitchPage(sal_uInt32 nSelectedPage)
                 }
             }
 
-            maTabControl.SetCurPageId(nSelectedPage+1);
+            maTabControl.SetCurPageId(static_cast< sal_uInt16 >(nSelectedPage + 1));
             String aPageName = mpActualPage->GetName();
 
             if (maTabControl.GetPageText(nSelectedPage+1) != aPageName)
@@ -1191,7 +1193,7 @@ bool DrawViewShell::SwitchPage(sal_uInt32 nSelectedPage)
             String aLayoutName(pMaster->GetLayoutName());
             aLayoutName.Erase(aLayoutName.SearchAscii(SD_LT_SEPARATOR));
 
-            maTabControl.SetCurPageId(nSelectedPage+1);
+            maTabControl.SetCurPageId(static_cast< sal_uInt16 >(nSelectedPage + 1));
 
             if (maTabControl.GetPageText(nSelectedPage+1) != aLayoutName)
             {
@@ -1355,7 +1357,7 @@ void DrawViewShell::ResetActualLayer()
             mpDrawView->SetActiveLayer( pLayerBar->GetPageText(aTheActiveLayer + 1) );
         }
 
-        pLayerBar->SetCurPageId(aTheActiveLayer + 1);
+        pLayerBar->SetCurPageId(static_cast< sal_uInt16 >(aTheActiveLayer + 1));
         GetViewFrame()->GetBindings().Invalidate( SID_MODIFYLAYER );
         GetViewFrame()->GetBindings().Invalidate( SID_DELETE_LAYER );
     }

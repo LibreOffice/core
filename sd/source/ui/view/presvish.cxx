@@ -139,7 +139,7 @@ SvxRuler* PresentationViewShell::CreateVRuler(::sd::Window*)
 }
 
 
-void PresentationViewShell::Activate( bool bIsMDIActivate )
+void PresentationViewShell::Activate( sal_Bool bIsMDIActivate )
 {
     DrawViewShell::Activate( bIsMDIActivate );
 

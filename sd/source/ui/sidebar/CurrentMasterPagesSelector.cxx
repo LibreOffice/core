@@ -139,12 +139,12 @@ void CurrentMasterPagesSelector::LateInit (void)
 
 void CurrentMasterPagesSelector::Fill (ItemList& rItemList)
 {
-    sal_uInt16 nPageCount = mrDocument.GetMasterSdPageCount(PK_STANDARD);
+    sal_uInt32 nPageCount = mrDocument.GetMasterSdPageCount(PK_STANDARD);
     SdPage* pMasterPage;
     // Remember the names of the master pages that have been inserted to
     // avoid double insertion.
     ::std::set<String> aMasterPageNames;
-    for (sal_uInt16 nIndex=0; nIndex<nPageCount; nIndex++)
+    for (sal_uInt32 nIndex=0; nIndex<nPageCount; nIndex++)
     {
         pMasterPage = mrDocument.GetMasterSdPage (nIndex, PK_STANDARD);
         if (pMasterPage == NULL)
@@ -192,10 +192,10 @@ void CurrentMasterPagesSelector::UpdateSelection (void)
 {
     // Iterate over all pages and for the selected ones put the name of
     // their master page into a set.
-    sal_uInt16 nPageCount = mrDocument.GetSdPageCount(PK_STANDARD);
+    sal_uInt32 nPageCount = mrDocument.GetSdPageCount(PK_STANDARD);
     SdPage* pPage;
     ::std::set<String> aNames;
-    sal_uInt16 nIndex;
+    sal_uInt32 nIndex;
     bool bLoop (true);
     for (nIndex=0; nIndex<nPageCount && bLoop; nIndex++)
     {
@@ -226,10 +226,10 @@ void CurrentMasterPagesSelector::UpdateSelection (void)
     sal_uInt16 nItemCount (PreviewValueSet::GetItemCount());
     for (nIndex=1; nIndex<=nItemCount && bLoop; nIndex++)
     {
-        String sName (PreviewValueSet::GetItemText (nIndex));
+        String sName (PreviewValueSet::GetItemText (static_cast< sal_uInt16 >(nIndex)));
         if (aNames.find(sName) != aNames.end())
         {
-            PreviewValueSet::SelectItem (nIndex);
+            PreviewValueSet::SelectItem (static_cast< sal_uInt16 >(nIndex));
         }
     }
 }

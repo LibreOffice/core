@@ -110,7 +110,7 @@ public:
     using SfxObjectShell::GetVisArea;
     using SfxShell::GetViewShell;
 
-    sd::ViewShell* GetViewShell() { return mpViewShell; }
+    sd::ViewShell* GetViewShell();
     ::sd::FrameView* GetFrameView();
     ::sd::FunctionReference GetDocShellFunction() const { return mxDocShellFunction; }
     void SetDocShellFunction( const ::sd::FunctionReference& xFunction );

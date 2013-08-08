@@ -85,7 +85,6 @@ public:
     virtual String getSpecialDragComment(const SdrDragStat& rDrag) const;
 
     virtual basegfx::B2DPolyPolygon TakeCreatePoly(const SdrDragStat& rDrag) const;
-    virtual Pointer GetCreatePointer(const SdrView& rSdrView) const;
 
     virtual bool DoMacro(const SdrObjMacroHitRec& rRec);
     virtual XubString GetMacroPopupComment(const SdrObjMacroHitRec& rRec) const;

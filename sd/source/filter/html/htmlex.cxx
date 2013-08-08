@@ -845,7 +845,7 @@ void HtmlExport::SetDocColors( SdPage* pPage )
 
 ///////////////////////////////////////////////////////////////////////
 
-void HtmlExport::InitProgress( sal_uInt16 nProgrCount )
+void HtmlExport::InitProgress( sal_uInt32 nProgrCount )
 {
     String aStr(SdResId(STR_CREATE_PAGES));
     mpProgress = new SfxProgress( mpDocSh, aStr, nProgrCount );
@@ -1240,13 +1240,13 @@ String HtmlExport::CreateTextForPage( SdrOutliner* pOutliner,
             sal_Int16 nActDepth = -1;
 
             String aParaText;
-            for (sal_uLong nPara = 0; nPara < nCount; nPara++)
+            for (sal_uInt16 nPara = 0; nPara < nCount; nPara++)
             {
                 pPara = pOutliner->GetParagraph(nPara);
                 if(pPara == 0)
                     continue;
 
-                const sal_Int16 nDepth = (sal_uInt16) pOutliner->GetDepth( (sal_uInt16) nPara );
+                const sal_Int16 nDepth = (sal_uInt16) pOutliner->GetDepth( nPara );
                 aParaText = ParagraphToHTMLString(pOutliner,nPara,rBackgroundColor);
 
                 if(aParaText.Len() == 0)
@@ -1331,8 +1331,8 @@ String HtmlExport::CreateTextForNotesPage( SdrOutliner* pOutliner,
             pOutliner->Clear();
             pOutliner->SetText( *pOPO );
 
-            sal_uLong nCount = pOutliner->GetParagraphCount();
-            for (sal_uLong nPara = 0; nPara < nCount; nPara++)
+            sal_uInt16 nCount = pOutliner->GetParagraphCount();
+            for (sal_uInt16 nPara = 0; nPara < nCount; nPara++)
             {
                 aStr.AppendAscii("<p style=\"");
                 aStr.Append( getParagraphStyle( pOutliner, nPara ) );
@@ -1642,14 +1642,14 @@ bool HtmlExport::CreateHtmlForPresPages()
                 Rectangle aRect(sdr::legacy::GetBoundRect(*pObject));
                 Point     aLogPos(aRect.TopLeft());
                 bool      bIsSquare = aRect.GetWidth() == aRect.GetHeight();
-
-                sal_uLong nPageWidth = pPage->GetPageScale().getX() - pPage->GetLeftPageBorder() - pPage->GetRightPageBorder();
+                const sal_Int32 nLeftPageBorder(basegfx::fround(pPage->GetLeftPageBorder()));
+                const sal_Int32 nTopPageBorder(basegfx::fround(pPage->GetTopPageBorder()));
 
                 // das BoundRect bezieht sich auf den physikalischen
                 // Seitenursprung, nicht auf den Koordinatenursprung
-                aRect.Move(-pPage->GetLeftPageBorder(), -pPage->GetTopPageBorder());
+                aRect.Move(-nLeftPageBorder, -nTopPageBorder);
 
-                double fLogicToPixel = ((double)mnWidthPixel) / nPageWidth;
+                const double fLogicToPixel((double)mnWidthPixel / pPage->GetInnerPageScale().getX());
                 aRect.Left()   = (long)(aRect.Left() * fLogicToPixel);
                 aRect.Top()    = (long)(aRect.Top() * fLogicToPixel);
                 aRect.Right()  = (long)(aRect.Right() * fLogicToPixel);
@@ -1705,8 +1705,7 @@ bool HtmlExport::CreateHtmlForPresPages()
                                                  GetRectangle(false));
 
                                 // Umrechnung in Pixelkoordinaten
-                                aArea.Move(aLogPos.X() - pPage->GetLeftPageBorder(),
-                                           aLogPos.Y() - pPage->GetTopPageBorder());
+                                aArea.Move(aLogPos.X() - nLeftPageBorder, aLogPos.Y() - nTopPageBorder);
                                 aArea.Left()   = (long)(aArea.Left() * fLogicToPixel);
                                 aArea.Top()    = (long)(aArea.Top() * fLogicToPixel);
                                 aArea.Right()  = (long)(aArea.Right() * fLogicToPixel);
@@ -1720,8 +1719,7 @@ bool HtmlExport::CreateHtmlForPresPages()
                             {
                                 Point aCenter(((IMapCircleObject*)pArea)->
                                                  GetCenter(false));
-                                aCenter += Point(aLogPos.X() - pPage->GetLeftPageBorder(),
-                                                 aLogPos.Y() - pPage->GetTopPageBorder());
+                                aCenter += Point(aLogPos.X() - nLeftPageBorder, aLogPos.Y() - nTopPageBorder);
                                 aCenter.X() = (long)(aCenter.X() * fLogicToPixel);
                                 aCenter.Y() = (long)(aCenter.Y() * fLogicToPixel);
 
@@ -1738,7 +1736,11 @@ bool HtmlExport::CreateHtmlForPresPages()
                             {
                                 Polygon aArea(((IMapPolygonObject*)pArea)->GetPolygon(false));
                                 const basegfx::B2DPolyPolygon aPolyPolygon(aArea.getB2DPolygon());
-                                aStr += CreateHTMLPolygonArea(aPolyPolygon, Size(aLogPos.X() - pPage->GetLeftPageBorder(), aLogPos.Y() - pPage->GetTopPageBorder()), fLogicToPixel, aURL);
+                                aStr += CreateHTMLPolygonArea(
+                                    aPolyPolygon,
+                                    Size(aLogPos.X() - nLeftPageBorder, aLogPos.Y() - nTopPageBorder),
+                                    fLogicToPixel,
+                                    aURL);
                             }
                             break;
 
@@ -1846,7 +1848,11 @@ bool HtmlExport::CreateHtmlForPresPages()
                         {
                             const basegfx::B2DPolyPolygon aPolyPolygon(static_cast< SdrPathObj* >(pObject)->getB2DPolyPolygonInObjectCoordinates());
 
-                            aStr += CreateHTMLPolygonArea(aPolyPolygon, Size(-pPage->GetLeftPageBorder(), -pPage->GetTopPageBorder()), fLogicToPixel, aHRef);
+                            aStr += CreateHTMLPolygonArea(
+                                aPolyPolygon,
+                                Size(-nLeftPageBorder, - nTopPageBorder),
+                                fLogicToPixel,
+                                aHRef);
                         }
                         // was anderes: das BoundRect nehmen
                         else

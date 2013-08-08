@@ -705,7 +705,7 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
                 aPagePos.setX(aPagePos.getX() - (aPageScale.getX() * 0.5));
 
                 const basegfx::B2DRange aFullPageZoomRange( aPagePos, aPagePos + aPageScale );
-                aZoomItem.AddSnappingPoint( pActiveWindow->GetZoomForRange( aFullPageZoomRange ) );
+                aZoomItem.AddSnappingPoint( static_cast< sal_Int32 >(pActiveWindow->GetZoomForRange( aFullPageZoomRange )));
             }
             aZoomItem.AddSnappingPoint(100);
             rSet.Put( aZoomItem );

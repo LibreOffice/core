@@ -3176,6 +3176,27 @@ bool SdPage::IsPrecious (void) const
 
 
 
+void SdPage::SetTime(sal_uInt32 nNewTime)
+{
+    mnTime = nNewTime;
+}
+
+void SdPage::SetPresChange(PresChange eChange)
+{
+    mePresChange = eChange;
+}
+
+AutoLayout SdPage::GetAutoLayout() const
+{
+    return meAutoLayout;
+}
+
+PageKind SdPage::GetPageKind() const
+{
+    return mePageKind;
+}
+
+
 
 HeaderFooterSettings::HeaderFooterSettings()
 {
@@ -3185,6 +3206,16 @@ HeaderFooterSettings::HeaderFooterSettings()
     mbDateTimeVisible = true;
     mbDateTimeIsFixed = true;
     meDateTimeFormat = SVXDATEFORMAT_A;
+}
+
+
+HeaderFooterSettings::HeaderFooterSettings(const HeaderFooterSettings& rSource)
+{
+    *this = rSource;
+}
+
+HeaderFooterSettings::~HeaderFooterSettings()
+{
 }
 
 bool HeaderFooterSettings::operator==( const HeaderFooterSettings& rSettings ) const
@@ -3200,3 +3231,19 @@ bool HeaderFooterSettings::operator==( const HeaderFooterSettings& rSettings ) c
            (maDateTimeText == rSettings.maDateTimeText);
 }
 
+HeaderFooterSettings& HeaderFooterSettings::operator=(const HeaderFooterSettings& rHeaderFooter)
+{
+    mbHeaderVisible = rHeaderFooter.mbHeaderVisible;
+    maHeaderText = rHeaderFooter.maHeaderText;
+    mbFooterVisible = rHeaderFooter.mbFooterVisible;
+    maFooterText = rHeaderFooter.maFooterText;
+    mbSlideNumberVisible = rHeaderFooter.mbSlideNumberVisible;
+    mbDateTimeVisible = rHeaderFooter.mbDateTimeVisible;
+    mbDateTimeIsFixed = rHeaderFooter.mbDateTimeIsFixed;
+    maDateTimeText = rHeaderFooter.maDateTimeText;
+    meDateTimeFormat = rHeaderFooter.meDateTimeFormat;
+
+    return *this;
+}
+
+// eof

@@ -244,10 +244,9 @@ void SdDocPreviewWin::updateViewSettings()
             pView->SetPageVisible( false );
             pView->ShowSdrPage( *pPage );
 
-            const Point aNewOrg( pPage->GetLeftPageBorder(), pPage->GetTopPageBorder() );
+            const Point aNewOrg(basegfx::fround(pPage->GetLeftPageBorder()), basegfx::fround(pPage->GetTopPageBorder()));
             const Size aSize(basegfx::fround(pPage->GetPageScale().getX()), basegfx::fround(pPage->GetPageScale().getY()));
-            const Size aNewSize( aSize.Width() - pPage->GetLeftPageBorder() - pPage->GetRightPageBorder(),
-                                  aSize.Height() - pPage->GetTopPageBorder() - pPage->GetBottomPageBorder() );
+            const Size aNewSize(basegfx::fround(pPage->GetInnerPageScale().getX()), basegfx::fround(pPage->GetInnerPageScale().getY()));
             const Rectangle aClipRect( aNewOrg, aNewSize );
             MapMode         aVMap( aMap );
 
@@ -256,11 +255,11 @@ void SdDocPreviewWin::updateViewSettings()
             aVDev.SetRelativeMapMode( aVMap );
             aVDev.IntersectClipRegion( aClipRect );
 
-        // Use new StandardCheckVisisbilityRedirector
-        StandardCheckVisisbilityRedirector aRedirector;
-        const Rectangle aRedrawRectangle = Rectangle( Point(), aNewSize );
-        Region aRedrawRegion(aRedrawRectangle);
-        pView->SdrPaintView::CompleteRedraw(&aVDev,aRedrawRegion,&aRedirector);
+            // Use new StandardCheckVisisbilityRedirector
+            StandardCheckVisisbilityRedirector aRedirector;
+            const Rectangle aRedrawRectangle = Rectangle( Point(), aNewSize );
+            Region aRedrawRegion(aRedrawRectangle);
+            pView->SdrPaintView::CompleteRedraw(&aVDev,aRedrawRegion,&aRedirector);
 
             aVDev.Pop();
 

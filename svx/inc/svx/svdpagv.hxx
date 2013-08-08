@@ -91,7 +91,7 @@ protected:
     SdrPageWindow* RemovePageWindow(sal_uInt32 nPos);
     SdrPageWindow* RemovePageWindow(SdrPageWindow& rOld);
 
-    void ImpInvalidateHelpLineArea(sal_uInt16 nNum) const;
+    void ImpInvalidateHelpLineArea(sal_uInt32 nNum) const;
 
     void SetLayer(const String& rName, SetOfByte& rBS, bool bJa);
     bool IsLayer(const String& rName, const SetOfByte& rBS) const;

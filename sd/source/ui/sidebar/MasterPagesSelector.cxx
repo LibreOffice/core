@@ -421,7 +421,7 @@ void MasterPagesSelector::AssignMasterPageToAllSlides (SdPage* pMasterPage)
         if (pMasterPage == NULL)
             break;
 
-        sal_uInt16 nPageCount = mrDocument.GetSdPageCount(PK_STANDARD);
+        sal_uInt32 nPageCount = mrDocument.GetSdPageCount(PK_STANDARD);
         if (nPageCount == 0)
             break;
 

@@ -137,7 +137,7 @@ SdrEditView::~SdrEditView()
 {
 }
 
-SdrLayer* SdrEditView::InsertNewLayer(const XubString& rName, sal_uInt16 nPos)
+SdrLayer* SdrEditView::InsertNewLayer(const XubString& rName, sal_uInt32 nPos)
 {
     SdrLayerAdmin& rLA = getSdrModelFromSdrView().GetModelLayerAdmin();
     const sal_uInt32 nMax(rLA.GetLayerCount());

@@ -253,24 +253,21 @@ public:
 
     /** convert double number to string (using ::rtl::math) and DO
         convert to export MapUnit */
-    void convertDouble(::rtl::OUStringBuffer& rBuffer,
-        double fNumber, sal_Bool bWriteUnits) const;
+    void convertDoubleAndUnit(::rtl::OUStringBuffer& rBuffer, double fNumber) const;
 
     /** convert double number to string (using ::rtl::math) and
         DO convert from eSrcUnit to export MapUnit */
-    static void convertDouble( ::rtl::OUStringBuffer& rBuffer,
-        double fNumber, sal_Bool bWriteUnits, MapUnit eCoreUnit, MapUnit eDstUnit);
-
-    /** convert double number to string (using ::rtl::math) without unit conversion */
-    static void convertDouble( ::rtl::OUStringBuffer& rBuffer, double fNumber);
+    static void convertDoubleAndUnit( ::rtl::OUStringBuffer& rBuffer, double fNumber, sal_Bool bWriteUnits, MapUnit eCoreUnit, MapUnit eDstUnit);
 
     /** convert string to double number (using ::rtl::math) and DO convert. */
-    sal_Bool convertDouble(double& rValue, const ::rtl::OUString& rString, sal_Bool bLookForUnits) const;
+    sal_Bool convertDoubleAndUnit(double& rValue, const ::rtl::OUString& rString) const;
 
     /** convert string to double number (using ::rtl::math) and DO convert from
         SrcUnit to DstUnit. */
-    static sal_Bool convertDouble(double& rValue,
-        const ::rtl::OUString& rString, MapUnit eSrcUnit, MapUnit eCoreUnit);
+    static sal_Bool convertDoubleAndUnit(double& rValue, const ::rtl::OUString& rString, MapUnit eSrcUnit, MapUnit eCoreUnit);
+
+    /** convert double number to string (using ::rtl::math) without unit conversion */
+    static void convertDouble( ::rtl::OUStringBuffer& rBuffer, double fNumber);
 
     /** convert string to double number (using ::rtl::math) without unit conversion */
     static sal_Bool convertDouble(double& rValue, const ::rtl::OUString& rString);

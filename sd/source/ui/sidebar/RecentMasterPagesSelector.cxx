@@ -113,8 +113,8 @@ void RecentMasterPagesSelector::Fill (ItemList& rItemList)
 {
     // Create a set of names of the master pages used by the document.
     MasterPageObserver::MasterPageNameSet aCurrentNames;
-    sal_uInt16 nMasterPageCount = mrDocument.GetMasterSdPageCount(PK_STANDARD);
-    sal_uInt16 nIndex;
+    sal_uInt32 nMasterPageCount = mrDocument.GetMasterSdPageCount(PK_STANDARD);
+    sal_uInt32 nIndex;
     for (nIndex=0; nIndex<nMasterPageCount; nIndex++)
     {
         SdPage* pMasterPage = mrDocument.GetMasterSdPage (nIndex, PK_STANDARD);
@@ -125,7 +125,7 @@ void RecentMasterPagesSelector::Fill (ItemList& rItemList)
 
     // Insert the recently used master pages that are currently not used.
     RecentlyUsedMasterPages& rInstance (RecentlyUsedMasterPages::Instance());
-    int nPageCount = rInstance.GetMasterPageCount();
+    const sal_uInt32 nPageCount = rInstance.GetMasterPageCount();
     for (nIndex=0; nIndex<nPageCount; nIndex++)
     {
         // Add an entry when a) the page is already known to the

@@ -1111,9 +1111,9 @@ void SdDrawDocument::ImpOnlineSpellCallback(SpellCallbackInfo* pInfo, SdrObject*
 void SdDrawDocument::RestoreLayerNames()
 {
     SdrLayerAdmin& rLayerAdmin = GetModelLayerAdmin();
-    sal_uInt16 nLayerCount = rLayerAdmin.GetLayerCount();
+    sal_uInt32 nLayerCount = rLayerAdmin.GetLayerCount();
 
-    for (sal_uInt16 nLayer = 0; nLayer < nLayerCount; nLayer++)
+    for (sal_uInt32 nLayer = 0; nLayer < nLayerCount; nLayer++)
     {
         SdrLayer* pLayer = rLayerAdmin.GetLayer(nLayer);
 

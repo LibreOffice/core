@@ -107,8 +107,8 @@ void SdTransformOOo2xDocument::transform()
 
 void SdTransformOOo2xDocument::transformMasterPages()
 {
-    sal_uInt16 nMasterPageCount = mrDocument.GetMasterPageCount();
-    for( sal_uInt16 nMasterPage = 0; nMasterPage < nMasterPageCount; nMasterPage++ )
+    sal_uInt32 nMasterPageCount = mrDocument.GetMasterPageCount();
+    for( sal_uInt32 nMasterPage = 0; nMasterPage < nMasterPageCount; nMasterPage++ )
     {
         SdrObjList* pPage = mrDocument.GetMasterPage( nMasterPage );
         if( pPage )
@@ -118,8 +118,8 @@ void SdTransformOOo2xDocument::transformMasterPages()
 
 void SdTransformOOo2xDocument::transformDrawPages()
 {
-    sal_uInt16 nPageCount = mrDocument.GetPageCount();
-    for( sal_uInt16 nPage = 0; nPage < nPageCount; nPage++ )
+    sal_uInt32 nPageCount = mrDocument.GetPageCount();
+    for( sal_uInt32 nPage = 0; nPage < nPageCount; nPage++ )
     {
         SdrObjList* pPage = mrDocument.GetPage( nPage );
         if( pPage )

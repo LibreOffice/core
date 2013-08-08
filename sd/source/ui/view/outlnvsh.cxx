@@ -1424,7 +1424,7 @@ void OutlineViewShell::GetStatusBarState(SfxItemSet& rSet)
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_STATUS_PAGE ) ||
         SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_STATUS_LAYOUT ) )
     */
-    sal_uInt16  nPageCount = GetDoc()->GetSdPageCount( PK_STANDARD );
+    sal_uInt32 nPageCount = GetDoc()->GetSdPageCount( PK_STANDARD );
     String  aPageStr, aLayoutStr;
 
     ::sd::Window*       pWin        = GetActiveWindow();

@@ -96,8 +96,11 @@ namespace sd {
         int meDateTimeFormat;
 
         HeaderFooterSettings();
+        HeaderFooterSettings(const HeaderFooterSettings& rSource);
+        ~HeaderFooterSettings();
 
         bool operator==( const HeaderFooterSettings& rSettings ) const;
+        HeaderFooterSettings& operator=(const HeaderFooterSettings& rHeaderFooter);
     };
 
     typedef std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation > > AnnotationVector;
@@ -214,7 +217,7 @@ public:
     void            InsertPresObj(SdrObject* pObj, PresObjKind eKind );
 
     void            SetAutoLayout(AutoLayout eLayout, bool bInit=false, bool bCreate=false);
-    AutoLayout      GetAutoLayout() const { return meAutoLayout; }
+    AutoLayout      GetAutoLayout() const;
     void            CreateTitleAndLayout(bool bInit=false, bool bCreate=false);
     SdrObject*      InsertAutoLayoutShape(SdrObject* pObj, PresObjKind eObjKind, bool bVertical, const basegfx::B2DRange& rRange, bool bInit );
 
@@ -226,7 +229,7 @@ public:
     void        SetObjText(SdrTextObj* pObj, SdrOutliner* pOutliner, PresObjKind eObjKind, const String& rStr );
 
     void        SetPageKind(PageKind ePgType)        { mePageKind = ePgType; }
-    PageKind    GetPageKind() const                  { return mePageKind; }
+    PageKind    GetPageKind() const;
 
     void        SetSelected(bool bSel)               { mbSelected = bSel; }
     bool        IsSelected() const                   { return mbSelected; }
@@ -234,10 +237,10 @@ public:
     void        SetFadeEffect(::com::sun::star::presentation::FadeEffect eNewEffect);
     ::com::sun::star::presentation::FadeEffect  GetFadeEffect() const;
 
-    void        SetPresChange(PresChange eChange)    { mePresChange = eChange; }
+    void        SetPresChange(PresChange eChange);
     PresChange  GetPresChange() const                { return mePresChange; }
 
-    void        SetTime(sal_uInt32 nNewTime)             { mnTime = nNewTime; }
+    void        SetTime(sal_uInt32 nNewTime);
     sal_uInt32      GetTime() const                      { return mnTime; }
 
     void        SetSound(bool bNewSoundOn)           { mbSoundOn = bNewSoundOn; }

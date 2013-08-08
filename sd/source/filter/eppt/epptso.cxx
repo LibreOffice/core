@@ -3430,7 +3430,7 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
             }
             nParaFlags >>= 16;
 
-            sal_uInt32  nDefaultTabSize = mfMap100thMmToMs * 2011.0;
+            sal_uInt32  nDefaultTabSize = basegfx::fround(mfMap100thMmToMs * 2011.0);
             sal_uInt32  nDefaultTabs = basegfx::fround(fabs(maObjectRange.getWidth())) / nDefaultTabSize;
             if ( nTabs )
                 nDefaultTabs -= (sal_Int32)( ( ( pTabStop[ nTabs - 1 ].Position / 4.40972 ) + nTextOfs ) / nDefaultTabSize );

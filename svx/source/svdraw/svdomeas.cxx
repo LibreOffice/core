@@ -955,11 +955,6 @@ basegfx::B2DPolyPolygon SdrMeasureObj::TakeCreatePoly(const SdrDragStat& /*rDrag
     return ImpCalcXPoly(aMPol);
 }
 
-Pointer SdrMeasureObj::GetCreatePointer(const SdrView& /*rSdrView*/) const
-{
-    return Pointer(POINTER_CROSS);
-}
-
 sal_uInt32 SdrMeasureObj::GetSnapPointCount() const
 {
     return 2L;

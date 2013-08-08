@@ -493,12 +493,12 @@ bool DrawView::SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAtt
 |*
 \************************************************************************/
 
-void DrawView::CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector /*=0L*/)
+void DrawView::CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector /*=0L*/) const
 {
     if( mpVDev )
     {
         delete mpVDev;
-        mpVDev = NULL;
+        const_cast< DrawView* >(this)->mpVDev = NULL;
     }
 
     bool bStandardPaint = true;
@@ -531,7 +531,7 @@ void DrawView::CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, sdr::co
 |*
 \************************************************************************/
 
-void DrawView::PresPaint(const Region& rRegion)
+void DrawView::PresPaint(const Region& rRegion) const
 {
     if(mpViewSh)
     {

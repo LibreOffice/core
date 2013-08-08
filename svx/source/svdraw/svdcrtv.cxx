@@ -371,23 +371,142 @@ void SdrCreateView::setSdrObjectCreationInfo(const SdrObjectCreationInfo& rNew)
     // copy values
     maSdrObjectCreationInfo = rNew;
 
-    // Always use I-Beam for text tool
     if(IsTextTool())
     {
+        // Always use I-Beam for text tool
         setCreatePointer(POINTER_TEXT);
     }
-    else if(static_cast< sal_uInt16 >(OBJ_NONE) != maSdrObjectCreationInfo.getIdent())
+    else if(SdrInventor == maSdrObjectCreationInfo.getInvent())
     {
-        SdrObject* pObj = SdrObjFactory::MakeNewObject(
-            getSdrModelFromSdrView(),
-            getSdrObjectCreationInfo());
-
-        if(pObj)
+        // different pointers for Sdr-level ObjectTypes
+        switch(maSdrObjectCreationInfo.getIdent())
         {
-            setCreatePointer(pObj->GetCreatePointer(*getAsSdrView()));
-            deleteSdrObjectSafeAndClearPointer(pObj);
+            case OBJ_RECT:
+            {
+                // The former implementation created a temporary default SdrRectObj only to call GetCreatePointer
+                // on it nad delete it again, this is not needed anymore. Default for creation of SdrTextObj
+                // is bIsTextFrame = false, thus the former check for IsTextFrame() is false, too, so not POINTER_DRAW_TEXT
+                setCreatePointer(POINTER_DRAW_RECT);
+                break;
+            }
+
+            case OBJ_POLY:
+            {
+                if(maSdrObjectCreationInfo.getFreehandMode())
+                {
+                    setCreatePointer(POINTER_DRAW_FREEHAND);
+                }
+                else
+                {
+                    switch(maSdrObjectCreationInfo.getSdrPathObjType())
+                    {
+                        case PathType_Line:
+                        {
+                            setCreatePointer(POINTER_DRAW_LINE);
+                            break;
+                        }
+                        case PathType_OpenPolygon:
+                        case PathType_ClosedPolygon:
+                        {
+                            setCreatePointer(POINTER_DRAW_POLYGON);
+                            break;
+                        }
+                        case PathType_OpenBezier:
+                        case PathType_ClosedBezier:
+                        {
+                            setCreatePointer(POINTER_DRAW_BEZIER);
+                            break;
+                        }
+                    }
+                }
+                break;
+            }
+
+            case OBJ_EDGE:
+            {
+                setCreatePointer(POINTER_DRAW_CONNECT);
+                break;
+            }
+
+            case OBJ_CIRC:
+            {
+                switch(maSdrObjectCreationInfo.getSdrCircleObjType())
+                {
+                    case CircleType_Circle:
+                    {
+                        setCreatePointer(POINTER_DRAW_ELLIPSE);
+                        break;
+                    }
+                    case CircleType_Sector:
+                    {
+                        setCreatePointer(POINTER_DRAW_PIE);
+                        break;
+                    }
+                    case CircleType_Arc:
+                    {
+                        setCreatePointer(POINTER_DRAW_ARC);
+                        break;
+                    }
+                    case CircleType_Segment:
+                    {
+                        setCreatePointer(POINTER_DRAW_CIRCLECUT);
+                        break;
+                    }
+                }
+                break;
+            }
+
+            case OBJ_CAPTION:
+            {
+                setCreatePointer(POINTER_DRAW_CAPTION);
+                break;
+            }
+
+            case OBJ_TEXT:
+            case OBJ_TITLETEXT:
+            case OBJ_OUTLINETEXT:
+            // The former implementation created a temporary default SdrTextObj only to call GetCreatePointer
+            // on it nad delete it again, this is not needed anymore. Default for creation of SdrTextObj
+            // is bIsTextFrame = false, thus the former check for IsTextFrame() is false, too, so not POINTER_DRAW_TEXT
+
+            case OBJ_NONE:
+            case OBJ_GRUP:
+            case OBJ_GRAF:
+            case OBJ_OLE2:
+            case OBJ_PAGE:
+            case OBJ_FRAME:
+            case OBJ_UNO:
+            case OBJ_CUSTOMSHAPE:
+            case OBJ_MEDIA:
+            case OBJ_MEASURE:
+            case OBJ_TABLE:
+            default:
+            {
+                // default for Sdr-Level objects
+                setCreatePointer(POINTER_CROSS);
+                break;
+            }
         }
     }
+    else
+    {
+        // default for non-Sdr-Level objects
+        setCreatePointer(POINTER_CROSS);
+    }
+
+    // TTTT
+    //else if(static_cast< sal_uInt16 >(OBJ_NONE) != maSdrObjectCreationInfo.getIdent())
+    //{
+    //    SdrObject* pObj = SdrObjFactory::MakeNewObject(
+    //        getSdrModelFromSdrView(),
+    //        getSdrObjectCreationInfo());
+    //
+    //    if(pObj)
+    //    {
+    //        setCreatePointer(pObj->GetCreatePointer(*getAsSdrView()));
+    //        deleteSdrObjectSafeAndClearPointer(pObj);
+    //    }
+    //}
 }
 
 bool SdrCreateView::ImpBegCreateObj(

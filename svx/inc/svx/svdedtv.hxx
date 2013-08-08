@@ -198,7 +198,7 @@ public:
     void AddUndoActions( std::vector< SdrUndoAction* >& );
 
     // Layerverwaltung. Mit Undo.
-    SdrLayer* InsertNewLayer(const String& rName, sal_uInt16 nPos=0xFFFF);
+    SdrLayer* InsertNewLayer(const String& rName, sal_uInt32 nPos = 0xFFFFFFFF);
     // Loeschen eines Layer inkl. aller darauf befindlichen Objekte
     void      DeleteLayer(const String& rName);
 

@@ -432,8 +432,8 @@ void ChartController::impl_PasteShapes( SdrModel* pModel )
         {
             Reference< drawing::XShape > xSelShape;
             m_pDrawViewWrapper->BegUndo( SVX_RESSTR( RID_SVX_3D_UNDO_EXCHANGE_PASTE ) );
-            sal_uInt16 nCount = pModel->GetPageCount();
-            for ( sal_uInt16 i = 0; i < nCount; ++i )
+            sal_uInt32 nCount = pModel->GetPageCount();
+            for ( sal_uInt32 i = 0; i < nCount; ++i )
             {
                 const SdrPage* pPage = pModel->GetPage( i );
                 SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );

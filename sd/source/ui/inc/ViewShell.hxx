@@ -267,11 +267,11 @@ public:
     void    SetStartShowWithDialog( bool bIn = true ) { mbStartShowWithDialog = bIn; }
     bool    IsStartShowWithDialog() const { return mbStartShowWithDialog; }
 
-    sal_uInt16 GetPrintedHandoutPageNum (void) const { return mnPrintedHandoutPageNum; }
-    void SetPrintedHandoutPageNum (sal_uInt16 nPageNumber) {mnPrintedHandoutPageNum=nPageNumber; }
+    sal_uInt32 GetPrintedHandoutPageNum (void) const { return mnPrintedHandoutPageNum; }
+    void SetPrintedHandoutPageNum (sal_uInt32 nPageNumber) {mnPrintedHandoutPageNum=nPageNumber; }
 
-    sal_uInt16 GetPrintedHandoutPageCount(void) const { return mnPrintedHandoutPageCount; }
-    void SetPrintedHandoutPageCount (sal_uInt16 nPageCount) {mnPrintedHandoutPageCount=nPageCount; }
+    sal_uInt32 GetPrintedHandoutPageCount(void) const { return mnPrintedHandoutPageCount; }
+    void SetPrintedHandoutPageCount (sal_uInt32 nPageCount) {mnPrintedHandoutPageCount=nPageCount; }
 
     virtual sal_uInt16 PrepareClose( bool bUI = true, bool bForBrowsing = false );
 
@@ -488,8 +488,8 @@ protected:
     bool        mbCenterAllowed;          // wird an Fenster weitergegeben
 
     bool        mbStartShowWithDialog;  // Praesentation wurde ueber Dialog gestartet
-    sal_uInt16      mnPrintedHandoutPageNum; // Page number of the handout page that is to be printed.
-    sal_uInt16      mnPrintedHandoutPageCount; // Page count of the handout pages that are to be printed.
+    sal_uInt32      mnPrintedHandoutPageNum; // Page number of the handout page that is to be printed.
+    sal_uInt32      mnPrintedHandoutPageCount; // Page count of the handout pages that are to be printed.
 
     /** Area covered by all windows, i.e. the area of the parent window
         without the controls at the borders like rulers, scroll bars, tab

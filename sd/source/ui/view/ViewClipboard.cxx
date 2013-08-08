@@ -185,7 +185,7 @@ void ViewClipboard::AssignMasterPage (
 
 
 
-sal_uInt16 ViewClipboard::DetermineInsertPosition  (
+sal_uInt32 ViewClipboard::DetermineInsertPosition  (
     const SdTransferable& )
 {
     SdDrawDocument* pDoc = mrView.GetDoc();
@@ -208,13 +208,13 @@ sal_uInt16 ViewClipboard::DetermineInsertPosition  (
 
 
 
-sal_uInt16 ViewClipboard::InsertSlides (
+sal_uInt32 ViewClipboard::InsertSlides (
     const SdTransferable& rTransferable,
-    sal_uInt16 nInsertPosition)
+    sal_uInt32 nInsertPosition)
 {
     SdDrawDocument* pDoc = mrView.GetDoc();
 
-    sal_uInt16 nInsertPgCnt = 0;
+    sal_uInt32 nInsertPgCnt = 0;
     bool bMergeMasterPages = !rTransferable.HasSourceDoc( pDoc );
 
     // Prepare the insertion.
@@ -226,7 +226,7 @@ sal_uInt16 ViewClipboard::InsertSlides (
         // pages are inserted.
         pBookmarkList = &rTransferable.GetPageBookmarks();
         pDataDocSh = rTransferable.GetPageDocShell();
-        nInsertPgCnt = (sal_uInt16)pBookmarkList->Count();
+        nInsertPgCnt = pBookmarkList->Count();
     }
     else
     {

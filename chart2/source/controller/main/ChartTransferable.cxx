@@ -129,8 +129,8 @@ sal_Bool ChartTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pUse
                     const SfxItemPool& rItemPool = pMarkedObjModel->GetItemPool();
                     const SvxFontHeightItem& rDefaultFontHeight = static_cast< const SvxFontHeightItem& >(
                         rItemPool.GetDefaultItem( EE_CHAR_FONTHEIGHT ) );
-                    sal_uInt16 nCount = pMarkedObjModel->GetPageCount();
-                    for ( sal_uInt16 i = 0; i < nCount; ++i )
+                    sal_uInt32 nCount = pMarkedObjModel->GetPageCount();
+                    for ( sal_uInt32 i = 0; i < nCount; ++i )
                     {
                         const SdrPage* pPage = pMarkedObjModel->GetPage( i );
                         SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
