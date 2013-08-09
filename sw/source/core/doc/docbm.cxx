@@ -874,7 +874,6 @@ namespace sw { namespace mark
 
 }} // namespace ::sw::mark
 
-
 #define PCURCRSR (_pCurrCrsr)
 #define FOREACHPAM_START(pSttCrsr) \
     {\
@@ -987,7 +986,6 @@ namespace
         return nReturn;
     }
 
-
     static inline int lcl_Greater( const SwPosition& rPos, const SwNodeIndex& rNdIdx, const SwIndex* pIdx )
     {
         return rPos.nNode > rNdIdx || ( pIdx && rPos.nNode == rNdIdx && rPos.nContent > pIdx->GetIndex() );
@@ -1024,11 +1022,9 @@ namespace
             rSave.DecType();
         }
     }
-
 }
 
 // IDocumentMarkAccess for SwDoc
-
 IDocumentMarkAccess* SwDoc::getIDocumentMarkAccess()
     { return static_cast< IDocumentMarkAccess* >(mpMarkManager.get()); }
 

@@ -1512,7 +1512,6 @@ void SwCompareData::ShowInsert( sal_uLong nStt, sal_uLong nEnd )
         pInsRing = pTmp;
 
     // #i65201#: These SwPaMs are calculated smaller than needed, see comment below
-
 }
 
 void SwCompareData::ShowDelete( const CompareData& rData, sal_uLong nStt,

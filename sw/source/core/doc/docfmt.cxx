@@ -1532,7 +1532,6 @@ SwFmt *SwDoc::_MakeFrmFmt(const String &rFmtName,
     return dynamic_cast<SwFmt*>(pFrmFmt);
 }
 
-
 // #i40550# - add parameter <bAuto> - not relevant
 SwCharFmt *SwDoc::MakeCharFmt( const String &rFmtName,
                                SwCharFmt *pDerivedFrom,
@@ -1604,7 +1603,6 @@ SwFmt *SwDoc::_MakeTxtFmtColl(const String &rFmtName,
     return dynamic_cast<SwFmt*>(pTxtFmtColl);
 }
 
-
 //FEATURE::CONDCOLL
 SwConditionTxtFmtColl* SwDoc::MakeCondTxtFmtColl( const String &rFmtName,
                                                   SwTxtFmtColl *pDerivedFrom,
@@ -1625,7 +1623,6 @@ SwConditionTxtFmtColl* SwDoc::MakeCondTxtFmtColl( const String &rFmtName,
 //FEATURE::CONDCOLL
 
 // GRF
-
 SwGrfFmtColl* SwDoc::MakeGrfFmtColl( const String &rFmtName,
                                      SwGrfFmtColl *pDerivedFrom )
 {

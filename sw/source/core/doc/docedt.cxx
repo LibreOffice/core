@@ -1788,7 +1788,6 @@ bool SwDoc::DeleteRange( SwPaM & rPam )
     return lcl_DoWithBreaks( *this, rPam, &SwDoc::DeleteRangeImpl );
 }
 
-
 static void lcl_syncGrammarError( SwTxtNode &rTxtNode, linguistic2::ProofreadingResult& rResult,
     xub_StrLen /*nBeginGrammarCheck*/, const ModelToViewHelper &rConversionMap )
 {

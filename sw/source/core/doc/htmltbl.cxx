@@ -864,7 +864,6 @@ void SwHTMLTableLayout::AutoLayoutPass1()
         pConstr = pConstr->GetNext();
     }
 
-
     if( bFixRelWidths )
     {
         if( HasColTags() )
@@ -1126,7 +1125,6 @@ void SwHTMLTableLayout::AutoLayoutPass2( sal_uInt16 nAbsAvail, sal_uInt16 nRelAv
             nRelAvail -= (nRelLeftFill + nRelRightFill);
     }
 
-
     // Step 2: Calculate the absolute table width.
     sal_uInt16 nAbsTabWidth = 0;
     bUseRelWidth = false;
@@ -1181,7 +1179,6 @@ void SwHTMLTableLayout::AutoLayoutPass2( sal_uInt16 nAbsAvail, sal_uInt16 nRelAv
     // Catch for the two asserts above (we never know!)
     if( (!IsTopTable() || nRelAvail>0) && nAbsTabWidth>nAbsAvail )
         nAbsTabWidth = nAbsAvail;
-
 
     // Step 3: Identify the column width and, if applicable, the absolute
     // and relative table widths.

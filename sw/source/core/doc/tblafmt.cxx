@@ -391,7 +391,6 @@ SwBoxAutoFmt& SwBoxAutoFmt::operator=( const SwBoxAutoFmt& rNew )
     return *this;
 }
 
-
 #define READ( aItem, aItemType, nVers )\
     pNew = aItem.Create(rStream, nVers ); \
     aItem = *(aItemType*)pNew; \

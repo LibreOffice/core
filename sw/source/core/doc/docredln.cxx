@@ -262,11 +262,9 @@ bool CheckPosition( const SwPosition* pStt, const SwPosition* pEnd )
 #endif
 
 /*
-
 Text means Text not "polluted" by Redlines.
 
 Behaviour of Insert-Redline:
-
     - in the Text                       - insert Redline Object
     - in InsertRedline (own)            - ignore, existing is extended
     - in InsertRedline (others)         - split up InsertRedline and
@@ -287,7 +285,6 @@ Behaviour of Delete-Redline:
                                           other Insert is overlapped by
                                           the Delete
 */
-
 bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
 {
     bool bError = true;
@@ -3807,7 +3804,6 @@ String SwRedline::GetDescr(sal_uInt16 nPos)
 
     return aResult;
 }
-
 
 bool SwDoc::IsInRedlines(const SwNode & rNode) const
 {

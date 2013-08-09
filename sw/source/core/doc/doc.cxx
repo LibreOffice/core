@@ -2193,7 +2193,6 @@ bool SwDoc::RemoveInvisibleContent()
                 // 1. removing the paragraph would result in an empty section or
                 // 2. if the paragraph is the last paragraph in the section and
                 //    there is no paragraph in front of the paragraph:
-
                 if ( ( 2 == pTxtNd->EndOfSectionIndex() - pTxtNd->StartOfSectionIndex() ) ||
                      ( 1 == pTxtNd->EndOfSectionIndex() - pTxtNd->GetIndex() &&
                        !GetNodes()[ pTxtNd->GetIndex() - 1 ]->GetTxtNode() ) )

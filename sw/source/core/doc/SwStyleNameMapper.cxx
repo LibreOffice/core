@@ -21,6 +21,7 @@
 #include <tools/resmgr.hxx>
 #include <poolfmt.hxx>
 #include <rcid.hrc>
+
 #ifdef _NEED_TO_DEBUG_MAPPING
 #include <stdlib.h>
 #endif
@@ -848,6 +849,7 @@ SwStyleNameMapper::GetProgName(sal_uInt16 const nId, const OUString& rName)
 {
     return getNameFromId(nId, rName, true);
 }
+
 // This gets the PoolId from the UI Name
 sal_uInt16 SwStyleNameMapper::GetPoolIdFromUIName(
         const OUString& rName, SwGetPoolIdFromName const eFlags)

@@ -1166,7 +1166,6 @@ SwFmt* SwDoc::GetFmtFromPool( sal_uInt16 nId )
         }
         break;
 
-
     case RES_POOLCHR_BUL_LEVEL:             // Bullet character
         {
             const Font& rBulletFont = numfunc::GetDefBulletFont();
