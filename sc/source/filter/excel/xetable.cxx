@@ -207,28 +207,29 @@ XclExpShrfmlaBuffer::XclExpShrfmlaBuffer( const XclExpRoot& rRoot ) :
 }
 
 XclExpShrfmlaRef XclExpShrfmlaBuffer::CreateOrExtendShrfmla(
-        const ScTokenArray& rScTokArr, const ScAddress& rScPos )
+    const ScFormulaCell& rScCell, const ScAddress& rScPos )
 {
     XclExpShrfmlaRef xRec;
-    if( const ScTokenArray* pShrdScTokArr = XclTokenArrayHelper::GetSharedFormula( GetRoot(), rScTokArr ) )
+    const ScTokenArray* pShrdScTokArr = rScCell.GetSharedCode();
+    if (!pShrdScTokArr)
+        // This formula cell is not shared formula cell.
+        return xRec;
+
+    XclExpShrfmlaMap::iterator aIt = maRecMap.find( pShrdScTokArr );
+    if( aIt == maRecMap.end() )
     {
-        XclExpShrfmlaMap::iterator aIt = maRecMap.find( pShrdScTokArr );
-        if( aIt == maRecMap.end() )
-        {
-            // create a new record
-            XclTokenArrayRef xTokArr = GetFormulaCompiler().CreateFormula( EXC_FMLATYPE_SHARED, *pShrdScTokArr, &rScPos );
-            xRec.reset( new XclExpShrfmla( xTokArr, rScPos ) );
-            maRecMap[ pShrdScTokArr ] = xRec;
-        }
-        else
-        {
-            // extend existing record
-            OSL_ENSURE( aIt->second, "XclExpShrfmlaBuffer::CreateOrExtendShrfmla - missing record" );
-            xRec = aIt->second;
-            xRec->ExtendRange( rScPos );
-        }
+        // create a new record
+        XclTokenArrayRef xTokArr = GetFormulaCompiler().CreateFormula( EXC_FMLATYPE_SHARED, *pShrdScTokArr, &rScPos );
+        xRec.reset( new XclExpShrfmla( xTokArr, rScPos ) );
+        maRecMap[ pShrdScTokArr ] = xRec;
     }
-    return xRec;
+    else
+    {
+        // extend existing record
+        OSL_ENSURE( aIt->second, "XclExpShrfmlaBuffer::CreateOrExtendShrfmla - missing record" );
+        xRec = aIt->second;
+        xRec->ExtendRange( rScPos );
+    }
 }
 
 // Multiple operations ========================================================
@@ -851,7 +852,7 @@ XclExpFormulaCell::XclExpFormulaCell(
 
     // no matrix found - try to create shared formula
     if( !mxAddRec )
-        mxAddRec = rShrfmlaBfr.CreateOrExtendShrfmla( rScTokArr, aScPos );
+        mxAddRec = rShrfmlaBfr.CreateOrExtendShrfmla(mrScFmlaCell, aScPos);
 
     // no shared formula found - create a simple cell formula
     if( !mxAddRec )

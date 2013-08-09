@@ -189,8 +189,7 @@ public:
             function updates its cell range to include the passed cell position,
             if there is a SHRFMLA record for the passed token array; otherwise
             this function creates and returns a new SHRFMLA record. */
-    XclExpShrfmlaRef    CreateOrExtendShrfmla(
-                            const ScTokenArray& rScTokArr, const ScAddress& rScPos );
+    XclExpShrfmlaRef CreateOrExtendShrfmla( const ScFormulaCell& rScCell, const ScAddress& rScPos );
 
 private:
     typedef ::std::map< const ScTokenArray*, XclExpShrfmlaRef > XclExpShrfmlaMap;

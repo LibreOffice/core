@@ -763,13 +763,6 @@ void XclTokenArrayHelper::ConvertStringToList( ScTokenArray& rScTokArr, sal_Unic
     }
 }
 
-// shared formulas ------------------------------------------------------------
-
-const ScTokenArray* XclTokenArrayHelper::GetSharedFormula( const XclRoot& /*rRoot*/, const ScTokenArray& /*rScTokArr*/ )
-{
-    return NULL;
-}
-
 // multiple operations --------------------------------------------------------
 
 namespace {

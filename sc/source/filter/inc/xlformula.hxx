@@ -523,14 +523,6 @@ public:
         @param bTrimLeadingSpaces  true = remove leading spaces from each token. */
     static void         ConvertStringToList( ScTokenArray& rScTokArr, sal_Unicode cStringSep, bool bTrimLeadingSpaces );
 
-    // shared formulas --------------------------------------------------------
-
-    /** Tries to extract the definition of a shared formula from the passed token array.
-        @descr  Shared formulas are stored as hidden defined names in Calc. This
-        function looks if the passed token array consists of the reference to
-        such a hidden defined name and returns its definition on success. */
-    static const ScTokenArray* GetSharedFormula( const XclRoot& rRoot, const ScTokenArray& rScTokArr );
-
     // multiple operations ----------------------------------------------------
 
     /** Parses the passed formula and tries to extract references of a multiple operation.
