@@ -33,7 +33,7 @@
 #include <poolfmt.hxx>
 #include <ftninfo.hxx>
 
-/*********************** SwFtnInfo ***************************/
+/*********************** SwEndNoteInfo ***************************/
 
 SwEndNoteInfo& SwEndNoteInfo::operator=(const SwEndNoteInfo& rInfo)
 {
@@ -208,6 +208,8 @@ void SwEndNoteInfo::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     else
         CheckRegistration( pOld, pNew );
 }
+
+/*********************** SwFtnInfo ***************************/
 
 SwFtnInfo& SwFtnInfo::operator=(const SwFtnInfo& rInfo)
 {

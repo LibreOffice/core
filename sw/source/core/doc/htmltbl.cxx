@@ -212,13 +212,13 @@ SwHTMLTableLayout::~SwHTMLTableLayout()
     delete[] aCells;
 }
 
-// The border width are calculated like in Netscape:
-// Outer border: BORDER + CELLSPACING + CELLPADDING
-// Inner border: CELLSPACING + CELLPADDING
-// However, we respect the border width in SW if bSwBorders is set,
-// so that we don't wrap wrongly.
-// We also need to respect the distance to the content. Even if
-// only the opposite side has a border.
+/// The border widths are calculated like in Netscape:
+/// Outer border: BORDER + CELLSPACING + CELLPADDING
+/// Inner border: CELLSPACING + CELLPADDING
+/// However, we respect the border widths in SW if bSwBorders is set,
+/// so that we don't wrap wrongly.
+/// We also need to respect the distance to the content. Even if
+/// only the opposite side has a border.
 sal_uInt16 SwHTMLTableLayout::GetLeftCellSpace( sal_uInt16 nCol, sal_uInt16 nColSpan,
                                             sal_Bool bSwBorders ) const
 {

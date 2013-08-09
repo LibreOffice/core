@@ -663,7 +663,7 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
     return *pHash;
 }
 
-// This gets the UI Name from the programmatic name
+// This gets the UI name from the programmatic name
 const OUString& SwStyleNameMapper::GetUIName(const OUString& rName,
                                              SwGetPoolIdFromName const eFlags)
 {
@@ -671,7 +671,7 @@ const OUString& SwStyleNameMapper::GetUIName(const OUString& rName,
     return nId != USHRT_MAX ? GetUIName( nId, rName ) : rName;
 }
 
-// Get the programmatic Name from the UI name
+// Get the programmatic name from the UI name
 const OUString& SwStyleNameMapper::GetProgName(
         const OUString& rName, SwGetPoolIdFromName const eFlags)
 {
@@ -823,26 +823,26 @@ void SwStyleNameMapper::fillNameFromId(
     rFillName = getNameFromId(nId, rFillName, bProgName);
 }
 
-// Get the UI Name from the pool ID
+// Get the UI name from the pool ID
 void SwStyleNameMapper::FillUIName(sal_uInt16 const nId, OUString& rFillName)
 {
     fillNameFromId(nId, rFillName, false);
 }
 
-// Get the UI Name from the pool ID
+// Get the UI name from the pool ID
 const OUString& SwStyleNameMapper::GetUIName(
         sal_uInt16 const nId, const OUString& rName)
 {
     return getNameFromId(nId, rName, false);
 }
 
-// Get the programmatic Name from the pool ID
+// Get the programmatic name from the pool ID
 void SwStyleNameMapper::FillProgName(sal_uInt16 nId, OUString& rFillName)
 {
     fillNameFromId(nId, rFillName, true);
 }
 
-// Get the programmatic Name from the pool ID
+// Get the programmatic name from the pool ID
 const OUString&
 SwStyleNameMapper::GetProgName(sal_uInt16 const nId, const OUString& rName)
 {
