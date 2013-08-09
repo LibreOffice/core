@@ -300,9 +300,7 @@ OUString Model::getNodeDisplayName( const XNode_t& xNode,
             OUString sContent = xNode->getNodeValue();
             if( bDetail || ! lcl_isWhitespace( sContent ) )
             {
-                aBuffer.append( sal_Unicode('"') );
-                aBuffer.append( Convert::collapseWhitespace( sContent ) );
-                aBuffer.append( sal_Unicode('"') );
+                aBuffer = aBuffer + "\"" + Convert::collapseWhitespace( sContent ) + "\"";
             }
         }
         break;
@@ -360,18 +358,15 @@ OUString Model::getBindingName( const XPropertySet_t& xBinding,
     OUString sExpression;
     xBinding->getPropertyValue( "BindingExpression" ) >>= sExpression;
 
-    OUStringBuffer aBuffer;
+    OUString sRet;
     if( !sID.isEmpty() )
     {
-        aBuffer.append( sID );
-        aBuffer.append( " (" );
-        aBuffer.append( sExpression );
-        aBuffer.append( ")" );
+        sRet = sID + " (" + sExpression + ") ";
     }
     else
-        aBuffer.append( sExpression );
+        sRet = sExpression;
 
-    return aBuffer.makeStringAndClear();
+    return sRet;
 }
 
 OUString Model::getSubmissionName( const XPropertySet_t& xSubmission,
@@ -766,18 +761,12 @@ static OUString lcl_serializeForDisplay( const Reference< XAttr >& _rxAttrNode )
     OSL_ENSURE( _rxAttrNode.is(), "lcl_serializeForDisplay( attr ): invalid argument!" );
     if ( _rxAttrNode.is() )
     {
-        OUStringBuffer aBuffer;
-        aBuffer.append( _rxAttrNode->getName() );
-        aBuffer.appendAscii( "=" );
         OUString sValue = _rxAttrNode->getValue();
         sal_Unicode nQuote = '"';
         if ( sValue.indexOf( nQuote ) >= 0 )
             nQuote = '\'';
-        aBuffer.append( nQuote );
-        aBuffer.append( sValue );
-        aBuffer.append( nQuote );
-        aBuffer.append( (sal_Unicode)' ' );
-        sResult = aBuffer.makeStringAndClear();
+
+        sResult = _rxAttrNode->getName() + "=" + OUString(nQuote) + sValue + OUString(nQuote) + " ";
     }
     return sResult;
 }
@@ -884,9 +873,7 @@ static OUString lcl_serializeForDisplay( const Reference<XXPathObject>& xResult 
         break;
 
     case XPathObjectType_XPATH_STRING:
-        aBuffer.append( sal_Unicode('"') );
-        aBuffer.append( xResult->getString() );
-        aBuffer.append( sal_Unicode('"') );
+        aBuffer = aBuffer + "\"" + xResult->getString() + "\"";
         break;
 
     case XPathObjectType_XPATH_NODESET:

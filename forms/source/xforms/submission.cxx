@@ -478,13 +478,8 @@ sal_Int64 SAL_CALL Submission::getSomething(
 
 static OUString lcl_message( const OUString& rID, const OUString& rText )
 {
-    OUStringBuffer aMessage;
-    aMessage.append( "XForms submission '" );
-    aMessage.append( rID );
-    aMessage.append( "' failed" );
-    aMessage.append( rText );
-    aMessage.append( "." );
-    return aMessage.makeStringAndClear();
+    OUString aMessage = "XForms submission '" + rID + "' failed" + rText + ".";
+    return aMessage;
 }
 
 void SAL_CALL Submission::submitWithInteraction(
