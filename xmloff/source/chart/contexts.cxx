@@ -31,8 +31,6 @@
 using namespace com::sun::star;
 using namespace ::xmloff::token;
 
-// ==================================================
-
 class SchXMLBodyContext_Impl : public SvXMLImportContext
 {
 private:
@@ -70,8 +68,6 @@ SvXMLImportContext *SchXMLBodyContext_Impl::CreateChildContext(
     return new SchXMLBodyContext( mrImportHelper, GetImport(), nPrefix,
                                   rLocalName );
 }
-
-// ==================================================
 
 SchXMLDocContext::SchXMLDocContext( SchXMLImportHelper& rImpHelper,
                                     SvXMLImport& rImport,
@@ -134,8 +130,6 @@ SvXMLImportContext* SchXMLDocContext::CreateChildContext(
     return pContext;
 }
 
-// ==================================================
-
 SchXMLFlatDocContext_Impl::SchXMLFlatDocContext_Impl(
         SchXMLImportHelper& i_rImpHelper,
         SchXMLImport& i_rImport,
@@ -149,7 +143,6 @@ SchXMLFlatDocContext_Impl::SchXMLFlatDocContext_Impl(
 }
 
 SchXMLFlatDocContext_Impl::~SchXMLFlatDocContext_Impl() { }
-
 
 SvXMLImportContext *SchXMLFlatDocContext_Impl::CreateChildContext(
     sal_uInt16 i_nPrefix, const OUString& i_rLocalName,
@@ -166,8 +159,6 @@ SvXMLImportContext *SchXMLFlatDocContext_Impl::CreateChildContext(
                     i_nPrefix, i_rLocalName, i_xAttrList );
     }
 }
-
-// ----------------------------------------
 
 SchXMLBodyContext::SchXMLBodyContext( SchXMLImportHelper& rImpHelper,
                                       SvXMLImport& rImport,
@@ -216,6 +207,5 @@ SvXMLImportContext* SchXMLBodyContext::CreateChildContext(
 
     return pContext;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

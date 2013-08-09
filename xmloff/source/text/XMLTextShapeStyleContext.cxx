@@ -31,7 +31,6 @@
 
 #include <xmloff/XMLTextShapeStyleContext.hxx>
 
-
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
@@ -120,8 +119,6 @@ SvXMLImportContext *XMLTextShapePropertySetContext_Impl::CreateChildContext(
 
     return pContext;
 }
-
-//-----------------------------------------------------------------------------
 
 void XMLTextShapeStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
                                         const OUString& rLocalName,
@@ -229,7 +226,6 @@ void XMLTextShapeStyleContext::CreateAndInsert( sal_Bool bOverwrite )
         xEventContext = 0;
     }
 }
-
 
 void XMLTextShapeStyleContext::Finish( sal_Bool bOverwrite )
 {

@@ -36,16 +36,12 @@
 #include <comphelper/stl_types.hxx>
 
 class XMLTextStyleContext;
-//.........................................................................
 namespace xmloff
 {
-//.........................................................................
 
     class OFormLayerXMLImport_Impl;
 
-    //=====================================================================
     //= OElementNameMap
-    //=====================================================================
     const OControlElement::ElementType& operator ++(OControlElement::ElementType& _e);
 
     /** helper class which allows fast translation of xml tag names into element types.
@@ -63,9 +59,7 @@ namespace xmloff
         static ElementType getElementType(const OUString& _rName);
     };
 
-    //=====================================================================
     //= OElementImport
-    //=====================================================================
     /** implements common behaviour for importing forms, controls and columns
     */
     class OElementImport
@@ -176,9 +170,7 @@ namespace xmloff
         virtual OUString determineDefaultServiceName() const;
     };
 
-    //=====================================================================
     //= OControlImport
-    //=====================================================================
     /** helper class for importing the description of a single control
     */
     class OControlImport
@@ -283,9 +275,7 @@ namespace xmloff
     // we should have dedicated attribute handlers
     // The rest of xmloff implements it this way - why don't we do, too?
 
-    //=====================================================================
     //= OImagePositionImport
-    //=====================================================================
     class OImagePositionImport : public OControlImport
     {
         sal_Int16   m_nImagePosition;
@@ -311,9 +301,7 @@ namespace xmloff
        );
     };
 
-    //=====================================================================
     //= OReferredControlImport
-    //=====================================================================
     class OReferredControlImport : public OControlImport
     {
     protected:
@@ -336,9 +324,7 @@ namespace xmloff
             const OUString& _rValue);
     };
 
-    //=====================================================================
     //= OPasswordImport
-    //=====================================================================
     class OPasswordImport : public OControlImport
     {
     public:
@@ -354,9 +340,7 @@ namespace xmloff
             const OUString& _rValue);
     };
 
-    //=====================================================================
     //= ORadioImport
-    //=====================================================================
     class ORadioImport : public OImagePositionImport
     {
     public:
@@ -373,9 +357,7 @@ namespace xmloff
             const OUString& _rValue);
     };
 
-    //=====================================================================
     //= OURLReferenceImport
-    //=====================================================================
     /** a specialized version of the <type>OControlImport</type> class, which is able
         to handle attributes which denote URLs (and stored relative)
     */
@@ -395,9 +377,7 @@ namespace xmloff
             const OUString& _rValue);
     };
 
-    //=====================================================================
     //= OButtonImport
-    //=====================================================================
     /** A specialized version of the <type>OControlImport</type> class, which handles
         the target frame for image and command buttons
     */
@@ -416,9 +396,7 @@ namespace xmloff
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList);
     };
 
-    //=====================================================================
     //= OValueRangeImport
-    //=====================================================================
     /** A specialized version of the <type>OControlImport</type> class, which imports
         the value-range elements
     */
@@ -445,9 +423,7 @@ namespace xmloff
             const OUString& _rValue );
     };
 
-    //=====================================================================
     //= OTextLikeImport
-    //=====================================================================
     /** A specialized version of the <type>OControlImport</type> class, which handles
         text like controls which have the convert-empty-to-null attribute</p>
     */
@@ -478,9 +454,7 @@ namespace xmloff
         void    removeRedundantCurrentValue();
     };
 
-    //=====================================================================
     //= OListAndComboImport
-    //=====================================================================
     /** A specialized version of the <type>OControlImport</type> class, which handles
         attributes / sub elements which are special to list and combo boxes
     */
@@ -545,9 +519,7 @@ namespace xmloff
     };
     SV_DECL_IMPL_REF(OListAndComboImport);
 
-    //=====================================================================
     //= OListOptionImport
-    //=====================================================================
     /** helper class for importing a single &lt;form:option&gt; element.
     */
     class OListOptionImport
@@ -563,9 +535,7 @@ namespace xmloff
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList);
     };
 
-    //=====================================================================
     //= OComboItemImport
-    //=====================================================================
     /** helper class for importing a single &lt;form:item&gt; element.
     */
     class OComboItemImport
@@ -583,9 +553,7 @@ namespace xmloff
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList);
     };
 
-    //=====================================================================
     //= OContainerImport
-    //=====================================================================
     // BASE must be a derivee of OElementImport
     template <class BASE>
     class OContainerImport
@@ -622,9 +590,7 @@ namespace xmloff
             sal_uInt16 _nPrefix, const OUString& _rLocalName) = 0;
     };
 
-    //=====================================================================
     //= OColumnImport
-    //=====================================================================
     /** helper class importing a single grid column (without the &lt;form:column&gt; element wrapping
         the column).
 
@@ -648,9 +614,7 @@ namespace xmloff
                         createElement();
     };
 
-    //=====================================================================
     //= OColumnWrapperImport
-    //=====================================================================
     class OColumnWrapperImport : public SvXMLImportContext
     {
     protected:
@@ -677,9 +641,7 @@ namespace xmloff
             OControlElement::ElementType _eType);
     };
 
-    //=====================================================================
     //= OGridImport
-    //=====================================================================
     typedef OContainerImport< OControlImport >  OGridImport_Base;
     /** helper class importing a single &lt;form:grid&gt; element
     */
@@ -697,9 +659,7 @@ namespace xmloff
             sal_uInt16 _nPrefix, const OUString& _rLocalName);
     };
 
-    //=====================================================================
     //= OFormImport
-    //=====================================================================
     typedef OContainerImport< OElementImport >  OFormImport_Base;
     /** helper class importing a single &lt;form:form&gt; element
     */
@@ -733,13 +693,10 @@ namespace xmloff
                 sal_uInt16 _nPrefix, const OUString& _rLocalName,
                 OControlElement::ElementType _eType );
 
-
         void implTranslateStringListProperty(const OUString& _rPropertyName, const OUString& _rValue);
     };
 
-    //=====================================================================
     //= OXMLDataSourceImport
-    //=====================================================================
     class OXMLDataSourceImport : public SvXMLImportContext
     {
     public:
@@ -754,9 +711,7 @@ namespace xmloff
 #include "elementimport_impl.hxx"
 #undef _INCLUDING_FROM_ELEMENTIMPORT_HXX_
 
-//.........................................................................
 }   // namespace xmloff
-//.........................................................................
 
 #endif // _XMLOFF_FORMS_ELEMENTIMPORT_HXX_
 

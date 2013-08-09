@@ -25,7 +25,6 @@
 #include <com/sun/star/awt/FontStrikeout.hpp>
 #include <com/sun/star/uno/Any.hxx>
 
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::awt;
 using namespace ::xmloff::token;
@@ -72,10 +71,7 @@ SvXMLEnumMapEntry pXML_CrossedoutWidth_Enum[] =
     { XML_TOKEN_INVALID,                0 }
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
 // class XMLCrossedOutTypePropHdl
-//
 
 XMLCrossedOutTypePropHdl::~XMLCrossedOutTypePropHdl()
 {
@@ -150,10 +146,7 @@ sal_Bool XMLCrossedOutTypePropHdl::exportXML( OUString& rStrExpValue, const uno:
     return bRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
 // class XMLCrossedOutStylePropHdl
-//
 
 XMLCrossedOutStylePropHdl::~XMLCrossedOutStylePropHdl()
 {
@@ -201,10 +194,7 @@ sal_Bool XMLCrossedOutStylePropHdl::exportXML( OUString& rStrExpValue, const uno
     return bRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
 // class XMLCrossedOutWidthPropHdl
-//
 
 XMLCrossedOutWidthPropHdl::~XMLCrossedOutWidthPropHdl()
 {
@@ -273,10 +263,7 @@ sal_Bool XMLCrossedOutWidthPropHdl::exportXML( OUString& rStrExpValue, const uno
     return bRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
 // class XMLCrossedOutTextPropHdl
-//
 
 XMLCrossedOutTextPropHdl::~XMLCrossedOutTextPropHdl()
 {

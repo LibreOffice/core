@@ -30,13 +30,11 @@ namespace com { namespace sun { namespace star { namespace xml { namespace sax {
         class XAttributeList;
 }}}}}
 
-/* ========================================
-
+/*
    These contexts are only nedded by
    SchXMLImport not by the SchXMLImportHelper
    that is also used by other applications
-
-   ======================================== */
+*/
 
 class SchXMLDocContext : public virtual SvXMLImportContext
 {
@@ -59,8 +57,6 @@ public:
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
 };
 
-// ========================================
-
 // context for flat file xml format
 class SchXMLFlatDocContext_Impl
     : public SchXMLDocContext, public SvXMLMetaDocumentContext
@@ -78,8 +74,6 @@ public:
         sal_uInt16 i_nPrefix, const OUString& i_rLocalName,
         const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& i_xAttrList);
 };
-
-// ========================================
 
 class SchXMLBodyContext : public SvXMLImportContext
 {
@@ -100,8 +94,6 @@ public:
         const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
 };
-
-// ========================================
 
 #endif  // _SCH_XML_CONTEXTS_HXX_
 

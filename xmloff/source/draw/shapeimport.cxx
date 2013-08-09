@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <tools/debug.hxx>
 
 #include <com/sun/star/text/PositionLayoutDir.hpp>
@@ -43,12 +42,9 @@
 #include <map>
 #include <vector>
 
-
 using namespace ::std;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
-
-//////////////////////////////////////////////////////////////////////////////
 
 struct ltint32
 {
@@ -110,8 +106,6 @@ struct XMLShapeImportHelperImpl
     // stores the capability of the current model to create presentation shapes
     sal_Bool                    mbIsPresentationShapesSupported;
 };
-
-//////////////////////////////////////////////////////////////////////////////
 
 XMLShapeImportHelper::XMLShapeImportHelper(
         SvXMLImport& rImporter,
@@ -183,8 +177,6 @@ XMLShapeImportHelper::XMLShapeImportHelper(
     mpImpl->mbIsPresentationShapesSupported = xInfo.is() && xInfo->supportsService( aSName );
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 XMLShapeImportHelper::~XMLShapeImportHelper()
 {
     DBG_ASSERT( mpImpl->maConnections.empty(), "XMLShapeImportHelper::restoreConnections() was not called!" );
@@ -238,10 +230,6 @@ XMLShapeImportHelper::~XMLShapeImportHelper()
 
     delete mpImpl;
 }
-
-//////////////////////////////////////////////////////////////////////////////
-
-
 
 const SvXMLTokenMap& XMLShapeImportHelper::GetGroupShapeElemTokenMap()
 {
@@ -306,9 +294,6 @@ const SvXMLTokenMap& XMLShapeImportHelper::GetFrameShapeElemTokenMap()
     return *mpFrameShapeElemTokenMap;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
-
 const SvXMLTokenMap& XMLShapeImportHelper::Get3DSceneShapeElemTokenMap()
 {
     if(!mp3DSceneShapeElemTokenMap)
@@ -329,9 +314,6 @@ const SvXMLTokenMap& XMLShapeImportHelper::Get3DSceneShapeElemTokenMap()
     return *mp3DSceneShapeElemTokenMap;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
-
 const SvXMLTokenMap& XMLShapeImportHelper::Get3DObjectAttrTokenMap()
 {
     if(!mp3DObjectAttrTokenMap)
@@ -348,9 +330,6 @@ const SvXMLTokenMap& XMLShapeImportHelper::Get3DObjectAttrTokenMap()
 
     return *mp3DObjectAttrTokenMap;
 }
-
-//////////////////////////////////////////////////////////////////////////////
-
 
 const SvXMLTokenMap& XMLShapeImportHelper::Get3DPolygonBasedAttrTokenMap()
 {
@@ -369,9 +348,6 @@ const SvXMLTokenMap& XMLShapeImportHelper::Get3DPolygonBasedAttrTokenMap()
     return *mp3DPolygonBasedAttrTokenMap;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
-
 const SvXMLTokenMap& XMLShapeImportHelper::Get3DCubeObjectAttrTokenMap()
 {
     if(!mp3DCubeObjectAttrTokenMap)
@@ -389,9 +365,6 @@ const SvXMLTokenMap& XMLShapeImportHelper::Get3DCubeObjectAttrTokenMap()
     return *mp3DCubeObjectAttrTokenMap;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
-
 const SvXMLTokenMap& XMLShapeImportHelper::Get3DSphereObjectAttrTokenMap()
 {
     if(!mp3DSphereObjectAttrTokenMap)
@@ -408,8 +381,6 @@ const SvXMLTokenMap& XMLShapeImportHelper::Get3DSphereObjectAttrTokenMap()
 
     return *mp3DSphereObjectAttrTokenMap;
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 const SvXMLTokenMap& XMLShapeImportHelper::Get3DLightAttrTokenMap()
 {
@@ -429,9 +400,6 @@ const SvXMLTokenMap& XMLShapeImportHelper::Get3DLightAttrTokenMap()
 
     return *mp3DLightAttrTokenMap;
 }
-
-//////////////////////////////////////////////////////////////////////////////
-
 
 SvXMLShapeContext* XMLShapeImportHelper::Create3DSceneChildContext(
     SvXMLImport& rImport,
@@ -495,23 +463,17 @@ SvXMLShapeContext* XMLShapeImportHelper::Create3DSceneChildContext(
     return pContext;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 void XMLShapeImportHelper::SetStylesContext(SvXMLStylesContext* pNew)
 {
     mpStylesContext = pNew;
     mpStylesContext->AddRef();
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 void XMLShapeImportHelper::SetAutoStylesContext(SvXMLStylesContext* pNew)
 {
     mpAutoStylesContext = pNew;
     mpAutoStylesContext->AddRef();
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 SvXMLShapeContext* XMLShapeImportHelper::CreateGroupChildContext(
     SvXMLImport& rImport,
@@ -663,7 +625,6 @@ SvXMLShapeContext* XMLShapeImportHelper::CreateFrameChildContext(
         pAttrList->AppendAttributeList( rFrameAttrList );
     uno::Reference < xml::sax::XAttributeList > xAttrList = pAttrList;
 
-
     switch(rTokenMap.Get(p_nPrefix, rLocalName))
     {
         case XML_TOK_FRAME_TEXT_BOX:
@@ -748,7 +709,6 @@ SvXMLImportContext *XMLShapeImportHelper::CreateFrameChildContext(
 
     return pContext;
 }
-
 
 /** this function is called whenever the implementation classes like to add this new
     shape to the given XShapes.
@@ -903,7 +863,6 @@ void XMLShapeImportHelper::popGroupAndSort()
 
             nCount -= rZList.size();
             nCount -= rUnsortedList.size();
-
 
             if( nCount > 0 )
             {

@@ -132,13 +132,10 @@ void XMLFormPropValueTContext_Impl::Characters( const OUString& rChars )
     m_aCharacters += rChars;
 }
 
-
 sal_Bool XMLFormPropValueTContext_Impl::IsPersistent() const
 {
     return m_bPersistent;
 }
-
-//------------------------------------------------------------------------------
 
 TYPEINIT1( XMLFormPropOOoTransformerContext, XMLTransformerContext );
 

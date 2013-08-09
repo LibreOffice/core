@@ -21,8 +21,6 @@
 
 #include "SchXMLImport.hxx"
 
-// ----------------------------------------
-
 class SchXMLLegendContext : public SvXMLImportContext
 {
 public:

@@ -29,14 +29,10 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 
-//............................................................................
 namespace xmloff
 {
-//............................................................................
 
-    //========================================================================
     //= FormCellBindingHelper
-    //========================================================================
     /** encapsulates functionality related to binding a form control to a spreadsheet cell
     */
     class FormCellBindingHelper
@@ -264,9 +260,7 @@ namespace xmloff
                         ) const SAL_THROW(());
     };
 
-//............................................................................
 }   // namespace xmloff
-//............................................................................
 
 #endif // XMLOFF_FORMS_FORMCELLBINDING
 

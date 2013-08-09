@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <weighhdl.hxx>
 
 #include <sax/tools/converter.hxx>
@@ -32,7 +31,6 @@
 
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/awt/FontWeight.hpp>
-
 
 using namespace ::com::sun::star::uno;
 using namespace ::xmloff::token;
@@ -59,10 +57,7 @@ FontWeightMapper const aFontWeightMap[] =
     { ::com::sun::star::awt::FontWeight::DONTKNOW,             1000 }
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
 // class XMLFmtBreakBeforePropHdl
-//
 
 XMLFontWeightPropHdl::~XMLFontWeightPropHdl()
 {

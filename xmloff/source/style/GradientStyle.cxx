@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "xmloff/GradientStyle.hxx"
 
 #include <com/sun/star/awt/Gradient.hpp>
@@ -35,8 +34,6 @@
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmlimp.hxx>
-
-
 
 using namespace ::com::sun::star;
 
@@ -58,7 +55,6 @@ enum SvXMLTokenMapAttrs
     XML_TOK_TABSTOP_END=XML_TOK_UNKNOWN
 };
 
-
 SvXMLEnumMapEntry const pXML_GradientStyle_Enum[] =
 {
     { XML_GRADIENTSTYLE_LINEAR,         awt::GradientStyle_LINEAR },
@@ -70,9 +66,7 @@ SvXMLEnumMapEntry const pXML_GradientStyle_Enum[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-//-------------------------------------------------------------
 // Import
-//-------------------------------------------------------------
 XMLGradientStyleImport::XMLGradientStyleImport(
     SvXMLImport& rImp )
     : rImport(rImp)
@@ -218,10 +212,7 @@ sal_Bool XMLGradientStyleImport::importXML(
     return bRet;
 }
 
-
-//-------------------------------------------------------------
 // Export
-//-------------------------------------------------------------
 
 XMLGradientStyleExport::XMLGradientStyleExport(
     SvXMLExport& rExp )
@@ -263,7 +254,6 @@ sal_Bool XMLGradientStyleExport::exportXML(
                 if( bEncoded )
                     rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DISPLAY_NAME,
                                             aStrName );
-
 
                 aStrValue = aOut.makeStringAndClear();
                 rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_STYLE, aStrValue );

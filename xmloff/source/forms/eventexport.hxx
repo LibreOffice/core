@@ -27,14 +27,10 @@
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/stl_types.hxx>
 
-//.........................................................................
 namespace xmloff
 {
-//.........................................................................
 
-    //=====================================================================
     //= OEventDescriptorMapper
-    //=====================================================================
     typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::container::XNameReplace
                                     >   OEventDescriptorMapper_Base;
     /** helper class wrapping different script event representations
@@ -69,10 +65,7 @@ namespace xmloff
         virtual sal_Bool SAL_CALL hasElements(  ) throw(::com::sun::star::uno::RuntimeException);
     };
 
-
-//.........................................................................
 }   // namespace xmloff
-//.........................................................................
 
 #endif // _XMLOFF_FORMS_EVENTEXPORT_HXX_
 

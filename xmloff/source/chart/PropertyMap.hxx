@@ -92,11 +92,9 @@
 #define MAP_SPECIAL_ODF12( a, ns, nm, t, c ) { a, sizeof(a)-1, XML_NAMESPACE_##ns, xmloff::token::nm, t|XML_TYPE_PROP_CHART | MID_FLAG_SPECIAL_ITEM, c, SvtSaveOptions::ODFVER_012 }
 #define MAP_ENTRY_END { 0,0,0,xmloff::token::XML_TOKEN_INVALID,0,0,SvtSaveOptions::ODFVER_010 }
 
-// ---------------------------------------------------------
 // PropertyMap for Chart properties drawing- and
 // textproperties are added later using the chaining
 // mechanism
-// ---------------------------------------------------------
 
 // only create maps once!
 // this define is set in PropertyMaps.cxx
@@ -222,9 +220,7 @@ const XMLPropertyMapEntry aXMLChartPropMap[] =
     MAP_ENTRY_END
 };
 
-// ----------------------------------------
 // maps for enums to XML attributes
-// ----------------------------------------
 
 SvXMLEnumMapEntry aXMLChartAxisLabelPositionEnumMap[] =
 {

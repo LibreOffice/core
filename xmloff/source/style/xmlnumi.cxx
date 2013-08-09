@@ -53,7 +53,6 @@
 
 #include <xmloff/xmlnumi.hxx>
 
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::style;
@@ -64,8 +63,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::frame;
 using namespace ::xmloff::token;
 using namespace ::com::sun::star::io;
-
-// ---------------------------------------------------------------------
 
 class SvxXMLListLevelStyleContext_Impl;
 
@@ -87,8 +84,6 @@ public:
             const Reference< xml::sax::XAttributeList > & xAttrList );
 };
 
-// ---------------------------------------------------------------------
-
 class SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl : public SvXMLImportContext
 {
     SvxXMLListLevelStyleContext_Impl&   rListLevel;
@@ -102,8 +97,6 @@ public:
             SvxXMLListLevelStyleContext_Impl& rLLevel   );
     virtual ~SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl();
 };
-
-// ---------------------------------------------------------------------
 
 enum SvxXMLTextListLevelStyleAttrTokens
 {
@@ -599,8 +592,6 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties(
     return aPropSeq;
 }
 
-// ---------------------------------------------------------------------
-
 enum SvxXMLStyleAttributesAttrTokens
 {
     XML_TOK_STYLE_ATTRIBUTES_ATTR_SPACE_BEFORE,
@@ -935,8 +926,6 @@ SvXMLImportContext* SvxXMLListLevelStyleAttrContext_Impl::CreateChildContext(
     return pContext;
 }
 
-// ---------------------------------------------------------------------
-
 enum SvxXMLStyleAttributesLabelAlignmentAttrTokens
 {
     XML_TOK_STYLE_ATTRIBUTES_ATTR_LABEL_FOLLOWED_BY,
@@ -1017,8 +1006,6 @@ SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl::~SvxXMLListLevelStyleLabelAl
 {
 }
 
-// ---------------------------------------------------------------------
-
 class SvxXMLListStyle_Impl : public std::vector<SvxXMLListLevelStyleContext_Impl *> {};
 
 void SvxXMLListStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
@@ -1035,7 +1022,6 @@ void SvxXMLListStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
         SvXMLStyleContext::SetAttribute( nPrefixKey, rLocalName, rValue );
     }
 }
-
 
 SvxXMLListStyleContext::SvxXMLListStyleContext( SvXMLImport& rImport,
         sal_uInt16 nPrfx,

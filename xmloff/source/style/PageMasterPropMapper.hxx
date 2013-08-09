@@ -22,9 +22,6 @@
 
 #include <xmloff/xmlprmap.hxx>
 
-
-//______________________________________________________________________________
-
 class XMLPageMasterPropSetMapper : public XMLPropertySetMapper
 {
 public:

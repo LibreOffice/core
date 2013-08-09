@@ -89,8 +89,6 @@ typedef ::std::multimap< tSchXMLIndexWithPart,
 
 bool operator < ( const tSchXMLIndexWithPart & rFirst, const tSchXMLIndexWithPart & rSecond );
 
-// ----------------------------------------
-
 struct SchNumericCellRangeAddress
 {
     sal_Int32 nRow1, nRow2;
@@ -107,8 +105,6 @@ struct SchNumericCellRangeAddress
             nCol1 = aOther.nCol1; nCol2 = aOther.nCol2;
         }
 };
-
-// ----------------------------------------
 
 enum SchXMLAxisDimension
 {
@@ -128,8 +124,6 @@ struct SchXMLAxis
 
     SchXMLAxis() : eDimension( SCH_XML_AXIS_UNDEF ), nAxisIndex( 0 ), bHasCategories( false ) {}
 };
-
-// ----------------------------------------
 
 struct GlobalSeriesImportInfo
 {

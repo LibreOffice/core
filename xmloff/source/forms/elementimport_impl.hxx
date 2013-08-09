@@ -26,10 +26,7 @@
 // no namespace. Same as above: this file is included from elementimport.hxx only,
 // and this is done inside the namespace
 
-//=========================================================================
 //= OContainerImport
-//=========================================================================
-//-------------------------------------------------------------------------
 template <class BASE>
 inline SvXMLImportContext* OContainerImport< BASE >::CreateChildContext(
     sal_uInt16 _nPrefix, const OUString& _rLocalName,
@@ -50,7 +47,6 @@ inline SvXMLImportContext* OContainerImport< BASE >::CreateChildContext(
     return BASE::CreateChildContext(_nPrefix, _rLocalName, _rxAttrList);
 }
 
-//-------------------------------------------------------------------------
 template <class BASE>
 inline ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
     OContainerImport< BASE >::createElement()
@@ -71,7 +67,6 @@ inline ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
     return xReturn;
 }
 
-//-------------------------------------------------------------------------
 template <class BASE>
 inline void OContainerImport< BASE >::EndElement()
 {
@@ -83,10 +78,7 @@ inline void OContainerImport< BASE >::EndElement()
         ODefaultEventAttacherManager::setEvents(xIndexContainer);
 }
 
-//=========================================================================
 //= OColumnImport
-//=========================================================================
-//-------------------------------------------------------------------------
 template <class BASE>
 OColumnImport< BASE >::OColumnImport(OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const OUString& _rName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxParentContainer,
@@ -97,7 +89,6 @@ OColumnImport< BASE >::OColumnImport(OFormLayerXMLImport_Impl& _rImport, IEventA
     OSL_ENSURE(m_xColumnFactory.is(), "OColumnImport::OColumnImport: invalid parent container (no factory)!");
 }
 
-//-------------------------------------------------------------------------
 // OElementImport overridables
 template <class BASE>
 ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > OColumnImport< BASE >::createElement()

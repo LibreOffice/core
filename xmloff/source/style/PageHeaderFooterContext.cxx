@@ -26,8 +26,6 @@ using namespace com::sun::star;
 using ::xmloff::token::IsXMLToken;
 using ::xmloff::token::XML_HEADER_FOOTER_PROPERTIES;
 
-//------------------------------------------------------------------
-
 PageHeaderFooterContext::PageHeaderFooterContext( SvXMLImport& rImport,
                                       sal_uInt16 nPrfx,
                                       const OUString& rLName,
@@ -68,7 +66,6 @@ SvXMLImportContext *PageHeaderFooterContext::CreateChildContext( sal_uInt16 nPre
                                                 rProperties,
                                                 rMap,  nStartIndex, nEndIndex, aType);
     }
-
 
     if( !pContext )
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );

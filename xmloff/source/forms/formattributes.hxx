@@ -27,10 +27,8 @@
 
 struct SvXMLEnumMapEntry;
 
-//.........................................................................
 namespace xmloff
 {
-//.........................................................................
 
     // flags for common control attributes
     #define CCA_NAME                    0x00000001
@@ -137,9 +135,7 @@ namespace xmloff
         ofaApplyDesignMode
     };
 
-    //=====================================================================
     //= OAttributeMetaData
-    //=====================================================================
     /** allows the translation of attribute ids into strings.
 
         <p>This class does not allow to connect xml attributes to property names or
@@ -221,9 +217,7 @@ namespace xmloff
         static sal_uInt16 getOfficeFormsAttributeNamespace(OfficeFormsAttributes _eAttrib);
     };
 
-    //=====================================================================
     //= OAttribute2Property
-    //=====================================================================
     /** some kind of opposite to the OAttributeMetaData class. Able to translate
         attributes into property names/types
 
@@ -347,9 +341,7 @@ namespace xmloff
             const sal_Char* _pAttributeName, const OUString& _rPropertyName,
             const ::com::sun::star::uno::Type& _rType, const OUString& _rDefaultString);
     };
-//.........................................................................
 }   // namespace xmloff
-//.........................................................................
 
 #endif // _XMLOFF_FORMATTRIBUTES_HXX_
 

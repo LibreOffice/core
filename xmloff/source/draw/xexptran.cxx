@@ -33,15 +33,12 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/tools/unotools.hxx>
 
-
 using namespace ::com::sun::star;
 
-//////////////////////////////////////////////////////////////////////////////
 // Defines
 
 #define BORDER_INTEGERS_ARE_EQUAL       (4)
 
-//////////////////////////////////////////////////////////////////////////////
 // Predeclarations
 
 void Imp_SkipDouble(const OUString& rStr, sal_Int32& rPos, const sal_Int32 nLen);
@@ -58,9 +55,6 @@ void Imp_CalcVectorValues(::basegfx::B2DVector& aVec1, ::basegfx::B2DVector& aVe
     bSameDirection = (nLen3 <= BORDER_INTEGERS_ARE_EQUAL);
 }
 
-
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
 // parsing help functions for simple chars
 void Imp_SkipSpaces(const OUString& rStr, sal_Int32& rPos, const sal_Int32 nLen)
 {
@@ -90,8 +84,6 @@ void Imp_SkipSpacesAndClosingBraces(const OUString& rStr, sal_Int32& rPos, const
         rPos++;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
 // parsing help functions for integer numbers
 
 bool Imp_IsOnNumberChar(const OUString& rStr, const sal_Int32 nPos, bool bSignAllowed = true)
@@ -152,8 +144,6 @@ void Imp_PutNumberCharWithSpace(OUString& rStr, sal_Int32 nValue)
     Imp_PutNumberChar(rStr, nValue);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
 // parsing help functions for double numbers
 
 void Imp_SkipDouble(const OUString& rStr, sal_Int32& rPos, const sal_Int32)
@@ -256,8 +246,6 @@ void Imp_PutDoubleChar(OUString& rStr, const SvXMLUnitConverter& rConv, double f
     rStr += OUString(sStringBuffer.makeStringAndClear());
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
 // base class of all 2D transform objects
 
 struct ImpSdXMLExpTransObj2DBase
@@ -267,7 +255,6 @@ struct ImpSdXMLExpTransObj2DBase
     :   mnType(nType) {}
 };
 
-//////////////////////////////////////////////////////////////////////////////
 // possible object types for 2D
 
 #define IMP_SDXMLEXP_TRANSOBJ2D_ROTATE          0x0000
@@ -277,7 +264,6 @@ struct ImpSdXMLExpTransObj2DBase
 #define IMP_SDXMLEXP_TRANSOBJ2D_SKEWY           0x0004
 #define IMP_SDXMLEXP_TRANSOBJ2D_MATRIX          0x0005
 
-//////////////////////////////////////////////////////////////////////////////
 // classes of objects, different sizes
 
 struct ImpSdXMLExpTransObj2DRotate : public ImpSdXMLExpTransObj2DBase
@@ -317,8 +303,6 @@ struct ImpSdXMLExpTransObj2DMatrix : public ImpSdXMLExpTransObj2DBase
     :   ImpSdXMLExpTransObj2DBase(IMP_SDXMLEXP_TRANSOBJ2D_MATRIX), maMatrix(rNew) {}
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
 // delete all entries in list
 
 void SdXMLImExTransform2D::EmptyList()
@@ -371,7 +355,6 @@ void SdXMLImExTransform2D::EmptyList()
     maList.clear();
 }
 
-//////////////////////////////////////////////////////////////////////////////
 // add members
 
 void SdXMLImExTransform2D::AddRotate(double fNew)
@@ -392,7 +375,6 @@ void SdXMLImExTransform2D::AddSkewX(double fNew)
         maList.push_back(new ImpSdXMLExpTransObj2DSkewX(fNew));
 }
 
-//////////////////////////////////////////////////////////////////////////////
 // gen string for export
 const OUString& SdXMLImExTransform2D::GetExportString(const SvXMLUnitConverter& rConv)
 {
@@ -495,7 +477,6 @@ const OUString& SdXMLImExTransform2D::GetExportString(const SvXMLUnitConverter& 
     return msString;
 }
 
-//////////////////////////////////////////////////////////////////////////////
 // sets new string, parses it and generates entries
 void SdXMLImExTransform2D::SetString(const OUString& rNew, const SvXMLUnitConverter& rConv)
 {
@@ -687,8 +668,6 @@ void SdXMLImExTransform2D::GetFullTransform(::basegfx::B2DHomMatrix& rFullTrans)
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
 // base class of all 3D transform objects
 
 struct ImpSdXMLExpTransObj3DBase
@@ -698,7 +677,6 @@ struct ImpSdXMLExpTransObj3DBase
     :   mnType(nType) {}
 };
 
-//////////////////////////////////////////////////////////////////////////////
 // possible object types for 3D
 
 #define IMP_SDXMLEXP_TRANSOBJ3D_ROTATE_X        0x0000
@@ -708,7 +686,6 @@ struct ImpSdXMLExpTransObj3DBase
 #define IMP_SDXMLEXP_TRANSOBJ3D_TRANSLATE       0x0004
 #define IMP_SDXMLEXP_TRANSOBJ3D_MATRIX          0x0005
 
-//////////////////////////////////////////////////////////////////////////////
 // classes of objects, different sizes
 
 struct ImpSdXMLExpTransObj3DRotateX : public ImpSdXMLExpTransObj3DBase
@@ -748,8 +725,6 @@ struct ImpSdXMLExpTransObj3DMatrix : public ImpSdXMLExpTransObj3DBase
     :   ImpSdXMLExpTransObj3DBase(IMP_SDXMLEXP_TRANSOBJ3D_MATRIX), maMatrix(rNew) {}
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
 // delete all entries in list
 
 void SdXMLImExTransform3D::EmptyList()
@@ -802,7 +777,6 @@ void SdXMLImExTransform3D::EmptyList()
     maList.clear();
 }
 
-//////////////////////////////////////////////////////////////////////////////
 // add members
 
 void SdXMLImExTransform3D::AddMatrix(const ::basegfx::B3DHomMatrix& rNew)
@@ -831,7 +805,6 @@ void SdXMLImExTransform3D::AddHomogenMatrix(const drawing::HomogenMatrix& xHomMa
     AddMatrix(aExportMatrix);
 }
 
-//////////////////////////////////////////////////////////////////////////////
 // gen string for export
 const OUString& SdXMLImExTransform3D::GetExportString(const SvXMLUnitConverter& rConv)
 {
@@ -962,14 +935,12 @@ const OUString& SdXMLImExTransform3D::GetExportString(const SvXMLUnitConverter& 
     return msString;
 }
 
-//////////////////////////////////////////////////////////////////////////////
 // for Import: constructor with string, parses it and generates entries
 SdXMLImExTransform3D::SdXMLImExTransform3D(const OUString& rNew, const SvXMLUnitConverter& rConv)
 {
     SetString(rNew, rConv);
 }
 
-//////////////////////////////////////////////////////////////////////////////
 // sets new string, parses it and generates entries
 void SdXMLImExTransform3D::SetString(const OUString& rNew, const SvXMLUnitConverter& rConv)
 {
@@ -1221,9 +1192,6 @@ void SdXMLImExTransform3D::GetFullTransform(::basegfx::B3DHomMatrix& rFullTrans)
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-
 SdXMLImExViewBox::SdXMLImExViewBox(sal_Int32 nX, sal_Int32 nY, sal_Int32 nW, sal_Int32 nH)
 :   mnX( nX ),
     mnY( nY ),
@@ -1293,9 +1261,6 @@ const OUString& SdXMLImExViewBox::GetExportString()
 
     return msString;
 }
-
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
 
 SdXMLImExPointsElement::SdXMLImExPointsElement(drawing::PointSequence* pPoints,
     const SdXMLImExViewBox& rViewBox,
@@ -1456,9 +1421,6 @@ SdXMLImExPointsElement::SdXMLImExPointsElement(const OUString& rNew,
         }
     }
 }
-
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
 
 SdXMLImExSvgDElement::SdXMLImExSvgDElement(const SdXMLImExViewBox& rViewBox,
                                            const SvXMLExport&      rExport)

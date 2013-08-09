@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <memory>
 
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
@@ -56,8 +55,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
-
-//////////////////////////////////////////////////////////////////////////////
 
 XMLShapeExport::XMLShapeExport(SvXMLExport& rExp,
                                 SvXMLExportPropertyMapper *pExtMapper )
@@ -122,13 +119,9 @@ XMLShapeExport::XMLShapeExport(SvXMLExport& rExp,
     GetShapeTableExport();
 }
 
-///////////////////////////////////////////////////////////////////////
-
 XMLShapeExport::~XMLShapeExport()
 {
 }
-
-///////////////////////////////////////////////////////////////////////
 
 // sj: replacing CustomShapes with standard objects that are also supported in OpenOffice.org format
 uno::Reference< drawing::XShape > XMLShapeExport::checkForCustomShapeReplacement( const uno::Reference< drawing::XShape >& xShape )
@@ -204,9 +197,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
     if ( xCustomShapeReplacement.is() )
         aShapeInfo.xCustomShapeReplacement = xCustomShapeReplacement;
 
-    // -----------------------------
     // first compute the shapes type
-    // -----------------------------
     ImpCalcShapeType(xShape, aShapeInfo.meShapeType);
 
     // #i118485# enabled XmlShapeTypeDrawChartShape and XmlShapeTypeDrawOLE2Shape
@@ -234,9 +225,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
     if ( aShapeInfo.xCustomShapeReplacement.is() )
         xPropSet.clear();
 
-    // ----------------
     // prep text styles
-    // ----------------
     if( xPropSet.is() && bObjSupportsText )
     {
         uno::Reference< text::XText > xText(xShape, uno::UNO_QUERY);
@@ -257,9 +246,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
         }
     }
 
-    // ------------------------------
     // compute the shape parent style
-    // ------------------------------
     if( xPropSet.is() )
     {
         uno::Reference< beans::XPropertySetInfo > xPropertySetInfo( xPropSet->getPropertySetInfo() );
@@ -369,7 +356,6 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
         {
             xPropStates = GetExport().GetTextParagraphExport()->GetParagraphPropertyMapper()->Filter( xPropSet );
 
-            // ----------------------------------------------------------------------
             // yet more additionally, we need to care for the ParaAdjust property
             if ( XmlShapeTypeDrawControlShape == aShapeInfo.meShapeType )
             {
@@ -401,7 +387,6 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
                     }
                 }
             }
-            // ----------------------------------------------------------------------
 
             nCount = 0;
             std::vector< XMLPropertyState >::iterator aIter = xPropStates.begin();
@@ -426,9 +411,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
         }
     }
 
-    // ----------------------------------------
     // prepare animation information if needed
-    // ----------------------------------------
     if( mxAnimationsExporter.is() )
         mxAnimationsExporter->prepare( xShape, mrExport );
 
@@ -471,10 +454,8 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
     maShapeInfos.push_back( aShapeInfo );
     maCurrentInfo = maShapeInfos.begin();
 
-    // -----------------------------------------------------
     // check for shape collections (group shape or 3d scene)
     // and collect contained shapes style infos
-    // -----------------------------------------------------
     const uno::Reference< drawing::XShape >& xCollection = aShapeInfo.xCustomShapeReplacement.is()
                                                 ? aShapeInfo.xCustomShapeReplacement : xShape;
     {
@@ -485,8 +466,6 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
         }
     }
 }
-
-///////////////////////////////////////////////////////////////////////
 
 namespace
 {
@@ -523,7 +502,6 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
     sal_Int32 nZIndex = 0;
     uno::Reference< beans::XPropertySet > xSet( xShape, uno::UNO_QUERY );
 
-
     ::std::auto_ptr< SvXMLElementExport >  mpHyperlinkElement;
 
     // export hyperlinks with <a><shape/></a>. Currently only in draw since draw
@@ -553,7 +531,6 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
         SAL_WARN("xmloff", "XMLShapeExport::exportShape(): exception during hyperlink export");
     }
 
-
     if( xSet.is() )
         xSet->getPropertyValue(msZIndex) >>= nZIndex;
 
@@ -569,11 +546,8 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
 
     const ImplXMLShapeExportInfo& aShapeInfo = aShapeInfoVector[nZIndex];
 
-
 #ifdef DBG_UTIL
-    // ---------------------------------------
     // check if this is the correct ShapesInfo
-    // ---------------------------------------
     uno::Reference< container::XChild > xChild( xShape, uno::UNO_QUERY );
     if( xChild.is() )
     {
@@ -581,9 +555,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
         DBG_ASSERT( xParent.is() && xParent.get() == (*maCurrentShapesIter).first.get(), "XMLShapeExport::exportShape(): Wrong call to XMLShapeExport::seekShapes()" );
     }
 
-    // -----------------------------
     // first compute the shapes type
-    // -----------------------------
     {
         XmlShapeType eShapeType(XmlShapeTypeNotYetSet);
         ImpCalcShapeType(xShape, eShapeType);
@@ -592,9 +564,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
     }
 #endif
 
-    // ----------------------------------------
     // collect animation information if needed
-    // ----------------------------------------
     if( mxAnimationsExporter.is() )
         mxAnimationsExporter->collect( xShape, mrExport );
 
@@ -623,9 +593,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
         }
     }
 
-    // ------------------
     // export style name
-    // ------------------
     if( !aShapeInfo.msStyleName.isEmpty() )
     {
         if(XML_STYLE_FAMILY_SD_GRAPHICS_ID == aShapeInfo.mnFamily)
@@ -634,17 +602,13 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
             mrExport.AddAttribute(XML_NAMESPACE_PRESENTATION, XML_STYLE_NAME, mrExport.EncodeStyleName( aShapeInfo.msStyleName) );
     }
 
-    // ------------------
     // export text style name
-    // ------------------
     if( !aShapeInfo.msTextStyleName.isEmpty() )
     {
         mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_TEXT_STYLE_NAME, aShapeInfo.msTextStyleName );
     }
 
-    // --------------------------
     // export shapes id if needed
-    // --------------------------
     {
         uno::Reference< uno::XInterface > xRef( xShape, uno::UNO_QUERY );
         const OUString& rShapeId = mrExport.getInterfaceToIdentifierMapper().getIdentifier( xRef );
@@ -654,9 +618,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
         }
     }
 
-    // --------------------------
     // export layer information
-    // --------------------------
     if( IsLayerExportEnabled() )
     {
         // check for group or scene shape and not export layer if this is one
@@ -720,9 +682,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
 
     onExport( xShape );
 
-    // --------------------
     // export shape element
-    // --------------------
     switch(aShapeInfo.meShapeType)
     {
         case XmlShapeTypeDrawRectangleShape:
@@ -904,8 +864,6 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
     mrExport.ClearAttrList();   // clears the attributes
 }
 
-///////////////////////////////////////////////////////////////////////
-
 // This method collects all automatic styles for the shapes inside the given XShapes collection
 void XMLShapeExport::collectShapesAutoStyles( const uno::Reference < drawing::XShapes >& xShapes )
 {
@@ -927,8 +885,6 @@ void XMLShapeExport::collectShapesAutoStyles( const uno::Reference < drawing::XS
     maCurrentShapesIter = aOldCurrentShapesIter;
 }
 
-///////////////////////////////////////////////////////////////////////
-
 // This method exports all XShape inside the given XShapes collection
 void XMLShapeExport::exportShapes( const uno::Reference < drawing::XShapes >& xShapes, sal_Int32 nFeatures /* = SEF_DEFAULT */, awt::Point* pRefPoint /* = NULL */ )
 {
@@ -949,8 +905,6 @@ void XMLShapeExport::exportShapes( const uno::Reference < drawing::XShapes >& xS
 
     maCurrentShapesIter = aOldCurrentShapesIter;
 }
-
-///////////////////////////////////////////////////////////////////////
 
 void XMLShapeExport::seekShapes( const uno::Reference< drawing::XShapes >& xShapes ) throw()
 {
@@ -976,8 +930,6 @@ void XMLShapeExport::seekShapes( const uno::Reference< drawing::XShapes >& xShap
         maCurrentShapesIter = maShapesInfos.end();
     }
 }
-
-///////////////////////////////////////////////////////////////////////
 
 void XMLShapeExport::exportAutoStyles()
 {
@@ -1007,8 +959,6 @@ void XMLShapeExport::exportAutoStyles()
         mxShapeTableExport->exportAutoStyles();
 }
 
-///////////////////////////////////////////////////////////////////////
-
 /// returns the export property mapper for external chaining
 SvXMLExportPropertyMapper* XMLShapeExport::CreateShapePropMapper(
     SvXMLExport& rExport )
@@ -1021,8 +971,6 @@ SvXMLExportPropertyMapper* XMLShapeExport::CreateShapePropMapper(
     // chain text attributes
     return pResult;
 }
-
-///////////////////////////////////////////////////////////////////////
 
 void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& xShape,
     XmlShapeType& eShapeType)
@@ -1158,8 +1106,6 @@ void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& x
         }
     }
 }
-
-///////////////////////////////////////////////////////////////////////
 
 extern SvXMLEnumMapEntry aXML_GlueAlignment_EnumMap[];
 extern SvXMLEnumMapEntry aXML_GlueEscapeDirection_EnumMap[];

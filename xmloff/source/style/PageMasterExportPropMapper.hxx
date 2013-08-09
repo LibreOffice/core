@@ -25,8 +25,6 @@
 #include "XMLTextColumnsExport.hxx"
 #include "XMLFootnoteSeparatorExport.hxx"
 
-//______________________________________________________________________________
-
 class XMLPageMasterExportPropMapper : public SvXMLExportPropertyMapper
 {
 protected:

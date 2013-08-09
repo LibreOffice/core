@@ -30,8 +30,6 @@
 
 #include <vector>
 
-//////////////////////////////////////////////////////////////////////////////
-
 class Rectangle;
 
 class ImpXMLEXPPageMasterInfo;
@@ -42,8 +40,6 @@ class XMLPageExportPropertyMapper;
 
 typedef ::std::vector< ImpXMLEXPPageMasterInfo* > ImpXMLEXPPageMasterList;
 typedef ::std::vector< ImpXMLAutoLayoutInfo*    > ImpXMLAutoLayoutInfoList;
-
-//////////////////////////////////////////////////////////////////////////////
 
 enum XmlPlaceholder
 {
@@ -65,8 +61,6 @@ enum XmlPlaceholder
 
 DECLARE_STL_STDKEY_SET( sal_Int32, SdXMLFormatMap );
 
-//////////////////////////////////////////////////////////////////////////////
-
 struct HeaderFooterPageSettingsImpl
 {
     OUString maStrHeaderDeclName;
@@ -80,9 +74,6 @@ struct DateTimeDeclImpl
     sal_Bool mbFixed;
     sal_Int32 mnFormat;
 };
-
-
-//////////////////////////////////////////////////////////////////////////////
 
 class SdXMLExport : public SvXMLExport
 {

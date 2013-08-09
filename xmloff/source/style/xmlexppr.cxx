@@ -39,7 +39,6 @@
 #include <xmloff/PropertySetInfoHash.hxx>
 #include <comphelper/stl_types.hxx>
 
-
 using namespace ::std;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
@@ -78,19 +77,12 @@ static  XMLPropTokens_Impl aPropTokens[MAX_PROP_TYPES] =
     ENTRY(SECTION)
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
 // public methods
-//
 
-///////////////////////////////////////////////////////////////////////////
-//
 // Take all properties of the XPropertySet which are also found in the
 // XMLPropertyMapEntry-array and which are not set to their default-value,
 // if a state is available.
-//
 // After that I call the method 'ContextFilter'.
-//
 
 typedef std::list<XMLPropertyState> XMLPropertyStateList_Impl;
 
@@ -190,8 +182,6 @@ FilterPropertyInfo_Impl::FilterPropertyInfo_Impl(
 
 typedef std::list<FilterPropertyInfo_Impl> FilterPropertyInfoList_Impl;
 
-// ----------------------------------------------------------------------------
-
 class FilterPropertiesInfo_Impl
 {
     sal_uInt32                              nCount;
@@ -213,8 +203,6 @@ public:
             const sal_Bool bDefault = sal_False);
     sal_uInt32 GetPropertyCount() const { return nCount; }
 };
-
-// ----------------------------------------------------------------------------
 
 typedef boost::unordered_map
 <
@@ -242,8 +230,6 @@ FilterPropertiesInfos_Impl::~FilterPropertiesInfos_Impl ()
         ++aIter;
     }
 }
-
-// ----------------------------------------------------------------------------
 
 FilterPropertiesInfo_Impl::FilterPropertiesInfo_Impl() :
     nCount(0),
@@ -554,10 +540,7 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
     aPropStates.FillPropertyStateVector(rPropStates);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
 // ctor/dtor , class SvXMLExportPropertyMapper
-//
 
 SvXMLExportPropertyMapper::SvXMLExportPropertyMapper(
         const UniReference< XMLPropertySetMapper >& rMapper ) :
@@ -601,7 +584,6 @@ void SvXMLExportPropertyMapper::ChainExportMapper(
         xNext->maPropMapper = maPropMapper;
     }
 }
-
 
 vector< XMLPropertyState > SvXMLExportPropertyMapper::_Filter(
         const Reference< XPropertySet > xPropSet,
@@ -725,13 +707,10 @@ void SvXMLExportPropertyMapper::ContextFilter(
         mxNextMapper->ContextFilter( rProperties, rPropSet );
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
 // Compares two Sequences of XMLPropertyState:
 //  1.Number of elements equal ?
 //  2.Index of each element equal ? (So I know whether the propertynames are the same)
 //  3.Value of each element equal ?
-//
 sal_Bool SvXMLExportPropertyMapper::Equals(
         const vector< XMLPropertyState >& aProperties1,
         const vector< XMLPropertyState >& aProperties2 ) const
@@ -776,7 +755,6 @@ sal_Bool SvXMLExportPropertyMapper::Equals(
     return bRet;
 }
 
-
 /** fills the given attribute list with the items in the given set
 void SvXMLExportPropertyMapper::exportXML( SvXMLAttributeList& rAttrList,
         const ::std::vector< XMLPropertyState >& rProperties,
@@ -787,7 +765,6 @@ void SvXMLExportPropertyMapper::exportXML( SvXMLAttributeList& rAttrList,
     _exportXML( rAttrList, rProperties, rUnitConverter, rNamespaceMap,
                 nFlags, 0, -1, -1 );
 }
-
 
 void SvXMLExportPropertyMapper::exportXML( SvXMLAttributeList& rAttrList,
         const ::std::vector< XMLPropertyState >& rProperties,
@@ -876,10 +853,7 @@ void SvXMLExportPropertyMapper::handleElementItem(
                                          pProperties, nIdx );
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
 // protected methods
-//
 
 /** fills the given attribute list with the items in the given set */
 void SvXMLExportPropertyMapper::_exportXML(

@@ -68,7 +68,6 @@
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 
-
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
@@ -81,7 +80,6 @@ using namespace ::xmloff::token;
 #define PMAP(name,prefix,token,type,context) _MAP(name,prefix,token,type|XML_TYPE_PROP_PARAGRAPH,context)
 #define MAP_END() { 0L, 0, 0, XML_EMPTY, 0 ,0, SvtSaveOptions::ODFVER_010}
 
-//////////////////////////////////////////////////////////////////////////////
 // entry list for graphic properties
 
 const XMLPropertyMapEntry aXMLSDProperties[] =
@@ -292,7 +290,6 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     MAP_END()
 };
 
-//////////////////////////////////////////////////////////////////////////////
 // entry list for presentation page properties
 
 const XMLPropertyMapEntry aXMLSDPresPageProps[] =
@@ -365,7 +362,6 @@ const XMLPropertyMapEntry aXMLTableShapeAttributes[] =
     MAP_END()
 };
 
-//////////////////////////////////////////////////////////////////////////////
 // implementation of factory for own graphic properties
 
 SvXMLEnumMapEntry aXML_LineStyle_EnumMap[] =
@@ -500,7 +496,6 @@ SvXMLEnumMapEntry   aXML_BitmapMode_EnumMap[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-//////////////////////////////////////////////////////////////////////////////
 // 3D EnumMaps
 
 SvXMLEnumMapEntry  aXML_NormalsKind_EnumMap[] =
@@ -732,8 +727,6 @@ SvXMLEnumMapEntry const pXML_Caption_Type_Enum[] =
     { XML_TOKEN_INVALID,0 }
 };
 
-//////////////////////////////////////////////////////////////////////////////
-
 class XMLCaptionEscapeRelative : public XMLPropertyHandler
 {
 public:
@@ -771,8 +764,6 @@ sal_Bool XMLCaptionEscapeRelative::exportXML( OUString& rStrExpValue, const Any&
     rStrExpValue = aOut.makeStringAndClear();
     return sal_True;
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 class XMLMoveSizeProtectHdl : public XMLPropertyHandler
 {
@@ -814,9 +805,6 @@ sal_Bool XMLMoveSizeProtectHdl::exportXML( OUString& rStrExpValue, const Any& rV
 
     return sal_True;
 }
-
-
-//////////////////////////////////////////////////////////////////////////////
 
 class XMLSdHeaderFooterVisibilityTypeHdl : public XMLPropertyHandler
 {
@@ -863,9 +851,6 @@ sal_Bool XMLSdHeaderFooterVisibilityTypeHdl::exportXML(
 
     return bRet;
 }
-
-
-//////////////////////////////////////////////////////////////////////////////
 
 XMLSdPropHdlFactory::XMLSdPropHdlFactory( uno::Reference< frame::XModel > xModel, SvXMLImport& rImport )
 : mxModel( xModel ), mpExport(0), mpImport( &rImport )
@@ -964,7 +949,6 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
                 break;
             }
 
-            //////////////////////////////////////////////////////////////////
             // 3D Properties
 
             case XML_SD_TYPE_BACKFACE_CULLING:
@@ -1178,8 +1162,6 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
     return pHdl;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 XMLShapePropertySetMapper::XMLShapePropertySetMapper(const UniReference< XMLPropertyHandlerFactory >& rFactoryRef)
 : XMLPropertySetMapper( aXMLSDProperties, rFactoryRef )
 {
@@ -1188,8 +1170,6 @@ XMLShapePropertySetMapper::XMLShapePropertySetMapper(const UniReference< XMLProp
 XMLShapePropertySetMapper::~XMLShapePropertySetMapper()
 {
 }
-
-// ----------------------------------------
 
 XMLShapeExportPropertyMapper::XMLShapeExportPropertyMapper( const UniReference< XMLPropertySetMapper >& rMapper, SvXMLExport& rExport )
 : SvXMLExportPropertyMapper( rMapper )
@@ -1574,8 +1554,6 @@ void XMLShapeExportPropertyMapper::handleElementItem(
             break;
     }
 }
-
-// ----------------------------------------
 
 XMLPageExportPropertyMapper::XMLPageExportPropertyMapper( const UniReference< XMLPropertySetMapper >& rMapper, SvXMLExport& rExport ) :
         SvXMLExportPropertyMapper( rMapper ),

@@ -24,11 +24,9 @@
 // --
 #include <xmloff/xmltoken.hxx>
 
-
 using namespace ::com::sun::star::uno;
 using namespace ::xmloff::token;
 
-///////////////////////////////////////////////////////////////////////////////
 //
 // class XMLFmtSplitPropHdl
 //

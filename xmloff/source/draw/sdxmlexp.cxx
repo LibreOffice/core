@@ -76,7 +76,6 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -88,9 +87,6 @@ using namespace ::com::sun::star::presentation;
 using namespace ::com::sun::star::geometry;
 using namespace ::com::sun::star::text;
 using namespace ::xmloff::token;
-
-
-//////////////////////////////////////////////////////////////////////////////
 
 class ImpXMLEXPPageMasterInfo
 {
@@ -191,8 +187,6 @@ void ImpXMLEXPPageMasterInfo::SetName(const OUString& rStr)
 {
     msName = rStr;
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 #define IMP_AUTOLAYOUT_INFO_MAX         (35L)
 
@@ -391,8 +385,6 @@ ImpXMLAutoLayoutInfo::ImpXMLAutoLayoutInfo(sal_uInt16 nTyp, ImpXMLEXPPageMasterI
     maPresRect.SetSize(aLayoutSize);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 // #110680#
 SdXMLExport::SdXMLExport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
@@ -421,7 +413,6 @@ SdXMLExport::SdXMLExport(
     msEndShape( "EndShape" ),
     msPageLayoutNames( "PageLayoutNames" )
 {
-
 
 }
 
@@ -638,7 +629,6 @@ void SAL_CALL SdXMLExport::setSourceDocument( const Reference< lang::XComponent 
     GetShapeExport()->enableHandleProgressBar();
 }
 
-//////////////////////////////////////////////////////////////////////////////
 // #82003# helper function for recursive object count
 sal_uInt32 SdXMLExport::ImpRecursiveObjectCount(Reference< drawing::XShapes > xShapes)
 {
@@ -667,8 +657,6 @@ sal_uInt32 SdXMLExport::ImpRecursiveObjectCount(Reference< drawing::XShapes > xS
 
     return nRetval;
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 SdXMLExport::~SdXMLExport()
 {
@@ -727,8 +715,6 @@ SdXMLExport::~SdXMLExport()
         mpAutoLayoutInfoList = 0L;
     }
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 void SdXMLExport::ImpPrepAutoLayoutInfos()
 {
@@ -828,8 +814,6 @@ sal_Bool SdXMLExport::ImpPrepAutoLayoutInfo(const Reference<XDrawPage>& xPage, O
 
     return bRetval;
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 void SdXMLExport::ImpWriteAutoLayoutInfos()
 {
@@ -1217,8 +1201,6 @@ void SdXMLExport::ImpWriteAutoLayoutInfos()
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 void SdXMLExport::ImpWriteAutoLayoutPlaceholder(XmlPlaceholder ePl, const Rectangle& rRect)
 {
     OUString aStr;
@@ -1267,8 +1249,6 @@ void SdXMLExport::ImpWriteAutoLayoutPlaceholder(XmlPlaceholder ePl, const Rectan
     // write presentation-placeholder
     SvXMLElementExport aPPL(*this, XML_NAMESPACE_PRESENTATION, XML_PLACEHOLDER, sal_True, sal_True);
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 ImpXMLEXPPageMasterInfo* SdXMLExport::ImpGetOrCreatePageMasterInfo( Reference< XDrawPage > xMasterPage )
 {
@@ -1343,8 +1323,6 @@ void SdXMLExport::ImpPrepPageMasterInfos()
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 void SdXMLExport::ImpWritePageMasterInfos()
 {
     // write created page-masters, create names for these
@@ -1411,8 +1389,6 @@ void SdXMLExport::ImpWritePageMasterInfos()
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 ImpXMLEXPPageMasterInfo* SdXMLExport::ImpGetPageMasterInfoByName(const OUString& rName)
 {
     if(!rName.isEmpty() && !mpPageMasterInfoList->empty())
@@ -1431,8 +1407,6 @@ ImpXMLEXPPageMasterInfo* SdXMLExport::ImpGetPageMasterInfoByName(const OUString&
     }
     return 0L;
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 void SdXMLExport::ImpPrepDrawPageInfos()
 {
@@ -1457,8 +1431,6 @@ void SdXMLExport::ImpPrepDrawPageInfos()
         }
     }
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 static OUString findOrAppendImpl( std::vector< OUString >& rVector, const OUString& rText, const sal_Char* pPrefix )
 {
@@ -1570,8 +1542,6 @@ HeaderFooterPageSettingsImpl SdXMLExport::ImpPrepDrawPageHeaderFooterDecls( cons
     return aSettings;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 void SdXMLExport::ImpWriteHeaderFooterDecls()
 {
     OUStringBuffer sBuffer;
@@ -1648,8 +1618,6 @@ void SdXMLExport::ImplExportHeaderFooterDeclAttributes( const HeaderFooterPageSe
         AddAttribute( XML_NAMESPACE_PRESENTATION, XML_USE_DATE_TIME_NAME, aSettings.maStrDateTimeDeclName );
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 OUString SdXMLExport::ImpCreatePresPageStyleName( Reference<XDrawPage> xDrawPage, bool bExportBackground /* = true */ )
 {
     // create name
@@ -1708,8 +1676,6 @@ OUString SdXMLExport::ImpCreatePresPageStyleName( Reference<XDrawPage> xDrawPage
     return sStyleName;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 void SdXMLExport::ImpPrepMasterPageInfos()
 {
     // create draw:style-name entries for master page export
@@ -1739,7 +1705,6 @@ void SdXMLExport::ImpPrepMasterPageInfos()
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
 void SdXMLExport::ImpWritePresentationStyles()
 {
     if(IsImpress())
@@ -1770,8 +1735,6 @@ void SdXMLExport::ImpWritePresentationStyles()
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 void SdXMLExport::SetProgress(sal_Int32 nProg)
 {
     // set progress view
@@ -1779,7 +1742,6 @@ void SdXMLExport::SetProgress(sal_Int32 nProg)
         GetStatusIndicator()->setValue(nProg);
 }
 
-//////////////////////////////////////////////////////////////////////////////
 // #82003#
 
 void SdXMLExport::_ExportMeta()
@@ -1800,8 +1762,6 @@ void SdXMLExport::_ExportMeta()
     // call parent
     SvXMLExport::_ExportMeta();
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 void SdXMLExport::_ExportFontDecls()
 {
@@ -1890,7 +1850,6 @@ void SdXMLExport::_ExportContent()
 
             if( IsImpress() )
                 ImplExportHeaderFooterDeclAttributes( maDrawPagesHeaderFooterSettings[nPageInd] );
-
 
             OUString sNavigationOrder( getNavigationOrder( xDrawPage ) );
             if( !sNavigationOrder.isEmpty() )
@@ -1993,8 +1952,6 @@ void SdXMLExport::_ExportContent()
     if( IsImpress() )
         exportPresentationSettings();
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 void SdXMLExport::exportPresentationSettings()
 {
@@ -2180,8 +2137,6 @@ void SdXMLExport::exportPresentationSettings()
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 void SdXMLExport::_ExportStyles(sal_Bool bUsed)
 {
     GetPropertySetMapper()->SetAutoStyles( sal_False );
@@ -2219,8 +2174,6 @@ void SdXMLExport::_ExportStyles(sal_Bool bUsed)
         }
     }
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 void SdXMLExport::_ExportAutoStyles()
 {
@@ -2417,8 +2370,6 @@ void SdXMLExport::_ExportAutoStyles()
     GetTextParagraphExport()->exportTextAutoStyles();
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 void SdXMLExport::_ExportMasterStyles()
 {
     // export layer
@@ -2602,8 +2553,6 @@ void SdXMLExport::GetConfigurationSettings(uno::Sequence<beans::PropertyValue>& 
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 void SdXMLExport::addDataStyle(const sal_Int32 nNumberFormat, sal_Bool bTimeFormat )
 {
     sal_Int32 nFormat = nNumberFormat;
@@ -2622,14 +2571,10 @@ void SdXMLExport::addDataStyle(const sal_Int32 nNumberFormat, sal_Bool bTimeForm
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 void SdXMLExport::exportDataStyles()
 {
     // there are no data styles to export in draw/impress yet
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 void SdXMLExport::exportAutoDataStyles()
 {
@@ -2647,8 +2592,6 @@ void SdXMLExport::exportAutoDataStyles()
     if(HasFormExport())
         GetFormExport()->exportAutoControlNumberStyles();
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 OUString SdXMLExport::getDataStyleName(const sal_Int32 nNumberFormat, sal_Bool bTimeFormat ) const
 {
@@ -2694,8 +2637,6 @@ OUString SdXMLExport::getNavigationOrder( const Reference< XDrawPage >& xDrawPag
     }
     return sNavOrder.makeStringAndClear();
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 void SdXMLExport::collectAnnotationAutoStyles( const Reference<XDrawPage>& xDrawPage )
 {
@@ -2790,8 +2731,6 @@ void SdXMLExport::exportAnnotations( const Reference<XDrawPage>& xDrawPage )
         OSL_FAIL("SdXMLExport::exportAnnotations(), exception caught during export of annotations");
     }
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 #define SERVICE( classname, servicename, implementationname, draw, flags )\
 uno::Sequence< OUString > SAL_CALL classname##_getSupportedServiceNames() throw()\

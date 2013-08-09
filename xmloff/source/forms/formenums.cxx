@@ -36,10 +36,8 @@
 #include <tools/wintypes.hxx>       // for check states
 #include <xmloff/xmltoken.hxx>
 
-//.........................................................................
 namespace xmloff
 {
-//.........................................................................
 
     using namespace ::com::sun::star::form;
     using namespace ::com::sun::star::sdb;
@@ -66,7 +64,6 @@ namespace xmloff
         NULL
     };
 
-    //---------------------------------------------------------------------
     const SvXMLEnumMapEntry*    OEnumMapper::getEnumMap(EnumProperties _eProperty)
     {
         OSL_ENSURE(_eProperty < KNOWN_ENUM_PROPERTIES, "OEnumMapper::getEnumMap: invalid index (this will crash)!");
@@ -333,8 +330,6 @@ namespace xmloff
         return rReturn;
     }
 
-//.........................................................................
 }   // namespace xmloff
-//.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

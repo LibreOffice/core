@@ -48,16 +48,11 @@
 #include <set>
 #include <boost/ptr_container/ptr_vector.hpp>
 
-
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 using namespace ::svt;
 
-//-------------------------------------------------------------------------
-
 #define XMLNUM_MAX_PARTS    3
-
-//-------------------------------------------------------------------------
 
 struct LessuInt32
 {
@@ -93,8 +88,6 @@ public:
     void SetWasUsed(const uno::Sequence<sal_Int32>& rWasUsed);
 };
 
-//-------------------------------------------------------------------------
-
 struct SvXMLEmbeddedTextEntry
 {
     sal_uInt16      nSourcePos;     // position in NumberFormat (to skip later)
@@ -107,11 +100,7 @@ struct SvXMLEmbeddedTextEntry
 
 class SvXMLEmbeddedTextEntryArr : public boost::ptr_vector<SvXMLEmbeddedTextEntry> {};
 
-//-------------------------------------------------------------------------
-
-//
 //! SvXMLNumUsedList_Impl should be optimized!
-//
 
 SvXMLNumUsedList_Impl::SvXMLNumUsedList_Impl() :
     nUsedCount(0),
@@ -216,8 +205,6 @@ void SvXMLNumUsedList_Impl::SetWasUsed(const uno::Sequence<sal_Int32>& rWasUsed)
     }
 }
 
-//-------------------------------------------------------------------------
-
 SvXMLNumFmtExport::SvXMLNumFmtExport(
             SvXMLExport& rExp,
             const uno::Reference< util::XNumberFormatsSupplier >& rSupp ) :
@@ -293,11 +280,7 @@ SvXMLNumFmtExport::~SvXMLNumFmtExport()
     delete pCharClass;
 }
 
-//-------------------------------------------------------------------------
-
-//
 //  helper methods
-//
 
 static OUString lcl_CreateStyleName( sal_Int32 nKey, sal_Int32 nPart, sal_Bool bDefPart, const OUString& rPrefix )
 {
@@ -345,11 +328,7 @@ void SvXMLNumFmtExport::AddLanguageAttr_Impl( sal_Int32 nLang )
     }
 }
 
-//-------------------------------------------------------------------------
-
-//
 //  methods to write individual elements within a format
-//
 
 void SvXMLNumFmtExport::AddToTextElement_Impl( const OUString& rString )
 {
@@ -752,7 +731,6 @@ void SvXMLNumFmtExport::WriteMapElement_Impl( sal_Int32 nOp, double fLimit,
     }
 }
 
-//-------------------------------------------------------------------------
 //  for old (automatic) currency formats: parse currency symbol from text
 
 sal_Int32 lcl_FindSymbol( const OUString& sUpperStr, const OUString& sCurString )
@@ -837,8 +815,6 @@ sal_Bool SvXMLNumFmtExport::WriteTextWithCurrency_Impl( const OUString& rString,
     return bRet;        // sal_True: currency element written
 }
 
-//-------------------------------------------------------------------------
-
 static OUString lcl_GetDefaultCalendar( SvNumberFormatter* pFormatter, LanguageType nLang )
 {
     //  get name of first non-gregorian calendar for the language
@@ -863,8 +839,6 @@ static OUString lcl_GetDefaultCalendar( SvNumberFormatter* pFormatter, LanguageT
     }
     return aCalendar;
 }
-
-//-------------------------------------------------------------------------
 
 static sal_Bool lcl_IsInEmbedded( const SvXMLEmbeddedTextEntryArr& rEmbeddedEntries, sal_uInt16 nPos )
 {
@@ -947,18 +921,14 @@ static sal_Bool lcl_IsDefaultDateFormat( const SvNumberformat& rFormat, sal_Bool
     }
 }
 
-//
 //  export one part (condition)
-//
 
 void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt32 nKey,
                                             sal_uInt16 nPart, sal_Bool bDefPart )
 {
     //! for the default part, pass the coditions from the other parts!
 
-    //
     //  element name
-    //
 
     NfIndexTableOffset eBuiltIn = pFormatter->GetIndexTableOffset( nKey );
 
@@ -1020,9 +990,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
     OUString sAttrValue;
     sal_Bool bUserDef = ( ( rFormat.GetType() & NUMBERFORMAT_DEFINED ) != 0 );
 
-    //
     //  common attributes for format
-    //
 
     //  format name (generated from key) - style namespace
     rExport.AddAttribute( XML_NAMESPACE_STYLE, XML_NAME,
@@ -1100,9 +1068,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                               XML_FALSE );
     }
 
-    //
     // Native number transliteration
-    //
     ::com::sun::star::i18n::NativeNumberXmlAttributes aAttr;
     rFormat.GetNatNumXml( aAttr, nPart );
     if ( !aAttr.Format.isEmpty() )
@@ -1122,28 +1088,21 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                               aAttr.Style );
     }
 
-    //
     // The element
-    //
     SvXMLElementExport aElem( rExport, XML_NAMESPACE_NUMBER, eType,
                               sal_True, sal_True );
 
-    //
     //  color (properties element)
-    //
 
     const Color* pCol = rFormat.GetColor( nPart );
     if (pCol)
         WriteColorElement_Impl(*pCol);
 
-
     //  detect if there is "real" content, excluding color and maps
     //! move to implementation of Write... methods?
     sal_Bool bAnyContent = sal_False;
 
-    //
     //  format elements
-    //
 
     SvXMLEmbeddedTextEntryArr aEmbeddedEntries;
     if ( eBuiltIn == NF_NUMBER_STANDARD )
@@ -1609,9 +1568,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                                    sal_True, sal_False );
     }
 
-    //
     //  mapping (conditions) must be last elements
-    //
 
     if (bDefPart)
     {
@@ -1656,11 +1613,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
     }
 }
 
-//-------------------------------------------------------------------------
-
-//
 //  export one format
-//
 
 void SvXMLNumFmtExport::ExportFormat_Impl( const SvNumberformat& rFormat, sal_uInt32 nKey )
 {
@@ -1690,11 +1643,7 @@ void SvXMLNumFmtExport::ExportFormat_Impl( const SvNumberformat& rFormat, sal_uI
     }
 }
 
-//-------------------------------------------------------------------------
-
-//
 //  export method called by application
-//
 
 void SvXMLNumFmtExport::Export( sal_Bool bIsAutoStyle )
 {
@@ -1778,8 +1727,6 @@ void SvXMLNumFmtExport::SetWasUsed(const uno::Sequence<sal_Int32>& rWasUsed)
     if (pUsedList)
         pUsedList->SetWasUsed(rWasUsed);
 }
-
-
 
 static const SvNumberformat* lcl_GetFormat( SvNumberFormatter* pFormatter,
                            sal_uInt32 nKey )

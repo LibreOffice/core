@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "XMLShapePropertySetContext.hxx"
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlnumi.hxx>
@@ -26,11 +25,8 @@
 
 #include "sdpropls.hxx"
 
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-
-//////////////////////////////////////////////////////////////////////////////
 
 TYPEINIT1( XMLShapePropertySetContext, SvXMLPropertySetContext );
 

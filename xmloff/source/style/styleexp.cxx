@@ -268,7 +268,6 @@ sal_Bool XMLStyleExport::exportStyle(
 
             bool bNoInheritedListStyle( true );
 
-            /////////////////////////////////////////////////
             Reference<XStyle> xStyle( xPropState, UNO_QUERY );
             while ( xStyle.is() )
             {
@@ -295,7 +294,6 @@ sal_Bool XMLStyleExport::exportStyle(
                     }
                 }
             }
-            /////////////////////////////////////////////////
             if ( bNoInheritedListStyle )
                 GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                                           XML_LIST_STYLE_NAME,
@@ -506,6 +504,5 @@ void XMLStyleExport::exportStyleFamily(
         }
     }
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -22,7 +22,6 @@
 
 #include <xmloff/xmlprhdl.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
 // graphic property Stroke
 
 class XMLDurationPropertyHdl : public XMLPropertyHandler
@@ -65,7 +64,6 @@ public:
     virtual sal_Bool importXML( const OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
     virtual sal_Bool exportXML( OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
 };
-
 
 #endif  //  _PROPIMP0_HXX
 

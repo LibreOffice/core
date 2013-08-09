@@ -62,7 +62,6 @@
 
 using ::com::sun::star::beans::XPropertySetInfo;
 
-
 using namespace ::osl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::frame;
@@ -114,8 +113,6 @@ sal_Char const sXML_np__style_old[] = "__style";
 sal_Char const sXML_np__text_old[] = "__text";
 sal_Char const sXML_np__table_old[] = "__table";
 sal_Char const sXML_np__meta_old[] = "__meta";
-
-
 
 class SvXMLImportEventListener : public cppu::WeakImplHelper1<
                             com::sun::star::lang::XEventListener >
@@ -823,8 +820,6 @@ void SvXMLImport::SetStatistics(const uno::Sequence< beans::NamedValue> &)
     GetProgressBarHelper()->SetReference(0);
 }
 
-///////////////////////////////////////////////////////////////////////
-
 // XImporter
 void SAL_CALL SvXMLImport::setTargetDocument( const uno::Reference< lang::XComponent >& xDoc )
     throw(lang::IllegalArgumentException, uno::RuntimeException)
@@ -1009,8 +1004,6 @@ uno::Sequence< OUString > SAL_CALL SvXMLImport::getSupportedServiceNames(  )
     return aSeq;
 }
 
-///////////////////////////////////////////////////////////////////////
-
 XMLTextImportHelper* SvXMLImport::CreateTextImport()
 {
     return new XMLTextImportHelper( mxModel, *this );
@@ -1031,8 +1024,6 @@ SchXMLImportHelper* SvXMLImport::CreateChartImport()
     return new ::xmloff::OFormLayerXMLImport(*this);
 }
 
-
-///////////////////////////////////////////////////////////////////////////////
 //
 // Get or create fill/line/lineend-style-helper
 //
@@ -1649,7 +1640,6 @@ void SvXMLImport::_CreateNumberFormatsSupplier()
             uno::Reference< util::XNumberFormatsSupplier> (mxModel, uno::UNO_QUERY);
 }
 
-
 void SvXMLImport::_CreateDataStylesImport()
 {
     SAL_WARN_IF( mpNumImport != NULL, "xmloff.core", "data styles import already exists!" );
@@ -1658,7 +1648,6 @@ void SvXMLImport::_CreateDataStylesImport()
     if ( xNum.is() )
         mpNumImport = new SvXMLNumFmtHelper(xNum, GetComponentContext() );
 }
-
 
 sal_Unicode SvXMLImport::ConvStarBatsCharToStarSymbol( sal_Unicode c )
 {
@@ -1695,8 +1684,6 @@ sal_Unicode SvXMLImport::ConvStarMathCharToStarSymbol( sal_Unicode c )
 
     return cNew;
 }
-
-
 
 void SvXMLImport::SetError(
     sal_Int32 nId,

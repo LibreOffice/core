@@ -23,12 +23,8 @@
 #include <rtl/ustrbuf.hxx>
 #include <sax/tools/converter.hxx>
 
-
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
-
-// ---------------------------------------------------------------------------
-
 
 sal_Bool XMLDurationMS16PropHdl_Impl::importXML(
         const OUString& rStrImpValue,

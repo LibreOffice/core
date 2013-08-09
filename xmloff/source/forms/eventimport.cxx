@@ -23,27 +23,21 @@
 #include <comphelper/extract.hxx>
 #include "strings.hxx"
 
-//.........................................................................
 namespace xmloff
 {
-//.........................................................................
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::script;
     using namespace ::com::sun::star::container;
 
-    //=====================================================================
     //= OFormEventsImportContext
-    //=====================================================================
-    //---------------------------------------------------------------------
     OFormEventsImportContext::OFormEventsImportContext(SvXMLImport& _rImport, sal_uInt16 _nPrefix, const OUString& _rLocalName, IEventAttacher& _rEventAttacher)
         :XMLEventsImportContext(_rImport, _nPrefix, _rLocalName)
         ,m_rEventAttacher(_rEventAttacher)
     {
     }
 
-    //---------------------------------------------------------------------
     void OFormEventsImportContext::EndElement()
     {
         Sequence< ScriptEventDescriptor > aTranslated(aCollectEvents.size());
@@ -102,15 +96,12 @@ namespace xmloff
         XMLEventsImportContext::EndElement();
     }
 
-    //=====================================================================
     //= ODefaultEventAttacherManager
-    //=====================================================================
 
     ODefaultEventAttacherManager::~ODefaultEventAttacherManager()
     {
     }
 
-    //-------------------------------------------------------------------------
     void ODefaultEventAttacherManager::registerEvents(const Reference< XPropertySet >& _rxElement,
         const Sequence< ScriptEventDescriptor >& _rEvents)
     {
@@ -120,7 +111,6 @@ namespace xmloff
         m_aEvents[_rxElement] = _rEvents;
     }
 
-    //-------------------------------------------------------------------------
     void ODefaultEventAttacherManager::setEvents(const Reference< XIndexAccess >& _rxContainer)
     {
         Reference< XEventAttacherManager > xEventManager(_rxContainer, UNO_QUERY);
@@ -146,9 +136,6 @@ namespace xmloff
         }
     }
 
-//.........................................................................
 }   // namespace xmloff
-//.........................................................................
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

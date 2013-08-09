@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <string.h>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <cppuhelper/factory.hxx>
@@ -33,7 +32,6 @@ using namespace ::com::sun::star;
 #define ENUMERATE_SERVICE( classname ) \
     { classname##_getImplementationName, classname##_getSupportedServiceNames, classname##_createInstance }
 
-// ============================================================================
 DECLARE_SERVICE( OOo2OasisTransformer )
 DECLARE_SERVICE( Oasis2OOoTransformer )
 
@@ -65,9 +63,6 @@ DECLARE_SERVICE( XMLImpressContentImportOOO )
 DECLARE_SERVICE( XMLImpressStylesImportOOO )
 DECLARE_SERVICE( XMLImpressImportOOO )
 
-// ============================================================================
-
-// ----------------------------------------------------------------------------
 namespace
 {
     typedef OUString (SAL_CALL * GetImplementationName)();
@@ -82,12 +77,10 @@ namespace
         CreateInstance              createInstance;
     };
 
-    // ------------------------------------------------------------------------
     static const ServiceDescriptor* getServiceDescriptors()
     {
         static const ServiceDescriptor aDescriptors[] =
         {
-            // ================================================================
             ENUMERATE_SERVICE( OOo2OasisTransformer ),
             ENUMERATE_SERVICE( Oasis2OOoTransformer ),
 
@@ -118,13 +111,11 @@ namespace
             ENUMERATE_SERVICE( XMLImpressContentImportOOO ),
             ENUMERATE_SERVICE( XMLImpressStylesImportOOO ),
             ENUMERATE_SERVICE( XMLImpressImportOOO ),
-            // ================================================================
             { NULL, NULL, NULL }
         };
         return aDescriptors;
     };
 }
-// ----------------------------------------------------------------------------
 
 #ifdef __cplusplus
 extern "C"

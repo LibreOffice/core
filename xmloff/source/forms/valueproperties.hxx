@@ -22,14 +22,10 @@
 
 #include "controlelement.hxx"
 
-//.........................................................................
 namespace xmloff
 {
-//.........................................................................
 
-    //=====================================================================
     //= OValuePropertiesMetaData
-    //=====================================================================
     class OValuePropertiesMetaData
     {
     protected:
@@ -67,11 +63,8 @@ namespace xmloff
             sal_Char const * & _rpDefaultValuePropertyName);
     };
 
-//.........................................................................
 }   // namespace xmloff
-//.........................................................................
 
 #endif // _XMLOFF_FORMS_VALUEPROPERTIES_HXX_
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

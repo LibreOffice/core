@@ -36,8 +36,6 @@ using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 
-// ----------------------------------------
-
 ::std::vector< Reference< chart2::XDataSeries > >
     SchXMLSeriesHelper::getDataSeriesFromDiagram(
         const Reference< chart2::XDiagram > & xDiagram )

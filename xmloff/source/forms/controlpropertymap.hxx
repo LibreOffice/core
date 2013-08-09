@@ -24,18 +24,14 @@
 #include <xmloff/xmlexppr.hxx>
 
 struct XMLPropertyMapEntry;
-//.........................................................................
 namespace xmloff
 {
-//.........................................................................
 
     const XMLPropertyMapEntry* getControlStylePropertyMap( );
 
     void initializePropertyMaps();
 
-    //=====================================================================
     //= OFormComponentStyleExportMapper
-    //=====================================================================
     class OFormComponentStyleExportMapper : public SvXMLExportPropertyMapper
     {
     public:
@@ -51,11 +47,8 @@ namespace xmloff
         ) const;
     };
 
-//.........................................................................
 }   // namespace xmloff
-//.........................................................................
 
 #endif // _XMLOFF_FORMS_CONTROLPROPERTYMAP_HXX_
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

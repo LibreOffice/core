@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "SchXMLImport.hxx"
 #include "SchXMLTextListContext.hxx"
 #include "SchXMLParagraphContext.hxx"
@@ -31,7 +30,6 @@ using ::com::sun::star::uno::Reference;
 using namespace com::sun::star;
 using namespace ::xmloff::token;
 
-//-------------------------------------------------
 class SchXMLListItemContext : public SvXMLImportContext
 {
 public:
@@ -80,8 +78,6 @@ SvXMLImportContext* SchXMLListItemContext::CreateChildContext(
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
     return pContext;
 }
-
-//-------------------------------------------------
 
 SchXMLTextListContext::SchXMLTextListContext(
         SvXMLImport& rImport

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <com/sun/star/util/Duration.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
@@ -34,7 +33,6 @@
 #include <xmloff/xmluconv.hxx>
 #include "ximpshow.hxx"
 
-
 using namespace ::std;
 using namespace ::cppu;
 using namespace ::com::sun::star;
@@ -48,8 +46,6 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::presentation;
 using namespace ::xmloff::token;
-
-///////////////////////////////////////////////////////////////////////
 
 class ShowsImpImpl
 {
@@ -65,8 +61,6 @@ public:
     :   mrImport( rImport )
     {}
 };
-
-///////////////////////////////////////////////////////////////////////
 
 TYPEINIT1( SdXMLShowsContext, SvXMLImportContext );
 
@@ -89,7 +83,6 @@ SdXMLShowsContext::SdXMLShowsContext( SdXMLImport& rImport,  sal_uInt16 nPrfx, c
     Reference< XPresentationSupplier > xPresentationSupplier( rImport.GetModel(), UNO_QUERY );
     if( xPresentationSupplier.is() )
         mpImpl->mxPresProps = Reference< XPropertySet >::query( xPresentationSupplier->getPresentation() );
-
 
     if( mpImpl->mxPresProps.is() )
     {

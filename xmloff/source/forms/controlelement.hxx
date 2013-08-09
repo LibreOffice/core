@@ -22,14 +22,10 @@
 
 #include <sal/types.h>
 
-//.........................................................................
 namespace xmloff
 {
-//.........................................................................
 
-    //=====================================================================
     //= OControlElement
-    //=====================================================================
     /** helper for translating between control types and XML tags
     */
     class OControlElement
@@ -79,9 +75,7 @@ namespace xmloff
         static const sal_Char* getElementName(ElementType _eType);
     };
 
-//.........................................................................
 }   // namespace xmloff
-//.........................................................................
 
 #endif // _XMLOFF_FORMS_CONTROLELEMENT_HXX_
 

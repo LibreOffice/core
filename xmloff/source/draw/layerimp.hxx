@@ -23,7 +23,6 @@
 #include <xmloff/xmlictxt.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
 
-//////////////////////////////////////////////////////////////////////////////
 // presentations:animations
 
 class SdXMLLayerSetContext : public SvXMLImportContext

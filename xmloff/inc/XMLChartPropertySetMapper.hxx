@@ -25,12 +25,9 @@
 #include <xmloff/xmlimppr.hxx>
 #include <xmloff/xmlimp.hxx>
 
-
 extern const XMLPropertyMapEntry aXMLChartPropMap[];
 
 class SvXMLExport;
-
-// ----------------------------------------
 
 class XMLChartPropHdlFactory : public XMLPropertyHandlerFactory
 {
@@ -42,16 +39,12 @@ public:
     virtual const XMLPropertyHandler* GetPropertyHandler( sal_Int32 nType ) const;
 };
 
-// ----------------------------------------
-
 class XMLChartPropertySetMapper : public XMLPropertySetMapper
 {
 public:
     XMLChartPropertySetMapper();
     ~XMLChartPropertySetMapper();
 };
-
-// ----------------------------------------
 
 class XMLChartExportPropertyMapper : public SvXMLExportPropertyMapper
 {
@@ -94,8 +87,6 @@ public:
     void setChartDoc( com::sun::star::uno::Reference<
             com::sun::star::chart2::XChartDocument > xChartDoc );
 };
-
-// ----------------------------------------
 
 class XMLChartImportPropertyMapper : public SvXMLImportPropertyMapper
 {

@@ -26,11 +26,11 @@
 #include <xmloff/prhdlfac.hxx>
 #include <xmloff/families.hxx>
 
-/* ----------------------------------------
+/*
    these enums are used for the
    SvXMLTokenMapEntries to distinguish
    the tokens in switch-directives
-   ----------------------------------------*/
+*/
 
 enum SchXMLDocElemTokenMap
 {
@@ -81,8 +81,6 @@ enum SchXMLSeriesElemTokenMap
     XML_TOK_SERIES_REGRESSION_CURVE,
     XML_TOK_SERIES_ERROR_INDICATOR
 };
-
-// ----------------------------------------
 
 enum SchXMLChartAttrMap
 {

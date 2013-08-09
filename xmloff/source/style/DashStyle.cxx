@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <com/sun/star/drawing/DashStyle.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
 
@@ -75,9 +74,7 @@ SvXMLEnumMapEntry const pXML_DashStyle_Enum[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-//-------------------------------------------------------------
 // Import
-//-------------------------------------------------------------
 
 XMLDashStyleImport::XMLDashStyleImport( SvXMLImport& rImp )
     : rImport(rImp)
@@ -210,10 +207,7 @@ sal_Bool XMLDashStyleImport::importXML(
     return sal_True;
 }
 
-
-//-------------------------------------------------------------
 // Export
-//-------------------------------------------------------------
 
 XMLDashStyleExport::XMLDashStyleExport( SvXMLExport& rExp )
     : rExport(rExp)
@@ -256,7 +250,6 @@ sal_Bool XMLDashStyleExport::exportXML(
             rUnitConverter.convertEnum( aOut, aLineDash.Style, pXML_DashStyle_Enum );
             aStrValue = aOut.makeStringAndClear();
             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_STYLE, aStrValue );
-
 
             // dots
             if( aLineDash.Dots )
@@ -314,7 +307,6 @@ sal_Bool XMLDashStyleExport::exportXML(
             }
             aStrValue = aOut.makeStringAndClear();
             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DISTANCE, aStrValue );
-
 
             // do Write
             SvXMLElementExport rElem( rExport,

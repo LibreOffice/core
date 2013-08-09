@@ -25,23 +25,19 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 
-
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
-
 
 /* TODO-BCP47: this fiddling with Locale is quite ugly and fragile, especially
  * for the fo:script temporarily stored in Variant, it would be better to use
  * LanguageTagODF but we have that nasty UNO API requirement here.
  * => make LanguageTagODF (unpublished) API? */
 
-
 // For runtime performance, instead of converting back and forth between
 // com::sun::star::Locale and LanguageTag to decide if script or tag are
 // needed, this code takes advantage of knowledge about the internal
 // representation of BCP 47 language tags in a Locale if present as done in a
 // LanguageTag.
-
 
 XMLCharLanguageHdl::~XMLCharLanguageHdl()
 {
@@ -129,8 +125,6 @@ sal_Bool XMLCharLanguageHdl::exportXML( OUString& rStrExpValue, const uno::Any& 
 
     return sal_True;
 }
-
-// ===========================================================================
 
 XMLCharScriptHdl::~XMLCharScriptHdl()
 {
@@ -246,8 +240,6 @@ sal_Bool XMLCharScriptHdl::exportXML( OUString& rStrExpValue, const uno::Any& rV
     return sal_True;
 }
 
-// ===========================================================================
-
 XMLCharCountryHdl::~XMLCharCountryHdl()
 {
     // nothing to do
@@ -318,8 +310,6 @@ sal_Bool XMLCharCountryHdl::exportXML( OUString& rStrExpValue, const uno::Any& r
 
     return sal_True;
 }
-
-// ===========================================================================
 
 XMLCharRfcLanguageTagHdl::~XMLCharRfcLanguageTagHdl()
 {

@@ -37,11 +37,8 @@ using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 
-// ------------------------------------------------------------------------
-
 const char XMLN_VERSIONSLIST[] = "VersionList.xml";
 
-// ------------------------------------------------------------------------
 // #110897#
 XMLVersionListExport::XMLVersionListExport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
@@ -57,7 +54,6 @@ XMLVersionListExport::XMLVersionListExport(
                                    xmloff::token::GetXMLToken(xmloff::token::XML_N_VERSIONS_LIST), XML_NAMESPACE_FRAMEWORK );
 }
 
-// ------------------------------------------------------------------------
 sal_uInt32 XMLVersionListExport::exportDoc( enum ::xmloff::token::XMLTokenEnum )
 {
     GetDocHandler()->startDocument();
@@ -103,7 +99,6 @@ sal_uInt32 XMLVersionListExport::exportDoc( enum ::xmloff::token::XMLTokenEnum )
     return 0;
 }
 
-// ------------------------------------------------------------------------
 XMLVersionListImport::XMLVersionListImport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
     com::sun::star::uno::Sequence < com::sun::star::util::RevisionTag >& rVersions )
@@ -114,11 +109,9 @@ XMLVersionListImport::XMLVersionListImport(
                                   xmloff::token::GetXMLToken(xmloff::token::XML_N_VERSIONS_LIST), XML_NAMESPACE_FRAMEWORK );
 }
 
-// ------------------------------------------------------------------------
 XMLVersionListImport::~XMLVersionListImport( void ) throw()
 {}
 
-// ------------------------------------------------------------------------
 SvXMLImportContext *XMLVersionListImport::CreateContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
@@ -139,8 +132,6 @@ SvXMLImportContext *XMLVersionListImport::CreateContext(
     return pContext;
 }
 
-
-// ------------------------------------------------------------------------
 XMLVersionListContext::XMLVersionListContext( XMLVersionListImport& rImport,
                                         sal_uInt16 nPrefix,
                                         const OUString& rLocalName,
@@ -150,11 +141,9 @@ XMLVersionListContext::XMLVersionListContext( XMLVersionListImport& rImport,
 {
 }
 
-// ------------------------------------------------------------------------
 XMLVersionListContext::~XMLVersionListContext( void )
 {}
 
-// ------------------------------------------------------------------------
 SvXMLImportContext *XMLVersionListContext::CreateChildContext( sal_uInt16 nPrefix,
                                         const OUString& rLocalName,
                                         const Reference< XAttributeList > & xAttrList )
@@ -174,7 +163,6 @@ SvXMLImportContext *XMLVersionListContext::CreateChildContext( sal_uInt16 nPrefi
     return pContext;
 }
 
-// ------------------------------------------------------------------------
 XMLVersionContext::XMLVersionContext( XMLVersionListImport& rImport,
                                         sal_uInt16 nPref,
                                         const OUString& rLocalName,
@@ -228,12 +216,9 @@ XMLVersionContext::XMLVersionContext( XMLVersionListImport& rImport,
     aList[nLength] = aInfo;
 }
 
-
-// ------------------------------------------------------------------------
 XMLVersionContext::~XMLVersionContext( void )
 {}
 
-// ------------------------------------------------------------------------
 sal_Bool XMLVersionContext::ParseISODateTimeString(
                                 const OUString& rString,
                                 util::DateTime& rDateTime )
@@ -333,8 +318,6 @@ sal_Bool XMLVersionContext::ParseISODateTimeString(
     return bSuccess;
 }
 
-
-// ------------------------------------------------------------------------
 void SAL_CALL XMLVersionListPersistence::store( const uno::Reference< embed::XStorage >& xRoot, const uno::Sequence< util::RevisionTag >& rVersions )
     throw (::com::sun::star::io::IOException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
 {
@@ -381,7 +364,6 @@ void SAL_CALL XMLVersionListPersistence::store( const uno::Reference< embed::XSt
     }
 }
 
-// ------------------------------------------------------------------------
 uno::Sequence< util::RevisionTag > SAL_CALL XMLVersionListPersistence::load( const uno::Reference< embed::XStorage >& xRoot )
         throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::io::IOException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
 {

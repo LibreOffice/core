@@ -30,7 +30,6 @@
 
 #include <vector>
 
-//////////////////////////////////////////////////////////////////////////////
 // predeclarations
 
 struct ImpSdXMLExpTransObj2DBase;
@@ -46,12 +45,8 @@ namespace basegfx
     class B3DHomMatrix;
 } // end of namespace basegfx
 
-//////////////////////////////////////////////////////////////////////////////
-
 typedef ::std::vector< ImpSdXMLExpTransObj2DBase* > ImpSdXMLExpTransObj2DBaseList;
 typedef ::std::vector< ImpSdXMLExpTransObj3DBase* > ImpSdXMLExpTransObj3DBaseList;
-
-//////////////////////////////////////////////////////////////////////////////
 
 class SdXMLImExTransform2D
 {
@@ -73,8 +68,6 @@ public:
     const OUString& GetExportString(const SvXMLUnitConverter& rConv);
     void SetString(const OUString& rNew, const SvXMLUnitConverter& rConv);
 };
-
-//////////////////////////////////////////////////////////////////////////////
 
 class SdXMLImExTransform3D
 {
@@ -98,8 +91,6 @@ public:
     void SetString(const OUString& rNew, const SvXMLUnitConverter& rConv);
 };
 
-//////////////////////////////////////////////////////////////////////////////
-
 class SdXMLImExViewBox
 {
     OUString               msString;
@@ -118,8 +109,6 @@ public:
     sal_Int32 GetHeight() const { return mnH; }
     const OUString& GetExportString();
 };
-
-//////////////////////////////////////////////////////////////////////////////
 
 class SdXMLImExPointsElement
 {
@@ -142,8 +131,6 @@ public:
     const OUString& GetExportString() const { return msString; }
     const com::sun::star::drawing::PointSequenceSequence& GetPointSequenceSequence() const { return maPoly; }
 };
-
-//////////////////////////////////////////////////////////////////////////////
 
 class SdXMLImExSvgDElement
 {
@@ -178,7 +165,6 @@ public:
     const com::sun::star::drawing::PointSequenceSequence& GetPointSequenceSequence() const { return maPoly.Coordinates; }
     const com::sun::star::drawing::FlagSequenceSequence& GetFlagSequenceSequence() const { return maPoly.Flags; }
 };
-
 
 #endif  //  _XEXPTRANSFORM_HXX
 

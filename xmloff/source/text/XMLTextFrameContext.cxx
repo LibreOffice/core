@@ -55,8 +55,6 @@
 
 #include <map>
 
-
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
@@ -147,8 +145,6 @@ void XMLTextFrameTitleOrDescContext_Impl::Characters( const OUString& rText )
 {
     mrTitleOrDesc += rText;
 }
-
-// ------------------------------------------------------------------------
 
 class XMLTextFrameParam_Impl : public SvXMLImportContext
 {
@@ -331,8 +327,6 @@ XMLTextFrameContourContext_Impl::XMLTextFrameContourContext_Impl(
 XMLTextFrameContourContext_Impl::~XMLTextFrameContourContext_Impl()
 {
 }
-
-// ------------------------------------------------------------------------
 
 class XMLTextFrameContext_Impl : public SvXMLImportContext
 {
@@ -620,7 +614,6 @@ void XMLTextFrameContext_Impl::Create( sal_Bool /*bHRefOrBase64*/ )
     if( pStyle )
         pStyle->FillPropertySet( xPropSet );
 
-
     // x and y
     sal_Int16 nHoriOrient =  HoriOrientation::NONE;
     aAny = xPropSet->getPropertyValue( sHoriOrient );
@@ -771,7 +764,6 @@ void XMLTextFrameContext_Impl::Create( sal_Bool /*bHRefOrBase64*/ )
         mbListContextPushed = true;
     }
 }
-
 
 void XMLTextFrameContext::removeGraphicFromImportContext(const SvXMLImportContext& rContext) const
 {
@@ -1308,8 +1300,6 @@ void XMLTextFrameContext_Impl::SetDesc( const OUString& rDesc )
         }
     }
 }
-
-//-----------------------------------------------------------------------------------------------------
 
 TYPEINIT1( XMLTextFrameContext, SvXMLImportContext );
 

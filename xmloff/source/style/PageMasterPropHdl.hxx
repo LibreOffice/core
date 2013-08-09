@@ -24,8 +24,6 @@
 #include <rtl/ustring.hxx>
 #include <xmloff/xmltoken.hxx>
 
-
-//______________________________________________________________________________
 // property handler for style:page-usage (style::PageStyleLayout)
 
 class XMLPMPropHdl_PageStyleLayout : public XMLPropertyHandler
@@ -48,8 +46,6 @@ public:
                                 ) const;
 };
 
-
-//______________________________________________________________________________
 // property handler for style:num-format (style::NumberingType)
 
 class XMLPMPropHdl_NumFormat : public XMLPropertyHandler
@@ -68,8 +64,6 @@ public:
                                 ) const;
 };
 
-
-//______________________________________________________________________________
 // property handler for style:num-letter-sync (style::NumberingType)
 
 class XMLPMPropHdl_NumLetterSync : public XMLPropertyHandler
@@ -88,8 +82,6 @@ public:
                                 ) const;
 };
 
-
-//______________________________________________________________________________
 // property handler for style:paper-tray-number
 
 class XMLPMPropHdl_PaperTrayNumber : public XMLPropertyHandler
@@ -108,8 +100,6 @@ public:
                                 ) const;
 };
 
-
-//______________________________________________________________________________
 // property handler for style:print
 
 class XMLPMPropHdl_Print : public XMLPropertyHandler
@@ -133,7 +123,6 @@ public:
                                 ) const;
 };
 
-//______________________________________________________________________________
 // property handler for style:table-centering
 
 class XMLPMPropHdl_CenterHorizontal : public XMLPropertyHandler

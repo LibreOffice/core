@@ -36,16 +36,12 @@ SV_DECL_REF( SvXMLStylesContext )
     // unfortunately, we can't put this into our namespace, as the macro expands to (amongst others) a forward
     // declaration of the class name, which then would be in the namespace, too
 
-//.........................................................................
 namespace xmloff
 {
-//.........................................................................
 
     class OAttribute2Property;
 
-    //=====================================================================
     //= OFormLayerXMLImport_Impl
-    //=====================================================================
     class OFormLayerXMLImport_Impl
                 : public ODefaultEventAttacherManager
     {
@@ -175,9 +171,7 @@ namespace xmloff
         void documentDone( );
     };
 
-//.........................................................................
 }   // namespace xmloff
-//.........................................................................
 
 #endif // _XMLOFF_FORMS_LAYERIMPORT_HXX_
 

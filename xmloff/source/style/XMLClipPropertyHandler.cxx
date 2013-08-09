@@ -24,13 +24,11 @@
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmltoken.hxx>
 
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
 using namespace ::xmloff::token;
 
-///////////////////////////////////////////////////////////////////////////////
 //
 // class XMLMeasurePropHdl
 //

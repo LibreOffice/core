@@ -25,7 +25,6 @@
 #include <xmloff/nmspmap.hxx>
 #include "ximppage.hxx"
 
-//////////////////////////////////////////////////////////////////////////////
 // presentation:notes context
 
 class SdXMLNotesContext : public SdXMLGenericPageContext
@@ -45,7 +44,6 @@ public:
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList );
     virtual void EndElement();
 };
-
 
 #endif  //  _XIMPNOTES_HXX
 

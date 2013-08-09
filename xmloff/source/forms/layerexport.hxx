@@ -33,10 +33,8 @@ class SvXMLNumFmtExport;
 class XMLPropertyHandlerFactory;
 class SvXMLExportPropertyMapper;
 
-//.........................................................................
 namespace xmloff
 {
-//.........................................................................
 
     typedef ::std::set  <   ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                         ,   OPropertySetCompare
@@ -54,9 +52,7 @@ namespace xmloff
                         ,   ODrawPageCompare
                         >   MapPropertySet2Map;
 
-    //=====================================================================
     //= OFormLayerXMLExport_Impl
-    //=====================================================================
     /** the implementation class for OFormLayerXMLExport
     */
     class OFormLayerXMLExport_Impl
@@ -300,9 +296,7 @@ namespace xmloff
         void excludeFromExport( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > _rxControl );
     };
 
-//.........................................................................
 }   // namespace xmloff
-//.........................................................................
 
 #endif // _XMLOFF_FORMS_LAYEREXPORT_HXX_
 

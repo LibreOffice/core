@@ -22,8 +22,6 @@
 #include "SchXMLImport.hxx"
 #include "transporttypes.hxx"
 
-// ----------------------------------------
-
 class SchXMLAxisContext : public SvXMLImportContext
 {
 public:

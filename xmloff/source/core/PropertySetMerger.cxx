@@ -20,7 +20,6 @@
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include "PropertySetMerger.hxx"
 
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -64,9 +63,7 @@ public:
     virtual sal_Bool SAL_CALL hasPropertyByName( const OUString& Name ) throw(RuntimeException);
 };
 
-// --------------------------------------------------------------------
 // Interface implementation
-// --------------------------------------------------------------------
 
 PropertySetMergerImpl::PropertySetMergerImpl( Reference< XPropertySet > rPropSet1, Reference< XPropertySet > rPropSet2 )
 : mxPropSet1( rPropSet1 )

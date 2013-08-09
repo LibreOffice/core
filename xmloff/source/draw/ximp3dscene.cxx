@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <sax/tools/converter.hxx>
 
 #include "ximp3dscene.hxx"
@@ -30,11 +29,9 @@
 #include "eventimp.hxx"
 #include "descriptionimp.hxx"
 
-
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-//////////////////////////////////////////////////////////////////////////////
 // dr3d:3dlight context
 
 SdXML3DLightContext::SdXML3DLightContext(
@@ -88,8 +85,6 @@ SdXML3DLightContext::~SdXML3DLightContext()
 {
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 TYPEINIT1( SdXML3DSceneShapeContext, SdXMLShapeContext );
 
 SdXML3DSceneShapeContext::SdXML3DSceneShapeContext(
@@ -103,13 +98,9 @@ SdXML3DSceneShapeContext::SdXML3DSceneShapeContext(
 {
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 SdXML3DSceneShapeContext::~SdXML3DSceneShapeContext()
 {
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 void SdXML3DSceneShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
 {
@@ -149,8 +140,6 @@ void SdXML3DSceneShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 void SdXML3DSceneShapeContext::EndElement()
 {
     if(mxShape.is())
@@ -168,8 +157,6 @@ void SdXML3DSceneShapeContext::EndElement()
         SdXMLShapeContext::EndElement();
     }
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 SvXMLImportContext* SdXML3DSceneShapeContext::CreateChildContext( sal_uInt16 nPrefix,
     const OUString& rLocalName,
@@ -210,8 +197,6 @@ SvXMLImportContext* SdXML3DSceneShapeContext::CreateChildContext( sal_uInt16 nPr
 
     return pContext;
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 SdXML3DSceneAttributesHelper::SdXML3DSceneAttributesHelper( SvXMLImport& rImporter )
 :   mrImport( rImporter ),

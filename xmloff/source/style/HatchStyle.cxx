@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "xmloff/HatchStyle.hxx"
 
 #include <com/sun/star/drawing/Hatch.hpp>
@@ -50,7 +49,6 @@ enum SvXMLTokenMapAttrs
     XML_TOK_TABSTOP_END=XML_TOK_UNKNOWN
 };
 
-
 SvXMLEnumMapEntry const pXML_HatchStyle_Enum[] =
 {
     { XML_HATCHSTYLE_SINGLE,    drawing::HatchStyle_SINGLE },
@@ -59,10 +57,7 @@ SvXMLEnumMapEntry const pXML_HatchStyle_Enum[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-
-//-------------------------------------------------------------
 // Import
-//-------------------------------------------------------------
 
 XMLHatchStyleImport::XMLHatchStyleImport( SvXMLImport& rImp )
     : rImport(rImp)
@@ -175,10 +170,7 @@ sal_Bool XMLHatchStyleImport::importXML(
     return bRet;
 }
 
-
-//-------------------------------------------------------------
 // Export
-//-------------------------------------------------------------
 
 XMLHatchStyleExport::XMLHatchStyleExport( SvXMLExport& rExp )
     : rExport(rExp)

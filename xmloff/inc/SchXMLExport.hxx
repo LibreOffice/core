@@ -32,9 +32,7 @@ namespace com { namespace sun { namespace star {
     }
 }}}
 
-// ------------------------------------------
 // export class for a complete chart document
-// ------------------------------------------
 
 class SchXMLExport : public SvXMLExport
 {

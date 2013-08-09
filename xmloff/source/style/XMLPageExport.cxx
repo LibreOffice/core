@@ -33,16 +33,12 @@
 #include "PageMasterPropMapper.hxx"
 #include "PageMasterExportPropMapper.hxx"
 
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 using namespace ::xmloff::token;
-
-
-//______________________________________________________________________________
 
 sal_Bool XMLPageExport::findPageMasterName( const OUString& rStyleName, OUString& rPMName ) const
 {

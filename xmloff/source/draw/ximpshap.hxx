@@ -36,7 +36,6 @@
 #include <xmloff/xmlmultiimagehelper.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
 // common shape context
 
 class SdXMLShapeContext : public SvXMLShapeContext
@@ -118,7 +117,6 @@ public:
     virtual void processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue );
 };
 
-//////////////////////////////////////////////////////////////////////////////
 // draw:rect context
 
 class SdXMLRectShapeContext : public SdXMLShapeContext
@@ -140,7 +138,6 @@ public:
     virtual void processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue );
 };
 
-//////////////////////////////////////////////////////////////////////////////
 // draw:line context
 
 class SdXMLLineShapeContext : public SdXMLShapeContext
@@ -165,7 +162,6 @@ public:
     virtual void processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue );
 };
 
-//////////////////////////////////////////////////////////////////////////////
 // draw:ellipse and draw:circle context
 
 class SdXMLEllipseShapeContext : public SdXMLShapeContext
@@ -193,7 +189,6 @@ public:
     virtual void processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue );
 };
 
-//////////////////////////////////////////////////////////////////////////////
 // draw:polyline and draw:polygon context
 
 class SdXMLPolygonShapeContext : public SdXMLShapeContext
@@ -216,7 +211,6 @@ public:
     virtual void processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue );
 };
 
-//////////////////////////////////////////////////////////////////////////////
 // draw:path context
 
 class SdXMLPathShapeContext : public SdXMLShapeContext
@@ -239,7 +233,6 @@ public:
     virtual void processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue );
 };
 
-//////////////////////////////////////////////////////////////////////////////
 // draw:text-box context
 
 class SdXMLTextBoxShapeContext : public SdXMLShapeContext
@@ -261,7 +254,6 @@ public:
     virtual void processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue );
 };
 
-//////////////////////////////////////////////////////////////////////////////
 // draw:control context
 
 class SdXMLControlShapeContext : public SdXMLShapeContext
@@ -284,7 +276,6 @@ public:
     virtual void processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue );
 };
 
-//////////////////////////////////////////////////////////////////////////////
 // draw:connector context
 
 class SdXMLConnectorShapeContext : public SdXMLShapeContext
@@ -321,7 +312,6 @@ public:
     virtual void processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue );
 };
 
-//////////////////////////////////////////////////////////////////////////////
 // draw:measure context
 
 class SdXMLMeasureShapeContext : public SdXMLShapeContext
@@ -346,7 +336,6 @@ public:
     virtual void processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue );
 };
 
-//////////////////////////////////////////////////////////////////////////////
 // draw:page context
 
 class SdXMLPageShapeContext : public SdXMLShapeContext
@@ -368,7 +357,6 @@ public:
     virtual void processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue );
 };
 
-//////////////////////////////////////////////////////////////////////////////
 // draw:caption context
 
 class SdXMLCaptionShapeContext : public SdXMLShapeContext
@@ -392,7 +380,6 @@ public:
     virtual void processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue );
 };
 
-//////////////////////////////////////////////////////////////////////////////
 // office:image context
 
 class SdXMLGraphicObjectShapeContext : public SdXMLShapeContext
@@ -420,7 +407,6 @@ public:
     virtual void processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue );
 };
 
-//////////////////////////////////////////////////////////////////////////////
 // chart:chart context
 
 class SdXMLChartShapeContext : public SdXMLShapeContext
@@ -444,7 +430,6 @@ public:
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList );
 };
 
-//////////////////////////////////////////////////////////////////////////////
 // draw:object and draw:object_ole context
 
 class SdXMLObjectShapeContext : public SdXMLShapeContext
@@ -477,7 +462,6 @@ public:
     virtual void processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue );
 };
 
-//////////////////////////////////////////////////////////////////////////////
 // draw:applet
 
 class SdXMLAppletShapeContext : public SdXMLShapeContext
@@ -510,7 +494,6 @@ public:
     virtual void processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue );
 };
 
-//////////////////////////////////////////////////////////////////////////////
 // draw:plugin
 
 class SdXMLPluginShapeContext : public SdXMLShapeContext
@@ -542,7 +525,6 @@ public:
     virtual void processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue );
 };
 
-//////////////////////////////////////////////////////////////////////////////
 // draw:floating-frame
 
 class SdXMLFloatingFrameShapeContext : public SdXMLShapeContext
@@ -568,7 +550,6 @@ public:
     virtual void processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue );
 };
 
-//////////////////////////////////////////////////////////////////////////////
 // draw:-frame
 
 class SdXMLFrameShapeContext : public SdXMLShapeContext, public MultiImageImportHelper
@@ -632,7 +613,6 @@ public:
     virtual void processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue );
 };
 
-//////////////////////////////////////////////////////////////////////////////
 // draw:table
 
 class SdXMLTableShapeContext : public SdXMLShapeContext

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <escphdl.hxx>
 
 #include <sax/tools/converter.hxx>
@@ -25,7 +24,6 @@
 #include <xmloff/xmluconv.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/uno/Any.hxx>
-
 
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
@@ -35,7 +33,6 @@ using namespace ::xmloff::token;
 #define DFLT_ESC_AUTO_SUPER 101
 #define DFLT_ESC_AUTO_SUB  -101
 
-///////////////////////////////////////////////////////////////////////////////
 //
 // class XMLEscapementPropHdl
 //
@@ -101,7 +98,6 @@ sal_Bool XMLEscapementPropHdl::exportXML( OUString& rStrExpValue, const uno::Any
     return sal_True;
 }
 
-///////////////////////////////////////////////////////////////////////////////
 //
 // class XMLEscapementHeightPropHdl
 //

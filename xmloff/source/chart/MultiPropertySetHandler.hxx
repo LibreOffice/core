@@ -24,7 +24,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 
-
 /** @descr  MultiPropertySetHandler handles the two slightly different
         interfaces XPropertySet and XMultiPorpertySet for accessing
         properties of an object.
@@ -60,9 +59,6 @@ public:
     const OUString msName;
 };
 
-
-
-
 /** @descr  For every property type there will be one instantiation of this
         template class with its own and type specific version of SetValue.
 */
@@ -89,9 +85,6 @@ private:
     T   &   mrValue;
 };
 
-
-
-
 /** @descr  Function object for comparing two OUStrings.
 */
 class   OUStringComparison
@@ -103,9 +96,6 @@ public:
         return (a.compareTo (b) < 0);
     }
 };
-
-
-
 
 /** @descr  This class lets you get the values from an object that either
         supports the interface XPropertySet or XMultiPropertySet.  If it
@@ -184,18 +174,11 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>    mxObject;
 };
 
-
-
-//=====  Inline implementation of the methods declared above  ==========================
-
 MultiPropertySetHandler::MultiPropertySetHandler (::com::sun::star::uno::Reference<
     ::com::sun::star::uno::XInterface> xObject)
         :   mxObject (xObject)
 {
 }
-
-
-
 
 MultiPropertySetHandler::~MultiPropertySetHandler (void)
 {
@@ -203,8 +186,6 @@ MultiPropertySetHandler::~MultiPropertySetHandler (void)
     for (I=aPropertyList.begin(); I!=aPropertyList.end(); ++I)
         delete I->second;
 }
-
-
 
 sal_Bool    MultiPropertySetHandler::GetProperties  (void)
 {
@@ -218,9 +199,6 @@ sal_Bool    MultiPropertySetHandler::GetProperties  (void)
             return sal_False;
     return sal_True;
 }
-
-
-
 
 sal_Bool    MultiPropertySetHandler::MultiGet   (const ::com::sun::star::uno::Sequence<
     OUString> & rNameList)
@@ -247,9 +225,6 @@ sal_Bool    MultiPropertySetHandler::MultiGet   (const ::com::sun::star::uno::Se
     return sal_True;
 }
 
-
-
-
 sal_Bool    MultiPropertySetHandler::SingleGet  (const ::com::sun::star::uno::Sequence<
     OUString> & rNameList)
 {
@@ -272,7 +247,6 @@ sal_Bool    MultiPropertySetHandler::SingleGet  (const ::com::sun::star::uno::Se
 
     return sal_True;
 }
-
 
 #endif
 

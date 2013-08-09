@@ -21,11 +21,8 @@
 #include "ximplink.hxx"
 #include <xmloff/xmltoken.hxx>
 
-
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
-
-//////////////////////////////////////////////////////////////////////////////
 
 TYPEINIT1( SdXMLShapeLinkContext, SvXMLImportContext );
 
@@ -48,13 +45,9 @@ SdXMLShapeLinkContext::SdXMLShapeLinkContext( SvXMLImport& rImport, sal_uInt16 n
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 SdXMLShapeLinkContext::~SdXMLShapeLinkContext()
 {
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 SvXMLImportContext* SdXMLShapeLinkContext::CreateChildContext( sal_uInt16 nPrefix,
     const OUString& rLocalName,
@@ -73,19 +66,14 @@ SvXMLImportContext* SdXMLShapeLinkContext::CreateChildContext( sal_uInt16 nPrefi
 
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 void SdXMLShapeLinkContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttr )
 {
     SvXMLImportContext::StartElement( xAttr );
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 void SdXMLShapeLinkContext::EndElement()
 {
     SvXMLImportContext::EndElement();
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

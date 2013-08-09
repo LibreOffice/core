@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <fonthdl.hxx>
 
 #include <sax/tools/converter.hxx>
@@ -27,7 +26,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <tools/fontenum.hxx>
-
 
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
@@ -54,10 +52,8 @@ static SvXMLEnumMapEntry const aFontPitchMapping[] =
     { XML_VARIABLE,         PITCH_VARIABLE  },
     { XML_TOKEN_INVALID,    0               }
 };
-///////////////////////////////////////////////////////////////////////////////
-//
+
 // class XMLFontFamilyNamePropHdl
-//
 
 XMLFontFamilyNamePropHdl::~XMLFontFamilyNamePropHdl()
 {
@@ -188,10 +184,7 @@ sal_Bool XMLFontFamilyNamePropHdl::exportXML( OUString& rStrExpValue, const uno:
     return bRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
 // class XMLFontFamilyPropHdl
-//
 
 XMLFontFamilyPropHdl::~XMLFontFamilyPropHdl()
 {
@@ -226,10 +219,7 @@ sal_Bool XMLFontFamilyPropHdl::exportXML( OUString& rStrExpValue, const uno::Any
     return bRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
 // class XMLFontEncodingPropHdl
-//
 
 XMLFontEncodingPropHdl::~XMLFontEncodingPropHdl()
 {
@@ -265,10 +255,7 @@ sal_Bool XMLFontEncodingPropHdl::exportXML( OUString& rStrExpValue, const uno::A
     return bRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
 // class XMLFontPitchPropHdl
-//
 
 XMLFontPitchPropHdl::~XMLFontPitchPropHdl()
 {

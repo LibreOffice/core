@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <com/sun/star/drawing/ColorMode.hpp>
 #include <com/sun/star/text/HorizontalAdjust.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
@@ -95,21 +94,14 @@ SvXMLEnumMapEntry const aXML_WritingDirection_Enum[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-
-///////////////////////////////////////////////////////////////////////////
-//
 // Dtor
-//
 XMLPropertyHandlerFactory::~XMLPropertyHandlerFactory()
 {
     for( CacheMap::iterator pPos = maHandlerCache.begin(); pPos != maHandlerCache.end(); ++pPos )
         delete pPos->second;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
 // Interface
-//
 const XMLPropertyHandler* XMLPropertyHandlerFactory::GetPropertyHandler( sal_Int32 nType ) const
 {
     DBG_ASSERT( (nType & ~((sal_uInt32)MID_FLAG_MASK)) == 0,
@@ -117,10 +109,7 @@ const XMLPropertyHandler* XMLPropertyHandlerFactory::GetPropertyHandler( sal_Int
     return GetBasicHandler( nType );
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
 // Helper-methods to create and cache PropertyHandler
-//
 XMLPropertyHandler* XMLPropertyHandlerFactory::GetHdlCache( sal_Int32 nType ) const
 {
     XMLPropertyHandler* pRet = NULL;

@@ -19,18 +19,13 @@
 
 #include "attriblistmerge.hxx"
 
-//.........................................................................
 namespace xmloff
 {
-//.........................................................................
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star;
 
-    //=====================================================================
     //= OAttribListMerger
-    //=====================================================================
-    //---------------------------------------------------------------------
     void OAttribListMerger::addList(const Reference< xml::sax::XAttributeList >& _rxList)
     {
         OSL_ENSURE(_rxList.is(), "OAttribListMerger::addList: invalid list!");
@@ -38,7 +33,6 @@ namespace xmloff
             m_aLists.push_back(_rxList);
     }
 
-    //---------------------------------------------------------------------
     sal_Bool OAttribListMerger::seekToIndex(sal_Int16 _nGlobalIndex, Reference< xml::sax::XAttributeList >& _rSubList, sal_Int16& _rLocalIndex)
     {
         sal_Int16 nLeftOver = _nGlobalIndex;
@@ -59,7 +53,6 @@ namespace xmloff
         return sal_True;
     }
 
-    //---------------------------------------------------------------------
     sal_Bool OAttribListMerger::seekToName(const OUString& _rName, Reference< xml::sax::XAttributeList >& _rSubList, sal_Int16& _rLocalIndex)
     {
         for (   ConstAttributeListArrayIterator aLookupSublist = m_aLists.begin();
@@ -78,7 +71,6 @@ namespace xmloff
         return sal_False;
     }
 
-    //---------------------------------------------------------------------
     sal_Int16 SAL_CALL OAttribListMerger::getLength(  ) throw(RuntimeException)
     {
         sal_Int16 nCount = 0;
@@ -90,7 +82,6 @@ namespace xmloff
         return nCount;
     }
 
-    //---------------------------------------------------------------------
     OUString SAL_CALL OAttribListMerger::getNameByIndex( sal_Int16 i ) throw(RuntimeException)
     {
         Reference< xml::sax::XAttributeList > xSubList;
@@ -102,7 +93,6 @@ namespace xmloff
         return xSubList->getNameByIndex(nLocalIndex);
     }
 
-    //---------------------------------------------------------------------
     OUString SAL_CALL OAttribListMerger::getTypeByIndex( sal_Int16 i ) throw(RuntimeException)
     {
         Reference< xml::sax::XAttributeList > xSubList;
@@ -114,7 +104,6 @@ namespace xmloff
         return xSubList->getTypeByIndex(nLocalIndex);
     }
 
-    //---------------------------------------------------------------------
     OUString SAL_CALL OAttribListMerger::getTypeByName( const OUString& _rName ) throw(RuntimeException)
     {
         Reference< xml::sax::XAttributeList > xSubList;
@@ -128,7 +117,6 @@ namespace xmloff
         return xSubList->getTypeByIndex(nLocalIndex);
     }
 
-    //---------------------------------------------------------------------
     OUString SAL_CALL OAttribListMerger::getValueByIndex( sal_Int16 i ) throw(RuntimeException)
     {
         Reference< xml::sax::XAttributeList > xSubList;
@@ -140,7 +128,6 @@ namespace xmloff
         return xSubList->getValueByIndex(nLocalIndex);
     }
 
-    //---------------------------------------------------------------------
     OUString SAL_CALL OAttribListMerger::getValueByName( const OUString& _rName ) throw(RuntimeException)
     {
         Reference< xml::sax::XAttributeList > xSubList;
@@ -154,8 +141,6 @@ namespace xmloff
         return xSubList->getValueByIndex(nLocalIndex);
     }
 
-//.........................................................................
 }   // namespace xmloff
-//.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

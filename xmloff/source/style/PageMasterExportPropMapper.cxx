@@ -32,9 +32,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::comphelper;
 using namespace ::xmloff::token;
 
-
-//______________________________________________________________________________
-
 static inline sal_Bool lcl_HasSameLineWidth( const table::BorderLine2& rLine1, const table::BorderLine2& rLine2 )
 {
     return  (rLine1.InnerLineWidth == rLine2.InnerLineWidth) &&
@@ -69,7 +66,6 @@ static void lcl_AddState(::std::vector< XMLPropertyState >& rPropState, sal_Int3
         rPropState.push_back(XMLPropertyState (nIndex, cppu::bool2any(sal_True)));
 }
 
-//______________________________________________________________________________
 // helper struct to handle equal XMLPropertyState's for page, header and footer
 
 struct XMLPropertyStateBuffer
@@ -213,8 +209,6 @@ void XMLPropertyStateBuffer::ContextFilter( ::std::vector< XMLPropertyState >& )
             lcl_RemoveState( pPMPaddingAll );
     }
 }
-
-//______________________________________________________________________________
 
 XMLPageMasterExportPropMapper::XMLPageMasterExportPropMapper(
         const UniReference< XMLPropertySetMapper >& rMapper,

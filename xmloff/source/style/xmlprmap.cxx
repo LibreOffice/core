@@ -27,7 +27,6 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <xmloff/xmltoken.hxx>
 
-
 using namespace ::std;
 
 using namespace ::com::sun::star::uno;
@@ -61,10 +60,7 @@ XMLPropertySetMapperEntry_Impl::XMLPropertySetMapperEntry_Impl(
     DBG_ASSERT( pHdl, "Unknown XML property type handler!" );
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
 // Ctor
-//
 XMLPropertySetMapper::XMLPropertySetMapper(
         const XMLPropertyMapEntry* pEntries,
         const UniReference< XMLPropertyHandlerFactory >& rFactory )
@@ -108,10 +104,7 @@ void XMLPropertySetMapper::AddMapperEntry(
     }
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
 // Export a Property
-//
 sal_Bool XMLPropertySetMapper::exportXML(
         OUString& rStrExpValue,
         const XMLPropertyState& rProperty,
@@ -129,10 +122,7 @@ sal_Bool XMLPropertySetMapper::exportXML(
     return bRet;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
 // Import a Property
-//
 sal_Bool XMLPropertySetMapper::importXML(
         const OUString& rStrImpValue,
         XMLPropertyState& rProperty,
@@ -149,12 +139,9 @@ sal_Bool XMLPropertySetMapper::importXML(
     return bRet;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
 // Search for the given name and the namespace in the list and return
 // the index of the entry
 // If there is no matching entry the method returns -1
-//
 sal_Int32 XMLPropertySetMapper::GetEntryIndex(
         sal_uInt16 nNamespace,
         const OUString& rStrName,
@@ -181,7 +168,6 @@ sal_Int32 XMLPropertySetMapper::GetEntryIndex(
 
     return -1;
 }
-
 
 /** searches for an entry that matches the given api name, namespace and local name or -1 if nothing found */
 sal_Int32 XMLPropertySetMapper::FindEntryIndex(

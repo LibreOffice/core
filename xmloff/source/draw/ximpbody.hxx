@@ -25,7 +25,6 @@
 #include <xmloff/nmspmap.hxx>
 #include "ximppage.hxx"
 
-//////////////////////////////////////////////////////////////////////////////
 // draw:page context
 
 class SdXMLDrawPageContext : public SdXMLGenericPageContext
@@ -50,7 +49,6 @@ public:
 
 };
 
-//////////////////////////////////////////////////////////////////////////////
 // office:body context
 
 class SdXMLBodyContext : public SvXMLImportContext
@@ -66,7 +64,6 @@ public:
         sal_uInt16 nPrefix, const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList );
 };
-
 
 #endif  //  _XIMPBODY_HXX
 

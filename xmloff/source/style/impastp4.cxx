@@ -34,15 +34,8 @@ using namespace ::std;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-//#############################################################################
-//
 // Class SvXMLAutoStylePool_Impl
-//
-
-///////////////////////////////////////////////////////////////////////////////
-//
 // ctor/dtor class SvXMLAutoStylePool_Impl
-//
 
 SvXMLAutoStylePoolP_Impl::SvXMLAutoStylePoolP_Impl( SvXMLExport& rExp)
     :   rExport( rExp )
@@ -53,10 +46,7 @@ SvXMLAutoStylePoolP_Impl::~SvXMLAutoStylePoolP_Impl()
 {
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
 // Adds stylefamily-information to sorted list
-//
 
 void SvXMLAutoStylePoolP_Impl::AddFamily(
         sal_Int32 nFamily,
@@ -105,11 +95,8 @@ void SvXMLAutoStylePoolP_Impl::SetFamilyPropSetMapper(
     if (aFind != maFamilyList.end())
         aFind->mxMapper = rMapper;
 }
-///////////////////////////////////////////////////////////////////////////////
-//
-// Adds a name to list
-//
 
+// Adds a name to list
 void SvXMLAutoStylePoolP_Impl::RegisterName( sal_Int32 nFamily, const OUString& rName )
 {
     XMLFamilyData_Impl aTmp( nFamily );
@@ -120,7 +107,6 @@ void SvXMLAutoStylePoolP_Impl::RegisterName( sal_Int32 nFamily, const OUString& 
         aFind->mpNameList->insert(rName);
 }
 
-///////////////////////////////////////////////////////////////////////////////
 //
 // Retrieve the list of registered names
 //
@@ -159,11 +145,8 @@ void SvXMLAutoStylePoolP_Impl::GetRegisteredNames(
     std::copy( aNames.begin(), aNames.end(), rNames.getArray() );
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
 // Adds a array of XMLPropertyState ( vector< XMLPropertyState > ) to list
 // if not added, yet.
-//
 
 sal_Bool SvXMLAutoStylePoolP_Impl::Add(OUString& rName, sal_Int32 nFamily,
                 const OUString& rParent,
@@ -255,7 +238,6 @@ sal_Bool SvXMLAutoStylePoolP_Impl::AddNamed(const OUString& rName, sal_Int32 nFa
     return bRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
 //
 // Search for a array of XMLPropertyState ( vector< XMLPropertyState > ) in list
 //
@@ -290,7 +272,6 @@ OUString SvXMLAutoStylePoolP_Impl::Find( sal_Int32 nFamily,
     return sName;
 }
 
-///////////////////////////////////////////////////////////////////////////////
 //
 // export
 //
@@ -316,7 +297,6 @@ void SvXMLAutoStylePoolP_Impl::exportXML(
     if (!nCount)
         return;
 
-    /////////////////////////////////////////////////////////////////////////////////////
     // create, initialize and fill helper-structure (SvXMLAutoStylePoolProperties_Impl)
     // which contains a parent-name and a SvXMLAutoStylePoolProperties_Impl
     //
@@ -354,7 +334,6 @@ void SvXMLAutoStylePoolP_Impl::exportXML(
         }
     }
 
-    /////////////////////////////////////////////////////////////////////////////////////
     //
     // create string to export for each XML-style. That means for each property-list
     //

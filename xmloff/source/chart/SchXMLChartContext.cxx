@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "SchXMLChartContext.hxx"
 #include "SchXMLImport.hxx"
 #include "SchXMLLegendContext.hxx"
@@ -56,7 +55,6 @@
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
-
 
 using namespace com::sun::star;
 using namespace ::xmloff::token;
@@ -220,8 +218,6 @@ uno::Sequence< sal_Int32 > lcl_getNumberSequenceFromString( const OUString& rStr
 }
 
 } // anonymous namespace
-
-// ----------------------------------------
 
 SchXMLChartContext::SchXMLChartContext( SchXMLImportHelper& rImpHelper,
                                         SvXMLImport& rImport, const OUString& rLocalName ) :
@@ -480,7 +476,6 @@ void lcl_swapPointAndSeriesStylesForDonutCharts( ::std::list< DataRowPointStyle 
         nOldSeriesCount = nMaxOldSeriesIndex+1;
     }
 
-
     //initialize new series styles
     ::std::map< Reference< chart2::XDataSeries >, sal_Int32 >::const_iterator aSeriesMapIt( aSeriesMap.begin() );
     ::std::map< Reference< chart2::XDataSeries >, sal_Int32 >::const_iterator aSeriesMapEnd( aSeriesMap.end() );
@@ -582,7 +577,6 @@ bool lcl_SpecialHandlingForDonutChartNeeded(
 
 } // anonymous namespace
 
-
 static void lcl_ApplyDataFromRectangularRangeToDiagram(
         const uno::Reference< chart2::XChartDocument >& xNewDoc
         , const OUString& rRectangularRange
@@ -660,7 +654,6 @@ static void lcl_ApplyDataFromRectangularRangeToDiagram(
                 beans::PropertyState_DIRECT_VALUE );
         }
     }
-
 
     uno::Reference< chart2::data::XDataSource > xDataSource(
         xDataProvider->createDataSource( aArgs ));
@@ -1105,7 +1098,6 @@ SvXMLImportContext* SchXMLChartContext::CreateChildContext(
     return pContext;
 }
 
-
 /*
     With a locked controller the following is done here:
         1.  Hide title, subtitle, and legend.
@@ -1143,8 +1135,6 @@ void SchXMLChartContext::InitChart(
         }
     }
 }
-
-// ----------------------------------------
 
 SchXMLTitleContext::SchXMLTitleContext( SchXMLImportHelper& rImpHelper, SvXMLImport& rImport,
                                         const OUString& rLocalName,
@@ -1197,7 +1187,6 @@ void SchXMLTitleContext::StartElement( const uno::Reference< xml::sax::XAttribut
         }
     }
 
-
     if( mxTitleShape.is())
     {
         if( bHasXPosition && bHasYPosition )
@@ -1236,8 +1225,5 @@ SvXMLImportContext* SchXMLTitleContext::CreateChildContext(
 
     return pContext;
 }
-
-// ----------------------------------------
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

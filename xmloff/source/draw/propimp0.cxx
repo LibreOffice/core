@@ -32,16 +32,11 @@
 
 using namespace ::com::sun::star;
 
-//////////////////////////////////////////////////////////////////////////////
 // implementation of graphic property Stroke
 
-
-//////////////////////////////////////////////////////////////////////////////
 // implementation of presentation page property Change
 
-//////////////////////////////////////////////////////////////////////////////
 // implementation of an effect duration property handler
-
 
 XMLDurationPropertyHdl::~XMLDurationPropertyHdl()
 {
@@ -84,9 +79,7 @@ sal_Bool XMLDurationPropertyHdl::exportXML(
     return sal_False;
 }
 
-//////////////////////////////////////////////////////////////////////////////
 // implementation of an opacity property handler
-
 
 XMLOpacityPropertyHdl::XMLOpacityPropertyHdl( SvXMLImport* pImport )
 : mpImport( pImport )
@@ -166,7 +159,6 @@ sal_Bool XMLOpacityPropertyHdl::exportXML(
     return bRet;
 }
 
-//////////////////////////////////////////////////////////////////////////////
 // implementation of an text animation step amount
 
 XMLTextAnimationStepPropertyHdl::~XMLTextAnimationStepPropertyHdl()
@@ -232,8 +224,6 @@ sal_Bool XMLTextAnimationStepPropertyHdl::exportXML(
 
     return bRet;
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 #include "sdxmlexp_impl.hxx"
 

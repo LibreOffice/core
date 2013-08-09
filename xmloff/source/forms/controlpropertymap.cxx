@@ -30,10 +30,8 @@
 
 using namespace ::xmloff::token;
 
-//.........................................................................
 namespace xmloff
 {
-//.........................................................................
 
 #define MAP_ASCII( name, prefix, token, type, context )  { name, sizeof(name)-1, prefix, token, type|XML_TYPE_PROP_TEXT, context, SvtSaveOptions::ODFVER_010 }
 #define MAP_CONST( name, prefix, token, type, context )  { name, sizeof(name)-1, prefix, token, type|XML_TYPE_PROP_TEXT, context, SvtSaveOptions::ODFVER_010 }
@@ -87,8 +85,6 @@ namespace xmloff
         return getControlStylePropertyMap_Access();
     }
 
-    //=====================================================================
-    //---------------------------------------------------------------------
     struct XMLPropertyMapEntryLess
     {
         sal_Bool operator()(const XMLPropertyMapEntry& _rLeft, const XMLPropertyMapEntry& _rRight)
@@ -97,7 +93,6 @@ namespace xmloff
         }
     };
 
-    //---------------------------------------------------------------------
     void implSortMap(XMLPropertyMapEntry* _pMap)
     {
         XMLPropertyMapEntry* pEnd;
@@ -107,7 +102,6 @@ namespace xmloff
         ::std::sort(_pMap, pEnd, XMLPropertyMapEntryLess());
     }
 
-    //---------------------------------------------------------------------
     void initializePropertyMaps()
     {
         static sal_Bool bSorted = sal_False;
@@ -118,16 +112,12 @@ namespace xmloff
         }
     }
 
-    //=====================================================================
     //= OFormComponentStyleExportMapper
-    //=====================================================================
-    //---------------------------------------------------------------------
     OFormComponentStyleExportMapper::OFormComponentStyleExportMapper( const UniReference< XMLPropertySetMapper >& _rMapper )
         :SvXMLExportPropertyMapper( _rMapper )
     {
     }
 
-    //---------------------------------------------------------------------
     void OFormComponentStyleExportMapper::handleSpecialItem( SvXMLAttributeList& _rAttrList, const XMLPropertyState& _rProperty, const SvXMLUnitConverter& _rUnitConverter,
         const SvXMLNamespaceMap& _rNamespaceMap, const ::std::vector< XMLPropertyState >* _pProperties,
         sal_uInt32 _nIdx ) const
@@ -137,9 +127,6 @@ namespace xmloff
             SvXMLExportPropertyMapper::handleSpecialItem( _rAttrList, _rProperty, _rUnitConverter, _rNamespaceMap, _pProperties, _nIdx );
     }
 
-//.........................................................................
 }   // namespace xmloff
-//.........................................................................
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

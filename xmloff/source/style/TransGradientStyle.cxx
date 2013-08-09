@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "TransGradientStyle.hxx"
 
 #include <com/sun/star/awt/Gradient.hpp>
@@ -35,7 +34,6 @@
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmlimp.hxx>
-
 
 using namespace ::com::sun::star;
 
@@ -55,7 +53,6 @@ enum SvXMLTokenMapAttrs
     XML_TOK_TABSTOP_END=XML_TOK_UNKNOWN
 };
 
-
 SvXMLEnumMapEntry const pXML_GradientStyle_Enum[] =
 {
     { XML_GRADIENTSTYLE_LINEAR,         awt::GradientStyle_LINEAR },
@@ -67,10 +64,7 @@ SvXMLEnumMapEntry const pXML_GradientStyle_Enum[] =
     { XML_TOKEN_INVALID,                0 }
 };
 
-
-//-------------------------------------------------------------
 // Import
-//-------------------------------------------------------------
 
 XMLTransGradientStyleImport::XMLTransGradientStyleImport( SvXMLImport& rImp )
     : rImport(rImp)
@@ -216,10 +210,7 @@ sal_Bool XMLTransGradientStyleImport::importXML(
     return bRet;
 }
 
-
-//-------------------------------------------------------------
 // Export
-//-------------------------------------------------------------
 
 XMLTransGradientStyleExport::XMLTransGradientStyleExport( SvXMLExport& rExp )
     : rExport(rExp)
@@ -229,7 +220,6 @@ XMLTransGradientStyleExport::XMLTransGradientStyleExport( SvXMLExport& rExp )
 XMLTransGradientStyleExport::~XMLTransGradientStyleExport()
 {
 }
-
 
 sal_Bool XMLTransGradientStyleExport::exportXML(
     const OUString& rStrName,
@@ -276,7 +266,6 @@ sal_Bool XMLTransGradientStyleExport::exportXML(
                     aStrValue = aOut.makeStringAndClear();
                     rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_CY, aStrValue );
                 }
-
 
                 Color aColor;
 

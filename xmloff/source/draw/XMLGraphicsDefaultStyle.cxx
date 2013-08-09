@@ -27,7 +27,6 @@
 #include "XMLShapePropertySetContext.hxx"
 #include <xmloff/XMLGraphicsDefaultStyle.hxx>
 
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -38,8 +37,6 @@ using ::xmloff::token::IsXMLToken;
 using ::xmloff::token::XML_TEXT_PROPERTIES;
 using ::xmloff::token::XML_GRAPHIC_PROPERTIES;
 using ::xmloff::token::XML_PARAGRAPH_PROPERTIES;
-
-// ---------------------------------------------------------------------
 
 TYPEINIT1( XMLGraphicsDefaultStyle, XMLPropStyleContext );
 
@@ -118,6 +115,5 @@ void XMLGraphicsDefaultStyle::SetDefaults()
 
     FillPropertySet( xDefaults );
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -30,7 +30,6 @@
 #include <com/sun/star/drawing/Position3D.hpp>
 #include "ximpshap.hxx"
 
-//////////////////////////////////////////////////////////////////////////////
 // common shape context
 
 class SdXML3DObjectContext : public SdXMLShapeContext
@@ -56,7 +55,6 @@ public:
     virtual void EndElement();
 };
 
-//////////////////////////////////////////////////////////////////////////////
 // dr3d:3dcube context
 
 class SdXML3DCubeObjectShapeContext : public SdXML3DObjectContext
@@ -80,7 +78,6 @@ public:
     virtual void EndElement();
 };
 
-//////////////////////////////////////////////////////////////////////////////
 // dr3d:3dsphere context
 
 class SdXML3DSphereObjectShapeContext : public SdXML3DObjectContext
@@ -104,7 +101,6 @@ public:
     virtual void EndElement();
 };
 
-//////////////////////////////////////////////////////////////////////////////
 // polygonbased context
 
 class SdXML3DPolygonBasedShapeContext : public SdXML3DObjectContext
@@ -126,7 +122,6 @@ public:
     virtual void EndElement();
 };
 
-//////////////////////////////////////////////////////////////////////////////
 // dr3d:3dlathe context
 
 class SdXML3DLatheObjectShapeContext : public SdXML3DPolygonBasedShapeContext
@@ -145,7 +140,6 @@ public:
     virtual void EndElement();
 };
 
-//////////////////////////////////////////////////////////////////////////////
 // dr3d:3dextrude context
 
 class SdXML3DExtrudeObjectShapeContext : public SdXML3DPolygonBasedShapeContext

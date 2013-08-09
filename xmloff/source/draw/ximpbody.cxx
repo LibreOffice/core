@@ -37,10 +37,7 @@
 #include "PropertySetMerger.hxx"
 #include "animationimport.hxx"
 
-
 using namespace ::com::sun::star;
-
-//////////////////////////////////////////////////////////////////////////////
 
 SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
     sal_uInt16 nPrfx, const OUString& rLocalName,
@@ -209,13 +206,9 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
     DeleteAllShapes();
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 SdXMLDrawPageContext::~SdXMLDrawPageContext()
 {
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 SvXMLImportContext *SdXMLDrawPageContext::CreateChildContext( sal_uInt16 nPrefix,
     const OUString& rLocalName,
@@ -286,22 +279,15 @@ void SdXMLDrawPageContext::EndElement()
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-
 SdXMLBodyContext::SdXMLBodyContext( SdXMLImport& rImport,
     sal_uInt16 nPrfx, const OUString& rLocalName )
 :   SvXMLImportContext( rImport, nPrfx, rLocalName )
 {
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 SdXMLBodyContext::~SdXMLBodyContext()
 {
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 SvXMLImportContext *SdXMLBodyContext::CreateChildContext(
     sal_uInt16 nPrefix,

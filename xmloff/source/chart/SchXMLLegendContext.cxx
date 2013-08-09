@@ -35,8 +35,6 @@ using namespace com::sun::star;
 
 using com::sun::star::uno::Reference;
 
-//----------------------------------------
-
 namespace
 {
 
@@ -80,8 +78,6 @@ public:
 struct theLegendAttributeTokenMap : public rtl::Static< LegendAttributeTokenMap, theLegendAttributeTokenMap > {};
 
 }//end anonymous namespace
-
-//----------------------------------------
 
 SchXMLLegendContext::SchXMLLegendContext( SchXMLImportHelper& rImpHelper, SvXMLImport& rImport, const OUString& rLocalName ) :
     SvXMLImportContext( rImport, XML_NAMESPACE_CHART, rLocalName ),

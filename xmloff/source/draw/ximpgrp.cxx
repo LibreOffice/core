@@ -24,11 +24,8 @@
 #include "eventimp.hxx"
 #include "descriptionimp.hxx"
 
-
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
-
-//////////////////////////////////////////////////////////////////////////////
 
 TYPEINIT1( SdXMLGroupShapeContext, SvXMLImportContext );
 
@@ -42,13 +39,9 @@ SdXMLGroupShapeContext::SdXMLGroupShapeContext(
 {
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 SdXMLGroupShapeContext::~SdXMLGroupShapeContext()
 {
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 SvXMLImportContext* SdXMLGroupShapeContext::CreateChildContext( sal_uInt16 nPrefix,
     const OUString& rLocalName,
@@ -85,8 +78,6 @@ SvXMLImportContext* SdXMLGroupShapeContext::CreateChildContext( sal_uInt16 nPref
     return pContext;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 void SdXMLGroupShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>&)
 {
     // create new group shape and add it to rShapes, use it
@@ -105,8 +96,6 @@ void SdXMLGroupShapeContext::StartElement(const uno::Reference< xml::sax::XAttri
     GetImport().GetShapeImport()->finishShape( mxShape, mxAttrList, mxShapes );
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 void SdXMLGroupShapeContext::EndElement()
 {
     if( mxChildren.is() )
@@ -114,6 +103,5 @@ void SdXMLGroupShapeContext::EndElement()
 
     SdXMLShapeContext::EndElement();
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

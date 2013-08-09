@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <comphelper/string.hxx>
 #include <unotools/syslocale.hxx>
 
@@ -47,11 +46,8 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/ptr_container/ptr_set.hpp>
 
-
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
-
-//-------------------------------------------------------------------------
 
 struct SvXMLNumFmtEntry
 {
@@ -79,8 +75,6 @@ struct SvXMLEmbeddedElement
 };
 
 typedef boost::ptr_set<SvXMLEmbeddedElement> SvXMLEmbeddedElementArr;
-
-//-------------------------------------------------------------------------
 
 class SvXMLNumImpData
 {
@@ -111,7 +105,6 @@ public:
     void                    SetUsed( sal_uInt32 nKey );
     void                    RemoveVolatileFormats();
 };
-
 
 struct SvXMLNumberInfo
 {
@@ -164,7 +157,6 @@ public:
     void    AddEmbeddedElement( sal_Int32 nFormatPos, const OUString& rContent );
 };
 
-
 class SvXMLNumFmtEmbeddedTextContext : public SvXMLImportContext
 {
     SvXMLNumFmtElementContext&  rParent;
@@ -186,7 +178,6 @@ public:
     virtual void Characters( const OUString& rChars );
     virtual void EndElement();
 };
-
 
 class SvXMLNumFmtMapContext : public SvXMLImportContext
 {
@@ -210,7 +201,6 @@ public:
     virtual void EndElement();
 };
 
-
 class SvXMLNumFmtPropContext : public SvXMLImportContext
 {
     SvXMLNumFormatContext&  rParent;
@@ -232,9 +222,6 @@ public:
     virtual void Characters( const OUString& rChars );
     virtual void EndElement();
 };
-
-
-//-------------------------------------------------------------------------
 
 enum SvXMLStyleTokens
 {
@@ -301,8 +288,6 @@ enum SvXMLStyleElemAttrTokens
     XML_TOK_ELEM_ATTR_CALENDAR
 };
 
-//-------------------------------------------------------------------------
-
 //
 //  standard colors
 //
@@ -343,8 +328,6 @@ static const SvXMLEnumMapEntry aFormatSourceMap[] =
     { XML_TOKEN_INVALID,    0 }
 };
 
-//-------------------------------------------------------------------------
-
 struct SvXMLDefaultDateFormat
 {
     NfIndexTableOffset          eFormat;
@@ -377,8 +360,6 @@ static const SvXMLDefaultDateFormat aDefaultDateFormats[] =
     { NF_DATETIME_SYSTEM_SHORT_HHMM,    XML_DEA_NONE,   XML_DEA_ANY,    XML_DEA_ANY,        XML_DEA_ANY,    XML_DEA_ANY,    XML_DEA_ANY,    XML_DEA_NONE,   sal_True },
     { NF_DATETIME_SYS_DDMMYYYY_HHMMSS,  XML_DEA_NONE,   XML_DEA_ANY,    XML_DEA_ANY,        XML_DEA_ANY,    XML_DEA_ANY,    XML_DEA_ANY,    XML_DEA_ANY,    sal_False }
 };
-
-//-------------------------------------------------------------------------
 
 //
 //  SvXMLNumImpData
@@ -617,8 +598,6 @@ const LocaleDataWrapper& SvXMLNumImpData::GetLocaleData( LanguageType nLang )
     return *pLocaleData;
 }
 
-//-------------------------------------------------------------------------
-
 //
 //  SvXMLNumFmtMapContext
 //
@@ -668,8 +647,6 @@ void SvXMLNumFmtMapContext::EndElement()
     rParent.AddCondition( sCondition, sName );
 }
 
-//-------------------------------------------------------------------------
-
 //
 //  SvXMLNumFmtPropContext
 //
@@ -717,8 +694,6 @@ void SvXMLNumFmtPropContext::EndElement()
     if (bColSet)
         rParent.AddColor( m_nColor );
 }
-
-//-------------------------------------------------------------------------
 
 //
 //  SvXMLNumFmtEmbeddedTextContext
@@ -770,8 +745,6 @@ void SvXMLNumFmtEmbeddedTextContext::EndElement()
 {
     rParent.AddEmbeddedElement( nTextPosition, aContent.makeStringAndClear() );
 }
-
-//-------------------------------------------------------------------------
 
 static sal_Bool lcl_ValidChar( sal_Unicode cChar, const SvXMLNumFormatContext& rParent )
 {
@@ -1259,8 +1232,6 @@ void SvXMLNumFmtElementContext::EndElement()
     }
 }
 
-//-------------------------------------------------------------------------
-
 sal_uInt16 SvXMLNumFmtDefaults::GetDefaultDateFormat( SvXMLDateElementAttributes eDOW,
                 SvXMLDateElementAttributes eDay, SvXMLDateElementAttributes eMonth,
                 SvXMLDateElementAttributes eYear, SvXMLDateElementAttributes eHours,
@@ -1286,8 +1257,6 @@ sal_uInt16 SvXMLNumFmtDefaults::GetDefaultDateFormat( SvXMLDateElementAttributes
 
     return NF_INDEX_TABLE_ENTRIES;  // invalid
 }
-
-//-------------------------------------------------------------------------
 
 //
 //  SvXMLNumFormatContext
@@ -2172,8 +2141,6 @@ sal_Bool SvXMLNumFormatContext::IsSystemLanguage()
 {
     return nFormatLang == LANGUAGE_SYSTEM;
 }
-
-//-------------------------------------------------------------------------
 
 //
 //  SvXMLNumFmtHelper

@@ -20,10 +20,7 @@
 #include "ximpnote.hxx"
 #include <com/sun/star/presentation/XPresentationPage.hpp>
 
-
 using namespace ::com::sun::star;
-
-//////////////////////////////////////////////////////////////////////////////
 
 SdXMLNotesContext::SdXMLNotesContext( SdXMLImport& rImport,
     sal_uInt16 nPrfx, const OUString& rLocalName,
@@ -91,13 +88,9 @@ SdXMLNotesContext::SdXMLNotesContext( SdXMLImport& rImport,
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 SdXMLNotesContext::~SdXMLNotesContext()
 {
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 SvXMLImportContext *SdXMLNotesContext::CreateChildContext( sal_uInt16 nPrefix,
     const OUString& rLocalName,
@@ -109,20 +102,12 @@ SvXMLImportContext *SdXMLNotesContext::CreateChildContext( sal_uInt16 nPrefix,
     // some special objects inside presentation:notes context
     // ...
 
-
-
-
-
-
-
     // call parent when no own context was created
     if(!pContext)
         pContext = SdXMLGenericPageContext::CreateChildContext(nPrefix, rLocalName, xAttrList);
 
     return pContext;
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 void SdXMLNotesContext::EndElement()
 {

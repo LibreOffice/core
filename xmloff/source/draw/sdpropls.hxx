@@ -29,18 +29,15 @@
 #include <xmloff/xmlprmap.hxx>
 #include <xmloff/xmlexppr.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
 // entry list for graphic properties
 
 extern const XMLPropertyMapEntry aXMLSDProperties[];
 
-//////////////////////////////////////////////////////////////////////////////
 // entry list for presentation page properties
 
 extern const XMLPropertyMapEntry aXMLSDPresPageProps[];
 extern const XMLPropertyMapEntry aXMLSDPresPageProps_onlyHeadersFooter[];
 
-//////////////////////////////////////////////////////////////////////////////
 // types of own properties
 
 #define XML_SD_TYPE_STROKE                          (XML_SD_TYPES_START +  0)
@@ -89,14 +86,12 @@ extern const XMLPropertyMapEntry aXMLSDPresPageProps_onlyHeadersFooter[];
 #define XML_SD_TYPE_TEX_KIND                        (XML_SD_TYPES_START + 45 )
 #define XML_SD_TYPE_TEX_MODE                        (XML_SD_TYPES_START + 46 )
 
-//////////////////////////////////////////////////////////////////////////////
 // #FontWork# types
 #define XML_SD_TYPE_FONTWORK_STYLE                  (XML_SD_TYPES_START + 47 )
 #define XML_SD_TYPE_FONTWORK_ADJUST                 (XML_SD_TYPES_START + 48 )
 #define XML_SD_TYPE_FONTWORK_SHADOW                 (XML_SD_TYPES_START + 49 )
 #define XML_SD_TYPE_FONTWORK_FORM                   (XML_SD_TYPES_START + 50 )
 
-//////////////////////////////////////////////////////////////////////////////
 // Caption types
 #define XML_SD_TYPE_CAPTION_ANGLE_TYPE              (XML_SD_TYPES_START + 60 )
 #define XML_SD_TYPE_CAPTION_IS_ESC_REL              (XML_SD_TYPES_START + 61 )
@@ -105,12 +100,9 @@ extern const XMLPropertyMapEntry aXMLSDPresPageProps_onlyHeadersFooter[];
 #define XML_SD_TYPE_CAPTION_ESC_DIR                 (XML_SD_TYPES_START + 64 )
 #define XML_SD_TYPE_CAPTION_TYPE                    (XML_SD_TYPES_START + 65 )
 
-//////////////////////////////////////////////////////////////////////////////
 // header & footer types
 #define XML_SD_TYPE_DATETIMEUPDATE                  (XML_SD_TYPES_START + 70 )
 #define XML_SD_TYPE_DATETIME_FORMAT                 (XML_SD_TYPES_START + 71 )
-
-//////////////////////////////////////////////////////////////////////////////
 
 // new types for merged style:protect attribute
 #define XML_SD_TYPE_MOVE_PROTECT                    (XML_SD_TYPES_START + 72 )
@@ -119,16 +111,12 @@ extern const XMLPropertyMapEntry aXMLSDPresPageProps_onlyHeadersFooter[];
 // new type for style:mirror attribute
 #define XML_TYPE_SD_MIRROR                          (XML_SD_TYPES_START + 74 )
 
-//////////////////////////////////////////////////////////////////////////////
-
 // new smil transition types for pages
 #define XML_SD_TYPE_TRANSITION_TYPE                 (XML_SD_TYPES_START + 75 )
 #define XML_SD_TYPE_TRANSTIION_SUBTYPE              (XML_SD_TYPES_START + 76 )
 #define XML_SD_TYPE_TRANSTIION_DIRECTION            (XML_SD_TYPES_START + 77 )
 
 #define XML_SD_TYPE_HEADER_FOOTER_VISIBILITY_TYPE   (XML_SD_TYPES_START + 78 )
-
-//////////////////////////////////////////////////////////////////////////////
 
 #define CTF_NUMBERINGRULES          1000
 #define CTF_CONTROLWRITINGMODE      1001
@@ -157,7 +145,6 @@ extern const XMLPropertyMapEntry aXMLSDPresPageProps_onlyHeadersFooter[];
 #define CTF_PAGE_TRANSITION_DIRECTION   1023
 #define CTF_PAGE_TRANSITION_FADECOLOR   1024
 
-//////////////////////////////////////////////////////////////////////////////
 // #FontWork#
 #define CTF_FONTWORK_STYLE              1021
 #define CTF_FONTWORK_ADJUST             1022
@@ -173,7 +160,6 @@ extern const XMLPropertyMapEntry aXMLSDPresPageProps_onlyHeadersFooter[];
 #define CTF_FONTWORK_HIDEFORM           1032
 #define CTF_FONTWORK_SHADOWTRANSPARENCE 1033
 
-//////////////////////////////////////////////////////////////////////////////
 // OLE part 1
 #define CTF_SD_OLE_VIS_AREA_IMPORT_LEFT     1040
 #define CTF_SD_OLE_VIS_AREA_IMPORT_TOP      1041
@@ -184,13 +170,11 @@ extern const XMLPropertyMapEntry aXMLSDPresPageProps_onlyHeadersFooter[];
 #define CTF_SD_MOVE_PROTECT             1045
 #define CTF_SD_SIZE_PROTECT             1046
 
-//////////////////////////////////////////////////////////////////////////////
 // caption
 #define CTF_CAPTION_ISESCREL            1047
 #define CTF_CAPTION_ESCREL              1048
 #define CTF_CAPTION_ESCABS              1049
 
-//////////////////////////////////////////////////////////////////////////////
 // header&footer
 #define CTF_HEADER_VISIBLE              1050
 #define CTF_FOOTER_VISIBLE              1051
@@ -202,7 +186,6 @@ extern const XMLPropertyMapEntry aXMLSDPresPageProps_onlyHeadersFooter[];
 #define CTF_DATE_TIME_FORMAT            1057
 #define CTF_DATE_TIME_UPDATE            1058
 
-//////////////////////////////////////////////////////////////////////////////
 // OLE part 2
 #define CTF_SD_OLE_ASPECT                   1059
 #define CTF_SD_OLE_VIS_AREA_EXPORT_LEFT     1060
@@ -210,18 +193,14 @@ extern const XMLPropertyMapEntry aXMLSDPresPageProps_onlyHeadersFooter[];
 #define CTF_SD_OLE_VIS_AREA_EXPORT_WIDTH    1062
 #define CTF_SD_OLE_VIS_AREA_EXPORT_HEIGHT   1063
 
-//////////////////////////////////////////////////////////////////////////////
 // enum maps for attributes
 
 extern SvXMLEnumMapEntry aXML_ConnectionKind_EnumMap[];
 extern SvXMLEnumMapEntry aXML_CircleKind_EnumMap[];
 
-//////////////////////////////////////////////////////////////////////////////
-
 /** contains the attribute to property mapping for a drawing layer table */
 extern const XMLPropertyMapEntry aXMLTableShapeAttributes[];
 
-//////////////////////////////////////////////////////////////////////////////
 // factory for own graphic properties
 
 class SvXMLExport;

@@ -32,14 +32,10 @@ namespace com { namespace sun { namespace star { namespace util {
     struct Date;
 } } } }
 
-//.........................................................................
 namespace xmloff
 {
-//.........................................................................
 
-    //=====================================================================
     //= PropertyConversion
-    //=====================================================================
     class PropertyConversion
     {
     public:
@@ -55,9 +51,7 @@ namespace xmloff
     };
 
     class OFormLayerXMLImport_Impl;
-    //=====================================================================
     //= OPropertyImport
-    //=====================================================================
     /** Helper class for importing property values
 
         <p>This class imports properties which are stored as attributes as well as properties which
@@ -151,9 +145,7 @@ namespace xmloff
     };
     SV_DECL_IMPL_REF( OPropertyImport )
 
-    //=====================================================================
     //= OPropertyElementsContext
-    //=====================================================================
     /** helper class for importing the &lt;form:properties&gt; element
     */
     class OPropertyElementsContext : public SvXMLImportContext
@@ -176,9 +168,7 @@ namespace xmloff
 #endif
     };
 
-    //=====================================================================
     //= OSinglePropertyContext
-    //=====================================================================
     /** helper class for importing a single &lt;form:property&gt; element
     */
     class OSinglePropertyContext : public SvXMLImportContext
@@ -197,9 +187,7 @@ namespace xmloff
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList);
     };
 
-    //=====================================================================
     //= OListPropertyContext
-    //=====================================================================
     class OListPropertyContext : public SvXMLImportContext
     {
         OPropertyImportRef                  m_xPropertyImporter;
@@ -221,9 +209,7 @@ namespace xmloff
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList);
     };
 
-    //=====================================================================
     //= OListValueContext
-    //=====================================================================
     class OListValueContext : public SvXMLImportContext
     {
         OUString& m_rListValueHolder;
@@ -236,11 +222,8 @@ namespace xmloff
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList );
     };
 
-//.........................................................................
 }   // namespace xmloff
-//.........................................................................
 
 #endif // _XMLOFF_FORMS_PROPERTYIMPORT_HXX_
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

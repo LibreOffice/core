@@ -24,7 +24,6 @@
 
 using namespace ::xmloff::token;
 
-
 class SvXMLTokenMapEntry_Impl
 {
     sal_uInt16  nPrefixKey;
@@ -63,8 +62,6 @@ public:
 };
 
 class SvXMLTokenMap_Impl : public boost::ptr_set<SvXMLTokenMapEntry_Impl> {};
-
-// ---------------------------------------------------------------------
 
 SvXMLTokenMapEntry_Impl *SvXMLTokenMap::_Find( sal_uInt16 nKeyPrefix,
                                                 const OUString& rLName ) const
@@ -105,6 +102,5 @@ sal_uInt16 SvXMLTokenMap::Get( sal_uInt16 nKeyPrefix,
     else
         return XML_TOK_UNKNOWN;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <bordrhdl.hxx>
 #include <sax/tools/converter.hxx>
 #include <xmloff/xmltoken.hxx>
@@ -25,7 +24,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/table/BorderLine2.hpp>
-
 
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
@@ -78,7 +76,6 @@ SvXMLEnumMapEntry pXML_NamedBorderWidths[] =
 };
 // mapping tables to map external xml input to intarnal box line widths
 
-
 static sal_uInt16 const aBorderWidths[] =
 {
     DEF_LINE_WIDTH_0,
@@ -95,8 +92,6 @@ static void lcl_frmitems_setXMLBorderStyle( table::BorderLine2 & rBorderLine, sa
     rBorderLine.LineStyle = eStyle;
 }
 
-
-///////////////////////////////////////////////////////////////////////////////
 //
 // class XMLEscapementPropHdl
 //
@@ -180,7 +175,6 @@ sal_Bool XMLBorderWidthHdl::exportXML( OUString& rStrExpValue, const uno::Any& r
     return sal_True;
 }
 
-///////////////////////////////////////////////////////////////////////////////
 //
 // class XMLEscapementHeightPropHdl
 //

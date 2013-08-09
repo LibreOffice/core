@@ -141,9 +141,6 @@ static sal_uInt16 aElemActionMaps[XML_PROP_TYPE_END] =
     PROP_OOO_CHART_ELEM_ACTIONS
 };
 
-
-//------------------------------------------------------------------------------
-
 class XMLTypedPropertiesOOoTContext_Impl : public XMLPersElemContentTContext
 {
     ::com::sun::star::uno::Reference<
@@ -218,8 +215,6 @@ void XMLTypedPropertiesOOoTContext_Impl::Export()
     }
 }
 
-//------------------------------------------------------------------------------
-
 class XMLPropertiesOOoTContext_Impl : public XMLTransformerContext
 {
     ::rtl::Reference < XMLTypedPropertiesOOoTContext_Impl >
@@ -238,7 +233,6 @@ class XMLPropertiesOOoTContext_Impl : public XMLTransformerContext
 
     XMLTypedPropertiesOOoTContext_Impl *GetPropContext(
             XMLPropType eType );
-
 
 public:
 
@@ -299,7 +293,6 @@ XMLTypedPropertiesOOoTContext_Impl
 
     return m_aPropContexts[nIndex].get();
 }
-
 
 XMLTypedPropertiesOOoTContext_Impl
     *XMLPropertiesOOoTContext_Impl::GetPropContextAndAction(
@@ -405,7 +398,6 @@ XMLTransformerContext *XMLPropertiesOOoTContext_Impl::CreateChildContext(
     return GetPropContextAndAction( aAction, nPrefix, rLocalName, sal_True )
                 ->CreateChildContext( nPrefix, rLocalName, rQName, rAttrList );
 }
-
 
 void XMLPropertiesOOoTContext_Impl::StartElement(
         const Reference< XAttributeList >& rAttrList )
@@ -1056,9 +1048,6 @@ sal_Bool XMLPropertiesOOoTContext_Impl::IsPersistent() const
 {
     return m_bPersistent;
 }
-
-
-//------------------------------------------------------------------------------
 
 TYPEINIT1( XMLStyleOOoTContext, XMLPersElemContentTContext );
 

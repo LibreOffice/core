@@ -79,7 +79,6 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing;
@@ -115,8 +114,6 @@ SvXMLEnumMapEntry aXML_GlueEscapeDirection_EnumMap[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 static bool ImpIsEmptyURL( const OUString& rURL )
 {
     if( rURL.isEmpty() )
@@ -129,8 +126,6 @@ static bool ImpIsEmptyURL( const OUString& rURL )
 
     return false;
 }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 TYPEINIT1( SvXMLShapeContext, SvXMLImportContext );
 TYPEINIT1( SdXMLShapeContext, SvXMLShapeContext );
@@ -160,13 +155,9 @@ SdXMLShapeContext::SdXMLShapeContext(
 {
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 SdXMLShapeContext::~SdXMLShapeContext()
 {
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 SvXMLImportContext *SdXMLShapeContext::CreateChildContext( sal_uInt16 p_nPrefix,
     const OUString& rLocalName,
@@ -333,7 +324,6 @@ void SdXMLShapeContext::addGluePoint( const uno::Reference< xml::sax::XAttribute
         }
     }
 }
-//////////////////////////////////////////////////////////////////////////////
 
 void SdXMLShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>&)
 {
@@ -415,8 +405,6 @@ void SdXMLShapeContext::EndElement()
         mxLockable->removeActionLock();
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 void SdXMLShapeContext::AddShape(uno::Reference< drawing::XShape >& xShape)
 {
     if(xShape.is())
@@ -483,8 +471,6 @@ void SdXMLShapeContext::AddShape(uno::Reference< drawing::XShape >& xShape)
 
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 void SdXMLShapeContext::AddShape(const char* pServiceName )
 {
     uno::Reference< lang::XMultiServiceFactory > xServiceFact(GetImport().GetModel(), uno::UNO_QUERY);
@@ -520,8 +506,6 @@ void SdXMLShapeContext::AddShape(const char* pServiceName )
         }
     }
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 void SdXMLShapeContext::SetTransformation()
 {
@@ -587,8 +571,6 @@ void SdXMLShapeContext::SetTransformation()
         }
     }
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 void SdXMLShapeContext::SetStyle( bool bSupportsStyle /* = true */)
 {
@@ -920,9 +902,6 @@ sal_Bool SdXMLShapeContext::isPresentationShape() const
     return sal_False;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 TYPEINIT1( SdXMLRectShapeContext, SdXMLShapeContext );
 
 SdXMLRectShapeContext::SdXMLRectShapeContext(
@@ -937,13 +916,9 @@ SdXMLRectShapeContext::SdXMLRectShapeContext(
 {
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 SdXMLRectShapeContext::~SdXMLRectShapeContext()
 {
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 // this is called from the parent group for each unparsed attribute in the attribute list
 void SdXMLRectShapeContext::processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue )
@@ -960,8 +935,6 @@ void SdXMLRectShapeContext::processAttribute( sal_uInt16 nPrefix, const OUString
 
     SdXMLShapeContext::processAttribute( nPrefix, rLocalName, rValue );
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 void SdXMLRectShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
 {
@@ -995,9 +968,6 @@ void SdXMLRectShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////3////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 TYPEINIT1( SdXMLLineShapeContext, SdXMLShapeContext );
 
 SdXMLLineShapeContext::SdXMLLineShapeContext(
@@ -1015,13 +985,9 @@ SdXMLLineShapeContext::SdXMLLineShapeContext(
 {
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 SdXMLLineShapeContext::~SdXMLLineShapeContext()
 {
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 // this is called from the parent group for each unparsed attribute in the attribute list
 void SdXMLLineShapeContext::processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue )
@@ -1056,8 +1022,6 @@ void SdXMLLineShapeContext::processAttribute( sal_uInt16 nPrefix, const OUString
 
     SdXMLShapeContext::processAttribute( nPrefix, rLocalName, rValue );
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 void SdXMLLineShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
 {
@@ -1121,9 +1085,6 @@ void SdXMLLineShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 TYPEINIT1( SdXMLEllipseShapeContext, SdXMLShapeContext );
 
 SdXMLEllipseShapeContext::SdXMLEllipseShapeContext(
@@ -1144,13 +1105,9 @@ SdXMLEllipseShapeContext::SdXMLEllipseShapeContext(
 {
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 SdXMLEllipseShapeContext::~SdXMLEllipseShapeContext()
 {
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 // this is called from the parent group for each unparsed attribute in the attribute list
 void SdXMLEllipseShapeContext::processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue )
@@ -1220,8 +1177,6 @@ void SdXMLEllipseShapeContext::processAttribute( sal_uInt16 nPrefix, const OUStr
     SdXMLShapeContext::processAttribute( nPrefix, rLocalName, rValue );
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 void SdXMLEllipseShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
 {
     // create rectangle shape
@@ -1265,9 +1220,6 @@ void SdXMLEllipseShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 TYPEINIT1( SdXMLPolygonShapeContext, SdXMLShapeContext );
 
 SdXMLPolygonShapeContext::SdXMLPolygonShapeContext(
@@ -1280,8 +1232,6 @@ SdXMLPolygonShapeContext::SdXMLPolygonShapeContext(
     mbClosed( bClosed )
 {
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 // this is called from the parent group for each unparsed attribute in the attribute list
 void SdXMLPolygonShapeContext::processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue )
@@ -1306,13 +1256,9 @@ void SdXMLPolygonShapeContext::processAttribute( sal_uInt16 nPrefix, const OUStr
     SdXMLShapeContext::processAttribute( nPrefix, rLocalName, rValue );
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 SdXMLPolygonShapeContext::~SdXMLPolygonShapeContext()
 {
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 void SdXMLPolygonShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
 {
@@ -1358,9 +1304,6 @@ void SdXMLPolygonShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 TYPEINIT1( SdXMLPathShapeContext, SdXMLShapeContext );
 
 SdXMLPathShapeContext::SdXMLPathShapeContext(
@@ -1374,13 +1317,9 @@ SdXMLPathShapeContext::SdXMLPathShapeContext(
 {
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 SdXMLPathShapeContext::~SdXMLPathShapeContext()
 {
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 // this is called from the parent group for each unparsed attribute in the attribute list
 void SdXMLPathShapeContext::processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue )
@@ -1401,8 +1340,6 @@ void SdXMLPathShapeContext::processAttribute( sal_uInt16 nPrefix, const OUString
 
     SdXMLShapeContext::processAttribute( nPrefix, rLocalName, rValue );
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 void SdXMLPathShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
 {
@@ -1491,9 +1428,6 @@ void SdXMLPathShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 TYPEINIT1( SdXMLTextBoxShapeContext, SdXMLShapeContext );
 
 SdXMLTextBoxShapeContext::SdXMLTextBoxShapeContext(
@@ -1508,13 +1442,9 @@ SdXMLTextBoxShapeContext::SdXMLTextBoxShapeContext(
 {
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 SdXMLTextBoxShapeContext::~SdXMLTextBoxShapeContext()
 {
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 // this is called from the parent group for each unparsed attribute in the attribute list
 void SdXMLTextBoxShapeContext::processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue )
@@ -1531,8 +1461,6 @@ void SdXMLTextBoxShapeContext::processAttribute( sal_uInt16 nPrefix, const OUStr
 
     SdXMLShapeContext::processAttribute( nPrefix, rLocalName, rValue );
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 void SdXMLTextBoxShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>&)
 {
@@ -1666,9 +1594,6 @@ void SdXMLTextBoxShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 TYPEINIT1( SdXMLControlShapeContext, SdXMLShapeContext );
 
 SdXMLControlShapeContext::SdXMLControlShapeContext(
@@ -1682,13 +1607,9 @@ SdXMLControlShapeContext::SdXMLControlShapeContext(
 {
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 SdXMLControlShapeContext::~SdXMLControlShapeContext()
 {
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 // this is called from the parent group for each unparsed attribute in the attribute list
 void SdXMLControlShapeContext::processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue )
@@ -1738,9 +1659,6 @@ void SdXMLControlShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 TYPEINIT1( SdXMLConnectorShapeContext, SdXMLShapeContext );
 
 SdXMLConnectorShapeContext::SdXMLConnectorShapeContext(
@@ -1762,13 +1680,9 @@ SdXMLConnectorShapeContext::SdXMLConnectorShapeContext(
 {
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 SdXMLConnectorShapeContext::~SdXMLConnectorShapeContext()
 {
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 // this is called from the parent group for each unparsed attribute in the attribute list
 void SdXMLConnectorShapeContext::processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue )
@@ -1889,8 +1803,6 @@ void SdXMLConnectorShapeContext::processAttribute( sal_uInt16 nPrefix, const OUS
     SdXMLShapeContext::processAttribute( nPrefix, rLocalName, rValue );
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 void SdXMLConnectorShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
 {
     // #107928#
@@ -2007,9 +1919,6 @@ void SdXMLConnectorShapeContext::StartElement(const uno::Reference< xml::sax::XA
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 TYPEINIT1( SdXMLMeasureShapeContext, SdXMLShapeContext );
 
 SdXMLMeasureShapeContext::SdXMLMeasureShapeContext(
@@ -2024,8 +1933,6 @@ SdXMLMeasureShapeContext::SdXMLMeasureShapeContext(
     maEnd(1,1)
 {
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 SdXMLMeasureShapeContext::~SdXMLMeasureShapeContext()
 {
@@ -2067,8 +1974,6 @@ void SdXMLMeasureShapeContext::processAttribute( sal_uInt16 nPrefix, const OUStr
 
     SdXMLShapeContext::processAttribute( nPrefix, rLocalName, rValue );
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 void SdXMLMeasureShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
 {
@@ -2126,9 +2031,6 @@ void SdXMLMeasureShapeContext::EndElement()
     SdXMLShapeContext::EndElement();
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 TYPEINIT1( SdXMLPageShapeContext, SdXMLShapeContext );
 
 SdXMLPageShapeContext::SdXMLPageShapeContext(
@@ -2143,13 +2045,9 @@ SdXMLPageShapeContext::SdXMLPageShapeContext(
     mbClearDefaultAttributes = false;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 SdXMLPageShapeContext::~SdXMLPageShapeContext()
 {
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 // this is called from the parent group for each unparsed attribute in the attribute list
 void SdXMLPageShapeContext::processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue )
@@ -2165,8 +2063,6 @@ void SdXMLPageShapeContext::processAttribute( sal_uInt16 nPrefix, const OUString
 
     SdXMLShapeContext::processAttribute( nPrefix, rLocalName, rValue );
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 void SdXMLPageShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
 {
@@ -2223,9 +2119,6 @@ void SdXMLPageShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 TYPEINIT1( SdXMLCaptionShapeContext, SdXMLShapeContext );
 
 SdXMLCaptionShapeContext::SdXMLCaptionShapeContext(
@@ -2241,13 +2134,9 @@ SdXMLCaptionShapeContext::SdXMLCaptionShapeContext(
 {
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 SdXMLCaptionShapeContext::~SdXMLCaptionShapeContext()
 {
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 void SdXMLCaptionShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
 {
@@ -2331,9 +2220,6 @@ void SdXMLCaptionShapeContext::processAttribute( sal_uInt16 nPrefix, const OUStr
     SdXMLShapeContext::processAttribute( nPrefix, rLocalName, rValue );
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 TYPEINIT1( SdXMLGraphicObjectShapeContext, SdXMLShapeContext );
 
 SdXMLGraphicObjectShapeContext::SdXMLGraphicObjectShapeContext(
@@ -2347,8 +2233,6 @@ SdXMLGraphicObjectShapeContext::SdXMLGraphicObjectShapeContext(
     maURL()
 {
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 // this is called from the parent group for each unparsed attribute in the attribute list
 void SdXMLGraphicObjectShapeContext::processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue )
@@ -2364,8 +2248,6 @@ void SdXMLGraphicObjectShapeContext::processAttribute( sal_uInt16 nPrefix, const
 
     SdXMLShapeContext::processAttribute( nPrefix, rLocalName, rValue );
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 void SdXMLGraphicObjectShapeContext::StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& )
 {
@@ -2472,9 +2354,6 @@ void SdXMLGraphicObjectShapeContext::EndElement()
     SdXMLShapeContext::EndElement();
 }
 
-
-//////////////////////////////////////////////////////////////////////////////
-
 SvXMLImportContext* SdXMLGraphicObjectShapeContext::CreateChildContext(
     sal_uInt16 nPrefix, const OUString& rLocalName,
     const uno::Reference<xml::sax::XAttributeList>& xAttrList )
@@ -2502,15 +2381,10 @@ SvXMLImportContext* SdXMLGraphicObjectShapeContext::CreateChildContext(
     return pContext;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 SdXMLGraphicObjectShapeContext::~SdXMLGraphicObjectShapeContext()
 {
 
 }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 TYPEINIT1( SdXMLChartShapeContext, SdXMLShapeContext );
 
@@ -2526,15 +2400,11 @@ SdXMLChartShapeContext::SdXMLChartShapeContext(
 {
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 SdXMLChartShapeContext::~SdXMLChartShapeContext()
 {
     if( mpChartContext )
         delete mpChartContext;
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 void SdXMLChartShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
 {
@@ -2586,7 +2456,6 @@ void SdXMLChartShapeContext::StartElement(const uno::Reference< xml::sax::XAttri
             }
         }
 
-
         // set pos, size, shear and rotate
         SetTransformation();
 
@@ -2619,8 +2488,6 @@ SvXMLImportContext * SdXMLChartShapeContext::CreateChildContext( sal_uInt16 nPre
 
     return NULL;
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 TYPEINIT1( SdXMLObjectShapeContext, SdXMLShapeContext );
 
@@ -2837,8 +2704,6 @@ SvXMLImportContext* SdXMLObjectShapeContext::CreateChildContext(
     return pContext;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 TYPEINIT1( SdXMLAppletShapeContext, SdXMLShapeContext );
 
 SdXMLAppletShapeContext::SdXMLAppletShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
@@ -3001,8 +2866,6 @@ SvXMLImportContext * SdXMLAppletShapeContext::CreateChildContext( sal_uInt16 p_n
 
     return SdXMLShapeContext::CreateChildContext( p_nPrefix, rLocalName, xAttrList );
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 TYPEINIT1( SdXMLPluginShapeContext, SdXMLShapeContext );
 
@@ -3278,8 +3141,6 @@ SvXMLImportContext * SdXMLPluginShapeContext::CreateChildContext( sal_uInt16 p_n
     return SdXMLShapeContext::CreateChildContext( p_nPrefix, rLocalName, xAttrList );
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 TYPEINIT1( SdXMLFloatingFrameShapeContext, SdXMLShapeContext );
 
 SdXMLFloatingFrameShapeContext::SdXMLFloatingFrameShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
@@ -3374,8 +3235,6 @@ void SdXMLFloatingFrameShapeContext::EndElement()
     SetThumbnail();
     SdXMLShapeContext::EndElement();
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 TYPEINIT1( SdXMLFrameShapeContext, SdXMLShapeContext );
 
@@ -3671,13 +3530,9 @@ SdXMLCustomShapeContext::SdXMLCustomShapeContext(
 {
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 SdXMLCustomShapeContext::~SdXMLCustomShapeContext()
 {
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 // this is called from the parent group for each unparsed attribute in the attribute list
 void SdXMLCustomShapeContext::processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue )
@@ -3697,8 +3552,6 @@ void SdXMLCustomShapeContext::processAttribute( sal_uInt16 nPrefix, const OUStri
     }
     SdXMLShapeContext::processAttribute( nPrefix, rLocalName, rValue );
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 void SdXMLCustomShapeContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
@@ -3828,8 +3681,6 @@ void SdXMLCustomShapeContext::EndElement()
     SdXMLShapeContext::EndElement();
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 SvXMLImportContext* SdXMLCustomShapeContext::CreateChildContext(
     sal_uInt16 nPrefix, const OUString& rLocalName,
     const uno::Reference<xml::sax::XAttributeList>& xAttrList )
@@ -3850,10 +3701,6 @@ SvXMLImportContext* SdXMLCustomShapeContext::CreateChildContext(
                                                          xAttrList);
     return pContext;
 }
-
-///////////////////////////////////////////////////////////////////////
-
-//////////////////////////////////////////////////////////////////////////////
 
 TYPEINIT1( SdXMLTableShapeContext, SdXMLShapeContext );
 

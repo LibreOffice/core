@@ -20,16 +20,8 @@
 #include <tools/debug.hxx>
 #include "impastpl.hxx"
 
-
-//#############################################################################
-//
 // Class XMLFamilyData_Impl
-//
-
-///////////////////////////////////////////////////////////////////////////////
-//
 // ctor/dtor class XMLFamilyData_Impl
-//
 
 XMLFamilyData_Impl::XMLFamilyData_Impl(
         sal_Int32 nFamily,

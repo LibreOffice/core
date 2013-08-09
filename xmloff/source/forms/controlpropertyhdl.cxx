@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <xmloff/controlpropertyhdl.hxx>
 
 #include <com/sun/star/util/MeasureUnit.hpp>
@@ -37,10 +36,8 @@
 #include "callbacks.hxx"
 #include <xmloff/XMLConstantsPropertyHandler.hxx>
 
-//.........................................................................
 namespace xmloff
 {
-//.........................................................................
 
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
@@ -48,10 +45,7 @@ namespace xmloff
     using namespace ::com::sun::star::beans;
     using namespace ::xmloff::token;
 
-    //=====================================================================
     //= OControlPropertyHandlerFactory
-    //=====================================================================
-    //---------------------------------------------------------------------
     OControlPropertyHandlerFactory::OControlPropertyHandlerFactory()
         :m_pTextAlignHandler(NULL)
         ,m_pControlBorderStyleHandler(NULL)
@@ -63,7 +57,6 @@ namespace xmloff
     {
     }
 
-    //---------------------------------------------------------------------
     OControlPropertyHandlerFactory::~OControlPropertyHandlerFactory()
     {
         delete m_pTextAlignHandler;
@@ -75,7 +68,6 @@ namespace xmloff
         delete m_pFontReliefHandler;
     }
 
-    //---------------------------------------------------------------------
     const XMLPropertyHandler* OControlPropertyHandlerFactory::GetPropertyHandler(sal_Int32 _nType) const
     {
         const XMLPropertyHandler* pHandler = NULL;
@@ -135,14 +127,11 @@ namespace xmloff
         return pHandler;
     }
 
-    //=====================================================================
     //= OControlTextEmphasisHandler
-    //=====================================================================
     OControlTextEmphasisHandler::OControlTextEmphasisHandler()
     {
     }
 
-    //---------------------------------------------------------------------
     sal_Bool OControlTextEmphasisHandler::exportXML( OUString& _rStrExpValue, const Any& _rValue, const SvXMLUnitConverter& ) const
     {
         OUStringBuffer aReturn;
@@ -169,7 +158,6 @@ namespace xmloff
         return bSuccess;
     }
 
-    //---------------------------------------------------------------------
     sal_Bool OControlTextEmphasisHandler::importXML( const OUString& _rStrImpValue, Any& _rValue, const SvXMLUnitConverter& ) const
     {
         sal_Bool bSuccess = sal_True;
@@ -218,16 +206,12 @@ namespace xmloff
         return bSuccess;
     }
 
-    //=====================================================================
     //= OControlBorderHandlerBase
-    //=====================================================================
-    //---------------------------------------------------------------------
     OControlBorderHandler::OControlBorderHandler( const OControlBorderHandler::BorderFacet _eFacet )
         :m_eFacet( _eFacet )
     {
     }
 
-    //---------------------------------------------------------------------
     sal_Bool OControlBorderHandler::importXML( const OUString& _rStrImpValue, Any& _rValue, const SvXMLUnitConverter& ) const
     {
         OUString sToken;
@@ -265,7 +249,6 @@ namespace xmloff
         return sal_False;
     }
 
-    //---------------------------------------------------------------------
     sal_Bool OControlBorderHandler::exportXML( OUString& _rStrExpValue, const Any& _rValue, const SvXMLUnitConverter& ) const
     {
         sal_Bool bSuccess = sal_False;
@@ -302,15 +285,11 @@ namespace xmloff
         return sal_True;
     }
 
-    //=====================================================================
     //= OFontWidthHandler
-    //=====================================================================
-    //---------------------------------------------------------------------
     OFontWidthHandler::OFontWidthHandler()
     {
     }
 
-    //---------------------------------------------------------------------
     sal_Bool OFontWidthHandler::importXML( const OUString& _rStrImpValue, Any& _rValue, const SvXMLUnitConverter& ) const
     {
         sal_Int32 nWidth = 0;
@@ -322,7 +301,6 @@ namespace xmloff
         return bSuccess;
     }
 
-    //---------------------------------------------------------------------
     sal_Bool OFontWidthHandler::exportXML( OUString& _rStrExpValue, const Any& _rValue, const SvXMLUnitConverter& ) const
     {
         sal_Int16 nWidth = 0;
@@ -337,15 +315,11 @@ namespace xmloff
         return !_rStrExpValue.isEmpty();
     }
 
-    //=====================================================================
     //= ORotationAngleHandler
-    //=====================================================================
-    //---------------------------------------------------------------------
     ORotationAngleHandler::ORotationAngleHandler()
     {
     }
 
-    //---------------------------------------------------------------------
     sal_Bool ORotationAngleHandler::importXML( const OUString& _rStrImpValue, Any& _rValue, const SvXMLUnitConverter& ) const
     {
         double fValue;
@@ -360,7 +334,6 @@ namespace xmloff
         return bSucces;
     }
 
-    //---------------------------------------------------------------------
     sal_Bool ORotationAngleHandler::exportXML( OUString& _rStrExpValue, const Any& _rValue, const SvXMLUnitConverter& ) const
     {
         float fAngle = 0;
@@ -376,17 +349,12 @@ namespace xmloff
         return bSuccess;
     }
 
-    //=====================================================================
     //= ImageScaleModeHandler
-    //=====================================================================
-    //---------------------------------------------------------------------
     ImageScaleModeHandler::ImageScaleModeHandler()
         :XMLConstantsPropertyHandler( OEnumMapper::getEnumMap( OEnumMapper::epImageScaleMode ), XML_STRETCH )
     {
     }
 
-//.........................................................................
 }   // namespace xmloff
-//.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

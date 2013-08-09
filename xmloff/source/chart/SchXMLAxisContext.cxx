@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <sax/tools/converter.hxx>
 
 #include "SchXMLAxisContext.hxx"
@@ -52,9 +51,6 @@ using namespace com::sun::star;
 
 using com::sun::star::uno::Reference;
 
-//----------------------------------------
-//----------------------------------------
-
 static SvXMLEnumMapEntry aXMLAxisDimensionMap[] =
 {
     { XML_X,  SCH_XML_AXIS_X  },
@@ -71,9 +67,6 @@ static SvXMLEnumMapEntry aXMLAxisTypeMap[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-//----------------------------------------
-//----------------------------------------
-
 class SchXMLCategoriesContext : public SvXMLImportContext
 {
 private:
@@ -88,10 +81,6 @@ public:
     virtual void StartElement( const Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 };
 
-//----------------------------------------
-//----------------------------------------
-
-
 class DateScaleContext : public SvXMLImportContext
 {
 public:
@@ -105,10 +94,6 @@ public:
 private:
     Reference< beans::XPropertySet > m_xAxisProps;
 };
-
-
-//----------------------------------------
-//----------------------------------------
 
 SchXMLAxisContext::SchXMLAxisContext( SchXMLImportHelper& rImpHelper,
                                       SvXMLImport& rImport, const OUString& rLocalName,
@@ -449,7 +434,6 @@ void SchXMLAxisContext::CreateAxis()
             return;
     }
 
-
     m_xAxisProps = Reference<beans::XPropertySet>( lcl_getChartAxis( m_aCurrentAxis, m_xDiagram ), uno::UNO_QUERY );
 
     if( m_bAddMissingXAxisForNetCharts && m_aCurrentAxis.eDimension==SCH_XML_AXIS_Y && m_aCurrentAxis.nAxisIndex==0 )
@@ -607,7 +591,6 @@ void SchXMLAxisContext::SetAxisTitle()
     }
 }
 
-//-----------------------------------------------------------------------
 namespace
 {
 enum AxisChildTokens
@@ -727,8 +710,6 @@ void SchXMLAxisContext::EndElement()
 
     SetAxisTitle();
 }
-
-// ========================================
 
 namespace
 {
@@ -867,8 +848,6 @@ void SchXMLAxisContext::CorrectAxisPositions( const Reference< chart2::XChartDoc
     }
 }
 
-// ========================================
-
 SchXMLCategoriesContext::SchXMLCategoriesContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrefix,
@@ -901,8 +880,6 @@ void SchXMLCategoriesContext::StartElement( const Reference< xml::sax::XAttribut
         }
     }
 }
-
-// ========================================
 
 DateScaleContext::DateScaleContext(
     SvXMLImport& rImport,
@@ -1032,7 +1009,5 @@ void DateScaleContext::StartElement( const Reference< xml::sax::XAttributeList >
     if( bSetNewIncrement )
         m_xAxisProps->setPropertyValue("TimeIncrement", uno::makeAny( aIncrement ) );
 }
-
-// ========================================
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

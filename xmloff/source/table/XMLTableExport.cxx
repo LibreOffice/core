@@ -52,14 +52,10 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::style;
 
-// --------------------------------------------------------------------
-
 #define _MAP(name,prefix,token,type,context)  { name, sizeof(name)-1, prefix, token, type, context, SvtSaveOptions::ODFVER_010 }
 #define CMAP(name,prefix,token,type,context) _MAP(name,prefix,token,type|XML_TYPE_PROP_TABLE_COLUMN,context)
 #define RMAP(name,prefix,token,type,context) _MAP(name,prefix,token,type|XML_TYPE_PROP_TABLE_ROW,context)
 #define MAP_END { 0L, 0, 0, XML_EMPTY, 0, 0, SvtSaveOptions::ODFVER_010 }
-
-// --------------------------------------------------------------------
 
 const XMLPropertyMapEntry* getColumnPropertiesMap()
 {
@@ -72,8 +68,6 @@ const XMLPropertyMapEntry* getColumnPropertiesMap()
 
     return &aXMLColumnProperties[0];
 }
-
-// --------------------------------------------------------------------
 
 const XMLPropertyMapEntry* getRowPropertiesMap()
 {
@@ -88,8 +82,6 @@ const XMLPropertyMapEntry* getRowPropertiesMap()
     return &aXMLRowProperties[0];
 }
 
-// --------------------------------------------------------------------
-
 class StringStatisticHelper : public std::map< OUString, sal_Int32 >
 {
 public:
@@ -98,8 +90,6 @@ public:
 
     sal_Int32 getModeString( /* out */ OUString& rModeString );
 };
-
-// --------------------------------------------------------------------
 
 void StringStatisticHelper::add( const OUString& rStyleName )
 {
@@ -113,8 +103,6 @@ void StringStatisticHelper::add( const OUString& rStyleName )
         (*iter).second += 1;
     }
 }
-
-// --------------------------------------------------------------------
 
 sal_Int32 StringStatisticHelper::getModeString( OUString& rStyleName )
 {
@@ -133,9 +121,7 @@ sal_Int32 StringStatisticHelper::getModeString( OUString& rStyleName )
     return nMax;
 }
 
-// --------------------------------------------------------------------
 // class XMLTableExport
-// --------------------------------------------------------------------
 
 XMLTableExport::XMLTableExport(SvXMLExport& rExp, const rtl::Reference< SvXMLExportPropertyMapper  >& xExportPropertyMapper, const rtl::Reference< XMLPropertyHandlerFactory >& xFactoryRef )
 : mrExport( rExp )
@@ -180,13 +166,9 @@ XMLTableExport::XMLTableExport(SvXMLExport& rExp, const rtl::Reference< SvXMLExp
         OUString(XML_STYLE_FAMILY_TABLE_CELL_STYLES_PREFIX));
 }
 
-// --------------------------------------------------------------------
-
 XMLTableExport::~XMLTableExport ()
 {
 }
-
-// --------------------------------------------------------------------
 
 static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
 {
@@ -203,8 +185,6 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
     }
     return false;
 }
-
-// --------------------------------------------------------------------
 
  void XMLTableExport::collectTableAutoStyles(const Reference < XColumnRowRange >& xColumnRowRange)
  {
@@ -309,8 +289,6 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
     }
  }
 
- // --------------------------------------------------------------------
-
  void XMLTableExport::exportTable( const Reference < XColumnRowRange >& xColumnRowRange )
  {
      if( !mbExportTables )
@@ -375,9 +353,7 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
      }
  }
 
-// --------------------------------------------------------------------
 // Export the table columns
-// --------------------------------------------------------------------
 
  void XMLTableExport::ExportTableColumns( const Reference < XIndexAccess >& xtableColumnsIndexAccess, const boost::shared_ptr< XMLTableInfo >& pTableInfo )
  {
@@ -404,9 +380,7 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
      }
  }
 
-// --------------------------------------------------------------------
 // ODF export for a table cell.
-// --------------------------------------------------------------------
 
  void XMLTableExport::ExportCell( const Reference < XCell >& xCell, const boost::shared_ptr< XMLTableInfo >& pTableInfo, const OUString& rDefaultCellStyle )
  {
@@ -457,11 +431,9 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
     ImpExportText( xCell );
  }
 
-// --------------------------------------------------------------------
 // ODF export of the text contents of a table cell.
 // Remarks: Up to now we only export text contents!
 // TODO: Check against nested tables ....
-// --------------------------------------------------------------------
 
  void XMLTableExport::ImpExportText( const Reference< XCell >& xCell )
  {
@@ -469,8 +441,6 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
     if( xText.is() && !xText->getString().isEmpty())
         mrExport.GetTextParagraphExport()->exportText( xText );
  }
-
-// --------------------------------------------------------------------
 
 void XMLTableExport::exportTableStyles()
 {
@@ -485,9 +455,7 @@ void XMLTableExport::exportTableStyles()
     exportTableTemplates();
 }
 
-// --------------------------------------------------------------------
 // Export the collected automatic styles
-// --------------------------------------------------------------------
 
 void XMLTableExport::exportAutoStyles()
 {
@@ -498,8 +466,6 @@ void XMLTableExport::exportAutoStyles()
     mrExport.GetAutoStylePool()->exportXML( XML_STYLE_FAMILY_TABLE_ROW, mrExport.GetDocHandler(), mrExport.GetMM100UnitConverter(), mrExport.GetNamespaceMap() );
     mrExport.GetAutoStylePool()->exportXML( XML_STYLE_FAMILY_TABLE_CELL, mrExport.GetDocHandler(), mrExport.GetMM100UnitConverter(), mrExport.GetNamespaceMap() );
 }
-
-// --------------------------------------------------------------------
 
 const TableStyleElement* getTableStyleMap()
 {
@@ -519,8 +485,6 @@ const TableStyleElement* getTableStyleMap()
 
     return &gTableStyleElements[0];
 }
-
-// --------------------------------------------------------------------
 
 void XMLTableExport::exportTableTemplates()
 {
@@ -575,7 +539,5 @@ void XMLTableExport::exportTableTemplates()
         OSL_FAIL("xmloff::XMLTableExport::exportTableDesigns(), exception caught!");
     }
 }
-
-// --------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

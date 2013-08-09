@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <sax/tools/converter.hxx>
 
 #include "SchXMLPlotAreaContext.hxx"
@@ -624,8 +623,6 @@ void SchXMLPlotAreaContext::EndElement()
     SchXMLAxisContext::CorrectAxisPositions( uno::Reference< chart2::XChartDocument >( mrImportHelper.GetChartDocument(), uno::UNO_QUERY ), maChartTypeServiceName, GetImport().GetODFVersion(), m_bAxisPositionAttributeImported );
 }
 
-// ========================================
-
 SchXMLDataPointContext::SchXMLDataPointContext(  SvXMLImport& rImport, const OUString& rLocalName,
                                                  ::std::list< DataRowPointStyle >& rStyleList,
                                                  const ::com::sun::star::uno::Reference<
@@ -675,8 +672,6 @@ void SchXMLDataPointContext::StartElement( const uno::Reference< xml::sax::XAttr
     }
     mrIndex += nRepeat;
 }
-
-// ========================================
 
 SchXMLPositonAttributesHelper::SchXMLPositonAttributesHelper( SvXMLImport& rImporter )
     : m_rImport( rImporter )
@@ -756,7 +751,6 @@ bool SchXMLPositonAttributesHelper::readPositioningAttribute( sal_uInt16 nPrefix
     return bReturn;
 }
 
-
 void SchXMLPositonAttributesHelper::readAutomaticPositioningProperties( XMLPropStyleContext* pPropStyleContext, const SvXMLStylesContext* pStylesCtxt )
 {
     if( pPropStyleContext && pStylesCtxt )
@@ -768,8 +762,6 @@ void SchXMLPositonAttributesHelper::readAutomaticPositioningProperties( XMLPropS
             OUString("AutomaticPosition"), pPropStyleContext, pStylesCtxt ) >>= m_bAutoPosition;
     }
 }
-
-// ========================================
 
 SchXMLCoordinateRegionContext::SchXMLCoordinateRegionContext(
           SvXMLImport& rImport
@@ -799,8 +791,6 @@ void SchXMLCoordinateRegionContext::StartElement( const uno::Reference< xml::sax
         m_rPositioning.readPositioningAttribute( nPrefix, aLocalName, aValue );
     }
 }
-
-// ========================================
 
 SchXMLWallFloorContext::SchXMLWallFloorContext(
     SchXMLImportHelper& rImpHelper,
@@ -862,8 +852,6 @@ void SchXMLWallFloorContext::StartElement( const uno::Reference< xml::sax::XAttr
         }
     }
 }
-
-// ========================================
 
 SchXMLStockContext::SchXMLStockContext(
     SchXMLImportHelper& rImpHelper,
@@ -934,8 +922,6 @@ void SchXMLStockContext::StartElement( const uno::Reference< xml::sax::XAttribut
         }
     }
 }
-
-// ========================================
 
 static void lcl_setErrorBarSequence ( const uno::Reference< chart2::XChartDocument > &xDoc,
                                const uno::Reference< beans::XPropertySet > &xBarProp,
@@ -1189,7 +1175,6 @@ void SchXMLStatisticsObjectContext::StartElement( const uno::Reference< xml::sax
                     xBarProp->setPropertyValue("Weight",uno::makeAny(static_cast<double>(1.0)));
                     xBarProp->setPropertyValue("ShowPositiveError",uno::makeAny(sal_True));
                     xBarProp->setPropertyValue("ShowNegativeError",uno::makeAny(sal_True));
-
 
                     // first import defaults from parent style
                     SetErrorBarPropertiesFromStyleName( maSeriesStyleName, xBarProp, mrImportHelper, aPosRange, aNegRange );

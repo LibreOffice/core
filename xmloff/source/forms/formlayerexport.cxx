@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <stdio.h>
 #include <xmloff/formlayerexport.hxx>
 #include "strings.hxx"
@@ -32,11 +31,8 @@
 #include <comphelper/stl_types.hxx>
 #include "officeforms.hxx"
 
-
-//.........................................................................
 namespace xmloff
 {
-//.........................................................................
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
@@ -46,43 +42,35 @@ namespace xmloff
     using namespace ::com::sun::star::drawing;
     using namespace ::com::sun::star::frame;
 
-    //=====================================================================
     //= OFormLayerXMLExport
-    //=====================================================================
 
-    //---------------------------------------------------------------------
     OFormLayerXMLExport::OFormLayerXMLExport(SvXMLExport& _rContext)
         :m_rContext(_rContext)
         ,m_pImpl(new OFormLayerXMLExport_Impl(_rContext))
     {
     }
 
-    //---------------------------------------------------------------------
     OFormLayerXMLExport::~OFormLayerXMLExport()
     {
         delete m_pImpl;
         m_pImpl = NULL;
     }
 
-    //---------------------------------------------------------------------
     sal_Bool OFormLayerXMLExport::seekPage(const Reference< XDrawPage >& _rxDrawPage)
     {
         return m_pImpl->seekPage(_rxDrawPage);
     }
 
-    //---------------------------------------------------------------------
     OUString OFormLayerXMLExport::getControlId(const Reference< XPropertySet >& _rxControl)
     {
         return m_pImpl->getControlId(_rxControl);
     }
 
-    //---------------------------------------------------------------------
     OUString OFormLayerXMLExport::getControlNumberStyle( const Reference< XPropertySet >& _rxControl )
     {
         return m_pImpl->getControlNumberStyle(_rxControl);
     }
 
-    //---------------------------------------------------------------------
     void OFormLayerXMLExport::examineForms(const Reference< XDrawPage >& _rxDrawPage)
     {
         try
@@ -95,66 +83,53 @@ namespace xmloff
         }
     }
 
-    //---------------------------------------------------------------------
     void OFormLayerXMLExport::exportForms(const Reference< XDrawPage >& _rxDrawPage)
     {
         m_pImpl->exportForms(_rxDrawPage);
     }
 
-    //---------------------------------------------------------------------
     void OFormLayerXMLExport::exportXForms() const
     {
         m_pImpl->exportXForms();
     }
 
-    //---------------------------------------------------------------------
     bool OFormLayerXMLExport::pageContainsForms( const Reference< XDrawPage >& _rxDrawPage ) const
     {
         return m_pImpl->pageContainsForms( _rxDrawPage );
     }
 
-    //---------------------------------------------------------------------
     bool OFormLayerXMLExport::documentContainsXForms() const
     {
         return m_pImpl->documentContainsXForms();
     }
 
-    //---------------------------------------------------------------------
     void OFormLayerXMLExport::exportAutoControlNumberStyles()
     {
         m_pImpl->exportAutoControlNumberStyles();
     }
 
-    //---------------------------------------------------------------------
     void OFormLayerXMLExport::exportAutoStyles()
     {
         m_pImpl->exportAutoStyles();
     }
 
-    //---------------------------------------------------------------------
     void OFormLayerXMLExport::excludeFromExport( const Reference< XControlModel > _rxControl )
     {
         m_pImpl->excludeFromExport( _rxControl );
     }
 
-    //=========================================================================
     //= OOfficeFormsExport
-    //=========================================================================
-    //-------------------------------------------------------------------------
     OOfficeFormsExport::OOfficeFormsExport( SvXMLExport& _rExp )
         :m_pImpl(NULL)
     {
         m_pImpl = new OFormsRootExport(_rExp);
     }
 
-    //-------------------------------------------------------------------------
     OOfficeFormsExport::~OOfficeFormsExport()
     {
         delete m_pImpl;
     }
 
-//.........................................................................
 }   // namespace xmloff
-//.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

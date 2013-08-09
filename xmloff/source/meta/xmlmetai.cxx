@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/xml/dom/SAXDocumentBuilder.hpp>
 #include <com/sun/star/xml/dom/XSAXDocumentBuilder2.hpp>
@@ -31,12 +30,8 @@
 #include <xmloff/xmltoken.hxx>
 #include "xmloff/xmlnmspe.hxx"
 
-
 using namespace com::sun::star;
 using namespace ::xmloff::token;
-
-
-//===========================================================================
 
 /// builds a DOM tree from SAX events, by forwarding to SAXDocumentBuilder
 class XMLDocumentBuilderContext : public SvXMLImportContext
@@ -108,9 +103,6 @@ void XMLDocumentBuilderContext::EndElement()
     mxDocBuilder->endElement(
       GetImport().GetNamespaceMap().GetQNameByKey(GetPrefix(), GetLocalName()));
 }
-
-
-//===========================================================================
 
 static void
 lcl_initDocumentProperties(SvXMLImport & rImport,
@@ -201,7 +193,6 @@ SvXMLImportContext *SvXMLMetaDocumentContext::CreateChildContext(
         return new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
     }
 }
-
 
 void SvXMLMetaDocumentContext::StartElement(
     const uno::Reference< xml::sax::XAttributeList >& xAttrList )

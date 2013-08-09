@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "RDFaImportHelper.hxx"
 
 #include <xmloff/xmlimp.hxx>
@@ -44,7 +43,6 @@
 #include <iterator>
 #include <functional>
 #include <algorithm>
-
 
 using namespace ::com::sun::star;
 
@@ -147,9 +145,6 @@ struct SAL_DLLPRIVATE RDFaEntry
         , m_pRDFaAttributes(i_pRDFaAttributes)
     { }
 };
-
-////////////////////////////////////////////////////////////////////////////
-
 
 static inline bool isWS(const sal_Unicode i_Char)
 {
@@ -263,8 +258,6 @@ RDFaReader::ReadURIOrSafeCURIE(OUString const & i_rURIOrSafeCURIE) const
         }
     }
 }
-
-////////////////////////////////////////////////////////////////////////////
 
 uno::Reference< rdf::XBlankNode >
 RDFaInserter::LookupBlankNode(OUString const & i_rNodeId )
@@ -390,8 +383,6 @@ void RDFaInserter::InsertRDFaEntry(
         SAL_WARN("xmloff.core", "InsertRDFaEntry: setStatementRDFa failed?");
     }
 }
-
-////////////////////////////////////////////////////////////////////////////
 
 RDFaImportHelper::RDFaImportHelper(const SvXMLImport & i_rImport)
     : m_rImport(i_rImport)

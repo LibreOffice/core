@@ -642,7 +642,6 @@ static XMLTransformerActionInit aEventActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-
 // action table for OOO_MASTER_PAGE_ACTIONS
 static XMLTransformerActionInit aMasterPageActionTable[] =
 {
@@ -1082,8 +1081,6 @@ static XMLTokenEnum aTokenMap[] =
     XML_TOKEN_END
 };
 
-//-----------------------------------------------------------------------------
-
 class XMLDocumentTransformerContext_Impl : public XMLTransformerContext
 {
     OUString m_aElemQName;
@@ -1234,8 +1231,6 @@ void XMLDocumentTransformerContext_Impl::EndElement()
     GetTransformer().SetClass( m_aOldClass );
 }
 
-//-----------------------------------------------------------------------------
-
 class XMLBodyTransformerContext_Impl : public XMLTransformerContext
 {
     OUString m_aClassQName;
@@ -1299,8 +1294,6 @@ void XMLBodyTransformerContext_Impl::EndElement()
     GetTransformer().GetDocHandler()->endElement( m_aClassQName );
     XMLTransformerContext::EndElement();
 }
-
-//-----------------------------------------------------------------------------
 
 class XMLTabStopOOoTContext_Impl : public XMLPersElemContentTContext
 {
@@ -1399,8 +1392,6 @@ void XMLTabStopOOoTContext_Impl::StartElement(
     XMLPersElemContentTContext::StartElement( xAttrList );
 }
 
-// -----------------------------------------------------------------------------
-
 class XMLTrackedChangesOOoTContext_Impl : public XMLTransformerContext
 {
     sal_uInt16 m_nPrefix;
@@ -1479,8 +1470,6 @@ void XMLTrackedChangesOOoTContext_Impl::StartElement(
     XMLTransformerContext::StartElement( xAttrList );
 }
 
-// -----------------------------------------------------------------------------
-
 class XMLTableOOoTransformerContext_Impl : public XMLTransformerContext
 {
     OUString m_aElemQName;
@@ -1552,9 +1541,6 @@ void XMLTableOOoTransformerContext_Impl::EndElement()
 {
     GetTransformer().GetDocHandler()->endElement( m_aElemQName );
 }
-
-
-//-----------------------------------------------------------------------------
 
 XMLTransformerContext *OOo2OasisTransformer::CreateUserDefinedContext(
                               const TransformerAction_Impl& rAction,
@@ -1803,7 +1789,6 @@ OUString OOo2OasisTransformer::GetEventName( const OUString& rName, sal_Bool )
     return aNewName;
 }
 
-
 OOo2OasisTransformer::OOo2OasisTransformer( const sal_Char *pImplName,
                                             const sal_Char *pSubServiceName )
         throw() :
@@ -1959,7 +1944,6 @@ void SAL_CALL OOo2OasisTransformer::startDocument( void )
 
     XMLTransformerBase::startDocument();
 }
-
 
 void SAL_CALL OOo2OasisTransformer::Initialize(
                 const Sequence< Any >& rArguments )

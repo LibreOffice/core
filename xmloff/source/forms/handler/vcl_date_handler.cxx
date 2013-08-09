@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "vcl_date_handler.hxx"
 
 #include <rtl/ustrbuf.hxx>
@@ -30,32 +29,25 @@
 #include <tools/diagnose_ex.h>
 #include <tools/date.hxx>
 
-//......................................................................................................................
 namespace xmloff
 {
-//......................................................................................................................
 
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::uno::makeAny;
     using ::com::sun::star::util::DateTime;
     using ::com::sun::star::util::Date;
 
-    //==================================================================================================================
     //= VCLDateHandler
-    //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
     VCLDateHandler::VCLDateHandler()
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     OUString VCLDateHandler::getAttributeValue( const PropertyValues& /*i_propertyValues*/ ) const
     {
         OSL_ENSURE( false, "VCLDateHandler::getAttributeValue: unexpected call!" );
         return OUString();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     OUString VCLDateHandler::getAttributeValue( const Any& i_propertyValue ) const
     {
         Date aDate;
@@ -71,7 +63,6 @@ namespace xmloff
         return aBuffer.makeStringAndClear();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     bool VCLDateHandler::getPropertyValues( const OUString i_attributeValue, PropertyValues& o_propertyValues ) const
     {
         DateTime aDateTime;
@@ -107,8 +98,6 @@ namespace xmloff
         return true;
     }
 
-//......................................................................................................................
 } // namespace xmloff
-//......................................................................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

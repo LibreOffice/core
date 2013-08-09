@@ -45,13 +45,10 @@
 #include "XMLNumberStylesImport.hxx"
 #include "xmloff/xmlerror.hxx"
 
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::xmloff::token;
-
-//////////////////////////////////////////////////////////////////////////////
 
 class SdXMLDrawingPagePropertySetContext : public SvXMLPropertySetContext
 {
@@ -130,8 +127,6 @@ SvXMLImportContext *SdXMLDrawingPagePropertySetContext::CreateChildContext(
 
     return pContext;
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 class SdXMLDrawingPageStyleContext : public XMLPropStyleContext
 {
@@ -303,8 +298,6 @@ void SdXMLDrawingPageStyleContext::FillPropertySet(
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 TYPEINIT1( SdXMLPageMasterStyleContext, SvXMLStyleContext );
 
 SdXMLPageMasterStyleContext::SdXMLPageMasterStyleContext(
@@ -383,14 +376,9 @@ SdXMLPageMasterStyleContext::SdXMLPageMasterStyleContext(
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 SdXMLPageMasterStyleContext::~SdXMLPageMasterStyleContext()
 {
 }
-
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
 
 TYPEINIT1( SdXMLPageMasterContext, SvXMLStyleContext );
 
@@ -425,8 +413,6 @@ SdXMLPageMasterContext::SdXMLPageMasterContext(
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 SdXMLPageMasterContext::~SdXMLPageMasterContext()
 {
     // release remembered contexts, they are no longer needed
@@ -436,8 +422,6 @@ SdXMLPageMasterContext::~SdXMLPageMasterContext()
         mpPageMasterStyle = 0L;
     }
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 SvXMLImportContext *SdXMLPageMasterContext::CreateChildContext(
     sal_uInt16 nPrefix,
@@ -465,9 +449,6 @@ SvXMLImportContext *SdXMLPageMasterContext::CreateChildContext(
 
     return pContext;
 }
-
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
 
 TYPEINIT1( SdXMLPresentationPageLayoutContext, SvXMLStyleContext );
 
@@ -740,9 +721,6 @@ void SdXMLPresentationPageLayoutContext::EndElement()
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-
 SdXMLPresentationPlaceholderContext::SdXMLPresentationPlaceholderContext(
     SdXMLImport& rImport,
     sal_uInt16 nPrfx, const
@@ -798,14 +776,9 @@ SdXMLPresentationPlaceholderContext::SdXMLPresentationPlaceholderContext(
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 SdXMLPresentationPlaceholderContext::~SdXMLPresentationPlaceholderContext()
 {
 }
-
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
 
 TYPEINIT1( SdXMLMasterPageContext, SdXMLGenericPageContext );
 
@@ -901,13 +874,9 @@ SdXMLMasterPageContext::SdXMLMasterPageContext(
     DeleteAllShapes();
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 SdXMLMasterPageContext::~SdXMLMasterPageContext()
 {
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 void SdXMLMasterPageContext::EndElement()
 {
@@ -922,8 +891,6 @@ void SdXMLMasterPageContext::EndElement()
     SdXMLGenericPageContext::EndElement();
     GetImport().GetShapeImport()->endPage(GetLocalShapesContext());
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 SvXMLImportContext* SdXMLMasterPageContext::CreateChildContext(
     sal_uInt16 nPrefix,
@@ -985,9 +952,6 @@ SvXMLImportContext* SdXMLMasterPageContext::CreateChildContext(
     return pContext;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-
 TYPEINIT1( SdXMLStylesContext, SvXMLStyleContext );
 
 SdXMLStylesContext::SdXMLStylesContext(
@@ -1004,15 +968,11 @@ SdXMLStylesContext::SdXMLStylesContext(
     mpNumFmtHelper = new SvXMLNumFmtHelper( mpNumFormatter, xContext );
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 SdXMLStylesContext::~SdXMLStylesContext()
 {
     delete mpNumFmtHelper;
     delete mpNumFormatter;
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 SvXMLStyleContext* SdXMLStylesContext::CreateStyleChildContext(
     sal_uInt16 nPrefix,
@@ -1083,8 +1043,6 @@ SvXMLStyleContext* SdXMLStylesContext::CreateStyleChildContext(
     return pContext;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 SvXMLStyleContext* SdXMLStylesContext::CreateStyleStyleChildContext(
     sal_uInt16 nFamily,
     sal_uInt16 nPrefix,
@@ -1112,8 +1070,6 @@ SvXMLStyleContext* SdXMLStylesContext::CreateStyleStyleChildContext(
     return pContext;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 SvXMLStyleContext* SdXMLStylesContext::CreateDefaultStyleStyleChildContext(
     sal_uInt16 nFamily,
     sal_uInt16 nPrefix,
@@ -1136,15 +1092,11 @@ SvXMLStyleContext* SdXMLStylesContext::CreateDefaultStyleStyleChildContext(
     return pContext;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 sal_uInt16 SdXMLStylesContext::GetFamily( const OUString& rFamily ) const
 {
     // call base class
     return SvXMLStylesContext::GetFamily(rFamily);
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 UniReference< SvXMLImportPropertyMapper > SdXMLStylesContext::GetImportPropertyMapper(
     sal_uInt16 nFamily) const
@@ -1187,7 +1139,6 @@ UniReference< SvXMLImportPropertyMapper > SdXMLStylesContext::GetImportPropertyM
     return xMapper;
 }
 
-//////////////////////////////////////////////////////////////////////////////
 // Process all style and object info
 //
 void SdXMLStylesContext::EndElement()
@@ -1250,7 +1201,6 @@ void SdXMLStylesContext::EndElement()
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
 // set master-page styles (all with family="presentation" and a special
 // prefix) on given master-page.
 //
@@ -1278,7 +1228,6 @@ void SdXMLStylesContext::SetMasterPageStyles(SdXMLMasterPageContext& rMaster) co
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
 // Process styles list:
 // set graphic styles (all with family="graphics"). Remember xStyle at list element.
 //
@@ -1312,7 +1261,6 @@ void SdXMLStylesContext::ImpSetCellStyles() const
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
 // help function used by ImpSetGraphicStyles() and ImpSetMasterPageStyles()
 //
 void SdXMLStylesContext::ImpSetGraphicStyles( uno::Reference< container::XNameAccess >& xPageStyles,  sal_uInt16 nFamily,  const OUString& rPrefix) const
@@ -1467,7 +1415,6 @@ void SdXMLStylesContext::ImpSetGraphicStyles( uno::Reference< container::XNameAc
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////
 // helper function to create the uno component that hold the mappings from
 // xml auto layout name to internal autolayout id
 
@@ -1488,8 +1435,6 @@ uno::Reference< container::XNameAccess > SdXMLStylesContext::getPageLayouts() co
     return uno::Reference< container::XNameAccess >::query( xLayouts );
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
 //
 TYPEINIT1( SdXMLMasterStylesContext, SvXMLImportContext );
 
@@ -1580,8 +1525,6 @@ SvXMLImportContext* SdXMLMasterStylesContext::CreateChildContext(
 
     return pContext;
 }
-
-///////////////////////////////////////////////////////////////////////
 
 SdXMLHeaderFooterDeclContext::SdXMLHeaderFooterDeclContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLName,

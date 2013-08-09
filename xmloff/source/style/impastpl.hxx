@@ -40,10 +40,7 @@ class SvXMLExport;
 
 #define MAX_CACHE_SIZE 65536
 
-///////////////////////////////////////////////////////////////////////////////
-//
 // Implementationclass for stylefamily-information
-//
 
 typedef OUString* OUStringPtr;
 typedef ::std::vector< OUStringPtr > SvXMLAutoStylePoolCache_Impl;
@@ -82,13 +79,10 @@ public:
     void ClearEntries();
 };
 
-/// A set that finds and sorts based only on mnFamily
+// A set that finds and sorts based only on mnFamily
 typedef boost::ptr_set<XMLFamilyData_Impl> XMLFamilyDataList_Impl;
 
-///////////////////////////////////////////////////////////////////////////////
-//
 // Properties of a pool
-//
 
 class SvXMLAutoStylePoolPropertiesP_Impl
 {
@@ -114,11 +108,7 @@ public:
 typedef SvXMLAutoStylePoolPropertiesP_Impl* SvXMLAutoStylePoolPropertiesPPtr;
 typedef ::std::vector< SvXMLAutoStylePoolPropertiesPPtr > SvXMLAutoStylePoolPropertiesPList_Impl;
 
-///////////////////////////////////////////////////////////////////////////////
-//
 // Parents of AutoStylePool's
-//
-
 class SvXMLAutoStylePoolParentP_Impl
 {
     OUString                         msParent;
@@ -160,10 +150,7 @@ public:
     ~SvXMLAutoStylePoolParentsP_Impl() { DeleteAndDestroyAll(); }
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
 // Implementationclass of SvXMLAutoStylePool
-//
 
 class SvXMLAutoStylePoolP_Impl
 {
