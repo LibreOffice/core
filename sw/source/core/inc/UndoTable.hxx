@@ -151,9 +151,7 @@ class SwUndoTableAutoFormat : public SwUndo
     void UndoRedo(bool const bUndo, ::sw::UndoRedoContext & rContext);
 
 public:
-    SwUndoTableAutoFormat( const SwTableNode& rTableNd, const SwTableAutoFormat& );
-
-    virtual ~SwUndoTableAutoFormat();
+    SwUndoTableAutoFormat( const SwTableNode& rTableNd );
 
     virtual void UndoImpl( ::sw::UndoRedoContext & );
     virtual void RedoImpl( ::sw::UndoRedoContext & );

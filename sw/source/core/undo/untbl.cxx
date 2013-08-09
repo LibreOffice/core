@@ -1403,18 +1403,12 @@ void SwUndoAttrTable::RedoImpl(::sw::UndoRedoContext & rContext)
 }
 
 // UndoObject for AutoFormat on Table
-SwUndoTableAutoFormat::SwUndoTableAutoFormat( const SwTableNode& rTableNd,
-                                    const SwTableAutoFormat& rAFormat )
+SwUndoTableAutoFormat::SwUndoTableAutoFormat( const SwTableNode& rTableNd )
     : SwUndo( UNDO_TABLE_AUTOFMT ),
     nSttNode( rTableNd.GetIndex() ),
     m_nRepeatHeading(rTableNd.GetTable().GetRowsToRepeat())
 {
-    pSaveFormat = new SwTableFormat( *rAFormat.GetTableStyle() );
-}
-
-SwUndoTableAutoFormat::~SwUndoTableAutoFormat()
-{
-    delete pSaveFormat;
+    pSaveFormat = (SwTableFormat*)rTableNd.GetTable().GetFrameFormat()->GetRegisteredIn();
 }
 
 void
@@ -1431,7 +1425,6 @@ SwUndoTableAutoFormat::UndoRedo(bool const bUndo, ::sw::UndoRedoContext & rConte
         table.SetRowsToRepeat( m_nRepeatHeading );
 
     SwTableFormat::RestoreTableProperties( pSaveFormat, table );
-    delete pSaveFormat;
     pSaveFormat = pOrig;
 }
 

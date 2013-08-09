@@ -3564,7 +3564,7 @@ bool SwDoc::SetTableAutoFormat( const SwSelBoxes& rBoxes, const SwTableAutoForma
     bool const bUndo(GetIDocumentUndoRedo().DoesUndo());
     if (bUndo)
     {
-        pUndo = new SwUndoTableAutoFormat( *pTableNd, rNew );
+        pUndo = new SwUndoTableAutoFormat( *pTableNd );
         GetIDocumentUndoRedo().AppendUndo(pUndo);
         GetIDocumentUndoRedo().DoUndo(false);
     }
