@@ -2929,12 +2929,11 @@ dnl  Test the gcc version
 dnl ===================================================================
 if test "$GCC" = "yes"; then
     AC_MSG_CHECKING([the GCC version])
-    _gcc_version=$($CC --version|head -n1|sed -e 's/^.*[^.[:digit:]]\(\([[:digit:]]\+\.\)\{1,2\}[[:digit:]]\+\).*/\1/')
-    _gcc_major=`echo $_gcc_version | $AWK -F. '{ print \$1 }'`
-    GCCVER=`echo $_gcc_version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
+    _gcc_version=`$CC -dumpversion`
+    GCCVER=`echo $_gcc_version | $AWK -F. '{ print \$1*100+\$2 }'`
 
     AC_MSG_RESULT([gcc $_gcc_version])
-    if test "$GCCVER" -lt 040000; then
+    if test "$GCCVER" -lt 0400; then
         AC_MSG_ERROR([GCC $_gcc_version is too old, must be at least GCC 4.0.0])
     fi
 fi
@@ -5612,7 +5611,7 @@ if test "$GCC" = "yes"; then
 #endif
                 ]])],[HAVE_THREADSAFE_STATICS=TRUE],[])
             AC_LANG_POP([C++])
-        elif test "${GCCVER?}" -ge 040300; then
+        elif test "${GCCVER?}" -ge 0403; then
             HAVE_THREADSAFE_STATICS=TRUE
         fi
     fi
