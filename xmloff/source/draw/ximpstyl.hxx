@@ -30,7 +30,6 @@
 class SvNumberFormatter;
 class SvXMLNumFmtHelper;
 
-//////////////////////////////////////////////////////////////////////////////
 // special style:style context inside style:page-master context
 
 class SdXMLPageMasterStyleContext: public SvXMLStyleContext
@@ -65,7 +64,6 @@ public:
     com::sun::star::view::PaperOrientation GetOrientation() const { return meOrientation; }
 };
 
-//////////////////////////////////////////////////////////////////////////////
 // style:page-master context
 
 class SdXMLPageMasterContext: public SvXMLStyleContext
@@ -94,7 +92,6 @@ public:
     const SdXMLPageMasterStyleContext* GetPageMasterStyle() const { return mpPageMasterStyle; }
 };
 
-//////////////////////////////////////////////////////////////////////////////
 // style:masterpage context
 
 class SdXMLMasterPageContext: public SdXMLGenericPageContext
@@ -128,7 +125,6 @@ public:
 };
 typedef ::std::vector< SdXMLMasterPageContext* > ImpMasterPageList;
 
-//////////////////////////////////////////////////////////////////////////////
 // presentation:placeholder context
 
 class SdXMLPresentationPlaceholderContext: public SvXMLImportContext
@@ -158,7 +154,6 @@ public:
 };
 typedef ::std::vector< SdXMLPresentationPlaceholderContext* > ImpPlaceholderList;
 
-//////////////////////////////////////////////////////////////////////////////
 // style:presentation-page-layout context
 
 class SdXMLPresentationPageLayoutContext: public SvXMLStyleContext
@@ -188,7 +183,6 @@ public:
     sal_uInt16 GetTypeId() const { return mnTypeId; }
 };
 
-//////////////////////////////////////////////////////////////////////////////
 // office:styles context
 
 class SdXMLStylesContext : public SvXMLStylesContext
@@ -243,7 +237,6 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > getPageLayouts() const;
 };
 
-//////////////////////////////////////////////////////////////////////////////
 // office:master-styles context
 //
 class SdXMLMasterStylesContext : public SvXMLImportContext
@@ -270,7 +263,6 @@ public:
     const ImpMasterPageList& GetMasterPageList() const { return maMasterPageList; }
 };
 
-//////////////////////////////////////////////////////////////////////////////
 // <pres:header-decl>, <pres:footer-decl> and <pres:date-time-decl>
 
 class SdXMLHeaderFooterDeclContext : public SvXMLStyleContext
@@ -290,7 +282,6 @@ private:
     OUString maStrDateTimeFormat;
     sal_Bool        mbFixed;
 };
-
 
 #endif  //  _XIMPSTYLE_HXX
 

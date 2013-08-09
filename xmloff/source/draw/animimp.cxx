@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/presentation/AnimationEffect.hpp>
@@ -36,7 +35,6 @@
 #include <xmloff/nmspmap.hxx>
 #include "anim.hxx"
 #include "animimp.hxx"
-
 
 using namespace ::std;
 using namespace ::cppu;
@@ -317,8 +315,6 @@ AnimationEffect ImplSdXMLgetEffect( XMLEffect eKind, XMLEffectDirection eDirecti
     }
 }
 
-///////////////////////////////////////////////////////////////////////
-
 class AnimImpImpl
 {
 public:
@@ -355,8 +351,6 @@ public:
         msIsAnimation( "IsAnimation" )
     {}
 };
-
-///////////////////////////////////////////////////////////////////////
 
 enum XMLActionKind
 {
@@ -448,7 +442,6 @@ XMLAnimationsSoundContext::XMLAnimationsSoundContext( SvXMLImport& rImport, sal_
 XMLAnimationsSoundContext::~XMLAnimationsSoundContext()
 {
 }
-
 
 TYPEINIT1( XMLAnimationsEffectContext, SvXMLImportContext );
 
@@ -655,8 +648,6 @@ void XMLAnimationsEffectContext::EndElement()
         OSL_FAIL( "exception caught while importing animation information!" );
     }
 }
-
-///////////////////////////////////////////////////////////////////////
 
 TYPEINIT1( XMLAnimationsContext, SvXMLImportContext );
 

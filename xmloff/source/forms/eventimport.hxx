@@ -26,14 +26,10 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 
 class SvXMLImport;
-//.........................................................................
 namespace xmloff
 {
-//.........................................................................
 
-    //=====================================================================
     //= OFormEventsImportContext
-    //=====================================================================
     class OFormEventsImportContext : public XMLEventsImportContext
     {
     protected:
@@ -47,9 +43,7 @@ namespace xmloff
         virtual void EndElement();
     };
 
-    //=====================================================================
     //= ODefaultEventAttacherManager
-    //=====================================================================
     class ODefaultEventAttacherManager : public IEventAttacherManager
     {
     protected:
@@ -79,9 +73,7 @@ namespace xmloff
         virtual ~ODefaultEventAttacherManager();
     };
 
-//.........................................................................
 }   // namespace xmloff
-//.........................................................................
 
 #endif // _XMLOFF_FORMS_EVENTIMPORT_HXX_
 

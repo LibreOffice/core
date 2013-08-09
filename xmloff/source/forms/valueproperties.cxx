@@ -22,17 +22,12 @@
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <sal/log.hxx>
 
-//.........................................................................
 namespace xmloff
 {
-//.........................................................................
 
     using namespace ::com::sun::star::form;
 
-    //=====================================================================
     //= OValuePropertiesMetaData
-    //=====================================================================
-    //---------------------------------------------------------------------
     void OValuePropertiesMetaData::getValuePropertyNames(
             OControlElement::ElementType _eType, sal_Int16 _nFormComponentType,
             sal_Char const * & _rpCurrentValuePropertyName, sal_Char const * & _rpValuePropertyName)
@@ -96,8 +91,6 @@ namespace xmloff
         }
     }
 
-
-    //---------------------------------------------------------------------
     void OValuePropertiesMetaData::getValueLimitPropertyNames(sal_Int16 _nFormComponentType,
         sal_Char const * & _rpMinValuePropertyName, sal_Char const * & _rpMaxValuePropertyName)
     {
@@ -131,7 +124,6 @@ namespace xmloff
         }
     }
 
-    //---------------------------------------------------------------------
     void OValuePropertiesMetaData::getRuntimeValuePropertyNames(
         OControlElement::ElementType _eType, sal_Int16 _nFormComponentType,
         sal_Char const * & _rpValuePropertyName, sal_Char const * & _rpDefaultValuePropertyName )
@@ -183,9 +175,6 @@ namespace xmloff
         }
     }
 
-//.........................................................................
 }   // namespace xmloff
-//.........................................................................
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

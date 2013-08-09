@@ -23,7 +23,6 @@
 #include <xmloff/xmlnumfi.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
 
-//////////////////////////////////////////////////////////////////////////////
 // presentations:animations
 
 struct SdXMLFixedDataStyle;

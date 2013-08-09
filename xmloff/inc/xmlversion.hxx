@@ -32,7 +32,6 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
 
-// ------------------------------------------------------------------------
 class XMLVersionListExport : public SvXMLExport
 {
 private:
@@ -51,7 +50,6 @@ public:
     void        _ExportContent() {}
 };
 
-// ------------------------------------------------------------------------
 class XMLVersionListImport : public SvXMLImport
 {
 private:
@@ -77,7 +75,6 @@ public:
         GetList() { return maVersions; }
 };
 
-// ------------------------------------------------------------------------
 class XMLVersionListContext : public SvXMLImportContext
 {
 private:
@@ -100,7 +97,6 @@ public:
 
 };
 
-// ------------------------------------------------------------------------
 class XMLVersionContext: public SvXMLImportContext
 {
 private:
@@ -121,8 +117,6 @@ public:
     ~XMLVersionContext();
 };
 
-
-// ------------------------------------------------------------------------
 class XMLVersionListPersistence : public ::cppu::WeakImplHelper1< ::com::sun::star::document::XDocumentRevisionListPersistence >
 {
 public:

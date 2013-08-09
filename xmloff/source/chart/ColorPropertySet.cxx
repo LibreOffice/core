@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "ColorPropertySet.hxx"
 
 #include <cppuhelper/implbase1.hxx>
@@ -28,8 +27,6 @@ using namespace ::com::sun::star::beans;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::RuntimeException;
-
-// ================================================================================
 
 namespace
 {
@@ -79,8 +76,6 @@ sal_Bool SAL_CALL lcl_ColorPropertySetInfo::hasPropertyByName( const OUString& N
 }
 
 } // anonymous namespace
-
-// ================================================================================
 
 namespace xmloff
 {

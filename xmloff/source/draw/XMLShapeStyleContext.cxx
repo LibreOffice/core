@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <tools/debug.hxx>
 #include <xmloff/XMLShapeStyleContext.hxx>
 #include "XMLShapePropertySetContext.hxx"
@@ -34,7 +33,6 @@
 
 #include "sdpropls.hxx"
 
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -42,8 +40,6 @@ using ::xmloff::token::IsXMLToken;
 using ::xmloff::token::XML_TEXT_PROPERTIES;
 using ::xmloff::token::XML_GRAPHIC_PROPERTIES;
 using ::xmloff::token::XML_PARAGRAPH_PROPERTIES;
-
-//////////////////////////////////////////////////////////////////////////////
 
 TYPEINIT1( XMLShapeStyleContext, XMLPropStyleContext );
 

@@ -35,7 +35,6 @@
 
 #include <boost/unordered_map.hpp>
 
-
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::xmloff::token;
@@ -75,8 +74,6 @@ XMLTransformerOASISEventMap_Impl::XMLTransformerOASISEventMap_Impl( XMLTransform
 XMLTransformerOASISEventMap_Impl::~XMLTransformerOASISEventMap_Impl()
 {
 }
-
-// -----------------------------------------------------------------------------
 
 TYPEINIT1( XMLEventOASISTransformerContext, XMLRenameElemTransformerContext);
 

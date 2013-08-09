@@ -28,11 +28,8 @@
 #include <xmloff/PageMasterStyleMap.hxx>
 #include <com/sun/star/text/TextGridMode.hpp>
 
-
-
 using namespace ::xmloff::token;
 using namespace ::com::sun::star;
-
 
 SvXMLEnumMapEntry aXML_TextGridMode_ConstantMap[] =
 {
@@ -41,8 +38,6 @@ SvXMLEnumMapEntry aXML_TextGridMode_ConstantMap[] =
     { XML_BOTH,         text::TextGridMode::LINES_AND_CHARS },
     { XML_TOKEN_INVALID, 0 }
 };
-
-//______________________________________________________________________________
 
 XMLPageMasterPropHdlFactory::XMLPageMasterPropHdlFactory() :
     XMLPropertyHandlerFactory()
@@ -130,6 +125,5 @@ const XMLPropertyHandler* XMLPageMasterPropHdlFactory::GetPropertyHandler( sal_I
     }
     return pHdl;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

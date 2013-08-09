@@ -25,11 +25,9 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
 
-
 using namespace ::com::sun::star::uno;
 using namespace ::xmloff::token;
 
-///////////////////////////////////////////////////////////////////////////////
 //
 // class XMLKerningPropHdl
 //

@@ -85,8 +85,6 @@ XMLTransformerOOoEventMap_Impl::~XMLTransformerOOoEventMap_Impl()
 {
 }
 
-// -----------------------------------------------------------------------------
-
 TYPEINIT1( XMLEventOOoTransformerContext, XMLPersElemContentTContext );
 
 XMLEventOOoTransformerContext::XMLEventOOoTransformerContext(
@@ -134,7 +132,6 @@ sal_uInt16 XMLEventOOoTransformerContext::GetEventName(
         return (*aIter).second.m_nPrefix;
     }
 }
-
 
 void XMLEventOOoTransformerContext::StartElement(
     const Reference< XAttributeList >& rAttrList )

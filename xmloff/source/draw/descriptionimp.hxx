@@ -23,7 +23,6 @@
 #include <xmloff/xmlictxt.hxx>
 #include <com/sun/star/drawing/XShape.hpp>
 
-//////////////////////////////////////////////////////////////////////////////
 // office:events inside a shape
 
 class SdXMLDescriptionContext : public SvXMLImportContext

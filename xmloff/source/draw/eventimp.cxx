@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <tools/debug.hxx>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
@@ -38,7 +37,6 @@
 #include "eventimp.hxx"
 #include "anim.hxx"
 
-
 using namespace ::std;
 using namespace ::cppu;
 using namespace ::com::sun::star;
@@ -52,8 +50,6 @@ using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::presentation;
 using namespace ::xmloff::token;
-
-///////////////////////////////////////////////////////////////////////
 
 SvXMLEnumMapEntry const aXML_EventActions_EnumMap[] =
 {
@@ -73,8 +69,6 @@ SvXMLEnumMapEntry const aXML_EventActions_EnumMap[] =
     { XML_SOUND,            ClickAction_SOUND },
     { XML_TOKEN_INVALID, 0 }
 };
-
-///////////////////////////////////////////////////////////////////////
 
 class SdXMLEventContext : public SvXMLImportContext
 {
@@ -104,8 +98,6 @@ public:
     OUString msBookmark;
     OUString msLanguage;
 };
-
-///////////////////////////////////////////////////////////////////////
 
 class XMLEventSoundContext : public SvXMLImportContext
 {
@@ -154,8 +146,6 @@ XMLEventSoundContext::XMLEventSoundContext( SvXMLImport& rImp, sal_uInt16 nPrfx,
 XMLEventSoundContext::~XMLEventSoundContext()
 {
 }
-
-///////////////////////////////////////////////////////////////////////
 
 TYPEINIT1( SdXMLEventContext, SvXMLImportContext );
 
@@ -492,8 +482,6 @@ void SdXMLEventContext::EndElement()
 
     } while(0);
 }
-
-///////////////////////////////////////////////////////////////////////
 
 TYPEINIT1( SdXMLEventsContext, SvXMLImportContext );
 

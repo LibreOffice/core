@@ -22,25 +22,18 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-
-// =============================================================================
 // XMLBasicExportFilter
-// =============================================================================
 
 XMLBasicExportFilter::XMLBasicExportFilter( const Reference< xml::sax::XDocumentHandler >& rxHandler )
     :m_xHandler( rxHandler )
 {
 }
 
-// -----------------------------------------------------------------------------
-
 XMLBasicExportFilter::~XMLBasicExportFilter()
 {
 }
 
-// -----------------------------------------------------------------------------
 // XDocumentHandler
-// -----------------------------------------------------------------------------
 
 void XMLBasicExportFilter::startDocument()
     throw (xml::sax::SAXException, RuntimeException)
@@ -48,15 +41,11 @@ void XMLBasicExportFilter::startDocument()
     // do nothing, filter this
 }
 
-// -----------------------------------------------------------------------------
-
 void XMLBasicExportFilter::endDocument()
     throw (xml::sax::SAXException, RuntimeException)
 {
     // do nothing, filter this
 }
-
-// -----------------------------------------------------------------------------
 
 void XMLBasicExportFilter::startElement( const OUString& aName,
         const Reference< xml::sax::XAttributeList >& xAttribs )
@@ -66,16 +55,12 @@ void XMLBasicExportFilter::startElement( const OUString& aName,
         m_xHandler->startElement( aName, xAttribs );
 }
 
-// -----------------------------------------------------------------------------
-
 void XMLBasicExportFilter::endElement( const OUString& aName )
     throw (xml::sax::SAXException, RuntimeException)
 {
     if ( m_xHandler.is() )
         m_xHandler->endElement( aName );
 }
-
-// -----------------------------------------------------------------------------
 
 void XMLBasicExportFilter::characters( const OUString& aChars )
     throw (xml::sax::SAXException, RuntimeException)
@@ -84,16 +69,12 @@ void XMLBasicExportFilter::characters( const OUString& aChars )
         m_xHandler->characters( aChars );
 }
 
-// -----------------------------------------------------------------------------
-
 void XMLBasicExportFilter::ignorableWhitespace( const OUString& aWhitespaces )
     throw (xml::sax::SAXException, RuntimeException)
 {
     if ( m_xHandler.is() )
         m_xHandler->ignorableWhitespace( aWhitespaces );
 }
-
-// -----------------------------------------------------------------------------
 
 void XMLBasicExportFilter::processingInstruction( const OUString& aTarget,
         const OUString& aData )
@@ -103,15 +84,11 @@ void XMLBasicExportFilter::processingInstruction( const OUString& aTarget,
         m_xHandler->processingInstruction( aTarget, aData );
 }
 
-// -----------------------------------------------------------------------------
-
 void XMLBasicExportFilter::setDocumentLocator( const Reference< xml::sax::XLocator >& xLocator )
     throw (xml::sax::SAXException, RuntimeException)
 {
     if ( m_xHandler.is() )
         m_xHandler->setDocumentLocator( xLocator );
 }
-
-// -----------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

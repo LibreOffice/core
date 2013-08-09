@@ -46,15 +46,11 @@
 // OD 2004-05-05 #i28701#
 #include <com/sun/star/text/WrapInfluenceOnPosition.hpp>
 
-
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::text;
 using namespace ::xmloff::token;
-
-// ---------------------------------------------------------------------------
 
 SvXMLEnumMapEntry const pXML_HoriPos_Enum[] =
 {
@@ -245,8 +241,6 @@ SvXMLEnumMapEntry const pXML_FillStyle_Enum[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-// ---------------------------------------------------------------------------
-
 class XMLDropCapPropHdl_Impl : public XMLPropertyHandler
 {
 public:
@@ -303,8 +297,6 @@ sal_Bool XMLDropCapPropHdl_Impl::exportXML(
     return sal_False;
 }
 
-// ---------------------------------------------------------------------------
-
 class XMLOpaquePropHdl_Impl : public XMLPropertyHandler
 {
 public:
@@ -355,8 +347,6 @@ XMLOpaquePropHdl_Impl::~XMLOpaquePropHdl_Impl ()
 {
 }
 
-// ---------------------------------------------------------------------------
-
 class XMLContourModePropHdl_Impl : public XMLPropertyHandler
 {
 public:
@@ -406,8 +396,6 @@ sal_Bool XMLContourModePropHdl_Impl::exportXML(
 XMLContourModePropHdl_Impl::~XMLContourModePropHdl_Impl()
 {
 }
-
-// ---------------------------------------------------------------------------
 
 class XMLParagraphOnlyPropHdl_Impl : public XMLPropertyHandler
 {
@@ -461,8 +449,6 @@ sal_Bool XMLParagraphOnlyPropHdl_Impl::exportXML(
 XMLParagraphOnlyPropHdl_Impl::~XMLParagraphOnlyPropHdl_Impl()
 {
 }
-
-// ---------------------------------------------------------------------------
 
 SvXMLEnumMapEntry const pXML_Wrap_Enum[] =
 {
@@ -525,8 +511,6 @@ sal_Bool XMLWrapPropHdl_Impl::exportXML(
 XMLWrapPropHdl_Impl::~XMLWrapPropHdl_Impl ()
 {
 }
-
-// ---------------------------------------------------------------------------
 
 class XMLFrameProtectPropHdl_Impl : public XMLPropertyHandler
 {
@@ -609,8 +593,6 @@ XMLFrameProtectPropHdl_Impl::~XMLFrameProtectPropHdl_Impl()
 {
 }
 
-// ---------------------------------------------------------------------------
-
 SvXMLEnumMapEntry const pXML_Anchor_Enum[] =
 {
     { XML_CHAR,         TextContentAnchorType_AT_CHARACTER },
@@ -620,7 +602,6 @@ SvXMLEnumMapEntry const pXML_Anchor_Enum[] =
     { XML_AS_CHAR,      TextContentAnchorType_AS_CHARACTER },
     { XML_TOKEN_INVALID, 0 }
 };
-
 
 sal_Bool XMLAnchorTypePropHdl::importXML(
         const OUString& rStrImpValue,
@@ -668,9 +649,6 @@ sal_Bool XMLAnchorTypePropHdl::convert( const OUString& rStrImpValue,
         rType = (TextContentAnchorType)nAnchor;
     return bRet;
 }
-
-// ---------------------------------------------------------------------------
-
 
 XMLTextColumnsPropertyHandler::~XMLTextColumnsPropertyHandler ()
 {
@@ -731,8 +709,6 @@ sal_Bool XMLTextColumnsPropertyHandler::exportXML(
     return sal_False;
 }
 
-// ---------------------------------------------------------------------------
-
 class XMLHoriMirrorPropHdl_Impl : public XMLPropertyHandler
 {
 public:
@@ -779,8 +755,6 @@ sal_Bool XMLHoriMirrorPropHdl_Impl::exportXML(
 XMLHoriMirrorPropHdl_Impl::~XMLHoriMirrorPropHdl_Impl ()
 {
 }
-
-// ---------------------------------------------------------------------------
 
 class XMLGrfMirrorPropHdl_Impl : public XMLPropertyHandler
 {
@@ -876,8 +850,6 @@ sal_Bool XMLGrfMirrorPropHdl_Impl::exportXML(
 XMLGrfMirrorPropHdl_Impl::~XMLGrfMirrorPropHdl_Impl()
 {
 }
-
-// ---------------------------------------------------------------------------
 
 SvXMLEnumMapEntry const pXML_Emphasize_Enum[] =
 {
@@ -989,9 +961,6 @@ XMLTextEmphasizePropHdl_Impl::~XMLTextEmphasizePropHdl_Impl()
 {
 }
 
-
-// ---------------------------------------------------------------------------
-
 class XMLTextCombineCharPropHdl_Impl : public XMLPropertyHandler
 {
 public:
@@ -1035,8 +1004,6 @@ sal_Bool XMLTextCombineCharPropHdl_Impl::exportXML(
 XMLTextCombineCharPropHdl_Impl::~XMLTextCombineCharPropHdl_Impl()
 {
 }
-
-// ---------------------------------------------------------------------------
 
 class XMLTextRelWidthHeightPropHdl_Impl : public XMLPropertyHandler
 {
@@ -1090,8 +1057,6 @@ XMLTextRelWidthHeightPropHdl_Impl::~XMLTextRelWidthHeightPropHdl_Impl()
 {
 }
 
-// ---------------------------------------------------------------------------
-
 class XMLTextSyncWidthHeightPropHdl_Impl : public XMLPropertyHandler
 {
     const OUString sValue;
@@ -1140,8 +1105,6 @@ sal_Bool XMLTextSyncWidthHeightPropHdl_Impl::exportXML(
 XMLTextSyncWidthHeightPropHdl_Impl::~XMLTextSyncWidthHeightPropHdl_Impl()
 {
 }
-
-// ---------------------------------------------------------------------------
 
 class XMLTextRotationAnglePropHdl_Impl : public XMLPropertyHandler
 {
@@ -1206,7 +1169,6 @@ sal_Bool XMLTextRotationAnglePropHdl_Impl::exportXML(
 XMLTextRotationAnglePropHdl_Impl::~XMLTextRotationAnglePropHdl_Impl()
 {
 }
-// ---------------------------------------------------------------------------
 class XMLNumber8OneBasedHdl : public XMLPropertyHandler
 {
 
@@ -1251,7 +1213,6 @@ sal_Bool XMLNumber8OneBasedHdl::exportXML(
     }
     return bRet;
 }
-// ---------------------------------------------------------------------------
 class XMLTextPropertyHandlerFactory_Impl
 {
 public:
@@ -1445,8 +1406,6 @@ XMLTextPropertyHandlerFactory_Impl::~XMLTextPropertyHandlerFactory_Impl()
 {
 }
 
-// ----------------------------------------------------------------------------
-
 XMLTextPropertyHandlerFactory::XMLTextPropertyHandlerFactory() :
     XMLPropertyHandlerFactory(),
    pImpl( new XMLTextPropertyHandlerFactory_Impl )
@@ -1476,6 +1435,5 @@ const XMLPropertyHandler *XMLTextPropertyHandlerFactory::GetPropertyHandler(
 
     return pHdl;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

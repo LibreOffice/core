@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "PageMasterPropHdl.hxx"
 
 #include <sax/tools/converter.hxx>
@@ -32,20 +31,14 @@
 #include <comphelper/types.hxx>
 #include <comphelper/extract.hxx>
 
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::style;
 using namespace ::comphelper;
 using namespace ::xmloff::token;
 
-
-//______________________________________________________________________________
-
 #define DEFAULT_PAPERTRAY   (sal_Int32(-1))
 
-
-//______________________________________________________________________________
 // property handler for style:page-usage (style::PageStyleLayout)
 
 XMLPMPropHdl_PageStyleLayout::~XMLPMPropHdl_PageStyleLayout()
@@ -112,8 +105,6 @@ sal_Bool XMLPMPropHdl_PageStyleLayout::exportXML(
     return bRet;
 }
 
-
-//______________________________________________________________________________
 // property handler for style:num-format (style::NumberingType)
 
 XMLPMPropHdl_NumFormat::~XMLPMPropHdl_NumFormat()
@@ -171,8 +162,6 @@ sal_Bool XMLPMPropHdl_NumFormat::exportXML(
     return bRet;
 }
 
-
-//______________________________________________________________________________
 // property handler for style:num-letter-sync (style::NumberingType)
 
 XMLPMPropHdl_NumLetterSync::~XMLPMPropHdl_NumLetterSync()
@@ -227,8 +216,6 @@ sal_Bool XMLPMPropHdl_NumLetterSync::exportXML(
     return bRet;
 }
 
-
-//______________________________________________________________________________
 // property handler for style:paper-tray-number
 
 XMLPMPropHdl_PaperTrayNumber::~XMLPMPropHdl_PaperTrayNumber()
@@ -283,8 +270,6 @@ sal_Bool XMLPMPropHdl_PaperTrayNumber::exportXML(
     return bRet;
 }
 
-
-//______________________________________________________________________________
 // property handler for style:print
 
 XMLPMPropHdl_Print::XMLPMPropHdl_Print( enum XMLTokenEnum eValue ) :
@@ -330,7 +315,6 @@ sal_Bool XMLPMPropHdl_Print::exportXML(
     return sal_True;
 }
 
-//______________________________________________________________________________
 // property handler for style:table-centering
 
 XMLPMPropHdl_CenterHorizontal::~XMLPMPropHdl_CenterHorizontal()
@@ -351,7 +335,6 @@ sal_Bool XMLPMPropHdl_CenterHorizontal::importXML(
             rValue = ::cppu::bool2any(sal_True);
             bRet = sal_True;
         }
-
 
     return bRet;
 }

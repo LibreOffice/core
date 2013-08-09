@@ -24,14 +24,10 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 
-//.........................................................................
 namespace xmloff
 {
-//.........................................................................
 
-    //=====================================================================
     //= OInterfaceCompare
-    //=====================================================================
     /** is stl-compliant structure for comparing Reference&lt; &lt;iface&gt; &gt; instances
     */
     template < class IAFCE >
@@ -54,9 +50,7 @@ namespace xmloff
     typedef OInterfaceCompare< ::com::sun::star::beans::XPropertySet >  OPropertySetCompare;
     typedef OInterfaceCompare< ::com::sun::star::drawing::XDrawPage >   ODrawPageCompare;
 
-//.........................................................................
 }   // namespace xmloff
-//.........................................................................
 
 #endif // _XMLOFF_FORMS_IFACECOMPARE_HXX_
 

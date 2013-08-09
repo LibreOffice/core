@@ -38,7 +38,6 @@
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <xmloff/xmluconv.hxx>
 
-
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 using namespace ::com::sun::star::uno;
@@ -51,9 +50,6 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::office;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::geometry;
-
-
-//////////////////////////////////////////////////////////////////////////////
 
 class DrawAnnotationContext : public SvXMLImportContext
 {
@@ -200,8 +196,6 @@ void DrawAnnotationContext::EndElement()
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 TYPEINIT1( SdXMLGenericPageContext, SvXMLImportContext );
 
 SdXMLGenericPageContext::SdXMLGenericPageContext(
@@ -228,13 +222,9 @@ SdXMLGenericPageContext::SdXMLGenericPageContext(
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 SdXMLGenericPageContext::~SdXMLGenericPageContext()
 {
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 void SdXMLGenericPageContext::StartElement( const Reference< ::com::sun::star::xml::sax::XAttributeList >& )
 {
@@ -243,8 +233,6 @@ void SdXMLGenericPageContext::StartElement( const Reference< ::com::sun::star::x
     if( GetImport().IsFormsSupported() )
         GetImport().GetFormImport()->startPage( Reference< drawing::XDrawPage >::query( mxShapes ) );
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 SvXMLImportContext* SdXMLGenericPageContext::CreateChildContext( sal_uInt16 nPrefix,
     const OUString& rLocalName,
@@ -279,8 +267,6 @@ SvXMLImportContext* SdXMLGenericPageContext::CreateChildContext( sal_uInt16 nPre
 
     return pContext;
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 void SdXMLGenericPageContext::EndElement()
 {

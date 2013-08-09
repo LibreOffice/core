@@ -42,8 +42,6 @@ namespace com { namespace sun { namespace star {
         class XAttributeList;
 }}}}}
 
-// ----------------------------------------
-
 class SchXML3DSceneAttributesHelper : public SdXML3DSceneAttributesHelper
 {
 public:
@@ -55,8 +53,6 @@ public:
 private:
     SchXML3DSceneAttributesHelper();
 };
-
-// ----------------------------------------
 
 class SchXMLPositonAttributesHelper
 {
@@ -70,7 +66,6 @@ public:
     bool hasPosSize() const;
     bool isAutomatic() const;
     ::com::sun::star::awt::Rectangle getRectangle() const;
-
 
 private:
     bool hasSize() const;
@@ -88,8 +83,6 @@ private:
     sal_Bool m_bAutoSize;
     sal_Bool m_bAutoPosition;
 };
-
-// ----------------------------------------
 
 class SchXMLPlotAreaContext : public SvXMLImportContext
 {
@@ -149,8 +142,6 @@ private:
     ::com::sun::star::awt::Size maChartSize;
 };
 
-//----------------------------------------
-
 class SchXMLDataPointContext : public SvXMLImportContext
 {
 private:
@@ -171,8 +162,6 @@ public:
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 };
 
-// ----------------------------------------
-
 class SchXMLCoordinateRegionContext : public SvXMLImportContext
 {
 public:
@@ -187,8 +176,6 @@ public:
 private:
     SchXMLPositonAttributesHelper& m_rPositioning;
 };
-
-// ----------------------------------------
 
 class SchXMLWallFloorContext : public SvXMLImportContext
 {
@@ -215,8 +202,6 @@ public:
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 };
 
-// ----------------------------------------
-
 class SchXMLStockContext : public SvXMLImportContext
 {
 public:
@@ -242,8 +227,6 @@ public:
     virtual ~SchXMLStockContext();
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 };
-
-// ----------------------------------------
 
 class SchXMLStatisticsObjectContext : public SvXMLImportContext
 {

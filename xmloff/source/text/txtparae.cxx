@@ -112,7 +112,6 @@
 #include <txtlists.hxx>
 #include <com/sun/star/rdf/XMetadatable.hpp>
 
-
 using namespace ::std;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -263,7 +262,7 @@ static int txtparae_bContainsIllegalCharacters = sal_False;
 // The following map shows which property values are required:
 //
 // property                     auto style pass     export
-// --------------------------------------------------------
+// -------------------------------------------------------
 // ParaStyleName                if style exists     always
 // ParaConditionalStyleName     if style exists     always
 // NumberingRules               if style exists     always
@@ -978,7 +977,6 @@ void XMLTextParagraphExport::exportListChange(
                     GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_STYLE_NAME,
                             GetExport().EncodeStyleName( sListStyleName ) );
                     bExportListStyle = false;
-
 
                 }
                 else
@@ -2044,8 +2042,6 @@ void XMLTextParagraphExport::exportParagraph(
                             rPropSetHelper.getValue(
                                        PARA_NUMBERING_STYLENAME, xPropSet ) >>= sListStyleName;
 
-
-
                         bool bAssignedtoOutlineStyle = false;
                         {
                             Reference< XChapterNumberingSupplier > xCNSupplier( GetExport().GetModel(), UNO_QUERY );
@@ -2095,7 +2091,6 @@ void XMLTextParagraphExport::exportParagraph(
                                                      XML_TRUE);
 
                             OUString sNumberingStartValue("NumberingStartValue");
-
 
                             if (xPropSetInfo->
                                 hasPropertyByName(sNumberingStartValue))
@@ -2669,7 +2664,6 @@ sal_Int32 XMLTextParagraphExport::addTextFrameAttributes(
         if( bShape )
             nShapeFeatures = (nShapeFeatures & ~SEF_EXPORT_Y);
     }
-
 
     Reference< XPropertySetInfo > xPropSetInfo(rPropSet->getPropertySetInfo());
 
@@ -3605,7 +3599,6 @@ void XMLTextParagraphExport::exportUsedDeclarations( sal_Bool bOnlyUsed )
     pFieldExport->SetExportOnlyUsedFieldDeclarations( bOnlyUsed );
 }
 
-
 void XMLTextParagraphExport::exportTrackedChanges(sal_Bool bAutoStyles)
 {
     if (NULL != pRedlineExport)
@@ -3632,7 +3625,6 @@ void XMLTextParagraphExport::recordTrackedChangesNoXText()
     if (NULL != pRedlineExport)
         pRedlineExport->SetCurrentXText();
 }
-
 
 void XMLTextParagraphExport::exportTextAutoStyles()
 {
@@ -3783,7 +3775,6 @@ void XMLTextParagraphExport::exportMeta(
     // recurse to export content
     exportTextRangeEnumeration( xTextEnum, i_bAutoStyles, i_isProgress );
 }
-
 
 void XMLTextParagraphExport::PreventExportOfControlsInMuteSections(
     const Reference<XIndexAccess> & rShapes,

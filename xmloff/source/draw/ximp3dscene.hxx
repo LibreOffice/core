@@ -27,7 +27,6 @@
 #include <tools/rtti.hxx>
 #include <ximpshap.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
 // dr3d:3dscene context
 
 class SdXML3DSceneShapeContext : public SdXMLShapeContext, public SdXML3DSceneAttributesHelper
@@ -67,7 +66,6 @@ public:
     com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& GetLocalShapesContext()
         { return mxShapes; }
 };
-
 
 #endif  //  _XIMPGROUP_HXX
 

@@ -37,10 +37,8 @@
 #include <functional>
 #include <algorithm>
 
-//............................................................................
 namespace xmloff
 {
-//............................................................................
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
@@ -61,7 +59,6 @@ namespace
     using ::com::sun::star::frame::XModel;
     using ::com::sun::star::uno::UNO_QUERY;
 
-    //....................................................................
     template< class TYPE >
     Reference< TYPE > getTypedModelNode( const Reference< XInterface >& _rxModelNode )
     {
@@ -78,13 +75,11 @@ namespace
         }
     }
 
-    //....................................................................
     Reference< XModel > getDocument( const Reference< XInterface >& _rxModelNode )
     {
         return getTypedModelNode< XModel >( _rxModelNode );
     }
 
-    //....................................................................
     struct StringCompare : public ::std::unary_function< OUString, bool >
     {
     private:
@@ -100,10 +95,7 @@ namespace
     };
 }
 
-//========================================================================
 //= FormCellBindingHelper
-//========================================================================
-//------------------------------------------------------------------------
 FormCellBindingHelper::FormCellBindingHelper( const Reference< XPropertySet >& _rxControlModel, const Reference< XModel >& _rxDocument )
     :m_xControlModel( _rxControlModel )
     ,m_xDocument( _rxDocument, UNO_QUERY )
@@ -115,14 +107,12 @@ FormCellBindingHelper::FormCellBindingHelper( const Reference< XPropertySet >& _
     OSL_ENSURE( m_xDocument.is(), "FormCellBindingHelper::FormCellBindingHelper: Did not find the spreadsheet document!" );
 }
 
-//------------------------------------------------------------------------
 sal_Bool FormCellBindingHelper::livesInSpreadsheetDocument( const Reference< XPropertySet >& _rxControlModel )
 {
     Reference< XSpreadsheetDocument > xDocument( getDocument( _rxControlModel ), UNO_QUERY );
     return xDocument.is();
 }
 
-//------------------------------------------------------------------------
 bool FormCellBindingHelper::convertStringAddress( const OUString& _rAddressDescription, CellAddress& /* [out] */ _rAddress, sal_Int16 /*_nAssumeSheet*/ ) const
 {
     Any aAddress;
@@ -136,7 +126,6 @@ bool FormCellBindingHelper::convertStringAddress( const OUString& _rAddressDescr
        &&  ( aAddress >>= _rAddress );
 }
 
-//------------------------------------------------------------------------
 bool FormCellBindingHelper::convertStringAddress( const OUString& _rAddressDescription,
                         CellRangeAddress& /* [out] */ _rAddress ) const
 {
@@ -151,7 +140,6 @@ bool FormCellBindingHelper::convertStringAddress( const OUString& _rAddressDescr
        &&  ( aAddress >>= _rAddress );
 }
 
-//------------------------------------------------------------------------
 Reference< XValueBinding > FormCellBindingHelper::createCellBindingFromStringAddress( const OUString& _rAddress, bool _bUseIntegerBinding ) const
 {
     Reference< XValueBinding > xBinding;
@@ -173,7 +161,6 @@ Reference< XValueBinding > FormCellBindingHelper::createCellBindingFromStringAdd
     return xBinding;
 }
 
-//------------------------------------------------------------------------
 Reference< XListEntrySource > FormCellBindingHelper::createCellListSourceFromStringAddress( const OUString& _rAddress ) const
 {
     Reference< XListEntrySource > xSource;
@@ -192,7 +179,6 @@ Reference< XListEntrySource > FormCellBindingHelper::createCellListSourceFromStr
     return xSource;
 }
 
-//------------------------------------------------------------------------
 OUString FormCellBindingHelper::getStringAddressFromCellBinding( const Reference< XValueBinding >& _rxBinding ) const
 {
     OSL_PRECOND( !_rxBinding.is() || isCellBinding( _rxBinding ), "FormCellBindingHelper::getStringAddressFromCellBinding: this is no cell binding!" );
@@ -222,7 +208,6 @@ OUString FormCellBindingHelper::getStringAddressFromCellBinding( const Reference
     return sAddress;
 }
 
-//------------------------------------------------------------------------
 OUString FormCellBindingHelper::getStringAddressFromCellListSource( const Reference< XListEntrySource >& _rxSource ) const
 {
     OSL_PRECOND( !_rxSource.is() || isCellRangeListSource( _rxSource ), "FormCellBindingHelper::getStringAddressFromCellListSource: this is no cell list source!" );
@@ -251,7 +236,6 @@ OUString FormCellBindingHelper::getStringAddressFromCellListSource( const Refere
     return sAddress;
 }
 
-//------------------------------------------------------------------------
 bool FormCellBindingHelper::isSpreadsheetDocumentWhichSupplies( const Reference< XSpreadsheetDocument >& _rxDocument, const OUString& _rService ) SAL_THROW(())
 {
     bool bYesItIs = false;
@@ -287,13 +271,11 @@ bool FormCellBindingHelper::isSpreadsheetDocumentWhichSupplies( const Reference<
     return bYesItIs;
 }
 
-//------------------------------------------------------------------------
 bool FormCellBindingHelper::isSpreadsheetDocumentWhichSupplies( const OUString& _rService ) const SAL_THROW(())
 {
     return isSpreadsheetDocumentWhichSupplies( m_xDocument, _rService );
 }
 
-//------------------------------------------------------------------------
 bool FormCellBindingHelper::isListCellRangeAllowed( const Reference< XModel >& _rxDocument )
 {
     return isSpreadsheetDocumentWhichSupplies(
@@ -302,7 +284,6 @@ bool FormCellBindingHelper::isListCellRangeAllowed( const Reference< XModel >& _
     );
 }
 
-//------------------------------------------------------------------------
 bool FormCellBindingHelper::isListCellRangeAllowed( ) const
 {
     bool bAllow( false );
@@ -316,7 +297,6 @@ bool FormCellBindingHelper::isListCellRangeAllowed( ) const
     return bAllow;
 }
 
-//------------------------------------------------------------------------
 bool FormCellBindingHelper::isCellBindingAllowed( ) const
 {
     bool bAllow( false );
@@ -332,7 +312,6 @@ bool FormCellBindingHelper::isCellBindingAllowed( ) const
     return bAllow;
 }
 
-//------------------------------------------------------------------------
 bool FormCellBindingHelper::isCellBindingAllowed( const Reference< XModel >& _rxDocument )
 {
     return isSpreadsheetDocumentWhichSupplies(
@@ -341,25 +320,21 @@ bool FormCellBindingHelper::isCellBindingAllowed( const Reference< XModel >& _rx
     );
 }
 
-//------------------------------------------------------------------------
 bool FormCellBindingHelper::isCellBinding( const Reference< XValueBinding >& _rxBinding ) const
 {
     return doesComponentSupport( _rxBinding.get(), SERVICE_CELLVALUEBINDING );
 }
 
-//------------------------------------------------------------------------
 bool FormCellBindingHelper::isCellIntegerBinding( const Reference< XValueBinding >& _rxBinding ) const
 {
     return doesComponentSupport( _rxBinding.get(), SERVICE_LISTINDEXCELLBINDING );
 }
 
-//------------------------------------------------------------------------
 bool FormCellBindingHelper::isCellRangeListSource( const Reference< XListEntrySource >& _rxSource ) const
 {
     return doesComponentSupport( _rxSource.get(), SERVICE_CELLRANGELISTSOURCE );
 }
 
-//------------------------------------------------------------------------
 bool FormCellBindingHelper::doesComponentSupport( const Reference< XInterface >& _rxComponent, const OUString& _rService ) const
 {
     Reference< XServiceInfo > xSI( _rxComponent, UNO_QUERY );
@@ -367,7 +342,6 @@ bool FormCellBindingHelper::doesComponentSupport( const Reference< XInterface >&
     return bDoes;
 }
 
-//------------------------------------------------------------------------
 Reference< XValueBinding > FormCellBindingHelper::getCurrentBinding( ) const
 {
     Reference< XValueBinding > xBinding;
@@ -377,7 +351,6 @@ Reference< XValueBinding > FormCellBindingHelper::getCurrentBinding( ) const
     return xBinding;
 }
 
-//------------------------------------------------------------------------
 Reference< XListEntrySource > FormCellBindingHelper::getCurrentListSource( ) const
 {
     Reference< XListEntrySource > xSource;
@@ -387,7 +360,6 @@ Reference< XListEntrySource > FormCellBindingHelper::getCurrentListSource( ) con
     return xSource;
 }
 
-//------------------------------------------------------------------------
 void FormCellBindingHelper::setBinding( const Reference< XValueBinding >& _rxBinding )
 {
     Reference< XBindableValue > xBindable( m_xControlModel, UNO_QUERY );
@@ -396,7 +368,6 @@ void FormCellBindingHelper::setBinding( const Reference< XValueBinding >& _rxBin
         xBindable->setValueBinding( _rxBinding );
 }
 
-//------------------------------------------------------------------------
 void FormCellBindingHelper::setListSource( const Reference< XListEntrySource >& _rxSource )
 {
     Reference< XListEntrySink > xSink( m_xControlModel, UNO_QUERY );
@@ -405,7 +376,6 @@ void FormCellBindingHelper::setListSource( const Reference< XListEntrySource >& 
         xSink->setListEntrySource( _rxSource );
 }
 
-//------------------------------------------------------------------------
 Reference< XInterface > FormCellBindingHelper::createDocumentDependentInstance( const OUString& _rService, const OUString& _rArgumentName,
     const Any& _rArgumentValue ) const
 {
@@ -441,7 +411,6 @@ Reference< XInterface > FormCellBindingHelper::createDocumentDependentInstance( 
     return xReturn;
 }
 
-//------------------------------------------------------------------------
 bool FormCellBindingHelper::doConvertAddressRepresentations( const OUString& _rInputProperty, const Any& _rInputValue,
     const OUString& _rOutputProperty, Any& _rOutputValue, bool _bIsRange ) const SAL_THROW(())
 {
@@ -473,8 +442,6 @@ bool FormCellBindingHelper::doConvertAddressRepresentations( const OUString& _rI
     return bSuccess;
 }
 
-//............................................................................
 }   // namespace xmloff
-//............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

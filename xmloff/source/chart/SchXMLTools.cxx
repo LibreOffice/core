@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "SchXMLTools.hxx"
 
 #include <rtl/ustrbuf.hxx>
@@ -128,8 +127,6 @@ Reference< chart2::data::XDataSequence > lcl_createNewSequenceFromCachedXMLRange
 
 } // anonymous namespace
 
-// ----------------------------------------
-
 namespace SchXMLTools
 {
 
@@ -199,7 +196,6 @@ const tMakeStringStringMap& lcl_getChartTypeNameMap()
         ;
     return g_aChartTypeNameMap;
 }
-
 
 OUString GetNewChartTypeName( const OUString & rOldChartTypeName )
 {
@@ -502,7 +498,6 @@ void CreateCategories(
         SAL_WARN("xmloff.chart", "Exception caught while creating Categories" );
     }
 }
-
 
 uno::Any getPropertyFromContext( const OUString& rPropertyName, const XMLPropStyleContext* pPropStyleContext, const SvXMLStylesContext* pStylesCtxt )
 {

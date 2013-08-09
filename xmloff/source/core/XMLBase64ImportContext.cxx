@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <com/sun/star/io/XOutputStream.hpp>
 
 #include <sax/tools/converter.hxx>
@@ -25,15 +24,11 @@
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/XMLBase64ImportContext.hxx>
 
-
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::io;
 
-//-----------------------------------------------------------------------------
-
 TYPEINIT1( XMLBase64ImportContext, SvXMLImportContext );
-
 
 XMLBase64ImportContext::XMLBase64ImportContext(
         SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
@@ -47,7 +42,6 @@ XMLBase64ImportContext::XMLBase64ImportContext(
 XMLBase64ImportContext::~XMLBase64ImportContext()
 {
 }
-
 
 void XMLBase64ImportContext::EndElement()
 {
@@ -78,6 +72,5 @@ void XMLBase64ImportContext::Characters( const OUString& rChars )
             sBase64CharsLeft = sChars.copy( nCharsDecoded );
     }
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

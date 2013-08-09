@@ -17,12 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-
-
-
-
-//___________________________________________________________________
 #include <xmloff/ProgressBarHelper.hxx>
 #include <tools/debug.hxx>
 #include <xmloff/xmltoken.hxx>

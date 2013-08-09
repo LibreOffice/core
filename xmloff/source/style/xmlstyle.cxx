@@ -62,8 +62,6 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::style;
 using namespace ::xmloff::token;
 
-// ---------------------------------------------------------------------
-
 static SvXMLTokenMapEntry aStyleStylesElemTokenMap[] =
 {
     { XML_NAMESPACE_STYLE,  XML_STYLE,          XML_TOK_STYLE_STYLE                },
@@ -92,8 +90,6 @@ const SvXMLTokenMap& SvXMLStylesContext::GetStyleStylesElemTokenMap()
 
     return *mpStyleStylesElemTokenMap;
 }
-
-// ---------------------------------------------------------------------
 
 void SvXMLStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
                                       const OUString& rLocalName,
@@ -206,8 +202,6 @@ sal_Bool SvXMLStyleContext::IsTransient() const
     return sal_False;
 }
 
-// ---------------------------------------------------------------------
-
 class SvXMLStyleIndex_Impl
 {
     OUString              sName;
@@ -251,7 +245,6 @@ struct SvXMLStyleIndexCmp_Impl
         return nRet < 0;
     }
 };
-
 
 class SvXMLStylesContext_Impl
 {
@@ -371,8 +364,6 @@ const SvXMLStyleContext *SvXMLStylesContext_Impl::FindStyleChildContext( sal_uIn
     }
     return pStyle;
 }
-
-// ---------------------------------------------------------------------
 
 TYPEINIT1( SvXMLStylesContext, SvXMLImportContext );
 
@@ -555,7 +546,6 @@ SvXMLStyleContext *SvXMLStylesContext::CreateDefaultStyleStyleChildContext(
 {
     return 0;
 }
-
 
 sal_Bool SvXMLStylesContext::InsertStyleFamily( sal_uInt16 ) const
 {
@@ -793,7 +783,6 @@ OUString SvXMLStylesContext::GetServiceName( sal_uInt16 nFamily ) const
     return sServiceName;
 }
 
-
 SvXMLStylesContext::SvXMLStylesContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
                                         const OUString& rLName,
                                         const uno::Reference< xml::sax::XAttributeList > &, sal_Bool bAuto ) :
@@ -804,7 +793,6 @@ SvXMLStylesContext::SvXMLStylesContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
     mpStyleStylesElemTokenMap( 0 )
 {
 }
-
 
 SvXMLStylesContext::~SvXMLStylesContext()
 {
@@ -912,7 +900,6 @@ void SvXMLStylesContext::FinishStyles( sal_Bool bOverwrite )
             pStyle->Finish( bOverwrite );
     }
 }
-
 
 const SvXMLStyleContext *SvXMLStylesContext::FindStyleChildContext(
                                   sal_uInt16 nFamily,

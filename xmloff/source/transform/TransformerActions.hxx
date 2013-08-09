@@ -56,8 +56,6 @@ struct NameKey_Impl
     }
 };
 
-// -----------------------------------------------------------------------------
-
 struct NameHash_Impl
 {
     inline size_t operator()( const NameKey_Impl& r ) const;
@@ -77,8 +75,6 @@ inline bool NameHash_Impl::operator()(
 {
     return r1.m_nPrefix == r2.m_nPrefix && r1.m_aLocalName == r2.m_aLocalName;
 }
-
-// -----------------------------------------------------------------------------
 
 struct TransformerAction_Impl
 {
@@ -135,9 +131,6 @@ struct TransformerAction_Impl
     }
 
 };
-
-
-// -----------------------------------------------------------------------------
 
 class XMLTransformerActions :
     public ::boost::unordered_map< NameKey_Impl, TransformerAction_Impl,

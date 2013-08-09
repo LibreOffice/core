@@ -119,8 +119,6 @@ uno::Reference<container::XIndexContainer> XMLMyList::GetIndexContainer()
     return xIndexContainer;
 }
 
-//=============================================================================
-
 class XMLConfigBaseContext : public SvXMLImportContext
 {
 protected:
@@ -136,8 +134,6 @@ public:
 
     void AddPropertyValue() { maProps.push_back(maProp); }
 };
-
-//=============================================================================
 
 class XMLConfigItemContext : public SvXMLImportContext
 {
@@ -168,8 +164,6 @@ public:
     virtual void ManipulateConfigItem();
 };
 
-//=============================================================================
-
 class XMLConfigItemSetContext : public XMLConfigBaseContext
 {
 public:
@@ -188,8 +182,6 @@ public:
     virtual void EndElement();
 };
 
-//=============================================================================
-
 class XMLConfigItemMapNamedContext : public XMLConfigBaseContext
 {
 public:
@@ -207,8 +199,6 @@ public:
 
     virtual void EndElement();
 };
-
-//=============================================================================
 
 class XMLConfigItemMapIndexedContext : public XMLConfigBaseContext
 {
@@ -232,8 +222,6 @@ public:
 
     virtual void EndElement();
 };
-
-//=============================================================================
 
 SvXMLImportContext *CreateSettingsContext(SvXMLImport& rImport, sal_uInt16 p_nPrefix,
                         const OUString& rLocalName,
@@ -278,7 +266,6 @@ SvXMLImportContext *CreateSettingsContext(SvXMLImport& rImport, sal_uInt16 p_nPr
     return pContext;
 }
 
-//=============================================================================
 namespace
 {
     struct SettingsGroup
@@ -306,8 +293,6 @@ struct XMLDocumentSettingsContext_Data
     com::sun::star::uno::Any        aConfigProps;
     ::std::list< SettingsGroup >    aDocSpecificSettings;
 };
-
-//=============================================================================
 
 XMLDocumentSettingsContext::XMLDocumentSettingsContext(SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
                     const uno::Reference<xml::sax::XAttributeList>& )
@@ -455,8 +440,6 @@ void XMLDocumentSettingsContext::EndElement()
     }
 }
 
-//=============================================================================
-
 XMLConfigBaseContext::XMLConfigBaseContext(SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLName, com::sun::star::uno::Any& rTempAny,
         XMLConfigBaseContext* pTempBaseContext)
@@ -471,8 +454,6 @@ XMLConfigBaseContext::XMLConfigBaseContext(SvXMLImport& rImport, sal_uInt16 nPrf
 XMLConfigBaseContext::~XMLConfigBaseContext()
 {
 }
-
-//=============================================================================
 
 XMLConfigItemSetContext::XMLConfigItemSetContext(SvXMLImport& rImport, sal_uInt16 nPrfx,
                                     const OUString& rLName,
@@ -503,8 +484,6 @@ void XMLConfigItemSetContext::EndElement()
     if (mpBaseContext)
         mpBaseContext->AddPropertyValue();
 }
-
-//=============================================================================
 
 XMLConfigItemContext::XMLConfigItemContext(SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
                                     const ::com::sun::star::uno::Reference<
@@ -582,7 +561,6 @@ void XMLConfigItemContext::Characters( const OUString& rChars )
     else
         msValue += rChars;
 }
-
 
 void XMLConfigItemContext::EndElement()
 {
@@ -694,9 +672,6 @@ void XMLConfigItemContext::ManipulateConfigItem()
     }
 }
 
-
-//=============================================================================
-
 XMLConfigItemMapNamedContext::XMLConfigItemMapNamedContext(SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
                                     const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::xml::sax::XAttributeList>&,
@@ -729,8 +704,6 @@ void XMLConfigItemMapNamedContext::EndElement()
         OSL_FAIL("no BaseContext");
     }
 }
-
-//=============================================================================
 
 XMLConfigItemMapIndexedContext::XMLConfigItemMapIndexedContext(SvXMLImport& rImport, sal_uInt16 nPrfx,
                                     const OUString& rLName,

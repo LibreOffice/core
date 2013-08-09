@@ -22,16 +22,8 @@
 
 using namespace std;
 
-
-//#############################################################################
-//
 // Class SvXMLAutoStylePoolParent_Impl
-//
-
-///////////////////////////////////////////////////////////////////////////////
-//
 // dtor class SvXMLAutoStylePoolParent_Impl
-//
 
 SvXMLAutoStylePoolParentP_Impl::~SvXMLAutoStylePoolParentP_Impl()
 {
@@ -40,11 +32,8 @@ SvXMLAutoStylePoolParentP_Impl::~SvXMLAutoStylePoolParentP_Impl()
     maPropertiesList.clear();
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
 // Adds a array of XMLPropertyState ( vector< XMLPropertyState > ) to list
 // if not added, yet.
-//
 
 sal_Bool SvXMLAutoStylePoolParentP_Impl::Add( XMLFamilyData_Impl& rFamilyData, const vector< XMLPropertyState >& rProperties, OUString& rName, bool bDontSeek )
 {
@@ -86,7 +75,6 @@ sal_Bool SvXMLAutoStylePoolParentP_Impl::Add( XMLFamilyData_Impl& rFamilyData, c
     return bAdded;
 }
 
-///////////////////////////////////////////////////////////////////////////////
 //
 // Adds a array of XMLPropertyState ( vector< XMLPropertyState > ) with a given name.
 // If the name exists already, nothing is done. If a style with a different name and
@@ -128,7 +116,6 @@ sal_Bool SvXMLAutoStylePoolParentP_Impl::AddNamed( XMLFamilyData_Impl& rFamilyDa
     return bAdded;
 }
 
-///////////////////////////////////////////////////////////////////////////////
 //
 // Search for a array of XMLPropertyState ( vector< XMLPropertyState > ) in list
 //

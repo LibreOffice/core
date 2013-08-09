@@ -24,10 +24,8 @@
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/uno/Any.hxx>
 
-
 using namespace ::com::sun::star::uno;
 
-///////////////////////////////////////////////////////////////////////////////
 //
 // class XMLNamedBoolPropertyHdl
 //

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <chrhghdl.hxx>
 
 #include <rtl/ustrbuf.hxx>
@@ -28,10 +27,8 @@
 
 #include <xmloff/xmluconv.hxx>
 
-
 using namespace ::com::sun::star;
 
-///////////////////////////////////////////////////////////////////////////////
 //
 // class XMLEscapementPropHdl
 //
@@ -78,7 +75,6 @@ sal_Bool XMLCharHeightHdl::exportXML( OUString& rStrExpValue, const uno::Any& rV
     return !rStrExpValue.isEmpty();
 }
 
-///////////////////////////////////////////////////////////////////////////////
 //
 // class XMLEscapementHeightPropHdl
 //
@@ -117,7 +113,6 @@ sal_Bool XMLCharHeightPropHdl::exportXML( OUString& rStrExpValue, const uno::Any
     return !rStrExpValue.isEmpty();
 }
 
-///////////////////////////////////////////////////////////////////////////////
 //
 // class XMLEscapementPropHdl
 //

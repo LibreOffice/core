@@ -32,7 +32,6 @@
 #include "xmloff/XMLFilterServiceNames.h"
 #include "XMLEmbeddedObjectImportContext.hxx"
 
-
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::beans;
@@ -135,8 +134,6 @@ void XMLEmbeddedObjectImportContext_Impl::Characters( const OUString& rChars )
     xHandler->characters( rChars );
 }
 
-//-----------------------------------------------------------------------------
-
 TYPEINIT1( XMLEmbeddedObjectImportContext, SvXMLImportContext );
 
 sal_Bool XMLEmbeddedObjectImportContext::SetComponent(
@@ -144,7 +141,6 @@ sal_Bool XMLEmbeddedObjectImportContext::SetComponent(
 {
     if( !rComp.is() || sFilterService.isEmpty() )
         return sal_False;
-
 
     Sequence<Any> aArgs( 0 );
 

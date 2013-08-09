@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "DrawAspectHdl.hxx"
 
 #include <com/sun/star/uno/Any.hxx>
@@ -31,12 +30,9 @@
 #include <xmloff/xmlement.hxx>
 #include <xmloff/xmltoken.hxx>
 
-
-
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-///////////////////////////////////////////////////////////////////////////////
 //
 // class XMLMeasurePropHdl
 //

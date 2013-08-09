@@ -24,10 +24,7 @@
 #include <com/sun/star/document/XXMLOasisBasicImporter.hpp>
 #include <xmloff/xmlictxt.hxx>
 
-
-// =============================================================================
 // class XMLBasicImportContext
-// =============================================================================
 
 class XMLBasicImportContext : public SvXMLImportContext
 {
@@ -51,10 +48,7 @@ public:
     virtual void Characters( const OUString& rChars );
 };
 
-
-// =============================================================================
 // class XMLBasicImportChildContext
-// =============================================================================
 
 class XMLBasicImportChildContext : public SvXMLImportContext
 {

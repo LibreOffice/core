@@ -22,16 +22,8 @@
 
 using namespace std;
 
-
-//#############################################################################
-//
 // Class SvXMLAutoStylePoolProperties_Impl
-//
-
-///////////////////////////////////////////////////////////////////////////////
-//
 // ctor class SvXMLAutoStylePoolProperties_Impl
-//
 
 SvXMLAutoStylePoolPropertiesP_Impl::SvXMLAutoStylePoolPropertiesP_Impl( XMLFamilyData_Impl& rFamilyData, const vector< XMLPropertyState >& rProperties )
 : maProperties( rProperties ),

@@ -23,7 +23,6 @@
 #include <xmloff/xmlictxt.hxx>
 #include <com/sun/star/animations/XAnimationNode.hpp>
 
-//////////////////////////////////////////////////////////////////////////////
 // presentations:animations
 
 namespace xmloff

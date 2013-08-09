@@ -25,8 +25,6 @@
 #include "XMLTextFrameContext.hxx"
 #include <xmloff/XMLEventsImportContext.hxx>
 
-// ---------------------------------------------------------------------
-
 #define XML_HINT_STYLE 1
 #define XML_HINT_REFERENCE 2
 #define XML_HINT_HYPERLINK 3
@@ -155,7 +153,6 @@ public:
     }
 };
 
-
 class XMLIndexMarkHint_Impl : public XMLHint_Impl
 {
     const css::uno::Reference<css::beans::XPropertySet> xIndexMarkPropSet;
@@ -187,7 +184,6 @@ public:
         { return xIndexMarkPropSet; }
     const OUString& GetID() const { return sID; }
 };
-
 
 class XMLTextFrameHint_Impl : public XMLHint_Impl
 {

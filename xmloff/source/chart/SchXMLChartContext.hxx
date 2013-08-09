@@ -45,8 +45,6 @@ namespace com { namespace sun { namespace star {
     }
 }}}
 
-// ----------------------------------------
-
 struct SeriesDefaultsAndStyles
 {
     //default values for series:
@@ -132,8 +130,6 @@ private:
 
     void MergeSeriesForStockChart();
 };
-
-// ----------------------------------------
 
 class SchXMLTitleContext : public SvXMLImportContext
 {

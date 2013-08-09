@@ -24,7 +24,6 @@
 #include <com/sun/star/style/CaseMap.hpp>
 #include <com/sun/star/uno/Any.hxx>
 
-
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
@@ -37,10 +36,7 @@ static SvXMLEnumMapEntry pXML_Casemap_Enum[] =
     { XML_TOKEN_INVALID,        0 }
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
 // class XMLPosturePropHdl
-//
 
 XMLCaseMapPropHdl::~XMLCaseMapPropHdl()
 {
@@ -75,10 +71,7 @@ sal_Bool XMLCaseMapPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& r
     return bRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
 // class XMLCaseMapVariantHdl
-//
 
 XMLCaseMapVariantHdl::~XMLCaseMapVariantHdl()
 {

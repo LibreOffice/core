@@ -22,9 +22,6 @@
 
 #include <xmloff/prhdlfac.hxx>
 
-
-//______________________________________________________________________________
-
 class XMLPageMasterPropHdlFactory : public XMLPropertyHandlerFactory
 {
 public:

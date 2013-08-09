@@ -24,7 +24,6 @@
 #include <com/sun/star/style/BreakType.hpp>
 #include <com/sun/star/uno/Any.hxx>
 
-
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
@@ -38,7 +37,6 @@ SvXMLEnumMapEntry pXML_BreakTypes[] =
     { XML_TOKEN_INVALID, 0}
 };
 
-///////////////////////////////////////////////////////////////////////////////
 //
 // class XMLFmtBreakBeforePropHdl
 //
@@ -109,7 +107,6 @@ sal_Bool XMLFmtBreakBeforePropHdl::exportXML( OUString& rStrExpValue, const uno:
     return sal_True;
 }
 
-///////////////////////////////////////////////////////////////////////////////
 //
 // class XMLFmtBreakBeforePropHdl
 //

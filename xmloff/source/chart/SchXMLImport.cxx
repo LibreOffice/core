@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "SchXMLImport.hxx"
 #include "SchXMLChartContext.hxx"
 #include "contexts.hxx"
@@ -76,34 +75,12 @@ private:
 };
 } // anonymous namespace
 
-/* ----------------------------------------
-   TokenMaps for distinguishing different
-   tokens in different contexts
-   ----------------------------------------*/
+   // TokenMaps for distinguishing different
+   // tokens in different contexts
 
-// ----------------------------------------
 // element maps
-// ----------------------------------------
 
-
-
-
-
-
-
-// ----------------------------------------
 // attribute maps
-// ----------------------------------------
-
-
-
-
-
-
-
-
-
-// ========================================
 
 SchXMLImportHelper::SchXMLImportHelper() :
         mpAutoStyles( 0 ),
@@ -172,9 +149,7 @@ SvXMLImportContext* SchXMLImportHelper::CreateChartContext(
     return pContext;
 }
 
-/* ----------------------------------------
-   get various token maps
-   ----------------------------------------*/
+// get various token maps
 
 const SvXMLTokenMap& SchXMLImportHelper::GetDocElemTokenMap()
 {
@@ -280,8 +255,6 @@ const SvXMLTokenMap& SchXMLImportHelper::GetSeriesElemTokenMap()
 
     return *mpSeriesElemTokenMap;
 }
-
-// ----------------------------------------
 
 const SvXMLTokenMap& SchXMLImportHelper::GetChartAttrTokenMap()
 {
@@ -394,8 +367,6 @@ const SvXMLTokenMap& SchXMLImportHelper::GetRegEquationAttrTokenMap()
 
     return *mpRegEquationAttrTokenMap;
 }
-
-// ----------------------------------------
 
 //static
 void SchXMLImportHelper::DeleteDataSeries(
@@ -519,8 +490,6 @@ Reference< chart2::XDataSeries > SchXMLImportHelper::GetNewDataSeries(
     }
     return xResult;
 }
-
-// ========================================
 
 // #110680#
 SchXMLImport::SchXMLImport(
@@ -673,8 +642,6 @@ void SAL_CALL SchXMLImport::setTargetDocument( const uno::Reference< lang::XComp
     }
 }
 
-// export components ========================================
-
 // first version: everything comes from one storage
 
 Sequence< OUString > SAL_CALL SchXMLImport_getSupportedServiceNames() throw()
@@ -694,8 +661,6 @@ Reference< uno::XInterface > SAL_CALL SchXMLImport_createInstance(const Referenc
     // #110680#
     return (cppu::OWeakObject*)new SchXMLImport( comphelper::getComponentContext(rSMgr));
 }
-
-// ============================================================
 
 // multiple storage version: one for content / styles / meta
 
@@ -717,8 +682,6 @@ Reference< uno::XInterface > SAL_CALL SchXMLImport_Styles_createInstance(const R
     return (cppu::OWeakObject*)new SchXMLImport( comphelper::getComponentContext(rSMgr), IMPORT_STYLES );
 }
 
-// ------------------------------------------------------------
-
 Sequence< OUString > SAL_CALL SchXMLImport_Content_getSupportedServiceNames() throw()
 {
     const OUString aServiceName(  "com.sun.star.comp.Chart.XMLOasisContentImporter"  );
@@ -736,8 +699,6 @@ Reference< uno::XInterface > SAL_CALL SchXMLImport_Content_createInstance(const 
     // #110680#
     return (cppu::OWeakObject*)new SchXMLImport( comphelper::getComponentContext(rSMgr), IMPORT_CONTENT | IMPORT_AUTOSTYLES | IMPORT_FONTDECLS );
 }
-
-// ------------------------------------------------------------
 
 Sequence< OUString > SAL_CALL SchXMLImport_Meta_getSupportedServiceNames() throw()
 {

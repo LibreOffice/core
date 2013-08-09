@@ -25,7 +25,6 @@
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <tools/fontenum.hxx>
 
-
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
@@ -37,7 +36,6 @@ SvXMLEnumMapEntry const aPostureGenericMapping[] =
     { XML_TOKEN_INVALID,        0               }
 };
 
-///////////////////////////////////////////////////////////////////////////////
 //
 // class XMLPosturePropHdl
 //

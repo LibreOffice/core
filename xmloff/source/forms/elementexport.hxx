@@ -29,14 +29,10 @@
 #include "valueproperties.hxx"
 
 class SvXMLElementExport;
-//.........................................................................
 namespace xmloff
 {
-//.........................................................................
 
-    //=====================================================================
     //= OElementExport
-    //=====================================================================
     class OElementExport : public OPropertyExport
     {
     protected:
@@ -78,9 +74,7 @@ namespace xmloff
         virtual void implEndElement();
     };
 
-    //=====================================================================
     //= OControlExport
-    //=====================================================================
     /** Helper class for handling xml elements representing a form control
     */
     class OControlExport
@@ -259,9 +253,7 @@ namespace xmloff
         bool controlHasUserSuppliedListEntries() const;
     };
 
-    //=====================================================================
     //= OColumnExport
-    //=====================================================================
     /** Helper class for exporting a grid column
     */
     class OColumnExport : public OControlExport
@@ -287,9 +279,7 @@ namespace xmloff
         virtual void examine();
     };
 
-    //=====================================================================
     //= OFormExport
-    //=====================================================================
     /** Helper class for handling xml elements representing a form
 
         <p>In opposite to the class <type>OControlExport</type>, OFormExport is unable to export a <em>complete</em>
@@ -313,9 +303,7 @@ namespace xmloff
         virtual void exportSubTags();
         virtual void exportAttributes();
     };
-//.........................................................................
 }   // namespace xmloff
-//.........................................................................
 
 #endif // _XMLOFF_ELEMENTEXPORT_HXX_
 

@@ -53,12 +53,8 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
 
-
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
-
-
-//////////////////////////////////////////////////////////////////////////////
 
 void XMLShapeExport::ImpExportNewTrans(const uno::Reference< beans::XPropertySet >& xPropSet,
     sal_Int32 nFeatures, awt::Point* pRefPoint)
@@ -222,8 +218,6 @@ void XMLShapeExport::ImpExportNewTrans_FeaturesAndWrite(::basegfx::B2DTuple& rTR
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 sal_Bool XMLShapeExport::ImpExportPresentationAttributes( const uno::Reference< beans::XPropertySet >& xPropSet, const OUString& rClass )
 {
     sal_Bool bIsEmpty = sal_False;
@@ -257,8 +251,6 @@ sal_Bool XMLShapeExport::ImpExportPresentationAttributes( const uno::Reference< 
     return bIsEmpty;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 void XMLShapeExport::ImpExportText( const uno::Reference< drawing::XShape >& xShape )
 {
     uno::Reference< text::XText > xText( xShape, uno::UNO_QUERY );
@@ -270,7 +262,6 @@ void XMLShapeExport::ImpExportText( const uno::Reference< drawing::XShape >& xSh
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
 #include <com/sun/star/presentation/ClickAction.hpp>
 #include <com/sun/star/presentation/AnimationSpeed.hpp>
 
@@ -302,8 +293,6 @@ void XMLShapeExport::ImpExportEvents( const uno::Reference< drawing::XShape >& x
         return;
 
     sal_Int32 nFound = 0;
-
-    // extract properties from "OnClick" event --------------------------------
 
     OUString aClickEventType;
     presentation::ClickAction eClickAction = presentation::ClickAction_NONE;
@@ -547,8 +536,6 @@ void XMLShapeExport::ImpExportEvents( const uno::Reference< drawing::XShape >& x
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 /** #i68101# export shape Title and Description */
 void XMLShapeExport::ImpExportDescription( const uno::Reference< drawing::XShape >& xShape )
 {
@@ -579,8 +566,6 @@ void XMLShapeExport::ImpExportDescription( const uno::Reference< drawing::XShape
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 void XMLShapeExport::ImpExportGroupShape( const uno::Reference< drawing::XShape >& xShape, XmlShapeType, sal_Int32 nFeatures, awt::Point* pRefPoint)
 {
     uno::Reference< drawing::XShapes > xShapes(xShape, uno::UNO_QUERY);
@@ -610,8 +595,6 @@ void XMLShapeExport::ImpExportGroupShape( const uno::Reference< drawing::XShape 
         exportShapes( xShapes, nFeatures, pRefPoint );
     }
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 void XMLShapeExport::ImpExportTextBoxShape(
     const uno::Reference< drawing::XShape >& xShape,
@@ -687,7 +670,6 @@ void XMLShapeExport::ImpExportTextBoxShape(
         if(bIsPresShape)
             bIsEmptyPresObj = ImpExportPresentationAttributes( xPropSet, aStr );
 
-
         sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); // #86116#/#92210#
         SvXMLElementExport aElem( mrExport, XML_NAMESPACE_DRAW,
                                   XML_FRAME, bCreateNewline, sal_True );
@@ -715,8 +697,6 @@ void XMLShapeExport::ImpExportTextBoxShape(
         ImpExportGluePoints( xShape );
     }
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 void XMLShapeExport::ImpExportRectangleShape(
     const uno::Reference< drawing::XShape >& xShape,
@@ -749,8 +729,6 @@ void XMLShapeExport::ImpExportRectangleShape(
         ImpExportText( xShape );
     }
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 void XMLShapeExport::ImpExportLineShape(
     const uno::Reference< drawing::XShape >& xShape,
@@ -864,8 +842,6 @@ void XMLShapeExport::ImpExportLineShape(
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 void XMLShapeExport::ImpExportEllipseShape(
     const uno::Reference< drawing::XShape >& xShape,
     XmlShapeType, sal_Int32 nFeatures, awt::Point* pRefPoint)
@@ -932,8 +908,6 @@ void XMLShapeExport::ImpExportEllipseShape(
         }
     }
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 void XMLShapeExport::ImpExportPolygonShape(
     const uno::Reference< drawing::XShape >& xShape,
@@ -1081,8 +1055,6 @@ void XMLShapeExport::ImpExportPolygonShape(
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 void XMLShapeExport::ImpExportGraphicObjectShape(
     const uno::Reference< drawing::XShape >& xShape,
     XmlShapeType eShapeType, sal_Int32 nFeatures, awt::Point* pRefPoint)
@@ -1212,8 +1184,6 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 void XMLShapeExport::ImpExportChartShape(
     const uno::Reference< drawing::XShape >& xShape,
     XmlShapeType eShapeType, sal_Int32 nFeatures, awt::Point* pRefPoint,
@@ -1221,8 +1191,6 @@ void XMLShapeExport::ImpExportChartShape(
 {
     ImpExportOLE2Shape( xShape, eShapeType, nFeatures, pRefPoint, pAttrList );
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 void XMLShapeExport::ImpExportControlShape(
     const uno::Reference< drawing::XShape >& xShape,
@@ -1252,8 +1220,6 @@ void XMLShapeExport::ImpExportControlShape(
 
     ImpExportDescription( xShape ); // #i68101#
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 void XMLShapeExport::ImpExportConnectorShape(
     const uno::Reference< drawing::XShape >& xShape,
@@ -1489,8 +1455,6 @@ void XMLShapeExport::ImpExportConnectorShape(
     ImpExportText( xShape );
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 void XMLShapeExport::ImpExportMeasureShape(
     const uno::Reference< drawing::XShape >& xShape,
     XmlShapeType, sal_Int32 nFeatures /* = SEF_DEFAULT */, awt::Point* pRefPoint /* = NULL */)
@@ -1587,8 +1551,6 @@ void XMLShapeExport::ImpExportMeasureShape(
     if( xText.is() )
         mrExport.GetTextParagraphExport()->exportText( xText );
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 void XMLShapeExport::ImpExportOLE2Shape(
     const uno::Reference< drawing::XShape >& xShape,
@@ -1748,8 +1710,6 @@ void XMLShapeExport::ImpExportOLE2Shape(
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 void XMLShapeExport::ImpExportPageShape(
     const uno::Reference< drawing::XShape >& xShape,
     XmlShapeType eShapeType, sal_Int32 nFeatures /* = SEF_DEFAULT */, awt::Point* pRefPoint /* = NULL */)
@@ -1785,8 +1745,6 @@ void XMLShapeExport::ImpExportPageShape(
         SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DRAW, XML_PAGE_THUMBNAIL, bCreateNewline, sal_True);
     }
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 void XMLShapeExport::ImpExportCaptionShape(
     const uno::Reference< drawing::XShape >& xShape,
@@ -1838,8 +1796,6 @@ void XMLShapeExport::ImpExportCaptionShape(
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 void XMLShapeExport::ImpExportFrameShape(
     const uno::Reference< drawing::XShape >& xShape,
     XmlShapeType, sal_Int32 nFeatures, com::sun::star::awt::Point* pRefPoint)
@@ -1873,8 +1829,6 @@ void XMLShapeExport::ImpExportFrameShape(
         }
     }
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 void XMLShapeExport::ImpExportAppletShape(
     const uno::Reference< drawing::XShape >& xShape,
@@ -1931,8 +1885,6 @@ void XMLShapeExport::ImpExportAppletShape(
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 void XMLShapeExport::ImpExportPluginShape(
     const uno::Reference< drawing::XShape >& xShape,
     XmlShapeType, sal_Int32 nFeatures, com::sun::star::awt::Point* pRefPoint)
@@ -1954,7 +1906,6 @@ void XMLShapeExport::ImpExportPluginShape(
         mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
         mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
         mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
-
 
         // export mime-type
         xPropSet->getPropertyValue("PluginMimeType") >>= aStr;
@@ -1979,8 +1930,6 @@ void XMLShapeExport::ImpExportPluginShape(
         }
     }
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 static void lcl_CopyStream(
         uno::Reference<io::XInputStream> const& xInStream,

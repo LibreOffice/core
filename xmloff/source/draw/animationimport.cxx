@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -67,7 +66,6 @@
 #include "animations.hxx"
 #include "animationimport.hxx"
 
-
 using namespace ::std;
 using namespace ::cppu;
 using namespace ::com::sun::star::beans;
@@ -89,15 +87,6 @@ using ::com::sun::star::lang::XInitialization;
 
 namespace xmloff
 {
-
-///////////////////////////////////////////////////////////////////////
-
-
-
-///////////////////////////////////////////////////////////////////////
-
-
-///////////////////////////////////////////////////////////////////////
 
 class AnimationsImportHelperImpl
 {
@@ -621,8 +610,6 @@ Any AnimationsImportHelperImpl::convertPath( const OUString& rValue )
 {
     return makeAny( rValue );
 }
-
-///////////////////////////////////////////////////////////////////////
 
 TYPEINIT1( AnimationNodeContext, SvXMLImportContext );
 
@@ -1253,8 +1240,6 @@ SvXMLImportContext * AnimationNodeContext::CreateChildContext( sal_uInt16 nPrefi
         return new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
 }
 
-// --------------------------------------------------------------------
-
 class AnimationsImport: public SvXMLImport, public XAnimationNodeSupplier
 {
 public:
@@ -1376,7 +1361,6 @@ void AnimationNodeContext::postProcessRootNode( SvXMLImport& /*rImport*/, const 
                         case AnimationNodeType::TRANSITIONFILTER:
                         {
                             Reference< XTransitionFilter > xTransFilter( xChildNode, UNO_QUERY_THROW );
-
 
                             xPageProps->setPropertyValue("TransitionType", Any( xTransFilter->getTransition() ) );
                             xPageProps->setPropertyValue("TransitionSubtype", Any( xTransFilter->getSubtype() ) );

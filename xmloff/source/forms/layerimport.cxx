@@ -55,10 +55,8 @@
 
 SV_IMPL_REF( SvXMLStylesContext );
 
-//.........................................................................
 namespace xmloff
 {
-//.........................................................................
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt;
@@ -71,10 +69,7 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::sdb;
 
-//=====================================================================
 //= OFormLayerXMLImport_Impl
-//=====================================================================
-//---------------------------------------------------------------------
 OFormLayerXMLImport_Impl::OFormLayerXMLImport_Impl(SvXMLImport& _rImporter)
     :m_rImporter(_rImporter)
     ,m_pAutoStyles(NULL)
@@ -232,7 +227,6 @@ OFormLayerXMLImport_Impl::OFormLayerXMLImport_Impl(SvXMLImport& _rImporter)
     m_aCurrentPageIds = m_aControlIds.end();
 }
 
-//---------------------------------------------------------------------
 OFormLayerXMLImport_Impl::~OFormLayerXMLImport_Impl()
 {
     // outlined to allow forward declaration of OAttribute2Property in the header
@@ -241,7 +235,6 @@ OFormLayerXMLImport_Impl::~OFormLayerXMLImport_Impl()
         m_pAutoStyles->ReleaseRef();
 }
 
-//---------------------------------------------------------------------
 void OFormLayerXMLImport_Impl::setAutoStyleContext(SvXMLStylesContext* _pNewContext)
 {
     OSL_ENSURE(!m_pAutoStyles, "OFormLayerXMLImport_Impl::setAutoStyleContext: not to be called twice!");
@@ -250,7 +243,6 @@ void OFormLayerXMLImport_Impl::setAutoStyleContext(SvXMLStylesContext* _pNewCont
         m_pAutoStyles->AddRef();
 }
 
-//---------------------------------------------------------------------
 void OFormLayerXMLImport_Impl::applyControlNumberStyle(const Reference< XPropertySet >& _rxControlModel, const OUString& _rControlNumerStyleName)
 {
     OSL_ENSURE(_rxControlModel.is() && (!_rControlNumerStyleName.isEmpty()),
@@ -302,7 +294,6 @@ void OFormLayerXMLImport_Impl::applyControlNumberStyle(const Reference< XPropert
     }
 }
 
-//---------------------------------------------------------------------
 void OFormLayerXMLImport_Impl::registerCellValueBinding( const Reference< XPropertySet >& _rxControlModel, const OUString& _rCellAddress )
 {
     OSL_ENSURE( _rxControlModel.is() && !_rCellAddress.isEmpty(),
@@ -310,7 +301,6 @@ void OFormLayerXMLImport_Impl::registerCellValueBinding( const Reference< XPrope
     m_aCellValueBindings.push_back( ModelStringPair( _rxControlModel, _rCellAddress ) );
 }
 
-//---------------------------------------------------------------------
 void OFormLayerXMLImport_Impl::registerXFormsValueBinding(
     const Reference< XPropertySet >& _rxControlModel,
     const OUString& _rBindingID )
@@ -322,7 +312,6 @@ void OFormLayerXMLImport_Impl::registerXFormsValueBinding(
         ModelStringPair( _rxControlModel, _rBindingID ) );
 }
 
-//---------------------------------------------------------------------
 void OFormLayerXMLImport_Impl::registerXFormsListBinding(
     const Reference< XPropertySet >& _rxControlModel,
     const OUString& _rBindingID )
@@ -334,7 +323,6 @@ void OFormLayerXMLImport_Impl::registerXFormsListBinding(
         ModelStringPair( _rxControlModel, _rBindingID ) );
 }
 
-//---------------------------------------------------------------------
 void OFormLayerXMLImport_Impl::registerXFormsSubmission(
     const Reference< XPropertySet >& _rxControlModel,
     const OUString& _rSubmissionID )
@@ -346,14 +334,12 @@ void OFormLayerXMLImport_Impl::registerXFormsSubmission(
         ModelStringPair( _rxControlModel, _rSubmissionID ) );
 }
 
-//---------------------------------------------------------------------
 void OFormLayerXMLImport_Impl::registerCellRangeListSource( const Reference< XPropertySet >& _rxControlModel, const OUString& _rCellRangeAddress )
 {
     OSL_ENSURE( _rxControlModel.is() && !_rCellRangeAddress.isEmpty(),
         "OFormLayerXMLImport_Impl::registerCellRangeListSource: invalid arguments!" );
     m_aCellRangeListSources.push_back( ModelStringPair( _rxControlModel, _rCellRangeAddress ) );
 }
-//---------------------------------------------------------------------
 const SvXMLStyleContext* OFormLayerXMLImport_Impl::getStyleElement(const OUString& _rStyleName) const
 {
     OSL_ENSURE( m_pAutoStyles, "OFormLayerXMLImport_Impl::getStyleElement: have no auto style context!" );
@@ -366,7 +352,6 @@ const SvXMLStyleContext* OFormLayerXMLImport_Impl::getStyleElement(const OUStrin
     return pControlStyle;
 }
 
-//---------------------------------------------------------------------
 void OFormLayerXMLImport_Impl::enterEventContext()
 {
     // install our own translation table. We need to disable the other tables because of name conflicts.
@@ -374,14 +359,12 @@ void OFormLayerXMLImport_Impl::enterEventContext()
     m_rImporter.GetEventImport().AddTranslationTable(g_pFormsEventTranslation);
 }
 
-//---------------------------------------------------------------------
 void OFormLayerXMLImport_Impl::leaveEventContext()
 {
     // install the original event tables.
     m_rImporter.GetEventImport().PopTranslationTable();
 }
 
-//---------------------------------------------------------------------
 void OFormLayerXMLImport_Impl::registerControlId(const Reference< XPropertySet >& _rxControl, const OUString& _rId)
 {
     OSL_ENSURE(m_aCurrentPageIds != m_aControlIds.end(), "OFormLayerXMLImport_Impl::registerControlId: no current page!");
@@ -391,7 +374,6 @@ void OFormLayerXMLImport_Impl::registerControlId(const Reference< XPropertySet >
     m_aCurrentPageIds->second[_rId] = _rxControl;
 }
 
-//---------------------------------------------------------------------
 void OFormLayerXMLImport_Impl::registerControlReferences(const Reference< XPropertySet >& _rxControl, const OUString& _rReferringControls)
 {
     OSL_ENSURE(!_rReferringControls.isEmpty(), "OFormLayerXMLImport_Impl::registerControlReferences: invalid (empty) control id list!");
@@ -399,7 +381,6 @@ void OFormLayerXMLImport_Impl::registerControlReferences(const Reference< XPrope
     m_aControlReferences.push_back( ModelStringPair( _rxControl, _rReferringControls ) );
 }
 
-//---------------------------------------------------------------------
 void OFormLayerXMLImport_Impl::startPage(const Reference< XDrawPage >& _rxDrawPage)
 {
     m_xCurrentPageFormsSupp.clear();
@@ -418,7 +399,6 @@ void OFormLayerXMLImport_Impl::startPage(const Reference< XDrawPage >& _rxDrawPa
     m_aCurrentPageIds = aPagePosition.first;
 }
 
-//---------------------------------------------------------------------
 void OFormLayerXMLImport_Impl::endPage()
 {
     OSL_ENSURE( m_xCurrentPageFormsSupp.is(), "OFormLayerXMLImport_Impl::endPage: sure you called startPage before?" );
@@ -477,7 +457,6 @@ void OFormLayerXMLImport_Impl::endPage()
     m_aCurrentPageIds = m_aControlIds.end();
 }
 
-//---------------------------------------------------------------------
 Reference< XPropertySet > OFormLayerXMLImport_Impl::lookupControlId(const OUString& _rControlId)
 {
     OSL_ENSURE(m_aCurrentPageIds != m_aControlIds.end(), "OFormLayerXMLImport_Impl::lookupControlId: no current page!");
@@ -493,7 +472,6 @@ Reference< XPropertySet > OFormLayerXMLImport_Impl::lookupControlId(const OUStri
     return xReturn;
 }
 
-//---------------------------------------------------------------------
 SvXMLImportContext* OFormLayerXMLImport_Impl::createOfficeFormsContext(
     SvXMLImport& _rImport,
     sal_uInt16 _nPrefix,
@@ -502,7 +480,6 @@ SvXMLImportContext* OFormLayerXMLImport_Impl::createOfficeFormsContext(
     return new OFormsRootImport( _rImport, _nPrefix, _rLocalName );
 }
 
-//---------------------------------------------------------------------
 SvXMLImportContext* OFormLayerXMLImport_Impl::createContext(const sal_uInt16 _nPrefix, const OUString& _rLocalName,
     const Reference< xml::sax::XAttributeList >&)
 {
@@ -529,7 +506,6 @@ SvXMLImportContext* OFormLayerXMLImport_Impl::createContext(const sal_uInt16 _nP
     return pContext;
 }
 
-//---------------------------------------------------------------------
 void OFormLayerXMLImport_Impl::documentDone( )
 {
     SvXMLImport& rImport = getGlobalContext();
@@ -621,8 +597,6 @@ void OFormLayerXMLImport_Impl::documentDone( )
                             rImport.GetModel() ) );
 }
 
-//.........................................................................
 }   // namespace xmloff
-//.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

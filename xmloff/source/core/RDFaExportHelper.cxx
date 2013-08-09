@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "RDFaExportHelper.hxx"
 
 #include "xmloff/xmlnmspe.hxx"
@@ -51,7 +50,6 @@
 
 #include <functional>
 #include <algorithm>
-
 
 using namespace ::com::sun::star;
 
@@ -103,9 +101,6 @@ getRelativeReference(SvXMLExport const& rExport, OUString const& rURI)
     return relativeURI;
 }
 
-
-////////////////////////////////////////////////////////////////////////////
-
 RDFaExportHelper::RDFaExportHelper(SvXMLExport & i_rExport)
     : m_rExport(i_rExport), m_xRepository(0), m_Counter(0)
 {
@@ -130,8 +125,6 @@ RDFaExportHelper::LookupBlankNode(
     }
     return rEntry;
 }
-
-////////////////////////////////////////////////////////////////////////////
 
 void
 RDFaExportHelper::AddRDFa(

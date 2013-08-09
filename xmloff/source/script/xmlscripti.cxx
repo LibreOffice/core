@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <xmloff/xmlscripti.hxx>
 #include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
@@ -37,10 +36,7 @@ using namespace com::sun::star::document;
 using namespace com::sun::star::xml::sax;
 using namespace ::xmloff::token;
 
-
-// =============================================================================
 // XMLScriptChildContext: context for <office:script> element
-// =============================================================================
 
 class XMLScriptChildContext : public SvXMLImportContext
 {
@@ -61,8 +57,6 @@ public:
     virtual void EndElement();
 };
 
-// -----------------------------------------------------------------------------
-
 XMLScriptChildContext::XMLScriptChildContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
         const Reference< frame::XModel >& rxModel, const OUString& rLanguage )
     :SvXMLImportContext( rImport, nPrfx, rLName )
@@ -72,13 +66,9 @@ XMLScriptChildContext::XMLScriptChildContext( SvXMLImport& rImport, sal_uInt16 n
 {
 }
 
-// -----------------------------------------------------------------------------
-
 XMLScriptChildContext::~XMLScriptChildContext()
 {
 }
-
-// -----------------------------------------------------------------------------
 
 SvXMLImportContext* XMLScriptChildContext::CreateChildContext(
     sal_uInt16 nPrefix, const OUString& rLocalName,
@@ -101,15 +91,11 @@ SvXMLImportContext* XMLScriptChildContext::CreateChildContext(
     return pContext;
 }
 
-// -----------------------------------------------------------------------------
-
 void XMLScriptChildContext::EndElement()
 {
 }
 
-// =============================================================================
 // XMLScriptContext: context for <office:scripts> element
-// =============================================================================
 
 XMLScriptContext::XMLScriptContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
         const Reference<XModel>& rDocModel )
@@ -118,13 +104,9 @@ XMLScriptContext::XMLScriptContext( SvXMLImport& rImport, sal_uInt16 nPrfx, cons
 {
 }
 
-// -----------------------------------------------------------------------------
-
 XMLScriptContext::~XMLScriptContext()
 {
 }
-
-// -----------------------------------------------------------------------------
 
 SvXMLImportContext* XMLScriptContext::CreateChildContext(
     sal_uInt16 nPrefix, const OUString& rLName,
@@ -168,12 +150,8 @@ SvXMLImportContext* XMLScriptContext::CreateChildContext(
     return pContext;
 }
 
-// -----------------------------------------------------------------------------
-
 void XMLScriptContext::EndElement()
 {
 }
-
-// -----------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

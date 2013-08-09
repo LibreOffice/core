@@ -25,7 +25,6 @@
 
 class AnimImpImpl;
 
-//////////////////////////////////////////////////////////////////////////////
 // presentations:animations
 
 class XMLAnimationsContext : public SvXMLImportContext

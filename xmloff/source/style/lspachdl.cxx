@@ -26,12 +26,10 @@
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/LineSpacingMode.hpp>
 
-
 using namespace ::com::sun::star;
 using ::xmloff::token::IsXMLToken;
 using ::xmloff::token::XML_CASEMAP_NORMAL;
 
-///////////////////////////////////////////////////////////////////////////////
 //
 // class XMLEscapementPropHdl
 //
@@ -95,7 +93,6 @@ sal_Bool XMLLineHeightHdl::exportXML( OUString& rStrExpValue, const uno::Any& rV
     return !rStrExpValue.isEmpty();
 }
 
-///////////////////////////////////////////////////////////////////////////////
 //
 // class XMLLineHeightAtLeastHdl
 //
@@ -136,7 +133,6 @@ sal_Bool XMLLineHeightAtLeastHdl::exportXML( OUString& rStrExpValue, const uno::
     return !rStrExpValue.isEmpty();
 }
 
-///////////////////////////////////////////////////////////////////////////////
 //
 // class XMLLineSpacingHdl
 //

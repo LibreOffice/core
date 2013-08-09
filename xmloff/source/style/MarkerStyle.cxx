@@ -34,10 +34,7 @@ using namespace ::com::sun::star;
 
 using namespace ::xmloff::token;
 
-
-//-------------------------------------------------------------
 // Import
-//-------------------------------------------------------------
 
 XMLMarkerStyleImport::XMLMarkerStyleImport( SvXMLImport& rImp )
     : rImport( rImp )
@@ -146,10 +143,7 @@ sal_Bool XMLMarkerStyleImport::importXML(
     return bHasViewBox && bHasPathData;
 }
 
-
-//-------------------------------------------------------------
 // Export
-//-------------------------------------------------------------
 
 XMLMarkerStyleExport::XMLMarkerStyleExport( SvXMLExport& rExp )
     : rExport( rExp )
@@ -172,7 +166,6 @@ sal_Bool XMLMarkerStyleExport::exportXML(
 
         if(rValue >>= aBezier)
         {
-            /////////////////
             // Name
             sal_Bool bEncoded = sal_False;
             OUString aStrName( rStrName );
@@ -183,7 +176,6 @@ sal_Bool XMLMarkerStyleExport::exportXML(
                 rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DISPLAY_NAME,
                                       aStrName );
 
-            /////////////////
             // Viewbox (viewBox="0 0 1500 1000")
             sal_Int32 nMinX(0x7fffffff);
             sal_Int32 nMaxX(0x80000000);
@@ -235,7 +227,6 @@ sal_Bool XMLMarkerStyleExport::exportXML(
             SdXMLImExViewBox aViewBox( 0, 0, nDifX, nDifY );
             rExport.AddAttribute( XML_NAMESPACE_SVG, XML_VIEWBOX, aViewBox.GetExportString() );
 
-            /////////////////
             // Pathdata
             pOuterSequence = aBezier.Coordinates.getArray();
             drawing::FlagSequence*  pOuterFlags = aBezier.Flags.getArray();
@@ -255,7 +246,6 @@ sal_Bool XMLMarkerStyleExport::exportXML(
             // write point array
             rExport.AddAttribute(XML_NAMESPACE_SVG, XML_D, aSvgDElement.GetExportString());
 
-            /////////////////
             // Do Write
             SvXMLElementExport rElem( rExport, XML_NAMESPACE_DRAW, XML_MARKER,
                                       sal_True, sal_False );

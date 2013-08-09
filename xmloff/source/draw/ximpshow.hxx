@@ -25,7 +25,6 @@
 
 class ShowsImpImpl;
 
-//////////////////////////////////////////////////////////////////////////////
 // presentations:animations
 
 class SdXMLShowsContext : public SvXMLImportContext

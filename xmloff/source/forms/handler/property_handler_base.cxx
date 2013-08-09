@@ -17,27 +17,21 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "property_handler_base.hxx"
 
 namespace xmloff
 {
 
-    //==================================================================================================================
     //= PropertyHandlerBase
-    //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
     PropertyHandlerBase::~PropertyHandlerBase()
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     oslInterlockedCount SAL_CALL PropertyHandlerBase::acquire()
     {
         return osl_atomic_increment( &m_refCount );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     oslInterlockedCount SAL_CALL PropertyHandlerBase::release()
     {
         oslInterlockedCount decremented = osl_atomic_decrement( &m_refCount );

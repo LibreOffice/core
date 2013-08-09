@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "vcl_time_handler.hxx"
 
 #include <rtl/ustrbuf.hxx>
@@ -30,32 +29,25 @@
 #include <tools/diagnose_ex.h>
 #include <tools/time.hxx>
 
-//......................................................................................................................
 namespace xmloff
 {
-//......................................................................................................................
 
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::uno::makeAny;
     using ::com::sun::star::util::Duration;
     using ::com::sun::star::util::Time;
 
-    //==================================================================================================================
     //= VCLTimeHandler
-    //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
     VCLTimeHandler::VCLTimeHandler()
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     OUString VCLTimeHandler::getAttributeValue( const PropertyValues& /*i_propertyValues*/ ) const
     {
         OSL_ENSURE( false, "VCLTimeHandler::getAttributeValue: unexpected call!" );
         return OUString();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     OUString VCLTimeHandler::getAttributeValue( const Any& i_propertyValue ) const
     {
         Time aTime;
@@ -72,7 +64,6 @@ namespace xmloff
         return aBuffer.makeStringAndClear();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     bool VCLTimeHandler::getPropertyValues( const OUString i_attributeValue, PropertyValues& o_propertyValues ) const
     {
         Duration aDuration;
@@ -110,8 +101,6 @@ namespace xmloff
         return true;
     }
 
-//......................................................................................................................
 } // namespace xmloff
-//......................................................................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

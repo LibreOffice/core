@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <sax/tools/converter.hxx>
 
 #include "SchXMLTableContext.hxx"
@@ -213,11 +212,7 @@ template< typename T >
 
 } // anonymous namespace
 
-
-// ----------------------------------------
 // class SchXMLTableContext
-// ----------------------------------------
-
 SchXMLTableContext::SchXMLTableContext( SchXMLImportHelper& rImpHelper,
                                         SvXMLImport& rImport,
                                         const OUString& rLName,
@@ -412,14 +407,8 @@ void SchXMLTableContext::setColumnPermutation( const uno::Sequence< sal_Int32 > 
     }
 }
 
-// ========================================
 // classes for columns
-// ========================================
-
-// ----------------------------------------
 // class SchXMLTableColumnsContext
-// ----------------------------------------
-
 SchXMLTableColumnsContext::SchXMLTableColumnsContext(
     SvXMLImport& rImport,
     const OUString& rLocalName,
@@ -451,10 +440,7 @@ SvXMLImportContext* SchXMLTableColumnsContext::CreateChildContext(
     return pContext;
 }
 
-// ----------------------------------------
 // class SchXMLTableColumnContext
-// ----------------------------------------
-
 SchXMLTableColumnContext::SchXMLTableColumnContext(
     SvXMLImport& rImport,
     const OUString& rLocalName,
@@ -513,14 +499,8 @@ SchXMLTableColumnContext::~SchXMLTableColumnContext()
 {
 }
 
-// ========================================
 // classes for rows
-// ========================================
-
-// ----------------------------------------
 // class SchXMLTableRowsContext
-// ----------------------------------------
-
 SchXMLTableRowsContext::SchXMLTableRowsContext(
     SchXMLImportHelper& rImpHelper,
     SvXMLImport& rImport,
@@ -556,10 +536,7 @@ SvXMLImportContext* SchXMLTableRowsContext::CreateChildContext(
     return pContext;
 }
 
-// ----------------------------------------
 // class SchXMLTableRowContext
-// ----------------------------------------
-
 SchXMLTableRowContext::SchXMLTableRowContext(
     SchXMLImportHelper& rImpHelper,
     SvXMLImport& rImport,
@@ -603,9 +580,6 @@ SvXMLImportContext* SchXMLTableRowContext::CreateChildContext(
     return pContext;
 }
 
-//---------------------------------------------------------------------------------------------------
-//---------------------------------------------------------------------------------------------------
-
 class SchXMLRangeSomewhereContext : public SvXMLImportContext
 {
 //#i113950# previously the range was exported to attribute text:id,
@@ -631,17 +605,8 @@ public:
     virtual void EndElement();
 };
 
-//---------------------------------------------------------------------------------------------------
-//---------------------------------------------------------------------------------------------------
-
-// ========================================
 // classes for cells and their content
-// ========================================
-
-// ----------------------------------------
 // class SchXMLTableCellContext
-// ----------------------------------------
-
 SchXMLTableCellContext::SchXMLTableCellContext(
     SchXMLImportHelper& rImpHelper,
     SvXMLImport& rImport,
@@ -751,8 +716,6 @@ void SchXMLTableCellContext::EndElement()
     if( !maRangeId.isEmpty())
         mrTable.aData[ mrTable.nRowIndex ][ mrTable.nColumnIndex ].aRangeId = maRangeId;
 }
-
-// ========================================
 
 static void lcl_ApplyCellToComplexLabel( const SchXMLCell& rCell, Sequence< uno::Any >& rComplexLabel )
 {
@@ -1154,8 +1117,6 @@ void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
         }
     }
 }
-
-//---------------------------------------------------------------------------------------------------
 
 SchXMLRangeSomewhereContext::SchXMLRangeSomewhereContext( SvXMLImport& rImport,
                                                 sal_uInt16 nPrefix,

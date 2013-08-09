@@ -25,14 +25,11 @@
 #include <xmloff/XMLTextMasterPageContext.hxx>
 #include <xmloff/XMLTextMasterStylesContext.hxx>
 
-
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
 using ::xmloff::token::IsXMLToken;
 using ::xmloff::token::XML_MASTER_PAGE;
-
-// ------------------------------------------------------------------------
 
 TYPEINIT1( XMLTextMasterStylesContext, SvXMLStylesContext );
 

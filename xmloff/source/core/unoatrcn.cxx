@@ -27,12 +27,9 @@
 
 #include "xmloff/unoatrcn.hxx"
 
-
 using namespace ::com::sun::star;
 
-// --------------------------------------------------------------------
 // Interface implementation
-// --------------------------------------------------------------------
 
 uno::Reference< uno::XInterface >  SvUnoAttributeContainer_CreateInstance()
 {
@@ -277,6 +274,5 @@ sal_Bool SvUnoAttributeContainer::supportsService(const OUString& ServiceName)
 
     return sal_False;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

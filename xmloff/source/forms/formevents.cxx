@@ -21,14 +21,10 @@
 #include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmlevent.hxx>
 
-//.........................................................................
 namespace xmloff
 {
-//.........................................................................
 
-    //=====================================================================
     //= event translation table
-    //=====================================================================
     static const XMLEventNameTranslation aEventTranslations[] =
     {
         { "XApproveActionListener::approveAction",      XML_NAMESPACE_FORM, "approveaction" }, // "on-approveaction"
@@ -69,8 +65,6 @@ namespace xmloff
 
     const XMLEventNameTranslation* g_pFormsEventTranslation = aEventTranslations;
 
-//.........................................................................
 }   // namespace xmloff
-//.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

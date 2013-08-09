@@ -27,10 +27,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-
-// =============================================================================
 // XMLBasicImportContext
-// =============================================================================
 
 XMLBasicImportContext::XMLBasicImportContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
         const Reference< frame::XModel >& rxModel )
@@ -44,13 +41,9 @@ XMLBasicImportContext::XMLBasicImportContext( SvXMLImport& rImport, sal_uInt16 n
     m_xHandler->setTargetDocument( xComp );
 }
 
-// -----------------------------------------------------------------------------
-
 XMLBasicImportContext::~XMLBasicImportContext()
 {
 }
-
-// -----------------------------------------------------------------------------
 
 SvXMLImportContext* XMLBasicImportContext::CreateChildContext(
     sal_uInt16 nPrefix, const OUString& rLocalName,
@@ -67,8 +60,6 @@ SvXMLImportContext* XMLBasicImportContext::CreateChildContext(
 
     return pContext;
 }
-
-// -----------------------------------------------------------------------------
 
 void XMLBasicImportContext::StartElement(
     const Reference< xml::sax::XAttributeList >& rxAttrList )
@@ -96,8 +87,6 @@ void XMLBasicImportContext::StartElement(
     }
 }
 
-// -----------------------------------------------------------------------------
-
 void XMLBasicImportContext::EndElement()
 {
     if ( m_xHandler.is() )
@@ -108,18 +97,13 @@ void XMLBasicImportContext::EndElement()
     }
 }
 
-// -----------------------------------------------------------------------------
-
 void XMLBasicImportContext::Characters( const OUString& rChars )
 {
     if ( m_xHandler.is() )
         m_xHandler->characters( rChars );
 }
 
-
-// =============================================================================
 // XMLBasicImportChildContext
-// =============================================================================
 
 XMLBasicImportChildContext::XMLBasicImportChildContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
         const Reference< xml::sax::XDocumentHandler >& rxHandler )
@@ -128,13 +112,9 @@ XMLBasicImportChildContext::XMLBasicImportChildContext( SvXMLImport& rImport, sa
 {
 }
 
-// -----------------------------------------------------------------------------
-
 XMLBasicImportChildContext::~XMLBasicImportChildContext()
 {
 }
-
-// -----------------------------------------------------------------------------
 
 SvXMLImportContext* XMLBasicImportChildContext::CreateChildContext(
     sal_uInt16 nPrefix, const OUString& rLocalName,
@@ -142,8 +122,6 @@ SvXMLImportContext* XMLBasicImportChildContext::CreateChildContext(
 {
     return new XMLBasicImportChildContext( GetImport(), nPrefix, rLocalName, m_xHandler );
 }
-
-// -----------------------------------------------------------------------------
 
 void XMLBasicImportChildContext::StartElement(
     const Reference< xml::sax::XAttributeList >& xAttrList )
@@ -156,8 +134,6 @@ void XMLBasicImportChildContext::StartElement(
     }
 }
 
-// -----------------------------------------------------------------------------
-
 void XMLBasicImportChildContext::EndElement()
 {
     if ( m_xHandler.is() )
@@ -167,14 +143,10 @@ void XMLBasicImportChildContext::EndElement()
     }
 }
 
-// -----------------------------------------------------------------------------
-
 void XMLBasicImportChildContext::Characters( const OUString& rChars )
 {
     if ( m_xHandler.is() )
         m_xHandler->characters( rChars );
 }
-
-// -----------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

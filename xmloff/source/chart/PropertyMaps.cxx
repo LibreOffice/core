@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 // include PropertyMap.hxx with this define
 // to create the maps
 #ifndef _PROPERTYMAP_HXX_
@@ -75,8 +74,6 @@ using namespace ::xmloff::token;
 // * XMLChartExportPropertyMapper
 // * XMLChartImportPropertyMapper
 // * SchXMLStyleExport
-
-// ----------------------------------------
 
 XMLChartPropHdlFactory::~XMLChartPropHdlFactory()
 {
@@ -166,8 +163,6 @@ const XMLPropertyHandler* XMLChartPropHdlFactory::GetPropertyHandler( sal_Int32 
     return pHdl;
 }
 
-// ----------------------------------------
-
 XMLChartPropertySetMapper::XMLChartPropertySetMapper() :
         XMLPropertySetMapper( aXMLChartPropMap, new XMLChartPropHdlFactory )
 {
@@ -176,8 +171,6 @@ XMLChartPropertySetMapper::XMLChartPropertySetMapper() :
 XMLChartPropertySetMapper::~XMLChartPropertySetMapper()
 {
 }
-
-// ----------------------------------------
 
 XMLChartExportPropertyMapper::XMLChartExportPropertyMapper( const UniReference< XMLPropertySetMapper >& rMapper,
                                                             SvXMLExport& rExport) :
@@ -506,8 +499,6 @@ void XMLChartExportPropertyMapper::setChartDoc( uno::Reference< chart2::XChartDo
     mxChartDoc = xChartDoc;
 }
 
-// ----------------------------------------
-
 XMLChartImportPropertyMapper::XMLChartImportPropertyMapper( const UniReference< XMLPropertySetMapper >& rMapper,
                                                             const SvXMLImport& _rImport ) :
         SvXMLImportPropertyMapper( rMapper, const_cast< SvXMLImport & >( _rImport )),
@@ -661,7 +652,6 @@ bool XMLChartImportPropertyMapper::handleSpecialItem(
                 break;
         }
     }
-
 
     // if we didn't handle it, the parent should
     if( !bRet )

@@ -22,10 +22,8 @@
 #include "strings.hxx"
 #include <tools/debug.hxx>
 
-//.........................................................................
 namespace xmloff
 {
-//.........................................................................
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::script;
@@ -33,10 +31,7 @@ namespace xmloff
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::lang;
 
-    //=====================================================================
     //= OEventDescriptorMapper
-    //=====================================================================
-    //---------------------------------------------------------------------
     OEventDescriptorMapper::OEventDescriptorMapper(const Sequence< ScriptEventDescriptor >& _rEvents)
     {
         sal_Int32 nEvents = _rEvents.getLength();
@@ -92,14 +87,12 @@ namespace xmloff
         }
     }
 
-    //---------------------------------------------------------------------
     void SAL_CALL OEventDescriptorMapper::replaceByName( const OUString&, const Any& ) throw(IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException)
     {
         throw IllegalArgumentException(
             OUString("replacing is not implemented for this wrapper class."), static_cast< ::cppu::OWeakObject* >(this), 1);
     }
 
-    //---------------------------------------------------------------------
     Any SAL_CALL OEventDescriptorMapper::getByName( const OUString& _rName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException)
     {
         ConstMapString2PropertyValueSequenceIterator aPos = m_aMappedEvents.find(_rName);
@@ -111,7 +104,6 @@ namespace xmloff
         return makeAny(aPos->second);
     }
 
-    //---------------------------------------------------------------------
     Sequence< OUString > SAL_CALL OEventDescriptorMapper::getElementNames(  ) throw(RuntimeException)
     {
         Sequence< OUString > aReturn(m_aMappedEvents.size());
@@ -125,27 +117,22 @@ namespace xmloff
         return aReturn;
     }
 
-    //---------------------------------------------------------------------
     sal_Bool SAL_CALL OEventDescriptorMapper::hasByName( const OUString& _rName ) throw(RuntimeException)
     {
         ConstMapString2PropertyValueSequenceIterator aPos = m_aMappedEvents.find(_rName);
         return m_aMappedEvents.end() != aPos;
     }
 
-    //---------------------------------------------------------------------
     Type SAL_CALL OEventDescriptorMapper::getElementType(  ) throw(RuntimeException)
     {
         return ::getCppuType(static_cast< PropertyValue* >(NULL));
     }
 
-    //---------------------------------------------------------------------
     sal_Bool SAL_CALL OEventDescriptorMapper::hasElements(  ) throw(RuntimeException)
     {
         return !m_aMappedEvents.empty();
     }
 
-//.........................................................................
 }   // namespace xmloff
-//.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

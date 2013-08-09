@@ -241,7 +241,6 @@ static XMLTransformerActionInit aActionTable[] =
     ENTRY1Q( TEXT, TAB, XML_ETACTION_RENAME_ELEM,
                         XML_NAMESPACE_TEXT, XML_TAB_STOP ),
 
-
     // replace <table:table tabke:is-sub-table> with <table:sub-table>
     ENTRY0( TABLE, TABLE, XML_ETACTION_TABLE ),
 
@@ -655,7 +654,6 @@ static XMLTransformerActionInit aParaStyleRefActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-
 // action table for OASIS_LIST_STYLE_REF_ACTIONS
 static XMLTransformerActionInit aListStyleRefActionTable[] =
 {
@@ -965,7 +963,6 @@ static XMLTransformerActionInit aDDEConnectionDeclActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-
 // OASIS_FORM_CONTROL_ACTIONS
 static XMLTransformerActionInit aFormControlActionTable[] =
 {
@@ -1144,8 +1141,6 @@ static XMLTokenEnum aTokenMap[] =
     XML_DOT_DOT_DASH, XML_WAVE, XML_SMALL_WAVE, XML_TOKEN_END
 };
 
-// -----------------------------------------------------------------------------
-
 class XMLTableTransformerContext_Impl : public XMLTransformerContext
 {
     OUString m_aElemQName;
@@ -1248,8 +1243,6 @@ void XMLTableTransformerContext_Impl::EndElement()
     GetTransformer().GetDocHandler()->endElement( m_aElemQName );
 }
 
-// -----------------------------------------------------------------------------
-
 class XMLBodyOASISTransformerContext_Impl : public XMLTransformerContext
 {
     sal_Bool m_bFirstChild;
@@ -1311,8 +1304,6 @@ void XMLBodyOASISTransformerContext_Impl::EndElement()
 
     XMLTransformerContext::EndElement();
 }
-
-//-----------------------------------------------------------------------------
 
 class XMLTabStopOASISTContext_Impl : public XMLPersElemContentTContext
 {
@@ -1443,8 +1434,6 @@ void XMLTabStopOASISTContext_Impl::StartElement(
     XMLPersElemContentTContext::StartElement( xAttrList );
 }
 
-// -----------------------------------------------------------------------------
-
 class XMLConfigItemTContext_Impl : public XMLTransformerContext
 {
     OUString m_aContent;
@@ -1563,8 +1552,6 @@ void XMLConfigItemTContext_Impl::EndElement()
     XMLTransformerContext::EndElement();
 }
 
-// -----------------------------------------------------------------------------
-
 class XMLTrackedChangesOASISTContext_Impl : public XMLTransformerContext
 {
     OUString m_aAttrQName;
@@ -1632,8 +1619,6 @@ void XMLTrackedChangesOASISTContext_Impl::StartElement(
     }
     XMLTransformerContext::StartElement( xAttrList );
 }
-
-// -----------------------------------------------------------------------------
 
 XMLTransformerContext *Oasis2OOoTransformer::CreateUserDefinedContext(
                               const TransformerAction_Impl& rAction,
@@ -1976,7 +1961,6 @@ Oasis2OOoTransformer::Oasis2OOoTransformer() throw() :
 
     GetNamespaceMap().Add( GetXMLToken(XML_NP_SVG), GetXMLToken(XML_N_SVG_COMPAT), XML_NAMESPACE_SVG );
     GetReplaceNamespaceMap().Add( GetXMLToken(XML_NP_SVG), GetXMLToken(XML_N_SVG),  XML_NAMESPACE_SVG );
-
 
     for( sal_uInt16 i=0; i<MAX_OASIS_ACTIONS; ++i )
         m_aActions[i] = 0;

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "SchXMLSeries2Context.hxx"
 #include "SchXMLPlotAreaContext.hxx"
 #include "SchXMLRegressionCurveObjectContext.hxx"
@@ -61,8 +60,6 @@ using namespace ::xmloff::token;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
-
-// ================================================================================
 
 namespace
 {
@@ -253,8 +250,6 @@ XMLPropStyleContext* lcl_GetStylePropContext(
 }
 
 } // anonymous namespace
-
-// ================================================================================
 
 SchXMLSeries2Context::SchXMLSeries2Context(
     SchXMLImportHelper& rImpHelper,
@@ -454,7 +449,6 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
         maPostponedSequences.insert(
             tSchXMLLSequencesPerIndex::value_type(
                 tSchXMLIndexWithPart( m_rGlobalSeriesImportInfo.nCurrentDataIndex, SCH_XML_PART_LABEL ), xLabeledSeq ));
-
 
         Sequence< Reference< chart2::data::XLabeledDataSequence > > aSeq( &xLabeledSeq, 1 );
         Reference< chart2::data::XDataSink > xSink( m_xSeries, uno::UNO_QUERY_THROW );

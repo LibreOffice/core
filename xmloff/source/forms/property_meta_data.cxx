@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "property_description.hxx"
 #include "forms/form_handler_factory.hxx"
 #include "strings.hxx"
@@ -28,20 +27,15 @@
 
 #include <boost/unordered_map.hpp>
 
-//......................................................................................................................
 namespace xmloff { namespace metadata
 {
-//......................................................................................................................
 
     using namespace ::xmloff::token;
 
 #define FORM_SINGLE_PROPERTY( id, att ) \
     PropertyDescription( PROPERTY_##id, XML_NAMESPACE_FORM, att, &FormHandlerFactory::getFormPropertyHandler, PID_##id, NO_GROUP )
 
-    //==================================================================================================================
     //= property meta data
-    //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
     namespace
     {
         const PropertyDescription* lcl_getPropertyMetaData()
@@ -63,7 +57,6 @@ namespace xmloff { namespace metadata
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     namespace
     {
         // TODO: instead of having all of the below static, it should be some per-instance data. This way, the
@@ -73,10 +66,8 @@ namespace xmloff { namespace metadata
         // one big instance, since in this case, every instance can quickly decide whether it is responsible
         // for some attribute or property, and otherwise delegate to the next instance.
 
-        //..............................................................................................................
         typedef ::boost::unordered_map< OUString, const PropertyDescription*, OUStringHash > DescriptionsByName;
 
-        //..............................................................................................................
         const DescriptionsByName& lcl_getPropertyDescriptions()
         {
             DBG_TESTSOLARMUTEX();
@@ -93,10 +84,8 @@ namespace xmloff { namespace metadata
             return s_propertyDescriptionsByName;
         }
 
-        //..............................................................................................................
         typedef ::std::map< PropertyGroup, PropertyDescriptionList > IndexedPropertyGroups;
 
-        //..............................................................................................................
         const IndexedPropertyGroups& lcl_getIndexedPropertyGroups()
         {
             DBG_TESTSOLARMUTEX();
@@ -114,10 +103,8 @@ namespace xmloff { namespace metadata
             return s_indexedPropertyGroups;
         }
 
-        //..............................................................................................................
         typedef ::boost::unordered_map< OUString, XMLTokenEnum, OUStringHash > ReverseTokenLookup;
 
-        //..............................................................................................................
         const ReverseTokenLookup& getReverseTokenLookup()
         {
             DBG_TESTSOLARMUTEX();
@@ -134,7 +121,6 @@ namespace xmloff { namespace metadata
             return s_reverseTokenLookup;
         }
 
-        //..............................................................................................................
         struct AttributeHash : public ::std::unary_function< AttributeDescription, size_t >
         {
             size_t operator()( const AttributeDescription& i_attribute ) const
@@ -143,10 +129,8 @@ namespace xmloff { namespace metadata
             }
         };
 
-        //..............................................................................................................
         typedef ::boost::unordered_multimap< AttributeDescription, PropertyGroup, AttributeHash > AttributeGroups;
 
-        //..............................................................................................................
         const AttributeGroups& lcl_getAttributeGroups()
         {
             DBG_TESTSOLARMUTEX();
@@ -164,10 +148,8 @@ namespace xmloff { namespace metadata
             return s_attributeGroups;
         }
 
-        //..............................................................................................................
         typedef ::boost::unordered_map< AttributeDescription, PropertyGroups, AttributeHash > AttributesWithoutGroup;
 
-        //..............................................................................................................
         const AttributesWithoutGroup& lcl_getAttributesWithoutGroups()
         {
             DBG_TESTSOLARMUTEX();
@@ -191,7 +173,6 @@ namespace xmloff { namespace metadata
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     const PropertyDescription* getPropertyDescription( const OUString& i_propertyName )
     {
         const DescriptionsByName& rAllDescriptions( lcl_getPropertyDescriptions() );
@@ -201,7 +182,6 @@ namespace xmloff { namespace metadata
         return NULL;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     void getPropertyGroup( const PropertyGroup i_propertyGroup, PropertyDescriptionList& o_propertyDescriptions )
     {
         OSL_ENSURE( i_propertyGroup != NO_GROUP, "xmloff::metadata::getPropertyGroup: illegal group!" );
@@ -212,7 +192,6 @@ namespace xmloff { namespace metadata
             o_propertyDescriptions = pos->second;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     void getPropertyGroupList( const AttributeDescription& i_attribute, PropertyGroups& o_propertyGroups )
     {
         const AttributeGroups& rAttributeGroups = lcl_getAttributeGroups();
@@ -247,7 +226,6 @@ namespace xmloff { namespace metadata
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     AttributeDescription getAttributeDescription( const sal_uInt16 i_namespacePrefix, const OUString& i_attributeName )
     {
         AttributeDescription attribute;
@@ -261,8 +239,6 @@ namespace xmloff { namespace metadata
         return attribute;
     }
 
-//......................................................................................................................
 } } // namespace xmloff::metadata
-//......................................................................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -52,12 +52,10 @@
 #include "XMLChangeImportContext.hxx"
 #include "txtlists.hxx"
 
-
 // OD 2004-04-21 #i26791#
 #include <txtparaimphint.hxx>
 class XMLHints_Impl : public boost::ptr_vector<XMLHint_Impl> {};
 // OD 2004-04-21 #i26791#
-
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -67,7 +65,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::xmloff::token;
 using ::com::sun::star::container::XEnumerationAccess;
 using ::com::sun::star::container::XEnumeration;
-
 
 TYPEINIT1( XMLCharContext, SvXMLImportContext );
 
@@ -124,7 +121,6 @@ XMLCharContext::XMLCharContext(
 XMLCharContext::~XMLCharContext()
 {
 }
-// -----------------------------------------------------------------------------
 void XMLCharContext::EndElement()
 {
     if ( !m_nCount )
@@ -146,7 +142,6 @@ void XMLCharContext::EndElement()
         }
     }
 }
-// -----------------------------------------------------------------------------
 void XMLCharContext::InsertControlCharacter(sal_Int16   _nControl)
 {
     GetImport().GetTextImport()->InsertControlCharacter( _nControl );
@@ -155,8 +150,6 @@ void XMLCharContext::InsertString(const OUString& _sString)
 {
     GetImport().GetTextImport()->InsertString( _sString );
 }
-
-// ---------------------------------------------------------------------
 
 /** import start of reference (<text:reference-start>) */
 class XMLStartReferenceContext_Impl : public SvXMLImportContext
@@ -229,8 +222,6 @@ sal_Bool XMLStartReferenceContext_Impl::FindName(
     return bNameOK;
 }
 
-// ---------------------------------------------------------------------
-
 /** import end of reference (<text:reference-end>) */
 class XMLEndReferenceContext_Impl : public SvXMLImportContext
 {
@@ -279,8 +270,6 @@ XMLEndReferenceContext_Impl::XMLEndReferenceContext_Impl(
     }
 }
 
-// ---------------------------------------------------------------------
-
 class XMLImpSpanContext_Impl : public SvXMLImportContext
 {
     const OUString sTextFrame;
@@ -322,7 +311,6 @@ public:
 
     virtual void Characters( const OUString& rChars );
 };
-// ---------------------------------------------------------------------
 
 class XMLImpHyperlinkContext_Impl : public SvXMLImportContext
 {
@@ -452,8 +440,6 @@ void XMLImpHyperlinkContext_Impl::Characters( const OUString& rChars )
     GetImport().GetTextImport()->InsertString( rChars, rIgnoreLeadingSpace );
 }
 
-// ---------------------------------------------------------------------
-
 class XMLImpRubyBaseContext_Impl : public SvXMLImportContext
 {
     XMLHints_Impl&  rHints;
@@ -518,8 +504,6 @@ void XMLImpRubyBaseContext_Impl::Characters( const OUString& rChars )
     GetImport().GetTextImport()->InsertString( rChars, rIgnoreLeadingSpace );
 }
 
-// ---------------------------------------------------------------------
-
 class XMLImpRubyContext_Impl : public SvXMLImportContext
 {
     XMLHints_Impl&  rHints;
@@ -552,8 +536,6 @@ public:
     void SetTextStyleName( const OUString& s ) { m_sTextStyleName = s; }
     void AppendText( const OUString& s ) { m_sText += s; }
 };
-
-// ---------------------------------------------------------------------
 
 class XMLImpRubyTextContext_Impl : public SvXMLImportContext
 {
@@ -613,8 +595,6 @@ void XMLImpRubyTextContext_Impl::Characters( const OUString& rChars )
 {
     m_rRubyContext.AppendText( rChars );
 }
-
-// ---------------------------------------------------------------------
 
 TYPEINIT1( XMLImpRubyContext_Impl, SvXMLImportContext );
 
@@ -689,8 +669,6 @@ SvXMLImportContext *XMLImpRubyContext_Impl::CreateChildContext(
 
     return pContext;
 }
-
-// ---------------------------------------------------------------------
 
 /** for text:meta and text:meta-field
  */
@@ -815,9 +793,6 @@ void XMLMetaImportContextBase::ProcessAttribute(sal_uInt16 const i_nPrefix,
     }
 }
 
-
-// ---------------------------------------------------------------------
-
 /** text:meta */
 class XMLMetaImportContext : public XMLMetaImportContextBase
 {
@@ -917,8 +892,6 @@ void XMLMetaImportContext::InsertMeta(
     }
 }
 
-// ---------------------------------------------------------------------
-
 /** text:meta-field */
 class XMLMetaFieldImportContext : public XMLMetaImportContextBase
 {
@@ -1015,10 +988,6 @@ void XMLMetaFieldImportContext::InsertMeta(
     }
 }
 
-
-// ---------------------------------------------------------------------
-
-
 /**
  * Process index marks.
  *
@@ -1071,7 +1040,6 @@ protected:
     sal_Bool CreateMark(Reference<beans::XPropertySet>& rPropSet,
                         const OUString& rServiceName);
 };
-
 
 TYPEINIT1( XMLIndexMarkImportContext_Impl, SvXMLImportContext );
 
@@ -1240,7 +1208,6 @@ static const sal_Char sAPI_com_sun_star_text_UserIndexMark[] =
 static const sal_Char sAPI_com_sun_star_text_DocumentIndexMark[] =
         "com.sun.star.text.DocumentIndexMark";
 
-
 void XMLIndexMarkImportContext_Impl::GetServiceName(
     OUString& sServiceName,
     enum XMLTextPElemTokens eToken)
@@ -1287,7 +1254,6 @@ void XMLIndexMarkImportContext_Impl::GetServiceName(
     }
 }
 
-
 sal_Bool XMLIndexMarkImportContext_Impl::CreateMark(
     Reference<beans::XPropertySet>& rPropSet,
     const OUString& rServiceName)
@@ -1305,7 +1271,6 @@ sal_Bool XMLIndexMarkImportContext_Impl::CreateMark(
 
     return sal_False;
 }
-
 
 class XMLTOCMarkImportContext_Impl : public XMLIndexMarkImportContext_Impl
 {
@@ -1331,7 +1296,6 @@ protected:
 };
 
 TYPEINIT1( XMLTOCMarkImportContext_Impl, XMLIndexMarkImportContext_Impl );
-
 
 XMLTOCMarkImportContext_Impl::XMLTOCMarkImportContext_Impl(
     SvXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLocalName,
@@ -1445,7 +1409,6 @@ void XMLUserIndexMarkImportContext_Impl::ProcessAttribute(
     }
 }
 
-
 class XMLAlphaIndexMarkImportContext_Impl : public XMLIndexMarkImportContext_Impl
 {
     const OUString sPrimaryKey;
@@ -1539,9 +1502,6 @@ void XMLAlphaIndexMarkImportContext_Impl::ProcessAttribute(
             nNamespace, sLocalName, sValue, rPropSet);
     }
 }
-
-
-// ---------------------------------------------------------------------
 
 TYPEINIT1( XMLImpSpanContext_Impl, SvXMLImportContext );
 
@@ -1860,8 +1820,6 @@ void XMLImpSpanContext_Impl::Characters( const OUString& rChars )
                                                        sal_False, GetImport() );
     GetImport().GetTextImport()->InsertString( sChars, rIgnoreLeadingSpace );
 }
-
-// ---------------------------------------------------------------------
 
 TYPEINIT1( XMLParaContext, SvXMLImportContext );
 
@@ -2286,8 +2244,6 @@ void XMLParaContext::Characters( const OUString& rChars )
                                                        sal_True, GetImport() );
     GetImport().GetTextImport()->InsertString( sChars, bIgnoreLeadingSpace );
 }
-
-
 
 TYPEINIT1( XMLNumberedParaContext, SvXMLImportContext );
 

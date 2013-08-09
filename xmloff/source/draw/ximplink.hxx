@@ -27,7 +27,6 @@
 #include <tools/rtti.hxx>
 #include "ximpshap.hxx"
 
-//////////////////////////////////////////////////////////////////////////////
 // draw:a context
 
 // this should have been a SvXMLImportContext but CreateGroupChildContext() returns
@@ -53,7 +52,6 @@ public:
     virtual void StartElement(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList);
     virtual void EndElement();
 };
-
 
 #endif  //  _XIMPLINK_HXX
 

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "officeforms.hxx"
 
 #include <sax/tools/converter.hxx>
@@ -30,10 +29,8 @@
 #include <comphelper/extract.hxx>
 #include "strings.hxx"
 
-//.........................................................................
 namespace xmloff
 {
-//.........................................................................
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
@@ -42,29 +39,23 @@ namespace xmloff
     using ::xmloff::token::XML_FORMS;
     using ::com::sun::star::xml::sax::XAttributeList;
 
-    //=========================================================================
     //= OFormsRootImport
-    //=========================================================================
     TYPEINIT1(OFormsRootImport, SvXMLImportContext);
-    //-------------------------------------------------------------------------
     OFormsRootImport::OFormsRootImport( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName )
         :SvXMLImportContext(rImport, nPrfx, rLocalName)
     {
     }
 
-    //-------------------------------------------------------------------------
     OFormsRootImport::~OFormsRootImport()
     {
     }
 
-    //-------------------------------------------------------------------------
     SvXMLImportContext* OFormsRootImport::CreateChildContext( sal_uInt16 _nPrefix, const OUString& _rLocalName,
             const Reference< XAttributeList>& xAttrList )
     {
         return GetImport().GetFormImport()->createContext( _nPrefix, _rLocalName, xAttrList );
     }
 
-    //-------------------------------------------------------------------------
     void OFormsRootImport::implImportBool(const Reference< XAttributeList >& _rxAttributes, OfficeFormsAttributes _eAttribute,
             const Reference< XPropertySet >& _rxProps, const Reference< XPropertySetInfo >& _rxPropInfo,
             const OUString& _rPropName, sal_Bool _bDefault)
@@ -86,7 +77,6 @@ namespace xmloff
         }
     }
 
-    //-------------------------------------------------------------------------
     void OFormsRootImport::StartElement( const Reference< XAttributeList >& _rxAttrList )
     {
         ENTER_LOG_CONTEXT( "xmloff::OFormsRootImport - importing the complete tree" );
@@ -112,17 +102,13 @@ namespace xmloff
         }
     }
 
-    //-------------------------------------------------------------------------
     void OFormsRootImport::EndElement()
     {
         SvXMLImportContext::EndElement();
         LEAVE_LOG_CONTEXT( );
     }
 
-    //=====================================================================
     //= OFormsRootExport
-    //=====================================================================
-    //---------------------------------------------------------------------
     OFormsRootExport::OFormsRootExport( SvXMLExport& _rExp )
         :m_pImplElement(NULL)
     {
@@ -131,13 +117,11 @@ namespace xmloff
         m_pImplElement = new SvXMLElementExport(_rExp, XML_NAMESPACE_OFFICE, XML_FORMS, sal_True, sal_True);
     }
 
-    //---------------------------------------------------------------------
     OFormsRootExport::~OFormsRootExport( )
     {
         delete m_pImplElement;
     }
 
-    //-------------------------------------------------------------------------
     void OFormsRootExport::implExportBool(SvXMLExport& _rExp, OfficeFormsAttributes _eAttribute,
         const Reference< XPropertySet >& _rxProps, const Reference< XPropertySetInfo >& _rxPropInfo,
         const OUString& _rPropName, sal_Bool _bDefault)
@@ -158,7 +142,6 @@ namespace xmloff
             aValue.makeStringAndClear());
     }
 
-    //-------------------------------------------------------------------------
     void OFormsRootExport::addModelAttributes(SvXMLExport& _rExp) SAL_THROW(())
     {
         try
@@ -181,9 +164,6 @@ namespace xmloff
         }
     }
 
-//.........................................................................
 }   // namespace xmloff
-//.........................................................................
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

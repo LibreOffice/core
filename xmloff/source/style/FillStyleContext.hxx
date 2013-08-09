@@ -24,7 +24,6 @@
 #include <xmloff/xmlstyle.hxx>
 #include<rtl/ustring.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
 // draw:gardient context
 
 class XMLGradientStyleContext: public SvXMLStyleContext
@@ -45,7 +44,6 @@ public:
     virtual sal_Bool IsTransient() const;
 };
 
-//////////////////////////////////////////////////////////////////////////////
 // draw:hatch context
 
 class XMLHatchStyleContext: public SvXMLStyleContext
@@ -66,7 +64,6 @@ public:
     virtual sal_Bool IsTransient() const;
 };
 
-//////////////////////////////////////////////////////////////////////////////
 // draw:fill-image context
 
 class XMLBitmapStyleContext: public SvXMLStyleContext
@@ -93,7 +90,6 @@ public:
     virtual sal_Bool IsTransient() const;
 };
 
-//////////////////////////////////////////////////////////////////////////////
 // draw:transparency context
 
 class XMLTransGradientStyleContext: public SvXMLStyleContext
@@ -114,7 +110,6 @@ public:
     virtual sal_Bool IsTransient() const;
 };
 
-//////////////////////////////////////////////////////////////////////////////
 // draw:marker context
 
 class XMLMarkerStyleContext: public SvXMLStyleContext
@@ -135,7 +130,6 @@ public:
     virtual sal_Bool IsTransient() const;
 };
 
-//////////////////////////////////////////////////////////////////////////////
 // draw:marker context
 
 class XMLDashStyleContext: public SvXMLStyleContext

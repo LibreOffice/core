@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "MetaImportComponent.hxx"
 #include "xmloff/xmlnmspe.hxx"
 
@@ -29,9 +28,6 @@
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-
-//===========================================================================
-
 // #110680#
 XMLMetaImportComponent::XMLMetaImportComponent(
     const uno::Reference< uno::XComponentContext >& xContext) throw()
@@ -42,7 +38,6 @@ XMLMetaImportComponent::XMLMetaImportComponent(
 XMLMetaImportComponent::~XMLMetaImportComponent() throw()
 {
 }
-
 
 SvXMLImportContext* XMLMetaImportComponent::CreateContext(
     sal_uInt16 nPrefix,

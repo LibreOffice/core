@@ -17,15 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "forms/form_handler_factory.hxx"
 #include "vcl_date_handler.hxx"
 #include "vcl_time_handler.hxx"
 
-//......................................................................................................................
 namespace xmloff
 {
-//......................................................................................................................
 
     namespace
     {
@@ -33,10 +30,7 @@ namespace xmloff
         static PPropertyHandler s_pVCLTimeHandler = NULL;
     }
 
-    //==================================================================================================================
     //= FormHandlerFactory
-    //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
     PPropertyHandler FormHandlerFactory::getFormPropertyHandler( const PropertyId i_propertyId )
     {
         PPropertyHandler pHandler( NULL );
@@ -77,8 +71,6 @@ namespace xmloff
         return pHandler;
     }
 
-//......................................................................................................................
 } // namespace xmloff
-//......................................................................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

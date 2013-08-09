@@ -88,7 +88,6 @@
 
 #include <comphelper/xmltools.hxx>
 
-
 using namespace ::osl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -138,8 +137,6 @@ const XMLServiceMapEntry_Impl aServiceMap[] =
     SERVICE_MAP_ENTRY( CHART ),
     { 0, 0, 0, 0 }
 };
-
-//==============================================================================
 
 class SAL_DLLPRIVATE SettingsExportFacade : public ::xmloff::XMLSettingsExportContext
 {
@@ -205,8 +202,6 @@ Reference< XComponentContext > SettingsExportFacade::GetComponentContext() const
     return m_rExport.getComponentContext();
 }
 
-//==============================================================================
-
 class SvXMLExportEventListener : public cppu::WeakImplHelper1<
                             com::sun::star::lang::XEventListener >
 {
@@ -240,8 +235,6 @@ void SAL_CALL SvXMLExportEventListener::disposing( const lang::EventObject& )
         pExport = NULL;
     }
 }
-
-//==============================================================================
 
 class SAL_DLLPRIVATE SvXMLExport_Impl
 {
@@ -298,8 +291,6 @@ SvXMLExport_Impl::SvXMLExport_Impl()
 {
     mxUriReferenceFactory = uri::UriReferenceFactory::create( comphelper::getProcessComponentContext() );
 }
-
-//==============================================================================
 
 void SvXMLExport::SetDocHandler( const uno::Reference< xml::sax::XDocumentHandler > &rHandler )
 {
@@ -594,8 +585,6 @@ SvXMLExport::~SvXMLExport()
     delete mpImpl;
 }
 
-///////////////////////////////////////////////////////////////////////
-
 // XExporter
 void SAL_CALL SvXMLExport::setSourceDocument( const uno::Reference< lang::XComponent >& xDoc )
     throw(lang::IllegalArgumentException, uno::RuntimeException)
@@ -881,7 +870,6 @@ void SAL_CALL SvXMLExport::setName( const OUString& )
     // do nothing, because it is not possible to set the FilterName
 }
 
-
 // XServiceInfo
 OUString SAL_CALL SvXMLExport::getImplementationName(  ) throw(uno::RuntimeException)
 {
@@ -904,8 +892,6 @@ uno::Sequence< OUString > SAL_CALL SvXMLExport::getSupportedServiceNames(  )
     aSeq[1] = OUString( "com.sun.star.xml.XMLExportFilter");
     return aSeq;
 }
-
-///////////////////////////////////////////////////////////////////////
 
 OUString
 SvXMLExport::EnsureNamespace(OUString const & i_rNamespace,
@@ -952,8 +938,6 @@ SvXMLExport::EnsureNamespace(OUString const & i_rNamespace,
     }
     return sPrefix;
 }
-
-///////////////////////////////////////////////////////////////////////
 
 void SvXMLExport::AddAttributeASCII( sal_uInt16 nPrefixKey,
                                      const sal_Char *pName,
@@ -1422,8 +1406,6 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
         nPos = mpNamespaceMap->GetNextKey( nPos );
     }
 
-
-
     // office:version = ...
     if( !mbExtended )
     {
@@ -1518,7 +1500,6 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
         if( mnExportFlags & EXPORT_CONTENT )
             ImplExportContent();
     }
-
 
     mxHandler->endDocument();
 
@@ -1943,7 +1924,6 @@ sal_Int32 SvXMLExport::dataStyleForceSystemLanguage(sal_Int32 nFormat) const
     return ( mpNumExport != NULL )
                  ? mpNumExport->ForceSystemLanguage( nFormat ) : nFormat;
 }
-
 
 OUString SvXMLExport::AddEmbeddedGraphicObject( const OUString& rGraphicObjectURL )
 {
@@ -2381,7 +2361,6 @@ void SvXMLExport::IgnorableWhitespace()
     }
 }
 
-
 void SvXMLExport::SetError(
     sal_Int32 nId,
     const Sequence<OUString>& rMsgParams,
@@ -2564,8 +2543,6 @@ sal_Bool SvXMLExport::SetNullDateOnUnitConverter()
 
     return mpImpl->mbNullDateInitialized;
 }
-
-//=============================================================================
 
 void SvXMLElementExport::StartElement( SvXMLExport& rExp,
                                        sal_uInt16 nPrefixKey,

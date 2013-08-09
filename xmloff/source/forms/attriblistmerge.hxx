@@ -25,14 +25,10 @@
 #include <osl/mutex.hxx>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 
-//.........................................................................
 namespace xmloff
 {
-//.........................................................................
 
-    //=====================================================================
     //= OAttribListMerger
-    //=====================================================================
     typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::xml::sax::XAttributeList
                                     >   OAttribListMerger_Base;
     /** implements the XAttributeList list by merging different source attribute lists
@@ -68,10 +64,7 @@ namespace xmloff
         sal_Bool seekToName(const OUString& _rName, ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rSubList, sal_Int16& _rLocalIndex);
     };
 
-
-//.........................................................................
 }   // namespace xmloff
-//.........................................................................
 
 #endif // _XMLOFF_FORMS_ATTRIBLISTMERGE_HXX_
 

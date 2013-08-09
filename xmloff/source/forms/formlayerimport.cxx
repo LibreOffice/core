@@ -20,10 +20,8 @@
 #include <xmloff/formlayerimport.hxx>
 #include "layerimport.hxx"
 
-//.........................................................................
 namespace xmloff
 {
-//.........................................................................
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
@@ -32,48 +30,39 @@ namespace xmloff
     using namespace ::com::sun::star::drawing;
     using namespace ::com::sun::star;
 
-    //=====================================================================
     //= OFormLayerXMLExport
-    //=====================================================================
 
-    //---------------------------------------------------------------------
     OFormLayerXMLImport::OFormLayerXMLImport(SvXMLImport& _rImporter)
         :m_pImpl(NULL)
     {
         m_pImpl = new OFormLayerXMLImport_Impl(_rImporter);
     }
 
-    //---------------------------------------------------------------------
     OFormLayerXMLImport::~OFormLayerXMLImport()
     {
         delete m_pImpl;
     }
 
-    //---------------------------------------------------------------------
     void OFormLayerXMLImport::setAutoStyleContext(SvXMLStylesContext* _pNewContext)
     {
         m_pImpl->setAutoStyleContext(_pNewContext);
     }
 
-    //---------------------------------------------------------------------
     void OFormLayerXMLImport::startPage(const Reference< XDrawPage >& _rxDrawPage)
     {
         m_pImpl->startPage(_rxDrawPage);
     }
 
-    //---------------------------------------------------------------------
     void OFormLayerXMLImport::endPage()
     {
         m_pImpl->endPage();
     }
 
-    //---------------------------------------------------------------------
     Reference< XPropertySet > OFormLayerXMLImport::lookupControl(const OUString& _rId)
     {
         return m_pImpl->lookupControlId(_rId);
     }
 
-    //---------------------------------------------------------------------
     SvXMLImportContext* OFormLayerXMLImport::createOfficeFormsContext(
         SvXMLImport& _rImport,
         sal_uInt16 _nPrefix,
@@ -82,27 +71,22 @@ namespace xmloff
         return m_pImpl->createOfficeFormsContext(_rImport, _nPrefix, _rLocalName);
     }
 
-    //---------------------------------------------------------------------
     SvXMLImportContext* OFormLayerXMLImport::createContext(const sal_uInt16 _nPrefix, const OUString& _rLocalName,
         const Reference< xml::sax::XAttributeList >& _rxAttribs)
     {
         return m_pImpl->createContext(_nPrefix, _rLocalName, _rxAttribs);
     }
 
-    //---------------------------------------------------------------------
     void OFormLayerXMLImport::applyControlNumberStyle(const Reference< XPropertySet >& _rxControlModel, const OUString& _rControlNumerStyleName)
     {
         m_pImpl->applyControlNumberStyle(_rxControlModel, _rControlNumerStyleName);
     }
 
-    //---------------------------------------------------------------------
     void OFormLayerXMLImport::documentDone( )
     {
         m_pImpl->documentDone( );
     }
 
-//.........................................................................
 }   // namespace xmloff
-//.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

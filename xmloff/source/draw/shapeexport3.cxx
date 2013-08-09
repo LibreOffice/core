@@ -41,12 +41,8 @@
 
 #include "xmloff/xmlnmspe.hxx"
 
-
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
-
-
-//////////////////////////////////////////////////////////////////////////////
 
 void XMLShapeExport::ImpExport3DSceneShape( const uno::Reference< drawing::XShape >& xShape, XmlShapeType, sal_Int32 nFeatures, awt::Point* pRefPoint)
 {
@@ -90,8 +86,6 @@ void XMLShapeExport::ImpExport3DSceneShape( const uno::Reference< drawing::XShap
         }
     }
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 void XMLShapeExport::ImpExport3DShape(
     const uno::Reference< drawing::XShape >& xShape,
@@ -307,8 +301,6 @@ void XMLShapeExport::ImpExport3DShape(
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 /** helper for chart that adds all attributes of a 3d scene element to the export */
 void XMLShapeExport::export3DSceneAttributes( const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet >& xPropSet )
 {
@@ -481,7 +473,5 @@ void XMLShapeExport::export3DLamps( const com::sun::star::uno::Reference< com::s
         SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DR3D, XML_LIGHT, sal_True, sal_True);
     }
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

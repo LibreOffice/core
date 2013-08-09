@@ -22,10 +22,8 @@
 #include <xmloff/xmluconv.hxx>
 #include <rtl/ustrbuf.hxx>
 
-
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/awt/FontUnderline.hpp>
-
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::awt;
@@ -102,9 +100,6 @@ SvXMLEnumMapEntry const pXML_UnderlineWidth_Enum[] =
     { XML_TOKEN_INVALID,                0 }
 };
 
-
-
-///////////////////////////////////////////////////////////////////////////////
 //
 // class XMLUnderlineTypePropHdl
 //
@@ -187,7 +182,6 @@ sal_Bool XMLUnderlineTypePropHdl::exportXML( OUString& rStrExpValue, const uno::
     return bRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
 //
 // class XMLUnderlineStylePropHdl
 //
@@ -275,7 +269,6 @@ sal_Bool XMLUnderlineStylePropHdl::exportXML( OUString& rStrExpValue, const uno:
     return bRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
 //
 // class XMLUnderlineWidthPropHdl
 //

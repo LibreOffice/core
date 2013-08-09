@@ -17,9 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "PageMasterPropMapper.hxx"
-
 
 #include <xmloff/PageMasterStyleMap.hxx>
 #include "PageMasterPropHdlFactory.hxx"
@@ -27,9 +25,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
-
-
-//______________________________________________________________________________
 
 XMLPageMasterPropSetMapper::XMLPageMasterPropSetMapper():
     XMLPropertySetMapper( aXMLPageMasterStyleMap, new XMLPageMasterPropHdlFactory())

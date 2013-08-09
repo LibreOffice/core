@@ -31,7 +31,6 @@ using namespace ::com::sun::star;
 
 namespace
 {
-//-----------------------------------------------------------------------
 
 SvXMLEnumMapEntry aXMLLegendPositionEnumMap[] =
 {
@@ -54,8 +53,6 @@ struct TheLegendPositionPropertyHdl : public rtl::Static< XMLLegendPositionPrope
 {
 };
 
-//-----------------------------------------------------------------------
-
 SvXMLEnumMapEntry aXMLLegendExpansionEnumMap[] =
 {
     { XML_WIDE,        chart::ChartLegendExpansion_WIDE },
@@ -77,11 +74,7 @@ struct TheLegendExpansionPropertyHdl : public rtl::Static< XMLLegendExpansionPro
 {
 };
 
-//-----------------------------------------------------------------------
-
 }//end anonymous namespace
-
-//-----------------------------------------------------------------------
 
 XMLEnumPropertyHdl& SchXMLEnumConverter::getLegendPositionConverter()
 {

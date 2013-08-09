@@ -28,7 +28,6 @@
 #include <tools/rtti.hxx>
 #include "ximpshap.hxx"
 
-//////////////////////////////////////////////////////////////////////////////
 // draw:g context (RECURSIVE)
 
 class SdXMLGenericPageContext : public SvXMLImportContext
@@ -83,7 +82,6 @@ public:
     com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& GetLocalShapesContext()
         { return mxShapes; }
 };
-
 
 #endif  //  _XIMPGROUP_HXX
 

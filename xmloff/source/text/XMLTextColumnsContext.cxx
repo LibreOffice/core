@@ -31,7 +31,6 @@
 #include <xmloff/xmltoken.hxx>
 #include "XMLTextColumnsContext.hxx"
 
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -171,8 +170,6 @@ XMLTextColumnContext_Impl::~XMLTextColumnContext_Impl()
 {
 }
 
-// --------------------------------------------------------------------------
-
 class XMLTextColumnSepContext_Impl: public SvXMLImportContext
 {
     sal_Int32 nWidth;
@@ -180,7 +177,6 @@ class XMLTextColumnSepContext_Impl: public SvXMLImportContext
     sal_Int8 nHeight;
     sal_Int8 nStyle;
     VerticalAlignment eVertAlign;
-
 
 public:
     TYPEINFO();
@@ -199,7 +195,6 @@ public:
     sal_Int8 GetStyle() const { return nStyle; }
     VerticalAlignment GetVertAlign() const { return eVertAlign; }
 };
-
 
 TYPEINIT1( XMLTextColumnSepContext_Impl, SvXMLImportContext );
 
@@ -269,8 +264,6 @@ XMLTextColumnSepContext_Impl::XMLTextColumnSepContext_Impl(
 XMLTextColumnSepContext_Impl::~XMLTextColumnSepContext_Impl()
 {
 }
-
-// --------------------------------------------------------------------------
 
 class XMLTextColumnsArray_Impl : public std::vector<XMLTextColumnContext_Impl *> {};
 
@@ -484,10 +477,8 @@ void XMLTextColumnsContext::EndElement( )
                 xPropSet->setPropertyValue( sSeparatorLineStyle, aAny );
             }
 
-
             aAny <<= pColumnSep->GetColor();
             xPropSet->setPropertyValue( sSeparatorLineColor, aAny );
-
 
             aAny <<= pColumnSep->GetVertAlign();
             xPropSet->setPropertyValue( sSeparatorLineVerticalAlignment, aAny );

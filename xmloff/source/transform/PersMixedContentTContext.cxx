@@ -17,14 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "TransformerBase.hxx"
 #include "PersMixedContentTContext.hxx"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
-//------------------------------------------------------------------------------
 class XMLPersTextTContext_Impl : public XMLTransformerContext
 {
     OUString m_aCharacters;
@@ -98,8 +96,6 @@ void XMLPersTextTContext_Impl::Export()
 {
     GetTransformer().GetDocHandler()->characters( m_aCharacters );
 }
-
-//------------------------------------------------------------------------------
 
 TYPEINIT1( XMLPersMixedContentTContext, XMLPersElemContentTContext );
 

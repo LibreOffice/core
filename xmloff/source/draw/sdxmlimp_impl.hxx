@@ -29,8 +29,6 @@
 #include <vector>
 #include <xmloff/xmlimp.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
-
 enum SdXMLDocElemTokenMap
 {
     XML_TOK_DOC_FONTDECLS,
@@ -144,8 +142,6 @@ enum SdXMLPresentationPlaceholderAttrTokenMap
     XML_TOK_PRESENTATIONPLACEHOLDER_HEIGHT
 };
 
-//////////////////////////////////////////////////////////////////////////////
-
 struct SdXMLltXDrawPageId
 {
   bool operator()(sal_Int32 nId1, sal_Int32 nId2 ) const
@@ -156,13 +152,9 @@ struct SdXMLltXDrawPageId
 
 typedef std::map< sal_Int32, com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage >, SdXMLltXDrawPageId > DrawPageIdMap;
 
-//////////////////////////////////////////////////////////////////////////////
-
 class SvXMLUnitConverter;
 class SvXMLTokenMap;
 class SdXMLMasterStylesContext;
-
-//////////////////////////////////////////////////////////////////////////////
 
 struct DateTimeDeclContextImpl
 {
@@ -175,8 +167,6 @@ struct DateTimeDeclContextImpl
 
 DECLARE_STL_USTRINGACCESS_MAP( OUString, HeaderFooterDeclMap );
 DECLARE_STL_USTRINGACCESS_MAP( DateTimeDeclContextImpl, DateTimeDeclMap );
-
-//////////////////////////////////////////////////////////////////////////////
 
 class SdXMLImport: public SvXMLImport
 {

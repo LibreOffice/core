@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <xmloff/xmltoken.hxx>
@@ -26,7 +25,6 @@
 #include <xmloff/nmspmap.hxx>
 
 #include "descriptionimp.hxx"
-
 
 using namespace ::std;
 using namespace ::cppu;
@@ -37,8 +35,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::beans;
 using namespace ::xmloff::token;
-
-///////////////////////////////////////////////////////////////////////
 
 TYPEINIT1( SdXMLDescriptionContext, SvXMLImportContext );
 

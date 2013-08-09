@@ -29,10 +29,8 @@
 #include "callbacks.hxx"
 #include "strings.hxx"
 
-//.........................................................................
 namespace xmloff
 {
-//.........................................................................
 
 #define BOOLATTR_DEFAULT_FALSE          0x00
 #define BOOLATTR_DEFAULT_TRUE           0x01
@@ -47,9 +45,7 @@ namespace xmloff
     // is <TRUE/>, the current property value is inverted <em>before</em> comparing it to the default.</p>
 
     class IFormsExportContext;
-    //=====================================================================
     //= OPropertyExport
-    //=====================================================================
     /** provides export related tools for attribute handling
 
         <p>(The name is somewhat misleading. It's not only a PropertyExport, but in real a ElementExport.
@@ -390,9 +386,7 @@ namespace xmloff
 #endif
     };
 
-    //=====================================================================
     //= helper
-    //=====================================================================
 #ifdef DBG_UTIL
     #define DBG_CHECK_PROPERTY(name, type)  \
         dbg_implCheckProperty(name, &::getCppuType(static_cast< type* >(NULL)))
@@ -408,11 +402,8 @@ namespace xmloff
     #define DBG_CHECK_PROPERTY_ASCII_NO_TYPE( name )
 #endif
 
-//.........................................................................
 }   // namespace xmloff
-//.........................................................................
 
 #endif // _XMLOFF_FORMS_PROPERTYEXPORT_HXX_
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

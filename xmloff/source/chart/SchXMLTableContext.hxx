@@ -35,8 +35,6 @@ namespace com { namespace sun { namespace star {
         class XChartDocument;
 }}}}
 
-// ========================================
-
 class SchXMLTableContext : public SvXMLImportContext
 {
 private:
@@ -66,8 +64,6 @@ public:
     void setColumnPermutation( const ::com::sun::star::uno::Sequence< sal_Int32 > & rPermutation );
 };
 
-// ----------------------------------------
-
 class SchXMLTableHelper
 {
 private:
@@ -90,11 +86,7 @@ public:
                                   ::com::sun::star::chart::ChartDataRowSource eDataRowSource );
 };
 
-// ========================================
-
-// ----------------------------------------
 // classes for columns
-// ----------------------------------------
 
 /** With this context all column elements are parsed to
     determine the index of the column containing
@@ -118,8 +110,6 @@ public:
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
 };
 
-// ----------------------------------------
-
 class SchXMLTableColumnContext : public SvXMLImportContext
 {
 private:
@@ -133,9 +123,7 @@ public:
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 };
 
-// ----------------------------------------
 // classes for rows
-// ----------------------------------------
 
 class SchXMLTableRowsContext : public SvXMLImportContext
 {
@@ -156,8 +144,6 @@ public:
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
 };
 
-// ----------------------------------------
-
 class SchXMLTableRowContext : public SvXMLImportContext
 {
 private:
@@ -177,9 +163,7 @@ public:
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
 };
 
-// ----------------------------------------
 // classes for cells and their content
-// ----------------------------------------
 
 class SchXMLTableCellContext : public SvXMLImportContext
 {

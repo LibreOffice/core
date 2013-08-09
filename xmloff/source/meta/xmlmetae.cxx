@@ -39,12 +39,8 @@
 
 #include <string.h>
 
-
 using namespace com::sun::star;
 using namespace ::xmloff::token;
-
-
-//-------------------------------------------------------------------------
 
 static void lcl_AddTwoDigits( OUStringBuffer& rStr, sal_Int32 nVal )
 {
@@ -73,8 +69,6 @@ SvXMLMetaExport::GetISODateTimeString( const util::DateTime& rDateTime )
 
     return sTmp.makeStringAndClear();
 }
-
-//-------------------------------------------------------------------------
 
 void SvXMLMetaExport::SimpleStringElement( const OUString& rText,
         sal_uInt16 nNamespace, enum XMLTokenEnum eElementName )
@@ -301,8 +295,6 @@ void SvXMLMetaExport::_MExport()
     }
 }
 
-//-------------------------------------------------------------------------
-
 static const char *s_xmlns  = "xmlns";
 static const char *s_xmlns2 = "xmlns:";
 static const char *s_meta   = "meta:";
@@ -498,6 +490,5 @@ SvXMLMetaExport::setDocumentLocator(const uno::Reference<xml::sax::XLocator>&)
 {
     // nothing to do here, move along...
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
