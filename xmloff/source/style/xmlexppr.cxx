@@ -1017,9 +1017,7 @@ void SvXMLExportPropertyMapper::_exportXML(
                                 sPrefix = pNamespaceMap->GetPrefixByKey( nKey );
                             }
                             // In any case, the attribute name has to be adapted.
-                            sNameBuffer.append( sPrefix );
-                            sNameBuffer.append( sal_Unicode(':') );
-                            sNameBuffer.append( pAttribName->copy( nColonPos+1 ) );
+                            sNameBuffer.append( sPrefix + ":" + pAttribName->copy( nColonPos+1 ) );
                             sAttribName = sNameBuffer.makeStringAndClear();
                         }
 
@@ -1031,9 +1029,7 @@ void SvXMLExportPropertyMapper::_exportXML(
                                 pNamespaceMap = pNewNamespaceMap;
                             }
                             pNewNamespaceMap->Add( sPrefix, sNamespace );
-                            sNameBuffer.append( GetXMLToken(XML_XMLNS) );
-                            sNameBuffer.append( sal_Unicode(':') );
-                            sNameBuffer.append( sPrefix );
+                            sNameBuffer.append( GetXMLToken(XML_XMLNS) + ":" + sPrefix );
                             rAttrList.AddAttribute( sNameBuffer.makeStringAndClear(),
                                                     sNamespace );
                         }
