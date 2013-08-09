@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//9LA\u003d",
+        "filename": "sw/source/filter/html/htmlfldw.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 480,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-08-09T14:56:57Z",
+      "side": 1,
+      "message": "there is a startsWithIgnoreAsciiCase\nno need to copy here.",
+      "revId": "a3669d1f4ec4adea1da841c8edb0026984fadc1c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
