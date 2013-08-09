@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//9KM\u003d",
+        "filename": "sw/source/filter/html/htmlftn.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 561,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-08-09T18:20:43Z",
+      "side": 1,
+      "message": "yep, the literal promotion to OUString thing does not work with ?:\nneed a full blow if/else here",
+      "revId": "262aafc095dbe2249eb5cff63344b2cc0b9871ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
