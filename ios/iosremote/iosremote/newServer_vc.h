@@ -15,9 +15,8 @@
 //  Constants representing the book's fields.
 //
 enum {
-    ServerName,
     ServerAddr,
-    ServerStore
+    ServerName
 };
 
 //  Constants representing the various sections of our grouped table view.

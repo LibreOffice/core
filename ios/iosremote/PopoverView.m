@@ -158,7 +158,7 @@
 
 - (void)showAtPoint:(CGPoint)point inView:(UIView *)view withText:(NSString *)text
 {
-    UIFont *font = kTextFont;
+    UIFont *font = UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? kTextFontPad : kTextFontPhone;
     
     CGSize screenSize = [self screenSize];
     CGSize textSize = [text sizeWithFont:font constrainedToSize:CGSizeMake(screenSize.width - kHorizontalMargin*4.f, 1000.f) lineBreakMode:UILineBreakModeWordWrap];
@@ -177,7 +177,7 @@
 
 - (void)showAtPoint:(CGPoint)point inView:(UIView *)view withTitle:(NSString *)title withText:(NSString *)text
 {
-    UIFont *font = kTextFont;
+    UIFont *font = UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? kTextFontPad : kTextFontPhone;
     
     CGSize screenSize = [self screenSize];
     CGSize textSize = [text sizeWithFont:font constrainedToSize:CGSizeMake(screenSize.width - kHorizontalMargin*4.f, 1000.f) lineBreakMode:UILineBreakModeWordWrap];
@@ -269,10 +269,10 @@
     UIView *container = [[UIView alloc] initWithFrame:CGRectZero];
     
     //Create a label for the title text.
-    CGSize titleSize = [title sizeWithFont:kTitleFont];
+    CGSize titleSize = [title sizeWithFont: UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? kTitleFontPad : kTitleFontPhone];
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.f, 0.f, titleSize.width, titleSize.height)];
     titleLabel.backgroundColor = [UIColor clearColor];
-    titleLabel.font = kTitleFont;
+    titleLabel.font = UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? kTitleFontPad : kTitleFontPhone;
     titleLabel.textAlignment = UITextAlignmentCenter;
     titleLabel.textColor = kTitleColor;
     titleLabel.text = title;
@@ -353,7 +353,7 @@
 {
     NSMutableArray *labelArray = [[NSMutableArray alloc] initWithCapacity:stringArray.count];
     
-    UIFont *font = kTextFont;
+    UIFont *font = UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? kTextFontPad : kTextFontPhone;
     
     for (NSString *string in stringArray) {
         CGSize textSize = [string sizeWithFont:font];
@@ -378,7 +378,7 @@
  {
     NSMutableArray *labelArray = [[NSMutableArray alloc] initWithCapacity:stringArray.count];
     
-    UIFont *font = kTextFont;
+    UIFont *font = UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? kTextFontPad : kTextFontPhone;
     
     for (NSString *string in stringArray) {
         CGSize textSize = [string sizeWithFont:font];
@@ -422,7 +422,7 @@
 {
     NSMutableArray *tempViewArray = [[NSMutableArray alloc] initWithCapacity:stringArray.count];
     
-    UIFont *font = kTextFont;
+    UIFont *font = UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? kTextFontPad : kTextFontPhone;
     
     for (int i = 0; i < stringArray.count; i++) {
         NSString *string = [stringArray objectAtIndex:i];

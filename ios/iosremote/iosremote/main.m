@@ -9,7 +9,6 @@
 #import <UIKit/UIKit.h>
 
 #import "AppDelegate.h"
-#import "AppDelegate_ipad.h"
 
 int main(int argc, char *argv[])
 {

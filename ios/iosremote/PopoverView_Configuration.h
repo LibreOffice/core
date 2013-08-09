@@ -83,7 +83,10 @@
 // FONTS
 
 //normal text font
-#define kTextFont [UIFont fontWithName:@"HelveticaNeue" size:16.f]
+#define kTextFontPhone [UIFont fontWithName:@"HelveticaNeue" size:16.f]
+
+//normal text font
+#define kTextFontPad [UIFont fontWithName:@"HelveticaNeue" size:20.f]
 
 //normal text color
 #define kTextColor [UIColor colorWithRed:0.329 green:0.341 blue:0.353 alpha:1]
@@ -94,7 +97,9 @@
 #define kTextAlignment UITextAlignmentCenter
 
 //title font
-#define kTitleFont [UIFont fontWithName:@"HelveticaNeue-Bold" size:16.f]
+#define kTitleFontPhone [UIFont fontWithName:@"HelveticaNeue-Bold" size:16.f]
+
+#define kTitleFontPad [UIFont fontWithName:@"HelveticaNeue-Bold" size:22.f]
 
 //title text color
 #define kTitleColor [UIColor colorWithRed:0.329 green:0.341 blue:0.353 alpha:1]

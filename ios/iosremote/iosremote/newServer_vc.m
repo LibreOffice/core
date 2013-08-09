@@ -100,16 +100,16 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
-    NSUInteger indexes[] = { 0, 0 };
-    NSIndexPath *indexPath = [NSIndexPath indexPathWithIndexes:indexes
-                                                        length:2];
-    
+
+    [self.comManager setDelegate:self];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
     EditableTableViewCell *cell = (EditableTableViewCell *)[[self tableView]
-                                                      cellForRowAtIndexPath:indexPath];
+                                                            cellForRowAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:0]];
     
     [[cell textField] becomeFirstResponder];
-    [self.comManager setDelegate:self];
 }
 
 //  Force textfields to resign firstResponder so that our implementation of
@@ -169,7 +169,7 @@
     switch ([textField tag])
     {
         case ServerName:     [self.server setServerName:text];          break;
-        case ServerAddr:  [self.server setServerAddress:text];       break;
+        case ServerAddr:     [self.server setServerAddress:text];       break;
     }
 }
 

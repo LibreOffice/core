@@ -29,9 +29,6 @@
 // Horizontal padding for the embedded table view within the row
 #define kRowHorizontalPadding                       1
 
-// The background color of the vertical table view
-#define kVerticalTableBackgroundColor               [UIColor colorWithRed:0.58823529 green:0.58823529 blue:0.58823529 alpha:1.0]
-
 // Background color for the horizontal table view (the one embedded inside the rows of our vertical table)
 #define kHorizontalTableBackgroundColor             [UIColor blackColor]
 
@@ -39,5 +36,13 @@
 #define kHorizontalTableSelectedBackgroundColor     [UIColor colorWithRed:0.0 green:0.59607843 blue:0.37254902 alpha:1.0]
 
 #define kHorizontalTableCellHighlightedBackgroundColor [UIColor colorWithRed:0 green:0.4745098 blue:0.29019808 alpha:0.9]
+
+#define kTintColor                                  [UIColor colorWithRed:0 green:0.462745098 blue:1 alpha:1.0]
+
+#define kAppTitleFont                               [UIFont fontWithName:@"HelveticaNeue-Medium" size:20.0f]
+
+#define kAppTextFont                               [UIFont fontWithName:@"HelveticaNeue-Medium" size:16.0f]
+
+#define kAppSmallTextFont                          [UIFont fontWithName:@"HelveticaNeue" size:14.0f]
 
 #endif

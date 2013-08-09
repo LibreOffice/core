@@ -10,6 +10,7 @@
 #import "CommunicationManager.h"
 #import "CommandTransmitter.h"
 #import "CommandInterpreter.h"
+#import "ControlVariables.h"
 #import "SlideShow.h"
 
 @interface slideShowPreviewTable_vc ()
@@ -105,7 +106,8 @@
 
 - (UIButton *)startButton{
     if (_startButton == nil) {
-        _startButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+        _startButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_startButton setBackgroundImage:[UIImage imageNamed:@"navBarButtonNormal"] forState:UIControlStateNormal];
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
             _startButton.frame = CGRectMake(10.0, 30.0, 300.0, 50.0);
         } else {
@@ -113,6 +115,8 @@
             _startButton.frame = CGRectMake(30.0, 50.0, 470.0, 50.0);
         }
         [_startButton setTitle:@"Start Presentation" forState:UIControlStateNormal];
+        [_startButton setTitleColor:kTintColor forState:UIControlStateNormal];
+        [_startButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateHighlighted];
         [_startButton addTarget:self action:@selector(startPresentationAction:) forControlEvents:UIControlEventTouchUpInside];
         
         _startButton.tag = 1;

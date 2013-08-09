@@ -7,6 +7,7 @@
 //
 
 #import "UIViewController+LibOStyling.h"
+#import "ControlVariables.h"
 
 @implementation UIViewController (LibOStyling)
 
@@ -16,10 +17,10 @@
     if (!titleView) {
         titleView = [[UILabel alloc] initWithFrame:CGRectZero];
         titleView.backgroundColor = [UIColor clearColor];
-        titleView.font = [UIFont boldSystemFontOfSize:20.0];
+        titleView.font = kAppTitleFont;
         titleView.shadowColor = nil;
         
-        titleView.textColor = [UIColor colorWithRed:1.0 green:0.231372549 blue:0.188235294 alpha:1.0];
+        titleView.textColor = [UIColor blackColor];
         
         self.navigationItem.titleView = titleView;
     }

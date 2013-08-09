@@ -73,7 +73,7 @@
     [self.detailViewController hideMaster:NO];
     [self dismissViewControllerAnimated:YES completion:nil];
 //    [(UITableView *)[(slideShowSwipeInList_ipad *)[[self viewControllers] objectAtIndex:2] view] reloadData];
-    [(slideShowSwipeInList_ipad *)[(UINavigationController *)[[self viewControllers] objectAtIndex:0] topViewController] didReceivePresentationStarted];
+    [(slideShowSwipeInList_ipad *)[[self viewControllers] objectAtIndex:0] didReceivePresentationStarted];
     [(BasePresentationViewController *)[[self viewControllers] objectAtIndex:1] setWelcomePageVisible:NO];
 }
 

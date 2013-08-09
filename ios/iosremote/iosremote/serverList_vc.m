@@ -11,6 +11,7 @@
 #import "newServer_vc.h"
 #import "Server.h"
 #import "Client.h"
+#import "ControlVariables.h"
 
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -58,6 +59,7 @@
                                                      delegate:self
                                             cancelButtonTitle:@"OK"
                                             otherButtonTitles:nil];
+    [self disableSpinner];
     [message show];
 }
 
@@ -80,8 +82,6 @@
 - (void)netServiceBrowser:(NSNetServiceBrowser *)aNetServiceBrowser didNotSearch:(NSDictionary *)errorDict
 {
     NSLog(@"search error");
-//    UITableViewCell * cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
-//    [(UIActivityIndicatorView *)[cell viewWithTag:5] stopAnimating];
     [self.serviceBrowser searchForServicesOfType:@"_impressRemote._tcp" inDomain:@"local"];
 }
 
@@ -285,10 +285,9 @@
         sectionHeader = [[UILabel alloc] initWithFrame:CGRectMake(25, 10, 200, 40)];
     }
     sectionHeader.backgroundColor = [UIColor clearColor];
-    sectionHeader.font = [UIFont boldSystemFontOfSize:18];
+    sectionHeader.font = kAppTextFont;
     sectionHeader.textColor = [UIColor darkTextColor];
     sectionHeader.text = sectionName;
-    sectionHeader 
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.bounds.size.width, [self tableView:tableView heightForHeaderInSection:section])];
     [view addSubview:sectionHeader];
     
@@ -301,8 +300,8 @@
         [sectionFooter setLineBreakMode:NSLineBreakByWordWrapping];
         [sectionFooter setNumberOfLines:5];
         sectionFooter.backgroundColor = [UIColor clearColor];
-        sectionFooter.font = [UIFont systemFontOfSize:14];
-        sectionFooter.textColor = [UIColor colorWithRed:0.22 green:0.33 blue:0.53 alpha:1.0];
+        sectionFooter.font = kAppSmallTextFont;
+        sectionFooter.textColor = kTintColor;
         sectionFooter.text = @"In case your computer does not appear in the section above, manually add a computer with its IP address.";
         
         UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.bounds.size.width, [self tableView:tableView heightForHeaderInSection:section])];

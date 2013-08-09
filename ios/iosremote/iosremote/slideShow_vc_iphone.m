@@ -333,7 +333,7 @@
     NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
     NSOperationQueue *mainQueue = [NSOperationQueue mainQueue];
     
-    [[(slideShowSwipeInList *)self.revealViewController.rearViewController stopWatch] setBarItem:self.navigationController.navigationBar.topItem];
+    [[(slideShowSwipeInList *)self.revealViewController.rearViewController stopWatch] setDelegate:self.revealViewController];
 
     self.slideShowImageNoteReadyObserver =[center addObserverForName:MSG_SLIDE_CHANGED
                                                               object:nil

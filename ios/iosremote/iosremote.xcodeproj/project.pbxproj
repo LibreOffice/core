@@ -488,8 +488,6 @@
 				8C26E5CA17A57C20007DA4B7 /* ControlVariables.h */,
 				8C26E5CE17A58703007DA4B7 /* HorizontalSlideCell.h */,
 				8C26E5CF17A58703007DA4B7 /* HorizontalSlideCell.m */,
-				8C26E5D517A68154007DA4B7 /* stopWatch.h */,
-				8C26E5D617A68154007DA4B7 /* stopWatch.m */,
 				8C0323A917A943720037432E /* UIImageView+setImageAnimated.h */,
 				8C0323AA17A943720037432E /* UIImageView+setImageAnimated.m */,
 				8C19F42917B04EC6005BDB61 /* UINavigationController+Theme.h */,
@@ -507,6 +505,8 @@
 		8C1A170717A28DE800B4BB3C /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				8C26E5D517A68154007DA4B7 /* stopWatch.h */,
+				8C26E5D617A68154007DA4B7 /* stopWatch.m */,
 				57C6E426175E076900E8BC5F /* Client.h */,
 				57C6E427175E076900E8BC5F /* Client.m */,
 				57C6E428175E076900E8BC5F /* CommunicationManager.h */,
@@ -612,7 +612,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = libreoffice.sdremote;
-				LastUpgradeCheck = 0460;
+				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = libreoffice;
 			};
 			buildConfigurationList = 57C6E3EA175E06E800E8BC5F /* Build configuration list for PBXProject "iosremote" */;
@@ -837,6 +837,7 @@
 					"\"$(SRCROOT)/TestFlightSDK1.2.6\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
@@ -859,6 +860,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};

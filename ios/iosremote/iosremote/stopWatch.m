@@ -22,7 +22,6 @@
 @synthesize startButton = _startButton;
 @synthesize clearButton = _clearButton;
 @synthesize timeLabel = _timeLabel;
-@synthesize barItem = _barItem;
 
 @synthesize lastInterval = _lastInterval;
 
@@ -81,7 +80,7 @@
         // Format the elapsed time and set it to the label
         NSString *timeString = [dateFormatter stringFromDate:timerDate];
         self.timeLabel.text = timeString;
-        self.barItem.title = timeString;
+        [self.delegate setTitle:timeString];
 }
 
 
@@ -148,7 +147,7 @@
     
     [self.startButton setImage:[UIImage imageNamed:@"timer_start_btn"] forState:UIControlStateNormal];
     [self updateTimer];
-    self.barItem.title = @"";
+    [self.delegate setTitle:@""];
 }
 
 @end

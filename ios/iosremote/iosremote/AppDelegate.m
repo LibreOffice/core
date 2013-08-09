@@ -7,6 +7,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #import "AppDelegate.h"
+#import "ControlVariables.h"
 #import "UINavigationController+Theme.h"
 @implementation AppDelegate
 
@@ -28,34 +29,17 @@
                                                              ofType:@"plist"];
     NSDictionary *appDefaults = [NSDictionary dictionaryWithContentsOfFile:defaultsPath];
     [[NSUserDefaults standardUserDefaults] registerDefaults:appDefaults];
-    
-    // Override point for customization after application launch.
-    /**
-     * If ever we need some iOS6-only storyboard based features and we want to keep backward compatibility, we should uncomment these code to pick the right storyboard based on the existence on certains classes.
-     */
-//    UIStoryboard *mainStoryboard = nil;
-//    if (NSClassFromString(@"NSLayoutConstraint")) {
-//        mainStoryboard = [UIStoryboard storyboardWithName:@"iPhone_autolayout" bundle:nil];
-//        NSLog(@"loading autolayout storyboard");
-//    } else {
-//      UIStoryboard * mainStoryboard = [UIStoryboard storyboardWithName:@"iPhone_autosize" bundle:nil];
-//        NSLog(@"Doesn't support autolayout, loading autosize");
-//    }
-//
-//    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-//    self.window.rootViewController = [mainStoryboard instantiateInitialViewController];
-//    [(UINavigationController *)self.window.rootViewController loadTheme];
-//    [self.window makeKeyAndVisible];
+
     [[UIBarButtonItem appearanceWhenContainedIn:[UINavigationBar class], nil]
      setBackgroundImage:[UIImage imageNamed:@"navBarButtonNormal"] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
     
     NSDictionary *attributes = [NSDictionary dictionaryWithObjects:
-                                [NSArray arrayWithObjects: [UIFont boldSystemFontOfSize:15], [UIColor colorWithRed:1.0 green:0.231372549 blue:0.188235294 alpha:1.0], [UIColor clearColor], nil]
+                                [NSArray arrayWithObjects: [UIFont boldSystemFontOfSize:15], kTintColor, [UIColor clearColor], nil]
                                                            forKeys: [NSArray arrayWithObjects:UITextAttributeFont, UITextAttributeTextColor, UITextAttributeTextShadowColor, nil]];
     [[UIBarButtonItem appearance] setTitleTextAttributes:attributes
                                                 forState:UIControlStateNormal];
     attributes = [NSDictionary dictionaryWithObjects:
-                  [NSArray arrayWithObjects: [UIFont boldSystemFontOfSize:15], [UIColor grayColor], [UIColor clearColor], nil]
+                  [NSArray arrayWithObjects: kAppTextFont, [UIColor grayColor], [UIColor clearColor], nil]
                                              forKeys: [NSArray arrayWithObjects:UITextAttributeFont, UITextAttributeTextColor, UITextAttributeTextShadowColor, nil]];
     [[UIBarButtonItem appearance] setTitleTextAttributes:attributes
                                                 forState:UIControlStateHighlighted];

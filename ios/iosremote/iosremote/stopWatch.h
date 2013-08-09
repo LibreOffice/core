@@ -12,13 +12,19 @@
 #define TIMER_STATE_PAUSED 1
 #define TIMER_STATE_CLEARED 2
 
+@protocol StopWatchDelegate <NSObject>
+
+- (void) setTitle:(NSString *) title;
+
+@end
+
 @interface stopWatch : NSObject
 
 // StopWatch
 @property (strong, nonatomic) NSTimer *stopWatchTimer;
 @property (strong, nonatomic) NSDate *startDate;
 @property BOOL set;
-@property (weak, nonatomic) UINavigationItem * barItem;
+@property (weak, nonatomic) id<StopWatchDelegate> delegate;
 
 - (stopWatch *) initWithStartButton:(UIButton *)startButton
                         ClearButton:(UIButton *)clearButton

@@ -26,6 +26,7 @@
 
 
 #import <UIKit/UIKit.h>
+#import "stopWatch.h"
 
 @class SWRevealViewController;
 @protocol SWRevealViewControllerDelegate;
@@ -56,7 +57,7 @@ typedef enum
 } FrontViewPosition;
 
 
-@interface SWRevealViewController : UIViewController
+@interface SWRevealViewController : UIViewController <StopWatchDelegate>
 
 // Object instance init and rear view setting
 - (id)initWithRearViewController:(UIViewController *)rearViewController frontViewController:(UIViewController *)frontViewController;
