@@ -3029,7 +3029,7 @@ ScDocShellModificator::ScDocShellModificator( ScDocShell& rDS )
     ScDocument* pDoc = rDocShell.GetDocument();
     bAutoCalcShellDisabled = pDoc->IsAutoCalcShellDisabled();
     bIdleEnabled = pDoc->IsIdleEnabled();
-    pDoc->SetAutoCalcShellDisabled( sal_True );
+    pDoc->SetAutoCalcShellDisabled( true );
     pDoc->EnableIdle(false);
 }
 
@@ -3050,7 +3050,7 @@ void ScDocShellModificator::SetDocumentModified()
     if ( !pDoc->IsImportingXML() )
     {
         // AutoCalcShellDisabled temporaer restaurieren
-        sal_Bool bDisabled = pDoc->IsAutoCalcShellDisabled();
+        bool bDisabled = pDoc->IsAutoCalcShellDisabled();
         pDoc->SetAutoCalcShellDisabled( bAutoCalcShellDisabled );
         rDocShell.SetDocumentModified();
         pDoc->SetAutoCalcShellDisabled( bDisabled );
