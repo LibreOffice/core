@@ -21,10 +21,6 @@
 #include "sc.hrc"   // -> RID_SCDLG_PAGE
                     // -> RID_SCPAGE_AREAS
 
-#define TP_PAGE_STD     1
-#define TP_PAGE_HEADER  2
-#define TP_PAGE_FOOTER  3
-
 //================================================
 // TabPage: Tabelle
 

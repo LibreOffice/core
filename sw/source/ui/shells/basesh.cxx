@@ -2343,10 +2343,20 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 // Temporary view, because the shell does not need to be valid after the dialogue
                 // for example disable header
                 SwView& rTempView = GetView();
+
+                OString sPageId;
+                switch (nSlot)
+                {
+                    case FN_FORMAT_PAGE_COLUMN_DLG:
+                        sPageId = "columns";
+                        break;
+                    case FN_FORMAT_PAGE_SETTING_DLG:
+                        sPageId = "page";
+                        break;
+                }
+
                 rTempView.GetDocShell()->FormatPage(
-                    rPageDesc.GetName(),
-                    nSlot,
-                    rSh );
+                    rPageDesc.GetName(), sPageId, rSh);
                 rTempView.InvalidateRulerPos();
             }
         }

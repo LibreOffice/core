@@ -32,7 +32,6 @@
 #include "dochdl.hrc"
 #include <index.hrc>
 #include <regionsw.hrc>
-#include <fmtui.hrc>
 
 #include <wordcountdialog.hxx>
 #include "abstract.hxx" // add for SwInsertAbstractDlg
@@ -822,9 +821,9 @@ SfxAbstractTabDialog* SwAbstractDialogFactory_Impl::CreateSwParaDlg ( Window *pP
                                                     sal_uInt8 nDialogMode,
                                                     const String *pCollName,
                                                     sal_Bool bDraw ,
-                                                    sal_uInt16 nDefPage)
+                                                    OString sDefPage)
 {
-    SfxTabDialog* pDlg = new SwParaDlg( pParent, rVw, rCoreSet,nDialogMode, pCollName, bDraw, nDefPage );
+    SfxTabDialog* pDlg = new SwParaDlg( pParent, rVw, rCoreSet,nDialogMode, pCollName, bDraw, sDefPage );
     return new AbstractTabDialog_Impl( pDlg );
 }
 
@@ -987,11 +986,11 @@ SfxAbstractApplyTabDialog* SwAbstractDialogFactory_Impl::CreateTemplateDialog(
                                                 Window*             pParent,
                                                 SfxStyleSheetBase&  rBase,
                                                 sal_uInt16          nRegion,
-                                                const sal_uInt16    nSlot,
+                                                OString             sPage,
                                                 SwWrtShell*         pActShell,
-                                                sal_Bool            bNew ) //add for SwTemplateDlg
+                                                bool                bNew ) //add for SwTemplateDlg
 {
-    SfxTabDialog* pDlg = new SwTemplateDlg( pParent, rBase, nRegion, nSlot, pActShell, bNew );
+    SfxTabDialog* pDlg = new SwTemplateDlg( pParent, rBase, nRegion, sPage, pActShell, bNew );
     return new AbstractApplyTabDialog_Impl( pDlg );
 }
 

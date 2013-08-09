@@ -401,13 +401,8 @@ void SwHeaderFooterWin::ExecuteCommand( sal_uInt16 nSlot )
     {
         case FN_HEADERFOOTER_EDIT:
             {
-                sal_uInt16 nPageId = TP_FOOTER_PAGE;
-                if ( m_bIsHeader )
-                    nPageId = TP_HEADER_PAGE;
-
-                rView.GetDocShell()->FormatPage(
-                        rStyleName,
-                        nPageId, rSh );
+                OString sPageId = m_bIsHeader ? OString("header") : OString("footer");
+                rView.GetDocShell()->FormatPage(rStyleName, sPageId, rSh);
             }
             break;
         case FN_HEADERFOOTER_BORDERBACK:

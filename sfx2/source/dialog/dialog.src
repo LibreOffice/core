@@ -30,10 +30,6 @@ String STR_APPLY
 {
     Text [ en-US ] = "Apply";
 };
-String STR_TABPAGE_MANAGESTYLES
-{
-    Text [ en-US ] = "Organizer" ;
-};
 InfoBox MSG_TABPAGE_INVALIDNAME
 {
     BUTTONS = WB_OK ;

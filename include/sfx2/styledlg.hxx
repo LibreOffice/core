@@ -31,13 +31,13 @@ class SFX2_DLLPUBLIC SfxStyleDialog: public SfxTabDialog
 private:
     SfxStyleSheetBase*          pStyle;
     DECL_DLLPRIVATE_LINK( CancelHdl, Button * );
+    sal_uInt16 m_nOrganizerId;
 protected:
     virtual const SfxItemSet*   GetRefreshedSet();
 
 public:
-#define ID_TABPAGE_MANAGESTYLES 1
-    SfxStyleDialog( Window* pParent, const ResId& rResId, SfxStyleSheetBase&,
-                    sal_Bool bFreeRes = sal_True, const String* pUserBtnTxt = 0 );
+    SfxStyleDialog(Window* pParent, const OString& rID,
+        const OUString& rUIXMLDescription, SfxStyleSheetBase&);
 
     ~SfxStyleDialog();
 

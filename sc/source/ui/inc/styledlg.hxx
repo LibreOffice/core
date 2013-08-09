@@ -29,10 +29,9 @@ class SfxStyleSheetBase;
 class ScStyleDlg : public SfxStyleDialog
 {
 public:
-                ScStyleDlg( Window*             pParent,
-                            SfxStyleSheetBase&  rStyleBase,
-                            sal_uInt16              nRscId );
-                ~ScStyleDlg();
+    ScStyleDlg( Window*             pParent,
+                SfxStyleSheetBase&  rStyleBase,
+                sal_uInt16          nRscId );
 
 protected:
     virtual void                PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage );
@@ -40,6 +39,19 @@ protected:
 
 private:
     sal_uInt16 nDlgRsc;
+
+    sal_uInt16 m_nNumberId;
+    sal_uInt16 m_nFontId;
+    sal_uInt16 m_nFontEffectId;
+    sal_uInt16 m_nAlignmentId;
+    sal_uInt16 m_nAsianId;
+    sal_uInt16 m_nBorderId;
+    sal_uInt16 m_nBackgroundId;
+    sal_uInt16 m_nProtectId;
+    sal_uInt16 m_nPageId;
+    sal_uInt16 m_nHeaderId;
+    sal_uInt16 m_nFooterId;
+    sal_uInt16 m_nSheetId;
 };
 
 

@@ -111,7 +111,7 @@ class SW_DLLPUBLIC SwDocShell: public SfxObjectShell, public SfxListener
         const sal_uInt16 nFamily,
         sal_uInt16 nMask,
         const sal_Bool bNew,
-        const sal_uInt16 nSlot = 0,
+        const OString sPageId = OString(),
         SwWrtShell* pActShell = 0,
         const sal_Bool bBasic = sal_False );
 
@@ -241,7 +241,7 @@ public:
     // Identifies slot by which the dialog is triggered. Used to activate certain dialog pane
     void FormatPage(
         const String& rPage,
-        const sal_uInt16 nSlot,
+        const OString& rPageId,
         SwWrtShell& rActShell );
 
     // #i59688#

@@ -73,7 +73,6 @@
 #include "unochart.hxx"
 
 #include "app.hrc"
-#include <fmtui.hrc>
 #include "swabstdlg.hxx"
 
 #include <list.hxx>
@@ -620,7 +619,7 @@ sal_uInt16 SwDocShell::Edit(
     const sal_uInt16 nFamily,
     sal_uInt16 nMask,
     const sal_Bool bNew,
-    const sal_uInt16 nSlot,
+    const OString sPage,
     SwWrtShell* pActShell,
     const sal_Bool bBasic )
 {
@@ -785,7 +784,7 @@ sal_uInt16 SwDocShell::Edit(
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
         OSL_ENSURE(pFact, "Dialogdiet fail!");
         SfxAbstractApplyTabDialog* pDlg = pFact->CreateTemplateDialog(
-                                                    0, *(xTmp.get()), nFamily, nSlot,
+                                                    0, *(xTmp.get()), nFamily, sPage,
                                                     pActShell ? pActShell : pWrtShell, bNew);
         OSL_ENSURE(pDlg, "Dialogdiet fail!");
         ApplyStyle aApplyStyleHelper(*this, bNew, pStyle, nRet, xTmp, nFamily, pDlg, mxBasePool, bModified);
@@ -1314,10 +1313,10 @@ void SwDocShell::_LoadStyles( SfxObjectShell& rSource, sal_Bool bPreserveCurrent
 
 void SwDocShell::FormatPage(
     const String& rPage,
-    const sal_uInt16 nSlot,
+    const OString& rPageId,
     SwWrtShell& rActShell )
 {
-    Edit( rPage, aEmptyStr, SFX_STYLE_FAMILY_PAGE, 0, sal_False, nSlot, &rActShell);
+    Edit( rPage, aEmptyStr, SFX_STYLE_FAMILY_PAGE, 0, sal_False, rPageId, &rActShell);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

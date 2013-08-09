@@ -50,7 +50,7 @@ SwParaDlg::SwParaDlg(Window *pParent,
                     sal_uInt8 nDialogMode,
                     const String *pTitle,
                     sal_Bool bDraw,
-                    sal_uInt16 nDefPage)
+                    OString sDefPage)
     : SfxTabDialog(pParent,
                  "ParagraphPropertiesDialog",
                  "modules/swriter/ui/paradialog.ui",
@@ -162,8 +162,8 @@ SwParaDlg::SwParaDlg(Window *pParent,
         m_nParaBorder = AddTabPage("labelTP_BORDER", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BORDER ) );
     }
 
-    if (nDefPage)
-        SetCurPageId(nDefPage);
+    if (!sDefPage.isEmpty())
+        SetCurPageId(sDefPage);
 }
 
 

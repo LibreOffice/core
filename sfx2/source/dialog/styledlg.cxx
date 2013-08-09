@@ -32,36 +32,31 @@
 
 SfxStyleDialog::SfxStyleDialog
 (
-    Window* pParent,            // Parent
-    const ResId& rResId,        // ResId
-    SfxStyleSheetBase& rStyle,  // stylesheet to be processed
-    sal_Bool bFreeRes,              // Flag release resources
-    const String* pUserBtnTxt
-) :
+    Window* pParent,           // Parent
+    const OString& rID, const OUString& rUIXMLDescription,
+    SfxStyleSheetBase& rStyle  // stylesheet to be processed
+)
 
 /*  [Description]
 
     Constructor: Add Manage TabPage, set ExampleSet from style.
 */
 
-    SfxTabDialog( pParent, rResId,
+    : SfxTabDialog( pParent, rID, rUIXMLDescription,
                   rStyle.GetItemSet().Clone(),
                   // return TRUE also without ParentSupport , but extended
                   // to suppress the standardButton
-                  rStyle.HasParentSupport() ? sal_True : 2,
-                  pUserBtnTxt ),
+                  rStyle.HasParentSupport() ? sal_True : 2 )
 
-    pStyle( &rStyle )
+    , pStyle( &rStyle )
 
 {
-    AddTabPage( ID_TABPAGE_MANAGESTYLES,
-                SfxResId( STR_TABPAGE_MANAGESTYLES ).toString(),
-                SfxManageStyleSheetPage::Create, 0, sal_False, 0 );
+    m_nOrganizerId = AddTabPage("organizer", SfxManageStyleSheetPage::Create, 0);
 
     // With new template always set the management page as the current page
 
     if( rStyle.GetName().isEmpty() )
-        SetCurPageId( ID_TABPAGE_MANAGESTYLES );
+        SetCurPageId(m_nOrganizerId);
     else
     {
         OUString sTxt = OUString(GetText()) + ": " + rStyle.GetName();
@@ -70,8 +65,6 @@ SfxStyleDialog::SfxStyleDialog
     delete pExampleSet; // in SfxTabDialog::Ctor() already created
     pExampleSet = &pStyle->GetItemSet();
 
-    if ( bFreeRes )
-        FreeResource();
     GetCancelButton().SetClickHdl( LINK(this, SfxStyleDialog, CancelHdl) );
 }
 
@@ -131,7 +124,7 @@ IMPL_LINK( SfxStyleDialog, CancelHdl, Button *, pButton )
 
 {
     (void)pButton; //unused
-    SfxTabPage* pPage = GetTabPage( ID_TABPAGE_MANAGESTYLES );
+    SfxTabPage* pPage = GetTabPage(m_nOrganizerId);
 
     const SfxItemSet* pInSet = GetInputSetImpl();
     SfxWhichIter aIter( *pInSet );

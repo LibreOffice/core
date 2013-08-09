@@ -52,17 +52,30 @@ private:
     ChangeType          nGradientListState;
     ChangeType          nHatchingListState;
 
+    sal_uInt16 m_nLineId;
+    sal_uInt16 m_nAreaId;
+    sal_uInt16 m_nShadowId;
+    sal_uInt16 m_nTransparencyId;
+    sal_uInt16 m_nFontId;
+    sal_uInt16 m_nFontEffectId;
+    sal_uInt16 m_nIndentsId;
+    sal_uInt16 m_nTextId;
+    sal_uInt16 m_nAnimationId;
+    sal_uInt16 m_nDimensionId;
+    sal_uInt16 m_nConnectorId;
+    sal_uInt16 m_nAlignId;
+    sal_uInt16 m_nTabId;
+    sal_uInt16 m_nAsianTypoId;
+
     virtual void                PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
     virtual const SfxItemSet*   GetRefreshedSet();
 
 public:
-                    SdTabTemplateDlg( Window* pParent,
-                            const SfxObjectShell* pDocShell,
-                            SfxStyleSheetBase& rStyleBase,
-                            SdrModel* pModel,
-                            SdrView* pView );
-                    ~SdTabTemplateDlg();
-
+    SdTabTemplateDlg(Window* pParent,
+            const SfxObjectShell* pDocShell,
+            SfxStyleSheetBase& rStyleBase,
+            SdrModel* pModel,
+            SdrView* pView);
 };
 
 

@@ -61,7 +61,6 @@ $(eval $(call gb_SrsTarget_add_files,sd/res,\
     sd/source/ui/dlg/prltempl.src \
     sd/source/ui/dlg/RemoteDialog.src \
     sd/source/ui/dlg/sdpreslt.src \
-    sd/source/ui/dlg/tabtempl.src \
     sd/source/ui/dlg/tpaction.src \
     sd/source/ui/dlg/vectdlg.src \
     sd/source/ui/slideshow/slideshow.src \

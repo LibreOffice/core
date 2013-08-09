@@ -26,6 +26,7 @@
 #include <svx/ruler.hxx>
 #include <editeng/lrspitem.hxx>
 #include <svl/srchitem.hxx>
+#include <svl/stritem.hxx>
 #include <sfx2/request.hxx>
 #include <swmodule.hxx>
 #include <view.hxx>
@@ -573,7 +574,7 @@ int SwView::KillVRuler()
 
 IMPL_LINK( SwView, ExecRulerClick, Ruler *, pRuler )
 {
-    sal_uInt16 nDefPage = 0;
+    OUString sDefPage;
     switch( pRuler->GetClickType() )
     {
         case RULER_TYPE_DONTKNOW:
@@ -581,14 +582,14 @@ IMPL_LINK( SwView, ExecRulerClick, Ruler *, pRuler )
         case RULER_TYPE_INDENT:
         case RULER_TYPE_MARGIN1:
         case RULER_TYPE_MARGIN2:
-            nDefPage = TP_PARA_STD;
+            sDefPage = "indents";
         break;
         default:
-            nDefPage = TP_TABULATOR;
+            sDefPage = "tabs";
 
     }
 
-    SfxUInt16Item aDefPage(SID_PARA_DLG, nDefPage);
+    SfxStringItem aDefPage(SID_PARA_DLG, sDefPage);
     GetViewFrame()->GetDispatcher()->Execute( SID_PARA_DLG,
                                 SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD,
                                 &aDefPage, 0L );

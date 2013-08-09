@@ -129,25 +129,11 @@
 
 // TABPAGES -----------------------------------------------------------
 
-#define TP_PAGE_STD                 (RC_GLOBALS_BEGIN +  1)
-
-#define TP_PARA_STD                 (RC_GLOBALS_BEGIN +  3)
-#define TP_PARA_EXT                 (RC_GLOBALS_BEGIN +  4)
-
-#define TP_CHAR_STD                 (RC_GLOBALS_BEGIN +  7)
-#define TP_CHAR_EXT                 (RC_GLOBALS_BEGIN +  8)
-
-#define TP_TABULATOR                (RC_GLOBALS_BEGIN +  9)
-#define TP_DROPCAPS                 (RC_GLOBALS_BEGIN +  10)
 #define TP_BACKGROUND               (RC_GLOBALS_BEGIN +  11)
 #define TP_BORDER                   (RC_GLOBALS_BEGIN +  12)
 #define TP_COLUMN                   (RC_GLOBALS_BEGIN +  13)
 
 #define TP_DOC_STAT                 (RC_GLOBALS_BEGIN +  15)
-
-#define TP_HEADER_PAGE              (RC_GLOBALS_BEGIN +  16)
-#define TP_FOOTER_PAGE              (RC_GLOBALS_BEGIN +  17)
-#define TP_FOOTNOTE_PAGE            (RC_GLOBALS_BEGIN +  18)
 
 // Sw-pages
 #define TP_OPTTEST_PAGE             (RC_GLOBALS_BEGIN +  25)
@@ -171,8 +157,6 @@
 #define TP_FRM_WRAP                 (RC_GLOBALS_BEGIN +  49)
 #define TP_FRM_ADD                  (RC_GLOBALS_BEGIN +  51)
 
-#define TP_PARA_ALIGN               (RC_GLOBALS_BEGIN +  55)
-
 #define TP_NUMBER                   (RC_GLOBALS_BEGIN +  57)
 
 #define TP_FLD_DB                   (RC_GLOBALS_BEGIN +  64)
@@ -183,8 +167,6 @@
 #define TP_FLD_REF                  (RC_GLOBALS_BEGIN +  69)
 
 #define TP_OPTSHDWCRSR              (RC_GLOBALS_BEGIN +  70)
-#define TP_NUMPARA                  (RC_GLOBALS_BEGIN +  73)
-
 
 
 #define TP_OPTCAPTION_PAGE          (RC_GLOBALS_BEGIN +  78)
@@ -198,10 +180,6 @@
 #define DLG_ADD_IDX_STYLES          (RC_GLOBALS_BEGIN +  94)
 #define TP_PRIVATE_DATA             (RC_GLOBALS_BEGIN +  95)
 #define TP_BUSINESS_DATA            (RC_GLOBALS_BEGIN +  96)
-#define TP_CHAR_POS                 (RC_GLOBALS_BEGIN +  98)
-#define TP_CHAR_TWOLN               (RC_GLOBALS_BEGIN +  99)
-#define TP_PARA_ASIAN               (RC_GLOBALS_BEGIN +  100)
-#define TP_TEXTGRID_PAGE            (RC_GLOBALS_BEGIN +  101)
 #define TP_OPTCOMPATIBILITY_PAGE    (RC_GLOBALS_BEGIN +  103)
 #define TP_MAILCONFIG               (RC_GLOBALS_BEGIN +  104)
 //maximum: RC_GLOBALS_BEGIN +  120

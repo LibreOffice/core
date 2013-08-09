@@ -209,7 +209,7 @@ void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const 
     }
     if (nSlot == SID_CHAR_DLG_EFFECT)
     {
-        pDlg->SetCurPageId(TP_CHAR_EXT);
+        pDlg->SetCurPageId("fonteffect");
     }
 
     const SfxItemSet* pSet = NULL;
@@ -966,9 +966,9 @@ void SwTextShell::Execute(SfxRequest &rReq)
             // Current page format
             ::SwToSfxPageDescAttr( aCoreSet );
 
-            sal_uInt16 nDefPage = 0;
-            if( pItem )
-                nDefPage = ((SfxUInt16Item *)pItem)->GetValue();
+            OString sDefPage;
+            if (pItem)
+                sDefPage = OUStringToOString(((const SfxStringItem*)pItem)->GetValue(), RTL_TEXTENCODING_UTF8);
 
             // Properties of numbering
             if( rWrtSh.GetDoc()->GetCurrNumRule( *pPaM->GetPoint() ) )
@@ -986,7 +986,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-                pDlg = pFact->CreateSwParaDlg( GetView().GetWindow(),GetView(), aCoreSet, DLG_STD, NULL, sal_False, nDefPage );
+                pDlg = pFact->CreateSwParaDlg( GetView().GetWindow(),GetView(), aCoreSet, DLG_STD, NULL, sal_False, sDefPage );
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
             }
             SfxItemSet* pSet = NULL;

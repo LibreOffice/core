@@ -144,6 +144,11 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/tablecolumnpage \
 	sw/uiconfig/swriter/ui/tableproperties \
 	sw/uiconfig/swriter/ui/tabletextflowpage \
+	sw/uiconfig/swriter/ui/templatedialog1 \
+	sw/uiconfig/swriter/ui/templatedialog2 \
+	sw/uiconfig/swriter/ui/templatedialog4 \
+	sw/uiconfig/swriter/ui/templatedialog8 \
+	sw/uiconfig/swriter/ui/templatedialog16 \
 	sw/uiconfig/swriter/ui/textgridpage \
 	sw/uiconfig/swriter/ui/titlepage \
 	sw/uiconfig/swriter/ui/viewoptionspage \

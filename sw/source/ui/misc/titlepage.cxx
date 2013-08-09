@@ -252,7 +252,7 @@ SwTitlePageDlg::~SwTitlePageDlg()
 IMPL_LINK_NOARG(SwTitlePageDlg, EditHdl)
 {
     SwView& rView = mpSh->GetView();
-    rView.GetDocShell()->FormatPage(m_pPagePropertiesLB->GetSelectEntry(), false, *mpSh);
+    rView.GetDocShell()->FormatPage(m_pPagePropertiesLB->GetSelectEntry(), "page", *mpSh);
     rView.InvalidateRulerPos();
 
     return 0;

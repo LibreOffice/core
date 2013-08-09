@@ -367,7 +367,7 @@ public:
                                                     sal_uInt8 nDialogMode,
                                                     const String *pCollName = 0,
                                                     sal_Bool bDraw = sal_False,
-                                                    sal_uInt16 nDefPage = 0) = 0;
+                                                    OString sDefPage = OString() ) = 0;
 
     virtual AbstractSwSelGlossaryDlg * CreateSwSelGlossaryDlg(Window * pParent, const String &rShortName) = 0; //add for SwSelGlossaryDlg
 
@@ -406,9 +406,9 @@ public:
                                                 Window*             pParent,
                                                 SfxStyleSheetBase&  rBase,
                                                 sal_uInt16          nRegion,
-                                                const sal_uInt16 nSlot = 0,
+                                                OString             sPage = OString(),
                                                 SwWrtShell*         pActShell = 0,
-                                                sal_Bool            bNew = sal_False ) = 0; //add for SwTemplateDlg
+                                                bool                bNew = false) = 0; //add for SwTemplateDlg
     virtual AbstractGlossaryDlg*        CreateGlossaryDlg(SfxViewFrame* pViewFrame,
                                                 SwGlossaryHdl* pGlosHdl,
                                                 SwWrtShell *pWrtShell) = 0; //add for SwGlossaryDlg

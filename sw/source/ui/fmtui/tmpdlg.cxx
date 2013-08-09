@@ -55,7 +55,6 @@
 #include <cmdid.h>
 #include <helpid.h>
 #include <globals.hrc>
-#include <fmtui.hrc>
 #include <SwStyleNameMapper.hxx>
 #include <svx/svxids.hrc>
 #include <svl/stritem.hxx>
@@ -73,23 +72,51 @@ extern SW_DLLPUBLIC SwWrtShell* GetActiveWrtShell();
     Description:    the dialog's carrier
  --------------------------------------------------------------------*/
 
-SwTemplateDlg::SwTemplateDlg(Window*            pParent,
+SwTemplateDlg::SwTemplateDlg(Window* pParent,
                              SfxStyleSheetBase& rBase,
-                             sal_uInt16             nRegion,
-                             const sal_uInt16 nSlot,
-                             SwWrtShell*        pActShell,
-                             sal_Bool               bNew ) :
-    SfxStyleDialog( pParent,
-                    SW_RES(DLG_TEMPLATE_BASE + nRegion),
-                    rBase,
-                    sal_False,
-                    0 ),
-    nType( nRegion ),
-    pWrtShell(pActShell),
-    bNewStyle(bNew)
+                             sal_uInt16 nRegion,
+                             OString sPage,
+                             SwWrtShell* pActShell,
+                             bool bNew)
+    : SfxStyleDialog(pParent,
+                    OString("TemplateDialog") + OString::number(nRegion),
+                    OUString("modules/swriter/ui/templatedialog") +
+                        OUString::number(nRegion) + OUString(".ui"),
+                    rBase)
+    , nType(nRegion)
+    , pWrtShell(pActShell)
+    , bNewStyle(bNew)
+    , m_nIndentsId(0)
+    , m_nAlignId(0)
+    , m_nTextFlowId(0)
+    , m_nAsianTypo(0)
+    , m_nFontId(0)
+    , m_nFontEffectId(0)
+    , m_nPositionId(0)
+    , m_nAsianLayoutId(0)
+    , m_nTabId(0)
+    , m_nOutlineId(0)
+    , m_nDropCapsId(0)
+    , m_nBackgroundId(0)
+    , m_nBorderId(0)
+    , m_nConditionId(0)
+    , m_nTypeId(0)
+    , m_nOptionsId(0)
+    , m_nWrapId(0)
+    , m_nColumnId(0)
+    , m_nMacroId(0)
+    , m_nHeaderId(0)
+    , m_nFooterId(0)
+    , m_nPageId(0)
+    , m_nFootNoteId(0)
+    , m_nTextGridId(0)
+    , m_nSingleId(0)
+    , m_nBulletId(0)
+    , m_nNumId(0)
+    , m_nBmpId(0)
+    , m_nNumOptId(0)
+    , m_nNumPosId(0)
 {
-    FreeResource();
-
     nHtmlMode = ::GetHtmlMode(pWrtShell->GetView().GetDocShell());
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "Dialogdiet fail!");
@@ -101,136 +128,134 @@ SwTemplateDlg::SwTemplateDlg(Window*            pParent,
         {
             OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_NAME ), "GetTabPageCreatorFunc fail!");
             OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_NAME ) , "GetTabPageRangesFunc fail!");
-            AddTabPage(TP_CHAR_STD, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_NAME ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_NAME ) );
+            m_nFontId = AddTabPage("font", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_NAME ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_NAME ));
 
             OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_EFFECTS ), "GetTabPageCreatorFunc fail!");
             OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_EFFECTS ) , "GetTabPageRangesFunc fail!");
-            AddTabPage(TP_CHAR_EXT, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_EFFECTS ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_EFFECTS ) );
+            m_nFontEffectId = AddTabPage("fonteffect", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_EFFECTS ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_EFFECTS ));
 
             OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_POSITION ), "GetTabPageCreatorFunc fail!");
             OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_POSITION ) , "GetTabPageRangesFunc fail!");
-            AddTabPage(TP_CHAR_POS, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_POSITION ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_POSITION ) );
+            m_nPositionId = AddTabPage("position", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_POSITION ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_POSITION ));
 
             OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_TWOLINES ), "GetTabPageCreatorFunc fail!");
             OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_TWOLINES ) , "GetTabPageRangesFunc fail!");
-            AddTabPage(TP_CHAR_TWOLN, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_TWOLINES ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_TWOLINES ) );
+            m_nAsianLayoutId = AddTabPage("asianlayout", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_TWOLINES ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_TWOLINES ));
 
             OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageCreatorFunc fail!");
             OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ) , "GetTabPageRangesFunc fail!");
-            AddTabPage(TP_BACKGROUND, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ) );
+            m_nBackgroundId = AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ));
 
             SAL_WARN_IF(!pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), "sw.ui", "GetTabPageCreatorFunc fail!");
             SAL_WARN_IF(!pFact->GetTabPageRangesFunc( RID_SVXPAGE_BORDER ), "sw.ui", "GetTabPageRangesFunc fail!");
-            AddTabPage(TP_BORDER, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BORDER ) );
+            m_nBorderId = AddTabPage("borders", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BORDER ));
 
             SvtCJKOptions aCJKOptions;
             if(nHtmlMode & HTMLMODE_ON || !aCJKOptions.IsDoubleLinesEnabled())
-                RemoveTabPage(TP_CHAR_TWOLN);
+                RemoveTabPage("asianlayout");
         }
         break;
         // paragraph styles
         case SFX_STYLE_FAMILY_PARA:
         {
-                OSL_ENSURE(pFact->GetTabPageCreatorFunc(RID_SVXPAGE_STD_PARAGRAPH), "GetTabPageCreatorFunc fail!");
-                OSL_ENSURE(pFact->GetTabPageRangesFunc(RID_SVXPAGE_STD_PARAGRAPH), "GetTabPageRangesFunc fail!");
-                AddTabPage( TP_PARA_STD,    pFact->GetTabPageCreatorFunc(RID_SVXPAGE_STD_PARAGRAPH),        pFact->GetTabPageRangesFunc(RID_SVXPAGE_STD_PARAGRAPH) );
+            OSL_ENSURE(pFact->GetTabPageCreatorFunc(RID_SVXPAGE_STD_PARAGRAPH), "GetTabPageCreatorFunc fail!");
+            OSL_ENSURE(pFact->GetTabPageRangesFunc(RID_SVXPAGE_STD_PARAGRAPH), "GetTabPageRangesFunc fail!");
+            m_nIndentsId = AddTabPage("indents", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_STD_PARAGRAPH),        pFact->GetTabPageRangesFunc(RID_SVXPAGE_STD_PARAGRAPH) );
 
-                OSL_ENSURE(pFact->GetTabPageCreatorFunc(RID_SVXPAGE_ALIGN_PARAGRAPH), "GetTabPageCreatorFunc fail!");
-                OSL_ENSURE(pFact->GetTabPageRangesFunc(RID_SVXPAGE_ALIGN_PARAGRAPH), "GetTabPageRangesFunc fail!");
-                AddTabPage( TP_PARA_ALIGN,  pFact->GetTabPageCreatorFunc(RID_SVXPAGE_ALIGN_PARAGRAPH),      pFact->GetTabPageRangesFunc(RID_SVXPAGE_ALIGN_PARAGRAPH) );
+            OSL_ENSURE(pFact->GetTabPageCreatorFunc(RID_SVXPAGE_ALIGN_PARAGRAPH), "GetTabPageCreatorFunc fail!");
+            OSL_ENSURE(pFact->GetTabPageRangesFunc(RID_SVXPAGE_ALIGN_PARAGRAPH), "GetTabPageRangesFunc fail!");
+            m_nAlignId = AddTabPage("alignment", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_ALIGN_PARAGRAPH),      pFact->GetTabPageRangesFunc(RID_SVXPAGE_ALIGN_PARAGRAPH) );
 
-                OSL_ENSURE(pFact->GetTabPageCreatorFunc(RID_SVXPAGE_EXT_PARAGRAPH), "GetTabPageCreatorFunc fail!");
-                OSL_ENSURE(pFact->GetTabPageRangesFunc(RID_SVXPAGE_EXT_PARAGRAPH), "GetTabPageRangesFunc fail!");
-                AddTabPage( TP_PARA_EXT,    pFact->GetTabPageCreatorFunc(RID_SVXPAGE_EXT_PARAGRAPH),        pFact->GetTabPageRangesFunc(RID_SVXPAGE_EXT_PARAGRAPH) );
+            OSL_ENSURE(pFact->GetTabPageCreatorFunc(RID_SVXPAGE_EXT_PARAGRAPH), "GetTabPageCreatorFunc fail!");
+            OSL_ENSURE(pFact->GetTabPageRangesFunc(RID_SVXPAGE_EXT_PARAGRAPH), "GetTabPageRangesFunc fail!");
+            m_nTextFlowId = AddTabPage("textflow", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_EXT_PARAGRAPH),        pFact->GetTabPageRangesFunc(RID_SVXPAGE_EXT_PARAGRAPH) );
 
-                OSL_ENSURE(pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PARA_ASIAN), "GetTabPageCreatorFunc fail!");
-                OSL_ENSURE(pFact->GetTabPageRangesFunc(RID_SVXPAGE_PARA_ASIAN), "GetTabPageRangesFunc fail!");
-                AddTabPage( TP_PARA_ASIAN,  pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PARA_ASIAN),       pFact->GetTabPageRangesFunc(RID_SVXPAGE_PARA_ASIAN) );
+            OSL_ENSURE(pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PARA_ASIAN), "GetTabPageCreatorFunc fail!");
+            OSL_ENSURE(pFact->GetTabPageRangesFunc(RID_SVXPAGE_PARA_ASIAN), "GetTabPageRangesFunc fail!");
+            m_nAsianTypo = AddTabPage("asiantypo",  pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PARA_ASIAN),       pFact->GetTabPageRangesFunc(RID_SVXPAGE_PARA_ASIAN) );
 
-                OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_NAME ), "GetTabPageCreatorFunc fail!");
-                OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_NAME ), "GetTabPageRangesFunc fail!");
-                AddTabPage(TP_CHAR_STD, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_NAME ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_NAME ) );
+            OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_NAME ), "GetTabPageCreatorFunc fail!");
+            OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_NAME ), "GetTabPageRangesFunc fail!");
+            m_nFontId = AddTabPage("font", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_NAME ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_NAME ) );
 
-                OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_EFFECTS ), "GetTabPageCreatorFunc fail!");
-                OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_EFFECTS ), "GetTabPageRangesFunc fail!");
-                AddTabPage(TP_CHAR_EXT, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_EFFECTS ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_EFFECTS ) );
+            OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_EFFECTS ), "GetTabPageCreatorFunc fail!");
+            OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_EFFECTS ), "GetTabPageRangesFunc fail!");
+            m_nFontEffectId = AddTabPage("fonteffect", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_EFFECTS ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_EFFECTS ) );
 
-                OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_POSITION ), "GetTabPageCreatorFunc fail!");
-                OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_POSITION ) , "GetTabPageRangesFunc fail!");
-                AddTabPage(TP_CHAR_POS, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_POSITION ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_POSITION ) );
+            OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_POSITION ), "GetTabPageCreatorFunc fail!");
+            OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_POSITION ) , "GetTabPageRangesFunc fail!");
+            m_nPositionId = AddTabPage("position", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_POSITION ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_POSITION ) );
 
-                OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_TWOLINES ), "GetTabPageCreatorFunc fail!");
-                OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_TWOLINES ) , "GetTabPageRangesFunc fail!");
-                AddTabPage(TP_CHAR_TWOLN, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_TWOLINES ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_TWOLINES ) );
-
+            OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_TWOLINES ), "GetTabPageCreatorFunc fail!");
+            OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_TWOLINES ) , "GetTabPageRangesFunc fail!");
+            m_nAsianLayoutId = AddTabPage("asianlayout", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_TWOLINES ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_TWOLINES ) );
 
             OSL_ENSURE(pFact->GetTabPageCreatorFunc(RID_SVXPAGE_TABULATOR), "GetTabPageCreatorFunc fail!");
             OSL_ENSURE(pFact->GetTabPageRangesFunc(RID_SVXPAGE_TABULATOR), "GetTabPageRangesFunc fail!");
-            AddTabPage( TP_TABULATOR,   pFact->GetTabPageCreatorFunc(RID_SVXPAGE_TABULATOR),        pFact->GetTabPageRangesFunc(RID_SVXPAGE_TABULATOR) );
+            m_nTabId = AddTabPage("tabs", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_TABULATOR),        pFact->GetTabPageRangesFunc(RID_SVXPAGE_TABULATOR) );
 
-
-            AddTabPage(TP_NUMPARA,   SwParagraphNumTabPage::Create,
+            m_nOutlineId = AddTabPage("outline", SwParagraphNumTabPage::Create,
                                     SwParagraphNumTabPage::GetRanges);
-            AddTabPage(TP_DROPCAPS,     SwDropCapsPage::Create,
+            m_nDropCapsId = AddTabPage("dropcaps", SwDropCapsPage::Create,
                                         SwDropCapsPage::GetRanges );
             OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageCreatorFunc fail!");
             OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageRangesFunc fail!");
-            AddTabPage(TP_BACKGROUND, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ) );
+            m_nBackgroundId = AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ) );
             OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), "GetTabPageCreatorFunc fail!");
             OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_BORDER ), "GetTabPageRangesFunc fail!");
-            AddTabPage(TP_BORDER, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BORDER ) );
+            m_nBorderId = AddTabPage("borders", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BORDER ) );
 
-            AddTabPage( TP_CONDCOLL,    SwCondCollPage::Create,
+            m_nConditionId = AddTabPage("condition", SwCondCollPage::Create,
                                         SwCondCollPage::GetRanges );
             if( (!bNewStyle && RES_CONDTXTFMTCOLL != ((SwDocStyleSheet&)rBase).GetCollection()->Which())
             || nHtmlMode & HTMLMODE_ON )
-                RemoveTabPage(TP_CONDCOLL);
+                RemoveTabPage("condition");
 
             SvtCJKOptions aCJKOptions;
             if(nHtmlMode & HTMLMODE_ON)
             {
                 SvxHtmlOptions& rHtmlOpt = SvxHtmlOptions::Get();
                 if (!rHtmlOpt.IsPrintLayoutExtension())
-                    RemoveTabPage(TP_PARA_EXT);
-                RemoveTabPage(TP_PARA_ASIAN);
-                RemoveTabPage(TP_TABULATOR);
-                RemoveTabPage(TP_NUMPARA);
-                RemoveTabPage(TP_CHAR_TWOLN);
+                    RemoveTabPage("textflow");
+                RemoveTabPage("asiantypo");
+                RemoveTabPage("tabs");
+                RemoveTabPage("outline");
+                RemoveTabPage("asianlayout");
                 if(!(nHtmlMode & HTMLMODE_FULL_STYLES))
                 {
-                    RemoveTabPage(TP_BACKGROUND);
-                    RemoveTabPage(TP_DROPCAPS);
+                    RemoveTabPage("background");
+                    RemoveTabPage("dropcaps");
                 }
             }
             else
             {
                 if(!aCJKOptions.IsAsianTypographyEnabled())
-                    RemoveTabPage(TP_PARA_ASIAN);
+                    RemoveTabPage("asiantypo");
                 if(!aCJKOptions.IsDoubleLinesEnabled())
-                    RemoveTabPage(TP_CHAR_TWOLN);
+                    RemoveTabPage("asianlayout");
             }
         }
         break;
         // frame styles
         case SFX_STYLE_FAMILY_FRAME:
         {
-            AddTabPage(TP_FRM_STD,      SwFrmPage::Create,
-                                        SwFrmPage::GetRanges );
-            AddTabPage(TP_FRM_ADD,      SwFrmAddPage::Create,
-                                        SwFrmAddPage::GetRanges );
-            AddTabPage(TP_FRM_WRAP,     SwWrapTabPage::Create,
-                                        SwWrapTabPage::GetRanges );
+            m_nTypeId = AddTabPage("type", SwFrmPage::Create,
+                                        SwFrmPage::GetRanges);
+            m_nOptionsId = AddTabPage("options", SwFrmAddPage::Create,
+                                        SwFrmAddPage::GetRanges);
+            m_nWrapId = AddTabPage("wrap", SwWrapTabPage::Create,
+                                        SwWrapTabPage::GetRanges);
             OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageCreatorFunc fail!");
             OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageRangesFunc fail!");
-            AddTabPage(TP_BACKGROUND, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ) );
+            m_nBackgroundId = AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ) );
             OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), "GetTabPageCreatorFunc fail!");
             OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_BORDER ), "GetTabPageRangesFunc fail!");
-            AddTabPage(TP_BORDER, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BORDER ) );
+            m_nBorderId = AddTabPage("borders", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BORDER ) );
 
-            AddTabPage(TP_COLUMN,       SwColumnPage::Create,
+            m_nColumnId = AddTabPage("columns", SwColumnPage::Create,
                                         SwColumnPage::GetRanges );
 
-            AddTabPage( TP_MACRO_ASSIGN, pFact->GetTabPageCreatorFunc(RID_SVXPAGE_MACROASSIGN), 0);
+            m_nMacroId = AddTabPage("macros", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_MACROASSIGN), 0);
 
         break;
         }
@@ -239,74 +264,52 @@ SwTemplateDlg::SwTemplateDlg(Window*            pParent,
         {
             OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageCreatorFunc fail!");
             OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageRangesFunc fail!");
-            AddTabPage(TP_BACKGROUND, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ) );
-            AddTabPage(TP_HEADER_PAGE,      String(SW_RES(STR_PAGE_HEADER)),
-                                            SvxHeaderPage::Create,
-                                            SvxHeaderPage::GetRanges );
-            AddTabPage(TP_FOOTER_PAGE,      String(SW_RES(STR_PAGE_FOOTER)),
-                                            SvxFooterPage::Create,
-                                            SvxFooterPage::GetRanges );
-            if ( nSlot == FN_FORMAT_PAGE_COLUMN_DLG )
-            {
-                SetCurPageId(TP_COLUMN);
-            }
-            else if ( nSlot == FN_FORMAT_PAGE_SETTING_DLG )
-            {
-                SetCurPageId(TP_PAGE_STD);
-            }
+            m_nBackgroundId = AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ) );
+            m_nHeaderId = AddTabPage("header",  SvxHeaderPage::Create, SvxHeaderPage::GetRanges);
+            m_nFooterId = AddTabPage("footer", SvxFooterPage::Create, SvxFooterPage::GetRanges);
 
             OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_PAGE ), "GetTabPageCreatorFunc fail!");
             OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_PAGE ), "GetTabPageRangesFunc fail!");
-            AddTabPage(TP_PAGE_STD,         String(SW_RES(STR_PAGE_STD)),
+            m_nPageId = AddTabPage("page",
                                             pFact->GetTabPageCreatorFunc( RID_SVXPAGE_PAGE ),
-                                            pFact->GetTabPageRangesFunc( RID_SVXPAGE_PAGE ),
-                                            sal_False,
-                                            1 ); // after the manage-page
+                                            pFact->GetTabPageRangesFunc( RID_SVXPAGE_PAGE ) );
             if(!pActShell || 0 == ::GetHtmlMode(pWrtShell->GetView().GetDocShell()))
             {
                 OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), "GetTabPageCreatorFunc fail!");
                 OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_BORDER ), "GetTabPageRangesFunc fail!");
-                AddTabPage(TP_BORDER,           String(SW_RES(STR_PAGE_BORDER)),
+                m_nBorderId = AddTabPage("borders",
                                 pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BORDER ) );
-                AddTabPage(TP_COLUMN,           String(SW_RES(STR_PAGE_COLUMN)),
-                                                SwColumnPage::Create,
-                                                SwColumnPage::GetRanges );
-                AddTabPage(TP_FOOTNOTE_PAGE,    String(SW_RES(STR_PAGE_FOOTNOTE)),
+                m_nColumnId = AddTabPage("columns", SwColumnPage::Create, SwColumnPage::GetRanges );
+                m_nFootNoteId = AddTabPage("footnotes",
                                                 SwFootNotePage::Create,
                                                 SwFootNotePage::GetRanges );
-                AddTabPage(TP_TEXTGRID_PAGE,    String(SW_RES(STR_PAGE_TEXTGRID)),
+                m_nTextGridId = AddTabPage("textgrid",
                                                 SwTextGridPage::Create,
                                                 SwTextGridPage::GetRanges );
                 SvtCJKOptions aCJKOptions;
                 if(!aCJKOptions.IsAsianTypographyEnabled())
-                    RemoveTabPage(TP_TEXTGRID_PAGE);
+                    RemoveTabPage("textgrid");
             }
-
-
         }
         break;
         // numbering styles
         case SFX_STYLE_FAMILY_PSEUDO:
         {
-            AddTabPage( RID_SVXPAGE_PICK_SINGLE_NUM );
-            AddTabPage( RID_SVXPAGE_PICK_BULLET );
-            AddTabPage( RID_SVXPAGE_PICK_NUM );
-            AddTabPage( RID_SVXPAGE_PICK_BMP);
-            AddTabPage( RID_SVXPAGE_NUM_OPTIONS );
-            AddTabPage( RID_SVXPAGE_NUM_POSITION );
-
+            m_nSingleId = AddTabPage("numbering", RID_SVXPAGE_PICK_SINGLE_NUM);
+            m_nBulletId = AddTabPage("bullets", RID_SVXPAGE_PICK_BULLET);
+            m_nNumId = AddTabPage("outline", RID_SVXPAGE_PICK_NUM);
+            m_nBmpId = AddTabPage("graphics", RID_SVXPAGE_PICK_BMP);
+            m_nNumOptId = AddTabPage("options", RID_SVXPAGE_NUM_OPTIONS );
+            m_nNumPosId = AddTabPage("position", RID_SVXPAGE_NUM_POSITION );
         }
         break;
 
         default:
             OSL_ENSURE(!this, "wrong family");
-
     }
-    EnableApplyButton( true );
-}
 
-SwTemplateDlg::~SwTemplateDlg()
-{
+    if (!sPage.isEmpty())
+        SetCurPageId(sPage);
 }
 
 short SwTemplateDlg::Ok()
@@ -351,233 +354,215 @@ void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     SwStyleNameMapper::FillUIName( RES_POOLCHR_BUL_LEVEL, sBulletCharFmt);
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
 
-    switch( nId )
+    if (nId == m_nFontId)
     {
-        case TP_CHAR_STD:
-            {
-                OSL_ENSURE(::GetActiveView(), "no active view");
+        OSL_ENSURE(::GetActiveView(), "no active view");
 
-                SvxFontListItem aFontListItem( *( (SvxFontListItem*)::GetActiveView()->
-                    GetDocShell()->GetItem( SID_ATTR_CHAR_FONTLIST ) ) );
+        SvxFontListItem aFontListItem( *( (SvxFontListItem*)::GetActiveView()->
+            GetDocShell()->GetItem( SID_ATTR_CHAR_FONTLIST ) ) );
 
-                aSet.Put (SvxFontListItem( aFontListItem.GetFontList(), SID_ATTR_CHAR_FONTLIST));
-                sal_uInt32 nFlags = 0;
-                if(rPage.GetItemSet().GetParent() && 0 == (nHtmlMode & HTMLMODE_ON ))
-                    nFlags = SVX_RELATIVE_MODE;
-                if( SFX_STYLE_FAMILY_CHAR == nType )
-                    nFlags = nFlags|SVX_PREVIEW_CHARACTER;
-                aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, nFlags));
-                rPage.PageCreated(aSet);
-            }
-            break;
-
-        case TP_CHAR_EXT:
-            {
-            sal_uInt32 nFlags = SVX_ENABLE_FLASH;
-            if( SFX_STYLE_FAMILY_CHAR == nType )
-                nFlags = nFlags|SVX_PREVIEW_CHARACTER;
-            aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, nFlags));
-            rPage.PageCreated(aSet);
-            }
-            break;
-
-        case TP_CHAR_POS:
-            if( SFX_STYLE_FAMILY_CHAR == nType )
-            {
-                aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, SVX_PREVIEW_CHARACTER));
-                rPage.PageCreated(aSet);
-            }
-        break;
-
-        case TP_CHAR_TWOLN:
-            if( SFX_STYLE_FAMILY_CHAR == nType )
-            {
-                aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, SVX_PREVIEW_CHARACTER));
-                rPage.PageCreated(aSet);
-            }
-        break;
-
-        case TP_PARA_STD:
-            {
-                if( rPage.GetItemSet().GetParent() )
-                {
-                    aSet.Put(SfxUInt32Item(SID_SVXSTDPARAGRAPHTABPAGE_ABSLINEDIST,MM50/10));
-                    aSet.Put(SfxUInt32Item(SID_SVXSTDPARAGRAPHTABPAGE_FLAGSET,0x000F));
-                    rPage.PageCreated(aSet);
-                }
-
-            }
-            break;
-        case TP_NUMPARA:
-            {
-                //-->#outlinelevel added by zhaojianwei
-                //  handle if the current paragraph style is assigned to a list level of outline style,
-                SwTxtFmtColl* pTmpColl = pWrtShell->FindTxtFmtCollByName( GetStyleSheet().GetName() );
-                if( pTmpColl && pTmpColl->IsAssignedToListLevelOfOutlineStyle() )
-                {
-                    ((SwParagraphNumTabPage&)rPage).DisableOutline() ;
-                    ((SwParagraphNumTabPage&)rPage).DisableNumbering();
-                }//<-end
-                ListBox & rBox = ((SwParagraphNumTabPage&)rPage).GetStyleBox();
-                SfxStyleSheetBasePool* pPool = pWrtShell->GetView().GetDocShell()->GetStyleSheetPool();
-                pPool->SetSearchMask(SFX_STYLE_FAMILY_PSEUDO, SFXSTYLEBIT_ALL);
-                const SfxStyleSheetBase* pBase = pPool->First();
-                std::set<String> aNames;
-                while(pBase)
-                {
-                    aNames.insert(pBase->GetName());
-                    pBase = pPool->Next();
-                }
-                for(std::set<String>::const_iterator it = aNames.begin(); it != aNames.end(); ++it)
-                    rBox.InsertEntry(*it);
-        }
-        break;
-        case TP_PARA_ALIGN:
-            {
-                aSet.Put(SfxBoolItem(SID_SVXPARAALIGNTABPAGE_ENABLEJUSTIFYEXT,sal_True));
-                rPage.PageCreated(aSet);
-            }
-            break;
-
-        case TP_FRM_STD:
-            ((SwFrmPage&)rPage).SetNewFrame( sal_True );
-            ((SwFrmPage&)rPage).SetFormatUsed( sal_True );
-            break;
-
-        case TP_FRM_ADD:
-            ((SwFrmAddPage&)rPage).SetFormatUsed(sal_True);
-            ((SwFrmAddPage&)rPage).SetNewFrame(sal_True);
-            break;
-
-        case TP_FRM_WRAP:
-            ((SwWrapTabPage&)rPage).SetFormatUsed( sal_True, sal_False );
-            break;
-
-        case TP_COLUMN:
-            if( nType == SFX_STYLE_FAMILY_FRAME )
-                ((SwColumnPage&)rPage).SetFrmMode(sal_True);
-            ((SwColumnPage&)rPage).SetFormatUsed( sal_True );
-            break;
-
-        case TP_BACKGROUND:
+        aSet.Put (SvxFontListItem( aFontListItem.GetFontList(), SID_ATTR_CHAR_FONTLIST));
+        sal_uInt32 nFlags = 0;
+        if(rPage.GetItemSet().GetParent() && 0 == (nHtmlMode & HTMLMODE_ON ))
+            nFlags = SVX_RELATIVE_MODE;
+        if( SFX_STYLE_FAMILY_CHAR == nType )
+            nFlags = nFlags|SVX_PREVIEW_CHARACTER;
+        aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, nFlags));
+        rPage.PageCreated(aSet);
+    }
+    else if (nId == m_nFontEffectId)
+    {
+        sal_uInt32 nFlags = SVX_ENABLE_FLASH;
+        if( SFX_STYLE_FAMILY_CHAR == nType )
+            nFlags = nFlags|SVX_PREVIEW_CHARACTER;
+        aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, nFlags));
+        rPage.PageCreated(aSet);
+    }
+    else if (nId == m_nPositionId)
+    {
+        if( SFX_STYLE_FAMILY_CHAR == nType )
         {
-            sal_Int32 nFlagType = 0;
-            if( SFX_STYLE_FAMILY_PARA == nType )
-                nFlagType |= SVX_SHOW_PARACTL;
-            if( SFX_STYLE_FAMILY_CHAR != nType )
-                nFlagType |= SVX_SHOW_SELECTOR;
-            if( SFX_STYLE_FAMILY_FRAME == nType )
-                nFlagType |= SVX_ENABLE_TRANSPARENCY;
-            aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, nFlagType));
+            aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, SVX_PREVIEW_CHARACTER));
             rPage.PageCreated(aSet);
         }
-        break;
-        case TP_CONDCOLL:
-            ((SwCondCollPage&)rPage).SetCollection(
-                ((SwDocStyleSheet&)GetStyleSheet()).GetCollection(), bNewStyle );
-            break;
-
-        case TP_PAGE_STD:
-            if(0 == (nHtmlMode & HTMLMODE_ON ))
-            {
-                std::vector<OUString> aList;
-                OUString aNew;
-                SwStyleNameMapper::FillUIName( RES_POOLCOLL_TEXT, aNew );
-                aList.push_back( aNew );
-                if( pWrtShell )
-                {
-                    SfxStyleSheetBasePool* pStyleSheetPool = pWrtShell->
-                                GetView().GetDocShell()->GetStyleSheetPool();
-                    pStyleSheetPool->SetSearchMask(SFX_STYLE_FAMILY_PARA);
-                    SfxStyleSheetBase *pFirstStyle = pStyleSheetPool->First();
-                    while(pFirstStyle)
-                    {
-                        aList.push_back( pFirstStyle->GetName() );
-                        pFirstStyle = pStyleSheetPool->Next();
-                    }
-                }
-                aSet.Put (SfxStringListItem(SID_COLLECT_LIST, &aList));
-                rPage.PageCreated(aSet);
-            }
-            break;
-
-        case TP_MACRO_ASSIGN:
+    }
+    else if (nId == m_nAsianLayoutId)
+    {
+        if( SFX_STYLE_FAMILY_CHAR == nType )
         {
-            SfxAllItemSet aNewSet(*aSet.GetPool());
-            aNewSet.Put( SwMacroAssignDlg::AddEvents(MACASSGN_ALLFRM) );
-            if ( pWrtShell )
-                rPage.SetFrame( pWrtShell->GetView().GetViewFrame()->GetFrame().GetFrameInterface() );
-            rPage.PageCreated(aNewSet);
-            break;
+            aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, SVX_PREVIEW_CHARACTER));
+            rPage.PageCreated(aSet);
+        }
+    }
+    else if (nId == m_nIndentsId)
+    {
+        if( rPage.GetItemSet().GetParent() )
+        {
+            aSet.Put(SfxUInt32Item(SID_SVXSTDPARAGRAPHTABPAGE_ABSLINEDIST,MM50/10));
+            aSet.Put(SfxUInt32Item(SID_SVXSTDPARAGRAPHTABPAGE_FLAGSET,0x000F));
+            rPage.PageCreated(aSet);
         }
 
-        case RID_SVXPAGE_PICK_NUM:
-            {
-                aSet.Put (SfxStringItem(SID_NUM_CHAR_FMT,sNumCharFmt));
-                aSet.Put (SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFmt));
-                rPage.PageCreated(aSet);
-            }
-        break;
-        case RID_SVXPAGE_NUM_OPTIONS:
+    }
+    else if (nId == m_nOutlineId)
+    {
+        //-->#outlinelevel added by zhaojianwei
+        //  handle if the current paragraph style is assigned to a list level of outline style,
+        SwTxtFmtColl* pTmpColl = pWrtShell->FindTxtFmtCollByName( GetStyleSheet().GetName() );
+        if( pTmpColl && pTmpColl->IsAssignedToListLevelOfOutlineStyle() )
         {
-
-            aSet.Put (SfxStringItem(SID_NUM_CHAR_FMT,sNumCharFmt));
-            aSet.Put (SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFmt));
-            // collect character styles
-            ListBox rCharFmtLB(this);
-            rCharFmtLB.Clear();
-            rCharFmtLB.InsertEntry( ViewShell::GetShellRes()->aStrNone );
-            SwDocShell* pDocShell = ::GetActiveWrtShell()->GetView().GetDocShell();
-            ::FillCharStyleListBox(rCharFmtLB,  pDocShell);
-
+            ((SwParagraphNumTabPage&)rPage).DisableOutline() ;
+            ((SwParagraphNumTabPage&)rPage).DisableNumbering();
+        }//<-end
+        ListBox & rBox = ((SwParagraphNumTabPage&)rPage).GetStyleBox();
+        SfxStyleSheetBasePool* pPool = pWrtShell->GetView().GetDocShell()->GetStyleSheetPool();
+        pPool->SetSearchMask(SFX_STYLE_FAMILY_PSEUDO, SFXSTYLEBIT_ALL);
+        const SfxStyleSheetBase* pBase = pPool->First();
+        std::set<String> aNames;
+        while(pBase)
+        {
+            aNames.insert(pBase->GetName());
+            pBase = pPool->Next();
+        }
+        for(std::set<String>::const_iterator it = aNames.begin(); it != aNames.end(); ++it)
+            rBox.InsertEntry(*it);
+    }
+    else if (nId == m_nAlignId)
+    {
+        aSet.Put(SfxBoolItem(SID_SVXPARAALIGNTABPAGE_ENABLEJUSTIFYEXT,sal_True));
+        rPage.PageCreated(aSet);
+    }
+    else if (nId == m_nTypeId)
+    {
+        ((SwFrmPage&)rPage).SetNewFrame( sal_True );
+        ((SwFrmPage&)rPage).SetFormatUsed( sal_True );
+    }
+    else if (nId == m_nOptionsId)
+    {
+        ((SwFrmAddPage&)rPage).SetFormatUsed(sal_True);
+        ((SwFrmAddPage&)rPage).SetNewFrame(sal_True);
+    }
+    else if (nId == m_nWrapId)
+    {
+        ((SwWrapTabPage&)rPage).SetFormatUsed( sal_True, sal_False );
+    }
+    else if (nId == m_nColumnId)
+    {
+        if( nType == SFX_STYLE_FAMILY_FRAME )
+            ((SwColumnPage&)rPage).SetFrmMode(sal_True);
+        ((SwColumnPage&)rPage).SetFormatUsed( sal_True );
+    }
+    else if (nId == m_nBackgroundId)
+    {
+        sal_Int32 nFlagType = 0;
+        if( SFX_STYLE_FAMILY_PARA == nType )
+            nFlagType |= SVX_SHOW_PARACTL;
+        if( SFX_STYLE_FAMILY_CHAR != nType )
+            nFlagType |= SVX_SHOW_SELECTOR;
+        if( SFX_STYLE_FAMILY_FRAME == nType )
+            nFlagType |= SVX_ENABLE_TRANSPARENCY;
+        aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, nFlagType));
+        rPage.PageCreated(aSet);
+    }
+    else if (nId == m_nConditionId)
+    {
+        ((SwCondCollPage&)rPage).SetCollection(
+            ((SwDocStyleSheet&)GetStyleSheet()).GetCollection(), bNewStyle );
+    }
+    else if (nId == m_nPageId)
+    {
+        if(0 == (nHtmlMode & HTMLMODE_ON ))
+        {
             std::vector<OUString> aList;
-            for(sal_uInt16 j = 0; j < rCharFmtLB.GetEntryCount(); j++)
-                 aList.push_back( rCharFmtLB.GetEntry(j) );
-
-            aSet.Put( SfxStringListItem( SID_CHAR_FMT_LIST_BOX,&aList ) ) ;
-            FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebDocShell, pDocShell));
-            aSet.Put ( SfxAllEnumItem(SID_METRIC_ITEM, static_cast< sal_uInt16 >(eMetric)));
+            OUString aNew;
+            SwStyleNameMapper::FillUIName( RES_POOLCOLL_TEXT, aNew );
+            aList.push_back( aNew );
+            if( pWrtShell )
+            {
+                SfxStyleSheetBasePool* pStyleSheetPool = pWrtShell->
+                            GetView().GetDocShell()->GetStyleSheetPool();
+                pStyleSheetPool->SetSearchMask(SFX_STYLE_FAMILY_PARA);
+                SfxStyleSheetBase *pFirstStyle = pStyleSheetPool->First();
+                while(pFirstStyle)
+                {
+                    aList.push_back( pFirstStyle->GetName() );
+                    pFirstStyle = pStyleSheetPool->Next();
+                }
+            }
+            aSet.Put (SfxStringListItem(SID_COLLECT_LIST, &aList));
             rPage.PageCreated(aSet);
         }
-        break;
-        case RID_SVXPAGE_NUM_POSITION:
+    }
+    else if (nId == m_nMacroId)
+    {
+        SfxAllItemSet aNewSet(*aSet.GetPool());
+        aNewSet.Put( SwMacroAssignDlg::AddEvents(MACASSGN_ALLFRM) );
+        if ( pWrtShell )
+            rPage.SetFrame( pWrtShell->GetView().GetViewFrame()->GetFrame().GetFrameInterface() );
+        rPage.PageCreated(aNewSet);
+    }
+    else if (nId == m_nNumId)
+    {
+        aSet.Put (SfxStringItem(SID_NUM_CHAR_FMT,sNumCharFmt));
+        aSet.Put (SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFmt));
+        rPage.PageCreated(aSet);
+    }
+    else if (nId == m_nNumOptId)
+    {
+
+        aSet.Put (SfxStringItem(SID_NUM_CHAR_FMT,sNumCharFmt));
+        aSet.Put (SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFmt));
+        // collect character styles
+        ListBox rCharFmtLB(this);
+        rCharFmtLB.Clear();
+        rCharFmtLB.InsertEntry( ViewShell::GetShellRes()->aStrNone );
+        SwDocShell* pDocShell = ::GetActiveWrtShell()->GetView().GetDocShell();
+        ::FillCharStyleListBox(rCharFmtLB,  pDocShell);
+
+        std::vector<OUString> aList;
+        for(sal_uInt16 j = 0; j < rCharFmtLB.GetEntryCount(); j++)
+             aList.push_back( rCharFmtLB.GetEntry(j) );
+
+        aSet.Put( SfxStringListItem( SID_CHAR_FMT_LIST_BOX,&aList ) ) ;
+        FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebDocShell, pDocShell));
+        aSet.Put ( SfxAllEnumItem(SID_METRIC_ITEM, static_cast< sal_uInt16 >(eMetric)));
+        rPage.PageCreated(aSet);
+    }
+    else if (nId == m_nNumPosId)
+    {
+        SwDocShell* pDocShell = ::GetActiveWrtShell()->GetView().GetDocShell();
+        FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebDocShell, pDocShell));
+
+        aSet.Put ( SfxAllEnumItem(SID_METRIC_ITEM, static_cast< sal_uInt16 >(eMetric)));
+        rPage.PageCreated(aSet);
+    }
+    else if (nId == m_nBulletId)
+    {
+        aSet.Put (SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFmt));
+        rPage.PageCreated(aSet);
+    }
+    else if (nId == m_nHeaderId)
+    {
+        if(0 == (nHtmlMode & HTMLMODE_ON ))
+            ((SvxHeaderPage&)rPage).EnableDynamicSpacing();
+    }
+    else if (nId == m_nFooterId)
+    {
+        if(0 == (nHtmlMode & HTMLMODE_ON ))
+            ((SvxFooterPage&)rPage).EnableDynamicSpacing();
+    }
+    else if (nId == m_nBorderId)
+    {
+        if( SFX_STYLE_FAMILY_PARA == nType )
         {
-            SwDocShell* pDocShell = ::GetActiveWrtShell()->GetView().GetDocShell();
-            FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebDocShell, pDocShell));
-
-            aSet.Put ( SfxAllEnumItem(SID_METRIC_ITEM, static_cast< sal_uInt16 >(eMetric)));
-            rPage.PageCreated(aSet);
+            aSet.Put (SfxUInt16Item(SID_SWMODE_TYPE,SW_BORDER_MODE_PARA));
         }
-        break;
-        case  RID_SVXPAGE_PICK_BULLET :
-            {
-                aSet.Put (SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFmt));
-                rPage.PageCreated(aSet);
-            }
-        break;
-        case  TP_HEADER_PAGE:
-            if(0 == (nHtmlMode & HTMLMODE_ON ))
-                ((SvxHeaderPage&)rPage).EnableDynamicSpacing();
-        break;
-        case  TP_FOOTER_PAGE:
-            if(0 == (nHtmlMode & HTMLMODE_ON ))
-                ((SvxFooterPage&)rPage).EnableDynamicSpacing();
-        break;
-        case TP_BORDER :
-            if( SFX_STYLE_FAMILY_PARA == nType )
-            {
-                aSet.Put (SfxUInt16Item(SID_SWMODE_TYPE,SW_BORDER_MODE_PARA));
-            }
-            else if( SFX_STYLE_FAMILY_FRAME == nType )
-            {
-                aSet.Put (SfxUInt16Item(SID_SWMODE_TYPE,SW_BORDER_MODE_FRAME));
-            }
-            rPage.PageCreated(aSet);
-
-        break;
+        else if( SFX_STYLE_FAMILY_FRAME == nType )
+        {
+            aSet.Put (SfxUInt16Item(SID_SWMODE_TYPE,SW_BORDER_MODE_FRAME));
+        }
+        rPage.PageCreated(aSet);
     }
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

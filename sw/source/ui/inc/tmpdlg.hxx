@@ -37,18 +37,47 @@ class SwTemplateDlg: public SfxStyleDialog
 
     DECL_LINK( NumOptionsHdl, PushButton* );
 
+    sal_uInt16 m_nIndentsId;
+    sal_uInt16 m_nAlignId;
+    sal_uInt16 m_nTextFlowId;
+    sal_uInt16 m_nAsianTypo;
+    sal_uInt16 m_nFontId;
+    sal_uInt16 m_nFontEffectId;
+    sal_uInt16 m_nPositionId;
+    sal_uInt16 m_nAsianLayoutId;
+    sal_uInt16 m_nTabId;
+    sal_uInt16 m_nOutlineId;
+    sal_uInt16 m_nDropCapsId;
+    sal_uInt16 m_nBackgroundId;
+    sal_uInt16 m_nBorderId;
+    sal_uInt16 m_nConditionId;
+    sal_uInt16 m_nTypeId;
+    sal_uInt16 m_nOptionsId;
+    sal_uInt16 m_nWrapId;
+    sal_uInt16 m_nColumnId;
+    sal_uInt16 m_nMacroId;
+    sal_uInt16 m_nHeaderId;
+    sal_uInt16 m_nFooterId;
+    sal_uInt16 m_nPageId;
+    sal_uInt16 m_nFootNoteId;
+    sal_uInt16 m_nTextGridId;
+    sal_uInt16 m_nSingleId;
+    sal_uInt16 m_nBulletId;
+    sal_uInt16 m_nNumId;
+    sal_uInt16 m_nBmpId;
+    sal_uInt16 m_nNumOptId;
+    sal_uInt16 m_nNumPosId;
+
 public:
-    // @param nSlot
-    // Identifies optional Slot by which the creation of the Template (Style) dialog is triggered.
-    // Currently used, if nRegion == SFX_STYLE_FAMILY_PAGE in order to activate certain dialog pane
+    // @param sPage
+    // Identifies name of page to open at by default
     SwTemplateDlg(  Window*             pParent,
                     SfxStyleSheetBase&  rBase,
                     sal_uInt16          nRegion,
-                    const sal_uInt16    nSlot = 0,
+                    OString             sPage = OString(),
                     SwWrtShell*         pActShell = 0,
-                    sal_Bool            bNew = sal_False );
+                    bool                bNew = false );
 
-    ~SwTemplateDlg();
     const SfxItemSet* GetRefreshedSet();
 
     virtual void PageCreated( sal_uInt16 nId, SfxTabPage &rPage );

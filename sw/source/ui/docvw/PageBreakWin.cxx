@@ -243,7 +243,7 @@ void SwPageBreakWin::Select( )
 
                         SwPaM aPaM( *pNd );
                         SwPaMItem aPaMItem( pEditWin->GetView().GetPool( ).GetWhich( FN_PARAM_PAM ), &aPaM );
-                        SfxUInt16Item aItem( pEditWin->GetView().GetPool( ).GetWhich( SID_PARA_DLG ), TP_PARA_EXT );
+                        SfxStringItem aItem( pEditWin->GetView().GetPool( ).GetWhich( SID_PARA_DLG ), "textflow" );
                         pEditWin->GetView().GetViewFrame()->GetDispatcher()->Execute(
                                 SID_PARA_DLG, SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD, &aItem, &aPaMItem, NULL );
                     }

@@ -468,7 +468,7 @@ public:
                                                     sal_uInt8 nDialogMode,
                                                     const String *pCollName = 0,
                                                     sal_Bool bDraw = sal_False,
-                                                    sal_uInt16 nDefPage = 0);
+                                                    OString sDefPage = OString() );
 
     virtual AbstractSwSelGlossaryDlg * CreateSwSelGlossaryDlg(Window * pParent, const String &rShortName); //add for SwSelGlossaryDlg
     virtual VclAbstractDialog * CreateVclAbstractDialog ( Window * pParent, SwWrtShell &rSh, int nResId ); //add for  SwTableHeightDlg SwSortDlg
@@ -501,10 +501,10 @@ public:
     virtual SfxAbstractApplyTabDialog*  CreateTemplateDialog(
                                                 Window*             pParent,
                                                 SfxStyleSheetBase&  rBase,
-                                                sal_uInt16              nRegion,
-                                                const sal_uInt16 nSlot = 0,
+                                                sal_uInt16          nRegion,
+                                                OString             sPage = OString(),
                                                 SwWrtShell*         pActShell = 0,
-                                                sal_Bool                bNew = sal_False ); //add for SwTemplateDlg
+                                                bool                bNew = false); //add for SwTemplateDlg
     virtual AbstractGlossaryDlg*        CreateGlossaryDlg(SfxViewFrame* pViewFrame,
                                                 SwGlossaryHdl* pGlosHdl,
                                                 SwWrtShell *pWrtShell); //add for SwGlossaryDlg
