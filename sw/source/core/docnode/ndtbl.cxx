@@ -103,7 +103,7 @@ extern void ClearFEShellTabCols();
 // Located in gctable.cxx
 extern sal_Bool sw_GC_Line_Border( const SwTableLine*& , void* pPara );
 
-static void lcl_SetDfltBoxAttr( SwFrmFmt& rFmt, sal_uInt8 nId )
+static void lcl_SetDfltBoxAttr( SwFrmFmt& rFmt, sal_uInt8 nId, sal_Bool bSetBorders )
 {
     sal_Bool bTop = false, bBottom = false, bLeft = false, bRight = false;
     switch ( nId )
@@ -131,7 +131,8 @@ static void lcl_SetDfltBoxAttr( SwFrmFmt& rFmt, sal_uInt8 nId )
         aBox.SetLine( &aLine, BOX_LINE_LEFT );
     if ( bRight )
         aBox.SetLine( &aLine, BOX_LINE_RIGHT );
-    rFmt.SetFmtAttr( aBox );
+    if ( bSetBorders )
+        rFmt.SetFmtAttr( aBox );
 }
 
 typedef std::map<SwFrmFmt *, SwTableBoxFmt *> DfltBoxAttrMap_t;
@@ -139,7 +140,7 @@ typedef std::vector<DfltBoxAttrMap_t *> DfltBoxAttrList_t;
 
 static void
 lcl_SetDfltBoxAttr(SwTableBox& rBox, DfltBoxAttrList_t & rBoxFmtArr,
-        sal_uInt8 const nId, SwTableAutoFmt const*const pAutoFmt = 0)
+        sal_uInt8 const nId, sal_Bool bSetBorders )
 {
     DfltBoxAttrMap_t * pMap = rBoxFmtArr[ nId ];
     if (!pMap)
@@ -162,7 +163,7 @@ lcl_SetDfltBoxAttr(SwTableBox& rBox, DfltBoxAttrList_t & rBoxFmtArr,
         pNewTableBoxFmt = pDoc->MakeTableBoxFmt();
         pNewTableBoxFmt->SetFmtAttr( pBoxFrmFmt->GetAttrSet().Get( RES_FRM_SIZE ) );
 
-        ::lcl_SetDfltBoxAttr( *pNewTableBoxFmt, nId );
+        ::lcl_SetDfltBoxAttr( *pNewTableBoxFmt, nId, bSetBorders );
 
         (*pMap)[pBoxFrmFmt] = pNewTableBoxFmt;
     }
@@ -170,7 +171,7 @@ lcl_SetDfltBoxAttr(SwTableBox& rBox, DfltBoxAttrList_t & rBoxFmtArr,
 }
 
 static SwTableBoxFmt *lcl_CreateDfltBoxFmt( SwDoc &rDoc, std::vector<SwTableBoxFmt*> &rBoxFmtArr,
-                                    sal_uInt16 nCols, sal_uInt8 nId )
+                                    sal_uInt16 nCols, sal_uInt8 nId, sal_Bool bSetBorders )
 {
     if ( !rBoxFmtArr[nId] )
     {
@@ -178,7 +179,7 @@ static SwTableBoxFmt *lcl_CreateDfltBoxFmt( SwDoc &rDoc, std::vector<SwTableBoxF
         if( USHRT_MAX != nCols )
             pBoxFmt->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE,
                                             USHRT_MAX / nCols, 0 ));
-        ::lcl_SetDfltBoxAttr( *pBoxFmt, nId );
+        ::lcl_SetDfltBoxAttr( *pBoxFmt, nId, bSetBorders );
         rBoxFmtArr[ nId ] = pBoxFmt;
     }
     return rBoxFmtArr[nId];
@@ -442,7 +443,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
 
     std::vector<SwTableBoxFmt*> aBoxFmtArr;
     SwTableBoxFmt* pBoxFmt = 0;
-    if( !bDfltBorders || pTAFmt )
+    if( !bDfltBorders )
     {
         pBoxFmt = MakeTableBoxFmt();
         pBoxFmt->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE, USHRT_MAX / nCols, 0 ));
@@ -460,10 +461,10 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
         for( sal_uInt16 i = 0; i < nCols; ++i )
         {
             SwTableBoxFmt *pBoxF;
-            if( !pTAFmt && bDfltBorders )
+            if( bDfltBorders )
             {
                 sal_uInt8 nBoxId = (i < nCols - 1 ? 0 : 1) + (n ? 2 : 0 );
-                pBoxF = new SwTableBoxFmt( *::lcl_CreateDfltBoxFmt( *this, aBoxFmtArr, nCols, nBoxId) );
+                pBoxF = new SwTableBoxFmt( *::lcl_CreateDfltBoxFmt( *this, aBoxFmtArr, nCols, nBoxId, pTAFmt == 0) );
             }
             else
                 pBoxF = new SwTableBoxFmt( *pBoxFmt );
@@ -705,7 +706,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTblOpts,
 
     pNdTbl->RegisterToFormat( *pTableFmt );
 
-    if( rInsTblOpts.mnInsMode & tabopts::DEFAULT_BORDER )
+    if( pTAFmt || rInsTblOpts.mnInsMode & tabopts::DEFAULT_BORDER )
     {
         sal_uInt8 nBoxArrLen = 4;
         boost::scoped_ptr< DfltBoxAttrList_t > aBoxFmtArr1;
@@ -732,10 +733,10 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTblOpts,
 
                 sal_uInt8 nId = (i < nCols - 1 ? 0 : 1) + (n ? 2 : 0 );
                 if( bUseBoxFmt )
-                    ::lcl_SetDfltBoxAttr( *pBox, *aBoxFmtArr1, nId );
+                    ::lcl_SetDfltBoxAttr( *pBox, *aBoxFmtArr1, nId, pTAFmt == 0 );
                 else
                 {
-                    pBoxF = new SwTableBoxFmt ( *::lcl_CreateDfltBoxFmt( *this, *aBoxFmtArr2, USHRT_MAX, nId ) );
+                    pBoxF = new SwTableBoxFmt ( *::lcl_CreateDfltBoxFmt( *this, *aBoxFmtArr2, USHRT_MAX, nId, pTAFmt == 0 ) );
                     pBoxF->SetFmtAttr( pBox->GetFrmFmt()->GetFrmSize() );
                     pBox->ChgFrmFmt( pBoxF );
                 }
