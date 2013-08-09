@@ -1074,9 +1074,9 @@ void AttributeOutputBase::TOXMark( const SwTxtNode& rNode, const SwTOXMark& rAtt
     {
         case TOX_INDEX:
             eType = ww::eXE;
-            if ( rAttr.GetPrimaryKey().Len() )
+            if ( !rAttr.GetPrimaryKey().isEmpty() )
             {
-                if ( rAttr.GetSecondaryKey().Len() )
+                if ( !rAttr.GetSecondaryKey().isEmpty() )
                 {
                     sTxt.Insert( ':', 0 );
                     sTxt.Insert( rAttr.GetSecondaryKey(), 0 );

@@ -442,10 +442,10 @@ sal_uInt16 SwTOXIndex::GetLevel() const
     sal_uInt16 nForm = FORM_PRIMARY_KEY;
 
     if( 0 == (GetOptions() & nsSwTOIOptions::TOI_KEY_AS_ENTRY)&&
-        pTxtMark->GetTOXMark().GetPrimaryKey().Len() )
+        !pTxtMark->GetTOXMark().GetPrimaryKey().isEmpty() )
     {
         nForm = FORM_SECONDARY_KEY;
-        if( pTxtMark->GetTOXMark().GetSecondaryKey().Len() )
+        if( !pTxtMark->GetTOXMark().GetSecondaryKey().isEmpty() )
             nForm = FORM_ENTRY;
     }
     return nForm;

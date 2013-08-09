@@ -103,14 +103,12 @@ sal_uInt16 SwDoc::GetTOIKeys( SwTOIKeyType eTyp, std::vector<String>& rArr ) con
         if ( pMark && pMark->GetpTxtNd() &&
              pMark->GetpTxtNd()->GetNodes().IsDocNodes() )
         {
-            const String* pStr;
-            if( TOI_PRIMARY == eTyp )
-                pStr = &((SwTOXMark*)pItem)->GetPrimaryKey();
-            else
-                pStr = &((SwTOXMark*)pItem)->GetSecondaryKey();
+            const OUString sStr = TOI_PRIMARY == eTyp
+                ? pItem->GetPrimaryKey()
+                : pItem->GetSecondaryKey();
 
-            if( pStr->Len() )
-                rArr.push_back( *pStr );
+            if( !sStr.isEmpty() )
+                rArr.push_back( sStr );
         }
     }
 
@@ -359,7 +357,7 @@ const SwTOXBaseSection* SwDoc::InsertTableOf( const SwPosition& rPos,
             // Value of 1st parameter = default value.
             pNewSection->Update( 0, true );
         }
-        else if( 1 == rTOX.GetTitle().Len() && IsInReading() )
+        else if( rTOX.GetTitle().getLength()==1 && IsInReading() )
         // insert title of TOX
         {
             // then insert the headline section
@@ -610,12 +608,12 @@ const SwTOXType* SwDoc::InsertTOXType( const SwTOXType& rTyp )
     return pNew;
 }
 
-String SwDoc::GetUniqueTOXBaseName( const SwTOXType& rType,
-                                    const String& rChkStr ) const
+OUString SwDoc::GetUniqueTOXBaseName( const SwTOXType& rType,
+                                      const OUString sChkStr ) const
 {
-    bool bUseChkStr = rChkStr.Len()>0;
-    String aName( rType.GetTypeName() );
-    xub_StrLen nNmLen = aName.Len();
+    bool bUseChkStr = !sChkStr.isEmpty();
+    const OUString aName( rType.GetTypeName() );
+    const sal_Int32 nNmLen = aName.getLength();
 
     sal_uInt16 nNum = 0;
     const sal_uInt16 nFlagSize = ( mpSectionFmtTbl->size() / 8 ) +2;
@@ -631,15 +629,15 @@ String SwDoc::GetUniqueTOXBaseName( const SwTOXType& rType,
         const SwSection& rSect = pSectNd->GetSection();
         if (rSect.GetType()==TOX_CONTENT_SECTION)
         {
-            const String& rNm = rSect.GetSectionName();
-            if( rNm.Match( aName ) == nNmLen )
+            const OUString rNm = rSect.GetSectionName();
+            if ( aName.startsWith(rNm) )
             {
                 // Calculate number and set the Flag
-                nNum = (sal_uInt16)rNm.Copy( nNmLen ).ToInt32();
+                nNum = (sal_uInt16)rNm.copy( nNmLen ).toInt32();
                 if( nNum-- && nNum < mpSectionFmtTbl->size() )
                     pSetFlags[ nNum / 8 ] |= (0x01 << ( nNum & 0x07 ));
             }
-            if( bUseChkStr && rChkStr.Equals( rNm ) )
+            if ( bUseChkStr && sChkStr==rNm )
                 bUseChkStr = false;
         }
     }
@@ -666,8 +664,8 @@ String SwDoc::GetUniqueTOXBaseName( const SwTOXType& rType,
     }
     delete [] pSetFlags;
     if ( bUseChkStr )
-        return rChkStr;
-    return aName += OUString::number( ++nNum );
+        return sChkStr;
+    return aName + OUString::number( ++nNum );
 }
 
 bool SwDoc::SetTOXBaseName(const SwTOXBase& rTOXBase, const String& rName)
@@ -879,7 +877,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
     }
 
     // insert title of TOX
-    if( GetTitle().Len() )
+    if ( !GetTitle().isEmpty() )
     {
         // then insert the headline section
         SwNodeIndex aIdx( *pSectNd, +1 );
@@ -924,7 +922,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
         (TOX_ILLUSTRATIONS == SwTOXBase::GetType() && IsFromObjectNames()))
         UpdateCntnt( nsSwTOXElement::TOX_GRAPHIC, pOwnChapterNode );
 
-    if( GetSequenceName().Len() && !IsFromObjectNames() &&
+    if( !GetSequenceName().isEmpty() && !IsFromObjectNames() &&
         (TOX_TABLES == SwTOXBase::GetType() ||
          TOX_ILLUSTRATIONS == SwTOXBase::GetType() ) )
         UpdateSequence( pOwnChapterNode );
@@ -998,7 +996,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
         // Task 70995 - save and restore PageDesc and Break Attributes
         if( pFirstEmptyNd->HasSwAttrSet() )
         {
-            if( GetTitle().Len() )
+            if( !GetTitle().isEmpty() )
                 aEndIdx = *pSectNd;
             else
                 aEndIdx = *pFirstEmptyNd;
@@ -1162,12 +1160,12 @@ void SwTOXBaseSection::UpdateMarks( const SwTOXInternational& rIntl,
                                             GetOptions(), FORM_ENTRY, rIntl, aLocale );
                     InsertSorted(pBase);
                     if(GetOptions() & nsSwTOIOptions::TOI_KEY_AS_ENTRY &&
-                        pTxtMark->GetTOXMark().GetPrimaryKey().Len())
+                        !pTxtMark->GetTOXMark().GetPrimaryKey().isEmpty())
                     {
                         pBase = new SwTOXIndex( *pTOXSrc, pTxtMark,
                                                 GetOptions(), FORM_PRIMARY_KEY, rIntl, aLocale );
                         InsertSorted(pBase);
-                        if(pTxtMark->GetTOXMark().GetSecondaryKey().Len())
+                        if (!pTxtMark->GetTOXMark().GetSecondaryKey().isEmpty())
                         {
                             pBase = new SwTOXIndex( *pTOXSrc, pTxtMark,
                                                     GetOptions(), FORM_SECONDARY_KEY, rIntl, aLocale );
@@ -1826,7 +1824,7 @@ void SwTOXBaseSection::GenerateText( sal_uInt16 nArrayIdx,
             case TOKEN_END: break;
             }
 
-            if( aToken.sCharStyleName.Len() )
+            if ( !aToken.sCharStyleName.isEmpty() )
             {
                 SwCharFmt* pCharFmt;
                 if( USHRT_MAX != aToken.nPoolId )
@@ -2115,7 +2113,7 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
     }
 
     // The main entries should get their character style
-    if(pCharStyleIdx && !pCharStyleIdx->empty() && GetMainEntryCharStyle().Len())
+    if(pCharStyleIdx && !pCharStyleIdx->empty() && !GetMainEntryCharStyle().isEmpty())
     {
         // eventually the last index must me appended
         if(pCharStyleIdx->size()&0x01)
@@ -2155,13 +2153,13 @@ void SwTOXBaseSection::InsertSorted(SwTOXSortTabBase* pNew)
         // Evaluate Key
         // Calculate the range where to insert
         if( 0 == (GetOptions() & nsSwTOIOptions::TOI_KEY_AS_ENTRY) &&
-            rMark.GetPrimaryKey().Len() )
+            !rMark.GetPrimaryKey().isEmpty() )
         {
             aRange = GetKeyRange( rMark.GetPrimaryKey(),
                                   rMark.GetPrimaryKeyReading(),
                                   *pNew, FORM_PRIMARY_KEY, aRange );
 
-            if( rMark.GetSecondaryKey().Len() )
+            if( !rMark.GetSecondaryKey().isEmpty() )
                 aRange = GetKeyRange( rMark.GetSecondaryKey(),
                                       rMark.GetSecondaryKeyReading(),
                                       *pNew, FORM_SECONDARY_KEY, aRange );

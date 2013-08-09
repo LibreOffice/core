@@ -24,7 +24,7 @@
 #include <boost/unordered_map.hpp>
 #include <tox.hxx>
 #include <cstdio>
-class String;
+#include "tools/string.hxx"
 
 class SwNode;
 class SwTxtAttr;

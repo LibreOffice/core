@@ -30,7 +30,7 @@ SwTxtTOXMark::SwTxtTOXMark( SwTOXMark& rAttr,
     , m_pEnd( 0 )
 {
     rAttr.pTxtAttr = this;
-    if ( !rAttr.GetAlternativeText().Len() )
+    if ( rAttr.GetAlternativeText().isEmpty() )
     {
         m_nEnd = *pEnd;
         m_pEnd = & m_nEnd;
@@ -58,7 +58,7 @@ void SwTxtTOXMark::CopyTOXMark( SwDoc* pDoc )
     TOXTypes    eType   = rTOX.GetTOXType()->GetType();
     sal_uInt16      nCount  = pDoc->GetTOXTypeCount( eType );
     const SwTOXType* pType = 0;
-    const XubString& rNm = rTOX.GetTOXType()->GetTypeName();
+    const OUString rNm = rTOX.GetTOXType()->GetTypeName();
 
     // kein entsprechender Verzeichnistyp vorhanden -> anlegen
     // sonst verwenden
