@@ -135,7 +135,7 @@ void WPXSvStreamTest::testRead()
 void WPXSvStreamTest::testSeekSet()
 {
     const shared_ptr<WPXInputStream> pInput(lcl_createStream());
-    const size_t nLen = sizeof aText;
+    const long nLen = sizeof aText;
 
     // check initial state
     CPPUNIT_ASSERT_EQUAL(0L, pInput->tell());
@@ -173,7 +173,7 @@ void WPXSvStreamTest::testSeekSet()
 void WPXSvStreamTest::testSeekCur()
 {
     const shared_ptr<WPXInputStream> pInput(lcl_createStream());
-    const size_t nLen = sizeof aText;
+    const long nLen = sizeof aText;
 
     // check initial state
     CPPUNIT_ASSERT(!pInput->atEOS());
@@ -210,7 +210,7 @@ void WPXSvStreamTest::testSeekCur()
 void WPXSvStreamTest::testSeekEnd()
 {
     const shared_ptr<WPXInputStream> pInput(lcl_createStream());
-    const size_t nLen = sizeof aText;
+    const long nLen = sizeof aText;
 
     // check initial state
     CPPUNIT_ASSERT(!pInput->atEOS());
