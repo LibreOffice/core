@@ -1799,7 +1799,10 @@ sal_Bool SlideShowImpl::setProperty( beans::PropertyValue const& rProperty )
     if ( rProperty.Name == "PointerVisible" )
     {
         bool visible;
-        rProperty.Value >>= visible;
+        if (!(rProperty.Value >>= visible))
+        {
+            return false;
+        }
         mpPointerSymbol->setVisible(visible);
     }
 
