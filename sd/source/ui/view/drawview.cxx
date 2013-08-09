@@ -140,13 +140,11 @@ sal_Bool DrawView::SetAttributes(const SfxItemSet& rSet,
     {
         SfxStyleSheetBasePool* pStShPool = mrDoc.GetStyleSheetPool();
         SdPage& rPage = *mpDrawViewShell->getCurrentPage();
-        String aLayoutName = rPage.GetName();
         SdrTextObj* pEditObject = static_cast< SdrTextObj* >( GetTextEditObject() );
 
         if (pEditObject)
         {
             // Textedit
-            String aTemplateName(aLayoutName);
 
             sal_uInt32 nInv = pEditObject->GetObjInventor();
 
@@ -180,17 +178,13 @@ sal_Bool DrawView::SetAttributes(const SfxItemSet& rSet,
                     OutlinerView* pOV   = GetTextEditOutlinerView();
                     ::Outliner* pOutliner = pOV->GetOutliner();
 
-                    aTemplateName += String(SdResId(STR_LAYOUT_OUTLINE));
-
                     pOutliner->SetUpdateMode(sal_False);
                     mpDocSh->SetWaitCursor( sal_True );
 
                     // replace placeholder by template name
-                    String aComment(SdResId(STR_UNDO_CHANGE_PRES_OBJECT));
-                    xub_StrLen nPos = aComment.Search( (sal_Unicode)'$' );
-                    aComment.Erase(nPos, 1);
-                    aComment.Insert( String((SdResId(STR_PSEUDOSHEET_OUTLINE))), nPos);
-                    mpDocSh->GetUndoManager()->EnterListAction( aComment, String() );
+                    OUString aComment(SD_RESSTR(STR_UNDO_CHANGE_PRES_OBJECT));
+                    aComment = aComment.replaceFirst("$", SD_RESSTR(STR_PSEUDOSHEET_OUTLINE));
+                    mpDocSh->GetUndoManager()->EnterListAction( aComment, OUString() );
 
                     std::vector<Paragraph*> aSelList;
                     pOV->CreateSelectionList(aSelList);
@@ -202,9 +196,8 @@ sal_Bool DrawView::SetAttributes(const SfxItemSet& rSet,
                     {
                         sal_Int32 nParaPos = pOutliner->GetAbsPos( pPara );
                         sal_Int16 nDepth = pOutliner->GetDepth( nParaPos );
-                        String aName(rPage.GetLayoutName());
-                        aName += (sal_Unicode)(' ');
-                        aName += OUString::number( (nDepth <= 0) ? 1 : nDepth + 1 );
+                        OUString aName = rPage.GetLayoutName() + " " +
+                            OUString::number((nDepth <= 0) ? 1 : nDepth + 1);
                         SfxStyleSheet* pSheet = (SfxStyleSheet*)pStShPool->Find(aName, SD_STYLE_FAMILY_MASTERPAGE);
                         DBG_ASSERT(pSheet, "StyleSheet not found");
 
@@ -229,9 +222,8 @@ sal_Bool DrawView::SetAttributes(const SfxItemSet& rSet,
                         sal_Int16 nChild;
                         for( nChild = nDepth + 1; nChild < 9; nChild++ )
                         {
-                            String aSheetName(rPage.GetLayoutName());
-                            aSheetName += (sal_Unicode)(' ');
-                            aSheetName += OUString::number( nChild <= 0 ? 1 : nChild + 1 );
+                            OUString aSheetName = rPage.GetLayoutName() + " " +
+                                OUString::number((nChild <= 0) ? 1 : nChild + 1);
                             SfxStyleSheet* pOutlSheet = static_cast< SfxStyleSheet* >(pStShPool->Find(aSheetName, SD_STYLE_FAMILY_MASTERPAGE));
 
                             if( pOutlSheet )
@@ -273,7 +265,6 @@ sal_Bool DrawView::SetAttributes(const SfxItemSet& rSet,
                 {
                     sal_uInt16 eObjKind = pObject->GetObjIdentifier();
                     PresObjKind ePresObjKind = rPage.GetPresObjKind(pObject);
-                    String aTemplateName(aLayoutName);
 
                     if (ePresObjKind == PRESOBJ_TITLE ||
                         ePresObjKind == PRESOBJ_NOTES)
@@ -297,12 +288,10 @@ sal_Bool DrawView::SetAttributes(const SfxItemSet& rSet,
                     else if (eObjKind == OBJ_OUTLINETEXT)
                     {
                         // Presentation object outline
-                        aTemplateName += String(SdResId(STR_LAYOUT_OUTLINE));
                         for (sal_uInt16 nLevel = 9; nLevel > 0; nLevel--)
                         {
-                            String aName(rPage.GetLayoutName());
-                            aName += (sal_Unicode)(' ');
-                            aName += OUString::number( (sal_Int32)nLevel );
+                            OUString aName = rPage.GetLayoutName() + " " +
+                                OUString::number(nLevel);
                             SfxStyleSheet* pSheet = (SfxStyleSheet*)pStShPool->
                                                 Find(aName, SD_STYLE_FAMILY_MASTERPAGE);
                             DBG_ASSERT(pSheet, "StyleSheet not found");
@@ -435,7 +424,7 @@ sal_Bool DrawView::SetStyleSheet(SfxStyleSheet* pStyleSheet, sal_Bool bDontRemov
         {
 
             InfoBox(mpDrawViewShell->GetActiveWindow(),
-                    String(SdResId(STR_ACTION_NOTPOSSIBLE))).Execute();
+                    SD_RESSTR(STR_ACTION_NOTPOSSIBLE)).Execute();
             bResult = sal_False;
         }
         else
@@ -545,9 +534,8 @@ void DrawView::DeleteMarked()
 
     if( pUndoManager )
     {
-        String aUndo( SVX_RES(STR_EditDelete) );
-        String aSearchString("%1");
-        aUndo.SearchAndReplace(aSearchString, GetDescriptionOfMarkedObjects());
+        OUString aUndo(SVX_RESSTR(STR_EditDelete));
+        aUndo = aUndo.replaceFirst("%1", GetDescriptionOfMarkedObjects());
         pUndoManager->EnterListAction(aUndo, aUndo);
     }
 
