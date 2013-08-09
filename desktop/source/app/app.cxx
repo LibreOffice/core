@@ -2235,6 +2235,21 @@ void Desktop::Main()
             OfficeIPCThread::SetDowning();
             FatalError( MakeStartupErrorMessage(exAnyCfg.Message) );
         }
+        catch( const ::com::sun::star::uno::Exception& exUNO)
+        {
+            OfficeIPCThread::SetDowning();
+            FatalError( exUNO.Message);
+        }
+        catch( const std::exception& exSTD)
+        {
+            OfficeIPCThread::SetDowning();
+            FatalError( OUString::createFromAscii( exSTD.what()));
+        }
+        catch( ...)
+        {
+            OfficeIPCThread::SetDowning();
+            FatalError( OUString(RTL_CONSTASCII_USTRINGPARAM( "Caught Unknown Exception: Aborting!")));
+        }
     }
     // CAUTION: you do not necessarily get here e.g. on the Mac.
     // please put all deinitialization code into doShutdown
