@@ -11,6 +11,7 @@
 #include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/graphic/GraphicType.hpp>
@@ -160,6 +161,7 @@ public:
     void testFdo67365();
     void testFdo67498();
     void testFdo47440();
+    void testFdo53556();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -305,6 +307,7 @@ void Test::run()
         {"fdo67365.rtf", &Test::testFdo67365},
         {"fdo67498.rtf", &Test::testFdo67498},
         {"fdo47440.rtf", &Test::testFdo47440},
+        {"fdo53556.rtf", &Test::testFdo53556},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1487,6 +1490,19 @@ void Test::testFdo47440()
     uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, getProperty<sal_Int16>(xDraws->getByIndex(0), "HoriOrientRelation"));
     CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, getProperty<sal_Int16>(xDraws->getByIndex(0), "VertOrientRelation"));
+}
+
+void Test::testFdo53556()
+{
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    // This was drawing::FillStyle_SOLID, which resulted in being non-transparent, hiding text which would be visible.
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, getProperty<drawing::FillStyle>(xDraws->getByIndex(2), "FillStyle"));
+
+    // This was a com.sun.star.drawing.CustomShape, which resulted in lack of word wrapping in the bugdoc.
+    uno::Reference<beans::XPropertySet> xShapeProperties(xDraws->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShapeDescriptor> xShapeDescriptor(xShapeProperties, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("FrameShape"), xShapeDescriptor->getShapeType());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
