@@ -386,11 +386,8 @@ namespace
                     aDateTime.Minutes, aDateTime.Hours, aDateTime.IsUTC);
         OUString sTime = lcl_toXSD_UNOTime_typed( aTime );
 
-        OUStringBuffer sInfo;
-        sInfo.append( sDate );
-        sInfo.append( (sal_Unicode) 'T' );
-        sInfo.append( sTime );
-        return sInfo.makeStringAndClear();
+        OUString sRet = sDate + "T" + sTime;
+        return sRet;
     }
 
     // ------------------------------------------------------------------------
