@@ -256,7 +256,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                 {
                     const SwTOXType* pTType = aCntntAtPos.pFndTxtAttr->
                                         GetTOXMark().GetTOXType();
-                    if( pTType && pTType->GetTypeName().Len() )
+                    if( pTType && !pTType->GetTypeName().isEmpty() )
                     {
                         sTxt.InsertAscii( ": ", 0 );
                         sTxt.Insert( pTType->GetTypeName(), 0 );

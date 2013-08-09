@@ -1400,8 +1400,8 @@ public:
     const SwAttrSet& GetTOXBaseAttrSet(const SwTOXBase& rTOX) const;
 
     bool DeleteTOX( const SwTOXBase& rTOXBase, bool bDelNodes = false );
-    String GetUniqueTOXBaseName( const SwTOXType& rType,
-                                const String sChkStr ) const;
+    OUString GetUniqueTOXBaseName( const SwTOXType& rType,
+                                   const OUString sChkStr ) const;
 
     bool SetTOXBaseName(const SwTOXBase& rTOXBase, const String& rName);
     void SetTOXBaseProtection(const SwTOXBase& rTOXBase, sal_Bool bProtect);
