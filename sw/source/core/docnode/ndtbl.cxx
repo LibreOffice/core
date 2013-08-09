@@ -3556,7 +3556,7 @@ sal_Bool SwDoc::SetTableAutoFmt( const SwSelBoxes& rBoxes, const SwTableAutoFmt&
     bool const bUndo(GetIDocumentUndoRedo().DoesUndo());
     if (bUndo)
     {
-        pUndo = new SwUndoTblAutoFmt( *pTblNd, rNew );
+        pUndo = new SwUndoTblAutoFmt( *pTblNd );
         GetIDocumentUndoRedo().AppendUndo(pUndo);
         GetIDocumentUndoRedo().DoUndo(false);
     }

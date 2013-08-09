@@ -153,9 +153,7 @@ class SwUndoTblAutoFmt : public SwUndo
     void UndoRedo(bool const bUndo, ::sw::UndoRedoContext & rContext);
 
 public:
-    SwUndoTblAutoFmt( const SwTableNode& rTblNd, const SwTableAutoFmt& );
-
-    virtual ~SwUndoTblAutoFmt();
+    SwUndoTblAutoFmt( const SwTableNode& rTblNd );
 
     virtual void UndoImpl( ::sw::UndoRedoContext & );
     virtual void RedoImpl( ::sw::UndoRedoContext & );
