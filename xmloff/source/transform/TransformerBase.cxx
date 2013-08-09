@@ -1222,11 +1222,8 @@ sal_Bool XMLTransformerBase::NegPercent( OUString& rValue )
 
         sal_Int32 nIntVal = 100 - static_cast<sal_Int32>( nVal );
 
-        OUStringBuffer aNewValBuffer;
-        aNewValBuffer.append( nIntVal );
-        aNewValBuffer.append( sal_Unicode('%' ) );
+        rValue = OUString::number(nIntVal) + "%";
 
-        rValue = aNewValBuffer.makeStringAndClear();
         bRet = sal_True;
     }
 
