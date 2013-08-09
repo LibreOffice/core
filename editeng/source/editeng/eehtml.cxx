@@ -177,8 +177,7 @@ void EditHTMLParser::NextToken( int nToken )
         if (IsReadStyle() && aToken.Len())
         {
             // Each token represents a single line.
-            maStyleSource.append(aToken);
-            maStyleSource.append(sal_Unicode('\n'));
+            maStyleSource = maStyleSource + aToken + sal_Unicode('\n');
         }
     break;
     case HTML_TEXTTOKEN:
