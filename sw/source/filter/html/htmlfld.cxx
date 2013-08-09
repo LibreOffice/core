@@ -574,7 +574,7 @@ void SwHTMLParser::EndField()
     }
 
     bInField = sal_False;
-    aContents.Erase();
+    aContents = "";
 }
 
 void SwHTMLParser::InsertFieldText()
@@ -588,18 +588,15 @@ void SwHTMLParser::InsertFieldText()
 
 void SwHTMLParser::InsertCommentText( const sal_Char *pTag )
 {
-    sal_Bool bEmpty = aContents.Len() == 0;
+    sal_Bool bEmpty = aContents.isEmpty();
     if( !bEmpty )
-        aContents += '\n';
+        aContents += "\n";
 
     aContents += aToken;
     if( bEmpty && pTag )
     {
-        String aTmp( aContents );
-        aContents.AssignAscii( "HTML: <" );
-        aContents.AppendAscii( pTag );
-        aContents.Append( '>' );
-        aContents.Append( aTmp );
+        OUString aTmp( aContents );
+        aContents = "HTML: <" + OUString( *pTag ) + ">" + aTmp;
     }
 }
 

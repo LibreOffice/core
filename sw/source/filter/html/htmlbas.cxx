@@ -63,7 +63,7 @@ void SwHTMLParser::NewScript()
     ParseScriptOptions( aScriptType, sBaseURL, eScriptLang, aScriptURL,
                         aBasicLib, aBasicModule );
 
-    if( aScriptURL.Len() )
+    if( !aScriptURL.isEmpty() )
     {
         // Den Inhalt des Script-Tags ignorieren
         bIgnoreRawData = sal_True;
@@ -96,13 +96,13 @@ void SwHTMLParser::EndScript()
             (SwScriptFieldType*)pDoc->GetSysFldType( RES_SCRIPTFLD );
 
         SwScriptField aFld( pType, aScriptType,
-                            aScriptURL.Len() ? aScriptURL : aScriptSource,
-                            aScriptURL.Len()!=0 );
+                            !aScriptURL.isEmpty() ? aScriptURL : aScriptSource,
+                            !aScriptURL.isEmpty() );
         InsertAttr( SwFmtFld( aFld ) );
     }
 
     SwDocShell *pDocSh = pDoc->GetDocShell();
-    if( aScriptSource.Len() && pDocSh &&
+    if( !aScriptSource.isEmpty() && pDocSh &&
         bInsIntoBasic && IsNewDoc() )
     {
     // Fuer JavaScript und StarBasic noch ein Basic-Modul anlegen
@@ -111,7 +111,7 @@ void SwHTMLParser::EndScript()
 
         // get library name
         OUString aLibName;
-        if( aBasicLib.Len() )
+        if( !aBasicLib.isEmpty() )
             aLibName = aBasicLib;
         else
             aLibName = OUString("Standard");
@@ -136,13 +136,13 @@ void SwHTMLParser::EndScript()
 
             if ( xModLib.is() )
             {
-                if( !aBasicModule.Len() )
+                if( aBasicModule.isEmpty() )
                 {
                     // create module name
                     sal_Bool bFound = sal_True;
                     while( bFound )
                     {
-                        aBasicModule.AssignAscii( "Modul" );
+                        aBasicModule = "Modul";
                         aBasicModule += OUString::number( (sal_Int32)(++nSBModuleCnt) );
                         bFound = xModLib->hasByName( OUString( aBasicModule ) );
                     }
@@ -172,12 +172,12 @@ void SwHTMLParser::EndScript()
         }
     }
 
-    aScriptSource.Erase();
-    aScriptType.Erase();
-    aScriptURL.Erase();
+    aScriptSource = "";
+    aScriptType = "";
+    aScriptURL = "";
 
-    aBasicLib.Erase();
-    aBasicModule.Erase();
+    aBasicLib = "";
+    aBasicModule = "";
 }
 
 void SwHTMLParser::AddScriptSource()
@@ -187,7 +187,7 @@ void SwHTMLParser::AddScriptSource()
         (HTML_SL_STARBASIC==eScriptLang && aToken.GetChar( 0 ) == '\'') )
     {
         xub_StrLen nPos = STRING_NOTFOUND;
-        if( !aBasicLib.Len() )
+        if( aBasicLib.isEmpty() )
         {
             nPos = aToken.SearchAscii( OOO_STRING_SVTOOLS_HTML_SB_library );
             if( nPos != STRING_NOTFOUND )
@@ -198,7 +198,7 @@ void SwHTMLParser::AddScriptSource()
             }
         }
 
-        if( !aBasicModule.Len() && nPos==STRING_NOTFOUND )
+        if( aBasicModule.isEmpty() && nPos==STRING_NOTFOUND )
         {
             nPos = aToken.SearchAscii( OOO_STRING_SVTOOLS_HTML_SB_module );
             if( nPos != STRING_NOTFOUND )
@@ -211,17 +211,17 @@ void SwHTMLParser::AddScriptSource()
 
         if( nPos==STRING_NOTFOUND )
         {
-            if( aScriptSource.Len() )
-                aScriptSource += '\n';
-            (aScriptSource += aToken);
+            if( !aScriptSource.isEmpty() )
+                aScriptSource += "\n";
+            aScriptSource += aToken;
         }
     }
-    else if( aScriptSource.Len() || aToken.Len() )
+    else if( !aScriptSource.isEmpty() || aToken.Len() )
     {
         // Leerzeilen am Anfang werden ignoriert
-        if( aScriptSource.Len() )
+        if( !aScriptSource.isEmpty() )
         {
-            aScriptSource += '\n';
+            aScriptSource += "\n";
         }
         else
         {

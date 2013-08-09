@@ -238,8 +238,8 @@ sal_uLong HTMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPam, co
 
 
 SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCrsr, SvStream& rIn,
-                            const String& rPath,
-                            const String& rBaseURL,
+                            const OUString& rPath,
+                            const OUString& rBaseURL,
                             int bReadNewDoc,
                             SfxMedium* pMed, sal_Bool bReadUTF8,
                             sal_Bool bNoHTMLComments )
@@ -370,19 +370,17 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCrsr, SvStream& rIn,
         if( pMed )
         {
             sJmpMark = pMed->GetURLObject().GetMark();
-            if( sJmpMark.Len() )
+            if( !sJmpMark.isEmpty() )
             {
                 eJumpTo = JUMPTO_MARK;
-                xub_StrLen nLastPos, nPos = 0;
-                while( STRING_NOTFOUND != ( nLastPos =
-                        sJmpMark.Search( cMarkSeparator, nPos + 1 )) )
-                    nPos = nLastPos;
+                sal_Int32 nLastPos = sJmpMark.lastIndexOf( cMarkSeparator );
+                sal_Int32 nPos =  nLastPos != -1 ? nLastPos : 0;
 
                 String sCmp;
                 if (nPos)
                 {
                     sCmp = comphelper::string::remove(
-                        sJmpMark.Copy(nPos + 1), ' ');
+                        sJmpMark.copy(nPos + 1), ' ');
                 }
 
                 if( sCmp.Len() )
@@ -400,13 +398,14 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCrsr, SvStream& rIn,
                         eJumpTo = JUMPTO_NONE;  // das ist nichts gueltiges!
                     else
                         // ansonsten ist das ein normaler (Book)Mark
-                        nPos = STRING_LEN;
+                        nPos = -1;
                 }
                 else
-                    nPos = STRING_LEN;
+                    nPos = -1;
 
-                sJmpMark.Erase( nPos );
-                if( !sJmpMark.Len() )
+                if( nPos != -1 )
+                    sJmpMark = sJmpMark.copy( 0, nPos );
+                if( sJmpMark.isEmpty() )
                     eJumpTo = JUMPTO_NONE;
             }
         }
@@ -639,7 +638,7 @@ void SwHTMLParser::Continue( int nToken )
     {
         // noch die letzten Attribute setzen
         {
-            if( aScriptSource.Len() )
+            if( !aScriptSource.isEmpty() )
             {
                 SwScriptFieldType *pType =
                     (SwScriptFieldType*)pDoc->GetSysFldType( RES_SCRIPTFLD );
@@ -988,7 +987,7 @@ void SwHTMLParser::NextToken( int nToken )
             switch( nToken )
             {
             case HTML_TITLE_OFF:
-                if( IsNewDoc() && sTitle.Len() )
+                if( IsNewDoc() && !sTitle.isEmpty() )
                 {
                     if( pDoc->GetDocShell() ) {
                         uno::Reference<document::XDocumentPropertiesSupplier>
@@ -1005,15 +1004,15 @@ void SwHTMLParser::NextToken( int nToken )
                     }
                 }
                 bInTitle = sal_False;
-                sTitle.Erase();
+                sTitle = "";
                 break;
 
             case HTML_NONBREAKSPACE:
-                sTitle += ' ';
+                sTitle += " ";
                 break;
 
             case HTML_SOFTHYPH:
-                sTitle += '-';
+                sTitle += "-";
                 break;
 
             case HTML_TEXTTOKEN:
@@ -1021,16 +1020,16 @@ void SwHTMLParser::NextToken( int nToken )
                 break;
 
             default:
-                sTitle += '<';
+                sTitle += "<";
                 if( (HTML_TOKEN_ONOFF & nToken) && (1 & nToken) )
-                    sTitle += '/';
+                    sTitle += "/";
                 sTitle += sSaveToken;
                 if( aToken.Len() )
                 {
-                    sTitle += ' ';
+                    sTitle += " ";
                     sTitle += aToken;
                 }
-                sTitle += '>';
+                sTitle += ">";
                 break;
             }
 
@@ -1071,7 +1070,7 @@ void SwHTMLParser::NextToken( int nToken )
             case HTML_NOEMBED_OFF:
                 aContents = convertLineEnd(aContents, GetSystemLineEnd());
                 InsertComment( aContents, OOO_STRING_SVTOOLS_HTML_noembed );
-                aContents.Erase();
+                aContents = "";
                 bCallNextToken = sal_False;
                 bInNoEmbed = sal_False;
                 break;
@@ -1212,7 +1211,7 @@ void SwHTMLParser::NextToken( int nToken )
             }
             return;
         }
-        else if( aUnknownToken.Len() )
+        else if( !aUnknownToken.isEmpty() )
         {
             // Paste content of unknown tags.
             // (but surely if we are not in the header section) fdo#36080 fdo#34666
@@ -1236,18 +1235,18 @@ void SwHTMLParser::NextToken( int nToken )
             switch( nToken )
             {
             case HTML_UNKNOWNCONTROL_OFF:
-                if( aUnknownToken.CompareTo(sSaveToken) != COMPARE_EQUAL )
+                if( aUnknownToken.startsWith(sSaveToken) )
                     return;
             case HTML_FRAMESET_ON:
             case HTML_HEAD_OFF:
             case HTML_BODY_ON:
             case HTML_IMAGE:        // Don't know why Netscape acts this way.
-                aUnknownToken.Erase();
+                aUnknownToken = "";
                 break;
             case HTML_TEXTTOKEN:
                 return;
             default:
-                aUnknownToken.Erase();
+                aUnknownToken = "";
                 break;
             }
         }
@@ -1256,10 +1255,10 @@ void SwHTMLParser::NextToken( int nToken )
     switch( nToken )
     {
     case HTML_BODY_ON:
-        if( aStyleSource.Len() )
+        if( !aStyleSource.isEmpty() )
         {
             pCSS1Parser->ParseStyleSheet( aStyleSource );
-            aStyleSource.Erase();
+            aStyleSource = "";
         }
         if( IsNewDoc() )
         {
@@ -1377,8 +1376,8 @@ void SwHTMLParser::NextToken( int nToken )
             }
             else if( IsReadStyle() )
             {
-                if( aStyleSource.Len() )
-                    aStyleSource += '\n';
+                if( !aStyleSource.isEmpty() )
+                    aStyleSource += "\n";
                 aStyleSource += aToken;
             }
         }
@@ -1884,10 +1883,10 @@ void SwHTMLParser::NextToken( int nToken )
         break;
 
     case HTML_HEAD_OFF:
-        if( aStyleSource.Len() )
+        if( !aStyleSource.isEmpty() )
         {
             pCSS1Parser->ParseStyleSheet( aStyleSource );
-            aStyleSource.Erase();
+            aStyleSource = "";
         }
         break;
 
@@ -2009,7 +2008,7 @@ void SwHTMLParser::NextToken( int nToken )
         // does not start with a '!'.
         // (but judging from the code, also if does not start with a '%')
         // (and also if we're not somewhere we consider PRE)
-        if( IsInHeader() && !IsReadPRE() && !aUnknownToken.Len() &&
+        if( IsInHeader() && !IsReadPRE() && aUnknownToken.isEmpty() &&
             sSaveToken.Len() && '!' != sSaveToken.GetChar(0) &&
             '%' != sSaveToken.GetChar(0) )
             aUnknownToken = sSaveToken;
