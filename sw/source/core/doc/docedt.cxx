@@ -2009,8 +2009,8 @@ class SwHyphArgs : public SwInterHyphInfo
     xub_StrLen nPamLen;
 
 public:
-         SwHyphArgs( const SwPaM *pPam, const Point &rPoint,
-                         sal_uInt16* pPageCount, sal_uInt16* pPageStart );
+    SwHyphArgs( const SwPaM *pPam, const Point &rPoint,
+                sal_uInt16* pPageCount, sal_uInt16* pPageStart );
     void SetPam( SwPaM *pPam ) const;
     inline void SetNode( SwNode *pNew ) { pNode = pNew; }
     inline const SwNode *GetNode() const { return pNode; }

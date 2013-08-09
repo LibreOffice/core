@@ -229,31 +229,31 @@ sal_Bool SwServerObject::IsLinkInServer( const SwBaseLink* pChkLnk ) const
         // Get LinkManager
         const ::sfx2::SvBaseLinks& rLnks = pNds->GetDoc()->GetLinkManager().GetLinks();
 
-// To avoid recursions: convert ServerType!
-SwServerObject::ServerModes eSave = eType;
-if( !pChkLnk )
-    ((SwServerObject*)this)->eType = NONE_SERVER;
-        for( sal_uInt16 n = rLnks.size(); n; )
-        {
-            const ::sfx2::SvBaseLink* pLnk = &(*rLnks[ --n ]);
-            if( pLnk && OBJECT_CLIENT_GRF != pLnk->GetObjType() &&
-                pLnk->ISA( SwBaseLink ) &&
-                !((SwBaseLink*)pLnk)->IsNoDataFlag() &&
-                ((SwBaseLink*)pLnk)->IsInRange( nSttNd, nEndNd, nStt, nEnd ))
-            {
-                if( pChkLnk )
+        // To avoid recursions: convert ServerType!
+        SwServerObject::ServerModes eSave = eType;
+        if( !pChkLnk )
+            ((SwServerObject*)this)->eType = NONE_SERVER;
+                for( sal_uInt16 n = rLnks.size(); n; )
                 {
-                    if( pLnk == pChkLnk ||
-                        ((SwBaseLink*)pLnk)->IsRecursion( pChkLnk ) )
-                        return sal_True;
+                    const ::sfx2::SvBaseLink* pLnk = &(*rLnks[ --n ]);
+                    if( pLnk && OBJECT_CLIENT_GRF != pLnk->GetObjType() &&
+                        pLnk->ISA( SwBaseLink ) &&
+                        !((SwBaseLink*)pLnk)->IsNoDataFlag() &&
+                        ((SwBaseLink*)pLnk)->IsInRange( nSttNd, nEndNd, nStt, nEnd ))
+                    {
+                        if( pChkLnk )
+                        {
+                            if( pLnk == pChkLnk ||
+                                ((SwBaseLink*)pLnk)->IsRecursion( pChkLnk ) )
+                                return sal_True;
+                        }
+                        else if( ((SwBaseLink*)pLnk)->IsRecursion( (SwBaseLink*)pLnk ) )
+                            ((SwBaseLink*)pLnk)->SetNoDataFlag();
+                    }
                 }
-                else if( ((SwBaseLink*)pLnk)->IsRecursion( (SwBaseLink*)pLnk ) )
-                    ((SwBaseLink*)pLnk)->SetNoDataFlag();
-            }
-        }
-if( !pChkLnk )
-    //  *((int*)&eType) = eSave;
-    ((SwServerObject*)this)->eType = eSave;
+        if( !pChkLnk )
+            //  *((int*)&eType) = eSave;
+            ((SwServerObject*)this)->eType = eSave;
     }
 
     return sal_False;

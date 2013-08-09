@@ -1132,12 +1132,12 @@ SwFmt* SwDoc::GetFmtFromPool( sal_uInt16 nId )
             {
                 case POOLGRP_CHARFMT:
                     pNewFmt = _MakeCharFmt(aNm, pDeriveFmt, false, true);
-                break;
+                    break;
                 case POOLGRP_FRAMEFMT:
                     pNewFmt = _MakeFrmFmt(aNm, pDeriveFmt, false, true);
-                break;
+                    break;
                 default:
-                break;
+                    break;
             }
         }
 
