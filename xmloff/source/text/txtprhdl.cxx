@@ -857,11 +857,8 @@ sal_Bool XMLGrfMirrorPropHdl_Impl::exportXML(
         }
         else
         {
-            OUStringBuffer aOut( rStrExpValue.getLength() + 1 +
-                                 sVal.getLength() );
-            aOut.append( rStrExpValue );
-            aOut.append( (sal_Unicode)' ' );
-            aOut.append( sVal );
+            OUStringBuffer aOut( OUString::number(rStrExpValue.getLength() + 1 + sVal.getLength())
+                    + rStrExpValue + " " + sVal );
             rStrExpValue = aOut.makeStringAndClear();
         }
     }
