@@ -2925,20 +2925,6 @@ fi
 AC_SUBST(CROSS_COMPILING)
 
 dnl ===================================================================
-dnl  Test the gcc version
-dnl ===================================================================
-if test "$GCC" = "yes"; then
-    AC_MSG_CHECKING([the GCC version])
-    _gcc_version=`$CC -dumpversion`
-    GCCVER=`echo $_gcc_version | $AWK -F. '{ print \$1*100+\$2 }'`
-
-    AC_MSG_RESULT([gcc $_gcc_version])
-    if test "$GCCVER" -lt 0400; then
-        AC_MSG_ERROR([GCC $_gcc_version is too old, must be at least GCC 4.0.0])
-    fi
-fi
-
-dnl ===================================================================
 dnl  Is GCC actually Clang?
 dnl ===================================================================
 
@@ -2972,6 +2958,27 @@ if test "$CCACHE" != "" -a "$COM_GCC_IS_CLANG" = TRUE; then
             add_warning "Using ccache with Clang without CCACHE_CPP2 set causes spurious warnings."
     fi
 fi
+
+dnl ===================================================================
+dnl  Test the gcc version
+dnl ===================================================================
+if test "$GCC" = "yes" -a -z "$COM_GCC_IS_CLANG"; then
+    AC_MSG_CHECKING([the GCC version])
+    _gcc_version=`$CC -dumpversion`
+    GCC_VERSION=`echo $_gcc_version | $AWK -F. '{ print \$1*100+\$2 }'`
+
+    AC_MSG_RESULT([gcc $_gcc_version])
+    if test "$GCC_VERSION" -lt 0400; then
+        AC_MSG_ERROR([GCC $_gcc_version is too old, must be at least GCC 4.0.0])
+    fi
+else
+    # Explicitly force GCC_VERSION to be empty, even for Clang, to check incorrect uses.
+    # GCC version should generally be checked only when handling GCC-specific bugs, for testing
+    # things like features configure checks should be used, otherwise they may e.g. fail with Clang
+    # (which reports itself as GCC 4.2.1).
+    GCC_VERSION=
+fi
+AC_SUBST(GCC_VERSION)
 
 # ===================================================================
 # check various GCC options that Clang does not support now but maybe
@@ -5596,10 +5603,10 @@ if test "$GCC" = "yes"; then
     dnl libstdc++-v3/libsupc++/guard.cc for what #ifdefs actually make a
     dnl difference there.  Conservative advice from Jakub Jelinek is to assume
     dnl it working in GCC >= 4.3, so conservative way to check here is to use
-    dnl GCCVER for GCC but resort to __GLIBCXX__ corresponding to libstdc++
+    dnl GCC_VERSION for GCC but resort to __GLIBCXX__ corresponding to libstdc++
     dnl shipped with GCC 4.3.0 (cf. <http://gcc.gnu.org/onlinedocs/libstdc++/
     dnl manual/abi.html#abi.versioning.history>; 4.3.0 is 20080306, 4.2.4 is
-    dnl 20080519, 4.3.1 is 20080606) for Clang (for which GCCVER is notoriously
+    dnl 20080519, 4.3.1 is 20080606) for Clang (for which GCC_VERSION is notoriously
     dnl "too old"):
     if test "$_os" != Darwin -a "$_os" != Android; then
         if test "$COM_GCC_IS_CLANG" = TRUE; then
@@ -5611,7 +5618,7 @@ if test "$GCC" = "yes"; then
 #endif
                 ]])],[HAVE_THREADSAFE_STATICS=TRUE],[])
             AC_LANG_POP([C++])
-        elif test "${GCCVER?}" -ge 0403; then
+        elif test "${GCC_VERSION?}" -ge 0403; then
             HAVE_THREADSAFE_STATICS=TRUE
         fi
     fi

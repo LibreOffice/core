@@ -74,8 +74,8 @@ gb_COMPILERDEFS += \
 
 endif
 
-gb_CCVER := $(shell $(gb_CC) -dumpversion | $(gb_AWK) -F. -- '{ print $$1*10000+$$2*100+$$3 }')
-gb_GccLess460 := $(shell expr $(gb_CCVER) \< 40600)
+ifeq ($(COM_GCC_IS_CLANG),)
+gb_GccLess460 := $(shell expr $(GCC_VERSION) \< 406)
 
 #At least SLED 10.2 gcc 4.3 overly agressively optimizes uno::Sequence into
 #junk, so only strict-alias on >= 4.6.0
@@ -84,6 +84,7 @@ gb_StrictAliasingUnsafe := $(gb_GccLess460)
 ifeq ($(gb_StrictAliasingUnsafe),1)
 gb_CFLAGS += -fno-strict-aliasing
 gb_CXXFLAGS += -fno-strict-aliasing
+endif
 endif
 
 ifeq ($(HAVE_CXX11),TRUE)

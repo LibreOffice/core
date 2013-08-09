@@ -25,12 +25,11 @@ gb_TMPDIR:=$(if $(TMPDIR),$(TMPDIR),/tmp)
 include $(GBUILDDIR)/platform/com_GCC_defs.mk
 include $(GBUILDDIR)/platform/windows.mk
 
+ifeq ($(COM_GCC_IS_CLANG),)
 # This has to do something with calling conventions, which are different
 # for x86 and x64. Don't put it in the common part since it is breaking
 # and conde that uses boost::bind
-gb_CCVER := $(shell $(gb_CC) -dumpversion | $(gb_AWK) -F. -- \
-    '{ print $$1*10000+$$2*100+$$3 }')
-gb_GccLess470 := $(shell expr $(gb_CCVER) \< 40700)
+gb_GccLess470 := $(shell expr $(GCC_VERSION) \< 407)
 
 # Until GCC 4.6, MinGW used __cdecl by default, and BOOST_MEM_FN_ENABLE_CDECL
 # would result in ambiguous calls to overloaded boost::bind; since GCC 4.7,
@@ -38,6 +37,7 @@ gb_GccLess470 := $(shell expr $(gb_CCVER) \< 40700)
 # uses of boost::bind with functions annotated with SAL_CALL:
 ifeq ($(gb_GccLess470),0)
 gb_COMPILERDEFS += -DBOOST_MEM_FN_ENABLE_CDECL
+endif
 endif
 
 include $(GBUILDDIR)/platform/mingw.mk

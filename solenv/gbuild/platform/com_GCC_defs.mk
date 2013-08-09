@@ -37,8 +37,6 @@ ifeq ($(strip $(gb_COMPILERDEFAULTOPTFLAGS)),)
 gb_COMPILERDEFAULTOPTFLAGS := -O2
 endif
 
-gb_CCVER := $(shell $(gb_CC) -dumpversion | $(gb_AWK) -F. -- '{ print $$1*10000+$$2*100+$$3 }')
-
 gb_SHORTSTDC3 := 1
 gb_SHORTSTDCPP3 := 6
 
