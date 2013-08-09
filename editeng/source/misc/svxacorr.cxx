@@ -1542,7 +1542,9 @@ sal_Bool SvxAutoCorrect::CreateLanguageFile( LanguageType eLang, sal_Bool bNewFi
 {
     OSL_ENSURE(pLangTable->find(eLang) == pLangTable->end(), "Language already exists ");
 
-    OUString sShareDirFile( GetAutoCorrFileName( eLang, sal_True, sal_False ));
+    OUString sUserDirFile( GetAutoCorrFileName( eLang, sal_True, sal_False ));
+    OUString sShareDirFile( sUserDirFile );
+
     SvxAutoCorrectLanguageListsPtr pLists = 0;
 
     Time nMinTime( 0, 2 ), nAktTime( Time::SYSTEM ), nLastCheckTime( Time::EMPTY );
@@ -1556,17 +1558,18 @@ sal_Bool SvxAutoCorrect::CreateLanguageFile( LanguageType eLang, sal_Bool bNewFi
         // 2 minutes.
         if( bNewFile )
         {
-            pLists = new SvxAutoCorrectLanguageLists( *this, sShareDirFile, sShareDirFile );
+            sShareDirFile = sUserDirFile;
+            pLists = new SvxAutoCorrectLanguageLists( *this, sShareDirFile, sUserDirFile );
             pLangTable->insert(eLang, pLists);
             aLastFileTable.erase(nFndPos);
         }
     }
-    else if( ( FStatHelper::IsDocument( sShareDirFile ) ||
+    else if( ( FStatHelper::IsDocument( sUserDirFile ) ||
                 FStatHelper::IsDocument( sShareDirFile =
                               GetAutoCorrFileName( eLang, sal_False, sal_False ) ) ) ||
-        ( sShareDirFile = sShareDirFile, bNewFile ))
+        ( sShareDirFile = sUserDirFile, bNewFile ))
     {
-        pLists = new SvxAutoCorrectLanguageLists( *this, sShareDirFile, sShareDirFile );
+        pLists = new SvxAutoCorrectLanguageLists( *this, sShareDirFile, sUserDirFile );
         pLangTable->insert(eLang, pLists);
         if (nFndPos != aLastFileTable.end())
             aLastFileTable.erase(nFndPos);
