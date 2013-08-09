@@ -833,6 +833,7 @@ bool ScDocFunc::SetValueCell( const ScAddress& rPos, double fVal, bool bInteract
     if (bHeight)
         AdjustRowHeight(rPos);
 
+    rDocShell.PostPaintCell( rPos );
     aModificator.SetDocumentModified();
 
     // #103934#; notify editline and cell in edit mode
@@ -869,6 +870,7 @@ bool ScDocFunc::SetStringCell( const ScAddress& rPos, const OUString& rStr, bool
     if (bHeight)
         AdjustRowHeight(rPos);
 
+    rDocShell.PostPaintCell( rPos );
     aModificator.SetDocumentModified();
 
     // #103934#; notify editline and cell in edit mode
@@ -903,6 +905,7 @@ bool ScDocFunc::SetEditCell( const ScAddress& rPos, const EditTextObject& rStr, 
     if (bHeight)
         AdjustRowHeight(rPos);
 
+    rDocShell.PostPaintCell( rPos );
     aModificator.SetDocumentModified();
 
     // #103934#; notify editline and cell in edit mode
@@ -956,6 +959,7 @@ bool ScDocFunc::SetFormulaCell( const ScAddress& rPos, ScFormulaCell* pCell, boo
     if (bHeight)
         AdjustRowHeight(rPos);
 
+    rDocShell.PostPaintCell( rPos );
     aModificator.SetDocumentModified();
 
     // #103934#; notify editline and cell in edit mode
