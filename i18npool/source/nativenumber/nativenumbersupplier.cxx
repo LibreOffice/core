@@ -32,10 +32,10 @@ using namespace ::rtl;
 
 typedef struct {
     sal_Int16 number;
-    sal_Unicode *multiplierChar;
+    const sal_Unicode *multiplierChar;
     sal_Int16 numberFlag;
     sal_Int16 exponentCount;
-    sal_Int16 *multiplierExponent;
+    const sal_Int16 *multiplierExponent;
 } Number;
 
 
@@ -89,7 +89,7 @@ OUString SAL_CALL AsciiToNativeChar( const OUString& inStr, sal_Int32 startPos, 
 
 sal_Bool SAL_CALL AsciiToNative_numberMaker(const sal_Unicode *str, sal_Int32 begin, sal_Int32 len,
         sal_Unicode *dst, sal_Int32& count, sal_Int16 multiChar_index, Sequence< sal_Int32 >& offset, sal_Bool useOffset, sal_Int32 startPos,
- Number *number, sal_Unicode* numberChar)
+ const Number *number, const sal_Unicode* numberChar)
 {
         sal_Unicode multiChar = (multiChar_index == -1 ? 0 : number->multiplierChar[multiChar_index]);
         if ( len <= number->multiplierExponent[number->exponentCount-1] ) {
@@ -160,12 +160,12 @@ sal_Bool SAL_CALL AsciiToNative_numberMaker(const sal_Unicode *str, sal_Int32 be
 }
 
 OUString SAL_CALL AsciiToNative( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
-        Sequence< sal_Int32 >& offset, sal_Bool useOffset, Number* number ) throw(RuntimeException)
+        Sequence< sal_Int32 >& offset, sal_Bool useOffset, const Number* number ) throw(RuntimeException)
 {
         OUString aRet;
 
         sal_Int32 strLen = inStr.getLength() - startPos;
-        sal_Unicode *numberChar = NumberChar[number->number];
+        const sal_Unicode *numberChar = NumberChar[number->number];
 
         if (nCount > strLen)
             nCount = strLen;
@@ -373,7 +373,7 @@ static OUString SAL_CALL NativeToAscii(const OUString& inStr,
         return aRet;
 }
 
-static Number natnum4[4] = {
+static const Number natnum4[4] = {
         { NumberChar_Lower_zh, MultiplierChar_6_CJK[Multiplier_Lower_zh], 0,
                 ExponentCount_6_CJK, MultiplierExponent_6_CJK },
         { NumberChar_Lower_zh, MultiplierChar_6_CJK[Multiplier_Lower_zh_TW], 0,
@@ -384,7 +384,7 @@ static Number natnum4[4] = {
                 ExponentCount_6_CJK, MultiplierExponent_6_CJK },
 };
 
-static Number natnum5[4] = {
+static const Number natnum5[4] = {
         { NumberChar_Upper_zh, MultiplierChar_6_CJK[Multiplier_Upper_zh], 0,
                 ExponentCount_6_CJK, MultiplierExponent_6_CJK },
         { NumberChar_Upper_zh_TW, MultiplierChar_6_CJK[Multiplier_Upper_zh_TW], 0,
@@ -395,7 +395,7 @@ static Number natnum5[4] = {
                 ExponentCount_6_CJK, MultiplierExponent_6_CJK },
 };
 
-static Number natnum6[4] = {
+static const Number natnum6[4] = {
         { NumberChar_FullWidth, MultiplierChar_6_CJK[Multiplier_Lower_zh], 0,
                 ExponentCount_6_CJK, MultiplierExponent_6_CJK },
         { NumberChar_FullWidth, MultiplierChar_6_CJK[Multiplier_Lower_zh_TW], 0,
@@ -406,7 +406,7 @@ static Number natnum6[4] = {
                 ExponentCount_6_CJK, MultiplierExponent_6_CJK },
 };
 
-static Number natnum7[4] = {
+static const Number natnum7[4] = {
         { NumberChar_Lower_zh, MultiplierChar_6_CJK[Multiplier_Lower_zh], NUMBER_OMIT_ALL,
                 ExponentCount_6_CJK, MultiplierExponent_6_CJK },
         { NumberChar_Lower_zh, MultiplierChar_6_CJK[Multiplier_Lower_zh_TW], NUMBER_OMIT_ALL,
@@ -417,7 +417,7 @@ static Number natnum7[4] = {
                 ExponentCount_6_CJK, MultiplierExponent_6_CJK },
 };
 
-static Number natnum8[4] = {
+static const Number natnum8[4] = {
         { NumberChar_Upper_zh, MultiplierChar_6_CJK[Multiplier_Upper_zh], NUMBER_OMIT_ALL,
                 ExponentCount_6_CJK, MultiplierExponent_6_CJK },
         { NumberChar_Upper_zh_TW, MultiplierChar_6_CJK[Multiplier_Upper_zh_TW], NUMBER_OMIT_ALL,
@@ -428,9 +428,9 @@ static Number natnum8[4] = {
                 ExponentCount_6_CJK, MultiplierExponent_6_CJK },
 };
 
-static Number natnum10 = { NumberChar_Hangul_ko, MultiplierChar_6_CJK[Multiplier_Hangul_ko], NUMBER_OMIT_ZERO,
+static const Number natnum10 = { NumberChar_Hangul_ko, MultiplierChar_6_CJK[Multiplier_Hangul_ko], NUMBER_OMIT_ZERO,
                 ExponentCount_6_CJK, MultiplierExponent_6_CJK };
-static Number natnum11 = { NumberChar_Hangul_ko, MultiplierChar_6_CJK[Multiplier_Hangul_ko], NUMBER_OMIT_ALL,
+static const Number natnum11 = { NumberChar_Hangul_ko, MultiplierChar_6_CJK[Multiplier_Hangul_ko], NUMBER_OMIT_ALL,
                 ExponentCount_6_CJK, MultiplierExponent_6_CJK };
 
 //! ATTENTION: Do not change order of elements!
@@ -466,7 +466,7 @@ static sal_Int16 nbOfLocale = SAL_N_ELEMENTS(natnum1Locales);
 
 //! ATTENTION: Do not change order of elements!
 //! Number and order must match elements of natnum1Locales!
-static sal_Int16 natnum1[] = {
+static const sal_Int16 natnum1[] = {
     NumberChar_Lower_zh,
     NumberChar_Lower_zh,
     NumberChar_Modern_ja,
@@ -493,18 +493,18 @@ static sal_Int16 natnum1[] = {
     NumberChar_dz,
     NumberChar_EastIndic_ar
 };
-static sal_Int16 sizeof_natnum1 = SAL_N_ELEMENTS(natnum1);
+static const sal_Int16 sizeof_natnum1 = SAL_N_ELEMENTS(natnum1);
 
 //! ATTENTION: Do not change order of elements!
 //! Order must match first elements of natnum1Locales!
-static sal_Int16 natnum2[] = {
+static const sal_Int16 natnum2[] = {
     NumberChar_Upper_zh,
     NumberChar_Upper_zh_TW,
     NumberChar_Traditional_ja,
     NumberChar_Upper_ko,
     NumberChar_he
 };
-static sal_Int16 sizeof_natnum2 = SAL_N_ELEMENTS(natnum2);
+static const sal_Int16 sizeof_natnum2 = SAL_N_ELEMENTS(natnum2);
 
 #define isLang(lang) rLocale.Language.equalsAsciiL(lang, 2)
 
@@ -523,7 +523,7 @@ static sal_Int16 SAL_CALL getLanguageNumber( const Locale& rLocale)
 OUString SAL_CALL NativeNumberSupplier::getNativeNumberString(const OUString& aNumberString, const Locale& rLocale,
                 sal_Int16 nNativeNumberMode, Sequence< sal_Int32 >& offset) throw (RuntimeException)
 {
-        Number *number = 0;
+        const Number *number = 0;
         sal_Int16 num = -1;
 
         if (isValidNatNum(rLocale, nNativeNumberMode)) {
@@ -734,7 +734,7 @@ NativeNumberXmlAttributes SAL_CALL NativeNumberSupplier::convertToXmlAttributes(
                                             OUString::createFromAscii(attType[type]));
 }
 
-static sal_Bool natNumIn(sal_Int16 num, sal_Int16 natnum[], sal_Int16 len)
+static sal_Bool natNumIn(sal_Int16 num, const sal_Int16 natnum[], sal_Int16 len)
 {
         for (sal_Int16 i = 0; i < len; i++)
             if (natnum[i] == num)

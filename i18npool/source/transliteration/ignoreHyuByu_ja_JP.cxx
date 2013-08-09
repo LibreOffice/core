@@ -29,7 +29,7 @@ using namespace com::sun::star::lang;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-static Mapping HyuByu[] = {
+static const Mapping HyuByu[] = {
         { 0x30D5, 0x30E5, 0x30D2, sal_False },
         { 0x3075, 0x3085, 0x3072, sal_False },
         { 0x30F4, 0x30E5, 0x30D3, sal_False },

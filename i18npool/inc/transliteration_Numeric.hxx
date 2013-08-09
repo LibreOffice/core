@@ -51,7 +51,7 @@ public:
 protected:
         sal_Int16 nNativeNumberMode;
         sal_Int16 tableSize;
-        sal_Unicode* table;
+        const sal_Unicode* table;
         sal_Bool recycleSymbol;
 private:
         OUString SAL_CALL

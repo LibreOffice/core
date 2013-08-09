@@ -30,7 +30,7 @@ using namespace com::sun::star::lang;
 namespace com { namespace sun { namespace star { namespace i18n {
 
 
-static Mapping TiJi[] = {
+static const Mapping TiJi[] = {
         // TU + I --> TI
         { 0x30C4, 0x30A3, 0x30C1, sal_True },
         // TE + I --> TI

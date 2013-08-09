@@ -60,21 +60,21 @@ using namespace ::rtl;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-static sal_Unicode table_Alphabet_ar[] = {
+static const sal_Unicode table_Alphabet_ar[] = {
     0x0623, 0x0628, 0x062A, 0x062B, 0x062C, 0x062D, 0x062E,
     0x062F, 0x0630, 0x0631, 0x0632, 0x0633, 0x0634, 0x0635,
     0x0636, 0x0637, 0x0638, 0x0639, 0x063A, 0x0641, 0x0642,
     0x0643, 0x0644, 0x0645, 0x0646, 0x0647, 0x0648, 0x0649
 };
 
-static sal_Unicode table_Alphabet_ar_abjad[] = {
+static const sal_Unicode table_Alphabet_ar_abjad[] = {
     0x0627, 0x0628, 0x062c, 0x062f, 0x0647, 0x0648, 0x0632, 0x062d,
     0x0637, 0x064a, 0x0643, 0x0644, 0x0645, 0x0646, 0x0633, 0x0639,
     0x0641, 0x0635, 0x0642, 0x0631, 0x0634, 0x062a, 0x062b, 0x062e,
     0x0630, 0x0636, 0x0638, 0x063a
 };
 
-static sal_Unicode table_Alphabet_th[] = {
+static const sal_Unicode table_Alphabet_th[] = {
     0x0E01, 0x0E02, 0x0E04, 0x0E07,
     0x0E08, 0x0E09, 0x0E0A, 0x0E0B, 0x0E0C, 0x0E0D, 0x0E0E, 0x0E0F,
     0x0E10, 0x0E11, 0x0E12, 0x0E13, 0x0E14, 0x0E15, 0x0E16, 0x0E17,
@@ -83,13 +83,13 @@ static sal_Unicode table_Alphabet_th[] = {
     0x0E28, 0x0E29, 0x0E2A, 0x0E2B, 0x0E2C, 0x0E2D, 0x0E2E
 };
 
-static sal_Unicode table_Alphabet_he[] = {
+static const sal_Unicode table_Alphabet_he[] = {
     0x05D0, 0x05D1, 0x05D2, 0x05D3, 0x05D4, 0x05D5, 0x05D6, 0x05D7,
     0x05D8, 0x05D9, 0x05DB, 0x05DC, 0x05DE, 0x05E0, 0x05E1, 0x05E2,
     0x05E4, 0x05E6, 0x05E7, 0x05E8, 0x05E9, 0x05EA
 };
 
-static sal_Unicode table_Alphabet_ne[] = {
+static const sal_Unicode table_Alphabet_ne[] = {
     0x0915, 0x0916, 0x0917, 0x0918, 0x0919, 0x091A, 0x091B, 0x091C,
     0x091D, 0x091E, 0x091F, 0x0920, 0x0921, 0x0922, 0x0923, 0x0924,
     0x0925, 0x0926, 0x0927, 0x0928, 0x092A, 0x092B, 0x092C, 0x092D,
@@ -97,7 +97,7 @@ static sal_Unicode table_Alphabet_ne[] = {
     0x0939
 };
 
-static sal_Unicode table_Alphabet_km[] = {
+static const sal_Unicode table_Alphabet_km[] = {
     0x1780, 0x1781, 0x1782, 0x1783, 0x1784, 0x1785, 0x1786, 0x1787,
     0x1788, 0x1789, 0x178A, 0x178B, 0x178C, 0x178D, 0x178E, 0x178F,
     0x1790, 0x1791, 0x1792, 0x1793, 0x1794, 0x1795, 0x1796, 0x1797,
@@ -105,21 +105,21 @@ static sal_Unicode table_Alphabet_km[] = {
     0x17A0, 0x17A1, 0x17A2
 };
 
-static sal_Unicode table_Alphabet_lo[] = {
+static const sal_Unicode table_Alphabet_lo[] = {
     0x0E81, 0x0E82, 0x0E84, 0x0E87, 0x0E88, 0x0E8A, 0x0E8D, 0x0E94,
     0x0E95, 0x0E96, 0x0E97, 0x0E99, 0x0E9A, 0x0E9B, 0x0E9C,
     0x0E9D, 0x0E9E, 0x0E9F, 0x0EA1, 0x0EA2, 0x0EA3, 0x0EA5, 0x0EA7,
     0x0EAA, 0x0EAB, 0x0EAD, 0x0EAE, 0x0EAF, 0x0EAE, 0x0EDC, 0x0EDD
 };
 
-static sal_Unicode table_Alphabet_dz[] = {
+static const sal_Unicode table_Alphabet_dz[] = {
     0x0F40, 0x0F41, 0x0F42, 0x0F44, 0x0F45, 0x0F46, 0x0F47, 0x0F49,
     0x0F4F, 0x0F50, 0x0F51, 0x0F53, 0x0F54, 0x0F55, 0x0F56, 0x0F58,
     0x0F59, 0x0F5A, 0x0F5B, 0x0F5D, 0x0F5E, 0x0F5F, 0x0F60, 0x0F61,
     0x0F62, 0x0F63, 0x0F64, 0x0F66, 0x0F67, 0x0F68
 };
 
-static sal_Unicode table_Alphabet_my[] = {
+static const sal_Unicode table_Alphabet_my[] = {
     0x1000, 0x1001, 0x1002, 0x1003, 0x1004, 0x1005, 0x1006, 0x1007,
     0x1008,/*0x1009,*/0x100A, 0x100B, 0x100C, 0x100D, 0x100E, 0x100F,
     0x1010, 0x1011, 0x1012, 0x1013, 0x1014, 0x1015, 0x1016, 0x1017,
@@ -128,7 +128,7 @@ static sal_Unicode table_Alphabet_my[] = {
 };
 
 // Bulgarian Cyrillic upper case letters
-static sal_Unicode table_CyrillicUpperLetter_bg[] = {
+static const sal_Unicode table_CyrillicUpperLetter_bg[] = {
     0x0410, 0x0411, 0x0412, 0x0413, 0x0414, 0x0415, 0x0416, 0x0417, 0x0418,
     0x041A, 0x041B, 0x041C, 0x041D, 0x041E, 0x041F, 0x0420, 0x0421, 0x0422,
     0x0423, 0x0424, 0x0425, 0x0426, 0x0427, 0x0428, 0x0429, 0x042A, 0x042E,
@@ -136,7 +136,7 @@ static sal_Unicode table_CyrillicUpperLetter_bg[] = {
 };
 
 // Bulgarian cyrillic lower case letters
-static sal_Unicode table_CyrillicLowerLetter_bg[] = {
+static const sal_Unicode table_CyrillicLowerLetter_bg[] = {
     0x0430, 0x0431, 0x0432, 0x0433, 0x0434, 0x0435, 0x0436, 0x0437, 0x0438,
     0x043A, 0x043B, 0x043C, 0x043D, 0x043E, 0x043F, 0x0440, 0x0441, 0x0442,
     0x0443, 0x0444, 0x0445, 0x0446, 0x0447, 0x0448, 0x0449, 0x044A, 0x044E,
@@ -144,7 +144,7 @@ static sal_Unicode table_CyrillicLowerLetter_bg[] = {
 };
 
 // Russian Cyrillic upper letters
-static sal_Unicode table_CyrillicUpperLetter_ru[] = {
+static const sal_Unicode table_CyrillicUpperLetter_ru[] = {
     0x0410, 0x0411, 0x0412, 0x0413, 0x0414, 0x0415, 0x0416, 0x0417,
     0x0418, 0x041A, 0x041B, 0x041C, 0x041D, 0x041E, 0x041F, 0x0420,
     0x0421, 0x0422, 0x0423, 0x0424, 0x0425, 0x0426, 0x0427, 0x0428,
@@ -152,7 +152,7 @@ static sal_Unicode table_CyrillicUpperLetter_ru[] = {
 };
 
 // Russian cyrillic lower letters
-static sal_Unicode table_CyrillicLowerLetter_ru[] = {
+static const sal_Unicode table_CyrillicLowerLetter_ru[] = {
     0x0430, 0x0431, 0x0432, 0x0433, 0x0434, 0x0435, 0x0436, 0x0437,
     0x0438, 0x043A, 0x043B, 0x043C, 0x043D, 0x043E, 0x043F, 0x0440,
     0x0441, 0x0442, 0x0443, 0x0444, 0x0445, 0x0446, 0x0447, 0x0448,
@@ -160,7 +160,7 @@ static sal_Unicode table_CyrillicLowerLetter_ru[] = {
 };
 
 // Serbian Cyrillic upper letters
-static sal_Unicode table_CyrillicUpperLetter_sr[] = {
+static const sal_Unicode table_CyrillicUpperLetter_sr[] = {
     0x0410, 0x0411, 0x0412, 0x0413, 0x0414, 0x0402, 0x0415, 0x0416,
     0x0417, 0x0418, 0x0408, 0x041A, 0x041B, 0x0409, 0x041C, 0x041D,
     0x040A, 0x041E, 0x041F, 0x0420, 0x0421, 0x0422, 0x040B, 0x0423,
@@ -168,46 +168,46 @@ static sal_Unicode table_CyrillicUpperLetter_sr[] = {
 };
 
 // Serbian cyrillic lower letters
-static sal_Unicode table_CyrillicLowerLetter_sr[] = {
+static const sal_Unicode table_CyrillicLowerLetter_sr[] = {
     0x0430, 0x0431, 0x0432, 0x0433, 0x0434, 0x0452, 0x0435, 0x0436,
     0x0437, 0x0438, 0x0458, 0x043A, 0x043B, 0x0459, 0x043C, 0x043D,
     0x045A, 0x043E, 0x043F, 0x0440, 0x0441, 0x0442, 0x045B, 0x0443,
     0x0444, 0x0445, 0x0446, 0x0447, 0x045F, 0x0448
 };
 
-static sal_Unicode table_GreekUpperLetter[] = {
+static const sal_Unicode table_GreekUpperLetter[] = {
     0x0391, 0x0392, 0x0393, 0x0394, 0x0395, 0x03DB, 0x0396, 0x0397, 0x0398,
     0x0399, 0x039A, 0x039B, 0x039C, 0x039D, 0x039E, 0x039F, 0x03A0, 0x03DF,
     0x03A1, 0x03A3, 0x03A4, 0x03A5, 0x03A6, 0x03A7, 0x03A8, 0x03A9, 0x03E0
 };
 
-static sal_Unicode table_GreekLowerLetter[] = {
+static const sal_Unicode table_GreekLowerLetter[] = {
     0x03B1, 0x03B2, 0x03B3, 0x03B4, 0x03B5, 0x03DB, 0x03B6, 0x03B7, 0x03B8,
     0x03B9, 0x03BA, 0x03BB, 0x03BC, 0x03BD, 0x03BE, 0x03BF, 0x03C0, 0x03DF,
     0x03C1, 0x03C3, 0x03C4, 0x03C5, 0x03C6, 0x03C7, 0x03C8, 0x03C9, 0x03E1
 };
 
-static sal_Unicode table_Alphabet_fa[] = {
+static const sal_Unicode table_Alphabet_fa[] = {
     0x0622, 0x0628, 0x067E, 0x062A, 0x062B, 0x062C, 0x0686, 0x062D,
     0x062E, 0x062F, 0x0630, 0x0631, 0x0632, 0x0698, 0x0633, 0x0634,
     0x0635, 0x0636, 0x0637, 0x0638, 0x0639, 0x0640, 0x0641, 0x0642,
     0x06A9, 0x06AF, 0x0644, 0x0645, 0x0646, 0x0648, 0x0647, 0x06CC
 };
 
-static sal_Unicode upperLetter[] = {
+static const sal_Unicode upperLetter[] = {
     0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49,
     0x4A, 0x4B, 0x4C, 0x4D, 0x4E, 0x4F, 0x50, 0x51, 0x52,
     0x53, 0x54, 0x55, 0x56, 0x57, 0x58, 0x59, 0x5A
 };
 
-static sal_Unicode lowerLetter[] = {
+static const sal_Unicode lowerLetter[] = {
     0x61, 0x62, 0x63, 0x64, 0x65, 0x66, 0x67, 0x68, 0x69,
     0x6A, 0x6B, 0x6C, 0x6D, 0x6E, 0x6F, 0x70, 0x71, 0x72,
     0x73, 0x74, 0x75, 0x76, 0x77, 0x78, 0x79, 0x7A
 };
 
 // Tables used for numbering in persian words
-static sal_Unicode table_PersianWord_decade1[][7]={
+static const sal_Unicode table_PersianWord_decade1[][7]={
     {0},                                                 // 0
     {0x06cc, 0x06a9, 0},                                 // 1
     {0x062f, 0x0648, 0},                                 // 2
@@ -230,7 +230,7 @@ static sal_Unicode table_PersianWord_decade1[][7]={
     {0x0646, 0x0648, 0x0632, 0x062f, 0x0647, 0}          // 19
 };
 
-static sal_Unicode table_PersianWord_decade2[][6]={
+static const sal_Unicode table_PersianWord_decade2[][6]={
     {0x0628, 0x06cc, 0x0633, 0x062a, 0},                 // 20
     {0x0633, 0x06cc, 0},                                 // 30
     {0x0686, 0x0647, 0x0644, 0},                         // 40
@@ -241,7 +241,7 @@ static sal_Unicode table_PersianWord_decade2[][6]={
     {0x0646, 0x0648, 0x062f, 0}                          // 90
 };
 
-static sal_Unicode table_PersianWord_decade3[][7]={
+static const sal_Unicode table_PersianWord_decade3[][7]={
     {0x0635, 0x062f, 0},                                 // 100
     {0x062f, 0x0648, 0x06cc, 0x0633, 0x062a, 0},         // 200
     {0x0633, 0x06cc, 0x0635, 0x062f, 0},                 // 300
@@ -253,7 +253,7 @@ static sal_Unicode table_PersianWord_decade3[][7]={
     {0x0646, 0x0647, 0x0635, 0x062f, 0}                  // 900
 };
 
-static sal_Unicode table_PersianWord_decadeX[][8]={
+static const sal_Unicode table_PersianWord_decadeX[][8]={
     {0x0647, 0x0632, 0x0627, 0x0631, 0},                        // 1000
     {0x0645, 0x06cc, 0x0644, 0x06cc, 0x0648, 0x0646, 0},        // 1000000
     {0x0645, 0x06cc, 0x0644, 0x06cc, 0x0627, 0x0631, 0x062f, 0} // 1000000000
@@ -334,7 +334,7 @@ OUString toRoman( sal_Int32 n )
 // not used:
 
 static
-void lcl_formatChars( sal_Unicode table[], int tableSize, int n, OUString& s )
+void lcl_formatChars( const sal_Unicode table[], int tableSize, int n, OUString& s )
 {
      // string representation of n is appended to s.
      // if A=='A' then 0=>A, 1=>B, ..., 25=>Z, 26=>AA, 27=>AB, ...
@@ -346,7 +346,7 @@ void lcl_formatChars( sal_Unicode table[], int tableSize, int n, OUString& s )
 }
 
 static
-void lcl_formatChars1( sal_Unicode table[], int tableSize, int n, OUString& s )
+void lcl_formatChars1( const sal_Unicode table[], int tableSize, int n, OUString& s )
 {
      // string representation of n is appended to s.
      // if A=='A' then 0=>A, 1=>B, ..., 25=>Z, 26=>AA, 27=>BB, ...
@@ -359,7 +359,7 @@ void lcl_formatChars1( sal_Unicode table[], int tableSize, int n, OUString& s )
 }
 
 static
-void lcl_formatChars2( sal_Unicode table_capital[], sal_Unicode table_small[], int tableSize, int n, OUString& s )
+void lcl_formatChars2( const sal_Unicode table_capital[], const sal_Unicode table_small[], int tableSize, int n, OUString& s )
 {
      // string representation of n is appended to s.
      // if A=='A' then 0=>A, 1=>B, ..., 25=>Z, 26=>Aa, 27=>Ab, ...
@@ -373,7 +373,7 @@ void lcl_formatChars2( sal_Unicode table_capital[], sal_Unicode table_small[], i
 }
 
 static
-void lcl_formatChars3( sal_Unicode table_capital[], sal_Unicode table_small[], int tableSize, int n, OUString& s )
+void lcl_formatChars3( const sal_Unicode table_capital[], const sal_Unicode table_small[], int tableSize, int n, OUString& s )
 {
      // string representation of n is appended to s.
      // if A=='A' then 0=>A, 1=>B, ..., 25=>Z, 26=>Aa, 27=>Bb, ...
@@ -396,7 +396,7 @@ void lcl_formatPersianWord( sal_Int32 nNumber, OUString& rsResult )
 {
     OUStringBuffer aTemp(64);
     unsigned int nDigit;
-    sal_Unicode asPersianWord_conjunction_data[] = {0x20,0x0648,0x20,0};
+    static const sal_Unicode asPersianWord_conjunction_data[] = {0x20,0x0648,0x20,0};
     OUString asPersianWord_conjunction( asPersianWord_conjunction_data );
     unsigned char nSection = 0;
 
@@ -463,7 +463,7 @@ void lcl_formatPersianWord( sal_Int32 nNumber, OUString& rsResult )
 * only for numbers up to 9999.
 */
 static
-OUString gr_smallNum(sal_Unicode table[], int n)
+OUString gr_smallNum(const sal_Unicode table[], int n)
 {
     if (n > 9999)
         throw IllegalArgumentException();
@@ -491,7 +491,7 @@ OUString gr_smallNum(sal_Unicode table[], int n)
 }
 
 static
-void lcl_formatCharsGR( sal_Unicode table[], int n, OUString& s )
+void lcl_formatCharsGR(const sal_Unicode table[], int n, OUString& s )
 {
     OUStringBuffer sb;
     int myriadPower = 2;
@@ -565,7 +565,7 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
 
      sal_Int16 natNum = 0;
      sal_Int16 tableSize = 0;
-     sal_Unicode *table = NULL;     // initialize to avoid compiler warning
+     const sal_Unicode *table = NULL;     // initialize to avoid compiler warning
      sal_Bool recycleSymbol = sal_False;
      Locale locale;
 
@@ -1042,7 +1042,7 @@ OUString DefaultNumberingProvider::getNumberingIdentifier( sal_Int16 nNumberingT
         return OUString();
 }
 
-const sal_Char cDefaultNumberingProvider[] = "com.sun.star.text.DefaultNumberingProvider";
+static const sal_Char cDefaultNumberingProvider[] = "com.sun.star.text.DefaultNumberingProvider";
 OUString DefaultNumberingProvider::getImplementationName(void)
                 throw( RuntimeException )
 {

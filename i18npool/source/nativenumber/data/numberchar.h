@@ -54,7 +54,7 @@ static const sal_Int16 NumberChar_ne        = 29;
 static const sal_Int16 NumberChar_dz        = 30;
 static const sal_Int16 NumberChar_Count     = 31;
 
-static sal_Unicode NumberChar[][10] = {
+static const sal_Unicode NumberChar[][10] = {
 //  0   1   2   3   4   5   6   7   8   9
     { 0x0030, 0x0031, 0x0032, 0x0033, 0x0034, 0x0035, 0x0036, 0x0037, 0x0038, 0x0039 }, // Half Width (Ascii)
     { 0xFF10, 0xFF11, 0xFF12, 0xFF13, 0xFF14, 0xFF15, 0xFF16, 0xFF17, 0xFF18, 0xFF19 }, // Full Width
@@ -123,7 +123,7 @@ static sal_Unicode DecimalChar[] = {
     0x0000, // Dzongkha
 };
 
-static sal_Unicode MinusChar[] = {
+static const sal_Unicode MinusChar[] = {
     0x002D, // Half Width (Ascii)
     0xFF0D, // Full Width
     0xFF0D, // Chinese Lower
@@ -211,10 +211,10 @@ const sal_Int16 Multiplier_Count    = 8;
 
 const sal_Int16 ExponentCount_6_CJK     = 6;
 
-static sal_Int16 MultiplierExponent_6_CJK[ExponentCount_6_CJK] = {
+static const sal_Int16 MultiplierExponent_6_CJK[ExponentCount_6_CJK] = {
         12,     8,  4,  3,  2,  1
 };
-static sal_Unicode MultiplierChar_6_CJK[][ExponentCount_6_CJK] = {
+static const sal_Unicode MultiplierChar_6_CJK[][ExponentCount_6_CJK] = {
     {0x5146, 0x4EBF, 0x4E07, 0x5343, 0x767E, 0x5341},   // S. Chinese Lower
     {0x5146, 0x4EBF, 0x4E07, 0x4EDF, 0x4F70, 0x62FE},   // S. Chinese Upper
     {0x5146, 0x5104, 0x842C, 0x5343, 0x767E, 0x5341},   // T. Chinese Lower
@@ -227,11 +227,11 @@ static sal_Unicode MultiplierChar_6_CJK[][ExponentCount_6_CJK] = {
 
 const sal_Int16 ExponentCount_2_CJK     = 2;
 
-static sal_Int16 MultiplierExponent_2_CJK[ExponentCount_2_CJK] = {
+static const sal_Int16 MultiplierExponent_2_CJK[ExponentCount_2_CJK] = {
         8,  4,
 };
 
-static sal_Unicode MultiplierChar_2_CJK[][ExponentCount_2_CJK] = {
+static const sal_Unicode MultiplierChar_2_CJK[][ExponentCount_2_CJK] = {
     {0x4EBF, 0x4E07}, // S. Chinese Lower
     {0x4EBF, 0x4E07}, // S. Chinese Upper
     {0x5104, 0x842C}, // T. Chinese Lower
@@ -244,10 +244,10 @@ static sal_Unicode MultiplierChar_2_CJK[][ExponentCount_2_CJK] = {
 
 const sal_Int16 ExponentCount_7_CJK     = 7;
 
-static sal_Int16 MultiplierExponent_7_CJK[ExponentCount_7_CJK] = {
+static const sal_Int16 MultiplierExponent_7_CJK[ExponentCount_7_CJK] = {
         16, 12,     8,  4,  3,  2,  1
 };
-static sal_Unicode MultiplierChar_7_CJK[][ExponentCount_7_CJK] = {
+static const sal_Unicode MultiplierChar_7_CJK[][ExponentCount_7_CJK] = {
     {0x4EAC, 0x5146, 0x4EBF, 0x4E07, 0x5343, 0x767E, 0x5341},   // S. Chinese Lower
     {0x4EAC, 0x5146, 0x4EBF, 0x4E07, 0x4EDF, 0x4F70, 0x62FE},   // S. Chinese Upper
     {0x4EAC, 0x5146, 0x5104, 0x842C, 0x5343, 0x767E, 0x5341},   // T. Chinese Lower

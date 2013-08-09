@@ -30,7 +30,7 @@
 
 using namespace ::com::sun::star::i18n;
 
-static ScriptTypeList defaultTypeList[] = {
+static const ScriptTypeList defaultTypeList[] = {
     { UnicodeScript_kBasicLatin,
       UnicodeScript_kBasicLatin,
       UnicodeScript_kBasicLatin },      // 0,
@@ -298,7 +298,7 @@ static ScriptTypeList defaultTypeList[] = {
 };
 
 sal_Int16 SAL_CALL
-unicode::getUnicodeScriptType( const sal_Unicode ch, ScriptTypeList* typeList, sal_Int16 unknownType ) {
+unicode::getUnicodeScriptType( const sal_Unicode ch, const ScriptTypeList* typeList, sal_Int16 unknownType ) {
 
     if (!typeList) {
         typeList = defaultTypeList;

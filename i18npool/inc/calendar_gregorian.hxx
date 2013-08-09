@@ -47,8 +47,8 @@ public:
 
     // Constructors
     Calendar_gregorian();
-    Calendar_gregorian(Era *_eraArray);
-    void SAL_CALL init(Era *_eraArray);
+    Calendar_gregorian(const Era *_eraArray);
+    void SAL_CALL init(const Era *_eraArray);
 
     /**
     * Destructor
@@ -91,7 +91,7 @@ public:
     virtual com::sun::star::uno::Sequence < OUString > SAL_CALL getSupportedServiceNames() throw(com::sun::star::uno::RuntimeException);
 
 protected:
-    Era *eraArray;
+    const Era *eraArray;
     icu::Calendar *body;
     NativeNumberSupplier aNatNum;
     const sal_Char* cCalendar;

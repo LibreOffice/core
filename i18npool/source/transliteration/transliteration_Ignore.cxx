@@ -146,7 +146,7 @@ transliteration_Ignore::folding( const OUString& inStr, sal_Int32 startPos,
         while (-- nCount > 0) {
             currentChar = *src ++;
 
-            Mapping *m;
+            const Mapping *m;
             for (m = map; m->replaceChar; m++) {
                 if (previousChar == m->previousChar &&  currentChar == m->currentChar ) {
                     if (useOffset) {

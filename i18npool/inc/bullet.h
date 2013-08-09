@@ -19,7 +19,7 @@
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-static sal_Unicode table_AIUFullWidth_ja_JP[] = {
+static const sal_Unicode table_AIUFullWidth_ja_JP[] = {
     0x30A2, // KATAKANA LETTER A
     0x30A4, // KATAKANA LETTER I
     0x30A6, // KATAKANA LETTER U
@@ -68,7 +68,7 @@ static sal_Unicode table_AIUFullWidth_ja_JP[] = {
     0x30F3  // KATAKANA LETTER N
 };
 
-static sal_Unicode table_AIUHalfWidth_ja_JP[] = {
+static const sal_Unicode table_AIUHalfWidth_ja_JP[] = {
     0xFF71, // HALFWIDTH KATAKANA LETTER A
     0xFF72, // HALFWIDTH KATAKANA LETTER I
     0xFF73, // HALFWIDTH KATAKANA LETTER U
@@ -117,7 +117,7 @@ static sal_Unicode table_AIUHalfWidth_ja_JP[] = {
     0xFF9D  // HALFWIDTH KATAKANA LETTER N
 };
 
-static sal_Unicode table_IROHAFullWidth_ja_JP[] = {
+static const sal_Unicode table_IROHAFullWidth_ja_JP[] = {
     0x30A4, // KATAKANA LETTER I
     0x30ED, // KATAKANA LETTER RO
     0x30CF, // KATAKANA LETTER HA
@@ -168,7 +168,7 @@ static sal_Unicode table_IROHAFullWidth_ja_JP[] = {
     0x30F3  // KATAKANA LETTER N
 };
 
-static sal_Unicode table_IROHAHalfWidth_ja_JP[] = {
+static const sal_Unicode table_IROHAHalfWidth_ja_JP[] = {
     0xFF72, // HALFWIDTH KATAKANA LETTER I
     0xFF9B, // HALFWIDTH KATAKANA LETTER RO
     0xFF8A, // HALFWIDTH KATAKANA LETTER HA
@@ -219,7 +219,7 @@ static sal_Unicode table_IROHAHalfWidth_ja_JP[] = {
     0xFF9D  // HALFWIDTH KATAKANA LETTER N
 };
 
-static sal_Unicode table_CircledNumber[] = {
+static const sal_Unicode table_CircledNumber[] = {
     0x2460, // CIRCLED DIGIT ONE
     0x2461, // CIRCLED DIGIT TWO
     0x2462, // CIRCLED DIGIT THREE
@@ -242,7 +242,7 @@ static sal_Unicode table_CircledNumber[] = {
     0x2473  // CIRCLED NUMBER TWENTY
 };
 
-static sal_Unicode table_HangulJamo_ko[] = {
+static const sal_Unicode table_HangulJamo_ko[] = {
         0x3131, // HANGUL LETTER KIYEOK
         0x3134, // HANGUL LETTER NIEUN
         0x3137, // HANGUL LETTER TIKEUT
@@ -259,7 +259,7 @@ static sal_Unicode table_HangulJamo_ko[] = {
         0x314E  // HANGUL LETTER HIEUH
 };
 
-static sal_Unicode table_HangulSyllable_ko[] = {
+static const sal_Unicode table_HangulSyllable_ko[] = {
         0xAC00, // HANGUL SYLLABLE GA
         0xB098, // HANGUL SYLLABLE NA
         0xB2E4, // HANGUL SYLLABLE DA
@@ -277,7 +277,7 @@ static sal_Unicode table_HangulSyllable_ko[] = {
 
 };
 
-static sal_Unicode table_HangulCircledJamo_ko[] = {
+static const sal_Unicode table_HangulCircledJamo_ko[] = {
         0x3260, // CIRCLED HANGUL LETTER KIYEOK
         0x3261, // CIRCLED HANGUL LETTER NIEUN
         0x3262, // CIRCLED HANGUL LETTER TIKEUT
@@ -295,7 +295,7 @@ static sal_Unicode table_HangulCircledJamo_ko[] = {
 };
 
 
-static sal_Unicode table_HangulCircledSyllable_ko[] = {
+static const sal_Unicode table_HangulCircledSyllable_ko[] = {
         0x326E, // CIRCLED HANGUL SYLLABLE GA
         0x326F, // CIRCLED HANGUL SYLLABLE NA
         0x3270, // CIRCLED HANGUL SYLLABLE DA
@@ -312,11 +312,11 @@ static sal_Unicode table_HangulCircledSyllable_ko[] = {
         0x327B  // CIRCLED HANGUL SYLLABLE HA
 };
 
-static sal_Unicode table_TianGan_zh[] = {
+static const sal_Unicode table_TianGan_zh[] = {
     0x7532,0x4e59,0x4e19,0x4e01,0x620a,0x5df1,0x5e9a,0x8f9b,0x58ec,0x7678
 };
 
-static sal_Unicode table_DiZi_zh[] = {
+static const sal_Unicode table_DiZi_zh[] = {
     0x5b50,0x4e11,0x5bc5,0x536f,0x8fb0,0x5df3,0x5348,0x672a,0x7533,0x9149,0x620c,0x4ea5
 };
 

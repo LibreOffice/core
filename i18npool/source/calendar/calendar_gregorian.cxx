@@ -130,12 +130,12 @@ Calendar_gregorian::Calendar_gregorian()
 {
     init(NULL);
 }
-Calendar_gregorian::Calendar_gregorian(Era *_earArray)
+Calendar_gregorian::Calendar_gregorian(const Era *_earArray)
 {
     init(_earArray);
 }
 void SAL_CALL
-Calendar_gregorian::init(Era *_eraArray)
+Calendar_gregorian::init(const Era *_eraArray)
 {
         cCalendar = "com.sun.star.i18n.Calendar_gregorian";
 
@@ -199,7 +199,7 @@ Calendar_hanja::loadCalendar( const OUString& /*uniqueID*/, const com::sun::star
         Calendar_gregorian::loadCalendar(OUString("hanja"), rLocale);
 }
 
-static Era gengou_eraArray[] = {
+static const Era gengou_eraArray[] = {
     {1868,  1,  1, 0},
     {1912,  7, 30, 0},
     {1926, 12, 25, 0},
@@ -211,7 +211,7 @@ Calendar_gengou::Calendar_gengou() : Calendar_gregorian(gengou_eraArray)
         cCalendar = "com.sun.star.i18n.Calendar_gengou";
 }
 
-static Era ROC_eraArray[] = {
+static const Era ROC_eraArray[] = {
     {1912, 1, 1, kDisplayEraForcedLongYear},    // #i116701#
     {0, 0, 0, 0}
 };
@@ -220,7 +220,7 @@ Calendar_ROC::Calendar_ROC() : Calendar_gregorian(ROC_eraArray)
         cCalendar = "com.sun.star.i18n.Calendar_ROC";
 }
 
-static Era buddhist_eraArray[] = {
+static const Era buddhist_eraArray[] = {
     {-542, 1, 1, 0},
     {0, 0, 0, 0}
 };

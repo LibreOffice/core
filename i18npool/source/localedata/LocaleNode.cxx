@@ -1984,7 +1984,7 @@ struct NameValuePair {
     const sal_Char *name;
     const sal_Char *value;
 };
-static NameValuePair ReserveWord[] = {
+static const NameValuePair ReserveWord[] = {
     { "trueWord", "true" },
     { "falseWord", "false" },
     { "quarter1Word", "1st quarter" },

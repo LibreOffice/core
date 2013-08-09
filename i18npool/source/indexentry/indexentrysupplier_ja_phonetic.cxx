@@ -37,7 +37,7 @@ OUString SAL_CALL IndexEntrySupplier_ja_phonetic::getIndexCharacter( const OUStr
         // using alphanumeric index for non-define stirng
         return OUString(&idxStr[(ch & 0xFF00) ? 0 : ch], 1);
     } else {
-        sal_Unicode *idx2 = strstr(implementationName, "syllable") ? syllable : consonant;
+        const sal_Unicode *idx2 = strstr(implementationName, "syllable") ? syllable : consonant;
         return OUString(&idx2[ first + (ch & 0xff) ], 1);
     }
 }
@@ -65,7 +65,7 @@ sal_Int16 SAL_CALL IndexEntrySupplier_ja_phonetic::compareIndexEntry(
     return result;
 }
 
-static sal_Char first[] = "ja_phonetic (alphanumeric first)";
+static const sal_Char first[] = "ja_phonetic (alphanumeric first)";
 sal_Bool SAL_CALL IndexEntrySupplier_ja_phonetic_alphanumeric_first_by_syllable::loadAlgorithm(
     const com::sun::star::lang::Locale& rLocale, const OUString& /*SortAlgorithm*/,
     sal_Int32 collatorOptions ) throw (com::sun::star::uno::RuntimeException)
@@ -79,7 +79,7 @@ sal_Bool SAL_CALL IndexEntrySupplier_ja_phonetic_alphanumeric_first_by_consonant
     return collator->loadCollatorAlgorithm(OUString::createFromAscii(first), rLocale, collatorOptions) == 0;
 }
 
-static sal_Char last[] = "ja_phonetic (alphanumeric last)";
+static const sal_Char last[] = "ja_phonetic (alphanumeric last)";
 sal_Bool SAL_CALL IndexEntrySupplier_ja_phonetic_alphanumeric_last_by_syllable::loadAlgorithm(
     const com::sun::star::lang::Locale& rLocale, const OUString& /*SortAlgorithm*/,
     sal_Int32 collatorOptions ) throw (com::sun::star::uno::RuntimeException)

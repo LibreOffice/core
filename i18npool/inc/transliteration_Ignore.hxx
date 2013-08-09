@@ -71,7 +71,7 @@ public:
 protected:
         TransFunc func;
         oneToOneMapping *table;
-        Mapping *map;
+        const Mapping *map;
 };
 
 #define TRANSLITERATION_IGNORE( name ) \

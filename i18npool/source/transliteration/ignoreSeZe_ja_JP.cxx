@@ -29,7 +29,7 @@ using namespace com::sun::star::lang;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-static Mapping SeZe[] = {
+static const Mapping SeZe[] = {
         // SI + E --> SE
         { 0x30B7, 0x30A7, 0x30BB, sal_True },
         // SI + E --> SE

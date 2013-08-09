@@ -1828,7 +1828,7 @@ sal_uInt16 SwScriptInfo::KashidaJustify( sal_Int32* pKernArray,
 bool SwScriptInfo::IsArabicText( const OUString& rTxt, sal_Int32 nStt, sal_Int32 nLen )
 {
     using namespace ::com::sun::star::i18n;
-    static ScriptTypeList typeList[] = {
+    static const ScriptTypeList typeList[] = {
         { UnicodeScript_kArabic, UnicodeScript_kArabic, UnicodeScript_kArabic },        // 11,
         { UnicodeScript_kScriptCount, UnicodeScript_kScriptCount, UnicodeScript_kScriptCount }    // 88
     };
