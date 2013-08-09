@@ -768,7 +768,6 @@ lcl_InsAttr(SwDoc *const pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
                                 nsSwGetPoolIdFromName::GET_POOLID_NUMRULE )) )
                 pDoc->GetNumRuleFromPool( nPoolId );
         }
-
     }
 
     if( !rRg.HasMark() )        // no range
@@ -1454,7 +1453,6 @@ SwDrawFrmFmt *SwDoc::MakeDrawFrmFmt( const String &rFmtName,
     return pFmt;
 }
 
-
 sal_uInt16 SwDoc::GetTblFrmFmtCount(bool bUsed) const
 {
     sal_uInt16 nCount = mpTblFrmFmtTbl->size();
@@ -1470,7 +1468,6 @@ sal_uInt16 SwDoc::GetTblFrmFmtCount(bool bUsed) const
 
     return nCount;
 }
-
 
 SwFrmFmt& SwDoc::GetTblFrmFmt(sal_uInt16 nFmt, bool bUsed ) const
 {
@@ -2401,7 +2398,6 @@ SwTblNumFmtMerge::~SwTblNumFmtMerge()
     if( pNFmt )
         pNFmt->ClearMergeTable();
 }
-
 
 void SwDoc::SetTxtFmtCollByAutoFmt( const SwPosition& rPos, sal_uInt16 nPoolId,
                                     const SfxItemSet* pSet )

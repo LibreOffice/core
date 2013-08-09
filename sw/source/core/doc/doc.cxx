@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <doc.hxx>
 #include <UndoManager.hxx>
 #include <hintids.hxx>
@@ -2363,7 +2362,6 @@ bool SwDoc::RestoreInvisibleContent()
     }
     return bRet;
 }
-
 
 bool SwDoc::ConvertFieldsToText()
 {

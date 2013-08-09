@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <hintids.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <unotools/localedatawrapper.hxx>
@@ -63,7 +62,6 @@
 #include <GetMetricVal.hxx>
 #include <numrule.hxx>
 
-
 using namespace ::editeng;
 using namespace ::com::sun::star;
 
@@ -80,7 +78,6 @@ const sal_uInt16 PT_16  = 16 * 20;      // 16 pt
 const sal_uInt16 PT_18  = 18 * 20;      // 18 pt
 const sal_uInt16 PT_22  = 22 * 20;      // 22 pt
 const sal_uInt16 PT_24  = 24 * 20;      // 22 pt
-
 
 #define HTML_PARSPACE   GetMetricVal( CM_05 )
 
@@ -245,8 +242,6 @@ static void lcl_SetHeadline( SwDoc* pDoc, SwTxtFmtColl* pColl,
     }
 }
 
-
-
 static void lcl_SetRegister( SwDoc* pDoc, SfxItemSet& rSet, sal_uInt16 nFact,
                         bool bHeader, bool bTab )
 {
@@ -270,8 +265,6 @@ static void lcl_SetRegister( SwDoc* pDoc, SfxItemSet& rSet, sal_uInt16 nFact,
         rSet.Put( aTStops );
     }
 }
-
-
 
 static void lcl_SetNumBul( SwDoc* pDoc, SwTxtFmtColl* pColl,
                         SfxItemSet& rSet,
@@ -527,7 +520,6 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage )
             lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 9, false );
             break;
 
-
         // Special sections:
         // Header
         case RES_POOLCOLL_HEADER:
@@ -729,8 +721,6 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage )
         case RES_POOLCOLL_TOX_AUTHORITIES1:
             lcl_SetRegister( this, aSet, 0, false, true );
         break;
-
-
 
         case RES_POOLCOLL_NUM_LEVEL1S:
             lcl_SetNumBul( this, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL1,
@@ -1318,7 +1308,6 @@ SwFmt* SwDoc::GetFmtFromPool( sal_uInt16 nId )
             aSet.Put( SwFmtSurround( SURROUND_THROUGHT ));
         }
         break;
-
     case RES_POOLFRM_LABEL:
         {
             aSet.Put( SwFmtAnchor( FLY_AS_CHAR ) );
@@ -1402,8 +1391,6 @@ bool SwDoc::IsPoolFmtUsed( sal_uInt16 nId ) const
 
     return bFnd;
 }
-
-
 
 static void lcl_PutStdPageSizeIntoItemSet( SwDoc* pDoc, SfxItemSet& rSet )
 {

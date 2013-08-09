@@ -77,7 +77,6 @@ using namespace com::sun::star;
 
 extern void ClrContourCache( const SdrObject *pObj ); // TxtFly.Cxx
 
-
 inline bool GetRealURL( const SwGrfNode& rNd, String& rTxt )
 {
     bool bRet = rNd.GetFileFilterNms( &rTxt, 0 );
@@ -167,9 +166,6 @@ void SetOutDev( ViewShell *pSh, OutputDevice *pOut )
 {
     pSh->mpOut = pOut;
 }
-
-
-
 
 static void lcl_ClearArea( const SwFrm &rFrm,
                     OutputDevice &rOut, const SwRect& rPtArea,
@@ -517,7 +513,6 @@ sal_Bool SwNoTxtFrm::GetCharRect( SwRect &rRect, const SwPosition& rPos,
 
     return sal_True;
 }
-
 
 sal_Bool SwNoTxtFrm::GetCrsrOfst(SwPosition* pPos, Point& ,
                              SwCrsrMoveState*, bool ) const
@@ -1104,7 +1099,6 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
     }
 }
 
-
 sal_Bool SwNoTxtFrm::IsTransparent() const
 {
     const ViewShell* pSh = getRootFrm()->GetCurrShell();
@@ -1119,7 +1113,6 @@ sal_Bool SwNoTxtFrm::IsTransparent() const
     return sal_True;
 }
 
-
 void SwNoTxtFrm::StopAnimation( OutputDevice* pOut ) const
 {
     // Stop animated graphics
@@ -1131,13 +1124,10 @@ void SwNoTxtFrm::StopAnimation( OutputDevice* pOut ) const
     }
 }
 
-
 sal_Bool SwNoTxtFrm::HasAnimation() const
 {
     const SwGrfNode* pGrfNd = GetNode()->GetGrfNode();
     return pGrfNd && pGrfNd->IsAnimated();
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

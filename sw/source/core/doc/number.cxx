@@ -52,7 +52,6 @@
 
 using namespace ::com::sun::star;
 
-
 sal_uInt16 SwNumRule::nRefCount = 0;
 SwNumFmt* SwNumRule::aBaseFmts[ RULE_END ][ MAXLEVEL ] = {
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } };
@@ -113,18 +112,15 @@ void SwNumRule::SetName( const String & rName,
     }
 }
 
-
 void SwNumRule::GetTxtNodeList( SwNumRule::tTxtNodeList& rTxtNodeList ) const
 {
     rTxtNodeList = maTxtNodeList;
 }
 
-
 SwNumRule::tTxtNodeList::size_type SwNumRule::GetTxtNodeListSize() const
 {
     return maTxtNodeList.size();
 }
-
 
 void SwNumRule::AddTxtNode( SwTxtNode& rTxtNode )
 {
@@ -137,7 +133,6 @@ void SwNumRule::AddTxtNode( SwTxtNode& rTxtNode )
     }
 }
 
-
 void SwNumRule::RemoveTxtNode( SwTxtNode& rTxtNode )
 {
     tTxtNodeList::iterator aIter =
@@ -148,7 +143,6 @@ void SwNumRule::RemoveTxtNode( SwTxtNode& rTxtNode )
         maTxtNodeList.erase( aIter );
     }
 }
-
 
 void SwNumRule::SetNumRuleMap(boost::unordered_map<String, SwNumRule *, StringHash> *
                               _pNumRuleMap)
@@ -238,7 +232,6 @@ sal_Bool SwNumFmt::IsEnumeration() const
     // IsEnumeration() as !IsItemize()
     return !IsItemize();
 }
-
 
 sal_Bool SwNumFmt::IsItemize() const
 {
@@ -729,7 +722,6 @@ String SwNumRule::MakeNumString( const SwNumberTree::tNumberVector & rNumVector,
     return aStr;
 }
 
-
 String SwNumRule::MakeRefNumString( const SwNodeNum& rNodeNum,
                                     const bool bInclSuperiorNumLabels,
                                     const sal_uInt8 nRestrictInclToThisLevel ) const
@@ -1015,7 +1007,6 @@ void SwNumRule::SetIndentOfFirstListLevelAndChangeOthers( const short nNewIndent
     }
 }
 
-
 void SwNumRule::Validate()
 {
     std::set< SwList* > aLists;
@@ -1032,24 +1023,20 @@ void SwNumRule::Validate()
     SetInvalidRule(sal_False);
 }
 
-
 bool SwNumRule::IsCountPhantoms() const
 {
     return mbCountPhantoms;
 }
-
 
 void SwNumRule::SetCountPhantoms(bool bCountPhantoms)
 {
     mbCountPhantoms = bCountPhantoms;
 }
 
-
 SwNumRule::tParagraphStyleList::size_type SwNumRule::GetParagraphStyleListSize() const
 {
     return maParagraphStyleList.size();
 }
-
 
 void SwNumRule::AddParagraphStyle( SwTxtFmtColl& rTxtFmtColl )
 {
@@ -1062,7 +1049,6 @@ void SwNumRule::AddParagraphStyle( SwTxtFmtColl& rTxtFmtColl )
     }
 }
 
-
 void SwNumRule::RemoveParagraphStyle( SwTxtFmtColl& rTxtFmtColl )
 {
     tParagraphStyleList::iterator aIter =
@@ -1073,7 +1059,6 @@ void SwNumRule::RemoveParagraphStyle( SwTxtFmtColl& rTxtFmtColl )
         maParagraphStyleList.erase( aIter );
     }
 }
-
 
 namespace numfunc
 {

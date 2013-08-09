@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <hintids.hxx>
 #include <vcl/vclenum.hxx>
 #include <editeng/crossedoutitem.hxx>
@@ -2273,7 +2272,6 @@ void WordArrayComparator::CalcPositions( int *pPos, const SwTxtNode *pTxtNd,
         }
     }
 }
-
 
 int CommonSubseq::FindLCS( int *pLcs1, int *pLcs2, int nStt1, int nEnd1,
                                                     int nStt2, int nEnd2 )

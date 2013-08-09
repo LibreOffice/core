@@ -158,7 +158,6 @@ namespace
     }
 }
 
-
 // Struct with version numbers of the Items
 
 struct SwAfVersions
@@ -306,7 +305,6 @@ SwBoxAutoFmt::SwBoxAutoFmt()
     aBox.SetDistance( 55 );
 }
 
-
 SwBoxAutoFmt::SwBoxAutoFmt( const SwBoxAutoFmt& rNew )
     : aFont( rNew.aFont ),
     aHeight( rNew.aHeight ),
@@ -345,7 +343,6 @@ SwBoxAutoFmt::SwBoxAutoFmt( const SwBoxAutoFmt& rNew )
     eNumFmtLanguage( rNew.eNumFmtLanguage )
 {
 }
-
 
 SwBoxAutoFmt::~SwBoxAutoFmt()
 {
@@ -548,7 +545,6 @@ sal_Bool SwBoxAutoFmt::Save( SvStream& rStream, sal_uInt16 fileVersion ) const
     return 0 == rStream.GetError();
 }
 
-
 sal_Bool SwBoxAutoFmt::SaveVersionNo( SvStream& rStream, sal_uInt16 fileVersion ) const
 {
     rStream << aFont.GetVersion( fileVersion );
@@ -588,8 +584,6 @@ sal_Bool SwBoxAutoFmt::SaveVersionNo( SvStream& rStream, sal_uInt16 fileVersion 
     return 0 == rStream.GetError();
 }
 
-
-
 SwTableAutoFmt::SwTableAutoFmt( const String& rName )
     : aName( rName )
     , nStrResId( USHRT_MAX )
@@ -610,7 +604,6 @@ SwTableAutoFmt::SwTableAutoFmt( const String& rName )
 
     memset( aBoxAutoFmt, 0, sizeof( aBoxAutoFmt ) );
 }
-
 
 SwTableAutoFmt::SwTableAutoFmt( const SwTableAutoFmt& rNew )
     : m_aBreak( rNew.m_aBreak )
@@ -660,7 +653,6 @@ SwTableAutoFmt& SwTableAutoFmt::operator=( const SwTableAutoFmt& rNew )
     return *this;
 }
 
-
 SwTableAutoFmt::~SwTableAutoFmt()
 {
     SwBoxAutoFmt** ppFmt = aBoxAutoFmt;
@@ -668,7 +660,6 @@ SwTableAutoFmt::~SwTableAutoFmt()
         if( *ppFmt )
             delete *ppFmt;
 }
-
 
 void SwTableAutoFmt::SetBoxFmt( const SwBoxAutoFmt& rNew, sal_uInt8 nPos )
 {
@@ -680,7 +671,6 @@ void SwTableAutoFmt::SetBoxFmt( const SwBoxAutoFmt& rNew, sal_uInt8 nPos )
     else            // else set anew
         aBoxAutoFmt[ nPos ] = new SwBoxAutoFmt( rNew );
 }
-
 
 const SwBoxAutoFmt& SwTableAutoFmt::GetBoxFmt( sal_uInt8 nPos ) const
 {
@@ -697,8 +687,6 @@ const SwBoxAutoFmt& SwTableAutoFmt::GetBoxFmt( sal_uInt8 nPos ) const
         return *pDfltBoxAutoFmt;
     }
 }
-
-
 
 void SwTableAutoFmt::UpdateFromSet( sal_uInt8 nPos,
                                     const SfxItemSet& rSet,
@@ -764,7 +752,6 @@ void SwTableAutoFmt::UpdateFromSet( sal_uInt8 nPos,
 
     // we cannot handle the rest, that's specific to StarCalc
 }
-
 
 void SwTableAutoFmt::UpdateToSet(sal_uInt8 nPos, SfxItemSet& rSet,
                                  UpdateFlags eFlags, SvNumberFormatter* pNFmtr) const
@@ -1020,7 +1007,6 @@ sal_Bool SwTableAutoFmt::Save( SvStream& rStream, sal_uInt16 fileVersion ) const
     return bRet;
 }
 
-
 struct SwTableAutoFmtTbl::Impl
 {
     boost::ptr_vector<SwTableAutoFmt> m_AutoFormats;
@@ -1213,7 +1199,6 @@ sal_Bool SwTableAutoFmtTbl::Load( SvStream& rStream )
     return bRet;
 }
 
-
 sal_Bool SwTableAutoFmtTbl::Save( SvStream& rStream ) const
 {
     sal_Bool bRet = 0 == rStream.GetError();
@@ -1245,7 +1230,5 @@ sal_Bool SwTableAutoFmtTbl::Save( SvStream& rStream ) const
     rStream.Flush();
     return bRet;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

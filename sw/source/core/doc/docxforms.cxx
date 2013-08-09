@@ -115,9 +115,7 @@ void SwDoc::disposeXForms( )
                 Reference< XIndexAccess > xBindings(
                          xModel->getBindings(), UNO_QUERY );
 
-                //
                 // Then release them one by one
-                //
                 int nCount = xBindings->getCount();
                 for( int i = nCount-1; i >= 0; i-- )
                 {
@@ -128,9 +126,7 @@ void SwDoc::disposeXForms( )
                 Reference< XIndexAccess > xSubmissions(
                          xModel->getSubmissions(), UNO_QUERY );
 
-                //
                 // Then release them one by one
-                //
                 nCount = xSubmissions->getCount();
                 for( int i = nCount-1; i >= 0; i-- )
                 {

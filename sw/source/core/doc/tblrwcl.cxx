@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <hintids.hxx>
@@ -56,7 +55,6 @@
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
-
 
 #define COLFUZZY 20
 #define ROWFUZZY 10
@@ -768,7 +766,6 @@ void _DeleteBox( SwTable& rTbl, SwTableBox* pBox, SwUndo* pUndo,
                     }
                 }
             }
-
         }
 
         // Delete the Box first, then the Nodes!
@@ -965,7 +962,6 @@ lcl_SaveUpperLowerBorder( SwTable& rTbl, const SwTableBox& rBox,
                 rShareFmts.SetAttr( *pPrvBox, aTmp );
             }
         }
-
     }
 }
 
@@ -2488,7 +2484,6 @@ static bool lcl_SetSelBoxWidth( SwTableLine* pLine, CR_SetBoxWidth& rParam,
             }
             rParam.nLowerDiff = nOldLower;
 
-
             if( nLowerDiff ||
                  ( 0 != ( bGreaterBox = !nOldLower && TBLFIX_CHGABS != rParam.nMode &&
                     ( nDist + ( rParam.bLeft ? 0 : nWidth ) ) >= rParam.nSide)) ||
@@ -3109,7 +3104,6 @@ static bool lcl_DelSelBox( SwTableLine* pTabLine, CR_SetBoxWidth& rParam,
         nBoxChkEnd = (sal_uInt16)rParam.nSide;
     }
 
-
     while( n != nCntEnd )
     {
         SwTableBox* pBox;
@@ -3505,7 +3499,6 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
         fnSelBox = lcl_SetSelBoxWidth;
         fnOtherBox = lcl_SetOtherBoxWidth;
     }
-
 
     switch( eType & 0xff )
     {

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "doc.hxx"
 #include "lineinfo.hxx"
 #include "charfmt.hxx"
@@ -25,6 +24,7 @@
 #include "rootfrm.hxx"
 #include "viewsh.hxx"
 #include <set>
+
 void SwDoc::SetLineNumberInfo( const SwLineNumberInfo &rNew )
 {
     SwRootFrm* pTmpRoot = GetCurrentLayout();//swmod 080219
@@ -112,7 +112,6 @@ bool SwLineNumberInfo::operator==( const SwLineNumberInfo& rInf ) const
             bCountInFlys == rInf.IsCountInFlys() &&
             bRestartEachPage == rInf.IsRestartEachPage();
 }
-
 
 SwCharFmt* SwLineNumberInfo::GetCharFmt( IDocumentStylePoolAccess& rIDSPA ) const
 {

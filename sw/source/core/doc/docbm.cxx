@@ -48,7 +48,6 @@
 #include <viscrs.hxx>
 #include <stdio.h>
 
-
 using namespace ::std;
 using namespace ::boost;
 using namespace ::sw::mark;
@@ -1028,7 +1027,6 @@ namespace
 
 }
 
-
 // IDocumentMarkAccess for SwDoc
 
 IDocumentMarkAccess* SwDoc::getIDocumentMarkAccess()
@@ -1455,7 +1453,6 @@ void _SaveCntntIdx(SwDoc* pDoc,
         }
     }
 }
-
 
 void _RestoreCntntIdx(SwDoc* pDoc,
     std::vector<sal_uLong> &rSaveArr,

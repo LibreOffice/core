@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <i18nlangtag/lang.h>
 #include <sortopt.hxx>
 #include <boost/foreach.hpp>

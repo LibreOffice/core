@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <com/sun/star/i18n/ScriptType.hpp>
 
 #include <editeng/langitem.hxx>
@@ -34,7 +33,6 @@
 #include <ndtxt.hxx>
 #include <txtfrm.hxx>
 #include <swundo.hxx>
-
 
 using namespace ::com::sun::star;
 
@@ -286,6 +284,5 @@ SwExtTextInput* SwDoc::GetExtTextInput() const
             "more then one InputEngine available" );
     return (SwExtTextInput*)mpExtInputRing;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

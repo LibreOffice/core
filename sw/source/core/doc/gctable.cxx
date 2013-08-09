@@ -31,7 +31,6 @@ inline const SvxBorderLine* GetLineTB( const SvxBoxItem* pBox, bool bTop )
     return bTop ? pBox->GetTop() : pBox->GetBottom();
 }
 
-
 bool _SwGCBorder_BoxBrd::CheckLeftBorderOfFormat( const SwFrmFmt& rFmt )
 {
     const SvxBorderLine* pBrd;
@@ -45,7 +44,6 @@ bool _SwGCBorder_BoxBrd::CheckLeftBorderOfFormat( const SwFrmFmt& rFmt )
     }
     return false;
 }
-
 
 static bool lcl_GCBorder_ChkBoxBrd_B( const SwTableBox* pBox, _SwGCBorder_BoxBrd* pPara );
 
@@ -436,6 +434,5 @@ void SwTable::GCLines()
             lcl_MergeGCLine( GetTabLines()[n], &aPara ); ++n )
         ;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

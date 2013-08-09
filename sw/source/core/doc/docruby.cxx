@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <string.h>         // for strchr()
 
 #include <com/sun/star/i18n/UnicodeType.hpp>
@@ -39,7 +38,6 @@
 #include <crsskip.hxx>
 
 using namespace ::com::sun::star::i18n;
-
 
 /*
  * Members in the list:

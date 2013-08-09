@@ -112,7 +112,6 @@ namespace
     }
 }
 
-
 void PaMCorrAbs( const SwPaM& rRange,
                 const SwPosition& rNewPos )
 {
@@ -253,10 +252,6 @@ void SwDoc::CorrAbs(const SwNodeIndex& rStartNode,
     }
 }
 
-
-
-
-
 void PaMCorrRel( const SwNodeIndex &rOldNode,
                  const SwPosition &rNewPos,
                  const xub_StrLen nOffset )
@@ -327,7 +322,6 @@ void SwDoc::CorrRel(const SwNodeIndex& rOldNode,
     if(bMoveCrsr)
         ::PaMCorrRel(rOldNode, rNewPos, nOffset);
 }
-
 
 SwEditShell* SwDoc::GetEditShell( ViewShell** ppSh ) const
 {

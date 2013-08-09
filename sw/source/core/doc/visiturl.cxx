@@ -28,7 +28,6 @@
 #include <editsh.hxx>
 #include <docsh.hxx>
 
-
 SwURLStateChanged::SwURLStateChanged( const SwDoc* pD )
     : pDoc( pD )
 {

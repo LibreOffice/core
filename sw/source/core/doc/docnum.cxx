@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <hintids.hxx>
 #include <rtl/random.h>
 #include <tools/resid.hxx>
@@ -80,7 +79,6 @@ namespace {
 }
 
 #include <stdlib.h>
-
 
 inline sal_uInt8 GetUpperLvlChg( sal_uInt8 nCurLvl, sal_uInt8 nLevel, sal_uInt16 nMask )
 {
@@ -326,7 +324,6 @@ bool SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
                 aMoveArr[n] = m;
             else
                 aMoveArr[n] = -1;
-
         }
         else
             aMoveArr[n] = -1;
@@ -494,6 +491,7 @@ bool SwDoc::MoveOutlinePara( const SwPaM& rPam, short nOffset )
     aEndRg--;
     while( aEndRg.GetNode().IsStartNode() )
         aEndRg--;
+
     while( aEndRg.GetNode().IsEndNode() )
     {
         pNd = aEndRg.GetNode().StartOfSectionNode();
@@ -530,6 +528,7 @@ bool SwDoc::MoveOutlinePara( const SwPaM& rPam, short nOffset )
         aInsertPos--;
         --nNewPos;
     }
+
     if( nOffset >= 0 )
     {
         // When just before the insert position a section ends, it is okay when I'm moving backward
@@ -1612,7 +1611,6 @@ const SwNumRule *  SwDoc::SearchNumRule(const SwPosition & rPos,
     return pResult;
 }
 
-
 bool SwDoc::GotoPrevNum( SwPosition& rPos, bool bOverUpper,
                             sal_uInt8* pUpper, sal_uInt8* pLower  )
 {
@@ -2035,7 +2033,6 @@ bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, bool bIsOutlMv )
         nMoved = rPam.End()->nNode.GetIndex() - rPam.Start()->nNode.GetIndex() + 1;
     }
 
-
     MoveNodeRange( aMvRg, aIdx, DOC_MOVEREDLINES );
 
     if( pUndo )
@@ -2101,7 +2098,6 @@ bool SwDoc::NumOrNoNum( const SwNodeIndex& rIdx, sal_Bool bDel )
                  pTxtNd->GetActualListLevel() < MAXLEVEL)
         {
             SwPaM aPam(*pTxtNd);
-
             DelNumRules(aPam);
 
             bResult = true;

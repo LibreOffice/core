@@ -47,7 +47,6 @@
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 
-
 void SwTable::UpdateCharts() const
 {
     GetFrmFmt()->GetDoc()->UpdateCharts( GetFrmFmt()->GetName() );
@@ -199,7 +198,6 @@ void SwDoc::SetTableName( SwFrmFmt& rTblFmt, const String &rNewName )
     SetModified();
 }
 
-
 SwChartDataProvider * SwDoc::GetChartDataProvider( bool bCreate ) const
 {
     // since there must be only one instance of this object per document
@@ -213,7 +211,6 @@ SwChartDataProvider * SwDoc::GetChartDataProvider( bool bCreate ) const
     }
     return maChartDataProviderImplRef.get();
 }
-
 
 void SwDoc::CreateChartInternalDataProviders( const SwTable *pTable )
 {
@@ -244,7 +241,6 @@ void SwDoc::CreateChartInternalDataProviders( const SwTable *pTable )
         }
     }
 }
-
 
 SwChartLockController_Helper & SwDoc::GetChartControllerHelper()
 {

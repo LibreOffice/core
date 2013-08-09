@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <sal/macros.h>
 #include <hintids.hxx>
 #include <editeng/ulspitem.hxx>
@@ -41,7 +40,6 @@ TYPEINIT1( SwCollCondition, SwClient );
 
 namespace TxtFmtCollFunc
 {
-
     // #i71574#
     void CheckTxtFmtCollForDeletionOfAssignmentToOutlineStyle(
                                             SwFmt* pFmt,
@@ -280,7 +278,6 @@ void SwTxtFmtColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
             bWeiter = pNewChgSet->GetTheChgdSet() == &GetAttrSet();
     }
 
-
     for( int nC = 0, nArrLen = sizeof(aFontSizeArr) / sizeof( aFontSizeArr[0]);
             nC < nArrLen; ++nC )
     {
@@ -475,7 +472,6 @@ SwCollCondition::SwCollCondition( SwTxtFmtColl* pColl, sal_uLong nMasterCond,
     aSubCondition.nSubCondition = nSubCond;
 }
 
-
 SwCollCondition::SwCollCondition( SwTxtFmtColl* pColl, sal_uLong nMasterCond,
                                     const String& rSubExp )
     : SwClient( pColl ), nCondition( nMasterCond )
@@ -486,7 +482,6 @@ SwCollCondition::SwCollCondition( SwTxtFmtColl* pColl, sal_uLong nMasterCond,
         aSubCondition.nSubCondition = 0;
 }
 
-
 SwCollCondition::SwCollCondition( const SwCollCondition& rCopy )
     : SwClient( (SwModify*)rCopy.GetRegisteredIn() ), nCondition( rCopy.nCondition )
 {
@@ -495,7 +490,6 @@ SwCollCondition::SwCollCondition( const SwCollCondition& rCopy )
     else
         aSubCondition.nSubCondition = rCopy.aSubCondition.nSubCondition;
 }
-
 
 SwCollCondition::~SwCollCondition()
 {
@@ -507,8 +501,6 @@ void SwCollCondition::RegisterToFormat( SwFmt& rFmt )
 {
     rFmt.Add( this );
 }
-
-
 
 int SwCollCondition::operator==( const SwCollCondition& rCmp ) const
 {
@@ -541,7 +533,6 @@ int SwCollCondition::operator==( const SwCollCondition& rCmp ) const
     return nRet;
 }
 
-
 void SwCollCondition::SetCondition( sal_uLong nCond, sal_uLong nSubCond )
 {
     if( USRFLD_EXPRESSION & nCondition )
@@ -549,7 +540,6 @@ void SwCollCondition::SetCondition( sal_uLong nCond, sal_uLong nSubCond )
     nCondition = nCond;
     aSubCondition.nSubCondition = nSubCond;
 }
-
 
 SwConditionTxtFmtColl::~SwConditionTxtFmtColl()
 {
@@ -568,7 +558,6 @@ const SwCollCondition* SwConditionTxtFmtColl::HasCondition(
     return n < aCondColls.size() ? pFnd : 0;
 }
 
-
 void SwConditionTxtFmtColl::InsertCondition( const SwCollCondition& rCond )
 {
     for( sal_uInt16 n = 0; n < aCondColls.size(); ++n )
@@ -582,7 +571,6 @@ void SwConditionTxtFmtColl::InsertCondition( const SwCollCondition& rCond )
     SwCollCondition* pNew = new SwCollCondition( rCond );
     aCondColls.push_back( pNew );
 }
-
 
 bool SwConditionTxtFmtColl::RemoveCondition( const SwCollCondition& rCond )
 {

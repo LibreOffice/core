@@ -43,10 +43,8 @@
 
 using namespace ::com::sun::star;
 
-
 #define COLFUZZY 20
 #define MAX_TABWIDTH (USHRT_MAX - 2001)
-
 
 class SwHTMLTableLayoutConstraints
 {
@@ -59,7 +57,6 @@ class SwHTMLTableLayoutConstraints
     sal_uLong nMinNoAlign, nMaxNoAlign; // provisional result of AL-Pass 1
 
 public:
-
     SwHTMLTableLayoutConstraints( sal_uLong nMin, sal_uLong nMax, sal_uInt16 nRow,
                                 sal_uInt16 nCol, sal_uInt16 nColSp );
     ~SwHTMLTableLayoutConstraints();
@@ -75,7 +72,6 @@ public:
     sal_uInt16 GetColSpan() const { return nColSpan; }
     sal_uInt16 GetColumn() const { return nCol; }
 };
-
 
 SwHTMLTableLayoutCnts::SwHTMLTableLayoutCnts( const SwStartNode *pSttNd,
                                           SwHTMLTableLayout* pTab,
@@ -96,7 +92,6 @@ const SwStartNode *SwHTMLTableLayoutCnts::GetStartNode() const
     return pBox ? pBox->GetSttNd() : pStartNode;
 }
 
-
 SwHTMLTableLayoutCell::SwHTMLTableLayoutCell( SwHTMLTableLayoutCnts *pCnts,
                                           sal_uInt16 nRSpan, sal_uInt16 nCSpan,
                                           sal_uInt16 nWidth, bool bPrcWidth,
@@ -115,7 +110,6 @@ SwHTMLTableLayoutCell::~SwHTMLTableLayoutCell()
     }
 }
 
-
 SwHTMLTableLayoutColumn::SwHTMLTableLayoutColumn( sal_uInt16 nWidth,
                                                   bool bRelWidth,
                                                   bool bLBorder ) :
@@ -125,7 +119,6 @@ SwHTMLTableLayoutColumn::SwHTMLTableLayoutColumn( sal_uInt16 nWidth,
     nWidthOption( nWidth ), bRelWidthOption( bRelWidth ),
     bLeftBorder( bLBorder )
 {}
-
 
 SwHTMLTableLayoutConstraints::SwHTMLTableLayoutConstraints(
     sal_uLong nMin, sal_uLong nMax, sal_uInt16 nRw, sal_uInt16 nColumn, sal_uInt16 nColSp ):
@@ -167,7 +160,6 @@ SwHTMLTableLayoutConstraints *SwHTMLTableLayoutConstraints::InsertNext(
 
     return pConstr;
 }
-
 
 typedef SwHTMLTableLayoutColumn *SwHTMLTableLayoutColumnPtr;
 typedef SwHTMLTableLayoutCell *SwHTMLTableLayoutCellPtr;
@@ -1720,7 +1712,6 @@ IMPL_STATIC_LINK( SwHTMLTableLayout, DelayedResize_Impl, void*, EMPTYARG )
     return 0;
 }
 
-
 sal_Bool SwHTMLTableLayout::Resize( sal_uInt16 nAbsAvail, sal_Bool bRecalc,
                                 sal_Bool bForce, sal_uLong nDelay )
 {
@@ -1800,6 +1791,5 @@ void SwHTMLTableLayout::BordersChanged( sal_uInt16 nAbsAvail, sal_Bool bRecalc )
 
     Resize( nAbsAvail, bRecalc );
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

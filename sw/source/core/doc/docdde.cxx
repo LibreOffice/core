@@ -42,7 +42,6 @@ using namespace ::com::sun::star;
 
 namespace
 {
-
     static ::sw::mark::DdeBookmark* lcl_FindDdeBookmark(const IDocumentMarkAccess& rMarkAccess, const OUString& rName, bool bCaseSensitive)
     {
         //Iterating over all bookmarks, checking DdeBookmarks
@@ -106,8 +105,6 @@ static bool lcl_FindSection( const SwSectionFmt* pSectFmt, _FindItem * const pIt
     return true;
 }
 
-
-
 static bool lcl_FindTable( const SwFrmFmt* pTableFmt, _FindItem * const pItem )
 {
     String sNm( GetAppCharClass().lowercase( pTableFmt->GetName() ));
@@ -130,8 +127,6 @@ static bool lcl_FindTable( const SwFrmFmt* pTableFmt, _FindItem * const pItem )
     }
     return true;
 }
-
-
 
 bool SwDoc::GetData( const OUString& rItem, const String& rMimeType,
                      uno::Any & rValue ) const
@@ -176,8 +171,6 @@ bool SwDoc::GetData( const OUString& rItem, const String& rMimeType,
     return sal_False;
 }
 
-
-
 bool SwDoc::SetData( const OUString& rItem, const String& rMimeType,
                      const uno::Any & rValue )
 {
@@ -221,8 +214,6 @@ bool SwDoc::SetData( const OUString& rItem, const String& rMimeType,
 
     return sal_False;
 }
-
-
 
 ::sfx2::SvLinkSource* SwDoc::CreateLinkSource(const OUString& rItem)
 {

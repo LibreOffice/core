@@ -305,7 +305,6 @@ const SwTOXMark& SwDoc::GotoTOXMark( const SwTOXMark& rCurTOXMark,
         }
     }
 
-
     // We couldn't find a successor
     // Use minimum or maximum
     if(!pNew)
@@ -548,7 +547,6 @@ bool SwDoc::DeleteTOX( const SwTOXBase& rTOXBase, bool bDelNodes )
                 aSearchPam = aTmpPam1;
             }
         }
-
 
         /* PaM containing the TOX. */
         SwPaM aPam(*pMyNode->EndOfSectionNode(), *pMyNode);

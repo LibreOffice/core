@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -33,9 +32,7 @@
 #include <crsrsh.hxx>
 #include <docsh.hxx>
 
-
 using namespace ::com::sun::star;
-
 
 /// copy document properties via public interface
 static void lcl_copyDocumentProperties(
@@ -184,6 +181,5 @@ bool SwDoc::InsertGlossary( SwTextBlocks& rBlock, const String& rEntry,
     rBlock.EndGetDoc();
     return bRet;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

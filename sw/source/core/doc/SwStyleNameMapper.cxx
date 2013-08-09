@@ -662,6 +662,7 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
 #endif
     return *pHash;
 }
+
 // This gets the UI Name from the programmatic name
 const OUString& SwStyleNameMapper::GetUIName(const OUString& rName,
                                              SwGetPoolIdFromName const eFlags)
@@ -669,7 +670,6 @@ const OUString& SwStyleNameMapper::GetUIName(const OUString& rName,
     sal_uInt16 nId = GetPoolIdFromProgName ( rName, eFlags );
     return nId != USHRT_MAX ? GetUIName( nId, rName ) : rName;
 }
-
 
 // Get the programmatic Name from the UI name
 const OUString& SwStyleNameMapper::GetProgName(
@@ -710,6 +710,7 @@ void SwStyleNameMapper::FillProgName(
         fillNameFromId(nId, rFillName, true);
     }
 }
+
 // Get the UI name from the programmatic name in rName and put it into rFillName
 void SwStyleNameMapper::FillUIName(
         const OUString& rName, OUString& rFillName,
@@ -827,6 +828,7 @@ void SwStyleNameMapper::FillUIName(sal_uInt16 const nId, OUString& rFillName)
 {
     fillNameFromId(nId, rFillName, false);
 }
+
 // Get the UI Name from the pool ID
 const OUString& SwStyleNameMapper::GetUIName(
         sal_uInt16 const nId, const OUString& rName)
@@ -839,6 +841,7 @@ void SwStyleNameMapper::FillProgName(sal_uInt16 nId, OUString& rFillName)
 {
     fillNameFromId(nId, rFillName, true);
 }
+
 // Get the programmatic Name from the pool ID
 const OUString&
 SwStyleNameMapper::GetProgName(sal_uInt16 const nId, const OUString& rName)
@@ -853,6 +856,7 @@ sal_uInt16 SwStyleNameMapper::GetPoolIdFromUIName(
     NameToIdHash::const_iterator aIter = rHashMap.find(rName);
     return aIter != rHashMap.end() ? (*aIter).second : USHRT_MAX;
 }
+
 // Get the Pool ID from the programmatic name
 sal_uInt16 SwStyleNameMapper::GetPoolIdFromProgName(
             const OUString& rName, SwGetPoolIdFromName const eFlags)
@@ -1037,7 +1041,6 @@ const ::std::vector<OUString>& SwStyleNameMapper::GetNumRuleProgNameArray()
             sizeof ( NumRuleProgNameTable ) / sizeof ( SwTableEntry ) );
     return *pNumRuleProgNameArray;
 }
-
 
 const OUString
 SwStyleNameMapper::GetSpecialExtraProgName(const OUString& rExtraUIName)

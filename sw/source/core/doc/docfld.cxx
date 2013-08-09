@@ -485,7 +485,6 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
         }
     }
 
-
     // all fields/boxes are now invalid, so we can start to calculate
     if( pHt && ( RES_TABLEFML_UPDATE != pHt->Which() ||
                 TBL_CALC != ((SwTableFmlUpdate*)pHt)->eFlags ))

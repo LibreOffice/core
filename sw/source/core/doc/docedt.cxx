@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <fmtanchr.hxx>
 #include <fmtcntnt.hxx>
 #include <txtftn.hxx>
@@ -1636,7 +1635,6 @@ bool SwDoc::DeleteRangeImplImpl(SwPaM & rPam)
         SwDataChanged aTmp( rPam );
     }
 
-
     if (GetIDocumentUndoRedo().DoesUndo())
     {
         GetIDocumentUndoRedo().ClearRedo();
@@ -1916,7 +1914,6 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
                                             pSpellArgs->pEndIdx->GetIndex() :
                                             pSpellArgs->pStartIdx->GetIndex();
                         }
-
 
                         if( pSpellArgs && pSpellArgs->bIsGrammarCheck )
                         {

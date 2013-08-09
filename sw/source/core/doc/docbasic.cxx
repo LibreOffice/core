@@ -130,8 +130,6 @@ bool SwDoc::ExecMacro( const SvxMacro& rMacro, String* pRet, SbxArray* pArgs )
     return 0 == eErr;
 }
 
-
-
 sal_uInt16 SwDoc::CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEvent,
                     bool bCheckPtr, SbxArray* pArgs, const Link* )
 {
@@ -241,8 +239,5 @@ sal_uInt16 SwDoc::CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEve
     }
     return nRet;
 }
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

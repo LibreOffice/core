@@ -473,7 +473,6 @@ SwDoc::~SwDoc()
         mpDocShell->SetUndoManager(0);
     }
 
-
     // #i83479#
     delete mpListItemsList;
     mpListItemsList = 0;
@@ -919,7 +918,6 @@ SwModify*   SwDoc::GetUnoCallBack() const
 {
     return mpUnoCallBack;
 }
-
 
 /** SwDoc: Reading and writing of the layout cache. */
 void SwDoc::ReadLayoutCache( SvStream& rStream )

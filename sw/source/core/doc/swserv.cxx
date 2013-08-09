@@ -39,7 +39,6 @@ SwServerObject::~SwServerObject()
 {
 }
 
-
 sal_Bool SwServerObject::GetData( uno::Any & rData,
                                 const String & rMimeType, sal_Bool )
 {
@@ -99,13 +98,11 @@ sal_Bool SwServerObject::GetData( uno::Any & rData,
                                         aMemStm.Seek( STREAM_SEEK_TO_END ) );
                 bRet = sal_True;
             }
-
             delete pPam;
         }
     }
     return bRet;
 }
-
 
 sal_Bool SwServerObject::SetData( const String & ,
                     const uno::Any& )
@@ -113,7 +110,6 @@ sal_Bool SwServerObject::SetData( const String & ,
     // set new data into the "server" -> at first nothing to do
     return sal_False;
 }
-
 
 void SwServerObject::SendDataChanged( const SwPosition& rPos )
 {
@@ -150,7 +146,6 @@ void SwServerObject::SendDataChanged( const SwPosition& rPos )
         }
     }
 }
-
 
 void SwServerObject::SendDataChanged( const SwPaM& rRange )
 {
@@ -189,7 +184,6 @@ void SwServerObject::SendDataChanged( const SwPaM& rRange )
         }
     }
 }
-
 
 sal_Bool SwServerObject::IsLinkInServer( const SwBaseLink* pChkLnk ) const
 {
@@ -292,15 +286,12 @@ void SwServerObject::SetDdeBookmark( ::sw::mark::IMark& rBookmark)
             " - setting an bookmark that is not DDE-capable");
 }
 
-
-
 SwDataChanged::SwDataChanged( const SwPaM& rPam )
     : pPam( &rPam ), pPos( 0 ), pDoc( rPam.GetDoc() )
 {
     nNode = rPam.GetPoint()->nNode.GetIndex();
     nCntnt = rPam.GetPoint()->nContent.GetIndex();
 }
-
 
 SwDataChanged::SwDataChanged( SwDoc* pDc, const SwPosition& rPos )
     : pPam( 0 ), pPos( &rPos ), pDoc( pDc )

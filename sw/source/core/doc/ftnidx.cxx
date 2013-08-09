@@ -28,8 +28,6 @@
 #include <fmtftntx.hxx>
 #include <rootfrm.hxx>
 
-
-
 bool CompareSwFtnIdxs::operator()(SwTxtFtn* const& lhs, SwTxtFtn* const& rhs) const
 {
     sal_uLong nIdxLHS = _SwTxtFtn_GetIndex( lhs );
@@ -156,7 +154,6 @@ void SwFtnIdxs::UpdateFtn( const SwNodeIndex& rStt )
     }
 }
 
-
 void SwFtnIdxs::UpdateAllFtn()
 {
     if( empty() )
@@ -277,7 +274,6 @@ SwTxtFtn* SwFtnIdxs::SeekEntry( const SwNodeIndex& rPos, sal_uInt16* pFndPos ) c
     return 0;
 }
 
-
 const SwSectionNode* SwUpdFtnEndNtAtEnd::FindSectNdWithEndAttr(
                 const SwTxtFtn& rTxtFtn )
 {
@@ -336,8 +332,5 @@ sal_uInt16 SwUpdFtnEndNtAtEnd::ChkNumber( const SwTxtFtn& rTxtFtn )
     const SwSectionNode* pSectNd = FindSectNdWithEndAttr( rTxtFtn );
     return pSectNd ? GetNumber( rTxtFtn, *pSectNd ) : 0;
 }
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

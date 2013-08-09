@@ -67,7 +67,6 @@ SwEndNoteInfo& SwEndNoteInfo::operator=(const SwEndNoteInfo& rInfo)
     return *this;
 }
 
-
 bool SwEndNoteInfo::operator==( const SwEndNoteInfo& rInfo ) const
 {
     return  aPageDescDep.GetRegisteredIn() ==
@@ -83,7 +82,6 @@ bool SwEndNoteInfo::operator==( const SwEndNoteInfo& rInfo ) const
             sPrefix == rInfo.sPrefix &&
             sSuffix == rInfo.sSuffix;
 }
-
 
 SwEndNoteInfo::SwEndNoteInfo(const SwEndNoteInfo& rInfo) :
     SwClient( rInfo.GetFtnTxtColl() ),
@@ -253,7 +251,6 @@ SwFtnInfo::SwFtnInfo(SwTxtFmtColl *pFmt) :
 
 /*********************** SwDoc ***************************/
 
-
 void SwDoc::SetFtnInfo(const SwFtnInfo& rInfo)
 {
     SwRootFrm* pTmpRoot = GetCurrentLayout();//swmod 080219
@@ -395,7 +392,6 @@ void SwDoc::SetEndNoteInfo(const SwEndNoteInfo& rInfo)
     }
 }
 
-
 bool SwDoc::SetCurFtn( const SwPaM& rPam, const String& rNumStr,
                        sal_uInt16 nNumber, bool bIsEndNote )
 {
@@ -508,9 +504,5 @@ bool SwDoc::SetCurFtn( const SwPaM& rPam, const String& rNumStr,
         delete pUndo;
     return bChg;
 }
-
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

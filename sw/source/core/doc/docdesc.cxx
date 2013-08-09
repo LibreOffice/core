@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <cmdid.h>
 #include <svx/svdmodel.hxx>
 #include <editeng/ulspitem.hxx>
@@ -223,7 +222,6 @@ void SwDoc::CopyMasterHeader(const SwPageDesc &rChged, const SwFmtHeader &rHead,
             else
                 ::lcl_DescSetAttr( *pRight,
                                *(SwFrmFmt*)rFmtHead.GetHeaderFmt(), false );
-
         }
     }
 }

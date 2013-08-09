@@ -1192,7 +1192,6 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
                 }
                 break;
 
-
             case nsRedlineType_t::REDLINE_FMTCOLL:
                 // How should we behave here?
                 // insert as is
@@ -1920,7 +1919,6 @@ static sal_Bool lcl_RejectRedline( SwRedlineTbl& rArr, sal_uInt16& rPos,
     return bRet;
 }
 
-
 static const SwRedline* lcl_FindCurrRedline( const SwPosition& rSttPos,
                                         sal_uInt16& rPos,
                                         bool bNext = true )
@@ -2030,7 +2028,6 @@ static void lcl_AdjustRedlineRange( SwPaM& rPam )
         }
     }
 }
-
 
 bool SwDoc::AcceptRedline( sal_uInt16 nPos, bool bCallDelete )
 {
@@ -2567,7 +2564,6 @@ void SwDoc::SetRedlinePassword(
     SetModified();
 }
 
-
 bool SwRedlineTbl::Insert( SwRedline* p, bool bIns )
 {
     bool bRet = false;
@@ -2832,7 +2828,6 @@ sal_uInt16 SwRedlineTbl::FindPrevSeqNo( sal_uInt16 nSeqNo, sal_uInt16 nSttPos,
     return nRet;
 }
 
-
 SwRedlineExtraData::~SwRedlineExtraData()
 {
 }
@@ -2849,7 +2844,6 @@ int SwRedlineExtraData::operator == ( const SwRedlineExtraData& ) const
 {
     return sal_False;
 }
-
 
 SwRedlineExtraData_FmtColl::SwRedlineExtraData_FmtColl( const String& rColl,
                                                 sal_uInt16 nPoolFmtId,
@@ -2923,7 +2917,6 @@ void SwRedlineExtraData_FmtColl::SetItemSet( const SfxItemSet& rSet )
     else
         pSet = 0;
 }
-
 
 SwRedlineExtraData_Format::SwRedlineExtraData_Format( const SfxItemSet& rSet )
 {
@@ -3236,7 +3229,6 @@ void SwRedline::ShowOriginal( sal_uInt16 nLoop )
     }
     pDoc->SetRedlineMode_intern( eOld );
 }
-
 
 void SwRedline::InvalidateRange()       // trigger the Layout
 {

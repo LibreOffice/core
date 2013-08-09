@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <unotools/linguprops.hxx>
 #include <unotools/lingucfg.hxx>
 #include <com/sun/star/embed/EmbedStates.hpp>
@@ -97,7 +96,6 @@
 using namespace ::com::sun::star;
 
 #define DEF_FLY_WIDTH    2268   // Default width for FlyFrms (2268 == 4cm)
-
 
 static bool lcl_IsItemSet(const SwCntntNode & rNode, sal_uInt16 which)
 {
@@ -1616,7 +1614,6 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
 #endif
         const_cast<SwFmtFlyCnt&>(pHnt->GetFlyCnt()).SetFlyFmt( pNewFmt );
     }
-
 
     // The old one should not have a flow
     // and it should be adjusted to above and middle.
