@@ -45,6 +45,8 @@ namespace writerfilter {
                 RTFDocumentImpl& m_rImport;
                 std::stack< uno::Reference<drawing::XShapes> > m_aParents;
                 uno::Reference<drawing::XShape> m_xShape;
+                /// If m_xShape is imported as a Writer text frame (instead of a drawinglayer rectangle).
+                bool m_bTextFrame;
         };
     } // namespace rtftok
 } // namespace writerfilter

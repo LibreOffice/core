@@ -14,6 +14,7 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegmentCommand.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
@@ -44,7 +45,8 @@ namespace rtftok {
 
 RTFSdrImport::RTFSdrImport(RTFDocumentImpl& rDocument,
         uno::Reference<lang::XComponent> const& xDstDoc)
-    : m_rImport(rDocument)
+    : m_rImport(rDocument),
+    m_bTextFrame(false)
 {
     uno::Reference<drawing::XDrawPageSupplier> xDrawings(xDstDoc, uno::UNO_QUERY);
     if (xDrawings.is())
@@ -193,7 +195,12 @@ void RTFSdrImport::applyProperty(uno::Reference<drawing::XShape> xShape, OUStrin
         xPropertySet->setPropertyValue("FrameIsAutomaticHeight", uno::makeAny(*obFitShapeToText));
     }
     if (!bFilled)
-        xPropertySet->setPropertyValue("BackColorTransparency", uno::makeAny(sal_Int32(100)));
+    {
+        if (m_bTextFrame)
+            xPropertySet->setPropertyValue("BackColorTransparency", uno::makeAny(sal_Int32(100)));
+        else
+            xPropertySet->setPropertyValue("FillStyle", uno::makeAny(drawing::FillStyle_NONE));
+    }
 }
 
 void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
@@ -201,7 +208,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
     int nType = -1;
     bool bPib = false;
     bool bCustom = false;
-    bool bTextFrame = false;
+    m_bTextFrame = false;
 
     uno::Reference<drawing::XShape> xShape;
     uno::Reference<beans::XPropertySet> xPropertySet;
@@ -241,7 +248,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
                     if (!bClose && m_aParents.size() == 1)
                     {
                         createShape("com.sun.star.text.TextFrame", xShape, xPropertySet);
-                        bTextFrame = true;
+                        m_bTextFrame = true;
                         std::vector<beans::PropertyValue> aDefaults = getTextFrameDefaults(true);
                         for (size_t j = 0; j < aDefaults.size(); ++j)
                             xPropertySet->setPropertyValue(aDefaults[j].Name, aDefaults[j].Value);
@@ -256,12 +263,12 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
 
             // Defaults
             aAny <<= (sal_uInt32)0xffffff; // White in Word, kind of blue in Writer.
-            if (xPropertySet.is() && !bTextFrame)
+            if (xPropertySet.is() && !m_bTextFrame)
                 xPropertySet->setPropertyValue("FillColor", aAny);
         }
         else if ( i->first == "wzName" )
         {
-            if (bTextFrame)
+            if (m_bTextFrame)
             {
                 uno::Reference<container::XNamed> xNamed(xShape, uno::UNO_QUERY);
                 xNamed->setName(i->second);
@@ -279,7 +286,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
         else if (i->first == "fillColor" && xPropertySet.is())
         {
             aAny <<= msfilter::util::BGRToRGB(i->second.toInt32());
-            if (bTextFrame)
+            if (m_bTextFrame)
                 xPropertySet->setPropertyValue("BackColor", aAny);
             else
                 xPropertySet->setPropertyValue("FillColor", aAny);
@@ -524,7 +531,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
 
     if (xPropertySet.is())
     {
-        if (!bTextFrame)
+        if (!m_bTextFrame)
         {
             xPropertySet->setPropertyValue("LineColor", aLineColor);
             xPropertySet->setPropertyValue("LineWidth", aLineWidth);
@@ -544,7 +551,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
         }
         if (rShape.oZ)
             resolveDhgt(xPropertySet, *rShape.oZ);
-        if (bTextFrame)
+        if (m_bTextFrame)
             // Writer textframes implement text::WritingMode2, which is a different data type.
             xPropertySet->setPropertyValue("WritingMode", uno::makeAny(sal_Int16(eWritingMode)));
         else
@@ -558,7 +565,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
         return;
     }
 
-    if (m_aParents.size() && m_aParents.top().is() && !bTextFrame)
+    if (m_aParents.size() && m_aParents.top().is() && !m_bTextFrame)
         m_aParents.top()->add(xShape);
     if (bCustom && xShape.is())
     {
@@ -616,7 +623,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
             nTop = static_cast< sal_Int32 >( rShape.nTop + fHeightRatio * (*oRelTop - *oGroupTop) );
         }
 
-        if (bTextFrame)
+        if (m_bTextFrame)
         {
             xPropertySet->setPropertyValue("HoriOrientPosition", uno::makeAny(nLeft));
             xPropertySet->setPropertyValue("VertOrientPosition", uno::makeAny(nTop));
