@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//9MY\u003d",
+        "filename": "sw/source/filter/html/parcss1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1243,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2013-08-09T09:12:41Z",
+      "side": 1,
+      "message": "The definitions of external objects like sCSS1_url from sw/source/filter/html/css1kywd.hxx should arguably be removed, replacing their uses with plain string literals that make use of the overloaded OUString functions for literals.  That is,\n\n  aValue.startsWithIgnoreAsciiCase(\"url\")\n\nand similarly for other places.",
+      "revId": "ef9e14a1d1fe29535b60efe63156b9e6dbebe7ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
