@@ -4009,6 +4009,7 @@ StackVar ScInterpreter::Interpret()
                 case ocMatMult          : ScMatMult();                  break;
                 case ocMatTrans         : ScMatTrans();                 break;
                 case ocMatRef           : ScMatRef();                   break;
+                case ocBackSolver       : ScBackSolver();               break;
                 case ocB                : ScB();                        break;
                 case ocNormDist         : ScNormDist();                 break;
                 case ocExpDist          : ScExpDist();                  break;

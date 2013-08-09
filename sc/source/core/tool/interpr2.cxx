@@ -1695,6 +1695,204 @@ void ScInterpreter::ScMod()
     }
 }
 
+/** (Goal Seek) Find a value of x that is a root of f(x)
+
+    This function is used internally for the goal seek operation.  It uses the
+    Regula Falsi (aka false position) algorithm to find a root of f(x).  The
+    start value and the target value are to be given by the user in the
+    goal seek dialog.  The f(x) in this case is defined as the formula in the
+    formula cell minus target value.  This function may also perform additional
+    search in the horizontal directions when the f(x) is discrete in order to
+    ensure a non-zero slope necessary for deriving a subsequent x that is
+    reasonably close to the root of interest.
+
+    @change 24.10.2004 by Kohei Yoshida (kohei@openoffice.org)
+
+    @see #i28955#
+*/
+void ScInterpreter::ScBackSolver()
+{
+    if ( MustHaveParamCount( GetByte(), 3 ) )
+    {
+        bool bDoneIteration = false;
+        ScAddress aValueAdr, aFormulaAdr;
+        double fTargetVal = GetDouble();
+        PopSingleRef( aFormulaAdr );
+        PopSingleRef( aValueAdr );
+
+        if (nGlobalError == 0)
+        {
+            ScRefCellValue aFCell;
+            double* pVCell = pDok->GetValueCell(aValueAdr);
+            aFCell.assign(*pDok, aFormulaAdr);
+
+            if (pVCell && aFCell.meType == CELLTYPE_FORMULA)
+            {
+                ScRange aVRange( aValueAdr, aValueAdr );    // fuer SetDirty
+                // Original value to be restored later if necessary
+                double fSaveVal = *pVCell;
+
+                const sal_uInt16 nMaxIter = 100;
+                const double fEps = 1E-10;
+                const double fDelta = 1E-6;
+
+                double fBestX, fXPrev;
+                double fBestF, fFPrev;
+                fBestX = fXPrev = fSaveVal;
+
+                ScFormulaCell* pFormula = aFCell.mpFormula;
+
+                pFormula->Interpret();
+                bool bError = ( pFormula->GetErrCode() != 0 );
+                // bError always corresponds with fF
+
+                fFPrev = pFormula->GetValue() - fTargetVal;
+
+                fBestF = fabs( fFPrev );
+                if ( fBestF < fDelta )
+                    bDoneIteration = true;
+
+                double fX = fXPrev + fEps;
+                double fF = fFPrev;
+                double fSlope;
+
+                sal_uInt16 nIter = 0;
+
+                bool bHorMoveError = false;
+                                                // Nach der Regula Falsi Methode
+                while ( !bDoneIteration && ( nIter++ < nMaxIter ) )
+                {
+                    *pVCell = fX;
+                    pDok->SetDirty( aVRange );
+                    pFormula->Interpret();
+                    bError = ( pFormula->GetErrCode() != 0 );
+                    fF = pFormula->GetValue() - fTargetVal;
+
+                    if ( fF == fFPrev && !bError )
+                    {
+                        // HORIZONTAL SEARCH: Keep moving x in both directions until the f(x)
+                        // becomes different from the previous f(x).  This routine is needed
+                        // when a given function is discrete, in which case the resulting slope
+                        // may become zero which ultimately causes the goal seek operation
+                        // to fail. #i28955#
+
+                        sal_uInt16 nHorIter = 0;
+                        const double fHorStepAngle = 5.0;
+                        const double fHorMaxAngle = 80.0;
+                        int nHorMaxIter = static_cast<int>( fHorMaxAngle / fHorStepAngle );
+                        bool bDoneHorMove = false;
+
+                        while ( !bDoneHorMove && !bHorMoveError && nHorIter++ < nHorMaxIter )
+                        {
+                            double fHorAngle = fHorStepAngle * static_cast<double>( nHorIter );
+                            double fHorTangent = ::rtl::math::tan( fHorAngle * F_PI / 180 );
+
+                            sal_uInt16 nIdx = 0;
+                            while( nIdx++ < 2 && !bDoneHorMove )
+                            {
+                                double fHorX;
+                                if ( nIdx == 1 )
+                                    fHorX = fX + fabs(fF)*fHorTangent;
+                                else
+                                    fHorX = fX - fabs(fF)*fHorTangent;
+
+                                *pVCell = fHorX;
+                                pDok->SetDirty( aVRange );
+                                pFormula->Interpret();
+                                bHorMoveError = ( pFormula->GetErrCode() != 0 );
+                                if ( bHorMoveError )
+                                    break;
+
+                                fF = pFormula->GetValue() - fTargetVal;
+                                if ( fF != fFPrev )
+                                {
+                                    fX = fHorX;
+                                    bDoneHorMove = true;
+                                }
+                            }
+                        }
+                        if ( !bDoneHorMove )
+                            bHorMoveError = true;
+                    }
+
+                    if ( bError )
+                    {
+                        // move closer to last valid value (fXPrev), keep fXPrev & fFPrev
+                        double fDiff = ( fXPrev - fX ) / 2;
+                        if (fabs(fDiff) < fEps)
+                            fDiff = (fDiff < 0.0) ? - fEps : fEps;
+                        fX += fDiff;
+                    }
+                    else if ( bHorMoveError )
+                        break;
+                    else if ( fabs(fF) < fDelta )
+                    {
+                        // converged to root
+                        fBestX = fX;
+                        bDoneIteration = true;
+                    }
+                    else
+                    {
+                        if ( fabs(fF) + fDelta < fBestF )
+                        {
+                            fBestX = fX;
+                            fBestF = fabs(fF);
+                        }
+
+                        if ( ( fXPrev - fX ) != 0 )
+                        {
+                            fSlope = ( fFPrev - fF ) / ( fXPrev - fX );
+                            if ( fabs( fSlope ) < fEps )
+                                fSlope = fSlope < 0.0 ? -fEps : fEps;
+                        }
+                        else
+                            fSlope = fEps;
+
+                        fXPrev = fX;
+                        fFPrev = fF;
+                        fX = fX - ( fF / fSlope );
+                    }
+                }
+
+                // Try a nice rounded input value if possible.
+                const double fNiceDelta = (bDoneIteration && fabs(fBestX) >= 1e-3 ? 1e-3 : fDelta);
+                double nX = ::rtl::math::approxFloor((fBestX / fNiceDelta) + 0.5) * fNiceDelta;
+
+                if ( bDoneIteration )
+                {
+                    *pVCell = nX;
+                    pDok->SetDirty( aVRange );
+                    pFormula->Interpret();
+                    if ( fabs( pFormula->GetValue() - fTargetVal ) > fabs( fF ) )
+                        nX = fBestX;
+                }
+                else if ( bError || bHorMoveError )
+                {
+                    nX = fBestX;
+                }
+                *pVCell = fSaveVal;
+                pDok->SetDirty( aVRange );
+                pFormula->Interpret();
+                if ( !bDoneIteration )
+                    SetError(NOTAVAILABLE);
+                PushDouble(nX);
+            }
+            else
+            {
+                if ( !bDoneIteration )
+                    SetError(NOTAVAILABLE);
+                PushInt(0);         // falsche Zelltypen
+            }
+        }
+        else
+        {
+            if ( !bDoneIteration )
+                SetError(NOTAVAILABLE);
+            PushInt(0);             // nGlobalError
+        }
+    }
+}
+
 void ScInterpreter::ScIntersect()
 {
     formula::FormulaTokenRef p2nd = PopToken();
