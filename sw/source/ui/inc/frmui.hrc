@@ -30,7 +30,6 @@
 
 #define STR_FRMUI_BORDER        (RC_FRMDLG_BEGIN + 16)
 #define STR_FRMUI_PATTERN       (RC_FRMDLG_BEGIN + 17)
-#define STR_FRMUI_WRAP          (RC_FRMDLG_BEGIN + 18)
 
 #define BMP_BEGIN               (RC_FRMDLG_BEGIN + 18)
 #define BMP_NOWRAP              (BMP_BEGIN+5)

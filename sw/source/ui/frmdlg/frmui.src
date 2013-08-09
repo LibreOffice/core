@@ -106,10 +106,6 @@ String STR_FRMUI_PATTERN
 {
     Text [ en-US ] = "Background" ;
 };
-String STR_FRMUI_WRAP
-{
-    Text [ en-US ] = "Wrap" ;
-};
 InfoBox MSG_COLUMN_ERR_BOUNDWIDTH
 {
     BUTTONS = WB_OK ;

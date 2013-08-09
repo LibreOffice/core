@@ -51,23 +51,16 @@ static sal_uInt16 aWrapPageRg[] = {
     0
 };
 
-SwWrapDlg::SwWrapDlg(Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, sal_Bool bDrawMode) :
-    SfxNoLayoutSingleTabDialog(pParent, rSet, 0),
-    pWrtShell(pSh)
+SwWrapDlg::SwWrapDlg(Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, bool bDrawMode)
+    : SfxSingleTabDialog(pParent, rSet, "WrapDialog", "modules/swriter/ui/wrapdialog.ui")
+    , pWrtShell(pSh)
 
 {
     // create TabPage
-    SwWrapTabPage* pNewPage = (SwWrapTabPage*) SwWrapTabPage::Create(this, rSet);
+    SwWrapTabPage* pNewPage = (SwWrapTabPage*) SwWrapTabPage::Create(get_content_area(), rSet);
     pNewPage->SetFormatUsed(sal_False, bDrawMode);
     pNewPage->SetShell(pWrtShell);
-    SetTabPage(pNewPage);
-
-    String sTitle(SW_RES(STR_FRMUI_WRAP));
-    SetText(sTitle);
-}
-
-SwWrapDlg::~SwWrapDlg()
-{
+    setTabPage(pNewPage);
 }
 
 SwWrapTabPage::SwWrapTabPage(Window *pParent, const SfxItemSet &rSet)

@@ -29,15 +29,14 @@ class Window;
 class SfxItemSet;
 class SwWrtShell;
 
-class SwWrapDlg : public SfxNoLayoutSingleTabDialog
+class SwWrapDlg : public SfxSingleTabDialog
 {
     SwWrtShell*         pWrtShell;
 
 public:
-     SwWrapDlg(Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, sal_Bool bDrawMode);
-    ~SwWrapDlg();
+    SwWrapDlg(Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, bool bDrawMode);
 
-    inline SwWrtShell*  GetWrtShell()   { return pWrtShell; }
+    SwWrtShell*  GetWrtShell()   { return pWrtShell; }
 };
 
 
