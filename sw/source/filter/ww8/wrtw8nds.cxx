@@ -104,47 +104,44 @@ using namespace sw::types;
 using namespace sw::mark;
 using namespace nsFieldFlags;
 
-static String lcl_getFieldCode( const IFieldmark* pFieldmark ) {
+static OUString lcl_getFieldCode( const IFieldmark* pFieldmark )
+{
     OSL_ENSURE(pFieldmark!=NULL, "where is my fieldmark???");
 
-    if ( !pFieldmark) {
-        return String();
-    } else if ( pFieldmark->GetFieldname( ) == ODF_FORMTEXT ) {
+    if ( !pFieldmark)
+        return OUString();
+    if ( pFieldmark->GetFieldname( ) == ODF_FORMTEXT )
         return OUString(" FORMTEXT ");
-    } else if ( pFieldmark->GetFieldname( ) == ODF_FORMDROPDOWN ) {
+    if ( pFieldmark->GetFieldname( ) == ODF_FORMDROPDOWN )
         return OUString(" FORMDROPDOWN ");
-    } else if ( pFieldmark->GetFieldname( ) == ODF_FORMCHECKBOX ) {
+    if ( pFieldmark->GetFieldname( ) == ODF_FORMCHECKBOX )
         return OUString(" FORMCHECKBOX ");
-    } else if ( pFieldmark->GetFieldname( ) == ODF_TOC ) {
+    if ( pFieldmark->GetFieldname( ) == ODF_TOC )
         return OUString(" TOC ");
-    } else if ( pFieldmark->GetFieldname( ) == ODF_HYPERLINK ) {
+    if ( pFieldmark->GetFieldname( ) == ODF_HYPERLINK )
         return OUString(" HYPERLINK ");
-    } else if ( pFieldmark->GetFieldname( ) == ODF_PAGEREF ) {
+    if ( pFieldmark->GetFieldname( ) == ODF_PAGEREF )
         return OUString(" PAGEREF ");
-    } else {
-        return pFieldmark->GetFieldname();
-    }
+    return pFieldmark->GetFieldname();
 }
 
 static ww::eField lcl_getFieldId( const IFieldmark* pFieldmark ) {
     OSL_ENSURE(pFieldmark!=NULL, "where is my fieldmark???");
-    if ( !pFieldmark ) {
+    if ( !pFieldmark )
         return ww::eUNKNOWN;
-    } else if ( pFieldmark->GetFieldname( ) == ODF_FORMTEXT ) {
+    if ( pFieldmark->GetFieldname( ) == ODF_FORMTEXT )
         return ww::eFORMTEXT;
-    } else if ( pFieldmark->GetFieldname( ) == ODF_FORMDROPDOWN ) {
+    if ( pFieldmark->GetFieldname( ) == ODF_FORMDROPDOWN )
         return ww::eFORMDROPDOWN;
-    } else if ( pFieldmark->GetFieldname( ) == ODF_FORMCHECKBOX ) {
+    if ( pFieldmark->GetFieldname( ) == ODF_FORMCHECKBOX )
         return ww::eFORMCHECKBOX;
-    } else if ( pFieldmark->GetFieldname( ) == ODF_TOC ) {
+    if ( pFieldmark->GetFieldname( ) == ODF_TOC )
         return ww::eTOC;
-    } else if ( pFieldmark->GetFieldname( ) == ODF_HYPERLINK ) {
+    if ( pFieldmark->GetFieldname( ) == ODF_HYPERLINK )
         return ww::eHYPERLINK;
-    } else if ( pFieldmark->GetFieldname( ) == ODF_PAGEREF ) {
+    if ( pFieldmark->GetFieldname( ) == ODF_PAGEREF )
         return ww::ePAGEREF;
-    } else {
-        return ww::eUNKNOWN;
-    }
+    return ww::eUNKNOWN;
 }
 
 MSWordAttrIter::MSWordAttrIter( MSWordExportBase& rExport )
@@ -1842,7 +1839,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                 if ( pFieldmark && pFieldmark->GetFieldname() == ODF_FORMTEXT )
                     AppendBookmark( pFieldmark->GetName(), false );
                 ww::eField eFieldId = lcl_getFieldId( pFieldmark );
-                String sCode = lcl_getFieldCode( pFieldmark );
+                OUString sCode = lcl_getFieldCode( pFieldmark );
                 if ( pFieldmark && pFieldmark->GetFieldname() == ODF_UNHANDLED )
                 {
                     IFieldmark::parameter_map_t::const_iterator it = pFieldmark->GetParameters()->find( ODF_ID_PARAM );
@@ -1856,9 +1853,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                     it = pFieldmark->GetParameters()->find( ODF_CODE_PARAM );
                     if ( it != pFieldmark->GetParameters()->end() )
                     {
-                        OUString sOUCode;
-                        it->second >>= sOUCode;
-                        sCode = sOUCode;
+                        it->second >>= sCode;
                     }
                 }
 
