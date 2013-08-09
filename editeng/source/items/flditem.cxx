@@ -1127,12 +1127,7 @@ OUString SvxAuthorField::GetFormatted() const
     switch( eFormat )
     {
         case SVXAUTHORFORMAT_FULLNAME:
-        {
-            OUStringBuffer aBuf(aFirstName);
-            aBuf.append(sal_Unicode(' '));
-            aBuf.append(aName);
-            aString = aBuf.makeStringAndClear();
-        }
+            aString = aFirstName + " " + aName;
         break;
         case SVXAUTHORFORMAT_NAME:
             aString = aName;
