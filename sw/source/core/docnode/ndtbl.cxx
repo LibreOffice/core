@@ -37,6 +37,7 @@
 #include <cellfrm.hxx>
 #include <pagefrm.hxx>
 #include <tabcol.hxx>
+#include <tblrwcl.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <UndoManager.hxx>
@@ -106,7 +107,7 @@ using namespace ::com::sun::star;
 
 const sal_Unicode T2T_PARA = 0x0a;
 
-static void lcl_SetDfltBoxAttr( SwFrameFormat& rFormat, sal_uInt8 nId )
+static void lcl_SetDfltBoxAttr( SwFrameFormat& rFormat, sal_uInt8 nId, sal_Bool bSetBorders )
 {
     bool bTop = false, bBottom = false, bLeft = false, bRight = false;
     switch ( nId )
@@ -134,7 +135,8 @@ static void lcl_SetDfltBoxAttr( SwFrameFormat& rFormat, sal_uInt8 nId )
         aBox.SetLine( &aLine, SvxBoxItemLine::LEFT );
     if ( bRight )
         aBox.SetLine( &aLine, SvxBoxItemLine::RIGHT );
-    rFormat.SetFormatAttr( aBox );
+    if ( bSetBorders )
+        rFormat.SetFormatAttr( aBox );
 }
 
 typedef std::map<SwFrameFormat *, SwTableBoxFormat *> DfltBoxAttrMap_t;
@@ -142,7 +144,7 @@ typedef std::vector<DfltBoxAttrMap_t *> DfltBoxAttrList_t;
 
 static void
 lcl_SetDfltBoxAttr(SwTableBox& rBox, DfltBoxAttrList_t & rBoxFormatArr,
-        sal_uInt8 const nId, SwTableAutoFormat const*const /*pAutoFormat*/ = 0)
+        sal_uInt8 const nId, sal_Bool bSetBorders )
 {
     DfltBoxAttrMap_t * pMap = rBoxFormatArr[ nId ];
     if (!pMap)
@@ -165,7 +167,7 @@ lcl_SetDfltBoxAttr(SwTableBox& rBox, DfltBoxAttrList_t & rBoxFormatArr,
         pNewTableBoxFormat = pDoc->MakeTableBoxFormat();
         pNewTableBoxFormat->SetFormatAttr( pBoxFrameFormat->GetAttrSet().Get( RES_FRM_SIZE ) );
 
-        ::lcl_SetDfltBoxAttr( *pNewTableBoxFormat, nId );
+        ::lcl_SetDfltBoxAttr( *pNewTableBoxFormat, nId, bSetBorders );
 
         (*pMap)[pBoxFrameFormat] = pNewTableBoxFormat;
     }
@@ -173,7 +175,7 @@ lcl_SetDfltBoxAttr(SwTableBox& rBox, DfltBoxAttrList_t & rBoxFormatArr,
 }
 
 static SwTableBoxFormat *lcl_CreateDfltBoxFormat( SwDoc &rDoc, std::vector<SwTableBoxFormat*> &rBoxFormatArr,
-                                    sal_uInt16 nCols, sal_uInt8 nId )
+                                    sal_uInt16 nCols, sal_uInt8 nId, sal_Bool bSetBorders )
 {
     if ( !rBoxFormatArr[nId] )
     {
@@ -181,7 +183,7 @@ static SwTableBoxFormat *lcl_CreateDfltBoxFormat( SwDoc &rDoc, std::vector<SwTab
         if( USHRT_MAX != nCols )
             pBoxFormat->SetFormatAttr( SwFormatFrmSize( ATT_VAR_SIZE,
                                             USHRT_MAX / nCols, 0 ));
-        ::lcl_SetDfltBoxAttr( *pBoxFormat, nId );
+        ::lcl_SetDfltBoxAttr( *pBoxFormat, nId, bSetBorders );
         rBoxFormatArr[ nId ] = pBoxFormat;
     }
     return rBoxFormatArr[nId];
@@ -444,7 +446,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTableOpts,
 
     std::vector<SwTableBoxFormat*> aBoxFormatArr;
     SwTableBoxFormat* pBoxFormat = 0;
-    if( !bDfltBorders || pTAFormat )
+    if( !bDfltBorders )
     {
         pBoxFormat = MakeTableBoxFormat();
         pBoxFormat->SetFormatAttr( SwFormatFrmSize( ATT_VAR_SIZE, USHRT_MAX / nCols, 0 ));
@@ -462,10 +464,10 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTableOpts,
         for( sal_uInt16 i = 0; i < nCols; ++i )
         {
             SwTableBoxFormat *pBoxF;
-            if( !pTAFormat && bDfltBorders )
+            if( bDfltBorders )
             {
                 sal_uInt8 nBoxId = (i < nCols - 1 ? 0 : 1) + (n ? 2 : 0 );
-                pBoxF = new SwTableBoxFormat( *::lcl_CreateDfltBoxFormat( *this, aBoxFormatArr, nCols, nBoxId) );
+                pBoxF = new SwTableBoxFormat( *::lcl_CreateDfltBoxFormat( *this, aBoxFormatArr, nCols, nBoxId, pTAFormat == 0) );
             }
             else
                 pBoxF = new SwTableBoxFormat( *pBoxFormat );
@@ -705,7 +707,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTableOpts,
 
     rNdTable.RegisterToFormat( *pTableFormat );
 
-    if( rInsTableOpts.mnInsMode & tabopts::DEFAULT_BORDER )
+    if( pTAFormat || rInsTableOpts.mnInsMode & tabopts::DEFAULT_BORDER )
     {
         sal_uInt8 nBoxArrLen = 4;
         boost::scoped_ptr< DfltBoxAttrList_t > aBoxFormatArr1;
@@ -732,10 +734,10 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTableOpts,
 
                 sal_uInt8 nId = (i < nCols - 1 ? 0 : 1) + (n ? 2 : 0 );
                 if( bUseBoxFormat )
-                    ::lcl_SetDfltBoxAttr( *pBox, *aBoxFormatArr1, nId );
+                    ::lcl_SetDfltBoxAttr( *pBox, *aBoxFormatArr1, nId, pTAFormat == 0 );
                 else
                 {
-                    pBoxF = new SwTableBoxFormat ( *::lcl_CreateDfltBoxFormat( *this, *aBoxFormatArr2, USHRT_MAX, nId ) );
+                    pBoxF = new SwTableBoxFormat ( *::lcl_CreateDfltBoxFormat( *this, *aBoxFormatArr2, USHRT_MAX, nId, pTAFormat == 0 ) );
                     pBoxF->SetFormatAttr( pBox->GetFrameFormat()->GetFrmSize() );
                     pBox->ChgFrameFormat( pBoxF );
                 }
@@ -1634,7 +1636,7 @@ bool SwDoc::InsertCol( const SwSelBoxes& rBoxes, sal_uInt16 nCnt, bool bBehind )
         if (bRet)
         {
             getIDocumentState().SetModified();
-            ::ClearFEShellTabCols();
+            ClearFEShellTabCols();
             getIDocumentFieldsAccess().SetFieldsDirty( true, NULL, 0 );
         }
     }
