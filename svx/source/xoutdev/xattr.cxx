@@ -1317,7 +1317,7 @@ SfxItemPresentation XLineWidthItem::GetPresentation
         case SFX_ITEM_PRESENTATION_COMPLETE:
             rText = GetMetricText( (long) GetValue(),
                                     eCoreUnit, ePresUnit, pIntl) +
-                    SVX_RESSTR( GetMetricId( ePresUnit) );
+                    EE_RESSTR( GetMetricId( ePresUnit) );
             return ePres;
         default:
             return SFX_ITEM_PRESENTATION_NONE;
@@ -2462,7 +2462,7 @@ SfxItemPresentation XLineStartWidthItem::GetPresentation
         case SFX_ITEM_PRESENTATION_COMPLETE:
             rText = GetMetricText( (long) GetValue(),
                                     eCoreUnit, ePresUnit, pIntl) +
-                    SVX_RESSTR( GetMetricId( ePresUnit) );
+                    EE_RESSTR( GetMetricId( ePresUnit) );
             return ePres;
         default:
             return SFX_ITEM_PRESENTATION_NONE;
@@ -2553,7 +2553,7 @@ SfxItemPresentation XLineEndWidthItem::GetPresentation
         case SFX_ITEM_PRESENTATION_COMPLETE:
             rText = GetMetricText( (long) GetValue(),
                                     eCoreUnit, ePresUnit, pIntl) +
-                    SVX_RESSTR( GetMetricId( ePresUnit) );
+                    EE_RESSTR( GetMetricId( ePresUnit) );
             return ePres;
         default:
             return SFX_ITEM_PRESENTATION_NONE;
