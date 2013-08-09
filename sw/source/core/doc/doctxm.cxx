@@ -257,8 +257,7 @@ const SwTOXMark& SwDoc::GotoTOXMark( const SwTOXMark& rCurTOXMark,
                     break;
             /* no break here */
             case TOX_PRV:
-                if ( (aAbsNew < aAbsIdx && aAbsNew > aPrevPos &&
-                      aPrevPos != aAbsIdx && aAbsNew != aAbsIdx ) ||
+                if ( (aAbsNew < aAbsIdx && aAbsNew > aPrevPos) ||
                      (aAbsIdx == aAbsNew &&
                       (sal_uLong(&rCurTOXMark) > sal_uLong(pTOXMark) &&
                        (!pNew ||
@@ -282,8 +281,7 @@ const SwTOXMark& SwDoc::GotoTOXMark( const SwTOXMark& rCurTOXMark,
                     break;
             /* no break here */
             case TOX_NXT:
-                if ( (aAbsNew > aAbsIdx && aAbsNew < aNextPos &&
-                      aNextPos != aAbsIdx && aAbsNew != aAbsIdx ) ||
+                if ( (aAbsNew > aAbsIdx && aAbsNew < aNextPos) ||
                      (aAbsIdx == aAbsNew &&
                       (sal_uLong(&rCurTOXMark) < sal_uLong(pTOXMark) &&
                        (!pNew ||
