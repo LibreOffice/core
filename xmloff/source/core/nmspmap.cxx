@@ -548,13 +548,11 @@ sal_Bool SvXMLNamespaceMap::NormalizeOasisURN( OUString& rName )
         return sal_False;
 
     // replace [tcid] with current TCID and version with current version.
-    OUStringBuffer aNewName( nNameLen +20 );
-    aNewName.append( rName.copy( 0, nTCIdStart ) );
-    aNewName.append( GetXMLToken( XML_OPENDOCUMENT ) );
-    aNewName.append( rName.copy( nTCIdEnd, nVersionStart-nTCIdEnd ) );
-    aNewName.append( GetXMLToken( XML_1_0 ) );
 
-    rName = aNewName.makeStringAndClear();
+    rName = rName.copy( 0, nTCIdStart ) +
+            GetXMLToken( XML_OPENDOCUMENT ) +
+            rName.copy( nTCIdEnd, nVersionStart-nTCIdEnd ) +
+            GetXMLToken( XML_1_0 );
 
     return sal_True;
 }
