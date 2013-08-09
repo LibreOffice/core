@@ -231,6 +231,13 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
     oox::vml::FillModel aFillModel; // Gradient.
     oox::vml::ShadowModel aShadowModel; // Shadow.
 
+    // The spec doesn't state what is the default for shapeType, Word seems to implement it as a rectangle.
+    if (std::find_if(rShape.aProperties.begin(),
+                rShape.aProperties.end(),
+                boost::bind(&OUString::equals, boost::bind(&std::pair<OUString, OUString>::first, _1), OUString("shapeType")))
+            == rShape.aProperties.end())
+        rShape.aProperties.insert(rShape.aProperties.begin(), std::pair<OUString, OUString>("shapeType", OUString::number(ESCHER_ShpInst_Rectangle)));
+
     for (std::vector< std::pair<OUString, OUString> >::iterator i = rShape.aProperties.begin();
             i != rShape.aProperties.end(); ++i)
     {
