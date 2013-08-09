@@ -441,13 +441,21 @@ SV_DECL_REF(ScDocShell)
 SV_IMPL_REF(ScDocShell)
 
 
-/** Create before modifications of the document and then destroy.
-    If noted in the ctor AutoCalcShellDisabled and IdleDisabled,
-    switches them off and restores the dtor AutoCalcShellDisabled
-    also before a ScDocShell SetDocumentModified.
-    Call SetDocumentModified after instead of the ScDocShell.
-    In the dtor, if ScDocShell bDocumentModifiedPending is set and
-    bAutoCalcShellDisabled is not set, then SetDocumentModified is called. */
+/** Create before modifications of the document and destroy thereafter.
+    Call SetDocumentModified() at an instance of this class instead of at
+    ScDocShell.
+
+    Remembers in the ctor ScDocument's AutoCalcShellDisabled and IdleDisabled,
+    switches them off and restores them in the dtor, AutoCalcShellDisabled
+    also before a ScDocShell::SetDocumentModified() call if necessary.
+    In the dtor, if ScDocShell's bDocumentModifiedPending is set and
+    bAutoCalcShellDisabled is not set, then ScDocShell::SetDocumentModified()
+    is called.
+
+    Several instances can be used in nested calls to ScDocFunc or ScDocShell
+    methods to avoid multiple modified status changes, only the last instance
+    destroyed calls ScDocShell::SetDocumentModified().
+ */
 class SC_DLLPUBLIC ScDocShellModificator
 {
             ScDocShell&     rDocShell;
