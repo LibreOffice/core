@@ -75,7 +75,10 @@ for tarball in $tarballs ; do
 
     echo "Unpacking $tarname..."
     echo tar -xf "$tarball" -C "$lo_src_dir"
-    tar -xf "$tarball" -C "$lo_src_dir"
+    if ! tar -xf "$tarball" -C "$lo_src_dir"; then
+        echo "Error: could not unpack $tarname"
+        exit 1
+    fi
 
     # create symlinks for module directories; ignore git-hooks directory
     for dir in `find "$lo_src_dir/$tarname" -mindepth 1 -maxdepth 1 -type d -path $lo_src_dir/$tarname/git-hooks -o -printf "$tarname/%f\n"` ; do
