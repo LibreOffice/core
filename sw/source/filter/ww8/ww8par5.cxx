@@ -2877,7 +2877,7 @@ static void EnsureMaxLevelForTemplates(SwTOXBase& rBase)
     {
         for (sal_uInt16 nI = MAXLEVEL; nI > 0; --nI)
         {
-            if (rBase.GetStyleNames(nI-1).Len())
+            if (!rBase.GetStyleNames(nI-1).isEmpty())
             {
                 rBase.SetLevel(nI);
                 break;

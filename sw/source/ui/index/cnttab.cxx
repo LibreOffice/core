@@ -1730,7 +1730,7 @@ public:
             OSL_ENSURE(TOKEN_LINK_START == aFormToken.eTokenType,
                                     "call SetLinkEnd for link start only!");
             aFormToken.eTokenType = TOKEN_LINK_END;
-            aFormToken.sText.AssignAscii(SwForm::aFormLinkEnd);
+            aFormToken.sText = SwForm::GetFormLinkEnd();
             SetText(aFormToken.sText);
         }
     void SetLinkStart()
@@ -1738,7 +1738,7 @@ public:
             OSL_ENSURE(TOKEN_LINK_END == aFormToken.eTokenType,
                                     "call SetLinkStart for link start only!");
             aFormToken.eTokenType = TOKEN_LINK_START;
-            aFormToken.sText.AssignAscii(SwForm::aFormLinkStt);
+            aFormToken.sText = SwForm::GetFormLinkStt();
             SetText(aFormToken.sText);
         }
 };
@@ -2340,8 +2340,7 @@ IMPL_LINK(SwTOXEntryTabPage, RemoveInsertAuthHdl, PushButton*, pButton)
         String sToInsert(aAuthFieldsLB.GetSelectEntry());
         SwFormToken aInsert(TOKEN_AUTHORITY);
         aInsert.nAuthorityField = (sal_uInt16)(sal_uIntPtr)aAuthFieldsLB.GetEntryData(nSelPos);
-        aTokenWIN.InsertAtSelection(OUString::createFromAscii(
-                                            SwForm::aFormAuth), aInsert);
+        aTokenWIN.InsertAtSelection(SwForm::GetFormAuth(), aInsert);
         aAuthFieldsLB.RemoveEntry(sToInsert);
         aAuthFieldsLB.SelectEntryPos( nSelPos ? nSelPos - 1 : 0);
     }
@@ -2382,42 +2381,42 @@ IMPL_LINK(SwTOXEntryTabPage, InsertTokenHdl, PushButton*, pBtn)
     sal_uInt16  nChapterFormat = CF_NUMBER; // i89791
     if(pBtn == &aEntryNoPB)
     {
-        sText.AssignAscii(SwForm::aFormEntryNum);
+        sText = SwForm::GetFormEntryNum();
         eTokenType = TOKEN_ENTRY_NO;
     }
     else if(pBtn == &aEntryPB)
     {
         if( TOX_CONTENT == m_pCurrentForm->GetTOXType() )
         {
-            sText.AssignAscii( SwForm::aFormEntryTxt );
+            sText = SwForm::GetFormEntryTxt();
             eTokenType = TOKEN_ENTRY_TEXT;
         }
         else
         {
-            sText.AssignAscii( SwForm::aFormEntry);
+            sText = SwForm::GetFormEntry();
             eTokenType = TOKEN_ENTRY;
         }
     }
     else if(pBtn == &aChapterInfoPB)
     {
-        sText.AssignAscii( SwForm::aFormChapterMark);
+        sText = SwForm::GetFormChapterMark();
         eTokenType = TOKEN_CHAPTER_INFO;
         nChapterFormat = CF_NUM_NOPREPST_TITLE; // i89791
     }
     else if(pBtn == &aPageNoPB)
     {
-        sText.AssignAscii(SwForm::aFormPageNums);
+        sText = SwForm::GetFormPageNums();
         eTokenType = TOKEN_PAGE_NUMS;
     }
     else if(pBtn == &aHyperLinkPB)
     {
-        sText.AssignAscii(SwForm::aFormLinkStt);
+        sText = SwForm::GetFormLinkStt();
         eTokenType = TOKEN_LINK_START;
         sCharStyle = String(SW_RES(STR_POOLCHR_TOXJUMP));
     }
     else if(pBtn == &aTabPB)
     {
-        sText.AssignAscii(SwForm::aFormTab);
+        sText = SwForm::GetFormTab();
         eTokenType = TOKEN_TAB_STOP;
     }
     SwFormToken aInsert(eTokenType);
@@ -2520,7 +2519,7 @@ IMPL_LINK(SwTOXEntryTabPage, SortKeyHdl, RadioButton*, pButton)
 
 IMPL_LINK(SwTOXEntryTabPage, TokenSelectedHdl, SwFormToken*, pToken)
 {
-    if(pToken->sCharStyleName.Len())
+    if (!pToken->sCharStyleName.isEmpty())
         aCharStyleLB.SelectEntry(pToken->sCharStyleName);
     else
         aCharStyleLB.SelectEntry(sNoCharStyle);
@@ -2881,23 +2880,23 @@ void    SwTokenWindow::SetForm(SwForm& rForm, sal_uInt16 nL)
                     if(!pSetActiveControl)
                         pSetActiveControl = pCtrl;
                 }
-                const sal_Char* pTmp = 0;
+
+                OUString sForm;
                 switch( aToken.eTokenType )
                 {
-                case TOKEN_ENTRY_NO:    pTmp = SwForm::aFormEntryNum; break;
-                case TOKEN_ENTRY_TEXT:  pTmp = SwForm::aFormEntryTxt; break;
-                case TOKEN_ENTRY:       pTmp = SwForm::aFormEntry; break;
-                case TOKEN_TAB_STOP:    pTmp = SwForm::aFormTab; break;
-                case TOKEN_PAGE_NUMS:   pTmp = SwForm::aFormPageNums; break;
-                case TOKEN_CHAPTER_INFO:pTmp = SwForm::aFormChapterMark; break;
-                case TOKEN_LINK_START:  pTmp = SwForm::aFormLinkStt; break;
-                case TOKEN_LINK_END:    pTmp = SwForm::aFormLinkEnd; break;
-                case TOKEN_AUTHORITY:   pTmp = SwForm::aFormAuth; break;
+                case TOKEN_ENTRY_NO:     sForm = SwForm::GetFormEntryNum(); break;
+                case TOKEN_ENTRY_TEXT:   sForm = SwForm::GetFormEntryTxt(); break;
+                case TOKEN_ENTRY:        sForm = SwForm::GetFormEntry(); break;
+                case TOKEN_TAB_STOP:     sForm = SwForm::GetFormTab(); break;
+                case TOKEN_PAGE_NUMS:    sForm = SwForm::GetFormPageNums(); break;
+                case TOKEN_CHAPTER_INFO: sForm = SwForm::GetFormChapterMark(); break;
+                case TOKEN_LINK_START:   sForm = SwForm::GetFormLinkStt(); break;
+                case TOKEN_LINK_END:     sForm = SwForm::GetFormLinkEnd(); break;
+                case TOKEN_AUTHORITY:    sForm = SwForm::GetFormAuth(); break;
                 default:; //prevent warning
                 }
 
-                InsertItem( pTmp ? OUString::createFromAscii(pTmp)
-                                 : OUString(), aToken );
+                InsertItem( sForm, aToken );
                 bLastWasText = false;
             }
 
@@ -3483,7 +3482,7 @@ sal_Bool SwTokenWindow::CreateQuickHelp(Control* pCtrl,
         }
         else
         {
-            if(rToken.sCharStyleName.Len())
+            if (!rToken.sCharStyleName.isEmpty())
             {
                 if(bBalloon)
                     sEntry += '\n';
@@ -3697,7 +3696,7 @@ void SwTOXStylesTabPage::ActivatePage( const SfxItemSet& )
 
     // display 1st TemplateEntry
     String aStr( SW_RES( STR_TITLE ));
-    if( m_pCurrentForm->GetTemplate( 0 ).Len() )
+    if( !m_pCurrentForm->GetTemplate( 0 ).isEmpty() )
     {
         aStr += ' ';
         aStr += aDeliStart;
@@ -3719,7 +3718,7 @@ void SwTOXStylesTabPage::ActivatePage( const SfxItemSet& )
         }
         String aCpy( aStr );
 
-        if( m_pCurrentForm->GetTemplate( i ).Len() )
+        if( !m_pCurrentForm->GetTemplate( i ).isEmpty() )
         {
             aCpy += ' ';
             aCpy += aDeliStart;

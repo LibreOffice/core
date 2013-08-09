@@ -120,7 +120,7 @@ lcl_ReAssignTOXType(SwDoc* pDoc, SwTOXBase& rTOXBase, const OUString& rNewName)
     for(sal_uInt16 nUser = 0; nUser < nUserCount; nUser++)
     {
         const SwTOXType* pType = pDoc->GetTOXType( TOX_USER, nUser );
-        if(pType->GetTypeName().Equals((String)rNewName))
+        if (pType->GetTypeName()==rNewName)
         {
             pNewType = pType;
             break;
@@ -1915,7 +1915,7 @@ void SwXDocumentIndexMark::Impl::InsertTOXMark(
     UnoActionContext aAction(pDoc);
     bool bMark = *rPam.GetPoint() != *rPam.GetMark();
     // n.b.: toxmarks must have either alternative text or an extent
-    if (bMark && rMark.GetAlternativeText().Len())
+    if (bMark && !rMark.GetAlternativeText().isEmpty())
     {
         rPam.Normalize(true);
         rPam.DeleteMark();
@@ -1923,7 +1923,7 @@ void SwXDocumentIndexMark::Impl::InsertTOXMark(
     }
     // Marks ohne Alternativtext ohne selektierten Text koennen nicht eingefuegt werden,
     // deshalb hier ein Leerzeichen - ob das die ideale Loesung ist?
-    if (!bMark && !rMark.GetAlternativeText().Len())
+    if (!bMark && rMark.GetAlternativeText().isEmpty())
     {
         rMark.SetAlternativeText( OUString(' ') );
     }

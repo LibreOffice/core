@@ -811,9 +811,9 @@ void SwIndexMarkPane::UpdateDialog()
     {
         bLevelEnable = sal_False;
         bKeyEnable = sal_True;
-        bKey1HasText = bKey2Enable = 0 != pMark->GetPrimaryKey().Len();
-        bKey2HasText = 0 != pMark->GetSecondaryKey().Len();
-        bEntryHasText = 0 != pMark->GetText().Len();
+        bKey1HasText = bKey2Enable = !pMark->GetPrimaryKey().isEmpty();
+        bKey2HasText = !pMark->GetSecondaryKey().isEmpty();
+        bEntryHasText = !pMark->GetText().isEmpty();
         m_pKey1DCB->SetText( pMark->GetPrimaryKey() );
         m_pKey2DCB->SetText( pMark->GetSecondaryKey() );
         m_pPhoneticED0->SetText( pMark->GetTextReading() );

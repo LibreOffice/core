@@ -1975,7 +1975,7 @@ static int lcl_CheckForm( const SwForm& rForm, sal_uInt8 nLvl, String& rText )
                 break;
             case TOKEN_TEXT:
                 nRet = 3;
-                rText = aIt->sText.Copy( 0, 5 ); // #i21237#
+                rText = aIt->sText.copy( 0, 5 ); // #i21237#
                 break;
 
             case TOKEN_LINK_START:
