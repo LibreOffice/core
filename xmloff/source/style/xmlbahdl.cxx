@@ -500,13 +500,7 @@ sal_Bool XMLColorPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, 
         Sequence< double > aHSL;
         if( (rValue >>= aHSL) && (aHSL.getLength() == 3) )
         {
-            aOut.append( OUString("hsl(") );
-            aOut.append( aHSL[0] );
-            aOut.append( OUString(",") );
-            aOut.append( aHSL[1] * 100.0 );
-            aOut.append( OUString("%,") );
-            aOut.append( aHSL[2] * 100.0 );
-            aOut.append( OUString("%)") );
+            aOut.append( "hsl(" + OUString::number(aHSL[0]) + "," + OUString::number(aHSL[1] * 100.0) + "%," + OUString::number(aHSL[2] * 100.0) + "%)" );
             rStrExpValue = aOut.makeStringAndClear();
 
             bRet = sal_True;

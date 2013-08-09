@@ -151,13 +151,9 @@ RDFaExportHelper::AddRDFa(
         {
             throw uno::RuntimeException();
         }
-        static const sal_Unicode s_OpenBracket ('[');
-        static const sal_Unicode s_CloseBracket(']');
         const OUString about( xSubjectURI.is()
             ?   getRelativeReference(m_rExport, xSubjectURI->getStringValue())
-            :   OUStringBuffer().append(s_OpenBracket).append(
-                        LookupBlankNode(xSubjectBNode)).append(s_CloseBracket)
-                    .makeStringAndClear()
+            :   "[" + LookupBlankNode(xSubjectBNode) + "]"
             );
 
         const uno::Reference<rdf::XLiteral> xContent(

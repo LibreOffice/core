@@ -500,12 +500,8 @@ void XMLShapeExport::ImpExportEvents( const uno::Reference< drawing::XShape >& x
                     (aStrLibrary.equalsIgnoreAsciiCase("StarOffice") ||
                      aStrLibrary.equalsIgnoreAsciiCase("application") ) ? XML_APPLICATION
                                                                        : XML_DOCUMENT ) );
-                OUStringBuffer sTmp( sLocation.getLength() + aStrMacro.getLength() + 1 );
-                sTmp = sLocation;
-                sTmp.append( sal_Unicode( ':' ) );
-                sTmp.append( aStrMacro );
                 mrExport.AddAttribute(XML_NAMESPACE_SCRIPT, XML_MACRO_NAME,
-                                     sTmp.makeStringAndClear());
+                    sLocation + ":" + aStrMacro);
             }
             else
             {

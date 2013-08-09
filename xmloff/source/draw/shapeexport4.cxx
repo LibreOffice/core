@@ -92,9 +92,7 @@ void ExportParameter( OUStringBuffer& rStrBuffer, const com::sun::star::drawing:
         {
             case com::sun::star::drawing::EnhancedCustomShapeParameterType::EQUATION :
             {
-                rStrBuffer.append( (sal_Unicode)'?' );
-                rStrBuffer.append( (sal_Unicode)'f' );
-                rStrBuffer.append( OUString::valueOf( nValue ) );
+                rStrBuffer.append( "?f" + OUString::number( nValue ) );
             }
             break;
 
