@@ -252,8 +252,10 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
 {
     get(pFtCharSet, "textcharset");
     get(pLbCharSet, "charset");
+    pLbCharSet->SetStyle(pLbCharSet->GetStyle() | WB_SORT);
     get(pFtCustomLang, "textlanguage");
     get(pLbCustomLang, "language");
+    pLbCustomLang->SetStyle(pLbCustomLang->GetStyle() | WB_SORT);
     get(pFtRow, "textfromrow");
     get(pNfRow, "fromrow");
     get(pRbFixed, "tofixedwidth");
