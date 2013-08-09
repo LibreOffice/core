@@ -43,9 +43,11 @@ class Parser:
         op.add_option("-f", "--filenames-only", action="store_true", dest="filenames_only", default=False,
             help="Only print the filenames of files containing German comments")
         op.add_option("-v", "--verbose", action="store_true", dest="verbose", default=False,
-            help="Turn on verbose mode (print progress to stderr)")
+            help="Turn on verbose mode (print only positives progress to stderr)")
         op.add_option("-l", "--line-numbers", action="store_true", dest="line_numbers", default=False,
             help="Prints the filenames and line numbers only.")
+        op.add_option("-L", "--line-numbers-pos", action="store_true", dest="line_numbers_pos", default=False,
+            help="Prints the filenames and line numbers only (if positive).")
         op.add_option("-t", "--threshold", action="store", dest="THRESHOLD", default=0,
             help="When used with '--line-numbers', only bothers outputting comment info if there are more than X number of flagged comments. Useful for weeding out false positives.")
         self.options, args = op.parse_args()
@@ -156,15 +158,19 @@ class Parser:
                 padding = 0
             return (diff/4)+padding
 
-        if self.options.line_numbers:
+        if self.options.line_numbers or self.options.line_numbers_pos:
             TABS = "\t"*10
             path_linenums = []
             for linenum, s in self.get_comments(path):
                 if self.is_german(s):
                     path_linenums.append(linenum)
             valid = len(path_linenums) > int(self.options.THRESHOLD)
-            sys.stderr.write("%s ... %s positives -- %s\n" % (path, str(len(path_linenums)), str(valid)))
+            if self.options.line_numbers:
+                sys.stderr.write("%s ... %s positives -- %s\n" % (path, str(len(path_linenums)), str(valid)))
             if valid:
+                if self.options.line_numbers_pos:
+                   sys.stderr.write("%s ... %s positives\n" % (path, str(len(path_linenums))))
+                   return
                 if len(path) + (len(path_linenums)*4) > 75:
                     print "%s:\n" % path
                     while(path_linenums):
@@ -180,12 +186,13 @@ class Parser:
                         numline = [str(i) for i in numline]
                         print "%s%s" %(TABS, ",".join(numline))
                 else:
-                    path_linenums = [str(i) for i in path_linenums]
-                    print "%s:%s%s" % (path,"\t"*tab_calc(path),",".join(path_linenums))
+                    if self.options.line_numbers:
+                        path_linenums = [str(i) for i in path_linenums]
+                        print "%s:%s%s" % (path,"\t"*tab_calc(path),",".join(path_linenums))
 
         elif not self.options.filenames_only:
             for linenum, s in self.get_comments(path):
-                if self.is_german(s):
+                if self.is_german(s) and self.options.line_numbers:
                     print "%s:%s: %s" % (path, linenum, s)
         else:
             fnames = set([])
