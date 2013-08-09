@@ -279,7 +279,7 @@ void SwHTMLParser::NewNumBulList( int nToken )
         bChangeNumFmt = sal_True;
     }
     else
-        aBulletGrfs[nLevel].Erase();
+        aBulletGrfs[nLevel] = "";
 
     // den aktuellen Absatz erst einmal nicht numerieren
     {

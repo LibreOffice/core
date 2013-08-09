@@ -252,13 +252,13 @@ public:
                       bool bSwitchToUCS2 = false,
                       rtl_TextEncoding eEnc=RTL_TEXTENCODING_DONTKNOW );
 
-    bool ParseScriptOptions( String& rLangString, const String&, HTMLScriptLanguage& rLang,
-                             String& rSrc, String& rLibrary, String& rModule );
+    bool ParseScriptOptions( OUString& rLangString, const OUString&, HTMLScriptLanguage& rLang,
+                             OUString& rSrc, OUString& rLibrary, OUString& rModule );
 
     // Einen Kommentar um den Inhalt von <SCRIPT> oder <STYLE> entfernen
     // Bei 'bFull' wird ggf. die gesammte Zeile hinter einem "<!--"
     // entfernt (fuer JavaSript)
-    static void RemoveSGMLComment( String &rString, sal_Bool bFull );
+    static void RemoveSGMLComment( OUString &rString, sal_Bool bFull );
 
     static bool InternalImgToPrivateURL( String& rURL );
     static rtl_TextEncoding GetEncodingByHttpHeader( SvKeyValueIterator *pHTTPHeader );

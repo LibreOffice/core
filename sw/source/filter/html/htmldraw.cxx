@@ -261,7 +261,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
 {
 
     OSL_ENSURE( !pMarquee, "Marquee in Marquee???" );
-    aContents.Erase();
+    aContents = "";
 
     String aId, aStyle, aClass;
 
@@ -572,7 +572,7 @@ void SwHTMLParser::EndMarquee()
         ((SdrTextObj*)pMarquee)->FitFrameToTextSize();
     }
 
-    aContents.Erase();
+    aContents = "";
     pMarquee = 0;
 }
 

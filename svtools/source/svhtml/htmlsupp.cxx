@@ -36,19 +36,19 @@ static HTMLOptionEnum const aScriptLangOptEnums[] =
     { 0,                    0                   }
 };
 
-bool HTMLParser::ParseScriptOptions( String& rLangString, const String& rBaseURL,
+bool HTMLParser::ParseScriptOptions( OUString& rLangString, const OUString& rBaseURL,
                                      HTMLScriptLanguage& rLang,
-                                     String& rSrc,
-                                     String& rLibrary,
-                                     String& rModule )
+                                     OUString& rSrc,
+                                     OUString& rLibrary,
+                                     OUString& rModule )
 {
     const HTMLOptions& aScriptOptions = GetOptions();
 
-    rLangString.Erase();
+    rLangString = "";
     rLang = HTML_SL_JAVASCRIPT;
-    rSrc.Erase();
-    rLibrary.Erase();
-    rModule.Erase();
+    rSrc = "";
+    rLibrary = "";
+    rModule = "";
 
     for( size_t i = aScriptOptions.size(); i; )
     {
@@ -82,71 +82,71 @@ bool HTMLParser::ParseScriptOptions( String& rLangString, const String& rBaseURL
     return true;
 }
 
-void HTMLParser::RemoveSGMLComment( String &rString, sal_Bool bFull )
+void HTMLParser::RemoveSGMLComment( OUString &rString, sal_Bool bFull )
 {
     sal_Unicode c = 0;
-    while( rString.Len() &&
-           ( ' '==(c=rString.GetChar(0)) || '\t'==c || '\r'==c || '\n'==c ) )
-        rString.Erase( 0, 1 );
+    while( !rString.isEmpty() &&
+           ( ' '==(c=rString[0]) || '\t'==c || '\r'==c || '\n'==c ) )
+        rString = rString.copy( 1, rString.getLength() - 1 );
 
-    while( rString.Len() &&
-           ( ' '==(c=rString.GetChar( rString.Len()-1))
+    while( !rString.isEmpty() &&
+           ( ' '==(c=rString[rString.getLength()-1])
            || '\t'==c || '\r'==c || '\n'==c ) )
-        rString.Erase( rString.Len()-1 );
+        rString = rString.copy( 0, rString.getLength()-1 );
 
 
     // remove SGML comments
-    if( rString.Len() >= 4 &&
-        rString.CompareToAscii( "<!--", 4 ) == COMPARE_EQUAL )
+    if( rString.getLength() >= 4 &&
+        rString.startsWith( "<!--" ) )
     {
-        xub_StrLen nPos = 3;
+        sal_Int32 nPos = 3;
         if( bFull )
         {
             // the whole line
             nPos = 4;
-            while( nPos < rString.Len() &&
-                ( ( c = rString.GetChar( nPos )) != '\r' && c != '\n' ) )
+            while( nPos < rString.getLength() &&
+                ( ( c = rString[nPos] ) != '\r' && c != '\n' ) )
                 ++nPos;
-            if( c == '\r' && nPos+1 < rString.Len() &&
-                '\n' == rString.GetChar( nPos+1 ))
+            if( c == '\r' && nPos+1 < rString.getLength() &&
+                '\n' == rString[nPos+1] )
                 ++nPos;
             else if( c != '\n' )
                 nPos = 3;
         }
-        rString.Erase( 0, ++nPos );
+        ++nPos;
+        rString = rString.copy( nPos, rString.getLength() - nPos );
     }
 
-    if( rString.Len() >=3 &&
-        rString.Copy(rString.Len()-3).CompareToAscii("-->")
-            == COMPARE_EQUAL )
+    if( rString.getLength() >=3 &&
+        rString.endsWith("-->") )
     {
-        rString.Erase( rString.Len()-3 );
+        rString = rString.copy( 0, rString.getLength()-3 );
         if( bFull )
         {
             // "//" or "'", maybe preceding CR/LF
             rString = comphelper::string::stripEnd(rString, ' ');
-            xub_StrLen nDel = 0, nLen = rString.Len();
+            sal_Int32 nDel = 0, nLen = rString.getLength();
             if( nLen >= 2 &&
-                rString.Copy(nLen-2).CompareToAscii("//") == COMPARE_EQUAL )
+                rString.endsWith("//") )
             {
                 nDel = 2;
             }
-            else if( nLen && '\'' == rString.GetChar(nLen-1) )
+            else if( nLen && '\'' == rString[nLen-1] )
             {
                 nDel = 1;
             }
             if( nDel && nLen >= nDel+1 )
             {
-                c = rString.GetChar( nLen-(nDel+1) );
+                c = rString[nLen-(nDel+1)];
                 if( '\r'==c || '\n'==c )
                 {
                     nDel++;
                     if( '\n'==c && nLen >= nDel+1 &&
-                        '\r'==rString.GetChar( nLen-(nDel+1) ) )
+                        '\r'==rString[nLen-(nDel+1)] )
                         nDel++;
                 }
             }
-            rString.Erase( nLen-nDel );
+            rString = rString.copy( 0, nLen-nDel );
         }
     }
 }

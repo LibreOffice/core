@@ -433,7 +433,7 @@ IMAGE_SETEVENT:
     // einer Bullet-Liste
     if( !pPam->GetPoint()->nContent.GetIndex() &&
         GetNumInfo().GetDepth() > 0 && GetNumInfo().GetDepth() <= MAXLEVEL &&
-        aBulletGrfs[GetNumInfo().GetDepth()-1].Len() &&
+        !aBulletGrfs[GetNumInfo().GetDepth()-1].isEmpty() &&
         aBulletGrfs[GetNumInfo().GetDepth()-1]==sGrfNm )
     {
         SwTxtNode* pTxtNode = pPam->GetNode()->GetTxtNode();
