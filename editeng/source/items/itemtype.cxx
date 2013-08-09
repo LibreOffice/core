@@ -23,14 +23,14 @@
 #include <unotools/localedatawrapper.hxx>
 #include <editeng/itemtype.hxx>
 #include <editeng/eerdll.hxx>
+#include <rtl/ustrbuf.hxx>
 
 // -----------------------------------------------------------------------
 
-XubString GetMetricText( long nVal, SfxMapUnit eSrcUnit, SfxMapUnit eDestUnit, const IntlWrapper* pIntl    )
+OUString GetMetricText( long nVal, SfxMapUnit eSrcUnit, SfxMapUnit eDestUnit, const IntlWrapper* pIntl )
 {
     sal_Bool bNeg = sal_False;
-    long nRet = 0;
-    XubString sRet;
+    sal_Int32 nRet = 0;
 
     if ( nVal < 0 )
     {
@@ -63,7 +63,7 @@ XubString GetMetricText( long nVal, SfxMapUnit eSrcUnit, SfxMapUnit eDestUnit, c
         case SFX_MAPUNIT_10TH_INCH:
         case SFX_MAPUNIT_INCH:
         {
-            nRet = (long)OutputDevice::LogicToLogic(
+            nRet = OutputDevice::LogicToLogic(
                 nVal, (MapUnit)eSrcUnit, (MapUnit)SFX_MAPUNIT_1000TH_INCH );
 
             switch ( eDestUnit )
@@ -84,12 +84,12 @@ XubString GetMetricText( long nVal, SfxMapUnit eSrcUnit, SfxMapUnit eDestUnit, c
 
         default:
             OSL_FAIL( "not supported mapunit" );
-            return sRet;
+            return OUString();
     }
 
     if ( SFX_MAPUNIT_CM == eDestUnit || SFX_MAPUNIT_INCH == eDestUnit )
     {
-        long nMod = nRet % 10;
+        sal_Int32 nMod = nRet % 10;
 
         if ( nMod > 4 )
             nRet += 10 - nMod;
@@ -97,45 +97,47 @@ XubString GetMetricText( long nVal, SfxMapUnit eSrcUnit, SfxMapUnit eDestUnit, c
             nRet -= nMod;
     }
 
+    OUStringBuffer sRet;
+
     if ( bNeg )
-        sRet += sal_Unicode('-');
+        sRet.append('-');
 
     long nDiff = 1000;
     for( int nDigits = 4; nDigits; --nDigits, nDiff /= 10 )
     {
         if ( nRet < nDiff )
-            sRet += sal_Unicode('0');
+            sRet.append('0');
         else
-            sRet += OUString::number( nRet / nDiff );
+            sRet.append(nRet / nDiff);
         nRet %= nDiff;
         if( 4 == nDigits )
         {
             if(pIntl)
-                sRet += pIntl->getLocaleData()->getNumDecimalSep();
+                sRet.append(pIntl->getLocaleData()->getNumDecimalSep());
             else
-                sRet += ',';
+                sRet.append(',');
             if( !nRet )
             {
-                sRet += sal_Unicode('0');
+                sRet.append('0');
                 break;
             }
         }
         else if( !nRet )
             break;
     }
-    return sRet;
+    return sRet.makeStringAndClear();
 }
 
 // -----------------------------------------------------------------------
 
-XubString GetSvxString( sal_uInt16 nId )
+OUString GetSvxString( sal_uInt16 nId )
 {
     return EE_RESSTR( nId );
 }
 
 // -----------------------------------------------------------------------
 
-XubString GetColorString( const Color& rCol )
+OUString GetColorString( const Color& rCol )
 {
     OUString sStr;
 

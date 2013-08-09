@@ -232,7 +232,7 @@ void SdrTextObj::ImpSetTextStyleSheetListeners()
             // the container aStyles. The Family is always appended to the name
             // of the stylesheet.
             const EditTextObject& rTextObj=pOutlinerParaObject->GetTextObject();
-            XubString aStyleName;
+            OUString aStyleName;
             SfxStyleFamily eStyleFam;
             sal_Int32 nParaAnz=rTextObj.GetParagraphCount();
 
@@ -240,13 +240,13 @@ void SdrTextObj::ImpSetTextStyleSheetListeners()
             {
                 rTextObj.GetStyleSheet(nParaNum, aStyleName, eStyleFam);
 
-                if(aStyleName.Len())
+                if (!aStyleName.isEmpty())
                 {
                     OUStringBuffer aFam;
                     aFam.append(static_cast<sal_Int32>(eStyleFam));
                     comphelper::string::padToLength(aFam, 5, ' ');
 
-                    aStyleName += sal_Unicode('|');
+                    aStyleName += OUString('|');
                     aStyleName += aFam.makeStringAndClear();
 
                     sal_Bool bFnd(sal_False);
@@ -256,7 +256,7 @@ void SdrTextObj::ImpSetTextStyleSheetListeners()
                     {
                         // we don't want duplicate stylesheets
                         nNum--;
-                        bFnd = aStyleName.Equals(*aStyleNames[nNum]);
+                        bFnd = aStyleName.equals(*aStyleNames[nNum]);
                     }
 
                     if(!bFnd)

@@ -106,11 +106,11 @@ public:
 
     const SfxItemSet& GetParaAttribs(sal_Int32 nPara) const;
 
-    void GetStyleSheet(sal_Int32 nPara, String& rName, SfxStyleFamily& eFamily) const;
-    void SetStyleSheet(sal_Int32 nPara, const String& rName, const SfxStyleFamily& eFamily);
+    void GetStyleSheet(sal_Int32 nPara, OUString& rName, SfxStyleFamily& eFamily) const;
+    void SetStyleSheet(sal_Int32 nPara, const OUString& rName, const SfxStyleFamily& eFamily);
     bool ChangeStyleSheets(
-        const XubString& rOldName, SfxStyleFamily eOldFamily, const XubString& rNewName, SfxStyleFamily eNewFamily );
-    void ChangeStyleSheetName( SfxStyleFamily eFamily, const XubString& rOldName, const XubString& rNewName );
+        const OUString& rOldName, SfxStyleFamily eOldFamily, const OUString& rNewName, SfxStyleFamily eNewFamily);
+    void ChangeStyleSheetName(SfxStyleFamily eFamily, const OUString& rOldName, const OUString& rNewName);
 
     editeng::FieldUpdater GetFieldUpdater();
 

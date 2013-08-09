@@ -276,24 +276,24 @@ bool EditTextObject::RemoveCharAttribs( sal_uInt16 nWhich )
     return mpImpl->RemoveCharAttribs(nWhich);
 }
 
-void EditTextObject::GetStyleSheet(sal_Int32 nPara, String& rName, SfxStyleFamily& eFamily) const
+void EditTextObject::GetStyleSheet(sal_Int32 nPara, OUString& rName, SfxStyleFamily& eFamily) const
 {
     mpImpl->GetStyleSheet(nPara, rName, eFamily);
 }
 
-void EditTextObject::SetStyleSheet(sal_Int32 nPara, const String& rName, const SfxStyleFamily& eFamily)
+void EditTextObject::SetStyleSheet(sal_Int32 nPara, const OUString& rName, const SfxStyleFamily& eFamily)
 {
     mpImpl->SetStyleSheet(nPara, rName, eFamily);
 }
 
 bool EditTextObject::ChangeStyleSheets(
-    const XubString& rOldName, SfxStyleFamily eOldFamily, const XubString& rNewName, SfxStyleFamily eNewFamily )
+    const OUString& rOldName, SfxStyleFamily eOldFamily, const OUString& rNewName, SfxStyleFamily eNewFamily)
 {
     return mpImpl->ChangeStyleSheets(rOldName, eOldFamily, rNewName, eNewFamily);
 }
 
 void EditTextObject::ChangeStyleSheetName(
-    SfxStyleFamily eFamily, const XubString& rOldName, const XubString& rNewName )
+    SfxStyleFamily eFamily, const OUString& rOldName, const OUString& rNewName)
 {
     mpImpl->ChangeStyleSheetName(eFamily, rOldName, rNewName);
 }
@@ -824,7 +824,7 @@ bool EditTextObjectImpl::RemoveCharAttribs( sal_uInt16 _nWhich )
     return bChanged;
 }
 
-void EditTextObjectImpl::GetStyleSheet(sal_Int32 nPara, String& rName, SfxStyleFamily& rFamily) const
+void EditTextObjectImpl::GetStyleSheet(sal_Int32 nPara, OUString& rName, SfxStyleFamily& rFamily) const
 {
     if (nPara < 0 || static_cast<size_t>(nPara) >= aContents.size())
         return;
@@ -834,7 +834,7 @@ void EditTextObjectImpl::GetStyleSheet(sal_Int32 nPara, String& rName, SfxStyleF
     rFamily = rC.GetFamily();
 }
 
-void EditTextObjectImpl::SetStyleSheet(sal_Int32 nPara, const String& rName, const SfxStyleFamily& rFamily)
+void EditTextObjectImpl::SetStyleSheet(sal_Int32 nPara, const OUString& rName, const SfxStyleFamily& rFamily)
 {
     if (nPara < 0 || static_cast<size_t>(nPara) >= aContents.size())
         return;
@@ -868,8 +868,8 @@ bool EditTextObjectImpl::ImpChangeStyleSheets(
 }
 
 bool EditTextObjectImpl::ChangeStyleSheets(
-                    const XubString& rOldName, SfxStyleFamily eOldFamily,
-                    const XubString& rNewName, SfxStyleFamily eNewFamily )
+                    const OUString& rOldName, SfxStyleFamily eOldFamily,
+                    const OUString& rNewName, SfxStyleFamily eNewFamily)
 {
     sal_Bool bChanges = ImpChangeStyleSheets( rOldName, eOldFamily, rNewName, eNewFamily );
     if ( bChanges )
@@ -879,7 +879,7 @@ bool EditTextObjectImpl::ChangeStyleSheets(
 }
 
 void EditTextObjectImpl::ChangeStyleSheetName( SfxStyleFamily eFamily,
-                const XubString& rOldName, const XubString& rNewName )
+                const OUString& rOldName, const OUString& rNewName )
 {
     ImpChangeStyleSheets( rOldName, eFamily, rNewName, eFamily );
 }
