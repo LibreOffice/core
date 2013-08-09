@@ -1015,7 +1015,7 @@ sal_uInt16 SdDrawDocument::GetAnnotationAuthorIndex( const OUString& rAuthor )
 // to get the root element of the xml file
 Reference<XElement> getRoot()
 {
-    const Reference<css::uno::XComponentContext> xContext( comphelper_getProcessComponentContext() );
+    const Reference<css::uno::XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
     Reference< XMultiServiceFactory > xServiceFactory( xContext->getServiceManager() , UNO_QUERY_THROW );
     Reference< util::XMacroExpander > xMacroExpander = util::theMacroExpander::get( xContext );
     Reference< XMultiServiceFactory > xConfigProvider = configuration::theDefaultProvider::get( xContext );
@@ -1056,7 +1056,7 @@ Reference<XElement> getRoot()
             aURL = aSysPath;
     }
 
-    const Reference<XDocumentBuilder> xDocBuilder( css::xml::dom::DocumentBuilder::create( comphelper::getComponentContext (xServiceFactory) ) );
+    const Reference<XDocumentBuilder> xDocBuilder( DocumentBuilder::create( comphelper::getComponentContext (xServiceFactory) ));
     const Reference<XDocument> xDoc = xDocBuilder->parseURI( aURL );
     const Reference<XElement> xRoot = xDoc->getDocumentElement();
     return xRoot;                      //this loops seems to work only once,so returning the root element

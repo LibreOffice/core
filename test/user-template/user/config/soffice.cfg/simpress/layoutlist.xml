@@ -3,30 +3,61 @@
 -->
 <layout-list>
     <layout type="AUTOLAYOUT_TITLE_CONTENT">
-        <presobj kind="PRESOBJ_TITLE" layout-pos-x="1400" layout-pos-y="837" layout-size-height="4400" layout-size-width="25600"/>
-        <presobj kind="PRESOBJ_OUTLINE1" layout-pos-x="1400" layout-pos-y="4914" layout-size-height="25200" layout-size-width="12180"/>
+        <presobj kind="PRESOBJ_TITLE" title-shape-relative-height="1" title-shape-relative-width="1" title-shape-relative-posX="0" title-shape-relative-posY="0"/>
+        <presobj kind="PRESOBJ_OUTLINE1" title-shape-relative-height="1" title-shape-relative-width="1" title-shape-relative-posX="0" title-shape-relative-posY="0"/>
     </layout>
-    <layout type="AUTOLAYOUT_TITLE_2VTEXT">
-        <presobj kind="PRESOBJ_TITLE" layout-pos-x="1400" layout-pos-y="837" layout-size-height="4400" layout-size-width="25600"/>
-        <presobj kind="PRESOBJ_OUTLINE1" layout-pos-x="1400" layout-pos-y="4914" layout-size-height="12297" layout-size-width="12180"/>
-        <presobj kind="PRESOBJ_OUTLINE2" layout-pos-x="14311" layout-pos-y="4914" layout-size-height="12297" layout-size-width="12180"/>
+    <layout type="AUTOLAYOUT_TITLE_2CONTENT">
+        <presobj kind="PRESOBJ_TITLE" title-shape-relative-height="1" title-shape-relative-width="1" title-shape-relative-posX="0" title-shape-relative-posY="0"/>
+        <presobj kind="PRESOBJ_OUTLINE1" title-shape-relative-height="1" title-shape-relative-width="0.488" title-shape-relative-posX="0" title-shape-relative-posY="0"/>
+        <presobj kind="PRESOBJ_OUTLINE2" title-shape-relative-height="1" title-shape-relative-width="0.488" title-shape-relative-posX="1.05" title-shape-relative-posY="0"/>
     </layout>
     <layout type="AUTOLAYOUT_TITLE_CONTENT_OVER_CONTENT">
-        <presobj kind="PRESOBJ_TITLE" layout-pos-x="1400" layout-pos-y="837" layout-size-height="4400" layout-size-width="25600"/>
-        <presobj kind="PRESOBJ_OUTLINE1" layout-pos-x="1400" layout-pos-y="4914" layout-size-height="25200" layout-size-width="5809"/>
-        <presobj kind="PRESOBJ_OUTLINE2" layout-pos-x="1400" layout-pos-y="11274" layout-size-height="25200" layout-size-width="5809"/>
+        <presobj kind="PRESOBJ_TITLE" title-shape-relative-height="1" title-shape-relative-width="1" title-shape-relative-posX="0" title-shape-relative-posY="0"/>
+        <presobj kind="PRESOBJ_OUTLINE1" title-shape-relative-height="0.477" title-shape-relative-width="1" title-shape-relative-posX="0" title-shape-relative-posY="0"/>
+        <presobj kind="PRESOBJ_OUTLINE2" title-shape-relative-height="0.477" title-shape-relative-width="1" title-shape-relative-posX="0" title-shape-relative-posY="1.095"/>
     </layout>
     <layout type="AUTOLAYOUT_TITLE_CONTENT_2CONTENT">
-        <presobj kind="PRESOBJ_TITLE" layout-pos-x="1400" layout-pos-y="837" layout-size-height="4400" layout-size-width="25600"/>
-        <presobj kind="PRESOBJ_OUTLINE1" layout-pos-x="1400" layout-pos-y="4914" layout-size-height="5809" layout-size-width="25198"/>
-        <presobj kind="PRESOBJ_OUTLINE2" layout-pos-x="1400" layout-pos-y="11274" layout-size-height="5809" layout-size-width="12297"/>
-        <presobj kind="PRESOBJ_OUTLINE3" layout-pos-x="14311" layout-pos-y="11274" layout-size-height="5809" layout-size-width="12297"/>
+        <presobj kind="PRESOBJ_TITLE" title-shape-relative-height="1" title-shape-relative-width="1" title-shape-relative-posX="0" title-shape-relative-posY="0"/>
+        <presobj kind="PRESOBJ_OUTLINE1" title-shape-relative-height="1" title-shape-relative-width="0.488" title-shape-relative-posX="0" title-shape-relative-posY="0"/>
+        <presobj kind="PRESOBJ_OUTLINE2" title-shape-relative-height="0.477" title-shape-relative-width="0.488" title-shape-relative-posX="1.05" title-shape-relative-posY="0"/>
+        <presobj kind="PRESOBJ_OUTLINE3" title-shape-relative-height="0.477" title-shape-relative-width="0.488" title-shape-relative-posX="1.05" title-shape-relative-posY="1.095"/>
     </layout>
-    <layout type="AUTOLAYOUT_TITLE_4SCONTENT">
-        <presobj kind="PRESOBJ_TITLE" layout-pos-x="1400" layout-pos-y="837" layout-size-height="4400" layout-size-width="25600"/>
-        <presobj kind="PRESOBJ_OUTLINE1" layout-pos-x="1400" layout-pos-y="4914" layout-size-height="5809" layout-size-width="12297"/>
-        <presobj kind="PRESOBJ_OUTLINE2" layout-pos-x="14311" layout-pos-y="5914" layout-size-height="4509" layout-size-width="12297"/>
-        <presobj kind="PRESOBJ_OUTLINE3" layout-pos-x="14311" layout-pos-y="12274" layout-size-height="4509" layout-size-width="12297"/>
-        <presobj kind="PRESOBJ_OUTLINE4" layout-pos-x="1400" layout-pos-y="11274" layout-size-height="5809" layout-size-width="12297"/>
+    <layout type="AUTOLAYOUT_TITLE_4CONTENT">
+        <presobj kind="PRESOBJ_TITLE" title-shape-relative-height="1" title-shape-relative-width="1" title-shape-relative-posX="0" title-shape-relative-posY="0"/>
+        <presobj kind="PRESOBJ_OUTLINE1" title-shape-relative-height="0.477" title-shape-relative-width="0.488" title-shape-relative-posX="0" title-shape-relative-posY="0"/>
+        <presobj kind="PRESOBJ_OUTLINE2" title-shape-relative-height="0.477" title-shape-relative-width="0.488" title-shape-relative-posX="1.05" title-shape-relative-posY="0"/>
+        <presobj kind="PRESOBJ_OUTLINE3" title-shape-relative-height="0.477" title-shape-relative-width="0.488" title-shape-relative-posX="1.05" title-shape-relative-posY="1.095"/>
+        <presobj kind="PRESOBJ_OUTLINE4" title-shape-relative-height="0.477" title-shape-relative-width="0.488" title-shape-relative-posX="0" title-shape-relative-posY="1.095"/>
+    </layout>
+    <layout type="AUTOLAYOUT_ONLY_TEXT">
+        <presobj kind="PRESOBJ_OUTLINE1" title-shape-relative-height="1" title-shape-relative-width="1" title-shape-relative-posX="0" title-shape-relative-posY="0"/>
+    </layout>
+    <layout type="AUTOLAYOUT_TITLE_ONLY">
+        <presobj kind="PRESOBJ_TITLE" title-shape-relative-height="1" title-shape-relative-width="1" title-shape-relative-posX="0" title-shape-relative-posY="0"/>
+    </layout>
+    <layout type="AUTOLAYOUT_TITLE_6CONTENT">
+        <presobj kind="PRESOBJ_TITLE" title-shape-relative-height="1" title-shape-relative-width="1" title-shape-relative-posX="0" title-shape-relative-posY="0"/>
+        <presobj kind="PRESOBJ_OUTLINE1" title-shape-relative-height="0.477" title-shape-relative-width="0.322" title-shape-relative-posX="0" title-shape-relative-posY="0"/>
+        <presobj kind="PRESOBJ_OUTLINE2" title-shape-relative-height="0.477" title-shape-relative-width="0.322" title-shape-relative-posX="1.05" title-shape-relative-posY="0"/>
+        <presobj kind="PRESOBJ_OUTLINE3" title-shape-relative-height="0.477" title-shape-relative-width="0.322" title-shape-relative-posX="2.10" title-shape-relative-posY="0"/>
+        <presobj kind="PRESOBJ_OUTLINE4" title-shape-relative-height="0.477" title-shape-relative-width="0.322" title-shape-relative-posX="2.10" title-shape-relative-posY="1.095"/>
+        <presobj kind="PRESOBJ_OUTLINE5" title-shape-relative-height="0.477" title-shape-relative-width="0.322" title-shape-relative-posX="1.05" title-shape-relative-posY="1.095"/>
+        <presobj kind="PRESOBJ_OUTLINE6" title-shape-relative-height="0.477" title-shape-relative-width="0.322" title-shape-relative-posX="0" title-shape-relative-posY="1.095"/>
+    </layout>
+    <layout type="AUTOLAYOUT__START">
+        <presobj kind="PRESOBJ_TITLE" title-shape-relative-height="1" title-shape-relative-width="1" title-shape-relative-posX="0" title-shape-relative-posY="0"/>
+        <presobj kind="PRESOBJ_OUTLINE1" title-shape-relative-height="1" title-shape-relative-width="1" title-shape-relative-posX="0" title-shape-relative-posY="0"/>
+    </layout>
+    <layout type="AUTOLAYOUT_TITLE_2CONTENT_CONTENT">
+        <presobj kind="PRESOBJ_TITLE" title-shape-relative-height="1" title-shape-relative-width="1" title-shape-relative-posX="0" title-shape-relative-posY="0"/>
+        <presobj kind="PRESOBJ_OUTLINE1" title-shape-relative-height="0.477" title-shape-relative-width="0.488" title-shape-relative-posX="0" title-shape-relative-posY="0"/>
+        <presobj kind="PRESOBJ_OUTLINE2" title-shape-relative-height="0.477" title-shape-relative-width="0.488" title-shape-relative-posX="0" title-shape-relative-posY="1.095"/>
+        <presobj kind="PRESOBJ_OUTLINE3" title-shape-relative-height="1" title-shape-relative-width="0.488" title-shape-relative-posX="1.05" title-shape-relative-posY="0"/>
+    </layout>
+    <layout type="AUTOLAYOUT_TITLE_2CONTENT_OVER_CONTENT">
+        <presobj kind="PRESOBJ_TITLE" title-shape-relative-height="1" title-shape-relative-width="1" title-shape-relative-posX="0" title-shape-relative-posY="0"/>
+        <presobj kind="PRESOBJ_OUTLINE1" title-shape-relative-height="0.477" title-shape-relative-width="0.488" title-shape-relative-posX="0" title-shape-relative-posY="0"/>
+        <presobj kind="PRESOBJ_OUTLINE2" title-shape-relative-height="0.477" title-shape-relative-width="0.488" title-shape-relative-posX="1.05" title-shape-relative-posY="0"/>
+        <presobj kind="PRESOBJ_OUTLINE3" title-shape-relative-height="0.477" title-shape-relative-width="1" title-shape-relative-posX="0" title-shape-relative-posY="1.095"/>
     </layout>
 </layout-list>
