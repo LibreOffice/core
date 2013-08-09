@@ -659,7 +659,6 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
                     case POS_OVERLAP_BEFORE:
                     case POS_OVERLAP_BEHIND:
                         if( pRedl->IsOwnRedline( *pNewRedl ) &&
-//                          1 == pRedl->GetStackCount() &&
                             pRedl->CanCombine( *pNewRedl ))
                         {
                             // If that's the case we can merge it, meaning

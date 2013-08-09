@@ -2842,10 +2842,7 @@ static bool lcl_InsOtherBox( SwTableLine* pLine, CR_SetBoxWidth& rParam,
                             pTmpBox = pTmpBox->GetUpper()->GetUpper();
                             nBoxPos = pTmpBox->GetUpper()->GetTabBoxes().GetPos( pTmpBox );
                         }
-//                      if( nBoxPos )
-                            nTmpWidth = pTmpBox->GetFrmFmt()->GetFrmSize().GetWidth();
-//                      else
-//                          nTmpWidth = 0;
+                        nTmpWidth = pTmpBox->GetFrmFmt()->GetFrmSize().GetWidth();
                     }
 
                     if( nTmpWidth < nDiff || nTmpWidth - nDiff < MINLAY )
