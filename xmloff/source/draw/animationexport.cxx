@@ -1247,9 +1247,7 @@ void AnimationsExporterImpl::exportAnimate( const Reference< XAnimate >& xAnimat
                     if( !sTmp.isEmpty() )
                         sTmp.append( (sal_Unicode)';' );
 
-                    sTmp.append( p->Time );
-                    sTmp.append( (sal_Unicode)',' );
-                    sTmp.append( p->Progress );
+                    sTmp.append( OUString::number(p->Time) + "," + OUString::number(p->Progress) );
 
                     p++;
                 }

@@ -674,11 +674,9 @@ OUString xforms_bool( const Any& rAny )
 
 void xforms_formatDate( OUStringBuffer& aBuffer, const util::Date& rDate )
 {
-    aBuffer.append( static_cast<sal_Int32>( rDate.Year ) );
-    aBuffer.append( sal_Unicode('-') );
-    aBuffer.append( static_cast<sal_Int32>( rDate.Month ) );
-    aBuffer.append( sal_Unicode('-') );
-    aBuffer.append( static_cast<sal_Int32>( rDate.Day ) );
+    aBuffer.append(OUString::number(static_cast<sal_Int32>( rDate.Year ) )
+            + "-" + OUString::number(static_cast<sal_Int32>( rDate.Month ))
+            + "-" + OUString::number(static_cast<sal_Int32>( rDate.Day )) );
 }
 
 void xforms_formatTime( OUStringBuffer& aBuffer, const com::sun::star::util::Time& rTime )

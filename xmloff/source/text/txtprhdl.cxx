@@ -589,12 +589,7 @@ sal_Bool XMLFrameProtectPropHdl_Impl::exportXML(
         }
         else
         {
-            OUStringBuffer aOut( rStrExpValue.getLength() + 1 +
-                                 sVal.getLength() );
-            aOut.append( rStrExpValue );
-            aOut.append( (sal_Unicode)' ' );
-            aOut.append( sVal );
-            rStrExpValue = aOut.makeStringAndClear();
+            rStrExpValue = OUString::number(rStrExpValue.getLength() + 1 + sVal.getLength()) + rStrExpValue + " " + sVal;
         }
     }
     else if( rStrExpValue.isEmpty() )
@@ -857,12 +852,8 @@ sal_Bool XMLGrfMirrorPropHdl_Impl::exportXML(
         }
         else
         {
-            OUStringBuffer aOut( rStrExpValue.getLength() + 1 +
-                                 sVal.getLength() );
-            aOut.append( rStrExpValue );
-            aOut.append( (sal_Unicode)' ' );
-            aOut.append( sVal );
-            rStrExpValue = aOut.makeStringAndClear();
+            rStrExpValue = OUString::number(rStrExpValue.getLength() + 1 + sVal.getLength())
+                + rStrExpValue + " " + sVal;
         }
     }
     else if( rStrExpValue.isEmpty() )
