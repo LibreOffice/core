@@ -2598,6 +2598,10 @@ bool ScFormulaCell::UpdateReference(
     if (pDocument->IsClipOrUndo())
         return false;
 
+    if (mxGroup && mxGroup->mnStart != aPos.Row())
+        // Update only the top cell in case the cell is part of a formula group.
+        return false;
+
     switch (rCxt.meMode)
     {
         case URM_INSDEL:
