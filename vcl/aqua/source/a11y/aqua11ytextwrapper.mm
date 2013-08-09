@@ -108,13 +108,13 @@ using namespace ::rtl;
 +(id)sharedTextUIElementsAttributeForElement:(AquaA11yWrapper *)wrapper
 {
     (void)wrapper;
-    return [ [ NSArray alloc ] init ]; // unsupported
+    return [NSArray arrayWithObject:wrapper];
 }
 
 +(id)sharedCharacterRangeAttributeForElement:(AquaA11yWrapper *)wrapper
 {
     (void)wrapper;
-    return [ NSValue valueWithRange: NSMakeRange ( 0, 0 ) ]; // unsupported
+    return [ NSValue valueWithRange: NSMakeRange ( 0, [wrapper accessibleText]->getCharacterCount() ) ];
 }
 
 +(void)addAttributeNamesTo:(NSMutableArray *)attributeNames {
