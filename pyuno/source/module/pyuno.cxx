@@ -427,6 +427,32 @@ PyObject *PyUNO_str( PyObject * self )
     return PyStr_FromString( buf.getStr());
 }
 
+PyObject* PyUNO_dir (PyObject* self)
+{
+    PyUNO* me = (PyUNO*) self;
+
+    PyObject* member_list = NULL;
+    Sequence<OUString> oo_member_list;
+
+    try
+    {
+        oo_member_list = me->members->xInvocation->getMemberNames ();
+        member_list = PyList_New (oo_member_list.getLength ());
+        for (int i = 0; i < oo_member_list.getLength (); i++)
+        {
+            // setitem steals a reference
+            PyList_SetItem (member_list, i, ustring2PyString(oo_member_list[i]).getAcquired() );
+        }
+    }
+    catch( const RuntimeException &e )
+    {
+        raisePyExceptionWithAny( makeAny(e) );
+    }
+
+    return member_list;
+}
+
+
 PyObject* PyUNO_getattr (PyObject* self, char* name)
 {
     PyUNO* me;
@@ -437,31 +463,10 @@ PyObject* PyUNO_getattr (PyObject* self, char* name)
         Runtime runtime;
 
         me = (PyUNO*) self;
-        //Handle Python dir () stuff first...
-        if (strcmp (name, "__members__") == 0)
-        {
-            PyObject* member_list;
-            Sequence<OUString> oo_member_list;
-
-            oo_member_list = me->members->xInvocation->getMemberNames ();
-            member_list = PyList_New (oo_member_list.getLength ());
-            for (int i = 0; i < oo_member_list.getLength (); i++)
-            {
-                // setitem steals a reference
-                PyList_SetItem (member_list, i, ustring2PyString(oo_member_list[i]).getAcquired() );
-            }
-            return member_list;
-        }
-
         if (strcmp (name, "__dict__") == 0)
         {
-            Py_INCREF (Py_None);
-            return Py_None;
-        }
-        if (strcmp (name, "__methods__") == 0)
-        {
-            Py_INCREF (Py_None);
-            return Py_None;
+            Py_INCREF (Py_TYPE(me)->tp_dict);
+            return Py_TYPE(me)->tp_dict;
         }
         if (strcmp (name, "__class__") == 0)
         {
@@ -638,6 +643,13 @@ static PyObject* PyUNO_cmp( PyObject *self, PyObject *that, int op )
     return result;
 }
 
+static PyMethodDef PyUNOMethods[] =
+{
+    {"__dir__", (PyCFunction)PyUNO_dir, METH_NOARGS, NULL},
+    {NULL,      NULL,                   0,           NULL}
+};
+
+
 /* Python 2 has a tp_flags value for rich comparisons.  Python 3 does not (on by default) */
 #ifdef Py_TPFLAGS_HAVE_RICHCOMPARE
 #define TP_FLAGS (Py_TPFLAGS_HAVE_RICHCOMPARE)
@@ -674,7 +686,7 @@ static PyTypeObject PyUNOType =
     0,
     (getiterfunc)0,
     (iternextfunc)0,
-    NULL,
+    PyUNOMethods,
     NULL,
     NULL,
     NULL,
@@ -697,6 +709,11 @@ static PyTypeObject PyUNOType =
     , 0
 #endif
 };
+
+int PyUNO_initType()
+{
+    return PyType_Ready(&PyUNOType);
+}
 
 PyRef getPyUnoClass()
 {

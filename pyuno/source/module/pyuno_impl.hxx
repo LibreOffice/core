@@ -188,6 +188,8 @@ typedef ::boost::unordered_map
 
 typedef ::boost::unordered_set< PyRef , PyRef::Hash , std::equal_to<PyRef> > ClassSet;
 
+int PyUNO_initType();
+
 PyObject* PyUNO_new(
     const com::sun::star::uno::Any & targetInterface,
     const com::sun::star::uno::Reference<com::sun::star::lang::XSingleServiceFactory> & ssf);
