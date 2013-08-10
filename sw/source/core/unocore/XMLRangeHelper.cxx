@@ -125,7 +125,7 @@ void lcl_getSingleCellAddressFromXMLString(
     sal_Int32 i = nLength - 1, nColumn = 0;
 
     // parse number for row
-    while( CharClass::isAsciiDigit( pStrArray[ i ] ) && i >= 0 )
+    while( rtl::isAsciiDigit( pStrArray[ i ] ) && i >= 0 )
         i--;
     rOutCell.nRow = (aCellStr.copy( i + 1 )).toInt32() - 1;
     // a dollar in XML means absolute (whereas in UI it means relative)
@@ -139,7 +139,7 @@ void lcl_getSingleCellAddressFromXMLString(
 
     // parse rest for column
     sal_Int32 nPower = 1;
-    while( CharClass::isAsciiAlpha( pStrArray[ i ] ))
+    while( rtl::isAsciiAlpha( pStrArray[ i ] ))
     {
         nColumn += (pStrArray[ i ] - aLetterA + 1) * nPower;
         i--;

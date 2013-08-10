@@ -20,6 +20,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <unotools/charclass.hxx>
+#include <rtl/character.hxx>
 #include <tools/debug.hxx>
 
 #include <com/sun/star/i18n/CharacterClassification.hpp>
@@ -85,7 +86,7 @@ bool CharClass::isAsciiNumeric( const OUString& rStr )
 
     do
     {
-        if ( !isAsciiDigit( *p ) )
+        if ( !rtl::isAsciiDigit( *p ) )
             return false;
     }
     while ( ++p < pStop );
@@ -104,7 +105,7 @@ bool CharClass::isAsciiAlpha( const OUString& rStr )
 
     do
     {
-        if ( !isAsciiAlpha( *p ) )
+        if ( !rtl::isAsciiAlpha( *p ) )
             return false;
     }
     while ( ++p < pStop );
@@ -118,7 +119,7 @@ bool CharClass::isAlpha( const OUString& rStr, sal_Int32 nPos ) const
 {
     sal_Unicode c = rStr[nPos];
     if ( c < 128 )
-        return isAsciiAlpha( c );
+        return rtl::isAsciiAlpha( c );
 
     try
     {
@@ -141,7 +142,7 @@ bool CharClass::isLetter( const OUString& rStr, sal_Int32 nPos ) const
 {
     sal_Unicode c = rStr[nPos];
     if ( c < 128 )
-        return isAsciiAlpha( c );
+        return rtl::isAsciiAlpha( c );
 
     try
     {
@@ -180,7 +181,7 @@ bool CharClass::isDigit( const OUString& rStr, sal_Int32 nPos ) const
 {
     sal_Unicode c = rStr[ nPos ];
     if ( c < 128 )
-        return isAsciiDigit( c );
+        return rtl::isAsciiDigit( c );
 
     try
     {
@@ -219,7 +220,7 @@ bool CharClass::isAlphaNumeric( const OUString& rStr, sal_Int32 nPos ) const
 {
     sal_Unicode c = rStr[nPos];
     if ( c < 128 )
-        return isAsciiAlphaNumeric( c );
+        return rtl::isAsciiAlphanumeric( c );
 
     try
     {
@@ -241,7 +242,7 @@ bool CharClass::isLetterNumeric( const OUString& rStr, sal_Int32 nPos ) const
 {
     sal_Unicode c = rStr[nPos];
     if ( c < 128 )
-        return isAsciiAlphaNumeric( c );
+        return rtl::isAsciiAlphanumeric( c );
 
     try
     {
