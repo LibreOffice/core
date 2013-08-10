@@ -28,19 +28,19 @@ class SdPage;
 
 class SdPresentationLayoutUndoAction : public SdUndoAction
 {
-    String          aOldLayoutName;
-    String          aNewLayoutName;
+    OUString        aOldLayoutName;
+    OUString        aNewLayoutName;
     AutoLayout      eOldAutoLayout;
     AutoLayout      eNewAutoLayout;
     sal_Bool        bSetAutoLayout;     // sal_True: change AutoLayout
     SdPage*         pPage;
-    String          aComment;
+    OUString        aComment;
 
 public:
     TYPEINFO();
     SdPresentationLayoutUndoAction(SdDrawDocument* pTheDoc,
-                         String          aTheOldLayoutName,
-                         String          aTheNewLayoutName,
+                         OUString        aTheOldLayoutName,
+                         OUString        aTheNewLayoutName,
                          AutoLayout      eTheOldAutoLayout,
                          AutoLayout      eTheNewAutoLayout,
                          sal_Bool            bSet,

@@ -30,8 +30,8 @@ TYPEINIT1(SdPresentationLayoutUndoAction, SdUndoAction);
 
 SdPresentationLayoutUndoAction::SdPresentationLayoutUndoAction(
                             SdDrawDocument* pTheDoc,
-                            String          aTheOldLayoutName,
-                            String          aTheNewLayoutName,
+                            OUString        aTheOldLayoutName,
+                            OUString        aTheNewLayoutName,
                             AutoLayout      eTheOldAutoLayout,
                             AutoLayout      eTheNewAutoLayout,
                             sal_Bool            bSet,
@@ -46,7 +46,7 @@ SdPresentationLayoutUndoAction::SdPresentationLayoutUndoAction(
 
     DBG_ASSERT(pThePage, "No Page set!");
     pPage = pThePage;
-    aComment = String(SdResId(STR_UNDO_SET_PRESLAYOUT));
+    aComment = SD_RESSTR(STR_UNDO_SET_PRESLAYOUT);
 }
 
 void SdPresentationLayoutUndoAction::Undo()

@@ -29,8 +29,8 @@ class SdPage;
 class ModifyPageUndoAction : public SdUndoAction
 {
     SdPage*         mpPage;
-    String          maOldName;
-    String          maNewName;
+    OUString        maOldName;
+    OUString        maNewName;
     AutoLayout      meOldAutoLayout;
     AutoLayout      meNewAutoLayout;
     sal_Bool            mbOldBckgrndVisible;
@@ -38,14 +38,14 @@ class ModifyPageUndoAction : public SdUndoAction
     sal_Bool            mbOldBckgrndObjsVisible;
     sal_Bool            mbNewBckgrndObjsVisible;
 
-    String          maComment;
+    OUString        maComment;
 
 public:
     TYPEINFO();
     ModifyPageUndoAction(
         SdDrawDocument*         pTheDoc,
         SdPage*                 pThePage,
-        String                  aTheNewName,
+        OUString                aTheNewName,
         AutoLayout              eTheNewAutoLayout,
         sal_Bool                    bTheNewBckgrndVisible,
         sal_Bool                    bTheNewBckgrndObjsVisible);
@@ -57,12 +57,14 @@ public:
     virtual OUString GetComment() const;
 };
 
-// --------------------------------------------------------------------
 
 class RenameLayoutTemplateUndoAction : public SdUndoAction
 {
 public:
-    RenameLayoutTemplateUndoAction( SdDrawDocument* pDocument, const String& rOldLayoutName, const String& rNewLayoutName );
+    RenameLayoutTemplateUndoAction(
+        SdDrawDocument* pDocument,
+        const OUString& rOldLayoutName,
+        const OUString& rNewLayoutName);
 
     virtual void Undo();
     virtual void Redo();
@@ -70,9 +72,9 @@ public:
     virtual OUString GetComment() const;
 
 private:
-    String maOldName;
-    String maNewName;
-    const String maComment;
+    OUString maOldName;
+    OUString maNewName;
+    const OUString maComment;
 };
 
 #endif      // _SD_UNMODPG_HXX

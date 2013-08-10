@@ -30,8 +30,8 @@ TYPEINIT1(SdLayerModifyUndoAction, SdUndoAction);
 
 SdLayerModifyUndoAction::SdLayerModifyUndoAction(
     SdDrawDocument* _pDoc, SdrLayer* pLayer,
-    const String& rOldLayerName, const String& rOldLayerTitle, const String& rOldLayerDesc, bool bOldIsVisible, bool bOldIsLocked, bool bOldIsPrintable,
-    const String& rNewLayerName, const String& rNewLayerTitle, const String& rNewLayerDesc, bool bNewIsVisible, bool bNewIsLocked, bool bNewIsPrintable )
+    const OUString& rOldLayerName, const OUString& rOldLayerTitle, const OUString& rOldLayerDesc, bool bOldIsVisible, bool bOldIsLocked, bool bOldIsPrintable,
+    const OUString& rNewLayerName, const OUString& rNewLayerTitle, const OUString& rNewLayerDesc, bool bNewIsVisible, bool bNewIsLocked, bool bNewIsPrintable )
 :   SdUndoAction( _pDoc ),
     mpLayer( pLayer ),
     maOldLayerName( rOldLayerName ),

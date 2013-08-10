@@ -43,7 +43,7 @@ TYPEINIT1(ModifyPageUndoAction, SdUndoAction);
 ModifyPageUndoAction::ModifyPageUndoAction(
     SdDrawDocument* pTheDoc,
     SdPage* pThePage,
-    String aTheNewName,
+    OUString aTheNewName,
     AutoLayout  eTheNewAutoLayout,
     sal_Bool bTheNewBckgrndVisible,
     sal_Bool bTheNewBckgrndObjsVisible)
@@ -63,15 +63,15 @@ ModifyPageUndoAction::ModifyPageUndoAction(
     {
         maOldName = mpPage->GetName();
         SdrLayerAdmin& rLayerAdmin = mpDoc->GetLayerAdmin();
-        sal_uInt8 aBckgrnd = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), sal_False);
-        sal_uInt8 aBckgrndObj = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), sal_False);
+        sal_uInt8 aBckgrnd = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRND), sal_False);
+        sal_uInt8 aBckgrndObj = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ), sal_False);
         SetOfByte aVisibleLayers = mpPage->TRG_GetMasterPageVisibleLayers();
 
         mbOldBckgrndVisible = aVisibleLayers.IsSet(aBckgrnd);
         mbOldBckgrndObjsVisible = aVisibleLayers.IsSet(aBckgrndObj);
     }
 
-    maComment = String(SdResId(STR_UNDO_MODIFY_PAGE));
+    maComment = SD_RESSTR(STR_UNDO_MODIFY_PAGE);
 }
 
 #include <svx/svdviter.hxx>
@@ -106,8 +106,8 @@ void ModifyPageUndoAction::Undo()
         }
 
         SdrLayerAdmin& rLayerAdmin = mpDoc->GetLayerAdmin();
-        sal_uInt8 aBckgrnd = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), sal_False);
-        sal_uInt8 aBckgrndObj = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), sal_False);
+        sal_uInt8 aBckgrnd = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRND), sal_False);
+        sal_uInt8 aBckgrndObj = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ), sal_False);
         SetOfByte aVisibleLayers;
         aVisibleLayers.Set(aBckgrnd, mbOldBckgrndVisible);
         aVisibleLayers.Set(aBckgrndObj, mbOldBckgrndObjsVisible);
@@ -150,8 +150,8 @@ void ModifyPageUndoAction::Redo()
         }
 
         SdrLayerAdmin& rLayerAdmin = mpDoc->GetLayerAdmin();
-        sal_uInt8 aBckgrnd = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), sal_False);
-        sal_uInt8 aBckgrndObj = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), sal_False);
+        sal_uInt8 aBckgrnd = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRND), sal_False);
+        sal_uInt8 aBckgrndObj = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ), sal_False);
         SetOfByte aVisibleLayers;
         aVisibleLayers.Set(aBckgrnd, mbNewBckgrndVisible);
         aVisibleLayers.Set(aBckgrndObj, mbNewBckgrndObjsVisible);
@@ -174,34 +174,30 @@ OUString ModifyPageUndoAction::GetComment() const
     return maComment;
 }
 
-// --------------------------------------------------------------------
 
-RenameLayoutTemplateUndoAction::RenameLayoutTemplateUndoAction( SdDrawDocument* pDocument, const String& rOldLayoutName, const String& rNewLayoutName )
-: SdUndoAction(pDocument)
-, maOldName( rOldLayoutName )
-, maNewName( rNewLayoutName )
-, maComment(SdResId(STR_TITLE_RENAMESLIDE))
+RenameLayoutTemplateUndoAction::RenameLayoutTemplateUndoAction(
+    SdDrawDocument* pDocument,
+    const OUString& rOldLayoutName,
+    const OUString& rNewLayoutName)
+    : SdUndoAction(pDocument)
+    , maOldName(rOldLayoutName)
+    , maNewName(rNewLayoutName)
+    , maComment(SD_RESSTR(STR_TITLE_RENAMESLIDE))
 {
-    sal_uInt16 nPos = maOldName.SearchAscii( SD_LT_SEPARATOR );
-    if( nPos != (sal_uInt16)-1 )
-        maOldName.Erase(nPos);
+    sal_Int32 nPos = maOldName.indexOf(SD_LT_SEPARATOR);
+    if (nPos != -1)
+        maOldName = maOldName.copy(0, nPos);
 }
 
 void RenameLayoutTemplateUndoAction::Undo()
 {
-    String aLayoutName( maNewName );
-    aLayoutName.AppendAscii( SD_LT_SEPARATOR );
-    aLayoutName.Append( String(SdResId(STR_LAYOUT_OUTLINE))) ;
-
+    OUString aLayoutName(maNewName + SD_LT_SEPARATOR + SD_RESSTR(STR_LAYOUT_OUTLINE));
     mpDoc->RenameLayoutTemplate( aLayoutName, maOldName );
 }
 
 void RenameLayoutTemplateUndoAction::Redo()
 {
-    String aLayoutName( maOldName );
-    aLayoutName.AppendAscii( SD_LT_SEPARATOR );
-    aLayoutName.Append( String(SdResId(STR_LAYOUT_OUTLINE))) ;
-
+    OUString aLayoutName(maOldName + SD_LT_SEPARATOR + SD_RESSTR(STR_LAYOUT_OUTLINE));
     mpDoc->RenameLayoutTemplate( aLayoutName, maNewName );
 }
 

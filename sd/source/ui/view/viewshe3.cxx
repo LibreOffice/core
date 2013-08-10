@@ -143,7 +143,7 @@ void  ViewShell::GetMenuState( SfxItemSet &rSet )
         {
             // Set the necessary string like in
             // sfx2/source/view/viewfrm.cxx ver 1.23 ln 1072 ff.
-            String aTmp( SvtResId( STR_UNDO ) );
+            OUString aTmp(SVT_RESSTR(STR_UNDO));
             aTmp += pUndoManager->GetUndoActionComment(0);
             rSet.Put(SfxStringItem(SID_UNDO, aTmp));
         }
@@ -170,7 +170,7 @@ void  ViewShell::GetMenuState( SfxItemSet &rSet )
         {
             // Set the necessary string like in
             // sfx2/source/view/viewfrm.cxx ver 1.23 ln 1081 ff.
-            String aTmp(SvtResId(STR_REDO));
+            OUString aTmp(SVT_RESSTR(STR_REDO));
             aTmp += pUndoManager->GetRedoActionComment(0);
             rSet.Put(SfxStringItem(SID_REDO, aTmp));
         }
@@ -198,8 +198,8 @@ SdPage* ViewShell::CreateOrDuplicatePage (
     sal_uInt16 nSId = rRequest.GetSlot();
     SdDrawDocument* pDocument = GetDoc();
     SdrLayerAdmin& rLayerAdmin = pDocument->GetLayerAdmin();
-    sal_uInt8 aBckgrnd = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), sal_False);
-    sal_uInt8 aBckgrndObj = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), sal_False);
+    sal_uInt8 aBckgrnd = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRND), sal_False);
+    sal_uInt8 aBckgrndObj = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ), sal_False);
     SetOfByte aVisibleLayers;
     // Determine the page from which to copy some values, such as layers,
     // size, master page, to the new page.  This is usually the given page.
@@ -212,8 +212,8 @@ SdPage* ViewShell::CreateOrDuplicatePage (
     else
         aVisibleLayers.SetAll();
 
-    String aStandardPageName;
-    String aNotesPageName;
+    OUString aStandardPageName;
+    OUString aNotesPageName;
     AutoLayout eStandardLayout (AUTOLAYOUT_NONE);
     AutoLayout eNotesLayout (AUTOLAYOUT_NOTES);
     sal_Bool bIsPageBack = aVisibleLayers.IsSet(aBckgrnd);
@@ -310,7 +310,7 @@ SdPage* ViewShell::CreateOrDuplicatePage (
     View* pDrView = GetView();
     const bool bUndo = pDrView && pDrView->IsUndoEnabled();
     if( bUndo )
-        pDrView->BegUndo( String( SdResId(STR_INSERTPAGE) ) );
+        pDrView->BegUndo(SD_RESSTR(STR_INSERTPAGE));
 
     sal_uInt16 nNewPageIndex = 0xffff;
     switch (nSId)
