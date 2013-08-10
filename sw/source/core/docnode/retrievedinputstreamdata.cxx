@@ -21,10 +21,8 @@
 #include <retrieveinputstreamconsumer.hxx>
 #include <vcl/svapp.hxx>
 
-/** implementation of class <SwRetrievedInputStreamDataManager>
+// #i73788#
 
-    #i73788#
-*/
 SwRetrievedInputStreamDataManager::tDataKey SwRetrievedInputStreamDataManager::mnNextKeyValue = 1;
 
 namespace
@@ -123,8 +121,6 @@ bool SwRetrievedInputStreamDataManager::PopData( const tDataKey nDataKey,
 
     #i73788#
     Note: This method has to be run in the main thread.
-
-    @author OD
 */
 IMPL_LINK( SwRetrievedInputStreamDataManager,
            LinkedInputStreamReady,

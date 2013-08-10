@@ -30,8 +30,6 @@
 /** thread to cancel a give list of cancellable jobs
 
     helper class for FinalThreadManager
-
-    @author OD
 */
 class CancelJobsThread : public osl::Thread
 {
@@ -144,8 +142,6 @@ void SAL_CALL CancelJobsThread::run()
 /** thread to terminate office, when all jobs are cancelled.
 
     helper class for FinalThreadManager
-
-    @author OD
 */
 class TerminateOfficeThread : public osl::Thread
 {
@@ -229,10 +225,6 @@ void SAL_CALL TerminateOfficeThread::onTerminated()
         delete this;
 }
 
-/** class FinalThreadManager
-
-    @author OD
-*/
 FinalThreadManager::FinalThreadManager(css::uno::Reference< css::uno::XComponentContext > const & context)
     : m_xContext(context),
       maMutex(),

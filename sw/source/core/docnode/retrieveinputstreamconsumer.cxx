@@ -22,12 +22,10 @@
 #include <retrieveinputstream.hxx>
 #include <swthreadmanager.hxx>
 
-/** class to provide creation of a thread to retrieve an input stream given by
+/* class to provide creation of a thread to retrieve an input stream given by
     an URL and to consume the retrieved input stream.
 
     #i73788#
-
-    @author OD
 */
 SwAsyncRetrieveInputStreamThreadConsumer::SwAsyncRetrieveInputStreamThreadConsumer(
                                                             SwGrfNode& rGrfNode )
