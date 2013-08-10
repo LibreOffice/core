@@ -223,8 +223,6 @@ public:
     const SfxItemSet*   GetExampleSet() const { return pExampleSet; }
     SfxViewFrame*       GetViewFrame() const { return pFrame; }
 
-    void                EnableApplyButton(sal_Bool bEnable = sal_True);
-    sal_Bool                IsApplyButtonEnabled() const;
     void                SetApplyHandler(const Link& _rHdl);
 
     SAL_DLLPRIVATE void Start_Impl();

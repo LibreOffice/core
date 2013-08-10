@@ -32,13 +32,6 @@ MultiLineEditSyntaxHighlight::MultiLineEditSyntaxHighlight( Window* pParent, Win
     aHighlighter.initialize( aLanguage );
 }
 
-MultiLineEditSyntaxHighlight::MultiLineEditSyntaxHighlight( Window* pParent, const ResId& rResId ,
-    HighlighterLanguage aLanguage): MultiLineEdit(pParent,rResId), mbDoBracketHilight(true)
-{
-    EnableUpdateData(300);
-    aHighlighter.initialize( aLanguage );
-}
-
 extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeMultiLineEditSyntaxHighlight(Window *pParent, VclBuilder::stringmap &)
 {
     return new MultiLineEditSyntaxHighlight(pParent);

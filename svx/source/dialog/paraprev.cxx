@@ -23,29 +23,6 @@
 
 // class SvxParaPrevWindow -----------------------------------------------
 
-SvxParaPrevWindow::SvxParaPrevWindow( Window* pParent, const ResId& rId ) :
-
-    Window( pParent, rId ),
-
-    nLeftMargin     ( 0 ),
-    nRightMargin    ( 0 ),
-    nFirstLineOfst  ( 0 ),
-    nUpper          ( 0 ),
-    nLower          ( 0 ),
-    eAdjust         ( SVX_ADJUST_LEFT ),
-    eLastLine       ( SVX_ADJUST_LEFT ),
-    eLine           ( SVX_PREV_LINESPACE_1 ),
-    nLineVal        ( 0 )
-
-{
-    // Count in Twips by default
-    SetMapMode( MapMode( MAP_TWIP ) );
-
-    aSize = Size( 11905, 16837 );
-
-    SetBorderStyle( WINDOW_BORDER_MONO );
-}
-
 SvxParaPrevWindow::SvxParaPrevWindow( Window* pParent,  WinBits nBits) :
 
     Window( pParent, nBits),

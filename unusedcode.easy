@@ -4,13 +4,15 @@
 (anonymous namespace)::StringTokenizer::getNextToken()
 (anonymous namespace)::VBATest::testMiscOLEStuff()
 AffineMatrixItem::GetAffineMatrix2D() const
+BitmapWriteAccess::FillPolyPolygon(PolyPolygon const&)
+BitmapWriteAccess::FillPolygon(Polygon const&)
+CuiAboutConfigTabPage::LinkStubHeaderSelect_Impl(void*, void*)
 DbgRegisterNamedUserChannel(rtl::OUString const&, void (*)(char const*))
 EditTextObjectImpl::SetParaAttribs(int, SfxItemSet const&)
 FontSelectPatternAttributes::FontSelectPatternAttributes(PhysicalFontFace const&, Size const&, float, int, bool)
 ImplRegionBand::IsInside(long, long)
 ImplRegionBand::IsOver(long, long)
 LanguageTag::reset(_rtl_Locale const&)
-LineEndLB::LineEndLB(Window*, long)
 Menu::GetItemImageAngle(unsigned short) const
 Menu::GetItemImageMirrorMode(unsigned short) const
 Menu::GetLogo() const
@@ -26,6 +28,9 @@ OutputDevice::LogicToPixel(basegfx::B2DPolygon const&, MapMode const&) const
 OutputDevice::PixelToLogic(Region const&, MapMode const&) const
 RawBitmap::RawBitmap()
 RawBitmap::~RawBitmap()
+RecentDocsView::SetHeight(long)
+RecentDocsView::SetThumbnailSize(long, long)
+RecentDocsView::loadRecentDocs()
 RscCompiler::Append(rtl::OString const&, rtl::OString const&)
 Ruler::GetPageWidth() const
 SalGraphics::drawTransformedBitmap(basegfx::B2DPoint const&, basegfx::B2DPoint const&, basegfx::B2DPoint const&, SalBitmap const&, SalBitmap const*)
@@ -37,7 +42,11 @@ ScCellValue::hasNumeric() const
 ScCellValue::hasString() const
 ScCellValue::set(EditTextObject const&)
 ScCellValue::set(ScFormulaCell const&)
+ScColorScaleEntry::UpdateMoveTab(short, short, short)
 ScColumn::MoveListeners(SvtBroadcaster&, int)
+ScCompiler::IsCharWordChar(String const&, unsigned short, formula::FormulaGrammar::AddressConvention)
+ScCompiler::IsWordChar(String const&, unsigned short, formula::FormulaGrammar::AddressConvention)
+ScComplexRefData::IsDeleted() const
 ScDBQueryDataIterator::DataAccessInternal::setPos(unsigned long)
 ScDPFilteredCache::SingleFilter::getMatchValue() const
 ScDPObject::ParseFilters(ScDPGetPivotDataField&, std::__debug::vector<ScDPGetPivotDataField, std::allocator<ScDPGetPivotDataField> >&, rtl::OUString const&)
@@ -46,11 +55,11 @@ ScDocument::GetCellCount(short, short) const
 ScDocument::GetFormulaTokens(ScAddress const&) const
 ScDocument::GetStringCell(ScAddress const&) const
 ScDocument::IsEmptyData(short, short) const
+ScEditUtil::GetSpaceDelimitedString(EditTextObject const&)
 ScExtIButton::GetSelected() const
 ScFormulaCell::GetResultDouble() const
 ScFormulaCell::HasColRowName() const
 ScFormulaCell::IsSharedInvariant() const
-ScFormulaCell::SetResultToken(formula::FormulaToken const*)
 ScGlobal::GetStandardFormat(double, SvNumberFormatter&, unsigned long, short)
 ScRangeStringConverter::GetRangeListFromString(com::sun::star::uno::Sequence<com::sun::star::table::CellRangeAddress>&, rtl::OUString const&, ScDocument const*, formula::FormulaGrammar::AddressConvention, unsigned short, unsigned short)
 ScRefCellValue::commit(ScColumn&, int) const
@@ -60,12 +69,14 @@ ScVbaFormat<ooo::vba::excel::XStyle>::setAddIndent(com::sun::star::uno::Any cons
 ServerFont::GetGlyphBitmap1(int, RawBitmap&) const
 ServerFont::GetGlyphBitmap8(int, RawBitmap&) const
 SfxAppMenuControl_Impl::RegisterControl(unsigned short, SfxModule*)
+SfxGrabBagItem::SetGrabBag(std::__debug::map<rtl::OUString, com::sun::star::uno::Any, std::less<rtl::OUString>, std::allocator<std::pair<rtl::OUString const, com::sun::star::uno::Any> > > const&)
 SfxTemplatePanelControl::GetISfxTemplateCommon()
 SfxTemplatePanelControl::SetParagraphFamily()
 SmFontPickList::Contains(Font const&) const
 StatusBar::CopyItems(StatusBar const&)
 StatusBar::HideItems()
 StatusBar::ShowItems()
+String::Equals(unsigned short const*, unsigned short, unsigned short) const
 SvFileStream::GetFileHandle() const
 SvdProgressInfo::ReportError()
 SvpSalInstance::PostEvent(SalFrame const*, void*, unsigned short)
@@ -82,12 +93,13 @@ SvtAccessibilityOptions::SetPreviewUsesCheckeredBackground(unsigned char)
 SvxGalleryItem::SvxGalleryItem(unsigned short)
 SvxNumRule::Create(SvStream&)
 SvxNumberFormat::Create(SvStream&)
+SwFont::SwFont()
 Test::test1Table1Page()
 TextEngine::GetLeftMargin() const
 ThumbnailView::DeselectItem(unsigned short)
 ThumbnailView::GetItemText(unsigned short) const
 ThumbnailView::SetColor(Color const&)
-TkResMgr::loadImage(unsigned short)
+UnoControlBase::ImplGetPropertyValue_INT64(unsigned short)
 VclMultiLineEdit::SetTextSelectable(bool)
 apitest::XCellRangesQuery::testQueryFormulaCells()
 apitest::XDataPilotDescriptor::testGetHiddenFields()
@@ -126,11 +138,12 @@ comphelper::detail::ConfigurationWrapper::getGroupReadWrite(boost::shared_ptr<co
 comphelper::detail::ConfigurationWrapper::getLocalizedPropertyValue(rtl::OUString const&) const
 comphelper::detail::ConfigurationWrapper::setLocalizedPropertyValue(boost::shared_ptr<comphelper::ConfigurationChanges> const&, rtl::OUString const&, com::sun::star::uno::Any const&) const
 connectivity::file::OStatement_Base::reset()
-connectivity::firebird::OPreparedStatement::checkParameterIndex(int)
 connectivity::firebird::release(int&, cppu::OBroadcastHelperVar<cppu::OMultiTypeInterfaceContainerHelper, com::sun::star::uno::Type>&, com::sun::star::uno::Reference<com::sun::star::uno::XInterface>&, com::sun::star::lang::XComponent*)
 connectivity::sdbcx::OGroup::OGroup(rtl::OUString const&, unsigned char)
 connectivity::sdbcx::OGroup::OGroup(unsigned char)
 dbtools::DBTypeConversion::getMsFromTime(com::sun::star::util::Time const&)
+dbtools::DBTypeConversion::toINT32(com::sun::star::util::Date const&)
+dbtools::DBTypeConversion::toINT64(com::sun::star::util::Time const&)
 drawinglayer::attribute::FontAttribute::isDefault() const
 drawinglayer::attribute::MaterialAttribute3D::isDefault() const
 drawinglayer::attribute::Sdr3DLightAttribute::isDefault() const
@@ -159,6 +172,8 @@ sd::LeftDrawPaneShell::RegisterInterface(SfxModule*)
 sd::LeftImpressPaneShell::RegisterInterface(SfxModule*)
 sd::SdPhotoAlbumDialog::createXShapeFromUrl(rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory>, com::sun::star::uno::Reference<com::sun::star::graphic::XGraphicProvider>)
 sd::ToolPanelPaneShell::RegisterInterface(SfxModule*)
+sd::fillDurationComboBox(ListBox*)
+sd::fillRepeatComboBox(ListBox*)
 sd::framework::FrameworkHelper::GetPaneWindow(com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId> const&)
 sd::framework::FrameworkHelper::GetResource(com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId> const&)
 sd::framework::FrameworkHelper::RequestResourceDeactivation(com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId> const&)
@@ -187,6 +202,8 @@ sfx2::sidebar::SidebarController::ShowDetailMenu(rtl::OUString const&) const
 sfx2::sidebar::SidebarDockingWindow::GetChildWindow()
 sfx2::sidebar::SidebarPanelBase::GetControl() const
 sfx2::sidebar::SidebarPanelBase::SetControl(Window*)
+sfx2::sidebar::SidebarToolBox::SetBorderWindow(Window const*)
+sfx2::sidebar::ToolBoxBackground::ToolBoxBackground(Window*, bool)
 std::_Rb_tree<rtl::OUString, std::pair<rtl::OUString const, (anonymous namespace)::TemplateId>, std::_Select1st<std::pair<rtl::OUString const, (anonymous namespace)::TemplateId> >, std::less<rtl::OUString>, std::allocator<std::pair<rtl::OUString const, (anonymous namespace)::TemplateId> > >::_Rb_tree(std::_Rb_tree<rtl::OUString, std::pair<rtl::OUString const, (anonymous namespace)::TemplateId>, std::_Select1st<std::pair<rtl::OUString const, (anonymous namespace)::TemplateId> >, std::less<rtl::OUString>, std::allocator<std::pair<rtl::OUString const, (anonymous namespace)::TemplateId> > >&&)
 std::auto_ptr<formula::FormulaTokenArray>::auto_ptr(std::auto_ptr<formula::FormulaTokenArray>&)
 std::auto_ptr<formula::FormulaTokenArray>::auto_ptr(std::auto_ptr_ref<formula::FormulaTokenArray>)

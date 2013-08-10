@@ -27,7 +27,6 @@ class SimpleResMgr;
 class ResMgr;
 
 #define TK_RES_STRING(id)   TkResMgr::loadString(id)
-#define TK_RES_IMAGE(id)    TkResMgr::loadImage(id)
 
 // -----------------------------------------------------------------------------
 // TkResMgr
@@ -60,8 +59,6 @@ public:
     // loads the string with the specified resource id
     static OUString loadString( sal_uInt16 nResId );
 
-    // loads the image with the specified resource id
-    static Image loadImage( sal_uInt16 nResId );
     static Image getImageFromURL( const OUString& i_rImageURL );
 };
 

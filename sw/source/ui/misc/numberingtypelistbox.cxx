@@ -36,18 +36,6 @@ struct SwNumberingTypeListBox_Impl
     uno::Reference<text::XNumberingTypeInfo> xInfo;
 };
 
-SwNumberingTypeListBox::SwNumberingTypeListBox( Window* pWin, const ResId& rResId,
-        sal_uInt16 nTypeFlags ) :
-    ListBox(pWin, rResId),
-    pImpl(new SwNumberingTypeListBox_Impl)
-{
-    uno::Reference<uno::XComponentContext>          xContext( ::comphelper::getProcessComponentContext() );
-    uno::Reference<text::XDefaultNumberingProvider> xDefNum = text::DefaultNumberingProvider::create(xContext);
-
-    pImpl->xInfo = uno::Reference<text::XNumberingTypeInfo>(xDefNum, uno::UNO_QUERY);
-    Reload(nTypeFlags);
-}
-
 SwNumberingTypeListBox::SwNumberingTypeListBox( Window* pWin, WinBits nStyle ) :
     ListBox(pWin, nStyle),
     pImpl(new SwNumberingTypeListBox_Impl)

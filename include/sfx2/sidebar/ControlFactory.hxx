@@ -42,10 +42,6 @@ public:
     static CheckBox* CreateMenuButton (Window* pParentWindow);
 
     static ImageRadioButton* CreateTabItem (Window* pParentWindow);
-
-    static ImageRadioButton* CreateCustomImageRadionButton(
-        Window* pParentWindow,
-        const ResId& rResId );
 };
 
 

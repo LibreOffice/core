@@ -39,47 +39,6 @@ using ::rtl::OUString;
 namespace sfx2 { namespace sidebar {
 
 
-SidebarToolBox::SidebarToolBox (
-    Window* pParentWindow,
-    const ResId& rResId,
-    const cssu::Reference<css::frame::XFrame>& rxFrame)
-    : ToolBox(pParentWindow, rResId),
-      mbParentIsBorder(false),
-      maItemSeparator(Theme::GetImage(Theme::Image_ToolBoxItemSeparator)),
-      maControllers(),
-      mbAreHandlersRegistered(false)
-{
-    SetBackground(Wallpaper());
-    SetPaintTransparent(true);
-    SetToolboxButtonSize( TOOLBOX_BUTTONSIZE_SMALL );
-
-    if (rxFrame.is())
-    {
-        const sal_uInt16 nItemCount (GetItemCount());
-        if (nItemCount == 1)
-        {
-            // When there is only one item then make that as wide as
-            // the tool box.
-            CreateController(GetItemId(0), rxFrame, GetSizePixel().Width());
-        }
-        else
-            for (sal_uInt16 nItemIndex=0; nItemIndex<nItemCount; ++nItemIndex)
-                CreateController(GetItemId(nItemIndex), rxFrame, 0);
-        UpdateIcons(rxFrame);
-
-        SetSizePixel(CalcWindowSizePixel());
-
-        RegisterHandlers();
-    }
-
-#ifdef DEBUG
-    SetText(A2S("SidebarToolBox"));
-#endif
-}
-
-
-
-
 SidebarToolBox::SidebarToolBox (Window* pParentWindow)
     : ToolBox(pParentWindow, 0),
       mbParentIsBorder(false),

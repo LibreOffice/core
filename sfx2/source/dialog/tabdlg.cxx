@@ -731,43 +731,6 @@ void SfxTabDialog::SetApplyHandler(const Link& _rHdl)
 
 // -----------------------------------------------------------------------
 
-void SfxTabDialog::EnableApplyButton(sal_Bool bEnable)
-{
-    if ( IsApplyButtonEnabled() == bEnable )
-        // nothing to do
-        return;
-
-    // create or remove the apply button
-    if ( bEnable )
-    {
-        m_pApplyBtn = new PushButton(m_pActionArea);
-        // in the z-order, the apply button should be behind the ok button, thus appearing at the right side of it
-        m_pApplyBtn->SetZOrder(m_pOKBtn, WINDOW_ZORDER_BEHIND);
-        m_pApplyBtn->SetText(SfxResId( STR_APPLY ).toString());
-        m_pApplyBtn->Show();
-
-        m_pApplyBtn->SetHelpId( HID_TABDLG_APPLY_BTN );
-    }
-    else
-    {
-        delete m_pApplyBtn;
-        m_pApplyBtn = NULL;
-    }
-
-    // adjust the layout
-    if (IsReallyShown())
-        AdjustLayout();
-}
-
-// -----------------------------------------------------------------------
-
-sal_Bool SfxTabDialog::IsApplyButtonEnabled() const
-{
-    return ( NULL != m_pApplyBtn );
-}
-
-// -----------------------------------------------------------------------
-
 void SfxTabDialog::Start_Impl()
 {
     DBG_ASSERT( pImpl->aData.size() == m_pTabCtrl->GetPageCount(), "not all pages registered" );

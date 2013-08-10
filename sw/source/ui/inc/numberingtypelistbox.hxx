@@ -35,8 +35,6 @@ class SW_DLLPUBLIC SwNumberingTypeListBox : public ListBox
     SwNumberingTypeListBox_Impl* pImpl;
 
 public:
-    SwNumberingTypeListBox( Window* pWin, const ResId& rResId,
-        sal_uInt16 nTypeFlags = INSERT_NUM_TYPE_PAGE_STYLE_NUMBERING|INSERT_NUM_TYPE_NO_NUMBERING|INSERT_NUM_EXTENDED_TYPES );
     SwNumberingTypeListBox( Window* pWin, WinBits nStyle = WB_BORDER );
     ~SwNumberingTypeListBox();
 

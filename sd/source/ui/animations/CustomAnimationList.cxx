@@ -455,20 +455,6 @@ void CustomAnimationTriggerEntryItem::Clone( SvLBoxItem* )
 
 // ====================================================================
 
-CustomAnimationList::CustomAnimationList( ::Window* pParent, const ResId& rResId, ICustomAnimationListController* pController )
-:   SvTreeListBox( pParent, rResId )
-,   mbIgnorePaint( false )
-,   mpController( pController )
-,   mpLastParentEntry(0)
-{
-    SetStyle( GetStyle() | WB_TABSTOP | WB_BORDER | WB_HASLINES | WB_HASBUTTONS | WB_HASBUTTONSATROOT );
-
-    EnableContextMenuHandling();
-    SetSelectionMode( MULTIPLE_SELECTION );
-    SetIndent(16);
-    SetNodeDefaultImages();
-}
-
 CustomAnimationList::CustomAnimationList( ::Window* pParent )
 :   SvTreeListBox( pParent, WB_TABSTOP | WB_BORDER   ),
     mpController(0)

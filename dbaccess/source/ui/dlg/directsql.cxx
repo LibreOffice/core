@@ -37,35 +37,6 @@ namespace dbaui
     using namespace ::com::sun::star::sdbc;
     using namespace ::com::sun::star::lang;
 
-
-    //====================================================================
-    //= LargeEntryListBox
-    //====================================================================
-    class LargeEntryListBox : public ListBox
-    {
-    public:
-        LargeEntryListBox( Window* _pParent, const ResId& _rId );
-
-    protected:
-        virtual void    UserDraw( const UserDrawEvent& rUDEvt );
-    };
-
-    //--------------------------------------------------------------------
-    LargeEntryListBox::LargeEntryListBox( Window* _pParent, const ResId& _rId )
-        :ListBox(_pParent, _rId )
-    {
-        EnableUserDraw(sal_True);
-    }
-
-    //--------------------------------------------------------------------
-    void LargeEntryListBox::UserDraw( const UserDrawEvent& _rUDEvt )
-    {
-        if (LISTBOX_ENTRY_NOTFOUND == _rUDEvt.GetItemId())
-            ListBox::UserDraw( _rUDEvt );
-        else
-            _rUDEvt.GetDevice()->DrawText( _rUDEvt.GetRect(), GetEntry( _rUDEvt.GetItemId() ), TEXT_DRAW_LEFT | TEXT_DRAW_VCENTER | TEXT_DRAW_ENDELLIPSIS);
-    }
-
     //====================================================================
     //= DirectSQLDialog
     //====================================================================

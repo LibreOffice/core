@@ -752,22 +752,6 @@ void SvxRectCtl::SetCS(CTL_STYLE eNew)
 
 // Control for editing bitmaps
 
-SvxPixelCtl::SvxPixelCtl( Window* pParent, const ResId& rResId, sal_uInt16 nNumber ) :
-                        Control     ( pParent, rResId ),
-                        nLines      ( nNumber ),
-                        bPaintable  ( sal_True )
-{
-    aRectSize = GetOutputSize();
-
-    SetPixelColor( Color( COL_BLACK ) );
-    SetBackgroundColor( Color( COL_WHITE ) );
-    SetLineColor( Application::GetSettings().GetStyleSettings().GetShadowColor() );
-
-    nSquares = nLines * nLines;
-    pPixel = new sal_uInt16[ nSquares ];
-    memset(pPixel, 0, nSquares * sizeof(sal_uInt16));
-}
-
 SvxPixelCtl::SvxPixelCtl(Window* pParent, sal_uInt16 nNumber)
     : Control(pParent, WB_BORDER)
     , nLines(nNumber)
@@ -1030,13 +1014,6 @@ void FillAttrLB::Fill( const XColorListRef &pColorTab )
 
 // Fills the listbox (provisional) with strings
 
-HatchingLB::HatchingLB( Window* pParent, ResId Id)
-: ListBox( pParent, Id ),
-  mpList ( NULL )
-{
-    SetEdgeBlending(true);
-}
-
 HatchingLB::HatchingLB( Window* pParent, WinBits nWinStyle)
 : ListBox( pParent, nWinStyle ),
   mpList ( NULL )
@@ -1135,13 +1112,6 @@ void FillAttrLB::Fill( const XHatchListRef &pList )
 }
 
 // Fills the listbox (provisional) with strings
-
-GradientLB::GradientLB( Window* pParent, ResId Id)
-: ListBox( pParent, Id ),
-  mpList(NULL)
-{
-    SetEdgeBlending(true);
-}
 
 GradientLB::GradientLB( Window* pParent, WinBits aWB)
 : ListBox( pParent, aWB ),
@@ -1266,13 +1236,6 @@ void FillAttrLB::Fill( const XGradientListRef &pList )
 
 // BitmapLB Constructor
 
-BitmapLB::BitmapLB(Window* pParent, ResId Id)
-:   ListBox(pParent, Id),
-    maBitmapEx(),
-    mpList(NULL)
-{
-    SetEdgeBlending(true);
-}
 BitmapLB::BitmapLB( Window* pParent, WinBits aWB)
 :   ListBox( pParent, aWB ),
     maBitmapEx(),
@@ -1454,13 +1417,6 @@ void FillTypeLB::Fill()
     SetUpdateMode( sal_True );
 }
 
-LineLB::LineLB(Window* pParent, ResId Id)
-:   ListBox(pParent, Id),
-    mbAddStandardFields(true)
-{
-    // No EdgeBlending for LineStyle/Dash SetEdgeBlending(true);
-}
-
 LineLB::LineLB(Window* pParent, WinBits aWB)
 :   ListBox(pParent, aWB),
     mbAddStandardFields(true)
@@ -1567,12 +1523,6 @@ void LineLB::Modify( const XDashEntry& rEntry, sal_uInt16 nPos, const Bitmap& rB
 }
 
 // Fills the listbox (provisional) with strings
-
-LineEndLB::LineEndLB( Window* pParent, ResId Id )
-    : ListBox( pParent, Id )
-{
-    // No EdgeBlending for LineEnds SetEdgeBlending(true);
-}
 
 LineEndLB::LineEndLB( Window* pParent, WinBits aWB )
     : ListBox( pParent, aWB )
@@ -1828,55 +1778,6 @@ void SvxPreviewBase::DataChanged(const DataChangedEvent& rDCEvt)
     }
 }
 
-SvxXLinePreview::SvxXLinePreview( Window* pParent, const ResId& rResId )
-:   SvxPreviewBase( pParent, rResId ),
-    mpLineObjA( 0L ),
-    mpLineObjB( 0L ),
-    mpLineObjC( 0L ),
-    mpGraphic( 0L ),
-    mbWithSymbol( sal_False )
-{
-    InitSettings( sal_True, sal_True );
-
-    const Size aOutputSize(GetOutputSize());
-    const sal_Int32 nDistance(500L);
-    const sal_Int32 nAvailableLength(aOutputSize.Width() - (4 * nDistance));
-
-    // create DrawObjectA
-    const sal_Int32 aYPosA(aOutputSize.Height() / 2);
-    const basegfx::B2DPoint aPointA1( nDistance,  aYPosA);
-    const basegfx::B2DPoint aPointA2( aPointA1.getX() + ((nAvailableLength * 14) / 20), aYPosA );
-    basegfx::B2DPolygon aPolygonA;
-    aPolygonA.append(aPointA1);
-    aPolygonA.append(aPointA2);
-    mpLineObjA = new SdrPathObj(OBJ_LINE, basegfx::B2DPolyPolygon(aPolygonA));
-    mpLineObjA->SetModel(&getModel());
-
-    // create DrawObectB
-    const sal_Int32 aYPosB1((aOutputSize.Height() * 3) / 4);
-    const sal_Int32 aYPosB2((aOutputSize.Height() * 1) / 4);
-    const basegfx::B2DPoint aPointB1( aPointA2.getX() + nDistance,  aYPosB1);
-    const basegfx::B2DPoint aPointB2( aPointB1.getX() + ((nAvailableLength * 2) / 20), aYPosB2 );
-    const basegfx::B2DPoint aPointB3( aPointB2.getX() + ((nAvailableLength * 2) / 20), aYPosB1 );
-    basegfx::B2DPolygon aPolygonB;
-    aPolygonB.append(aPointB1);
-    aPolygonB.append(aPointB2);
-    aPolygonB.append(aPointB3);
-    mpLineObjB = new SdrPathObj(OBJ_PLIN, basegfx::B2DPolyPolygon(aPolygonB));
-    mpLineObjB->SetModel(&getModel());
-
-    // create DrawObectC
-    const basegfx::B2DPoint aPointC1( aPointB3.getX() + nDistance,  aYPosB1);
-    const basegfx::B2DPoint aPointC2( aPointC1.getX() + ((nAvailableLength * 1) / 20), aYPosB2 );
-    const basegfx::B2DPoint aPointC3( aPointC2.getX() + ((nAvailableLength * 1) / 20), aYPosB1 );
-    basegfx::B2DPolygon aPolygonC;
-    aPolygonC.append(aPointC1);
-    aPolygonC.append(aPointC2);
-    aPolygonC.append(aPointC3);
-    mpLineObjC = new SdrPathObj(OBJ_PLIN, basegfx::B2DPolyPolygon(aPolygonC));
-    mpLineObjC->SetModel(&getModel());
-}
-
 void SvxXLinePreview::Resize()
 {
     SvxPreviewBase::Resize();
@@ -2015,18 +1916,6 @@ void SvxXLinePreview::Paint( const Rectangle& )
     }
 
     LocalPostPaint();
-}
-
-SvxXRectPreview::SvxXRectPreview( Window* pParent, const ResId& rResId )
-:   SvxPreviewBase( pParent, rResId ),
-    mpRectangleObject(0)
-{
-    InitSettings(true, true);
-
-    // create RectangleObject
-    const Rectangle aObjectSize(Point(), GetOutputSize());
-    mpRectangleObject = new SdrRectObj(aObjectSize);
-    mpRectangleObject->SetModel(&getModel());
 }
 
 SvxXRectPreview::SvxXRectPreview(Window* pParent)

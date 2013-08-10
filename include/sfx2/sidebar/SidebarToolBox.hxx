@@ -41,16 +41,7 @@ class SFX2_DLLPUBLIC SidebarToolBox
     : public ToolBox
 {
 public:
-    /** Create a new tool box.
-        When a valid XFrame is given then the tool box will handle its
-        buttons and drop-downs.  Otherwise the caller has to do that.
-    */
-    SidebarToolBox (
-        Window* pParentWindow,
-        const ResId& rResId,
-        const cssu::Reference<css::frame::XFrame>& rxFrame);
-    SidebarToolBox (
-        Window* pParentWindow);
+    SidebarToolBox(Window* pParentWindow);
     virtual ~SidebarToolBox (void);
 
     using ToolBox::InsertItem;

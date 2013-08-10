@@ -69,7 +69,6 @@ const int MISCEFFECTS = 4;
 class CategoryListBox : public ListBox
 {
 public:
-    CategoryListBox( Window* pParent, const ResId& rResId );
     CategoryListBox( Window* pParent );
     ~CategoryListBox();
 
@@ -86,13 +85,6 @@ private:
 
     Link            maDoubleClickHdl;
 };
-
-CategoryListBox::CategoryListBox( Window* pParent, const ResId& rResId )
-: ListBox( pParent, rResId )
-{
-    EnableUserDraw( sal_True );
-    SetDoubleClickHdl( LINK( this, CategoryListBox, implDoubleClickHdl ) );
-}
 
 CategoryListBox::CategoryListBox( Window* pParent )
 : ListBox( pParent, WB_TABSTOP | WB_BORDER )

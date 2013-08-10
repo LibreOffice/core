@@ -177,10 +177,9 @@ protected:
     void    ChangePixel( sal_uInt16 nPixel );
 
 public:
-            SvxPixelCtl( Window* pParent, const ResId& rResId,  sal_uInt16 nNumber = 8 );
-            SvxPixelCtl( Window* pParent, sal_uInt16 nNumber = 8 );
+    SvxPixelCtl( Window* pParent, sal_uInt16 nNumber = 8 );
 
-            ~SvxPixelCtl();
+    ~SvxPixelCtl();
 
     virtual void Paint( const Rectangle& rRect );
     virtual void MouseButtonDown( const MouseEvent& rMEvt );
@@ -224,7 +223,6 @@ class SVX_DLLPUBLIC HatchingLB : public ListBox
 {
     XHatchListRef mpList;
 public:
-    explicit HatchingLB(Window* pParent, ResId Id);
     explicit HatchingLB(Window* pParent, WinBits aWB);
 
     virtual void Fill( const XHatchListRef &pList );
@@ -239,7 +237,6 @@ class SVX_DLLPUBLIC GradientLB : public ListBox
 {
     XGradientListRef mpList;
 public:
-    explicit GradientLB(Window* pParent, ResId Id);
     explicit GradientLB(Window* pParent, WinBits aWB);
 
     virtual void Fill( const XGradientListRef &pList );
@@ -255,7 +252,6 @@ public:
 class SVX_DLLPUBLIC BitmapLB : public ListBox
 {
 public:
-    explicit BitmapLB(Window* pParent, ResId Id);
     explicit BitmapLB(Window* pParent, WinBits aWB);
 
     virtual void Fill(const XBitmapListRef &pList);
@@ -308,7 +304,6 @@ private:
     bool        mbAddStandardFields : 1;
 
 public:
-    LineLB(Window* pParent, ResId Id);
     LineLB(Window* pParent, WinBits aWB);
     virtual ~LineLB();
 
@@ -328,9 +323,8 @@ class SVX_DLLPUBLIC LineEndLB : public ListBox
 {
 
 public:
-                          LineEndLB( Window* pParent, ResId Id );
-                          LineEndLB( Window* pParent, WinBits aWB );
-                 virtual ~LineEndLB (void);
+    LineEndLB( Window* pParent, WinBits aWB );
+    virtual ~LineEndLB (void);
 
     virtual void Fill( const XLineEndListRef &pList, bool bStart = true );
 
@@ -391,7 +385,6 @@ private:
     Size                                            maSymbolSize;
 
 public:
-    SvxXLinePreview( Window* pParent, const ResId& rResId );
     SvxXLinePreview( Window* pParent );
     virtual ~SvxXLinePreview();
 
@@ -417,7 +410,6 @@ private:
     SdrObject*                                      mpRectangleObject;
 
 public:
-    SvxXRectPreview(Window* pParent, const ResId& rResId);
     SvxXRectPreview(Window* pParent);
     virtual ~SvxXRectPreview();
 

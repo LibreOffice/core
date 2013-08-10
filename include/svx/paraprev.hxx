@@ -68,7 +68,6 @@ protected:
     void DrawParagraph( sal_Bool bAll );
 
 public:
-    SvxParaPrevWindow( Window* pParent, const ResId& rId );
     SvxParaPrevWindow( Window* pParent, WinBits nBits);
 
     void        SetFirstLineOfst( short nNew )  { nFirstLineOfst = nNew; }

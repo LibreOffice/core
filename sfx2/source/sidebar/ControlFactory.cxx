@@ -34,24 +34,9 @@ CheckBox* ControlFactory::CreateMenuButton (Window* pParentWindow)
     return new MenuButton(pParentWindow);
 }
 
-
-
-
 ImageRadioButton* ControlFactory::CreateTabItem (Window* pParentWindow)
 {
     return new TabItem(pParentWindow);
-}
-
-
-
-
-ImageRadioButton* ControlFactory::CreateCustomImageRadionButton(
-    Window* pParentWindow,
-    const ResId& rResId )
-{
-    return new CustomImageRadioButton(
-        pParentWindow,
-        rResId );
 }
 
 } } // end of namespace sfx2::sidebar

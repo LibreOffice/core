@@ -77,18 +77,6 @@ OUString TkResMgr::loadString( sal_uInt16 nResId )
 }
 
 // -----------------------------------------------------------------------------
-Image TkResMgr::loadImage( sal_uInt16 nResId )
-{
-    Image aReturn;
-
-    ensureImplExists();
-    if ( m_pResMgr )
-        aReturn = Image( ResId( nResId, *m_pResMgr ) );
-
-    return aReturn;
-}
-
-// -----------------------------------------------------------------------------
 Image TkResMgr::getImageFromURL( const OUString& i_rImageURL )
 {
     if ( i_rImageURL.isEmpty() )
