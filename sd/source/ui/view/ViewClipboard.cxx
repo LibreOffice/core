@@ -90,7 +90,7 @@ SdPage* ViewClipboard::GetFirstMasterPage (const SdTransferable& rTransferable)
             std::vector<OUString>::const_iterator pIter;
             for ( pIter = rBookmarks.begin(); pIter != rBookmarks.end(); ++pIter )
             {
-                String sName (*pIter);
+                OUString sName (*pIter);
                 sal_Bool bIsMasterPage;
 
                 // SdPage* GetMasterSdPage(sal_uInt16 nPgNum, PageKind ePgKind);
@@ -154,13 +154,11 @@ void ViewClipboard::AssignMasterPage (
 
     // We have to remove the layout suffix from the layout name which is
     // appended again by SetMasterPage() to the given name.  Don't ask.
-    String sLayoutSuffix (SD_LT_SEPARATOR);
-    sLayoutSuffix.Append (SdResId(STR_LAYOUT_OUTLINE));
-    sal_uInt16 nLength = sLayoutSuffix.Len();
-    String sLayoutName (pMasterPage->GetLayoutName());
-    if (String(sLayoutName, sLayoutName.Len()-nLength, nLength).Equals (
-        sLayoutSuffix))
-        sLayoutName = String(sLayoutName, 0, sLayoutName.Len()-nLength);
+    OUString sLayoutSuffix = SD_LT_SEPARATOR + SD_RESSTR(STR_LAYOUT_OUTLINE);
+    sal_Int32 nLength = sLayoutSuffix.getLength();
+    OUString sLayoutName = pMasterPage->GetLayoutName();
+    if (sLayoutName.endsWith(sLayoutSuffix))
+        sLayoutName = sLayoutName.copy(0, sLayoutName.getLength() - nLength);
 
     rDocument.SetMasterPage (
         pPage->GetPageNum() / 2,

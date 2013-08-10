@@ -590,7 +590,7 @@ sal_uInt16 ViewShellBase::SetPrinter (
             WarningBox aWarnBox (
                 GetWindow(),
                 (WinBits)(WB_YES_NO | WB_DEF_YES),
-                String(SdResId(STR_SCALE_OBJS_TO_PAGE)));
+                SD_RESSTR(STR_SCALE_OBJS_TO_PAGE));
             bScaleAll = (aWarnBox.Execute() == RET_YES);
         }
 

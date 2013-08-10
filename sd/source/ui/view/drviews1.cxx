@@ -372,13 +372,12 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
             maTabControl.Clear();
 
             SdPage* pPage;
-            String aPageName;
             sal_uInt16 nPageCnt = GetDoc()->GetSdPageCount(mePageKind);
 
             for (sal_uInt16 i = 0; i < nPageCnt; i++)
             {
                 pPage = GetDoc()->GetSdPage(i, mePageKind);
-                aPageName = pPage->GetName();
+                OUString aPageName = pPage->GetName();
                 maTabControl.InsertPage(i + 1, aPageName);
 
                 if ( pPage->IsSelected() && nActualPageNum == 0 )
@@ -412,8 +411,10 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
             for (sal_uInt16 i = 0; i < nMasterPageCnt; i++)
             {
                 SdPage* pMaster = GetDoc()->GetMasterSdPage(i, mePageKind);
-                String aLayoutName(pMaster->GetLayoutName());
-                aLayoutName.Erase(aLayoutName.SearchAscii(SD_LT_SEPARATOR));
+                OUString aLayoutName = pMaster->GetLayoutName();
+                sal_Int32 nPos = aLayoutName.indexOf(SD_LT_SEPARATOR);
+                if (nPos != -1)
+                    aLayoutName = aLayoutName.copy(0, nPos);
 
                 maTabControl.InsertPage(i + 1, aLayoutName);
 
@@ -650,12 +651,11 @@ void DrawViewShell::ResetActualPage()
         maTabControl.Clear();
 
         SdPage* pPage = NULL;
-        String aPageName;
 
         for (sal_uInt16 i = 0; i < nPageCount; i++)
         {
             pPage = GetDoc()->GetSdPage(i, mePageKind);
-            aPageName = pPage->GetName();
+            OUString aPageName = pPage->GetName();
             maTabControl.InsertPage(i + 1, aPageName);
 
             // correct selection recognition of the pages
@@ -674,8 +674,10 @@ void DrawViewShell::ResetActualPage()
         for (sal_uInt16 i = 0; i < nMasterPageCnt; i++)
         {
             SdPage* pMaster = GetDoc()->GetMasterSdPage(i, mePageKind);
-            String aLayoutName(pMaster->GetLayoutName());
-            aLayoutName.Erase(aLayoutName.SearchAscii(SD_LT_SEPARATOR));
+            OUString aLayoutName = pMaster->GetLayoutName();
+            sal_Int32 nPos = aLayoutName.indexOf(SD_LT_SEPARATOR);
+            if (nPos != -1)
+                aLayoutName = aLayoutName.copy(0, nPos);
             maTabControl.InsertPage(i + 1, aLayoutName);
 
             if (pActualPage == pMaster)
@@ -1131,13 +1133,13 @@ void DrawViewShell::ResetActualLayer()
          */
         pLayerBar->Clear();
 
-        String aName;
-        String aActiveLayer = mpDrawView->GetActiveLayer();
-        String aBackgroundLayer( SdResId(STR_LAYER_BCKGRND) );
-        String aBackgroundObjLayer( SdResId(STR_LAYER_BCKGRNDOBJ) );
-        String aLayoutLayer( SdResId(STR_LAYER_LAYOUT) );
-        String aControlsLayer( SdResId(STR_LAYER_CONTROLS) );
-        String aMeasureLinesLayer( SdResId(STR_LAYER_MEASURELINES) );
+        OUString aName;
+        OUString aActiveLayer = mpDrawView->GetActiveLayer();
+        OUString aBackgroundLayer = SD_RESSTR(STR_LAYER_BCKGRND);
+        OUString aBackgroundObjLayer = SD_RESSTR(STR_LAYER_BCKGRNDOBJ);
+        OUString aLayoutLayer = SD_RESSTR(STR_LAYER_LAYOUT);
+        OUString aControlsLayer = SD_RESSTR(STR_LAYER_CONTROLS);
+        OUString aMeasureLinesLayer = SD_RESSTR(STR_LAYER_MEASURELINES);
         sal_uInt16 nActiveLayer = SDRLAYER_NOTFOUND;
         SdrLayerAdmin& rLayerAdmin = GetDoc()->GetLayerAdmin();
         sal_uInt16 nLayerCnt = rLayerAdmin.GetLayerCount();

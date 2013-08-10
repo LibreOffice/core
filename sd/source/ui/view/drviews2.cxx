@@ -190,9 +190,8 @@ public:
         if( pPageView )
         {
             SdrGrafObj* pNewObj = (SdrGrafObj*) m_pObj->Clone();
-            String      aStr( m_pView->GetDescriptionOfMarkedObjects() );
-            aStr.Append( sal_Unicode(' ') );
-            aStr.Append( String( "External Edit" ) );
+            OUString    aStr = m_pView->GetDescriptionOfMarkedObjects();
+            aStr += " External Edit";
             m_pView->BegUndo( aStr );
             pNewObj->SetGraphicObject( aGraphic );
             m_pView->ReplaceObjectAtView( m_pObj, *pPageView, pNewObj );
@@ -233,7 +232,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
             if( rMarkList.GetMarkCount() == 1 )
             {
-                pUndoManager->EnterListAction( String(), String() );
+                pUndoManager->EnterListAction("", "");
                 mpDrawView->BegUndo();
 
                 pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
@@ -432,9 +431,9 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     ? GetDoc()->GetSdPage( nPageId - 1, GetPageKind() )
                     : GetDoc()->GetMasterSdPage( nPageId - 1, GetPageKind() );
 
-                String aTitle( SdResId( STR_TITLE_RENAMESLIDE ) );
-                String aDescr( SdResId( STR_DESC_RENAMESLIDE ) );
-                String aPageName = pCurrentPage->GetName();
+                OUString aTitle = SD_RESSTR(STR_TITLE_RENAMESLIDE);
+                OUString aDescr = SD_RESSTR(STR_DESC_RENAMESLIDE);
+                OUString aPageName = pCurrentPage->GetName();
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 DBG_ASSERT(pFact, "Dialogdiet fail!");
@@ -645,7 +644,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if ( mpDrawView->IsPresObjSelected() )
             {
                 ::sd::Window* pWindow = GetActiveWindow();
-                InfoBox(pWindow, String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
+                InfoBox(pWindow, SD_RESSTR(STR_ACTION_NOTPOSSIBLE)).Execute();
             }
             else
             {
@@ -690,7 +689,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if ( mpDrawView->IsPresObjSelected() )
             {
                 ::sd::Window* pWindow = GetActiveWindow();
-                InfoBox(pWindow, String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
+                InfoBox(pWindow, SD_RESSTR(STR_ACTION_NOTPOSSIBLE)).Execute();
             }
             else
             {
@@ -718,7 +717,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if ( mpDrawView->IsPresObjSelected(true,true,true) )
             {
                 ::sd::Window* pWindow = GetActiveWindow();
-                InfoBox(pWindow, String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
+                InfoBox(pWindow, SD_RESSTR(STR_ACTION_NOTPOSSIBLE)).Execute();
             }
             else
             {
@@ -731,7 +730,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     case SID_CONVERT_TO_METAFILE:
                     {
                         // switch on undo for the next operations
-                        mpDrawView->BegUndo( String( SdResId( STR_UNDO_CONVERT_TO_METAFILE )));
+                        mpDrawView->BegUndo(SD_RESSTR(STR_UNDO_CONVERT_TO_METAFILE));
                         GDIMetaFile aMetaFile(mpDrawView->GetMarkedObjMetaFile());
                         aGraphic = Graphic(aMetaFile);
                     }
@@ -739,7 +738,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     case SID_CONVERT_TO_BITMAP:
                     {
                         // switch on undo for the next operations
-                        mpDrawView->BegUndo( String( SdResId( STR_UNDO_CONVERT_TO_BITMAP )));
+                        mpDrawView->BegUndo(SD_RESSTR(STR_UNDO_CONVERT_TO_BITMAP));
                         bool bDone(false);
 
                         // I have to get the image here directly since GetMarkedObjBitmapEx works
@@ -972,7 +971,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 {
                     GraphicObject aGraphicObject( ( (SdrGrafObj*) pObj )->GetGraphicObject() );
                     {
-                        GraphicHelper::ExportGraphic( aGraphicObject.GetGraphic(), String("") );
+                        GraphicHelper::ExportGraphic( aGraphicObject.GetGraphic(), "" );
                     }
                 }
             }
@@ -1014,8 +1013,8 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     {
                         SdrGrafObj* pNewObject = dialog.GetCompressedSdrGrafObj();
                         SdrPageView* pPageView = mpDrawView->GetSdrPageView();
-                        String aUndoString( mpDrawView->GetDescriptionOfMarkedObjects() );
-                        aUndoString += String( " Compress" );
+                        OUString aUndoString = mpDrawView->GetDescriptionOfMarkedObjects();
+                        aUndoString += " Compress";
                         mpDrawView->BegUndo( aUndoString );
                         mpDrawView->ReplaceObjectAtView( pObj, *pPageView, pNewObject );
                         mpDrawView->EndUndo();
@@ -1162,7 +1161,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if ( mpDrawView->IsPresObjSelected(sal_False, sal_True) )
             {
                 ::sd::Window* pWindow = GetActiveWindow();
-                InfoBox(pWindow, String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
+                InfoBox(pWindow, SD_RESSTR(STR_ACTION_NOTPOSSIBLE)).Execute();
             }
             else
             {
@@ -1358,7 +1357,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 #endif
 
                 ::sd::Window* pWindow = GetActiveWindow();
-                InfoBox(pWindow, String( SdResId( nId ) ) ).Execute();
+                InfoBox(pWindow, SD_RESSTR(nId)).Execute();
             }
             else
             {
@@ -1396,8 +1395,8 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             SdrLayerAdmin& rLayerAdmin = GetDoc()->GetLayerAdmin();
             sal_uInt16 nLayerCnt = rLayerAdmin.GetLayerCount();
             sal_uInt16 nLayer = nLayerCnt - 2 + 1;
-            String aLayerName ( SdResId(STR_LAYER) ), aLayerTitle, aLayerDesc;
-            aLayerName += OUString::number( (sal_Int32)nLayer );
+            OUString aLayerName = SD_RESSTR(STR_LAYER) + OUString::number(nLayer);
+            OUString aLayerTitle, aLayerDesc;
             sal_Bool bIsVisible = sal_False;
             sal_Bool bIsLocked = sal_False;
             sal_Bool bIsPrintable = sal_False;
@@ -1417,7 +1416,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 aNewAttr.Put( SdAttrLayerThisPage() );
 
                 SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-                AbstractSdInsertLayerDlg* pDlg = pFact ? pFact->CreateSdInsertLayerDlg(NULL, aNewAttr, true, String( SdResId( STR_INSERTLAYER ) ) ) : 0;
+                AbstractSdInsertLayerDlg* pDlg = pFact ? pFact->CreateSdInsertLayerDlg(NULL, aNewAttr, true, SD_RESSTR(STR_INSERTLAYER)) : 0;
                 if( pDlg )
                 {
                     pDlg->SetHelpId( SD_MOD()->GetSlotPool()->GetSlot( SID_INSERTLAYER )->GetCommand() );
@@ -1430,13 +1429,13 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                         aLayerName   = ((SdAttrLayerName &) aNewAttr.Get (ATTR_LAYER_NAME)).GetValue ();
 
                         if( rLayerAdmin.GetLayer( aLayerName, sal_False )
-                            || aLayerName.Len()==0 )
+                            || aLayerName.isEmpty() )
                         {
                             // name already exists
                             WarningBox aWarningBox (
                                 GetParentWindow(),
                                 WinBits( WB_OK ),
-                                String(SdResId( STR_WARN_NAME_DUPLICATE)));
+                                SD_RESSTR(STR_WARN_NAME_DUPLICATE));
                             aWarningBox.Execute();
                         }
                         else
@@ -1484,8 +1483,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                      bIsPrintable = pIsPrintable->GetValue ();
                  }
 
-            String aPrevLayer = mpDrawView->GetActiveLayer();
-            String aName;
+            OUString aPrevLayer = mpDrawView->GetActiveLayer();
             SdrLayer* pLayer;
             sal_uInt16 nPrevLayer = 0;
             nLayerCnt = rLayerAdmin.GetLayerCount();
@@ -1493,7 +1491,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             for ( nLayer = 0; nLayer < nLayerCnt; nLayer++ )
             {
                 pLayer = rLayerAdmin.GetLayer(nLayer);
-                aName = pLayer->GetName();
+                OUString aName = pLayer->GetName();
 
                 if ( aPrevLayer == aName )
                 {
@@ -1536,15 +1534,15 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
             SdrLayerAdmin& rLayerAdmin = GetDoc()->GetLayerAdmin();
             sal_uInt16 nCurPage = GetLayerTabControl()->GetCurPageId();
-            String aLayerName( GetLayerTabControl()->GetPageText(nCurPage) );
+            OUString aLayerName = GetLayerTabControl()->GetPageText(nCurPage);
             SdrLayer* pLayer = rLayerAdmin.GetLayer(aLayerName, sal_False);
 
-            String aLayerTitle( pLayer->GetTitle() );
-            String aLayerDesc( pLayer->GetDescription() );
+            OUString aLayerTitle = pLayer->GetTitle();
+            OUString aLayerDesc = pLayer->GetDescription();
 
-            String aOldLayerName( aLayerName );
-            String aOldLayerTitle( aLayerTitle );
-            String aOldLayerDesc( aLayerDesc );
+            OUString aOldLayerName(aLayerName);
+            OUString aOldLayerTitle(aLayerTitle);
+            OUString aOldLayerDesc(aLayerDesc);
 
             sal_Bool bIsVisible, bIsLocked, bIsPrintable;
             sal_Bool bOldIsVisible = bIsVisible = mpDrawView->IsLayerVisible(aLayerName);
@@ -1556,11 +1554,11 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             // is it allowed to delete the layer?
             bool bDelete = true;
 
-            String aLayoutLayer ( SdResId(STR_LAYER_LAYOUT) );
-            String aControlsLayer ( SdResId(STR_LAYER_CONTROLS) );
-            String aMeasureLinesLayer ( SdResId(STR_LAYER_MEASURELINES) );
-            String aBackgroundLayer( SdResId(STR_LAYER_BCKGRND) );
-            String aBackgroundObjLayer( SdResId(STR_LAYER_BCKGRNDOBJ) );
+            OUString aLayoutLayer = SD_RESSTR(STR_LAYER_LAYOUT);
+            OUString aControlsLayer = SD_RESSTR(STR_LAYER_CONTROLS);
+            OUString aMeasureLinesLayer = SD_RESSTR(STR_LAYER_MEASURELINES);
+            OUString aBackgroundLayer = SD_RESSTR(STR_LAYER_BCKGRND);
+            OUString aBackgroundObjLayer = SD_RESSTR(STR_LAYER_BCKGRNDOBJ);
 
             if( aLayerName == aLayoutLayer       || aLayerName == aControlsLayer ||
                 aLayerName == aMeasureLinesLayer ||
@@ -1582,7 +1580,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 aNewAttr.Put( SdAttrLayerThisPage() );
 
                 SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-                AbstractSdInsertLayerDlg* pDlg = pFact ? pFact->CreateSdInsertLayerDlg(NULL, aNewAttr, bDelete, String( SdResId( STR_MODIFYLAYER ) ) ) : 0;
+                AbstractSdInsertLayerDlg* pDlg = pFact ? pFact->CreateSdInsertLayerDlg(NULL, aNewAttr, bDelete, SD_RESSTR(STR_MODIFYLAYER)) : 0;
                 if( pDlg )
                 {
                     pDlg->SetHelpId( SD_MOD()->GetSlotPool()->GetSlot( SID_MODIFYLAYER )->GetCommand() );
@@ -1596,13 +1594,13 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                         aLayerName   = ((SdAttrLayerName &) aNewAttr.Get (ATTR_LAYER_NAME)).GetValue ();
 
                         if( (rLayerAdmin.GetLayer( aLayerName, sal_False ) &&
-                             aLayerName != aOldLayerName) || aLayerName.Len()==0 )
+                             aLayerName != aOldLayerName) || aLayerName.isEmpty() )
                         {
                             // name already exists
                             WarningBox aWarningBox (
                                 GetParentWindow(),
                                 WinBits( WB_OK ),
-                                String( SdResId( STR_WARN_NAME_DUPLICATE)));
+                                SD_RESSTR(STR_WARN_NAME_DUPLICATE));
                             aWarningBox.Execute();
                         }
                         else
@@ -1718,7 +1716,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                         SfxStringItem aUrl( SID_FILE_NAME, pURLField->GetURL() );
                         SfxStringItem aTarget( SID_TARGETNAME, pURLField->GetTargetFrame() );
 
-                        String aReferName;
+                        OUString aReferName;
                         SfxViewFrame* pFrame = GetViewFrame();
                         SfxMedium* pMed = pFrame->GetObjectShell()->GetMedium();
                         if (pMed)
@@ -1844,7 +1842,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
                 case SID_INSERT_FLD_FILE:
                 {
-                    String aName;
+                    OUString aName;
                     if( GetDocSh()->HasName() )
                         aName = GetDocSh()->GetMedium()->GetName();
                     pFieldItem = new SvxFieldItem( SvxExtFileField( aName ), EE_FEATURE_FIELD );
@@ -2010,7 +2008,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if ( mpDrawView->IsPresObjSelected( sal_True, sal_True, sal_True ) )
             {
                 ::sd::Window* pWindow = GetActiveWindow();
-                InfoBox(pWindow, String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
+                InfoBox(pWindow, SD_RESSTR(STR_ACTION_NOTPOSSIBLE)).Execute();
             }
             else
             {
@@ -2133,7 +2131,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if ( mpDrawView->IsPresObjSelected() )
             {
                 ::sd::Window* pWindow = GetActiveWindow();
-                InfoBox(pWindow, String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
+                InfoBox(pWindow, SD_RESSTR(STR_ACTION_NOTPOSSIBLE)).Execute();
             }
             else
             {
@@ -2150,7 +2148,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if ( mpDrawView->IsPresObjSelected() )
             {
                 ::sd::Window* pWindow = GetActiveWindow();
-                InfoBox(pWindow, String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
+                InfoBox(pWindow, SD_RESSTR(STR_ACTION_NOTPOSSIBLE)).Execute();
             }
             else
             {
@@ -2170,7 +2168,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if ( mpDrawView->IsPresObjSelected() )
             {
                 ::sd::Window* pWindow = GetActiveWindow();
-                InfoBox(pWindow, String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
+                InfoBox(pWindow, SD_RESSTR(STR_ACTION_NOTPOSSIBLE)).Execute();
             }
             else
             {
@@ -2191,7 +2189,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if ( mpDrawView->IsPresObjSelected() )
             {
                 ::sd::Window* pWindow = GetActiveWindow();
-                InfoBox(pWindow, String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
+                InfoBox(pWindow, SD_RESSTR(STR_ACTION_NOTPOSSIBLE)).Execute();
             }
             else
             {
@@ -2212,7 +2210,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if ( mpDrawView->IsPresObjSelected() )
             {
                 ::sd::Window* pWindow = GetActiveWindow();
-                InfoBox(pWindow, String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
+                InfoBox(pWindow, SD_RESSTR(STR_ACTION_NOTPOSSIBLE)).Execute();
             }
             else
             {
@@ -2241,7 +2239,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if ( mpDrawView->IsPresObjSelected() )
             {
                 ::sd::Window* pWindow = GetActiveWindow();
-                InfoBox(pWindow, String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
+                InfoBox(pWindow, SD_RESSTR(STR_ACTION_NOTPOSSIBLE)).Execute();
             }
             else
             {
@@ -2334,7 +2332,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if ( mpDrawView->IsPresObjSelected() )
             {
                 ::sd::Window* pWindow = GetActiveWindow();
-                InfoBox(pWindow, String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
+                InfoBox(pWindow, SD_RESSTR(STR_ACTION_NOTPOSSIBLE)).Execute();
             }
             else
             {
@@ -2829,9 +2827,9 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 SdrLayerAdmin& rLayerAdmin = GetDoc()->GetLayerAdmin();
                 sal_uInt8 aLayerId;
                 if (nSId == SID_DISPLAY_MASTER_BACKGROUND)
-                    aLayerId = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), sal_False);
+                    aLayerId = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRND), sal_False);
                 else
-                    aLayerId = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), sal_False);
+                    aLayerId = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ), sal_False);
                 aVisibleLayers.Set(aLayerId, !aVisibleLayers.IsSet(aLayerId));
                 pPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
             }

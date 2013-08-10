@@ -349,11 +349,11 @@ void TextObjectBar::Execute( SfxRequest &rReq )
 
         case SID_THES:
         {
-            String aReplaceText;
+            OUString aReplaceText;
             SFX_REQUEST_ARG( rReq, pItem2, SfxStringItem, SID_THES, sal_False );
             if (pItem2)
                 aReplaceText = pItem2->GetValue();
-            if (aReplaceText.Len() > 0)
+            if (!aReplaceText.isEmpty())
                 ReplaceTextWithSynonym( pOLV->GetEditView(), aReplaceText );
         }
         break;

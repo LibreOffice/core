@@ -267,7 +267,7 @@ void BezierObjectBar::Execute(SfxRequest& rReq)
                         SdrPathObj* pPathObj = (SdrPathObj*) rMarkList.GetMark(0)->GetMarkedSdrObj();
                         const bool bUndo = mpView->IsUndoEnabled();
                         if( bUndo )
-                            mpView->BegUndo(String(SdResId(STR_UNDO_BEZCLOSE)));
+                            mpView->BegUndo(SD_RESSTR(STR_UNDO_BEZCLOSE));
 
                         mpView->UnmarkAllPoints();
 

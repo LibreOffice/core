@@ -99,12 +99,12 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
 {
     SdDrawDocument* pDocument = mrViewShell.GetDoc();
     SdrLayerAdmin& rLayerAdmin = pDocument->GetLayerAdmin();
-    sal_uInt8 aBckgrnd = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), sal_False);
-    sal_uInt8 aBckgrndObj = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), sal_False);
+    sal_uInt8 aBckgrnd = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRND), sal_False);
+    sal_uInt8 aBckgrndObj = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ), sal_False);
     SetOfByte aVisibleLayers;
     sal_Bool bHandoutMode = sal_False;
     SdPage* pHandoutMPage = NULL;
-    String aNewName;
+    OUString aNewName;
 
     AutoLayout aNewAutoLayout;
 
@@ -222,8 +222,8 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
 
                 pCurrentPage->SetAutoLayout(aNewAutoLayout, sal_True);
 
-                aBckgrnd = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), sal_False);
-                aBckgrndObj = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), sal_False);
+                aBckgrnd = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRND), sal_False);
+                aBckgrndObj = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ), sal_False);
                 aVisibleLayers.Set(aBckgrnd, bBVisible);
                 aVisibleLayers.Set(aBckgrndObj, bBObjsVisible);
                 pCurrentPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
@@ -283,8 +283,8 @@ void ViewShell::Implementation::AssignLayout ( SfxRequest& rRequest, PageKind eP
         // Transform the given request into the four argument form that is
         // understood by ProcessModifyPageSlot().
         SdrLayerAdmin& rLayerAdmin (mrViewShell.GetViewShellBase().GetDocument()->GetLayerAdmin());
-        sal_uInt8 aBackground (rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), sal_False));
-        sal_uInt8 aBackgroundObject (rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), sal_False));
+        sal_uInt8 aBackground (rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRND), sal_False));
+        sal_uInt8 aBackgroundObject (rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ), sal_False));
 
         SetOfByte aVisibleLayers;
 

@@ -243,7 +243,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                     rSet.Put( SfxTemplateItem( nWhich, pStyleSheet->GetName() ) );
                 else
                 {
-                    rSet.Put( SfxTemplateItem( nWhich, String() ) );
+                    rSet.Put( SfxTemplateItem( nWhich, OUString() ) );
                 }
             }
             break;

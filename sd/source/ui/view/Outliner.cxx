@@ -768,7 +768,7 @@ void Outliner::DetectChange (void)
             pOutlinerView->SetOutputArea( Rectangle( Point(), Size(1, 1) ) );
         if (meMode == SPELL)
             SetPaperSize( Size(1, 1) );
-        SetText( String(), GetParagraph( 0 ) );
+        SetText(OUString(), GetParagraph(0));
 
         RememberStartPosition ();
 
@@ -980,7 +980,7 @@ void Outliner::ProvideNextTextObject (void)
         pOutlinerView->SetOutputArea( Rectangle( Point(), Size(1, 1) ) );
     if (meMode == SPELL)
         SetPaperSize( Size(1, 1) );
-    SetText( String(), GetParagraph( 0 ) );
+    SetText(OUString(), GetParagraph(0));
 
     mpTextObj = NULL;
 
@@ -1084,20 +1084,20 @@ void Outliner::EndOfSearch (void)
 
 void Outliner::ShowEndOfSearchDialog (void)
 {
-    String aString;
+    OUString aString;
     if (meMode == SEARCH)
     {
         if (mbStringFound)
-            aString = String( SdResId(STR_END_SEARCHING) );
+            aString = SD_RESSTR(STR_END_SEARCHING);
         else
-            aString = String( SdResId(STR_STRING_NOTFOUND) );
+            aString = SD_RESSTR(STR_STRING_NOTFOUND);
     }
     else
     {
         if (mpView->AreObjectsMarked())
-            aString = String(SdResId(STR_END_SPELLING_OBJ));
+            aString = SD_RESSTR(STR_END_SPELLING_OBJ);
         else
-            aString = String(SdResId(STR_END_SPELLING));
+            aString = SD_RESSTR(STR_END_SPELLING);
     }
 
     // Show the message in an info box that is modal with respect to the
@@ -1148,7 +1148,7 @@ bool Outliner::ShowWrapArroundDialog (void)
         QueryBox aQuestionBox (
             NULL,
             WB_YES_NO | WB_DEF_YES,
-            String(SdResId(nStringId)));
+            SD_RESSTR(nStringId));
         aQuestionBox.SetImage (QueryBox::GetStandardImage());
         sal_uInt16 nBoxResult = ShowModalMessageBox(aQuestionBox);
         bDoWrapArround = (nBoxResult == RET_YES);
@@ -1204,7 +1204,7 @@ void Outliner::PrepareSpellCheck (void)
         mbEndOfSearch = sal_True;
         ErrorBox aErrorBox (NULL,
             WB_OK,
-            String(SdResId(STR_NOLANGUAGE)));
+            SD_RESSTR(STR_NOLANGUAGE));
         ShowModalMessageBox (aErrorBox);
     }
     else if (eState != EE_SPELL_OK)
@@ -1381,7 +1381,7 @@ void Outliner::EnterEditMode (sal_Bool bGrabFocus)
 IMPL_LINK_INLINE_START( Outliner, SpellError, void *, nLang )
 {
     mbError = true;
-    String aError( SvtLanguageTable::GetLanguageString( (LanguageType)(sal_uLong)nLang ) );
+    OUString aError( SvtLanguageTable::GetLanguageString( (LanguageType)(sal_uLong)nLang ) );
     ErrorHandler::HandleError(* new StringErrorInfo(
                                 ERRCODE_SVX_LINGU_LANGUAGENOTEXISTS, aError) );
     return 0;
@@ -1447,8 +1447,7 @@ bool Outliner::HandleFailedSearch (void)
         if (HasNoPreviousMatch ())
         {
             // No match found in the whole presentation.  Tell the user.
-            InfoBox aInfoBox (NULL,
-                String(SdResId(STR_SAR_NOT_FOUND)));
+            InfoBox aInfoBox (NULL, SD_RESSTR(STR_SAR_NOT_FOUND));
             ShowModalMessageBox (aInfoBox);
         }
 
@@ -1788,7 +1787,7 @@ void Outliner::Implementation::ProvideOutlinerView (
                 rOutliner.SetUpdateMode(sal_False);
                 mpOutlineView->SetOutputArea (Rectangle (Point(), Size(1, 1)));
                 rOutliner.SetPaperSize( Size(1, 1) );
-                rOutliner.SetText( String(), rOutliner.GetParagraph( 0 ) );
+                rOutliner.SetText(OUString(), rOutliner.GetParagraph(0));
 
                 meOriginalEditMode =
                     ::boost::static_pointer_cast<DrawViewShell>(rpViewShell)->GetEditMode();
