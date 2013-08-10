@@ -33,14 +33,11 @@ using namespace ::com::sun::star::beans;
 
 static inline void lcl_assertEndingItem(xmlreader::XmlReader& reader)
 {
-#if OSL_DEBUG_LEVEL > 0
     int nsId;
     xmlreader::Span name;
-    assert(reader.nextItem(xmlreader::XmlReader::TEXT_NONE, &name, &nsId)
-            == xmlreader::XmlReader::RESULT_END);
-#else
-    (void)reader;
-#endif
+    xmlreader::XmlReader::Result res;
+    res = reader.nextItem(xmlreader::XmlReader::TEXT_NONE, &name, &nsId);
+    assert(res == xmlreader::XmlReader::RESULT_END);
 }
 
 static inline OUString lcl_getValue(xmlreader::XmlReader& reader,
