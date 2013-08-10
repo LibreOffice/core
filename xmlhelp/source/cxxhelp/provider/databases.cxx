@@ -80,7 +80,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::deployment;
 using namespace com::sun::star::beans;
 
-
 OUString Databases::expandURL( const OUString& aURL )
 {
     osl::MutexGuard aGuard( m_aMutex );
@@ -432,8 +431,6 @@ const std::vector< OUString >& Databases::getModuleList( const OUString& Languag
     return m_avModules;
 }
 
-
-
 StaticModuleInformation* Databases::getStaticInformationForModule( const OUString& Module,
                                                                    const OUString& Language )
 {
@@ -527,9 +524,6 @@ StaticModuleInformation* Databases::getStaticInformationForModule( const OUStrin
     return it->second;
 }
 
-
-
-
 OUString Databases::processLang( const OUString& Language )
 {
     osl::MutexGuard aGuard( m_aMutex );
@@ -562,7 +556,6 @@ OUString Databases::processLang( const OUString& Language )
     return ret;
 }
 
-
 OUString Databases::country( const OUString& Language )
 {
     sal_Int32 idx;
@@ -573,8 +566,6 @@ OUString Databases::country( const OUString& Language )
     return OUString();
 }
 
-
-
 helpdatafileproxy::Hdf* Databases::getHelpDataFile( const OUString& Database,
                             const OUString& Language, bool helpText,
                             const OUString* pExtensionPath )
@@ -583,7 +574,6 @@ helpdatafileproxy::Hdf* Databases::getHelpDataFile( const OUString& Database,
         return 0;
 
     osl::MutexGuard aGuard( m_aMutex );
-
 
     OUString aFileExt( helpText ? OUString(".ht") : OUString(".db") );
     OUString dbFileName = OUStringBuffer().append('/').append(Database).append(aFileExt).makeStringAndClear();
@@ -673,8 +663,6 @@ Databases::getCollator( const OUString& Language,
     return it->second;
 }
 
-
-
 namespace chelp {
 
     struct KeywordElementComparator
@@ -723,8 +711,6 @@ namespace chelp {
 
 }
 
-
-
 KeywordInfo::KeywordElement::KeywordElement( Databases *pDatabases,
                                              helpdatafileproxy::Hdf* pHdf,
                                              OUString& ky,
@@ -734,8 +720,6 @@ KeywordInfo::KeywordElement::KeywordElement( Databases *pDatabases,
     pDatabases->replaceName( key );
     init( pDatabases,pHdf,data );
 }
-
-
 
 void KeywordInfo::KeywordElement::init( Databases *pDatabases,helpdatafileproxy::Hdf* pHdf,const OUString& ids )
 {
@@ -787,8 +771,6 @@ void KeywordInfo::KeywordElement::init( Databases *pDatabases,helpdatafileproxy:
         listTitle[i] = title;
     }
 }
-
-
 
 KeywordInfo::KeywordInfo( const std::vector< KeywordElement >& aVec )
     : listKey( aVec.size() ),
@@ -852,7 +834,6 @@ bool Databases::checkModuleMatchForExtension
 
     return bBelongsToDatabase;
 }
-
 
 KeywordInfo* Databases::getKeyword( const OUString& Database,
                                     const OUString& Language )
@@ -1116,14 +1097,11 @@ void Databases::popupDocument( URLParameter* urlPar,char **buffer,int *byteCount
     (*buffer)[*byteCount] = 0;
 }
 
-
 void Databases::changeCSS(const OUString& newStyleSheet)
 {
     m_aCSS = newStyleSheet.toAsciiLowerCase();
     delete[] m_pCustomCSSDoc, m_pCustomCSSDoc = 0,m_nCustomCSSDocLength = 0;
 }
-
-
 
 void Databases::cascadingStylesheet( const OUString& Language,
                                      char** buffer,
@@ -1237,7 +1215,6 @@ void Databases::cascadingStylesheet( const OUString& Language,
 
 }
 
-
 void Databases::setActiveText( const OUString& Module,
                                const OUString& Language,
                                const OUString& Id,
@@ -1299,7 +1276,6 @@ void Databases::setActiveText( const OUString& Module,
     }
 }
 
-
 void Databases::setInstallPath( const OUString& aInstDir )
 {
     osl::MutexGuard aGuard( m_aMutex );
@@ -1311,8 +1287,6 @@ void Databases::setInstallPath( const OUString& aInstDir )
         m_aInstallDirectory += OUString( "/" );
 }
 
-
-//===================================================================
 // class ExtensionIteratorBase
 
 ExtensionHelpExistanceMap ExtensionIteratorBase::aHelpExistanceMap;
@@ -1575,8 +1549,6 @@ void ExtensionIteratorBase::implGetLanguageVectorFromPackage( ::std::vector< OUS
     }
 }
 
-
-//===================================================================
 // class DataBaseIterator
 
 helpdatafileproxy::Hdf* DataBaseIterator::nextHdf( OUString* o_pExtensionPath, OUString* o_pExtensionRegistryPath )
@@ -1686,8 +1658,6 @@ helpdatafileproxy::Hdf* DataBaseIterator::implGetHdfFromPackage( Reference< depl
     return pRetHdf;
 }
 
-
-//===================================================================
 // class KeyDataBaseFileIterator
 
 //returns a file URL
@@ -1768,8 +1738,6 @@ OUString KeyDataBaseFileIterator::implGetDbFileFromPackage
     return aExpandedURL;
 }
 
-
-//===================================================================
 // class JarFileIterator
 
 Reference< XHierarchicalNameAccess > JarFileIterator::nextJarFile
@@ -1890,8 +1858,6 @@ Reference< XHierarchicalNameAccess > JarFileIterator::implGetJarFromPackage
     return xNA;
 }
 
-
-//===================================================================
 // class IndexFolderIterator
 
 OUString IndexFolderIterator::nextIndexFolder( bool& o_rbExtension, bool& o_rbTemporary )

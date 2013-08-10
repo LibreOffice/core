@@ -44,16 +44,13 @@
 
 // Forward declaration
 
-
 namespace helpdatafileproxy {
 
     class Hdf;
 
 }
 
-
 namespace chelp {
-
 
     class Databases;
     class URLParameter;
@@ -68,7 +65,6 @@ namespace chelp {
         OUString m_aHeading;
         OUString m_aFulltext;
         int m_nOrder;
-
 
     public:
 
@@ -97,8 +93,6 @@ namespace chelp {
         int get_order() const { return m_nOrder; }
     };  // end class StaticModuleInformation
 
-
-
     class KeywordInfo
     {
     public:
@@ -125,7 +119,6 @@ namespace chelp {
             void init( Databases *pDatabases,helpdatafileproxy::Hdf* pHdf,const OUString& ids );
         };
 
-
         KeywordInfo( const std::vector< KeywordElement >& aVector );
 
         ~KeywordInfo() { };
@@ -148,8 +141,6 @@ namespace chelp {
         com::sun::star::uno::Sequence< com::sun::star::uno::Sequence< OUString > > listId,listAnchor,listTitle;
     };  // end class KeywordInfo
 
-
-
     class Databases
     {
     public:
@@ -169,7 +160,6 @@ namespace chelp {
                 return rName.hashCode();
             }
         };
-
 
         /**
          *  Input is the installdirectory in system dependent notation
@@ -202,7 +192,6 @@ namespace chelp {
                          const OUString& Language, bool helpText = false,
                          const OUString* pExtensionPath = NULL );
 
-
         /**
          *  The following method returns the Collator for the given language-country combination
          */
@@ -218,7 +207,6 @@ namespace chelp {
 
         void popupDocument( URLParameter* urlPar,char **buffer,int *byteCount );
 
-
         /**
          *  Returns the cascading stlye sheet used to format the HTML-output.
          *  First try is language directory, second try is main installation directory.
@@ -228,13 +216,11 @@ namespace chelp {
                                   char** buffer,
                                   int* byteCount );
 
-
         /**
          *  Changes the stylesheet for further reads.
          */
 
         void changeCSS(const OUString& newStyleSheet);
-
 
         /**
          *  Returns the active help text for the given module, language and id.
@@ -265,14 +251,12 @@ namespace chelp {
 
         OUString processLang( const OUString& Language );
 
-
         /**
          *  Maps a given language-locale combination to locale.
          *  The returned string maybe empty
          */
 
         OUString country( const OUString& Language );
-
 
         void replaceName( OUString& oustring ) const;
 
@@ -348,7 +332,6 @@ namespace chelp {
             eq >      CollatorTable;
         CollatorTable    m_aCollatorTable;
 
-
         struct ostring_eq
         {
             bool operator()( const OString& rKey1, const OString& rKey2 ) const
@@ -372,15 +355,12 @@ namespace chelp {
             ostring_eq >      EmptyActiveTextSet;
         EmptyActiveTextSet  m_aEmptyActiveTextSet;
 
-
         // methods
 
         void setInstallPath( const OUString& aInstallDirectory );
 
     }; // end class Databases
 
-
-    //===================================================================
     enum IteratorState
     {
         INITIAL_MODULE,
@@ -400,7 +380,6 @@ namespace chelp {
         Databases::eq
     >
     ExtensionHelpExistanceMap;
-
 
     class ExtensionIteratorBase
     {
@@ -458,8 +437,6 @@ namespace chelp {
 
     }; // end class ExtensionIteratorBase
 
-
-    //===================================================================
     class DataBaseIterator : public ExtensionIteratorBase
     {
     public:
@@ -476,7 +453,6 @@ namespace chelp {
 
         helpdatafileproxy::Hdf* nextHdf( OUString* o_pExtensionPath = NULL, OUString* o_pExtensionRegistryPath = NULL );
 
-
     private:
         helpdatafileproxy::Hdf* implGetHdfFromPackage(
             com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > xPackage,
@@ -486,7 +462,6 @@ namespace chelp {
 
     }; // end class DataBaseIterator
 
-    //===================================================================
     class KeyDataBaseFileIterator : public ExtensionIteratorBase
     {
     public:
@@ -503,7 +478,6 @@ namespace chelp {
 
     }; // end class KeyDataBaseFileIterator
 
-    //===================================================================
     class JarFileIterator : public ExtensionIteratorBase
     {
     public:
@@ -523,7 +497,6 @@ namespace chelp {
 
     }; // end class JarFileIterator
 
-    //===================================================================
     class IndexFolderIterator : public ExtensionIteratorBase
     {
     public:
@@ -540,10 +513,7 @@ namespace chelp {
 
     }; // end class KeyDataBaseFileIterator
 
-    //===================================================================
-
 }      // end namespace chelp
-
 
 #endif
 

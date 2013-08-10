@@ -154,26 +154,17 @@ uno::Sequence< beans::Property > Content::getProperties(
     return props;
 }
 
-
-
-//=========================================================================
 // virtual
 uno::Sequence< star::ucb::CommandInfo > Content::getCommands(
     const uno::Reference< star::ucb::XCommandEnvironment > & /*xEnv*/ )
 {
-    //=================================================================
-    //
     // Supported commands
-    //
-    //=================================================================
 
 #define COMMAND_COUNT 5
 
     static const star::ucb::CommandInfo aCommandInfoTable[] =
     {
-        ///////////////////////////////////////////////////////////////
         // Required commands
-        ///////////////////////////////////////////////////////////////
         star::ucb::CommandInfo(
             "getCommandInfo",
             -1,

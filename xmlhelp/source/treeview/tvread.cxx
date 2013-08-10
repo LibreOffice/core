@@ -165,7 +165,6 @@ namespace treeview {
 
 }
 
-
 using namespace treeview;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -176,7 +175,6 @@ using namespace com::sun::star::util;
 using namespace com::sun::star::frame;
 using namespace com::sun::star::container;
 using namespace com::sun::star::deployment;
-
 
 ConfigData::ConfigData()
     : prodName("%PRODUCTNAME"),
@@ -230,11 +228,7 @@ void SAL_CALL ConfigData::replaceName( OUString& oustring ) const
     }
 }
 
-
-//////////////////////////////////////////////////////////////////////////
 // XInterface
-//////////////////////////////////////////////////////////////////////////
-
 
 void SAL_CALL
 TVBase::acquire(
@@ -267,8 +261,6 @@ TVBase::queryInterface(
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
 // XTypeProvider methods.
 
 XTYPEPROVIDER_IMPL_5( TVBase,
@@ -544,7 +536,6 @@ bool TVChildTarget::SearchAndInsert(TVDom* p, TVDom* tvDom)
     sal_Int32 c_int;
     sal_Int32 p_int = p->id.toInt32();
 
-////////////////////////////////check this level in the tree
     for(i = tvDom->children.begin(); i!=tvDom->children.end(); ++i)
         if (!((*i)->isLeaf()) &&
             ((*i)->id.getLength() == p->id.getLength()) &&
@@ -564,7 +555,6 @@ bool TVChildTarget::SearchAndInsert(TVDom* p, TVDom* tvDom)
                 max_It = i+1;
             }
         }
-////////////////////////////////recursive call if necessary
     if (h) (*(tvDom->children.insert(max_It, p)))->parent = tvDom;
     else
     {
@@ -721,7 +711,6 @@ ConfigData TVChildTarget::init( const Reference< XComponentContext >& xContext )
                                   OUString( " " ) +
                                   setupextension );
     OUString locale( getKey( xHierAccess,"L10N/ooLocale" ) );
-
 
     // Determine fileurl from url and locale
     OUString url;
@@ -916,14 +905,12 @@ TVChildTarget::getBooleanKey(const Reference<
   return ret;
 }
 
-
 void TVChildTarget::subst( OUString& instpath ) const
 {
     SvtPathOptions aOptions;
     instpath = aOptions.SubstituteVariable( instpath );
 }
 
-//===================================================================
 // class ExtensionIteratorBase
 
 static OUString aSlash("/");
@@ -1136,7 +1123,6 @@ void ExtensionIteratorBase::implGetLanguageVectorFromPackage( ::std::vector< OUS
     }
 }
 
-//===================================================================
 // class TreeFileIterator
 
 OUString TreeFileIterator::nextTreeFile( sal_Int32& rnFileSize )

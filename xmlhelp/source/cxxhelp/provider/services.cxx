@@ -25,7 +25,6 @@
 
 using namespace com::sun::star;
 
-//=========================================================================
 extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucpchelp_component_getFactory(
     const sal_Char * pImplName,
     void * pServiceManager,
@@ -37,17 +36,13 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucpchelp_component_getFactory(
         reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ) );
     uno::Reference< lang::XSingleServiceFactory > xFactory;
 
-    //////////////////////////////////////////////////////////////////////
     // Create factory, if implementation name matches.
-    //////////////////////////////////////////////////////////////////////
 
     if ( ::chelp::ContentProvider::getImplementationName_Static().
              compareToAscii( pImplName ) == 0 )
     {
         xFactory = ::chelp::ContentProvider::createServiceFactory( xSMgr );
     }
-
-    //////////////////////////////////////////////////////////////////////
 
     if ( xFactory.is() )
     {
