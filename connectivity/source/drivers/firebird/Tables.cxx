@@ -28,6 +28,7 @@ Tables::Tables(ODatabaseMetaData& xMetaData,
                ::osl::Mutex& rMutex,
                const TStringVector& rVector) :
     OCollection(rParent, sal_True, rMutex, rVector),
+    m_rMutex(rMutex),
     m_xMetaData(xMetaData)
 {
 }
@@ -57,6 +58,7 @@ ObjectType Tables::createObject(const OUString& rName)
         throw RuntimeException();
 
     ObjectType xRet(new Table(this,
+                              m_rMutex,
                               m_xMetaData.getConnection(),
                               rName,
                               "", // TODO: Type

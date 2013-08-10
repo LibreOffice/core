@@ -7,18 +7,21 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include "Columns.hxx"
 #include "Table.hxx"
 
 using namespace ::connectivity;
 using namespace ::connectivity::firebird;
 using namespace ::connectivity::sdbcx;
 
+using namespace ::osl;
 using namespace ::rtl;
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::sdbc;
 
 Table::Table(Tables* pTables,
+             Mutex& rMutex,
              const uno::Reference< XConnection >& rConnection,
              const OUString& rName,
              const OUString& rType,
@@ -31,7 +34,8 @@ Table::Table(Tables* pTables,
                  rType,
                  rDescription,
                  "",
-                 "")
+                 ""),
+    m_rMutex(rMutex)
 {
     (void) nPrivileges;
 }
@@ -39,9 +43,9 @@ Table::Table(Tables* pTables,
 //----- OTableHelper ---------------------------------------------------------
 OCollection* Table::createColumns(const TStringVector& rNames)
 {
-    (void) rNames;
-    // TODO: IMPLEMENT ME
-    return 0;
+    return new Columns(*this,
+                       m_rMutex,
+                       rNames);
 }
 
 OCollection* Table::createKeys(const TStringVector& rNames)

@@ -25,6 +25,9 @@ namespace connectivity
          */
         class Tables: public ::connectivity::sdbcx::OCollection
         {
+        private:
+            ::osl::Mutex& m_rMutex;
+
         protected:
             // OCollection: pure virtual functions requiring implementation
             virtual void impl_refresh()

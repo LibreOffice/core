@@ -21,8 +21,12 @@ namespace connectivity
 
         class Table: public OTableHelper
         {
+        private:
+            ::osl::Mutex& m_rMutex;
+
         public:
             Table(Tables* pTables,
+                  ::osl::Mutex& rMutex,
                   const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection,
                   const OUString& rName,
                   const OUString& rType,
