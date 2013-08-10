@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <switerator.hxx>
 #include <calbck.hxx>
 #include <node.hxx>
@@ -130,7 +129,6 @@ SwNode* GoPreviousWithFrm(SwNodeIndex *pIdx)
         (*pIdx) = aTmp;
     return pNd;
 }
-
 
 SwNode2LayImpl::SwNode2LayImpl( const SwNode& rNode, sal_uLong nIdx, bool bSearch )
     : pUpperFrms( NULL ), nIndex( nIdx ), bInit( false )
@@ -461,6 +459,5 @@ SwFrm* SwNode2Layout::GetFrm( const Point* pDocPos,
 {
     return pImpl->GetFrm( pDocPos, pPos, bCalcFrm );
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

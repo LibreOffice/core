@@ -52,7 +52,6 @@
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
 
-
 extern void ClearFEShellTabCols();
 
 // See swtable.cxx too
@@ -72,7 +71,6 @@ public:
     static SwFrmFmt *FindNewFmt( std::vector<SwTblFmtCmp*> &rArr, SwFrmFmt*pOld, sal_Int16 nType );
     static void Delete( std::vector<SwTblFmtCmp*> &rArr );
 };
-
 
 SwTblFmtCmp::SwTblFmtCmp( SwFrmFmt *pO, SwFrmFmt *pN, sal_Int16 nT )
     : pOld ( pO ), pNew ( pN ), nType( nT )
@@ -190,7 +188,6 @@ struct LinesAndTable
           rLines( rL ), rTable( rTbl ), bInsertLines( true ) {}
 };
 
-
 bool _FindLine( _FndLine & rLine, LinesAndTable* pPara );
 
 bool _FindBox( _FndBox & rBox, LinesAndTable* pPara )
@@ -273,7 +270,6 @@ static void lcl_CollectLines( std::vector<SwTableLine*> &rArr, const SwCursor& r
     }
 }
 
-
 static void lcl_ProcessRowAttr( std::vector<SwTblFmtCmp*>& rFmtCmp, SwTableLine* pLine, const SfxPoolItem& rNew )
 {
     SwFrmFmt *pNewFmt;
@@ -288,7 +284,6 @@ static void lcl_ProcessRowAttr( std::vector<SwTblFmtCmp*>& rFmtCmp, SwTableLine*
     }
 }
 
-
 static void lcl_ProcessBoxSize( std::vector<SwTblFmtCmp*> &rFmtCmp, SwTableBox *pBox, const SwFmtFrmSize &rNew );
 
 static void lcl_ProcessRowSize( std::vector<SwTblFmtCmp*> &rFmtCmp, SwTableLine *pLine, const SwFmtFrmSize &rNew )
@@ -298,7 +293,6 @@ static void lcl_ProcessRowSize( std::vector<SwTblFmtCmp*> &rFmtCmp, SwTableLine 
     for ( sal_uInt16 i = 0; i < rBoxes.size(); ++i )
         ::lcl_ProcessBoxSize( rFmtCmp, rBoxes[i], rNew );
 }
-
 
 static void lcl_ProcessBoxSize( std::vector<SwTblFmtCmp*> &rFmtCmp, SwTableBox *pBox, const SwFmtFrmSize &rNew )
 {
@@ -311,7 +305,6 @@ static void lcl_ProcessBoxSize( std::vector<SwTblFmtCmp*> &rFmtCmp, SwTableBox *
             ::lcl_ProcessRowSize( rFmtCmp, rLines[i], aSz );
     }
 }
-
 
 void SwDoc::SetRowSplit( const SwCursor& rCursor, const SwFmtRowSplit &rNew )
 {
@@ -1266,7 +1259,6 @@ sal_uInt16 SwDoc::GetBoxAlign( const SwCursor& rCursor ) const
     return nAlign;
 }
 
-
 /**
  * Class: SwDoc
  * Methods: AdjustCellWidth()
@@ -1456,7 +1448,6 @@ static void lcl_CalcColValues( std::vector<sal_uInt16> &rToFill, const SwTabCols
         } while ( pCell && pTab->IsAnLower( pCell ) );
     }
 }
-
 
 void SwDoc::AdjustCellWidth( const SwCursor& rCursor, sal_Bool bBalance )
 {

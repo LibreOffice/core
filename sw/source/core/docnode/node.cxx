@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <hintids.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <editeng/protitem.hxx>
@@ -92,7 +91,6 @@ void GetNewAutoStyle( boost::shared_ptr<const SfxItemSet>& mrpAttrSet,
     const bool bSetModifyAtAttr = ((SwAttrSet*)mrpAttrSet.get())->SetModifyAtAttr( &rNode );
     rNode.SetModifyAtAttr( bSetModifyAtAttr );
 }
-
 
 void SetParent( boost::shared_ptr<const SfxItemSet>& mrpAttrSet,
                 const SwCntntNode& rNode,
@@ -263,7 +261,6 @@ sal_uInt16 ClearItem_BC( boost::shared_ptr<const SfxItemSet>& mrpAttrSet,
 |* All EndNodes of the BaseSection have level 0
 |* All StartNodes of the BaseSection have level 1
 *******************************************************************/
-
 sal_uInt16 SwNode::GetSectionLevel() const
 {
     // EndNode of a BaseSection? They are always 0!
@@ -365,7 +362,6 @@ SwNode::~SwNode()
 
 // Find the TableNode in which it is located.
 // If we're not in a table: return 0
-
 SwTableNode* SwNode::FindTableNode()
 {
     if( IsTableNode() )
@@ -375,7 +371,6 @@ SwTableNode* SwNode::FindTableNode()
         pTmp = pTmp->pStartOfSection;
     return pTmp->GetTableNode();
 }
-
 
 // Is the node located in the visible area of the Shell?
 sal_Bool SwNode::IsInVisibleArea( ViewShell* pSh ) const
@@ -718,7 +713,6 @@ const SwPageDesc* SwNode::FindPageDesc( sal_Bool bCalcLay,
     return pPgDesc;
 }
 
-
 // If the node is located in a Fly, we return it formatted accordingly
 SwFrmFmt* SwNode::GetFlyFmt() const
 {
@@ -868,7 +862,6 @@ sal_uInt8 SwNode::HasPrevNextLayNode() const
 |*      IN
 |*      rNodes is the variable array in which the node is contained
 *******************************************************************/
-
 SwStartNode::SwStartNode( const SwNodeIndex &rWhere, const sal_uInt8 nNdType,
                             SwStartNodeType eSttNd )
     : SwNode( rWhere, nNdType ), eSttNdTyp( eSttNd )
@@ -883,7 +876,6 @@ SwStartNode::SwStartNode( SwNodes& rNodes, sal_uLong nPos )
     // Just do this temporarily until the EndNode is inserted
     pEndOfSection = (SwEndNode*)this;
 }
-
 
 void SwStartNode::CheckSectionCondColl() const
 {
@@ -925,12 +917,7 @@ SwEndNode::SwEndNode( SwNodes& rNds, sal_uLong nPos, SwStartNode& rSttNd )
     pStartOfSection->pEndOfSection = this;
 }
 
-
-
-// --------------------
 // SwCntntNode
-// --------------------
-
 
 SwCntntNode::SwCntntNode( const SwNodeIndex &rWhere, const sal_uInt8 nNdType,
                             SwFmtColl *pColl )
@@ -987,7 +974,6 @@ void SwCntntNode::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewV
         }
         break;
 
-
     case RES_FMT_CHG:
         // If the Format parent was switched, register the Attrset at the new one
         // Skip own Modify!
@@ -998,6 +984,7 @@ void SwCntntNode::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewV
             AttrSetHandleHelper::SetParent( mpAttrSet, *this, GetFmtColl(), GetFmtColl() );
         }
         break;
+
 //FEATURE::CONDCOLL
     case RES_CONDCOLL_CONDCHG:
         if( ((SwCondCollCondChg*)pNewValue)->pChangedFmt == GetRegisteredIn() &&
@@ -1081,8 +1068,6 @@ SwRect SwCntntNode::FindPageFrmRect( const sal_Bool bPrtArea, const Point* pPoin
 
 xub_StrLen SwCntntNode::Len() const { return 0; }
 
-
-
 SwFmtColl *SwCntntNode::ChgFmtColl( SwFmtColl *pNewColl )
 {
     OSL_ENSURE( pNewColl, "Collectionpointer is 0." );
@@ -1118,7 +1103,6 @@ SwFmtColl *SwCntntNode::ChgFmtColl( SwFmtColl *pNewColl )
     }
     return pOldColl;
 }
-
 
 sal_Bool SwCntntNode::GoNext(SwIndex * pIdx, sal_uInt16 nMode ) const
 {
@@ -1167,7 +1151,6 @@ sal_Bool SwCntntNode::GoNext(SwIndex * pIdx, sal_uInt16 nMode ) const
     return bRet;
 }
 
-
 sal_Bool SwCntntNode::GoPrevious(SwIndex * pIdx, sal_uInt16 nMode ) const
 {
     sal_Bool bRet = sal_True;
@@ -1215,12 +1198,10 @@ sal_Bool SwCntntNode::GoPrevious(SwIndex * pIdx, sal_uInt16 nMode ) const
     return bRet;
 }
 
-
 /*
  * Creates all Views for the Doc for this Node.
  * The created ContentFrames are attached to the corresponding Layout.
  */
-
 void SwCntntNode::MakeFrms( SwCntntNode& rNode )
 {
     OSL_ENSURE( &rNode != this,
@@ -1263,7 +1244,6 @@ void SwCntntNode::MakeFrms( SwCntntNode& rNode )
  * Deletes all Views from the Doc for this Node.
  * The ContentFrames are removed from the corresponding Layout.
  */
-
 void SwCntntNode::DelFrms()
 {
     if( !GetDepends() )
@@ -1286,7 +1266,6 @@ void SwCntntNode::DelFrms()
     }
 }
 
-
 SwCntntNode *SwCntntNode::JoinNext()
 {
     return this;
@@ -1297,8 +1276,6 @@ SwCntntNode *SwCntntNode::JoinPrev()
 {
     return this;
 }
-
-
 
 // Get info from Modify
 bool SwCntntNode::GetInfo( SfxPoolItem& rInfo ) const
@@ -1328,7 +1305,6 @@ bool SwCntntNode::GetInfo( SfxPoolItem& rInfo ) const
 
     return SwModify::GetInfo( rInfo );
 }
-
 
 // Set an Attribute
 sal_Bool SwCntntNode::SetAttr(const SfxPoolItem& rAttr )
@@ -1364,6 +1340,7 @@ sal_Bool SwCntntNode::SetAttr(const SfxPoolItem& rAttr )
     }
     return bRet;
 }
+
 #include <svl/itemiter.hxx>
 
 sal_Bool SwCntntNode::SetAttr( const SfxItemSet& rSet )
@@ -1490,6 +1467,7 @@ sal_Bool SwCntntNode::ResetAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 )
     }
     return bRet;
 }
+
 sal_Bool SwCntntNode::ResetAttr( const std::vector<sal_uInt16>& rWhichArr )
 {
     if( !GetpSwAttrSet() )
@@ -1530,7 +1508,6 @@ sal_Bool SwCntntNode::ResetAttr( const std::vector<sal_uInt16>& rWhichArr )
     return 0 != nDel ;
 }
 
-
 sal_uInt16 SwCntntNode::ResetAllAttr()
 {
     if( !GetpSwAttrSet() )
@@ -1568,7 +1545,6 @@ sal_uInt16 SwCntntNode::ResetAllAttr()
     }
     return aNew.Count();
 }
-
 
 sal_Bool SwCntntNode::GetAttr( SfxItemSet& rSet, sal_Bool bInParent ) const
 {
@@ -1686,10 +1662,7 @@ int SwCntntNode::CanJoinPrev( SwNodeIndex* pIdx ) const
     return sal_True;
 }
 
-
 //FEATURE::CONDCOLL
-
-
 void SwCntntNode::SetCondFmtColl( SwFmtColl* pColl )
 {
     if( (!pColl && pCondColl) || ( pColl && !pCondColl ) ||
@@ -1720,7 +1693,6 @@ void SwCntntNode::SetCondFmtColl( SwFmtColl* pColl )
         }
     }
 }
-
 
 sal_Bool SwCntntNode::IsAnyCondition( SwCollCondition& rTmp ) const
 {
@@ -1808,7 +1780,6 @@ sal_Bool SwCntntNode::IsAnyCondition( SwCollCondition& rTmp ) const
     return sal_False;
 }
 
-
 void SwCntntNode::ChkCondColl()
 {
     // Check, just to be sure
@@ -1882,7 +1853,6 @@ short SwCntntNode::GetTextDirection( const SwPosition& rPos,
                 nRet = FRMDIR_HORI_LEFT_TOP;
         }
     }
-
 
     return nRet;
 }
