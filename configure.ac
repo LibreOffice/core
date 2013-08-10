@@ -10081,17 +10081,13 @@ OPENCL_LIBS=
 OPENCL_CFLAGS=
 ENABLE_OPENCL=
 AC_MSG_CHECKING([OpenCL])
-if test \( -z "$with_opencl_sdk" -o "$with_opencl_sdk" = yes \) -a $_os = Darwin ; then
-    # OS X
-    if test "$with_open_sdk" = yes -o "$with_macosx_sdk" != "10.6" ; then
-        AC_MSG_RESULT([yes, always on OS X])
-        ENABLE_OPENCL=TRUE
-        OPENCL_CFLAGS=
-        OPENCL_LIBS="-framework OpenCL"
-        AC_DEFINE(HAVE_FEATURE_OPENCL)
-    else
-        AC_MSG_RESULT([no])
-    fi
+if test \( -z "$with_opencl_sdk" -o "$with_opencl_sdk" = yes \) -a $_os = Darwin -a "$with_macosx_sdk" != 10.6; then
+    # OS X SDK > 10.6
+    AC_MSG_RESULT([yes, always on OS X > 10.6])
+    ENABLE_OPENCL=TRUE
+    OPENCL_CFLAGS=
+    OPENCL_LIBS="-framework OpenCL"
+    AC_DEFINE(HAVE_FEATURE_OPENCL)
 elif test -z "$with_opencl_sdk" -o "$with_opencl_sdk" = no; then
     AC_MSG_RESULT([no])
 else
