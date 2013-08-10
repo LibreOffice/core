@@ -88,6 +88,17 @@
 
 #define HAVE_FEATURE_MACOSX_SANDBOX 0
 
+/* MACOSX_MACLIKE_APP_STRUCTURE - LibreOffice.app substructure style
+ *
+ * Whether the structure of the LibreOffice.app bundle is more
+ * "Mac-like" and what it has been previously, for instance with all
+ * dylibs in the "Frameworks" folder and all non-code data in a the
+ * "Resources" folder. For now coupled to HAVE_FEATURE_MACOSX_SANDBOX
+ * in configure.ac.
+ */
+
+#define HAVE_FEATURE_MACOSX_MACLIKE_APP_STRUCTURE 0
+
 /* READONLY_INSTALLSET - whether to treat the installation as read-only
  *
  * Prevents attempts by LibreOffice to write into its installation. That means
