@@ -7,7 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include "Table.hxx"
 #include "Tables.hxx"
+
+#include <com/sun/star/sdbc/XRow.hpp>
 
 using namespace ::connectivity::firebird;
 using namespace ::connectivity::sdbcx;
@@ -20,10 +23,12 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::uno;
 
-Tables::Tables(::cppu::OWeakObject& rParent,
+Tables::Tables(ODatabaseMetaData& xMetaData,
+               ::cppu::OWeakObject& rParent,
                ::osl::Mutex& rMutex,
                const TStringVector& rVector) :
-    OCollection(rParent, sal_True, rMutex, rVector)
+    OCollection(rParent, sal_True, rMutex, rVector),
+    m_xMetaData(xMetaData)
 {
 }
 
@@ -36,23 +41,46 @@ void Tables::impl_refresh()
 
 ObjectType Tables::createObject(const OUString& rName)
 {
-    (void) rName;
-    // TODO: IMPLEMENT ME
-    return ObjectType();
+    // TODO: parse the name.
+    // TODO: use table types
+    uno::Reference< XResultSet > xTables = m_xMetaData.getTables(Any(),
+                                                                 OUString(),
+                                                                 rName,
+                                                                 uno::Sequence< OUString >());
+
+    if (!xTables.is())
+        throw RuntimeException();
+
+    uno::Reference< XRow > xRow(xTables,UNO_QUERY);
+
+    if (!xRow.is() || !xTables->next())
+        throw RuntimeException();
+
+    ObjectType xRet(new Table(this,
+                              m_xMetaData.getConnection(),
+                              rName,
+                              "", // TODO: Type
+                              "", // TODO: Description
+                              0)); // TODO: privileges
+
+    if (xTables->next())
+        throw RuntimeException(); // Only one table should be returned
+
+    return xRet;
 }
 
-//----- XDrop ----------------------------------------------------------------
-void SAL_CALL Tables::dropByName(const OUString& rName)
-    throw (SQLException, NoSuchElementException, RuntimeException)
-{
-    (void) rName;
-    // TODO: IMPLEMENT ME
-}
-
-void SAL_CALL Tables::dropByIndex(const sal_Int32 nIndex)
-    throw (SQLException, IndexOutOfBoundsException, RuntimeException)
-{
-    (void) nIndex;
-    // TODO: IMPLEMENT ME
-}
+// //----- XDrop ----------------------------------------------------------------
+// void SAL_CALL Tables::dropByName(const OUString& rName)
+//     throw (SQLException, NoSuchElementException, RuntimeException)
+// {
+//     (void) rName;
+//     // TODO: IMPLEMENT ME
+// }
+//
+// void SAL_CALL Tables::dropByIndex(const sal_Int32 nIndex)
+//     throw (SQLException, IndexOutOfBoundsException, RuntimeException)
+// {
+//     (void) nIndex;
+//     // TODO: IMPLEMENT ME
+// }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

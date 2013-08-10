@@ -10,6 +10,8 @@
 #ifndef CONNECTIVITY_FIREBIRD_TABLE_HXX
 #define CONNECTIVITY_FIREBIRD_TABLE_HXX
 
+#include "Tables.hxx"
+
 #include <connectivity/TTableHelper.hxx>
 
 namespace connectivity
@@ -19,6 +21,22 @@ namespace connectivity
 
         class Table: public OTableHelper
         {
+        public:
+            Table(Tables* pTables,
+                  const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection,
+                  const OUString& rName,
+                  const OUString& rType,
+                  const OUString& rDescription,
+                  sal_Int32 _nPrivileges);
+
+            // OTableHelper
+            virtual ::connectivity::sdbcx::OCollection* createColumns(
+                const ::connectivity::TStringVector& rNames);
+            virtual ::connectivity::sdbcx::OCollection* createKeys(
+                const ::connectivity::TStringVector& rNames);
+            virtual ::connectivity::sdbcx::OCollection* createIndexes(
+                const ::connectivity::TStringVector& rNames);
+
         };
 
     } // namespace firebird

@@ -9,4 +9,53 @@
 
 #include "Table.hxx"
 
+using namespace ::connectivity;
+using namespace ::connectivity::firebird;
+using namespace ::connectivity::sdbcx;
+
+using namespace ::rtl;
+
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::sdbc;
+
+Table::Table(Tables* pTables,
+             const uno::Reference< XConnection >& rConnection,
+             const OUString& rName,
+             const OUString& rType,
+             const OUString& rDescription,
+             sal_Int32 nPrivileges):
+    OTableHelper(pTables,
+                 rConnection,
+                 sal_True,
+                 rName,
+                 rType,
+                 rDescription,
+                 "",
+                 "")
+{
+    (void) nPrivileges;
+}
+
+//----- OTableHelper ---------------------------------------------------------
+OCollection* Table::createColumns(const TStringVector& rNames)
+{
+    (void) rNames;
+    // TODO: IMPLEMENT ME
+    return 0;
+}
+
+OCollection* Table::createKeys(const TStringVector& rNames)
+{
+    (void) rNames;
+    // TODO: IMPLEMENT ME
+    return 0;
+}
+
+OCollection* Table::createIndexes(const TStringVector& rNames)
+{
+    (void) rNames;
+    // TODO: IMPLEMENT ME
+    return 0;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

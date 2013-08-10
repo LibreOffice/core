@@ -10,6 +10,8 @@
 #ifndef CONNECTIVITY_FIREBIRD_TABLES_HXX
 #define CONNECTIVITY_FIREBIRD_TABLES_HXX
 
+#include "DatabaseMetaData.hxx"
+
 #include <connectivity/sdbcx/VCollection.hxx>
 
 namespace connectivity
@@ -30,23 +32,26 @@ namespace connectivity
             virtual ::connectivity::sdbcx::ObjectType createObject(
                                                 const ::rtl::OUString& rName);
 
+            ODatabaseMetaData& m_xMetaData;
+
         public:
-            Tables(::cppu::OWeakObject& rParent,
+            Tables(ODatabaseMetaData& xMetaData,
+                   ::cppu::OWeakObject& rParent,
                    ::osl::Mutex& rMutex,
                    const TStringVector& rVector);
 
             // TODO: we should also implement XDataDescriptorFactory, XRefreshable,
             // XAppend,  etc., but all are optional.
 
-            // XDrop
-            virtual void SAL_CALL dropByName(const ::rtl::OUString& rName)
-                throw (::com::sun::star::sdbc::SQLException,
-                       ::com::sun::star::container::NoSuchElementException,
-                       ::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL dropByIndex(const sal_Int32 nIndex)
-                throw (::com::sun::star::sdbc::SQLException,
-                       com::sun::star::lang::IndexOutOfBoundsException,
-                       ::com::sun::star::uno::RuntimeException);
+//             // XDrop
+//             virtual void SAL_CALL dropByName(const ::rtl::OUString& rName)
+//                 throw (::com::sun::star::sdbc::SQLException,
+//                        ::com::sun::star::container::NoSuchElementException,
+//                        ::com::sun::star::uno::RuntimeException);
+//             virtual void SAL_CALL dropByIndex(const sal_Int32 nIndex)
+//                 throw (::com::sun::star::sdbc::SQLException,
+//                        com::sun::star::lang::IndexOutOfBoundsException,
+//                        ::com::sun::star::uno::RuntimeException);
         };
 
     } // namespace firebird
