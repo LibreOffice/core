@@ -131,9 +131,16 @@ namespace VLC
         return libvlc_audio_get_mute( mPlayer );
     }
 
-    void Player::setXWindow( int id )
+
+    void Player::setWindow( int id )
     {
+#if defined( UNX )
         libvlc_media_player_set_xwindow( mPlayer, id );
+#elif defined( MACOS )
+        libvlc_media_player_set_nsobject( mPlayer, reinterpret_cast<void*>( id ) );
+#elif defined( WNT )
+        libvlc_media_player_set_hwnd( mPlayer, reinterpret_cast<void*>( id ) );
+#endif
     }
 
     void Player::takeSnapshot(const rtl::OUString& file)

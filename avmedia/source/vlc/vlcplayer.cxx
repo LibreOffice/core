@@ -179,13 +179,9 @@ uno::Reference< css::media::XPlayerWindow > SAL_CALL VLCPlayer::createPlayerWind
 
     const int winID = GetWindowID( aArguments );
 
-    if (winID != -1)
+    if ( winID != -1 )
     {
-#if defined(WIN32) && !defined(UNIX)
-        //TODO: Not works, will be crashed
-#else
-        mPlayer.setXWindow( winID );
-#endif
+        mPlayer.setWindow( winID );
     }
 
     return uno::Reference< css::media::XPlayerWindow >( window );
