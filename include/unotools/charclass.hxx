@@ -16,6 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #include "unotools/unotoolsdllapi.h"
 
 #ifndef _UNOTOOLS_CHARCLASS_HXX
@@ -32,7 +33,6 @@
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
 #include <osl/mutex.hxx>
 #include <rtl/character.hxx>
-
 
 namespace com { namespace sun { namespace star {
     namespace uno {
@@ -93,18 +93,21 @@ public:
 
 
     /// isdigit() on ascii values
+    SAL_DEPRECATED("Use rtl::isAsciiDigit instead")
     static inline bool isAsciiDigit( sal_Unicode c )
     {
         return rtl::isAsciiDigit( c );
     }
 
     /// isalpha() on ascii values
+    SAL_DEPRECATED("Use rtl::isAsciiAlpha instead")
     static inline bool isAsciiAlpha( sal_Unicode c )
     {
         return rtl::isAsciiAlpha( c );
     }
 
     /// isalnum() on ascii values
+    SAL_DEPRECATED("Use rtl::isAsciiAlphanumeric instead")
     static inline bool isAsciiAlphaNumeric( sal_Unicode c )
     {
         return rtl::isAsciiAlphanumeric( c );
