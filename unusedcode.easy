@@ -5,7 +5,6 @@
 (anonymous namespace)::VBATest::testMiscOLEStuff()
 AffineMatrixItem::GetAffineMatrix2D() const
 BitmapWriteAccess::FillPolyPolygon(PolyPolygon const&)
-BitmapWriteAccess::FillPolygon(Polygon const&)
 CuiAboutConfigTabPage::LinkStubHeaderSelect_Impl(void*, void*)
 DbgRegisterNamedUserChannel(rtl::OUString const&, void (*)(char const*))
 EditTextObjectImpl::SetParaAttribs(int, SfxItemSet const&)

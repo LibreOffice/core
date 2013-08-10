@@ -195,7 +195,6 @@ public:
     void                        FillRect( const Rectangle& rRect );
     void                        DrawRect( const Rectangle& rRect );
 
-    void                        FillPolygon( const Polygon& rPoly );
     void                        FillPolyPolygon( const PolyPolygon& rPoly );
 
 private:
