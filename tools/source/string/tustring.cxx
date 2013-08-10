@@ -412,17 +412,6 @@ sal_Bool STRING::Equals( const STRING& rStr, xub_StrLen nIndex, xub_StrLen nLen 
     return (ImplStringCompareWithoutZero( mpData->maStr+nIndex, rStr.mpData->maStr, nLen ) == 0);
 }
 
-sal_Bool STRING::Equals( const STRCODE* pCharStr, xub_StrLen nIndex, xub_StrLen nLen ) const
-{
-    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
-
-    // Are there enough codes for comparing?
-    if ( nIndex > mpData->mnLen )
-        return (*pCharStr == 0);
-
-    return (ImplStringCompare( mpData->maStr+nIndex, pCharStr, nLen ) == 0);
-}
-
 xub_StrLen STRING::Match( const STRING& rStr ) const
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );

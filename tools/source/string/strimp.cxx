@@ -17,22 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-static sal_Int32 ImplStringCompare( const STRCODE* pStr1, const STRCODE* pStr2,
-                                    xub_StrLen nCount )
-{
-    sal_Int32 nRet = 0;
-    while ( nCount &&
-            ((nRet = ((sal_Int32)((STRCODEU)*pStr1))-((sal_Int32)((STRCODEU)*pStr2))) == 0) &&
-            *pStr2 )
-    {
-        ++pStr1,
-        ++pStr2,
-        --nCount;
-    }
-
-    return nRet;
-}
-
 static sal_Int32 ImplStringCompareWithoutZero( const STRCODE* pStr1, const STRCODE* pStr2,
                                                sal_Int32 nCount )
 {

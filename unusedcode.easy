@@ -75,7 +75,6 @@ SmFontPickList::Contains(Font const&) const
 StatusBar::CopyItems(StatusBar const&)
 StatusBar::HideItems()
 StatusBar::ShowItems()
-String::Equals(unsigned short const*, unsigned short, unsigned short) const
 SvFileStream::GetFileHandle() const
 SvdProgressInfo::ReportError()
 SvpSalInstance::PostEvent(SalFrame const*, void*, unsigned short)
