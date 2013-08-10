@@ -1,0 +1,42 @@
+/* Configuration of subfolder names in the installation tree. The
+ * values of these macros when configured will be strings. The names
+ * of these macros reflect what the value would be in an "ideal" world
+ * on Linux, not current reality. (For example LIBO_BIN_FOLDER is
+ * actually "program" on Linux and most other Unixes.)
+ */
+
+#ifndef CONFIG_FOLDERS_H
+#define CONFIG_FOLDERS_H
+
+/* where the soffice executable and other end-user-invoked executables are */
+#undef LIBO_BIN_FOLDER
+
+/* where the *rc / *.ini file are */
+#undef LIBO_ETC_FOLDER
+
+/* where helper executables run by soffice are */
+#undef LIBO_LIBEXEC_FOLDER
+
+/* where dynamic libraries loaded directly or programmatically are */
+#undef LIBO_LIB_FOLDER
+
+/* where read-only resources are in general */
+#undef LIBO_SHARE_FOLDER
+
+/* where java jars are */
+#undef LIBO_SHARE_JAVA_FOLDER
+
+/* LO's own "resources" */
+#undef LIBO_SHARE_RESOURCE_FOLDER
+
+/* LO's "shell" artwork */
+#undef LIBO_SHARE_SHELL_FOLDER
+
+/* URE folders */
+#undef LIBO_URE_BIN_FOLDER
+#undef LIBO_URE_ETC_FOLDER
+#undef LIBO_URE_LIB_FOLDER
+#undef LIBO_URE_SHARE_FOLDER
+#undef LIBO_URE_SHARE_JAVA_FOLDER
+
+#endif

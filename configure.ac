@@ -2850,6 +2850,75 @@ else
 fi
 
 dnl ===================================================================
+dnl Structure of install set
+dnl ===================================================================
+
+if test $_os = Darwin -a "$ENABLE_MACOSX_SANDBOX" = YES; then
+    // For now, couple whether to use a more "Mac-like" installation tree structure
+    // with the choice whether to use sandboxing. Could be a separate choice, or could
+    // be always on for OS X.
+    LIBO_BIN_FOLDER=MacOS
+    LIBO_ETC_FOLDER=Resources
+    LIBO_LIBEXEC_FOLDER=MacOS
+    LIBO_LIB_FOLDER=Frameworks
+    LIBO_SHARE_FOLDER=Resources
+    LIBO_SHARE_JAVA_FOLDER=Resources/java
+    LIBO_SHARE_RESOURCE_FOLDER=Resources/resource
+    LIBO_SHARE_SHELL_FOLDER=Resources/shell
+    LIBO_URE_BIN_FOLDER=MacOS
+    LIBO_URE_ETC_FOLDER=Resources
+    LIBO_URE_LIB_FOLDER=Frameworks
+    LIBO_URE_SHARE_FOLDER=Resources/ure
+    LIBO_URE_SHARE_JAVA_FOLDER=Resources/java
+elif $_os = WINNT; then
+    LIBO_BIN_FOLDER=program
+    LIBO_ETC_FOLDER=program
+    LIBO_LIBEXEC_FOLDER=program
+    LIBO_LIB_FOLDER=program
+    LIBO_SHARE_FOLDER=share
+    LIBO_SHARE_JAVA_FOLDER=program/classes
+    LIBO_SHARE_RESOURCE_FOLDER=program/resource
+    LIBO_SHARE_SHELL_FOLDER=program/shell
+    LIBO_URE_BIN_FOLDER=ure-link/bin
+    LIBO_URE_ETC_FOLDER=ure-link/bin
+    LIBO_URE_LIB_FOLDER=ure-link/bin
+    LIBO_URE_SHARE_FOLDER=ure-link/share
+    LIBO_URE_SHARE_JAVA_FOLDER=ure-link/java
+else
+    LIBO_BIN_FOLDER=program
+    LIBO_ETC_FOLDER=program
+    LIBO_LIBEXEC_FOLDER=program
+    LIBO_LIB_FOLDER=program
+    LIBO_SHARE_FOLDER=share
+    LIBO_SHARE_JAVA_FOLDER=program/classes
+    LIBO_SHARE_RESOURCE_FOLDER=program/resource
+    LIBO_SHARE_SHELL_FOLDER=program/shell
+    LIBO_URE_BIN_FOLDER=ure/bin
+    LIBO_URE_ETC_FOLDER=ure/bin
+    LIBO_URE_LIB_FOLDER=ure/lib
+    LIBO_URE_SHARE_FOLDER=ure/share
+    LIBO_URE_SHARE_JAVA_FOLDER=ure/share/java
+fi
+AC_DEFINE_UNQUOTED(LIBO_BIN_FOLDER,"$LIBO_BIN_FOLDER")
+AC_DEFINE_UNQUOTED(LIBO_ETC_FOLDER,"$LIBO_ETC_FOLDER")
+AC_DEFINE_UNQUOTED(LIBO_LIBEXEC_FOLDER,"$LIBO_LIBEXEC_FOLDER")
+AC_DEFINE_UNQUOTED(LIBO_LIB_FOLDER,"$LIBO_LIB_FOLDER")
+AC_DEFINE_UNQUOTED(LIBO_SHARE_FOLDER,"$LIBO_SHARE_FOLDER")
+AC_DEFINE_UNQUOTED(LIBO_SHARE_JAVA_FOLDER,"$LIBO_SHARE_JAVA_FOLDER")
+AC_DEFINE_UNQUOTED(LIBO_SHARE_RESOURCE_FOLDER,"$LIBO_SHARE_RESOURCE_FOLDER")
+AC_DEFINE_UNQUOTED(LIBO_SHARE_SHELL_FOLDER,"$LIBO_SHARE_SHELL_FOLDER")
+AC_DEFINE_UNQUOTED(LIBO_URE_BIN_FOLDER,"$LIBO_URE_BIN_FOLDER")
+AC_DEFINE_UNQUOTED(LIBO_URE_ETC_FOLDER,"$LIBO_URE_ETC_FOLDER")
+AC_DEFINE_UNQUOTED(LIBO_URE_LIB_FOLDER,"$LIBO_URE_LIB_FOLDER")
+AC_DEFINE_UNQUOTED(LIBO_URE_SHARE_FOLDER,"$LIBO_URE_SHARE_FOLDER")
+AC_DEFINE_UNQUOTED(LIBO_URE_SHARE_JAVA_FOLDER,"$LIBO_URE_SHARE_JAVA_FOLDER")
+
+# Not all of them needed in config_host.mk, add more if need arises
+AC_SUBST(LIBO_BIN_FOLDER)
+AC_SUBST(LIBO_SHARE_FOLDER)
+AC_SUBST(LIBO_SHARE_RESOURCE_FOLDER)
+
+dnl ===================================================================
 dnl Windows specific tests and stuff
 dnl ===================================================================
 
@@ -12421,6 +12490,7 @@ fi
 AC_CONFIG_FILES([config_host.mk Makefile lo.xcent instsetoo_native/util/openoffice.lst])
 AC_CONFIG_HEADERS([config_host/config_clang.h])
 AC_CONFIG_HEADERS([config_host/config_features.h])
+AC_CONFIG_HEADERS([config_host/config_folders.h])
 AC_CONFIG_HEADERS([config_host/config_gcc.h])
 AC_CONFIG_HEADERS([config_host/config_global.h])
 AC_CONFIG_HEADERS([config_host/config_graphite.h])
