@@ -1051,18 +1051,6 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
             Point aPosition(aAlignedGrfArea.Pos());
             Size aSize(aAlignedGrfArea.SSize());
 
-            // Im BrowseModus gibt es nicht unbedingt einen Drucker und
-            // damit kein JobSetup, also legen wir eines an ...
-            const JobSetup* pJobSetup = pOLENd->getIDocumentDeviceAccess()->getJobsetup();
-            sal_Bool bDummyJobSetup = 0 == pJobSetup;
-            if( bDummyJobSetup )
-                pJobSetup = new JobSetup();
-
-            // #i42323#
-            // The reason for #114233# is gone, so i remove it again
-            //TODO/LATER: is it a problem that the JobSetup isn't used?
-            //xRef->DoDraw( pOut, aAlignedGrfArea.Pos(), aAlignedGrfArea.SSize(), *pJobSetup );
-
             const Graphic* pGraphic = pOLENd->GetGraphic();
             if ( pGraphic && pGraphic->GetType() != GRAPHIC_NONE )
             {
@@ -1077,9 +1065,6 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
             }
             else
                 ::svt::EmbeddedObjectRef::DrawPaintReplacement( Rectangle( aPosition, aSize ), pOLENd->GetOLEObj().GetCurrentPersistName(), pOut );
-
-            if( bDummyJobSetup )
-                delete pJobSetup;
 
             sal_Int64 nMiscStatus = pOLENd->GetOLEObj().GetOleRef()->getStatus( pOLENd->GetAspect() );
             if ( !bPrn && pShell->ISA( SwCrsrShell ) &&
