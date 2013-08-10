@@ -1378,58 +1378,63 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
 
     uno::Reference< XResultSet > rs = statement->executeQuery(query.getStr());
     uno::Reference< XRow > xRow( rs, UNO_QUERY_THROW );
-    ODatabaseMetaDataResultSet::ORows aRows;
+    ODatabaseMetaDataResultSet::ORows aResults;
+
+    ODatabaseMetaDataResultSet::ORow aCurrentRow(6);
+    aCurrentRow[0] = new ORowSetValueDecorator(); // 0. Unused
+    aCurrentRow[1] = new ORowSetValueDecorator(); // 1. Table_Cat Unsupported
+    aCurrentRow[2] = new ORowSetValueDecorator(); // 2. Table_Schem Unsupported
 
     while( rs->next() )
     {
-        ODatabaseMetaDataResultSet::ORow aCurrentRow(3);
-
-        OUString sTableName             = xRow->getString(1);
-        sanitizeIdentifier(sTableName);
-        sal_Int16 systemFlag            = xRow->getShort(2);
-        sal_Int16 tableType             = xRow->getShort(3);
-        uno::Reference< XBlob > xBlob   = xRow->getBlob(4);
-
-        OUString aDescription;
-        if (xBlob.is())
+        // 3. TABLE_NAME
         {
-            sal_Int32 aBlobLength = (sal_Int32) xBlob->length();
-            aDescription = OUString((char*) xBlob->getBytes(0, aBlobLength).getArray(),
-                                    aBlobLength,
-                                    RTL_TEXTENCODING_UTF8);
+            OUString sTableName = xRow->getString(1);
+            sanitizeIdentifier(sTableName);
+            aCurrentRow[3] = new ORowSetValueDecorator(sTableName);
         }
-
-        OUString aTableType;
-        if( 1 == systemFlag )
+        // 4. TABLE_TYPE
         {
-            aTableType = OUString::createFromAscii("SYSTEM TABLE");
+            sal_Int16 nSystemFlag = xRow->getShort(2);
+            sal_Int16 nTableType  = xRow->getShort(3);
+            OUString sTableType;
 
-        }
-        else
-        {
-            if( 0 == tableType )
+            if (nSystemFlag == 1)
             {
-                aTableType = OUString::createFromAscii("TABLE");
+                sTableType = "SYSTEM TABLE";
             }
             else
             {
-                aTableType = OUString::createFromAscii("VIEW");
+                if (nTableType == 0)
+                    sTableType = "TABLE";
+                else
+                    sTableType = "VIEW";
             }
+
+            aCurrentRow[4] = new ORowSetValueDecorator(sTableType);
+        }
+        // 5. REMARKS
+        {
+            uno::Reference< XBlob > xBlob   = xRow->getBlob(4);
+            OUString sDescription;
+
+            if (xBlob.is())
+            {
+                // TODO: we should actually be using CLOB here instead.
+                // However we haven't implemented CLOB yet, so use BLOB.
+                sal_Int32 aBlobLength = (sal_Int32) xBlob->length();
+                sDescription = OUString((char*) xBlob->getBytes(0, aBlobLength).getArray(),
+                                        aBlobLength,
+                                        RTL_TEXTENCODING_UTF8);
+            }
+
+            aCurrentRow[5] = new ORowSetValueDecorator(sDescription);
         }
 
-        // TABLE_CAT (catalog) may be null -- thus we omit it.
-        // TABLE_SCHEM (schema) may be null -- thus we omit it.
-        // TABLE_NAME
-        aCurrentRow.push_back(new ORowSetValueDecorator(sTableName));
-        // TABLE_TYPE
-        aCurrentRow.push_back(new ORowSetValueDecorator(aTableType));
-        // REMARKS
-        aCurrentRow.push_back(new ORowSetValueDecorator(aDescription));
-
-        aRows.push_back(aCurrentRow);
+        aResults.push_back(aCurrentRow);
     }
 
-    pResultSet->setRows( aRows );
+    pResultSet->setRows( aResults );
 
     return xResultSet;
 }
