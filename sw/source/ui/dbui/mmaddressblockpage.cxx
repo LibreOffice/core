@@ -616,7 +616,7 @@ SwCustomizeAddressBlockDialog::SwCustomizeAddressBlockDialog(
     const ResStringArray& rHeaders = m_rConfigItem.GetDefaultAddressHeaders();
     for(sal_uInt16 i = 0; i < rHeaders.Count(); ++i)
     {
-        const XubString& rHeader = rHeaders.GetString( i );
+        const OUString rHeader = rHeaders.GetString( i );
         SvTreeListEntry* pEntry = m_aAddressElementsLB.InsertEntry(rHeader);
         pEntry->SetUserData((void*)(sal_IntPtr)i);
     }
@@ -1026,11 +1026,9 @@ SwAssignFieldsControl::SwAssignFieldsControl(
     //fill the controls
     for(sal_uInt16 i = 0; i < rHeaders.Count(); ++i)
     {
-        const XubString& rHeader = rHeaders.GetString( i );
+        const OUString rHeader = rHeaders.GetString( i );
         FixedInfo* pNewText = new FixedInfo(&m_aWindow, ResId( FT_FIELDS, *rResId.GetResMgr()));
-        String sLabel(OUString("<>"));
-        sLabel.Insert(rHeader, 1);
-        pNewText->SetText(sLabel);
+        pNewText->SetText("<" + rHeader + ">");
         ListBox* pNewLB = new ListBox(&m_aWindow, ResId(LB_FIELDS, *rResId.GetResMgr()));
         pNewLB->SetHelpId( aHIDs[i] );
         pNewLB->SelectEntryPos(0);
@@ -1179,7 +1177,7 @@ IMPL_LINK(SwAssignFieldsControl, ScrollHdl_Impl, ScrollBar*, pScroll)
 
 IMPL_LINK(SwAssignFieldsControl, MatchHdl_Impl, ListBox*, pBox)
 {
-    String sColumn = pBox->GetSelectEntry();
+    const OUString sColumn = pBox->GetSelectEntry();
     uno::Reference< XColumnsSupplier > xColsSupp( m_rConfigItem.GetResultSet(), uno::UNO_QUERY);
     uno::Reference <XNameAccess> xColAccess = xColsSupp.is() ? xColsSupp->getColumns() : 0;
     OUString sPreview;
@@ -1255,14 +1253,14 @@ SwAssignFieldsDialog::SwAssignFieldsDialog(
     m_rConfigItem(rConfigItem)
 {
     //resize the HeaderBar
-    String sAddressElement(  SW_RES(ST_ADDRESSELEMENT ));
-    String sMatchesTo(       SW_RES(ST_MATCHESTO      ));
-    String sPreview(         SW_RES(ST_PREVIEW        ));
+    OUString sAddressElement( SW_RESSTR(ST_ADDRESSELEMENT) );
+    const OUString sMatchesTo( SW_RESSTR(ST_MATCHESTO) );
+    const OUString sPreview( SW_RESSTR(ST_PREVIEW) );
     if(!bIsAddressBlock)
     {
-        m_aPreviewFI.SetText(String(SW_RES(ST_SALUTATIONPREVIEW)));
-        m_aMatchingFI.SetText(String(SW_RES(ST_SALUTATIONMATCHING)));
-        sAddressElement = String(SW_RES(ST_SALUTATIONELEMENT));
+        m_aPreviewFI.SetText(SW_RESSTR(ST_SALUTATIONPREVIEW));
+        m_aMatchingFI.SetText(SW_RESSTR(ST_SALUTATIONMATCHING));
+        sAddressElement = SW_RESSTR(ST_SALUTATIONELEMENT);
     }
     FreeResource();
     Size aOutputSize(m_pFieldsControl->m_aHeaderHB.GetSizePixel());
@@ -1276,9 +1274,7 @@ SwAssignFieldsDialog::SwAssignFieldsDialog(
 
     m_pFieldsControl->SetModifyHdl(LINK(this, SwAssignFieldsDialog, AssignmentModifyHdl_Impl ));
 
-    String sMatching = m_aMatchingFI.GetText();
-    sMatching.SearchAndReplaceAscii("%1", sMatchesTo);
-    m_aMatchingFI.SetText(sMatching);
+    m_aMatchingFI.SetText(m_aMatchingFI.GetText().replaceAll("%1", sMatchesTo));
 
     m_aOK.SetClickHdl(LINK(this, SwAssignFieldsDialog, OkHdl_Impl));
 }
@@ -1299,11 +1295,8 @@ uno::Sequence< OUString > SwAssignFieldsDialog::CreateAssignments()
                 aLBIter != m_pFieldsControl->m_aMatches.end();
                     ++aLBIter, ++nIndex)
     {
-        String sSelect = (*aLBIter)->GetSelectEntry();
-        if(m_sNone != sSelect)
-            pAssignments[nIndex] = sSelect;
-        else
-            pAssignments[nIndex] = OUString();
+        const OUString sSelect = (*aLBIter)->GetSelectEntry();
+        pAssignments[nIndex] = (m_sNone != sSelect) ? sSelect : OUString();
     }
     return aAssignments;
 }
@@ -1320,7 +1313,7 @@ IMPL_LINK_NOARG(SwAssignFieldsDialog, OkHdl_Impl)
 IMPL_LINK_NOARG(SwAssignFieldsDialog, AssignmentModifyHdl_Impl)
 {
     uno::Sequence< OUString > aAssignments = CreateAssignments();
-    String sPreview = SwAddressPreview::FillData(
+    const OUString sPreview = SwAddressPreview::FillData(
             m_rPreviewString, m_rConfigItem, &aAssignments);
     m_aPreviewWIN.SetAddress(sPreview);
     return 0;
