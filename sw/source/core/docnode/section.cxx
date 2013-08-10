@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <stdlib.h>
 #include <hintids.hxx>
 #include <svl/intitem.hxx>
@@ -61,7 +60,6 @@
 
 using namespace ::com::sun::star;
 
-
 SV_IMPL_REF( SwServerObject )
 
 class SwIntrnlSectRefLink : public SwBaseLink
@@ -88,10 +86,8 @@ public:
     }
 };
 
-
 TYPEINIT1(SwSectionFmt,SwFrmFmt );
 TYPEINIT1(SwSection,SwClient );
-
 
 SwSectionData::SwSectionData(SectionType const eType, OUString const& rName)
     : m_eType(eType)
@@ -226,7 +222,6 @@ SwSection::SwSection(
     }
 }
 
-
 SwSection::~SwSection()
 {
     SwSectionFmt* pFmt = GetFmt();
@@ -299,7 +294,6 @@ bool SwSection::DataEquals(SwSectionData const& rCmp) const
     m_Data.SetEditInReadonlyFlag(bEditInReadonly);
     return bResult;
 }
-
 
 void SwSection::ImplSetHiddenFlag(bool const bTmpHidden, bool const bCondition)
 {
@@ -379,7 +373,6 @@ void SwSection::SetHidden(bool const bFlag)
     m_Data.SetHidden(bFlag);
     ImplSetHiddenFlag(bFlag, m_Data.IsCondHidden());
 }
-
 
 void SwSection::SetProtect(bool const bFlag)
 {
@@ -554,7 +547,6 @@ void SwSection::SetCondHidden(bool const bFlag)
     ImplSetHiddenFlag(m_Data.IsHidden(), bFlag);
 }
 
-
 // Set/remove the linked FileName
 OUString SwSection::GetLinkFileName() const
 {
@@ -593,7 +585,6 @@ OUString SwSection::GetLinkFileName() const
     }
     return m_Data.GetLinkFileName();
 }
-
 
 void SwSection::SetLinkFileName(const OUString& rNew, OUString const*const pPassWd)
 {
@@ -691,7 +682,6 @@ SwSectionFmt::~SwSectionFmt()
     }
 }
 
-
 SwSection * SwSectionFmt::GetSection() const
 {
     return SwIterator<SwSection,SwSectionFmt>::FirstElement( *this );
@@ -739,7 +729,6 @@ void SwSectionFmt::DelFrms()
         }
     }
 }
-
 
 // Create the Views
 void SwSectionFmt::MakeFrms()
@@ -1041,7 +1030,6 @@ void SwSectionFmt::UpdateParent()
         } while( 0 != ( pLast = ++aIter ));
 }
 
-
 SwSectionNode* SwSectionFmt::GetSectionNode(bool const bAlways)
 {
     const SwNodeIndex* pIdx = GetCntnt(sal_False).GetCntntIdx();
@@ -1105,7 +1093,6 @@ SwSectionFmt::MakeUnoObject()
     }
     return xMeta;
 }
-
 
 // Method to break section links inside a linked section
 static void lcl_BreakSectionLinksInSect( const SwSectionNode& rSectNd )
@@ -1187,7 +1174,6 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
         }
     }
 }
-
 
 ::sfx2::SvBaseLink::UpdateResult SwIntrnlSectRefLink::DataChanged(
     const OUString& rMimeType, const uno::Any & rValue )
@@ -1440,7 +1426,6 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
         }
     }
 
-
     // remove all undo actions and turn undo on again
     pDoc->GetIDocumentUndoRedo().DelAllUndoObj();
     pDoc->GetIDocumentUndoRedo().DoUndo(bWasUndo);
@@ -1458,7 +1443,6 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
 
     return SUCCESS;
 }
-
 
 void SwIntrnlSectRefLink::Closed()
 {
@@ -1505,7 +1489,6 @@ void SwIntrnlSectRefLink::Closed()
     }
     SvBaseLink::Closed();
 }
-
 
 void SwSection::CreateLink( LinkCreateType eCreateType )
 {
@@ -1604,7 +1587,6 @@ const SwNode* SwIntrnlSectRefLink::GetAnchor() const
     return rSectFmt.GetSectionNode( sal_False );
 }
 
-
 sal_Bool SwIntrnlSectRefLink::IsInRange( sal_uLong nSttNd, sal_uLong nEndNd,
                                      xub_StrLen , xub_StrLen ) const
 {
@@ -1630,6 +1612,5 @@ SwSectionFmts::~SwSectionFmts()
     for(const_iterator it = begin(); it != end(); ++it)
         delete *it;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

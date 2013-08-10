@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <hintids.hxx>
 #include <editeng/lrspitem.hxx>
@@ -220,7 +219,6 @@ SwTableNode* SwDoc::IsIdxInTbl(const SwNodeIndex& rIdx)
     } while ( nIndex );
     return pTableNd;
 }
-
 
 /**
  * Insert a new Box before the InsPos
@@ -614,7 +612,6 @@ SwTableNode* SwNodes::InsertTable( const SwNodeIndex& rNdIdx,
     }
     return pTblNd;
 }
-
 
 /**
  * Text to Table
@@ -1415,7 +1412,6 @@ SwTableNode* SwNodes::TextToTable( const SwNodes::TableRanges_t & rTableNodes,
     return pTblNd;
 }
 
-
 /**
  * Table to Text
  */
@@ -1494,7 +1490,6 @@ static void lcl_DelLine( SwTableLine* pLine, _DelTabPara* pPara )
         pPara->pLastNd = aPara.pLastNd;
 }
 
-
 static void lcl_DelBox( SwTableBox* pBox, _DelTabPara* pDelPara )
 {
     OSL_ENSURE( pDelPara, "The parameters are missing" );
@@ -1556,7 +1551,6 @@ static void lcl_DelBox( SwTableBox* pBox, _DelTabPara* pDelPara )
             pDelPara->pLastNd->ResetAttr( RES_PARATR_ADJUST );
     }
 }
-
 
 sal_Bool SwNodes::TableToText( const SwNodeRange& rRange, sal_Unicode cCh,
                             SwUndoTblToTxt* pUndo )
@@ -1670,7 +1664,6 @@ sal_Bool SwNodes::TableToText( const SwNodeRange& rRange, sal_Unicode cCh,
 
     return sal_True;
 }
-
 
 /**
  * Inserting Columns/Rows
@@ -2138,7 +2131,6 @@ sal_Bool SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn )
     return bRet;
 }
 
-
 /**
  * Split up/merge Boxes in the Table
  */
@@ -2210,7 +2202,6 @@ sal_Bool SwDoc::SplitTbl( const SwSelBoxes& rBoxes, sal_Bool bVert, sal_uInt16 n
 
     return bRet;
 }
-
 
 sal_uInt16 SwDoc::MergeTbl( SwPaM& rPam )
 {
@@ -2316,8 +2307,6 @@ sal_uInt16 SwDoc::MergeTbl( SwPaM& rPam )
     GetIDocumentUndoRedo().EndUndo( UNDO_TABLE_MERGE, NULL );
     return nRet;
 }
-
-
 
 /**
  * SwTableNode
@@ -2453,7 +2442,6 @@ void SwTableNode::DelFrms()
     }
 }
 
-
 void SwTableNode::SetNewTable( SwTable* pNewTable, sal_Bool bNewFrames )
 {
     DelFrms();
@@ -2520,9 +2508,7 @@ void SwDoc::GetTabCols( SwTabCols &rFill, const SwCursor* pCrsr,
     pTab->GetTable()->GetTabCols( rFill, pBox );
 }
 
-//
 // Here are some little helpers used in SwDoc::GetTabRows
-//
 
 #define ROWFUZZY 25
 
@@ -2547,10 +2533,7 @@ static bool lcl_IsFrmInColumn( const SwCellFrm& rFrm, SwSelBoxes& rBoxes )
     return false;
 }
 
-//
 // SwDoc::GetTabRows()
-//
-
 void SwDoc::GetTabRows( SwTabCols &rFill, const SwCursor* ,
                         const SwCellFrm* pBoxFrm ) const
 {
@@ -2922,8 +2905,6 @@ void SwDoc::SetRowsToRepeat( SwTable &rTable, sal_uInt16 nSet )
     SetModified();
 }
 
-
-
 void SwCollectTblLineBoxes::AddToUndoHistory( const SwCntntNode& rNd )
 {
     if( pHst )
@@ -3067,6 +3048,7 @@ sal_uInt16 aTableSplitBoxSetRange[] = {
     RES_PROTECT,        RES_PROTECT,
     RES_VERT_ORIENT,    RES_VERT_ORIENT,
     0 };
+
             SfxItemSet aTmpSet( pFmt->GetDoc()->GetAttrPool(),
                                 aTableSplitBoxSetRange );
             aTmpSet.Put( pFmt->GetAttrSet() );
@@ -3307,7 +3289,6 @@ public:
         pNewTblNd->GetTable().GetTabSortBoxes().insert( pBox );
     }
 };
-
 
 static void lcl_SplitTable_CpyBox( SwTableBox* pBox, _SplitTable_Para* pPara );
 
@@ -3631,7 +3612,6 @@ sal_Bool SwNodes::MergeTable( const SwNodeIndex& rPos, sal_Bool bWithPrev,
     return sal_True;
 }
 
-
 // Use the PtrArray's ForEach method
 struct _SetAFmtTabPara
 {
@@ -3713,7 +3693,6 @@ static bool lcl_SetAFmtBox( _FndBox & rBox, _SetAFmtTabPara *pSetPara )
         ++pSetPara->nCurBox;
     return true;
 }
-
 
 /**
  * AutoFormat for the Table/TableSelection
@@ -3802,7 +3781,6 @@ sal_Bool SwDoc::SetTableAutoFmt( const SwSelBoxes& rBoxes, const SwTableAutoFmt&
 
     return sal_True;
 }
-
 
 /**
  * Find out who has the Attributes
@@ -3994,7 +3972,6 @@ sal_Bool SwDoc::SetColRowWidthHeight( SwTableBox& rAktBox, sal_uInt16 eType,
     }
     return bRet;
 }
-
 
 void SwDoc::ChkBoxNumFmt( SwTableBox& rBox, sal_Bool bCallUpdate )
 {
@@ -4404,8 +4381,6 @@ sal_Bool SwDoc::InsCopyOfTbl( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
     return bRet;
 }
 
-
-
 sal_Bool SwDoc::_UnProtectTblCells( SwTable& rTbl )
 {
     bool bChgd = false;
@@ -4435,7 +4410,6 @@ sal_Bool SwDoc::_UnProtectTblCells( SwTable& rTbl )
     }
     return bChgd;
 }
-
 
 sal_Bool SwDoc::UnProtectCells( const String& rName )
 {

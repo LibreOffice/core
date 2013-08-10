@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <stdlib.h>
 
 #include <node.hxx>
@@ -44,12 +43,8 @@
 
 typedef std::vector<SwStartNode*> SwSttNdPtrs;
 
-
 // Funktion zum bestimmen des hoechsten Levels innerhalb des Bereiches
-
 sal_uInt16 HighestLevel( SwNodes & rNodes, const SwNodeRange & rRange );
-
-//-----------------------------------------------------------------------
 
 /*******************************************************************
 |*  SwNodes::SwNodes
@@ -98,7 +93,6 @@ SwNodes::SwNodes( SwDoc* pDocument )
 |*      in mehreren drin sein koennen
 |*
 *******************************************************************/
-
 SwNodes::~SwNodes()
 {
     delete pOutlineNds;
@@ -396,7 +390,6 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
     }
 }
 
-
 /***********************************************************************
 |*
 |*  SwNodes::Move
@@ -414,7 +407,6 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
 |*              ( 1.Node: aStart, letzer Node: aEnd-1 !! )
 |*
 ***********************************************************************/
-
 sal_Bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                     const SwNodeIndex& aIndex, sal_Bool bNewFrms )
 {
@@ -698,8 +690,6 @@ sal_Bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
             }
             break;
 
-
-
         case ND_SECTIONNODE:
             if( !nLevel &&
                 GetDoc()->GetIDocumentUndoRedo().IsUndoNodes(rNodes))
@@ -899,7 +889,6 @@ sal_Bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
     return sal_True;
 }
 
-
 /*******************************************************************
 |*
 |*  SwNodes::SectionDown
@@ -1069,7 +1058,6 @@ void SwNodes::SectionUp(SwNodeRange *pRange)
     SectionUpDown( aIdx, aTmpIdx );
 }
 
-
 /*************************************************************************
 |*
 |*  SwNodes::SectionUpDown()
@@ -1124,9 +1112,6 @@ void SwNodes::SectionUpDown( const SwNodeIndex & aStart, const SwNodeIndex & aEn
         }
     }
 }
-
-
-
 
 /*******************************************************************
 |*
@@ -1440,7 +1425,6 @@ SwCntntNode* SwNodes::GoPrevious(SwNodeIndex *pIdx) const
 |*                                  sal_False:  ungueltiger SRange
 |*
 *************************************************************************/
-
 inline int TstIdx( sal_uLong nSttIdx, sal_uLong nEndIdx, sal_uLong nStt, sal_uLong nEnd )
 {
     return nStt < nSttIdx && nEnd >= nSttIdx &&
@@ -1463,7 +1447,6 @@ sal_Bool SwNodes::CheckNodesRange( const SwNodeIndex& rStt, const SwNodeIndex& r
 
     return sal_False;       // liegt irgendwo dazwischen, FEHLER
 }
-
 
 /*************************************************************************
 |*
@@ -1532,7 +1515,6 @@ void SwNodes::DelNodes( const SwNodeIndex & rStart, sal_uLong nCnt )
             UpdtOutlineIdx( rStart.GetNode() );
     }
 }
-
 
 /*************************************************************************
 |*
@@ -1820,8 +1802,6 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
                 rNodes.IsDocNodes() ? SWFMTFLD_INSERTED : SWFMTFLD_REMOVED ) );
 }
 
-
-
 /*************************************************************************
 |*
 |*    SwNodes::_Copy()
@@ -1832,7 +1812,6 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
 |*                      SwIndex&    auf diese Position im Nodes-Array
 |*
 *************************************************************************/
-
 void SwNodes::_CopyNodes( const SwNodeRange& rRange,
             const SwNodeIndex& rIndex, sal_Bool bNewFrms, sal_Bool bTblInsDummyNode ) const
 {
@@ -2061,7 +2040,6 @@ SwStartNode* SwNodes::MakeEmptySection( const SwNodeIndex& rIdx,
     return pSttNd;
 }
 
-
 SwStartNode* SwNodes::MakeTextSection( const SwNodeIndex & rWhere,
                                         SwStartNodeType eSttNdTyp,
                                         SwTxtFmtColl *pColl,
@@ -2183,7 +2161,6 @@ SwCntntNode* SwNodes::GoPrevSection( SwNodeIndex * pIdx,
     }
     return 0;
 }
-
 
     // suche den vorhergehenden [/nachfolgenden ] ContentNode oder
     // TabellenNode mit Frames. Wird kein Ende angeben, dann wird mit

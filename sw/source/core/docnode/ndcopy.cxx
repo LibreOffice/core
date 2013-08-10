@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <editeng/formatbreakitem.hxx>
 
 #include <hintids.hxx>
@@ -521,7 +520,6 @@ void SwTxtNode::CopyCollFmt( SwTxtNode& rDestNd )
     if( aPgBrkSet.Count() )
         rDestNd.SetAttr( aPgBrkSet );
 }
-
 
 // Copy method from SwDoc
 // Prevent copying in Flys that are anchored in the area
@@ -1614,8 +1612,5 @@ void SwDoc::CopyFlyInFlyImpl( const SwNodeRange& rRg,
         }
     }
 }
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

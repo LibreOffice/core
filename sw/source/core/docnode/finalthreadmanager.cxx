@@ -16,6 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #include <finalthreadmanager.hxx>
 
 #include <osl/thread.hxx>
@@ -86,6 +87,7 @@ bool CancelJobsThread::allJobsCancelled() const
 
     return maJobs.empty() && mbAllJobsCancelled;
 }
+
 void CancelJobsThread::stopWhenAllJobsCancelled()
 {
     osl::MutexGuard aGuard(maMutex);
@@ -226,7 +228,6 @@ void SAL_CALL TerminateOfficeThread::onTerminated()
     if ( OfficeTerminationStopped() )
         delete this;
 }
-
 
 /** class FinalThreadManager
 

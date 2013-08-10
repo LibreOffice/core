@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <svl/smplhint.hxx>
 #include <hintids.hxx>
 #include <sfx2/linkmgr.hxx>
@@ -54,7 +53,6 @@
 // #i27138#
 #include <viewsh.hxx>
 #include <txtfrm.hxx>
-
 
 // #i21457# - new implementation of local method <lcl_IsInSameTblBox(..)>.
 // Method now determines the previous/next on its own. Thus, it can be controlled,
@@ -967,10 +965,7 @@ SwSectionNode* SwNode::FindSectionNode()
     return pTmp->GetSectionNode();
 }
 
-
-//---------
 // SwSectionNode
-//---------
 
 // ugly hack to make m_pSection const
 static SwSectionFmt &
@@ -1046,7 +1041,6 @@ SwSectionNode::~SwSectionNode()
         pFmt->UnlockModify();
     }
 }
-
 
 SwFrm *SwSectionNode::MakeFrm( SwFrm *pSib )
 {
@@ -1264,7 +1258,6 @@ SwSectionNode* SwSectionNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) c
         }
     }
 
-
     pNewSect->SetType( GetSection().GetType() );
     pNewSect->SetCondition( GetSection().GetCondition() );
     pNewSect->SetLinkFileName( GetSection().GetLinkFileName() );
@@ -1327,7 +1320,6 @@ sal_Bool SwSectionNode::IsCntntHidden() const
     return sal_True; // Hide everything
 }
 
-
 void SwSectionNode::NodesArrChgd()
 {
     SwSectionFmt *const pFmt = m_pSection->GetFmt();
@@ -1383,7 +1375,6 @@ void SwSectionNode::NodesArrChgd()
     }
 }
 
-
 OUString SwDoc::GetUniqueSectionName( const OUString* pChkStr ) const
 {
     const OUString aName( ResId( STR_REGION_DEFNAME, *pSwResMgr ) );
@@ -1431,6 +1422,5 @@ OUString SwDoc::GetUniqueSectionName( const OUString* pChkStr ) const
         return *pChkStr;
     return aName + OUString::number( ++nNum );
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

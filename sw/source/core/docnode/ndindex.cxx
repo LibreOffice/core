@@ -17,9 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "ndindex.hxx"
-
 
 SwNodeRange::SwNodeRange( const SwNodeIndex &rS, const SwNodeIndex &rE )
     : aStart( rS ), aEnd( rE )
@@ -33,7 +31,6 @@ SwNodeRange::SwNodeRange( SwNodes& rNds, sal_uLong nSttIdx, sal_uLong nEndIdx )
     : aStart( rNds, nSttIdx ), aEnd( rNds, nEndIdx )
 {}
 
-
 SwNodeRange::SwNodeRange( const SwNodeIndex& rS, long nSttDiff,
                           const SwNodeIndex& rE, long nEndDiff )
     : aStart( rS, nSttDiff ), aEnd( rE, nEndDiff )
@@ -44,13 +41,11 @@ SwNodeRange::SwNodeRange( const SwNode& rS, long nSttDiff,
     : aStart( rS, nSttDiff ), aEnd( rE, nEndDiff )
 {}
 
-
 SwNodeIndex::SwNodeIndex( SwNodes& rNds, sal_uLong nIdx )
     : pNd( rNds[ nIdx ] ), pNext( 0 ), pPrev( 0 )
 {
     rNds.RegisterIndex( *this );
 }
-
 
 SwNodeIndex::SwNodeIndex( const SwNodeIndex& rIdx, long nDiff )
     : pNext( 0 ), pPrev( 0 )
@@ -63,7 +58,6 @@ SwNodeIndex::SwNodeIndex( const SwNodeIndex& rIdx, long nDiff )
     pNd->GetNodes().RegisterIndex( *this );
 }
 
-
 SwNodeIndex::SwNodeIndex( const SwNode& rNd, long nDiff )
     : pNext( 0 ), pPrev( 0 )
 {
@@ -74,7 +68,6 @@ SwNodeIndex::SwNodeIndex( const SwNode& rNd, long nDiff )
 
     pNd->GetNodes().RegisterIndex( *this );
 }
-
 
 void SwNodeIndex::Remove()
 {
@@ -136,6 +129,5 @@ SwNodeIndex& SwNodeIndex::Assign( const SwNode& rNd, long nOffset )
 
     return *this;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

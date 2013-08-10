@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <hintids.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
@@ -81,7 +80,6 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
     }
     rGrfNd.UnlockModify();
 }
-
 
 ::sfx2::SvBaseLink::UpdateResult SwBaseLink::DataChanged(
     const OUString& rMimeType, const uno::Any & rValue )
@@ -273,7 +271,6 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
             pCntntNode->ModifyNotification( &aMsgHint, &aMsgHint );
         }
 
-
         if( pESh )
         {
             const sal_Bool bEndActionByVirDev = pESh->IsEndActionByVirDev();
@@ -373,7 +370,6 @@ sal_Bool SetGrfFlySize( const Size& rGrfSz, const Size& rFrmSz, SwGrfNode* pGrfN
 
     return bRet;
 }
-
 
 sal_Bool SwBaseLink::SwapIn( sal_Bool bWaitForData, sal_Bool bNativFormat )
 {
