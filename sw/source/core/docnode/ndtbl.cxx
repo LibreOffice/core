@@ -1339,12 +1339,10 @@ SwTableNode* SwNodes::TextToTable( const SwNodes::TableRanges_t & rTableNodes,
    new SwEndNode( aInsertIndex, *pTblNd );
 
 #if OSL_DEBUG_LEVEL > 1
-    /**debug**/
     const SwNodeRange& rStartRange = *rTableNodes.begin()->begin();
     const SwNodeRange& rEndRange = *rTableNodes.rbegin()->rbegin();
     (void) rStartRange;
     (void) rEndRange;
-    /**debug**/
 #endif
 
     SwDoc* pDoc = GetDoc();
@@ -2533,7 +2531,6 @@ static bool lcl_IsFrmInColumn( const SwCellFrm& rFrm, SwSelBoxes& rBoxes )
     return false;
 }
 
-// SwDoc::GetTabRows()
 void SwDoc::GetTabRows( SwTabCols &rFill, const SwCursor* ,
                         const SwCellFrm* pBoxFrm ) const
 {

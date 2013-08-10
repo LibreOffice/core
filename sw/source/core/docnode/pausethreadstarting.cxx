@@ -20,12 +20,10 @@
 #include <pausethreadstarting.hxx>
 #include <swthreadmanager.hxx>
 
-/** Helper class to pause starting of threads during existence of an instance
+/* Helper class to pause starting of threads during existence of an instance
     of this class
 
     #i73788#
-
-    @author OD
 */
 
 SwPauseThreadStarting::SwPauseThreadStarting()

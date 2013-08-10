@@ -20,11 +20,9 @@
 #include <observablethread.hxx>
 #include <boost/shared_ptr.hpp>
 
-/** class for an observable thread
+/* class for an observable thread
 
    #i73788#
-
-    @author OD
 */
 ObservableThread::ObservableThread()
     : mnRefCount( 0 ),

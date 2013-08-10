@@ -249,18 +249,17 @@ sal_uInt16 ClearItem_BC( boost::shared_ptr<const SfxItemSet>& mrpAttrSet,
 
 }
 
-/*******************************************************************
-|* Returns the section level at the position given by aIndex.
-|*
-|* We use the following logic:
-|* S = Start, E = End, C = CntntNode
-|* Level   0 = E
-|*         1 = S E
-|*         2 = SC
-|*
-|* All EndNodes of the BaseSection have level 0
-|* All StartNodes of the BaseSection have level 1
-*******************************************************************/
+/** Returns the section level at the position given by aIndex.
+ *
+ * We use the following logic:
+ * S = Start, E = End, C = CntntNode
+ * Level   0 = E
+ *         1 = S E
+ *         2 = SC
+ *
+ * All EndNodes of the BaseSection have level 0
+ * All StartNodes of the BaseSection have level 1
+ */
 sal_uInt16 SwNode::GetSectionLevel() const
 {
     // EndNode of a BaseSection? They are always 0!
@@ -273,21 +272,6 @@ sal_uInt16 SwNode::GetSectionLevel() const
         pNode = pNode->pStartOfSection;
     return IsEndNode() ? nLevel-1 : nLevel;
 }
-
-/*******************************************************************
-|* Inserts a node into the rNodes array at the rWhere position
-|* For the theEndOfSection it is passed the EndOfSection index of
-|* the preceding node. If it is at position 0 of the variable array
-|* theEndOfSection becomes 0 (itsef the new one).
-|*
-|* Parameters
-|*      IN
-|*      rNodes is the variable array in which the node will be
-|*      inserted
-|*      IN
-|*      rWhere is the position within the array where the node will
-|*      be inserted
-*******************************************************************/
 
 #ifdef DBG_UTIL
 long SwNode::s_nSerial = 0;
@@ -325,6 +309,12 @@ SwNode::SwNode( const SwNodeIndex &rWhere, const sal_uInt8 nNdType )
     }
 }
 
+/** Inserts a node into the rNodes array at the rWhere position
+ *
+ * @param rNodes the variable array in that the node will be inserted
+ * @param nPos position within the array where the node will be inserted
+ * @param nNdType the type of node to insert
+ */
 SwNode::SwNode( SwNodes& rNodes, sal_uLong nPos, const sal_uInt8 nNdType )
     : nNodeType( nNdType )
     , nAFmtNumLvl( 0 )
@@ -360,8 +350,8 @@ SwNode::~SwNode()
 {
 }
 
-// Find the TableNode in which it is located.
-// If we're not in a table: return 0
+/// Find the TableNode in which it is located.
+/// If we're not in a table: return 0
 SwTableNode* SwNode::FindTableNode()
 {
     if( IsTableNode() )
@@ -372,7 +362,7 @@ SwTableNode* SwNode::FindTableNode()
     return pTmp->GetTableNode();
 }
 
-// Is the node located in the visible area of the Shell?
+/// Is the node located in the visible area of the Shell?
 sal_Bool SwNode::IsInVisibleArea( ViewShell* pSh ) const
 {
     sal_Bool bRet = sal_False;
@@ -424,9 +414,9 @@ bool SwNode::IsInProtectSect() const
     return pSectNd && pSectNd->GetSection().IsProtectFlag();
 }
 
-// Does the node contain anything protected?
-// I.e.: Area/Frame/Table rows/... including the Anchor for
-// Frames/Footnotes/...
+/// Does the node contain anything protected?
+/// I.e.: Area/Frame/Table rows/... including the Anchor for
+/// Frames/Footnotes/...
 sal_Bool SwNode::IsProtect() const
 {
     const SwNode* pNd = ND_SECTIONNODE == nNodeType ? pStartOfSection : this;
@@ -469,8 +459,8 @@ sal_Bool SwNode::IsProtect() const
     return sal_False;
 }
 
-// Find the PageDesc that is used to format this node. If the Layout is available,
-// we search through that. Else we can only do it the hard way by searching onwards through the nodes.
+/// Find the PageDesc that is used to format this node. If the Layout is available,
+/// we search through that. Else we can only do it the hard way by searching onwards through the nodes.
 const SwPageDesc* SwNode::FindPageDesc( sal_Bool bCalcLay,
                                         sal_uInt32* pPgDescNdIdx ) const
 {
@@ -499,7 +489,7 @@ const SwPageDesc* SwNode::FindPageDesc( sal_Bool bCalcLay,
             pPgDesc = ((SwFmtPageDesc&)pNode->GetAttr( RES_PAGEDESC )).GetPageDesc();
     }
 
-    // Are we going through the Layout?
+    // Are we going through the layout?
     if( !pPgDesc )
     {
         const SwFrm* pFrm;
@@ -598,7 +588,7 @@ const SwPageDesc* SwNode::FindPageDesc( sal_Bool bCalcLay,
             }
             else
             {
-                // Find the Body Textnode
+                // Find the Body text node
                 if( 0 != ( pSttNd = pNd->FindHeaderStartNode() ) ||
                     0 != ( pSttNd = pNd->FindFooterStartNode() ))
                 {
@@ -648,7 +638,7 @@ const SwPageDesc* SwNode::FindPageDesc( sal_Bool bCalcLay,
                 }
                 else if( 0 != ( pSttNd = pNd->FindFootnoteStartNode() ))
                 {
-                    // iThe Anchor can only be in the Bodytext
+                    // the Anchor can only be in the Body text
                     const SwTxtFtn* pTxtFtn;
                     const SwFtnIdxs& rFtnArr = pDoc->GetFtnIdxs();
                     for( sal_uInt16 n = 0; n < rFtnArr.size(); ++n )
@@ -663,7 +653,7 @@ const SwPageDesc* SwNode::FindPageDesc( sal_Bool bCalcLay,
                 else
                 {
                     // Can only be a page-bound Fly (or something newer).
-                    // WE can only return the standard here
+                    // we can only return the standard here
                     OSL_ENSURE( pNd->FindFlyStartNode(),
                             "Where is this Node?" );
 
@@ -713,7 +703,7 @@ const SwPageDesc* SwNode::FindPageDesc( sal_Bool bCalcLay,
     return pPgDesc;
 }
 
-// If the node is located in a Fly, we return it formatted accordingly
+/// If the node is located in a Fly, we return it formatted accordingly
 SwFrmFmt* SwNode::GetFlyFmt() const
 {
     SwFrmFmt* pRet = 0;
@@ -855,13 +845,6 @@ sal_uInt8 SwNode::HasPrevNextLayNode() const
     return nRet;
 }
 
-/*******************************************************************
-|* Retruns the node's StartOfSection
-|*
-|* Parameters
-|*      IN
-|*      rNodes is the variable array in which the node is contained
-*******************************************************************/
 SwStartNode::SwStartNode( const SwNodeIndex &rWhere, const sal_uInt8 nNdType,
                             SwStartNodeType eSttNd )
     : SwNode( rWhere, nNdType ), eSttNdTyp( eSttNd )
@@ -889,19 +872,15 @@ void SwStartNode::CheckSectionCondColl() const
 //FEATURE::CONDCOLL
 }
 
-/*******************************************************************
-|* Inserts a node into the array rNodes at the position aWhere.
-|* The theStartOfSection pointer is set accordingly.
-|* The EndOfSection pointer of the corresponding StartNodes (identified
-|* by rStartOfSection) is set to this node.
-|*
-|* Parameters
-|*      IN
-|*      rNodes is the variable array in which the node is contained
-|*      IN
-|*      aWhere is the position where the node is inserted
-|*      We pass a copy!
-*******************************************************************/
+/** Insert a node into the array
+ *
+ * The StartOfSection pointer is set to the given node.
+ *
+ * The EndOfSection pointer of the corresponding start node is set to this node.
+ *
+ * @param rWhere position where the node shoul be inserted
+ * @param rSttNd the start note of the section
+ */
 
 SwEndNode::SwEndNode( const SwNodeIndex &rWhere, SwStartNode& rSttNd )
     : SwNode( rWhere, ND_ENDNODE )
@@ -1198,7 +1177,7 @@ sal_Bool SwCntntNode::GoPrevious(SwIndex * pIdx, sal_uInt16 nMode ) const
     return bRet;
 }
 
-/*
+/**
  * Creates all Views for the Doc for this Node.
  * The created ContentFrames are attached to the corresponding Layout.
  */
@@ -1240,7 +1219,7 @@ void SwCntntNode::MakeFrms( SwCntntNode& rNode )
     }
 }
 
-/*
+/**
  * Deletes all Views from the Doc for this Node.
  * The ContentFrames are removed from the corresponding Layout.
  */
@@ -1277,7 +1256,7 @@ SwCntntNode *SwCntntNode::JoinPrev()
     return this;
 }
 
-// Get info from Modify
+/// Get info from Modify
 bool SwCntntNode::GetInfo( SfxPoolItem& rInfo ) const
 {
     switch( rInfo.Which() )
@@ -1306,7 +1285,7 @@ bool SwCntntNode::GetInfo( SfxPoolItem& rInfo ) const
     return SwModify::GetInfo( rInfo );
 }
 
-// Set an Attribute
+/// @param rAttr the attribute to set
 sal_Bool SwCntntNode::SetAttr(const SfxPoolItem& rAttr )
 {
     if( !GetpSwAttrSet() ) // Have the Nodes created by the corresponding AttrSets
@@ -1615,8 +1594,8 @@ static bool lcl_CheckMaxLength(SwNode const& rPrev, SwNode const& rNext)
     return (nSum <= TXTNODE_MAX);
 }
 
-// Can we join two Nodes?
-// We can return the 2nd position in pIdx.
+/// Can we join two Nodes?
+/// We can return the 2nd position in pIdx.
 int SwCntntNode::CanJoinNext( SwNodeIndex* pIdx ) const
 {
     const SwNodes& rNds = GetNodes();
@@ -1639,8 +1618,8 @@ int SwCntntNode::CanJoinNext( SwNodeIndex* pIdx ) const
     return sal_True;
 }
 
-// Can we join two Nodes?
-// We can return the 2nd position in pIdx.
+/// Can we join two Nodes?
+/// We can return the 2nd position in pIdx.
 int SwCntntNode::CanJoinPrev( SwNodeIndex* pIdx ) const
 {
     SwNodeIndex aIdx( *this, -1 );

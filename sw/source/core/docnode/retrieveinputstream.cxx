@@ -21,11 +21,9 @@
 #include <comphelper/mediadescriptor.hxx>
 #include <com/sun/star/io/XStream.hpp>
 
-/** class for a thread to retrieve an input stream given by an URL
+/* class for a thread to retrieve an input stream given by an URL
 
     #i73788#
-
-    @author OD
 */
 ::rtl::Reference< ObservableThread > SwAsyncRetrieveInputStreamThread::createThread(
                         const SwRetrievedInputStreamDataManager::tDataKey nDataKey,

@@ -143,21 +143,6 @@ static bool lcl_GetBoxSel( const SwCursor& rCursor, SwSelBoxes& rBoxes,
     return !rBoxes.empty();
 }
 
-/**
- * Class:  SwDoc
- * Methods:  SetRowHeight(), GetRowHeight()
- *
- * The line height is calculated from the Selection.
- * Starting with every Cell within the Selection, all Cells are iterated
- * through in an upwards fashion.
- *
- * The topmost Line gets the requested value, all Lines below it get
- * a respective value that is calculated from the relation of the old and
- * new size of the topmost Line in the lower line's own size.
- *
- * All changed Lines may get an own FrmFmt.
- * Of course we can only touch every Line once.
- */
 inline void InsertLine( std::vector<SwTableLine*>& rLineArr, SwTableLine* pLine )
 {
     if( rLineArr.end() == std::find( rLineArr.begin(), rLineArr.end(), pLine ) )
@@ -358,6 +343,21 @@ void SwDoc::GetRowSplit( const SwCursor& rCursor, SwFmtRowSplit *& rpSz ) const
     }
 }
 
+/* Class:  SwDoc
+ * Methods:  SetRowHeight(), GetRowHeight()
+ *
+ * The line height is calculated from the Selection.
+ * Starting with every Cell within the Selection, all Cells are iterated
+ * through in an upwards fashion.
+ *
+ * The topmost Line gets the requested value, all Lines below it get
+ * a respective value that is calculated from the relation of the old and
+ * new size of the topmost Line in the lower line's own size.
+ *
+ * All changed Lines may get an own FrmFmt.
+ * Of course we can only touch every Line once.
+ */
+
 void SwDoc::SetRowHeight( const SwCursor& rCursor, const SwFmtFrmSize &rNew )
 {
     SwTableNode* pTblNd = rCursor.GetPoint()->nNode.GetNode().FindTableNode();
@@ -509,10 +509,6 @@ sal_Bool SwDoc::GetRowBackground( const SwCursor& rCursor, SvxBrushItem &rToFill
     return bRet;
 }
 
-/**
- * Class: SwDoc
- * Methods: SetTabBorders(), GetTabBorders()
- */
 inline void InsertCell( std::vector<SwCellFrm*>& rCellArr, SwCellFrm* pCellFrm )
 {
     if( rCellArr.end() == std::find( rCellArr.begin(), rCellArr.end(), pCellFrm ) )
@@ -1259,10 +1255,6 @@ sal_uInt16 SwDoc::GetBoxAlign( const SwCursor& rCursor ) const
     return nAlign;
 }
 
-/**
- * Class: SwDoc
- * Methods: AdjustCellWidth()
- */
 static sal_uInt16 lcl_CalcCellFit( const SwLayoutFrm *pCell )
 {
     SwTwips nRet = 0;
@@ -1291,8 +1283,7 @@ static sal_uInt16 lcl_CalcCellFit( const SwLayoutFrm *pCell )
     return (sal_uInt16)std::max( long(MINLAY), nRet );
 }
 
-/**
- * The Line is within the Selection but not outlined by the TabCols.
+/* The Line is within the Selection but not outlined by the TabCols.
  *
  * That means that the Line has been "split" by other Cells due to the
  * two-dimensional representation used. Thus, we have to distribute the cell's
