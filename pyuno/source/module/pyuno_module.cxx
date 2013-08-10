@@ -867,6 +867,7 @@ extern "C"
 #if PY_MAJOR_VERSION >= 3
 PyObject* PyInit_pyuno()
 {
+    PyUNO_initType();
     // noop when called already, otherwise needed to allow multiple threads
     PyEval_InitThreads();
     static struct PyModuleDef moduledef =
@@ -886,6 +887,7 @@ PyObject* PyInit_pyuno()
 #else
 void initpyuno()
 {
+    PyUNO_initType();
     PyEval_InitThreads();
     Py_InitModule ("pyuno", PyUNOModule_methods);
 }
