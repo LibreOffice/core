@@ -38,7 +38,6 @@
 
 namespace treeview {
 
-
     class ConfigData
     {
     public:
@@ -57,7 +56,6 @@ namespace treeview {
 
         void SAL_CALL replaceName( OUString& oustring ) const;
     };
-
 
     class TVDom;
     class TVChildTarget;
@@ -92,11 +90,9 @@ namespace treeview {
             void )
             throw();
 
-
         // XTypeProvider
 
         XTYPEPROVIDER_DECL()
-
 
         // XNameAccess
 
@@ -106,7 +102,6 @@ namespace treeview {
         {
             return getCppuVoidType();
         }
-
 
         virtual sal_Bool SAL_CALL hasElements()
             throw( com::sun::star::uno::RuntimeException )
@@ -134,7 +129,6 @@ namespace treeview {
             (void)aListener;
         }
 
-
         // XComponent
 
         virtual void SAL_CALL dispose( )
@@ -157,7 +151,6 @@ namespace treeview {
             (void)aListener;
         }
 
-
         // Abstract functions
         // XNameAccess
 
@@ -175,7 +168,6 @@ namespace treeview {
         hasByName( const OUString& aName )
             throw( com::sun::star::uno::RuntimeException ) = 0;
 
-
         // XHierarchicalNameAccess
 
         virtual com::sun::star::uno::Any SAL_CALL
@@ -188,10 +180,6 @@ namespace treeview {
             throw( com::sun::star::uno::RuntimeException ) = 0;
 
     }; // end class TVBase
-
-
-
-
 
     class TVRead
         : public TVBase
@@ -219,7 +207,6 @@ namespace treeview {
         hasByName( const OUString& aName )
             throw( com::sun::star::uno::RuntimeException );
 
-
         // XHierarchicalNameAccess
 
         virtual com::sun::star::uno::Any SAL_CALL
@@ -231,7 +218,6 @@ namespace treeview {
         hasByHierarchicalName( const OUString& aName )
             throw( com::sun::star::uno::RuntimeException );
 
-
     private:
 
         OUString                    Title;
@@ -239,11 +225,6 @@ namespace treeview {
         rtl::Reference< TVChildTarget >  Children;
 
     };  // end class TVRead
-
-
-
-
-
 
     class TVChildTarget
         : public TVBase
@@ -270,7 +251,6 @@ namespace treeview {
         hasByName( const OUString& aName )
             throw( com::sun::star::uno::RuntimeException );
 
-
         // XHierarchicalNameAccess
 
         virtual com::sun::star::uno::Any SAL_CALL
@@ -281,7 +261,6 @@ namespace treeview {
         virtual sal_Bool SAL_CALL
         hasByHierarchicalName( const OUString& aName )
             throw( com::sun::star::uno::RuntimeException );
-
 
     private:
         std::vector< rtl::Reference< TVRead > >   Elements;
@@ -313,7 +292,6 @@ namespace treeview {
     void Check(TVDom* tvDom);
 
     };  // end class TVChildTarget
-
 
     enum IteratorState
     {
@@ -370,8 +348,6 @@ namespace treeview {
 
     }; // end class ExtensionIteratorBase
 
-
-    //===================================================================
     class TreeFileIterator : public ExtensionIteratorBase
     {
     public:
@@ -388,9 +364,7 @@ namespace treeview {
 
     }; // end class TreeFileIterator
 
-
 }
-
 
 #endif
 

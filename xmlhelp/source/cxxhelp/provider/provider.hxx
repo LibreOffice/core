@@ -28,10 +28,7 @@
 #include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 
-
 namespace chelp {
-
-//=========================================================================
 
 // UNO service name for the provider. This name will be used by the UCB to
 // create instances of the provider.
@@ -50,11 +47,7 @@ namespace chelp {
 #define MYUCP_URL_SCHEME_LENGTH 18
 #define MYUCP_CONTENT_TYPE      "application/vnd.sun.star.xmlhelp"    // UCB Content Type.
 
-//=========================================================================
-
-
     class Databases;
-
 
     class ContentProvider :
         public ::ucbhelper::ContentProviderImplHelper,
@@ -84,9 +77,7 @@ namespace chelp {
             throw( ::com::sun::star::ucb::IllegalIdentifierException,
                    ::com::sun::star::uno::RuntimeException );
 
-        //////////////////////////////////////////////////////////////////////
         // Additional interfaces
-        //////////////////////////////////////////////////////////////////////
 
         // XComponent
 
@@ -136,10 +127,7 @@ namespace chelp {
         elementReplaced( const ::com::sun::star::container::ContainerEvent& Event )
             throw (::com::sun::star::uno::RuntimeException);
 
-
-        //////////////////////////////////////////////////////////////////////
         // Non-interface methods.
-        //////////////////////////////////////////////////////////////////////
 
     private:
 

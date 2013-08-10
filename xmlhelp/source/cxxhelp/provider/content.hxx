@@ -37,13 +37,9 @@ namespace com { namespace sun { namespace star { namespace sdbc {
 namespace chelp
 {
 
-//=========================================================================
-
 // UNO service name for the content.
 #define MYUCP_CONTENT_SERVICE_NAME \
                             "com.sun.star.ucb.CHelpContent"
-
-//=========================================================================
 
     class Databases;
 
@@ -54,8 +50,6 @@ namespace chelp
 
         ContentProperties() {}
     };
-
-//=========================================================================
 
     class Content : public ::ucbhelper::ContentImplHelper
     {
@@ -104,7 +98,6 @@ namespace chelp
         abort( sal_Int32 CommandId )
             throw( com::sun::star::uno::RuntimeException );
 
-
     private:
 
         // private members;
@@ -112,7 +105,6 @@ namespace chelp
         ContentProperties m_aProps;
         URLParameter      m_aURLParameter;
         Databases*        m_pDatabases;
-
 
         // private methods
 
@@ -131,7 +123,6 @@ namespace chelp
         void setPropertyValues(
             const ::com::sun::star::uno::Sequence<
             ::com::sun::star::beans::PropertyValue >& rValues );
-
 
     };
 

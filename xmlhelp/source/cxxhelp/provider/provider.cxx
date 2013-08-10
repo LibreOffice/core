@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 /**************************************************************************
                                 TODO
  **************************************************************************
@@ -48,13 +47,7 @@
 using namespace com::sun::star;
 using namespace chelp;
 
-//=========================================================================
-//=========================================================================
-//
 // ContentProvider Implementation.
-//
-//=========================================================================
-//=========================================================================
 
 ContentProvider::ContentProvider(
     const uno::Reference< uno::XComponentContext >& rxContext )
@@ -65,18 +58,13 @@ ContentProvider::ContentProvider(
 {
 }
 
-//=========================================================================
 // virtual
 ContentProvider::~ContentProvider()
 {
     delete m_pDatabases;
 }
 
-//=========================================================================
-//
 // XInterface methods.
-//
-//=========================================================================
 
 XINTERFACE_IMPL_6( ContentProvider,
                    lang::XTypeProvider,
@@ -86,11 +74,7 @@ XINTERFACE_IMPL_6( ContentProvider,
                    lang::XEventListener, /* base of XContainerListener */
                    container::XContainerListener);
 
-//=========================================================================
-//
 // XTypeProvider methods.
-//
-//=========================================================================
 
 XTYPEPROVIDER_IMPL_5( ContentProvider,
                          lang::XTypeProvider,
@@ -99,11 +83,7 @@ XTYPEPROVIDER_IMPL_5( ContentProvider,
                       lang::XComponent,
                       container::XContainerListener);
 
-//=========================================================================
-//
 // XServiceInfo methods.
-//
-//=========================================================================
 
 OUString SAL_CALL ContentProvider::getImplementationName()
     throw( uno::RuntimeException )
@@ -162,19 +142,11 @@ ContentProvider::getSupportedServiceNames_Static()
     return aSNS;
 }
 
-//=========================================================================
-//
 // Service factory implementation.
-//
-//=========================================================================
 
 ONE_INSTANCE_SERVICE_FACTORY_IMPL( ContentProvider );
 
-//=========================================================================
-//
 // XContentProvider methods.
-//
-//=========================================================================
 
 // virtual
 uno::Reference< ucb::XContent > SAL_CALL
@@ -392,8 +364,6 @@ ContentProvider::getHierAccess(
     }
     return xHierAccess;
 }
-
-
 
 OUString
 ContentProvider::getKey(

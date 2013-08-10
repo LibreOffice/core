@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 /**************************************************************************
                                 TODO
  **************************************************************************
@@ -52,13 +51,7 @@
 using namespace com::sun::star;
 using namespace chelp;
 
-//=========================================================================
-//=========================================================================
-//
 // Content Implementation.
-//
-//=========================================================================
-//=========================================================================
 
 Content::Content( const uno::Reference< uno::XComponentContext >& rxContext,
                   ::ucbhelper::ContentProviderImplHelper* pProvider,
@@ -71,17 +64,12 @@ Content::Content( const uno::Reference< uno::XComponentContext >& rxContext,
 {
 }
 
-//=========================================================================
 // virtual
 Content::~Content()
 {
 }
 
-//=========================================================================
-//
 // XInterface methods.
-//
-//=========================================================================
 
 // virtual
 void SAL_CALL Content::acquire()
@@ -90,7 +78,6 @@ void SAL_CALL Content::acquire()
     ContentImplHelper::acquire();
 }
 
-//=========================================================================
 // virtual
 void SAL_CALL Content::release()
     throw( )
@@ -98,7 +85,6 @@ void SAL_CALL Content::release()
     ContentImplHelper::release();
 }
 
-//=========================================================================
 // virtual
 uno::Any SAL_CALL Content::queryInterface( const uno::Type & rType )
     throw ( uno::RuntimeException )
@@ -107,15 +93,10 @@ uno::Any SAL_CALL Content::queryInterface( const uno::Type & rType )
      return aRet.hasValue() ? aRet : ContentImplHelper::queryInterface( rType );
 }
 
-//=========================================================================
-//
 // XTypeProvider methods.
-//
-//=========================================================================
 
 XTYPEPROVIDER_COMMON_IMPL( Content );
 
-//=========================================================================
 // virtual
 uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
     throw( uno::RuntimeException )
@@ -145,11 +126,7 @@ uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
     return (*pCollection).getTypes();
 }
 
-//=========================================================================
-//
 // XServiceInfo methods.
-//
-//=========================================================================
 
 // virtual
 OUString SAL_CALL Content::getImplementationName()
@@ -158,7 +135,6 @@ OUString SAL_CALL Content::getImplementationName()
     return OUString( "CHelpContent" );
 }
 
-//=========================================================================
 // virtual
 uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
     throw( uno::RuntimeException )
@@ -169,11 +145,7 @@ uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
     return aSNS;
 }
 
-//=========================================================================
-//
 // XContent methods.
-//
-//=========================================================================
 
 // virtual
 OUString SAL_CALL Content::getContentType()
@@ -182,19 +154,13 @@ OUString SAL_CALL Content::getContentType()
     return OUString( MYUCP_CONTENT_TYPE );
 }
 
-//=========================================================================
-//
 // XCommandProcessor methods.
-//
-//=========================================================================
 
 //virtual
 void SAL_CALL Content::abort( sal_Int32 /*CommandId*/ )
     throw( uno::RuntimeException )
 {
 }
-
-
 
 class ResultSetForRootFactory
     : public ResultSetFactory
@@ -208,7 +174,6 @@ private:
     uno::Sequence< ucb::NumberedSortingInfo >    m_seqSort;
     URLParameter                                 m_aURLParameter;
     Databases*                                   m_pDatabases;
-
 
 public:
 
@@ -242,8 +207,6 @@ public:
     }
 };
 
-
-
 class ResultSetForQueryFactory
     : public ResultSetFactory
 {
@@ -256,7 +219,6 @@ private:
     uno::Sequence< ucb::NumberedSortingInfo >    m_seqSort;
     URLParameter                                 m_aURLParameter;
     Databases*                                   m_pDatabases;
-
 
 public:
 
@@ -289,8 +251,6 @@ public:
                                       m_pDatabases );
     }
 };
-
-
 
 // virtual
 uno::Any SAL_CALL Content::execute(
@@ -421,9 +381,7 @@ uno::Any SAL_CALL Content::execute(
     }
     else
     {
-        //////////////////////////////////////////////////////////////////
         // Unsupported command
-        //////////////////////////////////////////////////////////////////
         aRet <<= ucb::UnsupportedCommandException();
         ucbhelper::cancelCommandExecution(aRet,Environment);
     }
@@ -431,10 +389,6 @@ uno::Any SAL_CALL Content::execute(
     return aRet;
 }
 
-
-
-
-//=========================================================================
 uno::Reference< sdbc::XRow > Content::getPropertyValues(
     const uno::Sequence< beans::Property >& rProperties )
 {
