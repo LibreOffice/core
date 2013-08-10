@@ -400,13 +400,11 @@ UCHAR GetTextChar(UCHAR* TBuf, sal_uInt16& Index,
                   ObjTextType& Atr0, ObjTextType& AktAtr,
                   sal_uInt16 Rest, bool ScanEsc)
 {
-    UCHAR c,c0,nc;
-
-    c=ProcessOne(TBuf,Index,Atr0,AktAtr,ScanEsc);
+    UCHAR c=ProcessOne(TBuf,Index,Atr0,AktAtr,ScanEsc);
     if (!ScanEsc) {
         if (c==SoftTrennAdd || c==SoftTrennK || c==SoftTrenn) {
-            nc=GetNextChar(TBuf,Index);
-            c0=c;
+            UCHAR nc=GetNextChar(TBuf,Index);
+            UCHAR c0=c;
             if (Rest==0 || Rest==DoTrenn ||
                 nc==' ' || nc==AbsatzEnd || nc==TextEnd) c='-';
             else {
@@ -693,7 +691,6 @@ UCHAR ProcessChar(OutputDevice& rOut, UCHAR* TBuf, ProcChrSta& R, ObjTextType& A
     sal_uInt16       KernDist=0;       // Wert fuer Kerning
     sal_uInt16       ChrWidth;
     UCHAR        c;
-    UCHAR        c1;
     bool         AbsEnd;
 
     c=GetTextChar(TBuf,R.Index,Atr0,R.Attrib,Rest,false); // versucht evtl. zu trennen, wenn Rest entsprechenden Wert besitzt
@@ -705,7 +702,7 @@ UCHAR ProcessChar(OutputDevice& rOut, UCHAR* TBuf, ProcChrSta& R, ObjTextType& A
         if (R.Kapt) R.OutCh=Upcase(R.OutCh);
         SetTextContext(rOut,R.Attrib,R.Kapt,0,1,1,1,1);
 
-        if (R.Kapt) c1=Upcase(c); else c1=c;
+        UCHAR c1 = (R.Kapt)?Upcase(c):c;
         ChrWidth=GetCharWidth(rOut,c1);
 
         if (R.Attrib.ZAbst!=100) { // Spezial-Zeichenabstand ?
@@ -980,7 +977,6 @@ void TextType::Draw(OutputDevice& rOut)
     sal_uInt16 TopToBase;
     bool   Ende = false;
     sal_uInt16 lc;
-    bool   LineFit; // FitSize.x=0? oder Flags -> jede Zeile stretchen
     bool   TextFit;
     short* xLine;
     UCHAR* cLine;   // Buffer fuer FormatLine
@@ -996,8 +992,7 @@ void TextType::Draw(OutputDevice& rOut)
     cLine=new UCHAR[CharLineSize];
 
     TextFit=(Flags & TextFitBits)!=0;
-    LineFit=false;
-    LineFit=((Flags & TextFitZBit)!=0);
+    bool LineFit=((Flags & TextFitZBit)!=0);  // FitSize.x=0? oder Flags -> jede Zeile stretchen
     if (TextFit && FitSize.x==0) LineFit=true;
 
     if (DrehWink==0) {
