@@ -38,6 +38,7 @@ static inline void lcl_assertEndingItem(xmlreader::XmlReader& reader)
     xmlreader::XmlReader::Result res;
     res = reader.nextItem(xmlreader::XmlReader::TEXT_NONE, &name, &nsId);
     assert(res == xmlreader::XmlReader::RESULT_END);
+    (void) res;
 }
 
 static inline OUString lcl_getValue(xmlreader::XmlReader& reader,
