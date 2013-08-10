@@ -306,7 +306,6 @@ void ButtonDialog::AddButton( StandardButtonType eType, sal_uInt16 nId,
          !((eType == BUTTON_HELP)   && (pItem->mpPushButton->GetType() == WINDOW_HELPBUTTON)) )
     {
         pItem->mpPushButton->SetText( Button::GetStandardText( eType ) );
-        pItem->mpPushButton->SetHelpText( Button::GetStandardHelpText( eType ) );
     }
 
     if ( nBtnFlags & BUTTONDIALOG_FOCUSBUTTON )

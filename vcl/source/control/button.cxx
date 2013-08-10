@@ -156,14 +156,6 @@ OUString Button::GetStandardText( StandardButtonType eButton )
 }
 
 // -----------------------------------------------------------------------
-
-XubString Button::GetStandardHelpText( StandardButtonType /* eButton */ )
-{
-    XubString aHelpText;
-    return aHelpText;
-}
-
-// -----------------------------------------------------------------------
 sal_Bool Button::SetModeImage( const Image& rImage )
 {
     if ( rImage != mpButtonData->maImage )
@@ -1753,7 +1745,6 @@ void OKButton::ImplInit( Window* pParent, WinBits nStyle )
     PushButton::ImplInit( pParent, nStyle );
 
     SetText( Button::GetStandardText( BUTTON_OK ) );
-    SetHelpText( Button::GetStandardHelpText( BUTTON_OK ) );
 }
 
 // -----------------------------------------------------------------------
@@ -1819,7 +1810,6 @@ void CancelButton::ImplInit( Window* pParent, WinBits nStyle )
     PushButton::ImplInit( pParent, nStyle );
 
     SetText( Button::GetStandardText( BUTTON_CANCEL ) );
-    SetHelpText( Button::GetStandardHelpText( BUTTON_CANCEL ) );
 }
 
 // -----------------------------------------------------------------------
@@ -1882,7 +1872,6 @@ CloseButton::CloseButton( Window* pParent, WinBits nStyle )
     : CancelButton(pParent, nStyle)
 {
     SetText( Button::GetStandardText( BUTTON_CLOSE ) );
-    SetHelpText( Button::GetStandardHelpText( BUTTON_CLOSE ) );
 }
 
 // =======================================================================
@@ -1892,7 +1881,6 @@ void HelpButton::ImplInit( Window* pParent, WinBits nStyle )
     PushButton::ImplInit( pParent, nStyle | WB_NOPOINTERFOCUS );
 
     SetText( Button::GetStandardText( BUTTON_HELP ) );
-    SetHelpText( Button::GetStandardHelpText( BUTTON_HELP ) );
 }
 
 // -----------------------------------------------------------------------

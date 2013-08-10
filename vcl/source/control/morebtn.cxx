@@ -45,8 +45,6 @@ void MoreButton::ImplInit( Window* pParent, WinBits nStyle )
     mpMBData->maMoreText = Button::GetStandardText( BUTTON_MORE );
     mpMBData->maLessText = Button::GetStandardText( BUTTON_LESS );
 
-    SetHelpText( Button::GetStandardHelpText( BUTTON_MORE ) );
-
     ShowState();
 
     SetSymbolAlign(SYMBOLALIGN_RIGHT);
