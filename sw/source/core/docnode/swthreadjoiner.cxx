@@ -24,10 +24,8 @@
 #include <osl/mutex.hxx>
 #include <rtl/instance.hxx>
 
-/** Testing
+// Testing
 
-    @author OD
-*/
 using namespace ::com::sun::star;
 
 uno::Reference< util::XJobManager > SwThreadJoiner::mpThreadJoiner;
