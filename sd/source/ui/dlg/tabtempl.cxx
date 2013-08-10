@@ -94,7 +94,7 @@ SdTabTemplateDlg::SdTabTemplateDlg( Window* pParent,
     m_nTabId = AddTabPage("tabs", RID_SVXPAGE_TABULATOR);
     SvtCJKOptions aCJKOptions;
     if( aCJKOptions.IsAsianTypographyEnabled() )
-        m_nAsianTypoId = AddTabPage("asiantype", RID_SVXPAGE_PARA_ASIAN);
+        m_nAsianTypoId = AddTabPage("asiantypo", RID_SVXPAGE_PARA_ASIAN);
     else
         RemoveTabPage("asiantypo");
 
