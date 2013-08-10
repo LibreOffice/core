@@ -26,9 +26,9 @@
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <osl/mutex.hxx>
-#include <comphelper/configurationhelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include "itemholder1.hxx"
+#include <officecfg/Office/Recovery.hxx>
 
 using namespace utl;
 using namespace com::sun::star::uno;
@@ -564,30 +564,9 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
         }
     }
 
-    try
-    {
-    css::uno::Reference< css::uno::XInterface > xCFG = ::comphelper::ConfigurationHelper::openConfig(
-        ::comphelper::getProcessComponentContext(),
-        OUString("org.openoffice.Office.Recovery"),
-        ::comphelper::ConfigurationHelper::E_READONLY);
-
-    ::comphelper::ConfigurationHelper::readRelativeKey(
-        xCFG,
-        OUString("AutoSave"),
-        OUString("Enabled")) >>= bAutoSave;
-
-    ::comphelper::ConfigurationHelper::readRelativeKey(
-        xCFG,
-        OUString("AutoSave"),
-        OUString("TimeIntervall")) >>= nAutoSaveTime;
-
-    ::comphelper::ConfigurationHelper::readRelativeKey(
-        xCFG,
-        OUString("AutoSave"),
-        OUString("UserAutoSaveEnabled")) >>= bUserAutoSave;
-    }
-    catch(const css::uno::Exception&)
-        { OSL_FAIL("Could not find needed information for AutoSave feature."); }
+    bAutoSave = officecfg::Office::Recovery::AutoSave::Enabled::get();
+    nAutoSaveTime = officecfg::Office::Recovery::AutoSave::TimeIntervall::get();
+    bUserAutoSave = officecfg::Office::Recovery::AutoSave::UserAutoSaveEnabled::get();
 }
 
 SvtSaveOptions_Impl::~SvtSaveOptions_Impl()
@@ -758,30 +737,12 @@ void SvtSaveOptions_Impl::Commit()
     aValues.realloc(nRealCount);
     PutProperties( aNames, aValues );
 
-    css::uno::Reference< css::uno::XInterface > xCFG = ::comphelper::ConfigurationHelper::openConfig(
-        ::comphelper::getProcessComponentContext(),
-        OUString("org.openoffice.Office.Recovery"),
-        ::comphelper::ConfigurationHelper::E_STANDARD);
-
-    ::comphelper::ConfigurationHelper::writeRelativeKey(
-        xCFG,
-        OUString("AutoSave"),
-        OUString("TimeIntervall"),
-        css::uno::makeAny(nAutoSaveTime));
-
-    ::comphelper::ConfigurationHelper::writeRelativeKey(
-        xCFG,
-        OUString("AutoSave"),
-        OUString("Enabled"),
-        css::uno::makeAny(bAutoSave));
-
-    ::comphelper::ConfigurationHelper::writeRelativeKey(
-        xCFG,
-        OUString("AutoSave"),
-        OUString("UserAutoSaveEnabled"),
-        css::uno::makeAny(bUserAutoSave));
-
-    ::comphelper::ConfigurationHelper::flush(xCFG);
+    boost::shared_ptr< comphelper::ConfigurationChanges > batch(
+    comphelper::ConfigurationChanges::create());
+    officecfg::Office::Recovery::AutoSave::TimeIntervall::set(nAutoSaveTime, batch);
+    officecfg::Office::Recovery::AutoSave::Enabled::set(bAutoSave, batch);
+    officecfg::Office::Recovery::AutoSave::UserAutoSaveEnabled::set(bUserAutoSave, batch);
+    batch->commit();
 }
 
 // -----------------------------------------------------------------------

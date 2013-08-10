@@ -13,6 +13,10 @@ $(eval $(call gb_Library_Library,utl))
 
 $(eval $(call gb_Library_use_external,utl,boost_headers))
 
+$(eval $(call gb_Library_use_custom_headers,utl,\
+ officecfg/registry \
+))
+
 # in case UNO services are exported: declare location of component file
 $(eval $(call gb_Library_set_componentfile,utl,unotools/util/utl))
 
