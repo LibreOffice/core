@@ -21,8 +21,10 @@
 #define INCLUDED_RTL_CHARACTER_HXX
 
 #include "sal/config.h"
-
 #include "sal/types.h"
+#include "sal/log.hxx"
+
+#include <assert.h>
 
 namespace rtl
 {
@@ -136,6 +138,29 @@ inline bool isAsciiHexDigit(sal_uInt32 nUtf32)
 {
     return isAsciiCanonicHexDigit(nUtf32) || (nUtf32 >= 'a' && nUtf32 <= 'f');
 }
+
+/** Compare two US-ASCII characters.
+
+    @param nChar1 A Unicode scalar value (represented as a UTF-32 code unit).
+    @param nChar2 A unicode scalar value (represented as a UTF-32 code unit).
+
+    @return
+        0 if both strings are equal
+        < 0 - if this string is less than the string argument
+        > 0 - if this string is greater than the string argument
+
+    @since LibreOffice 4.2
+ */
+inline sal_Int32 compareAsciiIgnoreCase(sal_uInt32 nChar1, sal_uInt32 nChar2)
+{
+    assert(isAscii(nChar1) && isAscii(nChar2));
+    if ( isAsciiUpperCase(nChar1) )
+        nChar1 += 32;
+    if ( isAsciiUpperCase(nChar2) )
+        nChar2 += 32;
+    return nChar1 - nChar2;
+}
+
 
 }//rtl namespace
 

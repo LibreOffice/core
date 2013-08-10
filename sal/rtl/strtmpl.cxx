@@ -27,6 +27,8 @@
 #include <limits>
 #include <boost/static_assert.hpp>
 
+#include <rtl/character.hxx>
+
 /*
 inline void rtl_str_ImplCopy( IMPL_RTL_STRCODE* pDest,
                               const IMPL_RTL_STRCODE* pSrc,
@@ -170,25 +172,19 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( compareIgnoreAsciiCase )( const IMPL_RTL_ST
     SAL_THROW_EXTERN_C()
 {
     sal_Int32   nRet;
-    sal_Int32   c1;
-    sal_Int32   c2;
     do
     {
-        /* If character between 'A' and 'Z', than convert it to lowercase */
-        c1 = (sal_Int32)IMPL_RTL_USTRCODE( *pStr1 );
-        c2 = (sal_Int32)IMPL_RTL_USTRCODE( *pStr2 );
-        if ( (c1 >= 65) && (c1 <= 90) )
-            c1 += 32;
-        if ( (c2 >= 65) && (c2 <= 90) )
-            c2 += 32;
-        nRet = c1-c2;
+        nRet = rtl::compareAsciiIgnoreCase(
+                (sal_Int32)IMPL_RTL_USTRCODE( *pStr1 ),
+                (sal_Int32)IMPL_RTL_USTRCODE( *pStr2 ));
+
         if ( nRet != 0 )
             return nRet;
 
         pStr1++;
         pStr2++;
     }
-    while ( c2 );
+    while ( *pStr2 );
 
     return 0;
 }
@@ -204,18 +200,12 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( compareIgnoreAsciiCase_WithLength )( const 
     const IMPL_RTL_STRCODE* pStr1End = pStr1 + nStr1Len;
     const IMPL_RTL_STRCODE* pStr2End = pStr2 + nStr2Len;
     sal_Int32   nRet;
-    sal_Int32   c1;
-    sal_Int32   c2;
     while ( (pStr1 < pStr1End) && (pStr2 < pStr2End) )
     {
-        /* If character between 'A' and 'Z', than convert it to lowercase */
-        c1 = (sal_Int32)IMPL_RTL_USTRCODE( *pStr1 );
-        c2 = (sal_Int32)IMPL_RTL_USTRCODE( *pStr2 );
-        if ( (c1 >= 65) && (c1 <= 90) )
-            c1 += 32;
-        if ( (c2 >= 65) && (c2 <= 90) )
-            c2 += 32;
-        nRet = c1-c2;
+        nRet = rtl::compareAsciiIgnoreCase(
+                (sal_Int32)IMPL_RTL_USTRCODE( *pStr1 ),
+                (sal_Int32)IMPL_RTL_USTRCODE( *pStr2 ));
+
         if ( nRet != 0 )
             return nRet;
 
