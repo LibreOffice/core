@@ -57,31 +57,7 @@
 #include <print.h>
 #include <jobset.h>
 
-/*
-#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
-#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
-#include <com/sun/star/ui/dialogs/XFilterManager.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
-#include <comphelper/processfactory.hxx>
-*/
-
 #include <malloc.h>
-
-/*
-#define _SV_SALPRN_CXX
-#include <tools/debug.hxx>
-#include <saldata.hxx>
-#include <salinst.h>
-#include <salgdi.h>
-#include <salframe.h>
-#include <vcl/salptype.hxx>
-#include <salprn.h>
-#include <vcl/print.h>
-#include <vcl/jobset.h>
-
-*/
 
 #ifndef __H_FT2LIB
 #include <os2/wingdi.h>
@@ -583,11 +559,15 @@ static void ImplFreeFormAndTrayList( Os2SalInfoPrinter* pOs2SalInfoPrinter )
 
 static void ImplGetFormAndTrayList( Os2SalInfoPrinter* pOs2SalInfoPrinter, const ImplJobSetup* pSetupData )
 {
+    // if not defined, suppose default orientation is portrait
+    Orientation orientation = ORIENTATION_PORTRAIT;
+
     ImplFreeFormAndTrayList( pOs2SalInfoPrinter );
 
     LONG alQuery[] =
     {
         0,                  0,              // First two members of QUERYSIZE
+        DJP_SJ_ORIENTATION,     DJP_CURRENT,
         DJP_CJ_FORM,        DJP_ALL,
         DJP_CJ_TRAYNAME,    DJP_ALL,
         DJP_NONE,           DJP_NONE        // EOL marker
@@ -638,7 +618,18 @@ static void ImplGetFormAndTrayList( Os2SalInfoPrinter* pOs2SalInfoPrinter, const
         PQUERYTUPLE pTuple = pQuerySize->aTuples;
         while ( DJP_NONE != pTuple->ulProperty )
         {
-            if ( pDJP->ulProperty == DJP_CJ_FORM )
+            if ( pDJP->ulProperty == DJP_SJ_ORIENTATION )
+            {
+                if ( pDJP->ulNumReturned )
+                {
+                    PDJPT_ORIENTATION pElm = DJP_ELEMENTP( *pDJP, DJPT_ORIENTATION );
+                    if ( (DJP_ORI_PORTRAIT == *pElm) || (DJP_ORI_REV_PORTRAIT == *pElm) )
+                        orientation = ORIENTATION_PORTRAIT;
+                    else
+                        orientation = ORIENTATION_LANDSCAPE;
+                }
+            }
+            else if ( pDJP->ulProperty == DJP_CJ_FORM )
             {
                 if ( pDJP->ulNumReturned )
                 {
@@ -649,11 +640,20 @@ static void ImplGetFormAndTrayList( Os2SalInfoPrinter* pOs2SalInfoPrinter, const
                     for( int i = 0; i < pDJP->ulNumReturned; i++, pElm++ )
                     {
                         ImplFormInfo* pInfo     = new ImplFormInfo;
-                        pInfo->mnPaperWidth     = pElm->hcInfo.cx;
-                        pInfo->mnPaperHeight    = pElm->hcInfo.cy;
+                        // AOO expects form size always in portrait mode
+                        if (orientation == ORIENTATION_PORTRAIT)
+                        {
+                            pInfo->mnPaperWidth     = pElm->hcInfo.cx;
+                            pInfo->mnPaperHeight    = pElm->hcInfo.cy;
+                        }
+                        else
+                        {
+                            pInfo->mnPaperWidth     = pElm->hcInfo.cy;
+                            pInfo->mnPaperHeight    = pElm->hcInfo.cx;
+                        }
 #if OSL_DEBUG_LEVEL>0
-        printf("ImplGetFormAndTrayList mnPaperWidth %d\n", pInfo->mnPaperWidth);
-        printf("ImplGetFormAndTrayList mnPaperHeight %d\n", pInfo->mnPaperHeight);
+                        debug_printf("ImplGetFormAndTrayList #%d: %d x %d",
+                                     i, pInfo->mnPaperWidth, pInfo->mnPaperHeight);
 #endif
                         pInfo->mnId             = pElm->djppsFormID;
                         pOs2SalInfoPrinter->mpFormArray[i] = pInfo;
@@ -865,6 +865,9 @@ static sal_Bool ImplSetOrientation( HDC hPrinterDC, PDRIVDATA pDriverData,
         DJP_SJ_ORIENTATION,     DJP_CURRENT,
         DJP_NONE,               DJP_NONE        // EOL marker
     };
+#if OSL_DEBUG_LEVEL>0
+    debug_printf( "ImplSetOrientation mhDC %x, %d", hPrinterDC, eOrientation);
+#endif
 
     APIRET      rc;
     PQUERYSIZE  pQuerySize      = (PQUERYSIZE)alQuery;
@@ -1164,6 +1167,7 @@ Os2SalInfoPrinter::Os2SalInfoPrinter()
     mpFormArray         = NULL;
     mnTrayCount         = 0;
     mpTrayArray         = NULL;
+    m_bPapersInit       = FALSE;
 }
 
 // -----------------------------------------------------------------------
@@ -1177,6 +1181,42 @@ Os2SalInfoPrinter::~Os2SalInfoPrinter()
     }
 
     ImplFreeFormAndTrayList( this );
+}
+
+// -----------------------------------------------------------------------
+
+void Os2SalInfoPrinter::InitPaperFormats( const ImplJobSetup* pSetupData )
+{
+#if OSL_DEBUG_LEVEL>0
+    debug_printf( "Os2SalInfoPrinter::InitPaperFormats pSetupData %x",
+                  pSetupData);
+#endif
+
+    m_aPaperFormats.clear();
+    m_bPapersInit = true;
+
+    // init paperbinlist if empty
+    if ( !mnTrayCount )
+        ImplGetFormAndTrayList( this, pSetupData );
+
+    for( int i = 0; i < mnFormCount; i++)
+    {
+        PaperInfo aInfo( mpFormArray[i]->mnPaperWidth * 100,
+                         mpFormArray[i]->mnPaperHeight * 100);
+#if OSL_DEBUG_LEVEL>0
+        debug_printf( "Os2SalInfoPrinter::InitPaperFormats #%d: %d x %d",
+                      i, mpFormArray[i]->mnPaperWidth * 100,
+                      mpFormArray[i]->mnPaperHeight * 100);
+#endif
+        m_aPaperFormats.push_back( aInfo );
+    }
+}
+
+// -----------------------------------------------------------------------
+
+int Os2SalInfoPrinter::GetLandscapeAngle( const ImplJobSetup* pSetupData )
+{
+    return 900;
 }
 
 // -----------------------------------------------------------------------
@@ -1292,6 +1332,11 @@ sal_Bool Os2SalInfoPrinter::SetPrinterData( ImplJobSetup* pSetupData )
 
 sal_Bool Os2SalInfoPrinter::SetData( ULONG nFlags, ImplJobSetup* pSetupData )
 {
+#if OSL_DEBUG_LEVEL>0
+    debug_printf( "Os2SalInfoPrinter::SetData nFlags %x, pSetupData %x",
+                  nFlags, pSetupData);
+#endif
+
     // needs DJP support
     if ( !mbDJPSupported )
         return FALSE;
@@ -1306,6 +1351,9 @@ sal_Bool Os2SalInfoPrinter::SetData( ULONG nFlags, ImplJobSetup* pSetupData )
     // set orientation
     if ( nFlags & SAL_JOBSET_ORIENTATION )
     {
+#if OSL_DEBUG_LEVEL>0
+        debug_printf( "Os2SalInfoPrinter::SetData meOrientation %d", pSetupData->meOrientation);
+#endif
         if ( ImplSetOrientation( mhDC, pDrivData, pSetupData->meOrientation ) )
             bOK = TRUE;
     }
@@ -1687,6 +1735,9 @@ sal_Bool Os2SalPrinter::StartJob( const XubString* pFileName,
 
     // Can we print with DJP
     mbPrintDJPSupported = ImplIsDriverPrintDJPEnabled( mhDC );
+#if OSL_DEBUG_LEVEL>0
+    debug_printf( "mbPrintDJPSupported %d", mbPrintDJPSupported);
+#endif
 
     // JobName ermitteln und Job starten
     PSZ pszJobName = NULL;
@@ -1697,9 +1748,10 @@ sal_Bool Os2SalPrinter::StartJob( const XubString* pFileName,
         nJobNameLen = jobName.Len();
     }
     rc = DevEscape( mhDC,
-                    DEVESC_STARTDOC,
+                    mbPrintDJPSupported ? DEVESC_STARTDOC_WPROP : DEVESC_STARTDOC,
                     nJobNameLen, (PBYTE)pszJobName,
-                    0, (PBYTE)NULL );
+                    &((PDRIVDATA)(pSetupData->mpDriverData))->cb,
+                    (PBYTE)(pSetupData->mpDriverData));
 
     if ( rc != DEV_OK )
     {
@@ -1769,6 +1821,13 @@ sal_Bool Os2SalPrinter::AbortJob()
 SalGraphics* Os2SalPrinter::StartPage( ImplJobSetup* pSetupData, sal_Bool bNewJobSetup )
 {
     APIRET rc;
+
+#if OSL_DEBUG_LEVEL>0
+    debug_printf( "Os2SalPrinter::StartPage mhDC %x, mbFirstPage %d, bNewJobSetup %d",
+                  mhDC, mbFirstPage, bNewJobSetup);
+    debug_printf( "Os2SalPrinter::StartPage pSetupData %x",
+                  pSetupData);
+#endif
 
     if ( mbFirstPage )
         mbFirstPage = FALSE;
@@ -1840,6 +1899,10 @@ SalGraphics* Os2SalPrinter::StartPage( ImplJobSetup* pSetupData, sal_Bool bNewJo
 
 sal_Bool Os2SalPrinter::EndPage()
 {
+#if OSL_DEBUG_LEVEL>0
+    debug_printf( "Os2SalPrinter::EndPage mhDC %x", mhDC);
+#endif
+
     if ( mpGraphics )
     {
         // destroy SalGraphics
@@ -1857,14 +1920,3 @@ ULONG Os2SalPrinter::GetErrorCode()
 {
     return mnError;
 }
-
-void Os2SalInfoPrinter::InitPaperFormats( const ImplJobSetup* pSetupData )
-{
-    printf("Os2SalInfoPrinter::InitPaperFormats\n");
-}
-int Os2SalInfoPrinter::GetLandscapeAngle( const ImplJobSetup* pSetupData )
-{
-    printf("Os2SalInfoPrinter::GetLandscapeAngle\n");
-    return 0;
-}
-
