@@ -85,7 +85,7 @@ bool CharClass::isAsciiNumeric( const OUString& rStr )
 
     do
     {
-        if ( !isAsciiDigit( *p ) )
+        if ( !rtl::isAsciiDigit( *p ) )
             return false;
     }
     while ( ++p < pStop );
@@ -104,7 +104,7 @@ bool CharClass::isAsciiAlpha( const OUString& rStr )
 
     do
     {
-        if ( !isAsciiAlpha( *p ) )
+        if ( !rtl::isAsciiAlpha( *p ) )
             return false;
     }
     while ( ++p < pStop );
@@ -118,7 +118,7 @@ bool CharClass::isAlpha( const OUString& rStr, sal_Int32 nPos ) const
 {
     sal_Unicode c = rStr[nPos];
     if ( c < 128 )
-        return isAsciiAlpha( c );
+        return rtl::isAsciiAlpha( c );
 
     try
     {
@@ -141,7 +141,7 @@ bool CharClass::isLetter( const OUString& rStr, sal_Int32 nPos ) const
 {
     sal_Unicode c = rStr[nPos];
     if ( c < 128 )
-        return isAsciiAlpha( c );
+        return rtl::isAsciiAlpha( c );
 
     try
     {
