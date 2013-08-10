@@ -41,6 +41,7 @@
 #include "strimp.hxx"
 #include "surrogates.hxx"
 #include <rtl/ustring.h>
+#include <rtl/character.hxx>
 
 #include "rtl/math.h"
 #include "rtl/tencinfo.h"
@@ -404,23 +405,10 @@ sal_Int32 SAL_CALL rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength( co
 {
     const sal_Unicode*  pStr1End = pStr1 + nStr1Len;
     sal_Int32           nRet;
-    sal_Int32           c1;
-    sal_Int32           c2;
     while ( (nShortenedLength > 0) &&
             (pStr1 < pStr1End) && *pStr2 )
     {
-        /* Check ASCII range */
-        SAL_WARN_IF( ((unsigned char)*pStr2) > 127, "rtl.string",
-                    "rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength - Found char > 127" );
-
-        /* If character between 'A' and 'Z', than convert it to lowercase */
-        c1 = (sal_Int32)*pStr1;
-        c2 = (sal_Int32)((unsigned char)*pStr2);
-        if ( (c1 >= 65) && (c1 <= 90) )
-            c1 += 32;
-        if ( (c2 >= 65) && (c2 <= 90) )
-            c2 += 32;
-        nRet = c1-c2;
+        nRet = rtl::compareAsciiIgnoreCase( *pStr1, (sal_Int32)((unsigned char)*pStr2));
         if ( nRet != 0 )
             return nRet;
 
