@@ -19,7 +19,7 @@ const char * const VLC_ARGS[] = {
     "-Vdummy",
     "--snapshot-format=png",
     "--ffmpeg-threads",
-    "--verbose=-1",
+    "--verbose=2"
 };
 
 const int MS_IN_SEC = 1000; // Millisec in sec
@@ -33,6 +33,7 @@ VLCPlayer::VLCPlayer( const rtl::OUString& url )
     , mUrl( url )
     , mPlaybackLoop( false )
 {
+    mPlayer.setMouseHandling(false);
 }
 
 const rtl::OUString& VLCPlayer::url() const

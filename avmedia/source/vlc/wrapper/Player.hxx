@@ -63,6 +63,8 @@ namespace VLC
             return mPlayer;
         }
 
+        void setMouseHandling(bool flag);
+
     private:
         libvlc_media_player_t *mPlayer;
     };
