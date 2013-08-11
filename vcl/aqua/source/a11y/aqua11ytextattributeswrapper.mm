@@ -50,7 +50,7 @@ using namespace ::rtl;
 }
 
 +(int)convertBoldStyle:(PropertyValue)property {
-    int boldStyle = 0;
+    int boldStyle = NSUnboldFontMask;
     float value = 0;
     property.Value >>= value;
     if ( value == ::css_awt::FontWeight::SEMIBOLD
@@ -63,7 +63,7 @@ using namespace ::rtl;
 }
 
 +(int)convertItalicStyle:(PropertyValue)property {
-    int italicStyle = 0;
+    int italicStyle = NSUnitalicFontMask;
     sal_Int16 value = property.Value.get< ::css_awt::FontSlant>();
     if ( value == ::css_awt::FontSlant_ITALIC ) {
         italicStyle = NSItalicFontMask;
@@ -198,10 +198,22 @@ using namespace ::rtl;
     if ( wrapperStore != nil ) { // default
         [ wrapperStore setDefaultFontname: CreateNSString ( fontname ) ];
         [ wrapperStore setDefaultFontsize: fontsize ];
+        [ wrapperStore setDefaultFonttraits: fonttraits ];
         NSFont * font = [ [ NSFontManager sharedFontManager ] fontWithFamily: CreateNSString ( fontname ) traits: fonttraits weight: 0 size: fontsize ];
         [ AquaA11yTextAttributesWrapper addFont: font toString: string forRange: range ];
-    } else if ( wrapper != nil && fonttraits != 0 ) { // attribute run and bold and/or italic was found
-        NSFont * font = [ [ NSFontManager sharedFontManager ] fontWithFamily: [ wrapper defaultFontname ] traits: fonttraits weight: 0 size: [ wrapper defaultFontsize ] ];
+    } else if ( wrapper != nil) { // attribute run and bold and/or italic was found
+        NSString *fontName = nil;
+        if (fontname.isEmpty())
+            fontName = [wrapper defaultFontname];
+        else
+            fontName = CreateNSString(fontname);
+        if (!(fonttraits & (NSBoldFontMask | NSUnboldFontMask)))
+            fonttraits |= [wrapper defaultFonttraits] & (NSBoldFontMask | NSUnboldFontMask);
+        if (!(fonttraits & (NSItalicFontMask | NSUnitalicFontMask)))
+            fonttraits |= [wrapper defaultFonttraits] & (NSItalicFontMask | NSUnitalicFontMask);
+        if (fontsize == 0.0)
+            fontsize = [wrapper defaultFontsize];
+        NSFont * font = [ [ NSFontManager sharedFontManager ] fontWithFamily: fontName traits: fonttraits weight: 0 size: fontsize ];
         [ AquaA11yTextAttributesWrapper addFont: font toString: string forRange: range ];
     }
     [ pool release ];

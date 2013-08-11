@@ -54,6 +54,7 @@ struct ReferenceWrapper
     ReferenceWrapper * mpReferenceWrapper;
     NSString * mpDefaultFontname;
     float mDefaultFontsize;
+    int mDefaultFonttraits;
     BOOL mActsAsRadioGroup;
     BOOL mIsTableCell;
 }
@@ -94,6 +95,8 @@ struct ReferenceWrapper
 -(NSString *)defaultFontname;
 -(void)setDefaultFontsize:(float)fontsize;
 -(float)defaultFontsize;
+-(void)setDefaultFonttraits:(int)fonttraits;
+-(int)defaultFonttraits;
 +(void)setPopupMenuOpen:(BOOL)popupMenuOpen;
 -(::com::sun::star::accessibility::XAccessibleAction *)accessibleAction;
 -(::com::sun::star::accessibility::XAccessibleContext *)accessibleContext;
