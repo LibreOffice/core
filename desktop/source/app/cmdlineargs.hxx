@@ -144,7 +144,6 @@ class CommandLineArgs: private boost::noncopyable
         bool m_helpmath;
         bool m_helpimpress;
         bool m_helpbase;
-        bool m_psn;
         bool m_version;
         bool m_splashpipe;
 

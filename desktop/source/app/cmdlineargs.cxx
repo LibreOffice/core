@@ -499,7 +499,6 @@ bool CommandLineArgs::InterpretCommandLineParameter( const OUString& aArg, OUStr
     */
     else if ( aArg.match("-psn") )
     {
-        m_psn = true;
         return true;
     }
 #endif
@@ -617,7 +616,6 @@ void CommandLineArgs::InitParamValues()
     m_helpmath = false;
     m_helpimpress = false;
     m_helpbase = false;
-    m_psn = false;
     m_version = false;
     m_splashpipe = false;
     m_bEmpty = true;
