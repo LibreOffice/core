@@ -393,7 +393,7 @@ EditEngine& SmDocShell::GetEditEngine()
                 (~EE_CNTRL_UNDOATTRIBS) &
                 (~EE_CNTRL_PASTESPECIAL) );
 
-        pEditEngine->SetWordDelimiters( OUString(" .=+-*/(){}[];\"" ) );
+        pEditEngine->SetWordDelimiters(" .=+-*/(){}[];\"");
         pEditEngine->SetRefMapMode( MAP_PIXEL );
 
         pEditEngine->SetPaperSize( Size( 800, 0 ) );

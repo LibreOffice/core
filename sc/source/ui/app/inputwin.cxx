@@ -1957,7 +1957,7 @@ void ScTextWnd::MakeDialogEditView()
     pEditEngine = pNew;
 
     pEditEngine->SetUpdateMode( false );
-    pEditEngine->SetWordDelimiters( pEditEngine->GetWordDelimiters() += '=' );
+    pEditEngine->SetWordDelimiters( pEditEngine->GetWordDelimiters() + "=" );
     pEditEngine->SetPaperSize( Size( bIsRTL ? USHRT_MAX : THESIZE, 300 ) );
 
     SfxItemSet* pSet = new SfxItemSet( pEditEngine->GetEmptyItemSet() );

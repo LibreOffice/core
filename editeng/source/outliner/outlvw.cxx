@@ -1562,7 +1562,7 @@ Selection OutlinerView::GetSurroundingTextSelection() const
 // returns: true if a word for thesaurus look-up was found at the current cursor position.
 // The status string will be word + iso language string (e.g. "light#en-US")
 bool EDITENG_DLLPUBLIC GetStatusValueForThesaurusFromContext(
-    String &rStatusVal,
+    OUString &rStatusVal,
     LanguageType &rLang,
     const EditView &rEditView )
 {
@@ -1578,9 +1578,7 @@ bool EDITENG_DLLPUBLIC GetStatusValueForThesaurusFromContext(
     OUString aLangText( LanguageTag::convertToBcp47( nLang ) );
 
     // set word and locale to look up as status value
-    OUString aStatusVal= aText + "#" + aLangText;
-
-    rStatusVal  = aStatusVal;
+    rStatusVal  = aText + "#" + aLangText;
     rLang       = nLang;
 
     return aText.getLength() > 0;

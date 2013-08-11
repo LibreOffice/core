@@ -715,7 +715,7 @@ void ScEditShell::GetState( SfxItemSet& rSet )
 
             case SID_THES:
                 {
-                    String          aStatusVal;
+                    OUString        aStatusVal;
                     LanguageType    nLang = LANGUAGE_NONE;
                     bool bIsLookUpWord = GetStatusValueForThesaurusFromContext( aStatusVal, nLang, *pActiveView );
                     rSet.Put( SfxStringItem( SID_THES, aStatusVal ) );
@@ -1143,7 +1143,7 @@ String ScEditShell::GetSelectionText( sal_Bool bWholeWord )
             ESelection  aSel = pEditView->GetSelection();
             String      aStrCurrentDelimiters = pEngine->GetWordDelimiters();
 
-            pEngine->SetWordDelimiters(OUString(" .,;\"'"));
+            pEngine->SetWordDelimiters(" .,;\"'");
             aStrSelection = pEngine->GetWord( aSel.nEndPara, aSel.nEndPos );
             pEngine->SetWordDelimiters( aStrCurrentDelimiters );
         }

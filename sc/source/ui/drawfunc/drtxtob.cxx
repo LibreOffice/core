@@ -456,7 +456,7 @@ void ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
         SdrView * pView = pViewData->GetScDrawView();
         OutlinerView* pOutView = pView->GetTextEditOutlinerView();
 
-        String          aStatusVal;
+        OUString        aStatusVal;
         LanguageType    nLang = LANGUAGE_NONE;
         bool bIsLookUpWord = false;
         if ( pOutView )

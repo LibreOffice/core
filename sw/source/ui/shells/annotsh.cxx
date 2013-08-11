@@ -1317,7 +1317,7 @@ void SwAnnotationShell::GetLinguState(SfxItemSet &rSet)
 
             case SID_THES:
             {
-                String          aStatusVal;
+                OUString        aStatusVal;
                 LanguageType    nLang = LANGUAGE_NONE;
                 bool bIsLookUpWord = GetStatusValueForThesaurusFromContext( aStatusVal, nLang, pOLV->GetEditView() );
                 rSet.Put( SfxStringItem( SID_THES, aStatusVal ) );

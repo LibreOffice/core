@@ -395,7 +395,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                 if( mpView && mpView->GetTextEditOutlinerView() )
                 {
                     EditView & rEditView = mpView->GetTextEditOutlinerView()->GetEditView();
-                    String          aStatusVal;
+                    OUString        aStatusVal;
                     LanguageType    nLang = LANGUAGE_NONE;
                     bool bIsLookUpWord = GetStatusValueForThesaurusFromContext( aStatusVal, nLang, rEditView );
                     rSet.Put( SfxStringItem( SID_THES, aStatusVal ) );

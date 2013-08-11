@@ -385,7 +385,7 @@ public:
 
 
 // some thesaurus functionality to avoid code duplication in different projects...
-bool EDITENG_DLLPUBLIC  GetStatusValueForThesaurusFromContext( String &rStatusVal, LanguageType &rLang, const EditView &rEditView );
+bool EDITENG_DLLPUBLIC  GetStatusValueForThesaurusFromContext( OUString &rStatusVal, LanguageType &rLang, const EditView &rEditView );
 void EDITENG_DLLPUBLIC  ReplaceTextWithSynonym( EditView &rEditView, const String &rSynonmText );
 
 typedef ::std::vector< OutlinerView* > ViewList;
@@ -857,8 +857,8 @@ public:
 
     EBulletInfo     GetBulletInfo( sal_Int32 nPara );
 
-    void        SetWordDelimiters( const String& rDelimiters );
-    String      GetWordDelimiters() const;
+    void        SetWordDelimiters( const OUString& rDelimiters );
+    OUString    GetWordDelimiters() const;
     String      GetWord( sal_Int32 nPara, xub_StrLen nIndex );
 
     void            StripPortions();

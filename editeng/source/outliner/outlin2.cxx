@@ -181,13 +181,13 @@ void Outliner::RemoveFields( sal_Bool bKeepFieldText, TypeId aType )
     pEditEngine->RemoveFields( bKeepFieldText, aType );
 }
 
-void Outliner::SetWordDelimiters( const String& rDelimiters )
+void Outliner::SetWordDelimiters( const OUString& rDelimiters )
 {
     DBG_CHKTHIS(Outliner,0);
     pEditEngine->SetWordDelimiters( rDelimiters );
 }
 
-String Outliner::GetWordDelimiters() const
+OUString Outliner::GetWordDelimiters() const
 {
     DBG_CHKTHIS(Outliner,0);
     return pEditEngine->GetWordDelimiters();

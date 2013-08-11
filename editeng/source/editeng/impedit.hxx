@@ -412,8 +412,7 @@ private:
 
     std::vector<EENotify> aNotifyCache;
 
-    XubString           aWordDelimiters;
-    XubString           aGroupChars;
+    OUString            aWordDelimiters;
 
     EditSelFunctionSet  aSelFuncSet;
     EditSelectionEngine aSelEngine;

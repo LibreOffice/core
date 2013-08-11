@@ -385,8 +385,8 @@ public:
     const SfxStyleSheet* GetStyleSheet( sal_Int32 nPara ) const;
     SfxStyleSheet* GetStyleSheet( sal_Int32 nPara );
 
-    void            SetWordDelimiters( const String& rDelimiters );
-    String          GetWordDelimiters() const;
+    void            SetWordDelimiters( const OUString& rDelimiters );
+    OUString        GetWordDelimiters() const;
 
     void            EraseVirtualDevice();
 

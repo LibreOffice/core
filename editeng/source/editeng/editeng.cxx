@@ -1359,7 +1359,7 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
                         // Only at end of word...
                         sal_uInt16 nIndex = aCurSel.Max().GetIndex();
                         if ( ( nIndex >= aCurSel.Max().GetNode()->Len() ) ||
-                             ( pImpEditEngine->aWordDelimiters.Search( aCurSel.Max().GetNode()->GetChar( nIndex ) ) != STRING_NOTFOUND ) )
+                             ( pImpEditEngine->aWordDelimiters.indexOf( aCurSel.Max().GetNode()->GetChar( nIndex ) ) != -1 ) )
                         {
                             EditPaM aStart( pImpEditEngine->WordLeft( aCurSel.Max() ) );
                             String aWord = pImpEditEngine->GetSelected( EditSelection( aStart, aCurSel.Max() ) );
@@ -2246,15 +2246,15 @@ SfxStyleSheetPool* EditEngine::GetStyleSheetPool()
     return pImpEditEngine->GetStyleSheetPool();
 }
 
-void EditEngine::SetWordDelimiters( const XubString& rDelimiters )
+void EditEngine::SetWordDelimiters( const OUString& rDelimiters )
 {
     DBG_CHKTHIS( EditEngine, 0 );
     pImpEditEngine->aWordDelimiters = rDelimiters;
-    if ( pImpEditEngine->aWordDelimiters.Search( CH_FEATURE ) == STRING_NOTFOUND )
-        pImpEditEngine->aWordDelimiters.Insert( CH_FEATURE );
+    if (pImpEditEngine->aWordDelimiters.indexOf(CH_FEATURE) == -1)
+        pImpEditEngine->aWordDelimiters += OUString(CH_FEATURE);
 }
 
-XubString EditEngine::GetWordDelimiters() const
+OUString EditEngine::GetWordDelimiters() const
 {
     DBG_CHKTHIS( EditEngine, 0 );
     return pImpEditEngine->aWordDelimiters;
