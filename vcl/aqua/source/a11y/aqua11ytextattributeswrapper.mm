@@ -29,6 +29,7 @@
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/FontStrikeout.hpp>
 #include <com/sun/star/text/TextMarkupType.hpp>
+#include <com/sun/star/style/ParagraphAdjust.hpp>
 
 namespace css_awt = ::com::sun::star::awt;
 using namespace ::com::sun::star::accessibility;
@@ -205,6 +206,7 @@ using namespace ::rtl;
     static const OUString attrForegroundColor("CharColor");
     static const OUString attrBackgroundColor("CharBackColor");
     static const OUString attrSuperscript("CharEscapement");
+    static const OUString attrTextAlignment("ParaAdjust");
     // vars
     sal_Int32 underlineColor = 0;
     BOOL underlineHasColor = NO;
@@ -255,6 +257,19 @@ using namespace ::rtl;
                 if ( [ number shortValue ] != 0 ) {
                     [ string addAttribute: NSAccessibilitySuperscriptTextAttribute value: number range: range ];
                 }
+            } else if ( property.Name.equals ( attrTextAlignment ) ) {
+                sal_Int32 alignment;
+                property.Value >>= alignment;
+                NSNumber *textAlignment = nil;
+                switch(alignment) {
+                    case ::com::sun::star::style::ParagraphAdjust_RIGHT : textAlignment = [NSNumber numberWithInteger:NSRightTextAlignment]    ; break;
+                    case ::com::sun::star::style::ParagraphAdjust_CENTER: textAlignment = [NSNumber numberWithInteger:NSCenterTextAlignment]   ; break;
+                    case ::com::sun::star::style::ParagraphAdjust_BLOCK : textAlignment = [NSNumber numberWithInteger:NSJustifiedTextAlignment]; break;
+                    case ::com::sun::star::style::ParagraphAdjust_LEFT  :
+                    default                                             : textAlignment = [NSNumber numberWithInteger:NSLeftTextAlignment]     ; break;
+                }
+                NSDictionary *paragraphStyle = [NSDictionary dictionaryWithObjectsAndKeys:textAlignment, @"AXTextAlignment", textAlignment, @"AXVisualTextAlignment", nil];
+                [string addAttribute:@"AXParagraphStyle" value:paragraphStyle range:range];
             }
         }
     }
