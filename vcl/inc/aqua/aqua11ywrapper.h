@@ -32,6 +32,7 @@
 #include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
 #include <com/sun/star/accessibility/XAccessibleMultiLineText.hpp>
+#include <com/sun/star/accessibility/XAccessibleTextMarkup.hpp>
 
 // rAccessibleXYZ as a field in an Objective-C-Class would not call Con-/Destructor, so use a struct instead
 struct ReferenceWrapper
@@ -47,6 +48,7 @@ struct ReferenceWrapper
     ::com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessibleValue > rAccessibleValue;
     ::com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessibleTextAttributes > rAccessibleTextAttributes;
     ::com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessibleMultiLineText > rAccessibleMultiLineText;
+    ::com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessibleTextMarkup > rAccessibleTextMarkup;
 };
 
 @interface AquaA11yWrapper : NSView
@@ -100,6 +102,7 @@ struct ReferenceWrapper
 -(::com::sun::star::accessibility::XAccessibleValue *)accessibleValue;
 -(::com::sun::star::accessibility::XAccessibleTextAttributes *)accessibleTextAttributes;
 -(::com::sun::star::accessibility::XAccessibleMultiLineText *)accessibleMultiLineText;
+-(::com::sun::star::accessibility::XAccessibleTextMarkup *)accessibleTextMarkup;
 @end
 
 #endif // _SV_AQUA11WRAPPER_H
