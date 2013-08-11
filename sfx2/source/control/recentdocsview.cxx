@@ -21,6 +21,8 @@
 
 #include <sfx2/templateabstractview.hxx>
 #include <sfx2/app.hxx>
+#include <sfx2/sfx.hrc>
+#include <sfx2/sfxresid.hxx>
 #include <unotools/historyoptions.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/svapp.hxx>
@@ -57,6 +59,64 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeRecentDocsView(Window *pPar
 
 RecentDocsView::~RecentDocsView()
 {
+}
+
+bool RecentDocsView::isFilteredExtension(APPLICATION_FILTER filter, const OUString &rExt)
+{
+    bool bRet = true;
+
+    if (filter == FILTER_WRITER)
+    {
+        bRet = rExt == "odt" || rExt == "doc" || rExt == "docx" ||
+            rExt == "rtf" || rExt == "txt";
+    }
+    else if (filter == FILTER_CALC)
+    {
+        bRet = rExt == "ods" || rExt == "xls" || rExt == "xlsx";
+    }
+    else if (filter == FILTER_IMPRESS)
+    {
+        bRet = rExt == "odp" || rExt == "pps" || rExt == "ppt" ||
+            rExt == "pptx";
+    }
+    else if (filter == FILTER_DRAW)
+    {
+        bRet = rExt == "odg";
+    }
+    else if (filter == FILTER_DATABASE)
+    {
+        bRet = rExt == "odb";
+    }
+    else if (filter == FILTER_MATH)
+    {
+        bRet = rExt == "odf";
+    }
+
+    return bRet;
+}
+
+BitmapEx RecentDocsView::getDefaultThumbnail(const OUString &rURL)
+{
+    BitmapEx aImg;
+    INetURLObject aUrl(rURL);
+    OUString aExt = aUrl.getExtension();
+
+    if ( isFilteredExtension( FILTER_WRITER, aExt) )
+        aImg = BitmapEx ( SfxResId( SFX_FILE_THUMBNAIL_TEXT ) );
+    else if ( isFilteredExtension( FILTER_CALC, aExt) )
+        aImg = BitmapEx ( SfxResId( SFX_FILE_THUMBNAIL_SHEET ) );
+    else if ( isFilteredExtension( FILTER_IMPRESS, aExt) )
+        aImg = BitmapEx ( SfxResId( SFX_FILE_THUMBNAIL_PRESENTATION ) );
+    else if ( isFilteredExtension( FILTER_DRAW, aExt) )
+        aImg = BitmapEx ( SfxResId( SFX_FILE_THUMBNAIL_DRAWING ) );
+    else if ( isFilteredExtension( FILTER_DATABASE, aExt) )
+        aImg = BitmapEx ( SfxResId( SFX_FILE_THUMBNAIL_DATABASE ) );
+    else if ( isFilteredExtension( FILTER_MATH, aExt) )
+        aImg = BitmapEx ( SfxResId( SFX_FILE_THUMBNAIL_MATH ) );
+    else
+        aImg = BitmapEx ( SfxResId( SFX_FILE_THUMBNAIL_DEFAULT ) );
+
+    return aImg;
 }
 
 void RecentDocsView::insertItem(const OUString &rURL, const OUString &rTitle)
