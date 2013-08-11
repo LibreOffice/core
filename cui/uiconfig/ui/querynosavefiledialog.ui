@@ -4,7 +4,7 @@
   <object class="GtkMessageDialog" id="NoSaveFileDialog">
     <property name="can_focus">False</property>
     <property name="border_width">12</property>
-    <property name="title" translatable="yes">No loaded file</property>
+    <property name="title" translatable="yes">No saved file</property>
     <property name="type_hint">dialog</property>
     <property name="skip_taskbar_hint">True</property>
     <property name="message_type">error</property>
