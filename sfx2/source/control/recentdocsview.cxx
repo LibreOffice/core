@@ -95,6 +95,12 @@ bool RecentDocsView::isFilteredExtension(APPLICATION_FILTER filter, const OUStri
     return bRet;
 }
 
+bool RecentDocsView::isUnfilteredFile(const OUString &rURL) const
+{
+    INetURLObject aUrl(rURL);
+    return isFilteredExtension(mFilter, aUrl.getExtension());
+}
+
 BitmapEx RecentDocsView::getDefaultThumbnail(const OUString &rURL)
 {
     BitmapEx aImg;
@@ -149,7 +155,10 @@ void RecentDocsView::loadRecentDocs()
                 a >>= aTitle;
         }
 
-        insertItem(aURL, aTitle);
+        if( isUnfilteredFile(aURL) )
+        {
+            insertItem(aURL, aTitle);
+        }
     }
 
     CalculateItemPositions();
@@ -212,6 +221,11 @@ void RecentDocsView::SetThumbnailSize(long thumbnailSize)
 long RecentDocsView::GetThumbnailSize() const
 {
     return mnItemMaxSize;
+}
+
+void RecentDocsView::SetFilter(APPLICATION_FILTER filter)
+{
+    mFilter = filter;
 }
 
 Size RecentDocsView::GetOptimalSize() const
