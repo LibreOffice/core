@@ -763,7 +763,7 @@ void OConnection::clearStatements()
 }
 
 //----- XTablesSupplier ------------------------------------------------------
-uno::Reference< XNameAccess > OConnection::getTables()
+uno::Reference< XNameAccess > SAL_CALL OConnection::getTables()
     throw (RuntimeException)
 {
     // TODO: IMPLEMENT ME PROPERLY

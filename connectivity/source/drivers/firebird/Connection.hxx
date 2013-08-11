@@ -162,8 +162,8 @@ namespace connectivity
             virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
 
             // XTablesSupplier
-            ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
-                getTables()
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
+                SAL_CALL getTables()
                 throw(::com::sun::star::uno::RuntimeException);
 
 
