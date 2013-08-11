@@ -107,6 +107,8 @@ static std::ostream &operator<<(std::ostream &s, NSPoint point) {
         mpReferenceWrapper -> rAccessibleTextAttributes = Reference < XAccessibleTextAttributes > ( rxAccessibleContext, UNO_QUERY );
         // XAccessibleMultiLineText
         mpReferenceWrapper -> rAccessibleMultiLineText = Reference < XAccessibleMultiLineText > ( rxAccessibleContext, UNO_QUERY );
+        // XAccessibleTextMarkup
+        mpReferenceWrapper -> rAccessibleTextMarkup = Reference < XAccessibleTextMarkup > ( rxAccessibleContext, UNO_QUERY );
         // XAccessibleEventBroadcaster
         #if 0
         /* #i102033# NSAccessibility does not seemt to know an equivalent for transient children.
@@ -1111,6 +1113,10 @@ Reference < XAccessibleContext > hitTestRunner ( com::sun::star::awt::Point poin
 
 -(XAccessibleMultiLineText *)accessibleMultiLineText {
     return mpReferenceWrapper -> rAccessibleMultiLineText.get();
+}
+
+-(XAccessibleTextMarkup *)accessibleTextMarkup {
+    return mpReferenceWrapper -> rAccessibleTextMarkup.get();
 }
 
 -(NSView *)viewElementForParent {
