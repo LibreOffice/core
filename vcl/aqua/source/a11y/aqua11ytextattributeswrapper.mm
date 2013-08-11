@@ -36,6 +36,72 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::rtl;
 
+// cannot use NSFontDescriptor as it has no notion of explicit NSUn{bold,italic}FontMask
+@interface AquaA11yFontDescriptor : NSObject
+{
+    NSString *_name;
+    NSFontTraitMask _traits;
+    CGFloat _size;
+}
+-(void)setName:(NSString*)name;
+-(void)setBold:(NSFontTraitMask)bold;
+-(void)setItalic:(NSFontTraitMask)italic;
+-(void)setSize:(CGFloat)size;
+-(NSFont*)font;
+@end
+
+@implementation AquaA11yFontDescriptor
+- (id)init
+{
+    if((self = [super init]))
+    {
+        _name = nil;
+        _traits = 0;
+        _size = 0.0;
+    }
+    return self;
+}
+
+- (id)initWithDescriptor:(AquaA11yFontDescriptor*)descriptor {
+    if((self = [super init]))
+    {
+        _name = [descriptor->_name retain];
+        _traits = descriptor->_traits;
+        _size = descriptor->_size;
+    }
+    return self;
+}
+
+- (void)dealloc {
+    [_name release];
+    [super dealloc];
+}
+
+-(void)setName:(NSString*)name {
+    if (_name != name) {
+        [name retain];
+        [_name release];
+        _name = name;
+    }
+}
+
+-(void)setBold:(NSFontTraitMask)bold {
+    _traits &= ~(NSBoldFontMask | NSUnboldFontMask);
+    _traits |= bold & (NSBoldFontMask | NSUnboldFontMask);
+};
+
+-(void)setItalic:(NSFontTraitMask)italic {
+    _traits &= ~(NSItalicFontMask | NSUnitalicFontMask);
+    _traits |= italic & (NSItalicFontMask | NSUnitalicFontMask);
+};
+
+-(void)setSize:(CGFloat)size { _size = size; }
+
+-(NSFont*)font {
+    return [[NSFontManager sharedFontManager] fontWithFamily:_name traits:_traits weight:0 size:_size];
+}
+@end
+
 @implementation AquaA11yTextAttributesWrapper : NSObject
 
 +(int)convertUnderlineStyle:(PropertyValue)property {
@@ -123,7 +189,7 @@ using namespace ::rtl;
     }
 }
 
-+(void)applyAttributesFrom:(Sequence < PropertyValue >)attributes toString:(NSMutableAttributedString *)string forRange:(NSRange)range storeDefaultsTo:(AquaA11yWrapper *)wrapperStore getDefaultsFrom:(AquaA11yWrapper *)wrapper {
++(void)applyAttributesFrom:(Sequence < PropertyValue >)attributes toString:(NSMutableAttributedString *)string forRange:(NSRange)range fontDescriptor:(AquaA11yFontDescriptor*)fontDescriptor {
     NSAutoreleasePool * pool = [ [ NSAutoreleasePool alloc ] init ];
     // constants
     static const OUString attrUnderline("CharUnderline");
@@ -139,9 +205,6 @@ using namespace ::rtl;
     static const OUString attrBackgroundColor("CharBackColor");
     static const OUString attrSuperscript("CharEscapement");
     // vars
-    OUString fontname;
-    int fonttraits = 0;
-    float fontsize = 0.0;
     sal_Int32 underlineColor = 0;
     BOOL underlineHasColor = NO;
     // add attributes to string
@@ -156,13 +219,17 @@ using namespace ::rtl;
                     [ string addAttribute: NSAccessibilityUnderlineTextAttribute value: [ NSNumber numberWithInt: style ] range: range ];
                 }
             } else if ( property.Name.equals ( attrFontname ) ) {
+                OUString fontname;
                 property.Value >>= fontname;
+                [fontDescriptor setName:CreateNSString(fontname)];
             } else if ( property.Name.equals ( attrBold ) ) {
-                fonttraits |= [ AquaA11yTextAttributesWrapper convertBoldStyle: property ];
+                [fontDescriptor setBold:[AquaA11yTextAttributesWrapper convertBoldStyle:property]];
             } else if ( property.Name.equals ( attrItalic ) ) {
-                fonttraits |= [ AquaA11yTextAttributesWrapper convertItalicStyle: property ];
+                [fontDescriptor setItalic:[AquaA11yTextAttributesWrapper convertItalicStyle:property]];
             } else if ( property.Name.equals ( attrHeight ) ) {
-                property.Value >>= fontsize;
+                float size;
+                property.Value >>= size;
+                [fontDescriptor setSize:size];
             } else if ( property.Name.equals ( attrStrikethrough ) ) {
                 if ( [ AquaA11yTextAttributesWrapper isStrikethrough: property ] ) {
                     [ string addAttribute: NSAccessibilityStrikethroughTextAttribute value: [ NSNumber numberWithBool: YES ] range: range ];
@@ -195,27 +262,8 @@ using namespace ::rtl;
         [ AquaA11yTextAttributesWrapper addColor: underlineColor forAttribute: NSAccessibilityUnderlineColorTextAttribute andRange: range toString: string ];
     }
     // add font information
-    if ( wrapperStore != nil ) { // default
-        [ wrapperStore setDefaultFontname: CreateNSString ( fontname ) ];
-        [ wrapperStore setDefaultFontsize: fontsize ];
-        [ wrapperStore setDefaultFonttraits: fonttraits ];
-        NSFont * font = [ [ NSFontManager sharedFontManager ] fontWithFamily: CreateNSString ( fontname ) traits: fonttraits weight: 0 size: fontsize ];
-        [ AquaA11yTextAttributesWrapper addFont: font toString: string forRange: range ];
-    } else if ( wrapper != nil) { // attribute run and bold and/or italic was found
-        NSString *fontName = nil;
-        if (fontname.isEmpty())
-            fontName = [wrapper defaultFontname];
-        else
-            fontName = CreateNSString(fontname);
-        if (!(fonttraits & (NSBoldFontMask | NSUnboldFontMask)))
-            fonttraits |= [wrapper defaultFonttraits] & (NSBoldFontMask | NSUnboldFontMask);
-        if (!(fonttraits & (NSItalicFontMask | NSUnitalicFontMask)))
-            fonttraits |= [wrapper defaultFonttraits] & (NSItalicFontMask | NSUnitalicFontMask);
-        if (fontsize == 0.0)
-            fontsize = [wrapper defaultFontsize];
-        NSFont * font = [ [ NSFontManager sharedFontManager ] fontWithFamily: fontName traits: fonttraits weight: 0 size: fontsize ];
-        [ AquaA11yTextAttributesWrapper addFont: font toString: string forRange: range ];
-    }
+    NSFont * font = [fontDescriptor font];
+    [AquaA11yTextAttributesWrapper addFont:font toString:string forRange:range];
     [ pool release ];
 }
 
@@ -234,7 +282,8 @@ using namespace ::rtl;
             [ string beginEditing ];
             // add default attributes for whole string
             Sequence < PropertyValue > defaultAttributes = [ wrapper accessibleTextAttributes ] -> getDefaultAttributes ( emptySequence );
-            [ AquaA11yTextAttributesWrapper applyAttributesFrom: defaultAttributes toString: string forRange: NSMakeRange ( 0, len ) storeDefaultsTo: wrapper getDefaultsFrom: nil ];
+            AquaA11yFontDescriptor *defaultFontDescriptor = [[AquaA11yFontDescriptor alloc] init];
+            [ AquaA11yTextAttributesWrapper applyAttributesFrom: defaultAttributes toString: string forRange: NSMakeRange ( 0, len ) fontDescriptor: defaultFontDescriptor ];
             // add attributes for attribute run(s)
             while ( currentIndex < endIndex ) {
                 TextSegment textSegment = [ wrapper accessibleText ] -> getTextAtIndex ( currentIndex, AccessibleTextType::ATTRIBUTE_RUN );
@@ -242,9 +291,12 @@ using namespace ::rtl;
                 NSRange rangeForAttributeRun = NSMakeRange ( currentIndex - loc , endOfRange - currentIndex );
                 // add run attributes
                 Sequence < PropertyValue > attributes = [ wrapper accessibleTextAttributes ] -> getRunAttributes ( currentIndex, emptySequence );
-                [ AquaA11yTextAttributesWrapper applyAttributesFrom: attributes toString: string forRange: rangeForAttributeRun storeDefaultsTo: nil getDefaultsFrom: wrapper ];
+                AquaA11yFontDescriptor *fontDescriptor = [[AquaA11yFontDescriptor alloc] initWithDescriptor:defaultFontDescriptor];
+                [ AquaA11yTextAttributesWrapper applyAttributesFrom: attributes toString: string forRange: rangeForAttributeRun fontDescriptor: fontDescriptor ];
+                [fontDescriptor release];
                 currentIndex = textSegment.SegmentEnd;
             }
+            [defaultFontDescriptor release];
             [ string endEditing ];
         }
     } catch ( IllegalArgumentException & e ) {
