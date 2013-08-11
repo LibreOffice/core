@@ -419,8 +419,8 @@ void ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
 
                 if ( mpIMEInfos->bWasCursorOverwrite )
                 {
-                    sal_uInt16 nOldIMETextLen = mpIMEInfos->nLen;
-                    sal_uInt16 nNewIMETextLen = pData->GetText().Len();
+                    sal_Int32 nOldIMETextLen = mpIMEInfos->nLen;
+                    sal_Int32 nNewIMETextLen = pData->GetText().getLength();
 
                     if ( ( nOldIMETextLen > nNewIMETextLen ) &&
                          ( nNewIMETextLen < mpIMEInfos->aOldTextAfterStartPos.Len() ) )
@@ -449,13 +449,13 @@ void ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
                 }
                 if ( pData->GetTextAttr() )
                 {
-                    mpIMEInfos->CopyAttribs( pData->GetTextAttr(), pData->GetText().Len() );
+                    mpIMEInfos->CopyAttribs( pData->GetTextAttr(), pData->GetText().getLength() );
                     mpIMEInfos->bCursor = pData->IsCursorVisible();
                 }
                 else
                 {
                     mpIMEInfos->DestroyAttribs();
-                    mpIMEInfos->nLen = pData->GetText().Len();
+                    mpIMEInfos->nLen = pData->GetText().getLength();
                 }
 
                 ParaPortion* pPortion = FindParaPortion( mpIMEInfos->aPos.GetNode() );

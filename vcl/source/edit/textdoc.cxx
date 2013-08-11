@@ -458,7 +458,7 @@ void TextDoc::DestroyTextNodes()
     maTextNodes.clear();
 }
 
-String TextDoc::GetText( const sal_Unicode* pSep ) const
+OUString TextDoc::GetText( const sal_Unicode* pSep ) const
 {
     sal_uLong nLen = GetTextLen( pSep );
     sal_uLong nNodes = maTextNodes.Count();
@@ -483,9 +483,10 @@ String TextDoc::GetText( const sal_Unicode* pSep ) const
     return aASCIIText;
 }
 
-XubString TextDoc::GetText( sal_uLong nPara ) const
+OUString TextDoc::GetText( sal_uLong nPara ) const
 {
-    XubString aText;
+    OUString aText;
+
     TextNode* pNode = ( nPara < maTextNodes.Count() ) ? maTextNodes.GetObject( nPara ) : 0;
     if ( pNode )
         aText = pNode->GetText();
@@ -541,15 +542,15 @@ TextPaM TextDoc::InsertText( const TextPaM& rPaM, sal_Unicode c )
     return aPaM;
 }
 
-TextPaM TextDoc::InsertText( const TextPaM& rPaM, const XubString& rStr )
+TextPaM TextDoc::InsertText( const TextPaM& rPaM, const OUString& rStr )
 {
-    DBG_ASSERT( rStr.Search( 0x0A ) == STRING_NOTFOUND, "TextDoc::InsertText: Zeilentrenner in Absatz nicht erlaubt!" );
-    DBG_ASSERT( rStr.Search( 0x0D ) == STRING_NOTFOUND, "TextDoc::InsertText: Zeilentrenner in Absatz nicht erlaubt!" );
+    DBG_ASSERT( rStr.indexOf( 0x0A ) == -1, "TextDoc::InsertText: Zeilentrenner in Absatz nicht erlaubt!" );
+    DBG_ASSERT( rStr.indexOf( 0x0D ) == -1, "TextDoc::InsertText: Zeilentrenner in Absatz nicht erlaubt!" );
 
     TextNode* pNode = maTextNodes.GetObject( rPaM.GetPara() );
     pNode->InsertText( rPaM.GetIndex(), rStr );
 
-    TextPaM aPaM( rPaM.GetPara(), rPaM.GetIndex()+rStr.Len() );
+    TextPaM aPaM( rPaM.GetPara(), rPaM.GetIndex()+rStr.getLength() );
     return aPaM;
 }
 

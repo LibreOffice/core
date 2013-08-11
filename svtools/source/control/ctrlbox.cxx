@@ -136,7 +136,7 @@ ColorListBox::~ColorListBox()
 
 // -----------------------------------------------------------------------
 
-sal_uInt16 ColorListBox::InsertEntry( const XubString& rStr, sal_uInt16 nPos )
+sal_uInt16 ColorListBox::InsertEntry( const OUString& rStr, sal_uInt16 nPos )
 {
     nPos = ListBox::InsertEntry( rStr, nPos );
     if ( nPos != LISTBOX_ERROR )
@@ -159,7 +159,7 @@ sal_uInt16 ColorListBox::InsertEntry( const XubString& rStr, sal_uInt16 nPos )
 
 // -----------------------------------------------------------------------
 
-sal_uInt16 ColorListBox::InsertEntry( const Color& rColor, const XubString& rStr,
+sal_uInt16 ColorListBox::InsertEntry( const Color& rColor, const OUString& rStr,
                                 sal_uInt16 nPos )
 {
     nPos = ListBox::InsertEntry( rStr, nPos );
@@ -529,7 +529,7 @@ sal_uInt16 LineListBox::GetSelectEntryStyle( sal_uInt16 nSelIndex ) const
     sal_uInt16 nPos = GetSelectEntryPos( nSelIndex );
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        if ( m_sNone.Len( ) > 0 )
+        if (!m_sNone.isEmpty())
             nPos--;
         nStyle = GetEntryStyle( nPos );
     }
@@ -808,7 +808,7 @@ LineListBox::~LineListBox()
 sal_uInt16 LineListBox::GetStylePos( sal_uInt16 nListPos, long nWidth )
 {
     sal_uInt16 nPos = LISTBOX_ENTRY_NOTFOUND;
-    if ( m_sNone.Len( ) > 0 )
+    if (!m_sNone.isEmpty())
         nListPos--;
 
     sal_uInt16 i = 0;
@@ -839,7 +839,7 @@ void LineListBox::SelectEntry( sal_uInt16 nStyle, sal_Bool bSelect )
 
 // -----------------------------------------------------------------------
 
-sal_uInt16 LineListBox::InsertEntry( const XubString& rStr, sal_uInt16 nPos )
+sal_uInt16 LineListBox::InsertEntry( const OUString& rStr, sal_uInt16 nPos )
 {
     nPos = ListBox::InsertEntry( rStr, nPos );
     if ( nPos != LISTBOX_ERROR ) {
@@ -907,7 +907,7 @@ sal_uInt16 LineListBox::GetEntryPos( sal_uInt16 nStyle ) const
             if ( GetEntryStyle( i ) == nStyle )
             {
                 size_t nPos = i;
-                if ( m_sNone.Len() > 0 )
+                if (!m_sNone.isEmpty())
                     nPos ++;
                 return (sal_uInt16)nPos;
             }
@@ -954,7 +954,7 @@ void LineListBox::UpdateEntries( long nOldWidth )
         ListBox::RemoveEntry( 0 );
 
     // Add the new entries based on the defined width
-    if ( m_sNone.Len( ) > 0 )
+    if (!m_sNone.isEmpty())
         ListBox::InsertEntry( m_sNone, LISTBOX_APPEND );
 
     sal_uInt16 n = 0;
@@ -1142,9 +1142,9 @@ void FontNameBox::ImplDestroyFontList()
 void FontNameBox::Fill( const FontList* pList )
 {
     // store old text and clear box
-    XubString aOldText = GetText();
-    XubString rEntries = GetMRUEntries();
-    sal_Bool bLoadFromFile = ! rEntries.Len();
+    OUString aOldText = GetText();
+    OUString rEntries = GetMRUEntries();
+    bool bLoadFromFile = rEntries.isEmpty();
     Clear();
 
     ImplDestroyFontList();
@@ -1176,7 +1176,7 @@ void FontNameBox::Fill( const FontList* pList )
     ImplCalcUserItemSize();
 
     // restore text
-    if ( aOldText.Len() )
+    if (!aOldText.isEmpty())
         SetText( aOldText );
 }
 
@@ -1476,7 +1476,7 @@ void FontStyleBox::Modify()
 {
     CharClass   aChrCls( ::comphelper::getProcessComponentContext(),
                         GetSettings().GetLanguageTag() );
-    XubString   aStr = GetText();
+    OUString   aStr = GetText();
     sal_uInt16      nEntryCount = GetEntryCount();
 
     if ( GetEntryPos( aStr ) == COMBOBOX_ENTRY_NOTFOUND )
@@ -1484,7 +1484,7 @@ void FontStyleBox::Modify()
         aStr = aChrCls.uppercase(aStr);
         for ( sal_uInt16 i = 0; i < nEntryCount; i++ )
         {
-            XubString aEntryText = aChrCls.uppercase(GetEntry(i));
+            OUString aEntryText = aChrCls.uppercase(GetEntry(i));
 
             if ( aStr == aEntryText )
             {
@@ -1499,12 +1499,12 @@ void FontStyleBox::Modify()
 
 // -------------------------------------------------------------------
 
-void FontStyleBox::Fill( const XubString& rName, const FontList* pList )
+void FontStyleBox::Fill( const OUString& rName, const FontList* pList )
 {
     // note: this method must call ComboBox::SetText(),
     //   else aLastStyle will overwritten
     // store prior selection position and clear box
-    XubString aOldText = GetText();
+    OUString aOldText = GetText();
     sal_uInt16 nPos = GetEntryPos( aOldText );
     Clear();
 
@@ -1608,7 +1608,7 @@ void FontStyleBox::Fill( const XubString& rName, const FontList* pList )
             if ( bNormal || bItalic || bBold )
                 InsertEntry( pList->GetBoldItalicStr() );
         }
-        if ( aOldText.Len() )
+        if (!aOldText.isEmpty())
         {
             if ( GetEntryPos( aLastStyle ) != LISTBOX_ENTRY_NOTFOUND )
                 ComboBox::SetText( aLastStyle );
@@ -1628,7 +1628,7 @@ void FontStyleBox::Fill( const XubString& rName, const FontList* pList )
         InsertEntry( pList->GetItalicStr() );
         InsertEntry( pList->GetBoldStr() );
         InsertEntry( pList->GetBoldItalicStr() );
-        if ( aOldText.Len() )
+        if (!aOldText.isEmpty())
         {
             if ( nPos > GetEntryCount() )
                 ComboBox::SetText( GetEntry( 0 ) );
@@ -1711,7 +1711,7 @@ void FontSizeBox::Modify()
 
     if ( bRelativeMode )
     {
-        XubString aStr = comphelper::string::stripStart(GetText(), ' ');
+        OUString aStr = comphelper::string::stripStart(GetText(), ' ');
 
         sal_Bool bNewMode = bRelative;
         sal_Bool bOldPtRelMode = bPtRelative;
@@ -1719,7 +1719,7 @@ void FontSizeBox::Modify()
         if ( bRelative )
         {
             bPtRelative = sal_False;
-            const sal_Unicode* pStr = aStr.GetBuffer();
+            const sal_Unicode* pStr = aStr.getStr();
             while ( *pStr )
             {
                 if ( ((*pStr < '0') || (*pStr > '9')) && (*pStr != '%') )
@@ -1739,13 +1739,13 @@ void FontSizeBox::Modify()
         }
         else
         {
-            if ( STRING_NOTFOUND != aStr.Search( '%' ) )
+            if ( -1 != aStr.indexOf('%') )
             {
                 bNewMode = sal_True;
                 bPtRelative = sal_False;
             }
 
-            if ( '-' == aStr.GetChar( 0 ) || '+' == aStr.GetChar( 0 ) )
+            if ( '-' == aStr[0] || '+' == aStr[0] )
             {
                 bNewMode = sal_True;
                 bPtRelative = sal_True;
@@ -1795,7 +1795,7 @@ void FontSizeBox::Fill( const FontInfo* pInfo, const FontList* pList )
         bStdSize = sal_False;
 
     Selection aSelection = GetSelection();
-    XubString aStr = GetText();
+    OUString aStr = GetText();
 
     Clear();
     sal_uInt16 nPos = 0;
@@ -1876,7 +1876,7 @@ void FontSizeBox::SetRelative( sal_Bool bNewRelative )
     if ( bRelativeMode )
     {
         Selection aSelection = GetSelection();
-        XubString aStr = comphelper::string::stripStart(GetText(), ' ');
+        OUString aStr = comphelper::string::stripStart(GetText(), ' ');
 
         if ( bNewRelative )
         {

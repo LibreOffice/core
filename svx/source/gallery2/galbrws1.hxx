@@ -133,7 +133,7 @@ public:
 
     void                    SelectTheme( const String& rThemeName ) { mpThemes->SelectEntry( rThemeName ); SelectThemeHdl( NULL ); }
     void                    SelectTheme( sal_uIntPtr nThemePos ) { mpThemes->SelectEntryPos( (sal_uInt16) nThemePos ); SelectThemeHdl( NULL ); }
-    String                  GetSelectedTheme() { return mpThemes->GetEntryCount() ? mpThemes->GetEntry( mpThemes->GetSelectEntryPos() ) : String(); }
+    OUString                GetSelectedTheme() { return mpThemes->GetEntryCount() ? mpThemes->GetEntry( mpThemes->GetSelectEntryPos() ) : OUString(); }
 
     void                    ShowContextMenu();
     sal_Bool                    KeyInput( const KeyEvent& rKEvt, Window* pWindow );

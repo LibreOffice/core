@@ -3356,7 +3356,7 @@ void SvxCharTwoLinesPage::SetBracket( sal_Unicode cBracket, sal_Bool bStart )
         {
             if ( (sal_uLong)pBox->GetEntryData(i) != CHRDLG_ENCLOSE_SPECIAL_CHAR )
             {
-                const sal_Unicode cChar = pBox->GetEntry(i).GetChar(0);
+                const sal_Unicode cChar = pBox->GetEntry(i)[0];
                 if ( cChar == cBracket )
                 {
                     pBox->SelectEntryPos(i);

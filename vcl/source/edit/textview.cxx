@@ -950,8 +950,8 @@ void TextView::Command( const CommandEvent& rCEvt )
 
                 if ( mpImpl->mpTextEngine->mpIMEInfos->bWasCursorOverwrite )
                 {
-                    sal_uInt16 nOldIMETextLen = mpImpl->mpTextEngine->mpIMEInfos->nLen;
-                    sal_uInt16 nNewIMETextLen = pData->GetText().Len();
+                    sal_Int32 nOldIMETextLen = mpImpl->mpTextEngine->mpIMEInfos->nLen;
+                    sal_Int32 nNewIMETextLen = pData->GetText().getLength();
 
                     if ( ( nOldIMETextLen > nNewIMETextLen ) &&
                          ( nNewIMETextLen < mpImpl->mpTextEngine->mpIMEInfos->aOldTextAfterStartPos.Len() ) )
@@ -981,7 +981,7 @@ void TextView::Command( const CommandEvent& rCEvt )
 
                 if ( pData->GetTextAttr() )
                 {
-                    mpImpl->mpTextEngine->mpIMEInfos->CopyAttribs( pData->GetTextAttr(), pData->GetText().Len() );
+                    mpImpl->mpTextEngine->mpIMEInfos->CopyAttribs( pData->GetTextAttr(), pData->GetText().getLength() );
                     mpImpl->mpTextEngine->mpIMEInfos->bCursor = pData->IsCursorVisible();
                 }
                 else

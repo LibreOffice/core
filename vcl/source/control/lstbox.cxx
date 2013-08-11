@@ -431,11 +431,11 @@ void ListBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sa
 
     if ( IsDropDownBox() )
     {
-        XubString   aText = GetSelectEntry();
-        long        nTextHeight = pDev->GetTextHeight();
-        long        nTextWidth = pDev->GetTextWidth( aText );
-        long        nOffX = 3*nOnePixel;
-        long        nOffY = (aSize.Height()-nTextHeight) / 2;
+        OUString   aText = GetSelectEntry();
+        long       nTextHeight = pDev->GetTextHeight();
+        long       nTextWidth = pDev->GetTextWidth( aText );
+        long       nOffX = 3*nOnePixel;
+        long       nOffY = (aSize.Height()-nTextHeight) / 2;
 
         // Clipping?
         if ( (nOffY < 0) ||
@@ -1012,7 +1012,7 @@ void ListBox::SetNoSelection()
 }
 
 
-sal_uInt16 ListBox::InsertEntry( const XubString& rStr, sal_uInt16 nPos )
+sal_uInt16 ListBox::InsertEntry( const OUString& rStr, sal_uInt16 nPos )
 {
     sal_uInt16 nRealPos = mpImplLB->InsertEntry( nPos + mpImplLB->GetEntryList()->GetMRUCount(), rStr );
     nRealPos = sal::static_int_cast<sal_uInt16>(nRealPos - mpImplLB->GetEntryList()->GetMRUCount());
@@ -1030,7 +1030,7 @@ sal_uInt16 ListBox::InsertEntry( const Image& rImage, sal_uInt16 nPos )
 }
 
 
-sal_uInt16 ListBox::InsertEntry( const XubString& rStr, const Image& rImage, sal_uInt16 nPos )
+sal_uInt16 ListBox::InsertEntry( const OUString& rStr, const Image& rImage, sal_uInt16 nPos )
 {
     sal_uInt16 nRealPos = mpImplLB->InsertEntry( nPos + mpImplLB->GetEntryList()->GetMRUCount(), rStr, rImage );
     nRealPos = sal::static_int_cast<sal_uInt16>(nRealPos - mpImplLB->GetEntryList()->GetMRUCount());
@@ -1039,7 +1039,7 @@ sal_uInt16 ListBox::InsertEntry( const XubString& rStr, const Image& rImage, sal
 }
 
 
-void ListBox::RemoveEntry( const XubString& rStr )
+void ListBox::RemoveEntry( const OUString& rStr )
 {
     RemoveEntry( GetEntryPos( rStr ) );
 }
@@ -1060,7 +1060,7 @@ Image ListBox::GetEntryImage( sal_uInt16 nPos ) const
 }
 
 
-sal_uInt16 ListBox::GetEntryPos( const XubString& rStr ) const
+sal_uInt16 ListBox::GetEntryPos( const OUString& rStr ) const
 {
     sal_uInt16 nPos = mpImplLB->GetEntryList()->FindEntry( rStr );
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
@@ -1078,7 +1078,7 @@ sal_uInt16 ListBox::GetEntryPos( const void* pData ) const
 }
 
 
-XubString ListBox::GetEntry( sal_uInt16 nPos ) const
+OUString ListBox::GetEntry( sal_uInt16 nPos ) const
 {
     return mpImplLB->GetEntryList()->GetEntryText( nPos + mpImplLB->GetEntryList()->GetMRUCount() );
 }
@@ -1127,7 +1127,7 @@ sal_Bool ListBox::IsEntryPosSelected( sal_uInt16 nPos ) const
 }
 
 
-void ListBox::SelectEntry( const XubString& rStr, sal_Bool bSelect )
+void ListBox::SelectEntry( const OUString& rStr, sal_Bool bSelect )
 {
     SelectEntryPos( GetEntryPos( rStr ), bSelect );
 }

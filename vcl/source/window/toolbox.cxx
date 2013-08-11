@@ -4310,13 +4310,13 @@ void ToolBox::RequestHelp( const HelpEvent& rHEvt )
             aTempRect.Bottom() = aPt.Y();
 
             // get text and display it
-            XubString aStr = GetQuickHelpText( nItemId );
-            const XubString& rHelpStr = GetHelpText( nItemId );
-            if ( !aStr.Len() )
+            OUString aStr = GetQuickHelpText( nItemId );
+            const OUString& rHelpStr = GetHelpText( nItemId );
+            if (aStr.isEmpty())
                 aStr = MnemonicGenerator::EraseAllMnemonicChars( GetItemText( nItemId ) );
             if ( rHEvt.GetMode() & HELPMODE_BALLOON )
             {
-                if ( rHelpStr.Len() )
+                if (!rHelpStr.isEmpty())
                     aStr = rHelpStr;
                 Help::ShowBalloon( this, aHelpPos, aTempRect, aStr );
             }

@@ -62,7 +62,7 @@ namespace com { namespace sun { namespace star {
 #define VCLEVENT_WINDOW_MOUSEMOVE           1015    // pData = MouseEvent*
 #define VCLEVENT_WINDOW_MOUSEBUTTONDOWN     1016    // pData = MouseEvent*
 #define VCLEVENT_WINDOW_MOUSEBUTTONUP       1017    // pData = MouseEvent*
-#define VCLEVENT_WINDOW_FRAMETITLECHANGED   1018    // pData = XubString* = oldTitle
+#define VCLEVENT_WINDOW_FRAMETITLECHANGED   1018    // pData = OUString* = oldTitle
 #define VCLEVENT_APPLICATION_DATACHANGED    1019    // pData = DataChangedEvent*
 #define VCLEVENT_WINDOW_ENABLED             1020
 #define VCLEVENT_WINDOW_DISABLED            1021

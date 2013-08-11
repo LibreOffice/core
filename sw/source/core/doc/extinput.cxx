@@ -194,7 +194,7 @@ void SwExtTextInput::SetInputData( const CommandExtTextInputData& rData )
         if( rData.GetTextAttr() )
         {
             const sal_uInt16 *pAttrs = rData.GetTextAttr();
-            aAttrs.insert( aAttrs.begin(), pAttrs, pAttrs + rData.GetText().Len() );
+            aAttrs.insert( aAttrs.begin(), pAttrs, pAttrs + rData.GetText().getLength() );
         }
     }
 }

@@ -22,7 +22,7 @@
 
 #include <vcl/cmdevt.hxx>
 
-CommandExtTextInputData::CommandExtTextInputData( const XubString& rText,
+CommandExtTextInputData::CommandExtTextInputData( const OUString& rText,
                                                   const sal_uInt16* pTextAttr,
                                                   xub_StrLen nCursorPos,
                                                   sal_uInt16 nCursorFlags,
@@ -31,10 +31,10 @@ CommandExtTextInputData::CommandExtTextInputData( const XubString& rText,
                                                   sal_Bool bOnlyCursor ) :
     maText( rText )
 {
-    if ( pTextAttr && maText.Len() )
+    if ( pTextAttr && !maText.isEmpty() )
     {
-        mpTextAttr = new sal_uInt16[maText.Len()];
-        memcpy( mpTextAttr, pTextAttr, maText.Len()*sizeof(sal_uInt16) );
+        mpTextAttr = new sal_uInt16[maText.getLength()];
+        memcpy( mpTextAttr, pTextAttr, maText.getLength()*sizeof(sal_uInt16) );
     }
     else
         mpTextAttr = NULL;
@@ -50,10 +50,10 @@ CommandExtTextInputData::CommandExtTextInputData( const XubString& rText,
 CommandExtTextInputData::CommandExtTextInputData( const CommandExtTextInputData& rData ) :
     maText( rData.maText )
 {
-    if ( rData.mpTextAttr && maText.Len() )
+    if ( rData.mpTextAttr && !maText.isEmpty() )
     {
-        mpTextAttr = new sal_uInt16[maText.Len()];
-        memcpy( mpTextAttr, rData.mpTextAttr, maText.Len()*sizeof(sal_uInt16) );
+        mpTextAttr = new sal_uInt16[maText.getLength()];
+        memcpy( mpTextAttr, rData.mpTextAttr, maText.getLength()*sizeof(sal_uInt16) );
     }
     else
         mpTextAttr = NULL;

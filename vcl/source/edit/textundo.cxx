@@ -224,7 +224,7 @@ void TextUndoConnectParas::Redo()
 
 OUString TextUndoConnectParas::GetComment () const
 {
-    return ResId(STR_TEXTUNDO_CONNECTPARAS, *ImplGetResMgr());
+    return ResId(STR_TEXTUNDO_CONNECTPARAS, *ImplGetResMgr()).toString();
 }
 
 TextUndoSplitPara::TextUndoSplitPara( TextEngine* pTextEngine, sal_uLong nPara, sal_uInt16 nPos )
@@ -255,7 +255,7 @@ OUString TextUndoSplitPara::GetComment () const
     return ResId(STR_TEXTUNDO_SPLITPARA, *ImplGetResMgr());
 }
 
-TextUndoInsertChars::TextUndoInsertChars( TextEngine* pTextEngine, const TextPaM& rTextPaM, const XubString& rStr )
+TextUndoInsertChars::TextUndoInsertChars( TextEngine* pTextEngine, const TextPaM& rTextPaM, const OUString& rStr )
                     : TextUndo( pTextEngine ),
                         maTextPaM( rTextPaM ), maText( rStr )
 {
@@ -264,7 +264,7 @@ TextUndoInsertChars::TextUndoInsertChars( TextEngine* pTextEngine, const TextPaM
 void TextUndoInsertChars::Undo()
 {
     TextSelection aSel( maTextPaM, maTextPaM );
-    aSel.GetEnd().GetIndex() = aSel.GetEnd().GetIndex() + maText.Len();
+    aSel.GetEnd().GetIndex() = aSel.GetEnd().GetIndex() + maText.getLength();
     TextPaM aPaM = GetTextEngine()->ImpDeleteText( aSel );
     SetSelection( aPaM );
 }
@@ -274,7 +274,7 @@ void TextUndoInsertChars::Redo()
     TextSelection aSel( maTextPaM, maTextPaM );
     GetTextEngine()->ImpInsertText( aSel, maText );
     TextPaM aNewPaM( maTextPaM );
-    aNewPaM.GetIndex() = aNewPaM.GetIndex() + maText.Len();
+    aNewPaM.GetIndex() = aNewPaM.GetIndex() + maText.getLength();
     SetSelection( TextSelection( aSel.GetStart(), aNewPaM ) );
 }
 
@@ -288,7 +288,7 @@ bool TextUndoInsertChars::Merge( SfxUndoAction* pNextAction )
     if ( maTextPaM.GetPara() != pNext->maTextPaM.GetPara() )
         return false;
 
-    if ( ( maTextPaM.GetIndex() + maText.Len() ) == pNext->maTextPaM.GetIndex() )
+    if ( ( maTextPaM.GetIndex() + maText.getLength() ) == pNext->maTextPaM.GetIndex() )
     {
         maText += pNext->maText;
         return true;
@@ -301,10 +301,10 @@ OUString TextUndoInsertChars::GetComment () const
     // multiple lines?
     OUString sText(maText);
     Shorten(sText);
-    return OUString(ResId(STR_TEXTUNDO_INSERTCHARS, *ImplGetResMgr())).replaceAll("$1", sText);
+    return ResId(STR_TEXTUNDO_INSERTCHARS, *ImplGetResMgr()).toString().replaceAll("$1", sText);
 }
 
-TextUndoRemoveChars::TextUndoRemoveChars( TextEngine* pTextEngine, const TextPaM& rTextPaM, const XubString& rStr )
+TextUndoRemoveChars::TextUndoRemoveChars( TextEngine* pTextEngine, const TextPaM& rTextPaM, const OUString& rStr )
                     : TextUndo( pTextEngine ),
                         maTextPaM( rTextPaM ), maText( rStr )
 {
@@ -314,14 +314,14 @@ void TextUndoRemoveChars::Undo()
 {
     TextSelection aSel( maTextPaM, maTextPaM );
     GetTextEngine()->ImpInsertText( aSel, maText );
-    aSel.GetEnd().GetIndex() = aSel.GetEnd().GetIndex() + maText.Len();
+    aSel.GetEnd().GetIndex() = aSel.GetEnd().GetIndex() + maText.getLength();
     SetSelection( aSel );
 }
 
 void TextUndoRemoveChars::Redo()
 {
     TextSelection aSel( maTextPaM, maTextPaM );
-    aSel.GetEnd().GetIndex() = aSel.GetEnd().GetIndex() + maText.Len();
+    aSel.GetEnd().GetIndex() = aSel.GetEnd().GetIndex() + maText.getLength();
     TextPaM aPaM = GetTextEngine()->ImpDeleteText( aSel );
     SetSelection( aPaM );
 }

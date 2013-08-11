@@ -318,9 +318,8 @@ static bool ImplIsNotTransparent( const MetaAction& rAct, const OutputDevice& rO
         case META_TEXT_ACTION:
         {
             const MetaTextAction& rTextAct = static_cast<const MetaTextAction&>(rAct);
-            const XubString aString( rTextAct.GetText(), rTextAct.GetIndex(), rTextAct.GetLen() );
-
-            if( aString.Len() )
+            const OUString aString( rTextAct.GetText().copy(rTextAct.GetIndex(), rTextAct.GetLen()) );
+            if (!aString.isEmpty())
                 bRet = true;
         }
         break;
@@ -328,9 +327,8 @@ static bool ImplIsNotTransparent( const MetaAction& rAct, const OutputDevice& rO
         case META_TEXTARRAY_ACTION:
         {
             const MetaTextArrayAction& rTextAct = static_cast<const MetaTextArrayAction&>(rAct);
-            const XubString aString( rTextAct.GetText(), rTextAct.GetIndex(), rTextAct.GetLen() );
-
-            if( aString.Len() )
+            const OUString aString( rTextAct.GetText().copy(rTextAct.GetIndex(), rTextAct.GetLen()) );
+            if (!aString.isEmpty())
                 bRet = true;
         }
         break;
@@ -537,9 +535,9 @@ static Rectangle ImplCalcActionBounds( const MetaAction& rAct, const OutputDevic
         case META_TEXT_ACTION:
         {
             const MetaTextAction& rTextAct = static_cast<const MetaTextAction&>(rAct);
-            const XubString aString( rTextAct.GetText(), rTextAct.GetIndex(), rTextAct.GetLen() );
+            const OUString aString( rTextAct.GetText().copy(rTextAct.GetIndex(), rTextAct.GetLen()) );
 
-            if( aString.Len() )
+            if (!aString.isEmpty())
             {
                 const Point aPtLog( rTextAct.GetPoint() );
 
@@ -555,8 +553,8 @@ static Rectangle ImplCalcActionBounds( const MetaAction& rAct, const OutputDevic
         case META_TEXTARRAY_ACTION:
         {
             const MetaTextArrayAction&  rTextAct = static_cast<const MetaTextArrayAction&>(rAct);
-            const XubString             aString( rTextAct.GetText(), rTextAct.GetIndex(), rTextAct.GetLen() );
-            const long                  nLen = aString.Len();
+            const OUString              aString( rTextAct.GetText().copy(rTextAct.GetIndex(), rTextAct.GetLen()) );
+            const sal_Int32             nLen = aString.getLength();
 
             if( nLen )
             {
@@ -581,8 +579,8 @@ static Rectangle ImplCalcActionBounds( const MetaAction& rAct, const OutputDevic
         case META_STRETCHTEXT_ACTION:
         {
             const MetaStretchTextAction& rTextAct = static_cast<const MetaStretchTextAction&>(rAct);
-            const XubString              aString( rTextAct.GetText(), rTextAct.GetIndex(), rTextAct.GetLen() );
-            const long                   nLen = aString.Len();
+            const OUString               aString( rTextAct.GetText().copy(rTextAct.GetIndex(), rTextAct.GetLen()) );
+            const sal_Int32              nLen = aString.getLength();
 
             // #i16195# Literate copy from TextArray action, the
             // semantics for the ImplLayout call are copied from the

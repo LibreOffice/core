@@ -2479,7 +2479,7 @@ OUString TabBar::GetPageText( sal_uInt16 nPageId ) const
 
 // -----------------------------------------------------------------------
 
-XubString TabBar::GetHelpText( sal_uInt16 nPageId ) const
+OUString TabBar::GetHelpText( sal_uInt16 nPageId ) const
 {
     sal_uInt16 nPos = GetPagePos( nPageId );
     if ( nPos != PAGE_NOT_FOUND )

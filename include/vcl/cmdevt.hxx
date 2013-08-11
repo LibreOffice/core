@@ -45,7 +45,7 @@
 class VCL_DLLPUBLIC CommandExtTextInputData
 {
 private:
-    XubString           maText;
+    OUString            maText;
     sal_uInt16*             mpTextAttr;
     xub_StrLen          mnCursorPos;
     xub_StrLen          mnDeltaStart;
@@ -54,7 +54,7 @@ private:
     sal_Bool                mbOnlyCursor;
 
 public:
-                        CommandExtTextInputData( const XubString& rText,
+                        CommandExtTextInputData( const OUString& rText,
                                                  const sal_uInt16* pTextAttr,
                                                  xub_StrLen nCursorPos,
                                                  sal_uInt16 nCursorFlags,
@@ -64,7 +64,7 @@ public:
                         CommandExtTextInputData( const CommandExtTextInputData& rData );
                         ~CommandExtTextInputData();
 
-    const XubString&    GetText() const { return maText; }
+    const OUString&     GetText() const { return maText; }
     const sal_uInt16*       GetTextAttr() const { return mpTextAttr; }
     sal_uInt16              GetCharTextAttr( sal_uInt16 nIndex ) const;
     xub_StrLen          GetCursorPos() const { return mnCursorPos; }
@@ -78,7 +78,7 @@ public:
 
 inline sal_uInt16 CommandExtTextInputData::GetCharTextAttr( sal_uInt16 nIndex ) const
 {
-    if ( mpTextAttr && (nIndex < maText.Len()) )
+    if ( mpTextAttr && (nIndex < maText.getLength()) )
         return mpTextAttr[nIndex];
     else
         return 0;

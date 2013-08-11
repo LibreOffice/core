@@ -34,11 +34,11 @@ public:
     sal_uInt16              mnId;
     HeaderBarItemBits   mnBits;
     long                mnSize;
-    OString        maHelpId;
+    OString             maHelpId;
     Image               maImage;
-    XubString           maOutText;
-    XubString           maText;
-    XubString           maHelpText;
+    OUString            maOutText;
+    OUString            maText;
+    OUString            maHelpText;
 };
 
 // =======================================================================
@@ -404,7 +404,7 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
     pItem->maOutText = pItem->maText;
     Size aImageSize = pItem->maImage.GetSizePixel();
     Size aTxtSize( pDev->GetTextWidth( pItem->maOutText ), 0  );
-    if ( pItem->maOutText.Len() )
+    if (!pItem->maOutText.isEmpty())
         aTxtSize.Height() = pDev->GetTextHeight();
     long nArrowWidth = 0;
     if ( nBits & (HIB_UPARROW | HIB_DOWNARROW) )
@@ -429,18 +429,19 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
     if ( nTxtWidth > nMaxTxtWidth )
     {
         bLeftText = sal_True;
-        // 3 == Len of "..."
-        pItem->maOutText.AppendAscii( "..." );
+        OUStringBuffer aBuf(pItem->maOutText);
+        aBuf.append("...");
         do
         {
-            pItem->maOutText.Erase( pItem->maOutText.Len()-3-1, 1 );
-            nTxtWidth = pDev->GetTextWidth( pItem->maOutText );
+            aBuf.remove(aBuf.getLength()-3-1, 1);
+            nTxtWidth = pDev->GetTextWidth( aBuf.toString() );
         }
-        while ( (nTxtWidth > nMaxTxtWidth) && (pItem->maOutText.Len() > 3) );
-        if ( pItem->maOutText.Len() == 3 )
+        while ( (nTxtWidth > nMaxTxtWidth) && (aBuf.getLength() > 3) );
+        pItem->maOutText = aBuf.makeStringAndClear();
+        if ( pItem->maOutText.getLength() == 3 )
         {
             nTxtWidth = 0;
-            pItem->maOutText.Erase();
+            pItem->maOutText = OUString();
         }
     }
 
@@ -481,7 +482,7 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
 
     // TextPosition berechnen
     long nTxtPosY = 0;
-    if ( pItem->maOutText.Len() || (nArrowWidth && aTxtSize.Height()) )
+    if ( !pItem->maOutText.isEmpty() || (nArrowWidth && aTxtSize.Height()) )
     {
         if ( nBits & HIB_TOP )
         {
@@ -503,7 +504,7 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
     }
 
     // Text ausgebeben
-    if ( pItem->maOutText.Len() )
+    if (!pItem->maOutText.isEmpty())
     {
         if( aSelectionTextColor != Color( COL_TRANSPARENT ) )
         {
@@ -576,7 +577,7 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
             nArrowX -= nArrowWidth;
         else
             nArrowX += nTxtWidth+HEADERBAR_ARROWOFF;
-        if ( !(nBits & (HIB_LEFTIMAGE | HIB_RIGHTIMAGE)) && !pItem->maText.Len() )
+        if ( !(nBits & (HIB_LEFTIMAGE | HIB_RIGHTIMAGE)) && pItem->maText.isEmpty() )
         {
             if ( nBits & HIB_RIGHT )
                 nArrowX -= aImageSize.Width();
@@ -1127,8 +1128,8 @@ void HeaderBar::RequestHelp( const HelpEvent& rHEvt )
             aItemRect.Right()  = aPt.X();
             aItemRect.Bottom() = aPt.Y();
 
-            XubString aStr = GetHelpText( nItemId );
-            if ( !aStr.Len() || !(rHEvt.GetMode() & HELPMODE_BALLOON) )
+            OUString aStr = GetHelpText( nItemId );
+            if ( aStr.isEmpty() || !(rHEvt.GetMode() & HELPMODE_BALLOON) )
             {
                 ImplHeadItem* pItem = (*mpItemList)[ GetItemPos( nItemId ) ];
                 // Wir zeigen die Quick-Hilfe nur an, wenn Text nicht
@@ -1136,11 +1137,11 @@ void HeaderBar::RequestHelp( const HelpEvent& rHEvt )
                 // an, wenn das Item keinen Text besitzt
                 if ( pItem->maOutText != pItem->maText )
                     aStr = pItem->maText;
-                else if ( pItem->maText.Len() )
-                    aStr.Erase();
+                else if (!pItem->maText.isEmpty())
+                    aStr = OUString();
             }
 
-            if ( aStr.Len() )
+            if (!aStr.isEmpty())
             {
                 if ( rHEvt.GetMode() & HELPMODE_BALLOON )
                     Help::ShowBalloon( this, aItemRect.Center(), aItemRect, aStr );
@@ -1251,7 +1252,7 @@ void HeaderBar::DoubleClick()
 
 // -----------------------------------------------------------------------
 
-void HeaderBar::InsertItem( sal_uInt16 nItemId, const XubString& rText,
+void HeaderBar::InsertItem( sal_uInt16 nItemId, const OUString& rText,
                             long nSize, HeaderBarItemBits nBits, sal_uInt16 nPos )
 {
     DBG_ASSERT( nItemId, "HeaderBar::InsertItem(): ItemId == 0" );
@@ -1447,7 +1448,7 @@ HeaderBarItemBits HeaderBar::GetItemBits( sal_uInt16 nItemId ) const
 
 // -----------------------------------------------------------------------
 
-void HeaderBar::SetItemText( sal_uInt16 nItemId, const XubString& rText )
+void HeaderBar::SetItemText( sal_uInt16 nItemId, const OUString& rText )
 {
     sal_uInt16 nPos = GetItemPos( nItemId );
     if ( nPos != HEADERBAR_ITEM_NOTFOUND )
@@ -1459,24 +1460,23 @@ void HeaderBar::SetItemText( sal_uInt16 nItemId, const XubString& rText )
 
 // -----------------------------------------------------------------------
 
-XubString HeaderBar::GetItemText( sal_uInt16 nItemId ) const
+OUString HeaderBar::GetItemText( sal_uInt16 nItemId ) const
 {
     sal_uInt16 nPos = GetItemPos( nItemId );
     if ( nPos != HEADERBAR_ITEM_NOTFOUND )
         return (*mpItemList)[ nPos ]->maText;
-    else
-        return String();
+    return OUString();
 }
 
 // -----------------------------------------------------------------------
 
-XubString HeaderBar::GetHelpText( sal_uInt16 nItemId ) const
+OUString HeaderBar::GetHelpText( sal_uInt16 nItemId ) const
 {
     sal_uInt16 nPos = GetItemPos( nItemId );
     if ( nPos != HEADERBAR_ITEM_NOTFOUND )
     {
         ImplHeadItem* pItem = (*mpItemList)[ nPos ];
-        if ( !pItem->maHelpText.Len() && !pItem->maHelpId.isEmpty() )
+        if ( pItem->maHelpText.isEmpty() && !pItem->maHelpId.isEmpty() )
         {
             Help* pHelp = Application::GetHelp();
             if ( pHelp )
@@ -1485,8 +1485,8 @@ XubString HeaderBar::GetHelpText( sal_uInt16 nItemId ) const
 
         return pItem->maHelpText;
     }
-    else
-        return XubString();
+
+    return OUString();
 }
 
 // -----------------------------------------------------------------------
@@ -1512,7 +1512,7 @@ Size HeaderBar::CalcWindowSizePixel() const
         ImplHeadItem* pItem = (*mpItemList)[ i ];
         // Image-Groessen beruecksichtigen
         long nImageHeight = pItem->maImage.GetSizePixel().Height();
-        if ( !(pItem->mnBits & (HIB_LEFTIMAGE | HIB_RIGHTIMAGE)) && pItem->maText.Len() )
+        if ( !(pItem->mnBits & (HIB_LEFTIMAGE | HIB_RIGHTIMAGE)) && !pItem->maText.isEmpty() )
             nImageHeight += aSize.Height();
         if ( nImageHeight > nMaxImageSize )
             nMaxImageSize = nImageHeight;

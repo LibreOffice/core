@@ -180,7 +180,7 @@ String PADialog::getSelectedDevice()
 {
     int nPos = m_aDevicesLB.GetSelectEntryPos();
     int nLen = (int)(sal_IntPtr)m_aDevicesLB.GetEntryData( nPos );
-    return m_aDevicesLB.GetEntry( nPos ).Copy( 0, nLen );
+    return m_aDevicesLB.GetEntry( nPos ).copy( 0, nLen );
 }
 
 IMPL_LINK( PADialog, DelPressedHdl, ListBox*, pBox )
@@ -592,10 +592,10 @@ void PADialog::AddDevice()
 
 void PADialog::RemDevice()
 {
-    String aPrinter( getSelectedDevice() );
-    String aDefPrinter( m_rPIManager.getDefaultPrinter() );
+    OUString aPrinter( getSelectedDevice() );
+    OUString aDefPrinter( m_rPIManager.getDefaultPrinter() );
     // do not remove the default printer
-    if( aPrinter.Equals( aDefPrinter ) )
+    if( aPrinter.equals( aDefPrinter ) )
         return;
 
     if( ! m_rPIManager.removePrinter( aPrinter ) )
@@ -609,9 +609,9 @@ void PADialog::RemDevice()
     m_aPrinters.remove( aPrinter );
 
     m_aDevicesLB.RemoveEntry( m_aDevicesLB.GetSelectEntryPos() );
-    for( int i=0; i < m_aDevicesLB.GetEntryCount(); i++ )
+    for (int i=0; i < m_aDevicesLB.GetEntryCount(); ++i)
     {
-        if( m_aDevicesLB.GetEntry( i ).CompareTo( aDefPrinter, aDefPrinter.Len() ) == COMPARE_EQUAL )
+        if (m_aDevicesLB.GetEntry(i).equals(aDefPrinter))
         {
             m_aDevicesLB.SelectEntryPos( i, sal_True );
             UpdateText();
@@ -627,9 +627,9 @@ void PADialog::RemDevice()
 
 void PADialog::ConfigureDevice()
 {
-    String aPrinter( getSelectedDevice() );
+    OUString aPrinter(getSelectedDevice());
 
-    if( ! aPrinter.Len() )
+    if (aPrinter.isEmpty())
         return;
 
     PrinterInfo aInfo( m_rPIManager.getPrinterInfo( aPrinter ) );

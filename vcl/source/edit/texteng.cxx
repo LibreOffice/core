@@ -492,7 +492,7 @@ void TextEngine::ImpRemoveChars( const TextPaM& rPaM, sal_uInt16 nChars, SfxUndo
     {
         // attributes have to be saved for UNDO before RemoveChars!
         TextNode* pNode = mpDoc->GetNodes().GetObject( rPaM.GetPara() );
-        XubString aStr( pNode->GetText().Copy( rPaM.GetIndex(), nChars ) );
+        OUString aStr( pNode->GetText().Copy( rPaM.GetIndex(), nChars ) );
 
         // check if attributes are being deleted or changed
         sal_uInt16 nStart = rPaM.GetIndex();
@@ -707,7 +707,7 @@ TextPaM TextEngine::ImpInsertText( sal_Unicode c, const TextSelection& rCurSel, 
 
                 // the text that needs to be checked is only the one
                 // before the current cursor position
-                OUString aOldText( mpDoc->GetText( aPaM.GetPara() ).Copy(0, nTmpPos) );
+                OUString aOldText( mpDoc->GetText( aPaM.GetPara() ).copy(0, nTmpPos) );
                 OUString aNewText( aOldText );
                 if (aCTLOptions.IsCTLSequenceCheckingTypeAndReplace())
                 {
@@ -770,7 +770,7 @@ TextPaM TextEngine::ImpInsertText( sal_Unicode c, const TextSelection& rCurSel, 
 }
 
 
-TextPaM TextEngine::ImpInsertText( const TextSelection& rCurSel, const XubString& rStr )
+TextPaM TextEngine::ImpInsertText( const TextSelection& rCurSel, const OUString& rStr )
 {
     UndoActionStart();
 
@@ -781,40 +781,35 @@ TextPaM TextEngine::ImpInsertText( const TextSelection& rCurSel, const XubString
     else
         aPaM = rCurSel.GetEnd();
 
-    XubString aText(convertLineEnd(rStr, LINEEND_LF));
+    OUString aText(convertLineEnd(rStr, LINEEND_LF));
 
-    sal_uInt16 nStart = 0;
-    while ( nStart < aText.Len() )
+    sal_Int32 nStart = 0;
+    while ( nStart < aText.getLength() )
     {
-        sal_uInt16 nEnd = aText.Search( LINE_SEP, nStart );
-        if ( nEnd == STRING_NOTFOUND )
-            nEnd = aText.Len(); // do not dereference!
+        sal_Int32 nEnd = aText.indexOf( LINE_SEP, nStart );
+        if (nEnd == -1)
+            nEnd = aText.getLength(); // do not dereference!
 
         // Start == End => empty line
         if ( nEnd > nStart )
         {
             sal_uLong nL = aPaM.GetIndex();
             nL += ( nEnd-nStart );
-            if ( nL > STRING_MAXLEN )
-            {
-                sal_uInt16 nDiff = (sal_uInt16) (nL-STRING_MAXLEN);
-                nEnd = nEnd - nDiff;
-            }
 
-            XubString aLine( aText, nStart, nEnd-nStart );
+            OUString aLine(aText.copy(nStart, nEnd-nStart));
             if ( IsUndoEnabled() && !IsInUndo() )
                 InsertUndo( new TextUndoInsertChars( this, aPaM, aLine ) );
 
             TEParaPortion* pPortion = mpTEParaPortions->GetObject( aPaM.GetPara() );
-            pPortion->MarkInvalid( aPaM.GetIndex(), aLine.Len() );
-            if ( aLine.Search( '\t' ) != STRING_NOTFOUND )
+            pPortion->MarkInvalid( aPaM.GetIndex(), aLine.getLength() );
+            if (aLine.indexOf( '\t' ) != -1)
                 pPortion->SetNotSimpleInvalid();
 
             aPaM = mpDoc->InsertText( aPaM, aLine );
-            ImpCharsInserted( aPaM.GetPara(), aPaM.GetIndex()-aLine.Len(), aLine.Len() );
+            ImpCharsInserted( aPaM.GetPara(), aPaM.GetIndex()-aLine.getLength(), aLine.getLength() );
 
         }
-        if ( nEnd < aText.Len() )
+        if ( nEnd < aText.getLength() )
             aPaM = ImpInsertParaBreak( aPaM );
 
         nStart = nEnd+1;
@@ -1352,7 +1347,7 @@ void TextEngine::UndoActionStart( sal_uInt16 nId )
     if ( IsUndoEnabled() && !IsInUndo() )
     {
         String aComment;
-        GetUndoManager().EnterListAction( aComment, XubString(), nId );
+        GetUndoManager().EnterListAction( aComment, OUString(), nId );
     }
 }
 

@@ -4183,10 +4183,10 @@ void Window::ImplNewInputContext()
 
     SalInputContext         aNewContext;
     const Font&             rFont = rInputContext.GetFont();
-    const XubString&        rFontName = rFont.GetName();
+    const OUString&         rFontName = rFont.GetName();
     ImplFontEntry*          pFontEntry = NULL;
     aNewContext.mpFont = NULL;
-    if ( rFontName.Len() )
+    if (!rFontName.isEmpty())
     {
         Size aSize = pFocusWin->ImplLogicToDevicePixel( rFont.GetSize() );
         if ( !aSize.Height() )

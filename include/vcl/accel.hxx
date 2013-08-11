@@ -40,7 +40,7 @@ class VCL_DLLPUBLIC Accelerator : public Resource
 
 private:
     ImplAccelData*  mpData;
-    XubString       maHelpStr;
+    OUString        maHelpStr;
     Link            maActivateHdl;
     Link            maDeactivateHdl;
     Link            maSelectHdl;
@@ -87,8 +87,8 @@ public:
 
     Accelerator*    GetAccel( sal_uInt16 nItemId ) const;
 
-    void            SetHelpText( const XubString& rHelpText ) { maHelpStr = rHelpText; }
-    const XubString& GetHelpText() const { return maHelpStr; }
+    void            SetHelpText( const OUString& rHelpText ) { maHelpStr = rHelpText; }
+    const OUString& GetHelpText() const { return maHelpStr; }
 
     void            SetActivateHdl( const Link& rLink ) { maActivateHdl = rLink; }
     const Link&     GetActivateHdl() const { return maActivateHdl; }

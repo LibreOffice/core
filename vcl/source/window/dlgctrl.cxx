@@ -427,11 +427,11 @@ static Window* ImplFindAccelWindow( Window* pParent, sal_uInt16& rIndex, sal_Uni
         pWindow = ImplGetChildWindow( pParent, nFormStart, i, sal_True );
     while( bSearch && pWindow )
     {
-        const XubString aStr = pWindow->GetText();
-        sal_uInt16 nPos = aStr.Search( '~' );
-        while ( nPos != STRING_NOTFOUND )
+        const OUString aStr = pWindow->GetText();
+        sal_Int32 nPos = aStr.indexOf( '~' );
+        while (nPos != -1)
         {
-            cCompareChar = aStr.GetChar( nPos+1 );
+            cCompareChar = aStr[nPos+1];
             cCompareChar = xCharClass->toUpper( OUString(cCompareChar), 0, 1, rLocale )[0];
             if ( cCompareChar == cCharCode )
             {
@@ -453,7 +453,7 @@ static Window* ImplFindAccelWindow( Window* pParent, sal_uInt16& rIndex, sal_Uni
                 rIndex = i;
                 return pWindow;
             }
-            nPos = aStr.Search( '~', nPos+1 );
+            nPos = aStr.indexOf( '~', nPos+1 );
         }
 
         // #i93011# it would have made sense to have this really recursive

@@ -82,11 +82,11 @@ class TextUndoInsertChars : public TextUndo
 {
 private:
     TextPaM         maTextPaM;
-    String          maText;
+    OUString        maText;
 
 public:
                     TYPEINFO();
-                    TextUndoInsertChars( TextEngine* pTextEngine, const TextPaM& rTextPaM, const String& rStr );
+                    TextUndoInsertChars( TextEngine* pTextEngine, const TextPaM& rTextPaM, const OUString& rStr );
 
     virtual void    Undo();
     virtual void    Redo();
@@ -101,11 +101,11 @@ class TextUndoRemoveChars : public TextUndo
 {
 private:
     TextPaM         maTextPaM;
-    String          maText;
+    OUString        maText;
 
 public:
                     TYPEINFO();
-                    TextUndoRemoveChars( TextEngine* pTextEngine, const TextPaM& rTextPaM, const String& rStr );
+                    TextUndoRemoveChars( TextEngine* pTextEngine, const TextPaM& rTextPaM, const OUString& rStr );
 
     virtual void    Undo();
     virtual void    Redo();

@@ -1223,7 +1223,7 @@ static long ImplHandleKey( Window* pWindow, sal_uInt16 nSVEvent,
 // -----------------------------------------------------------------------
 
 static long ImplHandleExtTextInput( Window* pWindow,
-                                    const XubString& rText,
+                                    const OUString& rText,
                                     const sal_uInt16* pTextAttr,
                                     sal_uLong nCursorPos, sal_uInt16 nCursorFlags )
 {
@@ -1266,12 +1266,12 @@ static long ImplHandleExtTextInput( Window* pWindow,
         return 0;
 
     // Test for changes
-    sal_Bool        bOnlyCursor = sal_False;
-    xub_StrLen  nMinLen = std::min( pWinData->mpExtOldText->getLength(), sal_Int32(rText.Len()) );
-    xub_StrLen  nDeltaStart = 0;
+    bool bOnlyCursor = false;
+    sal_Int32 nMinLen = std::min( pWinData->mpExtOldText->getLength(), rText.getLength() );
+    sal_Int32 nDeltaStart = 0;
     while ( nDeltaStart < nMinLen )
     {
-        if ( (*pWinData->mpExtOldText)[nDeltaStart] != rText.GetChar( nDeltaStart ) )
+        if ( (*pWinData->mpExtOldText)[nDeltaStart] != rText[nDeltaStart] )
             break;
         nDeltaStart++;
     }
@@ -1294,8 +1294,8 @@ static long ImplHandleExtTextInput( Window* pWindow,
         }
     }
     if ( (nDeltaStart >= nMinLen) &&
-         (pWinData->mpExtOldText->getLength() == rText.Len()) )
-        bOnlyCursor = sal_True;
+         (pWinData->mpExtOldText->getLength() == rText.getLength()) )
+        bOnlyCursor = true;
 
     // Call Event and store the information
     CommandExtTextInputData aData( rText, pTextAttr,
@@ -1310,8 +1310,8 @@ static long ImplHandleExtTextInput( Window* pWindow,
     }
     if ( pTextAttr )
     {
-        pWinData->mpExtOldAttrAry = new sal_uInt16[rText.Len()];
-        memcpy( pWinData->mpExtOldAttrAry, pTextAttr, rText.Len()*sizeof( sal_uInt16 ) );
+        pWinData->mpExtOldAttrAry = new sal_uInt16[rText.getLength()];
+        memcpy( pWinData->mpExtOldAttrAry, pTextAttr, rText.getLength()*sizeof( sal_uInt16 ) );
     }
     return !ImplCallCommand( pChild, COMMAND_EXTTEXTINPUT, &aData );
 }

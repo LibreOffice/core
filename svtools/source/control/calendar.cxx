@@ -1688,23 +1688,23 @@ void Calendar::RequestHelp( const HelpEvent& rHEvt )
                 maCalendarWrapper.setGregorianDateTime( aDate);
                 sal_uInt16      nWeek = (sal_uInt16) maCalendarWrapper.getValue( i18n::CalendarFieldIndex::WEEK_OF_YEAR);
                 sal_uInt16      nMonth = aDate.GetMonth();
-                XubString   aStr( maDayText );
-                aStr.AppendAscii( ": " );
-                aStr.Append( OUString::number( aDate.GetDayOfYear() ) );
-                aStr.AppendAscii( " / " );
-                aStr.Append( maWeekText );
-                aStr.AppendAscii( ": " );
-                aStr.Append( OUString::number( nWeek ) );
+                OUString   aStr( maDayText );
+                aStr += ": ";
+                aStr += OUString::number(aDate.GetDayOfYear());
+                aStr += " / ";
+                aStr += maWeekText;
+                aStr += ": ";
+                aStr += OUString::number(nWeek);
                 // Evt. noch Jahr hinzufuegen, wenn es nicht das gleiche ist
                 if ( (nMonth == 12) && (nWeek == 1) )
                 {
-                    aStr.AppendAscii( ",  " );
-                    aStr.Append( OUString::number( aDate.GetYear()+1 ) );
+                    aStr += ",  ";
+                    aStr += OUString::number(aDate.GetYear()+1);
                 }
                 else if ( (nMonth == 1) && (nWeek > 50) )
                 {
-                    aStr.AppendAscii( ", " );
-                    aStr.Append( OUString::number( aDate.GetYear()-1 ) );
+                    aStr += ", ";
+                    aStr += OUString::number(aDate.GetYear()-1);
                 }
                 Help::ShowQuickHelp( this, aDateRect, aStr );
                 return;
@@ -2253,7 +2253,7 @@ PushButton* ImplCFieldFloatWin::EnableTodayBtn( sal_Bool bEnable )
         if ( !mpTodayBtn )
         {
             mpTodayBtn = new PushButton( this, WB_NOPOINTERFOCUS );
-            XubString aTodayText(SVT_RESSTR(STR_SVT_CALENDAR_TODAY));
+            OUString aTodayText(SVT_RESSTR(STR_SVT_CALENDAR_TODAY));
             mpTodayBtn->SetText( aTodayText );
             Size aSize;
             aSize.Width()   = mpTodayBtn->GetCtrlTextWidth( mpTodayBtn->GetText() );
@@ -2285,7 +2285,7 @@ PushButton* ImplCFieldFloatWin::EnableNoneBtn( sal_Bool bEnable )
         if ( !mpNoneBtn )
         {
             mpNoneBtn = new PushButton( this, WB_NOPOINTERFOCUS );
-            XubString aNoneText(SVT_RESSTR(STR_SVT_CALENDAR_NONE));
+            OUString aNoneText(SVT_RESSTR(STR_SVT_CALENDAR_NONE));
             mpNoneBtn->SetText( aNoneText );
             Size aSize;
             aSize.Width()   = mpNoneBtn->GetCtrlTextWidth( mpNoneBtn->GetText() );

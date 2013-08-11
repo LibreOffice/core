@@ -116,14 +116,14 @@ public:
 
     TextPaM             RemoveChars( const TextPaM& rPaM, sal_uInt16 nChars );
     TextPaM             InsertText( const TextPaM& rPaM, sal_Unicode c );
-    TextPaM             InsertText( const TextPaM& rPaM, const String& rStr );
+    TextPaM             InsertText( const TextPaM& rPaM, const OUString& rStr );
 
     TextPaM             InsertParaBreak( const TextPaM& rPaM, sal_Bool bKeepEndingAttribs );
     TextPaM             ConnectParagraphs( TextNode* pLeft, TextNode* pRight );
 
     sal_uLong               GetTextLen( const sal_Unicode* pSep, const TextSelection* pSel = NULL ) const;
-    String              GetText( const sal_Unicode* pSep ) const;
-    String              GetText( sal_uLong nPara ) const;
+    OUString            GetText( const sal_Unicode* pSep ) const;
+    OUString            GetText( sal_uLong nPara ) const;
 
     void                SetLeftMargin( sal_uInt16 n )   { mnLeftMargin = n; }
     sal_uInt16              GetLeftMargin() const       { return mnLeftMargin; }

@@ -114,21 +114,21 @@ public:
 
     void                EnableDDAutoWidth( sal_Bool b );
 
-    virtual sal_uInt16      InsertEntry( const XubString& rStr, sal_uInt16 nPos = LISTBOX_APPEND );
+    virtual sal_uInt16      InsertEntry( const OUString& rStr, sal_uInt16 nPos = LISTBOX_APPEND );
     virtual sal_uInt16      InsertEntry( const Image& rImage, sal_uInt16 nPos = LISTBOX_APPEND );
-    virtual sal_uInt16      InsertEntry( const XubString& rStr, const Image& rImage, sal_uInt16 nPos = LISTBOX_APPEND );
-    virtual void        RemoveEntry( const XubString& rStr );
+    virtual sal_uInt16      InsertEntry( const OUString& rStr, const Image& rImage, sal_uInt16 nPos = LISTBOX_APPEND );
+    virtual void        RemoveEntry( const OUString& rStr );
     virtual void        RemoveEntry( sal_uInt16 nPos );
 
     virtual void        Clear();
 
-    virtual sal_uInt16      GetEntryPos( const XubString& rStr ) const;
+    virtual sal_uInt16      GetEntryPos( const OUString& rStr ) const;
     virtual sal_uInt16      GetEntryPos( const void* pData ) const;
             Image       GetEntryImage( sal_uInt16 nPos ) const;
-    virtual XubString   GetEntry( sal_uInt16 nPos ) const;
+    virtual OUString    GetEntry( sal_uInt16 nPos ) const;
     virtual sal_uInt16      GetEntryCount() const;
 
-    virtual void        SelectEntry( const XubString& rStr, sal_Bool bSelect = sal_True );
+    virtual void        SelectEntry( const OUString& rStr, sal_Bool bSelect = sal_True );
     virtual void        SelectEntryPos( sal_uInt16 nPos, sal_Bool bSelect = sal_True );
 
     virtual sal_uInt16  GetSelectEntryCount() const;

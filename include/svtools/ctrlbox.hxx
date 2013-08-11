@@ -177,9 +177,9 @@ public:
     virtual void    UserDraw( const UserDrawEvent& rUDEvt );
 
     using ListBox::InsertEntry;
-    virtual sal_uInt16  InsertEntry( const XubString& rStr,
+    virtual sal_uInt16  InsertEntry( const OUString& rStr,
                                  sal_uInt16 nPos = LISTBOX_APPEND );
-    virtual sal_uInt16  InsertEntry( const Color& rColor, const XubString& rStr,
+    virtual sal_uInt16  InsertEntry( const Color& rColor, const OUString& rStr,
                                  sal_uInt16 nPos = LISTBOX_APPEND );
     void            InsertAutomaticEntryColor(const Color &rAutoColorValue);
     bool            IsAutomaticSelected() { return !GetSelectEntryPos(); }
@@ -193,7 +193,7 @@ public:
     virtual Color   GetEntryColor( sal_uInt16 nPos ) const;
     Size            GetImageSize() const { return aImageSize; }
 
-    void            SelectEntry( const XubString& rStr, sal_Bool bSelect = sal_True )
+    void            SelectEntry( const OUString& rStr, sal_Bool bSelect = sal_True )
                         { ListBox::SelectEntry( rStr, bSelect ); }
     void            SelectEntry( const Color& rColor, sal_Bool bSelect = sal_True );
     Color           GetSelectEntryColor( sal_uInt16 nSelIndex = 0 ) const;
@@ -297,7 +297,7 @@ class SVT_DLLPUBLIC LineListBox : public ListBox
 {
     ImpLineList*    pLineList;
     long            m_nWidth;
-    XubString       m_sNone;
+    OUString        m_sNone;
 
     VirtualDevice   aVirDev;
     Size            aTxtSize;
@@ -324,10 +324,10 @@ public:
     /** Set the width in Twips */
     void            SetWidth( long nWidth );
     long            GetWidth() const { return m_nWidth; }
-    void            SetNone( const XubString& sNone );
+    void            SetNone( const OUString& sNone );
 
     using ListBox::InsertEntry;
-    virtual sal_uInt16  InsertEntry( const XubString& rStr, sal_uInt16 nPos = LISTBOX_APPEND );
+    virtual sal_uInt16  InsertEntry( const OUString& rStr, sal_uInt16 nPos = LISTBOX_APPEND );
     /** Insert a listbox entry with all widths in Twips. */
     void            InsertEntry( BorderWidthImpl aWidthImpl,
                         sal_uInt16 nStyle, long nMinWidth = 0,
@@ -343,7 +343,7 @@ public:
     virtual sal_uInt16  GetEntryPos( sal_uInt16 nStyle = STYLE_SOLID ) const;
     sal_uInt16          GetEntryStyle( sal_uInt16 nPos ) const;
 
-    void            SelectEntry( const XubString& rStr, sal_Bool bSelect = sal_True ) { ListBox::SelectEntry( rStr, bSelect ); }
+    void            SelectEntry( const OUString& rStr, sal_Bool bSelect = sal_True ) { ListBox::SelectEntry( rStr, bSelect ); }
     void            SelectEntry( sal_uInt16 nStyle = STYLE_SOLID, sal_Bool bSelect = sal_True );
     sal_uInt16          GetSelectEntryStyle( sal_uInt16 nSelIndex = 0 ) const;
     bool            IsEntrySelected(const OUString& rStr) const
@@ -401,7 +401,7 @@ inline void LineListBox::SetWidth( long nWidth )
     UpdateEntries( nOldWidth );
 }
 
-inline void LineListBox::SetNone( const XubString& sNone )
+inline void LineListBox::SetNone( const OUString& sNone )
 {
     m_sNone = sNone;
 }
@@ -449,7 +449,7 @@ private:
 
 class SVT_DLLPUBLIC FontStyleBox : public ComboBox
 {
-    XubString       aLastStyle;
+    OUString        aLastStyle;
 
 private:
     using ComboBox::SetText;
@@ -463,7 +463,7 @@ public:
     virtual void    Modify();
 
     void            SetText( const OUString& rText );
-    void            Fill( const XubString& rName, const FontList* pList );
+    void            Fill( const OUString& rName, const FontList* pList );
 
 private:
     // declared as private because some compilers would generate the default functions

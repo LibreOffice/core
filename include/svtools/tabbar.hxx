@@ -512,14 +512,14 @@ public:
 
     void            SetPageText( sal_uInt16 nPageId, const OUString& rText );
     OUString        GetPageText( sal_uInt16 nPageId ) const;
-    XubString       GetHelpText( sal_uInt16 nPageId ) const;
-    OString    GetHelpId( sal_uInt16 nPageId ) const;
+    OUString        GetHelpText( sal_uInt16 nPageId ) const;
+    OString         GetHelpId( sal_uInt16 nPageId ) const;
 
     long            GetSplitSize() const { return mnSplitSize; }
 
-    void            SetHelpText( const XubString& rText )
+    void            SetHelpText( const OUString& rText )
                         { Window::SetHelpText( rText ); }
-    XubString       GetHelpText() const
+    OUString        GetHelpText() const
                         { return Window::GetHelpText(); };
     void            SetHelpId( const OString& rId )
                         { Window::SetHelpId( rId ); }

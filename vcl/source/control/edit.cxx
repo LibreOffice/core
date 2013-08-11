@@ -2227,8 +2227,8 @@ void Edit::Command( const CommandEvent& rCEvt )
         maText.insert( mpIMEInfos->nPos, pData->GetText() );
         if ( mpIMEInfos->bWasCursorOverwrite )
         {
-            sal_uInt16 nOldIMETextLen = mpIMEInfos->nLen;
-            sal_uInt16 nNewIMETextLen = pData->GetText().Len();
+            sal_Int32 nOldIMETextLen = mpIMEInfos->nLen;
+            sal_Int32 nNewIMETextLen = pData->GetText().getLength();
             if ( ( nOldIMETextLen > nNewIMETextLen ) &&
                  ( nNewIMETextLen < mpIMEInfos->aOldTextAfterStartPos.getLength() ) )
             {
@@ -2250,7 +2250,7 @@ void Edit::Command( const CommandEvent& rCEvt )
 
         if ( pData->GetTextAttr() )
         {
-            mpIMEInfos->CopyAttribs( pData->GetTextAttr(), pData->GetText().Len() );
+            mpIMEInfos->CopyAttribs( pData->GetTextAttr(), pData->GetText().getLength() );
             mpIMEInfos->bCursor = pData->IsCursorVisible();
         }
         else

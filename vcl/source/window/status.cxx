@@ -363,10 +363,10 @@ void StatusBar::ImplDrawText( sal_Bool bOffScreen, long nOldTextWidth )
     if ( aTextRect.Right() > aTextRect.Left() )
     {
         // Position ermitteln
-        XubString aStr = GetText();
-        sal_uInt16 nPos = aStr.Search( '\n' );
-        if ( nPos != STRING_NOTFOUND )
-            aStr.Erase( nPos );
+        OUString aStr = GetText();
+        sal_Int32 nPos = aStr.indexOf('\n');
+        if (nPos != -1)
+            aStr = aStr.copy(0, nPos);
 
         aTextRect.Bottom() = aTextRect.Top()+GetTextHeight()+1;
 
@@ -809,15 +809,15 @@ void StatusBar::RequestHelp( const HelpEvent& rHEvt )
 
         if ( rHEvt.GetMode() & HELPMODE_BALLOON )
         {
-            XubString aStr = GetHelpText( nItemId );
+            OUString aStr = GetHelpText( nItemId );
             Help::ShowBalloon( this, aItemRect.Center(), aItemRect, aStr );
             return;
         }
         else if ( rHEvt.GetMode() & HELPMODE_QUICK )
         {
-            XubString   aStr = GetQuickHelpText( nItemId );
+            OUString aStr(GetQuickHelpText(nItemId));
             // Show quickhelp if available
-            if( aStr.Len() )
+            if (!aStr.isEmpty())
             {
                 Help::ShowQuickHelp( this, aItemRect, aStr );
                 return;

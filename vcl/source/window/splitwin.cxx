@@ -2698,7 +2698,7 @@ void SplitWindow::RequestHelp( const HelpEvent& rHEvt )
             aHelpRect.Bottom() = aPt.Y();
 
             // Text ermitteln und anzeigen
-            XubString aStr;
+            OUString aStr;
             ResMgr* pResMgr = ImplGetResMgr();
             if( pResMgr )
                 aStr = ResId( nHelpResId, *pResMgr ).toString();

@@ -127,7 +127,7 @@ void GroupBox::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
     long                    nTop;
     long                    nTextOff;
     const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
-    XubString               aText( GetText() );
+    OUString                aText( GetText() );
     Rectangle               aRect( rPos, rSize );
     sal_uInt16                  nTextStyle = TEXT_DRAW_LEFT | TEXT_DRAW_TOP | TEXT_DRAW_ENDELLIPSIS | TEXT_DRAW_MNEMONIC;
 
@@ -153,7 +153,7 @@ void GroupBox::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
         nDrawFlags |= WINDOW_DRAW_MONO;
     }
 
-    if ( !aText.Len() )
+    if (aText.isEmpty())
     {
         nTop = rPos.Y();
         nTextOff = 0;
@@ -175,7 +175,7 @@ void GroupBox::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
         else
             pDev->SetLineColor( rStyleSettings.GetShadowColor() );
 
-        if ( !aText.Len() )
+        if (aText.isEmpty())
             pDev->DrawLine( Point( rPos.X(), nTop ), Point( rPos.X()+rSize.Width()-2, nTop ) );
         else
         {
@@ -193,7 +193,7 @@ void GroupBox::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
         if ( !bIsPrinter && !(nDrawFlags & WINDOW_DRAW_MONO) )
         {
             pDev->SetLineColor( rStyleSettings.GetLightColor() );
-            if ( !aText.Len() )
+            if (aText.isEmpty())
                 pDev->DrawLine( Point( rPos.X()+1, nTop+1 ), Point( rPos.X()+rSize.Width()-3, nTop+1 ) );
             else
             {

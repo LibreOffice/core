@@ -56,12 +56,12 @@ TextSelection ExtTextEngine::MatchGroup( const TextPaM& rCursor ) const
                 sal_uInt16 nLevel = 1;
                 while ( nLevel && ( nPara < nParas ) )
                 {
-                    XubString aStr = GetText( nPara );
-                    while ( nCur < aStr.Len() )
+                    OUString aStr = GetText( nPara );
+                    while ( nCur < aStr.getLength() )
                     {
-                        if ( aStr.GetChar( nCur ) == nSC )
+                        if ( aStr[nCur] == nSC )
                             nLevel++;
-                        else if ( aStr.GetChar( nCur ) == nEC )
+                        else if ( aStr[nCur] == nEC )
                         {
                             nLevel--;
                             if ( !nLevel )
@@ -94,16 +94,16 @@ TextSelection ExtTextEngine::MatchGroup( const TextPaM& rCursor ) const
                 {
                     if ( GetTextLen( nPara ) )
                     {
-                        XubString aStr = GetText( nPara );
+                        OUString aStr = GetText( nPara );
                         while ( nCur )
                         {
-                            if ( aStr.GetChar( nCur ) == nSC )
+                            if ( aStr[nCur] == nSC )
                             {
                                 nLevel--;
                                 if ( !nLevel )
                                     break;  // while nCur...
                             }
-                            else if ( aStr.GetChar( nCur ) == nEC )
+                            else if ( aStr[nCur] == nEC )
                                 nLevel++;
 
                             nCur--;

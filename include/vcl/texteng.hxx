@@ -144,7 +144,7 @@ protected:
     void                ImpRemoveText();
     TextPaM             ImpDeleteText( const TextSelection& rSel );
     TextPaM             ImpInsertText( const TextSelection& rSel, sal_Unicode c, sal_Bool bOverwrite = sal_False );
-    TextPaM             ImpInsertText( const TextSelection& rSel, const String& rText );
+    TextPaM             ImpInsertText( const TextSelection& rSel, const OUString& rText );
     TextPaM             ImpInsertParaBreak( const TextSelection& rTextSelection, sal_Bool bKeepEndingAttribs = sal_True );
     TextPaM             ImpInsertParaBreak( const TextPaM& rPaM, sal_Bool bKeepEndingAttribs = sal_True );
     void                ImpRemoveChars( const TextPaM& rPaM, sal_uInt16 nChars, SfxUndoAction* pCurUndo = 0 );
