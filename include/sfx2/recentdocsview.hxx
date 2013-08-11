@@ -49,6 +49,7 @@ public:
 
     void SetThumbnailSize(long thumbnailSize);
     long GetThumbnailSize() const;
+    void SetFilter(APPLICATION_FILTER filter);
 
     static bool isFilteredExtension(APPLICATION_FILTER filter, const OUString &rExt);
     static BitmapEx getDefaultThumbnail(const OUString &rURL);
@@ -57,6 +58,10 @@ public:
 
 protected:
     virtual void OnItemDblClicked(ThumbnailViewItem *pItem);
+
+    bool isUnfilteredFile(const OUString &rURL) const;
+
+    APPLICATION_FILTER mFilter;
 
     long    mnItemMaxSize;
     long    mnTextHeight;
