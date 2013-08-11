@@ -468,12 +468,12 @@ bool lcl_fillDateCategories( const uno::Reference< data::XDataSequence >& xDataS
                 bIsDate = true;
 
             bool bContainsEmptyString = false;
-            bool bContainsNan = false;
             uno::Any aAny = aValues[nN];
             if( aAny.hasValue() )
             {
                 OUString aTest;
                 double fTest = 0;
+                bool bContainsNan = false;
                 if( (aAny>>=aTest) && aTest.isEmpty() ) //empty String
                     bContainsEmptyString = true;
                 else if( (aAny>>=fTest) &&  ::rtl::math::isNan(fTest) )
