@@ -50,6 +50,18 @@ $(eval $(call gb_Library_use_libraries,sofficeapp,\
 	$(gb_UWINAPI) \
 ))
 
+ifeq ($(OS),MACOSX)
+
+$(eval $(call gb_Library_add_cxxflags,sofficeapp,\
+    $(gb_OBJCXXFLAGS) \
+))
+
+$(eval $(call gb_Library_use_system_darwin_frameworks,sofficeapp,\
+    Foundation \
+))
+
+endif
+
 ifeq ($(OS),IOS)
 $(eval $(call gb_Library_add_cflags,sofficeapp,\
     $(gb_OBJCFLAGS) \

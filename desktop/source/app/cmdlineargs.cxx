@@ -19,6 +19,12 @@
 
 #include <config_features.h>
 
+#if HAVE_FEATURE_MACOSX_SANDBOX
+#include <premac.h>
+#include <Foundation/Foundation.h>
+#include <postmac.h>
+#endif
+
 #include <cmdlineargs.hxx>
 #include <vcl/svapp.hxx>
 #include <rtl/uri.hxx>
@@ -500,6 +506,13 @@ bool CommandLineArgs::InterpretCommandLineParameter( const OUString& aArg, OUStr
     else if ( aArg.match("-psn") )
     {
         return true;
+    }
+#endif
+#if HAVE_FEATURE_MACOSX_SANDBOX
+    else if ( oArg == "nstemporarydirectory" )
+    {
+        printf("%s\n", [NSTemporaryDirectory() UTF8String]);
+        exit(0);
     }
 #endif
 #ifdef WIN32
