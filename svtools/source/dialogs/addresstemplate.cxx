@@ -754,13 +754,13 @@ void AssignmentPersistentData::Commit()
         // we ignore the CommandType: only tables are supported
 
         // the logical names for the fields
-        DBG_ASSERT(m_pImpl->aLogicalFieldNames.size() == m_pImpl->aFieldAssignments.size(),
-            "AddressBookSourceDialog::loadConfiguration: inconsistence between field names and field assignments!");
+        // AddressBookSourceDialog::loadConfiguration: inconsistence between field names and field assignments!
+        assert(m_pImpl->aLogicalFieldNames.size() == m_pImpl->aFieldAssignments.size());
 
         ConstStringArrayIterator aLogical = m_pImpl->aLogicalFieldNames.begin();
         StringArrayIterator aAssignment = m_pImpl->aFieldAssignments.begin();
         for (   ;
-                aLogical < m_pImpl->aLogicalFieldNames.end();
+                aLogical != m_pImpl->aLogicalFieldNames.end();
                 ++aLogical, ++aAssignment
             )
             *aAssignment = m_pImpl->pConfigData->getFieldAssignment(*aLogical);
@@ -1187,11 +1187,14 @@ void AssignmentPersistentData::Commit()
             m_pImpl->pConfigData->setCommand(m_pTable->GetText());
         }
 
+        // AddressBookSourceDialog::loadConfiguration: inconsistence between field names and field assignments!
+        assert(m_pImpl->aLogicalFieldNames.size() == m_pImpl->aFieldAssignments.size());
+
         // set the field assignments
         ConstStringArrayIterator aLogical = m_pImpl->aLogicalFieldNames.begin();
         ConstStringArrayIterator aAssignment = m_pImpl->aFieldAssignments.begin();
         for (   ;
-                aLogical < m_pImpl->aLogicalFieldNames.end();
+                aLogical != m_pImpl->aLogicalFieldNames.end();
                 ++aLogical, ++aAssignment
             )
             m_pImpl->pConfigData->setFieldAssignment(*aLogical, *aAssignment);
