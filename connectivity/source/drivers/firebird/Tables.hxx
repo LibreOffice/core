@@ -41,7 +41,7 @@ namespace connectivity
             Tables(ODatabaseMetaData& xMetaData,
                    ::cppu::OWeakObject& rParent,
                    ::osl::Mutex& rMutex,
-                   const TStringVector& rVector);
+                   const ::connectivity::TStringVector& rVector);
 
             // TODO: we should also implement XDataDescriptorFactory, XRefreshable,
             // XAppend,  etc., but all are optional.

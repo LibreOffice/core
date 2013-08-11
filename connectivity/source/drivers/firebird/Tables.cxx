@@ -12,9 +12,11 @@
 
 #include <com/sun/star/sdbc/XRow.hpp>
 
+using namespace ::connectivity;
 using namespace ::connectivity::firebird;
 using namespace ::connectivity::sdbcx;
 using namespace ::cppu;
+using namespace ::osl;
 using namespace ::rtl;
 
 using namespace ::com::sun::star;
@@ -23,9 +25,10 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::uno;
 
+
 Tables::Tables(ODatabaseMetaData& xMetaData,
-               ::cppu::OWeakObject& rParent,
-               ::osl::Mutex& rMutex,
+               OWeakObject& rParent,
+               Mutex& rMutex,
                const TStringVector& rVector) :
     OCollection(rParent, sal_True, rMutex, rVector),
     m_rMutex(rMutex),
