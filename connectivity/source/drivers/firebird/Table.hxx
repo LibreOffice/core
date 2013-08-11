@@ -28,9 +28,9 @@ namespace connectivity
             Table(Tables* pTables,
                   ::osl::Mutex& rMutex,
                   const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection,
-                  const OUString& rName,
-                  const OUString& rType,
-                  const OUString& rDescription,
+                  const ::rtl::OUString& rName,
+                  const ::rtl::OUString& rType,
+                  const ::rtl::OUString& rDescription,
                   sal_Int32 _nPrivileges);
 
             // OTableHelper
