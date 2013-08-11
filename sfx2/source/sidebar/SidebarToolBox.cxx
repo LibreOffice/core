@@ -94,30 +94,6 @@ void SidebarToolBox::InsertItem(const OUString& rCommand,
     RegisterHandlers();
 }
 
-void SidebarToolBox::SetBorderWindow (const Window* pBorderWindow)
-{
-    if (pBorderWindow != GetParent())
-    {
-        OSL_ASSERT("SetBorderWindow can only handle parent as border window");
-        return;
-    }
-
-    if ( ! mbParentIsBorder)
-    {
-        mbParentIsBorder = true;
-
-        setPosSizePixel (
-            GetPosPixel().X(),
-            GetPosPixel().Y(),
-            GetSizePixel().Width(),
-            GetSizePixel().Height(),
-            WINDOW_POSSIZE_ALL);
-    }
-}
-
-
-
-
 void SidebarToolBox::Paint (const Rectangle& rRect)
 {
     ToolBox::Paint(rRect);
@@ -275,21 +251,6 @@ void SidebarToolBox::SetController(
 
     if (rxController.is())
         RegisterHandlers();
-}
-
-
-
-
-void SidebarToolBox::UpdateIcons (const Reference<frame::XFrame>& rxFrame)
-{
-    for (ControllerContainer::iterator iController(maControllers.begin()), iEnd(maControllers.end());
-         iController!=iEnd;
-         ++iController)
-    {
-        const ::rtl::OUString sCommandURL (iController->second.msCurrentCommand);
-        Image aImage (framework::GetImageFromURL(rxFrame, sCommandURL, false));
-        SetItemImage(iController->first, aImage);
-    }
 }
 
 

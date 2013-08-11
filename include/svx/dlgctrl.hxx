@@ -354,7 +354,6 @@ protected:
     void LocalPostPaint();
 
 public:
-    SvxPreviewBase(Window* pParent, const ResId& rResId);
     SvxPreviewBase(Window* pParent);
     virtual ~SvxPreviewBase();
 

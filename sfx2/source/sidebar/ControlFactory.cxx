@@ -22,7 +22,6 @@
 #include "TabItem.hxx"
 #include "sfx2/sidebar/SidebarToolBox.hxx"
 #include "ToolBoxBackground.hxx"
-#include "CustomImageRadioButton.hxx"
 #include <vcl/toolbox.hxx>
 
 

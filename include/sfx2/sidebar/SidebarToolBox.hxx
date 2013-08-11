@@ -51,7 +51,6 @@ public:
             const Size& rRequestedSize = Size(),
             sal_uInt16 nPos = TOOLBOX_APPEND);
 
-    void SetBorderWindow (const Window* pBorderWindow);
     virtual void Paint (const Rectangle& rRect);
 
     virtual Point GetPosPixel (void) const;
@@ -98,8 +97,6 @@ private:
         const sal_uInt16 nItemId,
         const cssu::Reference<css::frame::XFrame>& rxFrame,
         const sal_Int32 nItemWidth = 0);
-    void UpdateIcons (
-        const cssu::Reference<css::frame::XFrame>& rxFrame);
     void RegisterHandlers (void);
 };
 

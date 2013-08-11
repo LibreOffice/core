@@ -1665,20 +1665,6 @@ void SvxPreviewBase::InitSettings(bool bForeground, bool bBackground)
     Invalidate();
 }
 
-SvxPreviewBase::SvxPreviewBase( Window* pParent, const ResId& rResId )
-:   Control( pParent, rResId ),
-    mpModel( new SdrModel() ),
-    mpBufferDevice( new VirtualDevice(*this) )
-{
-    //  Draw the control's border as a flat thin black line.
-    SetBorderStyle(WINDOW_BORDER_MONO);
-    SetDrawMode( GetSettings().GetStyleSettings().GetHighContrastMode() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
-    SetMapMode(MAP_100TH_MM);
-
-    // init model
-    mpModel->GetItemPool().FreezeIdRanges();
-}
-
 SvxPreviewBase::SvxPreviewBase(Window* pParent)
     : Control(pParent, WB_BORDER)
     , mpModel(new SdrModel())
