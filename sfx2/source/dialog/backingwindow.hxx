@@ -24,34 +24,19 @@
 
 #include <vcl/builder.hxx>
 #include <vcl/button.hxx>
-#include <vcl/menubtn.hxx>
-#include <vcl/bitmapex.hxx>
-#include <vcl/toolbox.hxx>
 #include <vcl/layout.hxx>
+
+#include <sfx2/recentdocsview.hxx>
 
 #include <svtools/acceleratorexecute.hxx>
 #include <unotools/moduleoptions.hxx>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/frame/XUIControllerFactory.hpp>
-#include <com/sun/star/frame/XPopupMenuController.hpp>
-#include <com/sun/star/awt/XPopupMenu.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/frame/XTerminateListener.hpp>
-#include <com/sun/star/document/XEventListener.hpp>
-#include <com/sun/star/document/XEventBroadcaster.hpp>
-#include <com/sun/star/util/XURLTransformer.hpp>
-#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
-#include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
-#include <com/sun/star/ui/dialogs/XFilterManager.hpp>
-#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 
 #include <set>
-
-class MnemonicGenerator;
 
 class BackingWindow
     : public Window
@@ -60,24 +45,28 @@ class BackingWindow
     com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >         mxContext;
     com::sun::star::uno::Reference<com::sun::star::frame::XDispatchProvider >        mxDesktopDispatchProvider;
     com::sun::star::uno::Reference<com::sun::star::frame::XFrame>                    mxFrame;
-    com::sun::star::uno::Reference< com::sun::star::frame::XUIControllerFactory >    mxPopupMenuFactory;
-    com::sun::star::uno::Reference< com::sun::star::frame::XPopupMenuController >    mxPopupMenuController;
-    com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >                mxPopupMenu;
+
+    PushButton*                     mpOpenButton;
+    PushButton*                     mpTemplateButton;
 
     PushButton*                     mpWriterButton;
     PushButton*                     mpCalcButton;
     PushButton*                     mpImpressButton;
-    MenuButton*                     mpOpenButton;
     PushButton*                     mpDrawButton;
     PushButton*                     mpDBButton;
     PushButton*                     mpMathButton;
-    PushButton*                     mpTemplateButton;
 
     PushButton*                     mpExtensionsButton;
     PushButton*                     mpInfoButton;
     PushButton*                     mpTplRepButton;
 
-    VclGrid*                        mpStartCenterContainer;
+    RecentDocsView*                 mpAllRecentThumbnails;
+    RecentDocsView*                 mpWriterRecentThumbnails;
+    RecentDocsView*                 mpCalcRecentThumbnails;
+    RecentDocsView*                 mpImpressRecentThumbnails;
+    RecentDocsView*                 mpDrawRecentThumbnails;
+    RecentDocsView*                 mpDatabaseRecentThumbnails;
+    RecentDocsView*                 mpMathRecentThumbnails;
 
     BitmapEx                        maBackgroundLeft;
     BitmapEx                        maBackgroundMiddle;
@@ -88,9 +77,6 @@ class BackingWindow
     bool                            mbInitControls;
     sal_Int32                       mnHideExternalLinks;
     svt::AcceleratorExecute*        mpAccExec;
-
-    int                             mnSCWidth;
-    int                             mnSCHeight;
 
     void setupButton( PushButton* pButton, const OUString& rURL, const std::set<OUString>& rURLS,
                       SvtModuleOptions& rOpt, SvtModuleOptions::EModule eMod );
@@ -105,12 +91,9 @@ class BackingWindow
 
     DECL_LINK( ClickHdl, Button* );
     DECL_LINK( ExtLinkClickHdl, Button* );
-    DECL_LINK( ActivateHdl, Button* );
     DECL_LINK( WindowEventListener, VclSimpleEvent* );
 
     void initControls();
-    void initBackground();
-    void prepareRecentFileMenu();
 
 public:
     BackingWindow( Window* pParent );
