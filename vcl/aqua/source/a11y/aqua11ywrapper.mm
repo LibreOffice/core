@@ -82,6 +82,7 @@ static std::ostream &operator<<(std::ostream &s, NSPoint point) {
 
 -(void) setDefaults: (Reference < XAccessibleContext >) rxAccessibleContext {
     mDefaultFontsize = 0.0;
+    mDefaultFonttraits = 0;
     mpDefaultFontname = nil;
     mpReferenceWrapper = new ReferenceWrapper;
     mActsAsRadioGroup = NO;
@@ -1143,6 +1144,14 @@ Reference < XAccessibleContext > hitTestRunner ( com::sun::star::awt::Point poin
 
 -(float)defaultFontsize {
     return mDefaultFontsize;
+}
+
+-(void)setDefaultFonttraits:(int)fonttraits {
+    mDefaultFonttraits = fonttraits;
+}
+
+-(int)defaultFonttraits {
+    return mDefaultFonttraits;
 }
 
 -(void)setActsAsRadioGroup:(BOOL)actsAsRadioGroup {
