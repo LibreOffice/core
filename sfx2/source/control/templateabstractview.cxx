@@ -27,30 +27,34 @@
 #include "../doc/doc.hrc"
 #include "templateview.hrc"
 
-bool ViewFilter_Application::isValid (const OUString &rPath) const
+bool ViewFilter_Application::isFilteredExtension(FILTER_APPLICATION filter, const OUString &rExt)
 {
     bool bRet = true;
 
-    INetURLObject aUrl(rPath);
-    OUString aExt = aUrl.getExtension();
-    if (mApp == FILTER_APP_WRITER)
+    if (filter == FILTER_APP_WRITER)
     {
-        bRet = aExt == "ott" || aExt == "stw" || aExt == "oth" || aExt == "dot" || aExt == "dotx";
+        bRet = rExt == "ott" || rExt == "stw" || rExt == "oth" || rExt == "dot" || rExt == "dotx";
     }
-    else if (mApp == FILTER_APP_CALC)
+    else if (filter == FILTER_APP_CALC)
     {
-        bRet = aExt == "ots" || aExt == "stc" || aExt == "xlt" || aExt == "xltm" || aExt == "xltx";
+        bRet = rExt == "ots" || rExt == "stc" || rExt == "xlt" || rExt == "xltm" || rExt == "xltx";
     }
-    else if (mApp == FILTER_APP_IMPRESS)
+    else if (filter == FILTER_APP_IMPRESS)
     {
-        bRet = aExt == "otp" || aExt == "sti" || aExt == "pot" || aExt == "potm" || aExt == "potx";
+        bRet = rExt == "otp" || rExt == "sti" || rExt == "pot" || rExt == "potm" || rExt == "potx";
     }
-    else if (mApp == FILTER_APP_DRAW)
+    else if (filter == FILTER_APP_DRAW)
     {
-        bRet = aExt == "otg" || aExt == "std";
+        bRet = rExt == "otg" || rExt == "std";
     }
 
     return bRet;
+}
+
+bool ViewFilter_Application::isValid (const OUString &rPath) const
+{
+    INetURLObject aUrl(rPath);
+    return isFilteredExtension(mApp, aUrl.getExtension());
 }
 
 bool ViewFilter_Application::operator () (const ThumbnailViewItem *pItem)
@@ -260,26 +264,19 @@ BitmapEx TemplateAbstractView::scaleImg (const BitmapEx &rImg, long width, long 
 
 BitmapEx TemplateAbstractView::getDefaultThumbnail( const OUString& rPath )
 {
+    BitmapEx aImg;
     INetURLObject aUrl(rPath);
     OUString aExt = aUrl.getExtension();
 
-    BitmapEx aImg;
-    if ( aExt == "ott" || aExt == "stw" || aExt == "oth" || aExt == "dot" || aExt == "dotx" )
-    {
+    if ( ViewFilter_Application::isFilteredExtension( FILTER_APP_WRITER, aExt) )
         aImg = BitmapEx ( SfxResId( SFX_THUMBNAIL_TEXT ) );
-    }
-    else if ( aExt == "ots" || aExt == "stc" || aExt == "xlt" || aExt == "xltm" || aExt == "xltx" )
-    {
+    else if ( ViewFilter_Application::isFilteredExtension( FILTER_APP_CALC, aExt) )
         aImg = BitmapEx ( SfxResId( SFX_THUMBNAIL_SHEET ) );
-    }
-    else if ( aExt == "otp" || aExt == "sti" || aExt == "pot" || aExt == "potm" || aExt == "potx" )
-    {
+    else if ( ViewFilter_Application::isFilteredExtension( FILTER_APP_IMPRESS, aExt) )
         aImg = BitmapEx ( SfxResId( SFX_THUMBNAIL_PRESENTATION ) );
-    }
-    else if ( aExt == "otg" || aExt == "std" )
-    {
+    else if ( ViewFilter_Application::isFilteredExtension( FILTER_APP_DRAW, aExt) )
         aImg = BitmapEx ( SfxResId( SFX_THUMBNAIL_DRAWING ) );
-    }
+
     return aImg;
 }
 
