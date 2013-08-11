@@ -28,6 +28,7 @@
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/FontStrikeout.hpp>
+#include <com/sun/star/text/TextMarkupType.hpp>
 
 namespace css_awt = ::com::sun::star::awt;
 using namespace ::com::sun::star::accessibility;
@@ -267,6 +268,28 @@ using namespace ::rtl;
     [ pool release ];
 }
 
++(void)addMarkup:(XAccessibleTextMarkup*)markup toString:(NSMutableAttributedString*)string inRange:(NSRange)range {
+    [AquaA11yTextAttributesWrapper addMarkup:markup withType:(::com::sun::star::text::TextMarkupType::SPELLCHECK) toString:string inRange:range];
+}
+
++(void)addMarkup:(XAccessibleTextMarkup*)markup withType:(long)type toString:(NSMutableAttributedString*)string inRange:(NSRange)range {
+    const long markupCount = markup->getTextMarkupCount(type);
+    for (long markupIndex = 0; markupIndex < markupCount; ++markupIndex) {
+        TextSegment markupSegment = markup->getTextMarkup(markupIndex, type);
+        NSRange markupRange = NSMakeRange(markupSegment.SegmentStart, markupSegment.SegmentEnd - markupSegment.SegmentStart);
+        markupRange = NSIntersectionRange(range, markupRange);
+        if (markupRange.length > 0) {
+            markupRange.location -= range.location;
+            switch(type) {
+                case ::com::sun::star::text::TextMarkupType::SPELLCHECK: {
+                    [string addAttribute:NSAccessibilityMisspelledTextAttribute value:[NSNumber numberWithBool:YES] range:markupRange];
+                    break;
+                }
+            }
+        }
+    }
+}
+
 +(NSMutableAttributedString *)createAttributedStringForElement:(AquaA11yWrapper *)wrapper inOrigRange:(id)origRange {
     static const Sequence < OUString > emptySequence;
     // vars
@@ -297,6 +320,8 @@ using namespace ::rtl;
                 currentIndex = textSegment.SegmentEnd;
             }
             [defaultFontDescriptor release];
+            if ([wrapper accessibleTextMarkup])
+                [AquaA11yTextAttributesWrapper addMarkup:[wrapper accessibleTextMarkup] toString:string inRange:[origRange rangeValue]];
             [ string endEditing ];
         }
     } catch ( IllegalArgumentException & e ) {
