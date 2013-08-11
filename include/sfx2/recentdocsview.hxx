@@ -36,22 +36,18 @@ public:
 
     virtual Size GetOptimalSize() const;
 
-    void SetThumbnailSize(long ThumbnailWidth, long ThumbnailHeight);
-    void SetHeight(long Height);
+    void SetThumbnailSize(long thumbnailSize);
+    long GetThumbnailSize() const;
 
     DECL_STATIC_LINK( RecentDocsView, ExecuteHdl_Impl, LoadRecentFile* );
 
 protected:
     virtual void OnItemDblClicked(ThumbnailViewItem *pItem);
 
-    long    mnItemMaxWidth;
-    long    mnItemMaxHeight;
+    long    mnItemMaxSize;
+    long    mnTextHeight;
     long    mnItemPadding;
     long    mnItemMaxTextLength;
-    long    mnItemThumbnailMaxHeight;
-    long    mnItemMaxHeightSub;
-
-    long mnHeight;
 
     int     mnMaxThumbnailItems;
 };
