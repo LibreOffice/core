@@ -3875,9 +3875,8 @@ void Window::ImplCallFocusChangeActivate( Window* pNewOverlapWindow,
     ImplSVData* pSVData = ImplGetSVData();
     Window*     pNewRealWindow;
     Window*     pOldRealWindow;
-    Window*     pLastRealWindow;
-    sal_Bool        bCallActivate = sal_True;
-    sal_Bool        bCallDeactivate = sal_True;
+    bool bCallActivate = true;
+    bool bCallDeactivate = true;
 
     pOldRealWindow = pOldOverlapWindow->ImplGetWindow();
     pNewRealWindow = pNewOverlapWindow->ImplGetWindow();
@@ -3888,7 +3887,7 @@ void Window::ImplCallFocusChangeActivate( Window* pNewOverlapWindow,
              !pNewRealWindow->GetActivateMode() )
         {
             pSVData->maWinData.mpLastDeacWin = pOldOverlapWindow;
-            bCallDeactivate = sal_False;
+            bCallDeactivate = false;
         }
     }
     else if ( (pNewRealWindow->GetType() != WINDOW_FLOATINGWINDOW) ||
@@ -3897,10 +3896,10 @@ void Window::ImplCallFocusChangeActivate( Window* pNewOverlapWindow,
         if ( pSVData->maWinData.mpLastDeacWin )
         {
             if ( pSVData->maWinData.mpLastDeacWin == pNewOverlapWindow )
-                bCallActivate = sal_False;
+                bCallActivate = false;
             else
             {
-                pLastRealWindow = pSVData->maWinData.mpLastDeacWin->ImplGetWindow();
+                Window* pLastRealWindow = pSVData->maWinData.mpLastDeacWin->ImplGetWindow();
                 pSVData->maWinData.mpLastDeacWin->mpWindowImpl->mbActive = sal_False;
                 pSVData->maWinData.mpLastDeacWin->Deactivate();
                 if ( pLastRealWindow != pSVData->maWinData.mpLastDeacWin )
