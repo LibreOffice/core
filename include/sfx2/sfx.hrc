@@ -177,6 +177,14 @@
 #define SFX_THUMBNAIL_PRESENTATION          (RID_SFX_START+160)
 #define SFX_THUMBNAIL_DRAWING               (RID_SFX_START+161)
 
+#define SFX_FILE_THUMBNAIL_TEXT             (RID_SFX_START+162)
+#define SFX_FILE_THUMBNAIL_SHEET            (RID_SFX_START+163)
+#define SFX_FILE_THUMBNAIL_PRESENTATION     (RID_SFX_START+164)
+#define SFX_FILE_THUMBNAIL_DRAWING          (RID_SFX_START+165)
+#define SFX_FILE_THUMBNAIL_DATABASE         (RID_SFX_START+166)
+#define SFX_FILE_THUMBNAIL_MATH             (RID_SFX_START+167)
+#define SFX_FILE_THUMBNAIL_DEFAULT          (RID_SFX_START+168)
+
 //=========================================================================
 
 // group ids
