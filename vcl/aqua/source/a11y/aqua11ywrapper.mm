@@ -81,9 +81,6 @@ static std::ostream &operator<<(std::ostream &s, NSPoint point) {
 }
 
 -(void) setDefaults: (Reference < XAccessibleContext >) rxAccessibleContext {
-    mDefaultFontsize = 0.0;
-    mDefaultFonttraits = 0;
-    mpDefaultFontname = nil;
     mpReferenceWrapper = new ReferenceWrapper;
     mActsAsRadioGroup = NO;
     mpReferenceWrapper -> rAccessibleContext = rxAccessibleContext;
@@ -143,9 +140,6 @@ static std::ostream &operator<<(std::ostream &s, NSPoint point) {
 -(void)dealloc {
     if ( mpReferenceWrapper != nil ) {
         delete mpReferenceWrapper;
-    }
-    if ( mpDefaultFontname != nil ) {
-        [ mpDefaultFontname release ];
     }
     [ super dealloc ];
 }
@@ -1127,33 +1121,6 @@ Reference < XAccessibleContext > hitTestRunner ( com::sun::star::awt::Point poin
 // attributes have to be bound to a font on the Mac. Our UNO-API instead handles
 // and reports them independently. When they occur we bundle them to a font with
 // this information here to create a according NSFont.
--(void)setDefaultFontname:(NSString *)fontname {
-    if ( mpDefaultFontname != nil ) {
-        [ mpDefaultFontname release ];
-    }
-    mpDefaultFontname = fontname;
-}
-
--(NSString *)defaultFontname {
-    return mpDefaultFontname;
-}
-
--(void)setDefaultFontsize:(float)fontsize {
-    mDefaultFontsize = fontsize;
-}
-
--(float)defaultFontsize {
-    return mDefaultFontsize;
-}
-
--(void)setDefaultFonttraits:(int)fonttraits {
-    mDefaultFonttraits = fonttraits;
-}
-
--(int)defaultFonttraits {
-    return mDefaultFonttraits;
-}
-
 -(void)setActsAsRadioGroup:(BOOL)actsAsRadioGroup {
     mActsAsRadioGroup = actsAsRadioGroup;
 }

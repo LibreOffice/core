@@ -52,9 +52,6 @@ struct ReferenceWrapper
 @interface AquaA11yWrapper : NSView
 {
     ReferenceWrapper * mpReferenceWrapper;
-    NSString * mpDefaultFontname;
-    float mDefaultFontsize;
-    int mDefaultFonttraits;
     BOOL mActsAsRadioGroup;
     BOOL mIsTableCell;
 }
@@ -91,12 +88,6 @@ struct ReferenceWrapper
 -(id)initWithAccessibleContext: (::com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessibleContext >) anAccessibleContext;
 -(void) setDefaults: (::com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessibleContext >) rxAccessibleContext;
 -(void) dealloc;
--(void)setDefaultFontname:(NSString *)fontname;
--(NSString *)defaultFontname;
--(void)setDefaultFontsize:(float)fontsize;
--(float)defaultFontsize;
--(void)setDefaultFonttraits:(int)fonttraits;
--(int)defaultFonttraits;
 +(void)setPopupMenuOpen:(BOOL)popupMenuOpen;
 -(::com::sun::star::accessibility::XAccessibleAction *)accessibleAction;
 -(::com::sun::star::accessibility::XAccessibleContext *)accessibleContext;
