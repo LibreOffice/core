@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
@@ -28,7 +27,6 @@
 #include <xmlscript/xml_helper.hxx>
 #include <xmlscript/xmldlg_imexp.hxx>
 
-
 using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -37,7 +35,6 @@ using namespace ::com::sun::star::frame;
 namespace xmlscript
 {
 
-//==================================================================================================
 class InputStreamProvider
     : public ::cppu::WeakImplHelper1< io::XInputStreamProvider >
 {
@@ -52,14 +49,12 @@ public:
     virtual Reference< io::XInputStream > SAL_CALL createInputStream()
         throw (RuntimeException);
 };
-//__________________________________________________________________________________________________
 Reference< io::XInputStream > InputStreamProvider::createInputStream()
     throw (RuntimeException)
 {
     return ::xmlscript::createInputStream( _bytes );
 }
 
-//==================================================================================================
 Reference< io::XInputStreamProvider > SAL_CALL exportDialogModel(
     Reference< container::XNameContainer > const & xDialogModel,
     Reference< XComponentContext > const & xContext,
@@ -77,7 +72,6 @@ Reference< io::XInputStreamProvider > SAL_CALL exportDialogModel(
     return new InputStreamProvider( aBytes );
 }
 
-//==================================================================================================
 void SAL_CALL importDialogModel(
     Reference< io::XInputStream > const & xInput,
     Reference< container::XNameContainer > const & xDialogModel,

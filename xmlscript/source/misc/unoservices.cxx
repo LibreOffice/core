@@ -17,14 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <cppuhelper/implementationentry.hxx>
 
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
-
-
-// =============================================================================
 
 namespace xmlscript
 {
@@ -58,8 +54,6 @@ namespace xmlscript
         Reference< XComponentContext > const & xContext )
             SAL_THROW( (Exception) );
 
-    // -----------------------------------------------------------------------------
-
     static const struct ::cppu::ImplementationEntry s_entries [] =
     {
         {
@@ -90,8 +84,6 @@ namespace xmlscript
         { 0, 0, 0, 0, 0, 0 }
     };
 }
-
-// =============================================================================
 
 extern "C"
 {

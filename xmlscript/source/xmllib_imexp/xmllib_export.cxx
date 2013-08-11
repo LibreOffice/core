@@ -17,24 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <xmlscript/xmllib_imexp.hxx>
 #include <xmlscript/xml_helper.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star;
 
-
 namespace xmlscript
 {
 
 const char aTrueStr[] = "true";
 const char aFalseStr[] = "false";
-
-//##################################################################################################
-
-
-//==================================================================================================
 
 void
 SAL_CALL exportLibraryContainer(
@@ -50,14 +43,12 @@ SAL_CALL exportLibraryContainer(
     xOut->unknown( aDocTypeStr );
     xOut->ignorableWhitespace( OUString() );
 
-
     OUString aLibrariesName( XMLNS_LIBRARY_PREFIX ":libraries" );
     XMLElement* pLibsElement = new XMLElement( aLibrariesName );
     Reference< xml::sax::XAttributeList > xAttributes( pLibsElement );
 
     pLibsElement->addAttribute( "xmlns:" XMLNS_LIBRARY_PREFIX, XMLNS_LIBRARY_URI );
     pLibsElement->addAttribute( "xmlns:" XMLNS_XLINK_PREFIX, XMLNS_XLINK_URI );
-
 
     xOut->ignorableWhitespace( OUString() );
     xOut->startElement( aLibrariesName, xAttributes );
@@ -76,7 +67,6 @@ SAL_CALL exportLibraryContainer(
         xLibElementAttribs = static_cast< xml::sax::XAttributeList* >( pLibElement );
 
         pLibElement->addAttribute( XMLNS_LIBRARY_PREFIX ":name", rLib.aName );
-
 
         if( !rLib.aStorageURL.isEmpty() )
         {
@@ -100,8 +90,6 @@ SAL_CALL exportLibraryContainer(
     xOut->endDocument();
 }
 
-//==================================================================================================
-
 void
 SAL_CALL exportLibrary(
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XWriter > const & xOut,
@@ -115,7 +103,6 @@ SAL_CALL exportLibrary(
         " \"library.dtd\">" );
     xOut->unknown( aDocTypeStr );
     xOut->ignorableWhitespace( OUString() );
-
 
     OUString aLibraryName( XMLNS_LIBRARY_PREFIX ":library" );
     XMLElement* pLibElement = new XMLElement( aLibraryName );

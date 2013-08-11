@@ -31,11 +31,8 @@
 namespace xmlscript
 {
 
-/*##############################################################################
 
-    IMPORTING
-
-##############################################################################*/
+//  IMPORTING
 
 /** Creates a document handler to be used for SAX1 parser that can handle
     namespaces.  Namespace URI are mapped to integer ids for performance.

@@ -25,7 +25,6 @@
 namespace xmlscript
 {
 
-//==============================================================================
 template< typename T >
 inline void extract_throw( T * p, ::com::sun::star::uno::Any const & a )
 {
@@ -38,7 +37,6 @@ inline void extract_throw( T * p, ::com::sun::star::uno::Any const & a )
     }
 }
 
-//==============================================================================
 template< typename T >
 inline T extract_throw( ::com::sun::star::uno::Any const & a )
 {

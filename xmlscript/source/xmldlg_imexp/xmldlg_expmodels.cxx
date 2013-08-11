@@ -60,7 +60,6 @@ static inline bool readFontProps( ElementDescriptor * element, Style & style )
     return ret;
 }
 
-//__________________________________________________________________________________________________
 void ElementDescriptor::readMultiPageModel( StyleBag * all_styles )
 {
     // collect styles
@@ -95,7 +94,7 @@ void ElementDescriptor::readMultiPageModel( StyleBag * all_styles )
         addSubElement( pElem );
     }
 }
-//__________________________________________________________________________________________________
+
 void ElementDescriptor::readFrameModel( StyleBag * all_styles )
 {
     // collect styles
@@ -134,7 +133,7 @@ void ElementDescriptor::readFrameModel( StyleBag * all_styles )
     }
     readEvents();
 }
-//__________________________________________________________________________________________________
+
 void ElementDescriptor::readPageModel( StyleBag * all_styles )
 {
     // collect styles
@@ -193,7 +192,6 @@ void ElementDescriptor::readButtonModel( StyleBag * all_styles )
     readButtonTypeAttr( "PushButtonType", XMLNS_DIALOGS_PREFIX ":button-type" );
     readImageURLAttr( "ImageURL", XMLNS_DIALOGS_PREFIX ":image-src" );
 
-
     readImagePositionAttr( "ImagePosition", XMLNS_DIALOGS_PREFIX ":image-position" );
     readImageAlignAttr( "ImageAlign", XMLNS_DIALOGS_PREFIX ":image-align" );
 
@@ -205,7 +203,6 @@ void ElementDescriptor::readButtonModel( StyleBag * all_styles )
 
     readBoolAttr( "FocusOnClick", XMLNS_DIALOGS_PREFIX ":grab-focus" );
     readBoolAttr( "MultiLine",XMLNS_DIALOGS_PREFIX ":multiline" );
-
 
     // State
     sal_Int16 nState = 0;
@@ -227,7 +224,7 @@ void ElementDescriptor::readButtonModel( StyleBag * all_styles )
 
     readEvents();
 }
-//__________________________________________________________________________________________________
+
 void ElementDescriptor::readCheckBoxModel( StyleBag * all_styles )
     SAL_THROW( (Exception) )
 {
@@ -284,7 +281,7 @@ void ElementDescriptor::readCheckBoxModel( StyleBag * all_styles )
     }
     readEvents();
 }
-//__________________________________________________________________________________________________
+
 void ElementDescriptor::readComboBoxModel( StyleBag * all_styles )
     SAL_THROW( (Exception) )
 {
@@ -338,7 +335,7 @@ void ElementDescriptor::readComboBoxModel( StyleBag * all_styles )
     }
     readEvents();
 }
-//__________________________________________________________________________________________________
+
 void ElementDescriptor::readListBoxModel( StyleBag * all_styles )
     SAL_THROW( (Exception) )
 {
@@ -400,7 +397,7 @@ void ElementDescriptor::readListBoxModel( StyleBag * all_styles )
     }
     readEvents();
 }
-//__________________________________________________________________________________________________
+
 void ElementDescriptor::readRadioButtonModel( StyleBag * all_styles  )
     SAL_THROW( (Exception) )
 {
@@ -451,7 +448,7 @@ void ElementDescriptor::readRadioButtonModel( StyleBag * all_styles  )
     readDataAwareAttr( XMLNS_DIALOGS_PREFIX ":linked-cell" );
     readEvents();
 }
-//__________________________________________________________________________________________________
+
 void ElementDescriptor::readGroupBoxModel( StyleBag * all_styles )
     SAL_THROW( (Exception) )
 {
@@ -481,7 +478,7 @@ void ElementDescriptor::readGroupBoxModel( StyleBag * all_styles )
 
     readEvents();
 }
-//__________________________________________________________________________________________________
+
 void ElementDescriptor::readFixedTextModel( StyleBag * all_styles )
     SAL_THROW( (Exception) )
 {
@@ -512,7 +509,7 @@ void ElementDescriptor::readFixedTextModel( StyleBag * all_styles )
     readBoolAttr( "NoLabel", XMLNS_DIALOGS_PREFIX ":nolabel" );
     readEvents();
 }
-//__________________________________________________________________________________________________
+
 void ElementDescriptor::readFixedHyperLinkModel( StyleBag * all_styles )
     SAL_THROW( (Exception) )
 {
@@ -545,7 +542,7 @@ void ElementDescriptor::readFixedHyperLinkModel( StyleBag * all_styles )
     readBoolAttr( "NoLabel", XMLNS_DIALOGS_PREFIX ":nolabel" );
     readEvents();
 }
-//__________________________________________________________________________________________________
+
 void ElementDescriptor::readEditModel( StyleBag * all_styles )
     SAL_THROW( (Exception) )
 {
@@ -588,7 +585,7 @@ void ElementDescriptor::readEditModel( StyleBag * all_styles )
     readDataAwareAttr( XMLNS_DIALOGS_PREFIX ":linked-cell" );
     readEvents();
 }
-//__________________________________________________________________________________________________
+
 void ElementDescriptor::readImageControlModel( StyleBag * all_styles )
     SAL_THROW( (Exception) )
 {
@@ -610,7 +607,7 @@ void ElementDescriptor::readImageControlModel( StyleBag * all_styles )
     readImageURLAttr( "ImageURL", XMLNS_DIALOGS_PREFIX ":src" );
     readEvents();
 }
-//__________________________________________________________________________________________________
+
 void ElementDescriptor::readFileControlModel( StyleBag * all_styles )
     SAL_THROW( (Exception) )
 {
@@ -639,7 +636,7 @@ void ElementDescriptor::readFileControlModel( StyleBag * all_styles )
     readBoolAttr( "ReadOnly", XMLNS_DIALOGS_PREFIX ":readonly" );
     readEvents();
 }
-//__________________________________________________________________________________________________
+
 void ElementDescriptor::readTreeControlModel( StyleBag * all_styles )
     SAL_THROW( (Exception) )
 {
@@ -667,7 +664,7 @@ void ElementDescriptor::readTreeControlModel( StyleBag * all_styles )
     readLongAttr( "RowHeight", XMLNS_DIALOGS_PREFIX ":rowheight" );
     readEvents();
 }
-//__________________________________________________________________________________________________
+
 void ElementDescriptor::readCurrencyFieldModel( StyleBag * all_styles )
     SAL_THROW( (Exception) )
 {
@@ -708,7 +705,7 @@ void ElementDescriptor::readCurrencyFieldModel( StyleBag * all_styles )
     readBoolAttr( "EnforceFormat", XMLNS_DIALOGS_PREFIX ":enforce-format" );
     readEvents();
 }
-//__________________________________________________________________________________________________
+
 void ElementDescriptor::readDateFieldModel( StyleBag * all_styles )
     SAL_THROW( (Exception) )
 {
@@ -748,7 +745,7 @@ void ElementDescriptor::readDateFieldModel( StyleBag * all_styles )
     readBoolAttr( "EnforceFormat", XMLNS_DIALOGS_PREFIX ":enforce-format" );
     readEvents();
 }
-//__________________________________________________________________________________________________
+
 void ElementDescriptor::readNumericFieldModel( StyleBag * all_styles )
     SAL_THROW( (Exception) )
 {
@@ -787,7 +784,7 @@ void ElementDescriptor::readNumericFieldModel( StyleBag * all_styles )
     readBoolAttr( "EnforceFormat", XMLNS_DIALOGS_PREFIX ":enforce-format" );
     readEvents();
 }
-//__________________________________________________________________________________________________
+
 void ElementDescriptor::readTimeFieldModel( StyleBag * all_styles )
     SAL_THROW( (Exception) )
 {
@@ -825,7 +822,7 @@ void ElementDescriptor::readTimeFieldModel( StyleBag * all_styles )
     readBoolAttr( "EnforceFormat", XMLNS_DIALOGS_PREFIX ":enforce-format" );
     readEvents();
 }
-//__________________________________________________________________________________________________
+
 void ElementDescriptor::readPatternFieldModel( StyleBag * all_styles )
     SAL_THROW( (Exception) )
 {
@@ -858,7 +855,7 @@ void ElementDescriptor::readPatternFieldModel( StyleBag * all_styles )
     readStringAttr( "LiteralMask", XMLNS_DIALOGS_PREFIX ":literal-mask" );
     readEvents();
 }
-//__________________________________________________________________________________________________
+
 void ElementDescriptor::readFormattedFieldModel( StyleBag * all_styles )
     SAL_THROW( (Exception) )
 {
@@ -954,7 +951,6 @@ void ElementDescriptor::readSpinButtonModel( StyleBag * all_styles )
     readEvents();
 }
 
-//__________________________________________________________________________________________________
 void ElementDescriptor::readFixedLineModel( StyleBag * all_styles )
     SAL_THROW( (Exception) )
 {
@@ -977,7 +973,6 @@ void ElementDescriptor::readFixedLineModel( StyleBag * all_styles )
     readOrientationAttr( "Orientation", XMLNS_DIALOGS_PREFIX ":align" );
     readEvents();
 }
-//__________________________________________________________________________________________________
 void ElementDescriptor::readProgressBarModel( StyleBag * all_styles )
     SAL_THROW( (Exception) )
 {
@@ -1001,7 +996,6 @@ void ElementDescriptor::readProgressBarModel( StyleBag * all_styles )
     readLongAttr( "ProgressValueMax", XMLNS_DIALOGS_PREFIX ":value-max" );
     readEvents();
 }
-//__________________________________________________________________________________________________
 void ElementDescriptor::readScrollBarModel( StyleBag * all_styles )
     SAL_THROW( (Exception) )
 {
@@ -1032,7 +1026,6 @@ void ElementDescriptor::readScrollBarModel( StyleBag * all_styles )
     readDataAwareAttr( XMLNS_DIALOGS_PREFIX ":linked-cell" );
     readEvents();
 }
-//__________________________________________________________________________________________________
 void ElementDescriptor::readDialogModel( StyleBag * all_styles )
     SAL_THROW( (Exception) )
 {

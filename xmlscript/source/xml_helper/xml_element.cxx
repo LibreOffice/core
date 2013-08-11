@@ -19,33 +19,31 @@
 
 #include <xmlscript/xml_helper.hxx>
 
-
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 
 namespace xmlscript
 {
 
-//__________________________________________________________________________________________________
 void XMLElement::addAttribute( OUString const & rAttrName, OUString const & rValue )
     SAL_THROW(())
 {
     _attrNames.push_back( rAttrName );
     _attrValues.push_back( rValue );
 }
-//__________________________________________________________________________________________________
+
 void XMLElement::addSubElement( Reference< xml::sax::XAttributeList > const & xElem )
     SAL_THROW(())
 {
     _subElems.push_back( xElem );
 }
-//__________________________________________________________________________________________________
+
 Reference< xml::sax::XAttributeList > XMLElement::getSubElement( sal_Int32 nIndex )
     SAL_THROW(())
 {
     return _subElems[ (size_t)nIndex ];
 }
-//__________________________________________________________________________________________________
+
 void XMLElement::dumpSubElements( Reference< xml::sax::XDocumentHandler > const & xOut )
 {
     for ( size_t nPos = 0; nPos < _subElems.size(); ++nPos )
@@ -54,7 +52,7 @@ void XMLElement::dumpSubElements( Reference< xml::sax::XDocumentHandler > const 
         pElem->dump( xOut );
     }
 }
-//__________________________________________________________________________________________________
+
 void XMLElement::dump( Reference< xml::sax::XDocumentHandler > const & xOut )
 {
     xOut->ignorableWhitespace( OUString() );
@@ -66,20 +64,19 @@ void XMLElement::dump( Reference< xml::sax::XDocumentHandler > const & xOut )
 }
 
 // XAttributeList
-//__________________________________________________________________________________________________
 sal_Int16 XMLElement::getLength()
     throw (RuntimeException)
 {
     return static_cast<sal_Int16>(_attrNames.size());
 }
-//__________________________________________________________________________________________________
+
 OUString XMLElement::getNameByIndex( sal_Int16 nPos )
     throw (RuntimeException)
 {
     OSL_ASSERT( (size_t)nPos < _attrNames.size() );
     return _attrNames[ nPos ];
 }
-//__________________________________________________________________________________________________
+
 OUString XMLElement::getTypeByIndex( sal_Int16 nPos )
     throw (RuntimeException)
 {
@@ -88,21 +85,21 @@ OUString XMLElement::getTypeByIndex( sal_Int16 nPos )
     // xxx todo
     return OUString();
 }
-//__________________________________________________________________________________________________
+
 OUString XMLElement::getTypeByName( OUString const & /*rName*/ )
     throw (RuntimeException)
 {
     // xxx todo
     return OUString();
 }
-//__________________________________________________________________________________________________
+
 OUString XMLElement::getValueByIndex( sal_Int16 nPos )
     throw (RuntimeException)
 {
     OSL_ASSERT( (size_t)nPos < _attrNames.size() );
     return _attrValues[ nPos ];
 }
-//__________________________________________________________________________________________________
+
 OUString XMLElement::getValueByName( OUString const & rName )
     throw (RuntimeException)
 {

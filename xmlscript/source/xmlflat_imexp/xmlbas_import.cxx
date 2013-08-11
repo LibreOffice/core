@@ -30,15 +30,10 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 
-
-//.........................................................................
 namespace xmlscript
 {
-//.........................................................................
 
-    // =============================================================================
     // BasicElementBase
-    // =============================================================================
 
     BasicElementBase::BasicElementBase( const OUString& rLocalName,
             const Reference< xml::input::XAttributes >& xAttributes,
@@ -54,8 +49,6 @@ namespace xmlscript
             m_pParent->acquire();
     }
 
-    // -----------------------------------------------------------------------------
-
     BasicElementBase::~BasicElementBase()
     {
         if ( m_pImport )
@@ -63,8 +56,6 @@ namespace xmlscript
         if ( m_pParent )
             m_pParent->release();
     }
-
-    // -----------------------------------------------------------------------------
 
     bool BasicElementBase::getBoolAttr( sal_Bool* pRet, const OUString& rAttrName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::input::XAttributes >& xAttributes,
@@ -94,9 +85,7 @@ namespace xmlscript
         return false;
     }
 
-    // -----------------------------------------------------------------------------
     // XElement
-    // -----------------------------------------------------------------------------
 
     Reference< xml::input::XElement > BasicElementBase::getParent()
         throw (RuntimeException)
@@ -104,15 +93,11 @@ namespace xmlscript
         return static_cast< xml::input::XElement* >( m_pParent );
     }
 
-    // -----------------------------------------------------------------------------
-
     OUString BasicElementBase::getLocalName()
         throw (RuntimeException)
     {
         return m_aLocalName;
     }
-
-    // -----------------------------------------------------------------------------
 
     sal_Int32 BasicElementBase::getUid()
         throw (RuntimeException)
@@ -123,15 +108,11 @@ namespace xmlscript
         return nId;
     }
 
-    // -----------------------------------------------------------------------------
-
     Reference< xml::input::XAttributes > BasicElementBase::getAttributes()
         throw (RuntimeException)
     {
         return m_xAttributes;
     }
-
-    // -----------------------------------------------------------------------------
 
     Reference< xml::input::XElement > BasicElementBase::startChildElement(
         sal_Int32 /*nUid*/, const OUString& /*rLocalName*/,
@@ -141,39 +122,28 @@ namespace xmlscript
         throw xml::sax::SAXException("unexpected element!", Reference< XInterface >(), Any() );
     }
 
-    // -----------------------------------------------------------------------------
-
 void BasicElementBase::characters( const OUString& /*rChars*/ )
         throw (xml::sax::SAXException, RuntimeException)
     {
         // not used, all characters ignored
     }
 
-    // -----------------------------------------------------------------------------
-
 void BasicElementBase::ignorableWhitespace( const OUString& /*rWhitespaces*/ )
         throw (xml::sax::SAXException, RuntimeException)
     {
     }
-
-    // -----------------------------------------------------------------------------
 
 void BasicElementBase::processingInstruction( const OUString& /*rTarget*/, const OUString& /*rData*/ )
         throw (xml::sax::SAXException, RuntimeException)
     {
     }
 
-    // -----------------------------------------------------------------------------
-
     void BasicElementBase::endElement()
         throw (xml::sax::SAXException, RuntimeException)
     {
     }
 
-
-    // =============================================================================
     // BasicLibrariesElement
-    // =============================================================================
 
     BasicLibrariesElement::BasicLibrariesElement( const OUString& rLocalName,
             const Reference< xml::input::XAttributes >& xAttributes,
@@ -184,9 +154,7 @@ void BasicElementBase::processingInstruction( const OUString& /*rTarget*/, const
     {
     }
 
-    // -----------------------------------------------------------------------------
     // XElement
-    // -----------------------------------------------------------------------------
 
     Reference< xml::input::XElement > BasicLibrariesElement::startChildElement(
             sal_Int32 nUid, const OUString& rLocalName,
@@ -274,17 +242,12 @@ void BasicElementBase::processingInstruction( const OUString& /*rTarget*/, const
         return xElement;
     }
 
-    // -----------------------------------------------------------------------------
-
     void BasicLibrariesElement::endElement()
         throw (xml::sax::SAXException, RuntimeException)
     {
     }
 
-
-    // =============================================================================
     // BasicEmbeddedLibraryElement
-    // =============================================================================
 
     BasicEmbeddedLibraryElement::BasicEmbeddedLibraryElement( const OUString& rLocalName,
             const Reference< xml::input::XAttributes >& xAttributes,
@@ -307,9 +270,7 @@ void BasicElementBase::processingInstruction( const OUString& /*rTarget*/, const
         }
     }
 
-    // -----------------------------------------------------------------------------
     // XElement
-    // -----------------------------------------------------------------------------
 
     Reference< xml::input::XElement > BasicEmbeddedLibraryElement::startChildElement(
             sal_Int32 nUid, const OUString& rLocalName,
@@ -340,8 +301,6 @@ void BasicElementBase::processingInstruction( const OUString& /*rTarget*/, const
         return xElement;
     }
 
-    // -----------------------------------------------------------------------------
-
     void BasicEmbeddedLibraryElement::endElement()
         throw (xml::sax::SAXException, RuntimeException)
     {
@@ -349,10 +308,7 @@ void BasicElementBase::processingInstruction( const OUString& /*rTarget*/, const
             m_xLibContainer->setLibraryReadOnly( m_aLibName, m_bReadOnly );
     }
 
-
-    // =============================================================================
     // BasicModuleElement
-    // =============================================================================
 
     BasicModuleElement::BasicModuleElement( const OUString& rLocalName,
             const Reference< xml::input::XAttributes >& xAttributes,
@@ -364,9 +320,7 @@ void BasicElementBase::processingInstruction( const OUString& /*rTarget*/, const
     {
     }
 
-    // -----------------------------------------------------------------------------
     // XElement
-    // -----------------------------------------------------------------------------
 
     Reference< xml::input::XElement > BasicModuleElement::startChildElement(
             sal_Int32 nUid, const OUString& rLocalName,
@@ -399,17 +353,12 @@ void BasicElementBase::processingInstruction( const OUString& /*rTarget*/, const
         return xElement;
     }
 
-    // -----------------------------------------------------------------------------
-
     void BasicModuleElement::endElement()
         throw (xml::sax::SAXException, RuntimeException)
     {
     }
 
-
-    // =============================================================================
     // BasicSourceCodeElement
-    // =============================================================================
 
     BasicSourceCodeElement::BasicSourceCodeElement( const OUString& rLocalName,
             const Reference< xml::input::XAttributes >& xAttributes,
@@ -421,17 +370,13 @@ void BasicElementBase::processingInstruction( const OUString& /*rTarget*/, const
     {
     }
 
-    // -----------------------------------------------------------------------------
     // XElement
-    // -----------------------------------------------------------------------------
 
     void BasicSourceCodeElement::characters( const OUString& rChars )
         throw (xml::sax::SAXException, RuntimeException)
     {
         m_aBuffer.append( rChars );
     }
-
-    // -----------------------------------------------------------------------------
 
     void BasicSourceCodeElement::endElement()
         throw (xml::sax::SAXException, RuntimeException)
@@ -459,10 +404,7 @@ void BasicElementBase::processingInstruction( const OUString& /*rTarget*/, const
         }
     }
 
-
-    // =============================================================================
     // BasicImport
-    // =============================================================================
 
     BasicImport::BasicImport( const Reference< frame::XModel >& rxModel, sal_Bool bOasis )
         :m_xModel( rxModel )
@@ -470,15 +412,11 @@ void BasicElementBase::processingInstruction( const OUString& /*rTarget*/, const
     {
     }
 
-    // -----------------------------------------------------------------------------
-
     BasicImport::~BasicImport()
     {
     }
 
-    // -----------------------------------------------------------------------------
     // XRoot
-    // -----------------------------------------------------------------------------
 
     void BasicImport::startDocument( const Reference< xml::input::XNamespaceMapping >& xNamespaceMapping )
         throw (xml::sax::SAXException, RuntimeException)
@@ -495,28 +433,20 @@ void BasicElementBase::processingInstruction( const OUString& /*rTarget*/, const
         }
     }
 
-    // -----------------------------------------------------------------------------
-
     void BasicImport::endDocument()
         throw (xml::sax::SAXException, RuntimeException)
     {
     }
-
-    // -----------------------------------------------------------------------------
 
 void BasicImport::processingInstruction( const OUString& /*rTarget*/, const OUString& /*rData*/ )
         throw (xml::sax::SAXException, RuntimeException)
     {
     }
 
-    // -----------------------------------------------------------------------------
-
 void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*xLocator*/ )
         throw (xml::sax::SAXException, RuntimeException)
     {
     }
-
-    // -----------------------------------------------------------------------------
 
     Reference< xml::input::XElement > BasicImport::startRootElement( sal_Int32 nUid, const OUString& rLocalName,
             Reference< xml::input::XAttributes > const & xAttributes )
@@ -560,10 +490,7 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
         return xElement;
     }
 
-
-    // =============================================================================
     // component operations
-    // =============================================================================
 
     OUString getImplementationName_XMLBasicImporter()
     {
@@ -579,8 +506,6 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
         }
         return *pImplName;
     }
-
-    // -----------------------------------------------------------------------------
 
     Sequence< OUString > getSupportedServiceNames_XMLBasicImporter()
     {
@@ -598,8 +523,6 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
         return *pNames;
     }
 
-    // -----------------------------------------------------------------------------
-
     OUString getImplementationName_XMLOasisBasicImporter()
     {
         static OUString* pImplName = 0;
@@ -614,8 +537,6 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
         }
         return *pImplName;
     }
-
-    // -----------------------------------------------------------------------------
 
     Sequence< OUString > getSupportedServiceNames_XMLOasisBasicImporter()
     {
@@ -633,10 +554,7 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
         return *pNames;
     }
 
-
-    // =============================================================================
     // XMLBasicImporterBase
-    // =============================================================================
 
     XMLBasicImporterBase::XMLBasicImporterBase( const Reference< XComponentContext >& rxContext, sal_Bool bOasis )
         :m_xContext( rxContext )
@@ -644,15 +562,11 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
     {
     }
 
-    // -----------------------------------------------------------------------------
-
     XMLBasicImporterBase::~XMLBasicImporterBase()
     {
     }
 
-    // -----------------------------------------------------------------------------
     // XServiceInfo
-    // -----------------------------------------------------------------------------
 
     sal_Bool XMLBasicImporterBase::supportsService( const OUString& rServiceName ) throw (RuntimeException)
     {
@@ -665,9 +579,7 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
         return pNames != pEnd;
     }
 
-    // -----------------------------------------------------------------------------
     // XImporter
-    // -----------------------------------------------------------------------------
 
     void XMLBasicImporterBase::setTargetDocument( const Reference< XComponent >& rxDoc )
         throw (IllegalArgumentException, RuntimeException)
@@ -694,9 +606,7 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
         }
     }
 
-    // -----------------------------------------------------------------------------
     // XDocumentHandler
-    // -----------------------------------------------------------------------------
 
     void XMLBasicImporterBase::startDocument()
         throw (xml::sax::SAXException, RuntimeException)
@@ -707,8 +617,6 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
             m_xHandler->startDocument();
     }
 
-    // -----------------------------------------------------------------------------
-
     void XMLBasicImporterBase::endDocument()
         throw (xml::sax::SAXException, RuntimeException)
     {
@@ -717,8 +625,6 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
         if ( m_xHandler.is() )
             m_xHandler->endDocument();
     }
-
-    // -----------------------------------------------------------------------------
 
     void XMLBasicImporterBase::startElement( const OUString& aName,
             const Reference< xml::sax::XAttributeList >& xAttribs )
@@ -730,8 +636,6 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
             m_xHandler->startElement( aName, xAttribs );
     }
 
-    // -----------------------------------------------------------------------------
-
     void XMLBasicImporterBase::endElement( const OUString& aName )
         throw (xml::sax::SAXException, RuntimeException)
     {
@@ -740,8 +644,6 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
         if ( m_xHandler.is() )
             m_xHandler->endElement( aName );
     }
-
-    // -----------------------------------------------------------------------------
 
     void XMLBasicImporterBase::characters( const OUString& aChars )
         throw (xml::sax::SAXException, RuntimeException)
@@ -752,8 +654,6 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
             m_xHandler->characters( aChars );
     }
 
-    // -----------------------------------------------------------------------------
-
     void XMLBasicImporterBase::ignorableWhitespace( const OUString& aWhitespaces )
         throw (xml::sax::SAXException, RuntimeException)
     {
@@ -762,8 +662,6 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
         if ( m_xHandler.is() )
             m_xHandler->ignorableWhitespace( aWhitespaces );
     }
-
-    // -----------------------------------------------------------------------------
 
     void XMLBasicImporterBase::processingInstruction( const OUString& aTarget,
             const OUString& aData )
@@ -775,8 +673,6 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
             m_xHandler->processingInstruction( aTarget, aData );
     }
 
-    // -----------------------------------------------------------------------------
-
     void XMLBasicImporterBase::setDocumentLocator( const Reference< xml::sax::XLocator >& xLocator )
         throw (xml::sax::SAXException, RuntimeException)
     {
@@ -786,74 +682,53 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
             m_xHandler->setDocumentLocator( xLocator );
     }
 
-
-    // =============================================================================
     // XMLBasicImporter
-    // =============================================================================
 
     XMLBasicImporter::XMLBasicImporter( const Reference< XComponentContext >& rxContext )
         :XMLBasicImporterBase( rxContext, sal_False )
     {
     }
 
-    // -----------------------------------------------------------------------------
-
     XMLBasicImporter::~XMLBasicImporter()
     {
     }
 
-    // -----------------------------------------------------------------------------
     // XServiceInfo
-    // -----------------------------------------------------------------------------
 
     OUString XMLBasicImporter::getImplementationName(  ) throw (RuntimeException)
     {
         return getImplementationName_XMLBasicImporter();
     }
 
-    // -----------------------------------------------------------------------------
-
     Sequence< OUString > XMLBasicImporter::getSupportedServiceNames(  ) throw (RuntimeException)
     {
         return getSupportedServiceNames_XMLBasicImporter();
     }
 
-
-    // =============================================================================
     // XMLOasisBasicImporter
-    // =============================================================================
 
     XMLOasisBasicImporter::XMLOasisBasicImporter( const Reference< XComponentContext >& rxContext )
         :XMLBasicImporterBase( rxContext, sal_True )
     {
     }
 
-    // -----------------------------------------------------------------------------
-
     XMLOasisBasicImporter::~XMLOasisBasicImporter()
     {
     }
 
-    // -----------------------------------------------------------------------------
     // XServiceInfo
-    // -----------------------------------------------------------------------------
 
     OUString XMLOasisBasicImporter::getImplementationName(  ) throw (RuntimeException)
     {
         return getImplementationName_XMLOasisBasicImporter();
     }
 
-    // -----------------------------------------------------------------------------
-
     Sequence< OUString > XMLOasisBasicImporter::getSupportedServiceNames(  ) throw (RuntimeException)
     {
         return getSupportedServiceNames_XMLOasisBasicImporter();
     }
 
-
-    // =============================================================================
     // component operations
-    // =============================================================================
 
     Reference< XInterface > SAL_CALL create_XMLBasicImporter(
         Reference< XComponentContext > const & xContext )
@@ -862,8 +737,6 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
         return static_cast< lang::XTypeProvider * >( new XMLBasicImporter( xContext ) );
     }
 
-    // -----------------------------------------------------------------------------
-
     Reference< XInterface > SAL_CALL create_XMLOasisBasicImporter(
         Reference< XComponentContext > const & xContext )
         SAL_THROW(())
@@ -871,10 +744,6 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
         return static_cast< lang::XTypeProvider * >( new XMLOasisBasicImporter( xContext ) );
     }
 
-    // -----------------------------------------------------------------------------
-
-//.........................................................................
 }   // namespace xmlscript
-//.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

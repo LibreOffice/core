@@ -63,13 +63,12 @@ using namespace ::com::sun::star::frame;
 namespace xmlscript
 {
 
-//__________________________________________________________________________________________________
 void EventElement::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
     static_cast< ControlElement * >( _pParent )->_events.push_back( this );
 }
-//__________________________________________________________________________________________________
+
 ControlElement::ControlElement(
     OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes,
@@ -91,7 +90,6 @@ ControlElement::ControlElement(
     }
 }
 
-//__________________________________________________________________________________________________
 Reference< xml::input::XElement > ControlElement::getStyle(
     Reference< xml::input::XAttributes > const & xAttributes )
 {
@@ -102,7 +100,7 @@ Reference< xml::input::XElement > ControlElement::getStyle(
     }
     return Reference< xml::input::XElement >();
 }
-//__________________________________________________________________________________________________
+
 OUString ControlElement::getControlId(
     Reference< xml::input::XAttributes > const & xAttributes )
 {
@@ -125,10 +123,6 @@ OUString ControlElement::getControlModelName(
     return aModel;
 }
 
-
-//##################################################################################################
-
-//__________________________________________________________________________________________________
 bool StyleElement::importTextColorStyle(
     Reference< beans::XPropertySet > const & xProps )
 {
@@ -151,7 +145,7 @@ bool StyleElement::importTextColorStyle(
     }
     return false;
 }
-//__________________________________________________________________________________________________
+
 bool StyleElement::importTextLineColorStyle(
     Reference< beans::XPropertySet > const & xProps )
 {
@@ -174,7 +168,7 @@ bool StyleElement::importTextLineColorStyle(
     }
     return false;
 }
-//__________________________________________________________________________________________________
+
 bool StyleElement::importFillColorStyle(
     Reference< beans::XPropertySet > const & xProps )
 {
@@ -197,7 +191,7 @@ bool StyleElement::importFillColorStyle(
     }
     return false;
 }
-//__________________________________________________________________________________________________
+
 bool StyleElement::importBackgroundColorStyle(
     Reference< beans::XPropertySet > const & xProps )
 {
@@ -221,7 +215,6 @@ bool StyleElement::importBackgroundColorStyle(
     return false;
 }
 
-//__________________________________________________________________________________________________
 bool StyleElement::importBorderStyle(
     Reference< beans::XPropertySet > const & xProps )
 {
@@ -258,7 +251,6 @@ bool StyleElement::importBorderStyle(
     return false;
 }
 
-//______________________________________________________________________________
 bool StyleElement::importVisualEffectStyle(
     Reference<beans::XPropertySet> const & xProps )
 {
@@ -297,7 +289,6 @@ bool StyleElement::importVisualEffectStyle(
     return false;
 }
 
-//__________________________________________________________________________________________________
 void StyleElement::setFontProperties(
     Reference< beans::XPropertySet > const & xProps )
 {
@@ -305,7 +296,7 @@ void StyleElement::setFontProperties(
     xProps->setPropertyValue("FontEmphasisMark", makeAny( _fontEmphasisMark ) );
     xProps->setPropertyValue("FontRelief", makeAny( _fontRelief ) );
 }
-//__________________________________________________________________________________________________
+
 bool StyleElement::importFontStyle(
     Reference< beans::XPropertySet > const & xProps )
 {
@@ -683,7 +674,6 @@ bool StyleElement::importFontStyle(
         bFontImport = true;
     }
 
-    // ==================================================
     if (bFontImport)
     {
         _hasValue |= 0x8;
@@ -693,9 +683,6 @@ bool StyleElement::importFontStyle(
     return bFontImport;
 }
 
-//##################################################################################################
-
-//__________________________________________________________________________________________________
 bool ImportContext::importStringProperty(
     OUString const & rPropName, OUString const & rAttrName,
     Reference< xml::input::XAttributes > const & xAttributes )
@@ -710,7 +697,7 @@ bool ImportContext::importStringProperty(
     }
     return false;
 }
-//__________________________________________________________________________________________________
+
 bool ImportContext::importDoubleProperty(
     OUString const & rPropName, OUString const & rAttrName,
     Reference< xml::input::XAttributes > const & xAttributes )
@@ -726,7 +713,6 @@ bool ImportContext::importDoubleProperty(
     return false;
 }
 
-//__________________________________________________________________________________________________
 bool ImportContext::importBooleanProperty(
     OUString const & rPropName, OUString const & rAttrName,
     Reference< xml::input::XAttributes > const & xAttributes )
@@ -740,7 +726,7 @@ bool ImportContext::importBooleanProperty(
     }
     return false;
 }
-//__________________________________________________________________________________________________
+
 bool ImportContext::importLongProperty(
     OUString const & rPropName, OUString const & rAttrName,
     Reference< xml::input::XAttributes > const & xAttributes )
@@ -755,7 +741,7 @@ bool ImportContext::importLongProperty(
     }
     return false;
 }
-//__________________________________________________________________________________________________
+
 bool ImportContext::importLongProperty(
     sal_Int32 nOffset,
     OUString const & rPropName, OUString const & rAttrName,
@@ -771,7 +757,7 @@ bool ImportContext::importLongProperty(
     }
     return false;
 }
-//__________________________________________________________________________________________________
+
 bool ImportContext::importHexLongProperty(
     OUString const & rPropName, OUString const & rAttrName,
     Reference< xml::input::XAttributes > const & xAttributes )
@@ -786,7 +772,7 @@ bool ImportContext::importHexLongProperty(
     }
     return false;
 }
-//__________________________________________________________________________________________________
+
 bool ImportContext::importShortProperty(
     OUString const & rPropName, OUString const & rAttrName,
     Reference< xml::input::XAttributes > const & xAttributes )
@@ -801,7 +787,7 @@ bool ImportContext::importShortProperty(
     }
     return false;
 }
-//__________________________________________________________________________________________________
+
 bool ImportContext::importAlignProperty(
     OUString const & rPropName, OUString const & rAttrName,
     Reference< xml::input::XAttributes > const & xAttributes )
@@ -838,7 +824,7 @@ bool ImportContext::importAlignProperty(
     }
     return false;
 }
-//__________________________________________________________________________________________________
+
 bool ImportContext::importVerticalAlignProperty(
     OUString const & rPropName, OUString const & rAttrName,
     Reference< xml::input::XAttributes > const & xAttributes )
@@ -872,7 +858,7 @@ bool ImportContext::importVerticalAlignProperty(
     }
     return false;
 }
-//__________________________________________________________________________________________________
+
 bool ImportContext::importImageURLProperty(
     OUString const & rPropName, OUString const & rAttrName,
     Reference< xml::input::XAttributes > const & xAttributes )
@@ -919,8 +905,8 @@ bool ImportContext::importImageURLProperty(
     }
     return false;
 }
-//__________________________________________________________________________________________________
- bool ImportContext::importDataAwareProperty(
+
+bool ImportContext::importDataAwareProperty(
         OUString const & rPropName,
         Reference<xml::input::XAttributes> const & xAttributes )
 {
@@ -981,7 +967,7 @@ bool ImportContext::importImageURLProperty(
     }
     return bRes;
 }
-//__________________________________________________________________________________________________
+
 bool ImportContext::importImageAlignProperty(
     OUString const & rPropName, OUString const & rAttrName,
     Reference< xml::input::XAttributes > const & xAttributes )
@@ -1018,7 +1004,7 @@ bool ImportContext::importImageAlignProperty(
     }
     return false;
 }
-//__________________________________________________________________________________________________
+
 bool ImportContext::importImagePositionProperty(
     OUString const & rPropName, OUString const & rAttrName,
     Reference< xml::input::XAttributes > const & xAttributes )
@@ -1091,7 +1077,7 @@ bool ImportContext::importImagePositionProperty(
     }
     return false;
 }
-//__________________________________________________________________________________________________
+
 bool ImportContext::importButtonTypeProperty(
     OUString const & rPropName, OUString const & rAttrName,
     Reference< xml::input::XAttributes > const & xAttributes )
@@ -1128,7 +1114,7 @@ bool ImportContext::importButtonTypeProperty(
     }
     return false;
 }
-//__________________________________________________________________________________________________
+
 bool ImportContext::importDateFormatProperty(
     OUString const & rPropName, OUString const & rAttrName,
     Reference< xml::input::XAttributes > const & xAttributes )
@@ -1197,7 +1183,7 @@ bool ImportContext::importDateFormatProperty(
     }
     return false;
 }
-//__________________________________________________________________________________________________
+
 bool ImportContext::importTimeProperty(
     OUString const & rPropName, OUString const & rAttrName,
     Reference< xml::input::XAttributes > const & xAttributes )
@@ -1214,7 +1200,7 @@ bool ImportContext::importTimeProperty(
     }
     return false;
 }
-//__________________________________________________________________________________________________
+
 bool ImportContext::importDateProperty(
     OUString const & rPropName, OUString const & rAttrName,
     Reference< xml::input::XAttributes > const & xAttributes )
@@ -1231,7 +1217,7 @@ bool ImportContext::importDateProperty(
     }
     return false;
 }
-//__________________________________________________________________________________________________
+
 bool ImportContext::importTimeFormatProperty(
     OUString const & rPropName, OUString const & rAttrName,
     Reference< xml::input::XAttributes > const & xAttributes )
@@ -1276,7 +1262,7 @@ bool ImportContext::importTimeFormatProperty(
     }
     return false;
 }
-//__________________________________________________________________________________________________
+
 bool ImportContext::importOrientationProperty(
     OUString const & rPropName, OUString const & rAttrName,
     Reference< xml::input::XAttributes > const & xAttributes )
@@ -1305,7 +1291,7 @@ bool ImportContext::importOrientationProperty(
     }
     return false;
 }
-//__________________________________________________________________________________________________
+
 bool ImportContext::importLineEndFormatProperty(
     OUString const & rPropName, OUString const & rAttrName,
     Reference< xml::input::XAttributes > const & xAttributes )
@@ -1338,7 +1324,7 @@ bool ImportContext::importLineEndFormatProperty(
     }
     return false;
 }
-//__________________________________________________________________________________________________
+
 bool ImportContext::importSelectionTypeProperty(
     OUString const & rPropName, OUString const & rAttrName,
     Reference< xml::input::XAttributes > const & xAttributes )
@@ -1377,7 +1363,6 @@ bool ImportContext::importSelectionTypeProperty(
     return false;
 }
 
-//==================================================================================================
 struct StringTriple
 {
     char const * first;
@@ -1426,7 +1411,6 @@ static StringTriple const s_aEventTranslations[] =
 extern StringTriple const * const g_pEventTranslations;
 StringTriple const * const g_pEventTranslations = s_aEventTranslations;
 
-//__________________________________________________________________________________________________
 void ImportContext::importEvents(
     ::std::vector< Reference< xml::input::XElement > > const & rEvents )
 {
@@ -1550,7 +1534,6 @@ void ImportContext::importEvents(
         }
     }
 }
-//__________________________________________________________________________________________________
 void ImportContext::importScollableSettings(
     Reference< xml::input::XAttributes > const & _xAttributes )
 {
@@ -1627,57 +1610,54 @@ void ImportContext::importDefaults(
     importStringProperty( "HelpURL", "help-url", xAttributes );
 }
 
-//##################################################################################################
-
-//__________________________________________________________________________________________________
 Reference< xml::input::XElement > ElementBase::getParent()
     throw (RuntimeException)
 {
     return static_cast< xml::input::XElement * >( _pParent );
 }
-//__________________________________________________________________________________________________
+
 OUString ElementBase::getLocalName()
     throw (RuntimeException)
 {
     return _aLocalName;
 }
-//__________________________________________________________________________________________________
+
 sal_Int32 ElementBase::getUid()
     throw (RuntimeException)
 {
     return _nUid;
 }
-//__________________________________________________________________________________________________
+
 Reference< xml::input::XAttributes > ElementBase::getAttributes()
     throw (RuntimeException)
 {
     return _xAttributes;
 }
-//__________________________________________________________________________________________________
+
 void ElementBase::ignorableWhitespace(
     OUString const & /*rWhitespaces*/ )
     throw (xml::sax::SAXException, RuntimeException)
 {
     // not used
 }
-//__________________________________________________________________________________________________
+
 void ElementBase::characters( OUString const & /*rChars*/ )
     throw (xml::sax::SAXException, RuntimeException)
 {
     // not used, all characters ignored
 }
-//__________________________________________________________________________________________________
+
 void ElementBase::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
 }
-//______________________________________________________________________________
+
 void ElementBase::processingInstruction(
     OUString const & /*Target*/, OUString const & /*Data*/ )
     throw (xml::sax::SAXException, RuntimeException)
 {
 }
-//__________________________________________________________________________________________________
+
 Reference< xml::input::XElement > ElementBase::startChildElement(
     sal_Int32 /*nUid*/, OUString const & /*rLocalName*/,
     Reference< xml::input::XAttributes > const & /*xAttributes*/ )
@@ -1686,7 +1666,6 @@ Reference< xml::input::XElement > ElementBase::startChildElement(
     throw xml::sax::SAXException( "unexpected element!", Reference< XInterface >(), Any() );
 }
 
-//__________________________________________________________________________________________________
 ElementBase::ElementBase(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes,
@@ -1705,7 +1684,6 @@ ElementBase::ElementBase(
         _pParent->acquire();
     }
 }
-//__________________________________________________________________________________________________
 ElementBase::~ElementBase()
     SAL_THROW(())
 {
@@ -1723,12 +1701,8 @@ ElementBase::~ElementBase()
 #endif
 }
 
-//##################################################################################################
-
 // XRoot
-//
 
-//______________________________________________________________________________
 void DialogImport::startDocument(
     Reference< xml::input::XNamespaceMapping > const & xNamespaceMapping )
     throw (xml::sax::SAXException, RuntimeException)
@@ -1736,27 +1710,27 @@ void DialogImport::startDocument(
     XMLNS_DIALOGS_UID = xNamespaceMapping->getUidByUri( XMLNS_DIALOGS_URI );
     XMLNS_SCRIPT_UID = xNamespaceMapping->getUidByUri( XMLNS_SCRIPT_URI );
 }
-//__________________________________________________________________________________________________
+
 void DialogImport::endDocument()
     throw (xml::sax::SAXException, RuntimeException)
 {
     // ignored
 }
-//__________________________________________________________________________________________________
+
 void DialogImport::processingInstruction(
     OUString const & /*rTarget*/, OUString const & /*rData*/ )
     throw (xml::sax::SAXException, RuntimeException)
 {
     // ignored for now: xxx todo
 }
-//__________________________________________________________________________________________________
+
 void DialogImport::setDocumentLocator(
     Reference< xml::sax::XLocator > const & /*xLocator*/ )
     throw (xml::sax::SAXException, RuntimeException)
 {
     // ignored for now: xxx todo
 }
-//__________________________________________________________________________________________________
+
 Reference< xml::input::XElement > DialogImport::startRootElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
@@ -1776,7 +1750,7 @@ Reference< xml::input::XElement > DialogImport::startRootElement(
         throw xml::sax::SAXException( "illegal root element (expected window) given: " + rLocalName, Reference< XInterface >(), Any() );
     }
 }
-//__________________________________________________________________________________________________
+
 DialogImport::~DialogImport()
     SAL_THROW(())
 {
@@ -1784,7 +1758,7 @@ DialogImport::~DialogImport()
     SAL_INFO("xmlscript.xmldlg", "DialogImport::~DialogImport()." );
 #endif
 }
-//__________________________________________________________________________________________________
+
 Reference< util::XNumberFormatsSupplier > const & DialogImport::getNumberFormatsSupplier()
 {
     if (! _xSupplier.is())
@@ -1800,7 +1774,6 @@ Reference< util::XNumberFormatsSupplier > const & DialogImport::getNumberFormats
     return _xSupplier;
 }
 
-//__________________________________________________________________________________________________
 void DialogImport::addStyle(
     OUString const & rStyleId,
     Reference< xml::input::XElement > const & xStyle )
@@ -1809,7 +1782,7 @@ void DialogImport::addStyle(
     (*_pStyleNames).push_back( rStyleId );
     (*_pStyles).push_back( xStyle );
 }
-//__________________________________________________________________________________________________
+
 Reference< xml::input::XElement > DialogImport::getStyle(
     OUString const & rStyleId ) const
     SAL_THROW(())

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <stdio.h>
 #include "osl/file.h"
 
@@ -49,14 +48,10 @@
 #include <com/sun/star/registry/XImplementationRegistration.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-
 using namespace ::rtl;
 using namespace ::cppu;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-
-
-
 
 Reference< XComponentContext > createInitialComponentContext(
     OUString const & inst_dir )
@@ -83,9 +78,6 @@ Reference< XComponentContext > createInitialComponentContext(
 
     return xContext;
 }
-
-
-// -----------------------------------------------------------------------
 
 Reference< container::XNameContainer > importFile(
     char const * fname,
@@ -144,8 +136,6 @@ void exportToFile(
     ::fclose( f );
 }
 
-
-
 class MyApp : public Application
 {
 public:
@@ -153,8 +143,6 @@ public:
 };
 
 MyApp aMyApp;
-
-// -----------------------------------------------------------------------
 
 void MyApp::Main()
 {

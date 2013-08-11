@@ -104,7 +104,6 @@ inline bool getLongAttr(
 
 class ImportContext;
 
-//==============================================================================
 struct DialogImport
     : public ::cppu::WeakImplHelper1< css::xml::input::XRoot >
 {
@@ -196,7 +195,6 @@ public:
         throw (css::xml::sax::SAXException, css::uno::RuntimeException);
 };
 
-//==============================================================================
 class ElementBase
     : public ::cppu::WeakImplHelper1< css::xml::input::XElement >
 {
@@ -243,7 +241,6 @@ public:
         throw (css::xml::sax::SAXException, css::uno::RuntimeException);
 };
 
-//==============================================================================
 class StylesElement
     : public ElementBase
 {
@@ -264,7 +261,6 @@ public:
         {}
 };
 
-//==============================================================================
 class StyleElement
     : public ElementBase
 {
@@ -323,7 +319,6 @@ public:
         {}
 };
 
-//==============================================================================
 class MenuPopupElement
     : public ElementBase
 {
@@ -349,7 +344,6 @@ public:
         {}
 };
 
-//==============================================================================
 class ControlElement
     : public ElementBase
 {
@@ -378,7 +372,6 @@ public:
         SAL_THROW(());
 };
 
-//==============================================================================
 class ImportContext
 {
 protected:
@@ -473,7 +466,6 @@ public:
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes );
 };
 
-//==============================================================================
 class ControlImportContext : public ImportContext
 {
 public:
@@ -503,7 +495,6 @@ public:
     }
 };
 
-//==============================================================================
 class WindowElement
     : public ControlElement
 {
@@ -525,7 +516,6 @@ public:
         {}
 };
 
-//==============================================================================
 class EventElement
     : public ElementBase
 {
@@ -542,7 +532,6 @@ public:
         {}
 };
 
-//==============================================================================
 class BulletinBoardElement
     : public ControlElement
 {
@@ -560,7 +549,6 @@ public:
         SAL_THROW(());
 };
 
-//==============================================================================
 class ButtonElement
     : public ControlElement
 {
@@ -582,7 +570,6 @@ public:
         {}
 };
 
-//==============================================================================
 class CheckBoxElement
     : public ControlElement
 {
@@ -604,7 +591,6 @@ public:
         {}
 };
 
-//==============================================================================
 class ComboBoxElement
     : public ControlElement
 {
@@ -627,7 +613,6 @@ public:
         {}
 };
 
-//==============================================================================
 class MenuListElement
     : public ControlElement
 {
@@ -650,7 +635,6 @@ public:
         {}
 };
 
-//==============================================================================
 class RadioElement
     : public ControlElement
 {
@@ -670,7 +654,6 @@ public:
         {}
 };
 
-//==============================================================================
 class RadioGroupElement
     : public ControlElement
 {
@@ -693,7 +676,6 @@ public:
         {}
 };
 
-//==============================================================================
 class TitledBoxElement
     : public BulletinBoardElement
 {
@@ -717,7 +699,6 @@ public:
         {}
 };
 
-//==============================================================================
 class TextElement
     : public ControlElement
 {
@@ -738,7 +719,6 @@ public:
         : ControlElement( rLocalName, xAttributes, pParent, pImport )
         {}
 };
-//==============================================================================
 class FixedHyperLinkElement
     : public ControlElement
 {
@@ -759,7 +739,7 @@ public:
         : ControlElement( rLocalName, xAttributes, pParent, pImport )
         {}
 };
-//==============================================================================
+
 class TextFieldElement
     : public ControlElement
 {
@@ -781,7 +761,6 @@ public:
         {}
 };
 
-//==============================================================================
 class ImageControlElement
     : public ControlElement
 {
@@ -803,7 +782,6 @@ public:
         {}
 };
 
-//==============================================================================
 class FileControlElement
     : public ControlElement
 {
@@ -825,7 +803,6 @@ public:
         {}
 };
 
-//==============================================================================
 class TreeControlElement
     : public ControlElement
 {
@@ -847,7 +824,6 @@ public:
         {}
 };
 
-//==============================================================================
 class CurrencyFieldElement
     : public ControlElement
 {
@@ -869,7 +845,6 @@ public:
         {}
 };
 
-//==============================================================================
 class DateFieldElement
     : public ControlElement
 {
@@ -891,7 +866,6 @@ public:
         {}
 };
 
-//==============================================================================
 class NumericFieldElement
     : public ControlElement
 {
@@ -913,7 +887,6 @@ public:
         {}
 };
 
-//==============================================================================
 class TimeFieldElement
     : public ControlElement
 {
@@ -935,7 +908,6 @@ public:
         {}
 };
 
-//==============================================================================
 class PatternFieldElement
     : public ControlElement
 {
@@ -957,7 +929,6 @@ public:
         {}
 };
 
-//==============================================================================
 class FormattedFieldElement
     : public ControlElement
 {
@@ -979,7 +950,6 @@ public:
         {}
 };
 
-//==============================================================================
 class FixedLineElement
     : public ControlElement
 {
@@ -1001,7 +971,6 @@ public:
         {}
 };
 
-//==============================================================================
 class ScrollBarElement
     : public ControlElement
 {
@@ -1022,8 +991,6 @@ public:
         : ControlElement( rLocalName, xAttributes, pParent, pImport )
         {}
 };
-
-//==============================================================================
 
 class SpinButtonElement
     : public ControlElement
@@ -1046,7 +1013,6 @@ public:
         {}
 };
 
-//==============================================================================
 class MultiPage
     : public ControlElement
 {
@@ -1072,7 +1038,6 @@ private:
     css::uno::Reference< css::container::XNameContainer > m_xContainer;
 };
 
-//==============================================================================
 class Frame
     : public ControlElement
 {
@@ -1097,7 +1062,6 @@ private:
     css::uno::Reference< css::container::XNameContainer > m_xContainer;
 };
 
-//==============================================================================
 class Page
     : public ControlElement
 {
@@ -1122,7 +1086,6 @@ public:
 private:
     css::uno::Reference< css::container::XNameContainer > m_xContainer;
 };
-
 
 class ProgressBarElement
     : public ControlElement
