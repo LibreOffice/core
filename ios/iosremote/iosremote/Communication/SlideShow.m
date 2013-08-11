@@ -159,11 +159,11 @@ NSString *sTitle;
     if (index >= self.size)
     {
         if ([view isKindOfClass:[UIImageView class]])
-            [(UIImageView* )view setImage:[UIImage imageNamed:@"slide_finished.png"]];
+            [(UIImageView* )view setImage:[UIImage imageNamed:@"slide_finished"]];
         else if ([view isKindOfClass:[UITableViewCell class]])
         {
             UIImageView *image = (UIImageView *)[view viewWithTag:1];
-            [image setImage:[UIImage imageNamed:@"slide_finished.png"]];
+            [image setImage:[UIImage imageNamed:@"slide_finished"]];
         }
         else if ([view isKindOfClass:[UIWebView class]])
             [(UIWebView* )view loadHTMLString: @"SlideShow finished" baseURL:nil];

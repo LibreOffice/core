@@ -132,6 +132,7 @@
     }
 }
 
+// Not localized for now since this is subject to fundemental changes
 - (IBAction)pointerAction:(id)sender {
     if (self.count == 0 || self.count == 1){
         CGPoint p;
@@ -292,7 +293,7 @@
     
     self.revealViewController.navigationItem.rightBarButtonItem = backButton;
 
-    self.revealButtonItem = [[UIBarButtonItem alloc] initWithImage: [UIImage imageNamed:@"more_icon.png"]
+    self.revealButtonItem = [[UIBarButtonItem alloc] initWithImage: [UIImage imageNamed:@"more_icon"]
                                                              style:UIBarButtonItemStyleBordered
                                                             target:self.revealViewController
                                                             action:@selector( revealToggle: )];
@@ -316,9 +317,17 @@
 - (void) popOverStart:(id)sender
 {
     if (!isBlank) {
-        [PopoverView showPopoverAtPoint: CGPointMake(self.navigationController.view.frame.size.width - 20, 0) inView:self.view withTitle:@"More" withStringArray:[NSArray arrayWithObjects:@"Stop Presentation", @"Restart", @"Blank Screen", nil] delegate:self];
+        [PopoverView showPopoverAtPoint: CGPointMake(self.navigationController.view.frame.size.width - 20, 0)
+                                 inView:self.view
+                              withTitle:NSLocalizedString(@"More", @"Popover title")
+                        withStringArray:[NSArray arrayWithObjects:NSLocalizedString(@"Stop Presentation", nil), NSLocalizedString(@"Restart", nil), NSLocalizedString(@"Blank Screen", nil), nil]
+                               delegate:self];
     } else {
-        [PopoverView showPopoverAtPoint: CGPointMake(self.navigationController.view.frame.size.width - 20, 0) inView:self.view withTitle:@"More" withStringArray:[NSArray arrayWithObjects:@"Stop Presentation", @"Restart", @"Resume from blank screen", nil] delegate:self];
+        [PopoverView showPopoverAtPoint: CGPointMake(self.navigationController.view.frame.size.width - 20, 0)
+                                 inView:self.view
+                              withTitle:@"More"
+                        withStringArray:[NSArray arrayWithObjects:NSLocalizedString(@"Stop Presentation", nil), NSLocalizedString(@"Restart", nil), NSLocalizedString(@"Resume from blank screen", nil), nil]
+                               delegate:self];
     }
 }
 

@@ -471,11 +471,11 @@ static BOOL isBlank = NO;
 - (IBAction)popOverUp:(id)sender {
     if (!isBlank) {
         [PopoverView showPopoverAtPoint:self.gearButton.frame.origin inView:self.view withStringArray:
-         [NSArray arrayWithObjects:@"Stop Presentation", @"Restart", @"Blank Screen", nil]
+         [NSArray arrayWithObjects:NSLocalizedString(@"Stop Presentation", @"Popover option"), NSLocalizedString(@"Restart", @"Popover option"), NSLocalizedString(@"Blank Screen", @"Popover option"), nil]
                                delegate:self];
     } else {
         [PopoverView showPopoverAtPoint:self.gearButton.frame.origin inView:self.view withStringArray:
-         [NSArray arrayWithObjects:@"Stop Presentation", @"Restart", @"Resume from blank Screen", nil]
+         [NSArray arrayWithObjects:NSLocalizedString(@"Stop Presentation", @"Popover option"), NSLocalizedString(@"Restart", @"Popover option"), NSLocalizedString(@"Resume from blank Screen", @"Popover option"), nil]
                                delegate:self];
     }
     [UIView animateWithDuration:0.24 animations:^{

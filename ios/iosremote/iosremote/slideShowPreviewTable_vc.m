@@ -114,7 +114,7 @@
             self.modalViewController.view.backgroundColor = [UIColor clearColor];
             _startButton.frame = CGRectMake(30.0, 50.0, 470.0, 50.0);
         }
-        [_startButton setTitle:@"Start Presentation" forState:UIControlStateNormal];
+        [_startButton setTitle:NSLocalizedString(@"Start Presentation", nil) forState:UIControlStateNormal];
         [_startButton setTitleColor:kTintColor forState:UIControlStateNormal];
         [_startButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateHighlighted];
         [_startButton addTarget:self action:@selector(startPresentationAction:) forControlEvents:UIControlEventTouchUpInside];

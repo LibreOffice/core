@@ -54,10 +54,10 @@
 -(void) netService:(NSNetService *)sender didNotResolve:(NSDictionary *)errorDict
 {
     NSLog(@"Failed to resolve");
-    UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Failed to reach the computer"
-                                                      message:@"Please restart your application or wait the application to refresh. "
+    UIAlertView *message = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Failed to reach your computer", nil)
+                                                      message:NSLocalizedString(@"Please consider restart LibreOffice Impress on your computer.", nil)
                                                      delegate:self
-                                            cancelButtonTitle:@"OK"
+                                            cancelButtonTitle:NSLocalizedString(@"OK", nil)
                                             otherButtonTitles:nil];
     [self disableSpinner];
     [message show];
@@ -158,7 +158,7 @@
     self.serverTable.dataSource = self;
     self.serverTable.delegate = self;
     
-    [self setTitle:@"Impress Remote"];
+    [self setTitle:NSLocalizedString(@"Impress Remote", @"App name displayed on navbar")];
     
 }
 
@@ -185,6 +185,7 @@
                                                                                        }];
     NSLog(@"Clear auto discovered servers");
     [self.comManager.autoDiscoveryServers removeAllObjects];
+    [self.serverTable reloadData];
     self.serviceBrowser = [[NSNetServiceBrowser alloc] init];
     [self.serviceBrowser setDelegate:self];
     [self.serviceBrowser searchForServicesOfType:@"_impressremote._tcp" inDomain:@"local"];
@@ -272,10 +273,10 @@
     
     switch (section) {
         case 0:
-            sectionName = [NSString stringWithFormat:@"Detected connections"];
+            sectionName = [NSString stringWithFormat:NSLocalizedString(@"Detected Connections", @"Server list section title")];
             break;
         case 1:
-            sectionName = [NSString stringWithFormat:@"Custom connections"];
+            sectionName = [NSString stringWithFormat:NSLocalizedString(@"Custom Connections", @"Server list section title")];
             break;
     }
     UILabel *sectionHeader;
@@ -302,7 +303,7 @@
         sectionFooter.backgroundColor = [UIColor clearColor];
         sectionFooter.font = kAppSmallTextFont;
         sectionFooter.textColor = kTintColor;
-        sectionFooter.text = @"In case your computer does not appear in the section above, manually add a computer with its IP address.";
+        sectionFooter.text = NSLocalizedString(@"Customize server config instruction", @"Displayed when no customized server is available");
         
         UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.bounds.size.width, [self tableView:tableView heightForHeaderInSection:section])];
         [view addSubview:sectionFooter];

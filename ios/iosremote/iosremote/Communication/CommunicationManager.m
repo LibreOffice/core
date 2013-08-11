@@ -64,11 +64,11 @@
             self.state = DISCONNECTED;
             if ([self.delegate isKindOfClass:[server_list_vc class]]){
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Failed to reach server"
-                                                                      message:@"Please verify your IP address and make sure that LibreOffice Impress is running with impress remote feature enabled. "
+                    UIAlertView *message = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Failed to reach server", @"Connection failure title")
+                                                                      message:NSLocalizedString(@"Failed to reach server Msg", @"Connection failure message")
                                                                      delegate:self
-                                                            cancelButtonTitle:@"OK"
-                                                            otherButtonTitles:@"Help", nil];
+                                                            cancelButtonTitle:NSLocalizedString(@"OK", nil)
+                                                            otherButtonTitles:NSLocalizedString(@"Help", nil), nil];
                     [message show];
                 });
             } else {
@@ -76,10 +76,11 @@
                 BasePresentationViewController *bpvc = [[(MainSplitViewController *)[self.delegate presentingViewController] viewControllers] objectAtIndex:1];
                 [bpvc didReceiveDisconnection];
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Connection Lost"
-                                                                      message:@"Oups, connection lost...Please try to reconnect to your computer. "
+                    UIAlertView *message = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Connection Lost", @"Connection Lost Alert title")
+                                                                      message:NSLocalizedString(@"Connection Lost Msg", @"Connection Lost Alert Msg")
+                                            //@"Oups, connection lost...Please try to reconnect to your computer. "
                                                                      delegate:nil
-                                                            cancelButtonTitle:@"OK"
+                                                            cancelButtonTitle:NSLocalizedString(@"OK", nil)
                                                             otherButtonTitles:nil];
                     [message show];
                 });
@@ -93,14 +94,10 @@
         [alertView dismissWithClickedButtonIndex:0 animated:YES];
     }else if (buttonIndex == 1){
         [alertView dismissWithClickedButtonIndex:0 animated:YES];
-        UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Pairing instructions"
-                                                          message:@"1. Launch your LibreOffice Impress on your Computer\n\n"
-                                @"2. Enable Preferences - LibreOffice Impress - General - Enable remote control\n\n"
-                                @"3. Enable Preferences - LibreOffice Impress - Advanced - Enable Experimental Features\n\n"
-                                @"4. Make sure your Computer and your device are connected to the same WiFi network and Enter your Computer's IP address\n\n"
-                                @"5. Connect and Enjoy!\n\n"
+        UIAlertView *message = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Pairing Instructions", @"Pairing instructions Alert Title")
+                                                          message:NSLocalizedString(@"Pairing Instructions Msg", nil)
                                                          delegate:nil
-                                                cancelButtonTitle:@"OK"
+                                                cancelButtonTitle:NSLocalizedString(@"OK", nil)
                                                 otherButtonTitles:nil];
         [message show];
     }

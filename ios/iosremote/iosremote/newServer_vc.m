@@ -34,17 +34,17 @@
     NSString *serverName = [self.nameCell.textField text];
     NSString *serverAddr = [self.addrCell.textField text];
     if ([serverAddr isValidIPAddress]) {
-        if (!serverName) {
+        if (!serverName || [serverName isEqualToString:@""]) {
             serverName = [[self fetchSSIDInfo] valueForKey:@"SSID"];
         }
         NSLog(@"New server name:%@ ip:%@", serverName, serverAddr);
         [self.comManager addServersWithName:serverName AtAddress:serverAddr];
         [self.navigationController popViewControllerAnimated:YES];
     } else {
-        UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Invalid IP Address"
-                                                          message:@"A valid IP address should be like this: \"192.168.1.1\""
+        UIAlertView *message = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Invalid IP Address", @"Invalid IP Address Alert title")
+                                                          message:NSLocalizedString(@"Invalid IP Address Msg", @"Invalid IP Address Alert message")
                                                          delegate:nil
-                                                cancelButtonTitle:@"OK"
+                                                cancelButtonTitle:NSLocalizedString(@"OK", @"OK Button on Alert view")
                                                 otherButtonTitles:nil];
         [message show];
     }
@@ -66,7 +66,6 @@
 - (id)fetchSSIDInfo {
     NSArray *ifs = (__bridge_transfer id)CNCopySupportedInterfaces();
     id info = nil;
-    NSLog(@"Obtaining Wifi SSID");
     for (NSString *ifnam in ifs) {
         info = (__bridge_transfer id)CNCopyCurrentNetworkInfo((__bridge CFStringRef)ifnam);
         NSLog(@"%@ => %@", ifnam, info);
@@ -83,12 +82,12 @@
 - (void)viewDidLoad
 {
     self.comManager = [CommunicationManager sharedComManager];
-    [self setNameCell: [self newDetailCellWithTag:ServerName]];
-    [self setAddrCell: [self newDetailCellWithTag:ServerAddr]];
+    [self setNameCell:[self newDetailCellWithTag:ServerName]];
+    [self setAddrCell:[self newDetailCellWithTag:ServerAddr]];
     
     [self setTitle:@"New Server"];
     
-    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStyleBordered target:self action:@selector(handleBack)];
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Cancel", nil) style:UIBarButtonItemStyleBordered target:self action:@selector(handleBack)];
     [backButton setBackgroundImage:[UIImage imageNamed:@"backButton"] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
     self.navigationItem.leftBarButtonItem = backButton;
     
@@ -238,14 +237,14 @@
             {
                 cell = [self nameCell];
                 text = [self.server serverName];
-                placeholder = @"Name (optional)";
+                placeholder = NSLocalizedString(@"Name (optional)", @"EditableTableViewCell placeholder");
                 keyboardType = UIKeyboardTypeDefault;
             }
             else
             {
                 cell = [self addrCell];
                 text = [self.server serverAddress];
-                placeholder = @"IP Address";
+                placeholder = NSLocalizedString(@"IP Address", @"EditableTableViewCell placeholder");
                 keyboardType = UIKeyboardTypeNumbersAndPunctuation;
             }
             break;

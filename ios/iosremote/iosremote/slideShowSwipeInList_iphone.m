@@ -46,7 +46,7 @@ dispatch_queue_t backgroundQueue;
         [self.stopWatch start];
     }
     
-    UIImageView *tempImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"slideshowRail.png"]];
+    UIImageView *tempImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"slideshowRail"]];
     [tempImageView setFrame:self.tableView.frame];
     
     self.tableView.backgroundView = tempImageView;
@@ -112,10 +112,10 @@ dispatch_queue_t backgroundQueue;
 {
     switch (section) {
         case 0:
-            return @"Stop Watch";
+            return NSLocalizedString(@"Stop Watch", @"Sidebar section header");
             break;
         case 1:
-            return @"Slides";
+            return NSLocalizedString(@"Slides", @"Sidebar section header");
         default:
             break;
     }

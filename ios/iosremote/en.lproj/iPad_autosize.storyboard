@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="3084" systemVersion="12E55" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" initialViewController="XiK-Ye-iB8">
     <dependencies>
+        <deployment defaultVersion="1552" identifier="iOS"/>
         <development version="4600" identifier="xcode"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="2083"/>
     </dependencies>
@@ -17,7 +18,7 @@
                                 <rect key="frame" x="0.0" y="54" width="540" height="46"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                    <rect key="frame" x="31" y="1" width="478" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="540" height="46"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="h0a-Zq-2vY">
@@ -121,7 +122,7 @@
                                         <rect key="frame" x="0.0" y="30" width="540" height="45"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="31" y="1" width="478" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="540" height="45"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
@@ -130,7 +131,7 @@
                                         <rect key="frame" x="0.0" y="75" width="540" height="45"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="31" y="0.0" width="478" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="540" height="45"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
@@ -168,7 +169,7 @@
                             <rect key="frame" x="0.0" y="0.0" width="540" height="281"/>
                             <subviews>
                                 <view contentMode="scaleToFill" id="Is1-dX-SaP">
-                                    <rect key="frame" x="36" y="52.999999999999986" width="468" height="208.00000000000003"/>
+                                    <rect key="frame" x="36" y="53" width="468" height="208"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                     <subviews>
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Title of the presentation(TODO)" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="JEW-I6-sw5">
@@ -191,7 +192,7 @@
                                         <rect key="frame" x="0.0" y="291" width="540" height="45"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="31" y="1" width="478" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="540" height="45"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
@@ -200,7 +201,7 @@
                                         <rect key="frame" x="0.0" y="336" width="540" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="31" y="0.0" width="478" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="540" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
@@ -209,7 +210,7 @@
                                         <rect key="frame" x="0.0" y="380" width="540" height="45"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="31" y="0.0" width="478" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="540" height="45"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
@@ -316,7 +317,7 @@
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </view>
                             <tableView contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="Iok-mu-c0T" customClass="HorizontalTableView">
-                                <rect key="frame" x="-488" y="-333" width="0.0" height="0.0"/>
+                                <rect key="frame" x="-641" y="-181" width="0.0" height="0.0"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                 <connections>
@@ -477,10 +478,10 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" tag="1" contentMode="scaleToFill" image="Default.png" id="dn1-99-Dde">
-                                            <rect key="frame" x="44" y="6" width="233" height="163"/>
+                                            <rect key="frame" x="44" y="5" width="233" height="163"/>
                                         </imageView>
                                         <label clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" text="1" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="1" highlighted="YES" id="qrH-bi-qw7">
-                                            <rect key="frame" x="-605" y="154" width="29" height="21"/>
+                                            <rect key="frame" x="-605" y="152" width="29" height="21"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                             <accessibility key="accessibilityConfiguration">
@@ -538,90 +539,9 @@
         <image name="nextButton_pressed.png" width="42" height="230"/>
         <image name="previousButton_normal.png" width="42" height="230"/>
         <image name="previousButton_pressed.png" width="42" height="230"/>
-        <image name="timer_clear_btn.png" width="74" height="74"/>
-        <image name="timer_start_btn.png" width="74" height="74"/>
+        <image name="timer_clear_btn.png" width="60" height="60"/>
+        <image name="timer_start_btn.png" width="60" height="60"/>
     </resources>
-    <classes>
-        <class className="BasePresentationViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/BasePresentationViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="nextSlideAction:"/>
-                <relationship kind="action" name="popOverUp:"/>
-                <relationship kind="action" name="previousSlideAction:"/>
-                <relationship kind="action" name="startConnectionModal:"/>
-                <relationship kind="outlet" name="NoteWebView" candidateClass="UIWebView"/>
-                <relationship kind="outlet" name="NotesView" candidateClass="UIView"/>
-                <relationship kind="outlet" name="clearButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="currentSlideImageView" candidateClass="UIImageView"/>
-                <relationship kind="outlet" name="gearButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="horizontalTableView" candidateClass="UITableView"/>
-                <relationship kind="outlet" name="movingPointer" candidateClass="UIView"/>
-                <relationship kind="outlet" name="nextButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="previousButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="slideNumber" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="startButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="timeLabel" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="welcome_blocking_page" candidateClass="UIView"/>
-                <relationship kind="outlet" name="welcome_connect_button" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="welcome_label" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="welcome_libO_icon" candidateClass="UIImageView"/>
-            </relationships>
-        </class>
-        <class className="EditableTableViewCell" superclassName="UITableViewCell">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/EditableTableViewCell.h"/>
-        </class>
-        <class className="LibONavigationController" superclassName="UINavigationController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/LibONavigationController.h"/>
-        </class>
-        <class className="MainSplitViewController" superclassName="UISplitViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MainSplitViewController.h"/>
-        </class>
-        <class className="autoDismissKeyboardNavigationViewController" superclassName="LibONavigationController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/autoDismissKeyboardNavigationViewController.h"/>
-        </class>
-        <class className="newServerViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/newServerViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="save:"/>
-                <relationship kind="outlet" name="saveButton" candidateClass="UIBarButtonItem"/>
-            </relationships>
-        </class>
-        <class className="pinValidation_vc" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/pinValidation_vc.h"/>
-            <relationships>
-                <relationship kind="outlet" name="pinLabel" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="statusLabel" candidateClass="UILabel"/>
-            </relationships>
-        </class>
-        <class className="server_list_vc" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/server_list_vc.h"/>
-            <relationships>
-                <relationship kind="outlet" name="serverTable" candidateClass="UITableView"/>
-            </relationships>
-        </class>
-        <class className="server_list_vc_ipad" superclassName="server_list_vc">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/server_list_vc_ipad.h"/>
-            <relationships>
-                <relationship kind="action" name="cancelModalView:"/>
-            </relationships>
-        </class>
-        <class className="slideShowPreviewTable_vc" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/slideShowPreviewTable_vc.h"/>
-            <relationships>
-                <relationship kind="action" name="startPresentationAction:"/>
-                <relationship kind="outlet" name="optionsTable" candidateClass="UITableView"/>
-            </relationships>
-        </class>
-        <class className="slideShowPreviewTable_vc_ipad" superclassName="slideShowPreviewTable_vc">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/slideShowPreviewTable_vc_ipad.h"/>
-            <relationships>
-                <relationship kind="outlet" name="titleLabel" candidateClass="UILabel"/>
-            </relationships>
-        </class>
-        <class className="slideShowSwipeInList_ipad" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/slideShowSwipeInList_ipad.h"/>
-        </class>
-    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
