@@ -2871,7 +2871,7 @@ if test $_os = Darwin -a "$ENABLE_MACOSX_SANDBOX" = YES; then
     LIBO_URE_SHARE_FOLDER=Resources/ure
     LIBO_URE_SHARE_JAVA_FOLDER=Resources/java
     AC_DEFINE(HAVE_FEATURE_MACOSX_MACLIKE_APP_STRUCTURE)
-elif $_os = WINNT; then
+elif test $_os = WINNT; then
     LIBO_BIN_FOLDER=program
     LIBO_ETC_FOLDER=program
     LIBO_LIBEXEC_FOLDER=program
