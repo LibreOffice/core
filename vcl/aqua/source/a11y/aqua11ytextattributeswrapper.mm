@@ -28,6 +28,9 @@
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/FontStrikeout.hpp>
+#include <com/sun/star/text/TextMarkupType.hpp>
+
+#include <algorithm>
 
 namespace css_awt = ::com::sun::star::awt;
 using namespace ::com::sun::star::accessibility;
@@ -267,6 +270,32 @@ using namespace ::rtl;
     [ pool release ];
 }
 
++(void)addMarkup:(XAccessibleTextMarkup*)markup toString:(NSMutableAttributedString*)string inRange:(NSRange)range {
+    [AquaA11yTextAttributesWrapper addMarkup:markup withType:(::com::sun::star::text::TextMarkupType::SPELLCHECK) toString:string inRange:range];
+}
+
++(void)addMarkup:(XAccessibleTextMarkup*)markup withType:(long)type toString:(NSMutableAttributedString*)string inRange:(NSRange)range {
+    const long markupCount = markup->getTextMarkupCount(type);
+    TextSegment maskSegment;
+    maskSegment.SegmentStart = range.location;
+    maskSegment.SegmentEnd   = range.location + range.length;
+    for (long markupIndex = 0; markupIndex < markupCount; ++markupIndex) {
+        TextSegment textSegment = markup->getTextMarkup(markupIndex, type);
+        TextSegment intersectionSegment;
+        intersectionSegment.SegmentStart = std::min(std::max(textSegment.SegmentStart, maskSegment.SegmentStart), maskSegment.SegmentEnd);
+        intersectionSegment.SegmentEnd   = std::max(std::min(textSegment.SegmentEnd  , maskSegment.SegmentEnd)  , maskSegment.SegmentStart);
+        if (intersectionSegment.SegmentEnd >= intersectionSegment.SegmentStart) {
+            NSRange relativeIntersectionRange = NSMakeRange(intersectionSegment.SegmentStart - maskSegment.SegmentStart, intersectionSegment.SegmentEnd - intersectionSegment.SegmentStart);
+            switch(type) {
+                case com::sun::star::text::TextMarkupType::SPELLCHECK: {
+                    [string addAttribute:NSAccessibilityMisspelledTextAttribute value:[NSNumber numberWithBool:YES] range:relativeIntersectionRange];
+                    break;
+                }
+            }
+        }
+    }
+}
+
 +(NSMutableAttributedString *)createAttributedStringForElement:(AquaA11yWrapper *)wrapper inOrigRange:(id)origRange {
     static const Sequence < OUString > emptySequence;
     // vars
@@ -297,6 +326,8 @@ using namespace ::rtl;
                 currentIndex = textSegment.SegmentEnd;
             }
             [defaultFontDescriptor release];
+            if ([wrapper accessibleTextMarkup])
+                [AquaA11yTextAttributesWrapper addMarkup:[wrapper accessibleTextMarkup] toString:string inRange:[origRange rangeValue]];
             [ string endEditing ];
         }
     } catch ( IllegalArgumentException & e ) {
