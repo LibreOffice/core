@@ -29,15 +29,10 @@
 #include <cppuhelper/implbase3.hxx>
 #include <osl/mutex.hxx>
 
-
-//.........................................................................
 namespace xmlscript
 {
-//.........................................................................
 
-    // =============================================================================
     // class XMLBasicExporterBase
-    // =============================================================================
 
     typedef ::cppu::WeakImplHelper3<
         ::com::sun::star::lang::XServiceInfo,
@@ -77,10 +72,7 @@ namespace xmlscript
             throw (::com::sun::star::uno::RuntimeException);
     };
 
-
-    // =============================================================================
     // class XMLBasicExporter
-    // =============================================================================
 
     class XMLBasicExporter : public XMLBasicExporterBase
     {
@@ -96,10 +88,7 @@ namespace xmlscript
             throw (::com::sun::star::uno::RuntimeException);
     };
 
-
-    // =============================================================================
     // class XMLOasisBasicExporter
-    // =============================================================================
 
     class XMLOasisBasicExporter : public XMLBasicExporterBase
     {
@@ -115,9 +104,7 @@ namespace xmlscript
             throw (::com::sun::star::uno::RuntimeException);
     };
 
-//.........................................................................
 }   // namespace xmlscript
-//.........................................................................
 
 #endif // XMLSCRIPT_XMLBAS_EXPORT_HXX
 

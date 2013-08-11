@@ -31,15 +31,10 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 
-
-//.........................................................................
 namespace xmlscript
 {
-//.........................................................................
 
-    // =============================================================================
     // component operations
-    // =============================================================================
 
     OUString getImplementationName_XMLBasicExporter()
     {
@@ -55,8 +50,6 @@ namespace xmlscript
         }
         return *pImplName;
     }
-
-    // -----------------------------------------------------------------------------
 
     Sequence< OUString > getSupportedServiceNames_XMLBasicExporter()
     {
@@ -74,8 +67,6 @@ namespace xmlscript
         return *pNames;
     }
 
-    // -----------------------------------------------------------------------------
-
     OUString getImplementationName_XMLOasisBasicExporter()
     {
         static OUString* pImplName = 0;
@@ -90,8 +81,6 @@ namespace xmlscript
         }
         return *pImplName;
     }
-
-    // -----------------------------------------------------------------------------
 
     Sequence< OUString > getSupportedServiceNames_XMLOasisBasicExporter()
     {
@@ -109,10 +98,7 @@ namespace xmlscript
         return *pNames;
     }
 
-
-    // =============================================================================
     // XMLBasicExporterBase
-    // =============================================================================
 
     XMLBasicExporterBase::XMLBasicExporterBase( const Reference< XComponentContext >& rxContext, sal_Bool bOasis )
         :m_xContext( rxContext )
@@ -120,15 +106,11 @@ namespace xmlscript
     {
     }
 
-    // -----------------------------------------------------------------------------
-
     XMLBasicExporterBase::~XMLBasicExporterBase()
     {
     }
 
-    // -----------------------------------------------------------------------------
     // XServiceInfo
-    // -----------------------------------------------------------------------------
 
     sal_Bool XMLBasicExporterBase::supportsService( const OUString& rServiceName ) throw (RuntimeException)
     {
@@ -141,9 +123,7 @@ namespace xmlscript
         return pNames != pEnd;
     }
 
-    // -----------------------------------------------------------------------------
     // XInitialization
-    // -----------------------------------------------------------------------------
 
     void XMLBasicExporterBase::initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException)
     {
@@ -164,9 +144,7 @@ namespace xmlscript
         }
     }
 
-    // -----------------------------------------------------------------------------
     // XExporter
-    // -----------------------------------------------------------------------------
 
     void XMLBasicExporterBase::setSourceDocument( const Reference< XComponent >& rxDoc )
         throw (IllegalArgumentException, RuntimeException)
@@ -181,9 +159,7 @@ namespace xmlscript
         }
     }
 
-    // -----------------------------------------------------------------------------
     // XFilter
-    // -----------------------------------------------------------------------------
 
 sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /*aDescriptor*/ )
         throw (RuntimeException)
@@ -420,8 +396,6 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
         return bReturn;
     }
 
-    // -----------------------------------------------------------------------------
-
     void XMLBasicExporterBase::cancel()
         throw (RuntimeException)
     {
@@ -430,74 +404,53 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
         // cancel export
     }
 
-
-    // =============================================================================
     // XMLBasicExporter
-    // =============================================================================
 
     XMLBasicExporter::XMLBasicExporter( const Reference< XComponentContext >& rxContext )
         :XMLBasicExporterBase( rxContext, sal_False )
     {
     }
 
-    // -----------------------------------------------------------------------------
-
     XMLBasicExporter::~XMLBasicExporter()
     {
     }
 
-    // -----------------------------------------------------------------------------
     // XServiceInfo
-    // -----------------------------------------------------------------------------
 
     OUString XMLBasicExporter::getImplementationName(  ) throw (RuntimeException)
     {
         return getImplementationName_XMLBasicExporter();
     }
 
-    // -----------------------------------------------------------------------------
-
     Sequence< OUString > XMLBasicExporter::getSupportedServiceNames(  ) throw (RuntimeException)
     {
         return getSupportedServiceNames_XMLBasicExporter();
     }
 
-
-    // =============================================================================
     // XMLOasisBasicExporter
-    // =============================================================================
 
     XMLOasisBasicExporter::XMLOasisBasicExporter( const Reference< XComponentContext >& rxContext )
         :XMLBasicExporterBase( rxContext, sal_True )
     {
     }
 
-    // -----------------------------------------------------------------------------
-
     XMLOasisBasicExporter::~XMLOasisBasicExporter()
     {
     }
 
-    // -----------------------------------------------------------------------------
     // XServiceInfo
-    // -----------------------------------------------------------------------------
 
     OUString XMLOasisBasicExporter::getImplementationName(  ) throw (RuntimeException)
     {
         return getImplementationName_XMLOasisBasicExporter();
     }
 
-    // -----------------------------------------------------------------------------
-
     Sequence< OUString > XMLOasisBasicExporter::getSupportedServiceNames(  ) throw (RuntimeException)
     {
         return getSupportedServiceNames_XMLOasisBasicExporter();
     }
 
-
-    // =============================================================================
     // component operations
-    // =============================================================================
 
     Reference< XInterface > SAL_CALL create_XMLBasicExporter(
         Reference< XComponentContext > const & xContext )
@@ -506,8 +459,6 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
         return static_cast< lang::XTypeProvider * >( new XMLBasicExporter( xContext ) );
     }
 
-    // -----------------------------------------------------------------------------
-
     Reference< XInterface > SAL_CALL create_XMLOasisBasicExporter(
         Reference< XComponentContext > const & xContext )
         SAL_THROW(())
@@ -515,10 +466,6 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
         return static_cast< lang::XTypeProvider * >( new XMLOasisBasicExporter( xContext ) );
     }
 
-    // -----------------------------------------------------------------------------
-
-//.........................................................................
 }   // namespace xmlscript
-//.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

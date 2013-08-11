@@ -23,58 +23,52 @@
 namespace xmlscript
 {
 
-//##################################################################################################
-
-//__________________________________________________________________________________________________
 Reference< xml::input::XElement > LibElementBase::getParent()
     throw (RuntimeException)
 {
     return static_cast< xml::input::XElement * >( _pParent );
 }
-//__________________________________________________________________________________________________
+
 OUString LibElementBase::getLocalName()
     throw (RuntimeException)
 {
     return _aLocalName;
 }
-//__________________________________________________________________________________________________
+
 sal_Int32 LibElementBase::getUid()
     throw (RuntimeException)
 {
     return _pImport->XMLNS_LIBRARY_UID;
 }
-//__________________________________________________________________________________________________
+
 Reference< xml::input::XAttributes > LibElementBase::getAttributes()
     throw (RuntimeException)
 {
     return _xAttributes;
 }
-//__________________________________________________________________________________________________
+
 void LibElementBase::ignorableWhitespace(
     OUString const & /*rWhitespaces*/ )
     throw (xml::sax::SAXException, RuntimeException)
 {
 }
-//__________________________________________________________________________________________________
+
 void LibElementBase::characters( OUString const & /*rChars*/ )
     throw (xml::sax::SAXException, RuntimeException)
 {
     // not used, all characters ignored
 }
 
-//__________________________________________________________________________________________________
 void LibElementBase::processingInstruction(
     OUString const & /*rTarget*/, OUString const & /*rData*/ )
     throw (xml::sax::SAXException, RuntimeException)
 {
 }
 
-//__________________________________________________________________________________________________
 void LibElementBase::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
 }
-//__________________________________________________________________________________________________
 Reference< xml::input::XElement > LibElementBase::startChildElement(
     sal_Int32 /*nUid*/, OUString const & /*rLocalName*/,
     Reference< xml::input::XAttributes > const & /*xAttributes*/ )
@@ -83,7 +77,6 @@ Reference< xml::input::XElement > LibElementBase::startChildElement(
     throw xml::sax::SAXException("unexpected element!", Reference< XInterface >(), Any() );
 }
 
-//__________________________________________________________________________________________________
 LibElementBase::LibElementBase(
     OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes,
@@ -101,7 +94,7 @@ LibElementBase::LibElementBase(
         _pParent->acquire();
     }
 }
-//__________________________________________________________________________________________________
+
 LibElementBase::~LibElementBase()
     SAL_THROW(())
 {
@@ -118,11 +111,8 @@ LibElementBase::~LibElementBase()
 #endif
 }
 
-//##################################################################################################
-
 // XRoot
 
-//______________________________________________________________________________
 void LibraryImport::startDocument(
     Reference< xml::input::XNamespaceMapping > const & xNamespaceMapping )
     throw (xml::sax::SAXException, RuntimeException)
@@ -130,24 +120,24 @@ void LibraryImport::startDocument(
     XMLNS_LIBRARY_UID = xNamespaceMapping->getUidByUri( XMLNS_LIBRARY_URI );
     XMLNS_XLINK_UID = xNamespaceMapping->getUidByUri( XMLNS_XLINK_URI );
 }
-//__________________________________________________________________________________________________
+
 void LibraryImport::endDocument()
     throw (xml::sax::SAXException, RuntimeException)
 {
 }
-//__________________________________________________________________________________________________
+
 void LibraryImport::processingInstruction(
     OUString const & /*rTarget*/, OUString const & /*rData*/ )
     throw (xml::sax::SAXException, RuntimeException)
 {
 }
-//__________________________________________________________________________________________________
+
 void LibraryImport::setDocumentLocator(
     Reference< xml::sax::XLocator > const & /*xLocator*/ )
     throw (xml::sax::SAXException, RuntimeException)
 {
 }
-//__________________________________________________________________________________________________
+
 Reference< xml::input::XElement > LibraryImport::startRootElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
@@ -178,7 +168,7 @@ Reference< xml::input::XElement > LibraryImport::startRootElement(
         throw xml::sax::SAXException( "illegal root element (expected libraries) given: " + rLocalName, Reference< XInterface >(), Any() );
     }
 }
-//__________________________________________________________________________________________________
+
 LibraryImport::~LibraryImport()
     SAL_THROW(())
 {
@@ -187,11 +177,7 @@ LibraryImport::~LibraryImport()
 #endif
 }
 
-//##################################################################################################
-
-
 // libraries
-//__________________________________________________________________________________________________
 Reference< xml::input::XElement > LibrariesElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
@@ -221,7 +207,7 @@ Reference< xml::input::XElement > LibrariesElement::startChildElement(
         throw xml::sax::SAXException( "expected styles ot bulletinboard element!", Reference< XInterface >(), Any() );
     }
 }
-//__________________________________________________________________________________________________
+
 void LibrariesElement::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
@@ -236,7 +222,6 @@ void LibrariesElement::endElement()
 }
 
 // library
-//__________________________________________________________________________________________________
 Reference< xml::input::XElement > LibraryElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
@@ -260,7 +245,7 @@ Reference< xml::input::XElement > LibraryElement::startChildElement(
         throw xml::sax::SAXException( "expected styles ot bulletinboard element!", Reference< XInterface >(), Any() );
     }
 }
-//__________________________________________________________________________________________________
+
 void LibraryElement::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
@@ -276,9 +261,6 @@ void LibraryElement::endElement()
     pLib->aElementNames = aElementNames;
 }
 
-
-//##################################################################################################
-
 Reference< ::com::sun::star::xml::sax::XDocumentHandler >
 SAL_CALL importLibraryContainer( LibDescriptorArray* pLibArray )
         SAL_THROW( (Exception) )
@@ -287,8 +269,6 @@ SAL_CALL importLibraryContainer( LibDescriptorArray* pLibArray )
         static_cast< xml::input::XRoot * >( new LibraryImport( pLibArray ) ) );
 }
 
-//##################################################################################################
-
 ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >
 SAL_CALL importLibrary( LibDescriptor& rLib )
         SAL_THROW( (::com::sun::star::uno::Exception) )
@@ -296,9 +276,6 @@ SAL_CALL importLibrary( LibDescriptor& rLib )
     return ::xmlscript::createDocumentHandler(
         static_cast< xml::input::XRoot * >( new LibraryImport( &rLib ) ) );
 }
-
-
-//##################################################################################################
 
 LibDescriptorArray::LibDescriptorArray( sal_Int32 nLibCount )
 {

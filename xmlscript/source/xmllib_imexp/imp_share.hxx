@@ -32,7 +32,6 @@
 
 #include <vector>
 
-
 using namespace ::rtl;
 using namespace ::std;
 using namespace ::com::sun::star;
@@ -102,10 +101,8 @@ inline bool getLongAttr(
     return false;
 }
 
-//==================================================================================================
 // Library import
 
-//==================================================================================================
 struct LibraryImport
     : public ::cppu::WeakImplHelper1< xml::input::XRoot >
 {
@@ -149,7 +146,6 @@ public:
         throw (xml::sax::SAXException, RuntimeException);
 };
 
-//==================================================================================================
 class LibElementBase
     : public ::cppu::WeakImplHelper1< xml::input::XElement >
 {
@@ -194,8 +190,6 @@ public:
         throw (xml::sax::SAXException, RuntimeException);
 };
 
-//==================================================================================================
-
 class LibrariesElement : public LibElementBase
 {
     friend class LibraryElement;
@@ -219,8 +213,6 @@ public:
         : LibElementBase( rLocalName, xAttributes, pParent, pImport )
         {}
 };
-
-//==================================================================================================
 
 class LibraryElement : public LibElementBase
 {

@@ -41,10 +41,8 @@ using namespace ::com::sun::star::uno;
 namespace xmlscript
 {
 
-//==================================================================================================
 // Script module import
 
-//==================================================================================================
 struct ModuleImport
     : public ::cppu::WeakImplHelper1< xml::input::XRoot >
 {
@@ -81,7 +79,6 @@ public:
         throw (xml::sax::SAXException, RuntimeException);
 };
 
-//==================================================================================================
 class ModuleElement
     : public ::cppu::WeakImplHelper1< xml::input::XElement >
 {
@@ -126,8 +123,6 @@ public:
         Reference< xml::input::XAttributes > const & xAttributes )
         throw (xml::sax::SAXException, RuntimeException);
 };
-
-//==================================================================================================
 
 }
 

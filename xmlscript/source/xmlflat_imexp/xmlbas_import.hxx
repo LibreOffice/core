@@ -31,15 +31,10 @@
 #include <osl/mutex.hxx>
 #include <rtl/ustrbuf.hxx>
 
-
-//.........................................................................
 namespace xmlscript
 {
-//.........................................................................
 
-    // =============================================================================
     // class BasicElementBase
-    // =============================================================================
 
     class BasicImport;
 
@@ -89,10 +84,7 @@ namespace xmlscript
             throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
     };
 
-
-    // =============================================================================
     // class BasicLibrariesElement
-    // =============================================================================
 
     class BasicLibrariesElement : public BasicElementBase
     {
@@ -114,10 +106,7 @@ namespace xmlscript
             throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
     };
 
-
-    // =============================================================================
     // class BasicEmbeddedLibraryElement
-    // =============================================================================
 
     class BasicEmbeddedLibraryElement : public BasicElementBase
     {
@@ -143,10 +132,7 @@ namespace xmlscript
             throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
     };
 
-
-    // =============================================================================
     // class BasicModuleElement
-    // =============================================================================
 
     class BasicModuleElement : public BasicElementBase
     {
@@ -170,10 +156,7 @@ namespace xmlscript
             throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
     };
 
-
-    // =============================================================================
     // class BasicSourceCodeElement
-    // =============================================================================
 
     class BasicSourceCodeElement : public BasicElementBase
     {
@@ -196,10 +179,7 @@ namespace xmlscript
             throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
     };
 
-
-    // =============================================================================
     // class BasicImport
-    // =============================================================================
 
     typedef ::cppu::WeakImplHelper1<
         ::com::sun::star::xml::input::XRoot > BasicImport_BASE;
@@ -239,10 +219,7 @@ namespace xmlscript
             throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
     };
 
-
-    // =============================================================================
     // class XMLBasicImporterBase
-    // =============================================================================
 
     typedef ::cppu::WeakImplHelper2<
         ::com::sun::star::lang::XServiceInfo,
@@ -290,10 +267,7 @@ namespace xmlscript
             throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
     };
 
-
-    // =============================================================================
     // class XMLBasicImporter
-    // =============================================================================
 
     class XMLBasicImporter : public XMLBasicImporterBase
     {
@@ -309,10 +283,7 @@ namespace xmlscript
             throw (::com::sun::star::uno::RuntimeException);
     };
 
-
-    // =============================================================================
     // class XMLOasisBasicImporter
-    // =============================================================================
 
     class XMLOasisBasicImporter : public XMLBasicImporterBase
     {
@@ -328,9 +299,7 @@ namespace xmlscript
             throw (::com::sun::star::uno::RuntimeException);
     };
 
-//.........................................................................
 }   // namespace xmlscript
-//.........................................................................
 
 #endif // XMLSCRIPT_XMLBAS_IMPORT_HXX
 

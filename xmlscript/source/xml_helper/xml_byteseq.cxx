@@ -22,7 +22,6 @@
 #include <cppuhelper/implbase1.hxx>
 #include <xmlscript/xml_helper.hxx>
 
-
 using namespace osl;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -32,7 +31,6 @@ using ::rtl::ByteSequence;
 namespace xmlscript
 {
 
-//==================================================================================================
 class BSeqInputStream
     : public ::cppu::WeakImplHelper1< io::XInputStream >
 {
@@ -61,7 +59,7 @@ public:
     virtual void SAL_CALL closeInput()
         throw (io::NotConnectedException, io::IOException, RuntimeException);
 };
-//__________________________________________________________________________________________________
+
 sal_Int32 BSeqInputStream::readBytes(
     Sequence< sal_Int8 > & rData, sal_Int32 nBytesToRead )
     throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, RuntimeException)
@@ -75,34 +73,31 @@ sal_Int32 BSeqInputStream::readBytes(
     _nPos += nBytesToRead;
     return nBytesToRead;
 }
-//__________________________________________________________________________________________________
+
 sal_Int32 BSeqInputStream::readSomeBytes(
     Sequence< sal_Int8 > & rData, sal_Int32 nMaxBytesToRead )
     throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, RuntimeException)
 {
     return readBytes( rData, nMaxBytesToRead );
 }
-//__________________________________________________________________________________________________
+
 void BSeqInputStream::skipBytes(
     sal_Int32 /*nBytesToSkip*/ )
     throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, RuntimeException)
 {
 }
-//__________________________________________________________________________________________________
+
 sal_Int32 BSeqInputStream::available()
     throw (io::NotConnectedException, io::IOException, RuntimeException)
 {
     return (_seq.getLength() - _nPos);
 }
-//__________________________________________________________________________________________________
+
 void BSeqInputStream::closeInput()
     throw (io::NotConnectedException, io::IOException, RuntimeException)
 {
 }
 
-//##################################################################################################
-
-//==================================================================================================
 class BSeqOutputStream
     : public ::cppu::WeakImplHelper1< io::XOutputStream >
 {
@@ -123,7 +118,7 @@ public:
     virtual void SAL_CALL closeOutput()
         throw (io::NotConnectedException, io::BufferSizeExceededException, RuntimeException);
 };
-//__________________________________________________________________________________________________
+
 void BSeqOutputStream::writeBytes( Sequence< sal_Int8 > const & rData )
     throw (io::NotConnectedException, io::BufferSizeExceededException, RuntimeException)
 {
@@ -133,27 +128,22 @@ void BSeqOutputStream::writeBytes( Sequence< sal_Int8 > const & rData )
                       (char const *)rData.getConstArray(),
                       rData.getLength() );
 }
-//__________________________________________________________________________________________________
 void BSeqOutputStream::flush()
     throw (io::NotConnectedException, io::BufferSizeExceededException, RuntimeException)
 {
 }
-//__________________________________________________________________________________________________
+
 void BSeqOutputStream::closeOutput()
     throw (io::NotConnectedException, io::BufferSizeExceededException, RuntimeException)
 {
 }
 
-//##################################################################################################
-
-//==================================================================================================
 Reference< io::XInputStream > SAL_CALL createInputStream( ByteSequence const & rInData )
     SAL_THROW(())
 {
     return new BSeqInputStream( rInData );
 }
 
-//==================================================================================================
 Reference< io::XOutputStream > SAL_CALL createOutputStream( ByteSequence * pOutData )
     SAL_THROW(())
 {

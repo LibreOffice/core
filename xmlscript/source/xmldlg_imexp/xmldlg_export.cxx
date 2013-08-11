@@ -70,7 +70,6 @@ using namespace ::com::sun::star::uno;
 namespace xmlscript
 {
 
-//__________________________________________________________________________________________________
 Reference< xml::sax::XAttributeList > Style::createElement()
 {
     ElementDescriptor * pStyle = new ElementDescriptor( XMLNS_DIALOGS_PREFIX ":style" );
@@ -475,9 +474,6 @@ Reference< xml::sax::XAttributeList > Style::createElement()
     return pStyle;
 }
 
-//##################################################################################################
-
-//__________________________________________________________________________________________________
 void ElementDescriptor::addNumberFormatAttr(
     Reference< beans::XPropertySet > const & xFormatProperties )
 {
@@ -507,7 +503,7 @@ void ElementDescriptor::addNumberFormatAttr(
     }
     addAttribute( XMLNS_DIALOGS_PREFIX ":format-locale", aStr );
 }
-//__________________________________________________________________________________________________
+
 Any ElementDescriptor::readProp( OUString const & rPropName )
 {
     if (beans::PropertyState_DEFAULT_VALUE != _xPropState->getPropertyState( rPropName ))
@@ -517,7 +513,6 @@ Any ElementDescriptor::readProp( OUString const & rPropName )
     return Any();
 }
 
-//______________________________________________________________________________
 void ElementDescriptor::readStringAttr(
     OUString const & rPropName, OUString const & rAttrName )
 {
@@ -533,7 +528,6 @@ void ElementDescriptor::readStringAttr(
     }
 }
 
-//__________________________________________________________________________________________________
 void ElementDescriptor::readHexLongAttr( OUString const & rPropName, OUString const & rAttrName )
 {
     if (beans::PropertyState_DEFAULT_VALUE != _xPropState->getPropertyState( rPropName ))
@@ -550,7 +544,6 @@ void ElementDescriptor::readHexLongAttr( OUString const & rPropName, OUString co
     }
 }
 
-//__________________________________________________________________________________________________
 void ElementDescriptor::readDateFormatAttr( OUString const & rPropName, OUString const & rAttrName )
 {
     if (beans::PropertyState_DEFAULT_VALUE != _xPropState->getPropertyState( rPropName ))
@@ -605,7 +598,7 @@ void ElementDescriptor::readDateFormatAttr( OUString const & rPropName, OUString
             OSL_FAIL( "### unexpected property type!" );
     }
 }
-//__________________________________________________________________________________________________
+
 void ElementDescriptor::readDateAttr( OUString const & rPropName, OUString const & rAttrName )
 {
     if (beans::PropertyState_DEFAULT_VALUE != _xPropState->getPropertyState( rPropName ))
@@ -626,7 +619,7 @@ void ElementDescriptor::readDateAttr( OUString const & rPropName, OUString const
             OSL_FAIL( "### unexpected property type!" );
     }
 }
-//__________________________________________________________________________________________________
+
 void ElementDescriptor::readTimeAttr( OUString const & rPropName, OUString const & rAttrName )
 {
     if (beans::PropertyState_DEFAULT_VALUE != _xPropState->getPropertyState( rPropName ))
@@ -647,7 +640,7 @@ void ElementDescriptor::readTimeAttr( OUString const & rPropName, OUString const
             OSL_FAIL( "### unexpected property type!" );
     }
 }
-//__________________________________________________________________________________________________
+
 void ElementDescriptor::readTimeFormatAttr( OUString const & rPropName, OUString const & rAttrName )
 {
     if (beans::PropertyState_DEFAULT_VALUE != _xPropState->getPropertyState( rPropName ))
@@ -684,7 +677,7 @@ void ElementDescriptor::readTimeFormatAttr( OUString const & rPropName, OUString
             OSL_FAIL( "### unexpected property type!" );
     }
 }
-//__________________________________________________________________________________________________
+
 void ElementDescriptor::readAlignAttr( OUString const & rPropName, OUString const & rAttrName )
 {
     if (beans::PropertyState_DEFAULT_VALUE != _xPropState->getPropertyState( rPropName ))
@@ -712,7 +705,7 @@ void ElementDescriptor::readAlignAttr( OUString const & rPropName, OUString cons
             OSL_FAIL( "### unexpected property type!" );
     }
 }
-//__________________________________________________________________________________________________
+
 void ElementDescriptor::readVerticalAlignAttr( OUString const & rPropName, OUString const & rAttrName )
 {
     if (beans::PropertyState_DEFAULT_VALUE != _xPropState->getPropertyState( rPropName ))
@@ -742,7 +735,7 @@ void ElementDescriptor::readVerticalAlignAttr( OUString const & rPropName, OUStr
             OSL_FAIL( "### unexpected property type!" );
     }
 }
-//__________________________________________________________________________________________________
+
 void ElementDescriptor::readImageURLAttr( OUString const & rPropName, OUString const & rAttrName )
 {
     if (beans::PropertyState_DEFAULT_VALUE != _xPropState->getPropertyState( rPropName ))
@@ -765,7 +758,7 @@ void ElementDescriptor::readImageURLAttr( OUString const & rPropName, OUString c
                 addAttribute( rAttrName, sURL );
     }
 }
-//__________________________________________________________________________________________________
+
 void ElementDescriptor::readImageAlignAttr( OUString const & rPropName, OUString const & rAttrName )
 {
     if (beans::PropertyState_DEFAULT_VALUE != _xPropState->getPropertyState( rPropName ))
@@ -796,7 +789,7 @@ void ElementDescriptor::readImageAlignAttr( OUString const & rPropName, OUString
             OSL_FAIL( "### unexpected property type!" );
     }
 }
-//__________________________________________________________________________________________________
+
 void ElementDescriptor::readImagePositionAttr( OUString const & rPropName, OUString const & rAttrName )
 {
     if (beans::PropertyState_DEFAULT_VALUE != _xPropState->getPropertyState( rPropName ))
@@ -852,7 +845,7 @@ void ElementDescriptor::readImagePositionAttr( OUString const & rPropName, OUStr
         }
     }
 }
-//__________________________________________________________________________________________________
+
 void ElementDescriptor::readButtonTypeAttr( OUString const & rPropName, OUString const & rAttrName )
 {
     if (beans::PropertyState_DEFAULT_VALUE != _xPropState->getPropertyState( rPropName ))
@@ -881,7 +874,7 @@ void ElementDescriptor::readButtonTypeAttr( OUString const & rPropName, OUString
         }
     }
 }
-//__________________________________________________________________________________________________
+
 void ElementDescriptor::readOrientationAttr( OUString const & rPropName, OUString const & rAttrName )
 {
     if (beans::PropertyState_DEFAULT_VALUE != _xPropState->getPropertyState( rPropName ))
@@ -904,7 +897,7 @@ void ElementDescriptor::readOrientationAttr( OUString const & rPropName, OUStrin
         }
     }
 }
-//__________________________________________________________________________________________________
+
 void ElementDescriptor::readLineEndFormatAttr( OUString const & rPropName, OUString const & rAttrName )
 {
     if (beans::PropertyState_DEFAULT_VALUE != _xPropState->getPropertyState( rPropName ))
@@ -930,7 +923,7 @@ void ElementDescriptor::readLineEndFormatAttr( OUString const & rPropName, OUStr
         }
     }
 }
-//__________________________________________________________________________________________________
+
 void ElementDescriptor::readDataAwareAttr( OUString const & rAttrName )
 {
     Reference< lang::XMultiServiceFactory > xFac;
@@ -989,7 +982,7 @@ void ElementDescriptor::readDataAwareAttr( OUString const & rAttrName )
         }
     }
 }
-//__________________________________________________________________________________________________
+
 void ElementDescriptor::readSelectionTypeAttr( OUString const & rPropName, OUString const & rAttrName )
 {
     if (beans::PropertyState_DEFAULT_VALUE != _xPropState->getPropertyState( rPropName ))
@@ -1022,7 +1015,7 @@ void ElementDescriptor::readSelectionTypeAttr( OUString const & rPropName, OUStr
         }
     }
 }
-//__________________________________________________________________________________________________
+
 void ElementDescriptor::readScrollableSettings()
 {
     readLongAttr( "ScrollHeight",
@@ -1137,7 +1130,6 @@ struct StringTriple
 };
 extern StringTriple const * const g_pEventTranslations;
 
-//__________________________________________________________________________________________________
 void ElementDescriptor::readEvents()
     SAL_THROW( (Exception) )
 {
@@ -1235,8 +1227,6 @@ void ElementDescriptor::readEvents()
     }
 }
 
-//##################################################################################################
-
 inline bool equalFont( Style const & style1, Style const & style2 )
 {
     awt::FontDescriptor const & f1 = style1._descr;
@@ -1262,7 +1252,6 @@ inline bool equalFont( Style const & style1, Style const & style2 )
         style1._fontEmphasisMark == style2._fontEmphasisMark
         );
 }
-//__________________________________________________________________________________________________
 OUString StyleBag::getStyleId( Style const & rStyle )
     SAL_THROW(())
 {
@@ -1341,7 +1330,6 @@ OUString StyleBag::getStyleId( Style const & rStyle )
     _styles.push_back( pStyle );
     return pStyle->_id;
 }
-//__________________________________________________________________________________________________
 StyleBag::~StyleBag() SAL_THROW(())
 {
     for ( size_t nPos = 0; nPos < _styles.size(); ++nPos )
@@ -1349,7 +1337,6 @@ StyleBag::~StyleBag() SAL_THROW(())
         delete _styles[ nPos ];
     }
 }
-//__________________________________________________________________________________________________
 void StyleBag::dump( Reference< xml::sax::XExtendedDocumentHandler > const & xOut )
 {
     if (! _styles.empty())
@@ -1368,9 +1355,6 @@ void StyleBag::dump( Reference< xml::sax::XExtendedDocumentHandler > const & xOu
     }
 }
 
-//##################################################################################################
-
-//==================================================================================================
 void SAL_CALL exportDialogModel(
     Reference< xml::sax::XExtendedDocumentHandler > const & xOut,
     Reference< container::XNameContainer > const & xDialogModel,
@@ -1395,7 +1379,6 @@ void SAL_CALL exportDialogModel(
         " \"dialog.dtd\">" );
     xOut->unknown( aDocTypeStr );
     xOut->ignorableWhitespace( OUString() );
-
 
     OUString aWindowName( XMLNS_DIALOGS_PREFIX ":window" );
     ElementDescriptor * pWindow = new ElementDescriptor( xProps, xPropState, aWindowName, xDocument );

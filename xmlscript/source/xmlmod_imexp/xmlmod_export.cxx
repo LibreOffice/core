@@ -17,18 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <xmlscript/xmlmod_imexp.hxx>
 #include <xmlscript/xml_helper.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star;
 
-
 namespace xmlscript
 {
-
-//==================================================================================================
 
 void
 SAL_CALL exportScriptModule(
