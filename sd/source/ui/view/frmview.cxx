@@ -205,7 +205,7 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
         maPrintableLayers.SetAll();
         SetGridCoarse( Size( 1000, 1000 ) );
         SetSnapGridWidth(Fraction(1000, 1), Fraction(1000, 1));
-        SetActiveLayer( String( SdResId(STR_LAYER_LAYOUT) ) );
+        SetActiveLayer( SD_RESSTR(STR_LAYER_LAYOUT) );
         mbNoColors = sal_True;
         mbNoAttribs = sal_False;
         maVisArea = Rectangle( Point(), Size(0, 0) );

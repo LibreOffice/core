@@ -111,8 +111,9 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
             if (!bField)
             {
                 // use selected text as name for urls
-                String sReturn = pOLV->GetSelected();
-                sReturn.Erase(255);
+                OUString sReturn = pOLV->GetSelected();
+                if (sReturn.getLength() > 255)
+                    sReturn = sReturn.copy(0, 255);
                 aHLinkItem.SetName(comphelper::string::stripEnd(sReturn, ' '));
             }
         }
@@ -144,7 +145,7 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
                             if(xPropInfo->hasPropertyByName(sLabel))
                             {
                                 if( xPropSet->getPropertyValue(sLabel) >>= aString )
-                                    aHLinkItem.SetName(String( aString ));
+                                    aHLinkItem.SetName(aString);
                             }
 
                             // URL
@@ -152,7 +153,7 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
                             if(xPropInfo->hasPropertyByName(sTargetURL))
                             {
                                 if( xPropSet->getPropertyValue(sTargetURL) >>= aString )
-                                    aHLinkItem.SetURL(String( aString ));
+                                    aHLinkItem.SetURL(aString);
                             }
 
                             // Target
@@ -160,7 +161,7 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
                             if(xPropInfo->hasPropertyByName(sTargetFrame) )
                             {
                                 if( xPropSet->getPropertyValue(sTargetFrame) >>= aString )
-                                    aHLinkItem.SetTargetFrame(String( aString ));
+                                    aHLinkItem.SetTargetFrame(aString);
                             }
 
                             aHLinkItem.SetInsertMode(HLINK_BUTTON);
@@ -441,7 +442,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 {
                     if( nSlotId != SID_STYLE_APPLY && !mpDrawView->AreObjectsMarked() )
                     {
-                        SfxTemplateItem aTmpItem( nWhich, String() );
+                        SfxTemplateItem aTmpItem( nWhich, OUString() );
                         aAllSet.Put( aTmpItem, aTmpItem.Which()  );
                     }
                     else
@@ -462,14 +463,14 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                             }
                             else
                             {
-                                SfxTemplateItem aTmpItem(nWhich, String());
+                                SfxTemplateItem aTmpItem(nWhich, OUString());
                                 aAllSet.Put(aTmpItem,aTmpItem.Which()  );
                             }
                         }
                     }
                 }
                 else
-                {   SfxTemplateItem aItem( nWhich, String() );
+                {   SfxTemplateItem aItem( nWhich, OUString() );
                     aAllSet.Put( aItem, aItem.Which() );
                 }
             }
@@ -745,7 +746,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
 
 String DrawViewShell::GetSelectionText(sal_Bool bCompleteWords)
 {
-    String aStrSelection;
+    OUString aStrSelection;
     ::Outliner* pOl = mpDrawView->GetTextEditOutliner();
     OutlinerView* pOlView = mpDrawView->GetTextEditOutlinerView();
 
@@ -754,7 +755,7 @@ String DrawViewShell::GetSelectionText(sal_Bool bCompleteWords)
         if (bCompleteWords)
         {
             ESelection aSel = pOlView->GetSelection();
-            String aStrCurrentDelimiters = pOl->GetWordDelimiters();
+            OUString aStrCurrentDelimiters = pOl->GetWordDelimiters();
 
             pOl->SetWordDelimiters( OUString(" .,;\"'" ));
             aStrSelection = pOl->GetWord( aSel.nEndPara, aSel.nEndPos );

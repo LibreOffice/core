@@ -324,7 +324,7 @@ long TabControl::AllowRenaming()
     sal_Bool bOK = sal_True;
 
     String aNewName( GetEditText() );
-    String aCompareName( GetPageText( GetEditPageId() ) );
+    OUString aCompareName( GetPageText( GetEditPageId() ) );
 
     if( aCompareName != aNewName )
     {

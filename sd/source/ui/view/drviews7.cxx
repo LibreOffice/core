@@ -121,15 +121,15 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
             {
                 case SOT_FORMATSTR_ID_EMBED_SOURCE:
                 {
-                    String sName;
+                    OUString sName;
 
                     TransferableObjectDescriptor aDescriptor;
                     if (rDataHelper.GetTransferableObjectDescriptor(
                         SOT_FORMATSTR_ID_OBJECTDESCRIPTOR, aDescriptor))
-                        {
-                            sName = aDescriptor.maTypeName;
-                        }
-                    if (sName.Len() > 0)
+                    {
+                        sName = aDescriptor.maTypeName;
+                    }
+                    if (!sName.isEmpty())
                         pResult->AddClipbrdFormat(nTestFormat, sName);
                     else
                         pResult->AddClipbrdFormat(nTestFormat);
@@ -892,14 +892,14 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_DELETE_LAYER ) )
     {
         sal_uInt16        nCurrentLayer = GetLayerTabControl()->GetCurPageId();
-        const String& rName         = GetLayerTabControl()->GetPageText(nCurrentLayer);
+        const OUString& rName = GetLayerTabControl()->GetPageText(nCurrentLayer);
 
         sal_Bool bDisableIt = !IsLayerModeActive();
-        bDisableIt |= (rName == String(SdResId(STR_LAYER_LAYOUT)));
-        bDisableIt |= (rName == String(SdResId(STR_LAYER_BCKGRND)));
-        bDisableIt |= (rName == String(SdResId(STR_LAYER_BCKGRNDOBJ)));
-        bDisableIt |= (rName == String(SdResId(STR_LAYER_CONTROLS)));
-        bDisableIt |= (rName == String(SdResId(STR_LAYER_MEASURELINES)));
+        bDisableIt |= (rName == SD_RESSTR(STR_LAYER_LAYOUT));
+        bDisableIt |= (rName == SD_RESSTR(STR_LAYER_BCKGRND));
+        bDisableIt |= (rName == SD_RESSTR(STR_LAYER_BCKGRNDOBJ));
+        bDisableIt |= (rName == SD_RESSTR(STR_LAYER_CONTROLS));
+        bDisableIt |= (rName == SD_RESSTR(STR_LAYER_MEASURELINES));
 
         if (bDisableIt)
         {
@@ -1054,9 +1054,9 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     }
 
     SdrPageView* pPV = mpDrawView->GetSdrPageView();
-    String aActiveLayer = mpDrawView->GetActiveLayer();
+    OUString aActiveLayer = mpDrawView->GetActiveLayer();
 
-    if ( ( aActiveLayer.Len() != 0 && pPV && ( pPV->IsLayerLocked(aActiveLayer) ||
+    if ( ( !aActiveLayer.isEmpty() && pPV && ( pPV->IsLayerLocked(aActiveLayer) ||
           !pPV->IsLayerVisible(aActiveLayer) ) ) ||
           SD_MOD()->GetWaterCan() )
     {
@@ -1577,8 +1577,8 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         {
             SetOfByte aVisibleLayers = pPage->TRG_GetMasterPageVisibleLayers();
             SdrLayerAdmin& rLayerAdmin = GetDoc()->GetLayerAdmin();
-            sal_uInt8 aBackgroundId = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), sal_False);
-            sal_uInt8 aObjectId = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), sal_False);
+            sal_uInt8 aBackgroundId = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRND), sal_False);
+            sal_uInt8 aObjectId = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ), sal_False);
             rSet.Put(SfxBoolItem(SID_DISPLAY_MASTER_BACKGROUND,
                     aVisibleLayers.IsSet(aBackgroundId)));
             rSet.Put(SfxBoolItem(SID_DISPLAY_MASTER_OBJECTS,

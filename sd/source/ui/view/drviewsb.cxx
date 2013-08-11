@@ -65,7 +65,7 @@
 
 namespace sd {
 
-bool DrawViewShell::RenameSlide( sal_uInt16 nPageId, const String & rName  )
+bool DrawViewShell::RenameSlide( sal_uInt16 nPageId, const OUString & rName  )
 {
     sal_Bool   bOutDummy;
     if( GetDoc()->GetPageByName( rName, bOutDummy ) != SDRPAGE_NOTFOUND )
@@ -81,8 +81,8 @@ bool DrawViewShell::RenameSlide( sal_uInt16 nPageId, const String & rName  )
         // Undo
         SdPage* pUndoPage = pPageToRename;
         SdrLayerAdmin &  rLayerAdmin = GetDoc()->GetLayerAdmin();
-        sal_uInt8 nBackground = rLayerAdmin.GetLayerID( String( SdResId( STR_LAYER_BCKGRND )), sal_False );
-        sal_uInt8 nBgObj = rLayerAdmin.GetLayerID( String( SdResId( STR_LAYER_BCKGRNDOBJ )), sal_False );
+        sal_uInt8 nBackground = rLayerAdmin.GetLayerID( SD_RESSTR(STR_LAYER_BCKGRND), sal_False );
+        sal_uInt8 nBgObj = rLayerAdmin.GetLayerID( SD_RESSTR(STR_LAYER_BCKGRNDOBJ), sal_False );
         SetOfByte aVisibleLayers = mpActualPage->TRG_GetMasterPageVisibleLayers();
 
         ::svl::IUndoManager* pManager = GetDoc()->GetDocSh()->GetUndoManager();
@@ -109,7 +109,7 @@ bool DrawViewShell::RenameSlide( sal_uInt16 nPageId, const String & rName  )
         GetDoc()->RenameLayoutTemplate( pPageToRename->GetLayoutName(), rName );
     }
 
-    bool bSuccess = ( sal_False != rName.Equals( pPageToRename->GetName()));
+    bool bSuccess = (rName == pPageToRename->GetName());
 
     if( bSuccess )
     {
@@ -159,9 +159,9 @@ IMPL_LINK( DrawViewShell, RenameSlideHdl, AbstractSvxNameDialog*, pDialog )
 
 void DrawViewShell::ModifyLayer (
     SdrLayer* pLayer,
-    const String& rLayerName,
-    const String& rLayerTitle,
-    const String& rLayerDesc,
+    const OUString& rLayerName,
+    const OUString& rLayerTitle,
+    const OUString& rLayerDesc,
     bool bIsVisible,
     bool bIsLocked,
     bool bIsPrintable)

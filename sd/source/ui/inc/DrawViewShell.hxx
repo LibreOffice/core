@@ -141,9 +141,9 @@ public:
     virtual void    SetZoom( long nZoom );
     virtual void    SetZoomRect( const Rectangle& rZoomRect );
 
-    void            InsertURLField(const String& rURL, const String& rText, const String& rTarget,
+    void            InsertURLField(const OUString& rURL, const OUString& rText, const OUString& rTarget,
                                    const Point* pPos);
-    void            InsertURLButton(const String& rURL, const String& rText, const String& rTarget,
+    void            InsertURLButton(const OUString& rURL, const OUString& rText, const OUString& rTarget,
                                     const Point* pPos);
 
     virtual void    SetUIUnit(FieldUnit eUnit);
@@ -246,7 +246,7 @@ public:
     sal_Bool            SwitchPage(sal_uInt16 nPage);
     sal_Bool            IsSwitchPageAllowed() const;
 
-    sal_Bool            GotoBookmark(const String& rBookmark);
+    sal_Bool            GotoBookmark(const OUString& rBookmark);
     void            MakeVisible(const Rectangle& rRect, ::Window& rWin);
 
     virtual void    ReadFrameViewData(FrameView* pView);
@@ -347,10 +347,10 @@ public:
 
         <p>Implemented in <code>drviews8.cxx</code>.</p>
      */
-    bool RenameSlide( sal_uInt16 nPageId, const String & rName );
+    bool RenameSlide( sal_uInt16 nPageId, const OUString & rName );
 
     /** modifies the given layer with the given values */
-    void ModifyLayer( SdrLayer* pLayer, const String& rLayerName, const String& rLayerTitle, const String& rLayerDesc, bool bIsVisible, bool bIsLocked, bool bIsPrintable );
+    void ModifyLayer( SdrLayer* pLayer, const OUString& rLayerName, const OUString& rLayerTitle, const OUString& rLayerDesc, bool bIsVisible, bool bIsLocked, bool bIsPrintable );
 
     virtual css::uno::Reference<css::drawing::XDrawSubController> CreateSubController (void);
 

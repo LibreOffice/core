@@ -782,8 +782,8 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
         sal_Bool bDisable = nParaCount == 0;
         if (!bDisable && nParaCount == 1)
         {
-            String aTest( pOutl->GetText( pOutl->GetParagraph( 0 ) ) );
-            if (aTest.Len() == 0)
+            OUString aTest = pOutl->GetText(pOutl->GetParagraph(0));
+            if (aTest.isEmpty())
             {
                 bDisable = sal_True;
             }
@@ -860,8 +860,8 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
     // if not, the templates must not be edited
     SfxItemSet aSet(*rSet.GetPool(), SID_STATUS_LAYOUT, SID_STATUS_LAYOUT);
     GetStatusBarState(aSet);
-    String aTest(((SfxStringItem&)aSet.Get(SID_STATUS_LAYOUT)).GetValue());
-    if (aTest.Len() == 0)
+    OUString aTest = ((SfxStringItem&)aSet.Get(SID_STATUS_LAYOUT)).GetValue();
+    if (aTest.isEmpty())
     {
         bUnique = sal_False;
         rSet.DisableItem(SID_PRESENTATION_TEMPLATES);
@@ -1335,7 +1335,7 @@ void OutlineViewShell::GetStatusBarState(SfxItemSet& rSet)
     // page view and layout
 
     sal_uInt16  nPageCount = GetDoc()->GetSdPageCount( PK_STANDARD );
-    String  aPageStr, aLayoutStr;
+    OUString  aPageStr, aLayoutStr;
 
     ::sd::Window*       pWin        = GetActiveWindow();
     OutlinerView*   pActiveView = pOlView->GetViewByWindow( pWin );
@@ -1376,14 +1376,16 @@ void OutlineViewShell::GetStatusBarState(SfxItemSet& rSet)
 
         SdrPage* pPage = GetDoc()->GetSdPage( (sal_uInt16) nPos, PK_STANDARD );
 
-        aPageStr = String(SdResId( STR_SD_PAGE ));
-        aPageStr += sal_Unicode(' ');
+        aPageStr = SD_RESSTR(STR_SD_PAGE);
+        aPageStr += " ";
         aPageStr += OUString::number( (sal_Int32)(nPos + 1) );   // sal_uLong -> sal_Int32
-        aPageStr.AppendAscii( " / " );
+        aPageStr += " / ";
         aPageStr += OUString::number( nPageCount );
 
         aLayoutStr = pPage->GetLayoutName();
-        aLayoutStr.Erase( aLayoutStr.SearchAscii( SD_LT_SEPARATOR ) );
+        sal_Int32 nIndex = aLayoutStr.indexOf(SD_LT_SEPARATOR);
+        if (nIndex != -1)
+            aLayoutStr = aLayoutStr.copy(0, nIndex);
     }
     rSet.Put( SfxStringItem( SID_STATUS_PAGE, aPageStr ) );
     rSet.Put( SfxStringItem( SID_STATUS_LAYOUT, aLayoutStr ) );
@@ -1466,7 +1468,7 @@ sal_Bool OutlineViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
  */
 String OutlineViewShell::GetSelectionText(sal_Bool bCompleteWords)
 {
-    String aStrSelection;
+    OUString aStrSelection;
     ::Outliner* pOl = pOlView->GetOutliner();
     OutlinerView* pOutlinerView = pOlView->GetViewByWindow( GetActiveWindow() );
 
@@ -1475,7 +1477,7 @@ String OutlineViewShell::GetSelectionText(sal_Bool bCompleteWords)
         if (bCompleteWords)
         {
             ESelection aSel = pOutlinerView->GetSelection();
-            String aStrCurrentDelimiters = pOl->GetWordDelimiters();
+            OUString aStrCurrentDelimiters = pOl->GetWordDelimiters();
 
             pOl->SetWordDelimiters( OUString( " .,;\"'" ) );
             aStrSelection = pOl->GetWord( aSel.nEndPara, aSel.nEndPos );
@@ -1553,7 +1555,7 @@ void OutlineViewShell::GetAttrState( SfxItemSet& rSet )
 
                 if( !pStyleSheet )
                 {
-                    SfxTemplateItem aItem( nWhich, String() );
+                    SfxTemplateItem aItem( nWhich, OUString() );
                     aAllSet.Put( aItem, aItem.Which() );
                     // rSet.DisableItem( nWhich );
                 }
@@ -1568,9 +1570,8 @@ void OutlineViewShell::GetAttrState( SfxItemSet& rSet )
                 {
                     SfxItemSet aSet(*rSet.GetPool(), SID_STATUS_LAYOUT, SID_STATUS_LAYOUT);
                     GetStatusBarState(aSet);
-                    String aRealStyle(((SfxStringItem&) aSet.Get(SID_STATUS_LAYOUT)).GetValue());
-
-                    if (!aRealStyle.Len())
+                    OUString aRealStyle = ((SfxStringItem&) aSet.Get(SID_STATUS_LAYOUT)).GetValue();
+                    if (aRealStyle.isEmpty())
                     {
                         // no unique layout name found
                         rSet.DisableItem(nWhich);
@@ -1676,8 +1677,8 @@ bool OutlineViewShell::UpdateTitleObject( SdPage* pPage, Paragraph* pPara )
     SdrTextObj*         pTO  = pOlView->GetTitleTextObject( pPage );
     OutlinerParaObject* pOPO = NULL;
 
-    String  aTest( pOutliner->GetText( pPara ) );
-    bool    bText = aTest.Len() > 0;
+    OUString aTest = pOutliner->GetText(pPara);
+    bool    bText = !aTest.isEmpty();
     bool    bNewObject = false;
 
     if( bText )
@@ -1895,8 +1896,9 @@ sal_uLong OutlineViewShell::Read(SvStream& rInput, const String& rBaseURL, sal_u
             else
             {
                 pOutl->SetDepth( pOutl->GetParagraph( nPara ), nDepth - 1 );
-                String aStyleSheetName( pOutlSheet->GetName() );
-                aStyleSheetName.Erase( aStyleSheetName.Len() - 1, 1 );
+                OUString aStyleSheetName = pOutlSheet->GetName();
+                if (!aStyleSheetName.isEmpty())
+                    aStyleSheetName = aStyleSheetName.copy(0, aStyleSheetName.getLength() - 1);
                 aStyleSheetName += OUString::number( nDepth );
                 SfxStyleSheetBasePool* pStylePool = GetDoc()->GetStyleSheetPool();
                 SfxStyleSheet* pStyle = (SfxStyleSheet*) pStylePool->Find( aStyleSheetName, pOutlSheet->GetFamily() );

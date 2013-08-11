@@ -132,7 +132,7 @@ View::View(SdDrawDocument& rDrawDoc, OutputDevice* pOutDev,
 
     SetMinMoveDistancePixel(2);
     SetHitTolerancePixel(2);
-    SetMeasureLayer(String(SdResId(STR_LAYER_MEASURELINES)));
+    SetMeasureLayer(SD_RESSTR(STR_LAYER_MEASURELINES));
 
     // Timer for delayed drop (has to be for MAC)
     maDropErrorTimer.SetTimeoutHdl( LINK(this, View, DropErrorHdl) );
@@ -297,7 +297,7 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
                     // is displayed as page directly (MasterPage view)
                     if(!bSubContentProcessing && bIsMasterPageObject)
                     {
-                        String aObjectString;
+                        OUString aObjectString;
 
                         switch( eKind )
                         {
@@ -305,7 +305,7 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
                             {
                                 if(pObjectsSdPage && pObjectsSdPage->GetPageKind() == PK_STANDARD)
                                 {
-                                    static String aTitleAreaStr( SdResId( STR_PLACEHOLDER_DESCRIPTION_TITLE ) );
+                                    static OUString aTitleAreaStr(SD_RESSTR(STR_PLACEHOLDER_DESCRIPTION_TITLE));
                                     aObjectString = aTitleAreaStr;
                                 }
 
@@ -313,31 +313,31 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
                             }
                             case PRESOBJ_OUTLINE:
                             {
-                                static String aOutlineAreaStr( SdResId( STR_PLACEHOLDER_DESCRIPTION_OUTLINE ) );
+                                static OUString aOutlineAreaStr(SD_RESSTR(STR_PLACEHOLDER_DESCRIPTION_OUTLINE));
                                 aObjectString = aOutlineAreaStr;
                                 break;
                             }
                             case PRESOBJ_FOOTER:
                             {
-                                static String aFooterAreaStr( SdResId( STR_PLACEHOLDER_DESCRIPTION_FOOTER ) );
+                                static OUString aFooterAreaStr(SD_RESSTR(STR_PLACEHOLDER_DESCRIPTION_FOOTER));
                                 aObjectString = aFooterAreaStr;
                                 break;
                             }
                             case PRESOBJ_HEADER:
                             {
-                                static String aHeaderAreaStr( SdResId( STR_PLACEHOLDER_DESCRIPTION_HEADER ) );
+                                static OUString aHeaderAreaStr(SD_RESSTR(STR_PLACEHOLDER_DESCRIPTION_HEADER));
                                 aObjectString = aHeaderAreaStr;
                                 break;
                             }
                             case PRESOBJ_DATETIME:
                             {
-                                static String aDateTimeStr( SdResId( STR_PLACEHOLDER_DESCRIPTION_DATETIME ) );
+                                static OUString aDateTimeStr(SD_RESSTR(STR_PLACEHOLDER_DESCRIPTION_DATETIME));
                                 aObjectString = aDateTimeStr;
                                 break;
                             }
                             case PRESOBJ_NOTES:
                             {
-                                static String aDateTimeStr( SdResId( STR_PLACEHOLDER_DESCRIPTION_NOTES ) );
+                                static OUString aDateTimeStr(SD_RESSTR(STR_PLACEHOLDER_DESCRIPTION_NOTES));
                                 aObjectString = aDateTimeStr;
                                 break;
                             }
@@ -345,12 +345,12 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
                             {
                                 if(pObjectsSdPage && pObjectsSdPage->GetPageKind() == PK_STANDARD)
                                 {
-                                    static String aSlideAreaStr( SdResId( STR_PLACEHOLDER_DESCRIPTION_SLIDE ) );
+                                    static OUString aSlideAreaStr(SD_RESSTR(STR_PLACEHOLDER_DESCRIPTION_SLIDE));
                                     aObjectString = aSlideAreaStr;
                                 }
                                 else
                                 {
-                                    static String aNumberAreaStr( SdResId( STR_PLACEHOLDER_DESCRIPTION_NUMBER ) );
+                                    static OUString aNumberAreaStr(SD_RESSTR(STR_PLACEHOLDER_DESCRIPTION_NUMBER));
                                     aObjectString = aNumberAreaStr;
                                 }
                                 break;
@@ -361,7 +361,7 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
                             }
                         }
 
-                        if( aObjectString.Len() )
+                        if( !aObjectString.isEmpty() )
                         {
                             // decompose object matrix to be able to place text correctly
                             basegfx::B2DTuple aScale;
@@ -384,7 +384,7 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
                             // get basic geometry and get text size
                             drawinglayer::primitive2d::TextLayouterDevice aTextLayouter;
                             aTextLayouter.setFont(aScaledVclFont);
-                            const xub_StrLen nTextLength(aObjectString.Len());
+                            const sal_Int32 nTextLength(aObjectString.getLength());
 
                             // do not forget to use the factor again to get the width for the 500
                             const double fTextWidth(aTextLayouter.getTextWidth(aObjectString, 0, nTextLength) * (1.0 / nTextSizeFactor));
@@ -892,7 +892,7 @@ void View::SetMarkedOriginalSize()
 
     if( bOK )
     {
-        pUndoGroup->SetComment( String(SdResId(STR_UNDO_ORIGINALSIZE)) );
+        pUndoGroup->SetComment(SD_RESSTR(STR_UNDO_ORIGINALSIZE));
         mpDocSh->GetUndoManager()->AddUndoAction(pUndoGroup);
     }
     else
@@ -1206,8 +1206,9 @@ void View::OnEndPasteOrDrop( PasteOrDropInfos* pInfos )
                 SfxStyleSheet* pStyle = 0;
                 if( nDepth > 0 )
                 {
-                    String aStyleSheetName( pStyleSheet->GetName() );
-                    aStyleSheetName.Erase( aStyleSheetName.Len() - 1, 1 );
+                    OUString aStyleSheetName( pStyleSheet->GetName() );
+                    if (!aStyleSheetName.isEmpty())
+                        aStyleSheetName = aStyleSheetName.copy(0, aStyleSheetName.getLength() - 1);
                     aStyleSheetName += OUString::number( nDepth );
                     pStyle = static_cast<SfxStyleSheet*>( pStylePool->Find( aStyleSheetName, pStyleSheet->GetFamily() ) );
                     DBG_ASSERT( pStyle, "sd::View::OnEndPasteOrDrop(), Style not found!" );

@@ -112,20 +112,20 @@ void ImpAddPrintableCharactersToTextEdit(SfxRequest& rReq, ::sd::View* pView)
 
     if(pSet)
     {
-        String aInputString;
+        OUString aInputString;
 
         if(SFX_ITEM_SET == pSet->GetItemState(SID_ATTR_CHAR))
             aInputString = ((SfxStringItem&)pSet->Get(SID_ATTR_CHAR)).GetValue();
 
-        if(aInputString.Len())
+        if(!aInputString.isEmpty())
         {
             OutlinerView* pOLV = pView->GetTextEditOutlinerView();
 
             if(pOLV)
             {
-                for(sal_uInt16 a(0); a < aInputString.Len(); a++)
+                for(sal_Int32 a(0); a < aInputString.getLength(); a++)
                 {
-                    sal_Char aChar = (sal_Char)aInputString.GetChar(a);
+                    sal_Char aChar = (sal_Char)aInputString[a];
                     KeyCode aKeyCode;
                     KeyEvent aKeyEvent(aChar, aKeyCode);
 
@@ -331,10 +331,10 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
                     if ( mpDrawView->IsPresObjSelected() )
                     {
                         ::sd::Window* pWindow = GetActiveWindow();
-                        InfoBox(pWindow, String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
+                        InfoBox(pWindow, SD_RESSTR(STR_ACTION_NOTPOSSIBLE) ).Execute();
                     }
                     else if ( QueryBox(GetActiveWindow(), WB_YES_NO,
-                                      String(SdResId(STR_ASK_FOR_CONVERT_TO_BEZIER) )
+                                      SD_RESSTR(STR_ASK_FOR_CONVERT_TO_BEZIER)
                                       ).Execute() == RET_YES )
                     {
                         // implicit transformation into bezier
@@ -368,10 +368,10 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
                     if ( mpDrawView->IsPresObjSelected() )
                     {
                         ::sd::Window* pWindow = GetActiveWindow();
-                        InfoBox(pWindow, String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
+                        InfoBox(pWindow, SD_RESSTR(STR_ACTION_NOTPOSSIBLE) ).Execute();
                     }
                     else if ( QueryBox(GetActiveWindow(), WB_YES_NO,
-                                      String(SdResId(STR_ASK_FOR_CONVERT_TO_BEZIER) )
+                                      SD_RESSTR(STR_ASK_FOR_CONVERT_TO_BEZIER)
                                       ).Execute() == RET_YES )
                     {
                         // implicit transformation into bezier
@@ -721,7 +721,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                 SdrPathObj* pPathObj = (SdrPathObj*) rMarkList.GetMark(0)->GetMarkedSdrObj();
                 const bool bUndo = mpDrawView->IsUndoEnabled();
                 if( bUndo )
-                    mpDrawView->BegUndo(String(SdResId(STR_UNDO_BEZCLOSE)));
+                    mpDrawView->BegUndo(SD_RESSTR(STR_UNDO_BEZCLOSE));
 
                 mpDrawView->UnmarkAllPoints();
 
@@ -742,7 +742,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
             if ( mpDrawView->IsPresObjSelected(sal_False, sal_True, sal_False, sal_True) )
             {
                 ::sd::Window* pWindow = GetActiveWindow();
-                InfoBox(pWindow, String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
+                InfoBox(pWindow, SD_RESSTR(STR_ACTION_NOTPOSSIBLE) ).Execute();
             }
             else
             {
@@ -764,7 +764,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
             if ( mpDrawView->IsPresObjSelected(sal_False, sal_True, sal_False, sal_True) )
             {
                 ::sd::Window* pWindow = GetActiveWindow();
-                InfoBox(pWindow, String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
+                InfoBox(pWindow, SD_RESSTR(STR_ACTION_NOTPOSSIBLE) ).Execute();
             }
             else
             {
@@ -852,7 +852,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
             else if ( mpDrawView->IsPresObjSelected(sal_False, sal_True, sal_False, sal_True) )
             {
                 ::sd::Window* pWindow = GetActiveWindow();
-                InfoBox(pWindow, String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
+                InfoBox(pWindow, SD_RESSTR(STR_ACTION_NOTPOSSIBLE) ).Execute();
             }
             else
             {
@@ -941,7 +941,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                 }
 
                 // turn on default layer of MasterPage
-                mpDrawView->SetActiveLayer( String( SdResId(STR_LAYER_BCKGRNDOBJ) ) );
+                mpDrawView->SetActiveLayer( SD_RESSTR(STR_LAYER_BCKGRNDOBJ) );
 
                 ChangeEditMode(EM_MASTERPAGE, mbIsLayerModeActive);
 
@@ -1337,7 +1337,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                     break;
             }
 
-            mpDrawView->BegUndo(String(SdResId(STR_UNDO_COLORRESOLUTION)));
+            mpDrawView->BegUndo(SD_RESSTR(STR_UNDO_COLORRESOLUTION));
             const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
 
             for (sal_uLong i=0; i<rMarkList.GetMarkCount(); i++)
@@ -1470,8 +1470,8 @@ void DrawViewShell::FuSupportRotate(SfxRequest &rReq)
 }
 
 
-void DrawViewShell::InsertURLField(const String& rURL, const String& rText,
-                                     const String& rTarget, const Point* pPos)
+void DrawViewShell::InsertURLField(const OUString& rURL, const OUString& rText,
+                                   const OUString& rTarget, const Point* pPos)
 {
     OutlinerView* pOLV = mpDrawView->GetTextEditOutlinerView();
 
@@ -1529,8 +1529,8 @@ void DrawViewShell::InsertURLField(const String& rURL, const String& rText,
 }
 
 
-void DrawViewShell::InsertURLButton(const String& rURL, const String& rText,
-                                      const String& rTarget, const Point* pPos)
+void DrawViewShell::InsertURLButton(const OUString& rURL, const OUString& rText,
+                                    const OUString& rTarget, const Point* pPos)
 {
     sal_Bool bNewObj = sal_True;
 
@@ -1552,11 +1552,11 @@ void DrawViewShell::InsertURLButton(const String& rURL, const String& rText,
                 Reference< awt::XControlModel > xControlModel( pUnoCtrl->GetUnoControlModel(), UNO_QUERY_THROW );
                 Reference< beans::XPropertySet > xPropSet( xControlModel, UNO_QUERY_THROW );
 
-                xPropSet->setPropertyValue("Label" , Any( OUString( rText ) ) );
+                xPropSet->setPropertyValue("Label" , Any( rText ) );
                 xPropSet->setPropertyValue("TargetURL" , Any( sTargetURL ) );
 
-                if( rTarget.Len() )
-                    xPropSet->setPropertyValue("TargetFrame" , Any( OUString( rTarget ) ) );
+                if( !rTarget.isEmpty() )
+                    xPropSet->setPropertyValue("TargetFrame" , Any( rTarget ) );
 
                 xPropSet->setPropertyValue( "ButtonType" , Any( form::FormButtonType_URL ) );
                 if ( ::avmedia::MediaWindow::isMediaURL( rURL ) )
@@ -1590,8 +1590,8 @@ void DrawViewShell::InsertURLButton(const String& rURL, const String& rText,
         xPropSet->setPropertyValue( "Label" , Any( OUString( rText ) ) );
         xPropSet->setPropertyValue( "TargetURL" , Any( sTargetURL ) );
 
-        if( rTarget.Len() )
-            xPropSet->setPropertyValue( "TargetFrame" , Any( OUString( rTarget ) ) );
+        if( !rTarget.isEmpty() )
+            xPropSet->setPropertyValue( "TargetFrame" , Any( rTarget ) );
 
         xPropSet->setPropertyValue( "ButtonType" , Any(  form::FormButtonType_URL ) );
         if ( ::avmedia::MediaWindow::isMediaURL( rURL ) )

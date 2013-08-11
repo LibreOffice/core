@@ -100,7 +100,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
         if(bIsGraphic || (pPickObj && pPickObj->IsEmptyPresObj() && !bOnMaster)) // #i121603# Do not use pObj, it may be NULL
         {
             if( IsUndoEnabled() )
-                BegUndo(String(SdResId(STR_INSERTGRAPHIC)));
+                BegUndo(SD_RESSTR(STR_INSERTGRAPHIC));
 
             SdPage* pPage = (SdPage*) pPickObj->GetPage();
 
@@ -144,7 +144,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
             // fill object with graphic
             if( IsUndoEnabled() )
             {
-                BegUndo(String(SdResId(STR_UNDO_DRAGDROP)));
+                BegUndo(SD_RESSTR(STR_UNDO_DRAGDROP));
                 AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*pPickObj));
                 EndUndo();
             }
@@ -225,7 +225,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
             const bool bUndo = IsUndoEnabled();
 
             if( bUndo )
-                BegUndo(String(SdResId(STR_UNDO_DRAGDROP)));
+                BegUndo(SD_RESSTR(STR_UNDO_DRAGDROP));
             pNewGrafObj->NbcSetLayer(pPickObj->GetLayer());
             SdrPage* pP = pPV->GetPage();
             pP->InsertObject(pNewGrafObj);
@@ -303,7 +303,7 @@ SdrMediaObj* View::InsertMediaURL( const OUString& rMediaURL, sal_Int8& rAction,
         pNewMediaObj = static_cast< SdrMediaObj* >( pPickObj->Clone() );
         pNewMediaObj->setURL( realURL );
 
-        BegUndo(String(SdResId(STR_UNDO_DRAGDROP)));
+        BegUndo(SD_RESSTR(STR_UNDO_DRAGDROP));
         ReplaceObjectAtView(pPickObj, *pPV, pNewMediaObj);
         EndUndo();
     }
@@ -359,11 +359,11 @@ IMPL_LINK_NOARG(View, DropInsertFileHdl)
     SfxErrorContext aEc( ERRCTX_ERROR, mpViewSh->GetActiveWindow(), RID_SO_ERRCTX );
     ErrCode nError = 0;
 
-    ::std::vector< String >::const_iterator aIter( maDropFileVector.begin() );
+    ::std::vector< OUString >::const_iterator aIter( maDropFileVector.begin() );
 
     while( (aIter != maDropFileVector.end()) && !nError )
     {
-        String          aCurrentDropFile( *aIter );
+        OUString aCurrentDropFile( *aIter );
         INetURLObject   aURL( aCurrentDropFile );
         sal_Bool            bOK = sal_False;
 
@@ -388,7 +388,7 @@ IMPL_LINK_NOARG(View, DropInsertFileHdl)
                 SdrGrafObj* pGrafObj = InsertGraphic( aGraphic, nTempAction, maDropPos, NULL, NULL );
                 if(pGrafObj && bLink)
                 {
-                    pGrafObj->SetGraphicLink( aCurrentDropFile, String() );
+                    pGrafObj->SetGraphicLink( aCurrentDropFile, OUString() );
                 }
 
                 // return action from first inserted graphic
@@ -406,23 +406,22 @@ IMPL_LINK_NOARG(View, DropInsertFileHdl)
                 if( pFoundFilter && !nErr )
                 {
                     ::std::vector< OUString > aFilterVector;
-                    const String            aFilterName( pFoundFilter->GetFilterName() );
-                    String                  aLowerAsciiFileName( aCurrentDropFile );
-                    aLowerAsciiFileName.ToLowerAscii();
+                    OUString aFilterName = pFoundFilter->GetFilterName();
+                    OUString aLowerAsciiFileName = aCurrentDropFile.toAsciiLowerCase();
 
                     FuInsertFile::GetSupportedFilterVector( aFilterVector );
 
                     if( ( ::std::find( aFilterVector.begin(), aFilterVector.end(), pFoundFilter->GetMimeType() ) != aFilterVector.end() ) ||
-                        aFilterName.SearchAscii( "Text" ) != STRING_NOTFOUND ||
-                        aFilterName.SearchAscii( "Rich" ) != STRING_NOTFOUND ||
-                        aFilterName.SearchAscii( "RTF" ) != STRING_NOTFOUND ||
-                        aFilterName.SearchAscii( "HTML" ) != STRING_NOTFOUND ||
-                        aLowerAsciiFileName.SearchAscii(".sdd") != STRING_NOTFOUND ||
-                        aLowerAsciiFileName.SearchAscii(".sda") != STRING_NOTFOUND ||
-                        aLowerAsciiFileName.SearchAscii(".sxd") != STRING_NOTFOUND ||
-                        aLowerAsciiFileName.SearchAscii(".sxi") != STRING_NOTFOUND ||
-                        aLowerAsciiFileName.SearchAscii(".std") != STRING_NOTFOUND ||
-                        aLowerAsciiFileName.SearchAscii(".sti") != STRING_NOTFOUND )
+                        aFilterName.indexOf( "Text" ) != -1 ||
+                        aFilterName.indexOf( "Rich" ) != -1 ||
+                        aFilterName.indexOf( "RTF" ) != -1 ||
+                        aFilterName.indexOf( "HTML" ) != -1 ||
+                        aLowerAsciiFileName.indexOf(".sdd") != -1 ||
+                        aLowerAsciiFileName.indexOf(".sda") != -1 ||
+                        aLowerAsciiFileName.indexOf(".sxd") != -1 ||
+                        aLowerAsciiFileName.indexOf(".sxi") != -1 ||
+                        aLowerAsciiFileName.indexOf(".std") != -1 ||
+                        aLowerAsciiFileName.indexOf(".sti") != -1 )
                     {
                         ::sd::Window* pWin = mpViewSh->GetActiveWindow();
                         SfxRequest      aReq(SID_INSERTFILE, 0, mrDoc.GetItemPool());
@@ -459,7 +458,7 @@ IMPL_LINK_NOARG(View, DropInsertFileHdl)
                 InsertMediaURL( aCurrentDropFile, mnAction, maDropPos, aPrefSize, true ) ;
             }
             else if( mnAction & DND_ACTION_LINK )
-                static_cast< DrawViewShell* >( mpViewSh )->InsertURLButton( aCurrentDropFile, aCurrentDropFile, String(), &maDropPos );
+                static_cast< DrawViewShell* >( mpViewSh )->InsertURLButton( aCurrentDropFile, aCurrentDropFile, OUString(), &maDropPos );
             else
             {
                 if( mpViewSh )
@@ -470,7 +469,7 @@ IMPL_LINK_NOARG(View, DropInsertFileHdl)
                         OUString aName;
                         uno::Sequence < beans::PropertyValue > aMedium(1);
                         aMedium[0].Name = "URL" ;
-                        aMedium[0].Value <<=  OUString(aCurrentDropFile) ;
+                        aMedium[0].Value <<= aCurrentDropFile ;
 
                         uno::Reference < embed::XEmbeddedObject > xObj = mpDocSh->GetEmbeddedObjectContainer().
                                 InsertEmbeddedObject( aMedium, aName );
@@ -546,7 +545,7 @@ IMPL_LINK_NOARG(View, DropInsertFileHdl)
  */
 IMPL_LINK_NOARG(View, DropErrorHdl)
 {
-    InfoBox( mpViewSh ? mpViewSh->GetActiveWindow() : 0, String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
+    InfoBox( mpViewSh ? mpViewSh->GetActiveWindow() : 0, SD_RESSTR(STR_ACTION_NOTPOSSIBLE) ).Execute();
     return 0;
 }
 

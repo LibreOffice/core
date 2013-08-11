@@ -249,7 +249,7 @@ protected:
     SdrDropMarkerOverlay*   mpDropMarker;
     sal_uInt16                  mnDragSrcPgNum;
     Point                   maDropPos;
-    ::std::vector< String > maDropFileVector;
+    ::std::vector<OUString> maDropFileVector;
     sal_Int8                mnAction;
     Timer                   maDropErrorTimer;
     Timer                   maDropInsertFileTimer;

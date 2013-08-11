@@ -305,7 +305,7 @@ void DrawViewShell::ExecBmpMask( SfxRequest& rReq )
                 if( pNewObj->IsLinkedGraphic() )
                 {
                     QueryBox aQBox( (Window*) GetActiveWindow(), WB_YES_NO | WB_DEF_YES,
-                                    String( SdResId( STR_RELEASE_GRAPHICLINK ) ) );
+                                    SD_RESSTR( STR_RELEASE_GRAPHICLINK ) );
 
                     if( RET_YES == aQBox.Execute() )
                         pNewObj->ReleaseGraphicLink();
@@ -332,8 +332,8 @@ void DrawViewShell::ExecBmpMask( SfxRequest& rReq )
                                              SvxBmpMaskChildWindow::GetChildWindowId() )->GetWindow() )->
                                              Mask( pNewObj->GetGraphic() ) );
 
-                        String aStr( mpDrawView->GetDescriptionOfMarkedObjects() );
-                        aStr += (sal_Unicode)( ' ' ), aStr += String( SdResId( STR_EYEDROPPER ) );
+                        OUString aStr( mpDrawView->GetDescriptionOfMarkedObjects() );
+                        aStr += " " + SD_RESSTR(STR_EYEDROPPER);
 
                         mpDrawView->BegUndo( aStr );
                         mpDrawView->ReplaceObjectAtView( pObj, *pPV, pNewObj );

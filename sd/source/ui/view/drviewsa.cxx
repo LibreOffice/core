@@ -778,8 +778,10 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
     // Layout
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_STATUS_LAYOUT ) )
     {
-        String aString = mpActualPage->GetLayoutName();
-        aString.Erase( aString.SearchAscii( SD_LT_SEPARATOR ) );
+        OUString aString = mpActualPage->GetLayoutName();
+        sal_Int32 nPos = aString.indexOf(SD_LT_SEPARATOR);
+        if (nPos != -1)
+            aString = aString.copy(0, nPos);
         rSet.Put( SfxStringItem( SID_STATUS_LAYOUT, aString ) );
     }
 }

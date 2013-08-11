@@ -236,7 +236,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
             }
 
             // turn on default layer of page
-            mpDrawView->SetActiveLayer( String( SdResId(STR_LAYER_LAYOUT) ) );
+            mpDrawView->SetActiveLayer(SD_RESSTR(STR_LAYER_LAYOUT));
 
             ChangeEditMode(EM_PAGE, mbIsLayerModeActive);
 
@@ -1034,16 +1034,16 @@ void  DrawViewShell::GetSnapItemState( SfxItemSet &rSet )
         if ( rHelpLine.GetKind() == SDRHELPLINE_POINT )
         {
             rSet.Put( SfxStringItem( SID_SET_SNAPITEM,
-                                String( SdResId( STR_POPUP_EDIT_SNAPPOINT))) );
+                                SD_RESSTR( STR_POPUP_EDIT_SNAPPOINT)) );
             rSet.Put( SfxStringItem( SID_DELETE_SNAPITEM,
-                                String( SdResId( STR_POPUP_DELETE_SNAPPOINT))) );
+                                SD_RESSTR( STR_POPUP_DELETE_SNAPPOINT)) );
         }
         else
         {
             rSet.Put( SfxStringItem( SID_SET_SNAPITEM,
-                                String( SdResId( STR_POPUP_EDIT_SNAPLINE))) );
+                                SD_RESSTR( STR_POPUP_EDIT_SNAPLINE)) );
             rSet.Put( SfxStringItem( SID_DELETE_SNAPITEM,
-                                String( SdResId( STR_POPUP_DELETE_SNAPLINE))) );
+                                SD_RESSTR( STR_POPUP_DELETE_SNAPLINE)) );
         }
     }
 }

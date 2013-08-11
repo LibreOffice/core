@@ -172,7 +172,7 @@ struct SdNavigatorDropEvent : public ExecuteDropEvent
     SD_MOD()->pTransferDrag = pTransferable;
 
     TransferableObjectDescriptor    aObjDesc;
-    String                          aDisplayName;
+    OUString                        aDisplayName;
     SdrOle2Obj*                     pSdrOleObj = NULL;
 
     if( GetMarkedObjectCount() == 1 )
@@ -221,7 +221,7 @@ struct SdNavigatorDropEvent : public ExecuteDropEvent
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > xRet( pTransferable );
     TransferableObjectDescriptor    aObjDesc;
     const Rectangle                 aMarkRect( GetAllMarkedRect() );
-    String                          aDisplayName;
+    OUString                        aDisplayName;
 
     SD_MOD()->pTransferSelection = pTransferable;
 
@@ -266,10 +266,10 @@ void View::DoCut(::Window* )
         ( (OutlinerView*) pOLV)->Cut();
     else if( AreObjectsMarked() )
     {
-        String aStr( SdResId(STR_UNDO_CUT) );
+        OUString aStr(SD_RESSTR(STR_UNDO_CUT));
 
         DoCopy();
-        BegUndo( ( aStr += sal_Unicode(' ') ) += GetDescriptionOfMarkedObjects() );
+        BegUndo(aStr + " " + GetDescriptionOfMarkedObjects());
         DeleteMarked();
         EndUndo();
     }
@@ -397,10 +397,8 @@ void View::StartDrag( const Point& rStartPos, ::Window* pWindow )
 
         if( IsUndoEnabled() )
         {
-            String aStr( SdResId(STR_UNDO_DRAGDROP) );
-            aStr += sal_Unicode(' ');
-            aStr += mpDragSrcMarkList->GetMarkDescription();
-            BegUndo(aStr);
+            OUString aStr(SD_RESSTR(STR_UNDO_DRAGDROP));
+            BegUndo(aStr + " " + mpDragSrcMarkList->GetMarkDescription());
         }
         CreateDragDataObject( this, *pWindow, rStartPos );
     }
@@ -475,7 +473,7 @@ void View::DragFinished( sal_Int8 nDropAction )
 sal_Int8 View::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTargetHelper,
                              ::sd::Window*, sal_uInt16, sal_uInt16 nLayer )
 {
-    String          aLayerName( GetActiveLayer() );
+    OUString        aLayerName = GetActiveLayer();
     SdrPageView*    pPV = GetSdrPageView();
     sal_Int8        nDropAction = rEvt.mnAction;
     sal_Int8        nRet = DND_ACTION_NONE;
@@ -657,7 +655,7 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTar
                               ::sd::Window* pTargetWindow, sal_uInt16 nPage, sal_uInt16 nLayer )
 {
     SdrPageView*    pPV = GetSdrPageView();
-    String          aActiveLayer = GetActiveLayer();
+    OUString        aActiveLayer = GetActiveLayer();
     sal_Int8        nDropAction = rEvt.mnAction;
     sal_Int8        nRet = DND_ACTION_NONE;
 
@@ -736,7 +734,7 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTar
             // special insert?
             if( !nRet && mpViewSh )
             {
-                String          aTmpString1, aTmpString2;
+                OUString        aTmpString1, aTmpString2;
                 INetBookmark    aINetBookmark( aTmpString1, aTmpString2 );
 
                 // insert bookmark
@@ -824,7 +822,7 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTar
                         else if( mpViewSh->ISA( DrawViewShell ) )
                         {
                             // insert as normal URL button
-                            ( (DrawViewShell*) mpViewSh )->InsertURLButton( aINetBookmark.GetURL(), aINetBookmark.GetDescription(), String(), &aPos );
+                            ( (DrawViewShell*) mpViewSh )->InsertURLButton( aINetBookmark.GetURL(), aINetBookmark.GetDescription(), OUString(), &aPos );
                             nRet = nDropAction;
                         }
                     }

@@ -317,7 +317,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
         {
             pImageMap = new ImageMap;
             // mba: clipboard always must contain absolute URLs (could be from alien source)
-            pImageMap->Read( *xStm, String() );
+            pImageMap->Read( *xStm, OUString() );
         }
     }
 
@@ -372,7 +372,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
                     SdrLayerAdmin&  rLayerAdmin = mrDoc.GetLayerAdmin();
                     SdrLayer*       pLayer = rLayerAdmin.GetLayerPerID( nLayer );
                     SdrPageView*    pPV = GetSdrPageView();
-                    String          aLayer( pLayer->GetName() );
+                    OUString        aLayer = pLayer->GetName();
 
                     if( !pPV->IsLayerLocked( aLayer ) )
                     {
@@ -389,7 +389,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
                                 // #i11702#
                                 if( IsUndoEnabled() )
                                 {
-                                    BegUndo(String(SdResId(STR_MODIFYLAYER)));
+                                    BegUndo(SD_RESSTR(STR_MODIFYLAYER));
                                     AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoObjectLayerChange(*pO, pO->GetLayer(), (SdrLayerID)nLayer));
                                     EndUndo();
                                 }
@@ -415,7 +415,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
                     if( pPage )
                     {
                         // drop on other page
-                        String aActiveLayer( GetActiveLayer() );
+                        OUString aActiveLayer = GetActiveLayer();
 
                         if( !pPV->IsLayerLocked( aActiveLayer ) )
                         {
@@ -473,7 +473,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
                                         if( IsUndoEnabled() )
                                         {
-                                            BegUndo(String(SdResId(STR_UNDO_DRAGDROP)));
+                                            BegUndo(SD_RESSTR(STR_UNDO_DRAGDROP));
                                             AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pObj));
                                             EndUndo();
                                         }
@@ -606,8 +606,10 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
                     if( !pPage )
                         pPage = (SdPage*) GetSdrPageView()->GetPage();
 
-                    String aLayout( pPage->GetLayoutName() );
-                    aLayout.Erase( aLayout.SearchAscii( SD_LT_SEPARATOR ) );
+                    OUString aLayout = pPage->GetLayoutName();
+                    sal_Int32 nPos = aLayout.indexOf(SD_LT_SEPARATOR);
+                    if (nPos != -1)
+                        aLayout = aLayout.copy(0, nPos);
                     pPage->SetPresentationLayout( aLayout, sal_False, sal_False );
                     pSourceDoc->CreatingDataObj( NULL );
                 }
@@ -645,8 +647,10 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
             if( !pPage )
                 pPage = (SdPage*) GetSdrPageView()->GetPage();
 
-            String aLayout(pPage->GetLayoutName());
-            aLayout.Erase(aLayout.SearchAscii(SD_LT_SEPARATOR));
+            OUString aLayout = pPage->GetLayoutName();
+            sal_Int32 nPos = aLayout.indexOf(SD_LT_SEPARATOR);
+            if (nPos != -1)
+                aLayout = aLayout.copy(0, nPos);
             pPage->SetPresentationLayout( aLayout, sal_False, sal_False );
        }
     }
@@ -707,7 +711,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
                             const bool bUndo = IsUndoEnabled();
 
                             if( bUndo )
-                                BegUndo( String( SdResId(STR_UNDO_DRAGDROP ) ) );
+                                BegUndo(SD_RESSTR(STR_UNDO_DRAGDROP));
                             pNewObj->NbcSetLayer( pPickObj->GetLayer() );
                             SdrPage* pWorkPage = GetSdrPageView()->GetPage();
                             pWorkPage->InsertObject( pNewObj );
@@ -737,7 +741,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
                             const bool bUndo = IsUndoEnabled();
                             if( bUndo )
                             {
-                                BegUndo( String( SdResId( STR_UNDO_DRAGDROP ) ) );
+                                BegUndo( SD_RESSTR(STR_UNDO_DRAGDROP) );
                                 AddUndo( mrDoc.GetSdrUndoFactory().CreateUndoAttrObject( *pPickObj ) );
                             }
 
@@ -848,7 +852,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
                 ::sd::DrawDocShellRef xDocShRef( new ::sd::DrawDocShell( SFX_CREATE_MODE_EMBEDDED, sal_True, mrDoc.GetDocumentType() ) );
 
                 // mba: BaseURL doesn't make sense for clipboard functionality
-                SfxMedium *pMedium = new SfxMedium( xStore, String() );
+                SfxMedium *pMedium = new SfxMedium( xStore, OUString() );
                 if( xDocShRef->DoLoad( pMedium ) )
                 {
                     SdDrawDocument* pModel = (SdDrawDocument*) xDocShRef->GetDoc();
@@ -879,8 +883,10 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
                     if( !pPage )
                         pPage = (SdPage*) GetSdrPageView()->GetPage();
 
-                    String aLayout(pPage->GetLayoutName());
-                    aLayout.Erase(aLayout.SearchAscii(SD_LT_SEPARATOR));
+                    OUString aLayout = pPage->GetLayoutName();
+                    sal_Int32 nPos = aLayout.indexOf(SD_LT_SEPARATOR);
+                    if (nPos != -1)
+                        aLayout = aLayout.copy(0, nPos);
                     pPage->SetPresentationLayout( aLayout, sal_False, sal_False );
                 }
 
@@ -1291,7 +1297,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
             if( IsUndoEnabled() )
             {
-                BegUndo( String( SdResId( STR_UNDO_DRAGDROP ) ) );
+                BegUndo( SD_RESSTR(STR_UNDO_DRAGDROP) );
                 AddUndo( GetModel()->GetSdrUndoFactory().CreateUndoAttrObject( *pPickObj ) );
                 EndUndo();
             }
@@ -1304,7 +1310,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
             {
                 const XFillColorItem&   rColItem = (XFillColorItem&) rSet.Get( XATTR_FILLCOLOR );
                 Color                   aColor( rColItem.GetColorValue() );
-                String                  aName( rColItem.GetName() );
+                OUString                aName( rColItem.GetName() );
                 SfxItemSet              aSet( mrDoc.GetPool() );
                 sal_Bool                    bClosed = pPickObj->IsClosedObj();
                 ::sd::Window* pWin = mpViewSh->GetActiveWindow();
@@ -1351,7 +1357,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
         {
             xStm->Seek( 0 );
             // mba: clipboard always must contain absolute URLs (could be from alien source)
-            bReturn = SdrView::Paste( *xStm, String(), EE_FORMAT_HTML, maDropPos, pPage, nPasteOptions );
+            bReturn = SdrView::Paste( *xStm, OUString(), EE_FORMAT_HTML, maDropPos, pPage, nPasteOptions );
         }
     }
 
@@ -1373,14 +1379,14 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
                 if( aRect.IsInside( aPos ) || ( !bDrag && IsTextEdit() ) )
                 {
                     // mba: clipboard always must contain absolute URLs (could be from alien source)
-                    pOLV->Read( *xStm, String(), EE_FORMAT_BIN, sal_False, mpDocSh->GetHeaderAttributes() );
+                    pOLV->Read( *xStm, OUString(), EE_FORMAT_BIN, sal_False, mpDocSh->GetHeaderAttributes() );
                     bReturn = true;
                 }
             }
 
             if( !bReturn )
                 // mba: clipboard always must contain absolute URLs (could be from alien source)
-                bReturn = SdrView::Paste( *xStm, String(), EE_FORMAT_BIN, maDropPos, pPage, nPasteOptions );
+                bReturn = SdrView::Paste( *xStm, OUString(), EE_FORMAT_BIN, maDropPos, pPage, nPasteOptions );
         }
     }
 
@@ -1408,14 +1414,14 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
                     if( aRect.IsInside( aPos ) || ( !bDrag && IsTextEdit() ) )
                     {
                         // mba: clipboard always must contain absolute URLs (could be from alien source)
-                        pOLV->Read( *xStm, String(), EE_FORMAT_RTF, sal_False, mpDocSh->GetHeaderAttributes() );
+                        pOLV->Read( *xStm, OUString(), EE_FORMAT_RTF, sal_False, mpDocSh->GetHeaderAttributes() );
                         bReturn = true;
                     }
                 }
 
                 if( !bReturn )
                     // mba: clipboard always must contain absolute URLs (could be from alien source)
-                    bReturn = SdrView::Paste( *xStm, String(), EE_FORMAT_RTF, maDropPos, pPage, nPasteOptions );
+                    bReturn = SdrView::Paste( *xStm, OUString(), EE_FORMAT_RTF, maDropPos, pPage, nPasteOptions );
             }
         }
     }
@@ -1439,7 +1445,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
     if(!bReturn && CHECK_FORMAT_TRANS(FORMAT_FILE))
     {
-        String aDropFile;
+        OUString aDropFile;
 
         if( aDataHelper.GetString( FORMAT_FILE, aDropFile ) )
         {

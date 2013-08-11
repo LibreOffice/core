@@ -95,13 +95,11 @@ void DrawViewShell::DeleteActualPage()
 void DrawViewShell::DeleteActualLayer()
 {
     SdrLayerAdmin& rAdmin = GetDoc()->GetLayerAdmin();
-    const String&  rName  = GetLayerTabControl()->GetPageText(GetLayerTabControl()->GetCurPageId());
-    String         aString(SdResId(STR_ASK_DELETE_LAYER));
+    const OUString& rName = GetLayerTabControl()->GetPageText(GetLayerTabControl()->GetCurPageId());
+    OUString aString(SD_RESSTR(STR_ASK_DELETE_LAYER));
 
     // replace placeholder
-    sal_uInt16 nPos = aString.Search(sal_Unicode('$'));
-    aString.Erase(nPos, 1);
-    aString.Insert(rName, nPos);
+    aString = aString.replaceFirst("$", rName);
 
     if (QueryBox(GetActiveWindow(), WB_YES_NO, aString).Execute() == RET_YES)
     {
@@ -861,21 +859,21 @@ void DrawViewShell::ShowSnapLineContextMenu (
     {
         pMenu->InsertItem(
             SID_SET_SNAPITEM,
-            String(SdResId(STR_POPUP_EDIT_SNAPPOINT)));
+            SD_RESSTR(STR_POPUP_EDIT_SNAPPOINT));
         pMenu->InsertSeparator();
         pMenu->InsertItem(
             SID_DELETE_SNAPITEM,
-            String(SdResId(STR_POPUP_DELETE_SNAPPOINT)));
+            SD_RESSTR(STR_POPUP_DELETE_SNAPPOINT));
     }
     else
     {
         pMenu->InsertItem(
             SID_SET_SNAPITEM,
-            String(SdResId(STR_POPUP_EDIT_SNAPLINE)));
+            SD_RESSTR(STR_POPUP_EDIT_SNAPLINE));
         pMenu->InsertSeparator();
         pMenu->InsertItem(
             SID_DELETE_SNAPITEM,
-            String(SdResId(STR_POPUP_DELETE_SNAPLINE)));
+            SD_RESSTR(STR_POPUP_DELETE_SNAPLINE));
     }
 
     pMenu->RemoveDisabledEntries(sal_False, sal_False);

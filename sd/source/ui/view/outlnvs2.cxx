@@ -539,7 +539,7 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
 
                 case SID_INSERT_FLD_FILE:
                 {
-                    String aName;
+                    OUString aName;
                     if( GetDocSh()->HasName() )
                         aName = GetDocSh()->GetMedium()->GetName();
                     //else

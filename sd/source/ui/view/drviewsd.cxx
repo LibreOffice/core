@@ -133,10 +133,9 @@ void DrawViewShell::ExecNavigatorWin( SfxRequest& rReq )
             }
             else if (nSId == SID_NAVIGATOR_OBJECT)
             {
-                String aBookmarkStr;
-                aBookmarkStr += sal_Unicode( '#' );
+                OUString aBookmarkStr("#");
                 const SfxItemSet* pArgs = rReq.GetArgs();
-                String aTarget = ((SfxStringItem&) pArgs->
+                OUString aTarget = ((SfxStringItem&) pArgs->
                                  Get(SID_NAVIGATOR_OBJECT)).GetValue();
                 aBookmarkStr += aTarget;
                 SfxStringItem aStrItem(SID_FILE_NAME, aBookmarkStr);
@@ -168,7 +167,7 @@ void DrawViewShell::GetNavigatorWinState( SfxItemSet& rSet )
     sal_uInt16 nFirstPage = 0;
     sal_uInt16 nLastPage;
     sal_Bool   bEndless = sal_False;
-    String aPageName;
+    OUString aPageName;
 
     rtl::Reference< SlideShow > xSlideshow( SlideShow::GetSlideShow( GetViewShellBase() ) );
     if( xSlideshow.is() && xSlideshow->isRunning() )

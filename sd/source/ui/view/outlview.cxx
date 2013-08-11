@@ -432,8 +432,8 @@ SdPage* OutlineView::InsertSlideForParagraph( Paragraph* pPara )
     // paragraph
     if (nTarget == 1)
     {
-        String aTest(mrOutliner.GetText( mrOutliner.GetParagraph( 0 ) ));
-        if (aTest.Len() == 0)
+        OUString aTest = mrOutliner.GetText(mrOutliner.GetParagraph(0));
+        if (aTest.isEmpty())
         {
             nTarget = 0;
         }
@@ -630,8 +630,7 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner *, pOutliner )
                 if( mpProgress )
                     delete mpProgress;
 
-                const String aStr(SdResId(STR_CREATE_PAGES));
-                mpProgress = new SfxProgress( GetDocSh(), aStr, mnPagesToProcess );
+                mpProgress = new SfxProgress( GetDocSh(), SD_RESSTR(STR_CREATE_PAGES), mnPagesToProcess );
             }
             else
             {
@@ -775,8 +774,9 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner *, pOutliner )
 
                 if( nDepth > 0 )
                 {
-                    String aNewStyleSheetName( pStyleSheet->GetName() );
-                    aNewStyleSheetName.Erase( aNewStyleSheetName.Len()-1, 1 );
+                    OUString aNewStyleSheetName = pStyleSheet->GetName();
+                    if (!aNewStyleSheetName.isEmpty())
+                        aNewStyleSheetName = aNewStyleSheetName.copy(0, aNewStyleSheetName.getLength() - 1);
                     aNewStyleSheetName += OUString::number( nDepth+1 );
                     SfxStyleSheetBasePool* pStylePool = mrDoc.GetStyleSheetPool();
                     pStyleSheet = (SfxStyleSheet*) pStylePool->Find( aNewStyleSheetName, pStyleSheet->GetFamily() );
@@ -1069,8 +1069,7 @@ sal_Bool OutlineView::PrepareClose(sal_Bool)
 
     mrOutliner.GetUndoManager().Clear();
 
-    const String aUndoStr(SdResId(STR_UNDO_CHANGE_TITLE_AND_LAYOUT));
-    BegUndo(aUndoStr);
+    BegUndo(SD_RESSTR(STR_UNDO_CHANGE_TITLE_AND_LAYOUT));
     UpdateDocument();
     EndUndo();
     mrDoc.SetSelected(GetActualPage(), sal_True);
@@ -1145,7 +1144,7 @@ void OutlineView::FillOutliner()
 
         if( pPara == 0 ) // no title, insert an empty paragraph
         {
-            pPara = mrOutliner.Insert(String());
+            pPara = mrOutliner.Insert(OUString());
             mrOutliner.SetDepth(pPara, -1);
 
             // do not apply hard attributes from the previous paragraph
@@ -1233,8 +1232,7 @@ IMPL_LINK_NOARG(OutlineView, RemovingPagesHdl)
         if( mpProgress )
             delete mpProgress;
 
-        String aStr(SdResId(STR_DELETE_PAGES));
-        mpProgress = new SfxProgress( GetDocSh(), aStr, mnPagesToProcess );
+        mpProgress = new SfxProgress( GetDocSh(), SD_RESSTR(STR_DELETE_PAGES), mnPagesToProcess );
     }
     mrOutliner.UpdateFields();
 
@@ -1540,10 +1538,8 @@ void OutlineView::IgnoreCurrentPageChanges (bool bIgnoreChanges)
     and or the drawing document model. It will create needed undo actions */
 void OutlineView::BeginModelChange()
 {
-    const String aEmpty;
-    mrOutliner.GetUndoManager().EnterListAction(aEmpty,aEmpty);
-    const String aUndoStr(SdResId(STR_UNDO_CHANGE_TITLE_AND_LAYOUT));
-    BegUndo(aUndoStr);
+    mrOutliner.GetUndoManager().EnterListAction("", "");
+    BegUndo(SD_RESSTR(STR_UNDO_CHANGE_TITLE_AND_LAYOUT));
 }
 
 /** call this method after BeginModelChange(), when all possible model
@@ -1773,7 +1769,7 @@ IMPL_LINK(OutlineView, PaintingFirstLineHdl, PaintFirstLineInfo*, pInfo)
             aNewFont.SetOrientation( bVertical ? 2700 : 0 );
             aNewFont.SetColor( COL_AUTO );
             pInfo->mpOutDev->SetFont( aNewFont );
-            String aPageText = OUString::number( nPage );
+            OUString aPageText = OUString::number( nPage );
             Size aTextSz;
             aTextSz.Width() = pInfo->mpOutDev->GetTextWidth( aPageText );
             aTextSz.Height() = pInfo->mpOutDev->GetTextHeight();
@@ -1863,8 +1859,9 @@ void OutlineView::OnEndPasteOrDrop( PasteOrDropInfos* pInfos )
                     const sal_Int16 nDepth = mrOutliner.GetDepth( nPara );
                     if( nDepth > 0 )
                     {
-                        String aStyleSheetName( pStyle->GetName() );
-                        aStyleSheetName.Erase( aStyleSheetName.Len() - 1, 1 );
+                        OUString aStyleSheetName = pStyle->GetName();
+                        if (!aStyleSheetName.isEmpty())
+                            aStyleSheetName = aStyleSheetName.copy(0, aStyleSheetName.getLength() - 1);
                         aStyleSheetName += OUString::number( nDepth );
                         pStyle = static_cast<SfxStyleSheet*>( pStylePool->Find( aStyleSheetName, pStyle->GetFamily() ) );
                         DBG_ASSERT( pStyle, "sd::OutlineView::OnEndPasteOrDrop(), Style not found!" );

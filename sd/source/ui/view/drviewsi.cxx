@@ -128,7 +128,7 @@ void DrawViewShell::AssignFrom3DWindow()
                 p3DWin->GetAttr( aSet );
 
                 // own UNDO-compounding also around transformation in 3D
-                GetView()->BegUndo(String(SdResId(STR_UNDO_APPLY_3D_FAVOURITE)));
+                GetView()->BegUndo(SD_RESSTR(STR_UNDO_APPLY_3D_FAVOURITE));
 
                 if(GetView()->IsConvertTo3DObjPossible())
                 {
@@ -168,7 +168,7 @@ void DrawViewShell::AssignFrom3DWindow()
             {
                 InfoBox aInfoBox (
                     GetActiveWindow(),
-                    String(SdResId(STR_ACTION_NOTPOSSIBLE)));
+                    SD_RESSTR(STR_ACTION_NOTPOSSIBLE));
                 aInfoBox.Execute();
             }
 
