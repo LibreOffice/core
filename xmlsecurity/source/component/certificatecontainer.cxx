@@ -42,7 +42,6 @@ CertificateContainer::searchMap( const OUString & url, const OUString & certific
 
     return ret;
 }
-// -------------------------------------------------------------------
 
 sal_Bool
 CertificateContainer::isTemporaryCertificate ( const OUString & url, const OUString & certificate_name )
@@ -51,8 +50,6 @@ CertificateContainer::isTemporaryCertificate ( const OUString & url, const OUStr
     return searchMap( url, certificate_name, certMap);
 }
 
-// -------------------------------------------------------------------
-
 sal_Bool
 CertificateContainer::isCertificateTrust ( const OUString & url, const OUString & certificate_name )
     throw(::com::sun::star::uno::RuntimeException)
@@ -60,7 +57,6 @@ CertificateContainer::isCertificateTrust ( const OUString & url, const OUString 
     return searchMap( url, certificate_name, certTrustMap);
 }
 
-// -------------------------------------------------------------------
 sal_Bool
 CertificateContainer::addCertificate( const OUString & url, const OUString & certificate_name, ::sal_Bool trust )
     throw(::com::sun::star::uno::RuntimeException)
@@ -74,7 +70,6 @@ CertificateContainer::addCertificate( const OUString & url, const OUString & cer
         return true;
 }
 
-//-------------------------------------------------------------------------
 ::security::CertificateContainerStatus
 CertificateContainer::hasCertificate( const OUString & url, const OUString & certificate_name ) throw(::com::sun::star::uno::RuntimeException)
 {
@@ -89,7 +84,6 @@ CertificateContainer::hasCertificate( const OUString & url, const OUString & cer
         return security::CertificateContainerStatus_NOCERT;
     }
 }
-//-------------------------------------------------------------------------
 
 OUString SAL_CALL
 CertificateContainer::getImplementationName( )
@@ -97,8 +91,6 @@ CertificateContainer::getImplementationName( )
 {
     return impl_getStaticImplementationName();
 }
-
-//-------------------------------------------------------------------------
 
 sal_Bool SAL_CALL
 CertificateContainer::supportsService( const OUString& ServiceName )
@@ -110,16 +102,12 @@ CertificateContainer::supportsService( const OUString& ServiceName )
         return sal_False;
 }
 
-//-------------------------------------------------------------------------
-
 Sequence< OUString > SAL_CALL
 CertificateContainer::getSupportedServiceNames(  )
     throw(::com::sun::star::uno::RuntimeException)
 {
     return impl_getStaticSupportedServiceNames();
 }
-
-//-------------------------------------------------------------------------
 
 Sequence< OUString > SAL_CALL
 CertificateContainer::impl_getStaticSupportedServiceNames(  )
@@ -130,16 +118,12 @@ CertificateContainer::impl_getStaticSupportedServiceNames(  )
     return aRet;
 }
 
-//-------------------------------------------------------------------------
-
 OUString SAL_CALL
 CertificateContainer::impl_getStaticImplementationName()
     throw(::com::sun::star::uno::RuntimeException)
 {
     return OUString("com.sun.star.security.CertificateContainer");
 }
-
-//-------------------------------------------------------------------------
 
 Reference< XInterface > SAL_CALL CertificateContainer::impl_createInstance( const Reference< XMultiServiceFactory >& xServiceManager )
     throw( RuntimeException )
