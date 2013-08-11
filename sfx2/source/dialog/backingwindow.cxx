@@ -38,7 +38,6 @@
 #include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
-#include <com/sun/star/frame/PopupMenuControllerFactory.hpp>
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
@@ -61,18 +60,6 @@ const int nItemId_Extensions = 1;
 const int nItemId_Info = 3;
 const int nItemId_TplRep = 4;
 
-const int nShadowTop = 30;
-const int nShadowLeft = 30;
-const int nShadowRight = 30;
-const int nShadowBottom = 30;
-
-const int nPaddingTop = 30;
-const int nPaddingLeft = 50;
-const int nPaddingRight = 50;
-const int nPaddingBottom = 30;
-
-const int nLogoHeight = 150;
-
 BackingWindow::BackingWindow( Window* i_pParent ) :
     Window( i_pParent ),
     mbInitControls( false ),
@@ -82,20 +69,44 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     m_pUIBuilder = new VclBuilder(this, getUIRootDir(),
       "sfx/ui/startcenter.ui",
       "StartCenter" );
+
+    get(mpOpenButton,      "open");
+    get(mpTemplateButton,  "templates");
+
     get(mpWriterButton,    "writer");
     get(mpCalcButton,      "calc");
     get(mpImpressButton,   "impress");
-    get(mpOpenButton,      "open");
     get(mpDrawButton,      "draw");
     get(mpDBButton,        "database");
     get(mpMathButton,      "math");
-    get(mpTemplateButton,  "templates");
 
     get(mpExtensionsButton, "extension");
     get(mpInfoButton,       "info");
     get(mpTplRepButton,     "add_temp");
 
-    get(mpStartCenterContainer, "sccontainer");
+
+    get( mpAllRecentThumbnails,         "all_recent");
+    get( mpWriterRecentThumbnails,      "writer_recent");
+    get( mpCalcRecentThumbnails,        "calc_recent");
+    get( mpImpressRecentThumbnails,     "impress_recent");
+    get( mpDrawRecentThumbnails,        "draw_recent");
+    get( mpDatabaseRecentThumbnails,    "database_recent");
+    get( mpMathRecentThumbnails,        "math_recent");
+
+    mpWriterRecentThumbnails    ->SetFilter(FILTER_WRITER);
+    mpCalcRecentThumbnails      ->SetFilter(FILTER_CALC);
+    mpImpressRecentThumbnails   ->SetFilter(FILTER_IMPRESS);
+    mpDrawRecentThumbnails      ->SetFilter(FILTER_DRAW);
+    mpDatabaseRecentThumbnails  ->SetFilter(FILTER_DATABASE);
+    mpMathRecentThumbnails      ->SetFilter(FILTER_MATH);
+
+    mpAllRecentThumbnails       ->loadRecentDocs();
+    mpWriterRecentThumbnails    ->loadRecentDocs();
+    mpCalcRecentThumbnails      ->loadRecentDocs();
+    mpImpressRecentThumbnails   ->loadRecentDocs();
+    mpDrawRecentThumbnails      ->loadRecentDocs();
+    mpDatabaseRecentThumbnails  ->loadRecentDocs();
+    mpMathRecentThumbnails      ->loadRecentDocs();
 
     try
     {
@@ -115,24 +126,11 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
             Any value( xNameAccess->getByName("StartCenterHideExternalLinks") );
             mnHideExternalLinks = value.get<sal_Int32>();
         }
-
-        mxPopupMenuFactory.set(
-            frame::PopupMenuControllerFactory::create( mxContext ) );
-        // TODO If there is no PopupMenuController, the button should be a nomral one not a MenuButton
-        if ( mxPopupMenuFactory->hasController(
-            OUString( RECENT_FILE_LIST ) , OUString("com.sun.star.frame.StartModule") ) )
-        {
-            mxPopupMenu.set( mxContext->getServiceManager()->createInstanceWithContext(
-                OUString( "com.sun.star.awt.PopupMenu" ), mxContext ), uno::UNO_QUERY_THROW );
-        }
     }
     catch (const Exception& e)
     {
         SAL_WARN( "fwk", "BackingWindow - caught an exception! " << e.Message );
     }
-
-    // clean up resource stack
-    //FreeResource();
 
     // fdo#34392: we do the layout dynamically, the layout depends on the font,
     // so we should handle data changed events (font changing) of the last child
@@ -146,41 +144,27 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     Reference<XDesktop2> xDesktop = Desktop::create( comphelper::getProcessComponentContext() );
     mxDesktopDispatchProvider = xDesktop;
 
+    mpTemplateButton->SetHelpId( ".HelpId:StartCenter:TemplateButton" );
+    mpOpenButton->SetHelpId( ".HelpId:StartCenter:OpenButton" );
+
     mpWriterButton->SetHelpId( ".HelpId:StartCenter:WriterButton" );
     mpCalcButton->SetHelpId( ".HelpId:StartCenter:CalcButton" );
     mpImpressButton->SetHelpId( ".HelpId:StartCenter:ImpressButton" );
     mpDrawButton->SetHelpId( ".HelpId:StartCenter:DrawButton" );
     mpDBButton->SetHelpId( ".HelpId:StartCenter:DBButton" );
     mpMathButton->SetHelpId( ".HelpId:StartCenter:MathButton" );
-    mpTemplateButton->SetHelpId( ".HelpId:StartCenter:TemplateButton" );
-    mpOpenButton->SetHelpId( ".HelpId:StartCenter:OpenButton" );
+
     mpExtensionsButton->SetHelpId( ".HelpId:StartCenter:Extensions" );
     mpInfoButton->SetHelpId( ".HelpId:StartCenter:Info" );
     mpTplRepButton->SetHelpId( ".HelpId:StartCenter:TemplateRepository" );
 
     // init background
-    initBackground();
+    SetBackground();
 }
 
 
 BackingWindow::~BackingWindow()
 {
-    if( mxPopupMenuController.is() )
-    {
-        Reference< lang::XComponent > xComponent( mxPopupMenuController, UNO_QUERY );
-        if( xComponent.is() )
-        {
-            try
-            {
-                xComponent->dispose();
-            }
-            catch (...)
-            {}
-        }
-        mxPopupMenuController.clear();
-    }
-    mxPopupMenuFactory.clear();
-    mxPopupMenu.clear();
 }
 
 IMPL_LINK( BackingWindow, WindowEventListener, VclSimpleEvent*, pEvent )
@@ -192,87 +176,13 @@ IMPL_LINK( BackingWindow, WindowEventListener, VclSimpleEvent*, pEvent )
             static_cast<DataChangedEvent*>( pWinEvent->GetData() );
         if ( pDCEvt->GetFlags() & SETTINGS_STYLE )
         {
-            initBackground();
+            SetBackground();
             Invalidate();
             // fdo#34392: Resize buttons to match the new text size.
             Resize();
         }
     }
     return 0;
-}
-
-void BackingWindow::prepareRecentFileMenu()
-{
-    if( ! mxPopupMenu.is() )
-        return;
-
-    if ( !mxPopupMenuController.is() )
-    {
-        uno::Sequence< uno::Any > aArgs( 2 );
-        beans::PropertyValue aProp;
-
-        aProp.Name = OUString( "Frame" );
-        aProp.Value <<= mxFrame;
-        aArgs[0] <<= aProp;
-
-        aProp.Name = OUString( "ModuleIdentifier" );
-        aProp.Value <<= OUString("com.sun.star.frame.StartModule");
-        aArgs[1] <<= aProp;
-        try
-        {
-            mxPopupMenuController.set(
-                mxPopupMenuFactory->createInstanceWithArgumentsAndContext(
-                    OUString( RECENT_FILE_LIST ), aArgs, mxContext),
-                        uno::UNO_QUERY_THROW );
-            mxPopupMenuController->setPopupMenu( mxPopupMenu );
-        }
-        catch ( const Exception &e )
-        {
-            SAL_WARN( "fwk", "BackingWindow - caught an exception! " << e.Message );
-        }
-
-        PopupMenu *pRecentMenu = NULL;
-        VCLXMenu* pTKMenu = VCLXMenu::GetImplementation( mxPopupMenu );
-        if ( pTKMenu )
-            pRecentMenu = dynamic_cast< PopupMenu * >( pTKMenu->GetMenu() );
-        mpOpenButton->SetPopupMenu( pRecentMenu );
-    }
-}
-
-void BackingWindow::initBackground()
-{
-    SetBackground();
-
-    // scale middle segment
-    Size aMiddleSize;
-    if( !! maBackgroundMiddle )
-        aMiddleSize = maBackgroundMiddle.GetSizePixel();
-
-    // load middle segment
-    Application::LoadBrandBitmap ("shell/backing_space", maBackgroundMiddle);
-
-    // and scale it to previous size
-    if( aMiddleSize.Width() && aMiddleSize.Height() )
-        maBackgroundMiddle.Scale( aMiddleSize );
-
-    if( GetSettings().GetLayoutRTL() )
-    {
-        // replace images by RTL versions
-        Application::LoadBrandBitmap ("shell/backing_rtl_right", maBackgroundLeft);
-        Application::LoadBrandBitmap ("shell/backing_rtl_left", maBackgroundRight);
-    }
-    else
-    {
-        Application::LoadBrandBitmap ("shell/backing_left", maBackgroundLeft);
-        Application::LoadBrandBitmap ("shell/backing_right", maBackgroundRight);
-    }
-
-    mpOpenButton->SetMenuMode( MENUBUTTON_MENUMODE_TIMED );
-    mpOpenButton->SetActivateHdl( LINK( this, BackingWindow, ActivateHdl ) );
-
-    // this will be moved to somewhere saner later
-    mnSCWidth = 780;
-    mnSCHeight = maBackgroundLeft.GetSizePixel().Height();
 }
 
 void BackingWindow::initControls()
@@ -364,10 +274,7 @@ void BackingWindow::Paint( const Rectangle& )
     Wallpaper aBack( svtools::ColorConfig().GetColorValue(::svtools::APPBACKGROUND).nColor );
     Region aClip( Rectangle( Point( 0, 0 ), GetOutputSizePixel() ) );
 
-    Rectangle aBmpRect(Point((GetOutputSizePixel().Width()-mnSCWidth)/2,
-                             (GetOutputSizePixel().Height()-mnSCHeight)/2),
-                       Size(mnSCWidth,mnSCHeight));
-    aClip.Exclude( aBmpRect );
+    aClip.Exclude( maStartCentButtons );
 
     Push( PUSH_CLIPREGION );
     IntersectClipRegion( aClip );
@@ -376,28 +283,12 @@ void BackingWindow::Paint( const Rectangle& )
 
     VirtualDevice aDev( *this );
     aDev.EnableRTL( IsRTLEnabled() );
-    aDev.SetOutputSizePixel( aBmpRect.GetSize() );
-    Point aOffset( Point( 0, 0 ) - aBmpRect.TopLeft());
+    aDev.SetOutputSizePixel( maStartCentButtons.GetSize() );
+    Point aOffset( Point( 0, 0 ) - maStartCentButtons.TopLeft());
     aDev.DrawWallpaper( Rectangle( aOffset, GetOutputSizePixel() ), aBack );
 
-    maBackgroundMiddle.Scale(
-        Size(mnSCWidth - maBackgroundLeft.GetSizePixel().Width() - maBackgroundRight.GetSizePixel().Width(),
-        maBackgroundMiddle.GetSizePixel().Height()),
-        BMP_SCALE_FAST);
-
-    // draw bitmap
-    Point aTL( 0, 0 );
-    aDev.DrawBitmapEx( aTL, maBackgroundLeft );
-    aTL.X() += maBackgroundLeft.GetSizePixel().Width();
-    if( !!maBackgroundMiddle )
-    {
-        aDev.DrawBitmapEx( aTL, maBackgroundMiddle );
-        aTL.X() += maBackgroundMiddle.GetSizePixel().Width();
-    }
-    aDev.DrawBitmapEx( aTL, maBackgroundRight );
-
-    DrawOutDev( aBmpRect.TopLeft(), aBmpRect.GetSize(),
-                Point( 0, 0 ), aBmpRect.GetSize(),
+    DrawOutDev( maStartCentButtons.TopLeft(), maStartCentButtons.GetSize(),
+                Point( 0, 0 ), maStartCentButtons.GetSize(),
                 aDev );
 }
 
@@ -416,71 +307,6 @@ long BackingWindow::Notify( NotifyEvent& rNEvt )
         const KeyCode& rKeyCode(pEvt->GetKeyCode());
         if( pEvt && mpAccExec->execute(rKeyCode) )
             return 1;
-
-        // #i110344# extrawurst: specialized arrow key control
-        if( rKeyCode.GetModifier() == 0 )
-        {
-            if( rKeyCode.GetCode() == KEY_RIGHT )
-            {
-                if( mpWriterButton->HasFocus() )
-                    mpDrawButton->GrabFocus();
-                else if( mpCalcButton->HasFocus() )
-                    mpDBButton->GrabFocus();
-                else if( mpImpressButton->HasFocus() )
-                    mpMathButton->GrabFocus();
-                else if( mpOpenButton->HasFocus() )
-                    mpTemplateButton->GrabFocus();
-                return 1;
-            }
-            else if( rKeyCode.GetCode() == KEY_LEFT )
-            {
-                if( mpDrawButton->HasFocus() )
-                    mpWriterButton->GrabFocus();
-                else if( mpDBButton->HasFocus() )
-                    mpCalcButton->GrabFocus();
-                else if( mpMathButton->HasFocus() )
-                    mpImpressButton->GrabFocus();
-                else if( mpTemplateButton->HasFocus() )
-                    mpOpenButton->GrabFocus();
-                return 1;
-            }
-            else if( rKeyCode.GetCode() == KEY_UP )
-            {
-                // first column
-                if( mpOpenButton->HasFocus() )
-                    mpImpressButton->GrabFocus();
-                else if( mpImpressButton->HasFocus() )
-                    mpCalcButton->GrabFocus();
-                else if( mpCalcButton->HasFocus() )
-                    mpWriterButton->GrabFocus();
-                // second column
-                else if( mpTemplateButton->HasFocus() )
-                    mpMathButton->GrabFocus();
-                else if( mpMathButton->HasFocus() )
-                    mpDBButton->GrabFocus();
-                else if( mpDBButton->HasFocus() )
-                    mpDrawButton->GrabFocus();
-                return 1;
-            }
-            else if( rKeyCode.GetCode() == KEY_DOWN )
-            {
-                // first column
-                if( mpWriterButton->HasFocus() )
-                    mpCalcButton->GrabFocus();
-                else if( mpCalcButton->HasFocus() )
-                    mpImpressButton->GrabFocus();
-                else if( mpImpressButton->HasFocus() )
-                    mpOpenButton->GrabFocus();
-                // second column
-                else if( mpDrawButton->HasFocus() )
-                    mpDBButton->GrabFocus();
-                else if( mpDBButton->HasFocus() )
-                    mpMathButton->GrabFocus();
-                else if( mpMathButton->HasFocus() )
-                    mpTemplateButton->GrabFocus();
-                return 1;
-            }
-        }
     }
 
     return Window::Notify( rNEvt );
@@ -495,11 +321,8 @@ void BackingWindow::setOwningFrame( const com::sun::star::uno::Reference< com::s
 
 void BackingWindow::Resize()
 {
-    maStartCentButtons = Rectangle(
-                        Point((GetOutputSizePixel().Width()-mnSCWidth)/2 + nShadowTop + nPaddingTop,
-                              (GetOutputSizePixel().Height()-mnSCHeight)/2 + nShadowLeft + nPaddingLeft + nLogoHeight),
-                        Size(mnSCWidth - nShadowLeft - nShadowRight - nPaddingLeft - nPaddingRight,
-                             mnSCHeight - nShadowTop - nShadowBottom - nPaddingTop - nPaddingBottom - nLogoHeight));
+    maStartCentButtons = Rectangle( Point(0, 0), GetOutputSizePixel() );
+
     if (isLayoutEnabled(this))
         VclContainer::setLayoutAllocation(*GetWindow(WINDOW_FIRSTCHILD),
             maStartCentButtons.TopLeft(), maStartCentButtons.GetSize());
@@ -591,13 +414,6 @@ IMPL_LINK( BackingWindow, ClickHdl, Button*, pButton )
 
         dispatchURL( TEMPLATE_URL, OUString(), xFrame, aArgs );
     }
-    return 0;
-}
-
-IMPL_LINK( BackingWindow, ActivateHdl, Button*, pButton )
-{
-    if( pButton == mpOpenButton )
-        prepareRecentFileMenu();
     return 0;
 }
 
