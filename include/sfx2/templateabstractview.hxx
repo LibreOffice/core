@@ -53,6 +53,7 @@ public:
 
     virtual bool operator () (const ThumbnailViewItem *pItem);
 
+    static bool isFilteredExtension(FILTER_APPLICATION filter, const OUString &rExt);
     bool isValid (const OUString& rPath) const;
 
 protected:
