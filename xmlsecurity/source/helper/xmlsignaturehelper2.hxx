@@ -36,7 +36,6 @@ namespace embed {
     class XStorage; }
 }}}
 
-
 // MT: Not needed any more, remove later...
 
 class ImplXMLSignatureListener : public cppu::WeakImplHelper3
@@ -95,10 +94,7 @@ public:
         throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException);
 };
 
-
-// ---------------------------------------------------------------------------------
 // XUriBinding
-// ---------------------------------------------------------------------------------
 
 class UriBindingHelper : public cppu::WeakImplHelper1
 <
@@ -107,7 +103,6 @@ class UriBindingHelper : public cppu::WeakImplHelper1
 {
 private:
     com::sun::star::uno::Reference < com::sun::star::embed::XStorage > mxStorage;
-
 
 public:
     UriBindingHelper();

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <stdio.h>
 
 #include <osl/mutex.hxx>
@@ -41,7 +40,6 @@ using namespace ::com::sun::star::registry;
 
 extern "C"
 {
-//==================================================================================================
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL xsec_fw_component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
@@ -152,6 +150,5 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL xsec_fw_component_getFactory(
     return pRet;
 }
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

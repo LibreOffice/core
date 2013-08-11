@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <xmlsecurity/xmlsignaturehelper.hxx>
 #include <xmlsignaturehelper2.hxx>
 
@@ -63,9 +62,7 @@ void SAL_CALL ImplXMLSignatureListener::signatureVerified( sal_Int32 securityId,
     maVerifyResultListenerListener.Call( &aResult );
 }
 
-// ---------------------------------------------------------------------------------
 // XDocumentHandler
-// ---------------------------------------------------------------------------------
 void SAL_CALL ImplXMLSignatureListener::startDocument(  )
     throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException)
 {
@@ -143,9 +140,7 @@ void SAL_CALL ImplXMLSignatureListener::setDocumentLocator( const com::sun::star
     }
 }
 
-// ---------------------------------------------------------------------------------
 // XUriBinding
-// ---------------------------------------------------------------------------------
 
 UriBindingHelper::UriBindingHelper()
 {
@@ -155,7 +150,6 @@ UriBindingHelper::UriBindingHelper( const com::sun::star::uno::Reference < com::
 {
     mxStorage = rxStorage;
 }
-
 
 void SAL_CALL UriBindingHelper::setUriBinding( const OUString& /*uri*/, const uno::Reference< io::XInputStream >&)
     throw (uno::Exception, uno::RuntimeException)
@@ -216,6 +210,5 @@ uno::Reference < io::XInputStream > UriBindingHelper::OpenInputStream( const uno
     }
     return xInStream;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

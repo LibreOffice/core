@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <sal/config.h>
 #include <rtl/uuid.h>
 #include "xmlencryption_mscryptimpl.hxx"
@@ -281,7 +280,6 @@ XMLEncryption_MSCryptImpl :: decrypt(
         return aTemplate;
     }
     aTemplate->setStatus(::com::sun::star::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED);
-    /*----------------------------------------
     if( pEncCtx->resultReplaced != 0 ) {
         pContent = pEncryptedData ;
 
@@ -301,7 +299,6 @@ XMLEncryption_MSCryptImpl :: decrypt(
         xmlSecEncCtxDestroy( pEncCtx ) ;
         throw RuntimeException() ;
     }
-    ----------------------------------------*/
 
     //Destroy the encryption context
     xmlSecEncCtxDestroy( pEncCtx ) ;

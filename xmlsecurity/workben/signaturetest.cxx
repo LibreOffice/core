@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <sal/main.h>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
@@ -66,8 +65,6 @@ void Main();
 #define BUTTONHEIGHT    22
 #define BUTTONSPACE     20
 
-// -----------------------------------------------------------------------
-
     SAL_IMPLEMENT_MAIN()
 {
     uno::Reference< lang::XMultiServiceFactory > xMSF;
@@ -101,8 +98,6 @@ void Main();
 
     return 0;
 }
-
-// -----------------------------------------------------------------------
 
 class MyWin : public WorkWindow
 {
@@ -141,8 +136,6 @@ public:
 
 };
 
-// -----------------------------------------------------------------------
-
 void Main()
 {
     MyWin aMainWin( NULL, WB_APP | WB_STDWORK | WB_3DLOOK);
@@ -150,8 +143,6 @@ void Main()
 
     Application::Execute();
 }
-
-// -----------------------------------------------------------------------
 
 MyWin::MyWin( Window* pParent, WinBits nWinStyle ) :
     WorkWindow( pParent, nWinStyle ),
@@ -213,7 +204,6 @@ MyWin::MyWin( Window* pParent, WinBits nWinStyle ) :
     maTest2Line.Show();
 
     nY += EDITHEIGHT*3/2;
-
 
     maFixedTextDOCFileName.SetPosSizePixel( TEXTFIELDSTARTX, nY, TEXTFIELDWIDTH, EDITHEIGHT );
     maFixedTextDOCFileName.SetText( OUString("Office File:") );
@@ -289,7 +279,6 @@ IMPL_LINK_NOARG(MyWin, DigitalSignaturesWithServiceHdl)
     uno::Reference< security::XDocumentDigitalSignatures > xD(
         security::DocumentDigitalSignatures::createDefault(comphelper::getProcessComponentContext()) );
     xD->signDocumentContent( xStore, NULL );
-
 
     return 0;
 }
