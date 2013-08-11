@@ -91,10 +91,6 @@ String RID_SVXSTR_TABLE
 {
     Text [ en-US ] = "Table" ;
 };
-String RID_SVXSTR_WRITE_DATA_ERROR
-{
-    Text [ en-US ] = "The file could not be saved!" ;
-};
 String RID_SVXSTR_READ_DATA_ERROR
 {
     Text [ en-US ] = "The file could not be loaded!" ;

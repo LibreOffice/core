@@ -791,8 +791,9 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickSaveHdl_Impl)
         }
         else
         {
-            ErrorBox( GetParentDialog(), WinBits( WB_OK ),
-                String( CUI_RES( RID_SVXSTR_WRITE_DATA_ERROR ) ) ).Execute();
+            MessageDialog( GetParentDialog()
+                          ,"NoSaveFileDialog"
+                          ,"cui/ui/querynosavefiledialog.ui").Execute();
         }
     }
 

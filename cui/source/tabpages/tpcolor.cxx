@@ -240,9 +240,9 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickSaveHdl_Impl)
         }
         else
         {
-            ErrorBox aErrorBox( mpTopDlg, WinBits( WB_OK ),
-                String( CUI_RES( RID_SVXSTR_WRITE_DATA_ERROR ) ) );
-            aErrorBox.Execute();
+            MessageDialog( mpTopDlg
+                          ,"NoSaveFileDialog"
+                          ,"cui/ui/querynosavefiledialog.ui").Execute();
         }
     }
     return 0;
