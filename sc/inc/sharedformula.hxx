@@ -13,6 +13,8 @@
 #include "formulacell.hxx"
 #include "mtvelements.hxx"
 
+#include <vector>
+
 namespace sc {
 
 class SharedFormulaUtil
@@ -60,6 +62,8 @@ public:
      * @param aPos position of cell to examine.
      */
     static void splitFormulaCellGroup(const CellStoreType::position_type& aPos);
+
+    static void splitFormulaCellGroups(CellStoreType& rCells, const std::vector<SCROW>& rBounds);
 
     /**
      * See if two specified adjacent formula cells can be merged, and if they

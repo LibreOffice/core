@@ -166,6 +166,9 @@ public:
 
     sc::RefUpdateResult AdjustReferenceOnMovedTab( sc::RefUpdateMoveTabContext& rCxt, const ScAddress& rOldPos );
 
+    void CheckRelativeReferenceBounds(
+        const sc::RefUpdateContext& rCxt, const ScAddress& rPos, SCROW nGroupLen, std::vector<SCROW>& rBounds ) const;
+
 #if DEBUG_FORMULA_COMPILER
     void Dump() const;
 #endif

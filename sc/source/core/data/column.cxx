@@ -2295,6 +2295,46 @@ public:
     bool isUpdated() const { return mbUpdated; }
 };
 
+class UpdateRefGroupBoundChecker : std::unary_function<sc::CellStoreType::value_type, void>
+{
+    const sc::RefUpdateContext& mrCxt;
+    std::vector<SCROW>& mrBounds;
+public:
+    UpdateRefGroupBoundChecker(const sc::RefUpdateContext& rCxt, std::vector<SCROW>& rBounds) :
+        mrCxt(rCxt), mrBounds(rBounds) {}
+
+    void operator() (const sc::CellStoreType::value_type& node)
+    {
+        if (node.type != sc::element_type_formula)
+            return;
+
+        sc::formula_block::const_iterator it = sc::formula_block::begin(*node.data);
+        sc::formula_block::const_iterator itEnd = sc::formula_block::end(*node.data);
+
+        // Only pick shared formula cells that are the top cells of their
+        // respective shared ranges.
+        for (; it != itEnd; ++it)
+        {
+            const ScFormulaCell& rCell = **it;
+            if (!rCell.IsShared())
+                continue;
+
+            if (rCell.IsSharedTop())
+            {
+                // Check its tokens and record its reference boundaries.
+                const ScTokenArray& rCode = *rCell.GetCode();
+                rCode.CheckRelativeReferenceBounds(
+                    mrCxt, rCell.aPos, rCell.GetSharedLength(), mrBounds);
+
+                // Move to the last cell in the group, to get incremented to
+                // the next cell in the next iteration.
+                size_t nOffsetToLast = rCell.GetSharedLength() - 1;
+                std::advance(it, nOffsetToLast);
+            }
+        }
+    }
+};
+
 }
 
 bool ScColumn::UpdateReferenceOnCopy( const sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc )
@@ -2324,6 +2364,8 @@ bool ScColumn::UpdateReference( const sc::RefUpdateContext& rCxt, ScDocument* pU
     if (rCxt.meMode == URM_COPY)
         return UpdateReferenceOnCopy(rCxt, pUndoDoc);
 
+    std::vector<SCROW> aBounds;
+
     bool bThisColShifted = (rCxt.maRange.aStart.Tab() <= nTab && nTab <= rCxt.maRange.aEnd.Tab() &&
                             rCxt.maRange.aStart.Col() <= nCol && nCol <= rCxt.maRange.aEnd.Col());
     if (bThisColShifted)
@@ -2333,16 +2375,25 @@ bool ScColumn::UpdateReference( const sc::RefUpdateContext& rCxt, ScDocument* pU
         SCROW nSplitPos = rCxt.maRange.aStart.Row();
         if (ValidRow(nSplitPos))
         {
-            sc::CellStoreType::position_type aPos = maCells.position(nSplitPos);
-            sc::SharedFormulaUtil::splitFormulaCellGroup(aPos);
+            aBounds.push_back(nSplitPos);
             nSplitPos = rCxt.maRange.aEnd.Row() + 1;
             if (ValidRow(nSplitPos))
-            {
-                aPos = maCells.position(aPos.first, nSplitPos);
-                sc::SharedFormulaUtil::splitFormulaCellGroup(aPos);
-            }
+                aBounds.push_back(nSplitPos);
         }
     }
+
+    // Check the row positions at which the group must be split per relative
+    // references.
+    UpdateRefGroupBoundChecker aBoundChecker(rCxt, aBounds);
+    std::for_each(maCells.begin(), maCells.end(), aBoundChecker);
+
+    // Sort and remove duplicates.
+    std::sort(aBounds.begin(), aBounds.end());
+    std::vector<SCROW>::iterator it = std::unique(aBounds.begin(), aBounds.end());
+    aBounds.erase(it, aBounds.end());
+
+    // Do the actual splitting.
+    sc::SharedFormulaUtil::splitFormulaCellGroups(maCells, aBounds);
 
     UpdateRefOnNonCopy aHandler(nCol, nTab, rCxt, pUndoDoc);
     sc::ProcessFormula(maCells, aHandler);

@@ -336,6 +336,7 @@ public:
 
     bool IsShared() const;
     bool IsSharedInvariant() const;
+    bool IsSharedTop() const;
     SCROW GetSharedTopRow() const;
     SCROW GetSharedLength() const;
     ScTokenArray* GetSharedCode();

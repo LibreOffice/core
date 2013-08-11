@@ -64,6 +64,11 @@ void SharedFormulaUtil::splitFormulaCellGroup(const CellStoreType::position_type
     }
 }
 
+void SharedFormulaUtil::splitFormulaCellGroups(CellStoreType& rCells, const std::vector<SCROW>& rBounds)
+{
+    // TODO: Implement this.
+}
+
 void SharedFormulaUtil::joinFormulaCells(const CellStoreType::position_type& rPos, ScFormulaCell& rCell1, ScFormulaCell& rCell2)
 {
     ScFormulaCell::CompareState eState = rCell1.CompareByTokenArray(rCell2);

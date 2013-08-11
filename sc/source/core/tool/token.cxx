@@ -2934,6 +2934,88 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMovedTab( sc::RefUpdateMoveTa
     return aRes;
 }
 
+namespace {
+
+void checkBounds(
+    const sc::RefUpdateContext& rCxt, const ScAddress& rPos, SCROW nGroupLen,
+    const ScSingleRefData& rRef, std::vector<SCROW>& rBounds)
+{
+    if (!rRef.IsRowRel())
+        return;
+
+    ScRange aAbs(rRef.toAbs(rPos));
+    aAbs.aEnd.IncRow(nGroupLen-1);
+    if (!rCxt.maRange.Intersects(aAbs))
+        return;
+
+    // Get the boundary row positions.
+    if (aAbs.aEnd.Row() < rCxt.maRange.aStart.Row())
+        // No intersections.
+        return;
+
+    if (aAbs.aEnd.Row() <= rCxt.maRange.aEnd.Row())
+    {
+        //    +-+ <---- top
+        //    | |
+        // +--+-+--+ <---- boundary row position
+        // |  | |  |
+        // |  +-+  |
+        // +-------+
+
+        // Add offset from the reference top to the cell position.
+        SCROW nOffset = rCxt.maRange.aStart.Row() - aAbs.aStart.Row();
+        rBounds.push_back(rPos.Row()+nOffset);
+        return;
+    }
+
+    //    +-+ <---- top
+    //    | |
+    // +--+-+--+ <---- boundary row position
+    // |  | |  |
+    // |  | |  |
+    // +--+-+--+ <---- boundary row position
+    //    | |
+    //    +-+
+
+    // Add offset from the reference top to the cell position.
+    SCROW nOffset = rCxt.maRange.aStart.Row() - aAbs.aStart.Row();
+    rBounds.push_back(rPos.Row()+nOffset);
+    // Ditto.
+    nOffset = rCxt.maRange.aEnd.Row() - aAbs.aStart.Row();
+    rBounds.push_back(rPos.Row()+nOffset);
+}
+
+}
+
+void ScTokenArray::CheckRelativeReferenceBounds(
+    const sc::RefUpdateContext& rCxt, const ScAddress& rPos, SCROW nGroupLen, std::vector<SCROW>& rBounds ) const
+{
+    FormulaToken** p = pCode;
+    FormulaToken** pEnd = p + static_cast<size_t>(nLen);
+    for (; p != pEnd; ++p)
+    {
+        switch ((*p)->GetType())
+        {
+            case svSingleRef:
+            {
+                ScToken* pToken = static_cast<ScToken*>(*p);
+                checkBounds(rCxt, rPos, nGroupLen, pToken->GetSingleRef(), rBounds);
+            }
+            break;
+            case svDoubleRef:
+            {
+                ScToken* pToken = static_cast<ScToken*>(*p);
+                const ScComplexRefData& rRef = pToken->GetDoubleRef();
+                checkBounds(rCxt, rPos, nGroupLen, rRef.Ref1, rBounds);
+                checkBounds(rCxt, rPos, nGroupLen, rRef.Ref2, rBounds);
+            }
+            break;
+            default:
+                ;
+        }
+    }
+}
+
 #if DEBUG_FORMULA_COMPILER
 void ScTokenArray::Dump() const
 {
