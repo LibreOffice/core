@@ -39,17 +39,15 @@ static const char SFX_REFERER_USER[] = "private:user";
 
 RecentDocsView::RecentDocsView( Window* pParent )
     : ThumbnailView(pParent)
-    , mnItemMaxWidth(130)
-    , mnItemMaxHeight(130)
-    , mnItemPadding(0)
+    , mnItemMaxSize(100)
+    , mnTextHeight(30)
+    , mnItemPadding(5)
     , mnItemMaxTextLength(30)
-    , mnItemThumbnailMaxHeight(150)
-    , mnItemMaxHeightSub(160)
-    , mnHeight(260)
     , mnMaxThumbnailItems(50)
 {
+    SetStyle(GetStyle() | WB_VSCROLL);
     setItemMaxTextLength( mnItemMaxTextLength );
-    setItemDimensions( mnItemMaxWidth, mnItemThumbnailMaxHeight, mnItemMaxHeight - mnItemThumbnailMaxHeight, mnItemPadding );
+    setItemDimensions( mnItemMaxSize, mnItemMaxSize, mnTextHeight, mnItemPadding );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeRecentDocsView(Window *pParent, VclBuilder::stringmap &)
@@ -145,21 +143,20 @@ void RecentDocsView::OnItemDblClicked(ThumbnailViewItem *pItem)
     }
 }
 
-void RecentDocsView::SetThumbnailSize(long ThumbnailWidth, long ThumbnailHeight)
+void RecentDocsView::SetThumbnailSize(long thumbnailSize)
 {
-    mnItemMaxWidth = ThumbnailWidth;
-    mnItemMaxHeight = ThumbnailHeight;
-    setItemDimensions( mnItemMaxWidth, mnItemThumbnailMaxHeight, mnItemMaxHeight - mnItemThumbnailMaxHeight, mnItemPadding );
+    mnItemMaxSize = thumbnailSize;
+    setItemDimensions( mnItemMaxSize, mnItemMaxSize, mnTextHeight, mnItemPadding );
 }
 
-void RecentDocsView::SetHeight(long Height)
+long RecentDocsView::GetThumbnailSize() const
 {
-    mnHeight = Height;
+    return mnItemMaxSize;
 }
 
 Size RecentDocsView::GetOptimalSize() const
 {
-    return Size(Window::GetOptimalSize().Width(), mnHeight);
+    return Window::GetOptimalSize();
 }
 
 IMPL_STATIC_LINK_NOINSTANCE( RecentDocsView, ExecuteHdl_Impl, LoadRecentFile*, pLoadRecentFile )
