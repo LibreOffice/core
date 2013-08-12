@@ -34,9 +34,10 @@
 
 #ifndef DELETEX
 #ifdef DBG_UTIL
-#define DELETEX(pPtr) ( delete pPtr, (void*&) pPtr = (void*) 0xFFFFFFFF )
+#define DELETEX(T, pPtr) \
+    ( delete pPtr, pPtr = reinterpret_cast<T *>(sal_IntPtr(-1)) )
 #else
-#define DELETEX(pPtr) delete pPtr
+#define DELETEX(T, pPtr) delete pPtr
 #endif
 #endif
 

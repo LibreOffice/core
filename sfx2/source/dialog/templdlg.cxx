@@ -1013,10 +1013,10 @@ void SfxCommonTemplateDialog_Impl::ClearResource()
 
 void SfxCommonTemplateDialog_Impl::impl_clear()
 {
-    DELETEX(pStyleFamilies);
+    DELETEX(SfxStyleFamilies, pStyleFamilies);
     sal_uInt16 i;
     for ( i = 0; i < MAX_FAMILIES; ++i )
-        DELETEX(pFamilyState[i]);
+        DELETEX(SfxTemplateItem, pFamilyState[i]);
     for ( i = 0; i < COUNT_BOUND_FUNC; ++i )
         delete pBoundItems[i];
     pCurObjShell = NULL;

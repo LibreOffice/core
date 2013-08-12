@@ -363,7 +363,7 @@ SfxObjectShell::~SfxObjectShell()
     SfxObjectShell::Close();
     pImp->pBaseModel.set( NULL );
 
-    DELETEX(pImp->pReloadTimer );
+    DELETEX(AutoReloadTimer_Impl, pImp->pReloadTimer );
 
     SfxApplication *pSfxApp = SFX_APP();
     if ( USHRT_MAX != pImp->nVisualDocumentNumber )
@@ -398,7 +398,7 @@ SfxObjectShell::~SfxObjectShell()
         if ( IsDocShared() )
             FreeSharedFile();
 #endif
-        DELETEX( pMedium );
+        DELETEX( SfxMedium, pMedium );
     }
 
     // The removing of the temporary file must be done as the latest step in the document destruction

@@ -131,15 +131,15 @@ void SfxApplication::Deinitialize()
     // from here no SvObjects have to exists
     DELETEZ(pAppData_Impl->pMatcher);
 
-    DELETEX(pAppData_Impl->pSlotPool);
-    DELETEX(pAppData_Impl->pFactArr);
+    DELETEX(SfxSlotPool, pAppData_Impl->pSlotPool);
+    DELETEX(SfxChildWinFactArr_Impl, pAppData_Impl->pFactArr);
 
-    DELETEX(pAppData_Impl->pTbxCtrlFac);
-    DELETEX(pAppData_Impl->pStbCtrlFac);
-    DELETEX(pAppData_Impl->pMenuCtrlFac);
-    DELETEX(pAppData_Impl->pViewFrames);
-    DELETEX(pAppData_Impl->pViewShells);
-    DELETEX(pAppData_Impl->pObjShells);
+    DELETEX(SfxTbxCtrlFactArr_Impl, pAppData_Impl->pTbxCtrlFac);
+    DELETEX(SfxStbCtrlFactArr_Impl, pAppData_Impl->pStbCtrlFac);
+    DELETEX(SfxMenuCtrlFactArr_Impl, pAppData_Impl->pMenuCtrlFac);
+    DELETEX(SfxViewFrameArr_Impl, pAppData_Impl->pViewFrames);
+    DELETEX(SfxViewShellArr_Impl, pAppData_Impl->pViewShells);
+    DELETEX(SfxObjectShellArr_Impl, pAppData_Impl->pObjShells);
 
     //TODO/CLEANTUP
     //ReleaseArgs could be used instead!
