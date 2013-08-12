@@ -689,7 +689,6 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl)
         MessageDialog aWarningBox( GetParentDialog()
                                    ,"DuplicateNameDialog"
                                    ,"cui/ui/queryduplicatedialog.ui");
-//         aWarningBox.SetHelpId( HID_WARN_NAME_DUPLICATE );
         aWarningBox.Execute();
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
@@ -764,7 +763,6 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickModifyHdl_Impl)
             MessageDialog aWarningBox( GetParentDialog()
                                       ,"DuplicateNameDialog"
                                       ,"cui/ui/queryduplicatedialog.ui");
-//             aWarningBox.SetHelpId( HID_WARN_NAME_DUPLICATE );
             aWarningBox.Execute();
 
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();

@@ -454,7 +454,6 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickAddHdl_Impl)
             pWarnBox = new MessageDialog( GetParentDialog()
                                         ,"DuplicateNameDialog"
                                         ,"cui/ui/queryduplicatedialog.ui");
-//             pWarnBox->SetHelpId( HID_WARN_NAME_DUPLICATE );
         }
 
         if( pWarnBox->Execute() != RET_OK )
@@ -568,7 +567,6 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickModifyHdl_Impl)
                 MessageDialog aBox( GetParentDialog()
                                     ,"DuplicateNameDialog"
                                     ,"cui/ui/queryduplicatedialog.ui");
-//                 aBox.SetHelpId( HID_WARN_NAME_DUPLICATE );
                 aBox.Execute();
             }
 
