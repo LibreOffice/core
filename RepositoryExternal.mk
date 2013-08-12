@@ -867,6 +867,7 @@ ifeq ($(SYSTEM_NEON),YES)
 define gb_LinkTarget__use_neon
 $(call gb_LinkTarget_add_defs,$(1),\
 	-DNEON_VERSION=0x$(NEON_VERSION) \
+	-DSYSTEM_NEON \
 )
 $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
