@@ -85,7 +85,7 @@
     [self setNameCell:[self newDetailCellWithTag:ServerName]];
     [self setAddrCell:[self newDetailCellWithTag:ServerAddr]];
     
-    [self setTitle:@"New Server"];
+    [self setTitle:NSLocalizedString(@"New Server", nil)];
     
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Cancel", nil) style:UIBarButtonItemStyleBordered target:self action:@selector(handleBack)];
     [backButton setBackgroundImage:[UIImage imageNamed:@"backButton"] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];

@@ -176,13 +176,13 @@
 		8C0323A917A943720037432E /* UIImageView+setImageAnimated.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImageView+setImageAnimated.h"; path = "iosremote/UIImageView+setImageAnimated.h"; sourceTree = "<group>"; };
 		8C0323AA17A943720037432E /* UIImageView+setImageAnimated.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImageView+setImageAnimated.m"; path = "iosremote/UIImageView+setImageAnimated.m"; sourceTree = "<group>"; };
 		8C06B31C17B7EC83002F5CF8 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = iosremote/en.lproj/Localizable.strings; sourceTree = "<group>"; };
-		8C06B31F17B7ED1E002F5CF8 /* en */ = {isa = PBXFileReference; lastKnownFileType = file; name = en; path = en.lproj/iPad_autosize.storyboard; sourceTree = "<group>"; };
+		8C06B31F17B7ED1E002F5CF8 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/iPad_autosize.storyboard; sourceTree = "<group>"; };
 		8C06B32117B7ED2A002F5CF8 /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = fr; path = fr.lproj/iPhone_autoSize.storyboard; sourceTree = "<group>"; };
-		8C06B32217B7ED2A002F5CF8 /* fr */ = {isa = PBXFileReference; lastKnownFileType = file; name = fr; path = fr.lproj/iPad_autosize.storyboard; sourceTree = "<group>"; };
+		8C06B32217B7ED2A002F5CF8 /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = fr; path = fr.lproj/iPad_autosize.storyboard; sourceTree = "<group>"; };
 		8C06B32317B7ED2B002F5CF8 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8C06B32417B7ED2B002F5CF8 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		8C06B32517B7ED33002F5CF8 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = "zh-Hans"; path = "zh-Hans.lproj/iPhone_autoSize.storyboard"; sourceTree = "<group>"; };
-		8C06B32617B7ED33002F5CF8 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = file; name = "zh-Hans"; path = "zh-Hans.lproj/iPad_autosize.storyboard"; sourceTree = "<group>"; };
+		8C06B32617B7ED33002F5CF8 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = "zh-Hans"; path = "zh-Hans.lproj/iPad_autosize.storyboard"; sourceTree = "<group>"; };
 		8C06B32717B7ED33002F5CF8 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		8C06B32817B7ED33002F5CF8 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		8C0DC83617A4177C0099E5AE /* nextButton_pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = nextButton_pressed.png; sourceTree = "<group>"; };
@@ -854,7 +854,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				ONLY_ACTIVE_ARCH = YES;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
@@ -881,7 +881,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
