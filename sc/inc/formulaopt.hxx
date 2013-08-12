@@ -104,7 +104,10 @@ private:
 
 class ScFormulaCfg : public ScFormulaOptions, public utl::ConfigItem
 {
+    typedef std::map<OUString,sal_uInt16> PropsToIds;
     com::sun::star::uno::Sequence<OUString> GetPropertyNames();
+    ScFormulaCfg::PropsToIds GetPropNamesToId();
+    void UpdateFromProperties( const com::sun::star::uno::Sequence<OUString>& rNames );
 public:
     ScFormulaCfg();
 

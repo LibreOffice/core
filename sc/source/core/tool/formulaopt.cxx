@@ -230,21 +230,41 @@ Sequence<OUString> ScFormulaCfg::GetPropertyNames()
     return aNames;
 }
 
+ScFormulaCfg::PropsToIds ScFormulaCfg::GetPropNamesToId()
+{
+    Sequence<OUString> aPropNames = GetPropertyNames();
+    static sal_uInt16 aVals[] = { SCFORMULAOPT_GRAMMAR, SCFORMULAOPT_ENGLISH_FUNCNAME, SCFORMULAOPT_SEP_ARG, SCFORMULAOPT_SEP_ARRAY_ROW, SCFORMULAOPT_SEP_ARRAY_COL, SCFORMULAOPT_STRING_REF_SYNTAX, SCFORMULAOPT_EMPTY_STRING_AS_ZERO, SCFORMULAOPT_OOXML_RECALC, SCFORMULAOPT_ODF_RECALC, SCFORMULAOPT_OPENCL_ENABLED };
+    OSL_ENSURE( SAL_N_ELEMENTS(aVals) == aPropNames.getLength(), "Properties and ids are out of Sync");
+    PropsToIds aPropIdMap;
+    for ( sal_uInt16 i; i<aPropNames.getLength(); ++i )
+        aPropIdMap[aPropNames[i]] = aVals[ i ];
+    return aPropIdMap;
+}
+
 ScFormulaCfg::ScFormulaCfg() :
     ConfigItem( OUString( CFGPATH_FORMULA ) )
 {
     Sequence<OUString> aNames = GetPropertyNames();
+    UpdateFromProperties( aNames );
+    EnableNotification( aNames );
+}
+
+void ScFormulaCfg::UpdateFromProperties( const Sequence<OUString>& aNames )
+{
     Sequence<Any> aValues = GetProperties(aNames);
     const Any* pValues = aValues.getConstArray();
     OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
+    PropsToIds aPropMap = GetPropNamesToId();
     if(aValues.getLength() == aNames.getLength())
     {
         sal_Int32 nIntVal = 0;
         for(int nProp = 0; nProp < aNames.getLength(); nProp++)
         {
-            if(pValues[nProp].hasValue())
+            PropsToIds::iterator it_end = aPropMap.end();
+            PropsToIds::iterator it = aPropMap.find( aNames[nProp] );
+            if(pValues[nProp].hasValue() && it != it_end )
             {
-                switch(nProp)
+                switch(it->second)
                 {
                 case SCFORMULAOPT_GRAMMAR:
                 {
@@ -519,6 +539,9 @@ void ScFormulaCfg::SetOptions( const ScFormulaOptions& rNew )
     SetModified();
 }
 
-void ScFormulaCfg::Notify( const ::com::sun::star::uno::Sequence< OUString >& ) {}
+void ScFormulaCfg::Notify( const ::com::sun::star::uno::Sequence< OUString >& rNames)
+{
+    UpdateFromProperties( rNames );
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
