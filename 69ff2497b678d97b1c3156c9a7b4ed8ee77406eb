@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//9CE\u003d",
+        "filename": "cui/source/options/optaboutconfig.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2013-08-12T22:16:17Z",
+      "side": 1,
+      "message": "Unless one plans to implement a click handler doing something special (e.g. opening a new dialog on the top of this one), there\u0027s no need to get ptrs to OK and Cancel buttons ... it\u0027s enough to handle RET_OK | RET_CANCEL symbols",
+      "revId": "69ff2497b678d97b1c3156c9a7b4ed8ee77406eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//9CA\u003d",
+        "filename": "cui/uiconfig/ui/aboutconfigvaluedialog.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2013-08-12T22:16:17Z",
+      "side": 1,
+      "message": "Some \u0027help\u0027 button here ... aye, no one want to write help in this phase of development, but it\u0027s a good style *grin*",
+      "revId": "69ff2497b678d97b1c3156c9a7b4ed8ee77406eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
