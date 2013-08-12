@@ -72,4 +72,13 @@ Module gid_Module_Prg_Impress_MSO_Reg
     Default = YES;
 End
 
+Module gid_Module_Prg_Impress_Other_Reg
+    ParentID = gid_Module_Prg_Impress;
+    Name = "gid_Module_Prg_Impress_Other_Reg";
+    Description = "gid_Module_Prg_Impress_Other_Reg";
+    Styles = (HIDDEN_ROOT);
+    Minimal = YES;
+    Default = YES;
+End
+
 #include "alllangmodules_impress.inc"

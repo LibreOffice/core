@@ -68,4 +68,13 @@ Module gid_Module_Prg_Draw_MSO_Reg
     Default = YES;
 End
 
+Module gid_Module_Prg_Draw_Other_Reg
+    ParentID = gid_Module_Prg_Draw;
+    Name = "gid_Module_Prg_Draw_Other_Reg";
+    Description = "gid_Module_Prg_Draw_Other_Reg";
+    Styles = (HIDDEN_ROOT);
+    Minimal = YES;
+    Default = YES;
+End
+
 #include "alllangmodules_draw.inc"
