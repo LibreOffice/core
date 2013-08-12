@@ -64,9 +64,33 @@ void SharedFormulaUtil::splitFormulaCellGroup(const CellStoreType::position_type
     }
 }
 
-void SharedFormulaUtil::splitFormulaCellGroups(CellStoreType& rCells, const std::vector<SCROW>& rBounds)
+void SharedFormulaUtil::splitFormulaCellGroups(CellStoreType& rCells, std::vector<SCROW>& rBounds)
 {
-    // TODO: Implement this.
+    if (rBounds.empty())
+        return;
+
+    // Sort and remove duplicates.
+    std::sort(rBounds.begin(), rBounds.end());
+    std::vector<SCROW>::iterator it = std::unique(rBounds.begin(), rBounds.end());
+    rBounds.erase(it, rBounds.end());
+
+    it = rBounds.begin();
+    SCROW nRow = *it;
+    CellStoreType::position_type aPos = rCells.position(nRow);
+    if (aPos.first == rCells.end())
+        return;
+
+    splitFormulaCellGroup(aPos);
+    std::vector<SCROW>::iterator itEnd = rBounds.end();
+    for (++it; it != itEnd; ++it)
+    {
+        nRow = *it;
+        aPos = rCells.position(aPos.first, nRow);
+        if (aPos.first == rCells.end())
+            return;
+
+        splitFormulaCellGroup(aPos);
+    }
 }
 
 void SharedFormulaUtil::joinFormulaCells(const CellStoreType::position_type& rPos, ScFormulaCell& rCell1, ScFormulaCell& rCell2)

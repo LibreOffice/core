@@ -2981,7 +2981,7 @@ void checkBounds(
     SCROW nOffset = rCxt.maRange.aStart.Row() - aAbs.aStart.Row();
     rBounds.push_back(rPos.Row()+nOffset);
     // Ditto.
-    nOffset = rCxt.maRange.aEnd.Row() - aAbs.aStart.Row();
+    nOffset = rCxt.maRange.aEnd.Row() + 1 - aAbs.aStart.Row();
     rBounds.push_back(rPos.Row()+nOffset);
 }
 

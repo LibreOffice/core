@@ -2364,6 +2364,10 @@ bool ScColumn::UpdateReference( const sc::RefUpdateContext& rCxt, ScDocument* pU
     if (rCxt.meMode == URM_COPY)
         return UpdateReferenceOnCopy(rCxt, pUndoDoc);
 
+    if (IsEmptyData())
+        // Cells in this column are all empty.
+        return false;
+
     std::vector<SCROW> aBounds;
 
     bool bThisColShifted = (rCxt.maRange.aStart.Tab() <= nTab && nTab <= rCxt.maRange.aEnd.Tab() &&
@@ -2386,11 +2390,6 @@ bool ScColumn::UpdateReference( const sc::RefUpdateContext& rCxt, ScDocument* pU
     // references.
     UpdateRefGroupBoundChecker aBoundChecker(rCxt, aBounds);
     std::for_each(maCells.begin(), maCells.end(), aBoundChecker);
-
-    // Sort and remove duplicates.
-    std::sort(aBounds.begin(), aBounds.end());
-    std::vector<SCROW>::iterator it = std::unique(aBounds.begin(), aBounds.end());
-    aBounds.erase(it, aBounds.end());
 
     // Do the actual splitting.
     sc::SharedFormulaUtil::splitFormulaCellGroups(maCells, aBounds);

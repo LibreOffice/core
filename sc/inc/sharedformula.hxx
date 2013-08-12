@@ -63,7 +63,15 @@ public:
      */
     static void splitFormulaCellGroup(const CellStoreType::position_type& aPos);
 
-    static void splitFormulaCellGroups(CellStoreType& rCells, const std::vector<SCROW>& rBounds);
+    /**
+     * Split existing shared formula ranges at specified row positions.
+     *
+     * @param rCells cell storage container
+     * @param rBounds row positions at which to split existing shared formula
+     *                ranges. Note that this method will directly modify this
+     *                parameter to sort and remove duplicates.
+     */
+    static void splitFormulaCellGroups(CellStoreType& rCells, std::vector<SCROW>& rBounds);
 
     /**
      * See if two specified adjacent formula cells can be merged, and if they
