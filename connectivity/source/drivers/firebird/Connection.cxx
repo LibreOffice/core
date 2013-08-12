@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "Catalog.hxx"
 #include "Connection.hxx"
 #include "DatabaseMetaData.hxx"
 #include "Driver.hxx"
@@ -67,6 +68,7 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::uno;
 
 const OUString OConnection::sDBLocation( "firebird.fdb" );
@@ -86,7 +88,8 @@ OConnection::OConnection(FirebirdDriver*    _pDriver)
                          m_bReadOnly(sal_False),
                          m_aTransactionIsolation(TransactionIsolation::REPEATABLE_READ),
                          m_DBHandler(0),
-                         m_transactionHandle(0)
+                         m_transactionHandle(0),
+                         m_xCatalog(0)
 {
     SAL_INFO("connectivity.firebird", "OConnection().");
 
@@ -762,12 +765,22 @@ void OConnection::clearStatements()
     m_aStatements.clear();
 }
 
-//----- XTablesSupplier ------------------------------------------------------
-uno::Reference< XNameAccess > SAL_CALL OConnection::getTables()
-    throw (RuntimeException)
+uno::Reference< XTablesSupplier > OConnection::createCatalog()
 {
-    return new Tables(getMetaData(),
-                      *this,
-                      m_aMutex);
+    MutexGuard aGuard(m_aMutex);
+
+    // m_xCatalog is a weak reference. Reuse it if it still exists.
+    Reference< XTablesSupplier > xCatalog = m_xCatalog;
+    if (xCatalog.is())
+    {
+        return xCatalog;
+    }
+    else
+    {
+        xCatalog = new Catalog(this);
+        m_xCatalog = xCatalog;
+        return m_xCatalog;
+    }
+
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

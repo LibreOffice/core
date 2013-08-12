@@ -27,7 +27,7 @@
 
 #include <connectivity/CommonTools.hxx>
 #include <connectivity/OSubComponent.hxx>
-#include <cppuhelper/compbase5.hxx>
+#include <cppuhelper/compbase4.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <map>
 #include <OTypeInfo.hxx>
@@ -49,11 +49,10 @@ namespace connectivity
     namespace firebird
     {
 
-        typedef ::cppu::WeakComponentImplHelper5< ::com::sun::star::document::XDocumentEventListener,
+        typedef ::cppu::WeakComponentImplHelper4< ::com::sun::star::document::XDocumentEventListener,
                                                   ::com::sun::star::lang::XServiceInfo,
                                                   ::com::sun::star::sdbc::XConnection,
-                                                  ::com::sun::star::sdbc::XWarningsSupplier,
-                                                  ::com::sun::star::sdbcx::XTablesSupplier
+                                                  ::com::sun::star::sdbc::XWarningsSupplier
                                                 > OConnection_BASE;
 
         class OStatementCommonBase;
@@ -109,7 +108,10 @@ namespace connectivity
             isc_db_handle                           m_DBHandler;
             isc_tr_handle                           m_transactionHandle;
 
-            ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > m_xEmbeddedStorage;
+            ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
+                m_xEmbeddedStorage;
+            ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbcx::XTablesSupplier>
+                m_xCatalog;
 
             void                    buildTypeInfo() throw( ::com::sun::star::sdbc::SQLException);
 
@@ -161,13 +163,6 @@ namespace connectivity
             // css.lang.XEventListener
             virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
 
-            // XTablesSupplier
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
-                SAL_CALL getTables()
-                throw(::com::sun::star::uno::RuntimeException);
-
-
-
             inline ::rtl::OUString  getUserName()       const { return m_sUser; }
             inline isc_db_handle&    getDBHandle()       { return m_DBHandler; }
             inline FirebirdDriver*  getDriver()         const { return m_pDriver;}
@@ -185,6 +180,13 @@ namespace connectivity
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XBlob>
                 createBlob(ISC_QUAD* pBlobID)
                 throw(::com::sun::star::sdbc::SQLException);
+
+            /**
+             * Create and/or connect to the sdbcx Catalog. This is completely
+             * unrelated to the SQL "Catalog".
+             */
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier >
+                createCatalog();
         };
     }
 }

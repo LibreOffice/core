@@ -174,7 +174,8 @@ uno::Reference< XTablesSupplier > SAL_CALL FirebirdDriver::getDataDefinitionByCo
                                     const uno::Reference< XConnection >& rConnection)
     throw(SQLException, RuntimeException)
 {
-    return uno::Reference< XTablesSupplier >(rConnection, UNO_QUERY);
+    OConnection* pConnection = static_cast< OConnection* >(rConnection.get());
+    return uno::Reference< XTablesSupplier >(pConnection->createCatalog(), UNO_QUERY);
 }
 
 uno::Reference< XTablesSupplier > SAL_CALL FirebirdDriver::getDataDefinitionByURL(
