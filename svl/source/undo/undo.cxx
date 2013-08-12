@@ -600,6 +600,8 @@ bool SfxUndoManager::ImplAddUndoAction_NoNotify( SfxUndoAction *pAction, bool bT
             {
                 --m_pData->pActUndoArray->nCurUndoAction;
             }
+            // fdo#66071 invalidate the current empty mark when removing
+            --m_pData->mnEmptyMark;
         }
     }
 
