@@ -628,10 +628,10 @@ String SwDoc::GetUniqueTOXBaseName( const SwTOXType& rType,
         if ( !pSectNd )
             continue;
 
-        const SwSection& aSect = pSectNd->GetSection();
-        if (aSect.GetType()==TOX_CONTENT_SECTION)
+        const SwSection& rSect = pSectNd->GetSection();
+        if (rSect.GetType()==TOX_CONTENT_SECTION)
         {
-            const String& rNm = aSect.GetSectionName();
+            const String& rNm = rSect.GetSectionName();
             if( rNm.Match( aName ) == nNmLen )
             {
                 // Calculate number and set the Flag
