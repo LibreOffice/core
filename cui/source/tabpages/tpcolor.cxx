@@ -380,12 +380,9 @@ SvxColorTabPage::SvxColorTabPage(Window* pParent, const SfxItemSet& rInAttrs)
     m_pK->SetModifyHdl( aLink );
 
     m_pBtnAdd->SetClickHdl( LINK( this, SvxColorTabPage, ClickAddHdl_Impl ) );
-    m_pBtnModify->SetClickHdl(
-        LINK( this, SvxColorTabPage, ClickModifyHdl_Impl ) );
-    m_pBtnWorkOn->SetClickHdl(
-        LINK( this, SvxColorTabPage, ClickWorkOnHdl_Impl ) );
-    m_pBtnDelete->SetClickHdl(
-        LINK( this, SvxColorTabPage, ClickDeleteHdl_Impl ) );
+    m_pBtnModify->SetClickHdl( LINK( this, SvxColorTabPage, ClickModifyHdl_Impl ) );
+    m_pBtnWorkOn->SetClickHdl( LINK( this, SvxColorTabPage, ClickWorkOnHdl_Impl ) );
+    m_pBtnDelete->SetClickHdl( LINK( this, SvxColorTabPage, ClickDeleteHdl_Impl ) );
 
     // ValueSet
     m_pValSetColorList->SetStyle( m_pValSetColorList->GetStyle() | WB_ITEMBORDER );
@@ -689,9 +686,10 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl)
     // if yes, it is repeated and a new name is demanded
     if ( !bDifferent )
     {
-        WarningBox aWarningBox( GetParentDialog(), WinBits( WB_OK ),
-            String( ResId( RID_SVXSTR_WARN_NAME_DUPLICATE, rMgr ) ) );
-        aWarningBox.SetHelpId( HID_WARN_NAME_DUPLICATE );
+        MessageDialog aWarningBox( GetParentDialog()
+                                   ,"DuplicateNameDialog"
+                                   ,"cui/ui/queryduplicatedialog.ui");
+//         aWarningBox.SetHelpId( HID_WARN_NAME_DUPLICATE );
         aWarningBox.Execute();
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
@@ -763,9 +761,10 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickModifyHdl_Impl)
         // if yes, it is repeated and a new name is demanded
         if ( !bDifferent )
         {
-            WarningBox aWarningBox( GetParentDialog(), WinBits( WB_OK ),
-                String( ResId( RID_SVXSTR_WARN_NAME_DUPLICATE, rMgr ) ) );
-            aWarningBox.SetHelpId( HID_WARN_NAME_DUPLICATE );
+            MessageDialog aWarningBox( GetParentDialog()
+                                      ,"DuplicateNameDialog"
+                                      ,"cui/ui/queryduplicatedialog.ui");
+//             aWarningBox.SetHelpId( HID_WARN_NAME_DUPLICATE );
             aWarningBox.Execute();
 
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
