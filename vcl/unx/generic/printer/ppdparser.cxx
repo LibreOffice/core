@@ -594,7 +594,7 @@ OUString PPDParser::getPPDPrinterName( const OUString& rFile )
             aCurLine = OStringToOUString(aByteLine, RTL_TEXTENCODING_MS_1252);
             if( aCurLine.startsWithIgnoreAsciiCase( "*include:" ) )
             {
-                aCurLine.replaceAt( 0, 9, "" );
+                aCurLine = aCurLine.replaceAt( 0, 9, "" );
                 aCurLine = comphelper::string::stripStart(aCurLine, ' ');
                 aCurLine = comphelper::string::stripEnd(aCurLine, ' ');
                 aCurLine = comphelper::string::stripStart(aCurLine, '\t');
