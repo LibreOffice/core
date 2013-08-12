@@ -10,6 +10,7 @@
 #ifndef SC_FORMULAOPT_HXX
 #define SC_FORMULAOPT_HXX
 
+#include <map>
 #include <svl/poolitem.hxx>
 #include <unotools/configitem.hxx>
 #include <unotools/localedatawrapper.hxx>
