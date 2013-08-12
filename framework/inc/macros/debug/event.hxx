@@ -42,7 +42,7 @@
     /*_____________________________________________________________________________________________________________
         LOG_FRAMEACTIONEVENT( SFRAMETYPE, SFRAMENAME, AFRAMEACTION )
 
-        Use this macro to print debug information about sending of events to listener for controling right order.
+        Use this macro to print debug information about sending of events to listener for controlling right order.
         ( Use new scope in macro to declare sBuffer more then on time in same "parentscope"! )
     _____________________________________________________________________________________________________________*/
 

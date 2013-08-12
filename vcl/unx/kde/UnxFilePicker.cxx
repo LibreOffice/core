@@ -64,7 +64,7 @@ using namespace ::com::sun::star::ui::dialogs::TemplateDescription;
 
 namespace
 {
-    // controling event notifications
+    // controlling event notifications
     const bool STARTUP_SUSPENDED = true;
     const bool STARTUP_ALIVE     = false;
 

@@ -122,7 +122,7 @@ typedef ::cppu::WeakComponentImplHelper1 <
     ::com::sun::star::lang::XEventListener
     > LifetimeControllerInterfaceBase;
 
-/** This class helps controling the lifetime of the
+/** This class helps controlling the lifetime of the
     FrameworkHelper. Register at a ViewShellBase object and an XController
     object and call Dispose() at the associated FrameworkHelper object when
     one of them and Release() when both of them are destroyed.

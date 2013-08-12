@@ -60,7 +60,7 @@ using namespace ::com::sun::star::uno;
 
 namespace
 {
-    // controling event notifications
+    // controlling event notifications
     uno::Sequence<rtl::OUString> SAL_CALL FolderPicker_getSupportedServiceNames()
     {
         uno::Sequence<rtl::OUString> aRet(2);

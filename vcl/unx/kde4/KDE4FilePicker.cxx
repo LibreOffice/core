@@ -85,7 +85,7 @@ using namespace ::com::sun::star::uno;
 
 namespace
 {
-    // controling event notifications
+    // controlling event notifications
     const bool STARTUP_SUSPENDED = true;
     const bool STARTUP_ALIVE     = false;
 
