@@ -36,3 +36,82 @@ en-US = "Microsoft Visio 2000/XP/2003 Document"
 
 [STR_REG_VAL_MS_VISIO_TEMPLATE]
 en-US = "Microsoft Visio 2000/XP/2003 Template"
+
+[STR_REG_VAL_MS_PUBLISHER_DOCUMENT]
+en-US = "Microsoft Publisher Document"
+
+[STR_REG_VAL_WORDPERFECT_GRAPHIC_FILE]
+en-US = "WordPerfect Graphic File"
+
+[STR_REG_VAL_AUTOCAD_DRAWING_INTERCHANGE_FORMAT]
+en-US = "AutoCAD File"
+
+[STR_REG_VAL_MS_ENHANCED_METAFILE]
+en-US = "Microsoft Enhanced Metafile"
+
+[STR_REG_VAL_ENCAPSULATED_POSTSCRIPT]
+en-US = "Encapsulated PostScript File"
+
+[STR_REG_VAL_OS2_METAFILE]
+en-US = "OS/2 Metafile"
+
+[STR_REG_VAL_MACINTOSH_PICTURE_METAFILE]
+en-US = "Macintosh Picture Metafile"
+
+[STR_REG_VAL_MS_WINDOWS_METAFILE]
+en-US = "Microsoft Windows Metafile"
+
+[STR_REG_VAL_MS_WINDOWS_BITMAP]
+en-US = "Microsoft Windows Bitmap File"
+
+[STR_REG_VAL_CORELDRAW_FILE_FORMAT]
+en-US = "CorelDraw File"
+
+[STR_REG_VAL_COREL_PRESENTATION_EXCHANGE]
+en-US = "Corel Presentation Exchange File"
+
+[STR_REG_VAL_GRAPHICS_INTERCHANGE_FORMAT]
+en-US = "Graphics Interchange Format File"
+
+[STR_REG_VAL_JOINT_PHOTOGRAPHIC_EXPERTS_GROUP]
+en-US = "Joint Photographic Experts Group File"
+
+[STR_REG_VAL_PORTABLE_BITMAP_FORMAT]
+en-US = "Portable Bitmap Format File"
+
+[STR_REG_VAL_PERSONAL_COMPUTER_EXCHANGE]
+en-US = "Personal Computer Exchange File"
+
+[STR_REG_VAL_PORTABLE_GRAYMAP_FORMAT]
+en-US = "Portable Graymap Format File"
+
+[STR_REG_VAL_PORTABLE_NETWORK_GRAPHICS]
+en-US = "Portable Network Graphics File"
+
+[STR_REG_VAL_PORTABLE_PIXMAP_FORMAT]
+en-US = "Portable Pixmap Format File"
+
+[STR_REG_VAL_PHOTOSHOP_DOCUMENT]
+en-US = "Adobe Photoshop Document"
+
+[STR_REG_VAL_SUN_RASTER_GRAPHIC]
+en-US = "Sun Raster Graphic File"
+
+[STR_REG_VAL_SCALABLE_VECTOR_GRAPHICS]
+en-US = "Scalable Vector Graphics File"
+
+[STR_REG_VAL_TRUEVISION_TGA]
+en-US = "Truevision TGA File"
+
+[STR_REG_VAL_TAGGED_IMAGE_FILE_FORMAT]
+en-US = "Tagged Image File"
+
+[STR_REG_VAL_X_BITMAP]
+en-US = "X BitMap File"
+
+[STR_REG_VAL_X_PIXMAP]
+en-US = "X Pixmap File"
+
+[STR_REG_VAL_KODAK_PHOTO_CD_IMAGE]
+en-US = "Kodak Photo CD Image File"
+

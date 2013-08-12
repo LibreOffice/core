@@ -43,3 +43,9 @@ en-US = "Microsoft Excel 97-2003 Template"
 [STR_REG_VAL_MS_EXCEL_TEMPLATE]
 en-US = "Microsoft Excel Template"
 
+[STR_REG_VAL_UNIFORM_OFFICE_FORMAT_SPREADSHEET]
+en-US = "Uniform Office Format Spreadsheet"
+
+[STR_REG_VAL_QUATTROPRO_SPREADSHEET]
+en-US = "Lotus Quattro Pro Spreadsheet"
+

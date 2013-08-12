@@ -1724,3 +1724,10 @@ CONDITIONAL_REGISTER_DOCTEMPLATE_EXTENSION( Dotx, gid_Module_Prg_Wrt_MSO_Reg, do
 CONDITIONAL_REGISTER_DOCTEMPLATE_EXTENSION( Dotm, gid_Module_Prg_Wrt_MSO_Reg, dotm, DOTM, MS_WORD_TEMPLATE, 2, swriter.exe, new, Writer )
 CONDITIONAL_REGISTER_DOC_EXTENSION( Rtf,  gid_Module_Prg_Wrt_MSO_Reg, rtf,  RTF,  MS_RTF_DOCUMENT, 1, swriter.exe, open, Writer )
 
+// registering other supported types
+
+CONDITIONAL_REGISTER_DOC_EXTENSION( Uot,  gid_Module_Prg_Wrt_Other_Reg, uot,  UOT,  UNIFORM_OFFICE_FORMAT_TEXT, 1, swriter.exe, open, Writer )
+CONDITIONAL_REGISTER_DOC_EXTENSION( Lwp,  gid_Module_Prg_Wrt_Other_Reg, lwp,  LWP,  WORDPRO_DOCUMENT, 1, swriter.exe, open, Writer )
+CONDITIONAL_REGISTER_DOC_EXTENSION( 602,  gid_Module_Prg_Wrt_Other_Reg, 602,  602,  T602_TEXT_FILE, 1, swriter.exe, open, Writer )
+
+
