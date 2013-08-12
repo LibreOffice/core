@@ -117,6 +117,7 @@ class _SaveTable
     SfxItemSet m_aTableSet;
     _SaveLine* m_pLine;
     const SwTable* m_pSwTable;
+    OUString m_aSaveFormatName;
     SfxItemSets m_aSets;
     SwFrameFormats m_aFrameFormats;
     sal_uInt16 m_nLineCount;
@@ -869,7 +870,12 @@ _SaveTable::_SaveTable( const SwTable& rTable, sal_uInt16 nLnCnt, bool bSaveForm
 {
     m_bModifyBox = false;
     m_bNewModel = rTable.IsNewModel();
-    m_aTableSet.Put(rTable.GetFrameFormat()->GetAttrSet());
+    m_aTableSet.Put( rTable.GetFrameFormat()->GetAttrSet() );
+
+    SwTableFormat* pSaveFormat = (SwTableFormat*)rTable.GetFrameFormat()->GetRegisteredIn();
+    if( pSaveFormat )
+        m_aSaveFormatName = pSaveFormat->GetName();
+
     m_pLine = new _SaveLine( 0, *rTable.GetTabLines()[ 0 ], *this );
 
     _SaveLine* pLn = m_pLine;
@@ -926,9 +932,10 @@ void _SaveTable::RestoreAttr( SwTable& rTable, bool bMdfyBox )
 
     // first, get back attributes of TableFrmFormat
     SwFrameFormat* pFormat = rTable.GetFrameFormat();
+    SwDoc* pDoc = pFormat->GetDoc();
     SfxItemSet& rFormatSet  = (SfxItemSet&)pFormat->GetAttrSet();
     rFormatSet.ClearItem();
-    rFormatSet.Put(m_aTableSet);
+    rFormatSet.Put( m_aTableSet );
 
     if( pFormat->IsInCache() )
     {
@@ -964,6 +971,14 @@ void _SaveTable::RestoreAttr( SwTable& rTable, bool bMdfyBox )
         }
 
         pLn->RestoreAttr( *rTable.GetTabLines()[ n ], *this );
+    }
+
+    if( m_aSaveFormatName.isEmpty() )
+        SwTableFormat::RestoreTableProperties( NULL, rTable );
+    else
+    {
+        SwTableFormat* pStyle = pDoc->FindTableFormatByName( m_aSaveFormatName, true );
+        SwTableFormat::RestoreTableProperties( pStyle, rTable );
     }
 
     m_aFrameFormats.clear();
@@ -1410,7 +1425,7 @@ SwUndoTableAutoFormat::SwUndoTableAutoFormat( const SwTableNode& rTableNd )
 {
     SwTableFormat* pSaveFormat = (SwTableFormat*)rTableNd.GetTable().GetFrameFormat()->GetRegisteredIn();
     if( pSaveFormat )
-        sSaveFormatName = pSaveFormat->GetName();
+        m_aSaveFormatName = pSaveFormat->GetName();
 }
 
 void
@@ -1432,15 +1447,15 @@ SwUndoTableAutoFormat::UndoRedo(bool const bUndo, ::sw::UndoRedoContext & rConte
     if( bUndo )
         table.SetRowsToRepeat( m_nRepeatHeading );
 
-    if( sSaveFormatName.isEmpty() )
+    if( m_aSaveFormatName.isEmpty() )
         SwTableFormat::RestoreTableProperties( NULL, table );
     else
     {
-        pStyle = rDoc.FindTableFormatByName( sSaveFormatName, sal_True );
+        pStyle = rDoc.FindTableFormatByName( m_aSaveFormatName, sal_True );
         SwTableFormat::RestoreTableProperties( pStyle, table );
     }
 
-    sSaveFormatName = sOrigFormatName;
+    m_aSaveFormatName = sOrigFormatName;
 }
 
 void SwUndoTableAutoFormat::UndoImpl(::sw::UndoRedoContext & rContext)
