@@ -375,39 +375,57 @@ published service CharacterProperties
     [optional, property] com::sun::star::container::XNameContainer  TextUserDefinedAttributes;
 
     /** This property contains the left border of the object.
-     */
+     *
+     *  @since LibreOffice 4.2
+    **/
     [property, optional] com::sun::star::table::BorderLine2 CharLeftBorder;
 
     /** This property contains the right border of the object.
-     */
+     *
+     *  @since LibreOffice 4.2
+    **/
     [property, optional] com::sun::star::table::BorderLine2 CharRightBorder;
 
     /** This property contains the top border of the object.
-     */
+     *
+     *  @since LibreOffice 4.2
+    **/
     [property, optional] com::sun::star::table::BorderLine2 CharTopBorder;
 
     /** This property contains the bottom border of the object.
-     */
+     *
+     *  @since LibreOffice 4.2
+    **/
     [property, optional] com::sun::star::table::BorderLine2 CharBottomBorder;
 
     /** This property contains the distance from the border to the object.
-     */
+     *
+     *  @since LibreOffice 4.2
+    **/
     [property, optional] long CharBorderDistance;
 
     /** This property contains the distance from the left border to the object.
-     */
+     *
+     *  @since LibreOffice 4.2
+    **/
     [property, optional] long CharLeftBorderDistance;
 
     /** This property contains the distance from the right border to the object.
-     */
+     *
+     *  @since LibreOffice 4.2
+    **/
     [property, optional] long CharRightBorderDistance;
 
     /** This property contains the distance from the top border to the object.
-     */
+     *
+     *  @since LibreOffice 4.2
+    **/
     [property, optional] long CharTopBorderDistance;
 
     /** This property contains the distance from the bottom border to the object.
-     */
+     *
+     *  @since LibreOffice 4.2
+    **/
     [property, optional] long CharBottomBorderDistance;
 
 };
