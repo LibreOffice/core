@@ -92,8 +92,8 @@ using ::com::sun::star::beans::XPropertySet;
 
 namespace sd {
 
-extern void fillRepeatComboBox( ComboBox* pBox );
-extern void fillDurationComboBox( ComboBox* pBox );
+extern void fillRepeatComboBox( ListBox* pBox );
+extern void fillDurationComboBox( ListBox* pBox );
 extern OUString getShapeDescription( const Reference< XShape >& xShape, bool bWithText = true );
 extern OUString getPropertyName( sal_Int32 nPropertyType );
 
@@ -1746,8 +1746,8 @@ CustomAnimationDurationTabPage::CustomAnimationDurationTabPage(Window* pParent, 
     get(mpRBInteractive, "rb_interactive" );
     get(mpLBTrigger, "trigger_list");
 
-    //fillRepeatComboBox( mpCBRepeat.get() );
-    //fillDurationComboBox( mpCBDuration.get() );
+    fillRepeatComboBox( mpCBRepeat );
+    fillDurationComboBox( mpCBDuration );
 
     mpRBClickSequence->SetClickHdl( LINK( this, CustomAnimationDurationTabPage, implControlHdl ) );
     mpLBTrigger->SetSelectHdl( LINK( this, CustomAnimationDurationTabPage, implControlHdl ) );

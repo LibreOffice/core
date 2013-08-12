@@ -66,6 +66,8 @@ const int MISCEFFECTS = 4;
 
 // --------------------------------------------------------------------
 
+extern void fillDurationComboBox( ListBox* pBox );
+
 class CategoryListBox : public ListBox
 {
 public:
@@ -247,6 +249,8 @@ CustomAnimationCreateTabPage::CustomAnimationCreateTabPage( Window* pParent, Cus
     get( mpFTSpeed, "effect_speed_label" );
     get( mpCBSpeed, "effect_speed_list" );
     get( mpCBXPReview, "auto_preview" );
+
+    fillDurationComboBox(mpCBSpeed);
 
     String sMotionPathLabel( SdResId( STR_CUSTOMANIMATION_USERPATH ) );
 

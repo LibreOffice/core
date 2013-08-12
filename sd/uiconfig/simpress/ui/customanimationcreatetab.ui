@@ -44,13 +44,6 @@
           <object class="GtkComboBoxText" id="effect_speed_list">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <items>
-              <item translatable="yes">Very slow</item>
-              <item translatable="yes">Slow</item>
-              <item translatable="yes">Normal</item>
-              <item translatable="yes">Fast</item>
-              <item translatable="yes">Very fast</item>
-            </items>
           </object>
           <packing>
             <property name="expand">False</property>

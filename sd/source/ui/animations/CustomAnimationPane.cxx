@@ -195,6 +195,7 @@ CustomAnimationPane::CustomAnimationPane( ::Window* pParent, ViewShellBase& rBas
 
     maStrProperty = mpFTProperty->GetText();
 
+    fillDurationComboBox( mpCBSpeed );
     mpPBMoveUp->SetSymbol( SYMBOL_ARROW_UP );
     mpPBMoveDown->SetSymbol( SYMBOL_ARROW_DOWN );
 

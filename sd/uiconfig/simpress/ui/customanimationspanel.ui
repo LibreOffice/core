@@ -215,13 +215,6 @@
                     <property name="entry_text_column">0</property>
                     <property name="id_column">1</property>
                     <property name="hexpand">True</property>
-                    <items>
-                      <item translatable="yes">Very slow</item>
-                      <item translatable="yes">Slow</item>
-                      <item translatable="yes">Normal</item>
-                      <item translatable="yes">Fast</item>
-                      <item translatable="yes">Very fast</item>
-                    </items>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
