@@ -1155,22 +1155,11 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer > mxPlayer;
 };
 
-
-static void move_down( Control* pControl, int nOffsetX, int nOffsetY )
-{
-    Point aPos( pControl->GetPosPixel() );
-    aPos.X() += nOffsetX;
-    aPos.Y() += nOffsetY;
-    pControl->SetPosPixel( aPos );
-}
-
 CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, const STLPropertySet* pSet )
 : TabPage( pParent, "EffectTab", "modules/simpress/ui/customanimationeffecttab.ui" ), mbHasText( sal_False ), mpSet(pSet )
 {
     get(mpFTProperty1, "prop_label1" );
     get(mpLBProperty1, "prop_list1" );
-    //get(mpFTProperty2, "prop_label2" );
-    //get(mpLBProperty2, "prop_list2" );
     get(mpPlaceholderBox, "placeholder" );
     get(mpCBSmoothStart, "smooth_start" );
     get(mpCBSmoothEnd, "smooth_end" );
@@ -1186,8 +1175,6 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, con
     get(mpLBTextAnim, "text_animation_list" );
     get(mpMFTextDelay,"text_delay" );
     get(mpFTTextDelay,"text_delay_label" );
-
-    //FreeResource();
 
     // fill the soundbox
     fillSoundListBox();
@@ -1219,14 +1206,6 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, con
 
     mpCLBDimColor->SetUpdateMode( sal_True );
 
-    //
-    // init settings controls
-    //
-    int nOffsetY = 0;
-    int nOffsetX = 0;
-
-    Size aSpace( LogicToPixel( Size( 3, 3 ), MAP_APPFONT ) );
-
     // only show settings if all selected effects have the same preset-id
     if( pSet->getPropertyState( nHandlePresetId ) != STLPropertyState_AMBIGUOUS )
     {
@@ -1252,8 +1231,6 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, con
                     mpFTProperty1->Show();
                     mpLBProperty1->Show();
 
-                    //nOffsetY += mpLBProperty1->GetSizePixel().Height() + aSpace.Height();
-
                     mpFTProperty1->SetText( aPropertyName );
                 }
 
@@ -1277,11 +1254,6 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, con
             mpCBSmoothStart->Show();
             mpCBSmoothEnd->Show();
 
-            //move_down( mpCBSmoothStart, nOffsetX, nOffsetY );
-            //move_down( mpCBSmoothEnd, nOffsetX, nOffsetY );
-
-            nOffsetY += mpCBSmoothStart->GetSizePixel().Height() + aSpace.Height();
-
             double fTemp = 0.0;
             pSet->getPropertyValue( nHandleAccelerate ) >>= fTemp;
             mpCBSmoothStart->Check( fTemp > 0.0 );
@@ -1289,40 +1261,7 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, con
             pSet->getPropertyValue( nHandleDecelerate ) >>= fTemp;
             mpCBSmoothEnd->Check( fTemp > 0.0 );
         }
-
-        //
-        // auto reverse
-        //
-
-
-        /*if( nOffsetY )
-        {
-            nOffsetY += mpFLSettings->GetSizePixel().Height() + aSpace.Height();
-            mpFLSettings->Show();
-
-            mpFLEnhancements->Show();
-            move_down( mpFLEnhancements, nOffsetX, nOffsetY );
-
-            nOffsetY += mpFLEnhancements->GetSizePixel().Height() + aSpace.Height();
-
-            nOffsetX = 2* aSpace.Width();
-        }*/
     }
-
-    /*if( (nOffsetY != 0) || (nOffsetX != 0) )
-    {
-        move_down( mpFTSound, nOffsetX, nOffsetY );
-        move_down( mpLBSound, nOffsetX, nOffsetY );
-        move_down( mpPBSoundPreview, nOffsetX, nOffsetY );
-        move_down( mpFTAfterEffect, nOffsetX, nOffsetY );
-        move_down( mpLBAfterEffect, nOffsetX, nOffsetY );
-        move_down( mpFTDimColor, nOffsetX, nOffsetY );
-        move_down( mpCLBDimColor, nOffsetX, nOffsetY );
-        move_down( mpFTTextAnim, nOffsetX, nOffsetY );
-        move_down( mpLBTextAnim, nOffsetX, nOffsetY );
-        move_down( mpMFTextDelay, nOffsetX, nOffsetY );
-        move_down( mpFTTextDelay, nOffsetX, nOffsetY );
-    }*/
 
     //
     // init after effect controls
@@ -1453,9 +1392,6 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, con
 
     updateControlStates();
 
-    //Size aSize( GetSizePixel() );
-    //aSize.Height() += mpMFTextDelay->GetPosPixel().X() + GetSizePixel().Height() + aSpace.Height();
-    //SetSizePixel( aSize );
 }
 
 CustomAnimationEffectTabPage::~CustomAnimationEffectTabPage()
@@ -1525,17 +1461,6 @@ void CustomAnimationEffectTabPage::update( STLPropertySet* pSet )
         if( aOldValue != aNewValue )
             pSet->setPropertyValue( nHandleProperty1Value, aNewValue );
     }
-
-    /*if( mpLBProperty2->getSubControl() )
-    {
-        Any aNewValue( mpLBProperty2->getSubControl()->getValue() );
-        Any aOldValue;
-        if( mpSet->getPropertyState( nHandleProperty2Value ) != STLPropertyState_AMBIGUOUS)
-            aOldValue = mpSet->getPropertyValue( nHandleProperty2Value );
-
-        if( aOldValue != aNewValue )
-            pSet->setPropertyValue( nHandleProperty2Value, aNewValue );
-    }*/
 
     if( mpCBSmoothStart->IsVisible() )
     {
@@ -1825,8 +1750,6 @@ CustomAnimationDurationTabPage::CustomAnimationDurationTabPage(Window* pParent, 
 
     //fillRepeatComboBox( mpCBRepeat.get() );
     //fillDurationComboBox( mpCBDuration.get() );
-
-    //FreeResource();
 
     mpRBClickSequence->SetClickHdl( LINK( this, CustomAnimationDurationTabPage, implControlHdl ) );
     mpLBTrigger->SetSelectHdl( LINK( this, CustomAnimationDurationTabPage, implControlHdl ) );
@@ -2380,8 +2303,6 @@ CustomAnimationDialog::~CustomAnimationDialog()
     delete mpEffectTabPage;
     delete mpDurationTabPage;
     delete mpTextAnimTabPage;
-
-    /*delete mpTabControl;*/
 
     delete mpSet;
     delete mpResultSet;
