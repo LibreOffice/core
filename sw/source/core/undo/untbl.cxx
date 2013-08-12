@@ -1408,7 +1408,9 @@ SwUndoTableAutoFormat::SwUndoTableAutoFormat( const SwTableNode& rTableNd )
     nSttNode( rTableNd.GetIndex() ),
     m_nRepeatHeading(rTableNd.GetTable().GetRowsToRepeat())
 {
-    pSaveFormat = (SwTableFormat*)rTableNd.GetTable().GetFrameFormat()->GetRegisteredIn();
+    SwTableFormat* pSaveFormat = (SwTableFormat*)rTableNd.GetTable().GetFrameFormat()->GetRegisteredIn();
+    if( pSaveFormat )
+        sSaveFormatName = pSaveFormat->GetName();
 }
 
 void
@@ -1419,13 +1421,26 @@ SwUndoTableAutoFormat::UndoRedo(bool const bUndo, ::sw::UndoRedoContext & rConte
     OSL_ENSURE( pTableNd, "no TableNode" );
 
     SwTable& table = pTableNd->GetTable();
-    SwTableFormat* pOrig = (SwTableFormat*)table.GetFrameFormat()->GetRegisteredIn();
+    OUString sOrigFormatName;
+    SwTableFormat* pStyle;
+    SwTableFormat* pSaveFormat = (SwTableFormat*)pTableNd->GetTable().GetFrameFormat()->GetRegisteredIn();
+    if( pSaveFormat )
+        sOrigFormatName = pSaveFormat->GetName();
+    else
+        sOrigFormatName = OUString();
 
     if( bUndo )
         table.SetRowsToRepeat( m_nRepeatHeading );
 
-    SwTableFormat::RestoreTableProperties( pSaveFormat, table );
-    pSaveFormat = pOrig;
+    if( sSaveFormatName.isEmpty() )
+        SwTableFormat::RestoreTableProperties( NULL, table );
+    else
+    {
+        pStyle = rDoc.FindTableFormatByName( sSaveFormatName, sal_True );
+        SwTableFormat::RestoreTableProperties( pStyle, table );
+    }
+
+    sSaveFormatName = sOrigFormatName;
 }
 
 void SwUndoTableAutoFormat::UndoImpl(::sw::UndoRedoContext & rContext)

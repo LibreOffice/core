@@ -145,7 +145,7 @@ class SwUndoTableNumFormat;
 class SwUndoTableAutoFormat : public SwUndo
 {
     sal_uLong nSttNode;
-    SwTableFormat* pSaveFormat;
+    OUString sSaveFormatName;
     sal_uInt16 m_nRepeatHeading;
 
     void UndoRedo(bool const bUndo, ::sw::UndoRedoContext & rContext);

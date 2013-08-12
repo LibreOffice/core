@@ -842,7 +842,7 @@ SwTableAutoFormat* SwTableAutoFormat::Load( SvStream& rStream, const SwAfVersion
         // ideal, the table styles are created with the document
         SwTableFormat* pStyle = pDoc->FindTableFormatByName(aName);
         if ( !pStyle )
-            pStyle = pDoc->MakeTableFrameFormat(aName, NULL);
+            pStyle = pDoc->MakeTableFrameFormat( aName, pDoc->GetDfltFrameFormat() );
         pRet = new SwTableAutoFormat( aName, pStyle );
 
         pRet->nStrResId = nStrResId;
@@ -963,7 +963,7 @@ SwTableAutoFormatTable::SwTableAutoFormatTable(SwDoc* pDoc)
     sNm = SwStyleNameMapper::GetUIName( RES_POOLCOLL_STANDARD, sNm );
     SwTableFormat* pStyle = pDoc->FindTableFormatByName(sNm);
     if ( !pStyle )
-        pStyle = pDoc->MakeTableFrameFormat(sNm, NULL);
+        pStyle = pDoc->MakeTableFrameFormat( sNm, pDoc->GetDfltFrameFormat() );
     std::unique_ptr<SwTableAutoFormat> pNewTableAutoFormat(new SwTableAutoFormat(sNm, pStyle));
 
     SwTableBoxFormat* pNewBoxFormat = pDoc->MakeTableBoxFormat();
