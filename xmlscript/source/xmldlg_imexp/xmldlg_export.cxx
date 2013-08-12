@@ -80,41 +80,25 @@ Reference< xml::sax::XAttributeList > Style::createElement()
     // background-color
     if (_set & 0x1)
     {
-        OUStringBuffer buf( 16 );
-        buf.append( (sal_Unicode)'0' );
-        buf.append( (sal_Unicode)'x' );
-        buf.append( OUString::valueOf( (sal_Int64)(sal_uInt64)_backgroundColor, 16 ) );
-        pStyle->addAttribute( XMLNS_DIALOGS_PREFIX ":background-color", buf.makeStringAndClear() );
+        pStyle->addAttribute( XMLNS_DIALOGS_PREFIX ":background-color", "0x" + OUString::number(_backgroundColor,16));
     }
 
     // text-color
     if (_set & 0x2)
     {
-        OUStringBuffer buf( 16 );
-        buf.append( (sal_Unicode)'0' );
-        buf.append( (sal_Unicode)'x' );
-        buf.append( OUString::valueOf( (sal_Int64)(sal_uInt64)_textColor, 16 ) );
-        pStyle->addAttribute( XMLNS_DIALOGS_PREFIX ":text-color", buf.makeStringAndClear() );
+        pStyle->addAttribute( XMLNS_DIALOGS_PREFIX ":text-color", "0x" + OUString::number(_textColor,16));
     }
 
     // textline-color
     if (_set & 0x20)
     {
-        OUStringBuffer buf( 16 );
-        buf.append( (sal_Unicode)'0' );
-        buf.append( (sal_Unicode)'x' );
-        buf.append( OUString::valueOf( (sal_Int64)(sal_uInt64)_textLineColor, 16 ) );
-        pStyle->addAttribute( XMLNS_DIALOGS_PREFIX ":textline-color", buf.makeStringAndClear() );
+        pStyle->addAttribute( XMLNS_DIALOGS_PREFIX ":textline-color", "0x" + OUString::number(_textLineColor,16));
     }
 
     // fill-color
     if (_set & 0x10)
     {
-        OUStringBuffer buf( 16 );
-        buf.append( (sal_Unicode)'0' );
-        buf.append( (sal_Unicode)'x' );
-        buf.append( OUString::valueOf( (sal_Int64)(sal_uInt64)_fillColor, 16 ) );
-        pStyle->addAttribute( XMLNS_DIALOGS_PREFIX ":fill-color", buf.makeStringAndClear() );
+        pStyle->addAttribute( XMLNS_DIALOGS_PREFIX ":fill-color", "0x" + OUString::number(_fillColor,16));
     }
 
     // border
@@ -132,10 +116,7 @@ Reference< xml::sax::XAttributeList > Style::createElement()
             pStyle->addAttribute( XMLNS_DIALOGS_PREFIX ":border", "simple" );
             break;
         case BORDER_SIMPLE_COLOR: {
-            OUStringBuffer buf;
-            buf.appendAscii( "0x" );
-            buf.append( OUString::valueOf((sal_Int64)(sal_uInt64)_borderColor, 16 ) );
-            pStyle->addAttribute( XMLNS_DIALOGS_PREFIX ":border", buf.makeStringAndClear() );
+            pStyle->addAttribute( XMLNS_DIALOGS_PREFIX ":border", "0x" + OUString::number(_borderColor,16));
             break;
         }
         default:
@@ -535,11 +516,7 @@ void ElementDescriptor::readHexLongAttr( OUString const & rPropName, OUString co
         Any a( _xProps->getPropertyValue( rPropName ) );
         if (a.getValueTypeClass() == TypeClass_LONG)
         {
-            OUStringBuffer buf( 16 );
-            buf.append( (sal_Unicode)'0' );
-            buf.append( (sal_Unicode)'x' );
-            buf.append( OUString::valueOf( (sal_Int64)(sal_uInt64)*(sal_uInt32 *)a.getValue(), 16 ) );
-            addAttribute( rAttrName, buf.makeStringAndClear() );
+            addAttribute( rAttrName, "0x" + OUString::number((sal_Int64)(sal_uInt64)*(sal_uInt32 *)a.getValue(),16)  );
         }
     }
 }

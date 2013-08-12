@@ -1444,11 +1444,7 @@ void ImportContext::importEvents(
                         if (getStringAttr( &aLocation, "location", xAttributes, _pImport->XMLNS_SCRIPT_UID ))
                         {
                             // prepend location
-                            OUStringBuffer buf;
-                            buf.append( aLocation );
-                            buf.append( (sal_Unicode)':' );
-                            buf.append( descr.ScriptCode );
-                            descr.ScriptCode = buf.makeStringAndClear();
+                            descr.ScriptCode = aLocation + ":" + descr.ScriptCode;
                         }
                     }
                     else if ( descr.ScriptType == "Script" )
@@ -1458,10 +1454,7 @@ void ImportContext::importEvents(
                         // the protocol ) and fix it up!!
                         if ( descr.ScriptCode.indexOf( ':' ) == -1 )
                         {
-                            OUStringBuffer buf;
-                            buf.append( "vnd.sun.star.script:" );
-                            buf.append( descr.ScriptCode );
-                            descr.ScriptCode = buf.makeStringAndClear();
+                            descr.ScriptCode = "vnd.sun.start.script:" + descr.ScriptCode;
                         }
                     }
 
@@ -1525,11 +1518,7 @@ void ImportContext::importEvents(
                     getStringAttr( &descr.AddListenerParam, "param", xAttributes, _pImport->XMLNS_DIALOGS_UID );
                 }
 
-                OUStringBuffer buf;
-                buf.append( descr.ListenerType );
-                buf.appendAscii( "::" );
-                buf.append( descr.EventMethod );
-                xEvents->insertByName( buf.makeStringAndClear(), makeAny( descr ) );
+                xEvents->insertByName( descr.ListenerType + "::" + descr.EventMethod, makeAny( descr ) );
             }
         }
     }
