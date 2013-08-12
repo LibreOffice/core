@@ -2065,8 +2065,6 @@ void Menu::SetTipHelpText( sal_uInt16 nItemId, const OUString& rStr )
 
 OUString Menu::GetTipHelpText( sal_uInt16 nItemId ) const
 {
-    static const OUString EMPTY("");
-
     MenuItemData* pData = pItemList->GetData( nItemId );
 
     if ( pData )
