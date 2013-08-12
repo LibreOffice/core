@@ -343,7 +343,7 @@ TextNode* TextNode::Split( sal_uInt16 nPos, sal_Bool bKeepEndingAttribs )
     if ( nPos < maText.getLength() )
     {
         aNewText = maText.copy( nPos );
-        maText = maText.replaceAt( nPos, 1, "" );
+        maText = maText.copy(0, nPos);
     }
     TextNode* pNew = new TextNode( aNewText );
 

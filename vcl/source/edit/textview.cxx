@@ -2093,7 +2093,7 @@ void TextView::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEv
         }
 
         if ( !aText.isEmpty() && ( aText[ aText.getLength()-1 ] == LINE_SEP ) )
-            aText = aText.replaceAt( aText.getLength()-1, 1, "" );
+            aText = aText.copy(0, aText.getLength()-1);
 
         TextPaM aTempStart = mpImpl->maSelection.GetStart();
         if ( ImplCheckTextLen( aText ) )
