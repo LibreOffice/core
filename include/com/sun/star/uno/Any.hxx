@@ -19,6 +19,8 @@
 #ifndef _COM_SUN_STAR_UNO_ANY_HXX_
 #define _COM_SUN_STAR_UNO_ANY_HXX_
 
+#include <ostream>
+
 #include <com/sun/star/uno/Any.h>
 #include <uno/data.h>
 #include <com/sun/star/uno/Type.hxx>
@@ -589,6 +591,83 @@ sal_uInt16 Any::get<sal_uInt16>() const;
 }
 }
 }
+}
+
+inline std::ostream &operator<<(std::ostream& o, const ::com::sun::star::uno::Any &any) {
+#define HANDLE_UNSUPPORTED_TYPE(type) case typelib_TypeClass_##type: o << "<unsupported uno::Any type " << #type << ">"; return o; break
+    switch(any.pType->eTypeClass) {
+        case typelib_TypeClass_BYTE:
+        case typelib_TypeClass_SHORT:
+        case typelib_TypeClass_LONG:
+        case typelib_TypeClass_HYPER: {
+            sal_Int64 i;
+            any >>= i;
+            o << i;
+            break;
+        }
+
+        case typelib_TypeClass_UNSIGNED_SHORT:
+        case typelib_TypeClass_UNSIGNED_LONG:
+        case typelib_TypeClass_UNSIGNED_HYPER: {
+            sal_uInt64 u;
+            any >>= u;
+            o << u;
+            break;
+        }
+
+        case typelib_TypeClass_BOOLEAN: {
+            bool b;
+            any >>= b;
+            o << b;
+            break;
+        }
+
+        case typelib_TypeClass_FLOAT:
+        case typelib_TypeClass_DOUBLE: {
+            double d;
+            any >>= d;
+            o << d;
+            break;
+        }
+
+        case typelib_TypeClass_STRING: {
+            ::rtl::OUString s;
+            any >>= s;
+            o << s;
+            break;
+        }
+
+        //TODO implement
+        HANDLE_UNSUPPORTED_TYPE(VOID);
+        HANDLE_UNSUPPORTED_TYPE(CHAR);
+        HANDLE_UNSUPPORTED_TYPE(TYPE);
+        HANDLE_UNSUPPORTED_TYPE(ANY);
+        HANDLE_UNSUPPORTED_TYPE(ENUM);
+        HANDLE_UNSUPPORTED_TYPE(TYPEDEF);
+        HANDLE_UNSUPPORTED_TYPE(STRUCT);
+        HANDLE_UNSUPPORTED_TYPE(UNION);
+        HANDLE_UNSUPPORTED_TYPE(EXCEPTION);
+        HANDLE_UNSUPPORTED_TYPE(SEQUENCE);
+        HANDLE_UNSUPPORTED_TYPE(ARRAY);
+        HANDLE_UNSUPPORTED_TYPE(INTERFACE);
+        HANDLE_UNSUPPORTED_TYPE(SERVICE);
+        HANDLE_UNSUPPORTED_TYPE(MODULE);
+        HANDLE_UNSUPPORTED_TYPE(INTERFACE_METHOD);
+        HANDLE_UNSUPPORTED_TYPE(INTERFACE_ATTRIBUTE);
+        HANDLE_UNSUPPORTED_TYPE(UNKNOWN);
+        HANDLE_UNSUPPORTED_TYPE(PROPERTY);
+        HANDLE_UNSUPPORTED_TYPE(CONSTANT);
+        HANDLE_UNSUPPORTED_TYPE(CONSTANTS);
+        HANDLE_UNSUPPORTED_TYPE(SINGLETON);
+        HANDLE_UNSUPPORTED_TYPE(MAKE_FIXED_SIZE);
+
+        default: {
+            o << "<unknown uno::Any type code " << any.pType->eTypeClass << ">";
+            break;
+        }
+    }
+    return o;
+#undef HANDLE_UNSUPPORTED_TYPE
 }
 
 #endif
