@@ -19,6 +19,8 @@
 #ifndef _COM_SUN_STAR_UNO_ANY_HXX_
 #define _COM_SUN_STAR_UNO_ANY_HXX_
 
+#include <ostream>
+
 #include <com/sun/star/uno/Any.h>
 #include <uno/data.h>
 #include <com/sun/star/uno/Type.hxx>
@@ -585,6 +587,78 @@ T Any::get() const
 template <>
 sal_uInt16 Any::get<sal_uInt16>() const;
 #endif // ! defined(EXCEPTIONS_OFF)
+
+/**
+ * @since LibreOffice 4.2
+ */
+template<typename charT, typename traits>
+inline std::basic_ostream<charT, traits> &operator<<(std::basic_ostream<charT, traits> &o, Any &any) {
+    // prolog with type
+    o << "<Any: (" << any.getValueTypeName() << ")";
+    // log value
+    switch(any.pType->eTypeClass) {
+        case typelib_TypeClass_BOOLEAN: {
+            bool b = bool();
+            any >>= b;
+            o << b;
+            break;
+        }
+
+        case typelib_TypeClass_BYTE:
+        case typelib_TypeClass_SHORT:
+        case typelib_TypeClass_LONG:
+        case typelib_TypeClass_HYPER: {
+            sal_Int64 i = sal_Int64();
+            any >>= i;
+            o << i;
+            break;
+        }
+
+        case typelib_TypeClass_UNSIGNED_SHORT:
+        case typelib_TypeClass_UNSIGNED_LONG:
+        case typelib_TypeClass_UNSIGNED_HYPER: {
+            sal_uInt64 u  = sal_uInt64();
+            any >>= u;
+            o << u;
+            break;
+        }
+
+        case typelib_TypeClass_FLOAT:
+        case typelib_TypeClass_DOUBLE: {
+            double d = double();
+            any >>= d;
+            o << d;
+            break;
+        }
+
+        case typelib_TypeClass_STRING: {
+            ::rtl::OUString s;
+            any >>= s;
+            o << s;
+            break;
+        }
+
+        case typelib_TypeClass_VOID:
+        case typelib_TypeClass_CHAR:
+        case typelib_TypeClass_TYPE:
+        case typelib_TypeClass_SEQUENCE:
+        case typelib_TypeClass_ENUM:
+        case typelib_TypeClass_STRUCT:
+        case typelib_TypeClass_EXCEPTION:
+        case typelib_TypeClass_INTERFACE: {
+            // log nothing here - leave just type
+            break;
+        }
+
+        default:
+            assert(false); // this cannot happen
+            o << "!!this type should not happen in Any!!";
+            break;
+    }
+    // epilog
+    o << ">";
+    return o;
+}
 
 }
 }
