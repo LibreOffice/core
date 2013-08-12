@@ -5799,7 +5799,7 @@ if test "$GCC" = "yes"; then
     save_CFLAGS=$CFLAGS
     CFLAGS="$CFLAGS -Werror"
     AC_COMPILE_IFELSE([AC_LANG_SOURCE([
-            __attribute__((deprecated(test))) void f();
+            __attribute__((deprecated("test"))) void f();
         ])], [
             AC_DEFINE([HAVE_GCC_DEPRECATED_MESSAGE],[1])
             AC_MSG_RESULT([yes])
