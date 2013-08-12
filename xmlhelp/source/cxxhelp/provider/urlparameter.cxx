@@ -306,12 +306,7 @@ void URLParameter::readHelpDataFile()
         m_aJar   = converter.getDatabase();
         if( !aExtensionPath.isEmpty() )
         {
-            OUStringBuffer aExtendedJarStrBuf;
-            aExtendedJarStrBuf.append( '?' );
-            aExtendedJarStrBuf.append( aExtensionPath );
-            aExtendedJarStrBuf.append( '?' );
-            aExtendedJarStrBuf.append( m_aJar );
-            m_aJar = aExtendedJarStrBuf.makeStringAndClear();
+            m_aJar = "?" + aExtensionPath + "?" + m_aJar;
             m_aExtensionRegistryPath = aExtensionRegistryPath;
         }
         m_aTag   = converter.getHash();

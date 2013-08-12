@@ -913,8 +913,6 @@ void TVChildTarget::subst( OUString& instpath ) const
 
 // class ExtensionIteratorBase
 
-static OUString aSlash("/");
-static OUString aHelpFilesBaseName("help");
 static OUString aHelpMediaType("application/vnd.sun.star.help");
 
 ExtensionIteratorBase::ExtensionIteratorBase( const OUString& aLanguage )
@@ -1212,15 +1210,7 @@ OUString TreeFileIterator::implGetTreeFileFromPackage
     OUString aLanguage = m_aLanguage;
     for( sal_Int32 iPass = 0 ; iPass < 2 ; ++iPass )
     {
-        OUStringBuffer aStrBuf;
-        aStrBuf.append( xPackage->getURL() );
-        aStrBuf.append( aSlash );
-        aStrBuf.append( aLanguage );
-        aStrBuf.append( aSlash );
-        aStrBuf.append( aHelpFilesBaseName );
-        aStrBuf.appendAscii( ".tree" );
-
-        aRetFile = expandURL( aStrBuf.makeStringAndClear() );
+        aRetFile = expandURL( xPackage->getURL() + "/" + aLanguage + "/help.tree" );
         if( iPass == 0 )
         {
             if( m_xSFA->exists( aRetFile ) )
