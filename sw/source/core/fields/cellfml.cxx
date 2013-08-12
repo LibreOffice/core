@@ -663,7 +663,7 @@ String SwTableFormula::ScanString( FnScanFormel fnFormel, const SwTable& rTbl,
 const SwTable* SwTableFormula::FindTable( SwDoc& rDoc, const OUString& rNm ) const
 {
     const SwFrmFmts& rTblFmts = *rDoc.GetTblFrmFmts();
-    const SwTable* pTmpTbl, *pRet = 0;
+    const SwTable* pTmpTbl = 0, *pRet = 0;
     for( sal_uInt16 nFmtCnt = rTblFmts.size(); nFmtCnt; )
     {
         SwFrmFmt* pFmt = rTblFmts[ --nFmtCnt ];
