@@ -1965,7 +1965,7 @@ const SwFlyFrmFmt* SwDoc::FindFlyByName( const OUString& rName, sal_Int8 nNdTyp 
     for( sal_uInt16 n = rFmts.size(); n; )
     {
         const SwFrmFmt* pFlyFmt = rFmts[ --n ];
-        const SwNodeIndex* pIdx;
+        const SwNodeIndex* pIdx = 0;
         if( RES_FLYFRMFMT == pFlyFmt->Which() && pFlyFmt->GetName() == rName &&
             0 != ( pIdx = pFlyFmt->GetCntnt().GetCntntIdx() ) &&
             pIdx->GetNode().GetNodes().IsDocNodes() )
