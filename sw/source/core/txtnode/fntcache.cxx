@@ -543,7 +543,7 @@ void SwFntObj::GuessLeading( const ViewShell&
         pWin->SetFont( *pPrtFont );
         const FontMetric aWinMet( pWin->GetFontMetric() );
         const sal_uInt16 nWinHeight = sal_uInt16( aWinMet.GetSize().Height() );
-        if( pPrtFont->GetName().Search( aWinMet.GetName() ) < USHRT_MAX )
+        if( pPrtFont->GetName().indexOf( aWinMet.GetName() ) != -1 )
         {
             // If the Leading on the Window is also 0, then it has to stay
             // that way (see also StarMath).
