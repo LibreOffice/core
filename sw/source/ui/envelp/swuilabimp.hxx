@@ -126,40 +126,28 @@ public:
 
 class SwPrivateDataPage : public SfxTabPage
 {
-    FixedLine       aDataFL;
+    Edit* m_pFirstNameED;
+    Edit* m_pNameED;
+    Edit* m_pShortCutED;
 
-    FixedText       aNameFT;
-    Edit            aFirstNameED;
-    Edit            aNameED;
-    Edit            aShortCutED;
+    Edit* m_pFirstName2ED;
+    Edit* m_pName2ED;
+    Edit* m_pShortCut2ED;
 
-    FixedText       aName2FT;
-    Edit            aFirstName2ED;
-    Edit            aName2ED;
-    Edit            aShortCut2ED;
-
-    FixedText       aStreetFT;
-    Edit            aStreetED;
-    FixedText       aZipCityFT;
-    Edit            aZipED;
-    Edit            aCityED;
-    FixedText       aCountryStateFT;
-    Edit            aCountryED;
-    Edit            aStateED;
-    FixedText       aTitleProfessionFT;
-    Edit            aTitleED;
-    Edit            aProfessionED;
-    FixedText       aPhoneFT;
-    Edit            aPhoneED;
-    Edit            aMobilePhoneED;
-    FixedText       aFaxFT;
-    Edit            aFaxED;
-    FixedText       aWWWMailFT;
-    Edit            aHomePageED;
-    Edit            aMailED;
+    Edit* m_pStreetED;
+    Edit* m_pZipED;
+    Edit* m_pCityED;
+    Edit* m_pCountryED;
+    Edit* m_pStateED;
+    Edit* m_pTitleED;
+    Edit* m_pProfessionED;
+    Edit* m_pPhoneED;
+    Edit* m_pMobilePhoneED;
+    Edit* m_pFaxED;
+    Edit* m_pHomePageED;
+    Edit* m_pMailED;
 
     SwPrivateDataPage(Window* pParent, const SfxItemSet& rSet);
-    ~SwPrivateDataPage();
 
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;

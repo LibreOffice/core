@@ -708,46 +708,30 @@ void SwVisitingCardPage::Reset(const SfxItemSet& rSet)
     }
 }
 
-SwPrivateDataPage::SwPrivateDataPage(Window* pParent, const SfxItemSet& rSet) :
-    SfxTabPage(pParent, SW_RES(TP_PRIVATE_DATA), rSet),
-    aDataFL             (this, SW_RES( FL_DATA       )),
-
-    aNameFT             (this, SW_RES( FT_NAME       )),
-    aFirstNameED        (this, SW_RES( ED_FIRSTNAME )),
-    aNameED             (this, SW_RES( ED_NAME      )),
-    aShortCutED         (this, SW_RES( ED_SHORTCUT  )),
-
-    aName2FT            (this, SW_RES( FT_NAME_2     )),
-    aFirstName2ED       (this, SW_RES( ED_FIRSTNAME_2)),
-    aName2ED            (this, SW_RES( ED_NAME_2        )),
-    aShortCut2ED        (this, SW_RES( ED_SHORTCUT_2    )),
-
-    aStreetFT           (this, SW_RES( FT_STREET     )),
-    aStreetED           (this, SW_RES( ED_STREET        )),
-    aZipCityFT          (this, SW_RES( FT_ZIPCITY   )),
-    aZipED              (this, SW_RES( ED_ZIP       )),
-    aCityED             (this, SW_RES( ED_CITY      )),
-    aCountryStateFT     (this, SW_RES( FT_COUNTRYSTATE )),
-    aCountryED          (this, SW_RES( ED_COUNTRY   )),
-    aStateED            (this, SW_RES( ED_STATE     )),
-    aTitleProfessionFT  (this, SW_RES( FT_TITLEPROF )),
-    aTitleED            (this, SW_RES( ED_TITLE     )),
-    aProfessionED       (this, SW_RES( ED_PROFESSION )),
-    aPhoneFT            (this, SW_RES( FT_PHONE_MOBILE  )),
-    aPhoneED            (this, SW_RES( ED_PHONE     )),
-    aMobilePhoneED      (this, SW_RES( ED_MOBILE        )),
-    aFaxFT              (this, SW_RES( FT_FAX       )),
-    aFaxED              (this, SW_RES( ED_FAX       )),
-    aWWWMailFT          (this, SW_RES( FT_WWWMAIL   )),
-    aHomePageED         (this, SW_RES( ED_WWW       )),
-    aMailED             (this, SW_RES( ED_MAIL      ))
+SwPrivateDataPage::SwPrivateDataPage(Window* pParent, const SfxItemSet& rSet)
+    : SfxTabPage(pParent, "PrivateUserPage",
+        "modules/swriter/ui/privateuserpage.ui", rSet)
 {
-    FreeResource();
+    get(m_pFirstNameED, "firstname");
+    get(m_pNameED, "lastname");
+    get(m_pShortCutED, "shortname");
+    get(m_pFirstName2ED, "firstname2");
+    get(m_pName2ED, "lastname2");
+    get(m_pShortCut2ED, "shortname2");
+    get(m_pStreetED, "street");
+    get(m_pZipED, "izip");
+    get(m_pCityED, "icity");
+    get(m_pCountryED, "country");
+    get(m_pStateED, "state");
+    get(m_pTitleED, "title");
+    get(m_pProfessionED, "job");
+    get(m_pPhoneED, "phone");
+    get(m_pMobilePhoneED, "mobile");
+    get(m_pFaxED, "fax");
+    get(m_pHomePageED, "url");
+    get(m_pMailED, "email");
+
     SetExchangeSupport();
-}
-
-SwPrivateDataPage::~SwPrivateDataPage()
-{
 }
 
 SfxTabPage* SwPrivateDataPage::Create(Window* pParent, const SfxItemSet& rSet)
@@ -771,24 +755,24 @@ sal_Bool SwPrivateDataPage::FillItemSet(SfxItemSet& rSet)
 {
 
     SwLabItem aItem = (const SwLabItem&) GetTabDialog()->GetExampleSet()->Get(FN_LABEL);
-    aItem.aPrivFirstName = aFirstNameED .GetText();
-    aItem.aPrivName      = aNameED      .GetText(  );
-    aItem.aPrivShortCut  = aShortCutED  .GetText(  );
-    aItem.aPrivFirstName2 = aFirstName2ED   .GetText();
-    aItem.aPrivName2     = aName2ED     .GetText(  );
-    aItem.aPrivShortCut2 = aShortCut2ED .GetText(  );
-    aItem.aPrivStreet    = aStreetED    .GetText(  );
-    aItem.aPrivZip       = aZipED       .GetText(  );
-    aItem.aPrivCity      = aCityED      .GetText(  );
-    aItem.aPrivCountry   = aCountryED   .GetText(  );
-    aItem.aPrivState     = aStateED     .GetText(  );
-    aItem.aPrivTitle     = aTitleED     .GetText(  );
-    aItem.aPrivProfession= aProfessionED.GetText(   );
-    aItem.aPrivPhone     = aPhoneED     .GetText(  );
-    aItem.aPrivMobile    = aMobilePhoneED.GetText(  );
-    aItem.aPrivFax       = aFaxED       .GetText(  );
-    aItem.aPrivWWW       = aHomePageED  .GetText(  );
-    aItem.aPrivMail      = aMailED      .GetText(  );
+    aItem.aPrivFirstName = m_pFirstNameED->GetText();
+    aItem.aPrivName      = m_pNameED->GetText(  );
+    aItem.aPrivShortCut  = m_pShortCutED->GetText(  );
+    aItem.aPrivFirstName2 = m_pFirstName2ED->GetText();
+    aItem.aPrivName2     = m_pName2ED->GetText(  );
+    aItem.aPrivShortCut2 = m_pShortCut2ED->GetText(  );
+    aItem.aPrivStreet    = m_pStreetED->GetText(  );
+    aItem.aPrivZip       = m_pZipED->GetText(  );
+    aItem.aPrivCity      = m_pCityED->GetText(  );
+    aItem.aPrivCountry   = m_pCountryED->GetText(  );
+    aItem.aPrivState     = m_pStateED->GetText(  );
+    aItem.aPrivTitle     = m_pTitleED->GetText(  );
+    aItem.aPrivProfession= m_pProfessionED->GetText(   );
+    aItem.aPrivPhone     = m_pPhoneED->GetText(  );
+    aItem.aPrivMobile    = m_pMobilePhoneED->GetText(  );
+    aItem.aPrivFax       = m_pFaxED->GetText(  );
+    aItem.aPrivWWW       = m_pHomePageED->GetText(  );
+    aItem.aPrivMail      = m_pMailED->GetText(  );
 
     rSet.Put(aItem);
     return sal_True;
@@ -797,24 +781,24 @@ sal_Bool SwPrivateDataPage::FillItemSet(SfxItemSet& rSet)
 void SwPrivateDataPage::Reset(const SfxItemSet& rSet)
 {
     const SwLabItem& aItem = (const SwLabItem&) rSet.Get(FN_LABEL);
-    aFirstNameED.SetText(aItem.aPrivFirstName);
-    aNameED     .SetText(aItem.aPrivName);
-    aShortCutED .SetText(aItem.aPrivShortCut);
-    aFirstName2ED.SetText(aItem.aPrivFirstName2);
-    aName2ED     .SetText(aItem.aPrivName2);
-    aShortCut2ED .SetText(aItem.aPrivShortCut2);
-    aStreetED   .SetText(aItem.aPrivStreet);
-    aZipED      .SetText(aItem.aPrivZip);
-    aCityED     .SetText(aItem.aPrivCity);
-    aCountryED  .SetText(aItem.aPrivCountry);
-    aStateED    .SetText(aItem.aPrivState);
-    aTitleED    .SetText(aItem.aPrivTitle);
-    aProfessionED.SetText(aItem.aPrivProfession);
-    aPhoneED    .SetText(aItem.aPrivPhone);
-    aMobilePhoneED.SetText(aItem.aPrivMobile);
-    aFaxED      .SetText(aItem.aPrivFax);
-    aHomePageED .SetText(aItem.aPrivWWW);
-    aMailED     .SetText(aItem.aPrivMail);
+    m_pFirstNameED->SetText(aItem.aPrivFirstName);
+    m_pNameED->SetText(aItem.aPrivName);
+    m_pShortCutED->SetText(aItem.aPrivShortCut);
+    m_pFirstName2ED->SetText(aItem.aPrivFirstName2);
+    m_pName2ED->SetText(aItem.aPrivName2);
+    m_pShortCut2ED->SetText(aItem.aPrivShortCut2);
+    m_pStreetED->SetText(aItem.aPrivStreet);
+    m_pZipED->SetText(aItem.aPrivZip);
+    m_pCityED->SetText(aItem.aPrivCity);
+    m_pCountryED->SetText(aItem.aPrivCountry);
+    m_pStateED->SetText(aItem.aPrivState);
+    m_pTitleED->SetText(aItem.aPrivTitle);
+    m_pProfessionED->SetText(aItem.aPrivProfession);
+    m_pPhoneED->SetText(aItem.aPrivPhone);
+    m_pMobilePhoneED->SetText(aItem.aPrivMobile);
+    m_pFaxED->SetText(aItem.aPrivFax);
+    m_pHomePageED->SetText(aItem.aPrivWWW);
+    m_pMailED->SetText(aItem.aPrivMail);
 }
 
 SwBusinessDataPage::SwBusinessDataPage(Window* pParent, const SfxItemSet& rSet) :
