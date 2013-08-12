@@ -32,6 +32,7 @@ SwFmt::SwFmt( SwAttrPool& rPool, const sal_Char* pFmtNm,
               const sal_uInt16* pWhichRanges, SwFmt *pDrvdFrm,
               sal_uInt16 nFmtWhich )
     : SwModify( pDrvdFrm ),
+    aFmtName( OUString::createFromAscii(pFmtNm) ),
     aSet( rPool, pWhichRanges ),
     nWhichId( nFmtWhich ),
     nFmtId( 0 ),
@@ -39,7 +40,6 @@ SwFmt::SwFmt( SwAttrPool& rPool, const sal_Char* pFmtNm,
     nPoolHelpId( USHRT_MAX ),
     nPoolHlpFileId( UCHAR_MAX )
 {
-    aFmtName.AssignAscii( pFmtNm );
     bWritten = bFmtInDTOR = bAutoUpdateFmt = sal_False; // LAYER_IMPL
     bAutoFmt = sal_True;
     bHidden = false;
@@ -48,7 +48,7 @@ SwFmt::SwFmt( SwAttrPool& rPool, const sal_Char* pFmtNm,
         aSet.SetParent( &pDrvdFrm->aSet );
 }
 
-SwFmt::SwFmt( SwAttrPool& rPool, const String& rFmtNm,
+SwFmt::SwFmt( SwAttrPool& rPool, const OUString& rFmtNm,
               const sal_uInt16* pWhichRanges, SwFmt* pDrvdFrm,
               sal_uInt16 nFmtWhich )
     : SwModify( pDrvdFrm ),
@@ -140,7 +140,7 @@ SwFmt &SwFmt::operator=(const SwFmt& rFmt)
     return *this;
 }
 
-void SwFmt::SetName( const String& rNewName, sal_Bool bBroadcast )
+void SwFmt::SetName( const OUString& rNewName, sal_Bool bBroadcast )
 {
     OSL_ENSURE( !IsDefault(), "SetName: Defaultformat" );
     if( bBroadcast )

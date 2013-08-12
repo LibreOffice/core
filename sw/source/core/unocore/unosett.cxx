@@ -497,7 +497,7 @@ uno::Any SwXFootnoteProperties::getPropertyValue(const OUString& rPropertyName)
                     SwTxtFmtColl* pColl = rFtnInfo.GetFtnTxtColl();
                     OUString aString;
                     if(pColl)
-                        aString = String ( pColl->GetName() );
+                        aString = pColl->GetName();
                     SwStyleNameMapper::FillProgName(aString, aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, true);
                     aRet <<= aString;
                 }
@@ -1516,7 +1516,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
                 aAny >>= aUString;
             }
             else
-                aUString = aEmptyStr;
+                aUString = OUString();
             pData = new PropValData((void*)&aUString, SW_PROP_NAME_STR(UNO_NAME_GRAPHIC_URL), ::getCppuType((const OUString*)0));
             aPropertyValues.push_back(pData);
 
@@ -1551,7 +1551,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
     else
     {
         //Vorlagenname
-        String sValue(SW_RES(STR_POOLCOLL_HEADLINE1 + nIndex));
+        OUString sValue(SW_RES(STR_POOLCOLL_HEADLINE1 + nIndex));
         const SwTxtFmtColls* pColls = pDocShell->GetDoc()->GetTxtFmtColls();
         const sal_uInt16 nCount = pColls->size();
         for(sal_uInt16 i = 0; i < nCount;++i)
@@ -1573,7 +1573,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
             {
                 // if the default for the level is existing, but its
                 // level is different, then it cannot be the default.
-                sValue.Erase();
+                sValue = OUString();
             }
         }
         OUString aName;

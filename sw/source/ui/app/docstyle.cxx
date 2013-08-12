@@ -833,7 +833,7 @@ bool  SwDocStyleSheet::SetName( const OUString& rStr)
             OSL_ENSURE(pColl, "Collection missing!");
             if( pColl && pColl->GetName() != rStr )
             {
-                if (pColl->GetName().Len() > 0)
+                if (!pColl->GetName().isEmpty())
                     rDoc.RenameFmt(*pColl, rStr);
                 else
                     pColl->SetName(rStr);
@@ -847,7 +847,7 @@ bool  SwDocStyleSheet::SetName( const OUString& rStr)
             OSL_ENSURE(pFrmFmt, "FrmFmt missing!");
             if( pFrmFmt && pFrmFmt->GetName() != rStr )
             {
-                if (pFrmFmt->GetName().Len() > 0)
+                if (!pFrmFmt->GetName().isEmpty())
                     rDoc.RenameFmt(*pFrmFmt, rStr);
                 else
                     pFrmFmt->SetName( rStr );
@@ -2477,8 +2477,8 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
             }
 
             aLst.Append( cCHAR, pFmt == rDoc.GetDfltCharFmt()
-                        ? String(SwStyleNameMapper::GetTextUINameArray()[ RES_POOLCOLL_STANDARD -
-                                                RES_POOLCOLL_TEXT_BEGIN ])
+                        ? SwStyleNameMapper::GetTextUINameArray()[ RES_POOLCOLL_STANDARD -
+                                                RES_POOLCOLL_TEXT_BEGIN ]
                         : pFmt->GetName() );
         }
 

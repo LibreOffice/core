@@ -538,7 +538,7 @@ OString SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
 
     // Name
     if( (nFrmOpts & (HTML_FRMOPT_ID|HTML_FRMOPT_NAME)) &&
-        rFrmFmt.GetName().Len() )
+        !rFrmFmt.GetName().isEmpty() )
     {
         const sal_Char *pStr =
             (nFrmOpts & HTML_FRMOPT_ID) ? OOO_STRING_SVTOOLS_HTML_O_id : OOO_STRING_SVTOOLS_HTML_O_name;
@@ -978,7 +978,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
     OString aEndTags;
 
     // implizite Sprungmarke -> <A NAME=...></A>...<IMG ...>
-    if( pMarkType && rFrmFmt.GetName().Len() )
+    if( pMarkType && !rFrmFmt.GetName().isEmpty() )
         rHTMLWrt.OutImplicitMark( rFrmFmt.GetName(), pMarkType );
 
     // URL -> <A>...<IMG ... >...</A>

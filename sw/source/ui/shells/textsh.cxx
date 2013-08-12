@@ -404,8 +404,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                 if (!GetShell().IsTblComplexForChart())
                 {
                     SwFrmFmt* pTblFmt = GetShell().GetTableFmt();
-                    String aCurrentTblName = pTblFmt->GetName();
-                    aRangeString = aCurrentTblName;
+                    aRangeString = pTblFmt->GetName();
                     aRangeString += OUString::valueOf( sal_Unicode('.') );
                     aRangeString += GetShell().GetBoxNms();
 

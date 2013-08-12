@@ -197,8 +197,7 @@ void SwCondCollPage::Reset(const SfxItemSet &/*rSet*/)
 
     for( sal_uInt16 n = 0; n < aStrArr.Count(); n++)
     {
-        String aEntry( aStrArr.GetString(n) );
-        aEntry += '\t';
+        OUString aEntry( aStrArr.GetString(n) + "\t" );
 
         const SwCollCondition* pCond = 0;
         if( pFmt && RES_CONDTXTFMTCOLL == pFmt->Which() &&

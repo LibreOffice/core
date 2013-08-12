@@ -83,7 +83,7 @@ typedef void (SwTableFormula:: *FnScanFormel)( const SwTable&, String&,
     String ScanString( FnScanFormel fnFormel, const SwTable& rTbl,
                         void* = 0 ) const;
 
-    const SwTable* FindTable( SwDoc& rDoc, const String& rNm ) const;
+    const SwTable* FindTable( SwDoc& rDoc, const OUString& rNm ) const;
 
 protected:
     enum NameType { EXTRNL_NAME, INTRNL_NAME, REL_NAME };

@@ -1790,7 +1790,7 @@ SwFmt* SwDoc::CopyFmt( const SwFmt& rFmt,
         for( sal_uInt16 n = 0; n < rFmtArr.GetFmtCount(); n++ )
         {
             // Does the Doc already contain the template?
-            if( rFmtArr.GetFmt(n)->GetName().Equals( rFmt.GetName() ))
+            if( rFmtArr.GetFmt(n)->GetName()==rFmt.GetName() )
                 return (SwFmt*)rFmtArr.GetFmt(n);
         }
 
@@ -2257,7 +2257,7 @@ void SwDoc::ReplaceStyles( const SwDoc& rSource, bool bIncludePageStyles )
 }
 
 SwFmt* SwDoc::FindFmtByName( const SwFmtsBase& rFmtArr,
-                                    const String& rName ) const
+                             const OUString& rName ) const
 {
     SwFmt* pFnd = 0;
     for( sal_uInt16 n = 0; n < rFmtArr.GetFmtCount(); n++ )

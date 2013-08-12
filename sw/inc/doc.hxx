@@ -633,8 +633,7 @@ private:
                         FNCopyFmt fnCopyFmt, SwFmt& rDfltFmt );
     void CopyPageDescHeaderFooterImpl( bool bCpyHeader,
                                 const SwFrmFmt& rSrcFmt, SwFrmFmt& rDestFmt );
-    SwFmt* FindFmtByName( const SwFmtsBase& rFmtArr,
-                                    const String& rName ) const;
+    SwFmt* FindFmtByName( const SwFmtsBase& rFmtArr, const OUString& rName ) const;
 
     VirtualDevice& CreateVirtualDevice_() const;
     SfxPrinter& CreatePrinter_() const;
@@ -1160,8 +1159,8 @@ public:
 
     std::set<SwRootFrm*> GetAllLayouts();//swmod 080225
 
-    void SetFlyName( SwFlyFrmFmt& rFmt, const String& rName );
-    const SwFlyFrmFmt* FindFlyByName( const String& rName, sal_Int8 nNdTyp = 0 ) const;
+    void SetFlyName( SwFlyFrmFmt& rFmt, const OUString& rName );
+    const SwFlyFrmFmt* FindFlyByName( const OUString& rName, sal_Int8 nNdTyp = 0 ) const;
 
     void GetGrfNms( const SwFlyFrmFmt& rFmt, String* pGrfName,
                     String* pFltName ) const;

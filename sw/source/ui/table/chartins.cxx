@@ -157,8 +157,7 @@ void SwInsertChart(Window* pParent, SfxBindings* pBindings )
         if( ! rWrtShell.IsTblComplexForChart())
         {
             SwFrmFmt* pTblFmt = rWrtShell.GetTableFmt();
-            String aCurrentTblName = pTblFmt->GetName();
-            aRangeString = aCurrentTblName;
+            aRangeString = pTblFmt->GetName();
             aRangeString += OUString::valueOf( sal_Unicode('.') );
             aRangeString += rWrtShell.GetBoxNms();
 

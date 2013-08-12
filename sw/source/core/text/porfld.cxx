@@ -526,7 +526,7 @@ sal_Bool SwHiddenPortion::GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt )
  *                      class SwNumberPortion
  *************************************************************************/
 
-SwNumberPortion::SwNumberPortion( const XubString &rExpand,
+SwNumberPortion::SwNumberPortion( const OUString &rExpand,
                                   SwFont *pFont,
                                   const sal_Bool bLft,
                                   const sal_Bool bCntr,
@@ -779,13 +779,13 @@ static sal_Char const sDoubleSpace[] = "  ";
  *************************************************************************/
 
 SwBulletPortion::SwBulletPortion( const sal_Unicode cBullet,
-                                  const XubString& rBulletFollowedBy,
+                                  const OUString& rBulletFollowedBy,
                                   SwFont *pFont,
                                   const sal_Bool bLft,
                                   const sal_Bool bCntr,
                                   const KSHORT nMinDst,
                                   const bool bLabelAlignmentPosAndSpaceModeActive )
-    : SwNumberPortion( XubString( rBulletFollowedBy ).Insert( cBullet, 0 ) ,
+    : SwNumberPortion( OUString(cBullet) + rBulletFollowedBy,
                        pFont, bLft, bCntr, nMinDst,
                        bLabelAlignmentPosAndSpaceModeActive )
 {
@@ -800,7 +800,7 @@ SwBulletPortion::SwBulletPortion( const sal_Unicode cBullet,
 
 SwGrfNumPortion::SwGrfNumPortion(
         SwFrm*,
-        const XubString& rGraphicFollowedBy,
+        const OUString& rGraphicFollowedBy,
         const SvxBrushItem* pGrfBrush,
         const SwFmtVertOrient* pGrfOrient, const Size& rGrfSize,
         const sal_Bool bLft, const sal_Bool bCntr, const KSHORT nMinDst,
@@ -1088,7 +1088,7 @@ void SwTxtFrm::StopAnimation( OutputDevice* pOut )
  * initializes the script array and clears the width array
  *************************************************************************/
 
-SwCombinedPortion::SwCombinedPortion( const XubString &rTxt )
+SwCombinedPortion::SwCombinedPortion( const OUString &rTxt )
      : SwFldPortion( rTxt )
 {
     SetLen(1);
@@ -1100,7 +1100,7 @@ SwCombinedPortion::SwCombinedPortion( const XubString &rTxt )
     if( g_pBreakIt->GetBreakIter().is() )
     {
         sal_uInt8 nScr = SW_SCRIPTS;
-        for( sal_uInt16 i = 0; i < rTxt.Len(); ++i )
+        for( sal_Int32 i = 0; i < rTxt.getLength(); ++i )
         {
             sal_uInt16 nScript = g_pBreakIt->GetBreakIter()->getScriptType( rTxt, i );
             switch ( nScript ) {
@@ -1113,8 +1113,8 @@ SwCombinedPortion::SwCombinedPortion( const XubString &rTxt )
     }
     else
     {
-        for( sal_uInt16 i = 0; i < 6; aScrType[i++] = 0 )
-            ; // nothing
+        for( sal_uInt16 i = 0; i < 6; ++i )
+            aScrType[i] = 0;
     }
     memset( &aWidth, 0, sizeof(aWidth) );
 }

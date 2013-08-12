@@ -898,9 +898,8 @@ uno::Any SwXTextTables::getByName(const OUString& rItemName)
         uno::Reference< XTextTable >  xTbl;
         for( sal_uInt16 i = 0; i < nCount; i++)
         {
-            String aName(rItemName);
             SwFrmFmt& rFmt = GetDoc()->GetTblFrmFmt(i, true);
-            if(aName == rFmt.GetName())
+            if (rItemName == rFmt.GetName())
             {
                 xTbl = SwXTextTables::GetObject(rFmt);
                 aRet.setValue(&xTbl,
@@ -931,7 +930,7 @@ uno::Sequence< OUString > SwXTextTables::getElementNames(void)
         {
             SwFrmFmt& rFmt = GetDoc()->GetTblFrmFmt(i, true);
 
-            pArray[i] = OUString(rFmt.GetName());
+            pArray[i] = rFmt.GetName();
         }
     }
     return aSeq;
@@ -947,9 +946,8 @@ sal_Bool SwXTextTables::hasByName(const OUString& rName)
         sal_uInt16 nCount = GetDoc()->GetTblFrmFmtCount(true);
         for( sal_uInt16 i = 0; i < nCount; i++)
         {
-            String aName(rName);
             SwFrmFmt& rFmt = GetDoc()->GetTblFrmFmt(i, true);
-            if(aName == rFmt.GetName())
+            if (rName == rFmt.GetName())
             {
                 bRet = sal_True;
                 break;

@@ -1369,14 +1369,14 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
 
     SwDoc *pDoc = SwImport::GetDocFromXMLImport( GetSwImport() );
 
-    String sTblName;
+    OUString sTblName;
     if( !aName.isEmpty() )
     {
         const SwTableFmt *pTblFmt = pDoc->FindTblFmtByName( aName );
         if( !pTblFmt )
             sTblName = aName;
     }
-    if( !sTblName.Len() )
+    if( sTblName.isEmpty() )
     {
         sTblName = pDoc->GetUniqueTblName();
         GetImport().GetTextImport()

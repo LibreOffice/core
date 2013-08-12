@@ -752,21 +752,17 @@ SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(Window* pParent,
         if(pColl->IsDefault())
             continue;
 
-        const String& rName = pColl->GetName();
-
-        if(rName.Len() > 0)
+        const OUString aName = pColl->GetName();
+        if (!aName.isEmpty())
         {
             SvTreeListEntry* pEntry = rTLB.First();
-            bool bFound = false;
-            while(pEntry && !bFound)
+            while (pEntry && rTLB.GetEntryText(pEntry)!=aName)
             {
-                if(rTLB.GetEntryText(pEntry) == rName)
-                    bFound = true;
                 pEntry = rTLB.Next(pEntry);
             }
-            if(!bFound)
+            if (!pEntry)
             {
-                rTLB.InsertEntry(rName)->SetUserData((void*)USHRT_MAX);
+                rTLB.InsertEntry(aName)->SetUserData((void*)USHRT_MAX);
             }
         }
     }

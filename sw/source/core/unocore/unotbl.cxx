@@ -295,7 +295,7 @@ static uno::Any lcl_GetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertySimp
         }
         break;
         case FN_PARAM_LINK_DISPLAY_NAME :
-            aRet <<= OUString(pFmt->GetName());
+            aRet <<= pFmt->GetName();
         break;
         case FN_UNO_REDLINE_NODE_START:
         case FN_UNO_REDLINE_NODE_END:
@@ -3527,51 +3527,40 @@ void SwXTextTable::removeVetoableChangeListener(const OUString& /*rPropertyName*
 OUString SwXTextTable::getName(void) throw( uno::RuntimeException )
 {
     SolarMutexGuard aGuard;
-    String sRet;
     SwFrmFmt* pFmt = GetFrmFmt();
     if(!pFmt && !bIsDescriptor)
         throw uno::RuntimeException();
     if(pFmt)
     {
-        sRet = pFmt->GetName();
+        return pFmt->GetName();
     }
-    else
-        sRet = m_sTableName;
-    return sRet;
+    return m_sTableName;
 }
 
 void SwXTextTable::setName(const OUString& rName) throw( uno::RuntimeException )
 {
     SolarMutexGuard aGuard;
     SwFrmFmt* pFmt = GetFrmFmt();
-    String sNewTblName(rName);
     if((!pFmt && !bIsDescriptor) ||
-       !sNewTblName.Len() ||
-       STRING_NOTFOUND != sNewTblName.Search('.') ||
-       STRING_NOTFOUND != sNewTblName.Search(' ')  )
+       rName.isEmpty() ||
+       rName.indexOf('.')>=0 ||
+       rName.indexOf(' ')>=0 )
         throw uno::RuntimeException();
 
     if(pFmt)
     {
         const String aOldName( pFmt->GetName() );
-        bool bNameFound = false;
         SwFrmFmt* pTmpFmt;
         const SwFrmFmts* pTbl = pFmt->GetDoc()->GetTblFrmFmts();
         for( sal_uInt16 i = pTbl->size(); i; )
             if( !( pTmpFmt = (*pTbl)[ --i ] )->IsDefault() &&
-                pTmpFmt->GetName() == sNewTblName &&
+                pTmpFmt->GetName() == rName &&
                             pFmt->GetDoc()->IsUsed( *pTmpFmt ))
             {
-                bNameFound = true;
-                break;
+                throw uno::RuntimeException();
             }
 
-        if(bNameFound)
-        {
-            throw uno::RuntimeException();
-        }
-        pFmt->SetName( sNewTblName );
-
+        pFmt->SetName( rName );
 
         SwStartNode *pStNd;
         SwNodeIndex aIdx( *pFmt->GetDoc()->GetNodes().GetEndOfAutotext().StartOfSectionNode(), 1 );
@@ -3582,7 +3571,7 @@ void SwXTextTable::setName(const OUString& rName) throw( uno::RuntimeException )
             if ( pNd->IsOLENode() &&
                 aOldName == ((SwOLENode*)pNd)->GetChartTblName() )
             {
-                ((SwOLENode*)pNd)->SetChartTblName( sNewTblName );
+                ((SwOLENode*)pNd)->SetChartTblName( rName );
 
                 ((SwOLENode*)pNd)->GetOLEObj();
 
@@ -3595,7 +3584,7 @@ void SwXTextTable::setName(const OUString& rName) throw( uno::RuntimeException )
         pFmt->GetDoc()->SetModified();
     }
     else
-        m_sTableName = sNewTblName;
+        m_sTableName = rName;
 }
 
 sal_uInt16 SwXTextTable::getRowCount(void)

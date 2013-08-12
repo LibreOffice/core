@@ -1097,7 +1097,7 @@ Writer& OutHTML_SwTblNode( Writer& rWrt, SwTableNode & rNode,
     if( text::HoriOrientation::NONE==eTabHoriOri )
         nFlyHSpace = nFlyVSpace = 0;
 
-    if( pFmt->GetName().Len() )
+    if( !pFmt->GetName().isEmpty() )
         rHTMLWrt.OutImplicitMark( pFmt->GetName(), pMarkToTable );
 
     if( text::HoriOrientation::NONE!=eDivHoriOri )

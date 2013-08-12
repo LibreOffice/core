@@ -660,7 +660,7 @@ String SwTableFormula::ScanString( FnScanFormel fnFormel, const SwTable& rTbl,
     return aStr;
 }
 
-const SwTable* SwTableFormula::FindTable( SwDoc& rDoc, const String& rNm ) const
+const SwTable* SwTableFormula::FindTable( SwDoc& rDoc, const OUString& rNm ) const
 {
     const SwFrmFmts& rTblFmts = *rDoc.GetTblFrmFmts();
     const SwTable* pTmpTbl, *pRet = 0;
@@ -669,8 +669,7 @@ const SwTable* SwTableFormula::FindTable( SwDoc& rDoc, const String& rNm ) const
         SwFrmFmt* pFmt = rTblFmts[ --nFmtCnt ];
         // if we are called from Sw3Writer, a number is dependent on the format name
         SwTableBox* pFBox;
-        if( COMPARE_EQUAL == rNm.CompareTo( pFmt->GetName(),
-                                        pFmt->GetName().Search( 0x0a ) ) &&
+        if ( rNm.startsWith(pFmt->GetName().getToken(0, 0x0a)) &&
             0 != ( pTmpTbl = SwTable::FindTable( pFmt ) ) &&
             0 != (pFBox = pTmpTbl->GetTabSortBoxes()[0] ) &&
             pFBox->GetSttNd() &&

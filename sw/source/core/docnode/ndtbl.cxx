@@ -3884,8 +3884,7 @@ sal_Bool SwDoc::GetTableAutoFmt( const SwSelBoxes& rBoxes, SwTableAutoFmt& rGet 
 String SwDoc::GetUniqueTblName() const
 {
     ResId aId( STR_TABLE_DEFNAME, *pSwResMgr );
-    String aName( aId );
-    xub_StrLen nNmLen = aName.Len();
+    const OUString aName( aId );
 
     sal_uInt16 nNum, nTmp, nFlagSize = ( mpTblFrmFmtTbl->size() / 8 ) +2;
     sal_uInt16 n;
@@ -3897,10 +3896,11 @@ String SwDoc::GetUniqueTblName() const
     {
         const SwFrmFmt* pFmt = (*mpTblFrmFmtTbl)[ n ];
         if( !pFmt->IsDefault() && IsUsed( *pFmt )  &&
-            pFmt->GetName().Match( aName ) == nNmLen )
+            pFmt->GetName().startsWith( aName ) )
         {
             // Get number and set the Flag
-            nNum = static_cast<sal_uInt16>(pFmt->GetName().Copy( nNmLen ).ToInt32());
+            const sal_Int32 nNmLen = aName.getLength();
+            nNum = static_cast<sal_uInt16>(pFmt->GetName().copy( nNmLen ).toInt32());
             if( nNum-- && nNum < mpTblFrmFmtTbl->size() )
                 pSetFlags[ nNum / 8 ] |= (0x01 << ( nNum & 0x07 ));
         }
@@ -3919,7 +3919,7 @@ String SwDoc::GetUniqueTblName() const
         }
 
     delete [] pSetFlags;
-    return aName += OUString::number( ++nNum );
+    return aName + OUString::number( ++nNum );
 }
 
 SwTableFmt* SwDoc::FindTblFmtByName( const String& rName, sal_Bool bAll ) const

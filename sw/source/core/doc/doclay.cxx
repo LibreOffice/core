@@ -409,14 +409,14 @@ SwFrmFmt *SwDoc::CopyLayoutFmt( const SwFrmFmt& rSource,
         if( !mbCopyIsMove || this != pSrcDoc )
         {
             if( mbInReading )
-                pDest->SetName( aEmptyStr );
+                pDest->SetName( OUString() );
             else
             {
                 // Test first if the name is already taken, if so generate a new one.
                 sal_Int8 nNdTyp = aRg.aStart.GetNode().GetNodeType();
 
-                String sOld( pDest->GetName() );
-                pDest->SetName( aEmptyStr );
+                OUString sOld( pDest->GetName() );
+                pDest->SetName( OUString() );
                 if( FindFlyByName( sOld, nNdTyp ) )     // found one
                     switch( nNdTyp )
                     {
@@ -1148,7 +1148,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
     {
         for( sal_uInt16 i = pTxtFmtCollTbl->size(); i; )
         {
-            if( (*pTxtFmtCollTbl)[ --i ]->GetName().Equals(pType->GetName()) )
+            if( (*pTxtFmtCollTbl)[ --i ]->GetName()==pType->GetName() )
             {
                 pColl = (*pTxtFmtCollTbl)[i];
                 break;
@@ -1500,7 +1500,7 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
     {
         for( sal_uInt16 i = pTxtFmtCollTbl->size(); i; )
         {
-            if( (*pTxtFmtCollTbl)[ --i ]->GetName().Equals(pType->GetName()) )
+            if( (*pTxtFmtCollTbl)[ --i ]->GetName()==pType->GetName() )
             {
                 pColl = (*pTxtFmtCollTbl)[i];
                 break;
@@ -1919,10 +1919,10 @@ static String lcl_GetUniqueFlyName( const SwDoc* pDoc, sal_uInt16 nDefStrId )
     {
         const SwFrmFmt* pFlyFmt = rFmts[ n ];
         if( RES_FLYFRMFMT == pFlyFmt->Which() &&
-            pFlyFmt->GetName().Match( aName ) == nNmLen )
+            pFlyFmt->GetName().startsWith( aName ) )
         {
             // Only get and set the Flag
-            nNum = static_cast< sal_uInt16 >( pFlyFmt->GetName().Copy( nNmLen ).ToInt32() );
+            nNum = static_cast< sal_uInt16 >( pFlyFmt->GetName().copy( nNmLen ).toInt32() );
             if( nNum-- && nNum < rFmts.size() )
                 pSetFlags[ nNum / 8 ] |= (0x01 << ( nNum & 0x07 ));
         }
@@ -1959,7 +1959,7 @@ String SwDoc::GetUniqueFrameName() const
     return lcl_GetUniqueFlyName( this, STR_FRAME_DEFNAME );
 }
 
-const SwFlyFrmFmt* SwDoc::FindFlyByName( const String& rName, sal_Int8 nNdTyp ) const
+const SwFlyFrmFmt* SwDoc::FindFlyByName( const OUString& rName, sal_Int8 nNdTyp ) const
 {
     const SwFrmFmts& rFmts = *GetSpzFrmFmts();
     for( sal_uInt16 n = rFmts.size(); n; )
@@ -1986,10 +1986,10 @@ const SwFlyFrmFmt* SwDoc::FindFlyByName( const String& rName, sal_Int8 nNdTyp ) 
     return 0;
 }
 
-void SwDoc::SetFlyName( SwFlyFrmFmt& rFmt, const String& rName )
+void SwDoc::SetFlyName( SwFlyFrmFmt& rFmt, const OUString& rName )
 {
-    String sName( rName );
-    if( !rName.Len() || FindFlyByName( rName ) )
+    OUString sName( rName );
+    if( sName.isEmpty() || FindFlyByName( sName ) )
     {
         sal_uInt16 nTyp = STR_FRAME_DEFNAME;
         const SwNodeIndex* pIdx = rFmt.GetCntnt().GetCntntIdx();
@@ -2028,19 +2028,32 @@ void SwDoc::SetAllUniqueFlyNames()
         if( RES_FLYFRMFMT == (pFlyFmt = (*GetSpzFrmFmts())[ --n ])->Which() )
         {
             sal_uInt16 *pNum = 0;
-            xub_StrLen nLen;
-            const String& rNm = pFlyFmt->GetName();
-            if( rNm.Len() )
+            const OUString aNm = pFlyFmt->GetName();
+            if ( !aNm.isEmpty() )
             {
-                if( rNm.Match( sGrfNm ) == ( nLen = sGrfNm.Len() ))
+                xub_StrLen nLen = 0;
+                if ( aNm.startsWith(sGrfNm) )
+                {
+                    nLen = sGrfNm.Len();
                     pNum = &nGrfNum;
-                else if( rNm.Match( sFlyNm ) == ( nLen = sFlyNm.Len() ))
+                }
+                else if( aNm.startsWith(sFlyNm) )
+                {
+                    nLen = sFlyNm.Len();
                     pNum = &nFlyNum;
-                else if( rNm.Match( sOLENm ) == ( nLen = sOLENm.Len() ))
+                }
+                else if( aNm.startsWith(sOLENm) )
+                {
+                    nLen = sOLENm.Len();
                     pNum = &nOLENum;
+                }
 
-                if ( pNum && *pNum < ( nLen = static_cast< xub_StrLen >( rNm.Copy( nLen ).ToInt32() ) ) )
-                    *pNum = nLen;
+                if ( pNum )
+                {
+                    const xub_StrLen nNewLen = static_cast< xub_StrLen >( aNm.copy( nLen ).toInt32() );
+                    if (*pNum < nNewLen)
+                        *pNum = nNewLen;
+                }
             }
             else
                 // we want to set that afterwards
@@ -2066,7 +2079,7 @@ void SwDoc::SetAllUniqueFlyNames()
             && pIdx->GetNode().GetNodes().IsDocNodes() )
         {
             sal_uInt16 nNum;
-            String sNm;
+            OUString sNm;
             switch( GetNodes()[ pIdx->GetIndex() + 1 ]->GetNodeType() )
             {
             case ND_GRFNODE:
@@ -2082,7 +2095,7 @@ void SwDoc::SetAllUniqueFlyNames()
                 nNum = ++nFlyNum;
                 break;
             }
-            pFlyFmt->SetName( sNm += OUString::number( nNum ));
+            pFlyFmt->SetName( sNm + OUString::number( nNum ));
         }
     aArr.clear();
 

@@ -215,15 +215,14 @@ void SwAccessibleFrameBase::Modify( const SfxPoolItem* pOld, const SfxPoolItem *
             const SwFrmFmt *pFrmFmt = pFlyFrm->GetFmt();
             OSL_ENSURE( pFrmFmt == GetRegisteredIn(), "invalid frame" );
 
-            OUString sOldName( GetName() );
+            const OUString sOldName( GetName() );
             OSL_ENSURE( !pOld ||
-                    static_cast < const SwStringMsgPoolItem * >( pOld )->GetString() == String( sOldName ),
+                    static_cast < const SwStringMsgPoolItem * >( pOld )->GetString() == GetName(),
                     "invalid old name" );
 
-            const String& rNewName = pFrmFmt->GetName();
-            SetName( rNewName );
+            SetName( pFrmFmt->GetName() );
             OSL_ENSURE( !pNew ||
-                    static_cast < const SwStringMsgPoolItem * >( pNew )->GetString() == rNewName,
+                    static_cast < const SwStringMsgPoolItem * >( pNew )->GetString() == GetName(),
                     "invalid new name" );
 
             if( sOldName != GetName() )

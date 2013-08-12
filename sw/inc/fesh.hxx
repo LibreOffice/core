@@ -415,7 +415,7 @@ public:
 
     /// Set name at selected FlyFrame.
     void SetFlyName( const String& rName );
-    const String& GetFlyName() const;
+    OUString GetFlyName() const;
 
     /// get reference to OLE object (if there is one) for selected FlyFrame
     const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > GetOleRef() const;

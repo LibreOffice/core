@@ -416,7 +416,7 @@ SwTableNode* SwTableNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     }
 
     // Copy the TableFrmFmt
-    String sTblName( GetTable().GetFrmFmt()->GetName() );
+    OUString sTblName( GetTable().GetFrmFmt()->GetName() );
     if( !pDoc->IsCopyIsMove() )
     {
         const SwFrmFmts& rTblFmts = *pDoc->GetTblFrmFmts();

@@ -1479,7 +1479,7 @@ SwCharFmt *SwWrtShell::GetCharStyle(const String &rFmtName, GetStyle eCreate )
 //            frame format with this name exists or
 //            this is a default format or the format is automatic.
 
-SwFrmFmt *SwWrtShell::GetTblStyle(const String &rFmtName)
+SwFrmFmt *SwWrtShell::GetTblStyle(const OUString &rFmtName)
 {
     SwFrmFmt *pFmt = 0;
     for( sal_uInt16 i = GetTblFrmFmtCount(); i; )

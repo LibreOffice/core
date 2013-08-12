@@ -36,7 +36,7 @@ class SwDoc;
 /// Base class for various Writer styles.
 class SW_DLLPUBLIC SwFmt : public SwModify
 {
-    String aFmtName;
+    OUString aFmtName;
     SwAttrSet aSet;
 
     sal_uInt16 nWhichId;
@@ -57,7 +57,7 @@ class SW_DLLPUBLIC SwFmt : public SwModify
 protected:
     SwFmt( SwAttrPool& rPool, const sal_Char* pFmtNm,
             const sal_uInt16* pWhichRanges, SwFmt *pDrvdFrm, sal_uInt16 nFmtWhich );
-    SwFmt( SwAttrPool& rPool, const String &rFmtNm, const sal_uInt16* pWhichRanges,
+    SwFmt( SwAttrPool& rPool, const OUString &rFmtNm, const sal_uInt16* pWhichRanges,
             SwFmt *pDrvdFrm, sal_uInt16 nFmtWhich );
     SwFmt( const SwFmt& rFmt );
    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNewValue );
@@ -101,8 +101,8 @@ public:
     inline SwFmt* DerivedFrom() const { return (SwFmt*)GetRegisteredIn(); }
     inline sal_Bool IsDefault() const { return DerivedFrom() == 0; }
 
-    inline const String& GetName() const        { return aFmtName; }
-    void SetName( const String& rNewName, sal_Bool bBroadcast=sal_False );
+    inline OUString GetName() const   { return aFmtName; }
+    void SetName( const OUString& rNewName, sal_Bool bBroadcast=sal_False );
     inline void SetName( const sal_Char* pNewName,
                          sal_Bool bBroadcast=sal_False);
 

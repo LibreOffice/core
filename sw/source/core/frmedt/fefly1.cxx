@@ -1514,14 +1514,14 @@ void SwFEShell::SetFlyName( const String& rName )
     }
 }
 
-const String& SwFEShell::GetFlyName() const
+OUString SwFEShell::GetFlyName() const
 {
     SwLayoutFrm *pFly = FindFlyFrm();
     if( pFly )
         return pFly->GetFmt()->GetName();
 
     OSL_ENSURE( !this, "no FlyFrame selected" );
-    return aEmptyStr;
+    return OUString();
 }
 
 
@@ -1975,7 +1975,7 @@ void SwFEShell::GetConnectableFrmFmts(SwFrmFmt & rFmt,
 
         for (aIt = aTmpSpzArray.begin(); aIt != aTmpSpzArray.end(); ++aIt)
         {
-            String  aString = (*aIt)->GetName();
+            const String aString = (*aIt)->GetName();
 
             /* rFmt is not a vaild successor or predecessor of
                itself */

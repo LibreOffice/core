@@ -526,31 +526,34 @@ void MSWordStyles::OutputStyle( SwFmt* pFmt, sal_uInt16 nPos )
 
         GetStyleData( pFmt, bFmtColl, nBase, nWwNext );
 
-        String aName = pFmt->GetName();
+        OUString aName = pFmt->GetName();
         // We want to map LO's default style to Word's "Normal" style.
         // Word looks for this specific style name when reading docx files.
         // (It must be the English word regardless of language settings)
-        if ( nPos == 0 ) {
+        if ( nPos == 0 )
+        {
             assert( pFmt->GetPoolFmtId() == RES_POOLCOLL_STANDARD );
-            aName = OUString("Normal");
-        } else if (aName.EqualsIgnoreCaseAscii("Normal")) {
+            aName = "Normal";
+        }
+        else if (aName.equalsIgnoreAsciiCase("Normal"))
+        {
             // If LO has a style named "Normal"(!) rename it to something unique
-            aName.InsertAscii("LO-" , 0);
-            String aBaseName = aName;
+            const OUString aBaseName = "LO-" + aName;
+            aName = aBaseName;
             // Check if we still have a clash, in which case we add a suffix
             for ( int nSuffix = 0; ; ++nSuffix ) {
                 bool clash=false;
-                for ( int n = 1; n < nUsedSlots; ++n )
+                for ( sal_uInt16 n = 1; n < nUsedSlots; ++n )
                     if ( pFmtA[n] &&
-                         pFmtA[n]->GetName().EqualsIgnoreCaseAscii(aName) )
+                         pFmtA[n]->GetName().equalsIgnoreAsciiCase(aName) )
                     {
                         clash = true;
                         break;
                     }
                 if (!clash)
                     break;
-                aName = aBaseName;
-                aName += OUString::number(++nSuffix);
+                // TODO: verify if we really need to increment nSuffix in 2 places
+                aName = aBaseName + OUString::number(++nSuffix);
             }
         }
 

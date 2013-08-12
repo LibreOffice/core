@@ -345,7 +345,7 @@ typedef sal_Bool (SwWrtShell:: *FNSimpleMove)();
                                     GetStyle eCreate = GETSTYLE_NOCREATE);
     SwCharFmt*      GetCharStyle(const String &rFmtName,
                                     GetStyle eCreate = GETSTYLE_NOCREATE);
-    SwFrmFmt*       GetTblStyle(const String &rFmtName);
+    SwFrmFmt*       GetTblStyle(const OUString &rFmtName);
 
     void    SetPageStyle(const String &rCollName);
 

@@ -528,8 +528,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
                                       rHWrt.nCSS1Script,
                                       false );
         rHWrt.aTxtCollInfos.insert( pFmtInfo );
-        OUString aName( rFmt.GetName() );
-        if( 0 != rHWrt.aScriptParaStyles.count( aName ) )
+        if( rHWrt.aScriptParaStyles.count( rFmt.GetName() ) )
             ((SwHTMLFmtInfo *)pFmtInfo)->bScriptDependent = true;
     }
 
@@ -1626,8 +1625,7 @@ const SwHTMLFmtInfo *HTMLEndPosLst::GetFmtInfo( const SwFmt& rFmt,
         pFmtInfo = new SwHTMLFmtInfo( &rFmt, pDoc, pTemplate,
                                       bOutStyles );
         rFmtInfos.insert( pFmtInfo );
-        OUString aName( rFmt.GetName() );
-        if( 0 != rScriptTxtStyles.count( aName ) )
+        if ( rScriptTxtStyles.count( rFmt.GetName() ) )
             ((SwHTMLFmtInfo *)pFmtInfo)->bScriptDependent = true;
     }
 
@@ -2039,7 +2037,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
     sal_uInt16 nPoolId = pNd->GetAnyFmtColl().GetPoolFmtId();
 
     if( !nEnde && (RES_POOLCOLL_HTML_HR==nPoolId ||
-                   pNd->GetAnyFmtColl().GetName().EqualsAscii( OOO_STRING_SVTOOLS_HTML_horzrule) ) )
+                   pNd->GetAnyFmtColl().GetName() == OOO_STRING_SVTOOLS_HTML_horzrule) )
     {
         // dann die absatz-gebundenen Grafiken/OLE-Objekte im Absatz
         // MIB 8.7.97: Ein <PRE> spannen wir um die Linie auf. Dann stimmen

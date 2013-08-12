@@ -2853,9 +2853,9 @@ bool SwWW8ImplReader::AddExtraOutlinesAsExtraStyles(SwTOXBase& rBase)
                  nStyleLevel < nMaxLevel
                )
             {
-                String sStyles(rBase.GetStyleNames(rSI.nOutlineLevel));
-                if( sStyles.Len())
-                    sStyles += TOX_STYLE_DELIMITER;
+                OUString sStyles(rBase.GetStyleNames(rSI.nOutlineLevel));
+                if ( !sStyles.isEmpty())
+                    sStyles += OUString(TOX_STYLE_DELIMITER);
                 sStyles += pFmt->GetName();
                 rBase.SetStyleNames(sStyles, rSI.nOutlineLevel);
                 bExtras = true;

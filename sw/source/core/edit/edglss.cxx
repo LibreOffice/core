@@ -191,7 +191,7 @@ sal_Bool SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
             sal_Bool bCpyTblNm = aBoxes.size() == pTblNd->GetTable().GetTabSortBoxes().size();
             if( bCpyTblNm )
             {
-                const String& rTblName = pTblNd->GetTable().GetFrmFmt()->GetName();
+                const OUString rTblName = pTblNd->GetTable().GetFrmFmt()->GetName();
                 const SwFrmFmts& rTblFmts = *pInsDoc->GetTblFrmFmts();
                 for( sal_uInt16 n = rTblFmts.size(); n; )
                     if( rTblFmts[ --n ]->GetName() == rTblName )

@@ -598,7 +598,7 @@ String SvxNumberFormat::CreateRomanString( sal_uLong nNo, sal_Bool bUpper )
     return sRet;
 }
 
-const String&   SvxNumberFormat::GetCharFmtName()const
+OUString SvxNumberFormat::GetCharFmtName()const
 {
     return sCharStyleName;
 }

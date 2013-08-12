@@ -176,7 +176,7 @@ public:
     const OUString&   GetSuffix() const { return sSuffix;}
 
     void                    SetCharFmtName(const String& rSet){ sCharStyleName = rSet; }
-    virtual const String&   GetCharFmtName()const;
+    virtual OUString        GetCharFmtName()const;
 
     void            SetBulletFont(const Font* pFont);
     const Font*     GetBulletFont() const {return pBulletFont;}

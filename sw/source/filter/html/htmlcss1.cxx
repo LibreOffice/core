@@ -1043,7 +1043,8 @@ sal_Bool SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
                 // die Attribute in das DropCap-Attribut einfuegen
                 if( CSS1_SCRIPT_ALL == nScript )
                 {
-                    FillDropCap( aDrop, rItemSet, &pColl->GetName() );
+                    OUString sName(pColl->GetName());
+                    FillDropCap( aDrop, rItemSet, &sName );
                 }
                 else
                 {
@@ -1069,7 +1070,8 @@ sal_Bool SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
                         aScriptItemSet.ClearItem( RES_CHRATR_CTL_POSTURE );
                         aScriptItemSet.ClearItem( RES_CHRATR_CTL_WEIGHT );
                     }
-                    FillDropCap( aDrop, aScriptItemSet, &pColl->GetName() );
+                    OUString sName(pColl->GetName());
+                    FillDropCap( aDrop, aScriptItemSet, &sName );
                 }
 
                 // Das Attribut nur setzen, wenn float: left angegeben wurde
@@ -1488,7 +1490,7 @@ void SwCSS1Parser::AddClassName( OUString& rFmtName, const OUString& rClass )
 
 void SwCSS1Parser::FillDropCap( SwFmtDrop& rDrop,
                                 SfxItemSet& rItemSet,
-                                const String *pName )
+                                const OUString *pName )
 {
     // die Anzahl der Zeilen entspricht in etwa einer %-Angabe
     // fuer die Hoehe (was passiert mit absoluten Hoehen???)

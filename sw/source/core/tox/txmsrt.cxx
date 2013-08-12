@@ -659,7 +659,7 @@ sal_uInt16 SwTOXPara::GetLevel() const
 
 String SwTOXPara::GetURL() const
 {
-    String aTxt;
+    OUString aTxt;
     const SwCntntNode* pNd = aTOXSources[0].pNd;
     switch( eType )
     {
@@ -672,9 +672,7 @@ String SwTOXPara::GetURL() const
             ::sw::mark::IMark const * const pMark = pDoc->getIDocumentMarkAccess()->getMarkForTxtNode(
                                 *(pTxtNd),
                                 IDocumentMarkAccess::CROSSREF_HEADING_BOOKMARK);
-            aTxt = '#';
-            const String aMarkName( pMark->GetName() );
-            aTxt += aMarkName;
+            aTxt = "#" + pMark->GetName();
         }
         break;
 
@@ -686,7 +684,7 @@ String SwTOXPara::GetURL() const
             SwFrmFmt* pFly = pNd->GetFlyFmt();
             if( pFly )
             {
-                (( aTxt = '#' ) += pFly->GetName() ) += cMarkSeparator;
+                aTxt = "#" + pFly->GetName() + OUString(cMarkSeparator);
                 const sal_Char* pStr;
                 switch( eType )
                 {
@@ -696,16 +694,14 @@ String SwTOXPara::GetURL() const
                 default:            pStr = 0;
                 }
                 if( pStr )
-                    aTxt.AppendAscii( pStr );
+                    aTxt += OUString::createFromAscii( pStr );
             }
         }
         break;
     case nsSwTOXElement::TOX_SEQUENCE:
         {
-            aTxt = '#';
-            aTxt += m_sSequenceName;
-            aTxt += cMarkSeparator;
-            aTxt.AppendAscii( pMarkToSequence );
+            aTxt = "#" + m_sSequenceName + OUString(cMarkSeparator)
+                 + OUString::createFromAscii(pMarkToSequence);
         }
         break;
     default: break;
@@ -748,18 +744,19 @@ sal_uInt16 SwTOXTable::GetLevel() const
 
 String SwTOXTable::GetURL() const
 {
-    String aTxt;
     const SwNode* pNd = aTOXSources[0].pNd;
-    if( pNd && 0 != ( pNd = pNd->FindTableNode() ) )
-    {
-        aTxt = ((SwTableNode*)pNd)->GetTable().GetFrmFmt()->GetName();
-        if( aTxt.Len() )
-        {
-            ( aTxt.Insert( '#', 0 ) += cMarkSeparator ).
-                                            AppendAscii( pMarkToTable );
-        }
-    }
-    return aTxt;
+    if (!pNd)
+        return String();
+
+    pNd = pNd->FindTableNode();
+    if (!pNd)
+        return String();
+
+    const OUString sName = ((SwTableNode*)pNd)->GetTable().GetFrmFmt()->GetName();
+    if ( sName.isEmpty() )
+        return String();
+
+    return "#" + sName + OUString(cMarkSeparator) + OUString::createFromAscii( pMarkToTable );
 }
 
 SwTOXAuthority::SwTOXAuthority( const SwCntntNode& rNd,

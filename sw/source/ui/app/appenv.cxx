@@ -247,8 +247,8 @@ void SwModule::InsertEnv( SfxRequest& rReq )
         const SwPageDesc* pFollow = 0;
         SwTxtFmtColl *pSend = pTmp->GetTxtCollFromPool( RES_POOLCOLL_SENDADRESS ),
                      *pAddr = pTmp->GetTxtCollFromPool( RES_POOLCOLL_JAKETADRESS);
-        const String &rSendMark = pSend->GetName();
-        const String &rAddrMark = pAddr->GetName();
+        const OUString sSendMark = pSend->GetName();
+        const OUString sAddrMark = pAddr->GetName();
 
         if (nMode == ENV_INSERT)
         {
@@ -276,12 +276,12 @@ void SwModule::InsertEnv( SfxRequest& rReq )
                     pSh->EndPg(sal_True);
                 pSh->DelRight();
                 // Delete frame of the first page
-                if( pSh->GotoFly( rSendMark ) )
+                if ( pSh->GotoFly(sSendMark) )
                 {
                     pSh->EnterSelFrmMode();
                     pSh->DelRight();
                 }
-                if ( pSh->GotoFly( rAddrMark ) )
+                if ( pSh->GotoFly(sAddrMark) )
                 {
                     pSh->EnterSelFrmMode();
                     pSh->DelRight();
@@ -427,7 +427,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
                 Size (rItem.lAddrFromLeft - rItem.lSendFromLeft, 0));
 
             pSh->EnterSelFrmMode();
-            pSh->SetFlyName( rSendMark );
+            pSh->SetFlyName(sSendMark);
             pSh->UnSelectFrm();
             pSh->LeaveSelFrmMode();
             pSh->SetTxtFmtColl( pSend );
@@ -442,7 +442,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
             Point(rItem.lAddrFromLeft + lLeft, rItem.lAddrFromTop  + lUpper),
             Size (nPageW - rItem.lAddrFromLeft - 566, 0));
         pSh->EnterSelFrmMode();
-        pSh->SetFlyName( rAddrMark );
+        pSh->SetFlyName(sAddrMark);
         pSh->UnSelectFrm();
         pSh->LeaveSelFrmMode();
         pSh->SetTxtFmtColl( pAddr );

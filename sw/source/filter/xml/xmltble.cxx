@@ -286,20 +286,14 @@ bool SwXMLTableFrmFmtsSort_Impl::AddRow( SwFrmFmt& rFrmFmt,
             continue;
 
         // found!
-        const String& rFmtName = pTestFmt->GetName();
-        rFrmFmt.SetName( rFmtName );
+        rFrmFmt.SetName( pTestFmt->GetName() );
         bInsert = false;
         break;
     }
 
     if( bInsert )
     {
-        OUStringBuffer sBuffer( rNamePrefix.getLength() + 4UL );
-        sBuffer.append( rNamePrefix );
-        sBuffer.append( (sal_Unicode)'.' );
-        sBuffer.append( (sal_Int32)(nLine+1UL) );
-
-        rFrmFmt.SetName( sBuffer.makeStringAndClear() );
+        rFrmFmt.SetName( rNamePrefix + "." + OUString::number(nLine+1UL) );
         if ( i != aFormatList.end() ) ++i;
         aFormatList.insert( i, &rFrmFmt );
     }
@@ -466,8 +460,7 @@ bool SwXMLTableFrmFmtsSort_Impl::AddCell( SwFrmFmt& rFrmFmt,
             continue;
 
         // found!
-        const String& rFmtName = pTestFmt->GetName();
-        rFrmFmt.SetName( rFmtName );
+        rFrmFmt.SetName( pTestFmt->GetName() );
         bInsert = false;
         break;
     }
@@ -782,10 +775,10 @@ void SwXMLExport::ExportTableBox( const SwTableBox& rBox,
         const SwFrmFmt *pFrmFmt = rBox.GetFrmFmt();
         if( pFrmFmt )
         {
-            const String& rName = pFrmFmt->GetName();
-            if( rName.Len() )
+            const OUString sName = pFrmFmt->GetName();
+            if( !sName.isEmpty() )
             {
-                AddAttribute( XML_NAMESPACE_TABLE, XML_STYLE_NAME, EncodeStyleName(rName) );
+                AddAttribute( XML_NAMESPACE_TABLE, XML_STYLE_NAME, EncodeStyleName(sName) );
             }
         }
     }
@@ -922,10 +915,10 @@ void SwXMLExport::ExportTableLine( const SwTableLine& rLine,
     const SwFrmFmt *pFrmFmt = rLine.GetFrmFmt();
     if( pFrmFmt )
     {
-        const String& rName = pFrmFmt->GetName();
-        if( rName.Len() )
+        const OUString sName = pFrmFmt->GetName();
+        if( !sName.isEmpty() )
         {
-            AddAttribute( XML_NAMESPACE_TABLE, XML_STYLE_NAME, EncodeStyleName(rName) );
+            AddAttribute( XML_NAMESPACE_TABLE, XML_STYLE_NAME, EncodeStyleName(sName) );
         }
     }
 
@@ -1096,8 +1089,8 @@ static void lcl_xmltble_ClearName_Box( SwTableBox* pBox )
     else
     {
         SwFrmFmt *pFrmFmt = pBox->GetFrmFmt();
-        if( pFrmFmt && pFrmFmt->GetName().Len() )
-            pFrmFmt->SetName( aEmptyStr );
+        if( pFrmFmt && !pFrmFmt->GetName().isEmpty() )
+            pFrmFmt->SetName( OUString() );
     }
 }
 
@@ -1111,7 +1104,7 @@ void SwXMLExport::ExportTable( const SwTableNode& rTblNd )
 {
     const SwTable& rTbl = rTblNd.GetTable();
     const SwFrmFmt *pTblFmt = rTbl.GetFrmFmt();
-    if( pTblFmt && pTblFmt->GetName().Len() )
+    if( pTblFmt && !pTblFmt->GetName().isEmpty() )
     {
         AddAttribute( XML_NAMESPACE_TABLE, XML_NAME, pTblFmt->GetName() );
         AddAttribute( XML_NAMESPACE_TABLE, XML_STYLE_NAME,

@@ -1009,7 +1009,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
     if( rHTMLWrt.bLFPossible )
         rHTMLWrt.OutNewLine( sal_True );
 
-    if( rFrmFmt.GetName().Len() )
+    if( !rFrmFmt.GetName().isEmpty() )
         rHTMLWrt.OutImplicitMark( rFrmFmt.GetName(),
                                   pMarkToOLE );
     uno::Any aAny;

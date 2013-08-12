@@ -86,7 +86,7 @@ using namespace ::com::sun::star::uno;
 
 // Prototypes
 static void lcl_FrmGetMaxLineWidth(const SvxBorderLine* pBorderLine, SvxBorderLine& rBorderLine);
-static const SwFrmFmt* lcl_GetFrmFmtByName(SwWrtShell& rSh, const String& rName)
+static const SwFrmFmt* lcl_GetFrmFmtByName(SwWrtShell& rSh, const OUString& rName)
 {
     sal_uInt16 nCount = rSh.GetFlyCount(FLYCNTTYPE_FRM);
     for( sal_uInt16 i = 0; i < nCount; i++)
@@ -534,7 +534,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                         {
                             rSh.HideChainMarker();
 
-                            String sPrevName =
+                            OUString sPrevName =
                                 ((const SfxStringItem*)pItem)->GetValue();
                             const SwFmtChain &rChain = pCurrFlyFmt->GetChain();
                             //needs cast - no non-const method available
@@ -547,10 +547,10 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                                     rSh.Unchain(*pFlyFmt);
                                 }
                                 else
-                                    sPrevName.Erase();
+                                    sPrevName = OUString();
                             }
 
-                            if(sPrevName.Len())
+                            if (!sPrevName.isEmpty())
                             {
                                 //needs cast - no non-const method available
                                 SwFrmFmt* pPrevFmt = (SwFrmFmt*)
@@ -568,7 +568,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                                                  &pItem))
                         {
                             rSh.HideChainMarker();
-                            String sNextName =
+                            OUString sNextName =
                                 ((const SfxStringItem*)pItem)->GetValue();
                             const SwFmtChain &rChain = pCurrFlyFmt->GetChain();
                             //needs cast - no non-const method available
@@ -581,10 +581,10 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                                     rSh.Unchain(*((SwFlyFrmFmt*) pCurrFlyFmt));
                                 }
                                 else
-                                    sNextName.Erase();
+                                    sNextName = OUString();
                             }
 
-                            if(sNextName.Len())
+                            if (!sNextName.isEmpty())
                             {
                                 //needs cast - no non-const method available
                                 SwFrmFmt* pNextFmt = (SwFrmFmt*)

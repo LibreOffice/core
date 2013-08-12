@@ -124,7 +124,7 @@ public:
 
     // Fuellen eines DropCap-Attributs
     void FillDropCap( SwFmtDrop& rDrop, SfxItemSet& rItemSet,
-                      const String *pName=0 );
+                      const OUString *pName=0 );
 
     sal_Bool SetFmtBreak( SfxItemSet& rItemSet,
                       const SvxCSS1PropertyInfo& rPropInfo );

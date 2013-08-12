@@ -679,13 +679,11 @@ SwAccessibleTable::SwAccessibleTable(
 
     const SwFrmFmt *pFrmFmt = pTabFrm->GetFmt();
     const_cast< SwFrmFmt * >( pFrmFmt )->Add( this );
-    const String& rName = pFrmFmt->GetName();
 
-    SetName( OUString( rName ) + "-" + OUString::number( pTabFrm->GetPhyPageNum() ) );
+    SetName( pFrmFmt->GetName() + "-" + OUString::number( pTabFrm->GetPhyPageNum() ) );
 
-    OUString sArg1( static_cast< const SwTabFrm * >( GetFrm() )
-                                        ->GetFmt()->GetName() );
-    OUString sArg2( GetFormattedPageNumber() );
+    const OUString sArg1( static_cast< const SwTabFrm * >( GetFrm() )->GetFmt()->GetName() );
+    const OUString sArg2( GetFormattedPageNumber() );
 
     sDesc = GetResource( STR_ACCESS_TABLE_DESC, &sArg1, &sArg2 );
 }
@@ -709,11 +707,10 @@ void SwAccessibleTable::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew
             const SwFrmFmt *pFrmFmt = pTabFrm->GetFmt();
             OSL_ENSURE( pFrmFmt == GetRegisteredIn(), "invalid frame" );
 
-            OUString sOldName( GetName() );
+            const OUString sOldName( GetName() );
+            const OUString sNewTabName = pFrmFmt->GetName();
 
-            const String& rNewTabName = pFrmFmt->GetName();
-
-            SetName( OUString(rNewTabName) + "-" + OUString::number( pTabFrm->GetPhyPageNum() ) );
+            SetName( sNewTabName + "-" + OUString::number( pTabFrm->GetPhyPageNum() ) );
 
             if( sOldName != GetName() )
             {
@@ -724,11 +721,10 @@ void SwAccessibleTable::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew
                 FireAccessibleEvent( aEvent );
             }
 
-            OUString sOldDesc( sDesc );
-            OUString sArg1( rNewTabName );
-            OUString sArg2( GetFormattedPageNumber() );
+            const OUString sOldDesc( sDesc );
+            const OUString sArg2( GetFormattedPageNumber() );
 
-            sDesc = GetResource( STR_ACCESS_TABLE_DESC, &sArg1, &sArg2 );
+            sDesc = GetResource( STR_ACCESS_TABLE_DESC, &sNewTabName, &sArg2 );
             if( sDesc != sOldDesc )
             {
                 AccessibleEventObject aEvent;
@@ -1588,15 +1584,13 @@ SwAccessibleTableColHeaders::SwAccessibleTableColHeaders( SwAccessibleMap *pMap2
 
     const SwFrmFmt *pFrmFmt = pTabFrm->GetFmt();
     const_cast< SwFrmFmt * >( pFrmFmt )->Add( this );
-    const String& rName = pFrmFmt->GetName();
+    const OUString aName = pFrmFmt->GetName() + "-ColumnHeaders";
 
-    SetName( OUString(rName) + "-ColumnHeaders-" +  OUString::number( pTabFrm->GetPhyPageNum() ) );
+    SetName( aName + "-" + OUString::number( pTabFrm->GetPhyPageNum() ) );
 
-    OUString sArg1( OUString(rName) + "-ColumnHeaders" );
-    OUString sArg2( GetFormattedPageNumber() );
+    const OUString sArg2( GetFormattedPageNumber() );
 
-    OUString sDesc2 = GetResource( STR_ACCESS_TABLE_DESC, &sArg1, &sArg2 );
-    SetDesc( sDesc2 );
+    SetDesc( GetResource( STR_ACCESS_TABLE_DESC, &aName, &sArg2 ) );
 
     NotRegisteredAtAccessibleMap(); // #i85634#
 }

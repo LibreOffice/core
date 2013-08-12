@@ -305,12 +305,12 @@ void SwNumFmt::SetCharFmtName(const String& rSet)
     SvxNumberFormat::SetCharFmtName(rSet);
 }
 
-const String&   SwNumFmt::GetCharFmtName() const
+OUString SwNumFmt::GetCharFmtName() const
 {
     if((SwCharFmt*)GetRegisteredIn())
         return ((SwCharFmt*)GetRegisteredIn())->GetName();
-    else
-        return aEmptyStr;
+
+    return OUString();
 }
 
 void    SwNumFmt::SetGraphicBrush( const SvxBrushItem* pBrushItem, const Size* pSize,

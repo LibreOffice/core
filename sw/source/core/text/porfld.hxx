@@ -67,7 +67,7 @@ public:
     // #i89179# - made public
     inline const SwFont *GetFont() const { return pFnt; }
 
-    inline const OUString &GetExp() const { return aExpand; }
+    inline OUString GetExp() const { return aExpand; }
     virtual sal_Bool GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const;
     virtual sal_Bool Format( SwTxtFormatInfo &rInf );
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
@@ -118,7 +118,7 @@ public:
 class SwHiddenPortion : public SwFldPortion
 {
 public:
-    inline SwHiddenPortion( const XubString &rExpand, SwFont *pFntL = 0 )
+    inline SwHiddenPortion( const OUString &rExpand, SwFont *pFntL = 0 )
          : SwFldPortion( rExpand, pFntL )
         { SetLen(1); SetWhichPor( POR_HIDDEN ); }
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
@@ -141,7 +141,7 @@ protected:
     bool    mbLabelAlignmentPosAndSpaceModeActive;
 
 public:
-    SwNumberPortion( const XubString &rExpand,
+    SwNumberPortion( const OUString &rExpand,
                      SwFont *pFnt,
                      const sal_Bool bLeft,
                      const sal_Bool bCenter,
@@ -166,7 +166,7 @@ class SwBulletPortion : public SwNumberPortion
 {
 public:
     SwBulletPortion( const sal_Unicode cCh,
-                     const XubString& rBulletFollowedBy,
+                     const OUString& rBulletFollowedBy,
                      SwFont *pFnt,
                      const sal_Bool bLeft,
                      const sal_Bool bCenter,
@@ -188,7 +188,7 @@ class SwGrfNumPortion : public SwNumberPortion
     sal_Int16       eOrient;
 public:
     SwGrfNumPortion( SwFrm *pFrm,
-                     const XubString& rGraphicFollowedBy,
+                     const OUString& rGraphicFollowedBy,
                      const SvxBrushItem* pGrfBrush,
                      const SwFmtVertOrient* pGrfOrient,
                      const Size& rGrfSize,
@@ -239,7 +239,7 @@ class SwCombinedPortion : public SwFldPortion
     sal_uInt16 nLowPos;     // the Y position of the lower baseline
     sal_uInt8 nProportion;  // relative font height
 public:
-    SwCombinedPortion( const XubString &rExpand );
+    SwCombinedPortion( const OUString &rExpand );
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
     virtual sal_Bool Format( SwTxtFormatInfo &rInf );
     virtual KSHORT GetViewWidth( const SwTxtSizeInfo &rInf ) const;

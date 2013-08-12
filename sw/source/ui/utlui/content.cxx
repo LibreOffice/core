@@ -523,7 +523,7 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibilityChanged)
             for(sal_uInt16 i = 0; i < nMemberCount; i++)
             {
                 const SwFrmFmt& rTblFmt = pWrtShell->GetTblFrmFmt(i, true);
-                String sTblName( rTblFmt.GetName() );
+                const OUString sTblName( rTblFmt.GetName() );
 
                 SwContent* pCnt = new SwContent(this, sTblName,
                         rTblFmt.FindLayoutRect(sal_False, &aNullPt).Top() );
@@ -555,7 +555,7 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibilityChanged)
             for(sal_uInt16 i = 0; i < nMemberCount; i++)
             {
                 const SwFrmFmt* pFrmFmt = pWrtShell->GetFlyNum(i,eType);
-                String sFrmName = pFrmFmt->GetName();
+                const OUString sFrmName = pFrmFmt->GetName();
 
                 SwContent* pCnt;
                 if(CONTENT_TYPE_GRAPHIC == nContentType)

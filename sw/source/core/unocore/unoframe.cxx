@@ -1301,10 +1301,9 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
         else if(0 != (bNextFrame = (rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_CHAIN_NEXT_NAME))))
             || rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_CHAIN_PREV_NAME)))
         {
-            OUString uTemp;
-            aValue >>= uTemp;
-            String sChainName(uTemp);
-            if(!sChainName.Len())
+            OUString sChainName;
+            aValue >>= sChainName;
+            if (sChainName.isEmpty())
             {
                 if(bNextFrame)
                     pDoc->Unchain(*pFmt);
@@ -1688,7 +1687,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
         }
         else if(FN_PARAM_LINK_DISPLAY_NAME == pEntry->nWID)
         {
-            aAny <<= OUString(pFmt->GetName());
+            aAny <<= pFmt->GetName();
         }
         else if(FN_UNO_Z_ORDER == pEntry->nWID)
         {

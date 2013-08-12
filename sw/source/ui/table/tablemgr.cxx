@@ -208,7 +208,7 @@ uno::Reference< frame::XModel > SwTableFUNC::InsertChart(
     pSh->StartUndo( UNDO_UI_INSERT_CHART );
     pSh->StartAllAction();
 
-    String aName;
+    OUString aName;
     if (pSh->IsCrsrInTbl())
     {
         aName = pSh->GetTableFmt()->GetName();
@@ -247,7 +247,7 @@ uno::Reference< frame::XModel > SwTableFUNC::InsertChart(
         }
 
         // set the table name at the OLE-node
-        if (aName.Len())
+        if (!aName.isEmpty())
             pSh->SetChartName( aName );
     }
     pSh->EndAllAction();

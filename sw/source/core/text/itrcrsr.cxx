@@ -72,13 +72,15 @@ static void lcl_GetCharRectInsideField( SwTxtSizeInfo& rInf, SwRect& rOrig,
         sal_Int32 nFldIdx = 0;
         sal_Int32 nFldLen = 0;
 
+        OUString sString;
         const OUString* pString = 0;
         const SwLinePortion* pPor = &rPor;
         do
         {
             if ( pPor->InFldGrp() )
             {
-                pString = &((SwFldPortion*)pPor)->GetExp();
+                sString = ((SwFldPortion*)pPor)->GetExp();
+                pString = &sString;
                 nFldLen = pString->getLength();
             }
             else

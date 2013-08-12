@@ -1257,16 +1257,16 @@ SwTxtNode::GetTxtAttrAt(xub_StrLen const nIndex, RES_TXTATR const nWhich,
  *                          CopyHint()
  *************************************************************************/
 
-static SwCharFmt* lcl_FindCharFmt( const SwCharFmts* pCharFmts, const XubString& rName )
+static SwCharFmt* lcl_FindCharFmt( const SwCharFmts* pCharFmts, const OUString& rName )
 {
-    if( rName.Len() )
+    if( !rName.isEmpty() )
     {
         SwCharFmt* pFmt;
         sal_uInt16 nArrLen = pCharFmts->size();
         for( sal_uInt16 i = 1; i < nArrLen; i++ )
         {
             pFmt = (*pCharFmts)[ i ];
-            if( pFmt->GetName().CompareTo( rName ) == COMPARE_EQUAL )
+            if( pFmt->GetName()==rName )
                 return pFmt;
         }
     }

@@ -539,7 +539,7 @@ void SwNumRulesWithName::_SwNumFmtGlobal::ChgNumFmt( SwWrtShell& rSh,
         for( sal_uInt16 i = 1; i < nArrLen; ++i )
         {
             pFmt = &rSh.GetCharFmt( i );
-            if( COMPARE_EQUAL == pFmt->GetName().CompareTo( sCharFmtName ))
+            if (pFmt->GetName()==sCharFmtName)
                 // exists, so leave attributes as they are!
                 break;
             pFmt = 0;

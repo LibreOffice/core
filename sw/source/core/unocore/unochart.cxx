@@ -352,7 +352,7 @@ static bool GetTableAndCellsFromRangeRep(
     return bSuccess;
 }
 
-static void GetTableByName( const SwDoc &rDoc, const String &rTableName,
+static void GetTableByName( const SwDoc &rDoc, const OUString &rTableName,
         SwFrmFmt **ppTblFmt, SwTable **ppTable)
 {
     SwFrmFmt *pTblFmt = NULL;
