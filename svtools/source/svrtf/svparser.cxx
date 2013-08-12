@@ -382,7 +382,7 @@ int SvParser::GetNextToken()
 
     if( !nTokenStackPos )
     {
-        aToken.Erase();     // Token-Buffer loeschen
+        aToken = "";     // Token-Buffer loeschen
         nTokenValue = -1;   // Kennzeichen fuer kein Value gelesen
         bTokenHasValue = false;
 

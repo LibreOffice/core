@@ -216,7 +216,7 @@ public:
     // Ermitteln der Optionen. pNoConvertToken ist das optionale Token
     // einer Option, fuer die CR/LFs nicht aus dem Wert der Option
     // geloescht werden.
-    const HTMLOptions& GetOptions( sal_uInt16 *pNoConvertToken=0 ) const;
+    const HTMLOptions& GetOptions( sal_uInt16 *pNoConvertToken=0 );
 
     // fuers asynchrone lesen aus dem SvStream
     virtual void Continue( int nToken );

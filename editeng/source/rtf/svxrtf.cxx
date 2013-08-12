@@ -425,9 +425,9 @@ void SvxRTFParser::ReadColorTable()
         case RTF_BLUE:  nBlue = sal_uInt8(nTokenValue);     break;
 
         case RTF_TEXTTOKEN:
-            if( 1 == aToken.Len()
-                    ? aToken.GetChar( 0 ) != ';'
-                    : STRING_NOTFOUND == aToken.Search( ';' ) )
+            if( 1 == aToken.getLength()
+                    ? aToken[ 0 ] != ';'
+                    : -1 == aToken.indexOf( ";" ) )
                 break;      // At least the ';' must be found
 
             // else no break !!
@@ -557,7 +557,7 @@ void SvxRTFParser::ReadFontTable()
                 break;
             case RTF_TEXTTOKEN:
                 DelCharAtEnd( aToken, ';' );
-                if ( aToken.Len() )
+                if ( !aToken.isEmpty() )
                 {
                     if( bIsAltFntNm )
                         sAltNm = aToken;
@@ -795,14 +795,14 @@ void SvxRTFParser::ClearAttrStack()
     }
 }
 
-String& SvxRTFParser::DelCharAtEnd( String& rStr, const sal_Unicode cDel )
+OUString& SvxRTFParser::DelCharAtEnd( OUString& rStr, const sal_Unicode cDel )
 {
-    if( rStr.Len() && ' ' == rStr.GetChar( 0 ))
+    if( !rStr.isEmpty() && ' ' == rStr[ 0 ])
         rStr = comphelper::string::stripStart(rStr, ' ');
-    if( rStr.Len() && ' ' == rStr.GetChar( rStr.Len()-1 ))
+    if( !rStr.isEmpty() && ' ' == rStr[ rStr.getLength()-1 ])
         rStr = comphelper::string::stripEnd(rStr, ' ');
-    if( rStr.Len() && cDel == rStr.GetChar( rStr.Len()-1 ))
-        rStr.Erase( rStr.Len()-1 );
+    if( !rStr.isEmpty() && cDel == rStr[ rStr.getLength()-1 ])
+        rStr = rStr.copy( 0, rStr.getLength()-1 );
     return rStr;
 }
 

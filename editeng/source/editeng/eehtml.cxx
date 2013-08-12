@@ -174,7 +174,7 @@ void EditHTMLParser::NextToken( int nToken )
     }
     break;
     case HTML_RAWDATA:
-        if (IsReadStyle() && aToken.Len())
+        if (IsReadStyle() && !aToken.isEmpty())
         {
             // Each token represents a single line.
             maStyleSource.append(aToken);

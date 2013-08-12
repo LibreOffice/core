@@ -95,7 +95,7 @@ int SvRTFParser::_GetNextToken()
                 default:
                     if( RTF_ISALPHA( nNextCh ) )
                     {
-                        aToken = '\\';
+                        aToken = "\\";
                         {
                             String aStrBuffer;
                             sal_Unicode* pStr = aStrBuffer.AllocBuffer(
@@ -106,7 +106,6 @@ int SvRTFParser::_GetNextToken()
                                 if( MAX_TOKEN_LEN == nStrLen )
                                 {
                                     aToken += aStrBuffer;
-                                    aToken.GetBufferAccess();  // make unique string!
                                     nStrLen = 0;
                                 }
                                 nNextCh = GetNextChar();
@@ -164,7 +163,7 @@ int SvRTFParser::_GetNextToken()
                                 aParserStates.top().
                                     nUCharOverread = nUCharOverread;
                             }
-                            aToken.Erase(); // #i47831# erase token to prevent the token from beeing treated as text
+                            aToken = ""; // #i47831# erase token to prevent the token from beeing treated as text
                             // read next token
                             nRet = 0;
                             break;
@@ -185,7 +184,7 @@ int SvRTFParser::_GetNextToken()
                             if( !bRTF_InTextRead )
                             {
                                 nRet = RTF_TEXTTOKEN;
-                                aToken = (sal_Unicode)nTokenValue;
+                                aToken = OUString( (sal_Unicode)nTokenValue );
 
                                 // overread the next n "RTF" characters. This
                                 // can be also \{, \}, \'88

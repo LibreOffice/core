@@ -1024,7 +1024,7 @@ void SwHTMLParser::NextToken( int nToken )
                 if( (HTML_TOKEN_ONOFF & nToken) && (1 & nToken) )
                     sTitle += "/";
                 sTitle += sSaveToken;
-                if( aToken.Len() )
+                if( !aToken.isEmpty() )
                 {
                     sTitle += " ";
                     sTitle += aToken;
@@ -1215,7 +1215,7 @@ void SwHTMLParser::NextToken( int nToken )
         {
             // Paste content of unknown tags.
             // (but surely if we are not in the header section) fdo#36080 fdo#34666
-            if (aToken.Len() > 0 && !IsInHeader() )
+            if (!aToken.isEmpty() && !IsInHeader() )
             {
                 if( !bDocInitalized )
                     DocumentDetected();
@@ -1448,7 +1448,7 @@ void SwHTMLParser::NextToken( int nToken )
 
     case HTML_TEXTTOKEN:
         // insert string without spanning attributes at the end.
-        if( aToken.Len() && ' '==aToken.GetChar(0) && !IsReadPRE() )
+        if( !aToken.isEmpty() && ' '==aToken[0] && !IsReadPRE() )
         {
             xub_StrLen nPos = pPam->GetPoint()->nContent.GetIndex();
             if( nPos )
@@ -1457,19 +1457,19 @@ void SwHTMLParser::NextToken( int nToken )
                     pPam->GetPoint()->nNode.GetNode().GetTxtNode()->GetTxt();
                 sal_Unicode cLast = rText.GetChar(--nPos);
                 if( ' ' == cLast || '\x0a' == cLast)
-                    aToken.Erase(0,1);
+                    aToken = aToken.copy(1);
             }
             else
-                aToken.Erase(0,1);
+                aToken = aToken.copy(1);
 
-            if( !aToken.Len() )
+            if( aToken.isEmpty() )
             {
                 bUpperSpace = bUpperSpaceSave;
                 break;
             }
         }
 
-        if( aToken.Len() )
+        if( !aToken.isEmpty() )
         {
             if( !bDocInitalized )
                 DocumentDetected();
@@ -1942,15 +1942,15 @@ void SwHTMLParser::NextToken( int nToken )
         break;
 
     case HTML_COMMENT:
-        if( ( aToken.Len() > 5 ) && ( ! bIgnoreHTMLComments ) )
+        if( ( aToken.getLength() > 5 ) && ( ! bIgnoreHTMLComments ) )
         {
             // insert as Post-It
             // If there are no space characters right behind
             // the <!-- and on front of the -->, leave the comment untouched.
-            if( ' ' == aToken.GetChar( 3 ) &&
-                ' ' == aToken.GetChar( aToken.Len()-3 ) )
+            if( ' ' == aToken[ 3 ] &&
+                ' ' == aToken[ aToken.getLength()-3 ] )
             {
-                String aComment( aToken.Copy( 3, aToken.Len()-5 ) );
+                String aComment( aToken.copy( 3, aToken.getLength()-5 ) );
                 InsertComment(comphelper::string::strip(aComment, ' '));
             }
             else
@@ -2028,7 +2028,7 @@ void SwHTMLParser::NextToken( int nToken )
         if( (HTML_TOKEN_ONOFF & nToken) != 0 && (1 & nToken) != 0 )
             aComment += '/';
         aComment += sSaveToken;
-        if( aToken.Len() )
+        if( !aToken.isEmpty() )
         {
             UnescapeToken();
             (aComment += ' ') += aToken;

@@ -134,7 +134,7 @@ void ORTFReader::NextToken( int nToken )
                             }
                             nTmpToken2 = GetNextToken();
                         }
-                        while(aToken.GetChar(0) != ';' && eState != SVPAR_ERROR && eState != SVPAR_ACCEPTED);
+                        while(aToken[0] != ';' && eState != SVPAR_ERROR && eState != SVPAR_ACCEPTED);
                         m_vecColor.push_back(aColor.GetRGBColor());
                         nTmpToken2 = GetNextToken();
                     }

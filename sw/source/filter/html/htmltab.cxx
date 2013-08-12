@@ -4095,8 +4095,8 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, sal_Bool bReadOptions,
 
         case HTML_TEXTTOKEN:
             // keine Section fuer einen leeren String anlegen
-            if( !pSaveStruct->IsInSection() && 1==aToken.Len() &&
-                ' '==aToken.GetChar(0) )
+            if( !pSaveStruct->IsInSection() && 1==aToken.getLength() &&
+                ' '==aToken[0] )
                 break;
         default:
             if( !pSaveStruct->IsInSection() )
@@ -4392,7 +4392,7 @@ void SwHTMLParser::BuildTableRow( HTMLTable *pCurTable, sal_Bool bReadOptions,
         case HTML_TEXTTOKEN:
             if( (pCurTable->GetContext() ||
                  !pCurTable->HasParentSection()) &&
-                1==aToken.Len() && ' '==aToken.GetChar(0) )
+                1==aToken.getLength() && ' '==aToken[0] )
                 break;
         default:
             pCurTable->MakeParentContents();
@@ -4553,7 +4553,7 @@ void SwHTMLParser::BuildTableSection( HTMLTable *pCurTable,
             // Blank-Strings sind Folge von CR+LF und kein Text
             if( (pCurTable->GetContext() ||
                  !pCurTable->HasParentSection()) &&
-                1==aToken.Len() && ' '==aToken.GetChar(0) )
+                1==aToken.getLength() && ' ' == aToken[0] )
                 break;
         default:
             pCurTable->MakeParentContents();
@@ -4770,7 +4770,7 @@ void SwHTMLParser::BuildTableColGroup( HTMLTable *pCurTable,
         case HTML_TEXTTOKEN:
             if( (pCurTable->GetContext() ||
                  !pCurTable->HasParentSection()) &&
-                1==aToken.Len() && ' '==aToken.GetChar(0) )
+                1==aToken.getLength() && ' '==aToken[0] )
                 break;
         default:
             pCurTable->MakeParentContents();
@@ -5342,7 +5342,7 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
             // Blank-Strings sind u. U. eine Folge von CR+LF und kein Text
             if( (pCurTable->GetContext() ||
                  !pCurTable->HasParentSection()) &&
-                1==aToken.Len() && ' '==aToken.GetChar(0) )
+                1==aToken.getLength() && ' '==aToken[0] )
                 break;
         default:
             pCurTable->MakeParentContents();

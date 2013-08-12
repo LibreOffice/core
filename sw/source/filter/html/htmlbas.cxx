@@ -183,40 +183,40 @@ void SwHTMLParser::EndScript()
 void SwHTMLParser::AddScriptSource()
 {
     // Hier merken wir und nur ein par Strings
-    if( aToken.Len() > 2 &&
-        (HTML_SL_STARBASIC==eScriptLang && aToken.GetChar( 0 ) == '\'') )
+    if( !aToken.isEmpty() > 2 &&
+        (HTML_SL_STARBASIC==eScriptLang && aToken[ 0 ] == '\'') )
     {
-        xub_StrLen nPos = STRING_NOTFOUND;
+        sal_Int32 nPos = -1;
         if( aBasicLib.isEmpty() )
         {
-            nPos = aToken.SearchAscii( OOO_STRING_SVTOOLS_HTML_SB_library );
-            if( nPos != STRING_NOTFOUND )
+            nPos = aToken.indexOf( OOO_STRING_SVTOOLS_HTML_SB_library );
+            if( nPos != -1 )
             {
                 aBasicLib =
-                    aToken.Copy( nPos + sizeof(OOO_STRING_SVTOOLS_HTML_SB_library) - 1 );
+                    aToken.copy( nPos + sizeof(OOO_STRING_SVTOOLS_HTML_SB_library) - 1 );
                 aBasicLib = comphelper::string::strip(aBasicLib, ' ');
             }
         }
 
-        if( aBasicModule.isEmpty() && nPos==STRING_NOTFOUND )
+        if( aBasicModule.isEmpty() && nPos == -1 )
         {
-            nPos = aToken.SearchAscii( OOO_STRING_SVTOOLS_HTML_SB_module );
-            if( nPos != STRING_NOTFOUND )
+            nPos = aToken.indexOf( OOO_STRING_SVTOOLS_HTML_SB_module );
+            if( nPos != -1 )
             {
                 aBasicModule =
-                    aToken.Copy( nPos + sizeof(OOO_STRING_SVTOOLS_HTML_SB_module) - 1 );
+                    aToken.copy( nPos + sizeof(OOO_STRING_SVTOOLS_HTML_SB_module) - 1 );
                 aBasicModule = comphelper::string::strip(aBasicModule, ' ');
             }
         }
 
-        if( nPos==STRING_NOTFOUND )
+        if( nPos == -1 )
         {
             if( !aScriptSource.isEmpty() )
                 aScriptSource += "\n";
             aScriptSource += aToken;
         }
     }
-    else if( !aScriptSource.isEmpty() || aToken.Len() )
+    else if( !aScriptSource.isEmpty() || !aToken.isEmpty() )
     {
         // Leerzeilen am Anfang werden ignoriert
         if( !aScriptSource.isEmpty() )

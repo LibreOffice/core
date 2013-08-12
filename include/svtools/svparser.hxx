@@ -47,15 +47,15 @@ class SVT_DLLPUBLIC SvParser : public SvRefBase
     DECL_STATIC_LINK( SvParser, NewDataRead, void* );
 
 protected:
-    SvStream&       rInput;
-    String          aToken;             // gescanntes Token
+    SvStream&           rInput;
+    OUString            aToken;             // gescanntes Token
     sal_uLong           nlLineNr;           // akt. Zeilen Nummer
     sal_uLong           nlLinePos;          // akt. Spalten Nummer
 
-    SvParser_Impl   *pImplData;         // interne Daten
-    long            nTokenValue;        // zusaetzlicher Wert (RTF)
+    SvParser_Impl       *pImplData;         // interne Daten
+    long                nTokenValue;        // zusaetzlicher Wert (RTF)
     sal_Bool            bTokenHasValue;     // indicates whether nTokenValue is valid
-    SvParserState   eState;             // Status auch in abgl. Klassen
+    SvParserState       eState;             // Status auch in abgl. Klassen
 
     rtl_TextEncoding    eSrcEnc;        // Source encoding
 
@@ -79,10 +79,10 @@ protected:
 
     struct TokenStackType
     {
-        String  sToken;
-        long    nTokenValue;
+        OUString    sToken;
+        long        nTokenValue;
         sal_Bool    bTokenHasValue;
-        int     nTokenId;
+        int         nTokenId;
 
         inline TokenStackType() { nTokenId = 0; }
         inline ~TokenStackType() { }
@@ -207,8 +207,8 @@ class SvKeyValue
 {
     /** Representation.
     */
-    String m_aKey;
-    String m_aValue;
+    OUString m_aKey;
+    OUString m_aValue;
 
 public:
     /** Construction.
@@ -216,7 +216,7 @@ public:
     SvKeyValue (void)
     {}
 
-    SvKeyValue (const String &rKey, const String &rValue)
+    SvKeyValue (const OUString &rKey, const OUString &rValue)
         : m_aKey (rKey), m_aValue (rValue)
     {}
 
@@ -235,11 +235,11 @@ public:
 
     /** Operation.
     */
-    const String& GetKey   (void) const { return m_aKey; }
-    const String& GetValue (void) const { return m_aValue; }
+    const OUString& GetKey   (void) const { return m_aKey; }
+    const OUString& GetValue (void) const { return m_aValue; }
 
-    void SetKey   (const String &rKey  ) { m_aKey = rKey; }
-    void SetValue (const String &rValue) { m_aValue = rValue; }
+    void SetKey   (const OUString &rKey  ) { m_aKey = rKey; }
+    void SetValue (const OUString &rValue) { m_aValue = rValue; }
 };
 
 /*========================================================================
