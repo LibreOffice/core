@@ -174,7 +174,6 @@ SfxVirtualMenu::SfxVirtualMenu( sal_uInt16 nOwnId,
        pImageControl(0),
     pBindings(&rBindings),
     pResMgr(0),
-    pAutoDeactivate(0),
     nLocks(0),
     bHelpInitialized( bWithHelp ),
     bIsAddonPopupMenu( bIsAddonMenu )
@@ -208,7 +207,6 @@ SfxVirtualMenu::SfxVirtualMenu( Menu *pStarViewMenu, sal_Bool bWithHelp,
        pImageControl(0),
     pBindings(&rBindings),
     pResMgr(0),
-    pAutoDeactivate(0),
     nLocks(0),
     bHelpInitialized( bWithHelp ),
     bIsAddonPopupMenu( bIsAddonMenu )
@@ -250,14 +248,6 @@ SfxVirtualMenu::~SfxVirtualMenu()
     if ( bIsActive )
     {
         pBindings->LEAVEREGISTRATIONS(); --nLocks; bIsActive = sal_False;
-    }
-
-    // QAP-Hack
-    if ( pAutoDeactivate )
-    {
-        if ( pAutoDeactivate->IsActive() )
-            Deactivate(0);
-        DELETEX(pAutoDeactivate);
     }
 
     if (pItems)
@@ -502,17 +492,9 @@ void SfxVirtualMenu::CreateFromSVMenu()
 
 // called on activation of the SV-Menu
 
-IMPL_LINK( SfxVirtualMenu, Highlight, Menu *, pMenu )
+IMPL_LINK_NOARG( SfxVirtualMenu, Highlight )
 {
     DBG_CHKTHIS(SfxVirtualMenu, 0);
-
-    // own StarView-Menu
-    if ( pMenu == pSVMenu )
-    {
-        // AutoDeactivate is not necessary anymore
-        if ( pAutoDeactivate )
-            pAutoDeactivate->Stop();
-    }
 
     return sal_True;
 }
@@ -920,9 +902,6 @@ IMPL_LINK( SfxVirtualMenu, Activate, Menu *, pMenu )
         // Supress the Status updates until Deactivate
         pBindings->ENTERREGISTRATIONS(); ++nLocks; bIsActive = sal_True;
 
-        if ( pAutoDeactivate ) // QAP-Hack
-            pAutoDeactivate->Start();
-
         return sal_True;
     }
     else
@@ -945,9 +924,6 @@ IMPL_LINK( SfxVirtualMenu, Deactivate, Menu *, pMenu )
     DBG_OUTF( ("SfxVirtualMenu %lx deactivated %lx, own %lx", this, pMenu, pSVMenu) );
     if ( bIsActive && ( 0 == pMenu || pMenu == pSVMenu ) )
     {
-        if ( pAutoDeactivate )
-            pAutoDeactivate->Stop();
-
         // All controllers can be unbinded all the way up to the Menubar,
         // when the menu is disabled (= closed)
         if ( pParent )

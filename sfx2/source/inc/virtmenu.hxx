@@ -24,7 +24,6 @@
 #include <sfx2/mnuitem.hxx>
 
 class SfxBindings;
-class Timer;
 class SfxMenuImageControl_Impl;
 
 typedef ::boost::ptr_vector<SfxMenuControl> SfxMenuCtrlArr_Impl;
@@ -44,7 +43,6 @@ private:
     PopupMenu*      pWindowMenu;
     PopupMenu*      pPickMenu;
     PopupMenu*      pAddonsMenu;
-    Timer*          pAutoDeactivate; // Hack for QAP-Bug
     sal_uInt16          nVisibleItems;
     sal_uInt16          nId;
     sal_uInt16          nCount;
@@ -71,7 +69,7 @@ protected:
                         SfxBindings &rBind, sal_Bool bOLEServer=sal_False, sal_Bool bRes=sal_False, sal_Bool bIsAddonMenu=sal_False );
 
     void            CreateFromSVMenu();
-    DECL_LINK( Highlight, Menu * );
+    DECL_LINK( Highlight, void * );
     DECL_LINK( Activate, Menu * );
     DECL_LINK( Deactivate, Menu * );
     DECL_LINK( SettingsChanged, void* );
