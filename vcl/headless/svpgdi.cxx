@@ -116,7 +116,6 @@ void SvpSalGraphics::setDevice( basebmp::BitmapDeviceSharedPtr& rDevice )
 #ifndef IOS
     // determine matching bitmap format for masks
     basebmp::Format nDeviceFmt = m_aDevice->getScanlineFormat();
-    DBG_ASSERT( (nDeviceFmt <= (sal_uInt32)basebmp::FORMAT_MAX), "SVP::setDevice() with invalid bitmap format" );
     switch( nDeviceFmt )
     {
         case basebmp::FORMAT_EIGHT_BIT_GREY:
