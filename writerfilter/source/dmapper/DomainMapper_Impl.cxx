@@ -290,7 +290,7 @@ void DomainMapper_Impl::RemoveLastParagraph( )
             uno::Reference<lang::XComponent> xParagraph(xEnumeration->nextElement(), uno::UNO_QUERY);
             xParagraph->dispose();
         }
-        else
+        else if (xCursor.is())
         {
             xCursor->goLeft( 1, true );
             // If this is a text on a shape, possibly the text has the trailing
@@ -1603,7 +1603,7 @@ void DomainMapper_Impl::PushAnnotation()
         uno::Reference< text::XText > xAnnotationText;
         m_xAnnotationField->getPropertyValue("TextRange") >>= xAnnotationText;
         m_aTextAppendStack.push(TextAppendContext(uno::Reference< text::XTextAppend >( xAnnotationText, uno::UNO_QUERY_THROW ),
-                    m_bIsNewDoc ? uno::Reference<text::XTextCursor>() : m_xBodyText->createTextCursorByRange(xAnnotationText->getStart())));
+                    m_bIsNewDoc ? uno::Reference<text::XTextCursor>() : xAnnotationText->createTextCursorByRange(xAnnotationText->getStart())));
     }
     catch( const uno::Exception& rException)
     {
@@ -3626,8 +3626,13 @@ void DomainMapper_Impl::AddAnnotationPosition(const bool bStart)
     uno::Reference<text::XTextRange> xCurrent;
     if (xTextAppend.is())
     {
-        uno::Reference<text::XTextCursor> xCursor = xTextAppend->createTextCursorByRange(xTextAppend->getEnd());
-        xCurrent = xCursor->getStart();
+        uno::Reference<text::XTextCursor> xCursor;
+        if (m_bIsNewDoc)
+            xCursor = xTextAppend->createTextCursorByRange(xTextAppend->getEnd());
+        else
+            xCursor = m_aTextAppendStack.top().xCursor;
+        if (xCursor.is())
+            xCurrent = xCursor->getStart();
     }
 
     // And save it, to be used by PopAnnotation() later.
