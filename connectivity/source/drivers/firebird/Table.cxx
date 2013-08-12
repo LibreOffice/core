@@ -28,8 +28,7 @@ Table::Table(Tables* pTables,
              const uno::Reference< XConnection >& rConnection,
              const OUString& rName,
              const OUString& rType,
-             const OUString& rDescription,
-             sal_Int32 nPrivileges):
+             const OUString& rDescription):
     OTableHelper(pTables,
                  rConnection,
                  sal_True,
@@ -40,7 +39,6 @@ Table::Table(Tables* pTables,
                  ""),
     m_rMutex(rMutex)
 {
-    (void) nPrivileges;
 }
 
 //----- OTableHelper ---------------------------------------------------------

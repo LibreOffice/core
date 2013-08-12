@@ -30,8 +30,7 @@ namespace connectivity
                   const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection,
                   const ::rtl::OUString& rName,
                   const ::rtl::OUString& rType,
-                  const ::rtl::OUString& rDescription,
-                  sal_Int32 _nPrivileges);
+                  const ::rtl::OUString& rDescription);
 
             // OTableHelper
             virtual ::connectivity::sdbcx::OCollection* createColumns(

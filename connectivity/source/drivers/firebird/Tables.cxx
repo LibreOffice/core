@@ -65,8 +65,7 @@ ObjectType Tables::createObject(const OUString& rName)
                               m_xMetaData.getConnection(),
                               rName,
                               "", // TODO: Type
-                              "", // TODO: Description
-                              0)); // TODO: privileges
+                              "")); // TODO: Description
 
     if (xTables->next())
         throw RuntimeException(); // Only one table should be returned
