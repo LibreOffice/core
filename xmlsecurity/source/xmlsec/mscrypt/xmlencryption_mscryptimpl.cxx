@@ -280,6 +280,9 @@ XMLEncryption_MSCryptImpl :: decrypt(
         return aTemplate;
     }
     aTemplate->setStatus(::com::sun::star::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED);
+#if 0 // This code block has been commented out since 2004,
+      // but let's keep it here in case it contains some useful hints
+      // for future work.
     if( pEncCtx->resultReplaced != 0 ) {
         pContent = pEncryptedData ;
 
@@ -299,6 +302,7 @@ XMLEncryption_MSCryptImpl :: decrypt(
         xmlSecEncCtxDestroy( pEncCtx ) ;
         throw RuntimeException() ;
     }
+#endif // 0
 
     //Destroy the encryption context
     xmlSecEncCtxDestroy( pEncCtx ) ;
