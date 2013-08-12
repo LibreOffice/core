@@ -468,7 +468,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickAddHdl_Impl)
     {
         aName  = aNewName;
         aName += sal_Unicode(' ');
-        aName += OUString::valueOf( j++ );
+        aName += OUString::number( j++ );
         bDifferent = sal_True;
 
         for( long i = 0; i < nCount && bDifferent; i++ )
@@ -641,9 +641,9 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl_Impl)
         }
         else
             // graphic couldn't be loaded
-            ErrorBox( GetParentDialog(),
-                      WinBits( WB_OK ),
-                      String( ResId( RID_SVXSTR_READ_DATA_ERROR, rMgr ) ) ).Execute();
+            MessageDialog( GetParentDialog()
+                          ,"NoLoadedFileDialog"
+                          ,"cui/ui/querynoloadedfiledialog.ui").Execute();
     }
 
     return 0L;
@@ -841,8 +841,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickLoadHdl_Impl)
 
 IMPL_LINK_NOARG(SvxBitmapTabPage, ClickSaveHdl_Impl)
 {
-       ::sfx2::FileDialogHelper aDlg(
-        com::sun::star::ui::dialogs::TemplateDescription::FILESAVE_SIMPLE, 0 );
+       ::sfx2::FileDialogHelper aDlg( com::sun::star::ui::dialogs::TemplateDescription::FILESAVE_SIMPLE, 0 );
     String aStrFilterType( "*.sob" );
     aDlg.AddFilter( aStrFilterType, aStrFilterType );
 
