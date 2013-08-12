@@ -281,9 +281,9 @@
     }
     UILabel *sectionHeader;
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-        sectionHeader = [[UILabel alloc] initWithFrame:CGRectMake(10, 10, 200, 40)];
+        sectionHeader = [[UILabel alloc] initWithFrame:CGRectMake(10, 10, 310, 40)];
     } else {
-        sectionHeader = [[UILabel alloc] initWithFrame:CGRectMake(25, 10, 200, 40)];
+        sectionHeader = [[UILabel alloc] initWithFrame:CGRectMake(25, 10, 295, 40)];
     }
     sectionHeader.backgroundColor = [UIColor clearColor];
     sectionHeader.font = kAppTextFont;

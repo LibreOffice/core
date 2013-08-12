@@ -9,8 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "CommunicationManager.h"
 
-#define OPTION_TIMER @"Timer auto-start"
-#define OPTION_POINTER @"Touch pointer"
+#define OPTION_TIMER NSLocalizedString(@"Timer auto-start", nil)
+#define OPTION_POINTER NSLocalizedString(@"Touch pointer", nil)
 #define KEY_TIMER @"TIMER_AUTOSTART_ENABLED"
 #define KEY_POINTER @"TOUCH_POINTER_ENABLED"
 

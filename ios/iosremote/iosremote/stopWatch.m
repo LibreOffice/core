@@ -127,7 +127,7 @@
             [self.startButton setImage:[UIImage imageNamed:@"timer_pause_btn"] forState:UIControlStateNormal];
             break;
         case TIMER_STATE_PAUSED:
-            [self.startButton setImage:[UIImage imageNamed:@"timer_resume_btn"] forState:UIControlStateNormal];
+            [self.startButton setImage:[UIImage imageNamed:@"timer_start_btn"] forState:UIControlStateNormal];
             break;
         case TIMER_STATE_CLEARED:
             [self.startButton setImage:[UIImage imageNamed:@"timer_start_btn"] forState:UIControlStateNormal];
