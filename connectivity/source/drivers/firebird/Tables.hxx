@@ -41,7 +41,8 @@ namespace connectivity
         public:
             Tables(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& rMetaData,
                    ::cppu::OWeakObject& rParent,
-                   ::osl::Mutex& rMutex);
+                   ::osl::Mutex& rMutex,
+                   ::connectivity::TStringVector& rNames);
 
             // TODO: we should also implement XDataDescriptorFactory, XRefreshable,
             // XAppend,  etc., but all are optional.

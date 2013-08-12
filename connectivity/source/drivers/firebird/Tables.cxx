@@ -28,11 +28,12 @@ using namespace ::com::sun::star::uno;
 
 Tables::Tables(const uno::Reference< XDatabaseMetaData >& rMetaData,
                OWeakObject& rParent,
-               Mutex& rMutex) :
+               Mutex& rMutex,
+               TStringVector& rNames) :
     OCollection(rParent,
                 sal_True,
                 rMutex,
-                TStringVector(1, "TABLE")), // std::vector with 1 element
+                rNames),
     m_rMutex(rMutex),
     m_xMetaData(rMetaData)
 {

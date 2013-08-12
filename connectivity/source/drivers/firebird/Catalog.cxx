@@ -8,11 +8,15 @@
  */
 
 #include "Catalog.hxx"
+#include "Tables.hxx"
 
 using namespace ::connectivity::firebird;
 
+using namespace ::rtl;
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::uno;
 
 Catalog::Catalog(const uno::Reference< XConnection >& rConnection):
     OCatalog(rConnection),
@@ -23,8 +27,24 @@ Catalog::Catalog(const uno::Reference< XConnection >& rConnection):
 //----- OCatalog -------------------------------------------------------------
 void Catalog::refreshTables()
 {
-    // TODO: implement me.
-    // Sets m_pTables (OCatalog)
+    // TODO: set type -- currenty we also get system tables...
+    uno::Reference< XResultSet > xTables = m_xMetaData->getTables(Any(),
+                                                            "%",
+                                                            "%",
+                                                            Sequence< OUString >());
+
+    TStringVector aTableNames;
+
+    fillNames(xTables, aTableNames);
+
+    if (!m_pTables)
+        m_pTables = new Tables(m_xConnection->getMetaData(),
+                               *this,
+                               m_aMutex,
+                               aTableNames);
+    else
+        m_pTables->reFill(aTableNames);
+
 }
 
 void Catalog::refreshViews()
