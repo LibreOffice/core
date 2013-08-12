@@ -586,7 +586,7 @@ helpdatafileproxy::Hdf* Databases::getHelpDataFile( const OUString& Database,
 
 
     OUString aFileExt( helpText ? OUString(".ht") : OUString(".db") );
-    OUString dbFileName = OUStringBuffer().append('/').append(Database).append(aFileExt).makeStringAndClear();
+    OUString dbFileName = "/" + Database + aFileExt;
     OUString key;
     if( pExtensionPath == NULL )
         key = processLang( Language ) + dbFileName;
@@ -939,7 +939,7 @@ Reference< XHierarchicalNameAccess > Databases::jarFile( const OUString& jar,
     {
         return Reference< XHierarchicalNameAccess >( 0 );
     }
-    OUString key = OUStringBuffer(processLang(Language)).append('/').append(jar).makeStringAndClear();
+    OUString key = processLang(Language) + "/" + jar;
 
     osl::MutexGuard aGuard( m_aMutex );
 
@@ -959,12 +959,7 @@ Reference< XHierarchicalNameAccess > Databases::jarFile( const OUString& jar,
                 OUString aExtensionPath = jar.copy( nQuestionMark1 + 1, nQuestionMark2 - nQuestionMark1 - 1 );
                 OUString aPureJar = jar.copy( nQuestionMark2 + 1 );
 
-                OUStringBuffer aStrBuf;
-                aStrBuf.append( aExtensionPath );
-                aStrBuf.append( '/' );
-                aStrBuf.append( aPureJar );
-
-                zipFile = expandURL( aStrBuf.makeStringAndClear() );
+                zipFile = expandURL( aExtensionPath + "/" + aPureJar );
             }
             else
             {
@@ -1511,18 +1506,13 @@ OUString ExtensionIteratorBase::implGetFileFromPackage(
     OUString aLanguage = m_aLanguage;
     for( sal_Int32 iPass = 0 ; iPass < 2 ; ++iPass )
     {
-        OUStringBuffer aStrBuf;
-        aStrBuf.append( xPackage->getRegistrationDataURL().Value);
-        aStrBuf.append( '/' );
-        aStrBuf.append( aLanguage );
+        OUString aStr = xPackage->getRegistrationDataURL().Value + "/" + aLanguage;
         if( !bLangFolderOnly )
         {
-            aStrBuf.append( '/' );
-            aStrBuf.append( "help" );
-            aStrBuf.append( rFileExtension );
+            aStr += "/help" + rFileExtension;
         }
 
-        aFile = m_rDatabases.expandURL( aStrBuf.makeStringAndClear() );
+        aFile = m_rDatabases.expandURL( aStr );
         if( iPass == 0 )
         {
             if( m_xSFA->exists( aFile ) )
@@ -1654,7 +1644,7 @@ helpdatafileproxy::Hdf* DataBaseIterator::implGetHdfFromPackage( Reference< depl
     helpdatafileproxy::Hdf* pRetHdf = NULL;
     if (optRegData.IsPresent && !optRegData.Value.isEmpty())
     {
-        OUString aRegDataUrl = OUStringBuffer(optRegData.Value).append('/').makeStringAndClear();
+        OUString aRegDataUrl = optRegData.Value + "/";
 
         OUString aHelpFilesBaseName("help");
 
@@ -1680,7 +1670,7 @@ helpdatafileproxy::Hdf* DataBaseIterator::implGetHdfFromPackage( Reference< depl
             *o_pExtensionPath = aRegDataUrl + aUsedLanguage;
 
         if( o_pExtensionRegistryPath )
-            *o_pExtensionRegistryPath = OUStringBuffer(xPackage->getURL()).append('/').append(aUsedLanguage).makeStringAndClear();
+            *o_pExtensionRegistryPath = xPackage->getURL() + "/" + aUsedLanguage;
     }
 
     return pRetHdf;
@@ -1903,9 +1893,9 @@ OUString IndexFolderIterator::nextIndexFolder( bool& o_rbExtension, bool& o_rbTe
         switch( m_eState )
         {
             case INITIAL_MODULE:
-                aIndexFolder = OUStringBuffer(m_rDatabases.getInstallPathAsURL()).
-                    append(m_rDatabases.processLang(m_aLanguage)).append('/').
-                    append(m_aInitialModule).append(".idxl").makeStringAndClear();
+                aIndexFolder = m_rDatabases.getInstallPathAsURL()
+                    + m_rDatabases.processLang(m_aLanguage) + "/"
+                    + m_aInitialModule + ".idxl";
 
                 o_rbTemporary = false;
                 o_rbExtension = false;
