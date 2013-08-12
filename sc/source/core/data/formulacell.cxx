@@ -2173,6 +2173,29 @@ bool ScFormulaCell::HasColRowName() const
     return (pCode->GetNextColRowName() != NULL);
 }
 
+bool ScFormulaCell::UpdatePosOnShift( const sc::RefUpdateContext& rCxt )
+{
+    if (rCxt.meMode != URM_INSDEL)
+        // Just in case...
+        return false;
+
+    if (!rCxt.mnColDelta && !rCxt.mnRowDelta && !rCxt.mnTabDelta)
+        // No movement.
+        return false;
+
+    if (!rCxt.maRange.In(aPos))
+        return false;
+
+    // This formula cell itself is being shifted during cell range
+    // insertion or deletion. Update its position.
+    if (mxGroup && mxGroup->mnStart == aPos.Row())
+        mxGroup->mnStart += rCxt.mnRowDelta;
+
+    aPos.Move(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta);
+
+    return true;
+}
+
 namespace {
 
 /**
@@ -2290,17 +2313,7 @@ bool ScFormulaCell::UpdateReferenceOnShift(
     if ( pUndoCellPos )
         aUndoPos = *pUndoCellPos;
     ScAddress aOldPos( aPos );
-
-    if (rCxt.maRange.In(aPos))
-    {
-        // This formula cell itself is being shifted during cell range
-        // insertion or deletion. Update its position.
-        aPos.Move(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta);
-        if (mxGroup && mxGroup->mnStart == aOldPos.Row())
-            mxGroup->mnStart += rCxt.mnRowDelta;
-
-        bCellStateChanged = aPos != aOldPos;
-    }
+    bCellStateChanged = UpdatePosOnShift(rCxt);
 
     // Check presence of any references or column row names.
     pCode->Reset();
@@ -2599,8 +2612,19 @@ bool ScFormulaCell::UpdateReference(
         return false;
 
     if (mxGroup && mxGroup->mnStart != aPos.Row())
-        // Update only the top cell in case the cell is part of a formula group.
+    {
+        // This is not a top cell of a formula group. Don't update references.
+
+        switch (rCxt.meMode)
+        {
+            case URM_INSDEL:
+                return UpdatePosOnShift(rCxt);
+            break;
+            default:
+                ;
+        }
         return false;
+    }
 
     switch (rCxt.meMode)
     {

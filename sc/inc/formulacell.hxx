@@ -112,6 +112,8 @@ private:
                     };
     void            InterpretTail( ScInterpretTailParameter );
 
+    bool UpdatePosOnShift( const sc::RefUpdateContext& rCxt );
+
     /**
      * Update reference in response to cell insertion or deletion.
      */
