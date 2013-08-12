@@ -455,7 +455,7 @@ long SvxBitmapTabPage::CheckChanges_Impl()
 
 IMPL_LINK_NOARG(SvxBitmapTabPage, ClickAddHdl_Impl)
 {
-    ResMgr& rMgr = CUI_MGR();
+
     String aNewName( SVX_RES( RID_SVXSTR_BITMAP ) );
     String aDesc( CUI_RES( RID_SVXSTR_DESC_NEW_BITMAP ) );
     String aName;
@@ -480,8 +480,8 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickAddHdl_Impl)
     DBG_ASSERT(pFact, "Dialogdiet fail!");
     AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc );
     DBG_ASSERT(pDlg, "Dialogdiet fail!");
-    WarningBox*    pWarnBox = NULL;
-    sal_uInt16         nError   = RID_SVXSTR_WARN_NAME_DUPLICATE;
+    MessageDialog*    pWarnBox = NULL;
+    sal_uInt16         nError(1);
 
     while( pDlg->Execute() == RET_OK )
     {
@@ -500,10 +500,10 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickAddHdl_Impl)
 
         if( !pWarnBox )
         {
-            pWarnBox = new WarningBox( GetParentDialog(),
-                                       WinBits( WB_OK_CANCEL ),
-                                       String( ResId( nError, rMgr ) ) );
-            pWarnBox->SetHelpId( HID_WARN_NAME_DUPLICATE );
+            pWarnBox = new MessageDialog( GetParentDialog()
+                                        ,"DuplicateNameDialog"
+                                        ,"cui/ui/queryduplicatedialog.ui");
+//             pWarnBox->SetHelpId( HID_WARN_NAME_DUPLICATE );
         }
 
         if( pWarnBox->Execute() != RET_OK )
@@ -582,7 +582,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl_Impl)
         if( !nError )
         {
             String aDesc( ResId(RID_SVXSTR_DESC_EXT_BITMAP, rMgr) );
-            WarningBox*    pWarnBox = NULL;
+            MessageDialog*    pWarnBox = NULL;
 
             // convert file URL to UI name
             String          aName;
@@ -591,7 +591,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl_Impl)
             DBG_ASSERT(pFact, "Dialogdiet fail!");
             AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( GetParentDialog(), String(aURL.GetName()).GetToken( 0, '.' ), aDesc );
             DBG_ASSERT(pDlg, "Dialogdiet fail!");
-            nError = RID_SVXSTR_WARN_NAME_DUPLICATE;
+            nError = 1;
 
             while( pDlg->Execute() == RET_OK )
             {
@@ -611,12 +611,11 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl_Impl)
 
                 if( !pWarnBox )
                 {
-                    pWarnBox = new WarningBox( GetParentDialog(),
-                                               WinBits( WB_OK_CANCEL ),
-                                               String( ResId( nError, rMgr ) ) );
-                    pWarnBox->SetHelpId( HID_WARN_NAME_DUPLICATE );
+                    pWarnBox = new MessageDialog( GetParentDialog()
+                                                 ,"DuplicateNameDialog"
+                                                 ,"cui/ui/queryduplicatedialog.ui");
+//                     pWarnBox->SetHelpId( HID_WARN_NAME_DUPLICATE );
                 }
-
 
                 if( pWarnBox->Execute() != RET_OK )
                     break;
@@ -700,8 +699,9 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickModifyHdl_Impl)
             }
             else
             {
-                WarningBox aBox( GetParentDialog(), WinBits( WB_OK ), String( ResId( RID_SVXSTR_WARN_NAME_DUPLICATE, rMgr ) ) );
-                aBox.SetHelpId( HID_WARN_NAME_DUPLICATE );
+                MessageDialog aBox( GetParentDialog()
+                                   ,"DuplicateNameDialog"
+                                   ,"cui/ui/queryduplicatedialog.ui");
                 aBox.Execute();
             }
         }
