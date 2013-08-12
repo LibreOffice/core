@@ -490,6 +490,13 @@ void lcl_SetAnchorType(PropertySet& rPropSet, const ShapeTypeModel& rTypeModel)
     lcl_setSurround( rPropSet, rTypeModel );
 }
 
+void lcl_SetRotation(PropertySet& rPropSet, const sal_Int32 nRotation)
+{
+    // See DffPropertyReader::Fix16ToAngle(): in VML, positive rotation angles are clockwise, we have them as counter-clockwise.
+    // Additionally, VML type is 0..360, our is 0.36000.
+    rPropSet.setAnyProperty(PROP_RotateAngle, makeAny(sal_Int32(NormAngle360(nRotation * -100))));
+}
+
 Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes >& rxShapes, const awt::Rectangle& rShapeRect ) const
 {
     awt::Rectangle aShapeRect(rShapeRect);
@@ -580,9 +587,7 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
     PropertySet aPropertySet(xShape);
     if (xShape.is() && oRotation)
     {
-        // See DffPropertyReader::Fix16ToAngle(): in VML, positive rotation angles are clockwise, we have them as counter-clockwise.
-        // Additionally, VML type is 0..360, our is 0.36000.
-        aPropertySet.setAnyProperty(PROP_RotateAngle, makeAny(sal_Int32(NormAngle360((*oRotation) * -100))));
+        lcl_SetRotation(aPropertySet, *oRotation);
         // If rotation is used, simple setPosition() is not enough.
         aPropertySet.setAnyProperty(PROP_HoriOrientPosition, makeAny( aShapeRect.X ) );
         aPropertySet.setAnyProperty(PROP_VertOrientPosition, makeAny( aShapeRect.Y ) );
@@ -984,6 +989,8 @@ Reference< XShape > GroupShape::implConvertAndInsert( const Reference< XShapes >
     // Make sure group shapes are inline as well, unless there is an explicit different style.
     PropertySet aPropertySet(xGroupShape);
     lcl_SetAnchorType(aPropertySet, maTypeModel);
+    if (!maTypeModel.maRotation.isEmpty())
+        lcl_SetRotation(aPropertySet, maTypeModel.maRotation.toInt32());
     return xGroupShape;
 }
 

@@ -126,6 +126,7 @@ public:
     void testFdo46361();
     void testFdo65632();
     void testFdo66474();
+    void testGroupshapeRotation();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -217,6 +218,7 @@ void Test::run()
         {"fdo46361.docx", &Test::testFdo46361},
         {"fdo65632.docx", &Test::testFdo65632},
         {"fdo66474.docx", &Test::testFdo66474},
+        {"groupshape-rotation.docx", &Test::testGroupshapeRotation},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1525,6 +1527,14 @@ void Test::testFdo66474()
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(100), getProperty<sal_Int16>(xTables->getByIndex(0), "RelativeWidth"));
+}
+
+void Test::testGroupshapeRotation()
+{
+    // Rotation on groupshapes wasn't handled at all by the VML importer.
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(315 * 100), getProperty<sal_Int32>(xDraws->getByIndex(0), "RotateAngle"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
