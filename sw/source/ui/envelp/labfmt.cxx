@@ -40,22 +40,19 @@ using namespace ::com::sun::star::beans;
 
 #define ROUND(x) ((sal_uInt16) ((x) + .5))
 
-SwLabPreview::SwLabPreview( const SwLabFmtPage* pParent, const ResId& rResID ) :
-
-    Window((Window*) pParent, rResID),
-
-    aGrayColor(COL_LIGHTGRAY),
-
-    aHDistStr (SW_RES(STR_HDIST )),
-    aVDistStr (SW_RES(STR_VDIST )),
-    aWidthStr (SW_RES(STR_WIDTH )),
-    aHeightStr(SW_RES(STR_HEIGHT)),
-    aLeftStr  (SW_RES(STR_LEFT  )),
-    aUpperStr (SW_RES(STR_UPPER )),
-    aColsStr  (SW_RES(STR_COLS  )),
-    aRowsStr  (SW_RES(STR_ROWS  )),
-    aPWidthStr (SW_RES(STR_PWIDTH )),
-    aPHeightStr(SW_RES(STR_PHEIGHT))
+SwLabPreview::SwLabPreview(Window* pParent)
+    : Window(pParent, 0)
+    , aGrayColor(COL_LIGHTGRAY)
+    , aHDistStr(SW_RESSTR(STR_HDIST))
+    , aVDistStr(SW_RESSTR(STR_VDIST))
+    , aWidthStr(SW_RESSTR(STR_WIDTH))
+    , aHeightStr(SW_RESSTR(STR_HEIGHT))
+    , aLeftStr(SW_RESSTR(STR_LEFT))
+    , aUpperStr(SW_RESSTR(STR_UPPER))
+    , aColsStr(SW_RESSTR(STR_COLS))
+    , aRowsStr(SW_RESSTR(STR_ROWS))
+    , aPWidthStr(SW_RESSTR(STR_PWIDTH))
+    , aPHeightStr(SW_RESSTR(STR_PHEIGHT))
 {
     SetMapMode(MAP_PIXEL);
 
@@ -68,12 +65,6 @@ SwLabPreview::SwLabPreview( const SwLabFmtPage* pParent, const ResId& rResID ) :
     aFont.SetWeight  (WEIGHT_NORMAL);
     SetFont(aFont);
 
-    const Size aSz(GetOutputSizePixel());
-
-    lOutWPix   = aSz.Width ();
-    lOutHPix   = aSz.Height();
-
-
     lHDistWidth  = GetTextWidth(aHDistStr );
     lVDistWidth  = GetTextWidth(aVDistStr );
     lHeightWidth = GetTextWidth(aHeightStr);
@@ -84,20 +75,31 @@ SwLabPreview::SwLabPreview( const SwLabFmtPage* pParent, const ResId& rResID ) :
     lPHeightWidth = GetTextWidth(aPHeightStr);
     lXHeight = GetTextHeight();
     lXWidth  = GetTextWidth(OUString('X'));
-
-    // Scale factor
-    float fx = (float)(lOutWPix - (2 * (lLeftWidth + 15))) / (float)lOutWPix;
-
-    lOutWPix23 = (long)((float)lOutWPix * fx);
-    lOutHPix23 = (long)((float)lOutHPix * fx);
 }
 
-SwLabPreview::~SwLabPreview()
+Size SwLabPreview::GetOptimalSize() const
 {
+    return LogicToPixel(Size(146 , 161), MapMode(MAP_APPFONT));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSwLabPreview(Window *pParent, VclBuilder::stringmap &)
+{
+    return new SwLabPreview(pParent);
 }
 
 void SwLabPreview::Paint(const Rectangle &)
 {
+    const Size aSz(GetOutputSizePixel());
+
+    long lOutWPix   = aSz.Width ();
+    long lOutHPix   = aSz.Height();
+
+    // Scale factor
+    float fxpix = (float)(lOutWPix - (2 * (lLeftWidth + 15))) / (float)lOutWPix;
+
+    long lOutWPix23 = (long)((float)lOutWPix * fxpix);
+    long lOutHPix23 = (long)((float)lOutHPix * fxpix);
+
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     const Color& rWinColor = rStyleSettings.GetWindowColor();
     const Color& rFieldTextColor = SwViewOption::GetFontColor();
@@ -282,82 +284,72 @@ void SwLabPreview::DrawArrow(const Point &rP1, const Point &rP2, bool bArrow)
     }
 }
 
-void SwLabPreview::Update(const SwLabItem& rItem)
+void SwLabPreview::UpdateItem(const SwLabItem& rItem)
 {
     aItem = rItem;
     Invalidate();
 }
 
-SwLabFmtPage::SwLabFmtPage(Window* pParent, const SfxItemSet& rSet) :
-
-    SfxTabPage(pParent, SW_RES(TP_LAB_FMT), rSet),
-    aMakeFI      (this, SW_RES(FI_MAKE)),
-    aTypeFI      (this, SW_RES(FI_TYPE)),
-    aPreview     (this, SW_RES(WIN_PREVIEW)),
-    aHDistText   (this, SW_RES(TXT_HDIST  )),
-    aHDistField  (this, SW_RES(FLD_HDIST  )),
-    aVDistText   (this, SW_RES(TXT_VDIST  )),
-    aVDistField  (this, SW_RES(FLD_VDIST  )),
-    aWidthText   (this, SW_RES(TXT_WIDTH  )),
-    aWidthField  (this, SW_RES(FLD_WIDTH  )),
-    aHeightText  (this, SW_RES(TXT_HEIGHT )),
-    aHeightField (this, SW_RES(FLD_HEIGHT )),
-    aLeftText    (this, SW_RES(TXT_LEFT  )),
-    aLeftField   (this, SW_RES(FLD_LEFT  )),
-    aUpperText   (this, SW_RES(TXT_UPPER  )),
-    aUpperField  (this, SW_RES(FLD_UPPER  )),
-    aColsText    (this, SW_RES(TXT_COLUMNS)),
-    aColsField   (this, SW_RES(FLD_COLUMNS)),
-    aRowsText    (this, SW_RES(TXT_ROWS  )),
-    aRowsField   (this, SW_RES(FLD_ROWS  )),
-    aPWidthText   (this, SW_RES(TXT_PWIDTH  )),
-    aPWidthField  (this, SW_RES(FLD_PWIDTH  )),
-    aPHeightText  (this, SW_RES(TXT_PHEIGHT )),
-    aPHeightField (this, SW_RES(FLD_PHEIGHT )),
-    aSavePB      (this, SW_RES(PB_SAVE  )),
-    bModified(false),
-    aItem        ((const SwLabItem&) rSet.Get(FN_LABEL))
+SwLabFmtPage::SwLabFmtPage(Window* pParent, const SfxItemSet& rSet)
+    : SfxTabPage(pParent, "LabelFormatPage",
+        "modules/swriter/ui/labelformatpage.ui", rSet)
+    , bModified(false)
+    , aItem((const SwLabItem&) rSet.Get(FN_LABEL))
 {
-    FreeResource();
     SetExchangeSupport();
+
+    get(m_pMakeFI, "make");
+    get(m_pTypeFI, "type");
+    get(m_pPreview, "preview");
+    get(m_pHDistField, "hori");
+    get(m_pVDistField, "vert");
+    get(m_pWidthField, "width");
+    get(m_pHeightField, "height");
+    get(m_pLeftField, "left");
+    get(m_pUpperField, "top");
+    get(m_pColsField, "cols");
+    get(m_pRowsField, "rows");
+    get(m_pPWidthField, "pagewidth");
+    get(m_pPHeightField, "pageheight");
+    get(m_pSavePB, "save");
 
     // Metrics
     FieldUnit aMetric = ::GetDfltMetric(sal_False);
-    SetMetric(aHDistField , aMetric);
-    SetMetric(aVDistField , aMetric);
-    SetMetric(aWidthField , aMetric);
-    SetMetric(aHeightField, aMetric);
-    SetMetric(aLeftField  , aMetric);
-    SetMetric(aUpperField , aMetric);
-    SetMetric(aPWidthField , aMetric);
-    SetMetric(aPHeightField, aMetric);
+    SetMetric(*m_pHDistField, aMetric);
+    SetMetric(*m_pVDistField , aMetric);
+    SetMetric(*m_pWidthField , aMetric);
+    SetMetric(*m_pHeightField, aMetric);
+    SetMetric(*m_pLeftField  , aMetric);
+    SetMetric(*m_pUpperField , aMetric);
+    SetMetric(*m_pPWidthField , aMetric);
+    SetMetric(*m_pPHeightField, aMetric);
 
     // Install handlers
     Link aLk = LINK(this, SwLabFmtPage, ModifyHdl);
-    aHDistField .SetModifyHdl( aLk );
-    aVDistField .SetModifyHdl( aLk );
-    aWidthField .SetModifyHdl( aLk );
-    aHeightField.SetModifyHdl( aLk );
-    aLeftField  .SetModifyHdl( aLk );
-    aUpperField .SetModifyHdl( aLk );
-    aColsField  .SetModifyHdl( aLk );
-    aRowsField  .SetModifyHdl( aLk );
-    aPWidthField .SetModifyHdl( aLk );
-    aPHeightField.SetModifyHdl( aLk );
+    m_pHDistField->SetModifyHdl( aLk );
+    m_pVDistField->SetModifyHdl( aLk );
+    m_pWidthField->SetModifyHdl( aLk );
+    m_pHeightField->SetModifyHdl( aLk );
+    m_pLeftField->SetModifyHdl( aLk );
+    m_pUpperField->SetModifyHdl( aLk );
+    m_pColsField->SetModifyHdl( aLk );
+    m_pRowsField->SetModifyHdl( aLk );
+    m_pPWidthField->SetModifyHdl( aLk );
+    m_pPHeightField->SetModifyHdl( aLk );
 
     aLk = LINK(this, SwLabFmtPage, LoseFocusHdl);
-    aHDistField .SetLoseFocusHdl( aLk );
-    aVDistField .SetLoseFocusHdl( aLk );
-    aWidthField .SetLoseFocusHdl( aLk );
-    aHeightField.SetLoseFocusHdl( aLk );
-    aLeftField  .SetLoseFocusHdl( aLk );
-    aUpperField .SetLoseFocusHdl( aLk );
-    aColsField  .SetLoseFocusHdl( aLk );
-    aRowsField  .SetLoseFocusHdl( aLk );
-    aPWidthField .SetLoseFocusHdl( aLk );
-    aPHeightField.SetLoseFocusHdl( aLk );
+    m_pHDistField->SetLoseFocusHdl( aLk );
+    m_pVDistField->SetLoseFocusHdl( aLk );
+    m_pWidthField->SetLoseFocusHdl( aLk );
+    m_pHeightField->SetLoseFocusHdl( aLk );
+    m_pLeftField->SetLoseFocusHdl( aLk );
+    m_pUpperField->SetLoseFocusHdl( aLk );
+    m_pColsField->SetLoseFocusHdl( aLk );
+    m_pRowsField->SetLoseFocusHdl( aLk );
+    m_pPWidthField->SetLoseFocusHdl( aLk );
+    m_pPHeightField->SetLoseFocusHdl( aLk );
 
-    aSavePB.SetClickHdl( LINK (this, SwLabFmtPage, SaveHdl));
+    m_pSavePB->SetClickHdl( LINK (this, SwLabFmtPage, SaveHdl));
     // Set timer
     aPreviewTimer.SetTimeout(1000);
     aPreviewTimer.SetTimeoutHdl(LINK(this, SwLabFmtPage, PreviewHdl));
@@ -382,7 +374,7 @@ IMPL_LINK_NOARG_INLINE_START(SwLabFmtPage, PreviewHdl)
     aPreviewTimer.Stop();
     ChangeMinMax();
     FillItem( aItem );
-    aPreview.Update( aItem );
+    m_pPreview->UpdateItem( aItem );
 
     return 0;
 }
@@ -404,76 +396,76 @@ void SwLabFmtPage::ChangeMinMax()
 
     // Min and Max
 
-    int nCols   = aColsField.GetValue(),
-        nRows   = aRowsField.GetValue();
-    long lLeft   = static_cast< long >(GETFLDVAL(aLeftField )),
-         lUpper  = static_cast< long >(GETFLDVAL(aUpperField)),
-         lHDist  = static_cast< long >(GETFLDVAL(aHDistField)),
-         lVDist  = static_cast< long >(GETFLDVAL(aVDistField)),
-         lWidth  = static_cast< long >(GETFLDVAL(aWidthField)),
-         lHeight = static_cast< long >(GETFLDVAL(aHeightField)),
+    int nCols   = m_pColsField->GetValue(),
+        nRows   = m_pRowsField->GetValue();
+    long lLeft   = static_cast< long >(GETFLDVAL(*m_pLeftField )),
+         lUpper  = static_cast< long >(GETFLDVAL(*m_pUpperField)),
+         lHDist  = static_cast< long >(GETFLDVAL(*m_pHDistField)),
+         lVDist  = static_cast< long >(GETFLDVAL(*m_pVDistField)),
+         lWidth  = static_cast< long >(GETFLDVAL(*m_pWidthField)),
+         lHeight = static_cast< long >(GETFLDVAL(*m_pHeightField)),
          lMinPWidth  = lLeft  + (nCols - 1) * lHDist + lWidth,
          lMinPHeight = lUpper + (nRows - 1) * lVDist + lHeight;
 
-    aHDistField .SetMin(nMinSize, FUNIT_CM);
-    aVDistField .SetMin(nMinSize, FUNIT_CM);
+    m_pHDistField->SetMin(nMinSize, FUNIT_CM);
+    m_pVDistField->SetMin(nMinSize, FUNIT_CM);
 
-    aHDistField .SetMax((long) 100 * ((lMax - lLeft ) / std::max(1L, (long) nCols)), FUNIT_TWIP);
-    aVDistField .SetMax((long) 100 * ((lMax - lUpper) / std::max(1L, (long) nRows)), FUNIT_TWIP);
+    m_pHDistField->SetMax((long) 100 * ((lMax - lLeft ) / std::max(1L, (long) nCols)), FUNIT_TWIP);
+    m_pVDistField->SetMax((long) 100 * ((lMax - lUpper) / std::max(1L, (long) nRows)), FUNIT_TWIP);
 
-    aWidthField .SetMin(nMinSize, FUNIT_CM);
-    aHeightField.SetMin(nMinSize, FUNIT_CM);
+    m_pWidthField->SetMin(nMinSize, FUNIT_CM);
+    m_pHeightField->SetMin(nMinSize, FUNIT_CM);
 
-    aWidthField .SetMax((long) 100 * (lHDist), FUNIT_TWIP);
-    aHeightField.SetMax((long) 100 * (lVDist), FUNIT_TWIP);
+    m_pWidthField->SetMax((long) 100 * (lHDist), FUNIT_TWIP);
+    m_pHeightField->SetMax((long) 100 * (lVDist), FUNIT_TWIP);
 
-    aLeftField  .SetMax((long) 100 * (lMax - nCols * lHDist), FUNIT_TWIP);
-    aUpperField .SetMax((long) 100 * (lMax - nRows * lVDist), FUNIT_TWIP);
+    m_pLeftField->SetMax((long) 100 * (lMax - nCols * lHDist), FUNIT_TWIP);
+    m_pUpperField->SetMax((long) 100 * (lMax - nRows * lVDist), FUNIT_TWIP);
 
-    aColsField  .SetMin( 1 );
-    aRowsField  .SetMin( 1 );
+    m_pColsField->SetMin( 1 );
+    m_pRowsField->SetMin( 1 );
 
-    aColsField  .SetMax((lMax - lLeft ) / std::max(1L, lHDist));
-    aRowsField  .SetMax((lMax - lUpper) / std::max(1L, lVDist));
-    aPWidthField .SetMin( (long) 100 * lMinPWidth,  FUNIT_TWIP );
-    aPHeightField.SetMin( (long) 100 * lMinPHeight, FUNIT_TWIP );
+    m_pColsField->SetMax((lMax - lLeft ) / std::max(1L, lHDist));
+    m_pRowsField->SetMax((lMax - lUpper) / std::max(1L, lVDist));
+    m_pPWidthField->SetMin( (long) 100 * lMinPWidth,  FUNIT_TWIP );
+    m_pPHeightField->SetMin( (long) 100 * lMinPHeight, FUNIT_TWIP );
 
-    aPWidthField .SetMax( (long) 100 * lMax, FUNIT_TWIP);
-    aPHeightField.SetMax( (long) 100 * lMax, FUNIT_TWIP);
+    m_pPWidthField->SetMax( (long) 100 * lMax, FUNIT_TWIP);
+    m_pPHeightField->SetMax( (long) 100 * lMax, FUNIT_TWIP);
     // First and Last
 
-    aHDistField .SetFirst(aHDistField .GetMin());
-    aVDistField .SetFirst(aVDistField .GetMin());
+    m_pHDistField->SetFirst(m_pHDistField->GetMin());
+    m_pVDistField->SetFirst(m_pVDistField->GetMin());
 
-    aHDistField .SetLast (aHDistField .GetMax());
-    aVDistField .SetLast (aVDistField .GetMax());
+    m_pHDistField->SetLast (m_pHDistField->GetMax());
+    m_pVDistField->SetLast (m_pVDistField->GetMax());
 
-    aWidthField .SetFirst(aWidthField .GetMin());
-    aHeightField.SetFirst(aHeightField.GetMin());
+    m_pWidthField->SetFirst(m_pWidthField->GetMin());
+    m_pHeightField->SetFirst(m_pHeightField->GetMin());
 
-    aWidthField .SetLast (aWidthField .GetMax());
-    aHeightField.SetLast (aHeightField.GetMax());
+    m_pWidthField->SetLast (m_pWidthField->GetMax());
+    m_pHeightField->SetLast (m_pHeightField->GetMax());
 
-    aLeftField  .SetLast (aLeftField  .GetMax());
-    aUpperField .SetLast (aUpperField .GetMax());
+    m_pLeftField->SetLast (m_pLeftField->GetMax());
+    m_pUpperField->SetLast (m_pUpperField->GetMax());
 
-    aColsField  .SetLast (aColsField  .GetMax());
-    aRowsField  .SetLast (aRowsField  .GetMax());
-    aPWidthField .SetFirst(aPWidthField .GetMin());
-    aPHeightField.SetFirst(aPHeightField.GetMin());
+    m_pColsField->SetLast (m_pColsField->GetMax());
+    m_pRowsField->SetLast (m_pRowsField->GetMax());
+    m_pPWidthField->SetFirst(m_pPWidthField->GetMin());
+    m_pPHeightField->SetFirst(m_pPHeightField->GetMin());
 
-    aPWidthField .SetLast (aPWidthField .GetMax());
-    aPHeightField.SetLast (aPHeightField.GetMax());
-    aHDistField .Reformat();
-    aVDistField .Reformat();
-    aWidthField .Reformat();
-    aHeightField.Reformat();
-    aLeftField  .Reformat();
-    aUpperField .Reformat();
-    aColsField  .Reformat();
-    aRowsField  .Reformat();
-    aPWidthField .Reformat();
-    aPHeightField.Reformat();
+    m_pPWidthField->SetLast (m_pPWidthField->GetMax());
+    m_pPHeightField->SetLast (m_pPHeightField->GetMax());
+    m_pHDistField->Reformat();
+    m_pVDistField->Reformat();
+    m_pWidthField->Reformat();
+    m_pHeightField->Reformat();
+    m_pLeftField->Reformat();
+    m_pUpperField->Reformat();
+    m_pColsField->Reformat();
+    m_pRowsField->Reformat();
+    m_pPWidthField->Reformat();
+    m_pPHeightField->Reformat();
 }
 
 SfxTabPage* SwLabFmtPage::Create(Window* pParent, const SfxItemSet& rSet)
@@ -502,16 +494,16 @@ void SwLabFmtPage::FillItem(SwLabItem& rItem)
         rItem.aMake = rItem.aType = SW_RESSTR(STR_CUSTOM);
 
         SwLabRec& rRec = *GetParentSwLabDlg()->Recs()[0];
-        rItem.lHDist  = rRec.lHDist  = static_cast< long >(GETFLDVAL(aHDistField ));
-        rItem.lVDist  = rRec.lVDist  = static_cast< long >(GETFLDVAL(aVDistField ));
-        rItem.lWidth  = rRec.lWidth  = static_cast< long >(GETFLDVAL(aWidthField ));
-        rItem.lHeight = rRec.lHeight = static_cast< long >(GETFLDVAL(aHeightField));
-        rItem.lLeft   = rRec.lLeft   = static_cast< long >(GETFLDVAL(aLeftField  ));
-        rItem.lUpper  = rRec.lUpper  = static_cast< long >(GETFLDVAL(aUpperField ));
-        rItem.nCols   = rRec.nCols   = (sal_uInt16) aColsField.GetValue();
-        rItem.nRows   = rRec.nRows   = (sal_uInt16) aRowsField.GetValue();
-        rItem.lPWidth  = rRec.lPWidth  = static_cast< long >(GETFLDVAL(aPWidthField ));
-        rItem.lPHeight = rRec.lPHeight = static_cast< long >(GETFLDVAL(aPHeightField));
+        rItem.lHDist  = rRec.lHDist  = static_cast< long >(GETFLDVAL(*m_pHDistField ));
+        rItem.lVDist  = rRec.lVDist  = static_cast< long >(GETFLDVAL(*m_pVDistField ));
+        rItem.lWidth  = rRec.lWidth  = static_cast< long >(GETFLDVAL(*m_pWidthField ));
+        rItem.lHeight = rRec.lHeight = static_cast< long >(GETFLDVAL(*m_pHeightField));
+        rItem.lLeft   = rRec.lLeft   = static_cast< long >(GETFLDVAL(*m_pLeftField  ));
+        rItem.lUpper  = rRec.lUpper  = static_cast< long >(GETFLDVAL(*m_pUpperField ));
+        rItem.nCols   = rRec.nCols   = (sal_uInt16) m_pColsField->GetValue();
+        rItem.nRows   = rRec.nRows   = (sal_uInt16) m_pRowsField->GetValue();
+        rItem.lPWidth  = rRec.lPWidth  = static_cast< long >(GETFLDVAL(*m_pPWidthField ));
+        rItem.lPHeight = rRec.lPHeight = static_cast< long >(GETFLDVAL(*m_pPHeightField));
     }
 }
 
@@ -528,47 +520,47 @@ void SwLabFmtPage::Reset(const SfxItemSet& )
     // Initialise fields
     GetParentSwLabDlg()->GetLabItem(aItem);
 
-    aHDistField .SetMax(100 * aItem.lHDist , FUNIT_TWIP);
-    aVDistField .SetMax(100 * aItem.lVDist , FUNIT_TWIP);
-    aWidthField .SetMax(100 * aItem.lWidth , FUNIT_TWIP);
-    aHeightField.SetMax(100 * aItem.lHeight, FUNIT_TWIP);
-    aLeftField  .SetMax(100 * aItem.lLeft  , FUNIT_TWIP);
-    aUpperField .SetMax(100 * aItem.lUpper , FUNIT_TWIP);
-    aPWidthField .SetMax(100 * aItem.lPWidth , FUNIT_TWIP);
-    aPHeightField.SetMax(100 * aItem.lPHeight, FUNIT_TWIP);
+    m_pHDistField->SetMax(100 * aItem.lHDist , FUNIT_TWIP);
+    m_pVDistField->SetMax(100 * aItem.lVDist , FUNIT_TWIP);
+    m_pWidthField->SetMax(100 * aItem.lWidth , FUNIT_TWIP);
+    m_pHeightField->SetMax(100 * aItem.lHeight, FUNIT_TWIP);
+    m_pLeftField->SetMax(100 * aItem.lLeft  , FUNIT_TWIP);
+    m_pUpperField->SetMax(100 * aItem.lUpper , FUNIT_TWIP);
+    m_pPWidthField->SetMax(100 * aItem.lPWidth , FUNIT_TWIP);
+    m_pPHeightField->SetMax(100 * aItem.lPHeight, FUNIT_TWIP);
 
-    SETFLDVAL(aHDistField , aItem.lHDist );
-    SETFLDVAL(aVDistField , aItem.lVDist );
-    SETFLDVAL(aWidthField , aItem.lWidth );
-    SETFLDVAL(aHeightField, aItem.lHeight);
-    SETFLDVAL(aLeftField  , aItem.lLeft  );
-    SETFLDVAL(aUpperField , aItem.lUpper );
-    SETFLDVAL(aPWidthField , aItem.lPWidth );
-    SETFLDVAL(aPHeightField, aItem.lPHeight);
+    SETFLDVAL(*m_pHDistField, aItem.lHDist );
+    SETFLDVAL(*m_pVDistField , aItem.lVDist );
+    SETFLDVAL(*m_pWidthField , aItem.lWidth );
+    SETFLDVAL(*m_pHeightField, aItem.lHeight);
+    SETFLDVAL(*m_pLeftField  , aItem.lLeft  );
+    SETFLDVAL(*m_pUpperField , aItem.lUpper );
+    SETFLDVAL(*m_pPWidthField , aItem.lPWidth );
+    SETFLDVAL(*m_pPHeightField, aItem.lPHeight);
 
-    aColsField.SetMax(aItem.nCols);
-    aRowsField.SetMax(aItem.nRows);
+    m_pColsField->SetMax(aItem.nCols);
+    m_pRowsField->SetMax(aItem.nRows);
 
-    aColsField  .SetValue(aItem.nCols);
-    aRowsField  .SetValue(aItem.nRows);
-    aMakeFI.SetText(aItem.aMake);
-    aTypeFI.SetText(aItem.aType);
+    m_pColsField->SetValue(aItem.nCols);
+    m_pRowsField->SetValue(aItem.nRows);
+    m_pMakeFI->SetText(aItem.aMake);
+    m_pTypeFI->SetText(aItem.aType);
     PreviewHdl(0);
 }
 
 IMPL_LINK_NOARG(SwLabFmtPage, SaveHdl)
 {
     SwLabRec aRec;
-    aRec.lHDist  = static_cast< long >(GETFLDVAL(aHDistField ));
-    aRec.lVDist  = static_cast< long >(GETFLDVAL(aVDistField ));
-    aRec.lWidth  = static_cast< long >(GETFLDVAL(aWidthField ));
-    aRec.lHeight = static_cast< long >(GETFLDVAL(aHeightField));
-    aRec.lLeft   = static_cast< long >(GETFLDVAL(aLeftField  ));
-    aRec.lUpper  = static_cast< long >(GETFLDVAL(aUpperField ));
-    aRec.nCols   = (sal_uInt16) aColsField.GetValue();
-    aRec.nRows   = (sal_uInt16) aRowsField.GetValue();
-    aRec.lPWidth  = static_cast< long >(GETFLDVAL(aPWidthField ));
-    aRec.lPHeight = static_cast< long >(GETFLDVAL(aPHeightField));
+    aRec.lHDist  = static_cast< long >(GETFLDVAL(*m_pHDistField));
+    aRec.lVDist  = static_cast< long >(GETFLDVAL(*m_pVDistField ));
+    aRec.lWidth  = static_cast< long >(GETFLDVAL(*m_pWidthField ));
+    aRec.lHeight = static_cast< long >(GETFLDVAL(*m_pHeightField));
+    aRec.lLeft   = static_cast< long >(GETFLDVAL(*m_pLeftField  ));
+    aRec.lUpper  = static_cast< long >(GETFLDVAL(*m_pUpperField ));
+    aRec.nCols   = (sal_uInt16) m_pColsField->GetValue();
+    aRec.nRows   = (sal_uInt16) m_pRowsField->GetValue();
+    aRec.lPWidth  = static_cast< long >(GETFLDVAL(*m_pPWidthField ));
+    aRec.lPHeight = static_cast< long >(GETFLDVAL(*m_pPHeightField));
     aRec.bCont = aItem.bCont;
     SwSaveLabelDlg* pSaveDlg = new SwSaveLabelDlg(this, aRec);
     pSaveDlg->SetLabel(aItem.aLstMake, aItem.aLstType);
@@ -582,8 +574,8 @@ IMPL_LINK_NOARG(SwLabFmtPage, SaveHdl)
         {
             rMakes = rMan;
         }
-        aMakeFI.SetText(aItem.aMake);
-        aTypeFI.SetText(aItem.aType);
+        m_pMakeFI->SetText(aItem.aMake);
+        m_pTypeFI->SetText(aItem.aType);
     }
     delete pSaveDlg;
     return 0;

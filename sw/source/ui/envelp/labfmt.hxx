@@ -28,11 +28,6 @@ class SwLabFmtPage;
 
 class SwLabPreview : public Window
 {
-    long lOutWPix;
-    long lOutHPix;
-    long lOutWPix23;
-    long lOutHPix23;
-
     Color aGrayColor;
 
     String aHDistStr;
@@ -60,51 +55,37 @@ class SwLabPreview : public Window
 
     SwLabItem aItem;
 
-    void Paint(const Rectangle&);
+    virtual void Paint(const Rectangle&);
+
+    virtual Size GetOptimalSize() const;
 
     void DrawArrow(const Point& rP1, const Point& rP2, bool bArrow);
 
-    using Window::GetParent;
-    SwLabFmtPage* GetParent() {return (SwLabFmtPage*) Window::GetParent();}
-
-    using Window::Update;
-
 public:
 
-     SwLabPreview(const SwLabFmtPage* pParent, const ResId& rResID);
-    ~SwLabPreview();
+    SwLabPreview(Window* pParent);
 
-    void Update(const SwLabItem& rItem);
+    void UpdateItem(const SwLabItem& rItem);
 };
 
 // class SwLabFmtPage -------------------------------------------------------
 
 class SwLabFmtPage : public SfxTabPage
 {
-    FixedInfo       aMakeFI;
-    FixedInfo       aTypeFI;
-    SwLabPreview aPreview;
-    FixedText    aHDistText;
-    MetricField  aHDistField;
-    FixedText    aVDistText;
-    MetricField  aVDistField;
-    FixedText    aWidthText;
-    MetricField  aWidthField;
-    FixedText    aHeightText;
-    MetricField  aHeightField;
-    FixedText    aLeftText;
-    MetricField  aLeftField;
-    FixedText    aUpperText;
-    MetricField  aUpperField;
-    FixedText    aColsText;
-    NumericField aColsField;
-    FixedText    aRowsText;
-    NumericField aRowsField;
-    FixedText    aPWidthText;
-    MetricField  aPWidthField;
-    FixedText    aPHeightText;
-    MetricField  aPHeightField;
-    PushButton   aSavePB;
+    FixedText*    m_pMakeFI;
+    FixedText*    m_pTypeFI;
+    SwLabPreview* m_pPreview;
+    MetricField*  m_pHDistField;
+    MetricField*  m_pVDistField;
+    MetricField*  m_pWidthField;
+    MetricField*  m_pHeightField;
+    MetricField*  m_pLeftField;
+    MetricField*  m_pUpperField;
+    NumericField* m_pColsField;
+    NumericField* m_pRowsField;
+    MetricField*  m_pPWidthField;
+    MetricField*  m_pPHeightField;
+    PushButton*   m_pSavePB;
 
     Timer aPreviewTimer;
     bool  bModified;

@@ -22,34 +22,6 @@
 
 #include "envelp.hrc"
 
-// local resources *********************************************************
-
-#define WIN_PREVIEW   1
-#define TXT_HDIST     2
-#define FLD_HDIST     3
-#define TXT_VDIST     4
-#define FLD_VDIST     5
-#define TXT_WIDTH     6
-#define FLD_WIDTH     7
-#define TXT_HEIGHT    8
-#define FLD_HEIGHT    9
-#define TXT_LEFT     10
-#define FLD_LEFT     11
-#define TXT_UPPER    12
-#define FLD_UPPER    13
-#define TXT_COLUMNS  14
-#define FLD_COLUMNS  15
-#define TXT_ROWS     16
-#define FLD_ROWS     17
-#define TXT_PWIDTH   18
-#define FLD_PWIDTH   19
-#define TXT_PHEIGHT  20
-#define FLD_PHEIGHT  21
-#define FL_NONAME    22
-#define PB_SAVE      23
-#define FI_MAKE      24
-#define FI_TYPE      25
-
 // global resources ********************************************************
 
 #define STR_HDIST    (RC_LABFMT_BEGIN +  1)
