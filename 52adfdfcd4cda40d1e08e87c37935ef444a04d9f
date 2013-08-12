@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//9GQ\u003d",
+        "filename": "svtools/source/svhtml/htmlsupp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2013-08-12T06:46:30Z",
+      "side": 1,
+      "message": "The check for length \u003e\u003d 4 is unnecessary, startsWith() will return false if the string is not long enough surely.",
+      "revId": "52adfdfcd4cda40d1e08e87c37935ef444a04d9f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//9GM\u003d",
+        "filename": "sw/source/filter/html/htmlfld.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 599,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2013-08-12T06:46:30Z",
+      "side": 1,
+      "message": "Can be made even simpler, no need for the aTmp variable:\n\naContents \u003d \"HTML: \u003c\" + OUString( *pTag ) + \"\u003e\" + aContents;",
+      "revId": "52adfdfcd4cda40d1e08e87c37935ef444a04d9f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
