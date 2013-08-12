@@ -809,9 +809,6 @@ atk_object_wrapper_new( const ::com::sun::star::uno::Reference< ::com::sun::star
              */
             uno::Reference< accessibility::XAccessible > xParent( xContext->getAccessibleParent() );
 
-            /* The top-level objects should never be of this class */
-            OSL_ASSERT( xParent.is() );
-
             if( xParent.is() )
                 atk_obj->accessible_parent = atk_object_wrapper_ref( xParent );
         }

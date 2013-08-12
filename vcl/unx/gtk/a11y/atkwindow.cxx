@@ -278,7 +278,7 @@ ooo_window_wrapper_get_type (void)
 
         if( ! parent_type )
         {
-            g_warning( "Unknown type: GailWindow" );
+            SAL_INFO("vcl.a11y", "Unknown type: GailWindow");
             parent_type = ATK_TYPE_OBJECT;
         }
 
