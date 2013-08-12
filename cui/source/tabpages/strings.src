@@ -95,10 +95,6 @@ String RID_SVXSTR_WARN_TABLE_OVERWRITE
 {
     Text [ en-US ] = "The list was modified without saving. Would you like to save the list now?" ;
 };
-String RID_SVXSTR_WARN_NAME_DUPLICATE
-{
-    Text [ en-US ] = "The name you have entered already exists. \nPlease choose another name." ;
-};
 String RID_SVXSTR_DESC_LINEEND
 {
     Text [ en-US ] = "Please enter a name for the new arrowhead:" ;

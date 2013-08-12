@@ -455,7 +455,6 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ChangeHatchHdl_Impl)
 
 IMPL_LINK_NOARG(SvxHatchTabPage, ClickAddHdl_Impl)
 {
-    ResMgr& rMgr = CUI_MGR();
     String aNewName( SVX_RES( RID_SVXSTR_HATCH ) );
     String aDesc( CUI_RES( RID_SVXSTR_DESC_HATCH ) );
     String aName;
@@ -468,7 +467,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickAddHdl_Impl)
     {
         aName  = aNewName;
         aName += sal_Unicode(' ');
-        aName += OUString::valueOf( j++ );
+        aName += OUString::number( j++ );
         bDifferent = sal_True;
 
         for( long i = 0; i < nCount && bDifferent; i++ )
@@ -480,8 +479,8 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickAddHdl_Impl)
     DBG_ASSERT(pFact, "Dialogdiet fail!");
     AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc );
     DBG_ASSERT(pDlg, "Dialogdiet fail!");
-    WarningBox*    pWarnBox = NULL;
-    sal_uInt16         nError   = RID_SVXSTR_WARN_NAME_DUPLICATE;
+    MessageDialog*    pWarnBox = NULL;
+    sal_uInt16         nError   = 1;
 
     while( pDlg->Execute() == RET_OK )
     {
@@ -500,10 +499,10 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickAddHdl_Impl)
 
         if( !pWarnBox )
         {
-            pWarnBox = new WarningBox( GetParentDialog(),
-                                       WinBits( WB_OK_CANCEL ),
-                                       String( ResId( nError, rMgr ) ) );
-            pWarnBox->SetHelpId( HID_WARN_NAME_DUPLICATE );
+            pWarnBox = new MessageDialog( GetParentDialog()
+                                         ,"DuplicateNameDialog"
+                                         ,"cui/ui/queryduplicatedialog.ui");
+//             pWarnBox->SetHelpId( HID_WARN_NAME_DUPLICATE );
         }
 
         if( pWarnBox->Execute() != RET_OK )
@@ -610,8 +609,10 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickModifyHdl_Impl)
             }
             else
             {
-                WarningBox aBox( GetParentDialog(), WinBits( WB_OK ),String( ResId( RID_SVXSTR_WARN_NAME_DUPLICATE, rMgr ) ) );
-                aBox.SetHelpId( HID_WARN_NAME_DUPLICATE );
+                MessageDialog aBox( GetParentDialog()
+                                    ,"DuplicateNameDialog"
+                                    ,"cui/ui/queryduplicatedialog.ui");
+//                 aBox.SetHelpId( HID_WARN_NAME_DUPLICATE );
                 aBox.Execute();
             }
         }
