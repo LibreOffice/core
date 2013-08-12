@@ -1490,7 +1490,7 @@ void PPDParser::getResolutionFromString(
         if( ( nPos = rString.indexOf( 'x' ) ) != -1 )
         {
             rXRes = rString.copy( 0, nPos ).toInt32();
-            rYRes = rString.getToken( 1, 'x' ).replaceAt( nDPIPos - nPos - 1, 1, "" ).toInt32();
+            rYRes = rString.getToken( 1, 'x' ).copy(0, nDPIPos - nPos - 1).toInt32();
         }
         else
             rXRes = rYRes = rString.copy( 0, nDPIPos ).toInt32();
