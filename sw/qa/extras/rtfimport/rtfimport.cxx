@@ -155,6 +155,7 @@ public:
     void testFdo47440();
     void testPoshPosv();
     void testFdo53556();
+    void testFdo63428();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -294,6 +295,7 @@ void Test::run()
         {"fdo47440.rtf", &Test::testFdo47440},
         {"posh-posv.rtf", &Test::testPoshPosv},
         {"fdo53556.rtf", &Test::testFdo53556},
+        {"hello.rtf", &Test::testFdo63428},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1415,6 +1417,19 @@ void Test::testFdo53556()
     uno::Reference<beans::XPropertySet> xShapeProperties(xDraws->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<drawing::XShapeDescriptor> xShapeDescriptor(xShapeProperties, uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("FrameShape"), xShapeDescriptor->getShapeType());
+}
+
+void Test::testFdo63428()
+{
+    // Pasting content that contained an annotation caused a crash.
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xText(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xEnd = xText->getEnd();
+    paste("fdo63428.rtf", xEnd);
+
+    // Additionally, commented range was imported as a normal comment.
+    CPPUNIT_ASSERT_EQUAL(OUString("TextFieldStart"), getProperty<OUString>(getRun(getParagraph(1), 2), "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("TextFieldEnd"), getProperty<OUString>(getRun(getParagraph(1), 4), "TextPortionType"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
