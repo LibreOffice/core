@@ -79,7 +79,6 @@ bool ScDocument::Solver(SCCOL nFCol, SCROW nFRow, SCTAB nFTab,
         CellType eFType, eVType;
         GetCellType(nFCol, nFRow, nFTab, eFType);
         GetCellType(nVCol, nVRow, nVTab, eVType);
-        // CELLTYPE_NOTE: no value, but referenced by formula
         // #i108005# convert target value to number using default format,
         // as previously done in ScInterpreter::GetDouble
         double fTargetVal = 0.0;
