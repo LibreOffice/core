@@ -173,16 +173,6 @@ MediaTypeEntry const aStaticTypeNameMap[CONTENT_TYPE_LAST + 1]
         { CONTENT_TYPE_STR_APP_MSWORD, CONTENT_TYPE_APP_MSWORD, "doc" },
         { CONTENT_TYPE_STR_APP_MSWORD_TEMPL, CONTENT_TYPE_APP_MSWORD_TEMPL,
           "dot" },
-        { CONTENT_TYPE_STR_APP_SCHEDULE_CMB, CONTENT_TYPE_APP_SCHEDULE,
-          "tmp" },
-        { CONTENT_TYPE_STR_APP_SCHEDULE_EVT, CONTENT_TYPE_APP_SCHEDULE_EVT,
-          "tmp" },
-        { CONTENT_TYPE_STR_APP_SCHEDULE_FEVT,
-          CONTENT_TYPE_APP_SCHEDULE_FORM_EVT, "tmp" },
-        { CONTENT_TYPE_STR_APP_SCHEDULE_FTASK,
-          CONTENT_TYPE_APP_SCHEDULE_FORM_TASK, "tmp" },
-        { CONTENT_TYPE_STR_APP_SCHEDULE_TASK, CONTENT_TYPE_APP_SCHEDULE_TASK,
-          "tmp" },
         { CONTENT_TYPE_STR_APP_STARCALC, CONTENT_TYPE_APP_STARCALC, "sdc" },
         { CONTENT_TYPE_STR_APP_STARCHART, CONTENT_TYPE_APP_STARCHART, "sds" },
         { CONTENT_TYPE_STR_APP_STARDRAW, CONTENT_TYPE_APP_STARDRAW, "sda" },
@@ -302,12 +292,6 @@ sal_uInt16 const aStaticResourceIDMap[CONTENT_TYPE_LAST + 1]
         STR_SVT_MIMETYPE_APP_STARWRITER, // CONTENT_TYPE_APP_VND_WRITER
         STR_SVT_MIMETYPE_APP_STARW_GLOB, // CONTENT_TYPE_APP_VND_WRITER_GLOBAL
         STR_SVT_MIMETYPE_APP_STARW_WEB, // CONTENT_TYPE_APP_VND_WRITER_WEB
-        STR_SVT_MIMETYPE_SCHEDULE, // CONTENT_TYPE_APP_SCHEDULE
-        STR_SVT_MIMETYPE_SCHEDULE_EVT, // CONTENT_TYPE_APP_SCHEDULE_EVT
-        STR_SVT_MIMETYPE_SCHEDULE_TASK, // CONTENT_TYPE_APP_SCHEDULE_TASK
-        STR_SVT_MIMETYPE_SCHEDULE_FEVT, // CONTENT_TYPE_APP_SCHEDULE_FORM_EVT
-        STR_SVT_MIMETYPE_SCHEDULE_FTASK,
-            // CONTENT_TYPE_APP_SCHEDULE_FORM_TASK
         STR_SVT_MIMETYPE_FRAMESET, // CONTENT_TYPE_APP_FRAMESET
         STR_SVT_MIMETYPE_MACRO, // CONTENT_TYPE_APP_MACRO
         STR_SVT_MIMETYPE_CNT_SFSYSFOLDER,
@@ -806,29 +790,6 @@ INetContentType INetContentTypes::GetContentTypeFromURL(OUString const & rURL)
             }
             else if (aToken.equalsAscii(INETTYPE_URL_SUB_HELPID))
                 eTypeID = CONTENT_TYPE_APP_STARHELP;
-        }
-        else if (aToken.equalsIgnoreAsciiCase(INETTYPE_URL_PROT_COMPONENT))
-        {
-            aToken = rURL.getToken(1, ':'); // aToken now equals ss / *
-            aToken = aToken.getToken(0, '/');
-            if (aToken.equalsAscii(INETTYPE_URL_SSUB_SS))
-            {
-                if(rURL.indexOf(INETTYPE_URL_SCHED_CMB) < 0 && rURL.indexOf(INETTYPE_URL_SCHED_FORM) < 0)
-                {
-                    eTypeID = CONTENT_TYPE_APP_SCHEDULE;
-                }
-                else
-                {
-                    if( rURL.indexOf(INETTYPE_URL_SCHED_TASK) < 0)
-                    {
-                        eTypeID = CONTENT_TYPE_APP_SCHEDULE_EVT;
-                    }
-                    else
-                    {
-                        eTypeID = CONTENT_TYPE_APP_SCHEDULE_TASK;
-                    }
-                }
-            }
         }
         else if (aToken.equalsIgnoreAsciiCase(INETTYPE_URL_PROT_MAILTO))
             eTypeID = CONTENT_TYPE_APP_VND_OUTTRAY;

@@ -55,11 +55,6 @@
 #define CONTENT_TYPE_STR_APP_MSPPOINT "application/x-mspowerpoint"
 #define CONTENT_TYPE_STR_APP_MSWORD_TEMPL "application/x-msword-template"
 #define CONTENT_TYPE_STR_APP_MSWORD "application/x-msword"
-#define CONTENT_TYPE_STR_APP_SCHEDULE_EVT "application/x-schedule-event"
-#define CONTENT_TYPE_STR_APP_SCHEDULE_FEVT "application/x-schedule-form-event"
-#define CONTENT_TYPE_STR_APP_SCHEDULE_FTASK "application/x-schedule-form-task"
-#define CONTENT_TYPE_STR_APP_SCHEDULE_TASK "application/x-schedule-task"
-#define CONTENT_TYPE_STR_APP_SCHEDULE_CMB "application/x-schedule"
 #define CONTENT_TYPE_STR_APP_STARCALC "application/x-starcalc"
 #define CONTENT_TYPE_STR_APP_STARCHART "application/x-starchart"
 #define CONTENT_TYPE_STR_APP_STARDRAW "application/x-stardraw"
@@ -120,7 +115,6 @@
 //============================================================================
 /** Definitions for matching parts of URIs.
  */
-#define INETTYPE_URL_PROT_COMPONENT ".component"
 #define INETTYPE_URL_PROT_DATA "data"
 #define INETTYPE_URL_PROT_FILE "file"
 #define INETTYPE_URL_PROT_HTTP "http"
@@ -139,15 +133,10 @@
 #define INETTYPE_URL_SSUB_SIMAGE "simage"
 #define INETTYPE_URL_SSUB_SIMPRESS "simpress"
 #define INETTYPE_URL_SSUB_SMATH "smath"
-#define INETTYPE_URL_SSUB_SS "ss"
 #define INETTYPE_URL_SSUB_SWRITER "swriter"
 
 #define INETTYPE_URL_SSSUB_GLOB "GlobalDocument"
 #define INETTYPE_URL_SSSUB_WEB "web"
-
-#define INETTYPE_URL_SCHED_CMB "cmbview"
-#define INETTYPE_URL_SCHED_FORM "formular"
-#define INETTYPE_URL_SCHED_TASK "type=task"
 
 //============================================================================
 enum INetContentType
@@ -206,11 +195,6 @@ enum INetContentType
     CONTENT_TYPE_APP_VND_WRITER,
     CONTENT_TYPE_APP_VND_WRITER_GLOBAL,
     CONTENT_TYPE_APP_VND_WRITER_WEB,
-    CONTENT_TYPE_APP_SCHEDULE,
-    CONTENT_TYPE_APP_SCHEDULE_EVT,
-    CONTENT_TYPE_APP_SCHEDULE_TASK,
-    CONTENT_TYPE_APP_SCHEDULE_FORM_EVT,
-    CONTENT_TYPE_APP_SCHEDULE_FORM_TASK,
     CONTENT_TYPE_APP_FRAMESET,
     CONTENT_TYPE_APP_MACRO,
     CONTENT_TYPE_X_CNT_FSYSSPECIALFOLDER,
