@@ -549,7 +549,7 @@ void KDE4FilePicker::addCustomControl(sal_Int16 controlId)
 
             if (_resMgr && resId != -1)
             {
-                OUString s(ResId( resId, *_resMgr ));
+                OUString s(ResId(resId, *_resMgr).toString());
                 label = toQString(s);
                 label.replace("~", "&");
             }
