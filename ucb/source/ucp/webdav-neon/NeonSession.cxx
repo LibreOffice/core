@@ -228,7 +228,7 @@ extern "C" int NeonSession_ResponseBlockWriter( void * inUserData,
 }
 
 extern "C" int NeonSession_NeonAuth( void *       inUserData,
-#ifdef NE_FEATURE_SSPI
+#if defined NE_FEATURE_SSPI && ! defined SYSTEM_NEON
                                      const char * inAuthProtocol,
 #endif
                                      const char * inRealm,
@@ -297,7 +297,7 @@ extern "C" int NeonSession_NeonAuth( void *       inUserData,
 
     bool bCanUseSystemCreds = false;
 
-#ifdef NE_FEATURE_SSPI
+#if defined NE_FEATURE_SSPI && ! defined SYSTEM_NEON
     bCanUseSystemCreds
         = (attempt == 0) && // avoid endless loops
           ne_has_support( NE_FEATURE_SSPI ) && // Windows-only feature.
