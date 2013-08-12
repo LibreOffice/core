@@ -44,7 +44,7 @@ SvxSimpleTableContainer::SvxSimpleTableContainer(Window* pParent, WinBits nBits)
 extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxSimpleTableContainer(Window *pParent,
     VclBuilder::stringmap &)
 {
-    return new SvxSimpleTableContainer(pParent);
+    return new SvxSimpleTableContainer(pParent, WB_TABSTOP | WB_DIALOGCONTROL | WB_BORDER);
 }
 
 void SvxSimpleTableContainer::SetTable(SvxSimpleTable* pTable)
