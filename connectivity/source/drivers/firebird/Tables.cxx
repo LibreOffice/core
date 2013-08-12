@@ -63,9 +63,9 @@ ObjectType Tables::createObject(const OUString& rName)
     ObjectType xRet(new Table(this,
                               m_rMutex,
                               m_xMetaData.getConnection(),
-                              rName,
-                              "", // TODO: Type
-                              "")); // TODO: Description
+                              xRow->getString(3), // Name
+                              xRow->getString(4), // Type
+                              xRow->getString(5))); // Description / Remarks / Comments
 
     if (xTables->next())
         throw RuntimeException(); // Only one table should be returned
