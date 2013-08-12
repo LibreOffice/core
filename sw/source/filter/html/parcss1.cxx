@@ -255,7 +255,7 @@ CSS1Token CSS1Parser::GetNextToken()
                     aToken += sTmpBuffer.makeStringAndClear();
 
                     if( ( 'i'==aToken[0] || 'I'==aToken[0] ) &&
-                        aToken.equalsIgnoreAsciiCaseAscii( "important" ) )
+                        aToken.equalsIgnoreAsciiCase( "important" ) )
                     {
                         // '!' 'important'
                         nRet = CSS1_IMPORTANT_SYM;
