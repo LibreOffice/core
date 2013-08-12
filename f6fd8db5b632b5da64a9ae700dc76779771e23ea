@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//9Cg\u003d",
+        "filename": "sc/source/core/data/documen4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-08-12T19:21:05Z",
+      "side": 1,
+      "message": "Building with --enable-werror this gives\n\nsc/source/core/data/documen4.cxx:110:18: error: unused variable ‘bPrevError’ [-Werror\u003dunused-variable]\n\nI\u0027ll upload an amended patch.",
+      "revId": "f6fd8db5b632b5da64a9ae700dc76779771e23ea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
