@@ -503,7 +503,6 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickAddHdl_Impl)
             pWarnBox = new MessageDialog( GetParentDialog()
                                         ,"DuplicateNameDialog"
                                         ,"cui/ui/queryduplicatedialog.ui");
-//             pWarnBox->SetHelpId( HID_WARN_NAME_DUPLICATE );
         }
 
         if( pWarnBox->Execute() != RET_OK )
@@ -573,10 +572,9 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl_Impl)
     if( !aDlg.Execute() )
     {
         Graphic         aGraphic;
-        int             nError = 1;
 
         EnterWait();
-        nError = aDlg.GetGraphic( aGraphic );
+        int nError = aDlg.GetGraphic( aGraphic );
         LeaveWait();
 
         if( !nError )
@@ -614,7 +612,6 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl_Impl)
                     pWarnBox = new MessageDialog( GetParentDialog()
                                                  ,"DuplicateNameDialog"
                                                  ,"cui/ui/queryduplicatedialog.ui");
-//                     pWarnBox->SetHelpId( HID_WARN_NAME_DUPLICATE );
                 }
 
                 if( pWarnBox->Execute() != RET_OK )
