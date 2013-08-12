@@ -116,6 +116,7 @@ class _SaveTable
     SfxItemSet aTblSet;
     _SaveLine* pLine;
     const SwTable* pSwTable;
+    String sSaveFmtName;
     SfxItemSets aSets;
     SwFrmFmts aFrmFmts;
     sal_uInt16 nLineCount;
@@ -874,6 +875,11 @@ _SaveTable::_SaveTable( const SwTable& rTbl, sal_uInt16 nLnCnt, bool bSaveFml )
     bModifyBox = false;
     bNewModel = rTbl.IsNewModel();
     aTblSet.Put( rTbl.GetFrmFmt()->GetAttrSet() );
+
+    SwTableFmt* pSaveFmt = (SwTableFmt*)rTbl.GetTableFmt()->GetRegisteredIn();
+    if( pSaveFmt )
+        sSaveFmtName = pSaveFmt->GetName();
+
     pLine = new _SaveLine( 0, *rTbl.GetTabLines()[ 0 ], *this );
 
     _SaveLine* pLn = pLine;
@@ -931,6 +937,7 @@ void _SaveTable::RestoreAttr( SwTable& rTbl, bool bMdfyBox )
 
     // first, get back attributes of TableFrmFormat
     SwFrmFmt* pFmt = rTbl.GetFrmFmt();
+    SwDoc* pDoc = pFmt->GetDoc();
     SfxItemSet& rFmtSet  = (SfxItemSet&)pFmt->GetAttrSet();
     rFmtSet.ClearItem();
     rFmtSet.Put( aTblSet );
@@ -969,6 +976,14 @@ void _SaveTable::RestoreAttr( SwTable& rTbl, bool bMdfyBox )
         }
 
         pLn->RestoreAttr( *rTbl.GetTabLines()[ n ], *this );
+    }
+
+    if( !sSaveFmtName.Len() )
+        SwTableFmt::RestoreTableProperties( NULL, rTbl );
+    else
+    {
+        SwTableFmt* pStyle = pDoc->FindTblFmtByName( sSaveFmtName, sal_True );
+        SwTableFmt::RestoreTableProperties( pStyle, rTbl );
     }
 
     aFrmFmts.clear();
