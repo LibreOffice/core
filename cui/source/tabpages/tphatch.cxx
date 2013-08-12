@@ -556,7 +556,6 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickModifyHdl_Impl)
 
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        ResMgr& rMgr = CUI_MGR();
         String aDesc( CUI_RES( RID_SVXSTR_DESC_HATCH ) );
         String aName( pHatchingList->GetHatch( nPos )->GetName() );
         String aOldName = aName;

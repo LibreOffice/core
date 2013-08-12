@@ -91,10 +91,6 @@ String RID_SVXSTR_TABLE
 {
     Text [ en-US ] = "Table" ;
 };
-String RID_SVXSTR_WARN_TABLE_OVERWRITE
-{
-    Text [ en-US ] = "The list was modified without saving. Would you like to save the list now?" ;
-};
 String RID_SVXSTR_DESC_LINEEND
 {
     Text [ en-US ] = "Please enter a name for the new arrowhead:" ;

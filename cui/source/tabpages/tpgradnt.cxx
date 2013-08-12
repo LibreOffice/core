@@ -513,7 +513,6 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickModifyHdl_Impl)
 
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        ResMgr& rMgr = CUI_MGR();
         String aDesc( CUI_RES( RID_SVXSTR_DESC_GRADIENT ) );
         String aName( pGradientList->GetGradient( nPos )->GetName() );
         String aOldName = aName;
