@@ -48,12 +48,12 @@ void SharedFormulaUtil::splitFormulaCellGroup(const CellStoreType::position_type
 
     // Apply the lower group object to the lower cells.
 #if DEBUG_COLUMN_STORAGE
-        if (xGroup2->mnStart + xGroup2->mnLength > aPos.first->position + aPos.first->size)
-        {
-            cerr << "ScColumn::SplitFormulaCellGroup: Shared formula region goes beyond the formula block. Not good." << endl;
-            cerr.flush();
-            abort();
-        }
+    if (xGroup2->mnStart + xGroup2->mnLength > aPos.first->position + aPos.first->size)
+    {
+        cerr << "ScColumn::SplitFormulaCellGroup: Shared formula region goes beyond the formula block. Not good." << endl;
+        cerr.flush();
+        abort();
+    }
 #endif
     sc::formula_block::iterator itEnd = it;
     std::advance(itEnd, xGroup2->mnLength);
