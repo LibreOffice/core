@@ -35,8 +35,6 @@ void FileControl::ImplBrowseFile( )
 {
     try
     {
-        XubString aNewText;
-
         Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
         Reference < dialogs::XFilePicker3 > xFilePicker = dialogs::FilePicker::createWithMode( xContext, dialogs::TemplateDescription::FILEOPEN_SIMPLE );
         // transform the system notation text into a file URL
@@ -59,7 +57,7 @@ void FileControl::ImplBrowseFile( )
 
             if ( aPathSeq.getLength() )
             {
-                aNewText = aPathSeq[0];
+                OUString aNewText = aPathSeq[0];
                 INetURLObject aObj( aNewText );
                 if ( aObj.GetProtocol() == INET_PROT_FILE )
                     aNewText = aObj.PathToFileName();

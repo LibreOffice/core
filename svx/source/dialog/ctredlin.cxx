@@ -369,7 +369,7 @@ sal_Bool SvxRedlinTable::IsValidComment(const String* pCommentStr)
     return nTheFlag;
 }
 
-SvTreeListEntry* SvxRedlinTable::InsertEntry(const String& rStr,RedlinData *pUserData,
+SvTreeListEntry* SvxRedlinTable::InsertEntry(const OUString& rStr,RedlinData *pUserData,
                                 SvTreeListEntry* pParent,sal_uIntPtr nPos)
 {
     aEntryColor=GetTextColor();
@@ -396,7 +396,7 @@ SvTreeListEntry* SvxRedlinTable::InsertEntry(const String& rStr,RedlinData *pUse
 
 }
 
-SvTreeListEntry* SvxRedlinTable::InsertEntry(const String& rStr,RedlinData *pUserData,const Color& aColor,
+SvTreeListEntry* SvxRedlinTable::InsertEntry(const OUString& rStr,RedlinData *pUserData,const Color& aColor,
                                 SvTreeListEntry* pParent,sal_uIntPtr nPos)
 {
     aEntryColor=aColor;

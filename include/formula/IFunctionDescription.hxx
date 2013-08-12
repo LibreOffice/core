@@ -115,7 +115,7 @@ namespace formula
     {
     public:
         IStructHelper(){}
-        virtual SvTreeListEntry*    InsertEntry(const XubString& rText, SvTreeListEntry* pParent,
+        virtual SvTreeListEntry*    InsertEntry(const OUString& rText, SvTreeListEntry* pParent,
                                 sal_uInt16 nFlag,sal_uLong nPos=0,IFormulaToken* pScToken=NULL) = 0;
 
         virtual String          GetEntryText(SvTreeListEntry* pEntry) const = 0;

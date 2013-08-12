@@ -629,14 +629,14 @@ void SvBaseLinksDlg::InsertEntry( const SvBaseLink& rLink, sal_uInt16 nPos, sal_
     // So the first text column's width is Tab(2)-Tab(1).
     long nWidthPixel = Links().GetLogicTab( 2 ) - Links().GetLogicTab( 1 );
     nWidthPixel -= SV_TAB_BORDER;
-    XubString aTxt = Links().GetEllipsisString( sFileNm, nWidthPixel, TEXT_DRAW_PATHELLIPSIS );
+    OUString aTxt = Links().GetEllipsisString( sFileNm, nWidthPixel, TEXT_DRAW_PATHELLIPSIS );
     INetURLObject aPath( sFileNm, INET_PROT_FILE );
     String aFileName = aPath.getName();
     aFileName = INetURLObject::decode(aFileName, INET_HEX_ESCAPE, INetURLObject::DECODE_UNAMBIGUOUS);
 
-    if( aFileName.Len() > aTxt.Len() )
+    if( aFileName.Len() > aTxt.getLength() )
         aTxt = aFileName;
-    else if( aTxt.Search( aFileName, aTxt.Len() - aFileName.Len() ) == STRING_NOTFOUND )
+    else if( aTxt.indexOf( aFileName, aTxt.getLength() - aFileName.Len() ) == -1 )
         // filename not in string
         aTxt = aFileName;
 

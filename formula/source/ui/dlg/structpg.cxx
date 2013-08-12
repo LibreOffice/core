@@ -109,7 +109,7 @@ void StructPage::ClearStruct()
     aTlbStruct.Clear();
 }
 
-SvTreeListEntry* StructPage::InsertEntry( const XubString& rText, SvTreeListEntry* pParent,
+SvTreeListEntry* StructPage::InsertEntry( const OUString& rText, SvTreeListEntry* pParent,
                                        sal_uInt16 nFlag,sal_uLong nPos,IFormulaToken* pIFormulaToken)
 {
     aTlbStruct.SetActiveFlag( sal_False );

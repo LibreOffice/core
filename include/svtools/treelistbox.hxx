@@ -609,12 +609,12 @@ public:
         );
     }
 
-    virtual SvTreeListEntry*    InsertEntry( const XubString& rText, SvTreeListEntry* pParent = 0,
+    virtual SvTreeListEntry*    InsertEntry( const OUString& rText, SvTreeListEntry* pParent = 0,
                                          sal_Bool bChildrenOnDemand = sal_False,
                                          sal_uLong nPos=LIST_APPEND, void* pUserData = 0,
                                          SvLBoxButtonKind eButtonKind = SvLBoxButtonKind_enabledCheckbox );
 
-    virtual SvTreeListEntry*    InsertEntry( const XubString& rText,
+    virtual SvTreeListEntry*    InsertEntry( const OUString& rText,
                                          const Image& rExpandedEntryBmp,
                                          const Image& rCollapsedEntryBmp,
                                          SvTreeListEntry* pParent = 0,
@@ -636,8 +636,8 @@ public:
     void            SetExpandedEntryBmp( SvTreeListEntry* _pEntry, const Image& _rImage );
     void            SetCollapsedEntryBmp( SvTreeListEntry* _pEntry, const Image& _rImage );
 
-    virtual String  GetEntryText( SvTreeListEntry* pEntry ) const;
-    String          SearchEntryText( SvTreeListEntry* pEntry ) const;
+    virtual OUString GetEntryText( SvTreeListEntry* pEntry ) const;
+    OUString        SearchEntryText( SvTreeListEntry* pEntry ) const;
     const Image&    GetExpandedEntryBmp(const SvTreeListEntry* _pEntry ) const;
     const Image&    GetCollapsedEntryBmp(const SvTreeListEntry* _pEntry ) const;
 

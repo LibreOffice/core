@@ -282,7 +282,7 @@ public:
     void                ArrangeIcons();
 
 
-    SvxIconChoiceCtrlEntry* InsertEntry( const String& rText,
+    SvxIconChoiceCtrlEntry* InsertEntry( const OUString& rText,
                                          const Image& rImage,
                                          sal_uLong nPos = LIST_APPEND,
                                          const Point* pPos = 0,

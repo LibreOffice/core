@@ -67,9 +67,9 @@ void FontNameMenu::Fill( const FontList* pList )
     // more than 100 fonts reduces the speed of opening the menu.
     // So only the first 100 fonts will be displayed.
     sal_uInt16 nFontCount = ::std::min( pList->GetFontNameCount(), static_cast< sal_uInt16 >(100) );
-    for ( sal_uInt16 i = 0; i < nFontCount; i++ )
+    for (sal_uInt16 i = 0; i < nFontCount; ++i)
     {
-        const XubString& rName = pList->GetFontName( i ).GetName();
+        const OUString& rName = pList->GetFontName( i ).GetName();
 
         // sort with the I18nHelper
         sal_uInt16 j = GetItemCount();

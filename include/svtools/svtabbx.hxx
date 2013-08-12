@@ -47,8 +47,8 @@ class SVT_DLLPUBLIC SvTabListBox : public SvTreeListBox
 {
 private:
     SvLBoxTab*                  pTabList;
-    sal_uInt16                      nTabCount;
-    XubString                   aCurEntry;
+    sal_uInt16                  nTabCount;
+    OUString                    aCurEntry;
 
 protected:
     SvTreeListEntry*                pViewParent;
@@ -73,12 +73,12 @@ public:
     void            SetTab( sal_uInt16 nTab, long nValue, MapUnit = MAP_APPFONT );
     long            GetLogicTab( sal_uInt16 nTab );
 
-    virtual SvTreeListEntry*    InsertEntry( const XubString& rText, SvTreeListEntry* pParent = 0,
+    virtual SvTreeListEntry*    InsertEntry( const OUString& rText, SvTreeListEntry* pParent = 0,
                                          sal_Bool bChildrenOnDemand = sal_False,
                                          sal_uLong nPos=LIST_APPEND, void* pUserData = 0,
                                          SvLBoxButtonKind eButtonKind = SvLBoxButtonKind_enabledCheckbox );
 
-    virtual SvTreeListEntry*    InsertEntry( const XubString& rText,
+    virtual SvTreeListEntry*    InsertEntry( const OUString& rText,
                                          const Image& rExpandedEntryBmp,
                                          const Image& rCollapsedEntryBmp,
                                          SvTreeListEntry* pParent = 0,
@@ -94,18 +94,18 @@ public:
                                  const Image& rCollapsedEntryBmp, SvTreeListEntry* pParent = NULL,
                                  sal_uLong nPos = LIST_APPEND, sal_uInt16 nCol = 0xffff, void* pUserData = NULL );
 
-    virtual String  GetEntryText( SvTreeListEntry* pEntry ) const;
-    String          GetEntryText( SvTreeListEntry*, sal_uInt16 nCol ) const;
-    String          GetEntryText( sal_uLong nPos, sal_uInt16 nCol = 0xffff ) const;
+    virtual OUString GetEntryText( SvTreeListEntry* pEntry ) const;
+    OUString         GetEntryText( SvTreeListEntry*, sal_uInt16 nCol ) const;
+    OUString         GetEntryText( sal_uLong nPos, sal_uInt16 nCol = 0xffff ) const;
     using SvTreeListBox::SetEntryText;
-    void            SetEntryText(const OUString&, sal_uLong, sal_uInt16 nCol=0xffff);
-    void            SetEntryText(const OUString&, SvTreeListEntry*, sal_uInt16 nCol=0xffff);
-    String          GetCellText( sal_uLong nPos, sal_uInt16 nCol ) const;
-    sal_uLong           GetEntryPos( const XubString&, sal_uInt16 nCol = 0xffff );
-    sal_uLong           GetEntryPos( const SvTreeListEntry* pEntry ) const;
+    void             SetEntryText(const OUString&, sal_uLong, sal_uInt16 nCol=0xffff);
+    void             SetEntryText(const OUString&, SvTreeListEntry*, sal_uInt16 nCol=0xffff);
+    OUString         GetCellText( sal_uLong nPos, sal_uInt16 nCol ) const;
+    sal_uLong        GetEntryPos( const OUString&, sal_uInt16 nCol = 0xffff );
+    sal_uLong        GetEntryPos( const SvTreeListEntry* pEntry ) const;
 
-    virtual void    Resize();
-    void            SetTabJustify( sal_uInt16 nTab, SvTabJustify );
+    virtual void     Resize();
+    void             SetTabJustify( sal_uInt16 nTab, SvTabJustify );
 };
 
 inline long SvTabListBox::GetTab( sal_uInt16 nTab ) const

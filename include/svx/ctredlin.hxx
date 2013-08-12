@@ -138,10 +138,10 @@ public:
     sal_Bool            IsValidComment(const String* pComment);
     // }
 
-    SvTreeListEntry*    InsertEntry(const String& ,RedlinData *pUserData,
+    SvTreeListEntry*    InsertEntry(const OUString& ,RedlinData *pUserData,
                                 SvTreeListEntry* pParent=NULL,sal_uIntPtr nPos=LIST_APPEND);
 
-    SvTreeListEntry*    InsertEntry(const String& ,RedlinData *pUserData,const Color&,
+    SvTreeListEntry*    InsertEntry(const OUString& ,RedlinData *pUserData,const Color&,
                                 SvTreeListEntry* pParent=NULL,sal_uIntPtr nPos=LIST_APPEND);
 
 

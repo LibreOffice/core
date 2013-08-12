@@ -177,7 +177,7 @@ String      SwSelectDBTableDialog::GetSelectedTable(bool& bIsTable)
 {
     SvTreeListEntry* pEntry = m_aTableLB.FirstSelected();
     bIsTable = pEntry->GetUserData() ? false : true;
-    return pEntry ? m_aTableLB.GetEntryText(pEntry, 0) : String();
+    return pEntry ? m_aTableLB.GetEntryText(pEntry, 0) : OUString();
 }
 
 void   SwSelectDBTableDialog::SetSelectedTable(const String& rTable, bool bIsTable)

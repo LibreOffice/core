@@ -277,7 +277,7 @@ void OfaMSFilterTabPage2::Reset( const SfxItemSet& )
     aCheckLB.SetUpdateMode( sal_True );
 }
 
-void OfaMSFilterTabPage2::InsertEntry( const String& _rTxt, sal_IntPtr _nType )
+void OfaMSFilterTabPage2::InsertEntry( const OUString& _rTxt, sal_IntPtr _nType )
 {
     SvTreeListEntry* pEntry = new SvTreeListEntry;
 

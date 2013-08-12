@@ -38,7 +38,7 @@ private:
 
     using SvTreeListBox::InsertEntry;
     // Avoid ambiguity with new InsertEntry:
-    virtual SvTreeListEntry*    InsertEntry( const XubString& rText, SvTreeListEntry* pParent,
+    virtual SvTreeListEntry*    InsertEntry( const OUString& rText, SvTreeListEntry* pParent,
                                          sal_Bool bChildrenOnDemand,
                                          sal_uIntPtr nPos, void* pUserData,
                                          SvLBoxButtonKind eButtonKind );
@@ -50,7 +50,7 @@ public:
                      const Image& rNormalStaticImage );
     ~SvxCheckListBox();
 
-    void            InsertEntry         ( const String& rStr,
+    void            InsertEntry         ( const OUString& rStr,
                                           sal_uInt16 nPos = LISTBOX_APPEND,
                                           void* pUserData = NULL,
                                           SvLBoxButtonKind eButtonKind =

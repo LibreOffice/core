@@ -93,7 +93,7 @@ Printer* ImplPrnDlgListBoxSelect( ListBox* pBox, PushButton* pPropBtn,
 
 Printer* ImplPrnDlgUpdatePrinter( Printer* pPrinter, Printer* pTempPrinter )
 {
-    XubString aPrnName;
+    OUString aPrnName;
     if ( pTempPrinter )
         aPrnName = pTempPrinter->GetName();
     else
@@ -123,7 +123,7 @@ void ImplPrnDlgUpdateQueueInfo( ListBox* pBox, QueueInfo& rInfo )
 
 // -----------------------------------------------------------------------
 
-static void ImplPrnDlgAddString( XubString& rStr, const XubString& rAddStr )
+static void ImplPrnDlgAddString( XubString& rStr, const OUString& rAddStr )
 {
     if ( rStr.Len() )
         rStr.AppendAscii( "; " );
@@ -206,7 +206,7 @@ OUString ImplPrnDlgGetStatusText( const QueueInfo& rInfo )
     if ( nJobs && (nJobs != QUEUE_JOBS_DONTKNOW) )
     {
         XubString aJobStr( SVT_RESSTR( STR_SVT_PRNDLG_JOBCOUNT ) );
-        XubString aJobs( OUString::number( nJobs ) );
+        OUString aJobs( OUString::number( nJobs ) );
         aJobStr.SearchAndReplaceAscii( "%d", aJobs );
         ImplPrnDlgAddString( aStr, aJobStr );
     }
@@ -269,7 +269,7 @@ void PrinterSetupDialog::ImplSetInfo()
     }
     else
     {
-        XubString aTempStr;
+        OUString aTempStr;
         m_pFiType->SetText( aTempStr );
         m_pFiLocation->SetText( aTempStr );
         m_pFiComment->SetText( aTempStr );

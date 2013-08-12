@@ -85,7 +85,7 @@ void SvxCheckListBox::Init_Impl()
 
 // -----------------------------------------------------------------------
 
-void SvxCheckListBox::InsertEntry( const String& rStr, sal_uInt16 nPos,
+void SvxCheckListBox::InsertEntry( const OUString& rStr, sal_uInt16 nPos,
                                    void* pUserData,
                                    SvLBoxButtonKind eButtonKind )
 {
@@ -267,7 +267,7 @@ void SvxCheckListBox::KeyInput( const KeyEvent& rKEvt )
 
 // -----------------------------------------------------------------------
 
-SvTreeListEntry* SvxCheckListBox::InsertEntry( const XubString& rText, SvTreeListEntry* pParent, sal_Bool bChildrenOnDemand, sal_uIntPtr nPos, void* pUserData, SvLBoxButtonKind eButtonKind )
+SvTreeListEntry* SvxCheckListBox::InsertEntry( const OUString& rText, SvTreeListEntry* pParent, sal_Bool bChildrenOnDemand, sal_uIntPtr nPos, void* pUserData, SvLBoxButtonKind eButtonKind )
 {
     return SvTreeListBox::InsertEntry( rText, pParent, bChildrenOnDemand, nPos, pUserData, eButtonKind );
 }

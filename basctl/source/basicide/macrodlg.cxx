@@ -580,7 +580,7 @@ IMPL_LINK( MacroChooser, EditModifyHdl, Edit *, pEdit )
             {
                 SvTreeListEntry* pEntry = m_pMacroBox->GetEntry( n );
                 DBG_ASSERT( pEntry, "Entry ?!" );
-                if ( m_pMacroBox->GetEntryText( pEntry ).CompareIgnoreCaseToAscii( aEdtText ) == COMPARE_EQUAL )
+                if ( m_pMacroBox->GetEntryText( pEntry ).equalsIgnoreAsciiCase( aEdtText ) )
                 {
                     SaveSetCurEntry(*m_pMacroBox, pEntry);
                     bFound = true;

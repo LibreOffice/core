@@ -1768,7 +1768,7 @@ void SvTreeListBox::InitEntry(SvTreeListEntry* pEntry,
     pEntry->AddItem( pString );
 }
 
-String SvTreeListBox::GetEntryText(SvTreeListEntry* pEntry) const
+OUString SvTreeListBox::GetEntryText(SvTreeListEntry* pEntry) const
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     DBG_ASSERT( pEntry, "SvTreeListBox::GetEntryText(): no entry" );
@@ -1777,7 +1777,7 @@ String SvTreeListBox::GetEntryText(SvTreeListEntry* pEntry) const
     return pItem->GetText();
 }
 
-String SvTreeListBox::SearchEntryText( SvTreeListEntry* pEntry ) const
+OUString SvTreeListBox::SearchEntryText( SvTreeListEntry* pEntry ) const
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     DBG_ASSERT( pEntry, "SvTreeListBox::SearchEntryText(): no entry" );
@@ -1826,7 +1826,7 @@ IMPL_LINK_INLINE_START( SvTreeListBox, CheckButtonClick, SvLBoxButtonData *, pDa
 IMPL_LINK_INLINE_END( SvTreeListBox, CheckButtonClick, SvLBoxButtonData *, pData )
 
 SvTreeListEntry* SvTreeListBox::InsertEntry(
-    const XubString& aText,
+    const OUString& rText,
     SvTreeListEntry* pParent,
     sal_Bool bChildrenOnDemand, sal_uLong nPos,
     void* pUser,
@@ -1844,7 +1844,7 @@ SvTreeListEntry* SvTreeListBox::InsertEntry(
 
     SvTreeListEntry* pEntry = CreateEntry();
     pEntry->SetUserData( pUser );
-    InitEntry( pEntry, aText, rDefColBmp, rDefExpBmp, eButtonKind );
+    InitEntry( pEntry, rText, rDefColBmp, rDefExpBmp, eButtonKind );
     pEntry->EnableChildrenOnDemand( bChildrenOnDemand );
 
     if( !pParent )
@@ -1860,7 +1860,7 @@ SvTreeListEntry* SvTreeListBox::InsertEntry(
     return pEntry;
 }
 
-SvTreeListEntry* SvTreeListBox::InsertEntry( const XubString& aText,
+SvTreeListEntry* SvTreeListBox::InsertEntry( const OUString& rText,
     const Image& aExpEntryBmp, const Image& aCollEntryBmp,
     SvTreeListEntry* pParent, sal_Bool bChildrenOnDemand, sal_uLong nPos, void* pUser,
     SvLBoxButtonKind eButtonKind )
@@ -1873,7 +1873,7 @@ SvTreeListEntry* SvTreeListBox::InsertEntry( const XubString& aText,
 
     SvTreeListEntry* pEntry = CreateEntry();
     pEntry->SetUserData( pUser );
-    InitEntry( pEntry, aText, aCollEntryBmp, aExpEntryBmp, eButtonKind );
+    InitEntry( pEntry, rText, aCollEntryBmp, aExpEntryBmp, eButtonKind );
 
     pEntry->EnableChildrenOnDemand( bChildrenOnDemand );
 
