@@ -25,6 +25,7 @@ $(eval $(call gb_Library_set_include,vclplug_gtk3,\
     $$(INCLUDE) \
     -I$(SRCDIR)/vcl/inc \
     -I$(SRCDIR)/vcl/unx \
+    -I$(SRCDIR)/vcl/unx/gtk3/inc \
 ))
 
 $(eval $(call gb_Library_add_cxxflags,vclplug_gtk3,\
