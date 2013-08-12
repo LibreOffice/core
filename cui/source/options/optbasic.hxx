@@ -17,21 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef BASCTL_BASICIDEOPTIONSDLG_HXX
-#define BASCTL_BASICIDEOPTIONSDLG_HXX
+#ifndef _SVX_OPTBASIC_HXX
+#define _SVX_OPTBASIC_HXX
 
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
+#include <sfx2/tabdlg.hxx>
 
-namespace basctl
-{
-
-class BasicIDEOptionsDlg: public ModalDialog
+class SvxBasicIDEOptionsPage: public SfxTabPage
 {
 private:
-    CancelButton* pCancelBtn;
-    OKButton* pOkBtn;
-
     CheckBox* pCodeCompleteChk;
     CheckBox* pAutocloseProcChk;
     CheckBox* pAutocloseParenChk;
@@ -39,21 +34,19 @@ private:
     CheckBox* pAutoCorrectKeywordsChk;
     CheckBox* pUseExtendedTypesChk;
 
-    DECL_LINK(OkHdl, void*);
-    DECL_LINK(CancelHdl, void*);
-
     void LoadConfig();
     void SaveConfig();
 
 public:
-    BasicIDEOptionsDlg( Window* pWindow );
-    ~BasicIDEOptionsDlg();
+    SvxBasicIDEOptionsPage( Window* pParent, const SfxItemSet& rSet );
+    ~SvxBasicIDEOptionsPage();
 
-    virtual short Execute();
+    static SfxTabPage* Create( Window* pParent, const SfxItemSet& rSet );
+    virtual sal_Bool FillItemSet( SfxItemSet& rSet );
+    virtual void Reset( const SfxItemSet& rSet );
 };
 
-} // namespace basctl
 
-#endif //BASCTL_BASICIDEOPTIONSDLG_HXX
+#endif //_SVX_OPTBASIC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

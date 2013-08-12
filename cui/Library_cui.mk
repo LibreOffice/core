@@ -138,6 +138,7 @@ $(eval $(call gb_Library_add_exception_objects,cui,\
 	cui/source/options/optaboutconfig \
     cui/source/options/optaccessibility \
     cui/source/options/optasian \
+    cui/source/options/optbasic \
     cui/source/options/optchart \
     cui/source/options/optcolor \
     cui/source/options/optctl \

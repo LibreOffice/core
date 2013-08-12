@@ -100,6 +100,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "Appearance" ;        RID_SVXPAGE_COLORCONFIG        ; > ;
             < "Accessibility" ; RID_SVXPAGE_ACCESSIBILITYCONFIG ; > ;
             < "Advanced" ; RID_SVXPAGE_OPTIONS_JAVA ; > ;
+            < "Basic IDE Options" ; RID_SVXPAGE_BASICIDE_OPTIONS ; > ;
             < "Online Update" ; RID_SVXPAGE_ONLINEUPDATE ; > ;
             < "Expert Config" ; RID_SVXPAGE_ABOUT_CONFIG ; > ;
         };

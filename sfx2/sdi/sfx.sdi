@@ -3819,30 +3819,6 @@ SfxVoidItem MatchGroup SID_BASICIDE_MATCHGROUP
     GroupId = GID_MACRO;
 ]
 
-SfxVoidItem BasicIDEOptionsDialog SID_BASICIDE_IDEOPTIONS
-
-[
-    /* flags: */
-    AutoUpdate = TRUE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_MACRO;
-]
-
 //--------------------------------------------------------------------------
 SfxBoolItem MenuBarVisible SID_TOGGLE_MENUBAR
 

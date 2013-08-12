@@ -8,11 +8,6 @@
           <value xml:lang="en-US">Goto Line Number...</value>
         </prop>
       </node>
-      <node oor:name=".uno:BasicIDEOptionsDialog" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">IDE options</value>
-        </prop>
-      </node>
       <node oor:name=".uno:ShowLines" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Line Numbers</value>

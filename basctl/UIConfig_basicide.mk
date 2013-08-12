@@ -30,7 +30,6 @@ $(eval $(call gb_UIConfig_add_toolbarfiles,modules/BasicIDE,\
 
 $(eval $(call gb_UIConfig_add_uifiles,modules/BasicIDE,\
 	basctl/uiconfig/basicide/ui/basicmacrodialog \
-	basctl/uiconfig/basicide/ui/basicideoptionsdialog \
 ))
 
 # vim: set noet sw=4 ts=4:

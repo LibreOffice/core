@@ -36,12 +36,6 @@ shell basctl_Shell
         ExecMethod  = ExecuteCurrent;
     ]
 
-    SID_BASICIDE_IDEOPTIONS
-    [
-        StateMethod = GetState;
-        ExecMethod  = ExecuteCurrent;
-    ]
-
     SID_BASICIDE_HIDECURPAGE
     [
         ExecMethod  = ExecuteCurrent;
