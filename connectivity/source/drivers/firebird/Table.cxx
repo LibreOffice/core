@@ -10,6 +10,7 @@
 #include "Columns.hxx"
 #include "Table.hxx"
 
+#include <connectivity/TIndexes.hxx>
 #include <connectivity/TKeys.hxx>
 
 using namespace ::connectivity;
@@ -61,9 +62,9 @@ OCollection* Table::createKeys(const TStringVector& rNames)
 
 OCollection* Table::createIndexes(const TStringVector& rNames)
 {
-    (void) rNames;
-    // TODO: IMPLEMENT ME
-    return 0;
+    return new OIndexesHelper(this,
+                              m_rMutex,
+                              rNames);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
