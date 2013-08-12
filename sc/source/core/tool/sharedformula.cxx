@@ -38,13 +38,25 @@ void SharedFormulaUtil::splitFormulaCellGroup(const CellStoreType::position_type
 
     ScFormulaCellGroupRef xGroup = rTop.GetCellGroup();
 
-    ScFormulaCellGroupRef xGroup2(new ScFormulaCellGroup);
-    xGroup2->mbInvariant = xGroup->mbInvariant;
-    xGroup2->mnStart = nRow;
-    xGroup2->mnLength = xGroup->mnStart + xGroup->mnLength - nRow;
-    xGroup2->mpCode = xGroup->mpCode->Clone();
+    SCROW nLength2 = xGroup->mnStart + xGroup->mnLength - nRow;
+    ScFormulaCellGroupRef xGroup2;
+    if (nLength2 > 1)
+    {
+        xGroup2.reset(new ScFormulaCellGroup);
+        xGroup2->mbInvariant = xGroup->mbInvariant;
+        xGroup2->mnStart = nRow;
+        xGroup2->mnLength = nLength2;
+        xGroup2->mpCode = xGroup->mpCode->Clone();
+    }
 
     xGroup->mnLength = nRow - xGroup->mnStart;
+    if (xGroup->mnLength == 1)
+    {
+        // The top group consists of only one cell. Ungroup this.
+        ScFormulaCellGroupRef xNone;
+        ScFormulaCell& rPrev = *sc::formula_block::at(*aPos.first->data, aPos.second-1);
+        rPrev.SetCellGroup(xNone);
+    }
 
     // Apply the lower group object to the lower cells.
 #if DEBUG_COLUMN_STORAGE
@@ -56,7 +68,7 @@ void SharedFormulaUtil::splitFormulaCellGroup(const CellStoreType::position_type
     }
 #endif
     sc::formula_block::iterator itEnd = it;
-    std::advance(itEnd, xGroup2->mnLength);
+    std::advance(itEnd, nLength2);
     for (; it != itEnd; ++it)
     {
         ScFormulaCell& rCell = **it;
