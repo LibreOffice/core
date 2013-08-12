@@ -1138,7 +1138,6 @@ private:
     PropertyControl* mpLBProperty2;
     CheckBox*       mpCBSmoothStart;
     CheckBox*       mpCBSmoothEnd;
-    CheckBox*       mpCBAutoRestart;
 
     FixedText*      mpFTSound;
     ListBox*        mpLBSound;
@@ -1163,7 +1162,6 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, con
     get(mpPlaceholderBox, "placeholder" );
     get(mpCBSmoothStart, "smooth_start" );
     get(mpCBSmoothEnd, "smooth_end" );
-    get(mpCBAutoRestart, "auto_restart" );
     get(mpFTSound, "sound_label");
     get(mpLBSound, "sound_list" );
     get(mpPBSoundPreview, "sound_preview" );
