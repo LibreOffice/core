@@ -100,30 +100,39 @@ public class FormattedTextLayoutController
             DataSourceException
     {
         final FormattedTextElement element = (FormattedTextElement) getNode();
-        final VariablesCollection vc = getVariablesCollection();
-        if (vc != null)
-        {
-            final String name = vc.addVariable(element);
-            final AttributeMap variablesGet = new AttributeMap();
-            variablesGet.setAttribute(JFreeReportInfo.REPORT_NAMESPACE,
-                    Element.TYPE_ATTRIBUTE, "variable-get");
-            variablesGet.setAttribute(JFreeReportInfo.REPORT_NAMESPACE,
-                    Element.NAMESPACE_ATTRIBUTE, OfficeNamespaces.TEXT_NS);
-            variablesGet.setAttribute(OfficeNamespaces.TEXT_NS, "name", name);
+        // LEM 20130812 I have absolutely no clue why it wants to go via
+        // a variable like that. It complicates things, is fragile
+        // (because the variable-set is done in *every* detail section
+        //  again and again. This in itself is not that bad, but when
+        //  the detail section is of height zero, the "set" us never done...
+        //  and this whole schema fails). For now, keep the code in case
+        //  something break. If we survive the 4.2 cycle (in its entirety)
+        //  without regression traced to this, then remove it (for 4.4 or
+        //  something like that).
+        // final VariablesCollection vc = getVariablesCollection();
+        // if (vc != null)
+        // {
+        //     final String name = vc.addVariable(element);
+        //     final AttributeMap variablesGet = new AttributeMap();
+        //     variablesGet.setAttribute(JFreeReportInfo.REPORT_NAMESPACE,
+        //             Element.TYPE_ATTRIBUTE, "variable-get");
+        //     variablesGet.setAttribute(JFreeReportInfo.REPORT_NAMESPACE,
+        //             Element.NAMESPACE_ATTRIBUTE, OfficeNamespaces.TEXT_NS);
+        //     variablesGet.setAttribute(OfficeNamespaces.TEXT_NS, "name", name);
 
-            final String dataStyleName = computeValueStyle();
-            if (dataStyleName != null)
-            {
-                variablesGet.setAttribute(OfficeNamespaces.STYLE_NS, "data-style-name", dataStyleName);
-            }
+        //     final String dataStyleName = computeValueStyle();
+        //     if (dataStyleName != null)
+        //     {
+        //         variablesGet.setAttribute(OfficeNamespaces.STYLE_NS, "data-style-name", dataStyleName);
+        //     }
 
-            final String valueType = computeValueType();
-            variablesGet.setAttribute(OfficeNamespaces.OFFICE_NS, FormatValueUtility.VALUE_TYPE, valueType);
-            target.startElement(variablesGet);
+        //     final String valueType = computeValueType();
+        //     variablesGet.setAttribute(OfficeNamespaces.OFFICE_NS, FormatValueUtility.VALUE_TYPE, valueType);
+        //     target.startElement(variablesGet);
 
-            target.endElement(variablesGet);
-        }
-        else
+        //     target.endElement(variablesGet);
+        // }
+        // else
         {
             final DataFlags df = FormatValueUtility.computeDataFlag(element, getFlowController());
             if (df != null)
