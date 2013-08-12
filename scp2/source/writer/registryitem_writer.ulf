@@ -55,3 +55,12 @@ en-US = "Microsoft Word Template"
 [STR_REG_VAL_MS_RTF_DOCUMENT]
 en-US = "Rich Text Document"
 
+[STR_REG_VAL_UNIFORM_OFFICE_FORMAT_TEXT]
+en-US = "Uniform Office Format Text Document"
+
+[STR_REG_VAL_WORDPRO_DOCUMENT]
+en-US = "Lotus Word Pro Document"
+
+[STR_REG_VAL_T602_TEXT_FILE]
+en-US = "T602 Text File"
+

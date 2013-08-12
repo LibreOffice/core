@@ -1253,3 +1253,7 @@ CONDITIONAL_REGISTER_DOCTEMPLATE_EXTENSION( Xlt,  gid_Module_Prg_Calc_MSO_Reg, x
 CONDITIONAL_REGISTER_DOCTEMPLATE_EXTENSION( Xltx, gid_Module_Prg_Calc_MSO_Reg, xltx, XLTX, MS_EXCEL_TEMPLATE, 4, scalc.exe, new, Calc )
 CONDITIONAL_REGISTER_DOCTEMPLATE_EXTENSION( Xltm, gid_Module_Prg_Calc_MSO_Reg, xltm, XLTM, MS_EXCEL_TEMPLATE, 4, scalc.exe, new, Calc )
 
+// registering other supported types
+
+CONDITIONAL_REGISTER_DOC_EXTENSION( Uos, gid_Module_Prg_Calc_Other_Reg, uos, UOS, UNIFORM_OFFICE_FORMAT_SPREADSHEET, 3, scalc.exe, open, Calc )
+CONDITIONAL_REGISTER_DOC_EXTENSION( Wb2, gid_Module_Prg_Calc_Other_Reg, wb2, WB2, QUATTROPRO_SPREADSHEET, 3, scalc.exe, open, Calc )

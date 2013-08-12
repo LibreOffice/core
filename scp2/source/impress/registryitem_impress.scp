@@ -1118,3 +1118,8 @@ CONDITIONAL_REGISTER_DOC_EXTENSION( Pptm, gid_Module_Prg_Impress_MSO_Reg, pptm, 
 CONDITIONAL_REGISTER_DOCTEMPLATE_EXTENSION( Pot,  gid_Module_Prg_Impress_MSO_Reg, pot,  POT,  MS_POWERPOINT_TEMPLATE_OLD, 8, simpress.exe, new, Impress )
 CONDITIONAL_REGISTER_DOCTEMPLATE_EXTENSION( Potx, gid_Module_Prg_Impress_MSO_Reg, potx, POTX, MS_POWERPOINT_TEMPLATE, 8, simpress.exe, new, Impress )
 CONDITIONAL_REGISTER_DOCTEMPLATE_EXTENSION( Potm, gid_Module_Prg_Impress_MSO_Reg, potm, POTM, MS_POWERPOINT_TEMPLATE, 8, simpress.exe, new, Impress )
+
+// registering other supported types
+
+CONDITIONAL_REGISTER_DOC_EXTENSION( Uop, gid_Module_Prg_Impress_Other_Reg, uop, UOP, UNIFORM_OFFICE_FORMAT_PRESENTATION, 7, simpress.exe, open, Impress )
+CONDITIONAL_REGISTER_DOC_EXTENSION( Cgm, gid_Module_Prg_Impress_Other_Reg, cgm, CGM, COMPUTER_GRAPHICS_METAFILE, 7, simpress.exe, open, Impress )
