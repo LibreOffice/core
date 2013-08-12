@@ -554,7 +554,6 @@ static Rectangle ImplCalcActionBounds( const MetaAction& rAct, const OutputDevic
         {
             const MetaTextArrayAction&  rTextAct = static_cast<const MetaTextArrayAction&>(rAct);
             const OUString              aString( rTextAct.GetText().copy(rTextAct.GetIndex(), rTextAct.GetLen()) );
-            const sal_Int32             nLen = aString.getLength();
 
             if( !aString.isEmpty() )
             {
@@ -580,7 +579,6 @@ static Rectangle ImplCalcActionBounds( const MetaAction& rAct, const OutputDevic
         {
             const MetaStretchTextAction& rTextAct = static_cast<const MetaStretchTextAction&>(rAct);
             const OUString               aString( rTextAct.GetText().copy(rTextAct.GetIndex(), rTextAct.GetLen()) );
-            const sal_Int32              nLen = aString.getLength();
 
             // #i16195# Literate copy from TextArray action, the
             // semantics for the ImplLayout call are copied from the
