@@ -649,7 +649,6 @@ void ScKumKapZ();
 void ScEffektiv();
 void ScNominal();
 void ScMod();
-void ScBackSolver();
 void ScIntercept();
 double ScGetGCD(double fx, double fy);
 void ScGCD();
