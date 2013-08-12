@@ -987,27 +987,27 @@ PFilterCall ImpFilterLibCacheEntry::GetImportFunction()
 #ifndef DISABLE_DYNLOADING
         mpfnImport = (PFilterCall) maLibrary.getFunctionSymbol(OUString(IMPORT_FUNCTION_NAME));
 #else
-        if( maFiltername.EqualsAscii( "icd" ) )
+        if( maFiltername.equalsAscii( "icd" ) )
             mpfnImport = icdGraphicImport;
-        else if( maFiltername.EqualsAscii( "idx" ) )
+        else if( maFiltername.equalsAscii( "idx" ) )
             mpfnImport = idxGraphicImport;
-        else if( maFiltername.EqualsAscii( "ime" ) )
+        else if( maFiltername.equalsAscii( "ime" ) )
             mpfnImport = imeGraphicImport;
-        else if( maFiltername.EqualsAscii( "ipb" ) )
+        else if( maFiltername.equalsAscii( "ipb" ) )
             mpfnImport = ipbGraphicImport;
-        else if( maFiltername.EqualsAscii( "ipd" ) )
+        else if( maFiltername.equalsAscii( "ipd" ) )
             mpfnImport = ipdGraphicImport;
-        else if( maFiltername.EqualsAscii( "ips" ) )
+        else if( maFiltername.equalsAscii( "ips" ) )
             mpfnImport = ipsGraphicImport;
-        else if( maFiltername.EqualsAscii( "ipt" ) )
+        else if( maFiltername.equalsAscii( "ipt" ) )
             mpfnImport = iptGraphicImport;
-        else if( maFiltername.EqualsAscii( "ipx" ) )
+        else if( maFiltername.equalsAscii( "ipx" ) )
             mpfnImport = ipxGraphicImport;
-        else if( maFiltername.EqualsAscii( "ira" ) )
+        else if( maFiltername.equalsAscii( "ira" ) )
             mpfnImport = iraGraphicImport;
-        else if( maFiltername.EqualsAscii( "itg" ) )
+        else if( maFiltername.equalsAscii( "itg" ) )
             mpfnImport = itgGraphicImport;
-        else if( maFiltername.EqualsAscii( "iti" ) )
+        else if( maFiltername.equalsAscii( "iti" ) )
             mpfnImport = itiGraphicImport;
 #endif
     }
@@ -2061,25 +2061,25 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString
                 // Execute dialog in DLL
 #else
                 PFilterCall pFunc = NULL;
-                if( aFilterName.EqualsAscii( "egi" ) )
+                if( aFilterName.equalsAscii( "egi" ) )
                     pFunc = egiGraphicExport;
-                else if( aFilterName.EqualsAscii( "eme" ) )
+                else if( aFilterName.equalsAscii( "eme" ) )
                     pFunc = emeGraphicExport;
-                else if( aFilterName.EqualsAscii( "epb" ) )
+                else if( aFilterName.equalsAscii( "epb" ) )
                     pFunc = epbGraphicExport;
-                else if( aFilterName.EqualsAscii( "epg" ) )
+                else if( aFilterName.equalsAscii( "epg" ) )
                     pFunc = epgGraphicExport;
-                else if( aFilterName.EqualsAscii( "epp" ) )
+                else if( aFilterName.equalsAscii( "epp" ) )
                     pFunc = eppGraphicExport;
-                else if( aFilterName.EqualsAscii( "eps" ) )
+                else if( aFilterName.equalsAscii( "eps" ) )
                     pFunc = epsGraphicExport;
-                else if( aFilterName.EqualsAscii( "ept" ) )
+                else if( aFilterName.equalsAscii( "ept" ) )
                     pFunc = eptGraphicExport;
-                else if( aFilterName.EqualsAscii( "era" ) )
+                else if( aFilterName.equalsAscii( "era" ) )
                     pFunc = eraGraphicExport;
-                else if( aFilterName.EqualsAscii( "eti" ) )
+                else if( aFilterName.equalsAscii( "eti" ) )
                     pFunc = etiGraphicExport;
-                else if( aFilterName.EqualsAscii( "exp" ) )
+                else if( aFilterName.equalsAscii( "exp" ) )
                     pFunc = expGraphicExport;
 #endif
                 if( pFunc )
