@@ -26,13 +26,15 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::uno;
 
 
-Tables::Tables(ODatabaseMetaData& xMetaData,
+Tables::Tables(const uno::Reference< XDatabaseMetaData >& rMetaData,
                OWeakObject& rParent,
-               Mutex& rMutex,
-               const TStringVector& rVector) :
-    OCollection(rParent, sal_True, rMutex, rVector),
+               Mutex& rMutex) :
+    OCollection(rParent,
+                sal_True,
+                rMutex,
+                TStringVector(1, "TABLE")), // std::vector with 1 element
     m_rMutex(rMutex),
-    m_xMetaData(xMetaData)
+    m_xMetaData(rMetaData)
 {
 }
 
@@ -47,10 +49,10 @@ ObjectType Tables::createObject(const OUString& rName)
 {
     // TODO: parse the name.
     // TODO: use table types
-    uno::Reference< XResultSet > xTables = m_xMetaData.getTables(Any(),
-                                                                 OUString(),
-                                                                 rName,
-                                                                 uno::Sequence< OUString >());
+    uno::Reference< XResultSet > xTables = m_xMetaData->getTables(Any(),
+                                                                  OUString(),
+                                                                  rName,
+                                                                  uno::Sequence< OUString >());
 
     if (!xTables.is())
         throw RuntimeException();
@@ -62,7 +64,7 @@ ObjectType Tables::createObject(const OUString& rName)
 
     ObjectType xRet(new Table(this,
                               m_rMutex,
-                              m_xMetaData.getConnection(),
+                              m_xMetaData->getConnection(),
                               xRow->getString(3), // Name
                               xRow->getString(4), // Type
                               xRow->getString(5))); // Description / Remarks / Comments

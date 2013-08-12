@@ -35,13 +35,13 @@ namespace connectivity
             virtual ::connectivity::sdbcx::ObjectType createObject(
                                                 const ::rtl::OUString& rName);
 
-            ODatabaseMetaData& m_xMetaData;
+            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >
+                m_xMetaData;
 
         public:
-            Tables(ODatabaseMetaData& xMetaData,
+            Tables(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& rMetaData,
                    ::cppu::OWeakObject& rParent,
-                   ::osl::Mutex& rMutex,
-                   const ::connectivity::TStringVector& rVector);
+                   ::osl::Mutex& rMutex);
 
             // TODO: we should also implement XDataDescriptorFactory, XRefreshable,
             // XAppend,  etc., but all are optional.

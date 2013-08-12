@@ -766,8 +766,8 @@ void OConnection::clearStatements()
 uno::Reference< XNameAccess > SAL_CALL OConnection::getTables()
     throw (RuntimeException)
 {
-    // TODO: IMPLEMENT ME PROPERLY
-    //return new Tables();
-    return 0;
+    return new Tables(getMetaData(),
+                      *this,
+                      m_aMutex);
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
