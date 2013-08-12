@@ -116,50 +116,6 @@ String STR_CUSTOM
     Text [ en-US ] = "[User]";
 };
 /********************************************************************/
-TabPage TP_VISITING_CARDS
-{
-    HelpID = HID_TP_VISITING_CARDS ;
-    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
-    Hide = TRUE ;
-
-    Control LB_AUTO_TEXT
-    {
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 109 , 135 ) ;
-        Border = TRUE ;
-        TabStop = TRUE ;
-    };
-    FixedText FT_AUTO_TEXT_GROUP
-    {
-        Pos = MAP_APPFONT ( 12 ,  153) ;
-        Size = MAP_APPFONT ( 109 , 8 ) ;
-        Text [ en-US ] = "AutoText - Section";
-    };
-    ListBox LB_AUTO_TEXT_GROUP
-    {
-        HelpID = "sw:ListBox:TP_VISITING_CARDS:LB_AUTO_TEXT_GROUP";
-        Pos = MAP_APPFONT ( 12 , 164) ;
-        Size = MAP_APPFONT ( 109 , 50 ) ;
-        Border = TRUE ;
-        TabStop = TRUE ;
-        DropDown = TRUE ;
-    };
-    FixedLine FL_CONTENT
-    {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ en-US ] = "Content";
-    };
-    Window WIN_EXAMPLE
-    {
-        Pos = MAP_APPFONT ( 139, 14 ) ;
-        Size = MAP_APPFONT ( 109 , 162 ) ;
-    };
-    String ST_VISCARD_GROUP
-    {
-       Text = "Cards";
-    };
-};
 TabPage TP_PRIVATE_DATA
 {
     HelpID = HID_TP_PRIVATE_DATA  ;

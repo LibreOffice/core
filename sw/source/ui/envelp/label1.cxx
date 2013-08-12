@@ -548,11 +548,11 @@ void SwLabPage::Reset(const SfxItemSet& rSet)
 
 void SwVisitingCardPage::ClearUserData()
 {
-    SvTreeListEntry* pEntry = aAutoTextLB.First();
+    SvTreeListEntry* pEntry = m_pAutoTextLB->First();
     while(pEntry)
     {
         delete (String*)pEntry->GetUserData();
-        pEntry = aAutoTextLB.Next(pEntry);
+        pEntry = m_pAutoTextLB->Next(pEntry);
     }
 }
 
@@ -561,43 +561,38 @@ void SwVisitingCardPage::SetUserData( sal_uInt32 nCnt,
 {
     for( sal_uInt32 i = 0; i < nCnt; ++i )
     {
-        SvTreeListEntry* pEntry = aAutoTextLB.InsertEntry( pNames[ i ] );
+        SvTreeListEntry* pEntry = m_pAutoTextLB->InsertEntry( pNames[ i ] );
         pEntry->SetUserData( new String( pValues[ i ] ));
     }
 }
 
-SwVisitingCardPage::SwVisitingCardPage(Window* pParent, const SfxItemSet& rSet) :
-    SfxTabPage(pParent, SW_RES(TP_VISITING_CARDS), rSet),
-    aContentFL(this,        SW_RES( FL_CONTENT           )),
-    aAutoTextLB(this,       SW_RES( LB_AUTO_TEXT            )),
-    aAutoTextGroupFT(this,  SW_RES( FT_AUTO_TEXT_GROUP  )),
-    aAutoTextGroupLB(this,  SW_RES( LB_AUTO_TEXT_GROUP  )),
-    aExampleWIN(this,       SW_RES( WIN_EXAMPLE         )),
-    sVisCardGroup(SW_RES(ST_VISCARD_GROUP)),
-    pExampleFrame(0)
+SwVisitingCardPage::SwVisitingCardPage(Window* pParent, const SfxItemSet& rSet)
+    : SfxTabPage(pParent, "CardFormatPage",
+        "modules/swriter/ui/cardformatpage.ui", rSet)
+    , pExampleFrame(0)
 {
-    FreeResource();
-    aAutoTextLB.SetStyle( aAutoTextLB.GetStyle() | WB_HSCROLL );
-    aAutoTextLB.SetSpaceBetweenEntries(0);
-    aAutoTextLB.SetSelectionMode( SINGLE_SELECTION );
-    aAutoTextLB.SetHelpId(HID_BUSINESS_CARD_CONTENT);
+    get(m_pAutoTextLB, "treeview");
+    m_pAutoTextLB->set_height_request(m_pAutoTextLB->GetTextHeight() * 16);
+    get(m_pAutoTextGroupLB, "autotext");
+    get(m_pExampleWIN, "preview");
+
+    m_pAutoTextLB->SetStyle( m_pAutoTextLB->GetStyle() | WB_HSCROLL );
+    m_pAutoTextLB->SetSpaceBetweenEntries(0);
+    m_pAutoTextLB->SetSelectionMode( SINGLE_SELECTION );
 
     SetExchangeSupport();
-    aAutoTextLB.SetSelectHdl(LINK(this, SwVisitingCardPage, AutoTextSelectHdl));
-    aAutoTextGroupLB.SetSelectHdl(LINK(this, SwVisitingCardPage, AutoTextSelectHdl));
+    m_pAutoTextLB->SetSelectHdl(LINK(this, SwVisitingCardPage, AutoTextSelectHdl));
+    m_pAutoTextGroupLB->SetSelectHdl(LINK(this, SwVisitingCardPage, AutoTextSelectHdl));
 
-    aExampleWIN.Hide();
+    m_pExampleWIN->Hide();
 
-    aAutoTextLB.Show();
-    aAutoTextGroupFT.Show();
-    aAutoTextGroupLB.Show();
     InitFrameControl();
 }
 
 SwVisitingCardPage::~SwVisitingCardPage()
 {
-    for(sal_uInt16 i = 0; i < aAutoTextGroupLB.GetEntryCount(); i++)
-        delete (String*)aAutoTextGroupLB.GetEntryData( i );
+    for(sal_uInt16 i = 0; i < m_pAutoTextGroupLB->GetEntryCount(); i++)
+        delete (String*)m_pAutoTextGroupLB->GetEntryData( i );
     m_xAutoText = 0;
 
     ClearUserData();
@@ -624,14 +619,14 @@ int  SwVisitingCardPage::DeactivatePage(SfxItemSet* _pSet)
 
 sal_Bool SwVisitingCardPage::FillItemSet(SfxItemSet& rSet)
 {
-    String* pGroup = (String*)aAutoTextGroupLB.GetEntryData(
-                                    aAutoTextGroupLB.GetSelectEntryPos());
+    String* pGroup = (String*)m_pAutoTextGroupLB->GetEntryData(
+                                    m_pAutoTextGroupLB->GetSelectEntryPos());
     OSL_ENSURE(pGroup, "no group selected?");
 
     if(pGroup)
         aLabItem.sGlossaryGroup = *pGroup;
 
-    SvTreeListEntry* pSelEntry = aAutoTextLB.FirstSelected();
+    SvTreeListEntry* pSelEntry = m_pAutoTextLB->FirstSelected();
     if(pSelEntry)
         aLabItem.sGlossaryBlockName = *(String*)pSelEntry->GetUserData();
     rSet.Put(aLabItem);
@@ -674,9 +669,9 @@ void SwVisitingCardPage::Reset(const SfxItemSet& rSet)
 
     bool bFound = false;
     sal_uInt16 i;
-    for(i = 0; i < aAutoTextGroupLB.GetEntryCount() && !bFound; i++)
+    for(i = 0; i < m_pAutoTextGroupLB->GetEntryCount() && !bFound; i++)
         if( String(aLabItem.sGlossaryGroup) ==
-            *(String*)aAutoTextGroupLB.GetEntryData( i ))
+            *(String*)m_pAutoTextGroupLB->GetEntryData( i ))
         {
             bFound = true;
             break;
@@ -686,8 +681,8 @@ void SwVisitingCardPage::Reset(const SfxItemSet& rSet)
     {
         // initially search for a group starting with "crd" which is the name of the
         // business card AutoTexts
-        for(i = 0; i < aAutoTextGroupLB.GetEntryCount() && !bFound; i++)
-            if(0 == (*(String*)aAutoTextGroupLB.GetEntryData( i )).SearchAscii( "crd") )
+        for(i = 0; i < m_pAutoTextGroupLB->GetEntryCount() && !bFound; i++)
+            if(0 == (*(String*)m_pAutoTextGroupLB->GetEntryData( i )).SearchAscii( "crd") )
             {
                 bFound = true;
                 break;
@@ -695,19 +690,19 @@ void SwVisitingCardPage::Reset(const SfxItemSet& rSet)
     }
     if(bFound)
     {
-        if(aAutoTextGroupLB.GetSelectEntryPos() != i)
+        if(m_pAutoTextGroupLB->GetSelectEntryPos() != i)
         {
-            aAutoTextGroupLB.SelectEntryPos(i);
-            AutoTextSelectHdl(&aAutoTextGroupLB);
+            m_pAutoTextGroupLB->SelectEntryPos(i);
+            AutoTextSelectHdl(m_pAutoTextGroupLB);
         }
-        if(lcl_FindBlock(aAutoTextLB, aLabItem.sGlossaryBlockName))
+        if(lcl_FindBlock(*m_pAutoTextLB, aLabItem.sGlossaryBlockName))
         {
-            SvTreeListEntry* pSelEntry = aAutoTextLB.FirstSelected();
+            SvTreeListEntry* pSelEntry = m_pAutoTextLB->FirstSelected();
             if( pSelEntry &&
                 *(String*)pSelEntry->GetUserData() != String(aLabItem.sGlossaryBlockName))
             {
-                lcl_SelectBlock(aAutoTextLB, aLabItem.sGlossaryBlockName);
-                AutoTextSelectHdl(&aAutoTextLB);
+                lcl_SelectBlock(*m_pAutoTextLB, aLabItem.sGlossaryBlockName);
+                AutoTextSelectHdl(m_pAutoTextLB);
             }
         }
     }

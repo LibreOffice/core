@@ -26,14 +26,6 @@
 
 #define BTN_SYNC     20
 
-#define LB_AUTO_TEXT            3
-#define FT_AUTO_TEXT_GROUP      4
-#define LB_AUTO_TEXT_GROUP      5
-#define ED_TEXT                 6
-#define FL_CONTENT                          7
-#define WIN_EXAMPLE             8
-#define ST_VISCARD_GROUP        10
-
 #define FL_DATA                         30
 #define FT_NAME                 31
 #define ED_FIRSTNAME            32

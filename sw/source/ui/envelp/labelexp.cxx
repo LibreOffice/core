@@ -45,8 +45,8 @@ using namespace ::comphelper;
 void SwVisitingCardPage::InitFrameControl()
 {
     Link aLink(LINK(this, SwVisitingCardPage, FrameControlInitializedHdl));
-    aExampleWIN.Show();
-    pExampleFrame = new SwOneExampleFrame( aExampleWIN,
+    m_pExampleWIN->Show();
+    pExampleFrame = new SwOneExampleFrame( *m_pExampleWIN,
                                     EX_SHOW_BUSINESS_CARDS, &aLink );
 
     Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
@@ -74,20 +74,20 @@ void SwVisitingCardPage::InitFrameControl()
                 OUString uTitle;
                 aTitle >>= uTitle;
                 String sGroup(pGroups[i]);
-                sal_uInt16 nEntry = aAutoTextGroupLB.InsertEntry(uTitle);
-                aAutoTextGroupLB.SetEntryData(nEntry, new String(sGroup));
+                sal_uInt16 nEntry = m_pAutoTextGroupLB->InsertEntry(uTitle);
+                m_pAutoTextGroupLB->SetEntryData(nEntry, new String(sGroup));
             }
         }
         catch (const Exception&)
         {
         }
     }
-    if(aAutoTextGroupLB.GetEntryCount())
+    if(m_pAutoTextGroupLB->GetEntryCount())
     {
-        if(LISTBOX_ENTRY_NOTFOUND == aAutoTextGroupLB.GetSelectEntryPos())
-            aAutoTextGroupLB.SelectEntryPos(0);
+        if(LISTBOX_ENTRY_NOTFOUND == m_pAutoTextGroupLB->GetSelectEntryPos())
+            m_pAutoTextGroupLB->SelectEntryPos(0);
         String sCurGroupName(
-            *(String*)aAutoTextGroupLB.GetEntryData(aAutoTextGroupLB.GetSelectEntryPos()));
+            *(String*)m_pAutoTextGroupLB->GetEntryData(m_pAutoTextGroupLB->GetSelectEntryPos()));
         if(m_xAutoText->hasByName(sCurGroupName))
         {
             uno::Any aGroup = m_xAutoText->getByName(sCurGroupName);
@@ -111,17 +111,17 @@ void SwVisitingCardPage::InitFrameControl()
 
 IMPL_LINK_NOARG(SwVisitingCardPage, FrameControlInitializedHdl)
 {
-    SvTreeListEntry* pSel = aAutoTextLB.FirstSelected();
+    SvTreeListEntry* pSel = m_pAutoTextLB->FirstSelected();
     String sEntry;
     if( pSel )
         sEntry = *(String*)pSel->GetUserData();
     uno::Reference< text::XTextCursor > & xCrsr = pExampleFrame->GetTextCursor();
     OUString uEntry(sEntry);
 
-    if(LISTBOX_ENTRY_NOTFOUND != aAutoTextGroupLB.GetSelectEntryPos())
+    if(LISTBOX_ENTRY_NOTFOUND != m_pAutoTextGroupLB->GetSelectEntryPos())
     {
-        String sGroup( *(String*)aAutoTextGroupLB.GetEntryData(
-                                    aAutoTextGroupLB.GetSelectEntryPos() ) );
+        String sGroup( *(String*)m_pAutoTextGroupLB->GetEntryData(
+                                    m_pAutoTextGroupLB->GetSelectEntryPos() ) );
         uno::Any aGroup = m_xAutoText->getByName(sGroup);
         uno::Reference< text::XAutoTextGroup >  xGroup;
         aGroup >>= xGroup;
@@ -146,16 +146,16 @@ IMPL_LINK( SwVisitingCardPage, AutoTextSelectHdl, void*, pBox )
 {
     if(m_xAutoText.is())
     {
-        if( &aAutoTextGroupLB == pBox )
+        if (m_pAutoTextGroupLB == pBox)
         {
-            String sGroup( *(String*)aAutoTextGroupLB.GetEntryData(
-                                    aAutoTextGroupLB.GetSelectEntryPos()));
+            String sGroup( *(String*)m_pAutoTextGroupLB->GetEntryData(
+                                    m_pAutoTextGroupLB->GetSelectEntryPos()));
             uno::Any aGroup = m_xAutoText->getByName(sGroup);
             uno::Reference< text::XAutoTextGroup >  xGroup;
             aGroup >>= xGroup;
 
             ClearUserData();
-            aAutoTextLB.Clear();
+            m_pAutoTextLB->Clear();
 
             uno::Sequence<OUString> aBlockNames = xGroup->getElementNames();
             uno::Sequence< OUString > aTitles = xGroup->getTitles() ;

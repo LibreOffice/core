@@ -83,14 +83,10 @@ public:
 class SwOneExampleFrame;
 class SwVisitingCardPage : public SfxTabPage
 {
-    FixedLine       aContentFL;
-    SvTreeListBox   aAutoTextLB;
-    FixedText       aAutoTextGroupFT;
-    ListBox         aAutoTextGroupLB;
+    SvTreeListBox*  m_pAutoTextLB;
+    ListBox*        m_pAutoTextGroupLB;
+    Window*         m_pExampleWIN;
 
-    Window          aExampleWIN;
-
-    String          sVisCardGroup;
     String          sTempURL;
 
     SwLabItem       aLabItem;
