@@ -19,6 +19,8 @@
 #ifndef _COM_SUN_STAR_UNO_ANY_H_
 #define _COM_SUN_STAR_UNO_ANY_H_
 
+#include <iosfwd>
+
 #include <uno/any2.h>
 #include <typelib/typedescription.h>
 #include <com/sun/star/uno/Type.h>
@@ -369,6 +371,8 @@ inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( SAL_UNUSED_PARA
 {
     return ::cppu::UnoType< ::com::sun::star::uno::Any >::get();
 }
+
+inline std::ostream & operator << ( std::ostream & o, const ::com::sun::star::uno::Any & any );
 
 #endif
 
