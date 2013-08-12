@@ -165,9 +165,6 @@ private:
 
     CustomAnimationEffectPtr mpEffect;
     TabControl* mpTabControl;
-    OKButton* mpOKButton;
-    CancelButton* mpCancelButton;
-    HelpButton* mpHelpButton;
 
     CustomAnimationDurationTabPage* mpDurationTabPage;
     CustomAnimationEffectTabPage* mpEffectTabPage;

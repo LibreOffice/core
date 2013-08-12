@@ -42,6 +42,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/field.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/decoview.hxx>
@@ -1111,7 +1112,7 @@ Control* FontStylePropertyBox::getControl()
 class CustomAnimationEffectTabPage : public TabPage
 {
 public:
-    CustomAnimationEffectTabPage( Window* pParent, const ResId& rResId, const STLPropertySet* pSet );
+    CustomAnimationEffectTabPage( Window* pParent, const STLPropertySet* pSet );
     ~CustomAnimationEffectTabPage();
 
     void update( STLPropertySet* pSet );
@@ -1130,16 +1131,15 @@ private:
     sal_Bool mbHasText;
     const STLPropertySet* mpSet;
 
-    FixedLine*      mpFLSettings;
     FixedText*      mpFTProperty1;
     PropertyControl* mpLBProperty1;
+    VclHBox*        mpPlaceholderBox;
     FixedText*      mpFTProperty2;
     PropertyControl* mpLBProperty2;
     CheckBox*       mpCBSmoothStart;
     CheckBox*       mpCBSmoothEnd;
     CheckBox*       mpCBAutoRestart;
 
-    FixedLine*      mpFLEnhancements;
     FixedText*      mpFTSound;
     ListBox*        mpLBSound;
     PushButton*     mpPBSoundPreview;
@@ -1164,31 +1164,30 @@ static void move_down( Control* pControl, int nOffsetX, int nOffsetY )
     pControl->SetPosPixel( aPos );
 }
 
-CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, const ResId& rResId, const STLPropertySet* pSet )
-: TabPage( pParent, rResId ), mbHasText( sal_False ), mpSet(pSet )
+CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, const STLPropertySet* pSet )
+: TabPage( pParent, "EffectTab", "modules/simpress/ui/customanimationeffecttab.ui" ), mbHasText( sal_False ), mpSet(pSet )
 {
-    mpFLSettings = new FixedLine( this, SdResId( FL_SETTINGS ) );
-    mpFTProperty1 = new FixedText( this, SdResId( FT_PROPERTY_1 ) );
-    mpLBProperty1 = new PropertyControl( this, SdResId( LB_PROPERTY_1 ) );
-    mpFTProperty2 = new FixedText( this, SdResId( FT_PROPERTY_2 ) );
-    mpLBProperty2 = new PropertyControl( this, SdResId( LB_PROPERTY_2 ) );
-    mpCBSmoothStart = new CheckBox( this, SdResId( CB_SMOOTH_START ) );
-    mpCBSmoothEnd = new CheckBox( this, SdResId( CB_SMOOTH_END ) );
-    mpCBAutoRestart = new CheckBox( this, SdResId( CB_AUTORESTART ) );
-    mpFLEnhancements = new FixedLine( this, SdResId( FL_ENHANCEMENTS ) );
-    mpFTSound = new FixedText( this, SdResId( FT_SOUND ) );
-    mpLBSound = new ListBox( this, SdResId( LB_SOUND ) );
-    mpPBSoundPreview = new PushButton( this, SdResId( PB_SOUND_PREVIEW ) );
-    mpFTAfterEffect = new FixedText( this, SdResId( FT_AFTER_EFFECT ) );
-    mpLBAfterEffect = new ListBox( this, SdResId( LB_AFTER_EFFECT ) );
-    mpFTDimColor = new FixedText( this, SdResId( FT_DIMCOLOR ) );
-    mpCLBDimColor = new ColorListBox( this, SdResId( CLB_DIMCOLOR ) );
-    mpFTTextAnim = new FixedText( this, SdResId( FT_TEXT_ANIM ) );
-    mpLBTextAnim = new ListBox( this, SdResId( LB_TEXT_ANIM ) );
-    mpMFTextDelay = new MetricField( this, SdResId( MF_TEXT_DELAY ) );
-    mpFTTextDelay = new FixedText( this, SdResId( FT_TEXT_DELAY ) );
+    get(mpFTProperty1, "prop_label1" );
+    get(mpLBProperty1, "prop_list1" );
+    //get(mpFTProperty2, "prop_label2" );
+    //get(mpLBProperty2, "prop_list2" );
+    get(mpPlaceholderBox, "placeholder" );
+    get(mpCBSmoothStart, "smooth_start" );
+    get(mpCBSmoothEnd, "smooth_end" );
+    get(mpCBAutoRestart, "auto_restart" );
+    get(mpFTSound, "sound_label");
+    get(mpLBSound, "sound_list" );
+    get(mpPBSoundPreview, "sound_preview" );
+    get(mpFTAfterEffect, "aeffect_label" );
+    get(mpLBAfterEffect, "aeffect_list" );
+    get(mpFTDimColor, "dim_color_label" );
+    get(mpCLBDimColor, "dim_color_list" );
+    get(mpFTTextAnim, "text_animation_label" );
+    get(mpLBTextAnim, "text_animation_list" );
+    get(mpMFTextDelay,"text_delay" );
+    get(mpFTTextDelay,"text_delay_label" );
 
-    FreeResource();
+    //FreeResource();
 
     // fill the soundbox
     fillSoundListBox();
@@ -1253,7 +1252,7 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, con
                     mpFTProperty1->Show();
                     mpLBProperty1->Show();
 
-                    nOffsetY += mpLBProperty1->GetSizePixel().Height() + aSpace.Height();
+                    //nOffsetY += mpLBProperty1->GetSizePixel().Height() + aSpace.Height();
 
                     mpFTProperty1->SetText( aPropertyName );
                 }
@@ -1263,7 +1262,7 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, con
 
                 Link aModifyLink;
                 // create property sub control
-                mpLBProperty1->setSubControl( PropertySubControl::create( nType, this, aValue, aPresetId, aModifyLink ));
+                mpLBProperty1->setSubControl( PropertySubControl::create( nType, mpPlaceholderBox, aValue, aPresetId, aModifyLink ));
             }
         }
 
@@ -1278,8 +1277,8 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, con
             mpCBSmoothStart->Show();
             mpCBSmoothEnd->Show();
 
-            move_down( mpCBSmoothStart, nOffsetX, nOffsetY );
-            move_down( mpCBSmoothEnd, nOffsetX, nOffsetY );
+            //move_down( mpCBSmoothStart, nOffsetX, nOffsetY );
+            //move_down( mpCBSmoothEnd, nOffsetX, nOffsetY );
 
             nOffsetY += mpCBSmoothStart->GetSizePixel().Height() + aSpace.Height();
 
@@ -1296,7 +1295,7 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, con
         //
 
 
-        if( nOffsetY )
+        /*if( nOffsetY )
         {
             nOffsetY += mpFLSettings->GetSizePixel().Height() + aSpace.Height();
             mpFLSettings->Show();
@@ -1307,10 +1306,10 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, con
             nOffsetY += mpFLEnhancements->GetSizePixel().Height() + aSpace.Height();
 
             nOffsetX = 2* aSpace.Width();
-        }
+        }*/
     }
 
-    if( (nOffsetY != 0) || (nOffsetX != 0) )
+    /*if( (nOffsetY != 0) || (nOffsetX != 0) )
     {
         move_down( mpFTSound, nOffsetX, nOffsetY );
         move_down( mpLBSound, nOffsetX, nOffsetY );
@@ -1323,7 +1322,7 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, con
         move_down( mpLBTextAnim, nOffsetX, nOffsetY );
         move_down( mpMFTextDelay, nOffsetX, nOffsetY );
         move_down( mpFTTextDelay, nOffsetX, nOffsetY );
-    }
+    }*/
 
     //
     // init after effect controls
@@ -1454,36 +1453,14 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, con
 
     updateControlStates();
 
-    Size aSize( GetSizePixel() );
-    aSize.Height() += mpMFTextDelay->GetPosPixel().X() + GetSizePixel().Height() + aSpace.Height();
-    SetSizePixel( aSize );
+    //Size aSize( GetSizePixel() );
+    //aSize.Height() += mpMFTextDelay->GetPosPixel().X() + GetSizePixel().Height() + aSpace.Height();
+    //SetSizePixel( aSize );
 }
 
 CustomAnimationEffectTabPage::~CustomAnimationEffectTabPage()
 {
     clearSoundListBox();
-
-    delete mpFLSettings;
-    delete mpFTProperty1;
-    delete mpLBProperty1;
-    delete mpFTProperty2;
-    delete mpLBProperty2;
-    delete mpCBSmoothStart;
-    delete mpCBSmoothEnd;
-    delete mpCBAutoRestart;
-
-    delete mpFLEnhancements;
-    delete mpFTSound;
-    delete mpLBSound;
-    delete mpPBSoundPreview;
-    delete mpFTAfterEffect;
-    delete mpLBAfterEffect;
-    delete mpFTDimColor;
-    delete mpCLBDimColor;
-    delete mpFTTextAnim;
-    delete mpLBTextAnim;
-    delete mpMFTextDelay;
-    delete mpFTTextDelay;
 }
 
 void CustomAnimationEffectTabPage::updateControlStates()
@@ -1549,7 +1526,7 @@ void CustomAnimationEffectTabPage::update( STLPropertySet* pSet )
             pSet->setPropertyValue( nHandleProperty1Value, aNewValue );
     }
 
-    if( mpLBProperty2->getSubControl() )
+    /*if( mpLBProperty2->getSubControl() )
     {
         Any aNewValue( mpLBProperty2->getSubControl()->getValue() );
         Any aOldValue;
@@ -1558,7 +1535,7 @@ void CustomAnimationEffectTabPage::update( STLPropertySet* pSet )
 
         if( aOldValue != aNewValue )
             pSet->setPropertyValue( nHandleProperty2Value, aNewValue );
-    }
+    }*/
 
     if( mpCBSmoothStart->IsVisible() )
     {
@@ -1806,7 +1783,7 @@ void CustomAnimationEffectTabPage::onSoundPreview()
 class CustomAnimationDurationTabPage : public TabPage
 {
 public:
-    CustomAnimationDurationTabPage( Window* pParent, const ResId& rResId, const STLPropertySet* pSet );
+    CustomAnimationDurationTabPage( Window* pParent, const STLPropertySet* pSet );
     ~CustomAnimationDurationTabPage();
 
     void update( STLPropertySet* pSet );
@@ -1816,42 +1793,40 @@ public:
 private:
     const STLPropertySet* mpSet;
 
-    boost::shared_ptr< FixedText > mpFTStart;
-    boost::shared_ptr< ListBox > mpLBStart;
-    boost::shared_ptr< FixedText > mpFTStartDelay;
-    boost::shared_ptr< MetricField > mpMFStartDelay;
-    boost::shared_ptr< FixedText > mpFTDuration;
-    boost::shared_ptr< ComboBox > mpCBDuration;
-    boost::shared_ptr< FixedText > mpFTRepeat;
-    boost::shared_ptr< ComboBox > mpCBRepeat;
-    boost::shared_ptr< CheckBox > mpCBXRewind;
-    boost::shared_ptr< FixedLine > mpFLTrigger;
-    boost::shared_ptr< RadioButton > mpRBClickSequence;
-    boost::shared_ptr< RadioButton > mpRBInteractive;
-    boost::shared_ptr< ListBox > mpLBTrigger;
+    FixedText* mpFTStart;
+    ListBox* mpLBStart;
+    FixedText* mpFTStartDelay;
+    MetricField* mpMFStartDelay;
+    FixedText* mpFTDuration;
+    ListBox* mpCBDuration;
+    FixedText* mpFTRepeat;
+    ListBox* mpCBRepeat;
+    CheckBox* mpCBXRewind;
+    RadioButton* mpRBClickSequence;
+    RadioButton* mpRBInteractive;
+    ListBox* mpLBTrigger;
 };
 
-CustomAnimationDurationTabPage::CustomAnimationDurationTabPage(Window* pParent, const ResId& rResId, const STLPropertySet* pSet)
-: TabPage( pParent, rResId ), mpSet( pSet )
+CustomAnimationDurationTabPage::CustomAnimationDurationTabPage(Window* pParent, const STLPropertySet* pSet)
+: TabPage( pParent, "TimingTab", "modules/simpress/ui/customanimationtimingtab.ui" ), mpSet( pSet )
 {
-    mpFTStart.reset( new FixedText( this, SdResId( FT_START ) ) );
-    mpLBStart.reset( new ListBox( this, SdResId( LB_START ) ) );
-    mpFTStartDelay.reset( new FixedText( this, SdResId( FT_START_DELAY ) ) );
-    mpMFStartDelay.reset( new MetricField( this, SdResId( MF_START_DELAY ) ) );
-    mpFTDuration.reset( new FixedText( this, SdResId( FT_DURATION ) ) );
-    mpCBDuration.reset( new ComboBox( this, SdResId( CB_DURATION ) ) );
-    mpFTRepeat.reset( new FixedText( this, SdResId( FT_REPEAT ) ) );
-    mpCBRepeat.reset( new ComboBox( this, SdResId( CB_REPEAT ) ) );
-    mpCBXRewind.reset( new CheckBox( this, SdResId( CBX_REWIND ) ) );
-    mpFLTrigger.reset( new FixedLine( this, SdResId( FL_TRIGGER ) ) );
-    mpRBClickSequence.reset( new RadioButton( this, SdResId( RB_CLICKSEQUENCE ) ) );
-    mpRBInteractive.reset( new RadioButton( this, SdResId( RB_INTERACTIVE ) ) );
-    mpLBTrigger.reset( new ListBox( this, SdResId( LB_TRIGGER ) ) );
+    get(mpFTStart,"start_label" );
+    get(mpLBStart, "start_list" );
+    get(mpFTStartDelay, "delay_label" );
+    get(mpMFStartDelay, "delay_value" );
+    get(mpFTDuration, "duration_label" );
+    get(mpCBDuration, "duration_list" );
+    get(mpFTRepeat, "repeat_label" );
+    get(mpCBRepeat, "repeat_list" );
+    get(mpCBXRewind, "rewind" );
+    get(mpRBClickSequence, "rb_click_sequence" );
+    get(mpRBInteractive, "rb_interactive" );
+    get(mpLBTrigger, "trigger_list");
 
     //fillRepeatComboBox( mpCBRepeat.get() );
     //fillDurationComboBox( mpCBDuration.get() );
 
-    FreeResource();
+    //FreeResource();
 
     mpRBClickSequence->SetClickHdl( LINK( this, CustomAnimationDurationTabPage, implControlHdl ) );
     mpLBTrigger->SetSelectHdl( LINK( this, CustomAnimationDurationTabPage, implControlHdl ) );
@@ -2012,7 +1987,7 @@ CustomAnimationDurationTabPage::~CustomAnimationDurationTabPage()
 
 IMPL_LINK( CustomAnimationDurationTabPage, implControlHdl, Control*, pControl )
 {
-    if( pControl == mpLBTrigger.get() )
+    if( pControl == mpLBTrigger )
     {
         mpRBClickSequence->Check( sal_False );
         mpRBInteractive->Check( sal_True );
@@ -2184,7 +2159,7 @@ void CustomAnimationDurationTabPage::update( STLPropertySet* pSet )
 class CustomAnimationTextAnimTabPage : public TabPage
 {
 public:
-    CustomAnimationTextAnimTabPage( Window* pParent, const ResId& rResId, const STLPropertySet* pSet );
+    CustomAnimationTextAnimTabPage( Window* pParent, const STLPropertySet* pSet );
 
     void update( STLPropertySet* pSet );
 
@@ -2192,38 +2167,37 @@ public:
     DECL_LINK(implSelectHdl, void *);
 
 private:
-    FixedText   maFTGroupText;
-    ListBox     maLBGroupText;
-    CheckBox    maCBXGroupAuto;
-    MetricField maMFGroupAuto;
-    CheckBox    maCBXAnimateForm;
-    CheckBox    maCBXReverse;
+    FixedText*   maFTGroupText;
+    ListBox*     maLBGroupText;
+    CheckBox*    maCBXGroupAuto;
+    MetricField* maMFGroupAuto;
+    CheckBox*    maCBXAnimateForm;
+    CheckBox*    maCBXReverse;
 
     const STLPropertySet* mpSet;
 
     bool mbHasVisibleShapes;
 };
 
-CustomAnimationTextAnimTabPage::CustomAnimationTextAnimTabPage(Window* pParent, const ResId& rResId, const STLPropertySet* pSet)
-:   TabPage( pParent, rResId ),
-    maFTGroupText( this, SdResId( FT_GROUP_TEXT ) ),
-    maLBGroupText( this, SdResId( LB_GROUP_TEXT ) ),
-    maCBXGroupAuto( this, SdResId( CBX_GROUP_AUTO ) ),
-    maMFGroupAuto( this, SdResId( MF_GROUP_AUTO ) ),
-    maCBXAnimateForm( this, SdResId( CBX_ANIMATE_FORM ) ),
-    maCBXReverse( this, SdResId( CBX_REVERSE ) ),
+CustomAnimationTextAnimTabPage::CustomAnimationTextAnimTabPage(Window* pParent, const STLPropertySet* pSet)
+:   TabPage( pParent, "TextAnimationTab", "modules/simpress/ui/customanimationtexttab.ui" ),
     mpSet( pSet ),
     mbHasVisibleShapes(true)
 {
-    FreeResource();
+    get( maFTGroupText, "group_text_label" );
+    get( maLBGroupText, "group_text_list" );
+    get( maCBXGroupAuto, "auto_after" );
+    get( maMFGroupAuto, "auto_after_value" );
+    get( maCBXAnimateForm, "animate_shape" );
+    get( maCBXReverse, "reverse_order" );
 
-    maLBGroupText.SetSelectHdl( LINK( this, CustomAnimationTextAnimTabPage, implSelectHdl ) );
+    maLBGroupText->SetSelectHdl( LINK( this, CustomAnimationTextAnimTabPage, implSelectHdl ) );
 
     if( pSet->getPropertyState( nHandleTextGrouping ) != STLPropertyState_AMBIGUOUS )
     {
         sal_Int32 nTextGrouping = 0;
         if( pSet->getPropertyValue( nHandleTextGrouping ) >>= nTextGrouping )
-            maLBGroupText.SelectEntryPos( (sal_uInt16)(nTextGrouping + 1) );
+            maLBGroupText->SelectEntryPos( (sal_uInt16)(nTextGrouping + 1) );
     }
 
     if( pSet->getPropertyState( nHandleHasVisibleShape ) != STLPropertyState_AMBIGUOUS )
@@ -2234,37 +2208,37 @@ CustomAnimationTextAnimTabPage::CustomAnimationTextAnimTabPage(Window* pParent, 
         double fTextGroupingAuto = 0.0;
         if( pSet->getPropertyValue( nHandleTextGroupingAuto ) >>= fTextGroupingAuto )
         {
-            maCBXGroupAuto.Check( fTextGroupingAuto >= 0.0 );
+            maCBXGroupAuto->Check( fTextGroupingAuto >= 0.0 );
             if( fTextGroupingAuto >= 0.0 )
-                maMFGroupAuto.SetValue( (long)(fTextGroupingAuto*10) );
+                maMFGroupAuto->SetValue( (long)(fTextGroupingAuto*10) );
         }
     }
     else
     {
-        maCBXGroupAuto.SetState( STATE_DONTKNOW );
+        maCBXGroupAuto->SetState( STATE_DONTKNOW );
     }
 
-    maCBXAnimateForm.SetState( STATE_DONTKNOW );
+    maCBXAnimateForm->SetState( STATE_DONTKNOW );
     if( pSet->getPropertyState( nHandleAnimateForm ) != STLPropertyState_AMBIGUOUS )
     {
         sal_Bool bAnimateForm = sal_False;
         if( pSet->getPropertyValue( nHandleAnimateForm ) >>= bAnimateForm )
         {
-            maCBXAnimateForm.Check( bAnimateForm );
+            maCBXAnimateForm->Check( bAnimateForm );
         }
     }
     else
     {
-        maCBXAnimateForm.Enable( sal_False );
+        maCBXAnimateForm->Enable( sal_False );
     }
 
-    maCBXReverse.SetState( STATE_DONTKNOW );
+    maCBXReverse->SetState( STATE_DONTKNOW );
     if( pSet->getPropertyState( nHandleTextReverse ) != STLPropertyState_AMBIGUOUS )
     {
         sal_Bool bTextReverse = sal_False;
         if( pSet->getPropertyValue( nHandleTextReverse ) >>= bTextReverse )
         {
-            maCBXReverse.Check( bTextReverse );
+            maCBXReverse->Check( bTextReverse );
         }
     }
 
@@ -2277,7 +2251,7 @@ CustomAnimationTextAnimTabPage::CustomAnimationTextAnimTabPage(Window* pParent, 
         sal_Int32 nPos = 6;
         while( (nPos > 2) && (nPos > nMaxParaDepth) )
         {
-            maLBGroupText.RemoveEntry( (sal_uInt16)nPos );
+            maLBGroupText->RemoveEntry( (sal_uInt16)nPos );
             nPos--;
         }
     }
@@ -2287,7 +2261,7 @@ CustomAnimationTextAnimTabPage::CustomAnimationTextAnimTabPage(Window* pParent, 
 
 void CustomAnimationTextAnimTabPage::update( STLPropertySet* pSet )
 {
-    sal_uInt16 nPos = maLBGroupText.GetSelectEntryPos();
+    sal_uInt16 nPos = maLBGroupText->GetSelectEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         sal_Int32 nTextGrouping = nPos - 1;
@@ -2302,7 +2276,7 @@ void CustomAnimationTextAnimTabPage::update( STLPropertySet* pSet )
 
     if( nPos > 0 )
     {
-        sal_Bool bTextReverse = maCBXReverse.IsChecked();
+        sal_Bool bTextReverse = maCBXReverse->IsChecked();
         sal_Bool bOldTextReverse = !bTextReverse;
 
         if(mpSet->getPropertyState( nHandleTextReverse ) != STLPropertyState_AMBIGUOUS)
@@ -2313,7 +2287,7 @@ void CustomAnimationTextAnimTabPage::update( STLPropertySet* pSet )
 
         if( nPos > 1 )
         {
-            double fTextGroupingAuto = maCBXGroupAuto.IsChecked() ? maMFGroupAuto.GetValue() / 10.0 : -1.0;
+            double fTextGroupingAuto = maCBXGroupAuto->IsChecked() ? maMFGroupAuto->GetValue() / 10.0 : -1.0;
             double fOldTextGroupingAuto = -2.0;
 
             if(mpSet->getPropertyState( nHandleTextGroupingAuto ) != STLPropertyState_AMBIGUOUS)
@@ -2326,9 +2300,9 @@ void CustomAnimationTextAnimTabPage::update( STLPropertySet* pSet )
     //#i120049# impress crashes when modifying the "Random effects" animation
     //effect's trigger condition to "Start effect on click of".
     //If this control is disabled, we should ignore its value
-    if (maCBXAnimateForm.IsEnabled())
+    if (maCBXAnimateForm->IsEnabled())
     {
-        sal_Bool bAnimateForm = maCBXAnimateForm.IsChecked();
+        sal_Bool bAnimateForm = maCBXAnimateForm->IsChecked();
         sal_Bool bOldAnimateForm = !bAnimateForm;
 
         if(mpSet->getPropertyState( nHandleAnimateForm ) != STLPropertyState_AMBIGUOUS)
@@ -2341,20 +2315,20 @@ void CustomAnimationTextAnimTabPage::update( STLPropertySet* pSet )
 
 void CustomAnimationTextAnimTabPage::updateControlStates()
 {
-    sal_uInt16 nPos = maLBGroupText.GetSelectEntryPos();
+    sal_uInt16 nPos = maLBGroupText->GetSelectEntryPos();
 
-    maCBXGroupAuto.Enable( nPos > 1 );
-    maMFGroupAuto.Enable( nPos > 1 );
-    maCBXReverse.Enable( nPos > 0 );
+    maCBXGroupAuto->Enable( nPos > 1 );
+    maMFGroupAuto->Enable( nPos > 1 );
+    maCBXReverse->Enable( nPos > 0 );
 
     if( !mbHasVisibleShapes && nPos > 0 )
     {
-        maCBXAnimateForm.Check(sal_False);
-        maCBXAnimateForm.Enable(sal_False);
+        maCBXAnimateForm->Check(sal_False);
+        maCBXAnimateForm->Enable(sal_False);
     }
     else
     {
-        maCBXAnimateForm.Enable(sal_True);
+        maCBXAnimateForm->Enable(sal_True);
     }
 }
 
@@ -2367,19 +2341,20 @@ IMPL_LINK_NOARG(CustomAnimationTextAnimTabPage, implSelectHdl)
 // --------------------------------------------------------------------
 
 CustomAnimationDialog::CustomAnimationDialog( Window* pParent, STLPropertySet* pSet, sal_uInt16 nPage /* = 0 */  )
-: TabDialog( pParent, SdResId( DLG_CUSTOMANIMATION ) ), mpSet( pSet ), mpResultSet( 0 )
+: TabDialog( pParent, "CustomAnimationProperties", "modules/simpress/ui/customanimationproperties.ui")
+, mpSet( pSet )
+, mpResultSet( 0 )
 {
-    mpTabControl = new TabControl( this, SdResId( 1 ) );
-    mpOKButton = new OKButton(this, SdResId( 1 ) ) ;
-    mpCancelButton = new CancelButton(this, SdResId( 1 ) );
-    mpHelpButton = new HelpButton(this, SdResId( 1 ) );
+    get(mpTabControl, "tabs");
 
-    FreeResource();
+    sal_uInt16 mnEffectId = mpTabControl->GetPageId("effect");
+    sal_uInt16 mnTimingId = mpTabControl->GetPageId("timing");
+    sal_uInt16 mnTextAnimId = mpTabControl->GetPageId("textanim");
 
-    mpEffectTabPage = new CustomAnimationEffectTabPage( mpTabControl, SdResId( RID_TP_CUSTOMANIMATION_EFFECT ), mpSet );
-    mpTabControl->SetTabPage( RID_TP_CUSTOMANIMATION_EFFECT, mpEffectTabPage );
-    mpDurationTabPage = new CustomAnimationDurationTabPage( mpTabControl, SdResId( RID_TP_CUSTOMANIMATION_DURATION ), mpSet );
-    mpTabControl->SetTabPage( RID_TP_CUSTOMANIMATION_DURATION, mpDurationTabPage );
+    mpEffectTabPage = new CustomAnimationEffectTabPage( mpTabControl, mpSet );
+    mpTabControl->SetTabPage( mnEffectId, mpEffectTabPage );
+    mpDurationTabPage = new CustomAnimationDurationTabPage( mpTabControl, mpSet );
+    mpTabControl->SetTabPage( mnTimingId, mpDurationTabPage );
 
     sal_Bool bHasText = sal_False;
     if( pSet->getPropertyState( nHandleHasText ) != STLPropertyState_AMBIGUOUS )
@@ -2387,13 +2362,13 @@ CustomAnimationDialog::CustomAnimationDialog( Window* pParent, STLPropertySet* p
 
     if( bHasText )
     {
-        mpTextAnimTabPage = new CustomAnimationTextAnimTabPage( mpTabControl, SdResId( RID_TP_CUSTOMANIMATION_TEXT ), mpSet );
-        mpTabControl->SetTabPage( RID_TP_CUSTOMANIMATION_TEXT, mpTextAnimTabPage );
+        mpTextAnimTabPage = new CustomAnimationTextAnimTabPage( mpTabControl, mpSet );
+        mpTabControl->SetTabPage( mnTextAnimId, mpTextAnimTabPage );
     }
     else
     {
         mpTextAnimTabPage = 0;
-        mpTabControl->RemovePage( RID_TP_CUSTOMANIMATION_TEXT );
+        mpTabControl->RemovePage( mnTextAnimId );
     }
 
     if( nPage )
@@ -2406,10 +2381,7 @@ CustomAnimationDialog::~CustomAnimationDialog()
     delete mpDurationTabPage;
     delete mpTextAnimTabPage;
 
-    delete mpTabControl;
-    delete mpOKButton;
-    delete mpCancelButton;
-    delete mpHelpButton;
+    /*delete mpTabControl;*/
 
     delete mpSet;
     delete mpResultSet;
