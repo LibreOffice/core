@@ -125,7 +125,7 @@ Reference< XConnection > SAL_CALL FirebirdDriver::connect(
        throw DisposedException();
 
     if ( ! acceptsURL(url) )
-        return NULL;
+        return NULL; // TODO: throw Exception?
 
     // create a new connection with the given properties and append it to our vector
     OConnection* pCon = new OConnection(this);
@@ -171,23 +171,19 @@ sal_Int32 SAL_CALL FirebirdDriver::getMinorVersion(  ) throw(RuntimeException)
 
 //----- XDataDefinitionSupplier
 uno::Reference< XTablesSupplier > SAL_CALL FirebirdDriver::getDataDefinitionByConnection(
-                                    const uno::Reference< XConnection >& rxConnection)
+                                    const uno::Reference< XConnection >& rConnection)
     throw(SQLException, RuntimeException)
 {
-    (void) rxConnection;
-    // TODO: IMPLEMENT ME
-    return 0;
+    return uno::Reference< XTablesSupplier >(rConnection, UNO_QUERY);
 }
 
 uno::Reference< XTablesSupplier > SAL_CALL FirebirdDriver::getDataDefinitionByURL(
-                    const OUString& rsURL,
+                    const OUString& rURL,
                     const uno::Sequence< PropertyValue >& rInfo)
     throw(SQLException, RuntimeException)
 {
-    (void) rsURL;
-    (void) rInfo;
-    // TODO: IMPLEMENT ME
-    return 0;
+    uno::Reference< XConnection > xConnection = connect(rURL, rInfo);
+    return getDataDefinitionByConnection(xConnection);
 }
 
 namespace connectivity
