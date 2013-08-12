@@ -236,7 +236,7 @@ ScFormulaCfg::PropsToIds ScFormulaCfg::GetPropNamesToId()
     static sal_uInt16 aVals[] = { SCFORMULAOPT_GRAMMAR, SCFORMULAOPT_ENGLISH_FUNCNAME, SCFORMULAOPT_SEP_ARG, SCFORMULAOPT_SEP_ARRAY_ROW, SCFORMULAOPT_SEP_ARRAY_COL, SCFORMULAOPT_STRING_REF_SYNTAX, SCFORMULAOPT_EMPTY_STRING_AS_ZERO, SCFORMULAOPT_OOXML_RECALC, SCFORMULAOPT_ODF_RECALC, SCFORMULAOPT_OPENCL_ENABLED };
     OSL_ENSURE( SAL_N_ELEMENTS(aVals) == aPropNames.getLength(), "Properties and ids are out of Sync");
     PropsToIds aPropIdMap;
-    for ( sal_uInt16 i; i<aPropNames.getLength(); ++i )
+    for ( sal_uInt16 i=0; i<aPropNames.getLength(); ++i )
         aPropIdMap[aPropNames[i]] = aVals[ i ];
     return aPropIdMap;
 }
