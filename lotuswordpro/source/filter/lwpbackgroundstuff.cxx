@@ -87,7 +87,7 @@ void LwpBackgroundStuff::GetPattern(sal_uInt16 btPttnIndex, sal_uInt8* pPttnArra
     if (pPttnArray)
     {
         assert((2 < btPttnIndex) && (btPttnIndex < 72));
-        sal_uInt8* pTempArray = s_pLwpPatternTab[btPttnIndex];
+        const sal_uInt8* pTempArray = s_pLwpPatternTab[btPttnIndex];
         for(sal_uInt8 i = 0; i < 32; i++)
         {
             pPttnArray[i] = (i%4 == 0) ? pTempArray[7-i/4] : 0;

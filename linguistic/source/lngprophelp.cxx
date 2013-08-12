@@ -51,7 +51,7 @@ static const char *aCH[] =
     UPN_IS_USE_DICTIONARY_LIST,
 };
 
-static int nCHCount = sizeof(aCH) / sizeof(aCH[0]);
+static const int nCHCount = sizeof(aCH) / sizeof(aCH[0]);
 
 
 PropertyChgHelper::PropertyChgHelper(

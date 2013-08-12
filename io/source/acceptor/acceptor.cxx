@@ -311,7 +311,7 @@ namespace io_acceptor
 
 using namespace io_acceptor;
 
-static struct ImplementationEntry g_entries[] =
+static const struct ImplementationEntry g_entries[] =
 {
     {
         acceptor_CreateInstance, acceptor_getImplementationName ,

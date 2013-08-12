@@ -271,7 +271,7 @@ Sequence< OUString > OTextOutputStream::getSupportedServiceNames(void) throw()
 
 using namespace io_TextOutputStream;
 
-static struct ImplementationEntry g_entries[] =
+static const struct ImplementationEntry g_entries[] =
 {
     {
         TextOutputStream_CreateInstance, TextOutputStream_getImplementationName ,

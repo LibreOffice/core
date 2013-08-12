@@ -34,7 +34,7 @@ using namespace ::com::sun::star::registry;
 
 using namespace io_stm;
 
-static struct ImplementationEntry g_entries[] =
+static const struct ImplementationEntry g_entries[] =
 {
     {
         OPipeImpl_CreateInstance, OPipeImpl_getImplementationName ,

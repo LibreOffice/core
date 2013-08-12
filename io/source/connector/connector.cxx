@@ -216,7 +216,7 @@ namespace stoc_connector
 }
 using namespace stoc_connector;
 
-static struct ImplementationEntry g_entries[] =
+static const struct ImplementationEntry g_entries[] =
 {
     {
         connector_CreateInstance, connector_getImplementationName ,

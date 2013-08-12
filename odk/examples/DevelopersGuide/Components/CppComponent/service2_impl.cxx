@@ -175,7 +175,7 @@ Reference< XInterface > SAL_CALL create_MyService2Impl(
 /* shared lib exports implemented without helpers in service_impl1.cxx */
 namespace my_sc_impl
 {
-static struct ::cppu::ImplementationEntry s_component_entries [] =
+static const struct ::cppu::ImplementationEntry s_component_entries [] =
 {
     {
         create_MyService1Impl, getImplementationName_MyService1Impl,

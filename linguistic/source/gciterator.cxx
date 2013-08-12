@@ -76,7 +76,7 @@ static uno::Sequence< OUString > GrammarCheckingIterator_getSupportedServiceName
 
 
 // white space list: obtained from the fonts.config.txt of a Linux system.
-static sal_Unicode aWhiteSpaces[] =
+static const sal_Unicode aWhiteSpaces[] =
 {
     0x0020,   /* SPACE */
     0x00a0,   /* NO-BREAK SPACE */
@@ -128,7 +128,7 @@ static sal_Unicode aWhiteSpaces[] =
     0xfffb    /* INTERLINEAR ANNOTATION TERMINATOR */
 };
 
-static int nWhiteSpaces = sizeof( aWhiteSpaces ) / sizeof( aWhiteSpaces[0] );
+static const int nWhiteSpaces = sizeof( aWhiteSpaces ) / sizeof( aWhiteSpaces[0] );
 
 static bool lcl_IsWhiteSpace( sal_Unicode cChar )
 {
