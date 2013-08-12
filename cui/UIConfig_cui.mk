@@ -42,6 +42,7 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/optaccessibilitypage \
 	cui/uiconfig/ui/optadvancedpage \
 	cui/uiconfig/ui/optappearancepage \
+	cui/uiconfig/ui/optbasicidepage \
 	cui/uiconfig/ui/optbrowserpage \
 	cui/uiconfig/ui/optctlpage \
 	cui/uiconfig/ui/optemailpage \

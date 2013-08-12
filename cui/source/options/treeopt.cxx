@@ -50,6 +50,7 @@
 #include "optupdt.hxx"
 #include "personalization.hxx"
 #include "treeopt.hxx"
+#include "optbasic.hxx"
 
 #include <com/sun/star/awt/XContainerWindowEventHandler.hpp>
 #include <com/sun/star/awt/ContainerWindowProvider.hpp>
@@ -317,6 +318,7 @@ SfxTabPage* CreateGeneralTabPage( sal_uInt16 nId, Window* pParent, const SfxItem
         case RID_SVXPAGE_OPTIONS_JAVA:              fnCreate = &SvxJavaOptionsPage::Create ; break;
         case RID_SVXPAGE_ONLINEUPDATE:              fnCreate = &SvxOnlineUpdateTabPage::Create; break;
         case RID_OPTPAGE_CHART_DEFCOLORS:           fnCreate = &SvxDefaultColorOptPage::Create; break;
+        case RID_SVXPAGE_BASICIDE_OPTIONS:          fnCreate = &SvxBasicIDEOptionsPage::Create; break;
     }
 
     SfxTabPage* pRet = fnCreate ? (*fnCreate)( pParent, rSet ) : NULL;
@@ -347,6 +349,7 @@ static OptionsMapping_Impl const OptionsMap_Impl[] =
     { "ProductName",        "Appearance",           RID_SVXPAGE_COLORCONFIG },
     { "ProductName",        "Accessibility",        RID_SVXPAGE_ACCESSIBILITYCONFIG },
     { "ProductName",        "Java",                 RID_SVXPAGE_OPTIONS_JAVA },
+    { "ProductName",        "BasicIDEOptions",      RID_SVXPAGE_BASICIDE_OPTIONS },
     { "ProductName",        "OnlineUpdate",         RID_SVXPAGE_ONLINEUPDATE },
     { "LanguageSettings",   NULL,                   SID_LANGUAGE_OPTIONS },
     { "LanguageSettings",   "Languages",            OFA_TP_LANGUAGES  },

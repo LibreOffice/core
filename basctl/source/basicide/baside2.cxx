@@ -54,7 +54,6 @@
 #include <cassert>
 #include <basic/codecompletecache.hxx>
 #include <svtools/miscopt.hxx>
-#include "basicideoptionsdlg.hxx"
 
 namespace basctl
 {
@@ -1012,12 +1011,6 @@ void ModulWindow::ExecuteCommand (SfxRequest& rReq)
             rLayout.BasicRemoveWatch();
         }
         break;
-        case SID_BASICIDE_IDEOPTIONS:
-        {
-            boost::scoped_ptr< BasicIDEOptionsDlg > pDlg( new BasicIDEOptionsDlg( this ) );
-            pDlg->Execute();
-        }
-        break;
         case SID_CUT:
         {
             if ( !IsReadOnly() )
@@ -1164,15 +1157,6 @@ void ModulWindow::GetState( SfxItemSet &rSet )
                 rSet.Put(SfxBoolItem(nWh, bSourceLinesEnabled));
                 break;
             }
-            case SID_BASICIDE_IDEOPTIONS:
-            {
-                SvtMiscOptions aMiscOptions;
-                if( !aMiscOptions.IsExperimentalMode() )
-                {
-                    rSet.Put( SfxVisibilityItem(nWh, false) );
-                }
-            }
-            break;
         }
     }
 }
