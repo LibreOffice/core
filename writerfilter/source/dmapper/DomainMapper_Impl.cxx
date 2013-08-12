@@ -1605,9 +1605,9 @@ void DomainMapper_Impl::PushAnnotation()
         m_aTextAppendStack.push(TextAppendContext(uno::Reference< text::XTextAppend >( xAnnotationText, uno::UNO_QUERY_THROW ),
                     m_bIsNewDoc ? uno::Reference<text::XTextCursor>() : m_xBodyText->createTextCursorByRange(xAnnotationText->getStart())));
     }
-    catch( const uno::Exception& )
+    catch( const uno::Exception& rException)
     {
-        OSL_FAIL( "exception in PushAnnotation" );
+        SAL_WARN("writerfilter", "exception in PushAnnotation: " << rException.Message);
     }
 }
 
