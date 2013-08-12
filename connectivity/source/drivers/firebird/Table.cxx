@@ -10,6 +10,8 @@
 #include "Columns.hxx"
 #include "Table.hxx"
 
+#include <connectivity/TKeys.hxx>
+
 using namespace ::connectivity;
 using namespace ::connectivity::firebird;
 using namespace ::connectivity::sdbcx;
@@ -50,9 +52,11 @@ OCollection* Table::createColumns(const TStringVector& rNames)
 
 OCollection* Table::createKeys(const TStringVector& rNames)
 {
-    (void) rNames;
-    // TODO: IMPLEMENT ME
-    return 0;
+    // TODO: maybe add a wrapper here in case we the OKeysHelper isn't
+    // fully FB compatible.
+    return new OKeysHelper(this,
+                           m_rMutex,
+                           rNames);
 }
 
 OCollection* Table::createIndexes(const TStringVector& rNames)
