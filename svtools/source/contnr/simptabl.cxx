@@ -43,7 +43,7 @@ SvSimpleTableContainer::SvSimpleTableContainer(Window* pParent, WinBits nBits)
 extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvSimpleTableContainer(Window *pParent,
     VclBuilder::stringmap &)
 {
-    return new SvSimpleTableContainer(pParent, WB_TABSTOP);
+    return new SvSimpleTableContainer(pParent, WB_TABSTOP | WB_DIALOGCONTROL);
 }
 
 void SvSimpleTableContainer::SetTable(SvSimpleTable* pTable)
