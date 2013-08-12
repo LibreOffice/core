@@ -809,10 +809,10 @@ TextPaM TextEngine::ImpInsertText( const TextSelection& rCurSel, const OUString&
         if ( nEnd < aText.getLength() )
             aPaM = ImpInsertParaBreak( aPaM );
 
-        nStart = nEnd+1;
-
-        if ( nStart < nEnd )    // #108611# overflow
+        if ( nEnd == aText.getLength() )    // #108611# prevent overflow in "nStart = nEnd+1" calculation
             break;
+
+        nStart = nEnd+1;
     }
 
     UndoActionEnd();
