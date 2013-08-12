@@ -1062,7 +1062,7 @@ diff -u misc/Python-2.7.5/PCbuild/make_versioninfo.vcproj misc/build/Python-2.7.
 diff -u misc/Python-2.7.5/PCbuild/pcbuild.sln misc/build/Python-2.7.5/PCbuild/pcbuild.sln
 --- misc/Python-2.7.5/PCbuild/pcbuild.sln	2012-04-09 18:07:35.000000000 -0500
 +++ misc/build/Python-2.7.5/PCbuild/pcbuild.sln	2012-07-30 21:04:33.000000000 -0500
-@@ -38,17 +38,17 @@
+@@ -38,12 +38,12 @@
  		{CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26} = {CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26}
  	EndProjectSection
  EndProject
@@ -1072,23 +1072,13 @@ diff -u misc/Python-2.7.5/PCbuild/pcbuild.sln misc/build/Python-2.7.5/PCbuild/pc
 -		{CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26} = {CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26}
 -	EndProjectSection
 -EndProject
--Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "_ctypes", "_ctypes.vcproj", "{0E9791DB-593A-465F-98BC-681011311618}"
--	ProjectSection(ProjectDependencies) = postProject
--		{CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26} = {CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26}
--	EndProjectSection
--EndProject
 +#Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "_bsddb", "_bsddb.vcproj", "{B4D38F3F-68FB-42EC-A45D-E00657BB3627}"
 +#	ProjectSection(ProjectDependencies) = postProject
 +#		{6DE10744-E396-40A5-B4E2-1B69AA7C8D31} = {6DE10744-E396-40A5-B4E2-1B69AA7C8D31}
 +#		{CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26} = {CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26}
 +#	EndProjectSection
 +#EndProject
-+#Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "_ctypes", "_ctypes.vcproj", "{0E9791DB-593A-465F-98BC-681011311618}"
-+#	ProjectSection(ProjectDependencies) = postProject
-+#		{CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26} = {CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26}
-+#	EndProjectSection
-+#EndProject
- Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "_ctypes_test", "_ctypes_test.vcproj", "{9EC7190A-249F-4180-A900-548FDCF3055F}"
+ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "_ctypes", "_ctypes.vcproj", "{0E9791DB-593A-465F-98BC-681011311618}"
  	ProjectSection(ProjectDependencies) = postProject
  		{CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26} = {CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26}
 @@ -69,12 +69,12 @@
