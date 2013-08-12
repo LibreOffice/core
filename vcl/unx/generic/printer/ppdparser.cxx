@@ -1048,7 +1048,7 @@ void PPDParser::parse( ::std::list< OString >& rLines )
             aOption = GetCommandLineToken( 1, aOption );
             sal_Int32 nTransPos = aOption.indexOf( '/' );
             if( nTransPos != -1 )
-                aOption = aOption.replaceAt( nTransPos, 1, "" );
+                aOption = aOption.copy(0,  nTransPos);
         }
 
         PPDValueType eType = eNo;
@@ -1194,7 +1194,7 @@ void PPDParser::parse( ::std::list< OString >& rLines )
             sal_Int32 nPos = aKey.indexOf( ':' );
             if( nPos != -1 )
             {
-                aKey = aKey.replaceAt( nPos, 1, "" );
+                aKey = aKey.copy(0, nPos);
                 OUString aOption(OStringToOUString(
                     WhitespaceToSpace(aLine.copy(nPos+9)),
                     RTL_TEXTENCODING_MS_1252));
