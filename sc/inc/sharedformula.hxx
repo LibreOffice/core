@@ -34,7 +34,7 @@ public:
         for (++it; it != itEnd; ++it, pPrev = pCur)
         {
             pCur = *it;
-            ScFormulaCell::CompareState eState = pPrev->CompareByTokenArray(*pPrev);
+            ScFormulaCell::CompareState eState = pCur->CompareByTokenArray(*pPrev);
             if (eState == ScFormulaCell::NotEqual)
                 continue;
 
