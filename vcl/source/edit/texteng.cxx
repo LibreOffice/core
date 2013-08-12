@@ -793,9 +793,6 @@ TextPaM TextEngine::ImpInsertText( const TextSelection& rCurSel, const OUString&
         // Start == End => empty line
         if ( nEnd > nStart )
         {
-            sal_uLong nL = aPaM.GetIndex();
-            nL += ( nEnd-nStart );
-
             OUString aLine(aText.copy(nStart, nEnd-nStart));
             if ( IsUndoEnabled() && !IsInUndo() )
                 InsertUndo( new TextUndoInsertChars( this, aPaM, aLine ) );
