@@ -106,7 +106,7 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     EditableTableViewCell *cell = (EditableTableViewCell *)[[self tableView]
-                                                            cellForRowAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:0]];
+                                                            cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
     
     [[cell textField] becomeFirstResponder];
 }
