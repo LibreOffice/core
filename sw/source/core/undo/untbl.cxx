@@ -1411,7 +1411,9 @@ SwUndoTblAutoFmt::SwUndoTblAutoFmt( const SwTableNode& rTblNd )
     nSttNode( rTblNd.GetIndex() ),
     m_nRepeatHeading(rTblNd.GetTable().GetRowsToRepeat())
 {
-    pSaveFmt = (SwTableFmt*)rTblNd.GetTable().GetTableFmt()->GetRegisteredIn();
+    SwTableFmt* pSaveFmt = (SwTableFmt*)rTblNd.GetTable().GetTableFmt()->GetRegisteredIn();
+    if( pSaveFmt )
+        sSaveFmtName = pSaveFmt->GetName();
 }
 
 void
@@ -1422,13 +1424,26 @@ SwUndoTblAutoFmt::UndoRedo(bool const bUndo, ::sw::UndoRedoContext & rContext)
     OSL_ENSURE( pTblNd, "no TableNode" );
 
     SwTable& table = pTblNd->GetTable();
-    SwTableFmt* pOrig = (SwTableFmt*)table.GetTableFmt()->GetRegisteredIn();
+    String sOrigFmtName;
+    SwTableFmt* pStyle;
+    SwTableFmt* pSaveFmt = (SwTableFmt*)pTblNd->GetTable().GetTableFmt()->GetRegisteredIn();
+    if( pSaveFmt )
+        sOrigFmtName = pSaveFmt->GetName();
+    else
+        sOrigFmtName = UniString::EmptyString();
 
     if( bUndo )
         table.SetRowsToRepeat( m_nRepeatHeading );
 
-    SwTableFmt::RestoreTableProperties( pSaveFmt, table );
-    pSaveFmt = pOrig;
+    if( !sSaveFmtName.Len() )
+        SwTableFmt::RestoreTableProperties( NULL, table );
+    else
+    {
+        pStyle = rDoc.FindTblFmtByName( sSaveFmtName, sal_True );
+        SwTableFmt::RestoreTableProperties( pStyle, table );
+    }
+
+    sSaveFmtName = sOrigFmtName;
 }
 
 void SwUndoTblAutoFmt::UndoImpl(::sw::UndoRedoContext & rContext)

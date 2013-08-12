@@ -846,7 +846,7 @@ SwTableAutoFmt* SwTableAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVe
         // ideal, the table styles are created with the document
         SwTableFmt* pStyle = pDoc->FindTblFmtByName(aName);
         if ( !pStyle )
-            pStyle = pDoc->MakeTblFrmFmt(aName, NULL);
+            pStyle = pDoc->MakeTblFrmFmt( aName, pDoc->GetDfltFrmFmt() );
         pRet = new SwTableAutoFmt( aName, pStyle );
 
         pRet->nStrResId = nStrResId;
@@ -967,7 +967,7 @@ SwTableAutoFmtTbl::SwTableAutoFmtTbl(SwDoc* pDoc)
     sNm = SwStyleNameMapper::GetUIName( RES_POOLCOLL_STANDARD, sNm );
     SwTableFmt* pStyle = pDoc->FindTblFmtByName(sNm);
     if ( !pStyle )
-        pStyle = pDoc->MakeTblFrmFmt(sNm, NULL);
+        pStyle = pDoc->MakeTblFrmFmt( sNm, pDoc->GetDfltFrmFmt() );
     SwTableAutoFmt* pNewTableAutoFmt = new SwTableAutoFmt( sNm, pStyle );
 
     SwTableBoxFmt* pNewBoxFmt = pDoc->MakeTableBoxFmt();

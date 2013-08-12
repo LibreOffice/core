@@ -250,7 +250,7 @@ void SwTableFmt::RestoreTableProperties( SwTableFmt* pSrcFmt, SwTable &rTable )
         bRowSplit = pSrcFmt->GetRowSplit();
         nRepeatHeading = pSrcFmt->GetRepeatHeading();
     }
-    else
+    else if( pTableStyle )
         pTableStyle->Remove( pHardFmt );
 
     AssignFormatParents( pSrcFmt, rTable );

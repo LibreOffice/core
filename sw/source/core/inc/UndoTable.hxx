@@ -147,7 +147,8 @@ class SwUndoTblNumFmt;
 class SwUndoTblAutoFmt : public SwUndo
 {
     sal_uLong nSttNode;
-    SwTableFmt* pSaveFmt;
+    String sSaveFmtName;
+    //String sEmptyStr;
     sal_uInt16 m_nRepeatHeading;
 
     void UndoRedo(bool const bUndo, ::sw::UndoRedoContext & rContext);
