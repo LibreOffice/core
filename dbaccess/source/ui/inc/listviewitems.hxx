@@ -37,7 +37,7 @@ namespace dbaui
         sal_Bool    m_bEmphasized;
 
     public:
-        OBoldListboxString(SvTreeListEntry* _pEntry, sal_uInt16 _nFlags, const XubString& _rStr)
+        OBoldListboxString(SvTreeListEntry* _pEntry, sal_uInt16 _nFlags, const OUString& _rStr)
             :SvLBoxString(_pEntry, _nFlags, _rStr)
             ,m_bEmphasized(sal_False)
         {

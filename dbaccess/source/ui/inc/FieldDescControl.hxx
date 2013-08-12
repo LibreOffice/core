@@ -102,8 +102,8 @@ namespace dbaui
 
         TOTypeInfoSP            m_pPreviousType;
         short                   m_nPos;
-        XubString               aYes;
-        XubString               aNo;
+        OUString                aYes;
+        OUString                aNo;
 
         long                    m_nOldVThumb;
         long                    m_nOldHThumb;

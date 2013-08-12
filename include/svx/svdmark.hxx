@@ -168,9 +168,9 @@ class SVX_DLLPUBLIC SdrMarkList
 protected:
     std::vector<SdrMark*>                               maList;
 
-    String                                              maMarkName;
-    String                                              maPointName;
-    String                                              maGluePointName;
+    OUString                                            maMarkName;
+    OUString                                            maPointName;
+    OUString                                            maGluePointName;
 
     sal_Bool                                            mbPointNameOk;
     sal_Bool                                            mbGluePointNameOk;
@@ -182,7 +182,7 @@ private:
     SVX_DLLPRIVATE void ImpForceSort();
 
 private:
-    SVX_DLLPRIVATE const XubString& GetPointMarkDescription(sal_Bool bGlue) const;
+    SVX_DLLPRIVATE const OUString& GetPointMarkDescription(sal_Bool bGlue) const;
 
 public:
     SdrMarkList()
@@ -235,13 +235,13 @@ public:
 
     // A verbal description of selected objects e.g.:
     // "27 Lines", "12 Objects", "Polygon" or even "Not an object"
-    const String& GetMarkDescription() const;
-    const String& GetPointMarkDescription() const
+    const OUString& GetMarkDescription() const;
+    const OUString& GetPointMarkDescription() const
     {
         return GetPointMarkDescription(sal_False);
     }
 
-    const String& GetGluePointMarkDescription() const
+    const OUString& GetGluePointMarkDescription() const
     {
         return GetPointMarkDescription(sal_True);
     }

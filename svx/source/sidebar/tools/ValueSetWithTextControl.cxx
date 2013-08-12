@@ -88,8 +88,8 @@ ValueSetWithTextControl::~ValueSetWithTextControl(void)
 void ValueSetWithTextControl::AddItem(
     const Image& rItemImage,
     const Image* pSelectedItemImage,
-    const XubString& rItemText,
-    const XubString* pItemHelpText )
+    const OUString& rItemText,
+    const OUString* pItemHelpText )
 {
     if ( meControlType != IMAGE_TEXT )
     {
@@ -112,9 +112,9 @@ void ValueSetWithTextControl::AddItem(
 
 
 void ValueSetWithTextControl::AddItem(
-    const XubString& rItemText,
-    const XubString& rItemText2,
-    const XubString* pItemHelpText )
+    const OUString& rItemText,
+    const OUString& rItemText2,
+    const OUString* pItemHelpText )
 {
     if ( meControlType != TEXT_TEXT )
     {

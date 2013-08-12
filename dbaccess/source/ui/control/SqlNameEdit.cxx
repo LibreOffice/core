@@ -38,18 +38,18 @@ namespace dbaui
         sal_Bool bCorrected = sal_False;
         if ( m_bCheck )
         {
-            XubString sText         = _sToCheck;
-            xub_StrLen nMatch       = 0;
-            for ( xub_StrLen i=nMatch;i < sText.Len(); ++i )
+            OUString sText = _sToCheck;
+            sal_Int32 nMatch = 0;
+            for (sal_Int32 i = nMatch; i < sText.getLength(); ++i)
             {
-                if ( !isCharOk( sText.GetBuffer()[i], i == 0, m_bOnlyUpperCase, m_sAllowedChars ) )
+                if ( !isCharOk( sText[i], i == 0, m_bOnlyUpperCase, m_sAllowedChars ) )
                 {
-                    _rsCorrected += sText.Copy( nMatch, i - nMatch );
+                    _rsCorrected += sText.copy(nMatch, i - nMatch);
                     bCorrected = sal_True;
                     nMatch = i + 1;
                 }
             }
-            _rsCorrected += sText.Copy( nMatch, sText.Len() - nMatch );
+            _rsCorrected += sText.copy( nMatch, sText.getLength() - nMatch );
         }
         return bCorrected;
     }

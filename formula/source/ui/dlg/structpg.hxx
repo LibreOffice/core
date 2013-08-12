@@ -52,7 +52,7 @@ public:
 
     /** Inserts an entry with static image (no difference between collapsed/expanded). */
     SvTreeListEntry*    InsertStaticEntry(
-                        const XubString& rText,
+                        const OUString& rText,
                         const Image& rEntryImg,
                         SvTreeListEntry* pParent = NULL,
                         sal_uLong nPos = LIST_APPEND,

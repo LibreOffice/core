@@ -61,7 +61,6 @@ private:
     ValueSetWithTextControl maVSSpacing;
 
     FixedText           maLastCus;
-//  Control             maBorder;
 
     FixedText           maFTSpacing;
     ListBox             maLBKerning;
@@ -70,16 +69,16 @@ private:
 
     Image*              mpImg;
     Image*              mpImgSel;
-    XubString*          mpStr;
-    XubString*          mpStrTip;
+    OUString*           mpStr;
+    OUString*           mpStrTip;
 
     Image               maImgCus;
     Image               maImgCusGrey;
-    XubString           maStrCus;
-    XubString           maStrCusE;      //add
-    XubString           maStrCusC;      //add
-    XubString           maStrCusN;      //add
-    XubString           maStrUnit;      //add
+    OUString            maStrCus;
+    OUString            maStrCusE;
+    OUString            maStrCusC;
+    OUString            maStrCusN;
+    OUString            maStrUnit;
 
     long                mnCustomKern;
     short               mnLastCus;

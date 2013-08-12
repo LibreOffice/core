@@ -126,13 +126,13 @@ void ParaLineSpacingControl::initial()
     mpImgSel[2] = maSelSpacing15;
     mpImgSel[3] = maSelSpacing2;
 
-    mpStr = new XubString[4];
+    mpStr = new OUString[4];
     mpStr[0] = SVX_RESSTR(STR_SPACING1);
     mpStr[1] = SVX_RESSTR(STR_SPACING115);
     mpStr[2] = SVX_RESSTR(STR_SPACING15);
     mpStr[3] = SVX_RESSTR(STR_SPACING2);
 
-    mpStrTip = new XubString[4];
+    mpStrTip = new OUString[4];
     mpStrTip[0] = SVX_RESSTR(STR_LS_SINGLE);
     mpStrTip[1] = SVX_RESSTR(STR_LS_115);
     mpStrTip[2] = SVX_RESSTR(STR_LS_15);

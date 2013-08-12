@@ -167,14 +167,14 @@ void PageMarginControl::FillValueSet(
     const bool bLandscape,
     const bool bUserCustomValuesAvailable )
 {
-    const XubString aLeft = SW_RES(STR_MARGIN_TOOLTIP_LEFT);
-    const XubString aRight = SW_RES(STR_MARGIN_TOOLTIP_RIGHT);
-    const XubString aTop = SW_RES(STR_MARGIN_TOOLTIP_TOP);
-    const XubString aBottom = SW_RES(STR_MARGIN_TOOLTIP_BOT);
+    const OUString aLeft = SW_RESSTR(STR_MARGIN_TOOLTIP_LEFT);
+    const OUString aRight = SW_RESSTR(STR_MARGIN_TOOLTIP_RIGHT);
+    const OUString aTop = SW_RESSTR(STR_MARGIN_TOOLTIP_TOP);
+    const OUString aBottom = SW_RESSTR(STR_MARGIN_TOOLTIP_BOT);
 
     SetMetricValue( maWidthHeightField, SWPAGE_NARROW_VALUE, meUnit );
-    const XubString aNarrowValText = maWidthHeightField.GetText();
-    XubString aHelpText = aLeft;
+    const OUString aNarrowValText = maWidthHeightField.GetText();
+    OUString aHelpText = aLeft;
     aHelpText += aNarrowValText;
     aHelpText += aRight;
     aHelpText += aNarrowValText;
@@ -184,10 +184,10 @@ void PageMarginControl::FillValueSet(
     aHelpText += aNarrowValText;
     mpMarginValueSet->AddItem(
         (bLandscape ? SW_RES(IMG_NARROW_L) : SW_RES(IMG_NARROW) ), 0,
-        SW_RES(STR_NARROW), &aHelpText );
+        SW_RESSTR(STR_NARROW), &aHelpText );
 
     SetMetricValue( maWidthHeightField, SWPAGE_NORMAL_VALUE, meUnit );
-    const XubString aNormalValText = maWidthHeightField.GetText();
+    const OUString aNormalValText = maWidthHeightField.GetText();
     aHelpText = aLeft;
     aHelpText += aNormalValText;
     aHelpText += aRight;
@@ -198,12 +198,12 @@ void PageMarginControl::FillValueSet(
     aHelpText += aNormalValText;
     mpMarginValueSet->AddItem(
         (bLandscape ? SW_RES(IMG_NORMAL_L) : SW_RES(IMG_NORMAL) ), 0,
-        SW_RES(STR_NORMAL), &aHelpText );
+        SW_RESSTR(STR_NORMAL), &aHelpText );
 
     SetMetricValue( maWidthHeightField, SWPAGE_WIDE_VALUE1, meUnit );
-    const XubString aWide1ValText = maWidthHeightField.GetText();
+    const OUString aWide1ValText = maWidthHeightField.GetText();
     SetMetricValue( maWidthHeightField, SWPAGE_WIDE_VALUE2, meUnit );
-    const XubString aWide2ValText = maWidthHeightField.GetText();
+    const OUString aWide2ValText = maWidthHeightField.GetText();
     aHelpText = aLeft;
     aHelpText += aWide2ValText;
     aHelpText += aRight;
@@ -214,13 +214,13 @@ void PageMarginControl::FillValueSet(
     aHelpText += aWide1ValText;
     mpMarginValueSet->AddItem(
         (bLandscape ? SW_RES(IMG_WIDE_L) : SW_RES(IMG_WIDE) ), 0,
-        SW_RES(STR_WIDE), &aHelpText );
+        SW_RESSTR(STR_WIDE), &aHelpText );
 
-    const XubString aInner = SW_RES(STR_MARGIN_TOOLTIP_INNER);
-    const XubString aOuter = SW_RES(STR_MARGIN_TOOLTIP_OUTER);
+    const OUString aInner = SW_RESSTR(STR_MARGIN_TOOLTIP_INNER);
+    const OUString aOuter = SW_RESSTR(STR_MARGIN_TOOLTIP_OUTER);
 
     SetMetricValue( maWidthHeightField, SWPAGE_WIDE_VALUE3, meUnit );
-    const XubString aWide3ValText = maWidthHeightField.GetText();
+    const OUString aWide3ValText = maWidthHeightField.GetText();
     aHelpText = aInner;
     aHelpText += aWide3ValText;
     aHelpText += aOuter;
@@ -231,7 +231,7 @@ void PageMarginControl::FillValueSet(
     aHelpText += aWide1ValText;
     mpMarginValueSet->AddItem(
         (bLandscape ? SW_RES(IMG_MIRRORED_L) : SW_RES(IMG_MIRRORED) ), 0,
-        SW_RES(STR_MIRRORED), &aHelpText );
+        SW_RESSTR(STR_MIRRORED), &aHelpText );
 
     if ( bUserCustomValuesAvailable )
     {
@@ -254,7 +254,7 @@ void PageMarginControl::FillValueSet(
     }
     mpMarginValueSet->AddItem(
         (bUserCustomValuesAvailable ? SW_RES(IMG_CUSTOM) : SW_RES(IMG_CUSTOM_DIS) ), 0,
-        SW_RES(STR_LCVALUE), &aHelpText );
+        SW_RESSTR(STR_LCVALUE), &aHelpText );
 }
 
 

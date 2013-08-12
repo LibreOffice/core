@@ -78,8 +78,8 @@ public:
     void AddItem(
         const Image& rItemImage,
         const Image* pSelectedItemImage,
-        const XubString& rItemText,
-        const XubString* pItemHelpText );
+        const OUString& rItemText,
+        const OUString* pItemHelpText );
 
     // replace item images for control type IMAGE_TEXT
     void ReplaceItemImages(
@@ -92,9 +92,9 @@ public:
     // @param pItemHelpText
     // help text is optional. if not provided, it is the same as the item text
     void AddItem(
-        const XubString& rItemText,
-        const XubString& rItemText2,
-        const XubString* pItemHelpText );
+        const OUString& rItemText,
+        const OUString& rItemText2,
+        const OUString* pItemHelpText );
 
     virtual void UserDraw( const UserDrawEvent& rUDEvt );
 
@@ -103,8 +103,8 @@ private:
     {
         Image maItemImage;
         Image maSelectedItemImage;
-        XubString maItemText;
-        XubString maItemText2;
+        OUString maItemText;
+        OUString maItemText2;
     };
 
     typedef ::std::vector< ValueSetWithTextItem > tItemList;

@@ -59,7 +59,7 @@ public:
     void                SetRefValid(bool bValid);
 
     using Edit::SetText;
-    virtual void        SetText( const XubString& rStr );
+    void                SetText( const OUString& rStr );
     virtual void        Modify();
 
     void                StartUpdateData();

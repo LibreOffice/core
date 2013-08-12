@@ -45,7 +45,7 @@ StructListBox::StructListBox(Window* pParent, const ResId& rResId ):
 }
 
 SvTreeListEntry* StructListBox::InsertStaticEntry(
-        const XubString& rText,
+        const OUString& rText,
         const Image& rEntryImg,
         SvTreeListEntry* pParent, sal_uLong nPos, IFormulaToken* pToken )
 {

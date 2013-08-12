@@ -896,7 +896,7 @@ void RefEdit::SetRefValid(bool bValid)
     }
 }
 
-void RefEdit::SetText( const XubString& rStr )
+void RefEdit::SetText(const OUString& rStr)
 {
     Edit::SetText( rStr );
     UpdateHdl( &aTimer );

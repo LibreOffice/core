@@ -88,12 +88,12 @@ private:
     Image  maSelSelHanging;
     Image               maImgCus;
     Image               maImgCusGrey;
-    XubString           maStrCus;
+    OUString            maStrCus;
 
     Image*              mpImg;
     Image*              mpImgSel;
-    XubString*          mpStr;
-    XubString*          mpStrTip;
+    OUString*           mpStr;
+    OUString*           mpStrTip;
     String              maLine;
     String              maOf;
 

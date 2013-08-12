@@ -540,7 +540,7 @@ sal_Bool SdrMarkList::InsertPageView(const SdrPageView& rPV)
     return bChgd;
 }
 
-const XubString& SdrMarkList::GetMarkDescription() const
+const OUString& SdrMarkList::GetMarkDescription() const
 {
     sal_uLong nAnz(GetMarkCount());
 
@@ -563,7 +563,7 @@ const XubString& SdrMarkList::GetMarkDescription() const
 
         if(!nAnz)
         {
-            ((SdrMarkList*)(this))->maMarkName = ImpGetResStr(STR_ObjNameNoObj);
+            const_cast<SdrMarkList*>(this)->maMarkName = ImpGetResStr(STR_ObjNameNoObj);
         }
         else if(1L == nAnz)
         {
@@ -596,17 +596,17 @@ const XubString& SdrMarkList::GetMarkDescription() const
             aNam.Insert(OUString::number( nAnz ), 0);
         }
 
-        ((SdrMarkList*)(this))->maMarkName = aNam;
-        ((SdrMarkList*)(this))->mbNameOk = sal_True;
+        const_cast<SdrMarkList*>(this)->maMarkName = aNam;
+        const_cast<SdrMarkList*>(this)->mbNameOk = sal_True;
     }
 
     return maMarkName;
 }
 
-const XubString& SdrMarkList::GetPointMarkDescription(sal_Bool bGlue) const
+const OUString& SdrMarkList::GetPointMarkDescription(sal_Bool bGlue) const
 {
     sal_Bool& rNameOk = (sal_Bool&)(bGlue ? mbGluePointNameOk : mbPointNameOk);
-    XubString& rName = (XubString&)(bGlue ? maGluePointName : maPointName);
+    OUString& rName = const_cast<OUString&>(bGlue ? maGluePointName : maPointName);
     sal_uLong nMarkAnz(GetMarkCount());
     sal_uLong nMarkPtAnz(0L);
     sal_uLong nMarkPtObjAnz(0L);
@@ -650,7 +650,7 @@ const XubString& SdrMarkList::GetPointMarkDescription(sal_Bool bGlue) const
 
     if(!nMarkPtObjAnz)
     {
-        rName.Erase();
+        rName = OUString();
         rNameOk = sal_True;
     }
     else if(!rNameOk)

@@ -111,7 +111,7 @@ void TextCharacterSpacingControl::initial()
     mpImgSel[3] = Image(SVX_RES(IMG_LOOSE_S));
     mpImgSel[4] = Image(SVX_RES(IMG_VERY_LOOSE_S));
 
-    mpStr = new XubString[5];
+    mpStr = new OUString[5];
     mpStr[0] = SVX_RESSTR(STR_VERY_TIGHT);
     mpStr[1] = SVX_RESSTR(STR_TIGHT);
     mpStr[2] = SVX_RESSTR(STR_NORMAL);
@@ -119,7 +119,7 @@ void TextCharacterSpacingControl::initial()
     mpStr[4] = SVX_RESSTR(STR_VERY_LOOSE);
 
 
-    mpStrTip = new XubString[5];
+    mpStrTip = new OUString[5];
     mpStrTip[0] = SVX_RESSTR(STR_VERY_TIGHT_TIP);
     mpStrTip[1] = SVX_RESSTR(STR_TIGHT_TIP);
     mpStrTip[2] = SVX_RESSTR(STR_NORMAL_TIP);
