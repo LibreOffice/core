@@ -122,7 +122,8 @@
 #define PROPERTY_MAP_FLDTYP_DOCINFO_CUSTOM              97
 #define PROPERTY_MAP_METAFIELD                          98
 #define PROPERTY_MAP_ACCESSIBILITY_TEXT_ATTRIBUTE       99
-#define PROPERTY_MAP_END                                100
+#define PROPERTY_MAP_POSITIONAL_TAB                     100
+#define PROPERTY_MAP_END                                101
 
 //S&E
 #define WID_WORDS                0

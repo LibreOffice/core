@@ -45,6 +45,11 @@
 #define MID_TABSTOPS            0
 #define MID_STD_TAB             1
 
+// SvxPositionalTabItem
+#define MID_PTAB_ALIGNMENT      0
+#define MID_PTAB_LEADER         1
+#define MID_PTAB_RELATIVE_TO    2
+
 //SvxHyphenZoneItem
 #define MID_IS_HYPHEN           0
 #define MID_HYPHEN_MIN_LEAD     1

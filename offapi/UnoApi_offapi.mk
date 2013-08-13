@@ -3550,6 +3550,9 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/style,\
 	PageStyleLayout \
 	ParagraphAdjust \
 	ParagraphStyleCategory \
+	PositionalTab \
+	PositionalTabAlign \
+	PositionalTabRelativeTo \
 	TabAlign \
 	TabStop \
 	VerticalAlignment \

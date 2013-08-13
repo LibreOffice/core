@@ -55,6 +55,7 @@
 #include <editeng/paravertalignitem.hxx>
 #include <editeng/pbinitem.hxx>
 #include <editeng/pgrditem.hxx>
+#include <editeng/PositionalTabItem.hxx>
 #include <editeng/prntitem.hxx>
 #include <editeng/protitem.hxx>
 #include <editeng/prszitem.hxx>
@@ -304,6 +305,7 @@ SfxItemInfo aSlotTab[] =
     { 0, 0 },                                           // RES_TXTATR_FIELD
     { 0, 0 },                                           // RES_TXTATR_FLYCNT
     { 0, 0 },                                           // RES_TXTATR_FTN
+    { 0, 0 },                                           // RES_TXTATR_PTAB
     { 0, SFX_ITEM_POOLABLE },                           // RES_TXTATR_DUMMY4
     { 0, SFX_ITEM_POOLABLE },                           // RES_TXTATR_DUMMY3
     { 0, SFX_ITEM_POOLABLE },                           // RES_TXTATR_DUMMY1
@@ -512,6 +514,7 @@ void _InitCore()
     aAttrTab[ RES_TXTATR_FIELD- POOLATTR_BEGIN ] =          new SwFmtFld;
     aAttrTab[ RES_TXTATR_FLYCNT - POOLATTR_BEGIN ] =        new SwFmtFlyCnt( 0 );
     aAttrTab[ RES_TXTATR_FTN - POOLATTR_BEGIN ] =           new SwFmtFtn;
+    aAttrTab[ RES_TXTATR_PTAB - POOLATTR_BEGIN ] =          new SvxPositionalTabItem( RES_TXTATR_PTAB );
 
 // TextAttr - Dummies
     aAttrTab[ RES_TXTATR_DUMMY1 - POOLATTR_BEGIN ] =        new SfxBoolItem( RES_TXTATR_DUMMY1 );

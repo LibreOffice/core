@@ -98,6 +98,7 @@
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/style/GraphicLocation.hpp>
 #include <com/sun/star/style/VerticalAlignment.hpp>
+#include <com/sun/star/style/PositionalTab.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
@@ -222,6 +223,7 @@ namespace comphelper
             case CPPUTYPE_LINESTYLE:        pType = &::getCppuType( (drawing::LineStyle*)0 ); break;
             case CPPUTYPE_FILLSTYLE:        pType = &::getCppuType( (drawing::FillStyle*)0 ); break;
             case CPPUTYPE_GRADIENT:         pType = &::getCppuType( (awt::Gradient*)0 ); break;
+            case CPPUTYPE_POSITIONALTAB:    pType = &::getCppuType( (style::PositionalTab*)0 ); break;
             default:
                 OSL_FAIL( "Unknown CPPU type" );
         }
