@@ -14,4 +14,5 @@
 
 @property (strong, nonatomic) IBOutlet UITableView *serverTable;
 
+- (void) startSearching;
 @end

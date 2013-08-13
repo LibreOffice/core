@@ -71,6 +71,7 @@
                                                             otherButtonTitles:NSLocalizedString(@"Help", nil), nil];
                     [message show];
                 });
+                [(server_list_vc *)self.delegate startSearching];
             } else {
                 [[self.delegate navigationController] popToRootViewControllerAnimated:YES];
                 BasePresentationViewController *bpvc = [[(MainSplitViewController *)[self.delegate presentingViewController] viewControllers] objectAtIndex:1];

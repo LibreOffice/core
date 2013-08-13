@@ -24,8 +24,8 @@
 @property (nonatomic, strong) id slideShowPreviewStartObserver;
 @property (nonatomic, strong) id pinValidationObserver;
 @property (atomic, strong) NSIndexPath *lastSpinningCellIndex;
-
 @property (nonatomic, strong) NSNetServiceBrowser *serviceBrowser;
+
 @property (nonatomic, strong) NSTimer *searchLabelTimer;
 @property (nonatomic, strong) NSTimer *searchTimeoutTimer;
 @property (nonatomic, strong) NSString *searchStateText;
@@ -46,6 +46,13 @@
 @synthesize serviceBrowser = _serviceBrowser;
 
 #pragma mark - helper
+- (void) startSearching
+{
+    [self.comManager.autoDiscoveryServers removeAllObjects];
+    [self.serviceBrowser searchForServicesOfType:@"_impressremote._tcp" inDomain:@"local"];
+    [self.serviceBrowser scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+}
+
 - (void) setSearchStateText:(NSString *)searchStateText
 {
     _searchStateText = searchStateText;
@@ -75,6 +82,9 @@
 -(void) netService:(NSNetService *)sender didNotResolve:(NSDictionary *)errorDict
 {
     NSLog(@"Failed to resolve");
+    [self.comManager.autoDiscoveryServers removeAllObjects];
+    [self startSearching];
+    
     UIAlertView *message = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Failed to reach your computer", nil)
                                                       message:NSLocalizedString(@"Please consider restart LibreOffice Impress on your computer.", nil)
                                                      delegate:self
@@ -140,7 +150,6 @@
 - (void)netServiceBrowser:(NSNetServiceBrowser *)aNetServiceBrowser didNotSearch:(NSDictionary *)errorDict
 {
     NSLog(@"search error");
-//    [self.serviceBrowser searchForServicesOfType:@"_impressRemote._tcp" inDomain:@"local"];
 }
 
 - (void)netServiceBrowser:(NSNetServiceBrowser *)aNetServiceBrowser
@@ -158,6 +167,9 @@
     if(!moreComing)
     {
         [self.tableView reloadData];
+        [self.serviceBrowser stop];
+        [self.searchTimeoutTimer invalidate];
+        [self.searchLabelTimer invalidate];
     }
 }
 
@@ -245,8 +257,7 @@
     [self.serverTable reloadData];
     self.serviceBrowser = [[NSNetServiceBrowser alloc] init];
     [self.serviceBrowser setDelegate:self];
-    [self.serviceBrowser searchForServicesOfType:@"_impressremote._tcp" inDomain:@"local"];
-    [self.serviceBrowser scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+    [self startSearching];
     [super viewDidAppear:animated];
 }
 
@@ -299,8 +310,7 @@
     if ([self.comManager.autoDiscoveryServers count] == 0 && indexPath.section == 0){
         // No discovered server and not searching => in a "click to refresh" state, so we restart searching process
         if (self.comManager.searchState == WAITING){
-            [self.serviceBrowser searchForServicesOfType:@"_impressremote._tcp" inDomain:@"local"];
-            [self.serviceBrowser scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+            [self startSearching];
         }
         // Return when browser is still searching...
         return;
