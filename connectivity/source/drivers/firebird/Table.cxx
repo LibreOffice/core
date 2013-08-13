@@ -39,6 +39,7 @@ Table::Table(Tables* pTables,
                  ""),
     m_rMutex(rMutex)
 {
+    OTableHelper::construct();
 }
 
 //----- OTableHelper ---------------------------------------------------------
