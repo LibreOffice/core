@@ -121,7 +121,7 @@ public:
     virtual void setTitle(const OUString& _sTitle);
     virtual void enableConfirmSettings( bool _bEnable );
     virtual sal_Bool saveDatasource();
-    virtual String  getStateDisplayName( WizardState _nState ) const;
+    virtual OUString getStateDisplayName( WizardState _nState ) const;
 
     /** returns <TRUE/> if the database should be opened, otherwise <FALSE/>.
     */

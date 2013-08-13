@@ -273,7 +273,7 @@ namespace svt
     }
 
     //--------------------------------------------------------------------
-    void RoadmapWizard::describeState( WizardState _nState, const String& _rStateDisplayName, RoadmapPageFactory _pPageFactory )
+    void RoadmapWizard::describeState( WizardState _nState, const OUString& _rStateDisplayName, RoadmapPageFactory _pPageFactory )
     {
         OSL_ENSURE( m_pImpl->aStateDescriptors.find( _nState ) == m_pImpl->aStateDescriptors.end(),
             "RoadmapWizard::describeState: there already is a descriptor for this state!" );
@@ -581,9 +581,9 @@ namespace svt
     }
 
     //--------------------------------------------------------------------
-    String RoadmapWizard::getStateDisplayName( WizardState _nState ) const
+    OUString RoadmapWizard::getStateDisplayName( WizardState _nState ) const
     {
-        String sDisplayName;
+        OUString sDisplayName;
 
         StateDescriptions::const_iterator pos = m_pImpl->aStateDescriptors.find( _nState );
         OSL_ENSURE( pos != m_pImpl->aStateDescriptors.end(),

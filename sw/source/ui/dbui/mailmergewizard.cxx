@@ -174,7 +174,7 @@ void SwMailMergeWizard::enterState( WizardState _nState )
     UpdateRoadmap();
 }
 
-String  SwMailMergeWizard::getStateDisplayName( WizardState _nState ) const
+OUString SwMailMergeWizard::getStateDisplayName( WizardState _nState ) const
 {
     String sRet;
     switch(_nState)

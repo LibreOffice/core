@@ -133,7 +133,7 @@ namespace abp
     }
 
     //---------------------------------------------------------------------
-    String OAddessBookSourcePilot::getStateDisplayName( WizardState _nState ) const
+    OUString OAddessBookSourcePilot::getStateDisplayName( WizardState _nState ) const
     {
         sal_uInt16 nResId = 0;
         switch ( _nState )
@@ -146,7 +146,7 @@ namespace abp
         }
         DBG_ASSERT( nResId, "OAddessBookSourcePilot::getStateDisplayName: don't know this state!" );
 
-        String sDisplayName;
+        OUString sDisplayName;
         if ( nResId )
         {
             svt::OLocalResourceAccess aAccess( ModuleRes( RID_DLG_ADDRESSBOOKSOURCEPILOT ), RSC_MODALDIALOG );

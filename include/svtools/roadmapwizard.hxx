@@ -123,7 +123,7 @@ protected:
             The given display name is used in the default implementation of getStateDisplayName,
             and the given factory is used in the default implementation of createPage.
         */
-        void    describeState( WizardState _nState, const String& _rStateDisplayName, RoadmapPageFactory _pPageFactory );
+        void    describeState( WizardState _nState, const OUString& _rStateDisplayName, RoadmapPageFactory _pPageFactory );
 
         /** activates a path which has previously been declared with <member>declarePath</member>
 
@@ -203,7 +203,7 @@ protected:
             this is worth an assertion in a non-product build, and then an empty string is
             returned.
         */
-        virtual String  getStateDisplayName( WizardState _nState ) const;
+        virtual OUString  getStateDisplayName( WizardState _nState ) const;
 
         /** creates a page for a given state
 

@@ -62,7 +62,7 @@ protected:
 
 // roadmap feature ??
 //    virtual sal_Bool            prepareLeaveCurrentState( CommitPageReason _eReason );
-    virtual String                  getStateDisplayName( WizardState _nState ) const;
+    virtual OUString                getStateDisplayName( WizardState _nState ) const;
 
 public:
     SwMailMergeWizard(SwView& rView, SwMailMergeConfigItem& rConfigItem);

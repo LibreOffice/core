@@ -218,9 +218,9 @@ void ODbTypeWizDialogSetup::declareAuthDepPath( const OUString& _sURL, PathId _n
     ::svt::RoadmapWizard::declarePath( _nPathId, aPath );
 }
 
-String ODbTypeWizDialogSetup::getStateDisplayName( WizardState _nState ) const
+OUString ODbTypeWizDialogSetup::getStateDisplayName( WizardState _nState ) const
 {
-    String sRoadmapItem;
+    OUString sRoadmapItem;
     switch( _nState )
     {
         case PAGE_DBSETUPWIZARD_INTRO:

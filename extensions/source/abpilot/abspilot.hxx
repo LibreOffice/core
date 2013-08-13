@@ -75,7 +75,7 @@ namespace abp
         virtual sal_Bool            onFinish();
 
         // RoadmapWizard
-        virtual String              getStateDisplayName( WizardState _nState ) const;
+        virtual OUString            getStateDisplayName( WizardState _nState ) const;
 
         virtual sal_Bool    Close();
 

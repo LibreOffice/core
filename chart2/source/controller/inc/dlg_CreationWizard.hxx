@@ -63,7 +63,7 @@ protected:
     virtual WizardState     determineNextState(WizardState nCurrentState) const;
     virtual void            enterState(WizardState nState);
 
-    virtual String  getStateDisplayName( WizardState nState ) const;
+    virtual OUString        getStateDisplayName( WizardState nState ) const;
 
 private:
     //no default constructor

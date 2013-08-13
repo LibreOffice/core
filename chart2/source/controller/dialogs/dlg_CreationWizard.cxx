@@ -196,7 +196,7 @@ void CreationWizard::setValidPage( TabPage * /* pTabPage */ )
     m_bCanTravel = true;
 }
 
-String CreationWizard::getStateDisplayName( WizardState nState ) const
+OUString CreationWizard::getStateDisplayName( WizardState nState ) const
 {
     sal_uInt16 nResId = 0;
     switch( nState )
