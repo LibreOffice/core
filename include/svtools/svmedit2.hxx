@@ -32,7 +32,7 @@ public:
                     ~ExtMultiLineEdit();
 
                     // methods of TextView
-    void            InsertText( const String& rNew, sal_Bool bSelect = sal_False );
+    void            InsertText( const OUString& rNew, sal_Bool bSelect = sal_False );
     void            SetAutoScroll( sal_Bool bAutoScroll );
 
                     // methods of TextEngine

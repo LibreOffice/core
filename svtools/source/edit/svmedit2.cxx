@@ -39,7 +39,7 @@ ExtMultiLineEdit::~ExtMultiLineEdit()
 {
 }
 
-void ExtMultiLineEdit::InsertText( const String& rNew, sal_Bool )
+void ExtMultiLineEdit::InsertText( const OUString& rNew, sal_Bool )
 {
     GetTextView()->InsertText( rNew, sal_False );
 }
