@@ -495,7 +495,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTableOpts,
         }
     }
 
-    SwTableFormat::AssignLineParents( pTableStyle, rNdTable );
+    SwTableFormat::AssignFormatParents( pTableStyle, rNdTable );
 
     // Insert Frms
     GetNodes().GoNext( &aNdIdx ); // Go to the next ContentNode
