@@ -5125,6 +5125,14 @@ void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
 
 
     OutputBorderOptions aOutputBorderOptions = lcl_getBoxBorderOptions();
+    // Check if there is a shadow item
+    const SfxPoolItem* pItem = GetExport().HasItem( RES_SHADOW );
+    if ( pItem )
+    {
+        const SvxShadowItem* pShadowItem = (const SvxShadowItem*)pItem;
+        aOutputBorderOptions.aShadowLocation = pShadowItem->GetLocation();
+    }
+
 
     if ( m_bOpenedSectPr && GetWritingHeaderFooter() == false)
     {
@@ -5132,14 +5140,6 @@ void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
 
         // Check if the distance is larger than 31 points
         aOutputBorderOptions.bCheckDistanceSize = true;
-
-        // Check if there is a shadow item
-        const SfxPoolItem* pItem = GetExport().HasItem( RES_SHADOW );
-        if ( pItem )
-        {
-            const SvxShadowItem* pShadowItem = (const SvxShadowItem*)pItem;
-            aOutputBorderOptions.aShadowLocation = pShadowItem->GetLocation();
-        }
 
         impl_borders( m_pSerializer, rBox, aOutputBorderOptions, &m_pageMargins );
 

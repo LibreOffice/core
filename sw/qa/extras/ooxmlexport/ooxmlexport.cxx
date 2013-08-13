@@ -106,6 +106,7 @@ public:
     void testFdo65718();
     void testFdo64350();
     void testFdo67013();
+    void testParaShadow();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -188,6 +189,7 @@ void Test::run()
         {"fdo65718.docx", &Test::testFdo65718},
         {"fdo64350.docx", &Test::testFdo64350},
         {"fdo67013.docx", &Test::testFdo67013},
+        {"para-shadow.docx", &Test::testParaShadow},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -1132,6 +1134,16 @@ void Test::testFdo67013()
     CPPUNIT_ASSERT_EQUAL(sal_Int16(4), aFooterTopBorder.LineStyle);
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(159), aFooterTopBorder.LineWidth);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(106), aFooterTopBorder.OuterLineWidth);
+}
+
+void Test::testParaShadow()
+{
+    // The problem was that in w:pBdr, child elements had a w:shadow attribute, but that was ignored.
+    table::ShadowFormat aShadow = getProperty<table::ShadowFormat>(getParagraph(2), "ParaShadowFormat");
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, sal_uInt32(aShadow.Color));
+    CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_BOTTOM_RIGHT, aShadow.Location);
+    // w:sz="48" is in eights of a point, 1 pt is 20 twips.
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(TWIP_TO_MM100(24/8*20)), aShadow.ShadowWidth);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
