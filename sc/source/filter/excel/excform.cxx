@@ -118,6 +118,10 @@ void ImportExcel::Formula(
         if (!xGroup)
             return;
 
+        if (xGroup->mnStart == aScPos.Row())
+            // Generate code for the top cell only.
+            xGroup->compileCode(*pD, aScPos, formula::FormulaGrammar::GRAM_DEFAULT);
+
         ScFormulaCell* pCell = new ScFormulaCell(pD, aScPos, xGroup);
         pD->EnsureTable(aScPos.Tab());
         bool bInserted = pD->SetGroupFormulaCell(aScPos, pCell);

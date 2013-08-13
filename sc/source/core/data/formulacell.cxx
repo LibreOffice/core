@@ -387,7 +387,9 @@ ScFormulaCellGroup::ScFormulaCellGroup() :
     mpCode(NULL),
     mnStart(0),
     mnLength(0),
+    mnFormatType(NUMBERFORMAT_NUMBER),
     mbInvariant(false),
+    mbSubTotal(false),
     meCalcState(sc::GroupCalcEnabled)
 {
 }
@@ -403,6 +405,26 @@ void ScFormulaCellGroup::setCode( const ScTokenArray& rCode )
     mpCode = rCode.Clone();
     mbInvariant = mpCode->IsInvariant();
     mpCode->GenHash();
+}
+
+void ScFormulaCellGroup::compileCode(
+    ScDocument& rDoc, const ScAddress& rPos, FormulaGrammar::Grammar eGram )
+{
+    if (!mpCode)
+        return;
+
+    if (mpCode->GetLen() && !mpCode->GetCodeError() && !mpCode->GetCodeLen())
+    {
+        ScCompiler aComp(&rDoc, rPos, *mpCode);
+        aComp.SetGrammar(eGram);
+        mbSubTotal = aComp.CompileTokenArray();
+        mnFormatType = aComp.GetNumFormatType();
+    }
+    else
+    {
+        mpCode->Reset();
+        mbSubTotal = mpCode->GetNextOpCodeRPN(ocSubTotal) != NULL;
+    }
 }
 
 // ============================================================================
@@ -500,12 +522,12 @@ ScFormulaCell::ScFormulaCell(
     pNextTrack(0),
     nSeenInIteration(0),
     cMatrixFlag ( cInd ),
-    nFormatType ( NUMBERFORMAT_NUMBER ),
+    nFormatType(xGroup->mnFormatType),
     bDirty(false),
     bChanged( false ),
     bRunning( false ),
     bCompile( false ),
-    bSubTotal( false ),
+    bSubTotal(xGroup->mbSubTotal),
     bIsIterCell( false ),
     bInChangeTrack( false ),
     bTableOpDirty( false ),
@@ -513,21 +535,6 @@ ScFormulaCell::ScFormulaCell(
     mbNeedsNumberFormat( false ),
     aPos( rPos )
 {
-    // UPN-Array generation
-    if( pCode->GetLen() && !pCode->GetCodeError() && !pCode->GetCodeLen() )
-    {
-        ScCompiler aComp( pDocument, aPos, *pCode);
-        aComp.SetGrammar(eTempGrammar);
-        bSubTotal = aComp.CompileTokenArray();
-        nFormatType = aComp.GetNumFormatType();
-    }
-    else
-    {
-        pCode->Reset();
-        if ( pCode->GetNextOpCodeRPN( ocSubTotal ) )
-            bSubTotal = true;
-    }
-
     if (bSubTotal)
         pDocument->AddSubTotalCell(this);
 }

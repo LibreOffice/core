@@ -387,6 +387,8 @@ void ScOrcusSheet::set_shared_formula(
     if (!xGroup)
         return;
 
+    // Generate code for the top cell only.
+    xGroup->compileCode(mrDoc.getDoc(), aPos, formula::FormulaGrammar::GRAM_DEFAULT);
     ScFormulaCell* pCell = new ScFormulaCell(&mrDoc.getDoc(), aPos, xGroup);
     mrDoc.setFormulaCell(aPos, pCell);
     cellInserted();

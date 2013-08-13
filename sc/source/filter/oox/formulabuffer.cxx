@@ -200,6 +200,9 @@ void FormulaBuffer::applySharedFormulas( sal_Int32 nTab )
 
             ScAddress aPos;
             ScUnoConversion::FillScAddress(aPos, rAddr);
+            if (xGroup->mnStart == aPos.Row())
+                // Generate code for the top cell only.
+                xGroup->compileCode(rDoc, aPos, formula::FormulaGrammar::GRAM_DEFAULT);
             ScFormulaCell* pCell = new ScFormulaCell(&rDoc, aPos, xGroup);
 
             bool bInserted = rDoc.SetGroupFormulaCell(aPos, pCell);

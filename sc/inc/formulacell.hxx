@@ -51,13 +51,17 @@ struct SC_DLLPUBLIC ScFormulaCellGroup : boost::noncopyable
     ScTokenArray* mpCode;
     SCROW mnStart;  // Start offset of that cell
     SCROW mnLength; // How many of these do we have ?
-    bool mbInvariant;
+    short mnFormatType;
+    bool mbInvariant:1;
+    bool mbSubTotal:1;
     sc::GroupCalcState meCalcState;
 
     ScFormulaCellGroup();
     ~ScFormulaCellGroup();
 
     void setCode( const ScTokenArray& rCode );
+    void compileCode(
+        ScDocument& rDoc, const ScAddress& rPos, formula::FormulaGrammar::Grammar eGram );
 };
 
 inline void intrusive_ptr_add_ref(const ScFormulaCellGroup *p)
