@@ -17,16 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DOCXFOOTNOTES_HXX_
-#define _DOCXFOOTNOTES_HXX_
-
-#include <fmtftn.hxx>
-
-#include <rtl/string.hxx>
-#include <rtl/ustring.hxx>
-#include <sax/fshelper.hxx>
+#ifndef DOCXFOOTNOTES_HXX
+#define DOCXFOOTNOTES_HXX
 
 #include <vector>
+
+class SwFmtFtn;
 
 namespace docx {
 
@@ -56,16 +52,16 @@ public:
     /// Return the current footnote/endnote and clear the 'current' state.
     const SwFmtFtn* getCurrent( sal_Int32& rId )
     {
-        // skip ids 0 and 1 - they are reserved for separator and
-        // continuationSeparator
-        rId = m_nCurrent + 2;
-
         // anything to write at all?
         if ( m_nCurrent < 0 )
         {
             rId = -1;
             return NULL;
         }
+
+        // skip ids 0 and 1 - they are reserved for separator and
+        // continuationSeparator
+        rId = m_nCurrent + 2;
 
         const SwFmtFtn *pFootnote = m_aFootnotes[m_nCurrent];
         m_nCurrent = -1;
@@ -88,6 +84,6 @@ public:
 
 } // namespace docx
 
-#endif // _DOCXFOOTNOTES_HXX_
+#endif // DOCXFOOTNOTES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

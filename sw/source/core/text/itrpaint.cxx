@@ -29,7 +29,6 @@
 #include <fchrfmt.hxx>
 #include <frmatr.hxx>
 #include <sfx2/printer.hxx>
-#include <fmtftn.hxx>
 #include <fmtfld.hxx>
 #include <fldbas.hxx>      // SwField
 #include <rootfrm.hxx>

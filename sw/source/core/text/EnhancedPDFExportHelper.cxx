@@ -55,7 +55,6 @@
 #include <docufld.hxx>
 #include <ftnidx.hxx>
 #include <txtftn.hxx>
-#include <fmtftn.hxx>
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>
 #include <txtfrm.hxx>

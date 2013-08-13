@@ -81,7 +81,6 @@
 #include <svtools/ctrltool.hxx>
 #include <flypos.hxx>
 #include <txtftn.hxx>
-#include <fmtftn.hxx>
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/TextMarkupType.hpp>

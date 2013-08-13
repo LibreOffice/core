@@ -55,7 +55,6 @@
 #include <fmtpdsc.hxx>
 #include <fmtflcnt.hxx>
 #include <fmtinfmt.hxx>
-#include <fmtftn.hxx>
 #include <txatbase.hxx>
 #include <frmatr.hxx>
 #include <charfmt.hxx>
