@@ -31,7 +31,7 @@ private:
     CheckBox* pAutocloseProcChk;
     CheckBox* pAutocloseParenChk;
     CheckBox* pAutocloseQuotesChk;
-    CheckBox* pAutoCorrectKeywordsChk;
+    CheckBox* pAutoCorrectChk;
     CheckBox* pUseExtendedTypesChk;
 
     void LoadConfig();
