@@ -19,7 +19,9 @@
 
 #include "envelp.hrc"
 #include "globals.hrc"
- // Strings ******************************************************************
+
+// Strings ******************************************************************
+
 String STR_DATABASE_NOT_OPENED
 {
     Text [ en-US ] = "Database could not be opened." ;

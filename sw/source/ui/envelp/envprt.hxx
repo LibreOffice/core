@@ -39,22 +39,19 @@ class SwEnvDlg;
 
 class SwEnvPrtPage : public SfxTabPage
 {
-    ToolBox      aAlignBox;
-    RadioButton  aTopButton;
-    RadioButton  aBottomButton;
-    FixedText    aRightText;
-    MetricField  aRightField;
-    FixedText    aDownText;
-    MetricField  aDownField;
-    FixedInfo    aPrinterInfo;
-    FixedLine    aNoNameFL;
-    FixedLine    aPrinterFL;
-    PushButton   aPrtSetup;
+    ToolBox*     m_pAlignBox;
+    RadioButton* m_pTopButton;
+    RadioButton* m_pBottomButton;
+    MetricField* m_pRightField;
+    MetricField* m_pDownField;
+    FixedText*   m_pPrinterInfo;
+    PushButton*  m_pPrtSetup;
+
+    sal_uInt16 m_aIds[6];
 
     Printer* pPrt;
 
-     SwEnvPrtPage(Window* pParent, const SfxItemSet& rSet);
-    ~SwEnvPrtPage();
+    SwEnvPrtPage(Window* pParent, const SfxItemSet& rSet);
 
     DECL_LINK(ClickHdl, void *);
     DECL_LINK(AlignHdl, void *);

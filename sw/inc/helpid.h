@@ -144,7 +144,6 @@
 
 #define HID_FRM_STD                                             "SW_HID_FRM_STD"
 #define HID_GRF_EXT                                             "SW_HID_GRF_EXT"
-#define HID_ENV_PRT                                             "SW_HID_ENV_PRT"
 #define HID_ENV_ENV                                             "SW_HID_ENV_ENV"
 #define HID_ENV_FMT                                             "SW_HID_ENV_FMT"
 #define HID_COND_COLL                                           "SW_HID_COND_COLL"
@@ -508,13 +507,6 @@
 #define HID_MM_HEADER_11                                        "SW_HID_MM_HEADER_11"
 #define HID_MM_HEADER_12                                        "SW_HID_MM_HEADER_12"
 #define HID_MM_HEADER_13                                        "SW_HID_MM_HEADER_13"
-
-#define HID_ITM_HOR_LEFT                                        "SW_HID_ITM_HOR_LEFT"
-#define HID_ITM_HOR_CNTR                                        "SW_HID_ITM_HOR_CNTR"
-#define HID_ITM_HOR_RGHT                                        "SW_HID_ITM_HOR_RGHT"
-#define HID_ITM_VER_LEFT                                        "SW_HID_ITM_VER_LEFT"
-#define HID_ITM_VER_CNTR                                        "SW_HID_ITM_VER_CNTR"
-#define HID_ITM_VER_RGHT                                        "SW_HID_ITM_VER_RGHT"
 
 #define HID_TBX_FORMULA_CALC                                    "SW_HID_TBX_FORMULA_CALC"
 #define HID_TBX_FORMULA_CANCEL                                  "SW_HID_TBX_FORMULA_CANCEL"

@@ -28,78 +28,71 @@
 
 #include "envprt.hrc"
 
-SwEnvPrtPage::SwEnvPrtPage(Window* pParent, const SfxItemSet& rSet) :
-
-    SfxTabPage(pParent, SW_RES(TP_ENV_PRT), rSet),
-
-    aAlignBox    (this, SW_RES(BOX_ALIGN  )),
-    aTopButton   (this, SW_RES(BTN_TOP    )),
-    aBottomButton(this, SW_RES(BTN_BOTTOM )),
-    aRightText   (this, SW_RES(TXT_RIGHT  )),
-    aRightField  (this, SW_RES(FLD_RIGHT  )),
-    aDownText    (this, SW_RES(TXT_DOWN   )),
-    aDownField   (this, SW_RES(FLD_DOWN   )),
-    aPrinterInfo (this, SW_RES(TXT_PRINTER)),
-    aNoNameFL    (this, SW_RES(FL_NONAME )),
-    aPrinterFL   (this, SW_RES(FL_PRINTER )),
-    aPrtSetup    (this, SW_RES(BTN_PRTSETUP))
-
+SwEnvPrtPage::SwEnvPrtPage(Window* pParent, const SfxItemSet& rSet)
+    : SfxTabPage(pParent, "EnvPrinterPage",
+        "modules/swriter/ui/envprinterpage.ui", rSet)
 {
-    FreeResource();
+    get(m_pAlignBox, "alignbox");
+    get(m_pTopButton, "top");
+    get(m_pBottomButton, "bottom");
+    get(m_pRightField, "right");
+    get(m_pDownField, "down");
+    get(m_pPrinterInfo, "printername");
+    get(m_pPrtSetup, "setup");
     SetExchangeSupport();
 
     // Metrics
     FieldUnit eUnit = ::GetDfltMetric(sal_False);
-    SetMetric(aRightField, eUnit);
-    SetMetric(aDownField , eUnit);
+    SetMetric(*m_pRightField, eUnit);
+    SetMetric(*m_pDownField, eUnit);
 
     // Install handlers
-    aTopButton   .SetClickHdl(LINK(this, SwEnvPrtPage, ClickHdl));
-    aBottomButton.SetClickHdl(LINK(this, SwEnvPrtPage, ClickHdl));
+    m_pTopButton->SetClickHdl(LINK(this, SwEnvPrtPage, ClickHdl));
+    m_pBottomButton->SetClickHdl(LINK(this, SwEnvPrtPage, ClickHdl));
 
-    aPrtSetup    .SetClickHdl(LINK(this, SwEnvPrtPage, ButtonHdl));
+    m_pPrtSetup->SetClickHdl(LINK(this, SwEnvPrtPage, ButtonHdl));
 
     // Bitmaps
-    aBottomButton.GetClickHdl().Call(&aBottomButton);
+    m_pBottomButton->GetClickHdl().Call(m_pBottomButton);
 
     // ToolBox
-    Size aSz = aAlignBox.CalcWindowSizePixel();
-    aAlignBox.SetSizePixel(aSz);
-    aAlignBox.SetClickHdl(LINK(this, SwEnvPrtPage, AlignHdl));
-}
-
-SwEnvPrtPage::~SwEnvPrtPage()
-{
+    m_pAlignBox->SetClickHdl(LINK(this, SwEnvPrtPage, AlignHdl));
+    m_aIds[ENV_HOR_LEFT] = m_pAlignBox->GetItemId("horileft");
+    m_aIds[ENV_HOR_CNTR] = m_pAlignBox->GetItemId("horicenter");
+    m_aIds[ENV_HOR_RGHT] = m_pAlignBox->GetItemId("horiright");
+    m_aIds[ENV_VER_LEFT] = m_pAlignBox->GetItemId("vertleft");
+    m_aIds[ENV_VER_CNTR] = m_pAlignBox->GetItemId("vertcenter");
+    m_aIds[ENV_VER_RGHT] = m_pAlignBox->GetItemId("vertright");
 }
 
 IMPL_LINK_NOARG(SwEnvPrtPage, ClickHdl)
 {
-    if (aBottomButton.IsChecked())
+    if (m_pBottomButton->IsChecked())
     {
         // Envelope from botton
-        aAlignBox.SetItemImage(ITM_HOR_LEFT, Bitmap(SW_RES(BMP_HOR_LEFT_LOWER)));
-        aAlignBox.SetItemImage(ITM_HOR_CNTR, Bitmap(SW_RES(BMP_HOR_CNTR_LOWER)));
-        aAlignBox.SetItemImage(ITM_HOR_RGHT, Bitmap(SW_RES(BMP_HOR_RGHT_LOWER)));
-        aAlignBox.SetItemImage(ITM_VER_LEFT, Bitmap(SW_RES(BMP_VER_LEFT_LOWER)));
-        aAlignBox.SetItemImage(ITM_VER_CNTR, Bitmap(SW_RES(BMP_VER_CNTR_LOWER)));
-        aAlignBox.SetItemImage(ITM_VER_RGHT, Bitmap(SW_RES(BMP_VER_RGHT_LOWER)));
+        m_pAlignBox->SetItemImage(m_aIds[ENV_HOR_LEFT], Bitmap(SW_RES(BMP_HOR_LEFT_LOWER)));
+        m_pAlignBox->SetItemImage(m_aIds[ENV_HOR_CNTR], Bitmap(SW_RES(BMP_HOR_CNTR_LOWER)));
+        m_pAlignBox->SetItemImage(m_aIds[ENV_HOR_RGHT], Bitmap(SW_RES(BMP_HOR_RGHT_LOWER)));
+        m_pAlignBox->SetItemImage(m_aIds[ENV_VER_LEFT], Bitmap(SW_RES(BMP_VER_LEFT_LOWER)));
+        m_pAlignBox->SetItemImage(m_aIds[ENV_VER_CNTR], Bitmap(SW_RES(BMP_VER_CNTR_LOWER)));
+        m_pAlignBox->SetItemImage(m_aIds[ENV_VER_RGHT], Bitmap(SW_RES(BMP_VER_RGHT_LOWER)));
     }
     else
     {
         // Envelope from top
-        aAlignBox.SetItemImage(ITM_HOR_LEFT, Bitmap(SW_RES(BMP_HOR_LEFT_UPPER)));
-        aAlignBox.SetItemImage(ITM_HOR_CNTR, Bitmap(SW_RES(BMP_HOR_CNTR_UPPER)));
-        aAlignBox.SetItemImage(ITM_HOR_RGHT, Bitmap(SW_RES(BMP_HOR_RGHT_UPPER)));
-        aAlignBox.SetItemImage(ITM_VER_LEFT, Bitmap(SW_RES(BMP_VER_LEFT_UPPER)));
-        aAlignBox.SetItemImage(ITM_VER_CNTR, Bitmap(SW_RES(BMP_VER_CNTR_UPPER)));
-        aAlignBox.SetItemImage(ITM_VER_RGHT, Bitmap(SW_RES(BMP_VER_RGHT_UPPER)));
+        m_pAlignBox->SetItemImage(m_aIds[ENV_HOR_LEFT], Bitmap(SW_RES(BMP_HOR_LEFT_UPPER)));
+        m_pAlignBox->SetItemImage(m_aIds[ENV_HOR_CNTR], Bitmap(SW_RES(BMP_HOR_CNTR_UPPER)));
+        m_pAlignBox->SetItemImage(m_aIds[ENV_HOR_RGHT], Bitmap(SW_RES(BMP_HOR_RGHT_UPPER)));
+        m_pAlignBox->SetItemImage(m_aIds[ENV_VER_LEFT], Bitmap(SW_RES(BMP_VER_LEFT_UPPER)));
+        m_pAlignBox->SetItemImage(m_aIds[ENV_VER_CNTR], Bitmap(SW_RES(BMP_VER_CNTR_UPPER)));
+        m_pAlignBox->SetItemImage(m_aIds[ENV_VER_RGHT], Bitmap(SW_RES(BMP_VER_RGHT_UPPER)));
     }
     return 0;
 }
 
 IMPL_LINK( SwEnvPrtPage, ButtonHdl, Button *, pBtn )
 {
-    if (pBtn == &aPrtSetup)
+    if (pBtn == m_pPrtSetup)
     {
         // Call printer setup
         if (pPrt)
@@ -109,7 +102,7 @@ IMPL_LINK( SwEnvPrtPage, ButtonHdl, Button *, pBtn )
             pDlg->Execute();
             delete pDlg;
             GrabFocus();
-            aPrinterInfo.SetText(pPrt->GetName());
+            m_pPrinterInfo->SetText(pPrt->GetName());
         }
     }
     return 0;
@@ -117,17 +110,17 @@ IMPL_LINK( SwEnvPrtPage, ButtonHdl, Button *, pBtn )
 
 IMPL_LINK_NOARG(SwEnvPrtPage, AlignHdl)
 {
-    if (aAlignBox.GetCurItemId())
+    if (m_pAlignBox->GetCurItemId())
     {
-        for (sal_uInt16 i = ITM_HOR_LEFT; i <= ITM_VER_RGHT; i++)
-            aAlignBox.CheckItem(i, sal_False);
-        aAlignBox.CheckItem(aAlignBox.GetCurItemId(), sal_True);
+        for (sal_uInt16 i = ENV_HOR_LEFT; i <= ENV_VER_RGHT; ++i)
+            m_pAlignBox->CheckItem(m_aIds[i], false);
+        m_pAlignBox->CheckItem(m_pAlignBox->GetCurItemId(), true);
     }
     else
     {
         // GetCurItemId() == 0 is possible!
         const SwEnvItem& rItem = (const SwEnvItem&) GetItemSet().Get(FN_ENVELOP);
-        aAlignBox.CheckItem((sal_uInt16) rItem.eAlign + ITM_HOR_LEFT, sal_True);
+        m_pAlignBox->CheckItem(m_aIds[rItem.eAlign], true);
     }
     return 0;
 }
@@ -140,7 +133,7 @@ SfxTabPage* SwEnvPrtPage::Create(Window* pParent, const SfxItemSet& rSet)
 void SwEnvPrtPage::ActivatePage(const SfxItemSet&)
 {
     if (pPrt)
-        aPrinterInfo.SetText(pPrt->GetName());
+        m_pPrinterInfo->SetText(pPrt->GetName());
 }
 
 int SwEnvPrtPage::DeactivatePage(SfxItemSet* _pSet)
@@ -152,15 +145,20 @@ int SwEnvPrtPage::DeactivatePage(SfxItemSet* _pSet)
 
 void SwEnvPrtPage::FillItem(SwEnvItem& rItem)
 {
-    sal_uInt16 nID = 0;
-    for (sal_uInt16 i = ITM_HOR_LEFT; i <= ITM_VER_RGHT && !nID; i++)
-        if (aAlignBox.IsItemChecked(i))
-            nID = i;
+    sal_uInt16 nOrient = 0;
+    for (sal_uInt16 i = ENV_HOR_LEFT; i <= ENV_VER_RGHT; ++i)
+    {
+        if (m_pAlignBox->IsItemChecked(m_aIds[i]))
+        {
+            nOrient = i;
+            break;
+        }
+    }
 
-    rItem.eAlign          = (SwEnvAlign) (nID - ITM_HOR_LEFT);
-    rItem.bPrintFromAbove = aTopButton.IsChecked();
-    rItem.lShiftRight     = static_cast< sal_Int32 >(GetFldVal(aRightField));
-    rItem.lShiftDown      = static_cast< sal_Int32 >(GetFldVal(aDownField ));
+    rItem.eAlign          = (SwEnvAlign) (nOrient);
+    rItem.bPrintFromAbove = m_pTopButton->IsChecked();
+    rItem.lShiftRight     = static_cast< sal_Int32 >(GetFldVal(*m_pRightField));
+    rItem.lShiftDown      = static_cast< sal_Int32 >(GetFldVal(*m_pDownField ));
 }
 
 sal_Bool SwEnvPrtPage::FillItemSet(SfxItemSet& rSet)
@@ -174,21 +172,18 @@ void SwEnvPrtPage::Reset(const SfxItemSet& rSet)
 {
     // Read item
     const SwEnvItem& rItem = (const SwEnvItem&) rSet.Get(FN_ENVELOP);
-    aAlignBox.CheckItem((sal_uInt16) rItem.eAlign + ITM_HOR_LEFT);
+    m_pAlignBox->CheckItem(m_aIds[rItem.eAlign]);
 
     if (rItem.bPrintFromAbove)
-        aTopButton   .Check();
+        m_pTopButton->Check();
     else
-        aBottomButton.Check();
+        m_pBottomButton->Check();
 
-    SetFldVal(aRightField, rItem.lShiftRight);
-    SetFldVal(aDownField , rItem.lShiftDown );
+    SetFldVal(*m_pRightField, rItem.lShiftRight);
+    SetFldVal(*m_pDownField , rItem.lShiftDown );
 
     ActivatePage(rSet);
-    ClickHdl(&aTopButton);
+    ClickHdl(m_pTopButton);
 }
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

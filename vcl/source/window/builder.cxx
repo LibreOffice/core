@@ -1430,18 +1430,28 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
         {
             OUString aCommand(OStringToOUString(extractActionName(rMap), RTL_TEXTENCODING_UTF8));
 
+            sal_uInt16 nItemId = 0;
             ToolBoxItemBits nBits = 0;
             if (name == "GtkMenuToolButton")
                 nBits |= TIB_DROPDOWN;
 
-            if (!aCommand.isEmpty())
+            if (!aCommand.isEmpty() && m_xFrame.is())
             {
                 pToolBox->InsertItem(aCommand, m_xFrame, nBits, extractSizeRequest(rMap));
-
-                OUString aTooltip(OStringToOUString(extractTooltipText(rMap), RTL_TEXTENCODING_UTF8));
-                if (!aTooltip.isEmpty())
-                    pToolBox->SetQuickHelpText(pToolBox->GetItemId(aCommand), aTooltip);
+                nItemId = pToolBox->GetItemId(aCommand);
             }
+            else
+            {
+                const sal_uInt16 COMMAND_ITEMID_START = 30000;
+                nItemId = COMMAND_ITEMID_START + pToolBox->GetItemCount();
+                pToolBox->InsertItem(nItemId,
+                    OStringToOUString(extractLabel(rMap), RTL_TEXTENCODING_UTF8), nBits);
+                pToolBox->SetItemCommand(nItemId, aCommand);
+            }
+
+            OUString sTooltip(OStringToOUString(extractTooltipText(rMap), RTL_TEXTENCODING_UTF8));
+            if (!sTooltip.isEmpty())
+                pToolBox->SetQuickHelpText(nItemId, sTooltip);
 
             return NULL; // no widget to be created
         }
