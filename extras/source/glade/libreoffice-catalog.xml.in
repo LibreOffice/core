@@ -448,5 +448,10 @@
     <glade-widget-class title="Tab Stop Images" name="cuilo-TabWin_Impl"
                         generic-name="TabWin_Impl" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
+
+    <glade-widget-class title="Recent Documents View" name="sfxlo-RecentDocsView"
+                        generic-name="Icon View" parent="GtkIconView"
+                        icon-name="widget-gtk-iconview"/>
+
   </glade-widget-classes>
 </glade-catalog>
