@@ -1179,7 +1179,6 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, con
     mpLBSound->SetSelectHdl( LINK( this, CustomAnimationEffectTabPage, implSelectHdl ) );
 
     mpPBSoundPreview->SetClickHdl( LINK( this, CustomAnimationEffectTabPage, implSelectHdl ) );
-    mpPBSoundPreview->SetSymbol( SYMBOL_PLAY );
 
     // fill the color box
     SfxObjectShell* pDocSh = SfxObjectShell::Current();

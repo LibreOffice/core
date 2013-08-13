@@ -2,6 +2,11 @@
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
   <!-- interface-requires LibreOffice 1.0 -->
+  <object class="GtkImage" id="image1">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-media-play</property>
+  </object>
   <object class="GtkBox" id="EffectTab">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -239,11 +244,10 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="sound_preview">
-                        <property name="label">gtk-media-play</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="use_stock">True</property>
+                        <property name="image">image1</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
