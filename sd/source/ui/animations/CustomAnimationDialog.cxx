@@ -1134,8 +1134,6 @@ private:
     FixedText*      mpFTProperty1;
     PropertyControl* mpLBProperty1;
     VclHBox*        mpPlaceholderBox;
-    FixedText*      mpFTProperty2;
-    PropertyControl* mpLBProperty2;
     CheckBox*       mpCBSmoothStart;
     CheckBox*       mpCBSmoothEnd;
 
