@@ -1197,9 +1197,6 @@ rtl::OUString enumtoString(AutoLayout aut)
         case AUTOLAYOUT_TITLE_CONTENT:
         retstr="AUTOLAYOUT_TITLE_CONTENT";
         break;
-        case AUTOLAYOUT_TITLE_2VTEXT:
-        retstr="AUTOLAYOUT_TITLE_2VTEXT";
-        break;
         case AUTOLAYOUT_TITLE_CONTENT_OVER_CONTENT:
         retstr="AUTOLAYOUT_TITLE_CONTENT_OVER_CONTENT";
         break;
@@ -1230,6 +1227,18 @@ rtl::OUString enumtoString(AutoLayout aut)
         case AUTOLAYOUT_TITLE_2CONTENT:
         retstr="AUTOLAYOUT_TITLE_2CONTENT";
         break;
+        case AUTOLAYOUT_VTITLE_VCONTENT:
+        retstr="AUTOLAYOUT_VTITLE_VCONTENT";
+        break;
+        case AUTOLAYOUT_VTITLE_VCONTENT_OVER_VCONTENT:
+        retstr="AUTOLAYOUT_VTITLE_VCONTENT_OVER_VCONTENT";
+        break;
+        case AUTOLAYOUT_TITLE_VCONTENT:
+        retstr="AUTOLAYOUT_TITLE_VCONTENT";
+        break;
+        case AUTOLAYOUT_TITLE_2VTEXT:
+        retstr="AUTOLAYOUT_TITLE_2VTEXT";
+        break;
         default:
         retstr="unknown";
         break;
@@ -1238,7 +1247,7 @@ rtl::OUString enumtoString(AutoLayout aut)
     return retstr;
 }
 
-static void CalcAutoLayoutRectangles( SdPage& rPage, int nLayout, Rectangle* rRectangle ,const rtl::OUString& autolayout)
+static void CalcAutoLayoutRectangles( SdPage& rPage,Rectangle* rRectangle ,const rtl::OUString& autolayout)
 {
     Rectangle aTitleRect;
     Rectangle aLayoutRect;
@@ -1283,10 +1292,9 @@ static void CalcAutoLayoutRectangles( SdPage& rPage, int nLayout, Rectangle* rRe
     Size        aTempSize;
     Point       aTempPnt;
     aTempSize = aLayoutSize;
-    aTempPnt = aLayoutPos;
-    sal_Bool    bRightToLeft = ( rPage.GetModel() && static_cast< SdDrawDocument* >( rPage.GetModel() )->GetDefaultWritingMode() == ::com::sun::star::text::WritingMode_RL_TB );
+    aTempPnt  = aLayoutPos;
 
-    std::vector<Reference<XNode>>  &layoutinfo = static_cast< SdDrawDocument* >( rPage.GetModel() )->GetLayoutVector(); //getting vector from "SdDrawDocument" ,not sure about the correct mechanism
+    const std::vector<Reference<XNode>>  &layoutinfo = static_cast< SdDrawDocument* >( rPage.GetModel() )->GetLayoutVector(); //getting vector from "SdDrawDocument" ,not sure about the correct mechanism
     for(size_t y=0; y < layoutinfo.size(); y++) //loop through vector of Xnodes
     {
         Reference<XNode> layoutnode = layoutinfo[y];      //get i'th layout element
@@ -1350,170 +1358,6 @@ static void CalcAutoLayoutRectangles( SdPage& rPage, int nLayout, Rectangle* rRe
             }
             break;
         }
-    }
-
-    switch( nLayout )
-    {
-    case 0: // default layout using only the title and layout area
-        break; // do nothing
-    case 1: // title, 2 shapes
-    case 9: // title, 2 vertical shapes
-
-        // if( bRightToLeft && (nLayout != 9) )
-        //     ::std::swap( rRectangle[1], rRectangle[2] );
-        break;
-    case 2: // title, shape, 2 shapes
-        // aTempPnt = aLayoutPos;
-        // aTempSize = aLayoutSize;
-        // aLayoutSize.Height() = long (aLayoutSize.Height() * 0.477);
-        // aLayoutSize.Width() = long (aLayoutSize.Width() * 0.488);
-        // aLayoutPos.X() = long (aLayoutPos.X() + aLayoutSize.Width() * 1.05);
-        // rRectangle[2] = Rectangle (aLayoutPos, aLayoutSize);
-
-        // aLayoutPos.Y() = long (aLayoutPos.Y() + aLayoutSize.Height() * 1.095);
-        // rRectangle[3] = Rectangle (aLayoutPos, aLayoutSize);
-
-        // aLayoutPos = aTempPnt;
-        // aLayoutSize = aTempSize;
-        // aLayoutSize.Width() = long (aLayoutSize.Width() * 0.488);
-        // rRectangle[1] = Rectangle (aLayoutPos, aLayoutSize);
-
-        // if( bRightToLeft )
-        // {
-        //     ::std::swap( rRectangle[1].Left(), rRectangle[2].Left() );
-        //     rRectangle[3].Left() = rRectangle[2].Left();
-        // }
-        break;
-    case 3: // title, 2 shapes, shape
-        // aTempPnt = aLayoutPos;
-        // aTempSize = aLayoutSize;
-        // aLayoutSize.Height() = long (aLayoutSize.Height() * 0.477);
-        // aLayoutSize.Width() = long (aLayoutSize.Width() * 0.488);
-        // rRectangle[1] = Rectangle (aLayoutPos, aLayoutSize);
-
-        // aLayoutPos.Y() = long (aLayoutPos.Y() + aLayoutSize.Height() * 1.095);
-        // rRectangle[2] = Rectangle (aLayoutPos, aLayoutSize);
-
-        // aLayoutPos = aTempPnt;
-        // aLayoutSize = aTempSize;
-        // aLayoutSize.Width() = long (aLayoutSize.Width() * 0.488);
-        // aLayoutPos.X() = long (aLayoutPos.X() + aLayoutSize.Width() * 1.05);
-        // rRectangle[3] = Rectangle (aLayoutPos, aLayoutSize);
-
-        // if( bRightToLeft )
-        // {
-        //     ::std::swap( rRectangle[1].Left(), rRectangle[2].Left() );
-        //     rRectangle[3].Left() = rRectangle[2].Left();
-        // }
-        break;
-    case 4: // title, shape above shape
-        // aLayoutSize.Height() = long (aLayoutSize.Height() * 0.477);
-        // rRectangle[1] = Rectangle (aLayoutPos, aLayoutSize);
-
-        // aLayoutPos.Y() = long (aLayoutPos.Y() + aLayoutSize.Height() * 1.095);
-        // rRectangle[2] = Rectangle (aLayoutPos, aLayoutSize);
-        break;
-
-    case 5: // title, 2 shapes above shape
-        // aLayoutSize.Height() = long (aLayoutSize.Height() * 0.477);
-        // aLayoutSize.Width() = long (aLayoutSize.Width() * 0.488);
-        // rRectangle[1] = Rectangle (aLayoutPos, aLayoutSize);
-
-        // aTempPnt = aLayoutPos;
-        // aLayoutPos.X() = long (aLayoutPos.X() + aLayoutSize.Width() * 1.05);
-        // rRectangle[2] = Rectangle (aLayoutPos, aLayoutSize);
-
-        // aLayoutPos.X() = aTempPnt.X();
-        // aLayoutPos.Y() = long (aLayoutPos.Y() + aLayoutSize.Height() * 1.095);
-        // aLayoutSize.Width() = long (aLayoutSize.Width() / 0.488);
-        // rRectangle[3] = Rectangle (aLayoutPos, aLayoutSize);
-        break;
-    case 6: // title, 4 shapes
-    {
-        // sal_uLong nX = long (aLayoutPos.X());
-
-        // aLayoutSize.Height() = long (aLayoutSize.Height() * 0.477);
-        // aLayoutSize.Width()  = long (aLayoutSize.Width() * 0.488);
-        // rRectangle[1] = Rectangle (aLayoutPos, aLayoutSize);
-
-        // aLayoutPos.X() = long (nX + aLayoutSize.Width() * 1.05);
-        // rRectangle[2] = Rectangle (aLayoutPos, aLayoutSize);
-
-        // aLayoutPos.Y() = long (aLayoutPos.Y() + aLayoutSize.Height() * 1.095);
-        // rRectangle[3] = Rectangle (aLayoutPos, aLayoutSize);
-
-        // aLayoutPos.X() = nX;
-        // rRectangle[4] = Rectangle (aLayoutPos, aLayoutSize);
-        break;
-    }
-    case 7: // vertical title, shape above shape
-    {
-        Size aSize( rRectangle[0].GetSize().Height(), rRectangle[1].BottomLeft().Y() - rRectangle[0].TopLeft().Y() );
-        rRectangle[0].SetSize( aSize );
-        rRectangle[0].SetPos( aTitleRect.TopRight() - Point( aSize.Width(), 0 ) );
-
-        Size aPageSize ( rPage.GetSize() );
-        aPageSize.Height() -= rPage.GetUppBorder() + rPage.GetLwrBorder();
-        aSize.Height() = long ( rRectangle[0].GetSize().Height() * 0.47 );
-        aSize.Width() = long( aPageSize.Width() * 0.7 );
-        rRectangle[1].SetPos( aTitleRect.TopLeft() );
-        rRectangle[1].SetSize( aSize );
-
-        aSize.Height() = rRectangle[0].GetSize().Height();
-        Point aPos( aTitleRect.TopLeft() );
-        aPos.Y() += long ( aSize.Height() * 0.53 );
-        rRectangle[2].SetPos( aPos );
-        aSize.Height() = long ( rRectangle[0].GetSize().Height() * 0.47 );
-        rRectangle[2].SetSize( aSize );
-        break;
-    }
-    case 8: // vertical title, shape
-    {
-        Size aSize( rRectangle[0].GetSize().Height(), rRectangle[1].BottomLeft().Y() - rRectangle[0].TopLeft().Y() );
-        rRectangle[0].SetSize( aSize );
-        rRectangle[0].SetPos( aTitleRect.TopRight() - Point( aSize.Width(), 0 ) );
-
-        Size aPageSize ( rPage.GetSize() );
-        aPageSize.Height() -= rPage.GetUppBorder() + rPage.GetLwrBorder();
-        aSize.Height() = rRectangle[0].GetSize().Height();
-        aSize.Width() = long( aPageSize.Width() * 0.7 );
-        rRectangle[1].SetPos( aTitleRect.TopLeft() );
-        rRectangle[1].SetSize( aSize );
-        break;
-    }
-    case 10: // onlytext
-    {
-        Size aSize( rRectangle[0].GetSize().Width(), rRectangle[1].BottomLeft().Y() - rRectangle[0].TopLeft().Y() );
-        rRectangle[0].SetSize( aSize );
-        rRectangle[0].SetPos( aTitlePos);
-        break;
-    }
-    case 11: // title, 6 shapes
-    {
-        // sal_uLong nX = long (aLayoutPos.X());
-
-        // aLayoutSize.Height() = long (aLayoutSize.Height() * 0.477);
-        // aLayoutSize.Width()  = long (aLayoutSize.Width() * 0.322);
-        // rRectangle[1] = Rectangle (aLayoutPos, aLayoutSize);
-
-        // aLayoutPos.X() = long (nX + aLayoutSize.Width() * 1.05);
-        // rRectangle[2] = Rectangle (aLayoutPos, aLayoutSize);
-
-        // aLayoutPos.X() = long (nX + aLayoutSize.Width() * 2 * 1.05);
-        // rRectangle[3] = Rectangle (aLayoutPos, aLayoutSize);
-
-        // aLayoutPos.Y() = long (aLayoutPos.Y() + aLayoutSize.Height() * 1.095);
-        // rRectangle[4] = Rectangle (aLayoutPos, aLayoutSize);
-
-        // aLayoutPos.X() = long (nX + aLayoutSize.Width() * 1.05);
-        // rRectangle[5] = Rectangle (aLayoutPos, aLayoutSize);
-
-        // aLayoutPos.X() = nX;
-        // rRectangle[6] = Rectangle (aLayoutPos, aLayoutSize);
-
-        break;
-    }
-
     }
 }
 
@@ -1703,7 +1547,7 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, sal_Bool bInit, sal_Bool bCreate 
     Rectangle aRectangle[MAX_PRESOBJS];
     const LayoutDescriptor& aDescriptor = GetLayoutDescriptor( meAutoLayout );
     autolayout=enumtoString(meAutoLayout);
-    CalcAutoLayoutRectangles( *this, aDescriptor.mnLayout, aRectangle, autolayout);
+    CalcAutoLayoutRectangles( *this, aRectangle, autolayout);
 
     std::set< SdrObject* > aUsedPresentationObjects;
 
