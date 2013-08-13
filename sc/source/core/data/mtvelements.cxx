@@ -25,22 +25,6 @@ CellTextAttr::CellTextAttr(sal_uInt16 nTextWidth, sal_uInt8 nScriptType) :
     mnTextWidth(nTextWidth),
     mnScriptType(nScriptType) {}
 
-ColumnBlockPosition& ColumnBlockPosition::operator= (const ColumnBlockPosition& r)
-{
-    miBroadcasterPos = r.miBroadcasterPos;
-    miCellTextAttrPos = r.miCellTextAttrPos;
-    miCellPos = r.miCellPos;
-    return *this;
-}
-
-ColumnBlockConstPosition& ColumnBlockConstPosition::operator= (const ColumnBlockConstPosition& r)
-{
-    miBroadcasterPos = r.miBroadcasterPos;
-    miCellTextAttrPos = r.miCellTextAttrPos;
-    miCellPos = r.miCellPos;
-    return *this;
-}
-
 ColumnBlockPositionSet::ColumnBlockPositionSet(ScDocument& rDoc) : mrDoc(rDoc) {}
 
 ColumnBlockPosition* ColumnBlockPositionSet::getBlockPosition(SCTAB nTab, SCCOL nCol)

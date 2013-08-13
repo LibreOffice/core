@@ -107,7 +107,7 @@ struct ColumnBlockPosition
     CellTextAttrStoreType::iterator miCellTextAttrPos;
     CellStoreType::iterator miCellPos;
 
-    ColumnBlockPosition& operator= (const ColumnBlockPosition& r);
+    ColumnBlockPosition(): miCellPos() {}
 };
 
 struct ColumnBlockConstPosition
@@ -116,7 +116,7 @@ struct ColumnBlockConstPosition
     CellTextAttrStoreType::const_iterator miCellTextAttrPos;
     CellStoreType::const_iterator miCellPos;
 
-    ColumnBlockConstPosition& operator= (const ColumnBlockConstPosition& r);
+    ColumnBlockConstPosition(): miCellPos() {}
 };
 
 class ColumnBlockPositionSet
