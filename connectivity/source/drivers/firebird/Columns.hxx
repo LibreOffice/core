@@ -21,7 +21,7 @@ namespace connectivity
         class Columns: public ::connectivity::OColumnsHelper
         {
         public:
-            Columns(::cppu::OWeakObject& rTable,
+            Columns(Table& rTable,
                     ::osl::Mutex& rMutex,
                     const ::connectivity::TStringVector &_rVector);
 

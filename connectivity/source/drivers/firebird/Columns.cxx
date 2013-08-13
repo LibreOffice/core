@@ -24,7 +24,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::uno;
 
-Columns::Columns(OWeakObject& rTable,
+Columns::Columns(Table& rTable,
                  Mutex& rMutex,
                  const TStringVector& rVector):
     OColumnsHelper(rTable,
@@ -32,6 +32,7 @@ Columns::Columns(OWeakObject& rTable,
                    rMutex,
                    rVector)
 {
+    OColumnsHelper::setParent(&rTable);
 }
 
 ObjectType Columns::createObject(const OUString& rColumnName)
