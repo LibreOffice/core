@@ -20,20 +20,18 @@
 
 #include <stdio.h>
 #include <string.h>
-
 #include <svsys.h>
 #include <rtl/strbuf.hxx>
-
 #include <tools/debug.hxx>
 #include <tools/poly.hxx>
-
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
-
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <win/wincomp.hxx>
 #include <win/saldata.hxx>
 #include <win/salgdi.h>
 #include <win/salframe.h>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 // =======================================================================
 
@@ -846,8 +844,40 @@ bool WinSalGraphics::setClipRegion( const Region& i_rClip )
         mhRegion = 0;
     }
 
-    if( i_rClip.HasPolyPolygonOrB2DPolyPolygon() )
+    bool bUsePolygon(i_rClip.HasPolyPolygonOrB2DPolyPolygon());
+    static bool bTryToAvoidPolygon(true);
+
+    // #i122149# try to avoid usage of PolyPolygon ClipRegions when PolyPolygon is no curve
+    // and only contains horizontal/vertical edges. In that case, use the fallback
+    // in GetRegionRectangles which will use Region::GetAsRegionBand() which will do
+    // the correct polygon-to-RegionBand transformation.
+    // Background is that when using the same Rectangle as rectangle or as Polygon
+    // clip region will lead to different results; the polygon-based one will be
+    // one pixel less to the right and down (see GDI docu for CreatePolygonRgn). This
+    // again is because of the polygon-nature and it's classic handling when filling.
+    // This also means that all cases which use a 'true' polygon-based incarnation of
+    // a Region should know what they do - it may lead to repaint errors.
+    if(bUsePolygon && bTryToAvoidPolygon)
     {
+        const basegfx::B2DPolyPolygon aPolyPolygon( i_rClip.GetAsB2DPolyPolygon() );
+
+        if(!aPolyPolygon.areControlPointsUsed())
+        {
+            if(basegfx::tools::containsOnlyHorizontalAndVerticalEdges(aPolyPolygon))
+            {
+                bUsePolygon = false;
+            }
+        }
+    }
+
+    if(bUsePolygon)
+    {
+        // #i122149# check the comment above to know that this may lead to potentioal repaint
+        // problems. It may be solved (if needed) by scaling the polygon by one in X
+        // and Y. Currently the workaround to only use it if really unavoidable will
+        // solve most cases. When someone is really using polygon-based Regions he
+        // should know what he is doing.
+        // Added code to do that scaling to check if it works, testing it.
         const basegfx::B2DPolyPolygon aPolyPolygon( i_rClip.GetAsB2DPolyPolygon() );
         const sal_uInt32 nCount(aPolyPolygon.count());
 
@@ -856,21 +886,38 @@ bool WinSalGraphics::setClipRegion( const Region& i_rClip )
             std::vector< POINT > aPolyPoints;
             aPolyPoints.reserve( 1024 );
             std::vector< INT > aPolyCounts( nCount, 0 );
+            basegfx::B2DHomMatrix aExpand;
+            static bool bExpandByOneInXandY(true);
+
+            if(bExpandByOneInXandY)
+            {
+                const basegfx::B2DRange aRangeS(aPolyPolygon.getB2DRange());
+                const basegfx::B2DRange aRangeT(aRangeS.getMinimum(), aRangeS.getMaximum() + basegfx::B2DTuple(1.0, 1.0));
+                aExpand = basegfx::B2DHomMatrix(basegfx::tools::createSourceRangeTargetRangeTransform(aRangeS, aRangeT));
+            }
 
             for(sal_uInt32 a(0); a < nCount; a++)
             {
-                basegfx::B2DPolygon aPoly(aPolyPolygon.getB2DPolygon(a));
-
-                aPoly = basegfx::tools::adaptiveSubdivideByDistance( aPoly, 1 );
-                const sal_uInt32 nPoints = aPoly.count();
+                const basegfx::B2DPolygon aPoly(
+                    basegfx::tools::adaptiveSubdivideByDistance(
+                        aPolyPolygon.getB2DPolygon(a),
+                        1));
+                const sal_uInt32 nPoints(aPoly.count());
                 aPolyCounts[a] = nPoints;
 
                 for( sal_uInt32 b = 0; b < nPoints; b++ )
                 {
-                    basegfx::B2DPoint aPt( aPoly.getB2DPoint( b ) );
+                    basegfx::B2DPoint aPt(aPoly.getB2DPoint(b));
+
+                    if(bExpandByOneInXandY)
+                    {
+                        aPt = aExpand * aPt;
+                    }
+
                     POINT aPOINT;
-                    aPOINT.x = (LONG)aPt.getX();
-                    aPOINT.y = (LONG)aPt.getY();
+                    // #i122149# do correct rounding
+                    aPOINT.x = basegfx::fround(aPt.getX());
+                    aPOINT.y = basegfx::fround(aPt.getY());
                     aPolyPoints.push_back( aPOINT );
                 }
             }
@@ -993,7 +1040,16 @@ bool WinSalGraphics::setClipRegion( const Region& i_rClip )
     }
 
     if( mhRegion )
+    {
         SelectClipRgn( getHDC(), mhRegion );
+
+        // debug code if you weant to check range of the newly applied ClipRegion
+        //RECT aBound;
+        //const int aRegionType = GetRgnBox(mhRegion, &aBound);
+        //
+        //bool bBla = true;
+    }
+
     return mhRegion != 0;
 }
 

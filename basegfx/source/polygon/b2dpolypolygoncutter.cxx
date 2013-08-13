@@ -104,6 +104,8 @@ namespace basegfx
         typedef ::std::vector< PN > PNV;
         typedef ::std::vector< VN > VNV;
         typedef ::std::vector< SN > SNV;
+        typedef ::std::pair< basegfx::B2DPoint /*orig*/, basegfx::B2DPoint /*repl*/ > CorrectionPair;
+        typedef ::std::vector< CorrectionPair > CorrectionTable;
 
         //////////////////////////////////////////////////////////////////////////////
 
@@ -114,6 +116,7 @@ namespace basegfx
             PNV                     maPNV;
             VNV                     maVNV;
             SNV                     maSNV;
+            CorrectionTable         maCorrectionTable;
 
             unsigned                mbIsCurve : 1;
             unsigned                mbChanged : 1;
@@ -438,13 +441,44 @@ namespace basegfx
 
             void impSolve()
             {
-                // sort by point to identify common nodes
+                // sort by point to identify common nodes easier
                 ::std::sort(maSNV.begin(), maSNV.end());
 
                 // handle common nodes
                 const sal_uInt32 nNodeCount(maSNV.size());
+                sal_uInt32 a(0);
 
-                for(sal_uInt32 a(0); a < nNodeCount - 1; a++)
+                // snap unsharp-equal points
+                if(nNodeCount)
+                {
+                    basegfx::B2DPoint* pLast(&maSNV[0].mpPN->maPoint);
+
+                    for(a = 1; a < nNodeCount; a++)
+                    {
+                        basegfx::B2DPoint* pCurrent(&maSNV[a].mpPN->maPoint);
+
+                        if(pLast->equal(*pCurrent) && (pLast->getX() != pCurrent->getX() || pLast->getY() != pCurrent->getY()))
+                        {
+                            const basegfx::B2DPoint aMiddle((*pLast + *pCurrent) * 0.5);
+
+                            if(pLast->getX() != aMiddle.getX() || pLast->getY() != aMiddle.getY())
+                            {
+                                maCorrectionTable.push_back(CorrectionPair(*pLast, aMiddle));
+                                *pLast = aMiddle;
+                            }
+
+                            if(pCurrent->getX() != aMiddle.getX() || pCurrent->getY() != aMiddle.getY())
+                            {
+                                maCorrectionTable.push_back(CorrectionPair(*pCurrent, aMiddle));
+                                *pCurrent = aMiddle;
+                            }
+                        }
+
+                        pLast = pCurrent;
+                    }
+                }
+
+                for(a = 0; a < nNodeCount - 1; a++)
                 {
                     // test a before using it, not after. Also use nPointCount instead of aSortNodes.size()
                     PN& rPNb = *(maSNV[a].mpPN);
@@ -614,8 +648,45 @@ namespace basegfx
                 }
                 else
                 {
+                    const sal_uInt32 nCorrectionSize(maCorrectionTable.size());
+
                     // no change, return original
-                    return maOriginal;
+                    if(!nCorrectionSize)
+                    {
+                        return maOriginal;
+                    }
+
+                    // apply coordinate corrections to ensure inside/outside correctness after solving
+                    const sal_uInt32 nPolygonCount(maOriginal.count());
+                    basegfx::B2DPolyPolygon aRetval(maOriginal);
+
+                    for(sal_uInt32 a(0); a < nPolygonCount; a++)
+                    {
+                        basegfx::B2DPolygon aTemp(aRetval.getB2DPolygon(a));
+                        const sal_uInt32 nPointCount(aTemp.count());
+                        bool bChanged;
+
+                        for(sal_uInt32 b(0); b < nPointCount; b++)
+                        {
+                            const basegfx::B2DPoint aCandidate(aTemp.getB2DPoint(b));
+
+                            for(sal_uInt32 c(0); c < nCorrectionSize; c++)
+                            {
+                                if(maCorrectionTable[c].first.getX() == aCandidate.getX() && maCorrectionTable[c].first.getY() == aCandidate.getY())
+                                {
+                                    aTemp.setB2DPoint(b, maCorrectionTable[c].second);
+                                    bChanged = true;
+                                }
+                            }
+                        }
+
+                        if(bChanged)
+                        {
+                            aRetval.setB2DPolygon(a, aTemp);
+                        }
+                    }
+
+                    return aRetval;
                 }
             }
         };

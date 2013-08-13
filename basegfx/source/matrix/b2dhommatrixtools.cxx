@@ -357,6 +357,47 @@ namespace basegfx
 
             return aRetval;
         }
+
+        /// special for the case to map from source range to target range
+        B2DHomMatrix createSourceRangeTargetRangeTransform(
+            const B2DRange& rSourceRange,
+            const B2DRange& rTargetRange)
+        {
+            B2DHomMatrix aRetval;
+
+            if(&rSourceRange == &rTargetRange)
+            {
+                return aRetval;
+            }
+
+            if(!fTools::equalZero(rSourceRange.getMinX()) || !fTools::equalZero(rSourceRange.getMinY()))
+            {
+                aRetval.set(0, 2, -rSourceRange.getMinX());
+                aRetval.set(1, 2, -rSourceRange.getMinY());
+            }
+
+            const double fSourceW(rSourceRange.getWidth());
+            const double fSourceH(rSourceRange.getHeight());
+            const bool bDivX(!fTools::equalZero(fSourceW) && !fTools::equal(fSourceW, 1.0));
+            const bool bDivY(!fTools::equalZero(fSourceH) && !fTools::equal(fSourceH, 1.0));
+            const double fScaleX(bDivX ? rTargetRange.getWidth() / fSourceW : rTargetRange.getWidth());
+            const double fScaleY(bDivY ? rTargetRange.getHeight() / fSourceH : rTargetRange.getHeight());
+
+            if(!fTools::equalZero(fScaleX) || !fTools::equalZero(fScaleY))
+            {
+                aRetval.scale(fScaleX, fScaleY);
+            }
+
+            if(!fTools::equalZero(rTargetRange.getMinX()) || !fTools::equalZero(rTargetRange.getMinY()))
+            {
+                aRetval.translate(
+                    rTargetRange.getMinX(),
+                    rTargetRange.getMinY());
+            }
+
+            return aRetval;
+        }
+
     } // end of namespace tools
 } // end of namespace basegfx
 

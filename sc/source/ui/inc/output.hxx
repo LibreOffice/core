@@ -312,7 +312,7 @@ public:
     void    DrawSelectiveObjects(const sal_uInt16 nLayer);
 
     sal_Bool    SetChangedClip();       // sal_False = not
-    PolyPolygon GetChangedArea();
+    Region      GetChangedAreaRegion();
 
     void    FindChanged();
     void    SetPagebreakMode( ScPageBreakData* pPageData );

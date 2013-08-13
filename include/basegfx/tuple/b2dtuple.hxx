@@ -215,12 +215,12 @@ namespace basegfx
 
         bool operator==( const B2DTuple& rTup ) const
         {
-            return equal(rTup);
+            return mfX == rTup.mfX && mfY == rTup.mfY;
         }
 
         bool operator!=( const B2DTuple& rTup ) const
         {
-            return !equal(rTup);
+            return mfX != rTup.mfX || mfY != rTup.mfY;
         }
 
         B2DTuple& operator=( const B2DTuple& rTup )

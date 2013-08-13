@@ -434,6 +434,11 @@ namespace basegfx
         */
         BASEGFX_DLLPUBLIC B2DPolygon snapPointsOfHorizontalOrVerticalEdges(const B2DPolygon& rCandidate);
 
+        /** returns true if the Polygon only contains horizontal or vertical edges
+            so that it could be represented by RegionBands
+        */
+        bool containsOnlyHorizontalAndVerticalEdges(const B2DPolygon& rCandidate);
+
     } // end of namespace tools
 } // end of namespace basegfx
 

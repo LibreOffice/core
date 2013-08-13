@@ -1867,42 +1867,46 @@ drawinglayer::processor2d::BaseProcessor2D* ScOutputData::CreateProcessor2D( )
 
 //  Drucker
 
-PolyPolygon ScOutputData::GetChangedArea()
+Region ScOutputData::GetChangedAreaRegion()
 {
-    PolyPolygon aPoly;
-
+    Region aRegion;
     Rectangle aDrawingRect;
+    bool bHad(false);
+    long nPosY = nScrY;
+    SCSIZE nArrY;
+
     aDrawingRect.Left() = nScrX;
     aDrawingRect.Right() = nScrX+nScrW-1;
 
-    sal_Bool    bHad    = false;
-    long    nPosY   = nScrY;
-    SCSIZE  nArrY;
-    for (nArrY=1; nArrY+1<nArrCount; nArrY++)
+    for(nArrY=1; nArrY+1<nArrCount; nArrY++)
     {
         RowInfo* pThisRowInfo = &pRowInfo[nArrY];
 
-        if ( pThisRowInfo->bChanged )
+        if(pThisRowInfo->bChanged)
         {
-            if (!bHad)
+            if(!bHad)
             {
                 aDrawingRect.Top() = nPosY;
-                bHad = sal_True;
+                bHad = true;
             }
+
             aDrawingRect.Bottom() = nPosY + pRowInfo[nArrY].nHeight - 1;
         }
-        else if (bHad)
+        else if(bHad)
         {
-            aPoly.Insert( Polygon( mpDev->PixelToLogic(aDrawingRect) ) );
+            aRegion.Union(mpDev->PixelToLogic(aDrawingRect));
             bHad = false;
         }
+
         nPosY += pRowInfo[nArrY].nHeight;
     }
 
-    if (bHad)
-        aPoly.Insert( Polygon( mpDev->PixelToLogic(aDrawingRect) ) );
+    if(bHad)
+    {
+        aRegion.Union(mpDev->PixelToLogic(aDrawingRect));
+    }
 
-    return aPoly;
+    return aRegion;
 }
 
 sal_Bool ScOutputData::SetChangedClip()

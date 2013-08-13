@@ -1252,7 +1252,7 @@ namespace basegfx
     {
         OSL_ENSURE(nIndex < mpPolygon->count(), "B2DPolygon access outside range (!)");
 
-        if(getB2DPoint(nIndex) != rValue)
+        if(mpPolygon->getPoint(nIndex) != rValue)
         {
             mpPolygon->setPoint(nIndex, rValue);
         }
