@@ -23,6 +23,7 @@
 #include "writerwordglue.hxx"
 #include "ww8par.hxx"
 #include "fmtcntnt.hxx"
+#include "fmtftn.hxx"
 #include "fchrfmt.hxx"
 #include "tgrditem.hxx"
 #include "fmtruby.hxx"
