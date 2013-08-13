@@ -29,7 +29,7 @@ namespace
 
 CodeCompleteOptions::CodeCompleteOptions()
 {
-    bIsAutoCorrectKeywordsOn = officecfg::Office::BasicIDE::Autocomplete::AutoCorrectKeywords::get();
+    bIsAutoCorrectKeywordsOn = officecfg::Office::BasicIDE::Autocomplete::AutoCorrect::get();
     bIsAutoCloseParenthesisOn = officecfg::Office::BasicIDE::Autocomplete::AutocloseParenthesis::get();
     bIsAutoCloseQuotesOn = officecfg::Office::BasicIDE::Autocomplete::AutocloseDoubleQuotes::get();
     bIsProcedureAutoCompleteOn = officecfg::Office::BasicIDE::Autocomplete::AutocloseProc::get();

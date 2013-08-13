@@ -1832,6 +1832,11 @@ SbxArrayRef SbModule::GetMethods()
     return pMethods;
 }
 
+OUString SbModule::GetKeywordCase( const OUString& sKeyword ) const
+{
+    return SbiParser::GetKeywordCase( sKeyword );
+}
+
 bool SbModule::HasExeCode()
 {
     // And empty Image always has the Global Chain set up

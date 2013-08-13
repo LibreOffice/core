@@ -536,8 +536,7 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
        HandleProcedureCompletition();
     }
 
-    if( rKEvt.GetKeyCode().GetCode() == KEY_POINT &&
-        (CodeCompleteOptions::IsCodeCompleteOn() || CodeCompleteOptions::IsExtendedTypeDeclaration()) )
+    if( rKEvt.GetKeyCode().GetCode() == KEY_POINT && CodeCompleteOptions::IsCodeCompleteOn() )
     {
         HandleCodeCompletition();
     }
@@ -602,9 +601,13 @@ void EditorWindow::HandleAutoCorrect()
         OUString sStr = aLine.copy(r.nBegin, r.nEnd - r.nBegin);
         if( !sStr.isEmpty() )
         {
-            //capitalize first letter and replace
             sStr = sStr.toAsciiLowerCase();
-            sStr = sStr.replaceAt( 0, 1, OUString(sStr[0]).toAsciiUpperCase() );
+            if( !rModulWindow.GetSbModule()->GetKeywordCase(sStr).isEmpty() )
+            // if it is a keyword, get its correct case
+                sStr = rModulWindow.GetSbModule()->GetKeywordCase(sStr);
+            else
+            // else capitalize first letter/select the correct one, and replace
+                sStr = sStr.replaceAt( 0, 1, OUString(sStr[0]).toAsciiUpperCase() );
 
             TextPaM aStart(nLine, aSel.GetStart().GetIndex() - sStr.getLength() );
             TextSelection sTextSelection(aStart, TextPaM(nLine, aSel.GetStart().GetIndex()));
@@ -690,13 +693,17 @@ void EditorWindow::HandleProcedureCompletition()
         return;// no sub/function keyword or there is no identifier
 
     OUString sText("\nEnd ");
+    aSel = GetEditView()->GetSelection();
     if( sProcType.equalsIgnoreAsciiCase("function") )
         sText += OUString( "Function\n" );
     if( sProcType.equalsIgnoreAsciiCase("sub") )
         sText += OUString( "Sub\n" );
 
     if( nLine+1 == pEditEngine->GetParagraphCount() )
+    {
         pEditView->InsertText( sText );//append to the end
+        GetEditView()->SetSelection(aSel);
+    }
     else
     {
         for( sal_uLong i = nLine+1; i < pEditEngine->GetParagraphCount(); ++i )
@@ -714,7 +721,8 @@ void EditorWindow::HandleProcedureCompletition()
                 {
                     if( sStr.equalsIgnoreAsciiCase("sub") || sStr.equalsIgnoreAsciiCase("function") )
                     {
-                        pEditView->InsertText( sText );
+                        pEditView->InsertText( sText );//append to the end
+                        GetEditView()->SetSelection(aSel);
                         break;
                     }
                     if( sStr.equalsIgnoreAsciiCase("end") )
@@ -735,15 +743,16 @@ void EditorWindow::HandleCodeCompletition()
     std::vector< OUString > aVect; //vector to hold the base variable+methods for the nested reflection
 
     HighlightPortions aPortions;
+    aLine = aLine.copy(0, aSel.GetEnd().GetIndex());
     aHighlighter.getHighlightPortions( nLine, aLine, aPortions );
     if( aPortions.size() > 0 )
     {//use the syntax highlighter to grab out nested reflection calls, eg. aVar.aMethod("aa").aOtherMethod ..
-        for( auto aIt = aPortions.crbegin(); aIt != aPortions.crend(); ++aIt )
+        for( HighlightPortions::reverse_iterator aIt = aPortions.rbegin(); aIt != aPortions.rend(); ++aIt )
         {
             HighlightPortion r = *aIt;
-            if( r.tokenType == 2 ) // a whitespace: stop; if there is no ws, it goes to the beginning of the line
+            if( r.tokenType == TT_WHITESPACE ) // a whitespace: stop; if there is no ws, it goes to the beginning of the line
                 break;
-            if( r.tokenType == 1 || r.tokenType == 9 ) // extract the identifers(methods, base variable)
+            if( r.tokenType == TT_IDENTIFIER || r.tokenType == TT_KEYWORDS ) // extract the identifers(methods, base variable)
             /* an example: Dim aLocVar2 as com.sun.star.beans.PropertyValue
              * here, aLocVar2.Name, and PropertyValue's Name field is treated as a keyword(?!)
              * */
@@ -2609,19 +2618,43 @@ void CodeCompleteListBox::KeyInput( const KeyEvent& rKeyEvt )
             case KEY_ESCAPE: // hide, do nothing
                 HideAndRestoreFocus();
                 break;
+            case KEY_RIGHT:
+            {
+                TextSelection aTextSelection( GetParentEditView()->GetSelection() );
+                if( aTextSelection.GetEnd().GetPara() != pCodeCompleteWindow->GetTextSelection().GetEnd().GetPara() )
+                {
+                    HideAndRestoreFocus();
+                }
+                break;
+            }
+            case KEY_LEFT:
+            {
+                TextSelection aTextSelection( GetParentEditView()->GetSelection() );
+                if( aTextSelection.GetStart().GetIndex()-1 < pCodeCompleteWindow->GetTextSelection().GetStart().GetIndex() )
+                {//leave the cursor where it is
+                    pCodeCompleteWindow->Hide();
+                    pCodeCompleteWindow->pParent->GrabFocus();
+                }
+                break;
+            }
             case KEY_TAB:
+            {
+                TextPaM aTextEnd( GetParentEditView()->CursorEndOfLine(pCodeCompleteWindow->GetTextSelection().GetEnd()) );
+                TextSelection aTextSelection( pCodeCompleteWindow->GetTextSelection().GetStart(), aTextEnd );
+                OUString sTypedText = pCodeCompleteWindow->pParent->GetEditEngine()->GetText(aTextSelection);
                 if( !aFuncBuffer.isEmpty() )
                 {
                     sal_uInt16 nInd = GetSelectEntryPos();
-                    if( nInd+1 != LISTBOX_ENTRY_NOTFOUND )
+                    if( nInd != LISTBOX_ENTRY_NOTFOUND )
                     {//if there is something selected
                         bool bFound = false;
                         if( nInd == GetEntryCount() )
                             nInd = 0;
-                        for( sal_uInt16 i = nInd+1; i != GetEntryCount(); ++i )
+                        for( sal_uInt16 i = nInd; i != GetEntryCount(); ++i )
                         {
                             OUString sEntry = (OUString) GetEntry(i);
-                            if( sEntry.startsWithIgnoreAsciiCase( aFuncBuffer.toString() ) )
+                            if( sEntry.startsWithIgnoreAsciiCase( aFuncBuffer.toString() )
+                                && (aFuncBuffer.toString() != sTypedText) && (i != nInd) )
                             {
                                 SelectEntry( sEntry );
                                 bFound = true;
@@ -2638,6 +2671,7 @@ void CodeCompleteListBox::KeyInput( const KeyEvent& rKeyEvt )
                     }
                 }
                 break;
+            }
             case KEY_SPACE:
                 HideAndRestoreFocus();
                 break;

@@ -547,4 +547,25 @@ bool SbiTokenizer::MayBeLabel( bool bNeedsColon )
     }
 }
 
+
+OUString SbiTokenizer::GetKeywordCase( const OUString& sKeyword )
+{
+    if( !nToken )
+    {
+        TokenTable *tp;
+        for( nToken = 0, tp = pTokTable; tp->t; nToken++, tp++ )
+        {}
+    }
+    TokenTable* tp = pTokTable;
+    for( short i = 0; i < nToken; i++, tp++ )
+    {
+        OUString sStr = OStringToOUString(tp->s, RTL_TEXTENCODING_ASCII_US);
+        if( sStr.equalsIgnoreAsciiCase(sKeyword) )
+        {
+            return sStr;
+        }
+    }
+    return OUString("");
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

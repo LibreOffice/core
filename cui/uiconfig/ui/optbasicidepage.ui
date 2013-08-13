@@ -126,11 +126,12 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="autocorrect_keywords">
-                    <property name="label" translatable="yes">Autocorrect Keywords</property>
+                  <object class="GtkCheckButton" id="autocorrect">
+                    <property name="label" translatable="yes">Autocorrection</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
+                    <property name="relief">none</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                   </object>

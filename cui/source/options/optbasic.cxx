@@ -39,7 +39,7 @@ SvxBasicIDEOptionsPage::SvxBasicIDEOptionsPage( Window* pParent, const SfxItemSe
     get(pAutocloseProcChk, "autoclose_proc");
     get(pAutocloseParenChk, "autoclose_paren");
     get(pAutocloseQuotesChk, "autoclose_quotes");
-    get(pAutoCorrectKeywordsChk, "autocorrect_keywords");
+    get(pAutoCorrectChk, "autocorrect");
     get(pUseExtendedTypesChk, "extendedtypes_enable");
 
     LoadConfig();
@@ -57,13 +57,13 @@ void SvxBasicIDEOptionsPage::LoadConfig()
     bool bCodeCompleteOn = officecfg::Office::BasicIDE::Autocomplete::CodeComplete::get();
     bool bParenClose = officecfg::Office::BasicIDE::Autocomplete::AutocloseParenthesis::get();
     bool bQuoteClose = officecfg::Office::BasicIDE::Autocomplete::AutocloseDoubleQuotes::get();
-    bool bCorrect = officecfg::Office::BasicIDE::Autocomplete::AutoCorrectKeywords::get();
+    bool bCorrect = officecfg::Office::BasicIDE::Autocomplete::AutoCorrect::get();
 
     pCodeCompleteChk->Check( bCodeCompleteOn );
     pAutocloseProcChk->Check( bProcClose );
     pAutocloseQuotesChk->Check( bQuoteClose );
     pAutocloseParenChk->Check( bParenClose );
-    pAutoCorrectKeywordsChk->Check( bCorrect );
+    pAutoCorrectChk->Check( bCorrect );
     pUseExtendedTypesChk->Check( bExtended );
 }
 
@@ -75,7 +75,7 @@ void SvxBasicIDEOptionsPage::SaveConfig()
     officecfg::Office::BasicIDE::Autocomplete::UseExtended::set( pUseExtendedTypesChk->IsChecked(), batch );
     officecfg::Office::BasicIDE::Autocomplete::AutocloseParenthesis::set( pAutocloseParenChk->IsChecked(), batch );
     officecfg::Office::BasicIDE::Autocomplete::AutocloseDoubleQuotes::set( pAutocloseQuotesChk->IsChecked(), batch );
-    officecfg::Office::BasicIDE::Autocomplete::AutoCorrectKeywords::set( pAutoCorrectKeywordsChk->IsChecked(), batch );
+    officecfg::Office::BasicIDE::Autocomplete::AutoCorrect::set( pAutoCorrectChk->IsChecked(), batch );
     batch->commit();
 }
 
@@ -123,10 +123,10 @@ sal_Bool SvxBasicIDEOptionsPage::FillItemSet( SfxItemSet& /*rCoreSet*/ )
         bModified = sal_True;
     }
 
-    if( pAutoCorrectKeywordsChk->IsChecked() != pAutoCorrectKeywordsChk->GetSavedValue() )
+    if( pAutoCorrectChk->IsChecked() != pAutoCorrectChk->GetSavedValue() )
     {
         boost::shared_ptr< comphelper::ConfigurationChanges > batch( comphelper::ConfigurationChanges::create() );
-        officecfg::Office::BasicIDE::Autocomplete::AutoCorrectKeywords::set( pAutoCorrectKeywordsChk->IsChecked(), batch );
+        officecfg::Office::BasicIDE::Autocomplete::AutoCorrect::set( pAutoCorrectChk->IsChecked(), batch );
         batch->commit();
         bModified = sal_True;
     }
@@ -145,7 +145,7 @@ void SvxBasicIDEOptionsPage::Reset( const SfxItemSet& /*rSet*/ )
 
     pAutocloseParenChk->SaveValue();
 
-    pAutoCorrectKeywordsChk->SaveValue();
+    pAutoCorrectChk->SaveValue();
 
     pUseExtendedTypesChk->SaveValue();
 }
