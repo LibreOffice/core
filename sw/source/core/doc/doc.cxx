@@ -1648,22 +1648,25 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
 }
 
 // returns true while there is more to do
-bool SwDoc::IncrementalDocStatCalculate( long nTextNodes, bool bFields )
+bool SwDoc::IncrementalDocStatCalculate(long nChars, bool bFields)
 {
     mpDocStat->Reset();
     mpDocStat->nPara = 0; // default is 1!
     SwNode* pNd;
 
     // This is the inner loop - at least while the paras are dirty.
-    for( sal_uLong i = GetNodes().Count(); i > 0 && nTextNodes > 0; )
+    for( sal_uLong i = GetNodes().Count(); i > 0 && nChars > 0; )
     {
         switch( ( pNd = GetNodes()[ --i ])->GetNodeType() )
         {
         case ND_TEXTNODE:
         {
+            long const nOldChars(mpDocStat->nChar);
             SwTxtNode *pTxt = static_cast< SwTxtNode * >( pNd );
             if (pTxt->CountWords(*mpDocStat, 0, pTxt->GetTxt().getLength()))
-                nTextNodes--;
+            {
+                nChars -= (mpDocStat->nChar - nOldChars);
+            }
             break;
         }
         case ND_TABLENODE:      ++mpDocStat->nTbl;   break;
@@ -1738,13 +1741,13 @@ bool SwDoc::IncrementalDocStatCalculate( long nTextNodes, bool bFields )
         pType->UpdateFlds();
     }
 
-    return nTextNodes <= 0;
+    return nChars <= 0;
 }
 
 IMPL_LINK( SwDoc, DoIdleStatsUpdate, Timer *, pTimer )
 {
     (void)pTimer;
-    if( IncrementalDocStatCalculate( 1000 ) )
+    if (IncrementalDocStatCalculate(32000))
         maStatsUpdateTimer.Start();
 
     SwView* pView = GetDocShell() ? GetDocShell()->GetView() : NULL;
@@ -1759,10 +1762,10 @@ void SwDoc::UpdateDocStat( bool bCompleteAsync, bool bFields )
     {
         if (!bCompleteAsync)
         {
-            while (IncrementalDocStatCalculate(250, bFields)) {}
+            while (IncrementalDocStatCalculate(5000, bFields)) {}
             maStatsUpdateTimer.Stop();
         }
-        else if (IncrementalDocStatCalculate(250, bFields))
+        else if (IncrementalDocStatCalculate(5000, bFields))
             maStatsUpdateTimer.Start();
     }
 }
