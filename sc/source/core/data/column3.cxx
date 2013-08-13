@@ -529,7 +529,6 @@ class EmptyCells
 {
     ScColumn& mrColumn;
     sc::ColumnBlockPosition& mrPos;
-    sc::CellStoreType::iterator miPos;
 
     void splitFormulaGrouping(const sc::CellStoreType::position_type& rPos)
     {
