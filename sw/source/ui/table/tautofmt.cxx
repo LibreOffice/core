@@ -101,10 +101,10 @@ public:
             SwStringInputDlg(     Window* pParent,
                             const String& rTitle,
                             const String& rEditTitle,
-                            const String& rDefault );
+                            const OUString& rDefault );
             ~SwStringInputDlg();
 
-    void GetInputString( String& rString ) const;
+    OUString GetInputString() const;
 
 private:
     Edit*           m_pEdInput;   // Edit obtains the focus.
@@ -112,7 +112,7 @@ private:
 
 
 SwStringInputDlg::SwStringInputDlg(Window* pParent, const String& rTitle,
-    const String& rEditTitle, const String& rDefault)
+    const String& rEditTitle, const OUString& rDefault)
     : ModalDialog(pParent, "StringInputDialog", "modules/swriter/ui/stringinput.ui")
 {
     get<FixedText>("name")->SetText(rEditTitle);
@@ -122,9 +122,9 @@ SwStringInputDlg::SwStringInputDlg(Window* pParent, const String& rTitle,
     m_pEdInput->SetText(rDefault);
 }
 
-void SwStringInputDlg::GetInputString( String& rString ) const
+OUString SwStringInputDlg::GetInputString() const
 {
-    rString = m_pEdInput->GetText();
+    return m_pEdInput->GetText();
 }
 
 
@@ -288,16 +288,15 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, AddHdl)
     bool bOk = false, bFmtInserted = false;
     while( !bOk )
     {
-        SwStringInputDlg*   pDlg = new SwStringInputDlg( this,
-                                                            aStrTitle,
-                                                            aStrLabel,
-                                                            aEmptyStr );
+        SwStringInputDlg* pDlg = new SwStringInputDlg( this,
+                                                       aStrTitle,
+                                                       aStrLabel,
+                                                       OUString() );
         if( RET_OK == pDlg->Execute() )
         {
-            String aFormatName;
-            pDlg->GetInputString( aFormatName );
+            const OUString aFormatName( pDlg->GetInputString() );
 
-            if( aFormatName.Len() > 0 )
+            if ( !aFormatName.isEmpty() )
             {
                 sal_uInt16 n;
                 for( n = 0; n < pTableTbl->size(); ++n )
@@ -390,15 +389,15 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, RenameHdl)
     while( !bOk )
     {
         SwStringInputDlg* pDlg = new SwStringInputDlg( this,
-                        aStrRenameTitle, m_pLbFormat->GetSelectEntry(),
-                                                        aEmptyStr );
+                                                       aStrRenameTitle,
+                                                       m_pLbFormat->GetSelectEntry(),
+                                                       OUString() );
         if( pDlg->Execute() == RET_OK )
         {
             bool bFmtRenamed = false;
-            String aFormatName;
-            pDlg->GetInputString( aFormatName );
+            const OUString aFormatName( pDlg->GetInputString() );
 
-            if ( aFormatName.Len() > 0 )
+            if ( !aFormatName.isEmpty() )
             {
                 sal_uInt16 n;
                 for( n = 0; n < pTableTbl->size(); ++n )

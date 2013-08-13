@@ -233,7 +233,7 @@ class SW_DLLPUBLIC SwTableAutoFmt
     friend void _FinitCore();       // To destroy dflt. pointer.
     static SwBoxAutoFmt* pDfltBoxAutoFmt;
 
-    String aName;
+    OUString m_aName;
     sal_uInt16 nStrResId;
 
     // Common flags of Calc and Writer.
@@ -259,7 +259,7 @@ class SW_DLLPUBLIC SwTableAutoFmt
     SvxShadowItem m_aShadow;
 
 public:
-    SwTableAutoFmt( const String& rName );
+    SwTableAutoFmt( const OUString& rName );
     SwTableAutoFmt( const SwTableAutoFmt& rNew );
     ~SwTableAutoFmt();
 
@@ -268,8 +268,8 @@ public:
     void SetBoxFmt( const SwBoxAutoFmt& rNew, sal_uInt8 nPos );
     const SwBoxAutoFmt& GetBoxFmt( sal_uInt8 nPos ) const;
 
-    void SetName( const String& rNew ) { aName = rNew; nStrResId = USHRT_MAX; }
-    const String& GetName() const { return aName; }
+    void SetName( const OUString& rNew ) { m_aName = rNew; nStrResId = USHRT_MAX; }
+    OUString GetName() const { return m_aName; }
 
     enum UpdateFlags { UPDATE_CHAR = 1, UPDATE_BOX = 2, UPDATE_ALL = 3 };
     void UpdateFromSet( sal_uInt8 nPos, const SfxItemSet& rSet,
