@@ -425,6 +425,34 @@ void SmEditWindow::KeyInput(const KeyEvent& rKEvt)
 
         if (selected.trim() == "<?>")
             autoClose = true;
+        else if (selected.isEmpty() && !aSelection.HasRange())
+        {
+            selected = pEditView->GetEditEngine()->GetText(aSelection.nEndPara);
+            if (!selected.isEmpty())
+            {
+                sal_Int32 index = selected.indexOf("\n", aSelection.nEndPos);
+                if (index != -1)
+                {
+                    selected = selected.copy(index, sal_Int32(aSelection.nEndPos));
+                    if (selected.trim().isEmpty())
+                        autoClose = true;
+                }
+                else
+                {
+                    sal_Int32 length = selected.getLength();
+                    if (aSelection.nEndPos == length)
+                        autoClose = true;
+                    else
+                    {
+                        selected = selected.copy(aSelection.nEndPos, length);
+                        if (selected.trim().isEmpty())
+                            autoClose = true;
+                    }
+                }
+            }
+            else
+                autoClose = true;
+        }
 
         if (!pEditView)
             CreateEditView();
