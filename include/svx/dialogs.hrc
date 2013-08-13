@@ -298,8 +298,9 @@
 #define RID_SVXSTR_RULER_START              (RID_SVX_START + 245)
 #define RID_SVXSTR_RULER_TAB_LEFT           (RID_SVX_START + 245)
 #define RID_SVXSTR_RULER_TAB_RIGHT          (RID_SVX_START + 246)
-#define RID_SVXSTR_RULER_TAB_DECIMAL        (RID_SVX_START + 247)
-#define RID_SVXSTR_RULER_TAB_CENTER         (RID_SVX_START + 248)
+#define RID_SVXSTR_RULER_TAB_CENTER         (RID_SVX_START + 247)
+#define RID_SVXSTR_RULER_TAB_DECIMAL        (RID_SVX_START + 248)
+
 
 // Close (in TabDialog line/aria)
 #define RID_SVXSTR_CLOSE                    (RID_SVX_START + 260)

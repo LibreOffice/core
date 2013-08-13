@@ -561,8 +561,8 @@ struct RulerIndent
 
 #define RULER_TAB_LEFT          ((sal_uInt16)0x0000)
 #define RULER_TAB_RIGHT         ((sal_uInt16)0x0001)
-#define RULER_TAB_DECIMAL       ((sal_uInt16)0x0002)
-#define RULER_TAB_CENTER        ((sal_uInt16)0x0003)
+#define RULER_TAB_CENTER        ((sal_uInt16)0x0002)
+#define RULER_TAB_DECIMAL       ((sal_uInt16)0x0003)
 #define RULER_TAB_DEFAULT       ((sal_uInt16)0x0004)
 #define RULER_TAB_STYLE         ((sal_uInt16)0x000F)
 #define RULER_TAB_RTL           ((sal_uInt16)0x0010)
