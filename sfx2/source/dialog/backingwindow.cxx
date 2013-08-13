@@ -60,6 +60,13 @@ const int nItemId_Extensions = 1;
 const int nItemId_Info = 3;
 const int nItemId_TplRep = 4;
 
+const int nWriterTabId      = 2;
+const int nCalcTabId        = 3;
+const int nImpressTabId     = 4;
+const int nDrawTabId        = 5;
+const int nDatabaseTabId    = 6;
+const int nMathTabId        = 7;
+
 BackingWindow::BackingWindow( Window* i_pParent ) :
     Window( i_pParent ),
     mbInitControls( false ),
@@ -70,20 +77,21 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
       "sfx/ui/startcenter.ui",
       "StartCenter" );
 
-    get(mpOpenButton,      "open");
-    get(mpTemplateButton,  "templates");
+    get(mpOpenButton,       "open");
+    get(mpTemplateButton,   "templates");
 
-    get(mpWriterButton,    "writer");
-    get(mpCalcButton,      "calc");
-    get(mpImpressButton,   "impress");
-    get(mpDrawButton,      "draw");
-    get(mpDBButton,        "database");
-    get(mpMathButton,      "math");
+    get(mpModuleNotebook,   "modules_notebook");
+
+    get(mpWriterButton,     "writer");
+    get(mpCalcButton,       "calc");
+    get(mpImpressButton,    "impress");
+    get(mpDrawButton,       "draw");
+    get(mpDBButton,         "database");
+    get(mpMathButton,       "math");
 
     get(mpExtensionsButton, "extension");
     get(mpInfoButton,       "info");
     get(mpTplRepButton,     "add_temp");
-
 
     get( mpAllRecentThumbnails,         "all_recent");
     get( mpWriterRecentThumbnails,      "writer_recent");
@@ -92,23 +100,6 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     get( mpDrawRecentThumbnails,        "draw_recent");
     get( mpDatabaseRecentThumbnails,    "database_recent");
     get( mpMathRecentThumbnails,        "math_recent");
-
-    mpAllRecentThumbnails       ->addFileType(TYPE_WRITER | TYPE_CALC |
-        TYPE_IMPRESS | TYPE_DRAW | TYPE_DATABASE | TYPE_MATH | TYPE_OTHER);
-    mpWriterRecentThumbnails    ->addFileType(TYPE_WRITER);
-    mpCalcRecentThumbnails      ->addFileType(TYPE_CALC);
-    mpImpressRecentThumbnails   ->addFileType(TYPE_IMPRESS);
-    mpDrawRecentThumbnails      ->addFileType(TYPE_DRAW);
-    mpDatabaseRecentThumbnails  ->addFileType(TYPE_DATABASE);
-    mpMathRecentThumbnails      ->addFileType(TYPE_MATH);
-
-    mpAllRecentThumbnails       ->loadRecentDocs();
-    mpWriterRecentThumbnails    ->loadRecentDocs();
-    mpCalcRecentThumbnails      ->loadRecentDocs();
-    mpImpressRecentThumbnails   ->loadRecentDocs();
-    mpDrawRecentThumbnails      ->loadRecentDocs();
-    mpDatabaseRecentThumbnails  ->loadRecentDocs();
-    mpMathRecentThumbnails      ->loadRecentDocs();
 
     try
     {
@@ -211,23 +202,39 @@ void BackingWindow::initControls()
             aFileNewAppsAvailable.insert( sURL );
     }
 
-    setupButton( mpWriterButton, WRITER_URL, aFileNewAppsAvailable,
-                 aModuleOptions, SvtModuleOptions::E_SWRITER );
-    setupButton( mpDrawButton, DRAW_URL, aFileNewAppsAvailable,
-                 aModuleOptions, SvtModuleOptions::E_SDRAW );
-    setupButton( mpCalcButton, CALC_URL, aFileNewAppsAvailable,
-                 aModuleOptions, SvtModuleOptions::E_SCALC );
-    setupButton( mpDBButton, BASE_URL, aFileNewAppsAvailable,
-                 aModuleOptions, SvtModuleOptions::E_SDATABASE );
-    setupButton( mpImpressButton, IMPRESS_WIZARD_URL, aFileNewAppsAvailable,
-                 aModuleOptions, SvtModuleOptions::E_SIMPRESS );
-    setupButton( mpMathButton, MATH_URL, aFileNewAppsAvailable,
-                 aModuleOptions, SvtModuleOptions::E_SMATH );
+    setupModuleTab( nWriterTabId, mpWriterRecentThumbnails, TYPE_WRITER,
+        WRITER_URL, aFileNewAppsAvailable, aModuleOptions,
+        SvtModuleOptions::E_SWRITER );
+    setupModuleTab( nCalcTabId, mpCalcRecentThumbnails, TYPE_CALC,
+        DRAW_URL, aFileNewAppsAvailable, aModuleOptions,
+        SvtModuleOptions::E_SDRAW );
+    setupModuleTab( nImpressTabId, mpImpressRecentThumbnails, TYPE_IMPRESS,
+        CALC_URL, aFileNewAppsAvailable, aModuleOptions,
+        SvtModuleOptions::E_SCALC );
+    setupModuleTab( nDrawTabId, mpDrawRecentThumbnails, TYPE_DRAW,
+        BASE_URL, aFileNewAppsAvailable, aModuleOptions,
+        SvtModuleOptions::E_SDATABASE );
+    setupModuleTab( nDatabaseTabId, mpDatabaseRecentThumbnails, TYPE_DATABASE,
+        IMPRESS_WIZARD_URL, aFileNewAppsAvailable, aModuleOptions,
+        SvtModuleOptions::E_SIMPRESS );
+    setupModuleTab( nMathTabId, mpMathRecentThumbnails, TYPE_MATH,
+        MATH_URL, aFileNewAppsAvailable, aModuleOptions,
+        SvtModuleOptions::E_SMATH );
 
-    setupButton( mpOpenButton, "", aFileNewAppsAvailable,
-                 aModuleOptions, SvtModuleOptions::E_SWRITER );
-    setupButton( mpTemplateButton, "", aFileNewAppsAvailable,
-                 aModuleOptions, SvtModuleOptions::E_SWRITER );
+    // File types for mpAllRecentThumbnails are added in the above calls
+    // of setupModuleTab. TYPE_OTHER is always added.
+    mpAllRecentThumbnails->addFileType(TYPE_OTHER);
+    mpAllRecentThumbnails->loadRecentDocs();
+
+    setupButton( mpWriterButton );
+    setupButton( mpDrawButton );
+    setupButton( mpCalcButton );
+    setupButton( mpDBButton );
+    setupButton( mpImpressButton );
+    setupButton( mpMathButton );
+
+    setupButton( mpOpenButton );
+    setupButton( mpTemplateButton );
 
     setupExternalLink( mpExtensionsButton );
     setupExternalLink( mpInfoButton );
@@ -238,17 +245,27 @@ void BackingWindow::initControls()
     mpWriterButton->GrabFocus();
 }
 
-void BackingWindow::setupButton( PushButton* pButton, const OUString &rURL,
-        const std::set<OUString>& rURLS,
-        SvtModuleOptions& rOpt, SvtModuleOptions::EModule eMod )
+void BackingWindow::setupModuleTab(int nPageId, RecentDocsView* pRecView, int nFileTypes,
+    const OUString &rURL, const std::set<OUString>& rURLS, SvtModuleOptions& rOpt,
+    SvtModuleOptions::EModule eMod)
 {
-    pButton->SetClickHdl( LINK( this, BackingWindow, ClickHdl ) );
-
-    // disable the parts that are not installed
     if( !rURL.isEmpty() && (!rOpt.IsModuleInstalled( eMod ) || rURLS.find( rURL ) == rURLS.end()) )
     {
-        pButton->Enable( sal_False );
+        // disable the parts that are not installed
+        mpModuleNotebook->RemovePage(nPageId);
     }
+    else
+    {
+        // if a module is installed, add that filetype to the "All" page
+        mpAllRecentThumbnails->addFileType(nFileTypes);
+        pRecView->addFileType(nFileTypes);
+        pRecView->loadRecentDocs();
+    }
+}
+
+void BackingWindow::setupButton( PushButton* pButton )
+{
+    pButton->SetClickHdl( LINK( this, BackingWindow, ClickHdl ) );
 
     // setup text - slighly larger font than normal labels on the texts
     Font aFont;
