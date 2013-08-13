@@ -15,6 +15,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Flip Vertically</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:NumberFormatType" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -23,7 +26,10 @@
       </node>
       <node oor:name=".uno:ObjectMirrorHorizontal" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Flip Object Horizontally</value>
+          <value xml:lang="en-US">Flip Horizontally</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:ShowPrecedents" oor:op="replace">
