@@ -29,6 +29,7 @@
 #include <ooxml/OOXMLFastTokens.hxx>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XOOXMLDocumentPropertiesImporter.hpp>
+#include <com/sun/star/table/ShadowFormat.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
@@ -1797,6 +1798,11 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
                         rContext->Insert( eBorderId, uno::makeAny( pBorderHandler->getBorderLine()) , true);
                     if(eBorderDistId)
                         rContext->Insert(eBorderDistId, uno::makeAny( pBorderHandler->getLineDistance()), true);
+                    if (nSprmId == NS_sprm::LN_PBrcRight && pBorderHandler->getShadow())
+                    {
+                        table::ShadowFormat aFormat = rContext->getShadowFromBorder(pBorderHandler->getBorderLine());
+                        rContext->Insert(PROP_PARA_SHADOW_FORMAT, uno::makeAny(aFormat));
+                    }
                 }
             }
             else

@@ -48,6 +48,7 @@ namespace com{namespace sun{namespace star{
     }
     namespace table{
         struct BorderLine2;
+        struct ShadowFormat;
     }
 }}}
 
@@ -123,6 +124,7 @@ public:
 #if OSL_DEBUG_LEVEL > 1
     virtual void dumpXml( const TagLogger::Pointer_t pLogger ) const;
 #endif
+    static com::sun::star::table::ShadowFormat getShadowFromBorder(com::sun::star::table::BorderLine2 aBorder);
 
 };
 typedef boost::shared_ptr<PropertyMap>  PropertyMapPtr;

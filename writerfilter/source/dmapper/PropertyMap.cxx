@@ -533,19 +533,25 @@ void SectionPropertyMap::ApplyBorderToPageStyles(
 
     if (m_bBorderShadows[BORDER_RIGHT])
     {
-        // In Word UI, shadow is a boolean property, in OOXML, it's a boolean
-        // property of each 4 border type, finally in Writer the border is a
-        // property of the page style, with shadow location, distance and
-        // color. See SwWW8ImplReader::SetShadow().
-        table::ShadowFormat aFormat;
-        aFormat.Color = COL_BLACK;
-        aFormat.Location = table::ShadowLocation_BOTTOM_RIGHT;
-        aFormat.ShadowWidth = m_pBorderLines[BORDER_RIGHT]->LineWidth;
+        table::ShadowFormat aFormat = getShadowFromBorder(*m_pBorderLines[BORDER_RIGHT]);
         if (xFirst.is())
             xFirst->setPropertyValue(rPropNameSupplier.GetName(PROP_SHADOW_FORMAT), uno::makeAny(aFormat));
         if (xSecond.is())
             xSecond->setPropertyValue(rPropNameSupplier.GetName(PROP_SHADOW_FORMAT), uno::makeAny(aFormat));
     }
+}
+
+table::ShadowFormat PropertyMap::getShadowFromBorder(table::BorderLine2 aBorder)
+{
+    // In Word UI, shadow is a boolean property, in OOXML, it's a boolean
+    // property of each 4 border type, finally in Writer the border is a
+    // property of the page style, with shadow location, distance and
+    // color. See SwWW8ImplReader::SetShadow().
+    table::ShadowFormat aFormat;
+    aFormat.Color = COL_BLACK;
+    aFormat.Location = table::ShadowLocation_BOTTOM_RIGHT;
+    aFormat.ShadowWidth = aBorder.LineWidth;
+    return aFormat;
 }
 
 void SectionPropertyMap::SetBorderDistance( uno::Reference< beans::XPropertySet > xStyle,

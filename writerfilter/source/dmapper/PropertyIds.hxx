@@ -301,6 +301,7 @@ enum PropertyIds
         ,PROP_FIRST_IS_SHARED
         ,PROP_MIRROR_INDENTS
         ,PROP_SURROUND_TEXT_WRAP_SMALL
+        ,PROP_PARA_SHADOW_FORMAT
     };
 struct PropertyNameSupplier_Impl;
 class PropertyNameSupplier
