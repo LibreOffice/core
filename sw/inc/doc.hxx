@@ -2074,12 +2074,11 @@ private:
     void CopyMasterFooter(const SwPageDesc &rChged, const SwFmtFooter &rFoot, SwPageDesc *pDesc, bool bLeft);
 
     /** continue computing a chunk of document statistics
-      * \param nTextNodes number of paragraphs to calculate before
-      * exiting
+      * \param nChars  number of characters to count before exiting
       *
       * returns false when there is no more to calculate
       */
-    bool IncrementalDocStatCalculate(long nTextNodes = 250);
+    bool IncrementalDocStatCalculate(long nChars);
 
     /// Our own 'StatsUpdateTimer' calls the following method
     DECL_LINK( DoIdleStatsUpdate, Timer * );
