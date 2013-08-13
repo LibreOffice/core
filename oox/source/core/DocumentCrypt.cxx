@@ -27,6 +27,8 @@
 #include <osl/time.h>
 #include <rtl/random.h>
 
+#include <com/sun/star/io/XSeekable.hpp>
+
 namespace oox {
 namespace core {
 
@@ -408,6 +410,13 @@ AesEncoder::AesEncoder(Reference< XStream > xDocumentStream, oox::ole::OleStorag
 bool AesEncoder::encode()
 {
     Reference< XInputStream > xInputStream ( mxDocumentStream->getInputStream(), UNO_SET_THROW );
+    Reference< XSeekable > xSeekable( xInputStream, UNO_QUERY );
+
+    if (!xSeekable.is())
+        return false;
+
+    sal_uInt32 aLength = xSeekable->getLength();
+    printf("%d\n", aLength);
 
     if (!mrOleStorage.isStorage())
         return false;
@@ -461,7 +470,7 @@ bool AesEncoder::encode()
     sal_Int32 inLength;
     int outLength;
 
-    aEncryptedPackageStream.writeValue<sal_uInt32>( 0 ); // size
+    aEncryptedPackageStream.writeValue<sal_uInt32>( aLength ); // size
     aEncryptedPackageStream.writeValue<sal_uInt32>( 0 ); // size
 
     do
