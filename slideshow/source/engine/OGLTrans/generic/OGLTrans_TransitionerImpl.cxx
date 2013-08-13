@@ -578,7 +578,6 @@ bool OGLTransitionerImpl::createWindow( Window* pPWindow )
                 vi = glXGetVisualFromFBConfig( GLWin.dpy, fbconfigs[i] );
                 mbHasTFPVisual = true;
                 pChildSysData = lcl_createSystemWindow( vi, pPWindow, &pWindow );
-                XFree ( vi );
                 SAL_INFO("slideshow.opengl", "found visual suitable for texture_from_pixmap");
             } else if( firstVisual && pAttributeTable[1] == NULL ) {
                 vi = firstVisual;
@@ -599,7 +598,7 @@ bool OGLTransitionerImpl::createWindow( Window* pPWindow )
     }
 
 #if defined( GLX_VERSION_1_3 ) && defined( GLX_EXT_texture_from_pixmap )
-    if ( firstVisual )
+    if ( firstVisual && vi != firstVisual )
         XFree (firstVisual);
 #endif
 
@@ -681,6 +680,7 @@ bool OGLTransitionerImpl::initWindowFromSlideShowView( const Reference< presenta
                                  GLWin.vi,
                                  0,
                                  GL_TRUE);
+    XFree ( GLWin.vi );
     if( GLWin.ctx == NULL ) {
         SAL_INFO("slideshow.opengl", "unable to create GLX context");
         return false;
