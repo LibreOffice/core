@@ -26,50 +26,9 @@
 
 #define BTN_SYNC     20
 
-#define FL_DATA                         30
-#define FT_NAME                 31
-#define ED_FIRSTNAME            32
-#define ED_NAME                 33
-#define ED_SHORTCUT             34
-#define FT_STREET               35
-#define ED_STREET               36
-#define FT_ZIPCITY              37
-#define ED_ZIP                  38
-#define ED_CITY                 39
-#define FT_COUNTRYSTATE         40
-#define ED_COUNTRY              41
-#define FT_TITLEPROF            42
-#define ED_PROFESSION           43
-#define ED_TITLE                44
-
-#define ED_PHONE                46
-#define ED_MOBILE               47
-
-#define ED_FAX                  49
-#define FT_WWWMAIL              50
-#define ED_WWW                  51
-#define ED_MAIL                 52
-#define ED_STATE                53
-#define FT_COMP                 54
-#define ED_COMP                 55
-#define FT_COMP_EXT             56
-#define ED_COMP_EXT             57
-#define FT_SLOGAN               58
-#define ED_SLOGAN               59
-#define FT_POSITION             60
-#define ED_POSITION             61
-
 #define ST_BUSINESSCARDDLG      62
 #define ST_FIRSTPAGE_LAB        63
 #define ST_FIRSTPAGE_BC         64
-
-#define FT_NAME_2               65
-#define ED_FIRSTNAME_2          66
-#define ED_NAME_2               67
-#define ED_SHORTCUT_2           68
-
-#define FT_PHONE_MOBILE         70
-#define FT_FAX                  73
 
 // global resources ********************************************************
 #define STR_DOC_TITLE           (RC_LABEL_BEGIN)

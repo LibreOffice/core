@@ -801,41 +801,25 @@ void SwPrivateDataPage::Reset(const SfxItemSet& rSet)
     m_pMailED->SetText(aItem.aPrivMail);
 }
 
-SwBusinessDataPage::SwBusinessDataPage(Window* pParent, const SfxItemSet& rSet) :
-    SfxTabPage(pParent, SW_RES(TP_BUSINESS_DATA), rSet),
-    aDataFL             (this, SW_RES( FL_DATA       )),
-    aCompanyFT          (this, SW_RES( FT_COMP      )),
-    aCompanyED          (this, SW_RES( ED_COMP      )),
-    aCompanyExtFT       (this, SW_RES( FT_COMP_EXT  )),
-    aCompanyExtED       (this, SW_RES( ED_COMP_EXT  )),
-    aSloganFT           (this, SW_RES( FT_SLOGAN        )),
-    aSloganED           (this, SW_RES( ED_SLOGAN        )),
-    aStreetFT           (this, SW_RES( FT_STREET        )),
-    aStreetED           (this, SW_RES( ED_STREET        )),
-    aZipCityFT          (this, SW_RES( FT_ZIPCITY   )),
-    aZipED              (this, SW_RES( ED_ZIP       )),
-    aCityED             (this, SW_RES( ED_CITY      )),
-    aCountryStateFT     (this, SW_RES( FT_COUNTRYSTATE  )),
-    aCountryED          (this, SW_RES( ED_COUNTRY   )),
-    aStateED            (this, SW_RES( ED_STATE     )),
-    aPositionFT         (this, SW_RES( FT_POSITION  )),
-    aPositionED         (this, SW_RES( ED_POSITION  )),
-    aPhoneFT            (this, SW_RES( FT_PHONE_MOBILE  )),
-    aPhoneED            (this, SW_RES( ED_PHONE     )),
-    aMobilePhoneED      (this, SW_RES( ED_MOBILE        )),
-    aFaxFT              (this, SW_RES( FT_FAX       )),
-    aFaxED              (this, SW_RES( ED_FAX       )),
-    aWWWMailFT          (this, SW_RES( FT_WWWMAIL   )),
-    aHomePageED         (this, SW_RES( ED_WWW       )),
-    aMailED             (this, SW_RES( ED_MAIL      ))
+SwBusinessDataPage::SwBusinessDataPage(Window* pParent, const SfxItemSet& rSet)
+    : SfxTabPage(pParent, "BusinessDataPage",
+        "modules/swriter/ui/businessdatapage.ui", rSet)
 {
-    FreeResource();
+    get(m_pCompanyED, "company");
+    get(m_pCompanyExtED, "company2");
+    get(m_pSloganED, "slogan");
+    get(m_pStreetED, "street");
+    get(m_pZipED, "izip");
+    get(m_pCityED, "icity");
+    get(m_pCountryED, "country");
+    get(m_pStateED, "state");
+    get(m_pPositionED, "position");
+    get(m_pPhoneED, "phone");
+    get(m_pMobilePhoneED, "mobile");
+    get(m_pFaxED, "fax");
+    get(m_pHomePageED, "url");
+    get(m_pMailED, "email");
     SetExchangeSupport();
-}
-
-
-SwBusinessDataPage::~SwBusinessDataPage()
-{
 }
 
 SfxTabPage* SwBusinessDataPage::Create(Window* pParent, const SfxItemSet& rSet)
@@ -859,20 +843,20 @@ sal_Bool SwBusinessDataPage::FillItemSet(SfxItemSet& rSet)
 {
     SwLabItem aItem = (const SwLabItem&) GetTabDialog()->GetExampleSet()->Get(FN_LABEL);
 
-    aItem.aCompCompany   = aCompanyED      .GetText();
-    aItem.aCompCompanyExt= aCompanyExtED   .GetText();
-    aItem.aCompSlogan    = aSloganED       .GetText();
-    aItem.aCompStreet    = aStreetED       .GetText();
-    aItem.aCompZip       = aZipED          .GetText();
-    aItem.aCompCity      = aCityED         .GetText();
-    aItem.aCompCountry   = aCountryED      .GetText();
-    aItem.aCompState     = aStateED        .GetText();
-    aItem.aCompPosition  = aPositionED     .GetText();
-    aItem.aCompPhone     = aPhoneED        .GetText();
-    aItem.aCompMobile    = aMobilePhoneED  .GetText();
-    aItem.aCompFax       = aFaxED          .GetText();
-    aItem.aCompWWW       = aHomePageED     .GetText();
-    aItem.aCompMail      = aMailED         .GetText();
+    aItem.aCompCompany   = m_pCompanyED->GetText();
+    aItem.aCompCompanyExt= m_pCompanyExtED->GetText();
+    aItem.aCompSlogan    = m_pSloganED->GetText();
+    aItem.aCompStreet    = m_pStreetED->GetText();
+    aItem.aCompZip       = m_pZipED->GetText();
+    aItem.aCompCity      = m_pCityED->GetText();
+    aItem.aCompCountry   = m_pCountryED->GetText();
+    aItem.aCompState     = m_pStateED->GetText();
+    aItem.aCompPosition  = m_pPositionED->GetText();
+    aItem.aCompPhone     = m_pPhoneED->GetText();
+    aItem.aCompMobile    = m_pMobilePhoneED->GetText();
+    aItem.aCompFax       = m_pFaxED->GetText();
+    aItem.aCompWWW       = m_pHomePageED->GetText();
+    aItem.aCompMail      = m_pMailED->GetText();
 
     rSet.Put(aItem);
     return sal_True;
@@ -881,20 +865,20 @@ sal_Bool SwBusinessDataPage::FillItemSet(SfxItemSet& rSet)
 void SwBusinessDataPage::Reset(const SfxItemSet& rSet)
 {
     const SwLabItem& aItem = (const SwLabItem&) rSet.Get(FN_LABEL);
-    aCompanyED      .SetText(aItem.aCompCompany);
-    aCompanyExtED   .SetText(aItem.aCompCompanyExt);
-    aSloganED       .SetText(aItem.aCompSlogan);
-    aStreetED       .SetText(aItem.aCompStreet);
-    aZipED          .SetText(aItem.aCompZip);
-    aCityED         .SetText(aItem.aCompCity);
-    aCountryED      .SetText(aItem.aCompCountry);
-    aStateED        .SetText(aItem.aCompState);
-    aPositionED     .SetText(aItem.aCompPosition);
-    aPhoneED        .SetText(aItem.aCompPhone);
-    aMobilePhoneED  .SetText(aItem.aCompMobile);
-    aFaxED          .SetText(aItem.aCompFax);
-    aHomePageED     .SetText(aItem.aCompWWW);
-    aMailED         .SetText(aItem.aCompMail);
+    m_pCompanyED->SetText(aItem.aCompCompany);
+    m_pCompanyExtED->SetText(aItem.aCompCompanyExt);
+    m_pSloganED->SetText(aItem.aCompSlogan);
+    m_pStreetED->SetText(aItem.aCompStreet);
+    m_pZipED->SetText(aItem.aCompZip);
+    m_pCityED->SetText(aItem.aCompCity);
+    m_pCountryED->SetText(aItem.aCompCountry);
+    m_pStateED->SetText(aItem.aCompState);
+    m_pPositionED->SetText(aItem.aCompPosition);
+    m_pPhoneED->SetText(aItem.aCompPhone);
+    m_pMobilePhoneED->SetText(aItem.aCompMobile);
+    m_pFaxED->SetText(aItem.aCompFax);
+    m_pHomePageED->SetText(aItem.aCompWWW);
+    m_pMailED->SetText(aItem.aCompMail);
 }
 
 

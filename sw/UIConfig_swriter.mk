@@ -66,6 +66,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/autotext \
 	sw/uiconfig/swriter/ui/bibliographyentry \
 	sw/uiconfig/swriter/ui/bulletsandnumbering \
+	sw/uiconfig/swriter/ui/businessdatapage \
 	sw/uiconfig/swriter/ui/cannotsavelabeldialog \
 	sw/uiconfig/swriter/ui/captionoptions \
 	sw/uiconfig/swriter/ui/cardformatpage \

@@ -164,38 +164,26 @@ public:
 
 class SwBusinessDataPage : public SfxTabPage
 {
-    FixedLine       aDataFL;
-    FixedText       aCompanyFT;
-    Edit            aCompanyED;
-    FixedText       aCompanyExtFT;
-    Edit            aCompanyExtED;
-    FixedText       aSloganFT;
-    Edit            aSloganED;
+    Edit* m_pCompanyED;
+    Edit* m_pCompanyExtED;
+    Edit* m_pSloganED;
 
-    FixedText       aStreetFT;
-    Edit            aStreetED;
-    FixedText       aZipCityFT;
-    Edit            aZipED;
-    Edit            aCityED;
-    FixedText       aCountryStateFT;
-    Edit            aCountryED;
-    Edit            aStateED;
+    Edit* m_pStreetED;
+    Edit* m_pZipED;
+    Edit* m_pCityED;
+    Edit* m_pCountryED;
+    Edit* m_pStateED;
 
-    FixedText       aPositionFT;
-    Edit            aPositionED;
+    Edit* m_pPositionED;
 
-    FixedText       aPhoneFT;
-    Edit            aPhoneED;
-    Edit            aMobilePhoneED;
-    FixedText       aFaxFT;
-    Edit            aFaxED;
+    Edit* m_pPhoneED;
+    Edit* m_pMobilePhoneED;
+    Edit* m_pFaxED;
 
-    FixedText       aWWWMailFT;
-    Edit            aHomePageED;
-    Edit            aMailED;
+    Edit* m_pHomePageED;
+    Edit* m_pMailED;
 
     SwBusinessDataPage(Window* pParent, const SfxItemSet& rSet);
-    ~SwBusinessDataPage();
 
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
