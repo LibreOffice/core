@@ -658,7 +658,7 @@ private:
 
     SVT_DLLPRIVATE void                ImplVDrawLine( long nX1, long nY1, long nX2, long nY2 );
     SVT_DLLPRIVATE void                ImplVDrawRect( long nX1, long nY1, long nX2, long nY2 );
-    SVT_DLLPRIVATE void                ImplVDrawText( long nX, long nY, const String& rText, long nMin = LONG_MIN, long nMax = LONG_MAX );
+    SVT_DLLPRIVATE void                ImplVDrawText( long nX, long nY, const OUString& rText, long nMin = LONG_MIN, long nMax = LONG_MAX );
 
     SVT_DLLPRIVATE void                ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter );
     SVT_DLLPRIVATE void                ImplDrawBorders( long nMin, long nMax, long nVirTop, long nVirBottom );

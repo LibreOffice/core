@@ -347,7 +347,7 @@ void Ruler::ImplVDrawRect( long nX1, long nY1, long nX2, long nY2 )
 
 // -----------------------------------------------------------------------
 
-void Ruler::ImplVDrawText( long nX, long nY, const String& rText, long nMin, long nMax )
+void Ruler::ImplVDrawText( long nX, long nY, const OUString& rText, long nMin, long nMax )
 {
     Rectangle aRect;
     maVirDev.GetTextBoundRect( aRect, rText );
