@@ -2332,11 +2332,14 @@ void SwNodes::ForEach( const SwNodeIndex& rStart, const SwNodeIndex& rEnd,
                             (FnForEach) fnForEach, pArgs );
 }
 
-struct _TempBigPtrEntry : public BigPtrEntry
+namespace {
+
+struct TempBigPtrEntry : public BigPtrEntry
 {
-    _TempBigPtrEntry() {}
+    TempBigPtrEntry() {}
 };
 
+}
 
 void SwNodes::RemoveNode( sal_uLong nDelPos, sal_uLong nSz, sal_Bool bDel )
 {
@@ -2380,6 +2383,7 @@ void SwNodes::RemoveNode( sal_uLong nDelPos, sal_uLong nSz, sal_Bool bDel )
         }
     }
 
+    std::vector<TempBigPtrEntry> aTempEntries;
     if( bDel )
     {
         sal_uLong nCnt = nSz;
@@ -2392,14 +2396,14 @@ void SwNodes::RemoveNode( sal_uLong nDelPos, sal_uLong nSz, sal_Bool bDel )
         //      ablaueft, wird hier ein temp. Objekt eingefuegt, das
         //      dann mit dem Remove wieder entfernt wird.
         // siehe Bug 55406
-        _TempBigPtrEntry aTempEntry;
-        BigPtrEntry* pTempEntry = &aTempEntry;
+        aTempEntries.resize(nCnt);
 
         while( nCnt-- )
         {
             delete pDel;
             pDel = pPrev;
             sal_uLong nPrevNdIdx = pPrev->GetIndex();
+            BigPtrEntry* pTempEntry = &aTempEntries[nCnt];
             BigPtrArray::Replace( nPrevNdIdx+1, pTempEntry );
             if( nCnt )
                 pPrev = (*this)[ nPrevNdIdx  - 1 ];
