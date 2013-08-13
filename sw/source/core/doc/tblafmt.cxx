@@ -89,7 +89,7 @@ const sal_uInt16 AUTOFORMAT_FILE_VERSION= SOFFICE_FILEFORMAT_50;
 
 SwBoxAutoFmt* SwTableAutoFmt::pDfltBoxAutoFmt = 0;
 
-#define sAutoTblFmtName "autotbl.fmt"
+#define AUTOTABLE_FORMAT_NAME "autotbl.fmt"
 
 namespace
 {
@@ -583,8 +583,8 @@ sal_Bool SwBoxAutoFmt::SaveVersionNo( SvStream& rStream, sal_uInt16 fileVersion 
     return 0 == rStream.GetError();
 }
 
-SwTableAutoFmt::SwTableAutoFmt( const String& rName )
-    : aName( rName )
+SwTableAutoFmt::SwTableAutoFmt( const OUString& rName )
+    : m_aName( rName )
     , nStrResId( USHRT_MAX )
     , m_aBreak( SVX_BREAK_NONE, RES_BREAK )
     , m_aKeepWithNextPara( sal_False, RES_KEEP )
@@ -631,7 +631,7 @@ SwTableAutoFmt& SwTableAutoFmt::operator=( const SwTableAutoFmt& rNew )
             aBoxAutoFmt[ n ] = 0;
     }
 
-    aName = rNew.aName;
+    m_aName = rNew.m_aName;
     nStrResId = rNew.nStrResId;
     bInclFont = rNew.bInclFont;
     bInclJustify = rNew.bInclJustify;
@@ -912,7 +912,7 @@ sal_Bool SwTableAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVersions 
         sal_Bool b;
         // --- from 680/dr25 on: store strings as UTF-8
         CharSet eCharSet = (nVal >= AUTOFORMAT_ID_680DR25) ? RTL_TEXTENCODING_UTF8 : rStream.GetStreamCharSet();
-        aName = rStream.ReadUniOrByteString( eCharSet );
+        m_aName = rStream.ReadUniOrByteString( eCharSet );
         if( AUTOFORMAT_DATA_ID_552 <= nVal )
         {
             rStream >> nStrResId;
@@ -920,7 +920,7 @@ sal_Bool SwTableAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVersions 
             if( RID_SVXSTR_TBLAFMT_BEGIN <= nId &&
                 nId < RID_SVXSTR_TBLAFMT_END )
             {
-                aName = SVX_RESSTR( nId );
+                m_aName = SVX_RESSTR( nId );
             }
             else
                 nStrResId = USHRT_MAX;
@@ -969,7 +969,7 @@ sal_Bool SwTableAutoFmt::Save( SvStream& rStream, sal_uInt16 fileVersion ) const
     sal_Bool b;
     rStream << nVal;
     // --- from 680/dr25 on: store strings as UTF-8
-    write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rStream, aName,
+    write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rStream, m_aName,
         RTL_TEXTENCODING_UTF8 );
     rStream << nStrResId;
     rStream << ( b = bInclFont );
@@ -1048,7 +1048,7 @@ SwTableAutoFmtTbl::~SwTableAutoFmtTbl()
 SwTableAutoFmtTbl::SwTableAutoFmtTbl()
     : m_pImpl(new Impl)
 {
-    String sNm;
+    OUString sNm;
     SwTableAutoFmt* pNew = new SwTableAutoFmt(
                             SwStyleNameMapper::GetUIName( RES_POOLCOLL_STANDARD, sNm ) );
 
@@ -1107,7 +1107,7 @@ SwTableAutoFmtTbl::SwTableAutoFmtTbl()
 sal_Bool SwTableAutoFmtTbl::Load()
 {
     sal_Bool bRet = sal_False;
-    OUString sNm(OUString(sAutoTblFmtName));
+    OUString sNm(AUTOTABLE_FORMAT_NAME);
     SvtPathOptions aOpt;
     if( aOpt.SearchFile( sNm, SvtPathOptions::PATH_USERCONFIG ))
     {
@@ -1122,9 +1122,7 @@ sal_Bool SwTableAutoFmtTbl::Load()
 sal_Bool SwTableAutoFmtTbl::Save() const
 {
     SvtPathOptions aPathOpt;
-    String sNm( aPathOpt.GetUserConfigPath() );
-    sNm += INET_PATH_TOKEN;
-    sNm.AppendAscii( RTL_CONSTASCII_STRINGPARAM( sAutoTblFmtName ));
+    const OUString sNm( aPathOpt.GetUserConfigPath() + OUString(INET_PATH_TOKEN) + AUTOTABLE_FORMAT_NAME );
     SfxMedium aStream(sNm, STREAM_STD_WRITE );
     return Save( *aStream.GetOutStream() ) && aStream.Commit();
 }
