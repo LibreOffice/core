@@ -3931,6 +3931,12 @@ int RTFDocumentImpl::popState()
                 aState.aShape.aProperties.back().second = m_aStates.top().aDestinationText.makeStringAndClear();
                 if (m_aStates.top().bHadShapeText)
                     m_pSdrImport->append(aState.aShape.aProperties.back().first, aState.aShape.aProperties.back().second);
+                else if (aState.bInShapeGroup && !aState.bInShape && aState.aShape.aProperties.back().first == "rotation")
+                {
+                    // Rotation should be applied on the groupshape itself, not on each shape.
+                    aState.aShape.aGroupProperties.push_back(aState.aShape.aProperties.back());
+                    aState.aShape.aProperties.pop_back();
+                }
             }
             break;
         case DESTINATION_PICPROP:
@@ -3938,6 +3944,13 @@ int RTFDocumentImpl::popState()
             // Don't trigger a shape import in case we're only leaving the \shpinst of the groupshape itself.
             if (!m_bObject && !aState.bInListpicture && !aState.bHadShapeText && !(aState.bInShapeGroup && !aState.bInShape))
                 m_pSdrImport->resolve(m_aStates.top().aShape, true);
+            else if (aState.bInShapeGroup && !aState.bInShape)
+            {
+                // End of a groupshape, as we're in shapegroup, but not in a real shape.
+                for (std::vector< std::pair<OUString, OUString> >::iterator i = aState.aShape.aGroupProperties.begin(); i != aState.aShape.aGroupProperties.end(); ++i)
+                    m_pSdrImport->appendGroupProperty(i->first, i->second);
+                aState.aShape.aGroupProperties.clear();
+            }
             break;
         case DESTINATION_BOOKMARKSTART:
             {

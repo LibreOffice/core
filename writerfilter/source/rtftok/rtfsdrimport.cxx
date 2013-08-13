@@ -27,6 +27,7 @@
 #include <ooxml/resourceids.hxx> // NS_ooxml namespace
 #include <filter/msfilter/escherex.hxx>
 #include <filter/msfilter/util.hxx>
+#include <svx/svdtrans.hxx>
 
 #include <dmapper/DomainMapper.hxx>
 #include "../dmapper/GraphicHelpers.hxx"
@@ -184,6 +185,13 @@ void RTFSdrImport::applyProperty(uno::Reference<drawing::XShape> xShape, OUStrin
         obFitShapeToText.reset(aValue.toInt32() == 1);
     else if (aKey == "fFilled")
         bFilled = aValue.toInt32() == 1;
+    else if (aKey == "rotation")
+    {
+        // See DffPropertyReader::Fix16ToAngle(): in RTF, positive rotation angles are clockwise, we have them as counter-clockwise.
+        // Additionally, RTF type is 0..360*2^16, our is 0..360*100.
+        sal_Int32 nRotation = aValue.toInt32()*100/65536;
+        xPropertySet->setPropertyValue("RotateAngle", uno::makeAny(sal_Int32(NormAngle360(nRotation * -1))));
+    }
 
     if (nHoriOrient != 0)
         xPropertySet->setPropertyValue("HoriOrient", uno::makeAny(nHoriOrient));
@@ -320,11 +328,6 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
            int opacity = 100 - (i->second.toInt32())*100/65536;
            aAny <<= uno::makeAny(sal_uInt32(opacity));
            xPropertySet->setPropertyValue("FillTransparence", aAny);
-        }
-        else if (i->first == "rotation" && xPropertySet.is())
-        {
-            aAny <<= i->second.toInt32()*100/65536;
-            xPropertySet->setPropertyValue("RotateAngle", aAny);
         }
         else if (i->first == "lineWidth")
             aLineWidth <<= i->second.toInt32()/360;
@@ -492,7 +495,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
         else if (i->first == "shadowOffsetX")
             // EMUs to points
             aShadowModel.moOffset.set(OUString::number(i->second.toDouble() / 12700) + "pt");
-        else if (i->first == "posh" || i->first == "posv" || i->first == "fFitShapeToText" || i->first == "fFilled")
+        else if (i->first == "posh" || i->first == "posv" || i->first == "fFitShapeToText" || i->first == "fFilled" || i->first == "rotation")
             applyProperty(xShape, i->first, i->second);
         else if (i->first == "posrelh")
         {
@@ -697,6 +700,11 @@ void RTFSdrImport::close()
 void RTFSdrImport::append(OUString aKey, OUString aValue)
 {
     applyProperty(m_xShape, aKey, aValue);
+}
+
+void RTFSdrImport::appendGroupProperty(OUString aKey, OUString aValue)
+{
+    applyProperty(uno::Reference<drawing::XShape>(m_aParents.top(), uno::UNO_QUERY), aKey, aValue);
 }
 
 } // namespace rtftok

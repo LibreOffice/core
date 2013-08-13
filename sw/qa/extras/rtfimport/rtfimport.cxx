@@ -163,6 +163,7 @@ public:
     void testFdo47440();
     void testFdo53556();
     void testFdo63428();
+    void testGroupshapeRotation();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -310,6 +311,7 @@ void Test::run()
         {"fdo47440.rtf", &Test::testFdo47440},
         {"fdo53556.rtf", &Test::testFdo53556},
         {"hello.rtf", &Test::testFdo63428},
+        {"groupshape-rotation.rtf", &Test::testGroupshapeRotation},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1518,6 +1520,14 @@ void Test::testFdo63428()
     // Additionally, commented range was imported as a normal comment.
     CPPUNIT_ASSERT_EQUAL(OUString("TextFieldStart"), getProperty<OUString>(getRun(getParagraph(1), 2), "TextPortionType"));
     CPPUNIT_ASSERT_EQUAL(OUString("TextFieldEnd"), getProperty<OUString>(getRun(getParagraph(1), 4), "TextPortionType"));
+}
+
+void Test::testGroupshapeRotation()
+{
+    // Rotation on groupshapes wasn't handled correctly, RotateAngle was 4500.
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(315 * 100), getProperty<sal_Int32>(xDraws->getByIndex(0), "RotateAngle"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

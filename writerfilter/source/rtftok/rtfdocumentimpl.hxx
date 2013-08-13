@@ -94,7 +94,8 @@ namespace writerfilter {
         {
             public:
                 RTFShape();
-                std::vector< std::pair<OUString, OUString> > aProperties;
+                std::vector< std::pair<OUString, OUString> > aProperties; ///< Properties of a single shape.
+                std::vector< std::pair<OUString, OUString> > aGroupProperties; ///< Properties applied on the groupshape.
                 sal_Int32 nLeft;
                 sal_Int32 nTop;
                 sal_Int32 nRight;

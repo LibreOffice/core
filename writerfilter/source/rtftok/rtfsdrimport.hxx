@@ -26,6 +26,8 @@ namespace writerfilter {
                 void resolve(RTFShape& rShape, bool bClose);
                 void close();
                 void append(OUString aKey, OUString aValue);
+                /// Append property on the current parent.
+                void appendGroupProperty(OUString aKey, OUString aValue);
                 void resolveDhgt(uno::Reference<beans::XPropertySet> xPropertySet, sal_Int32 nZOrder);
                 void resolveFLine(uno::Reference<beans::XPropertySet> xPropertySet, sal_Int32 nFLine);
                 /**

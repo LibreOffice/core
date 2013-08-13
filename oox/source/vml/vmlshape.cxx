@@ -493,7 +493,7 @@ void lcl_SetAnchorType(PropertySet& rPropSet, const ShapeTypeModel& rTypeModel)
 void lcl_SetRotation(PropertySet& rPropSet, const sal_Int32 nRotation)
 {
     // See DffPropertyReader::Fix16ToAngle(): in VML, positive rotation angles are clockwise, we have them as counter-clockwise.
-    // Additionally, VML type is 0..360, our is 0.36000.
+    // Additionally, VML type is 0..360, our is 0..36000.
     rPropSet.setAnyProperty(PROP_RotateAngle, makeAny(sal_Int32(NormAngle360(nRotation * -100))));
 }
 

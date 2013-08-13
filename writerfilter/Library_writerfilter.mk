@@ -63,6 +63,7 @@ $(eval $(call gb_Library_use_libraries,writerfilter,\
     sfx \
     sot \
     svt \
+	svxcore \
     tl \
     utl \
     vcl \
