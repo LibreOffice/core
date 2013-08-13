@@ -167,6 +167,7 @@
 #define SV_BUTTONTEXT_GO_DOWN               10125
 #define SV_BUTTONTEXT_CLEAR                 10126
 #define SV_BUTTONTEXT_OPEN                  10127
+#define SV_BUTTONTEXT_PLAY                  10128
 
 #define SV_STDTEXT_FIRST                    SV_STDTEXT_SERVICENOTAVAILABLE
 #define SV_STDTEXT_SERVICENOTAVAILABLE      10210

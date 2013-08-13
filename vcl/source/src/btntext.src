@@ -166,4 +166,9 @@ String SV_BUTTONTEXT_CLEAR
     Text [ en-US ] = "~Clear" ;
 };
 
+String SV_BUTTONTEXT_PLAY
+{
+    Text [ en-US ] = "~Play" ;
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
