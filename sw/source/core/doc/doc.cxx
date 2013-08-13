@@ -1684,22 +1684,25 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
 }
 
 // returns true while there is more to do
-bool SwDoc::IncrementalDocStatCalculate( long nTextNodes )
+bool SwDoc::IncrementalDocStatCalculate(long nChars)
 {
     pDocStat->Reset();
     pDocStat->nPara = 0; // default is 1!
     SwNode* pNd;
 
     // This is the inner loop - at least while the paras are dirty.
-    for( sal_uLong i = GetNodes().Count(); i > 0 && nTextNodes > 0; )
+    for( sal_uLong i = GetNodes().Count(); i > 0 && nChars > 0; )
     {
         switch( ( pNd = GetNodes()[ --i ])->GetNodeType() )
         {
         case ND_TEXTNODE:
         {
+            long const nOldChars(pDocStat->nChar);
             SwTxtNode *pTxt = static_cast< SwTxtNode * >( pNd );
             if( pTxt->CountWords( *pDocStat, 0, pTxt->GetTxt().Len() ) )
-                nTextNodes--;
+            {
+                nChars -= (pDocStat->nChar - nOldChars);
+            }
             break;
         }
         case ND_TABLENODE:      ++pDocStat->nTbl;   break;
@@ -1771,13 +1774,13 @@ bool SwDoc::IncrementalDocStatCalculate( long nTextNodes )
     SwFieldType *pType = GetSysFldType(RES_DOCSTATFLD);
     pType->UpdateFlds();
 
-    return nTextNodes <= 0;
+    return nChars <= 0;
 }
 
 IMPL_LINK( SwDoc, DoIdleStatsUpdate, Timer *, pTimer )
 {
     (void)pTimer;
-    if( IncrementalDocStatCalculate( 1000 ) )
+    if (IncrementalDocStatCalculate(32000))
         aStatsUpdateTimer.Start();
 
     SwView* pView = GetDocShell() ? GetDocShell()->GetView() : NULL;
@@ -1792,10 +1795,10 @@ void SwDoc::UpdateDocStat( bool bCompleteAsync )
     {
         if (!bCompleteAsync)
         {
-            while (IncrementalDocStatCalculate()) {}
+            while (IncrementalDocStatCalculate(5000)) {}
             aStatsUpdateTimer.Stop();
         }
-        else if (IncrementalDocStatCalculate())
+        else if (IncrementalDocStatCalculate(5000))
             aStatsUpdateTimer.Start();
     }
 }
