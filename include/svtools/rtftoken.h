@@ -20,10 +20,12 @@
 #ifndef _RTFTOKEN_H
 #define _RTFTOKEN_H
 
-class String;
+namespace rtl {
+  class OUString;
+};
 
 // suche die TokenID zu dem Token
-int GetRTFToken( const String& rSearch );
+int GetRTFToken( const rtl::OUString& rSearch );
 
 enum RTF_TOKEN_RANGES {
     RTF_NOGROUP                     = 0x0100,

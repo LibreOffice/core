@@ -31,7 +31,7 @@ struct RTF_TokenEntry
 {
     union{
         const sal_Char* sToken;
-        const String* pUToken;
+        const OUString* pUToken;
     };
     int nToken;
 };
@@ -1182,16 +1182,18 @@ static int SAL_CALL RTFKeyCompare( const void *pFirst, const void *pSecond)
     if( -1 == ((RTF_TokenEntry*)pFirst)->nToken )
     {
         if( -1 == ((RTF_TokenEntry*)pSecond)->nToken )
-            nRet = ((RTF_TokenEntry*)pFirst)->pUToken->CompareTo(
+            nRet = ((RTF_TokenEntry*)pFirst)->pUToken->compareTo(
                             *((RTF_TokenEntry*)pSecond)->pUToken );
         else
-            nRet = ((RTF_TokenEntry*)pFirst)->pUToken->CompareIgnoreCaseToAscii(
+        {
+            nRet = ((RTF_TokenEntry*)pFirst)->pUToken->compareToIgnoreAsciiCaseAscii(
                             ((RTF_TokenEntry*)pSecond)->sToken );
+        }
     }
     else
     {
         if( -1 == ((RTF_TokenEntry*)pSecond)->nToken )
-            nRet = -1 * ((RTF_TokenEntry*)pSecond)->pUToken->CompareIgnoreCaseToAscii(
+            nRet = -1 * ((RTF_TokenEntry*)pSecond)->pUToken->compareToIgnoreAsciiCaseAscii(
                             ((RTF_TokenEntry*)pFirst)->sToken );
         else
             nRet = strcmp( ((RTF_TokenEntry*)pFirst)->sToken,
@@ -1203,7 +1205,7 @@ static int SAL_CALL RTFKeyCompare( const void *pFirst, const void *pSecond)
 
 }
 
-int GetRTFToken( const String& rSearch )
+int GetRTFToken( const OUString& rSearch )
 {
     if( !bSortKeyWords )
     {
