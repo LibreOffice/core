@@ -14,6 +14,7 @@
 #include "docsh.hxx"
 #include "clipparam.hxx"
 #include "undoblk.hxx"
+#include "scopetools.hxx"
 
 #include "formula/grammar.hxx"
 
@@ -245,6 +246,68 @@ void Test::testSharedFormulas()
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(5), pFC->GetSharedTopRow());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(2), pFC->GetSharedLength());
     CPPUNIT_ASSERT_MESSAGE("The token is expected to be shared.", pFC->GetCode() == pFC->GetSharedCode());
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testSharedFormulasRefUpdate()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, false); // turn off auto calculation.
+
+    // Set values to A10:A12.
+    m_pDoc->SetValue(ScAddress(0,9,0), 1);
+    m_pDoc->SetValue(ScAddress(0,10,0), 2);
+    m_pDoc->SetValue(ScAddress(0,11,0), 3);
+
+    // Insert formulas that reference A10:A12 in B1:B3.
+    m_pDoc->SetString(ScAddress(1,0,0), "=A10");
+    m_pDoc->SetString(ScAddress(1,1,0), "=A11");
+    m_pDoc->SetString(ScAddress(1,2,0), "=A12");
+
+    if (!checkFormula(*m_pDoc, ScAddress(1,0,0), "A10"))
+        CPPUNIT_FAIL("Wrong formula in B1");
+    if (!checkFormula(*m_pDoc, ScAddress(1,1,0), "A11"))
+        CPPUNIT_FAIL("Wrong formula in B2");
+    if (!checkFormula(*m_pDoc, ScAddress(1,2,0), "A12"))
+        CPPUNIT_FAIL("Wrong formula in B3");
+
+    const ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(1,0,0));
+    CPPUNIT_ASSERT_MESSAGE("This must be a shared formula cell.", pFC && pFC->IsShared());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(0), pFC->GetSharedTopRow());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(3), pFC->GetSharedLength());
+
+    // Insert cells over A11:B11 to shift to right. This should split the B1:B3 grouping into 3.
+    m_pDoc->InsertCol(ScRange(0,10,0,1,10,0));
+    if (!checkFormula(*m_pDoc, ScAddress(1,0,0), "A10"))
+        CPPUNIT_FAIL("Wrong formula in B1");
+    if (!checkFormula(*m_pDoc, ScAddress(1,1,0), "C11"))
+        CPPUNIT_FAIL("Wrong formula in B2");
+    if (!checkFormula(*m_pDoc, ScAddress(1,2,0), "A12"))
+        CPPUNIT_FAIL("Wrong formula in B3");
+
+    pFC = m_pDoc->GetFormulaCell(ScAddress(1,0,0));
+    CPPUNIT_ASSERT_MESSAGE("B1 should be a non-shared formula cell.", pFC && !pFC->IsShared());
+    pFC = m_pDoc->GetFormulaCell(ScAddress(1,1,0));
+    CPPUNIT_ASSERT_MESSAGE("B2 should be a non-shared formula cell.", pFC && !pFC->IsShared());
+    pFC = m_pDoc->GetFormulaCell(ScAddress(1,2,0));
+    CPPUNIT_ASSERT_MESSAGE("B3 should be a non-shared formula cell.", pFC && !pFC->IsShared());
+
+    // Delelte cells over A11:B11 to bring it back to the previous state.
+    m_pDoc->DeleteCol(ScRange(0,10,0,1,10,0));
+
+    if (!checkFormula(*m_pDoc, ScAddress(1,0,0), "A10"))
+        CPPUNIT_FAIL("Wrong formula in B1");
+    if (!checkFormula(*m_pDoc, ScAddress(1,1,0), "A11"))
+        CPPUNIT_FAIL("Wrong formula in B2");
+    if (!checkFormula(*m_pDoc, ScAddress(1,2,0), "A12"))
+        CPPUNIT_FAIL("Wrong formula in B3");
+
+    pFC = m_pDoc->GetFormulaCell(ScAddress(1,0,0));
+    CPPUNIT_ASSERT_MESSAGE("This must be a shared formula cell.", pFC && pFC->IsShared());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(0), pFC->GetSharedTopRow());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(3), pFC->GetSharedLength());
 
     m_pDoc->DeleteTab(0);
 }

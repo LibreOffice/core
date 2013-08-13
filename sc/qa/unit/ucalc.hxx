@@ -219,6 +219,7 @@ public:
     void testUpdateReference();
     void testSearchCells();
     void testSharedFormulas();
+    void testSharedFormulasRefUpdate();
     void testSharedFormulasCopyPaste();
     void testFormulaPosition();
 
@@ -345,6 +346,7 @@ public:
     CPPUNIT_TEST(testUpdateReference);
     CPPUNIT_TEST(testSearchCells);
     CPPUNIT_TEST(testSharedFormulas);
+    CPPUNIT_TEST(testSharedFormulasRefUpdate);
     CPPUNIT_TEST(testSharedFormulasCopyPaste);
     CPPUNIT_TEST(testFormulaPosition);
     CPPUNIT_TEST(testJumpToPrecedentsDependents);
