@@ -293,6 +293,8 @@ void SwTableFormat::AssignFormatParents( SwTableFormat* pSrcFormat, SwTable &rTa
             pLast->InvalidateAll();
             pLast->SetCompletePaint();
         }
+
+    ((SwModify*)pHardFormat)->CheckCaching( RES_BOX );
 }
 
 void SwTableFormat::AssignLineParents( SwTableFormat* pSrcFormat, SwTable &rTable )
@@ -327,6 +329,8 @@ void SwTableFormat::AssignLineParents( SwTableFormat* pSrcFormat, SwTable &rTabl
         }
 
         AssignBoxParents( pFormat, *rTable.GetTabLines()[ n ] );
+
+        ((SwModify*)pLineFormat)->CheckCaching( RES_BOX );
     }
 }
 
@@ -363,6 +367,8 @@ void SwTableFormat::AssignBoxParents( SwTableLineFormat* pSrcLineFormat, SwTable
 
         if( rLine.GetTabBoxes()[ n ]->GetTabLines().size() )
             AssignLineParents_Complex( pSrcLineFormat, pFormat, *rLine.GetTabBoxes()[ n ] );
+
+        ((SwModify*)pBoxFormat)->CheckCaching( RES_BOX );
     }
 }
 
@@ -385,6 +391,8 @@ void SwTableFormat::AssignLineParents_Complex( SwTableLineFormat* pSrcLineFormat
         }
 
         AssignBoxParents_Complex( pSrcLineFormat, pSrcBoxFormat, *rBox.GetTabLines()[ n ] );
+
+        ((SwModify*)pLineFormat)->CheckCaching( RES_BOX );
     }
 }
 
@@ -408,6 +416,8 @@ void SwTableFormat::AssignBoxParents_Complex( SwTableLineFormat* pSrcLineFormat,
 
         if( rLine.GetTabBoxes()[ n ]->GetTabLines().size() )
             AssignLineParents_Complex( pSrcLineFormat, pSrcBoxFormat, *rLine.GetTabBoxes()[ n ] );
+
+        ((SwModify*)pBoxFormat)->CheckCaching( RES_BOX );
     }
 }
 
