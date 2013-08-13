@@ -657,7 +657,7 @@ void ScAutoFormatData::FillToItemSet( sal_uInt16 nIndex, SfxItemSet& rItemSet, S
         rItemSet.Put( rField.GetPosture() );
         // do not insert empty CJK font
         const SvxFontItem& rCJKFont = rField.GetCJKFont();
-        if( rCJKFont.GetStyleName().Len() )
+        if (!rCJKFont.GetStyleName().isEmpty())
         {
             rItemSet.Put( rCJKFont );
             rItemSet.Put( rField.GetCJKHeight() );
@@ -672,7 +672,7 @@ void ScAutoFormatData::FillToItemSet( sal_uInt16 nIndex, SfxItemSet& rItemSet, S
         }
         // do not insert empty CTL font
         const SvxFontItem& rCTLFont = rField.GetCTLFont();
-        if( rCTLFont.GetStyleName().Len() )
+        if (rCTLFont.GetStyleName().isEmpty())
         {
             rItemSet.Put( rCTLFont );
             rItemSet.Put( rField.GetCTLHeight() );

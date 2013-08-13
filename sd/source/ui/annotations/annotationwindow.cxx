@@ -253,7 +253,7 @@ Selection AnnotationTextWindow::GetSurroundingTextSelection() const
     if( mpOutlinerView )
     {
         if( mpOutlinerView->HasSelection() )
-            return Selection( 0, mpOutlinerView->GetSelected().Len() );
+            return Selection( 0, mpOutlinerView->GetSelected().getLength() );
         else
         {
             ESelection aSelection = mpOutlinerView->GetEditView().GetSelection();

@@ -779,7 +779,7 @@ sal_Bool DrawViewShell::HasSelection(sal_Bool bText) const
     {
         OutlinerView* pOlView = mpDrawView->GetTextEditOutlinerView();
 
-        if (pOlView && pOlView->GetSelected().Len() != 0)
+        if (pOlView && !pOlView->GetSelected().isEmpty())
         {
             bReturn = sal_True;
         }

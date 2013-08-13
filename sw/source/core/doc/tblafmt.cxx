@@ -767,7 +767,7 @@ void SwTableAutoFmt::UpdateToSet(sal_uInt8 nPos, SfxItemSet& rSet,
             rSet.Put( rChg.GetPosture() );
             // do not insert empty CJK font
             const SvxFontItem& rCJKFont = rChg.GetCJKFont();
-            if( rCJKFont.GetStyleName().Len() )
+            if (!rCJKFont.GetStyleName().isEmpty())
             {
                 rSet.Put( rChg.GetCJKFont() );
                 rSet.Put( rChg.GetCJKHeight() );
@@ -782,7 +782,7 @@ void SwTableAutoFmt::UpdateToSet(sal_uInt8 nPos, SfxItemSet& rSet,
             }
             // do not insert empty CTL font
             const SvxFontItem& rCTLFont = rChg.GetCTLFont();
-            if( rCTLFont.GetStyleName().Len() )
+            if (!rCTLFont.GetStyleName().isEmpty())
             {
                 rSet.Put( rChg.GetCTLFont() );
                 rSet.Put( rChg.GetCTLHeight() );

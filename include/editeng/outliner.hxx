@@ -266,7 +266,7 @@ public:
                     sal_Bool bSelect=sal_True,
                     sal_Bool bWChildren=sal_True);
 
-    String      GetSelected() const;
+    OUString    GetSelected() const;
     void        SelectRange( sal_Int32 nFirst, sal_Int32 nCount );
     void        SetAttribs( const SfxItemSet& );
     void        Indent( short nDiff );
@@ -276,7 +276,7 @@ public:
 
     sal_uLong       Read( SvStream& rInput, const String& rBaseURL, EETextFormat eFormat, sal_Bool bSelect = sal_False, SvKeyValueIterator* pHTTPHeaderAttrs = NULL );
 
-    void        InsertText( const String& rNew, sal_Bool bSelect = sal_False );
+    void        InsertText( const OUString& rNew, sal_Bool bSelect = sal_False );
     void        InsertText( const OutlinerParaObject& rParaObj );
     void        Expand();
     void        Collapse();

@@ -34,7 +34,7 @@ friend class ImpItemEdit;
     std::vector<ImpItemListRow*> aList;
     long nAktPaintRow;
     Edit* pEditControl;
-    XubString aWNamMerk;
+    OUString aWNamMerk;
     Link aEntryChangedHdl;
     Link aSetDirtyHdl;
     ImpItemListRow* pAktChangeEntry;
@@ -87,7 +87,7 @@ public:
     virtual OUString  GetCellText(long _nRow, sal_uInt16 _nColId) const;
 
     const ImpItemListRow* GetAktChangeEntry() const { return pAktChangeEntry; }
-    XubString GetNewEntryValue() const                 { return pEditControl->GetText(); }
+    OUString GetNewEntryValue() const                 { return pEditControl->GetText(); }
     void SetEntryChangedHdl(const Link& rLink)      { aEntryChangedHdl=rLink; }
     const Link& GetEntryChangedHdl() const          { return aEntryChangedHdl; }
     void SetSetDirtyHdl(const Link& rLink)          { aSetDirtyHdl=rLink; }

@@ -35,9 +35,9 @@ class SvXMLUnitConverter;
 
 class EDITENG_DLLPUBLIC SvxFontItem : public SfxPoolItem
 {
-    String  aFamilyName;
-    String  aStyleName;
-    FontFamily  eFamily;
+    OUString aFamilyName;
+    OUString aStyleName;
+    FontFamily eFamily;
     FontPitch ePitch;
     rtl_TextEncoding eTextEncoding;
 
@@ -47,8 +47,8 @@ public:
     TYPEINFO();
 
     explicit SvxFontItem( const sal_uInt16 nId  );
-    SvxFontItem( const FontFamily eFam, const String& rFamilyName,
-        const String& rStyleName,
+    SvxFontItem( const FontFamily eFam, const OUString& rFamilyName,
+        const OUString& rStyleName,
         const FontPitch eFontPitch /*= PITCH_DONTKNOW*/,
         const rtl_TextEncoding eFontTextEncoding /*= RTL_TEXTENCODING_DONTKNOW*/,
         const sal_uInt16 nId  );
@@ -67,21 +67,21 @@ public:
                                     OUString &rText, const IntlWrapper * = 0 ) const;
 
     // Access methods:
-    void SetFamilyName( const String& rFamilyName ) { aFamilyName = rFamilyName; }
-    inline const String &GetFamilyName() const { return aFamilyName; }
+    void SetFamilyName( const OUString& rFamilyName ) { aFamilyName = rFamilyName; }
+    const OUString &GetFamilyName() const { return aFamilyName; }
 
-    void SetStyleName(const String &rStyleName ) { aStyleName = rStyleName; }
-    inline const String &GetStyleName() const { return aStyleName; }
+    void SetStyleName(const OUString &rStyleName ) { aStyleName = rStyleName; }
+    const OUString &GetStyleName() const { return aStyleName; }
 
     void SetFamily( FontFamily _eFamily ) { eFamily = _eFamily; }
-    inline FontFamily GetFamily() const { return eFamily; }
+    FontFamily GetFamily() const { return eFamily; }
 
     void SetPitch(FontPitch _ePitch ) { ePitch = _ePitch; }
-    inline FontPitch GetPitch() const { return ePitch; }
+    FontPitch GetPitch() const { return ePitch; }
 
     void SetCharSet(rtl_TextEncoding _eEncoding) { eTextEncoding = _eEncoding; }
 
-    inline rtl_TextEncoding GetCharSet() const { return eTextEncoding; }
+    rtl_TextEncoding GetCharSet() const { return eTextEncoding; }
 
     SvxFontItem& operator=(const SvxFontItem& rFont);
 

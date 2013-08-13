@@ -1504,7 +1504,7 @@ sal_Bool OutlineViewShell::HasSelection(sal_Bool bText) const
     {
         OutlinerView* pOutlinerView = pOlView->GetViewByWindow( GetActiveWindow() );
 
-        if (pOutlinerView && pOutlinerView->GetSelected().Len() != 0)
+        if (pOutlinerView && !pOutlinerView->GetSelected().isEmpty())
         {
             bReturn = sal_True;
         }

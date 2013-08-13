@@ -1248,11 +1248,11 @@ void OutlinerView::RemoveAttribs( sal_Bool bRemoveParaAttribs, sal_uInt16 nWhich
 // ======================================================================
 
 
-void OutlinerView::InsertText( const XubString& rNew, sal_Bool bSelect )
+void OutlinerView::InsertText( const OUString& rNew, sal_Bool bSelect )
 {
     DBG_CHKTHIS(OutlinerView,0);
     if( pOwner->bFirstParaIsEmpty )
-        pOwner->Insert( String() );
+        pOwner->Insert( OUString() );
     pEditView->InsertText( rNew, bSelect );
 }
 
@@ -1330,7 +1330,7 @@ Rectangle OutlinerView::GetOutputArea() const
 }
 
 
-XubString OutlinerView::GetSelected() const
+OUString OutlinerView::GetSelected() const
 {
     DBG_CHKTHIS(OutlinerView,0);
     return pEditView->GetSelected();

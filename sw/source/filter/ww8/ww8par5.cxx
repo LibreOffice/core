@@ -2771,7 +2771,7 @@ void SwWW8ImplReader::Read_SubF_Ruby( WW8ReadFieldParams& rReadParam)
             {
                 const SvxFontItem &rF = ItemGet<SvxFontItem>(*(*aIter),
                     GetWhichOfScript(RES_CHRATR_FONT,nScript));
-                if (rF.GetFamilyName().Equals(sFontName))
+                if (rF.GetFamilyName().equals(sFontName))
                 {
                     pCharFmt=*aIter;
                     break;

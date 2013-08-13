@@ -222,8 +222,8 @@ SvxFontItem::SvxFontItem( const sal_uInt16 nId ) :
 
 // -----------------------------------------------------------------------
 
-SvxFontItem::SvxFontItem( const FontFamily eFam, const XubString& aName,
-                  const XubString& aStName, const FontPitch eFontPitch,
+SvxFontItem::SvxFontItem( const FontFamily eFam, const OUString& aName,
+                  const OUString& aStName, const FontPitch eFontPitch,
                   const rtl_TextEncoding eFontTextEncoding, const sal_uInt16 nId ) :
 
     SfxPoolItem( nId ),
@@ -256,19 +256,19 @@ bool SvxFontItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         case 0:
         {
             com::sun::star::awt::FontDescriptor aFontDescriptor;
-            aFontDescriptor.Name = aFamilyName.GetBuffer();
-            aFontDescriptor.StyleName = aStyleName.GetBuffer();
+            aFontDescriptor.Name = aFamilyName;
+            aFontDescriptor.StyleName = aStyleName;
             aFontDescriptor.Family = (sal_Int16)(eFamily);
             aFontDescriptor.CharSet = (sal_Int16)(eTextEncoding);
             aFontDescriptor.Pitch = (sal_Int16)(ePitch);
             rVal <<= aFontDescriptor;
         }
         break;
-        case MID_FONT_FAMILY_NAME   :
-            rVal <<= OUString(aFamilyName.GetBuffer());
+        case MID_FONT_FAMILY_NAME:
+            rVal <<= aFamilyName;
         break;
         case MID_FONT_STYLE_NAME:
-            rVal <<= OUString(aStyleName.GetBuffer());
+            rVal <<= aStyleName;
         break;
         case MID_FONT_FAMILY    : rVal <<= (sal_Int16)(eFamily);    break;
         case MID_FONT_CHAR_SET  : rVal <<= (sal_Int16)(eTextEncoding);  break;
@@ -300,7 +300,7 @@ bool SvxFontItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId)
             OUString aStr;
             if(!(rVal >>= aStr))
                 return sal_False;
-            aFamilyName = aStr.getStr();
+            aFamilyName = aStr;
         }
         break;
         case MID_FONT_STYLE_NAME:
@@ -308,7 +308,7 @@ bool SvxFontItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId)
             OUString aStr;
             if(!(rVal >>= aStr))
                 return sal_False;
-            aStyleName = aStr.getStr();
+            aStyleName = aStr;
         }
         break;
         case MID_FONT_FAMILY :
