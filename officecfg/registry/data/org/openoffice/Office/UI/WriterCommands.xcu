@@ -722,7 +722,15 @@
       </node>
       <node oor:name=".uno:FlipVertical" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Flip Horizontally</value>
+          <value xml:lang="en-US">Flip Vertically</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:FlipHorizontal" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Flip Horizontal</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
