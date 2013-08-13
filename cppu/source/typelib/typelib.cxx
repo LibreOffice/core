@@ -1645,6 +1645,7 @@ extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_release(
 #endif
 
         delete pTD;
+        pTD=0;
     }
 }
 
@@ -2405,6 +2406,7 @@ extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescriptionreference_release
             osl_atomic_decrement( &rInit.nTypeDescriptionReferenceCount );
 #endif
             delete pRef;
+            pRef=0;
         }
     }
     else
