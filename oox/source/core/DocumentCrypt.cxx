@@ -416,7 +416,6 @@ bool AesEncoder::encode()
         return false;
 
     sal_uInt32 aLength = xSeekable->getLength();
-    printf("%d\n", aLength);
 
     if (!mrOleStorage.isStorage())
         return false;
