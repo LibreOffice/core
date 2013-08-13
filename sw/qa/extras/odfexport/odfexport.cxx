@@ -19,6 +19,7 @@ public:
     void testTextframeGradient();
     void testFdo60769();
     void testFdo58949();
+    void testCharacterBorder();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -38,6 +39,7 @@ void Test::run()
         {"textframe-gradient.odt", &Test::testTextframeGradient},
         {"fdo60769.odt", &Test::testFdo60769},
         {"fdo58949.docx", &Test::testFdo58949},
+        {"charborder.odt", &Test::testCharacterBorder },
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -160,6 +162,180 @@ void Test::testFdo58949()
     aArgs[0] <<= OUString(aTempFile.GetURL());
     uno::Reference<container::XNameAccess> xNameAccess(m_xSFactory->createInstanceWithArguments("com.sun.star.packages.zip.ZipFileAccess", aArgs), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(true, bool(xNameAccess->hasByName("Obj102")));
+}
+
+void Test::testCharacterBorder()
+{
+    // Make sure paragraph and character attributes don't interfere
+    // First paragraph has a paragraph border and a character border included by the paragraph style
+
+    // Paragraph border of first paragraph
+    {
+        const table::BorderLine2 aFirstParTopBorder(6711039,0,26,26,7,53);
+        const sal_Int32 aFirstParTopPadding(150);
+        uno::Reference<beans::XPropertySet> xSet(getParagraph(1), uno::UNO_QUERY);
+
+        // Top border
+        assertEqualBorder(
+            aFirstParTopBorder, aFirstParTopPadding,
+            getProperty<table::BorderLine2>(xSet,"TopBorder"),
+            getProperty<sal_Int32>(xSet,"TopBorderDistance"));
+
+        // Bottom border (same as top border)
+        assertEqualBorder(
+            aFirstParTopBorder, aFirstParTopPadding,
+            getProperty<table::BorderLine2>(xSet,"BottomBorder"),
+            getProperty<sal_Int32>(xSet,"BottomBorderDistance"));
+
+        // Left border (same as top border)
+        assertEqualBorder(
+            aFirstParTopBorder, aFirstParTopPadding,
+            getProperty<table::BorderLine2>(xSet,"LeftBorder"),
+            getProperty<sal_Int32>(xSet,"LeftBorderDistance"));
+
+        // Right border (same as top border)
+        assertEqualBorder(
+            aFirstParTopBorder, aFirstParTopPadding,
+            getProperty<table::BorderLine2>(xSet,"RightBorder"),
+            getProperty<sal_Int32>(xSet,"RightBorderDistance"));
+    }
+
+    // Character border for first paragraph
+    {
+        const table::BorderLine2 aFirstParCharTopBorder(16724787,0,37,0,2,37);
+        const sal_Int32 aFirstParCharTopPadding(450);
+        uno::Reference<beans::XPropertySet> xSet(getParagraph(1), uno::UNO_QUERY);
+
+        // Top border
+        assertEqualBorder(
+            aFirstParCharTopBorder, aFirstParCharTopPadding,
+            getProperty<table::BorderLine2>(xSet,"CharTopBorder"),
+            getProperty<sal_Int32>(xSet,"CharTopBorderDistance"));
+
+        // Bottom border (same as top border)
+        assertEqualBorder(
+            aFirstParCharTopBorder, aFirstParCharTopPadding,
+            getProperty<table::BorderLine2>(xSet,"CharBottomBorder"),
+            getProperty<sal_Int32>(xSet,"CharBottomBorderDistance"));
+
+        // Left border (same as top border)
+        assertEqualBorder(
+            aFirstParCharTopBorder, aFirstParCharTopPadding,
+            getProperty<table::BorderLine2>(xSet,"CharLeftBorder"),
+            getProperty<sal_Int32>(xSet,"CharLeftBorderDistance"));
+
+        // Right border (same as top border)
+        assertEqualBorder(
+            aFirstParCharTopBorder, aFirstParCharTopPadding,
+            getProperty<table::BorderLine2>(xSet,"CharRightBorder"),
+            getProperty<sal_Int32>(xSet,"CharRightBorderDistance"));
+
+        // Check autostyle
+        {
+            uno::Reference< style::XAutoStyleFamily > xAutoStyleFamily(getAutoStyles("ParagraphStyles"));
+            uno::Reference < container::XEnumeration > xAutoStylesEnum( xAutoStyleFamily->createEnumeration() );
+            CPPUNIT_ASSERT_EQUAL((bool)xAutoStylesEnum->hasMoreElements(), true);
+
+            // First paragraph autostyle
+            uno::Reference < beans::XPropertySet > xPSet( xAutoStylesEnum->nextElement(), uno::UNO_QUERY );
+
+            // Top border
+            assertEqualBorder(
+                aFirstParCharTopBorder, aFirstParCharTopPadding,
+                getProperty<table::BorderLine2>(xSet,"CharTopBorder"),
+                getProperty<sal_Int32>(xSet,"CharTopBorderDistance"));
+
+            // Bottom border
+            assertEqualBorder(
+                aFirstParCharTopBorder, aFirstParCharTopPadding,
+                getProperty<table::BorderLine2>(xSet,"CharBottomBorder"),
+                getProperty<sal_Int32>(xSet,"CharBottomBorderDistance"));
+
+            // Left border
+            assertEqualBorder(
+                aFirstParCharTopBorder, aFirstParCharTopPadding,
+                getProperty<table::BorderLine2>(xSet,"CharLeftBorder"),
+                getProperty<sal_Int32>(xSet,"CharLeftBorderDistance"));
+
+            // Right border
+            assertEqualBorder(
+                aFirstParCharTopBorder, aFirstParCharTopPadding,
+                getProperty<table::BorderLine2>(xSet,"CharRightBorder"),
+                getProperty<sal_Int32>(xSet,"CharRightBorderDistance"));
+        }
+    }
+
+    // Second paragraph's second text portion has a character style named CharDiffBor
+    // This style includes border with different sides
+    {
+
+        table::BorderLine2 aBorderArray[4] =
+        {
+            table::BorderLine2(16724787,26,2,4,13,35),     // Top
+            table::BorderLine2(10092390,26,26,53,11,106),  // Bottom
+            table::BorderLine2(6711039,9,26,9,12,71),      // Left
+            table::BorderLine2(0,0,0,0,0,0)                // Right
+        };
+
+        sal_Int32 aDistances[4] = { 400 /*Top*/, 300 /*Bottom*/, 250 /*Left*/, 0 /*Right*/ };
+
+        // Get second text portion of second paragraph
+        uno::Reference < beans::XPropertySet > xSet( getRun(getParagraph(2),2), uno::UNO_QUERY );
+
+        // Top border
+        assertEqualBorder(
+            aBorderArray[0], aDistances[0],
+            getProperty<table::BorderLine2>(xSet,"CharTopBorder"),
+            getProperty<sal_Int32>(xSet,"CharTopBorderDistance"));
+
+        // Bottom border
+        assertEqualBorder(
+            aBorderArray[1], aDistances[1],
+            getProperty<table::BorderLine2>(xSet,"CharBottomBorder"),
+            getProperty<sal_Int32>(xSet,"CharBottomBorderDistance"));
+
+        // Left border
+        assertEqualBorder(
+            aBorderArray[2], aDistances[2],
+            getProperty<table::BorderLine2>(xSet,"CharLeftBorder"),
+            getProperty<sal_Int32>(xSet,"CharLeftBorderDistance"));
+
+        // Right border
+        assertEqualBorder(
+            aBorderArray[3], aDistances[3],
+            getProperty<table::BorderLine2>(xSet,"CharRightBorder"),
+            getProperty<sal_Int32>(xSet,"CharRightBorderDistance"));
+
+        // Check character style
+        {
+            uno::Reference< container::XNameAccess > xStyleFamily(getStyles("CharacterStyles"), uno::UNO_QUERY);
+            uno::Reference < beans::XPropertySet > xStyleSet(xStyleFamily->getByName("CharDiffBor"), uno::UNO_QUERY);
+
+            // Top border
+            assertEqualBorder(
+                aBorderArray[0], aDistances[0],
+                getProperty<table::BorderLine2>(xStyleSet,"CharTopBorder"),
+                getProperty<sal_Int32>(xStyleSet,"CharTopBorderDistance"));
+
+            // Bottom border
+            assertEqualBorder(
+                aBorderArray[1], aDistances[1],
+                getProperty<table::BorderLine2>(xStyleSet,"CharBottomBorder"),
+                getProperty<sal_Int32>(xStyleSet,"CharBottomBorderDistance"));
+
+            // Left border
+            assertEqualBorder(
+                aBorderArray[2], aDistances[2],
+                getProperty<table::BorderLine2>(xStyleSet,"CharLeftBorder"),
+                getProperty<sal_Int32>(xStyleSet,"CharLeftBorderDistance"));
+
+            // Right border
+            assertEqualBorder(
+                aBorderArray[3], aDistances[3],
+                getProperty<table::BorderLine2>(xStyleSet,"CharRightBorder"),
+                getProperty<sal_Int32>(xStyleSet,"CharRightBorderDistance"));
+        }
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

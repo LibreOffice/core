@@ -10,12 +10,15 @@
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#include <com/sun/star/style/XAutoStylesSupplier.hpp>
+#include <com/sun/star/style/XAutoStyleFamily.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/table/XCell.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
 
 #include <test/bootstrapfixture.hxx>
 #include <unotest/macros_test.hxx>
@@ -118,6 +121,15 @@ protected:
         uno::Reference<container::XNameAccess> xStyleFamilies(xStyleFamiliesSupplier->getStyleFamilies(), uno::UNO_QUERY);
         uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName(aFamily), uno::UNO_QUERY);
         return xStyleFamily;
+    }
+
+    /// Get a family of auto styles, see com.sun.star.style.StyleFamilies for possible values.
+    uno::Reference<style::XAutoStyleFamily> getAutoStyles(OUString aFamily)
+    {
+        uno::Reference< style::XAutoStylesSupplier > xAutoStylesSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference< style::XAutoStyles > xAutoStyles(xAutoStylesSupplier->getAutoStyles());
+        uno::Reference< style::XAutoStyleFamily > xAutoStyleFamily(xAutoStyles->getByName(aFamily), uno::UNO_QUERY);
+        return xAutoStyleFamily;
     }
 
     /**
@@ -324,6 +336,21 @@ protected:
         uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
         xCursor->jumpToLastPage();
         return xCursor->getPage();
+    }
+
+    void assertEqualBorder(
+        const table::BorderLine2& rLeft, const sal_Int32 nLeftDist,
+        const table::BorderLine2& rRight, const sal_Int32 nRightDist )
+    {
+        // Border
+        CPPUNIT_ASSERT_EQUAL(rLeft.Color, rRight.Color);
+        CPPUNIT_ASSERT_EQUAL(rLeft.InnerLineWidth, rRight.InnerLineWidth);
+        CPPUNIT_ASSERT_EQUAL(rLeft.LineDistance, rRight.LineDistance);
+        CPPUNIT_ASSERT_EQUAL(rLeft.LineStyle, rRight.LineStyle);
+        CPPUNIT_ASSERT_EQUAL(rLeft.LineWidth, rRight.LineWidth);
+        CPPUNIT_ASSERT_EQUAL(rLeft.OuterLineWidth, rRight.OuterLineWidth);
+        // Padding
+        CPPUNIT_ASSERT_EQUAL(nLeftDist, nRightDist);
     }
 
     uno::Reference<lang::XComponent> mxComponent;
