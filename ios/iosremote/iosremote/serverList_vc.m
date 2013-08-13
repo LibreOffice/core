@@ -26,16 +26,37 @@
 @property (atomic, strong) NSIndexPath *lastSpinningCellIndex;
 
 @property (nonatomic, strong) NSNetServiceBrowser *serviceBrowser;
+@property (nonatomic, strong) NSTimer *searchLabelTimer;
+@property (nonatomic, strong) NSTimer *searchTimeoutTimer;
+@property (nonatomic, strong) NSString *searchStateText;
+@property (nonatomic)  UITableViewCellSelectionStyle style;
+
 @end
 
 @implementation server_list_vc
 
+@synthesize style = _style;
+@synthesize searchStateText = _searchStateText;
+@synthesize searchLabelTimer = _searchLabelTimer;
 @synthesize center = _center;
 @synthesize comManager = _comManager;
 @synthesize lastSpinningCellIndex = _lastSpinningCellIndex;
 @synthesize slideShowPreviewStartObserver = _slideShowPreviewStartObserver;
 @synthesize pinValidationObserver = _pinValidationObserver;
 @synthesize serviceBrowser = _serviceBrowser;
+
+#pragma mark - helper
+- (void) setSearchStateText:(NSString *)searchStateText
+{
+    _searchStateText = searchStateText;
+    [self.serverTable reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
+}
+
+- (void) setStyle:(UITableViewCellSelectionStyle)style
+{
+    _style = style;
+    [self.serverTable reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
+}
 
 #pragma mark - netservice resolve delegate
 -(void) netServiceDidResolveAddress:(NSNetService *)sender
@@ -65,18 +86,56 @@
 
 #pragma mark - bonjour service discovery
 
+-(void) handleSearchTimeout
+{
+    [self.serviceBrowser stop];
+}
+
+-(void) updateSearchLabel
+{
+    static short count = 1;
+    NSString * searchText = NSLocalizedString(@"Searching", nil);
+    for (uint i = 0; i<=count; ++i) {
+        searchText = [searchText stringByAppendingString:@"."];
+    }
+    NSLog(@"Updating count = %u SearchText = %@", count, searchText);
+    self.searchStateText = searchText;
+    count++;
+    count = count % 3;
+}
+
 -(void) netServiceBrowserWillSearch:(NSNetServiceBrowser *)aNetServiceBrowser
 {
     NSLog(@"Will search");
-    UITableViewCell * cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
-    [(UIActivityIndicatorView *)[cell viewWithTag:5] startAnimating];
+    self.comManager.state = SEARCHING;
+    self.searchStateText = NSLocalizedString(@"Searching", nil);
+    [self.searchLabelTimer invalidate];
+    [self.searchTimeoutTimer invalidate];
+    self.searchLabelTimer = [NSTimer scheduledTimerWithTimeInterval:1.0
+                                                           target:self
+                                                         selector:@selector(updateSearchLabel)
+                                                         userInfo:nil
+                                                          repeats:YES];
+    
+    self.searchTimeoutTimer = [NSTimer scheduledTimerWithTimeInterval:5.0
+                                                                   target:self
+                                                                 selector:@selector(handleSearchTimeout)
+                                                                 userInfo:nil
+                                                                  repeats:NO];
+    
+    [[NSRunLoop currentRunLoop] addTimer:self.searchLabelTimer forMode:NSRunLoopCommonModes];
+    self.style = UITableViewCellSelectionStyleNone;
 }
 
 -(void) netServiceBrowserDidStopSearch:(NSNetServiceBrowser *)aNetServiceBrowser
 {
     NSLog(@"End search");
-    UITableViewCell * cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
-    [(UIActivityIndicatorView *)[cell viewWithTag:5] stopAnimating];
+    if (self.comManager.state == SEARCHING)
+        self.comManager.state = DISCONNECTED;
+    [self.searchLabelTimer invalidate];
+    [self.searchTimeoutTimer invalidate];
+    self.searchStateText = NSLocalizedString(@"Click to refresh", nil);
+    self.style = UITableViewCellSelectionStyleBlue;
 }
 
 - (void)netServiceBrowser:(NSNetServiceBrowser *)aNetServiceBrowser didNotSearch:(NSDictionary *)errorDict
@@ -99,8 +158,6 @@
     
     if(!moreComing)
     {
-        UITableViewCell * cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
-        [(UIActivityIndicatorView *)[cell viewWithTag:5] stopAnimating];
         [self.tableView reloadData];
     }
 }
@@ -157,6 +214,7 @@
     self.comManager = [CommunicationManager sharedComManager];
     self.serverTable.dataSource = self;
     self.serverTable.delegate = self;
+    _style = UITableViewCellSelectionStyleNone;
     
     [self setTitle:NSLocalizedString(@"Impress Remote", @"App name displayed on navbar")];
     
@@ -239,11 +297,13 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    // Return when nothing should be done
-    if (self.comManager.state == CONNECTING ||
-        ([self.comManager.autoDiscoveryServers count] == 0 && indexPath.section == 0)) {
+    // Return when browser is still searching...
+    if ([self.comManager.autoDiscoveryServers count] == 0 && indexPath.section == 0 && self.comManager.state == SEARCHING)
         return;
-    }
+    
+    // Return when nothing should be done
+    if (self.comManager.state == CONNECTING)
+        return;
     
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     
@@ -257,6 +317,12 @@
         NSLog(@"Connecting to %@:%@", [[self.comManager.servers objectAtIndex:indexPath.row] serverName], [[self.comManager.servers objectAtIndex:indexPath.row] serverAddress]);
         [self.comManager connectToServer:[self.comManager.servers objectAtIndex:indexPath.row]];
     } else if (indexPath.section == 0){
+        // No discovered server and not searching => in a click to refresh state, so we restart searching process
+        if ([self.comManager.autoDiscoveryServers count] == 0) {
+            [self.serviceBrowser searchForServicesOfType:@"_impressremote._tcp" inDomain:@"local"];
+            [self.serviceBrowser scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+            return;
+        }
         NSLog(@"Connecting to %@", [[self.comManager.autoDiscoveryServers objectAtIndex:indexPath.row] name]);
         [[self.comManager.autoDiscoveryServers objectAtIndex:indexPath.row] resolveWithTimeout:0.0];
     }
@@ -341,19 +407,9 @@
     
     if (indexPath.section == 0){
         if ([self.comManager.autoDiscoveryServers count] == 0){
-            // Looking for one
-            UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-            int vCenter = [cell frame].size.height / 2;
-            int hCenter = [cell frame].size.width / 2;
-            
-            int SPINNER_SIZE = spinner.frame.size.width;
-            [spinner setFrame:CGRectMake(hCenter - SPINNER_SIZE, vCenter - SPINNER_SIZE/2, SPINNER_SIZE, SPINNER_SIZE)];
-            [[cell contentView] addSubview:spinner];
-            
-            [spinner setTag:5];
-            
-            cell.textLabel.text = @"";
-            cell.detailTextLabel.text = @"";
+            cell.textLabel.text = NSLocalizedString(self.searchStateText, nil);
+            cell.textLabel.lineBreakMode = UILineBreakModeClip;
+            cell.selectionStyle = self.style;
         } else {
             id s = [self.comManager.autoDiscoveryServers objectAtIndex:indexPath.row];
             

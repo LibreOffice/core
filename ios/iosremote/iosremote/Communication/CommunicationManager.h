@@ -58,7 +58,8 @@ typedef enum ConnectionState : NSInteger ConnectionState;
 enum ConnectionState : NSInteger {
     DISCONNECTED,
     CONNECTING,
-    CONNECTED
+    CONNECTED,
+    SEARCHING
 };
 
 @interface CommunicationManager : NSObject
