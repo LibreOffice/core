@@ -83,7 +83,7 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
     aMinAutoPaperSize( 0x0, 0x0 ),
     aMaxAutoPaperSize( 0x7FFFFFFF, 0x7FFFFFFF ),
     aEditDoc( pItemPool ),
-    aWordDelimiters("  .,;:-'`'?!_=\"{}()[]\xFF"),
+    aWordDelimiters(" .,;:-'`'?!_=\"{}()[]\xFF"),
     bKernAsianPunctuation(false),
     bAddExtLeading(false),
     bIsFormatting(false),
