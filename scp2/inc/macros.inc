@@ -239,7 +239,7 @@ End
     RegistryItem CONCAT3(gid_Regitem_Openoffice_,name,AppUserModelID) \
         ParentID = PREDEFINED_HKEY_CLASSES_ROOT; \
         ModuleID = modid; \
-        ComponentCondition = "VersionNT >= 600"; \
+        ComponentCondition = "VersionNT >= 601"; \
         Subkey = STRING(AppUserModelID); \
         Value = STRING(CONCAT2(TheDocumentFoundation.LibreOffice.,doc_type)); \
     End
