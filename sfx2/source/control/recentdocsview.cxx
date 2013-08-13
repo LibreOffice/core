@@ -41,6 +41,7 @@ static const char SFX_REFERER_USER[] = "private:user";
 
 RecentDocsView::RecentDocsView( Window* pParent )
     : ThumbnailView(pParent)
+    , mnFileTypes(TYPE_NONE)
     , mnItemMaxSize(100)
     , mnTextHeight(30)
     , mnItemPadding(5)
@@ -60,44 +61,55 @@ RecentDocsView::~RecentDocsView()
 {
 }
 
-bool RecentDocsView::isFilteredExtension(APPLICATION_FILTER filter, const OUString &rExt)
+bool RecentDocsView::typeMatchesExtension(ApplicationType type, const OUString &rExt)
 {
-    bool bRet = true;
+    bool bRet = false;
 
-    if (filter == FILTER_WRITER)
+    if (rExt == "odt" || rExt == "doc" || rExt == "docx" ||
+        rExt == "rtf" || rExt == "txt")
     {
-        bRet = rExt == "odt" || rExt == "doc" || rExt == "docx" ||
-            rExt == "rtf" || rExt == "txt";
+        bRet = type & TYPE_WRITER;
     }
-    else if (filter == FILTER_CALC)
+    else if (rExt == "ods" || rExt == "xls" || rExt == "xlsx")
     {
-        bRet = rExt == "ods" || rExt == "xls" || rExt == "xlsx";
+        bRet = type & TYPE_CALC;
     }
-    else if (filter == FILTER_IMPRESS)
+    else if (rExt == "odp" || rExt == "pps" || rExt == "ppt" ||
+            rExt == "pptx")
     {
-        bRet = rExt == "odp" || rExt == "pps" || rExt == "ppt" ||
-            rExt == "pptx";
+        bRet = type & TYPE_IMPRESS;
     }
-    else if (filter == FILTER_DRAW)
+    else if (rExt == "odg")
     {
-        bRet = rExt == "odg";
+        bRet = type & TYPE_DRAW;
     }
-    else if (filter == FILTER_DATABASE)
+    else if (rExt == "odb")
     {
-        bRet = rExt == "odb";
+        bRet = type & TYPE_DATABASE;
     }
-    else if (filter == FILTER_MATH)
+    else if (rExt == "odf")
     {
-        bRet = rExt == "odf";
+        bRet = type & TYPE_MATH;
+    }
+    else
+    {
+        bRet = type & TYPE_OTHER;
     }
 
     return bRet;
 }
 
-bool RecentDocsView::isUnfilteredFile(const OUString &rURL) const
+bool RecentDocsView::isAcceptedFile(const OUString &rURL) const
 {
     INetURLObject aUrl(rURL);
-    return isFilteredExtension(mFilter, aUrl.getExtension());
+    OUString aExt = aUrl.getExtension();
+    return (mnFileTypes & TYPE_WRITER   && typeMatchesExtension(TYPE_WRITER,  aExt)) ||
+           (mnFileTypes & TYPE_CALC     && typeMatchesExtension(TYPE_CALC,    aExt)) ||
+           (mnFileTypes & TYPE_IMPRESS  && typeMatchesExtension(TYPE_IMPRESS, aExt)) ||
+           (mnFileTypes & TYPE_DRAW     && typeMatchesExtension(TYPE_DRAW,    aExt)) ||
+           (mnFileTypes & TYPE_DATABASE && typeMatchesExtension(TYPE_DATABASE,aExt)) ||
+           (mnFileTypes & TYPE_MATH     && typeMatchesExtension(TYPE_MATH,    aExt)) ||
+           (mnFileTypes & TYPE_OTHER    && typeMatchesExtension(TYPE_OTHER,   aExt));
 }
 
 BitmapEx RecentDocsView::getDefaultThumbnail(const OUString &rURL)
@@ -106,17 +118,17 @@ BitmapEx RecentDocsView::getDefaultThumbnail(const OUString &rURL)
     INetURLObject aUrl(rURL);
     OUString aExt = aUrl.getExtension();
 
-    if ( isFilteredExtension( FILTER_WRITER, aExt) )
+    if ( typeMatchesExtension( TYPE_WRITER, aExt) )
         aImg = BitmapEx ( SfxResId( SFX_FILE_THUMBNAIL_TEXT ) );
-    else if ( isFilteredExtension( FILTER_CALC, aExt) )
+    else if ( typeMatchesExtension( TYPE_CALC, aExt) )
         aImg = BitmapEx ( SfxResId( SFX_FILE_THUMBNAIL_SHEET ) );
-    else if ( isFilteredExtension( FILTER_IMPRESS, aExt) )
+    else if ( typeMatchesExtension( TYPE_IMPRESS, aExt) )
         aImg = BitmapEx ( SfxResId( SFX_FILE_THUMBNAIL_PRESENTATION ) );
-    else if ( isFilteredExtension( FILTER_DRAW, aExt) )
+    else if ( typeMatchesExtension( TYPE_DRAW, aExt) )
         aImg = BitmapEx ( SfxResId( SFX_FILE_THUMBNAIL_DRAWING ) );
-    else if ( isFilteredExtension( FILTER_DATABASE, aExt) )
+    else if ( typeMatchesExtension( TYPE_DATABASE, aExt) )
         aImg = BitmapEx ( SfxResId( SFX_FILE_THUMBNAIL_DATABASE ) );
-    else if ( isFilteredExtension( FILTER_MATH, aExt) )
+    else if ( typeMatchesExtension( TYPE_MATH, aExt) )
         aImg = BitmapEx ( SfxResId( SFX_FILE_THUMBNAIL_MATH ) );
     else
         aImg = BitmapEx ( SfxResId( SFX_FILE_THUMBNAIL_DEFAULT ) );
@@ -153,7 +165,7 @@ void RecentDocsView::loadRecentDocs()
                 a >>= aTitle;
         }
 
-        if( isUnfilteredFile(aURL) )
+        if( isAcceptedFile(aURL) )
         {
             insertItem(aURL, aTitle);
         }
@@ -219,11 +231,6 @@ void RecentDocsView::SetThumbnailSize(long thumbnailSize)
 long RecentDocsView::GetThumbnailSize() const
 {
     return mnItemMaxSize;
-}
-
-void RecentDocsView::SetFilter(APPLICATION_FILTER filter)
-{
-    mFilter = filter;
 }
 
 IMPL_STATIC_LINK_NOINSTANCE( RecentDocsView, ExecuteHdl_Impl, LoadRecentFile*, pLoadRecentFile )
