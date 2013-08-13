@@ -2719,20 +2719,30 @@ ErrCode RequestPassword(const SfxFilter* pCurrentFilter, OUString& aURL, SfxItem
             // TODO/LATER: The filters should show the password dialog themself in future
             if ( bMSType )
             {
-                // all the current MS-filters use MSCodec_Std97 implementation
-                uno::Sequence< sal_Int8 > aUniqueID = ::comphelper::DocPasswordHelper::GenerateRandomByteSequence( 16 );
-                uno::Sequence< sal_Int8 > aEncryptionKey = ::comphelper::DocPasswordHelper::GenerateStd97Key( pPasswordRequest->getPassword(), aUniqueID );
-
-                if ( aEncryptionKey.getLength() )
+                if ( pCurrentFilter->GetFilterName() == "Calc MS Excel 2007 XML" )
                 {
                     ::comphelper::SequenceAsHashMap aHashData;
-                    aHashData[ OUString( "STD97EncryptionKey"  ) ] <<= aEncryptionKey;
-                    aHashData[ OUString( "STD97UniqueID"  ) ] <<= aUniqueID;
-
+                    aHashData[ OUString( "Password"  ) ] <<= pPasswordRequest->getPassword();
                     pSet->Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, uno::makeAny( aHashData.getAsConstNamedValueList() ) ) );
                 }
                 else
-                    return ERRCODE_IO_NOTSUPPORTED;
+                {
+                    uno::Sequence< sal_Int8 > aUniqueID = ::comphelper::DocPasswordHelper::GenerateRandomByteSequence( 16 );
+                    uno::Sequence< sal_Int8 > aEncryptionKey = ::comphelper::DocPasswordHelper::GenerateStd97Key( pPasswordRequest->getPassword(), aUniqueID );
+
+                    if ( aEncryptionKey.getLength() )
+                    {
+                        ::comphelper::SequenceAsHashMap aHashData;
+                        aHashData[ OUString( "STD97EncryptionKey"  ) ] <<= aEncryptionKey;
+                        aHashData[ OUString( "STD97UniqueID"  ) ] <<= aUniqueID;
+
+                        pSet->Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, uno::makeAny( aHashData.getAsConstNamedValueList() ) ) );
+                    }
+                    else
+                    {
+                        return ERRCODE_IO_NOTSUPPORTED;
+                    }
+                }
             }
             else
             {

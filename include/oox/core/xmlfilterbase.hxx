@@ -233,7 +233,12 @@ public:
 
 protected:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
-                        implGetInputStream( ::comphelper::MediaDescriptor& rMediaDesc ) const;
+        implGetInputStream( ::comphelper::MediaDescriptor& rMediaDesc ) const;
+
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >
+        implGetOutputStream( ::comphelper::MediaDescriptor& rMediaDesc ) const;
+
+    virtual bool implFinalizeExport(  ::comphelper::MediaDescriptor& rMediaDescriptor );
 
 private:
     virtual StorageRef  implCreateStorage(

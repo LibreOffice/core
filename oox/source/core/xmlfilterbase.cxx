@@ -49,6 +49,8 @@
 #include <oox/core/filterdetect.hxx>
 #include <comphelper/storagehelper.hxx>
 
+#include <oox/core/DocumentCrypt.hxx>
+
 using ::com::sun::star::xml::dom::DocumentBuilder;
 using ::com::sun::star::xml::dom::XDocument;
 using ::com::sun::star::xml::dom::XDocumentBuilder;
@@ -643,6 +645,73 @@ Reference< XInputStream > XmlFilterBase::implGetInputStream( MediaDescriptor& rM
         All this is implemented in the detector service. */
     FilterDetect aDetector( getComponentContext() );
     return aDetector.extractUnencryptedPackage( rMediaDesc );
+}
+
+Reference<XStream> XmlFilterBase::implGetOutputStream( MediaDescriptor& rMediaDescriptor ) const
+{
+    Sequence< NamedValue > aMediaEncData;
+    aMediaEncData = rMediaDescriptor.getUnpackedValueOrDefault(
+                                        MediaDescriptor::PROP_ENCRYPTIONDATA(),
+                                        Sequence< NamedValue >() );
+
+    OUString aPassword;
+    for (int i=0; i<aMediaEncData.getLength(); i++)
+    {
+        if (aMediaEncData[i].Name == "Password")
+        {
+            Any& any = aMediaEncData[i].Value;
+            any >>= aPassword;
+            break;
+        }
+    }
+    if (aPassword.isEmpty())
+    {
+        return FilterBase::implGetOutputStream( rMediaDescriptor );
+    }
+    else // We need to encrypt the stream so create a memory stream
+    {
+        Reference< XComponentContext > xContext = getComponentContext();
+        return Reference< XStream > (
+                    xContext->getServiceManager()->createInstanceWithContext("com.sun.star.comp.MemoryStream", xContext),
+                    uno::UNO_QUERY_THROW );
+    }
+    return Reference<XStream>();
+}
+
+bool XmlFilterBase::implFinalizeExport( MediaDescriptor& rMediaDescriptor )
+{
+    bool bRet = true;
+
+    Sequence< NamedValue > aMediaEncData;
+    aMediaEncData = rMediaDescriptor.getUnpackedValueOrDefault(
+                                        MediaDescriptor::PROP_ENCRYPTIONDATA(),
+                                        Sequence< NamedValue >() );
+
+    OUString aPassword;
+
+    for (int i=0; i<aMediaEncData.getLength(); i++)
+    {
+        if (aMediaEncData[i].Name == "Password")
+        {
+            Any& any = aMediaEncData[i].Value;
+            any >>= aPassword;
+            break;
+        }
+    }
+
+    if (!aPassword.isEmpty())
+    {
+        commitStorage();
+
+        Reference< XStream> xDocumentStream (FilterBase::implGetOutputStream(rMediaDescriptor));
+        oox::ole::OleStorage aOleStorage( getComponentContext(), xDocumentStream, true );
+        AesEncoder encoder(getMainDocumentStream(), aOleStorage, aPassword);
+        bRet = encoder.encode();
+        if (bRet)
+            aOleStorage.commit();
+    }
+
+    return bRet;
 }
 
 // private --------------------------------------------------------------------

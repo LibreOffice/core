@@ -257,6 +257,11 @@ protected:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >
                         implGetOutputStream( ::comphelper::MediaDescriptor& rMediaDesc ) const;
 
+    virtual bool        implFinalizeExport( ::comphelper::MediaDescriptor& rMediaDescriptor );
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >
+                        getMainDocumentStream( ) const;
+
 private:
     void                setMediaDescriptor(
                             const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rMediaDescSeq );

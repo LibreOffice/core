@@ -496,7 +496,7 @@ sal_Bool SAL_CALL FilterBase::filter( const Sequence< PropertyValue >& rMediaDes
                 if( mxImpl->mxOutStream.is() )
                 {
                     mxImpl->mxStorage = implCreateStorage( mxImpl->mxOutStream );
-                    bRet = mxImpl->mxStorage.get() && exportDocument();
+                    bRet = mxImpl->mxStorage.get() && exportDocument() && implFinalizeExport( getMediaDescriptor() );
                 }
             break;
         }
@@ -519,6 +519,16 @@ Reference< XInputStream > FilterBase::implGetInputStream( MediaDescriptor& rMedi
 Reference< XStream > FilterBase::implGetOutputStream( MediaDescriptor& rMediaDesc ) const
 {
     return rMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_STREAMFOROUTPUT(), Reference< XStream >() );
+}
+
+bool FilterBase::implFinalizeExport( MediaDescriptor& /*rMediaDescriptor*/ )
+{
+    return true;
+}
+
+Reference< XStream > FilterBase::getMainDocumentStream( ) const
+{
+    return mxImpl->mxOutStream;
 }
 
 // private --------------------------------------------------------------------

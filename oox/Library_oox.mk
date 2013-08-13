@@ -78,6 +78,7 @@ $(eval $(call gb_Library_add_exception_objects,oox,\
     oox/source/core/binarycodec \
     oox/source/core/contexthandler2 \
     oox/source/core/contexthandler \
+    oox/source/core/DocumentCrypt \
     oox/source/core/fastparser \
     oox/source/core/fasttokenhandler \
     oox/source/core/filterbase \

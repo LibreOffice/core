@@ -1,4 +1,5 @@
-<!--
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
  * This file is part of the LibreOffice project.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -14,14 +15,39 @@
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
--->
-<node oor:name="Calc MS Excel 2007 XML" oor:op="replace">
-    <prop oor:name="Flags"><value>IMPORT EXPORT ALIEN 3RDPARTYFILTER PREFERRED ENCRYPTION PASSWORDTOMODIFY</value></prop>
-    <prop oor:name="UIComponent"/>
-    <prop oor:name="FilterService"><value>com.sun.star.comp.oox.xls.ExcelFilter</value></prop>
-    <prop oor:name="UserData"/>
-    <prop oor:name="FileFormatVersion"/>
-    <prop oor:name="Type"><value>MS Excel 2007 XML</value></prop>
-    <prop oor:name="TemplateName"/>
-    <prop oor:name="DocumentService"><value>com.sun.star.sheet.SpreadsheetDocument</value></prop>
-</node>
+ */
+
+#ifndef DOCUMENTCRYPTO_HXX
+#define DOCUMENTCRYPTO_HXX
+
+#include "oox/dllapi.h"
+
+#include "oox/ole/olestorage.hxx"
+#include <com/sun/star/io/XStream.hpp>
+
+namespace oox {
+namespace core {
+
+class OOX_DLLPUBLIC AesEncoder
+{
+private:
+    com::sun::star::uno::Reference< com::sun::star::io::XStream > mxDocumentStream;
+    oox::ole::OleStorage& mrOleStorage;
+    OUString maPassword;
+
+public:
+    AesEncoder(
+        com::sun::star::uno::Reference< com::sun::star::io::XStream > xDocumentStream,
+        oox::ole::OleStorage& rOleStorage,
+        OUString aPassword);
+
+    bool encode();
+};
+
+
+} // namespace core
+} // namespace oox
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
