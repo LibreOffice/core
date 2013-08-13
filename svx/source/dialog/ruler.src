@@ -100,13 +100,13 @@ String RID_SVXSTR_RULER_TAB_RIGHT
 {
     Text [ en-US ] = "Right" ;
 };
-String RID_SVXSTR_RULER_TAB_DECIMAL
-{
-    Text [ en-US ] = "Decimal" ;
-};
 String RID_SVXSTR_RULER_TAB_CENTER
 {
     Text [ en-US ] = "Center" ;
+};
+String RID_SVXSTR_RULER_TAB_DECIMAL
+{
+    Text [ en-US ] = "Decimal" ;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
