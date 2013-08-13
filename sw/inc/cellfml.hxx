@@ -20,7 +20,7 @@
 #ifndef _CELLFML_HXX
 #define _CELLFML_HXX
 
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 
 class SwTable;
 class SwNode;
@@ -30,7 +30,6 @@ class SwCalc;
 class SwTableBox;
 class SwTableFmlUpdate;
 class SwDoc;
-class String;
 
 class SwTblCalcPara
 {
@@ -56,31 +55,31 @@ public:
 
 class SwTableFormula
 {
-typedef void (SwTableFormula:: *FnScanFormula)( const SwTable&, String&,
-                                            String&, String*, void* ) const;
+typedef void (SwTableFormula:: *FnScanFormula)( const SwTable&, OUString&,
+                                                OUString&, OUString*, void* ) const;
 
-    void BoxNmsToPtr( const SwTable&, String&, String&, String* = 0,
+    void BoxNmsToPtr( const SwTable&, OUString&, OUString&, OUString* = 0,
                         void* pPara = 0 ) const;
-    void PtrToBoxNms( const SwTable&, String&, String&, String* = 0,
+    void PtrToBoxNms( const SwTable&, OUString&, OUString&, OUString* = 0,
                         void* pPara = 0 ) const;
-    void RelNmsToBoxNms( const SwTable&, String&, String&, String* = 0,
+    void RelNmsToBoxNms( const SwTable&, OUString&, OUString&, OUString* = 0,
                         void* pPara = 0 ) const;
-    void RelBoxNmsToPtr( const SwTable&, String&, String&, String* = 0,
+    void RelBoxNmsToPtr( const SwTable&, OUString&, OUString&, OUString* = 0,
                         void* pPara = 0 ) const;
-    void BoxNmsToRelNm( const SwTable&, String&, String&, String* = 0,
+    void BoxNmsToRelNm( const SwTable&, OUString&, OUString&, OUString* = 0,
                         void* pPara = 0 ) const;
-    void _MakeFormula( const SwTable&, String&, String&, String* = 0,
+    void _MakeFormula( const SwTable&, OUString&, OUString&, OUString* = 0,
                         void* pPara = 0 ) const;
-    void _GetFmlBoxes( const SwTable&, String&, String&, String* = 0,
+    void _GetFmlBoxes( const SwTable&, OUString&, OUString&, OUString* = 0,
                         void* pPara = 0 ) const;
-    void _HasValidBoxes( const SwTable&, String&, String&, String* = 0,
+    void _HasValidBoxes( const SwTable&, OUString&, OUString&, OUString* = 0,
                         void* pPara = 0 ) const;
-    void _SplitMergeBoxNm( const SwTable&, String&, String&, String* = 0,
+    void _SplitMergeBoxNm( const SwTable&, OUString&, OUString&, OUString* = 0,
                         void* pPara = 0 ) const;
 
     void GetBoxes( const SwTableBox& rStt, const SwTableBox& rEnd,
                     SwSelBoxes& rBoxes ) const;
-    String ScanString( FnScanFormula fnFormula, const SwTable& rTbl,
+    OUString ScanString( FnScanFormula fnFormula, const SwTable& rTbl,
                         void* = 0 ) const;
 
     const SwTable* FindTable( SwDoc& rDoc, const OUString& rNm ) const;
@@ -88,7 +87,7 @@ typedef void (SwTableFormula:: *FnScanFormula)( const SwTable&, String&,
 protected:
     enum NameType { EXTRNL_NAME, INTRNL_NAME, REL_NAME };
 
-    String      m_sFormula;         ///< current formula
+    OUString    m_sFormula;         ///< current formula
     NameType    m_eNmType;          ///< current display method
     bool        m_bValidValue;      ///< true: recalculate formula
 
@@ -98,9 +97,9 @@ protected:
     // !!! has to be overloaded by every derivation !!!
     virtual const SwNode* GetNodeOfFormula() const = 0;
 
-    SwTableFormula( const String& rFormula );
+    SwTableFormula( const OUString& rFormula );
 
-    String MakeFormula( SwTblCalcPara& rCalcPara ) const
+    OUString MakeFormula( SwTblCalcPara& rCalcPara ) const
     {
         return ScanString( &SwTableFormula::_MakeFormula,
                             *rCalcPara.pTbl, &rCalcPara );
@@ -135,8 +134,8 @@ public:
     bool IsValid() const                    { return m_bValidValue; }
     void ChgValid( bool bNew )              { m_bValidValue = bNew; }
 
-    const String& GetFormula() const        { return m_sFormula; }
-    void SetFormula( const String& rNew )
+    OUString GetFormula() const             { return m_sFormula; }
+    void SetFormula( const OUString& rNew )
     {
         m_sFormula = rNew;
         m_eNmType = EXTRNL_NAME;

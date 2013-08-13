@@ -3144,7 +3144,7 @@ sal_Bool SwDoc::SplitTable( const SwPosition& rPos, sal_uInt16 eHdlnMode,
             aMsgHnt.nSplitLine = rTbl.GetTabLines().GetPos( pLine );
         }
 
-        String sNewTblNm( GetUniqueTblName() );
+        OUString sNewTblNm( GetUniqueTblName() );
         aMsgHnt.DATA.pNewTblNm = &sNewTblNm;
         aMsgHnt.eFlags = TBL_SPLITTBL;
         UpdateTblFlds( &aMsgHnt );
