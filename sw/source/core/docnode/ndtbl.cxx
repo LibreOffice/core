@@ -492,7 +492,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
         }
     }
 
-    SwTableFmt::AssignLineParents( pTableStyle, *pNdTbl );
+    SwTableFmt::AssignFormatParents( pTableStyle, *pNdTbl );
 
     // Insert Frms
     GetNodes().GoNext( &aNdIdx ); // Go to the next ContentNode
