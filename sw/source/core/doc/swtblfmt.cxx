@@ -290,6 +290,8 @@ void SwTableFmt::AssignFormatParents( SwTableFmt* pSrcFmt, SwTable &rTable )
             pLast->InvalidateAll();
             pLast->SetCompletePaint();
         }
+
+    ((SwModify*)pHardFmt)->CheckCaching( RES_BOX );
 }
 
 void SwTableFmt::AssignLineParents( SwTableFmt* pSrcFmt, SwTable &rTable )
@@ -324,6 +326,8 @@ void SwTableFmt::AssignLineParents( SwTableFmt* pSrcFmt, SwTable &rTable )
         }
 
         AssignBoxParents( pFmt, *rTable.GetTabLines()[ n ] );
+
+        ((SwModify*)pLineFmt)->CheckCaching( RES_BOX );
     }
 }
 
@@ -360,6 +364,8 @@ void SwTableFmt::AssignBoxParents( SwTableLineFmt* pSrcLineFmt, SwTableLine &rLi
 
         if( rLine.GetTabBoxes()[ n ]->GetTabLines().size() )
             AssignLineParents_Complex( pSrcLineFmt, pFmt, *rLine.GetTabBoxes()[ n ] );
+
+        ((SwModify*)pBoxFmt)->CheckCaching( RES_BOX );
     }
 }
 
@@ -382,6 +388,8 @@ void SwTableFmt::AssignLineParents_Complex( SwTableLineFmt* pSrcLineFmt, SwTable
         }
 
         AssignBoxParents_Complex( pSrcLineFmt, pSrcBoxFmt, *rBox.GetTabLines()[ n ] );
+
+        ((SwModify*)pLineFmt)->CheckCaching( RES_BOX );
     }
 }
 
@@ -405,6 +413,8 @@ void SwTableFmt::AssignBoxParents_Complex( SwTableLineFmt* pSrcLineFmt, SwTableB
 
         if( rLine.GetTabBoxes()[ n ]->GetTabLines().size() )
             AssignLineParents_Complex( pSrcLineFmt, pSrcBoxFmt, *rLine.GetTabBoxes()[ n ] );
+
+        ((SwModify*)pBoxFmt)->CheckCaching( RES_BOX );
     }
 }
 
