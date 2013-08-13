@@ -34,7 +34,6 @@ $(eval $(call gb_SrsTarget_add_files,sd/res,\
     sd/source/core/glob.src \
     sd/source/filter/html/pubdlg.src \
     sd/source/ui/accessibility/accessibility.src \
-    sd/source/ui/animations/CustomAnimationDialog.src \
     sd/source/ui/animations/CustomAnimationPane.src \
     sd/source/ui/animations/CustomAnimation.src \
     sd/source/ui/animations/SlideTransitionPane.src \

@@ -382,6 +382,10 @@
                         generic-name="URLBox" parent="VclComboBoxText"
                         icon-name="widget-gtk-comboboxtext"/>
 
+    <glade-widget-class title="PropertyControl" name="sdlo-PropertyControl"
+                        generic-name="PropertyControl" parent="VclComboBoxText"
+                        icon-name="widget-gtk-comboboxtext"/>
+
     <glade-widget-class title="Reference Button" name="foruilo-RefButton"
                         generic-name="Reference Button" parent="GtkButton"
                         icon-name="widget-gtk-button"/>

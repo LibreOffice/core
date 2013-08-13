@@ -808,7 +808,7 @@ void CustomAnimationPane::onContextMenu( sal_uInt16 nSelectedPopupEntry )
     case CM_WITH_PREVIOUS:  onChangeStart( EffectNodeType::WITH_PREVIOUS  ); break;
     case CM_AFTER_PREVIOUS: onChangeStart( EffectNodeType::AFTER_PREVIOUS ); break;
     case CM_OPTIONS:        showOptions(); break;
-    case CM_DURATION:       showOptions(RID_TP_CUSTOMANIMATION_DURATION); break;
+    case CM_DURATION:       showOptions("timing"); break;
     case CM_REMOVE:         onRemove(); break;
     case CM_CREATE:         if( maViewSelection.hasValue() ) onChange( true ); break;
     }
@@ -1572,11 +1572,11 @@ void CustomAnimationPane::changeSelection( STLPropertySet* pResultSet, STLProper
     }
 }
 
-void CustomAnimationPane::showOptions( sal_uInt16 nPage /* = 0 */ )
+void CustomAnimationPane::showOptions(OString sPage)
 {
     STLPropertySet* pSet = createSelectionSet();
 
-    CustomAnimationDialog* pDlg = new CustomAnimationDialog( this, pSet, nPage );
+    CustomAnimationDialog* pDlg = new CustomAnimationDialog(this, pSet, sPage);
     if( pDlg->Execute() )
     {
         addUndo();

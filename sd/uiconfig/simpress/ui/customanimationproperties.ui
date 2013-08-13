@@ -4,6 +4,7 @@
   <object class="GtkDialog" id="CustomAnimationProperties">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
+    <property name="title" translatable="yes">Effect Options</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -17,11 +18,11 @@
             <child>
               <object class="GtkButton" id="ok">
                 <property name="label">gtk-ok</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="has_default">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -33,11 +34,9 @@
             <child>
               <object class="GtkButton" id="cancel">
                 <property name="label">gtk-cancel</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -49,11 +48,9 @@
             <child>
               <object class="GtkButton" id="help">
                 <property name="label">gtk-help</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -77,7 +74,7 @@
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
             <child>
-               <placeholder/>
+              <placeholder/>
             </child>
             <child type="tab">
               <object class="GtkLabel" id="effect">
@@ -90,7 +87,7 @@
               </packing>
             </child>
             <child>
-               <placeholder/>
+              <placeholder/>
             </child>
             <child type="tab">
               <object class="GtkLabel" id="timing">
@@ -104,7 +101,7 @@
               </packing>
             </child>
             <child>
-               <placeholder/>
+              <placeholder/>
             </child>
             <child type="tab">
               <object class="GtkLabel" id="textanim">

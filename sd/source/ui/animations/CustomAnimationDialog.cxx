@@ -65,7 +65,6 @@
 
 #include "glob.hrc"
 #include "CustomAnimationDialog.hxx"
-#include "CustomAnimationDialog.hrc"
 #include "CustomAnimation.hrc"
 #include "STLPropertySet.hxx"
 
@@ -1131,6 +1130,7 @@ private:
     sal_Bool mbHasText;
     const STLPropertySet* mpSet;
 
+    VclFrame*       mpSettings;
     FixedText*      mpFTProperty1;
     PropertyControl* mpLBProperty1;
     VclHBox*        mpPlaceholderBox;
@@ -1155,6 +1155,7 @@ private:
 CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, const STLPropertySet* pSet )
 : TabPage( pParent, "EffectTab", "modules/simpress/ui/customanimationeffecttab.ui" ), mbHasText( sal_False ), mpSet(pSet )
 {
+    get(mpSettings, "settings" );
     get(mpFTProperty1, "prop_label1" );
     get(mpLBProperty1, "prop_list1" );
     get(mpPlaceholderBox, "placeholder" );
@@ -1224,9 +1225,7 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, con
 
                 if( !aPropertyName.isEmpty() )
                 {
-                    mpFTProperty1->Show();
-                    mpLBProperty1->Show();
-
+                    mpSettings->Show();
                     mpFTProperty1->SetText( aPropertyName );
                 }
 
@@ -2259,7 +2258,7 @@ IMPL_LINK_NOARG(CustomAnimationTextAnimTabPage, implSelectHdl)
 
 // --------------------------------------------------------------------
 
-CustomAnimationDialog::CustomAnimationDialog( Window* pParent, STLPropertySet* pSet, sal_uInt16 nPage /* = 0 */  )
+CustomAnimationDialog::CustomAnimationDialog(Window* pParent, STLPropertySet* pSet, OString sPage)
 : TabDialog( pParent, "CustomAnimationProperties", "modules/simpress/ui/customanimationproperties.ui")
 , mpSet( pSet )
 , mpResultSet( 0 )
@@ -2290,8 +2289,8 @@ CustomAnimationDialog::CustomAnimationDialog( Window* pParent, STLPropertySet* p
         mpTabControl->RemovePage( mnTextAnimId );
     }
 
-    if( nPage )
-        mpTabControl->SelectTabPage( nPage );
+    if (!sPage.isEmpty())
+        mpTabControl->SelectTabPage(mpTabControl->GetPageId(sPage));
 }
 
 CustomAnimationDialog::~CustomAnimationDialog()

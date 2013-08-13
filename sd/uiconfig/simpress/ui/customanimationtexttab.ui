@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
+  <object class="GtkAdjustment" id="adjustment1">
+    <property name="upper">999.99000000000001</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
   <object class="GtkBox" id="TextAnimationTab">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
+    <property name="border_width">6</property>
     <property name="orientation">vertical</property>
     <property name="spacing">12</property>
     <child>
@@ -11,7 +17,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="row_spacing">6</property>
-        <property name="columnt_spacing">6</property>
+        <property name="column_spacing">12</property>
         <child>
           <object class="GtkLabel" id="group_text_label">
             <property name="visible">True</property>
@@ -19,6 +25,7 @@
             <property name="halign">start</property>
             <property name="label" translatable="yes">_Group text:</property>
             <property name="use_underline">True</property>
+            <property name="mnemonic_widget">group_text_list</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -28,10 +35,45 @@
           </packing>
         </child>
         <child>
-          <object class="GtkComboBox" id="group_text_list">
+          <object class="GtkSpinButton" id="auto_after_value:0.0sec">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="halign">start</property>
+            <property name="hexpand">True</property>
+            <property name="invisible_char">●</property>
+            <property name="adjustment">adjustment1</property>
+            <property name="digits">1</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">1</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkCheckButton" id="auto_after">
+            <property name="label" translatable="yes">_Automatically after:</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="use_underline">True</property>
+            <property name="xalign">0</property>
+            <property name="draw_indicator">True</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">1</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkComboBoxText" id="group_text_list">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="hexpand">True</property>
+            <property name="entry_text_column">0</property>
+            <property name="id_column">1</property>
             <items>
               <item translatable="yes">As one object</item>
               <item translatable="yes">All paragraphs at once</item>
@@ -49,39 +91,6 @@
             <property name="height">1</property>
           </packing>
         </child>
-        <child>
-          <object class="GtkSpinButton" id="auto_after_value:0">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="hexpand">True</property>
-            <property name="invisible_char">●</property>
-          </object>
-          <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">1</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkCheckButton" id="auto_after">
-            <property name="label" translatable="yes">_Automatically after:</property>
-            <property name="use_action_appearance">False</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">False</property>
-            <property name="use_action_appearance">False</property>
-            <property name="use_underline">True</property>
-            <property name="xalign">0</property>
-            <property name="draw_indicator">True</property>
-          </object>
-          <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">1</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
-          </packing>
-        </child>
       </object>
       <packing>
         <property name="expand">False</property>
@@ -92,11 +101,9 @@
     <child>
       <object class="GtkCheckButton" id="animate_shape">
         <property name="label" translatable="yes">Animate attached _shape</property>
-        <property name="use_action_appearance">False</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
-        <property name="use_action_appearance">False</property>
         <property name="use_underline">True</property>
         <property name="xalign">0</property>
         <property name="draw_indicator">True</property>
@@ -110,11 +117,9 @@
     <child>
       <object class="GtkCheckButton" id="reverse_order">
         <property name="label" translatable="yes">_In reverse order</property>
-        <property name="use_action_appearance">False</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
-        <property name="use_action_appearance">False</property>
         <property name="use_underline">True</property>
         <property name="xalign">0</property>
         <property name="draw_indicator">True</property>

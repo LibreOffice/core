@@ -104,7 +104,7 @@ private:
     void updateMotionPathTags();
     void markShapesFromSelectedEffects();
 
-    void showOptions( sal_uInt16 nPage = 0 );
+    void showOptions(OString sPage = OString());
     void moveSelection( bool bUp );
     void onPreview( bool bForcePreview );
 
