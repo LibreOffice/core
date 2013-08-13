@@ -142,7 +142,7 @@ public:
     const SwTable* pTbl;         ///< Pointer to the current table
     union {
         const SwTable* pDelTbl;  ///< Merge: Pointer to the table to be removed
-        const String* pNewTblNm; ///< Split: the name of the new table
+        const OUString* pNewTblNm; ///< Split: the name of the new table
     } DATA;
     SwHistory* pHistory;
     sal_uInt16 nSplitLine;       ///< Split: from this BaseLine on will be splitted

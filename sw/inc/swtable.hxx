@@ -260,7 +260,7 @@ public:
 
     // #i80314#
     // add 3rd parameter in order to control validation check on <rStr>
-    static sal_uInt16 _GetBoxNum( String& rStr,
+    static sal_uInt16 _GetBoxNum( OUString& rStr,
                               sal_Bool bFirst = sal_False,
                               const bool bPerformValidCheck = false );
 
