@@ -166,10 +166,5 @@ TabPage TP_ENV_ENV
         Size = MAP_APPFONT ( 84 , 63 ) ;
     };
 };
- // Strings ******************************************************************
-String STR_DOC_TITLE
-{
-    Text [ en-US ] = "Envelope" ;
-};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

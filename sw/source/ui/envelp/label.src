@@ -20,70 +20,6 @@
 #include "label.hrc"
 #include "globals.hrc"
 #include "helpid.h"
-// ----- defined strings -----------------------------------------------------
-#define LABEL_STRING                                    \
-    Text [ en-US ] = "Labels" ;                    \
-
-#define BUSINESS_CARD_STRING \
-    Text [ en-US ] = "Business Cards";              \
-
- // DLG_LAB ------------------------------------------------------------------
-TabDialog DLG_LAB
-{
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    Moveable = TRUE ;
-    LABEL_STRING
-    TabControl 1
-    {
-        OutputSize = TRUE ;
-        PageList =
-        {
-            PageItem
-            {
-                Identifier = TP_VISITING_CARDS;
-                PageResID = TP_VISITING_CARDS;
-                BUSINESS_CARD_STRING
-            };
-            PageItem
-            {
-                Identifier = TP_PRIVATE_DATA;
-                PageResID = TP_PRIVATE_DATA;
-                Text [ en-US ] = "Private";
-            };
-            PageItem
-            {
-                Identifier = TP_BUSINESS_DATA;
-                PageResID = TP_BUSINESS_DATA;
-                Text [ en-US ] = "Business";
-            };
-            PageItem
-            {
-                Identifier = TP_LAB_FMT ;
-                PageResID = TP_LAB_FMT ;
-                Text [ en-US ] = "Format" ;
-            };
-            PageItem
-            {
-                Identifier = TP_LAB_PRT ;
-                PageResID = TP_LAB_PRT ;
-                Text [ en-US ] = "Options" ;
-            };
-        };
-    };
-    String ST_BUSINESSCARDDLG
-    {
-        BUSINESS_CARD_STRING
-    };
-    String ST_FIRSTPAGE_LAB
-    {
-        LABEL_STRING
-    };
-    String ST_FIRSTPAGE_BC
-    {
-        Text [ en-US ] = "Medium";
-    };
-};
 
 #define WIDTH  100
 #define HEIGHT 16
@@ -105,11 +41,6 @@ FloatingWindow DLG_SYNC_BTN
         Size = MAP_APPFONT ( WIDTH - 1 , HEIGHT - 1 ) ;
         Text [ en-US ] = "Synchronize Labels" ;
     };
-};
- // String *******************************************************************
-String STR_DOC_TITLE
-{
-    Text [ en-US ] = "Labels" ;
 };
 String STR_CUSTOM
 {

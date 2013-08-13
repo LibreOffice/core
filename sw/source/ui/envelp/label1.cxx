@@ -78,7 +78,7 @@ void SwLabDlg::_ReplaceGroup( const String &rMake )
 
 void SwLabDlg::PageCreated(sal_uInt16 nId, SfxTabPage &rPage)
 {
-    if (nId == TP_LAB_LAB)
+    if (nId == m_nLabelId)
     {
         if(m_bLabel)
         {
@@ -88,47 +88,49 @@ void SwLabDlg::PageCreated(sal_uInt16 nId, SfxTabPage &rPage)
         else
             ((SwLabPage*)&rPage)->SetToBusinessCard();
     }
-    else if (nId == TP_LAB_PRT)
+    else if (nId == m_nOptionsId)
         pPrtPage = (SwLabPrtPage*)&rPage;
 }
 
 SwLabDlg::SwLabDlg(Window* pParent, const SfxItemSet& rSet,
-                                SwNewDBMgr* pDBMgr, sal_Bool bLabel) :
-    SfxTabDialog( pParent, SW_RES(DLG_LAB), &rSet, sal_False ),
-    pNewDBMgr(pDBMgr),
-    pPrtPage(0),
-    aTypeIds( 50, 10 ),
-    pRecs   ( new SwLabRecs() ),
-    sBusinessCardDlg(SW_RES(ST_BUSINESSCARDDLG)),
-    sFormat(SW_RES(ST_FIRSTPAGE_LAB)),
-    sMedium(SW_RES(ST_FIRSTPAGE_BC)),
-    m_bLabel(bLabel)
+                                SwNewDBMgr* pDBMgr, sal_Bool bLabel)
+    : SfxTabDialog(pParent, "LabelDialog",
+        "modules/swriter/ui/labeldialog.ui", &rSet, false)
+    , pNewDBMgr(pDBMgr)
+    , pPrtPage(0)
+    , aTypeIds(50, 10)
+    , pRecs(new SwLabRecs())
+    , m_bLabel(bLabel)
+    , m_nFormatId(0)
+    , m_nOptionsId(0)
+    , m_nLabelId(0)
+    , m_nCardsId(0)
+    , m_nBusinessId(0)
+    , m_nPrivateId(0)
 {
     WaitObject aWait( pParent );
 
-    FreeResource();
+    m_nFormatId = AddTabPage("format", SwLabFmtPage::Create, 0);
+    m_nOptionsId = AddTabPage("options", SwLabPrtPage::Create, 0);
+    m_nCardsId = AddTabPage("cards", SwVisitingCardPage::Create, 0);
+    m_sBusinessCardDlg = GetPageText(m_nCardsId);
 
-    GetOKButton().SetText(String(SW_RES(STR_BTN_NEW_DOC)));
-    GetOKButton().SetHelpId(HID_LABEL_INSERT);
-    GetOKButton().SetHelpText(aEmptyStr);   // in order for generated help text to get used
-
-    AddTabPage(TP_LAB_LAB, m_bLabel ? sFormat : sMedium ,SwLabPage   ::Create, 0, sal_False, 0);
-    AddTabPage(TP_VISITING_CARDS, SwVisitingCardPage::Create, 0);
-    AddTabPage(TP_LAB_FMT, SwLabFmtPage::Create, 0);
-    AddTabPage(TP_LAB_PRT, SwLabPrtPage::Create, 0);
-    AddTabPage(TP_BUSINESS_DATA, SwBusinessDataPage::Create, 0 );
-    AddTabPage(TP_PRIVATE_DATA, SwPrivateDataPage::Create, 0);
-
-
-    if(m_bLabel)
+    if (m_bLabel)
     {
-        RemoveTabPage(TP_BUSINESS_DATA);
-        RemoveTabPage(TP_PRIVATE_DATA);
-        RemoveTabPage(TP_VISITING_CARDS);
+        RemoveTabPage("business");
+        RemoveTabPage("private");
+        RemoveTabPage("cards");
+        RemoveTabPage("medium");
+        m_nLabelId = AddTabPage("labels", SwLabPage::Create, 0);
     }
     else
     {
-        SetText(sBusinessCardDlg);
+        RemoveTabPage("labels");
+        RemoveTabPage("cards");
+        m_nLabelId = AddTabPage("medium", SwLabPage::Create, 0);
+        m_nBusinessId = AddTabPage("business", SwBusinessDataPage::Create, 0 );
+        m_nPrivateId = AddTabPage("private", SwPrivateDataPage::Create, 0);
+        SetText(m_sBusinessCardDlg);
     }
     // Read user label from writer.cfg
     SwLabItem aItem((const SwLabItem&)rSet.Get( FN_LABEL ));

@@ -176,10 +176,7 @@
 #define TP_TOX_SELECT               (RC_GLOBALS_BEGIN +  90)
 #define TP_TOX_ENTRY                (RC_GLOBALS_BEGIN +  91)
 #define TP_TOX_STYLES               (RC_GLOBALS_BEGIN +  92)
-#define TP_VISITING_CARDS           (RC_GLOBALS_BEGIN +  93)
 #define DLG_ADD_IDX_STYLES          (RC_GLOBALS_BEGIN +  94)
-#define TP_PRIVATE_DATA             (RC_GLOBALS_BEGIN +  95)
-#define TP_BUSINESS_DATA            (RC_GLOBALS_BEGIN +  96)
 #define TP_OPTCOMPATIBILITY_PAGE    (RC_GLOBALS_BEGIN +  103)
 #define TP_MAILCONFIG               (RC_GLOBALS_BEGIN +  104)
 //maximum: RC_GLOBALS_BEGIN +  120

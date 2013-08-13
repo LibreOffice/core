@@ -197,6 +197,11 @@ public:
     {
         return m_pTabCtrl->GetCurPageId();
     }
+    OUString            GetPageText( sal_uInt16 nPageId ) const
+    {
+        return m_pTabCtrl->GetPageText(nPageId);
+    }
+
     void                ShowPage( sal_uInt16 nId );
 
     // may provide local slots converted by Map

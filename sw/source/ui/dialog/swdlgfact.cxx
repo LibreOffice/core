@@ -282,7 +282,7 @@ OUString AbstractSwLabDlg_Impl::GetText() const
     return pDlg->GetText();
 }
 
-const String& AbstractSwLabDlg_Impl::GetBusinessCardStr() const
+const OUString& AbstractSwLabDlg_Impl::GetBusinessCardStr() const
 {
     return pDlg->GetBusinessCardStr();
 }
@@ -791,30 +791,17 @@ SfxAbstractTabDialog* SwAbstractDialogFactory_Impl::CreateSwEnvDlg ( Window* pPa
     return 0;
 }
 
-AbstractSwLabDlg* SwAbstractDialogFactory_Impl::CreateSwLabDlg ( Window* pParent, const SfxItemSet& rSet, //add for SwLabDlg
-                                                     SwNewDBMgr* pNewDBMgr, sal_Bool bLabel,int nResId  )
+AbstractSwLabDlg* SwAbstractDialogFactory_Impl::CreateSwLabDlg(Window* pParent, const SfxItemSet& rSet, //add for SwLabDlg
+                                                     SwNewDBMgr* pNewDBMgr, bool bLabel)
 {
-    SwLabDlg* pDlg=NULL;
-    switch ( nResId )
-    {
-        case DLG_LAB :
-            pDlg = new SwLabDlg( pParent, rSet, pNewDBMgr,bLabel  );
-            break;
-
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractSwLabDlg_Impl( pDlg );
-    return 0;
+    SwLabDlg* pDlg = new SwLabDlg(pParent, rSet, pNewDBMgr, bLabel);
+    return new AbstractSwLabDlg_Impl(pDlg);
 }
 
 SwLabDlgMethod SwAbstractDialogFactory_Impl::GetSwLabDlgStaticMethod ()
 {
     return SwLabDlg::UpdateFieldInformation;
 }
-
 
 SfxAbstractTabDialog* SwAbstractDialogFactory_Impl::CreateSwParaDlg ( Window *pParent, SwView& rVw,
                                                     const SfxItemSet& rCoreSet  ,

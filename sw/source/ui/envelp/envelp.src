@@ -28,10 +28,6 @@ String STR_NO_DRIVERS
 {
     Text [ en-US ] = "No database drivers installed." ;
 };
-String STR_BTN_NEW_DOC
-{
-    Text [ en-US ] = "~New Document" ;
-};
 
 String STR_BTN_NEWDOC
 {

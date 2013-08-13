@@ -330,7 +330,6 @@
 #define HID_DRAW_TEXT_TOOLBOX                                   "SW_HID_DRAW_TEXT_TOOLBOX"
 #define HID_NUM_TOOLBOX                                         "SW_HID_NUM_TOOLBOX"
 
-#define HID_LABEL_INSERT                                        "SW_HID_LABEL_INSERT"
 #define HID_CALC_TOOLBOX                                        "SW_HID_CALC_TOOLBOX"
 #define HID_PVIEW_TOOLBOX                                       "SW_HID_PVIEW_TOOLBOX"
 

@@ -38,17 +38,6 @@
 #define WIN_PREVIEW  12
 #define ST_INSERT   13
 #define ST_CHANGE   14
-// global resources ********************************************************
-
-#define STR_DOC_TITLE  (RC_ENVLOP_BEGIN)
-
-// overflow check ********************************************************
-
-#define ENVLOP_ACT_END  STR_DOC_TITLE
-
-#if ENVLOP_ACT_END > RC_ENVLOP_END
-#error Resource-Ueberlauf in #file, #line
-#endif
 
 #endif
 

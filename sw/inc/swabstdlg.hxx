@@ -247,7 +247,7 @@ public:
 class AbstractSwLabDlg  : public SfxAbstractTabDialog //add for SwLabDlg
 {
 public:
-     virtual const String& GetBusinessCardStr() const = 0;
+     virtual const OUString& GetBusinessCardStr() const = 0;
      virtual Printer *GetPrt() =0;
 };
 
@@ -356,8 +356,8 @@ public:
     virtual SfxAbstractTabDialog* CreateSwEnvDlg ( Window* pParent, const SfxItemSet& rSet, SwWrtShell* pWrtSh, Printer* pPrt, sal_Bool bInsert,int nResId ) = 0; //add for SwEnvDlg
 
 
-    virtual AbstractSwLabDlg* CreateSwLabDlg ( Window* pParent, const SfxItemSet& rSet, //add for SwLabDlg
-                                                     SwNewDBMgr* pNewDBMgr, sal_Bool bLabel,int nResId  ) = 0;
+    virtual AbstractSwLabDlg* CreateSwLabDlg(Window* pParent, const SfxItemSet& rSet, //add for SwLabDlg
+                                                     SwNewDBMgr* pNewDBMgr, bool bLabel) = 0;
 
     virtual SwLabDlgMethod GetSwLabDlgStaticMethod () =0;//add for SwLabDlg
 

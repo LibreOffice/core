@@ -168,7 +168,7 @@ void SwModule::InsertLab(SfxRequest& rReq, sal_Bool bLabel)
     SwAbstractDialogFactory* pDialogFactory = SwAbstractDialogFactory::Create();
     OSL_ENSURE(pDialogFactory, "SwAbstractDialogFactory fail!");
 
-    AbstractSwLabDlg* pDlg = pDialogFactory->CreateSwLabDlg( 0, aSet, pNewDBMgr, bLabel, DLG_LAB );
+    AbstractSwLabDlg* pDlg = pDialogFactory->CreateSwLabDlg(0, aSet, pNewDBMgr, bLabel);
     OSL_ENSURE(pDlg, "Dialogdiet fail!");
 
     if ( RET_OK == pDlg->Execute() )

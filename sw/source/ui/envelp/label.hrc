@@ -26,12 +26,7 @@
 
 #define BTN_SYNC     20
 
-#define ST_BUSINESSCARDDLG      62
-#define ST_FIRSTPAGE_LAB        63
-#define ST_FIRSTPAGE_BC         64
-
 // global resources ********************************************************
-#define STR_DOC_TITLE           (RC_LABEL_BEGIN)
 #define STR_CUSTOM              (RC_LABEL_BEGIN + 1)
 
 // overflow check ********************************************************

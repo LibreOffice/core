@@ -40,12 +40,16 @@ class SwLabDlg : public SfxTabDialog
     std::vector<sal_uInt16> aTypeIds;
     std::vector<OUString> aMakes;
 
-    SwLabRecs*      pRecs;
-    String          aLstGroup;
-    String          sBusinessCardDlg;
-    String          sFormat;
-    String          sMedium;
-    sal_Bool            m_bLabel;
+    SwLabRecs* pRecs;
+    String     aLstGroup;
+    OUString   m_sBusinessCardDlg;
+    bool       m_bLabel;
+    sal_uInt16 m_nFormatId;
+    sal_uInt16 m_nOptionsId;
+    sal_uInt16 m_nLabelId;
+    sal_uInt16 m_nCardsId;
+    sal_uInt16 m_nBusinessId;
+    sal_uInt16 m_nPrivateId;
     void          _ReplaceGroup( const String &rMake );
 
     virtual void PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
@@ -72,7 +76,7 @@ public:
     void UpdateGroup( const String &rMake ) {_ReplaceGroup( rMake );}
     static void UpdateFieldInformation(::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel>& xModel,
                                                                                 const SwLabItem& rItem);
-    const String& GetBusinessCardStr() const {return sBusinessCardDlg;}
+    const OUString& GetBusinessCardStr() const {return m_sBusinessCardDlg;}
 
     SwLabelConfig& GetLabelsConfig() {return aLabelsCfg;}
 

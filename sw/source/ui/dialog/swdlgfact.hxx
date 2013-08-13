@@ -197,8 +197,8 @@ class AbstractSwLabDlg_Impl  : public AbstractSwLabDlg
         //From class Window.
     virtual void        SetText( const OUString& rStr );
     virtual OUString    GetText() const;
-     virtual const String& GetBusinessCardStr() const;
-     virtual Printer *GetPrt();
+    virtual const OUString& GetBusinessCardStr() const;
+    virtual Printer *GetPrt();
 };
 //add for SwLabDlg end
 
@@ -458,8 +458,8 @@ public:
     virtual AbstractDropDownFieldDialog * CreateDropDownFieldDialog (Window *pParent, SwWrtShell &rSh,
         SwField* pField, sal_Bool bNextButton = sal_False);
     virtual SfxAbstractTabDialog* CreateSwEnvDlg ( Window* pParent, const SfxItemSet& rSet, SwWrtShell* pWrtSh, Printer* pPrt, sal_Bool bInsert,int nResId ); //add for SwEnvDlg
-    virtual AbstractSwLabDlg* CreateSwLabDlg ( Window* pParent, const SfxItemSet& rSet, //add for SwLabDlg
-                                                     SwNewDBMgr* pNewDBMgr, sal_Bool bLabel,int nResId  );
+    virtual AbstractSwLabDlg* CreateSwLabDlg(Window* pParent, const SfxItemSet& rSet, //add for SwLabDlg
+                                                     SwNewDBMgr* pNewDBMgr, bool bLabel);
 
     virtual SwLabDlgMethod GetSwLabDlgStaticMethod (); //add for SwLabDlg
     virtual SfxAbstractTabDialog* CreateSwParaDlg ( Window *pParent, //add for SwParaDlg

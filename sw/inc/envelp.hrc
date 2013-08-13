@@ -33,10 +33,6 @@
 #define TP_ENV_FMT (RC_ENVELP_BEGIN + 3)
 #define TP_ENV_PRT (RC_ENVELP_BEGIN + 4)
 
-#define TP_LAB_LAB (RC_ENVELP_BEGIN + 5)
-#define TP_LAB_FMT (RC_ENVELP_BEGIN + 6)
-#define TP_LAB_PRT (RC_ENVELP_BEGIN + 7)
-
 #define DLG_MAILMERGE (RC_ENVELP_BEGIN + 8)
 
 #define DLG_SYNC_BTN  (RC_ENVELP_BEGIN + 9)
@@ -58,9 +54,6 @@
 #define RC_LABFMT_BEGIN  (RC_ENVELP_BEGIN + 50)
 #define RC_LABFMT_END    (RC_ENVELP_BEGIN + 62)
 
-//      RC_LABPRT_BEGIN  (RC_ENVELP_BEGIN + 63)
-#define RC_LABPRT_END    (RC_ENVELP_BEGIN + 72)
-
 // Strings --------------------------------------------------------------------
 
 #define STR_DATABASE_NOT_OPENED  (RC_ENVLOP_BEGIN + 63)
@@ -68,7 +61,6 @@
 
 #define DLG_MERGE_FIELD_CONNECTIONS (RC_ENVLOP_BEGIN + 66)
 
-#define STR_BTN_NEW_DOC          (RC_ENVLOP_BEGIN + 67)
 #define STR_BTN_NEWDOC           (RC_ENVLOP_BEGIN + 68)
 #define STR_SENDER_TOKENS        (RC_ENVLOP_BEGIN + 69)
 // Ueberlaufpruefung ----------------------------------------------------------
