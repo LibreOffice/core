@@ -45,8 +45,6 @@ public:
     void insertItem(const OUString &rURL, const OUString &rTitle);
     void loadRecentDocs();
 
-    virtual Size GetOptimalSize() const;
-
     void SetThumbnailSize(long thumbnailSize);
     long GetThumbnailSize() const;
     void SetFilter(APPLICATION_FILTER filter);

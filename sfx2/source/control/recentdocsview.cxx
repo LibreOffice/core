@@ -228,11 +228,6 @@ void RecentDocsView::SetFilter(APPLICATION_FILTER filter)
     mFilter = filter;
 }
 
-Size RecentDocsView::GetOptimalSize() const
-{
-    return Window::GetOptimalSize();
-}
-
 IMPL_STATIC_LINK_NOINSTANCE( RecentDocsView, ExecuteHdl_Impl, LoadRecentFile*, pLoadRecentFile )
 {
     try
