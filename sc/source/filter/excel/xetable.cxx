@@ -230,6 +230,8 @@ XclExpShrfmlaRef XclExpShrfmlaBuffer::CreateOrExtendShrfmla(
         xRec = aIt->second;
         xRec->ExtendRange( rScPos );
     }
+
+    return xRec;
 }
 
 // Multiple operations ========================================================
