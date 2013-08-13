@@ -24,6 +24,7 @@
 
 #include <vcl/builder.hxx>
 #include <vcl/button.hxx>
+#include <vcl/tabctrl.hxx>
 #include <vcl/layout.hxx>
 
 #include <sfx2/recentdocsview.hxx>
@@ -49,6 +50,8 @@ class BackingWindow
     PushButton*                     mpOpenButton;
     PushButton*                     mpTemplateButton;
 
+    TabControl*                     mpModuleNotebook;
+
     PushButton*                     mpWriterButton;
     PushButton*                     mpCalcButton;
     PushButton*                     mpImpressButton;
@@ -68,19 +71,16 @@ class BackingWindow
     RecentDocsView*                 mpDatabaseRecentThumbnails;
     RecentDocsView*                 mpMathRecentThumbnails;
 
-    BitmapEx                        maBackgroundLeft;
-    BitmapEx                        maBackgroundMiddle;
-    BitmapEx                        maBackgroundRight;
-
     Rectangle                       maStartCentButtons;
 
     bool                            mbInitControls;
     sal_Int32                       mnHideExternalLinks;
     svt::AcceleratorExecute*        mpAccExec;
 
-    void setupButton( PushButton* pButton, const OUString& rURL, const std::set<OUString>& rURLS,
-                      SvtModuleOptions& rOpt, SvtModuleOptions::EModule eMod );
-
+    void setupModuleTab( const OString& rTabName, RecentDocsView* pRecView, int nFileTypes,
+        const OUString& rURL, const std::set<OUString>& rURLS, SvtModuleOptions& rOpt,
+        SvtModuleOptions::EModule eMod );
+    void setupButton( PushButton* pButton );
     void setupExternalLink( PushButton* pButton );
 
     void dispatchURL( const OUString& i_rURL,

@@ -44,7 +44,7 @@
         <property name="row_spacing">12</property>
         <property name="column_spacing">12</property>
         <child>
-          <object class="GtkNotebook" id="notebook1">
+          <object class="GtkNotebook" id="modules_notebook">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="hexpand">True</property>
@@ -87,7 +87,7 @@
               </object>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="label1">
+              <object class="GtkLabel" id="tab_all">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">All Recent</property>
@@ -150,7 +150,7 @@
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="label2">
+              <object class="GtkLabel" id="tab_writer">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Documents</property>
@@ -214,7 +214,7 @@
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="label3">
+              <object class="GtkLabel" id="tab_calc">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Spreadsheets</property>
@@ -278,7 +278,7 @@
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="label4">
+              <object class="GtkLabel" id="tab_impress">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Presentations</property>
@@ -342,7 +342,7 @@
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="label5">
+              <object class="GtkLabel" id="tab_draw">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Drawings</property>
@@ -406,7 +406,7 @@
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="label6">
+              <object class="GtkLabel" id="tab_database">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Databases</property>
@@ -470,7 +470,7 @@
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="label7">
+              <object class="GtkLabel" id="tab_math">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Formulas</property>
