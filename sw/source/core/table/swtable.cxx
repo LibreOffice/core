@@ -1361,20 +1361,20 @@ static bool lcl_IsValidRowName( const String& rStr )
 
 // #i80314#
 // add 3rd parameter and its handling
-sal_uInt16 SwTable::_GetBoxNum( String& rStr, sal_Bool bFirstPart,
+sal_uInt16 SwTable::_GetBoxNum( OUString& rStr, sal_Bool bFirstPart,
                             const bool bPerformValidCheck )
 {
     sal_uInt16 nRet = 0;
-    xub_StrLen nPos = 0;
     if( bFirstPart )   // sal_True == column; sal_False == row
     {
+        sal_Int32 nPos = 0;
         // the first one uses letters for addressing!
-        sal_Unicode cChar;
         bool bFirst = true;
-        while( 0 != ( cChar = rStr.GetChar( nPos )) &&
-               ( (cChar >= 'A' && cChar <= 'Z') ||
-                 (cChar >= 'a' && cChar <= 'z') ) )
+        while (nPos<rStr.getLength())
         {
+            sal_Unicode cChar = rStr[nPos];
+            if ((cChar<'A' || cChar>'Z') && (cChar<'a' || cChar>'z'))
+                break;
             if( (cChar -= 'A') >= 26 )
                 cChar -= 'a' - '[';
             if( bFirst )
@@ -1384,26 +1384,30 @@ sal_uInt16 SwTable::_GetBoxNum( String& rStr, sal_Bool bFirstPart,
             nRet = nRet * 52 + cChar;
             ++nPos;
         }
-        rStr.Erase( 0, nPos );      // Remove char from String
-    }
-    else if( STRING_NOTFOUND == ( nPos = rStr.Search( aDotStr ) ))
-    {
-        nRet = 0;
-        if ( !bPerformValidCheck || lcl_IsValidRowName( rStr ) )
-        {
-            nRet = static_cast<sal_uInt16>(rStr.ToInt32());
-        }
-        rStr.Erase();
+        rStr = rStr.copy( nPos );      // Remove char from String
     }
     else
     {
-        nRet = 0;
-        String aTxt( rStr.Copy( 0, nPos ) );
-        if ( !bPerformValidCheck || lcl_IsValidRowName( aTxt ) )
+        const sal_Int32 nPos = rStr.indexOf( aDotStr );
+        if ( nPos<0 )
         {
-            nRet = static_cast<sal_uInt16>(aTxt.ToInt32());
+            nRet = 0;
+            if ( !bPerformValidCheck || lcl_IsValidRowName( rStr ) )
+            {
+                nRet = static_cast<sal_uInt16>(rStr.toInt32());
+            }
+            rStr = OUString();
         }
-        rStr.Erase( 0, nPos+1 );
+        else
+        {
+            nRet = 0;
+            const OUString aTxt( rStr.copy( 0, nPos ) );
+            if ( !bPerformValidCheck || lcl_IsValidRowName( aTxt ) )
+            {
+                nRet = static_cast<sal_uInt16>(aTxt.toInt32());
+            }
+            rStr = rStr.copy( nPos+1 );
+        }
     }
     return nRet;
 }
@@ -1419,8 +1423,8 @@ const SwTableBox* SwTable::GetTblBox( const String& rName,
     const SwTableBoxes* pBoxes;
 
     sal_uInt16 nLine, nBox;
-    String aNm( rName );
-    while( aNm.Len() )
+    OUString aNm( rName );
+    while( !aNm.isEmpty() )
     {
         nBox = SwTable::_GetBoxNum( aNm, 0 == pBox, bPerformValidCheck );
         // first box ?
