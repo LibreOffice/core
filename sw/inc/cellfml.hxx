@@ -56,7 +56,7 @@ public:
 
 class SwTableFormula
 {
-typedef void (SwTableFormula:: *FnScanFormel)( const SwTable&, String&,
+typedef void (SwTableFormula:: *FnScanFormula)( const SwTable&, String&,
                                             String&, String*, void* ) const;
 
     void BoxNmsToPtr( const SwTable&, String&, String&, String* = 0,
@@ -80,7 +80,7 @@ typedef void (SwTableFormula:: *FnScanFormel)( const SwTable&, String&,
 
     void GetBoxes( const SwTableBox& rStt, const SwTableBox& rEnd,
                     SwSelBoxes& rBoxes ) const;
-    String ScanString( FnScanFormel fnFormel, const SwTable& rTbl,
+    String ScanString( FnScanFormula fnFormula, const SwTable& rTbl,
                         void* = 0 ) const;
 
     const SwTable* FindTable( SwDoc& rDoc, const OUString& rNm ) const;
@@ -88,9 +88,9 @@ typedef void (SwTableFormula:: *FnScanFormel)( const SwTable&, String&,
 protected:
     enum NameType { EXTRNL_NAME, INTRNL_NAME, REL_NAME };
 
-    String      sFormel;            ///< current formula
-    NameType    eNmType;            ///< current display method
-    bool        bValidValue;        ///< true: recalculate formula
+    String      m_sFormula;         ///< current formula
+    NameType    m_eNmType;          ///< current display method
+    bool        m_bValidValue;      ///< true: recalculate formula
 
     // find the node in which the formula is located
     //  TextFeld    -> TextNode,
@@ -98,7 +98,7 @@ protected:
     // !!! has to be overloaded by every derivation !!!
     virtual const SwNode* GetNodeOfFormula() const = 0;
 
-    SwTableFormula( const String& rFormel );
+    SwTableFormula( const String& rFormula );
 
     String MakeFormula( SwTblCalcPara& rCalcPara ) const
     {
@@ -113,12 +113,12 @@ public:
     SwTableFormula( const SwTableFormula& rCpy )    { *this = rCpy; }
     virtual ~SwTableFormula();
     SwTableFormula& operator=( const SwTableFormula& rCpy )
-        {
-                                    sFormel = rCpy.sFormel;
-                                    eNmType = rCpy.eNmType;
-                                    bValidValue = rCpy.bValidValue;
-                                    return *this;
-        }
+    {
+        m_sFormula = rCpy.m_sFormula;
+        m_eNmType = rCpy.m_eNmType;
+        m_bValidValue = rCpy.m_bValidValue;
+        return *this;
+    }
 
     /// create from the internal formula (for CORE) the external formula (for UI)
     void PtrToBoxNm( const SwTable* pTbl );
@@ -129,19 +129,19 @@ public:
     /// gets called before/after merging/splitting of tables
     void ToSplitMergeBoxNm( SwTableFmlUpdate& rTblUpd );
 
-    bool IsIntrnlName() const                  { return eNmType == INTRNL_NAME; }
-    NameType GetNameType() const        { return eNmType; }
+    bool IsIntrnlName() const               { return m_eNmType == INTRNL_NAME; }
+    NameType GetNameType() const            { return m_eNmType; }
 
-    bool               IsValid() const                         { return bValidValue; }
-    inline void        ChgValid( bool bNew )           { bValidValue = bNew; }
+    bool IsValid() const                    { return m_bValidValue; }
+    void ChgValid( bool bNew )              { m_bValidValue = bNew; }
 
-    const String& GetFormula() const        { return sFormel; }
+    const String& GetFormula() const        { return m_sFormula; }
     void SetFormula( const String& rNew )
-        {
-            sFormel = rNew;
-            bValidValue = false;
-            eNmType = EXTRNL_NAME;
-        }
+    {
+        m_sFormula = rNew;
+        m_eNmType = EXTRNL_NAME;
+        m_bValidValue = false;
+    }
 
     void GetBoxesOfFormula(const SwTable& rTbl, SwSelBoxes& rBoxes);
     // are all boxes valid which this formula relies on?

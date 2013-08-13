@@ -40,8 +40,8 @@
 #include <ndindex.hxx>
 #include <comphelper/string.hxx>
 
-const sal_Unicode cRelTrenner = ',';
-const sal_Unicode cRelKennung = '';        // CTRL-R
+const sal_Unicode cRelSeparator = ',';
+const sal_Unicode cRelIdentifier = '';     // CTRL-R
 const sal_uInt16 cMAXSTACKSIZE = 50;
 
 static const SwFrm* lcl_GetBoxFrm( const SwTableBox& rBox );
@@ -279,10 +279,10 @@ sal_Bool SwTblCalcPara::CalcWithStackOverflow()
 }
 
 SwTableFormula::SwTableFormula( const String& rFormel )
-    : sFormel( rFormel )
+: m_sFormula( rFormel )
+, m_eNmType( EXTRNL_NAME )
+, m_bValidValue( false )
 {
-    eNmType = EXTRNL_NAME;
-    bValidValue = false;
 }
 
 SwTableFormula::~SwTableFormula()
@@ -435,13 +435,13 @@ void SwTableFormula::BoxNmsToRelNm( const SwTable& rTbl, String& rNewStr,
     if( pLastBox )
     {
         rNewStr += lcl_BoxNmToRel( rTbl, *pTblNd, sRefBoxNm, *pLastBox,
-                                eNmType == EXTRNL_NAME );
+                                m_eNmType == EXTRNL_NAME );
         rNewStr += ':';
         rFirstBox.Erase( 0, pLastBox->Len()+1 );
     }
 
     rNewStr += lcl_BoxNmToRel( rTbl, *pTblNd, sRefBoxNm, rFirstBox,
-                            eNmType == EXTRNL_NAME );
+                            m_eNmType == EXTRNL_NAME );
 
     // get label for the box
     rNewStr += rFirstBox.GetChar( rFirstBox.Len() - 1 );
@@ -507,125 +507,125 @@ void SwTableFormula::BoxNmsToPtr( const SwTable& rTbl, String& rNewStr,
 void SwTableFormula::PtrToBoxNm( const SwTable* pTbl )
 {
     const SwNode* pNd = 0;
-    FnScanFormel fnFormel = 0;
-    switch( eNmType)
+    FnScanFormula fnFormula = 0;
+    switch (m_eNmType)
     {
     case INTRNL_NAME:
         if( pTbl )
-            fnFormel = &SwTableFormula::PtrToBoxNms;
+            fnFormula = &SwTableFormula::PtrToBoxNms;
         break;
     case REL_NAME:
         if( pTbl )
         {
-            fnFormel = &SwTableFormula::RelNmsToBoxNms;
+            fnFormula = &SwTableFormula::RelNmsToBoxNms;
             pNd = GetNodeOfFormula();
         }
         break;
     case EXTRNL_NAME:
         return;
     }
-    sFormel = ScanString( fnFormel, *pTbl, (void*)pNd );
-    eNmType = EXTRNL_NAME;
+    m_sFormula = ScanString( fnFormula, *pTbl, (void*)pNd );
+    m_eNmType = EXTRNL_NAME;
 }
 
 /// create internal formula (in CORE)
 void SwTableFormula::BoxNmToPtr( const SwTable* pTbl )
 {
     const SwNode* pNd = 0;
-    FnScanFormel fnFormel = 0;
-    switch( eNmType)
+    FnScanFormula fnFormula = 0;
+    switch (m_eNmType)
     {
     case EXTRNL_NAME:
         if( pTbl )
-            fnFormel = &SwTableFormula::BoxNmsToPtr;
+            fnFormula = &SwTableFormula::BoxNmsToPtr;
         break;
     case REL_NAME:
         if( pTbl )
         {
-            fnFormel = &SwTableFormula::RelBoxNmsToPtr;
+            fnFormula = &SwTableFormula::RelBoxNmsToPtr;
             pNd = GetNodeOfFormula();
         }
         break;
     case INTRNL_NAME:
         return;
     }
-    sFormel = ScanString( fnFormel, *pTbl, (void*)pNd );
-    eNmType = INTRNL_NAME;
+    m_sFormula = ScanString( fnFormula, *pTbl, (void*)pNd );
+    m_eNmType = INTRNL_NAME;
 }
 
 /// create relative formula (for copy)
 void SwTableFormula::ToRelBoxNm( const SwTable* pTbl )
 {
     const SwNode* pNd = 0;
-    FnScanFormel fnFormel = 0;
-    switch( eNmType)
+    FnScanFormula fnFormula = 0;
+    switch (m_eNmType)
     {
     case INTRNL_NAME:
     case EXTRNL_NAME:
         if( pTbl )
         {
-            fnFormel = &SwTableFormula::BoxNmsToRelNm;
+            fnFormula = &SwTableFormula::BoxNmsToRelNm;
             pNd = GetNodeOfFormula();
         }
         break;
     case REL_NAME:
         return;
     }
-    sFormel = ScanString( fnFormel, *pTbl, (void*)pNd );
-    eNmType = REL_NAME;
+    m_sFormula = ScanString( fnFormula, *pTbl, (void*)pNd );
+    m_eNmType = REL_NAME;
 }
 
-String SwTableFormula::ScanString( FnScanFormel fnFormel, const SwTable& rTbl,
+String SwTableFormula::ScanString( FnScanFormula fnFormula, const SwTable& rTbl,
                                     void* pPara ) const
 {
     String aStr;
-    sal_uInt16 nFml = 0, nStt = 0, nEnd = 0, nTrenner;
+    sal_uInt16 nFml = 0, nStt = 0, nEnd = 0, nSeparator;
 
     do {
         // If the formula is preceded by a name, use this table!
         const SwTable* pTbl = &rTbl;
 
-        nStt = sFormel.Search( '<', nFml );
+        nStt = m_sFormula.Search( '<', nFml );
         if( STRING_NOTFOUND != nStt )
         {
             while( STRING_NOTFOUND != nStt &&
-                ( ' ' == sFormel.GetChar( nStt + 1 ) ||
-                  '=' == sFormel.GetChar( nStt + 1 ) ) )
-                nStt = sFormel.Search( '<', nStt + 1 );
+                ( ' ' == m_sFormula.GetChar( nStt + 1 ) ||
+                  '=' == m_sFormula.GetChar( nStt + 1 ) ) )
+                nStt = m_sFormula.Search( '<', nStt + 1 );
 
             if( STRING_NOTFOUND != nStt )
-                nEnd = sFormel.Search( '>', nStt+1 );
+                nEnd = m_sFormula.Search( '>', nStt+1 );
         }
         if( STRING_NOTFOUND == nStt || STRING_NOTFOUND == nEnd )
         {
             // set the rest and finish
-            aStr.Insert( sFormel, nFml, sFormel.Len() - nFml );
+            aStr.Insert( m_sFormula, nFml, m_sFormula.Len() - nFml );
             break;
         }
-        aStr.Insert( sFormel, nFml, nStt - nFml );  // write beginning
+        aStr.Insert( m_sFormula, nFml, nStt - nFml );  // write beginning
 
-        if( fnFormel != 0 )
+        if (fnFormula)
         {
             // Is a table name preceded?
             // JP 16.02.99: SplitMergeBoxNm take care of the name themself
             // JP 22.02.99: Linux compiler needs cast
             // JP 28.06.99: rel. BoxName has no preceding tablename!
-            if( fnFormel != (FnScanFormel)&SwTableFormula::_SplitMergeBoxNm &&
-                1 < sFormel.Len() && cRelKennung != sFormel.GetChar( 1 ) &&
-                STRING_NOTFOUND != ( nTrenner = sFormel.Search( '.', nStt ))
-                && nTrenner < nEnd )
+            if( fnFormula != (FnScanFormula)&SwTableFormula::_SplitMergeBoxNm &&
+                1 < m_sFormula.Len() && cRelIdentifier != m_sFormula.GetChar( 1 ) &&
+                STRING_NOTFOUND != ( nSeparator = m_sFormula.Search( '.', nStt ))
+                && nSeparator < nEnd )
             {
-                String sTblNm( sFormel.Copy( nStt, nEnd - nStt ));
+                String sTblNm( m_sFormula.Copy( nStt, nEnd - nStt ));
 
-                // If there are dots in the name, than these appear in pairs (e.g. A1.1.1)!
+                // If there are dots in the name, then they appear in pairs (e.g. A1.1.1)!
                 if( (comphelper::string::getTokenCount(sTblNm, '.') - 1) & 1 )
                 {
-                    sTblNm.Erase( nTrenner - nStt );
+                    sTblNm.Erase( nSeparator - nStt );
 
                     // when creating a formula the table name is unwanted
-                    if( fnFormel != (FnScanFormel)&SwTableFormula::_MakeFormula )
+                    if( fnFormula != (FnScanFormula)&SwTableFormula::_MakeFormula )
                         aStr += sTblNm;
-                    nStt = nTrenner;
+                    nStt = nSeparator;
 
                     sTblNm.Erase( 0, 1 );   // delete separator
                     if( sTblNm != rTbl.GetFrmFmt()->GetName() )
@@ -642,17 +642,17 @@ String SwTableFormula::ScanString( FnScanFormel fnFormel, const SwTable& rTbl,
                 }
             }
 
-            String sBox( sFormel.Copy( nStt, nEnd - nStt + 1 ));
+            String sBox( m_sFormula.Copy( nStt, nEnd - nStt + 1 ));
             // area in these parentheses?
-            if( STRING_NOTFOUND != ( nTrenner = sFormel.Search( ':', nStt ))
-                && nTrenner < nEnd )
+            if( STRING_NOTFOUND != ( nSeparator = m_sFormula.Search( ':', nStt ))
+                && nSeparator < nEnd )
             {
                 // without opening parenthesis
-                String aFirstBox( sFormel.Copy( nStt+1, nTrenner - nStt - 1 ));
-                (this->*fnFormel)( *pTbl, aStr, sBox, &aFirstBox, pPara );
+                String aFirstBox( m_sFormula.Copy( nStt+1, nSeparator - nStt - 1 ));
+                (this->*fnFormula)( *pTbl, aStr, sBox, &aFirstBox, pPara );
             }
             else
-                (this->*fnFormel)( *pTbl, aStr, sBox, 0, pPara );
+                (this->*fnFormula)( *pTbl, aStr, sBox, 0, pPara );
         }
 
         nFml = nEnd+1;
@@ -696,7 +696,7 @@ static long lcl_GetLongBoxNum( String& rStr )
 {
     sal_uInt16 nPos;
     long nRet;
-    if( STRING_NOTFOUND == ( nPos = rStr.Search( cRelTrenner ) ))
+    if( STRING_NOTFOUND == ( nPos = rStr.Search( cRelSeparator ) ))
     {
         nRet = rStr.ToInt32();
         rStr.Erase();
@@ -718,7 +718,7 @@ static const SwTableBox* lcl_RelToBox( const SwTable& rTbl,
     String sGetName( rGetName );
 
     // Is it really a relative value?
-    if( cRelKennung == sGetName.GetChar(0) ) // yes
+    if( cRelIdentifier == sGetName.GetChar(0) ) // yes
     {
         if( !pRefBox )
             return 0;
@@ -820,14 +820,14 @@ static String lcl_BoxNmToRel( const SwTable& rTbl, const SwTableNode& rTblNd,
 
         sCpy = sTmp;        //JP 01.11.95: add rest from box name
 
-        sTmp = cRelKennung;
+        sTmp = cRelIdentifier;
         sTmp += OUString::number( nBox );
-        sTmp += cRelTrenner;
+        sTmp += cRelSeparator;
         sTmp += OUString::number( nLine );
 
         if( sCpy.Len() )
         {
-            sTmp += cRelTrenner;
+            sTmp += cRelSeparator;
             sTmp += sCpy;
         }
     }
@@ -950,7 +950,7 @@ void SwTableFormula::_HasValidBoxes( const SwTable& rTbl, String& ,
         if( pLastBox )
             rFirstBox.Erase( 0, pLastBox->Len()+1 );
 
-        switch( eNmType)
+        switch (m_eNmType)
         {
         case INTRNL_NAME:
             if( pLastBox )
@@ -1022,13 +1022,13 @@ void SwTableFormula::_SplitMergeBoxNm( const SwTable& rTbl, String& rNewStr,
     String* pTblNmBox = pLastBox ? pLastBox : &rFirstBox;
 
     sal_uInt16 nLastBoxLen = pTblNmBox->Len();
-    sal_uInt16 nTrenner = pTblNmBox->Search( '.' );
-    if( STRING_NOTFOUND != nTrenner &&
+    sal_uInt16 nSeparator = pTblNmBox->Search( '.' );
+    if( STRING_NOTFOUND != nSeparator &&
         // If there are dots in the name, than these appear in pairs (e.g. A1.1.1)!
         (comphelper::string::getTokenCount(*pTblNmBox, '.') - 1) & 1 )
     {
-        sTblNm = pTblNmBox->Copy( 0, nTrenner );
-        pTblNmBox->Erase( 0, nTrenner + 1); // remove dot
+        sTblNm = pTblNmBox->Copy( 0, nSeparator );
+        pTblNmBox->Erase( 0, nSeparator + 1); // remove dot
         const SwTable* pFnd = FindTable( *rTbl.GetFrmFmt()->GetDoc(), sTblNm );
         if( pFnd )
             pTbl = pFnd;
@@ -1058,7 +1058,7 @@ void SwTableFormula::_SplitMergeBoxNm( const SwTable& rTbl, String& rNewStr,
         rFirstBox.Erase( 0, nLastBoxLen + 1 );
 
     SwTableBox* pSttBox = 0, *pEndBox = 0;
-    switch( eNmType )
+    switch (m_eNmType)
     {
     case INTRNL_NAME:
         if( pLastBox )
@@ -1163,8 +1163,8 @@ void SwTableFormula::ToSplitMergeBoxNm( SwTableFmlUpdate& rTblUpd )
     else
         pTbl = rTblUpd.pTbl;
 
-    sFormel = ScanString( &SwTableFormula::_SplitMergeBoxNm, *pTbl, (void*)&rTblUpd );
-    eNmType = INTRNL_NAME;
+    m_sFormula = ScanString( &SwTableFormula::_SplitMergeBoxNm, *pTbl, (void*)&rTblUpd );
+    m_eNmType = INTRNL_NAME;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
