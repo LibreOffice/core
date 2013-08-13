@@ -107,7 +107,7 @@
 -(void) netServiceBrowserWillSearch:(NSNetServiceBrowser *)aNetServiceBrowser
 {
     NSLog(@"Will search");
-    self.comManager.state = SEARCHING;
+    self.comManager.searchState = SEARCHING;
     self.searchStateText = NSLocalizedString(@"Searching", nil);
     [self.searchLabelTimer invalidate];
     [self.searchTimeoutTimer invalidate];
@@ -130,8 +130,7 @@
 -(void) netServiceBrowserDidStopSearch:(NSNetServiceBrowser *)aNetServiceBrowser
 {
     NSLog(@"End search");
-    if (self.comManager.state == SEARCHING)
-        self.comManager.state = DISCONNECTED;
+    self.comManager.searchState = WAITING;
     [self.searchLabelTimer invalidate];
     [self.searchTimeoutTimer invalidate];
     self.searchStateText = NSLocalizedString(@"Click to refresh", nil);
@@ -141,7 +140,7 @@
 - (void)netServiceBrowser:(NSNetServiceBrowser *)aNetServiceBrowser didNotSearch:(NSDictionary *)errorDict
 {
     NSLog(@"search error");
-    [self.serviceBrowser searchForServicesOfType:@"_impressRemote._tcp" inDomain:@"local"];
+//    [self.serviceBrowser searchForServicesOfType:@"_impressRemote._tcp" inDomain:@"local"];
 }
 
 - (void)netServiceBrowser:(NSNetServiceBrowser *)aNetServiceBrowser
@@ -297,9 +296,15 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    // Return when browser is still searching...
-    if ([self.comManager.autoDiscoveryServers count] == 0 && indexPath.section == 0 && self.comManager.state == SEARCHING)
+    if ([self.comManager.autoDiscoveryServers count] == 0 && indexPath.section == 0){
+        // No discovered server and not searching => in a "click to refresh" state, so we restart searching process
+        if (self.comManager.searchState == WAITING){
+            [self.serviceBrowser searchForServicesOfType:@"_impressremote._tcp" inDomain:@"local"];
+            [self.serviceBrowser scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+        }
+        // Return when browser is still searching...
         return;
+    }
     
     // Return when nothing should be done
     if (self.comManager.state == CONNECTING)
@@ -317,12 +322,6 @@
         NSLog(@"Connecting to %@:%@", [[self.comManager.servers objectAtIndex:indexPath.row] serverName], [[self.comManager.servers objectAtIndex:indexPath.row] serverAddress]);
         [self.comManager connectToServer:[self.comManager.servers objectAtIndex:indexPath.row]];
     } else if (indexPath.section == 0){
-        // No discovered server and not searching => in a click to refresh state, so we restart searching process
-        if ([self.comManager.autoDiscoveryServers count] == 0) {
-            [self.serviceBrowser searchForServicesOfType:@"_impressremote._tcp" inDomain:@"local"];
-            [self.serviceBrowser scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-            return;
-        }
         NSLog(@"Connecting to %@", [[self.comManager.autoDiscoveryServers objectAtIndex:indexPath.row] name]);
         [[self.comManager.autoDiscoveryServers objectAtIndex:indexPath.row] resolveWithTimeout:0.0];
     }

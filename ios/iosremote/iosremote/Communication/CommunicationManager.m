@@ -107,6 +107,7 @@
 {
     self = [super init];
     self.state = DISCONNECTED;
+    self.searchState = WAITING;
     self.interpreter = [[CommandInterpreter alloc] init];
     self.servers = [[NSMutableArray alloc] init];
     

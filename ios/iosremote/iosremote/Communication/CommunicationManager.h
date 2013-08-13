@@ -54,11 +54,16 @@
 
 
 typedef enum ConnectionState : NSInteger ConnectionState;
+typedef enum SearchState : NSInteger SearchState;
 
 enum ConnectionState : NSInteger {
     DISCONNECTED,
     CONNECTING,
-    CONNECTED,
+    CONNECTED
+};
+
+enum SearchState : NSInteger {
+    WAITING,
     SEARCHING
 };
 
@@ -72,6 +77,7 @@ enum ConnectionState : NSInteger {
 - (void) removeServerAtIndex:(NSUInteger)index;
 
 @property ConnectionState state;
+@property SearchState searchState;
 @property (nonatomic, strong) id delegate;
 @property (atomic, strong) NSMutableArray* servers;
 @property (atomic, strong) NSMutableArray* autoDiscoveryServers;
