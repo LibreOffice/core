@@ -826,7 +826,9 @@ enum SwPropNameIds
 
 /* 0762 */  UNO_NAME_PARA_INTEROP_GRAB_BAG,
 
-/* 0762 */  SW_PROPNAME_END
+/* 0763 */  UNO_NAME_POSITIONAL_TAB,
+
+/* 0764 */  SW_PROPNAME_END
 
 // new items in this array must match SwPropNameTab aPropNameTab
 };

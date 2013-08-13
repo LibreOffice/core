@@ -2452,6 +2452,16 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                 aMapEntriesArr[nPropertyId] = aMetaFieldMap;
             }
             break;
+            case PROPERTY_MAP_POSITIONAL_TAB       :
+            {
+                static SfxItemPropertyMapEntry aPositionalTabPropMap [] =
+                {
+                    {SW_PROP_NMID(UNO_NAME_POSITIONAL_TAB), RES_TXTATR_PTAB,    CPPU_E2T(CPPUTYPE_POSITIONALTAB),   PROPERTY_NONE, 0},
+                    {0,0,0,0,0,0}
+                };
+                aMapEntriesArr[nPropertyId] = aPositionalTabPropMap;
+            }
+            break;
 
             default:
                 OSL_FAIL( "unexpected property map ID" );
@@ -3061,6 +3071,12 @@ const SfxItemPropertySet*  SwUnoPropertyMapProvider::GetPropertySet( sal_uInt16 
             {
                 static SfxItemPropertySet aPROPERTY_MAP_METAFIELD(pEntries);
                 aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_METAFIELD;
+            }
+            break;
+            case PROPERTY_MAP_POSITIONAL_TAB:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_POSITIONAL_TAB(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_POSITIONAL_TAB;
             }
             break;
         }

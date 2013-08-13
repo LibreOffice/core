@@ -792,6 +792,7 @@ const SwPropNameTab aPropNameTab = {
 /* 0760 UNO_NAME_DEFAULT_PAGE_MODE */    {MAP_CHAR_LEN("DefaultPageMode")},
 /* 0761 UNO_NAME_CHAR_SHADING_VALUE */   {MAP_CHAR_LEN("CharShadingValue")},
 /* 0762 UNO_NAME_PARA_INTEROP_GRAB_BAG */   {MAP_CHAR_LEN("ParaInteropGrabBag")},
+/* 0763 UNO_NAME_POSITIONAL_TAB */   {MAP_CHAR_LEN("PositionalTab")},
 
 // new items in this array must match enum SwPropNameIds
 };

@@ -111,6 +111,7 @@ namespace comphelper
         CPPUTPYE_REFEMBEDDEDOBJECT, // XEmbeddedObject::static_type
         CPPUTYPE_FILLSTYLE,         //getCppuType( (drawing::FillStyle*)0 )
         CPPUTYPE_GRADIENT,          //getCppuType( (awt::Gradient*)0 )
+        CPPUTYPE_POSITIONALTAB,     //getCppuType( (style::PositionalTab*)0 )
 
         CPPUTYPE_END
     };
