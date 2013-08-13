@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//89I\u003d",
+        "filename": "sc/source/filter/oox/formulabase.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 823,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-08-13T17:49:43Z",
+      "side": 1,
+      "message": "FUNCFLAG_MACROCALLODF is reserved for ODF-only functions, the flags instead should be\n\n FUNCFLAG_MACROCALL_NEW | FUNCFLAG_EXTERNAL\n\nand you probably need also to define the OOXML name, maybe best duplicate the \"ORG.OPENOFFICE.*\" names.",
+      "revId": "9cd58ef3186155347d26ddf034bfb6a0bdf38689",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
