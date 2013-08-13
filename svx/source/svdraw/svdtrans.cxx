@@ -779,6 +779,7 @@ void GetMeterOrInch(FieldUnit eFU, short& rnKomma, long& rnMul, long& rnDiv, boo
         case FUNIT_LINE     : break;
         case FUNIT_PIXEL    : break;
         case FUNIT_DEGREE   : break;
+        case FUNIT_SECOND   : break;
     } // switch
     rnKomma=nKomma;
     rbMetr=bMetr;
