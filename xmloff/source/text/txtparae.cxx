@@ -798,7 +798,7 @@ OUString XMLTextParagraphExport::FindTextStyleAndHyperlink(
         }
         OUString sParent; // AutoStyles should not have parents!
         sName = GetAutoStylePool().Find( XML_STYLE_FAMILY_TEXT_TEXT, sParent, xPropStates );
-        DBG_ASSERT( !sName.isEmpty(), "AutoStyle could not be found" );
+        assert(!sName.isEmpty()); // AutoStyle could not be found
         rbHasAutoStyle = sal_True;
     }
 
