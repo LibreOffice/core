@@ -247,6 +247,7 @@ void XMLTextImportPropertyMapper::FontDefaultsCheck(
     }
 }
 
+namespace {
 //fdo#58730 The [UL|LR]Space class has a deficiency where "100%" also serves as
 //a flag that the value is an absolute value so we can't truly handle an
 //up/lower space property which wants to specify its 200% upper but 100% lower
@@ -265,6 +266,67 @@ isNotDefaultRelSize(const XMLPropertyState* pRelState, const UniReference<XMLPro
         return nTemp != 100;
     }
     return true;
+}
+
+static void lcl_SeparateBorder(
+    sal_uInt16 nIndex, XMLPropertyState* pAllBorderDistance,
+    XMLPropertyState* pBorderDistances[4], XMLPropertyState* pNewBorderDistances[4],
+    XMLPropertyState* pAllBorder, XMLPropertyState* pBorders[4],
+    XMLPropertyState* pNewBorders[4], XMLPropertyState* pAllBorderWidth,
+    XMLPropertyState* pBorderWidths[4]
+#ifdef DBG_UTIL
+    , const UniReference< XMLPropertySetMapper >& rMapper
+#endif
+)
+{
+    if( pAllBorderDistance && !pBorderDistances[nIndex] )
+    {
+#ifdef DBG_UTIL
+        sal_Int16 nTmp = rMapper->GetEntryContextId(
+                                    pAllBorderDistance->mnIndex + nIndex + 1 );
+        DBG_ASSERT( nTmp >= CTF_LEFTBORDERDISTANCE &&
+                    nTmp <= CTF_BOTTOMBORDERDISTANCE,
+                    "wrong property context id" );
+#endif
+        pNewBorderDistances[nIndex] =
+            new XMLPropertyState( pAllBorderDistance->mnIndex + nIndex + 1,
+                                    pAllBorderDistance->maValue );
+        pBorderDistances[nIndex] = pNewBorderDistances[nIndex];
+    }
+    if( pAllBorder && !pBorders[nIndex] )
+    {
+#ifdef DBG_UTIL
+        sal_Int16 nTmp = rMapper->GetEntryContextId(
+                                        pAllBorder->mnIndex + nIndex + 1 );
+        DBG_ASSERT( nTmp >= CTF_LEFTBORDER && nTmp <= CTF_BOTTOMBORDER,
+                    "wrong property context id" );
+#endif
+        pNewBorders[nIndex] = new XMLPropertyState( pAllBorder->mnIndex + nIndex + 1,
+                                                   pAllBorder->maValue );
+        pBorders[nIndex] = pNewBorders[nIndex];
+    }
+    if( !pBorderWidths[nIndex] )
+        pBorderWidths[nIndex] = pAllBorderWidth;
+    else
+        pBorderWidths[nIndex]->mnIndex = -1;
+
+    if( pBorders[nIndex] && pBorderWidths[nIndex] )
+    {
+        table::BorderLine2 aBorderLine;
+        pBorders[nIndex]->maValue >>= aBorderLine;
+
+        table::BorderLine2 aBorderLineWidth;
+        pBorderWidths[nIndex]->maValue >>= aBorderLineWidth;
+
+        aBorderLine.OuterLineWidth = aBorderLineWidth.OuterLineWidth;
+        aBorderLine.InnerLineWidth = aBorderLineWidth.InnerLineWidth;
+        aBorderLine.LineDistance = aBorderLineWidth.LineDistance;
+        aBorderLine.LineWidth = aBorderLineWidth.LineWidth;
+
+        pBorders[nIndex]->maValue <<= aBorderLine;
+    }
+}
+
 }
 
 void XMLTextImportPropertyMapper::finished(
@@ -311,6 +373,14 @@ void XMLTextImportPropertyMapper::finished(
     XMLPropertyState* pNewBorders[4] = { 0, 0, 0, 0 };
     XMLPropertyState* pAllBorderWidth = 0;
     XMLPropertyState* pBorderWidths[4] = { 0, 0, 0, 0 };
+    XMLPropertyState* pCharAllBorderDistance = 0;
+    XMLPropertyState* pCharBorderDistances[4] = { 0, 0, 0, 0 };
+    XMLPropertyState* pCharNewBorderDistances[4] = { 0, 0, 0, 0 };
+    XMLPropertyState* pCharAllBorder = 0;
+    XMLPropertyState* pCharBorders[4] = { 0, 0, 0, 0 };
+    XMLPropertyState* pCharNewBorders[4] = { 0, 0, 0, 0 };
+    XMLPropertyState* pCharAllBorderWidth = 0;
+    XMLPropertyState* pCharBorderWidths[4] = { 0, 0, 0, 0 };
     XMLPropertyState* pVertOrient = 0;
     XMLPropertyState* pVertOrientRelAsChar = 0;
     XMLPropertyState* pBackTransparency = NULL; // transparency in %
@@ -364,12 +434,28 @@ void XMLTextImportPropertyMapper::finished(
         case CTF_RIGHTBORDER:           pBorders[XML_LINE_RIGHT] = property; break;
         case CTF_TOPBORDER:             pBorders[XML_LINE_TOP] = property; break;
         case CTF_BOTTOMBORDER:          pBorders[XML_LINE_BOTTOM] = property; break;
-
         case CTF_ALLBORDERWIDTH:        pAllBorderWidth = property; break;
         case CTF_LEFTBORDERWIDTH:       pBorderWidths[XML_LINE_LEFT] = property; break;
         case CTF_RIGHTBORDERWIDTH:      pBorderWidths[XML_LINE_RIGHT] = property; break;
         case CTF_TOPBORDERWIDTH:        pBorderWidths[XML_LINE_TOP] = property; break;
         case CTF_BOTTOMBORDERWIDTH:     pBorderWidths[XML_LINE_BOTTOM] = property; break;
+
+        case CTF_CHARALLBORDERDISTANCE:     pCharAllBorderDistance = property; break;
+        case CTF_CHARLEFTBORDERDISTANCE:    pCharBorderDistances[XML_LINE_LEFT] = property; break;
+        case CTF_CHARRIGHTBORDERDISTANCE:   pCharBorderDistances[XML_LINE_RIGHT] = property; break;
+        case CTF_CHARTOPBORDERDISTANCE:     pCharBorderDistances[XML_LINE_TOP] = property; break;
+        case CTF_CHARBOTTOMBORDERDISTANCE:  pCharBorderDistances[XML_LINE_BOTTOM] = property; break;
+        case CTF_CHARALLBORDER:             pCharAllBorder = property; break;
+        case CTF_CHARLEFTBORDER:            pCharBorders[XML_LINE_LEFT] = property; break;
+        case CTF_CHARRIGHTBORDER:           pCharBorders[XML_LINE_RIGHT] = property; break;
+        case CTF_CHARTOPBORDER:             pCharBorders[XML_LINE_TOP] = property; break;
+        case CTF_CHARBOTTOMBORDER:          pCharBorders[XML_LINE_BOTTOM] = property; break;
+        case CTF_CHARALLBORDERWIDTH:        pCharAllBorderWidth = property; break;
+        case CTF_CHARLEFTBORDERWIDTH:       pCharBorderWidths[XML_LINE_LEFT] = property; break;
+        case CTF_CHARRIGHTBORDERWIDTH:      pCharBorderWidths[XML_LINE_RIGHT] = property; break;
+        case CTF_CHARTOPBORDERWIDTH:        pCharBorderWidths[XML_LINE_TOP] = property; break;
+        case CTF_CHARBOTTOMBORDERWIDTH:     pCharBorderWidths[XML_LINE_BOTTOM] = property; break;
+
         case CTF_ANCHORTYPE:            break;
         case CTF_VERTICALPOS:           pVertOrient = property; break;
         case CTF_VERTICALREL_ASCHAR:    pVertOrientRelAsChar = property; break;
@@ -459,52 +545,24 @@ void XMLTextImportPropertyMapper::finished(
             pNewMargins[i].reset(new XMLPropertyState(
                 pAllMargin->mnIndex + i + 1, pAllMargin->maValue));
         }
-        if( pAllBorderDistance && !pBorderDistances[i] )
-        {
+
+        lcl_SeparateBorder(
+            i, pAllBorderDistance, pBorderDistances, pNewBorderDistances,
+            pAllBorder, pBorders, pNewBorders,
+            pAllBorderWidth, pBorderWidths
 #ifdef DBG_UTIL
-            sal_Int16 nTmp = getPropertySetMapper()->GetEntryContextId(
-                                        pAllBorderDistance->mnIndex + i + 1 );
-            DBG_ASSERT( nTmp >= CTF_LEFTBORDERDISTANCE &&
-                        nTmp <= CTF_BOTTOMBORDERDISTANCE,
-                        "wrong property context id" );
+            , getPropertySetMapper()
 #endif
-            pNewBorderDistances[i] =
-                new XMLPropertyState( pAllBorderDistance->mnIndex + i + 1,
-                                      pAllBorderDistance->maValue );
-            pBorderDistances[i] = pNewBorderDistances[i];
-        }
-        if( pAllBorder && !pBorders[i] )
-        {
+            );
+
+        lcl_SeparateBorder(
+            i, pCharAllBorderDistance, pCharBorderDistances,
+            pCharNewBorderDistances, pCharAllBorder, pCharBorders,
+            pCharNewBorders, pCharAllBorderWidth, pCharBorderWidths
 #ifdef DBG_UTIL
-            sal_Int16 nTmp = getPropertySetMapper()->GetEntryContextId(
-                                            pAllBorder->mnIndex + i + 1 );
-            DBG_ASSERT( nTmp >= CTF_LEFTBORDER && nTmp <= CTF_BOTTOMBORDER,
-                        "wrong property context id" );
+            , getPropertySetMapper()
 #endif
-            pNewBorders[i] = new XMLPropertyState( pAllBorder->mnIndex + i + 1,
-                                                   pAllBorder->maValue );
-            pBorders[i] = pNewBorders[i];
-        }
-        if( !pBorderWidths[i] )
-            pBorderWidths[i] = pAllBorderWidth;
-        else
-            pBorderWidths[i]->mnIndex = -1;
-
-        if( pBorders[i] && pBorderWidths[i] )
-        {
-            table::BorderLine2 aBorderLine;
-            pBorders[i]->maValue >>= aBorderLine;
-
-            table::BorderLine2 aBorderLineWidth;
-            pBorderWidths[i]->maValue >>= aBorderLineWidth;
-
-            aBorderLine.OuterLineWidth = aBorderLineWidth.OuterLineWidth;
-            aBorderLine.InnerLineWidth = aBorderLineWidth.InnerLineWidth;
-            aBorderLine.LineDistance = aBorderLineWidth.LineDistance;
-            aBorderLine.LineWidth = aBorderLineWidth.LineWidth;
-
-            pBorders[i]->maValue <<= aBorderLine;
-        }
+            );
     }
 
     if (pAllParaMargin)
@@ -524,6 +582,15 @@ void XMLTextImportPropertyMapper::finished(
 
     if( pAllBorderWidth )
         pAllBorderWidth->mnIndex = -1;
+
+    if( pCharAllBorderDistance )
+        pCharAllBorderDistance->mnIndex = -1;
+
+    if( pCharAllBorder )
+        pCharAllBorder->mnIndex = -1;
+
+    if( pCharAllBorderWidth )
+        pCharAllBorderWidth->mnIndex = -1;
 
     if( pVertOrient && pVertOrientRelAsChar )
     {
@@ -678,6 +745,16 @@ void XMLTextImportPropertyMapper::finished(
         {
             rProperties.push_back( *pNewBorders[i] );
             delete pNewBorders[i];
+        }
+        if( pCharNewBorderDistances[i] )
+        {
+            rProperties.push_back( *pCharNewBorderDistances[i] );
+            delete pCharNewBorderDistances[i];
+        }
+        if( pCharNewBorders[i] )
+        {
+            rProperties.push_back( *pCharNewBorders[i] );
+            delete pCharNewBorders[i];
         }
     }
 

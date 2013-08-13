@@ -177,6 +177,24 @@
 #define CTF_MARGINRIGHT                     (XML_TEXT_CTF_START + 150)
 #define CTF_MARGINTOP                       (XML_TEXT_CTF_START + 151)
 #define CTF_MARGINBOTTOM                    (XML_TEXT_CTF_START + 152)
+/* CTF ids for character border to avoid interference between
+   paragraph and character attributes */
+#define CTF_CHARALLBORDERWIDTH              (XML_TEXT_CTF_START + 153)
+#define CTF_CHARLEFTBORDERWIDTH             (XML_TEXT_CTF_START + 154)
+#define CTF_CHARRIGHTBORDERWIDTH            (XML_TEXT_CTF_START + 155)
+#define CTF_CHARTOPBORDERWIDTH              (XML_TEXT_CTF_START + 156)
+#define CTF_CHARBOTTOMBORDERWIDTH           (XML_TEXT_CTF_START + 157)
+#define CTF_CHARALLBORDERDISTANCE           (XML_TEXT_CTF_START + 158)
+#define CTF_CHARLEFTBORDERDISTANCE          (XML_TEXT_CTF_START + 159)
+#define CTF_CHARRIGHTBORDERDISTANCE         (XML_TEXT_CTF_START + 160)
+#define CTF_CHARTOPBORDERDISTANCE           (XML_TEXT_CTF_START + 161)
+#define CTF_CHARBOTTOMBORDERDISTANCE        (XML_TEXT_CTF_START + 162)
+#define CTF_CHARALLBORDER                   (XML_TEXT_CTF_START + 163)
+#define CTF_CHARLEFTBORDER                  (XML_TEXT_CTF_START + 164)
+#define CTF_CHARRIGHTBORDER                 (XML_TEXT_CTF_START + 165)
+#define CTF_CHARTOPBORDER                   (XML_TEXT_CTF_START + 166)
+#define CTF_CHARBOTTOMBORDER                (XML_TEXT_CTF_START + 167)
+
 
 #define TEXT_PROP_MAP_TEXT 0
 #define TEXT_PROP_MAP_PARA 1

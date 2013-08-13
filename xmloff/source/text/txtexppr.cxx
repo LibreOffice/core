@@ -287,6 +287,8 @@ void XMLTextExportPropertySetMapper::ContextFontHeightFilter(
 
 }
 
+namespace {
+
 // helper method; implementation below
 static bool lcl_IsOutlineStyle(const SvXMLExport&, const OUString&);
 
@@ -309,6 +311,143 @@ lcl_checkMultiProperty(XMLPropertyState *const pState,
             pState->maValue.clear();
         }
     }
+}
+
+static void lcl_FilterBorders(
+    XMLPropertyState* pAllBorderWidthState, XMLPropertyState* pLeftBorderWidthState,
+    XMLPropertyState* pRightBorderWidthState, XMLPropertyState* pTopBorderWidthState,
+    XMLPropertyState* pBottomBorderWidthState, XMLPropertyState* pAllBorderDistanceState,
+    XMLPropertyState* pLeftBorderDistanceState, XMLPropertyState* pRightBorderDistanceState,
+    XMLPropertyState* pTopBorderDistanceState, XMLPropertyState* pBottomBorderDistanceState,
+    XMLPropertyState* pAllBorderState, XMLPropertyState* pLeftBorderState,
+    XMLPropertyState* pRightBorderState,XMLPropertyState* pTopBorderState,
+    XMLPropertyState* pBottomBorderState )
+{
+    if( pAllBorderWidthState )
+    {
+        if( pLeftBorderWidthState && pRightBorderWidthState && pTopBorderWidthState && pBottomBorderWidthState )
+        {
+            table::BorderLine2 aLeft, aRight, aTop, aBottom;
+
+            pLeftBorderWidthState->maValue >>= aLeft;
+            pRightBorderWidthState->maValue >>= aRight;
+            pTopBorderWidthState->maValue >>= aTop;
+            pBottomBorderWidthState->maValue >>= aBottom;
+            if( aLeft.Color == aRight.Color && aLeft.InnerLineWidth == aRight.InnerLineWidth &&
+                aLeft.OuterLineWidth == aRight.OuterLineWidth && aLeft.LineDistance == aRight.LineDistance &&
+                aLeft.LineStyle == aRight.LineStyle &&
+                aLeft.LineWidth == aRight.LineWidth &&
+                aLeft.Color == aTop.Color && aLeft.InnerLineWidth == aTop.InnerLineWidth &&
+                aLeft.OuterLineWidth == aTop.OuterLineWidth && aLeft.LineDistance == aTop.LineDistance &&
+                aLeft.LineStyle == aTop.LineStyle &&
+                aLeft.LineWidth == aTop.LineWidth &&
+                aLeft.Color == aBottom.Color && aLeft.InnerLineWidth == aBottom.InnerLineWidth &&
+                aLeft.OuterLineWidth == aBottom.OuterLineWidth && aLeft.LineDistance == aBottom.LineDistance &&
+                aLeft.LineStyle == aBottom.LineStyle &&
+                aLeft.LineWidth == aBottom.LineWidth )
+            {
+                pLeftBorderWidthState->mnIndex = -1;
+                pLeftBorderWidthState->maValue.clear();
+                pRightBorderWidthState->mnIndex = -1;
+                pRightBorderWidthState->maValue.clear();
+                pTopBorderWidthState->mnIndex = -1;
+                pTopBorderWidthState->maValue.clear();
+                pBottomBorderWidthState->mnIndex = -1;
+                pBottomBorderWidthState->maValue.clear();
+            }
+            else
+            {
+                pAllBorderWidthState->mnIndex = -1;
+                pAllBorderWidthState->maValue.clear();
+            }
+        }
+        else
+        {
+            pAllBorderWidthState->mnIndex = -1;
+            pAllBorderWidthState->maValue.clear();
+        }
+    }
+
+    if( pAllBorderDistanceState )
+    {
+        if( pLeftBorderDistanceState && pRightBorderDistanceState && pTopBorderDistanceState && pBottomBorderDistanceState )
+        {
+            sal_Int32 aLeft = 0, aRight = 0, aTop = 0, aBottom = 0;
+
+            pLeftBorderDistanceState->maValue >>= aLeft;
+            pRightBorderDistanceState->maValue >>= aRight;
+            pTopBorderDistanceState->maValue >>= aTop;
+            pBottomBorderDistanceState->maValue >>= aBottom;
+            if( aLeft == aRight && aLeft == aTop && aLeft == aBottom )
+            {
+                pLeftBorderDistanceState->mnIndex = -1;
+                pLeftBorderDistanceState->maValue.clear();
+                pRightBorderDistanceState->mnIndex = -1;
+                pRightBorderDistanceState->maValue.clear();
+                pTopBorderDistanceState->mnIndex = -1;
+                pTopBorderDistanceState->maValue.clear();
+                pBottomBorderDistanceState->mnIndex = -1;
+                pBottomBorderDistanceState->maValue.clear();
+            }
+            else
+            {
+                pAllBorderDistanceState->mnIndex = -1;
+                pAllBorderDistanceState->maValue.clear();
+            }
+        }
+        else
+        {
+            pAllBorderDistanceState->mnIndex = -1;
+            pAllBorderDistanceState->maValue.clear();
+        }
+    }
+
+    if( pAllBorderState )
+    {
+        if( pLeftBorderState && pRightBorderState && pTopBorderState && pBottomBorderState )
+        {
+            table::BorderLine2 aLeft, aRight, aTop, aBottom;
+
+            pLeftBorderState->maValue >>= aLeft;
+            pRightBorderState->maValue >>= aRight;
+            pTopBorderState->maValue >>= aTop;
+            pBottomBorderState->maValue >>= aBottom;
+            if( aLeft.Color == aRight.Color && aLeft.InnerLineWidth == aRight.InnerLineWidth &&
+                aLeft.OuterLineWidth == aRight.OuterLineWidth && aLeft.LineDistance == aRight.LineDistance &&
+                aLeft.LineStyle == aRight.LineStyle &&
+                aLeft.LineWidth == aRight.LineWidth &&
+                aLeft.Color == aTop.Color && aLeft.InnerLineWidth == aTop.InnerLineWidth &&
+                aLeft.OuterLineWidth == aTop.OuterLineWidth && aLeft.LineDistance == aTop.LineDistance &&
+                aLeft.LineStyle == aTop.LineStyle  &&
+                aLeft.LineWidth == aTop.LineWidth  &&
+                aLeft.Color == aBottom.Color && aLeft.InnerLineWidth == aBottom.InnerLineWidth &&
+                aLeft.OuterLineWidth == aBottom.OuterLineWidth && aLeft.LineDistance == aBottom.LineDistance &&
+                aLeft.LineWidth == aBottom.LineWidth &&
+                aLeft.LineStyle == aBottom.LineStyle )
+            {
+                pLeftBorderState->mnIndex = -1;
+                pLeftBorderState->maValue.clear();
+                pRightBorderState->mnIndex = -1;
+                pRightBorderState->maValue.clear();
+                pTopBorderState->mnIndex = -1;
+                pTopBorderState->maValue.clear();
+                pBottomBorderState->mnIndex = -1;
+                pBottomBorderState->maValue.clear();
+            }
+            else
+            {
+                pAllBorderState->mnIndex = -1;
+                pAllBorderState->maValue.clear();
+            }
+        }
+        else
+        {
+            pAllBorderState->mnIndex = -1;
+            pAllBorderState->maValue.clear();
+        }
+    }
+}
+
 }
 
 void XMLTextExportPropertySetMapper::ContextFilter(
@@ -386,6 +525,27 @@ void XMLTextExportPropertySetMapper::ContextFilter(
     XMLPropertyState* pRightBorderState = NULL;
     XMLPropertyState* pTopBorderState = NULL;
     XMLPropertyState* pBottomBorderState = NULL;
+
+    // filter Char(Left|Right|Top|Bottom|)BorderWidth
+    XMLPropertyState* pCharAllBorderWidthState = NULL;
+    XMLPropertyState* pCharLeftBorderWidthState = NULL;
+    XMLPropertyState* pCharRightBorderWidthState = NULL;
+    XMLPropertyState* pCharTopBorderWidthState = NULL;
+    XMLPropertyState* pCharBottomBorderWidthState = NULL;
+
+    // filter Char(Left|Right|Top|)BorderDistance
+    XMLPropertyState* pCharAllBorderDistanceState = NULL;
+    XMLPropertyState* pCharLeftBorderDistanceState = NULL;
+    XMLPropertyState* pCharRightBorderDistanceState = NULL;
+    XMLPropertyState* pCharTopBorderDistanceState = NULL;
+    XMLPropertyState* pCharBottomBorderDistanceState = NULL;
+
+    // filter Char(Left|Right|Top|Bottom|)Border
+    XMLPropertyState* pCharAllBorderState = NULL;
+    XMLPropertyState* pCharLeftBorderState = NULL;
+    XMLPropertyState* pCharRightBorderState = NULL;
+    XMLPropertyState* pCharTopBorderState = NULL;
+    XMLPropertyState* pCharBottomBorderState = NULL;
 
     // filter height properties
     XMLPropertyState* pHeightMinAbsState = NULL;
@@ -486,6 +646,7 @@ void XMLTextExportPropertySetMapper::ContextFilter(
         case CTF_PARATOPMARGIN_REL:     pParaTopMarginRelState = propertie; break;
         case CTF_PARABOTTOMMARGIN:      pParaBottomMarginState = propertie; break;
         case CTF_PARABOTTOMMARGIN_REL:  pParaBottomMarginRelState = propertie; break;
+
         case CTF_ALLBORDERWIDTH:        pAllBorderWidthState = propertie; break;
         case CTF_LEFTBORDERWIDTH:       pLeftBorderWidthState = propertie; break;
         case CTF_RIGHTBORDERWIDTH:      pRightBorderWidthState = propertie; break;
@@ -501,6 +662,22 @@ void XMLTextExportPropertySetMapper::ContextFilter(
         case CTF_RIGHTBORDER:           pRightBorderState = propertie; break;
         case CTF_TOPBORDER:             pTopBorderState = propertie; break;
         case CTF_BOTTOMBORDER:          pBottomBorderState = propertie; break;
+
+        case CTF_CHARALLBORDERWIDTH:        pCharAllBorderWidthState = propertie; break;
+        case CTF_CHARLEFTBORDERWIDTH:       pCharLeftBorderWidthState = propertie; break;
+        case CTF_CHARRIGHTBORDERWIDTH:      pCharRightBorderWidthState = propertie; break;
+        case CTF_CHARTOPBORDERWIDTH:        pCharTopBorderWidthState = propertie; break;
+        case CTF_CHARBOTTOMBORDERWIDTH:     pCharBottomBorderWidthState = propertie; break;
+        case CTF_CHARALLBORDERDISTANCE:     pCharAllBorderDistanceState = propertie; break;
+        case CTF_CHARLEFTBORDERDISTANCE:    pCharLeftBorderDistanceState = propertie; break;
+        case CTF_CHARRIGHTBORDERDISTANCE:   pCharRightBorderDistanceState = propertie; break;
+        case CTF_CHARTOPBORDERDISTANCE:     pCharTopBorderDistanceState = propertie; break;
+        case CTF_CHARBOTTOMBORDERDISTANCE:  pCharBottomBorderDistanceState = propertie; break;
+        case CTF_CHARALLBORDER:             pCharAllBorderState = propertie; break;
+        case CTF_CHARLEFTBORDER:            pCharLeftBorderState = propertie; break;
+        case CTF_CHARRIGHTBORDER:           pCharRightBorderState = propertie; break;
+        case CTF_CHARTOPBORDER:             pCharTopBorderState = propertie; break;
+        case CTF_CHARBOTTOMBORDER:          pCharBottomBorderState = propertie; break;
 
         case CTF_FRAMEHEIGHT_MIN_ABS:   pHeightMinAbsState = propertie; break;
         case CTF_FRAMEHEIGHT_MIN_REL:   pHeightMinRelState = propertie; break;
@@ -639,129 +816,19 @@ void XMLTextExportPropertySetMapper::ContextFilter(
         pAllMargin->maValue.clear();
     }
 
-    if( pAllBorderWidthState )
-    {
-        if( pLeftBorderWidthState && pRightBorderWidthState && pTopBorderWidthState && pBottomBorderWidthState )
-        {
-            table::BorderLine2 aLeft, aRight, aTop, aBottom;
+    lcl_FilterBorders(
+        pAllBorderWidthState, pLeftBorderWidthState, pRightBorderWidthState,
+        pTopBorderWidthState, pBottomBorderWidthState, pAllBorderDistanceState,
+        pLeftBorderDistanceState, pRightBorderDistanceState, pTopBorderDistanceState,
+        pBottomBorderDistanceState, pAllBorderState, pLeftBorderState,
+        pRightBorderState, pTopBorderState, pBottomBorderState);
 
-            pLeftBorderWidthState->maValue >>= aLeft;
-            pRightBorderWidthState->maValue >>= aRight;
-            pTopBorderWidthState->maValue >>= aTop;
-            pBottomBorderWidthState->maValue >>= aBottom;
-            if( aLeft.Color == aRight.Color && aLeft.InnerLineWidth == aRight.InnerLineWidth &&
-                aLeft.OuterLineWidth == aRight.OuterLineWidth && aLeft.LineDistance == aRight.LineDistance &&
-                aLeft.LineStyle == aRight.LineStyle &&
-                aLeft.LineWidth == aRight.LineWidth &&
-                aLeft.Color == aTop.Color && aLeft.InnerLineWidth == aTop.InnerLineWidth &&
-                aLeft.OuterLineWidth == aTop.OuterLineWidth && aLeft.LineDistance == aTop.LineDistance &&
-                aLeft.LineStyle == aTop.LineStyle &&
-                aLeft.LineWidth == aTop.LineWidth &&
-                aLeft.Color == aBottom.Color && aLeft.InnerLineWidth == aBottom.InnerLineWidth &&
-                aLeft.OuterLineWidth == aBottom.OuterLineWidth && aLeft.LineDistance == aBottom.LineDistance &&
-                aLeft.LineStyle == aBottom.LineStyle &&
-                aLeft.LineWidth == aBottom.LineWidth )
-            {
-                pLeftBorderWidthState->mnIndex = -1;
-                pLeftBorderWidthState->maValue.clear();
-                pRightBorderWidthState->mnIndex = -1;
-                pRightBorderWidthState->maValue.clear();
-                pTopBorderWidthState->mnIndex = -1;
-                pTopBorderWidthState->maValue.clear();
-                pBottomBorderWidthState->mnIndex = -1;
-                pBottomBorderWidthState->maValue.clear();
-            }
-            else
-            {
-                pAllBorderWidthState->mnIndex = -1;
-                pAllBorderWidthState->maValue.clear();
-            }
-        }
-        else
-        {
-            pAllBorderWidthState->mnIndex = -1;
-            pAllBorderWidthState->maValue.clear();
-        }
-    }
-
-    if( pAllBorderDistanceState )
-    {
-        if( pLeftBorderDistanceState && pRightBorderDistanceState && pTopBorderDistanceState && pBottomBorderDistanceState )
-        {
-            sal_Int32 aLeft = 0, aRight = 0, aTop = 0, aBottom = 0;
-
-            pLeftBorderDistanceState->maValue >>= aLeft;
-            pRightBorderDistanceState->maValue >>= aRight;
-            pTopBorderDistanceState->maValue >>= aTop;
-            pBottomBorderDistanceState->maValue >>= aBottom;
-            if( aLeft == aRight && aLeft == aTop && aLeft == aBottom )
-            {
-                pLeftBorderDistanceState->mnIndex = -1;
-                pLeftBorderDistanceState->maValue.clear();
-                pRightBorderDistanceState->mnIndex = -1;
-                pRightBorderDistanceState->maValue.clear();
-                pTopBorderDistanceState->mnIndex = -1;
-                pTopBorderDistanceState->maValue.clear();
-                pBottomBorderDistanceState->mnIndex = -1;
-                pBottomBorderDistanceState->maValue.clear();
-            }
-            else
-            {
-                pAllBorderDistanceState->mnIndex = -1;
-                pAllBorderDistanceState->maValue.clear();
-            }
-        }
-        else
-        {
-            pAllBorderDistanceState->mnIndex = -1;
-            pAllBorderDistanceState->maValue.clear();
-        }
-    }
-
-    if( pAllBorderState )
-    {
-        if( pLeftBorderState && pRightBorderState && pTopBorderState && pBottomBorderState )
-        {
-            table::BorderLine2 aLeft, aRight, aTop, aBottom;
-
-            pLeftBorderState->maValue >>= aLeft;
-            pRightBorderState->maValue >>= aRight;
-            pTopBorderState->maValue >>= aTop;
-            pBottomBorderState->maValue >>= aBottom;
-            if( aLeft.Color == aRight.Color && aLeft.InnerLineWidth == aRight.InnerLineWidth &&
-                aLeft.OuterLineWidth == aRight.OuterLineWidth && aLeft.LineDistance == aRight.LineDistance &&
-                aLeft.LineStyle == aRight.LineStyle &&
-                aLeft.LineWidth == aRight.LineWidth &&
-                aLeft.Color == aTop.Color && aLeft.InnerLineWidth == aTop.InnerLineWidth &&
-                aLeft.OuterLineWidth == aTop.OuterLineWidth && aLeft.LineDistance == aTop.LineDistance &&
-                aLeft.LineStyle == aTop.LineStyle  &&
-                aLeft.LineWidth == aTop.LineWidth  &&
-                aLeft.Color == aBottom.Color && aLeft.InnerLineWidth == aBottom.InnerLineWidth &&
-                aLeft.OuterLineWidth == aBottom.OuterLineWidth && aLeft.LineDistance == aBottom.LineDistance &&
-                aLeft.LineWidth == aBottom.LineWidth &&
-                aLeft.LineStyle == aBottom.LineStyle )
-            {
-                pLeftBorderState->mnIndex = -1;
-                pLeftBorderState->maValue.clear();
-                pRightBorderState->mnIndex = -1;
-                pRightBorderState->maValue.clear();
-                pTopBorderState->mnIndex = -1;
-                pTopBorderState->maValue.clear();
-                pBottomBorderState->mnIndex = -1;
-                pBottomBorderState->maValue.clear();
-            }
-            else
-            {
-                pAllBorderState->mnIndex = -1;
-                pAllBorderState->maValue.clear();
-            }
-        }
-        else
-        {
-            pAllBorderState->mnIndex = -1;
-            pAllBorderState->maValue.clear();
-        }
-    }
+    lcl_FilterBorders(
+        pCharAllBorderWidthState, pCharLeftBorderWidthState, pCharRightBorderWidthState,
+        pCharTopBorderWidthState, pCharBottomBorderWidthState, pCharAllBorderDistanceState,
+        pCharLeftBorderDistanceState, pCharRightBorderDistanceState, pCharTopBorderDistanceState,
+        pCharBottomBorderDistanceState, pCharAllBorderState, pCharLeftBorderState,
+        pCharRightBorderState, pCharTopBorderState, pCharBottomBorderState);
 
     sal_Int16 nSizeType = SizeType::FIX;
     if( pSizeTypeState )
@@ -963,6 +1030,7 @@ void XMLTextExportPropertySetMapper::ContextFilter(
     SvXMLExportPropertyMapper::ContextFilter(rProperties,rPropSet);
 }
 
+namespace {
 
 static bool lcl_IsOutlineStyle(const SvXMLExport &rExport, const OUString & rName)
 {
@@ -984,6 +1052,8 @@ static bool lcl_IsOutlineStyle(const SvXMLExport &rExport, const OUString & rNam
     }
 
     return rName == sOutlineName;
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
