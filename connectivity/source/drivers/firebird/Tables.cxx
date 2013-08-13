@@ -48,8 +48,7 @@ void Tables::impl_refresh()
 
 ObjectType Tables::createObject(const OUString& rName)
 {
-    // TODO: parse the name.
-    // TODO: use table types
+    // Only retrieving a single table, so table type is irrelevant (param 4)
     uno::Reference< XResultSet > xTables = m_xMetaData->getTables(Any(),
                                                                   OUString(),
                                                                   rName,
