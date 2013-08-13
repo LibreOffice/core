@@ -27,6 +27,7 @@
 #include <sal/types.h>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/vector/b2dvector.hxx>
+#include <basegfx/range/b2drange.hxx>
 
 namespace rtl { class OUString; }
 
@@ -130,6 +131,11 @@ namespace basegfx
                 rPoint.getX(), rPoint.getY(),
                 fRadiant);
         }
+
+        /// special for the case to map from source range to target range
+        B2DHomMatrix createSourceRangeTargetRangeTransform(
+            const B2DRange& rSourceRange,
+            const B2DRange& rTargetRange);
 
     } // end of namespace tools
 } // end of namespace basegfx

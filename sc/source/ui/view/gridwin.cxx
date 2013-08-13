@@ -4449,10 +4449,12 @@ void ScGridWindow::UpdateFormulas()
 
     aOutputData.FindChanged();
 
-    PolyPolygon aChangedPoly( aOutputData.GetChangedArea() );   // logic (PixelToLogic)
-    if ( aChangedPoly.Count() )
+    // #122149# do not use old GetChangedArea() which used polygon-based Regions, but use
+    // the region-band based new version; anyways, only rectangles are added
+    Region aChangedRegion( aOutputData.GetChangedAreaRegion() );   // logic (PixelToLogic)
+    if(!aChangedRegion.IsEmpty())
     {
-        Invalidate( aChangedPoly );
+        Invalidate(aChangedRegion);
     }
 
     CheckNeedsRepaint();    // #i90362# used to be called via Draw() - still needed here
