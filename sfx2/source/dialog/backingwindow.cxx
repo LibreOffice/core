@@ -93,12 +93,14 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     get( mpDatabaseRecentThumbnails,    "database_recent");
     get( mpMathRecentThumbnails,        "math_recent");
 
-    mpWriterRecentThumbnails    ->SetFilter(FILTER_WRITER);
-    mpCalcRecentThumbnails      ->SetFilter(FILTER_CALC);
-    mpImpressRecentThumbnails   ->SetFilter(FILTER_IMPRESS);
-    mpDrawRecentThumbnails      ->SetFilter(FILTER_DRAW);
-    mpDatabaseRecentThumbnails  ->SetFilter(FILTER_DATABASE);
-    mpMathRecentThumbnails      ->SetFilter(FILTER_MATH);
+    mpAllRecentThumbnails       ->addFileType(TYPE_WRITER | TYPE_CALC |
+        TYPE_IMPRESS | TYPE_DRAW | TYPE_DATABASE | TYPE_MATH | TYPE_OTHER);
+    mpWriterRecentThumbnails    ->addFileType(TYPE_WRITER);
+    mpCalcRecentThumbnails      ->addFileType(TYPE_CALC);
+    mpImpressRecentThumbnails   ->addFileType(TYPE_IMPRESS);
+    mpDrawRecentThumbnails      ->addFileType(TYPE_DRAW);
+    mpDatabaseRecentThumbnails  ->addFileType(TYPE_DATABASE);
+    mpMathRecentThumbnails      ->addFileType(TYPE_MATH);
 
     mpAllRecentThumbnails       ->loadRecentDocs();
     mpWriterRecentThumbnails    ->loadRecentDocs();

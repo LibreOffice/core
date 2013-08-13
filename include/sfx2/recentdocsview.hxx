@@ -24,16 +24,18 @@ struct LoadRecentFile
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >      xDispatch;
 };
 
-enum APPLICATION_FILTER
+enum ApplicationType
 {
-    FILTER_NONE,
-    FILTER_WRITER,
-    FILTER_CALC,
-    FILTER_IMPRESS,
-    FILTER_DRAW,
-    FILTER_DATABASE,
-    FILTER_MATH,
+    TYPE_NONE     =      0,
+    TYPE_WRITER   = 1 << 0,
+    TYPE_CALC     = 1 << 1,
+    TYPE_IMPRESS  = 1 << 2,
+    TYPE_DRAW     = 1 << 3,
+    TYPE_DATABASE = 1 << 4,
+    TYPE_MATH     = 1 << 5,
+    TYPE_OTHER    = 1 << 6
 };
+
 
 class SFX2_DLLPUBLIC RecentDocsView :   protected ::comphelper::OBaseMutex,
                                         public ThumbnailView
@@ -47,9 +49,12 @@ public:
 
     void SetThumbnailSize(long thumbnailSize);
     long GetThumbnailSize() const;
-    void SetFilter(APPLICATION_FILTER filter);
 
-    static bool isFilteredExtension(APPLICATION_FILTER filter, const OUString &rExt);
+    void addFileType(int type);
+    void removeFileType(int type);
+    bool isAcceptedFileType(ApplicationType type) const;
+
+    static bool typeMatchesExtension(ApplicationType type, const OUString &rExt);
     static BitmapEx getDefaultThumbnail(const OUString &rURL);
 
     DECL_STATIC_LINK( RecentDocsView, ExecuteHdl_Impl, LoadRecentFile* );
@@ -57,9 +62,9 @@ public:
 protected:
     virtual void OnItemDblClicked(ThumbnailViewItem *pItem);
 
-    bool isUnfilteredFile(const OUString &rURL) const;
+    bool isAcceptedFile(const OUString &rURL) const;
 
-    APPLICATION_FILTER mFilter;
+    int     mnFileTypes;
 
     long    mnItemMaxSize;
     long    mnTextHeight;
