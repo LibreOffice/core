@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//8/U\u003d",
+        "filename": "xmloff/source/core/nmspmap.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 552,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2013-08-13T10:58:43Z",
+      "side": 1,
+      "message": "This is wrong. OUStringBuffer aNewName(nNameLen+20) indicates the initial *capacity* of the OUStringBuffer.",
+      "revId": "25923ef8bb93e64a7ad90371b901f4e4e47cbdf4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//8/Q\u003d",
+        "filename": "xmloff/source/draw/shapeexport2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 518,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2013-08-13T10:58:43Z",
+      "side": 1,
+      "message": "Nah. The OUStringBuffer here is unnecessary. Just do:\n\nmrExport.AddAttribute(XML_NAMESPACE_SCRIPT, XML_MACRO_NAME, sLocation + \":\" + aStrMacro);",
+      "revId": "25923ef8bb93e64a7ad90371b901f4e4e47cbdf4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//8/M\u003d",
+        "filename": "xmloff/source/style/xmlbahdl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 540,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2013-08-13T10:58:43Z",
+      "side": 1,
+      "message": "Here you could move the aOut inside the true branch if the if, and in the false branch just do;\n\nrStrExpValue \u003d \"hsl(\" + OUString::number(aHSL[0]) + \",\" + OUString::number(aHSL[1] * 100.0\n) + \"%,\" + OUString::number(aHSL[2] * 100.0) + \"%)\";\n\nI think...",
+      "revId": "25923ef8bb93e64a7ad90371b901f4e4e47cbdf4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
