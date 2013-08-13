@@ -115,7 +115,7 @@ public:
     virtual void GetState (SfxItemSet& rSet);
 
     /* override these from SfxViewShell */
-    virtual String GetSelectionText(sal_Bool);
+    virtual OUString GetSelectionText(bool);
     virtual sal_Bool HasSelection(sal_Bool) const;
 
     SvBorder GetBorder (bool bOuterResize);

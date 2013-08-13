@@ -213,7 +213,7 @@ protected:
 
     virtual void    QueryObjAreaPixel( Rectangle& rRect ) const;
 
-    virtual String  GetSelectionText( sal_Bool bWholeWord );
+    virtual OUString GetSelectionText( bool bWholeWord );
     virtual sal_Bool    HasSelection( sal_Bool bText ) const;
     virtual String  GetDescription() const;
 

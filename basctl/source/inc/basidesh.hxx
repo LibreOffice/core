@@ -179,7 +179,7 @@ public:
     // virtual sal_uInt16           Print( SfxProgress &rProgress, sal_Bool bIsAPI, PrintDialog *pPrintDialog = 0 );
     virtual SfxPrinter*     GetPrinter( sal_Bool bCreate );
     virtual sal_uInt16      SetPrinter( SfxPrinter *pNewPrinter, sal_uInt16 nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false );
-    virtual String          GetSelectionText( sal_Bool bCompleteWords );
+    virtual OUString        GetSelectionText( bool bCompleteWords );
     virtual sal_Bool        HasSelection( sal_Bool bText ) const;
 
     void                GetState( SfxItemSet& );

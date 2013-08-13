@@ -269,7 +269,7 @@ void SwIndexMarkPane::InitControls()
         if (nCnt < 2)
         {
             bSelected = !pSh->HasSelection();
-            aOrgStr = pSh->GetView().GetSelectionTextParam(sal_True, sal_False);
+            aOrgStr = pSh->GetView().GetSelectionTextParam(true, false);
             m_pEntryED->SetText(aOrgStr);
 
             //to include all equal entries may only be allowed in the body and even there
@@ -361,7 +361,7 @@ void    SwIndexMarkPane::Activate()
         if (nCnt < 2)
         {
             bSelected = !pSh->HasSelection();
-            aOrgStr = pSh->GetView().GetSelectionTextParam(sal_True, sal_False);
+            aOrgStr = pSh->GetView().GetSelectionTextParam(true, false);
             m_pEntryED->SetText(aOrgStr);
 
             //to include all equal entries may only be allowed in the body and even there

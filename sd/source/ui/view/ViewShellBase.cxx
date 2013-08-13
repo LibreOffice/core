@@ -459,7 +459,7 @@ void ViewShellBase::InitializeFramework (void)
 }
 
 
-String ViewShellBase::GetSelectionText(sal_Bool bCompleteWords)
+OUString ViewShellBase::GetSelectionText(bool bCompleteWords)
 {
     ::boost::shared_ptr<ViewShell> const pMainShell(GetMainViewShell());
     DrawViewShell *const pDrawViewShell(

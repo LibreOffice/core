@@ -102,7 +102,7 @@ public:
 
     virtual void SetZoom(long nZoom);
     virtual void SetZoomRect(const Rectangle& rZoomRect);
-    virtual String  GetSelectionText( sal_Bool bCompleteWords = sal_False );
+    virtual OUString GetSelectionText( bool bCompleteWords = false );
     virtual sal_Bool    HasSelection( sal_Bool bText = sal_True ) const;
 
     void Execute(SfxRequest& rReq);

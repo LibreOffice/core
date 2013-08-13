@@ -1466,7 +1466,7 @@ sal_Bool OutlineViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
 /**
  * Return text of the selection
  */
-String OutlineViewShell::GetSelectionText(sal_Bool bCompleteWords)
+OUString OutlineViewShell::GetSelectionText(bool bCompleteWords)
 {
     OUString aStrSelection;
     ::Outliner* pOl = pOlView->GetOutliner();

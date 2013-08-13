@@ -1572,13 +1572,12 @@ sal_Bool SwView::HasSelection( sal_Bool  bText ) const
                  : GetWrtShell().HasSelection();
 }
 
-String SwView::GetSelectionText( sal_Bool bCompleteWrds )
+OUString SwView::GetSelectionText( bool bCompleteWrds )
 {
-    return GetSelectionTextParam( bCompleteWrds, sal_True );
+    return GetSelectionTextParam( bCompleteWrds, true );
 }
 
-String  SwView::GetSelectionTextParam( sal_Bool bCompleteWrds,
-                                       sal_Bool bEraseTrail )
+OUString SwView::GetSelectionTextParam( bool bCompleteWrds, bool bEraseTrail )
 {
     String sReturn;
     if( bCompleteWrds && !GetWrtShell().HasSelection() )

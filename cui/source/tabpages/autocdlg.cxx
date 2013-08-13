@@ -1032,10 +1032,10 @@ void OfaAutocorrReplacePage::RefillReplaceBox(sal_Bool bFromReset,
     if( pViewShell && pViewShell->HasSelection( sal_True ) )
     {
         bHasSelectionText = sal_True;
-        const String sSelection( pViewShell->GetSelectionText() );
+        const OUString sSelection( pViewShell->GetSelectionText() );
         m_pReplaceED->SetText( sSelection );
         m_pTextOnlyCB->Check( !bSWriter );
-        m_pTextOnlyCB->Enable( bSWriter && sSelection.Len() );
+        m_pTextOnlyCB->Enable( bSWriter && !sSelection.isEmpty() );
     }
     else
     {

@@ -63,9 +63,9 @@ sal_Bool Shell::HasSelection( sal_Bool /* bText */ ) const
     return false;
 }
 
-String Shell::GetSelectionText( sal_Bool bWholeWord )
+OUString Shell::GetSelectionText( bool bWholeWord )
 {
-    String aText;
+    OUString aText;
     if (ModulWindow* pMCurWin = dynamic_cast<ModulWindow*>(pCurWin))
     {
         if (TextView* pEditView = pMCurWin->GetEditView())

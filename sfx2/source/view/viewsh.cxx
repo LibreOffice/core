@@ -1357,9 +1357,9 @@ SdrView* SfxViewShell::GetDrawView() const
 
 //--------------------------------------------------------------------
 
-String SfxViewShell::GetSelectionText
+OUString SfxViewShell::GetSelectionText
 (
-    sal_Bool /*bCompleteWords*/     /*  FALSE (default)
+    bool /*bCompleteWords*/ /*  FALSE (default)
                                 Only the actual selected text is returned.
 
                                 TRUE
@@ -1382,7 +1382,7 @@ String SfxViewShell::GetSelectionText
 */
 
 {
-    return String();
+    return OUString();
 }
 
 //--------------------------------------------------------------------

@@ -1131,9 +1131,9 @@ void ScEditShell::GetAttrState(SfxItemSet &rSet)
     }
 }
 
-String ScEditShell::GetSelectionText( sal_Bool bWholeWord )
+OUString ScEditShell::GetSelectionText( bool bWholeWord )
 {
-    String aStrSelection;
+    OUString aStrSelection;
 
     if ( pViewData->HasEditView( pViewData->GetActivePart() ) )    // #125326#
     {

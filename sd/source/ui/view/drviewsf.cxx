@@ -744,7 +744,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
 
 
 
-String DrawViewShell::GetSelectionText(sal_Bool bCompleteWords)
+OUString DrawViewShell::GetSelectionText(bool bCompleteWords)
 {
     OUString aStrSelection;
     ::Outliner* pOl = mpDrawView->GetTextEditOutliner();

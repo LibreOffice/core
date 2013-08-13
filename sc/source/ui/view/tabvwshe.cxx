@@ -42,9 +42,9 @@
 
 //==================================================================
 
-String ScTabViewShell::GetSelectionText( sal_Bool bWholeWord )
+OUString ScTabViewShell::GetSelectionText( bool bWholeWord )
 {
-    String aStrSelection;
+    OUString aStrSelection;
 
     if ( pEditShell && pEditShell == GetMySubShell() )
     {
@@ -107,12 +107,8 @@ String ScTabViewShell::GetSelectionText( sal_Bool bWholeWord )
 
             if ( bInFormatDialog || bWholeWord || aRange.aEnd.Row() == aRange.aStart.Row() )
             {
-                xub_StrLen nAt;
-                while (  (nAt = aStrSelection.Search( CHAR_CR )) != STRING_NOTFOUND )
-                    aStrSelection.SetChar( nAt, ' ' );
-                while (  (nAt = aStrSelection.Search( '\t' )) != STRING_NOTFOUND )
-                    aStrSelection.SetChar( nAt, ' ' );
-
+                aStrSelection = aStrSelection.replaceAll(OUString(CHAR_CR), " ");
+                aStrSelection = aStrSelection.replaceAll("\t", " ");
                 aStrSelection = comphelper::string::stripEnd(aStrSelection, ' ');
             }
         }

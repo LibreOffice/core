@@ -154,7 +154,7 @@ public:
     virtual void    Deactivate(sal_Bool IsMDIActivate);
     virtual void    UIActivating( SfxInPlaceClient* );
     virtual void    UIDeactivated( SfxInPlaceClient* );
-    virtual String  GetSelectionText( sal_Bool bCompleteWords = sal_False );
+    virtual OUString GetSelectionText( bool bCompleteWords = false );
     virtual sal_Bool    HasSelection( sal_Bool bText = sal_True ) const;
 
     void            ExecCtrl(SfxRequest& rReq);

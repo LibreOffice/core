@@ -69,7 +69,7 @@ public:
     void    ExecuteUndo(SfxRequest& rReq);
     void    GetUndoState(SfxItemSet &rSet);
 
-    String  GetSelectionText( sal_Bool bWholeWord );
+    OUString GetSelectionText( bool bWholeWord );
 };
 
 

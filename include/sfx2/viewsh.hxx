@@ -185,7 +185,7 @@ public:
 
     // Misc
     virtual sal_uInt16              PrepareClose( sal_Bool bUI = sal_True, sal_Bool bForBrowsing = sal_False );
-    virtual String              GetSelectionText( sal_Bool bCompleteWords = sal_False );
+    virtual OUString            GetSelectionText( bool bCompleteWords = false );
     virtual sal_Bool                HasSelection( sal_Bool bText = sal_True ) const;
     virtual SdrView*            GetDrawView() const;
 

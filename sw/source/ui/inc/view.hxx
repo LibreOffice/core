@@ -413,10 +413,10 @@ public:
 
     com::sun::star::view::XSelectionSupplier*       GetUNOObject();
 
-    String                  GetSelectionTextParam( sal_Bool bCompleteWords,
-                                                   sal_Bool bEraseTrail );
+    OUString                GetSelectionTextParam( bool bCompleteWords,
+                                                   bool bEraseTrail );
     virtual sal_Bool            HasSelection( sal_Bool  bText ) const;
-    virtual String          GetSelectionText( sal_Bool bCompleteWords = sal_False );
+    virtual OUString        GetSelectionText( bool bCompleteWords = false );
     virtual sal_uInt16          PrepareClose( sal_Bool bUI = sal_True, sal_Bool bForBrowsing = sal_False );
     virtual void            MarginChanged();
 
