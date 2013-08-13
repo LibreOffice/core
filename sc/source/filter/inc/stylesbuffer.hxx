@@ -26,6 +26,7 @@
 #include <com/sun/star/table/CellVertJustify2.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/util/CellProtection.hpp>
+#include <boost/ptr_container/ptr_vector.hpp>
 #include "oox/drawingml/color.hxx"
 #include "oox/helper/graphichelper.hxx"
 #include "oox/helper/refmap.hxx"
@@ -786,6 +787,11 @@ typedef ::boost::shared_ptr< Dxf > DxfRef;
 
 // ============================================================================
 
+struct TableStyleElementModel{
+    int maDxfId;
+    OUString maStyleElementType;
+};
+
 /* Contains attributes for table styles from the <tableStyle> element */
 class TableStyle : public WorkbookHelper
 {
@@ -797,7 +803,9 @@ public:
     ScDBDataFormatting& getTableFormatting(); //not const since it will be edited and put in ScDBData objects
 private:
     typedef ::boost::shared_ptr< ::ScDBDataFormatting > TableFormattingRef;
+    typedef std::vector< TableStyleElementModel > TableStyleElementModelVector;
 
+    TableStyleElementModelVector maStyleElementVector;
     TableFormattingRef mxTableFormatting;
 };
 

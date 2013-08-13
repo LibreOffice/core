@@ -2646,18 +2646,10 @@ void TableStyle::importTableStyleElement( const AttributeList& rAttribs )
     //Extract the Dxf Id and create such a style
     sal_Int32 aDxfId = static_cast< sal_Int32 >( rAttribs.getInteger( XML_dxfId, -1 ) );
     SAL_WARN_IF( (aDxfId == -1) ,"sc", "TableStyle::importTableStyleElement - DxfId not defined for table style element" );
-    //Should I stop on finding this missing feild or keep going?
-    OUString aDxfStyleName = getStyles().createDxfStyle( aDxfId );
-    if( aStyleElementType.equals("firstColumnStripe") )
-        mxTableFormatting->SetFirstColStripeStyle( aDxfStyleName );
-    else if( aStyleElementType.equals("secondColumnStripe") )
-        mxTableFormatting->SetSecondColStripeStyle( aDxfStyleName );
-    else if( aStyleElementType.equals("firstRowStripe") )
-        mxTableFormatting->SetFirstRowStripeStyle( aDxfStyleName );
-    else if( aStyleElementType.equals("secondRowStripe") )
-        mxTableFormatting->SetSecondRowStripeStyle( aDxfStyleName );
-    //Though the Dxf styles are being imported, the bsckground color etc
-    //is not showing up.
+    TableStyleElementModel aTableStyleElementModel;
+    aTableStyleElementModel.maDxfId = aDxfId;
+    aTableStyleElementModel.maStyleElementType = aStyleElementType;
+    maStyleElementVector.push_back( aTableStyleElementModel );
 }
 
 const OUString& TableStyle::getTableStyleName() const
@@ -2672,6 +2664,20 @@ ScDBDataFormatting& TableStyle::getTableFormatting()
 
 void TableStyle::finalizeImport()
 {
+    //Iterate through each of the elements in maStyleElementVector
+    for( TableStyleElementModelVector::iterator itr = maStyleElementVector.begin(); itr!=maStyleElementVector.end(); ++itr)
+    {
+        //Should I stop on finding this missing feild or keep going?
+        OUString aDxfStyleName = getStyles().createDxfStyle( itr->maDxfId );
+        if( itr->maStyleElementType.equals("firstColumnStripe") )
+            mxTableFormatting->SetFirstColStripeStyle( aDxfStyleName );
+        else if( itr->maStyleElementType.equals("secondColumnStripe") )
+            mxTableFormatting->SetSecondColStripeStyle( aDxfStyleName );
+        else if( itr->maStyleElementType.equals("firstRowStripe") )
+            mxTableFormatting->SetFirstRowStripeStyle( aDxfStyleName );
+        else if( itr->maStyleElementType.equals("secondRowStripe") )
+            mxTableFormatting->SetSecondRowStripeStyle( aDxfStyleName );
+    }
 }
 
 
