@@ -2627,18 +2627,6 @@ xub_StrLen ScColumn::GetMaxNumberStringLen(
 
 namespace {
 
-class CellGroupSetter
-{
-    ScFormulaCellGroupRef mxGroup;
-public:
-    CellGroupSetter(const ScFormulaCellGroupRef& xGroup) : mxGroup(xGroup) {}
-
-    void operator() (size_t, ScFormulaCell* pCell)
-    {
-        pCell->SetCellGroup(mxGroup);
-    }
-};
-
 class GroupFormulaCells
 {
     ScFormulaCellGroupRef mxNone;
@@ -2651,40 +2639,103 @@ public:
             // We are only interested in formula cells.
             return;
 
-        ScFormulaCell* pPrev = NULL;
-        ScFormulaCell* pCur = NULL;
         size_t nRow = node.position; // start row position.
 
         sc::formula_block::iterator it = sc::formula_block::begin(*node.data);
         sc::formula_block::iterator itEnd = sc::formula_block::end(*node.data);
-        for (; it != itEnd; ++it, ++nRow, pPrev = pCur)
+
+        // This block should never be empty.
+
+        ScFormulaCell* pPrev = *it;
+        ScFormulaCellGroupRef xPrevGrp = pPrev->GetCellGroup();
+        if (xPrevGrp)
+        {
+            // Move to the cell after the last cell of the current group.
+            std::advance(it, xPrevGrp->mnLength);
+            nRow += xPrevGrp->mnLength;
+        }
+        else
+        {
+            ++it;
+            ++nRow;
+        }
+
+        ScFormulaCell* pCur = NULL;
+        ScFormulaCellGroupRef xCurGrp;
+        for (; it != itEnd; pPrev = pCur, xPrevGrp = xCurGrp)
         {
             pCur = *it;
-            if (!pPrev)
-                continue;
+            xCurGrp = pCur->GetCellGroup();
 
             ScFormulaCell::CompareState eCompState = pPrev->CompareByTokenArray(*pCur);
             if (eCompState == ScFormulaCell::NotEqual)
             {
                 // different formula tokens.
                 pCur->SetCellGroup(mxNone);
+                if (xCurGrp)
+                {
+                    // Move to the cell after the last cell of the current group.
+                    std::advance(it, xCurGrp->mnLength);
+                    nRow += xCurGrp->mnLength;
+                }
+                else
+                {
+                    ++it;
+                    ++nRow;
+                }
+
                 continue;
             }
 
-            // Formula tokens equal those of the previous formula cell.
-            ScFormulaCellGroupRef xGroup = pPrev->GetCellGroup();
-            if (!xGroup)
+            // Formula tokens equal those of the previous formula cell or cell group.
+            if (xPrevGrp)
             {
-                // create a new group ...
-                xGroup = pPrev->CreateCellGroup(nRow - 1, 2, eCompState == ScFormulaCell::EqualInvariant);
-                pCur->SetCellGroup(xGroup);
+                // Previous cell is a group.
+                if (xCurGrp)
+                {
+                    // The current cell is a group.  Merge these two groups.
+                    xPrevGrp->mnLength += xCurGrp->mnLength;
+                    pCur->SetCellGroup(xPrevGrp);
+                    sc::formula_block::iterator itGrpEnd = it;
+                    std::advance(itGrpEnd, xCurGrp->mnLength);
+                    for (++it; it != itGrpEnd; ++it)
+                    {
+                        ScFormulaCell* pCell = *it;
+                        pCell->SetCellGroup(xPrevGrp);
+                    }
+                    nRow += xCurGrp->mnLength;
+                }
+                else
+                {
+                    // Add this cell to the previous group.
+                    pCur->SetCellGroup(xPrevGrp);
+                    ++xPrevGrp->mnLength;
+                    ++nRow;
+                    ++it;
+                }
+
+            }
+            else if (xCurGrp)
+            {
+                // Previous cell is a regular cell and current cell is a group.
+                nRow += xCurGrp->mnLength;
+                std::advance(it, xCurGrp->mnLength);
+                pPrev->SetCellGroup(xCurGrp);
+                --xCurGrp->mnStart;
+                ++xCurGrp->mnLength;
+                xPrevGrp = xCurGrp;
             }
             else
             {
-                // existing group. extend its length.
-                pCur->SetCellGroup(xGroup);
-                ++xGroup->mnLength;
+                // Both previous and current cells are regular cells.
+                xPrevGrp = pPrev->CreateCellGroup(nRow - 1, 2, eCompState == ScFormulaCell::EqualInvariant);
+                pCur->SetCellGroup(xPrevGrp);
+                ++nRow;
+                ++it;
             }
+
+            pCur = pPrev;
+            xCurGrp = xPrevGrp;
         }
     }
 };
@@ -2704,11 +2755,6 @@ void ScColumn::RebuildFormulaGroups()
 
 void ScColumn::RegroupFormulaCells()
 {
-    // clear previous formula groups (if any)
-    ScFormulaCellGroupRef xNone;
-    CellGroupSetter aFunc(xNone);
-    sc::ProcessFormula(maCells, aFunc);
-
     // re-build formula groups.
     std::for_each(maCells.begin(), maCells.end(), GroupFormulaCells());
 }
