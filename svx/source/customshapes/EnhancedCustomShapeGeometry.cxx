@@ -17,8 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <limits>
+#ifdef WNT
+#define _USE_MATH_DEFINES // for M_SQRT2
+#endif
+
 #include <cmath>
+#include <limits>
 
 #include "svx/EnhancedCustomShapeGeometry.hxx"
 #include <com/sun/star/drawing/EnhancedCustomShapeGluePointType.hpp>
