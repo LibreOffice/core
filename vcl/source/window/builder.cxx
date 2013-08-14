@@ -1447,6 +1447,7 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
                 pToolBox->InsertItem(nItemId,
                     OStringToOUString(extractLabel(rMap), RTL_TEXTENCODING_UTF8), nBits);
                 pToolBox->SetItemCommand(nItemId, aCommand);
+                pToolBox->SetHelpId(nItemId, m_sHelpRoot + id);
             }
 
             OUString sTooltip(OStringToOUString(extractTooltipText(rMap), RTL_TEXTENCODING_UTF8));
