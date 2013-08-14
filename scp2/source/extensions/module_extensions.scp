@@ -257,7 +257,7 @@ End
 
 #if defined SOLAR_JAVA && !defined WITHOUT_SCRIPTING_BEANSHELL
 
-Module gid_Module_Optional_Extensions_Script_Provider_For_Beanshell
+Module gid_Module_Optional_Extensions_Script_Provider_For_BS
     PackageInfo = "packinfo_extensions.txt";
     MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_SCRIPT_PROVIDER_FOR_BEANSHELL);
     ParentID = gid_Module_Optional_Extensions;
@@ -276,7 +276,7 @@ End
 
 #if defined SOLAR_JAVA && !defined WITHOUT_SCRIPTING_JAVASCRIPT
 
-Module gid_Module_Optional_Extensions_Script_Provider_For_Javascript
+Module gid_Module_Optional_Extensions_Script_Provider_For_JS
     PackageInfo = "packinfo_extensions.txt";
     MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_SCRIPT_PROVIDER_FOR_JAVASCRIPT);
     ParentID = gid_Module_Optional_Extensions;
