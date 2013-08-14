@@ -85,9 +85,9 @@ namespace pcr
 
         void                SetComponentHelpIds( const OString& _rHelpId, const OString& _sPrimaryButtonId, const OString& _sSecondaryButtonId );
 
-        void                SetTitle(const String& rString );
+        void                SetTitle(const OUString& rString );
         void                FullFillTitleString();
-        String              GetTitle() const;
+        OUString            GetTitle() const;
         void                SetTitleWidth(sal_uInt16);
 
         void                SetPosSizePixel(Point aPos,Size aSize);

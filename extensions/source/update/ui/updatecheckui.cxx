@@ -90,8 +90,8 @@ class BubbleWindow : public FloatingWindow
     Region          maBounds;
     Polygon         maRectPoly;
     Polygon         maTriPoly;
-    XubString       maBubbleTitle;
-    XubString       maBubbleText;
+    OUString        maBubbleTitle;
+    OUString        maBubbleText;
     Image           maBubbleImage;
     Size            maMaxTextSize;
     Rectangle       maTitleRect;
@@ -102,8 +102,8 @@ private:
     void            RecalcTextRects();
 
 public:
-                    BubbleWindow( Window* pParent, const XubString& rTitle,
-                                  const XubString& rText, const Image& rImage );
+                    BubbleWindow( Window* pParent, const OUString& rTitle,
+                                  const OUString& rText, const Image& rImage );
                    ~BubbleWindow();
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt );
@@ -111,7 +111,7 @@ public:
     void            Resize();
     void            Show( sal_Bool bVisible = sal_True, sal_uInt16 nFlags = SHOW_NOACTIVATE );
     void            SetTipPosPixel( const Point& rTipPos ) { maTipPos = rTipPos; }
-    void            SetTitleAndText( const XubString& rTitle, const XubString& rText,
+    void            SetTitleAndText( const OUString& rTitle, const OUString& rText,
                                      const Image& rImage );
 };
 
@@ -552,15 +552,12 @@ BubbleWindow * UpdateCheckUI::GetBubbleWindow()
     BubbleWindow* pBubbleWin = mpBubbleWin;
 
     if ( !pBubbleWin ) {
-        pBubbleWin = new BubbleWindow( mpIconSysWin,
-                                         XubString( maBubbleTitle ),
-                                       XubString( maBubbleText ),
-                                       maBubbleImage );
+        pBubbleWin = new BubbleWindow( mpIconSysWin, maBubbleTitle,
+                                       maBubbleText, maBubbleImage );
         mbBubbleChanged = false;
     }
     else if ( mbBubbleChanged ) {
-        pBubbleWin->SetTitleAndText( XubString( maBubbleTitle ),
-                                     XubString( maBubbleText ),
+        pBubbleWin->SetTitleAndText( maBubbleTitle, maBubbleText,
                                      maBubbleImage );
         mbBubbleChanged = false;
     }
@@ -784,8 +781,8 @@ IMPL_LINK( UpdateCheckUI, ApplicationEventHdl, VclSimpleEvent *, pEvent)
 #define TEXT_MAX_HEIGHT       200
 
 //------------------------------------------------------------------------------
-BubbleWindow::BubbleWindow( Window* pParent, const XubString& rTitle,
-                            const XubString& rText, const Image& rImage )
+BubbleWindow::BubbleWindow( Window* pParent, const OUString& rTitle,
+                            const OUString& rText, const Image& rImage )
     : FloatingWindow( pParent, WB_SYSTEMWINDOW
                                | WB_OWNERDRAWDECORATION
                                | WB_NOBORDER
@@ -836,8 +833,8 @@ void BubbleWindow::Resize()
 }
 
 //------------------------------------------------------------------------------
-void BubbleWindow::SetTitleAndText( const XubString& rTitle,
-                                    const XubString& rText,
+void BubbleWindow::SetTitleAndText( const OUString& rTitle,
+                                    const OUString& rText,
                                     const Image& rImage )
 {
     maBubbleTitle = rTitle;
@@ -905,7 +902,7 @@ void BubbleWindow::Show( sal_Bool bVisible, sal_uInt16 nFlags )
     }
 
     // don't show bubbles without a text
-    if ( ( maBubbleTitle.Len() == 0 ) && ( maBubbleText.Len() == 0 ) )
+    if ( ( maBubbleTitle.isEmpty() ) && ( maBubbleText.isEmpty() ) )
         return;
 
     Size aWindowSize = GetSizePixel();

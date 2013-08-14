@@ -104,7 +104,7 @@ void BibTBListBoxListener::statusChanged(const ::com::sun::star::frame::FeatureS
             const OUString* pStringArray = (const OUString*)pStringSeq->getConstArray();
 
             sal_uInt32 nCount = pStringSeq->getLength();
-            XubString aEntry;
+            OUString aEntry;
             for( sal_uInt32 i=0; i<nCount; i++ )
             {
                 aEntry = String(pStringArray[i]);
@@ -113,8 +113,7 @@ void BibTBListBoxListener::statusChanged(const ::com::sun::star::frame::FeatureS
             pToolBar->UpdateSourceList(sal_True);
         }
 
-        XubString aStr = String(rEvt.FeatureDescriptor);
-        pToolBar->SelectSourceEntry(aStr);
+        pToolBar->SelectSourceEntry(rEvt.FeatureDescriptor);
     }
 };
 
@@ -219,7 +218,7 @@ BibToolBar::BibToolBar(Window* pParent, Link aLink, WinBits nStyle):
     aEdQuery.SetSizePixel(aLBSource.GetSizePixel());
     aEdQuery.Show();
 
-    XubString aStr=GetItemText(TBC_FT_SOURCE);
+    OUString aStr=GetItemText(TBC_FT_SOURCE);
     Rectangle aRect=GetItemRect(TBC_FT_SOURCE);
     aFtSource.SetText(aStr);
     aFtSource.SetSizePixel(aRect.GetSize());
@@ -377,7 +376,7 @@ void BibToolBar::ClearFilterMenu()
     aPopupMenu.Clear();
     nMenuId=0;
 }
-sal_uInt16 BibToolBar::InsertFilterItem(const XubString& aMenuEntry)
+sal_uInt16 BibToolBar::InsertFilterItem(const OUString& aMenuEntry)
 {
     nMenuId++;
     aPopupMenu.InsertItem(nMenuId,aMenuEntry);
@@ -407,12 +406,12 @@ void BibToolBar::UpdateSourceList(sal_Bool bFlag)
     aLBSource.SetUpdateMode(bFlag);
 }
 
-void BibToolBar::InsertSourceEntry(const XubString& aEntry, sal_uInt16 nPos)
+void BibToolBar::InsertSourceEntry(const OUString& aEntry, sal_uInt16 nPos)
 {
     aLBSource.InsertEntry(aEntry, nPos);
 }
 
-void BibToolBar::SelectSourceEntry(const XubString& aStr)
+void BibToolBar::SelectSourceEntry(const OUString& aStr)
 {
     aLBSource.SelectEntry(aStr);
 }
@@ -423,7 +422,7 @@ void BibToolBar::EnableQuery(sal_Bool bFlag)
     aEdQuery.Enable(bFlag);
 }
 
-void BibToolBar::SetQueryString(const XubString& aStr)
+void BibToolBar::SetQueryString(const OUString& aStr)
 {
     aEdQuery.SetText(aStr);
 }

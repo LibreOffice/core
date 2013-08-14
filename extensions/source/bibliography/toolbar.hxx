@@ -156,15 +156,15 @@ class BibToolBar:   public ToolBox
         void    ClearSourceList();
         void    UpdateSourceList(sal_Bool bFlag=sal_True);
         void    EnableSourceList(sal_Bool bFlag=sal_True);
-        void    InsertSourceEntry(const XubString&,sal_uInt16 nPos=LISTBOX_APPEND );
-        void    SelectSourceEntry(const XubString& );
+        void    InsertSourceEntry(const OUString&,sal_uInt16 nPos=LISTBOX_APPEND );
+        void    SelectSourceEntry(const OUString& );
 
         void    EnableQuery(sal_Bool bFlag=sal_True);
-        void    SetQueryString(const XubString& );
+        void    SetQueryString(const OUString& );
         void    AdjustToolBox();
 
         void    ClearFilterMenu();
-        sal_uInt16  InsertFilterItem(const XubString& );
+        sal_uInt16  InsertFilterItem(const OUString& );
         void    SelectFilterItem(sal_uInt16 nId);
 
         void    statusChanged(const ::com::sun::star::frame::FeatureStateEvent& Event)

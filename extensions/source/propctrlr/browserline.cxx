@@ -256,7 +256,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    void OBrowserLine::SetTitle(const XubString& _rNewTtile )
+    void OBrowserLine::SetTitle(const OUString& _rNewTtile )
     {
         if ( GetTitle() == _rNewTtile )
             return;
@@ -291,7 +291,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    XubString OBrowserLine::GetTitle() const
+    OUString OBrowserLine::GetTitle() const
     {
         OUString sDisplayName = m_aFtTitle.GetText();
 
