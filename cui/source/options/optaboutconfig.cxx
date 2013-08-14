@@ -335,8 +335,6 @@ void CuiAboutConfigTabPage::AddToModifiedVector( Prop_Impl* rProp )
 CuiAboutConfigValueDialog::CuiAboutConfigValueDialog( Window* pWindow, const OUString& rValue )
     :ModalDialog( pWindow, "AboutConfigValueDialog", "cui/ui/aboutconfigvaluedialog.ui" )
 {
-    get(m_pBtnOK, "ok");
-    get(m_pBtnCancel, "cancel");
     get(m_pEDValue, "valuebox");
 
     m_pEDValue->SetText( rValue );

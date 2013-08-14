@@ -57,9 +57,6 @@ public:
 class CuiAboutConfigValueDialog : public ModalDialog
 {
 private:
-    OKButton*            m_pBtnOK;
-    CancelButton*        m_pBtnCancel;
-
     VclMultiLineEdit*    m_pEDValue;
 
 public:
