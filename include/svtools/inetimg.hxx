@@ -29,28 +29,28 @@ class SotDataObject;
 
 class INetImage
 {
-    String          aImageURL;
-    String          aTargetURL;
-    String          aTargetFrame;
-    String          aAlternateText;
+    OUString        aImageURL;
+    OUString        aTargetURL;
+    OUString        aTargetFrame;
+    OUString        aAlternateText;
     Size            aSizePixel;
 
 protected:
-    String          CopyExchange() const;
-    void            PasteExchange( const String& rString );
+    OUString        CopyExchange() const;
+    void            PasteExchange( const OUString& rString );
 
-    void            SetImageURL( const String& rS )     { aImageURL = rS; }
-    void            SetTargetURL( const String& rS )    { aTargetURL = rS; }
-    void            SetTargetFrame( const String& rS )  { aTargetFrame = rS; }
-    void            SetAlternateText( const String& rS ){ aAlternateText = rS; }
+    void            SetImageURL( const OUString& rS )     { aImageURL = rS; }
+    void            SetTargetURL( const OUString& rS )    { aTargetURL = rS; }
+    void            SetTargetFrame( const OUString& rS )  { aTargetFrame = rS; }
+    void            SetAlternateText( const OUString& rS ){ aAlternateText = rS; }
     void            SetSizePixel( const Size& rSize )   { aSizePixel = rSize; }
 
 public:
                     INetImage(
-                        const String& rImageURL,
-                        const String& rTargetURL,
-                        const String& rTargetFrame,
-                        const String& rAlternateText,
+                        const OUString& rImageURL,
+                        const OUString& rTargetURL,
+                        const OUString& rTargetFrame,
+                        const OUString& rAlternateText,
                         const Size& rSizePixel )
                     :   aImageURL( rImageURL ),
                         aTargetURL( rTargetURL ),
@@ -61,10 +61,10 @@ public:
                     INetImage()
                     {}
 
-    const String&   GetImageURL() const { return aImageURL; }
-    const String&   GetTargetURL() const { return aTargetURL; }
-    const String&   GetTargetFrame() const { return aTargetFrame; }
-    const String&   GetAlternateText() const { return aAlternateText; }
+    const OUString& GetImageURL() const { return aImageURL; }
+    const OUString& GetTargetURL() const { return aTargetURL; }
+    const OUString& GetTargetFrame() const { return aTargetFrame; }
+    const OUString& GetAlternateText() const { return aAlternateText; }
     const Size&     GetSizePixel() const { return aSizePixel; }
 
     // Im-/Export

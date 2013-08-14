@@ -115,16 +115,16 @@ sal_Bool INetImage::Read( SvStream& rIStm, sal_uLong nFormat )
                 rIStm.Seek( nFilePos + nAltOffset );
                 aAlternateText = read_zeroTerminated_uInt8s_ToOUString(rIStm, eSysCSet);
             }
-            else if( aAlternateText.Len() )
-                aAlternateText.Erase();
+            else if( !aAlternateText.isEmpty() )
+                aAlternateText = "";
 
             if( nAnchorOffset )
             {
                 rIStm.Seek( nFilePos + nAnchorOffset );
                 aTargetURL = read_zeroTerminated_uInt8s_ToOUString(rIStm, eSysCSet);
             }
-            else if( aTargetURL.Len() )
-                aTargetURL.Erase();
+            else if( !aTargetURL.isEmpty() )
+                aTargetURL = "";
 
             bRet = 0 == rIStm.GetError();
         }

@@ -1909,7 +1909,7 @@ int SwTransferable::_PasteTargetURL( TransferableDataHelper& rData,
         ( rData.HasFormat( SOT_FORMATSTR_ID_NETSCAPE_IMAGE ) &&
           rData.GetINetImage( SOT_FORMATSTR_ID_NETSCAPE_IMAGE, aINetImg )) )
     {
-        if( aINetImg.GetImageURL().Len() && bInsertGRF )
+        if( !aINetImg.GetImageURL().isEmpty() && bInsertGRF )
         {
             OUString sURL( aINetImg.GetImageURL() );
             SwTransferable::_CheckForURLOrLNKFile( rData, sURL );
