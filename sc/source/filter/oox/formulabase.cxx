@@ -769,7 +769,7 @@ static const FunctionData saFuncTable2013[] =
     { "DAYS",                   "DAYS",                 NOID,   NOID,   2,  2,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "DECIMAL",                "DECIMAL",              NOID,   NOID,   2,  2,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { 0,                        "ENCODEURL",            NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
-    { 0,                        "FILTERXML",            NOID,   NOID,   2,  2,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
+    { "COM.MICROSOFT.FILTERXML","FILTERXML",            NOID,   NOID,   2,  2,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     /* FIXME: FLOOR.MATH is our/ODFF FLOOR, but we have special handling for
      * the weird Excel FLOOR behavior, check that and unify or diversify. */
     { 0/*"FLOOR"*/,             "FLOOR.MATH",           NOID,   NOID,   1,  3,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
@@ -806,7 +806,7 @@ static const FunctionData saFuncTable2013[] =
     { "SKEWP",                  "SKEW.P",               NOID,   NOID,   1,  MX, V, { RX }, FUNCFLAG_MACROCALL_NEW },
     { "UNICHAR",                "UNICHAR",              NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "UNICODE",                "UNICODE",              NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
-    { 0,                        "WEBSERVICE",           NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
+    { "COM.MICROSOFT.WEBSERVICE","WEBSERVICE",          NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "XOR",                    "XOR",                  NOID,   NOID,   1,  MX, V, { RX }, FUNCFLAG_MACROCALL_NEW }
 };
 
