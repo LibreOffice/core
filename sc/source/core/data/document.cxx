@@ -1301,10 +1301,10 @@ void ScDocument::DeleteRow( SCCOL nStartCol, SCTAB nStartTab,
     }
     while ( lcl_GetNextTabRange( nTabRangeStart, nTabRangeEnd, pTabMark, static_cast<SCTAB>(maTabs.size()) ) );
 
+    sc::RefUpdateContext aCxt(*this);
     if ( ValidRow(nStartRow+nSize) )
     {
         lcl_GetFirstTabRange( nTabRangeStart, nTabRangeEnd, pTabMark, static_cast<SCTAB>(maTabs.size()) );
-        sc::RefUpdateContext aCxt(*this);
         aCxt.meMode = URM_INSDEL;
         aCxt.maRange = ScRange(nStartCol, nStartRow+nSize, nTabRangeStart, nEndCol, MAXROW, nTabRangeEnd);
         aCxt.mnRowDelta = -(static_cast<SCROW>(nSize));
@@ -1320,7 +1320,7 @@ void ScDocument::DeleteRow( SCCOL nStartCol, SCTAB nStartTab,
 
     for ( i = nStartTab; i <= nEndTab && i < static_cast<SCTAB>(maTabs.size()); i++)
         if (maTabs[i] && (!pTabMark || pTabMark->GetTableSelect(i)))
-            maTabs[i]->DeleteRow( nStartCol, nEndCol, nStartRow, nSize, pUndoOutline );
+            maTabs[i]->DeleteRow(aCxt.maRegroupCols, nStartCol, nEndCol, nStartRow, nSize, pUndoOutline);
 
     if ( ValidRow(nStartRow+nSize) )
     {   // Listeners have been removed in UpdateReference

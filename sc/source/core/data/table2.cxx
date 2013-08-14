@@ -227,8 +227,9 @@ void ScTable::InsertRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE
 }
 
 
-void ScTable::DeleteRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE nSize,
-                            bool* pUndoOutline )
+void ScTable::DeleteRow(
+    const sc::ColumnSet& rRegroupCols, SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE nSize,
+    bool* pUndoOutline )
 {
     if (nStartCol==0 && nEndCol==MAXCOL)
     {
@@ -265,6 +266,10 @@ void ScTable::DeleteRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE
             maRowManualBreaks.swap(aNewBreaks);
         }
     }
+
+    std::vector<SCCOL> aRegroupCols;
+    rRegroupCols.getColumns(nTab, aRegroupCols);
+    std::for_each(aRegroupCols.begin(), aRegroupCols.end(), ColumnRegroupFormulaCells(aCol));
 
     // Transfer those notes that will get shifted into another container.
     ScNotes aNotes(pDocument);
