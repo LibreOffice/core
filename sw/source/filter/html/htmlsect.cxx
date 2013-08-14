@@ -572,7 +572,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
             break;
         case HTML_O_WIDTH:
             nWidth = rOption.GetNumber();
-            bPrcWidth = (rOption.GetString().Search('%') != STRING_NOTFOUND);
+            bPrcWidth = (rOption.GetString().indexOf('%') != -1);
             if( bPrcWidth && nWidth>100 )
                 nWidth = 100;
             break;

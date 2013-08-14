@@ -113,7 +113,7 @@ void SfxFrameHTMLParser::ParseFrameOptions(
             pFrame->SetResizable( sal_False );
             break;
         default:
-            if ( aOption.GetTokenString().EqualsIgnoreCaseAscii(
+            if ( aOption.GetTokenString().equalsIgnoreAsciiCaseAscii(
                                                         HTML_O_READONLY ) )
             {
                 String aStr = aOption.GetString();
@@ -122,7 +122,7 @@ void SfxFrameHTMLParser::ParseFrameOptions(
                     bReadonly = sal_False;
                 pFrame->SetReadOnly( bReadonly );
             }
-            else if ( aOption.GetTokenString().EqualsIgnoreCaseAscii(
+            else if ( aOption.GetTokenString().equalsIgnoreAsciiCaseAscii(
                                                         HTML_O_EDIT ) )
             {
                 String aStr = aOption.GetString();

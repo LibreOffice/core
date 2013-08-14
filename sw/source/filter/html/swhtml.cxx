@@ -2009,8 +2009,8 @@ void SwHTMLParser::NextToken( int nToken )
         // (but judging from the code, also if does not start with a '%')
         // (and also if we're not somewhere we consider PRE)
         if( IsInHeader() && !IsReadPRE() && aUnknownToken.isEmpty() &&
-            sSaveToken.Len() && '!' != sSaveToken.GetChar(0) &&
-            '%' != sSaveToken.GetChar(0) )
+            !sSaveToken.isEmpty() && '!' != sSaveToken[0] &&
+            '%' != sSaveToken[0] )
             aUnknownToken = sSaveToken;
         // no break
 
@@ -3672,11 +3672,11 @@ void SwHTMLParser::NewFontAttr( int nToken )
         switch( rOption.GetToken() )
         {
         case HTML_O_SIZE:
-            if( HTML_FONT_ON==nToken && rOption.GetString().Len() )
+            if( HTML_FONT_ON==nToken && !rOption.GetString().isEmpty() )
             {
                 sal_Int32 nSSize;
-                if( '+' == rOption.GetString().GetChar(0) ||
-                    '-' == rOption.GetString().GetChar(0) )
+                if( '+' == rOption.GetString()[0] ||
+                    '-' == rOption.GetString()[0] )
                     nSSize = nBaseSize + rOption.GetSNumber();
                 else
                     nSSize = (sal_Int32)rOption.GetNumber();
@@ -4874,12 +4874,12 @@ void SwHTMLParser::InsertSpacer()
             break;
         case HTML_O_WIDTH:
             // erstmal nur als Pixelwerte merken!
-            bPrcWidth = (rOption.GetString().Search('%') != STRING_NOTFOUND);
+            bPrcWidth = (rOption.GetString().indexOf('%') != -1);
             aSize.Width() = (long)rOption.GetNumber();
             break;
         case HTML_O_HEIGHT:
             // erstmal nur als Pixelwerte merken!
-            bPrcHeight = (rOption.GetString().Search('%') != STRING_NOTFOUND);
+            bPrcHeight = (rOption.GetString().indexOf('%') != -1);
             aSize.Height() = (long)rOption.GetNumber();
             break;
         case HTML_O_SIZE:
@@ -5257,7 +5257,7 @@ void SwHTMLParser::InsertHorzRule()
             nSize = (sal_uInt16)rOption.GetNumber();
             break;
         case HTML_O_WIDTH:
-            bPrcWidth = (rOption.GetString().Search('%') != STRING_NOTFOUND);
+            bPrcWidth = (rOption.GetString().indexOf('%') != -1);
             nWidth = (sal_uInt16)rOption.GetNumber();
             if( bPrcWidth && nWidth>=100 )
             {

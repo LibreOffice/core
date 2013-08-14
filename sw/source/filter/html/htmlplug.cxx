@@ -343,14 +343,14 @@ void SwHTMLParser::InsertEmbed()
         case HTML_O_WIDTH:
             if( USHRT_MAX==aSize.Width() )
             {
-                bPrcWidth = (rOption.GetString().Search('%') != STRING_NOTFOUND);
+                bPrcWidth = (rOption.GetString().indexOf('%') != -1);
                 aSize.Width() = (long)rOption.GetNumber();
             }
             break;
         case HTML_O_HEIGHT:
             if( USHRT_MAX==aSize.Height() )
             {
-                bPrcHeight = (rOption.GetString().Search('%') != STRING_NOTFOUND);
+                bPrcHeight = (rOption.GetString().indexOf('%') != -1);
                 aSize.Height() = (long)rOption.GetNumber();
             }
             break;
@@ -363,9 +363,9 @@ void SwHTMLParser::InsertEmbed()
                 aSpace.Height() = (long)rOption.GetNumber();
             break;
         case HTML_O_UNKNOWN:
-            if( rOption.GetTokenString().EqualsIgnoreCaseAscii( OOO_STRING_SW_HTML_O_Hidden ) )
+            if( rOption.GetTokenString().equalsIgnoreAsciiCaseAscii( OOO_STRING_SW_HTML_O_Hidden ) )
                 bHidden =
-                    !rOption.GetString().EqualsIgnoreCaseAscii( sHTML_O_Hidden_False );
+                    !rOption.GetString().equalsIgnoreAsciiCaseAscii( sHTML_O_Hidden_False );
             break;
         }
 
@@ -533,11 +533,11 @@ void SwHTMLParser::NewObject()
             aStandBy = rOption.GetString();
             break;
         case HTML_O_WIDTH:
-            bPrcWidth = (rOption.GetString().Search('%') != STRING_NOTFOUND);
+            bPrcWidth = (rOption.GetString().indexOf('%') != -1);
             aSize.Width() = (long)rOption.GetNumber();
             break;
         case HTML_O_HEIGHT:
-            bPrcHeight = (rOption.GetString().Search('%') != STRING_NOTFOUND);
+            bPrcHeight = (rOption.GetString().indexOf('%') != -1);
             aSize.Height() = (long)rOption.GetNumber();
             break;
         case HTML_O_ALIGN:
@@ -697,11 +697,11 @@ void SwHTMLParser::InsertApplet()
             eHoriOri = rOption.GetEnum( aHTMLImgHAlignTable, eHoriOri );
             break;
         case HTML_O_WIDTH:
-            bPrcWidth = (rOption.GetString().Search('%') != STRING_NOTFOUND);
+            bPrcWidth = (rOption.GetString().indexOf('%') != -1);
             aSize.Width() = (long)rOption.GetNumber();
             break;
         case HTML_O_HEIGHT:
-            bPrcHeight = (rOption.GetString().Search('%') != STRING_NOTFOUND);
+            bPrcHeight = (rOption.GetString().indexOf('%') != -1);
             aSize.Height() = (long)rOption.GetNumber();
             break;
         case HTML_O_HSPACE:
@@ -848,11 +848,11 @@ void SwHTMLParser::InsertFloatingFrame()
             eHoriOri = rOption.GetEnum( aHTMLImgHAlignTable, eHoriOri );
             break;
         case HTML_O_WIDTH:
-            bPrcWidth = (rOption.GetString().Search('%') != STRING_NOTFOUND);
+            bPrcWidth = (rOption.GetString().indexOf('%') != -1);
             aSize.Width() = (long)rOption.GetNumber();
             break;
         case HTML_O_HEIGHT:
-            bPrcHeight = (rOption.GetString().Search('%') != STRING_NOTFOUND);
+            bPrcHeight = (rOption.GetString().indexOf('%') != -1);
             aSize.Height() = (long)rOption.GetNumber();
             break;
         case HTML_O_HSPACE:

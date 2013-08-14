@@ -309,7 +309,8 @@ void SwHTMLParser::GetDefaultScriptType( ScriptType& rType,
 void SwHTMLParser::InsertImage()
 {
     // und jetzt auswerten
-    String sGrfNm, sAltNm, aId, aClass, aStyle, aMap, sHTMLGrfName;
+    String sAltNm, aId, aClass, aStyle, aMap, sHTMLGrfName;
+    OUString sGrfNm;
     sal_Int16 eVertOri = text::VertOrientation::TOP;
     sal_Int16 eHoriOri = text::HoriOrientation::NONE;
     long nWidth=0, nHeight=0;
@@ -358,14 +359,14 @@ void SwHTMLParser::InsertImage()
             case HTML_O_WIDTH:
                 // erstmal nur als Pixelwerte merken!
                 nWidth = rOption.GetNumber();
-                bPrcWidth = (rOption.GetString().Search('%') != STRING_NOTFOUND);
+                bPrcWidth = (rOption.GetString().indexOf('%') != -1);
                 if( bPrcWidth && nWidth>100 )
                     nWidth = 100;
                 break;
             case HTML_O_HEIGHT:
                 // erstmal nur als Pixelwerte merken!
                 nHeight = rOption.GetNumber();
-                bPrcHeight = (rOption.GetString().Search('%') != STRING_NOTFOUND);
+                bPrcHeight = (rOption.GetString().indexOf('%') != -1);
                 if( bPrcHeight && nHeight>100 )
                     nHeight = 100;
                 break;
@@ -425,7 +426,7 @@ IMAGE_SETEVENT:
         }
     }
 
-    if( !sGrfNm.Len() )
+    if( sGrfNm.isEmpty() )
         return;
 
     // Wenn wir in einer Numerierung stehen und der Absatz noch leer und

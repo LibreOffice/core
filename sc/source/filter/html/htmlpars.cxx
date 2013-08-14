@@ -1007,12 +1007,12 @@ void ScHTMLLayoutParser::TableDataOn( ImportInfo* pInfo )
         {
             case HTML_O_COLSPAN:
             {
-                pActEntry->nColOverlap = ( SCCOL ) rOption.GetString().ToInt32();
+                pActEntry->nColOverlap = ( SCCOL ) rOption.GetString().toInt32();
             }
             break;
             case HTML_O_ROWSPAN:
             {
-                pActEntry->nRowOverlap = ( SCROW ) rOption.GetString().ToInt32();
+                pActEntry->nRowOverlap = ( SCROW ) rOption.GetString().toInt32();
             }
             break;
             case HTML_O_ALIGN:
@@ -1995,7 +1995,7 @@ ScHTMLTable::ScHTMLTable( ScHTMLTable& rParentTable, const ImportInfo& rInfo, bo
             switch( itr->GetToken() )
             {
                 case HTML_O_BORDER:
-                    mbBorderOn = ((itr->GetString().Len() == 0) || (itr->GetNumber() != 0));
+                    mbBorderOn = itr->GetString().isEmpty() || (itr->GetNumber() != 0);
                 break;
                 case HTML_O_ID:
                     maTableName = itr->GetString();
@@ -2221,10 +2221,10 @@ void ScHTMLTable::DataOn( const ImportInfo& rInfo )
             switch (itr->GetToken())
             {
                 case HTML_O_COLSPAN:
-                    aSpanSize.mnCols = static_cast<SCCOL>( getLimitedValue<sal_Int32>( itr->GetString().ToInt32(), 1, 256 ) );
+                    aSpanSize.mnCols = static_cast<SCCOL>( getLimitedValue<sal_Int32>( itr->GetString().toInt32(), 1, 256 ) );
                 break;
                 case HTML_O_ROWSPAN:
-                    aSpanSize.mnRows = static_cast<SCROW>( getLimitedValue<sal_Int32>( itr->GetString().ToInt32(), 1, 256 ) );
+                    aSpanSize.mnRows = static_cast<SCROW>( getLimitedValue<sal_Int32>( itr->GetString().toInt32(), 1, 256 ) );
                 break;
                 case HTML_O_SDVAL:
                     pValStr.reset(new OUString(itr->GetString()));

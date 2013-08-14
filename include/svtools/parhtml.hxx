@@ -87,20 +87,20 @@ struct HTMLOptionEnum
 
 class SVT_DLLPUBLIC HTMLOption
 {
-    String aValue;          // der Wert der Option (immer als String)
-    String aToken;          // der Name der Option als String
-    sal_uInt16 nToken;          // und das entsprechende Token
+    OUString aValue;          // der Wert der Option (immer als String)
+    OUString aToken;          // der Name der Option als String
+    sal_uInt16 nToken;        // und das entsprechende Token
 
 public:
 
-    HTMLOption( sal_uInt16 nTyp, const String& rToken, const String& rValue );
+    HTMLOption( sal_uInt16 nTyp, const OUString& rToken, const OUString& rValue );
 
     // der Name der Option ...
     sal_uInt16 GetToken() const { return nToken; }  // ... als Enum
-    const String& GetTokenString() const { return aToken; } // ... als String
+    const OUString& GetTokenString() const { return aToken; } // ... als String
 
     // der Wert der Option ...
-    const String& GetString() const { return aValue; }  // ... als String
+    const OUString& GetString() const { return aValue; }  // ... als String
 
     sal_uInt32 GetNumber() const;                           // ... als Zahl
     sal_Int32 GetSNumber() const;                           // ... als Zahl
@@ -146,10 +146,10 @@ private:
 
     int mnPendingOffToken;          ///< OFF token pending for a <XX.../> ON/OFF ON token
 
-    String aEndToken;
+    OUString aEndToken;
 
 protected:
-    String sSaveToken;              // das gelesene Tag als String
+    OUString sSaveToken;              // das gelesene Tag als String
 
     int ScanText( const sal_Unicode cBreak = 0U );
 
@@ -208,7 +208,7 @@ public:
     // Lesen eines <SCRIPT> aufgerufen werden
     void EndScanScript() { bReadScript = false; }
 
-    void ReadRawData( const sal_Char *pEndToken ) { aEndToken.AssignAscii(pEndToken); }
+    void ReadRawData( const OUString &rEndToken ) { aEndToken = rEndToken; }
 
     // Token ohne \-Sequenzen
     void UnescapeToken();
@@ -224,7 +224,7 @@ public:
 
 protected:
 
-    static rtl_TextEncoding GetEncodingByMIME( const String& rMime );
+    static rtl_TextEncoding GetEncodingByMIME( const OUString& rMime );
 
     /// template method: called when ParseMetaOptions adds a user-defined meta
     virtual void AddMetaUserDefined( OUString const & i_rMetaName );
@@ -260,7 +260,7 @@ public:
     // entfernt (fuer JavaSript)
     static void RemoveSGMLComment( OUString &rString, sal_Bool bFull );
 
-    static bool InternalImgToPrivateURL( String& rURL );
+    static bool InternalImgToPrivateURL( OUString& rURL );
     static rtl_TextEncoding GetEncodingByHttpHeader( SvKeyValueIterator *pHTTPHeader );
     bool SetEncodingByHTTPHeader( SvKeyValueIterator *pHTTPHeader );
 };

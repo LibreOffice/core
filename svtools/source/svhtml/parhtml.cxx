@@ -98,7 +98,7 @@ sal_uInt16 HTMLOption::GetEnum( const HTMLOptionEnum *pOptEnums, sal_uInt16 nDfl
     sal_uInt16 nValue = nDflt;
 
     while( pOptEnums->pName )
-        if( aValue.EqualsIgnoreCaseAscii( pOptEnums->pName ) )
+        if( aValue.equalsIgnoreAsciiCaseAscii( pOptEnums->pName ) )
             break;
         else
             pOptEnums++;
@@ -113,7 +113,7 @@ bool HTMLOption::GetEnum( sal_uInt16 &rEnum, const HTMLOptionEnum *pOptEnums ) c
 {
     while( pOptEnums->pName )
     {
-        if( aValue.EqualsIgnoreCaseAscii( pOptEnums->pName ) )
+        if( aValue.equalsIgnoreAsciiCaseAscii( pOptEnums->pName ) )
             break;
         else
             pOptEnums++;
@@ -126,8 +126,8 @@ bool HTMLOption::GetEnum( sal_uInt16 &rEnum, const HTMLOptionEnum *pOptEnums ) c
     return (pName != 0);
 }
 
-HTMLOption::HTMLOption( sal_uInt16 nTok, const String& rToken,
-                        const String& rValue )
+HTMLOption::HTMLOption( sal_uInt16 nTok, const OUString& rToken,
+                        const OUString& rValue )
     : aValue(rValue)
     , aToken(rToken)
     , nToken( nTok )
@@ -168,9 +168,9 @@ void HTMLOption::GetNumbers( std::vector<sal_uInt32> &rNumbers, bool bSpaceDelim
         // numerals in the string.
         bool bInNum = false;
         sal_uLong nNum = 0;
-        for( xub_StrLen i=0; i<aValue.Len(); i++ )
+        for( sal_Int32 i=0; i<aValue.getLength(); i++ )
         {
-            sal_Unicode c = aValue.GetChar( i );
+            sal_Unicode c = aValue[ i ];
             if( c>='0' && c<='9' )
             {
                 nNum *= 10;
@@ -193,30 +193,29 @@ void HTMLOption::GetNumbers( std::vector<sal_uInt32> &rNumbers, bool bSpaceDelim
     {
         // Check whether numbers are separated by ',' and
         // insert 0 if necessary
-        xub_StrLen nPos = 0;
-        while( nPos < aValue.Len() )
+        sal_Int32 nPos = 0;
+        while( nPos < aValue.getLength() )
         {
             sal_Unicode c;
-            while( nPos < aValue.Len() &&
-                   ((c=aValue.GetChar(nPos)) == ' ' || c == '\t' ||
+            while( nPos < aValue.getLength() &&
+                   ((c=aValue[nPos]) == ' ' || c == '\t' ||
                    c == '\n' || c== '\r' ) )
                 nPos++;
 
-            if( nPos==aValue.Len() )
+            if( nPos==aValue.getLength() )
                 rNumbers.push_back(0);
             else
             {
-                xub_StrLen nEnd = aValue.Search( (sal_Unicode)',', nPos );
-                if( STRING_NOTFOUND==nEnd )
+                sal_Int32 nEnd = aValue.indexOf( (sal_Unicode)',', nPos );
+                if( -1 == nEnd )
                 {
-                    sal_Int32 nTmp = aValue.Copy(nPos).ToInt32();
+                    sal_Int32 nTmp = aValue.copy(nPos).toInt32();
                     rNumbers.push_back( nTmp >= 0 ? (sal_uInt32)nTmp : 0 );
-                    nPos = aValue.Len();
+                    nPos = aValue.getLength();
                 }
                 else
                 {
-                    sal_Int32 nTmp =
-                        aValue.Copy(nPos,nEnd-nPos).ToInt32();
+                    sal_Int32 nTmp = aValue.copy(nPos,nEnd-nPos).toInt32();
                     rNumbers.push_back( nTmp >= 0 ? (sal_uInt32)nTmp : 0 );
                     nPos = nEnd+1;
                 }
@@ -840,7 +839,7 @@ int HTMLParser::_GetNextRawToken()
         // thus we don't have to search it again.
         bReadScript = false;
         bReadStyle = false;
-        aEndToken.Erase();
+        aEndToken = "";
         bEndTokenFound = false;
 
         return 0;
@@ -891,7 +890,7 @@ int HTMLParser::_GetNextRawToken()
                 String aTok( sTmpBuffer.toString() );
                 aTok.ToUpperAscii();
                 bool bDone = false;
-                if( bReadScript || aEndToken.Len() )
+                if( bReadScript || !aEndToken.isEmpty() )
                 {
                     if( !bReadComment )
                     {
@@ -944,7 +943,7 @@ int HTMLParser::_GetNextRawToken()
                         // and parse the end token
                         bReadScript = false;
                         bReadStyle = false;
-                        aEndToken.Erase();
+                        aEndToken = "";
                         nToken = 0;
                     }
                     else
@@ -1024,7 +1023,7 @@ int HTMLParser::_GetNextRawToken()
                 {
                     bReadScript = false;
                     bReadStyle = false;
-                    aEndToken.Erase();
+                    aEndToken = "";
                     nToken = 0;
                 }
                 break;
@@ -1056,7 +1055,7 @@ int HTMLParser::_GetNextRawToken()
 int HTMLParser::_GetNextToken()
 {
     int nRet = 0;
-    sSaveToken.Erase();
+    sSaveToken = "";
 
     if (mnPendingOffToken)
     {
@@ -1085,7 +1084,7 @@ int HTMLParser::_GetNextToken()
         bReadNextChar = false;
     }
 
-    if( bReadScript || bReadStyle || aEndToken.Len() )
+    if( bReadScript || bReadStyle || !aEndToken.isEmpty() )
     {
         nRet = _GetNextRawToken();
         if( nRet || !IsParserWorking() )
@@ -1816,16 +1815,15 @@ int HTMLParser::FilterXMP( int nToken )
         {
             if( (HTML_TOKEN_ONOFF & nToken) && (1 & nToken) )
             {
-                sSaveToken.Insert( '<', 0 );
-                sSaveToken.Insert( '/', 1 );
+                sSaveToken = "</" + sSaveToken;
             }
             else
-                sSaveToken.Insert( '<', 0 );
+                sSaveToken = "<" + sSaveToken;
             if( !aToken.isEmpty() )
             {
                 UnescapeToken();
-                sSaveToken += (sal_Unicode)' ';
-                aToken = aToken.replaceAt( 0, 0, sSaveToken );
+                sSaveToken += " ";
+                aToken = " " + aToken;
             }
             else
                 aToken = sSaveToken;
@@ -1977,69 +1975,69 @@ bool HTMLParser::IsHTMLFormat( const sal_Char* pHeader,
     return false;
 }
 
-bool HTMLParser::InternalImgToPrivateURL( String& rURL )
+bool HTMLParser::InternalImgToPrivateURL( OUString& rURL )
 {
-    if( rURL.Len() < 19 || 'i' != rURL.GetChar(0) ||
-        rURL.CompareToAscii( OOO_STRING_SVTOOLS_HTML_internal_gopher, 9 ) != COMPARE_EQUAL )
+    if( rURL.getLength() < 19 || 'i' != rURL[0] ||
+        rURL.compareTo( OOO_STRING_SVTOOLS_HTML_internal_gopher, 9 ) != 0 )
         return false;
 
     bool bFound = false;
 
-    if( rURL.CompareToAscii( OOO_STRING_SVTOOLS_HTML_internal_gopher,16) == COMPARE_EQUAL )
+    if( rURL.compareTo( OOO_STRING_SVTOOLS_HTML_internal_gopher,16) == 0 )
     {
-        String aName( rURL.Copy(16) );
-        switch( aName.GetChar(0) )
+        OUString aName( rURL.copy(16) );
+        switch( aName[0] )
         {
         case 'b':
-            bFound = aName.EqualsAscii( OOO_STRING_SVTOOLS_HTML_INT_GOPHER_binary );
+            bFound = aName == OOO_STRING_SVTOOLS_HTML_INT_GOPHER_binary;
             break;
         case 'i':
-            bFound = aName.EqualsAscii( OOO_STRING_SVTOOLS_HTML_INT_GOPHER_image ) ||
-                     aName.EqualsAscii( OOO_STRING_SVTOOLS_HTML_INT_GOPHER_index );
+            bFound = aName == OOO_STRING_SVTOOLS_HTML_INT_GOPHER_image ||
+                     aName == OOO_STRING_SVTOOLS_HTML_INT_GOPHER_index;
             break;
         case 'm':
-            bFound = aName.EqualsAscii( OOO_STRING_SVTOOLS_HTML_INT_GOPHER_menu ) ||
-                     aName.EqualsAscii( OOO_STRING_SVTOOLS_HTML_INT_GOPHER_movie );
+            bFound = aName == OOO_STRING_SVTOOLS_HTML_INT_GOPHER_menu ||
+                     aName == OOO_STRING_SVTOOLS_HTML_INT_GOPHER_movie;
             break;
         case 's':
-            bFound = aName.EqualsAscii( OOO_STRING_SVTOOLS_HTML_INT_GOPHER_sound );
+            bFound = aName == OOO_STRING_SVTOOLS_HTML_INT_GOPHER_sound;
             break;
         case 't':
-            bFound = aName.EqualsAscii( OOO_STRING_SVTOOLS_HTML_INT_GOPHER_telnet ) ||
-                     aName.EqualsAscii( OOO_STRING_SVTOOLS_HTML_INT_GOPHER_text );
+            bFound = aName == OOO_STRING_SVTOOLS_HTML_INT_GOPHER_telnet ||
+                     aName == OOO_STRING_SVTOOLS_HTML_INT_GOPHER_text;
             break;
         case 'u':
-            bFound = aName.EqualsAscii( OOO_STRING_SVTOOLS_HTML_INT_GOPHER_unknown );
+            bFound = aName == OOO_STRING_SVTOOLS_HTML_INT_GOPHER_unknown;
             break;
         }
     }
-    else if( rURL.CompareToAscii( OOO_STRING_SVTOOLS_HTML_internal_icon,14) == COMPARE_EQUAL )
+    else if( rURL.compareTo( OOO_STRING_SVTOOLS_HTML_internal_icon,14) == 0 )
     {
-        String aName( rURL.Copy(14) );
-        switch( aName.GetChar(0) )
+        OUString aName( rURL.copy(14) );
+        switch( aName[0] )
         {
         case 'b':
-            bFound = aName.EqualsAscii( OOO_STRING_SVTOOLS_HTML_INT_ICON_baddata );
+            bFound = aName == OOO_STRING_SVTOOLS_HTML_INT_ICON_baddata;
             break;
         case 'd':
-            bFound = aName.EqualsAscii( OOO_STRING_SVTOOLS_HTML_INT_ICON_delayed );
+            bFound = aName == OOO_STRING_SVTOOLS_HTML_INT_ICON_delayed;
             break;
         case 'e':
-            bFound = aName.EqualsAscii( OOO_STRING_SVTOOLS_HTML_INT_ICON_embed );
+            bFound = aName == OOO_STRING_SVTOOLS_HTML_INT_ICON_embed;
             break;
         case 'i':
-            bFound = aName.EqualsAscii( OOO_STRING_SVTOOLS_HTML_INT_ICON_insecure );
+            bFound = aName == OOO_STRING_SVTOOLS_HTML_INT_ICON_insecure;
             break;
         case 'n':
-            bFound = aName.EqualsAscii( OOO_STRING_SVTOOLS_HTML_INT_ICON_notfound );
+            bFound = aName == OOO_STRING_SVTOOLS_HTML_INT_ICON_notfound;
             break;
         }
     }
     if( bFound )
     {
-        String sTmp ( rURL );
-        rURL.AssignAscii( OOO_STRING_SVTOOLS_HTML_private_image );
-        rURL.Append( sTmp );
+        OUString sTmp ( rURL );
+        rURL =  OOO_STRING_SVTOOLS_HTML_private_image;
+        rURL += sTmp;
     }
 
     return bFound;
@@ -2259,7 +2257,7 @@ bool HTMLParser::ParseMetaOptions(
     return bRet;
 }
 
-rtl_TextEncoding HTMLParser::GetEncodingByMIME( const String& rMime )
+rtl_TextEncoding HTMLParser::GetEncodingByMIME( const OUString& rMime )
 {
     OUString sType;
     OUString sSubType;

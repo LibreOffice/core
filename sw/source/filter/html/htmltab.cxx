@@ -3222,19 +3222,19 @@ _CellSaveStruct::_CellSaveStruct( SwHTMLParser& rParser, HTMLTable *pCurTable,
                 break;
             case HTML_O_WIDTH:
                 nWidth = (sal_uInt16)rOption.GetNumber();   // nur fuer Netscape
-                bPrcWidth = (rOption.GetString().Search('%') != STRING_NOTFOUND);
+                bPrcWidth = (rOption.GetString().indexOf('%') != -1);
                 if( bPrcWidth && nWidth>100 )
                     nWidth = 100;
                 break;
             case HTML_O_HEIGHT:
                 nHeight = (sal_uInt16)rOption.GetNumber();  // nur fuer Netscape
-                if( rOption.GetString().Search('%') != STRING_NOTFOUND)
+                if( rOption.GetString().indexOf('%') != -1)
                     nHeight = 0;    // keine %-Angaben beruecksichtigen
                 break;
             case HTML_O_BGCOLOR:
                 // Leere BGCOLOR bei <TABLE>, <TR> und <TD>/<TH> wie Netscape
                 // ignorieren, bei allen anderen Tags *wirklich* nicht.
-                if( rOption.GetString().Len() )
+                if( !rOption.GetString().isEmpty() )
                 {
                     rOption.GetColor( aBGColor );
                     bBGColor = sal_True;
@@ -4275,7 +4275,7 @@ void SwHTMLParser::BuildTableRow( HTMLTable *pCurTable, sal_Bool bReadOptions,
                 case HTML_O_BGCOLOR:
                     // Leere BGCOLOR bei <TABLE>, <TR> und <TD>/<TH> wie Netsc.
                     // ignorieren, bei allen anderen Tags *wirklich* nicht.
-                    if( rOption.GetString().Len() )
+                    if( !rOption.GetString().isEmpty() )
                     {
                         rOption.GetColor( aBGColor );
                         bBGColor = sal_True;
@@ -4657,7 +4657,7 @@ void SwHTMLParser::BuildTableColGroup( HTMLTable *pCurTable,
                 case HTML_O_WIDTH:
                     pSaveStruct->nColGrpWidth = (sal_uInt16)rOption.GetNumber();
                     pSaveStruct->bRelColGrpWidth =
-                        (rOption.GetString().Search('*') != STRING_NOTFOUND);
+                        (rOption.GetString().indexOf('*') != -1);
                     break;
                 case HTML_O_ALIGN:
                     pSaveStruct->eColGrpAdjust =
@@ -4740,7 +4740,7 @@ void SwHTMLParser::BuildTableColGroup( HTMLTable *pCurTable,
                     case HTML_O_WIDTH:
                         nColWidth = (sal_uInt16)rOption.GetNumber();
                         bRelColWidth =
-                            (rOption.GetString().Search('*') != STRING_NOTFOUND);
+                            (rOption.GetString().indexOf('*') != -1);
                         break;
                     case HTML_O_ALIGN:
                         eColAdjust =
@@ -4876,7 +4876,7 @@ void SwHTMLParser::BuildTableCaption( HTMLTable *pCurTable )
             const HTMLOption& rOption = rHTMLOptions[--i];
             if( HTML_O_ALIGN == rOption.GetToken() )
             {
-                if( rOption.GetString().EqualsIgnoreCaseAscii(OOO_STRING_SVTOOLS_HTML_VA_bottom))
+                if( rOption.GetString().equalsIgnoreAsciiCaseAscii(OOO_STRING_SVTOOLS_HTML_VA_bottom))
                     bTop = sal_False;
             }
         }
@@ -5112,13 +5112,13 @@ HTMLTableOptions::HTMLTableOptions( const HTMLOptions& rOptions,
             break;
         case HTML_O_WIDTH:
             nWidth = (sal_uInt16)rOption.GetNumber();
-            bPrcWidth = (rOption.GetString().Search('%') != STRING_NOTFOUND);
+            bPrcWidth = (rOption.GetString().indexOf('%') != -1);
             if( bPrcWidth && nWidth>100 )
                 nWidth = 100;
             break;
         case HTML_O_HEIGHT:
             nHeight = (sal_uInt16)rOption.GetNumber();
-            if( rOption.GetString().Search('%') != STRING_NOTFOUND )
+            if( rOption.GetString().indexOf('%') != -1 )
                 nHeight = 0;    // keine %-Anagben benutzen!!!
             break;
         case HTML_O_CELLPADDING:
@@ -5142,8 +5142,8 @@ HTMLTableOptions::HTMLTableOptions( const HTMLOptions& rOptions,
             break;
         case HTML_O_BORDER:
             // BORDER und BORDER=BORDER wie BORDER=1 behandeln
-            if( rOption.GetString().Len() &&
-                !rOption.GetString().EqualsIgnoreCaseAscii(OOO_STRING_SVTOOLS_HTML_O_border) )
+            if( !rOption.GetString().isEmpty() &&
+                !rOption.GetString().equalsIgnoreAsciiCaseAscii(OOO_STRING_SVTOOLS_HTML_O_border) )
                 nBorder = (sal_uInt16)rOption.GetNumber();
             else
                 nBorder = 1;
@@ -5164,7 +5164,7 @@ HTMLTableOptions::HTMLTableOptions( const HTMLOptions& rOptions,
         case HTML_O_BGCOLOR:
             // Leere BGCOLOR bei <TABLE>, <TR> und <TD>/<TH> wie Netscape
             // ignorieren, bei allen anderen Tags *wirklich* nicht.
-            if( rOption.GetString().Len() )
+            if( !rOption.GetString().isEmpty() )
             {
                 rOption.GetColor( aBGColor );
                 bBGColor = sal_True;
