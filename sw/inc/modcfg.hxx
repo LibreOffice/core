@@ -20,7 +20,6 @@
 #define _MODOPT_HXX
 
 #include <boost/ptr_container/ptr_vector.hpp>
-#include <tools/string.hxx>
 #include <tools/wintypes.hxx>
 #include <vcl/field.hxx>
 #include <unotools/configitem.hxx>
@@ -144,18 +143,18 @@ class SwMiscConfig : public utl::ConfigItem
 {
     friend class SwModuleOptions;
 
-    String      sWordDelimiter;             // Statistics/WordNumber/Delimiter
+    OUString    sWordDelimiter;             // Statistics/WordNumber/Delimiter
     sal_Bool        bDefaultFontsInCurrDocOnly; // DefaultFont/Document
-    sal_Bool        bShowIndexPreview ;         // Index/ShowPreview
+    sal_Bool        bShowIndexPreview;          // Index/ShowPreview
     sal_Bool        bGrfToGalleryAsLnk;         // Misc/GraphicToGalleryAsLink
     sal_Bool        bNumAlignSize;              // Numbering/Graphic/KeepRatio
     sal_Bool        bSinglePrintJob;            // FormLetter/PrintOutput/SinglePrintJobs
     sal_Bool        bIsNameFromColumn;          // FormLetter/FileOutput/FileName/Generation
     sal_Bool        bAskForMailMergeInPrint;    // Ask if documents containing fields should be 'mailmerged'
     sal_Int16   nMailingFormats;            // FormLetter/MailingOutput/Formats
-    String      sNameFromColumn;            // FormLetter/FileOutput/FileName/FromDatabaseField (string!)
-    String      sMailingPath;               // FormLetter/FileOutput/Path
-    String      sMailName;                  // FormLetter/FileOutput/FileName/FromManualSetting (string!)
+    OUString    sNameFromColumn;            // FormLetter/FileOutput/FileName/FromDatabaseField (string!)
+    OUString    sMailingPath;               // FormLetter/FileOutput/Path
+    OUString    sMailName;                  // FormLetter/FileOutput/FileName/FromManualSetting (string!)
 
     const com::sun::star::uno::Sequence<OUString>& GetPropertyNames();
     public:
@@ -179,7 +178,7 @@ class SW_DLLPUBLIC SwModuleOptions
 
     SwMiscConfig                    aMiscConfig;
 
-    SwCompareConfig					aCompareConfig;
+    SwCompareConfig                 aCompareConfig;
 
     //fiscus: don't show tips of text fields - it's not part of the configuration!
     sal_Bool        bHideFieldTips : 1;
@@ -304,24 +303,24 @@ public:
                     }
 
 
-    const String&   GetNameFromColumn() const       { return aMiscConfig.sNameFromColumn; }
-    void            SetNameFromColumn( const String& rSet )     { aMiscConfig.sNameFromColumn = rSet;
+    OUString    GetNameFromColumn() const       { return aMiscConfig.sNameFromColumn; }
+    void        SetNameFromColumn( const OUString& rSet )       { aMiscConfig.sNameFromColumn = rSet;
                                                                   aMiscConfig.SetModified();}
 
-    String      GetMailingPath() const          { return aMiscConfig.sMailingPath; }
-    void        SetMailingPath(const String& sPath) { aMiscConfig.sMailingPath = sPath;
+    OUString    GetMailingPath() const          { return aMiscConfig.sMailingPath; }
+    void        SetMailingPath(const OUString& sPath) { aMiscConfig.sMailingPath = sPath;
                                                       aMiscConfig.SetModified();}
 
-    String      GetMailName() const             { return aMiscConfig.sMailName; }
-    void        SetMailName(const String& sName){ aMiscConfig.sMailName = sName;
+    OUString    GetMailName() const             { return aMiscConfig.sMailName; }
+    void        SetMailName(const OUString& sName){ aMiscConfig.sMailName = sName;
                                                   aMiscConfig.SetModified();}
 
-    const String    &GetWordDelimiter() const           { return aMiscConfig.sWordDelimiter; }
-    void        SetWordDelimiter(const String& sDelim)  { aMiscConfig.sWordDelimiter = sDelim;
+    OUString    GetWordDelimiter() const        { return aMiscConfig.sWordDelimiter; }
+    void        SetWordDelimiter(const OUString& sDelim)  { aMiscConfig.sWordDelimiter = sDelim;
                                                           aMiscConfig.SetModified();}
 
     //convert word delimiter from or to user interface
-    static String ConvertWordDelimiter(const String& rDelim, sal_Bool bFromUI);
+    static OUString ConvertWordDelimiter(const OUString& rDelim, sal_Bool bFromUI);
 
     sal_Bool    IsShowIndexPreview() const {return  aMiscConfig.bShowIndexPreview;}
     void        SetShowIndexPreview(sal_Bool bSet)
