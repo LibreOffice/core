@@ -1762,7 +1762,8 @@ void SwDoc::UpdateDocStat( bool bCompleteAsync, bool bFields )
     {
         if (!bCompleteAsync)
         {
-            while (IncrementalDocStatCalculate(5000, bFields)) {}
+            while (IncrementalDocStatCalculate(
+                        ::std::numeric_limits<long>::max(), bFields)) {}
             maStatsUpdateTimer.Stop();
         }
         else if (IncrementalDocStatCalculate(5000, bFields))
