@@ -19,10 +19,15 @@
 #ifndef _COM_SUN_STAR_UNO_ANY_HXX_
 #define _COM_SUN_STAR_UNO_ANY_HXX_
 
+#include "sal/config.h"
+
+#include <cassert>
+#include <iomanip>
 #include <ostream>
 
 #include <com/sun/star/uno/Any.h>
 #include <uno/data.h>
+#include <uno/sequence2.h>
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/genfunc.hxx>
@@ -589,74 +594,71 @@ sal_uInt16 Any::get<sal_uInt16>() const;
 #endif // ! defined(EXCEPTIONS_OFF)
 
 /**
- * @since LibreOffice 4.2
- */
+   Support for Any in std::ostream (and thus in CPPUNIT_ASSERT or SAL_INFO
+   macros, for example).
+
+   @since LibreOffice 4.2
+*/
 template<typename charT, typename traits>
 inline std::basic_ostream<charT, traits> &operator<<(std::basic_ostream<charT, traits> &o, Any &any) {
-    // prolog with type
-    o << "<Any: (" << any.getValueTypeName() << ")";
-    // log value
+    o << "<Any: (" << any.getValueTypeName() << ')';
     switch(any.pType->eTypeClass) {
-        case typelib_TypeClass_BOOLEAN: {
-            bool b = bool();
-            any >>= b;
-            o << b;
+        case typelib_TypeClass_VOID:
             break;
-        }
-
+        case typelib_TypeClass_BOOLEAN:
+            o << ' ' << any.get<bool>();
+            break;
         case typelib_TypeClass_BYTE:
         case typelib_TypeClass_SHORT:
         case typelib_TypeClass_LONG:
-        case typelib_TypeClass_HYPER: {
-            sal_Int64 i = sal_Int64();
-            any >>= i;
-            o << i;
+        case typelib_TypeClass_HYPER:
+            o << ' ' << any.get<sal_Int64>();
             break;
-        }
-
         case typelib_TypeClass_UNSIGNED_SHORT:
         case typelib_TypeClass_UNSIGNED_LONG:
-        case typelib_TypeClass_UNSIGNED_HYPER: {
-            sal_uInt64 u  = sal_uInt64();
-            any >>= u;
-            o << u;
+        case typelib_TypeClass_UNSIGNED_HYPER:
+            o << ' ' << any.get<sal_uInt64>();
             break;
-        }
-
         case typelib_TypeClass_FLOAT:
-        case typelib_TypeClass_DOUBLE: {
-            double d = double();
-            any >>= d;
-            o << d;
+        case typelib_TypeClass_DOUBLE:
+            o << ' ' << any.get<double>();
+            break;
+        case typelib_TypeClass_CHAR: {
+            std::ios_base::fmtflags flgs = o.setf(
+                std::ios_base::hex, std::ios_base::basefield);
+            charT fill = o.fill('0');
+            o << " U+" << std::setw(4)
+              << *static_cast<sal_Unicode const *>(any.getValue());
+            o.setf(flgs);
+            o.fill(fill);
             break;
         }
-
-        case typelib_TypeClass_STRING: {
-            ::rtl::OUString s;
-            any >>= s;
-            o << s;
+        case typelib_TypeClass_STRING:
+            o << ' ' << any.get<rtl::OUString>();
             break;
-        }
-
-        case typelib_TypeClass_VOID:
-        case typelib_TypeClass_CHAR:
         case typelib_TypeClass_TYPE:
+            o << ' ' << any.get<css::uno::Type>().getTypeName();
+            break;
         case typelib_TypeClass_SEQUENCE:
+            o << " len "
+              << ((*static_cast<uno_Sequence * const *>(any.getValue()))->
+                  nElements);
+            break;
         case typelib_TypeClass_ENUM:
+            o << ' ' << *static_cast<sal_Int32 const *>(any.getValue());
+            break;
         case typelib_TypeClass_STRUCT:
         case typelib_TypeClass_EXCEPTION:
-        case typelib_TypeClass_INTERFACE: {
-            // log nothing here - leave just type
+            o << ' ' << any.getValue();
             break;
-        }
-
+        case typelib_TypeClass_INTERFACE:
+            o << ' ' << *static_cast<void * const *>(any.getValue());
+            break;
         default:
             assert(false); // this cannot happen
-            o << "!!this type should not happen in Any!!";
             break;
     }
-    // epilog
-    o << ">";
+    o << '>';
     return o;
 }
 
