@@ -31,7 +31,6 @@
 #include <IMark.hxx>
 #include <numrule.hxx>
 #include <swerror.h>
-#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 
@@ -64,7 +63,6 @@ struct Writer_Impl
 {
     SvStream * m_pStream;
 
-    boost::scoped_ptr< std::map<String, String> > pFileNameMap;
     std::vector<const SvxFontItem*> aFontRemoveLst;
     SwBookmarkNodeTable aBkmkNodePos;
 
