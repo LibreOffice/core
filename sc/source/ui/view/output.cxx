@@ -24,6 +24,7 @@
 #include <editeng/brushitem.hxx>
 #include <editeng/editdata.hxx>
 #include <svtools/colorcfg.hxx>
+#include "svtools/optionsdrawinglayer.hxx"
 #include <svx/rotmodit.hxx>
 #include <editeng/shaditem.hxx>
 #include <editeng/svxfont.hxx>
@@ -1272,10 +1273,7 @@ void ScOutputData::DrawClear()
     }
 }
 
-
-//
-//  Linien
-//
+namespace {
 
 long lclGetSnappedX( OutputDevice& rDev, long nPosX, bool bSnapPixel )
 {
@@ -1292,8 +1290,32 @@ size_t lclGetArrayColFromCellInfoX( sal_uInt16 nCellInfoX, sal_uInt16 nCellInfoF
     return static_cast< size_t >( bRTL ? (nCellInfoLastX + 2 - nCellInfoX) : (nCellInfoX - nCellInfoFirstX) );
 }
 
+/**
+ * Temporarily turn off antialiasing.
+ */
+class AntiAliasingSwitch
+{
+    SvtOptionsDrawinglayer maDrawOpt;
+    bool mbOldSetting;
+public:
+    AntiAliasingSwitch(bool bOn) : mbOldSetting(maDrawOpt.IsAntiAliasing())
+    {
+        maDrawOpt.SetAntiAliasing(bOn);
+    }
+
+    ~AntiAliasingSwitch()
+    {
+        maDrawOpt.SetAntiAliasing(mbOldSetting);
+    }
+};
+
+}
+
 void ScOutputData::DrawFrame()
 {
+    // No anti-aliasing for drawing cell borders.
+    AntiAliasingSwitch aAASwitch(false);
+
     sal_uLong nOldDrawMode = mpDev->GetDrawMode();
 
     Color aSingleColor;
