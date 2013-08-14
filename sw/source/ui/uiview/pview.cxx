@@ -1185,7 +1185,7 @@ SwPagePreView::SwPagePreView(SfxViewFrame *pViewFrame, SfxViewShell* pOldSh):
         {
             pVS = ((SwView*)pOldSh)->GetWrtShellPtr();
             // save the current ViewData of the previous SwView
-            pOldSh->WriteUserData( sSwViewData, sal_False );
+            pOldSh->WriteUserData( sSwViewData, false );
         }
         else
             pVS = GetDocShell()->GetWrtShell();

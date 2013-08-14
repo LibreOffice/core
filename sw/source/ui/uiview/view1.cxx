@@ -77,7 +77,7 @@ void SwView::Activate(sal_Bool bMDIActivate)
 
         if( m_sSwViewData.Len() )
         {
-            ReadUserData( m_sSwViewData, sal_False );
+            ReadUserData(m_sSwViewData, false);
             m_sSwViewData.Erase();
         }
 

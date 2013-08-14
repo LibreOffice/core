@@ -219,8 +219,8 @@ public:
     Printer*                    GetActivePrinter() const;
 
     // Working set
-    virtual void                WriteUserData( String&, sal_Bool bBrowse = sal_False );
-    virtual void                ReadUserData( const String&, sal_Bool bBrowse = sal_False );
+    virtual void                WriteUserData( OUString&, bool bBrowse = false );
+    virtual void                ReadUserData( const OUString&, bool bBrowse = false );
     virtual void                WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse = sal_False );
     virtual void                ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse = sal_False );
     virtual void                QueryObjAreaPixel( Rectangle& rRect ) const;

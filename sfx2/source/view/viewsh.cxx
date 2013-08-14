@@ -1468,13 +1468,13 @@ void SfxViewShell::PushSubShells_Impl( sal_Bool bPush )
 
 //--------------------------------------------------------------------
 
-void SfxViewShell::WriteUserData( String&, sal_Bool )
+void SfxViewShell::WriteUserData( OUString&, bool )
 {
 }
 
 //--------------------------------------------------------------------
 
-void SfxViewShell::ReadUserData(const String&, sal_Bool )
+void SfxViewShell::ReadUserData(const OUString&, bool )
 {
 }
 

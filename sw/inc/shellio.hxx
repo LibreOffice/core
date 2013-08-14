@@ -90,8 +90,8 @@ public:
         nLanguage = 0;
     }
     // for the automatic conversion (mail/news/...)
-    void ReadUserData( const String& );
-    void WriteUserData( String& );
+    void ReadUserData( const OUString& );
+    void WriteUserData( OUString& );
 
     SwAsciiOptions() { Reset(); }
 };

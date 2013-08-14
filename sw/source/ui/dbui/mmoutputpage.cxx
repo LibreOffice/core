@@ -1139,7 +1139,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
     if(!sEMailColumn.Len() || !xColAccess.is() || !xColAccess->hasByName(sEMailColumn))
         return 0;
 
-    String sFilterOptions;
+    OUString sFilterOptions;
     if(MM_DOCTYPE_TEXT == nDocType)
     {
         SwAsciiOptions aOpt;
@@ -1212,7 +1212,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
             if(MM_DOCTYPE_TEXT == nDocType)
             {
                 pFilterValues[1].Name = "FilterOptions";
-                pFilterValues[1].Value <<= OUString(sFilterOptions);
+                pFilterValues[1].Value <<= sFilterOptions;
             }
 
             uno::Reference< frame::XStorable > xTempStore( pTempView->GetDocShell()->GetModel(), uno::UNO_QUERY);

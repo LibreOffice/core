@@ -252,8 +252,8 @@ public:
 
     void            UpdateInputHandler( sal_Bool bForce = false, sal_Bool bStopEditing = sal_True );
 
-    void            WriteUserData(String& rData);
-    void            ReadUserData(const String& rData);
+    void            WriteUserData(OUString& rData);
+    void            ReadUserData(const OUString& rData);
     void            WriteExtOptions( ScExtDocOptions& rOpt ) const;
     void            ReadExtOptions( const ScExtDocOptions& rOpt );
     void            WriteUserDataSequence(com::sun::star::uno::Sequence <com::sun::star::beans::PropertyValue>& rSettings) const;

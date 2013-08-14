@@ -162,8 +162,8 @@ public:
         const Fraction &rZoomX,
         const Fraction &rZoomY);
     virtual sal_uInt16 PrepareClose (sal_Bool bUI = sal_True, sal_Bool bForBrowsing = sal_False);
-    virtual void WriteUserData (String&, sal_Bool bBrowse = sal_False);
-    virtual void ReadUserData (const String&, sal_Bool bBrowse = sal_False);
+    virtual void WriteUserData (OUString&, bool bBrowse = false);
+    virtual void ReadUserData (const OUString&, bool bBrowse = false);
     virtual SdrView* GetDrawView (void) const;
     virtual void AdjustPosSizePixel (const Point &rOfs, const Size &rSize);
 

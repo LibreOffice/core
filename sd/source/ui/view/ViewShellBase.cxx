@@ -864,7 +864,7 @@ sal_uInt16 ViewShellBase::PrepareClose (sal_Bool bUI, sal_Bool bForBrowsing)
 
 
 
-void ViewShellBase::WriteUserData (String& rString, sal_Bool bBrowse)
+void ViewShellBase::WriteUserData (OUString& rString, bool bBrowse)
 {
     SfxViewShell::WriteUserData (rString, bBrowse);
 
@@ -877,7 +877,7 @@ void ViewShellBase::WriteUserData (String& rString, sal_Bool bBrowse)
 
 
 
-void ViewShellBase::ReadUserData (const String& rString, sal_Bool bBrowse)
+void ViewShellBase::ReadUserData (const OUString& rString, bool bBrowse)
 {
     SfxViewShell::ReadUserData (rString, bBrowse);
 

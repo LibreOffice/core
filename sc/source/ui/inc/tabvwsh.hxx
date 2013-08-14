@@ -217,8 +217,8 @@ protected:
     virtual sal_Bool    HasSelection( sal_Bool bText ) const;
     virtual String  GetDescription() const;
 
-    virtual void    WriteUserData(String &, sal_Bool bBrowse = false);
-    virtual void    ReadUserData(const String &, sal_Bool bBrowse = false);
+    virtual void    WriteUserData(OUString &, bool bBrowse = false);
+    virtual void    ReadUserData(const OUString &, bool bBrowse = false);
     virtual void    WriteUserDataSequence (::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse = false );
     virtual void    ReadUserDataSequence (const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse = false );
 

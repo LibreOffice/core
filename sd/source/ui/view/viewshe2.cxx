@@ -906,7 +906,7 @@ const Rectangle& ViewShell::GetAllWindowRect()
     return maAllWindowRectangle;
 }
 
-void ViewShell::ReadUserData(const String&)
+void ViewShell::ReadUserData(const OUString&)
 {
     // zoom onto VisArea from FrameView
     GetViewShell()->GetViewFrame()->GetDispatcher()->Execute(SID_SIZE_VISAREA,
@@ -914,7 +914,7 @@ void ViewShell::ReadUserData(const String&)
 }
 
 
-void ViewShell::WriteUserData(String&)
+void ViewShell::WriteUserData(OUString&)
 {
     // writing of our data is always done in WriteFrameViewData()
     WriteFrameViewData();

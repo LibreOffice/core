@@ -259,9 +259,9 @@ void SwAsciiFilterDlg::FillOptions( SwAsciiOptions& rOptions )
     rOptions.SetParaFlags( GetCRLF() );
 
     // save the user settings
-    String sData;
+    OUString sData;
     rOptions.WriteUserData( sData );
-    if( sData.Len() )
+    if (!sData.isEmpty())
     {
         const OUString sFindNm = OUString::createFromAscii(
                                     m_pFontLB->IsVisible() ? sDialogImpExtraData

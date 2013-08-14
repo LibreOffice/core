@@ -233,8 +233,8 @@ public:
     void SetFrameView (FrameView* pFrameView);
     virtual void  ReadFrameViewData(FrameView* pView);
     virtual void  WriteFrameViewData();
-    virtual void  WriteUserData(String& rString);
-    virtual void  ReadUserData(const String& rString);
+    virtual void  WriteUserData(OUString& rString);
+    virtual void  ReadUserData(const OUString& rString);
 
     virtual sal_Bool  ActivateObject(SdrOle2Obj* pObj, long nVerb);
 

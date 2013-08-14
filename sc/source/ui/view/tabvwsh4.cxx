@@ -477,7 +477,7 @@ void ScTabViewShell::ShowCursor(bool /* bOn */)
 
 //------------------------------------------------------------------
 
-void ScTabViewShell::WriteUserData(String& rData, sal_Bool /* bBrowse */)
+void ScTabViewShell::WriteUserData(OUString& rData, bool /* bBrowse */)
 {
     GetViewData()->WriteUserData(rData);
 }
@@ -487,7 +487,7 @@ void ScTabViewShell::WriteUserDataSequence (uno::Sequence < beans::PropertyValue
     GetViewData()->WriteUserDataSequence (rSettings);
 }
 
-void ScTabViewShell::ReadUserData(const String& rData, sal_Bool /* bBrowse */)
+void ScTabViewShell::ReadUserData(const OUString& rData, bool /* bBrowse */)
 {
     if ( !GetViewData()->GetDocShell()->IsPreview() )
         DoReadUserData( rData );

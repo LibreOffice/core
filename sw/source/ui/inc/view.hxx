@@ -598,8 +598,8 @@ public:
     // so that in the SubShells' DTors m_pShell can be reset if applicable
     void ResetSubShell()    { m_pShell = 0; }
 
-    virtual void    WriteUserData(String &, sal_Bool bBrowse = sal_False );
-    virtual void    ReadUserData(const String &, sal_Bool bBrowse = sal_False );
+    virtual void    WriteUserData(OUString &, bool bBrowse = false);
+    virtual void    ReadUserData(const OUString &, bool bBrowse = false);
     virtual void    ReadUserDataSequence ( const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse );
     virtual void    WriteUserDataSequence ( com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse );
 

@@ -598,71 +598,70 @@ String NameFromCharSet(rtl_TextEncoding nChrSet)
 // the delimetercharacter is ","
 //
 
-void SwAsciiOptions::ReadUserData( const String& rStr )
+void SwAsciiOptions::ReadUserData( const OUString& rStr )
 {
-        sal_Int32 nToken = 0;
-        sal_uInt16 nCnt = 0;
-        String sToken;
-        do {
-                if( 0 != (sToken = rStr.GetToken( 0, ',', nToken )).Len() )
-                {
-                        switch( nCnt )
-                        {
-                        case 0:         // CharSet
+    sal_Int32 nToken = 0;
+    sal_uInt16 nCnt = 0;
+    OUString sToken;
+    do {
+        if( !(sToken = rStr.getToken( 0, ',', nToken )).isEmpty() )
+        {
+            switch( nCnt )
+            {
+            case 0:         // CharSet
                 eCharSet = CharSetFromName(sToken);
-                                break;
-                        case 1:         // LineEnd
-                                if( sToken.EqualsIgnoreCaseAscii( "CRLF" ))
-                                        eCRLF_Flag = LINEEND_CRLF;
-                                else if( sToken.EqualsIgnoreCaseAscii( "LF" ))
-                                        eCRLF_Flag = LINEEND_LF;
-                                else
-                                        eCRLF_Flag = LINEEND_CR;
-                                break;
-                        case 2:         // fontname
-                                sFont = sToken;
-                                break;
-                        case 3:         // Language
+                break;
+            case 1:         // LineEnd
+                if( sToken.equalsIgnoreAsciiCase( "CRLF" ))
+                    eCRLF_Flag = LINEEND_CRLF;
+                else if( sToken.equalsIgnoreAsciiCase( "LF" ))
+                    eCRLF_Flag = LINEEND_LF;
+                else
+                    eCRLF_Flag = LINEEND_CR;
+                break;
+            case 2:         // fontname
+                sFont = sToken;
+                break;
+            case 3:         // Language
                 nLanguage = LanguageTag::convertToLanguageType( sToken );
-                                break;
-                        }
-                }
-                ++nCnt;
-        } while( -1 != nToken );
+                break;
+            }
+        }
+        ++nCnt;
+    } while( -1 != nToken );
 }
 
-void SwAsciiOptions::WriteUserData( String& rStr )
+void SwAsciiOptions::WriteUserData(OUString& rStr)
 {
-        // 1. charset
-        rStr = NameFromCharSet(eCharSet);
-        rStr += ',';
+    // 1. charset
+    rStr = NameFromCharSet(eCharSet);
+    rStr += ",";
 
-        // 2. LineEnd
-        switch(eCRLF_Flag)
-        {
-        case LINEEND_CRLF:
-            rStr.AppendAscii( "CRLF" );
-            break;
-        case LINEEND_CR:
-            rStr.AppendAscii(  "CR" );
-            break;
-        case LINEEND_LF:
-            rStr.AppendAscii(  "LF" );
-            break;
-        }
-        rStr += ',';
+    // 2. LineEnd
+    switch(eCRLF_Flag)
+    {
+    case LINEEND_CRLF:
+        rStr += "CRLF";
+        break;
+    case LINEEND_CR:
+        rStr += "CR";
+        break;
+    case LINEEND_LF:
+        rStr += "LF";
+        break;
+    }
+    rStr += ",";
 
-        // 3. Fontname
-        rStr += sFont;
-        rStr += ',';
+    // 3. Fontname
+    rStr += sFont;
+    rStr += ",";
 
-        // 4. Language
-        if (nLanguage)
-        {
-        OUString sTmp = LanguageTag::convertToBcp47( nLanguage );
-        rStr += (String)sTmp;
-        }
-        rStr += ',';
+    // 4. Language
+    if (nLanguage)
+    {
+        rStr += LanguageTag::convertToBcp47(nLanguage);
+    }
+    rStr += ",";
 }
 
 #ifdef DISABLE_DYNLOADING

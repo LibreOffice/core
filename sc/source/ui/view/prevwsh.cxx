@@ -922,24 +922,23 @@ void ScPreviewShell::FillFieldData( ScHeaderFieldData& rData )
     //  the dialog knows eNumType
 }
 
-void ScPreviewShell::WriteUserData(String& rData, sal_Bool /* bBrowse */)
+void ScPreviewShell::WriteUserData(OUString& rData, bool /* bBrowse */)
 {
     //  nZoom
     //  nPageNo
 
     rData =  OUString::number(pPreview->GetZoom());
-    rData += (sal_Unicode) SC_USERDATA_SEP;
+    rData += OUString(SC_USERDATA_SEP);
     rData += OUString::number(pPreview->GetPageNo());
 }
 
-void ScPreviewShell::ReadUserData(const String& rData, sal_Bool /* bBrowse */)
+void ScPreviewShell::ReadUserData(const OUString& rData, bool /* bBrowse */)
 {
-    xub_StrLen nCount = comphelper::string::getTokenCount(rData, ';');
-    if (nCount)
+    if (!rData.isEmpty())
     {
         sal_Int32 nIndex = 0;
-        pPreview->SetZoom((sal_uInt16)rData.GetToken( 0, SC_USERDATA_SEP, nIndex ).ToInt32());
-        pPreview->SetPageNo(rData.GetToken( 0, SC_USERDATA_SEP, nIndex ).ToInt32());
+        pPreview->SetZoom((sal_uInt16)rData.getToken(0, SC_USERDATA_SEP, nIndex).toInt32());
+        pPreview->SetPageNo(rData.getToken(0, SC_USERDATA_SEP, nIndex).toInt32());
         eZoom = SVX_ZOOM_PERCENT;
     }
 }

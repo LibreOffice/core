@@ -2172,7 +2172,7 @@ void ScViewData::CalcPPT()
 #define SC_OLD_TABSEP   '/'
 #define SC_NEW_TABSEP   '+'
 
-void ScViewData::WriteUserData(String& rData)
+void ScViewData::WriteUserData(OUString& rData)
 {
     //  nZoom (bis 364v) oder nZoom/nPageZoom/bPageMode (ab 364w)
     //  nTab
@@ -2187,9 +2187,9 @@ void ScViewData::WriteUserData(String& rData)
     nZoom = (sal_uInt16)((pThisTab->aPageZoomY.GetNumerator() * 100) / pThisTab->aPageZoomY.GetDenominator());
     rData += OUString::number( nZoom ) + "/";
     if (bPagebreak)
-        rData += '1';
+        rData += "1";
     else
-        rData += '0';
+        rData += "0";
 
     rData += ";" + OUString::number( nTabNo ) + ";" + TAG_TABBARWIDTH +
              OUString::number( pView->GetTabBarWidth() );
@@ -2197,7 +2197,7 @@ void ScViewData::WriteUserData(String& rData)
     SCTAB nTabCount = pDoc->GetTableCount();
     for (SCTAB i=0; i<nTabCount; i++)
     {
-        rData += ';';                   // Numerierung darf auf keinen Fall durcheinanderkommen
+        rData += ";";                   // Numerierung darf auf keinen Fall durcheinanderkommen
         if (i < static_cast<SCTAB>(maTabData.size()) && maTabData[i])
         {
             OUString cTabSep = OUString(SC_OLD_TABSEP);                // wie 3.1
@@ -2233,12 +2233,12 @@ void ScViewData::WriteUserData(String& rData)
     }
 }
 
-void ScViewData::ReadUserData(const String& rData)
+void ScViewData::ReadUserData(const OUString& rData)
 {
-    if (!rData.Len())       // Leerer String kommt bei "neu Laden"
+    if (rData.isEmpty())       // Leerer String kommt bei "neu Laden"
         return;             // dann auch ohne Assertion beenden
 
-    xub_StrLen nCount = comphelper::string::getTokenCount(rData, ';');
+    sal_Int32 nCount = comphelper::string::getTokenCount(rData, ';');
     if ( nCount <= 2 )
     {
         //  beim Reload in der Seitenansicht sind evtl. die Preview-UserData
@@ -2247,40 +2247,38 @@ void ScViewData::ReadUserData(const String& rData)
         return;
     }
 
-    String aTabOpt;
-    xub_StrLen nTagLen = RTL_CONSTASCII_LENGTH(TAG_TABBARWIDTH);
-
     // nicht pro Tabelle:
     SCTAB nTabStart = 2;
 
     Fraction aZoomX, aZoomY, aPageZoomX, aPageZoomY;    //! evaluate (all sheets?)
 
-    String aZoomStr = rData.GetToken(0);                        // Zoom/PageZoom/Modus
-    sal_uInt16 nNormZoom = sal::static_int_cast<sal_uInt16>(aZoomStr.GetToken(0,'/').ToInt32());
+    OUString aZoomStr = rData.getToken(0, ';');                 // Zoom/PageZoom/Modus
+    sal_uInt16 nNormZoom = sal::static_int_cast<sal_uInt16>(aZoomStr.getToken(0,'/').toInt32());
     if ( nNormZoom >= MINZOOM && nNormZoom <= MAXZOOM )
         aZoomX = aZoomY = Fraction( nNormZoom, 100 );           //  "normaler" Zoom (immer)
-    sal_uInt16 nPageZoom = sal::static_int_cast<sal_uInt16>(aZoomStr.GetToken(1,'/').ToInt32());
+    sal_uInt16 nPageZoom = sal::static_int_cast<sal_uInt16>(aZoomStr.getToken(1,'/').toInt32());
     if ( nPageZoom >= MINZOOM && nPageZoom <= MAXZOOM )
         aPageZoomX = aPageZoomY = Fraction( nPageZoom, 100 );   // Pagebreak-Zoom, wenn gesetzt
-    sal_Unicode cMode = aZoomStr.GetToken(2,'/').GetChar(0);    // 0 oder "0"/"1"
+    sal_Unicode cMode = aZoomStr.getToken(2,'/')[0];            // 0 oder "0"/"1"
     SetPagebreakMode( cMode == '1' );
     // SetPagebreakMode muss immer gerufen werden wegen CalcPPT / RecalcPixPos()
 
     //
     //  Tabelle kann ungueltig geworden sein (z.B. letzte Version):
     //
-    SCTAB nNewTab = static_cast<SCTAB>(rData.GetToken(1).ToInt32());
+    SCTAB nNewTab = static_cast<SCTAB>(rData.getToken(1, ';').toInt32());
     if (pDoc->HasTable( nNewTab ))
         SetTabNo(nNewTab);
 
     //
     // wenn vorhanden, TabBar-Breite holen:
     //
-    aTabOpt = rData.GetToken(2);
+    OUString aTabOpt = rData.getToken(2, ';');
 
-    if ( nTagLen && aTabOpt.Copy(0,nTagLen).EqualsAscii(TAG_TABBARWIDTH) )
+    if (aTabOpt.startsWith(TAG_TABBARWIDTH))
     {
-        pView->SetTabBarWidth( aTabOpt.Copy(nTagLen).ToInt32() );
+        sal_Int32 nTagLen = RTL_CONSTASCII_LENGTH(TAG_TABBARWIDTH);
+        pView->SetTabBarWidth(aTabOpt.copy(nTagLen).toInt32());
         nTabStart = 3;
     }
 
@@ -2288,7 +2286,7 @@ void ScViewData::ReadUserData(const String& rData)
     SCTAB nPos = 0;
     while ( nCount > nPos+nTabStart )
     {
-        aTabOpt = rData.GetToken(static_cast<xub_StrLen>(nPos+nTabStart));
+        aTabOpt = rData.getToken(static_cast<sal_Int32>(nPos+nTabStart), ';');
         EnsureTabDataSize(nPos + 1);
         if (!maTabData[nPos])
             maTabData[nPos] = new ScViewDataTable;
@@ -2304,32 +2302,32 @@ void ScViewData::ReadUserData(const String& rData)
 
         if (cTabSep)
         {
-            maTabData[nPos]->nCurX = SanitizeCol( static_cast<SCCOL>(aTabOpt.GetToken(0,cTabSep).ToInt32()));
-            maTabData[nPos]->nCurY = SanitizeRow( aTabOpt.GetToken(1,cTabSep).ToInt32());
-            maTabData[nPos]->eHSplitMode = (ScSplitMode) aTabOpt.GetToken(2,cTabSep).ToInt32();
-            maTabData[nPos]->eVSplitMode = (ScSplitMode) aTabOpt.GetToken(3,cTabSep).ToInt32();
+            maTabData[nPos]->nCurX = SanitizeCol( static_cast<SCCOL>(aTabOpt.getToken(0,cTabSep).toInt32()));
+            maTabData[nPos]->nCurY = SanitizeRow( aTabOpt.getToken(1,cTabSep).toInt32());
+            maTabData[nPos]->eHSplitMode = (ScSplitMode) aTabOpt.getToken(2,cTabSep).toInt32();
+            maTabData[nPos]->eVSplitMode = (ScSplitMode) aTabOpt.getToken(3,cTabSep).toInt32();
 
             if ( maTabData[nPos]->eHSplitMode == SC_SPLIT_FIX )
             {
-                maTabData[nPos]->nFixPosX = SanitizeCol( static_cast<SCCOL>(aTabOpt.GetToken(4,cTabSep).ToInt32()));
+                maTabData[nPos]->nFixPosX = SanitizeCol( static_cast<SCCOL>(aTabOpt.getToken(4,cTabSep).toInt32()));
                 UpdateFixX(nPos);
             }
             else
-                maTabData[nPos]->nHSplitPos = aTabOpt.GetToken(4,cTabSep).ToInt32();
+                maTabData[nPos]->nHSplitPos = aTabOpt.getToken(4,cTabSep).toInt32();
 
             if ( maTabData[nPos]->eVSplitMode == SC_SPLIT_FIX )
             {
-                maTabData[nPos]->nFixPosY = SanitizeRow( aTabOpt.GetToken(5,cTabSep).ToInt32());
+                maTabData[nPos]->nFixPosY = SanitizeRow( aTabOpt.getToken(5,cTabSep).toInt32());
                 UpdateFixY(nPos);
             }
             else
-                maTabData[nPos]->nVSplitPos = aTabOpt.GetToken(5,cTabSep).ToInt32();
+                maTabData[nPos]->nVSplitPos = aTabOpt.getToken(5,cTabSep).toInt32();
 
-            maTabData[nPos]->eWhichActive = (ScSplitPos) aTabOpt.GetToken(6,cTabSep).ToInt32();
-            maTabData[nPos]->nPosX[0] = SanitizeCol( static_cast<SCCOL>(aTabOpt.GetToken(7,cTabSep).ToInt32()));
-            maTabData[nPos]->nPosX[1] = SanitizeCol( static_cast<SCCOL>(aTabOpt.GetToken(8,cTabSep).ToInt32()));
-            maTabData[nPos]->nPosY[0] = SanitizeRow( aTabOpt.GetToken(9,cTabSep).ToInt32());
-            maTabData[nPos]->nPosY[1] = SanitizeRow( aTabOpt.GetToken(10,cTabSep).ToInt32());
+            maTabData[nPos]->eWhichActive = (ScSplitPos) aTabOpt.getToken(6,cTabSep).toInt32();
+            maTabData[nPos]->nPosX[0] = SanitizeCol( static_cast<SCCOL>(aTabOpt.getToken(7,cTabSep).toInt32()));
+            maTabData[nPos]->nPosX[1] = SanitizeCol( static_cast<SCCOL>(aTabOpt.getToken(8,cTabSep).toInt32()));
+            maTabData[nPos]->nPosY[0] = SanitizeRow( aTabOpt.getToken(9,cTabSep).toInt32());
+            maTabData[nPos]->nPosY[1] = SanitizeRow( aTabOpt.getToken(10,cTabSep).toInt32());
 
             //  Test, ob der aktive Teil laut SplitMode ueberhaupt existiert
             //  (Bug #44516#)

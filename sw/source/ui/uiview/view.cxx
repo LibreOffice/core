@@ -1086,7 +1086,7 @@ SwDocShell* SwView::GetDocShell()
 
 // Remember CursorPos
 
-void SwView::WriteUserData( String &rUserData, sal_Bool bBrowse )
+void SwView::WriteUserData( OUString &rUserData, bool bBrowse )
 {
     // The browse flag will be passed from Sfx when documents are browsed
     // (not to be confused with the BrowseMode).
@@ -1096,23 +1096,23 @@ void SwView::WriteUserData( String &rUserData, sal_Bool bBrowse )
     const Rectangle& rVis = GetVisArea();
 
     rUserData = OUString::number( rRect.Left() );
-    rUserData += ';';
+    rUserData += ";";
     rUserData += OUString::number( rRect.Top() );
-    rUserData += ';';
+    rUserData += ";";
     rUserData += OUString::number( m_pWrtShell->GetViewOptions()->GetZoom() );
-    rUserData += ';';
+    rUserData += ";";
     rUserData += OUString::number( rVis.Left() );
-    rUserData += ';';
+    rUserData += ";";
     rUserData += OUString::number( rVis.Top() );
-    rUserData += ';';
+    rUserData += ";";
     rUserData += OUString::number( bBrowse ? SAL_MIN_INT32 : rVis.Right());
-    rUserData += ';';
+    rUserData += ";";
     rUserData += OUString::number( bBrowse ? SAL_MIN_INT32 : rVis.Bottom());
-    rUserData += ';';
+    rUserData += ";";
     rUserData += OUString::number(
             (sal_uInt16)m_pWrtShell->GetViewOptions()->GetZoomType());//eZoom;
-    rUserData += ';';
-    rUserData += FRMTYPE_NONE == m_pWrtShell->GetSelFrmType() ? '0' : '1';
+    rUserData += ";";
+    rUserData += FRMTYPE_NONE == m_pWrtShell->GetSelFrmType() ? OUString("0") : OUString("1");
 }
 
 // Set CursorPos
@@ -1131,7 +1131,7 @@ static bool lcl_IsOwnDocument( SwView& rView )
             (!Changed.Len() && Created.Len() && Created == FullName );
 }
 
-void SwView::ReadUserData( const String &rUserData, sal_Bool bBrowse )
+void SwView::ReadUserData( const OUString &rUserData, bool bBrowse )
 {
     if ( comphelper::string::getTokenCount(rUserData, ';') > 1 &&
         // For document without layout only in the onlinelayout or
@@ -1146,17 +1146,17 @@ void SwView::ReadUserData( const String &rUserData, sal_Bool bBrowse )
 
         // No it is *no* good idea to call GetToken within Point-Konstr. immediately,
         // because which parameter is evaluated first?
-        long nX = rUserData.GetToken( 0, ';', nPos ).ToInt32(),
-             nY = rUserData.GetToken( 0, ';', nPos ).ToInt32();
+        long nX = rUserData.getToken( 0, ';', nPos ).toInt32(),
+             nY = rUserData.getToken( 0, ';', nPos ).toInt32();
         Point aCrsrPos( nX, nY );
 
         sal_uInt16 nZoomFactor =
-            static_cast< sal_uInt16 >( rUserData.GetToken(0, ';', nPos ).ToInt32() );
+            static_cast< sal_uInt16 >( rUserData.getToken(0, ';', nPos ).toInt32() );
 
-        long nLeft  = rUserData.GetToken(0, ';', nPos ).ToInt32(),
-             nTop   = rUserData.GetToken(0, ';', nPos ).ToInt32(),
-             nRight = rUserData.GetToken(0, ';', nPos ).ToInt32(),
-             nBottom= rUserData.GetToken(0, ';', nPos ).ToInt32();
+        long nLeft  = rUserData.getToken(0, ';', nPos ).toInt32(),
+             nTop   = rUserData.getToken(0, ';', nPos ).toInt32(),
+             nRight = rUserData.getToken(0, ';', nPos ).toInt32(),
+             nBottom= rUserData.getToken(0, ';', nPos ).toInt32();
 
         const long nAdd = m_pWrtShell->GetViewOptions()->getBrowseMode() ? DOCUMENTBORDER : DOCUMENTBORDER*2;
         if ( nBottom <= (m_pWrtShell->GetDocSize().Height()+nAdd) )
@@ -1165,17 +1165,17 @@ void SwView::ReadUserData( const String &rUserData, sal_Bool bBrowse )
 
             const Rectangle aVis( nLeft, nTop, nRight, nBottom );
 
-            sal_uInt16 nOff = 0;
+            sal_Int32 nOff = 0;
             SvxZoomType eZoom;
             if( !m_pWrtShell->GetViewOptions()->getBrowseMode() )
-                eZoom = (SvxZoomType) (sal_uInt16)rUserData.GetToken(nOff, ';', nPos ).ToInt32();
+                eZoom = (SvxZoomType) (sal_uInt16)rUserData.getToken(nOff, ';', nPos ).toInt32();
             else
             {
                 eZoom = SVX_ZOOM_PERCENT;
                 ++nOff;
             }
 
-            sal_Bool bSelectObj = (0 != rUserData.GetToken( nOff, ';', nPos ).ToInt32())
+            sal_Bool bSelectObj = (0 != rUserData.getToken( nOff, ';', nPos ).toInt32())
                                 && m_pWrtShell->IsObjSelectable( aCrsrPos );
 
             // restore editing position
