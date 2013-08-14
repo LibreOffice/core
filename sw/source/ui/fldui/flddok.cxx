@@ -86,10 +86,10 @@ void SwFldDokPage::Reset(const SfxItemSet& )
     aTypeLB.Clear();
 
     sal_uInt16 nPos, nTypeId;
-    bool bPage = false;
 
     if (!IsFldEdit())
     {
+        bool bPage = false;
         // fill Type-Listbox
         for(short i = rRg.nStart; i < rRg.nEnd; ++i)
         {
