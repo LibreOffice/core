@@ -611,7 +611,7 @@ namespace svgio
                 // Extract known viewport data
                 // bXXXIsAbsolute tracks whether relative values could be resolved to absolute values
                 if (getParent())
-                    {
+                {
                     // If width or height is not provided, the default 100% is used, see SVG 1.1 section 5.1.2
                     // value 0.0 here is only to initialize variable
                     bool bWidthIsAbsolute(getWidth().isSet() && Unit_percent != getWidth().getUnit());
@@ -628,7 +628,8 @@ namespace svgio
 
                     if (bXIsAbsolute && bYIsAbsolute && bWidthIsAbsolute && bHeightIsAbsolute)
                     {
-                        return &basegfx::B2DRange(fX, fY, fX+fW, fY+fH);
+                        xGeneratedBox.reset(new basegfx::B2DRange(fX, fY, fX+fW, fY+fH));
+                        return xGeneratedBox.get();
                     }
                     else // try to resolve relative values
                     {
@@ -671,7 +672,8 @@ namespace svgio
 
                         if (bXIsAbsolute && bYIsAbsolute && bWidthIsAbsolute && bHeightIsAbsolute)
                         {
-                            return &basegfx::B2DRange(fX, fY, fX+fW, fY+fH);
+                            xGeneratedBox.reset(new basegfx::B2DRange(fX, fY, fX+fW, fY+fH));
+                            return xGeneratedBox.get();
                         }
                         else // relative values could not be resolved, there exists no fallback
                         {
@@ -690,11 +692,12 @@ namespace svgio
                     double fH( bHeightIsAbsolute ? getHeight().solveNonPercentage(*this) : 0.0);
                     if (bWidthIsAbsolute && bHeightIsAbsolute)
                     {
-                        return &basegfx::B2DRange(0.0, 0.0, fW, fH);
+                        xGeneratedBox.reset(new basegfx::B2DRange(0.0, 0.0, fW, fH));
+                        return xGeneratedBox.get();
                     }
                     else // no fallback exists
                     {
-                            return SvgNode::getCurrentViewPort();
+                        return SvgNode::getCurrentViewPort();
                     }
                 }
 // ToDo: Is it possible to decompose and use the bounding box of the childs, if even the
