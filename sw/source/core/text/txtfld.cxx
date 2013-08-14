@@ -79,8 +79,7 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
     const sal_Bool bName = rInf.GetOpt().IsFldName();
 
     SwCharFmt* pChFmt = 0;
-    bool bNewFlyPor = false,
-         bINet = false;
+    bool bNewFlyPor = false;
 
     // set language
     ((SwTxtFormatter*)this)->SeekAndChg( rInf );
@@ -257,19 +256,7 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
         if( !bName )
         {
             pTmpFnt = new SwFont( *pFnt );
-            if( bINet )
-            {
-                SwAttrPool* pPool = pChFmt->GetAttrSet().GetPool();
-                SfxItemSet aSet( *pPool, RES_CHRATR_BEGIN, RES_CHRATR_END );
-                SfxItemSet aTmpSet( aSet );
-                pFrm->GetTxtNode()->GetAttr(aSet,rInf.GetIdx(),rInf.GetIdx()+1);
-                aTmpSet.Set( pChFmt->GetAttrSet() );
-                aTmpSet.Differentiate( aSet );
-                if( aTmpSet.Count() )
-                    pTmpFnt->SetDiffFnt( &aTmpSet, pFrm->GetTxtNode()->getIDocumentSettingAccess() );
-            }
-            else
-                pTmpFnt->SetDiffFnt( &pChFmt->GetAttrSet(), pFrm->GetTxtNode()->getIDocumentSettingAccess() );
+            pTmpFnt->SetDiffFnt( &pChFmt->GetAttrSet(), pFrm->GetTxtNode()->getIDocumentSettingAccess() );
         }
         {
             String const str( (bName)
