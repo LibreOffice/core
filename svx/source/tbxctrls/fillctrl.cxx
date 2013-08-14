@@ -96,7 +96,6 @@ void SvxFillToolBoxControl::StateChanged(
     sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
 
 {
-    bool bEnableControls = false;
 
     if ( bIgnoreStatusUpdate )
         return;
@@ -115,6 +114,7 @@ void SvxFillToolBoxControl::StateChanged(
     {
         if ( SFX_ITEM_AVAILABLE == eState )
         {
+            bool bEnableControls = false;
             if( nSID == SID_ATTR_FILL_STYLE )
             {
                 delete pStyleItem;
