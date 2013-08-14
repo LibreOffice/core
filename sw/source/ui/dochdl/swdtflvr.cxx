@@ -2921,7 +2921,7 @@ void SwTransferable::FillClipFmtItem( const SwWrtShell& rSh,
         SotFormatStringId nFormat;
         if ( rData.HasFormat(nFormat = SOT_FORMATSTR_ID_EMBED_SOURCE_OLE) || rData.HasFormat(nFormat = SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE) )
         {
-            String sName,sSource;
+            OUString sName,sSource;
             if ( SvPasteObjectHelper::GetEmbeddedName(rData,sName,sSource,nFormat) )
                 rToFill.AddClipbrdFormat( nFormat, sName );
         }

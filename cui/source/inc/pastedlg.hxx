@@ -42,7 +42,7 @@ class SvPasteObjectDialog : public ModalDialog
     FixedText* m_pFtObjectSource;
     ListBox* m_pLbInsertList;
     OKButton* m_pOKButton;
-    ::std::map< SotFormatStringId, String > aSupplementMap;
+    ::std::map< SotFormatStringId, OUString > aSupplementMap;
     SvGlobalName    aObjClassName;
     String          aObjName;
 

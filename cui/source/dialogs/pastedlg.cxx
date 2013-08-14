@@ -102,7 +102,7 @@ sal_uLong SvPasteObjectDialog::GetFormat( const TransferableDataHelper& rHelper,
         pFormats = &rHelper.GetDataFlavorExVector();
 
     // create and fill dialog box
-    String aSourceName, aTypeName;
+    OUString aSourceName, aTypeName;
     sal_uLong nSelFormat = 0;
     SvGlobalName aEmptyNm;
 
@@ -115,19 +115,19 @@ sal_uLong SvPasteObjectDialog::GetFormat( const TransferableDataHelper& rHelper,
         ::com::sun::star::datatransfer::DataFlavor aFlavor( *aIter );
         SotFormatStringId nFormat = (*aIter++).mnSotId;
 
-        ::std::map< SotFormatStringId, String >::iterator itName =
+        ::std::map< SotFormatStringId, OUString >::iterator itName =
             aSupplementMap.find( nFormat );
 
         // if there is an "Embed Source" or and "Embedded Object" on the
         // Clipboard we read the Description and the Source of this object
         // from an accompanied "Object Descriptor" format on the clipboard
         // Remember: these formats mostly appear together on the clipboard
-        String aName;
-        const String* pName = NULL;
+        OUString aName;
+        const OUString* pName = NULL;
         if ( itName == aSupplementMap.end() )
         {
             SvPasteObjectHelper::GetEmbeddedName(rHelper,aName,aSourceName,nFormat);
-            if ( aName.Len() )
+            if ( !aName.isEmpty() )
                 pName = &aName;
         }
         else
@@ -155,7 +155,7 @@ sal_uLong SvPasteObjectDialog::GetFormat( const TransferableDataHelper& rHelper,
             {
                 continue;
             }
-            else if( !aName.Len() )
+            else if( aName.isEmpty() )
                 aName = SvPasteObjectHelper::GetSotFormatUIName( nFormat );
 
             if( LISTBOX_ENTRY_NOTFOUND == ObjectLB().GetEntryPos( aName ) )
@@ -164,7 +164,7 @@ sal_uLong SvPasteObjectDialog::GetFormat( const TransferableDataHelper& rHelper,
         }
     }
 
-    if( !aTypeName.Len() && !aSourceName.Len() )
+    if( aTypeName.isEmpty() && aSourceName.isEmpty() )
     {
         if( aDesc.maClassName != aEmptyNm )
         {
@@ -172,7 +172,7 @@ sal_uLong SvPasteObjectDialog::GetFormat( const TransferableDataHelper& rHelper,
             aTypeName = aDesc.maTypeName;
         }
 
-        if( !aTypeName.Len() && !aSourceName.Len() )
+        if( aTypeName.isEmpty() && aSourceName.isEmpty() )
         {
             ResMgr* pMgr = ResMgr::CreateResMgr( "svt", Application::GetSettings().GetUILanguageTag() );
             // global resource from svtools (former so3 resource)
@@ -185,10 +185,10 @@ sal_uLong SvPasteObjectDialog::GetFormat( const TransferableDataHelper& rHelper,
     ObjectLB().SetUpdateMode( sal_True );
     SelectObject();
 
-    if( aSourceName.Len() )
+    if( !aSourceName.isEmpty() )
     {
-        if( aTypeName.Len() )
-            aTypeName += '\n';
+        if( !aTypeName.isEmpty() )
+            aTypeName += "\n";
 
         aTypeName += aSourceName;
         aTypeName = convertLineEnd(aTypeName, GetSystemLineEnd());

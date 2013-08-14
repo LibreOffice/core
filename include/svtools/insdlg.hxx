@@ -33,15 +33,15 @@ class SvObjectServer
 {
 private:
     SvGlobalName    aClassName;
-    String          aHumanName;
+    OUString        aHumanName;
 
 public:
-    SvObjectServer( const SvGlobalName & rClassP, const String & rHumanP ) :
+    SvObjectServer( const SvGlobalName & rClassP, const OUString & rHumanP ) :
         aClassName( rClassP ),
         aHumanName( rHumanP ) {}
 
     const SvGlobalName &    GetClassName() const { return aClassName; }
-    const String &          GetHumanName() const { return aHumanName; }
+    const OUString &        GetHumanName() const { return aHumanName; }
 };
 
 typedef ::std::vector< SvObjectServer > SvObjectServerList_impl;
@@ -52,7 +52,7 @@ private:
     SvObjectServerList_impl aObjectServerList;
 
 public:
-    const SvObjectServer *  Get( const String & rHumanName ) const;
+    const SvObjectServer *  Get( const OUString & rHumanName ) const;
     const SvObjectServer *  Get( const SvGlobalName & ) const;
     void                    Remove( const SvGlobalName & );
     void                    FillInsertObjects();
@@ -70,8 +70,8 @@ public:
 class SVT_DLLPUBLIC SvPasteObjectHelper
 {
 public:
-    static String GetSotFormatUIName( SotFormatStringId nId );
-    static sal_Bool GetEmbeddedName(const TransferableDataHelper& rData, String& _rName, String& _rSource, SotFormatStringId& _nFormat);
+    static OUString GetSotFormatUIName( SotFormatStringId nId );
+    static sal_Bool GetEmbeddedName(const TransferableDataHelper& rData, OUString& _rName, OUString& _rSource, SotFormatStringId& _nFormat);
 };
 
 #endif // _SVTOOLS_INSDLG_HXX

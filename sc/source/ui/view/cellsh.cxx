@@ -345,7 +345,7 @@ static sal_Bool lcl_TestFormat( SvxClipboardFmtItem& rFormats, const Transferabl
         //  translated format name strings are no longer inserted here,
         //  handled by "paste special" dialog / toolbox controller instead.
         //  Only the object type name has to be set here:
-        String aStrVal;
+        OUString aStrVal;
         if ( nFormatId == SOT_FORMATSTR_ID_EMBED_SOURCE )
         {
             TransferableObjectDescriptor aDesc;
@@ -356,11 +356,11 @@ static sal_Bool lcl_TestFormat( SvxClipboardFmtItem& rFormats, const Transferabl
         else if ( nFormatId == SOT_FORMATSTR_ID_EMBED_SOURCE_OLE
           || nFormatId == SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE )
         {
-            String aSource;
+            OUString aSource;
             SvPasteObjectHelper::GetEmbeddedName( rDataHelper, aStrVal, aSource, nFormatId );
         }
 
-        if ( aStrVal.Len() )
+        if ( !aStrVal.isEmpty() )
             rFormats.AddClipbrdFormat( nFormatId, aStrVal );
         else
             rFormats.AddClipbrdFormat( nFormatId );

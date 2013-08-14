@@ -162,8 +162,8 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
     }
     if (bHasFormat)
     {
-        String sName;
-        String sSource;
+        OUString sName;
+        OUString sSource;
         if (SvPasteObjectHelper::GetEmbeddedName (rDataHelper, sName, sSource, nFormat))
             pResult->AddClipbrdFormat (nFormat, sName);
     }

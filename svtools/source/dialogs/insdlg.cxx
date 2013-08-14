@@ -55,7 +55,7 @@ struct OleObjectDescriptor
 /********************** SvObjectServerList ********************************
 **************************************************************************/
 
-const SvObjectServer * SvObjectServerList::Get( const String & rHumanName ) const
+const SvObjectServer * SvObjectServerList::Get( const OUString & rHumanName ) const
 {
     for( size_t i = 0; i < aObjectServerList.size(); i++ )
     {
@@ -189,7 +189,7 @@ void SvObjectServerList::FillInsertObjects()
     }
 }
 
-String SvPasteObjectHelper::GetSotFormatUIName( SotFormatStringId nId )
+OUString SvPasteObjectHelper::GetSotFormatUIName( SotFormatStringId nId )
 {
     struct SotResourcePair
     {
@@ -284,7 +284,7 @@ String SvPasteObjectHelper::GetSotFormatUIName( SotFormatStringId nId )
     return aUIName;
 }
 // -----------------------------------------------------------------------------
-sal_Bool SvPasteObjectHelper::GetEmbeddedName(const TransferableDataHelper& rData,String& _rName,String& _rSource,SotFormatStringId& _nFormat)
+sal_Bool SvPasteObjectHelper::GetEmbeddedName(const TransferableDataHelper& rData, OUString& _rName, OUString& _rSource, SotFormatStringId& _nFormat)
 {
     sal_Bool bRet = sal_False;
     if( _nFormat == SOT_FORMATSTR_ID_EMBED_SOURCE_OLE || _nFormat == SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE )
@@ -314,7 +314,7 @@ sal_Bool SvPasteObjectHelper::GetEmbeddedName(const TransferableDataHelper& rDat
                         reinterpret_cast< sal_Char* >( pOleObjDescr ) +
                             pOleObjDescr->dwFullUserTypeName );
 
-                _rName.Append( pUserTypeName );
+                _rName += pUserTypeName;
                 // the following statement was here for historical reasons, it is commented out since it causes bug i49460
                 // _nFormat = SOT_FORMATSTR_ID_EMBED_SOURCE_OLE;
             }
@@ -331,7 +331,7 @@ sal_Bool SvPasteObjectHelper::GetEmbeddedName(const TransferableDataHelper& rDat
                         reinterpret_cast< sal_Char* >( pOleObjDescr ) +
                             pOleObjDescr->dwSrcOfCopy );
 
-                _rSource.Append( pSrcOfCopy );
+                _rSource += pSrcOfCopy;
             }
             else
                 _rSource = SVT_RESSTR(STR_UNKNOWN_SOURCE);
