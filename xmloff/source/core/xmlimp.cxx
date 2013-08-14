@@ -371,6 +371,8 @@ void SvXMLImport::_InitCtor()
         mpNamespaceMap->Add( OUString( sXML_np__css3text ), GetXMLToken(XML_N_CSS3TEXT), XML_NAMESPACE_CSS3TEXT );
 
         mpNamespaceMap->Add( "_calc_libo", GetXMLToken(XML_N_CALC_EXT), XML_NAMESPACE_CALC_EXT);
+        mpNamespaceMap->Add( "_office_libo",
+                             GetXMLToken(XML_N_LO_EXT), XML_NAMESPACE_LO_EXT);
     }
 
     msPackageProtocol = "vnd.sun.star.Package:";
