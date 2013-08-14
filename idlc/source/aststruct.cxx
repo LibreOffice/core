@@ -36,7 +36,7 @@ AstStruct::AstStruct(
          i != typeParameters.end(); ++i)
     {
         m_typeParameters.push_back(
-            new AstDeclaration(NT_type_parameter, *i, 0));
+            new AstType(NT_type_parameter, *i, 0));
     }
 }
 
