@@ -45,7 +45,7 @@ public:
     virtual void        ParagraphConnected( sal_Int32 nLeftParagraph, sal_Int32 nRightParagraph );
 
     virtual void DrawingText(
-        const Point& rStartPos, const XubString& rText, sal_uInt16 nTextStart, sal_uInt16 nTextLen, const sal_Int32* pDXArray, const SvxFont& rFont,
+        const Point& rStartPos, const OUString& rText, sal_uInt16 nTextStart, sal_uInt16 nTextLen, const sal_Int32* pDXArray, const SvxFont& rFont,
         sal_Int32 nPara, sal_uInt16 nIndex, sal_uInt8 nRightToLeft,
         const EEngineData::WrongSpellVector* pWrongSpellVector,
         const SvxFieldData* pFieldData,
@@ -66,8 +66,8 @@ public:
 
     virtual void        StyleSheetChanged( SfxStyleSheet* pStyle );
     virtual void        ParaAttribsChanged( sal_Int32 nPara );
-    virtual sal_Bool        SpellNextDocument();
-    virtual XubString   GetUndoComment( sal_uInt16 nUndoId ) const;
+    virtual sal_Bool    SpellNextDocument();
+    virtual OUString    GetUndoComment( sal_uInt16 nUndoId ) const;
 
     // for text conversion
     virtual sal_Bool        ConvertNextDocument();

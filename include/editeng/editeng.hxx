@@ -452,7 +452,7 @@ public:
     virtual void    ParagraphHeightChanged( sal_Int32 nPara );
 
     virtual void DrawingText(
-        const Point& rStartPos, const String& rText, sal_uInt16 nTextStart, sal_uInt16 nTextLen, const sal_Int32* pDXArray,
+        const Point& rStartPos, const OUString& rText, sal_uInt16 nTextStart, sal_uInt16 nTextLen, const sal_Int32* pDXArray,
         const SvxFont& rFont, sal_Int32 nPara, xub_StrLen nIndex, sal_uInt8 nRightToLeft,
         const EEngineData::WrongSpellVector* pWrongSpellVector,
         const SvxFieldData* pFieldData,
@@ -470,7 +470,7 @@ public:
         bool bEndOfParagraph,
         const Color& rOverlineColor,
         const Color& rTextLineColor);
-    virtual String  GetUndoComment( sal_uInt16 nUndoId ) const;
+    virtual OUString  GetUndoComment( sal_uInt16 nUndoId ) const;
     virtual sal_Bool    FormattingParagraph( sal_Int32 nPara );
     virtual sal_Bool    SpellNextDocument();
     virtual void    FieldClicked( const SvxFieldItem& rField, sal_Int32 nPara, xub_StrLen nPos );

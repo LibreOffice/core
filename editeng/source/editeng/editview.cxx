@@ -364,7 +364,7 @@ Cursor* EditView::GetCursor() const
     return pImpEditView->pCursor;
 }
 
-void EditView::InsertText( const XubString& rStr, sal_Bool bSelect )
+void EditView::InsertText( const OUString& rStr, sal_Bool bSelect )
 {
     DBG_CHKTHIS( EditView, 0 );
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
@@ -613,7 +613,7 @@ void EditView::SetSelectionMode( EESelectionMode eMode )
     pImpEditView->SetSelectionMode( eMode );
 }
 
-XubString EditView::GetSelected()
+OUString EditView::GetSelected()
 {
     DBG_CHKTHIS( EditView, 0 );
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
@@ -691,7 +691,7 @@ void EditView::InsertText( const EditTextObject& rTextObject )
     PIMPE->FormatAndUpdate( this );
 }
 
-void EditView::InsertText( ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > xDataObj, const String& rBaseURL, sal_Bool bUseSpecial )
+void EditView::InsertText( ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > xDataObj, const OUString& rBaseURL, sal_Bool bUseSpecial )
 {
     DBG_CHKTHIS( EditView, 0 );
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );

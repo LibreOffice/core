@@ -75,7 +75,7 @@ void Outliner::ImplCheckDepth( sal_Int16& rnDepth ) const
         rnDepth = nMaxDepth;
 }
 
-Paragraph* Outliner::Insert(const XubString& rText, sal_Int32 nAbsPos, sal_Int16 nDepth)
+Paragraph* Outliner::Insert(const OUString& rText, sal_Int32 nAbsPos, sal_Int16 nDepth)
 {
     DBG_CHKTHIS(Outliner,0);
     DBG_ASSERT(pParaList->GetParagraphCount(),"Insert:No Paras");
@@ -425,7 +425,7 @@ OutlinerParaObject* Outliner::CreateParaObject( sal_Int32 nStartPara, sal_Int32 
     return pPObj;
 }
 
-void Outliner::SetText( const XubString& rText, Paragraph* pPara )
+void Outliner::SetText( const OUString& rText, Paragraph* pPara )
 {
     DBG_CHKTHIS(Outliner,0);
     DBG_ASSERT(pPara,"SetText:No Para");
@@ -436,24 +436,24 @@ void Outliner::SetText( const XubString& rText, Paragraph* pPara )
 
     sal_Int32 nPara = pParaList->GetAbsPos( pPara );
 
-    if( !rText.Len() )
+    if (rText.isEmpty())
     {
         pEditEngine->SetText( nPara, rText );
         ImplInitDepth( nPara, pPara->GetDepth(), sal_False );
     }
     else
     {
-        XubString aText(convertLineEnd(rText, LINEEND_LF));
+        OUString aText(convertLineEnd(rText, LINEEND_LF));
 
-        if( aText.GetChar( aText.Len()-1 ) == '\x0A' )
-            aText.Erase( aText.Len()-1, 1 ); // Delete the last break
+        if (aText[aText.getLength()-1] == '\x0A')
+            aText = aText.copy(0, aText.getLength()-1); // Delete the last break
 
         sal_uInt16 nCount = comphelper::string::getTokenCount(aText, '\x0A');
         sal_uInt16 nPos = 0;
         sal_Int32 nInsPos = nPara+1;
         while( nCount > nPos )
         {
-            XubString aStr = aText.GetToken( nPos, '\x0A' );
+            OUString aStr = aText.getToken( nPos, '\x0A' );
 
             sal_Int16 nCurDepth;
             if( nPos )
@@ -471,10 +471,10 @@ void Outliner::SetText( const XubString& rText, Paragraph* pPara )
             {
                 // Extract Tabs
                 sal_uInt16 nTabs = 0;
-                while ( ( nTabs < aStr.Len() ) && ( aStr.GetChar( nTabs ) == '\t' ) )
+                while ( ( nTabs < aStr.getLength() ) && ( aStr[nTabs] == '\t' ) )
                     nTabs++;
                 if ( nTabs )
-                    aStr.Erase( 0, nTabs );
+                    aStr = aStr.copy(nTabs);
 
                 // Keep depth?  (see Outliner::Insert)
                 if( !(pPara->nFlags & PARAFLAG_HOLDDEPTH) )
@@ -519,15 +519,12 @@ bool Outliner::ImpConvertEdtToOut( sal_Int32 nPara,EditView* pView)
     sal_uInt16 nTabs = 0;
     ESelection aDelSel;
 
-//  const SfxItemSet& rAttrs = pEditEngine->GetParaAttribs( nPara );
-//  bool bAlreadyOutliner = rAttrs.GetItemState( EE_PARA_OUTLLRSPACE ) == SFX_ITEM_ON ? true : false;
+    OUString aName;
+    OUString aHeading_US( "heading" );
+    OUString aNumber_US( "Numbering" );
 
-    XubString aName;
-    XubString aHeading_US( RTL_CONSTASCII_USTRINGPARAM( "heading" ) );
-    XubString aNumber_US( RTL_CONSTASCII_USTRINGPARAM( "Numbering" ) );
-
-    XubString aStr( pEditEngine->GetText( nPara ) );
-    sal_Unicode* pPtr = (sal_Unicode*)aStr.GetBuffer();
+    OUString aStr( pEditEngine->GetText( nPara ) );
+    const sal_Unicode* pPtr = aStr.getStr();
 
     sal_uInt16 nHeadingNumberStart = 0;
     sal_uInt16 nNumberingNumberStart = 0;
@@ -535,17 +532,17 @@ bool Outliner::ImpConvertEdtToOut( sal_Int32 nPara,EditView* pView)
     if( pStyle )
     {
         aName = pStyle->GetName();
-        sal_uInt16 nSearch;
-        if ( ( nSearch = aName.Search( aHeading_US ) ) != STRING_NOTFOUND )
-            nHeadingNumberStart = nSearch + aHeading_US.Len();
-        else if ( ( nSearch = aName.Search( aNumber_US ) ) != STRING_NOTFOUND )
-            nNumberingNumberStart = nSearch + aNumber_US.Len();
+        sal_Int32 nSearch;
+        if ( ( nSearch = aName.indexOf( aHeading_US ) ) != -1 )
+            nHeadingNumberStart = nSearch + aHeading_US.getLength();
+        else if ( ( nSearch = aName.indexOf( aNumber_US ) ) != -1 )
+            nNumberingNumberStart = nSearch + aNumber_US.getLength();
     }
 
     if ( nHeadingNumberStart || nNumberingNumberStart )
     {
         // PowerPoint import ?
-        if( nHeadingNumberStart && ( aStr.Len() >= 2 ) &&
+        if( nHeadingNumberStart && ( aStr.getLength() >= 2 ) &&
                 ( pPtr[0] != '\t' ) && ( pPtr[1] == '\t' ) )
         {
             // Extract Bullet and Tab
@@ -553,8 +550,8 @@ bool Outliner::ImpConvertEdtToOut( sal_Int32 nPara,EditView* pView)
         }
 
         sal_uInt16 nPos = nHeadingNumberStart ? nHeadingNumberStart : nNumberingNumberStart;
-        String aLevel = comphelper::string::stripStart(aName.Copy(nPos), ' ');
-        nTabs = sal::static_int_cast< sal_uInt16 >(aLevel.ToInt32());
+        OUString aLevel = comphelper::string::stripStart(aName.copy(nPos), ' ');
+        nTabs = sal::static_int_cast< sal_uInt16 >(aLevel.toInt32());
         if( nTabs )
             nTabs--; // Level 0 = "heading 1"
         bConverted = sal_True;
@@ -1749,17 +1746,17 @@ EBulletInfo Outliner::GetBulletInfo( sal_Int32 nPara )
     return aInfo;
 }
 
-XubString Outliner::GetText( Paragraph* pParagraph, sal_Int32 nCount ) const
+OUString Outliner::GetText( Paragraph* pParagraph, sal_Int32 nCount ) const
 {
     DBG_CHKTHIS(Outliner,0);
 
-    XubString aText;
+    OUString aText;
     sal_Int32 nStartPara = pParaList->GetAbsPos( pParagraph );
     for ( sal_Int32 n = 0; n < nCount; n++ )
     {
         aText += pEditEngine->GetText( nStartPara + n );
         if ( (n+1) < nCount )
-            aText += '\n';
+            aText += "\n";
     }
     return aText;
 }
@@ -1788,7 +1785,7 @@ void Outliner::StripPortions()
     bStrippingPortions = sal_False;
 }
 
-void Outliner::DrawingText( const Point& rStartPos, const XubString& rText, sal_uInt16 nTextStart, sal_uInt16 nTextLen, const sal_Int32* pDXArray,const SvxFont& rFont,
+void Outliner::DrawingText( const Point& rStartPos, const OUString& rText, sal_uInt16 nTextStart, sal_uInt16 nTextLen, const sal_Int32* pDXArray,const SvxFont& rFont,
     sal_Int32 nPara, sal_uInt16 nIndex, sal_uInt8 nRightToLeft,
     const EEngineData::WrongSpellVector* pWrongSpellVector,
     const SvxFieldData* pFieldData,
@@ -1973,14 +1970,14 @@ void Outliner::ImplCalcBulletText( sal_Int32 nPara, sal_Bool bRecalcLevel, sal_B
 
     while ( pPara )
     {
-        XubString aBulletText;
+        OUString aBulletText;
         const SvxNumberFormat* pFmt = GetNumberFormat( nPara );
         if( pFmt && ( pFmt->GetNumberingType() != SVX_NUM_BITMAP ) )
         {
             aBulletText += pFmt->GetPrefix();
             if( pFmt->GetNumberingType() == SVX_NUM_CHAR_SPECIAL )
             {
-                aBulletText += pFmt->GetBulletChar();
+                aBulletText += OUString(pFmt->GetBulletChar());
             }
             else if( pFmt->GetNumberingType() != SVX_NUM_NUMBER_NONE )
             {

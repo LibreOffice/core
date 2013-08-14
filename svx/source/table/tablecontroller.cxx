@@ -1667,7 +1667,7 @@ void SvxTableController::EditCell( const CellPos& rPos, ::Window* pWindow, const
             if(nParaAnz==1 && p1stPara)
             {
                 // Bei nur einem Pararaph
-                if (pOutl->GetText(p1stPara).Len() == 0)
+                if (pOutl->GetText(p1stPara).isEmpty())
                 {
                     bEmptyOutliner = true;
                 }

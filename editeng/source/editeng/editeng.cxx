@@ -2576,7 +2576,7 @@ ParagraphInfos EditEngine::GetParagraphInfos( sal_Int32 nPara )
 // =====================================================================
 // ======================    Virtual Methods    ========================
 // =====================================================================
-void EditEngine::DrawingText( const Point&, const XubString&, sal_uInt16, sal_uInt16,
+void EditEngine::DrawingText( const Point&, const OUString&, sal_uInt16, sal_uInt16,
     const sal_Int32*, const SvxFont&, sal_Int32, sal_uInt16, sal_uInt8,
     const EEngineData::WrongSpellVector*, const SvxFieldData*, bool, bool, bool,
     const ::com::sun::star::lang::Locale*, const Color&, const Color&)
@@ -2660,7 +2660,7 @@ void EditEngine::ParagraphHeightChanged( sal_Int32 nPara )
     }
 }
 
-XubString EditEngine::GetUndoComment( sal_uInt16 nId ) const
+OUString EditEngine::GetUndoComment( sal_uInt16 nId ) const
 {
     DBG_CHKTHIS( EditEngine, 0 );
     XubString aComment;

@@ -541,7 +541,7 @@ void Outliner::QuickSetAttribs( const SfxItemSet& rSet, const ESelection& rSel )
     pEditEngine->QuickSetAttribs( rSet, rSel );
 }
 
-void Outliner::QuickInsertText( const XubString& rText, const ESelection& rSel )
+void Outliner::QuickInsertText( const OUString& rText, const ESelection& rSel )
 {
     bFirstParaIsEmpty = sal_False;
     pEditEngine->QuickInsertText( rText, rSel );

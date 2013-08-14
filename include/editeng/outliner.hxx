@@ -717,11 +717,11 @@ public:
     OutlinerView*   GetView( size_t nIndex ) const;
     size_t          GetViewCount() const;
 
-    Paragraph*      Insert( const String& rText, sal_Int32 nAbsPos = EE_PARA_APPEND, sal_Int16 nDepth = 0 );
+    Paragraph*      Insert( const OUString& rText, sal_Int32 nAbsPos = EE_PARA_APPEND, sal_Int16 nDepth = 0 );
     void            SetText( const OutlinerParaObject& );
     void            AddText( const OutlinerParaObject& );
-    void            SetText( const String& rText, Paragraph* pParagraph );
-    String          GetText( Paragraph* pPara, sal_Int32 nParaCount=1 ) const;
+    void            SetText( const OUString& rText, Paragraph* pParagraph );
+    OUString        GetText( Paragraph* pPara, sal_Int32 nParaCount=1 ) const;
 
     OutlinerParaObject* CreateParaObject( sal_Int32 nStartPara = 0, sal_Int32 nParaCount = EE_PARA_ALL ) const;
 
@@ -864,7 +864,7 @@ public:
     void            StripPortions();
 
     virtual void DrawingText(
-        const Point& rStartPos, const String& rText, sal_uInt16 nTextStart, sal_uInt16 nTextLen,
+        const Point& rStartPos, const OUString& rText, sal_uInt16 nTextStart, sal_uInt16 nTextLen,
         const sal_Int32* pDXArray, const SvxFont& rFont, sal_Int32 nPara, xub_StrLen nIndex, sal_uInt8 nRightToLeft,
         const EEngineData::WrongSpellVector* pWrongSpellVector,
         const SvxFieldData* pFieldData,
@@ -931,7 +931,7 @@ public:
     void            QuickInsertLineBreak( const ESelection& rSel );
 
     // Only for EditEngine mode
-    void            QuickInsertText( const String& rText, const ESelection& rSel );
+    void            QuickInsertText( const OUString& rText, const ESelection& rSel );
     void            QuickDelete( const ESelection& rSel );
     void            QuickRemoveCharAttribs( sal_Int32 nPara, sal_uInt16 nWhich = 0 );
     void            QuickFormatDoc( sal_Bool bFull = sal_False );

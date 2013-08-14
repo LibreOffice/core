@@ -1031,7 +1031,7 @@ void FuText::SetInEditMode(const MouseEvent& rMEvt, sal_Bool bQuickDrag)
             if (nParaAnz==1 && p1stPara)
             {
                 // with only one paragraph
-                if (pOutl->GetText(p1stPara).Len() == 0)
+                if (pOutl->GetText(p1stPara).isEmpty())
                 {
                     bEmptyOutliner = sal_True;
                 }

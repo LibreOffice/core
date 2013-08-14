@@ -115,7 +115,7 @@ public:
     void            SetInsertMode( sal_Bool bInsert );
 
     void            ReplaceSelected( const String& rStr );
-    String          GetSelected();
+    OUString        GetSelected();
     void            DeleteSelected();
 
     sal_uInt16          GetSelectedScriptType() const;
@@ -134,7 +134,7 @@ public:
 
     Cursor*         GetCursor() const;
 
-    void            InsertText( const String& rNew, sal_Bool bSelect = sal_False );
+    void            InsertText( const OUString& rNew, sal_Bool bSelect = sal_False );
 
     sal_Bool            PostKeyEvent( const KeyEvent& rKeyEvent, Window* pFrameWin = NULL );
 
@@ -173,7 +173,7 @@ public:
 
     EditTextObject* CreateTextObject();
     void            InsertText( const EditTextObject& rTextObject );
-    void            InsertText( ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > xDataObj, const String& rBaseURL, sal_Bool bUseSpecial );
+    void            InsertText( ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > xDataObj, const OUString& rBaseURL, sal_Bool bUseSpecial );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > GetTransferable();
 

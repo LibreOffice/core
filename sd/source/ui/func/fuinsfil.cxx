@@ -488,7 +488,7 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
                     while ( pOutliner->GetParagraphCount() > 1 )
                     {
                         Paragraph* pPara = pOutliner->GetParagraph( 0 );
-                        sal_uLong nLen = pOutliner->GetText( pPara, 1 ).Len();
+                        sal_uLong nLen = pOutliner->GetText( pPara, 1 ).getLength();
                         pOutliner->QuickDelete( ESelection( 0, (sal_uInt16) nLen, 1, 0 ) );
                         pOutliner->QuickInsertLineBreak( ESelection( 0, (sal_uInt16) nLen, 0, (sal_uInt16) nLen ) );
                     }
@@ -647,7 +647,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
 
             // only take the last paragraph if it is filled
             if (nSourcePos < nParaCount - 1 ||
-                pOutliner->GetText(pSourcePara).Len() > 0)
+                !pOutliner->GetText(pSourcePara).isEmpty())
             {
                 pDocliner->Insert( pOutliner->GetText(pSourcePara), nTargetPos, nDepth );
                 String aStyleSheetName( pStyleSheet->GetName() );

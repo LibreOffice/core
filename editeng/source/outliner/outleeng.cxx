@@ -122,7 +122,7 @@ sal_Bool OutlinerEditEng::ConvertNextDocument()
     return pOwner->ConvertNextDocument();
 }
 
-XubString OutlinerEditEng::GetUndoComment( sal_uInt16 nUndoId ) const
+OUString OutlinerEditEng::GetUndoComment( sal_uInt16 nUndoId ) const
 {
     switch( nUndoId )
     {
@@ -146,7 +146,7 @@ XubString OutlinerEditEng::GetUndoComment( sal_uInt16 nUndoId ) const
     }
 }
 
-void OutlinerEditEng::DrawingText( const Point& rStartPos, const XubString& rText, sal_uInt16 nTextStart, sal_uInt16 nTextLen,
+void OutlinerEditEng::DrawingText( const Point& rStartPos, const OUString& rText, sal_uInt16 nTextStart, sal_uInt16 nTextLen,
     const sal_Int32* pDXArray, const SvxFont& rFont, sal_Int32 nPara, sal_uInt16 nIndex, sal_uInt8 nRightToLeft,
     const EEngineData::WrongSpellVector* pWrongSpellVector,
     const SvxFieldData* pFieldData,

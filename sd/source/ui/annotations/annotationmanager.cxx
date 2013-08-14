@@ -487,7 +487,7 @@ void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest& rReq )
 
             ESelection aSel;
             aSel.nEndPara = pOutliner->GetParagraphCount()-2;
-            aSel.nEndPos = pOutliner->GetText( pOutliner->GetParagraph( aSel.nEndPara ) ).Len();
+            aSel.nEndPos = pOutliner->GetText( pOutliner->GetParagraph( aSel.nEndPara ) ).getLength();
 
             pOutliner->QuickSetAttribs( aAnswerSet, aSel );
         }
