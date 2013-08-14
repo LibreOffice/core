@@ -34,8 +34,8 @@ class SVT_DLLPUBLIC SvtURLBox : public ComboBox
 friend class SvtMatchContext_Impl;
 friend class SvtURLBox_Impl;
     Link                            aOpenHdl;
-    String                          aBaseURL;
-    String                          aPlaceHolder;
+    OUString                        aBaseURL;
+    OUString                        aPlaceHolder;
     rtl::Reference< SvtMatchContext_Impl > pCtx;
     SvtURLBox_Impl*                 pImp;
     INetProtocol                    eSmartProtocol;
@@ -64,8 +64,8 @@ public:
                                     SvtURLBox( Window* pParent, const ResId& _rResId, INetProtocol eSmart = INET_PROT_NOT_VALID, bool bSetDefaultHelpID = true );
                                     ~SvtURLBox();
 
-    void                            SetBaseURL( const String& rURL );
-    const String&                   GetBaseURL() const { return aBaseURL; }
+    void                            SetBaseURL( const OUString& rURL );
+    const OUString&                 GetBaseURL() const { return aBaseURL; }
     void                            SetOpenHdl( const Link& rLink ) { aOpenHdl = rLink; }
     const Link&                     GetOpenHdl() const { return aOpenHdl; }
     void                            SetOnlyDirectories( sal_Bool bDir = sal_True );
@@ -74,20 +74,22 @@ public:
     void                            SetSmartProtocol( INetProtocol eProt );
     sal_Bool                            IsCtrlOpen()
                                         { return bCtrlClick; }
-    String                          GetURL();
+    OUString                        GetURL();
     void                            DisableHistory();
 
     void                            UpdatePickList( );
 
-    static String                   ParseSmart( String aText, String aBaseURL, String aWorkDir );
+    static OUString                 ParseSmart( OUString aText, OUString aBaseURL, const OUString& aWorkDir );
 
-    void                            SetFilter(const String& _sFilter);
+    void                            SetFilter(const OUString& _sFilter);
 
     inline void                     EnableAutocompletion( sal_Bool _bEnable = sal_True )
                                         { bIsAutoCompleteEnabled = _bEnable; }
-    void SetPlaceHolder( const String& sPlaceHolder ) { aPlaceHolder = sPlaceHolder; }
-    String GetPlaceHolder() { return aPlaceHolder; }
-    bool MatchesPlaceHolder( const String& sToMatch ) { return ( ( aPlaceHolder.Len() > 0 ) && ( aPlaceHolder == sToMatch ) ); }
+    void                            SetPlaceHolder( const OUString& sPlaceHolder )
+                                        { aPlaceHolder = sPlaceHolder; }
+    OUString                        GetPlaceHolder() { return aPlaceHolder; }
+    bool                            MatchesPlaceHolder( const OUString& sToMatch ) const
+                                        { return ( !aPlaceHolder.isEmpty() ) && ( aPlaceHolder == sToMatch ); }
 };
 
 #endif

@@ -79,9 +79,9 @@ class SvtURLBox_Impl
 public:
     std::vector<OUString>      aURLs;
     std::vector<OUString>      aCompletions;
-    ::std::vector< WildCard >       m_aFilters;
+    std::vector<WildCard>      m_aFilters;
 
-    static sal_Bool TildeParsing( String& aText, String& aBaseUrl );
+    static sal_Bool TildeParsing( OUString& aText, OUString& aBaseUrl );
 
     inline SvtURLBox_Impl( )
     {
@@ -470,22 +470,22 @@ void SvtMatchContext_Impl::ReadFolder( const String& rURL,
 }
 
 //-------------------------------------------------------------------------
-String SvtURLBox::ParseSmart( String aText, String aBaseURL, String aWorkDir )
+OUString SvtURLBox::ParseSmart( OUString aText, OUString aBaseURL, const OUString& aWorkDir )
 {
     String aMatch;
 
     // parse ~ for Unix systems
     // does nothing for Windows
     if( !SvtURLBox_Impl::TildeParsing( aText, aBaseURL ) )
-        return String();
+        return OUString();
 
     INetURLObject aURLObject;
-    if( aBaseURL.Len() )
+    if( !aBaseURL.isEmpty() )
     {
         INetProtocol eBaseProt = INetURLObject::CompareProtocolScheme( aBaseURL );
 
         // if a base URL is set the string may be parsed relative
-        if( aText.Search( '/' ) == 0 )
+        if( aText.indexOf( '/' ) == 0 )
         {
             // text starting with slashes means absolute file URLs
             String aTemp = INetURLObject::GetScheme( eBaseProt );
@@ -501,7 +501,7 @@ String SvtURLBox::ParseSmart( String aText, String aBaseURL, String aWorkDir )
         }
         else
         {
-            String aSmart( aText );
+            OUString aSmart( aText );
             INetURLObject aObj( aBaseURL );
 
             // HRO: I suppose this hack should only be done for Windows !!!???
@@ -536,7 +536,7 @@ String SvtURLBox::ParseSmart( String aText, String aBaseURL, String aWorkDir )
             INetURLObject aTmp( aObj.smartRel2Abs( aSmart, bWasAbsolute ) );
 #endif
 
-            if ( aText.GetChar( aText.Len() - 1 ) == '.' )
+            if ( aText[ aText.getLength() - 1 ] == '.' )
                 // INetURLObject appends a final slash for the directories "." and "..", this is a bug!
                 // Remove it as a workaround
                 aTmp.removeFinalSlash();
@@ -547,7 +547,7 @@ String SvtURLBox::ParseSmart( String aText, String aBaseURL, String aWorkDir )
     else
     {
         OUString aTmpMatch;
-        ::utl::LocalFileHelper::ConvertSystemPathToURL( OUString(aText), OUString(aWorkDir), aTmpMatch );
+        ::utl::LocalFileHelper::ConvertSystemPathToURL( aText, aWorkDir, aTmpMatch );
         aMatch = aTmpMatch;
     }
 
@@ -1187,12 +1187,12 @@ void SvtURLBox::SetNoURLSelection( sal_Bool bSet )
 }
 
 //-------------------------------------------------------------------------
-String SvtURLBox::GetURL()
+OUString SvtURLBox::GetURL()
 {
     // wait for end of autocompletion
     ::osl::MutexGuard aGuard( theSvtMatchContextMutex::get() );
 
-    String aText( GetText() );
+    OUString aText( GetText() );
     if ( MatchesPlaceHolder( aText ) )
         return aPlaceHolder;
 
@@ -1213,7 +1213,7 @@ String SvtURLBox::GetURL()
 #endif
 
     INetURLObject aObj( aText );
-    if( aText.Search( '*' ) != STRING_NOTFOUND || aText.Search( '?' ) != STRING_NOTFOUND )
+    if( aText.indexOf( '*' ) != -1 || aText.indexOf( '?' ) != -1 )
     {
         // no autocompletion for wildcards
         INetURLObject aTempObj;
@@ -1272,7 +1272,7 @@ void SvtURLBox::DisableHistory()
     UpdatePicklistForSmartProtocol_Impl();
 }
 
-void SvtURLBox::SetBaseURL( const String& rURL )
+void SvtURLBox::SetBaseURL( const OUString& rURL )
 {
     ::osl::MutexGuard aGuard( theSvtMatchContextMutex::get() );
 
@@ -1287,23 +1287,23 @@ void SvtURLBox::SetBaseURL( const String& rURL )
     does nothing for Windows
  */
 sal_Bool SvtURLBox_Impl::TildeParsing(
-    String&
+    OUString&
 #ifdef UNX
     aText
 #endif
-    , String&
+    , OUString&
 #ifdef UNX
     aBaseURL
 #endif
 )
 {
 #ifdef UNX
-    if( aText.Search( '~' ) == 0 )
+    if( aText.indexOf( '~' ) == 0 )
     {
         String aParseTilde;
         sal_Bool bTrailingSlash = sal_True; // use trailing slash
 
-        if( aText.Len() == 1 || aText.GetChar( 1 ) == '/' )
+        if( aText.getLength() == 1 || aText[ 1 ] == '/' )
         {
             // covers "~" or "~/..." cases
             const char* aHomeLocation = getenv( "HOME" );
@@ -1314,14 +1314,14 @@ sal_Bool SvtURLBox_Impl::TildeParsing(
 
             // in case the whole path is just "~" then there should
             // be no trailing slash at the end
-            if( aText.Len() == 1 )
+            if( aText.getLength() == 1 )
                 bTrailingSlash = sal_False;
         }
         else
         {
             // covers "~username" and "~username/..." cases
-            xub_StrLen nNameEnd = aText.Search( '/' );
-            OUString aUserName = aText.Copy( 1, ( nNameEnd != STRING_NOTFOUND ) ? nNameEnd : ( aText.Len() - 1 ) );
+            sal_Int32 nNameEnd = aText.indexOf( '/' );
+            OUString aUserName = aText.copy( 1, ( nNameEnd != -1 ) ? nNameEnd : ( aText.getLength() - 1 ) );
 
             struct passwd* pPasswd = NULL;
 #ifdef SOLARIS
@@ -1367,8 +1367,8 @@ sal_Bool SvtURLBox_Impl::TildeParsing(
         {
             if( aParseTilde.GetChar( aParseTilde.Len() - 1 ) != '/' )
                 aParseTilde += '/';
-            if( aText.Len() > 2 )
-                aParseTilde += aText.Copy( 2 );
+            if( aText.getLength() > 2 )
+                aParseTilde += aText.copy( 2 );
         }
 
         aText = aParseTilde;
@@ -1379,7 +1379,7 @@ sal_Bool SvtURLBox_Impl::TildeParsing(
     return sal_True;
 }
 
-void SvtURLBox::SetFilter(const String& _sFilter)
+void SvtURLBox::SetFilter(const OUString& _sFilter)
 {
     pImp->m_aFilters.clear();
     FilterMatch::createWildCardFilterList(_sFilter,pImp->m_aFilters);
