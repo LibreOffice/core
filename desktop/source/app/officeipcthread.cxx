@@ -522,41 +522,29 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
     do
     {
         osl::Security &rSecurity = Security::get();
-        // #119950# Try to connect pipe first. If connected, means another instance already launched.
-        if ( pThread->maPipe.create( aPipeIdent.getStr(), osl_Pipe_OPEN, rSecurity ))
-        {
-            // #119950# Test if launched in a new terminal session for same user. On Windows platform, normally a user is resticted
-            // to have only one terminal session. But if mutiple terminal session for one user is allowed, crash will happen if launched
-            // LibreOffice from more than one terminal session. So need to detect and prevent this happen.
 
-            // Will try to create a same name pipe. If creation is successfully, means current instance is launched in a new session.
-            osl::Pipe  aSessionPipe;
-            if ( aSessionPipe.create( aPipeIdent.getStr(), osl_Pipe_OPEN, rSecurity )) {
-                // Can create a pipe with same name. This can only happen in multiple terminal session environment on Windows platform.
-                // Will display a warning dialog and exit.
-                return IPC_STATUS_MULTI_TS_ERROR;
-            } else {
-                osl::StreamPipe aStreamPipe(pThread->maPipe.getHandle());
-                if (readStringFromPipe(aStreamPipe) == SEND_ARGUMENTS)
-                {
-                    // Pipe connected to first office
-                    nPipeMode = PIPEMODE_CONNECTED;
-                }
-                else
-                {
-                    // Pipe connection failed (other office exited or crashed)
-                    TimeValue tval;
-                    tval.Seconds = 0;
-                    tval.Nanosec = 500000000;
-                    salhelper::Thread::wait( tval );
-                }
-            }
-
-        }
-        else if ( pThread->maPipe.create( aPipeIdent.getStr(), osl_Pipe_CREATE, rSecurity )) // Connection not successfull, now we try to create
+        // Try to create pipe
+        if ( pThread->maPipe.create( aPipeIdent.getStr(), osl_Pipe_CREATE, rSecurity ))
         {
             // Pipe created
             nPipeMode = PIPEMODE_CREATED;
+        }
+        else if( pThread->maPipe.create( aPipeIdent.getStr(), osl_Pipe_OPEN, rSecurity )) // Creation not successful, now we try to connect
+        {
+            osl::StreamPipe aStreamPipe(pThread->maPipe.getHandle());
+            if (readStringFromPipe(aStreamPipe) == SEND_ARGUMENTS)
+            {
+                // Pipe connected to first office
+                nPipeMode = PIPEMODE_CONNECTED;
+            }
+            else
+            {
+                // Pipe connection failed (other office exited or crashed)
+                TimeValue tval;
+                tval.Seconds = 0;
+                tval.Nanosec = 500000000;
+                salhelper::Thread::wait( tval );
+            }
         }
         else
         {

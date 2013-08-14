@@ -415,10 +415,7 @@ OUString MakeStartupConfigAccessErrorMessage( OUString const & aInternalErrMsg )
 // are allowed. Otherwise we will force a "crash inside a crash".
 // Thats why we have to use a special native message box here which does not use yield :-)
 //=============================================================================
-
-// #i119950# Add a option that not to display the "Fatal Error" on dialog title
-void FatalError(const OUString& sMessage, const bool isDisplayErrorString = true);
-void FatalError(const OUString& sMessage, const bool isDisplayErrorString)
+void FatalError(const OUString& sMessage)
 {
     OUString sProductKey = ::utl::Bootstrap::getProductKey();
     if ( sProductKey.isEmpty())
@@ -432,9 +429,8 @@ void FatalError(const OUString& sMessage, const bool isDisplayErrorString)
 
     OUStringBuffer sTitle (128);
     sTitle.append      (sProductKey     );
-    if (isDisplayErrorString) {
-        sTitle.appendAscii (" - Fatal Error");
-    }
+    sTitle.appendAscii (" - Fatal Error");
+
     Application::ShowNativeErrorBox (sTitle.makeStringAndClear (), sMessage);
     _exit(EXITHELPER_FATAL_ERROR);
 }
@@ -625,10 +621,6 @@ void Desktop::Init()
         else if ( aStatus == OfficeIPCThread::IPC_STATUS_BOOTSTRAP_ERROR )
         {
             SetBootstrapError( BE_PATHINFO_MISSING, OUString() );
-        }
-        else if ( aStatus == OfficeIPCThread::IPC_STATUS_MULTI_TS_ERROR )
-        {
-            SetBootstrapError( BE_MULTISESSION_NOT_SUPPORTED, OUString() );
         }
         else if ( aStatus == OfficeIPCThread::IPC_STATUS_2ND_OFFICE )
         {
@@ -856,13 +848,7 @@ OUString    Desktop::CreateErrorMsgString(
 void Desktop::HandleBootstrapErrors(
     BootstrapError aBootstrapError, OUString const & aErrorMessage )
 {
-    if ( aBootstrapError == BE_MULTISESSION_NOT_SUPPORTED ) {
-        OUString        aMessage;
-        aMessage = GetMsgString( STR_BOOTSTRAP_ERR_MULTISESSION,
-                        OUString( RTL_CONSTASCII_USTRINGPARAM( "You have another instance running in a different terminal session. Close that instance and then try again." )) );
-        FatalError(aMessage,sal_False);
-
-    } else if ( aBootstrapError == BE_PATHINFO_MISSING )
+    if ( aBootstrapError == BE_PATHINFO_MISSING )
     {
         OUString                    aErrorMsg;
         OUString                    aBuffer;
