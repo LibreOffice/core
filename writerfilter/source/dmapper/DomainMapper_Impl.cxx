@@ -1758,6 +1758,15 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
             {
                 xProps->setPropertyValue( rPropNameSupplier.GetName( PROP_ANCHOR_TYPE ), bIsGraphic  ?  uno::makeAny( text::TextContentAnchorType_AS_CHARACTER ) : uno::makeAny( text::TextContentAnchorType_AT_PARAGRAPH ) );
             }
+            else
+            {
+                // Fix spacing for as-character objects. If the paragraph has CT_Spacing_after set,
+                // it needs to be set on the object too, as that's what object placement code uses.
+                PropertyMapPtr paragraphContext = GetTopContextOfType( CONTEXT_PARAGRAPH );
+                PropertyMap::const_iterator pos = paragraphContext->find( PropertyDefinition( PROP_PARA_BOTTOM_MARGIN ));
+                if( pos != paragraphContext->end())
+                    xProps->setPropertyValue( rPropNameSupplier.GetName( PROP_BOTTOM_MARGIN ), (*pos).second );
+            }
         }
     }
     catch ( const uno::Exception& e )
