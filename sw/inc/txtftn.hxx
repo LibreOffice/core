@@ -21,12 +21,13 @@
 
 #include <txatbase.hxx>
 
+namespace rtl { class OUString; }
+
 class SwNodeIndex;
 class SwTxtNode;
 class SwNodes;
 class SwDoc;
 class SwFrm;
-class OUString;
 
 // ATT_FTN **********************************************************
 
