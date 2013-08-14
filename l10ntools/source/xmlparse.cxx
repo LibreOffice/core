@@ -447,11 +447,11 @@ void XMLFile::SearchL10NElements( XMLParentNode *pCur , int pos)
     else {
         switch( pCur->GetNodeType()) {
             case XML_NODE_TYPE_FILE: {
-                XMLParentNode* pElement;
+                XMLChildNode* pElement;
                 if( GetChildList()){
                     for ( size_t i = 0; i < GetChildList()->size(); i++ ){
-                        pElement = (XMLParentNode*) (*GetChildList())[ i ];
-                        if( pElement->GetNodeType() ==  XML_NODE_TYPE_ELEMENT ) SearchL10NElements( pElement , i);
+                        pElement = (*GetChildList())[ i ];
+                        if( pElement->GetNodeType() ==  XML_NODE_TYPE_ELEMENT ) SearchL10NElements( (XMLParentNode*) pElement , i);
                     }
                 }
             }
