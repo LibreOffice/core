@@ -88,32 +88,6 @@ void lclRandomGenerateValues( sal_Int32 nLength, sal_uInt8* aArray )
     rtl_random_destroyPool ( aRandomPool );
 }
 
-bool lclReadEncryptionInfo( PackageEncryptionInfo& rEncrInfo, BinaryInputStream& rStrm )
-{
-    rStrm.skip( 4 );
-    rStrm >> rEncrInfo.mnFlags;
-    if( getFlag( rEncrInfo.mnFlags, ENCRYPTINFO_EXTERNAL ) )
-        return false;
-
-    sal_uInt32 nHeaderSize, nRepeatedFlags;
-    rStrm >> nHeaderSize >> nRepeatedFlags;
-    if( (nHeaderSize < 20) || (nRepeatedFlags != rEncrInfo.mnFlags) )
-        return false;
-
-    rStrm.skip( 4 );
-    rStrm >> rEncrInfo.mnAlgorithmId >> rEncrInfo.mnAlgorithmIdHash >> rEncrInfo.mnKeySize;
-    rStrm.skip( nHeaderSize - 20 );
-    rStrm >> rEncrInfo.mnSaltSize;
-    if( rEncrInfo.mnSaltSize != 16 )
-        return false;
-
-    rStrm.readMemory( rEncrInfo.mpnSalt, 16 );
-    rStrm.readMemory( rEncrInfo.mpnEncrVerifier, 16 );
-    rStrm >> rEncrInfo.mnVerifierHashSize;
-    rStrm.readMemory( rEncrInfo.mpnEncrVerifierHash, 32 );
-    return !rStrm.isEof();
-}
-
 struct EncryptionStandardHeader {
     sal_uInt32 flags;
     sal_uInt32 sizeExtra;
