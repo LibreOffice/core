@@ -1099,7 +1099,7 @@ public:
           SwFtnIdxs& GetFtnIdxs()       { return *mpFtnIdxs; }
     const SwFtnIdxs& GetFtnIdxs() const { return *mpFtnIdxs; }
     /// change footnotes in area
-    bool SetCurFtn( const SwPaM& rPam, const String& rNumStr,
+    bool SetCurFtn( const SwPaM& rPam, const OUString& rNumStr,
                     sal_uInt16 nNumber, bool bIsEndNote );
 
     /** Operations on the content of the document e.g.

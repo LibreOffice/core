@@ -237,7 +237,9 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                 if( aCntntAtPos.pFndTxtAttr && aCntntAtPos.aFnd.pAttr )
                 {
                     const SwFmtFtn* pFtn = (SwFmtFtn*)aCntntAtPos.aFnd.pAttr;
-                    pFtn->GetFtnText( sTxt );
+                    OUString sTmp;
+                    pFtn->GetFtnText( sTmp );
+                    sTxt = sTmp;
                     sTxt.Insert( SW_RESSTR( pFtn->IsEndNote()
                                     ? STR_ENDNOTE : STR_FTNNOTE ), 0 );
                     bBalloon = sal_True;

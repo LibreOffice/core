@@ -2933,7 +2933,7 @@ Replace0xFF(SwTxtNode const& rNode, OUStringBuffer & rTxt, sal_Int32 & rTxtStt,
                         {
                             const SwFmtFtn& rFtn = pAttr->GetFtn();
                             OUString sExpand;
-                            if( rFtn.GetNumStr().Len() )
+                            if( !rFtn.GetNumStr().isEmpty() )
                                 sExpand = rFtn.GetNumStr();
                             else if( rFtn.IsEndNote() )
                                 sExpand = rNode.GetDoc()->GetEndNoteInfo().aFmt.
@@ -3091,7 +3091,7 @@ sal_Bool SwTxtNode::GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx,
                         {
                             const SwFmtFtn& rFtn = pHt->GetFtn();
                             XubString sExpand;
-                            if( rFtn.GetNumStr().Len() )
+                            if( !rFtn.GetNumStr().isEmpty() )
                                 sExpand = rFtn.GetNumStr();
                             else if( rFtn.IsEndNote() )
                                 sExpand = GetDoc()->GetEndNoteInfo().aFmt.

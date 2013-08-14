@@ -2652,10 +2652,12 @@ void SwPageFrm::UpdateFtnNum()
                 {
                     SwTxtFtn* pTxtFtn = pFtn->GetAttr();
                     if( !pTxtFtn->GetFtn().IsEndNote() &&
-                         !pTxtFtn->GetFtn().GetNumStr().Len() &&
+                         pTxtFtn->GetFtn().GetNumStr().isEmpty() &&
                          !pFtn->GetMaster() &&
                          (pTxtFtn->GetFtn().GetNumber() != ++nNum) )
-                        pTxtFtn->SetNumber( nNum );
+                    {
+                        pTxtFtn->SetNumber( nNum, OUString() );
+                    }
                     if ( pFtn->GetNext() )
                         pFtn = (SwFtnFrm*)pFtn->GetNext();
                     else

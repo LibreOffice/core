@@ -19,7 +19,7 @@
 #ifndef _FMTFTN_HXX
 #define _FMTFTN_HXX
 
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 #include <svl/poolitem.hxx>
 #include "swdllapi.h"
 
@@ -31,9 +31,9 @@ class SwTxtFtn;
 class SW_DLLPUBLIC SwFmtFtn: public SfxPoolItem
 {
     friend class SwTxtFtn;
-    SwTxtFtn* pTxtAttr;     ///< My TextAttribute.
-    String  aNumber;        ///< User-defined 'Number'.
-    sal_uInt16  nNumber;    ///< Automatische Nummerierung
+    SwTxtFtn* m_pTxtAttr;   ///< My TextAttribute.
+    OUString m_aNumber;     ///< User-defined 'Number'.
+    sal_uInt16 m_nNumber;   ///< Automatische Nummerierung
     bool    m_bEndNote;     ///< Is it an End note?
 
     /// Protected CopyCtor.
@@ -48,24 +48,27 @@ public:
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
 
-    const String &GetNumStr() const { return aNumber; }
-    const sal_uInt16 &GetNumber() const { return nNumber; }
-          bool    IsEndNote() const { return m_bEndNote;}
+    OUString   GetNumStr() const { return m_aNumber; }
+    sal_uInt16 GetNumber() const { return m_nNumber; }
+    bool       IsEndNote() const { return m_bEndNote;}
 
-    void SetNumStr( const String& rStr )    { aNumber = rStr; }
-    void SetNumber( sal_uInt16 nNo )            { nNumber = nNo; }
+    void SetNumStr( const OUString& rStr ) { m_aNumber = rStr; }
+    void SetNumber( sal_uInt16 nNo )       { m_nNumber = nNo; }
     void SetEndNote( bool b );
 
     void SetNumber( const SwFmtFtn& rFtn )
-        { nNumber = rFtn.nNumber; aNumber = rFtn.aNumber; }
+    {
+        m_nNumber = rFtn.m_nNumber;
+        m_aNumber = rFtn.m_aNumber;
+    }
 
-    const SwTxtFtn *GetTxtFtn() const   { return pTxtAttr; }
-          SwTxtFtn *GetTxtFtn()         { return pTxtAttr; }
+    const SwTxtFtn *GetTxtFtn() const   { return m_pTxtAttr; }
+          SwTxtFtn *GetTxtFtn()         { return m_pTxtAttr; }
 
-    void GetFtnText( String& rStr ) const;
+    void GetFtnText( OUString& rStr ) const;
 
     /// Returns string to be displayed of footnote / endnote.
-    String GetViewNumStr( const SwDoc& rDoc, sal_Bool bInclStrs = sal_False ) const;
+    OUString GetViewNumStr( const SwDoc& rDoc, sal_Bool bInclStrs = sal_False ) const;
 };
 
 

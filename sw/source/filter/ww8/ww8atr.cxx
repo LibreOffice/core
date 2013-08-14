@@ -3091,7 +3091,7 @@ void WW8AttributeOutput::ParaVerticalAlign( const SvxParaVertAlignItem& rAlign )
 void WW8Export::WriteFtnBegin( const SwFmtFtn& rFtn, ww::bytes* pOutArr )
 {
     ww::bytes aAttrArr;
-    bool bAutoNum = !rFtn.GetNumStr().Len();    // Auto-Nummer
+    const bool bAutoNum = rFtn.GetNumStr().isEmpty();    // Auto-Nummer
     if( bAutoNum )
     {
         if( bWrtWW8 )
@@ -3139,7 +3139,7 @@ void WW8Export::WriteFtnBegin( const SwFmtFtn& rFtn, ww::bytes* pOutArr )
         WriteChar( 0x02 );              // Auto-Nummer-Zeichen
     else
         // User-Nummerierung
-        OutSwString( rFtn.GetNumStr(), 0, rFtn.GetNumStr().Len(),
+        OutSwString( rFtn.GetNumStr(), 0, rFtn.GetNumStr().getLength(),
                         IsUnicode(), RTL_TEXTENCODING_MS_1252 );
 
     if( pOutArr )

@@ -334,7 +334,7 @@ sal_uInt16 SwWW8ImplReader::End_Ftn()
         // If no automatic numbering use the following char from the main text
         // as the footnote number
         if (!rDesc.mbAutoNum)
-            ((SwTxtFtn*)pFN)->SetNumber(0, &sChar);
+            ((SwTxtFtn*)pFN)->SetNumber(0, sChar);
 
         /*
             Delete the footnote char from the footnote if its at the beginning

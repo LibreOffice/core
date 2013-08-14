@@ -321,7 +321,7 @@ void SwDoc::ChgPageDesc( sal_uInt16 i, const SwPageDesc &rChged )
         {
             SwTxtFtn *pTxtFtn = rFtnIdxs[ nPos ];
             const SwFmtFtn &rFtn = pTxtFtn->GetFtn();
-            pTxtFtn->SetNumber( rFtn.GetNumber(), &rFtn.GetNumStr());
+            pTxtFtn->SetNumber(rFtn.GetNumber(), rFtn.GetNumStr());
         }
     }
 
