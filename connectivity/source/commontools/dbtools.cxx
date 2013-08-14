@@ -1595,6 +1595,14 @@ sal_Bool implSetObject( const Reference< XParameters >& _rxParameters,
     switch (_rValue.getValueTypeClass())
     {
         case TypeClass_UNSIGNED_HYPER:
+        {
+            sal_uInt64 nValue = 0;
+            OSL_VERIFY( _rValue >>= nValue );
+            _rxParameters->setString(_nColumnIndex, OUString::number(nValue));
+        }
+        break;
+
+        case TypeClass_UNSIGNED_LONG:
         case TypeClass_HYPER:
         {
             sal_Int64 nValue = 0;
@@ -1627,7 +1635,6 @@ sal_Bool implSetObject( const Reference< XParameters >& _rxParameters,
             _rxParameters->setByte(_nColumnIndex, *(sal_Int8 *)_rValue.getValue());
             break;
 
-        case TypeClass_UNSIGNED_SHORT:
         case TypeClass_SHORT:
             _rxParameters->setShort(_nColumnIndex, *(sal_Int16*)_rValue.getValue());
             break;
@@ -1636,10 +1643,14 @@ sal_Bool implSetObject( const Reference< XParameters >& _rxParameters,
             _rxParameters->setString(_nColumnIndex, OUString((sal_Unicode *)_rValue.getValue(),1));
             break;
 
-        case TypeClass_UNSIGNED_LONG:
+        case TypeClass_UNSIGNED_SHORT:
         case TypeClass_LONG:
-            _rxParameters->setInt(_nColumnIndex, *(sal_Int32*)_rValue.getValue());
+        {
+            sal_Int32 nValue = 0;
+            OSL_VERIFY( _rValue >>= nValue );
+            _rxParameters->setInt(_nColumnIndex, nValue);
             break;
+        }
 
         case TypeClass_FLOAT:
             _rxParameters->setFloat(_nColumnIndex, *(float*)_rValue.getValue());

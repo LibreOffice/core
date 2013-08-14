@@ -204,8 +204,15 @@ void ORowSetValue::setTypeKind(sal_Int32 _eType)
                 (*this) = getString();
                 break;
             case DataType::BIGINT:
-                (*this) = getLong();
+            {
+                sal_Int64 nVal(getLong());
+                sal_uInt64 nuVal(getULong());
+                if (nVal == 0 && nuVal != 0)
+                    (*this) = nuVal;
+                else
+                    (*this) = nVal;
                 break;
+            }
 
             case DataType::FLOAT:
                 (*this) = getFloat();
@@ -221,8 +228,15 @@ void ORowSetValue::setTypeKind(sal_Int32 _eType)
                 (*this) = getInt16();
                 break;
             case DataType::INTEGER:
-                (*this) = getInt32();
+            {
+                sal_Int32 nVal(getInt32());
+                sal_uInt32 nuVal(getUInt32());
+                if (nVal == 0 && nuVal != 0)
+                    (*this) = nuVal;
+                else
+                    (*this) = nVal;
                 break;
+            }
             case DataType::BIT:
             case DataType::BOOLEAN:
                 (*this) = getBool();
@@ -1498,7 +1512,7 @@ sal_uInt32 ORowSetValue::getUInt32()  const
             case DataType::DECIMAL:
             case DataType::NUMERIC:
             case DataType::LONGVARCHAR:
-                nRet = OUString(m_aValue.m_pString).toInt32();
+                nRet = OUString(m_aValue.m_pString).toUInt32();
                 break;
             case DataType::FLOAT:
                 nRet = sal_uInt32(m_aValue.m_nFloat);
@@ -1645,7 +1659,7 @@ sal_uInt64 ORowSetValue::getULong()   const
             case DataType::DECIMAL:
             case DataType::NUMERIC:
             case DataType::LONGVARCHAR:
-                nRet = static_cast<sal_uInt64>(OUString(m_aValue.m_pString).toInt64());
+                nRet = static_cast<sal_uInt64>(OUString(m_aValue.m_pString).toUInt64());
                 break;
             case DataType::FLOAT:
                 nRet = sal_uInt64(m_aValue.m_nFloat);
