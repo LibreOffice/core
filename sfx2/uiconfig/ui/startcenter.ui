@@ -90,7 +90,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">All</property>
+                <property name="label" translatable="yes">All Recent</property>
               </object>
               <packing>
                 <property name="tab_fill">False</property>
