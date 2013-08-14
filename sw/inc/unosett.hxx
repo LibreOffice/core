@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _UNOSETT_HXX
-#define _UNOSETT_HXX
+#ifndef UNOSETT_HXX
+#define UNOSETT_HXX
 
 #include <swtypes.hxx>
 #include <calbck.hxx>
@@ -31,7 +31,6 @@
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/implbase5.hxx>
-#include <tools/string.hxx>
 #include <svl/itemprop.hxx>
 
 class SwDoc;
@@ -142,9 +141,9 @@ class SwXNumberingRules : public cppu::WeakAggImplHelper5
 >,
     public SwClient
 {
-    String                      sNewCharStyleNames[MAXLEVEL];
-    String                      sNewBulletFontNames[MAXLEVEL];
-    String                      sCreatedNumRuleName; //connects to a numbering in SwDoc
+    OUString                    m_sNewCharStyleNames[MAXLEVEL];
+    OUString                    m_sNewBulletFontNames[MAXLEVEL];
+    OUString                    m_sCreatedNumRuleName; //connects to a numbering in SwDoc
     SwDoc*                      pDoc;
     SwDocShell*                 pDocShell; // Only if used as chapter numbering.
     SwNumRule*                  pNumRule;
@@ -203,13 +202,13 @@ public:
                 const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rProperties, sal_Int32 nIndex)
                 throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException );
 
-    const String*           GetNewCharStyleNames() const {return sNewCharStyleNames;}
-    const String*           GetBulletFontNames() const {return sNewBulletFontNames;}
+    const OUString*         GetNewCharStyleNames() const {return m_sNewCharStyleNames;}
+    const OUString*         GetBulletFontNames() const {return m_sNewBulletFontNames;}
     const SwNumRule*        GetNumRule() {return pNumRule;}
 
     static bool             isInvalidStyle(const OUString &rName);
     void    Invalidate()    {pDocShell = 0;}
-    const String&           GetCreatedNumRuleName() const{return sCreatedNumRuleName; }
+    OUString                GetCreatedNumRuleName() const {return m_sCreatedNumRuleName;}
 };
 
 class SwXChapterNumbering : public SwXNumberingRules
