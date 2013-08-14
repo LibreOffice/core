@@ -25,10 +25,13 @@ namespace connectivity
         /**
          * Make sure an identifier is safe to use within the databse. Currently
          * firebird seems to return identifiers with 93 character (instead of
-         * 31). Use this to avoid issues when using the identifier in other
-         * sql queries.
+         * 31), whereby the name is simply padded with trailing whitespace.
+         * This removes all trailing whitespace (i.e. if necessary so that
+         * the length is below 31 characters). Firebird automatically compensates
+         * for such shorter strings, however any trailing padding makes the gui
+         * editing of such names harder, hence we remove all trailing whitespace.
          */
-        void sanitizeIdentifier(::rtl::OUString& rIdentifier);
+        ::rtl::OUString& sanitizeIdentifier(::rtl::OUString& rIdentifier);
 
         /**
          * Evaluate a firebird status vector and throw exceptions as necessary.
