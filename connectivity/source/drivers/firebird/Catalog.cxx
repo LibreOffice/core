@@ -28,10 +28,14 @@ Catalog::Catalog(const uno::Reference< XConnection >& rConnection):
 void Catalog::refreshTables()
 {
     // TODO: set type -- currenty we also get system tables...
+    Sequence< OUString > aTypes(2);
+    aTypes[0] = "TABLE";
+    aTypes[1] = "VIEW";
+
     uno::Reference< XResultSet > xTables = m_xMetaData->getTables(Any(),
                                                             "%",
                                                             "%",
-                                                            Sequence< OUString >());
+                                                            aTypes);
 
     TStringVector aTableNames;
 
