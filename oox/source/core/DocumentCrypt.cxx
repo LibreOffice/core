@@ -161,6 +161,9 @@ bool lclWriteEncryptionInfo( PackageEncryptionInfo& rEncrInfo, BinaryOutputStrea
 
 void lclDeriveKey( const sal_uInt8* pnHash, sal_uInt32 nHashLen, sal_uInt8* pnKeyDerived, sal_uInt32 nRequiredKeyLen )
 {
+    // De facto we are always called with nRequiredKeyLen == 16, at least currently
+    assert(nRequiredKeyLen == 16);
+
     sal_uInt8 pnBuffer[ 64 ];
     memset( pnBuffer, 0x36, sizeof( pnBuffer ) );
     for( sal_uInt32 i = 0; i < nHashLen; ++i )
@@ -182,11 +185,17 @@ void lclDeriveKey( const sal_uInt8* pnHash, sal_uInt32 nHashLen, sal_uInt8* pnKe
     rtl_digest_get( aDigest, pnX2, RTL_DIGEST_LENGTH_SHA1 );
     rtl_digest_destroy( aDigest );
 
+#if 0 // for now nRequiredKeyLen will always be 16 and thus less than
+      // RTL_DIGEST_LENGTH_SHA1==20, see assert above...
     if( nRequiredKeyLen > RTL_DIGEST_LENGTH_SHA1 )
     {
+        // This memcpy call generates a (bogus?) warning when
+        // compiling with gcc 4.7 and 4.8 and optimising: array
+        // subscript is above array bounds.
         memcpy( pnKeyDerived + RTL_DIGEST_LENGTH_SHA1, pnX2, nRequiredKeyLen - RTL_DIGEST_LENGTH_SHA1 );
         nRequiredKeyLen = RTL_DIGEST_LENGTH_SHA1;
     }
+#endif
     memcpy( pnKeyDerived, pnX1, nRequiredKeyLen );
 }
 
@@ -406,8 +415,9 @@ bool AesEncoder::encode()
 
     lclRandomGenerateValues( rEncrInfo.mnSaltSize, rEncrInfo.mpnSalt );
 
-    sal_Int32 keyLength = rEncrInfo.mnKeySize / 8;
+    const sal_Int32 keyLength = rEncrInfo.mnKeySize / 8;
     sal_uInt8 key[16];
+    assert(keyLength == 16);
     memset(key, 0, keyLength);
 
     lclGenerateEncryptionKey(rEncrInfo, maPassword, key, keyLength);
