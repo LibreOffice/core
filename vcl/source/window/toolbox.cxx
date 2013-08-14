@@ -5108,7 +5108,11 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
     KeyCode aKeyCode = rKEvt.GetKeyCode();
     mnKeyModifier = aKeyCode.GetModifier();
     sal_uInt16 nCode = aKeyCode.GetCode();
-    sal_Bool bParentIsDialog = ( ( ImplGetParent()->GetStyle() & (WB_DIALOGCONTROL | WB_NODIALOGCONTROL) ) == WB_DIALOGCONTROL );
+
+    Window *pParent = ImplGetParent();
+    bool bOldSchoolContainer = ((pParent->GetStyle() & (WB_DIALOGCONTROL | WB_NODIALOGCONTROL)) == WB_DIALOGCONTROL);
+    bool bParentIsContainer = bOldSchoolContainer || isContainerWindow(pParent);
+
     sal_Bool bForwardKey = sal_False;
     sal_Bool bGrabFocusToDocument = sal_False;
 
@@ -5199,7 +5203,7 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
             break;
         case KEY_ESCAPE:
         {
-            if( !ImplIsFloatingMode() && bParentIsDialog )
+            if( !ImplIsFloatingMode() && bParentIsContainer )
                 DockingWindow::KeyInput( rKEvt );
             else
             {
@@ -5266,10 +5270,10 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
     ImplRemoveDel( &aDelData );
 
     // #107251# move focus away if this toolbox was disabled during keyinput
-    if( HasFocus() && mpData->mbKeyInputDisabled && (ImplGetParent()->GetStyle() & (WB_DIALOGCONTROL | WB_NODIALOGCONTROL) ) == WB_DIALOGCONTROL)
+    if (HasFocus() && bParentIsContainer)
     {
         sal_uInt16 n = 0;
-        Window *pFocusControl = ImplGetParent()->ImplGetDlgWindow( n, DLGWINDOW_FIRST );
+        Window *pFocusControl = pParent->ImplGetDlgWindow( n, DLGWINDOW_FIRST );
         if ( pFocusControl && pFocusControl != this )
             pFocusControl->ImplControlFocus( GETFOCUS_INIT );
     }
