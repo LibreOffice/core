@@ -32,36 +32,20 @@ class SwTxtFmtColl;
 
 class SwEnvFmtPage : public SfxTabPage
 {
-
-    FixedLine    aAddrFL;
-    FixedInfo    aAddrPosInfo;
-    FixedText    aAddrLeftText;
-    MetricField  aAddrLeftField;
-    FixedText    aAddrTopText;
-    MetricField  aAddrTopField;
-    FixedInfo    aAddrFormatInfo;
-    MenuButton   aAddrEditButton;
-    FixedLine    aSendFL;
-    FixedInfo    aSendPosInfo;
-    FixedText    aSendLeftText;
-    MetricField  aSendLeftField;
-    FixedText    aSendTopText;
-    MetricField  aSendTopField;
-    FixedInfo    aSendFormatInfo;
-    MenuButton   aSendEditButton;
-    FixedLine    aSizeFL;
-    FixedText    aSizeFormatText;
-    ListBox      aSizeFormatBox;
-    FixedText    aSizeWidthText;
-    MetricField  aSizeWidthField;
-    FixedText    aSizeHeightText;
-    MetricField  aSizeHeightField;
-    SwEnvPreview aPreview;
+    MetricField*  m_pAddrLeftField;
+    MetricField*  m_pAddrTopField;
+    MenuButton*   m_pAddrEditButton;
+    MetricField*  m_pSendLeftField;
+    MetricField*  m_pSendTopField;
+    MenuButton*   m_pSendEditButton;
+    ListBox*      m_pSizeFormatBox;
+    MetricField*  m_pSizeWidthField;
+    MetricField*  m_pSizeHeightField;
+    SwEnvPreview* m_pPreview;
 
     std::vector<sal_uInt16>  aIDs;
 
-     SwEnvFmtPage(Window* pParent, const SfxItemSet& rSet);
-    ~SwEnvFmtPage();
+    SwEnvFmtPage(Window* pParent, const SfxItemSet& rSet);
 
     DECL_LINK( ModifyHdl, Edit * );
     DECL_LINK( EditHdl, MenuButton * );

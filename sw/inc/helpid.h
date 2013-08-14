@@ -144,7 +144,6 @@
 
 #define HID_FRM_STD                                             "SW_HID_FRM_STD"
 #define HID_GRF_EXT                                             "SW_HID_GRF_EXT"
-#define HID_ENV_FMT                                             "SW_HID_ENV_FMT"
 #define HID_COND_COLL                                           "SW_HID_COND_COLL"
 
 #define HID_FLD_DB                                              "SW_HID_FLD_DB"

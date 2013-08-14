@@ -97,7 +97,6 @@ $(eval $(call gb_SrsTarget_add_files,sw/res,\
     sw/source/ui/docvw/access.src \
     sw/source/ui/docvw/docvw.src \
     sw/source/ui/envelp/envelp.src \
-    sw/source/ui/envelp/envfmt.src \
     sw/source/ui/envelp/envlop.src \
     sw/source/ui/envelp/envprt.src \
     sw/source/ui/envelp/label.src \

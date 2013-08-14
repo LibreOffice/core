@@ -344,6 +344,11 @@
           <object class="swuilo-SwEnvPreview" id="preview">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="preview-atkobject">
+                <property name="AtkObject::accessible-name" translatable="yes">Preview</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left_attach">2</property>
