@@ -1407,7 +1407,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
             sal_Int16 nSystemFlag = xRow->getShort(2);
             sal_Int16 nTableType  = xRow->getShort(3);
             xRow->getBlob(5); // We have to retrieve a column to verify it is null.
-            sal_Bool aIsView      = xRow->wasNull();
+            sal_Bool aIsView      = !xRow->wasNull();
             OUString sTableType;
 
             if (nSystemFlag == 1)
