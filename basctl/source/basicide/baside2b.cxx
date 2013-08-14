@@ -516,7 +516,7 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
 
     if( (rKEvt.GetKeyCode().GetCode() == KEY_SPACE ||
         rKEvt.GetKeyCode().GetCode() == KEY_TAB ||
-        rKEvt.GetKeyCode().GetCode() == KEY_RETURN ) && CodeCompleteOptions::IsAutoCorrectKeywordsOn() )
+        rKEvt.GetKeyCode().GetCode() == KEY_RETURN ) && CodeCompleteOptions::IsAutoCorrectOn() )
     {
         HandleAutoCorrect();
     }
@@ -761,7 +761,7 @@ void EditorWindow::HandleCodeCompletition()
 
         OUString sBaseName = aVect[0];//variable name
         OUString sVarType = aCodeCompleteCache.GetVarType( sBaseName );
-        if( !sVarType.isEmpty() && CodeCompleteOptions::IsAutoCorrectKeywordsOn() )
+        if( !sVarType.isEmpty() && CodeCompleteOptions::IsAutoCorrectOn() )
         {//correct variable name
             TextPaM aStart(nLine, aLine.indexOf(sBaseName) );
             TextPaM aEnd(nLine, aLine.indexOf(sBaseName) + sBaseName.getLength() );

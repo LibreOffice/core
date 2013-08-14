@@ -29,7 +29,7 @@ namespace
 
 CodeCompleteOptions::CodeCompleteOptions()
 {
-    bIsAutoCorrectKeywordsOn = officecfg::Office::BasicIDE::Autocomplete::AutoCorrect::get();
+    bIsAutoCorrectOn = officecfg::Office::BasicIDE::Autocomplete::AutoCorrect::get();
     bIsAutoCloseParenthesisOn = officecfg::Office::BasicIDE::Autocomplete::AutocloseParenthesis::get();
     bIsAutoCloseQuotesOn = officecfg::Office::BasicIDE::Autocomplete::AutocloseDoubleQuotes::get();
     bIsProcedureAutoCompleteOn = officecfg::Office::BasicIDE::Autocomplete::AutocloseProc::get();
@@ -87,14 +87,14 @@ void CodeCompleteOptions::SetAutoCloseParenthesisOn( const bool& b )
     theCodeCompleteOptions::get().bIsAutoCloseParenthesisOn = b;
 }
 
-bool CodeCompleteOptions::IsAutoCorrectKeywordsOn()
+bool CodeCompleteOptions::IsAutoCorrectOn()
 {
-    return theCodeCompleteOptions::get().aMiscOptions.IsExperimentalMode() && theCodeCompleteOptions::get().bIsAutoCorrectKeywordsOn;
+    return theCodeCompleteOptions::get().aMiscOptions.IsExperimentalMode() && theCodeCompleteOptions::get().bIsAutoCorrectOn;
 }
 
-void CodeCompleteOptions::SetAutoCorrectKeywordsOn( const bool& b )
+void CodeCompleteOptions::SetAutoCorrectOn( const bool& b )
 {
-    theCodeCompleteOptions::get().bIsAutoCorrectKeywordsOn = b;
+    theCodeCompleteOptions::get().bIsAutoCorrectOn = b;
 }
 
 std::ostream& operator<< (std::ostream& aStream, const CodeCompleteDataCache& aCache)

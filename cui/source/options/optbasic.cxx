@@ -155,4 +155,10 @@ SfxTabPage* SvxBasicIDEOptionsPage::Create( Window* pParent, const SfxItemSet& r
     return ( new SvxBasicIDEOptionsPage( pParent, rAttrSet ) );
 }
 
+void SvxBasicIDEOptionsPage::FillUserData()
+{
+    OUString aUserData;
+    SetUserData( aUserData );
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
