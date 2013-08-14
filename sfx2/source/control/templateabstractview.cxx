@@ -142,6 +142,18 @@ TemplateAbstractView::TemplateAbstractView(Window *pParent, const ResId &rResId,
     maFTName.Hide();
 }
 
+TemplateAbstractView::TemplateAbstractView(Window *pParent)
+    : ThumbnailView(pParent),
+      mnCurRegionId(0),
+      maAllButton(this, SfxResId(BTN_ALL_TEMPLATES)),
+      maFTName(this, SfxResId(FT_NAME))
+{
+    maAllButton.Hide();
+    maAllButton.SetStyle(maAllButton.GetStyle() | WB_FLATBUTTON);
+    maAllButton.SetClickHdl(LINK(this,TemplateAbstractView,ShowRootRegionHdl));
+    maFTName.Hide();
+}
+
 TemplateAbstractView::~TemplateAbstractView ()
 {
 }

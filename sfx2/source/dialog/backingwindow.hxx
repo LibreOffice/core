@@ -28,6 +28,8 @@
 #include <vcl/layout.hxx>
 
 #include <sfx2/recentdocsview.hxx>
+#include <sfx2/templatelocalview.hxx>
+#include <sfx2/templateviewitem.hxx>
 
 #include <svtools/acceleratorexecute.hxx>
 #include <unotools/moduleoptions.hxx>
@@ -36,6 +38,7 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/frame/XDesktop2.hpp>
 
 #include <set>
 
@@ -46,6 +49,7 @@ class BackingWindow
     com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >         mxContext;
     com::sun::star::uno::Reference<com::sun::star::frame::XDispatchProvider >        mxDesktopDispatchProvider;
     com::sun::star::uno::Reference<com::sun::star::frame::XFrame>                    mxFrame;
+    com::sun::star::uno::Reference< com::sun::star::frame::XDesktop2 >               mxDesktop;
 
     PushButton*                     mpOpenButton;
     PushButton*                     mpTemplateButton;
@@ -70,6 +74,16 @@ class BackingWindow
     PushButton*                     mpInfoButton;
     PushButton*                     mpTplRepButton;
 
+    PushButton*                     mpShowWriterTemplateButton;
+    PushButton*                     mpShowCalcTemplateButton;
+    PushButton*                     mpShowImpressTemplateButton;
+    PushButton*                     mpShowDrawTemplateButton;
+
+    PushButton*                     mpShowWriterRecentButton;
+    PushButton*                     mpShowCalcRecentButton;
+    PushButton*                     mpShowImpressRecentButton;
+    PushButton*                     mpShowDrawRecentButton;
+
     RecentDocsView*                 mpAllRecentThumbnails;
     RecentDocsView*                 mpWriterRecentThumbnails;
     RecentDocsView*                 mpCalcRecentThumbnails;
@@ -77,6 +91,11 @@ class BackingWindow
     RecentDocsView*                 mpDrawRecentThumbnails;
     RecentDocsView*                 mpDatabaseRecentThumbnails;
     RecentDocsView*                 mpMathRecentThumbnails;
+
+    TemplateLocalView*              mpWriterTemplateThumbnails;
+    TemplateLocalView*              mpCalcTemplateThumbnails;
+    TemplateLocalView*              mpImpressTemplateThumbnails;
+    TemplateLocalView*              mpDrawTemplateThumbnails;
 
     Rectangle                       maStartCentButtons;
 
@@ -88,6 +107,7 @@ class BackingWindow
         const OUString& rURL, const std::set<OUString>& rURLS, SvtModuleOptions& rOpt,
         SvtModuleOptions::EModule eMod );
     void setupButton( PushButton* pButton );
+    void setupTemplateView( TemplateLocalView* pView, FILTER_APPLICATION eFilter );
     void setupExternalLink( PushButton* pButton );
 
     void dispatchURL( const OUString& i_rURL,
@@ -97,6 +117,8 @@ class BackingWindow
                       );
 
     DECL_LINK( ClickHdl, Button* );
+    DECL_LINK( RecentTemplateToggleHdl, Button* );
+    DECL_LINK( OpenTemplateHdl, ThumbnailViewItem* );
     DECL_LINK( ExtLinkClickHdl, Button* );
     DECL_LINK( WindowEventListener, VclSimpleEvent* );
 
