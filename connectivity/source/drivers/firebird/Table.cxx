@@ -100,6 +100,7 @@ void SAL_CALL Table::alterColumnByName(const OUString& rColName,
         getConnection()->createStatement()->execute(sSql);
     }
 
+    m_pColumns->refresh();
     // TODO: implement me
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
