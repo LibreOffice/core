@@ -31,7 +31,7 @@ using namespace ::com::sun::star::accessibility;
 |
 \*****************************************************************************/
 
-SvxIconChoiceCtrlEntry::SvxIconChoiceCtrlEntry( const String& rText, const Image& rImage, sal_uInt16 _nFlags )
+SvxIconChoiceCtrlEntry::SvxIconChoiceCtrlEntry( const OUString& rText, const Image& rImage, sal_uInt16 _nFlags )
 {
     aText = rText;
     aImage = rImage;
@@ -43,7 +43,7 @@ SvxIconChoiceCtrlEntry::SvxIconChoiceCtrlEntry( const String& rText, const Image
     pflink = 0;
 }
 
-String SvxIconChoiceCtrlEntry::GetDisplayText() const
+OUString SvxIconChoiceCtrlEntry::GetDisplayText() const
 {
     return MnemonicGenerator::EraseAllMnemonicChars( aText );
 }
@@ -110,7 +110,7 @@ void SvtIconChoiceCtrl::DrawEntryImage( SvxIconChoiceCtrlEntry* pEntry, const Po
     rDev.DrawImage( rPos, pEntry->GetImage() );
 }
 
-String SvtIconChoiceCtrl::GetEntryText( SvxIconChoiceCtrlEntry* pEntry, sal_Bool )
+OUString SvtIconChoiceCtrl::GetEntryText( SvxIconChoiceCtrlEntry* pEntry, sal_Bool )
 {
     return pEntry->GetText();
 }

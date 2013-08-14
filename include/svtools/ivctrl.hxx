@@ -66,7 +66,7 @@ class SvxIconChoiceCtrlEntry
     Image aImage;
 
     OUString aText;
-    String aQuickHelpText;
+    OUString aQuickHelpText;
     void*  pUserData;
 
     friend class SvxIconChoiceCtrl_Impl;
@@ -111,16 +111,16 @@ class SvxIconChoiceCtrlEntry
                             }
 
 public:
-                            SvxIconChoiceCtrlEntry( const String& rText, const Image& rImage, sal_uInt16 nFlags = 0 );
+                            SvxIconChoiceCtrlEntry( const OUString& rText, const Image& rImage, sal_uInt16 nFlags = 0 );
                             ~SvxIconChoiceCtrlEntry () {}
 
     void                    SetImage ( const Image& rImage ) { aImage = rImage; }
     Image                   GetImage () const { return aImage; }
     void                    SetText ( const OUString& rText ) { aText = rText; }
     OUString                GetText () const { return aText; }
-    String SVT_DLLPUBLIC    GetDisplayText() const;
-    void                    SetQuickHelpText( const String& rText ) { aQuickHelpText = rText; }
-    String                  GetQuickHelpText() const { return aQuickHelpText; }
+    OUString SVT_DLLPUBLIC  GetDisplayText() const;
+    void                    SetQuickHelpText( const OUString& rText ) { aQuickHelpText = rText; }
+    OUString                GetQuickHelpText() const { return aQuickHelpText; }
     void                    SetUserData ( void* _pUserData ) { pUserData = _pUserData; }
     void*                   GetUserData () { return pUserData; }
 
@@ -252,7 +252,7 @@ protected:
                             const Point& rPos,
                             OutputDevice& rDev );
 
-    virtual String      GetEntryText(
+    OUString            GetEntryText(
                             SvxIconChoiceCtrlEntry* pEntry,
                             sal_Bool bInplaceEdit );
 
