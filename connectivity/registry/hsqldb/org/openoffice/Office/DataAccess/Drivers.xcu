@@ -23,7 +23,7 @@
         <value>com.sun.star.sdbcx.comp.hsqldb.Driver</value>
       </prop>
       <prop oor:name="DriverTypeDisplayName" oor:type="xs:string">
-        <value xml:lang="en-US">HSQL database engine</value>
+        <value xml:lang="en-US">HSQLDB Embedded</value>
       </prop>
       <node oor:name="Features">
         <node oor:name="UseDOSLineEnds" oor:op="replace">
