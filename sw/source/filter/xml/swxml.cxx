@@ -341,8 +341,7 @@ sal_Int32 ReadThroughComponent(
     OSL_ENSURE( xInfoSet.is(), "missing property set" );
     if( xInfoSet.is() )
     {
-        OUString sPropName("StreamName");
-        xInfoSet->setPropertyValue( sPropName, makeAny( sStreamName ) );
+        xInfoSet->setPropertyValue( "StreamName", makeAny( sStreamName ) );
     }
 
     try
@@ -351,8 +350,7 @@ sal_Int32 ReadThroughComponent(
         uno::Reference <io::XStream> xStream = xStorage->openStreamElement( sStreamName, embed::ElementModes::READ );
         uno::Reference <beans::XPropertySet > xProps( xStream, uno::UNO_QUERY );
 
-        Any aAny = xProps->getPropertyValue(
-                OUString("Encrypted") );
+        Any aAny = xProps->getPropertyValue("Encrypted");
 
         bool bEncrypted = aAny.getValueType() == ::getBooleanCppuType() &&
                 *(sal_Bool *)aAny.getValue();
@@ -501,7 +499,7 @@ static void lcl_ConvertSdrOle2ObjsToSdrGrafObjs( SwDoc& _rDoc )
 }
 
 
-sal_uLong XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const String & rName )
+sal_uLong XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, const OUString & rName )
 {
     // Get service factory
     uno::Reference< uno::XComponentContext > xContext =
@@ -649,7 +647,7 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, con
         if( xParentSet.is() )
         {
             uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xParentSet->getPropertySetInfo() );
-            OUString sPropName("BuildId" );
+            const OUString sPropName("BuildId" );
             if( xPropSetInfo.is() && xPropSetInfo->hasPropertyByName(sPropName) )
             {
                 xInfoSet->setPropertyValue( sPropName, xParentSet->getPropertyValue(sPropName) );
@@ -683,8 +681,7 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, con
     }
     uno::Any aProgRange;
     aProgRange <<= nProgressRange;
-    OUString sProgressRange("ProgressRange");
-    xInfoSet->setPropertyValue(sProgressRange, aProgRange);
+    xInfoSet->setPropertyValue("ProgressRange", aProgRange);
 
     Reference< container::XNameAccess > xLateInitSettings( document::NamedPropertyValues::create(xContext), UNO_QUERY_THROW );
     beans::NamedValue aLateInitSettings(
@@ -721,36 +718,33 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, con
         OUString *pSeq = aFamiliesSeq.getArray();
         if( aOpt.IsFrmFmts() )
             // SFX_STYLE_FAMILY_FRAME;
-            *pSeq++ = OUString("FrameStyles");
+            *pSeq++ = "FrameStyles";
         if( aOpt.IsPageDescs() )
             // SFX_STYLE_FAMILY_PAGE;
-            *pSeq++ = OUString("PageStyles");
+            *pSeq++ = "PageStyles";
         if( aOpt.IsTxtFmts() )
         {
             // (SFX_STYLE_FAMILY_CHAR|SFX_STYLE_FAMILY_PARA);
-            *pSeq++ = OUString("CharacterStyles");
-            *pSeq++ = OUString("ParagraphStyles");
+            *pSeq++ = "CharacterStyles";
+            *pSeq++ = "ParagraphStyles";
         }
         if( aOpt.IsNumRules() )
             // SFX_STYLE_FAMILY_PSEUDO;
-            *pSeq++ = OUString("NumberingStyles");
+            *pSeq++ = "NumberingStyles";
 
-        OUString sStyleInsertModeFamilies("StyleInsertModeFamilies");
-        xInfoSet->setPropertyValue( sStyleInsertModeFamilies,
+        xInfoSet->setPropertyValue( "StyleInsertModeFamilies",
                                     makeAny(aFamiliesSeq) );
 
-        OUString sStyleInsertModeOverwrite("StyleInsertModeOverwrite");
         sal_Bool bTmp = !aOpt.IsMerge();
         Any aAny;
         aAny.setValue( &bTmp, ::getBooleanCppuType() );
-        xInfoSet->setPropertyValue( sStyleInsertModeOverwrite, aAny );
+        xInfoSet->setPropertyValue( "StyleInsertModeOverwrite", aAny );
     }
     else if( bInsertMode )
     {
         const uno::Reference<text::XTextRange> xInsertTextRange =
             SwXTextRange::CreateXTextRange(rDoc, *rPaM.GetPoint(), 0);
-        OUString sTextInsertModeRange("TextInsertModeRange");
-        xInfoSet->setPropertyValue( sTextInsertModeRange,
+        xInfoSet->setPropertyValue( "TextInsertModeRange",
                                     makeAny(xInsertTextRange) );
     }
     else
@@ -761,19 +755,17 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, con
 
     if( IsBlockMode() )
     {
-        OUString sAutoTextMode("AutoTextMode");
         sal_Bool bTmp = sal_True;
         Any aAny;
         aAny.setValue( &bTmp, ::getBooleanCppuType() );
-        xInfoSet->setPropertyValue( sAutoTextMode, aAny );
+        xInfoSet->setPropertyValue( "AutoTextMode", aAny );
     }
     if( IsOrganizerMode() )
     {
-        OUString sOrganizerMode("OrganizerMode");
         sal_Bool bTmp = sal_True;
         Any aAny;
         aAny.setValue( &bTmp, ::getBooleanCppuType() );
-        xInfoSet->setPropertyValue( sOrganizerMode, aAny );
+        xInfoSet->setPropertyValue( "OrganizerMode", aAny );
     }
 
     // Set base URI
@@ -782,9 +774,7 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, con
     SfxMedium* pMedDescrMedium = pMedium ? pMedium : pDocSh->GetMedium();
     OSL_ENSURE( pMedDescrMedium, "There is no medium to get MediaDescriptor from!\n" );
 
-    OUString aBaseURL( rBaseURL );
-    OUString sPropName("BaseURI");
-    xInfoSet->setPropertyValue( sPropName, makeAny( aBaseURL ) );
+    xInfoSet->setPropertyValue( "BaseURI", makeAny( rBaseURL ) );
 
     // TODO/LATER: separate links from usual embedded objects
     OUString StreamPath;
@@ -799,13 +789,12 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, con
         }
         else
         {
-            StreamPath = OUString("dummyObjectName");
+            StreamPath = "dummyObjectName";
         }
 
         if( !StreamPath.isEmpty() )
         {
-            sPropName = OUString("StreamRelPath");
-            xInfoSet->setPropertyValue( sPropName, makeAny( StreamPath ) );
+            xInfoSet->setPropertyValue( "StreamRelPath", makeAny( StreamPath ) );
         }
     }
 
@@ -815,15 +804,15 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, con
     // save redline mode into import info property set
     Any aAny;
     sal_Bool bTmp;
-    OUString sShowChanges("ShowChanges");
+    const OUString sShowChanges("ShowChanges");
+    const OUString sRecordChanges("RecordChanges");
+    const OUString sRedlineProtectionKey("RedlineProtectionKey");
     bTmp = IDocumentRedlineAccess::IsShowChanges( rDoc.GetRedlineMode() );
     aAny.setValue( &bTmp, ::getBooleanCppuType() );
     xInfoSet->setPropertyValue( sShowChanges, aAny );
-    OUString sRecordChanges("RecordChanges");
     bTmp = IDocumentRedlineAccess::IsRedlineOn(rDoc.GetRedlineMode());
     aAny.setValue( &bTmp, ::getBooleanCppuType() );
     xInfoSet->setPropertyValue( sRecordChanges, aAny );
-    OUString sRedlineProtectionKey("RedlineProtectionKey");
     aAny <<= rDoc.GetRedlinePassword();
     xInfoSet->setPropertyValue( sRedlineProtectionKey, aAny );
 
@@ -836,13 +825,13 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, con
     {
         const sal_Bool bShapePositionInHoriL2R = !bOASIS;
         xInfoSet->setPropertyValue(
-                OUString("ShapePositionInHoriL2R"),
+                "ShapePositionInHoriL2R",
                 makeAny( bShapePositionInHoriL2R ) );
     }
     {
         const sal_Bool bTextDocInOOoFileFormat = !bOASIS;
         xInfoSet->setPropertyValue(
-                OUString("TextDocInOOoFileFormat"),
+                "TextDocInOOoFileFormat",
                 makeAny( bTextDocInOOoFileFormat ) );
     }
 
@@ -857,7 +846,7 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, con
             const uno::Reference<rdf::XDocumentMetadataAccess> xDMA(xModelComp,
                 uno::UNO_QUERY_THROW);
             const uno::Reference<rdf::XURI> xBaseURI( ::sfx2::createBaseURI(
-                xContext, xStorage, aBaseURL, StreamPath) );
+                xContext, xStorage, rBaseURL, StreamPath) );
             const uno::Reference<task::XInteractionHandler> xHandler(
                 pDocSh->GetMedium()->GetInteractionHandler() );
             xDMA->loadMetadataFromStorage(xStorage, xBaseURI, xHandler);
@@ -1013,7 +1002,7 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, con
         if( xModelSet.is() )
         {
             uno::Reference< beans::XPropertySetInfo > xModelSetInfo( xModelSet->getPropertySetInfo() );
-            OUString sName("BuildId" );
+            const OUString sName("BuildId" );
             if( xModelSetInfo.is() && xModelSetInfo->hasPropertyByName(sName) )
             {
                 xModelSet->setPropertyValue( sName, xInfoSet->getPropertyValue(sName) );
@@ -1033,7 +1022,7 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, con
     // read the sections of the document, which is equal to the medium.
     // returns the count of it
 size_t XMLReader::GetSectionList( SfxMedium& rMedium,
-                                  std::vector<String*>& rStrings ) const
+                                  std::vector<OUString*>& rStrings ) const
 {
     uno::Reference< uno::XComponentContext > xContext =
             comphelper::getProcessComponentContext();

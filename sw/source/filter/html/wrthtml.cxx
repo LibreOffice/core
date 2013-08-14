@@ -1367,7 +1367,7 @@ HTMLSaveData::~HTMLSaveData()
 }
 
 
-void GetHTMLWriter( const String&, const String& rBaseURL, WriterRef& xRet )
+void GetHTMLWriter( const OUString&, const OUString& rBaseURL, WriterRef& xRet )
 {
     xRet = new SwHTMLWriter( rBaseURL );
 }

@@ -49,10 +49,10 @@ protected:
 
 public:
 
-    SwXMLWriter( const String& rBaseURL );
+    SwXMLWriter( const OUString& rBaseURL );
     virtual ~SwXMLWriter();
 
-    virtual sal_uLong Write( SwPaM&, SfxMedium&, const String* = 0 );
+    virtual sal_uLong Write( SwPaM&, SfxMedium&, const OUString* = 0 );
 
 private:
 

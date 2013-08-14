@@ -95,7 +95,7 @@ Reader* SwReaderWriterEntry::GetReader()
     return NULL;
 }
 
-void SwReaderWriterEntry::GetWriter( const String& rNm, const String& rBaseURL, WriterRef& xWrt ) const
+void SwReaderWriterEntry::GetWriter( const OUString& rNm, const OUString& rBaseURL, WriterRef& xWrt ) const
 {
     if ( fnGetWriter )
         (*fnGetWriter)( rNm, rBaseURL, xWrt );
@@ -171,34 +171,34 @@ Reader* GetReader( ReaderWriterEnum eReader )
     return aReaderWriter[eReader].GetReader();
 }
 
-void GetWriter( const String& rFltName, const String& rBaseURL, WriterRef& xRet )
+void GetWriter( const OUString& rFltName, const OUString& rBaseURL, WriterRef& xRet )
 {
-        for( sal_uInt16 n = 0; n < MAXFILTER; ++n )
-                if( aFilterDetect[n].IsFilter( rFltName ) )
-                {
+    for( sal_uInt16 n = 0; n < MAXFILTER; ++n )
+        if ( aFilterDetect[n].IsFilter( rFltName ) )
+        {
             aReaderWriter[n].GetWriter( rFltName, rBaseURL, xRet );
-                        break;
-                }
+            break;
+        }
 }
 
-SwRead GetReader( const String& rFltName )
+SwRead GetReader( const OUString& rFltName )
 {
-        SwRead pRead = 0;
-        for( sal_uInt16 n = 0; n < MAXFILTER; ++n )
-                if( aFilterDetect[n].IsFilter( rFltName ) )
-                {
-                        pRead = aReaderWriter[n].GetReader();
-                        // fuer einige Reader noch eine Sonderbehandlung:
-                        if ( pRead )
-                                pRead->SetFltName( rFltName );
-                        break;
-                }
-        return pRead;
+    SwRead pRead = 0;
+    for( sal_uInt16 n = 0; n < MAXFILTER; ++n )
+        if ( aFilterDetect[n].IsFilter( rFltName ) )
+        {
+            pRead = aReaderWriter[n].GetReader();
+            // fuer einige Reader noch eine Sonderbehandlung:
+            if ( pRead )
+                    pRead->SetFltName( rFltName );
+            break;
+        }
+    return pRead;
 }
 
 } // namespace SwReaderWriter
 
-void Writer::SetVersion( const String&, long ) {}
+void Writer::SetVersion( const OUString&, long ) {}
 
 
 sal_Bool Writer::IsStgWriter() const { return sal_False; }
@@ -214,7 +214,7 @@ sal_Bool SwReader::NeedsPasswd( const Reader& /*rOptions*/ )
 }
 
 
-sal_Bool SwReader::CheckPasswd( const String& /*rPasswd*/, const Reader& /*rOptions*/ )
+sal_Bool SwReader::CheckPasswd( const OUString& /*rPasswd*/, const Reader& /*rOptions*/ )
 {
     return sal_True;
 }
@@ -298,7 +298,7 @@ void SwFilterOptions::Notify( const ::com::sun::star::uno::Sequence< OUString >&
 
 
 
-void StgReader::SetFltName( const String& rFltNm )
+void StgReader::SetFltName( const OUString& rFltNm )
 {
         if( SW_STORAGE_READER & GetReaderType() )
                 aFltName = rFltNm;
@@ -436,6 +436,9 @@ void CalculateFlySize(SfxItemSet& rFlySet, const SwNodeIndex& rAnchor,
         }
 }
 
+namespace
+{
+
 struct CharSetNameMap
 {
     rtl_TextEncoding eCode;
@@ -543,17 +546,18 @@ const CharSetNameMap *GetCharSetNameMap()
     };
     return &aMapArr[0];
 }
+
 /*
  Get a rtl_TextEncoding from its name
  */
-rtl_TextEncoding CharSetFromName(const String& rChrSetStr)
+rtl_TextEncoding CharSetFromName(const OUString& rChrSetStr)
 {
     const CharSetNameMap *pStart = GetCharSetNameMap();
     rtl_TextEncoding nRet = pStart->eCode;
 
     for(const CharSetNameMap *pMap = pStart; pMap->pName; ++pMap)
     {
-        if(rChrSetStr.EqualsIgnoreCaseAscii(pMap->pName))
+        if(rChrSetStr.equalsIgnoreAsciiCaseAscii(pMap->pName))
         {
             nRet = pMap->eCode;
             break;
@@ -565,11 +569,10 @@ rtl_TextEncoding CharSetFromName(const String& rChrSetStr)
         return nRet;
 }
 
-
 /*
  Get the String name of an rtl_TextEncoding
  */
-String NameFromCharSet(rtl_TextEncoding nChrSet)
+OUString NameFromCharSet(rtl_TextEncoding nChrSet)
 {
     const CharSetNameMap *pStart = GetCharSetNameMap();
     const char *pRet = pStart->pName;
@@ -588,6 +591,8 @@ String NameFromCharSet(rtl_TextEncoding nChrSet)
     return OUString::createFromAscii(pRet);
 }
 
+}
+
 // for the automatic conversion (mail/news/...)
 // The user data contains the options for the ascii import/export filter.
 // The format is:
@@ -602,9 +607,9 @@ void SwAsciiOptions::ReadUserData( const OUString& rStr )
 {
     sal_Int32 nToken = 0;
     sal_uInt16 nCnt = 0;
-    OUString sToken;
     do {
-        if( !(sToken = rStr.getToken( 0, ',', nToken )).isEmpty() )
+        const OUString sToken = rStr.getToken( 0, ',', nToken );
+        if (!sToken.isEmpty())
         {
             switch( nCnt )
             {
@@ -612,9 +617,9 @@ void SwAsciiOptions::ReadUserData( const OUString& rStr )
                 eCharSet = CharSetFromName(sToken);
                 break;
             case 1:         // LineEnd
-                if( sToken.equalsIgnoreAsciiCase( "CRLF" ))
+                if (sToken.equalsIgnoreAsciiCase("CRLF"))
                     eCRLF_Flag = LINEEND_CRLF;
-                else if( sToken.equalsIgnoreAsciiCase( "LF" ))
+                else if (sToken.equalsIgnoreAsciiCase("LF"))
                     eCRLF_Flag = LINEEND_LF;
                 else
                     eCRLF_Flag = LINEEND_CR;
@@ -634,8 +639,7 @@ void SwAsciiOptions::ReadUserData( const OUString& rStr )
 void SwAsciiOptions::WriteUserData(OUString& rStr)
 {
     // 1. charset
-    rStr = NameFromCharSet(eCharSet);
-    rStr += ",";
+    rStr = NameFromCharSet(eCharSet) + ",";
 
     // 2. LineEnd
     switch(eCRLF_Flag)
@@ -653,8 +657,7 @@ void SwAsciiOptions::WriteUserData(OUString& rStr)
     rStr += ",";
 
     // 3. Fontname
-    rStr += sFont;
-    rStr += ",";
+    rStr += sFont + ",";
 
     // 4. Language
     if (nLanguage)
@@ -693,7 +696,7 @@ Reader* GetRTFReader()
 
 }
 
-void GetRTFWriter( const String& rFltName, const String& rBaseURL, WriterRef& xRet )
+void GetRTFWriter( const OUString& rFltName, const OUString& rBaseURL, WriterRef& xRet )
 {
 #ifndef DISABLE_DYNLOADING
     FnGetWriter pFunction = reinterpret_cast<FnGetWriter>( SwGlobals::getFilters().GetMswordLibSymbol( "ExportRTF" ) );
@@ -721,7 +724,7 @@ Reader* GetWW8Reader()
 #endif
 }
 
-void GetWW8Writer( const String& rFltName, const String& rBaseURL, WriterRef& xRet )
+void GetWW8Writer( const OUString& rFltName, const OUString& rBaseURL, WriterRef& xRet )
 {
 #ifndef DISABLE_DYNLOADING
     FnGetWriter pFunction = reinterpret_cast<FnGetWriter>( SwGlobals::getFilters().GetMswordLibSymbol( "ExportDOC" ) );
@@ -738,7 +741,7 @@ void GetWW8Writer( const String& rFltName, const String& rBaseURL, WriterRef& xR
 typedef sal_uLong ( SAL_CALL *SaveOrDel )( SfxObjectShell&, SotStorage&, sal_Bool, const String& );
 typedef sal_uLong ( SAL_CALL *GetSaveWarning )( SfxObjectShell& );
 
-sal_uLong SaveOrDelMSVBAStorage( SfxObjectShell& rDoc, SotStorage& rStor, sal_Bool bSaveInto, const String& rStorageName )
+sal_uLong SaveOrDelMSVBAStorage( SfxObjectShell& rDoc, SotStorage& rStor, sal_Bool bSaveInto, const OUString& rStorageName )
 {
 #ifndef DISABLE_DYNLOADING
     SaveOrDel pFunction = reinterpret_cast<SaveOrDel>( SwGlobals::getFilters().GetMswordLibSymbol( "SaveOrDelMSVBAStorage_ww8" ) );

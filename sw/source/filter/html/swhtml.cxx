@@ -142,35 +142,26 @@ HTMLReader::HTMLReader()
     bTmplBrowseMode = sal_True;
 }
 
-String HTMLReader::GetTemplateName() const
+OUString HTMLReader::GetTemplateName() const
 {
-    OUString sTemplate("internal/html");
-
-    OUString sTemplateWithoutExt( sTemplate );
-    // first search for OpenDocument Writer/Web template
-    sTemplate += ".oth";
-
+    const OUString sTemplateWithoutExt("internal/html");
     SvtPathOptions aPathOpt;
-    // OpenDocument Writer/Web template (extension .oth)
-    bool bSet = aPathOpt.SearchFile( sTemplate, SvtPathOptions::PATH_TEMPLATE );
 
-    if( !bSet )
-    {
+    // first search for OpenDocument Writer/Web template
+    // OpenDocument Writer/Web template (extension .oth)
+    OUString sTemplate( sTemplateWithoutExt + ".oth" );
+    if (aPathOpt.SearchFile( sTemplate, SvtPathOptions::PATH_TEMPLATE ))
+        return sTemplate;
+
         // no OpenDocument Writer/Web template found.
         // search for OpenOffice.org Writer/Web template
-        sTemplate = sTemplateWithoutExt;
-        sTemplate += ".stw";
-        bSet = aPathOpt.SearchFile( sTemplate, SvtPathOptions::PATH_TEMPLATE );
-    }
+    sTemplate = sTemplateWithoutExt + ".stw";
+    if (aPathOpt.SearchFile( sTemplate, SvtPathOptions::PATH_TEMPLATE ))
+        return sTemplate;
 
-    if( !bSet )
-    {
-        sTemplate = "";
-        OSL_ENSURE( !this,
-            "The default HTML template cannot be found in the defined template directories!");
-    }
+    OSL_ENSURE( !this, "The default HTML template cannot be found in the defined template directories!");
 
-    return sTemplate;
+    return OUString();
 }
 
 int HTMLReader::SetStrmStgPtr()
@@ -187,7 +178,7 @@ int HTMLReader::SetStrmStgPtr()
 }
 
     // Aufruf fuer die allg. Reader-Schnittstelle
-sal_uLong HTMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPam, const String & rName )
+sal_uLong HTMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPam, const OUString & rName )
 {
     if( !pStrm )
     {
@@ -222,9 +213,8 @@ sal_uLong HTMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPam, co
         pStrm->ResetError();
     else if( SVPAR_ACCEPTED != eState )
     {
-        String sErr( OUString::number((sal_Int32)xParser->GetLineNr()));
-        sErr += ',';
-        sErr += OUString::number((sal_Int32)xParser->GetLinePos());
+        const OUString sErr(OUString::number((sal_Int32)xParser->GetLineNr())
+            + "," + OUString::number((sal_Int32)xParser->GetLinePos()));
 
         // den Stream als Fehlernummer Transporter benutzen
         nRet = *new StringErrorInfo( ERR_FORMAT_ROWCOL, sErr,

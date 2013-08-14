@@ -33,17 +33,17 @@
 
 //-----------------------------------------------------------------
 
-SwASCWriter::SwASCWriter( const String& rFltNm )
+SwASCWriter::SwASCWriter( const OUString& rFltNm )
 {
     SwAsciiOptions aNewOpts;
 
-    switch( 5 <= rFltNm.Len() ? rFltNm.GetChar( 4 ) : 0 )
+    switch( 5 <= rFltNm.getLength() ? rFltNm[4] : 0 )
     {
     case 'D':
                 aNewOpts.SetCharSet( RTL_TEXTENCODING_IBM_850 );
                 aNewOpts.SetParaFlags( LINEEND_CRLF );
-                if( 5 < rFltNm.Len() )
-                    switch( rFltNm.Copy( 5 ).ToInt32() )
+                if( 5 < rFltNm.getLength() )
+                    switch( rFltNm.copy( 5 ).toInt32() )
                     {
                     case 437: aNewOpts.SetCharSet( RTL_TEXTENCODING_IBM_437 );  break;
                     case 850: aNewOpts.SetCharSet( RTL_TEXTENCODING_IBM_850 );  break;
@@ -74,7 +74,7 @@ SwASCWriter::SwASCWriter( const String& rFltNm )
                 break;
 
     default:
-        if( rFltNm.Copy( 4 ).EqualsAscii( "_DLG" ))
+        if( rFltNm.copy( 4 )=="_DLG" )
         {
             // use the options
             aNewOpts = GetAsciiOptions();
@@ -87,22 +87,17 @@ SwASCWriter::~SwASCWriter() {}
 
 sal_uLong SwASCWriter::WriteStream()
 {
-    sal_Char cLineEnd[ 3 ];
-    sal_Char* pCEnd = cLineEnd;
     if( bASCII_ParaAsCR )           // If predefined
-        *pCEnd++ = '\015';
+        m_sLineEnd = "\015";
     else if( bASCII_ParaAsBlanc )
-        *pCEnd++ = ' ';
+        m_sLineEnd = " ";
     else
         switch( GetAsciiOptions().GetParaFlags() )
         {
-        case LINEEND_CR:    *pCEnd++ = '\015'; break;
-        case LINEEND_LF:    *pCEnd++ = '\012'; break;
-        case LINEEND_CRLF:  *pCEnd++ = '\015', *pCEnd++ = '\012'; break;
+        case LINEEND_CR:    m_sLineEnd = "\015"; break;
+        case LINEEND_LF:    m_sLineEnd = "\012"; break;
+        case LINEEND_CRLF:  m_sLineEnd = "\015\012"; break;
         }
-    *pCEnd = 0;
-
-    sLineEnd.AssignAscii( cLineEnd );
 
     long nMaxNode = pDoc->GetNodes().Count();
 
@@ -200,7 +195,7 @@ sal_uLong SwASCWriter::WriteStream()
 }
 
 
-void GetASCWriter( const String& rFltNm, const String& /*rBaseURL*/, WriterRef& xRet )
+void GetASCWriter( const OUString& rFltNm, const OUString& /*rBaseURL*/, WriterRef& xRet )
 {
   xRet = new SwASCWriter( rFltNm );
 }

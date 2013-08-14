@@ -250,7 +250,7 @@ SvStream& Writer::OutULong( SvStream& rStrm, sal_uLong nVal )
 }
 
 
-sal_uLong Writer::Write( SwPaM& rPaM, SvStream& rStrm, const String* pFName )
+sal_uLong Writer::Write( SwPaM& rPaM, SvStream& rStrm, const OUString* pFName )
 {
     if ( IsStgWriter() )
     {
@@ -277,20 +277,20 @@ sal_uLong Writer::Write( SwPaM& rPaM, SvStream& rStrm, const String* pFName )
     return nRet;
 }
 
-sal_uLong Writer::Write( SwPaM& rPam, SfxMedium& rMed, const String* pFileName )
+sal_uLong Writer::Write( SwPaM& rPam, SfxMedium& rMed, const OUString* pFileName )
 {
     // This method must be overloaded in SwXMLWriter a storage from medium will be used there.
     // The microsoft format can write to storage but the storage will be based on the stream.
     return Write( rPam, *rMed.GetOutStream(), pFileName );
 }
 
-sal_uLong Writer::Write( SwPaM& /*rPam*/, SvStorage&, const String* )
+sal_uLong Writer::Write( SwPaM& /*rPam*/, SvStorage&, const OUString* )
 {
     OSL_ENSURE( !this, "Write in Storages on a stream?" );
     return ERR_SWG_WRITE_ERROR;
 }
 
-sal_uLong Writer::Write( SwPaM&, const uno::Reference < embed::XStorage >&, const String*, SfxMedium* )
+sal_uLong Writer::Write( SwPaM&, const uno::Reference < embed::XStorage >&, const OUString*, SfxMedium* )
 {
     OSL_ENSURE( !this, "Write in Storages on a stream?" );
     return ERR_SWG_WRITE_ERROR;
@@ -445,7 +445,7 @@ sal_uLong StgWriter::WriteStream()
     return ERR_SWG_WRITE_ERROR;
 }
 
-sal_uLong StgWriter::Write( SwPaM& rPaM, SvStorage& rStg, const String* pFName )
+sal_uLong StgWriter::Write( SwPaM& rPaM, SvStorage& rStg, const OUString* pFName )
 {
     SetStream(0);
     pStg = &rStg;
@@ -465,7 +465,7 @@ sal_uLong StgWriter::Write( SwPaM& rPaM, SvStorage& rStg, const String* pFName )
     return nRet;
 }
 
-sal_uLong StgWriter::Write( SwPaM& rPaM, const uno::Reference < embed::XStorage >& rStg, const String* pFName, SfxMedium* pMedium )
+sal_uLong StgWriter::Write( SwPaM& rPaM, const uno::Reference < embed::XStorage >& rStg, const OUString* pFName, SfxMedium* pMedium )
 {
     SetStream(0);
     pStg = 0;

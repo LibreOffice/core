@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/string.hxx>
 #include <SwXMLSectionList.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
@@ -26,13 +25,15 @@
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
+// TODO: verify if these should match the same-name constants
+//       in xmloff/source/core/xmlimp.cxx ("_office" and "_office")
 sal_Char const sXML_np__office[] = "_ooffice";
 sal_Char const sXML_np__text[] = "_otext";
 
 // #110680#
 SwXMLSectionList::SwXMLSectionList(
     const uno::Reference< uno::XComponentContext > xContext,
-    std::vector<String*> &rNewSectionList)
+    std::vector<OUString*> &rNewSectionList)
 :   SvXMLImport( xContext ),
     rSectionList ( rNewSectionList )
 {
@@ -93,11 +94,11 @@ SvXMLImportContext *SvXMLSectionListContext::CreateChildContext(
     const uno::Reference< xml::sax::XAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = 0;
-    String sName;
 
     if (nPrefix == XML_NAMESPACE_TEXT && ( IsXMLToken ( rLocalName, XML_SECTION ) ||
                                            IsXMLToken ( rLocalName, XML_BOOKMARK) ) )
     {
+        OUString sName;
         sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
 
         for (sal_Int16 i=0; i < nAttrCount; i++)
@@ -105,12 +106,11 @@ SvXMLImportContext *SvXMLSectionListContext::CreateChildContext(
             const OUString& rAttrName = xAttrList->getNameByIndex( i );
             OUString aLocalName;
             sal_uInt16 nPrefx = rLocalRef.GetNamespaceMap().GetKeyByAttrName( rAttrName, &aLocalName);
-            const OUString& rAttrValue = xAttrList->getValueByIndex( i );
             if (XML_NAMESPACE_TEXT == nPrefx && IsXMLToken ( aLocalName, XML_NAME ) )
-                sName = rAttrValue;
+                sName = xAttrList->getValueByIndex( i );
         }
-        if ( sName.Len() )
-            rLocalRef.rSectionList.push_back( new String(sName) );
+        if ( !sName.isEmpty() )
+            rLocalRef.rSectionList.push_back( new OUString(sName) );
     }
 
     pContext = new SvXMLSectionListContext (rLocalRef, nPrefix, rLocalName, xAttrList);

@@ -5685,7 +5685,7 @@ sal_uLong WW8Reader::OpenMainStream( SvStorageStreamRef& rRef, sal_uInt16& rBuff
     return nRet;
 }
 
-sal_uLong WW8Reader::Read(SwDoc &rDoc, const String& rBaseURL, SwPaM &rPam, const String & /* FileName */)
+sal_uLong WW8Reader::Read(SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPam, const OUString & /* FileName */)
 {
     sal_uInt16 nOldBuffSize = 32768;
     bool bNew = !bInsertMode; // New Doc (no inserting)
@@ -5697,8 +5697,8 @@ sal_uLong WW8Reader::Read(SwDoc &rDoc, const String& rBaseURL, SwPaM &rPam, cons
     sal_uLong nRet = 0;
     sal_uInt8 nVersion = 8;
 
-    String sFltName = GetFltName();
-    if( sFltName.EqualsAscii( "WW6" ) )
+    const OUString sFltName = GetFltName();
+    if ( sFltName=="WW6" )
     {
         if (pStrm)
             nVersion = 6;
@@ -5710,9 +5710,9 @@ sal_uLong WW8Reader::Read(SwDoc &rDoc, const String& rBaseURL, SwPaM &rPam, cons
     }
     else
     {
-        if( sFltName.EqualsAscii( "CWW6" ) )
+        if ( sFltName=="CWW6" )
             nVersion = 6;
-        else if( sFltName.EqualsAscii( "CWW7" ) )
+        else if ( sFltName=="CWW7" )
             nVersion = 7;
 
         if( pStg )

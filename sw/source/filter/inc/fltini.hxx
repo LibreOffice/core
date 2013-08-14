@@ -33,20 +33,20 @@ class HTMLReader: public Reader
 {
     // wir wollen die Streams / Storages nicht geoeffnet haben
     virtual int SetStrmStgPtr();
-    virtual sal_uLong Read(SwDoc &, const String& rBaseURL, SwPaM &,const String &);
-    virtual String GetTemplateName() const;
+    virtual sal_uLong Read(SwDoc &, const OUString& rBaseURL, SwPaM &, const OUString &);
+    virtual OUString GetTemplateName() const;
 public:
     HTMLReader();
 };
 
 class WW1Reader : public Reader
 {
-    virtual sal_uLong Read(SwDoc &, const String& rBaseURL, SwPaM &,const String &);
+    virtual sal_uLong Read(SwDoc &, const OUString& rBaseURL, SwPaM &, const OUString &);
 };
 
 class XMLReader : public Reader
 {
-    virtual sal_uLong Read(SwDoc &, const String& rBaseURL, SwPaM &,const String &);
+    virtual sal_uLong Read(SwDoc &, const OUString& rBaseURL, SwPaM &, const OUString &);
 public:
     virtual int GetReaderType();
 
@@ -55,12 +55,12 @@ public:
     // read the sections of the document, which is equal to the medium.
     // returns the count of it
     virtual size_t GetSectionList( SfxMedium& rMedium,
-                                   std::vector<String*>& rStrings ) const;
+                                   std::vector<OUString*>& rStrings ) const;
 };
 
 // die speziellen Writer
 
-void GetWW8Writer( const String&, const String&, WriterRef& );
+void GetWW8Writer( const OUString&, const OUString&, WriterRef& );
 
 
 // Umsetzen der LRSpaces im aktuell importierten Doc. Die Fremd-Filter

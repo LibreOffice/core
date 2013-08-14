@@ -136,7 +136,7 @@ struct WW8LFOInfo;
 
 class WW8Reader : public StgReader
 {
-    virtual sal_uLong Read(SwDoc &, const String& rBaseURL, SwPaM &,const String &);
+    virtual sal_uLong Read(SwDoc &, const OUString& rBaseURL, SwPaM &, const OUString &);
     sal_uLong OpenMainStream( SvStorageStreamRef& rRef, sal_uInt16& rBuffSize );
 public:
     virtual int GetReaderType();

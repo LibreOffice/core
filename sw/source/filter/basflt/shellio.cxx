@@ -404,7 +404,7 @@ sal_uLong SwReader::Read( const Reader& rOptions )
  * Konstruktoren, Destruktor
  */
 
-SwReader::SwReader(SfxMedium& rMedium, const String& rFileName, SwDoc *pDocument)
+SwReader::SwReader(SfxMedium& rMedium, const OUString& rFileName, SwDoc *pDocument)
     : SwDocFac(pDocument), pStrm(0), pMedium(&rMedium), pCrsr(0),
     aFileName(rFileName)
 {
@@ -413,21 +413,21 @@ SwReader::SwReader(SfxMedium& rMedium, const String& rFileName, SwDoc *pDocument
 
 // In ein existierendes Dokument einlesen
 
-SwReader::SwReader(SvStream& rStrm, const String& rFileName, const String& rBaseURL, SwPaM& rPam)
+SwReader::SwReader(SvStream& rStrm, const OUString& rFileName, const OUString& rBaseURL, SwPaM& rPam)
     : SwDocFac(rPam.GetDoc()), pStrm(&rStrm), pMedium(0), pCrsr(&rPam),
     aFileName(rFileName)
 {
     SetBaseURL( rBaseURL );
 }
 
-SwReader::SwReader(SfxMedium& rMedium, const String& rFileName, SwPaM& rPam)
+SwReader::SwReader(SfxMedium& rMedium, const OUString& rFileName, SwPaM& rPam)
     : SwDocFac(rPam.GetDoc()), pStrm(0), pMedium(&rMedium),
     pCrsr(&rPam), aFileName(rFileName)
 {
     SetBaseURL( rMedium.GetBaseURL() );
 }
 
-SwReader::SwReader( const uno::Reference < embed::XStorage > &rStg, const String& rFilename, SwPaM &rPam )
+SwReader::SwReader( const uno::Reference < embed::XStorage > &rStg, const OUString& rFilename, SwPaM &rPam )
     : SwDocFac(rPam.GetDoc()), pStrm(0), xStg( rStg ), pMedium(0), pCrsr(&rPam), aFileName(rFilename)
 {
 }
@@ -448,9 +448,9 @@ Reader::~Reader()
     delete pTemplate;
 }
 
-String Reader::GetTemplateName() const
+OUString Reader::GetTemplateName() const
 {
-    return aEmptyStr;
+    return OUString();
 }
 
 // Die Filter-Vorlage laden, setzen und wieder freigeben
@@ -462,12 +462,12 @@ SwDoc* Reader::GetTemplateDoc()
         bHasAskTemplateName = sal_True;
     }
 
-    if( !aTemplateNm.Len() )
+    if( aTemplateNm.isEmpty() )
         ClearTemplate();
     else
     {
         INetURLObject aTDir( aTemplateNm );
-        String aFileName = aTDir.GetMainURL( INetURLObject::NO_DECODE );
+        const OUString aFileName = aTDir.GetMainURL( INetURLObject::NO_DECODE );
         OSL_ENSURE( !aTDir.HasError(), "No absolute path for template name!" );
         DateTime aCurrDateTime( DateTime::SYSTEM );
         bool bLoad = false;
@@ -529,8 +529,7 @@ SwDoc* Reader::GetTemplateDoc()
                 }
         }
 
-        OSL_ENSURE( !pTemplate || FStatHelper::IsDocument( aFileName ) ||
-                aTemplateNm.EqualsAscii( "$$Dummy$$" ),
+        OSL_ENSURE( !pTemplate || FStatHelper::IsDocument( aFileName ) || aTemplateNm=="$$Dummy$$",
                 "TemplatePtr but no template exist!" );
     }
 
@@ -563,9 +562,9 @@ void Reader::ClearTemplate()
     }
 }
 
-void Reader::SetTemplateName( const String& rDir )
+void Reader::SetTemplateName( const OUString& rDir )
 {
-    if( rDir.Len() && aTemplateNm != rDir )
+    if( !rDir.isEmpty() && aTemplateNm != rDir )
     {
         ClearTemplate();
         aTemplateNm = rDir;
@@ -581,7 +580,7 @@ void Reader::MakeHTMLDummyTemplateDoc()
     pTemplate->getPrinter( true );
     pTemplate->RemoveAllFmtLanguageDependencies();
     aChkDateTime = Date( 1, 1, 2300 );  // 2300. Jahrtausend sollte reichen
-    aTemplateNm.AssignAscii( "$$Dummy$$" );
+    aTemplateNm = "$$Dummy$$";
 }
 
 // alle die die Streams / Storages nicht geoeffnet brauchen,
@@ -624,7 +623,7 @@ int Reader::GetReaderType()
 }
 
 
-void Reader::SetFltName( const String& )
+void Reader::SetFltName( const OUString& )
 {
 }
 
@@ -668,7 +667,7 @@ void Reader::ResetFrmFmts( SwDoc& rDoc )
 
     // read the sections of the document, which is equal to the medium.
     // returns the count of it
-size_t Reader::GetSectionList( SfxMedium&, std::vector<String*>& ) const
+size_t Reader::GetSectionList( SfxMedium&, std::vector<OUString*>& ) const
 {
     return 0;
 }
@@ -768,7 +767,7 @@ SwWriter::SwWriter(SfxMedium& rMedium, SwDoc &rDocument)
 {
 }
 
-sal_uLong SwWriter::Write( WriterRef& rxWriter, const String* pRealFileName )
+sal_uLong SwWriter::Write( WriterRef& rxWriter, const OUString* pRealFileName )
 {
     // #i73788#
     SwPauseThreadStarting aPauseThreadStarting;

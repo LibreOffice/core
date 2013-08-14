@@ -29,7 +29,6 @@
 #include <sot/formats.hxx>
 #include <sot/storage.hxx>
 #include <svtools/parhtml.hxx>
-#include <tools/string.hxx>
 #include <tools/date.hxx>
 #include <tools/time.hxx>
 #include <tools/datetime.hxx>
@@ -63,15 +62,15 @@ struct Writer_Impl;
 
 class SW_DLLPUBLIC SwAsciiOptions
 {
-    String sFont;
+    OUString sFont;
     rtl_TextEncoding eCharSet;
     sal_uInt16 nLanguage;
     LineEnd eCRLF_Flag;
 
 public:
 
-    const String& GetFontName() const { return sFont; }
-    void SetFontName( const String& rFont ) { sFont = rFont; }
+    OUString GetFontName() const { return sFont; }
+    void SetFontName( const OUString& rFont ) { sFont = rFont; }
 
     rtl_TextEncoding GetCharSet() const { return eCharSet; }
     void SetCharSet( rtl_TextEncoding nVal ) { eCharSet = nVal; }
@@ -84,7 +83,7 @@ public:
 
     void Reset()
     {
-        sFont.Erase();
+        sFont = OUString();
         eCRLF_Flag = GetSystemLineEnd();
         eCharSet = ::osl_getThreadTextEncoding();
         nLanguage = 0;
@@ -155,35 +154,35 @@ class SwReader: public SwDocFac
     SfxMedium* pMedium;     // Who wants to obtain a Medium (W4W).
 
     SwPaM* pCrsr;
-    String aFileName;
-    String sBaseURL;
+    OUString aFileName;
+    OUString sBaseURL;
 
 public:
 
     // Initial reading. Document is created only at Read(...)
     // or in case it is given, into that.
     // Special case for Load with Sw3Reader.
-    SwReader( SfxMedium&, const String& rFilename, SwDoc *pDoc = 0 );
+    SwReader( SfxMedium&, const OUString& rFilename, SwDoc *pDoc = 0 );
 
     // Read into existing document.
     // Document and position in document are taken from SwPaM.
-    SwReader( SvStream&, const String& rFilename, const String& rBaseURL, SwPaM& );
-    SwReader( SfxMedium&, const String& rFilename, SwPaM& );
-    SwReader( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&, const String& rFilename, SwPaM& );
+    SwReader( SvStream&, const OUString& rFilename, const OUString& rBaseURL, SwPaM& );
+    SwReader( SfxMedium&, const OUString& rFilename, SwPaM& );
+    SwReader( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&, const OUString& rFilename, SwPaM& );
 
     // The only export interface is SwReader::Read(...)!!!
     sal_Bool NeedsPasswd( const Reader& );
-    sal_Bool CheckPasswd( const String&, const Reader& );
+    sal_Bool CheckPasswd( const OUString&, const Reader& );
     sal_uLong Read( const Reader& );
 
     // Ask for glossaries.
     sal_Bool HasGlossaries( const Reader& );
     sal_Bool ReadGlossaries( const Reader&, SwTextBlocks&, sal_Bool bSaveRelFiles );
 
-    const String&       GetBaseURL() const { return sBaseURL;}
+    OUString            GetBaseURL() const { return sBaseURL;}
 
 protected:
-    void                SetBaseURL( const String& rURL ) { sBaseURL = rURL; }
+    void                SetBaseURL( const OUString& rURL ) { sBaseURL = rURL; }
 };
 
 
@@ -198,7 +197,7 @@ class SW_DLLPUBLIC Reader
 {
     friend class SwReader;
     SwDoc* pTemplate;
-    String aTemplateNm;
+    OUString aTemplateNm;
 
     Date aDStamp;
     Time aTStamp;
@@ -219,7 +218,7 @@ protected:
     sal_Bool bHasAskTemplateName : 1;
     sal_Bool bIgnoreHTMLComments : 1;
 
-    virtual String GetTemplateName() const;
+    virtual OUString GetTemplateName() const;
 
 public:
     Reader();
@@ -228,7 +227,7 @@ public:
     virtual int GetReaderType();
     SwgReaderOption& GetReaderOpt() { return aOpt; }
 
-    virtual void SetFltName( const String& rFltNm );
+    virtual void SetFltName( const OUString& rFltNm );
 
     // Adapt item-set of a Frm-Format to the old format.
     static void ResetFrmFmtAttrs( SfxItemSet &rFrmSet );
@@ -241,7 +240,7 @@ public:
     SwDoc* GetTemplateDoc();
     sal_Bool SetTemplate( SwDoc& rDoc );
     void ClearTemplate();
-    void SetTemplateName( const String& rDir );
+    void SetTemplateName( const OUString& rDir );
     void MakeHTMLDummyTemplateDoc();
 
     sal_Bool IsReadUTF8() const { return bReadUTF8; }
@@ -261,13 +260,13 @@ public:
     // Read the sections of the document, which is equal to the medium.
     // Returns the count of it
     virtual size_t GetSectionList( SfxMedium& rMedium,
-                                   std::vector<String*>& rStrings ) const;
+                                   std::vector<OUString*>& rStrings ) const;
 
     SotStorageRef getSotStorageRef() { return pStg; };
     void setSotStorageRef(SotStorageRef pStgRef) { pStg = pStgRef; };
 
 private:
-    virtual sal_uLong Read(SwDoc &, const String& rBaseURL, SwPaM &,const String &)=0;
+    virtual sal_uLong Read(SwDoc &, const OUString& rBaseURL, SwPaM &, const OUString &)=0;
 
     // Everyone who does not need the streams / storages open
     // has to overload the method (W4W!!).
@@ -277,21 +276,21 @@ private:
 class AsciiReader: public Reader
 {
     friend class SwReader;
-    virtual sal_uLong Read( SwDoc &, const String& rBaseURL, SwPaM &,const String &);
+    virtual sal_uLong Read( SwDoc &, const OUString& rBaseURL, SwPaM &, const OUString &);
 public:
     AsciiReader(): Reader() {}
 };
 
 class SW_DLLPUBLIC StgReader : public Reader
 {
-    String aFltName;
+    OUString aFltName;
 
 protected:
     sal_uLong OpenMainStream( SotStorageStreamRef& rRef, sal_uInt16& rBuffSize );
 public:
     virtual int GetReaderType();
-    const String& GetFltName() { return aFltName; }
-    virtual void SetFltName( const String& r );
+    OUString GetFltName() { return aFltName; }
+    virtual void SetFltName( const OUString& r );
 };
 
 
@@ -380,7 +379,7 @@ class SW_DLLPUBLIC Writer
     , private ::boost::noncopyable
 {
     SwAsciiOptions aAscOpts;
-    String          sBaseURL;
+    OUString       sBaseURL;
 
     void _AddFontItem( SfxItemPool& rPool, const SvxFontItem& rFont );
     void _AddFontItems( SfxItemPool& rPool, sal_uInt16 nWhichId );
@@ -390,7 +389,7 @@ class SW_DLLPUBLIC Writer
 protected:
 
     SwPaM* pOrigPam;            // Last Pam that has to be processed.
-    const String* pOrigFileName;
+    const OUString* pOrigFileName;
 
     void ResetWriter();
     sal_Bool CopyNextPam( SwPaM ** );
@@ -399,7 +398,7 @@ protected:
     void PutEditEngFontsInAttrPool( bool bIncl_CJK_CTL = true );
 
     virtual sal_uLong WriteStream() = 0;
-    void                SetBaseURL( const String& rURL ) { sBaseURL = rURL; }
+    void                SetBaseURL( const OUString& rURL ) { sBaseURL = rURL; }
 
     IDocumentSettingAccess* getIDocumentSettingAccess();
     const IDocumentSettingAccess* getIDocumentSettingAccess() const;
@@ -426,22 +425,22 @@ public:
     Writer();
     virtual ~Writer();
 
-    virtual sal_uLong Write( SwPaM&, SfxMedium&, const String* = 0 );
-            sal_uLong Write( SwPaM&, SvStream&,  const String* = 0 );
-    virtual sal_uLong Write( SwPaM&, const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&, const String* = 0, SfxMedium* = 0 );
-    virtual sal_uLong Write( SwPaM&, SotStorage&, const String* = 0 );
+    virtual sal_uLong Write( SwPaM&, SfxMedium&, const OUString* = 0 );
+            sal_uLong Write( SwPaM&, SvStream&,  const OUString* = 0 );
+    virtual sal_uLong Write( SwPaM&, const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&, const OUString* = 0, SfxMedium* = 0 );
+    virtual sal_uLong Write( SwPaM&, SotStorage&, const OUString* = 0 );
 
-    virtual void SetVersion( const String&, long );
+    virtual void SetVersion( const OUString&, long );
     virtual sal_Bool IsStgWriter() const;
 
     void SetShowProgress( sal_Bool bFlag = sal_False )  { bShowProgress = bFlag; }
 
-    const String* GetOrigFileName() const       { return pOrigFileName; }
+    const OUString* GetOrigFileName() const       { return pOrigFileName; }
 
     const SwAsciiOptions& GetAsciiOptions() const { return aAscOpts; }
     void SetAsciiOptions( const SwAsciiOptions& rOpt ) { aAscOpts = rOpt; }
 
-    const String&       GetBaseURL() const { return sBaseURL;}
+    OUString GetBaseURL() const { return sBaseURL;}
 
     // Look up next bookmark position from bookmark-table.
     sal_Int32 FindPos_Bkmk( const SwPosition& rPos ) const;
@@ -482,7 +481,7 @@ SV_IMPL_REF(Writer)
 class SW_DLLPUBLIC StgWriter : public Writer
 {
 protected:
-    String aFltName;
+    OUString aFltName;
     SotStorageRef pStg;
     com::sun::star::uno::Reference < com::sun::star::embed::XStorage > xStg;
 
@@ -498,8 +497,8 @@ public:
 
     virtual sal_Bool IsStgWriter() const;
 
-    virtual sal_uLong Write( SwPaM&, const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&, const String* = 0, SfxMedium* = 0 );
-    virtual sal_uLong Write( SwPaM&, SotStorage&, const String* = 0 );
+    virtual sal_uLong Write( SwPaM&, const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&, const OUString* = 0, SfxMedium* = 0 );
+    virtual sal_uLong Write( SwPaM&, SotStorage&, const OUString* = 0 );
 
     SotStorage& GetStorage() const       { return *pStg; }
 };
@@ -521,7 +520,7 @@ class SwWriter
     sal_Bool bWriteAll;
 
 public:
-    sal_uLong Write( WriterRef& rxWriter, const String* = 0);
+    sal_uLong Write( WriterRef& rxWriter, const OUString* = 0);
 
     SwWriter( SvStream&, SwCrsrShell &,sal_Bool bWriteAll = sal_False );
     SwWriter( SvStream&, SwDoc & );
@@ -536,8 +535,8 @@ public:
 
 
 typedef Reader* (*FnGetReader)();
-typedef void (*FnGetWriter)(const String&, const String& rBaseURL, WriterRef&);
-sal_uLong SaveOrDelMSVBAStorage( SfxObjectShell&, SotStorage&, sal_Bool, const String& );
+typedef void (*FnGetWriter)(const OUString&, const OUString& rBaseURL, WriterRef&);
+sal_uLong SaveOrDelMSVBAStorage( SfxObjectShell&, SotStorage&, sal_Bool, const OUString& );
 sal_uLong GetSaveWarningOfMSVBAStorage( SfxObjectShell &rDocS );
 
 struct SwReaderWriterEntry
@@ -555,7 +554,7 @@ struct SwReaderWriterEntry
     Reader* GetReader();
 
     /// Get access to the writer.
-    void GetWriter( const String& rNm, const String& rBaseURL, WriterRef& xWrt ) const;
+    void GetWriter( const OUString& rNm, const OUString& rBaseURL, WriterRef& xWrt ) const;
 };
 
 namespace SwReaderWriter
@@ -564,17 +563,17 @@ namespace SwReaderWriter
     Reader* GetReader( ReaderWriterEnum eReader );
 
     /// Return reader based on the name.
-    Reader* GetReader( const String& rFltName );
+    Reader* GetReader( const OUString& rFltName );
 
     /// Return writer based on the name.
-    void GetWriter( const String& rFltName, const String& rBaseURL, WriterRef& xWrt );
+    void GetWriter( const OUString& rFltName, const OUString& rBaseURL, WriterRef& xWrt );
 }
 
-void GetRTFWriter( const String&, const String&, WriterRef& );
-void GetASCWriter( const String&, const String&, WriterRef& );
-void GetHTMLWriter( const String&, const String&, WriterRef& );
-void GetXMLWriter( const String&, const String&, WriterRef& );
-void GetWW8Writer( const String&, const String&, WriterRef& );
+void GetRTFWriter( const OUString&, const OUString&, WriterRef& );
+void GetASCWriter( const OUString&, const OUString&, WriterRef& );
+void GetHTMLWriter( const OUString&, const OUString&, WriterRef& );
+void GetXMLWriter( const OUString&, const OUString&, WriterRef& );
+void GetWW8Writer( const OUString&, const OUString&, WriterRef& );
 
 #endif
 
