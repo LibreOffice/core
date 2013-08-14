@@ -41,16 +41,16 @@ public:
             If FALSE, do replace.
      */
     const OUString GetString( const LanguageType eType, bool bUserInterfaceSelection = false ) const;
-    LanguageType    GetType( const String& rStr ) const;
+    LanguageType    GetType( const OUString& rStr ) const;
 
     sal_uInt32      GetEntryCount() const;
     LanguageType    GetTypeAtIndex( sal_uInt32 nIndex ) const;
-    static String   GetLanguageString( const LanguageType eType );
+    static OUString   GetLanguageString( const LanguageType eType );
 };
 
 // Add LRE or RLE embedding characters to the string based on the
 // String content (see #i78466#, #i32179#)
-SVT_DLLPUBLIC const String ApplyLreOrRleEmbedding( const String &rText );
+SVT_DLLPUBLIC const OUString ApplyLreOrRleEmbedding( const OUString &rText );
 
 #endif
 

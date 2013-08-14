@@ -37,9 +37,9 @@ using namespace ::com::sun::star;
 
 //------------------------------------------------------------------------
 
-SVT_DLLPUBLIC const String ApplyLreOrRleEmbedding( const String &rText )
+SVT_DLLPUBLIC const OUString ApplyLreOrRleEmbedding( const OUString &rText )
 {
-    const sal_uInt16 nLen = rText.Len();
+    const sal_Int32 nLen = rText.getLength();
     if (nLen == 0)
         return String();
 
@@ -49,7 +49,7 @@ SVT_DLLPUBLIC const String ApplyLreOrRleEmbedding( const String &rText )
 
     // check if there are alreay embedding characters at the strings start
     // if so change nothing
-    const sal_Unicode cChar = rText.GetBuffer()[0];
+    const sal_Unicode cChar = rText[0];
     if (cChar == cLRE_Embedding || cChar == cRLE_Embedding)
         return rText;
 
@@ -151,7 +151,7 @@ const OUString SvtLanguageTable::GetString( const LanguageType eType, bool bUser
     return sLangTag;
 }
 
-String SvtLanguageTable::GetLanguageString( const LanguageType eType )
+OUString SvtLanguageTable::GetLanguageString( const LanguageType eType )
 {
     static const SvtLanguageTable aLangTable;
     return aLangTable.GetString( eType );
@@ -159,7 +159,7 @@ String SvtLanguageTable::GetLanguageString( const LanguageType eType )
 
 //------------------------------------------------------------------------
 
-LanguageType SvtLanguageTable::GetType( const String& rStr ) const
+LanguageType SvtLanguageTable::GetType( const OUString& rStr ) const
 {
     LanguageType eType = LANGUAGE_DONTKNOW;
     sal_uInt32 nCount = Count();
