@@ -1676,7 +1676,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                                 XML_STYLE_FAMILY_TEXT_TEXT,
                                 pStyle->GetDropCapStyleName()) );
             if (m_pImpl->m_xTextStyles->hasByName(sDisplayName) &&
-                xPropSetInfo->hasPropertyByName( sDisplayName ) )
+                xPropSetInfo->hasPropertyByName( pStyle->sDropCapCharStyleName ) )
             {
                 xPropSet->setPropertyValue( pStyle->sDropCapCharStyleName, makeAny(sDisplayName) );
             }
