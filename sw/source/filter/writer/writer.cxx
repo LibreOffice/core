@@ -35,10 +35,28 @@
 
 using namespace ::com::sun::star;
 
+namespace
+{
 
-// Stringbuffer for the converted numbers
-static sal_Char aNToABuf[] = "0000000000000000000000000";
-#define NTOABUFLEN (sizeof(aNToABuf))
+SvStream& lcl_OutLongExt( SvStream& rStrm, sal_uLong nVal, bool bNeg )
+{
+    sal_Char aBuf[28];
+
+    int i = SAL_N_ELEMENTS(aBuf);
+    aBuf[--i] = 0;
+    do
+    {
+        aBuf[--i] = '0' + static_cast<sal_Char>(nVal % 10);
+        nVal /= 10;
+    } while (nVal);
+
+    if (bNeg)
+        aBuf[--i] = '-';
+
+    return rStrm << &aBuf[i];
+}
+
+}
 
 typedef std::multimap<sal_uLong, const ::sw::mark::IMark*> SwBookmarkNodeTable;
 
@@ -218,35 +236,16 @@ void Writer::SetStream(SvStream *const pStream)
 
 SvStream& Writer::OutLong( SvStream& rStrm, long nVal )
 {
-    // Set the Pointer at the end of the buffer
-    sal_Char* pStr = aNToABuf + (NTOABUFLEN-1);
-
-    int bNeg = nVal < 0;
-    if( bNeg )
+    const bool bNeg = nVal < 0;
+    if (bNeg)
         nVal = -nVal;
 
-    do {
-        *(--pStr) = (sal_Char)(nVal % 10 ) + 48;
-        nVal /= 10;
-    } while( nVal );
-
-    // is the number negative, then in addition -
-    if( bNeg )
-        *(--pStr) = '-';
-
-    return rStrm << pStr;
+    return lcl_OutLongExt(rStrm, static_cast<sal_uLong>(nVal), bNeg);
 }
 
 SvStream& Writer::OutULong( SvStream& rStrm, sal_uLong nVal )
 {
-    // Set the Pointer at the end of the buffer
-    sal_Char* pStr = aNToABuf + (NTOABUFLEN-1);
-
-    do {
-        *(--pStr) = (sal_Char)(nVal % 10 ) + 48;
-        nVal /= 10;
-    } while ( nVal );
-    return rStrm << pStr;
+    return lcl_OutLongExt(rStrm, nVal, false);
 }
 
 
