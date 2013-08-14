@@ -157,6 +157,8 @@ void PluginHandler::HandleTranslationUnit( ASTContext& context )
          ++it )
         {
         const FileEntry* e = context.getSourceManager().getFileEntryForID( it->first );
+        if( e == NULL )
+            continue; // Failed modification because of a macro expansion?
         /* Check where the file actually is, and warn about cases where modification
            most probably doesn't matter (generated files in workdir).
            The order here is important, as OUTDIR and WORKDIR are often in SRCDIR/BUILDDIR,
