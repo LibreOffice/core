@@ -327,8 +327,7 @@ void GraphicPropertyItemConverter::FillSpecialItem(
 
                 // translate model name to UI-name for predefined entries, so
                 // that the correct entry is chosen in the list of UI-names
-                XLineDashItem * pItemToPut = & aItem;
-                pItemToPut = aItem.checkForUniqueItem( & m_rDrawModel );
+                XLineDashItem * pItemToPut = aItem.checkForUniqueItem( & m_rDrawModel );
 
                 rOutItemSet.Put( * pItemToPut );
             }
@@ -351,8 +350,7 @@ void GraphicPropertyItemConverter::FillSpecialItem(
 
                 // translate model name to UI-name for predefined entries, so
                 // that the correct entry is chosen in the list of UI-names
-                XFillGradientItem * pItemToPut = & aItem;
-                pItemToPut = aItem.checkForUniqueItem( & m_rDrawModel );
+                XFillGradientItem * pItemToPut = aItem.checkForUniqueItem( & m_rDrawModel );
 
                 rOutItemSet.Put( * pItemToPut );
             }
@@ -375,8 +373,7 @@ void GraphicPropertyItemConverter::FillSpecialItem(
 
                 // translate model name to UI-name for predefined entries, so
                 // that the correct entry is chosen in the list of UI-names
-                XFillHatchItem * pItemToPut = & aItem;
-                pItemToPut = aItem.checkForUniqueItem( & m_rDrawModel );
+                XFillHatchItem * pItemToPut = aItem.checkForUniqueItem( & m_rDrawModel );
 
                 rOutItemSet.Put( * pItemToPut );
             }
@@ -394,8 +391,7 @@ void GraphicPropertyItemConverter::FillSpecialItem(
 
                 // translate model name to UI-name for predefined entries, so
                 // that the correct entry is chosen in the list of UI-names
-                XFillBitmapItem * pItemToPut = & aItem;
-                pItemToPut = aItem.checkForUniqueItem( & m_rDrawModel );
+                XFillBitmapItem * pItemToPut = aItem.checkForUniqueItem( & m_rDrawModel );
 
                 rOutItemSet.Put( * pItemToPut );
             }
