@@ -585,6 +585,11 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
 
 void EditorWindow::HandleAutoCorrect()
 {
+    if( CodeCompleteOptions::IsExtendedTypeDeclaration() )
+    {
+        rModulWindow.UpdateModule();
+        rModulWindow.GetSbModule()->GetCodeCompleteDataFromParse(aCodeCompleteCache);
+    }
     TextSelection aSel = GetEditView()->GetSelection();
     sal_uLong nLine =  aSel.GetStart().GetPara();
     OUString aLine( pEditEngine->GetText( nLine ) ); // the line being modified
@@ -596,7 +601,7 @@ void EditorWindow::HandleAutoCorrect()
         return;
 
     HighlightPortion& r = aPortions[aPortions.size()-1];
-    if( r.tokenType == 9 ) // correct the last entered keyword
+    if( r.tokenType == TT_KEYWORDS ) // correct the last entered keyword
     {
         OUString sStr = aLine.copy(r.nBegin, r.nEnd - r.nBegin);
         if( !sStr.isEmpty() )
@@ -606,9 +611,22 @@ void EditorWindow::HandleAutoCorrect()
             // if it is a keyword, get its correct case
                 sStr = rModulWindow.GetSbModule()->GetKeywordCase(sStr);
             else
-            // else capitalize first letter/select the correct one, and replace
+            {// else capitalize first letter/select the correct one, and replace
                 sStr = sStr.replaceAt( 0, 1, OUString(sStr[0]).toAsciiUpperCase() );
+            }
 
+            TextPaM aStart(nLine, aSel.GetStart().GetIndex() - sStr.getLength() );
+            TextSelection sTextSelection(aStart, TextPaM(nLine, aSel.GetStart().GetIndex()));
+            pEditEngine->ReplaceText( sTextSelection, sStr );
+            pEditView->SetSelection( aSel );
+        }
+    }
+    if( r.tokenType == TT_IDENTIFIER )
+    {// correct uno types
+        OUString sStr = aLine.copy(r.nBegin, r.nEnd - r.nBegin);
+        if( !sStr.isEmpty() && !aCodeCompleteCache.GetCorrectCaseVarName(sStr).isEmpty() )
+        {
+            sStr = aCodeCompleteCache.GetCorrectCaseVarName(sStr);
             TextPaM aStart(nLine, aSel.GetStart().GetIndex() - sStr.getLength() );
             TextSelection sTextSelection(aStart, TextPaM(nLine, aSel.GetStart().GetIndex()));
             pEditEngine->ReplaceText( sTextSelection, sStr );
