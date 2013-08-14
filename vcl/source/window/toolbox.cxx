@@ -33,6 +33,7 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/gradient.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/menu.hxx>
 
 #include <svdata.hxx>
@@ -4360,11 +4361,14 @@ long ToolBox::Notify( NotifyEvent& rNEvt )
         switch( nKeyCode )
         {
             case KEY_TAB:
-                {
-                // internal TAB cycling only if parent is not a dialog or if we are the ony child
+            {
+                // internal TAB cycling only if parent is not a dialog or if we are the only child
                 // otherwise the dialog control will take over
-                sal_Bool bNoTabCycling = ( ( ImplGetParent()->GetStyle() & (WB_DIALOGCONTROL | WB_NODIALOGCONTROL) ) == WB_DIALOGCONTROL &&
-                    ImplGetParent()->GetChildCount() != 1 );
+                Window *pParent = ImplGetParent();
+                bool bOldSchoolContainer =
+                    ((pParent->GetStyle() & (WB_DIALOGCONTROL | WB_NODIALOGCONTROL)) == WB_DIALOGCONTROL &&
+                    pParent->GetChildCount() != 1);
+                bool bNoTabCycling = bOldSchoolContainer || isContainerWindow(pParent);
 
                 if( bNoTabCycling &&  ! (GetStyle() & WB_FORCETABCYCLE) )
                     return DockingWindow::Notify( rNEvt );
@@ -4372,7 +4376,7 @@ long ToolBox::Notify( NotifyEvent& rNEvt )
                     return sal_False;
                 else
                     return DockingWindow::Notify( rNEvt );
-                }
+            }
             default:
                 break;
         };
