@@ -46,7 +46,7 @@ static sal_Bool bFootnote = sal_True;
 
 void SwInsFootNoteDlg::Apply()
 {
-    String aStr;
+    OUString aStr;
 
     if ( m_pNumberCharBtn->IsChecked() )
         aStr = m_pNumberCharEdit->GetText();
@@ -65,7 +65,7 @@ void SwInsFootNoteDlg::Apply()
             SfxItemSet aSet( rSh.GetAttrPool(), RES_CHRATR_FONT, RES_CHRATR_FONT );
             rSh.GetCurAttr( aSet );
             SvxFontItem &rFont = (SvxFontItem &) aSet.Get( RES_CHRATR_FONT );
-            SvxFontItem aFont( rFont.GetFamily(), aFontName,
+            SvxFontItem aFont( rFont.GetFamily(), m_aFontName,
                                rFont.GetStyleName(), rFont.GetPitch(),
                                eCharSet, RES_CHRATR_FONT );
             aSet.Put( aFont );
@@ -129,14 +129,13 @@ IMPL_LINK_NOARG(SwInsFootNoteDlg, NumberExtCharHdl)
         SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pFontItem, SvxFontItem, SID_ATTR_CHAR_FONT, sal_False );
         if ( pItem )
         {
-            String sExtChars(pItem->GetValue());
-            m_pNumberCharEdit->SetText( sExtChars );
+            m_pNumberCharEdit->SetText( pItem->GetValue() );
 
             if ( pFontItem )
             {
-                aFontName = pFontItem->GetFamilyName();
+                m_aFontName = pFontItem->GetFamilyName();
                 eCharSet  = pFontItem->GetCharSet();
-                Font aFont( aFontName, pFontItem->GetStyleName(), m_pNumberCharEdit->GetFont().GetSize() );
+                Font aFont( m_aFontName, pFontItem->GetStyleName(), m_pNumberCharEdit->GetFont().GetSize() );
                 aFont.SetCharSet( pFontItem->GetCharSet() );
                 aFont.SetPitch( pFontItem->GetPitch() );
                 m_pNumberCharEdit->SetFont( aFont  );
@@ -216,7 +215,7 @@ SwInsFootNoteDlg::~SwInsFootNoteDlg()
 void SwInsFootNoteDlg::Init()
 {
     SwFmtFtn aFtnNote;
-    String sNumStr;
+    OUString sNumStr;
     Font aFont;
     bExtCharAvailable = sal_False;
 
@@ -234,9 +233,9 @@ void SwInsFootNoteDlg::Init()
             const SvxFontItem &rFont = (SvxFontItem &) aSet.Get( RES_CHRATR_FONT );
 
             aFont = m_pNumberCharEdit->GetFont();
-            aFontName = rFont.GetFamilyName();
+            m_aFontName = rFont.GetFamilyName();
             eCharSet = rFont.GetCharSet();
-            aFont.SetName(aFontName);
+            aFont.SetName(m_aFontName);
             aFont.SetCharSet(eCharSet);
             bExtCharAvailable = sal_True;
             rSh.Left( CRSR_SKIP_CHARS, sal_False, 1, sal_False );
@@ -245,7 +244,7 @@ void SwInsFootNoteDlg::Init()
     }
     m_pNumberCharEdit->SetFont(aFont);
 
-    bool bNumChar = sNumStr.Len() != 0;
+    const bool bNumChar = !sNumStr.isEmpty();
 
     m_pNumberCharEdit->SetText(sNumStr);
     m_pNumberCharBtn->Check(bNumChar);
