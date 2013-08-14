@@ -48,8 +48,6 @@ SmElementSeparator::SmElementSeparator() :
     SmElement(SmNodePointer(), OUString())
 {}
 
-//////////////////////////////////
-
 const sal_uInt16 SmElementsControl::aUnaryBinaryOperatorsList[] =
 {
     RID_PLUSX, RID_MINUSX, RID_PLUSMINUSX, RID_MINUSPLUSX,
@@ -130,7 +128,10 @@ const sal_uInt16 SmElementsControl::aAttributes[] =
     RID_WIDEVECX, RID_WIDETILDEX, RID_WIDEHATX, RID_OVERLINEX,
     RID_UNDERLINEX, RID_OVERSTRIKEX,
     0xFFFF,
-    RID_PHANTOMX, RID_BOLDX, RID_ITALX, RID_SIZEXY, RID_FONTXY
+    RID_PHANTOMX, RID_BOLDX, RID_ITALX, RID_SIZEXY, RID_FONTXY,
+    0xFFFF,
+    RID_COLORX_BLACK, RID_COLORX_BLUE, RID_COLORX_GREEN,
+    RID_COLORX_RED, RID_COLORX_CYAN, RID_COLORX_MAGENTA, RID_COLORX_YELLOW
 };
 
 const sal_uInt16 SmElementsControl::aBrackets[] =
@@ -401,6 +402,20 @@ void SmElementsControl::addElements(const sal_uInt16 aElementsArray[], sal_uInt1
                 addElement(OUString("\"size\""), SmResId(aElementId));
             else if (aElementId == RID_FONTXY)
                 addElement(OUString("\"font\""), SmResId(aElementId));
+            else if (aElementId == RID_COLORX_BLACK)
+                addElement(OUString("color black { \"black\" }"), SmResId(aElementId));
+            else if (aElementId == RID_COLORX_BLUE)
+                addElement(OUString("color blue { \"blue\" }"), SmResId(aElementId));
+            else if (aElementId == RID_COLORX_GREEN)
+                addElement(OUString("color green { \"green\" }"), SmResId(aElementId));
+            else if (aElementId == RID_COLORX_RED)
+                addElement(OUString("color red { \"red\" }"), SmResId(aElementId));
+            else if (aElementId == RID_COLORX_CYAN)
+                addElement(OUString("color cyan { \"cyan\" }"), SmResId(aElementId));
+            else if (aElementId == RID_COLORX_MAGENTA)
+                addElement(OUString("color magenta { \"magenta\" }"), SmResId(aElementId));
+            else if (aElementId == RID_COLORX_YELLOW)
+                addElement(OUString("color yellow { \"yellow\" }"), SmResId(aElementId));
             else
                 addElement(SmResId(aElementId), SmResId(aElementId));
         }
@@ -457,8 +472,6 @@ void SmElementsControl::build()
     }
     Invalidate();
 }
-
-//*******************
 
 const sal_uInt16 SmElementsDockingWindow::aCategories[] = {
     RID_CATEGORY_UNARY_BINARY_OPERATORS,

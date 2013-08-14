@@ -327,6 +327,13 @@
 #define RID_WIDEHATX                (RID_APP_START + 1722)
 #define RID_WIDETILDEX              (RID_APP_START + 1723)
 #define RID_WIDEVECX                (RID_APP_START + 1724)
+#define RID_COLORX_BLACK            (RID_APP_START + 1725)
+#define RID_COLORX_BLUE             (RID_APP_START + 1726)
+#define RID_COLORX_GREEN            (RID_APP_START + 1727)
+#define RID_COLORX_RED              (RID_APP_START + 1728)
+#define RID_COLORX_CYAN             (RID_APP_START + 1729)
+#define RID_COLORX_MAGENTA          (RID_APP_START + 1730)
+#define RID_COLORX_YELLOW           (RID_APP_START + 1731)
 
 #define RID_LRPARENTX               (RID_APP_START + 1801)
 #define RID_LRBRACKETX              (RID_APP_START + 1802)
