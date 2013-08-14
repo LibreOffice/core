@@ -20,6 +20,7 @@ public:
     void testFdo60769();
     void testFdo58949();
     void testCharacterBorder();
+    void testFdo43807();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -40,6 +41,7 @@ void Test::run()
         {"fdo60769.odt", &Test::testFdo60769},
         {"fdo58949.docx", &Test::testFdo58949},
         {"charborder.odt", &Test::testCharacterBorder },
+        {"fdo43807.odt", &Test::testFdo43807 },
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -336,6 +338,15 @@ void Test::testCharacterBorder()
                 getProperty<sal_Int32>(xStyleSet,"CharRightBorderDistance"));
         }
     }
+}
+
+void Test::testFdo43807()
+{
+    uno::Reference<beans::XPropertySet> xSet(getParagraph(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Drop Caps"),getProperty<OUString>(xSet,"DropCapCharStyleName"));
+
+    xSet = uno::Reference<beans::XPropertySet>(getParagraph(2), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("User Defined Drop Caps"),getProperty<OUString>(xSet,"DropCapCharStyleName"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
