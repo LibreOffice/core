@@ -171,8 +171,6 @@ void ObjectCopySource::copyFilterAndSortingTo( const Reference< XConnection >& _
                 ,::std::pair< OUString, OUString >(PROPERTY_ORDER,OUString(" ORDER BY "))
     };
 
-    size_t i = 0;
-
     try
     {
         const String sSourceName = (::dbtools::composeTableNameForSelect(m_xConnection,m_xObject) + OUString("."));
@@ -184,7 +182,7 @@ void ObjectCopySource::copyFilterAndSortingTo( const Reference< XConnection >& _
         sStatement += OUString(" WHERE 0=1");
 
 
-        for ( i=0; i < sizeof( aProperties ) / sizeof( aProperties[0] ); ++i )
+        for ( size_t i=0; i < SAL_N_ELEMENTS(aProperties); ++i )
         {
             if ( m_xObjectPSI->hasPropertyByName( aProperties[i].first ) )
             {
