@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//84o\u003d",
+        "filename": "icon-themes/galaxy/cmd/lc_objectmirrorhorizontal.png",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-08-14T20:04:01Z",
+      "side": 1,
+      "message": "This is a symbolic link, which I doubt was intended, but if it was it should be relative within the directory and not point to some absolute path.",
+      "revId": "25e23919c8d8530089bd78bc33689a955e7f49ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//84k\u003d",
+        "filename": "icon-themes/galaxy/cmd/lc_objectmirrorvertical.png",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-08-14T20:04:01Z",
+      "side": 1,
+      "message": "This is a symbolic link, which I doubt was intended, but if it was it should be relative within the directory and not point to some absolute path.",
+      "revId": "25e23919c8d8530089bd78bc33689a955e7f49ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
