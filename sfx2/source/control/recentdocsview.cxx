@@ -45,7 +45,6 @@ RecentDocsView::RecentDocsView( Window* pParent )
     , mnTextHeight(30)
     , mnItemPadding(5)
     , mnItemMaxTextLength(30)
-    , mnMaxThumbnailItems(50)
 {
     SetStyle(GetStyle() | WB_VSCROLL);
     setItemMaxTextLength( mnItemMaxTextLength );
@@ -137,8 +136,7 @@ void RecentDocsView::loadRecentDocs()
     Clear();
 
     Sequence< Sequence< PropertyValue > > aHistoryList = SvtHistoryOptions().GetList( ePICKLIST );
-    int nRecentThumbnailItems = mnMaxThumbnailItems < aHistoryList.getLength() ? mnMaxThumbnailItems : aHistoryList.getLength();
-    for ( int i = 0; i < nRecentThumbnailItems; i++ )
+    for ( int i = 0; i < aHistoryList.getLength(); i++ )
     {
         Sequence< PropertyValue >& rRecentEntry = aHistoryList[i];
 

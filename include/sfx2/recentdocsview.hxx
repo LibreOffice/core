@@ -65,8 +65,6 @@ protected:
     long    mnTextHeight;
     long    mnItemPadding;
     long    mnItemMaxTextLength;
-
-    int     mnMaxThumbnailItems;
 };
 
 #endif  // __SFX2_RECENTDOCSVIEW_HXX__
