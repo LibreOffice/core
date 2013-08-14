@@ -2424,10 +2424,6 @@ ORowSetValue& ORowSet::getParameterStorage(sal_Int32 parameterIndex)
         m_aParametersSet.resize( parameterIndex ,false);
     m_aParametersSet[parameterIndex - 1] = true;
 
-    if ( m_aParametersSet.size() < (size_t)parameterIndex )
-        m_aParametersSet.resize( parameterIndex ,false);
-    m_aParametersSet[parameterIndex - 1] = true;
-
     if ( m_pParameters.is() )
     {
         if ( m_bCommandFacetsDirty )
