@@ -567,7 +567,6 @@ inline sal_Bool SAL_CALL operator != ( const Any & rAny, const C & value ) SAL_T
     return (! operator == ( rAny, value ));
 }
 
-#if ! defined(EXCEPTIONS_OFF)
 extern "C" rtl_uString * SAL_CALL cppu_Any_extraction_failure_msg(
     uno_Any const * pAny, typelib_TypeDescriptionReference * pType )
     SAL_THROW_EXTERN_C();
@@ -591,7 +590,6 @@ T Any::get() const
 // not impl: forbid use with ambiguous type (sal_Unicode, sal_uInt16)
 template <>
 sal_uInt16 Any::get<sal_uInt16>() const;
-#endif // ! defined(EXCEPTIONS_OFF)
 
 /**
    Support for Any in std::ostream (and thus in CPPUNIT_ASSERT or SAL_INFO

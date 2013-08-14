@@ -168,7 +168,6 @@ namespace utl
             reset( _rxComponent, eMode );
         }
 
-#ifndef EXCEPTIONS_OFF
         inline SharedUNOComponent( const ::com::sun::star::uno::XInterface* _pInterface, ::com::sun::star::uno::UnoReference_QueryThrow _queryThrow )
         {
             set( _pInterface, _queryThrow );
@@ -188,7 +187,6 @@ namespace utl
         {
             set( _rxComponent, _setThrow );
         }
-#endif
 
 //        SharedUNOComponent& operator=( const ::com::sun::star::uno::Reference< INTERFACE >& _rxComponent );
         // This operator is intentionally not implemented. There is no canonic ownership after this operator
@@ -206,7 +204,6 @@ namespace utl
         inline bool set( const ::com::sun::star::uno::BaseReference& _rRef, ::com::sun::star::uno::UnoReference_Query _query );
         inline bool set( const ::com::sun::star::uno::Any& _rAny, ::com::sun::star::uno::UnoReference_Query _query );
 
-#ifndef EXCEPTIONS_OFF
         inline void set( const ::com::sun::star::uno::XInterface* _pInterface, ::com::sun::star::uno::UnoReference_QueryThrow _queryThrow );
         inline void set( const ::com::sun::star::uno::BaseReference & _rRef, ::com::sun::star::uno::UnoReference_QueryThrow _queryThrow );
         inline void set( const ::com::sun::star::uno::Any& _rAny, ::com::sun::star::uno::UnoReference_QueryThrow _queryThrow );
@@ -214,7 +211,6 @@ namespace utl
         inline void set( const INTERFACE* _pInterface, ::com::sun::star::uno::UnoReference_SetThrow _setThrow );
         inline void set( const ::com::sun::star::uno::Reference< INTERFACE >& _rRef, ::com::sun::star::uno::UnoReference_SetThrow _setThrow );
         inline void set( const SharedUNOComponent& _rComp, ::com::sun::star::uno::UnoReference_SetThrow _setThrow );
-#endif
 
         INTERFACE* SAL_CALL operator->() const;
 
@@ -285,7 +281,6 @@ namespace utl
         return makeAny( value.getTyped() );
     }
 
-#ifndef EXCEPTIONS_OFF
     //-------------------------------------------------------------------------
     template < class INTERFACE, class COMPONENT >
     void SharedUNOComponent< INTERFACE, COMPONENT >::set( const ::com::sun::star::uno::XInterface* _pInterface, ::com::sun::star::uno::UnoReference_QueryThrow _queryThrow )
@@ -329,7 +324,6 @@ namespace utl
         // provoke an exception in case the component is NULL
         m_xTypedComponent.set( m_xTypedComponent, _setThrow );
     }
-#endif
 
     //-------------------------------------------------------------------------
     template < class INTERFACE, class COMPONENT >

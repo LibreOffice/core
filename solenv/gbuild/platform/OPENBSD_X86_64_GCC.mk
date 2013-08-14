@@ -14,6 +14,4 @@ gb_STDLIBS := $(PTHREAD_LIBS)
 
 include $(GBUILDDIR)/platform/unxgcc.mk
 
-gb_LinkTarget_NOEXCEPTIONFLAGS += -DBOOST_NO_EXCEPTIONS
-
 # vim: set noet sw=4:

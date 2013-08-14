@@ -157,7 +157,6 @@ public:
     inline const void * SAL_CALL getValue() const SAL_THROW(())
         { return pData; }
 
-#if ! defined(EXCEPTIONS_OFF)
     /** Provides a value of specified type, so you can easily write e.g.
         <pre>
         sal_Int32 myVal = myAny.get<sal_Int32>();
@@ -172,7 +171,6 @@ public:
     */
     template <typename T>
     inline T get() const;
-#endif // ! defined(EXCEPTIONS_OFF)
 
     /** Sets a value. If the any already contains a value, that value will be destructed
         and its memory freed.
@@ -240,10 +238,8 @@ private:
     // Omitting the following private declarations leads to an internal compiler
     // error on MSVC (version 1310).
     // not impl: forbid use with ambiguous type (sal_Unicode, sal_uInt16)
-#if ! defined(EXCEPTIONS_OFF)
     template <>
     sal_uInt16 get<sal_uInt16>() const;
-#endif // ! defined(EXCEPTIONS_OFF)
     template <>
     bool has<sal_uInt16>() const;
 #endif // defined(_MSC_VER)

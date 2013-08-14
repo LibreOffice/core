@@ -23,6 +23,7 @@
 #include "sal/config.h"
 
 #include <cassert>
+#include <new>
 #include <ostream>
 #include <string.h>
 
@@ -36,10 +37,6 @@
 #endif
 
 #include "sal/log.hxx"
-
-#if !defined EXCEPTIONS_OFF
-#include <new>
-#endif
 
 // The unittest uses slightly different code to help check that the proper
 // calls are made. The class is put into a different namespace to make
@@ -231,11 +228,7 @@ public:
         pData = 0;
         rtl_uString2String( &pData, value, length, encoding, convertFlags );
         if (pData == 0) {
-#if defined EXCEPTIONS_OFF
-            abort();
-#else
             throw std::bad_alloc();
-#endif
         }
     }
 

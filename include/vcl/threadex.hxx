@@ -70,10 +70,8 @@ public:
         typedef GenericSolarThreadExecutor<FuncT, ResultT> ExecutorT;
         ::std::auto_ptr<ExecutorT> const pExecutor( new ExecutorT(func) );
         pExecutor->execute();
-#if ! defined(EXCEPTIONS_OFF)
         if (pExecutor->m_exc.hasValue())
             ::cppu::throwException( pExecutor->m_exc );
-#endif
         return *pExecutor->m_result;
     }
 
@@ -83,9 +81,6 @@ private:
 
     virtual long doIt()
     {
-#if defined(EXCEPTIONS_OFF)
-        m_result.reset( m_func() );
-#else
         try {
             m_result.reset( m_func() );
         }
@@ -93,7 +88,6 @@ private:
             // only UNO exceptions can be dispatched:
             m_exc = ::cppu::getCaughtException();
         }
-#endif
         return 0;
     }
 
@@ -113,10 +107,8 @@ public:
         typedef GenericSolarThreadExecutor<FuncT, void> ExecutorT;
         ::std::auto_ptr<ExecutorT> const pExecutor( new ExecutorT(func) );
         pExecutor->execute();
-#if ! defined(EXCEPTIONS_OFF)
         if (pExecutor->m_exc.hasValue())
             ::cppu::throwException( pExecutor->m_exc );
-#endif
     }
 
 private:
@@ -125,9 +117,6 @@ private:
 
     virtual long doIt()
     {
-#if defined(EXCEPTIONS_OFF)
-        m_func();
-#else
         try {
             m_func();
         }
@@ -135,7 +124,6 @@ private:
             // only UNO exceptions can be dispatched:
             m_exc = ::cppu::getCaughtException();
         }
-#endif
         return 0;
     }
 

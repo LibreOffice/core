@@ -24,10 +24,7 @@
 #include "com/sun/star/uno/Type.h"
 #include "rtl/alloc.h"
 
-#if ! defined EXCEPTIONS_OFF
 #include <new>
-#endif
-
 
 namespace rtl
 {

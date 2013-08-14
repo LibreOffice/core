@@ -269,9 +269,6 @@ inline void OInterfaceContainerHelper::forEach( FuncT const& func )
         ::com::sun::star::uno::Reference<ListenerT> const xListener(
             iter.next(), ::com::sun::star::uno::UNO_QUERY );
         if (xListener.is()) {
-#if defined(EXCEPTIONS_OFF)
-            func( xListener );
-#else
             try {
                 func( xListener );
             }
@@ -279,7 +276,6 @@ inline void OInterfaceContainerHelper::forEach( FuncT const& func )
                 if (exc.Context == xListener)
                     iter.remove();
             }
-#endif
         }
     }
 }

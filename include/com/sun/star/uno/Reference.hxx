@@ -57,7 +57,6 @@ inline XInterface * Reference< interface_type >::iquery(
 {
     return BaseReference::iquery(pInterface, interface_type::static_type());
 }
-#ifndef EXCEPTIONS_OFF
 extern "C" rtl_uString * SAL_CALL cppu_unsatisfied_iquery_msg(
     typelib_TypeDescriptionReference * pType )
     SAL_THROW_EXTERN_C();
@@ -98,7 +97,6 @@ inline interface_type * Reference< interface_type >::iset_throw(
         ::rtl::OUString( cppu_unsatisfied_iset_msg( interface_type::static_type().getTypeLibType() ), SAL_NO_ACQUIRE ),
         NULL );
 }
-#endif
 
 //__________________________________________________________________________________________________
 template< class interface_type >
@@ -172,7 +170,6 @@ inline Reference< interface_type >::Reference( const Any & rAny, UnoReference_Qu
     _pInterface = (typelib_TypeClass_INTERFACE == rAny.pType->eTypeClass
                    ? iquery( static_cast< XInterface * >( rAny.pReserved ) ) : 0);
 }
-#ifndef EXCEPTIONS_OFF
 //__________________________________________________________________________________________________
 template< class interface_type >
 inline Reference< interface_type >::Reference( const BaseReference & rRef, UnoReference_QueryThrow ) SAL_THROW( (RuntimeException) )
@@ -204,7 +201,6 @@ inline Reference< interface_type >::Reference( interface_type * pInterface, UnoR
 {
     _pInterface = castToXInterface( iset_throw( pInterface ) );
 }
-#endif
 
 //__________________________________________________________________________________________________
 template< class interface_type >
@@ -284,7 +280,6 @@ inline bool Reference< interface_type >::set(
         SAL_NO_ACQUIRE );
 }
 
-#ifndef EXCEPTIONS_OFF
 //__________________________________________________________________________________________________
 template< class interface_type >
 inline void Reference< interface_type >::set(
@@ -325,8 +320,6 @@ inline void Reference< interface_type >::set(
 {
     set( rRef.get(), UNO_SET_THROW );
 }
-
-#endif
 
 //__________________________________________________________________________________________________
 template< class interface_type >
@@ -369,21 +362,17 @@ inline sal_Bool BaseReference::operator == ( XInterface * pInterface ) const SAL
 {
     if (_pInterface == pInterface)
         return sal_True;
-#ifndef EXCEPTIONS_OFF
     try
     {
-#endif
         // only the query to XInterface must return the same pointer if they belong to same objects
         Reference< XInterface > x1( _pInterface, UNO_QUERY );
         Reference< XInterface > x2( pInterface, UNO_QUERY );
         return (x1._pInterface == x2._pInterface);
-#ifndef EXCEPTIONS_OFF
     }
     catch (RuntimeException &)
     {
         return sal_False;
     }
-#endif
 }
 
 //______________________________________________________________________________
@@ -392,21 +381,17 @@ inline sal_Bool BaseReference::operator < (
 {
     if (_pInterface == rRef._pInterface)
         return sal_False;
-#if ! defined EXCEPTIONS_OFF
     try
     {
-#endif
         // only the query to XInterface must return the same pointer:
         Reference< XInterface > x1( _pInterface, UNO_QUERY );
         Reference< XInterface > x2( rRef, UNO_QUERY );
         return (x1._pInterface < x2._pInterface);
-#if ! defined EXCEPTIONS_OFF
     }
     catch (RuntimeException &)
     {
         return sal_False;
     }
-#endif
 }
 
 //__________________________________________________________________________________________________

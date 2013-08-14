@@ -50,10 +50,8 @@ inline void * SAL_CALL cpp_queryInterface( void * pCppI, typelib_TypeDescription
 {
     if (pCppI)
     {
-#ifndef EXCEPTIONS_OFF
         try
         {
-#endif
             Any aRet( reinterpret_cast< XInterface * >( pCppI )->queryInterface(
                 * reinterpret_cast< const Type * >( &pType ) ) );
             if (typelib_TypeClass_INTERFACE == aRet.pType->eTypeClass)
@@ -62,12 +60,10 @@ inline void * SAL_CALL cpp_queryInterface( void * pCppI, typelib_TypeDescription
                 aRet.pReserved = 0;
                 return pRet;
             }
-#ifndef EXCEPTIONS_OFF
         }
         catch (RuntimeException &)
         {
         }
-#endif
     }
     return 0;
 }

@@ -23,6 +23,7 @@
 #include "sal/config.h"
 
 #include <cassert>
+#include <new>
 #include <ostream>
 #include <string.h>
 
@@ -35,12 +36,6 @@
 
 #ifdef RTL_FAST_STRING
 #include <rtl/stringconcat.hxx>
-#endif
-
-#if defined EXCEPTIONS_OFF
-#include <stdlib.h>
-#else
-#include <new>
 #endif
 
 // The unittest uses slightly different code to help check that the proper
@@ -244,11 +239,7 @@ public:
         pData = 0;
         rtl_string2UString( &pData, value, length, encoding, convertFlags );
         if (pData == 0) {
-#if defined EXCEPTIONS_OFF
-            abort();
-#else
             throw std::bad_alloc();
-#endif
         }
     }
 
@@ -274,11 +265,7 @@ public:
     {
         rtl_uString_newFromCodePoints(&pData, codePoints, codePointCount);
         if (pData == NULL) {
-#if defined EXCEPTIONS_OFF
-            abort();
-#else
             throw std::bad_alloc();
-#endif
         }
     }
 
@@ -1894,11 +1881,7 @@ public:
         rtl_uString * pNew = 0;
         rtl_uString_intern( &pNew, pData );
         if (pNew == 0) {
-#if defined EXCEPTIONS_OFF
-            abort();
-#else
             throw std::bad_alloc();
-#endif
         }
         return OUString( pNew, SAL_NO_ACQUIRE );
     }
@@ -1937,11 +1920,7 @@ public:
         rtl_uString_internConvert( &pNew, value, length, encoding,
                                    convertFlags, pInfo );
         if (pNew == 0) {
-#if defined EXCEPTIONS_OFF
-            abort();
-#else
             throw std::bad_alloc();
-#endif
         }
         return OUString( pNew, SAL_NO_ACQUIRE );
     }

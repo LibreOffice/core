@@ -112,10 +112,6 @@ gb_LinkTarget_EXCEPTIONFLAGS += \
 endif
 endif
 
-gb_LinkTarget_NOEXCEPTIONFLAGS := \
-	-DEXCEPTIONS_OFF \
-	-fno-exceptions \
-
 gb_PrecompiledHeader_EXCEPTIONFLAGS := $(gb_LinkTarget_EXCEPTIONFLAGS)
 
 # optimization level
