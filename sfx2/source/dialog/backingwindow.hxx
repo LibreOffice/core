@@ -28,6 +28,7 @@
 #include <vcl/layout.hxx>
 
 #include <sfx2/recentdocsview.hxx>
+#include <sfx2/templatelocalview.hxx>
 
 #include <svtools/acceleratorexecute.hxx>
 #include <unotools/moduleoptions.hxx>
@@ -70,6 +71,9 @@ class BackingWindow
     PushButton*                     mpInfoButton;
     PushButton*                     mpTplRepButton;
 
+    PushButton*                     mpToggleImpressTemplateButton;
+    bool                            mbShowImpressTemplates;
+
     RecentDocsView*                 mpAllRecentThumbnails;
     RecentDocsView*                 mpWriterRecentThumbnails;
     RecentDocsView*                 mpCalcRecentThumbnails;
@@ -77,6 +81,14 @@ class BackingWindow
     RecentDocsView*                 mpDrawRecentThumbnails;
     RecentDocsView*                 mpDatabaseRecentThumbnails;
     RecentDocsView*                 mpMathRecentThumbnails;
+
+    TemplateLocalView*              mpWriterTemplateThumbnails;
+    TemplateLocalView*              mpCalcTemplateThumbnails;
+    TemplateLocalView*              mpImpressTemplateThumbnails;
+    TemplateLocalView*              mpDrawTemplateThumbnails;
+
+    // test
+    TemplateLocalView*              mpTestTemplateThumbnails;
 
     Rectangle                       maStartCentButtons;
 
