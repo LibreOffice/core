@@ -21,7 +21,10 @@ using namespace ::osl;
 using namespace ::rtl;
 
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::uno;
 
 Table::Table(Tables* pTables,
              Mutex& rMutex,
@@ -66,4 +69,37 @@ OCollection* Table::createIndexes(const TStringVector& rNames)
                               rNames);
 }
 
+//----- XAlterTable -----------------------------------------------------------
+void SAL_CALL Table::alterColumnByName(const OUString& rColName,
+                                       const uno::Reference< XPropertySet >& rDescriptor)
+    throw(SQLException, NoSuchElementException, RuntimeException)
+{
+    MutexGuard aGuard(m_rMutex);
+    checkDisposed(rBHelper.bDisposed);
+
+    uno::Reference< XPropertySet > xColumn(m_pColumns->getByName(rColName), UNO_QUERY);
+
+    // sdbcx::Descriptor
+    bool bNameChanged = xColumn->getPropertyValue("Name") != rDescriptor->getPropertyValue("Name");
+    // sdbcx::ColumnDescriptor
+//     bool bTypeChanged = xColumn->getPropertyValue("Type") != rDescriptor->getPropertyValue("Type");
+//     bool bTypeNameChanged = xColumn->getPropertyValue("TypeName") != rDescriptor->getPropertyValue("TypeName");
+//     bool bPrecisionChanged = xColumn->getPropertyValue("Precision") != rDescriptor->getPropertyValue("Precision");
+//     bool bScaleChanged = xColumn->getPropertyValue("Scale") != rDescriptor->getPropertyValue("Scale");
+//     bool bIsNullableChanged = xColumn->getPropertyValue("IsNullable") != rDescriptor->getPropertyValue("IsNullable");
+//     bool bIsAutoIncrementChanged = xColumn->getPropertyValue("IsAutoIncrement") != rDescriptor->getPropertyValue("IsAutoIncrement");
+    // TODO: remainder
+
+    if (bNameChanged)
+    {
+        OUString sNewTableName;
+        rDescriptor->getPropertyValue("Name") >>= sNewTableName;
+        OUString sSql("ALTER TABLE \"" + getName() + "\" ALTER COLUMN \""
+            + rColName + "\" TO \"" + sNewTableName + "\"");
+
+        getConnection()->createStatement()->execute(sSql);
+    }
+
+    // TODO: implement me
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

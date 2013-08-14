@@ -40,6 +40,18 @@ namespace connectivity
             virtual ::connectivity::sdbcx::OCollection* createIndexes(
                 const ::connectivity::TStringVector& rNames);
 
+            // XAlterTable
+            /**
+             * See ::com::sun::star::sdbcx::ColumnDescriptor for details of
+             * rDescriptor.
+             */
+            virtual void SAL_CALL alterColumnByName(
+                    const ::rtl::OUString& rColName,
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rDescriptor)
+                throw(::com::sun::star::sdbc::SQLException,
+                      ::com::sun::star::container::NoSuchElementException,
+                      ::com::sun::star::uno::RuntimeException);
+
         };
 
     } // namespace firebird
