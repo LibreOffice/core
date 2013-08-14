@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//848\u003d",
+        "filename": "sw/source/core/unocore/unocrsrhelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 786,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-08-14T19:37:42Z",
+      "side": 1,
+      "message": "indeed it appears so - unless isInvalidStyle modifies its parameter... perhaps look at the git history to see if there once was a reason for the if here?",
+      "revId": "e1f1842eea6783e3199dfe46f9e95d9a999b0ab6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
