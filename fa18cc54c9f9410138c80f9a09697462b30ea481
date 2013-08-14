@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//88g\u003d",
+        "filename": "xmloff/source/style/xmlnumfi.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1991,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2013-08-14T06:13:49Z",
+      "side": 1,
+      "message": "append() should be used here I assume?",
+      "revId": "fa18cc54c9f9410138c80f9a09697462b30ea481",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//88c\u003d",
+        "filename": "xmloff/source/text/txtprhdl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 592,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2013-08-14T06:13:49Z",
+      "side": 1,
+      "message": "The initialiser parameter to OUStringBuffer here is the initial *capacity* of the buffer. As far as I can see, what we want is simply:\n\nrStrExpValue +\u003d \" \" + sVal;",
+      "revId": "fa18cc54c9f9410138c80f9a09697462b30ea481",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
