@@ -388,46 +388,49 @@ static const mso_CustomShape msoTrapezoid =
     (SvxMSDffHandle*)mso_sptTrapezoidHandle, SAL_N_ELEMENTS( mso_sptTrapezoidHandle )        // handles
 };
 
-// The side of the enclosing square for the regular (all sides the
-// same, all angles the same) octagon described below is 21600. Let's
-// call that 'a'.
+/*
 
-// The "adjustment1" is the horizontal (or vertical) distance from a
-// side of the square to the nearest vertex. Let's call that 'd'.
+ The side of the enclosing square for the regular (all sides the
+ same, all angles the same) octagon described below is 21600. Let's
+ call that 'a'.
 
-// Let's call the side of the regular octagon 'b'.
+ The "adjustment1" is the horizontal (or vertical) distance from a
+ side of the square to the nearest vertex. Let's call that 'd'.
 
-// We know a. We want d. d=(a-b)/2
+ Let's call the side of the regular octagon 'b'.
 
-// Pythagoras says that b^2 = 2d^2
+ We know a. We want d. d=(a-b)/2
 
-// Solving for b, we get b = (sqrt(2)-1)a
+ Pythagoras says that b^2 = 2d^2
+
+ Solving for b, we get b = (sqrt(2)-1)a
 
 
-//     !------------a=21600-------!
-//
-//     !--d--!
-//           x--------------x
-//          /                \
-//         /                  \
-//        /                    \
-//       /                      \
-//      /                        \
-//     x                          x
-//     !                          !
-//     !                          !
-//     !                          !
-//     !                          !
-//     !                          !
-//     !                          !
-//     x                          x
-//      \                        /
-//       \                      /
-//        \                    /
-//         \                  /
-//          \                /
-//           x--------------x
-//
+     !------------a=21600-------!
+
+     !--d--!
+           x--------------x
+          /                \
+         /                  \
+        /                    \
+       /                      \
+      /                        \
+     x                          x
+     !                          !
+     !                          !
+     !                          !
+     !                          !
+     !                          !
+     !                          !
+     x                          x
+      \                        /
+       \                      /
+        \                    /
+         \                  /
+          \                /
+           x--------------x
+
+*/
 
 static const SvxMSDffVertPair mso_sptOctagonVert[] =        // adjustment1 : 0 - 10800
 {
