@@ -10,6 +10,7 @@
 #include "Columns.hxx"
 #include "Table.hxx"
 
+#include <comphelper/sequence.hxx>
 #include <connectivity/TIndexes.hxx>
 #include <connectivity/TKeys.hxx>
 
@@ -102,5 +103,41 @@ void SAL_CALL Table::alterColumnByName(const OUString& rColName,
 
     m_pColumns->refresh();
     // TODO: implement me
+}
+
+// ----- XRename --------------------------------------------------------------
+void SAL_CALL Table::rename(const OUString& rName)
+    throw(SQLException, ElementExistException, RuntimeException)
+{
+    (void) rName;
+    throw RuntimeException(); // Firebird doesn't support this.
+}
+
+// ----- XInterface -----------------------------------------------------------
+Any SAL_CALL Table::queryInterface(const Type& rType)
+    throw(RuntimeException)
+{
+    if (rType.getTypeName() == "com.sun.star.sdbcx.XRename")
+        return Any();
+
+    return OTableHelper::queryInterface(rType);
+}
+
+// ----- XTypeProvider --------------------------------------------------------
+uno::Sequence< Type > SAL_CALL Table::getTypes()
+    throw(RuntimeException)
+{
+    uno::Sequence< Type > aTypes = OTableHelper::getTypes();
+
+    for (int i = 0; i < aTypes.getLength(); i++)
+    {
+        if (aTypes[i].getTypeName() == "com.sun.star.sdbcx.XRename")
+        {
+            ::comphelper::removeElementAt(aTypes, i);
+            break;
+        }
+    }
+
+    return OTableHelper::getTypes();
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
