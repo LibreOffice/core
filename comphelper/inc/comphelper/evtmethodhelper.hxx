@@ -20,15 +20,15 @@
  *************************************************************/
 
 
-#ifndef COMPHELPER_EVENTMEHODHELPER_HXX
-#define COMPHELPER_EVENMETHODHELPER_HXX
+#ifndef COMPHELPER_EVENTMETHODHELPER_HXX
+#define COMPHELPER_EVENTMETHODHELPER_HXX
 #include <comphelper/sequence.hxx>
-//........................................................................
+
 namespace comphelper
 {
     COMPHELPER_DLLPUBLIC ::com::sun::star::uno::Sequence< ::rtl::OUString> getEventMethodsForType(const ::com::sun::star::uno::Type& type);
-//........................................................................
 
-}   // namespace comphelper
-//........................................................................
-#endif // COMPHELPER_EVENTMEHODHELPER_HXX
+}
+
+#endif // COMPHELPER_EVENTMETHODHELPER_HXX
+
