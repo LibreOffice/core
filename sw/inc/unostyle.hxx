@@ -108,7 +108,7 @@ class SwXStyleFamily : public cppu::WeakImplHelper4
     SfxStyleSheetBasePool*      pBasePool;
     SwDocShell*                 pDocShell;
 
-    SwXStyle*               _FindStyle(const String& rStyleName) const;
+    SwXStyle*               _FindStyle(const OUString& rStyleName) const;
 public:
     SwXStyleFamily(SwDocShell* pDocShell, sal_uInt16 nFamily);
     ~SwXStyleFamily();
@@ -164,13 +164,13 @@ class SwXStyle : public cppu::WeakImplHelper7
 {
     friend class SwXStyleFamily;
     SwDoc*                  m_pDoc;
-    String                  sStyleName;
+    OUString                m_sStyleName;
     SfxStyleSheetBasePool*  pBasePool;
     SfxStyleFamily          eFamily;    // for Notify
 
     sal_Bool                    bIsDescriptor  : 1;
     sal_Bool                    bIsConditional : 1;
-    String                  sParentStyleName;
+    OUString                m_sParentStyleName;
     SwStyleProperties_Impl* pPropImpl;
 
     void    ApplyDescriptorProperties();
@@ -180,7 +180,7 @@ protected:
     const SfxStyleSheetBasePool*    GetBasePool() const {return pBasePool;}
     SfxStyleSheetBasePool*  GetBasePool() {return pBasePool;}
 
-    void                SetStyleName(const String& rSet){ sStyleName = rSet;}
+    void SetStyleName(const OUString& rSet){ m_sStyleName = rSet;}
     SwStyleProperties_Impl* GetPropImpl(){return pPropImpl;}
     com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > mxStyleData;
     com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >  mxStyleFamily;
@@ -193,7 +193,7 @@ public:
     SwXStyle(SwDoc* pDoc, SfxStyleFamily eFam = SFX_STYLE_FAMILY_PARA, sal_Bool bConditional = sal_False);
     SwXStyle(SfxStyleSheetBasePool& rPool, SfxStyleFamily eFam,
                                 SwDoc*  pDoc,
-                                const String& rStyleName);
+                                const OUString& rStyleName);
 
     ~SwXStyle();
 
@@ -249,12 +249,12 @@ public:
     //SfxListener
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
-    const String&       GetStyleName() const { return sStyleName;}
+    OUString            GetStyleName() const { return m_sStyleName;}
     SfxStyleFamily      GetFamily() const {return eFamily;}
 
     sal_Bool                IsDescriptor() const {return bIsDescriptor;}
     sal_Bool                IsConditional() const { return bIsConditional;}
-    const String&       GetParentStyleName() const { return sParentStyleName;}
+    OUString            GetParentStyleName() const { return m_sParentStyleName;}
     void                SetDoc(SwDoc* pDc, SfxStyleSheetBasePool*   pPool)
                             {
                                 bIsDescriptor = sal_False; m_pDoc = pDc;
@@ -270,7 +270,7 @@ class SwXFrameStyle : public SwXStyle,
 public:
     SwXFrameStyle(SfxStyleSheetBasePool& rPool,
                                 SwDoc*  pDoc,
-                                const String& rStyleName) :
+                                const OUString& rStyleName) :
         SwXStyle(rPool, SFX_STYLE_FAMILY_FRAME, pDoc, rStyleName){}
     SwXFrameStyle( SwDoc *pDoc );
     ~SwXFrameStyle();
@@ -294,7 +294,7 @@ protected:
 
 public:
     SwXPageStyle(SfxStyleSheetBasePool& rPool, SwDocShell* pDocSh, SfxStyleFamily eFam,
-                                const String& rStyleName);
+                                const OUString& rStyleName);
     SwXPageStyle(SwDocShell* pDocSh);
     ~SwXPageStyle();
 
