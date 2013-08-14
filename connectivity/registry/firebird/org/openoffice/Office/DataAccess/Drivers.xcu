@@ -62,16 +62,6 @@
         </node>
       </node><!--Properties-->
       <node oor:name="Features">
-        <node oor:name="UseCatalogInSelect" oor:op="replace">
-          <prop oor:name="Value" oor:type="xs:boolean">
-            <value>false</value>
-          </prop>
-        </node>
-        <node oor:name="UseSchemaInSelect" oor:op="replace">
-          <prop oor:name="Value" oor:type="xs:boolean">
-            <value>false</value>
-          </prop>
-        </node>
       </node><!--Features-->
       <node oor:name="MetaData">
       </node>
