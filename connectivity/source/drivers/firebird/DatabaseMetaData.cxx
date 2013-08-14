@@ -1322,8 +1322,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
 {
     (void) catalog;
     (void) schemaPattern;
-    (void) types;
-    // TODO: implement types
+
     SAL_INFO("connectivity.firebird", "getTables() with "
              "TableNamePattern: " << tableNamePattern);
 
@@ -1335,10 +1334,38 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
     static const OUString wld("%");
     OUStringBuffer queryBuf(
             "SELECT "
-            "RDB$RELATION_NAME, RDB$SYSTEM_FLAG, RDB$RELATION_TYPE, "
-            "RDB$DESCRIPTION "
+            "RDB$RELATION_NAME, "
+            "RDB$SYSTEM_FLAG, "
+            "RDB$RELATION_TYPE, "
+            "RDB$DESCRIPTION, "
+            "RDB$VIEW_BLR "
             "FROM RDB$RELATIONS "
-            "WHERE (RDB$RELATION_TYPE = 0 OR RDB$RELATION_TYPE = 1)");
+            "WHERE ");
+
+    // TODO: GLOBAL TEMPORARY, LOCAL TEMPORARY, ALIAS, SYNONYM
+    if ((types.getLength() == 0) || (types.getLength() == 1 && types[0].match(wld)))
+    {
+        // All table types? I.e. includes system tables.
+        queryBuf.append("(RDB$RELATION_TYPE = 0 OR RDB$RELATION_TYPE = 1) ");
+    }
+    else
+    {
+        for (int i = 0; i < types.getLength(); i++)
+        {
+            if (i)
+                queryBuf.append("OR ");
+
+            if (types[i] == "SYSTEM TABLE")
+                queryBuf.append("(RDB$SYSTEM_FLAG = 1 AND RDB$VIEW_BLR IS NULL) ");
+            else if (types[i] == "TABLE")
+                queryBuf.append("(RDB$SYSTEM_FLAG IS NULL OR RDB$SYSTEM_FLAG = 0 AND RDB$VIEW_BLR IS NULL) ");
+            else if (types[i] == "VIEW")
+                queryBuf.append("(RDB$SYSTEM_FLAG IS NULL OR RDB$SYSTEM_FLAG = 0 AND RDB$VIEW_BLR IS NOT NULL) ");
+            else
+                throw SQLException(); // TODO: implement other types, see above.
+
+        }
+    }
 
     if (!tableNamePattern.isEmpty())
     {
@@ -1350,6 +1377,9 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
 
         queryBuf.append(sAppend.replaceAll(wld, tableNamePattern));
     }
+
+
+
     queryBuf.append(" ORDER BY RDB$RELATION_TYPE, RDB$RELATION_NAME");
 
     OUString query = queryBuf.makeStringAndClear();
@@ -1373,20 +1403,25 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
         }
         // 4. TABLE_TYPE
         {
+            // TODO: check this as the docs are a bit unclear.
             sal_Int16 nSystemFlag = xRow->getShort(2);
             sal_Int16 nTableType  = xRow->getShort(3);
+            xRow->getBlob(5); // We have to retrieve a column to verify it is null.
+            sal_Bool aIsView      = xRow->wasNull();
             OUString sTableType;
 
             if (nSystemFlag == 1)
             {
                 sTableType = "SYSTEM TABLE";
             }
+            else if (aIsView)
+            {
+                sTableType = "VIEW";
+            }
             else
             {
                 if (nTableType == 0)
                     sTableType = "TABLE";
-                else
-                    sTableType = "VIEW";
             }
 
             aCurrentRow[4] = new ORowSetValueDecorator(sTableType);
