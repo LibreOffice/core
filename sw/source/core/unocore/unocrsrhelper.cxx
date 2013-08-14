@@ -770,17 +770,22 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
             if(pSwNum->GetNumRule())
             {
                 SwNumRule aRule(*pSwNum->GetNumRule());
-                const String* pNewCharStyles =  pSwNum->GetNewCharStyleNames();
-                const String* pBulletFontNames = pSwNum->GetBulletFontNames();
+                const OUString* pNewCharStyles =  pSwNum->GetNewCharStyleNames();
+                const OUString* pBulletFontNames = pSwNum->GetBulletFontNames();
                 for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
                 {
                     SwNumFmt aFmt(aRule.Get( i ));
-                    if( pNewCharStyles[i].Len() &&
+                    if (!pNewCharStyles[i].isEmpty() &&
                         !SwXNumberingRules::isInvalidStyle(pNewCharStyles[i]) &&
                         (!aFmt.GetCharFmt() || pNewCharStyles[i] != aFmt.GetCharFmt()->GetName()))
                     {
-                        if(!pNewCharStyles[i].Len())
+                        if (pNewCharStyles[i].isEmpty())
+                        {
+                            // FIXME
+                            // Is something missing/wrong here?
+                            // if condition is always false due to outer check!
                             aFmt.SetCharFmt(0);
+                        }
                         else
                         {
 
@@ -813,12 +818,9 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
                     }
                     //Now again for fonts
                     if(
+                       !pBulletFontNames[i].isEmpty() &&
                        !SwXNumberingRules::isInvalidStyle(pBulletFontNames[i]) &&
-                       (
-                        (pBulletFontNames[i].Len() && !aFmt.GetBulletFont()) ||
-                        (pBulletFontNames[i].Len() &&
-                            aFmt.GetBulletFont()->GetName() != pBulletFontNames[i])
-                       )
+                       (!aFmt.GetBulletFont() || aFmt.GetBulletFont()->GetName() != pBulletFontNames[i])
                       )
                     {
                         const SvxFontListItem* pFontListItem =
@@ -855,7 +857,7 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
 
 
             }
-            else if(pSwNum->GetCreatedNumRuleName().Len())
+            else if(!pSwNum->GetCreatedNumRuleName().isEmpty())
             {
                 UnoActionContext aAction(pDoc);
                 SwNumRule* pRule = pDoc->FindNumRulePtr( pSwNum->GetCreatedNumRuleName() );

@@ -1727,8 +1727,8 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
                 }
                 if(pSwXRules)
                 {
-                    const String* pCharStyleNames = pSwXRules->GetNewCharStyleNames();
-                    const String* pBulletFontNames = pSwXRules->GetBulletFontNames();
+                    const OUString* pCharStyleNames = pSwXRules->GetNewCharStyleNames();
+                    const OUString* pBulletFontNames = pSwXRules->GetBulletFontNames();
 
                     SwNumRule aSetRule(*pSwXRules->GetNumRule());
                     const SwCharFmts* pFmts = pDoc->GetCharFmts();
@@ -1740,44 +1740,38 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
                         if(pFmt)
                         {
                             SwNumFmt aFmt(*pFmt);
-                            if(
+                            if (!pCharStyleNames[i].isEmpty() &&
                                 !SwXNumberingRules::isInvalidStyle(pCharStyleNames[i]) &&
-                                ((pCharStyleNames[i].Len() && !pFmt->GetCharFmt()) ||
-                                (pCharStyleNames[i].Len() &&
-                                            pFmt->GetCharFmt()->GetName() != pCharStyleNames[i]) ))
+                                (!pFmt->GetCharFmt() || pFmt->GetCharFmt()->GetName() != pCharStyleNames[i]) )
                             {
 
                                 SwCharFmt* pCharFmt = 0;
-                                if(pCharStyleNames[i].Len())
+                                for(sal_uInt16 j = 0; j< nChCount; j++)
                                 {
-                                    for(sal_uInt16 j = 0; j< nChCount; j++)
+                                    SwCharFmt* pTmp = (*pFmts)[j];
+                                    if(pTmp->GetName() == pCharStyleNames[i])
                                     {
-                                        SwCharFmt* pTmp = (*pFmts)[j];
-                                        if(pTmp->GetName() == pCharStyleNames[i])
-                                        {
-                                            pCharFmt = pTmp;
-                                            break;
-                                        }
+                                        pCharFmt = pTmp;
+                                        break;
                                     }
-                                    if(!pCharFmt)
-                                    {
-
-                                        SfxStyleSheetBase* pBase;
-                                        pBase = ((SfxStyleSheetBasePool*)pBasePool)->Find(pCharStyleNames[i], SFX_STYLE_FAMILY_CHAR);
-                                        if(!pBase)
-                                            pBase = &pBasePool->Make(pCharStyleNames[i], SFX_STYLE_FAMILY_CHAR);
-                                        pCharFmt = ((SwDocStyleSheet*)pBase)->GetCharFmt();
-
-                                    }
-
-                                    aFmt.SetCharFmt( pCharFmt );
                                 }
+                                if(!pCharFmt)
+                                {
+
+                                    SfxStyleSheetBase* pBase;
+                                    pBase = ((SfxStyleSheetBasePool*)pBasePool)->Find(pCharStyleNames[i], SFX_STYLE_FAMILY_CHAR);
+                                    if(!pBase)
+                                        pBase = &pBasePool->Make(pCharStyleNames[i], SFX_STYLE_FAMILY_CHAR);
+                                    pCharFmt = ((SwDocStyleSheet*)pBase)->GetCharFmt();
+
+                                }
+
+                                aFmt.SetCharFmt( pCharFmt );
                             }
                             //jetzt nochmal fuer Fonts
-                            if (!SwXNumberingRules::isInvalidStyle(pBulletFontNames[i]) &&
-                                ((pBulletFontNames[i].Len() && !pFmt->GetBulletFont()) ||
-                                (pBulletFontNames[i].Len() &&
-                                        pFmt->GetBulletFont()->GetName() != pBulletFontNames[i]) ))
+                            if (!pBulletFontNames[i].isEmpty() &&
+                                !SwXNumberingRules::isInvalidStyle(pBulletFontNames[i]) &&
+                                (!pFmt->GetBulletFont() || pFmt->GetBulletFont()->GetName() != pBulletFontNames[i]) )
                             {
                                 const SvxFontListItem* pFontListItem =
                                         (const SvxFontListItem* )pDoc->GetDocShell()
