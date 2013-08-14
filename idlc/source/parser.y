@@ -582,7 +582,7 @@ interface_dcl :
 		{
 			pInterface = new AstInterface(
                 *$1->getName(),
-                static_cast< AstInterface * >($1->getInherits()), pScope);
+                static_cast< AstInterface const * >(resolveTypedefs($1->getInherits())), pScope);
 			if ( pInterface &&
 				(pDecl = pScope->lookupByName(pInterface->getScopedName())) ) 
 			{
@@ -2586,7 +2586,7 @@ struct_type :
 
 		if ( pScope )
 		{
-			AstStruct* pBase= static_cast< AstStruct* >($1->getInherits());
+			AstStruct const* pBase= static_cast< AstStruct const* >(resolveTypedefs($1->getInherits()));
             pStruct = new AstStruct(
                 *$1->getName(), $1->getTypeParameters(), pBase, pScope);
 			pScope->addDeclaration(pStruct);

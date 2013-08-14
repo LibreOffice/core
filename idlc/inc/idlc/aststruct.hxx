@@ -33,15 +33,15 @@ public:
     AstStruct(
         const OString& name,
         std::vector< OString > const & typeParameters,
-        AstStruct* pBaseType, AstScope* pScope);
+        AstStruct const* pBaseType, AstScope* pScope);
 
     AstStruct(const NodeType type,
               const OString& name,
-              AstStruct* pBaseType,
+              AstStruct const* pBaseType,
               AstScope* pScope);
     virtual ~AstStruct();
 
-    AstStruct* getBaseType()
+    AstStruct const* getBaseType()
         { return m_pBaseType; }
 
     DeclList::size_type getTypeParameterCount() const
@@ -53,7 +53,7 @@ public:
 
     virtual sal_Bool dump(RegistryKey& rKey);
 private:
-    AstStruct* m_pBaseType;
+    AstStruct const* m_pBaseType;
     DeclList m_typeParameters;
 };
 

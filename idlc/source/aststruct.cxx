@@ -27,7 +27,7 @@ using namespace ::rtl;
 
 AstStruct::AstStruct(
     const OString& name, std::vector< OString > const & typeParameters,
-    AstStruct* pBaseType, AstScope* pScope)
+    AstStruct const* pBaseType, AstScope* pScope)
     : AstType(NT_struct, name, pScope)
     , AstScope(NT_struct)
     , m_pBaseType(pBaseType)
@@ -42,7 +42,7 @@ AstStruct::AstStruct(
 
 AstStruct::AstStruct(const NodeType type,
                         const OString& name,
-                       AstStruct* pBaseType,
+                       AstStruct const* pBaseType,
                      AstScope* pScope)
     : AstType(type, name, pScope)
     , AstScope(type)
