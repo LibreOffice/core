@@ -798,12 +798,23 @@ public:
         formula::FormulaGrammar::Grammar eGram = formula::FormulaGrammar::GRAM_DEFAULT );
 
     /**
-     * Takes ownership of pCell
+     * Set formula cell, and transfer its ownership to the document. This call
+     * attempts to group the passed formula cell with the adjacent cells or
+     * cell groups if appropriate.
      *
      * @return pCell if it was successfully inserted, NULL otherwise. pCell
      *         is deleted automatically on failure to insert.
      */
     SC_DLLPUBLIC ScFormulaCell* SetFormulaCell( const ScAddress& rPos, ScFormulaCell* pCell );
+
+    /**
+     * Set formula cell, and transfer its ownership to the document.  Unlike
+     * SetFormulaCell(), this call will <i>not</i> attempt to group the passed
+     * formula cell with the adjacent cells or cell groups.
+     *
+     * @return true if the cell is inserted, false otherwise. The caller
+     *         should delete the cell instance if the method returns false.
+     */
     SC_DLLPUBLIC bool SetGroupFormulaCell( const ScAddress& rPos, ScFormulaCell* pCell );
 
     SC_DLLPUBLIC void InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
@@ -1801,7 +1812,7 @@ public:
     SC_DLLPUBLIC void CalcFormulaTree(
         bool bOnlyForced = false, bool bProgressBar = true, bool bSetAllDirty = true );
     void                ClearFormulaTree();
-    void                RebuildFormulaGroups();
+    SC_DLLPUBLIC void RebuildFormulaGroups();
     void                AppendToFormulaTrack( ScFormulaCell* pCell );
     void                RemoveFromFormulaTrack( ScFormulaCell* pCell );
     void                TrackFormulas( sal_uLong nHintId = SC_HINT_DATACHANGED );

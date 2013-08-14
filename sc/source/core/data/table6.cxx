@@ -1029,7 +1029,7 @@ bool ScTable::SearchRangeForAllEmptyCells(
 void ScTable::RebuildFormulaGroups()
 {
     for (SCCOL i=0; i<=MAXCOL; i++)
-        aCol[i].RebuildFormulaGroups();
+        aCol[i].RegroupFormulaCells();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

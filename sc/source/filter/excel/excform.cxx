@@ -146,7 +146,12 @@ void ImportExcel::Formula(
     {
         pCell = new ScFormulaCell( pD, aScPos, pResult );
         pD->EnsureTable(aScPos.Tab());
-        pCell = pD->SetFormulaCell(aScPos, pCell);
+        bool bInserted = pD->SetGroupFormulaCell(aScPos, pCell);
+        if (!bInserted)
+        {
+            delete pCell;
+            return;
+        }
     }
     else
     {

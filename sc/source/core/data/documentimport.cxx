@@ -353,6 +353,7 @@ void ScDocumentImport::initColumn(ScColumn& rCol)
     CellTextAttrInitializer aFunc(mpImpl->mnDefaultScriptNumeric);
     std::for_each(rCol.maCells.begin(), rCol.maCells.end(), aFunc);
     aFunc.swap(rCol.maCellTextAttrs);
+    rCol.RegroupFormulaCells();
     rCol.CellStorageModified();
 }
 

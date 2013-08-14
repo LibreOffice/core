@@ -163,7 +163,6 @@ public:
     void        FreeAll();
     void        SwapRow( SCROW nRow1, SCROW nRow2 );
     void        SwapCell( SCROW nRow, ScColumn& rCol);
-    void        RebuildFormulaGroups();
 
     bool        HasAttrib( SCROW nRow1, SCROW nRow2, sal_uInt16 nMask ) const;
     bool    HasAttribSelection( const ScMarkData& rMark, sal_uInt16 nMask ) const;

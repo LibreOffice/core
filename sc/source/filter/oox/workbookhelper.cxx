@@ -636,6 +636,7 @@ void WorkbookGlobals::finalize()
         //stop preventing establishment of listeners as is done in
         //ScDocShell::AfterXMLLoading() for ods
         getScDocument().SetInsertingFromOtherDoc(false);
+        getScDocument().RebuildFormulaGroups();
     }
 }
 

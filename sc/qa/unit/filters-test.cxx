@@ -351,7 +351,7 @@ void ScFiltersTest::testSharedFormulaXLS()
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell.", pCell);
     ScFormulaCellGroupRef xGroup = pCell->GetCellGroup();
     CPPUNIT_ASSERT_MESSAGE("This cell should be a part of a cell group.", xGroup);
-    CPPUNIT_ASSERT_MESSAGE("Incorrect group geometry.", xGroup->mnStart == 2 && xGroup->mnLength == 17);
+    CPPUNIT_ASSERT_MESSAGE("Incorrect group geometry.", xGroup->mnStart == 1 && xGroup->mnLength == 18);
 
     xDocSh->DoClose();
 }
@@ -369,6 +369,13 @@ void ScFiltersTest::testSharedFormulaXLSX()
         double fCheck = i*10.0;
         CPPUNIT_ASSERT_EQUAL(fCheck, fVal);
     }
+
+    ScFormulaCell* pCell = pDoc->GetFormulaCell(ScAddress(1,18,0));
+    CPPUNIT_ASSERT_MESSAGE("This should be a formula cell.", pCell);
+    ScFormulaCellGroupRef xGroup = pCell->GetCellGroup();
+    CPPUNIT_ASSERT_MESSAGE("This cell should be a part of a cell group.", xGroup);
+    CPPUNIT_ASSERT_MESSAGE("Incorrect group geometry.", xGroup->mnStart == 1 && xGroup->mnLength == 18);
+
     xDocSh->DoClose();
 }
 

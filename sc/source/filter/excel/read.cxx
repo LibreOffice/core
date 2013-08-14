@@ -1278,13 +1278,13 @@ FltError ImportExcel8::Read( void )
                     break;
                 }
             }
-
         }
         // #i45843# Convert pivot tables before calculation, so they are available
         // for the GETPIVOTDATA function.
         if( GetBiff() == EXC_BIFF8 )
             GetPivotTableManager().ConvertPivotTables();
 
+        pD->RebuildFormulaGroups();
         pProgress.reset();
 #if 0
         // Excel documents look much better without this call; better in the

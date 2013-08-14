@@ -2742,17 +2742,6 @@ public:
 
 }
 
-// Very[!] slow way to look for and merge contiguous runs
-// of similar formulae into a formulagroup
-void ScColumn::RebuildFormulaGroups()
-{
-    if (!mbDirtyGroups)
-        return;
-
-    RegroupFormulaCells();
-    mbDirtyGroups = false;
-}
-
 void ScColumn::RegroupFormulaCells()
 {
     // re-build formula groups.
