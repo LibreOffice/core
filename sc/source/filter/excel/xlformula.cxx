@@ -439,7 +439,7 @@ static const XclFunctionInfo saFuncTable_2013[] =
     EXC_FUNCENTRY_V_VR(         ocNoName,        3,  4,  0,  "FDIST" ),
     // NOTE: this FINV is not our LEGACY.FINV
     EXC_FUNCENTRY_V_VR(         ocNoName,        3,  3,  0,  "FINV" ),
-    EXC_FUNCENTRY_V_VR(         ocNoName,        2,  2,  0,  "FILTERXML" ),
+    EXC_FUNCENTRY_V_VR(         ocFilterXML,     2,  2,  0,  "FILTERXML" ),
     /* FIXME: FLOOR.MATH is our/ODFF FLOOR, but we have special handling for
      * the weird Excel FLOOR behavior, check that and unify or diversify. */
     EXC_FUNCENTRY_V_VR(         ocNoName,        1,  3,  0,  "FLOOR.MATH" ),
@@ -465,7 +465,7 @@ static const XclFunctionInfo saFuncTable_2013[] =
     EXC_FUNCENTRY_V_RX(         ocSkewp,         1,  MX, 0,  "SKEW.P" ),
     EXC_FUNCENTRY_V_VR(         ocUnichar,       1,  1,  0,  "UNICHAR" ),
     EXC_FUNCENTRY_V_VR(         ocUnicode,       1,  1,  0,  "UNICODE" ),
-    EXC_FUNCENTRY_V_VR(         ocNoName,        1,  1,  0,  "WEBSERVICE" ),
+    EXC_FUNCENTRY_V_VR(         ocWebservice,    1,  1,  0,  "WEBSERVICE" ),
     EXC_FUNCENTRY_V_RX(         ocXor,           1,  MX, 0,  "XOR" )
 };
 
