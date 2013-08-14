@@ -76,7 +76,7 @@ void SAL_CALL Table::alterColumnByName(const OUString& rColName,
     throw(SQLException, NoSuchElementException, RuntimeException)
 {
     MutexGuard aGuard(m_rMutex);
-    checkDisposed(rBHelper.bDisposed);
+    checkDisposed(WeakComponentImplHelperBase::rBHelper.bDisposed);
 
     uno::Reference< XPropertySet > xColumn(m_pColumns->getByName(rColName), UNO_QUERY);
 
