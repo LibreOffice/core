@@ -135,36 +135,32 @@ SwModuleOptions::SwModuleOptions() :
 {
 }
 
-String SwModuleOptions::ConvertWordDelimiter(const String& rDelim, sal_Bool bFromUI)
+OUString SwModuleOptions::ConvertWordDelimiter(const OUString& rDelim, sal_Bool bFromUI)
 {
-    String sReturn;
+    OUString sReturn;
+    const sal_Int32 nDelimLen = rDelim.getLength();
     if(bFromUI)
     {
-        xub_StrLen i = 0;
-        sal_Unicode c;
-
-        while (i < rDelim.Len())
+        for (sal_Int32 i = 0; i < nDelimLen; )
         {
-            c = rDelim.GetChar(i++);
+            const sal_Unicode c = rDelim[i++];
 
-            if (c == '\\')
+            if (c == '\\' && i < nDelimLen )
             {
-                c = rDelim.GetChar(i++);
-
-                switch (c)
+                switch (rDelim[i++])
                 {
-                    case 'n':   sReturn += '\n';    break;
-                    case 't':   sReturn += '\t';    break;
-                    case '\\':  sReturn += '\\';    break;
+                    case 'n':   sReturn += "\n";    break;
+                    case 't':   sReturn += "\t";    break;
+                    case '\\':  sReturn += "\\";    break;
 
                     case 'x':
                     {
-                        sal_Unicode nVal, nChar;
+                        sal_Unicode nChar = 0;
                         bool bValidData = true;
-                        xub_StrLen n;
-                        for( n = 0, nChar = 0; n < 2 && i < rDelim.Len(); ++n, ++i )
+                        for( sal_Int32 n = 0; n < 2 && i < nDelimLen; ++n, ++i )
                         {
-                            if( ((nVal = rDelim.GetChar( i )) >= '0') && ( nVal <= '9') )
+                            sal_Unicode nVal = rDelim[i];
+                            if( (nVal >= '0') && ( nVal <= '9') )
                                 nVal -= '0';
                             else if( (nVal >= 'A') && (nVal <= 'F') )
                                 nVal -= 'A' - 10;
@@ -177,44 +173,45 @@ String SwModuleOptions::ConvertWordDelimiter(const String& rDelim, sal_Bool bFro
                                 break;
                             }
 
-                            (nChar <<= 4 );
-                            nChar = nChar + nVal;
+                            nChar <<= 4;
+                            nChar += nVal;
                         }
                         if( bValidData )
-                            sReturn += nChar;
+                            sReturn += OUString(nChar);
                         break;
                     }
 
                     default:    // Unknown, so insert backslash
-                        sReturn += '\\';
+                        sReturn += "\\";
                         i--;
                         break;
                 }
             }
             else
-                sReturn += c;
+                sReturn += OUString(c);
         }
     }
     else
     {
-        for (xub_StrLen i = 0; i < rDelim.Len(); i++)
+        for (sal_Int32 i = 0; i < nDelimLen; ++i)
         {
-            sal_Unicode c = rDelim.GetChar(i);
+            const sal_Unicode c = rDelim[i];
 
             switch (c)
             {
-                case '\n':  sReturn.AppendAscii(RTL_CONSTASCII_STRINGPARAM("\\n")); break;
-                case '\t':  sReturn.AppendAscii(RTL_CONSTASCII_STRINGPARAM("\\t")); break;
-                case '\\':  sReturn.AppendAscii(RTL_CONSTASCII_STRINGPARAM("\\\\"));    break;
+                case '\n':  sReturn += "\\n"; break;
+                case '\t':  sReturn += "\\t"; break;
+                case '\\':  sReturn += "\\\\"; break;
 
                 default:
                     if( c <= 0x1f || c >= 0x7f )
                     {
-                        sReturn.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "\\x" ))
-                            += OUString::number( c, 16 );
+                        sReturn += "\\x" + OUString::number( c, 16 );
                     }
                     else
-                        sReturn += c;
+                    {
+                        sReturn += OUString(c);
+                    }
             }
         }
     }
@@ -1264,8 +1261,8 @@ void SwMiscConfig::Commit()
         switch(nProp)
         {
             case 0 :
-                pValues[nProp] <<= OUString(
-                    SwModuleOptions::ConvertWordDelimiter(sWordDelimiter, sal_False));
+                pValues[nProp] <<=
+                    SwModuleOptions::ConvertWordDelimiter(sWordDelimiter, sal_False);
             break;
             case 1 : pValues[nProp].setValue(&bDefaultFontsInCurrDocOnly, rType); break;
             case 2 : pValues[nProp].setValue(&bShowIndexPreview, rType) ;        break;
@@ -1273,9 +1270,9 @@ void SwMiscConfig::Commit()
             case 4 : pValues[nProp].setValue(&bNumAlignSize, rType);            break;
             case 5 : pValues[nProp].setValue(&bSinglePrintJob, rType);          break;
             case 6 : pValues[nProp] <<= nMailingFormats;             break;
-            case 7 : pValues[nProp] <<= OUString(sNameFromColumn);  break;
-            case 8 : pValues[nProp] <<= OUString(sMailingPath);     break;
-            case 9 : pValues[nProp] <<= OUString(sMailName);        break;
+            case 7 : pValues[nProp] <<= sNameFromColumn;  break;
+            case 8 : pValues[nProp] <<= sMailingPath;     break;
+            case 9 : pValues[nProp] <<= sMailName;        break;
             case 10: pValues[nProp].setValue(&bIsNameFromColumn, rType);break;
             case 11: pValues[nProp] <<= bAskForMailMergeInPrint; break;
         }

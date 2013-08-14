@@ -2043,7 +2043,7 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
         break;
         case  WID_DOC_WORD_SEPARATOR :
         {
-            aAny <<= OUString(SW_MOD()->GetDocStatWordDelim());
+            aAny <<= SW_MOD()->GetDocStatWordDelim();
         }
         break;
         case WID_DOC_CHANGES_RECORD:
