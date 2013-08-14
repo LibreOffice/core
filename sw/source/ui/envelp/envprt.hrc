@@ -38,14 +38,6 @@
 #define BMP_VER_RGHT_LOWER  (RC_ENVPRT_BEGIN + 10)
 #define BMP_VER_RGHT_UPPER  (RC_ENVPRT_BEGIN + 11)
 
-// overflow check ********************************************************
-
-#define ENVPRT_ACT_END  ITM_VER_RGHT
-
-#if ENVPRT_ACT_END > ITM_VER_RGHT
-#error Resource-Ueberlauf in #file, #line
-#endif
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
