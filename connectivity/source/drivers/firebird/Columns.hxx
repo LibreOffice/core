@@ -25,9 +25,6 @@ namespace connectivity
                     ::osl::Mutex& rMutex,
                     const ::connectivity::TStringVector &_rVector);
 
-            // OColumnsHelper
-            virtual ::connectivity::sdbcx::ObjectType createObject(
-                                                        const ::rtl::OUString& rName);
         };
 
     } // namespace firebird
