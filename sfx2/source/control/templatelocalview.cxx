@@ -16,6 +16,7 @@
 #include <svl/inettype.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/ucbstreamhelper.hxx>
+#include <vcl/builder.hxx>
 #include <vcl/pngread.hxx>
 
 #include <com/sun/star/embed/ElementModes.hpp>
@@ -35,6 +36,17 @@ TemplateLocalView::TemplateLocalView ( Window* pParent, const ResId& rResId, boo
     : TemplateAbstractView(pParent,rResId,bDisableTransientChildren),
       mpDocTemplates(new SfxDocumentTemplates)
 {
+}
+
+TemplateLocalView::TemplateLocalView ( Window* pParent)
+    : TemplateAbstractView(pParent),
+      mpDocTemplates(new SfxDocumentTemplates)
+{
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeTemplateLocalView(Window *pParent, VclBuilder::stringmap &)
+{
+    return new TemplateLocalView(pParent);
 }
 
 TemplateLocalView::~TemplateLocalView()

@@ -31,6 +31,8 @@
 
 #include <toolkit/awt/vclxmenu.hxx>
 
+#include <com/sun/star/document/MacroExecMode.hpp>
+#include <com/sun/star/document/UpdateDocMode.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -38,11 +40,13 @@
 #include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star;
+using namespace ::com::sun::star::document;
 
 const char RECENT_FILE_LIST[] =   ".uno:RecentFileList";
 
@@ -60,8 +64,15 @@ const int nItemId_Extensions = 1;
 const int nItemId_Info = 3;
 const int nItemId_TplRep = 4;
 
+const int nTemplateItemMaxWidth = 160;
+const int nTemplateItemMaxHeight = 148;
+const int nTemplateItemPadding = 5;
+const int nTemplateItemMaxTextLength = 20;
+const int nTemplateItemThumbnailMaxHeight = 96;
+
 BackingWindow::BackingWindow( Window* i_pParent ) :
     Window( i_pParent ),
+    mxDesktop( Desktop::create(comphelper::getProcessComponentContext()) ),
     mbInitControls( false ),
     mnHideExternalLinks( 0 ),
     mpAccExec( NULL )
@@ -93,6 +104,16 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     get(mpInfoButton,       "info");
     get(mpTplRepButton,     "add_temp");
 
+    get(mpShowWriterTemplateButton,     "show_writer_template");
+    get(mpShowCalcTemplateButton,       "show_calc_template");
+    get(mpShowImpressTemplateButton,    "show_impress_template");
+    get(mpShowDrawTemplateButton,       "show_draw_template");
+
+    get(mpShowWriterRecentButton,       "show_writer_recent");
+    get(mpShowCalcRecentButton,         "show_calc_recent");
+    get(mpShowImpressRecentButton,      "show_impress_recent");
+    get(mpShowDrawRecentButton,         "show_draw_recent");
+
     get( mpAllRecentThumbnails,         "all_recent");
     get( mpWriterRecentThumbnails,      "writer_recent");
     get( mpCalcRecentThumbnails,        "calc_recent");
@@ -100,6 +121,11 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     get( mpDrawRecentThumbnails,        "draw_recent");
     get( mpDatabaseRecentThumbnails,    "database_recent");
     get( mpMathRecentThumbnails,        "math_recent");
+
+    get( mpWriterTemplateThumbnails,    "writer_templates");
+    get( mpCalcTemplateThumbnails,      "calc_templates");
+    get( mpImpressTemplateThumbnails,   "impress_templates");
+    get( mpDrawTemplateThumbnails,      "draw_templates");
 
     try
     {
@@ -158,6 +184,10 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
 
 BackingWindow::~BackingWindow()
 {
+    mpWriterTemplateThumbnails  ->setOpenTemplateHdl(Link());
+    mpCalcTemplateThumbnails    ->setOpenTemplateHdl(Link());
+    mpImpressTemplateThumbnails ->setOpenTemplateHdl(Link());
+    mpDrawTemplateThumbnails    ->setOpenTemplateHdl(Link());
 }
 
 IMPL_LINK( BackingWindow, WindowEventListener, VclSimpleEvent*, pEvent )
@@ -247,6 +277,26 @@ void BackingWindow::initControls()
     setupExternalLink( mpInfoButton );
     setupExternalLink( mpTplRepButton );
 
+    mpShowWriterTemplateButton  ->SetClickHdl( LINK( this, BackingWindow, RecentTemplateToggleHdl ) );
+    mpShowCalcTemplateButton    ->SetClickHdl( LINK( this, BackingWindow, RecentTemplateToggleHdl ) );
+    mpShowImpressTemplateButton ->SetClickHdl( LINK( this, BackingWindow, RecentTemplateToggleHdl ) );
+    mpShowDrawTemplateButton    ->SetClickHdl( LINK( this, BackingWindow, RecentTemplateToggleHdl ) );
+
+    mpShowWriterRecentButton    ->SetClickHdl( LINK( this, BackingWindow, RecentTemplateToggleHdl ) );
+    mpShowCalcRecentButton      ->SetClickHdl( LINK( this, BackingWindow, RecentTemplateToggleHdl ) );
+    mpShowImpressRecentButton   ->SetClickHdl( LINK( this, BackingWindow, RecentTemplateToggleHdl ) );
+    mpShowDrawRecentButton      ->SetClickHdl( LINK( this, BackingWindow, RecentTemplateToggleHdl ) );
+
+    mpShowWriterRecentButton    ->Hide();
+    mpShowCalcRecentButton      ->Hide();
+    mpShowImpressRecentButton   ->Hide();
+    mpShowDrawRecentButton      ->Hide();
+
+    setupTemplateView( mpWriterTemplateThumbnails,  FILTER_APP_WRITER );
+    setupTemplateView( mpCalcTemplateThumbnails,    FILTER_APP_CALC );
+    setupTemplateView( mpImpressTemplateThumbnails, FILTER_APP_IMPRESS );
+    setupTemplateView( mpDrawTemplateThumbnails,    FILTER_APP_DRAW );
+
     Resize();
 }
 
@@ -279,6 +329,20 @@ void BackingWindow::setupButton( PushButton* pButton )
 
     pButton->SetFont( aFont );
     pButton->SetControlFont( aFont );
+}
+
+void BackingWindow::setupTemplateView( TemplateLocalView* pView, FILTER_APPLICATION eFilter )
+{
+    pView->SetStyle(pView->GetStyle() | WB_VSCROLL);
+    pView->setItemMaxTextLength(nTemplateItemMaxTextLength);
+
+    pView->setItemDimensions(nTemplateItemMaxWidth, nTemplateItemThumbnailMaxHeight,
+                              nTemplateItemMaxHeight-nTemplateItemMaxHeight, nTemplateItemPadding);
+    pView->filterItems(ViewFilter_Application(eFilter));
+    pView->Populate();
+    pView->Hide(); // hidden by default
+    pView->showRootRegion();
+    pView->setOpenTemplateHdl( LINK( this, BackingWindow, OpenTemplateHdl ) );
 }
 
 void BackingWindow::setupExternalLink( PushButton* pButton )
@@ -438,6 +502,96 @@ IMPL_LINK( BackingWindow, ClickHdl, Button*, pButton )
 
         dispatchURL( TEMPLATE_URL, OUString(), xFrame, aArgs );
     }
+    return 0;
+}
+
+IMPL_LINK( BackingWindow, RecentTemplateToggleHdl, Button*, pButton )
+{
+    // writer
+    if( pButton == mpShowWriterTemplateButton )
+    {
+        mpWriterRecentThumbnails->Hide();
+        mpWriterTemplateThumbnails->Show();
+        mpShowWriterTemplateButton->Hide();
+        mpShowWriterRecentButton->Show();
+    }
+    else if( pButton == mpShowWriterRecentButton )
+    {
+        mpWriterRecentThumbnails->Show();
+        mpWriterTemplateThumbnails->Hide();
+        mpShowWriterTemplateButton->Show();
+        mpShowWriterRecentButton->Hide();
+    }
+    // calc
+    else if( pButton == mpShowCalcTemplateButton )
+    {
+        mpCalcRecentThumbnails->Hide();
+        mpCalcTemplateThumbnails->Show();
+        mpShowCalcTemplateButton->Hide();
+        mpShowCalcRecentButton->Show();
+    }
+    else if( pButton == mpShowCalcRecentButton )
+    {
+        mpCalcRecentThumbnails->Show();
+        mpCalcTemplateThumbnails->Hide();
+        mpShowCalcTemplateButton->Show();
+        mpShowCalcRecentButton->Hide();
+    }
+    // impress
+    else if( pButton == mpShowImpressTemplateButton )
+    {
+        mpImpressRecentThumbnails->Hide();
+        mpImpressTemplateThumbnails->Show();
+        mpShowImpressTemplateButton->Hide();
+        mpShowImpressRecentButton->Show();
+    }
+    else if( pButton == mpShowImpressRecentButton )
+    {
+        mpImpressRecentThumbnails->Show();
+        mpImpressTemplateThumbnails->Hide();
+        mpShowImpressTemplateButton->Show();
+        mpShowImpressRecentButton->Hide();
+    }
+    // draw
+    else if( pButton == mpShowDrawTemplateButton )
+    {
+        mpDrawRecentThumbnails->Hide();
+        mpDrawTemplateThumbnails->Show();
+        mpShowDrawTemplateButton->Hide();
+        mpShowDrawRecentButton->Show();
+    }
+    else if( pButton == mpShowDrawRecentButton )
+    {
+        mpDrawRecentThumbnails->Show();
+        mpDrawTemplateThumbnails->Hide();
+        mpShowDrawTemplateButton->Show();
+        mpShowDrawRecentButton->Hide();
+    }
+    return 0;
+}
+
+IMPL_LINK( BackingWindow, OpenTemplateHdl, ThumbnailViewItem*, pItem)
+{
+    uno::Sequence< PropertyValue > aArgs(4);
+    aArgs[0].Name = "AsTemplate";
+    aArgs[0].Value <<= sal_True;
+    aArgs[1].Name = "MacroExecutionMode";
+    aArgs[1].Value <<= MacroExecMode::USE_CONFIG;
+    aArgs[2].Name = "UpdateDocMode";
+    aArgs[2].Value <<= UpdateDocMode::ACCORDING_TO_CONFIG;
+    aArgs[3].Name = "InteractionHandler";
+    aArgs[3].Value <<= task::InteractionHandler::createWithParent( ::comphelper::getProcessComponentContext(), 0 );
+
+    TemplateViewItem *pTemplateItem = static_cast<TemplateViewItem*>(pItem);
+
+    try
+    {
+        mxDesktop->loadComponentFromURL(pTemplateItem->getPath(),"_default", 0, aArgs );
+    }
+    catch( const uno::Exception& )
+    {
+    }
+
     return 0;
 }
 
