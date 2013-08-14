@@ -138,6 +138,7 @@ public:
     void testBnc779620();
     void testDefaultSectBreakCols();
     void testFdo66474();
+    void testBnc780044Spacing();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -240,6 +241,7 @@ void Test::run()
         {"bnc779620.docx", &Test::testBnc779620},
         {"default-sect-break-cols.docx", &Test::testDefaultSectBreakCols},
         {"fdo66474.docx", &Test::testFdo66474},
+        {"bnc780044_spacing.docx", &Test::testBnc780044Spacing},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1678,6 +1680,17 @@ void Test::testFdo66474()
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(100), getProperty<sal_Int16>(xTables->getByIndex(0), "RelativeWidth"));
+}
+
+void Test::testBnc780044Spacing()
+{
+    // The document has global w:spacing in styles.xml , and local w:spacing in w:pPr, which however
+    // only applied to text runs, not to as-character pictures. So the picture made the line higher.
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
+    xCursor->jumpToLastPage();
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(1), xCursor->getPage());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
