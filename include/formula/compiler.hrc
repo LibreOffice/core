@@ -402,16 +402,16 @@
 #define SC_OPCODE_AVERAGE_IFS       404
 #define SC_OPCODE_COUNT_IFS         405
 #define SC_OPCODE_SKEWP             406
-#define SC_OPCODE_STOP_2_PAR        407
-#define SC_OPCODE_LENB              408
-#define SC_OPCODE_RIGHTB            409
-#define SC_OPCODE_LEFTB             410
-#define SC_OPCODE_MIDB              412
-#define SC_OPCODE_FILTERXML         413
-#define SC_OPCODE_WEBSERVICE        414
-#define SC_OPCODE_LAST_OPCODE_ID    415     /* last OpCode */
+#define SC_OPCODE_LENB              407
+#define SC_OPCODE_RIGHTB            408
+#define SC_OPCODE_LEFTB             409
+#define SC_OPCODE_MIDB              410
+#define SC_OPCODE_FILTERXML         411
+#define SC_OPCODE_WEBSERVICE        412
 
-#define SC_OPCODE_STOP_FUNCTION     416
+#define SC_OPCODE_LAST_OPCODE_ID    412     /* last OpCode */
+#define SC_OPCODE_STOP_2_PAR        413     /* last function with two or more parameters' OpCode + 1 */
+#define SC_OPCODE_STOP_FUNCTION     413     /* last function's OpCode + 1 */
 
 /*** Internal ***/
 #define SC_OPCODE_INTERNAL_BEGIN   9999
