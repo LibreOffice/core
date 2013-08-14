@@ -86,7 +86,7 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
     done
 
     # it is not a real extension; it used to be in the main package...
-    merge_flists gid_Module_Optional_Extensions_Script_Provider_For_Javascript $FILELISTSDIR/common_list.txt
+    merge_flists gid_Module_Optional_Extensions_Script_Provider_For_JS $FILELISTSDIR/common_list.txt
 
     if test "$SPLIT_APP_MODULES" = "YES" ; then
         merge_flists gid_Module_Prg_Base_Bin      $FILELISTSDIR/base_list.txt
@@ -275,7 +275,7 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
 
     if test "z$OOO_VENDOR" = "zSUSE" ; then
         # officebean subpackage
-        test -f $DESTDIR/gid_Module_Optional_Extensions_Script_Provider_For_Beanshell && cp $DESTDIR/gid_Module_Optional_Extensions_Script_Provider_For_Beanshell officebean_list.txt || :
+        test -f $DESTDIR/gid_Module_Optional_Extensions_Script_Provider_For_BS && cp $DESTDIR/gid_Module_Optional_Extensions_Script_Provider_For_BS officebean_list.txt || :
         mv_file_between_flists officebean_list.txt common_list.txt $INSTALLDIR/program/classes/officebean.jar
         mv_file_between_flists officebean_list.txt common_list.txt $INSTALLDIR/program/libofficebean.so
         add_used_directories officebean_list.txt common_list.txt
