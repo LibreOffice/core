@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _INSFNOTE_HXX
-#define _INSFNOTE_HXX
+#ifndef INSFNOTE_HXX
+#define INSFNOTE_HXX
 
 #include <svx/stddlg.hxx>
 
@@ -35,7 +35,7 @@ class SwInsFootNoteDlg: public SvxStandardDialog
     SwWrtShell     &rSh;
 
     // everything for the character(s)
-    String          aFontName;
+    OUString        m_aFontName;
     CharSet         eCharSet;
     sal_Bool        bExtCharAvailable;
     sal_Bool        bEdit;
@@ -70,14 +70,13 @@ public:
 
     CharSet         GetCharSet() { return eCharSet; }
     sal_Bool        IsExtCharAvailable() { return bExtCharAvailable; }
-    String          GetFontName() { return aFontName; }
+    OUString        GetFontName() { return m_aFontName; }
     sal_Bool        IsEndNote() { return m_pEndNoteBtn->IsChecked(); }
-    String          GetStr()
+    OUString        GetStr()
                     {
                         if ( m_pNumberCharBtn->IsChecked() )
                             return m_pNumberCharEdit->GetText();
-                        else
-                            return String();
+                        return OUString();
                     }
 };
 
