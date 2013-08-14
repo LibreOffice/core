@@ -58,6 +58,7 @@ namespace sc {
     class CopyToDocContext;
     class MixDocContext;
     class ColumnSpanSet;
+    class ColumnSet;
     struct ColumnBlockPosition;
     struct RefUpdateContext;
     struct RefUpdateInsertTabContext;
@@ -388,8 +389,8 @@ public:
 
     bool        TestInsertCol( SCROW nStartRow, SCROW nEndRow, SCSIZE nSize ) const;
     void        InsertCol( SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE nSize );
-    void        DeleteCol( SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE nSize,
-                            bool* pUndoOutline = NULL );
+    void DeleteCol(
+        const sc::ColumnSet& rRegroupCols, SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE nSize, bool* pUndoOutline = NULL );
 
     void        DeleteArea(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, sal_uInt16 nDelFlag);
     void CopyToClip( sc::CopyToClipContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScTable* pTable );

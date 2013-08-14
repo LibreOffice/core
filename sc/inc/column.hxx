@@ -329,7 +329,7 @@ public:
      * @return true if reference of at least one formula cell has been
      *         updated, false otherwise.
      */
-    bool UpdateReference( const sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc = NULL );
+    bool UpdateReference( sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc = NULL );
 
     void UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt );
     void UpdateInsertTabOnlyCells( sc::RefUpdateInsertTabContext& rCxt );

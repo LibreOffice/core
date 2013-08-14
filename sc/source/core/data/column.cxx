@@ -2359,7 +2359,7 @@ bool ScColumn::UpdateReferenceOnCopy( const sc::RefUpdateContext& rCxt, ScDocume
     return aHandler.isUpdated();
 }
 
-bool ScColumn::UpdateReference( const sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc )
+bool ScColumn::UpdateReference( sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc )
 {
     if (rCxt.meMode == URM_COPY)
         return UpdateReferenceOnCopy(rCxt, pUndoDoc);
@@ -2396,6 +2396,9 @@ bool ScColumn::UpdateReference( const sc::RefUpdateContext& rCxt, ScDocument* pU
 
     UpdateRefOnNonCopy aHandler(nCol, nTab, rCxt, pUndoDoc);
     sc::ProcessFormula(maCells, aHandler);
+    if (aHandler.isUpdated())
+        rCxt.maRegroupCols.set(nTab, nCol);
+
     return aHandler.isUpdated();
 }
 

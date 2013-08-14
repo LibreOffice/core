@@ -59,7 +59,21 @@
 #include <svl/PasswordHelper.hxx>
 #include <unotools/transliterationwrapper.hxx>
 
-// STATIC DATA -----------------------------------------------------------
+namespace {
+
+class ColumnRegroupFormulaCells
+{
+    ScColumn* mpCols;
+public:
+    ColumnRegroupFormulaCells(ScColumn* pCols) : mpCols(pCols) {}
+
+    void operator() (SCCOL nCol)
+    {
+        mpCols[nCol].RegroupFormulaCells();
+    }
+};
+
+}
 
 sal_uInt16 ScTable::GetTextWidth(SCCOL nCol, SCROW nRow) const
 {
@@ -425,9 +439,8 @@ void ScTable::InsertCol( SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE
         SetStreamValid(false);
 }
 
-
-void ScTable::DeleteCol( SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE nSize,
-                            bool* pUndoOutline )
+void ScTable::DeleteCol(
+    const sc::ColumnSet& rRegroupCols, SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE nSize, bool* pUndoOutline )
 {
     if (nStartRow==0 && nEndRow==MAXROW)
     {
@@ -460,7 +473,6 @@ void ScTable::DeleteCol( SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE
         }
     }
 
-
     {   // scope for bulk broadcast
         ScBulkBroadcast aBulkBroadcast( pDocument->GetBASM());
         for (SCSIZE i = 0; i < nSize; i++)
@@ -478,6 +490,10 @@ void ScTable::DeleteCol( SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE
         for (SCSIZE i=0; static_cast<SCCOL>(i+nSize)+nStartCol <= MAXCOL; i++)
             aCol[nStartCol + nSize + i].MoveTo(nStartRow, nEndRow, aCol[nStartCol + i]);
     }
+
+    std::vector<SCCOL> aRegroupCols;
+    rRegroupCols.getColumns(nTab, aRegroupCols);
+    std::for_each(aRegroupCols.begin(), aRegroupCols.end(), ColumnRegroupFormulaCells(aCol));
 
     // Transfer those notes that will get shifted into another container.
     ScNotes aNotes(pDocument);

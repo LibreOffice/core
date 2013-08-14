@@ -1474,8 +1474,7 @@ void ScDocument::DeleteCol(SCROW nStartRow, SCTAB nStartTab, SCROW nEndRow, SCTA
         nEndTab = static_cast<SCTAB>(maTabs.size())-1;
     }
 
-    bool bOldAutoCalc = GetAutoCalc();
-    SetAutoCalc( false );   // avoid multiple calculations
+    sc::AutoCalcSwitch aACSwitch(*this, false); // avoid multiple calculations
 
     // handle chunks of consecutive selected sheets together
     SCTAB nTabRangeStart = nStartTab;
@@ -1499,10 +1498,10 @@ void ScDocument::DeleteCol(SCROW nStartRow, SCTAB nStartTab, SCROW nEndRow, SCTA
     }
     while ( lcl_GetNextTabRange( nTabRangeStart, nTabRangeEnd, pTabMark, static_cast<SCTAB>(maTabs.size()) ) );
 
+    sc::RefUpdateContext aCxt(*this);
     if ( ValidCol(sal::static_int_cast<SCCOL>(nStartCol+nSize)) )
     {
         lcl_GetFirstTabRange( nTabRangeStart, nTabRangeEnd, pTabMark, static_cast<SCTAB>(maTabs.size()) );
-        sc::RefUpdateContext aCxt(*this);
         aCxt.meMode = URM_INSDEL;
         aCxt.maRange = ScRange(sal::static_int_cast<SCCOL>(nStartCol+nSize), nStartRow, nTabRangeStart, MAXCOL, nEndRow, nTabRangeEnd);
         aCxt.mnColDelta = -(static_cast<SCCOL>(nSize));
@@ -1516,9 +1515,11 @@ void ScDocument::DeleteCol(SCROW nStartRow, SCTAB nStartTab, SCROW nEndRow, SCTA
     if (pUndoOutline)
         *pUndoOutline = false;
 
-    for ( i = nStartTab; i <= nEndTab && i < static_cast<SCTAB>(maTabs.size()); i++)
+    for (i = nStartTab; i <= nEndTab && i < static_cast<SCTAB>(maTabs.size()); ++i)
+    {
         if (maTabs[i] && (!pTabMark || pTabMark->GetTableSelect(i)))
-            maTabs[i]->DeleteCol( nStartCol, nStartRow, nEndRow, nSize, pUndoOutline );
+            maTabs[i]->DeleteCol(aCxt.maRegroupCols, nStartCol, nStartRow, nEndRow, nSize, pUndoOutline);
+    }
 
     if ( ValidCol(sal::static_int_cast<SCCOL>(nStartCol+nSize)) )
     {// Listeners have been removed in UpdateReference
@@ -1536,7 +1537,6 @@ void ScDocument::DeleteCol(SCROW nStartRow, SCTAB nStartTab, SCROW nEndRow, SCTA
         std::for_each(maTabs.begin(), maTabs.end(), BroadcastRecalcOnRefMoveHandler());
     }
 
-    SetAutoCalc( bOldAutoCalc );
     pChartListenerCollection->UpdateDirtyCharts();
 }
 

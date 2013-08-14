@@ -108,6 +108,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
 	sc/source/core/data/column2 \
 	sc/source/core/data/column3 \
 	sc/source/core/data/columniterator \
+	sc/source/core/data/columnset \
 	sc/source/core/data/columnspanset \
 	sc/source/core/data/compressedarray \
 	sc/source/core/data/colorscale \

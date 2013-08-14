@@ -12,6 +12,7 @@
 
 #include "global.hxx"
 #include "address.hxx"
+#include "columnset.hxx"
 
 #include <boost/unordered_map.hpp>
 #include <boost/unordered_set.hpp>
@@ -66,6 +67,7 @@ struct RefUpdateContext
     SCTAB mnTabDelta;
 
     UpdatedRangeNames maUpdatedNames;
+    ColumnSet maRegroupCols;
 
     RefUpdateContext(ScDocument& rDoc);
 
