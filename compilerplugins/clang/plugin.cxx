@@ -145,6 +145,11 @@ void Plugin::buildParents( CompilerInstance& compiler )
     builder.TraverseDecl( compiler.getASTContext().getTranslationUnitDecl());
     }
 
+SourceLocation Plugin::locationAfterToken( SourceLocation location )
+    {
+    return Lexer::getLocForEndOfToken( location, 0, compiler.getSourceManager(), compiler.getLangOpts());
+    }
+
 /////
 
 RewritePlugin::RewritePlugin( CompilerInstance& compiler, Rewriter& rewriter )
@@ -222,7 +227,7 @@ bool RewritePlugin::adjustRangeForOptions( CharSourceRange* range, RewriteOption
         return false;
     SourceLocation locationEnd = range->getEnd();
     if( range->isTokenRange())
-        locationEnd = Lexer::getLocForEndOfToken( locationEnd, 0, compiler.getSourceManager(), compiler.getLangOpts());
+        locationEnd = locationAfterToken( locationEnd );
     const char* endBuf = SM.getCharacterData( locationEnd, &invalid );
     if( invalid )
         return false;

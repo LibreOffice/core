@@ -73,7 +73,7 @@ bool PointerToBool::VisitImplicitCastExpr( const ImplicitCastExpr* expr )
         report( DiagnosticsEngine::Warning,
             "pointer %0 implicitly converted to bool", expr->getLocStart())
             << expr->getSubExpr()->getType() << expr->getSourceRange();
-        SourceLocation endOfExpression = Lexer::getLocForEndOfToken( expr->getLocEnd(), 0, compiler.getSourceManager(), compiler.getLangOpts());
+        SourceLocation endOfExpression = locationAfterToken( expr->getLocEnd());
         report( DiagnosticsEngine::Note,
             "explicitly compare to null pointer to silence this warning", endOfExpression )
             << FixItHint::CreateInsertion( endOfExpression, " != NULL" );

@@ -51,6 +51,8 @@ class Plugin
         DiagnosticBuilder report( DiagnosticsEngine::Level level, StringRef message, SourceLocation loc = SourceLocation());
         static DiagnosticBuilder report( DiagnosticsEngine::Level level, StringRef message,
             CompilerInstance& compiler, SourceLocation loc = SourceLocation());
+        // Returns location right after the end of the token that starts at the given location.
+        SourceLocation locationAfterToken( SourceLocation location );
     protected:
         bool ignoreLocation( SourceLocation loc );
         bool ignoreLocation( const Decl* decl );
