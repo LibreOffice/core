@@ -4249,7 +4249,7 @@ void DocxAttributeOutput::FootnoteEndnoteReference()
     sal_Int32 nToken = pFootnote->IsEndNote()? XML_endnoteReference: XML_footnoteReference;
 
     // write it
-    if ( pFootnote->GetNumStr().Len() == 0 )
+    if ( pFootnote->GetNumStr().isEmpty() )
     {
         // autonumbered
         m_pSerializer->singleElementNS( XML_w, nToken,

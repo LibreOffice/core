@@ -307,7 +307,7 @@ Writer& OutHTML_SwFmtFtn( Writer& rWrt, const SfxPoolItem& rHt )
     rWrt.Strm() << sOut.makeStringAndClear().getStr();
     HTMLOutFuncs::Out_String( rWrt.Strm(), sFtnName, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
     sOut.append(OOO_STRING_SVTOOLS_HTML_FTN_symbol).append('\"');
-    if( rFmtFtn.GetNumStr().Len() )
+    if( !rFmtFtn.GetNumStr().isEmpty() )
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_sdfixed);
     sOut.append('>');
     rWrt.Strm() << sOut.makeStringAndClear().getStr();
@@ -409,7 +409,7 @@ void SwHTMLWriter::OutFootEndNotes()
 String SwHTMLWriter::GetFootEndNoteSym( const SwFmtFtn& rFmtFtn )
 {
     const SwEndNoteInfo * pInfo = 0;
-    if( rFmtFtn.GetNumStr().Len() == 0 )
+    if( rFmtFtn.GetNumStr().isEmpty() )
         pInfo = rFmtFtn.IsEndNote() ? &pDoc->GetEndNoteInfo()
                                     : &pDoc->GetFtnInfo();
 

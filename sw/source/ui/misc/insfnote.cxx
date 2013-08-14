@@ -223,7 +223,7 @@ void SwInsFootNoteDlg::Init()
 
     if( rSh.GetCurFtn( &aFtnNote ))
     {
-        if(aFtnNote.GetNumStr().Len())
+        if (!aFtnNote.GetNumStr().isEmpty())
         {
             sNumStr = aFtnNote.GetNumStr();
 

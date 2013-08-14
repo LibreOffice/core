@@ -2394,7 +2394,7 @@ void RtfAttributeOutput::TextCharFormat( const SwFmtCharFmt& rCharFmt )
 
 void RtfAttributeOutput::WriteTextFootnoteNumStr(const SwFmtFtn& rFootnote)
 {
-    if (!rFootnote.GetNumStr().Len())
+    if (rFootnote.GetNumStr().isEmpty())
         m_aRun->append(OOO_STRING_SVTOOLS_RTF_CHFTN);
     else
         m_aRun->append(msfilter::rtfutil::OutString(rFootnote.GetNumStr(), m_rExport.eCurrentEncoding));

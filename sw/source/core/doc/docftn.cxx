@@ -201,7 +201,7 @@ void SwEndNoteInfo::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
             const SwFmtFtn &rFtn = pTxtFtn->GetFtn();
             if ( rFtn.IsEndNote() == m_bEndNote )
             {
-                pTxtFtn->SetNumber( rFtn.GetNumber(), &rFtn.GetNumStr());
+                pTxtFtn->SetNumber(rFtn.GetNumber(), rFtn.GetNumStr());
             }
         }
     }
@@ -302,7 +302,7 @@ void SwDoc::SetFtnInfo(const SwFtnInfo& rInfo)
                         SwTxtFtn *pTxtFtn = rFtnIdxs[ nPos ];
                         const SwFmtFtn &rFtn = pTxtFtn->GetFtn();
                         if ( !rFtn.IsEndNote() )
-                            pTxtFtn->SetNumber( rFtn.GetNumber(), &rFtn.GetNumStr());
+                            pTxtFtn->SetNumber(rFtn.GetNumber(), rFtn.GetNumStr());
                     }
                 }
             }
@@ -372,7 +372,7 @@ void SwDoc::SetEndNoteInfo(const SwEndNoteInfo& rInfo)
                     SwTxtFtn *pTxtFtn = rFtnIdxs[ nPos ];
                     const SwFmtFtn &rFtn = pTxtFtn->GetFtn();
                     if ( rFtn.IsEndNote() )
-                        pTxtFtn->SetNumber( rFtn.GetNumber(), &rFtn.GetNumStr());
+                        pTxtFtn->SetNumber(rFtn.GetNumber(), rFtn.GetNumStr());
                 }
             }
         }   //swmod 080219
@@ -394,7 +394,7 @@ void SwDoc::SetEndNoteInfo(const SwEndNoteInfo& rInfo)
     }
 }
 
-bool SwDoc::SetCurFtn( const SwPaM& rPam, const String& rNumStr,
+bool SwDoc::SetCurFtn( const SwPaM& rPam, const OUString& rNumStr,
                        sal_uInt16 nNumber, bool bIsEndNote )
 {
     SwFtnIdxs& rFtnArr = GetFtnIdxs();
@@ -438,7 +438,7 @@ bool SwDoc::SetCurFtn( const SwPaM& rPam, const String& rNumStr,
                     pUndo->GetHistory().Add( *pTxtFtn );
                 }
 
-                pTxtFtn->SetNumber( nNumber, &rNumStr );
+                pTxtFtn->SetNumber( nNumber, rNumStr );
                 if( rFtn.IsEndNote() != bIsEndNote )
                 {
                     ((SwFmtFtn&)rFtn).SetEndNote( bIsEndNote );
@@ -469,7 +469,7 @@ bool SwDoc::SetCurFtn( const SwPaM& rPam, const String& rNumStr,
                     pUndo->GetHistory().Add( *pTxtFtn );
                 }
 
-                pTxtFtn->SetNumber( nNumber, &rNumStr );
+                pTxtFtn->SetNumber( nNumber, rNumStr );
                 if( rFtn.IsEndNote() != bIsEndNote )
                 {
                     ((SwFmtFtn&)rFtn).SetEndNote( bIsEndNote );

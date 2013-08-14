@@ -2358,7 +2358,7 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
             {
                 const SwFmtFtn* pFtn = (SwFmtFtn*)aCntnt[ i ];
                 SwWW8Writer::WriteShort( *rWrt.pTableStrm,
-                        pFtn->GetNumStr().Len() ? 0 : ++nNo );
+                        !pFtn->GetNumStr().isEmpty() ? 0 : ++nNo );
             }
         }
     }

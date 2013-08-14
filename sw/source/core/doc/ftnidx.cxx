@@ -100,10 +100,11 @@ void SwFtnIdxs::UpdateFtn( const SwNodeIndex& rStt )
                 break;
 
             const SwFmtFtn &rFtn = pTxtFtn->GetFtn();
-            if( !rFtn.GetNumStr().Len() && !rFtn.IsEndNote() &&
+            if( rFtn.GetNumStr().isEmpty() && !rFtn.IsEndNote() &&
                 !SwUpdFtnEndNtAtEnd::FindSectNdWithEndAttr( *pTxtFtn ))
-                pTxtFtn->SetNumber( rFtnInfo.nFtnOffset + nFtnNo++,
-                                    &rFtn.GetNumStr() );
+            {
+                pTxtFtn->SetNumber( rFtnInfo.nFtnOffset + nFtnNo++, rFtn.GetNumStr() );
+            }
         }
     }
 
@@ -121,7 +122,7 @@ void SwFtnIdxs::UpdateFtn( const SwNodeIndex& rStt )
             break;
 
         const SwFmtFtn &rFtn = pTxtFtn->GetFtn();
-        if( !rFtn.GetNumStr().Len() )
+        if( rFtn.GetNumStr().isEmpty() )
         {
             if( !aNumArr.ChkNumber( *pTxtFtn ) )
             {
@@ -138,7 +139,7 @@ void SwFtnIdxs::UpdateFtn( const SwNodeIndex& rStt )
     {
         pTxtFtn = (*this)[ nPos ];
         const SwFmtFtn &rFtn = pTxtFtn->GetFtn();
-        if( !rFtn.GetNumStr().Len() )
+        if( rFtn.GetNumStr().isEmpty() )
         {
             sal_uInt16 nSectNo = aNumArr.ChkNumber( *pTxtFtn );
             if( !nSectNo && ( rFtn.IsEndNote() || !bEndNoteOnly ))
@@ -148,7 +149,7 @@ void SwFtnIdxs::UpdateFtn( const SwNodeIndex& rStt )
 
             if( nSectNo )
             {
-                pTxtFtn->SetNumber( nSectNo, &rFtn.GetNumStr() );
+                pTxtFtn->SetNumber( nSectNo, rFtn.GetNumStr() );
             }
         }
     }
@@ -189,10 +190,11 @@ void SwFtnIdxs::UpdateAllFtn()
 
                     // Endnotes are per-document only
                     const SwFmtFtn &rFtn = pTxtFtn->GetFtn();
-                    if( !rFtn.IsEndNote() && !rFtn.GetNumStr().Len() &&
+                    if( !rFtn.IsEndNote() && rFtn.GetNumStr().isEmpty() &&
                         !SwUpdFtnEndNtAtEnd::FindSectNdWithEndAttr( *pTxtFtn ))
-                        pTxtFtn->SetNumber( rFtnInfo.nFtnOffset + nNo++,
-                                            &rFtn.GetNumStr() );
+                    {
+                        pTxtFtn->SetNumber( rFtnInfo.nFtnOffset + nNo++, rFtn.GetNumStr() );
+                    }
                 }
                 if( nFtnIdx >= size() )
                     break;          // ok, everything is updated
@@ -205,10 +207,11 @@ void SwFtnIdxs::UpdateAllFtn()
             // Endnotes are per-document
             pTxtFtn = (*this)[ nFtnIdx ];
             const SwFmtFtn &rFtn = pTxtFtn->GetFtn();
-            if( !rFtn.IsEndNote() && !rFtn.GetNumStr().Len() &&
+            if( !rFtn.IsEndNote() && rFtn.GetNumStr().isEmpty() &&
                 !SwUpdFtnEndNtAtEnd::FindSectNdWithEndAttr( *pTxtFtn ))
-                pTxtFtn->SetNumber( rFtnInfo.nFtnOffset + nNo++,
-                                    &rFtn.GetNumStr() );
+            {
+                pTxtFtn->SetNumber( rFtnInfo.nFtnOffset + nNo++, rFtn.GetNumStr() );
+            }
         }
 
     }
@@ -220,7 +223,7 @@ void SwFtnIdxs::UpdateAllFtn()
     {
         pTxtFtn = (*this)[ nPos ];
         const SwFmtFtn &rFtn = pTxtFtn->GetFtn();
-        if( !rFtn.GetNumStr().Len() )
+        if( rFtn.GetNumStr().isEmpty() )
         {
             sal_uInt16 nSectNo = aNumArr.ChkNumber( *pTxtFtn );
             if( !nSectNo && ( rFtn.IsEndNote() || !bEndNoteOnly ))
@@ -230,7 +233,7 @@ void SwFtnIdxs::UpdateAllFtn()
 
             if( nSectNo )
             {
-                pTxtFtn->SetNumber( nSectNo, &rFtn.GetNumStr() );
+                pTxtFtn->SetNumber( nSectNo, rFtn.GetNumStr() );
             }
         }
     }

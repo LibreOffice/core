@@ -121,8 +121,8 @@ namespace {
 
 SwFmtFtn::SwFmtFtn( bool bEndNote )
     : SfxPoolItem( RES_TXTATR_FTN ),
-    pTxtAttr( 0 ),
-    nNumber( 0 ),
+    m_pTxtAttr( 0 ),
+    m_nNumber( 0 ),
     m_bEndNote( bEndNote )
 {
 }
@@ -131,8 +131,8 @@ SwFmtFtn::SwFmtFtn( bool bEndNote )
 int SwFmtFtn::operator==( const SfxPoolItem& rAttr ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
-    return nNumber  == ((SwFmtFtn&)rAttr).nNumber &&
-           aNumber  == ((SwFmtFtn&)rAttr).aNumber &&
+    return m_nNumber  == ((SwFmtFtn&)rAttr).m_nNumber &&
+           m_aNumber  == ((SwFmtFtn&)rAttr).m_aNumber &&
            m_bEndNote == ((SwFmtFtn&)rAttr).m_bEndNote;
 }
 
@@ -140,8 +140,8 @@ int SwFmtFtn::operator==( const SfxPoolItem& rAttr ) const
 SfxPoolItem* SwFmtFtn::Clone( SfxItemPool* ) const
 {
     SwFmtFtn* pNew  = new SwFmtFtn;
-    pNew->aNumber   = aNumber;
-    pNew->nNumber   = nNumber;
+    pNew->m_aNumber = m_aNumber;
+    pNew->m_nNumber = m_nNumber;
     pNew->m_bEndNote = m_bEndNote;
     return pNew;
 }
@@ -163,11 +163,11 @@ SwFmtFtn::~SwFmtFtn()
 }
 
 
-void SwFmtFtn::GetFtnText( XubString& rStr ) const
+void SwFmtFtn::GetFtnText( OUString& rStr ) const
 {
-    if( pTxtAttr->GetStartNode() )
+    if( m_pTxtAttr->GetStartNode() )
     {
-        SwNodeIndex aIdx( *pTxtAttr->GetStartNode(), 1 );
+        SwNodeIndex aIdx( *m_pTxtAttr->GetStartNode(), 1 );
         SwCntntNode* pCNd = aIdx.GetNode().GetTxtNode();
         if( !pCNd )
             pCNd = aIdx.GetNodes().GoNext( &aIdx );
@@ -178,7 +178,7 @@ void SwFmtFtn::GetFtnText( XubString& rStr ) const
             ++aIdx;
             while ( !aIdx.GetNode().IsEndNode() ) {
                 if ( aIdx.GetNode().IsTxtNode() )
-                    rStr += OUString("  ") + ((SwTxtNode*)(aIdx.GetNode().GetTxtNode()))->GetExpandTxt();
+                    rStr += "  " + ((SwTxtNode*)(aIdx.GetNode().GetTxtNode()))->GetExpandTxt();
                 ++aIdx;
             }
         }
@@ -186,16 +186,16 @@ void SwFmtFtn::GetFtnText( XubString& rStr ) const
 }
 
     // returnt den anzuzeigenden String der Fuss-/Endnote
-XubString SwFmtFtn::GetViewNumStr( const SwDoc& rDoc, sal_Bool bInclStrings ) const
+OUString SwFmtFtn::GetViewNumStr( const SwDoc& rDoc, sal_Bool bInclStrings ) const
 {
-    XubString sRet( GetNumStr() );
-    if( !sRet.Len() )
+    OUString sRet( GetNumStr() );
+    if( sRet.isEmpty() )
     {
         // dann ist die Nummer von Interesse, also ueber die Info diese
         // besorgen.
         bool bMakeNum = true;
-        const SwSectionNode* pSectNd = pTxtAttr
-                    ? SwUpdFtnEndNtAtEnd::FindSectNdWithEndAttr( *pTxtAttr )
+        const SwSectionNode* pSectNd = m_pTxtAttr
+                    ? SwUpdFtnEndNtAtEnd::FindSectNdWithEndAttr( *m_pTxtAttr )
                     : 0;
 
         if( pSectNd )
@@ -212,8 +212,7 @@ XubString SwFmtFtn::GetViewNumStr( const SwDoc& rDoc, sal_Bool bInclStrings ) co
                 sRet = rFtnEnd.GetSwNumType().GetNumStr( GetNumber() );
                 if( bInclStrings )
                 {
-                    sRet.Insert( rFtnEnd.GetPrefix(), 0 );
-                    sRet += rFtnEnd.GetSuffix();
+                    sRet = rFtnEnd.GetPrefix() + sRet + rFtnEnd.GetSuffix();
                 }
             }
         }
@@ -228,8 +227,7 @@ XubString SwFmtFtn::GetViewNumStr( const SwDoc& rDoc, sal_Bool bInclStrings ) co
             sRet = pInfo->aFmt.GetNumStr( GetNumber() );
             if( bInclStrings )
             {
-                sRet.Insert( pInfo->GetPrefix(), 0 );
-                sRet += pInfo->GetSuffix();
+                sRet = pInfo->GetPrefix() + sRet + pInfo->GetSuffix();
             }
         }
     }
@@ -246,7 +244,7 @@ SwTxtFtn::SwTxtFtn( SwFmtFtn& rAttr, xub_StrLen nStartPos )
     , m_pTxtNode( 0 )
     , m_nSeqNo( USHRT_MAX )
 {
-    rAttr.pTxtAttr = this;
+    rAttr.m_pTxtAttr = this;
     SetHasDummyChar(true);
 }
 
@@ -327,15 +325,14 @@ void SwTxtFtn::SetStartNode( const SwNodeIndex *pNewNode, sal_Bool bDelNode )
 }
 
 
-void SwTxtFtn::SetNumber( const sal_uInt16 nNewNum, const XubString* pStr )
+void SwTxtFtn::SetNumber( const sal_uInt16 nNewNum, const OUString &sNumStr )
 {
     SwFmtFtn& rFtn = (SwFmtFtn&)GetFtn();
-    if( pStr && pStr->Len() )
-        rFtn.aNumber = *pStr;
-    else
+
+    rFtn.m_aNumber = sNumStr;
+    if ( sNumStr.isEmpty() )
     {
-        rFtn.nNumber = nNewNum;
-        rFtn.aNumber = aEmptyStr;
+        rFtn.m_nNumber = nNewNum;
     }
 
     OSL_ENSURE( m_pTxtNode, "SwTxtFtn: where is my TxtNode?" );
@@ -392,9 +389,9 @@ void SwTxtFtn::CopyFtn(SwTxtFtn & rDest, SwTxtNode & rDestNode) const
     }
 
     // also copy user defined number string
-    if( GetFtn().aNumber.Len() )
+    if( !GetFtn().m_aNumber.isEmpty() )
     {
-        const_cast<SwFmtFtn &>(rDest.GetFtn()).aNumber = GetFtn().aNumber;
+        const_cast<SwFmtFtn &>(rDest.GetFtn()).m_aNumber = GetFtn().m_aNumber;
     }
 }
 

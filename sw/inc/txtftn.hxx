@@ -20,13 +20,13 @@
 #define _TXTFTN_HXX
 
 #include <txatbase.hxx>
-#include <tools/string.hxx>
 
 class SwNodeIndex;
 class SwTxtNode;
 class SwNodes;
 class SwDoc;
 class SwFrm;
+class OUString;
 
 // ATT_FTN **********************************************************
 
@@ -42,7 +42,7 @@ public:
 
     inline SwNodeIndex *GetStartNode() const { return m_pStartNode; }
     void SetStartNode( const SwNodeIndex *pNode, sal_Bool bDelNodes = sal_True );
-    void SetNumber( const sal_uInt16 nNumber, const String* = 0 );
+    void SetNumber( const sal_uInt16 nNumber, const OUString &sNumStr );
     void CopyFtn(SwTxtFtn & rDest, SwTxtNode & rDestNode) const;
 
     // Get and set TxtNode pointer.

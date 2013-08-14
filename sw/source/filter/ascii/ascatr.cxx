@@ -117,7 +117,7 @@ bool SwASC_AttrIter::OutAttr( xub_StrLen nSwPos )
                 case RES_TXTATR_FTN:
                     {
                         const SwFmtFtn& rFtn = pHt->GetFtn();
-                        if( rFtn.GetNumStr().Len() )
+                        if( !rFtn.GetNumStr().isEmpty() )
                             sOut = rFtn.GetNumStr();
                         else if( rFtn.IsEndNote() )
                             sOut = rWrt.pDoc->GetEndNoteInfo().aFmt.
