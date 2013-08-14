@@ -129,7 +129,7 @@ namespace basegfx
         }
 
         /// special for the case to map from source range to target range
-        B2DHomMatrix createSourceRangeTargetRangeTransform(
+        BASEGFX_DLLPUBLIC B2DHomMatrix createSourceRangeTargetRangeTransform(
             const B2DRange& rSourceRange,
             const B2DRange& rTargetRange);
 

@@ -237,7 +237,7 @@ namespace basegfx
         /** returns true if the Polygon only contains horizontal or vertical edges
             so that it could be represented by RegionBands
         */
-        bool containsOnlyHorizontalAndVerticalEdges(const B2DPolyPolygon& rCandidate);
+        BASEGFX_DLLPUBLIC bool containsOnlyHorizontalAndVerticalEdges(const B2DPolyPolygon& rCandidate);
 
     } // end of namespace tools
 } // end of namespace basegfx
