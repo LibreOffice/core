@@ -30,6 +30,7 @@ class SFX2_DLLPUBLIC TemplateLocalView : public TemplateAbstractView
 public:
 
     TemplateLocalView ( Window* pParent, const ResId& rResId, bool bDisableTransientChildren = false );
+    TemplateLocalView ( Window* pParent );
 
     virtual ~TemplateLocalView ();
 

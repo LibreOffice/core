@@ -62,6 +62,7 @@ const int nItemId_TplRep = 4;
 
 BackingWindow::BackingWindow( Window* i_pParent ) :
     Window( i_pParent ),
+    mbShowImpressTemplates( false ),
     mbInitControls( false ),
     mnHideExternalLinks( 0 ),
     mpAccExec( NULL )
@@ -85,6 +86,11 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     get(mpExtensionsButton, "extension");
     get(mpInfoButton,       "info");
     get(mpTplRepButton,     "add_temp");
+
+    get(mpToggleImpressTemplateButton,      "toggle_template_impress");
+    get(mpImpressTemplateThumbnails,      "impress_templates");
+    // test
+    get(mpTestTemplateThumbnails,      "template_test");
 
     get( mpAllRecentThumbnails,         "all_recent");
     get( mpWriterRecentThumbnails,      "writer_recent");
@@ -226,12 +232,34 @@ void BackingWindow::initControls()
     setupButton( mpImpressButton );
     setupButton( mpMathButton );
 
+    setupButton( mpToggleImpressTemplateButton );
+
     setupButton( mpOpenButton );
     setupButton( mpTemplateButton );
 
     setupExternalLink( mpExtensionsButton );
     setupExternalLink( mpInfoButton );
     setupExternalLink( mpTplRepButton );
+
+    mpImpressTemplateThumbnails->Hide(); // hidden by default
+
+    //test
+//template thumbnail item defines
+#define TEMPLATE_ITEM_MAX_WIDTH 160
+#define TEMPLATE_ITEM_MAX_HEIGHT 148
+#define TEMPLATE_ITEM_PADDING 5
+#define TEMPLATE_ITEM_MAX_TEXT_LENGTH 20
+#define TEMPLATE_ITEM_THUMBNAIL_MAX_HEIGHT 96
+
+    mpTestTemplateThumbnails->setItemMaxTextLength(TEMPLATE_ITEM_MAX_TEXT_LENGTH);
+
+    mpTestTemplateThumbnails->setItemDimensions(TEMPLATE_ITEM_MAX_WIDTH,TEMPLATE_ITEM_THUMBNAIL_MAX_HEIGHT,
+                              TEMPLATE_ITEM_MAX_HEIGHT-TEMPLATE_ITEM_THUMBNAIL_MAX_HEIGHT,
+                              TEMPLATE_ITEM_PADDING);
+    mpTestTemplateThumbnails->filterItems(ViewFilter_Application(FILTER_APP_IMPRESS));
+    mpTestTemplateThumbnails->Populate();
+    mpTestTemplateThumbnails->Show();
+    mpTestTemplateThumbnails->showRootRegion();
 
     Resize();
 
@@ -425,6 +453,22 @@ IMPL_LINK( BackingWindow, ClickHdl, Button*, pButton )
         pArg[0].Value <<= OUString("private:user");
 
         dispatchURL( TEMPLATE_URL, OUString(), xFrame, aArgs );
+    }
+    else if( pButton == mpToggleImpressTemplateButton )
+    {
+        mbShowImpressTemplates = !mbShowImpressTemplates;
+        if ( mbShowImpressTemplates )
+        {
+            mpImpressRecentThumbnails->Hide();
+            mpImpressTemplateThumbnails->Show();
+            mpToggleImpressTemplateButton->SetText("Show Recent");
+        }
+        else
+        {
+            mpImpressRecentThumbnails->Show();
+            mpImpressTemplateThumbnails->Hide();
+            mpToggleImpressTemplateButton->SetText("Show Templates");
+        }
     }
     return 0;
 }
