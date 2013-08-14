@@ -11,6 +11,7 @@
 #include "plugin.hxx"
 
 #include <clang/Basic/FileManager.h>
+#include <clang/Lex/Lexer.h>
 
 #include "pluginhandler.hxx"
 
@@ -180,35 +181,25 @@ bool RewritePlugin::insertTextBefore( SourceLocation Loc, StringRef Str )
     return true;
     }
 
-// These two removeText() overloads should not be merged into one, as the SourceRange
-// one uses a token range (which counts token length for some reason), so exact length
-// given to this overload would not match afterwards.
 bool RewritePlugin::removeText( SourceLocation Start, unsigned Length, RewriteOptions opts )
     {
-    if( removals.find( Start ) != removals.end())
-        report( DiagnosticsEngine::Warning, "double code removal, possible plugin error", Start );
-    removals.insert( Start );
-    if( opts.RemoveWholeStatement )
-        {
-        SourceRange range( Start, Start.getLocWithOffset( Length - 1 ));
-        if( !adjustForWholeStatement( &range ))
-            return reportEditFailure( Start );
-        Start = range.getBegin();
-        Length = range.getEnd().getRawEncoding() - range.getBegin().getRawEncoding();
-        }
-    if( rewriter.RemoveText( Start, Length, opts ))
-        return reportEditFailure( Start );
-    return true;
+    CharSourceRange range( SourceRange( Start, Start.getLocWithOffset( Length )), false );
+    return removeText( range, opts );
     }
 
 bool RewritePlugin::removeText( SourceRange range, RewriteOptions opts )
     {
+    return removeText( CharSourceRange( range, true ), opts );
+    }
+
+bool RewritePlugin::removeText( CharSourceRange range, RewriteOptions opts )
+    {
     if( removals.find( range.getBegin()) != removals.end())
         report( DiagnosticsEngine::Warning, "double code removal, possible plugin error", range.getBegin());
     removals.insert( range.getBegin());
-    if( opts.RemoveWholeStatement )
+    if( opts.flags & RemoveWholeStatement || opts.flags & RemoveAllWhitespace )
         {
-        if( !adjustForWholeStatement( &range ))
+        if( !adjustRangeForOptions( &range, opts ))
             return reportEditFailure( range.getBegin());
         }
     if( rewriter.RemoveText( range, opts ))
@@ -216,7 +207,7 @@ bool RewritePlugin::removeText( SourceRange range, RewriteOptions opts )
     return true;
     }
 
-bool RewritePlugin::adjustForWholeStatement( SourceRange* range )
+bool RewritePlugin::adjustRangeForOptions( CharSourceRange* range, RewriteOptions opts )
     {
     SourceManager& SM = rewriter.getSourceMgr();
     SourceLocation fileStartLoc = SM.getLocForStartOfFile( SM.getFileID( range->getBegin()));
@@ -229,19 +220,30 @@ bool RewritePlugin::adjustForWholeStatement( SourceRange* range )
     const char* startBuf = SM.getCharacterData( range->getBegin(), &invalid );
     if( invalid )
         return false;
-    const char* endBuf = SM.getCharacterData( range->getEnd(), &invalid );
+    SourceLocation locationEnd = range->getEnd();
+    if( range->isTokenRange())
+        locationEnd = Lexer::getLocForEndOfToken( locationEnd, 0, compiler.getSourceManager(), compiler.getLangOpts());
+    const char* endBuf = SM.getCharacterData( locationEnd, &invalid );
     if( invalid )
         return false;
-    const char* startSpacePos = startBuf;
-    // do not skip \n here, RemoveLineIfEmpty can take care of that
-    --startSpacePos;
-    while( startSpacePos >= fileBuf && ( *startSpacePos == ' ' || *startSpacePos == '\t' ))
-        --startSpacePos;
-    const char* semiPos = strchr( endBuf, ';' );
-    if( semiPos == NULL )
-        return false;
-    *range = SourceRange( range->getBegin().getLocWithOffset( startSpacePos - startBuf + 1 ),
-        range->getEnd().getLocWithOffset( semiPos - endBuf + 1 ));
+    const char* startPos = startBuf;
+    --startPos;
+    while( startPos >= fileBuf && ( *startPos == ' ' || *startPos == '\t' ))
+        --startPos;
+    if( startPos >= fileBuf && *startPos == '\n' )
+        startPos = startBuf - 1; // do not remove indentation whitespace (RemoveLineIfEmpty can do that)
+    const char* endPos = endBuf;
+    while( *endPos == ' ' || *endPos == '\t' )
+        ++endPos;
+    if( opts.flags & RemoveWholeStatement )
+        {
+        if( *endPos == ';' )
+            ++endPos;
+        else
+            return false;
+        }
+    *range = CharSourceRange( SourceRange( range->getBegin().getLocWithOffset( startPos - startBuf + 1 ),
+        locationEnd.getLocWithOffset( endPos - endBuf )), false );
     return true;
     }
 

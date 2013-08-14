@@ -81,39 +81,41 @@ class RewritePlugin
     public:
         explicit RewritePlugin( CompilerInstance& compiler, Rewriter& rewriter );
     protected:
-        // This enum allows passing just 'RemoveLineIfEmpty' to functions below.
-        enum RemoveLineIfEmpty_t { RemoveLineIfEmpty };
-        // Use this to remove the declaration/statement as a whole, i.e. all whitespace before the statement
-        // and the trailing semicolor (is not part of the AST element range itself).
-        // The trailing semicolon must be present.
-        enum RemoveWholeStatement_t { RemoveWholeStatement };
-        enum RemoveLineIfEmptyAndWholeStatement_t { RemoveLineIfEmptyAndWholeStatement };
-        // syntactic sugar to be able to write 'RemoveLineIfEmpty | RemoveWholeStatement'
-        friend RemoveLineIfEmptyAndWholeStatement_t operator|( RemoveLineIfEmpty_t, RemoveWholeStatement_t )
-            { return RemoveLineIfEmptyAndWholeStatement; }
+        enum RewriteOption
+            {
+            // This enum allows passing just 'RemoveLineIfEmpty' to functions below.
+            // If the resulting line would be completely empty, it'll be removed.
+            RemoveLineIfEmpty = 1 << 0,
+            // Use this to remove the declaration/statement as a whole, i.e. all whitespace before the statement
+            // and the trailing semicolor (is not part of the AST element range itself).
+            // The trailing semicolon must be present.
+            RemoveWholeStatement = 1 << 1,
+            // Removes also all whitespace preceding and following the expression (completely, so that
+            // the preceding and following tokens would be right next to each other, follow with insertText( " " )
+            // if this is not wanted). Despite the name, indentation whitespace is not removed.
+            RemoveAllWhitespace = 1 << 2
+            };
         struct RewriteOptions
             : public Rewriter::RewriteOptions
             {
-            RewriteOptions() : RemoveWholeStatement( false ) {} // default
-            RewriteOptions( RemoveLineIfEmpty_t ) : RemoveWholeStatement( false ) { RemoveLineIfEmpty = true; }
-            RewriteOptions( RemoveWholeStatement_t ) : RemoveWholeStatement( true ) {}
-            RewriteOptions( RemoveLineIfEmptyAndWholeStatement_t ) : RemoveWholeStatement( true ) { RemoveLineIfEmpty = true; }
-            bool RemoveWholeStatement;
+            RewriteOptions();
+            RewriteOptions( RewriteOption option );
+            const int flags;
             };
+        // syntactic sugar to be able to write 'RemoveLineIfEmpty | RemoveWholeStatement'
+        friend RewriteOption operator|( RewriteOption option1, RewriteOption option2 );
         // These following insert/remove/replaceText functions map to functions
         // in clang::Rewriter, with these differences:
         // - they (more intuitively) return false on failure rather than true
         // - they report a warning when the change cannot be done
-        // - There is RemoveWholeStatement to also remove the trailing semicolon when removing (must be there)
-        //   and al preceding whitespace.
+        // - There are more options for easier removal of surroundings of a statement/expression.
         bool insertText( SourceLocation Loc, StringRef Str,
             bool InsertAfter = true, bool indentNewLines = false );
         bool insertTextAfter( SourceLocation Loc, StringRef Str );
         bool insertTextAfterToken( SourceLocation Loc, StringRef Str );
         bool insertTextBefore( SourceLocation Loc, StringRef Str );
         bool removeText( SourceLocation Start, unsigned Length, RewriteOptions opts = RewriteOptions());
-        // CharSourceRange not supported, unless really needed, as it needs handling for RemoveWholeStatement.
-        //bool removeText( CharSourceRange range, RewriteOptions opts = RewriteOptions());
+        bool removeText( CharSourceRange range, RewriteOptions opts = RewriteOptions());
         bool removeText( SourceRange range, RewriteOptions opts = RewriteOptions());
         bool replaceText( SourceLocation Start, unsigned OrigLength, StringRef NewStr );
         bool replaceText( SourceRange range, StringRef NewStr );
@@ -124,7 +126,7 @@ class RewritePlugin
         template< typename T > static Plugin* createHelper( CompilerInstance& compiler, Rewriter& rewriter );
         enum { isRewriter = true };
         bool reportEditFailure( SourceLocation loc );
-        bool adjustForWholeStatement( SourceRange* range );
+        bool adjustRangeForOptions( CharSourceRange* range, RewriteOptions options );
         set< SourceLocation > removals;
     };
 
@@ -188,6 +190,27 @@ inline
 Plugin::Registration< T >::Registration( const char* optionName )
     {
     registerPlugin( &T::template createHelper< T >, optionName, T::isRewriter, T::isPPCallback );
+    }
+
+inline
+RewritePlugin::RewriteOptions::RewriteOptions()
+    : flags( 0 )
+    {
+    }
+
+inline
+RewritePlugin::RewriteOptions::RewriteOptions( RewriteOption option )
+    : flags( option )
+    {
+    // Note that 'flags' stores also RemoveLineIfEmpty, it must be kept in sync with the base class.
+    if( flags & RewritePlugin::RemoveLineIfEmpty )
+        this->RemoveLineIfEmpty = true;
+    }
+
+inline
+RewritePlugin::RewriteOption operator|( RewritePlugin::RewriteOption option1, RewritePlugin::RewriteOption option2 )
+    {
+    return static_cast< RewritePlugin::RewriteOption >( int( option1 ) | int( option2 ));
     }
 
 } // namespace
