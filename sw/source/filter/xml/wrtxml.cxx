@@ -58,7 +58,7 @@ using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 
-SwXMLWriter::SwXMLWriter( const String& rBaseURL )
+SwXMLWriter::SwXMLWriter( const OUString& rBaseURL )
 {
     SetBaseURL( rBaseURL );
 }
@@ -212,9 +212,9 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
         if ( !aDocHierarchicalName.isEmpty() )
             aName = aDocHierarchicalName;
         else
-            aName = OUString( "dummyObjectName" );
+            aName = "dummyObjectName";
 
-        sPropName = OUString("StreamRelPath");
+        sPropName = "StreamRelPath";
         xInfoSet->setPropertyValue( sPropName, makeAny( aName ) );
     }
 
@@ -287,7 +287,6 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
 
     // export sub streams for package, else full stream into a file
     bool bWarn = false, bErr = false;
-    String sWarnFile, sErrFile;
 
     // RDF metadata: export if ODF >= 1.2
     // N.B.: embedded documents have their own manifest.rdf!
@@ -333,6 +332,7 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
         {}
     }
 
+    OUString sWarnFile;
     if( !bOrganizerMode && !bBlock && bStoreMeta )
     {
         if( !WriteThroughComponent(
@@ -342,8 +342,7 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
                 aEmptyArgs, aProps ) )
         {
             bWarn = true;
-            sWarnFile = String( RTL_CONSTASCII_STRINGPARAM("meta.xml"),
-                                RTL_TEXTENCODING_ASCII_US );
+            sWarnFile = "meta.xml";
         }
     }
 
@@ -360,13 +359,13 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
                 if( !bWarn )
                 {
                     bWarn = true;
-                    sWarnFile = String( RTL_CONSTASCII_STRINGPARAM("settings.xml"),
-                                        RTL_TEXTENCODING_ASCII_US );
+                    sWarnFile = "settings.xml";
                 }
             }
         }
     }
 
+    OUString sErrFile;
     if( !WriteThroughComponent(
             xModelComp, "styles.xml", xContext,
             (bOASIS ? "com.sun.star.comp.Writer.XMLOasisStylesExporter"
@@ -374,8 +373,7 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
             aFilterArgs, aProps ) )
     {
         bErr = true;
-        sErrFile = String( RTL_CONSTASCII_STRINGPARAM("styles.xml"),
-                           RTL_TEXTENCODING_ASCII_US );
+        sErrFile = "styles.xml";
     }
 
 
@@ -388,8 +386,7 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
                 aFilterArgs, aProps ) )
         {
             bErr = true;
-            sErrFile = String( RTL_CONSTASCII_STRINGPARAM("content.xml"),
-                               RTL_TEXTENCODING_ASCII_US );
+            sErrFile = "content.xml";
         }
     }
 
@@ -442,19 +439,17 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
 
     if( bErr )
     {
-        if( sErrFile.Len() )
+        if( !sErrFile.isEmpty() )
             return *new StringErrorInfo( ERR_WRITE_ERROR_FILE, sErrFile,
                                          ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR );
-        else
-            return ERR_SWG_WRITE_ERROR;
+        return ERR_SWG_WRITE_ERROR;
     }
     else if( bWarn )
     {
-        if( sWarnFile.Len() )
+        if( !sWarnFile.isEmpty() )
             return *new StringErrorInfo( WARN_WRITE_ERROR_FILE, sWarnFile,
                                          ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR );
-        else
-            return WARN_SWG_FEATURES_LOST;
+        return WARN_SWG_FEATURES_LOST;
     }
 
     return 0;
@@ -482,7 +477,7 @@ sal_uLong SwXMLWriter::WriteMedium( SfxMedium& aTargetMedium )
 }
 
 sal_uLong SwXMLWriter::Write( SwPaM& rPaM, SfxMedium& rMed,
-                               const String* pFileName )
+                               const OUString* pFileName )
 {
     return IsStgWriter()
             ? ((StgWriter *)this)->Write( rPaM, rMed.GetOutputStorage(), pFileName, &rMed )
@@ -600,7 +595,7 @@ bool SwXMLWriter::WriteThroughComponent(
 
 // -----------------------------------------------------------------------
 
-void GetXMLWriter( const String& /*rName*/, const String& rBaseURL, WriterRef& xRet )
+void GetXMLWriter( const OUString& /*rName*/, const OUString& rBaseURL, WriterRef& xRet )
 {
     xRet = new SwXMLWriter( rBaseURL );
 }

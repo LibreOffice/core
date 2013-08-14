@@ -676,7 +676,7 @@ sal_Bool SwDocShell::ConvertTo( SfxMedium& rMedium )
 
     // Span Context in order to suppress the Selection's View
     sal_uLong nErrno;
-    String aFileName( rMedium.GetName() );
+    const OUString aFileName( rMedium.GetName() );
 
     // No View, so the whole Document!
     if ( pWrtShell )

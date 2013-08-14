@@ -32,11 +32,11 @@ protected:
                   const ::com::sun::star::uno::Reference<
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 public:
-    std::vector<String*> &rSectionList;
+    std::vector<OUString*> &rSectionList;
 
     SwXMLSectionList(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
-        std::vector<String*> &rNewSectionList );
+        std::vector<OUString*> &rNewSectionList );
 
     virtual ~SwXMLSectionList ( )
         throw();

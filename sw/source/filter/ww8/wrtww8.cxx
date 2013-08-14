@@ -3395,7 +3395,7 @@ sal_uLong SwWW8Writer::WriteMedium( SfxMedium& )
 }
 
 sal_uLong SwWW8Writer::Write( SwPaM& rPaM, SfxMedium& rMed,
-                          const String* pFileName )
+                          const OUString* pFileName )
 {
     mpMedium = &rMed;
     sal_uLong nRet = StgWriter::Write( rPaM, rMed, pFileName );

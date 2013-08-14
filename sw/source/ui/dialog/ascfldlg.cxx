@@ -196,7 +196,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
                 m_pFontLB->InsertEntry( *it );
             }
 
-            if( !aOpt.GetFontName().Len() )
+            if( aOpt.GetFontName().isEmpty() )
             {
                 LanguageType eLang = aOpt.GetLanguage();
                 Font aTmpFont(OutputDevice::GetDefaultFont(DEFAULTFONT_FIXED, eLang, DEFAULTFONT_FLAGS_ONLYONE, pPrt));
@@ -259,9 +259,9 @@ void SwAsciiFilterDlg::FillOptions( SwAsciiOptions& rOptions )
     rOptions.SetParaFlags( GetCRLF() );
 
     // save the user settings
-    String sData;
+    OUString sData;
     rOptions.WriteUserData( sData );
-    if( sData.Len() )
+    if ( !sData.isEmpty() )
     {
         const OUString sFindNm = OUString::createFromAscii(
                                     m_pFontLB->IsVisible() ? sDialogImpExtraData

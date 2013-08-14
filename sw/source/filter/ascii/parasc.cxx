@@ -69,7 +69,7 @@ public:
 
 
 // Call for the general reader interface
-sal_uLong AsciiReader::Read( SwDoc &rDoc, const String&, SwPaM &rPam, const String & )
+sal_uLong AsciiReader::Read( SwDoc &rDoc, const OUString&, SwPaM &rPam, const OUString & )
 {
     if( !pStrm )
     {
@@ -110,7 +110,7 @@ SwASCIIParser::SwASCIIParser(SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
         pItemSet->Put( aLang, RES_CHRATR_CJK_LANGUAGE );
         pItemSet->Put( aLang, RES_CHRATR_CTL_LANGUAGE );
     }
-    if( rOpt.GetFontName().Len() )
+    if( !rOpt.GetFontName().isEmpty() )
     {
         Font aTextFont( rOpt.GetFontName(), Size( 0, 10 ) );
         if( pDoc->getPrinter( false ) )

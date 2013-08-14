@@ -894,7 +894,7 @@ public:
     bool InitStd97CodecUpdateMedium( ::msfilter::MSCodec_Std97& rCodec );
 
     using StgWriter::Write;
-    virtual sal_uLong Write( SwPaM&, SfxMedium&, const String* = 0 );
+    virtual sal_uLong Write( SwPaM&, SfxMedium&, const OUString* = 0 );
 
 private:
     /// No copying.

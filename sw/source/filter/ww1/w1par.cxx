@@ -57,7 +57,7 @@ static sal_uLong WW1_Read_FieldIniFlags()
 // Diese werden dann einfach per Pipe 'uebertragen'.
 //
 
-sal_uLong WW1Reader::Read(SwDoc& rDoc, const String& rBaseURL, SwPaM& rPam, const String& /*cName*/)
+sal_uLong WW1Reader::Read(SwDoc& rDoc, const OUString& rBaseURL, SwPaM& rPam, const OUString& /*cName*/)
 {
     sal_uLong nRet = ERR_SWG_READ_ERROR;
     OSL_ENSURE(pStrm!=NULL, "W1-Read ohne Stream");

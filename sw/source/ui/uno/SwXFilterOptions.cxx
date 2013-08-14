@@ -126,9 +126,7 @@ sal_Int16 SwXFilterOptions::execute() throw (uno::RuntimeException)
         {
             SwAsciiOptions aOptions;
             pAsciiDlg->FillOptions( aOptions );
-            String sTmp;
-            aOptions.WriteUserData(sTmp);
-            sFilterOptions = sTmp;
+            aOptions.WriteUserData(sFilterOptions);
             nRet = ui::dialogs::ExecutableDialogResults::OK;
         }
         delete pAsciiDlg;

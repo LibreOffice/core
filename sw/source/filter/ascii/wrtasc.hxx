@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _WRTASC_HXX
-#define _WRTASC_HXX
+#ifndef WRTASC_HXX
+#define WRTASC_HXX
 
 #include <shellio.hxx>
 #include <wrt_fn.hxx>
@@ -29,15 +29,15 @@ extern SwNodeFnTab aASCNodeFnTab;
 
 class SwASCWriter : public Writer
 {
-    String sLineEnd;
+    OUString m_sLineEnd;
 
     virtual sal_uLong WriteStream();
 
 public:
-    SwASCWriter( const String& rFilterName );
+    SwASCWriter( const OUString& rFilterName );
     virtual ~SwASCWriter();
 
-    const String& GetLineEnd() const      { return sLineEnd; }
+    OUString GetLineEnd() const { return m_sLineEnd; }
 };
 
 

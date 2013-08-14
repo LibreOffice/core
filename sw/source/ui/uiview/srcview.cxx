@@ -816,19 +816,17 @@ void SwSrcView::Load(SwDocShell* pDocShell)
     {
         utl::TempFile aTempFile;
         aTempFile.EnableKillingFile();
-        String sFileURL( aTempFile.GetURL() );
+        const OUString sFileURL( aTempFile.GetURL() );
         SvtSaveOptions aOpt;
 
         {
             SfxMedium aMedium( sFileURL,STREAM_READWRITE );
             SwWriter aWriter( aMedium, *pDocShell->GetDoc() );
             WriterRef xWriter;
-            ::GetHTMLWriter(aEmptyStr, aMedium.GetBaseURL( true ), xWriter);
-            String sWriteName;
-            if (pDocShell->HasName())
-                sWriteName = pMedium->GetName();
-            else
-                sWriteName = sFileURL;
+            ::GetHTMLWriter(OUString(), aMedium.GetBaseURL( true ), xWriter);
+            const OUString sWriteName = pDocShell->HasName()
+                ? pMedium->GetName()
+                : sFileURL;
             sal_uLong nRes = aWriter.Write(xWriter, &sWriteName);
             if(nRes)
             {
