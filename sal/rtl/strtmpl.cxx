@@ -22,9 +22,11 @@
 /* String-Class                                                            */
 /* ======================================================================= */
 
+#include <cassert>
+#include <limits>
+
 #include <string.h>
 #include <sal/log.hxx>
-#include <limits>
 #include <boost/static_assert.hpp>
 
 /*
@@ -278,13 +280,13 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( hashCode_WithLength )( const IMPL_RTL_STRCO
                                                             sal_Int32 nLen )
     SAL_THROW_EXTERN_C()
 {
-    sal_Int32 h = nLen;
+    sal_uInt32 h = static_cast<sal_uInt32>(nLen);
 
     if ( nLen < 256 )
     {
         while ( nLen > 0 )
         {
-            h = (h*37) + IMPL_RTL_USTRCODE( *pStr );
+            h = (h*37U) + IMPL_RTL_USTRCODE( *pStr );
             pStr++;
             nLen--;
         }
@@ -296,34 +298,34 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( hashCode_WithLength )( const IMPL_RTL_STRCO
 
         /* only sample some characters */
         /* the first 3, some characters between, and the last 5 */
-        h = (h*39) + IMPL_RTL_USTRCODE( *pStr );
+        h = (h*39U) + IMPL_RTL_USTRCODE( *pStr );
         pStr++;
-        h = (h*39) + IMPL_RTL_USTRCODE( *pStr );
+        h = (h*39U) + IMPL_RTL_USTRCODE( *pStr );
         pStr++;
-        h = (h*39) + IMPL_RTL_USTRCODE( *pStr );
+        h = (h*39U) + IMPL_RTL_USTRCODE( *pStr );
         pStr++;
 
         nSkip = nLen / 8;
         nLen -= 8;
         while ( nLen > 0 )
         {
-            h = (h*39) + IMPL_RTL_USTRCODE( *pStr );
+            h = (h*39U) + IMPL_RTL_USTRCODE( *pStr );
             pStr += nSkip;
             nLen -= nSkip;
         }
 
-        h = (h*39) + IMPL_RTL_USTRCODE( *pEndStr );
+        h = (h*39U) + IMPL_RTL_USTRCODE( *pEndStr );
         pEndStr++;
-        h = (h*39) + IMPL_RTL_USTRCODE( *pEndStr );
+        h = (h*39U) + IMPL_RTL_USTRCODE( *pEndStr );
         pEndStr++;
-        h = (h*39) + IMPL_RTL_USTRCODE( *pEndStr );
+        h = (h*39U) + IMPL_RTL_USTRCODE( *pEndStr );
         pEndStr++;
-        h = (h*39) + IMPL_RTL_USTRCODE( *pEndStr );
+        h = (h*39U) + IMPL_RTL_USTRCODE( *pEndStr );
         pEndStr++;
-        h = (h*39) + IMPL_RTL_USTRCODE( *pEndStr );
+        h = (h*39U) + IMPL_RTL_USTRCODE( *pEndStr );
     }
 
-    return h;
+    return static_cast<sal_Int32>(h);
 }
 
 /* ----------------------------------------------------------------------- */
@@ -752,8 +754,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( valueOfInt32 )( IMPL_RTL_STRCODE* pStr,
         *pStr = '-';
         pStr++;
         nLen++;
-        nValue = -n; /* FIXME this code is not portable for n == -2147483648
-                        (smallest negative value for sal_Int32) */
+        nValue = n == SAL_MIN_INT32 ? static_cast<sal_uInt32>(n) : -n;
     }
     else
         nValue = n;
@@ -807,9 +808,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( valueOfInt64 )( IMPL_RTL_STRCODE* pStr,
         *pStr = '-';
         pStr++;
         nLen++;
-        nValue = -n; /* FIXME this code is not portable for
-                        n == -9223372036854775808 (smallest negative value for
-                        sal_Int64) */
+        nValue = n == SAL_MIN_INT64 ? static_cast<sal_uInt64>(n) : -n;
     }
     else
         nValue = n;
@@ -914,13 +913,13 @@ sal_Bool SAL_CALL IMPL_RTL_STRNAME( toBoolean )( const IMPL_RTL_STRCODE* pStr )
 
 /* ----------------------------------------------------------------------- */
 namespace {
-    template <typename T> static inline T IMPL_RTL_STRNAME( toInt )( const IMPL_RTL_STRCODE* pStr,
+    template<typename T, typename U> static inline T IMPL_RTL_STRNAME( toInt )( const IMPL_RTL_STRCODE* pStr,
                                                                      sal_Int16 nRadix )
     {
         BOOST_STATIC_ASSERT(std::numeric_limits<T>::is_signed);
         sal_Bool    bNeg;
         sal_Int16   nDigit;
-        T           n = 0;
+        U           n = 0;
 
         if ( (nRadix < RTL_STR_MIN_RADIX) || (nRadix > RTL_STR_MAX_RADIX) )
             nRadix = 10;
@@ -968,7 +967,8 @@ namespace {
             nDigit = rtl_ImplGetDigit( IMPL_RTL_USTRCODE( *pStr ), nRadix );
             if ( nDigit < 0 )
                 break;
-            if( ( nMod < nDigit ? nDiv-1 : nDiv ) < n )
+            assert(nDiv > 0);
+            if( static_cast<U>( nMod < nDigit ? nDiv-1 : nDiv ) < n )
                 return 0;
 
             n *= nRadix;
@@ -978,9 +978,10 @@ namespace {
         }
 
         if ( bNeg )
-            return -n;
+            return n == static_cast<U>(std::numeric_limits<T>::min())
+                ? std::numeric_limits<T>::min() : -static_cast<T>(n);
         else
-            return n;
+            return static_cast<T>(n);
     }
 }
 
@@ -988,14 +989,14 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( toInt32 )( const IMPL_RTL_STRCODE* pStr,
                                                 sal_Int16 nRadix )
     SAL_THROW_EXTERN_C()
 {
-    return IMPL_RTL_STRNAME( toInt )<sal_Int32>(pStr, nRadix);
+    return IMPL_RTL_STRNAME( toInt )<sal_Int32, sal_uInt32>(pStr, nRadix);
 }
 
 sal_Int64 SAL_CALL IMPL_RTL_STRNAME( toInt64 )( const IMPL_RTL_STRCODE* pStr,
                                                 sal_Int16 nRadix )
     SAL_THROW_EXTERN_C()
 {
-    return IMPL_RTL_STRNAME( toInt )<sal_Int64>(pStr, nRadix);
+    return IMPL_RTL_STRNAME( toInt )<sal_Int64, sal_uInt64>(pStr, nRadix);
 }
 
 /* ----------------------------------------------------------------------- */
