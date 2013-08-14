@@ -340,6 +340,54 @@ void Test::testSharedFormulasRefUpdate()
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(0), pFC->GetSharedTopRow());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(3), pFC->GetSharedLength());
 
+    // Insert cells over A11:B11 to shift to right again.
+    m_pDoc->InsertCol(ScRange(0,10,0,1,10,0));
+    if (!checkFormula(*m_pDoc, ScAddress(1,0,0), "A10"))
+        CPPUNIT_FAIL("Wrong formula in B1");
+    if (!checkFormula(*m_pDoc, ScAddress(1,1,0), "C11"))
+        CPPUNIT_FAIL("Wrong formula in B2");
+    if (!checkFormula(*m_pDoc, ScAddress(1,2,0), "A12"))
+        CPPUNIT_FAIL("Wrong formula in B3");
+
+    pFC = m_pDoc->GetFormulaCell(ScAddress(1,0,0));
+    CPPUNIT_ASSERT_MESSAGE("B1 should be a non-shared formula cell.", pFC && !pFC->IsShared());
+    pFC = m_pDoc->GetFormulaCell(ScAddress(1,1,0));
+    CPPUNIT_ASSERT_MESSAGE("B2 should be a non-shared formula cell.", pFC && !pFC->IsShared());
+    pFC = m_pDoc->GetFormulaCell(ScAddress(1,2,0));
+    CPPUNIT_ASSERT_MESSAGE("B3 should be a non-shared formula cell.", pFC && !pFC->IsShared());
+
+    // Insert cells over A12:B12 to shift to right.
+    m_pDoc->InsertCol(ScRange(0,11,0,1,11,0));
+    if (!checkFormula(*m_pDoc, ScAddress(1,0,0), "A10"))
+        CPPUNIT_FAIL("Wrong formula in B1");
+    if (!checkFormula(*m_pDoc, ScAddress(1,1,0), "C11"))
+        CPPUNIT_FAIL("Wrong formula in B2");
+    if (!checkFormula(*m_pDoc, ScAddress(1,2,0), "C12"))
+        CPPUNIT_FAIL("Wrong formula in B3");
+
+    pFC = m_pDoc->GetFormulaCell(ScAddress(1,0,0));
+    CPPUNIT_ASSERT_MESSAGE("B1 should be a non-shared formula cell.", pFC && !pFC->IsShared());
+    // B2 and B3 should be grouped.
+    pFC = m_pDoc->GetFormulaCell(ScAddress(1,1,0));
+    CPPUNIT_ASSERT_MESSAGE("This must be a shared formula cell.", pFC && pFC->IsShared());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(1), pFC->GetSharedTopRow());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(2), pFC->GetSharedLength());
+
+    // Insert cells over A10:B10 to shift to right.
+    m_pDoc->InsertCol(ScRange(0,9,0,1,9,0));
+    if (!checkFormula(*m_pDoc, ScAddress(1,0,0), "C10"))
+        CPPUNIT_FAIL("Wrong formula in B1");
+    if (!checkFormula(*m_pDoc, ScAddress(1,1,0), "C11"))
+        CPPUNIT_FAIL("Wrong formula in B2");
+    if (!checkFormula(*m_pDoc, ScAddress(1,2,0), "C12"))
+        CPPUNIT_FAIL("Wrong formula in B3");
+
+    // B1:B3 should be now grouped.
+    pFC = m_pDoc->GetFormulaCell(ScAddress(1,0,0));
+    CPPUNIT_ASSERT_MESSAGE("This must be a shared formula cell.", pFC && pFC->IsShared());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(0), pFC->GetSharedTopRow());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(3), pFC->GetSharedLength());
+
     m_pDoc->DeleteTab(0);
 }
 

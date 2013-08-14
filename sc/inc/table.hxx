@@ -388,7 +388,8 @@ public:
         const sc::ColumnSet& rRegroupCols, SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE nSize, bool* pUndoOutline = NULL );
 
     bool        TestInsertCol( SCROW nStartRow, SCROW nEndRow, SCSIZE nSize ) const;
-    void        InsertCol( SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE nSize );
+    void InsertCol(
+        const sc::ColumnSet& rRegroupCols, SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE nSize );
     void DeleteCol(
         const sc::ColumnSet& rRegroupCols, SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE nSize, bool* pUndoOutline = NULL );
 

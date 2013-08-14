@@ -1423,7 +1423,7 @@ bool ScDocument::InsertCol( SCROW nStartRow, SCTAB nStartTab,
 
         for (i=nStartTab; i<=nEndTab && i < static_cast<SCTAB>(maTabs.size()); i++)
             if (maTabs[i] && (!pTabMark || pTabMark->GetTableSelect(i)))
-                maTabs[i]->InsertCol( nStartCol, nStartRow, nEndRow, nSize );
+                maTabs[i]->InsertCol(aCxt.maRegroupCols, nStartCol, nStartRow, nEndRow, nSize);
 
         if ( pChangeTrack && pChangeTrack->IsInDeleteUndo() )
         {   // durch Restaurierung von Referenzen auf geloeschte Bereiche ist

@@ -341,7 +341,8 @@ bool ScTable::TestInsertCol( SCROW nStartRow, SCROW nEndRow, SCSIZE nSize ) cons
 }
 
 
-void ScTable::InsertCol( SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE nSize )
+void ScTable::InsertCol(
+    const sc::ColumnSet& rRegroupCols, SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE nSize )
 {
     if (nStartRow==0 && nEndRow==MAXROW)
     {
@@ -387,6 +388,10 @@ void ScTable::InsertCol( SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE
         for (SCSIZE i=0; static_cast<SCCOL>(i+nSize)+nStartCol <= MAXCOL; i++)
             aCol[MAXCOL - nSize - i].MoveTo(nStartRow, nEndRow, aCol[MAXCOL - i]);
     }
+
+    std::vector<SCCOL> aRegroupCols;
+    rRegroupCols.getColumns(nTab, aRegroupCols);
+    std::for_each(aRegroupCols.begin(), aRegroupCols.end(), ColumnRegroupFormulaCells(aCol));
 
     // Transfer those notes that will get shifted into another container.
     ScNotes aNotes(pDocument);
