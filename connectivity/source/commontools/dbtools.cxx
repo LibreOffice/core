@@ -1594,6 +1594,7 @@ sal_Bool implSetObject( const Reference< XParameters >& _rxParameters,
     sal_Bool bSuccessfullyReRouted = sal_True;
     switch (_rValue.getValueTypeClass())
     {
+        case TypeClass_UNSIGNED_HYPER:
         case TypeClass_HYPER:
         {
             sal_Int64 nValue = 0;
