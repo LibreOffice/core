@@ -16,25 +16,21 @@
 #ifdef __x86_64__
 #undef CORE_BIG_ENDIAN
 #define CORE_LITTLE_ENDIAN
-#define USE_MEMORY_ALIGNMENT 64 /* big value -> no alignment */
 #else
 #define CORE_BIG_ENDIAN
 #undef CORE_LITTLE_ENDIAN
-#define USE_MEMORY_ALIGNMENT 4
 #endif
 
 #endif
 #ifdef _AIX
 #define CORE_BIG_ENDIAN
 #undef CORE_LITTLE_ENDIAN
-#define USE_MEMORY_ALIGNMENT 4
 #endif /* Def _AIX */
 
 #ifdef _MSC_VER
 #define __windows
 #undef CORE_BIG_ENDIAN
 #define CORE_LITTLE_ENDIAN
-#define USE_MEMORY_ALIGNMENT 64 /* big value -> no alignment */
 #endif /* Def _MSC_VER */
 
 #if defined(__linux) || defined(__OpenBSD__) || \
@@ -44,16 +40,10 @@
 #if __BYTE_ORDER == __LITTLE_ENDIAN
 #undef CORE_BIG_ENDIAN
 #define CORE_LITTLE_ENDIAN
-#if defined(__x86_64) || defined(__i386)
-#define USE_MEMORY_ALIGNMENT 64
-#else
-#define USE_MEMORY_ALIGNMENT 4
-#endif
 #else /* !(__BYTE_ORDER == __LITTLE_ENDIAN) */
 #if __BYTE_ORDER == __BIG_ENDIAN
 #define CORE_BIG_ENDIAN
 #undef CORE_LITTLE_ENDIAN
-#define USE_MEMORY_ALIGNMENT 4
 #endif /* __BYTE_ORDER == __BIG_ENDIAN */
 #endif /* !(__BYTE_ORDER == __LITTLE_ENDIAN) */
 #endif /* Def __linux || Def *BSD */
@@ -62,21 +52,11 @@
 #ifdef __sparc
 #define CORE_BIG_ENDIAN
 #undef CORE_LITTLE_ENDIAN
-#define USE_MEMORY_ALIGNMENT 4
 #else  /* Ndef __sparc */
 #undef CORE_BIG_ENDIAN
 #define CORE_LITTLE_ENDIAN
-#define USE_MEMORY_ALIGNMENT 4
 #endif /* Ndef __sparc */
 #endif /* Def __sun */
-
-/* Note USE_MEMORY_ALIGNMENT is 4 for platform that allow short non-aligned but required int access to be aligned (e.g sparc, ppc, zos..)
- *      USE_MEMORY_ALIGNMENT is 2 for platform that require short and int access to be aligned (e.g hppa )
- * if the platform does not have alignment requirement (x86/amd64) use a big value (i.e > 16)
- */
-#ifndef USE_MEMORY_ALIGNMENT
-#error "USE_MEMORY_ALIGNMENT must be defined to the proper alignment value for the platform"
-#endif
 
 #include <assert.h>
 #include <stdio.h>
@@ -136,9 +116,6 @@ int result = 32;
 }
 #endif
 
-#if (USE_MEMORY_ALIGNMENT > 4)
-#define get_unaligned_uint(str)           (*(unsigned int*)(str))
-#else
 static inline unsigned int get_unaligned_uint(const unsigned char* cursor)
 {
 unsigned int   result;
@@ -146,7 +123,6 @@ unsigned int   result;
     memcpy(&result, cursor, sizeof(unsigned int));
     return result;
 }
-#endif
 
 /* ===============================================
  * memory pool for fast fix-size allocation (non-tread-safe)
