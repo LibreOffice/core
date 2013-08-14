@@ -146,10 +146,9 @@ OOXMLFastHelper<T>::createAndSetParentRef
     uno::Reference<XFastContextHandler> xChild =
         pTmp->createFastChildContext(nToken, Attribs);
 
-    OOXMLFastContextHandler * pResult = NULL;
     if (xChild.is())
     {
-        pResult = dynamic_cast<OOXMLFastContextHandler *>(xChild.get());
+        OOXMLFastContextHandler* pResult = dynamic_cast<OOXMLFastContextHandler *>(xChild.get());
         pResult->setToken(nToken);
         pResult->setParent(pHandler);
     }
