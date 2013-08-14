@@ -18,8 +18,8 @@
  */
 
 
-#include <svtools/rtfkeywd.hxx>
-#include <svtools/rtftoken.h>
+#include <rtfkeywd.hxx>
+#include <rtftoken.h>
 #include "tools/string.hxx"
 
 #include <string.h>

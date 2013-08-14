@@ -27,9 +27,9 @@
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
-#include <svtools/svtools.hrc>
-#include <svtools/svtresid.hxx>
-#include <svtools/langtab.hxx>
+#include <svtools.hrc>
+#include <svtresid.hxx>
+#include <langtab.hxx>
 #include <unotools/syslocale.hxx>
 
 

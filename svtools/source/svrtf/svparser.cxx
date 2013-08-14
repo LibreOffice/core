@@ -18,7 +18,7 @@
  */
 
 #include <stdio.h>
-#include <svtools/svparser.hxx>
+#include <svparser.hxx>
 #include <tools/stream.hxx>
 #include <tools/debug.hxx>
 #include <rtl/textcvt.h>

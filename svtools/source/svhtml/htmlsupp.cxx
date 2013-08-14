@@ -21,9 +21,9 @@
 #include <ctype.h>
 #include <stdio.h>
 #include <comphelper/string.hxx>
-#include <svtools/parhtml.hxx>
-#include <svtools/htmltokn.h>
-#include <svtools/htmlkywd.hxx>
+#include <parhtml.hxx>
+#include <htmltokn.h>
+#include <htmlkywd.hxx>
 #include <tools/urlobj.hxx>
 
 // Table for converting option values into strings

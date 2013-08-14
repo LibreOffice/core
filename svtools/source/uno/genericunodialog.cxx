@@ -18,7 +18,7 @@
  */
 
 
-#include "svtools/genericunodialog.hxx"
+#include "genericunodialog.hxx"
 
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/ucb/AlreadyInitializedException.hpp>

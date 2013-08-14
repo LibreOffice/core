@@ -20,8 +20,8 @@
 
 #include "toolpaneldrawer.hxx"
 #include "toolpaneldrawerpeer.hxx"
-#include "svtools/svtresid.hxx"
-#include "svtools/svtools.hrc"
+#include "svtresid.hxx"
+#include "svtools.hrc"
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 

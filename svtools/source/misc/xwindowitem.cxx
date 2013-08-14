@@ -18,7 +18,7 @@
  */
 
 
-#include "svtools/xwindowitem.hxx"
+#include "xwindowitem.hxx"
 
 #include <vcl/window.hxx>
 

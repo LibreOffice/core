@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svtools/svtools.hrc>
+#include <svtools.hrc>
 #include <tools/resid.hxx>
 #include <com/sun/star/task/XInteractionContinuation.hpp>
 #include <com/sun/star/task/XInteractionAbort.hpp>
@@ -35,10 +35,10 @@
 #include <tools/rcid.h>
 #include <jvmfwk/framework.h>
 
-#include <svtools/restartdialog.hxx>
-#include <svtools/svtresid.hxx>
-#include <svtools/javainteractionhandler.hxx>
-#include <svtools/javacontext.hxx>
+#include <restartdialog.hxx>
+#include <svtresid.hxx>
+#include <javainteractionhandler.hxx>
+#include <javacontext.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::task;

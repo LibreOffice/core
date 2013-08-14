@@ -22,8 +22,8 @@
 #include <tools/string.hxx>
 #include <rtl/string.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <svtools/rtfkeywd.hxx>
-#include <svtools/rtfout.hxx>
+#include <rtfkeywd.hxx>
+#include <rtfout.hxx>
 
 
 #if defined(UNX)

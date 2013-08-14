@@ -22,23 +22,23 @@
 #include <vcl/fixedhyper.hxx>
 #include <vcl/prgsbar.hxx>
 #include <vcl/svapp.hxx>
-#include <svtools/svmedit.hxx>
+#include <svmedit.hxx>
 #include <unoiface.hxx>
-#include <svtools/filectrl.hxx>
-#include <svtools/roadmap.hxx>
+#include <filectrl.hxx>
+#include <roadmap.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/awt/LineEndFormat.hpp>
 #include <comphelper/processfactory.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <toolkit/helper/property.hxx>
-#include <svtools/fmtfield.hxx>
+#include <fmtfield.hxx>
 #include <svl/numuno.hxx>
-#include <svtools/calendar.hxx>
-#include <svtools/treelistbox.hxx>
+#include <calendar.hxx>
+#include <treelistbox.hxx>
 #include "treecontrolpeer.hxx"
 #include "svtxgridcontrol.hxx"
-#include <svtools/table/tablecontrol.hxx>
+#include <table/tablecontrol.hxx>
 
 namespace
 {

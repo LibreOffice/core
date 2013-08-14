@@ -23,10 +23,10 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 
-#include <svtools/ehdl.hxx>
-#include <svtools/svtresid.hxx>
-#include <svtools/svtools.hrc>
-#include <svtools/sfxecode.hxx>
+#include <ehdl.hxx>
+#include <svtresid.hxx>
+#include <svtools.hrc>
+#include <sfxecode.hxx>
 
 //=========================================================================
 

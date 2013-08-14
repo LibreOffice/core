@@ -22,7 +22,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <tools/rtti.hxx>
 #include <tools/solar.h>
-#include <svtools/unoevent.hxx>
+#include <unoevent.hxx>
 #include <svl/macitem.hxx>
 
 using namespace ::com::sun::star;

@@ -9,7 +9,7 @@
 
 #include "sal/config.h"
 
-#include "svtools/filechangedchecker.hxx"
+#include "filechangedchecker.hxx"
 
 FileChangedChecker::FileChangedChecker(const OUString& rFilename, const ::boost::function0<void>& rCallback) :
     mTimer(),

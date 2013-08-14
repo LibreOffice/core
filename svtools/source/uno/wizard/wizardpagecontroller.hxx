@@ -20,7 +20,7 @@
 #ifndef SVT_UNOWIZ_WIZARDPAGECONTROLLER_HXX
 #define SVT_UNOWIZ_WIZARDPAGECONTROLLER_HXX
 
-#include "svtools/wizardmachine.hxx"
+#include "wizardmachine.hxx"
 
 #include <com/sun/star/ui/dialogs/XWizardController.hpp>
 

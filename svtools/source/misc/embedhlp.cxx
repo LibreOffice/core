@@ -18,10 +18,10 @@
  */
 
 
-#include <svtools/embedhlp.hxx>
+#include <embedhlp.hxx>
 #include <vcl/graphicfilter.hxx>
-#include <svtools/svtools.hrc>
-#include <svtools/svtresid.hxx>
+#include <svtools.hrc>
+#include <svtresid.hxx>
 
 #include <comphelper/embeddedobjectcontainer.hxx>
 #include <comphelper/seqstream.hxx>

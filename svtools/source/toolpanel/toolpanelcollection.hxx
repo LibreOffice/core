@@ -20,7 +20,7 @@
 #ifndef TOOLPANELCOLLECTION_HXX
 #define TOOLPANELCOLLECTION_HXX
 
-#include "svtools/toolpanel/toolpaneldeck.hxx"
+#include "toolpanel/toolpaneldeck.hxx"
 
 #include <memory>
 

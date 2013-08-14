@@ -19,7 +19,7 @@
 
 
 #include "paneldecklisteners.hxx"
-#include "svtools/toolpanel/toolpaneldeck.hxx"
+#include "toolpanel/toolpaneldeck.hxx"
 
 //........................................................................
 namespace svt

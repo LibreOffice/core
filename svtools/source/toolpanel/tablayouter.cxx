@@ -18,9 +18,9 @@
  */
 
 
-#include "svtools/toolpanel/tablayouter.hxx"
-#include "svtools/toolpanel/toolpaneldeck.hxx"
-#include "svtools/toolpanel/paneltabbar.hxx"
+#include "toolpanel/tablayouter.hxx"
+#include "toolpanel/toolpaneldeck.hxx"
+#include "toolpanel/paneltabbar.hxx"
 #include "svtaccessiblefactory.hxx"
 
 #include <tools/gen.hxx>

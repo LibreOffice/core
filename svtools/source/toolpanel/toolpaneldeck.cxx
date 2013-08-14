@@ -22,9 +22,9 @@
 #include "toolpanelcollection.hxx"
 #include "paneldecklisteners.hxx"
 #include "toolpaneldeckpeer.hxx"
-#include "svtools/toolpanel/toolpaneldeck.hxx"
-#include "svtools/toolpanel/tablayouter.hxx"
-#include "svtools/toolpanel/drawerlayouter.hxx"
+#include "toolpanel/toolpaneldeck.hxx"
+#include "toolpanel/tablayouter.hxx"
+#include "toolpanel/drawerlayouter.hxx"
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>

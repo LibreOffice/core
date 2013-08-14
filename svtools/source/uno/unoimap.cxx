@@ -34,12 +34,12 @@
 #include <list>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
-#include <svtools/unoevent.hxx>
-#include <svtools/unoimap.hxx>
-#include <svtools/imap.hxx>
-#include <svtools/imapcirc.hxx>
-#include <svtools/imaprect.hxx>
-#include <svtools/imappoly.hxx>
+#include <unoevent.hxx>
+#include <unoimap.hxx>
+#include <imap.hxx>
+#include <imapcirc.hxx>
+#include <imaprect.hxx>
+#include <imappoly.hxx>
 
 #ifndef SEQTYPE
  #if defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)

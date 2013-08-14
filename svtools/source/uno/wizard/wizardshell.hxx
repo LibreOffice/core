@@ -23,7 +23,7 @@
 #include <com/sun/star/ui/dialogs/XWizardController.hpp>
 #include <com/sun/star/ui/dialogs/XWizard.hpp>
 
-#include <svtools/roadmapwizard.hxx>
+#include <roadmapwizard.hxx>
 
 #include <boost/shared_ptr.hpp>
 #include <map>

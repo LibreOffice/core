@@ -20,7 +20,7 @@
 #ifndef SVTOOLS_ACCESSIBLE_FACTORY_ACCESS_HXX
 #define SVTOOLS_ACCESSIBLE_FACTORY_ACCESS_HXX
 
-#include <svtools/accessiblefactory.hxx>
+#include <accessiblefactory.hxx>
 
 //........................................................................
 namespace svt

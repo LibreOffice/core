@@ -20,7 +20,7 @@
 #ifndef SVT_UNO_WIZARD_HXX
 #define SVT_UNO_WIZARD_HXX
 
-#include "svtools/genericunodialog.hxx"
+#include "genericunodialog.hxx"
 
 #include <com/sun/star/ui/dialogs/XWizard.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>

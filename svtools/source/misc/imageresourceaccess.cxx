@@ -18,7 +18,7 @@
  */
 
 
-#include <svtools/imageresourceaccess.hxx>
+#include <imageresourceaccess.hxx>
 
 #include <com/sun/star/io/NotConnectedException.hpp>
 #include <com/sun/star/io/XSeekable.hpp>

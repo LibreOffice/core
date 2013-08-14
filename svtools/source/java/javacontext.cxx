@@ -19,9 +19,9 @@
 
 #include "com/sun/star/uno/Any.hxx"
 #include "com/sun/star/uno/Type.hxx"
-#include <svtools/svtresid.hxx>
-#include <svtools/javacontext.hxx>
-#include <svtools/javainteractionhandler.hxx>
+#include <svtresid.hxx>
+#include <javacontext.hxx>
+#include <javainteractionhandler.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::task;

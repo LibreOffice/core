@@ -18,9 +18,9 @@
  */
 
 
-#include <svtools/contextmenuhelper.hxx>
-#include <svtools/menuoptions.hxx>
-#include <svtools/miscopt.hxx>
+#include <contextmenuhelper.hxx>
+#include <menuoptions.hxx>
+#include <miscopt.hxx>
 
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>

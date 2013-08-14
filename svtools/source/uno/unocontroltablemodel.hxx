@@ -20,8 +20,8 @@
 #ifndef _UNOCONTROL_TABLEMODEL_HXX_
 #define _UNOCONTROL_TABLEMODEL_HXX_
 
-#include "svtools/table/tablemodel.hxx"
-#include "svtools/table/tablecontrol.hxx"
+#include "table/tablemodel.hxx"
+#include "table/tablecontrol.hxx"
 
 #include <com/sun/star/awt/grid/XGridControl.hpp>
 #include <com/sun/star/awt/grid/GridDataEvent.hpp>

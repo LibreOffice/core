@@ -20,8 +20,8 @@
 #ifndef SVTOOLS_GRIDCOLUMNFACADE_HXX
 #define SVTOOLS_GRIDCOLUMNFACADE_HXX
 
-#include "svtools/table/tablemodel.hxx"
-#include "svtools/table/tablecontrol.hxx"
+#include "table/tablemodel.hxx"
+#include "table/tablecontrol.hxx"
 
 #include <com/sun/star/awt/grid/XGridColumn.hpp>
 #include <com/sun/star/style/VerticalAlignment.hpp>

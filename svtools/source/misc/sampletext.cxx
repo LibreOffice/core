@@ -6,7 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#include <svtools/sampletext.hxx>
+#include <sampletext.hxx>
 #include <vcl/font.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>

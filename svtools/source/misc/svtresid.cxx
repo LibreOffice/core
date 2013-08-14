@@ -18,7 +18,7 @@
  */
 
 #include <tools/resmgr.hxx>
-#include <svtools/svtresid.hxx>
+#include <svtresid.hxx>
 #include <vcl/svapp.hxx>
 
 static ResMgr* pMgr=NULL;

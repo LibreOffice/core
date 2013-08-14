@@ -51,8 +51,8 @@
 #include "svl/urlbmk.hxx"
 #include "inetimg.hxx"
 #include <vcl/wmf.hxx>
-#include <svtools/imap.hxx>
-#include <svtools/transfer.hxx>
+#include <imap.hxx>
+#include <transfer.hxx>
 #include <rtl/strbuf.hxx>
 #include <cstdio>
 #include <vcl/dibtools.hxx>

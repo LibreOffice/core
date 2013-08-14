@@ -29,9 +29,9 @@
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/datatransfer/dnd/XDropTargetDragContext.hpp>
 #include "svl/urlbmk.hxx"
-#include <svtools/inetimg.hxx>
-#include <svtools/imap.hxx>
-#include <svtools/transfer.hxx>
+#include <inetimg.hxx>
+#include <imap.hxx>
+#include <transfer.hxx>
 
 // --------------
 // - Namespaces -

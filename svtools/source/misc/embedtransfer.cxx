@@ -25,7 +25,7 @@
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 
-#include <svtools/embedtransfer.hxx>
+#include <embedtransfer.hxx>
 #include <tools/mapunit.hxx>
 #include <vcl/outdev.hxx>
 #include <comphelper/storagehelper.hxx>
@@ -34,7 +34,7 @@
 #include <unotools/tempfile.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
-#include <svtools/embedhlp.hxx>
+#include <embedhlp.hxx>
 
 using namespace ::com::sun::star;
 

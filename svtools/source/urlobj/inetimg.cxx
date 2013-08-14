@@ -20,7 +20,7 @@
 #include <sot/formats.hxx>
 #include <tools/stream.hxx>
 
-#include <svtools/inetimg.hxx>
+#include <inetimg.hxx>
 
 #define TOKEN_SEPARATOR '\001'
 

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svtools/openfiledroptargetlistener.hxx>
+#include <openfiledroptargetlistener.hxx>
 
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
@@ -26,7 +26,7 @@
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 
-#include <svtools/transfer.hxx>
+#include <transfer.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <sot/filelist.hxx>
 #include <comphelper/processfactory.hxx>

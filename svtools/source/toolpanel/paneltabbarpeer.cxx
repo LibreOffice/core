@@ -19,7 +19,7 @@
 
 
 #include "paneltabbarpeer.hxx"
-#include "svtools/toolpanel/paneltabbar.hxx"
+#include "toolpanel/paneltabbar.hxx"
 
 #include <com/sun/star/lang/DisposedException.hpp>
 

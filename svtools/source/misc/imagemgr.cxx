@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svtools/imagemgr.hxx>
+#include <imagemgr.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
@@ -35,9 +35,9 @@
 #include <ucbhelper/content.hxx>
 #include <tools/rcid.h>
 #include <unotools/configmgr.hxx>
-#include <svtools/svtools.hrc>
-#include <svtools/imagemgr.hrc>
-#include <svtools/svtresid.hxx>
+#include <svtools.hrc>
+#include <imagemgr.hrc>
+#include <svtresid.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/lazydelete.hxx>
 

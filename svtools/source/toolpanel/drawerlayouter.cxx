@@ -18,7 +18,7 @@
  */
 
 
-#include "svtools/toolpanel/drawerlayouter.hxx"
+#include "toolpanel/drawerlayouter.hxx"
 #include "toolpaneldrawer.hxx"
 
 #include <com/sun/star/accessibility/XAccessible.hpp>

@@ -23,12 +23,12 @@
 #include <vcl/svapp.hxx>
 #include <svl/zforlist.hxx>
 
-#include <svtools/htmlout.hxx>
-#include <svtools/htmlkywd.hxx>
-#include <svtools/imap.hxx>
-#include <svtools/imaprect.hxx>
-#include <svtools/imapcirc.hxx>
-#include <svtools/imappoly.hxx>
+#include <htmlout.hxx>
+#include <htmlkywd.hxx>
+#include <imap.hxx>
+#include <imaprect.hxx>
+#include <imapcirc.hxx>
+#include <imappoly.hxx>
 #include "svl/urihelper.hxx"
 
 #if defined(UNX)

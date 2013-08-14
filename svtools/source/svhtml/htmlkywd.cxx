@@ -22,9 +22,9 @@
 #include <sal/types.h>                  // for sal_Char, sal_Unicode, etc
 #include <stdlib.h>                     // for bsearch, qsort
 #include <string.h>                     // for strcmp
-#include <svtools/htmltokn.h>
+#include <htmltokn.h>
 #include <tools/solar.h>                // for String
-#include <svtools/htmlkywd.hxx>
+#include <htmlkywd.hxx>
 #include <tools/string.hxx>             // for String::CompareToAscii, etc
 
 // Table has still to be sorted

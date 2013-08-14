@@ -33,9 +33,9 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 
-#include <svtools/parhtml.hxx>
-#include <svtools/htmltokn.h>
-#include <svtools/htmlkywd.hxx>
+#include <parhtml.hxx>
+#include <htmltokn.h>
+#include <htmlkywd.hxx>
 
 #include <memory>
 

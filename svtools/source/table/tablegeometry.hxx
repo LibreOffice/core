@@ -20,7 +20,7 @@
 #ifndef SVTOOLS_TABLEGEOMETRY_HXX
 #define SVTOOLS_TABLEGEOMETRY_HXX
 
-#include "svtools/table/tabletypes.hxx"
+#include "table/tabletypes.hxx"
 
 #include <tools/gen.hxx>
 

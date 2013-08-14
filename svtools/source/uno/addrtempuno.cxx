@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "svtools/genericunodialog.hxx"
-#include <svtools/addresstemplate.hxx>
+#include "genericunodialog.hxx"
+#include <addresstemplate.hxx>
 #include <comphelper/extract.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/property.hxx>

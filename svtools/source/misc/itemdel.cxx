@@ -18,7 +18,7 @@
  */
 
 
-#include <svtools/itemdel.hxx>
+#include <itemdel.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/errcode.hxx>
 #include <limits.h>

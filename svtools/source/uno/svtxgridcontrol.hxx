@@ -21,7 +21,7 @@
 #define _SVT_GRIDCONTROL_HXX_
 
 #include <unocontroltablemodel.hxx>
-#include <svtools/table/tablecontrol.hxx>
+#include <table/tablecontrol.hxx>
 #include <com/sun/star/awt/grid/XGridControl.hpp>
 #include <com/sun/star/awt/grid/XGridRowSelection.hpp>
 #include <com/sun/star/awt/grid/XGridDataListener.hpp>

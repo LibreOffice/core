@@ -29,8 +29,8 @@
 #include <com/sun/star/awt/XTextArea.hpp>
 #include <com/sun/star/awt/XTextComponent.hpp>
 #include <com/sun/star/awt/XTextLayoutConstrains.hpp>
-#include <svtools/svmedit.hxx>
-#include <svtools/fmtfield.hxx>
+#include <svmedit.hxx>
+#include <fmtfield.hxx>
 
 
 #include <comphelper/uno3.hxx>

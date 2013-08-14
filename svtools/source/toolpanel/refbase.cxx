@@ -18,7 +18,7 @@
  */
 
 
-#include "svtools/toolpanel/refbase.hxx"
+#include "toolpanel/refbase.hxx"
 
 //........................................................................
 namespace svt

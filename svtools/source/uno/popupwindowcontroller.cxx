@@ -23,8 +23,8 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/svapp.hxx>
 
-#include "svtools/popupwindowcontroller.hxx"
-#include "svtools/toolbarmenu.hxx"
+#include "popupwindowcontroller.hxx"
+#include "toolbarmenu.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

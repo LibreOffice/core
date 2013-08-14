@@ -19,7 +19,7 @@
 
 
 #include "toolpaneldeckpeer.hxx"
-#include "svtools/toolpanel/toolpaneldeck.hxx"
+#include "toolpanel/toolpaneldeck.hxx"
 
 #include <com/sun/star/lang/DisposedException.hpp>
 

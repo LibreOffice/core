@@ -18,10 +18,10 @@
  */
 
 
-#include "svtools/toolpanel/paneltabbar.hxx"
-#include "svtools/toolpanel/toolpaneldeck.hxx"
-#include "svtools/svtresid.hxx"
-#include "svtools/svtools.hrc"
+#include "toolpanel/paneltabbar.hxx"
+#include "toolpanel/toolpaneldeck.hxx"
+#include "svtresid.hxx"
+#include "svtools.hrc"
 
 #include "tabitemdescriptor.hxx"
 #include "paneltabbarpeer.hxx"

@@ -19,9 +19,9 @@
 
 #include "svtxgridcontrol.hxx"
 #include <com/sun/star/view/SelectionType.hpp>
-#include "svtools/table/tablecontrolinterface.hxx"
-#include "svtools/table/gridtablerenderer.hxx"
-#include "svtools/table/tablecontrol.hxx"
+#include "table/tablecontrolinterface.hxx"
+#include "table/gridtablerenderer.hxx"
+#include "table/tablecontrol.hxx"
 #include "unocontroltablemodel.hxx"
 #include <comphelper/sequence.hxx>
 #include <rtl/ref.hxx>

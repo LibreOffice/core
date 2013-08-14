@@ -8,7 +8,7 @@
  */
 
 
-#include <svtools/langhelp.hxx>
+#include <langhelp.hxx>
 
 #include <vcl/svapp.hxx>
 #include <rtl/ustring.hxx>

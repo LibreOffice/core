@@ -19,7 +19,7 @@
 
 
 #include "mousefunction.hxx"
-#include "svtools/table/tablecontrolinterface.hxx"
+#include "table/tablecontrolinterface.hxx"
 
 #include <tools/diagnose_ex.h>
 #include <vcl/window.hxx>

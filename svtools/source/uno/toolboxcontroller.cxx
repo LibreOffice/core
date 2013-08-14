@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svtools/toolboxcontroller.hxx>
+#include <toolboxcontroller.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -28,8 +28,8 @@
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
-#include <svtools/imgdef.hxx>
-#include <svtools/miscopt.hxx>
+#include <imgdef.hxx>
+#include <miscopt.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/toolbox.hxx>
 #include <comphelper/processfactory.hxx>

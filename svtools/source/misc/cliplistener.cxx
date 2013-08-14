@@ -24,8 +24,8 @@
 #include <vcl/window.hxx>
 #include <osl/mutex.hxx>
 
-#include <svtools/cliplistener.hxx>
-#include <svtools/transfer.hxx>
+#include <cliplistener.hxx>
+#include <transfer.hxx>
 
 using namespace ::com::sun::star;
 

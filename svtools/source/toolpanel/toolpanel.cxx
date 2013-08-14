@@ -18,7 +18,7 @@
  */
 
 
-#include "svtools/toolpanel/toolpanel.hxx"
+#include "toolpanel/toolpanel.hxx"
 
 //........................................................................
 namespace svt

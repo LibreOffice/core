@@ -20,7 +20,7 @@
 #ifndef PANELDECKLISTENERS_HXX
 #define PANELDECKLISTENERS_HXX
 
-#include "svtools/toolpanel/toolpaneldeck.hxx"
+#include "toolpanel/toolpaneldeck.hxx"
 
 #include <boost/optional.hpp>
 #include <vector>
