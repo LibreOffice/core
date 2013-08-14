@@ -45,6 +45,8 @@ typedef ::com::sun::star::uno::Sequence< RowPropertyValuesSeq_t>    CellProperty
 typedef std::vector<PropertyMapPtr>     PropertyMapVector1;
 typedef std::vector<PropertyMapVector1> PropertyMapVector2;
 
+#define DEF_BORDER_DIST 190  //0,19cm
+
 class DomainMapper_Impl;
 class TableStyleSheetEntry;
 struct TableInfo;
@@ -66,7 +68,7 @@ class WRITERFILTER_DLLPRIVATE DomainMapperTableHandler : public TableDataHandler
     sal_Int32 m_nCellIndex;
     sal_Int32 m_nRowIndex;
 
-    TableStyleSheetEntry * endTableGetTableStyle(TableInfo & rInfo);
+    TableStyleSheetEntry * endTableGetTableStyle(TableInfo & rInfo, uno::Sequence<beans::PropertyValue>& rFrameProperties);
     CellPropertyValuesSeq_t endTableGetCellProperties(TableInfo & rInfo);
     RowPropertyValuesSeq_t endTableGetRowProperties();
 
