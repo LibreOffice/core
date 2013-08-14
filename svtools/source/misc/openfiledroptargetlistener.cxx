@@ -191,7 +191,7 @@ sal_Bool OpenFileDropTargetListener::implts_IsDropFormatSupported( SotFormatStri
     return bRet;
 }
 
-void OpenFileDropTargetListener::implts_OpenFile( const String& rFilePath )
+void OpenFileDropTargetListener::implts_OpenFile( const OUString& rFilePath )
 {
     OUString aFileURL;
     if ( !::utl::LocalFileHelper::ConvertPhysicalNameToURL( rFilePath, aFileURL ) )

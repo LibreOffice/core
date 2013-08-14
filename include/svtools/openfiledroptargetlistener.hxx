@@ -64,7 +64,7 @@ class SVT_DLLPUBLIC OpenFileDropTargetListener : public ::cppu::WeakImplHelper1<
         void     implts_BeginDrag( const css::uno::Sequence< css::datatransfer::DataFlavor >& rSupportedDataFlavors );
         void     implts_EndDrag();
         sal_Bool implts_IsDropFormatSupported( SotFormatStringId nFormat );
-        void     implts_OpenFile( const String& rFilePath );
+        void     implts_OpenFile( const OUString& rFilePath );
 };
 
 #endif // SVTOOLS_DROPTARGETLISTENER_HXX
