@@ -85,6 +85,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/editcategories \
 	sw/uiconfig/swriter/ui/editsectiondialog \
 	sw/uiconfig/swriter/ui/endnotepage \
+	sw/uiconfig/swriter/ui/envaddresspage \
 	sw/uiconfig/swriter/ui/envprinterpage \
 	sw/uiconfig/swriter/ui/exchangedatabases \
 	sw/uiconfig/swriter/ui/formatsectiondialog \

@@ -24,18 +24,6 @@
 
 // local resources *********************************************************
 
-#define TXT_ADDR      1
-#define EDT_ADDR      2
-#define FT_DATABASE   3
-#define LB_DATABASE   4
-#define FT_TABLE      5
-#define LB_TABLE      6
-#define BTN_INSERT    7
-#define FT_DBFIELD    8
-#define LB_DBFIELD    9
-#define BOX_SEND     10
-#define EDT_SEND     11
-#define WIN_PREVIEW  12
 #define ST_INSERT   13
 #define ST_CHANGE   14
 

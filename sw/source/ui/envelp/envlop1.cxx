@@ -19,6 +19,7 @@
 
 #include "dbmgr.hxx"
 #include <sfx2/app.hxx>
+#include <vcl/builder.hxx>
 #include <vcl/msgbox.hxx>
 #include <swwait.hxx>
 #include <viewopt.hxx>
@@ -56,8 +57,20 @@ SwEnvPreview::SwEnvPreview(SfxTabPage* pParent, const ResId& rResID) :
     SetMapMode(MapMode(MAP_PIXEL));
 }
 
-SwEnvPreview::~SwEnvPreview()
+SwEnvPreview::SwEnvPreview(Window* pParent, WinBits nStyle)
+    : Window(pParent, nStyle)
 {
+    SetMapMode(MapMode(MAP_PIXEL));
+}
+
+Size SwEnvPreview::GetOptimalSize() const
+{
+    return LogicToPixel(Size(84 , 63), MAP_APPFONT);
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSwEnvPreview(Window *pParent, VclBuilder::stringmap &)
+{
+    return new SwEnvPreview(pParent, 0);
 }
 
 void SwEnvPreview::DataChanged( const DataChangedEvent& rDCEvt )
@@ -191,34 +204,41 @@ short SwEnvDlg::Ok()
     return nRet;
 }
 
-SwEnvPage::SwEnvPage(Window* pParent, const SfxItemSet& rSet) :
-
-    SfxTabPage(pParent, SW_RES(TP_ENV_ENV), rSet),
-
-    aAddrText      (this, SW_RES(TXT_ADDR   )),
-    aAddrEdit      (this, SW_RES(EDT_ADDR   )),
-    aDatabaseFT    (this, SW_RES(FT_DATABASE)),
-    aDatabaseLB    (this, SW_RES(LB_DATABASE)),
-    aTableFT       (this, SW_RES(FT_TABLE   )),
-    aTableLB       (this, SW_RES(LB_TABLE   )),
-    aInsertBT      (this, SW_RES(BTN_INSERT )),
-    aDBFieldFT     (this, SW_RES(FT_DBFIELD )),
-    aDBFieldLB     (this, SW_RES(LB_DBFIELD )),
-    aSenderBox     (this, SW_RES(BOX_SEND   )),
-    aSenderEdit    (this, SW_RES(EDT_SEND   )),
-    aPreview       (this, SW_RES(WIN_PREVIEW))
-
+SwEnvPage::SwEnvPage(Window* pParent, const SfxItemSet& rSet)
+    : SfxTabPage(pParent, "EnvAddressPage",
+        "modules/swriter/ui/envaddresspage.ui", rSet)
 {
-    FreeResource();
+    get(m_pAddrEdit, "addredit");
+    get(m_pDatabaseLB, "database");
+    get(m_pTableLB, "table");
+    get(m_pDBFieldLB, "field");
+    get(m_pInsertBT, "insert");
+    get(m_pSenderBox, "sender");
+    get(m_pSenderEdit, "senderedit");
+    get(m_pPreview, "preview");
+
+    long nTextBoxHeight(m_pAddrEdit->GetTextHeight() * 10);
+    long nTextBoxWidth(m_pAddrEdit->approximate_char_width() * 25);
+
+    m_pAddrEdit->set_height_request(nTextBoxHeight);
+    m_pAddrEdit->set_width_request(nTextBoxWidth);
+    m_pSenderEdit->set_height_request(nTextBoxHeight);
+    m_pSenderEdit->set_width_request(nTextBoxWidth);
+
+    long nListBoxWidth = approximate_char_width() * 30;
+    m_pTableLB->set_width_request(nListBoxWidth);
+    m_pDatabaseLB->set_width_request(nListBoxWidth);
+    m_pDBFieldLB->set_width_request(nListBoxWidth);
+
     SetExchangeSupport();
     pSh = GetParentSwEnvDlg()->pSh;
 
     // Install handlers
-    aDatabaseLB    .SetSelectHdl(LINK(this, SwEnvPage, DatabaseHdl     ));
-    aTableLB       .SetSelectHdl(LINK(this, SwEnvPage, DatabaseHdl     ));
-    aInsertBT      .SetClickHdl (LINK(this, SwEnvPage, FieldHdl        ));
-    aSenderBox     .SetClickHdl (LINK(this, SwEnvPage, SenderHdl       ));
-    aPreview.SetBorderStyle( WINDOW_BORDER_MONO );
+    m_pDatabaseLB->SetSelectHdl(LINK(this, SwEnvPage, DatabaseHdl     ));
+    m_pTableLB->SetSelectHdl(LINK(this, SwEnvPage, DatabaseHdl     ));
+    m_pInsertBT->SetClickHdl (LINK(this, SwEnvPage, FieldHdl        ));
+    m_pSenderBox->SetClickHdl (LINK(this, SwEnvPage, SenderHdl       ));
+    m_pPreview->SetBorderStyle( WINDOW_BORDER_MONO );
 
     SwDBData aData = pSh->GetDBData();
     sActDBName = aData.sDataSource;
@@ -235,44 +255,44 @@ IMPL_LINK( SwEnvPage, DatabaseHdl, ListBox *, pListBox )
 {
     SwWait aWait( *pSh->GetView().GetDocShell(), sal_True );
 
-    if (pListBox == &aDatabaseLB)
+    if (pListBox == m_pDatabaseLB)
     {
         sActDBName = pListBox->GetSelectEntry();
-        pSh->GetNewDBMgr()->GetTableNames(&aTableLB, sActDBName);
+        pSh->GetNewDBMgr()->GetTableNames(m_pTableLB, sActDBName);
         sActDBName += DB_DELIM;
     }
     else
-        sActDBName.SetToken(1, DB_DELIM, aTableLB.GetSelectEntry());
-    pSh->GetNewDBMgr()->GetColumnNames(&aDBFieldLB, aDatabaseLB.GetSelectEntry(),
-                                       aTableLB.GetSelectEntry());
+        sActDBName.SetToken(1, DB_DELIM, m_pTableLB->GetSelectEntry());
+    pSh->GetNewDBMgr()->GetColumnNames(m_pDBFieldLB, m_pDatabaseLB->GetSelectEntry(),
+                                       m_pTableLB->GetSelectEntry());
     return 0;
 }
 
 IMPL_LINK_NOARG(SwEnvPage, FieldHdl)
 {
-    OUString aStr("<" + aDatabaseLB.GetSelectEntry() + "." +
-                  aTableLB.GetSelectEntry() + "." +
-                  OUString(aTableLB.GetEntryData(aTableLB.GetSelectEntryPos()) == 0 ? '0' : '1') + "." +
-                  aDBFieldLB.GetSelectEntry() + ">");
-    aAddrEdit.ReplaceSelected(aStr);
-    Selection aSel = aAddrEdit.GetSelection();
-    aAddrEdit.GrabFocus();
-    aAddrEdit.SetSelection(aSel);
+    OUString aStr("<" + m_pDatabaseLB->GetSelectEntry() + "." +
+                  m_pTableLB->GetSelectEntry() + "." +
+                  OUString(m_pTableLB->GetEntryData(m_pTableLB->GetSelectEntryPos()) == 0 ? '0' : '1') + "." +
+                  m_pDBFieldLB->GetSelectEntry() + ">");
+    m_pAddrEdit->ReplaceSelected(aStr);
+    Selection aSel = m_pAddrEdit->GetSelection();
+    m_pAddrEdit->GrabFocus();
+    m_pAddrEdit->SetSelection(aSel);
     return 0;
 }
 
 IMPL_LINK_NOARG(SwEnvPage, SenderHdl)
 {
-    const sal_Bool bEnable = aSenderBox.IsChecked();
+    const sal_Bool bEnable = m_pSenderBox->IsChecked();
     GetParentSwEnvDlg()->aEnvItem.bSend = bEnable;
-    aSenderEdit.Enable(bEnable);
+    m_pSenderEdit->Enable(bEnable);
     if ( bEnable )
     {
-        aSenderEdit.GrabFocus();
-        if(aSenderEdit.GetText().isEmpty())
-            aSenderEdit.SetText(MakeSender());
+        m_pSenderEdit->GrabFocus();
+        if(m_pSenderEdit->GetText().isEmpty())
+            m_pSenderEdit->SetText(MakeSender());
     }
-    aPreview.Invalidate();
+    m_pPreview->Invalidate();
     return 0;
 }
 
@@ -280,23 +300,23 @@ void SwEnvPage::InitDatabaseBox()
 {
     if (pSh->GetNewDBMgr())
     {
-        aDatabaseLB.Clear();
+        m_pDatabaseLB->Clear();
         Sequence<OUString> aDataNames = SwNewDBMgr::GetExistingDatabaseNames();
         const OUString* pDataNames = aDataNames.getConstArray();
 
         for (long i = 0; i < aDataNames.getLength(); i++)
-            aDatabaseLB.InsertEntry(pDataNames[i]);
+            m_pDatabaseLB->InsertEntry(pDataNames[i]);
 
         String sDBName = sActDBName.GetToken( 0, DB_DELIM );
         String sTableName = sActDBName.GetToken( 1, DB_DELIM );
-        aDatabaseLB.SelectEntry(sDBName);
-        if (pSh->GetNewDBMgr()->GetTableNames(&aTableLB, sDBName))
+        m_pDatabaseLB->SelectEntry(sDBName);
+        if (pSh->GetNewDBMgr()->GetTableNames(m_pTableLB, sDBName))
         {
-            aTableLB.SelectEntry(sTableName);
-            pSh->GetNewDBMgr()->GetColumnNames(&aDBFieldLB, sDBName, sTableName);
+            m_pTableLB->SelectEntry(sTableName);
+            pSh->GetNewDBMgr()->GetColumnNames(m_pDBFieldLB, sDBName, sTableName);
         }
         else
-            aDBFieldLB.Clear();
+            m_pDBFieldLB->Clear();
 
     }
 }
@@ -323,9 +343,9 @@ int SwEnvPage::DeactivatePage(SfxItemSet* _pSet)
 
 void SwEnvPage::FillItem(SwEnvItem& rItem)
 {
-    rItem.aAddrText = aAddrEdit  .GetText();
-    rItem.bSend     = aSenderBox .IsChecked();
-    rItem.aSendText = aSenderEdit.GetText();
+    rItem.aAddrText = m_pAddrEdit->GetText();
+    rItem.bSend     = m_pSenderBox->IsChecked();
+    rItem.aSendText = m_pSenderEdit->GetText();
 }
 
 sal_Bool SwEnvPage::FillItemSet(SfxItemSet& rSet)
@@ -338,10 +358,10 @@ sal_Bool SwEnvPage::FillItemSet(SfxItemSet& rSet)
 void SwEnvPage::Reset(const SfxItemSet& rSet)
 {
     SwEnvItem aItem = (const SwEnvItem&) rSet.Get(FN_ENVELOP);
-    aAddrEdit  .SetText(convertLineEnd(aItem.aAddrText, GetSystemLineEnd()));
-    aSenderEdit.SetText(convertLineEnd(aItem.aSendText, GetSystemLineEnd()));
-    aSenderBox .Check  (aItem.bSend);
-    aSenderBox.GetClickHdl().Call(&aSenderBox);
+    m_pAddrEdit->SetText(convertLineEnd(aItem.aAddrText, GetSystemLineEnd()));
+    m_pSenderEdit->SetText(convertLineEnd(aItem.aSendText, GetSystemLineEnd()));
+    m_pSenderBox->Check  (aItem.bSend);
+    m_pSenderBox->GetClickHdl().Call(m_pSenderBox);
 }
 
 

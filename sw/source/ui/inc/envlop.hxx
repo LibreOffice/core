@@ -47,11 +47,12 @@ class SwEnvPreview : public Window
 
 public:
 
-     SwEnvPreview(SfxTabPage* pParent, const ResId& rResID);
-    ~SwEnvPreview();
+    SwEnvPreview(SfxTabPage* pParent, const ResId& rResID);
+    SwEnvPreview(Window * pParent, WinBits nStyle);
 
 protected:
     virtual void DataChanged( const DataChangedEvent& rDCEvt );
+    virtual Size GetOptimalSize() const;
 };
 
 // class SwEnvDlg -----------------------------------------------------------
@@ -81,18 +82,14 @@ public:
 // class SwEnvPage ----------------------------------------------------------
 class SwEnvPage : public SfxTabPage
 {
-    FixedText     aAddrText;
-    MultiLineEdit aAddrEdit;
-    FixedText     aDatabaseFT;
-    ListBox       aDatabaseLB;
-    FixedText     aTableFT;
-    ListBox       aTableLB;
-    ImageButton   aInsertBT;
-    FixedText     aDBFieldFT;
-    ListBox       aDBFieldLB;
-    CheckBox      aSenderBox;
-    MultiLineEdit aSenderEdit;
-    SwEnvPreview  aPreview;
+    VclMultiLineEdit* m_pAddrEdit;
+    ListBox*      m_pDatabaseLB;
+    ListBox*      m_pTableLB;
+    ListBox*      m_pDBFieldLB;
+    PushButton*   m_pInsertBT;
+    CheckBox*     m_pSenderBox;
+    VclMultiLineEdit* m_pSenderEdit;
+    SwEnvPreview* m_pPreview;
 
     SwWrtShell*   pSh;
     String        sActDBName;
