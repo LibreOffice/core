@@ -37,6 +37,9 @@ namespace svgio
         void myAssert(const OUString& rMessage);
 #endif
 
+// recommended value for this devise dependend unit, see CSS2 section 4.3.2 Lenghts
+#define F_SVG_PIXEL_PER_INCH  90.0
+
         // common non-token strings
         struct commonStrings
         {
@@ -126,7 +129,12 @@ namespace svgio
 
             bool isPositive() const;
 
+            // Only usable in cases, when the unit is not Unit_percent, otherwise use method solve
+            double solveNonPercentage(const InfoProvider& rInfoProvider) const;
+
             double solve(const InfoProvider& rInfoProvider, NumberType aNumberType = length) const;
+
+
         };
 
         typedef ::std::vector< SvgNumber > SvgNumberVector;

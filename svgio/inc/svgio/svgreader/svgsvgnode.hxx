@@ -53,7 +53,15 @@ namespace svgio
             virtual void parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent);
             virtual void decomposeSvgNode(drawinglayer::primitive2d::Primitive2DSequence& rTarget, bool bReferenced) const;
 
-            /// InfoProvider support for % values
+            /// Seeks width and height of viewport, which is current before the new viewport is set.
+            // needed for percentage unit in x, y, width or height
+            virtual void seekReferenceWidth(double& fWidth, bool& bHasFound) const;
+            virtual void seekReferenceHeight(double& fHeight, bool& bHasFound) const;
+
+            /// InfoProvider support for % values in childs
+            // The returned 'CurrentViewPort' is the viewport as it is set by this svg element
+            // and as it is needed to resolve relative values in childs
+            // The method does not check for invalid width and height
             virtual const basegfx::B2DRange* getCurrentViewPort() const;
 
             /// viewBox content
