@@ -940,45 +940,45 @@ void XclExpFormulaCell::WriteContents( XclExpStream& rStrm )
             << XclTools::GetXclErrorCode( nScErrCode )
             << sal_uInt8( 0 ) << sal_uInt16( 0 )
             << sal_uInt16( 0xFFFF );
-
-        return;
     }
-
-    // result of the formula
-    switch( mrScFmlaCell.GetFormatType() )
+    else
     {
-        case NUMBERFORMAT_NUMBER:
+        // result of the formula
+        switch( mrScFmlaCell.GetFormatType() )
         {
-            // either value or error code
-            rStrm << mrScFmlaCell.GetValue();
-        }
-        break;
+            case NUMBERFORMAT_NUMBER:
+                {
+                    // either value or error code
+                    rStrm << mrScFmlaCell.GetValue();
+                }
+                break;
 
-        case NUMBERFORMAT_TEXT:
-        {
-            OUString aResult = mrScFmlaCell.GetString();
-            if( !aResult.isEmpty() || (rStrm.GetRoot().GetBiff() <= EXC_BIFF5) )
-            {
-                rStrm << EXC_FORMULA_RES_STRING;
-                mxStringRec.reset( new XclExpStringRec( rStrm.GetRoot(), aResult ) );
-            }
-            else
-                rStrm << EXC_FORMULA_RES_EMPTY;     // BIFF8 only
-            rStrm << sal_uInt8( 0 ) << sal_uInt32( 0 ) << sal_uInt16( 0xFFFF );
-        }
-        break;
+            case NUMBERFORMAT_TEXT:
+                {
+                    OUString aResult = mrScFmlaCell.GetString();
+                    if( !aResult.isEmpty() || (rStrm.GetRoot().GetBiff() <= EXC_BIFF5) )
+                    {
+                        rStrm << EXC_FORMULA_RES_STRING;
+                        mxStringRec.reset( new XclExpStringRec( rStrm.GetRoot(), aResult ) );
+                    }
+                    else
+                        rStrm << EXC_FORMULA_RES_EMPTY;     // BIFF8 only
+                    rStrm << sal_uInt8( 0 ) << sal_uInt32( 0 ) << sal_uInt16( 0xFFFF );
+                }
+                break;
 
-        case NUMBERFORMAT_LOGICAL:
-        {
-            sal_uInt8 nXclValue = (mrScFmlaCell.GetValue() == 0.0) ? 0 : 1;
-            rStrm << EXC_FORMULA_RES_BOOL << sal_uInt8( 0 )
-                  << nXclValue << sal_uInt8( 0 ) << sal_uInt16( 0 )
-                  << sal_uInt16( 0xFFFF );
-        }
-        break;
+            case NUMBERFORMAT_LOGICAL:
+                {
+                    sal_uInt8 nXclValue = (mrScFmlaCell.GetValue() == 0.0) ? 0 : 1;
+                    rStrm << EXC_FORMULA_RES_BOOL << sal_uInt8( 0 )
+                        << nXclValue << sal_uInt8( 0 ) << sal_uInt16( 0 )
+                        << sal_uInt16( 0xFFFF );
+                }
+                break;
 
-        default:
-            rStrm << mrScFmlaCell.GetValue();
+            default:
+                rStrm << mrScFmlaCell.GetValue();
+        }
     }
 
     // flags and formula token array
