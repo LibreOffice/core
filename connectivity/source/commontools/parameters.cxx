@@ -609,6 +609,7 @@ namespace dbtools
                     }
                     catch( const Exception& )
                     {
+                        DBG_UNHANDLED_EXCEPTION();
                         SAL_WARN( "connectivity.commontools", "ParameterManager::fillLinkedParameters: master-detail parameter number " <<
                                   sal_Int32( *aPosition + 1 ) << " could not be filled!" );
                     }
