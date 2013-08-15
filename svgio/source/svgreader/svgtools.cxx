@@ -194,7 +194,6 @@ namespace svgio
                     {
                         OSL_ENSURE(false, "Do not use with percentage! ");
                         return 0.0;
-                        break;
                     }
                 }
             }
@@ -213,7 +212,6 @@ namespace svgio
                     case Unit_px:
                     {
                         return mfNumber;
-                        break;
                     }
                     case Unit_pt:
                     case Unit_pc:
@@ -224,7 +222,6 @@ namespace svgio
                     case Unit_ex:
                     {
                         return solveNonPercentage( rInfoProvider);
-                        break;
                     }
                     case Unit_percent:
                     {
