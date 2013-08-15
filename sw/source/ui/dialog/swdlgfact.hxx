@@ -457,7 +457,7 @@ public:
     //add for DropDownFieldDialog
     virtual AbstractDropDownFieldDialog * CreateDropDownFieldDialog (Window *pParent, SwWrtShell &rSh,
         SwField* pField, sal_Bool bNextButton = sal_False);
-    virtual SfxAbstractTabDialog* CreateSwEnvDlg ( Window* pParent, const SfxItemSet& rSet, SwWrtShell* pWrtSh, Printer* pPrt, sal_Bool bInsert,int nResId ); //add for SwEnvDlg
+    virtual SfxAbstractTabDialog* CreateSwEnvDlg ( Window* pParent, const SfxItemSet& rSet, SwWrtShell* pWrtSh, Printer* pPrt, sal_Bool bInsert ); //add for SwEnvDlg
     virtual AbstractSwLabDlg* CreateSwLabDlg(Window* pParent, const SfxItemSet& rSet, //add for SwLabDlg
                                                      SwNewDBMgr* pNewDBMgr, bool bLabel);
 

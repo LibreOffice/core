@@ -63,13 +63,12 @@ friend class SwEnvFmtPage;
 friend class SwEnvPrtPage;
 friend class SwEnvPreview;
 
-    String          sInsert;
-    String          sChange;
     SwEnvItem       aEnvItem;
     SwWrtShell      *pSh;
     Printer         *pPrinter;
     SfxItemSet      *pAddresseeSet;
     SfxItemSet      *pSenderSet;
+    sal_uInt16      m_nEnvPrintId;
 
     virtual void    PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
     virtual short   Ok();

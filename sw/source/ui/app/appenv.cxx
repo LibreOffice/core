@@ -211,7 +211,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
         OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-        pDlg = pFact->CreateSwEnvDlg( pParent, aSet, pOldSh, pTempPrinter, !bEnvChange, DLG_ENV );
+        pDlg = pFact->CreateSwEnvDlg( pParent, aSet, pOldSh, pTempPrinter, !bEnvChange );
         OSL_ENSURE(pDlg, "Dialogdiet fail!");
         nMode = pDlg->Execute();
     }

@@ -26,13 +26,6 @@
 
 // Dialoge --------------------------------------------------------------------
 
-#define DLG_ENV    (RC_ENVELP_BEGIN    )
-#define DLG_LAB    (RC_ENVELP_BEGIN + 1)
-
-#define TP_ENV_ENV (RC_ENVELP_BEGIN + 2)
-#define TP_ENV_FMT (RC_ENVELP_BEGIN + 3)
-#define TP_ENV_PRT (RC_ENVELP_BEGIN + 4)
-
 #define DLG_MAILMERGE (RC_ENVELP_BEGIN + 8)
 
 #define DLG_SYNC_BTN  (RC_ENVELP_BEGIN + 9)

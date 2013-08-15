@@ -773,22 +773,10 @@ AbstractDropDownFieldDialog *  SwAbstractDialogFactory_Impl::CreateDropDownField
 
 SfxAbstractTabDialog* SwAbstractDialogFactory_Impl::CreateSwEnvDlg ( Window* pParent, const SfxItemSet& rSet,
                                                                  SwWrtShell* pWrtSh, Printer* pPrt,
-                                                                 sal_Bool bInsert,int nResId ) //add for SwEnvDlg
+                                                                 sal_Bool bInsert ) //add for SwEnvDlg
 {
-    SfxTabDialog* pDlg=NULL;
-    switch ( nResId )
-    {
-        case DLG_ENV :
-            pDlg = new SwEnvDlg( pParent, rSet, pWrtSh,pPrt, bInsert  );
-            break;
-
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractTabDialog_Impl( pDlg );
-    return 0;
+    SfxTabDialog* pDlg = new SwEnvDlg( pParent, rSet, pWrtSh,pPrt, bInsert  );
+    return new AbstractTabDialog_Impl( pDlg );
 }
 
 AbstractSwLabDlg* SwAbstractDialogFactory_Impl::CreateSwLabDlg(Window* pParent, const SfxItemSet& rSet, //add for SwLabDlg

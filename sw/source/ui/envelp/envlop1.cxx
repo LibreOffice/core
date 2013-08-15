@@ -34,7 +34,6 @@
 #include "poolfmt.hxx"
 #include "view.hxx"
 
-#include "envlop.hrc"
 #include <comphelper/processfactory.hxx>
 
 #include <unomid.h>
@@ -142,31 +141,24 @@ void SwEnvPreview::Paint(const Rectangle &)
 }
 
 SwEnvDlg::SwEnvDlg(Window* pParent, const SfxItemSet& rSet,
-                    SwWrtShell* pWrtSh, Printer* pPrt, sal_Bool bInsert) :
-
-    SfxTabDialog(pParent, SW_RES(DLG_ENV), &rSet, sal_False, &aEmptyStr),
-    sInsert(SW_RES(ST_INSERT)),
-    sChange(SW_RES(ST_CHANGE)),
-    aEnvItem((const SwEnvItem&) rSet.Get(FN_ENVELOP)),
-    pSh(pWrtSh),
-    pPrinter(pPrt),
-    pAddresseeSet(0),
-    pSenderSet(0)
+                    SwWrtShell* pWrtSh, Printer* pPrt, sal_Bool bInsert)
+    : SfxTabDialog(pParent, "EnvDialog",
+        "modules/swriter/ui/envdialog.ui", &rSet)
+    , aEnvItem((const SwEnvItem&) rSet.Get(FN_ENVELOP))
+    , pSh(pWrtSh)
+    , pPrinter(pPrt)
+    , pAddresseeSet(0)
+    , pSenderSet(0)
+    , m_nEnvPrintId(0)
 {
-    FreeResource();
-
-    GetOKButton().SetText(String(SW_RES(STR_BTN_NEWDOC)));
-    GetOKButton().SetHelpId(HID_ENVELOP_PRINT);
-    GetOKButton().SetHelpText(aEmptyStr);   // in order for generated help text to get used
-    if (GetUserButton())
+    if (!bInsert)
     {
-        GetUserButton()->SetText(bInsert ? sInsert : sChange);
-        GetUserButton()->SetHelpId(HID_ENVELOP_INSERT);
+        GetUserButton()->SetText(get<PushButton>("modify")->GetText());
     }
 
-    AddTabPage(TP_ENV_ENV, SwEnvPage   ::Create, 0);
-    AddTabPage(TP_ENV_FMT, SwEnvFmtPage::Create, 0);
-    AddTabPage(TP_ENV_PRT, SwEnvPrtPage::Create, 0);
+    AddTabPage("envelope", SwEnvPage   ::Create, 0);
+    AddTabPage("format", SwEnvFmtPage::Create, 0);
+    m_nEnvPrintId = AddTabPage("printer", SwEnvPrtPage::Create, 0);
 }
 
 SwEnvDlg::~SwEnvDlg()
@@ -177,7 +169,7 @@ SwEnvDlg::~SwEnvDlg()
 
 void SwEnvDlg::PageCreated(sal_uInt16 nId, SfxTabPage &rPage)
 {
-    if (nId == TP_ENV_PRT)
+    if (nId == m_nEnvPrintId)
     {
         ((SwEnvPrtPage*)&rPage)->SetPrt(pPrinter);
     }

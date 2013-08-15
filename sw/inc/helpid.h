@@ -313,9 +313,7 @@
 #define HID_FORMAT_PAGE                                         "SW_HID_FORMAT_PAGE"
 #define HID_CONFIG_MENU                                         "SW_HID_CONFIG_MENU"
 #define HID_NAVIGATION_PI                                       "SW_HID_NAVIGATION_PI"
-#define HID_ENVELOP_PRINT                                       "SW_HID_ENVELOP_PRINT"
 #define HID_NAVIGATION_IMGBTN                                   "SW_HID_NAVIGATION_IMGBTN"
-#define HID_ENVELOP_INSERT                                      "SW_HID_ENVELOP_INSERT"
 
 #define HID_TEXT_TOOLBOX                                        "SW_HID_TEXT_TOOLBOX"
 #define HID_TABLE_TOOLBOX                                       "SW_HID_TABLE_TOOLBOX"
