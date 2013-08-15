@@ -57,6 +57,8 @@ struct DAVProperties
                                     OUString & rFullName );
 
     static bool isUCBDeadProperty( const NeonPropName & rName );
+    static bool isUCBSpecialProperty( const OUString & rFullName,
+                                      OUString & rParsedName );
 };
 
 } // namespace webdav_ucp

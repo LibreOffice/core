@@ -55,6 +55,7 @@ namespace com { namespace sun { namespace star { namespace sdbc {
 namespace com { namespace sun { namespace star { namespace ucb {
     struct OpenCommandArgument3;
     struct PostCommandArgument2;
+    struct PropertyCommandArgument;
     struct TransferInfo;
 } } } }
 
@@ -203,6 +204,21 @@ private:
     bool supportsExclusiveWriteLock(
         const com::sun::star::uno::Reference<
             com::sun::star::ucb::XCommandEnvironment >& Environment );
+
+    void addProperty( const com::sun::star::ucb::PropertyCommandArgument &aCmdArg,
+                      const com::sun::star::uno::Reference<
+                      com::sun::star::ucb::XCommandEnvironment >& Environment )
+    throw( com::sun::star::beans::PropertyExistException,
+           com::sun::star::beans::IllegalTypeException,
+           com::sun::star::lang::IllegalArgumentException,
+           com::sun::star::uno::RuntimeException );
+
+    void removeProperty( const OUString& Name,
+                         const com::sun::star::uno::Reference<
+                         com::sun::star::ucb::XCommandEnvironment >& Environment )
+    throw( com::sun::star::beans::UnknownPropertyException,
+           com::sun::star::beans::NotRemoveableException,
+           com::sun::star::uno::RuntimeException );
 
 public:
     Content( const ::com::sun::star::uno::Reference<

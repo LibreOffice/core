@@ -172,4 +172,36 @@ bool DAVProperties::isUCBDeadProperty( const NeonPropName & rName )
                == 0 ) );
 }
 
+bool DAVProperties::isUCBSpecialProperty(
+    const OUString& rFullName, OUString& rParsedName)
+{
+    if ( !rFullName.startsWith( "<prop:" ) || !rFullName.endsWith( "\">" ) )
+        return false;
+
+    sal_Int32 nStart = strlen( "<prop:" );
+    sal_Int32 nEnd = rFullName.indexOf( sal_Unicode( ' ' ), nStart );
+    if ( nEnd <= nStart ) // incl. -1 for "not found"
+        return false;
+
+    OUString sPropName = rFullName.copy( nStart, nEnd - nStart );
+
+    // TODO skip whitespaces?
+    if ( !rFullName.match( "xmlns:prop=\"", ++nEnd ) )
+        return false;
+
+    nStart = nEnd + strlen( "xmlns:prop=\"" );
+    nEnd = rFullName.indexOf( sal_Unicode( '"' ), nStart );
+    if ( nEnd != rFullName.getLength() - sal_Int32( strlen( "\">" ) )
+         || nEnd == nStart )
+    {
+        return false;
+    }
+
+    rParsedName = rFullName.copy( nStart, nEnd - nStart );
+    if ( !rParsedName.endsWith( "/" ) )
+        rParsedName += "/";
+
+    return rParsedName.getLength();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

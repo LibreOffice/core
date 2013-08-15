@@ -487,7 +487,7 @@ published service Content
                            <type scope="com::sun::star::lang">IllegalArgumentException</type>
                            if the Name of the property is empty.</p>
                         <blockquote>
-                            Note: This command replaces the deprecated interface method
+                            Note: This command is new since Apache OpenOffice 4.0, LibreOffice 4.2 and replaces the deprecated interface method
                             <member scope="com::sun::star::beans">XPropertyContainer::addProperty</member>.
                         </blockquote>
                     </td>
@@ -502,7 +502,7 @@ published service Content
                         <type scope="com::sun::star::beans">NotRemoveableException</type>
                         if the property is not removable.</p>
                         <blockquote>
-                            Note: This command replaces the deprecated interface method
+                            Note: This command is new since Apache OpenOffice 4.0, LibreOffice 4.2 and replaces the deprecated interface method
                             <member scope="com::sun::star::beans">XPropertyContainer::removeProperty</member>.
                         </blockquote>
                     </td>
