@@ -1120,7 +1120,6 @@ void SwTxtFrm::PrepareVisualMove( xub_StrLen& nPos, sal_uInt8& nCrsrLevel,
     // Bidi functions from icu 2.0
     //
     const sal_Unicode* pLineString = GetTxtNode()->GetTxt().getStr();
-    pLine += nStt;
 
     UErrorCode nError = U_ZERO_ERROR;
     UBiDi* pBidi = ubidi_openSized( nLen, 0, &nError );
