@@ -70,7 +70,6 @@ $(eval $(call gb_Library_add_exception_objects,svl,\
     svl/source/items/ctypeitm \
     svl/source/items/custritm \
     svl/source/items/dateitem \
-    svl/source/items/eitem \
     svl/source/items/flagitem \
     svl/source/items/globalnameitem \
     svl/source/items/grabbagitem \

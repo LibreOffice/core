@@ -119,37 +119,43 @@ void SfxEnumItemInterface::SetBoolValue(sal_Bool)
 {}
 
 //
-//  class CntEnumItem
+//  class SfxEnumItem
 //
 
-DBG_NAME(CntEnumItem)
+DBG_NAME(SfxEnumItem)
 
-CntEnumItem::CntEnumItem(sal_uInt16 which, SvStream & rStream):
-    SfxEnumItemInterface(which)
+SfxEnumItem::SfxEnumItem(sal_uInt16 const nWhich, SvStream & rStream)
+    : SfxEnumItemInterface(nWhich)
 {
     m_nValue = 0;
     rStream >> m_nValue;
 }
 
-TYPEINIT1(CntEnumItem, SfxEnumItemInterface)
+TYPEINIT1(SfxEnumItem, SfxEnumItemInterface)
 
 // virtual
-SvStream & CntEnumItem::Store(SvStream & rStream, sal_uInt16) const
+SvStream & SfxEnumItem::Store(SvStream & rStream, sal_uInt16) const
 {
     rStream << m_nValue;
     return rStream;
 }
 
 // virtual
-sal_uInt16 CntEnumItem::GetEnumValue() const
+sal_uInt16 SfxEnumItem::GetEnumValue() const
 {
     return GetValue();
 }
 
 // virtual
-void CntEnumItem::SetEnumValue(sal_uInt16 nTheValue)
+void SfxEnumItem::SetEnumValue(sal_uInt16 const nTheValue)
 {
     SetValue(nTheValue);
+}
+
+void SfxEnumItem::SetValue(sal_uInt16 const nTheValue)
+{
+    DBG_ASSERT(GetRefCount() == 0, "SfxEnumItem::SetValue(): Pooled item");
+    m_nValue = nTheValue;
 }
 
 //

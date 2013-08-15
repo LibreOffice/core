@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVTOOLS_CENUMITM_HXX
-#define _SVTOOLS_CENUMITM_HXX
+#ifndef SVTOOLS_CENUMITM_HXX
+#define SVTOOLS_CENUMITM_HXX
 
 #include "svl/svldllapi.h"
 #include <tools/debug.hxx>
@@ -81,42 +81,6 @@ public:
     virtual void SetBoolValue(sal_Bool bValue);
 };
 
-//============================================================================
-DBG_NAMEEX(CntEnumItem)
-
-class SVL_DLLPUBLIC CntEnumItem: public SfxEnumItemInterface
-{
-    sal_uInt16 m_nValue;
-
-protected:
-    explicit CntEnumItem(sal_uInt16 which = 0, sal_uInt16 nTheValue = 0):
-        SfxEnumItemInterface(which), m_nValue(nTheValue) {}
-
-    CntEnumItem(sal_uInt16 which, SvStream & rStream);
-
-    CntEnumItem(const CntEnumItem & rItem):
-        SfxEnumItemInterface(rItem), m_nValue(rItem.m_nValue) {}
-
-public:
-    TYPEINFO();
-
-    virtual SvStream & Store(SvStream & rStream, sal_uInt16) const;
-
-    virtual sal_uInt16 GetEnumValue() const;
-
-    virtual void SetEnumValue(sal_uInt16 nTheValue);
-
-    sal_uInt16 GetValue() const { return m_nValue; }
-
-    inline void SetValue(sal_uInt16 nTheValue);
-};
-
-inline void CntEnumItem::SetValue(sal_uInt16 nTheValue)
-{
-    DBG_ASSERT(GetRefCount() == 0, "CntEnumItem::SetValue(): Pooled item");
-    m_nValue = nTheValue;
-}
-
-#endif // _SVTOOLS_CENUMITM_HXX
+#endif // SVTOOLS_CENUMITM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

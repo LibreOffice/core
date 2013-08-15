@@ -24,17 +24,38 @@
 #include <svl/cenumitm.hxx>
 
 //============================================================================
-class SVL_DLLPUBLIC SfxEnumItem: public CntEnumItem
-{
-protected:
-    explicit SfxEnumItem(sal_uInt16 which = 0, sal_uInt16 nValue = 0):
-        CntEnumItem(which, nValue) {}
 
-    SfxEnumItem(sal_uInt16 which, SvStream & rStream):
-        CntEnumItem(which, rStream) {}
+class SVL_DLLPUBLIC SfxEnumItem
+    : public SfxEnumItemInterface
+{
+    sal_uInt16 m_nValue;
+
+protected:
+    explicit SfxEnumItem(sal_uInt16 const nWhich =0, sal_uInt16 const nValue =0)
+        : SfxEnumItemInterface(nWhich)
+        , m_nValue(nValue)
+    { }
+
+    SfxEnumItem(const SfxEnumItem & rItem)
+        : SfxEnumItemInterface(rItem)
+        , m_nValue(rItem.m_nValue)
+    { }
+
+    SfxEnumItem(sal_uInt16 const nWhich, SvStream & rStream);
 
 public:
     TYPEINFO();
+
+    sal_uInt16 GetValue() const { return m_nValue; }
+
+    void SetValue(sal_uInt16 nTheValue);
+
+    // SfxPoolItem
+    virtual SvStream & Store(SvStream & rStream, sal_uInt16) const SAL_OVERRIDE;
+
+    virtual sal_uInt16 GetEnumValue() const SAL_OVERRIDE;
+
+    virtual void SetEnumValue(sal_uInt16 nTheValue) SAL_OVERRIDE;
 
 };
 
