@@ -808,25 +808,22 @@ void EditorWindow::HandleCodeCompletition()
 
 void EditorWindow::SetupAndShowCodeCompleteWnd( const std::vector< OUString >& aEntryVect, TextSelection aSel )
 {
-    // calculate position
-    Rectangle aRect = ( (TextEngine*) GetEditEngine() )->PaMtoEditCursor( aSel.GetEnd() , false );
-    long nViewYOffset = pEditView->GetStartDocPos().Y();
-    Point aPoint = aRect.BottomRight();
-    aPoint.Y() = (aPoint.Y() - nViewYOffset) + 2;
-    aSel.GetStart().GetIndex() += 1;
-    aSel.GetEnd().GetIndex() += 1;
+    // clear the listbox
     pCodeCompleteWnd->ClearListBox();
-    pCodeCompleteWnd->SetTextSelection(aSel);
-    //fill the listbox
+    // fill the listbox
     for(unsigned int l = 0; l < aEntryVect.size(); ++l)
     {
         pCodeCompleteWnd->InsertEntry( aEntryVect[l] );
     }
-    //show it
-    pCodeCompleteWnd->SetPosPixel( aPoint );
+    // show it
     pCodeCompleteWnd->Show();
-    pCodeCompleteWnd->ResizeListBox();
+    pCodeCompleteWnd->ResizeListBox( aSel );
     pCodeCompleteWnd->SelectFirstEntry();
+    // correct text selection, and set it
+    aSel.GetStart().GetIndex() += 1;
+    aSel.GetEnd().GetIndex() += 1;
+    pCodeCompleteWnd->SetTextSelection( aSel );
+    //give the focus to the EditView
     pEditView->GetWindow()->GrabFocus();
 }
 
@@ -2770,26 +2767,30 @@ const TextSelection& CodeCompleteWindow::GetTextSelection() const
     return aTextSelection;
 }
 
-void CodeCompleteWindow::ResizeListBox()
+void CodeCompleteWindow::ResizeListBox( const TextSelection& aSel )
 {
-    if( pListBox->GetEntryCount() > 0 )
+    if( pListBox->GetEntryCount() >= 1 )
     {// if there is at least one element inside
-        OUString aLongestEntry = pListBox->GetEntry( 0 );//grab the longest one: max search
-        if( pListBox->GetEntryCount() > 0 )
+        // calculate basic position: under the current line
+        Rectangle aRect = ( (TextEngine*) pParent->GetEditEngine() )->PaMtoEditCursor( aSel.GetEnd() , false );
+        long nViewYOffset = pParent->GetEditView()->GetStartDocPos().Y();
+        Point aPos = aRect.BottomRight();// this variable will be used later (if needed)
+        aPos.Y() = (aPos.Y() - nViewYOffset) + 2;
+
+        OUString aLongestEntry = pListBox->GetEntry( 0 );// grab the longest one: max search
+        for( sal_uInt16 i=1; i< pListBox->GetEntryCount(); ++i )
         {
-            for( sal_uInt16 i=1; i< pListBox->GetEntryCount(); ++i )
-            {
-                if( ((OUString) pListBox->GetEntry( i )).getLength() > aLongestEntry.getLength() )
-                    aLongestEntry = pListBox->GetEntry( i );
-            }
+            if( ((OUString) pListBox->GetEntry( i )).getLength() > aLongestEntry.getLength() )
+                aLongestEntry = pListBox->GetEntry( i );
         }
-        sal_uInt16 nColumns = aLongestEntry.getLength();
-        sal_uInt16 nLines = std::min( (sal_uInt16) 6, pListBox->GetEntryCount() );
-        const Font& aFont = pListBox->GetUnzoomedControlPointFont();
+        // get column/line count
+        const sal_uInt16& nColumns = aLongestEntry.getLength();
+        const sal_uInt16& nLines = std::min( (sal_uInt16) 6, pListBox->GetEntryCount() );
+        const Font& aFont = pListBox->GetFont();// listbox's font: height is needed
 
         Rectangle aVisArea( pParent->GetEditView()->GetStartDocPos(), pParent->GetOutputSizePixel() );
-        Size aSize = pListBox->GetOptimalSize();//this sets the correct width
-        aSize.setHeight( pListBox->CalcSize( nColumns, nLines ).getHeight() );
+        Size aSize = pListBox->GetOptimalSize();// this sets the correct width
+        aSize.setHeight( pListBox->CalcSize( nColumns, nLines ).getHeight() );// correct height
 
         Point aBottomPoint = aVisArea.BottomRight();
         Point aTopPoint = aVisArea.TopRight();
@@ -2797,23 +2798,22 @@ void CodeCompleteWindow::ResizeListBox()
 
         if( (nYDiff + aFont.GetSize().getHeight()) < aSize.Height() )
         {//bottom part is clipped, fix the visibility by placing it over the line (not under)
-            Point aPos = GetPosPixel();
-            Font aParFont = pParent->GetEditEngine()->GetFont();
+            const Font& aParFont = pParent->GetEditEngine()->GetFont();//parent's font (in the IDE): needed for height
             aPos.Y() = aPos.Y() - (aSize.getHeight() + aParFont.GetSize().getHeight()+5);
-            SetPosPixel(aPos);
         }
 
         long nXDiff = std::abs(aTopPoint.X() - GetPosPixel().X());
         if( nXDiff < aSize.Width() )
         {//clipped at the right side, move it a bit left
-            Point aPos = GetPosPixel();
             aPos.X() = aPos.X() - aSize.Width() + nXDiff;
-            SetPosPixel(aPos);
         }
+
         pListBox->SetSizePixel( aSize );
         aSize.setWidth( aSize.getWidth() + 1 );
         aSize.setHeight( aSize.getHeight() + 1 );
+        // set the size and the position of the window
         SetSizePixel( aSize );
+        SetPosPixel( aPos );
     }
 }
 
