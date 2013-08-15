@@ -30,6 +30,8 @@ TablePositionHandler::TablePositionHandler() :
     m_aXSpec( ),
     m_nY( 0 ),
     m_nX( 0 ),
+    m_nTopFromText(0),
+    m_nBottomFromText(0),
     m_nLeftBorderDistance(DEF_BORDER_DIST),
     m_nRightBorderDistance(DEF_BORDER_DIST)
 {
@@ -61,6 +63,12 @@ void TablePositionHandler::lcl_attribute(Id rName, Value& rVal)
         break;
         case NS_ooxml::LN_CT_TblPPr_tblpX:
             m_nX = rVal.getInt();
+        break;
+        case NS_ooxml::LN_CT_TblPPr_topFromText:
+            m_nTopFromText = rVal.getInt();
+        break;
+        case NS_ooxml::LN_CT_TblPPr_bottomFromText:
+            m_nBottomFromText = rVal.getInt();
         break;
         default:
 #ifdef DEBUG_DOMAINMAPPER
@@ -95,9 +103,9 @@ uno::Sequence<beans::PropertyValue> TablePositionHandler::getTablePosition() con
     pFrameProperties[5].Name = "RightMargin";
     pFrameProperties[5].Value <<= sal_Int32(0);
     pFrameProperties[6].Name = "TopMargin";
-    pFrameProperties[6].Value <<= sal_Int32(0);
+    pFrameProperties[6].Value <<= ConversionHelper::convertTwipToMM100(m_nTopFromText);
     pFrameProperties[7].Name = "BottomMargin";
-    pFrameProperties[7].Value <<= sal_Int32(0);
+    pFrameProperties[7].Value <<= ConversionHelper::convertTwipToMM100(m_nBottomFromText);
 
     table::BorderLine2 aEmptyBorder;
     pFrameProperties[8].Name = "TopBorder";
