@@ -20,6 +20,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <tools/stream.hxx>
 #include <svl/cenumitm.hxx>
+#include <svl/eitem.hxx>
 #include <whassert.hxx>
 
 #include <comphelper/extract.hxx>
@@ -152,38 +153,39 @@ void CntEnumItem::SetEnumValue(sal_uInt16 nTheValue)
 }
 
 //
-//  class CntBoolItem
+//  class SfxBoolItem
 //
 
-DBG_NAME(CntBoolItem)
+DBG_NAME(SfxBoolItem)
 
-TYPEINIT1_AUTOFACTORY(CntBoolItem, SfxPoolItem)
+TYPEINIT1_AUTOFACTORY(SfxBoolItem, SfxPoolItem);
 
-CntBoolItem::CntBoolItem(sal_uInt16 which, SvStream & rStream):
-    SfxPoolItem(which)
+SfxBoolItem::SfxBoolItem(sal_uInt16 const nWhich, SvStream & rStream)
+    : SfxPoolItem(nWhich)
 {
-    m_bValue = false;
-    rStream >> m_bValue;
+    sal_Bool tmp = false;
+    rStream >> tmp;
+    m_bValue = tmp;
 }
 
 // virtual
-int CntBoolItem::operator ==(const SfxPoolItem & rItem) const
+int SfxBoolItem::operator ==(const SfxPoolItem & rItem) const
 {
-    DBG_ASSERT(rItem.ISA(CntBoolItem),
-               "CntBoolItem::operator ==(): Bad type");
-    return m_bValue == static_cast< CntBoolItem const * >(&rItem)->m_bValue;
+    DBG_ASSERT(rItem.ISA(SfxBoolItem),
+               "SfxBoolItem::operator ==(): Bad type");
+    return m_bValue == static_cast< SfxBoolItem const * >(&rItem)->m_bValue;
 }
 
 // virtual
-int CntBoolItem::Compare(const SfxPoolItem & rWith) const
+int SfxBoolItem::Compare(const SfxPoolItem & rWith) const
 {
-    DBG_ASSERT(rWith.ISA(CntBoolItem), "CntBoolItem::Compare(): Bad type");
-    return m_bValue == static_cast< CntBoolItem const * >(&rWith)->m_bValue ?
+    DBG_ASSERT(rWith.ISA(SfxBoolItem), "SfxBoolItem::Compare(): Bad type");
+    return (m_bValue == static_cast<SfxBoolItem const*>(&rWith)->m_bValue) ?
                0 : m_bValue ? -1 : 1;
 }
 
 // virtual
-SfxItemPresentation CntBoolItem::GetPresentation(SfxItemPresentation,
+SfxItemPresentation SfxBoolItem::GetPresentation(SfxItemPresentation,
                                                  SfxMapUnit, SfxMapUnit,
                                                  OUString & rText,
                                                  const IntlWrapper *) const
@@ -193,14 +195,14 @@ SfxItemPresentation CntBoolItem::GetPresentation(SfxItemPresentation,
 }
 
 // virtual
-bool CntBoolItem::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8) const
+bool SfxBoolItem::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8) const
 {
-    rVal <<= sal_Bool(m_bValue);
+    rVal <<= m_bValue;
     return true;
 }
 
 // virtual
-bool CntBoolItem::PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8)
+bool SfxBoolItem::PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8)
 {
     sal_Bool bTheValue = sal_Bool();
     if (rVal >>= bTheValue)
@@ -208,37 +210,37 @@ bool CntBoolItem::PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8)
         m_bValue = bTheValue;
         return true;
     }
-    OSL_FAIL("CntBoolItem::PutValue(): Wrong type");
+    OSL_FAIL("SfxBoolItem::PutValue(): Wrong type");
     return false;
 }
 
 // virtual
-SfxPoolItem * CntBoolItem::Create(SvStream & rStream, sal_uInt16) const
+SfxPoolItem * SfxBoolItem::Create(SvStream & rStream, sal_uInt16) const
 {
-    return new CntBoolItem(Which(), rStream);
+    return new SfxBoolItem(Which(), rStream);
 }
 
 // virtual
-SvStream & CntBoolItem::Store(SvStream & rStream, sal_uInt16) const
+SvStream & SfxBoolItem::Store(SvStream & rStream, sal_uInt16) const
 {
-    rStream << m_bValue;
+    rStream << static_cast<sal_Bool>(m_bValue); // not bool for serialization!
     return rStream;
 }
 
 // virtual
-SfxPoolItem * CntBoolItem::Clone(SfxItemPool *) const
+SfxPoolItem * SfxBoolItem::Clone(SfxItemPool *) const
 {
-    return new CntBoolItem(*this);
+    return new SfxBoolItem(*this);
 }
 
 // virtual
-sal_uInt16 CntBoolItem::GetValueCount() const
+sal_uInt16 SfxBoolItem::GetValueCount() const
 {
     return 2;
 }
 
 // virtual
-OUString CntBoolItem::GetValueTextByVal(sal_Bool bTheValue) const
+OUString SfxBoolItem::GetValueTextByVal(sal_Bool bTheValue) const
 {
     return bTheValue ?  OUString("TRUE") : OUString("FALSE");
 }

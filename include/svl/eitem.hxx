@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SFXENUMITEM_HXX
-#define _SFXENUMITEM_HXX
+#ifndef SFXENUMITEM_HXX
+#define SFXENUMITEM_HXX
 
 #include "svl/svldllapi.h"
 #include <svl/cenumitm.hxx>
@@ -39,24 +39,63 @@ public:
 };
 
 //============================================================================
-class SVL_DLLPUBLIC SfxBoolItem: public CntBoolItem
+
+class SVL_DLLPUBLIC SfxBoolItem
+    : public SfxPoolItem
 {
+    bool m_bValue;
+
 public:
     TYPEINFO();
 
-    explicit SfxBoolItem(sal_uInt16 which = 0, sal_Bool bValue = sal_False):
-        CntBoolItem(which, bValue) {}
+    explicit SfxBoolItem(sal_uInt16 const nWhich = 0, bool const bValue = false)
+        : SfxPoolItem(nWhich)
+        , m_bValue(bValue)
+    { }
 
-    SfxBoolItem(sal_uInt16 which, SvStream & rStream):
-        CntBoolItem(which, rStream) {}
+    SfxBoolItem(SfxBoolItem const& rItem)
+        : SfxPoolItem(rItem)
+        , m_bValue(rItem.m_bValue)
+    { }
+
+    SfxBoolItem(sal_uInt16 nWhich, SvStream & rStream);
+
+    bool GetValue() const { return m_bValue; }
+
+    void SetValue(bool const bTheValue) { m_bValue = bTheValue; }
+
+    // SfxPoolItem
+    virtual int operator ==(const SfxPoolItem & rItem) const SAL_OVERRIDE;
+
+    using SfxPoolItem::Compare;
+    virtual int Compare(const SfxPoolItem & rWith) const SAL_OVERRIDE;
+
+    virtual SfxItemPresentation GetPresentation(SfxItemPresentation,
+                                                SfxMapUnit, SfxMapUnit,
+                                                OUString & rText,
+                                                const IntlWrapper * = 0)
+        const SAL_OVERRIDE;
+
+    virtual bool QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8 = 0)
+        const SAL_OVERRIDE;
+
+    virtual bool PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8 = 0)
+        SAL_OVERRIDE;
+
 
     virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const
-    { return new SfxBoolItem(Which(), rStream); }
+        SAL_OVERRIDE;
 
-    virtual SfxPoolItem * Clone(SfxItemPool * = 0) const
-    { return new SfxBoolItem(*this); }
+    virtual SvStream & Store(SvStream & rStream, sal_uInt16) const SAL_OVERRIDE;
+
+    virtual SfxPoolItem * Clone(SfxItemPool * = 0) const SAL_OVERRIDE;
+
+    virtual sal_uInt16 GetValueCount() const;
+
+    virtual OUString GetValueTextByVal(sal_Bool bTheValue) const;
+
 };
 
-#endif //  _SFXENUMITEM_HXX
+#endif // SFXENUMITEM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

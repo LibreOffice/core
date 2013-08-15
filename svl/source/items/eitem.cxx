@@ -24,11 +24,4 @@
 
 TYPEINIT1(SfxEnumItem, CntEnumItem);
 
-//
-//  class SfxBoolItem
-//
-
-TYPEINIT1_AUTOFACTORY(SfxBoolItem, CntBoolItem);
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -117,54 +117,6 @@ inline void CntEnumItem::SetValue(sal_uInt16 nTheValue)
     m_nValue = nTheValue;
 }
 
-//============================================================================
-DBG_NAMEEX(CntBoolItem)
-
-class SVL_DLLPUBLIC CntBoolItem: public SfxPoolItem
-{
-    sal_Bool m_bValue;
-
-public:
-    TYPEINFO();
-
-    explicit CntBoolItem(sal_uInt16 which = 0, sal_Bool bTheValue = sal_False):
-        SfxPoolItem(which), m_bValue(bTheValue) {}
-
-    CntBoolItem(sal_uInt16 nWhich, SvStream & rStream);
-
-    CntBoolItem(const CntBoolItem & rItem):
-        SfxPoolItem(rItem), m_bValue(rItem.m_bValue) {}
-
-    virtual int operator ==(const SfxPoolItem & rItem) const;
-
-    using SfxPoolItem::Compare;
-    virtual int Compare(const SfxPoolItem & rWith) const;
-
-    virtual SfxItemPresentation GetPresentation(SfxItemPresentation,
-                                                SfxMapUnit, SfxMapUnit,
-                                                OUString & rText,
-                                                const IntlWrapper * = 0)
-        const;
-
-    virtual bool QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8 = 0) const;
-
-    virtual bool PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8 = 0);
-
-    virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const;
-
-    virtual SvStream & Store(SvStream & rStream, sal_uInt16) const;
-
-    virtual SfxPoolItem * Clone(SfxItemPool * = 0) const;
-
-    virtual sal_uInt16 GetValueCount() const;
-
-    virtual OUString GetValueTextByVal(sal_Bool bTheValue) const;
-
-    sal_Bool GetValue() const { return m_bValue; }
-
-    void SetValue(sal_Bool bTheValue) { m_bValue = bTheValue; }
-};
-
 #endif // _SVTOOLS_CENUMITM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
