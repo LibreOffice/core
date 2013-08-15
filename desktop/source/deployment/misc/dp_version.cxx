@@ -43,8 +43,8 @@ namespace dp_misc {
     OUString const & version1, OUString const & version2)
 {
     for (::sal_Int32 i1 = 0, i2 = 0; i1 >= 0 || i2 >= 0;) {
-        OUString e1(getElement(version1, &i1));
-        OUString e2(getElement(version2, &i2));
+        OUString e1(i1 >= 0 ? getElement(version1, &i1) : OUString());
+        OUString e2(i2 >= 0 ? getElement(version2, &i2) : OUString());
         if (e1.getLength() < e2.getLength()) {
             return ::dp_misc::LESS;
         } else if (e1.getLength() > e2.getLength()) {
