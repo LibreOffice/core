@@ -1494,4 +1494,102 @@ SfxInPlaceClient* SwDocShell::GetIPClient( const ::svt::EmbeddedObjectRef& xObjR
     return pResult;
 }
 
+
+int SwFindDocShell( SfxObjectShellRef& xDocSh,
+                    SfxObjectShellLock& xLockRef,
+                    const OUString& rFileName,
+                    const OUString& rPasswd,
+                    const OUString& rFilter,
+                    sal_Int16 nVersion,
+                    SwDocShell* pDestSh )
+{
+    if ( rFileName.isEmpty() )
+        return 0;
+
+    // 1. Does the file already exist in the list of all Documents?
+    INetURLObject aTmpObj( rFileName );
+    aTmpObj.SetMark( OUString() );
+
+    // Iterate over the DocShell and get the ones with the name
+    TypeId aType( TYPE(SwDocShell) );
+
+    SfxObjectShell* pShell = pDestSh;
+    bool bFirst = 0 != pShell;
+
+    if( !bFirst )
+        // No DocShell passed, starting with the first from the DocShell list
+        pShell = SfxObjectShell::GetFirst( &aType );
+
+    while( pShell )
+    {
+        // We want this one
+        SfxMedium* pMed = pShell->GetMedium();
+        if( pMed && pMed->GetURLObject() == aTmpObj )
+        {
+            const SfxPoolItem* pItem;
+            if( ( SFX_ITEM_SET == pMed->GetItemSet()->GetItemState(
+                                            SID_VERSION, sal_False, &pItem ) )
+                    ? (nVersion == ((SfxInt16Item*)pItem)->GetValue())
+                    : !nVersion )
+            {
+                // Found, thus return
+                xDocSh = pShell;
+                return 1;
+            }
+        }
+
+        if( bFirst )
+        {
+            bFirst = false;
+            pShell = SfxObjectShell::GetFirst( &aType );
+        }
+        else
+            pShell = SfxObjectShell::GetNext( *pShell, &aType );
+    }
+
+    // 2. Open the file ourselves
+    SfxMedium* pMed = new SfxMedium( aTmpObj.GetMainURL(
+                             INetURLObject::NO_DECODE ), STREAM_READ );
+    if( INET_PROT_FILE == aTmpObj.GetProtocol() )
+        pMed->DownLoad(); // Touch the medium (download it)
+
+    const SfxFilter* pSfxFlt = 0;
+    if( !pMed->GetError() )
+    {
+        SfxFilterMatcher aMatcher( OUString::createFromAscii(SwDocShell::Factory().GetShortName()) );
+
+        // No Filter, so search for it. Else test if the one passed is a valid one
+        if( !rFilter.isEmpty() )
+        {
+            pSfxFlt = aMatcher.GetFilter4FilterName( rFilter );
+        }
+
+        if( nVersion )
+            pMed->GetItemSet()->Put( SfxInt16Item( SID_VERSION, nVersion ));
+
+        if( !rPasswd.isEmpty() )
+            pMed->GetItemSet()->Put( SfxStringItem( SID_PASSWORD, rPasswd ));
+
+        if( !pSfxFlt )
+            aMatcher.DetectFilter( *pMed, &pSfxFlt, sal_False, sal_False );
+
+        if( pSfxFlt )
+        {
+            // We cannot do anything without a Filter
+            pMed->SetFilter( pSfxFlt );
+
+            // If the new shell is created, SfxObjectShellLock should be used to let it be closed later for sure
+            xLockRef = new SwDocShell( SFX_CREATE_MODE_INTERNAL );
+            xDocSh = (SfxObjectShell*)xLockRef;
+            if( xDocSh->DoLoad( pMed ) )
+                return 2;
+        }
+    }
+
+    if( !xDocSh.Is() ) // Medium still needs to be deleted
+        delete pMed;
+
+    return 0;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
