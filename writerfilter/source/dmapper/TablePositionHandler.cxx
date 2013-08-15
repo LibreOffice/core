@@ -30,10 +30,11 @@ TablePositionHandler::TablePositionHandler() :
     m_aXSpec( ),
     m_nY( 0 ),
     m_nX( 0 ),
+    m_nLeftFromText(0),
+    m_nRightFromText(0),
     m_nTopFromText(0),
     m_nBottomFromText(0),
-    m_nLeftBorderDistance(DEF_BORDER_DIST),
-    m_nRightBorderDistance(DEF_BORDER_DIST)
+    m_nLeftBorderDistance(DEF_BORDER_DIST)
 {
 }
 
@@ -64,6 +65,12 @@ void TablePositionHandler::lcl_attribute(Id rName, Value& rVal)
         case NS_ooxml::LN_CT_TblPPr_tblpX:
             m_nX = rVal.getInt();
         break;
+        case NS_ooxml::LN_CT_TblPPr_leftFromText:
+            m_nLeftFromText = rVal.getInt();
+        break;
+        case NS_ooxml::LN_CT_TblPPr_rightFromText:
+            m_nRightFromText = rVal.getInt();
+        break;
         case NS_ooxml::LN_CT_TblPPr_topFromText:
             m_nTopFromText = rVal.getInt();
         break;
@@ -86,7 +93,7 @@ void TablePositionHandler::lcl_sprm(Sprm& /*rSprm*/)
 
 uno::Sequence<beans::PropertyValue> TablePositionHandler::getTablePosition() const
 {
-    uno::Sequence< beans::PropertyValue > aFrameProperties(19);
+    uno::Sequence< beans::PropertyValue > aFrameProperties(18);
     beans::PropertyValue* pFrameProperties = aFrameProperties.getArray();
 
     pFrameProperties[0].Name = "LeftBorderDistance";
@@ -99,9 +106,9 @@ uno::Sequence<beans::PropertyValue> TablePositionHandler::getTablePosition() con
     pFrameProperties[3].Value <<= sal_Int32(0);
 
     pFrameProperties[4].Name = "LeftMargin";
-    pFrameProperties[4].Value <<= sal_Int32(0);
+    pFrameProperties[4].Value <<= ConversionHelper::convertTwipToMM100(m_nLeftFromText);
     pFrameProperties[5].Name = "RightMargin";
-    pFrameProperties[5].Value <<= sal_Int32(0);
+    pFrameProperties[5].Value <<= ConversionHelper::convertTwipToMM100(m_nRightFromText);
     pFrameProperties[6].Name = "TopMargin";
     pFrameProperties[6].Value <<= ConversionHelper::convertTwipToMM100(m_nTopFromText);
     pFrameProperties[7].Name = "BottomMargin";
@@ -171,9 +178,6 @@ uno::Sequence<beans::PropertyValue> TablePositionHandler::getTablePosition() con
     pFrameProperties[16].Value <<= nVertOrientRelation;
     pFrameProperties[17].Name = "VertOrientPosition";
     pFrameProperties[17].Value <<= m_nY;
-
-    pFrameProperties[18].Name = "RightMargin";
-    pFrameProperties[18].Value <<= m_nRightBorderDistance;
 
     return aFrameProperties;
 }

@@ -17985,11 +17985,11 @@
       </define>
       <define name="CT_TblPPr">
         <attribute name="leftFromText">
-          <text/>
+          <ref name="ST_SignedTwipsMeasure"/>
           <xs:documentation>Distance From Left of Table to Text</xs:documentation>
         </attribute>
         <attribute name="rightFromText">
-          <text/>
+          <ref name="ST_SignedTwipsMeasure"/>
           <xs:documentation>(Distance From Right of Table to Text</xs:documentation>
         </attribute>
         <attribute name="topFromText">
@@ -22913,6 +22913,8 @@
       <attribute name="tblpXSpec" tokenid="ooxml:CT_TblPPr_tblpXSpec"/>
       <attribute name="tblpY" tokenid="ooxml:CT_TblPPr_tblpY"/>
       <attribute name="tblpX" tokenid="ooxml:CT_TblPPr_tblpX"/>
+      <attribute name="leftFromText" tokenid="ooxml:CT_TblPPr_leftFromText"/>
+      <attribute name="rightFromText" tokenid="ooxml:CT_TblPPr_rightFromText"/>
       <attribute name="topFromText" tokenid="ooxml:CT_TblPPr_topFromText"/>
       <attribute name="bottomFromText" tokenid="ooxml:CT_TblPPr_bottomFromText"/>
     </resource>

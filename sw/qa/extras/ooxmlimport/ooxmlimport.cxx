@@ -1566,7 +1566,7 @@ void Test::testTableFloating()
     // This was 0, should be the the opposite of (left margin + half of the border width).
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-199), getProperty<sal_Int32>(xFrame, "HoriOrientPosition"));
     // Was 0 as well, should be the right margin.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(191), getProperty<sal_Int32>(xFrame, "RightMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(250), getProperty<sal_Int32>(xFrame, "RightMargin"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
