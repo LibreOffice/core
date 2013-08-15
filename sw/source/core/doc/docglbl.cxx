@@ -409,7 +409,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const String& rPath, bool bOutline, c
 
                 default:
                     {
-                        String sNm( INetURLObject( sFileName ).GetName() );
+                        const OUString sNm( INetURLObject( sFileName ).GetName() );
                         SwSectionData aSectData( FILE_LINK_SECTION,
                                         GetUniqueSectionName( &sNm ));
                         SwSectionFmt* pFmt = MakeSectionFmt( 0 );

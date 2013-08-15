@@ -840,7 +840,7 @@ public:
                             sal_Bool bChkHidden = sal_False,
                             sal_Bool BChkTOX = sal_False ) const;
 
-    String GetUniqueSectionName( const String* pChkStr = 0 ) const;
+    OUString GetUniqueSectionName( const OUString* pChkStr = 0 ) const;
 
     /// Set attributes.
     void SetSectionAttr(const SfxItemSet& rSet, SwSectionFmt* pSectFmt = 0);

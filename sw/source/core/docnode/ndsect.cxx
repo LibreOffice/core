@@ -687,11 +687,11 @@ void SwDoc::UpdateSection(sal_uInt16 const nPos, SwSectionData & rNewData,
                 &&  (rNewData.GetLinkFileName() != sCompareString)
                 &&  (rNewData.GetLinkFileName() != pSection->GetLinkFileName()));
 
-    String sSectName( rNewData.GetSectionName() );
+    OUString sSectName( rNewData.GetSectionName() );
     if (sSectName != pSection->GetSectionName())
         GetUniqueSectionName( &sSectName );
     else
-        sSectName.Erase();
+        sSectName = OUString();
 
     /// In SwSection::operator=(..) class member bCondHiddenFlag is always set to sal_True.
     /// IMHO this have to be changed, but I can't estimate the consequences:
@@ -704,7 +704,7 @@ void SwDoc::UpdateSection(sal_uInt16 const nPos, SwSectionData & rNewData,
     if( pAttr )
         pSection->GetFmt()->SetFmtAttr( *pAttr );
 
-    if( sSectName.Len() )
+    if( !sSectName.isEmpty() )
     {
         pSection->SetSectionName( sSectName );
     }
@@ -1259,9 +1259,8 @@ SwSectionNode* SwSectionNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) c
         }
         else
         {
-            const String sSectionName(GetSection().GetSectionName());
-            pNewSect->SetSectionName(
-                pDoc->GetUniqueSectionName( &sSectionName ));
+            const OUString sSectionName(GetSection().GetSectionName());
+            pNewSect->SetSectionName(pDoc->GetUniqueSectionName( &sSectionName ));
         }
     }
 
@@ -1385,11 +1384,9 @@ void SwSectionNode::NodesArrChgd()
 }
 
 
-String SwDoc::GetUniqueSectionName( const String* pChkStr ) const
+OUString SwDoc::GetUniqueSectionName( const OUString* pChkStr ) const
 {
-    ResId aId( STR_REGION_DEFNAME, *pSwResMgr );
-    String aName( aId );
-    xub_StrLen nNmLen = aName.Len();
+    const OUString aName( ResId( STR_REGION_DEFNAME, *pSwResMgr ) );
 
     sal_uInt16 nNum = 0;
     sal_uInt16 nTmp, nFlagSize = ( mpSectionFmtTbl->size() / 8 ) +2;
@@ -1402,15 +1399,15 @@ String SwDoc::GetUniqueSectionName( const String* pChkStr ) const
     for( n = 0; n < mpSectionFmtTbl->size(); ++n )
         if( 0 != ( pSectNd = (*mpSectionFmtTbl)[ n ]->GetSectionNode( sal_False ) ))
         {
-            const String& rNm = pSectNd->GetSection().GetSectionName();
-            if( rNm.Match( aName ) == nNmLen )
+            const OUString rNm = pSectNd->GetSection().GetSectionName();
+            if (rNm.startsWith( aName ))
             {
                 // Calculate the Number and reset the Flag
-                nNum = static_cast<sal_uInt16>(rNm.Copy( nNmLen ).ToInt32());
+                nNum = static_cast<sal_uInt16>(rNm.copy( aName.getLength() ).toInt32());
                 if( nNum-- && nNum < mpSectionFmtTbl->size() )
                     pSetFlags[ nNum / 8 ] |= (0x01 << ( nNum & 0x07 ));
             }
-            if( pChkStr && pChkStr->Equals( rNm ) )
+            if( pChkStr && *pChkStr==rNm )
                 pChkStr = 0;
         }
 
@@ -1432,7 +1429,7 @@ String SwDoc::GetUniqueSectionName( const String* pChkStr ) const
     delete [] pSetFlags;
     if( pChkStr )
         return *pChkStr;
-    return aName += OUString::number( ++nNum );
+    return aName + OUString::number( ++nNum );
 }
 
 

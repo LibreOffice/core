@@ -96,7 +96,7 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
         if ( SFX_ITEM_SET ==
                 pSet->GetItemState(FN_PARAM_REGION_NAME, sal_True, &pItem) )
         {
-            String sRemoveWhenUniStringIsGone = ((const SfxStringItem *)pItem)->GetValue();
+            const OUString sRemoveWhenUniStringIsGone = ((const SfxStringItem *)pItem)->GetValue();
             aTmpStr = rSh.GetUniqueSectionName(&sRemoveWhenUniStringIsGone);
         }
         else

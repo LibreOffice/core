@@ -333,8 +333,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
         }
     }
 
-    String tmp(m_pImpl->m_sName);
-    SwSectionData aSect(eType, pDoc->GetUniqueSectionName(&tmp));
+    SwSectionData aSect(eType, pDoc->GetUniqueSectionName(&m_pImpl->m_sName));
     aSect.SetCondition(m_pImpl->m_pProps->m_sCondition);
     OUStringBuffer sLinkNameBuf(m_pImpl->m_pProps->m_sLinkFileName);
     sLinkNameBuf.append(sfx2::cTokenSeparator);
