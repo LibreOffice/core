@@ -134,6 +134,9 @@ sub generateSource
 	print OUT "    return aPropertyMap;\n";
 	print OUT "  }\n";
 	print OUT "};\n";
+        print OUT "\n";
+        print OUT "// This is a generated source file. DO NOT EDIT.\n";
+        print OUT "\n";
 
         $shCount++;
 

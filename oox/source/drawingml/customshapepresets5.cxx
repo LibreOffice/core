@@ -223,6 +223,9 @@ class ShapeCplus : public CustomShapeProvider
     return aPropertyMap;
   }
 };
+
+// This is a generated source file. DO NOT EDIT.
+
 class ShapeCaccentCallout3 : public CustomShapeProvider
 {
   virtual PropertyMap getProperties()
@@ -644,6 +647,9 @@ class ShapeCaccentCallout3 : public CustomShapeProvider
     return aPropertyMap;
   }
 };
+
+// This is a generated source file. DO NOT EDIT.
+
 class ShapeCleftCircularArrow : public CustomShapeProvider
 {
   virtual PropertyMap getProperties()
@@ -1110,6 +1116,9 @@ class ShapeCleftCircularArrow : public CustomShapeProvider
     return aPropertyMap;
   }
 };
+
+// This is a generated source file. DO NOT EDIT.
+
 class ShapeCrightArrow : public CustomShapeProvider
 {
   virtual PropertyMap getProperties()
@@ -1326,6 +1335,9 @@ class ShapeCrightArrow : public CustomShapeProvider
     return aPropertyMap;
   }
 };
+
+// This is a generated source file. DO NOT EDIT.
+
 class ShapeCflowChartPunchedCard : public CustomShapeProvider
 {
   virtual PropertyMap getProperties()
@@ -1451,6 +1463,9 @@ class ShapeCflowChartPunchedCard : public CustomShapeProvider
     return aPropertyMap;
   }
 };
+
+// This is a generated source file. DO NOT EDIT.
+
 class ShapeCsnip2DiagRect : public CustomShapeProvider
 {
   virtual PropertyMap getProperties()
@@ -1675,6 +1690,9 @@ class ShapeCsnip2DiagRect : public CustomShapeProvider
     return aPropertyMap;
   }
 };
+
+// This is a generated source file. DO NOT EDIT.
+
 class ShapeCverticalScroll : public CustomShapeProvider
 {
   virtual PropertyMap getProperties()
@@ -2208,6 +2226,9 @@ class ShapeCverticalScroll : public CustomShapeProvider
     return aPropertyMap;
   }
 };
+
+// This is a generated source file. DO NOT EDIT.
+
 class ShapeCstar7 : public CustomShapeProvider
 {
   virtual PropertyMap getProperties()
@@ -2456,6 +2477,9 @@ class ShapeCstar7 : public CustomShapeProvider
     return aPropertyMap;
   }
 };
+
+// This is a generated source file. DO NOT EDIT.
+
 class ShapeCchartX : public CustomShapeProvider
 {
   virtual PropertyMap getProperties()
@@ -2575,6 +2599,9 @@ class ShapeCchartX : public CustomShapeProvider
     return aPropertyMap;
   }
 };
+
+// This is a generated source file. DO NOT EDIT.
+
 class ShapeCcloud : public CustomShapeProvider
 {
   virtual PropertyMap getProperties()
@@ -3034,6 +3061,9 @@ class ShapeCcloud : public CustomShapeProvider
     return aPropertyMap;
   }
 };
+
+// This is a generated source file. DO NOT EDIT.
+
 class ShapeCcube : public CustomShapeProvider
 {
   virtual PropertyMap getProperties()
@@ -3308,6 +3338,9 @@ class ShapeCcube : public CustomShapeProvider
     return aPropertyMap;
   }
 };
+
+// This is a generated source file. DO NOT EDIT.
+
 class ShapeCround2DiagRect : public CustomShapeProvider
 {
   virtual PropertyMap getProperties()
@@ -3572,6 +3605,9 @@ class ShapeCround2DiagRect : public CustomShapeProvider
     return aPropertyMap;
   }
 };
+
+// This is a generated source file. DO NOT EDIT.
+
 class ShapeCflowChartMultidocument : public CustomShapeProvider
 {
   virtual PropertyMap getProperties()
@@ -4021,6 +4057,9 @@ class ShapeCflowChartMultidocument : public CustomShapeProvider
     return aPropertyMap;
   }
 };
+
+// This is a generated source file. DO NOT EDIT.
+
 class ShapeCactionButtonDocument : public CustomShapeProvider
 {
   virtual PropertyMap getProperties()
@@ -4297,6 +4336,9 @@ class ShapeCactionButtonDocument : public CustomShapeProvider
     return aPropertyMap;
   }
 };
+
+// This is a generated source file. DO NOT EDIT.
+
 class ShapeCflowChartTerminator : public CustomShapeProvider
 {
   virtual PropertyMap getProperties()
@@ -4442,6 +4484,9 @@ class ShapeCflowChartTerminator : public CustomShapeProvider
     return aPropertyMap;
   }
 };
+
+// This is a generated source file. DO NOT EDIT.
+
 class ShapeCflowChartDelay : public CustomShapeProvider
 {
   virtual PropertyMap getProperties()
@@ -4566,6 +4611,9 @@ class ShapeCflowChartDelay : public CustomShapeProvider
     return aPropertyMap;
   }
 };
+
+// This is a generated source file. DO NOT EDIT.
+
 class ShapeCcurvedConnector5 : public CustomShapeProvider
 {
   virtual PropertyMap getProperties()
@@ -4853,6 +4901,9 @@ class ShapeCcurvedConnector5 : public CustomShapeProvider
     return aPropertyMap;
   }
 };
+
+// This is a generated source file. DO NOT EDIT.
+
 class ShapeChorizontalScroll : public CustomShapeProvider
 {
   virtual PropertyMap getProperties()
@@ -5385,6 +5436,9 @@ class ShapeChorizontalScroll : public CustomShapeProvider
     return aPropertyMap;
   }
 };
+
+// This is a generated source file. DO NOT EDIT.
+
 class ShapeCbentConnector4 : public CustomShapeProvider
 {
   virtual PropertyMap getProperties()
@@ -5582,6 +5636,9 @@ class ShapeCbentConnector4 : public CustomShapeProvider
     return aPropertyMap;
   }
 };
+
+// This is a generated source file. DO NOT EDIT.
+
 class ShapeCleftRightCircularArrow : public CustomShapeProvider
 {
   virtual PropertyMap getProperties()
@@ -6084,6 +6141,9 @@ class ShapeCleftRightCircularArrow : public CustomShapeProvider
     return aPropertyMap;
   }
 };
+
+// This is a generated source file. DO NOT EDIT.
+
 class ShapeCwedgeRectCallout : public CustomShapeProvider
 {
   virtual PropertyMap getProperties()
@@ -6354,6 +6414,9 @@ class ShapeCwedgeRectCallout : public CustomShapeProvider
     return aPropertyMap;
   }
 };
+
+// This is a generated source file. DO NOT EDIT.
+
 class ShapeCaccentCallout2 : public CustomShapeProvider
 {
   virtual PropertyMap getProperties()
@@ -6702,6 +6765,9 @@ class ShapeCaccentCallout2 : public CustomShapeProvider
     return aPropertyMap;
   }
 };
+
+// This is a generated source file. DO NOT EDIT.
+
 class ShapeCflowChartMagneticDrum : public CustomShapeProvider
 {
   virtual PropertyMap getProperties()
@@ -6926,6 +6992,9 @@ class ShapeCflowChartMagneticDrum : public CustomShapeProvider
     return aPropertyMap;
   }
 };
+
+// This is a generated source file. DO NOT EDIT.
+
 class ShapeCcorner : public CustomShapeProvider
 {
   virtual PropertyMap getProperties()
@@ -7139,6 +7208,9 @@ class ShapeCcorner : public CustomShapeProvider
     return aPropertyMap;
   }
 };
+
+// This is a generated source file. DO NOT EDIT.
+
 class ShapeCborderCallout2 : public CustomShapeProvider
 {
   virtual PropertyMap getProperties()
@@ -7472,6 +7544,9 @@ class ShapeCborderCallout2 : public CustomShapeProvider
     return aPropertyMap;
   }
 };
+
+// This is a generated source file. DO NOT EDIT.
+
 class ShapeCdonut : public CustomShapeProvider
 {
   virtual PropertyMap getProperties()
@@ -7719,6 +7794,9 @@ class ShapeCdonut : public CustomShapeProvider
     return aPropertyMap;
   }
 };
+
+// This is a generated source file. DO NOT EDIT.
+
 class ShapeCflowChartCollate : public CustomShapeProvider
 {
   virtual PropertyMap getProperties()
@@ -7851,6 +7929,9 @@ class ShapeCflowChartCollate : public CustomShapeProvider
     return aPropertyMap;
   }
 };
+
+// This is a generated source file. DO NOT EDIT.
+
 class ShapeCmathNotEqual : public CustomShapeProvider
 {
   virtual PropertyMap getProperties()
@@ -8195,6 +8276,9 @@ class ShapeCmathNotEqual : public CustomShapeProvider
     return aPropertyMap;
   }
 };
+
+// This is a generated source file. DO NOT EDIT.
+
 class ShapeCbentConnector2 : public CustomShapeProvider
 {
   virtual PropertyMap getProperties()
@@ -8296,6 +8380,9 @@ class ShapeCbentConnector2 : public CustomShapeProvider
     return aPropertyMap;
   }
 };
+
+// This is a generated source file. DO NOT EDIT.
+
 class ShapeCmathMultiply : public CustomShapeProvider
 {
   virtual PropertyMap getProperties()
@@ -8516,6 +8603,9 @@ class ShapeCmathMultiply : public CustomShapeProvider
     return aPropertyMap;
   }
 };
+
+// This is a generated source file. DO NOT EDIT.
+
 class ShapeCheptagon : public CustomShapeProvider
 {
   virtual PropertyMap getProperties()
@@ -8669,6 +8759,9 @@ class ShapeCheptagon : public CustomShapeProvider
     return aPropertyMap;
   }
 };
+
+// This is a generated source file. DO NOT EDIT.
+
 class ShapeCrect : public CustomShapeProvider
 {
   virtual PropertyMap getProperties()
@@ -8777,6 +8870,9 @@ class ShapeCrect : public CustomShapeProvider
     return aPropertyMap;
   }
 };
+
+// This is a generated source file. DO NOT EDIT.
+
 class ShapeCaccentBorderCallout2 : public CustomShapeProvider
 {
   virtual PropertyMap getProperties()
@@ -9124,6 +9220,9 @@ class ShapeCaccentBorderCallout2 : public CustomShapeProvider
     return aPropertyMap;
   }
 };
+
+// This is a generated source file. DO NOT EDIT.
+
 class ShapeCpieWedge : public CustomShapeProvider
 {
   virtual PropertyMap getProperties()
@@ -9241,6 +9340,9 @@ class ShapeCpieWedge : public CustomShapeProvider
     return aPropertyMap;
   }
 };
+
+// This is a generated source file. DO NOT EDIT.
+
 class ShapeCupArrowCallout : public CustomShapeProvider
 {
   virtual PropertyMap getProperties()
@@ -9565,6 +9667,9 @@ class ShapeCupArrowCallout : public CustomShapeProvider
     return aPropertyMap;
   }
 };
+
+// This is a generated source file. DO NOT EDIT.
+
 } // anonymous namespace
 void CustomShapeProperties::initializePresetsMap5()
 {
