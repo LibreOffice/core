@@ -759,25 +759,17 @@ void ScXMLExport::CollectShapesAutoStyles(const sal_Int32 nTableCount)
                         ++aShapeItr;
                     }
                 }
-                const ScMyNoteShapeList* pNoteShapes = NULL;
-                ScMyNoteShapeList::const_iterator aNoteShapeItr;
-                ScMyNoteShapeList::const_iterator aNoteShapeEndItr;
                 if (pSharedData->GetNoteShapes())
                 {
-                    pNoteShapes = pSharedData->GetNoteShapes()->GetNotes();
+                    const ScMyNoteShapeList* pNoteShapes = pSharedData->GetNoteShapes()->GetNotes();
                     if (pNoteShapes)
                     {
-                        aNoteShapeItr = pNoteShapes->begin();
-                        aNoteShapeEndItr = pNoteShapes->end();
-                    }
-                }
-                if (pNoteShapes)
-                {
-                    while (aNoteShapeItr != aNoteShapeEndItr)
-                    {
-                        if (static_cast<sal_Int32>(aNoteShapeItr->aPos.Tab()) == nTable)
-                            GetShapeExport()->collectShapeAutoStyles(aNoteShapeItr->xShape);
-                        ++aNoteShapeItr;
+                        for (ScMyNoteShapeList::const_iterator aNoteShapeItr = pNoteShapes->begin(), aNoteShapeEndItr = pNoteShapes->end();
+                             aNoteShapeItr != aNoteShapeEndItr; ++aNoteShapeItr)
+                        {
+                            if (static_cast<sal_Int32>(aNoteShapeItr->aPos.Tab()) == nTable)
+                                GetShapeExport()->collectShapeAutoStyles(aNoteShapeItr->xShape);
+                        }
                     }
                 }
             }
