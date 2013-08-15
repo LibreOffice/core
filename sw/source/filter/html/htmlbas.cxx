@@ -183,7 +183,7 @@ void SwHTMLParser::EndScript()
 void SwHTMLParser::AddScriptSource()
 {
     // Hier merken wir und nur ein par Strings
-    if( !aToken.isEmpty() > 2 &&
+    if( aToken.getLength() > 2 &&
         (HTML_SL_STARBASIC==eScriptLang && aToken[ 0 ] == '\'') )
     {
         sal_Int32 nPos = -1;
