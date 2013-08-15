@@ -262,7 +262,8 @@ bool FormulaGroupInterpreterOpenCL::interpret(ScDocument& rDoc, const ScAddress&
                         if( NULL==pArray )
                         {
                             fprintf(stderr,"Error: pArray is NULL!\n");
-                            free(rResult);
+                            if (rResult)
+                                free(rResult);
                             return false;
                         }
                         if(ocl_calc.GetOpenclState())
@@ -313,7 +314,11 @@ bool FormulaGroupInterpreterOpenCL::interpret(ScDocument& rDoc, const ScAddress&
 
         ScFormulaCell* pDest = rDoc.GetFormulaCell(aTmpPos);
         if (!pDest)
+        {
+            if (rResult)
+                free(rResult);
             return false;
+        }
         if(ocl_calc.GetOpenclState())
         {
             const formula::FormulaToken *pCur = aCode2.First();
