@@ -59,6 +59,7 @@ public:
 
     /** Creates a database range from this tables. */
     void                finalizeImport();
+    void                applyAutoFilters();
 
     /** Returns the unique table identifier. */
     inline sal_Int32    getTableId() const { return maModel.mnId; }
@@ -103,7 +104,8 @@ public:
 
     /** Creates database ranges from all imported tables. */
     void                finalizeImport();
-
+    /** Applies autofilters from created database range ( requires finalizeImport to have run before being called */
+    void                applyAutoFilters();
     /** Returns a table by its identifier. */
     TableRef            getTable( sal_Int32 nTableId ) const;
     /** Returns a table by its display name. */
