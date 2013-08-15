@@ -39,6 +39,7 @@ $(call gb_ExternalProject_get_state_target,cairo,build) :
 		pixman_LIBS="-L$(call gb_UnpackedTarball_get_dir,pixman)/pixman/.libs -lpixman-1" \
 		COMPRESS=$(if $(filter YES,$(SYSTEM_ZLIB)),compress,z_compress) \
 		ZLIB3RDLIB=-lz \
+		png_REQUIRES="trick_configure_into_using_png_CFLAGS_and_LIBS" \
 		png_CFLAGS="$(LIBPNG_CFLAGS)" png_LIBS="$(LIBPNG_LIBS)" \
 		$(if $(filter IOS,$(OS)),--disable-shared,--disable-static) \
 		$(if $(filter ANDROID IOS,$(OS)),--disable-xlib,--enable-xlib) \
