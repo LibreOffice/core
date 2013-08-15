@@ -33,6 +33,23 @@
       "revId": "7d9327b3f48ad68f838481b0395a0d160d900506",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//810\u003d",
+        "filename": "offapi/com/sun/star/style/PositionalTab.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-08-15T07:45:27Z",
+      "side": 1,
+      "message": "Please avoid \"published\" if this API is just added for the sake of the DOCX importer. That way we can change the struct before it being an API change.",
+      "revId": "7d9327b3f48ad68f838481b0395a0d160d900506",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
