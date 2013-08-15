@@ -360,7 +360,7 @@ void SwUndoDelSection::UndoImpl(::sw::UndoRedoContext & rContext)
         ///     frames, if the hidden condition flag changes.
         SwSection& aInsertedSect = pInsertedSectNd->GetSection();
         if ( aInsertedSect.IsHidden() &&
-             aInsertedSect.GetCondition().Len() > 0 )
+             !aInsertedSect.GetCondition().isEmpty() )
         {
             SwCalc aCalc( rDoc );
             rDoc.FldsToCalc(aCalc, pInsertedSectNd->GetIndex(), USHRT_MAX);
@@ -467,7 +467,7 @@ void SwUndoUpdateSection::UndoImpl(::sw::UndoRedoContext & rContext)
     {
         const bool bUpdate =
                (!rNdSect.IsLinkType() && m_pSectionData->IsLinkType())
-            || (    m_pSectionData->GetLinkFileName().Len()
+            || (    !m_pSectionData->GetLinkFileName().isEmpty()
                 &&  (m_pSectionData->GetLinkFileName() !=
                         rNdSect.GetLinkFileName()));
 

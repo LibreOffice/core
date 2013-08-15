@@ -64,8 +64,6 @@ using namespace ::com::sun::star;
 
 SV_IMPL_REF( SwServerObject )
 
-#define sSectionFmtNm aEmptyStr
-
 class SwIntrnlSectRefLink : public SwBaseLink
 {
     SwSectionFmt& rSectFmt;
@@ -95,7 +93,7 @@ TYPEINIT1(SwSectionFmt,SwFrmFmt );
 TYPEINIT1(SwSection,SwClient );
 
 
-SwSectionData::SwSectionData(SectionType const eType, String const& rName)
+SwSectionData::SwSectionData(SectionType const eType, OUString const& rName)
     : m_eType(eType)
     , m_sSectionName(rName)
     , m_bHiddenFlag(false)
@@ -200,7 +198,7 @@ OUString SwSectionData::CollapseWhiteSpaces(const OUString sName)
 // SwSection ===========================================================
 
 SwSection::SwSection(
-        SectionType const eType, String const& rName, SwSectionFmt & rFormat)
+        SectionType const eType, OUString const& rName, SwSectionFmt & rFormat)
     : SwClient(& rFormat)
     , m_Data(eType, rName)
 {
@@ -558,11 +556,11 @@ void SwSection::SetCondHidden(bool const bFlag)
 
 
 // Set/remove the linked FileName
-const String& SwSection::GetLinkFileName() const
+OUString SwSection::GetLinkFileName() const
 {
     if (m_RefLink.Is())
     {
-        String sTmp;
+        OUString sTmp;
         switch (m_Data.GetType())
         {
         case DDE_LINK_SECTION:
@@ -571,13 +569,14 @@ const String& SwSection::GetLinkFileName() const
 
         case FILE_LINK_SECTION:
             {
-                String sRange, sFilter;
+                OUString sRange;
+                OUString sFilter;
                 if (m_RefLink->GetLinkManager() &&
                     m_RefLink->GetLinkManager()->GetDisplayNames(
                         m_RefLink, 0, &sTmp, &sRange, &sFilter ))
                 {
-                    ( sTmp += sfx2::cTokenSeparator ) += sFilter;
-                    ( sTmp += sfx2::cTokenSeparator ) += sRange;
+                    sTmp += OUString(sfx2::cTokenSeparator) + sFilter
+                         +  OUString(sfx2::cTokenSeparator) + sRange;
                 }
                 else if( GetFmt() && !GetFmt()->GetSectionNode() )
                 {
@@ -596,7 +595,7 @@ const String& SwSection::GetLinkFileName() const
 }
 
 
-void SwSection::SetLinkFileName(const String& rNew, String const*const pPassWd)
+void SwSection::SetLinkFileName(const OUString& rNew, OUString const*const pPassWd)
 {
     if (m_RefLink.Is())
     {
@@ -646,7 +645,7 @@ const SwTOXBase* SwSection::GetTOXBase() const
 // SwSectionFmt ========================================================
 
 SwSectionFmt::SwSectionFmt( SwSectionFmt* pDrvdFrm, SwDoc *pDoc )
-    : SwFrmFmt( pDoc->GetAttrPool(), sSectionFmtNm, pDrvdFrm )
+    : SwFrmFmt( pDoc->GetAttrPool(), OUString(), pDrvdFrm )
 {
     LockModify();
     SetFmtAttr( *GetDfltAttr( RES_COL ) );
@@ -912,9 +911,7 @@ static bool lcl_SectionCmpPos( const SwSection *pFirst, const SwSection *pSecond
 static bool lcl_SectionCmpNm( const SwSection *pFSect, const SwSection *pSSect)
 {
     OSL_ENSURE( pFSect && pSSect, "Invalid Sections" );
-    StringCompare const eCmp =
-        pFSect->GetSectionName().CompareTo( pSSect->GetSectionName() );
-    return eCmp == COMPARE_LESS;
+    return pFSect->GetSectionName() < pSSect->GetSectionName();
 }
 
 // Alle Sections which have been derived from this one
@@ -1152,11 +1149,11 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
     if( !pDShell || !pDShell->GetMedium() )
         return ;
 
-    String sName( pDShell->GetMedium()->GetName() );
+    const OUString sName( pDShell->GetMedium()->GetName() );
     SwBaseLink* pBLink;
-    String sMimeType( SotExchange::GetFormatMimeType( FORMAT_FILE ));
+    const OUString sMimeType( SotExchange::GetFormatMimeType( FORMAT_FILE ));
     uno::Any aValue;
-    aValue <<= OUString( sName ); // Arbitrary name
+    aValue <<= sName; // Arbitrary name
 
     const ::sfx2::SvBaseLinks& rLnks = pDoc->GetLinkManager().GetLinks();
     for( sal_uInt16 n = rLnks.size(); n; )
@@ -1169,7 +1166,7 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
                                                 rSectNd.EndOfSectionIndex() ) )
         {
             // It's in the Section, so update. But only if it's not in the same File!
-            String sFName;
+            OUString sFName;
             pDoc->GetLinkManager().GetDisplayNames( pBLink, 0, &sFName, 0, 0 );
             if( sFName != sName )
             {
@@ -1254,7 +1251,6 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
     SwSection& rSection = pSectNd->GetSection();
     rSection.SetConnectFlag(false);
 
-    OUString sNewFileName;
     Reader* pRead = 0;
     switch( nDataFormat )
     {
@@ -1267,9 +1263,13 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
         break;
 
     case FORMAT_FILE:
-        if( rValue.hasValue() && ( rValue >>= sNewFileName ) )
+        if ( rValue.hasValue() )
         {
-            String sFilter, sRange, sFileName( sNewFileName );
+            OUString sFileName;
+            if ( !(rValue >>= sFileName) )
+                break;
+            OUString sFilter;
+            OUString sRange;
             pDoc->GetLinkManager().GetDisplayNames( this, 0, &sFileName,
                                                     &sRange, &sFilter );
 
@@ -1277,7 +1277,7 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
             SfxObjectShellRef xDocSh;
             SfxObjectShellLock xLockRef;
             int nRet;
-            if( !sFileName.Len() )
+            if( sFileName.isEmpty() )
             {
                 xDocSh = pDoc->GetDocShell();
                 nRet = 1;
@@ -1303,7 +1303,7 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
                 SwNodeRange* pCpyRg = 0;
 
                 if( xDocSh->GetMedium() &&
-                    !rSection.GetLinkFilePassword().Len() )
+                    rSection.GetLinkFilePassword().isEmpty() )
                 {
                     const SfxPoolItem* pItem;
                     if( SFX_ITEM_SET == xDocSh->GetMedium()->GetItemSet()->
@@ -1314,7 +1314,7 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
 
                 SwDoc* pSrcDoc = ((SwDocShell*)&xDocSh)->GetDoc();
 
-                if( sRange.Len() )
+                if( !sRange.isEmpty() )
                 {
                     // Catch recursion
                     bool bRecursion = false;
@@ -1426,7 +1426,7 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
         aStrm.Seek( 0 );
 
         // TODO/MBA: it's impossible to set a BaseURL here!
-        SwReader aTmpReader( aStrm, aEmptyStr, pDoc->GetDocShell()->GetMedium()->GetBaseURL(), *pPam );
+        SwReader aTmpReader( aStrm, OUString(), pDoc->GetDocShell()->GetMedium()->GetBaseURL(), *pPam );
 
         if( !IsError( aTmpReader.Read( *pRead ) ))
         {
@@ -1481,7 +1481,7 @@ void SwIntrnlSectRefLink::Closed()
 
                 SwSectionData aSectionData(*rSectFmt.GetSection());
                 aSectionData.SetType( CONTENT_SECTION );
-                aSectionData.SetLinkFileName( aEmptyStr );
+                aSectionData.SetLinkFileName( OUString() );
                 aSectionData.SetHidden( false );
                 aSectionData.SetProtectFlag( false );
                 // edit in readonly sections
@@ -1595,8 +1595,8 @@ void SwSection::BreakLink()
     // change type
     SetType( CONTENT_SECTION );
     // reset linked file data
-    SetLinkFileName( aEmptyStr );
-    SetLinkFilePassword( aEmptyStr );
+    SetLinkFileName( OUString() );
+    SetLinkFilePassword( OUString() );
 }
 
 const SwNode* SwIntrnlSectRefLink::GetAnchor() const

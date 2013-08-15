@@ -83,7 +83,7 @@ static bool lcl_FindSection( const SwSectionFmt* pSectFmt, _FindItem * const pIt
     {
         String sNm( (bCaseSensitive)
                 ? pSect->GetSectionName()
-                : String(GetAppCharClass().lowercase( pSect->GetSectionName() )));
+                : GetAppCharClass().lowercase( pSect->GetSectionName() ));
         String sCompare( (bCaseSensitive)
                 ? pItem->m_Item
                 : String(GetAppCharClass().lowercase( pItem->m_Item ) ));

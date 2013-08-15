@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SECTION_HXX
-#define _SECTION_HXX
+#ifndef SECTION_HXX
+#define SECTION_HXX
 
 #include <boost/utility.hpp>
 
@@ -71,10 +71,10 @@ class SW_DLLPUBLIC SwSectionData
 private:
     SectionType m_eType;
 
-    String m_sSectionName;
-    String m_sCondition;
-    String m_sLinkFileName;
-    String m_sLinkFilePassword; // Must be changed to Sequence.
+    OUString m_sSectionName;
+    OUString m_sCondition;
+    OUString m_sLinkFileName;
+    OUString m_sLinkFilePassword; // Must be changed to Sequence.
     ::com::sun::star::uno::Sequence <sal_Int8> m_Password;
 
     /// It seems this flag caches the current final "hidden" state.
@@ -93,14 +93,14 @@ private:
 
 public:
 
-    SwSectionData(SectionType const eType, String const& rName);
+    SwSectionData(SectionType const eType, OUString const& rName);
     explicit SwSectionData(SwSection const&);
     SwSectionData(SwSectionData const&);
     SwSectionData & operator=(SwSectionData const&);
     bool operator==(SwSectionData const&) const;
 
-    String const& GetSectionName() const    { return m_sSectionName; }
-    void SetSectionName(String const& rName){ m_sSectionName = rName; }
+    OUString GetSectionName() const         { return m_sSectionName; }
+    void SetSectionName(OUString const& rName){ m_sSectionName = rName; }
     SectionType GetType() const             { return m_eType; }
     void SetType(SectionType const eNew)    { m_eType = eNew; }
 
@@ -117,21 +117,21 @@ public:
     void SetEditInReadonlyFlag(bool const bFlag)
         { m_bEditInReadonlyFlag = bFlag; }
 
-    void SetCondHidden(bool const bFlag = true) { m_bCondHiddenFlag = bFlag; };
+    void SetCondHidden(bool const bFlag = true) { m_bCondHiddenFlag = bFlag; }
     bool IsCondHidden() const { return m_bCondHiddenFlag; }
 
-    String const& GetCondition() const      { return m_sCondition; }
-    void SetCondition(String const& rNew)   { m_sCondition = rNew; }
+    OUString GetCondition() const           { return m_sCondition; }
+    void SetCondition(OUString const& rNew) { m_sCondition = rNew; }
 
-    String const& GetLinkFileName() const   { return m_sLinkFileName; };
-    void SetLinkFileName(String const& rNew, String const* pPassWd = 0)
+    OUString GetLinkFileName() const        { return m_sLinkFileName; }
+    void SetLinkFileName(OUString const& rNew, OUString const* pPassWd = 0)
     {
         m_sLinkFileName = rNew;
         if (pPassWd) { SetLinkFilePassword(*pPassWd); }
     }
 
-    String const& GetLinkFilePassword() const   { return m_sLinkFilePassword; }
-    void SetLinkFilePassword(String const& rS)  { m_sLinkFilePassword = rS; }
+    OUString GetLinkFilePassword() const        { return m_sLinkFilePassword; }
+    void SetLinkFilePassword(OUString const& rS){ m_sLinkFilePassword = rS; }
 
     ::com::sun::star::uno::Sequence<sal_Int8> const& GetPassword() const
                                             { return m_Password; }
@@ -169,7 +169,7 @@ protected:
 public:
     TYPEINFO();     // rtti
 
-    SwSection(SectionType const eType, String const& rName,
+    SwSection(SectionType const eType, OUString const& rName,
                 SwSectionFmt & rFormat);
     virtual ~SwSection();
 
@@ -177,8 +177,8 @@ public:
 
     void SetSectionData(SwSectionData const& rData);
 
-    String const& GetSectionName() const    { return m_Data.GetSectionName(); }
-    void SetSectionName(String const& rName){ m_Data.SetSectionName(rName); }
+    OUString GetSectionName() const         { return m_Data.GetSectionName(); }
+    void SetSectionName(OUString const& rName){ m_Data.SetSectionName(rName); }
     SectionType GetType() const             { return m_Data.GetType(); }
     void SetType(SectionType const eType)   { return m_Data.SetType(eType); }
 
@@ -208,15 +208,15 @@ public:
 
     inline SwSection* GetParent() const;
 
-    String const& GetCondition() const      { return m_Data.GetCondition(); }
-    void SetCondition(String const& rNew)   { m_Data.SetCondition(rNew); }
+    OUString GetCondition() const           { return m_Data.GetCondition(); }
+    void SetCondition(OUString const& rNew) { m_Data.SetCondition(rNew); }
 
-    const String& GetLinkFileName() const;
-    void SetLinkFileName(String const& rNew, String const*const pPassWd = 0);
+    OUString GetLinkFileName() const;
+    void SetLinkFileName(OUString const& rNew, OUString const*const pPassWd = 0);
     // Password of linked file (only valid during runtime!)
-    String const& GetLinkFilePassword() const
+    OUString GetLinkFilePassword() const
         { return m_Data.GetLinkFilePassword(); }
-    void SetLinkFilePassword(String const& rS)
+    void SetLinkFilePassword(OUString const& rS)
         { m_Data.SetLinkFilePassword(rS); }
 
     // Get / set password of this section

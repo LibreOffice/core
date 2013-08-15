@@ -332,7 +332,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
     }
 
     // Is a Condition set?
-    if (rNewData.IsHidden() && rNewData.GetCondition().Len())
+    if (rNewData.IsHidden() && !rNewData.GetCondition().isEmpty())
     {
         // The calculate up to that position
         SwCalc aCalc( *this );
@@ -683,7 +683,7 @@ void SwDoc::UpdateSection(sal_uInt16 const nPos, SwSectionData & rNewData,
     sCompareString += sfx2::cTokenSeparator;
     const bool bUpdate =
            (!pSection->IsLinkType() && rNewData.IsLinkType())
-            ||  (rNewData.GetLinkFileName().Len()
+            ||  (!rNewData.GetLinkFileName().isEmpty()
                 &&  (rNewData.GetLinkFileName() != sCompareString)
                 &&  (rNewData.GetLinkFileName() != pSection->GetLinkFileName()));
 
@@ -710,7 +710,7 @@ void SwDoc::UpdateSection(sal_uInt16 const nPos, SwSectionData & rNewData,
     }
 
     // Is a Condition set
-    if( pSection->IsHidden() && pSection->GetCondition().Len() )
+    if( pSection->IsHidden() && !pSection->GetCondition().isEmpty() )
     {
         // Then calculate up to that position
         SwCalc aCalc( *this );
@@ -1259,8 +1259,9 @@ SwSectionNode* SwSectionNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) c
         }
         else
         {
+            const String sSectionName(GetSection().GetSectionName());
             pNewSect->SetSectionName(
-                pDoc->GetUniqueSectionName( &GetSection().GetSectionName() ));
+                pDoc->GetUniqueSectionName( &sSectionName ));
         }
     }
 
