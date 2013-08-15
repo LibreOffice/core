@@ -363,9 +363,12 @@ void SwHTMLParser::InsertEmbed()
                 aSpace.Height() = (long)rOption.GetNumber();
             break;
         case HTML_O_UNKNOWN:
-            if( rOption.GetTokenString().equalsIgnoreAsciiCaseAscii( OOO_STRING_SW_HTML_O_Hidden ) )
-                bHidden =
-                    !rOption.GetString().equalsIgnoreAsciiCaseAscii( sHTML_O_Hidden_False );
+            if (rOption.GetTokenString().equalsIgnoreAsciiCase(
+                        OOO_STRING_SW_HTML_O_Hidden))
+            {
+                bHidden = !rOption.GetString().equalsIgnoreAsciiCase(
+                                sHTML_O_Hidden_False);
+            }
             break;
         }
 

@@ -4876,8 +4876,11 @@ void SwHTMLParser::BuildTableCaption( HTMLTable *pCurTable )
             const HTMLOption& rOption = rHTMLOptions[--i];
             if( HTML_O_ALIGN == rOption.GetToken() )
             {
-                if( rOption.GetString().equalsIgnoreAsciiCaseAscii(OOO_STRING_SVTOOLS_HTML_VA_bottom))
+                if (rOption.GetString().equalsIgnoreAsciiCase(
+                        OOO_STRING_SVTOOLS_HTML_VA_bottom))
+                {
                     bTop = sal_False;
+                }
             }
         }
 
@@ -5142,9 +5145,12 @@ HTMLTableOptions::HTMLTableOptions( const HTMLOptions& rOptions,
             break;
         case HTML_O_BORDER:
             // BORDER und BORDER=BORDER wie BORDER=1 behandeln
-            if( !rOption.GetString().isEmpty() &&
-                !rOption.GetString().equalsIgnoreAsciiCaseAscii(OOO_STRING_SVTOOLS_HTML_O_border) )
+            if (!rOption.GetString().isEmpty() &&
+                !rOption.GetString().equalsIgnoreAsciiCase(
+                        OOO_STRING_SVTOOLS_HTML_O_border))
+            {
                 nBorder = (sal_uInt16)rOption.GetNumber();
+            }
             else
                 nBorder = 1;
 

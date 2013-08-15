@@ -311,8 +311,8 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
                 break;
 
             case HTML_O_LOOP:
-                if( rOption.GetString().
-                        equalsIgnoreAsciiCaseAscii(OOO_STRING_SVTOOLS_HTML_LOOP_infinite) )
+                if (rOption.GetString().
+                    equalsIgnoreAsciiCase(OOO_STRING_SVTOOLS_HTML_LOOP_infinite))
                 {
                     nCount = 0;
                 }
