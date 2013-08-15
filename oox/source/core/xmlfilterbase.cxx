@@ -675,7 +675,6 @@ Reference<XStream> XmlFilterBase::implGetOutputStream( MediaDescriptor& rMediaDe
                     xContext->getServiceManager()->createInstanceWithContext("com.sun.star.comp.MemoryStream", xContext),
                     uno::UNO_QUERY_THROW );
     }
-    return Reference<XStream>();
 }
 
 bool XmlFilterBase::implFinalizeExport( MediaDescriptor& rMediaDescriptor )
