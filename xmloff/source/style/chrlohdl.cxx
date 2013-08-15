@@ -20,6 +20,7 @@
 #include <chrlohdl.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
+#include <unotools/saveopt.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/uno/Any.hxx>
@@ -229,6 +230,9 @@ sal_Bool XMLCharScriptHdl::exportXML( OUString& rStrExpValue, const uno::Any& rV
     if (!aLanguageTag.hasScript())
         return sal_False;
 
+    if (SvtSaveOptions().GetODFDefaultVersion() < SvtSaveOptions::ODFVER_012)
+        return sal_False;
+
     OUString aLanguage, aCountry;
     aLanguageTag.getIsoLanguageScriptCountry( aLanguage, rStrExpValue, aCountry);
     // For non-ISO language it does not make sense to write *:script if
@@ -350,6 +354,9 @@ sal_Bool XMLCharRfcLanguageTagHdl::exportXML( OUString& rStrExpValue, const uno:
 
     // Do not write rfc-language-tag='none' if BCP 47 is not needed.
     if (aLocale.Variant.isEmpty())
+        return sal_False;
+
+    if (SvtSaveOptions().GetODFDefaultVersion() < SvtSaveOptions::ODFVER_012)
         return sal_False;
 
     rStrExpValue = aLocale.Variant;

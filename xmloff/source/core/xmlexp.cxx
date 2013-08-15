@@ -1081,7 +1081,7 @@ void SvXMLExport::AddLanguageTagAttributes( sal_uInt16 nPrefix, sal_uInt16 nPref
         if (bWriteEmpty || !rLanguageTag.isSystemLocale())
         {
             AddAttribute( nPrefix, eLanguage, rLanguageTag.getLanguage());
-            if (rLanguageTag.hasScript())
+            if (rLanguageTag.hasScript() && getDefaultVersion() >= SvtSaveOptions::ODFVER_012)
                 AddAttribute( nPrefix, eScript, rLanguageTag.getScript());
             if (bWriteEmpty || !rLanguageTag.getCountry().isEmpty())
                 AddAttribute( nPrefix, eCountry, rLanguageTag.getCountry());
@@ -1089,7 +1089,8 @@ void SvXMLExport::AddLanguageTagAttributes( sal_uInt16 nPrefix, sal_uInt16 nPref
     }
     else
     {
-        AddAttribute( nPrefixRfc, eRfcLanguageTag, rLanguageTag.getBcp47());
+        if (getDefaultVersion() >= SvtSaveOptions::ODFVER_012)
+            AddAttribute( nPrefixRfc, eRfcLanguageTag, rLanguageTag.getBcp47());
         // Also in case of non-pure-ISO tag store best matching fo: attributes
         // for consumers not handling *:rfc-language-tag, ensuring that only
         // valid ISO codes are stored. Here the bWriteEmpty parameter has no
@@ -1099,7 +1100,7 @@ void SvXMLExport::AddLanguageTagAttributes( sal_uInt16 nPrefix, sal_uInt16 nPref
         if (!aLanguage.isEmpty())
         {
             AddAttribute( nPrefix, eLanguage, aLanguage);
-            if (!aScript.isEmpty())
+            if (!aScript.isEmpty() && getDefaultVersion() >= SvtSaveOptions::ODFVER_012)
                 AddAttribute( nPrefix, eScript, aScript);
             if (!aCountry.isEmpty())
                 AddAttribute( nPrefix, eCountry, aCountry);
