@@ -223,12 +223,12 @@ OUString GetFormulaParameter( const EnhancedCustomShapeParameter& rParameter )
 
 // ---------------------------------------------------------------------
 
-static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCustomShapeProperties, const OUString& rValue, sal_Bool bNoSymbols = sal_True )
+static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCustomShapeProperties, const OUString& rValue, bool bNoSymbols = true )
 {
     com::sun::star::drawing::EnhancedCustomShapeParameter aRet;
     if ( !rValue.isEmpty() )
     {
-        sal_Bool    bConstant = sal_True;
+        bool        bConstant = true;
         sal_Int32   nConstant = -1;
         sal_Int32   nIntVal = 0;
 
@@ -387,7 +387,7 @@ static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCu
             break;
 
             default:
-                bConstant = sal_False;
+                bConstant = false;
             break;
         }
         if ( bConstant )
@@ -488,7 +488,7 @@ static OUString convertToOOEquation( CustomShapeProperties& rCustomShapeProperti
         OUString sParameters[ 3 ];
 
         for ( i = 0; i < nParameters; i++ )
-            sParameters[ i ] = GetFormulaParameter( GetAdjCoordinate( rCustomShapeProperties, aTokens[ i + 1 ], sal_False ) );
+            sParameters[ i ] = GetFormulaParameter( GetAdjCoordinate( rCustomShapeProperties, aTokens[ i + 1 ], false ) );
 
         const FormulaCommandHMap::const_iterator aIter( pCommandHashMap->find( aTokens[ 0 ] ) );
         if ( aIter != pCommandHashMap->end() )
@@ -654,8 +654,8 @@ public:
 AdjPoint2DContext::AdjPoint2DContext( ContextHandler2Helper& rParent, const AttributeList& rAttribs, CustomShapeProperties& rCustomShapeProperties, EnhancedCustomShapeParameterPair& rAdjPoint2D )
 : ContextHandler2( rParent )
 {
-    rAdjPoint2D.First = GetAdjCoordinate( rCustomShapeProperties, rAttribs.getString( XML_x ).get(), sal_True );
-    rAdjPoint2D.Second = GetAdjCoordinate( rCustomShapeProperties, rAttribs.getString( XML_y ).get(), sal_True );
+    rAdjPoint2D.First = GetAdjCoordinate( rCustomShapeProperties, rAttribs.getString( XML_x ).get(), true );
+    rAdjPoint2D.Second = GetAdjCoordinate( rCustomShapeProperties, rAttribs.getString( XML_y ).get(), true );
 }
 
 // ---------------------------------------------------------------------
@@ -683,11 +683,11 @@ XYAdjustHandleContext::XYAdjustHandleContext( ContextHandler2Helper& rParent, co
     }
     if ( rAttribs.hasAttribute( XML_minX ) )
     {
-        mrAdjustHandle.min1 = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_minX, aEmptyDefault ), sal_True );
+        mrAdjustHandle.min1 = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_minX, aEmptyDefault ), true );
     }
     if ( rAttribs.hasAttribute( XML_maxX ) )
     {
-        mrAdjustHandle.max1 = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_maxX, aEmptyDefault ), sal_True );
+        mrAdjustHandle.max1 = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_maxX, aEmptyDefault ), true );
     }
     if ( rAttribs.hasAttribute( XML_gdRefY ) )
     {
@@ -695,11 +695,11 @@ XYAdjustHandleContext::XYAdjustHandleContext( ContextHandler2Helper& rParent, co
     }
     if ( rAttribs.hasAttribute( XML_minY ) )
     {
-        mrAdjustHandle.min2 = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_minY, aEmptyDefault ), sal_True );
+        mrAdjustHandle.min2 = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_minY, aEmptyDefault ), true );
     }
     if ( rAttribs.hasAttribute( XML_maxY ) )
     {
-        mrAdjustHandle.max2 = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_maxY, aEmptyDefault ), sal_True );
+        mrAdjustHandle.max2 = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_maxY, aEmptyDefault ), true );
     }
 }
 
@@ -735,11 +735,11 @@ PolarAdjustHandleContext::PolarAdjustHandleContext( ContextHandler2Helper& rPare
     }
     if ( rAttribs.hasAttribute( XML_minR ) )
     {
-        mrAdjustHandle.min1 = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_minR, aEmptyDefault ), sal_True );
+        mrAdjustHandle.min1 = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_minR, aEmptyDefault ), true );
     }
     if ( rAttribs.hasAttribute( XML_maxR ) )
     {
-        mrAdjustHandle.max1 = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_maxR, aEmptyDefault ), sal_True );
+        mrAdjustHandle.max1 = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_maxR, aEmptyDefault ), true );
     }
     if ( rAttribs.hasAttribute( XML_gdRefAng ) )
     {
@@ -1079,8 +1079,8 @@ ContextHandlerRef Path2DContext::onCreateContext( sal_Int32 aElementToken,
             EnhancedCustomShapeParameterPair aScale;
             EnhancedCustomShapeParameterPair aAngles;
 
-            aScale.First = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_wR ).get(), sal_True );
-            aScale.Second = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_hR ).get(), sal_True );
+            aScale.First = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_wR ).get(), true );
+            aScale.Second = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_hR ).get(), true );
 
             CustomShapeGuide aGuide;
             sal_Int32 nArcNum = mrCustomShapeProperties.getArcNum();
@@ -1212,10 +1212,10 @@ ContextHandlerRef CustomShapeGeometryContext::onCreateContext( sal_Int32 aElemen
         case A_TOKEN( rect ):           // CT_GeomRectList geometry rect list
         {
             GeomRect aGeomRect;
-            aGeomRect.l = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_l ).get(), sal_True );
-            aGeomRect.t = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_t ).get(), sal_True );
-            aGeomRect.r = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_r ).get(), sal_True );
-            aGeomRect.b = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_b ).get(), sal_True );
+            aGeomRect.l = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_l ).get(), true );
+            aGeomRect.t = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_t ).get(), true );
+            aGeomRect.r = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_r ).get(), true );
+            aGeomRect.b = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_b ).get(), true );
             mrCustomShapeProperties.getTextRect() = aGeomRect;
         }
         break;
