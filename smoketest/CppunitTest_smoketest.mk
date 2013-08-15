@@ -32,9 +32,15 @@ $(eval $(call gb_CppunitTest_use_libraries,smoketest,\
 
 $(eval $(call gb_CppunitTest_use_ure,smoketest))
 
+ifeq ($(ENABLE_MACOSX_SANDBOX),YES)
+userinstallation=$(shell $(gb_DEVINSTALLROOT)/MacOS/soffice --nstemporarydirectory)
+else
+userinstallation=$(WORKDIR)/CustomTarget/smoketest
+endif
+
 $(eval $(call gb_CppunitTest_add_arguments,smoketest,\
 	-env:arg-soffice=$(gb_JunitTest_SOFFICEARG) \
-	-env:arg-user=$(WORKDIR)/CustomTarget/smoketest \
+	-env:arg-user=$(userinstallation) \
 	-env:arg-env=$(gb_Helper_LIBRARY_PATH_VAR)"$$$${$(gb_Helper_LIBRARY_PATH_VAR)+=$$$$$(gb_Helper_LIBRARY_PATH_VAR)}" \
 	-env:arg-testarg.smoketest.doc=$(WORKDIR)/Zip/smoketestdoc.sxw \
 ))
