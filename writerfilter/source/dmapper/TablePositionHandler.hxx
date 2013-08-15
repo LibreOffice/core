@@ -31,7 +31,6 @@ namespace writerfilter {
             sal_Int32 m_nRightFromText;
             sal_Int32 m_nTopFromText;
             sal_Int32 m_nBottomFromText;
-            sal_Int32 m_nLeftBorderDistance;
 
             // Properties
             virtual void lcl_attribute(Id Name, Value & val);

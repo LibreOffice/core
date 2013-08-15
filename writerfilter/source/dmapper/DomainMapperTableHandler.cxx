@@ -38,6 +38,8 @@ namespace dmapper {
 using namespace ::com::sun::star;
 using namespace ::std;
 
+#define DEF_BORDER_DIST 190  //0,19cm
+
 #ifdef DEBUG_DMAPPER_TABLE_HANDLER
 static void  lcl_printProperties( PropertyMapPtr pProps )
 {
@@ -306,6 +308,22 @@ bool lcl_extractTableBorderProperty(PropertyMapPtr pTableProperties, const Prope
 
 }
 
+void lcl_DecrementHoriOrientPosition(uno::Sequence<beans::PropertyValue>& rFrameProperties, sal_Int32 nAmount)
+{
+    // Shifts the frame left by the given value.
+    for (sal_Int32 i = 0; i < rFrameProperties.getLength(); ++i)
+    {
+        beans::PropertyValue& rPropertyValue = rFrameProperties[i];
+        if (rPropertyValue.Name == "HoriOrientPosition")
+        {
+            sal_Int32 nValue = rPropertyValue.Value.get<sal_Int32>();
+            nValue -= nAmount;
+            rPropertyValue.Value <<= nValue;
+            return;
+        }
+    }
+}
+
 TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo & rInfo, uno::Sequence<beans::PropertyValue>& rFrameProperties)
 {
     // will receive the table style if any
@@ -401,8 +419,10 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
 
         m_aTableProperties->Insert( PROP_TABLE_BORDER_DISTANCES, uno::makeAny( aDistances ) );
 
+        if (rFrameProperties.hasElements())
+            lcl_DecrementHoriOrientPosition(rFrameProperties, rInfo.nLeftBorderDistance);
+
         // Set table above/bottom spacing to 0.
-        // TODO: handle 'Around' text wrapping mode
         m_aTableProperties->Insert( PROP_TOP_MARGIN, uno::makeAny( sal_Int32( 0 ) ) );
         m_aTableProperties->Insert( PROP_BOTTOM_MARGIN, uno::makeAny( sal_Int32( 0 ) ) );
 
@@ -430,20 +450,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
                 if (!rFrameProperties.hasElements())
                     rInfo.nLeftBorderDistance += aLeftBorder.LineWidth * 0.5;
                 else
-                {
-                    // If this is a floating table, then the position of the frame should be adjusted, instead.
-                    for (sal_Int32 i = 0; i < rFrameProperties.getLength(); ++i)
-                    {
-                        beans::PropertyValue& rPropertyValue = rFrameProperties[i];
-                        if (rPropertyValue.Name == "HoriOrientPosition")
-                        {
-                            sal_Int32 nValue = rPropertyValue.Value.get<sal_Int32>();
-                            nValue -= aLeftBorder.LineWidth * 0.5;
-                            rPropertyValue.Value <<= nValue;
-                            break;
-                        }
-                    }
-                }
+                    lcl_DecrementHoriOrientPosition(rFrameProperties, aLeftBorder.LineWidth * 0.5);
             }
         }
         if (lcl_extractTableBorderProperty(m_aTableProperties, PROP_RIGHT_BORDER, rInfo, aBorderLine))

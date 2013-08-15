@@ -33,8 +33,7 @@ TablePositionHandler::TablePositionHandler() :
     m_nLeftFromText(0),
     m_nRightFromText(0),
     m_nTopFromText(0),
-    m_nBottomFromText(0),
-    m_nLeftBorderDistance(DEF_BORDER_DIST)
+    m_nBottomFromText(0)
 {
 }
 
@@ -150,7 +149,7 @@ uno::Sequence<beans::PropertyValue> TablePositionHandler::getTablePosition() con
     pFrameProperties[13].Name = "HoriOrientRelation";
     pFrameProperties[13].Value <<= nHoriOrientRelation;
     pFrameProperties[14].Name = "HoriOrientPosition";
-    pFrameProperties[14].Value <<= m_nX - m_nLeftBorderDistance;
+    pFrameProperties[14].Value <<= m_nX;
 
 
     // Vertical positioning

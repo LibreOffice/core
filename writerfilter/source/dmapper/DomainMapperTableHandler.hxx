@@ -45,8 +45,6 @@ typedef ::com::sun::star::uno::Sequence< RowPropertyValuesSeq_t>    CellProperty
 typedef std::vector<PropertyMapPtr>     PropertyMapVector1;
 typedef std::vector<PropertyMapVector1> PropertyMapVector2;
 
-#define DEF_BORDER_DIST 190  //0,19cm
-
 class DomainMapper_Impl;
 class TableStyleSheetEntry;
 struct TableInfo;
