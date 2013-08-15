@@ -122,6 +122,21 @@ using namespace ::cppu;
 namespace sfx2
 {
 
+namespace
+{
+    bool lclSupportsOOXMLEncryption(OUString aFilterName)
+    {
+        return  aFilterName == "Calc MS Excel 2007 XML"
+                ||  aFilterName == "MS Word 2007 XML"
+                ||  aFilterName == "Impress MS PowerPoint 2007 XML"
+                ||  aFilterName == "Impress MS PowerPoint 2007 XML AutoPlay"
+                ||  aFilterName == "Calc Office Open XML"
+                ||  aFilterName == "Impress Office Open XML"
+                ||  aFilterName == "Impress Office Open XML AutoPlay"
+                ||  aFilterName == "Office Open XML Text";
+    }
+}
+
 const OUString* GetLastFilterConfigId( FileDialogHelper::Context _eContext )
 {
     static const OUString aSD_EXPORT_IDENTIFIER( "SdExportLastFilter"  );
@@ -2719,7 +2734,8 @@ ErrCode RequestPassword(const SfxFilter* pCurrentFilter, OUString& aURL, SfxItem
             // TODO/LATER: The filters should show the password dialog themself in future
             if ( bMSType )
             {
-                if ( pCurrentFilter->GetFilterName() == "Calc MS Excel 2007 XML" )
+                // Check if filter supports OOXML encryption
+                if ( lclSupportsOOXMLEncryption( pCurrentFilter->GetFilterName() ) )
                 {
                     ::comphelper::SequenceAsHashMap aHashData;
                     aHashData[ OUString( "Password"  ) ] <<= pPasswordRequest->getPassword();
