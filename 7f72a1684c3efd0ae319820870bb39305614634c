@@ -53,6 +53,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAXn//824\u003d",
+        "filename": "sw/source/core/fields/cellfml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 630,
+      "author": {
+        "id": 1000094
+      },
+      "writtenOn": "2013-08-15T00:11:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAXn//84E\u003d",
+      "revId": "7f72a1684c3efd0ae319820870bb39305614634c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAXn//84A\u003d",
         "filename": "sw/source/core/fields/cellfml.cxx",
         "patchSetId": 1
@@ -64,6 +82,24 @@
       "writtenOn": "2013-08-14T21:02:14Z",
       "side": 1,
       "message": "same as above, aStr +\u003d m_sFormula.copy(nFml, nStt-nFml)",
+      "revId": "7f72a1684c3efd0ae319820870bb39305614634c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//828\u003d",
+        "filename": "sw/source/core/fields/cellfml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 637,
+      "author": {
+        "id": 1000094
+      },
+      "writtenOn": "2013-08-15T00:11:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAXn//84A\u003d",
       "revId": "7f72a1684c3efd0ae319820870bb39305614634c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
