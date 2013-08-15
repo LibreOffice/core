@@ -1197,7 +1197,7 @@ int HTMLParser::_GetNextToken()
                             SetLineNr( nCLineNr );
                             SetLinePos( nCLinePos );
                             ClearTxtConvContext();
-                            aToken = aToken.replaceAt( nCStrLen, 1, "" );
+                            aToken = aToken.copy(0, nCStrLen);
                             nNextCh = '>';
                         }
                     }
