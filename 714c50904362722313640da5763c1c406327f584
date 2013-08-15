@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//8z8\u003d",
+        "filename": "sw/source/filter/rtf/swparrtf.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-08-15T14:29:55Z",
+      "side": 1,
+      "message": "would be a good idea to use SAL_OVERRIDE on such virtual methods to catch errors...",
+      "revId": "714c50904362722313640da5763c1c406327f584",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
