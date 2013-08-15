@@ -17,26 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <osl/mutex.hxx>
-#include <ucbhelper/content.hxx>
-#include <vcl/msgbox.hxx>
-
-#include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
-
-#include <map>
-#include <vector>
-#include <iterator>
-
-#include "symbol.hxx"
-#include "view.hxx"
-#include "utility.hxx"
-#include "dialog.hxx"
 #include "config.hxx"
-#include "cfgitem.hxx"
-#include "smmod.hxx"
-#include "starmath.hrc"
-
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::ucb;

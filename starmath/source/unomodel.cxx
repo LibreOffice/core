@@ -17,35 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <osl/mutex.hxx>
 #include <sfx2/printer.hxx>
-#include <vcl/svapp.hxx>
-#include <svtools/ctrltool.hxx>
 #include <svl/itemprop.hxx>
-#include <unotools/localedatawrapper.hxx>
-#include <comphelper/processfactory.hxx>
-#include <editeng/paperinf.hxx>
-#include <vcl/settings.hxx>
-#include <vcl/print.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
-#include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/formula/SymbolDescriptor.hpp>
-#include <com/sun/star/awt/Size.hpp>
-#include <com/sun/star/script/XLibraryContainer.hpp>
-#include <xmloff/xmluconv.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <comphelper/propertysetinfo.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <unotools/moduleoptions.hxx>
 
-#include <unomodel.hxx>
 #include <document.hxx>
 #include <view.hxx>
-#include <symbol.hxx>
-#include <starmath.hrc>
 #include <config.hxx>
-#include <smdll.hxx>
 
 using namespace ::cppu;
 using namespace ::std;
@@ -60,8 +43,6 @@ using namespace ::com::sun::star::script;
 
 #define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
 #define MM100_TO_TWIP(MM100)    ((MM100) >= 0 ? (((MM100)*72L+63L)/127L) : (((MM100)*72L-63L)/127L))
-
-////////////////////////////////////////////////////////////
 
 SmPrintUIOptions::SmPrintUIOptions()
 {

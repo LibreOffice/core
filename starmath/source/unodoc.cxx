@@ -17,14 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sfx2/docfac.hxx>
-#include <sfx2/sfxmodelfactory.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-
 #include "smdll.hxx"
 #include "document.hxx"
-#include <osl/mutex.hxx>
-#include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;
 

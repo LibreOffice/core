@@ -17,22 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sfx2/app.hxx>
-#include <vcl/virdev.hxx>
-#include <tools/tenccvt.hxx>
-#include <osl/thread.h>
-
-#include <tools/stream.hxx>
-
-#include "starmath.hrc"
-
-#include "utility.hxx"
 #include "dialog.hxx"
 #include "view.hxx"
-#include "smdll.hxx"
-
-
-////////////////////////////////////////////////////////////
 
 // return pointer to active SmViewShell, if this is not possible
 // return 0 instead.
@@ -43,12 +29,6 @@ SmViewShell * SmGetActiveView()
     SfxViewShell *pView = SfxViewShell::Current();
     return PTR_CAST(SmViewShell, pView);
 }
-
-
-////////////////////////////////////////////////////////////
-
-
-/**************************************************************************/
 
 void SmFontPickList::Clear()
 {

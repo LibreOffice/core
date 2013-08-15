@@ -17,20 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <stdio.h>
-
 #include <com/sun/star/i18n/UnicodeType.hpp>
-#include <i18nlangtag/lang.h>
-#include <unotools/charclass.hxx>
-#include <editeng/unolingu.hxx>
-#include <unotools/syslocale.hxx>
-#include <sal/macros.h>
 #include "parse.hxx"
-#include "starmath.hrc"
-#include "smdll.hxx"
-#include "smmod.hxx"
 #include "config.hxx"
-
 #include "node.hxx"
 
 using namespace ::com::sun::star;

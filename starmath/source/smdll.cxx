@@ -17,27 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sot/factory.hxx>
 #include <svx/svxids.hrc>
 #include <svx/modctrl.hxx>
 #include <svx/zoomctrl.hxx>
 #include <svx/zoomsliderctrl.hxx>
-#include <sfx2/docfac.hxx>
 #include <svx/lboxctrl.hxx>
-#include <sfx2/docfile.hxx>
-#include <sfx2/docfilt.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/taskpane.hxx>
 
-#include <smdll.hxx>
-#include <document.hxx>
 #include <toolbox.hxx>
 #include <view.hxx>
 
 #include <ElementsDockingWindow.hxx>
-
-#include <starmath.hrc>
-
 #include <svx/xmlsecctrl.hxx>
 
 namespace

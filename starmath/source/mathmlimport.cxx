@@ -22,51 +22,30 @@
 into one string, xml parser hands them to us line by line rather than all in
 one go*/
 
-#include <com/sun/star/xml/sax/XErrorHandler.hpp>
-#include <com/sun/star/xml/sax/XEntityResolver.hpp>
-#include <com/sun/star/xml/sax/InputSource.hpp>
-#include <com/sun/star/xml/sax/XDTDHandler.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
-#include <com/sun/star/io/XActiveDataSource.hpp>
-#include <com/sun/star/io/XActiveDataControl.hpp>
-#include <com/sun/star/document/XDocumentProperties.hpp>
-#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
-#include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
-#include <com/sun/star/uno/Any.h>
 
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/string.hxx>
-#include <rtl/math.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/docfile.hxx>
-#include <osl/diagnose.h>
 #include <svtools/sfxecode.hxx>
-#include <unotools/saveopt.hxx>
 #include <svl/stritem.hxx>
 #include <svl/itemprop.hxx>
 #include <unotools/streamwrap.hxx>
 #include <sax/tools/converter.hxx>
 #include <xmloff/xmlnmspe.hxx>
-#include <xmloff/xmltoken.hxx>
 #include <xmloff/nmspmap.hxx>
-#include <xmloff/attrlist.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlmetai.hxx>
-#include <osl/mutex.hxx>
-
-#include <memory>
 
 #include "mathmlimport.hxx"
-#include <starmath.hrc>
 #include <unomodel.hxx>
 #include <document.hxx>
-#include <utility.hxx>
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
@@ -75,7 +54,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
-
 
 #define IMPORT_SVC_NAME "com.sun.star.xml.XMLImportFilter"
 

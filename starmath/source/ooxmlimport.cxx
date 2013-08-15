@@ -9,10 +9,7 @@
 
 
 #include "ooxmlimport.hxx"
-
-#include <oox/token/tokens.hxx>
 #include <oox/token/namespaces.hxx>
-#include <rtl/ustring.hxx>
 
 using namespace oox;
 using namespace oox::formulaimport;

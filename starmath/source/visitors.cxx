@@ -436,15 +436,7 @@ void SmCaretPos2LineVisitor::DefaultVisit( SmNode* pNode )
 
 /////////////////////////////// Nasty temporary device!!! ////////////////////////////////
 
-#include <tools/gen.hxx>
-#include <tools/fract.hxx>
-#include <rtl/math.hxx>
-#include <tools/color.hxx>
-#include <vcl/metric.hxx>
 #include <vcl/lineinfo.hxx>
-#include <vcl/outdev.hxx>
-#include <sfx2/module.hxx>
-#include "symbol.hxx"
 #include "smmod.hxx"
 
 class SmTmpDevice2

@@ -17,41 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "smdetect.hxx"
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <comphelper/processfactory.hxx>
-#include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/task/XInteractionHandler.hpp>
-#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
-#include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <com/sun/star/ucb/InteractiveAppException.hpp>
-#include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <ucbhelper/simpleinteractionrequest.hxx>
-#include <rtl/ustring.h>
-#include <rtl/logfile.hxx>
-#include <svl/itemset.hxx>
-#include <vcl/window.hxx>
 #include <svl/eitem.hxx>
-#include <svl/stritem.hxx>
 #include <tools/urlobj.hxx>
-#include <osl/mutex.hxx>
-#include <svtools/sfxecode.hxx>
-#include <svtools/ehdl.hxx>
-#include <sot/storinfo.hxx>
-#include <vcl/svapp.hxx>
 #include <sfx2/app.hxx>
-#include <sfx2/sfxsids.hrc>
 #include <sfx2/request.hxx>
 #include <sfx2/docfile.hxx>
-#include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/brokenpackageint.hxx>
 

@@ -18,28 +18,11 @@
  */
 
 
-#include "node.hxx"
-#include "rect.hxx"
 #include "symbol.hxx"
-#include "smmod.hxx"
-#include "document.hxx"
-#include "view.hxx"
 #include "mathtype.hxx"
 #include "visitors.hxx"
 
 #include <comphelper/string.hxx>
-#include <tools/gen.hxx>
-#include <tools/fract.hxx>
-#include <rtl/math.hxx>
-#include <tools/color.hxx>
-#include <vcl/metric.hxx>
-#include <vcl/lineinfo.hxx>
-#include <vcl/outdev.hxx>
-#include <sfx2/module.hxx>
-
-#include <math.h>
-#include <float.h>
-
 
 ////////////////////////////////////////
 // SmTmpDevice

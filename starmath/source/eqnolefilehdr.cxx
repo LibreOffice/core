@@ -18,11 +18,6 @@
  */
 
 #include "eqnolefilehdr.hxx"
-#include <sot/storage.hxx>
-
-//////////////////////////////////////////////////////////////////////
-
-
 
 sal_Bool GetMathTypeVersion( SotStorage* pStor, sal_uInt8 &nVersion )
 {

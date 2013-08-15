@@ -18,19 +18,10 @@
  */
 
 #include <svl/eitem.hxx>
-#include <sfx2/app.hxx>
 #include <svl/intitem.hxx>
-#include <svtools/imgdef.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/imgmgr.hxx>
-#include <vcl/wrkwin.hxx>
 #include "toolbox.hxx"
-#include "starmath.hrc"
-#include "toolbox.hrc"
 #include "view.hxx"
-
-
-////////////////////////////////////////////////////////////
 
 static sal_uInt16  GetImageListRID( sal_uInt16 nCategoryRID )
 {

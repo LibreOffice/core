@@ -17,37 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "tools/rcid.h"
 #include <comphelper/string.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
-#include <sfx2/app.hxx>
-#include <vcl/builder.hxx>
-#include <vcl/layout.hxx>
-#include <vcl/msgbox.hxx>
-#include <svtools/ctrltool.hxx>
-#include <sfx2/printer.hxx>
 #include <vcl/help.hxx>
 #include <vcl/waitobj.hxx>
-#include <vcl/settings.hxx>
-#include <vcl/wall.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/sfx.hrc>
-#include <osl/diagnose.h>
 #include <svx/ucsubset.hxx>
 
-
 #include "dialog.hxx"
-#include "starmath.hrc"
 #include "config.hxx"
 #include "dialog.hrc"
-#include "smmod.hxx"
-#include "symbol.hxx"
 #include "view.hxx"
-#include "document.hxx"
-#include "unomodel.hxx"
-
 
 // Since it's better to set/query the FontStyle via its attributes rather
 // than via the StyleName we create a way to translate

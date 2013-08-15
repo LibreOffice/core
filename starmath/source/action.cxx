@@ -18,10 +18,7 @@
  */
 
 #include "action.hxx"
-#include "smdll.hxx"
 #include "document.hxx"
-#include "starmath.hrc"
-
 
 SmFormatAction::SmFormatAction(SmDocShell *pDocSh,
                                const SmFormat& rOldFormat,

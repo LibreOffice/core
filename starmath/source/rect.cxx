@@ -17,20 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <osl/diagnose.h>
 #include <vcl/svapp.hxx>
-#include <vcl/wrkwin.hxx>
 #include <vcl/virdev.hxx>
 
-
 #include "rect.hxx"
-#include "types.hxx"
-#include "utility.hxx"
 #include "smmod.hxx"
-
-
-////////////////////////////////////////////////////////////////////////////////
-
 
 // '\0' terminated Array with symbol, which should be treat as letters in
 // StarMath Font, (to get a normal (non-clipped) SmRect in contrast to the

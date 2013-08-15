@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
-#include <com/sun/star/uno/Sequence.h>
-#include <rtl/ustring.hxx>
-
 #include "smdetect.hxx"
 
 using namespace ::rtl;

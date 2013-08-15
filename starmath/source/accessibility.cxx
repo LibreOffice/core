@@ -20,36 +20,19 @@
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleTextType.hpp>
-#include <com/sun/star/accessibility/XAccessibleEventListener.hpp>
-#include <com/sun/star/accessibility/AccessibleEventObject.hpp>
-#include <com/sun/star/awt/FocusEvent.hpp>
-#include <com/sun/star/awt/XFocusListener.hpp>
 #include <unotools/accessiblerelationsethelper.hxx>
 
-
-#include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
-#include <com/sun/star/i18n/WordType.hpp>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <comphelper/accessibleeventnotifier.hxx>
-#include <osl/diagnose.h>
-#include <vcl/svapp.hxx>
-#include <vcl/window.hxx>
 #include <vcl/unohelp2.hxx>
-#include <tools/gen.hxx>
-#include <osl/mutex.hxx>
-#include <svl/itemset.hxx>
 
 #include <editeng/editobj.hxx>
-#include <editeng/editdata.hxx>
 #include <editeng/editview.hxx>
-#include <editeng/eeitem.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/unoedhlp.hxx>
 
-
 #include "accessibility.hxx"
-#include <unomodel.hxx>
 #include <document.hxx>
 #include <view.hxx>
 
@@ -57,8 +40,6 @@ using namespace com::sun::star;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::accessibility;
-
-//////////////////////////////////////////////////////////////////////
 
 static awt::Rectangle lcl_GetBounds( Window *pWin )
 {

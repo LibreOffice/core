@@ -17,12 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/stream.hxx>
 #include <vcl/svapp.hxx>
 #include <editeng/scripttypeitem.hxx>
 #include "format.hxx"
-
-/////////////////////////////////////////////////////////////////
 
 // Latin default-fonts
 static const sal_uInt16 aLatinDefFnts[FNT_END] =

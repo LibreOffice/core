@@ -7,10 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-
 #include "wordexportbase.hxx"
-
-#include <rtl/ustring.hxx>
 
 SmWordExportBase::SmWordExportBase( const SmNode* pIn )
 : m_pTree( pIn )

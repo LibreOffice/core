@@ -17,38 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/globname.hxx>
-#include <vcl/status.hxx>
-#include <sfx2/msg.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objface.hxx>
 #include <svl/whiter.hxx>
-#include <sfx2/request.hxx>
-#include <sfx2/sfx.hrc>
-#include <sfx2/viewsh.hxx>
-#include <vcl/wrkwin.hxx>
 #include <svx/svxids.hrc>
-#include <vcl/msgbox.hxx>
-#include <vcl/virdev.hxx>
-#include <unotools/syslocale.hxx>
-#include <tools/rtti.hxx>
-#include "smmod.hxx"
-#include "symbol.hxx"
 #include "config.hxx"
 #include "dialog.hxx"
-#include "edit.hxx"
 #include "view.hxx"
-#include "starmath.hrc"
 #include "svx/modctrl.hxx"
 
 TYPEINIT1( SmModule, SfxModule );
 
 #define SmModule
 #include "smslots.hxx"
-
-#include <svx/xmlsecctrl.hxx>
-
-
 
 SmResId::SmResId( sal_uInt16 nId )
     : ResId(nId, *SM_MOD()->GetResMgr())

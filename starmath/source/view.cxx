@@ -17,55 +17,30 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/accessibility/AccessibleEventId.hpp>
-#include <com/sun/star/accessibility/AccessibleEventObject.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
-#include <com/sun/star/accessibility/XAccessible.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/XFramesSupplier.hpp>
-#include <com/sun/star/container/XChild.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
-#include <sfx2/docfilt.hxx>
 #include <sfx2/docinsert.hxx>
 #include <sfx2/filedlghelper.hxx>
-#include <sfx2/msg.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/request.hxx>
 #include <svl/eitem.hxx>
-#include <svl/intitem.hxx>
-#include <svl/itemset.hxx>
-#include <svl/poolitem.hxx>
-#include <svl/ptitem.hxx>
 #include <svl/stritem.hxx>
-#include <svtools/transfer.hxx>
 #include <svtools/miscopt.hxx>
-#include <svl/undo.hxx>
 #include <svl/whiter.hxx>
-#include <svx/dialogs.hrc>
 #include <svx/zoomslideritem.hxx>
-#include <editeng/editeng.hxx>
 #include <svx/svxdlg.hxx>
 #include <sfx2/zoomitem.hxx>
 #include <vcl/decoview.hxx>
-#include <vcl/menu.hxx>
-#include <vcl/msgbox.hxx>
-#include <vcl/wrkwin.hxx>
-#include <fstream>
 
-#include "unomodel.hxx"
 #include "view.hxx"
-#include "config.hxx"
 #include "dialog.hxx"
-#include "document.hxx"
-#include "starmath.hrc"
 #include "toolbox.hxx"
 #include "mathmlimport.hxx"
 #include "cursor.hxx"

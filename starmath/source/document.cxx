@@ -17,68 +17,30 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/accessibility/AccessibleEventId.hpp>
-#include <com/sun/star/lang/Locale.hpp>
-#include <com/sun/star/uno/Any.h>
-
 #include <comphelper/accessibletexthelper.hxx>
-#include <comphelper/processfactory.hxx>
-#include <comphelper/storagehelper.hxx>
-#include <rtl/ustring.hxx>
-#include <unotools/eventcfg.hxx>
 #include <sfx2/event.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
-#include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>
-#include <sfx2/msg.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/request.hxx>
-#include <sfx2/viewfrm.hxx>
 #include <comphelper/classids.hxx>
-#include <sot/exchange.hxx>
-#include <sot/formats.hxx>
-#include <sot/storage.hxx>
 #include <svl/eitem.hxx>
-#include <svl/fstathelper.hxx>
 #include <svl/intitem.hxx>
-#include <svl/itempool.hxx>
 #include <unotools/lingucfg.hxx>
-#include <unotools/linguprops.hxx>
-#include <unotools/pathoptions.hxx>
-#include <svl/ptitem.hxx>
-#include <svtools/sfxecode.hxx>
 #include <svl/slstitm.hxx>
-#include <svl/smplhint.hxx>
 #include <svl/stritem.hxx>
-#include <svtools/transfer.hxx>
-#include <svl/undo.hxx>
-#include <svl/urihelper.hxx>
 #include <svl/whiter.hxx>
-#include <editeng/editeng.hxx>
 #include <editeng/editstat.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/fontitem.hxx>
-#include <editeng/unolingu.hxx>
-#include <ucbhelper/content.hxx>
-#include <vcl/mapmod.hxx>
-#include <tools/mapunit.hxx>
-#include <vcl/msgbox.hxx>
-#include <sfx2/sfx.hrc>
 #include <document.hxx>
 #include <action.hxx>
-#include <config.hxx>
 #include <dialog.hxx>
-#include <format.hxx>
-#include <smdll.hxx>
-#include <starmath.hrc>
-#include <symbol.hxx>
 #include <toolbox.hxx>
-#include <unomodel.hxx>
-#include <utility.hxx>
 #include <view.hxx>
 #include "mathtype.hxx"
 #include "ooxmlexport.hxx"
@@ -86,7 +48,6 @@
 #include "rtfexport.hxx"
 #include "mathmlimport.hxx"
 #include "mathmlexport.hxx"
-#include <sfx2/sfxsids.hrc>
 #include <svx/svxids.hrc>
 #include "cursor.hxx"
 #include <tools/diagnose_ex.h>
@@ -101,9 +62,6 @@ using namespace ::com::sun::star::uno;
 
 #define SmDocShell
 #include "smslots.hxx"
-
-////////////////////////////////////////////////////////////
-
 
 TYPEINIT1( SmDocShell, SfxObjectShell );
 

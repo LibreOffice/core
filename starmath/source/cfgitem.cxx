@@ -17,27 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/svapp.hxx>
-#include <sal/macros.h>
 #include "cfgitem.hxx"
-
-#include "starmath.hrc"
-#include "smdll.hxx"
 #include "format.hxx"
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 
-
-
 static const char aRootName[] = "Office.Math";
 
 #define SYMBOL_LIST         "SymbolList"
 #define FONT_FORMAT_LIST    "FontFormatList"
-
-/////////////////////////////////////////////////////////////////
-
 
 static Sequence< OUString > lcl_GetFontPropertyNames()
 {

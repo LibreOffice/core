@@ -17,16 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
-#include <com/sun/star/uno/Sequence.h>
-#include <rtl/ustring.hxx>
-
 #include <sfx2/sfxmodelfactory.hxx>
-
-#include "smdll.hxx"
 #include "document.hxx"
-#include "unomodel.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

@@ -18,23 +18,11 @@
  */
 
 #include <svl/itemset.hxx>
-#include <svl/hint.hxx>
-#include <svl/smplhint.hxx>
-#include <unotools/pathoptions.hxx>
-#include <sfx2/sfxsids.hrc>
 #include <svl/eitem.hxx>
 #include <svl/itempool.hxx>
-#include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
-#include <tools/stream.hxx>
-
 
 #include "config.hxx"
-#include "format.hxx"
-#include "smmod.hxx"
-#include "starmath.hrc"
-
-/////////////////////////////////////////////////////////////////
 
 SmConfig::SmConfig()
 {
