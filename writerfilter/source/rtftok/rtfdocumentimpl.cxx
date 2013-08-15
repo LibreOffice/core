@@ -2710,6 +2710,9 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_REVISIONS:
                 m_aSettingsTableSprms.set(NS_ooxml::LN_CT_Settings_trackRevisions, RTFValue::Pointer_t(new RTFValue(1)));
                 break;
+        case RTF_BRDRSH:
+                lcl_putBorderProperty(m_aStates, NS_rtf::LN_FSHADOW, RTFValue::Pointer_t(new RTFValue(1)));
+                break;
         default:
                 {
                     SAL_INFO("writerfilter", "TODO handle flag '" << lcl_RtfToString(nKeyword) << "'");

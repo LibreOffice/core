@@ -67,6 +67,7 @@ public:
     void testRecordChanges();
     void testTextframeTable();
     void testFdo66682();
+    void testParaShadow();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -123,6 +124,7 @@ void Test::run()
         {"record-changes.rtf", &Test::testRecordChanges},
         {"textframe-table.rtf", &Test::testTextframeTable},
         {"fdo66682.rtf", &Test::testFdo66682},
+        {"para-shadow.rtf", &Test::testParaShadow},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -626,6 +628,15 @@ void Test::testFdo66682()
     }
     // Suffix was '\0' instead of ' '.
     CPPUNIT_ASSERT_EQUAL(OUString(" "), aSuffix);
+}
+
+void Test::testParaShadow()
+{
+    // The problem was that \brdrsh was ignored.
+    table::ShadowFormat aShadow = getProperty<table::ShadowFormat>(getParagraph(2), "ParaShadowFormat");
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, sal_uInt32(aShadow.Color));
+    CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_BOTTOM_RIGHT, aShadow.Location);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(TWIP_TO_MM100(60)), aShadow.ShadowWidth);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

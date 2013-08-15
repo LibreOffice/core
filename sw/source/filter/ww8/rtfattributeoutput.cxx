@@ -189,12 +189,14 @@ static OString OutTBLBorderLine(RtfExport &rExport, const SvxBorderLine* pLine, 
 }
 
 static OString OutBorderLine(RtfExport &rExport, const SvxBorderLine* pLine,
-    const sal_Char* pStr, sal_uInt16 nDist)
+    const sal_Char* pStr, sal_uInt16 nDist, SvxShadowLocation eShadowLocation = SVX_SHADOW_NONE)
 {
     OStringBuffer aRet;
     aRet.append(OutTBLBorderLine(rExport, pLine, pStr));
     aRet.append(OOO_STRING_SVTOOLS_RTF_BRSP);
     aRet.append((sal_Int32)nDist);
+    if (eShadowLocation == SVX_SHADOW_BOTTOMRIGHT)
+        aRet.append(LO_STRING_SVTOOLS_RTF_BRDRSH);
     return aRet.makeStringAndClear();
 }
 
@@ -3033,6 +3035,10 @@ void RtfAttributeOutput::FormatBox( const SvxBoxItem& rBox )
         m_aSectionBreaks.append(OutBorderLine( m_rExport, rBox.GetTop(), OOO_STRING_SVTOOLS_RTF_BOX, nDist ));
     else
     {
+        SvxShadowLocation eShadowLocation = SVX_SHADOW_NONE;
+        if (const SfxPoolItem* pItem = GetExport().HasItem(RES_SHADOW))
+            eShadowLocation = static_cast<const SvxShadowItem*>(pItem)->GetLocation();
+
         const sal_uInt16* pBrd = aBorders;
         const sal_Char** pBrdNms = (const sal_Char**)aBorderNames;
         for(int i = 0; i < 4; ++i, ++pBrd, ++pBrdNms)
@@ -3040,7 +3046,7 @@ void RtfAttributeOutput::FormatBox( const SvxBoxItem& rBox )
             if (const SvxBorderLine* pLn = rBox.GetLine(*pBrd))
             {
                 m_aSectionBreaks.append(OutBorderLine(m_rExport, pLn, *pBrdNms,
-                        rBox.GetDistance(*pBrd)));
+                        rBox.GetDistance(*pBrd), eShadowLocation));
             }
         }
     }

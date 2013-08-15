@@ -1206,6 +1206,7 @@
 #define LO_STRING_SVTOOLS_RTF_MNOR "\\mnor"
 #define LO_STRING_SVTOOLS_RTF_LISTPICTURE "\\listpicture"
 #define LO_STRING_SVTOOLS_RTF_LEVELPICTURE "\\levelpicture"
+#define LO_STRING_SVTOOLS_RTF_BRDRSH "\\brdrsh"
 
 #endif // _RTFKEYWD_HXX
 
