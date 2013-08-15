@@ -283,7 +283,7 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                 sal_False, &pItem ))
                 sParent = ((const SfxStringItem*)pItem)->GetValue();
 
-            nRet = Edit( sName, sParent, nFamily, nMask, sal_True, 0, 0, rReq.IsAPI() );
+            nRet = Edit( sName, sParent, nFamily, nMask, sal_True, OString(), 0, rReq.IsAPI() );
         }
         break;
 
@@ -445,7 +445,7 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                 switch(nSlot)
                 {
                     case SID_STYLE_EDIT:
-                        nRet = Edit(aParam, aEmptyStr, nFamily, nMask, sal_False, 0, pActShell );
+                        nRet = Edit(aParam, aEmptyStr, nFamily, nMask, sal_False, OString(), pActShell );
                         break;
                     case SID_STYLE_DELETE:
                         nRet = Delete(aParam, nFamily);
