@@ -467,7 +467,7 @@ void     SwGlobalTree::RequestHelp( const HelpEvent& rHEvt )
             if (pItem && SV_ITEM_ID_LBOXSTRING == pItem->GetType())
             {
                 const SwSection* pSect = pCont->GetSection();
-                String sEntry = pSect->GetLinkFileName().GetToken(0, sfx2::cTokenSeparator);
+                String sEntry = pSect->GetLinkFileName().getToken(0, sfx2::cTokenSeparator);
                 if(!pSect->IsConnectFlag())
                     sEntry.Insert(aContextStrings[ST_BROKEN_LINK - ST_GLOBAL_CONTEXT_FIRST], 0 );
                 Point aEntryPos = GetEntryPosition( pEntry );
@@ -1156,14 +1156,14 @@ sal_Bool    SwGlobalTree::Update(sal_Bool bHard)
 
 void SwGlobalTree::OpenDoc(const SwGlblDocContent* pCont)
 {
-    String sFileName(pCont->GetSection()->GetLinkFileName().GetToken(0,
+    const OUString sFileName(pCont->GetSection()->GetLinkFileName().getToken(0,
             sfx2::cTokenSeparator));
     bool bFound = false;
     const SfxObjectShell* pCurr = SfxObjectShell::GetFirst();
     while( !bFound && pCurr )
     {
         if(pCurr->GetMedium() &&
-            String(pCurr->GetMedium()->GetURLObject().GetMainURL(INetURLObject::DECODE_TO_IURI)) == sFileName)
+           pCurr->GetMedium()->GetURLObject().GetMainURL(INetURLObject::DECODE_TO_IURI) == sFileName)
         {
             bFound = true;
             SwGlobalTree::SetShowShell(pCurr);
@@ -1176,10 +1176,9 @@ void SwGlobalTree::OpenDoc(const SwGlblDocContent* pCont)
     }
     if(!bFound)
     {
-        SfxStringItem aURL(SID_FILE_NAME,
-            sFileName);
+        SfxStringItem aURL(SID_FILE_NAME, sFileName);
         SfxBoolItem aReadOnly(SID_DOC_READONLY, sal_False);
-        SfxStringItem aTargetFrameName( SID_TARGETNAME, OUString("_blank") );
+        SfxStringItem aTargetFrameName( SID_TARGETNAME, "_blank" );
         SfxStringItem aReferer(SID_REFERER, pActiveShell->GetView().GetDocShell()->GetTitle());
         pActiveShell->GetView().GetViewFrame()->GetDispatcher()->
                 Execute(SID_OPENDOC, SFX_CALLMODE_ASYNCHRON,

@@ -2251,10 +2251,10 @@ bool SwDoc::RemoveInvisibleContent()
                 if (it == aSectFmts.end())
                     aSectFmts.insert( aSectFmts.begin(), pSect->GetFmt() );
             }
-            if( pSect->GetCondition().Len() )
+            if( !pSect->GetCondition().isEmpty() )
             {
                 SwSectionData aSectionData( *pSect );
-                aSectionData.SetCondition( aEmptyStr );
+                aSectionData.SetCondition( OUString() );
                 aSectionData.SetHidden( false );
                 UpdateSection( n, aSectionData );
             }

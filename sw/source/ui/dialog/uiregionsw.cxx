@@ -193,7 +193,7 @@ SectRepr::SectRepr( sal_uInt16 nPos, SwSection& rSect )
     , m_FrmDirItem( FRMDIR_ENVIRONMENT, RES_FRAMEDIR )
     , m_LRSpaceItem( RES_LR_SPACE )
     , m_nArrPos(nPos)
-    , m_bContent(m_SectionData.GetLinkFileName().Len() == 0)
+    , m_bContent(m_SectionData.GetLinkFileName().isEmpty())
     , m_bSelected(false)
 {
     SwSectionFmt *pFmt = rSect.GetFmt();
@@ -1601,8 +1601,9 @@ void    SwInsertSectionTabPage::SetWrtShell(SwWrtShell& rSh)
             ->GetSectionData();
     if (pSectionData) // something set?
     {
+        const String sSectionName(pSectionData->GetSectionName());
         m_pCurName->SetText(
-            rSh.GetUniqueSectionName(& pSectionData->GetSectionName()));
+            rSh.GetUniqueSectionName(&sSectionName));
         m_pProtectCB->Check( 0 != pSectionData->IsProtectFlag() );
         m_sFileName = pSectionData->GetLinkFileName();
         m_sFilePasswd = pSectionData->GetLinkFilePassword();

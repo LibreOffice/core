@@ -698,7 +698,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                     sFileNameBuf.append(aLink.FilterName);
                     sFileNameBuf.append(sfx2::cTokenSeparator);
                     sFileNameBuf.append(
-                        pSectionData->GetLinkFileName().GetToken(2,
+                        pSectionData->GetLinkFileName().getToken(2,
                             sfx2::cTokenSeparator));
                     const OUString sFileName(
                             sFileNameBuf.makeStringAndClear());
@@ -770,7 +770,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                 }
                 else
                 {
-                    if (pSectionData->GetCondition().Len() != 0)
+                    if (!pSectionData->GetCondition().isEmpty())
                     {
                         pSectionData->SetCondHidden(!bVal);
                     }
@@ -1066,7 +1066,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 }
                 else if (FILE_LINK_SECTION == pSect->GetType())
                 {
-                    sRet = pSect->GetLinkFileName().GetToken(2,
+                    sRet = pSect->GetLinkFileName().getToken(2,
                             sfx2::cTokenSeparator);
                 }
                 pRet[nProperty] <<= sRet;

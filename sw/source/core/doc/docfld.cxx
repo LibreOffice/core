@@ -2225,7 +2225,7 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
         for (sal_uInt16 n = rArr.size(); n; )
         {
             SwSection* pSect = rArr[ --n ]->GetSection();
-            if( pSect && pSect->IsHidden() && pSect->GetCondition().Len() &&
+            if( pSect && pSect->IsHidden() && !pSect->GetCondition().isEmpty() &&
                 0 != ( pSectNd = pSect->GetFmt()->GetSectionNode() ))
             {
                 sal_uLong nIdx = pSectNd->GetIndex();
