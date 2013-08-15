@@ -1,8 +1,19 @@
 <?xml version="1.0"?>
 <object-list>
     <object pagekind="PK_STANDARD" type="PRESOBJ_DATETIME" relative-height="0.069" relative-width="0.233" relative-posX="0.05" relative-posY="0.911"/>
-    <object pagekind="PK_HANDOUT" type="PRESOBJ_DATETIME" relative-height="1" relative-width="1" relative-posX="0.434" relative-posY="0.05"/>
-    <object pagekind="PK_NOTES" type="PRESOBJ_DATETIME" relative-height="1" relative-width="1" relative-posX="0.434" relative-posY="0.05"/>
+    <object pagekind="PK_HANDOUT" type="PRESOBJ_DATETIME" relative-height="0.434" relative-width="0.05" relative-posX="0.434" relative-posY="0"/>
+    <object pagekind="PK_NOTES" type="PRESOBJ_DATETIME" relative-height="0.434" relative-width="0.05" relative-posX="0.434" relative-posY="0"/>
+    <object pagekind="PK_STANDARD" type="PRESOBJ_FOOTER" relative-height="0.069" relative-width="0.317" relative-posX="0.342" relative-posY="0.911"/>
+    <object pagekind="PK_HANDOUT" type="PRESOBJ_FOOTER" relative-height="0.434" relative-width="0.05" relative-posX="0" relative-posY="0.05"/>
+    <object pagekind="PK_NOTES" type="PRESOBJ_FOOTER" relative-height="0.434" relative-width="0.05" relative-posX="0" relative-posY="0.05"/>
+    <object pagekind="PK_STANDARD" type="PRESOBJ_SLIDENUMBER" relative-height="0.069" relative-width="0.317" relative-posX="0.717" relative-posY="0.911"/>
+    <object pagekind="PK_HANDOUT" type="PRESOBJ_SLIDENUMBER" relative-height="0.434" relative-width="0.05" relative-posX="0" relative-posY="0.05"/>
+    <object pagekind="PK_NOTES" type="PRESOBJ_SLIDENUMBER" relative-height="0.434" relative-width="0.05" relative-posX="0" relative-posY="0.05"/>
+    <object pagekind="PK_STANDARD" type="PRESOBJ_HEADER" relative-height="0.069" relative-width="0.317" relative-posX="0.717" relative-posY="0.911"/>
+    <object pagekind="PK_HANDOUT" type="PRESOBJ_HEADER" relative-height="0.434" relative-width="0.05" relative-posX="0" relative-posY="0"/>
+    <object pagekind="PK_NOTES" type="PRESOBJ_HEADER" relative-height="0.434" relative-width="0.05" relative-posX="0" relative-posY="0"/>
     <object pagekind="PK_STANDARD" type="PRESOBJ_TITLE" relative-height="0.167" relative-width="0.9" relative-posX="0.05" relative-posY="0.0399"/>
     <object pagekind="PK_NOTES" type="PRESOBJ_TITLE" relative-height="0.375" relative-width="1" relative-posX="0" relative-posY="0.076"/>
+    <object pagekind="PK_STANDARD" type="PRESOBJ_OUTLINE" relative-height="0.58" relative-width="0.9" relative-posX="0.05" relative-posY="0.234"/>
+    <object pagekind="PK_NOTES" type="PRESOBJ_OUTLINE" relative-height="0.45" relative-width="0.1" relative-posX="0.1" relative-posY="0.475"/>
 </object-list>
