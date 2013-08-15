@@ -64,7 +64,8 @@ using namespace ::com::sun::star;
 
 void SwHTMLParser::NewDivision( int nToken )
 {
-    String aId, aHRef, aStyle, aLang, aDir;
+    OUString aId;
+    String aHRef, aStyle, aLang, aDir;
     OUString aClass;
     SvxAdjust eAdjust = HTML_CENTER_ON==nToken ? SVX_ADJUST_CENTER
                                                : SVX_ADJUST_END;
@@ -113,7 +114,7 @@ void SwHTMLParser::NewDivision( int nToken )
     sal_Bool bAppended = sal_False;
     if( pPam->GetPoint()->nContent.GetIndex() )
     {
-        AppendTxtNode( bHeader||bFooter||aId.Len()||aHRef.Len() ? AM_NORMAL
+        AppendTxtNode( bHeader||bFooter||!aId.isEmpty()||aHRef.Len() ? AM_NORMAL
                                                                 : AM_NOSPACE );
         bAppended = sal_True;
     }
@@ -216,14 +217,14 @@ void SwHTMLParser::NewDivision( int nToken )
         SwPosition aNewPos( SwNodeIndex( rCntntStIdx, 1 ), SwIndex( pCNd, 0 ) );
         SaveDocContext( pCntxt, nFlags, &aNewPos );
     }
-    else if( !bPositioned && aId.Len() > 9 &&
-             ('s' == aId.GetChar(0) || 'S' == aId.GetChar(0) ) &&
-             ('d' == aId.GetChar(1) || 'D' == aId.GetChar(1) ) )
+    else if( !bPositioned && aId.getLength() > 9 &&
+             (aId[0] == 's' || aId[0] == 'S' ) &&
+             (aId[1] == 'd' || aId[1] == 'D' ) )
     {
         sal_Bool bEndNote = sal_False, bFootNote = sal_False;
-        if( aId.CompareIgnoreCaseToAscii( OOO_STRING_SVTOOLS_HTML_sdendnote, 9 ) == COMPARE_EQUAL )
+        if( aId.startsWithIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_sdendnote ) )
             bEndNote = sal_True;
-        else if( aId.CompareIgnoreCaseToAscii( OOO_STRING_SVTOOLS_HTML_sdfootnote, 10 ) == COMPARE_EQUAL )
+        else if( aId.startsWithIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_sdfootnote ) )
             bFootNote = sal_True;
         if( bFootNote || bEndNote )
         {
@@ -235,13 +236,13 @@ void SwHTMLParser::NewDivision( int nToken )
                 SwNodeIndex aTmpSwNodeIndex = SwNodeIndex(*pCNd);
                 SwPosition aNewPos( aTmpSwNodeIndex, SwIndex( pCNd, 0 ) );
                 SaveDocContext( pCntxt, CONTEXT_FLAGS_FTN, &aNewPos );
-                aId = aPropInfo.aId = aEmptyStr;
+                aId = aPropInfo.aId = OUString();
             }
         }
     }
 
     // Bereiche fuegen wir in Rahmen nur dann ein, wenn der Bereich gelinkt ist.
-    if( (aId.Len() && !bPositioned) || aHRef.Len()  )
+    if( (!aId.isEmpty() && !bPositioned) || aHRef.Len()  )
     {
         // Bereich einfuegen (muss vor dem Setzten von Attributen erfolgen,
         // weil die Section vor der PaM-Position eingefuegt.
@@ -263,7 +264,7 @@ void SwHTMLParser::NewDivision( int nToken )
         SetAttr( sal_True, sal_True, pPostIts );
 
         // Namen der Section eindeutig machen
-        String aName( pDoc->GetUniqueSectionName( aId.Len() ? &aId : 0 ) );
+        const OUString aName( pDoc->GetUniqueSectionName( !aId.isEmpty() ? &aId : 0 ) );
 
         if( aHRef.Len() )
         {
@@ -541,7 +542,8 @@ sal_Bool SwHTMLParser::EndSections( sal_Bool bLFStripped )
 
 void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
 {
-    String aId, aStyle, aClass, aLang, aDir;
+    OUString aId;
+    String aStyle, aClass, aLang, aDir;
     long nWidth = 100;
     sal_uInt16 nCols = columnsFromCss, nGutter = 10;
     sal_Bool bPrcWidth = sal_True;
@@ -686,7 +688,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
         SetAttr( sal_True, sal_True, pPostIts );
 
         // Make section name unique.
-        String aName( pDoc->GetUniqueSectionName( aId.Len() ? &aId : 0 ) );
+        String aName( pDoc->GetUniqueSectionName( !aId.isEmpty() ? &aId : 0 ) );
         SwSectionData aSection( CONTENT_SECTION, aName );
 
         SfxItemSet aFrmItemSet( pDoc->GetAttrPool(),

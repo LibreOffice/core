@@ -1756,7 +1756,7 @@ public:
     void DelSectionFmt( SwSectionFmt *pFmt, bool bDelNodes = false );
     void UpdateSection(sal_uInt16 const nSect, SwSectionData &,
             SfxItemSet const*const = 0, bool const bPreventLinkUpdate = false);
-    String GetUniqueSectionName( const String* pChkStr = 0 ) const;
+    OUString GetUniqueSectionName( const OUString* pChkStr = 0 ) const;
 
     /* @@@MAINTAINABILITY-HORROR@@@
        The model should not have anything to do with a shell.

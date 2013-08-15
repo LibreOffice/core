@@ -443,7 +443,7 @@ void SwWrtShell::NavigatorPaste( const NaviContentBookmark& rBkmk,
     }
     else
     {
-        SwSectionData aSection( FILE_LINK_SECTION, GetUniqueSectionName( 0 ) );
+        SwSectionData aSection( FILE_LINK_SECTION, GetUniqueSectionName() );
         String aLinkFile( rBkmk.GetURL().GetToken(0, '#') );
         aLinkFile += sfx2::cTokenSeparator;
         aLinkFile += sfx2::cTokenSeparator;

@@ -838,8 +838,9 @@ oncemore:
             aFName = URIHelper::SmartRel2Abs(
                 INetURLObject(rOut.GetBaseURL()), aFName );
 
+            const OUString sStr(aStr);
             SwSectionData * pSection = new SwSectionData( FILE_LINK_SECTION,
-                rOut.GetDoc().GetUniqueSectionName( &aStr ) );
+                rOut.GetDoc().GetUniqueSectionName( &sStr ) );
             pSection->SetLinkFileName( aFName );
             pSection->SetProtectFlag( true );
             rOut << SwFltSection( pSection );

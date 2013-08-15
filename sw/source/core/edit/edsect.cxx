@@ -169,7 +169,7 @@ void SwEditShell::UpdateSection(sal_uInt16 const nSect,
     EndAllAction();
 }
 
-String SwEditShell::GetUniqueSectionName( const String* pChkStr ) const
+OUString SwEditShell::GetUniqueSectionName( const OUString* pChkStr ) const
 {
     return GetDoc()->GetUniqueSectionName( pChkStr );
 }

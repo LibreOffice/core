@@ -2459,8 +2459,7 @@ eF_ResT SwWW8ImplReader::Read_F_IncludePicture( WW8FieldDesc*, String& rStr )
 
 String wwSectionNamer::UniqueName()
 {
-    String aName(msFileLinkSeed);
-    aName += OUString::number(++mnFileSectionNo);
+    const OUString aName(msFileLinkSeed + OUString::number(++mnFileSectionNo));
     return mrDoc.GetUniqueSectionName(&aName);
 }
 
