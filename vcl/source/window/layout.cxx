@@ -222,6 +222,22 @@ void VclBox::setAllocation(const Size &rAllocation)
         nExtraSpace = (getPrimaryDimension(rAllocation) - getPrimaryDimension(aRequisition)) / nExpandChildren;
     }
 
+    //Split into those we pack from the start onwards, and those we pack from the end backwards
+    std::vector<Window*> aWindows[2];
+    for (Window *pChild = GetWindow(WINDOW_FIRSTCHILD); pChild; pChild = pChild->GetWindow(WINDOW_NEXT))
+    {
+        if (!pChild->IsVisible())
+            continue;
+
+        sal_Int32 ePacking = pChild->get_pack_type();
+        aWindows[ePacking].push_back(pChild);
+    }
+
+    //See VclBuilder::sortIntoBestTabTraversalOrder for why they are in visual
+    //order under the parent which requires us to reverse them here to
+    //pack from the end back
+    std::reverse(aWindows[VCL_PACK_END].begin(),aWindows[VCL_PACK_END].end());
+
     for (sal_Int32 ePackType = VCL_PACK_START; ePackType <= VCL_PACK_END; ++ePackType)
     {
         Point aPos(0, 0);
@@ -231,15 +247,9 @@ void VclBox::setAllocation(const Size &rAllocation)
             setPrimaryCoordinate(aPos, nPrimaryCoordinate + nAllocPrimaryDimension);
         }
 
-        for (Window *pChild = GetWindow(WINDOW_FIRSTCHILD); pChild; pChild = pChild->GetWindow(WINDOW_NEXT))
+        for (std::vector<Window*>::iterator aI = aWindows[ePackType].begin(), aEnd = aWindows[ePackType].end(); aI != aEnd; ++aI)
         {
-            if (!pChild->IsVisible())
-                continue;
-
-            sal_Int32 ePacking = pChild->get_pack_type();
-
-            if (ePacking != ePackType)
-                continue;
+            Window *pChild = *aI;
 
             long nPadding = pChild->get_padding();
 

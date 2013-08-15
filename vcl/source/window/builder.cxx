@@ -1720,13 +1720,15 @@ bool VclBuilder::sortIntoBestTabTraversalOrder::operator()(const Window *pA, con
         if (bPackA > bPackB)
             return false;
     }
-    //honour relative box positions with pack group
-    bPackA = m_pBuilder->get_window_packing_data(pA).m_nPosition;
-    bPackB = m_pBuilder->get_window_packing_data(pB).m_nPosition;
-    if (bPackA < bPackB)
-        return true;
-    if (bPackA > bPackB)
-        return false;
+    //honour relative box positions with pack group, (numerical order is reversed
+    //for VCL_PACK_END, they are packed from the end back, but here we need
+    //them in visual layout order so that tabbing works as expected)
+    sal_Int32 nPackA = m_pBuilder->get_window_packing_data(pA).m_nPosition;
+    sal_Int32 nPackB = m_pBuilder->get_window_packing_data(pB).m_nPosition;
+    if (nPackA < nPackB)
+        return ePackA == VCL_PACK_START ? true : false;
+    if (nPackA > nPackB)
+        return ePackA == VCL_PACK_START ? false : true;
     //sort labels of Frames before body
     if (pA->GetParent() == pB->GetParent())
     {
