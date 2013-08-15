@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//8zg\u003d",
+        "filename": "sw/source/filter/writer/writer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-08-15T14:59:42Z",
+      "side": 1,
+      "message": "best to declare this \"static\" too as functions in anonymous namespace are for some weird reason still public in the .o file, just with unpredictable name (at least last time i checked)",
+      "revId": "136453d255860afd99bea466cdcc4936088fb433",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
