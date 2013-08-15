@@ -1175,112 +1175,6 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
 }
 
 
-// Find the right DocShell and create a new one:
-// The return value specifies what should happen to the Shell
-//  0 - Error, could not find the DocShell
-//  1 - DocShell is an existing Document
-//  2 - DocShell was created anew, thus it needs to be closed again
-//      (will be assigned to xLockRef additionally)
-int sw_FindDocShell( SfxObjectShellRef& xDocSh,
-                        SfxObjectShellLock& xLockRef,
-                        const String& rFileName,
-                        const String& rPasswd,
-                        String& rFilter,
-                        sal_Int16 nVersion,
-                        SwDocShell* pDestSh )
-{
-    if( !rFileName.Len() )
-        return 0;
-
-    // 1. Does the file already exist in the list of all Documents?
-    INetURLObject aTmpObj( rFileName );
-    aTmpObj.SetMark( aEmptyStr );
-
-    // Iterate over the DocShell and get the ones with the name
-    TypeId aType( TYPE(SwDocShell) );
-
-    SfxObjectShell* pShell = pDestSh;
-    bool bFirst = 0 != pShell;
-
-    if( !bFirst )
-        // No DocShell passed, starting with the first from the DocShell list
-        pShell = SfxObjectShell::GetFirst( &aType );
-
-    while( pShell )
-    {
-        // We want this one
-        SfxMedium* pMed = pShell->GetMedium();
-        if( pMed && pMed->GetURLObject() == aTmpObj )
-        {
-            const SfxPoolItem* pItem;
-            if( ( SFX_ITEM_SET == pMed->GetItemSet()->GetItemState(
-                                            SID_VERSION, sal_False, &pItem ) )
-                    ? (nVersion == ((SfxInt16Item*)pItem)->GetValue())
-                    : !nVersion )
-            {
-                // Found, thus return
-                xDocSh = pShell;
-                return 1;
-            }
-        }
-
-        if( bFirst )
-        {
-            bFirst = false;
-            pShell = SfxObjectShell::GetFirst( &aType );
-        }
-        else
-            pShell = SfxObjectShell::GetNext( *pShell, &aType );
-    }
-
-    // 2. Open the file ourselves
-    SfxMedium* pMed = new SfxMedium( aTmpObj.GetMainURL(
-                             INetURLObject::NO_DECODE ), STREAM_READ );
-    if( INET_PROT_FILE == aTmpObj.GetProtocol() )
-        pMed->DownLoad(); // Touch the medium (download it)
-
-    const SfxFilter* pSfxFlt = 0;
-    if( !pMed->GetError() )
-    {
-        String sFactory(OUString::createFromAscii(SwDocShell::Factory().GetShortName()));
-        SfxFilterMatcher aMatcher( sFactory );
-
-        // No Filter, so search for it. Else test if the one passed is a valid one
-        if( rFilter.Len() )
-        {
-            pSfxFlt = aMatcher.GetFilter4FilterName( rFilter );
-        }
-
-        if( nVersion )
-            pMed->GetItemSet()->Put( SfxInt16Item( SID_VERSION, nVersion ));
-
-        if( rPasswd.Len() )
-            pMed->GetItemSet()->Put( SfxStringItem( SID_PASSWORD, rPasswd ));
-
-        if( !pSfxFlt )
-            aMatcher.DetectFilter( *pMed, &pSfxFlt, sal_False, sal_False );
-
-        if( pSfxFlt )
-        {
-            // We cannot do anything without a Filter
-            pMed->SetFilter( pSfxFlt );
-
-            // If the new shell is created, SfxObjectShellLock should be used to let it be closed later for sure
-            xLockRef = new SwDocShell( SFX_CREATE_MODE_INTERNAL );
-            xDocSh = (SfxObjectShell*)xLockRef;
-            if( xDocSh->DoLoad( pMed ) )
-                return 2;
-        }
-    }
-
-    if( !xDocSh.Is() ) // Medium still needs to be deleted
-        delete pMed;
-
-    return 0;
-}
-
-
-
 ::sfx2::SvBaseLink::UpdateResult SwIntrnlSectRefLink::DataChanged(
     const String& rMimeType, const uno::Any & rValue )
 {
@@ -1373,7 +1267,7 @@ int sw_FindDocShell( SfxObjectShellRef& xDocSh,
             }
             else
             {
-                nRet = sw_FindDocShell( xDocSh, xLockRef, sFileName,
+                nRet = SwFindDocShell( xDocSh, xLockRef, sFileName,
                                     rSection.GetLinkFilePassword(),
                                     sFilter, 0, pDoc->GetDocShell() );
                 if( nRet )

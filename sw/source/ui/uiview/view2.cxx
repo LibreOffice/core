@@ -2177,13 +2177,8 @@ long SwView::InsertMedium( sal_uInt16 nSlotId, SfxMedium* pMedium, sal_Int16 nVe
         SfxObjectShellRef xDocSh;
         SfxObjectShellLock xLockRef;
 
-        extern int sw_FindDocShell( SfxObjectShellRef& xDocSh, SfxObjectShellLock& xLockRef,
-                            const String& rFileName, const String& rPasswd,
-                            String& rFilter, sal_Int16 nVersion,
-                            SwDocShell* pDestSh );
-
         String sFltNm;
-        int nRet = sw_FindDocShell( xDocSh, xLockRef, pMedium->GetName(), aEmptyStr,
+        const int nRet = SwFindDocShell( xDocSh, xLockRef, pMedium->GetName(), OUString(),
                                     sFltNm, nVersion, pDocSh );
         if( nRet )
         {
@@ -2204,9 +2199,9 @@ long SwView::InsertMedium( sal_uInt16 nSlotId, SfxMedium* pMedium, sal_Int16 nVe
                 Window* pWin = &GetEditWin();
                 InfoBox(pWin, SW_RES(MSG_NO_MERGE_ENTRY)).Execute();
             }
+            if( nRet==2 && xDocSh.Is() )
+                xDocSh->DoClose();
         }
-        if( 2 == nRet && xDocSh.Is() )
-            xDocSh->DoClose();
     }
 
     delete pMedium;

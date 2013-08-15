@@ -305,6 +305,21 @@ class Graphic;
  /// implemented in source/ui/docvw/romenu.cxx
 String ExportGraphic( const Graphic &rGraphic, const String &rGrfName );
 
+/** Find the right DocShell and create a new one:
+    The return value specifies what should happen to the Shell
+    0 - Error, could not find the DocShell
+    1 - DocShell is an existing Document
+    2 - DocShell was created anew, thus it needs to be closed again
+        (will be assigned to xLockRef additionally)
+*/
+int SwFindDocShell( SfxObjectShellRef& xDocSh,
+                    SfxObjectShellLock& xLockRef,
+                    const OUString& rFileName,
+                    const OUString& rPasswd,
+                    const OUString& rFilter,
+                    sal_Int16 nVersion,
+                    SwDocShell* pDestSh );
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
