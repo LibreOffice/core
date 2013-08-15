@@ -153,7 +153,7 @@ class SW_DLLPUBLIC SwSection
     friend class SwSectionFrm;
 
 private:
-    SwSectionData m_Data;
+    mutable SwSectionData m_Data;
 
     SwServerObjectRef m_RefObj; // Set if DataServer.
     ::sfx2::SvBaseLinkRef m_RefLink;
