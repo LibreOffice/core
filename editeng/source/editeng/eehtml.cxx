@@ -717,11 +717,12 @@ void EditHTMLParser::StartPara( bool bReal )
             {
                 case HTML_O_ALIGN:
                 {
-                    if ( aOption.GetString().equalsIgnoreAsciiCaseAscii( OOO_STRING_SVTOOLS_HTML_AL_right ) )
+                    OUString const& rTmp(aOption.GetString());
+                    if (rTmp.equalsIgnoreAsciiCase(OOO_STRING_SVTOOLS_HTML_AL_right))
                         eAdjust = SVX_ADJUST_RIGHT;
-                    else if ( aOption.GetString().equalsIgnoreAsciiCaseAscii( OOO_STRING_SVTOOLS_HTML_AL_middle ) )
+                    else if (rTmp.equalsIgnoreAsciiCase(OOO_STRING_SVTOOLS_HTML_AL_middle))
                         eAdjust = SVX_ADJUST_CENTER;
-                    else if ( aOption.GetString().equalsIgnoreAsciiCaseAscii( OOO_STRING_SVTOOLS_HTML_AL_center ) )
+                    else if (rTmp.equalsIgnoreAsciiCase(OOO_STRING_SVTOOLS_HTML_AL_center))
                         eAdjust = SVX_ADJUST_CENTER;
                     else
                         eAdjust = SVX_ADJUST_LEFT;
