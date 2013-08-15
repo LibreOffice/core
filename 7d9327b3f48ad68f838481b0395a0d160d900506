@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//82M\u003d",
+        "filename": "editeng/source/items/PositionalTabItem.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-08-15T07:40:40Z",
+      "side": 1,
+      "message": "Wrong license header, see TEMPLATE.SOURCECODE.HEADER for the header that should be used for new code.",
+      "revId": "7d9327b3f48ad68f838481b0395a0d160d900506",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//82I\u003d",
+        "filename": "editeng/source/items/PositionalTabItem.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-08-15T07:40:40Z",
+      "side": 1,
+      "message": "Is Create() and Store() used? If not, sound like they\u0027ll instantly become unused code as this patch goes in.",
+      "revId": "7d9327b3f48ad68f838481b0395a0d160d900506",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
