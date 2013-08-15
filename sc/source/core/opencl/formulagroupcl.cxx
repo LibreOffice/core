@@ -313,7 +313,10 @@ bool FormulaGroupInterpreterOpenCL::interpret(ScDocument& rDoc, const ScAddress&
 
         ScFormulaCell* pDest = rDoc.GetFormulaCell(aTmpPos);
         if (!pDest)
+        {
+            free(rResult);
             return false;
+        }
         if(ocl_calc.GetOpenclState())
         {
             const formula::FormulaToken *pCur = aCode2.First();
@@ -473,8 +476,7 @@ bool FormulaGroupInterpreterOpenCL::interpret(ScDocument& rDoc, const ScAddress&
         rDoc.SetFormulaResults(rTopPos, rResult, xGroup->mnLength);
     }
 
-    if(rResult)
-        free(rResult);
+    free(rResult);
 
     return true;
 }
