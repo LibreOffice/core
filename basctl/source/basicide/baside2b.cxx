@@ -63,6 +63,8 @@ namespace
 {
 
 sal_uInt16 const NoMarker = 0xFFFF;
+long const nBasePad = 2;
+long const nCursorPad = 5;
 
 long nVirtToolBoxHeight;    // inited in WatchWindow, used in Stackwindow
 long nHeaderBarHeight;
@@ -624,7 +626,7 @@ void EditorWindow::HandleAutoCorrect()
     if( r.tokenType == TT_IDENTIFIER )
     {// correct uno types
         OUString sStr = aLine.copy(r.nBegin, r.nEnd - r.nBegin);
-        if( !sStr.isEmpty() && !aCodeCompleteCache.GetCorrectCaseVarName(sStr).isEmpty() )
+        if( sStr != aCodeCompleteCache.GetCorrectCaseVarName(sStr) )
         {
             sStr = aCodeCompleteCache.GetCorrectCaseVarName(sStr);
             TextPaM aStart(nLine, aSel.GetStart().GetIndex() - sStr.getLength() );
@@ -780,7 +782,7 @@ void EditorWindow::HandleCodeCompletition()
         OUString sBaseName = aVect[0];//variable name
         OUString sVarType = aCodeCompleteCache.GetVarType( sBaseName );
         if( !sVarType.isEmpty() && CodeCompleteOptions::IsAutoCorrectOn() )
-        {//correct variable name
+        {//correct variable name, if autocorrection on
             TextPaM aStart(nLine, aLine.indexOf(sBaseName) );
             TextPaM aEnd(nLine, aLine.indexOf(sBaseName) + sBaseName.getLength() );
             TextSelection sTextSelection(aStart, aEnd);
@@ -2775,7 +2777,7 @@ void CodeCompleteWindow::ResizeListBox( const TextSelection& aSel )
         Rectangle aRect = ( (TextEngine*) pParent->GetEditEngine() )->PaMtoEditCursor( aSel.GetEnd() , false );
         long nViewYOffset = pParent->GetEditView()->GetStartDocPos().Y();
         Point aPos = aRect.BottomRight();// this variable will be used later (if needed)
-        aPos.Y() = (aPos.Y() - nViewYOffset) + 2;
+        aPos.Y() = (aPos.Y() - nViewYOffset) + nBasePad;
 
         OUString aLongestEntry = pListBox->GetEntry( 0 );// grab the longest one: max search
         for( sal_uInt16 i=1; i< pListBox->GetEntryCount(); ++i )
@@ -2794,18 +2796,18 @@ void CodeCompleteWindow::ResizeListBox( const TextSelection& aSel )
 
         Point aBottomPoint = aVisArea.BottomRight();
         Point aTopPoint = aVisArea.TopRight();
-        long nYDiff = std::abs((aBottomPoint.Y() - aTopPoint.Y()) - GetPosPixel().Y());
+        long nYDiff = std::abs( (aBottomPoint.Y() - aTopPoint.Y()) - GetPosPixel().Y() );
 
-        if( (nYDiff + aFont.GetSize().getHeight()) < aSize.Height() )
+        if( (nYDiff + aFont.GetHeight()) < aSize.Height() )
         {//bottom part is clipped, fix the visibility by placing it over the line (not under)
             const Font& aParFont = pParent->GetEditEngine()->GetFont();//parent's font (in the IDE): needed for height
-            aPos.Y() = aPos.Y() - (aSize.getHeight() + aParFont.GetSize().getHeight()+5);
+            aPos.Y() -= aSize.Height() + aParFont.GetHeight() + nCursorPad;
         }
 
-        long nXDiff = std::abs(aTopPoint.X() - GetPosPixel().X());
+        long nXDiff = std::abs( aTopPoint.X() - GetPosPixel().X() );
         if( nXDiff < aSize.Width() )
         {//clipped at the right side, move it a bit left
-            aPos.X() = aPos.X() - aSize.Width() + nXDiff;
+            aPos.X() -= aSize.Width() + nXDiff;
         }
 
         pListBox->SetSizePixel( aSize );
