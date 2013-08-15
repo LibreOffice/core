@@ -1121,25 +1121,24 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
     if (rTableNodes.empty())
         return NULL;
 
-    std::vector<SwNodeRange> rFirstRange = *rTableNodes.begin();
+    const std::vector<SwNodeRange>& rFirstRange = *rTableNodes.begin();
 
     if (rFirstRange.empty())
+        return NULL;
+
+    const std::vector<SwNodeRange>& rLastRange = *rTableNodes.rbegin();
+
+    if (rLastRange.empty())
         return NULL;
 
     /* Save first node in the selection if it is a content node. */
     SwCntntNode * pSttCntntNd = rFirstRange.begin()->aStart.GetNode().GetCntntNode();
 
-    /**debug**/
-#if OSL_DEBUG_LEVEL > 1
-    const SwNodeRange& rStartRange = *rTableNodes.begin()->begin();
-    const SwNodeRange& rEndRange = *rTableNodes.rbegin()->rbegin();
-    (void) rStartRange;
-    (void) rEndRange;
-#endif
-    /**debug**/
+    const SwNodeRange& rStartRange = *rFirstRange.begin();
+    const SwNodeRange& rEndRange = *rLastRange.rbegin();
 
     //!!! not necessarily TextNodes !!!
-    SwPaM aOriginal( rTableNodes.begin()->begin()->aStart, rTableNodes.rbegin()->rbegin()->aEnd );
+    SwPaM aOriginal( rStartRange.aStart, rEndRange.aEnd );
     const SwPosition *pStt = aOriginal.GetMark();
     const SwPosition *pEnd = aOriginal.GetPoint();
 
