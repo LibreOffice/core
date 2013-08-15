@@ -2997,160 +2997,160 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
     };
 
-	// -=*# Resource for function AVERAGEIF #*=-
-	Resource SC_OPCODE_AVERAGE_IF
-	{
-		String 1 // Description
-		{
-			Text [ en-US ] = "Averages the arguments that meet the conditions." ;
-		};
-		ExtraData =
-		{
+    // -=*# Resource for function AVERAGEIF #*=-
+    Resource SC_OPCODE_AVERAGE_IF
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Averages the arguments that meet the conditions." ;
+        };
+        ExtraData =
+        {
             0;
-			ID_FUNCTION_GRP_MATH;
-			U2S( HID_FUNC_AVERAGEIF );
-			3;	0;	0;	1;
+            ID_FUNCTION_GRP_MATH;
+            U2S( HID_FUNC_AVERAGEIF );
+            3;  0;  0;  1;
             0;
-		};
-		String 2 // Name of Parameter 1
-		{
-			Text [ en-US ] = "range" ;
-		};
-		String 3 // Description of Parameter 1
-		{
-			Text [ en-US ] = "The range to be evaluated by the criteria given." ;
-		};
-		String 4 // Name of Parameter 2
-		{
-			Text [ en-US ] = "criteria" ;
-		};
-		String 5 // Description of Parameter 2
-		{
-			Text [ en-US ] = "The cell range in which the search criteria are given." ;
-		};
-		String 6 // Name of Parameter 3
-		{
-			Text [ en-US ] = "average_range" ;
-		};
-		String 7 // Description of Parameter 3
-		{
-			Text [ en-US ] = "The range from which the values are to be averaged." ;
-		};
-	};
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "range" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The range to be evaluated by the criteria given." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "criteria" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "The cell range in which the search criteria are given." ;
+        };
+        String 6 // Name of Parameter 3
+        {
+            Text [ en-US ] = "average_range" ;
+        };
+        String 7 // Description of Parameter 3
+        {
+            Text [ en-US ] = "The range from which the values are to be averaged." ;
+        };
+    };
 
-	Resource SC_OPCODE_SUM_IFS
-	{
-		String 1 // Description
-		{
-			Text [ en-US ] = "Totals the values of cells in a range that meet multiple criteria in multiple ranges." ;
-		};
-		ExtraData =
-		{
+    Resource SC_OPCODE_SUM_IFS
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Totals the values of cells in a range that meet multiple criteria in multiple ranges." ;
+        };
+        ExtraData =
+        {
             0;
-			ID_FUNCTION_GRP_MATH;
-			U2S( HID_FUNC_SUMIFS );
-			PAIRED_VAR_ARGS+1;	0;	0;	0;
+            ID_FUNCTION_GRP_MATH;
+            U2S( HID_FUNC_SUMIFS );
+            PAIRED_VAR_ARGS+1;  0;  0;  0;
             0;
-		};
-		String 2 // Name of Parameter 1
-		{
-			Text [ en-US ] = "sum_range" ;
-		};
-		String 3 // Description of Parameter 1
-		{
-			Text [ en-US ] = "The range from which the values are to be totalled." ;
-		};
-		String 4 // Name of Parameter 2
-		{
-			Text [ en-US ] = "range " ;
-		};
-		String 5 // Description of Parameter 2
-		{
-			Text [ en-US ] = "Range 1, range 2,... are the ranges to be evaluated by the criteria given." ;
-		};
-		String 6 // Name of Parameter 3
-		{
-			Text [ en-US ] = "criteria " ;
-		};
-		String 7 // Description of Parameter 3
-		{
-			Text [ en-US ] = "Criteria 1, criteria 2,... are the cell ranges in which the search criteria are given." ;
-		};
-	};
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "sum_range" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The range from which the values are to be totalled." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "range " ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "Range 1, range 2,... are the ranges to be evaluated by the criteria given." ;
+        };
+        String 6 // Name of Parameter 3
+        {
+            Text [ en-US ] = "criteria " ;
+        };
+        String 7 // Description of Parameter 3
+        {
+            Text [ en-US ] = "Criteria 1, criteria 2,... are the cell ranges in which the search criteria are given." ;
+        };
+    };
 
-	// -=*# Resource for function AVERAGEIFS #*=-
-	Resource SC_OPCODE_AVERAGE_IFS
-	{
-		String 1 // Description
-		{
-			Text [ en-US ] = "Averages the value of the cells that meet multiple criteria in multiple ranges." ;
-		};
-		ExtraData =
-		{
+    // -=*# Resource for function AVERAGEIFS #*=-
+    Resource SC_OPCODE_AVERAGE_IFS
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Averages the value of the cells that meet multiple criteria in multiple ranges." ;
+        };
+        ExtraData =
+        {
             0;
-			ID_FUNCTION_GRP_MATH;
-			U2S( HID_FUNC_AVERAGEIFS );
-			PAIRED_VAR_ARGS+1;	0;	0;	0;
+            ID_FUNCTION_GRP_MATH;
+            U2S( HID_FUNC_AVERAGEIFS );
+            PAIRED_VAR_ARGS+1;  0;  0;  0;
             0;
-		};
-		String 2 // Name of Parameter 1
-		{
-			Text [ en-US ] = "average_range" ;
-		};
-		String 3 // Description of Parameter 1
-		{
-			Text [ en-US ] = "The range from which the values are to be averaged." ;
-		};
-		String 4 // Name of Parameter 2
-		{
-			Text [ en-US ] = "range " ;
-		};
-		String 5 // Description of Parameter 2
-		{
-			Text [ en-US ] = "Range 1, range 2,... are the ranges to be evaluated by the criteria given." ;
-		};
-		String 6 // Name of Parameter 3
-		{
-			Text [ en-US ] = "criteria " ;
-		};
-		String 7 // Description of Parameter 3
-		{
-			Text [ en-US ] = "Criteria 1, criteria 2,... are the cell ranges in which the search criteria are given." ;
-		};
-	};
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "average_range" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The range from which the values are to be averaged." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "range " ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "Range 1, range 2,... are the ranges to be evaluated by the criteria given." ;
+        };
+        String 6 // Name of Parameter 3
+        {
+            Text [ en-US ] = "criteria " ;
+        };
+        String 7 // Description of Parameter 3
+        {
+            Text [ en-US ] = "Criteria 1, criteria 2,... are the cell ranges in which the search criteria are given." ;
+        };
+    };
 
-	// -=*# Resource for function COUNTIFS #*=-
-	Resource SC_OPCODE_COUNT_IFS
-	{
-		String 1 // Description
-		{
-			Text [ en-US ] = "Counts the cells that meet multiple criteria in multiple ranges." ;
-		};
-		ExtraData =
-		{
+    // -=*# Resource for function COUNTIFS #*=-
+    Resource SC_OPCODE_COUNT_IFS
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Counts the cells that meet multiple criteria in multiple ranges." ;
+        };
+        ExtraData =
+        {
             0;
-			ID_FUNCTION_GRP_MATH;
-			U2S( HID_FUNC_COUNTIFS );
-			PAIRED_VAR_ARGS;	0;	0;
+            ID_FUNCTION_GRP_MATH;
+            U2S( HID_FUNC_COUNTIFS );
+            PAIRED_VAR_ARGS;    0;  0;
             0;
-		};
-		String 2 // Name of Parameter 1
-		{
-			Text [ en-US ] = "range " ;
-		};
-		String 3 // Description of Parameter 1
-		{
-			Text [ en-US ] = "Range 1, range 2,... are the ranges to be evaluated by the criteria given." ;
-		};
-		String 4 // Name of Parameter 2
-		{
-			Text [ en-US ] = "criteria " ;
-		};
-		String 5 // Description of Parameter 2
-		{
-			Text [ en-US ] = "Criteria 1, criteria 2,... are the cell ranges in which the search criteria are given." ;
-		};
-	};
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "range " ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "Range 1, range 2,... are the ranges to be evaluated by the criteria given." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "criteria " ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "Criteria 1, criteria 2,... are the cell ranges in which the search criteria are given." ;
+        };
+    };
 
      // -=*# Resource for function ZÄHLENWENN #*=-
     Resource SC_OPCODE_COUNT_IF
