@@ -5270,7 +5270,7 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
     ImplRemoveDel( &aDelData );
 
     // #107251# move focus away if this toolbox was disabled during keyinput
-    if (HasFocus() && bParentIsContainer)
+    if (HasFocus() && mpData->mbKeyInputDisabled && bParentIsContainer)
     {
         sal_uInt16 n = 0;
         Window *pFocusControl = pParent->ImplGetDlgWindow( n, DLGWINDOW_FIRST );
