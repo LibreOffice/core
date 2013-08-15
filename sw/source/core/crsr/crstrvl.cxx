@@ -293,25 +293,31 @@ sal_Bool SwCrsrShell::GotoNextTOXBase( const String* pName )
     for( sal_uInt16 n = rFmts.size(); n; )
     {
         const SwSection* pSect = rFmts[ --n ]->GetSection();
-        const SwSectionNode* pSectNd;
-        if( TOX_CONTENT_SECTION == pSect->GetType() &&
-            0 != ( pSectNd = pSect->GetFmt()->GetSectionNode() ) &&
-             m_pCurCrsr->GetPoint()->nNode < pSectNd->GetIndex() &&
-            ( !pFnd || pFnd->GetIndex() > pSectNd->GetIndex() ) &&
-            ( !pName || *pName == ((SwTOXBaseSection*)pSect)->GetTOXName() )
-            )
+        if (TOX_CONTENT_SECTION == pSect->GetType())
         {
-            SwNodeIndex aIdx( *pSectNd, 1 );
-            SwCntntNode* pCNd = aIdx.GetNode().GetCntntNode();
-            if( !pCNd )
-                pCNd = GetDoc()->GetNodes().GoNext( &aIdx );
-            const SwCntntFrm* pCFrm;
-            if( pCNd &&
-                pCNd->EndOfSectionIndex() <= pSectNd->EndOfSectionIndex() &&
-                0 != ( pCFrm = pCNd->getLayoutFrm( GetLayout() ) ) &&
-                ( IsReadOnlyAvailable() || !pCFrm->IsProtected() ))
+            SwSectionNode const*const pSectNd(
+                    pSect->GetFmt()->GetSectionNode());
+            if (   pSectNd
+                && m_pCurCrsr->GetPoint()->nNode < pSectNd->GetIndex()
+                && (!pFnd  || pFnd->GetIndex() > pSectNd->GetIndex())
+                && (!pName || *pName ==
+                    static_cast<SwTOXBaseSection const*>(pSect)->GetTOXName()))
             {
-                pFnd = pCNd;
+                SwNodeIndex aIdx(*pSectNd, 1);
+                SwCntntNode* pCNd = aIdx.GetNode().GetCntntNode();
+                if (!pCNd)
+                    pCNd = GetDoc()->GetNodes().GoNext( &aIdx );
+                if (pCNd &&
+                    pCNd->EndOfSectionIndex() <= pSectNd->EndOfSectionIndex())
+                {
+                    SwCntntFrm const*const pCFrm(
+                            pCNd->getLayoutFrm(GetLayout()));
+                    if (pCFrm &&
+                        (IsReadOnlyAvailable() || !pCFrm->IsProtected()))
+                    {
+                        pFnd = pCNd;
+                    }
+                }
             }
         }
     }
@@ -338,25 +344,31 @@ sal_Bool SwCrsrShell::GotoPrevTOXBase( const String* pName )
     for( sal_uInt16 n = rFmts.size(); n; )
     {
         const SwSection* pSect = rFmts[ --n ]->GetSection();
-        const SwSectionNode* pSectNd;
-        if( TOX_CONTENT_SECTION == pSect->GetType() &&
-            0 != ( pSectNd = pSect->GetFmt()->GetSectionNode() ) &&
-            m_pCurCrsr->GetPoint()->nNode > pSectNd->EndOfSectionIndex() &&
-            ( !pFnd || pFnd->GetIndex() < pSectNd->GetIndex() ) &&
-            ( !pName || *pName == ((SwTOXBaseSection*)pSect)->GetTOXName() )
-            )
+        if (TOX_CONTENT_SECTION == pSect->GetType())
         {
-            SwNodeIndex aIdx( *pSectNd, 1 );
-            SwCntntNode* pCNd = aIdx.GetNode().GetCntntNode();
-            if( !pCNd )
-                pCNd = GetDoc()->GetNodes().GoNext( &aIdx );
-            const SwCntntFrm* pCFrm;
-            if( pCNd &&
-                pCNd->EndOfSectionIndex() <= pSectNd->EndOfSectionIndex() &&
-                0 != ( pCFrm = pCNd->getLayoutFrm( GetLayout() ) ) &&
-                ( IsReadOnlyAvailable() || !pCFrm->IsProtected() ))
+            SwSectionNode const*const pSectNd(
+                    pSect->GetFmt()->GetSectionNode());
+            if (   pSectNd
+                && m_pCurCrsr->GetPoint()->nNode > pSectNd->EndOfSectionIndex()
+                && (!pFnd  || pFnd->GetIndex() < pSectNd->GetIndex())
+                && (!pName || *pName ==
+                    static_cast<SwTOXBaseSection const*>(pSect)->GetTOXName()))
             {
-                pFnd = pCNd;
+                SwNodeIndex aIdx(*pSectNd, 1);
+                SwCntntNode* pCNd = aIdx.GetNode().GetCntntNode();
+                if (!pCNd)
+                    pCNd = GetDoc()->GetNodes().GoNext( &aIdx );
+                if (pCNd &&
+                    pCNd->EndOfSectionIndex() <= pSectNd->EndOfSectionIndex())
+                {
+                    SwCntntFrm const*const pCFrm(
+                            pCNd->getLayoutFrm(GetLayout()));
+                    if (pCFrm &&
+                        (IsReadOnlyAvailable() || !pCFrm->IsProtected()))
+                    {
+                        pFnd = pCNd;
+                    }
+                }
             }
         }
     }
