@@ -14,10 +14,6 @@ $(eval $(call gb_Package_add_file,test_unittest,unittest/user/wordbook/sl.dic,us
 $(eval $(call gb_Package_add_file,test_unittest,unittest/user/wordbook/en-US.dic,user/wordbook/en-US.dic))
 $(eval $(call gb_Package_add_file,test_unittest,unittest/user/wordbook/technical.dic,user/wordbook/technical.dic))
 $(eval $(call gb_Package_add_file,test_unittest,unittest/user/wordbook/en-GB.dic,user/wordbook/en-GB.dic))
-$(eval $(call gb_Package_add_file,test_unittest,unittest/user/gallery/empty_directory,user/gallery/empty_directory))
-$(eval $(call gb_Package_add_file,test_unittest,unittest/user/dtd/empty_directory,user/dtd/empty_directory))
-$(eval $(call gb_Package_add_file,test_unittest,unittest/user/psprint/fontmetric/empty_directory,user/psprint/fontmetric/empty_directory))
-$(eval $(call gb_Package_add_file,test_unittest,unittest/user/psprint/driver/empty_directory,user/psprint/driver/empty_directory))
 $(eval $(call gb_Package_add_file,test_unittest,unittest/user/autotext/en-US/template.bau,user/autotext/en-US/template.bau))
 $(eval $(call gb_Package_add_file,test_unittest,unittest/user/autotext/en-US/standard.bau,user/autotext/en-US/standard.bau))
 $(eval $(call gb_Package_add_file,test_unittest,unittest/user/autotext/en-US/crdbus50.bau,user/autotext/en-US/crdbus50.bau))
@@ -26,9 +22,6 @@ $(eval $(call gb_Package_add_file,test_unittest,unittest/install/share/config/so
 $(eval $(call gb_Package_add_file,test_unittest,unittest/user/config/soffice.cfg/simpress/transitions-ogl.xml,user/config/soffice.cfg/simpress/transitions-ogl.xml))
 $(eval $(call gb_Package_add_file,test_unittest,unittest/install/share/config/soffice.cfg/simpress/effects.xml,user/config/soffice.cfg/simpress/effects.xml))
 $(eval $(call gb_Package_add_file,test_unittest,unittest/install/share/config/soffice.cfg/simpress/layoutlist.xml,user/config/soffice.cfg/simpress/layoutlist.xml))
-$(eval $(call gb_Package_add_file,test_unittest,unittest/user/config/soffice.cfg/modules/empty_directory,user/config/soffice.cfg/modules/empty_directory))
 $(eval $(call gb_Package_add_file,test_unittest,unittest/user/config/psetupl.xpm,user/config/psetupl.xpm))
-$(eval $(call gb_Package_add_file,test_unittest,unittest/user/autocorr/empty_directory,user/autocorr/empty_directory))
-$(eval $(call gb_Package_add_file,test_unittest,unittest/user/template/empty_directory,user/template/empty_directory))
 
 # vim: set noet sw=4 ts=4:
