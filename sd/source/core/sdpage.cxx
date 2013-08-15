@@ -1317,19 +1317,19 @@ static void CalcAutoLayoutRectangles( SdPage& rPage,Rectangle* rRectangle ,const
                 {
                     Reference<XNamedNodeMap> presObjAttributes = presobj->getAttributes();
 
-                    Reference<XNode> presObjSizeHeight = presObjAttributes->getNamedItem("title-shape-relative-height");
+                    Reference<XNode> presObjSizeHeight = presObjAttributes->getNamedItem("relative-height");
                     rtl::OUString sValue = presObjSizeHeight->getNodeValue();
                     propvalue[0] = sValue.toDouble();
 
-                    Reference<XNode> presObjSizeWidth = presObjAttributes->getNamedItem("title-shape-relative-width");
+                    Reference<XNode> presObjSizeWidth = presObjAttributes->getNamedItem("relative-width");
                     sValue = presObjSizeWidth->getNodeValue();
                     propvalue[1] = sValue.toDouble();
 
-                    Reference<XNode> presObjPosX = presObjAttributes->getNamedItem("title-shape-relative-posX");
+                    Reference<XNode> presObjPosX = presObjAttributes->getNamedItem("relative-posX");
                     sValue = presObjPosX->getNodeValue();
                     propvalue[2] = sValue.toDouble();
 
-                    Reference<XNode> presObjPosY = presObjAttributes->getNamedItem("title-shape-relative-posY");
+                    Reference<XNode> presObjPosY = presObjAttributes->getNamedItem("relative-posY");
                     sValue = presObjPosY->getNodeValue();
                     propvalue[3] = sValue.toDouble();
 
