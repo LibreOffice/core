@@ -180,6 +180,23 @@ bool SwSectionData::operator==(SwSectionData const& rOther) const
     // FIXME: old code ignored m_bCondHiddenFlag m_bHiddenFlag m_bConnectFlag
 }
 
+OUString SwSectionData::CollapseWhiteSpaces(const OUString sName)
+{
+    const sal_Int32 nLen = sName.getLength();
+    const sal_Unicode cRef = ' ';
+    OUStringBuffer aBuf(nLen+1);
+    for (sal_Int32 i = 0; i<nLen; )
+    {
+        const sal_Unicode cCur = sName[i++];
+        aBuf.append(cCur);
+        if (cCur!=cRef)
+            continue;
+        while (i<nLen && sName[i]==cRef)
+            ++i;
+    }
+    return aBuf.makeStringAndClear();
+}
+
 // SwSection ===========================================================
 
 SwSection::SwSection(
@@ -1512,11 +1529,7 @@ void SwSection::CreateLink( LinkCreateType eCreateType )
     SwIntrnlSectRefLink *const pLnk =
         static_cast<SwIntrnlSectRefLink*>(& m_RefLink);
 
-    String sCmd( m_Data.GetLinkFileName() );
-    xub_StrLen nPos;
-    while( STRING_NOTFOUND != (nPos = sCmd.SearchAscii( "  " )) )
-        sCmd.Erase( nPos, 1 );
-
+    const OUString sCmd(SwSectionData::CollapseWhiteSpaces(m_Data.GetLinkFileName()));
     pLnk->SetUpdateMode( nUpdateType );
     pLnk->SetVisible( pFmt->GetDoc()->IsVisibleLinks() );
 
@@ -1529,13 +1542,15 @@ void SwSection::CreateLink( LinkCreateType eCreateType )
     case FILE_LINK_SECTION:
         {
             pLnk->SetContentType( FORMAT_FILE );
-            String sFltr( sCmd.GetToken( 1, sfx2::cTokenSeparator ) );
-            String sRange( sCmd.GetToken( 2, sfx2::cTokenSeparator ) );
+            sal_Int32 nIndex = 0;
+            const OUString sFile(sCmd.getToken( 0, sfx2::cTokenSeparator, nIndex ));
+            const OUString sFltr(sCmd.getToken( 0, sfx2::cTokenSeparator, nIndex ));
+            const OUString sRange(sCmd.getToken( 0, sfx2::cTokenSeparator, nIndex ));
             pFmt->GetDoc()->GetLinkManager().InsertFileLink( *pLnk,
                                 static_cast<sal_uInt16>(m_Data.GetType()),
-                                sCmd.GetToken( 0, sfx2::cTokenSeparator ),
-                                ( sFltr.Len() ? &sFltr : 0 ),
-                                ( sRange.Len() ? &sRange : 0 ) );
+                                sFile,
+                                ( !sFltr.isEmpty() ? &sFltr : 0 ),
+                                ( !sRange.isEmpty() ? &sRange : 0 ) );
         }
         break;
     default:

@@ -1168,13 +1168,13 @@ IMPL_LINK( SwEditRegionDlg, FileNameHdl, Edit *, pEdit )
         m_pSubRegionED->Clear();
         if (m_pDDECB->IsChecked())
         {
-            String sLink( pEdit->GetText() );
-            sal_uInt16 nPos = 0;
-            while( STRING_NOTFOUND != (nPos = sLink.SearchAscii( "  ", nPos )) )
-                sLink.Erase( nPos--, 1 );
-
-            nPos = sLink.SearchAndReplace( ' ', sfx2::cTokenSeparator );
-            sLink.SearchAndReplace( ' ', sfx2::cTokenSeparator, nPos );
+            OUString sLink( SwSectionData::CollapseWhiteSpaces(pEdit->GetText()) );
+            sal_Int32 nPos = 0;
+            sLink = sLink.replaceFirst( " ", OUString(sfx2::cTokenSeparator), &nPos );
+            if (nPos>=0)
+            {
+                sLink = sLink.replaceFirst( " ", OUString(sfx2::cTokenSeparator), &nPos );
+            }
 
             pSectRepr->GetSectionData().SetLinkFileName( sLink );
             pSectRepr->GetSectionData().SetType( DDE_LINK_SECTION );
@@ -1635,17 +1635,16 @@ sal_Bool SwInsertSectionTabPage::FillItemSet( SfxItemSet& )
     sal_Bool bDDe = m_pDDECB->IsChecked();
     if(m_pFileCB->IsChecked() && (sFileName.Len() || sSubRegion.Len() || bDDe))
     {
-        String aLinkFile;
+        OUString aLinkFile;
         if( bDDe )
         {
-            aLinkFile = sFileName;
-
-            sal_uInt16 nPos = 0;
-            while( STRING_NOTFOUND != (nPos = aLinkFile.SearchAscii( "  ", nPos )) )
-                aLinkFile.Erase( nPos--, 1 );
-
-            nPos = aLinkFile.SearchAndReplace( ' ', sfx2::cTokenSeparator );
-            aLinkFile.SearchAndReplace( ' ', sfx2::cTokenSeparator, nPos );
+            aLinkFile = SwSectionData::CollapseWhiteSpaces(sFileName);
+            sal_Int32 nPos = 0;
+            aLinkFile = aLinkFile.replaceFirst( " ", OUString(sfx2::cTokenSeparator), &nPos );
+            if (nPos>=0)
+            {
+                aLinkFile = aLinkFile.replaceFirst( " ", OUString(sfx2::cTokenSeparator), &nPos );
+            }
         }
         else
         {
@@ -1660,14 +1659,12 @@ sal_Bool SwInsertSectionTabPage::FillItemSet( SfxItemSet& )
                 aSection.SetLinkFilePassword( m_sFilePasswd );
             }
 
-            aLinkFile += sfx2::cTokenSeparator;
-            aLinkFile += m_sFilterName;
-            aLinkFile += sfx2::cTokenSeparator;
-            aLinkFile += sSubRegion;
+            aLinkFile += OUString(sfx2::cTokenSeparator) + m_sFilterName
+                      +  OUString(sfx2::cTokenSeparator) + sSubRegion;
         }
 
         aSection.SetLinkFileName(aLinkFile);
-        if(aLinkFile.Len())
+        if (!aLinkFile.isEmpty())
         {
             aSection.SetType( m_pDDECB->IsChecked() ?
                                     DDE_LINK_SECTION :
