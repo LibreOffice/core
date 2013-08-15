@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAXn//80s\u003d",
+        "filename": "editeng/source/items/PositionalTabItem.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1000389
+      },
+      "writtenOn": "2013-08-15T13:16:00Z",
+      "side": 1,
+      "message": "I saw they are implemented in other \u0027SfxFooItem\u0027 classes, so I assumed they are needed... maybe for some BinaryStream writer?",
+      "parentUuid": "AAAAXn//82I\u003d",
+      "revId": "7d9327b3f48ad68f838481b0395a0d160d900506",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAXn//810\u003d",
         "filename": "offapi/com/sun/star/style/PositionalTab.idl",
         "patchSetId": 2
