@@ -183,8 +183,6 @@ bool DAVProperties::isUCBSpecialProperty(
     if ( nEnd <= nStart ) // incl. -1 for "not found"
         return false;
 
-    OUString sPropName = rFullName.copy( nStart, nEnd - nStart );
-
     // TODO skip whitespaces?
     if ( !rFullName.match( "xmlns:prop=\"", ++nEnd ) )
         return false;
