@@ -408,7 +408,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickAddHdl_Impl)
 {
     String aNewName( SVX_RES( RID_SVXSTR_GRADIENT ) );
     String aDesc( CUI_RES( RID_SVXSTR_DESC_GRADIENT ) );
-    String aName;
+    OUString aName;
 
     long nCount = pGradientList->Count();
     long j = 1;
@@ -417,7 +417,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickAddHdl_Impl)
     while( !bDifferent )
     {
         aName  = aNewName;
-        aName += sal_Unicode(' ');
+        aName += " ";
         aName += OUString::number( j++ );
         bDifferent = sal_True;
 
@@ -514,8 +514,8 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickModifyHdl_Impl)
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         String aDesc( CUI_RES( RID_SVXSTR_DESC_GRADIENT ) );
-        String aName( pGradientList->GetGradient( nPos )->GetName() );
-        String aOldName = aName;
+        OUString aName( pGradientList->GetGradient( nPos )->GetName() );
+        OUString aOldName = aName;
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         DBG_ASSERT(pFact, "Dialogdiet fail!");

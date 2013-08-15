@@ -313,7 +313,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickModifyHdl_Impl)
     {
         ResMgr& rMgr = CUI_MGR();
         OUString aDesc( ResId( RID_SVXSTR_DESC_LINEEND, rMgr ) );
-        String aName( m_pEdtName->GetText() );
+        OUString aName( m_pEdtName->GetText() );
         long nCount = pLineEndList->Count();
         sal_Bool bDifferent = sal_True;
 
@@ -417,7 +417,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickAddHdl_Impl)
         ResMgr& rMgr = CUI_MGR();
         OUString aNewName( SVX_RES( RID_SVXSTR_LINEEND ) );
         OUString aDesc( ResId( RID_SVXSTR_DESC_LINEEND, rMgr ) );
-        String aName;
+        OUString aName;
 
         long nCount = pLineEndList->Count();
         long j = 1;
@@ -426,7 +426,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickAddHdl_Impl)
         while ( !bDifferent )
         {
             aName = aNewName;
-            aName += sal_Unicode(' ');
+            aName += " ";
             aName += OUString::number( j++ );
             bDifferent = sal_True;
 

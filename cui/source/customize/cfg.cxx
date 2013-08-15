@@ -2535,7 +2535,7 @@ IMPL_LINK( SvxMenuConfigPage, MenuSelectHdl, MenuButton *, pButton )
         {
             SvxConfigEntry* pMenuData = GetTopLevelSelection();
 
-            String aNewName( stripHotKey( pMenuData->GetName() ) );
+            OUString aNewName( stripHotKey( pMenuData->GetName() ) );
             String aDesc = CUI_RESSTR( RID_SVXSTR_LABEL_NEW_NAME );
 
             SvxNameDialog* pNameDialog = new SvxNameDialog( this, aNewName, aDesc );
@@ -2593,7 +2593,7 @@ IMPL_LINK( SvxMenuConfigPage, EntrySelectHdl, MenuButton *, pButton )
     {
         case ID_ADD_SUBMENU:
         {
-            String aNewName;
+            OUString aNewName;
             String aDesc = CUI_RESSTR( RID_SVXSTR_SUBMENU_NAME );
 
             SvxNameDialog* pNameDialog = new SvxNameDialog( this, aNewName, aDesc );
@@ -2639,7 +2639,7 @@ IMPL_LINK( SvxMenuConfigPage, EntrySelectHdl, MenuButton *, pButton )
             SvxConfigEntry* pEntry =
                 (SvxConfigEntry*) pActEntry->GetUserData();
 
-            String aNewName( stripHotKey( pEntry->GetName() ) );
+            OUString aNewName( stripHotKey( pEntry->GetName() ) );
             String aDesc = CUI_RESSTR( RID_SVXSTR_LABEL_NEW_NAME );
 
             SvxNameDialog* pNameDialog = new SvxNameDialog( this, aNewName, aDesc );
@@ -3272,7 +3272,7 @@ IMPL_LINK( SvxToolbarConfigPage, ToolbarSelectHdl, MenuButton *, pButton )
         }
         case ID_RENAME:
         {
-            String aNewName( stripHotKey( pToolbar->GetName() ) );
+            OUString aNewName( stripHotKey( pToolbar->GetName() ) );
             String aDesc = CUI_RESSTR( RID_SVXSTR_LABEL_NEW_NAME );
 
             SvxNameDialog* pNameDialog = new SvxNameDialog( this, aNewName, aDesc );
@@ -3363,7 +3363,7 @@ IMPL_LINK( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton )
             SvxConfigEntry* pEntry =
                 (SvxConfigEntry*) pActEntry->GetUserData();
 
-            String aNewName( stripHotKey( pEntry->GetName() ) );
+            OUString aNewName( stripHotKey( pEntry->GetName() ) );
             String aDesc = CUI_RESSTR( RID_SVXSTR_LABEL_NEW_NAME );
 
             SvxNameDialog* pNameDialog = new SvxNameDialog( this, aNewName, aDesc );

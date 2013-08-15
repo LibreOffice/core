@@ -146,7 +146,7 @@ public:
                 a default name of a not-yet-existing slide (e.g. 'Slide 17'),
                 sal_True is returned, but rName is set to an empty string.
      */
-    sal_Bool                    CheckPageName(::Window* pWin, String& rName );
+    sal_Bool                    CheckPageName(::Window* pWin, OUString& rName );
 
     void                    SetSlotFilter(sal_Bool bEnable = sal_False, sal_uInt16 nCount = 0, const sal_uInt16* pSIDs = NULL) { mbFilterEnable = bEnable; mnFilterCount = nCount; mpFilterSIDs = pSIDs; }
     void                    ApplySlotFilter() const;
@@ -177,7 +177,7 @@ public:
                     is true, the return value is also true, if the slide name is
                     a standard name (see above)
      */
-    bool                    IsNewPageNameValid( String & rInOutPageName, bool bResetStringIfStandardName = false );
+    bool                    IsNewPageNameValid( OUString & rInOutPageName, bool bResetStringIfStandardName = false );
 
 
     /** Return the reference device for the current document.  When the

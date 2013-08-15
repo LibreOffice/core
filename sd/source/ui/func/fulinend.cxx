@@ -94,7 +94,7 @@ void FuLineEnd::DoExecute( SfxRequest& )
 
         String aNewName( SdResId( STR_LINEEND ) );
         String aDesc( SdResId( STR_DESC_LINEEND ) );
-        String aName;
+        OUString aName;
 
         long nCount = pLineEndList->Count();
         long j = 1;
@@ -103,8 +103,8 @@ void FuLineEnd::DoExecute( SfxRequest& )
         while( !bDifferent )
         {
             aName = aNewName;
-            aName.Append( sal_Unicode(' ') );
-            aName.Append( OUString::valueOf( j++ ) );
+            aName += " ";
+            aName += OUString::number(j++);
             bDifferent = sal_True;
             for( long i = 0; i < nCount && bDifferent; i++ )
             {

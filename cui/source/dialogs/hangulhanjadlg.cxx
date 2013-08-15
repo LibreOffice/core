@@ -1027,7 +1027,7 @@ namespace svx
 
     IMPL_LINK_NOARG(HangulHanjaOptionsDialog, NewDictHdl)
     {
-        String                      aName;
+        OUString                    aName;
         HangulHanjaNewDictDialog    aNewDlg( this );
         aNewDlg.Execute();
         if( aNewDlg.GetName( aName ) )
@@ -1223,7 +1223,7 @@ namespace svx
     {
     }
 
-    bool HangulHanjaNewDictDialog::GetName( String& _rRetName ) const
+    bool HangulHanjaNewDictDialog::GetName( OUString& _rRetName ) const
     {
         if( m_bEntered )
             _rRetName = comphelper::string::stripEnd(m_aDictNameED.GetText(), ' ');

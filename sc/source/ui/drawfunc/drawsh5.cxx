@@ -502,9 +502,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
                         if(RET_OK == pDlg->Execute())
                         {
                             ScDocShell* pDocSh = pViewData->GetDocShell();
-                            String aTmp;
-                            pDlg->GetName(aTmp);
-                            aName = aTmp;
+                            pDlg->GetName(aName);
 
                             if (!aName.equals(pSelected->GetName()))
                             {
@@ -562,8 +560,8 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
 
                     if(SC_LAYER_INTERN != pSelected->GetLayer())
                     {
-                        String aTitle(pSelected->GetTitle());
-                        String aDescription(pSelected->GetDescription());
+                        OUString aTitle(pSelected->GetTitle());
+                        OUString aDescription(pSelected->GetDescription());
 
                         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                         OSL_ENSURE(pFact, "Dialogdiet fail!");
@@ -632,13 +630,13 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
 
 IMPL_LINK( ScDrawShell, NameObjectHdl, AbstractSvxNameDialog*, pDialog )
 {
-    String aName;
+    OUString aName;
 
     if( pDialog )
         pDialog->GetName( aName );
 
     ScDrawLayer* pModel = pViewData->GetDocument()->GetDrawLayer();
-    if ( aName.Len() && pModel )
+    if ( !aName.isEmpty() && pModel )
     {
         SCTAB nDummyTab;
         if ( pModel->GetNamedObject( aName, 0, nDummyTab ) )

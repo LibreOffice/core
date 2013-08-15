@@ -41,7 +41,7 @@ private:
 public:
     SvxNameDialog( Window* pWindow, const String& rName, const String& rDesc );
 
-    void    GetName( String& rName ){rName = pEdtName->GetText();}
+    void    GetName( OUString& rName ){rName = pEdtName->GetText();}
 
     /** add a callback Link that is called whenever the content of the edit
         field is changed.  The Link result determines whether the OK
@@ -90,7 +90,7 @@ public:
     SvxObjectNameDialog(Window* pWindow, const String& rName);
 
     // data access
-    void GetName(String& rName) {rName = pEdtName->GetText(); }
+    void GetName(OUString& rName) {rName = pEdtName->GetText(); }
 
     // set handler
     void SetCheckNameHdl(const Link& rLink, bool bCheckImmediately = false)
@@ -120,8 +120,8 @@ public:
     SvxObjectTitleDescDialog(Window* pWindow, const String& rTitle, const String& rDesc);
 
     // data access
-    void GetTitle(String& rTitle) {rTitle = pEdtTitle->GetText(); }
-    void GetDescription(String& rDescription) {rDescription = pEdtDescription->GetText(); }
+    void GetTitle(OUString& rTitle) {rTitle = pEdtTitle->GetText(); }
+    void GetDescription(OUString& rDescription) {rDescription = pEdtDescription->GetText(); }
 };
 
 /// Dialog to cancel, save, or add

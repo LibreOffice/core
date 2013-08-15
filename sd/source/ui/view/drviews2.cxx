@@ -445,9 +445,9 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
                 if( aNameDlg->Execute() == RET_OK )
                 {
-                    String aNewName;
+                    OUString aNewName;
                     aNameDlg->GetName( aNewName );
-                    if( ! aNewName.Equals( aPageName ) )
+                    if (aNewName != aPageName)
                     {
 #ifdef DBG_UTIL
                         bool bResult =
@@ -2036,7 +2036,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 // #i68101#
                 SdrObject* pSelected = mpDrawView->GetMarkedObjectByIndex(0L);
                 OSL_ENSURE(pSelected, "DrawViewShell::FuTemp03: nMarkCount, but no object (!)");
-                String aName(pSelected->GetName());
+                OUString aName(pSelected->GetName());
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "Dialogdiet fail!");
@@ -2070,8 +2070,8 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             {
                 SdrObject* pSelected = mpDrawView->GetMarkedObjectByIndex(0L);
                 OSL_ENSURE(pSelected, "DrawViewShell::FuTemp03: nMarkCount, but no object (!)");
-                String aTitle(pSelected->GetTitle());
-                String aDescription(pSelected->GetDescription());
+                OUString aTitle(pSelected->GetTitle());
+                OUString aDescription(pSelected->GetDescription());
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "Dialogdiet fail!");

@@ -626,8 +626,8 @@ void SwFrameShell::Execute(SfxRequest &rReq)
             if ( pSdrView &&
                  pSdrView->GetMarkedObjectCount() == 1 )
             {
-                String aDescription(rSh.GetObjDescription());
-                String aTitle(rSh.GetObjTitle());
+                OUString aDescription(rSh.GetObjDescription());
+                OUString aTitle(rSh.GetObjTitle());
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "Dialogdiet fail!");

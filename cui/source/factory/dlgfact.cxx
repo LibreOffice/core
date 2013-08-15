@@ -716,7 +716,7 @@ long AbstractFmInputRecordNoDialog_Impl::GetValue() const
     return pDlg->GetNewDictionary();
 }
 
-void AbstractSvxNameDialog_Impl::GetName( String& rName )
+void AbstractSvxNameDialog_Impl::GetName(OUString& rName)
 {
     pDlg->GetName( rName );
 }
@@ -748,7 +748,7 @@ IMPL_LINK_NOARG(AbstractSvxNameDialog_Impl, CheckNameHdl)
     return 0;
 }
 
-void AbstractSvxObjectNameDialog_Impl::GetName(String& rName)
+void AbstractSvxObjectNameDialog_Impl::GetName(OUString& rName)
 {
     pDlg->GetName(rName);
 }
@@ -777,12 +777,12 @@ IMPL_LINK_NOARG(AbstractSvxObjectNameDialog_Impl, CheckNameHdl)
     return 0;
 }
 
-void AbstractSvxObjectTitleDescDialog_Impl::GetTitle(String& rTitle)
+void AbstractSvxObjectTitleDescDialog_Impl::GetTitle(OUString& rTitle)
 {
     pDlg->GetTitle(rTitle);
 }
 
-void AbstractSvxObjectTitleDescDialog_Impl::GetDescription(String& rDescription)
+void AbstractSvxObjectTitleDescDialog_Impl::GetDescription(OUString& rDescription)
 {
     pDlg->GetDescription(rDescription);
 }

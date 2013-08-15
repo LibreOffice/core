@@ -673,7 +673,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl)
 
     ResMgr& rMgr = CUI_MGR();
     String aDesc( ResId( RID_SVXSTR_DESC_COLOR, rMgr ) );
-    String aName( m_pEdtName->GetText() );
+    OUString aName( m_pEdtName->GetText() );
     XColorEntry* pEntry;
     long nCount = pColorList->Count();
     sal_Bool bDifferent = sal_True;
@@ -748,7 +748,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickModifyHdl_Impl)
     {
         ResMgr& rMgr = CUI_MGR();
         String aDesc( ResId( RID_SVXSTR_DESC_COLOR, rMgr ) );
-        String aName( m_pEdtName->GetText() );
+        OUString aName( m_pEdtName->GetText() );
         long nCount = pColorList->Count();
         sal_Bool bDifferent = sal_True;
 

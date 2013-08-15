@@ -146,12 +146,12 @@ IMPL_LINK( DrawViewShell, RenameSlideHdl, AbstractSvxNameDialog*, pDialog )
     if( ! pDialog )
         return 0;
 
-    String aNewName;
+    OUString aNewName;
     pDialog->GetName( aNewName );
 
     SdPage* pCurrentPage = GetDoc()->GetSdPage( maTabControl.GetCurPageId() - 1, GetPageKind() );
 
-    return pCurrentPage && ( aNewName.Equals( pCurrentPage->GetName() ) || GetDocSh()->IsNewPageNameValid( aNewName ) );
+    return pCurrentPage && ( aNewName == pCurrentPage->GetName() || GetDocSh()->IsNewPageNameValid( aNewName ) );
 }
 
 

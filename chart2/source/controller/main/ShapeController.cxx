@@ -231,12 +231,12 @@ void ShapeController::describeSupportedFeatures()
 
 IMPL_LINK( ShapeController, CheckNameHdl, AbstractSvxNameDialog*, pDialog )
 {
-    String aName;
+    OUString aName;
     if ( pDialog )
     {
         pDialog->GetName( aName );
     }
-    if ( aName.Len() )
+    if ( !aName.isEmpty() )
     {
         DrawViewWrapper* pDrawViewWrapper = ( m_pChartController ? m_pChartController->GetDrawViewWrapper() : NULL );
         if ( pDrawViewWrapper && pDrawViewWrapper->getNamedSdrObject( aName ) )
@@ -436,8 +436,8 @@ void ShapeController::executeDispatch_ObjectTitleDescription()
             SdrObject* pSelectedObj = pDrawViewWrapper->getSelectedObject();
             if ( pSelectedObj )
             {
-                String aTitle( pSelectedObj->GetTitle() );
-                String aDescription( pSelectedObj->GetDescription() );
+                OUString aTitle( pSelectedObj->GetTitle() );
+                OUString aDescription( pSelectedObj->GetDescription() );
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 if ( pFact )
                 {
@@ -476,9 +476,7 @@ void ShapeController::executeDispatch_RenameObject()
                     pDlg->SetCheckNameHdl( LINK( this, ShapeController, CheckNameHdl ) );
                     if ( pDlg.get() && ( pDlg->Execute() == RET_OK ) )
                     {
-                        String aTmp;
-                        pDlg->GetName(aTmp);
-                        aName = aTmp;
+                        pDlg->GetName(aName);
                         if (pSelectedObj->GetName().equals(aName))
                         {
                             pSelectedObj->SetName( aName );

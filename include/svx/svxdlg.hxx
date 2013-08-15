@@ -183,7 +183,7 @@ public:
 class AbstractSvxNameDialog :public VclAbstractDialog  //add for SvxNameDialog
 {
 public:
-    virtual void    GetName( String& rName ) = 0;
+    virtual void    GetName( OUString& rName ) = 0;
     virtual void    SetCheckNameHdl( const Link& rLink, bool bCheckImmediately = false ) = 0;
     virtual void    SetEditHelpId(const OString&) = 0;
     //from class Window
@@ -197,15 +197,15 @@ public:
 class AbstractSvxObjectNameDialog :public VclAbstractDialog
 {
 public:
-    virtual void GetName(String& rName) = 0;
+    virtual void GetName(OUString& rName) = 0;
     virtual void SetCheckNameHdl(const Link& rLink, bool bCheckImmediately = false) = 0;
 };
 
 class AbstractSvxObjectTitleDescDialog :public VclAbstractDialog
 {
 public:
-    virtual void GetTitle(String& rTitle) = 0;
-    virtual void GetDescription(String& rDescription) = 0;
+    virtual void GetTitle(OUString& rTitle) = 0;
+    virtual void GetDescription(OUString& rDescription) = 0;
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////

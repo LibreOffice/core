@@ -532,7 +532,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                 // #i68101#
                 SdrObject* pSelected = pSdrView->GetMarkedObjectByIndex(0L);
                 OSL_ENSURE(pSelected, "DrawViewShell::FuTemp03: nMarkCount, but no object (!)");
-                String aName(pSelected->GetName());
+                OUString aName(pSelected->GetName());
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "Dialogdiet fail!");
@@ -563,8 +563,8 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
             {
                 SdrObject* pSelected = pSdrView->GetMarkedObjectByIndex(0L);
                 OSL_ENSURE(pSelected, "DrawViewShell::FuTemp03: nMarkCount, but no object (!)");
-                String aTitle(pSelected->GetTitle());
-                String aDescription(pSelected->GetDescription());
+                OUString aTitle(pSelected->GetTitle());
+                OUString aDescription(pSelected->GetDescription());
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "Dialogdiet fail!");
@@ -616,10 +616,10 @@ IMPL_LINK( SwDrawBaseShell, CheckGroupShapeNameHdl, AbstractSvxNameDialog*, pNam
     OSL_ENSURE(rMarkList.GetMarkCount() == 1, "wrong draw selection");
     SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
     const String sCurrentName = pObj->GetName();
-    String sNewName;
+    OUString sNewName;
     pNameDialog->GetName(sNewName);
     long nRet = 0;
-    if(!sNewName.Len() || sCurrentName == sNewName)
+    if (sNewName.isEmpty() || sCurrentName == sNewName)
         nRet = 1;
     else
     {

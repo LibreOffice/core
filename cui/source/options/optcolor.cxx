@@ -1150,7 +1150,7 @@ IMPL_LINK(SvxColorOptionsTabPage, SaveDeleteHdl_Impl, PushButton*, pButton )
 {
     if (m_pSaveSchemePB == pButton)
     {
-        String sName;
+        OUString sName;
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         DBG_ASSERT(pFact, "Dialogdiet fail!");
@@ -1194,9 +1194,9 @@ IMPL_LINK(SvxColorOptionsTabPage, SaveDeleteHdl_Impl, PushButton*, pButton )
 
 IMPL_LINK(SvxColorOptionsTabPage, CheckNameHdl_Impl, AbstractSvxNameDialog*, pDialog )
 {
-    String sName;
+    OUString sName;
     pDialog->GetName(sName);
-    return sName.Len() && LISTBOX_ENTRY_NOTFOUND == m_pColorSchemeLB->GetEntryPos( sName );
+    return !sName.isEmpty() && LISTBOX_ENTRY_NOTFOUND == m_pColorSchemeLB->GetEntryPos( sName );
 }
 
 void SvxColorOptionsTabPage::FillUserData()

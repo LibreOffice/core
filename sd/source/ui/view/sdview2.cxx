@@ -905,7 +905,7 @@ bool View::GetExchangeList (std::vector<OUString> &rExchangeList,
     std::vector<OUString>::const_iterator pIter;
     for ( pIter = rBookmarkList.begin(); bNameOK && pIter != rBookmarkList.end(); ++pIter )
     {
-        String aNewName = *pIter;
+        OUString aNewName = *pIter;
 
         if( nType == 0  || nType == 2 )
             bNameOK = mpDocSh->CheckPageName(mpViewSh->GetActiveWindow(), aNewName);

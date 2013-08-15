@@ -361,12 +361,12 @@ void DrawViewShell::UpdateIMapDlg( SdrObject* pObj )
 
 IMPL_LINK( DrawViewShell, NameObjectHdl, AbstractSvxNameDialog*, pDialog )
 {
-    String aName;
+    OUString aName;
 
     if( pDialog )
         pDialog->GetName( aName );
 
-    return( ( !aName.Len() || ( GetDoc() && !GetDoc()->GetObj( aName ) ) ) ? 1 : 0 );
+    return ( aName.isEmpty() || ( GetDoc() && !GetDoc()->GetObj( aName ) ) ) ? 1 : 0;
 }
 
 } // end of namespace sd

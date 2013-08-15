@@ -949,9 +949,9 @@ void SlotManager::RenameSlide (void)
 
             if( aNameDlg->Execute() == RET_OK )
             {
-                String aNewName;
+                OUString aNewName;
                 aNameDlg->GetName( aNewName );
-                if( ! aNewName.Equals( aPageName ) )
+                if (aNewName != aPageName)
                 {
 #ifdef DBG_UTIL
                     bool bResult =
@@ -976,7 +976,7 @@ IMPL_LINK(SlotManager, RenameSlideHdl, AbstractSvxNameDialog*, pDialog)
     if( ! pDialog )
         return 0;
 
-    String aNewName;
+    OUString aNewName;
     pDialog->GetName( aNewName );
 
     model::SharedPageDescriptor pDescriptor (
@@ -985,7 +985,7 @@ IMPL_LINK(SlotManager, RenameSlideHdl, AbstractSvxNameDialog*, pDialog)
     if (pDescriptor.get() != NULL)
         pCurrentPage = pDescriptor->GetPage();
 
-    return ( (pCurrentPage!=NULL && aNewName.Equals( pCurrentPage->GetName() ))
+    return ( (pCurrentPage!=NULL && aNewName == pCurrentPage->GetName())
         || (mrSlideSorter.GetViewShell()
             && mrSlideSorter.GetViewShell()->GetDocSh()->IsNewPageNameValid( aNewName ) ));
 }

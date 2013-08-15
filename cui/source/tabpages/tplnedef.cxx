@@ -524,7 +524,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickAddHdl_Impl)
     ResMgr& rMgr = CUI_MGR();
     String aNewName( SVX_RES( RID_SVXSTR_LINESTYLE ) );
     String aDesc( ResId( RID_SVXSTR_DESC_LINESTYLE, rMgr ) );
-    String aName;
+    OUString aName;
     XDashEntry* pEntry;
 
     long nCount = pDashList->Count();
@@ -534,7 +534,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickAddHdl_Impl)
     while ( !bDifferent )
     {
         aName = aNewName;
-        aName += sal_Unicode(' ');
+        aName += " ";
         aName += OUString::number( j++ );
         bDifferent = sal_True;
 
@@ -618,8 +618,8 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickModifyHdl_Impl)
     {
         ResMgr& rMgr = CUI_MGR();
         String aDesc( ResId( RID_SVXSTR_DESC_LINESTYLE, rMgr ) );
-        String aName( pDashList->GetDash( nPos )->GetName() );
-        String aOldName = aName;
+        OUString aName( pDashList->GetDash( nPos )->GetName() );
+        OUString aOldName = aName;
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         DBG_ASSERT(pFact, "Dialogdiet fail!");

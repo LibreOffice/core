@@ -284,7 +284,7 @@ Bitmap DrawDocShell::GetPagePreviewBitmap(SdPage* pPage, sal_uInt16 nMaxEdgePixe
  * name.
  * @return sal_False if the user cancels the action.
  */
-sal_Bool DrawDocShell::CheckPageName (::Window* pWin, String& rName )
+sal_Bool DrawDocShell::CheckPageName (::Window* pWin, OUString& rName )
 {
     const String aStrForDlg( rName );
     bool bIsNameValid = IsNewPageNameValid( rName, true );
@@ -317,49 +317,47 @@ sal_Bool DrawDocShell::CheckPageName (::Window* pWin, String& rName )
     return ( bIsNameValid ? sal_True : sal_False );
 }
 
-bool DrawDocShell::IsNewPageNameValid( String & rInOutPageName, bool bResetStringIfStandardName /* = false */ )
+bool DrawDocShell::IsNewPageNameValid( OUString & rInOutPageName, bool bResetStringIfStandardName /* = false */ )
 {
     bool bCanUseNewName = false;
 
     // check if name is something like 'Slide n'
-    String aStrPage( SdResId( STR_SD_PAGE ) );
-    aStrPage += ' ';
+    OUString aStrPage(SD_RESSTR(STR_SD_PAGE) + " ");
 
     bool bIsStandardName = false;
 
     // prevent also _future_ slide names of the form "'STR_SD_PAGE' + ' ' + '[0-9]+|[a-z]|[A-Z]|[CDILMVX]+|[cdilmvx]+'"
     // (arabic, lower- and upper case single letter, lower- and upper case roman numbers)
-    if( 0 == rInOutPageName.Search( aStrPage ) )
+    if (rInOutPageName.startsWith(aStrPage) &&
+        rInOutPageName.getLength() > aStrPage.getLength())
     {
-        if( rInOutPageName.GetToken( 1, sal_Unicode(' ') ).GetChar(0) >= '0' &&
-            rInOutPageName.GetToken( 1, sal_Unicode(' ') ).GetChar(0) <= '9' )
+        OUString sRemainder = rInOutPageName.getToken(1, ' ');
+        if (sRemainder[0] >= '0' && sRemainder[0] <= '9')
         {
             // check for arabic numbering
 
-            // gobble up all following numbers
-            String sRemainder = rInOutPageName.GetToken( 1, sal_Unicode(' ') );
-            while( sRemainder.Len() &&
-                   sRemainder.GetChar(0) >= '0' &&
-                   sRemainder.GetChar(0) <= '9' )
+            sal_Int32 nIndex = 1;
+            // skip all following numbers
+            while (nIndex < sRemainder.getLength() &&
+                   sRemainder[nIndex] >= '0' && sRemainder[nIndex] <= '9')
             {
-                // trim by one
-                sRemainder.Erase(0, 1);
+                nIndex++;
             }
 
             // EOL? Reserved name!
-            if( !sRemainder.Len() )
+            if (nIndex >= sRemainder.getLength())
             {
                 bIsStandardName = true;
             }
         }
-        else if( rInOutPageName.GetToken( 1, sal_Unicode(' ') ).Len() == 1 &&
-                 comphelper::string::islowerAscii(rInOutPageName.GetToken( 1, sal_Unicode(' ') ).GetChar(0) ) )
+        else if (sRemainder.getLength() == 1 &&
+                 comphelper::string::islowerAscii(sRemainder[0]))
         {
             // lower case, single character: reserved
             bIsStandardName = true;
         }
-        else if( rInOutPageName.GetToken( 1, sal_Unicode(' ') ).Len() == 1 &&
-                 comphelper::string::isupperAscii(rInOutPageName.GetToken( 1, sal_Unicode(' ') ).GetChar(0) ) )
+        else if (sRemainder.getLength() == 1 &&
+                 comphelper::string::isupperAscii(sRemainder[0]))
         {
             // upper case, single character: reserved
             bIsStandardName = true;
@@ -367,21 +365,21 @@ bool DrawDocShell::IsNewPageNameValid( String & rInOutPageName, bool bResetStrin
         else
         {
             // check for upper/lower case roman numbering
-            String sReserved( OUString("cdilmvx") );
+            OUString sReserved("cdilmvx");
 
-            // gobble up all following characters contained in one reserved class
-            String sRemainder = rInOutPageName.GetToken( 1, sal_Unicode(' ') );
-            if( sReserved.Search( sRemainder.GetChar(0) ) == STRING_NOTFOUND )
-                sReserved.ToUpperAscii();
+            // skip all following characters contained in one reserved class
+            if (sReserved.indexOf(sRemainder[0]) == -1)
+                sReserved = sReserved.toAsciiUpperCase();
 
-            while( sReserved.Search( sRemainder.GetChar(0) ) != STRING_NOTFOUND )
+            sal_Int32 nIndex = 0;
+            while (nIndex < sRemainder.getLength() &&
+                   sReserved.indexOf(sRemainder[nIndex]) != -1)
             {
-                // trim by one
-                sRemainder.Erase(0, 1);
+                nIndex++;
             }
 
             // EOL? Reserved name!
-            if( !sRemainder.Len() )
+            if (nIndex >= sRemainder.getLength())
             {
                 bIsStandardName = true;
             }
@@ -395,7 +393,7 @@ bool DrawDocShell::IsNewPageNameValid( String & rInOutPageName, bool bResetStrin
             // this is for insertion of slides from other files with standard
             // name.  They get a new standard name, if the string is set to an
             // empty one.
-            rInOutPageName = String();
+            rInOutPageName = OUString();
             bCanUseNewName = true;
         }
         else
@@ -403,7 +401,7 @@ bool DrawDocShell::IsNewPageNameValid( String & rInOutPageName, bool bResetStrin
     }
     else
     {
-        if( rInOutPageName.Len() > 0 )
+        if (!rInOutPageName.isEmpty())
         {
             sal_Bool   bOutDummy;
             sal_uInt16 nExistingPageNum = mpDoc->GetPageByName( rInOutPageName, bOutDummy );
@@ -421,7 +419,7 @@ IMPL_LINK( DrawDocShell, RenameSlideHdl, AbstractSvxNameDialog*, pDialog )
     if( ! pDialog )
         return 0;
 
-    String aNewName;
+    OUString aNewName;
     pDialog->GetName( aNewName );
 
     return IsNewPageNameValid( aNewName );

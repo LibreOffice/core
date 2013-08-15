@@ -458,7 +458,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickAddHdl_Impl)
 
     String aNewName( SVX_RES( RID_SVXSTR_BITMAP ) );
     String aDesc( CUI_RES( RID_SVXSTR_DESC_NEW_BITMAP ) );
-    String aName;
+    OUString aName;
 
     long nCount = pBitmapList->Count();
     long j = 1;
@@ -467,7 +467,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickAddHdl_Impl)
     while( !bDifferent )
     {
         aName  = aNewName;
-        aName += sal_Unicode(' ');
+        aName += " ";
         aName += OUString::number( j++ );
         bDifferent = sal_True;
 
@@ -583,7 +583,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl_Impl)
             MessageDialog*    pWarnBox = NULL;
 
             // convert file URL to UI name
-            String          aName;
+            OUString        aName;
             INetURLObject   aURL( aDlg.GetPath() );
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             DBG_ASSERT(pFact, "Dialogdiet fail!");
@@ -655,8 +655,8 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickModifyHdl_Impl)
     {
         ResMgr& rMgr = CUI_MGR();
         String aDesc( ResId( RID_SVXSTR_DESC_NEW_BITMAP, rMgr ) );
-        String aName( pBitmapList->GetBitmap( nPos )->GetName() );
-        String aOldName = aName;
+        OUString aName( pBitmapList->GetBitmap( nPos )->GetName() );
+        OUString aOldName = aName;
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         DBG_ASSERT(pFact, "Dialogdiet fail!");

@@ -386,7 +386,7 @@ class SvxNameDialog;
 class AbstractSvxNameDialog_Impl :public AbstractSvxNameDialog
 {
     DECL_ABSTDLG_BASE(AbstractSvxNameDialog_Impl,SvxNameDialog)
-    virtual void    GetName( String& rName ) ;
+    virtual void    GetName( OUString& rName ) ;
     virtual void    SetCheckNameHdl( const Link& rLink, bool bCheckImmediately = false ) ;
     virtual void    SetEditHelpId(const OString&) ;
     //from class Window
@@ -408,7 +408,7 @@ class SvxObjectTitleDescDialog;
 class AbstractSvxObjectNameDialog_Impl :public AbstractSvxObjectNameDialog
 {
     DECL_ABSTDLG_BASE(AbstractSvxObjectNameDialog_Impl, SvxObjectNameDialog)
-    virtual void GetName(String& rName) ;
+    virtual void GetName(OUString& rName) ;
     virtual void SetCheckNameHdl(const Link& rLink, bool bCheckImmediately = false);
 
 private:
@@ -419,8 +419,8 @@ private:
 class AbstractSvxObjectTitleDescDialog_Impl :public AbstractSvxObjectTitleDescDialog
 {
     DECL_ABSTDLG_BASE(AbstractSvxObjectTitleDescDialog_Impl, SvxObjectTitleDescDialog)
-    virtual void GetTitle(String& rName);
-    virtual void GetDescription(String& rName);
+    virtual void GetTitle(OUString& rName);
+    virtual void GetDescription(OUString& rName);
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////

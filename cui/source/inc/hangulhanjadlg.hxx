@@ -254,7 +254,7 @@ namespace svx
                             HangulHanjaNewDictDialog( Window* _pParent );
         virtual             ~HangulHanjaNewDictDialog();
 
-        bool                GetName( String& _rRetName ) const;
+        bool                GetName( OUString& _rRetName ) const;
     };
 
 
