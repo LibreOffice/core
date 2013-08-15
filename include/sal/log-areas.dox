@@ -129,9 +129,10 @@ certain functionality.
 @li @c filter.config
 @li @c filter.ms - escher import/export
 @li @c filter.xslt - xslt import/export
-@li @c oox.xmlstream - XmlStream class
-@li @c oox.storage - ZipStorage class
+@li @c oox.cscode - see oox/source/drawingml/customshapes/README
 @li @c oox.ppt - pptx filter
+@li @c oox.storage - ZipStorage class
+@li @c oox.xmlstream - XmlStream class
 
 @section forms
 

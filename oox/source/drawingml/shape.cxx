@@ -592,7 +592,7 @@ Reference< XShape > Shape::createAndInsert(
                 mpCustomShapePropertiesPtr->setTextRotateAngle( nTextRotateAngle / 60000 );
             }
 
-            SAL_INFO("oox", "==cscode== shape name: '" << msName << "'");
+            SAL_INFO("oox.cscode", "==cscode== shape name: '" << msName << "'");
             mpCustomShapePropertiesPtr->pushToPropSet( rFilterBase, xSet, mxShape );
         }
         else if( getTextBody() )

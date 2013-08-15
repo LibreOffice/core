@@ -1,18 +1,59 @@
-This code is used to generate the customshapepresets source code.
+#!/bin/bash
 
-To re-generate the code first you need to re-build oox with:
+# The Perl code here is used to generate the custom shape presets
+# source code.
 
-make oox.clean oox dbglevel=2
+# This file is both a README and also, if run as a shell script, does what
+# it describes.
 
-Then load the cshape-all.pptx file[1]
+# We want to exit on errors...
 
-SAL_LOG='+INFO+WARN' ./soffice /path/to/oox/pptx/cshape-all.pptx 2>& | tee /path/to/oox/custom-shapes.log
+set -o errexit
 
-Now run:
+# To re-generate the code, you need to be on Linux (I think). You need
+# to have done a make dev-install. oox needs to be build with
+# dbglevel=2 so that DEBUG is defined.
 
-generatePresetsCXX.pl # this operates on custom-shapes.log in the CWD
+make oox.clean && make oox dbglevel=2
 
-And this will re-generate the .cxx sources we need to embed the right
-custom shapes into the source code.
+# This reads the
+# oox/source/drawingml/customshapes/presetShapeDefinitions.xml file.
+# It will produce the file
+# oox/source/drawingml/customshapes/pptx/cshape-all.ppx and a whole
+# bunch of other files that aren't needed further.
 
-[1] - this file is built by generatePresetsPPTXs.pl incidentally.
+(cd oox/source/drawingml/customshapes && ./generatePresetsPPTXs.pl)
+
+
+# Then load it and store the debugging output. Note that this will run
+# an *interactive* LO, and you need to quit it manually.
+
+echo
+echo "Starting LibreOffice, quit once you see the slide."
+echo
+
+# We need only the SAL_INFO output with tag "oox.cscode", plus stderr
+# for PropertyMap::dumpCode() output.
+
+SAL_LOG='+INFO.oox.cscode-WARN' install/program/soffice oox/source/drawingml/customshapes/pptx/cshape-all.pptx > oox/source/drawingml/customshapes/custom-shapes.log 2>&1
+
+
+# Now run a script that reads the above log file and generates the
+# customshapepresets*.cxx sources:
+
+(cd oox/source/drawingml/customshapes && ./generatePresetsCXX.pl)
+
+
+# Then move them into place
+
+mv oox/source/drawingml/customshapes/customshapepresets*.cxx oox/source/drawingml
+
+echo
+echo "To see what has been done, run git diff --patience oox/source/drawingml"
+echo
+echo "The generatePresetsCXX.pl doesn't sort the classes by name (it uses just"
+echo "the keys function on a hash which returns the keys in an unspecified"
+echo "order), so there will almost always be some random re-ordering of"
+echo "classes, sigh."
+echo
+
