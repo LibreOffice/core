@@ -17,14 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 /*
  Warning: The SvXMLElementExport helper class creates the beginning and
  closing tags of xml elements in its constructor and destructor, so theres
  hidden stuff going on, on occasion the ordering of these classes declarations
  may be significant
 */
-
 
 #include <com/sun/star/xml/sax/XErrorHandler.hpp>
 #include <com/sun/star/xml/sax/XEntityResolver.hpp>
@@ -81,13 +79,20 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-
 #define EXPORT_SVC_NAME "com.sun.star.xml.XMLExportFilter"
 
 #undef WANTEXCEPT
 
-
-////////////////////////////////////////////////////////////
+sal_Unicode ConvertMathToMathML( sal_Unicode cChar )
+{
+    sal_Unicode cRes = cChar;
+    if (IsInPrivateUseArea( cChar ))
+    {
+        SAL_WARN("starmath", "Error: private use area characters should no longer be in use!" );
+        cRes = (sal_Unicode) '@'; // just some character that should easily be notice as odd in the context
+    }
+    return cRes;
+}
 
 sal_Bool SmXMLExportWrapper::Export(SfxMedium &rMedium)
 {
@@ -356,8 +361,6 @@ sal_Bool SmXMLExportWrapper::WriteThroughComponent(
     return bRet;
 }
 
-////////////////////////////////////////////////////////////
-
 SmXMLExport::SmXMLExport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
     sal_uInt16 nExportFlags)
@@ -413,8 +416,6 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLExport_createInstance(
     return (cppu::OWeakObject*)new SmXMLExport( comphelper::getComponentContext(rSMgr), EXPORT_OASIS|EXPORT_ALL );
 }
 
-////////////////////////////////////////////////////////////
-
 OUString SAL_CALL SmXMLExportMetaOOO_getImplementationName() throw()
 {
     return OUString( "com.sun.star.comp.Math.XMLMetaExporter" );
@@ -434,8 +435,6 @@ throw( uno::Exception )
 {
     return (cppu::OWeakObject*)new SmXMLExport( comphelper::getComponentContext(rSMgr), EXPORT_META );
 }
-
-////////////////////////////////////////////////////////////
 
 OUString SAL_CALL SmXMLExportMeta_getImplementationName() throw()
 {
@@ -457,8 +456,6 @@ throw( uno::Exception )
     return (cppu::OWeakObject*)new SmXMLExport( comphelper::getComponentContext(rSMgr), EXPORT_OASIS|EXPORT_META );
 }
 
-////////////////////////////////////////////////////////////
-
 OUString SAL_CALL SmXMLExportSettingsOOO_getImplementationName() throw()
 {
     return OUString( "com.sun.star.comp.Math.XMLSettingsExporter" );
@@ -479,8 +476,6 @@ throw( uno::Exception )
     return (cppu::OWeakObject*)new SmXMLExport( comphelper::getComponentContext(rSMgr), EXPORT_SETTINGS );
 }
 
-////////////////////////////////////////////////////////////
-
 OUString SAL_CALL SmXMLExportSettings_getImplementationName() throw()
 {
     return OUString( "com.sun.star.comp.Math.XMLOasisSettingsExporter" );
@@ -500,8 +495,6 @@ throw( uno::Exception )
 {
     return (cppu::OWeakObject*)new SmXMLExport( comphelper::getComponentContext(rSMgr), EXPORT_OASIS|EXPORT_SETTINGS );
 }
-
-////////////////////////////////////////////////////////////
 
 OUString SAL_CALL SmXMLExportContent_getImplementationName() throw()
 {
@@ -524,8 +517,6 @@ throw( uno::Exception )
     // chanied in
     return (cppu::OWeakObject*)new SmXMLExport( comphelper::getComponentContext(rSMgr), EXPORT_OASIS|EXPORT_CONTENT );
 }
-
-////////////////////////////////////////////////////////////
 
 // XServiceInfo
 // override empty method from parent class
@@ -1661,7 +1652,5 @@ void SmXMLExport::ExportNodes(const SmNode *pNode, int nLevel)
 
     }
 }
-
-////////////////////////////////////////////////////////////
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
