@@ -277,12 +277,11 @@ bool SwSection::DataEquals(SwSectionData const& rCmp) const
     (void) GetLinkFileName(); // updates m_sLinkFileName
     bool const bProtect(m_Data.IsProtectFlag());
     bool const bEditInReadonly(m_Data.IsEditInReadonlyFlag());
-    const_cast<SwSection*>(this)->m_Data.SetProtectFlag(IsProtect());
-    const_cast<SwSection*>(this)->m_Data
-        .SetEditInReadonlyFlag(IsEditInReadonly());
+    m_Data.SetProtectFlag(IsProtect());
+    m_Data.SetEditInReadonlyFlag(IsEditInReadonly());
     bool const bResult( m_Data == rCmp );
-    const_cast<SwSection*>(this)->m_Data.SetProtectFlag(bProtect);
-    const_cast<SwSection*>(this)->m_Data.SetEditInReadonlyFlag(bEditInReadonly);
+    m_Data.SetProtectFlag(bProtect);
+    m_Data.SetEditInReadonlyFlag(bEditInReadonly);
     return bResult;
 }
 
@@ -574,7 +573,7 @@ const String& SwSection::GetLinkFileName() const
             break;
         default: break;
         }
-        const_cast<SwSection*>(this)->m_Data.SetLinkFileName(sTmp);
+        m_Data.SetLinkFileName(sTmp);
     }
     return m_Data.GetLinkFileName();
 }
