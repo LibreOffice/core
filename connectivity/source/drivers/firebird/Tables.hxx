@@ -52,15 +52,9 @@ namespace connectivity
             // TODO: we should also implement XDataDescriptorFactory, XRefreshable,
             // XAppend,  etc., but all are optional.
 
-//             // XDrop
-//             virtual void SAL_CALL dropByName(const ::rtl::OUString& rName)
-//                 throw (::com::sun::star::sdbc::SQLException,
-//                        ::com::sun::star::container::NoSuchElementException,
-//                        ::com::sun::star::uno::RuntimeException);
-//             virtual void SAL_CALL dropByIndex(const sal_Int32 nIndex)
-//                 throw (::com::sun::star::sdbc::SQLException,
-//                        com::sun::star::lang::IndexOutOfBoundsException,
-//                        ::com::sun::star::uno::RuntimeException);
+            // XDrop
+            virtual void dropObject(sal_Int32 nPosition, const ::rtl::OUString rName);
+
         };
 
     } // namespace firebird

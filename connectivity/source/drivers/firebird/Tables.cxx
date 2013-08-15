@@ -96,18 +96,25 @@ ObjectType Tables::appendObject(const OUString& rName,
 
     return createObject(rName);
 }
-// //----- XDrop ----------------------------------------------------------------
-// void SAL_CALL Tables::dropByName(const OUString& rName)
-//     throw (SQLException, NoSuchElementException, RuntimeException)
-// {
-//     (void) rName;
-//     // TODO: IMPLEMENT ME
-// }
-//
-// void SAL_CALL Tables::dropByIndex(const sal_Int32 nIndex)
-//     throw (SQLException, IndexOutOfBoundsException, RuntimeException)
-// {
-//     (void) nIndex;
-//     // TODO: IMPLEMENT ME
-// }
+
+//----- XDrop -----------------------------------------------------------------
+void Tables::dropObject(sal_Int32 nPosition, const OUString sName)
+{
+    uno::Reference< XPropertySet > xTable(getObject(nPosition));
+
+    if (!ODescriptor::isNew(xTable))
+    {
+        OUStringBuffer sSql("DROP ");
+
+        OUString sType;
+        xTable->getPropertyValue("Type") >>= sType;
+        sSql.append(sType);
+
+        const OUString sQuoteString = m_xMetaData->getIdentifierQuoteString();
+        sSql.append(::dbtools::quoteName(sQuoteString,sName));
+
+        m_xMetaData->getConnection()->createStatement()->execute(sSql.makeStringAndClear());
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
