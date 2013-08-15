@@ -1125,23 +1125,15 @@ void DAVResourceAccess::getUserRequestHeaders(
 
         if ( xDAVEnv.is() )
         {
-            uno::Sequence< beans::NamedValue > aRequestHeaders
+            uno::Sequence< beans::StringPair > aRequestHeaders
                 = xDAVEnv->getUserRequestHeaders( rURI, rMethod );
 
             for ( sal_Int32 n = 0; n < aRequestHeaders.getLength(); ++n )
             {
-                OUString aValue;
-                sal_Bool isString = aRequestHeaders[ n ].Value >>= aValue;
-
-                if ( !isString )
-                {
-                    OSL_ENSURE( isString,
-                        "DAVResourceAccess::getUserRequestHeaders :"
-                        "Value is not a string! Ignoring..." );
-                }
-
                 rRequestHeaders.push_back(
-                    DAVRequestHeader( aRequestHeaders[ n ].Name, aValue ) );
+                    DAVRequestHeader(
+                        aRequestHeaders[ n ].First,
+                        aRequestHeaders[ n ].Second ) );
             }
         }
     }
