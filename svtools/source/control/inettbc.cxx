@@ -509,7 +509,7 @@ OUString SvtURLBox::ParseSmart( OUString aText, OUString aBaseURL, const OUStrin
             // HRO: INetURLObject::smatRel2Abs does not recognize '\\' as a relative path
             //      but in case of "\\\\" INetURLObject is right - this is an absolute path !
 
-            if( aText.Search( '\\' ) == 0 && (aText.Len() < 2 || aText.GetChar( 1 ) != '\\') )
+            if( aText.indexOf( '\\' ) == 0 && (aText.getLength() < 2 || aText[ 1 ] != '\\') )
             {
                 // cut to first segment
                 String aTmp = INetURLObject::GetScheme( eBaseProt );
@@ -517,7 +517,7 @@ OUString SvtURLBox::ParseSmart( OUString aText, OUString aBaseURL, const OUStrin
                 aTmp += String(aObj.getName( 0, true, INetURLObject::DECODE_WITH_CHARSET ));
                 aObj.SetURL( aTmp );
 
-                aSmart.Erase(0,1);
+                aSmart = aSmart.copy(1);
             }
 #endif
             // base URL must be a directory !
@@ -1207,7 +1207,7 @@ OUString SvtURLBox::GetURL()
     // erase trailing spaces on Windows since thay are invalid on this OS and
     // most of the time they are inserted by accident via copy / paste
     aText = comphelper::string::stripEnd(aText, ' ');
-    if ( !aText.Len() )
+    if ( aText.isEmpty() )
         return aText;
     // #i9739#
 #endif
