@@ -11,6 +11,7 @@
 #include "Table.hxx"
 
 #include <comphelper/sequence.hxx>
+#include <connectivity/dbtools.hxx>
 #include <connectivity/TIndexes.hxx>
 #include <connectivity/TKeys.hxx>
 
@@ -115,7 +116,16 @@ void SAL_CALL Table::alterColumnByName(const OUString& rColName,
         getConnection()->createStatement()->execute(sSql);
     }
 
-    if (bTypeChanged || bTypeNameChanged || bPrecisionChanged || bScaleChanged
+    if (bTypeChanged || bTypeNameChanged)
+    {
+        OUString sSql(getAlterTableColumn(rColName) + "TYPE " +
+                ::dbtools::createStandardTypePart(rDescriptor, getConnection()));
+        getConnection()->createStatement()->execute(sSql);
+        // TODO: could cause errors e.g. if incompatible types, deal with them here as appropriate.
+        // possibly we have to wrap things in Util::evaluateStatusVector.
+    }
+
+    if (bPrecisionChanged || bScaleChanged
         || bIsNullableChanged || bIsAutoIncrementChanged)
     {
         // TODO: changeType
