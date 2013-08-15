@@ -2985,7 +2985,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 5 // Description of Parameter 2
         {
-            Text [ en-US ] = "The cell range in which the search criteria are given." ;
+            Text [ en-US ] = "The criteria to be applied to the range." ;
         };
         String 6 // Name of Parameter 3
         {
@@ -3026,7 +3026,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 5 // Description of Parameter 2
         {
-            Text [ en-US ] = "The cell range in which the search criteria are given." ;
+            Text [ en-US ] = "The criteria to be applied to the range." ;
         };
         String 6 // Name of Parameter 3
         {
@@ -3074,7 +3074,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 7 // Description of Parameter 3
         {
-            Text [ en-US ] = "Criteria 1, criteria 2,... are the cell ranges in which the search criteria are given." ;
+            Text [ en-US ] = "Criteria 1, criteria 2,... are the criteria to be applied to the ranges given." ;
         };
     };
 
@@ -3115,7 +3115,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 7 // Description of Parameter 3
         {
-            Text [ en-US ] = "Criteria 1, criteria 2,... are the cell ranges in which the search criteria are given." ;
+            Text [ en-US ] = "Criteria 1, criteria 2,... are the criteria to be applied to the ranges given." ;
         };
     };
 
@@ -3148,7 +3148,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 5 // Description of Parameter 2
         {
-            Text [ en-US ] = "Criteria 1, criteria 2,... are the cell ranges in which the search criteria are given." ;
+            Text [ en-US ] = "Criteria 1, criteria 2,... are the criteria to be applied to the ranges given." ;
         };
     };
 
@@ -3173,7 +3173,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 3 // Description of Parameter 1
         {
-            Text [ en-US ] = "The range of cells on which the criteria are to be applied." ;
+            Text [ en-US ] = "The range of cells to be evaluated by the criteria given." ;
         };
         String 4 // Name of Parameter 2
         {
@@ -3181,7 +3181,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 5 // Description of Parameter 2
         {
-            Text [ en-US ] = "The cell range in which the search criteria are given." ;
+            Text [ en-US ] = "The criteria to be applied to the range." ;
         };
     };
      // -=*# Resource for function WURZEL #*=-
