@@ -361,7 +361,7 @@ static long getMaxNonOutlier(const std::vector<long> &rG, long nAvgDimension)
 }
 
 static std::vector<long> setButtonSizes(const std::vector<long> &rG,
-    long nAvgDimension, long nMaxNonOutlier)
+    long nAvgDimension, long nMaxNonOutlier, long nMinWidth)
 {
     std::vector<long> aVec;
     //set everything < 1.5 times the average to the same width, leave the
@@ -371,9 +371,13 @@ static std::vector<long> setButtonSizes(const std::vector<long> &rG,
     {
         long nPrimaryChildDimension = *aI;
         if (nPrimaryChildDimension < nAvgDimension * 1.5)
-            aVec.push_back(nMaxNonOutlier);
+        {
+            aVec.push_back(std::max(nMaxNonOutlier, nMinWidth));
+        }
         else
-            aVec.push_back(nPrimaryChildDimension);
+        {
+            aVec.push_back(std::max(nPrimaryChildDimension, nMinWidth));
+        }
     }
     return aVec;
 }
@@ -405,12 +409,12 @@ VclButtonBox::Requisition VclButtonBox::calculatePrimarySecondaryRequisitions() 
             //set the max secondary dimension
             nMainGroupSecondary = std::max(nMainGroupSecondary, getSecondaryDimension(aChildSize));
             //collect the primary dimensions
-            aMainGroupSizes.push_back(std::max(nMinMainGroupPrimary, getPrimaryDimension(aChildSize)));
+            aMainGroupSizes.push_back(getPrimaryDimension(aChildSize));
         }
         else
         {
             nSubGroupSecondary = std::max(nSubGroupSecondary, getSecondaryDimension(aChildSize));
-            aSubGroupSizes.push_back(std::max(nMinSubGroupPrimary, getPrimaryDimension(aChildSize)));
+            aSubGroupSizes.push_back(getPrimaryDimension(aChildSize));
         }
     }
 
@@ -418,8 +422,10 @@ VclButtonBox::Requisition VclButtonBox::calculatePrimarySecondaryRequisitions() 
     {
         long nMaxMainDimension = aMainGroupSizes.empty() ? 0 :
             *std::max_element(aMainGroupSizes.begin(), aMainGroupSizes.end());
+        nMaxMainDimension = std::max(nMaxMainDimension, nMinMainGroupPrimary);
         long nMaxSubDimension = aSubGroupSizes.empty() ? 0 :
             *std::max_element(aSubGroupSizes.begin(), aSubGroupSizes.end());
+        nMaxSubDimension = std::max(nMaxSubDimension, nMinSubGroupPrimary);
         long nMaxDimension = std::max(nMaxMainDimension, nMaxSubDimension);
         aReq.m_aMainGroupDimensions.resize(aMainGroupSizes.size(), nMaxDimension);
         aReq.m_aSubGroupDimensions.resize(aSubGroupSizes.size(), nMaxDimension);
@@ -446,9 +452,9 @@ VclButtonBox::Requisition VclButtonBox::calculatePrimarySecondaryRequisitions() 
         long nMaxNonOutlier = std::max(nMaxMainNonOutlier, nMaxSubNonOutlier);
 
         aReq.m_aMainGroupDimensions = setButtonSizes(aMainGroupSizes,
-            nAvgDimension, nMaxNonOutlier);
+            nAvgDimension, nMaxNonOutlier, nMinMainGroupPrimary);
         aReq.m_aSubGroupDimensions = setButtonSizes(aSubGroupSizes,
-            nAvgDimension, nMaxNonOutlier);
+            nAvgDimension, nMaxNonOutlier, nMinSubGroupPrimary);
     }
 
     if (!aReq.m_aMainGroupDimensions.empty())
