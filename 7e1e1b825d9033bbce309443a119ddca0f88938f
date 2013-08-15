@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//8yw\u003d",
+        "filename": "sc/source/core/opencl/formulagroupcl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-08-15T21:09:17Z",
+      "side": 1,
+      "message": "The test is unnecessary, code above at the beginning does\n\n    rResult \u003d (double *)malloc(sizeof(double) * rowSize*2);// For 2 columns(B,C)\n    if(NULL\u003d\u003drResult)\n    {\n        printf(\"malloc err\\n\");\n        return false;\n    }",
+      "revId": "7e1e1b825d9033bbce309443a119ddca0f88938f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//8ys\u003d",
+        "filename": "sc/source/core/opencl/formulagroupcl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-08-15T21:09:17Z",
+      "side": 1,
+      "message": "Also here, the test is unnecessary.\n\nFreeing rResult below is of course good.",
+      "revId": "7e1e1b825d9033bbce309443a119ddca0f88938f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
