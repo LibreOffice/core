@@ -11,8 +11,6 @@
 #include "oox/core/DocumentCrypt.hxx"
 #include <config_oox.h>
 
-#include <comphelper/docpasswordhelper.hxx>
-#include <comphelper/mediadescriptor.hxx>
 #if USE_TLS_OPENSSL
 #include <openssl/evp.h>
 #endif // USE_TLS_OPENSSL
@@ -21,8 +19,9 @@
 #include <pk11pub.h>
 #endif // USE_TLS_NSS
 #include <rtl/digest.h>
-#include "oox/helper/binaryinputstream.hxx"
-#include "oox/helper/binaryoutputstream.hxx"
+
+#include <comphelper/docpasswordhelper.hxx>
+#include <comphelper/mediadescriptor.hxx>
 
 #include <osl/time.h>
 #include <rtl/random.h>
@@ -40,43 +39,13 @@ using namespace ::com::sun::star::uno;
 using ::comphelper::MediaDescriptor;
 using ::comphelper::SequenceAsHashMap;
 
+using namespace std;
+
 /* =========================================================================== */
 /*  Kudos to Caolan McNamara who provided the core decryption implementations. */
 /* =========================================================================== */
 
 namespace {
-
-const sal_uInt32 ENCRYPTINFO_CRYPTOAPI      = 0x00000004;
-const sal_uInt32 ENCRYPTINFO_DOCPROPS       = 0x00000008;
-const sal_uInt32 ENCRYPTINFO_EXTERNAL       = 0x00000010;
-const sal_uInt32 ENCRYPTINFO_AES            = 0x00000020;
-
-const sal_uInt32 ENCRYPT_ALGO_AES128        = 0x0000660E;
-const sal_uInt32 ENCRYPT_ALGO_AES192        = 0x0000660F;
-const sal_uInt32 ENCRYPT_ALGO_AES256        = 0x00006610;
-const sal_uInt32 ENCRYPT_ALGO_RC4           = 0x00006801;
-
-const sal_uInt32 ENCRYPT_HASH_SHA1          = 0x00008004;
-
-const sal_uInt32 ENCRYPT_KEY_SIZE_AES_128   = 0x00000080;
-const sal_uInt32 ENCRYPT_KEY_SIZE_AES_192   = 0x000000C0;
-const sal_uInt32 ENCRYPT_KEY_SIZE_AES_256   = 0x00000100;
-
-const sal_uInt32 ENCRYPT_PROVIDER_TYPE_AES  = 0x00000018;
-const sal_uInt32 ENCRYPT_PROVIDER_TYPE_RC4  = 0x00000001;
-
-struct PackageEncryptionInfo
-{
-    sal_uInt8           mpnSalt[ 16 ];
-    sal_uInt8           mpnEncrVerifier[ 16 ];
-    sal_uInt8           mpnEncrVerifierHash[ 32 ];
-    sal_uInt32          mnFlags;
-    sal_uInt32          mnAlgorithmId;
-    sal_uInt32          mnAlgorithmIdHash;
-    sal_uInt32          mnKeySize;
-    sal_uInt32          mnSaltSize;
-    sal_uInt32          mnVerifierHashSize;
-};
 
 void lclRandomGenerateValues( sal_Int32 nLength, sal_uInt8* aArray )
 {
@@ -88,81 +57,10 @@ void lclRandomGenerateValues( sal_Int32 nLength, sal_uInt8* aArray )
     rtl_random_destroyPool ( aRandomPool );
 }
 
-struct EncryptionStandardHeader {
-    sal_uInt32 flags;
-    sal_uInt32 sizeExtra;
-    sal_uInt32 algId;         // if flag AES && CRYPTOAPI this defaults to 128-bit AES
-    sal_uInt32 algIdHash;     // 0 - determined by flags - defaults to SHA-1 if not external
-    sal_uInt32 keySize;       // 0 - determined by flags, 128, 192, 256 for AES
-    sal_uInt32 providedType;
-    sal_uInt32 reserved1;
-    sal_uInt32 reserved2;
-};
-
-struct EncryptionVerifierAES {
-    sal_uInt32 saltSize; // must be 0x00000010
-    sal_uInt8  salt[16]; //
-    sal_uInt8  encryptedVerifier[16];     // randomly generated verifier value
-    sal_uInt32 verifierHashSize;
-    sal_uInt8  encryptedVerifierHash[32];
-};
-
-bool lclWriteEncryptionInfo( PackageEncryptionInfo& rEncrInfo, BinaryOutputStream& rStream )
-{
-    const sal_uInt16 versionInfoMajor = 0x003;
-    const sal_uInt16 versionInfoMinor = 0x002;
-
-    rStream.writeValue(versionInfoMajor);
-    rStream.writeValue(versionInfoMinor);
-
-    const OUString cspName = "Microsoft Enhanced RSA and AES Cryptographic Provider";
-    sal_Int32      cspNameSize = (cspName.getLength() * 2) + 2;
-
-    EncryptionStandardHeader encryptionHeader;
-    sal_Int32 encryptionHeaderSize = static_cast<sal_Int32>(sizeof(EncryptionStandardHeader));
-    memset(&encryptionHeader, 0, encryptionHeaderSize);
-
-    EncryptionVerifierAES encryptionVerifier;
-    sal_Int32 encryptionVerifierSize = static_cast<sal_Int32>(sizeof(EncryptionVerifierAES));
-    memset(&encryptionVerifier, 0, encryptionVerifierSize);
-
-    rStream << rEncrInfo.mnFlags;
-
-    sal_uInt32 headerSize = encryptionHeaderSize + cspNameSize;
-    rStream << headerSize;
-
-    encryptionHeader.flags = rEncrInfo.mnFlags;
-    encryptionHeader.algId = rEncrInfo.mnAlgorithmId;
-    encryptionHeader.algIdHash = rEncrInfo.mnAlgorithmIdHash;
-    encryptionHeader.keySize = rEncrInfo.mnKeySize;
-    encryptionHeader.providedType = ENCRYPT_PROVIDER_TYPE_AES;
-
-    rStream.writeMemory(&encryptionHeader, encryptionHeaderSize);
-    rStream.writeUnicodeArray(cspName);
-    rStream.writeValue<sal_uInt16>(0);
-
-    if (rEncrInfo.mnSaltSize != 16)
-        return false;
-
-    encryptionVerifier.saltSize = rEncrInfo.mnSaltSize;
-
-    memcpy(&encryptionVerifier.salt, rEncrInfo.mpnSalt, 16);
-
-    memcpy(&encryptionVerifier.encryptedVerifier, rEncrInfo.mpnEncrVerifier, 16);
-
-    encryptionVerifier.verifierHashSize = rEncrInfo.mnVerifierHashSize;
-
-    memcpy(encryptionVerifier.encryptedVerifierHash, rEncrInfo.mpnEncrVerifierHash, 32);
-
-    rStream.writeMemory(&encryptionVerifier, encryptionVerifierSize);
-
-    return true;
-}
-
-void lclDeriveKey( const sal_uInt8* pnHash, sal_uInt32 nHashLen, sal_uInt8* pnKeyDerived, sal_uInt32 nRequiredKeyLen )
+void lclDeriveKey( const sal_uInt8* pnHash, sal_uInt32 nHashLen, vector<sal_uInt8>& rKey, sal_uInt32 aKeyLength )
 {
     // De facto we are always called with nRequiredKeyLen == 16, at least currently
-    assert(nRequiredKeyLen == 16);
+    assert(aKeyLength == 16);
 
     sal_uInt8 pnBuffer[ 64 ];
     memset( pnBuffer, 0x36, sizeof( pnBuffer ) );
@@ -187,46 +85,47 @@ void lclDeriveKey( const sal_uInt8* pnHash, sal_uInt32 nHashLen, sal_uInt8* pnKe
 
 #if 0 // for now nRequiredKeyLen will always be 16 and thus less than
       // RTL_DIGEST_LENGTH_SHA1==20, see assert above...
-    if( nRequiredKeyLen > RTL_DIGEST_LENGTH_SHA1 )
+    if( aKeyLength > RTL_DIGEST_LENGTH_SHA1 )
     {
         // This memcpy call generates a (bogus?) warning when
         // compiling with gcc 4.7 and 4.8 and optimising: array
         // subscript is above array bounds.
-        memcpy( pnKeyDerived + RTL_DIGEST_LENGTH_SHA1, pnX2, nRequiredKeyLen - RTL_DIGEST_LENGTH_SHA1 );
-        nRequiredKeyLen = RTL_DIGEST_LENGTH_SHA1;
+        std::copy(pnX1, pnX1 + aKeyLength - RTL_DIGEST_LENGTH_SHA1, rKey.begin() + RTL_DIGEST_LENGTH_SHA1);
+        aKeyLength = RTL_DIGEST_LENGTH_SHA1;
     }
 #endif
-    memcpy( pnKeyDerived, pnX1, nRequiredKeyLen );
+    std::copy(pnX1, pnX1 + aKeyLength, rKey.begin());
+    //memcpy( pnKeyDerived, pnX1, nRequiredKeyLen );
 }
 
-bool lclGenerateVerifier(PackageEncryptionInfo& rEncryptionInfo, const sal_uInt8* pKey, sal_uInt32 nKeySize)
+bool lclGenerateVerifier(PackageEncryptionInfo& rEncryptionInfo, const vector<sal_uInt8>& rKey, sal_uInt32 nKeySize)
 {
-    bool bResult = false;
-
+    // only support key of size 128 bit (16 byte)
     if (nKeySize != 16)
-        return bResult;
+        return false;
 
-    sal_uInt8 aVerifier[16];
+    sal_uInt8 aVerifier[ENCRYPTED_VERIFIER_LENGTH];
     sal_Int32 aVerifierSize = sizeof(aVerifier);
-    memset( aVerifier, 0, aVerifierSize );
     lclRandomGenerateValues(aVerifierSize, aVerifier);
 
 #if USE_TLS_OPENSSL
     {
         EVP_CIPHER_CTX aContext;
         EVP_CIPHER_CTX_init( &aContext );
-        EVP_EncryptInit_ex( &aContext, EVP_aes_128_ecb(), NULL, pKey, 0 );
+        EVP_EncryptInit_ex( &aContext, EVP_aes_128_ecb(), NULL, &rKey[0], 0 );
         EVP_CIPHER_CTX_set_padding( &aContext, 0 );
-        int aEncryptedVerifierSize = 0;
-        EVP_EncryptUpdate( &aContext, rEncryptionInfo.mpnEncrVerifier, &aEncryptedVerifierSize, aVerifier, aVerifierSize );
+        int aWrittenLength = 0;
+        EVP_EncryptUpdate( &aContext, rEncryptionInfo.verifier.encryptedVerifier, &aWrittenLength, aVerifier, aVerifierSize );
+        if (aWrittenLength != ENCRYPTED_VERIFIER_LENGTH)
+            return false;
         EVP_CIPHER_CTX_cleanup( &aContext );
     }
 
 #endif // USE_TLS_OPENSSL
 
-    sal_uInt8 pSha1Hash[ 32 ];
-    memset(pSha1Hash, 0, 32);
-    rEncryptionInfo.mnVerifierHashSize = RTL_DIGEST_LENGTH_SHA1;
+    sal_uInt8 pSha1Hash[ENCRYPTED_VERIFIER_HASH_LENGTH];
+    memset(pSha1Hash, 0, sizeof(pSha1Hash));
+    rEncryptionInfo.verifier.encryptedVerifierHashSize = RTL_DIGEST_LENGTH_SHA1;
 
     rtlDigest aDigest = rtl_digest_create( rtl_Digest_AlgorithmSHA1 );
     rtl_digest_update( aDigest, aVerifier, aVerifierSize );
@@ -235,106 +134,95 @@ bool lclGenerateVerifier(PackageEncryptionInfo& rEncryptionInfo, const sal_uInt8
 
 #if USE_TLS_OPENSSL
     {
-        memset(rEncryptionInfo.mpnEncrVerifierHash, 0, rEncryptionInfo.mnVerifierHashSize);
-        int written = 0;
+        int aWrittenLength = 0;
 
         EVP_CIPHER_CTX aContext;
         EVP_CIPHER_CTX_init( &aContext );
-        EVP_EncryptInit_ex( &aContext, EVP_aes_128_ecb(), NULL, pKey, 0 );
+        EVP_EncryptInit_ex( &aContext, EVP_aes_128_ecb(), NULL, &rKey[0], 0 );
         EVP_CIPHER_CTX_set_padding( &aContext, 0 );
-        EVP_EncryptUpdate( &aContext, rEncryptionInfo.mpnEncrVerifierHash, &written, pSha1Hash, 32 );
+        EVP_EncryptUpdate( &aContext, rEncryptionInfo.verifier.encryptedVerifierHash, &aWrittenLength, pSha1Hash, sizeof(pSha1Hash) );
         EVP_CIPHER_CTX_cleanup( &aContext );
     }
-
 #endif // USE_TLS_OPENSSL
 
-    bResult = true;
-
-    return bResult;
+    return true;
 }
-
 
 bool lclCheckEncryptionData( const sal_uInt8* pnKey, sal_uInt32 nKeySize, const sal_uInt8* pnVerifier, sal_uInt32 nVerifierSize, const sal_uInt8* pnVerifierHash, sal_uInt32 nVerifierHashSize )
 {
-    bool bResult = false;
-
     // the only currently supported algorithm needs key size 128
-    if ( nKeySize == 16 && nVerifierSize == 16 )
-    {
-        // check password
+    if ( nKeySize != 16 || nVerifierSize != 16 )
+        return false;
+
+    // check password
 #if USE_TLS_OPENSSL
-        EVP_CIPHER_CTX aes_ctx;
-        EVP_CIPHER_CTX_init( &aes_ctx );
-        EVP_DecryptInit_ex( &aes_ctx, EVP_aes_128_ecb(), 0, pnKey, 0 );
-        EVP_CIPHER_CTX_set_padding( &aes_ctx, 0 );
-        int nOutLen = 0;
-        sal_uInt8 pnTmpVerifier[ 16 ];
-        (void) memset( pnTmpVerifier, 0, sizeof(pnTmpVerifier) );
+    EVP_CIPHER_CTX aes_ctx;
+    EVP_CIPHER_CTX_init( &aes_ctx );
+    EVP_DecryptInit_ex( &aes_ctx, EVP_aes_128_ecb(), 0, pnKey, 0 );
+    EVP_CIPHER_CTX_set_padding( &aes_ctx, 0 );
+    int nOutLen = 0;
+    sal_uInt8 pnTmpVerifier[ 16 ];
+    (void) memset( pnTmpVerifier, 0, sizeof(pnTmpVerifier) );
 
-        /*int*/ EVP_DecryptUpdate( &aes_ctx, pnTmpVerifier, &nOutLen, pnVerifier, nVerifierSize );
-        EVP_CIPHER_CTX_cleanup( &aes_ctx );
+    /*int*/ EVP_DecryptUpdate( &aes_ctx, pnTmpVerifier, &nOutLen, pnVerifier, nVerifierSize );
+    EVP_CIPHER_CTX_cleanup( &aes_ctx );
 
-        EVP_CIPHER_CTX_init( &aes_ctx );
-        EVP_DecryptInit_ex( &aes_ctx, EVP_aes_128_ecb(), 0, pnKey, 0 );
-        EVP_CIPHER_CTX_set_padding( &aes_ctx, 0 );
-        sal_uInt8* pnTmpVerifierHash = new sal_uInt8[nVerifierHashSize];
-        (void) memset( pnTmpVerifierHash, 0, nVerifierHashSize );
+    EVP_CIPHER_CTX_init( &aes_ctx );
+    EVP_DecryptInit_ex( &aes_ctx, EVP_aes_128_ecb(), 0, pnKey, 0 );
+    EVP_CIPHER_CTX_set_padding( &aes_ctx, 0 );
+    sal_uInt8* pnTmpVerifierHash = new sal_uInt8[nVerifierHashSize];
+    (void) memset( pnTmpVerifierHash, 0, nVerifierHashSize );
 
-        /*int*/ EVP_DecryptUpdate( &aes_ctx, pnTmpVerifierHash, &nOutLen, pnVerifierHash, nVerifierHashSize );
-        EVP_CIPHER_CTX_cleanup( &aes_ctx );
+    /*int*/ EVP_DecryptUpdate( &aes_ctx, pnTmpVerifierHash, &nOutLen, pnVerifierHash, nVerifierHashSize );
+    EVP_CIPHER_CTX_cleanup( &aes_ctx );
 #endif // USE_TLS_OPENSSL
 
 #if USE_TLS_NSS
-        PK11SlotInfo *aSlot( PK11_GetBestSlot( CKM_AES_ECB, NULL ) );
-        sal_uInt8 *key( new sal_uInt8[ nKeySize ] );
-        (void) memcpy( key, pnKey, nKeySize * sizeof(sal_uInt8) );
+    PK11SlotInfo *aSlot( PK11_GetBestSlot( CKM_AES_ECB, NULL ) );
+    sal_uInt8 *key( new sal_uInt8[ nKeySize ] );
+    (void) memcpy( key, pnKey, nKeySize * sizeof(sal_uInt8) );
 
-        SECItem keyItem;
-        keyItem.type = siBuffer;
-        keyItem.data = key;
-        keyItem.len  = nKeySize;
+    SECItem keyItem;
+    keyItem.type = siBuffer;
+    keyItem.data = key;
+    keyItem.len  = nKeySize;
 
-        PK11SymKey *symKey( PK11_ImportSymKey( aSlot, CKM_AES_ECB, PK11_OriginUnwrap, CKA_ENCRYPT, &keyItem, NULL ) );
-        SECItem *secParam( PK11_ParamFromIV( CKM_AES_ECB, NULL ) );
-        PK11Context *encContext( PK11_CreateContextBySymKey( CKM_AES_ECB, CKA_DECRYPT, symKey, secParam ) );
+    PK11SymKey *symKey( PK11_ImportSymKey( aSlot, CKM_AES_ECB, PK11_OriginUnwrap, CKA_ENCRYPT, &keyItem, NULL ) );
+    SECItem *secParam( PK11_ParamFromIV( CKM_AES_ECB, NULL ) );
+    PK11Context *encContext( PK11_CreateContextBySymKey( CKM_AES_ECB, CKA_DECRYPT, symKey, secParam ) );
 
-        int nOutLen(0);
-        sal_uInt8 pnTmpVerifier[ 16 ];
-        (void) memset( pnTmpVerifier, 0, sizeof(pnTmpVerifier) );
+    int nOutLen(0);
+    sal_uInt8 pnTmpVerifier[ 16 ];
+    (void) memset( pnTmpVerifier, 0, sizeof(pnTmpVerifier) );
 
-        PK11_CipherOp( encContext, pnTmpVerifier, &nOutLen, sizeof(pnTmpVerifier), const_cast<sal_uInt8*>(pnVerifier), nVerifierSize );
+    PK11_CipherOp( encContext, pnTmpVerifier, &nOutLen, sizeof(pnTmpVerifier), const_cast<sal_uInt8*>(pnVerifier), nVerifierSize );
 
-        sal_uInt8* pnTmpVerifierHash = new sal_uInt8[nVerifierHashSize];
-        (void) memset( pnTmpVerifierHash, 0, nVerifierHashSize );
-        PK11_CipherOp( encContext, pnTmpVerifierHash, &nOutLen, nVerifierHashSize, const_cast<sal_uInt8*>(pnVerifierHash), nVerifierHashSize );
+    sal_uInt8* pnTmpVerifierHash = new sal_uInt8[nVerifierHashSize];
+    (void) memset( pnTmpVerifierHash, 0, nVerifierHashSize );
+    PK11_CipherOp( encContext, pnTmpVerifierHash, &nOutLen, nVerifierHashSize, const_cast<sal_uInt8*>(pnVerifierHash), nVerifierHashSize );
 
-        PK11_DestroyContext( encContext, PR_TRUE );
-        PK11_FreeSymKey( symKey );
-        SECITEM_FreeItem( secParam, PR_TRUE );
-        delete[] key;
+    PK11_DestroyContext( encContext, PR_TRUE );
+    PK11_FreeSymKey( symKey );
+    SECITEM_FreeItem( secParam, PR_TRUE );
+    delete[] key;
 #endif // USE_TLS_NSS
 
-        rtlDigest aDigest = rtl_digest_create( rtl_Digest_AlgorithmSHA1 );
-        rtl_digest_update( aDigest, pnTmpVerifier, sizeof( pnTmpVerifier ) );
-        sal_uInt8 pnSha1Hash[ RTL_DIGEST_LENGTH_SHA1 ];
-        rtl_digest_get( aDigest, pnSha1Hash, RTL_DIGEST_LENGTH_SHA1 );
-        rtl_digest_destroy( aDigest );
+    rtlDigest aDigest = rtl_digest_create( rtl_Digest_AlgorithmSHA1 );
+    rtl_digest_update( aDigest, pnTmpVerifier, sizeof( pnTmpVerifier ) );
+    sal_uInt8 pnSha1Hash[ RTL_DIGEST_LENGTH_SHA1 ];
+    rtl_digest_get( aDigest, pnSha1Hash, RTL_DIGEST_LENGTH_SHA1 );
+    rtl_digest_destroy( aDigest );
 
-        bResult = ( memcmp( pnSha1Hash, pnTmpVerifierHash, RTL_DIGEST_LENGTH_SHA1 ) == 0 );
-    }
-
-    return bResult;
+    return memcmp( pnSha1Hash, pnTmpVerifierHash, RTL_DIGEST_LENGTH_SHA1 ) == 0;
 }
 
-// ----------------------------------------------------------------------------
-
-Sequence< NamedValue > lclGenerateEncryptionKey( const PackageEncryptionInfo& rEncrInfo, const OUString& rPassword, sal_uInt8* pnKey, sal_uInt32 nRequiredKeyLen )
+bool lclGenerateEncryptionKey( const PackageEncryptionInfo& rEncryptionInfo, const OUString& rPassword, vector<sal_uInt8>& aKey, sal_uInt32 aKeyLength )
 {
-    size_t nBufferSize = rEncrInfo.mnSaltSize + 2 * rPassword.getLength();
+    size_t nBufferSize = rEncryptionInfo.verifier.saltSize + 2 * rPassword.getLength();
     sal_uInt8* pnBuffer = new sal_uInt8[ nBufferSize ];
-    memcpy( pnBuffer, rEncrInfo.mpnSalt, rEncrInfo.mnSaltSize );
+    memcpy( pnBuffer, rEncryptionInfo.verifier.salt, rEncryptionInfo.verifier.saltSize );
 
-    sal_uInt8* pnPasswordLoc = pnBuffer + rEncrInfo.mnSaltSize;
+    sal_uInt8* pnPasswordLoc = pnBuffer + rEncryptionInfo.verifier.saltSize;
     const sal_Unicode* pStr = rPassword.getStr();
     for( sal_Int32 i = 0, nLen = rPassword.getLength(); i < nLen; ++i, ++pStr, pnPasswordLoc += 2 )
         ByteOrderConverter::writeLittleEndian( pnPasswordLoc, static_cast< sal_uInt16 >( *pStr ) );
@@ -364,30 +252,69 @@ Sequence< NamedValue > lclGenerateEncryptionKey( const PackageEncryptionInfo& rE
     rtl_digest_get( aDigest, pnHash, RTL_DIGEST_LENGTH_SHA1 );
     rtl_digest_destroy( aDigest );
 
-    lclDeriveKey( pnHash, RTL_DIGEST_LENGTH_SHA1, pnKey, nRequiredKeyLen );
+    lclDeriveKey( pnHash, RTL_DIGEST_LENGTH_SHA1, aKey, aKeyLength );
     delete[] pnHash;
-
-    Sequence< NamedValue > aResult;
-    if( lclCheckEncryptionData( pnKey, nRequiredKeyLen, rEncrInfo.mpnEncrVerifier, sizeof( rEncrInfo.mpnEncrVerifier ), rEncrInfo.mpnEncrVerifierHash, sizeof( rEncrInfo.mpnEncrVerifierHash ) ) )
-    {
-        SequenceAsHashMap aEncryptionData;
-        aEncryptionData[ "AES128EncryptionKey" ] <<= Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( pnKey ), nRequiredKeyLen );
-        aEncryptionData[ "AES128EncryptionSalt" ] <<= Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( rEncrInfo.mpnSalt ), rEncrInfo.mnSaltSize );
-        aEncryptionData[ "AES128EncryptionVerifier" ] <<= Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( rEncrInfo.mpnEncrVerifier ), sizeof( rEncrInfo.mpnEncrVerifier ) );
-        aEncryptionData[ "AES128EncryptionVerifierHash" ] <<= Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( rEncrInfo.mpnEncrVerifierHash ), sizeof( rEncrInfo.mpnEncrVerifierHash ) );
-        aResult = aEncryptionData.getAsConstNamedValueList();
-    }
-
-    return aResult;
+    return true;
 }
 
 } // namespace
+
+EncryptionStandardHeader::EncryptionStandardHeader()
+{
+    flags        = 0;
+    sizeExtra    = 0;
+    algId        = 0;
+    algIdHash    = 0;
+    keySize      = 0;
+    providedType = 0;
+    reserved1    = 0;
+    reserved2    = 0;
+}
+
+EncryptionVerifierAES::EncryptionVerifierAES()
+{
+    saltSize = SALT_LENGTH;
+    memset(salt, 0, sizeof(salt));
+    memset(encryptedVerifier, 0, sizeof(encryptedVerifier));
+    memset(encryptedVerifierHash, 0, sizeof(encryptedVerifierHash));
+}
 
 AesEncoder::AesEncoder(Reference< XStream > xDocumentStream, oox::ole::OleStorage& rOleStorage, OUString aPassword) :
     mxDocumentStream(xDocumentStream),
     mrOleStorage(rOleStorage),
     maPassword(aPassword)
 {
+}
+
+bool AesEncoder::checkEncryptionInfo(vector<sal_uInt8>& aKey, sal_uInt32 aKeyLength)
+{
+   return lclCheckEncryptionData(
+            &aKey[0], aKeyLength,
+            mEncryptionInfo.verifier.encryptedVerifier, sizeof(mEncryptionInfo.verifier.encryptedVerifier),
+            mEncryptionInfo.verifier.encryptedVerifierHash, ENCRYPTED_VERIFIER_HASH_LENGTH);
+}
+
+bool AesEncoder::writeEncryptionInfo( BinaryOutputStream& rStream )
+{
+    rStream.writeValue(VERSION_INFO_2007_FORMAT);
+
+    const OUString cspName = "Microsoft Enhanced RSA and AES Cryptographic Provider";
+    sal_Int32      cspNameSize = (cspName.getLength() * 2) + 2;
+
+    sal_Int32 encryptionHeaderSize = static_cast<sal_Int32>(sizeof(EncryptionStandardHeader));
+
+    rStream << mEncryptionInfo.header.flags;
+    sal_uInt32 headerSize = encryptionHeaderSize + cspNameSize;
+    rStream << headerSize;
+
+    rStream.writeMemory(&mEncryptionInfo.header, encryptionHeaderSize);
+    rStream.writeUnicodeArray(cspName);
+    rStream.writeValue<sal_uInt16>(0);
+
+    sal_Int32 encryptionVerifierSize = static_cast<sal_Int32>(sizeof(EncryptionVerifierAES));
+    rStream.writeMemory(&mEncryptionInfo.verifier, encryptionVerifierSize);
+
+    return true;
 }
 
 bool AesEncoder::encode()
@@ -405,31 +332,32 @@ bool AesEncoder::encode()
 
     Reference< XOutputStream > xEncryptionInfo( mrOleStorage.openOutputStream( "EncryptionInfo" ), UNO_SET_THROW );
 
-    PackageEncryptionInfo rEncrInfo;
-    rEncrInfo.mnFlags = ENCRYPTINFO_AES | ENCRYPTINFO_CRYPTOAPI;
-    rEncrInfo.mnAlgorithmId = ENCRYPT_ALGO_AES128;
-    rEncrInfo.mnAlgorithmIdHash = ENCRYPT_HASH_SHA1;
-    rEncrInfo.mnKeySize = ENCRYPT_KEY_SIZE_AES_128;
+    mEncryptionInfo.header.flags        = ENCRYPTINFO_AES | ENCRYPTINFO_CRYPTOAPI;
+    mEncryptionInfo.header.algId        = ENCRYPT_ALGO_AES128;
+    mEncryptionInfo.header.algIdHash    = ENCRYPT_HASH_SHA1;
+    mEncryptionInfo.header.keySize      = ENCRYPT_KEY_SIZE_AES_128;
+    mEncryptionInfo.header.providedType = ENCRYPT_PROVIDER_TYPE_AES;
 
-    rEncrInfo.mnSaltSize = 16;
+    lclRandomGenerateValues( mEncryptionInfo.verifier.saltSize, mEncryptionInfo.verifier.salt );
 
-    lclRandomGenerateValues( rEncrInfo.mnSaltSize, rEncrInfo.mpnSalt );
+    const sal_Int32 keyLength = mEncryptionInfo.header.keySize / 8;
+    vector<sal_uInt8> aKey;
+    aKey.resize(keyLength, 0);
 
-    const sal_Int32 keyLength = rEncrInfo.mnKeySize / 8;
-    sal_uInt8 key[16];
     assert(keyLength == 16);
-    memset(key, 0, keyLength);
 
-    lclGenerateEncryptionKey(rEncrInfo, maPassword, key, keyLength);
+    lclGenerateEncryptionKey(mEncryptionInfo, maPassword, aKey, keyLength);
 
-    lclGenerateVerifier(rEncrInfo, key, keyLength);
+    sal_uInt8 key[16];
+    std::copy(aKey.begin(), aKey.end(), key);
 
-    bool aResult = lclCheckEncryptionData(key, keyLength, rEncrInfo.mpnEncrVerifier, 16, rEncrInfo.mpnEncrVerifierHash, 32);
-    if (!aResult)
+    lclGenerateVerifier(mEncryptionInfo, aKey, keyLength);
+
+    if (!checkEncryptionInfo(aKey, keyLength))
         return false;
 
     BinaryXOutputStream aEncryptionInfoBinaryOutputStream( xEncryptionInfo, false );
-    lclWriteEncryptionInfo( rEncrInfo, aEncryptionInfoBinaryOutputStream );
+    writeEncryptionInfo( aEncryptionInfoBinaryOutputStream );
     aEncryptionInfoBinaryOutputStream.close();
 
     xEncryptionInfo->flush();
@@ -480,6 +408,198 @@ bool AesEncoder::encode()
 
     xEncryptedPackage->flush();
     xEncryptedPackage->closeOutput();
+
+    return true;
+}
+
+bool AesDecoder::checkCurrentEncryptionData()
+{
+    return lclCheckEncryptionData(
+                &mKey[0], mKeyLength,
+                mEncryptionInfo.verifier.encryptedVerifier, ENCRYPTED_VERIFIER_LENGTH,
+                mEncryptionInfo.verifier.encryptedVerifierHash, ENCRYPTED_VERIFIER_HASH_LENGTH );
+}
+
+bool AesDecoder::checkEncryptionData(const Sequence<NamedValue>& rEncryptionData)
+{
+    SequenceAsHashMap aHashData( rEncryptionData );
+    Sequence<sal_Int8> aKey          = aHashData.getUnpackedValueOrDefault( "AES128EncryptionKey", Sequence<sal_Int8>() );
+    Sequence<sal_Int8> aVerifier     = aHashData.getUnpackedValueOrDefault( "AES128EncryptionVerifier", Sequence<sal_Int8>() );
+    Sequence<sal_Int8> aVerifierHash = aHashData.getUnpackedValueOrDefault( "AES128EncryptionVerifierHash", Sequence<sal_Int8>() );
+
+    return lclCheckEncryptionData(
+        reinterpret_cast<const sal_uInt8*>( aKey.getConstArray() ), aKey.getLength(),
+        reinterpret_cast<const sal_uInt8*>( aVerifier.getConstArray() ), aVerifier.getLength(),
+        reinterpret_cast<const sal_uInt8*>( aVerifierHash.getConstArray() ), aVerifierHash.getLength() );
+}
+
+bool AesDecoder::generateEncryptionKey(const OUString& rPassword)
+{
+    return lclGenerateEncryptionKey(mEncryptionInfo, rPassword, mKey, mKeyLength);
+}
+
+AesDecoder::AesDecoder(oox::ole::OleStorage& rOleStorage) :
+    mrOleStorage(rOleStorage),
+    mKeyLength(0)
+{
+#if USE_TLS_NSS
+    // Initialize NSS, database functions are not needed
+    NSS_NoDB_Init( NULL );
+#endif // USE_TLS_NSS
+}
+
+bool AesDecoder::readEncryptionInfoFromStream( BinaryInputStream& rStream )
+{
+    sal_uInt32 aVersion;
+    rStream >> aVersion;
+
+    if (aVersion != VERSION_INFO_2007_FORMAT)
+        return false;
+
+    rStream >> mEncryptionInfo.header.flags;
+    if( getFlag( mEncryptionInfo.header.flags, ENCRYPTINFO_EXTERNAL ) )
+        return false;
+
+    sal_uInt32 nHeaderSize;
+    rStream >> nHeaderSize;
+
+    sal_uInt32 actualHeaderSize = sizeof(mEncryptionInfo.header);
+
+    if( (nHeaderSize < actualHeaderSize) )
+        return false;
+
+    rStream >> mEncryptionInfo.header;
+    rStream.skip( nHeaderSize - actualHeaderSize );
+    rStream >> mEncryptionInfo.verifier;
+
+    if( mEncryptionInfo.verifier.saltSize != 16 )
+        return false;
+    return !rStream.isEof();
+}
+
+bool AesDecoder::readEncryptionInfo()
+{
+    if( !mrOleStorage.isStorage() )
+        return false;
+
+    Reference< XInputStream > xEncryptionInfo( mrOleStorage.openInputStream( "EncryptionInfo" ), UNO_SET_THROW );
+
+    // read the encryption info stream
+    BinaryXInputStream aInputStream( xEncryptionInfo, true );
+    bool bValidInfo = readEncryptionInfoFromStream( aInputStream );
+
+    if (!bValidInfo)
+        return false;
+
+    // check flags and algorithm IDs, required are AES128 and SHA-1
+    bool bImplemented =
+        getFlag( mEncryptionInfo.header.flags , ENCRYPTINFO_CRYPTOAPI ) &&
+        getFlag( mEncryptionInfo.header.flags, ENCRYPTINFO_AES ) &&
+        // algorithm ID 0 defaults to AES128 too, if ENCRYPTINFO_AES flag is set
+        ((mEncryptionInfo.header.algId == 0) || (mEncryptionInfo.header.algId == ENCRYPT_ALGO_AES128)) &&
+        // hash algorithm ID 0 defaults to SHA-1 too
+        ((mEncryptionInfo.header.algIdHash == 0) || (mEncryptionInfo.header.algIdHash == ENCRYPT_HASH_SHA1)) &&
+        (mEncryptionInfo.verifier.encryptedVerifierHashSize == 20);
+
+    mKeyLength = (mEncryptionInfo.header.keySize / 8);
+    mKey.clear();
+    mKey.resize(mKeyLength, 0);
+
+    return bImplemented;
+}
+
+Sequence<NamedValue> AesDecoder::createEncryptionData()
+{
+    Sequence<NamedValue> aResult;
+
+    if (mKeyLength > 0)
+    {
+        SequenceAsHashMap aEncryptionData;
+        EncryptionVerifierAES& verifier = mEncryptionInfo.verifier;
+        aEncryptionData["AES128EncryptionKey"] <<= Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( &mKey[0] ), mKeyLength );
+        aEncryptionData["AES128EncryptionSalt"] <<= Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( verifier.salt ), verifier.saltSize );
+        aEncryptionData["AES128EncryptionVerifier"] <<= Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( verifier.encryptedVerifier ), sizeof( verifier.encryptedVerifier ) );
+        aEncryptionData["AES128EncryptionVerifierHash"] <<= Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( verifier.encryptedVerifierHash ), sizeof( verifier.encryptedVerifierHash ) );
+        aResult = aEncryptionData.getAsConstNamedValueList();
+    }
+
+    return aResult;
+}
+
+bool AesDecoder::decode( com::sun::star::uno::Reference< com::sun::star::io::XStream > xDocumentStream )
+{
+    if( !mrOleStorage.isStorage() )
+        return false;
+
+    // open the required input streams in the encrypted package
+    Reference< XInputStream > xEncryptedPackage( mrOleStorage.openInputStream( "EncryptedPackage" ), UNO_SET_THROW );
+
+    // create temporary file for unencrypted package
+    Reference< XOutputStream > xDecryptedPackage( xDocumentStream->getOutputStream(), UNO_SET_THROW );
+    BinaryXOutputStream aDecryptedPackage( xDecryptedPackage, true );
+    BinaryXInputStream aEncryptedPackage( xEncryptedPackage, true );
+
+#if USE_TLS_OPENSSL
+    EVP_CIPHER_CTX aes_ctx;
+    EVP_CIPHER_CTX_init( &aes_ctx );
+    EVP_DecryptInit_ex( &aes_ctx, EVP_aes_128_ecb(), 0, &mKey.front(), 0 );
+    EVP_CIPHER_CTX_set_padding( &aes_ctx, 0 );
+#endif // USE_TLS_OPENSSL
+
+#if USE_TLS_NSS
+    PK11SlotInfo* aSlot( PK11_GetBestSlot( CKM_AES_ECB, NULL ) );
+    sal_uInt8* key = new sal_uInt8[ mKeyLength ];
+    std::copy(mKey.begin(), mKey.end(), key);
+
+    SECItem keyItem;
+    keyItem.type = siBuffer;
+    keyItem.data = key;
+    keyItem.len  = mKeyLength;
+
+    PK11SymKey* symKey( PK11_ImportSymKey( aSlot, CKM_AES_ECB, PK11_OriginUnwrap, CKA_ENCRYPT, &keyItem, NULL ) );
+    SECItem* secParam( PK11_ParamFromIV( CKM_AES_ECB, NULL ) );
+    PK11Context* encContext( PK11_CreateContextBySymKey( CKM_AES_ECB, CKA_DECRYPT, symKey, secParam ) );
+#endif // USE_TLS_NSS
+
+    sal_uInt8 pnInBuffer[ 1024 ];
+    sal_uInt8 pnOutBuffer[ 1024 ];
+    sal_Int32 nInLen;
+    int nOutLen;
+    aEncryptedPackage.skip( 8 ); // decrypted size
+    while( (nInLen = aEncryptedPackage.readMemory( pnInBuffer, sizeof( pnInBuffer ) )) > 0 )
+    {
+#if USE_TLS_OPENSSL
+        EVP_DecryptUpdate( &aes_ctx, pnOutBuffer, &nOutLen, pnInBuffer, nInLen );
+#endif // USE_TLS_OPENSSL
+
+#if USE_TLS_NSS
+        PK11_CipherOp( encContext, pnOutBuffer, &nOutLen, sizeof(pnOutBuffer), pnInBuffer, nInLen );
+#endif // USE_TLS_NSS
+        aDecryptedPackage.writeMemory( pnOutBuffer, nOutLen );
+    }
+#if USE_TLS_OPENSSL
+    EVP_DecryptFinal_ex( &aes_ctx, pnOutBuffer, &nOutLen );
+#endif // USE_TLS_OPENSSL
+
+#if USE_TLS_NSS
+    uint finalLength;
+    PK11_DigestFinal( encContext, pnOutBuffer, &finalLength, nInLen - nOutLen );
+    nOutLen = finalLength;
+#endif // USE_TLS_NSS
+    aDecryptedPackage.writeMemory( pnOutBuffer, nOutLen );
+
+#if USE_TLS_OPENSSL
+    EVP_CIPHER_CTX_cleanup( &aes_ctx );
+#endif // USE_TLS_OPENSSL
+
+#if USE_TLS_NSS
+    PK11_DestroyContext( encContext, PR_TRUE );
+    PK11_FreeSymKey( symKey );
+    SECITEM_FreeItem( secParam, PR_TRUE );
+    delete[] key;
+#endif // USE_TLS_NSS
+    xDecryptedPackage->flush();
+    aDecryptedPackage.seekToStart();
 
     return true;
 }
