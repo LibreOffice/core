@@ -237,7 +237,7 @@ void DAVResourceAccess::PROPFIND(
 
             getUserRequestHeaders( xEnv,
                                    getRequestURI(),
-                                   OUString( "PROPFIND" ),
+                                   ucb::WebDAVHTTPMethod_PROPFIND,
                                    aHeaders );
 
             m_xSession->PROPFIND( getRequestURI(),
@@ -279,7 +279,7 @@ void DAVResourceAccess::PROPFIND(
             DAVRequestHeaders aHeaders;
             getUserRequestHeaders( xEnv,
                                    getRequestURI(),
-                                   OUString( "PROPFIND" ),
+                                   ucb::WebDAVHTTPMethod_PROPFIND,
                                    aHeaders );
 
             m_xSession->PROPFIND( getRequestURI(),
@@ -319,7 +319,7 @@ void DAVResourceAccess::PROPPATCH(
             DAVRequestHeaders aHeaders;
             getUserRequestHeaders( xEnv,
                                    getRequestURI(),
-                                   OUString( "PROPPATCH" ),
+                                   ucb::WebDAVHTTPMethod_PROPPATCH,
                                    aHeaders );
 
             m_xSession->PROPPATCH( getRequestURI(),
@@ -359,7 +359,7 @@ void DAVResourceAccess::HEAD(
             DAVRequestHeaders aHeaders;
             getUserRequestHeaders( xEnv,
                                    getRequestURI(),
-                                   OUString("HEAD"),
+                                   ucb::WebDAVHTTPMethod_HEAD,
                                    aHeaders );
 
             m_xSession->HEAD( getRequestURI(),
@@ -399,7 +399,7 @@ uno::Reference< io::XInputStream > DAVResourceAccess::GET(
             DAVRequestHeaders aHeaders;
             getUserRequestHeaders( xEnv,
                                    getRequestURI(),
-                                   OUString("GET"),
+                                   ucb::WebDAVHTTPMethod_GET,
                                    aHeaders );
 
             xStream = m_xSession->GET( getRequestURI(),
@@ -440,7 +440,7 @@ void DAVResourceAccess::GET(
             DAVRequestHeaders aHeaders;
             getUserRequestHeaders( xEnv,
                                    getRequestURI(),
-                                   OUString("GET"),
+                                   ucb::WebDAVHTTPMethod_GET,
                                    aHeaders );
 
             m_xSession->GET( getRequestURI(),
@@ -481,7 +481,7 @@ uno::Reference< io::XInputStream > DAVResourceAccess::GET(
             DAVRequestHeaders aHeaders;
             getUserRequestHeaders( xEnv,
                                    getRequestURI(),
-                                   OUString("GET"),
+                                   ucb::WebDAVHTTPMethod_GET,
                                    aHeaders );
 
             xStream = m_xSession->GET( getRequestURI(),
@@ -526,7 +526,7 @@ void DAVResourceAccess::GET(
             DAVRequestHeaders aHeaders;
             getUserRequestHeaders( xEnv,
                                    getRequestURI(),
-                                   OUString("GET"),
+                                   ucb::WebDAVHTTPMethod_GET,
                                    aHeaders );
 
             m_xSession->GET( getRequestURI(),
@@ -611,7 +611,7 @@ void DAVResourceAccess::PUT(
             DAVRequestHeaders aHeaders;
             getUserRequestHeaders( xEnv,
                                    getRequestURI(),
-                                   OUString("PUT"),
+                                   ucb::WebDAVHTTPMethod_PUT,
                                    aHeaders );
 
             m_xSession->PUT( getRequestURI(),
@@ -663,7 +663,7 @@ uno::Reference< io::XInputStream > DAVResourceAccess::POST(
             DAVRequestHeaders aHeaders;
             getUserRequestHeaders( xEnv,
                                    getRequestURI(),
-                                   OUString("POST"),
+                                   ucb::WebDAVHTTPMethod_POST,
                                    aHeaders );
 
             xStream = m_xSession->POST( getRequestURI(),
@@ -726,7 +726,7 @@ void DAVResourceAccess::POST(
             DAVRequestHeaders aHeaders;
             getUserRequestHeaders( xEnv,
                                    getRequestURI(),
-                                   OUString("POST"),
+                                   ucb::WebDAVHTTPMethod_POST,
                                    aHeaders );
 
             m_xSession->POST( getRequestURI(),
@@ -774,7 +774,7 @@ void DAVResourceAccess::MKCOL(
             DAVRequestHeaders aHeaders;
             getUserRequestHeaders( xEnv,
                                    getRequestURI(),
-                                   OUString("MKCOL"),
+                                   ucb::WebDAVHTTPMethod_MKCOL,
                                    aHeaders );
 
             m_xSession->MKCOL( getRequestURI(),
@@ -814,7 +814,7 @@ void DAVResourceAccess::COPY(
             DAVRequestHeaders aHeaders;
             getUserRequestHeaders( xEnv,
                                    getRequestURI(),
-                                   OUString("COPY"),
+                                   ucb::WebDAVHTTPMethod_COPY,
                                    aHeaders );
 
             m_xSession->COPY( rSourcePath,
@@ -856,7 +856,7 @@ void DAVResourceAccess::MOVE(
             DAVRequestHeaders aHeaders;
             getUserRequestHeaders( xEnv,
                                    getRequestURI(),
-                                   OUString("MOVE"),
+                                   ucb::WebDAVHTTPMethod_MOVE,
                                    aHeaders );
 
             m_xSession->MOVE( rSourcePath,
@@ -895,7 +895,7 @@ void DAVResourceAccess::DESTROY(
             DAVRequestHeaders aHeaders;
             getUserRequestHeaders( xEnv,
                                    getRequestURI(),
-                                   OUString( "DESTROY" ),
+                                   ucb::WebDAVHTTPMethod_DELETE,
                                    aHeaders );
 
             m_xSession->DESTROY( getRequestURI(),
@@ -934,7 +934,7 @@ void DAVResourceAccess::LOCK(
             DAVRequestHeaders aHeaders;
             getUserRequestHeaders( xEnv,
                                    getRequestURI(),
-                                   OUString("LOCK"),
+                                   ucb::WebDAVHTTPMethod_LOCK,
                                    aHeaders );
 
             m_xSession->LOCK( getRequestURI(),
@@ -976,7 +976,7 @@ sal_Int64 DAVResourceAccess::LOCK(
             DAVRequestHeaders aHeaders;
             getUserRequestHeaders( xEnv,
                                    getRequestURI(),
-                                   OUString("LOCK"),
+                                   ucb::WebDAVHTTPMethod_LOCK,
                                    aHeaders );
 
             nNewTimeout = m_xSession->LOCK( getRequestURI(),
@@ -1018,7 +1018,7 @@ void DAVResourceAccess::UNLOCK(
             DAVRequestHeaders aHeaders;
             getUserRequestHeaders( xEnv,
                                    getRequestURI(),
-                                   OUString("UNLOCK"),
+                                   ucb::WebDAVHTTPMethod_UNLOCK,
                                    aHeaders );
 
             m_xSession->UNLOCK( getRequestURI(),
@@ -1115,7 +1115,7 @@ const OUString & DAVResourceAccess::getRequestURI() const
 void DAVResourceAccess::getUserRequestHeaders(
     const uno::Reference< ucb::XCommandEnvironment > & xEnv,
     const OUString & rURI,
-    const OUString & rMethod,
+    ucb::WebDAVHTTPMethod eMethod,
     DAVRequestHeaders & rRequestHeaders )
 {
     if ( xEnv.is() )
@@ -1126,7 +1126,7 @@ void DAVResourceAccess::getUserRequestHeaders(
         if ( xDAVEnv.is() )
         {
             uno::Sequence< beans::StringPair > aRequestHeaders
-                = xDAVEnv->getUserRequestHeaders( rURI, rMethod );
+                = xDAVEnv->getUserRequestHeaders( rURI, eMethod );
 
             for ( sal_Int32 n = 0; n < aRequestHeaders.getLength(); ++n )
             {
