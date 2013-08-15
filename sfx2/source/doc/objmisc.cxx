@@ -1626,7 +1626,7 @@ void SfxHeaderAttributes_Impl::SetAttributes()
 void SfxHeaderAttributes_Impl::SetAttribute( const SvKeyValue& rKV )
 {
     String aValue = rKV.GetValue();
-    if( rKV.GetKey() == "refresh" && !rKV.GetValue().isEmpty() )
+    if( rKV.GetKey().equalsIgnoreAsciiCase("refresh") && !rKV.GetValue().isEmpty() )
     {
         sal_uInt32 nTime = aValue.GetToken(  0, ';' ).ToInt32() ;
         String aURL = comphelper::string::strip(aValue.GetToken( 1, ';' ), ' ');
