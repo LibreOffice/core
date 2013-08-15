@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
 
 #include "osl/file.hxx"
 #include "osl/detail/file.h"
@@ -929,6 +930,7 @@ SAL_CALL osl_openFilePath( const char *cpFilePath, oslFileHandle* pHandle, sal_u
         return oslTranslateFileError (OSL_FET_ERROR, saved_errno);
     }
 
+#if !HAVE_FEATURE_MACOSX_SANDBOX
     /* reset O_NONBLOCK flag */
     if (flags & O_NONBLOCK)
     {
@@ -958,7 +960,7 @@ SAL_CALL osl_openFilePath( const char *cpFilePath, oslFileHandle* pHandle, sal_u
             return eRet;
         }
     }
-
+#endif
     /* get file status (mode, size) */
     struct stat aFileStat;
     if (-1 == fstat (fd, &aFileStat))
