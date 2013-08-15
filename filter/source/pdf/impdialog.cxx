@@ -627,6 +627,7 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem( const ImpPDFTabDialog* paParent 
 
     if ( mbIsPresentation )
     {
+        mpRbRange->SetText(get<FixedText>("slides")->GetText());
         mpCbExportNotesPages->Show(true);
         mpCbExportNotesPages->Check(paParent->mbExportNotesPages);
         mpCbExportHiddenSlides->Show(true);
