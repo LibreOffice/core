@@ -17,7 +17,7 @@
 
 - (void) publishImpressRemoteServiceOnLocalNetworkWithName:(NSString *)sName
 {
-    netService = [[NSNetService alloc] initWithDomain:@"local" type:@"_impressremote._tcp" name:sName port:1599];
+    netService = [[NSNetService alloc] initWithDomain:@"local" type:@kREG_TYPE name:sName port:1599];
 
   if (netService != nil) 
   {

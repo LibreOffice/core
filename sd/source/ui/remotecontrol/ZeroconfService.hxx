@@ -19,6 +19,8 @@
 #define PORT_DISCOVERY 1598
 #define BUFFER_SIZE 200
 
+#define kREG_TYPE "_impressremote._tcp"
+
 #define CHARSET RTL_TEXTENCODING_UTF8
 
 struct sockaddr_in;

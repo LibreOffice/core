@@ -95,7 +95,7 @@ static void create_services(AvahiClient *c) {
     if (avahi_entry_group_is_empty(group)) {
         fprintf(stderr, "Adding service '%s'\n", avahiService->getName().c_str());
         snprintf(r, sizeof(r), "random=%i", rand());
-        if ((ret = avahi_entry_group_add_service(group, AVAHI_IF_UNSPEC, AVAHI_PROTO_UNSPEC, static_cast<AvahiPublishFlags>(0), avahiService->getName().c_str(), "_impressremote._tcp", NULL, NULL, 1599, "local", r, NULL)) < 0) {
+        if ((ret = avahi_entry_group_add_service(group, AVAHI_IF_UNSPEC, AVAHI_PROTO_UNSPEC, static_cast<AvahiPublishFlags>(0), avahiService->getName().c_str(), kREG_TYPE, NULL, NULL, 1599, "local", r, NULL)) < 0) {
 
             if (ret == AVAHI_ERR_COLLISION){
                 /* A service name collision with a local service happened. Let's

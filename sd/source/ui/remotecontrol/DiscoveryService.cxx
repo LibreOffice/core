@@ -27,6 +27,8 @@
 
   #include <winsock2.h>
   #include <ws2tcpip.h>
+
+  #include "WINNetworkService.hxx"
   typedef int socklen_t;
 #else
   #include <unistd.h>
@@ -70,6 +72,10 @@ DiscoveryService::DiscoveryService()
     zService = new AvahiNetworkService(hostname);
 #endif
 
+#ifdef WIN32
+    zService = new WINNetworkService();
+#endif
+
     if (zService)
         zService->setup();
 
@@ -111,9 +117,9 @@ DiscoveryService::DiscoveryService()
 DiscoveryService::~DiscoveryService()
 {
   #ifdef WNT
-      closesocket( mSocket );
+    closesocket( mSocket );
   #else
-     close( mSocket );
+    close( mSocket );
   #endif
 
      if (zService)
