@@ -28,6 +28,12 @@ namespace connectivity
         private:
             ::osl::Mutex& m_rMutex;
 
+            /**
+             * Get the ALTER TABLE [TABLE] ALTER [COLUMN] String.
+             * Includes a trailing space.
+             */
+            ::rtl::OUString getAlterTableColumn(const ::rtl::OUString& rColumn);
+
         public:
             Table(Tables* pTables,
                   ::osl::Mutex& rMutex,

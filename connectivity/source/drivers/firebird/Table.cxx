@@ -83,20 +83,44 @@ void SAL_CALL Table::alterColumnByName(const OUString& rColName,
     // sdbcx::Descriptor
     bool bNameChanged = xColumn->getPropertyValue("Name") != rDescriptor->getPropertyValue("Name");
     // sdbcx::ColumnDescriptor
-//     bool bTypeChanged = xColumn->getPropertyValue("Type") != rDescriptor->getPropertyValue("Type");
-//     bool bTypeNameChanged = xColumn->getPropertyValue("TypeName") != rDescriptor->getPropertyValue("TypeName");
-//     bool bPrecisionChanged = xColumn->getPropertyValue("Precision") != rDescriptor->getPropertyValue("Precision");
-//     bool bScaleChanged = xColumn->getPropertyValue("Scale") != rDescriptor->getPropertyValue("Scale");
-//     bool bIsNullableChanged = xColumn->getPropertyValue("IsNullable") != rDescriptor->getPropertyValue("IsNullable");
-//     bool bIsAutoIncrementChanged = xColumn->getPropertyValue("IsAutoIncrement") != rDescriptor->getPropertyValue("IsAutoIncrement");
-    // TODO: remainder
+    bool bTypeChanged = xColumn->getPropertyValue("Type") != rDescriptor->getPropertyValue("Type");
+    bool bTypeNameChanged = xColumn->getPropertyValue("TypeName") != rDescriptor->getPropertyValue("TypeName");
+    bool bPrecisionChanged = xColumn->getPropertyValue("Precision") != rDescriptor->getPropertyValue("Precision");
+    bool bScaleChanged = xColumn->getPropertyValue("Scale") != rDescriptor->getPropertyValue("Scale");
+    bool bIsNullableChanged = xColumn->getPropertyValue("IsNullable") != rDescriptor->getPropertyValue("IsNullable");
+    bool bIsAutoIncrementChanged = xColumn->getPropertyValue("IsAutoIncrement") != rDescriptor->getPropertyValue("IsAutoIncrement");
+    // TODO: remainder -- these are all "optional" so have to detect presence and change.
+
+    bool bDefaultChanged = xColumn->getPropertyValue("DefaultValue")
+                                     != rDescriptor->getPropertyValue("DefaultValue");
 
     if (bNameChanged)
     {
         OUString sNewTableName;
         rDescriptor->getPropertyValue("Name") >>= sNewTableName;
-        OUString sSql("ALTER TABLE \"" + getName() + "\" ALTER COLUMN \""
-            + rColName + "\" TO \"" + sNewTableName + "\"");
+        OUString sSql(getAlterTableColumn(rColName)
+                                            + " TO \"" + sNewTableName + "\"");
+
+        getConnection()->createStatement()->execute(sSql);
+    }
+
+    if (bTypeChanged || bTypeNameChanged || bPrecisionChanged || bScaleChanged
+        || bIsNullableChanged || bIsAutoIncrementChanged)
+    {
+        // TODO: changeType
+    }
+
+    if (bDefaultChanged)
+    {
+        OUString sOldDefault, sNewDefault;
+        xColumn->getPropertyValue("DefaultValue") >>= sOldDefault;
+        rDescriptor->getPropertyValue("DefaultValue") >>= sNewDefault;
+
+        OUString sSql;
+        if (sNewDefault.isEmpty())
+            sSql = getAlterTableColumn(rColName) + "DROP DEFAULT";
+        else
+            sSql = getAlterTableColumn(rColName) + "SET DEFAULT " + sNewDefault;
 
         getConnection()->createStatement()->execute(sSql);
     }
@@ -139,5 +163,10 @@ uno::Sequence< Type > SAL_CALL Table::getTypes()
     }
 
     return OTableHelper::getTypes();
+}
+
+OUString Table::getAlterTableColumn(const OUString& rColumn)
+{
+    return ("ALTER TABLE \"" + getName() + "\" ALTER COLUMN \"" + rColumn + "\" ");
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
