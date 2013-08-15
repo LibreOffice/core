@@ -321,10 +321,7 @@ void CGMImpressOutAct::ImplSetFillBundle()
     {
         drawing::Hatch aHatch;
 
-        if ( mpCGM->pElement->nAspectSourceFlags & ASF_LINECOLOR )
-            aHatch.Color = nFillColor;
-        else
-            aHatch.Color = nFillColor;
+        aHatch.Color = nFillColor;
         if ( mpCGM->pElement->maHatchMap.find( nHatchIndex ) !=  mpCGM->pElement->maHatchMap.end() )
         {
             HatchEntry& rHatchEntry = mpCGM->pElement->maHatchMap[ nHatchIndex ];
