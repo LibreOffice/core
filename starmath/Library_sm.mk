@@ -79,7 +79,6 @@ $(eval $(call gb_Library_add_exception_objects,sm,\
         starmath/source/symbol \
         starmath/source/toolbox \
         starmath/source/typemap \
-        starmath/source/types \
         starmath/source/unodoc \
         starmath/source/unomodel \
         starmath/source/utility \

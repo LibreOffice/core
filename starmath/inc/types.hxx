@@ -34,8 +34,6 @@ inline sal_Bool IsInPrivateUseArea( sal_Unicode cChar ) { return 0xE000 <= cChar
 // Greek char range as seen in svx/.../charmap.cxx RID_SUBSETSTR_BASIC_GREEK
 inline sal_Bool IsGreekChar( sal_Unicode cChar ) { return 0x0370 <= cChar  &&  cChar <= 0x03FF; }
 
-sal_Unicode ConvertMathPrivateUseAreaToUnicode( sal_Unicode cChar );
-
 sal_Unicode ConvertMathToMathML( sal_Unicode cChar );
 
 /////////////////////////////////////////////////////////////////
