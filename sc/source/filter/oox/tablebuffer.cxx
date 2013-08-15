@@ -20,6 +20,7 @@
 #include "tablebuffer.hxx"
 
 #include <com/sun/star/sheet/XDatabaseRange.hpp>
+#include <com/sun/star/sheet/XDatabaseRanges.hpp>
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/binaryinputstream.hxx"
 #include "oox/helper/propertyset.hxx"
@@ -96,13 +97,29 @@ void Table::finalizeImport()
         PropertySet aPropSet( xDatabaseRange );
         if( !aPropSet.getProperty( mnTokenIndex, PROP_TokenIndex ) )
             mnTokenIndex = -1;
-
-        // filter settings
-        maAutoFilters.finalizeImport( xDatabaseRange );
     }
     catch( Exception& )
     {
         OSL_FAIL( "Table::finalizeImport - cannot create database range" );
+    }
+}
+
+void Table::applyAutoFilters()
+{
+    if( !maDBRangeName.isEmpty() )
+    {
+        try
+        {
+            // get the range ( maybe we should cache the xDatabaseRange from finalizeImport )
+            PropertySet aDocProps( getDocument() );
+            Reference< XDatabaseRanges > xDatabaseRanges( aDocProps.getAnyProperty( PROP_DatabaseRanges ), UNO_QUERY_THROW );
+            Reference< XDatabaseRange > xDatabaseRange( xDatabaseRanges->getByName( maDBRangeName ), UNO_QUERY );
+            maAutoFilters.finalizeImport( xDatabaseRange );
+        }
+        catch( Exception& )
+        {
+            OSL_FAIL( "Table::applyAutofilters - cannot create filter" );
+        }
     }
 }
 
@@ -127,6 +144,11 @@ void TableBuffer::finalizeImport()
         insertTableToMaps( *aIt );
     // finalize all valid tables
     maIdTables.forEachMem( &Table::finalizeImport );
+}
+
+void TableBuffer::applyAutoFilters()
+{
+    maIdTables.forEachMem( &Table::applyAutoFilters );
 }
 
 TableRef TableBuffer::getTable( sal_Int32 nTableId ) const
