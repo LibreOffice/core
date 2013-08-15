@@ -522,7 +522,7 @@ static Image GetImageFromList_Impl( sal_uInt16 nImageId, sal_Bool bBig )
     return Image();
 }
 
-String SvFileInformationManager::GetDescription_Impl( const INetURLObject& rObject, sal_Bool bDetectFolder )
+OUString SvFileInformationManager::GetDescription_Impl( const INetURLObject& rObject, sal_Bool bDetectFolder )
 {
     OUString sExtension(rObject.getExtension());
     String sDescription, sURL( rObject.GetMainURL( INetURLObject::NO_DECODE ) );
@@ -631,17 +631,17 @@ Image SvFileInformationManager::GetFolderImage( const svtools::VolumeInfo& rInfo
     return GetImageFromList_Impl( nImage, bBig );
 }
 
-String SvFileInformationManager::GetDescription( const INetURLObject& rObject )
+OUString SvFileInformationManager::GetDescription( const INetURLObject& rObject )
 {
     return SvFileInformationManager::GetDescription_Impl( rObject, sal_True );
 }
 
-String SvFileInformationManager::GetFileDescription( const INetURLObject& rObject )
+OUString SvFileInformationManager::GetFileDescription( const INetURLObject& rObject )
 {
     return SvFileInformationManager::GetDescription_Impl( rObject, sal_False );
 }
 
-String SvFileInformationManager::GetFolderDescription( const svtools::VolumeInfo& rInfo )
+OUString SvFileInformationManager::GetFolderDescription( const svtools::VolumeInfo& rInfo )
 {
     sal_uInt16 nResId = STR_DESCRIPTION_FOLDER;
     if ( rInfo.m_bIsRemote )
