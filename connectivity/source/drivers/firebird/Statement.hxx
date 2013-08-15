@@ -39,11 +39,17 @@ namespace connectivity
         {
         protected:
             virtual ~OStatement(){}
+
+            XSQLDA* m_pSqlda;
+
         public:
             // a constructor, which is required for returning objects:
             OStatement( OConnection* _pConnection)
-                : OStatementCommonBase( _pConnection)
+                : OStatementCommonBase( _pConnection),
+                  m_pSqlda(0)
             {}
+
+            virtual void disposeResultSet();
 
             DECLARE_SERVICE_INFO();
 

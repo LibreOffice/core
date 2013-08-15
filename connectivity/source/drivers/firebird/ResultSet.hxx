@@ -60,6 +60,12 @@ namespace connectivity
                                                         ::com::sun::star::sdbc::XColumnLocate,
                                                         ::com::sun::star::lang::XServiceInfo> OResultSet_BASE;
 
+        /**
+         * This ResultSet does not deal with the management of the SQLDA
+         * it is supplied with. The owner must mange its SQLDA appropriately
+         * and ensure that the ResultSet is destroyed before disposing of the
+         * SQLDA.
+         */
         class OResultSet :  public  OResultSet_BASE,
                             public  ::cppu::OPropertySetHelper,
                             public  OPropertyArrayUsageHelper<OResultSet>

@@ -64,7 +64,7 @@ namespace connectivity
             isc_stmt_handle                             m_aStatementHandle;
 
         protected:
-            void disposeResultSet();
+            virtual void disposeResultSet();
             void freeStatementHandle()
                 throw (::com::sun::star::sdbc::SQLException);
 
@@ -102,7 +102,10 @@ namespace connectivity
             using OStatementCommonBase_Base::operator ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >;
 
             // OComponentHelper
-            virtual void SAL_CALL disposing(void){OStatementCommonBase_Base::disposing();}
+            virtual void SAL_CALL disposing(void){
+                disposeResultSet();
+                OStatementCommonBase_Base::disposing();
+            }
             // XInterface
             virtual void SAL_CALL release() throw();
             virtual void SAL_CALL acquire() throw();

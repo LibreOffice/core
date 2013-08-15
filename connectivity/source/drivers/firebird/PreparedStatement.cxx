@@ -77,7 +77,7 @@ void OPreparedStatement::ensurePrepared()
         m_pInSqlda = (XSQLDA*) malloc(XSQLDA_LENGTH(10));
         m_pInSqlda->version = SQLDA_VERSION1;
         m_pInSqlda->sqln = 10;
-    } // TODO: free this on closing
+    }
 
     prepareAndDescribeStatement(m_sSqlStatement,
                                m_pOutSqlda,
@@ -172,7 +172,22 @@ Reference< XResultSetMetaData > SAL_CALL OPreparedStatement::getMetaData()
 
 void SAL_CALL OPreparedStatement::close() throw(SQLException, RuntimeException)
 {
+    MutexGuard aGuard( m_pConnection->getMutex() );
+    checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
+
     OStatementCommonBase::close();
+    if (m_pInSqlda)
+    {
+        freeSQLVAR(m_pInSqlda);
+        free(m_pInSqlda);
+        m_pInSqlda = 0;
+    }
+    if (m_pOutSqlda)
+    {
+        freeSQLVAR(m_pOutSqlda);
+        free(m_pOutSqlda);
+        m_pOutSqlda = 0;
+    }
 }
 
 void SAL_CALL OPreparedStatement::disposing()

@@ -265,8 +265,6 @@ void OResultSet::disposing(void)
 
     MutexGuard aGuard(m_pConnection->getMutex());
 
-    // TODO: free the sqlda
-
     m_xMetaData     = NULL;
 }
 // -------------------------------------------------------------------------

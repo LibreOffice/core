@@ -251,4 +251,51 @@ void firebird::mallocSQLVAR(XSQLDA* pSqlda)
         }
     }
 }
+
+void firebird::freeSQLVAR(XSQLDA* pSqlda)
+{
+    XSQLVAR* pVar = pSqlda->sqlvar;
+    for (int i=0; i < pSqlda->sqld; i++, pVar++)
+    {
+        int dtype = (pVar->sqltype & ~1); /* drop flag bit for now */
+        switch(dtype) {
+        case SQL_TEXT:
+        case SQL_VARYING:
+        case SQL_SHORT:
+        case SQL_LONG:
+        case SQL_FLOAT:
+        case SQL_DOUBLE:
+        case SQL_D_FLOAT:
+        case SQL_TIMESTAMP:
+        case SQL_BLOB:
+        case SQL_INT64:
+            free(pVar->sqldata);
+            break;
+        case SQL_ARRAY:
+            assert(false); // TODO: implement
+            break;
+        case SQL_TYPE_TIME:
+            assert(false); // TODO: implement
+            break;
+        case SQL_TYPE_DATE:
+            assert(false); // TODO: implement
+            break;
+        case SQL_NULL:
+            assert(false); // TODO: implement
+            break;
+        case SQL_QUAD:
+            assert(false); // TODO: implement
+            break;
+        default:
+            SAL_WARN("connectivity.firebird", "Unknown type: " << dtype);
+            assert(false);
+            break;
+        }
+
+        if (pVar->sqltype & 1)
+        {
+            free(pVar->sqlind);
+        }
+    }
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

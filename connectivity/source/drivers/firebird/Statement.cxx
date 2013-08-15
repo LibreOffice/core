@@ -78,6 +78,21 @@ void SAL_CALL OStatement::release() throw()
     OStatementCommonBase::release();
 }
 
+void OStatement::disposeResultSet()
+{
+    MutexGuard aGuard(m_pConnection->getMutex());
+    checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
+
+    OStatementCommonBase::disposeResultSet();
+
+    if (m_pSqlda)
+    {
+        freeSQLVAR(m_pSqlda);
+        free(m_pSqlda);
+        m_pSqlda = 0;
+    }
+}
+
 // ---- XStatement -----------------------------------------------------------
 sal_Int32 SAL_CALL OStatement::executeUpdate(const OUString& sql)
     throw(SQLException, RuntimeException)
@@ -109,11 +124,12 @@ uno::Reference< XResultSet > SAL_CALL OStatement::executeQuery(const OUString& s
     MutexGuard aGuard(m_pConnection->getMutex());
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
-    XSQLDA* pOutSqlda = 0;
     ISC_STATUS aErr = 0;
 
+    disposeResultSet();
+
     prepareAndDescribeStatement(sql,
-                                pOutSqlda);
+                                m_pSqlda);
 
     aErr = isc_dsql_execute(m_statusVector,
                             &m_pConnection->getTransaction(),
@@ -126,7 +142,7 @@ uno::Reference< XResultSet > SAL_CALL OStatement::executeQuery(const OUString& s
     m_xResultSet = new OResultSet(m_pConnection,
                                   uno::Reference< XInterface >(*this),
                                   m_aStatementHandle,
-                                  pOutSqlda);
+                                  m_pSqlda);
 
     // TODO: deal with cleanup
 
@@ -179,6 +195,7 @@ void SAL_CALL OStatement::close() throw(SQLException, RuntimeException)
 
 void SAL_CALL OStatement::disposing()
 {
+    disposeResultSet();
     close();
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
