@@ -26,7 +26,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/propertysetinfo.hxx>
 #include <svl/itemprop.hxx>
-#include <grfmgr.hxx>
+#include <svtools/grfmgr.hxx>
 #include <comphelper/servicehelper.hxx>
 #include "graphic.hxx"
 #include "renderer.hxx"

@@ -18,7 +18,7 @@
  */
 
 #include <salhelper/timer.hxx>
-#include <grfmgr.hxx>
+#include <svtools/grfmgr.hxx>
 #include <tools/debug.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/outdev.hxx>

@@ -20,7 +20,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
 #include <vcl/tabpage.hxx>
-#include <wizdlg.hxx>
+#include <svtools/wizdlg.hxx>
 
 // =======================================================================
 

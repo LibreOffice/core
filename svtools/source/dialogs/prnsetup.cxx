@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <prnsetup.hxx>
-#include <svtools.hrc>
-#include <svtresid.hxx>
+#include <svtools/prnsetup.hxx>
+#include <svtools/svtools.hrc>
+#include <svtools/svtresid.hxx>
 #include <vcl/print.hxx>
 
 // =======================================================================

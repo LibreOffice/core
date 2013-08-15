@@ -25,7 +25,7 @@
 #include <unotools/localedatawrapper.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/zformat.hxx>
-#include <fmtfield.hxx>
+#include <svtools/fmtfield.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/util/SearchOptions.hpp>

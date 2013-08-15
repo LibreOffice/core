@@ -22,7 +22,7 @@
 #include <sys/types.h>
 #endif
 
-#include <inettbc.hxx>
+#include <svtools/inettbc.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/beans/Property.hpp>
@@ -57,7 +57,7 @@
 #include <unotools/localfilehelper.hxx>
 #include <unotools/ucbhelper.hxx>
 #include "iodlg.hrc"
-#include <asynclink.hxx>
+#include <svtools/asynclink.hxx>
 #include <svl/urlfilter.hxx>
 
 #include <vector>

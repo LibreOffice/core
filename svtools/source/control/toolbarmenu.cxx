@@ -27,8 +27,8 @@
 #include <vcl/taskpanelist.hxx>
 #include <vcl/toolbox.hxx>
 
-#include "valueset.hxx"
-#include "toolbarmenu.hxx"
+#include "svtools/valueset.hxx"
+#include "svtools/toolbarmenu.hxx"
 #include "toolbarmenuimp.hxx"
 
 using namespace ::com::sun::star::uno;

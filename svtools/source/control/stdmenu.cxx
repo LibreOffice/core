@@ -21,8 +21,8 @@
 #include <string.h>
 #include <vcl/svapp.hxx>
 #include <vcl/i18nhelp.hxx>
-#include <ctrltool.hxx>
-#include <stdmenu.hxx>
+#include <svtools/ctrltool.hxx>
+#include <svtools/stdmenu.hxx>
 
 // ========================================================================
 

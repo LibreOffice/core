@@ -18,7 +18,7 @@
  */
 
 
-#include <textwindowpeer.hxx>
+#include <svtools/textwindowpeer.hxx>
 #include <vcl/textview.hxx>
 #include "svtaccessiblefactory.hxx"
 

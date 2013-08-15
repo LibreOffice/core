@@ -18,10 +18,10 @@
  */
 
 
-#include <roadmapwizard.hxx>
-#include <svtools.hrc>
-#include <svtresid.hxx>
-#include <roadmap.hxx>
+#include <svtools/roadmapwizard.hxx>
+#include <svtools/svtools.hrc>
+#include <svtools/svtresid.hxx>
+#include <svtools/roadmap.hxx>
 #include <tools/debug.hxx>
 
 #include <stdarg.h>

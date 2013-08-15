@@ -15,7 +15,7 @@
 #include "com/sun/star/task/XInteractionHandler.hpp"
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/XComponentContext.hpp"
-#include "restartdialog.hxx"
+#include "svtools/restartdialog.hxx"
 #include "tools/link.hxx"
 #include "vcl/button.hxx"
 #include "vcl/dialog.hxx"

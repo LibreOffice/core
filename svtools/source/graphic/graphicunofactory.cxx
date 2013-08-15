@@ -22,7 +22,7 @@
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/graphic/XGraphicObject.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <grfmgr.hxx>
+#include <svtools/grfmgr.hxx>
 
 using namespace com::sun::star;
 

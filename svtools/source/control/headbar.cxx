@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <headbar.hxx>
+#include <svtools/headbar.hxx>
 #include <tools/debug.hxx>
 
 #include <vcl/svapp.hxx>

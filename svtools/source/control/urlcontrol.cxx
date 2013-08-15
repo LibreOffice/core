@@ -18,7 +18,7 @@
  */
 
 
-#include <urlcontrol.hxx>
+#include <svtools/urlcontrol.hxx>
 #include "svl/filenotation.hxx"
 
 //.........................................................................

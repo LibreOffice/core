@@ -18,10 +18,10 @@
  */
 
 
-#include <svmedit.hxx>
+#include <svtools/svmedit.hxx>
 #include <vcl/xtextedt.hxx>
 #include <vcl/builder.hxx>
-#include <editsyntaxhighlighter.hxx>
+#include <svtools/editsyntaxhighlighter.hxx>
 #include <vcl/txtattr.hxx>
 
 

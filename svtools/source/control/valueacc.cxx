@@ -19,7 +19,7 @@
 
 #include <unotools/accessiblestatesethelper.hxx>
 #include <vcl/svapp.hxx>
-#include <valueset.hxx>
+#include <svtools/valueset.hxx>
 #include "valueimp.hxx"
 #include <comphelper/servicehelper.hxx>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>

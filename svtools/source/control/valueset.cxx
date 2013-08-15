@@ -30,7 +30,7 @@
 #include <rtl/ustring.hxx>
 #include "valueimp.hxx"
 
-#include <valueset.hxx>
+#include <svtools/valueset.hxx>
 
 namespace
 {

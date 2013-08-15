@@ -26,7 +26,7 @@
 
 #include <vcl/svapp.hxx>
 
-#include "toolbarmenu.hxx"
+#include "svtools/toolbarmenu.hxx"
 
 #include "toolbarmenuimp.hxx"
 

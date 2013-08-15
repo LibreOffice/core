@@ -18,7 +18,7 @@
  */
 
 
-#include <tabbar.hxx>
+#include <svtools/tabbar.hxx>
 #include <tools/time.hxx>
 #include <tools/debug.hxx>
 #include <tools/poly.hxx>
@@ -30,8 +30,8 @@
 #include <vcl/image.hxx>
 #include "svtaccessiblefactory.hxx"
 #include <filectrl.hrc>
-#include <svtresid.hxx>
-#include <svtools.hrc>
+#include <svtools/svtresid.hxx>
+#include <svtools/svtools.hrc>
 #include <limits>
 
 // =======================================================================
