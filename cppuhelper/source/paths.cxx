@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include "sal/config.h"
 
 #include <cassert>
@@ -69,6 +71,18 @@ rtl::OUString cppu::getUnoIniUri() {
     rtl::OUString uri("file:///assets/program");
 #else
     rtl::OUString uri(get_this_libpath());
+#if HAVE_FEATURE_MACOSX_MACLIKE_APP_STRUCTURE
+    // We keep both the LO and URE dylibs direcly in the Frameworks
+    // folder and rc files in Resources. Except for unorc, of which
+    // there are two, the "LO" one (which is in Resources) and the
+    // "URE" one which is in Resources/ure. As this code goes into the
+    // cppuhelper library which is part of URE, we are looking for the
+    // latter one here. I think...
+    if (uri.endsWith( "/Frameworks" ) )
+    {
+        uri = uri.copy( 0, uri.getLength() - (sizeof("Frameworks")-1) ) + "Resources/ure";
+    }
+#endif
 #endif
     return uri + "/" SAL_CONFIGFILE("uno");
 }
