@@ -61,7 +61,7 @@ struct FormularCommandNameTable
     const char*     pS;
     FormularCommand pE;
 };
-static FormularCommandNameTable pFormularCommandNameTable[] =
+static const FormularCommandNameTable pFormularCommandNameTable[] =
 {
     { "*/",     FC_MULDIV },
     { "+-",     FC_PLUSMINUS },

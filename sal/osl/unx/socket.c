@@ -97,7 +97,7 @@
 /*****************************************************************************/
 
 /* map */
-static unsigned long FamilyMap[]= {
+static const unsigned long FamilyMap[]= {
     AF_INET,                    /* osl_Socket_FamilyInet    */
     AF_IPX,                     /* osl_Socket_FamilyIpx     */
     0                           /* osl_Socket_FamilyInvalid */
@@ -127,7 +127,7 @@ static oslAddrFamily osl_AddrFamilyFromNative(sal_uInt32 nativeType)
 /*****************************************************************************/
 
 /* map */
-static sal_uInt32 ProtocolMap[]= {
+static const sal_uInt32 ProtocolMap[]= {
     0,                          /* osl_Socket_ProtocolIp      */
     NSPROTO_IPX,                /* osl_Socket_ProtocolIpx     */
     NSPROTO_SPX,                /* osl_Socket_ProtocolSpx     */
@@ -161,7 +161,7 @@ static oslProtocol osl_ProtocolFromNative(sal_uInt32 nativeType)
 /*****************************************************************************/
 
 /* map */
-static sal_uInt32 TypeMap[]= {
+static const sal_uInt32 TypeMap[]= {
     SOCK_STREAM,                /* osl_Socket_TypeStream    */
     SOCK_DGRAM,                 /* osl_Socket_TypeDgram     */
     SOCK_RAW,                   /* osl_Socket_TypeRaw       */
@@ -195,7 +195,7 @@ static oslSocketType osl_SocketTypeFromNative(sal_uInt32 nativeType)
 /*****************************************************************************/
 
 /* map */
-static sal_uInt32 OptionMap[]= {
+static const sal_uInt32 OptionMap[]= {
     SO_DEBUG,                   /* osl_Socket_OptionDebug       */
     SO_ACCEPTCONN,              /* osl_Socket_OptionAcceptConn  */
     SO_REUSEADDR,               /* osl_Socket_OptionReuseAddr   */
@@ -240,7 +240,7 @@ static oslSocketOption osl_SocketOptionFromNative(sal_uInt32 nativeType)
 /* enum oslSocketOptionLevel */
 /*****************************************************************************/
 
-static sal_uInt32 OptionLevelMap[]= {
+static const sal_uInt32 OptionLevelMap[]= {
     SOL_SOCKET,                 /* osl_Socket_LevelSocket  */
     IPPROTO_TCP,                /* osl_Socket_LevelTcp     */
     0                           /* osl_Socket_LevelInvalid */
@@ -269,7 +269,7 @@ static oslSocketOptionLevel osl_SocketOptionLevelFromNative(sal_uInt32 nativeTyp
 /* enum oslSocketMsgFlag */
 /*****************************************************************************/
 
-static sal_uInt32 SocketMsgFlagMap[]= {
+static const sal_uInt32 SocketMsgFlagMap[]= {
     0,                          /* osl_Socket_MsgNormal    */
     MSG_OOB,                    /* osl_Socket_MsgOOB       */
     MSG_PEEK,                   /* osl_Socket_MsgPeek      */
@@ -302,7 +302,7 @@ static oslSocketMsgFlag osl_SocketMsgFlagFromNative(sal_uInt32 nativeType)
 /* enum oslSocketDirection */
 /*****************************************************************************/
 
-static sal_uInt32 SocketDirection[]= {
+static const sal_uInt32 SocketDirection[]= {
     SD_RECEIVE,                 /* osl_Socket_DirRead      */
     SD_SEND,                    /* osl_Socket_DirWrite     */
     SD_BOTH,                    /* osl_Socket_DirReadWrite */
@@ -333,7 +333,7 @@ static oslSocketDirection osl_SocketDirectionFromNative(sal_uInt32 nativeType)
 /* enum oslSocketError */
 /*****************************************************************************/
 
-static struct
+static const struct
 {
     int            errcode;
     oslSocketError error;

@@ -24,7 +24,7 @@
 
 #include "internal/rtllifecycle.h"
 
-static sal_Int32 RTL_HASHTABLE_SIZE[] =
+static const sal_Int32 RTL_HASHTABLE_SIZE[] =
 {
     7, 31, 127, 251, 509, 1021, 2039, 4093
 };

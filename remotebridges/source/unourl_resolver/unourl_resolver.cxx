@@ -172,7 +172,7 @@ static Reference< XInterface > SAL_CALL ResolverImpl_create( const Reference< XC
 
 using namespace unourl_resolver;
 
-static struct ImplementationEntry g_entries[] =
+static const struct ImplementationEntry g_entries[] =
 {
     {
         ResolverImpl_create, resolver_getImplementationName,

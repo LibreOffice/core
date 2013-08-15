@@ -33,8 +33,8 @@
 
 #include <cstddef>
 
-static sal_Char NULL_STRING[1] = { 0 };
-static sal_Unicode NULL_WSTRING[1] = { 0 };
+static const sal_Char NULL_STRING[1] = { 0 };
+static const sal_Unicode NULL_WSTRING[1] = { 0 };
 
 const sal_uInt32    magic = 0x12345678;
 const sal_uInt16 minorVersion = 0x0000;

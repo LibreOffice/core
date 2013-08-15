@@ -252,7 +252,7 @@ Reference< XInterface > CreateInstance( const Reference< XComponentContext > & c
 }
 
 
-static struct cppu::ImplementationEntry g_entries[] =
+static const struct cppu::ImplementationEntry g_entries[] =
 {
     {
         pyuno_loader::CreateInstance, pyuno_loader::getImplementationName,

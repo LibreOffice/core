@@ -1182,83 +1182,83 @@ ScIconSetMap* ScIconSetFormat::getIconSetMap()
 
 namespace {
 
-sal_Int32 a3TrafficLights1[] = {
+const sal_Int32 a3TrafficLights1[] = {
     BMP_ICON_SET_CIRCLES1_RED, BMP_ICON_SET_CIRCLES1_YELLOW, BMP_ICON_SET_CIRCLES1_GREEN
 };
 
-sal_Int32 a3TrafficLights2[] = {
+const sal_Int32 a3TrafficLights2[] = {
     BMP_ICON_SET_TRAFFICLIGHTS_RED, BMP_ICON_SET_TRAFFICLIGHTS_YELLOW, BMP_ICON_SET_TRAFFICLIGHTS_GREEN
 };
 
-sal_Int32 a3Arrows[] = {
+const sal_Int32 a3Arrows[] = {
     BMP_ICON_SET_COLORARROWS_DOWN, BMP_ICON_SET_COLORARROWS_SAME, BMP_ICON_SET_COLORARROWS_UP
 };
 
-sal_Int32 a3ArrowsGray[] = {
+const sal_Int32 a3ArrowsGray[] = {
     BMP_ICON_SET_GRAYARROWS_DOWN, BMP_ICON_SET_GRAYARROWS_SAME, BMP_ICON_SET_GRAYARROWS_UP
 };
 
-sal_Int32 a3Flags[] = {
+const sal_Int32 a3Flags[] = {
     BMP_ICON_SET_FLAGS_RED, BMP_ICON_SET_FLAGS_YELLOW, BMP_ICON_SET_FLAGS_GREEN
 };
 
-sal_Int32 a4Arrows[] = {
+const sal_Int32 a4Arrows[] = {
     BMP_ICON_SET_COLORARROWS_DOWN, BMP_ICON_SET_COLORARROWS_SLIGHTLY_DOWN, BMP_ICON_SET_COLORARROWS_SLIGHTLY_UP, BMP_ICON_SET_COLORARROWS_UP
 };
 
-sal_Int32 a4ArrowsGray[] = {
+const sal_Int32 a4ArrowsGray[] = {
     BMP_ICON_SET_GRAYARROWS_DOWN, BMP_ICON_SET_GRAYARROWS_SLIGHTLY_DOWN, BMP_ICON_SET_GRAYARROWS_SLIGHTLY_UP, BMP_ICON_SET_GRAYARROWS_UP
 };
 
-sal_Int32 a5Arrows[] = {
+const sal_Int32 a5Arrows[] = {
     BMP_ICON_SET_COLORARROWS_DOWN, BMP_ICON_SET_COLORARROWS_SLIGHTLY_DOWN,
     BMP_ICON_SET_COLORARROWS_SAME, BMP_ICON_SET_COLORARROWS_SLIGHTLY_UP, BMP_ICON_SET_COLORARROWS_UP
 };
 
-sal_Int32 a5ArrowsGray[] = {
+const sal_Int32 a5ArrowsGray[] = {
     BMP_ICON_SET_GRAYARROWS_DOWN, BMP_ICON_SET_GRAYARROWS_SLIGHTLY_DOWN,
     BMP_ICON_SET_GRAYARROWS_SAME, BMP_ICON_SET_GRAYARROWS_SLIGHTLY_UP, BMP_ICON_SET_GRAYARROWS_UP
 };
 
-sal_Int32 a4TrafficLights[] = {
+const sal_Int32 a4TrafficLights[] = {
     BMP_ICON_SET_CIRCLES1_GRAY, BMP_ICON_SET_CIRCLES1_RED,
     BMP_ICON_SET_CIRCLES1_YELLOW, BMP_ICON_SET_CIRCLES1_GREEN
 };
 
-sal_Int32 a5Quarters[] = {
+const sal_Int32 a5Quarters[] = {
     BMP_ICON_SET_PIES_EMPTY, BMP_ICON_SET_PIES_ONE_QUARTER, BMP_ICON_SET_PIES_HALF,
     BMP_ICON_SET_PIES_THREE_QUARTER, BMP_ICON_SET_PIES_FULL,
 };
 
-sal_Int32 a3Symbols1[] = {
+const sal_Int32 a3Symbols1[] = {
     BMP_ICON_SET_SYMBOLS1_CROSS, BMP_ICON_SET_SYMBOLS1_EXCLAMATION_MARK, BMP_ICON_SET_SYMBOLS1_CHECK
 };
 
-sal_Int32 a3Signs[] = {
+const sal_Int32 a3Signs[] = {
     BMP_ICON_SET_SHAPES_DIAMOND, BMP_ICON_SET_SHAPES_TRIANGLE, BMP_ICON_SET_SHAPES_CIRCLE
 };
 
-sal_Int32 a4RedToBlack[] = {
+const sal_Int32 a4RedToBlack[] = {
     BMP_ICON_SET_CIRCLES2_DARK_GRAY, BMP_ICON_SET_CIRCLES2_LIGHT_GRAY,
     BMP_ICON_SET_CIRCLES2_LIGHT_RED, BMP_ICON_SET_CIRCLES2_DARK_RED
 };
 
-sal_Int32 a4Ratings[] = {
+const sal_Int32 a4Ratings[] = {
     BMP_ICON_SET_BARS_ONE_QUARTER, BMP_ICON_SET_BARS_HALF,
     BMP_ICON_SET_BARS_THREE_QUARTER, BMP_ICON_SET_BARS_FULL
 };
 
-sal_Int32 a5Ratings[] = {
+const sal_Int32 a5Ratings[] = {
     BMP_ICON_SET_BARS_EMPTY, BMP_ICON_SET_BARS_ONE_QUARTER, BMP_ICON_SET_BARS_HALF,
     BMP_ICON_SET_BARS_THREE_QUARTER, BMP_ICON_SET_BARS_FULL
 };
 
 struct ScIconSetBitmapMap {
     ScIconSetType eType;
-    sal_Int32* nBitmaps;
+    const sal_Int32* nBitmaps;
 };
 
-static ScIconSetBitmapMap aBitmapMap[] = {
+static const ScIconSetBitmapMap aBitmapMap[] = {
     { IconSet_3Arrows, a3Arrows },
     { IconSet_3ArrowsGray, a3ArrowsGray },
     { IconSet_3Flags, a3Flags },

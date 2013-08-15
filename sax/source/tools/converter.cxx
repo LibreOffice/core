@@ -496,7 +496,7 @@ bool Converter::convertColor( sal_Int32& rColor, const OUString& rValue )
     return true;
 }
 
-static sal_Char aHexTab[] = "0123456789abcdef";
+static const sal_Char aHexTab[] = "0123456789abcdef";
 
 /** convert color to string */
 void Converter::convertColor( OUStringBuffer& rBuffer, sal_Int32 nColor )
