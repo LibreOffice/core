@@ -10,6 +10,8 @@
 #include "Table.hxx"
 #include "Tables.hxx"
 
+#include <connectivity/dbtools.hxx>
+
 #include <com/sun/star/sdbc/XRow.hpp>
 
 using namespace ::connectivity;
@@ -20,6 +22,7 @@ using namespace ::osl;
 using namespace ::rtl;
 
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
@@ -75,6 +78,24 @@ ObjectType Tables::createObject(const OUString& rName)
     return xRet;
 }
 
+uno::Reference< XPropertySet > Tables::createDescriptor()
+{
+    // There is some internal magic so that the same class can be used as either
+    // a descriptor or as a normal table. See VTable.cxx for the details. In our
+    // case we just need to ensure we use the correct constructor.
+    return new Table(this, m_rMutex, m_xMetaData->getConnection());
+}
+
+//----- XAppend ---------------------------------------------------------------
+ObjectType Tables::appendObject(const OUString& rName,
+                                const uno::Reference< XPropertySet >& rDescriptor)
+{
+    OUString sSql(::dbtools::createSqlCreateTableStatement(rDescriptor,
+                                                            m_xMetaData->getConnection()));
+    m_xMetaData->getConnection()->createStatement()->execute(sSql);
+
+    return createObject(rName);
+}
 // //----- XDrop ----------------------------------------------------------------
 // void SAL_CALL Tables::dropByName(const OUString& rName)
 //     throw (SQLException, NoSuchElementException, RuntimeException)

@@ -29,14 +29,19 @@ namespace connectivity
             ::osl::Mutex& m_rMutex;
 
         protected:
-            // OCollection: pure virtual functions requiring implementation
+            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >
+                m_xMetaData;
+
+            // OCollection
             virtual void impl_refresh()
                 throw(::com::sun::star::uno::RuntimeException);
             virtual ::connectivity::sdbcx::ObjectType createObject(
                                                 const ::rtl::OUString& rName);
-
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >
-                m_xMetaData;
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+                    createDescriptor();
+            virtual ::connectivity::sdbcx::ObjectType appendObject(
+                        const OUString& rName,
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rDescriptor);
 
         public:
             Tables(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& rMetaData,

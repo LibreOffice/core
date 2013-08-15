@@ -29,6 +29,17 @@ using namespace ::com::sun::star::uno;
 
 Table::Table(Tables* pTables,
              Mutex& rMutex,
+             const uno::Reference< XConnection >& rConnection):
+    OTableHelper(pTables,
+                 rConnection,
+                 sal_True),
+    m_rMutex(rMutex)
+{
+    OTableHelper::construct();
+}
+
+Table::Table(Tables* pTables,
+             Mutex& rMutex,
              const uno::Reference< XConnection >& rConnection,
              const OUString& rName,
              const OUString& rType,

@@ -37,6 +37,9 @@ namespace connectivity
         public:
             Table(Tables* pTables,
                   ::osl::Mutex& rMutex,
+                  const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection);
+            Table(Tables* pTables,
+                  ::osl::Mutex& rMutex,
                   const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection,
                   const ::rtl::OUString& rName,
                   const ::rtl::OUString& rType,
