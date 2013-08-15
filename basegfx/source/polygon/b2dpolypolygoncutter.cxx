@@ -664,7 +664,7 @@ namespace basegfx
                     {
                         basegfx::B2DPolygon aTemp(aRetval.getB2DPolygon(a));
                         const sal_uInt32 nPointCount(aTemp.count());
-                        bool bChanged;
+                        bool bChanged(false);
 
                         for(sal_uInt32 b(0); b < nPointCount; b++)
                         {
