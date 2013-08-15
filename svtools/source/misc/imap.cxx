@@ -53,8 +53,8 @@ IMapObject::IMapObject()
 {
 }
 
-IMapObject::IMapObject( const String& rURL, const String& rAltText, const String& rDesc,
-                        const String& rTarget, const String& rName, sal_Bool bURLActive )
+IMapObject::IMapObject( const OUString& rURL, const OUString& rAltText, const OUString& rDesc,
+                        const OUString& rTarget, const OUString& rName, sal_Bool bURLActive )
 : aURL( rURL )
 , aAltText( rAltText )
 , aDesc( rDesc )
@@ -77,7 +77,7 @@ sal_uInt16 IMapObject::GetVersion() const
     return IMAP_OBJ_VERSION;
 }
 
-void IMapObject::Write( SvStream& rOStm, const String& rBaseURL ) const
+void IMapObject::Write( SvStream& rOStm, const OUString& rBaseURL ) const
 {
     IMapCompat*             pCompat;
     const rtl_TextEncoding  eEncoding = osl_getThreadTextEncoding();
@@ -109,7 +109,7 @@ void IMapObject::Write( SvStream& rOStm, const String& rBaseURL ) const
 |*
 \******************************************************************************/
 
-void IMapObject::Read( SvStream& rIStm, const String& rBaseURL )
+void IMapObject::Read( SvStream& rIStm, const OUString& rBaseURL )
 {
     IMapCompat*         pCompat;
     rtl_TextEncoding    nTextEncoding;
@@ -153,11 +153,11 @@ sal_Bool IMapObject::IsEqual( const IMapObject& rEqObj )
 }
 
 IMapRectangleObject::IMapRectangleObject( const Rectangle& rRect,
-                                          const String& rURL,
-                                          const String& rAltText,
-                                          const String& rDesc,
-                                          const String& rTarget,
-                                          const String& rName,
+                                          const OUString& rURL,
+                                          const OUString& rAltText,
+                                          const OUString& rDesc,
+                                          const OUString& rTarget,
+                                          const OUString& rName,
                                           sal_Bool bURLActive,
                                           sal_Bool bPixelCoords ) :
             IMapObject  ( rURL, rAltText, rDesc, rTarget, rName, bURLActive )
@@ -253,11 +253,11 @@ sal_Bool IMapRectangleObject::IsEqual( const IMapRectangleObject& rEqObj )
 }
 
 IMapCircleObject::IMapCircleObject( const Point& rCenter, sal_uLong nCircleRadius,
-                                    const String& rURL,
-                                    const String& rAltText,
-                                    const String& rDesc,
-                                    const String& rTarget,
-                                    const String& rName,
+                                    const OUString& rURL,
+                                    const OUString& rAltText,
+                                    const OUString& rDesc,
+                                    const OUString& rTarget,
+                                    const OUString& rName,
                                     sal_Bool bURLActive,
                                     sal_Bool bPixelCoords ) :
             IMapObject  ( rURL, rAltText, rDesc, rTarget, rName, bURLActive )
@@ -401,11 +401,11 @@ sal_Bool IMapCircleObject::IsEqual( const IMapCircleObject& rEqObj )
 }
 
 IMapPolygonObject::IMapPolygonObject( const Polygon& rPoly,
-                                      const String& rURL,
-                                      const String& rAltText,
-                                      const String& rDesc,
-                                      const String& rTarget,
-                                      const String& rName,
+                                      const OUString& rURL,
+                                      const OUString& rAltText,
+                                      const OUString& rDesc,
+                                      const OUString& rTarget,
+                                      const OUString& rName,
                                       sal_Bool bURLActive,
                                       sal_Bool bPixelCoords ) :
             IMapObject  ( rURL, rAltText, rDesc, rTarget, rName, bURLActive ),
@@ -567,7 +567,7 @@ sal_Bool IMapPolygonObject::IsEqual( const IMapPolygonObject& rEqObj )
 |*
 \******************************************************************************/
 
-ImageMap::ImageMap( const String& rName )
+ImageMap::ImageMap( const OUString& rName )
 :   aName( rName )
 {
 }
@@ -869,7 +869,7 @@ void ImageMap::Scale( const Fraction& rFracX, const Fraction& rFracY )
 |*
 \******************************************************************************/
 
-void ImageMap::ImpWriteImageMap( SvStream& rOStm, const String& rBaseURL ) const
+void ImageMap::ImpWriteImageMap( SvStream& rOStm, const OUString& rBaseURL ) const
 {
     IMapObject* pObj;
     size_t      nCount = maList.size();
@@ -888,7 +888,7 @@ void ImageMap::ImpWriteImageMap( SvStream& rOStm, const String& rBaseURL ) const
 |*
 \******************************************************************************/
 
-void ImageMap::ImpReadImageMap( SvStream& rIStm, size_t nCount, const String& rBaseURL )
+void ImageMap::ImpReadImageMap( SvStream& rIStm, size_t nCount, const OUString& rBaseURL )
 {
     // neue Objekte einlesen
     for ( size_t i = 0; i < nCount; i++ )
@@ -937,7 +937,7 @@ void ImageMap::ImpReadImageMap( SvStream& rIStm, size_t nCount, const String& rB
 |*
 \******************************************************************************/
 
-void ImageMap::Write( SvStream& rOStm, const String& rBaseURL ) const
+void ImageMap::Write( SvStream& rOStm, const OUString& rBaseURL ) const
 {
     IMapCompat*             pCompat;
     String                  aImageName( GetName() );
@@ -973,7 +973,7 @@ void ImageMap::Write( SvStream& rOStm, const String& rBaseURL ) const
 |*
 \******************************************************************************/
 
-void ImageMap::Read( SvStream& rIStm, const String& rBaseURL )
+void ImageMap::Read( SvStream& rIStm, const OUString& rBaseURL )
 {
     char        cMagic[6];
     sal_uInt16      nOldFormat = rIStm.GetNumberFormatInt();

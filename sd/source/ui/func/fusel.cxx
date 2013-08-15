@@ -1158,7 +1158,7 @@ sal_Bool FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
         {
             const IMapObject* pIMapObj = mpDoc->GetHitIMapObject( pObj, rPos, *mpWindow );
 
-            if ( pIMapObj && pIMapObj->GetURL().Len() )
+            if ( pIMapObj && !pIMapObj->GetURL().isEmpty() )
             {
                 // Jump to Document
                 mpWindow->ReleaseMouse();

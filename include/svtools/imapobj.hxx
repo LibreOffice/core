@@ -54,13 +54,13 @@ class SVT_DLLPUBLIC IMapObject
 {
     friend class        ImageMap;
 
-    String              aURL;
-    String              aAltText;
-    String              aDesc;
-    String              aTarget;
-    String              aName;
+    OUString            aURL;
+    OUString            aAltText;
+    OUString            aDesc;
+    OUString            aTarget;
+    OUString            aName;
     SvxMacroTableDtor   aEventList;
-    sal_Bool                bActive;
+    sal_Bool            bActive;
 
 protected:
     sal_uInt16              nReadVersion;
@@ -71,20 +71,20 @@ protected:
 
     // Hilfsmethoden
     void AppendCERNCoords(OStringBuffer& rBuf, const Point& rPoint100) const;
-    void AppendCERNURL(OStringBuffer& rBuf, const String& rBaseURL) const;
+    void AppendCERNURL(OStringBuffer& rBuf, const OUString& rBaseURL) const;
     void AppendNCSACoords(OStringBuffer& rBuf, const Point& rPoint100) const;
-    void AppendNCSAURL(OStringBuffer&rBuf, const String& rBaseURL) const;
+    void AppendNCSAURL(OStringBuffer&rBuf, const OUString& rBaseURL) const;
 
 public:
 
     static rtl_TextEncoding nActualTextEncoding;
 
                         IMapObject();
-                        IMapObject( const String& rURL,
-                                    const String& rAltText,
-                                    const String& rDesc,
-                                    const String& rTarget,
-                                    const String& rName,
+                        IMapObject( const OUString& rURL,
+                                    const OUString& rAltText,
+                                    const OUString& rDesc,
+                                    const OUString& rTarget,
+                                    const OUString& rName,
                                     sal_Bool bActive );
     virtual             ~IMapObject() {};
 
@@ -92,25 +92,25 @@ public:
     virtual sal_uInt16      GetType() const = 0;
     virtual sal_Bool        IsHit( const Point& rPoint ) const = 0;
 
-    void                Write ( SvStream& rOStm, const String& rBaseURL ) const;
-    void                Read( SvStream& rIStm, const String& rBaseURL );
+    void                Write ( SvStream& rOStm, const OUString& rBaseURL ) const;
+    void                Read( SvStream& rIStm, const OUString& rBaseURL );
 
     virtual Rectangle   GetBoundRect() const = 0;
 
-    const String&       GetURL() const { return aURL; }
-    void                SetURL( const String& rURL ) { aURL = rURL; }
+    const OUString&     GetURL() const { return aURL; }
+    void                SetURL( const OUString& rURL ) { aURL = rURL; }
 
-    const String&       GetAltText() const { return aAltText; }
-    void                SetAltText( const String& rAltText) { aAltText = rAltText; }
+    const OUString&     GetAltText() const { return aAltText; }
+    void                SetAltText( const OUString& rAltText) { aAltText = rAltText; }
 
-    const String&       GetDesc() const { return aDesc; }
-    void                SetDesc( const String& rDesc ) { aDesc = rDesc; }
+    const OUString&     GetDesc() const { return aDesc; }
+    void                SetDesc( const OUString& rDesc ) { aDesc = rDesc; }
 
-    const String&       GetTarget() const { return aTarget; }
-    void                SetTarget( const String& rTarget ) { aTarget = rTarget; }
+    const OUString&     GetTarget() const { return aTarget; }
+    void                SetTarget( const OUString& rTarget ) { aTarget = rTarget; }
 
-    const String&       GetName() const { return aName; }
-    void                SetName( const String& rName ) { aName = rName; }
+    const OUString&     GetName() const { return aName; }
+    void                SetName( const OUString& rName ) { aName = rName; }
 
     sal_Bool                IsActive() const { return bActive; }
     void                SetActive( sal_Bool bSetActive = sal_True ) { bActive = bSetActive; }

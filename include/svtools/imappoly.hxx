@@ -40,16 +40,16 @@ protected:
     virtual void        WriteIMapObject( SvStream& rOStm ) const;
     virtual void        ReadIMapObject(  SvStream& rIStm );
 
-    sal_Bool                ReadPreProLine( SvStream& rIStm, String& rStr );
+    sal_Bool            ReadPreProLine( SvStream& rIStm, OUString& rStr );
 
 public:
                         IMapPolygonObject() {};
                         IMapPolygonObject( const Polygon& rPoly,
-                                           const String& rURL,
-                                           const String& rAltText,
-                                           const String& rDesc,
-                                           const String& rTarget,
-                                           const String& rName,
+                                           const OUString& rURL,
+                                           const OUString& rAltText,
+                                           const OUString& rDesc,
+                                           const OUString& rTarget,
+                                           const OUString& rName,
                                            sal_Bool bActive = sal_True,
                                            sal_Bool bPixelCoords = sal_True );
     virtual             ~IMapPolygonObject() {};
@@ -72,8 +72,8 @@ public:
     sal_Bool                IsEqual( const IMapPolygonObject& rEqObj );
 
     // Im-/Export
-    void                WriteCERN( SvStream& rOStm, const String& rBaseURL  ) const;
-    void                WriteNCSA( SvStream& rOStm, const String& rBaseURL  ) const;
+    void                WriteCERN( SvStream& rOStm, const OUString& rBaseURL  ) const;
+    void                WriteNCSA( SvStream& rOStm, const OUString& rBaseURL  ) const;
 };
 
 #endif

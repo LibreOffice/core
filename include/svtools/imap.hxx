@@ -38,27 +38,27 @@ class SVT_DLLPUBLIC ImageMap
 private:
 
     IMapObjectList_impl maList;
-    String              aName;
+    OUString            aName;
 
 protected:
 
     // Binaer laden/speichern
-    void                ImpWriteImageMap( SvStream& rOStm, const String& ) const ;
-    void                ImpReadImageMap( SvStream& rIStm, size_t nCount, const String& );
+    void                ImpWriteImageMap( SvStream& rOStm, const OUString& ) const ;
+    void                ImpReadImageMap( SvStream& rIStm, size_t nCount, const OUString& );
 
     // Im-/Export
-    void                ImpWriteCERN( SvStream& rOStm, const String& rBaseURL ) const;
-    void                ImpWriteNCSA( SvStream& rOStm, const String& rBaseURL ) const;
-    sal_uLong           ImpReadCERN( SvStream& rOStm, const String& rBaseURL );
-    sal_uLong           ImpReadNCSA( SvStream& rOStm, const String& rBaseURL );
+    void                ImpWriteCERN( SvStream& rOStm, const OUString& rBaseURL ) const;
+    void                ImpWriteNCSA( SvStream& rOStm, const OUString& rBaseURL ) const;
+    sal_uLong           ImpReadCERN( SvStream& rOStm, const OUString& rBaseURL );
+    sal_uLong           ImpReadNCSA( SvStream& rOStm, const OUString& rBaseURL );
 
-    void                ImpReadCERNLine( const OString& rLine, const String& rBaseURL );
+    void                ImpReadCERNLine( const OString& rLine, const OUString& rBaseURL );
     Point               ImpReadCERNCoords( const char** ppStr );
     long                ImpReadCERNRadius( const char** ppStr );
-    String              ImpReadCERNURL( const char** ppStr, const String& rBaseURL );
+    OUString            ImpReadCERNURL( const char** ppStr, const OUString& rBaseURL );
 
-    void                ImpReadNCSALine( const OString& rLine, const String& rBaseURL );
-    String              ImpReadNCSAURL( const char** ppStr, const String& rBaseURL );
+    void                ImpReadNCSALine( const OString& rLine, const OUString& rBaseURL );
+    OUString            ImpReadNCSAURL( const char** ppStr, const OUString& rBaseURL );
     Point               ImpReadNCSACoords( const char** ppStr );
 
     sal_uLong           ImpDetectFormat( SvStream& rIStm );
@@ -68,7 +68,7 @@ public:
     TYPEINFO();
 
                         ImageMap() {};
-                        ImageMap( const String& rName );
+                        ImageMap( const OUString& rName );
                         ImageMap( const ImageMap& rImageMap );
 
                         // Der Dtor gibt den intern belegten
@@ -114,18 +114,18 @@ public:
     sal_uInt16          GetVersion() const;
 
     // liefert / setzt den Namen der ImageMap
-    const String&       GetName() const { return aName; }
-    void                SetName( const String& rName ) { aName = rName; }
+    const OUString&     GetName() const { return aName; }
+    void                SetName( const OUString& rName ) { aName = rName; }
 
     // skaliert alle Objekte der ImageMap entpr. dem uebergebenen Faktor
     void                Scale( const Fraction& rFractX, const Fraction& rFracY );
 
     // Im-/Export
-    void                Write ( SvStream& rOStm, const String& rBaseURL ) const;
-    void                Read( SvStream& rIStm, const String& rBaseURL );
+    void                Write ( SvStream& rOStm, const OUString& rBaseURL ) const;
+    void                Read( SvStream& rIStm, const OUString& rBaseURL );
 
-    void                Write( SvStream& rOStm, sal_uLong nFormat, const String& rBaseURL ) const;
-    sal_uLong               Read( SvStream& rIStm, sal_uLong nFormat, const String& rBaseURL );
+    void                Write( SvStream& rOStm, sal_uLong nFormat, const OUString& rBaseURL ) const;
+    sal_uLong               Read( SvStream& rIStm, sal_uLong nFormat, const OUString& rBaseURL );
 };
 
 class IMapCompat
