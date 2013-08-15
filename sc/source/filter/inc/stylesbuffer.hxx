@@ -789,7 +789,7 @@ typedef ::boost::shared_ptr< Dxf > DxfRef;
 
 struct TableStyleElementModel
 {
-    sal_int32 maDxfId;
+    sal_Int32 maDxfId;
     OUString maStyleElementType;
 };
 
