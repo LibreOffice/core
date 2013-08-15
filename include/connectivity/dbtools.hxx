@@ -645,6 +645,22 @@ namespace dbtools
     OUString createStandardKeyStatement( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor,
                                                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection);
 
+    /** creates the standard sql statement for the type part of a create or alter table statement.
+        @param  _pHelper
+            Allow to add special SQL constructs.
+        @param  descriptor
+            The descriptor of the column.
+        @param  _xConnection
+            The connection.
+        @param  _pHelper
+            Allow to add special SQL constructs.
+    */
+    OOO_DLLPUBLIC_DBTOOLS
+    OUString createStandardTypePart(     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor
+                                                ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection
+                                                ,ISQLStatementHelper* _pHelper = NULL
+                                                ,const OUString& _sCreatePattern = OUString());
+
     /** creates the standard sql statement for the column part of a create table statement.
         @param  _pHelper
             Allow to add special SQL constructs.
