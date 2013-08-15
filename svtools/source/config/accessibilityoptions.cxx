@@ -18,7 +18,7 @@
  */
 
 
-#include <accessibilityoptions.hxx>
+#include <svtools/accessibilityoptions.hxx>
 
 #include <unotools/configmgr.hxx>
 #include <com/sun/star/uno/Any.hxx>

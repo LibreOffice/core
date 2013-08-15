@@ -18,7 +18,7 @@
  */
 
 
-#include <ivctrl.hxx>
+#include <svtools/ivctrl.hxx>
 #include "imivctl.hxx"
 #include <vcl/bitmapex.hxx>
 #include <vcl/controllayout.hxx>

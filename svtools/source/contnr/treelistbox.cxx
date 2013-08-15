@@ -23,7 +23,7 @@
         - SelectAll( sal_False ) => only repaint the delselected entries
 */
 
-#include <treelistbox.hxx>
+#include <svtools/treelistbox.hxx>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <vcl/svapp.hxx>
 #include <vcl/accel.hxx>
@@ -34,10 +34,10 @@
 #include <rtl/instance.hxx>
 #include <comphelper/string.hxx>
 
-#include <svmedit.hxx>
-#include <svlbitm.hxx>
-#include "treelistentry.hxx"
-#include "viewdataentry.hxx"
+#include <svtools/svmedit.hxx>
+#include <svtools/svlbitm.hxx>
+#include "svtools/treelistentry.hxx"
+#include "svtools/viewdataentry.hxx"
 #include "svimpbox.hxx"
 
 #include <set>

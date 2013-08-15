@@ -18,8 +18,8 @@
  */
 
 #include "contentenumeration.hxx"
-#include <inettbc.hxx>
-#include <imagemgr.hxx>
+#include <svtools/inettbc.hxx>
+#include <svtools/imagemgr.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>

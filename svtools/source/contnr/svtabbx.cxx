@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svtabbx.hxx>
-#include <headbar.hxx>
-#include <svtresid.hxx>
-#include <svlbitm.hxx>
-#include <svtools.hrc>
-#include <treelistentry.hxx>
+#include <svtools/svtabbx.hxx>
+#include <svtools/headbar.hxx>
+#include <svtools/svtresid.hxx>
+#include <svtools/svlbitm.hxx>
+#include <svtools/svtools.hrc>
+#include <svtools/treelistentry.hxx>
 #include <vcl/builder.hxx>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>

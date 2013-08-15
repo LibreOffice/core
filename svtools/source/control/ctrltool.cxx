@@ -26,9 +26,9 @@
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <sal/macros.h>
-#include <svtools.hrc>
-#include <svtresid.hxx>
-#include <ctrltool.hxx>
+#include <svtools/svtools.hrc>
+#include <svtools/svtresid.hxx>
+#include <svtools/ctrltool.hxx>
 
 // =======================================================================
 

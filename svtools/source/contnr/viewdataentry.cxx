@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "viewdataentry.hxx"
+#include "svtools/viewdataentry.hxx"
 
 #include "tools/debug.hxx"
 

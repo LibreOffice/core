@@ -27,12 +27,12 @@
 #include <comphelper/string.hxx>
 #include <unotools/charclass.hxx>
 
-#include <sampletext.hxx>
-#include <svtresid.hxx>
-#include <svtools.hrc>
-#include <ctrlbox.hxx>
-#include <ctrltool.hxx>
-#include <borderhelper.hxx>
+#include <svtools/sampletext.hxx>
+#include <svtools/svtresid.hxx>
+#include <svtools/svtools.hrc>
+#include <svtools/ctrlbox.hxx>
+#include <svtools/ctrltool.hxx>
+#include <svtools/borderhelper.hxx>
 
 #include <vcl/i18nhelp.hxx>
 #include <vcl/fontcapabilities.hxx>

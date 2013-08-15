@@ -28,7 +28,7 @@
 #include "rtl/ustring.hxx"
 #include "svl/inettype.hxx"
 #include "svtools/DocumentInfoPreview.hxx"
-#include "imagemgr.hxx"
+#include "svtools/imagemgr.hxx"
 #include "vcl/txtattr.hxx"
 #include "tools/datetime.hxx"
 #include "tools/urlobj.hxx"

@@ -18,7 +18,7 @@
  */
 
 
-#include <asynclink.hxx>
+#include <svtools/asynclink.hxx>
 #include <osl/mutex.hxx>
 #include <tools/debug.hxx>
 #include <vcl/timer.hxx>

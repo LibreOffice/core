@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <editbrowsebox.hxx>
+#include <svtools/editbrowsebox.hxx>
 
 #include "editbrowsebox.hrc"
 
@@ -28,9 +28,9 @@
 #include <vcl/edit.hxx>
 #include <tools/resid.hxx>
 #include <vcl/spinfld.hxx>
-#include <svtresid.hxx>
+#include <svtools/svtresid.hxx>
 
-#include <svtools.hrc>
+#include <svtools/svtools.hrc>
 
 #include <algorithm>
 #include <tools/multisel.hxx>

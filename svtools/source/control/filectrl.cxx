@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svtresid.hxx>
-#include <filectrl.hxx>
+#include <svtools/svtresid.hxx>
+#include <svtools/filectrl.hxx>
 #include <filectrl.hrc>
 
 // =======================================================================

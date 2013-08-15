@@ -18,9 +18,9 @@
  */
 
 
-#include <svtresid.hxx>
-#include <svtools.hrc>
-#include <collatorres.hxx>
+#include <svtools/svtresid.hxx>
+#include <svtools/svtools.hrc>
+#include <svtools/collatorres.hxx>
 
 // -------------------------------------------------------------------------
 //

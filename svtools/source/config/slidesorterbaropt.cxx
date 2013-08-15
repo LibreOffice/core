@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <slidesorterbaropt.hxx>
+#include <svtools/slidesorterbaropt.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/configitem.hxx>
 #include <tools/debug.hxx>

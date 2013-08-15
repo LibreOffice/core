@@ -29,7 +29,7 @@
 
 #include <limits.h>
 
-#include <ivctrl.hxx>
+#include <svtools/ivctrl.hxx>
 #include <boost/ptr_container/ptr_map.hpp>
 
 class IcnCursor_Impl;

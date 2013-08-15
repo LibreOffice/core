@@ -21,7 +21,7 @@
 #pragma hdrstop
 #endif
 
-#include <optionsdrawinglayer.hxx>
+#include <svtools/optionsdrawinglayer.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/configitem.hxx>
 #include <tools/debug.hxx>

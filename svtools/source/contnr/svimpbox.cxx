@@ -23,18 +23,18 @@
 
 #include <stack>
 
-#include <treelistbox.hxx>
-#include <svlbitm.hxx>
+#include <svtools/treelistbox.hxx>
+#include <svtools/svlbitm.hxx>
 #include <svimpbox.hxx>
 #include <rtl/instance.hxx>
-#include <svtresid.hxx>
+#include <svtools/svtresid.hxx>
 #include <tools/wintypes.hxx>
-#include <svtools.hrc>
+#include <svtools/svtools.hrc>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 
-#include "treelistentry.hxx"
-#include "viewdataentry.hxx"
+#include "svtools/treelistentry.hxx"
+#include "svtools/viewdataentry.hxx"
 
 #define NODE_BMP_TABDIST_NOTVALID   -2000000
 #define FIRST_ENTRY_TAB             1

@@ -18,9 +18,9 @@
  */
 
 #include <comphelper/processfactory.hxx>
-#include <simptabl.hxx>
-#include <svlbitm.hxx>
-#include <treelistentry.hxx>
+#include <svtools/simptabl.hxx>
+#include <svtools/svlbitm.hxx>
+#include <svtools/treelistentry.hxx>
 #include <unotools/intlwrapper.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/svapp.hxx>

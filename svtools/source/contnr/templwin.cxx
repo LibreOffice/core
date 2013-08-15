@@ -18,22 +18,22 @@
  */
 
 #include "templwin.hxx"
-#include <templdlg.hxx>
-#include <svtresid.hxx>
-#include <langhelp.hxx>
+#include <svtools/templdlg.hxx>
+#include <svtools/svtresid.hxx>
+#include <svtools/langhelp.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/dynamicmenuoptions.hxx>
 #include <unotools/extendedsecurityoptions.hxx>
 #include <vcl/xtextedt.hxx>
 #include <svl/inettype.hxx>
-#include <imagemgr.hxx>
-#include <miscopt.hxx>
-#include <templatefoldercache.hxx>
-#include <imgdef.hxx>
+#include <svtools/imagemgr.hxx>
+#include <svtools/miscopt.hxx>
+#include <svtools/templatefoldercache.hxx>
+#include <svtools/imgdef.hxx>
 #include <vcl/txtattr.hxx>
-#include <svtools.hrc>
+#include <svtools/svtools.hrc>
 #include "templwin.hrc"
-#include <helpid.hrc>
+#include <svtools/helpid.hrc>
 #include <unotools/viewoptions.hxx>
 #include <unotools/ucbhelper.hxx>
 #include "unotools/configmgr.hxx"
@@ -74,7 +74,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/split.hxx>
 #include <vcl/msgbox.hxx>
-#include <DocumentInfoPreview.hxx>
+#include <svtools/DocumentInfoPreview.hxx>
 #include <vcl/mnemonic.hxx>
 
 #include <ucbhelper/content.hxx>
