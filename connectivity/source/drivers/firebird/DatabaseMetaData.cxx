@@ -292,6 +292,18 @@ sal_Bool SAL_CALL ODatabaseMetaData::storesUpperCaseIdentifiers()
 }
 
 // ---- SQL Feature Support ---------------------------------------------------
+sal_Bool SAL_CALL ODatabaseMetaData::supportsCoreSQLGrammar()
+    throw(SQLException, RuntimeException)
+{
+    return sal_True;
+}
+
+sal_Bool SAL_CALL ODatabaseMetaData::supportsMinimumSQLGrammar()
+    throw(SQLException, RuntimeException)
+{
+    return sal_True;
+}
+
 sal_Bool SAL_CALL ODatabaseMetaData::supportsAlterTableWithAddColumn()
     throw(SQLException, RuntimeException)
 {
@@ -703,16 +715,6 @@ OUString SAL_CALL ODatabaseMetaData::getNumericFunctions(  ) throw(SQLException,
 sal_Bool SAL_CALL ODatabaseMetaData::supportsExtendedSQLGrammar(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
-}
-// -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::supportsCoreSQLGrammar(  ) throw(SQLException, RuntimeException)
-{
-    return sal_False;
-}
-// -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::supportsMinimumSQLGrammar(  ) throw(SQLException, RuntimeException)
-{
-    return sal_True;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::supportsFullOuterJoins(  ) throw(SQLException, RuntimeException)
