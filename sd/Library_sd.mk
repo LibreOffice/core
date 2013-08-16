@@ -464,6 +464,7 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/ui/unoidl/unopback \
 	sd/source/ui/unoidl/unopool \
 	sd/source/ui/unoidl/unosrch \
+	sd/source/ui/unoidl/unowcntr \
 	sd/source/ui/view/DocumentRenderer \
 	sd/source/ui/view/FormShellManager \
 	sd/source/ui/view/GraphicObjectBar \
@@ -609,17 +610,6 @@ else
 $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/ui/app/optsitem \
 	sd/source/ui/func/futext \
-))
-endif
-
-ifeq ($(strip $(COM)),GCC)
-$(eval $(call gb_Library_add_cxxobjects,sd,\
-	sd/source/ui/unoidl/unowcntr \
-	, $(gb_COMPILERNOOPTFLAGS) $(gb_LinkTarget_EXCEPTIONFLAGS) \
-))
-else
-$(eval $(call gb_Library_add_exception_objects,sd,\
-	sd/source/ui/unoidl/unowcntr \
 ))
 endif
 
