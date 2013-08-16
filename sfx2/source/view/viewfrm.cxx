@@ -2791,7 +2791,7 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
             if (xSupplier.is())
                 xRecorder = xSupplier->getDispatchRecorder();
 
-            sal_Bool bIsRecording = xRecorder.is();
+            bool bIsRecording = xRecorder.is();
             SFX_REQUEST_ARG( rReq, pItem, SfxBoolItem, SID_RECORDMACRO, sal_False);
             if ( pItem && pItem->GetValue() == bIsRecording )
                 return;
