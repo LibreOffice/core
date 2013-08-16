@@ -46,6 +46,7 @@
 class Test : public SwModelTestBase
 {
 public:
+    Test();
     void testZoom();
     void defaultTabStopNotInStyles();
     void testFdo38244();
@@ -125,7 +126,14 @@ private:
      */
     xmlDocPtr parseExport();
     void assertXPath(xmlDocPtr pXmlDoc, OString aXPath, OString aAttribute = OString(), OUString aExpectedValue = OUString());
+    /// If the XPath test for now runs only after one export iteration, check for this variable.
+    bool m_bImport;
 };
+
+Test::Test()
+    : m_bImport(false)
+{
+}
 
 void Test::run()
 {
@@ -204,9 +212,11 @@ void Test::run()
     {
         MethodEntry<Test>& rEntry = aMethods[i];
         load("/sw/qa/extras/ooxmlexport/data/", rEntry.pName);
+        m_bImport = true;
         // If the testcase is stored in some other format, it's pointless to test.
         if (OString(rEntry.pName).endsWith(".docx") && std::find(vBlacklist.begin(), vBlacklist.end(), rEntry.pName) == vBlacklist.end())
             (this->*rEntry.pMethod)();
+        m_bImport = false;
         reload("Office Open XML Text");
         (this->*rEntry.pMethod)();
         finish();
@@ -242,6 +252,7 @@ void Test::assertXPath(xmlDocPtr pXmlDoc, OString aXPath, OString aAttribute, OU
 {
     xmlXPathContextPtr pXmlXpathCtx = xmlXPathNewContext(pXmlDoc);
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("w"), BAD_CAST("http://schemas.openxmlformats.org/wordprocessingml/2006/main"));
+    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("v"), BAD_CAST("urn:schemas-microsoft-com:vml"));
     xmlXPathObjectPtr pXmlXpathObj = xmlXPathEvalExpression(BAD_CAST(aXPath.getStr()), pXmlXpathCtx);
     xmlNodeSetPtr pXmlNodes = pXmlXpathObj->nodesetval;
     CPPUNIT_ASSERT_EQUAL(1, xmlXPathNodeSetGetLength(pXmlNodes));
@@ -1156,6 +1167,13 @@ void Test::testTableFloatingMargins()
     // These were 0, due to lack of import/export.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1000), getProperty<sal_Int32>(xFrame, "TopMargin"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), getProperty<sal_Int32>(xFrame, "BottomMargin"));
+
+    if (m_bImport)
+    {
+        // Paragraph bottom margin wasn't 0 in the A1 cell of the floating table.
+        xmlDocPtr pXmlDoc = parseExport();
+        assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:pict/v:rect/v:textbox/w:txbxContent/w:tbl/w:tr[1]/w:tc[1]/w:p/w:pPr/w:spacing", "after", "0");
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

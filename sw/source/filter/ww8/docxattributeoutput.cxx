@@ -330,6 +330,7 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
         m_pTextboxAttrList = NULL;
         m_bTextFrameSyntax = false;
         m_pFlyFrameSize = 0;
+        m_rExport.mpParentFrame = NULL;
 
         m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
         m_pSerializer->startElementNS( XML_w, XML_pict, FSEND );
@@ -360,7 +361,6 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
 
         m_rExport.RestoreData();
 
-        m_rExport.mpParentFrame = NULL;
     }
 
     m_pSerializer->endElementNS( XML_w, XML_p );
