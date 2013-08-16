@@ -215,7 +215,7 @@ public:
 
     sal_uInt16 GetStackCount() const;
     sal_uInt16 GetAuthor( sal_uInt16 nPos = 0) const;
-    const String& GetAuthorString( sal_uInt16 nPos = 0 ) const;
+    OUString GetAuthorString( sal_uInt16 nPos = 0 ) const;
     const DateTime& GetTimeStamp( sal_uInt16 nPos = 0) const;
     RedlineType_t GetRealType( sal_uInt16 nPos = 0 ) const;
     RedlineType_t GetType( sal_uInt16 nPos = 0) const

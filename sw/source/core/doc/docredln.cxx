@@ -291,7 +291,7 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
     _CHECK_REDLINE( this )
 
     if( IsRedlineOn() && !IsShowOriginal( meRedlineMode ) &&
-         pNewRedl->GetAuthorString().Len() )
+        !pNewRedl->GetAuthorString().isEmpty() )
     {
         pNewRedl->InvalidateRange();
 
@@ -3711,7 +3711,7 @@ sal_uInt16 SwRedline::GetAuthor( sal_uInt16 nPos ) const
     return GetRedlineData(nPos).nAuthor;
 }
 
-const String& SwRedline::GetAuthorString( sal_uInt16 nPos ) const
+OUString SwRedline::GetAuthorString( sal_uInt16 nPos ) const
 {
     return SW_MOD()->GetRedlineAuthor(GetRedlineData(nPos).nAuthor);
 }
