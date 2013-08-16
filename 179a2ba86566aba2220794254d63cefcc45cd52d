@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//8xM\u003d",
+        "filename": "xmloff/source/text/txtprhdl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 855,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2013-08-16T11:11:10Z",
+      "side": 1,
+      "message": "Also here the numeric argument to the OUStringBuffer initialiser is the capacity...",
+      "revId": "179a2ba86566aba2220794254d63cefcc45cd52d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
