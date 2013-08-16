@@ -62,10 +62,16 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
     return s << [[obj description] UTF8String];
 }
 
+#ifndef _LP64
+
+// In 64-bit code NSPoint == CGPoint, and CGPoint already has
+// an operator<< in vcl/inc/quartz/util.h
+
 static std::ostream &operator<<(std::ostream &s, NSPoint point) {
     return s << NSStringFromPoint(point);
 }
 
+#endif
 
 @implementation AquaA11yWrapper : NSView
 
