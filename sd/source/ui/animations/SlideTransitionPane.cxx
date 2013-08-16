@@ -220,7 +220,7 @@ struct TransitionEffect
     double       mfTime;
     PresChange  mePresChange;
     sal_Bool        mbSoundOn;
-    String      maSound;
+    OUString    maSound;
     bool        mbLoopSound;
     bool        mbStopSound;
 
@@ -330,33 +330,33 @@ sal_uInt16 lcl_getTransitionEffectIndex(
     return pResult;
 }
 
-struct lcl_EqualsSoundFileName : public ::std::unary_function< String, bool >
+struct lcl_EqualsSoundFileName : public ::std::unary_function< OUString, bool >
 {
-    explicit lcl_EqualsSoundFileName( const String & rStr ) :
+    explicit lcl_EqualsSoundFileName( const OUString & rStr ) :
             maStr( rStr )
     {}
 
-    bool operator() ( const String & rStr ) const
+    bool operator() ( const OUString & rStr ) const
     {
         // note: formerly this was a case insensitive search for all
         // platforms. It seems more sensible to do this platform-dependent
 #if defined( WNT )
-        return maStr.EqualsIgnoreCaseAscii( rStr );
+        return maStr.equalsIgnoreAsciiCase( rStr );
 #else
-        return maStr.Equals( rStr );
+        return maStr == rStr;
 #endif
     }
 
 private:
-    String maStr;
+    OUString maStr;
 };
 
 // returns -1 if no object was found
-bool lcl_findSoundInList( const ::std::vector< String > & rSoundList,
-                          const String & rFileName,
-                          ::std::vector< String >::size_type & rOutPosition )
+bool lcl_findSoundInList( const ::std::vector< OUString > & rSoundList,
+                          const OUString & rFileName,
+                          ::std::vector< OUString >::size_type & rOutPosition )
 {
-    ::std::vector< String >::const_iterator aIt =
+    ::std::vector< OUString >::const_iterator aIt =
           ::std::find_if( rSoundList.begin(), rSoundList.end(),
                           lcl_EqualsSoundFileName( rFileName ));
     if( aIt != rSoundList.end())
@@ -368,12 +368,10 @@ bool lcl_findSoundInList( const ::std::vector< String > & rSoundList,
     return false;
 }
 
-String lcl_getSoundFileURL(
-    const ::std::vector< String > & rSoundList,
+OUString lcl_getSoundFileURL(
+    const ::std::vector< OUString > & rSoundList,
     const ListBox & rListBox )
 {
-    String aResult;
-
     if( rListBox.GetSelectEntryCount() > 0 )
     {
         sal_uInt16 nPos = rListBox.GetSelectEntryPos();
@@ -384,20 +382,20 @@ String lcl_getSoundFileURL(
                         "Sound list-box is not synchronized to sound list" );
             nPos -= 3;
             if( rSoundList.size() > nPos )
-                aResult = rSoundList[ nPos ];
+                return rSoundList[ nPos ];
         }
     }
 
-    return aResult;
+    return OUString();
 }
 
-struct lcl_AppendSoundToListBox : public ::std::unary_function< String, void >
+struct lcl_AppendSoundToListBox : public ::std::unary_function< OUString, void >
 {
     lcl_AppendSoundToListBox( ListBox & rListBox ) :
             mrListBox( rListBox )
     {}
 
-    void operator() ( const String & rString ) const
+    void operator() ( const OUString & rString ) const
     {
         INetURLObject aURL( rString );
         mrListBox.InsertEntry( aURL.GetBase(), LISTBOX_APPEND );
@@ -408,7 +406,7 @@ private:
 };
 
 void lcl_FillSoundListBox(
-    const ::std::vector< String > & rSoundList,
+    const ::std::vector< OUString > & rSoundList,
     ListBox & rOutListBox )
 {
     sal_uInt16 nCount = rOutListBox.GetEntryCount();
@@ -460,7 +458,7 @@ SlideTransitionPane::SlideTransitionPane(
         maFL_EMPTY2( this, SdResId( FL_EMPTY2 ) ),
         maCB_AUTO_PREVIEW( this, SdResId( CB_AUTO_PREVIEW ) ),
 
-        maSTR_NO_TRANSITION( SdResId( STR_NO_TRANSITION ) ),
+        maSTR_NO_TRANSITION( SD_RESSTR( STR_NO_TRANSITION ) ),
         mbHasSelection( false ),
         mbUpdatingControls( false ),
         mbIsMainViewChangePending( false ),
@@ -845,16 +843,16 @@ void SlideTransitionPane::updateControls()
     if( aEffect.mbSoundAmbiguous )
     {
         maLB_SOUND.SetNoSelection();
-        maCurrentSoundFile.Erase();
+        maCurrentSoundFile = "";
     }
     else
     {
-        maCurrentSoundFile.Erase();
+        maCurrentSoundFile = "";
         if( aEffect.mbStopSound )
         {
             maLB_SOUND.SelectEntryPos( 1 );
         }
-        else if( aEffect.mbSoundOn && aEffect.maSound.Len() > 0 )
+        else if( aEffect.mbSoundOn && !aEffect.maSound.isEmpty() )
         {
             tSoundListType::size_type nPos = 0;
             if( lcl_findSoundInList( maSoundList, aEffect.maSound, nPos ))
@@ -916,19 +914,10 @@ void SlideTransitionPane::updateControlState()
 
 void SlideTransitionPane::updateSoundList()
 {
-    ::std::vector< String > aSoundList;
-
-    GalleryExplorer::FillObjList( GALLERY_THEME_SOUNDS, aSoundList );
-    GalleryExplorer::FillObjList( GALLERY_THEME_USERSOUNDS, aSoundList );
-
-    size_t nCount = aSoundList.size();
     maSoundList.clear();
-    maSoundList.reserve( nCount );
-    for( size_t i =0 ; i < nCount; ++i )
-    {
-        // store copy of string in member list
-        maSoundList.push_back( aSoundList[ i ] );
-    }
+
+    GalleryExplorer::FillObjList( GALLERY_THEME_SOUNDS, maSoundList );
+    GalleryExplorer::FillObjList( GALLERY_THEME_USERSOUNDS, maSoundList );
 
     lcl_FillSoundListBox( maSoundList, maLB_SOUND );
 }
@@ -940,7 +929,7 @@ void SlideTransitionPane::openSoundFileDialog()
 
     SdOpenSoundFileDialog aFileDialog;
 
-    String aFile;
+    OUString aFile;
     DBG_ASSERT( maLB_SOUND.GetSelectEntryPos() == 2,
                 "Dialog should only open when \"Other sound\" is selected" );
     aFile = SvtPathOptions().GetGraphicPath();
@@ -974,9 +963,8 @@ void SlideTransitionPane::openSoundFileDialog()
             }
             else
             {
-                String aStrWarning(SdResId(STR_WARNING_NOSOUNDFILE));
-                OUString aStr('%');
-                aStrWarning.SearchAndReplace( aStr , aFile );
+                OUString aStrWarning(SD_RESSTR(STR_WARNING_NOSOUNDFILE));
+                aStrWarning = aStrWarning.replaceFirst("%", aFile);
                 WarningBox aWarningBox( NULL, WB_3DLOOK | WB_RETRY_CANCEL, aStrWarning );
                 aWarningBox.SetModalInputMode (sal_True);
                 bQuitLoop = (aWarningBox.Execute() != RET_RETRY);
@@ -992,7 +980,7 @@ void SlideTransitionPane::openSoundFileDialog()
 
     if( ! bValidSoundFile )
     {
-        if( maCurrentSoundFile.Len() > 0 )
+        if( !maCurrentSoundFile.isEmpty() )
         {
             tSoundListType::size_type nPos = 0;
             if( lcl_findSoundInList( maSoundList, maCurrentSoundFile, nPos ))
@@ -1066,7 +1054,7 @@ impl::TransitionEffect SlideTransitionPane::getTransitionEffectFromControls() co
     // sound
     if( maLB_SOUND.IsEnabled())
     {
-        maCurrentSoundFile.Erase();
+        maCurrentSoundFile = "";
         if( maLB_SOUND.GetSelectEntryCount() > 0 )
         {
             sal_uInt16 nPos = maLB_SOUND.GetSelectEntryPos();

@@ -245,7 +245,7 @@ OUString
 {
     SolarMutexGuard aGuard;
 
-    return String( SdResId(SID_SD_A11Y_I_OUTLINEVIEW_N) );
+    return SD_RESSTR(SID_SD_A11Y_I_OUTLINEVIEW_N);
 }
 
 
@@ -258,7 +258,7 @@ OUString
 {
     SolarMutexGuard aGuard;
 
-    return String( SdResId(SID_SD_A11Y_I_OUTLINEVIEW_D) );
+    return SD_RESSTR(SID_SD_A11Y_I_OUTLINEVIEW_D);
 }
 
 void AccessibleOutlineView::UpdateChildren()

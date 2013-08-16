@@ -664,7 +664,7 @@ void CustomAnimationList::update()
             {
                 SvTreeListEntry* pLBoxEntry = new CustomAnimationListEntry;
                 pLBoxEntry->AddItem( new SvLBoxContextBmp( pLBoxEntry, 0, Image(), Image(), 0));
-                OUString aDescription = String( SdResId( STR_CUSTOMANIMATION_TRIGGER ) );
+                OUString aDescription = SD_RESSTR(STR_CUSTOMANIMATION_TRIGGER);
                 aDescription += ": ";
                 aDescription += getShapeDescription( xShape, false );
                 pLBoxEntry->AddItem( new CustomAnimationTriggerEntryItem( pLBoxEntry, 0, aDescription ) );
@@ -1013,7 +1013,7 @@ void CustomAnimationList::Paint( const Rectangle& rRect )
         aRect.Right() -= aOffset.X();
         aRect.Bottom() -= aOffset.Y();
 
-        DrawText( aRect, String( SdResId( STR_CUSTOMANIMATION_LIST_HELPTEXT ) ),
+        DrawText( aRect, SD_RESSTR(STR_CUSTOMANIMATION_LIST_HELPTEXT),
             TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK | TEXT_DRAW_CENTER | TEXT_DRAW_VCENTER );
 
         SetTextColor( aOldColor );

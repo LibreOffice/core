@@ -120,7 +120,7 @@ private:
     FixedLine    maFL_EMPTY2;
     CheckBox     maCB_AUTO_PREVIEW;
 
-    String       maSTR_NO_TRANSITION;
+    OUString     maSTR_NO_TRANSITION;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawView >             mxView;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >                  mxModel;
@@ -129,9 +129,9 @@ private:
     bool         mbUpdatingControls;
     bool         mbIsMainViewChangePending;
 
-    typedef ::std::vector< String > tSoundListType;
+    typedef ::std::vector< OUString > tSoundListType;
     tSoundListType  maSoundList;
-    mutable String  maCurrentSoundFile;
+    mutable OUString maCurrentSoundFile;
 
     typedef ::std::map< sal_uInt16, sal_uInt16 > tPresetIndexesType;
     tPresetIndexesType m_aPresetIndexes;

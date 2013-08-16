@@ -203,7 +203,7 @@ OUString SAL_CALL AccessibleSlideSorterObject::getAccessibleDescription (void)
     throw (uno::RuntimeException)
 {
     ThrowIfDisposed();
-    return String(SdResId(STR_PAGE));
+    return SD_RESSTR(STR_PAGE);
 }
 
 
@@ -219,7 +219,7 @@ OUString SAL_CALL AccessibleSlideSorterObject::getAccessibleName (void)
     if (pPage != NULL)
         return pPage->GetName();
     else
-        return String();
+        return OUString();
 }
 
 

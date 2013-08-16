@@ -566,8 +566,7 @@ TransparencyPropertyBox::TransparencyPropertyBox( sal_Int32 nControlType, Window
     mpMenu = new PopupMenu();
     for( sal_Int32 i = 25; i < 101; i += 25 )
     {
-        String aStr(OUString::valueOf(i));
-        aStr += sal_Unicode('%');
+        OUString aStr(OUString::number(i) + "%");
         mpMenu->InsertItem( i, aStr );
     }
 
@@ -1004,7 +1003,7 @@ FontStylePropertyBox::FontStylePropertyBox( sal_Int32 nControlType, Window* pPar
 , maModifyHdl( rModifyHdl )
 {
     mpEdit = new Edit( pParent, WB_TABSTOP|WB_IGNORETAB|WB_NOBORDER|WB_READONLY);
-    mpEdit->SetText( String( SdResId( STR_CUSTOMANIMATION_SAMPLE ) ) );
+    mpEdit->SetText( SD_RESSTR(STR_CUSTOMANIMATION_SAMPLE) );
 
     mpMenu = new PopupMenu(SdResId( RID_CUSTOMANIMATION_FONTSTYLE_POPUP ) );
     mpControl = new DropdownMenuBox( pParent, mpEdit, mpMenu );
@@ -1121,12 +1120,12 @@ private:
     void updateControlStates();
     void fillSoundListBox();
     void clearSoundListBox();
-    sal_Int32 getSoundObject( const String& rStr );
+    sal_Int32 getSoundObject( const OUString& rStr );
     void openSoundFileDialog();
     void onSoundPreview();
 
 private:
-    ::std::vector< String > maSoundList;
+    ::std::vector< OUString > maSoundList;
     sal_Bool mbHasText;
     const STLPropertySet* mpSet;
 
@@ -1290,7 +1289,7 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, con
                     mpCLBDimColor->SelectEntryPos( nColorPos );
                 else
                     mpCLBDimColor->SelectEntryPos(
-                        mpCLBDimColor->InsertEntry( aColor, String( SVX_RES( RID_SVXSTR_COLOR_USER ) ) ) );
+                        mpCLBDimColor->InsertEntry( aColor, SVX_RESSTR(RID_SVXSTR_COLOR_USER) ) );
             }
             else
             {
@@ -1357,13 +1356,11 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, con
 
             if( !aSoundURL.isEmpty() )
             {
-                const String aTmp( aSoundURL );
-
                 sal_uLong i;
                 for( i = 0; i < maSoundList.size(); i++ )
                 {
-                    String aString = maSoundList[ i ];
-                    if( aString == aTmp )
+                    OUString aString = maSoundList[ i ];
+                    if( aString == aSoundURL )
                     {
                         nPos = (sal_uInt16)i+2;
                         break;
@@ -1373,8 +1370,8 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, con
                 if( nPos == 0 )
                 {
                     nPos = (sal_uInt16)maSoundList.size()+2;
-                    maSoundList.push_back( String( aTmp ) );
-                    INetURLObject aURL( aTmp );
+                    maSoundList.push_back( aSoundURL );
+                    INetURLObject aURL( aSoundURL );
                     nPos = mpLBSound->InsertEntry( aURL.GetBase(), nPos );
                 }
             }
@@ -1592,15 +1589,15 @@ void CustomAnimationEffectTabPage::fillSoundListBox()
     GalleryExplorer::FillObjList( GALLERY_THEME_SOUNDS, maSoundList );
     GalleryExplorer::FillObjList( GALLERY_THEME_USERSOUNDS, maSoundList );
 
-    mpLBSound->InsertEntry( String( SdResId( STR_CUSTOMANIMATION_NO_SOUND ) ) );
-    mpLBSound->InsertEntry( String( SdResId( STR_CUSTOMANIMATION_STOP_PREVIOUS_SOUND ) ) );
+    mpLBSound->InsertEntry( SD_RESSTR(STR_CUSTOMANIMATION_NO_SOUND) );
+    mpLBSound->InsertEntry( SD_RESSTR(STR_CUSTOMANIMATION_STOP_PREVIOUS_SOUND) );
     for( size_t i = 0; i < maSoundList.size(); i++ )
     {
-        String aString = maSoundList[ i ];
+        OUString aString = maSoundList[ i ];
         INetURLObject aURL( aString );
         mpLBSound->InsertEntry( aURL.GetBase() );
     }
-    mpLBSound->InsertEntry( String( SdResId( STR_CUSTOMANIMATION_BROWSE_SOUND ) ) );
+    mpLBSound->InsertEntry( SD_RESSTR(STR_CUSTOMANIMATION_BROWSE_SOUND) );
 }
 
 void CustomAnimationEffectTabPage::clearSoundListBox()
@@ -1609,19 +1606,13 @@ void CustomAnimationEffectTabPage::clearSoundListBox()
     mpLBSound->Clear();
 }
 
-sal_Int32 CustomAnimationEffectTabPage::getSoundObject( const String& rStr )
+sal_Int32 CustomAnimationEffectTabPage::getSoundObject( const OUString& rStr )
 {
-    String aStrIn( rStr );
-    aStrIn.ToLowerAscii();
-
     size_t i;
     const size_t nCount = maSoundList.size();
     for( i = 0; i < nCount; i++ )
     {
-        String aTmpStr( maSoundList[ i ] );
-        aTmpStr.ToLowerAscii();
-
-        if( aTmpStr == aStrIn )
+        if( maSoundList[ i ].equalsIgnoreAsciiCase(rStr) )
             return i+2;
     }
 
@@ -1632,7 +1623,7 @@ void CustomAnimationEffectTabPage::openSoundFileDialog()
 {
     SdOpenSoundFileDialog   aFileDialog;
 
-    String aFile( SvtPathOptions().GetGraphicPath() );
+    OUString aFile( SvtPathOptions().GetGraphicPath() );
     aFileDialog.SetPath( aFile );
 
     bool bValidSoundFile = false;
@@ -1660,9 +1651,8 @@ void CustomAnimationEffectTabPage::openSoundFileDialog()
             }
             else
             {
-                String aStrWarning(SdResId(STR_WARNING_NOSOUNDFILE));
-                String aStr; aStr += sal_Unicode('%');
-                aStrWarning.SearchAndReplace( aStr , aFile );
+                OUString aStrWarning(SD_RESSTR(STR_WARNING_NOSOUNDFILE));
+                aStrWarning = aStrWarning.replaceFirst("%", aFile);
                 WarningBox aWarningBox( NULL, WB_3DLOOK | WB_RETRY_CANCEL, aStrWarning );
                 aWarningBox.SetModalInputMode (sal_True);
                 bQuitLoop = aWarningBox.Execute()==RET_RETRY ? sal_False : sal_True;
@@ -1888,7 +1878,7 @@ CustomAnimationDurationTabPage::CustomAnimationDurationTabPage(Window* pParent, 
                     continue;
             }
 
-            String aDescription( getShapeDescription( xShape, true ) );
+            OUString aDescription( getShapeDescription( xShape, true ) );
             sal_uInt16 nPos = mpLBTrigger->InsertEntry( aDescription );
 
             mpLBTrigger->SetEntryData( nPos, (void*)(sal_IntPtr)nShape );

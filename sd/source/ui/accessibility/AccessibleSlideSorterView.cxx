@@ -294,7 +294,7 @@ OUString SAL_CALL AccessibleSlideSorterView::getAccessibleDescription (void)
     ThrowIfDisposed();
     SolarMutexGuard aGuard;
 
-    return String(SdResId(SID_SD_A11Y_I_SLIDEVIEW_D));
+    return SD_RESSTR(SID_SD_A11Y_I_SLIDEVIEW_D);
 }
 
 
@@ -306,7 +306,7 @@ OUString SAL_CALL AccessibleSlideSorterView::getAccessibleName (void)
     ThrowIfDisposed();
     SolarMutexGuard aGuard;
 
-    return String(SdResId(SID_SD_A11Y_I_SLIDEVIEW_N));
+    return SD_RESSTR(SID_SD_A11Y_I_SLIDEVIEW_N);
 }
 
 

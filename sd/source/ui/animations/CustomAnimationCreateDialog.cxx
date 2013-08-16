@@ -252,7 +252,7 @@ CustomAnimationCreateTabPage::CustomAnimationCreateTabPage( Window* pParent, Cus
 
     fillDurationComboBox(mpCBSpeed);
 
-    String sMotionPathLabel( SdResId( STR_CUSTOMANIMATION_USERPATH ) );
+    OUString sMotionPathLabel( SD_RESSTR( STR_CUSTOMANIMATION_USERPATH ) );
 
     sal_uInt16 nFirstEffect = LISTBOX_ENTRY_NOTFOUND;
 

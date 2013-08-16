@@ -147,8 +147,8 @@ private:
     PushButton* mpPBSlideShow;
     CheckBox*   mpCBAutoPreview;
 
-    String      maStrModify;
-    String      maStrProperty;
+    OUString    maStrModify;
+    OUString    maStrProperty;
 
     sal_Int32   mnPropertyType;
 

@@ -116,25 +116,25 @@ void fillDurationComboBox( ListBox* pBox )
     static const double gdFast = 1.0;
     static const double gdVeryFast = 0.5;
 
-    String aVerySlow( SdResId( STR_CUSTOMANIMATION_DURATION_VERY_SLOW ) );
+    OUString aVerySlow( SD_RESSTR( STR_CUSTOMANIMATION_DURATION_VERY_SLOW ) );
     pBox->SetEntryData( pBox->InsertEntry( aVerySlow ), (void*)&gdVerySlow );
 
-    String aSlow( SdResId( STR_CUSTOMANIMATION_DURATION_SLOW ) );
+    OUString aSlow( SD_RESSTR( STR_CUSTOMANIMATION_DURATION_SLOW ) );
     pBox->SetEntryData( pBox->InsertEntry( aSlow ), (void*)&gdSlow );
 
-    String aNormal( SdResId( STR_CUSTOMANIMATION_DURATION_NORMAL ) );
+    OUString aNormal( SD_RESSTR( STR_CUSTOMANIMATION_DURATION_NORMAL ) );
     pBox->SetEntryData( pBox->InsertEntry( aNormal ), (void*)&gdNormal );
 
-    String aFast( SdResId( STR_CUSTOMANIMATION_DURATION_FAST ) );
+    OUString aFast( SD_RESSTR( STR_CUSTOMANIMATION_DURATION_FAST ) );
     pBox->SetEntryData( pBox->InsertEntry( aFast ), (void*)&gdFast );
 
-    String aVeryFast( SdResId( STR_CUSTOMANIMATION_DURATION_VERY_FAST ) );
+    OUString aVeryFast( SD_RESSTR( STR_CUSTOMANIMATION_DURATION_VERY_FAST ) );
     pBox->SetEntryData( pBox->InsertEntry( aVeryFast ), (void*)&gdVeryFast );
 }
 
 void fillRepeatComboBox( ListBox* pBox )
 {
-    String aNone( SdResId( STR_CUSTOMANIMATION_REPEAT_NONE ) );
+    OUString aNone( SD_RESSTR( STR_CUSTOMANIMATION_REPEAT_NONE ) );
     pBox->SetEntryData( pBox->InsertEntry( aNone ), (void*)((sal_Int32)0) );
 
     pBox->SetEntryData( pBox->InsertEntry( OUString::number( 2 ) ), (void*)((sal_Int32)1) );
@@ -143,10 +143,10 @@ void fillRepeatComboBox( ListBox* pBox )
     pBox->SetEntryData( pBox->InsertEntry( OUString::number( 5 ) ), (void*)((sal_Int32)5) );
     pBox->SetEntryData( pBox->InsertEntry( OUString::number( 10 ) ), (void*)((sal_Int32)10) );
 
-    String aUntilClick( SdResId( STR_CUSTOMANIMATION_REPEAT_UNTIL_NEXT_CLICK ) );
+    OUString aUntilClick( SD_RESSTR( STR_CUSTOMANIMATION_REPEAT_UNTIL_NEXT_CLICK ) );
     pBox->SetEntryData( pBox->InsertEntry( aUntilClick ), (void*)((sal_Int32)-1) );
 
-    String aEndOfSlide( SdResId( STR_CUSTOMANIMATION_REPEAT_UNTIL_END_OF_SLIDE ) );
+    OUString aEndOfSlide( SD_RESSTR( STR_CUSTOMANIMATION_REPEAT_UNTIL_END_OF_SLIDE ) );
     pBox->SetEntryData( pBox->InsertEntry( aEndOfSlide ), (void*)((sal_Int32)-2) );
 }
 
@@ -408,59 +408,58 @@ OUString getPropertyName( sal_Int32 nPropertyType )
     switch( nPropertyType )
     {
     case nPropertyTypeDirection:
-        return OUString( String( SdResId( STR_CUSTOMANIMATION_DIRECTION_PROPERTY ) ) );
+        return SD_RESSTR(STR_CUSTOMANIMATION_DIRECTION_PROPERTY);
 
     case nPropertyTypeSpokes:
-        return OUString( String( SdResId( STR_CUSTOMANIMATION_SPOKES_PROPERTY ) ) );
+        return SD_RESSTR(STR_CUSTOMANIMATION_SPOKES_PROPERTY);
 
     case nPropertyTypeFirstColor:
-        return OUString( String( SdResId( STR_CUSTOMANIMATION_FIRST_COLOR_PROPERTY ) ) );
+        return SD_RESSTR(STR_CUSTOMANIMATION_FIRST_COLOR_PROPERTY);
 
     case nPropertyTypeSecondColor:
-        return OUString( String( SdResId( STR_CUSTOMANIMATION_SECOND_COLOR_PROPERTY ) ) );
+        return SD_RESSTR(STR_CUSTOMANIMATION_SECOND_COLOR_PROPERTY);
 
     case nPropertyTypeZoom:
-        return OUString( String( SdResId( STR_CUSTOMANIMATION_ZOOM_PROPERTY ) ) );
+        return SD_RESSTR(STR_CUSTOMANIMATION_ZOOM_PROPERTY);
 
     case nPropertyTypeFillColor:
-        return OUString( String( SdResId( STR_CUSTOMANIMATION_FILL_COLOR_PROPERTY ) ) );
+        return SD_RESSTR(STR_CUSTOMANIMATION_FILL_COLOR_PROPERTY);
 
     case nPropertyTypeColorStyle:
-        return OUString( String( SdResId( STR_CUSTOMANIMATION_STYLE_PROPERTY ) ) );
+        return SD_RESSTR(STR_CUSTOMANIMATION_STYLE_PROPERTY);
 
     case nPropertyTypeFont:
-        return OUString( String( SdResId( STR_CUSTOMANIMATION_FONT_PROPERTY ) ) );
+        return SD_RESSTR(STR_CUSTOMANIMATION_FONT_PROPERTY);
 
     case nPropertyTypeCharHeight:
-        return OUString( String( SdResId( STR_CUSTOMANIMATION_SIZE_PROPERTY ) ) );
+        return SD_RESSTR(STR_CUSTOMANIMATION_SIZE_PROPERTY);
 
     case nPropertyTypeCharColor:
-        return OUString( String( SdResId( STR_CUSTOMANIMATION_FONT_COLOR_PROPERTY ) ) );
+        return SD_RESSTR(STR_CUSTOMANIMATION_FONT_COLOR_PROPERTY);
 
     case nPropertyTypeCharHeightStyle:
-        return OUString( String( SdResId( STR_CUSTOMANIMATION_FONT_SIZE_STYLE_PROPERTY ) ) );
+        return SD_RESSTR(STR_CUSTOMANIMATION_FONT_SIZE_STYLE_PROPERTY);
 
     case nPropertyTypeCharDecoration:
-        return OUString( String( SdResId( STR_CUSTOMANIMATION_FONT_STYLE_PROPERTY ) ) );
+        return SD_RESSTR(STR_CUSTOMANIMATION_FONT_STYLE_PROPERTY);
 
     case nPropertyTypeLineColor:
-        return OUString( String( SdResId( STR_CUSTOMANIMATION_LINE_COLOR_PROPERTY ) ) );
+        return SD_RESSTR(STR_CUSTOMANIMATION_LINE_COLOR_PROPERTY);
 
     case nPropertyTypeRotate:
-        return OUString( String( SdResId( STR_CUSTOMANIMATION_AMOUNT_PROPERTY ) ) );
+        return SD_RESSTR(STR_CUSTOMANIMATION_AMOUNT_PROPERTY);
 
     case nPropertyTypeColor:
-        return OUString( String( SdResId( STR_CUSTOMANIMATION_COLOR_PROPERTY ) ) );
+        return SD_RESSTR(STR_CUSTOMANIMATION_COLOR_PROPERTY);
 
     case nPropertyTypeTransparency:
-        return OUString( String( SdResId( STR_CUSTOMANIMATION_AMOUNT_PROPERTY ) ) );
+        return SD_RESSTR(STR_CUSTOMANIMATION_AMOUNT_PROPERTY);
 
     case nPropertyTypeScale:
-        return OUString( String( SdResId( STR_CUSTOMANIMATION_SCALE_PROPERTY ) ) );
+        return SD_RESSTR(STR_CUSTOMANIMATION_SCALE_PROPERTY);
     }
 
-    OUString aStr;
-    return aStr;
+    return OUString();
 }
 
 void CustomAnimationPane::updateControls()
