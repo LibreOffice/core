@@ -217,7 +217,7 @@
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
     static int count = 0;
-    if (count < 2){
+    if (count < 1){
         ++count;
         return;
     }

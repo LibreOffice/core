@@ -79,7 +79,6 @@
                 dispatch_async(dispatch_get_main_queue(), ^{
                     UIAlertView *message = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Connection Lost", @"Connection Lost Alert title")
                                                                       message:NSLocalizedString(@"Connection Lost Msg", @"Connection Lost Alert Msg")
-                                            //@"Oups, connection lost...Please try to reconnect to your computer. "
                                                                      delegate:nil
                                                             cancelButtonTitle:NSLocalizedString(@"OK", nil)
                                                             otherButtonTitles:nil];
