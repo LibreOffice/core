@@ -79,9 +79,6 @@ public:
     void ClearEntries();
 };
 
-// A set that finds and sorts based only on mnFamily
-typedef boost::ptr_set<XMLFamilyData_Impl> XMLFamilyDataList_Impl;
-
 // Properties of a pool
 
 class SvXMLAutoStylePoolPropertiesP_Impl
@@ -154,9 +151,11 @@ public:
 
 class SvXMLAutoStylePoolP_Impl
 {
-    SvXMLExport& rExport;
+    // A set that finds and sorts based only on mnFamily
+    typedef boost::ptr_set<XMLFamilyData_Impl> FamilyListType;
 
-    XMLFamilyDataList_Impl      maFamilyList;
+    SvXMLExport& rExport;
+    FamilyListType maFamilyList;
 
 public:
 
