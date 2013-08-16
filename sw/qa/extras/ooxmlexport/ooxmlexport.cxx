@@ -107,6 +107,7 @@ public:
     void testFdo64350();
     void testFdo67013();
     void testParaShadow();
+    void testTableFloatingMargins();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -190,6 +191,7 @@ void Test::run()
         {"fdo64350.docx", &Test::testFdo64350},
         {"fdo67013.docx", &Test::testFdo67013},
         {"para-shadow.docx", &Test::testParaShadow},
+        {"table-floating-margins.docx", &Test::testTableFloatingMargins},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -1144,6 +1146,16 @@ void Test::testParaShadow()
     CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_BOTTOM_RIGHT, aShadow.Location);
     // w:sz="48" is in eights of a point, 1 pt is 20 twips.
     CPPUNIT_ASSERT_EQUAL(sal_Int16(TWIP_TO_MM100(24/8*20)), aShadow.ShadowWidth);
+}
+
+void Test::testTableFloatingMargins()
+{
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+    // These were 0, due to lack of import/export.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1000), getProperty<sal_Int32>(xFrame, "TopMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), getProperty<sal_Int32>(xFrame, "BottomMargin"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

@@ -4681,6 +4681,8 @@ void DocxAttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLRSpace )
 
     if (m_bTextFrameSyntax)
     {
+        m_aTextFrameStyle.append(";mso-wrap-distance-left:").append(double(rLRSpace.GetLeft()) / 20).append("pt");
+        m_aTextFrameStyle.append(";mso-wrap-distance-right:").append(double(rLRSpace.GetRight()) / 20).append("pt");
     }
     else if ( m_rExport.bOutFlyFrmAttrs )
     {
@@ -4735,6 +4737,8 @@ void DocxAttributeOutput::FormatULSpace( const SvxULSpaceItem& rULSpace )
 
     if (m_bTextFrameSyntax)
     {
+        m_aTextFrameStyle.append(";mso-wrap-distance-top:").append(double(rULSpace.GetUpper()) / 20).append("pt");
+        m_aTextFrameStyle.append(";mso-wrap-distance-bottom:").append(double(rULSpace.GetLower()) / 20).append("pt");
     }
     else if ( m_rExport.bOutFlyFrmAttrs )
     {
