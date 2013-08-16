@@ -110,6 +110,7 @@ $(eval $(call gb_Library_add_exception_objects,slideshow,\
     slideshow/source/engine/slide/slideimpl \
     slideshow/source/engine/slide/userpaintoverlay \
     slideshow/source/engine/slideview \
+    slideshow/source/engine/smilfunctionparser \
     slideshow/source/engine/soundplayer \
     slideshow/source/engine/tools \
     slideshow/source/engine/transitions/barndoorwipe \
@@ -145,17 +146,6 @@ $(eval $(call gb_Library_add_exception_objects,slideshow,\
     slideshow/source/engine/pointersymbol \
     slideshow/source/engine/wakeupevent \
 ))
-
-ifeq ($(strip $(OS)),MACOSX)
-$(eval $(call gb_Library_add_cxxobjects,slideshow,\
-    slideshow/source/engine/smilfunctionparser \
-    , $(gb_COMPILERNOOPTFLAGS) $(gb_LinkTarget_EXCEPTIONFLAGS) \
-))
-else
-$(eval $(call gb_Library_add_exception_objects,slideshow,\
-    slideshow/source/engine/smilfunctionparser \
-))
-endif
 
 ifneq ($(strip $(debug)$(DEBUG)),)
 $(eval $(call gb_Library_add_exception_objects,slideshow,\
