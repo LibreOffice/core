@@ -132,11 +132,9 @@ public:
 
     void            SetCalcView(sal_Bool bFlag=sal_True);
 
-    // no NULL-pointer checking {
-    bool            IsValidEntry(const String* pAuthor,const DateTime *pDateTime,const String* pComment);
-    bool            IsValidEntry(const String* pAuthor,const DateTime *pDateTime);
-    bool            IsValidComment(const String* pComment);
-    // }
+    bool            IsValidEntry(const String &rAuthor, const DateTime &rDateTime, const String &rComment);
+    bool            IsValidEntry(const String &rAuthor, const DateTime &rDateTime);
+    bool            IsValidComment(const String &rComment);
 
     SvTreeListEntry*    InsertEntry(const OUString& ,RedlinData *pUserData,
                                 SvTreeListEntry* pParent=NULL,sal_uIntPtr nPos=LIST_APPEND);
