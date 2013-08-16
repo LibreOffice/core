@@ -65,12 +65,8 @@ CertificateChooser::CertificateChooser( Window* _pParent, uno::Reference< uno::X
     m_pCertLB = new SvSimpleTable(*pSignatures);
     static long nTabs[] = { 3, 0, 30*nControlWidth/100, 60*nControlWidth/100 };
     m_pCertLB->SetTabs( &nTabs[0] );
-    OUStringBuffer sHeader;
-    sHeader.append(get<FixedText>("issuedto")->GetText())
-        .append("\t").append(get<FixedText>("issuedby")->GetText())
-        .append("\t").append(get<FixedText>("expiration")->GetText());
-    m_pCertLB->InsertHeaderEntry(sHeader.makeStringAndClear());
-
+    m_pCertLB->InsertHeaderEntry(get<FixedText>("issuedto")->GetText() + "\t" + get<FixedText>("issuedby")->GetText()
+        + "\t" + get<FixedText>("expiration")->GetText());
     m_pCertLB->SetSelectHdl( LINK( this, CertificateChooser, CertificateHighlightHdl ) );
     m_pCertLB->SetDoubleClickHdl( LINK( this, CertificateChooser, CertificateSelectHdl ) );
     m_pViewBtn->SetClickHdl( LINK( this, CertificateChooser, ViewButtonHdl ) );
@@ -174,12 +170,9 @@ void CertificateChooser::ImplInitialize()
         // fill list of certificates; the first entry will be selected
         for ( sal_Int32 nC = 0; nC < nCertificates; ++nC )
         {
-            OUStringBuffer sEntry( XmlSec::GetContentPart( maCerts[ nC ]->getSubjectName() ) );
-            sEntry.append( '\t' );
-            sEntry.append( XmlSec::GetContentPart( maCerts[ nC ]->getIssuerName() ) );
-            sEntry.append( '\t' );
-            sEntry.append( XmlSec::GetDateString( maCerts[ nC ]->getNotValidAfter() ) );
-            SvTreeListEntry* pEntry = m_pCertLB->InsertEntry( sEntry.makeStringAndClear() );
+            SvTreeListEntry* pEntry = m_pCertLB->InsertEntry( XmlSec::GetContentPart( maCerts[ nC ]->getSubjectName() )
+                + "\t" + XmlSec::GetContentPart( maCerts[ nC ]->getIssuerName() )
+                + "\t" + XmlSec::GetDateString( maCerts[ nC ]->getNotValidAfter() ) );
             pEntry->SetUserData( ( void* )(sal_IntPtr)nC ); // missuse user data as index
         }
 

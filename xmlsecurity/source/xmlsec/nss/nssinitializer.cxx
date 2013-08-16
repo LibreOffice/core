@@ -313,16 +313,11 @@ bool nsscrypto_initialize( const css::uno::Reference< css::uno::XComponentContex
         if (::osl::File::E_None == ::osl::File::getSystemPathFromFileURL(rootModule, rootModulePath))
         {
             OString ospath = OUStringToOString(rootModulePath, osl_getThreadTextEncoding());
-            OStringBuffer pkcs11moduleSpec;
-            pkcs11moduleSpec.append("name=\"");
-            pkcs11moduleSpec.append(ROOT_CERTS);
-            pkcs11moduleSpec.append("\" library=\"");
-            pkcs11moduleSpec.append(ospath.getStr());
-            pkcs11moduleSpec.append("\"");
+            OString aStr = "name=\"" ROOT_CERTS "\" library=\"" + ospath + "\"";
 
             SECMODModule * RootsModule =
                 SECMOD_LoadUserModule(
-                    const_cast<char*>(pkcs11moduleSpec.makeStringAndClear().getStr()),
+                    const_cast<char*>(aStr.getStr()),
                     0, // no parent
                     PR_FALSE); // do not recurse
 
