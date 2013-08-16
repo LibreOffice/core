@@ -470,8 +470,9 @@ sal_Bool MediaDescriptor::impl_addInputStream( sal_Bool bLockFile )
                     css::uno::Reference< css::uno::XInterface >());
 
         // Parse URL! Only the main part has to be used further. E.g. a jumpmark can make trouble
-        OUString sNormalizedURL = impl_normalizeURL( sURL );
-        return impl_openStreamWithURL( sNormalizedURL, bLockFile );
+        // We need to keep the full URL with Mark to store the Object ID
+        // in CMIS UCB
+        return impl_openStreamWithURL( sURL, bLockFile );
     }
 #if OSL_DEBUG_LEVEL > 0
     catch(const css::uno::Exception& ex)
