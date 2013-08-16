@@ -802,7 +802,7 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTxtFormatInfo &rInf )
 
         // for growing controll
         long nMax = KSHRT_MAX;
-        long nMin = nFactor / 2;
+        long nMin = 0;
 #if OSL_DEBUG_LEVEL > 1
         long nGrow = 0;
 #endif
@@ -889,6 +889,16 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTxtFormatInfo &rInf )
                 rFnt.SetProportion( nOldProp );
 
                 // Modify the bounding rectangle with the borders
+                // Robust: If the padding is so big as drop cap letter has no enough space than
+                // remove all padding.
+                if( rFnt.GetTopBorderSpace() + rFnt.GetBottomBorderSpace() >= nWishedHeight )
+                {
+                    rFnt.SetTopBorderDist(0);
+                    rFnt.SetBottomBorderDist(0);
+                    rFnt.SetRightBorderDist(0);
+                    rFnt.SetLeftBorderDist(0);
+                }
+
                 if( rFnt.GetTopBorder() )
                 {
                     aRect.setHeight(aRect.GetHeight() + rFnt.GetTopBorderSpace());
