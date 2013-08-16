@@ -148,13 +148,11 @@ void SvXMLAutoStylePoolP_Impl::GetRegisteredNames(
 // Adds a array of XMLPropertyState ( vector< XMLPropertyState > ) to list
 // if not added, yet.
 
-sal_Bool SvXMLAutoStylePoolP_Impl::Add(OUString& rName, sal_Int32 nFamily,
-                const OUString& rParent,
-                const ::std::vector< XMLPropertyState >& rProperties,
-                sal_Bool bCache,
-                bool bDontSeek )
+bool SvXMLAutoStylePoolP_Impl::Add(
+    OUString& rName, sal_Int32 nFamily, const OUString& rParent,
+    const ::std::vector< XMLPropertyState >& rProperties, bool bDontSeek )
 {
-    sal_Bool bRet(sal_False);
+    bool bRet = false;
 
     XMLFamilyData_Impl aTemporary( nFamily );
     FamilyListType::iterator aFind = maFamilyList.find(aTemporary);
@@ -183,15 +181,7 @@ sal_Bool SvXMLAutoStylePoolP_Impl::Add(OUString& rName, sal_Int32 nFamily,
         if( pParent->Add( rFamily, rProperties, rName, bDontSeek ) )
         {
             rFamily.mnCount++;
-            bRet = sal_True;
-        }
-
-        if( bCache )
-        {
-            if( !rFamily.pCache )
-                rFamily.pCache = new SvXMLAutoStylePoolCache_Impl();
-            if( rFamily.pCache->size() < MAX_CACHE_SIZE )
-                rFamily.pCache->push_back( new OUString( rName ) );
+            bRet = true;
         }
     }
 

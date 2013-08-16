@@ -346,7 +346,7 @@ OUString SvXMLAutoStylePoolP::Add( sal_Int32 nFamily,
                                   const vector< XMLPropertyState >& rProperties, bool bDontSeek )
 {
     OUString sName;
-    pImpl->Add(sName, nFamily, rParent, rProperties, sal_False, bDontSeek );
+    pImpl->Add(sName, nFamily, rParent, rProperties, bDontSeek);
     return sName;
 }
 

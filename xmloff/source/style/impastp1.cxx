@@ -28,9 +28,9 @@ XMLFamilyData_Impl::XMLFamilyData_Impl(
         const OUString& rStrName,
         const UniReference < SvXMLExportPropertyMapper > &rMapper,
         const OUString& rStrPrefix,
-        sal_Bool bAsFam )
-    : pCache( 0 ), mnFamily( nFamily ), maStrFamilyName( rStrName), mxMapper( rMapper ),
-      mnCount( 0 ), mnName( 0 ), maStrPrefix( rStrPrefix ), bAsFamily( bAsFam )
+        sal_Bool bAsFam ) :
+    mnFamily( nFamily ), maStrFamilyName( rStrName), mxMapper( rMapper ),
+    mnCount( 0 ), mnName( 0 ), maStrPrefix( rStrPrefix ), bAsFamily( bAsFam )
 
 {
     mpParentList = new SvXMLAutoStylePoolParentsP_Impl;
@@ -41,27 +41,12 @@ XMLFamilyData_Impl::~XMLFamilyData_Impl()
 {
     delete mpParentList;
     delete mpNameList;
-    DBG_ASSERT( !pCache || !pCache->size(), "auto style pool cache is not empty!" );
-    if( pCache )
-    {
-        for ( size_t i = 0, n = pCache->size(); i < n; ++i )
-            delete (*pCache)[ i ];
-        pCache->clear();
-        delete pCache;
-    }
 }
 
 void XMLFamilyData_Impl::ClearEntries()
 {
     delete mpParentList;
     mpParentList = new SvXMLAutoStylePoolParentsP_Impl;
-    DBG_ASSERT( !pCache || !pCache->size(), "auto style pool cache is not empty!" );
-    if( pCache )
-    {
-        for ( size_t i = 0, n = pCache->size(); i < n; ++i )
-            delete (*pCache)[ i ];
-        pCache->clear();
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

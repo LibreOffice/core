@@ -42,13 +42,9 @@ class SvXMLExport;
 
 // Implementationclass for stylefamily-information
 
-typedef OUString* OUStringPtr;
-typedef ::std::vector< OUStringPtr > SvXMLAutoStylePoolCache_Impl;
-
 class XMLFamilyData_Impl
 {
 public:
-    SvXMLAutoStylePoolCache_Impl        *pCache;
     sal_uInt32                          mnFamily;
     OUString                     maStrFamilyName;
     UniReference < SvXMLExportPropertyMapper >  mxMapper;
@@ -66,7 +62,6 @@ public:
             const OUString& rStrPrefix, sal_Bool bAsFamily = sal_True );
 
     XMLFamilyData_Impl( sal_Int32 nFamily ) :
-        pCache( 0 ),
         mnFamily( nFamily ), mpParentList( NULL ),
         mpNameList( NULL ), mnCount( 0 ), mnName( 0 ),
         bAsFamily( false )
@@ -174,11 +169,12 @@ public:
         com::sun::star::uno::Sequence<sal_Int32>& aFamilies,
         com::sun::star::uno::Sequence<OUString>& aNames );
 
-    sal_Bool Add( OUString& rName, sal_Int32 nFamily,
-                const OUString& rParent,
-                const ::std::vector< XMLPropertyState >& rProperties,
-                sal_Bool bCache = sal_False,
-                bool bDontSeek = false );
+    bool Add(
+        OUString& rName, sal_Int32 nFamily,
+        const OUString& rParent,
+        const ::std::vector< XMLPropertyState >& rProperties,
+        bool bDontSeek = false );
+
     sal_Bool AddNamed( const OUString& rName, sal_Int32 nFamily,
                 const OUString& rParent,
                 const ::std::vector< XMLPropertyState >& rProperties );
