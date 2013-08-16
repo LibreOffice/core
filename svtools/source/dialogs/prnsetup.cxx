@@ -123,92 +123,92 @@ void ImplPrnDlgUpdateQueueInfo( ListBox* pBox, QueueInfo& rInfo )
 
 // -----------------------------------------------------------------------
 
-static void ImplPrnDlgAddString( XubString& rStr, const OUString& rAddStr )
+static OUString ImplPrnDlgAddString(const OUString& rStr, const OUString& rAddStr)
 {
-    if ( rStr.Len() )
-        rStr.AppendAscii( "; " );
-    rStr += rAddStr;
+    OUString aStr(rStr);
+    if (!aStr.isEmpty())
+        aStr += "; " ;
+    return aStr + rAddStr;
 }
 
 // -----------------------------------------------------------------------
 
-static void ImplPrnDlgAddResString( XubString& rStr, sal_uInt16 nResId )
+static OUString ImplPrnDlgAddResString(const OUString& rStr, sal_uInt16 nResId)
 {
-    ImplPrnDlgAddString( rStr, SVT_RESSTR(nResId) );
+    return ImplPrnDlgAddString(rStr, SVT_RESSTR(nResId));
 }
 
 // -----------------------------------------------------------------------
 
 OUString ImplPrnDlgGetStatusText( const QueueInfo& rInfo )
 {
-    XubString   aStr;
-    sal_uLong       nStatus = rInfo.GetStatus();
+    OUString aStr;
+    sal_uLong nStatus = rInfo.GetStatus();
 
     // Default-Printer
     if ( !rInfo.GetPrinterName().isEmpty() &&
          (rInfo.GetPrinterName() == Printer::GetDefaultPrinterName()) )
-        ImplPrnDlgAddResString( aStr, STR_SVT_PRNDLG_DEFPRINTER );
+        aStr = ImplPrnDlgAddResString( aStr, STR_SVT_PRNDLG_DEFPRINTER );
 
     // Status
     if ( nStatus & QUEUE_STATUS_READY )
-        ImplPrnDlgAddResString( aStr, STR_SVT_PRNDLG_READY );
+        aStr = ImplPrnDlgAddResString( aStr, STR_SVT_PRNDLG_READY );
     if ( nStatus & QUEUE_STATUS_PAUSED )
-        ImplPrnDlgAddResString( aStr, STR_SVT_PRNDLG_PAUSED );
+        aStr = ImplPrnDlgAddResString( aStr, STR_SVT_PRNDLG_PAUSED );
     if ( nStatus & QUEUE_STATUS_PENDING_DELETION )
-        ImplPrnDlgAddResString( aStr, STR_SVT_PRNDLG_PENDING );
+        aStr = ImplPrnDlgAddResString( aStr, STR_SVT_PRNDLG_PENDING );
     if ( nStatus & QUEUE_STATUS_BUSY )
-        ImplPrnDlgAddResString( aStr, STR_SVT_PRNDLG_BUSY );
+        aStr = ImplPrnDlgAddResString( aStr, STR_SVT_PRNDLG_BUSY );
     if ( nStatus & QUEUE_STATUS_INITIALIZING )
-        ImplPrnDlgAddResString( aStr, STR_SVT_PRNDLG_INITIALIZING );
+        aStr = ImplPrnDlgAddResString( aStr, STR_SVT_PRNDLG_INITIALIZING );
     if ( nStatus & QUEUE_STATUS_WAITING )
-        ImplPrnDlgAddResString( aStr, STR_SVT_PRNDLG_WAITING );
+        aStr = ImplPrnDlgAddResString( aStr, STR_SVT_PRNDLG_WAITING );
     if ( nStatus & QUEUE_STATUS_WARMING_UP )
-        ImplPrnDlgAddResString( aStr, STR_SVT_PRNDLG_WARMING_UP );
+        aStr = ImplPrnDlgAddResString( aStr, STR_SVT_PRNDLG_WARMING_UP );
     if ( nStatus & QUEUE_STATUS_PROCESSING )
-        ImplPrnDlgAddResString( aStr, STR_SVT_PRNDLG_PROCESSING );
+        aStr = ImplPrnDlgAddResString( aStr, STR_SVT_PRNDLG_PROCESSING );
     if ( nStatus & QUEUE_STATUS_PRINTING )
-        ImplPrnDlgAddResString( aStr, STR_SVT_PRNDLG_PRINTING );
+        aStr = ImplPrnDlgAddResString( aStr, STR_SVT_PRNDLG_PRINTING );
     if ( nStatus & QUEUE_STATUS_OFFLINE )
-        ImplPrnDlgAddResString( aStr, STR_SVT_PRNDLG_OFFLINE );
+        aStr = ImplPrnDlgAddResString( aStr, STR_SVT_PRNDLG_OFFLINE );
     if ( nStatus & QUEUE_STATUS_ERROR )
-        ImplPrnDlgAddResString( aStr, STR_SVT_PRNDLG_ERROR );
+        aStr = ImplPrnDlgAddResString( aStr, STR_SVT_PRNDLG_ERROR );
     if ( nStatus & QUEUE_STATUS_SERVER_UNKNOWN )
-        ImplPrnDlgAddResString( aStr, STR_SVT_PRNDLG_SERVER_UNKNOWN );
+        aStr = ImplPrnDlgAddResString( aStr, STR_SVT_PRNDLG_SERVER_UNKNOWN );
     if ( nStatus & QUEUE_STATUS_PAPER_JAM )
-        ImplPrnDlgAddResString( aStr, STR_SVT_PRNDLG_PAPER_JAM );
+        aStr = ImplPrnDlgAddResString( aStr, STR_SVT_PRNDLG_PAPER_JAM );
     if ( nStatus & QUEUE_STATUS_PAPER_OUT )
-        ImplPrnDlgAddResString( aStr, STR_SVT_PRNDLG_PAPER_OUT );
+        aStr = ImplPrnDlgAddResString( aStr, STR_SVT_PRNDLG_PAPER_OUT );
     if ( nStatus & QUEUE_STATUS_MANUAL_FEED )
-        ImplPrnDlgAddResString( aStr, STR_SVT_PRNDLG_MANUAL_FEED );
+        aStr = ImplPrnDlgAddResString( aStr, STR_SVT_PRNDLG_MANUAL_FEED );
     if ( nStatus & QUEUE_STATUS_PAPER_PROBLEM )
-        ImplPrnDlgAddResString( aStr, STR_SVT_PRNDLG_PAPER_PROBLEM );
+        aStr = ImplPrnDlgAddResString( aStr, STR_SVT_PRNDLG_PAPER_PROBLEM );
     if ( nStatus & QUEUE_STATUS_IO_ACTIVE )
-        ImplPrnDlgAddResString( aStr, STR_SVT_PRNDLG_IO_ACTIVE );
+        aStr = ImplPrnDlgAddResString( aStr, STR_SVT_PRNDLG_IO_ACTIVE );
     if ( nStatus & QUEUE_STATUS_OUTPUT_BIN_FULL )
-        ImplPrnDlgAddResString( aStr, STR_SVT_PRNDLG_OUTPUT_BIN_FULL );
+        aStr = ImplPrnDlgAddResString( aStr, STR_SVT_PRNDLG_OUTPUT_BIN_FULL );
     if ( nStatus & QUEUE_STATUS_TONER_LOW )
-        ImplPrnDlgAddResString( aStr, STR_SVT_PRNDLG_TONER_LOW );
+        aStr = ImplPrnDlgAddResString( aStr, STR_SVT_PRNDLG_TONER_LOW );
     if ( nStatus & QUEUE_STATUS_NO_TONER )
-        ImplPrnDlgAddResString( aStr, STR_SVT_PRNDLG_NO_TONER );
+        aStr = ImplPrnDlgAddResString( aStr, STR_SVT_PRNDLG_NO_TONER );
     if ( nStatus & QUEUE_STATUS_PAGE_PUNT )
-        ImplPrnDlgAddResString( aStr, STR_SVT_PRNDLG_PAGE_PUNT );
+        aStr = ImplPrnDlgAddResString( aStr, STR_SVT_PRNDLG_PAGE_PUNT );
     if ( nStatus & QUEUE_STATUS_USER_INTERVENTION )
-        ImplPrnDlgAddResString( aStr, STR_SVT_PRNDLG_USER_INTERVENTION );
+        aStr = ImplPrnDlgAddResString( aStr, STR_SVT_PRNDLG_USER_INTERVENTION );
     if ( nStatus & QUEUE_STATUS_OUT_OF_MEMORY )
-        ImplPrnDlgAddResString( aStr, STR_SVT_PRNDLG_OUT_OF_MEMORY );
+        aStr = ImplPrnDlgAddResString( aStr, STR_SVT_PRNDLG_OUT_OF_MEMORY );
     if ( nStatus & QUEUE_STATUS_DOOR_OPEN )
-        ImplPrnDlgAddResString( aStr, STR_SVT_PRNDLG_DOOR_OPEN );
+        aStr = ImplPrnDlgAddResString( aStr, STR_SVT_PRNDLG_DOOR_OPEN );
     if ( nStatus & QUEUE_STATUS_POWER_SAVE )
-        ImplPrnDlgAddResString( aStr, STR_SVT_PRNDLG_POWER_SAVE );
+        aStr = ImplPrnDlgAddResString( aStr, STR_SVT_PRNDLG_POWER_SAVE );
 
     // Anzahl Jobs
     sal_uLong nJobs = rInfo.GetJobs();
     if ( nJobs && (nJobs != QUEUE_JOBS_DONTKNOW) )
     {
-        XubString aJobStr( SVT_RESSTR( STR_SVT_PRNDLG_JOBCOUNT ) );
+        OUString aJobStr( SVT_RESSTR( STR_SVT_PRNDLG_JOBCOUNT ) );
         OUString aJobs( OUString::number( nJobs ) );
-        aJobStr.SearchAndReplaceAscii( "%d", aJobs );
-        ImplPrnDlgAddString( aStr, aJobStr );
+        aStr = ImplPrnDlgAddString(aStr, aJobStr.replaceAll("%d", aJobs));
     }
 
     return aStr;
