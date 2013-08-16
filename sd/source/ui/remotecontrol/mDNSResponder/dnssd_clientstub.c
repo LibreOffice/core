@@ -1492,7 +1492,9 @@ DNSServiceErrorType DNSSD_API DNSServiceRegister
     size_t len;
     ipc_msg_hdr *hdr;
     DNSServiceErrorType err;
-    union { uint16_t s; u_char b[2]; } port = { PortInNetworkByteOrder };
+    union { uint16_t s; u_char b[2]; } port;
+
+    port.s = PortInNetworkByteOrder;
 
     if (!name) name = "";
     if (!regtype) return kDNSServiceErr_BadParam;
@@ -1975,11 +1977,14 @@ DNSServiceErrorType DNSSD_API DNSServiceNATPortMappingCreate
     char *ptr;
     size_t len;
     ipc_msg_hdr *hdr;
-    union { uint16_t s; u_char b[2]; } internalPort = { internalPortInNetworkByteOrder };
-    union { uint16_t s; u_char b[2]; } externalPort = { externalPortInNetworkByteOrder };
+    union { uint16_t s; u_char b[2]; } internalPort;
+    union { uint16_t s; u_char b[2]; } externalPort;
 
     DNSServiceErrorType err = ConnectToServer(sdRef, flags, port_mapping_request, handle_port_mapping_response, callBack, context);
     if (err) return err;    // On error ConnectToServer leaves *sdRef set to NULL
+
+    internalPort.s = internalPortInNetworkByteOrder;
+    externalPort.s = externalPortInNetworkByteOrder;
 
     len = sizeof(flags);
     len += sizeof(interfaceIndex);
