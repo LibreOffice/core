@@ -1301,6 +1301,68 @@ static FormulaToken* convertToToken( ScRefCellValue& rCell )
     return NULL;
 }
 
+template<class T>
+struct ColumnBatch
+{
+    std::vector<T> maStorage;
+    CellType meType1;
+    CellType meType2;
+    SCROW mnRowStart;
+
+    ColumnBatch(CellType eType1, CellType eType2) :
+        meType1(eType1), meType2(eType2), mnRowStart(-1) {}
+
+    void update(ScRefCellValue& raCell, const SCCOL nCol, const SCROW nRow, ScMatrixRef& xMat)
+    {
+        if (raCell.meType == meType1 || raCell.meType == meType2)
+        {
+            if (mnRowStart < 0)
+                mnRowStart = nRow;
+            maStorage.push_back(getValue(raCell));
+        }
+        else
+        {
+            flush(nCol, xMat);
+        }
+    }
+
+    void flush(const SCCOL nCol, ScMatrixRef& xMat)
+    {
+        if (maStorage.empty())
+            return;
+        putValues(xMat, nCol);
+        mnRowStart = -1;
+        maStorage.clear();
+    }
+
+    T getValue(ScRefCellValue& raCell) const;
+    void putValues(ScMatrixRef& xMat, const SCCOL nCol) const;
+};
+
+template<>
+inline OUString ColumnBatch<OUString>::getValue(ScRefCellValue& raCell) const
+{
+    return raCell.getString(NULL);
+}
+
+template<class T>
+inline T ColumnBatch<T>::getValue(ScRefCellValue& raCell) const
+{
+    return raCell.mfValue;
+}
+
+template<>
+inline void ColumnBatch<OUString>::putValues(ScMatrixRef& xMat, const SCCOL nCol) const
+{
+    xMat->PutString(maStorage.data(), maStorage.size(), nCol, mnRowStart);
+}
+
+template<class T>
+inline void ColumnBatch<T>::putValues(ScMatrixRef& xMat, const SCCOL nCol) const
+{
+    xMat->PutDouble(maStorage.data(), maStorage.size(), nCol, mnRowStart);
+}
+
 static ScTokenArray* convertToTokenArray(
     ScDocument* pSrcDoc, ScRange& rRange, vector<ScExternalRefCache::SingleRangeData>& rCacheData )
 {
@@ -1348,13 +1410,20 @@ static ScTokenArray* convertToTokenArray(
             static_cast<SCSIZE>(nCol2-nCol1+1), static_cast<SCSIZE>(nRow2-nRow1+1));
 
         ScRefCellValue aCell;
+        ColumnBatch<OUString> stringBatch(CELLTYPE_STRING, CELLTYPE_EDIT);
+        ColumnBatch<double> doubleBatch(CELLTYPE_VALUE, CELLTYPE_VALUE);
+
         for (SCCOL nCol = nDataCol1; nCol <= nDataCol2; ++nCol)
         {
+            const SCSIZE nC = nCol - nCol1;
             for (SCROW nRow = nDataRow1; nRow <= nDataRow2; ++nRow)
             {
-                SCSIZE nC = nCol - nCol1, nR = nRow - nRow1;
+                const SCSIZE nR = nRow - nRow1;
 
                 aCell.assign(*pSrcDoc, ScAddress(nCol, nRow, nTab));
+
+                stringBatch.update(aCell, nC, nR, xMat);
+                doubleBatch.update(aCell, nC, nR, xMat);
 
                 if (aCell.hasEmptyValue())
                     // Skip empty cells.  Matrix's default values are empty elements.
@@ -1362,13 +1431,6 @@ static ScTokenArray* convertToTokenArray(
 
                 switch (aCell.meType)
                 {
-                    case CELLTYPE_EDIT:
-                    case CELLTYPE_STRING:
-                        xMat->PutString(aCell.getString(NULL), nC, nR);
-                    break;
-                    case CELLTYPE_VALUE:
-                        xMat->PutDouble(aCell.mfValue, nC, nR);
-                    break;
                     case CELLTYPE_FORMULA:
                     {
                         ScFormulaCell* pFCell = aCell.mpFormula;
@@ -1391,6 +1453,9 @@ static ScTokenArray* convertToTokenArray(
                         OSL_FAIL("attempted to convert an unknown cell type.");
                 }
             }
+
+            stringBatch.flush(nC, xMat);
+            doubleBatch.flush(nC, xMat);
         }
         if (!bFirstTab)
             pArray->AddOpCode(ocSep);
