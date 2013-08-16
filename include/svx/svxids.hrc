@@ -959,7 +959,7 @@
 
 
 // IMPORTANT NOTE: adjust SID_SVX_FIRSTFREE, when adding new slot id
-#define SID_SVX_FIRSTFREE                               (FN_SVX_SET_BULLET + 1)
+#define SID_SVX_FIRSTFREE                               (SID_SW_ATTR_FILL_GRADIENT + 1)
 
 // --------------------------------------------------------------------------
 // Overflow check for slot IDs
