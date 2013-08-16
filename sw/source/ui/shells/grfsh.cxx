@@ -288,14 +288,14 @@ void SwGrfShell::Execute(SfxRequest &rReq)
 
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "Dialogdiet fail!");
-            SfxAbstractTabDialog* pDlg = pFact->CreateFrmTabDialog( DLG_FRM_GRF,
+            SfxAbstractTabDialog* pDlg = pFact->CreateFrmTabDialog("PictureDialog",
                                                     GetView().GetViewFrame(),
                                                     GetView().GetWindow(),
-                                                    aSet, sal_False, DLG_FRM_GRF);
+                                                    aSet, false);
             OSL_ENSURE(pDlg, "Dialogdiet fail!");
 
             if (nSlot == FN_DRAW_WRAP_DLG)
-                pDlg->SetCurPageId(TP_FRM_WRAP);
+                pDlg->SetCurPageId("wrap");
 
             if( pDlg->Execute() )
             {

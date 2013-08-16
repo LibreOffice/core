@@ -49,20 +49,32 @@
 SwFrmDlg::SwFrmDlg( SfxViewFrame*       pViewFrame,
                     Window*             pParent,
                     const SfxItemSet&   rCoreSet,
-                    sal_Bool                bNewFrm,
-                    sal_uInt16              nResType,
-                    sal_Bool                bFormat,
-                    sal_uInt16              nDefPage,
-                    const String*       pStr) :
+                    bool                bNewFrm,
+                    OString             sResType,
+                    bool                bFormat,
+                    OString             sDefPage,
+                    const String*       pStr)
 
-    SfxTabDialog(pViewFrame, pParent, SW_RES(nResType), &rCoreSet, pStr != 0),
-    m_bFormat(bFormat),
-    m_bNew(bNewFrm),
-    m_rSet(rCoreSet),
-    m_nDlgType(nResType),
-    m_pWrtShell(((SwView*)pViewFrame->GetViewShell())->GetWrtShellPtr())
+    : SfxTabDialog(pViewFrame, pParent, sResType,
+        OUString("modules/swriter/ui/") +
+        OStringToOUString(sResType.toAsciiLowerCase(), RTL_TEXTENCODING_UTF8) +
+        (".ui"), &rCoreSet, pStr != 0)
+    , m_bFormat(bFormat)
+    , m_bNew(bNewFrm)
+    , m_rSet(rCoreSet)
+    , m_sDlgType(sResType)
+    , m_pWrtShell(((SwView*)pViewFrame->GetViewShell())->GetWrtShellPtr())
+    , m_nStdId(0)
+    , m_nAddId(0)
+    , m_nWrapId(0)
+    , m_nUrlId(0)
+    , m_nPictureId(0)
+    , m_nCropId(0)
+    , m_nColumnId(0)
+    , m_nBackgroundId(0)
+    , m_nMacroId(0)
+    , m_nBorderId(0)
 {
-    FreeResource();
     sal_uInt16 nHtmlMode = ::GetHtmlMode(m_pWrtShell->GetView().GetDocShell());
     m_bHTMLMode = static_cast< sal_Bool >(nHtmlMode & HTMLMODE_ON);
 
@@ -76,49 +88,45 @@ SwFrmDlg::SwFrmDlg( SfxViewFrame*       pViewFrame,
         aTmp += ')';
     }
 
-    AddTabPage(TP_FRM_STD,  SwFrmPage::Create, 0);
-    AddTabPage(TP_FRM_ADD,  SwFrmAddPage::Create, 0);
-    AddTabPage(TP_FRM_WRAP, SwWrapTabPage::Create, 0);
-    AddTabPage(TP_FRM_URL,  SwFrmURLPage::Create, 0);
-    if(m_nDlgType == DLG_FRM_GRF)
+    m_nStdId = AddTabPage("type",  SwFrmPage::Create, 0);
+    m_nAddId = AddTabPage("options",  SwFrmAddPage::Create, 0);
+    m_nWrapId = AddTabPage("wrap", SwWrapTabPage::Create, 0);
+    m_nUrlId = AddTabPage("hyperlink",  SwFrmURLPage::Create, 0);
+    if (m_sDlgType == "PictureDialog")
     {
-        AddTabPage( TP_GRF_EXT, SwGrfExtPage::Create, 0 );
-        AddTabPage( RID_SVXPAGE_GRFCROP );
+        m_nPictureId = AddTabPage("picture", SwGrfExtPage::Create, 0);
+        m_nCropId = AddTabPage("crop", RID_SVXPAGE_GRFCROP);
     }
-    if (m_nDlgType == DLG_FRM_STD)
+    if (m_sDlgType == "FrameDialog")
     {
-        AddTabPage(TP_COLUMN,   SwColumnPage::Create,    0);
+        m_nColumnId = AddTabPage("columns", SwColumnPage::Create, 0);
     }
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "Dialogdiet fail!");
-    AddTabPage(TP_BACKGROUND, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), 0 );
-    AddTabPage( TP_MACRO_ASSIGN, pFact->GetTabPageCreatorFunc(RID_SVXPAGE_MACROASSIGN), 0);
-    AddTabPage( TP_BORDER, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), 0 );
+    m_nBackgroundId = AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), 0);
+    m_nMacroId = AddTabPage("macro", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_MACROASSIGN), 0);
+    m_nBorderId = AddTabPage("borders", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), 0);
 
     if(m_bHTMLMode)
     {
-        switch( m_nDlgType )
+        if (m_sDlgType == "FrameDialog" || m_sDlgType == "ObjectDialog")
         {
-        case DLG_FRM_STD:
-                RemoveTabPage(TP_COLUMN);
-            // no break
-        case DLG_FRM_OLE:
-                RemoveTabPage(TP_FRM_URL);
-                RemoveTabPage(TP_MACRO_ASSIGN);
-            break;
-        case DLG_FRM_GRF:
-                RemoveTabPage(RID_SVXPAGE_GRFCROP);
-            break;
+            if (m_sDlgType == "FrameDialog")
+                RemoveTabPage("columns");
+            RemoveTabPage("hyperlink");
+            RemoveTabPage("macro");
         }
-        if( m_nDlgType != DLG_FRM_STD )
-            RemoveTabPage(TP_BACKGROUND);
+        else if (m_sDlgType == "PictureDialog")
+            RemoveTabPage("crop");
+        if( m_sDlgType != "FrameDialog" )
+            RemoveTabPage("background");
     }
 
     if (m_bNew)
-        SetCurPageId(TP_FRM_STD);
+        SetCurPageId("type");
 
-    if (nDefPage)
-        SetCurPageId(nDefPage);
+    if (!sDefPage.isEmpty())
+        SetCurPageId(sDefPage);
 }
 
 SwFrmDlg::~SwFrmDlg()
@@ -128,77 +136,66 @@ SwFrmDlg::~SwFrmDlg()
 void SwFrmDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
-    switch ( nId )
+    if (nId == m_nStdId)
     {
-    case TP_FRM_STD:
         ((SwFrmPage&)rPage).SetNewFrame(m_bNew);
         ((SwFrmPage&)rPage).SetFormatUsed(m_bFormat);
-        ((SwFrmPage&)rPage).SetFrmType(m_nDlgType);
-        break;
-
-    case TP_FRM_ADD:
+        ((SwFrmPage&)rPage).SetFrmType(m_sDlgType);
+    }
+    else if (nId == m_nAddId)
+    {
         ((SwFrmAddPage&)rPage).SetFormatUsed(m_bFormat);
-        ((SwFrmAddPage&)rPage).SetFrmType(m_nDlgType);
+        ((SwFrmAddPage&)rPage).SetFrmType(m_sDlgType);
         ((SwFrmAddPage&)rPage).SetNewFrame(m_bNew);
         ((SwFrmAddPage&)rPage).SetShell(m_pWrtShell);
-        break;
-
-    case TP_FRM_WRAP:
+    }
+    else if (nId == m_nWrapId)
+    {
         ((SwWrapTabPage&)rPage).SetNewFrame(m_bNew);
         ((SwWrapTabPage&)rPage).SetFormatUsed(m_bFormat, sal_False);
         ((SwWrapTabPage&)rPage).SetShell(m_pWrtShell);
-        break;
+    }
+    else if (nId == m_nColumnId)
+    {
+        ((SwColumnPage&)rPage).SetFrmMode(sal_True);
+        ((SwColumnPage&)rPage).SetFormatUsed(m_bFormat);
 
-    case TP_COLUMN:
-        {
-            ((SwColumnPage&)rPage).SetFrmMode(sal_True);
-            ((SwColumnPage&)rPage).SetFormatUsed(m_bFormat);
-
-            const SwFmtFrmSize& rSize = (const SwFmtFrmSize&)
-                                                m_rSet.Get( RES_FRM_SIZE );
-            ((SwColumnPage&)rPage).SetPageWidth( rSize.GetWidth() );
-        }
-        break;
-
-    case TP_MACRO_ASSIGN:
-        {
+        const SwFmtFrmSize& rSize = (const SwFmtFrmSize&)
+                                            m_rSet.Get( RES_FRM_SIZE );
+        ((SwColumnPage&)rPage).SetPageWidth( rSize.GetWidth() );
+    }
+    else if (nId == m_nMacroId)
+    {
         SfxAllItemSet aNewSet(*aSet.GetPool());
         aNewSet.Put( SwMacroAssignDlg::AddEvents(
-            DLG_FRM_GRF == m_nDlgType ? MACASSGN_GRAPHIC : DLG_FRM_OLE == m_nDlgType ? MACASSGN_OLE : MACASSGN_FRMURL ) );
-        if ( m_pWrtShell )
+            m_sDlgType == "PictureDialog" ? MACASSGN_GRAPHIC : m_sDlgType == "ObjectDialog" ? MACASSGN_OLE : MACASSGN_FRMURL ) );
+        if (m_pWrtShell)
             rPage.SetFrame( m_pWrtShell->GetView().GetViewFrame()->GetFrame().GetFrameInterface() );
         rPage.PageCreated(aNewSet);
-        break;
-        }
+    }
+    else if (nId == m_nBackgroundId && m_sDlgType == "FrameDialog")
+    {
+        sal_Int32 nFlagType = SVX_SHOW_SELECTOR;
+        if (!m_bHTMLMode)
+            nFlagType |= SVX_ENABLE_TRANSPARENCY;
+        aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, nFlagType));
 
-    case TP_BACKGROUND:
-        if( DLG_FRM_STD == m_nDlgType )
-        {
-            sal_Int32 nFlagType = SVX_SHOW_SELECTOR;
-            if(!m_bHTMLMode)
-                nFlagType |= SVX_ENABLE_TRANSPARENCY;
-            aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, nFlagType));
+        SvxGradientListItem aGradientListItem(m_pWrtShell->GetDoc()->GetOrCreateDrawModel()->GetGradientList(), SID_GRADIENT_LIST);
+        aSet.Put(aGradientListItem);
 
-            SvxGradientListItem aGradientListItem(m_pWrtShell->GetDoc()->GetOrCreateDrawModel()->GetGradientList(), SID_GRADIENT_LIST);
-            aSet.Put(aGradientListItem);
+        XFillStyleItem aFillStyleItem(((const XFillStyleItem&)m_rSet.Get(RES_FILL_STYLE)).GetValue(), SID_SW_ATTR_FILL_STYLE);
+        aSet.Put(aFillStyleItem);
 
-            XFillStyleItem aFillStyleItem(((const XFillStyleItem&)m_rSet.Get(RES_FILL_STYLE)).GetValue(), SID_SW_ATTR_FILL_STYLE);
-            aSet.Put(aFillStyleItem);
+        const XFillGradientItem& rFillGradientItem = (const XFillGradientItem&)m_rSet.Get(RES_FILL_GRADIENT);
+        XFillGradientItem aFillGradientItem(rFillGradientItem.GetName(), rFillGradientItem.GetGradientValue(), SID_SW_ATTR_FILL_GRADIENT);
+        aSet.Put(aFillGradientItem);
 
-            const XFillGradientItem& rFillGradientItem = (const XFillGradientItem&)m_rSet.Get(RES_FILL_GRADIENT);
-            XFillGradientItem aFillGradientItem(rFillGradientItem.GetName(), rFillGradientItem.GetGradientValue(), SID_SW_ATTR_FILL_GRADIENT);
-            aSet.Put(aFillGradientItem);
-
-            rPage.PageCreated(aSet);
-        }
-        break;
-
-    case TP_BORDER:
-        {
-            aSet.Put (SfxUInt16Item(SID_SWMODE_TYPE,SW_BORDER_MODE_FRAME));
-            rPage.PageCreated(aSet);
-        }
-        break;
+        rPage.PageCreated(aSet);
+    }
+    else if (nId == m_nBorderId)
+    {
+        aSet.Put (SfxUInt16Item(SID_SWMODE_TYPE,SW_BORDER_MODE_FRAME));
+        rPage.PageCreated(aSet);
     }
 }
 

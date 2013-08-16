@@ -391,14 +391,13 @@ public:
     virtual AbstractSwModalRedlineAcceptDlg * CreateSwModalRedlineAcceptDlg(Window *pParent) = 0;
 
     virtual VclAbstractDialog*          CreateTblMergeDialog( Window* pParent, sal_Bool& rWithPrev ) = 0; //add for SwMergeTblDlg
-    virtual SfxAbstractTabDialog*       CreateFrmTabDialog( int nResId,
+    virtual SfxAbstractTabDialog*       CreateFrmTabDialog(const OString &rDialogType,
                                                 SfxViewFrame *pFrame, Window *pParent,
                                                 const SfxItemSet& rCoreSet,
-                                                sal_Bool            bNewFrm  = sal_True,
-                                                sal_uInt16          nResType = DLG_FRM_STD,
-                                                sal_Bool            bFmt     = sal_False,
-                                                sal_uInt16          nDefPage = 0,
-                                                const String*   pFmtStr  = 0) = 0;  //add for SwFrmDlg
+                                                bool bNewFrm = true,
+                                                bool bFmt = false,
+                                                OString sDefPage = OString(),
+                                                const String* pFmtStr = 0) = 0;  //add for SwFrmDlg
     // @param nSlot
     // Identifies optional Slot by which the creation of the Template (Style) dialog is triggered.
     // Currently used, if nRegion == SFX_STYLE_FAMILY_PAGE in order to activate certain dialog pane

@@ -578,8 +578,10 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)));
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "Dialogdiet fail!");
-            SfxAbstractTabDialog* pDlg = pFact->CreateFrmTabDialog( DLG_FRM_STD,
-                                                    GetView().GetViewFrame(), &GetView().GetViewFrame()->GetWindow(), aSet, sal_True);
+            SfxAbstractTabDialog* pDlg = pFact->CreateFrmTabDialog("FrameDialog",
+                                                    GetView().GetViewFrame(),
+                                                    &GetView().GetViewFrame()->GetWindow(),
+                                                    aSet, true);
             OSL_ENSURE(pDlg, "Dialogdiet fail!");
             if(pDlg->Execute() == RET_OK && pDlg->GetOutputItemSet())
             {

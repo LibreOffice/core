@@ -96,6 +96,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/footnotepage \
 	sw/uiconfig/swriter/ui/footnoteareapage \
 	sw/uiconfig/swriter/ui/footnotesendnotestabpage \
+	sw/uiconfig/swriter/ui/framedialog \
 	sw/uiconfig/swriter/ui/frmaddpage \
 	sw/uiconfig/swriter/ui/frmtypepage \
 	sw/uiconfig/swriter/ui/frmurlpage \
@@ -120,6 +121,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/newuserindexdialog \
 	sw/uiconfig/swriter/ui/numparapage \
 	sw/uiconfig/swriter/ui/numberingnamedialog \
+	sw/uiconfig/swriter/ui/objectdialog \
 	sw/uiconfig/swriter/ui/optcomparison \
 	sw/uiconfig/swriter/ui/optfonttabpage \
 	sw/uiconfig/swriter/ui/optformataidspage \
@@ -134,6 +136,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/querysavelabeldialog \
 	sw/uiconfig/swriter/ui/queryshowchangesdialog \
 	sw/uiconfig/swriter/ui/paradialog \
+	sw/uiconfig/swriter/ui/picturedialog \
 	sw/uiconfig/swriter/ui/previewzoomdialog \
 	sw/uiconfig/swriter/ui/printoptionspage \
 	sw/uiconfig/swriter/ui/printeroptions \

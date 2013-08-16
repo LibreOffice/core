@@ -146,7 +146,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
             if (!pArgs)
             {
                 // Frame already exists, open frame dialog for editing.
-                SfxUInt16Item aDefPage(FN_FORMAT_FRAME_DLG, TP_COLUMN);
+                SfxStringItem aDefPage(FN_FORMAT_FRAME_DLG, "columns");
                 rSh.GetView().GetViewFrame()->GetDispatcher()->Execute( FN_FORMAT_FRAME_DLG,
                                 SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD,
                                 &aDefPage, 0L );
@@ -463,29 +463,29 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                 const uno::Reference < embed::XEmbeddedObject > xObj( rSh.GetOleRef() );
                 aSet.Put( SfxBoolItem( FN_OLE_IS_MATH, xObj.is() && SotExchange::IsMath( xObj->getClassID() ) ) );
 
-                sal_uInt16 nDefPage = 0;
+                OString sDefPage;
                 if(pArgs && pArgs->GetItemState(FN_FORMAT_FRAME_DLG, sal_False, &pItem) == SFX_ITEM_SET)
-                    nDefPage = ((SfxUInt16Item *)pItem)->GetValue();
+                    sDefPage = OUStringToOString(((SfxStringItem *)pItem)->GetValue(), RTL_TEXTENCODING_UTF8);
 
                 aSet.Put(SfxFrameItem( SID_DOCFRAME, &GetView().GetViewFrame()->GetTopFrame()));
                 FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, &GetView()));
                 SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric) ));
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "Dialogdiet fail!");
-                SfxAbstractTabDialog* pDlg = pFact->CreateFrmTabDialog( DLG_FRM_STD,
+                SfxAbstractTabDialog* pDlg = pFact->CreateFrmTabDialog(
+                                                        nSel & nsSelectionType::SEL_GRF ? "PictureDialog" :
+                                                        nSel & nsSelectionType::SEL_OLE ? "ObjectDialog":
+                                                                                        "FrameDialog",
                                                         GetView().GetViewFrame(),
                                                         GetView().GetWindow(),
                                                         aSet, sal_False,
-                                                        nSel & nsSelectionType::SEL_GRF ? DLG_FRM_GRF :
-                                                        nSel & nsSelectionType::SEL_OLE ? DLG_FRM_OLE :
-                                                                                        DLG_FRM_STD,
                                                         sal_False,
-                                                        nDefPage);
+                                                        sDefPage);
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
 
                 if ( nSlot == FN_DRAW_WRAP_DLG )
                 {
-                    pDlg->SetCurPageId(TP_FRM_WRAP);
+                    pDlg->SetCurPageId("wrap");
                 }
 
                 if ( pDlg->Execute() )

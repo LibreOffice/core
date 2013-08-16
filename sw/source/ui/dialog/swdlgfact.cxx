@@ -931,30 +931,16 @@ VclAbstractDialog * SwAbstractDialogFactory_Impl::CreateTblMergeDialog(Window* p
     return new VclAbstractDialog_Impl( pDlg );
 }
 
-SfxAbstractTabDialog* SwAbstractDialogFactory_Impl::CreateFrmTabDialog( int nResId,
+SfxAbstractTabDialog* SwAbstractDialogFactory_Impl::CreateFrmTabDialog(const OString &rDialogType,
                                                 SfxViewFrame *pFrame, Window *pParent,
                                                 const SfxItemSet& rCoreSet,
-                                                sal_Bool            bNewFrm,
-                                                sal_uInt16          nResType,
-                                                sal_Bool            bFmt,
-                                                sal_uInt16          nDefPage,
+                                                bool        bNewFrm,
+                                                bool        bFmt,
+                                                OString     sDefPage,
                                                 const String*   pFmtStr ) //add for SwFrmDlg
 {
-    SfxTabDialog* pDlg=NULL;
-    switch ( nResId )
-    {
-        case DLG_FRM_GRF :
-        case DLG_FRM_OLE :
-        case DLG_FRM_STD :
-            pDlg = new SwFrmDlg( pFrame, pParent, rCoreSet, bNewFrm, nResType, bFmt, nDefPage, pFmtStr );
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractTabDialog_Impl( pDlg );
-    return 0;
+    SfxTabDialog* pDlg = new SwFrmDlg(pFrame, pParent, rCoreSet, bNewFrm, rDialogType, bFmt, sDefPage, pFmtStr);
+    return new AbstractTabDialog_Impl(pDlg);
 }
 
 SfxAbstractApplyTabDialog* SwAbstractDialogFactory_Impl::CreateTemplateDialog(

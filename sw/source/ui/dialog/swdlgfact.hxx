@@ -490,13 +490,12 @@ public:
     virtual AbstractSwModalRedlineAcceptDlg * CreateSwModalRedlineAcceptDlg(Window *pParent); //add for SwModalRedlineAcceptDlg
 
     virtual VclAbstractDialog*          CreateTblMergeDialog(Window* pParent, sal_Bool& rWithPrev); //add for SwMergeTblDlg
-    virtual SfxAbstractTabDialog*       CreateFrmTabDialog( int nResId,
+    virtual SfxAbstractTabDialog*       CreateFrmTabDialog( const OString &rDialogType,
                                                 SfxViewFrame *pFrame, Window *pParent,
                                                 const SfxItemSet& rCoreSet,
-                                                sal_Bool            bNewFrm  = sal_True,
-                                                sal_uInt16          nResType = DLG_FRM_STD,
-                                                sal_Bool            bFmt     = sal_False,
-                                                sal_uInt16          nDefPage = 0,
+                                                bool bNewFrm  = true,
+                                                bool bFmt     = false,
+                                                OString sDefPage = OString(),
                                                 const String*   pFmtStr  = 0); //add for SwFrmDlg
     virtual SfxAbstractApplyTabDialog*  CreateTemplateDialog(
                                                 Window*             pParent,

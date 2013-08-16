@@ -104,7 +104,7 @@ class SwFrmPage: public SfxTabPage
     sal_Bool            bIsInRightToLeft; // current frame is in right-to-left environment - strings are exchanged
     sal_Bool            bHtmlMode;
     sal_uInt16          nHtmlMode;
-    sal_uInt16          nDlgType;
+    OString         sDlgType;
     Size            aGrfSize;
     Size            aWrap;
     SwTwips         nUpperBorder;
@@ -194,8 +194,8 @@ public:
 
     void            SetNewFrame(sal_Bool bNewFrame) { bNew      = bNewFrame; }
     void            SetFormatUsed(sal_Bool bFmt);
-    void            SetFrmType(sal_uInt16 nType)    { nDlgType  = nType;     }
-    inline sal_Bool     IsInGraficMode( void )      { return nDlgType == DLG_FRM_GRF || nDlgType == DLG_FRM_OLE; }
+    void            SetFrmType(const OString &rType) { sDlgType  = rType; }
+    inline sal_Bool     IsInGraficMode( void ) { return sDlgType == "PictureDialog" || sDlgType == "ObjectDialog"; }
     void            EnableVerticalPositioning( bool bEnable );
 };
 
@@ -296,7 +296,7 @@ class SwFrmAddPage : public SfxTabPage
 
     SwWrtShell*   pWrtSh;
 
-    sal_uInt16    nDlgType;
+    OString       sDlgType;
     sal_Bool      bHtmlMode;
     sal_Bool      bFormat;
     sal_Bool      bNew;
@@ -316,7 +316,7 @@ public:
     virtual void Reset(const SfxItemSet &rSet);
 
     void            SetFormatUsed(sal_Bool bFmt);
-    void            SetFrmType(sal_uInt16 nType) { nDlgType = nType; }
+    void            SetFrmType(const OString &rType) { sDlgType = rType; }
     void            SetNewFrame(sal_Bool bNewFrame) { bNew  = bNewFrame; }
     void            SetShell(SwWrtShell* pSh) { pWrtSh  = pSh; }
 

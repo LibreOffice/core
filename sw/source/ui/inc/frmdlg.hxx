@@ -29,28 +29,38 @@ class SwWrtShell;
  --------------------------------------------------------------------*/
 class SwFrmDlg : public SfxTabDialog
 {
-    sal_Bool                m_bFormat;
-    sal_Bool                m_bNew;
-    sal_Bool                m_bHTMLMode;
+    bool m_bFormat;
+    bool m_bNew;
+    bool m_bHTMLMode;
     const SfxItemSet&   m_rSet;
-    sal_uInt16              m_nDlgType;
-    SwWrtShell*         m_pWrtShell;
+    OString m_sDlgType;
+    SwWrtShell* m_pWrtShell;
 
+    sal_uInt16 m_nStdId;
+    sal_uInt16 m_nAddId;
+    sal_uInt16 m_nWrapId;
+    sal_uInt16 m_nUrlId;
+    sal_uInt16 m_nPictureId;
+    sal_uInt16 m_nCropId;
+    sal_uInt16 m_nColumnId;
+    sal_uInt16 m_nBackgroundId;
+    sal_uInt16 m_nMacroId;
+    sal_uInt16 m_nBorderId;
 
     virtual void PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
 
 public:
     SwFrmDlg(   SfxViewFrame *pFrame, Window *pParent,
                 const SfxItemSet& rCoreSet,
-                sal_Bool            bNewFrm  = sal_True,
-                sal_uInt16          nResType = DLG_FRM_STD,
-                sal_Bool            bFmt     = sal_False,
-                sal_uInt16          nDefPage = 0,
+                bool bNewFrm  = false,
+                OString sResType = OString("FrameDialog"),
+                bool bFmt     = false,
+                OString sDefPage = OString(),
                 const String*   pFmtStr  = 0);
 
     ~SwFrmDlg();
 
-    inline SwWrtShell*  GetWrtShell()   { return m_pWrtShell; }
+    SwWrtShell*  GetWrtShell()   { return m_pWrtShell; }
 };
 
 #endif // _FRMDLG_HXX

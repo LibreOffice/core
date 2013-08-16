@@ -622,7 +622,6 @@ SwFrmPage::SwFrmPage(Window *pParent, const SfxItemSet &rSet)
     bIsInRightToLeft(sal_False),
     bHtmlMode(sal_False),
     nHtmlMode(0),
-    nDlgType(0),
     nUpperBorder(0),
     nLowerBorder(0),
     fWidthHeightRatio(1.0),
@@ -901,7 +900,7 @@ void SwFrmPage::Reset( const SfxItemSet &rSet )
         }
     }
 
-    if ( nDlgType == DLG_FRM_GRF || nDlgType == DLG_FRM_OLE )
+    if ( sDlgType == "PictureDialog" || sDlgType == "ObjectDialog" )
     {
         OSL_ENSURE(pSh , "shell not found");
         //OS: only for the variant Insert/Graphic/Properties
@@ -916,7 +915,7 @@ void SwFrmPage::Reset( const SfxItemSet &rSet )
             EnableGraficMode();
         }
 
-        if ( nDlgType == DLG_FRM_GRF )
+        if ( sDlgType == "PictureDialog" )
             m_pFixedRatioCB->Check( sal_False );
         else
         {
@@ -980,7 +979,7 @@ void SwFrmPage::Reset( const SfxItemSet &rSet )
         m_pAutoHeightCB->Enable(sal_False);
         m_pAutoWidthCB->Enable(sal_False);
         m_pMirrorPagesCB->Show(sal_False);
-        if(nDlgType == DLG_FRM_STD)
+        if (sDlgType == "FrameDialog")
             m_pFixedRatioCB->Enable(sal_False);
         // i#18732 hide checkbox in HTML mode
         m_pFollowTextFlowCB->Show(sal_False);
@@ -1835,7 +1834,7 @@ IMPL_LINK_NOARG(SwFrmPage, RangeModifyHdl)
     SwTwips nMaxWidth(aVal.nMaxWidth);
     SwTwips nMaxHeight(aVal.nMaxHeight);
 
-    if (aVal.bAutoHeight && (nDlgType == DLG_FRM_GRF || nDlgType == DLG_FRM_OLE))
+    if (aVal.bAutoHeight && (sDlgType == "PictureDialog" || sDlgType == "ObjectDialog"))
     {
         SwTwips nTmp = std::min(nWidth * nMaxHeight / std::max(nHeight, 1L), nMaxHeight);
         m_aWidthED.SetMax(m_aWidthED.NormalizePercent(nTmp), FUNIT_TWIP);
@@ -2129,7 +2128,7 @@ void SwFrmPage::Init(const SfxItemSet& rSet, sal_Bool bReset)
         m_aHeightED.Enable( !bSizeFixed );
 
         // size controls for math OLE objects
-        if ( DLG_FRM_OLE == nDlgType && ! bNew )
+        if ( sDlgType == "ObjectDialog" && ! bNew )
         {
             // disable width and height for math objects
             const SvGlobalName& rFactNm( pSh->GetOLEObject()->getClassID() );
@@ -2803,14 +2802,12 @@ IMPL_LINK_NOARG(SwFrmURLPage, InsertFileHdl)
     return 0;
 }
 
-SwFrmAddPage::SwFrmAddPage(Window *pParent, const SfxItemSet &rSet ) :
-    SfxTabPage(pParent, "FrmAddPage" , "modules/swriter/ui/frmaddpage.ui", rSet),
-    pWrtSh(0),
-
-    nDlgType(0),
-    bHtmlMode(sal_False),
-    bFormat(sal_False),
-    bNew(sal_False)
+SwFrmAddPage::SwFrmAddPage(Window *pParent, const SfxItemSet &rSet)
+    : SfxTabPage(pParent, "FrmAddPage" , "modules/swriter/ui/frmaddpage.ui", rSet)
+    , pWrtSh(0)
+    , bHtmlMode(sal_False)
+    , bFormat(sal_False)
+    , bNew(sal_False)
 {
     get(pNameFrame, "nameframe");
     get(pNameFT,"name_label");
@@ -2855,7 +2852,7 @@ void SwFrmAddPage::Reset(const SfxItemSet &rSet )
         pEditInReadonlyCB->Hide();
         pPrintFrameCB->Hide();
     }
-    if ( DLG_FRM_GRF == nDlgType || DLG_FRM_OLE == nDlgType )
+    if (sDlgType == "PictureDialog" || sDlgType == "ObjectDialog")
     {
         pEditInReadonlyCB->Hide();
         if (bHtmlMode)
@@ -2882,19 +2879,14 @@ void SwFrmAddPage::Reset(const SfxItemSet &rSet )
 
         OSL_ENSURE(pWrtSh, "keine Shell?");
         if( bNew || !aTmpName1.Len() )
-
-            switch( nDlgType )
-            {
-                case DLG_FRM_GRF:
-                    aTmpName1 = pWrtSh->GetUniqueGrfName();
-                    break;
-                case DLG_FRM_OLE:
-                    aTmpName1 = pWrtSh->GetUniqueOLEName();
-                    break;
-                default:
-                    aTmpName1 = pWrtSh->GetUniqueFrameName();
-                    break;
-            }
+        {
+            if (sDlgType == "PictureDialog")
+                aTmpName1 = pWrtSh->GetUniqueGrfName();
+            else if (sDlgType == "ObjectDialog")
+                aTmpName1 = pWrtSh->GetUniqueOLEName();
+            else
+                aTmpName1 = pWrtSh->GetUniqueFrameName();
+        }
 
         pNameED->SetText( aTmpName1 );
         pNameED->SaveValue();
@@ -2906,7 +2898,7 @@ void SwFrmAddPage::Reset(const SfxItemSet &rSet )
         pNameFT->Enable( sal_False );
         pAltNameFT->Enable(sal_False);
     }
-    if(nDlgType == DLG_FRM_STD && pAltNameFT->IsVisible())
+    if (sDlgType == "FrameDialog" && pAltNameFT->IsVisible())
     {
         pAltNameFT->Hide();
         pAltNameED->Hide();
@@ -2987,7 +2979,7 @@ void SwFrmAddPage::Reset(const SfxItemSet &rSet )
     // textflow
     SfxItemState eState;
     if( (!bHtmlMode || (0 != (nHtmlMode&HTMLMODE_SOME_STYLES)))
-            && DLG_FRM_GRF != nDlgType && DLG_FRM_OLE != nDlgType &&
+            && sDlgType != "PictureDialog" && sDlgType != "ObjectDialog" &&
         SFX_ITEM_UNKNOWN != ( eState = rSet.GetItemState(
                                         RES_FRAMEDIR, sal_True )) )
     {

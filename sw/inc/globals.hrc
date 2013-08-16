@@ -139,23 +139,11 @@
 #define TP_OPTTEST_PAGE             (RC_GLOBALS_BEGIN +  25)
 #define TP_OPTPRINT_PAGE            (RC_GLOBALS_BEGIN +  26)
 
-#define TP_FRM_STD                  (RC_GLOBALS_BEGIN +  31)
-
 #define TP_GRF_EXT                  (RC_GLOBALS_BEGIN +  35)
-
-#define DLG_FRM_STD                 (RC_GLOBALS_BEGIN +  36)
-#define DLG_FRM_GRF                 (RC_GLOBALS_BEGIN +  37)
-#define DLG_FRM_OLE                 (RC_GLOBALS_BEGIN +  38)
-
-#define TP_MACRO_ASSIGN             (RC_GLOBALS_BEGIN +  40)
-#define TP_FRM_URL                  (RC_GLOBALS_BEGIN +  42)
 
 #define TP_CONTENT_OPT              (RC_GLOBALS_BEGIN +  45)
 #define TP_STD_FONT                 (RC_GLOBALS_BEGIN +  47)
 #define TP_CONDCOLL                 (RC_GLOBALS_BEGIN +  48)
-
-#define TP_FRM_WRAP                 (RC_GLOBALS_BEGIN +  49)
-#define TP_FRM_ADD                  (RC_GLOBALS_BEGIN +  51)
 
 #define TP_NUMBER                   (RC_GLOBALS_BEGIN +  57)
 
