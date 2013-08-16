@@ -271,7 +271,7 @@ endif
 ifeq ($(COM),GCC)
 $(eval $(call gb_Library_add_cxxobjects,dbu,\
     dbaccess/source/ui/uno/copytablewizard \
-    , $(gb_LinkTarget_EXCEPTIONFLAGS) $(gb_COMPILERNOOPTFLAGS) \
+    , $(gb_LinkTarget_EXCEPTIONFLAGS) $(gb_COMPILERNOOPTFLAGS) $(if $(call gb_LinkTarget__debug_enabled,dbu),$(gb_DEBUG_CFLAGS)) \
 ))
 else
 $(eval $(call gb_Library_add_exception_objects,dbu,\

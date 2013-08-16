@@ -123,7 +123,7 @@ endif
 ifeq ($(sc_gccthunkBroken),1)
 $(eval $(call gb_Library_add_cxxobjects,vbaobj,\
     sc/source/ui/vba/vbasheetobjects \
-    , $(gb_COMPILERNOOPTFLAGS) $(gb_LinkTarget_EXCEPTIONFLAGS) \
+    , $(gb_COMPILERNOOPTFLAGS) $(if $(call gb_LinkTarget__debug_enabled,vbaobj),$(gb_DEBUG_CFLAGS)) $(gb_LinkTarget_EXCEPTIONFLAGS) \
 ))
 else
 $(eval $(call gb_Library_add_exception_objects,vbaobj,\

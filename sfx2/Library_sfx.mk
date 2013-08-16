@@ -293,7 +293,7 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Library_add_cxxobjects,sfx,\
        sfx2/source/control/dispatch \
-    , $(gb_COMPILERNOOPTFLAGS) $(gb_LinkTarget_EXCEPTIONFLAGS) \
+    , $(gb_COMPILERNOOPTFLAGS) $(if $(call gb_LinkTarget__debug_enabled,sfx),$(gb_DEBUG_CFLAGS)) $(gb_LinkTarget_EXCEPTIONFLAGS) \
 ))
 else
 $(eval $(call gb_Library_add_exception_objects,sfx,\
