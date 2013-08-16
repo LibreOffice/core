@@ -253,10 +253,19 @@ const sal_Unicode* lcl_UnicodeStrChr( const sal_Unicode* pStr,sal_Unicode c )
 
 void FormulaCompiler::OpCodeMap::putExternal( const String & rSymbol, const String & rAddIn )
 {
+    // Different symbols may map to the same AddIn, but the same AddIn may not
+    // map to different symbols, the first pair wins. Same symbol of course may
+    // not map to different AddIns, again the first pair wins and also the
+    // AddIn->symbol mapping is not inserted in other cases.
     bool bOk = mpExternalHashMap->insert( ExternalHashMap::value_type( rSymbol, rAddIn)).second;
+    SAL_WARN_IF( !bOk, "formula.core", "OpCodeMap::putExternal: symbol not inserted, " << rSymbol << " -> " << rAddIn);
     if (bOk)
+    {
         bOk = mpReverseExternalHashMap->insert( ExternalHashMap::value_type( rAddIn, rSymbol)).second;
-    DBG_ASSERT( bOk, "OpCodeMap::putExternal: symbol not inserted");
+        // Failed insertion of the AddIn is ok for different symbols mapping to
+        // the same AddIn. Make this INFO only.
+        SAL_INFO_IF( !bOk, "formula.core", "OpCodeMap::putExternal: AddIn not inserted, " << rAddIn << " -> " << rSymbol);
+    }
 }
 
 void FormulaCompiler::OpCodeMap::putExternalSoftly( const String & rSymbol, const String & rAddIn )
