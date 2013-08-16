@@ -5,7 +5,7 @@
 
 void sd::WINNetworkService::setup()
 {
-    DNSServiceErrorType err = DNSServiceRegister(&client, 0, 0, NULL, kREG_TYPE, NULL, NULL, 1599, 1, "", NULL, this );
+    DNSServiceErrorType err = DNSServiceRegister(&client, 0, 0, NULL, kREG_TYPE, "local", NULL, 1599, 1, "", NULL, this );
 
     if ( err == 0 ) {
         SAL_INFO("sd", "Windows bonjour service setup");
