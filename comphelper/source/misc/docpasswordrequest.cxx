@@ -106,26 +106,6 @@ SimplePasswordRequest::~SimplePasswordRequest()
 {
 }
 
-/*uno::*/Any SAL_CALL SimplePasswordRequest::queryInterface( const /*uno::*/Type& rType ) throw (RuntimeException)
-{
-    return ::cppu::queryInterface ( rType,
-            // OWeakObject interfaces
-            dynamic_cast< XInterface* > ( (XInteractionRequest *) this ),
-            static_cast< XWeak* > ( this ),
-            // my own interfaces
-            static_cast< XInteractionRequest*  > ( this ) );
-}
-
-void SAL_CALL SimplePasswordRequest::acquire(  ) throw ()
-{
-    OWeakObject::acquire();
-}
-
-void SAL_CALL SimplePasswordRequest::release(  ) throw ()
-{
-    OWeakObject::release();
-}
-
 sal_Bool SimplePasswordRequest::isPassword() const
 {
     return mpPassword->isSelected();
@@ -180,26 +160,6 @@ DocPasswordRequest::DocPasswordRequest( DocPasswordRequestType eType,
 
 DocPasswordRequest::~DocPasswordRequest()
 {
-}
-
-/*uno::*/Any SAL_CALL DocPasswordRequest::queryInterface( const /*uno::*/Type& rType ) throw (RuntimeException)
-{
-    return ::cppu::queryInterface ( rType,
-            // OWeakObject interfaces
-            dynamic_cast< XInterface* > ( (XInteractionRequest *) this ),
-            static_cast< XWeak* > ( this ),
-            // my own interfaces
-            static_cast< XInteractionRequest*  > ( this ) );
-}
-
-void SAL_CALL DocPasswordRequest::acquire(  ) throw ()
-{
-    OWeakObject::acquire();
-}
-
-void SAL_CALL DocPasswordRequest::release(  ) throw ()
-{
-    OWeakObject::release();
 }
 
 sal_Bool DocPasswordRequest::isPassword() const
