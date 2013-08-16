@@ -2479,7 +2479,7 @@ void SfxMedium::Init_Impl()
         {
             if ( aUrl.HasMark() )
             {
-                pImp->m_aLogicName = aUrl.GetURLNoMark( INetURLObject::NO_DECODE );
+                // keep the Mark to store the Document ID
                 GetItemSet()->Put( SfxStringItem( SID_JUMPMARK, aUrl.GetMark() ) );
             }
 
@@ -2994,8 +2994,7 @@ const INetURLObject& SfxMedium::GetURLObject() const
     if (!pImp->m_pURLObj)
     {
         pImp->m_pURLObj = new INetURLObject( pImp->m_aLogicName );
-        if (pImp->m_pURLObj->HasMark())
-            *pImp->m_pURLObj = INetURLObject( pImp->m_aLogicName ).GetURLNoMark();
+        // keep the Mark to store the Document ID
     }
 
     return *pImp->m_pURLObj;

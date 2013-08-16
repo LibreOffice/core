@@ -484,7 +484,10 @@ sal_Bool MediaDescriptor::impl_addInputStream( sal_Bool bLockFile )
             throw css::uno::Exception("Found no URL.",
                     css::uno::Reference< css::uno::XInterface >());
 
-        return impl_openStreamWithURL( removeFragment(sURL), bLockFile );
+        // Parse URL! Only the main part has to be used further. E.g. a jumpmark can make trouble
+        // We need to keep the full URL with Mark to store the Object ID
+        // in CMIS UCB
+        return impl_openStreamWithURL( sURL, bLockFile );
     }
     catch(const css::uno::Exception& ex)
     {

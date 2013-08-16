@@ -412,7 +412,18 @@ namespace cmis
     {
         if ( !m_pObject.get() )
         {
-            if ( !m_sObjectPath.isEmpty( ) )
+            if ( !m_sObjectId.isEmpty( ) )
+            {
+                try
+                {
+                    m_pObject = getSession( xEnv )->getObject( OUSTR_TO_STDSTR( m_sObjectId ) );
+                }
+                catch ( const libcmis::Exception& )
+                {
+                    throw libcmis::Exception( "Object not found" );
+                }
+            }
+            else if ( !m_sObjectPath.isEmpty( ) )
             {
                 try
                 {
@@ -435,7 +446,7 @@ namespace cmis
                     {
                         vector< libcmis::ObjectPtr > children = pParentFolder->getChildren( );
                         for ( vector< libcmis::ObjectPtr >::iterator it = children.begin( );
-                              it != children.end() && !m_pObject; ++it )
+                                it != children.end() && !m_pObject; ++it )
                         {
                             if ( ( *it )->getName( ) == sName )
                                 m_pObject = *it;
@@ -446,8 +457,6 @@ namespace cmis
                         throw libcmis::Exception( "Object not found" );
                 }
             }
-            else if (!m_sObjectId.isEmpty( ) )
-                m_pObject = getSession( xEnv )->getObject( OUSTR_TO_STDSTR( m_sObjectId ) );
             else
             {
                 m_pObject = getSession( xEnv )->getRootFolder( );
@@ -464,7 +473,9 @@ namespace cmis
         bool bIsFolder = false;
         try
         {
-            bIsFolder = getObject( xEnv )->getBaseType( ) == "cmis:folder";
+            libcmis::ObjectPtr obj = getObject( xEnv );
+            if ( obj )
+                bIsFolder = obj->getBaseType( ) == "cmis:folder";
         }
         catch ( const libcmis::Exception& e )
         {
@@ -536,7 +547,9 @@ namespace cmis
                 {
                     try
                     {
-                        xRow->appendBoolean( rProp, getObject( xEnv )->getBaseType( ) == "cmis:document" );
+                        libcmis::ObjectPtr obj = getObject( xEnv );
+                        if ( obj )
+                            xRow->appendBoolean( rProp, obj->getBaseType( ) == "cmis:document" );
                     }
                     catch ( const libcmis::Exception& )
                     {
@@ -550,7 +563,11 @@ namespace cmis
                 {
                     try
                     {
-                        xRow->appendBoolean( rProp, getObject( xEnv )->getBaseType( ) == "cmis:folder" );
+                        libcmis::ObjectPtr obj = getObject( xEnv );
+                        if ( obj )
+                            xRow->appendBoolean( rProp, obj->getBaseType( ) == "cmis:folder" );
+                        else
+                            xRow->appendBoolean( rProp, sal_False );
                     }
                     catch ( const libcmis::Exception& )
                     {
@@ -630,20 +647,7 @@ namespace cmis
                 else if ( rProp.Name == "TitleOnServer" )
                 {
                     string path;
-                    try
-                    {
-                        vector< string > paths = getObject( xEnv )->getPaths( );
-                        if ( !paths.empty( ) )
-                            path = paths.front( );
-                        else
-                            path = getObject( xEnv )->getName( );
-
-                        xRow->appendString( rProp, STD_TO_OUSTR( path ) );
-                    }
-                    catch ( const libcmis::Exception& )
-                    {
-                        xRow->appendVoid( rProp );
-                    }
+                    xRow->appendString( rProp, m_sObjectPath);
                 }
                 else if ( rProp.Name == "IsReadOnly" )
                 {
@@ -1151,41 +1155,30 @@ namespace cmis
             if ( pFolder != NULL )
             {
                 libcmis::ObjectPtr object;
-                string newPath;
-                if ( m_sObjectId.isEmpty( ) )
+                map< string, libcmis::PropertyPtr >::iterator it = m_pObjectProps.find( "cmis:name" );
+                if ( it == m_pObjectProps.end( ) )
                 {
-                    map< string, libcmis::PropertyPtr >::iterator it = m_pObjectProps.find( "cmis:name" );
-                    if ( it == m_pObjectProps.end( ) )
-                    {
-                        ucbhelper::cancelCommandExecution( uno::makeAny
-                            ( uno::RuntimeException( "Missing name property",
-                                static_cast< cppu::OWeakObject * >( this ) ) ),
-                            xEnv );
-                    }
-                    string newName = it->second->getStrings( ).front( );
-                    newPath = pFolder->getPath( );
-                    if ( newPath[ newPath.size( ) - 1 ] != '/' )
-                        newPath += "/";
-                    newPath += newName;
-
-                    try
-                    {
-                        object = getSession( xEnv )->getObjectByPath( newPath );
-                        sNewPath = STD_TO_OUSTR( newPath );
-                    }
-                    catch ( const libcmis::Exception& )
-                    {
-                        // Nothing matched the path
-                    }
+                    ucbhelper::cancelCommandExecution( uno::makeAny
+                        ( uno::RuntimeException( "Missing name property",
+                            static_cast< cppu::OWeakObject * >( this ) ) ),
+                        xEnv );
                 }
-                else
+                string newName = it->second->getStrings( ).front( );
+                string newPath = OUSTR_TO_STDSTR( m_sObjectPath );
+                if ( !newPath.empty( ) && newPath[ newPath.size( ) - 1 ] != '/' )
+                    newPath += "/";
+                newPath += newName;
                 try
                 {
-                    object = getSession( xEnv )->getObject( OUSTR_TO_STDSTR( m_sObjectId) );
+                    if ( !m_sObjectId.isEmpty( ) )
+                        object = getSession( xEnv )->getObject( OUSTR_TO_STDSTR( m_sObjectId) );
+                    else
+                        object = getSession( xEnv )->getObjectByPath( newPath );
+                    sNewPath = STD_TO_OUSTR( newPath );
                 }
-                catch ( libcmis::Exception& )
+                catch ( const libcmis::Exception& )
                 {
-                    // Continue
+                    // Nothing matched the path
                 }
 
                 if ( NULL != object.get( ) )
@@ -1272,7 +1265,8 @@ namespace cmis
                     m_pObjectType.reset( );
                     m_pObjectProps.clear( );
                     m_bTransient = false;
-
+                    uno::Reference< ucb::XContentIdentifier > xId(new ::ucbhelper::ContentIdentifier(m_sURL));
+                    m_xIdentifier = xId;
                     inserted();
                 }
             }
@@ -1545,54 +1539,18 @@ namespace cmis
         OUString sRet;
 
         SAL_INFO( "cmisucp", "Content::getParentURL()" );
-
-        string parentPath;
-        try
-        {
-            libcmis::ObjectPtr pObj = getObject( uno::Reference< ucb::XCommandEnvironment >() );
-            libcmis::Document* document = dynamic_cast< libcmis::Document* >( pObj.get( ) );
-            if ( NULL != document )
-            {
-                vector< boost::shared_ptr< libcmis::Folder > > parents = document->getParents( );
-                if ( !parents.empty( ) )
-                    parentPath = parents.front( )->getPath( );
-            }
-            else
-            {
-                libcmis::Folder* folder = dynamic_cast< libcmis::Folder* >( pObj.get( ) );
-                if ( NULL != folder )
-                {
-                    libcmis::FolderPtr parentFolder = folder->getFolderParent( );
-                    if ( NULL != parentFolder )
-                        parentPath = parentFolder->getPath( );
-                }
-            }
-        }
-        catch ( const libcmis::Exception & )
-        {
-            // We may have an exception if we don't have the rights to
-            // get the parents
-        }
-
-        if ( !parentPath.empty() )
-        {
-            URL aUrl( m_sURL );
-            aUrl.setObjectPath( STD_TO_OUSTR( parentPath ) );
-            sRet = aUrl.asString( );
-        }
+        OUString parentUrl = OUString( "/" );
+        if ( m_sObjectPath == "/" )
+            return parentUrl;
         else
         {
-            INetURLObject aUrl( m_sURL );
-            if ( aUrl.getSegmentCount( ) > 0 )
-            {
-                URL aCmisUrl( m_sURL );
-                aUrl.removeSegment( );
-                aCmisUrl.setObjectPath( aUrl.GetURLPath( INetURLObject::DECODE_WITH_CHARSET ) );
-                sRet = aCmisUrl.asString( );
-            }
+            INetURLObject aParentUrl( m_sURL );
+            string sName = OUSTR_TO_STDSTR( aParentUrl.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET ) );
+            aParentUrl.removeSegment( );
+            return aParentUrl.GetMainURL( INetURLObject::NO_DECODE );
         }
 
-        return sRet;
+        return parentUrl;
     }
 
     XTYPEPROVIDER_COMMON_IMPL( Content );

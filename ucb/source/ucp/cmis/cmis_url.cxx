@@ -35,8 +35,8 @@ namespace cmis
         m_sPath = aUrl.GetURLPath( INetURLObject::DECODE_WITH_CHARSET );
         m_sId = aUrl.GetMark( INetURLObject::DECODE_WITH_CHARSET );
 
-        if ( !m_sId.isEmpty( ) )
-            m_sPath = OUString( );
+        if ( m_sPath == "/" && m_sBindingUrl.indexOf( "google" ) != -1 )
+            m_sId = "root";
     }
 
     OUString& URL::getObjectPath( )
@@ -103,7 +103,7 @@ namespace cmis
             while ( nPos != -1 );
             sUrl += sEncodedPath;
         }
-        else if ( !m_sId.isEmpty( ) )
+        if ( !m_sId.isEmpty( ) )
         {
             sUrl += "#" + rtl::Uri::encode( m_sId,
                 rtl_UriCharClassRelSegment,
