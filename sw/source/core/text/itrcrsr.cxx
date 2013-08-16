@@ -931,7 +931,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                         if( aInf.GetIdx() < nOfst && nOfst < aInf.GetIdx() + pPor->GetLen() )
                         {
                             // Find the current drop portion part and use its right border
-                            if( pPor->IsDropPortion() )
+                            if( pPor->IsDropPortion() && static_cast<SwDropPortion*>(pPor)->GetLines() > 1 )
                             {
                                 SwDropPortion* pDrop = static_cast<SwDropPortion*>(pPor);
                                 const SwDropPortionPart* pCurrPart = pDrop->GetPart();
@@ -945,7 +945,8 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                                     nX -= pCurrPart->GetFont().GetRightBorderSpace();
                                 }
                             }
-                            else if(GetInfo().GetFont()->GetRightBorder())
+                            else if( GetInfo().GetFont()->GetRightBorder() && pPor->InTxtGrp() &&
+                                     !static_cast<const SwTxtPortion*>(pPor)->GetJoinBorderWithNext())
                             {
                                 nX -= GetInfo().GetFont()->GetRightBorderSpace();
                             }
@@ -1110,7 +1111,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                 if ( pCMS->pSpecialPos )
                 {
                     // apply attributes to font
-                    SeekAndChgAttrIter( nOfst, aInf.GetOut() );
+                    Seek( nOfst );
                     lcl_GetCharRectInsideField( aInf, *pOrig, *pCMS, *pPor );
                 }
             }
@@ -1640,7 +1641,7 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
                                          pPor->GetLen() );
 
                 // Drop portion works like a multi portion, just its parts are not portions
-                if( pPor->IsDropPortion() )
+                if( pPor->IsDropPortion() && static_cast<SwDropPortion*>(pPor)->GetLines() > 1 )
                 {
                     SwDropPortion* pDrop = static_cast<SwDropPortion*>(pPor);
                     const SwDropPortionPart* pCurrPart = pDrop->GetPart();
@@ -1663,8 +1664,11 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
                     nX = std::max(0, nX - nSumBorderWidth);
                 }
                 // Shift the offset with the left border width
-                else if (GetInfo().GetFont()->GetLeftBorder() )
+                else if ( GetInfo().GetFont()->GetLeftBorder() &&
+                          !static_cast<const SwTxtPortion*>(pPor)->GetJoinBorderWithPrev() )
+                {
                     nX = std::max(0, nX - GetInfo().GetFont()->GetLeftBorderSpace());
+                }
 
 
                 aDrawInf.SetOfst( nX );

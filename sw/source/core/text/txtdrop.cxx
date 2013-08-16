@@ -604,7 +604,7 @@ SwDropPortion *SwTxtFormatter::NewDropPortion( SwTxtFormatInfo &rInf )
     while ( nNextChg  < nPorLen )
     {
         // check for attribute changes and if the portion has to split:
-        SeekAndChgAttrIter( nNextChg, rInf.GetOut() );
+        Seek( nNextChg );
 
         // the font is deleted in the destructor of the drop portion part
         SwFont* pTmpFnt = new SwFont( *rInf.GetFont() );

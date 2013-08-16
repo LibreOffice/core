@@ -46,6 +46,8 @@ class SwTxtFormatter : public SwTxtPainter
     sal_Bool bTruncLines : 1; // Flag for extending the repaint rect, if needed
     sal_Bool bUnclipped : 1; // Flag whether repaint is larger than the fixed line height
     sal_uInt16 m_nHintEndIndex; // HACK for TryNewNoLengthPortion
+    SwTxtPortion* m_pFirstOfBorderMerge; // The first text portion of a joined border (during portion bulding)
+
     SwLinePortion *NewPortion( SwTxtFormatInfo &rInf );
     SwTxtPortion  *NewTxtPortion( SwTxtFormatInfo &rInf );
     SwLinePortion *NewExtraPortion( SwTxtFormatInfo &rInf );
@@ -220,6 +222,23 @@ public:
     inline const sal_uInt8 &CntMidHyph() const { return nCntMidHyph; }
     inline sal_uInt8 &CntEndHyph() { return nCntEndHyph; }
     inline sal_uInt8 &CntMidHyph() { return nCntMidHyph; }
+
+    /**
+     * Merge border of the drop portion with modifying the font of
+     * the portions' part. Removing left or right border.
+     * @param   rPortion    drop portion for merge
+    **/
+    void MergeCharacterBorder( SwDropPortion& rPortion );
+
+    /**
+     * Merge border of the text portion with setting the text portions
+     * m_bJoinBorderWidthNext and m_bJoinBorderWidthPrev members and
+     * changing the size (width, height and ascent) of the text portion
+     * to get a merged border.
+     * @param   rPortion    text portion for merge
+     * @param   rInf        contain information
+    **/
+    void MergeCharacterBorder( SwTxtPortion& rPortion, SwTxtFormatInfo& rInf );
 };
 
 

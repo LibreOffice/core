@@ -60,8 +60,6 @@ private:
     const void* aMagicNo[ SW_SCRIPTS ];
     MSHORT aFntIdx[ SW_SCRIPTS ];
     const SwTxtNode* m_pTxtNode;
-    /// previous seek remove left/right border of the current font during merge character border
-    bool m_bPrevSeekRemBorder;
 
     void SeekFwd( const xub_StrLen nPos );
     inline void SetFnt( SwFont* pNew ) { pFnt = pNew; }
@@ -71,17 +69,15 @@ protected:
     void Rst( SwTxtAttr *pHt );
     void CtorInitAttrIter( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf, SwTxtFrm* pFrm = 0 );
     inline SwAttrIter(SwTxtNode* pTxtNode)
-        : pShell(0), pFnt(0), pHints(0), pAttrSet(0), pScriptInfo(0), pLastOut(0), nChgCnt(0), pRedln(0), nPropFont(0), m_pTxtNode(pTxtNode), m_bPrevSeekRemBorder(false) {
+        : pShell(0), pFnt(0), pHints(0), pAttrSet(0), pScriptInfo(0), pLastOut(0), nChgCnt(0), pRedln(0), nPropFont(0), m_pTxtNode(pTxtNode)
+        {
             aMagicNo[SW_LATIN] = aMagicNo[SW_CJK] = aMagicNo[SW_CTL] = NULL;
         }
 
-    /// Implementation of the considering public methods (to avoid recursion)
-    sal_Bool ImplSeekAndChgAttrIter( const xub_StrLen nNewPos, OutputDevice* pOut );
-    sal_Bool ImplSeekStartAndChgAttrIter( OutputDevice* pOut, const sal_Bool bParaFont );
 public:
     // Constructor, destructor
     inline SwAttrIter( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf )
-        : pShell(0), pFnt(0), pHints(0), pScriptInfo(0), pLastOut(0), nChgCnt(0), pRedln(0),nPropFont(0), m_pTxtNode(&rTxtNode),m_bPrevSeekRemBorder(false)
+        : pShell(0), pFnt(0), pHints(0), pScriptInfo(0), pLastOut(0), nChgCnt(0), pRedln(0),nPropFont(0), m_pTxtNode(&rTxtNode)
         { CtorInitAttrIter( rTxtNode, rScrInf ); }
 
     virtual ~SwAttrIter();
@@ -101,16 +97,6 @@ public:
     **/
     sal_Bool SeekAndChgAttrIter( const xub_StrLen nPos, OutputDevice* pOut );
     sal_Bool SeekStartAndChgAttrIter( OutputDevice* pOut, const sal_Bool bParaFont = sal_False );
-
-    /** Merge character border with removing left/right border of the font if the
-     *  the neighbours of the current position (nPos) has the same height
-     *  and same kind of border.
-     *  @param      bStart  true if it is called from SeekStartAndChgAttrIter
-     *                      false, otherwise
-     *  @return     true,   if font change (removing some of its borders)
-     *              false,  otherwise
-    **/
-    bool MergeCharBorder( const bool bStart );
 
     // Do we have an attribute change at all?
     inline sal_Bool HasHints() const { return 0 != pHints; }

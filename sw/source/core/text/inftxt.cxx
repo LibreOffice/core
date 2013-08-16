@@ -696,7 +696,8 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
 
     // Draw text next to the left border
     Point aFontPos(aPos);
-    if( m_pFnt->GetLeftBorder() )
+    if( m_pFnt->GetLeftBorder() && rPor.InTxtGrp() &&
+        !static_cast<const SwTxtPortion&>(rPor).GetJoinBorderWithPrev() )
     {
         const sal_uInt16 nLeftBorderSpace = m_pFnt->GetLeftBorderSpace();
         switch( m_pFnt->GetOrientation(GetTxtFrm()->IsVertical()) )

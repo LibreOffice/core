@@ -43,6 +43,7 @@
 #include <porfld.hxx>       // SwNumberPortion for CalcAscent()
 #include <porftn.hxx>       // SwFtnPortion
 #include <porhyph.hxx>
+#include <pordrop.hxx>
 #include <guess.hxx>
 #include <blink.hxx>        // pBlink
 #include <ftnfrm.hxx>       // WhichFirstPortion() -> move it
@@ -74,6 +75,9 @@ namespace {
                                     const std::vector<long> &rFlyStarts );
     //! Determine if we need to build hidden portions
     static bool lcl_BuildHiddenPortion( const SwTxtSizeInfo& rInf, xub_StrLen &rPos );
+
+    // Check whether the two font has the same border
+    static bool lcl_HasSameBorder(const SwFont& rFirst, const SwFont& rSecond);
 }
 
 inline void ClearFly( SwTxtFormatInfo &rInf )
@@ -102,6 +106,7 @@ void SwTxtFormatter::CtorInitTxtFormatter( SwTxtFrm *pNewFrm, SwTxtFormatInfo *p
     nLeftScanIdx = STRING_LEN;
     nRightScanIdx = 0;
     m_nHintEndIndex = 0;
+    m_pFirstOfBorderMerge = 0;
 
     if( nStart > GetInfo().GetTxt().getLength() )
     {
@@ -546,6 +551,9 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
                 InsertPortion( rInf, pGridKernPortion );
         }
 
+        if( pPor->IsDropPortion() )
+            MergeCharacterBorder(*static_cast<SwDropPortion*>(pPor));
+
         // the multi-portion has it's own format function
         if( pPor->IsMultiPortion() && ( !pMulti || pMulti->IsBidi() ) )
             bFull = BuildMultiPortion( rInf, *((SwMultiPortion*)pPor) );
@@ -698,6 +706,9 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
         }
 
         rInf.SetFull( bFull );
+
+        if( pPor->InTxtGrp() && !pPor->IsDropPortion() )
+            MergeCharacterBorder(*static_cast<SwTxtPortion*>(pPor), rInf);
 
         // Restportions from fields with multiple lines don't yet have the right ascent
         if ( !pPor->GetLen() && !pPor->IsFlyPortion()
@@ -2588,6 +2599,120 @@ SwFlyCntPortion *SwTxtFormatter::NewFlyCntPortion( SwTxtFormatInfo &rInf,
     return pRet;
 }
 
+/* Drop portion is a special case, because it has parts which aren't portions
+   but we have handle them just like portions */
+void SwTxtFormatter::MergeCharacterBorder( SwDropPortion& rPortion )
+{
+    if( rPortion.GetLines() > 1 )
+    {
+        SwDropPortionPart* pCurrPart = rPortion.GetPart();
+        bool bJoinWithPrev = false;
+        while( pCurrPart )
+        {
+            const bool bJoinWithNext =
+                pCurrPart->GetFollow() &&
+                ::lcl_HasSameBorder(pCurrPart->GetFont(), pCurrPart->GetFollow()->GetFont());
+
+            if( bJoinWithPrev )
+                pCurrPart->GetFont().SetLeftBorder(0);
+
+            if( bJoinWithNext )
+            {
+                pCurrPart->GetFont().SetRightBorder(0);
+                bJoinWithPrev = true;
+            }
+            else
+            {
+                bJoinWithPrev = false;
+            }
+            pCurrPart = pCurrPart->GetFollow();
+        }
+    }
+}
+
+void SwTxtFormatter::MergeCharacterBorder( SwTxtPortion& rPortion, SwTxtFormatInfo& rInf )
+{
+
+    const SwFont aCurFont = *rInf.GetFont();
+    if( aCurFont.HasBorder() )
+    {
+        // The current portion isn't inserted into the portion chain yet, so the info's
+        // last portion will be the previous one
+        if( rInf.GetLast() && rInf.GetLast()->InTxtGrp() &&
+            rInf.GetLast() != &rPortion && // For para portion (special case)
+            static_cast<SwTxtPortion*>(rInf.GetLast())->GetJoinBorderWithNext())
+        {
+            rPortion.SetJoinBorderWithPrev(true);
+            rPortion.Width(rPortion.Width() - aCurFont.GetLeftBorderSpace());
+        }
+        else
+        {
+            rPortion.SetJoinBorderWithPrev(false);
+            m_pFirstOfBorderMerge = &rPortion;
+        }
+
+        // Get next portion's font
+        bool bSeek = false;
+        if( !rInf.IsFull() // Last portion of the line (in case of line break)
+            && rInf.GetIdx() + rInf.GetLen() != rInf.GetTxt().getLength() ) // Last portion of the paragraph
+            bSeek = Seek(rInf.GetIdx() + rInf.GetLen());
+
+        // If next portion has the same font then merge
+        if( bSeek && GetFnt()->HasBorder() && ::lcl_HasSameBorder(aCurFont, *GetFnt()) )
+        {
+            rPortion.SetJoinBorderWithNext(true);
+            rPortion.Width(rPortion.Width() - aCurFont.GetRightBorderSpace());
+        }
+        // If this is the last portion of the merge group than make the real height merge
+        else
+        {
+            rPortion.SetJoinBorderWithNext(false);
+            if( m_pFirstOfBorderMerge != &rPortion )
+            {
+                // Calculate maximum height and ascent
+                SwLinePortion* pActPor = m_pFirstOfBorderMerge;
+                sal_uInt16 nMaxAscent = 0;
+                sal_uInt16 nMaxHeight = 0;
+                bool bReachCurrent = false;
+                while( pActPor )
+                {
+                    if( nMaxHeight < pActPor->Height() )
+                        nMaxHeight = pActPor->Height();
+                    if( nMaxAscent < pActPor->GetAscent() )
+                        nMaxAscent = pActPor->GetAscent();
+
+                    pActPor = pActPor->GetPortion();
+                    if( !pActPor && !bReachCurrent )
+                    {
+                        pActPor = &rPortion;
+                        bReachCurrent = true;
+                    }
+                }
+
+                // Change all portion's height and ascent
+                pActPor = m_pFirstOfBorderMerge;
+                bReachCurrent = false;
+                while( pActPor )
+                {
+                    if( nMaxHeight > pActPor->Height() )
+                        pActPor->Height(nMaxHeight);
+                    if( nMaxAscent > pActPor->GetAscent() )
+                        pActPor->SetAscent(nMaxAscent);
+
+                    pActPor = pActPor->GetPortion();
+                    if( !pActPor && !bReachCurrent )
+                    {
+                        pActPor = &rPortion;
+                        bReachCurrent = true;
+                    }
+                }
+                m_pFirstOfBorderMerge = 0;
+            }
+        }
+        Seek(rInf.GetIdx());
+    }
+}
+
 namespace {
     /*************************************************************************
     *                      ::CalcOptRepaint()
@@ -2727,6 +2852,20 @@ namespace {
         }
 
         return false;
+    }
+
+    bool lcl_HasSameBorder(const SwFont& rFirst, const SwFont& rSecond)
+    {
+        return
+            rFirst.GetTopBorder() == rSecond.GetTopBorder() &&
+            rFirst.GetBottomBorder() == rSecond.GetBottomBorder() &&
+            rFirst.GetLeftBorder() == rSecond.GetLeftBorder() &&
+            rFirst.GetRightBorder() == rSecond.GetRightBorder() &&
+            rFirst.GetTopBorderDist() == rSecond.GetTopBorderDist() &&
+            rFirst.GetBottomBorderDist() == rSecond.GetBottomBorderDist() &&
+            rFirst.GetLeftBorderDist() == rSecond.GetLeftBorderDist() &&
+            rFirst.GetRightBorderDist() == rSecond.GetRightBorderDist() &&
+            rFirst.GetOrientation() == rSecond.GetOrientation();
     }
 
 } //end unnamed namespace

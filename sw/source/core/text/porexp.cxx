@@ -91,6 +91,11 @@ sal_Bool SwExpandPortion::Format( SwTxtFormatInfo &rInf )
 void SwExpandPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
     SwTxtSlot aDiffTxt( &rInf, this, true, true );
+    const SwFont aOldFont = *rInf.GetFont();
+    if( GetJoinBorderWithPrev() )
+        const_cast<SwTxtPaintInfo&>(rInf).GetFont()->SetLeftBorder(0);
+    if( GetJoinBorderWithNext() )
+        const_cast<SwTxtPaintInfo&>(rInf).GetFont()->SetRightBorder(0);
 
     rInf.DrawBackBrush( *this );
     rInf.DrawBorder( *this );
@@ -111,6 +116,9 @@ void SwExpandPortion::Paint( const SwTxtPaintInfo &rInf ) const
             0 != rInf.GetSmartTags(), 0 != rInf.GetGrammarCheckList() );
     else
         rInf.DrawText( *this, rInf.GetLen(), sal_False );
+
+    if( GetJoinBorderWithPrev() || GetJoinBorderWithNext() )
+        *const_cast<SwTxtPaintInfo&>(rInf).GetFont() = aOldFont;
 }
 
 /*************************************************************************
