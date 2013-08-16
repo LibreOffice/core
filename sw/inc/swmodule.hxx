@@ -16,9 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SWMODULE_HXX
-#define _SWMODULE_HXX
-#include <tools/string.hxx>
+#ifndef SWMODULE_HXX
+#define SWMODULE_HXX
 #include <tools/fldunit.hxx>
 #include <svl/lstner.hxx>
 #include <unotools/options.hxx>
@@ -66,7 +65,7 @@ namespace com{ namespace sun{ namespace star{ namespace scanner{
 
 class SW_DLLPUBLIC SwModule: public SfxModule, public SfxListener, public utl::ConfigurationListener
 {
-    String              sActAuthor;
+    OUString            sActAuthor;
 
     // ConfigItems
     SwModuleOptions*    pModuleConfig;
@@ -95,7 +94,7 @@ class SW_DLLPUBLIC SwModule: public SfxModule, public SfxListener, public utl::C
     SwView*             pView;
 
     // List of all Redline-authors.
-    std::vector<String>*      pAuthorNames;
+    std::vector<OUString>* pAuthorNames;
 
     // DictionaryList listener to trigger spellchecking or hyphenation
     ::com::sun::star::uno::Reference<
@@ -186,9 +185,9 @@ public:
 
     // Redlining.
     sal_uInt16          GetRedlineAuthor();
-    const String&       GetRedlineAuthor(sal_uInt16 nPos);
-    sal_uInt16          InsertRedlineAuthor(const String& rAuthor);
-    void                SetRedlineAuthor(const String& rAuthor); // for unit tests
+    OUString            GetRedlineAuthor(sal_uInt16 nPos);
+    sal_uInt16          InsertRedlineAuthor(const OUString& rAuthor);
+    void                SetRedlineAuthor(const OUString& rAuthor); // for unit tests
 
     void                GetInsertAuthorAttr(sal_uInt16 nAuthor, SfxItemSet &rSet);
     void                GetDeletedAuthorAttr(sal_uInt16 nAuthor, SfxItemSet &rSet);

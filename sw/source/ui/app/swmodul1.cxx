@@ -398,32 +398,36 @@ sal_uInt16 SwModule::GetRedlineAuthor()
     if (!bAuthorInitialised)
     {
         const SvtUserOptions& rOpt = GetUserOptions();
-        if( !(sActAuthor = rOpt.GetFullName()).Len() )
-            if( !(sActAuthor = rOpt.GetID()).Len() )
-                sActAuthor = String( SW_RES( STR_REDLINE_UNKNOWN_AUTHOR ));
+        sActAuthor = rOpt.GetFullName();
+        if (sActAuthor.isEmpty())
+        {
+            sActAuthor = rOpt.GetID();
+            if (sActAuthor.isEmpty())
+                sActAuthor = SW_RESSTR( STR_REDLINE_UNKNOWN_AUTHOR );
+        }
         bAuthorInitialised = sal_True;
     }
     return InsertRedlineAuthor( sActAuthor );
 }
 
-void SwModule::SetRedlineAuthor(const String &rAuthor)
+void SwModule::SetRedlineAuthor(const OUString &rAuthor)
 {
     bAuthorInitialised = sal_True;
     sActAuthor = rAuthor;
     InsertRedlineAuthor( sActAuthor );
 }
 
-const String& SwModule::GetRedlineAuthor(sal_uInt16 nPos)
+OUString SwModule::GetRedlineAuthor(sal_uInt16 nPos)
 {
     OSL_ENSURE(nPos < pAuthorNames->size(), "author not found!"); //#i45342# RTF doc with no author table caused reader to crash
     while(!(nPos < pAuthorNames->size()))
     {
-        InsertRedlineAuthor(String("nn"));
+        InsertRedlineAuthor("nn");
     };
     return (*pAuthorNames)[nPos];
 }
 
-sal_uInt16 SwModule::InsertRedlineAuthor(const String& rAuthor)
+sal_uInt16 SwModule::InsertRedlineAuthor(const OUString& rAuthor)
 {
     sal_uInt16 nPos = 0;
 
