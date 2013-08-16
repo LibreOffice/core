@@ -59,6 +59,13 @@ class BackingWindow
     PushButton*                     mpDBButton;
     PushButton*                     mpMathButton;
 
+    PushButton*                     mpWriterAllButton;
+    PushButton*                     mpCalcAllButton;
+    PushButton*                     mpImpressAllButton;
+    PushButton*                     mpDrawAllButton;
+    PushButton*                     mpDBAllButton;
+    PushButton*                     mpMathAllButton;
+
     PushButton*                     mpExtensionsButton;
     PushButton*                     mpInfoButton;
     PushButton*                     mpTplRepButton;
