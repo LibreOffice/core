@@ -82,6 +82,13 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     get(mpDBButton,         "database");
     get(mpMathButton,       "math");
 
+    get(mpWriterAllButton,  "writer_all");
+    get(mpCalcAllButton,    "calc_all");
+    get(mpImpressAllButton, "impress_all");
+    get(mpDrawAllButton,    "draw_all");
+    get(mpDBAllButton,      "database_all");
+    get(mpMathAllButton,    "math_all");
+
     get(mpExtensionsButton, "extension");
     get(mpInfoButton,       "info");
     get(mpTplRepButton,     "add_temp");
@@ -226,6 +233,13 @@ void BackingWindow::initControls()
     setupButton( mpImpressButton );
     setupButton( mpMathButton );
 
+    setupButton( mpWriterAllButton );
+    setupButton( mpDrawAllButton );
+    setupButton( mpCalcAllButton );
+    setupButton( mpDBAllButton );
+    setupButton( mpImpressAllButton );
+    setupButton( mpMathAllButton );
+
     setupButton( mpOpenButton );
     setupButton( mpTemplateButton );
 
@@ -234,8 +248,6 @@ void BackingWindow::initControls()
     setupExternalLink( mpTplRepButton );
 
     Resize();
-
-    mpWriterButton->GrabFocus();
 }
 
 void BackingWindow::setupModuleTab(const OString& rTabName, RecentDocsView* pRecView, int nFileTypes,
@@ -392,17 +404,17 @@ IMPL_LINK( BackingWindow, ExtLinkClickHdl, Button*, pButton )
 IMPL_LINK( BackingWindow, ClickHdl, Button*, pButton )
 {
     // dispatch the appropriate URL and end the dialog
-    if( pButton == mpWriterButton )
+    if( pButton == mpWriterButton       || pButton == mpWriterAllButton )
         dispatchURL( WRITER_URL );
-    else if( pButton == mpCalcButton )
+    else if( pButton == mpCalcButton    || pButton == mpCalcAllButton )
         dispatchURL( CALC_URL );
-    else if( pButton == mpImpressButton )
+    else if( pButton == mpImpressButton || pButton == mpImpressAllButton )
         dispatchURL( IMPRESS_WIZARD_URL );
-    else if( pButton == mpDrawButton )
+    else if( pButton == mpDrawButton    || pButton == mpDrawAllButton )
         dispatchURL( DRAW_URL );
-    else if( pButton == mpDBButton )
+    else if( pButton == mpDBButton      || pButton == mpDBAllButton )
         dispatchURL( BASE_URL );
-    else if( pButton == mpMathButton )
+    else if( pButton == mpMathButton    || pButton == mpMathAllButton )
         dispatchURL( MATH_URL );
     else if( pButton == mpOpenButton )
     {
