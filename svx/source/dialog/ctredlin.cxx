@@ -334,28 +334,8 @@ bool SvxRedlinTable::IsValidComment(const String &rCommentStr)
 SvTreeListEntry* SvxRedlinTable::InsertEntry(const OUString& rStr,RedlinData *pUserData,
                                 SvTreeListEntry* pParent,sal_uIntPtr nPos)
 {
-    aEntryColor=GetTextColor();
-    if(pUserData!=NULL)
-    {
-        if(pUserData->bDisabled)
-            aEntryColor=Color(COL_GRAY);
-    }
-
-    XubString aStr= rStr;
-
-    XubString aFirstStr( aStr );
-    xub_StrLen nEnd = aFirstStr.Search( sal_Unicode( '\t' ) );
-    if( nEnd != STRING_NOTFOUND )
-    {
-        aFirstStr.Erase( nEnd );
-        aCurEntry = aStr;
-        aCurEntry.Erase( 0, ++nEnd );
-    }
-    else
-        aCurEntry.Erase();
-
-    return SvSimpleTable::InsertEntry( aFirstStr, pParent, sal_False, nPos, pUserData );
-
+    const Color aColor = (pUserData && pUserData->bDisabled) ? Color(COL_GRAY) : GetTextColor();
+    return InsertEntry(rStr, pUserData, aColor, pParent, nPos);
 }
 
 SvTreeListEntry* SvxRedlinTable::InsertEntry(const OUString& rStr,RedlinData *pUserData,const Color& aColor,
