@@ -204,32 +204,23 @@ public:
     sal_uInt32 GetPropertyCount() const { return nCount; }
 };
 
-typedef boost::unordered_map
-<
-    PropertySetInfoKey,
-    FilterPropertiesInfo_Impl *,
-    PropertySetInfoHash,
-    PropertySetInfoHash
->
-FilterOropertiesHashMap_Impl;
-
-class FilterPropertiesInfos_Impl : public FilterOropertiesHashMap_Impl
+struct SvXMLExportPropertyMapper::Impl
 {
-public:
-    ~FilterPropertiesInfos_Impl ();
-};
+    typedef boost::unordered_map<PropertySetInfoKey, FilterPropertiesInfo_Impl*, PropertySetInfoHash, PropertySetInfoHash> CacheType;
+    CacheType maCache;
 
-FilterPropertiesInfos_Impl::~FilterPropertiesInfos_Impl ()
-{
-    FilterOropertiesHashMap_Impl::iterator aIter = begin();
-    FilterOropertiesHashMap_Impl::iterator aEnd = end();
-    while( aIter != aEnd )
+    UniReference<SvXMLExportPropertyMapper> mxNextMapper;
+    UniReference<XMLPropertySetMapper> mxPropMapper;
+
+    OUString maStyleName;
+
+    ~Impl()
     {
-        delete (*aIter).second;
-        (*aIter).second = 0;
-        ++aIter;
+        CacheType::iterator it = maCache.begin(), itEnd = maCache.end();
+        for (; it != itEnd; ++it)
+            delete it->second;
     }
-}
+};
 
 FilterPropertiesInfo_Impl::FilterPropertiesInfo_Impl() :
     nCount(0),
@@ -544,44 +535,43 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
 
 SvXMLExportPropertyMapper::SvXMLExportPropertyMapper(
         const UniReference< XMLPropertySetMapper >& rMapper ) :
-    pCache( 0 ),
-    maPropMapper( rMapper )
+    mpImpl(new Impl)
 {
+    mpImpl->mxPropMapper = rMapper;
 }
 
 SvXMLExportPropertyMapper::~SvXMLExportPropertyMapper()
 {
-    delete pCache;
-    mxNextMapper = 0;
+    delete mpImpl;
 }
 
 void SvXMLExportPropertyMapper::ChainExportMapper(
         const UniReference< SvXMLExportPropertyMapper>& rMapper )
 {
     // add map entries from rMapper to current map
-    maPropMapper->AddMapperEntry( rMapper->getPropertySetMapper() );
+    mpImpl->mxPropMapper->AddMapperEntry( rMapper->getPropertySetMapper() );
     // rMapper uses the same map as 'this'
-    rMapper->maPropMapper = maPropMapper;
+    rMapper->mpImpl->mxPropMapper = mpImpl->mxPropMapper;
 
     // set rMapper as last mapper in current chain
-    UniReference< SvXMLExportPropertyMapper > xNext = mxNextMapper;
+    UniReference< SvXMLExportPropertyMapper > xNext = mpImpl->mxNextMapper;
     if( xNext.is())
     {
-        while( xNext->mxNextMapper.is())
-            xNext = xNext->mxNextMapper;
-        xNext->mxNextMapper = rMapper;
+        while (xNext->mpImpl->mxNextMapper.is())
+            xNext = xNext->mpImpl->mxNextMapper;
+        xNext->mpImpl->mxNextMapper = rMapper;
     }
     else
-        mxNextMapper = rMapper;
+        mpImpl->mxNextMapper = rMapper;
 
     // if rMapper was already chained, correct
     // map pointer of successors
     xNext = rMapper;
 
-    while( xNext->mxNextMapper.is())
+    while (xNext->mpImpl->mxNextMapper.is())
     {
-        xNext = xNext->mxNextMapper;
-        xNext->maPropMapper = maPropMapper;
+        xNext = xNext->mpImpl->mxNextMapper;
+        xNext->mpImpl->mxPropMapper = mpImpl->mxPropMapper;
     }
 }
 
@@ -596,7 +586,7 @@ vector< XMLPropertyState > SvXMLExportPropertyMapper::_Filter(
     if( !xInfo.is() )
         return aPropStateArray;
 
-    sal_Int32 nProps = maPropMapper->GetEntryCount();
+    sal_Int32 nProps = mpImpl->mxPropMapper->GetEntryCount();
 
     FilterPropertiesInfo_Impl *pFilterInfo = 0;
 
@@ -607,16 +597,12 @@ vector< XMLPropertyState > SvXMLExportPropertyMapper::_Filter(
         aImplId = xTypeProv->getImplementationId();
         if( aImplId.getLength() == 16 )
         {
-            if( pCache )
-            {
-                // The key must not be created outside this block, because it
-                // keeps a reference to the property set info.
-                PropertySetInfoKey aKey( xInfo, aImplId );
-                FilterPropertiesInfos_Impl::iterator aIter =
-                    pCache->find( aKey );
-                if( aIter != pCache->end() )
-                    pFilterInfo = (*aIter).second;
-            }
+            // The key must not be created outside this block, because it
+            // keeps a reference to the property set info.
+            PropertySetInfoKey aKey( xInfo, aImplId );
+            Impl::CacheType::iterator aIter = mpImpl->maCache.find(aKey);
+            if (aIter != mpImpl->maCache.end())
+                pFilterInfo = (*aIter).second;
         }
     }
 
@@ -628,15 +614,15 @@ vector< XMLPropertyState > SvXMLExportPropertyMapper::_Filter(
         {
             // Are we allowed to ask for the property? (MID_FLAG_NO_PROP..)
             // Does the PropertySet contain name of mpEntries-array ?
-            const OUString& rAPIName = maPropMapper->GetEntryAPIName( i );
-            const sal_Int32 nFlags = maPropMapper->GetEntryFlags( i );
+            const OUString& rAPIName = mpImpl->mxPropMapper->GetEntryAPIName( i );
+            const sal_Int32 nFlags = mpImpl->mxPropMapper->GetEntryFlags( i );
             if( (0 == (nFlags & MID_FLAG_NO_PROPERTY_EXPORT)) &&
                 ( (0 != (nFlags & MID_FLAG_MUST_EXIST)) ||
                   xInfo->hasPropertyByName( rAPIName ) ) )
             {
                 const SvtSaveOptions::ODFDefaultVersion nCurrentVersion( SvtSaveOptions().GetODFDefaultVersion() );
                 const SvtSaveOptions::ODFDefaultVersion nEarliestODFVersionForExport(
-                        maPropMapper->GetEarliestODFVersionForExport( i ) );
+                        mpImpl->mxPropMapper->GetEarliestODFVersionForExport(i));
                 if( nCurrentVersion >= nEarliestODFVersionForExport
                         || nCurrentVersion == SvtSaveOptions::ODFVER_UNKNOWN
                         || nEarliestODFVersionForExport == SvtSaveOptions::ODFVER_UNKNOWN )
@@ -655,19 +641,16 @@ vector< XMLPropertyState > SvXMLExportPropertyMapper::_Filter(
             xInfo = xWeakInfo;
             if( xInfo.is() )
             {
-                if( !pCache )
-                    ((SvXMLExportPropertyMapper *)this)->pCache =
-                        new FilterPropertiesInfos_Impl;
                 PropertySetInfoKey aKey( xInfo, aImplId );
-                (*pCache)[aKey] = pFilterInfo;
+                mpImpl->maCache.insert(Impl::CacheType::value_type(aKey, pFilterInfo));
             }
             else
-                bDelInfo = sal_True;
+                bDelInfo = true;
         }
         else
         {
             OSL_FAIL("here is no TypeProvider or the ImplId is wrong");
-            bDelInfo = sal_True;
+            bDelInfo = true;
         }
     }
 
@@ -675,9 +658,8 @@ vector< XMLPropertyState > SvXMLExportPropertyMapper::_Filter(
     {
         try
         {
-            pFilterInfo->FillPropertyStateArray(aPropStateArray,
-                                                xPropSet, maPropMapper,
-                                                bDefault);
+            pFilterInfo->FillPropertyStateArray(
+                aPropStateArray, xPropSet, mpImpl->mxPropMapper, bDefault);
         }
         catch( UnknownPropertyException& )
         {
@@ -703,8 +685,8 @@ void SvXMLExportPropertyMapper::ContextFilter(
         Reference< XPropertySet > rPropSet ) const
 {
     // Derived class could implement this.
-    if( mxNextMapper.is() )
-        mxNextMapper->ContextFilter( rProperties, rPropSet );
+    if (mpImpl->mxNextMapper.is())
+        mpImpl->mxNextMapper->ContextFilter(rProperties, rPropSet);
 }
 
 // Compares two Sequences of XMLPropertyState:
@@ -732,13 +714,13 @@ sal_Bool SvXMLExportPropertyMapper::Equals(
                 if( rProp1.mnIndex != -1 )
                 {
                     // Now compare values
-                    if( ( maPropMapper->GetEntryType( rProp1.mnIndex ) &
+                    if ( (mpImpl->mxPropMapper->GetEntryType( rProp1.mnIndex ) &
                           XML_TYPE_BUILDIN_CMP ) != 0 )
                         // simple type ( binary compare )
                         bRet = ( rProp1.maValue == rProp2.maValue );
                     else
                         // complex type ( ask for compare-function )
-                        bRet = maPropMapper->GetPropertyHandler(
+                        bRet = mpImpl->mxPropMapper->GetPropertyHandler(
                                     rProp1.mnIndex )->equals( rProp1.maValue,
                                                               rProp2.maValue );
                 }
@@ -832,10 +814,10 @@ void SvXMLExportPropertyMapper::handleSpecialItem(
         const ::std::vector< XMLPropertyState > *pProperties,
         sal_uInt32 nIdx ) const
 {
-    OSL_ENSURE( mxNextMapper.is(), "special item not handled in xml export" );
-    if( mxNextMapper.is() )
-        mxNextMapper->handleSpecialItem( rAttrList, rProperty, rUnitConverter,
-                                        rNamespaceMap, pProperties, nIdx );
+    OSL_ENSURE(mpImpl->mxNextMapper.is(), "special item not handled in xml export");
+    if (mpImpl->mxNextMapper.is())
+        mpImpl->mxNextMapper->handleSpecialItem(
+            rAttrList, rProperty, rUnitConverter, rNamespaceMap, pProperties, nIdx);
 }
 
 /** this method is called for every item that has the
@@ -847,10 +829,9 @@ void SvXMLExportPropertyMapper::handleElementItem(
         const ::std::vector< XMLPropertyState > *pProperties,
         sal_uInt32 nIdx ) const
 {
-    OSL_ENSURE( mxNextMapper.is(), "element item not handled in xml export" );
-    if( mxNextMapper.is() )
-        mxNextMapper->handleElementItem( rExport, rProperty, nFlags,
-                                         pProperties, nIdx );
+    OSL_ENSURE(mpImpl->mxNextMapper.is(), "element item not handled in xml export");
+    if (mpImpl->mxNextMapper.is())
+        mpImpl->mxNextMapper->handleElementItem(rExport, rProperty, nFlags, pProperties, nIdx);
 }
 
 // protected methods
@@ -872,7 +853,7 @@ void SvXMLExportPropertyMapper::_exportXML(
     if( -1 == nPropMapStartIdx )
         nPropMapStartIdx = 0;
     if( -1 == nPropMapEndIdx )
-        nPropMapEndIdx = maPropMapper->GetEntryCount();
+        nPropMapEndIdx = mpImpl->mxPropMapper->GetEntryCount();
 
     while( nIndex < nCount )
     {
@@ -880,7 +861,7 @@ void SvXMLExportPropertyMapper::_exportXML(
         if( nPropMapIdx >= nPropMapStartIdx &&
             nPropMapIdx < nPropMapEndIdx  )// valid entry?
         {
-            sal_uInt32 nEFlags = maPropMapper->GetEntryFlags( nPropMapIdx );
+            sal_uInt32 nEFlags = mpImpl->mxPropMapper->GetEntryFlags(nPropMapIdx);
             sal_uInt16 nEPType = GET_PROP_TYPE(nEFlags);
             OSL_ENSURE( nEPType >= (XML_TYPE_PROP_START>>XML_TYPE_PROP_SHIFT),
                         "no prop type sepcified" );
@@ -918,8 +899,7 @@ void SvXMLExportPropertyMapper::_exportXML(
         const ::std::vector< XMLPropertyState > *pProperties,
         sal_uInt32 nIdx ) const
 {
-    if ( ( maPropMapper->GetEntryFlags( rProperty.mnIndex ) &
-                MID_FLAG_SPECIAL_ITEM_EXPORT ) != 0 )
+    if ((mpImpl->mxPropMapper->GetEntryFlags(rProperty.mnIndex) & MID_FLAG_SPECIAL_ITEM_EXPORT) != 0)
     {
         uno::Reference< container::XNameContainer > xAttrContainer;
         if( (rProperty.maValue >>= xAttrContainer) && xAttrContainer.is() )
@@ -1028,23 +1008,21 @@ void SvXMLExportPropertyMapper::_exportXML(
                                rNamespaceMap, pProperties, nIdx );
         }
     }
-    else if ( ( maPropMapper->GetEntryFlags( rProperty.mnIndex ) &
-                    MID_FLAG_ELEMENT_ITEM_EXPORT ) == 0 )
+    else if ((mpImpl->mxPropMapper->GetEntryFlags(rProperty.mnIndex) & MID_FLAG_ELEMENT_ITEM_EXPORT ) == 0)
     {
         OUString aValue;
-        const OUString sName( rNamespaceMap.GetQNameByKey(
-                    maPropMapper->GetEntryNameSpace( rProperty.mnIndex ),
-                    maPropMapper->GetEntryXMLName( rProperty.mnIndex ) ) );
+        const OUString sName = rNamespaceMap.GetQNameByKey(
+            mpImpl->mxPropMapper->GetEntryNameSpace(rProperty.mnIndex),
+            mpImpl->mxPropMapper->GetEntryXMLName(rProperty.mnIndex));
 
         sal_Bool bRemove = sal_False;
-        if( ( maPropMapper->GetEntryFlags( rProperty.mnIndex ) &
-                    MID_FLAG_MERGE_ATTRIBUTE ) != 0 )
+        if ((mpImpl->mxPropMapper->GetEntryFlags( rProperty.mnIndex ) & MID_FLAG_MERGE_ATTRIBUTE) != 0)
         {
             aValue = rAttrList.getValueByName( sName );
             bRemove = sal_True;
         }
 
-        if( maPropMapper->exportXML( aValue, rProperty, rUnitConverter ) )
+        if (mpImpl->mxPropMapper->exportXML(aValue, rProperty, rUnitConverter))
         {
             if( bRemove )
                 rAttrList.RemoveAttribute( sName );
@@ -1066,7 +1044,7 @@ void SvXMLExportPropertyMapper::exportElementItems(
     {
         const sal_uInt16 nElement = rIndexArray[nIndex];
 
-        OSL_ENSURE( 0 != ( maPropMapper->GetEntryFlags(
+        OSL_ENSURE( 0 != (mpImpl->mxPropMapper->GetEntryFlags(
                 rProperties[nElement].mnIndex ) & MID_FLAG_ELEMENT_ITEM_EXPORT),
                 "wrong mid flag!" );
 
@@ -1078,6 +1056,21 @@ void SvXMLExportPropertyMapper::exportElementItems(
 
     if( bItemsExported )
         rExport.IgnorableWhitespace();
+}
+
+const UniReference<XMLPropertySetMapper>& SvXMLExportPropertyMapper::getPropertySetMapper() const
+{
+    return mpImpl->mxPropMapper;
+}
+
+void SvXMLExportPropertyMapper::SetStyleName( const OUString& rStyleName )
+{
+    mpImpl->maStyleName = rStyleName;
+}
+
+const OUString& SvXMLExportPropertyMapper::GetStyleName() const
+{
+    return mpImpl->maStyleName;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

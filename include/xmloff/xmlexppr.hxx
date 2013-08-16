@@ -41,14 +41,10 @@ class SvXMLExport;
 
 class XMLOFF_DLLPUBLIC SvXMLExportPropertyMapper : public UniRefBase
 {
-    UniReference< SvXMLExportPropertyMapper> mxNextMapper;
-
-    FilterPropertiesInfos_Impl *pCache;
+    struct Impl;
+    Impl* mpImpl;
 
 protected:
-    UniReference< XMLPropertySetMapper > maPropMapper;
-
-    OUString maStyleName;
 
     /** Filter all properties we don't want to export:
         Take all properties of the XPropertySet which are also found in the
@@ -177,10 +173,10 @@ public:
             const ::std::vector< XMLPropertyState > *pProperties = 0,
             sal_uInt32 nIdx = 0 ) const;
 
-    inline const UniReference< XMLPropertySetMapper >&
-        getPropertySetMapper() const { return maPropMapper; }
+    const UniReference<XMLPropertySetMapper>& getPropertySetMapper() const;
 
-    void SetStyleName( const OUString& rStyleName ) { maStyleName = rStyleName; }
+    void SetStyleName( const OUString& rStyleName );
+    const OUString& GetStyleName() const;
 };
 
 #endif  //  _XMLOFF_XMLEXPPR_HXX

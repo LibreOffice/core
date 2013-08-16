@@ -361,14 +361,14 @@ void XMLChartExportPropertyMapper::handleSpecialItem(
 {
     sal_Bool bHandled = sal_False;
 
-    sal_Int32 nContextId = maPropMapper->GetEntryContextId( rProperty.mnIndex );
+    sal_Int32 nContextId = getPropertySetMapper()->GetEntryContextId( rProperty.mnIndex );
 
     if( nContextId )
     {
         bHandled = sal_True;
 
-        OUString sAttrName = maPropMapper->GetEntryXMLName( rProperty.mnIndex );
-        sal_uInt16 nNameSpace = maPropMapper->GetEntryNameSpace( rProperty.mnIndex );
+        OUString sAttrName = getPropertySetMapper()->GetEntryXMLName( rProperty.mnIndex );
+        sal_uInt16 nNameSpace = getPropertySetMapper()->GetEntryNameSpace( rProperty.mnIndex );
         OUStringBuffer sValueBuffer;
         OUString sValue;
 
