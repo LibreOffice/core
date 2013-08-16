@@ -1141,6 +1141,13 @@ AC_ARG_ENABLE(macosx-sandbox,
          adherence to App Store rules.]),
 ,)
 
+AC_ARG_ENABLE(canonical-installation-tree-structure,
+    AS_HELP_STRING([--enable-canonical-installation-tree-structure],
+        [Make the installation tree structure be more canonical for
+         the platform. Implemented only for OS X. Experimental.]),
+,)
+
+
 AC_ARG_WITH(macosx-bundle-identifier,
     AS_HELP_STRING([--with-macosx-bundle-identifier=tld.mumble.orifice.TheOffice],
         [Define the OS X bundle identifier. Default is the somewhat weird
@@ -2853,10 +2860,7 @@ dnl ===================================================================
 dnl Structure of install set
 dnl ===================================================================
 
-if test $_os = Darwin -a "$ENABLE_MACOSX_SANDBOX" = YES; then
-    # For now, couple whether to use a more "Mac-like" installation tree structure
-    # with the choice whether to use sandboxing. Could be a separate choice, or could
-    # be always on for OS X.
+if test $_os = Darwin -a "$enable_canonical_installation_tree_structure" = yes; then
     LIBO_BIN_FOLDER=MacOS
     LIBO_ETC_FOLDER=Resources
     LIBO_LIBEXEC_FOLDER=MacOS
