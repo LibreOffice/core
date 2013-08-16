@@ -45,6 +45,7 @@
 #include "scmod.hxx"
 #include "tabprotection.hxx"
 #include "markdata.hxx"
+#include "inputopt.hxx"
 
 namespace {
 
@@ -610,6 +611,7 @@ void ScTabView::GetAreaMoveEndPosition(SCsCOL nMovX, SCsROW nMovY, ScFollowMode 
 {
     SCCOL nNewX = -1;
     SCROW nNewY = -1;
+
     // current cursor position.
     SCCOL nCurX = aViewData.GetCurX();
     SCROW nCurY = aViewData.GetCurY();
@@ -637,20 +639,24 @@ void ScTabView::GetAreaMoveEndPosition(SCsCOL nMovX, SCsROW nMovY, ScFollowMode 
     SCTAB nTab = aViewData.GetTabNo();
 
     //  FindAreaPos kennt nur -1 oder 1 als Richtung
+    ScModule* pScModule = SC_MOD();
+    bool bLegacyCellSelection = pScModule->GetInputOptions().GetLegacyCellSelection();
+    SCCOL nVirtualX = bLegacyCellSelection ? nNewX : nCurX;
+    SCROW nVirtualY = bLegacyCellSelection ? nNewY : nCurY;
 
     SCsCOLROW i;
     if ( nMovX > 0 )
         for ( i=0; i<nMovX; i++ )
-            pDoc->FindAreaPos( nNewX, nCurY, nTab,  SC_MOVE_RIGHT );
+            pDoc->FindAreaPos( nNewX, nVirtualY, nTab,  SC_MOVE_RIGHT );
     if ( nMovX < 0 )
         for ( i=0; i<-nMovX; i++ )
-            pDoc->FindAreaPos( nNewX, nCurY, nTab, SC_MOVE_LEFT );
+            pDoc->FindAreaPos( nNewX, nVirtualY, nTab,  SC_MOVE_LEFT );
     if ( nMovY > 0 )
         for ( i=0; i<nMovY; i++ )
-            pDoc->FindAreaPos( nCurX, nNewY, nTab,  SC_MOVE_DOWN );
+            pDoc->FindAreaPos( nVirtualX, nNewY, nTab,  SC_MOVE_DOWN );
     if ( nMovY < 0 )
         for ( i=0; i<-nMovY; i++ )
-            pDoc->FindAreaPos( nCurX, nNewY, nTab,  SC_MOVE_UP );
+            pDoc->FindAreaPos( nVirtualX, nNewY, nTab,  SC_MOVE_UP );
 
     if (eMode==SC_FOLLOW_JUMP)                  // unten/rechts nicht zuviel grau anzeigen
     {

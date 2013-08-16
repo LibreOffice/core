@@ -38,6 +38,7 @@ private:
     sal_Bool        bUseTabCol;
     sal_Bool        bTextWysiwyg;
     sal_Bool        bReplCellsWarn;
+    sal_Bool        bLegacyCellSelection;
 
 public:
                 ScInputOptions();
@@ -66,6 +67,8 @@ public:
     sal_Bool        GetTextWysiwyg() const          { return bTextWysiwyg;   }
     void        SetReplaceCellsWarn(sal_Bool bSet)  { bReplCellsWarn = bSet; }
     sal_Bool        GetReplaceCellsWarn() const     { return bReplCellsWarn; }
+    void        SetLegacyCellSelection(sal_Bool bSet)   { bLegacyCellSelection = bSet; }
+    sal_Bool        GetLegacyCellSelection() const      { return bLegacyCellSelection; }
 
     const ScInputOptions&   operator=   ( const ScInputOptions& rOpt );
 };

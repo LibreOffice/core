@@ -1304,6 +1304,12 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
         bSaveInputOptions = sal_True;
     }
 
+    if( rOptSet.HasItem( SID_SC_INPUT_LEGACY_CELL_SELECTION, &pItem ) )
+    {
+        pInputCfg->SetLegacyCellSelection( ((const SfxBoolItem*)pItem)->GetValue() );
+        bSaveInputOptions = sal_True;
+    }
+
     //============================================
     // PrintOptions
     //============================================
@@ -2016,6 +2022,7 @@ SfxItemSet*  ScModule::CreateItemSet( sal_uInt16 nId )
                             SID_SC_INPUT_SELECTION,SID_SC_INPUT_MARK_HEADER,
                             SID_SC_INPUT_TEXTWYSIWYG,SID_SC_INPUT_TEXTWYSIWYG,
                             SID_SC_INPUT_REPLCELLSWARN,SID_SC_INPUT_REPLCELLSWARN,
+                            SID_SC_INPUT_LEGACY_CELL_SELECTION,SID_SC_INPUT_LEGACY_CELL_SELECTION,
                             // TP_USERLISTS:
                             SCITEM_USERLIST,        SCITEM_USERLIST,
                             // TP_PRINT:
@@ -2084,6 +2091,9 @@ SfxItemSet*  ScModule::CreateItemSet( sal_uInt16 nId )
                     rInpOpt.GetTextWysiwyg() ) );
         pRet->Put( SfxBoolItem( SID_SC_INPUT_REPLCELLSWARN,
                     rInpOpt.GetReplaceCellsWarn() ) );
+        pRet->Put( SfxBoolItem( SID_SC_INPUT_LEGACY_CELL_SELECTION,
+                    rInpOpt.GetLegacyCellSelection() ) );
+
 
         // RID_SC_TP_PRINT
         pRet->Put( ScTpPrintItem( SID_SCPRINTOPTIONS, GetPrintOptions() ) );

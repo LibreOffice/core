@@ -84,6 +84,9 @@
 #define FID_SCALESTATUS         (SC_VIEW_START + 10)
 #define SID_UPDATECHART         (SC_VIEW_START + 13)
 
+// TabPage entry - Legacy selection
+#define SID_SC_INPUT_LEGACY_CELL_SELECTION (SC_VIEW_START + 15)
+
 // Format options
 #define SID_SCFORMULAOPTIONS    (SC_VIEW_START + 20)
 #define SID_SCDEFAULTSOPTIONS   (SC_VIEW_START + 21)

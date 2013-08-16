@@ -714,6 +714,14 @@
         </info>
         <value>true</value>
       </prop>
+      <prop oor:name="LegacyCellSelection" oor:type="xs:boolean" oor:nillable="false">
+        <!-- UIHints: Tools - Options - Spreadsheet - General - [Section] Input settings -->
+        <info>
+          <desc>Use legacy behaviour when selecting cells</desc>
+          <label>Use legacy behaviour when selecting cells</label>
+        </info>
+        <value>true</value>
+      </prop>
       <prop oor:name="LastFunctions" oor:type="oor:int-list" oor:nillable="false">
         <!-- OldPath: Calc/Input -->
         <!-- OldLocation: Soffice.cfg -->

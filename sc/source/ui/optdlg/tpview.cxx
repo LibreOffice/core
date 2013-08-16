@@ -381,6 +381,7 @@ ScTpLayoutOptions::ScTpLayoutOptions(   Window* pParent,
     get( m_pMarkHdrCB, "markhdrcb");
     get( m_pTextFmtCB, "textfmtcb");
     get( m_pReplWarnCB, "replwarncb");
+    get( m_pLegacyCellSelectionCB, "legacy_cell_selection_cb");
 
     SetExchangeSupport();
 
@@ -520,6 +521,12 @@ sal_Bool    ScTpLayoutOptions::FillItemSet( SfxItemSet& rCoreSet )
         bRet = sal_True;
     }
 
+    if( m_pLegacyCellSelectionCB->GetSavedValue() != m_pLegacyCellSelectionCB->IsChecked() )
+    {
+        rCoreSet.Put( SfxBoolItem( SID_SC_INPUT_LEGACY_CELL_SELECTION, m_pLegacyCellSelectionCB->IsChecked() ) );
+        bRet = sal_True;
+    }
+
     return bRet;
 }
 
@@ -599,6 +606,10 @@ void    ScTpLayoutOptions::Reset( const SfxItemSet& rCoreSet )
     if( SFX_ITEM_SET == rCoreSet.GetItemState( SID_SC_INPUT_REPLCELLSWARN, false, &pItem ) )
         m_pReplWarnCB->Check( ( (const SfxBoolItem*)pItem)->GetValue() );
 
+    if( SFX_ITEM_SET == rCoreSet.GetItemState( SID_SC_INPUT_LEGACY_CELL_SELECTION, false, &pItem ) )
+        m_pLegacyCellSelectionCB->Check( ( (const SfxBoolItem*)pItem)->GetValue() );
+
+
     m_pAlignCB    ->SaveValue();
     m_pAlignLB    ->SaveValue();
     m_pEditModeCB ->SaveValue();
@@ -608,6 +619,9 @@ void    ScTpLayoutOptions::Reset( const SfxItemSet& rCoreSet )
     m_pMarkHdrCB  ->SaveValue();
     m_pTextFmtCB  ->SaveValue();
     m_pReplWarnCB ->SaveValue();
+
+    m_pLegacyCellSelectionCB->SaveValue();
+
     AlignHdl(m_pAlignCB);
 
     m_pAlwaysRB->SaveValue();

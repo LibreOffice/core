@@ -105,6 +105,7 @@ class ScTpLayoutOptions : public SfxTabPage
     CheckBox*       m_pMarkHdrCB;
     CheckBox*       m_pTextFmtCB;
     CheckBox*       m_pReplWarnCB;
+    CheckBox*       m_pLegacyCellSelectionCB;
 
     SvxStringArray  aUnitArr;
 

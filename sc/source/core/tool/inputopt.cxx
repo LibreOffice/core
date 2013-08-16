@@ -68,6 +68,7 @@ void ScInputOptions::SetDefaults()
     bUseTabCol      = false;
     bTextWysiwyg    = false;
     bReplCellsWarn  = sal_True;
+    bLegacyCellSelection = false;
 }
 
 //------------------------------------------------------------------------
@@ -84,6 +85,7 @@ const ScInputOptions& ScInputOptions::operator=( const ScInputOptions& rCpy )
     bUseTabCol      = rCpy.bUseTabCol;
     bTextWysiwyg    = rCpy.bTextWysiwyg;
     bReplCellsWarn  = rCpy.bReplCellsWarn;
+    bLegacyCellSelection = rCpy.bLegacyCellSelection;
 
     return *this;
 }
@@ -95,17 +97,18 @@ const ScInputOptions& ScInputOptions::operator=( const ScInputOptions& rCpy )
 
 #define CFGPATH_INPUT           "Office.Calc/Input"
 
-#define SCINPUTOPT_MOVEDIR          0
-#define SCINPUTOPT_MOVESEL          1
-#define SCINPUTOPT_EDTEREDIT        2
-#define SCINPUTOPT_EXTENDFMT        3
-#define SCINPUTOPT_RANGEFIND        4
-#define SCINPUTOPT_EXPANDREFS       5
-#define SCINPUTOPT_MARKHEADER       6
-#define SCINPUTOPT_USETABCOL        7
-#define SCINPUTOPT_TEXTWYSIWYG      8
-#define SCINPUTOPT_REPLCELLSWARN    9
-#define SCINPUTOPT_COUNT            10
+#define SCINPUTOPT_MOVEDIR                0
+#define SCINPUTOPT_MOVESEL                1
+#define SCINPUTOPT_EDTEREDIT              2
+#define SCINPUTOPT_EXTENDFMT              3
+#define SCINPUTOPT_RANGEFIND              4
+#define SCINPUTOPT_EXPANDREFS             5
+#define SCINPUTOPT_MARKHEADER             6
+#define SCINPUTOPT_USETABCOL              7
+#define SCINPUTOPT_TEXTWYSIWYG            8
+#define SCINPUTOPT_REPLCELLSWARN          9
+#define SCINPUTOPT_LEGACY_CELL_SELECTION 10
+#define SCINPUTOPT_COUNT                 11
 
 Sequence<OUString> ScInputCfg::GetPropertyNames()
 {
@@ -120,7 +123,8 @@ Sequence<OUString> ScInputCfg::GetPropertyNames()
         "HighlightSelection",       // SCINPUTOPT_MARKHEADER
         "UseTabCol",                // SCINPUTOPT_USETABCOL
         "UsePrinterMetrics",        // SCINPUTOPT_TEXTWYSIWYG
-        "ReplaceCellsWarning"       // SCINPUTOPT_REPLCELLSWARN
+        "ReplaceCellsWarning",      // SCINPUTOPT_REPLCELLSWARN
+        "LegacyCellSelection"       // SCINPUTOPT_LEGACY_CELL_SELECTION
     };
     Sequence<OUString> aNames(SCINPUTOPT_COUNT);
     OUString* pNames = aNames.getArray();
@@ -179,6 +183,9 @@ ScInputCfg::ScInputCfg() :
                     case SCINPUTOPT_REPLCELLSWARN:
                         SetReplaceCellsWarn( ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
                         break;
+                    case SCINPUTOPT_LEGACY_CELL_SELECTION:
+                        SetLegacyCellSelection( ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
+                        break;
                 }
             }
         }
@@ -225,6 +232,9 @@ void ScInputCfg::Commit()
                 break;
             case SCINPUTOPT_REPLCELLSWARN:
                 ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], GetReplaceCellsWarn() );
+                break;
+            case SCINPUTOPT_LEGACY_CELL_SELECTION:
+                ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], GetLegacyCellSelection() );
                 break;
         }
     }
