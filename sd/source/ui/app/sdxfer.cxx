@@ -205,7 +205,7 @@ void SdTransferable::CreateObjectReplacement( SdrObject* pObj )
                     xPropSet->getPropertyValue( "Label" ) >>= aLabel;
                     xPropSet->getPropertyValue( "TargetURL" ) >>= aURL;
 
-                    mpBookmark = new INetBookmark( String( aURL ), String( aLabel ) );
+                    mpBookmark = new INetBookmark( aURL, aLabel );
                 }
             }
         }
@@ -288,14 +288,16 @@ void SdTransferable::CreateData()
         SdStyleSheetPool*   pOldStylePool = (SdStyleSheetPool*) pOldModel->GetStyleSheetPool();
         SdStyleSheetPool*   pNewStylePool = (SdStyleSheetPool*) mpSdDrawDocumentIntern->GetStyleSheetPool();
         SdPage*             pPage = mpSdDrawDocumentIntern->GetSdPage( 0, PK_STANDARD );
-        String              aOldLayoutName( pOldPage->GetLayoutName() );
+        OUString            aOldLayoutName( pOldPage->GetLayoutName() );
 
         pPage->SetSize( pOldPage->GetSize() );
         pPage->SetLayoutName( aOldLayoutName );
         pNewStylePool->CopyGraphicSheets( *pOldStylePool );
         pNewStylePool->CopyCellSheets( *pOldStylePool );
         pNewStylePool->CopyTableStyles( *pOldStylePool );
-        aOldLayoutName.Erase( aOldLayoutName.SearchAscii( SD_LT_SEPARATOR ) );
+        sal_Int32 nPos = aOldLayoutName.indexOf( SD_LT_SEPARATOR );
+        if( nPos != -1 )
+            aOldLayoutName = aOldLayoutName.copy( 0, nPos );
         SdStyleSheetVector aCreatedSheets;
         pNewStylePool->CopyLayoutSheets( aOldLayoutName, *pOldStylePool, aCreatedSheets );
     }
@@ -608,7 +610,7 @@ sal_Bool SdTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pObject
                 // write document storage
                 pEmbObj->SetupStorage( xWorkStore, SOFFICE_FILEFORMAT_CURRENT, sal_False );
                 // mba: no relative ULRs for clipboard!
-                SfxMedium aMedium( xWorkStore, String() );
+                SfxMedium aMedium( xWorkStore, OUString() );
                 bRet = pEmbObj->DoSaveObjectAs( aMedium, sal_False );
                 pEmbObj->DoSaveCompleted();
 

@@ -187,7 +187,7 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo)
         {
             if( pDocShell && (pExtFileField->GetType() != SVXFILETYPE_FIX) )
             {
-                String aName;
+                OUString aName;
                 if( pDocShell->HasName() )
                     aName = pDocShell->GetMedium()->GetName();
                 else
@@ -214,8 +214,7 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo)
         }
         else if( dynamic_cast< const SvxPageField*  >(pField) )
         {
-            String aRepresentation;
-            aRepresentation += sal_Unicode( ' ' );
+            OUString aRepresentation(" ");
 
             ::sd::ViewShell* pViewSh = pDocShell ? pDocShell->GetViewShell() : NULL;
             if(pViewSh == NULL)
@@ -251,8 +250,7 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo)
         }
         else if( dynamic_cast< const SvxPagesField*  >(pField) )
         {
-            String aRepresentation;
-            aRepresentation += sal_Unicode( ' ' );
+            OUString aRepresentation(" ");
 
             ::sd::ViewShell* pViewSh = pDocShell ? pDocShell->GetViewShell() : NULL;
             if(pViewSh == NULL)
@@ -302,7 +300,7 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo)
                     break;
             }
 
-            String aURL = pURLField->GetURL();
+            OUString aURL = pURLField->GetURL();
 
             svtools::ColorConfig aConfig;
             svtools::ColorConfigEntry eEntry =
@@ -315,7 +313,7 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo)
         }
         else
         {
-            String aRepresentation;
+            OUString aRepresentation;
 
             bool bHeaderField = dynamic_cast< const SvxHeaderField* >( pField ) != 0;
             bool bFooterField = !bHeaderField && (dynamic_cast< const SvxFooterField* >( pField ) != 0 );
@@ -369,8 +367,8 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo)
                 OSL_FAIL("sd::SdModule::CalcFieldValueHdl(), unknown field type!");
             }
 
-            if( aRepresentation.Len() == 0 )                // TODO: Edit engine doesn't handle empty fields?
-                aRepresentation += sal_Unicode( ' ' );
+            if( aRepresentation.isEmpty() )                // TODO: Edit engine doesn't handle empty fields?
+                aRepresentation = " ";
             pInfo->SetRepresentation( aRepresentation );
         }
     }

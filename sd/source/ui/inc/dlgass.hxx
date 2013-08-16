@@ -50,7 +50,7 @@ public:
     OutputType GetOutputMedium() const;
     sal_Bool IsSummary() const;
     StartType GetStartType() const;
-    String GetDocPath() const;
+    OUString GetDocPath() const;
     sal_Bool GetStartWithFlag() const;
 
     sal_Bool IsDocEmpty() const;

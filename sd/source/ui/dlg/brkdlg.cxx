@@ -58,7 +58,7 @@ BreakDlg::BreakDlg(
 {
     aBtnCancel.SetClickHdl( LINK( this, BreakDlg, CancelButtonHdl));
 
-    mpProgress = new SfxProgress( pShell, String(SdResId(STR_BREAK_METAFILE)), nSumActionCount*3 );
+    mpProgress = new SfxProgress( pShell, SD_RESSTR(STR_BREAK_METAFILE), nSumActionCount*3 );
 
     pProgrInfo = new SvdProgressInfo( &aLink );
     // every action is editedt 3 times in DoImport()
@@ -95,15 +95,13 @@ IMPL_LINK_NOARG(BreakDlg, CancelButtonHdl)
  */
 IMPL_LINK( BreakDlg, UpDate, void*, nInit )
 {
-    String aEmptyStr;
-
     if(pProgrInfo == NULL)
       return 1L;
 
     // update status bar or show a error message?
     if(nInit == (void*)1L)
     {
-        ErrorBox aErrBox( this, WB_OK, String( SdResId( STR_BREAK_FAIL ) ) );
+        ErrorBox aErrBox( this, WB_OK, SD_RESSTR( STR_BREAK_FAIL ) );
         aErrBox.Execute();
     }
     else
@@ -121,7 +119,7 @@ IMPL_LINK( BreakDlg, UpDate, void*, nInit )
     // how many actions are started?
     if(pProgrInfo->GetActionCount() == 0)
     {
-        aFiActInfo.SetText( aEmptyStr );
+        aFiActInfo.SetText( OUString() );
     }
     else
     {
@@ -134,7 +132,7 @@ IMPL_LINK( BreakDlg, UpDate, void*, nInit )
     // and inserted????
     if(pProgrInfo->GetInsertCount() == 0)
     {
-        aFiInsInfo.SetText( aEmptyStr );
+        aFiInsInfo.SetText( OUString() );
     }
     else
     {

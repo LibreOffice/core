@@ -417,7 +417,7 @@ void AnnotationTag::Move( int nDX, int nDY )
     if( mxAnnotation.is() )
     {
         if( mrManager.GetDoc()->IsUndoEnabled() )
-            mrManager.GetDoc()->BegUndo( String( SdResId( STR_ANNOTATION_UNDO_MOVE ) ) );
+            mrManager.GetDoc()->BegUndo( SD_RESSTR( STR_ANNOTATION_UNDO_MOVE ) );
 
         RealPoint2D aPosition( mxAnnotation->getPosition() );
         aPosition.X += (double)nDX / 100.0;

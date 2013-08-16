@@ -48,11 +48,11 @@ SdPagesField::SdPagesField( Window* pParent,
     SvxMetricField  ( pParent, rFrame, nBits ),
     m_xFrame        ( rFrame )
 {
-    String aStr( SdResId( STR_SLIDE_PLURAL ) );
+    OUString aStr( SD_RESSTR( STR_SLIDE_PLURAL ) );
     SetCustomUnitText( aStr );
 
     // set size
-    aStr.AppendAscii( "XXX" );
+    aStr += "XXX";
     Size aSize( GetTextWidth( aStr )+20, GetTextHeight()+6 );
 
 
@@ -84,12 +84,12 @@ void SdPagesField::UpdatePagesField( const SfxUInt16Item* pItem )
         long nValue = (long) pItem->GetValue();
         SetValue( nValue );
         if( nValue == 1 )
-            SetCustomUnitText( String( SdResId( STR_SLIDE_SINGULAR ) ) );
+            SetCustomUnitText( SD_RESSTR( STR_SLIDE_SINGULAR ) );
         else
-            SetCustomUnitText( String( SdResId( STR_SLIDE_PLURAL ) ) );
+            SetCustomUnitText( SD_RESSTR( STR_SLIDE_PLURAL ) );
     }
     else
-        SetText( String() );
+        SetText( OUString() );
 }
 
 // -----------------------------------------------------------------------
@@ -130,7 +130,7 @@ void SdTbxCtlDiaPages::StateChanged( sal_uInt16,
     if ( eState == SFX_ITEM_DISABLED )
     {
         pFld->Disable();
-        pFld->SetText( String() );
+        pFld->SetText( OUString() );
     }
     else
     {

@@ -633,7 +633,7 @@ void AnnotationWindow::Deactivate()
             if( pOPO )
             {
                 if( mpDoc->IsUndoEnabled() )
-                    mpDoc->BegUndo( String( SdResId( STR_ANNOTATION_UNDO_EDIT ) ) );
+                    mpDoc->BegUndo( SD_RESSTR( STR_ANNOTATION_UNDO_EDIT ) );
 
                 pTextApi->SetText( *pOPO );
                 delete pOPO;

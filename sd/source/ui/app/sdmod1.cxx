@@ -239,7 +239,7 @@ void SdModule::Execute(SfxRequest& rReq)
             }
             else
             {
-                ErrorBox(NULL, WB_OK, String(SdResId(STR_CANT_PERFORM_IN_LIVEMODE))).Execute();
+                ErrorBox(NULL, WB_OK, SD_RESSTR(STR_CANT_PERFORM_IN_LIVEMODE)).Execute();
 
                 SFX_REQUEST_ARG( rReq, pLinkItem, SfxLinkItem, SID_DONELINK, sal_False );
                 if( pLinkItem )
@@ -573,7 +573,7 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
             // Open the Pilot
             if( pPilotDlg.get() && pPilotDlg->Execute()==RET_OK )
             {
-                const String aDocPath( pPilotDlg->GetDocPath());
+                const OUString aDocPath( pPilotDlg->GetDocPath());
                 const sal_Bool bIsDocEmpty = pPilotDlg->IsDocEmpty();
 
                 // So that you can open the document without AutoLayout-Dialog
@@ -583,10 +583,10 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
 
                 if( pPilotDlg->GetStartType() == ST_OPEN )
                 {
-                    String aFileToOpen = aDocPath;
+                    OUString aFileToOpen = aDocPath;
 
-                    DBG_ASSERT( aFileToOpen.Len()!=0, "The autopilot should have asked for a file itself already!" );
-                    if(aFileToOpen.Len() != 0)
+                    DBG_ASSERT( !aFileToOpen.isEmpty(), "The autopilot should have asked for a file itself already!" );
+                    if (!aFileToOpen.isEmpty())
                     {
                         com::sun::star::uno::Sequence< com::sun::star::beans::NamedValue > aPasswrd( pPilotDlg->GetPassword() );
 
@@ -688,7 +688,7 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
                                 AddSummaryPage(pViewFrame, pDoc);
 
                             // empty document
-                            if((aDocPath.Len() == 0) && pViewFrame && pViewFrame->GetDispatcher())
+                            if (aDocPath.isEmpty() && pViewFrame && pViewFrame->GetDispatcher())
                             {
                                 SfxBoolItem aIsChangedItem(SID_MODIFYPAGE, !bIsDocEmpty);
                                 SfxUInt32Item eAutoLayout( ID_VAL_WHATLAYOUT, (sal_uInt32) AUTOLAYOUT_TITLE );
@@ -1005,7 +1005,7 @@ void OutlineToImpressFinalizer::operator() (bool)
         sd::OutlineView* pView = static_cast<sd::OutlineView*>(pOutlineShell->GetView());
         // mba: the stream can't contain any relative URLs, because we don't
         // have any information about a BaseURL!
-        if ( pOutlineShell->Read(*mpStream, String(), EE_FORMAT_RTF) == 0 )
+        if ( pOutlineShell->Read(*mpStream, OUString(), EE_FORMAT_RTF) == 0 )
         {
         }
 

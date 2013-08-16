@@ -99,7 +99,7 @@ void LayerTabBar::MouseButtonDown(const MouseEvent& rMEvt)
         else if (rMEvt.IsShift())
         {
             // Toggle between layer visible / hidden
-            String aName(GetPageText(aLayerId));
+            OUString aName(GetPageText(aLayerId));
             SdrPageView* pPV = pDrViewSh->GetView()->GetSdrPageView();
             sal_Bool bVisible = pPV->IsLayerVisible(aName);
             pPV->SetLayerVisible(aName, !bVisible);
@@ -177,12 +177,12 @@ void  LayerTabBar::Command(const CommandEvent& rCEvt)
 long LayerTabBar::StartRenaming()
 {
     sal_Bool bOK = sal_True;
-    String aLayerName = GetPageText( GetEditPageId() );
-    String aLayoutLayer ( SdResId(STR_LAYER_LAYOUT) );
-    String aControlsLayer ( SdResId(STR_LAYER_CONTROLS) );
-    String aMeasureLinesLayer ( SdResId(STR_LAYER_MEASURELINES) );
-    String aBackgroundLayer( SdResId(STR_LAYER_BCKGRND) );
-    String aBackgroundObjLayer( SdResId(STR_LAYER_BCKGRNDOBJ) );
+    OUString aLayerName = GetPageText( GetEditPageId() );
+    OUString aLayoutLayer = SD_RESSTR(STR_LAYER_LAYOUT);
+    OUString aControlsLayer = SD_RESSTR(STR_LAYER_CONTROLS);
+    OUString aMeasureLinesLayer = SD_RESSTR(STR_LAYER_MEASURELINES);
+    OUString aBackgroundLayer = SD_RESSTR(STR_LAYER_BCKGRND);
+    OUString aBackgroundObjLayer = SD_RESSTR(STR_LAYER_BCKGRNDOBJ);
 
     if ( aLayerName == aLayoutLayer       || aLayerName == aControlsLayer  ||
          aLayerName == aMeasureLinesLayer ||
@@ -211,27 +211,27 @@ long LayerTabBar::AllowRenaming()
     // Check if names already exists
     ::sd::View* pView = pDrViewSh->GetView();
     SdDrawDocument& rDoc = pView->GetDoc();
-    String aLayerName = pView->GetActiveLayer();
+    OUString aLayerName = pView->GetActiveLayer();
     SdrLayerAdmin& rLayerAdmin = rDoc.GetLayerAdmin();
-    String aNewName( GetEditText() );
+    OUString aNewName( GetEditText() );
 
-    if ( aNewName.Len() == 0 ||
+    if (aNewName.isEmpty() ||
         (rLayerAdmin.GetLayer( aNewName, sal_False ) && aLayerName != aNewName) )
     {
         // Name already exists
         WarningBox aWarningBox( &pDrViewSh->GetViewFrame()->GetWindow(), WinBits( WB_OK ),
-                                String(SdResId( STR_WARN_NAME_DUPLICATE ) ) );
+                                SD_RESSTR( STR_WARN_NAME_DUPLICATE ) );
         aWarningBox.Execute();
         bOK = sal_False;
     }
 
     if (bOK)
     {
-        String aLayoutLayer ( SdResId(STR_LAYER_LAYOUT) );
-        String aControlsLayer ( SdResId(STR_LAYER_CONTROLS) );
-        String aMeasureLinesLayer ( SdResId(STR_LAYER_MEASURELINES) );
-        String aBackgroundLayer( SdResId(STR_LAYER_BCKGRND) );
-        String aBackgroundObjLayer( SdResId(STR_LAYER_BCKGRNDOBJ) );
+        OUString aLayoutLayer = SD_RESSTR(STR_LAYER_LAYOUT);
+        OUString aControlsLayer = SD_RESSTR(STR_LAYER_CONTROLS);
+        OUString aMeasureLinesLayer = SD_RESSTR(STR_LAYER_MEASURELINES);
+        OUString aBackgroundLayer = SD_RESSTR(STR_LAYER_BCKGRND);
+        OUString aBackgroundObjLayer = SD_RESSTR(STR_LAYER_BCKGRNDOBJ);
 
         if ( aNewName == aLayoutLayer       || aNewName == aControlsLayer  ||
              aNewName == aMeasureLinesLayer ||
@@ -253,13 +253,13 @@ void LayerTabBar::EndRenaming()
         DrawView* pDrView = PTR_CAST( DrawView, pView );
 
         SdDrawDocument& rDoc = pView->GetDoc();
-        String aLayerName = pView->GetActiveLayer();
+        OUString aLayerName = pView->GetActiveLayer();
         SdrLayerAdmin& rLayerAdmin = rDoc.GetLayerAdmin();
         SdrLayer* pLayer = rLayerAdmin.GetLayer(aLayerName, sal_False);
 
         if (pLayer)
         {
-            String aNewName( GetEditText() );
+            OUString aNewName( GetEditText() );
 
             DBG_ASSERT( pDrView, "Rename layer undo action is only working with a SdDrawView" );
             if( pDrView )

@@ -212,7 +212,7 @@ StartType AbstractAssistentDlg_Impl::GetStartType() const
 {
     return pDlg->GetStartType();
 }
-String AbstractAssistentDlg_Impl::GetDocPath() const
+OUString AbstractAssistentDlg_Impl::GetDocPath() const
 {
     return pDlg->GetDocPath();
 }

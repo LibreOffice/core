@@ -128,7 +128,7 @@ class AbstractAssistentDlg_Impl : public AbstractAssistentDlg
     virtual OutputType GetOutputMedium() const;
     virtual sal_Bool IsSummary() const;
     virtual StartType GetStartType() const;
-    virtual String GetDocPath() const;
+    virtual OUString GetDocPath() const;
     virtual sal_Bool GetStartWithFlag() const;
     virtual sal_Bool IsDocEmpty() const;
     virtual com::sun::star::uno::Sequence< com::sun::star::beans::NamedValue > GetPassword();

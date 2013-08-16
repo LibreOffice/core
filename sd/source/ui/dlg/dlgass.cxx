@@ -103,7 +103,7 @@ class PasswordEntry
 {
 public:
     uno::Sequence< beans::NamedValue > aEncryptionData;
-    String maPath;
+    OUString maPath;
 };
 
 // ====================================================================
@@ -190,21 +190,21 @@ public:
 
     ::Window* mpWindow;
 
-    void SavePassword( SfxObjectShellLock xDoc, const String& rPath );
-    void RestorePassword( SfxItemSet* pSet, const String& rPath );
-    uno::Sequence < beans::NamedValue > GetPassword( const String rPath );
+    void SavePassword( SfxObjectShellLock xDoc, const OUString& rPath );
+    void RestorePassword( SfxItemSet* pSet, const OUString& rPath );
+    uno::Sequence < beans::NamedValue > GetPassword( const OUString& rPath );
     void DeletePasswords();
 
     boost::ptr_vector< PasswordEntry > maPasswordList;
 
-    String maDocFile;
-    String maLayoutFile;
+    OUString maDocFile;
+    OUString maLayoutFile;
 
-    String GetDocFileName();
-    String GetLayoutFileName();
+    OUString GetDocFileName();
+    OUString GetLayoutFileName();
 
     /// List of URLs of recently used impress files.
-    std::vector<String*> maOpenFilesList;
+    std::vector<OUString> maOpenFilesList;
 
     /// List of folders containing data about impress templates.
     std::vector<TemplateDir*> maPresentList;
@@ -232,13 +232,13 @@ public:
 
     sal_uLong mnTemplate;
 
-    String maPageListFile;
+    OUString maPageListFile;
 
     void UpdatePreview( sal_Bool bDocPreview );
     void UpdatePageList();
     void UpdateUserData();
 
-    sal_Bool IsOwnFormat( const String& rPath );
+    bool IsOwnFormat( const OUString& rPath );
 
     // dlg status
     void EndDialog( long nResult = 0 );
@@ -246,14 +246,14 @@ public:
     void SetStartType( StartType eType );
     StartType GetStartType();
 
-    void SelectTemplateRegion( const String& rRegion );
-    void SelectLayoutRegion( const String& rRegion );
+    void SelectTemplateRegion( const OUString& rRegion );
+    void SelectLayoutRegion( const OUString& rRegion );
 
     void UpdatePage();
     void ChangePage();
     void LeavePage();
 
-    String GetUiTextForCommand (const OUString& aCommandURL);
+    OUString GetUiTextForCommand (const OUString& aCommandURL);
     Image GetUiIconForCommand (const OUString& aCommandURL);
 
     DECL_LINK( StartScanHdl, void * );
@@ -285,8 +285,8 @@ public:
     OKButton            maFinishButton;
     SdDocPreviewWin     maPreview;
 
-    String              maCreateStr;
-    String              maOpenStr;
+    OUString            maCreateStr;
+    OUString            maOpenStr;
 
     // page 1
     FixedBitmap*        mpPage1FB;
@@ -371,7 +371,7 @@ AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, 
     maCreateStr(SdResId(STR_CREATE)),
     maOpenStr(SdResId(STR_OPEN))
 {
-    maPageListFile += sal_Unicode('?'),
+    maPageListFile = "?";
     mbRecentDocumentsReady = sal_False;
     mbTemplatesReady = sal_False;
     mbPreviewUpdating = sal_False;
@@ -422,11 +422,11 @@ AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, 
 
     // Set text and icon of the 'Open...' button.
     {
-        String sText (GetUiTextForCommand(".uno:Open"));
+        OUString sText (GetUiTextForCommand(".uno:Open"));
         // Remove the mnemonic and add a leading space so that icon and text
         // are not too close together.
-        sText.SearchAndReplaceAll(OUString("~"),String());
-        sText.Insert(OUString(" "),0);
+        sText = sText.replaceAll("~", "");
+        sText = " " + sText;
         mpPage1OpenPB->SetText(sText);
         // Place icon left of text and both centered in the button.
         mpPage1OpenPB->SetModeImage(
@@ -443,7 +443,7 @@ AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, 
     mpPage1RegionLB->SetDropDownLineCount( 6 );
     mpPage1TemplateLB->SetSelectHdl(LINK(this,AssistentDlgImpl,SelectTemplateHdl));
     mpPage1TemplateLB->SetStyle(mpPage1TemplateLB->GetStyle() | WB_SORT);
-    mpPage1TemplateLB->InsertEntry(String(SdResId(STR_ISLOADING)));
+    mpPage1TemplateLB->InsertEntry(SD_RESSTR(STR_ISLOADING));
 
     mpPage1EmptyRB->SetClickHdl(LINK(this,AssistentDlgImpl,StartTypeHdl));
     mpPage1TemplateRB->SetClickHdl(LINK(this,AssistentDlgImpl,StartTypeHdl));
@@ -484,7 +484,7 @@ AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, 
     mpPage2RegionLB->SetDropDownLineCount( 6 );
     mpPage2LayoutLB->SetSelectHdl(LINK(this,AssistentDlgImpl,SelectLayoutHdl));
     mpPage2LayoutLB->SetStyle(mpPage2LayoutLB->GetStyle() | WB_SORT);
-    mpPage2LayoutLB->InsertEntry(String(SdResId(STR_ISLOADING)));
+    mpPage2LayoutLB->InsertEntry(SD_RESSTR(STR_ISLOADING));
 
     // page 3
     maAssistentFunc.InsertControl(3, &maPreview );
@@ -522,9 +522,9 @@ AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, 
     mpPage3EffectLB->SetSelectHdl( LINK(this,AssistentDlgImpl,SelectEffectHdl ));
     mpPage3EffectLB->SetDropDownLineCount( 12 );
 
-    mpPage3SpeedLB->InsertEntry( String( SdResId(STR_SLOW) ));
-    mpPage3SpeedLB->InsertEntry( String( SdResId(STR_MEDIUM) ));
-    mpPage3SpeedLB->InsertEntry( String( SdResId(STR_FAST) ));
+    mpPage3SpeedLB->InsertEntry( SD_RESSTR(STR_SLOW) );
+    mpPage3SpeedLB->InsertEntry( SD_RESSTR(STR_MEDIUM) );
+    mpPage3SpeedLB->InsertEntry( SD_RESSTR(STR_FAST) );
     mpPage3SpeedLB->SetDropDownLineCount( 3 );
     mpPage3SpeedLB->SetSelectHdl( LINK(this,AssistentDlgImpl,SelectEffectHdl ));
     mpPage3SpeedLB->SelectEntryPos( 1 );
@@ -620,8 +620,8 @@ AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, 
 
     //check whether we should start with a template document initialy and preselect it
     const OUString aServiceName( "com.sun.star.presentation.PresentationDocument" );
-    String aStandardTemplate( SfxObjectFactory::GetStandardTemplate( aServiceName ) );
-    if( aStandardTemplate.Len() )
+    OUString aStandardTemplate( SfxObjectFactory::GetStandardTemplate( aServiceName ) );
+    if( !aStandardTemplate.isEmpty() )
     {
         ProvideTemplates();
 
@@ -733,11 +733,6 @@ AssistentDlgImpl::~AssistentDlgImpl()
     delete mpPage5PageListFT;
     delete mpPage5PageListCT;
     delete mpPage5SummaryCB;
-
-    //  Delete the file history list.
-    std::vector<String*>::iterator  I2;
-    for (I2=maOpenFilesList.begin(); I2!=maOpenFilesList.end(); ++I2)
-        delete *I2;
 }
 
 void AssistentDlgImpl::CloseDocShell()
@@ -827,7 +822,7 @@ void    AssistentDlgImpl::ScanDocmenu   (void)
                 // The password is set only when it is not empty.
                 if (!sPassword.isEmpty())
                     aURL.SetPass (sPassword);
-                maOpenFilesList.push_back (new String (aURL.GetMainURL( INetURLObject::NO_DECODE )));
+                maOpenFilesList.push_back (aURL.GetMainURL(INetURLObject::NO_DECODE));
                 mpPage1OpenLB->InsertEntry (sTitle);
                 break;
             }
@@ -968,18 +963,18 @@ StartType AssistentDlgImpl::GetStartType()
         return ST_OPEN;
 }
 
-String AssistentDlgImpl::GetDocFileName()
+OUString AssistentDlgImpl::GetDocFileName()
 {
-    String aTitle;
+    OUString aTitle;
     if(mpWindow)
     {
         aTitle = mpWindow->GetText();
-        sal_uInt16 nPos = aTitle.Search(sal_Unicode('('));
-        if(nPos != STRING_NOTFOUND)
-            aTitle.Erase( nPos-1 );
+        sal_Int32 nPos = aTitle.indexOf('(');
+        if (nPos != -1)
+            aTitle = aTitle.copy( 0, nPos-1 );
     }
 
-    String aDocFile;
+    OUString aDocFile;
     if( GetStartType() == ST_TEMPLATE )
     {
         const sal_uInt16 nEntry = mpPage1TemplateLB->GetSelectEntryPos();
@@ -991,16 +986,16 @@ String AssistentDlgImpl::GetDocFileName()
         {
             aDocFile = pEntry->msPath;
 
-            aTitle.AppendAscii( " (" );
-            aTitle.Append( pEntry->msTitle );
-            aTitle.Append( sal_Unicode(')') );
+            aTitle += " (";
+            aTitle += pEntry->msTitle;
+            aTitle += ")";
         }
     }
     else if( GetStartType() == ST_OPEN )
     {
         const sal_uInt16 nEntry = mpPage1OpenLB->GetSelectEntryPos();
         if(nEntry != (sal_uInt16)-1 )
-            aDocFile = *maOpenFilesList[nEntry];
+            aDocFile = maOpenFilesList[nEntry];
     }
 
     if(mpWindow)
@@ -1009,18 +1004,18 @@ String AssistentDlgImpl::GetDocFileName()
     return aDocFile;
 }
 
-String AssistentDlgImpl::GetLayoutFileName()
+OUString AssistentDlgImpl::GetLayoutFileName()
 {
-    String aFile;
+    OUString aFile;
     const sal_uInt16 nEntry = mpPage2LayoutLB->GetSelectEntryPos();
     TemplateEntry* pEntry = NULL;
     if(nEntry != (sal_uInt16)-1 && nEntry > 0)
         pEntry = mpLayoutRegion->maEntries[nEntry-1];
 
     if(pEntry)
-        aFile = pEntry->msPath;
+        return pEntry->msPath;
 
-    return aFile;
+    return OUString();
 }
 
 SfxObjectShellLock AssistentDlgImpl::GetDocument()
@@ -1329,10 +1324,10 @@ IMPL_LINK_NOARG(AssistentDlgImpl, LastPageHdl)
 
 IMPL_LINK_NOARG(AssistentDlgImpl, PresTypeHdl)
 {
-    if(maDocFile.Len() == 0)
-      {
+    if (maDocFile.isEmpty())
+    {
         maNextPageButton.Enable(false);
-      }
+    }
 
     sal_Bool bKiosk = mpPage3PresTypeKioskRB->IsChecked();
     mpPage3PresTimeFT->Enable(bKiosk);
@@ -1346,12 +1341,12 @@ IMPL_LINK_NOARG(AssistentDlgImpl, PresTypeHdl)
 IMPL_LINK_NOARG(AssistentDlgImpl, UpdateUserDataHdl)
 {
     mbUserDataDirty = sal_True;
-    String aTopic = mpPage4AskTopicEDT->GetText();
-    String aName  = mpPage4AskNameEDT->GetText();
-    String aInfo  = mpPage4AskInfoEDT->GetText();
+    OUString aTopic = mpPage4AskTopicEDT->GetText();
+    OUString aName  = mpPage4AskNameEDT->GetText();
+    OUString aInfo  = mpPage4AskInfoEDT->GetText();
 
-    if(aTopic.Len() == 0 && aName.Len() == 0 && aInfo.Len() == 0)
-        maDocFile.Erase();
+    if (aTopic.isEmpty() && aName.isEmpty() && aInfo.isEmpty())
+        maDocFile = "";
 
     return 0;
 }
@@ -1359,7 +1354,7 @@ IMPL_LINK_NOARG(AssistentDlgImpl, UpdateUserDataHdl)
 // ********************************************************************
 // ********************************************************************
 
-void AssistentDlgImpl::SelectTemplateRegion( const String& rRegion )
+void AssistentDlgImpl::SelectTemplateRegion( const OUString& rRegion )
 {
     mpPage1TemplateLB->Clear();
     std::vector<TemplateDir*>::iterator I;
@@ -1383,10 +1378,10 @@ void AssistentDlgImpl::SelectTemplateRegion( const String& rRegion )
     }
 }
 
-void AssistentDlgImpl::SelectLayoutRegion( const String& rRegion )
+void AssistentDlgImpl::SelectLayoutRegion( const OUString& rRegion )
 {
     mpPage2LayoutLB->Clear();
-    mpPage2LayoutLB->InsertEntry(String(SdResId(STR_WIZARD_ORIGINAL)));
+    mpPage2LayoutLB->InsertEntry(SD_RESSTR(STR_WIZARD_ORIGINAL));
     std::vector<TemplateDir*>::iterator I;
     for (I=maPresentList.begin(); I!=maPresentList.end(); ++I)
     {
@@ -1406,23 +1401,23 @@ void AssistentDlgImpl::SelectLayoutRegion( const String& rRegion )
 
 void AssistentDlgImpl::UpdateUserData()
 {
-    String aTopic = mpPage4AskTopicEDT->GetText();
-    String aName  = mpPage4AskNameEDT->GetText();
-    String aInfo  = mpPage4AskInfoEDT->GetText();
+    OUString aTopic = mpPage4AskTopicEDT->GetText();
+    OUString aName  = mpPage4AskNameEDT->GetText();
+    OUString aInfo  = mpPage4AskInfoEDT->GetText();
 
     SfxObjectShell* pShell = xDocShell;
     DrawDocShell* pDocShell = PTR_CAST(DrawDocShell,pShell);
     SdDrawDocument* pDoc = pDocShell?pDocShell->GetDoc():NULL;
     SdPage* pPage = pDoc?pDoc->GetSdPage(0, PK_STANDARD):NULL;
 
-    if(pPage && ( aTopic.Len() != 0 || aName.Len() != 0 || aInfo.Len() != 0 ) )
+    if (pPage && (!aTopic.isEmpty() || !aName.isEmpty() || !aInfo.isEmpty()))
     {
         if( pPage->GetAutoLayout() == AUTOLAYOUT_NONE )
             pPage->SetAutoLayout(AUTOLAYOUT_TITLE, sal_True);
 
         SdrTextObj* pObj;
 
-        if( aTopic.Len() )
+        if (!aTopic.isEmpty())
         {
             pObj  = dynamic_cast<SdrTextObj*>( pPage->GetPresObj( PRESOBJ_TITLE ) );
             if( pObj )
@@ -1434,12 +1429,12 @@ void AssistentDlgImpl::UpdateUserData()
 
         }
 
-        if ( aName.Len() || aInfo.Len() )
+        if (!aName.isEmpty() || !aInfo.isEmpty())
         {
-            String aStrTmp( aName );
-            if( aName.Len() )
-                aStrTmp.AppendAscii( "\n\n" );
-            aStrTmp.Append( aInfo );
+            OUString aStrTmp( aName );
+            if (!aName.isEmpty())
+                aStrTmp += "\n\n";
+            aStrTmp += aInfo;
 
             pObj = dynamic_cast<SdrTextObj*>( pPage->GetPresObj( PRESOBJ_OUTLINE ) );
             if( pObj )
@@ -1500,18 +1495,17 @@ void AssistentDlgImpl::UpdatePreview( sal_Bool bDocPreview )
         return;
     }
 
-    String aDocFile = GetDocFileName();
-    String aLayoutFile = GetLayoutFileName();
-    String aEmptyStr;
+    OUString aDocFile = GetDocFileName();
+    OUString aLayoutFile = GetLayoutFileName();
 
     SfxApplication *pSfxApp = SFX_APP();
     sal_uLong lErr;
-    sal_Bool bChangeMaster = aLayoutFile.Len() != 0;
+    sal_Bool bChangeMaster = !aLayoutFile.isEmpty();
 
-    if( aDocFile.Len() == 0 )
+    if (aDocFile.isEmpty())
     {
-        if( !xDocShell.Is() || maDocFile.Len() != 0 ||
-            (maDocFile.Len() == 0 && maLayoutFile.Len() != 0 && aLayoutFile.Len() == 0 ))
+        if (!xDocShell.Is() || !maDocFile.isEmpty() ||
+            (maDocFile.isEmpty() && !maLayoutFile.isEmpty() && aLayoutFile.isEmpty()))
         {
             CloseDocShell();
 
@@ -1527,7 +1521,7 @@ void AssistentDlgImpl::UpdatePreview( sal_Bool bDocPreview )
             mbUserDataDirty = sal_True;
         }
         else
-            bChangeMaster = (aLayoutFile.Len() != 0) && (maLayoutFile != aLayoutFile);
+            bChangeMaster = !aLayoutFile.isEmpty() && (maLayoutFile != aLayoutFile);
     }
     else if( aDocFile == maDocFile && ( mbDocPreview == bDocPreview || bDocPreview ) )
     {
@@ -1568,7 +1562,7 @@ void AssistentDlgImpl::UpdatePreview( sal_Bool bDocPreview )
         {
             SfxRequest aReq( SID_OPENDOC, SFX_CALLMODE_SYNCHRON, SFX_APP()->GetPool() );
             aReq.AppendItem( SfxStringItem( SID_FILE_NAME, aDocFile ));
-            aReq.AppendItem( SfxStringItem( SID_REFERER, aEmptyStr ) );
+            aReq.AppendItem( SfxStringItem( SID_REFERER, OUString() ) );
             aReq.AppendItem( SfxStringItem( SID_TARGETNAME, OUString("_default") ) );
             aReq.AppendItem( SfxBoolItem( SID_HIDDEN, sal_True ) );
             aReq.AppendItem( SfxBoolItem( SID_PREVIEW, bDocPreview ) );
@@ -1622,7 +1616,7 @@ void AssistentDlgImpl::UpdatePreview( sal_Bool bDocPreview )
 
         if( pDoc && pLayoutDoc )
         {
-            pDoc->SetMasterPage(0, aEmptyStr, pLayoutDoc, sal_True,  sal_False );
+            pDoc->SetMasterPage(0, OUString(), pLayoutDoc, sal_True,  sal_False );
         }
         else
         {
@@ -1646,7 +1640,7 @@ void AssistentDlgImpl::UpdatePreview( sal_Bool bDocPreview )
     mbPreviewUpdating = sal_False;
 }
 
-void AssistentDlgImpl::SavePassword( SfxObjectShellLock xDoc, const String& rPath )
+void AssistentDlgImpl::SavePassword( SfxObjectShellLock xDoc, const OUString& rPath )
 {
     if(xDoc.Is())
     {
@@ -1687,7 +1681,7 @@ void AssistentDlgImpl::SavePassword( SfxObjectShellLock xDoc, const String& rPat
     }
 }
 
-void AssistentDlgImpl::RestorePassword( SfxItemSet* pSet, const String& rPath )
+void AssistentDlgImpl::RestorePassword( SfxItemSet* pSet, const OUString& rPath )
 {
     uno::Sequence < beans::NamedValue > aEncryptionData( GetPassword( rPath ) );
 
@@ -1695,7 +1689,7 @@ void AssistentDlgImpl::RestorePassword( SfxItemSet* pSet, const String& rPath )
         pSet->Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, uno::makeAny( aEncryptionData ) ) );
 }
 
-uno::Sequence < beans::NamedValue > AssistentDlgImpl::GetPassword( const String rPath )
+uno::Sequence < beans::NamedValue > AssistentDlgImpl::GetPassword( const OUString& rPath )
 {
     for ( size_t i = 0, n = maPasswordList.size(); i < n; ++i )
     {
@@ -1711,22 +1705,22 @@ void AssistentDlgImpl::DeletePasswords()
     maPasswordList.clear();
 }
 
-sal_Bool AssistentDlgImpl::IsOwnFormat( const String& rPath )
+bool AssistentDlgImpl::IsOwnFormat( const OUString& rPath )
 {
     INetURLObject   aURL( rPath );
-    String          aExt( aURL.GetFileExtension() );
+    OUString        aExt( aURL.GetFileExtension() );
 
     DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
-    return !aExt.EqualsIgnoreCaseAscii( "ppt" );
+    return !aExt.equalsIgnoreAsciiCase( "ppt" );
 }
 
 
 
 
-String AssistentDlgImpl::GetUiTextForCommand (const OUString& sCommandURL)
+OUString AssistentDlgImpl::GetUiTextForCommand (const OUString& sCommandURL)
 {
-    String sLabel;
+    OUString sLabel;
     Reference<container::XNameAccess> xUICommandLabels;
 
     try
@@ -1847,8 +1841,8 @@ IMPL_LINK_NOARG(AssistentDlg, FinishHdl)
     if( GetStartType() == ST_OPEN )
     {
         //if we do not have a file here asked for one before ending the dialog
-        String aFileToOpen = GetDocPath();
-        if(aFileToOpen.Len() == 0)
+        OUString aFileToOpen = GetDocPath();
+        if (aFileToOpen.isEmpty())
         {
             sfx2::FileDialogHelper aFileDlg(
                 ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION, 0,
@@ -1856,7 +1850,7 @@ IMPL_LINK_NOARG(AssistentDlg, FinishHdl)
 
             if ( aFileDlg.Execute() == ERRCODE_NONE )
                 aFileToOpen = aFileDlg.GetPath();
-            if( aFileToOpen.Len() == 0)
+            if (aFileToOpen.isEmpty())
                 return 1;
             else
             {
@@ -1865,7 +1859,7 @@ IMPL_LINK_NOARG(AssistentDlg, FinishHdl)
 
                 INetURLObject aURL;
                 aURL.SetSmartURL(aFileToOpen);
-                mpImpl->maOpenFilesList.push_back (new String (aURL.GetMainURL( INetURLObject::NO_DECODE )));
+                mpImpl->maOpenFilesList.push_back (aURL.GetMainURL(INetURLObject::NO_DECODE));
                 sal_uInt16 nNewPos = mpImpl->mpPage1OpenLB->InsertEntry(aURL.getName());
                 mpImpl->mpPage1OpenLB->SelectEntryPos(nNewPos);
             }
@@ -1915,7 +1909,7 @@ StartType AssistentDlg::GetStartType() const
     return mpImpl->GetStartType();
 }
 
-String AssistentDlg::GetDocPath() const
+OUString AssistentDlg::GetDocPath() const
 {
     return mpImpl->GetDocFileName();
 }
@@ -1927,8 +1921,8 @@ sal_Bool AssistentDlg::GetStartWithFlag() const
 
 sal_Bool AssistentDlg::IsDocEmpty() const
 {
-    return mpImpl->GetDocFileName().Len() == 0 &&
-           mpImpl->GetLayoutFileName().Len() == 0;
+    return mpImpl->GetDocFileName().isEmpty() &&
+           mpImpl->GetLayoutFileName().isEmpty();
 }
 
 uno::Sequence< beans::NamedValue > AssistentDlg::GetPassword()

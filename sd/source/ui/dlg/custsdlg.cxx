@@ -475,7 +475,7 @@ void SdDefineCustomShowDlg::CheckCustomShow()
     }
 
     // compare name and set name if necessary
-    String aStr( m_pEdtName->GetText() );
+    OUString aStr( m_pEdtName->GetText() );
     if( rpCustomShow->GetName() != aStr )
     {
         rpCustomShow->SetName( aStr );
@@ -493,7 +493,7 @@ IMPL_LINK_NOARG(SdDefineCustomShowDlg, OKHdl)
     SdCustomShowList* pCustomShowList = rDoc.GetCustomShowList();
     if( pCustomShowList )
     {
-        String aName( m_pEdtName->GetText() );
+        OUString aName( m_pEdtName->GetText() );
         SdCustomShow* pCustomShow;
 
         long nPosToSelect = pCustomShowList->GetCurPos();
@@ -516,7 +516,7 @@ IMPL_LINK_NOARG(SdDefineCustomShowDlg, OKHdl)
     else
     {
         WarningBox( this, WinBits( WB_OK ),
-                    String( SdResId( STR_WARN_NAME_DUPLICATE ) ) ).Execute();
+                    SD_RESSTR( STR_WARN_NAME_DUPLICATE ) ).Execute();
 
         m_pEdtName->GrabFocus();
     }

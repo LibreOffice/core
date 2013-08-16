@@ -148,7 +148,7 @@ static void fillLayoutValueSet( ValueSet* pValue, snewfoil_value_info* pInfo )
     Size aLayoutItemSize;
     for( ; pInfo->mnBmpResId; pInfo++ )
     {
-        String   aText( SdResId( pInfo->mnStrResId ) );
+        OUString aText( SD_RESSTR( pInfo->mnStrResId ) );
         BitmapEx aBmp(  SdResId( pInfo->mnBmpResId ) );
 
         pValue->InsertItem( static_cast<sal_uInt16>(pInfo->maAutoLayout)+1, aBmp, aText );
@@ -187,8 +187,8 @@ LayoutToolbarMenu::LayoutToolbarMenu( SlideLayoutController& rController, const 
 
     const sal_Int32 LAYOUT_BORDER_PIX = 7;
 
-    String aTitle1( SdResId( STR_GLUE_ESCDIR_HORZ ) );
-    String aTitle2( SdResId( STR_GLUE_ESCDIR_VERT ) );
+    OUString aTitle1( SD_RESSTR( STR_GLUE_ESCDIR_HORZ ) );
+    OUString aTitle2( SD_RESSTR( STR_GLUE_ESCDIR_VERT ) );
 
     SvtLanguageOptions aLanguageOptions;
     const bool bVerticalEnabled = aLanguageOptions.IsVerticalTextEnabled();
@@ -255,11 +255,11 @@ LayoutToolbarMenu::LayoutToolbarMenu( SlideLayoutController& rController, const 
                 sSlotStr = ".uno:Undo";
             aSlotImage = ::GetImage( mxFrame, sSlotStr, sal_False );
 
-            String sSlotTitle;
+            OUString sSlotTitle;
             if( bInsertPage )
                 sSlotTitle = ImplRetrieveLabelFromCommand( mxFrame, sSlotStr );
             else
-                sSlotTitle = String( SdResId( STR_RESET_LAYOUT ) );
+                sSlotTitle = SD_RESSTR( STR_RESET_LAYOUT );
             appendEntry( 2, sSlotTitle, aSlotImage);
         }
     }

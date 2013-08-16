@@ -81,7 +81,7 @@ public:
     virtual OutputType GetOutputMedium() const = 0;
     virtual sal_Bool IsSummary() const = 0;
     virtual StartType GetStartType() const = 0;
-    virtual String GetDocPath() const = 0;
+    virtual OUString GetDocPath() const = 0;
     virtual sal_Bool GetStartWithFlag() const = 0;
     virtual sal_Bool IsDocEmpty() const = 0;
     virtual com::sun::star::uno::Sequence< com::sun::star::beans::NamedValue > GetPassword() = 0;

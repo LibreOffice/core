@@ -113,8 +113,7 @@ SfxItemPool* GetAnnotationPool()
         mpAnnotationPool->SetPoolDefaultItem(SvxFontHeightItem(423,100,EE_CHAR_FONTHEIGHT));
 
         Font aAppFont( Application::GetSettings().GetStyleSettings().GetAppFont() );
-        String EMPTYSTRING;
-        mpAnnotationPool->SetPoolDefaultItem(SvxFontItem(aAppFont.GetFamily(),aAppFont.GetName(), EMPTYSTRING,PITCH_DONTKNOW,RTL_TEXTENCODING_DONTKNOW,EE_CHAR_FONTINFO));
+        mpAnnotationPool->SetPoolDefaultItem(SvxFontItem(aAppFont.GetFamily(),aAppFont.GetName(),"",PITCH_DONTKNOW,RTL_TEXTENCODING_DONTKNOW,EE_CHAR_FONTINFO));
     }
 
     return mpAnnotationPool;
@@ -365,7 +364,7 @@ void AnnotationManagerImpl::InsertAnnotation()
     if( pPage )
     {
         if( mpDoc->IsUndoEnabled() )
-            mpDoc->BegUndo( String( SdResId( STR_ANNOTATION_UNDO_INSERT ) ) );
+            mpDoc->BegUndo( SD_RESSTR( STR_ANNOTATION_UNDO_INSERT ) );
 
         // find free space for new annotation
         int y = 0, x = 0;
@@ -458,27 +457,24 @@ void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest& rReq )
         mpDoc->SetCalcFieldValueHdl( pOutliner.get() );
         pOutliner->SetUpdateMode( sal_True );
 
-        String aStr(SdResId(STR_ANNOTATION_REPLY));
+        OUString aStr(SD_RESSTR(STR_ANNOTATION_REPLY));
         OUString sAuthor( xAnnotation->getAuthor() );
         if( sAuthor.isEmpty() )
-            sAuthor = String( SdResId( STR_ANNOTATION_NOAUTHOR ) );
+            sAuthor = SD_RESSTR( STR_ANNOTATION_NOAUTHOR );
 
-        aStr.SearchAndReplaceAscii("%1", sAuthor);
+        aStr = aStr.replaceFirst("%1", sAuthor);
 
-        aStr.Append( OUString(" (") );
-        aStr.Append( OUString( getAnnotationDateTimeString( xAnnotation ) ) );
-        aStr.Append( OUString("): \"") );
+        aStr += " (" + getAnnotationDateTimeString( xAnnotation ) + "): \"";
 
         OUString sQuote( pTextApi->GetText() );
 
         if( sQuote.isEmpty() )
             sQuote = "...";
-        aStr.Append( sQuote );
-        aStr.Append( OUString("\"\n") );
+        aStr += sQuote + "\"\n";
 
         sal_Int32 nParaCount = comphelper::string::getTokenCount(aStr, '\n');
         for( sal_Int32 nPara = 0; nPara < nParaCount; nPara++ )
-            pOutliner->Insert( aStr.GetToken( nPara, '\n' ), EE_PARA_APPEND, -1 );
+            pOutliner->Insert( aStr.getToken( nPara, '\n' ), EE_PARA_APPEND, -1 );
 
         if( pOutliner->GetParagraphCount() > 1 )
         {
@@ -515,7 +511,7 @@ void AnnotationManagerImpl::DeleteAnnotation( Reference< XAnnotation > xAnnotati
     if( xAnnotation.is() && pPage )
     {
         if( mpDoc->IsUndoEnabled() )
-            mpDoc->BegUndo( String( SdResId( STR_ANNOTATION_UNDO_DELETE ) ) );
+            mpDoc->BegUndo( SD_RESSTR( STR_ANNOTATION_UNDO_DELETE ) );
 
         pPage->removeAnnotation( xAnnotation );
 
@@ -529,7 +525,7 @@ void AnnotationManagerImpl::DeleteAnnotation( Reference< XAnnotation > xAnnotati
 void AnnotationManagerImpl::DeleteAnnotationsByAuthor( const OUString& sAuthor )
 {
     if( mpDoc->IsUndoEnabled() )
-        mpDoc->BegUndo( String( SdResId( STR_ANNOTATION_UNDO_DELETE ) ) );
+        mpDoc->BegUndo( SD_RESSTR( STR_ANNOTATION_UNDO_DELETE ) );
 
     SdPage* pPage = 0;
     do
@@ -559,7 +555,7 @@ void AnnotationManagerImpl::DeleteAnnotationsByAuthor( const OUString& sAuthor )
 void AnnotationManagerImpl::DeleteAllAnnotations()
 {
     if( mpDoc->IsUndoEnabled() )
-        mpDoc->BegUndo( String( SdResId( STR_ANNOTATION_UNDO_DELETE ) ) );
+        mpDoc->BegUndo( SD_RESSTR( STR_ANNOTATION_UNDO_DELETE ) );
 
     SdPage* pPage = 0;
     do
@@ -730,7 +726,7 @@ void AnnotationManagerImpl::SelectNextAnnotation(bool bForeward)
 
         // Pop up question box that asks the user whether to wrap arround.
         // The dialog is made modal with respect to the whole application.
-        QueryBox aQuestionBox ( NULL, (WB_YES_NO | WB_DEF_YES), String(SdResId(nStringId)));
+        QueryBox aQuestionBox ( NULL, (WB_YES_NO | WB_DEF_YES), SD_RESSTR(nStringId));
         aQuestionBox.SetImage (QueryBox::GetStandardImage());
         short nBoxResult = aQuestionBox.Execute();
         if (nBoxResult != RET_YES)
@@ -976,10 +972,11 @@ void AnnotationManagerImpl::ExecuteAnnotationContextMenu( Reference< XAnnotation
     OUString sCurrentAuthor( aUserOptions.GetFullName() );
     OUString sAuthor( xAnnotation->getAuthor() );
 
-    String aStr( pMenu->GetItemText( SID_DELETEALLBYAUTHOR_POSTIT ) ), aReplace( sAuthor );
-    if( aReplace.Len() == 0 )
-        aReplace = String( SdResId( STR_ANNOTATION_NOAUTHOR ) );
-    aStr.SearchAndReplaceAscii("%1", aReplace);
+    OUString aStr( pMenu->GetItemText( SID_DELETEALLBYAUTHOR_POSTIT ) );
+    OUString aReplace( sAuthor );
+    if( aReplace.isEmpty() )
+        aReplace = SD_RESSTR( STR_ANNOTATION_NOAUTHOR );
+    aStr = aStr.replaceFirst("%1", aReplace);
     pMenu->SetItemText( SID_DELETEALLBYAUTHOR_POSTIT, aStr );
     pMenu->EnableItem( SID_REPLYTO_POSTIT, (sAuthor != sCurrentAuthor) && !bReadOnly );
     pMenu->EnableItem( SID_DELETE_POSTIT, (xAnnotation.is() && !bReadOnly) ? sal_True : sal_False );

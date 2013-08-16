@@ -84,7 +84,7 @@ ClientBox::ClientBox( Dialog* pParent, RemoteServer *pServer,
     m_pScrollBar->EnableDrag();
 
     m_aPinBox.SetUseThousandSep(false);
-//     m_aPinDescription.SetText( String( SdResId( STR_ENTER_PIN ) ) );
+//     m_aPinDescription.SetText( SD_RESSTR( STR_ENTER_PIN ) );
 
     SetPaintTransparent( true );
     SetPosPixel( Point( RSC_SP_DLG_INNERBORDER_LEFT, RSC_SP_DLG_INNERBORDER_TOP ) );
@@ -308,15 +308,15 @@ void ClientBox::DrawRow( const Rectangle& rRect, const TClientBoxEntry pEntry )
     long nMaxTitleWidth = rRect.GetWidth() - ICON_OFFSET;
     nMaxTitleWidth -= ( 2 * SMALL_ICON_SIZE ) + ( 4 * SPACE_BETWEEN );
 
-    long aTitleWidth = GetTextWidth( String( pEntry->m_pClientInfo->mName ) ) + (aTextHeight / 3);
+    long aTitleWidth = GetTextWidth( pEntry->m_pClientInfo->mName ) + (aTextHeight / 3);
 
     aPos = rRect.TopLeft() + Point( ICON_OFFSET, TOP_OFFSET );
 
     if ( aTitleWidth > nMaxTitleWidth )
     {
         aTitleWidth = nMaxTitleWidth - (aTextHeight / 3);
-        String aShortTitle = GetEllipsisString( pEntry->m_pClientInfo->mName,
-                                                aTitleWidth );
+        OUString aShortTitle = GetEllipsisString( pEntry->m_pClientInfo->mName,
+                                                  aTitleWidth );
         DrawText( aPos, aShortTitle );
         aTitleWidth += (aTextHeight / 3);
     }
@@ -337,9 +337,9 @@ void ClientBox::DrawRow( const Rectangle& rRect, const TClientBoxEntry pEntry )
                    aRect.Bottom() - TOP_OFFSET - aBtnSize.Height() );
 //         m_aPinDescription.SetPosPixel( aBtnPos );
         DrawText( Rectangle( aBtnPos.X(), aBtnPos.Y(), rRect.Right(), rRect.Bottom() - TOP_OFFSET),
-                  String( SdResId( STR_ENTER_PIN ) ), 0 );
+                  SD_RESSTR( STR_ENTER_PIN ), 0 );
 
-        aBtnPos = Point( aRect.Left() + GetTextWidth( String( SdResId( STR_ENTER_PIN ) ) ),
+        aBtnPos = Point( aRect.Left() + GetTextWidth( SD_RESSTR( STR_ENTER_PIN ) ),
                    aRect.Bottom() - TOP_OFFSET - aBtnSize.Height() );
 
         m_aPinBox.SetPosPixel( aBtnPos );
