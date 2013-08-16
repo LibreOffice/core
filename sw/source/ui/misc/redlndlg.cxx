@@ -537,7 +537,7 @@ void SwRedlineAcceptDlg::InsertChildren(SwRedlineDataParent *pParent, const SwRe
 
     const String *pAction = &GetActionText(rRedln);
     sal_Bool bValidParent = !sFilterAction.Len() || sFilterAction == *pAction;
-    bValidParent = bValidParent && pTable->IsValidEntry(&rRedln.GetAuthorString(), &rRedln.GetTimeStamp(), &rRedln.GetComment());
+    bValidParent = bValidParent && pTable->IsValidEntry(rRedln.GetAuthorString(), rRedln.GetTimeStamp(), rRedln.GetComment());
     if (nAutoFmt)
     {
 
@@ -576,7 +576,7 @@ void SwRedlineAcceptDlg::InsertChildren(SwRedlineDataParent *pParent, const SwRe
 
         pAction = &GetActionText(rRedln, nStack);
         sal_Bool bValidChild = !sFilterAction.Len() || sFilterAction == *pAction;
-        bValidChild = bValidChild && pTable->IsValidEntry(&rRedln.GetAuthorString(nStack), &rRedln.GetTimeStamp(nStack), &rRedln.GetComment());
+        bValidChild = bValidChild && pTable->IsValidEntry(rRedln.GetAuthorString(nStack), rRedln.GetTimeStamp(nStack), rRedln.GetComment());
         if (nAutoFmt)
             bValidChild = bValidChild && bAutoFmt;
         bValidTree |= bValidChild;

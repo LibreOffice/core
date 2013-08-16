@@ -302,32 +302,33 @@ void SvxRedlinTable::SetCommentParams( const utl::SearchParam* pSearchPara )
     }
 }
 
-bool SvxRedlinTable::IsValidEntry(const String* pAuthorStr,
-                                  const DateTime *pDateTime,const String* pCommentStr)
+bool SvxRedlinTable::IsValidEntry(const String &rAuthorStr,
+                                  const DateTime &rDateTime,
+                                  const String &rCommentStr)
 {
-    return IsValidEntry(pAuthorStr, pDateTime) && IsValidComment(pCommentStr);
+    return IsValidEntry(rAuthorStr, rDateTime) && IsValidComment(rCommentStr);
 }
 
-bool SvxRedlinTable::IsValidEntry(const String* pAuthorStr,const DateTime *pDateTime)
+bool SvxRedlinTable::IsValidEntry(const String &rAuthorStr,const DateTime &rDateTime)
 {
-    if (bAuthor && !aAuthor.CompareTo(*pAuthorStr)==COMPARE_EQUAL)
+    if (bAuthor && !aAuthor.CompareTo(rAuthorStr)==COMPARE_EQUAL)
         return false;
 
     if (!bDate)
         return true;
 
-    const bool bRes = pDateTime->IsBetween(aDaTiFilterFirst, aDaTiFilterLast);
+    const bool bRes = rDateTime.IsBetween(aDaTiFilterFirst, aDaTiFilterLast);
     return nDaTiMode!=FLT_DATE_NOTEQUAL ? bRes : !bRes;
 }
 
-bool SvxRedlinTable::IsValidComment(const String* pCommentStr)
+bool SvxRedlinTable::IsValidComment(const String &rCommentStr)
 {
     if (!bComment)
         return true;
 
     sal_Int32 nStartPos = 0;
-    sal_Int32 nEndPos = pCommentStr->Len();
-    return pCommentSearcher->SearchForward( *pCommentStr, &nStartPos, &nEndPos);
+    sal_Int32 nEndPos = rCommentStr.Len();
+    return pCommentSearcher->SearchForward( rCommentStr, &nStartPos, &nEndPos);
 }
 
 SvTreeListEntry* SvxRedlinTable::InsertEntry(const OUString& rStr,RedlinData *pUserData,

@@ -323,7 +323,7 @@ bool ScAcceptChgDlg::IsValidAction(const ScChangeAction* pScChangeAction)
         aComment += ')';
     }
 
-    if(pTheView->IsValidEntry(&aUser,&aDateTime,&aComment))
+    if (pTheView->IsValidEntry(aUser, aDateTime, aComment))
     {
         if(pTPFilter->IsRange())
         {
@@ -442,9 +442,9 @@ SvTreeListEntry* ScAcceptChgDlg::InsertChangeAction(
 
     aBuf.append(aComment);
 
-    if(pTheView->IsValidEntry(&aUser,&aDateTime)|| bIsGenerated)
+    if (pTheView->IsValidEntry(aUser, aDateTime) || bIsGenerated)
     {
-        if(pTheView->IsValidComment(&aComment))
+        if (pTheView->IsValidComment(aComment))
         {
             if(pTPFilter->IsRange())
             {
@@ -514,7 +514,7 @@ SvTreeListEntry* ScAcceptChgDlg::InsertFilteredAction(
     String aUser=pScChangeAction->GetUser();
     DateTime aDateTime=pScChangeAction->GetDateTime();
 
-    if(pTheView->IsValidEntry(&aUser,&aDateTime)||bIsGenerated)
+    if (pTheView->IsValidEntry(aUser, aDateTime) || bIsGenerated)
     {
         if(pTPFilter->IsRange())
         {
@@ -610,7 +610,7 @@ SvTreeListEntry* ScAcceptChgDlg::InsertFilteredAction(
             aComment += String(aDesc);
             aComment += ')';
         }
-        if(pTheView->IsValidComment(&aComment))
+        if (pTheView->IsValidComment(aComment))
         {
             aString+=aComment;
             pEntry=pTheView->InsertEntry(aString,pNewData,pParent,nPos);
@@ -637,7 +637,7 @@ SvTreeListEntry* ScAcceptChgDlg::InsertChangeActionContent(const ScChangeActionC
     String aUser=pScChangeAction->GetUser();
     DateTime aDateTime=pScChangeAction->GetDateTime();
 
-    if(pTheView->IsValidEntry(&aUser,&aDateTime)||bIsGenerated)
+    if (pTheView->IsValidEntry(aUser, aDateTime) || bIsGenerated)
     {
         if(pTPFilter->IsRange())
         {
@@ -740,7 +740,7 @@ SvTreeListEntry* ScAcceptChgDlg::InsertChangeActionContent(const ScChangeActionC
     pNewData->nCol  = aRef.aStart.Col();
     pNewData->nTable= aRef.aStart.Tab();
 
-    if(pTheView->IsValidComment(&aComment) && bFlag)
+    if (pTheView->IsValidComment(aComment) && bFlag)
     {
         bHasFilterEntry=true;
         pEntry=pTheView->InsertEntry(aString,pNewData,pParent);
