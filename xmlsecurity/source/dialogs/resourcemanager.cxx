@@ -62,10 +62,8 @@ namespace XmlSec
         // String with date and time information (#i20172#)
         DateTime aDT( GetDateTime( _rDT ) );
         const LocaleDataWrapper& rLoDa = GetLocaleData();
-        OUStringBuffer sRet( rLoDa.getDate( aDT ) );
-        sRet.append( ' ' );
-        sRet.append( rLoDa.getTime( aDT ) );
-        return sRet.makeStringAndClear();
+
+        return  rLoDa.getDate( aDT ) + " " + rLoDa.getTime( aDT );
     }
 
     OUString GetDateString( const ::com::sun::star::util::DateTime& _rDT )
@@ -94,10 +92,8 @@ namespace XmlSec
                 s1.append(static_cast<sal_Unicode>(','));
                 s2.append(static_cast<sal_Unicode>('\n'));
             }
-            s1.append(i->second);
-            s2.append(i->first);
-            s2.append(sEqual);
-            s2.append(i->second);
+            s1.append(i->second + i->first);
+            s2.append(sEqual + i->second);
         }
         return make_pair(s1.makeStringAndClear(), s2.makeStringAndClear());
     }

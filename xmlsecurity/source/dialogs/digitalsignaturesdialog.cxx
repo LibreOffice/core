@@ -208,11 +208,8 @@ DigitalSignaturesDialog::DigitalSignaturesDialog(
     static long aTabs[] = { 4, 0, 6*nControlWidth/100, 36*nControlWidth/100, 74*nControlWidth/100 };
     m_pSignaturesLB->SetTabs(aTabs);
 
-    OUStringBuffer sHeader;
-    sHeader.append("\t").append(get<FixedText>("signed")->GetText())
-        .append("\t").append(get<FixedText>("issued")->GetText())
-        .append("\t").append(get<FixedText>("date")->GetText());
-    m_pSignaturesLB->InsertHeaderEntry(sHeader.makeStringAndClear());
+    m_pSignaturesLB->InsertHeaderEntry("\t" + get<FixedText>("signed")->GetText() + "\t"
+               + get<FixedText>("issued")->GetText() + "\t" + get<FixedText>("date")->GetText());
 
     mbVerifySignatures = true;
     mbSignaturesChanged = false;
