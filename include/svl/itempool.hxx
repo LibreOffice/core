@@ -213,8 +213,7 @@ public:
     bool                            IsItemFlag( sal_uInt16 nWhich, sal_uInt16 nFlag ) const;
     bool                            IsItemFlag( const SfxPoolItem &rItem, sal_uInt16 nFlag ) const
                                     { return IsItemFlag( rItem.Which(), nFlag ); }
-    void                            SetItemInfos( const SfxItemInfo *pInfos )
-                                    { pItemInfos = pInfos; }
+    void                            SetItemInfos( const SfxItemInfo *pInfos );
     sal_uInt16                      GetWhich( sal_uInt16 nSlot, sal_Bool bDeep = sal_True ) const;
     sal_uInt16                      GetSlotId( sal_uInt16 nWhich, sal_Bool bDeep = sal_True ) const;
     sal_uInt16                      GetTrueWhich( sal_uInt16 nSlot, sal_Bool bDeep = sal_True ) const;

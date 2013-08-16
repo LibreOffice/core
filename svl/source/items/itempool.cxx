@@ -28,6 +28,53 @@
 #include "poolio.hxx"
 
 
+#if OSL_DEBUG_LEVEL > 0
+#include <map>
+
+static void
+lcl_CheckSlots2(std::map<sal_uInt16, sal_uInt16> & rSlotMap,
+        SfxItemPool const& rPool, SfxItemInfo const* pInfos)
+{
+    if (!pInfos)
+        return; // may not be initialized yet
+    if (rPool.GetName() == "EditEngineItemPool")
+        return; // HACK: this one has loads of duplicates already, ignore it :(
+    sal_uInt16 const nFirst(rPool.GetFirstWhich());
+    sal_uInt16 const nCount(rPool.GetLastWhich() - rPool.GetFirstWhich() + 1);
+    for (sal_uInt16 n = 0; n < nCount; ++n)
+    {
+        sal_uInt16 const nSlotId(pInfos[n]._nSID);
+        if (nSlotId != 0
+            && nSlotId != 10883  // preexisting duplicate SID_ATTR_GRAF_CROP
+            && nSlotId != 10024) // preexisting duplicate SID_ATTR_BORDER_OUTER
+        {   // check for duplicate slot-id mapping
+            std::map<sal_uInt16, sal_uInt16>::const_iterator const iter(
+                rSlotMap.find(nSlotId));
+            sal_uInt16 const nWhich(nFirst + n);
+            if (iter != rSlotMap.end())
+            {
+                SAL_WARN("svl", "SfxItemPool: duplicate SlotId " << nSlotId
+                        << " mapped to " << iter->second << " and " << nWhich);
+                assert(false);
+            }
+            rSlotMap.insert(std::make_pair(nSlotId, nWhich));
+        }
+    }
+}
+
+#define CHECK_SLOTS() \
+do { \
+    std::map<sal_uInt16, sal_uInt16> slotmap; \
+    for (SfxItemPool * p = pImp->mpMaster; p; p = p->pImp->mpSecondary) \
+    { \
+        lcl_CheckSlots2(slotmap, *p, p->pItemInfos); \
+    } \
+} while (false)
+
+#else
+#define CHECK_SLOTS() do {} while (false)
+#endif
+
 
 void SfxItemPool::AddSfxItemPoolUser(SfxItemPoolUser& rNewUser)
 {
@@ -433,6 +480,14 @@ void SfxItemPool::SetSecondaryPool( SfxItemPool *pPool )
 
     // neuen Secondary-Pool merken
     pImp->mpSecondary = pPool;
+
+    CHECK_SLOTS();
+}
+
+void SfxItemPool::SetItemInfos(SfxItemInfo const*const pInfos)
+{
+    pItemInfos = pInfos;
+    CHECK_SLOTS();
 }
 
 // -----------------------------------------------------------------------
