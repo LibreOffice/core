@@ -282,7 +282,7 @@ void SvxRedlinTable::SetFilterAuthor(sal_Bool bFlag)
     bAuthor=bFlag;
 }
 
-void SvxRedlinTable::SetAuthor(const String &aString)
+void SvxRedlinTable::SetAuthor(const OUString &aString)
 {
     aAuthor=aString;
 }
@@ -302,16 +302,16 @@ void SvxRedlinTable::SetCommentParams( const utl::SearchParam* pSearchPara )
     }
 }
 
-bool SvxRedlinTable::IsValidEntry(const String &rAuthorStr,
+bool SvxRedlinTable::IsValidEntry(const OUString &rAuthorStr,
                                   const DateTime &rDateTime,
-                                  const String &rCommentStr)
+                                  const OUString &rCommentStr)
 {
     return IsValidEntry(rAuthorStr, rDateTime) && IsValidComment(rCommentStr);
 }
 
-bool SvxRedlinTable::IsValidEntry(const String &rAuthorStr,const DateTime &rDateTime)
+bool SvxRedlinTable::IsValidEntry(const OUString &rAuthorStr, const DateTime &rDateTime)
 {
-    if (bAuthor && !aAuthor.CompareTo(rAuthorStr)==COMPARE_EQUAL)
+    if (bAuthor && aAuthor!=rAuthorStr)
         return false;
 
     if (!bDate)
@@ -321,13 +321,13 @@ bool SvxRedlinTable::IsValidEntry(const String &rAuthorStr,const DateTime &rDate
     return nDaTiMode!=FLT_DATE_NOTEQUAL ? bRes : !bRes;
 }
 
-bool SvxRedlinTable::IsValidComment(const String &rCommentStr)
+bool SvxRedlinTable::IsValidComment(const OUString &rCommentStr)
 {
     if (!bComment)
         return true;
 
     sal_Int32 nStartPos = 0;
-    sal_Int32 nEndPos = rCommentStr.Len();
+    sal_Int32 nEndPos = rCommentStr.getLength();
     return pCommentSearcher->SearchForward( rCommentStr, &nStartPos, &nEndPos);
 }
 
@@ -343,18 +343,9 @@ SvTreeListEntry* SvxRedlinTable::InsertEntry(const OUString& rStr,RedlinData *pU
 {
     aEntryColor=aColor;
 
-    XubString aStr= rStr;
-
-    XubString aFirstStr( aStr );
-    xub_StrLen nEnd = aFirstStr.Search( sal_Unicode ( '\t' ) );
-    if( nEnd != STRING_NOTFOUND )
-    {
-        aFirstStr.Erase( nEnd );
-        aCurEntry = aStr;
-        aCurEntry.Erase( 0, ++nEnd );
-    }
-    else
-        aCurEntry.Erase();
+    sal_Int32 nIndex = 0;
+    const OUString aFirstStr( rStr.getToken(0, '\t', nIndex ) );
+    aCurEntry = nIndex>0 ? rStr.copy(nIndex) : OUString();
 
     return SvSimpleTable::InsertEntry( aFirstStr, pParent, sal_False, nPos, pUserData );
 }
@@ -645,13 +636,13 @@ void SvxTPFilter::ShowDateFields(sal_uInt16 nKind)
         case FLT_DATE_EQUAL:
                 EnableDateLine1(sal_True);
                 m_pTfDate->Disable();
-                m_pTfDate->SetText(aEmpty);
+                m_pTfDate->SetText(OUString());
                 EnableDateLine2(sal_False);
                 break;
         case FLT_DATE_NOTEQUAL:
                 EnableDateLine1(sal_True);
                 m_pTfDate->Disable();
-                m_pTfDate->SetText(aEmpty);
+                m_pTfDate->SetText(OUString());
                 EnableDateLine2(sal_False);
                 break;
         case FLT_DATE_BETWEEN:
@@ -694,9 +685,9 @@ void SvxTPFilter::EnableDateLine2(sal_Bool bFlag)
     {
         m_pFtDate2->Disable();
         m_pDfDate2->Disable();
-        m_pDfDate2->SetText(aEmpty);
+        m_pDfDate2->SetText(OUString());
         m_pTfDate2->Disable();
-        m_pTfDate2->SetText(aEmpty);
+        m_pTfDate2->SetText(OUString());
         m_pIbClock2->Disable();
     }
 }
@@ -757,12 +748,12 @@ void SvxTPFilter::ClearAuthors()
     m_pLbAuthor->Clear();
 }
 
-void SvxTPFilter::InsertAuthor( const String& rString, sal_uInt16 nPos)
+void SvxTPFilter::InsertAuthor( const OUString& rString, sal_uInt16 nPos)
 {
     m_pLbAuthor->InsertEntry(rString,nPos);
 }
 
-String SvxTPFilter::GetSelectedAuthor() const
+OUString SvxTPFilter::GetSelectedAuthor() const
 {
     return m_pLbAuthor->GetSelectEntry();
 }
@@ -772,18 +763,18 @@ void SvxTPFilter::SelectedAuthorPos(sal_uInt16 nPos)
     m_pLbAuthor->SelectEntryPos(nPos);
 }
 
-sal_uInt16 SvxTPFilter::SelectAuthor(const String& aString)
+sal_uInt16 SvxTPFilter::SelectAuthor(const OUString& aString)
 {
     m_pLbAuthor->SelectEntry(aString);
     return m_pLbAuthor->GetSelectEntryPos();
 }
 
-void SvxTPFilter::SetRange(const String& rString)
+void SvxTPFilter::SetRange(const OUString& rString)
 {
     m_pEdRange->SetText(rString);
 }
 
-String SvxTPFilter::GetRange() const
+OUString SvxTPFilter::GetRange() const
 {
     return m_pEdRange->GetText();
 }
@@ -810,11 +801,12 @@ void SvxTPFilter::HideRange(sal_Bool bHide)
     }
 }
 
-void SvxTPFilter::SetComment(const String &rComment)
+void SvxTPFilter::SetComment(const OUString &rComment)
 {
     m_pEdComment->SetText(rComment);
 }
-String SvxTPFilter::GetComment()const
+
+OUString SvxTPFilter::GetComment()const
 {
     return m_pEdComment->GetText();
 }
