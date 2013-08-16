@@ -723,11 +723,14 @@ SwFrmPage::SwFrmPage(Window *pParent, const SfxItemSet &rSet)
     m_pAutoHeightCB->SetClickHdl( LINK( this, SwFrmPage, AutoHeightClickHdl ) );
 }
 
-struct FrmMaps
+namespace
 {
-    FrmMap *pMap;
-    size_t nCount;
-};
+    struct FrmMaps
+    {
+        FrmMap *pMap;
+        size_t nCount;
+    };
+}
 
 void SwFrmPage::setOptimalFrmWidth()
 {
@@ -780,11 +783,14 @@ void SwFrmPage::setOptimalFrmWidth()
     m_pHorizontalDLB->Clear();
 }
 
-struct RelationMaps
+namespace
 {
-    RelationMap *pMap;
-    size_t nCount;
-};
+    struct RelationMaps
+    {
+        RelationMap *pMap;
+        size_t nCount;
+    };
+}
 
 void SwFrmPage::setOptimalRelWidth()
 {

@@ -106,6 +106,7 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/spellingdialog \
 	cui/uiconfig/ui/splitcellsdialog \
 	cui/uiconfig/ui/storedwebconnectiondialog \
+	cui/uiconfig/ui/swpossizepage \
 	cui/uiconfig/ui/textflowpage \
 	cui/uiconfig/ui/thesaurus \
 	cui/uiconfig/ui/transparencytabpage \

@@ -22,6 +22,7 @@
 #include <sfx2/tabdlg.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
 #include <svx/swframeposstrings.hxx>
 #include <svx/swframeexample.hxx>
@@ -33,46 +34,39 @@ class SvxSwPosSizeTabPage : public SfxTabPage
 {
     using TabPage::DeactivatePage;
 
-    FixedLine   m_aSizeFL;
-    FixedText   m_aWidthFT;
-    MetricField m_aWidthMF;
-    FixedText   m_aHeightFT;
-    MetricField m_aHeightMF;
-    CheckBox    m_aKeepRatioCB;
+    MetricField*  m_pWidthMF;
+    MetricField*  m_pHeightMF;
+    CheckBox*     m_pKeepRatioCB;
 
-    FixedLine   m_aSeparatorFL;
+    RadioButton*  m_pToPageRB;
+    RadioButton*  m_pToParaRB;
+    RadioButton*  m_pToCharRB;
+    RadioButton*  m_pAsCharRB;
+    RadioButton*  m_pToFrameRB;
 
-    FixedLine   m_aAnchorFL;
-    RadioButton m_aToPageRB;
-    RadioButton m_aToParaRB;
-    RadioButton m_aToCharRB;
-    RadioButton m_aAsCharRB;
-    RadioButton m_aToFrameRB;
+    TriStateBox*  m_pPositionCB;
+    TriStateBox*  m_pSizeCB;
 
-    FixedLine   m_aProtectionFL;
-    TriStateBox m_aPositionCB;
-    TriStateBox m_aSizeCB;
+    VclContainer* m_pPosFrame;
+    FixedText*    m_pHoriFT;
+    ListBox*      m_pHoriLB;
+    FixedText*    m_pHoriByFT;
+    MetricField*  m_pHoriByMF;
+    FixedText*    m_pHoriToFT;
+    ListBox*      m_pHoriToLB;
 
-    FixedLine   m_aPositionFL;
-    FixedText   m_aHoriFT;
-    ListBox     m_aHoriLB;
-    FixedText   m_aHoriByFT;
-    MetricField m_aHoriByMF;
-    FixedText   m_aHoriToFT;
-    ListBox     m_aHoriToLB;
+    CheckBox*     m_pHoriMirrorCB;
 
-    CheckBox    m_aHoriMirrorCB;
+    FixedText*    m_pVertFT;
+    ListBox*      m_pVertLB;
+    FixedText*    m_pVertByFT;
+    MetricField*  m_pVertByMF;
+    FixedText*    m_pVertToFT;
+    ListBox*      m_pVertToLB;
 
-    FixedText   m_aVertFT;
-    ListBox     m_aVertLB;
-    FixedText   m_aVertByFT;
-    MetricField m_aVertByMF;
-    FixedText   m_aVertToFT;
-    ListBox     m_aVertToLB;
+    CheckBox*     m_pFollowCB;
 
-    CheckBox    m_aFollowCB;
-
-    SvxSwFrameExample m_aExampleWN;
+    SvxSwFrameExample* m_pExampleWN;
 
     Link        m_aValidateLink;
 
@@ -124,6 +118,9 @@ class SvxSwPosSizeTabPage : public SfxTabPage
     sal_uInt16          FillPosLB(FrmMap *pMap, sal_uInt16 nAlign, const sal_uInt16 _nRel, ListBox &rLB);
 
     void            UpdateExample();
+
+    void setOptimalFrmWidth();
+    void setOptimalRelWidth();
 
 public:
     SvxSwPosSizeTabPage( Window* pParent, const SfxItemSet& rInAttrs  );
