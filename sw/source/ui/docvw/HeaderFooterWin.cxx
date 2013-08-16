@@ -190,9 +190,9 @@ void SwHeaderFooterWin::SetOffset( Point aOffset, long nXLineStart, long nXLineE
     Rectangle aTextRect;
     GetTextBoundRect( aTextRect, String( m_sLabel ) );
     Rectangle aTextPxRect = LogicToPixel( aTextRect );
-
+    FontMetric aFontMetric = GetFontMetric( GetFont() );
     Size  aBoxSize ( aTextPxRect.GetWidth() + BUTTON_WIDTH + TEXT_PADDING * 2,
-                     aTextPxRect.GetHeight() + TEXT_PADDING  * 2 );
+                     aFontMetric.GetLineHeight() + TEXT_PADDING  * 2 );
 
     long nYFooterOff = 0;
     if ( !m_bIsHeader )
