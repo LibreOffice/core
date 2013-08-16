@@ -314,7 +314,7 @@ public class TestParameters extends HashMap<String,Object> {
         String operatingSystem = "";
         if (osname.indexOf ("windows")>-1) {
             operatingSystem = PropertyName.WNTMSCI;
-        } else if (osname.indexOf ("linux")>-1) {
+        } else if (osname.indexOf ("linux")>-1 || osname.indexOf ("kfreebsd")>-1) {
             operatingSystem = PropertyName.UNXLNGI;
         } else if (osname.indexOf ("sunos")>-1) {
             if (osarch.equals ("x86")) {
