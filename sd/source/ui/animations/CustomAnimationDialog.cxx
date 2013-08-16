@@ -2355,11 +2355,6 @@ STLPropertySet* CustomAnimationDialog::createDefaultSet()
     return pSet;
 }
 
-PropertyControl::PropertyControl( Window* pParent, const ResId& rResId )
-: ListBox( pParent, rResId ), mpSubControl(0)
-{
-}
-
 PropertyControl::PropertyControl( Window* pParent )
 : ListBox( pParent, WB_TABSTOP | WB_BORDER | WB_DROPDOWN ), mpSubControl(0)
 {

@@ -1021,15 +1021,6 @@ sal_uInt16 ListBox::InsertEntry( const OUString& rStr, sal_uInt16 nPos )
 }
 
 
-sal_uInt16 ListBox::InsertEntry( const Image& rImage, sal_uInt16 nPos )
-{
-    sal_uInt16 nRealPos = mpImplLB->InsertEntry( nPos + mpImplLB->GetEntryList()->GetMRUCount(), rImage );
-    nRealPos = sal::static_int_cast<sal_uInt16>(nRealPos - mpImplLB->GetEntryList()->GetMRUCount());
-    CallEventListeners( VCLEVENT_LISTBOX_ITEMADDED, (void*) sal_IntPtr(nRealPos) );
-    return nRealPos;
-}
-
-
 sal_uInt16 ListBox::InsertEntry( const OUString& rStr, const Image& rImage, sal_uInt16 nPos )
 {
     sal_uInt16 nRealPos = mpImplLB->InsertEntry( nPos + mpImplLB->GetEntryList()->GetMRUCount(), rStr, rImage );

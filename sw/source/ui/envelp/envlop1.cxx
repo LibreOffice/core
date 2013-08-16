@@ -48,14 +48,6 @@ using namespace ::rtl;
 //impl in envimg.cxx
 extern SW_DLLPUBLIC String MakeSender();
 
-SwEnvPreview::SwEnvPreview(SfxTabPage* pParent, const ResId& rResID) :
-
-    Window(pParent, rResID)
-
-{
-    SetMapMode(MapMode(MAP_PIXEL));
-}
-
 SwEnvPreview::SwEnvPreview(Window* pParent, WinBits nStyle)
     : Window(pParent, nStyle)
 {

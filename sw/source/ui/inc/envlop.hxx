@@ -47,7 +47,6 @@ class SwEnvPreview : public Window
 
 public:
 
-    SwEnvPreview(SfxTabPage* pParent, const ResId& rResID);
     SwEnvPreview(Window * pParent, WinBits nStyle);
 
 protected:

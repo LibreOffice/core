@@ -115,7 +115,6 @@ public:
     void                EnableDDAutoWidth( sal_Bool b );
 
     sal_uInt16          InsertEntry( const OUString& rStr, sal_uInt16 nPos = LISTBOX_APPEND );
-    sal_uInt16          InsertEntry( const Image& rImage, sal_uInt16 nPos = LISTBOX_APPEND );
     sal_uInt16          InsertEntry( const OUString& rStr, const Image& rImage, sal_uInt16 nPos = LISTBOX_APPEND );
     void                RemoveEntry( const OUString& rStr );
     void                RemoveEntry( sal_uInt16 nPos );

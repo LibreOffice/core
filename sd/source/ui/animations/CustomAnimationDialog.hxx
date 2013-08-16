@@ -128,7 +128,6 @@ protected:
 class PropertyControl : public ListBox
 {
 public:
-    PropertyControl( Window* pParent, const ResId& rResId );
     PropertyControl( Window* pParent );
     ~PropertyControl();
 
