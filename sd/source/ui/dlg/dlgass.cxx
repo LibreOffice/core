@@ -1006,7 +1006,6 @@ OUString AssistentDlgImpl::GetDocFileName()
 
 OUString AssistentDlgImpl::GetLayoutFileName()
 {
-    OUString aFile;
     const sal_uInt16 nEntry = mpPage2LayoutLB->GetSelectEntryPos();
     TemplateEntry* pEntry = NULL;
     if(nEntry != (sal_uInt16)-1 && nEntry > 0)
