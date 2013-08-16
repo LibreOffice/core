@@ -44,7 +44,7 @@ using namespace ::com::sun::star;
 
 
 
-SwPageDesc::SwPageDesc( const String& rName, SwFrmFmt *pFmt, SwDoc *pDc ) :
+SwPageDesc::SwPageDesc( const OUString& rName, SwFrmFmt *pFmt, SwDoc *pDc ) :
     SwModify( 0 ),
     aDescName( rName ),
     aMaster( pDc->GetAttrPool(), rName, pFmt ),
@@ -463,7 +463,7 @@ SwPageDescExt::~SwPageDescExt()
 {
 }
 
-const String & SwPageDescExt::GetName() const
+OUString SwPageDescExt::GetName() const
 {
     return aPageDesc.GetName();
 }
