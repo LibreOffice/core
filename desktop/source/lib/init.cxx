@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <config_folders.h>
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -260,12 +262,12 @@ initialize_uno( const OUString &aAppURL )
     rtl::Bootstrap::setIniFilename( aAppURL + "/fundamentalrc" );
 
     rtl::Bootstrap::set( "CONFIGURATION_LAYERS",
-                         "xcsxcu:${BRAND_BASE_DIR}/share/registry "
-                         "res:${BRAND_BASE_DIR}/share/registry "
-//                       "bundledext:${${BRAND_BASE_DIR}/program/unorc:BUNDLED_EXTENSIONS_USER}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini " );
-//                       "sharedext:${${BRAND_BASE_DIR}/program/unorc:SHARED_EXTENSIONS_USER}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini "
-//                       "userext:${${BRAND_BASE_DIR}/program/unorc:UNO_USER_PACKAGES_CACHE}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini "
-//                         "user:${$BRAND_BASE_DIR/program/bootstraprc:UserInstallation}/user/registrymodifications.xcu"
+                         "xcsxcu:${BRAND_BASE_DIR}/" LIBO_SHARE_FOLDER "/registry "
+                         "res:${BRAND_BASE_DIR}/" LIBO_SHARE_FOLDER "/registry "
+//                       "bundledext:${${BRAND_BASE_DIR}/" LIBO_ETC_FOLDER "/unorc:BUNDLED_EXTENSIONS_USER}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini " );
+//                       "sharedext:${${BRAND_BASE_DIR}/" LIBO_ETC_FOLDER "/unorc:SHARED_EXTENSIONS_USER}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini "
+//                       "userext:${${BRAND_BASE_DIR}/" LIBO_ETC_FOLDER "/unorc:UNO_USER_PACKAGES_CACHE}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini "
+//                         "user:${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/bootstraprc:UserInstallation}/user/registrymodifications.xcu"
                          );
 
     xContext = cppu::defaultBootstrap_InitialComponentContext();

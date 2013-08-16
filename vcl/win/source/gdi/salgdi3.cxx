@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_folders.h>
 
 #include <string.h>
 #include <malloc.h>
@@ -2183,7 +2184,7 @@ void WinSalGraphics::GetDevFontList( ImplDevFontList* pFontList )
         osl_getExecutableFile( &aPath.pData );
         aPath = aPath.copy( 0, aPath.lastIndexOf('/') );
         String aFontDirUrl = aPath.copy( 0, aPath.lastIndexOf('/') );
-        aFontDirUrl += String( RTL_CONSTASCII_USTRINGPARAM("/Basis/share/fonts/truetype") );
+        aFontDirUrl += String( RTL_CONSTASCII_USTRINGPARAM("/Basis/" LIBO_SHARE_FOLDER "/fonts/truetype") );
 
         // collect fonts in font path that could not be registered
         osl::Directory aFontDir( aFontDirUrl );
@@ -2195,7 +2196,7 @@ void WinSalGraphics::GetDevFontList( ImplDevFontList* pFontList )
 
             OUString aBootStrap;
             rtl::Bootstrap::get( String( RTL_CONSTASCII_USTRINGPARAM( "BRAND_BASE_DIR" ) ), aBootStrap );
-            aBootStrap += String( RTL_CONSTASCII_USTRINGPARAM( "/program/" SAL_CONFIGFILE( "bootstrap" ) ) );
+            aBootStrap += String( RTL_CONSTASCII_USTRINGPARAM( "/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap" ) ) );
             rtl::Bootstrap aBootstrap( aBootStrap );
             OUString aUserPath;
             aBootstrap.getFrom( OUString( "UserInstallation" ), aUserPath );

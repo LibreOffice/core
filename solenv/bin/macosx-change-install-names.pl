@@ -45,20 +45,22 @@ sub action($$$)
     # comment telling that this library is supposed to have been found
     # by the dynamic linker already in DYLD_LIBRARY_PATH.
 
+    my $OLD = $ENV{ENABLE_MACOSX_MACLIKE_APP_STRUCTURE} ne 'YES';
+
     my %action =
-        ('app/UREBIN/URELIB' => '@executable_path/../lib',
-         'app/OOO/URELIB' => '@executable_path/../ure-link/lib',
-         'app/OOO/OOO' => '@executable_path',
-         'app/SDKBIN/URELIB' => '@executable_path/../../ure-link/lib',
+        ('app/UREBIN/URELIB' => ($OLD ? '@executable_path/../lib' : '@executable_path/../Frameworks'),
+         'app/OOO/URELIB' => ($OLD ? '@executable_path/../ure-link/lib' : '@executable_path/../Frameworks'),
+         'app/OOO/OOO' => ($OLD ? '@executable_path' : '@executable_path/../Frameworks'),
+         'app/SDKBIN/URELIB' => ($OLD ? '@executable_path/../../ure-link/lib' : '@executable_path/../Frameworks'),
          'app/NONE/URELIB' => '@__VIA_LIBRARY_PATH__',
          'app/NONE/OOO' => '@__VIA_LIBRARY_PATH__',
          'app/NONE/NONE' => '@__VIA_LIBRARY_PATH__',
          'shl/URELIB/URELIB' => '@loader_path',
-         'shl/OOO/URELIB' => '@loader_path/../ure-link/lib',
+         'shl/OOO/URELIB' => ($OLD ? '@loader_path/../ure-link/lib' : '@loader_path'),
          'shl/OOO/OOO' => '@loader_path',
-         'fb/OOO/URELIB' => '@rpath/../ure-link/lib',
+         'fb/OOO/URELIB' => ($OLD ? '@rpath/../ure-link/lib' : '@executable_path/../Frameworks'),
          'fb/OOO/OOO' => '@rpath',
-         'shl/OXT/URELIB' => '@executable_path/urelibs',
+         'shl/OXT/URELIB' => ($OLD ? '@executable_path/urelibs' : '@executable_path/../Frameworks'),
          'shl/NONE/URELIB' => '@__VIA_LIBRARY_PATH__',
          'shl/NONE/OOO' => '@__VIA_LIBRARY_PATH__',
          'shl/NONE/NONE' => '@__VIA_LIBRARY_PATH__');

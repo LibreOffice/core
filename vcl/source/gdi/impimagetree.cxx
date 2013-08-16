@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_folders.h>
 
 #include "sal/config.h"
 
@@ -238,7 +239,7 @@ void ImplImageTree::setStyle(OUString const & style) {
 }
 
 void ImplImageTree::resetPaths() {
-    OUString url( "$BRAND_BASE_DIR/share/config/" );
+    OUString url( "$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/config/" );
     rtl::Bootstrap::expandMacros(url);
     if ( m_style != "default" )
     {

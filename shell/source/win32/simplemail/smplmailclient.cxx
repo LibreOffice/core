@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_folders.h>
+
 #include <osl/diagnose.h>
 #include <osl/process.h>
 #include <rtl/bootstrap.hxx>
@@ -101,7 +103,7 @@ namespace /* private */
 
         if (senddocUrl.getLength() == 0)
         {
-            senddocUrl = OUString( "$BRAND_BASE_DIR/program/senddoc.exe");
+            senddocUrl = OUString( "$BRAND_BASE_DIR/" LIBO_LIBEXEC_FOLDER "/senddoc.exe");
             rtl::Bootstrap::expandMacros(senddocUrl); //TODO: detect failure
         }
         return senddocUrl;

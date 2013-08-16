@@ -2854,9 +2854,9 @@ dnl Structure of install set
 dnl ===================================================================
 
 if test $_os = Darwin -a "$ENABLE_MACOSX_SANDBOX" = YES; then
-    // For now, couple whether to use a more "Mac-like" installation tree structure
-    // with the choice whether to use sandboxing. Could be a separate choice, or could
-    // be always on for OS X.
+    # For now, couple whether to use a more "Mac-like" installation tree structure
+    # with the choice whether to use sandboxing. Could be a separate choice, or could
+    # be always on for OS X.
     LIBO_BIN_FOLDER=MacOS
     LIBO_ETC_FOLDER=Resources
     LIBO_LIBEXEC_FOLDER=MacOS

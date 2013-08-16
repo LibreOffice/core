@@ -139,7 +139,7 @@ File gid_File_Bin_UIPreviewer
   #endif
 End
 
-#ifdef UNX
+#if defined UNX && !defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
 
 File gid_File_Script_Gengal
     BIN_FILE_BODY;

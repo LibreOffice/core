@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+#include <config_folders.h>
+
 #include "sal/config.h"
 
 #include <stdlib.h>
@@ -70,6 +73,9 @@ void extendApplicationEnvironment() {
             uri = uri.copy(0, i + 1);
         }
         env.append(rtl::Bootstrap::encode(uri));
+#if HAVE_FEATURE_MACOSX_MACLIKE_APP_STRUCTURE
+        env.append("../" LIBO_SHARE_FOLDER "/");
+#endif
         env.append(SAL_CONFIGFILE("fundamental"));
     }
     OUString envValue(env.makeStringAndClear());

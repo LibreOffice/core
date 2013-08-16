@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_folders.h>
+
 #include <swtypes.hxx>
 #include <labelcfg.hxx>
 #include <labimp.hxx>
@@ -72,7 +74,7 @@ static Sequence<OUString> lcl_CreatePropertyNames(const OUString& rPrefix)
 SwLabelConfig::SwLabelConfig() :
     ConfigItem("Office.Labels/Manufacturer")
 {
-    OUString uri("$BRAND_BASE_DIR/share/labels/labels.xml");
+    OUString uri("$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/labels/labels.xml");
     rtl::Bootstrap::expandMacros(uri);
     xmlreader::XmlReader reader(uri);
     int nsId;

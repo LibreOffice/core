@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_folders.h>
+
 #include <osl/diagnose.h>
 #include <osl/thread.h>
 #include <osl/process.h>
@@ -161,14 +163,14 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
         //  the CWD) on stderr and SystemShellExecuteException.
         aBuffer.append("open --");
 #else
-        // The url launchers are expected to be in the $BRAND_BASE_DIR/program
+        // The url launchers are expected to be in the $BRAND_BASE_DIR/LIBO_LIBEXEC_FOLDER
         // directory:
         com::sun::star::uno::Reference< com::sun::star::util::XMacroExpander >
             exp = com::sun::star::util::theMacroExpander::get(m_xContext);
         OUString aProgramURL;
         try {
             aProgramURL = exp->expandMacros(
-                OUString( "$BRAND_BASE_DIR/program/"));
+                OUString( "$BRAND_BASE_DIR/" LIBO_LIBEXEC_FOLDER "/"));
         } catch (com::sun::star::lang::IllegalArgumentException &)
         {
             throw SystemShellExecuteException(

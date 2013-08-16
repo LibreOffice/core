@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_folders.h>
+
 #define UNICODE
 #define WIN32_LEAN_AND_MEAN
 #if defined _MSC_VER
@@ -159,7 +161,7 @@ static FILE *_tmpfile(void)
 
 static BOOL GetCrashDataPath( LPTSTR szBuffer )
 {
-    OUString ustrValue("${$BRAND_BASE_DIR/program/bootstrap.ini:UserInstallation}");
+    OUString ustrValue("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/bootstrap.ini:UserInstallation}");
     ::rtl::Bootstrap::expandMacros( ustrValue );
 
     if ( !ustrValue.isEmpty() )

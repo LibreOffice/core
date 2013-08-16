@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <config_folders.h>
+
 #include <vcl/embeddedfontshelper.hxx>
 
 #include <osl/file.hxx>
@@ -43,7 +45,7 @@ static void clearDir( const OUString& path )
 
 void EmbeddedFontsHelper::clearTemporaryFontFiles()
 {
-    OUString path = "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}";
+    OUString path = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}";
     rtl::Bootstrap::expandMacros( path );
     path += "/user/temp/embeddedfonts/";
     clearDir( path + "fromdocs/" );
@@ -111,7 +113,7 @@ bool EmbeddedFontsHelper::addEmbeddedFont( uno::Reference< io::XInputStream > st
 
 OUString EmbeddedFontsHelper::fileUrlForTemporaryFont( const OUString& fontName, const char* extra )
 {
-    OUString path = "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}";
+    OUString path = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}";
     rtl::Bootstrap::expandMacros( path );
     path += "/user/temp/embeddedfonts/fromdocs/";
     osl::Directory::createPath( path );
@@ -163,7 +165,7 @@ bool EmbeddedFontsHelper::sufficientFontRights( const void* data, long size, Fon
 OUString EmbeddedFontsHelper::fontFileUrl( const OUString& familyName, FontFamily family, FontItalic italic,
     FontWeight weight, FontPitch pitch, rtl_TextEncoding, FontRights rights )
 {
-    OUString path = "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}";
+    OUString path = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}";
     rtl::Bootstrap::expandMacros( path );
     path += "/user/temp/embeddedfonts/fromsystem/";
     osl::Directory::createPath( path );

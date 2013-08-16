@@ -27,6 +27,8 @@
 
 #include "macros.inc"
 
+#include "config_folders.h"
+
 Module gid_Module_Root_Brand
     ParentID = gid_Module_Root;
     InstallOrder = "150";
@@ -42,6 +44,7 @@ Module gid_Module_Root_Brand
             gid_Brand_Dir_Share_Extensions,
             gid_Brand_Dir_Share_Uno_Packages,
             gid_Brand_Dir_Share_Uno_Packages_Cache,
+            gid_Brand_Dir_Share_Ure,
             gid_Brand_Dir_Share_Glade,
             gid_Brand_Dir_Share_Labels,
             gid_Brand_Dir_Share_Registry,
@@ -87,9 +90,11 @@ Module gid_Module_Root_Brand
 	     git_License_Odt,
 	     gid_Credits_Odt,
 	     gid_Apache_Notice);
+#if defined MACOSX && !defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
     Unixlinks = (gid_Brand_Unixlink_Program,
                  gid_Brand_Unixlink_Unopkg,
                  gid_Brand_Unixlink_Urelibs);
+#endif
 End
 
 // Language specific brand module
@@ -121,7 +126,11 @@ Directory gid_Brand_Dir_Program
 End
 
 Directory gid_Brand_Dir_Program_Shell
+#if defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
+    ParentID = gid_Brand_Dir_Share;
+#else
     ParentID = gid_Brand_Dir_Program;
+#endif
     DosName = "shell";
 End
 
@@ -140,7 +149,7 @@ Directory gid_Brand_Dir_Share
 #else
     ParentID = gid_Dir_Brand_Root;
 #endif
-    DosName = "share";
+    DosName = LIBO_SHARE_FOLDER;
 End
 
 Directory gid_Brand_Dir_Share_Config
@@ -431,6 +440,15 @@ Directory gid_Brand_Dir_Share_Labels
     DosName = "labels";
 End
 
+#if defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
+
+Directory gid_Brand_Dir_Share_Ure
+    ParentID = gid_Brand_Dir_Share;
+    DosName = "ure";
+End
+
+#endif
+
 Directory gid_Brand_Dir_Share_Registry
     ParentID = gid_Brand_Dir_Share;
     DosName = "registry";
@@ -445,7 +463,7 @@ End
 
 // UnixLinks
 
-#if defined MACOSX
+#if defined MACOSX && !defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
 Unixlink gid_Brand_Unixlink_Urelibs
     Dir = gid_Brand_Dir_Program;
     Name = "urelibs";
@@ -453,7 +471,7 @@ Unixlink gid_Brand_Unixlink_Urelibs
 End
 #endif
 
-#if defined MACOSX
+#if defined MACOSX && !defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
 Unixlink gid_Brand_Unixlink_Program
     BIN_FILE_BODY;
     Dir = gid_Dir_Bundle_Contents;
@@ -476,7 +494,7 @@ File gid_Brand_File_Html_Thirdpartylicensereadme
     TXT_FILE_BODY;
 End
 
-#if defined UNX
+#if defined UNX && !defined ENABLE_MACOSX_SANDBOX
 
 File gid_Brand_File_Gdb_Trace
     TXT_FILE_BODY;
@@ -573,7 +591,7 @@ File gid_Brand_File_Script_Unopkg
 End
 #endif
 
-#if defined MACOSX
+#if defined MACOSX && !defined ENABLE_MACOSX_SANDBOX
 Unixlink gid_Brand_Unixlink_Unopkg
     BIN_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
@@ -745,35 +763,35 @@ End
 Profile gid_Brand_Profile_Bootstrap_Ini
     ModuleID = gid_Module_Root_Brand;
     Name = PROFILENAME(bootstrap);
-    Dir = gid_Brand_Dir_Program;
+    Dir = GID_BRAND_DIR_ETC;
     Styles = (NETWORK);
 End
 
 Profile gid_Brand_Profile_Soffice_Ini
     ModuleID = gid_Module_Root_Brand;
     Name = PROFILENAME(soffice);
-    Dir = gid_Brand_Dir_Program;
+    Dir = GID_BRAND_DIR_ETC;
     Styles = (NETWORK);
 End
 
 Profile gid_Brand_Profile_Setup_Ini
     ModuleID = gid_Module_Root_Brand;
     Name = PROFILENAME(setup);
-    Dir = gid_Brand_Dir_Program;
+    Dir = GID_BRAND_DIR_ETC;
     Styles = (NETWORK);
 End
 
 Profile gid_Brand_Profile_Version_Ini
     ModuleID = gid_Module_Root_Brand;
     Name = PROFILENAME(version);
-    Dir = gid_Brand_Dir_Program;
+    Dir = GID_BRAND_DIR_ETC;
     Styles = (NETWORK);
 End
 
 Profile gid_Brand_Profile_Fundamental_Ini
     ModuleID = gid_Module_Root_Brand;
     Name = PROFILENAME(fundamental);
-    Dir = gid_Brand_Dir_Program;
+    Dir = GID_BRAND_DIR_ETC;
 End
 
 #if !defined MACOSX
@@ -1084,12 +1102,28 @@ ProfileItem gid_Brand_Profileitem_Fundamental_Brand_Base_Dir
     Value = "${ORIGIN}/..";
 End
 
+ProfileItem gid_Brand_Profileitem_Fundamental_Brand_Share_Subdir
+    ModuleID = gid_Module_Root_Brand;
+    ProfileID = gid_Brand_Profile_Fundamental_Ini;
+    Section = "Bootstrap";
+    Key = "BRAND_SHARE_SUBDIR";
+    Value = LIBO_SHARE_FOLDER;
+End
+
+ProfileItem gid_Brand_Profileitem_Fundamental_Brand_Bin_Subdir
+    ModuleID = gid_Module_Root_Brand;
+    ProfileID = gid_Brand_Profile_Fundamental_Ini;
+    Section = "Bootstrap";
+    Key = "BRAND_BIN_SUBDIR";
+    Value = LIBO_BIN_FOLDER;
+End
+
 ProfileItem gid_Brand_Profileitem_Fundamental_Lo_Lib_Dir
     ModuleID = gid_Module_Root_Brand;
     ProfileID = gid_Brand_Profile_Fundamental_Ini;
     Section = "Bootstrap";
     Key = "LO_LIB_DIR";
-    Value = "${BRAND_BASE_DIR}/program";
+    Value = "${BRAND_BASE_DIR}/" LIBO_LIB_FOLDER;
 End
 
 ProfileItem gid_Brand_Profileitem_Fundamental_Lo_Java_Dir
@@ -1097,7 +1131,7 @@ ProfileItem gid_Brand_Profileitem_Fundamental_Lo_Java_Dir
     ProfileID = gid_Brand_Profile_Fundamental_Ini;
     Section = "Bootstrap";
     Key = "LO_JAVA_DIR";
-    Value = "${BRAND_BASE_DIR}/program/classes";
+    Value = "${BRAND_BASE_DIR}/" LIBO_SHARE_JAVA_FOLDER;
 End
 
 ProfileItem gid_Brand_Profileitem_Fundamental_Uno_Bundled_Extensions
@@ -1185,7 +1219,7 @@ ProfileItem gid_Brand_Profileitem_Fundamental_Ure_Java_Jfw_Shared_Data
     ProfileID = gid_Brand_Profile_Fundamental_Ini;
     Section = "Bootstrap";
     Key = "URE_OVERRIDE_JAVA_JFW_SHARED_DATA";
-    Value = "${BRAND_BASE_DIR}/share/config/javasettings_${_OS}_${_ARCH}.xml";
+    Value = "${BRAND_BASE_DIR}/" LIBO_SHARE_FOLDER "/config/javasettings_${_OS}_${_ARCH}.xml";
 End
 
 ProfileItem gid_Brand_Profileitem_Fundamental_Ure_Java_Jfw_User_Data
@@ -1193,7 +1227,7 @@ ProfileItem gid_Brand_Profileitem_Fundamental_Ure_Java_Jfw_User_Data
     ProfileID = gid_Brand_Profile_Fundamental_Ini;
     Section = "Bootstrap";
     Key = "URE_OVERRIDE_JAVA_JFW_USER_DATA";
-    Value = "${${BRAND_BASE_DIR}/program/" PROFILENAME(bootstrap) ":UserInstallation}/user/config/javasettings_${_OS}_${_ARCH}.xml";
+    Value = "${${BRAND_BASE_DIR}/" LIBO_ETC_FOLDER "/" PROFILENAME(bootstrap) ":UserInstallation}/user/config/javasettings_${_OS}_${_ARCH}.xml";
 End
 
 ProfileItem gid_Brand_Profileitem_Fundamental_Ure_Java_Classpath_Urls
@@ -1236,7 +1270,7 @@ ProfileItem gid_Brand_Profileitem_Fundamental_Configuration_Layers
     ModuleID = gid_Module_Root_Brand;
     Section = "Bootstrap";
     Key = "CONFIGURATION_LAYERS";
-    Value = "xcsxcu:${BRAND_BASE_DIR}/share/registry res:${BRAND_BASE_DIR}/share/registry bundledext:${${BRAND_BASE_DIR}/program/" PROFILENAME(uno) ":BUNDLED_EXTENSIONS_USER}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini sharedext:${${BRAND_BASE_DIR}/program/" PROFILENAME(uno) ":SHARED_EXTENSIONS_USER}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini userext:${${BRAND_BASE_DIR}/program/" PROFILENAME(uno) ":UNO_USER_PACKAGES_CACHE}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini user:${$BRAND_BASE_DIR/program/" PROFILENAME(bootstrap) ":UserInstallation}/user/registrymodifications.xcu";
+    Value = "xcsxcu:${BRAND_BASE_DIR}/" LIBO_SHARE_FOLDER "/registry res:${BRAND_BASE_DIR}/" LIBO_SHARE_FOLDER "/registry bundledext:${${BRAND_BASE_DIR}/" LIBO_ETC_FOLDER "/" PROFILENAME(uno) ":BUNDLED_EXTENSIONS_USER}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini sharedext:${${BRAND_BASE_DIR}/" LIBO_ETC_FOLDER "/" PROFILENAME(uno) ":SHARED_EXTENSIONS_USER}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini userext:${${BRAND_BASE_DIR}/" LIBO_ETC_FOLDER "/" PROFILENAME(uno) ":UNO_USER_PACKAGES_CACHE}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini user:${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" PROFILENAME(bootstrap) ":UserInstallation}/user/registrymodifications.xcu";
 End
 
 #if !defined MACOSX

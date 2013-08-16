@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_folders.h>
+
 #include "templwin.hxx"
 #include <svtools/templdlg.hxx>
 #include <svtools/svtresid.hxx>
@@ -156,7 +158,7 @@ SvtIconWindow_Impl::SvtIconWindow_Impl( Window* pParent ) :
     aNewDocumentRootURL( "private:newdoc" ),
     aMyDocumentsRootURL( SvtPathOptions().GetWorkPath() ),
     aSamplesFolderRootURL( SvtPathOptions().
-        SubstituteVariable( String( "$(insturl)/share/samples/$(vlang)" ) ) ),
+        SubstituteVariable( String( "$(insturl)/" LIBO_SHARE_FOLDER "/samples/$(vlang)" ) ) ),
     nMaxTextLength( 0 )
 
 {

@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_folders.h>
+ 
 #include <stdio.h>
 #include "osl/file.h"
 
@@ -65,7 +67,7 @@ Reference< XComponentContext > createInitialComponentContext(
             inst_dir.pData, &file_url.pData );
         OSL_ASSERT( osl_File_E_None == rc );
 
-        OUString unorc = file_url + OUString("/program/" SAL_CONFIGFILE("uno") );
+        OUString unorc = file_url + OUString("/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("uno") );
 
         return defaultBootstrap_InitialComponentContext( unorc );
     }

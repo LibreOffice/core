@@ -26,6 +26,8 @@
  *
  ************************************************************************/
 
+#include <config_folders.h>
+
 #include "sal/config.h"
 
 #include "nsp_func.hxx"
@@ -179,7 +181,7 @@ int nspluginOOoModuleHook (void** aResult)
 
     char *clobber;
     static char realFileName[NPP_PATH_MAX] = {0};
-#   define SEARCH_SUFFIX "/program/libnpsoplug"
+#   define SEARCH_SUFFIX "/" LIBO_LIB_FOLDER "/libnpsoplug"
 
     if (!(clobber = strstr (libFileName, SEARCH_SUFFIX)))
     {
@@ -262,10 +264,10 @@ int findReadSversion(void** aResult, int /*bWnt*/, const char* /*tag*/, const ch
     }
     realFileName[len] = '\0';
 
-    if (NULL == (pTempZero = strstr(realFileName, "/program/libnpsoplugin" SAL_DLLEXTENSION)))
+    if (NULL == (pTempZero = strstr(realFileName, "/" LIBO_LIB_FOLDER "/libnpsoplugin" SAL_DLLEXTENSION)))
 #else  // LINUX
     if ((0 > readlink(lnkFileName, realFileName, NPP_PATH_MAX)) ||
-        (NULL == (pTempZero = strstr(realFileName, "/program/libnpsoplugin" SAL_DLLEXTENSION))))
+        (NULL == (pTempZero = strstr(realFileName, "/" LIBO_LIB_FOLDER "/libnpsoplugin" SAL_DLLEXTENSION))))
 #endif // LINUX
     {
         *realFileName = 0;
@@ -334,7 +336,7 @@ const char* findProgramDir()
     static char sProgram[NPP_BUFFER_SIZE] = {0};
     if (!sProgram[0])
     {
-        sprintf(sProgram, "%s/program", findInstallDir());
+        sprintf(sProgram, "%s/" LIBO_BIN_FOLDER, findInstallDir());
 #ifdef WNT
         UnixToDosPath(sProgram);
 #endif

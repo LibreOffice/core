@@ -27,7 +27,7 @@ Profile gid_Profile_Pythonloader_Uno_Ini
   #else
     Name = "pythonloader.uno.ini";
   #endif
-    Dir = gid_Brand_Dir_Program;
+    Dir = GID_BRAND_DIR_ETC;
     Styles = (NETWORK);
 End
 
@@ -39,7 +39,7 @@ ProfileItem gid_Profileitem_Pythonloader_Pythonhome
     Order = 1;
     Key = "PYUNO_LOADER_PYTHONHOME";
   #ifdef MACOSX
-    Value = CONCAT2($ORIGIN,/LibreOfficePython.framework);
+    Value = "$ORIGIN/../Frameworks/LibreOfficePython.framework";
   #else
     Value = CONCAT2($ORIGIN/python-core-,PYVERSION);
   #endif
@@ -57,7 +57,7 @@ ProfileItem gid_Profileitem_Pythonloader_Pythonpath
 #else
   #ifdef UNX
     #ifdef MACOSX
-    #define FRAMEWORKLIB CONCAT3($ORIGIN,/LibreOfficePython.framework/Versions/Current/lib/python,PYMAJMIN)
+    #define FRAMEWORKLIB CONCAT3($ORIGIN,/../Frameworks/LibreOfficePython.framework/Versions/Current/lib/python,PYMAJMIN)
     Value = CONCAT4(FRAMEWORKLIB FRAMEWORKLIB,
 		   /lib-dynload FRAMEWORKLIB,
 		   /lib-tk FRAMEWORKLIB,

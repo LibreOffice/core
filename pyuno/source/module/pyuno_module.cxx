@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+#include <config_folders.h>
+
 #include "pyuno_impl.hxx"
 
 #include <boost/unordered_map.hpp>
@@ -268,6 +271,9 @@ static PyObject* getComponentContext(
 
             OUStringBuffer iniFileName;
             iniFileName.append( path );
+#if HAVE_FEATURE_MACOSX_MACLIKE_APP_STRUCTURE
+            iniFileName.appendAscii( "/../" LIBO_ETC_FOLDER );
+#endif
             iniFileName.appendAscii( "/" );
             iniFileName.appendAscii( SAL_CONFIGFILE( "pyuno" ) );
             iniFile = iniFileName.makeStringAndClear();

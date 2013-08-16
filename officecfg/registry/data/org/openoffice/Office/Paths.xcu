@@ -26,7 +26,7 @@
     </node>
     <node oor:name="AutoCorrect" oor:op="fuse" oor:mandatory="true">
       <node oor:name="InternalPaths">
-        <node oor:name="$(insturl)/share/autocorr" oor:op="fuse"/>
+        <node oor:name="$(insturl)/$(share_subdir_name)/autocorr" oor:op="fuse"/>
       </node>
       <prop oor:name="WritePath">
         <value>$(userurl)/autocorr</value>
@@ -34,7 +34,7 @@
     </node>
     <node oor:name="AutoText" oor:op="fuse" oor:mandatory="true">
       <node oor:name="InternalPaths">
-        <node oor:name="$(insturl)/share/autotext/$(vlang)" oor:op="fuse"/>
+        <node oor:name="$(insturl)/$(share_subdir_name)/autotext/$(vlang)" oor:op="fuse"/>
       </node>
       <prop oor:name="WritePath">
         <value>$(userurl)/autotext</value>
@@ -52,7 +52,7 @@
     </node>
     <node oor:name="Basic" oor:op="fuse" oor:mandatory="true">
       <node oor:name="InternalPaths">
-        <node oor:name="$(insturl)/share/basic" oor:op="fuse"/>
+        <node oor:name="$(insturl)/$(share_subdir_name)/basic" oor:op="fuse"/>
       </node>
       <prop oor:name="WritePath">
         <value>$(userurl)/basic</value>
@@ -60,12 +60,12 @@
     </node>
     <node oor:name="Bitmap" oor:op="fuse" oor:mandatory="true">
       <node oor:name="InternalPaths">
-        <node oor:name="$(insturl)/share/config/symbol" oor:op="fuse"/>
+        <node oor:name="$(insturl)/$(share_subdir_name)/config/symbol" oor:op="fuse"/>
       </node>
     </node>
     <node oor:name="Config" oor:op="fuse" oor:mandatory="true">
       <node oor:name="InternalPaths">
-        <node oor:name="$(insturl)/share/config" oor:op="fuse"/>
+        <node oor:name="$(insturl)/$(share_subdir_name)/config" oor:op="fuse"/>
       </node>
     </node>
     <node oor:name="Favorite" oor:op="fuse" oor:mandatory="true">
@@ -80,7 +80,7 @@
     </node>
     <node oor:name="Gallery" oor:op="fuse" oor:mandatory="true">
       <node oor:name="InternalPaths">
-        <node oor:name="$(insturl)/share/gallery" oor:op="fuse"/>
+        <node oor:name="$(insturl)/$(share_subdir_name)/gallery" oor:op="fuse"/>
       </node>
       <prop oor:name="WritePath">
         <value>$(userurl)/gallery</value>
@@ -103,8 +103,8 @@
     </node>
     <node oor:name="Linguistic" oor:op="fuse" oor:mandatory="true">
       <node oor:name="InternalPaths">
-        <node oor:name="$(insturl)/share/dict" oor:op="fuse"/>
-        <node oor:name="$(insturl)/share/dict/ooo" oor:op="fuse"/>
+        <node oor:name="$(insturl)/$(share_subdir_name)/dict" oor:op="fuse"/>
+        <node oor:name="$(insturl)/$(share_subdir_name)/dict/ooo" oor:op="fuse"/>
       </node>
       <prop oor:name="UserPaths">
         <value>$(userurl)/wordbook</value>
@@ -112,7 +112,7 @@
     </node>
     <node oor:name="Dictionary" oor:op="fuse" oor:mandatory="true">
       <node oor:name="InternalPaths">
-        <node oor:name="$(insturl)/share/wordbook" oor:op="fuse"/>
+        <node oor:name="$(insturl)/$(share_subdir_name)/wordbook" oor:op="fuse"/>
       </node>
       <prop oor:name="WritePath">
         <value>$(userurl)/wordbook</value>
@@ -135,7 +135,7 @@
     </node>
     <node oor:name="Fingerprint" oor:op="fuse" oor:mandatory="true">
       <node oor:name="InternalPaths">
-        <node install:module="internallibexttextcatdata" oor:name="$(insturl)/share/fingerprint" oor:op="fuse"/>
+        <node install:module="internallibexttextcatdata" oor:name="$(insturl)/$(share_subdir_name)/fingerprint" oor:op="fuse"/>
         <node install:module="externallibexttextcatdata" oor:name="${SYSTEM_LIBEXTTEXTCAT_DATA}" oor:op="fuse"/>
       </node>
     </node>
@@ -158,7 +158,7 @@
     </node>
     <node oor:name="Template" oor:op="fuse" oor:mandatory="true">
       <node oor:name="InternalPaths">
-        <node oor:name="$(insturl)/share/template/$(vlang)" oor:op="fuse"/>
+        <node oor:name="$(insturl)/$(share_subdir_name)/template/$(vlang)" oor:op="fuse"/>
       </node>
       <prop oor:name="WritePath">
         <value>$(userurl)/template</value>
@@ -166,7 +166,7 @@
     </node>
     <node oor:name="UIConfig" oor:op="fuse" oor:mandatory="true">
       <node oor:name="InternalPaths">
-        <node oor:name="$(insturl)/share/config" oor:op="fuse"/>
+        <node oor:name="$(insturl)/$(share_subdir_name)/config" oor:op="fuse"/>
       </node>
     </node>
     <node oor:name="UserConfig" oor:op="fuse" oor:mandatory="true">

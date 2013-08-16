@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_folders.h>
+
 #include <rtl/ustring.hxx>
 #include <rtl/bootstrap.hxx>
 #include <osl/process.h>
@@ -41,7 +43,7 @@ namespace {
     }
     static bool tryLoadPng( const OUString& rBaseDir, const OUString& rName, BitmapEx& rBitmap )
     {
-        return loadPng( rBaseDir + "/program" + rName, rBitmap);
+        return loadPng( rBaseDir + "/" LIBO_ETC_FOLDER + rName, rBitmap);
     }
 }
 

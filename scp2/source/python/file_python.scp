@@ -28,7 +28,7 @@ File gid_File_scriptproviderforpython
 End
 
 File gid_File_Lib_Pyuno
-    LIB_FILE_BODY;
+    PACKED_LIB_FILE_BODY;
   #ifdef UNX
     Name = STRING(CONCAT2(libpyuno,UNXSUFFIX));
   #else
@@ -38,8 +38,6 @@ File gid_File_Lib_Pyuno
     Name = "pyuno.pyd";
   #endif // MSVC_PKG_DEBUG_RUNTIME
   #endif
-    Dir = gid_Brand_Dir_Program;
-    Styles = (PACKED);
 End
 
 STD_LIB_FILE( gid_File_Lib_Pythonloader, pythonloader )
@@ -51,26 +49,9 @@ File gid_File_Pyuno_Rdb
     Styles = (PACKED);
 End
 
-File gid_File_Py_Unohelper
-    TXT_FILE_BODY;
-    Dir = gid_Brand_Dir_Program;
-    Name = "pyuno/unohelper.py";
-    Styles = (PACKED);
-End
-
-File gid_File_Py_Uno
-    TXT_FILE_BODY;
-    Dir = gid_Brand_Dir_Program;
-    Name = "pyuno/uno.py";
-    Styles = (PACKED);
-End
-
-File gid_File_Py_Pythonloader
-    TXT_FILE_BODY;
-    Dir = gid_Brand_Dir_Program;
-    Name = "pyuno/pythonloader.py";
-    Styles = (PACKED);
-End
+STD_PY_FILE(gid_File_Py_Unohelper, "pyuno/unohelper.py")
+STD_PY_FILE(gid_File_Py_Uno, "pyuno/uno.py")
+STD_PY_FILE(gid_File_Py_Pythonloader, "pyuno/pythonloader.py")
 
 #ifndef SYSTEM_PYTHON
 File gid_File_Py_Bin_Python
@@ -130,10 +111,8 @@ End
 
 // pyuno.so even on Mac OS X, because it is a python module
 File gid_File_Pyuno
-    LIB_FILE_BODY;
+    PACKED_LIB_FILE_BODY;
     Name = "pyuno.so";
-    Dir = gid_Brand_Dir_Program;
-    Styles = (PACKED);
 End
 
 #endif

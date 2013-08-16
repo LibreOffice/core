@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_folders.h>
+
 #include <tools/stream.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/svapp.hxx>
@@ -1120,7 +1122,7 @@ void FontNameBox::LoadMRUEntries( const String& aFontMRUEntriesFile, sal_Unicode
 
 void FontNameBox::InitFontMRUEntriesFile()
 {
-    OUString sUserConfigDir("${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}");
+    OUString sUserConfigDir("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}");
     rtl::Bootstrap::expandMacros(sUserConfigDir);
 
     maFontMRUEntriesFile = sUserConfigDir;

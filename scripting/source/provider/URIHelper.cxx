@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_folders.h>
 
 #include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
@@ -41,7 +42,7 @@ static const char SHARE_UNO_PACKAGES_URI[] =
 
 static const char USER[] = "user";
 static const char USER_URI[] =
-    "vnd.sun.star.expand:${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}";
+    "vnd.sun.star.expand:${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}";
 
 static const char USER_UNO_PACKAGES[] = "user:uno_packages";
 static const char USER_UNO_PACKAGES_DIR[] =

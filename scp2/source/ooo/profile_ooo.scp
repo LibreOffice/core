@@ -20,11 +20,7 @@
 
 Profile gid_Profile_Uno_Ini
     ModuleID = gid_Module_Root;
-  #ifdef UNX
-    Name = "unorc";
-  #else
-    Name = "uno.ini";
-  #endif
-    Dir = gid_Brand_Dir_Program;
+    Name = PROFILENAME(uno);
+    Dir = GID_BRAND_DIR_ETC;
     Styles = (NETWORK);
 End

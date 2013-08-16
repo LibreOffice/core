@@ -49,7 +49,7 @@ function tryLoadingLibrary( xmcf, context, name )
         }
 
         libURL = xme.expandMacros(
-                "$BRAND_BASE_DIR/share/basic/ScriptBindingLibrary/" +
+                "$BRAND_BASE_DIR/$BRAND_SHARE_SUBDIR/basic/ScriptBindingLibrary/" +
                     name.toLowerCase() + ".xlb/");
 
         System.err.println("libURL is: " + libURL);

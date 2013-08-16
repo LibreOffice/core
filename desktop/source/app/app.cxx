@@ -18,6 +18,7 @@
  */
 
 #include <config_features.h>
+#include <config_folders.h>
 
 #include "sal/config.h"
 
@@ -240,10 +241,10 @@ void removeTree(OUString const & url) {
 // UserInstallation can be poisoned by old junk any more.
 bool cleanExtensionCache() {
     OUString buildId(
-        "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("version") ":buildid}");
+        "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("version") ":buildid}");
     rtl::Bootstrap::expandMacros(buildId); //TODO: detect failure
     OUString extDir(
-        "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("bootstrap")
+        "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap")
         ":UserInstallation}/user/extensions");
     rtl::Bootstrap::expandMacros(extDir); //TODO: detect failure
     OUString buildIdFile(extDir + "/buildid");

@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+#include <config_folders.h>
+
 #include "newerverwarn.hxx"
 #include "newerverwarn.hrc"
 #include "ids.hrc"
@@ -78,7 +81,10 @@ IMPL_LINK_NOARG(NewerVersionWarningDialog, UpdateHdl)
 
     // read keys from soffice.ini (sofficerc)
     OUString sIniFileName = sProgramPath;
-    sIniFileName += OUString( SAL_CONFIGFILE( "version" ) );
+#if HAVE_FEATURE_MACOSX_MACLIKE_APP_STRUCTURE
+    sIniFileName += "../" LIBO_ETC_FOLDER "/";
+#endif
+    sIniFileName += SAL_CONFIGFILE( "version" );
     ::rtl::Bootstrap aIniFile( sIniFileName );
     OUString sNotifyURL;
     aIniFile.getFrom( OUString(  "ODFNotifyURL" ), sNotifyURL );

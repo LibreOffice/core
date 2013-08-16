@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <config_folders.h>
+
 #include "i18nlangtag/languagetag.hxx"
 #include "i18nlangtag/mslangid.hxx"
 #include <rtl/ustrbuf.hxx>
@@ -117,7 +119,7 @@ void LiblantagDataRef::teardown()
 void LiblantagDataRef::setupDataPath()
 {
     // maDataPath is assumed to be empty here.
-    OUString aURL("$BRAND_BASE_DIR/share/liblangtag");
+    OUString aURL("$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/liblangtag");
     rtl::Bootstrap::expandMacros(aURL); //TODO: detect failure
 
     // Check if data is in our own installation, else assume system

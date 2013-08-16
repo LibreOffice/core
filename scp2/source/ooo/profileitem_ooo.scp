@@ -18,6 +18,8 @@
 
 #include "macros.inc"
 
+#include "config_folders.h"
+
 ProfileItem gid_Profileitem_Setup_Uno_Services
     ProfileID = gid_Profile_Setup_Ini;
     ModuleID = gid_Module_Root;
@@ -100,7 +102,7 @@ ProfileItem gid_Profileitem_Uno_Uno_Bundled_Extensions
     Section = "Bootstrap";
     Order = 1;
     Key = "BUNDLED_EXTENSIONS";
-    Value = "$BRAND_BASE_DIR/share/extensions";
+    Value = "$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/extensions";
 End
 
 ProfileItem gid_Profileitem_Uno_Uno_Bundled_Extensions_User
@@ -109,7 +111,7 @@ ProfileItem gid_Profileitem_Uno_Uno_Bundled_Extensions_User
     Section = "Bootstrap";
     Order = 1;
     Key = "BUNDLED_EXTENSIONS_USER";
-    Value = "${$BRAND_BASE_DIR/program/" PROFILENAME(bootstrap) ":UserInstallation}/user/extensions/bundled";
+    Value = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" PROFILENAME(bootstrap) ":UserInstallation}/user/extensions/bundled";
 End
 
 ProfileItem gid_Profileitem_Uno_Uno_Shared_Packages
@@ -118,7 +120,7 @@ ProfileItem gid_Profileitem_Uno_Uno_Shared_Packages
     Section = "Bootstrap";
     Order = 1;
     Key = "UNO_SHARED_PACKAGES";
-    Value = "$BRAND_BASE_DIR/share/uno_packages";
+    Value = "$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/uno_packages";
 End
 
 ProfileItem gid_Profileitem_Uno_Uno_Shared_Packages_Cache
@@ -136,7 +138,7 @@ ProfileItem gid_Profileitem_Uno_Uno_Shared_Extensions_User
     Section = "Bootstrap";
     Order = 1;
     Key = "SHARED_EXTENSIONS_USER";
-    Value = "${$BRAND_BASE_DIR/program/" PROFILENAME(bootstrap) ":UserInstallation}/user/extensions/shared";
+    Value = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" PROFILENAME(bootstrap) ":UserInstallation}/user/extensions/shared";
 End
 
 ProfileItem gid_Profileitem_Uno_Uno_User_Packages
@@ -145,7 +147,7 @@ ProfileItem gid_Profileitem_Uno_Uno_User_Packages
     Section = "Bootstrap";
     Order = 3;
     Key = "UNO_USER_PACKAGES";
-    Value = "${$BRAND_BASE_DIR/program/" PROFILENAME(bootstrap) ":UserInstallation}/user/uno_packages";
+    Value = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" PROFILENAME(bootstrap) ":UserInstallation}/user/uno_packages";
 End
 
 ProfileItem gid_Profileitem_Uno_Uno_Bundled_Tmp_Extensions
@@ -154,7 +156,7 @@ ProfileItem gid_Profileitem_Uno_Uno_Bundled_Tmp_Extensions
     Section = "Bootstrap";
     Order = 1;
     Key = "TMP_EXTENSIONS";
-    Value = "${$BRAND_BASE_DIR/program/" PROFILENAME(bootstrap) ":UserInstallation}/user/extensions/tmp";
+    Value = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" PROFILENAME(bootstrap) ":UserInstallation}/user/extensions/tmp";
 End
 
 ProfileItem gid_Profileitem_Uno_Uno_Bundled_Bak_Extensions
@@ -163,7 +165,7 @@ ProfileItem gid_Profileitem_Uno_Uno_Bundled_Bak_Extensions
     Section = "Bootstrap";
     Order = 1;
     Key = "BAK_EXTENSIONS";
-    Value = "${$BRAND_BASE_DIR/program/" PROFILENAME(bootstrap) ":UserInstallation}/user/extensions/bak";
+    Value = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" PROFILENAME(bootstrap) ":UserInstallation}/user/extensions/bak";
 End
 
 ProfileItem gid_Profileitem_Uno_Uno_User_Packages_Cache

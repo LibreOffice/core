@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+#include <config_folders.h>
 
 #include "util.hxx"
 
@@ -154,6 +156,9 @@ namespace
            static OUString sIni;
             OUStringBuffer buf( 255);
             buf.append( getLibraryLocation());
+#if HAVE_FEATURE_MACOSX_MACLIKE_APP_STRUCTURE
+            buf.appendAscii( "/../" LIBO_ETC_FOLDER );
+#endif
             buf.appendAscii( SAL_CONFIGFILE("/sunjavaplugin") );
             sIni = buf.makeStringAndClear();
             JFW_TRACE2("[Java framework] sunjavaplugin: "

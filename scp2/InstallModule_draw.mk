@@ -9,6 +9,11 @@
 
 $(eval $(call gb_InstallModule_InstallModule,scp2/draw))
 
+$(eval $(call gb_InstallModule_define_if_set,scp2/draw,\
+	ENABLE_MACOSX_MACLIKE_APP_STRUCTURE \
+	ENABLE_MACOSX_SANDBOX \
+))
+
 $(eval $(call gb_InstallModule_add_templates,scp2/draw,\
     scp2/source/templates/module_langpack_draw \
 ))

@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_folders.h>
+
 #include "sal/config.h"
 
 #include "osl/file.hxx"
@@ -435,7 +437,7 @@ static bool AddLocalTempFontDirs( void )
 
     OStringBuffer aBrandFontDir( aBrandSysPath.getLength()*2 );
     aBrandFontDir.append( OUStringToOString( aBrandSysPath, RTL_TEXTENCODING_UTF8 ) );
-    aBrandFontDir.append( "/share/fonts/truetype/" );
+    aBrandFontDir.append( "/" LIBO_SHARE_FOLDER "/fonts/truetype/" );
     return AddTempFontDir( aBrandFontDir.getStr() );
 }
 

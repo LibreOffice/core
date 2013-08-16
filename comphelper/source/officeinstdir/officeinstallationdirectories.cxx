@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_folders.h>
 
 #include "comphelper_module.hxx"
 
@@ -303,7 +304,7 @@ void OfficeInstallationDirectories::initDirs()
 
             *m_pUserDir =
                 xExpander->expandMacros(
-                    OUString("${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE( "bootstrap" ) ":UserInstallation}" ) );
+                    OUString("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap" ) ":UserInstallation}" ) );
 
             OSL_ENSURE( !m_pUserDir->isEmpty(),
                         "Unable to obtain office user data directory!" );

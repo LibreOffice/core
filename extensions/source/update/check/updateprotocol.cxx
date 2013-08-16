@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_folders.h>
+
 #include <com/sun/star/xml/xpath/XPathAPI.hpp>
 
 #include "updateprotocol.hxx"
@@ -50,17 +52,17 @@ getBootstrapData(
     OUString & rGitID,
     OUString & rInstallSetID)
 {
-    rGitID = "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("version") ":buildid}";
+    rGitID = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("version") ":buildid}";
     rtl::Bootstrap::expandMacros( rGitID );
     if ( rGitID.isEmpty() )
         return false;
 
-    rInstallSetID = "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("version") ":UpdateID}";
+    rInstallSetID = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("version") ":UpdateID}";
     rtl::Bootstrap::expandMacros( rInstallSetID );
     if ( rInstallSetID.isEmpty() )
         return false;
 
-    OUString aValue( "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("version") ":UpdateURL}" );
+    OUString aValue( "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("version") ":UpdateURL}" );
     rtl::Bootstrap::expandMacros( aValue );
 
     if( !aValue.isEmpty() )

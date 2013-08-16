@@ -215,7 +215,7 @@ $(call gb_InstallModuleTarget_get_external_target,$(1)) :| \
 
 $(call gb_InstallModuleTarget_get_target,$(1)) : SCP_FILES :=
 $(call gb_InstallModuleTarget_get_target,$(1)) : SCP_DEFS :=
-$(call gb_InstallModuleTarget_get_target,$(1)) : SCP_INCLUDE := -I$(SRCDIR)/scp2/inc -I$(WORKDIR)
+$(call gb_InstallModuleTarget_get_target,$(1)) : SCP_INCLUDE := -I$(SRCDIR)/scp2/inc -I$(WORKDIR) -I$(BUILDDIR)/config_$(gb_Side)
 $(call gb_InstallModuleTarget_get_target,$(1)) : SCP_TEMPLATE_INCLUDE :=
 $(call gb_InstallModuleTarget_use_custom_headers,$(1),scp2/macros)
 

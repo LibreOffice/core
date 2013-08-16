@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_folders.h>
+
 #include <osl/diagnose.h>
 #include <osl/thread.h>
 
@@ -122,7 +124,7 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
     }
 
 
-    OUString aProgramURL("$BRAND_BASE_DIR/program/senddoc");
+    OUString aProgramURL("$BRAND_BASE_DIR/" LIBO_LIBEXEC_FOLDER "/senddoc");
     rtl::Bootstrap::expandMacros(aProgramURL);
 
     OUString aProgram;

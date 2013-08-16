@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_folders.h>
+
 #include "services/substitutepathvars.hxx"
 #include <threadhelp/resetableguard.hxx>
 #include <helper/networkdomain.hxx>
@@ -102,6 +104,7 @@
 #define VARIABLE_BASEINSTURL                            "$(baseinsturl)"
 #define VARIABLE_USERDATAURL                            "$(userdataurl)"
 #define VARIABLE_BRANDBASEURL                           "$(brandbaseurl)"
+#define VARIABLE_SHARE_SUBDIR_NAME                      "$(share_subdir_name)"
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
@@ -191,7 +194,8 @@ static const FixedVariable aFixedVarTable[] =
     // New variable of hierachy service (#i32656#)
     { VARIABLE_BASEINSTURL, PREDEFVAR_BASEINSTURL,  REPLACELENGTH_BASEINSTURL,true                     },
     { VARIABLE_USERDATAURL, PREDEFVAR_USERDATAURL,  REPLACELENGTH_USERDATAURL,true                     },
-    { VARIABLE_BRANDBASEURL,PREDEFVAR_BRANDBASEURL, RTL_CONSTASCII_LENGTH(VARIABLE_BRANDBASEURL), true }
+    { VARIABLE_BRANDBASEURL,PREDEFVAR_BRANDBASEURL, RTL_CONSTASCII_LENGTH(VARIABLE_BRANDBASEURL), true },
+    { VARIABLE_SHARE_SUBDIR_NAME,PREDEFVAR_SHARE_SUBDIR_NAME, RTL_CONSTASCII_LENGTH(VARIABLE_SHARE_SUBDIR_NAME), false }
 };
 
 //_________________________________________________________________________________________________________________
@@ -1113,6 +1117,8 @@ void SubstitutePathVariables::SetPredefinedPathVariables( PredefinedPathVariable
     rtl::Bootstrap::expandMacros(
         aPreDefPathVariables.m_FixedVar[PREDEFVAR_BRANDBASEURL]);
 
+    aPreDefPathVariables.m_FixedVar[PREDEFVAR_SHARE_SUBDIR_NAME] = rtl::OUString(LIBO_SHARE_FOLDER);
+
     Any             aAny;
 
     // Get inspath and userpath from bootstrap mechanism in every case as file URL
@@ -1145,7 +1151,7 @@ void SubstitutePathVariables::SetPredefinedPathVariables( PredefinedPathVariable
     // Set $(prog), $(progpath), $(progurl)
     INetURLObject aProgObj(
         aPreDefPathVariables.m_FixedVar[PREDEFVAR_BRANDBASEURL] );
-    if ( !aProgObj.HasError() && aProgObj.insertName( OUString("program") ) )
+    if ( !aProgObj.HasError() && aProgObj.insertName( OUString(LIBO_BIN_FOLDER) ) )
     {
         aPreDefPathVariables.m_FixedVar[ PREDEFVAR_PROGPATH ] = aProgObj.GetMainURL(INetURLObject::NO_DECODE);
         aPreDefPathVariables.m_FixedVar[ PREDEFVAR_PROGURL ]  = aPreDefPathVariables.m_FixedVar[ PREDEFVAR_PROGPATH ];

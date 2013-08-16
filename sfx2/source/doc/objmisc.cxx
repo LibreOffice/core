@@ -18,6 +18,7 @@
  */
 
 #include <config_features.h>
+#include <config_folders.h>
 
 #include <tools/inetmsg.hxx>
 #include <tools/diagnose_ex.h>
@@ -2074,11 +2075,11 @@ void SfxObjectShell::StoreLog()
 
     if ( pImp->m_xLogRing.is() )
     {
-        OUString aFileURL = OUString( "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}"  );
+        OUString aFileURL = OUString( "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}"  );
 
         ::rtl::Bootstrap::expandMacros( aFileURL );
 
-        OUString aBuildID = OUString( "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("setup") ":buildid}"  );
+        OUString aBuildID = OUString( "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("setup") ":buildid}"  );
 
         ::rtl::Bootstrap::expandMacros( aBuildID );
 

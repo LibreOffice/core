@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_folders.h>
+
 #include "hsqldb/HDriver.hxx"
 #include "hsqldb/HConnection.hxx"
 #include <osl/diagnose.h>
@@ -233,10 +235,10 @@ namespace connectivity
                     OUString(
 #ifdef SYSTEM_HSQLDB
                         HSQLDB_JAR
-                        " vnd.sun.star.expand:$BRAND_BASE_DIR/program/classes/sdbc_hsqldb.jar"
+                        " vnd.sun.star.expand:$BRAND_BASE_DIR/" LIBO_SHARE_JAVA_FOLDER "/sdbc_hsqldb.jar"
 #else
-                        "vnd.sun.star.expand:$BRAND_BASE_DIR/program/classes/hsqldb.jar"
-                        " vnd.sun.star.expand:$BRAND_BASE_DIR/program/classes/sdbc_hsqldb.jar"
+                        "vnd.sun.star.expand:$BRAND_BASE_DIR/" LIBO_SHARE_JAVA_FOLDER "/hsqldb.jar"
+                        " vnd.sun.star.expand:$BRAND_BASE_DIR/" LIBO_SHARE_JAVA_FOLDER "/sdbc_hsqldb.jar"
 #endif
                         ) );
 

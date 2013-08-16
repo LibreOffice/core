@@ -18,6 +18,7 @@
  */
 
 #include <config_features.h>
+#include <config_folders.h>
 
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XContainer.hpp>
@@ -596,7 +597,7 @@ static void createVariableURL( OUString& rStr, const OUString& rLibName,
     }
     else
     {
-        rStr = OUString("$(INST)/share/basic/");
+        rStr = OUString("$(INST)/" LIBO_SHARE_FOLDER "/basic/");
     }
     rStr += rLibName;
     rStr += "/";

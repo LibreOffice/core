@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_folders.h>
+
 #include "osl/file.hxx"
 #include "osl/mutex.hxx"
 
@@ -346,7 +348,7 @@ static bool impl_needsCompatCheck()
 {
     bool bNeedsCheck = false;
     OUString aLastCheckBuildID;
-    OUString aCurrentBuildID( "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("version") ":buildid}" );
+    OUString aCurrentBuildID( "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("version") ":buildid}" );
     rtl::Bootstrap::expandMacros( aCurrentBuildID );
 
     try {

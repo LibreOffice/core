@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_folders.h>
 
 #include "docrecovery.hxx"
 #include "osl/file.hxx"
@@ -223,7 +224,7 @@ namespace svx{
             }
 
             int ret = -1;
-            OUString path1("$BRAND_BASE_DIR/program/crashrep");
+            OUString path1("$BRAND_BASE_DIR/" LIBO_LIBEXEC_FOLDER "/crashrep");
             rtl::Bootstrap::expandMacros(path1);
             OString path2;
             if ((osl::FileBase::getSystemPathFromFileURL(path1, path1) ==

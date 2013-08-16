@@ -69,7 +69,11 @@ End
 
 Directory gid_Dir_Wizards
     Styles = (CREATE);
+#if defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
+    ParentID = gid_Brand_Dir_Share;
+#else
     ParentID = gid_Brand_Dir_Program;
+#endif
     DosName = "wizards";
 End
 
@@ -80,13 +84,22 @@ Directory gid_Dir_Wizards_Ui
 End
 
 Directory gid_Dir_Resource
+#if defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
+    ParentID = gid_Brand_Dir_Share;
+#else
     ParentID = gid_Brand_Dir_Program;
+#endif
     DosName = "resource";
 End
 
 Directory gid_Dir_Classes
+#if defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
+    ParentID = gid_Brand_Dir_Share;
+    DosName = "java";
+#else
     ParentID = gid_Brand_Dir_Program;
     DosName = "classes";
+#endif
 End
 
 #ifdef WNT
@@ -592,11 +605,19 @@ Directory gid_Dir_Template_Common_Presnt
 End
 
 Directory gid_Brand_Dir_Program_Services
+#if defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
+    ParentID = gid_Brand_Dir_Share;
+#else
     ParentID = gid_Brand_Dir_Program;
+#endif
     DosName = "services";
 End
 
 Directory gid_Brand_Dir_Program_Types
+#if defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
+    ParentID = gid_Brand_Dir_Share;
+#else
     ParentID = gid_Brand_Dir_Program;
+#endif
     DosName = "types";
 End

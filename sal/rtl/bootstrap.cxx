@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+#include <config_folders.h>
 
 #include "rtl/bootstrap.h"
 #include "rtl/bootstrap.hxx"
@@ -287,6 +289,13 @@ static OUString & getIniFileName_Impl()
 
             // append config file suffix
             fileName += OUString(SAL_CONFIGFILE(""));
+
+#if HAVE_FEATURE_MACOSX_MACLIKE_APP_STRUCTURE
+            // We keep only executables in the MacOS folder, and all
+            // rc files in LIBO_ETC_FOLDER (typically "Resources").
+            sal_Int32 p = fileName.lastIndexOf( "/MacOS/" );
+            fileName = fileName.replaceAt( p+1, strlen("MacOS"), LIBO_ETC_FOLDER );
+#endif
         }
 #endif
 

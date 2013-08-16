@@ -166,10 +166,10 @@
         </prop>
         <node oor:name="UserDefinedImages">
           <prop oor:name="ImageSmallURL">
-            <value>vnd.sun.star.expand:$BRAND_BASE_DIR/share/Scripts/python/LibreLogo/icons/sc_arrowshapes.up-arrow.png</value>
+            <value>vnd.sun.star.expand:$BRAND_BASE_DIR/$BRAND_SHARE_SUBDIR/Scripts/python/LibreLogo/icons/sc_arrowshapes.up-arrow.png</value>
           </prop>
           <prop oor:name="ImageBigURL">
-            <value>vnd.sun.star.expand:$BRAND_BASE_DIR/share/Scripts/python/LibreLogo/icons/lc_arrowshapes.up-arrow.png</value>
+            <value>vnd.sun.star.expand:$BRAND_BASE_DIR/$BRAND_SHARE_SUBDIR/Scripts/python/LibreLogo/icons/lc_arrowshapes.up-arrow.png</value>
           </prop>
         </node>
       </node>
@@ -179,10 +179,10 @@
         </prop>
         <node oor:name="UserDefinedImages">
           <prop oor:name="ImageSmallURL">
-            <value>vnd.sun.star.expand:$BRAND_BASE_DIR/share/Scripts/python/LibreLogo/icons/sc_arrowshapes.down-arrow.png</value>
+            <value>vnd.sun.star.expand:$BRAND_BASE_DIR/$BRAND_SHARE_SUBDIR/Scripts/python/LibreLogo/icons/sc_arrowshapes.down-arrow.png</value>
           </prop>
           <prop oor:name="ImageBigURL">
-            <value>vnd.sun.star.expand:$BRAND_BASE_DIR/share/Scripts/python/LibreLogo/icons/lc_arrowshapes.down-arrow.png</value>
+            <value>vnd.sun.star.expand:$BRAND_BASE_DIR/$BRAND_SHARE_SUBDIR/Scripts/python/LibreLogo/icons/lc_arrowshapes.down-arrow.png</value>
           </prop>
         </node>
       </node>
@@ -192,10 +192,10 @@
         </prop>
         <node oor:name="UserDefinedImages">
           <prop oor:name="ImageSmallURL">
-            <value>vnd.sun.star.expand:$BRAND_BASE_DIR/share/Scripts/python/LibreLogo/icons/sc_arrowshapes.circular-leftarrow.png</value>
+            <value>vnd.sun.star.expand:$BRAND_BASE_DIR/$BRAND_SHARE_SUBDIR/Scripts/python/LibreLogo/icons/sc_arrowshapes.circular-leftarrow.png</value>
           </prop>
           <prop oor:name="ImageBigURL">
-            <value>vnd.sun.star.expand:$BRAND_BASE_DIR/share/Scripts/python/LibreLogo/icons/lc_arrowshapes.circular-leftarrow.png</value>
+            <value>vnd.sun.star.expand:$BRAND_BASE_DIR/$BRAND_SHARE_SUBDIR/Scripts/python/LibreLogo/icons/lc_arrowshapes.circular-leftarrow.png</value>
           </prop>
         </node>
       </node>
@@ -205,10 +205,10 @@
         </prop>
         <node oor:name="UserDefinedImages">
           <prop oor:name="ImageSmallURL">
-            <value>vnd.sun.star.expand:$BRAND_BASE_DIR/share/Scripts/python/LibreLogo/icons/sc_arrowshapes.circular-arrow.png</value>
+            <value>vnd.sun.star.expand:$BRAND_BASE_DIR/$BRAND_SHARE_SUBDIR/Scripts/python/LibreLogo/icons/sc_arrowshapes.circular-arrow.png</value>
           </prop>
           <prop oor:name="ImageBigURL">
-            <value>vnd.sun.star.expand:$BRAND_BASE_DIR/share/Scripts/python/LibreLogo/icons/lc_arrowshapes.circular-arrow.png</value>
+            <value>vnd.sun.star.expand:$BRAND_BASE_DIR/$BRAND_SHARE_SUBDIR/Scripts/python/LibreLogo/icons/lc_arrowshapes.circular-arrow.png</value>
           </prop>
         </node>
       </node>
@@ -218,10 +218,10 @@
         </prop>
         <node oor:name="UserDefinedImages">
           <prop oor:name="ImageSmallURL">
-            <value>vnd.sun.star.expand:$BRAND_BASE_DIR/share/Scripts/python/LibreLogo/icons/sc_runbasic.png</value>
+            <value>vnd.sun.star.expand:$BRAND_BASE_DIR/$BRAND_SHARE_SUBDIR/Scripts/python/LibreLogo/icons/sc_runbasic.png</value>
           </prop>
           <prop oor:name="ImageBigURL">
-            <value>vnd.sun.star.expand:$BRAND_BASE_DIR/share/Scripts/python/LibreLogo/icons/lc_runbasic.png</value>
+            <value>vnd.sun.star.expand:$BRAND_BASE_DIR/$BRAND_SHARE_SUBDIR/Scripts/python/LibreLogo/icons/lc_runbasic.png</value>
           </prop>
         </node>
       </node>
@@ -231,10 +231,10 @@
         </prop>
         <node oor:name="UserDefinedImages">
           <prop oor:name="ImageSmallURL">
-            <value>vnd.sun.star.expand:$BRAND_BASE_DIR/share/Scripts/python/LibreLogo/icons/sc_basicstop.png</value>
+            <value>vnd.sun.star.expand:$BRAND_BASE_DIR/$BRAND_SHARE_SUBDIR/Scripts/python/LibreLogo/icons/sc_basicstop.png</value>
           </prop>
           <prop oor:name="ImageBigURL">
-            <value>vnd.sun.star.expand:$BRAND_BASE_DIR/share/Scripts/python/LibreLogo/icons/lc_basicstop.png</value>
+            <value>vnd.sun.star.expand:$BRAND_BASE_DIR/$BRAND_SHARE_SUBDIR/Scripts/python/LibreLogo/icons/lc_basicstop.png</value>
           </prop>
         </node>
       </node>
@@ -244,10 +244,10 @@
         </prop>
         <node oor:name="UserDefinedImages">
           <prop oor:name="ImageSmallURL">
-            <value>vnd.sun.star.expand:$BRAND_BASE_DIR/share/Scripts/python/LibreLogo/icons/sc_navigationbarleft.png</value>
+            <value>vnd.sun.star.expand:$BRAND_BASE_DIR/$BRAND_SHARE_SUBDIR/Scripts/python/LibreLogo/icons/sc_navigationbarleft.png</value>
           </prop>
           <prop oor:name="ImageBigURL">
-            <value>vnd.sun.star.expand:$BRAND_BASE_DIR/share/Scripts/python/LibreLogo/icons/lc_navigationbarleft.png</value>
+            <value>vnd.sun.star.expand:$BRAND_BASE_DIR/$BRAND_SHARE_SUBDIR/Scripts/python/LibreLogo/icons/lc_navigationbarleft.png</value>
           </prop>
         </node>
       </node>
@@ -257,10 +257,10 @@
         </prop>
         <node oor:name="UserDefinedImages">
           <prop oor:name="ImageSmallURL">
-            <value>vnd.sun.star.expand:$BRAND_BASE_DIR/share/Scripts/python/LibreLogo/icons/sc_newdoc.png</value>
+            <value>vnd.sun.star.expand:$BRAND_BASE_DIR/$BRAND_SHARE_SUBDIR/Scripts/python/LibreLogo/icons/sc_newdoc.png</value>
           </prop>
           <prop oor:name="ImageBigURL">
-            <value>vnd.sun.star.expand:$BRAND_BASE_DIR/share/Scripts/python/LibreLogo/icons/lc_newdoc.png</value>
+            <value>vnd.sun.star.expand:$BRAND_BASE_DIR/$BRAND_SHARE_SUBDIR/Scripts/python/LibreLogo/icons/lc_newdoc.png</value>
           </prop>
         </node>
       </node>
@@ -270,10 +270,10 @@
         </prop>
         <node oor:name="UserDefinedImages">
           <prop oor:name="ImageSmallURL">
-            <value>vnd.sun.star.expand:$BRAND_BASE_DIR/share/Scripts/python/LibreLogo/icons/sc_editglossary.png</value>
+            <value>vnd.sun.star.expand:$BRAND_BASE_DIR/$BRAND_SHARE_SUBDIR/Scripts/python/LibreLogo/icons/sc_editglossary.png</value>
           </prop>
           <prop oor:name="ImageBigURL">
-            <value>vnd.sun.star.expand:$BRAND_BASE_DIR/share/Scripts/python/LibreLogo/icons/lc_editglossary.png</value>
+            <value>vnd.sun.star.expand:$BRAND_BASE_DIR/$BRAND_SHARE_SUBDIR/Scripts/python/LibreLogo/icons/lc_editglossary.png</value>
           </prop>
         </node>
       </node>

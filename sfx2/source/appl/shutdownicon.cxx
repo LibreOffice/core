@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_folders.h>
+
 #include <shutdownicon.hxx>
 #include <app.hrc>
 #include <sfx2/app.hxx>
@@ -860,7 +862,7 @@ void ShutdownIcon::SetAutostart( bool bActivate )
 #else // UNX
         getAutostartDir( true );
 
-        OUString aPath( "${BRAND_BASE_DIR}/share/xdg/qstart.desktop"  );
+        OUString aPath( "${BRAND_BASE_DIR}/" LIBO_SHARE_FOLDER "/xdg/qstart.desktop"  );
         Bootstrap::expandMacros( aPath );
 
         OUString aDesktopFile;

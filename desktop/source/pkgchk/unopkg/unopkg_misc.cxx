@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_folders.h>
 
 #include "deployment.hrc"
 #include "unopkg_shared.h"
@@ -421,7 +422,7 @@ Reference<XComponentContext> connectToOffice(
 OUString getLockFilePath()
 {
     OUString ret;
-    OUString sBootstrap("${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}");
+    OUString sBootstrap("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}");
     rtl::Bootstrap::expandMacros(sBootstrap);
     OUString sAbs;
     if (::osl::File::E_None ==  ::osl::File::getAbsoluteFileURL(

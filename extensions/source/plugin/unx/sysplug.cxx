@@ -26,6 +26,7 @@
  *
  ************************************************************************/
 
+#include <config_folders.h>
 
 #ifdef AIX
 #define _LINUX_SOURCE_COMPAT
@@ -136,7 +137,7 @@ UnxPluginComm::~UnxPluginComm()
 
 bool UnxPluginComm::getPluginappPath(OString * path) {
     OSL_ASSERT(path != NULL);
-    OUString p("$BRAND_BASE_DIR/program/pluginapp.bin");
+    OUString p("$BRAND_BASE_DIR/" LIBO_LIBEXEC_FOLDER "/pluginapp.bin");
     rtl::Bootstrap::expandMacros(p);
     return
         (osl::FileBase::getSystemPathFromFileURL(p, p) ==

@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_folders.h>
 
 #include "updatecheck.hxx"
 
@@ -99,7 +100,7 @@ namespace
 
 static inline OUString getBuildId()
 {
-    OUString aPathVal("${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("version") ":buildid}");
+    OUString aPathVal("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("version") ":buildid}");
     rtl::Bootstrap::expandMacros(aPathVal);
     return aPathVal;
 }

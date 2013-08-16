@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+#include <config_folders.h>
+
 #include "pyuno_impl.hxx"
 
 #include <osl/thread.h>
@@ -175,6 +178,9 @@ static void readLoggingConfig( sal_Int32 *pLevel, FILE **ppFile )
         reinterpret_cast< oslGenericFunction >(readLoggingConfig),
         (rtl_uString **) &fileName );
     fileName = OUString( fileName.getStr(), fileName.lastIndexOf( '/' )+1 );
+#if HAVE_FEATURE_MACOSX_MACLIKE_APP_STRUCTURE
+    fileName += "../" LIBO_ETC_FOLDER "/";
+#endif
     fileName += OUString(  SAL_CONFIGFILE("pyuno" ));
     rtl::Bootstrap bootstrapHandle( fileName );
 

@@ -30,4 +30,9 @@ Directory gid_Dir_Bundle_Contents
     HostName = "Contents";
     Styles = (OFFICEDIRECTORY);
 End
+
+Directory gid_Dir_Frameworks
+    ParentID = gid_Dir_Bundle_Contents;
+    DosName = "Frameworks";
+End
 #endif

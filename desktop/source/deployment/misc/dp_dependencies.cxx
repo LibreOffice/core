@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_folders.h>
+
 #include "sal/config.h"
 
 #include "com/sun/star/uno/Reference.hxx"
@@ -60,7 +62,7 @@ OUString getLibreOfficeMajorMinorMicro() {
 
 OUString getReferenceOpenOfficeOrgMajorMinor() {
     OUString v(
-            "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("version")
+            "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("version")
             ":Version:ReferenceOOoMajorMinor}");
     rtl::Bootstrap::expandMacros(v); //TODO: check for failure
     return v;

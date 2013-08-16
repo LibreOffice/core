@@ -42,10 +42,12 @@ File gid_File_UreLink
     Styles = (PACKED);
 End
 #elif defined MACOSX
+#if !defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
 Directory gid_Dir_UreLink
     ParentID = gid_Dir_Bundle_Contents;
     DosName = "ure-link";
 End
+#endif
 #else
 Unixlink gid_Unixlink_UreLink
     BIN_FILE_BODY;

@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_folders.h>
+
 #include "recoveryui.hxx"
 #include "docrecovery.hxx"
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -175,7 +177,7 @@ static OUString GetCrashConfigDir()
 {
 
 #if defined(WNT)
-    OUString    ustrValue = OUString("${$BRAND_BASE_DIR/program/bootstrap.ini:UserInstallation}");
+    OUString    ustrValue = OUString("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/bootstrap.ini:UserInstallation}");
 #elif defined(MACOSX)
     OUString    ustrValue = OUString("~");
 #else

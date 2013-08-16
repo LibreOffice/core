@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_folders.h>
+
 #include "dp_update.hxx"
 #include "dp_version.hxx"
 #include "dp_identifier.hxx"
@@ -215,7 +217,7 @@ bool onlyBundledExtensions(
 OUString getExtensionDefaultUpdateURL()
 {
     OUString sUrl(
-        "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("version")
+        "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("version")
         ":Version:ExtensionUpdateURL}");
     ::rtl::Bootstrap::expandMacros(sUrl);
     return sUrl;

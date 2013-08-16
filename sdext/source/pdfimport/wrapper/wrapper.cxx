@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_folders.h>
 
 #include "contentsink.hxx"
 #include "pdfparse.hxx"
@@ -1043,11 +1044,11 @@ bool xpdf_ImportFromFile( const OUString&                             rURL,
     }
 
     // Determine xpdfimport executable URL:
-    OUString converterURL("$BRAND_BASE_DIR/program/xpdfimport");
+    OUString converterURL("$BRAND_BASE_DIR/" LIBO_BIN_FOLDER "/xpdfimport");
     rtl::Bootstrap::expandMacros(converterURL); //TODO: detect failure
 
     // Determine pathname of xpdfimport_err.pdf:
-    OUString errPathname("$BRAND_BASE_DIR/share/xpdfimport/xpdfimport_err.pdf");
+    OUString errPathname("$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/xpdfimport/xpdfimport_err.pdf");
     rtl::Bootstrap::expandMacros(errPathname); //TODO: detect failure
     if (osl::FileBase::getSystemPathFromFileURL(errPathname, errPathname)
         != osl::FileBase::E_None)

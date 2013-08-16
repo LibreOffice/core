@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <config_folders.h>
+
 #include "personalization.hxx"
 
 #include <comphelper/processfactory.hxx>
@@ -276,7 +278,7 @@ bool SvxPersonalizationTabPage::CopyPersonaToGallery( const OUString &rURL )
         return false;
 
     // copy the images to the user's gallery
-    OUString gallery = "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}";
+    OUString gallery = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}";
     rtl::Bootstrap::expandMacros( gallery );
     gallery += "/user/gallery/personas/";
     osl::Directory::createPath( gallery );

@@ -19,11 +19,12 @@
 #include "macros.inc"
 
 #ifdef UNX
+#ifndef ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
 #ifndef SYSTEM_ICU
 
 Shortcut gid_Shortcut_Lib_Icudata
     FileID = gid_File_Lib_Icudata;
-    Dir = SCP2_OOO_BIN_DIR;
+    Dir = SCP2_OOO_LIB_DIR;
 #ifndef AIX
     Name = STRING(CONCAT4(libicudata,UNXSUFFIX,.,ICU_MAJOR));
 #else
@@ -34,7 +35,7 @@ End
 
 Shortcut gid_Shortcut_Lib_Icui18n
     FileID = gid_File_Lib_Icui18n;
-    Dir = SCP2_OOO_BIN_DIR;
+    Dir = SCP2_OOO_LIB_DIR;
 #ifndef AIX
     Name = STRING(CONCAT4(libicui18n,UNXSUFFIX,.,ICU_MAJOR));
 #else
@@ -45,7 +46,7 @@ End
 
 Shortcut gid_Shortcut_Lib_Icuuc
     FileID = gid_File_Lib_Icuuc;
-    Dir = SCP2_OOO_BIN_DIR;
+    Dir = SCP2_OOO_LIB_DIR;
 #ifndef AIX
     Name = STRING(CONCAT4(libicuuc,UNXSUFFIX,.,ICU_MAJOR));
 #else
@@ -58,6 +59,8 @@ End
 
 #endif
 
+#endif
+
 #ifdef MACOSX
 
 #ifdef SOLAR_JAVA
@@ -65,7 +68,7 @@ End
 // auto_ooo_lib_hsqldb defined in gbuild ($(WORKDIR)/AutoInstall/ooo)
 Shortcut gid_Shortcut_Lib_Hsqldb_2
     FileID = auto_ooo_lib_hsqldb;
-    Dir = SCP2_OOO_BIN_DIR;
+    Dir = SCP2_OOO_LIB_DIR;
     Name = "libhsqldb.jnilib";
     Styles = (NETWORK, RELATIVE);
 End

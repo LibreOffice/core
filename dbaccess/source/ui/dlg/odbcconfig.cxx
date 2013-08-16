@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_folders.h>
 
 #include "odbcconfig.hxx"
 
@@ -343,7 +344,7 @@ bool OOdbcManagement::manageDataSources_async()
 
     // this is done in an external process, due to #i78733#
     // (and note this whole functionality is supported on Windows only, ATM)
-    OUString sExecutableName( "$BRAND_BASE_DIR/program/odbcconfig.exe" );
+    OUString sExecutableName( "$BRAND_BASE_DIR/" LIBO_LIBEXEC_FOLDER "/odbcconfig.exe" );
     ::rtl::Bootstrap::expandMacros( sExecutableName ); //TODO: detect failure
     oslProcess hProcessHandle(0);
     oslProcessError eError = osl_executeProcess( sExecutableName.pData, NULL, 0, 0, NULL, NULL, NULL, 0, &hProcessHandle );

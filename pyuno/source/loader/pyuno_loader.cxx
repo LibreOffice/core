@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_folders.h>
+
 #include <pyuno/pyuno.hxx>
 
 #include <osl/process.h>
@@ -181,7 +183,7 @@ Reference< XInterface > CreateInstance( const Reference< XComponentContext > & c
     {
         OUString pythonPath;
         OUString pythonHome;
-        OUString path( "$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("pythonloader.uno" ));
+        OUString path( "$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("pythonloader.uno" ));
         rtl::Bootstrap::expandMacros(path); //TODO: detect failure
         rtl::Bootstrap bootstrap(path);
 

@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_folders.h>
 
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase3.hxx>
@@ -348,7 +349,7 @@ UpdateInformationProvider::UpdateInformationProvider(
     }
     OUString product(buf.makeStringAndClear());
 
-    OUString aUserAgent( "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("version") ":UpdateUserAgent}" );
+    OUString aUserAgent( "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("version") ":UpdateUserAgent}" );
     rtl::Bootstrap::expandMacros( aUserAgent );
 
     for (sal_Int32 i = 0;;) {

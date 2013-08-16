@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_folders.h>
+
 #include "sal/config.h"
 
 #include <cassert>
@@ -179,7 +181,7 @@ void ResMgrContainer::init()
     assert( m_aResFiles.empty() );
 
     // get resource path
-    OUString uri("$BRAND_BASE_DIR/program/resource/");
+    OUString uri("$BRAND_BASE_DIR/" LIBO_SHARE_RESOURCE_FOLDER "/");
     rtl::Bootstrap::expandMacros(uri); //TODO: detect failure
 
     // collect all possible resource files

@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_folders.h>
+
 #include <services/license.hxx>
 #include <threadhelp/resetableguard.hxx>
 #include <macros/debug.hxx>
@@ -68,7 +70,7 @@ using ::Time;
 using ::DateTime;
 
 // license file name
-static const char *szLicensePath = "/share/readme";
+static const char *szLicensePath = "/" LIBO_SHARE_FOLDER "/readme";
 #ifdef UNX
 static const char *szUNXLicenseName = "/LICENSE";
 static const char *szUNXLicenseExt = "";

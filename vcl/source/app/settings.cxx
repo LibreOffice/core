@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_folders.h>
+
 #include <officecfg/Office/Common.hxx>
 
 #include <svsys.h>
@@ -790,7 +792,7 @@ static void setupPersonaHeaderFooter( WhichPersona eWhich, OUString& rHeaderFoot
     if ( !aName.isEmpty() )
     {
         // try the gallery first, then the program path:
-        OUString gallery = "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}";
+        OUString gallery = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}";
         rtl::Bootstrap::expandMacros( gallery );
         gallery += "/user/gallery/personas/";
 
@@ -798,7 +800,7 @@ static void setupPersonaHeaderFooter( WhichPersona eWhich, OUString& rHeaderFoot
             rHeaderFooterBitmap = readBitmapEx( gallery + aName );
 
         if ( rHeaderFooterBitmap.IsEmpty() )
-            rHeaderFooterBitmap = readBitmapEx( "$BRAND_BASE_DIR/program/" + aName );
+            rHeaderFooterBitmap = readBitmapEx( "$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" + aName );
     }
 }
 

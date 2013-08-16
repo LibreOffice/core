@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_folders.h>
+
 #include "dp_misc.h"
 #include "dp_version.hxx"
 #include "dp_interact.h"
@@ -68,7 +70,7 @@ namespace {
 struct UnoRc : public rtl::StaticWithInit<
     boost::shared_ptr<rtl::Bootstrap>, UnoRc> {
     const boost::shared_ptr<rtl::Bootstrap> operator () () {
-        OUString unorc( "$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("uno") );
+        OUString unorc( "$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("uno") );
         ::rtl::Bootstrap::expandMacros( unorc );
         ::boost::shared_ptr< ::rtl::Bootstrap > ret(
             new ::rtl::Bootstrap( unorc ) );

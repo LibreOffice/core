@@ -19,6 +19,9 @@
 #ifndef INCLUDED_JVMFWK_FWKUTIL_HXX
 #define INCLUDED_JVMFWK_FWKUTIL_HXX
 
+#include <config_features.h>
+#include <config_folders.h>
+
 #include "sal/config.h"
 #include "osl/mutex.hxx"
 #include "rtl/bootstrap.hxx"
@@ -47,6 +50,9 @@ struct Bootstrap :
         const rtl::Bootstrap * operator () () {
             OUStringBuffer buf(256);
             buf.append(getLibraryLocation());
+#if HAVE_FEATURE_MACOSX_MACLIKE_APP_STRUCTURE
+            buf.appendAscii( "/../" LIBO_ETC_FOLDER );
+#endif
             buf.appendAscii(SAL_CONFIGFILE("/jvmfwk3"));
             OUString sIni = buf.makeStringAndClear();
             ::rtl::Bootstrap *  bootstrap = new ::rtl::Bootstrap(sIni);
