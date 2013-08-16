@@ -1334,7 +1334,7 @@ sal_Bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
 
 
     // automatic spell checking
-    sal_Bool bNewAutoCheck = aLinguOptionsCLB.IsChecked( (sal_uInt16) EID_SPELL_AUTO );
+    bool bNewAutoCheck = aLinguOptionsCLB.IsChecked( (sal_uInt16) EID_SPELL_AUTO );
     const SfxPoolItem* pOld = GetOldItem( rCoreSet, SID_AUTOSPELL_CHECK );
     if ( !pOld || ( (SfxBoolItem*)pOld )->GetValue() != bNewAutoCheck )
     {

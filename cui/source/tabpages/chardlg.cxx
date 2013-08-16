@@ -147,7 +147,7 @@ static sal_uInt16 pTwoLinesRanges[] =
 
 // C-Funktion ------------------------------------------------------------
 
-inline sal_Bool StateToAttr( TriState aState )
+inline bool StateToAttr( TriState aState )
 {
     return ( STATE_CHECK == aState );
 }
@@ -2274,7 +2274,7 @@ sal_Bool SvxCharEffectsPage::FillItemSet( SfxItemSet& rSet )
     if ( pOld )
     {
         const SvxWordLineModeItem& rItem = *( (const SvxWordLineModeItem*)pOld );
-        if ( rItem.GetValue() == m_pIndividualWordsBtn->IsChecked() )
+        if ( rItem.GetValue() == (bool) m_pIndividualWordsBtn->IsChecked() )
             bChanged = false;
     }
 
