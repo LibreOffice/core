@@ -18,6 +18,7 @@
  */
 
 #include <tools/poly.hxx>
+#include <vcl/builder.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/svapp.hxx>
 #include <svtools/colorcfg.hxx>
@@ -48,6 +49,33 @@ SvxSwFrameExample::SvxSwFrameExample( Window *pParent, const ResId& rResID ) :
 {
     InitColors_Impl();
     SetMapMode(MAP_PIXEL);
+}
+
+SvxSwFrameExample::SvxSwFrameExample( Window *pParent, WinBits nStyle ) :
+
+    Window(pParent, nStyle),
+
+    nHAlign     (HoriOrientation::CENTER),
+    nHRel       (RelOrientation::FRAME),
+    nVAlign     (VertOrientation::TOP),
+    nVRel       (RelOrientation::PRINT_AREA),
+    nWrap       (WrapTextMode_NONE),
+    nAnchor     (TextContentAnchorType_AT_PAGE),
+    bTrans      (sal_False),
+    aRelPos     (Point(0,0))
+{
+    InitColors_Impl();
+    SetMapMode(MAP_PIXEL);
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxSwFrameExample(Window *pParent, VclBuilder::stringmap &)
+{
+    return new SvxSwFrameExample(pParent, 0);
+}
+
+Size SvxSwFrameExample::GetOptimalSize() const
+{
+    return LogicToPixel(Size(52, 86), MapMode(MAP_APPFONT));
 }
 
 SvxSwFrameExample::~SvxSwFrameExample()

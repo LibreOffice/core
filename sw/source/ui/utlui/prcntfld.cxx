@@ -258,6 +258,14 @@ void PercentFieldWrap::SetPrcntValue(sal_Int64 nNewValue, FieldUnit eInUnit)
     }
 }
 
+void PercentFieldWrap::SetBaseValue(sal_Int64 nNewValue, FieldUnit eInUnit)
+{
+    if (m_pField->GetUnit() == FUNIT_CUSTOM)
+        nOldBaseValue = m_pField->ConvertValue(nNewValue, 0, nOldDigits, eInUnit, eOldUnit);
+    else
+        m_pField->SetBaseValue(nNewValue, eInUnit);
+}
+
 void PercentField::SetUserValue( sal_Int64 nNewValue, FieldUnit eInUnit )
 {
     if (GetUnit() != FUNIT_CUSTOM || eInUnit == FUNIT_CUSTOM)
@@ -394,6 +402,36 @@ sal_Int64 PercentFieldWrap::DenormalizePercent(sal_Int64 nValue)
         nValue = ((nValue+(nFactor/2)) / nFactor);
     }
     return nValue;
+}
+
+bool PercentFieldWrap::IsValueModified()
+{
+    if (m_pField->GetUnit() == FUNIT_CUSTOM)
+        return true;
+    else
+        return m_pField->IsValueModified();
+}
+
+void PercentFieldWrap::SetUserValue(sal_Int64 nNewValue, FieldUnit eInUnit)
+{
+    if (m_pField->GetUnit() != FUNIT_CUSTOM || eInUnit == FUNIT_CUSTOM)
+        m_pField->SetUserValue(Convert(nNewValue, eInUnit, m_pField->GetUnit()),FUNIT_NONE);
+    else
+    {
+        // Overwrite output value, do not restore later
+        sal_Int64 nPercent, nAktWidth;
+        if (eInUnit == FUNIT_TWIP)
+        {
+            nAktWidth = m_pField->ConvertValue(nNewValue, 0, nOldDigits, FUNIT_TWIP, FUNIT_TWIP);
+        }
+        else
+        {
+            sal_Int64 nValue = Convert(nNewValue, eInUnit, eOldUnit);
+            nAktWidth = m_pField->ConvertValue(nValue, 0, nOldDigits, eOldUnit, FUNIT_TWIP);
+        }
+        nPercent = ((nAktWidth * 10) / nRefValue + 5) / 10;
+        m_pField->SetUserValue(nPercent,FUNIT_NONE);
+    }
 }
 
 sal_Bool PercentField::IsValueModified()

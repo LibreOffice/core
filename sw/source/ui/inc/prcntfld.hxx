@@ -50,9 +50,11 @@ public:
     MetricField* get() { return m_pField; }
     void SetUpHdl(const Link& rLink) { m_pField->SetUpHdl(rLink); }
     void SetDownHdl(const Link& rLink) { m_pField->SetDownHdl(rLink); }
+    void SetModifyHdl(const Link& rLink) { m_pField->SetModifyHdl(rLink); }
     void SetLoseFocusHdl(const Link& rLink) { m_pField->SetLoseFocusHdl(rLink); }
     void SetMetric(FieldUnit eUnit) { ::SetMetric(*m_pField, eUnit); }
     void Enable(bool bEnable = true, bool bChild = true) { m_pField->Enable(bEnable, bChild); }
+    void Disable(bool bChild = true) { m_pField->Disable(bChild); }
     bool HasFocus() const { return m_pField->HasFocus(); }
     void SetAccessibleName(const OUString& rName) { m_pField->SetAccessibleName(rName); }
     void SetText(const OUString& rStr) { m_pField->SetText(rStr); }
@@ -63,7 +65,7 @@ public:
     void SetMetricFieldMin(sal_Int64 nNewMin) { m_pField->SetMin(nNewMin); }
     void SetMetricFieldMax(sal_Int64 nNewMax) { m_pField->SetMax(nNewMax); }
 
-    void SetValue(sal_Int64 nNewValue, FieldUnit eInUnit = FUNIT_NONE);
+    void SetValue(sal_Int64 nNewValue, FieldUnit eInUnit = FUNIT_NONE) { m_pField->SetValue(nNewValue, eInUnit); }
 
     void SetLast(sal_Int64 nNewLast) { m_pField->SetLast(nNewLast); }
 
@@ -81,8 +83,14 @@ public:
 
     void SetMin(sal_Int64 nNewMin, FieldUnit eInUnit = FUNIT_NONE);
 
+    sal_Int64 GetMin() const { return m_pField->GetMin(); }
+    sal_Int64 GetMax() const { return m_pField->GetMax(); }
+
     sal_Int64 NormalizePercent(sal_Int64 nValue);
     sal_Int64 DenormalizePercent(sal_Int64 nValue);
+
+    sal_Int64 Normalize( sal_Int64 nValue ) const { return m_pField->Normalize(nValue); }
+    sal_Int64 Denormalize( sal_Int64 nValue ) const { return m_pField->Denormalize(nValue); }
 
     void SetRefValue(sal_Int64 nValue);
     sal_Int64 GetRefValue() const { return nRefValue; }

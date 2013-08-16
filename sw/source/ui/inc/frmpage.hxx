@@ -44,49 +44,50 @@ struct SwPosition;
 class SwFrmPage: public SfxTabPage
 {
     // size
-    FixedLine       aSizeFL;
-    FixedText       aWidthFT;
-    FixedText       aWidthAutoFT;
-    PercentField    aWidthED;
-    CheckBox        aRelWidthCB;
-    CheckBox        aAutoWidthCB;
-    FixedText       aHeightFT;
-    FixedText       aHeightAutoFT;
-    PercentField    aHeightED;
-    CheckBox        aRelHeightCB;
-    CheckBox        aAutoHeightCB;
-    CheckBox        aFixedRatioCB;
-    PushButton      aRealSizeBT;
+    FixedText*       m_pWidthFT;
+    FixedText*       m_pWidthAutoFT;
+    PercentFieldWrap m_aWidthED;
+    CheckBox*        m_pRelWidthCB;
+    CheckBox*        m_pAutoWidthCB;
+
+    FixedText*       m_pHeightFT;
+    FixedText*       m_pHeightAutoFT;
+    PercentFieldWrap m_aHeightED;
+    CheckBox*        m_pRelHeightCB;
+    CheckBox*        m_pAutoHeightCB;
+
+    CheckBox*        m_pFixedRatioCB;
+    PushButton*      m_pRealSizeBT;
 
     // anchor
-    FixedLine       aTypeSepFL;
-    FixedLine       aTypeFL;
-    RadioButton     aAnchorAtPageRB;
-    RadioButton     aAnchorAtParaRB;
-    RadioButton     aAnchorAtCharRB;
-    RadioButton     aAnchorAsCharRB;
-    RadioButton     aAnchorAtFrameRB;
+    VclContainer*    m_pAnchorFrame;
+    RadioButton*     m_pAnchorAtPageRB;
+    RadioButton*     m_pAnchorAtParaRB;
+    RadioButton*     m_pAnchorAtCharRB;
+    RadioButton*     m_pAnchorAsCharRB;
+    RadioButton*     m_pAnchorAtFrameRB;
 
     // position
-    FixedLine       aPositionFL;
-    FixedText       aHorizontalFT;
-    ListBox         aHorizontalDLB;
-    FixedText       aAtHorzPosFT;
-    MetricField     aAtHorzPosED;
-    FixedText       aHoriRelationFT;
-    ListBox         aHoriRelationLB;
-    CheckBox        aMirrorPagesCB;
-    FixedText       aVerticalFT;
-    ListBox         aVerticalDLB;
-    FixedText       aAtVertPosFT;
-    MetricField     aAtVertPosED;
-    FixedText       aVertRelationFT;
-    ListBox         aVertRelationLB;
-    // OD 02.10.2003 #i18732# - check box for new option 'FollowTextFlow'
-    CheckBox        aFollowTextFlowCB;
+    FixedText*       m_pHorizontalFT;
+    ListBox*         m_pHorizontalDLB;
+    FixedText*       m_pAtHorzPosFT;
+    MetricField*     m_pAtHorzPosED;
+    FixedText*       m_pHoriRelationFT;
+    ListBox*         m_pHoriRelationLB;
+
+    CheckBox*        m_pMirrorPagesCB;
+
+    FixedText*       m_pVerticalFT;
+    ListBox*         m_pVerticalDLB;
+    FixedText*       m_pAtVertPosFT;
+    MetricField*     m_pAtVertPosED;
+    FixedText*       m_pVertRelationFT;
+    ListBox*         m_pVertRelationLB;
+    // #i18732# - check box for new option 'FollowTextFlow'
+    CheckBox*        m_pFollowTextFlowCB;
 
     // example
-    SvxSwFrameExample   aExampleWN;
+    SvxSwFrameExample*  m_pExampleWN;
 
     //'string provider'
     SvxSwFramePosString aFramePosString;
@@ -169,6 +170,9 @@ class SwFrmPage: public SfxTabPage
     short           GetAlignment(FrmMap *pMap, sal_uInt16 nMapPos, ListBox &rAlignLB, ListBox &rRelationLB);
     short           GetRelation(FrmMap *pMap, ListBox &rRelationLB);
     RndStdIds       GetAnchor();
+
+    void setOptimalFrmWidth();
+    void setOptimalRelWidth();
 
     void            EnableGraficMode( void );   // hides auto check boxes and re-org controls for "Real Size" button
 

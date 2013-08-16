@@ -68,11 +68,13 @@ class SVX_DLLPUBLIC SvxSwFrameExample : public Window
 
     void DrawRect_Impl(const Rectangle &rRect, const Color &rFillColor, const Color &rLineColor);
     virtual void Paint(const Rectangle&);
+    virtual Size GetOptimalSize() const;
 protected:
     virtual void DataChanged( const DataChangedEvent& rDCEvt );
 public:
 
     SvxSwFrameExample(Window* pParent, const ResId& rResID);
+    SvxSwFrameExample(Window* pParent, WinBits nStyle);
     ~SvxSwFrameExample();
 
     inline void SetWrap(sal_uInt16 nW)          { nWrap     = nW; }

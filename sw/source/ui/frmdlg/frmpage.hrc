@@ -19,41 +19,6 @@
 
 #include <svtools/controldims.hrc>
 
-#define RB_ANCHOR_PAGE          1
-#define RB_ANCHOR_PARA          2
-#define RB_ANCHOR_AT_CHAR       3
-#define RB_ANCHOR_AS_CHAR       4
-#define RB_ANCHOR_FRAME         5
-#define WN_BSP                  21
-
-
-// SwFrmPage
-#define FL_TYPE                 26
-#define FT_WIDTH                27
-#define ED_WIDTH                28
-#define FT_HEIGHT               29
-#define ED_HEIGHT               30
-#define CB_AUTOHEIGHT           31
-#define FL_SIZE                 32
-#define FT_HORIZONTAL           33
-#define DLB_HORIZONTAL          34
-#define FT_AT_HORZ_POS          35
-#define ED_AT_HORZ_POS          36
-#define FT_HORI_RELATION        1
-#define LB_HORI_RELATION        2
-#define CB_MIRROR               37
-#define FT_VERTICAL             38
-#define DLB_VERTICAL            39
-#define FT_AT_VERT_POS          40
-#define ED_AT_VERT_POS          41
-#define FT_VERT_RELATION        3
-#define LB_VERT_RELATION        4
-#define FL_POSITION             43
-#define BT_REALSIZE             44
-#define CB_AUTOWIDTH            46
-#define FT_WIDTH_AUTO           47
-#define FT_HEIGHT_AUTO          48
-
 // metrics
 #define SWFRMPG_COL_0           RSC_SP_TBPG_INNERBORDER_LEFT
 #define SWFRMPG_COL_1           (SWFRMPG_COL_0+RSC_SP_FLGR_INNERBORDER_LEFT)
