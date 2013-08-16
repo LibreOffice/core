@@ -319,7 +319,7 @@ OConnection::OConnection(ODatabaseSource& _rDB
 
     try
     {
-        m_xQueries = new OQueryContainer(Reference< XNameContainer >(_rDB.getQueryDefinitions(), UNO_QUERY), this, _rxORB, &m_aWarnings);
+        m_xQueries = OQueryContainer::create(Reference< XNameContainer >(_rDB.getQueryDefinitions(), UNO_QUERY), this, _rxORB, &m_aWarnings).get();
 
         sal_Bool bCase = sal_True;
         Reference<XDatabaseMetaData> xMeta;

@@ -62,11 +62,10 @@ namespace dbaccess
     //==========================================================================
     //= OQueryContainer
     //==========================================================================
-    class OContainerListener;
     class OQueryContainer   : public ODefinitionContainer
                             , public OQueryContainer_Base
     {
-    protected:
+    private:
         ::dbtools::IWarningsContainer*  m_pWarnings;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
                                         m_xCommandDefinitions;
@@ -75,8 +74,6 @@ namespace dbaccess
         // possible actions on our "aggregate"
         enum AGGREGATE_ACTION { NONE, INSERTING, FLUSHING };
         AGGREGATE_ACTION        m_eDoingCurrently;
-
-        OContainerListener*     m_pCommandsListener;
 
         /** a class which automatically resets m_eDoingCurrently in it's destructor
         */
@@ -97,7 +94,7 @@ namespace dbaccess
         // helper
         virtual void SAL_CALL disposing();
         virtual ~OQueryContainer();
-    public:
+
         /** ctor of the container. The parent has to support the <type scope="com::sun::star::sdbc">XConnection</type>
             interface.<BR>
 
@@ -110,6 +107,16 @@ namespace dbaccess
                 <p>The caller is responsible for ensuring the lifetime of the object pointed to by this parameter.
         */
         OQueryContainer(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxCommandDefinitions,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB,
+            ::dbtools::IWarningsContainer* _pWarnings
+            );
+
+        void init();
+
+    public:
+        static rtl::Reference<OQueryContainer> create(
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxCommandDefinitions,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn,
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB,
@@ -150,11 +157,10 @@ namespace dbaccess
     // ::com::sun::star::container::XNameAccess
         virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw(::com::sun::star::uno::RuntimeException);
 
-    protected:
+    private:
         // OContentHelper overridables
         virtual OUString determineContentType() const;
 
-    private:
         // helper
         /** create a query object wrapping a CommandDefinition given by name. To retrieve the object, the CommandDescription
             container will be asked for the given name.<BR>

@@ -22,7 +22,6 @@
 #include "dbastrings.hrc"
 #include "query.hxx"
 #include "objectnameapproval.hxx"
-#include "ContainerListener.hxx"
 #include "veto.hxx"
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -75,32 +74,41 @@ OQueryContainer::OQueryContainer(
     ,m_xConnection(_rxConn)
 {
     DBG_CTOR(OQueryContainer, NULL);
+}
 
-    increment(m_refCount);
+void OQueryContainer::init()
+{
+    Reference< XContainer > xContainer( m_xCommandDefinitions, UNO_QUERY_THROW );
+    xContainer->addContainerListener( this );
+
+    Reference< XContainerApproveBroadcaster > xContainerApprove( m_xCommandDefinitions, UNO_QUERY_THROW );
+    xContainerApprove->addContainerApproveListener( this );
+
+    // fill my structures
+    ODefinitionContainer_Impl& rDefinitions( getDefinitions() );
+    Sequence< OUString > sDefinitionNames = m_xCommandDefinitions->getElementNames();
+    const OUString* pDefinitionName = sDefinitionNames.getConstArray();
+    const OUString* pEnd = pDefinitionName + sDefinitionNames.getLength();
+    for ( ; pDefinitionName != pEnd; ++pDefinitionName )
     {
-        m_pCommandsListener = new OContainerListener( *this, m_aMutex );
-        m_pCommandsListener->acquire();
-
-        Reference< XContainer > xContainer( m_xCommandDefinitions, UNO_QUERY_THROW );
-        xContainer->addContainerListener( m_pCommandsListener );
-
-        Reference< XContainerApproveBroadcaster > xContainerApprove( m_xCommandDefinitions, UNO_QUERY_THROW );
-        xContainerApprove->addContainerApproveListener( m_pCommandsListener );
-
-        // fill my structures
-        ODefinitionContainer_Impl& rDefinitions( getDefinitions() );
-        Sequence< OUString > sDefinitionNames = m_xCommandDefinitions->getElementNames();
-        const OUString* pDefinitionName = sDefinitionNames.getConstArray();
-        const OUString* pEnd = pDefinitionName + sDefinitionNames.getLength();
-        for ( ; pDefinitionName != pEnd; ++pDefinitionName )
-        {
-            rDefinitions.insert( *pDefinitionName, TContentPtr() );
-            m_aDocuments.push_back(m_aDocumentMap.insert(Documents::value_type(*pDefinitionName,Documents::mapped_type())).first);
-        }
+        rDefinitions.insert( *pDefinitionName, TContentPtr() );
+        m_aDocuments.push_back(m_aDocumentMap.insert(Documents::value_type(*pDefinitionName,Documents::mapped_type())).first);
     }
-    decrement(m_refCount);
 
-    setElementApproval( PContainerApprove( new ObjectNameApproval( _rxConn, ObjectNameApproval::TypeQuery ) ) );
+    setElementApproval( PContainerApprove( new ObjectNameApproval( m_xConnection, ObjectNameApproval::TypeQuery ) ) );
+}
+
+rtl::Reference<OQueryContainer> OQueryContainer::create(
+                  const Reference< XNameContainer >& _rxCommandDefinitions
+                , const Reference< XConnection >& _rxConn
+                , const Reference< XComponentContext >& _rxORB,
+                ::dbtools::IWarningsContainer* _pWarnings)
+{
+    rtl::Reference<OQueryContainer> c(
+        new OQueryContainer(
+            _rxCommandDefinitions, _rxConn, _rxORB, _pWarnings));
+    c->init();
+    return c;
 }
 
 OQueryContainer::~OQueryContainer()
@@ -122,17 +130,10 @@ void OQueryContainer::disposing()
         // already disposed
         return;
 
-    if ( m_pCommandsListener )
-    {
-        Reference< XContainer > xContainer( m_xCommandDefinitions, UNO_QUERY );
-        xContainer->removeContainerListener( m_pCommandsListener );
-        Reference< XContainerApproveBroadcaster > xContainerApprove( m_xCommandDefinitions, UNO_QUERY );
-        xContainerApprove->removeContainerApproveListener( m_pCommandsListener );
-
-        m_pCommandsListener->dispose();
-        m_pCommandsListener->release();
-        m_pCommandsListener = NULL;
-    }
+    Reference< XContainer > xContainer( m_xCommandDefinitions, UNO_QUERY );
+    xContainer->removeContainerListener( this );
+    Reference< XContainerApproveBroadcaster > xContainerApprove( m_xCommandDefinitions, UNO_QUERY );
+    xContainerApprove->removeContainerApproveListener( this );
 
     m_xCommandDefinitions   = NULL;
     m_xConnection           = NULL;
@@ -345,7 +346,8 @@ Reference< XContent > OQueryContainer::implCreateWrapper(const Reference< XConte
     Reference< XContent > xReturn;
     if ( xContainer .is() )
     {
-        xReturn = new OQueryContainer( xContainer, m_xConnection, m_aContext, m_pWarnings );
+        xReturn = create( xContainer, m_xConnection, m_aContext, m_pWarnings ).
+            get();
     }
     else
     {
