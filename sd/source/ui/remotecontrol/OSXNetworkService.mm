@@ -17,24 +17,24 @@
 
 - (void) publishImpressRemoteServiceOnLocalNetworkWithName:(NSString *)sName
 {
-    netService = [[NSNetService alloc] initWithDomain:@"local" type:@kREG_TYPE name:sName port:1599];
+    netService = [[NSNetService alloc] initWithDomain:@"local" type:"_impressremote._tcp" name:sName port:1599];
 
-  if (netService != nil) 
+  if (netService != nil)
   {
             [netService setDelegate:self];
             [netService scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
             [netService publish];
-  } 
+  }
 }
 
--(void)netService:(NSNetService *)aNetService 
+-(void)netService:(NSNetService *)aNetService
     didNotPublish:(NSDictionary *)dict {
     NSLog(@"Service %p did not publish: %@", aNetService, dict);
 }
 
 - (void)dealloc {
     [netService stop];
-    [netService release]; 
+    [netService release];
     [super dealloc];
 }
 
