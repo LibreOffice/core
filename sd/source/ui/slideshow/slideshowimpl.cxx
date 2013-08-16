@@ -1148,7 +1148,7 @@ bool SlideshowImpl::startShowImpl( const Sequence< beans::PropertyValue >& aProp
                         beans::PropertyState_DIRECT_VALUE ) );
             }
 
-            BitmapEx pointerSymbolBitmap( SdResId(BMP_WAIT_ICON) );
+            BitmapEx pointerSymbolBitmap( SdResId(BMP_POINTER_ICON) );
             const Reference<rendering::XBitmap> xPointerBitmap(
                 vcl::unotools::xBitmapFromBitmapEx(
                     xSpriteCanvas->getDevice(), pointerSymbolBitmap ) );

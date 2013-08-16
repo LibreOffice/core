@@ -40,6 +40,7 @@
 #define BMP_FOIL_NONE                       RID_APP_START+120
 #define BMP_GROUP                           RID_APP_START+121
 #define BMP_WAIT_ICON                       RID_APP_START+124
+#define BMP_POINTER_ICON                    RID_APP_START+126
 
 // additional effects
 

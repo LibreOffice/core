@@ -48,6 +48,7 @@
 #pragma mark - helper
 - (void) startSearching
 {
+    [self.serviceBrowser stop];
     [self.comManager.autoDiscoveryServers removeAllObjects];
     [self.serviceBrowser searchForServicesOfType:@"_impressremote._tcp" inDomain:@"local"];
     [self.serviceBrowser scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
@@ -56,7 +57,9 @@
 - (void) setSearchStateText:(NSString *)searchStateText
 {
     _searchStateText = searchStateText;
+    // This doesn't work well on iOS7, might be a bug. The text will get duplicated, it seems that the older section header view was not removed
     [self.serverTable reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
+//    [self.serverTable reloadData];
 }
 
 - (void) setStyle:(UITableViewCellSelectionStyle)style
@@ -122,16 +125,16 @@
     [self.searchLabelTimer invalidate];
     [self.searchTimeoutTimer invalidate];
     self.searchLabelTimer = [NSTimer scheduledTimerWithTimeInterval:1.0
-                                                           target:self
-                                                         selector:@selector(updateSearchLabel)
-                                                         userInfo:nil
-                                                          repeats:YES];
+                                                             target:self
+                                                           selector:@selector(updateSearchLabel)
+                                                           userInfo:nil
+                                                            repeats:YES];
     
     self.searchTimeoutTimer = [NSTimer scheduledTimerWithTimeInterval:5.0
-                                                                   target:self
-                                                                 selector:@selector(handleSearchTimeout)
-                                                                 userInfo:nil
-                                                                  repeats:NO];
+                                                               target:self
+                                                             selector:@selector(handleSearchTimeout)
+                                                             userInfo:nil
+                                                              repeats:NO];
     
     [[NSRunLoop currentRunLoop] addTimer:self.searchLabelTimer forMode:NSRunLoopCommonModes];
     self.style = UITableViewCellSelectionStyleNone;
@@ -156,7 +159,7 @@
            didFindService:(NSNetService *)aNetService
                moreComing:(BOOL)moreComing
 {
-    [self.comManager.autoDiscoveryServers removeObject:aNetService];
+//    [self.comManager.autoDiscoveryServers removeObject:aNetService];
     [self.comManager.autoDiscoveryServers addObject:aNetService];
     
     NSLog(@"Got service %p with hostname %@\n", aNetService,
@@ -166,8 +169,8 @@
     
     if(!moreComing)
     {
-        [self.tableView reloadData];
-        [self.serviceBrowser stop];
+//        [self.tableView reloadData];
+        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
         [self.searchTimeoutTimer invalidate];
         [self.searchLabelTimer invalidate];
     }
@@ -182,11 +185,9 @@
     
     if(!moreComing)
     {
-        [self.tableView reloadData];
-        if ([self.comManager.autoDiscoveryServers count] == 0) {
-            UITableViewCell * cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
-            [(UIActivityIndicatorView *)[cell viewWithTag:5] startAnimating];
-        }
+//        [self.tableView reloadData];
+        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
+        [self startSearching];
     }
 }
 
@@ -216,7 +217,7 @@
     [super viewDidLoad];
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
- 
+    
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
@@ -254,7 +255,8 @@
                                                                                        }];
     NSLog(@"Clear auto discovered servers");
     [self.comManager.autoDiscoveryServers removeAllObjects];
-    [self.serverTable reloadData];
+//    [self.serverTable reloadData];
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
     self.serviceBrowser = [[NSNetServiceBrowser alloc] init];
     [self.serviceBrowser setDelegate:self];
     [self startSearching];
@@ -327,7 +329,7 @@
     UIActivityIndicatorView *activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     [activityView startAnimating];
     [cell setAccessoryView:activityView];
-
+    
     if (indexPath.section == 1){
         NSLog(@"Connecting to %@:%@", [[self.comManager.servers objectAtIndex:indexPath.row] serverName], [[self.comManager.servers objectAtIndex:indexPath.row] serverAddress]);
         [self.comManager connectToServer:[self.comManager.servers objectAtIndex:indexPath.row]];
@@ -380,10 +382,24 @@
         sectionFooter.textColor = kTintColor;
         sectionFooter.text = NSLocalizedString(@"Customize server config instruction", @"Displayed when no customized server is available");
         
-        UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.bounds.size.width, [self tableView:tableView heightForHeaderInSection:section])];
+        UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.bounds.size.width, [self tableView:tableView heightForFooterInSection:section])];
         [view addSubview:sectionFooter];
         return view;
     }
+//    
+//    if ([self.comManager.autoDiscoveryServers count] == 0 && section == 0) {
+//        UILabel *sectionFooter = [[UILabel alloc] initWithFrame:CGRectMake(20, 10, tableView.frame.size.width - 50, 60)];
+//        [sectionFooter setLineBreakMode:NSLineBreakByWordWrapping];
+//        [sectionFooter setNumberOfLines:5];
+//        sectionFooter.backgroundColor = [UIColor clearColor];
+//        sectionFooter.font = kAppSmallTextFont;
+//        sectionFooter.textColor = kTintColor;
+//        sectionFooter.text = NSLocalizedString(@"Don't have a working WiFi around you? Consider create your own hotspot with your phone or your computer", @"Displayed when no customized server is available");
+//        
+//        UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.bounds.size.width, [self tableView:tableView heightForFooterInSection:section])];
+//        [view addSubview:sectionFooter];
+//        return view;
+//    }
     return nil;
 }
 
@@ -391,6 +407,11 @@
 {
     return 50.0;
 }
+
+//- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+//{
+////    return 50.0;
+//}
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {

@@ -159,6 +159,13 @@
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
+    static int count = 0;
+    if (count < 2){
+        ++count;
+        return;
+    }
+    count = 0;
+    
     UITouch *touch = [[event allTouches] anyObject];
     CGPoint loc = [touch locationInView:self.currentSlideImageView];
     if (loc.x >= 0 && loc.x <= self.currentSlideImageView.frame.size.width

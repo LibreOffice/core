@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="3084" systemVersion="12E55" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" initialViewController="XiK-Ye-iB8">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="4488.1" systemVersion="12E55" targetRuntime="iOS.CocoaTouch.iPad" variant="6xAndEarlier" propertyAccessControl="none" promptedForUpgradeToXcode5="NO" initialViewController="XiK-Ye-iB8">
     <dependencies>
         <development version="4600" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="2083"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3715.3"/>
     </dependencies>
     <scenes>
         <!--Server list vc ipad - 连接-->
@@ -54,7 +54,7 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
-                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="blackOpaque"/>
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
                     <connections>
                         <outlet property="serverTable" destination="0vt-Sx-o55" id="Szp-pH-0rk"/>
                         <segue destination="m26-i1-eiL" kind="push" identifier="pinValidation" id="yUv-cB-P15"/>
@@ -95,7 +95,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="V5z-WP-qrM"/>
-                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="blackOpaque"/>
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
                     <connections>
                         <outlet property="pinLabel" destination="Bp1-Dv-nt4" id="6xd-P5-J5U"/>
                         <outlet property="statusLabel" destination="VVO-s2-eCV" id="Uhy-iy-HAW"/>
@@ -150,7 +150,7 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
-                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="blackOpaque"/>
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JK3-FB-UoN" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -223,7 +223,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="4ju-ge-QPw"/>
-                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="blackOpaque"/>
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
                     <connections>
                         <outlet property="optionsTable" destination="Pc5-8o-PrW" id="18R-Zo-CBq"/>
                         <outlet property="titleLabel" destination="JEW-I6-sw5" id="1AH-TC-z10"/>
@@ -502,7 +502,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="tG3-aQ-qyu"/>
-                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="blackOpaque"/>
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="EJg-kN-O5N" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

@@ -326,6 +326,11 @@ Bitmap BMP_PRESOBJ_TABLE
     File = "table.bmp" ;
 };
 
+Bitmap BMP_POINTER_ICON
+{
+    File = "pointericon.bmp";
+};
+
 Bitmap BMP_WAIT_ICON
 {
     File = "waiticon.bmp";
