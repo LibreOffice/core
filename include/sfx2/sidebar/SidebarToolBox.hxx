@@ -53,13 +53,6 @@ public:
 
     virtual void Paint (const Rectangle& rRect);
 
-    virtual Point GetPosPixel (void) const;
-    virtual void setPosSizePixel (
-        long nX,
-        long nY,
-        long nWidth,
-        long nHeight,
-        sal_uInt16 nFlags);
     virtual long Notify (NotifyEvent& rEvent);
 
     cssu::Reference<css::frame::XToolbarController> GetControllerForItemId (
@@ -73,7 +66,6 @@ public:
         const ::rtl::OUString& rsCommandName);
 
 private:
-    bool mbParentIsBorder;
     Image maItemSeparator;
     class ItemDescriptor
     {

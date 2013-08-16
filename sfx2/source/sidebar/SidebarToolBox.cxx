@@ -41,7 +41,6 @@ namespace sfx2 { namespace sidebar {
 
 SidebarToolBox::SidebarToolBox (Window* pParentWindow)
     : ToolBox(pParentWindow, 0),
-      mbParentIsBorder(false),
       maItemSeparator(Theme::GetImage(Theme::Image_ToolBoxItemSeparator)),
       maControllers(),
       mbAreHandlersRegistered(false)
@@ -115,53 +114,6 @@ void SidebarToolBox::Paint (const Rectangle& rRect)
             nLastRight = aItemBoundingBox.Right();
         }
     }
-}
-
-
-
-
-Point SidebarToolBox::GetPosPixel (void) const
-{
-    if (mbParentIsBorder)
-    {
-        const Point aParentPoint (GetParent()->GetPosPixel());
-        const Point aChildPoint (ToolBox::GetPosPixel());
-        return Point(
-            aParentPoint.X() + aChildPoint.X(),
-            aParentPoint.Y() + aChildPoint.Y());
-    }
-    else
-        return ToolBox::GetPosPixel();
-}
-
-
-
-
-void SidebarToolBox::setPosSizePixel (
-    long nX,
-    long nY,
-    long nWidth,
-    long nHeight,
-    sal_uInt16 nFlags)
-{
-    if (mbParentIsBorder)
-    {
-        const Point aRelativePosition (static_cast<ToolBoxBackground*>(GetParent())->SetToolBoxChild(
-                this,
-                nX,
-                nY,
-                nWidth,
-                nHeight,
-                nFlags));
-        ToolBox::setPosSizePixel(
-            aRelativePosition.X(),
-            aRelativePosition.Y(),
-            nWidth,
-            nHeight,
-            nFlags);
-    }
-    else
-        ToolBox::setPosSizePixel(nX, nY, nWidth, nHeight, nFlags);
 }
 
 
