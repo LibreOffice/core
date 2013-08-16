@@ -6565,17 +6565,24 @@ void ScInterpreter::CalculateLookup(bool HLookup)
                     }
                     else
                     {
-                        for (SCSIZE i = 0; i < nMatCount; i++)
+                        if (HLookup)
                         {
-                            if (HLookup ? pMat->IsString(i, 0) : pMat->IsString(0, i))
+                            for (SCSIZE i = 0; i < nMatCount; i++)
                             {
-                                if ( ScGlobal::GetpTransliteration()->isEqual(
-                                    HLookup ? pMat->GetString(i,0) : pMat->GetString(0,i), rParamStr))
+                                if (pMat->IsString(i, 0))
                                 {
-                                    nDelta = i;
-                                    i = nMatCount + 1;
+                                    if ( ScGlobal::GetpTransliteration()->isEqual(
+                                        pMat->GetString(i,0), rParamStr))
+                                    {
+                                        nDelta = i;
+                                        i = nMatCount + 1;
+                                    }
                                 }
                             }
+                        }
+                        else
+                        {
+                            nDelta = pMat->MatchStringInColumns(rParamStr, 0, 0);
                         }
                     }
                 }
@@ -6597,16 +6604,23 @@ void ScInterpreter::CalculateLookup(bool HLookup)
                     }
                     else
                     {
-                        for (SCSIZE i = 0; i < nMatCount; i++)
+                        if (HLookup)
                         {
-                            if (!(HLookup ? pMat->IsString(i, 0) : pMat->IsString(0, i)))
+                            for (SCSIZE i = 0; i < nMatCount; i++)
                             {
-                                if ((HLookup ? pMat->GetDouble(i,0) : pMat->GetDouble(0,i)) == rItem.mfVal)
+                                if (! pMat->IsString(i, 0) )
                                 {
-                                    nDelta = i;
-                                    i = nMatCount + 1;
+                                    if ( pMat->GetDouble(i,0) == rItem.mfVal)
+                                    {
+                                        nDelta = i;
+                                        i = nMatCount + 1;
+                                    }
                                 }
                             }
+                        }
+                        else
+                        {
+                            nDelta = pMat->MatchDoubleInColumns(rItem.mfVal, 0, 0);
                         }
                     }
                 }
