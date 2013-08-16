@@ -522,6 +522,25 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
     Reference< XShape > xShape = mrDrawing.createAndInsertXShape( maService, rxShapes, aShapeRect );
     convertShapeProperties( xShape );
 
+    // Handle left/right/top/bottom wrap distance.
+    const GraphicHelper& rGraphicHelper = mrDrawing.getFilter().getGraphicHelper();
+    sal_Int32 nWrapDistanceLeft = 0;
+    if (!maTypeModel.maWrapDistanceLeft.isEmpty())
+        nWrapDistanceLeft = ConversionHelper::decodeMeasureToHmm(rGraphicHelper, maTypeModel.maWrapDistanceLeft, 0, true, true);
+    PropertySet(xShape).setAnyProperty(PROP_LeftMargin, uno::makeAny(nWrapDistanceLeft));
+    sal_Int32 nWrapDistanceRight = 0;
+    if (!maTypeModel.maWrapDistanceRight.isEmpty())
+        nWrapDistanceRight = ConversionHelper::decodeMeasureToHmm(rGraphicHelper, maTypeModel.maWrapDistanceRight, 0, true, true);
+    PropertySet(xShape).setAnyProperty(PROP_RightMargin, uno::makeAny(nWrapDistanceRight));
+    sal_Int32 nWrapDistanceTop = 0;
+    if (!maTypeModel.maWrapDistanceTop.isEmpty())
+        nWrapDistanceTop = ConversionHelper::decodeMeasureToHmm(rGraphicHelper, maTypeModel.maWrapDistanceTop, 0, false, true);
+    PropertySet(xShape).setAnyProperty(PROP_TopMargin, uno::makeAny(nWrapDistanceTop));
+    sal_Int32 nWrapDistanceBottom = 0;
+    if (!maTypeModel.maWrapDistanceBottom.isEmpty())
+        nWrapDistanceBottom = ConversionHelper::decodeMeasureToHmm(rGraphicHelper, maTypeModel.maWrapDistanceBottom, 0, false, true);
+    PropertySet(xShape).setAnyProperty(PROP_BottomMargin, uno::makeAny(nWrapDistanceBottom));
+
     if ( maService.equalsAscii( "com.sun.star.text.TextFrame" ) )
     {
         PropertySet( xShape ).setAnyProperty( PROP_FrameIsAutomaticHeight, makeAny( maTypeModel.mbAutoHeight ) );

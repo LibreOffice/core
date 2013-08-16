@@ -418,6 +418,10 @@ void ShapeTypeContext::setStyle( const OUString& rStyle )
                 mrTypeModel.mbVisible = !aValue.equalsAscii( "hidden" );
             else if( aName == "mso-wrap-style" ) mrTypeModel.maWrapStyle = aValue;
             else if ( aName == "v-text-anchor" ) mrTypeModel.maVTextAnchor = aValue;
+            else if ( aName == "mso-wrap-distance-left" ) mrTypeModel.maWrapDistanceLeft = aValue;
+            else if ( aName == "mso-wrap-distance-right" ) mrTypeModel.maWrapDistanceRight = aValue;
+            else if ( aName == "mso-wrap-distance-top" ) mrTypeModel.maWrapDistanceTop = aValue;
+            else if ( aName == "mso-wrap-distance-bottom" ) mrTypeModel.maWrapDistanceBottom = aValue;
         }
     }
 }

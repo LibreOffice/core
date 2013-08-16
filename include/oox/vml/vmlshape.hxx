@@ -97,6 +97,10 @@ struct OOX_DLLPUBLIC ShapeTypeModel
     OptValue< ::rtl::OUString > moWrapType;     ///< How to wrap the text around the object
     OptValue< ::rtl::OUString > moWrapSide;     ///< On which side to wrap the text around the object
     OUString maVTextAnchor; ///< How the text inside the shape is anchored vertically.
+    OUString maWrapDistanceLeft;         ///< Distance from the left side of the shape to the text that wraps around it.
+    OUString maWrapDistanceRight;        ///< Distance from the right side of the shape to the text that wraps around it.
+    OUString maWrapDistanceTop;          ///< Distance from the top of the shape to the text that wraps around it.
+    OUString maWrapDistanceBottom;       ///< Distance from the bottom of the shape to the text that wraps around it.
 
     explicit            ShapeTypeModel();
 
