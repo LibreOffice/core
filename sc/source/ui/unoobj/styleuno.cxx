@@ -398,12 +398,12 @@ SC_SIMPLE_SERVICE_INFO( ScStyleFamilyObj, "ScStyleFamilyObj", "com.sun.star.styl
 
 //------------------------------------------------------------------------
 
-static sal_Bool lcl_AnyTabProtected( ScDocument& rDoc )
+static bool lcl_AnyTabProtected( ScDocument& rDoc )
 {
     SCTAB nTabCount = rDoc.GetTableCount();
     for (SCTAB i=0; i<nTabCount; i++)
         if (rDoc.IsTabProtected(i))
-            return sal_True;
+            return true;
     return false;
 }
 
@@ -664,7 +664,7 @@ void SAL_CALL ScStyleFamilyObj::insertByName( const OUString& aName, const uno::
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    sal_Bool bDone = false;
+    bool bDone = false;
     //  Reflection muss nicht uno::XInterface sein, kann auch irgendein Interface sein...
     uno::Reference< uno::XInterface > xInterface(aElement, uno::UNO_QUERY);
     if ( xInterface.is() )
@@ -691,7 +691,7 @@ void SAL_CALL ScStyleFamilyObj::insertByName( const OUString& aName, const uno::
                 pStyleObj->InitDoc( pDocShell, aNameStr );  // Objekt kann benutzt werden
 
                 pDocShell->SetDocumentModified();   // verwendet wird der neue Style noch nicht
-                bDone = sal_True;
+                bDone = true;
             }
             else
                 throw container::ElementExistException();
@@ -720,7 +720,7 @@ void SAL_CALL ScStyleFamilyObj::removeByName( const OUString& aName )
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    sal_Bool bFound = false;
+    bool bFound = false;
     if ( pDocShell )
     {
         String aString(ScStyleNameConversion::ProgrammaticToDisplayName( aName, sal::static_int_cast<sal_uInt16>(eFamily) ));
@@ -734,7 +734,7 @@ void SAL_CALL ScStyleFamilyObj::removeByName( const OUString& aName )
         SfxStyleSheetBase* pStyle = pStylePool->Find( aString, eFamily );
         if (pStyle)
         {
-            bFound = sal_True;
+            bFound = true;
             if ( eFamily == SFX_STYLE_FAMILY_PARA )
             {
                 // wie ScViewFunc::RemoveStyleSheetInUse
@@ -1539,7 +1539,7 @@ void ScStyleObj::SetOnePropertyValue( const OUString& rPropertyName, const SfxIt
             throw uno::RuntimeException();
 
         SfxItemSet& rSet = pStyle->GetItemSet();    // direkt im lebenden Style aendern...
-        sal_Bool bDone = false;
+        bool bDone = false;
         if ( eFamily == SFX_STYLE_FAMILY_PAGE )
         {
             if(pEntry->nWID == SC_WID_UNO_HEADERSET)
@@ -1553,7 +1553,7 @@ void ScStyleObj::SetOnePropertyValue( const OUString& rPropertyName, const SfxIt
                     else
                         aNewHeader.GetItemSet().ClearItem( pHeaderEntry->nWID );
                     rSet.Put( aNewHeader );
-                    bDone = sal_True;
+                    bDone = true;
                 }
             }
             else if(pEntry->nWID == SC_WID_UNO_FOOTERSET)
@@ -1567,7 +1567,7 @@ void ScStyleObj::SetOnePropertyValue( const OUString& rPropertyName, const SfxIt
                     else
                         aNewFooter.GetItemSet().ClearItem( pFooterEntry->nWID );
                     rSet.Put( aNewFooter );
-                    bDone = sal_True;
+                    bDone = true;
                 }
             }
         }
@@ -1687,13 +1687,13 @@ void ScStyleObj::SetOnePropertyValue( const OUString& rPropertyName, const SfxIt
                             case ATTR_PAGE_PAPERBIN:
                                 {
                                     sal_uInt8 nTray = PAPERBIN_PRINTER_SETTINGS;
-                                    sal_Bool bFound = false;
+                                    bool bFound = false;
 
                                     OUString aName;
                                     if ( *pValue >>= aName )
                                     {
                                         if ( aName == SC_PAPERBIN_DEFAULTNAME )
-                                            bFound = sal_True;
+                                            bFound = true;
                                         else
                                         {
                                             Printer* pPrinter = pDocShell->GetPrinter();
@@ -1704,7 +1704,7 @@ void ScStyleObj::SetOnePropertyValue( const OUString& rPropertyName, const SfxIt
                                                     if ( aName == pPrinter->GetPaperBinName(i) )
                                                     {
                                                         nTray = (sal_uInt8) i;
-                                                        bFound = sal_True;
+                                                        bFound = true;
                                                         break;
                                                     }
                                             }
@@ -1986,7 +1986,7 @@ OUString SAL_CALL ScStyleObj::getImplementationName() throw(uno::RuntimeExceptio
 sal_Bool SAL_CALL ScStyleObj::supportsService( const OUString& rServiceName )
                                                     throw(uno::RuntimeException)
 {
-    sal_Bool bPage = ( eFamily == SFX_STYLE_FAMILY_PAGE );
+    bool bPage = ( eFamily == SFX_STYLE_FAMILY_PAGE );
     return rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SCSTYLE_SERVICE ) )||
            rServiceName.equalsAsciiL(
             RTL_CONSTASCII_STRINGPARAM ( bPage ? SCPAGESTYLE_SERVICE : SCCELLSTYLE_SERVICE ));
@@ -1995,7 +1995,7 @@ sal_Bool SAL_CALL ScStyleObj::supportsService( const OUString& rServiceName )
 uno::Sequence<OUString> SAL_CALL ScStyleObj::getSupportedServiceNames()
                                                     throw(uno::RuntimeException)
 {
-    sal_Bool bPage = ( eFamily == SFX_STYLE_FAMILY_PAGE );
+    bool bPage = ( eFamily == SFX_STYLE_FAMILY_PAGE );
     uno::Sequence<OUString> aRet(2);
     OUString* pArray = aRet.getArray();
     pArray[0] = OUString(SCSTYLE_SERVICE );

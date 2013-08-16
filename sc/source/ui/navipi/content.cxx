@@ -348,7 +348,7 @@ void ScContentTree::MouseButtonDown( const MouseEvent& rMEvt )
 
 void ScContentTree::KeyInput( const KeyEvent& rKEvt )
 {
-    sal_Bool bUsed = false;
+    bool bUsed = false;
 
     const KeyCode aCode = rKEvt.GetKeyCode();
     if (aCode.GetCode() == KEY_RETURN)
@@ -357,7 +357,7 @@ void ScContentTree::KeyInput( const KeyEvent& rKEvt )
         {
             case KEY_MOD1:
                 ToggleRoot();       // toggle root mode (as in Writer)
-                bUsed = sal_True;
+                bUsed = true;
                 break;
             case 0:
             {
@@ -379,7 +379,7 @@ void ScContentTree::KeyInput( const KeyEvent& rKEvt )
                         ContentDoubleClickHdl(0);      // select content as if double clicked
                 }
 
-                bUsed = sal_True;
+                bUsed = true;
             }
             break;
         }
@@ -411,7 +411,7 @@ void ScContentTree::DragFinished( sal_Int8 /* nAction */ )
 
 void ScContentTree::Command( const CommandEvent& rCEvt )
 {
-    sal_Bool bDone = false;
+    bool bDone = false;
 
     switch ( rCEvt.GetCommand() )
     {
@@ -423,7 +423,7 @@ void ScContentTree::Command( const CommandEvent& rCEvt )
 
             Application::PostUserEvent( STATIC_LINK( this, ScContentTree, ExecDragHdl ) );
 
-            bDone = sal_True;
+            bDone = true;
             break;
 
         case COMMAND_CONTEXTMENU:
@@ -1035,8 +1035,8 @@ static void lcl_DoDragObject( ScDocShell* pSrcShell, const String& rName, sal_uI
     ScDrawLayer* pModel = pSrcDoc->GetDrawLayer();
     if (pModel)
     {
-        sal_Bool bOle = ( nType == SC_CONTENT_OLEOBJECT );
-        sal_Bool bGraf = ( nType == SC_CONTENT_GRAPHIC );
+        bool bOle = ( nType == SC_CONTENT_OLEOBJECT );
+        bool bGraf = ( nType == SC_CONTENT_GRAPHIC );
         sal_uInt16 nDrawId = sal::static_int_cast<sal_uInt16>( bOle ? OBJ_OLE2 : ( bGraf ? OBJ_GRAF : OBJ_GRUP ) );
         SCTAB nTab = 0;
         SdrObject* pObject = pModel->GetNamedObject( rName, nDrawId, nTab );
@@ -1136,7 +1136,7 @@ void ScContentTree::DoDrag()
             }
         }
 
-        sal_Bool bDoLinkTrans = false;      // use ScLinkTransferObj
+        bool bDoLinkTrans = false;      // use ScLinkTransferObj
         String aLinkURL;                // for ScLinkTransferObj
         String aLinkText;
 
@@ -1159,7 +1159,7 @@ void ScContentTree::DoDrag()
                         aLinkURL = aUrl;
                         aLinkText = aText;
                     }
-                    bDoLinkTrans = sal_True;
+                    bDoLinkTrans = true;
                 }
                 break;
             case SC_DROPMODE_LINK:
@@ -1172,12 +1172,12 @@ void ScContentTree::DoDrag()
                         {
                             case SC_CONTENT_TABLE:
                                 pScMod->SetDragLink( aDocName, aText, EMPTY_STRING );
-                                bDoLinkTrans = sal_True;
+                                bDoLinkTrans = true;
                                 break;
                             case SC_CONTENT_RANGENAME:
                             case SC_CONTENT_DBAREA:
                                 pScMod->SetDragLink( aDocName, EMPTY_STRING, aText );
-                                bDoLinkTrans = sal_True;
+                                bDoLinkTrans = true;
                                 break;
 
                             // other types cannot be linked
@@ -1397,7 +1397,7 @@ void ScContentTree::SelectDoc(const String& rName)      // rName wie im Menue/Li
     if ( rName.Copy( nNotActiveStart ) == pParentWindow->aStrNotActive )
         aRealName = rName.Copy( 0, nNotActiveStart );
 
-    sal_Bool bLoaded = false;
+    bool bLoaded = false;
 
         // ist es ein normal geladenes Doc ?
 
@@ -1406,7 +1406,7 @@ void ScContentTree::SelectDoc(const String& rName)      // rName wie im Menue/Li
     {
         if ( pSh->ISA(ScDocShell) )
             if ( pSh->GetTitle() == aRealName )
-                bLoaded = sal_True;
+                bLoaded = true;
         pSh = SfxObjectShell::GetNext( *pSh );
     }
 

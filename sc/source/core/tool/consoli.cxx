@@ -267,10 +267,10 @@ void ScConsData::AddFields( ScDocument* pSrcDoc, SCTAB nTab,
             aTitle = pSrcDoc->GetString(nCol, nRow1, nTab);
             if (aTitle.Len())
             {
-                sal_Bool bFound = false;
+                bool bFound = false;
                 for (SCSIZE i=0; i<nColCount && !bFound; i++)
                     if ( *ppColHeaders[i] == aTitle )
-                        bFound = sal_True;
+                        bFound = true;
                 if (!bFound)
                     lcl_AddString( ppColHeaders, nColCount, aTitle );
             }
@@ -284,10 +284,10 @@ void ScConsData::AddFields( ScDocument* pSrcDoc, SCTAB nTab,
             aTitle = pSrcDoc->GetString(nCol1, nRow, nTab);
             if (aTitle.Len())
             {
-                sal_Bool bFound = false;
+                bool bFound = false;
                 for (SCSIZE i=0; i<nRowCount && !bFound; i++)
                     if ( *ppRowHeaders[i] == aTitle )
-                        bFound = sal_True;
+                        bFound = true;
                 if (!bFound)
                     lcl_AddString( ppRowHeaders, nRowCount, aTitle );
             }
@@ -539,12 +539,12 @@ void ScConsData::AddData( ScDocument* pSrcDoc, SCTAB nTab,
             SCCOL nPos = SC_CONS_NOTFOUND;
             if (aTitle.Len())
             {
-                sal_Bool bFound = false;
+                bool bFound = false;
                 for (SCSIZE i=0; i<nColCount && !bFound; i++)
                     if ( *ppColHeaders[i] == aTitle )
                     {
                         nPos = static_cast<SCCOL>(i);
-                        bFound = sal_True;
+                        bFound = true;
                     }
                 OSL_ENSURE(bFound, "column not found");
             }
@@ -560,12 +560,12 @@ void ScConsData::AddData( ScDocument* pSrcDoc, SCTAB nTab,
             SCROW nPos = SC_CONS_NOTFOUND;
             if (aTitle.Len())
             {
-                sal_Bool bFound = false;
+                bool bFound = false;
                 for (SCSIZE i=0; i<nRowCount && !bFound; i++)
                     if ( *ppRowHeaders[i] == aTitle )
                     {
                         nPos = static_cast<SCROW>(i);
-                        bFound = sal_True;
+                        bFound = true;
                     }
                 OSL_ENSURE(bFound, "row not found");
             }
@@ -577,7 +577,7 @@ void ScConsData::AddData( ScDocument* pSrcDoc, SCTAB nTab,
 
     //      Daten
 
-    sal_Bool bAnyCell = ( eFunction == SUBTOTAL_FUNC_CNT2 );
+    bool bAnyCell = ( eFunction == SUBTOTAL_FUNC_CNT2 );
     for (nCol=nCol1; nCol<=nCol2; nCol++)
     {
         SCCOL nArrX = nCol-nCol1;
@@ -794,7 +794,7 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
                     for (SCSIZE nPos=0; nPos<nDataCount; nPos++)
                     {
                         SCSIZE nTPos = ppTitlePos[nArrY][nPos];
-                        sal_Bool bDo = sal_True;
+                        bool bDo = true;
                         if (nPos+1<nDataCount)
                             if (ppTitlePos[nArrY][nPos+1] == nTPos)
                                 bDo = false;                                    // leer
