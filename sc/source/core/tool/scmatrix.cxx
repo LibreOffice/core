@@ -222,6 +222,8 @@ public:
     ScMatrix::IterateResult SumSquare(bool bTextAsZero) const;
     ScMatrix::IterateResult Product(bool bTextAsZero) const;
     size_t Count(bool bCountStrings) const;
+    size_t MatchDoubleInColumns(double fValue, size_t nCol1, size_t nCol2) const;
+    size_t MatchStringInColumns(const OUString& rStr, size_t nCol1, size_t nCol2) const;
 
     double GetMaxValue( bool bTextAsZero ) const;
     double GetMinValue( bool bTextAsZero ) const;
@@ -940,6 +942,108 @@ public:
     }
 };
 
+
+template<typename vType>
+class WalkAndMatchElements : std::unary_function<MatrixImplType::element_block_node_type, void>
+{
+    vType maMatchValue;
+    MatrixImplType::size_pair_type maSize;
+    size_t mnCol1, mnCol2;
+    size_t mnResult, mnIndex;
+
+public:
+    WalkAndMatchElements(vType aMatchValue, const MatrixImplType::size_pair_type& aSize, size_t nCol1, size_t nCol2)
+        : maMatchValue(aMatchValue), maSize(aSize), mnCol1(nCol1), mnCol2(nCol2), mnResult(size_t_MAX), mnIndex(0) {}
+
+    size_t getMatching() const { return mnResult; }
+
+    size_t compare(const MatrixImplType::element_block_node_type& node) const;
+
+    void operator() (const MatrixImplType::element_block_node_type& node)
+    {
+        // early exit if match aleady found
+        if (mnResult != SCSIZE_MAX)
+            return;
+
+        // limit lookup to the requested columns
+        if (mnIndex >= ( mnCol1 * maSize.row ) &&
+            mnIndex <= ( ( mnCol2 + 1 ) * maSize.row ) )
+        {
+            mnResult = compare(node);
+        }
+
+        mnIndex += node.size;
+    }
+};
+
+template<>
+size_t WalkAndMatchElements<double>::compare(const MatrixImplType::element_block_node_type& node) const {
+    size_t nCount = 0;
+    switch (node.type)
+    {
+        case mdds::mtm::element_numeric:
+        {
+            mdds::mtv::numeric_element_block::const_iterator it = mdds::mtv::numeric_element_block::begin(*node.data);
+            mdds::mtv::numeric_element_block::const_iterator itEnd = mdds::mtv::numeric_element_block::end(*node.data);
+            for (; it != itEnd; ++it, nCount++)
+            {
+                if (*it == maMatchValue)
+                {
+                    return mnIndex + nCount;
+                }
+            }
+            break;
+        }
+        case mdds::mtm::element_boolean:
+        {
+            mdds::mtv::boolean_element_block::const_iterator it = mdds::mtv::boolean_element_block::begin(*node.data);
+            mdds::mtv::boolean_element_block::const_iterator itEnd = mdds::mtv::boolean_element_block::end(*node.data);
+            for (; it != itEnd; ++it, nCount++)
+            {
+                if (*it == maMatchValue)
+                {
+                    return mnIndex + nCount;
+                }
+            }
+            break;
+        }
+        break;
+        case mdds::mtm::element_string:
+        case mdds::mtm::element_empty:
+        default:
+            ;
+    }
+    return SCSIZE_MAX;
+}
+
+template<>
+size_t WalkAndMatchElements<OUString>::compare(const MatrixImplType::element_block_node_type& node) const {
+    size_t nCount = 0;
+    switch (node.type)
+    {
+        case mdds::mtm::element_string:
+        {
+            MatrixImplType::string_block_type::const_iterator it = MatrixImplType::string_block_type::begin(*node.data);
+            MatrixImplType::string_block_type::const_iterator itEnd = MatrixImplType::string_block_type::end(*node.data);
+            for (; it != itEnd; ++it, ++nCount)
+            {
+                if (ScGlobal::GetpTransliteration()->isEqual(*it, maMatchValue))
+                {
+                    return mnIndex + nCount;
+                }
+            }
+            break;
+        }
+        case mdds::mtm::element_boolean:
+        case mdds::mtm::element_numeric:
+        case mdds::mtm::element_empty:
+        default:
+            ;
+    }
+    return SCSIZE_MAX;
+}
+
+
 struct MaxOp
 {
     static double init() { return -std::numeric_limits<double>::max(); }
@@ -1172,6 +1276,20 @@ size_t ScMatrixImpl::Count(bool bCountStrings) const
     CountElements aFunc(bCountStrings);
     maMat.walk(aFunc);
     return aFunc.getCount();
+}
+
+size_t ScMatrixImpl::MatchDoubleInColumns(double fValue, size_t nCol1, size_t nCol2) const
+{
+    WalkAndMatchElements<double> aFunc(fValue, maMat.size(), nCol1, nCol2);
+    maMat.walk(aFunc);
+    return aFunc.getMatching();
+}
+
+size_t ScMatrixImpl::MatchStringInColumns(const OUString& rStr, size_t nCol1, size_t nCol2) const
+{
+    WalkAndMatchElements<OUString> aFunc(rStr, maMat.size(), nCol1, nCol2);
+    maMat.walk(aFunc);
+    return aFunc.getMatching();
 }
 
 double ScMatrixImpl::GetMaxValue( bool bTextAsZero ) const
@@ -1568,6 +1686,14 @@ ScMatrix::IterateResult ScMatrix::Product(bool bTextAsZero) const
 size_t ScMatrix::Count(bool bCountStrings) const
 {
     return pImpl->Count(bCountStrings);
+}
+
+size_t ScMatrix::MatchDoubleInColumns(double fValue, size_t nCol1, size_t nCol2) const {
+    return pImpl->MatchDoubleInColumns(fValue, nCol1, nCol2);
+}
+
+size_t ScMatrix::MatchStringInColumns(const OUString& rStr, size_t nCol1, size_t nCol2) const {
+    return pImpl->MatchStringInColumns(rStr, nCol1, nCol2);
 }
 
 double ScMatrix::GetMaxValue( bool bTextAsZero ) const

@@ -334,6 +334,8 @@ public:
     IterateResult SumSquare(bool bTextAsZero) const;
     IterateResult Product(bool bTextAsZero) const;
     size_t Count(bool bCountStrings) const;
+    size_t MatchDoubleInColumns(double fValue, size_t nCol1, size_t nCol2) const;
+    size_t MatchStringInColumns(const OUString& rStr, size_t nCol1, size_t nCol2) const;
 
     double GetMaxValue( bool bTextAsZero ) const;
     double GetMinValue( bool bTextAsZero ) const;
