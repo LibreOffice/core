@@ -650,7 +650,7 @@ void SvxShowCharSet::SelectIndex( int nNewIndex, sal_Bool bFocus )
 void SvxShowCharSet::SelectCharacter( sal_UCS4 cNew, sal_Bool bFocus )
 {
     // get next available char of current font
-    sal_UCS4 cNext = maFontCharMap.GetNextChar( cNew - 1 );
+    sal_UCS4 cNext = maFontCharMap.GetNextChar( (cNew > 0) ? cNew - 1 : cNew );
 
     int nMapIndex = maFontCharMap.GetIndexFromChar( cNext );
     SelectIndex( nMapIndex, bFocus );
