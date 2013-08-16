@@ -86,17 +86,14 @@ extern "C" {
 #ifndef WIN32
 #define WIN32
 #endif
-#ifndef _DEBUG
-#define _DEBUG
+#ifndef NDEBUG
+#define NDEBUG
 #endif
 #ifndef _WINDOWS
 #define _WINDOWS
 #endif
 #ifndef _USRDLL
 #define _USRDLL
-#endif
-#ifndef DEBUG
-#define DEBUG 1
 #endif
 #ifndef NOT_HAVE_SA_LEN
 #define NOT_HAVE_SA_LEN
