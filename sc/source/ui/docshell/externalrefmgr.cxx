@@ -764,21 +764,30 @@ void ScExternalRefCache::setCellRangeData(sal_uInt16 nFileId, const ScRange& rRa
         if (!pTabData.get())
             pTabData.reset(new Table);
 
+        const ScMatrixRef& pMat = itrData->mpRangeData;
         for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
         {
+            const SCSIZE nR = nRow - nRow1;
             for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
             {
-                SCSIZE nC = nCol - nCol1, nR = nRow - nRow1;
-                TokenRef pToken;
-                const ScMatrixRef& pMat = itrData->mpRangeData;
-                if (pMat->IsEmpty(nC, nR))
-                    // Don't cache empty cells.
-                    continue;
+                const SCSIZE nC = nCol - nCol1;
 
-                if (pMat->IsValue(nC, nR))
-                    pToken.reset(new formula::FormulaDoubleToken(pMat->GetDouble(nC, nR)));
-                else if (pMat->IsString(nC, nR))
-                    pToken.reset(new formula::FormulaStringToken(pMat->GetString(nC, nR)));
+                ScMatrixValue value = pMat->Get(nC, nR);
+
+                TokenRef pToken;
+
+                switch (value.nType) {
+                    case SC_MATVAL_VALUE:
+                    case SC_MATVAL_BOOLEAN:
+                        pToken.reset(new formula::FormulaDoubleToken(value.fVal));
+                        break;
+                    case SC_MATVAL_STRING:
+                        pToken.reset(new formula::FormulaStringToken(value.aStr));
+                        break;
+                    default:
+                        // Don't cache empty cells.
+                        break;
+                }
 
                 if (pToken)
                     // Don't mark this cell 'cached' here, for better performance.
