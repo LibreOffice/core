@@ -1101,6 +1101,41 @@ void ScXMLExport::ExportExternalRefCacheStyles()
     }
 }
 
+void ScXMLExport::ExportCellTextAutoStyles(const Reference <sheet::XSpreadsheet>& xTable)
+{
+    Reference<sheet::XCellRangesQuery> xCellRangesQuery (xTable, uno::UNO_QUERY);
+    if (!xCellRangesQuery.is())
+        return;
+
+    Reference<sheet::XSheetCellRanges> xSheetCellRanges(xCellRangesQuery->queryContentCells(sheet::CellFlags::FORMATTED));
+    if (!xSheetCellRanges.is())
+        return;
+
+    uno::Sequence< table::CellRangeAddress > aCellRangeAddresses (xSheetCellRanges->getRangeAddresses());
+    sal_uInt32 nCount(aCellRangeAddresses.getLength());
+    Reference<container::XEnumerationAccess> xCellsAccess(xSheetCellRanges->getCells());
+    if (!xCellsAccess.is())
+        return;
+
+    GetProgressBarHelper()->ChangeReference(GetProgressBarHelper()->GetReference() + nCount);
+    Reference<container::XEnumeration> xCells(xCellsAccess->createEnumeration());
+    if (!xCells.is())
+        return;
+
+    sal_uInt32 nCount2 = 0;
+    while (xCells->hasMoreElements())
+    {
+        Reference<text::XText> xText(xCells->nextElement(), uno::UNO_QUERY);
+        if (xText.is())
+            GetTextParagraphExport()->collectTextAutoStyles(xText, false, false);
+        ++nCount2;
+        IncrementProgressBar(false);
+    }
+
+    if (nCount2 > nCount)
+        GetProgressBarHelper()->SetReference(GetProgressBarHelper()->GetReference() + nCount2 - nCount);
+}
+
 void ScXMLExport::WriteRowContent()
 {
     ScMyRowFormatRange aRange;
@@ -2428,37 +2463,10 @@ void ScXMLExport::_ExportAutoStyles()
                     }
                 }
             }
-            Reference<sheet::XCellRangesQuery> xCellRangesQuery (xTable, uno::UNO_QUERY);
-            if (xCellRangesQuery.is())
-            {
-                Reference<sheet::XSheetCellRanges> xSheetCellRanges(xCellRangesQuery->queryContentCells(sheet::CellFlags::FORMATTED));
-                if (xSheetCellRanges.is())
-                {
-                    uno::Sequence< table::CellRangeAddress > aCellRangeAddresses (xSheetCellRanges->getRangeAddresses());
-                    sal_uInt32 nCount(aCellRangeAddresses.getLength());
-                    Reference<container::XEnumerationAccess> xCellsAccess(xSheetCellRanges->getCells());
-                    if (xCellsAccess.is())
-                    {
-                        GetProgressBarHelper()->ChangeReference(GetProgressBarHelper()->GetReference() + nCount);
-                        Reference<container::XEnumeration> xCells(xCellsAccess->createEnumeration());
-                        if (xCells.is())
-                        {
-                            sal_uInt32 nCount2(0);
-                            while (xCells->hasMoreElements())
-                            {
-                                Reference<text::XText> xText(xCells->nextElement(), uno::UNO_QUERY);
-                                if (xText.is())
-                                    GetTextParagraphExport()->collectTextAutoStyles(xText, false, false);
-                                ++nCount2;
-                                IncrementProgressBar(false);
-                            }
-                            if(nCount2 > nCount)
-                                GetProgressBarHelper()->SetReference(GetProgressBarHelper()->GetReference() + nCount2 - nCount);
-                        }
-                    }
-                }
-            }
+
+            ExportCellTextAutoStyles(xTable);
         }
+
         pChangeTrackingExportHelper->CollectAutoStyles();
 
         GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_TABLE_COLUMN,
