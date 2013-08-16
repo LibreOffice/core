@@ -305,30 +305,7 @@ void SvxRedlinTable::SetCommentParams( const utl::SearchParam* pSearchPara )
 sal_Bool SvxRedlinTable::IsValidEntry(const String* pAuthorStr,
                                   const DateTime *pDateTime,const String* pCommentStr)
 {
-    bool nTheFlag=true;
-    if(bAuthor)
-    {
-        nTheFlag = aAuthor.CompareTo(*pAuthorStr)==COMPARE_EQUAL;
-    }
-    if(bDate && nTheFlag)
-    {
-        if(nDaTiMode!=FLT_DATE_NOTEQUAL)
-        {
-            nTheFlag=pDateTime->IsBetween(aDaTiFilterFirst,aDaTiFilterLast);
-        }
-        else
-        {
-            nTheFlag=!(pDateTime->IsBetween(aDaTiFilterFirst,aDaTiFilterLast));
-        }
-    }
-    if(bComment && nTheFlag)
-    {
-        sal_Int32 nStartPos = 0;
-        sal_Int32 nEndPos = pCommentStr->Len();
-
-        nTheFlag=pCommentSearcher->SearchForward( *pCommentStr, &nStartPos, &nEndPos);
-    }
-    return nTheFlag;
+    return IsValidEntry(pAuthorStr, pDateTime) && IsValidComment(pCommentStr);
 }
 
 sal_Bool SvxRedlinTable::IsValidEntry(const String* pAuthorStr,const DateTime *pDateTime)
