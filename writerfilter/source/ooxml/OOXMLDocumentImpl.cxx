@@ -54,8 +54,17 @@ OOXMLDocumentImpl::~OOXMLDocumentImpl()
 void OOXMLDocumentImpl::resolveFastSubStream(Stream & rStreamHandler,
                                              OOXMLStream::StreamType_t nType)
 {
-    OOXMLStream::Pointer_t pStream
-        (OOXMLDocumentFactory::createStream(mpStream, nType));
+    OOXMLStream::Pointer_t pStream;
+    try
+    {
+        pStream = OOXMLDocumentFactory::createStream(mpStream, nType);
+    }
+    catch (uno::Exception const& e)
+    {
+        SAL_INFO("writerfilter", "resolveFastSubStream: exception while "
+                "resolving stream " << nType << " : " << e.Message);
+        return;
+    }
     OOXMLStream::Pointer_t savedStream = mpStream;
     mpStream = pStream;
 

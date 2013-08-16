@@ -2136,7 +2136,11 @@ SotElement_Impl* OStorage::OpenStreamElement_Impl( const OUString& aStreamName, 
         if ( !( m_pImpl->m_nStorageMode & embed::ElementModes::WRITE )
           || (( nOpenMode & embed::ElementModes::WRITE ) != embed::ElementModes::WRITE )
           || ( nOpenMode & embed::ElementModes::NOCREATE ) == embed::ElementModes::NOCREATE )
-            throw io::IOException( OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() ); // TODO: access_denied
+        {
+            throw io::IOException("Element does not exist and cannot be "
+                    "created: \"" + aStreamName + "\"",
+                    uno::Reference< uno::XInterface >()); // TODO: access_denied
+        }
 
         // create a new StreamElement and insert it into the list
         pElement = m_pImpl->InsertStream( aStreamName, bEncr );
