@@ -100,6 +100,8 @@ sal_Int32 SAL_CALL OStatement::executeUpdate(const OUString& sql)
     MutexGuard aGuard(m_pConnection->getMutex());
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
+    SAL_INFO("connectivity.firebird", "executeUpdate(" << sql << ")");
+
     int aErr = isc_dsql_execute_immediate(m_statusVector,
                                           &m_pConnection->getDBHandle(),
                                           &m_pConnection->getTransaction(),
@@ -123,6 +125,8 @@ uno::Reference< XResultSet > SAL_CALL OStatement::executeQuery(const OUString& s
 {
     MutexGuard aGuard(m_pConnection->getMutex());
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
+
+    SAL_INFO("connectivity.firebird", "executeQuery(" << sql << ")");
 
     ISC_STATUS aErr = 0;
 
