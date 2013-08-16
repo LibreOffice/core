@@ -87,6 +87,7 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/core/extedit \
     svx/source/core/graphichelper \
     svx/source/customshapes/EnhancedCustomShape2d \
+    svx/source/customshapes/EnhancedCustomShapeFunctionParser \
     svx/source/customshapes/EnhancedCustomShapeGeometry \
     svx/source/customshapes/EnhancedCustomShapeTypeNames \
     svx/source/dialog/checklbx \
@@ -435,20 +436,6 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/form/typeconversionclient \
     svx/source/form/typemap \
     svx/source/form/xfm_addcondition \
-))
-endif
-
-# the following source file can't be compiled with optimization by some compilers (crash or endless loop):
-# Solaris Sparc with Sun compiler, gcc on MacOSX and Linux PPC
-# the latter is currently not supported by gbuild and needs a fix here later
-ifeq ($(OS),$(filter-out SOLARIS MACOSX,$(OS)))
-$(eval $(call gb_Library_add_exception_objects,svxcore,\
-    svx/source/customshapes/EnhancedCustomShapeFunctionParser \
-))
-else
-$(eval $(call gb_Library_add_cxxobjects,svxcore,\
-    svx/source/customshapes/EnhancedCustomShapeFunctionParser \
-    , $(gb_COMPILERNOOPTFLAGS) $(gb_LinkTarget_EXCEPTIONFLAGS) \
 ))
 endif
 
