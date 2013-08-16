@@ -302,48 +302,32 @@ void SvxRedlinTable::SetCommentParams( const utl::SearchParam* pSearchPara )
     }
 }
 
-sal_Bool SvxRedlinTable::IsValidEntry(const String* pAuthorStr,
+bool SvxRedlinTable::IsValidEntry(const String* pAuthorStr,
                                   const DateTime *pDateTime,const String* pCommentStr)
 {
     return IsValidEntry(pAuthorStr, pDateTime) && IsValidComment(pCommentStr);
 }
 
-sal_Bool SvxRedlinTable::IsValidEntry(const String* pAuthorStr,const DateTime *pDateTime)
+bool SvxRedlinTable::IsValidEntry(const String* pAuthorStr,const DateTime *pDateTime)
 {
-    sal_Bool nTheFlag=sal_True;
-    if(bAuthor)
-    {
-        if(aAuthor.CompareTo(*pAuthorStr)==COMPARE_EQUAL)
-            nTheFlag=sal_True;
-        else
-            nTheFlag=sal_False;
-    }
-    if(bDate && nTheFlag)
-    {
-        if(nDaTiMode!=FLT_DATE_NOTEQUAL)
-        {
-            nTheFlag=pDateTime->IsBetween(aDaTiFilterFirst,aDaTiFilterLast);
-        }
-        else
-        {
-            nTheFlag=!(pDateTime->IsBetween(aDaTiFilterFirst,aDaTiFilterLast));
-        }
-    }
-    return nTheFlag;
+    if (bAuthor && !aAuthor.CompareTo(*pAuthorStr)==COMPARE_EQUAL)
+        return false;
+
+    if (!bDate)
+        return true;
+
+    const bool bRes = pDateTime->IsBetween(aDaTiFilterFirst, aDaTiFilterLast);
+    return nDaTiMode!=FLT_DATE_NOTEQUAL ? bRes : !bRes;
 }
 
-sal_Bool SvxRedlinTable::IsValidComment(const String* pCommentStr)
+bool SvxRedlinTable::IsValidComment(const String* pCommentStr)
 {
-    bool nTheFlag=true;
+    if (!bComment)
+        return true;
 
-    if(bComment)
-    {
-        sal_Int32 nStartPos = 0;
-        sal_Int32 nEndPos = pCommentStr->Len();
-
-        nTheFlag=pCommentSearcher->SearchForward( *pCommentStr, &nStartPos, &nEndPos);
-    }
-    return nTheFlag;
+    sal_Int32 nStartPos = 0;
+    sal_Int32 nEndPos = pCommentStr->Len();
+    return pCommentSearcher->SearchForward( *pCommentStr, &nStartPos, &nEndPos);
 }
 
 SvTreeListEntry* SvxRedlinTable::InsertEntry(const OUString& rStr,RedlinData *pUserData,
