@@ -41,19 +41,6 @@ DBG_NAMEEX(SfxItemPool)
 #define SFX_ITEM_POOLABLE           0x0001
 #define SFX_ITEM_NOT_POOLABLE       0x0002
 
-#define SFX_ITEM_USERFLAG0          0x0100
-#define SFX_ITEM_USERFLAG1          0x0200
-#define SFX_ITEM_USERFLAG2          0x0400
-#define SFX_ITEM_USERFLAG3          0x0800
-#define SFX_ITEM_USERFLAG4          0x1000
-#define SFX_ITEM_USERFLAG5          0x2000
-#define SFX_ITEM_USERFLAG6          0x4000
-#define SFX_ITEM_USERFLAG7          0x8000
-#define SFX_ITEM_USERFLAG8          0x0010
-#define SFX_ITEM_USERFLAG9          0x0020
-#define SFX_ITEM_USERFLAGA          0x0040
-#define SFX_ITEM_USERFLAGB          0x0080
-
 //====================================================================
 
 struct SfxItemInfo
