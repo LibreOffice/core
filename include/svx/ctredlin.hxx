@@ -97,9 +97,9 @@ private:
     DateTime        aDaTiLast;
     DateTime        aDaTiFilterFirst;
     DateTime        aDaTiFilterLast;
-    String          aAuthor;
+    OUString        aAuthor;
     Color           aEntryColor;
-    String          aCurEntry;
+    OUString        aCurEntry;
     utl::TextSearch* pCommentSearcher;
     Link            aColCompareLink;
 
@@ -123,7 +123,7 @@ public:
     void            SetFirstTime(const Time&);
     void            SetLastTime(const Time&);
     void            SetFilterAuthor(sal_Bool bFlag=sal_True);
-    void            SetAuthor(const String &);
+    void            SetAuthor(const OUString &);
     void            SetFilterComment(sal_Bool bFlag=sal_True);
     void            SetCommentParams( const utl::SearchParam* pSearchPara );
 
@@ -132,9 +132,9 @@ public:
 
     void            SetCalcView(sal_Bool bFlag=sal_True);
 
-    bool            IsValidEntry(const String &rAuthor, const DateTime &rDateTime, const String &rComment);
-    bool            IsValidEntry(const String &rAuthor, const DateTime &rDateTime);
-    bool            IsValidComment(const String &rComment);
+    bool            IsValidEntry(const OUString &rAuthor, const DateTime &rDateTime, const OUString &rComment);
+    bool            IsValidEntry(const OUString &rAuthor, const DateTime &rDateTime);
+    bool            IsValidComment(const OUString &rComment);
 
     SvTreeListEntry*    InsertEntry(const OUString& ,RedlinData *pUserData,
                                 SvTreeListEntry* pParent=NULL,sal_uIntPtr nPos=LIST_APPEND);
@@ -221,17 +221,17 @@ public:
     sal_uInt16          GetDateMode();
 
     void            ClearAuthors();
-    void            InsertAuthor( const String& rString, sal_uInt16 nPos = LISTBOX_APPEND );
-    String          GetSelectedAuthor()const;
+    void            InsertAuthor( const OUString& rString, sal_uInt16 nPos = LISTBOX_APPEND );
+    OUString        GetSelectedAuthor()const;
     void            SelectedAuthorPos(sal_uInt16 nPos);
-    sal_uInt16          SelectAuthor(const String& aString);
-    void            SetComment(const String &rComment);
-    String          GetComment()const;
+    sal_uInt16      SelectAuthor(const OUString& aString);
+    void            SetComment(const OUString& rComment);
+    OUString        GetComment()const;
 
 
     // Methods for Calc {
-    void            SetRange(const String& rString);
-    String          GetRange() const;
+    void            SetRange(const OUString& rString);
+    OUString        GetRange() const;
     void            HideRange(sal_Bool bHide=sal_True);
     void            SetFocusToRange();
     // } Methods for Calc
