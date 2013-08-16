@@ -270,7 +270,6 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/sidebar/TitleBar \
     sfx2/source/sidebar/Theme \
     sfx2/source/sidebar/Tools \
-    sfx2/source/sidebar/ToolBoxBackground \
     sfx2/source/statbar/stbitem \
     sfx2/source/toolbox/imgmgr \
     sfx2/source/toolbox/tbxitem \

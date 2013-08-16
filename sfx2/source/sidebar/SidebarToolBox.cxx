@@ -18,7 +18,6 @@
  */
 
 #include "sfx2/sidebar/SidebarToolBox.hxx"
-#include "ToolBoxBackground.hxx"
 #include "sfx2/sidebar/ControllerFactory.hxx"
 #include "sfx2/sidebar/Theme.hxx"
 #include "sfx2/sidebar/Tools.hxx"
