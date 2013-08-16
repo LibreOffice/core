@@ -240,6 +240,8 @@ build-nocheck: bootstrap fetch $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cro
 cross-toolset: bootstrap fetch
 	$(GNUMAKE) gb_Side=build -j $(PARALLELISM) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild build-tools
 
+ifneq ($(OS),MACOSX)
+
 #
 # Install
 #
@@ -257,6 +259,8 @@ install-strip:
 	echo "" && \
 	echo "Installation finished, you can now execute:" && \
 	echo "$(INSTALLDIR)/program/soffice"
+
+endif # !MACOSX
 
 ifeq ($(ENABLE_MACOSX_SANDBOX),YES)
 entitlements:=--entitlements $(BUILDDIR)/lo.xcent
