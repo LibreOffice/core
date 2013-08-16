@@ -182,11 +182,11 @@ void SwFrmDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
             SvxGradientListItem aGradientListItem(m_pWrtShell->GetDoc()->GetOrCreateDrawModel()->GetGradientList(), SID_GRADIENT_LIST);
             aSet.Put(aGradientListItem);
 
-            XFillStyleItem aFillStyleItem(((const XFillStyleItem&)m_rSet.Get(RES_FILL_STYLE)).GetValue(), SID_ATTR_FILL_STYLE);
+            XFillStyleItem aFillStyleItem(((const XFillStyleItem&)m_rSet.Get(RES_FILL_STYLE)).GetValue(), SID_SW_ATTR_FILL_STYLE);
             aSet.Put(aFillStyleItem);
 
             const XFillGradientItem& rFillGradientItem = (const XFillGradientItem&)m_rSet.Get(RES_FILL_GRADIENT);
-            XFillGradientItem aFillGradientItem(rFillGradientItem.GetName(), rFillGradientItem.GetGradientValue(), SID_ATTR_FILL_GRADIENT);
+            XFillGradientItem aFillGradientItem(rFillGradientItem.GetName(), rFillGradientItem.GetGradientValue(), SID_SW_ATTR_FILL_GRADIENT);
             aSet.Put(aFillGradientItem);
 
             rPage.PageCreated(aSet);

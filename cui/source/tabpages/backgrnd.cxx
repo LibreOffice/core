@@ -807,16 +807,16 @@ sal_Bool SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
                     else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, sal_False ) )
                         rCoreSet.ClearItem( nWhich );
                     // Handle XFILL_GRADIENT -> XFILL_SOLID
-                    XFillStyleItem aFillStyleItem(XFILL_SOLID, GetWhich(SID_ATTR_FILL_STYLE));
+                    XFillStyleItem aFillStyleItem(XFILL_SOLID, GetWhich(SID_SW_ATTR_FILL_STYLE));
                     rCoreSet.Put(aFillStyleItem);
                 }
                 else
                 {
-                    XFillStyleItem aFillStyleItem(((const XFillStyleItem&)m_rXFillSet.Get(XATTR_FILLSTYLE)).GetValue(), GetWhich(SID_ATTR_FILL_STYLE));
+                    XFillStyleItem aFillStyleItem(((const XFillStyleItem&)m_rXFillSet.Get(XATTR_FILLSTYLE)).GetValue(), GetWhich(SID_SW_ATTR_FILL_STYLE));
                     rCoreSet.Put(aFillStyleItem);
 
                     const XFillGradientItem& rFillGradientItem = (const XFillGradientItem&)m_rXFillSet.Get(XATTR_FILLGRADIENT);
-                    XFillGradientItem aFillGradientItem(rFillGradientItem.GetName(), rFillGradientItem.GetGradientValue(), GetWhich(SID_ATTR_FILL_GRADIENT));
+                    XFillGradientItem aFillGradientItem(rFillGradientItem.GetName(), rFillGradientItem.GetGradientValue(), GetWhich(SID_SW_ATTR_FILL_GRADIENT));
                     rCoreSet.Put(aFillGradientItem);
                 }
             }
@@ -871,11 +871,11 @@ sal_Bool SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
                 if (bIsGradient)
                 {
                     // Handle XFILL_BITMAP -> XFILL_GRADIENT
-                    XFillStyleItem aFillStyleItem(((const XFillStyleItem&)m_rXFillSet.Get(XATTR_FILLSTYLE)).GetValue(), GetWhich(SID_ATTR_FILL_STYLE));
+                    XFillStyleItem aFillStyleItem(((const XFillStyleItem&)m_rXFillSet.Get(XATTR_FILLSTYLE)).GetValue(), GetWhich(SID_SW_ATTR_FILL_STYLE));
                     rCoreSet.Put(aFillStyleItem);
 
                     const XFillGradientItem& rFillGradientItem = (const XFillGradientItem&)m_rXFillSet.Get(XATTR_FILLGRADIENT);
-                    XFillGradientItem aFillGradientItem(rFillGradientItem.GetName(), rFillGradientItem.GetGradientValue(), GetWhich(SID_ATTR_FILL_GRADIENT));
+                    XFillGradientItem aFillGradientItem(rFillGradientItem.GetName(), rFillGradientItem.GetGradientValue(), GetWhich(SID_SW_ATTR_FILL_GRADIENT));
                     rCoreSet.Put(aFillGradientItem);
                 }
             }
@@ -1959,9 +1959,9 @@ void SvxBackgroundTabPage::PageCreated (SfxAllItemSet aSet)
         // If we get a gradient list, also read fill and gradient style.
         m_pGradientList = pGradientListItem->GetGradientList();
         m_pLbGradients->Fill(m_pGradientList);
-        const XFillStyleItem& rFillStyleItem = (const XFillStyleItem&)aSet.Get(SID_ATTR_FILL_STYLE);
+        const XFillStyleItem& rFillStyleItem = (const XFillStyleItem&)aSet.Get(SID_SW_ATTR_FILL_STYLE);
         m_rXFillSet.Put(XFillStyleItem(rFillStyleItem.GetValue()));
-        const XFillGradientItem& rFillGradientItem = (const XFillGradientItem&)aSet.Get(SID_ATTR_FILL_GRADIENT);
+        const XFillGradientItem& rFillGradientItem = (const XFillGradientItem&)aSet.Get(SID_SW_ATTR_FILL_GRADIENT);
         m_rXFillSet.Put(XFillGradientItem(rFillGradientItem.GetName(), rFillGradientItem.GetGradientValue()));
     }
     else

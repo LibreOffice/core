@@ -383,8 +383,8 @@ SfxItemInfo aSlotTab[] =
     { 0, 0 },                                           // RES_AUTO_STYLE
     { 0, SFX_ITEM_POOLABLE },                           // RES_FRMATR_STYLE_NAME
     { 0, SFX_ITEM_POOLABLE },                           // RES_FRMATR_CONDITIONAL_STYLE_NAME
-    { SID_ATTR_FILL_STYLE, SFX_ITEM_POOLABLE },                           // RES_FILL_STYLE
-    { SID_ATTR_FILL_GRADIENT, SFX_ITEM_POOLABLE },                           // RES_FILL_GRADIENT
+    { SID_SW_ATTR_FILL_STYLE, SFX_ITEM_POOLABLE },                           // RES_FILL_STYLE
+    { SID_SW_ATTR_FILL_GRADIENT, SFX_ITEM_POOLABLE },                           // RES_FILL_GRADIENT
 
     { 0, SFX_ITEM_POOLABLE },                           // RES_GRFATR_MIRRORGRF
     { SID_ATTR_GRAF_CROP, SFX_ITEM_POOLABLE },          // RES_GRFATR_CROPGRF

@@ -954,6 +954,8 @@
 
 #define FN_SVX_SET_NUMBER                               (SID_SVX_START+1136)
 #define FN_SVX_SET_BULLET                               (SID_SVX_START+1137)
+#define SID_SW_ATTR_FILL_STYLE                          (SID_SVX_START+1138)
+#define SID_SW_ATTR_FILL_GRADIENT                       (SID_SVX_START+1139)
 
 
 // IMPORTANT NOTE: adjust SID_SVX_FIRSTFREE, when adding new slot id
