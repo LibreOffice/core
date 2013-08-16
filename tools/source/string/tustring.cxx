@@ -66,13 +66,6 @@ sal_Int32 UniString::ToInt32() const
     return rtl_ustr_toInt32( mpData->maStr, 10 );
 }
 
-sal_Int64 UniString::ToInt64() const
-{
-    DBG_CHKTHIS( UniString, DbgCheckUniString );
-
-    return rtl_ustr_toInt64( mpData->maStr, 10 );
-}
-
 xub_StrLen STRING::SearchChar( const STRCODE* pChars, xub_StrLen nIndex ) const
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
@@ -648,39 +641,6 @@ xub_StrLen STRING::SearchAndReplace( const STRING& rStr, const STRING& rRepStr,
         Replace( nSPos, rStr.Len(), rRepStr );
 
     return nSPos;
-}
-
-static sal_Int32 ImplStringICompare( const STRCODE* pStr1, const STRCODE* pStr2 )
-{
-    sal_Int32   nRet;
-    STRCODE     c1;
-    STRCODE     c2;
-    do
-    {
-        // Convert char if between 'A' and 'Z'
-        c1 = *pStr1;
-        c2 = *pStr2;
-        if ( (c1 >= 65) && (c1 <= 90) )
-            c1 += 32;
-        if ( (c2 >= 65) && (c2 <= 90) )
-            c2 += 32;
-        nRet = ((sal_Int32)((STRCODEU)c1))-((sal_Int32)((STRCODEU)c2));
-        if ( nRet != 0 )
-            break;
-
-        ++pStr1,
-        ++pStr2;
-    }
-    while ( c2 );
-
-    return nRet;
-}
-
-sal_Bool STRING::EqualsIgnoreCaseAscii( const STRCODE* pCharStr ) const
-{
-    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
-
-    return (ImplStringICompare( mpData->maStr, pCharStr ) == 0);
 }
 
 STRING& STRING::Assign( const STRCODE* pCharStr )

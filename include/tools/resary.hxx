@@ -22,7 +22,6 @@
 #include "boost/noncopyable.hpp"
 #include <vector>
 #include "tools/toolsdllapi.h"
-#include <tools/string.hxx>
 #include <tools/resid.hxx>
 
 #define RESARRAY_INDEX_NOTFOUND (0xffffffff)

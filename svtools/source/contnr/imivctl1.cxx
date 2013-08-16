@@ -80,7 +80,7 @@ public:
                         SvtIconChoiceCtrl* pParent,
                         const Point& rPos,
                         const Size& rSize,
-                        const XubString& rData,
+                        const OUString& rData,
                         const Link& rNotifyEditEnd );
 
                     ~IcnViewEdit_Impl();
@@ -3319,7 +3319,7 @@ void SvxIconChoiceCtrl_Impl::SelectAll( sal_Bool bSelect, sal_Bool bPaint )
 }
 
 IcnViewEdit_Impl::IcnViewEdit_Impl( SvtIconChoiceCtrl* pParent, const Point& rPos,
-    const Size& rSize, const XubString& rData, const Link& rNotifyEditEnd ) :
+    const Size& rSize, const OUString& rData, const Link& rNotifyEditEnd ) :
     MultiLineEdit( pParent, (pParent->GetStyle() & WB_ICON) ? WB_CENTER : WB_LEFT),
     aCallBackHdl( rNotifyEditEnd ),
     bCanceled( sal_False ),

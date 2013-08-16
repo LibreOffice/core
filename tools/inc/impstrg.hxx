@@ -20,7 +20,6 @@
 #define _IMPSTRG_HXX
 
 #include <tools/tools.h>
-#include <tools/string.hxx>
 
 // Debug methode for Strings
 

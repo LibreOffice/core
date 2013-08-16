@@ -144,12 +144,12 @@ public:
 class ScaResStringLoader : public Resource
 {
 private:
-    String                      aStr;
+    OUString                    aStr;
 
 public:
     inline                      ScaResStringLoader( sal_uInt16 nResId, sal_uInt16 nStrId, ResMgr& rResMgr );
 
-    inline const String&        GetString() const   { return aStr; }
+    inline const OUString&      GetString() const   { return aStr; }
 
 };
 

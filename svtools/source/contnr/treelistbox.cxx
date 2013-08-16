@@ -2056,7 +2056,7 @@ void SvTreeListBox::CheckButtonHdl()
 SvTreeListEntry* SvTreeListBox::CloneEntry( SvTreeListEntry* pSource )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
-    XubString aStr;
+    OUString aStr;
     Image aCollEntryBmp;
     Image aExpEntryBmp;
     SvLBoxButtonKind eButtonKind = SvLBoxButtonKind_enabledCheckbox;

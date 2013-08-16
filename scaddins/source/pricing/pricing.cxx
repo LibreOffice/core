@@ -188,7 +188,7 @@ const ScaFuncData* ScaFuncDataList::Get( const OUString& rProgrammaticName ) con
 ScaFuncRes::ScaFuncRes( ResId& rResId, ResMgr& rResMgr, sal_uInt16 nIndex, OUString& rRet ) :
     Resource( rResId )
 {
-    rRet = String( ScaResId( nIndex, rResMgr ) );
+    rRet = ScaResId(nIndex, rResMgr).toString();
     FreeResource();
 }
 

@@ -21,7 +21,6 @@
 #include <tools/shl.hxx>
 #include <tools/debug.hxx>
 #include <tools/errinf.hxx>
-#include <tools/string.hxx>
 #include <rtl/strbuf.hxx>
 
 class ErrorHandler;

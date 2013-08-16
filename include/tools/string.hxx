@@ -134,8 +134,9 @@ private:
     TOOLS_DLLPRIVATE UniString( sal_Unicode c );
     TOOLS_DLLPRIVATE UniString& Assign( const sal_Unicode* pCharStr, xub_StrLen nLen );
     TOOLS_DLLPRIVATE UniString& Expand( xub_StrLen nCount, sal_Unicode cExpandChar );
-    TOOLS_DLLPRIVATE sal_Bool Equals( const sal_Unicode* pCharStr,
+    TOOLS_DLLPRIVATE sal_Bool   Equals( const sal_Unicode* pCharStr,
                                 xub_StrLen nIndex, xub_StrLen nLen ) const;
+    TOOLS_DLLPRIVATE sal_Bool   EqualsIgnoreCaseAscii( const sal_Unicode* pCharStr ) const;
 public:
                         UniString();
                         UniString( const ResId& rResId );
@@ -171,7 +172,6 @@ public:
 
     static const UniString& EmptyString();
     sal_Int32           ToInt32() const;
-    sal_Int64           ToInt64() const;
 
     UniString&          Assign( const UniString& rStr );
     UniString&          Assign( const OUString& rStr );
@@ -240,7 +240,6 @@ public:
     sal_Bool            Equals( const UniString& rStr ) const;
     sal_Bool            EqualsAscii( const sal_Char* pAsciiStr ) const;
     sal_Bool            EqualsIgnoreCaseAscii( const UniString& rStr ) const;
-    sal_Bool            EqualsIgnoreCaseAscii( const sal_Unicode* pCharStr ) const;
     sal_Bool            EqualsIgnoreCaseAscii( const sal_Char* pAsciiStr ) const;
     sal_Bool            Equals( const UniString& rStr,
                                 xub_StrLen nIndex, xub_StrLen nLen ) const;

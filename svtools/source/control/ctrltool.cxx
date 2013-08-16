@@ -146,21 +146,21 @@ static sal_Int32 ImplCompareFontInfo( ImplFontListFontInfo* pInfo1,
 
 // =======================================================================
 
-static void ImplMakeSearchString( XubString& rStr )
+static OUString ImplMakeSearchString(const OUString& rStr)
 {
-    rStr.ToLowerAscii();
+    return rStr.toAsciiLowerCase();
 }
 
 // -----------------------------------------------------------------------
 
-static void ImplMakeSearchStringFromName( XubString& rStr )
+static OUString ImplMakeSearchStringFromName(const OUString& rStr)
 {
     // check for features before alternate font separator
-    if (rStr.Search(':') < rStr.Search(';'))
-        rStr = rStr.GetToken( 0, ':' );
-    else
-        rStr = rStr.GetToken( 0, ';' );
-    ImplMakeSearchString( rStr );
+    sal_Int32 nColon = rStr.indexOf(':');
+    sal_Int32 nSemiColon = rStr.indexOf(';');
+    if (nColon != -1 && (nSemiColon == -1 || nColon < nSemiColon))
+        return ImplMakeSearchString(rStr.getToken( 0, ':' ));
+    return ImplMakeSearchString(rStr.getToken( 0, ';' ));
 }
 
 // -----------------------------------------------------------------------
@@ -236,16 +236,11 @@ ImplFontListNameInfo* FontList::ImplFind(const OUString& rSearchName, sal_uLong*
     return const_cast<ImplFontListNameInfo*>(pFoundData);
 }
 
-// -----------------------------------------------------------------------
-
 ImplFontListNameInfo* FontList::ImplFindByName(const OUString& rStr) const
 {
-    XubString aSearchName = rStr;
-    ImplMakeSearchStringFromName( aSearchName );
+    OUString aSearchName = ImplMakeSearchStringFromName(rStr);
     return ImplFind( aSearchName, NULL );
 }
-
-// -----------------------------------------------------------------------
 
 void FontList::ImplInsertFonts( OutputDevice* pDevice, sal_Bool bAll,
                                 sal_Bool bInsertData )
@@ -270,10 +265,10 @@ void FontList::ImplInsertFonts( OutputDevice* pDevice, sal_Bool bAll,
         if ( !bAll && (aFontInfo.GetType() == TYPE_RASTER) )
             continue;
 
-        XubString               aSearchName = aFontInfo.GetName();
+        OUString aSearchName(aFontInfo.GetName());
         ImplFontListNameInfo*   pData;
         sal_uLong                   nIndex;
-        ImplMakeSearchString( aSearchName );
+        aSearchName = ImplMakeSearchString(aSearchName);
         pData = ImplFind( aSearchName, &nIndex );
 
         if ( !pData )
@@ -521,8 +516,8 @@ OUString FontList::GetFontMapText( const FontInfo& rInfo ) const
 
     // search for synthetic style
     sal_uInt16              nType       = pData->mnType;
-    const XubString&    rStyleName  = rInfo.GetStyleName();
-    if ( rStyleName.Len() )
+    const OUString& rStyleName  = rInfo.GetStyleName();
+    if (!rStyleName.isEmpty())
     {
         sal_Bool                    bNotSynthetic = sal_False;
         sal_Bool                    bNoneAvailable = sal_False;

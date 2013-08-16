@@ -1149,9 +1149,9 @@ sal_Bool MenuBarManager::MustBeHidden( PopupMenu* pPopupMenu, const Reference< X
     return sal_True;
 }
 
-String MenuBarManager::RetrieveLabelFromCommand( const String& aCmdURL )
+OUString MenuBarManager::RetrieveLabelFromCommand(const OUString& rCmdURL)
 {
-    return framework::RetrieveLabelFromCommand(aCmdURL, m_xContext, m_xUICommandLabels,m_xFrame,m_aModuleIdentifier,m_bModuleIdentified,"Label");
+    return framework::RetrieveLabelFromCommand(rCmdURL, m_xContext, m_xUICommandLabels,m_xFrame,m_aModuleIdentifier,m_bModuleIdentified,"Label");
 }
 
 

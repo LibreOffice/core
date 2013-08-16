@@ -72,7 +72,7 @@ namespace framework
         private:
             virtual void impl_select(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >& _xDispatch,const ::com::sun::star::util::URL& aURL);
             void fillPopupMenu( com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >& rPopupMenu );
-            String RetrieveLabelFromCommand( const String& aCmdURL );
+            OUString RetrieveLabelFromCommand(const OUString& rCmdURL);
             void addScriptItems( PopupMenu* pPopupMenu, sal_uInt16 startItemId );
     };
 }

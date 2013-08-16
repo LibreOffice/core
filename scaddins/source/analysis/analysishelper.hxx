@@ -298,7 +298,7 @@ class AnalysisResId : public ResId
 class AnalysisRscStrLoader : public Resource
 {
 private:
-    String          aStr;
+    OUString        aStr;
 public:
     AnalysisRscStrLoader( sal_uInt16 nRsc, sal_uInt16 nStrId, ResMgr& rResMgr ) :
         Resource( AnalysisResId( nRsc, rResMgr ) ),
@@ -307,7 +307,7 @@ public:
         FreeResource();
     }
 
-    const String&   GetString() const { return aStr; }
+    const OUString& GetString() const { return aStr; }
 
 };
 

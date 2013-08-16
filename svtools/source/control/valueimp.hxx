@@ -54,7 +54,7 @@ struct ValueSetItem
     bool                mbVisible;
     Image               maImage;
     Color               maColor;
-    XubString           maText;
+    OUString            maText;
     void*               mpData;
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >* mpxAcc;
 

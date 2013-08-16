@@ -92,7 +92,7 @@ static OUString lcl_GetResourceString( sal_uInt32 nId )
     if (!pSolverResMgr)
         pSolverResMgr = ResMgr::CreateResMgr("solver");
 
-    return String( ResId( nId, *pSolverResMgr ) );
+    return ResId(nId, *pSolverResMgr).toString();
 }
 
 // -----------------------------------------------------------------------

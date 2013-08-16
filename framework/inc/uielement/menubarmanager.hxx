@@ -171,7 +171,7 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
         void RequestImages();
         void RetrieveImageManagers();
         static sal_Bool MustBeHidden( PopupMenu* pPopupMenu, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer >& rTransformer );
-        String RetrieveLabelFromCommand( const String& aCmdURL );
+        OUString RetrieveLabelFromCommand(const OUString& rCmdURL);
 
     private:
 

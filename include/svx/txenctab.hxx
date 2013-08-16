@@ -20,6 +20,7 @@
 #define _SVX_TXENCTAB_HXX
 
 #include <tools/resary.hxx>
+#include <tools/string.hxx>
 #include <rtl/textenc.h>
 #include "svx/svxdllapi.h"
 

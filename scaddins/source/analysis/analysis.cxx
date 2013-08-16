@@ -86,7 +86,7 @@ ResMgr& AnalysisAddIn::GetResMgr( void ) throw( uno::RuntimeException )
 
 OUString AnalysisAddIn::GetDisplFuncStr( sal_uInt16 nFuncNum ) throw( uno::RuntimeException )
 {
-    return String( AnalysisRscStrLoader( RID_ANALYSIS_FUNCTION_NAMES, nFuncNum, GetResMgr() ).GetString() );
+    return AnalysisRscStrLoader( RID_ANALYSIS_FUNCTION_NAMES, nFuncNum, GetResMgr() ).GetString();
 }
 
 
@@ -108,7 +108,7 @@ public:
 
 AnalysisFuncRes::AnalysisFuncRes( ResId& rRes, ResMgr& rResMgr, sal_uInt16 nInd, OUString& rRet ) : Resource( rRes )
 {
-    rRet = String( AnalysisResId( nInd, rResMgr ) );
+    rRet = AnalysisResId(nInd, rResMgr).toString();
 
     FreeResource();
 }

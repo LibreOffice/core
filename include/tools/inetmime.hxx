@@ -30,7 +30,6 @@
 #include <rtl/tencinfo.h>
 #include <tools/debug.hxx>
 #include <tools/errcode.hxx>
-#include <tools/string.hxx>
 
 class DateTime;
 class INetContentTypeParameterList;

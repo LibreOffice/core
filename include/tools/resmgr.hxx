@@ -21,7 +21,6 @@
 
 #include "tools/toolsdllapi.h"
 #include <i18nlangtag/languagetag.hxx>
-#include <tools/string.hxx>
 #include <tools/resid.hxx>
 
 #include <vector>

@@ -23,6 +23,7 @@
 
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/inspection/XPropertyHandler.hpp>
+#include <tools/string.hxx>
 
 //............................................................................
 namespace rptui

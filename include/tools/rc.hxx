@@ -21,7 +21,6 @@
 
 #include "tools/toolsdllapi.h"
 #include <i18nlangtag/lang.h>
-#include <tools/string.hxx>
 #include <tools/resmgr.hxx>
 
 class TOOLS_DLLPUBLIC Resource
