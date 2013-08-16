@@ -670,7 +670,17 @@ void ScEditShell::GetState( SfxItemSet& rSet )
                     if ( pActiveView )
                         rSet.Put( SfxBoolItem( nWhich, pActiveView->IsInsertMode() ) );
                     else
-                        rSet.Put( SfxBoolItem( nWhich, 42 ) );
+                    {
+                        // Here the code used to pass the value 42 and it used
+                        // to "work" without warnings because the SfxBoolItem
+                        // was based on 'sal_Bool', which is actually 'unsigned
+                        // char'. But now it uses actual 'bool', and passing 42
+                        // for a 'bool' parameter causes a warning at least with
+                        // MSVC.  So use 'true'. I really really hope there is
+                        // not code somewhere that retrieves this "boolean" item
+                        // and checks it value for the magic value 42...
+                        rSet.Put( SfxBoolItem( nWhich,  true) );
+                    }
                 }
                 break;
 
