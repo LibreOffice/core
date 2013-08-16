@@ -28,25 +28,27 @@ XMLFamilyData_Impl::XMLFamilyData_Impl(
         const OUString& rStrName,
         const UniReference < SvXMLExportPropertyMapper > &rMapper,
         const OUString& rStrPrefix,
-        sal_Bool bAsFam ) :
+        bool bAsFamily ) :
     mnFamily( nFamily ), maStrFamilyName( rStrName), mxMapper( rMapper ),
-    mnCount( 0 ), mnName( 0 ), maStrPrefix( rStrPrefix ), bAsFamily( bAsFam )
+    mnCount( 0 ), mnName( 0 ), maStrPrefix( rStrPrefix ), mbAsFamily( bAsFamily )
 
 {
-    mpParentList = new SvXMLAutoStylePoolParentsP_Impl;
     mpNameList   = new SvXMLAutoStylePoolNamesP_Impl;
 }
 
+XMLFamilyData_Impl::XMLFamilyData_Impl( sal_Int32 nFamily ) :
+    mnFamily( nFamily ), mpNameList( NULL ), mnCount( 0 ), mnName( 0 ),
+    mbAsFamily( false )
+{}
+
 XMLFamilyData_Impl::~XMLFamilyData_Impl()
 {
-    delete mpParentList;
     delete mpNameList;
 }
 
 void XMLFamilyData_Impl::ClearEntries()
 {
-    delete mpParentList;
-    mpParentList = new SvXMLAutoStylePoolParentsP_Impl;
+    maParents.clear();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

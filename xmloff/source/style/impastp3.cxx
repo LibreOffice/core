@@ -146,4 +146,9 @@ OUString SvXMLAutoStylePoolParentP_Impl::Find( const XMLFamilyData_Impl& rFamily
     return sName;
 }
 
+bool SvXMLAutoStylePoolParentP_Impl::operator< (const SvXMLAutoStylePoolParentP_Impl& rOther) const
+{
+    return msParent < rOther.msParent;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
