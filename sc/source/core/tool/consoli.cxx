@@ -33,7 +33,7 @@
 
 // STATIC DATA -----------------------------------------------------------
 
-static OpCode eOpCodeTable[] = {            //  Reihenfolge wie bei enum ScSubTotalFunc
+static const OpCode eOpCodeTable[] = {      //  Reihenfolge wie bei enum ScSubTotalFunc
         ocBad,                              //  none
         ocAverage,
         ocCount,

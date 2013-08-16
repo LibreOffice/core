@@ -376,7 +376,7 @@ static const SfxItemPropertyMap* lcl_GetFooterStyleMap()
 #define SC_FAMILYNAME_CELL  "CellStyles"
 #define SC_FAMILYNAME_PAGE  "PageStyles"
 
-static sal_uInt16 aStyleFamilyTypes[SC_STYLE_FAMILY_COUNT] = { SFX_STYLE_FAMILY_PARA, SFX_STYLE_FAMILY_PAGE };
+static const sal_uInt16 aStyleFamilyTypes[SC_STYLE_FAMILY_COUNT] = { SFX_STYLE_FAMILY_PARA, SFX_STYLE_FAMILY_PAGE };
 
 //------------------------------------------------------------------------
 

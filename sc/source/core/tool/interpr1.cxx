@@ -7992,7 +7992,7 @@ typedef struct {
     UBlockCode to;
 } UBlockScript;
 
-static UBlockScript scriptList[] = {
+static const UBlockScript scriptList[] = {
     {UBLOCK_HANGUL_JAMO, UBLOCK_HANGUL_JAMO},
     {UBLOCK_CJK_RADICALS_SUPPLEMENT, UBLOCK_HANGUL_SYLLABLES},
     {UBLOCK_CJK_COMPATIBILITY_IDEOGRAPHS,UBLOCK_CJK_RADICALS_SUPPLEMENT },

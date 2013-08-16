@@ -62,7 +62,7 @@ using namespace com::sun::star;
 
 //  Reihenfolge der Kategorien im Navigator -------------------------------------
 
-static sal_uInt16 pTypeList[SC_CONTENT_COUNT] =
+static const sal_uInt16 pTypeList[SC_CONTENT_COUNT] =
 {
     SC_CONTENT_ROOT,            // ROOT (0) muss vorne stehen
     SC_CONTENT_TABLE,

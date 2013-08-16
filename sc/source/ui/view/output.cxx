@@ -78,7 +78,7 @@ using namespace com::sun::star;
 
 #define SC_AUTHORCOLORCOUNT     9
 
-static ColorData nAuthorColor[ SC_AUTHORCOLORCOUNT ] = {
+static const ColorData nAuthorColor[ SC_AUTHORCOLORCOUNT ] = {
                     COL_LIGHTRED,       COL_LIGHTBLUE,      COL_LIGHTMAGENTA,
                     COL_GREEN,          COL_RED,            COL_BLUE,
                     COL_BROWN,          COL_MAGENTA,        COL_CYAN };
