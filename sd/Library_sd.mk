@@ -189,6 +189,7 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/ui/annotations/annotationmanager \
 	sd/source/ui/annotations/annotationtag \
 	sd/source/ui/annotations/annotationwindow \
+	sd/source/ui/app/optsitem \
 	sd/source/ui/app/sddll \
 	sd/source/ui/app/sddll1 \
 	sd/source/ui/app/sddll2 \
@@ -308,6 +309,7 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/ui/func/fusnapln \
 	sd/source/ui/func/fusumry \
 	sd/source/ui/func/futempl \
+	sd/source/ui/func/futext \
 	sd/source/ui/func/futhes \
 	sd/source/ui/func/futransf \
 	sd/source/ui/func/futxtatt \
@@ -598,19 +600,6 @@ $(eval $(call gb_Library_add_defs,sd,\
 
 endif
 
-endif
-
-ifeq ($(OS),WNT)
-$(eval $(call gb_Library_add_cxxobjects,sd,\
-	sd/source/ui/app/optsitem \
-	sd/source/ui/func/futext \
-	, $(gb_COMPILERNOOPTFLAGS) $(gb_LinkTarget_EXCEPTIONFLAGS) \
-))
-else
-$(eval $(call gb_Library_add_exception_objects,sd,\
-	sd/source/ui/app/optsitem \
-	sd/source/ui/func/futext \
-))
 endif
 
 # vim: set noet sw=4 ts=4:
