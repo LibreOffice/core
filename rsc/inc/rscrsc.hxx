@@ -73,7 +73,6 @@ class RscCompiler
 {
 private:
     void            CreateResFile( const char * pRc );
-    void            Append( const OString& rOutputSrs, const OString& rTmpFile );
 
     bool            GetImageFilePath( const RscCmdLine::OutputFile& rOutputFile,
                                       const WriteRcContext& rContext,

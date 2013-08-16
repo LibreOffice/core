@@ -739,17 +739,6 @@ ERRTYPE RscCompiler::Link()
     return aError;
 }
 
-void RscCompiler::Append( const OString& rOutputSrs,
-                          const OString& rTmpFile )
-{
-    if( !::Append( rOutputSrs, rTmpFile ) )
-    {
-        OStringBuffer aTemp(rOutputSrs);
-        aTemp.append(" or ").append(rTmpFile);
-        pTC->pEH->FatalError( ERR_OPENFILE, RscId(), aTemp.getStr() );
-    }
-}
-
 bool RscCompiler::GetImageFilePath( const RscCmdLine::OutputFile& rOutputFile,
                                     const WriteRcContext& rContext,
                                     const OString& rBaseFileName,

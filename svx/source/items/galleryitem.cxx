@@ -44,14 +44,6 @@ SvxGalleryItem::SvxGalleryItem( const SvxGalleryItem &rItem )
     DBG_CTOR(SvxGalleryItem, 0);
 }
 
-SvxGalleryItem::SvxGalleryItem(
-    const ::sal_uInt16 nId )
-    : SfxPoolItem( nId )
-    , m_nType( css::gallery::GalleryItemType::EMPTY )
-{
-    DBG_CTOR(SvxGalleryItem, 0);
-}
-
 SvxGalleryItem::~SvxGalleryItem()
 {
     DBG_DTOR(SvxGalleryItem, 0);

@@ -50,7 +50,6 @@ public:
 
     SvxGalleryItem();
     SvxGalleryItem( const SvxGalleryItem& );
-    SvxGalleryItem( const sal_uInt16 nId );
     ~SvxGalleryItem();
 
     sal_Int8 GetType() const { return m_nType; }

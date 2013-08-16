@@ -4,6 +4,7 @@
 (anonymous namespace)::StringTokenizer::getNextToken()
 (anonymous namespace)::VBATest::testMiscOLEStuff()
 AffineMatrixItem::GetAffineMatrix2D() const
+BackingWindow::LinkStubWindowEventListener(void*, void*)
 BitmapWriteAccess::FillPolyPolygon(PolyPolygon const&)
 CuiAboutConfigTabPage::LinkStubHeaderSelect_Impl(void*, void*)
 DbgRegisterNamedUserChannel(rtl::OUString const&, void (*)(char const*))
@@ -27,10 +28,7 @@ OutputDevice::LogicToPixel(basegfx::B2DPolygon const&, MapMode const&) const
 OutputDevice::PixelToLogic(Region const&, MapMode const&) const
 RawBitmap::RawBitmap()
 RawBitmap::~RawBitmap()
-RecentDocsView::SetHeight(long)
-RecentDocsView::SetThumbnailSize(long, long)
-RecentDocsView::loadRecentDocs()
-RscCompiler::Append(rtl::OString const&, rtl::OString const&)
+RecentDocsView::SetThumbnailSize(long)
 Ruler::GetPageWidth() const
 SalGraphics::drawTransformedBitmap(basegfx::B2DPoint const&, basegfx::B2DPoint const&, basegfx::B2DPoint const&, SalBitmap const&, SalBitmap const*)
 ScCellIterator::getValue()
@@ -54,12 +52,16 @@ ScDocument::GetCellCount(short, short) const
 ScDocument::GetFormulaTokens(ScAddress const&) const
 ScDocument::GetStringCell(ScAddress const&) const
 ScDocument::IsEmptyData(short, short) const
+ScDocumentImport::setFormulaCell(ScAddress const&, ScTokenArray const&)
 ScEditUtil::GetSpaceDelimitedString(EditTextObject const&)
 ScExtIButton::GetSelected() const
 ScFormulaCell::GetResultDouble() const
+ScFormulaCell::GetValueAlways()
 ScFormulaCell::HasColRowName() const
 ScFormulaCell::IsSharedInvariant() const
 ScGlobal::GetStandardFormat(double, SvNumberFormatter&, unsigned long, short)
+ScRangeData::SetMaxCol(short)
+ScRangeData::SetMaxRow(int)
 ScRangeStringConverter::GetRangeListFromString(com::sun::star::uno::Sequence<com::sun::star::table::CellRangeAddress>&, rtl::OUString const&, ScDocument const*, formula::FormulaGrammar::AddressConvention, unsigned short, unsigned short)
 ScRefCellValue::commit(ScColumn&, int) const
 ScUndoSetCell::ScUndoSetCell(ScDocShell*, ScAddress const&, ScCellValue const&)
@@ -88,7 +90,6 @@ SvtAccessibilityOptions::SetColorValueSetColumnCount(short)
 SvtAccessibilityOptions::SetEdgeBlending(short)
 SvtAccessibilityOptions::SetListBoxMaximumLineCount(short)
 SvtAccessibilityOptions::SetPreviewUsesCheckeredBackground(unsigned char)
-SvxGalleryItem::SvxGalleryItem(unsigned short)
 SvxNumRule::Create(SvStream&)
 SvxNumberFormat::Create(SvStream&)
 SwFont::SwFont()
@@ -125,6 +126,8 @@ basebmp::createBitmapDevice(basegfx::B2IVector const&, bool, basebmp::Format, bo
 basegfx::BPixel::getEmptyBPixel()
 basegfx::snapToNearestMultiple(double, double)
 basegfx::snapToRange(double, double, double)
+basegfx::tools::containsOnlyHorizontalAndVerticalEdges(basegfx::B2DPolyPolygon const&)
+basegfx::tools::createSourceRangeTargetRangeTransform(basegfx::B2DRange const&, basegfx::B2DRange const&)
 basegfx::unotools::homMatrixFromMatrix(basegfx::B2DHomMatrix&, com::sun::star::geometry::Matrix2D const&)
 canvas::createSurfaceProxyManager(boost::shared_ptr<canvas::IRenderModule> const&)
 comphelper::ComponentContext::ComponentContext(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&)
@@ -162,6 +165,7 @@ oox::xls::StylesBuffer::writeStyleXfToPropertySet(oox::PropertySet&, int) const
 oox::xls::WorksheetGlobals::getColumns(oox::ValueRange const&) const
 oox::xls::WorksheetGlobals::getRows(oox::ValueRange const&) const
 sc::CellTextAttr::CellTextAttr(unsigned short, unsigned char)
+sc::ColumnSet::has(short, short) const
 sc::sidebar::CellLineStyleValueSet::GetSelItem()
 sc::sidebar::CellLineStyleValueSet::SetCusEnable(bool)
 sc::sidebar::CellLineStyleValueSet::SetImage(Image)
@@ -170,8 +174,6 @@ sd::LeftDrawPaneShell::RegisterInterface(SfxModule*)
 sd::LeftImpressPaneShell::RegisterInterface(SfxModule*)
 sd::SdPhotoAlbumDialog::createXShapeFromUrl(rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory>, com::sun::star::uno::Reference<com::sun::star::graphic::XGraphicProvider>)
 sd::ToolPanelPaneShell::RegisterInterface(SfxModule*)
-sd::fillDurationComboBox(ListBox*)
-sd::fillRepeatComboBox(ListBox*)
 sd::framework::FrameworkHelper::GetPaneWindow(com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId> const&)
 sd::framework::FrameworkHelper::GetResource(com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId> const&)
 sd::framework::FrameworkHelper::RequestResourceDeactivation(com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId> const&)
