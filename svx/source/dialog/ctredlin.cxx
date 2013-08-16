@@ -383,28 +383,14 @@ void SvxRedlinTable::InitEntry(SvTreeListEntry* pEntry, const OUString& rStr,
     pString = new SvLBoxColorString( pEntry, 0, rStr ,aEntryColor);
     pEntry->AddItem( pString );
 
-    XubString aToken;
-
-    sal_Unicode* pCurToken = (sal_Unicode*)aCurEntry.GetBuffer();
-    sal_uInt16 nCurTokenLen;
-    sal_Unicode* pNextToken = (sal_Unicode*)GetToken( pCurToken, nCurTokenLen );
-    sal_uInt16 nCount = TabCount(); nCount--;
-
+    sal_Int32 nIndex = 0;
+    // TODO: verify if TabCount() is always >0 here!
+    const sal_uInt16 nCount = TabCount()-1;
     for( sal_uInt16 nToken = 0; nToken < nCount; nToken++ )
     {
-        if( pCurToken && nCurTokenLen )
-            aToken = OUString(pCurToken, nCurTokenLen);
-        else
-            aToken.Erase();
-
-        SvLBoxColorString* pStr = new SvLBoxColorString( pEntry, 0, aToken ,aEntryColor);
+        const OUString aToken = GetToken(aCurEntry, nIndex);
+        SvLBoxColorString* pStr = new SvLBoxColorString( pEntry, 0, aToken, aEntryColor);
         pEntry->AddItem( pStr );
-
-        pCurToken = pNextToken;
-        if( pCurToken )
-            pNextToken = (sal_Unicode*)GetToken( pCurToken, nCurTokenLen );
-        else
-            nCurTokenLen = 0;
     }
 }
 

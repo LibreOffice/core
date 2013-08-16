@@ -76,25 +76,15 @@ void SvTabListBox::InitEntry(SvTreeListEntry* pEntry, const OUString& rStr,
     const Image& rColl, const Image& rExp, SvLBoxButtonKind eButtonKind)
 {
     SvTreeListBox::InitEntry(pEntry, rStr, rColl, rExp, eButtonKind);
-    OUString aToken;
 
-    const sal_Unicode* pCurToken = aCurEntry.getStr();
-    sal_uInt16 nCurTokenLen;
-    const sal_Unicode* pNextToken = GetToken( pCurToken, nCurTokenLen );
-    sal_uInt16 nCount = nTabCount; nCount--;
+    sal_Int32 nIndex = 0;
+    // TODO: verify if nTabCount is always >0 here!
+    const sal_uInt16 nCount = nTabCount - 1;
     for( sal_uInt16 nToken = 0; nToken < nCount; nToken++ )
     {
-        if( pCurToken && nCurTokenLen )
-            aToken = OUString(pCurToken, nCurTokenLen);
-        else
-            aToken = OUString();
+        const OUString aToken = GetToken(aCurEntry, nIndex);
         SvLBoxString* pStr = new SvLBoxString( pEntry, 0, aToken );
         pEntry->AddItem( pStr );
-        pCurToken = pNextToken;
-        if( pCurToken )
-            pNextToken = GetToken( pCurToken, nCurTokenLen );
-        else
-            nCurTokenLen = 0;
     }
 }
 
@@ -324,45 +314,26 @@ void SvTabListBox::SetEntryText(const OUString& rStr, SvTreeListEntry* pEntry, s
     if (sOldText == rStr)
         return;
 
-    sal_uInt16 nTextColumn = nCol;
-    const sal_Unicode* pCurToken = rStr.getStr();
-    sal_uInt16 nCurTokenLen;
-    const sal_Unicode* pNextToken = GetToken( pCurToken, nCurTokenLen );
-
-    OUString aTemp;
-    sal_uInt16 nCount = pEntry->ItemCount();
-    sal_uInt16 nCur = 0;
-    while( nCur < nCount )
+    sal_Int32 nIndex = 0;
+    const sal_uInt16 nTextColumn = nCol;
+    const sal_uInt16 nCount = pEntry->ItemCount();
+    for (sal_uInt16 nCur = 0; nCur < nCount; ++nCur)
     {
         SvLBoxItem* pStr = pEntry->GetItem( nCur );
         if (pStr && pStr->GetType() == SV_ITEM_ID_LBOXSTRING)
         {
-            if( nCol == 0xffff )
+            if (!nCol || nCol==0xFFFF)
             {
-                if( pCurToken )
-                    aTemp = OUString(pCurToken, nCurTokenLen);
-                else
-                    aTemp = OUString(); // delete all columns without a token
+                const OUString aTemp(GetToken(rStr, nIndex));
                 ((SvLBoxString*)pStr)->SetText( aTemp );
-                pCurToken = pNextToken;
-                pNextToken = GetToken( pCurToken, nCurTokenLen );
+                if (!nCol && nIndex<0)
+                    break;
             }
             else
             {
-                if( !nCol )
-                {
-                    aTemp = OUString(pCurToken, nCurTokenLen);
-                    ((SvLBoxString*)pStr)->SetText( aTemp );
-                    if( !pNextToken )
-                        break;
-                    pCurToken = pNextToken;
-                    pNextToken = GetToken( pCurToken, nCurTokenLen );
-                }
-                else
-                    nCol--;
+                --nCol;
             }
         }
-        nCur++;
     }
     GetModel()->InvalidateEntry( pEntry );
 
@@ -420,27 +391,9 @@ void SvTabListBox::Resize()
 }
 
 // static
-const sal_Unicode* SvTabListBox::GetToken( const sal_Unicode* pPtr, sal_uInt16& rLen )
+OUString SvTabListBox::GetToken( const OUString &sStr, sal_Int32& nIndex )
 {
-    if( !pPtr || *pPtr == 0 )
-    {
-        rLen = 0;
-        return 0;
-    }
-    sal_Unicode c = *pPtr;
-    sal_uInt16 nLen = 0;
-    while( c != '\t' && c != 0 )
-    {
-        pPtr++;
-        nLen++;
-        c = *pPtr;
-    }
-    if( c )
-        pPtr++; // skip tab
-    else
-        pPtr = 0;
-    rLen = nLen;
-    return pPtr;
+    return sStr.getToken(0, '\t', nIndex);
 }
 
 OUString SvTabListBox::GetTabEntryText( sal_uLong nPos, sal_uInt16 nCol ) const
