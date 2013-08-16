@@ -668,7 +668,7 @@ SwUnoCursorHelper::GetCurTxtFmtColl(SwPaM & rPaM, const bool bConditional)
 /* --------------------------------------------------
  *  Hilfsfunktion fuer PageDesc
  * --------------------------------------------------*/
-SwPageDesc* GetPageDescByName_Impl(SwDoc& rDoc, const String& rName)
+SwPageDesc* GetPageDescByName_Impl(SwDoc& rDoc, const OUString& rName)
 {
     SwPageDesc* pRet = 0;
     sal_uInt16 nDCount = rDoc.GetPageDescCnt();
@@ -687,8 +687,7 @@ SwPageDesc* GetPageDescByName_Impl(SwDoc& rDoc, const String& rName)
     {
         for(i = RC_POOLPAGEDESC_BEGIN; i <= STR_POOLPAGE_LANDSCAPE; ++i)
         {
-            const String aFmtName(SW_RES(i));
-            if(aFmtName == rName)
+            if (rName==SW_RESSTR(i))
             {
                 pRet = rDoc.GetPageDescFromPool( static_cast< sal_uInt16 >(
                             RES_POOLPAGE_BEGIN + i - RC_POOLPAGEDESC_BEGIN) );

@@ -16,12 +16,11 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _PAGEDESC_HXX
-#define _PAGEDESC_HXX
+#ifndef PAGEDESC_HXX
+#define PAGEDESC_HXX
 
 #include <tools/fract.hxx>
 #include <tools/color.hxx>
-#include <tools/string.hxx>
 #include "swdllapi.h"
 #include <swtypes.hxx>  ///< For SwTwips.
 #include <frmfmt.hxx>
@@ -132,7 +131,7 @@ class SW_DLLPUBLIC SwPageDesc : public SwModify
 {
     friend class SwDoc;
 
-    String      aDescName;
+    OUString    aDescName;
     SvxNumberType   aNumType;
     SwFrmFmt    aMaster;
     SwFrmFmt    aLeft;
@@ -154,14 +153,14 @@ class SW_DLLPUBLIC SwPageDesc : public SwModify
 
     SW_DLLPRIVATE void ResetAllAttr( sal_Bool bLeft );
 
-    SW_DLLPRIVATE SwPageDesc(const String&, SwFrmFmt*, SwDoc *pDc );
+    SW_DLLPRIVATE SwPageDesc(const OUString&, SwFrmFmt*, SwDoc *pDc );
 
 protected:
    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNewValue );
 
 public:
-    const String &GetName() const { return aDescName; }
-          void    SetName( const String& rNewName ) { aDescName = rNewName; }
+    OUString GetName() const { return aDescName; }
+    void SetName( const OUString& rNewName ) { aDescName = rNewName; }
 
     sal_Bool GetLandscape() const { return bLandscape; }
     void SetLandscape( sal_Bool bNew ) { bLandscape = bNew; }
@@ -316,7 +315,7 @@ class SwPageDescExt
 {
     SwPageDesc aPageDesc;
     SwDoc * pDoc;
-    String sFollow;
+    OUString sFollow;
 
     void SetPageDesc(const SwPageDesc & aPageDesc);
 
@@ -328,14 +327,14 @@ public:
     SwPageDescExt & operator = (const SwPageDescExt & rSrc);
     SwPageDescExt & operator = (const SwPageDesc & rSrc);
 
-    const String & GetName() const;
+    OUString GetName() const;
 
     operator SwPageDesc() const; // #i7983#
 };
 
 
-SwPageDesc* GetPageDescByName_Impl(SwDoc& rDoc, const String& rName);
+SwPageDesc* GetPageDescByName_Impl(SwDoc& rDoc, const OUString& rName);
 
-#endif  //_PAGEDESC_HXX
+#endif  //PAGEDESC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
