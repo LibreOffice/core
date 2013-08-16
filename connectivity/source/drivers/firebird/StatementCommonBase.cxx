@@ -145,9 +145,13 @@ void OStatementCommonBase::prepareAndDescribeStatement(const OUString& sql,
                                        &m_aStatementHandle);
 
     if (aErr)
+    {
+        free(pOutSqlda);
+        pOutSqlda = 0;
         evaluateStatusVector(m_statusVector,
                              "isc_dsql_allocate_statement",
                              *this);
+    }
 
     aErr = isc_dsql_prepare(m_statusVector,
                             &m_pConnection->getTransaction(),
@@ -158,9 +162,14 @@ void OStatementCommonBase::prepareAndDescribeStatement(const OUString& sql,
                             pInSqlda);
 
     if (aErr)
+    {
+        // TODO: free statement handle?
+        free(pOutSqlda);
+        pOutSqlda = 0;
         evaluateStatusVector(m_statusVector,
                              "isc_dsql_prepare",
                              *this);
+    }
 
     aErr = isc_dsql_describe(m_statusVector,
                              &m_aStatementHandle,
@@ -169,9 +178,14 @@ void OStatementCommonBase::prepareAndDescribeStatement(const OUString& sql,
 
 
     if (aErr)
+    {
+        // TODO: free statement handle, etc.?
+        free(pOutSqlda);
+        pOutSqlda = 0;
         evaluateStatusVector(m_statusVector,
                              "isc_dsql_describe",
                              *this);
+    }
 
     // Ensure we have enough space in pOutSqlda
     if (pOutSqlda->sqld > pOutSqlda->sqln)
