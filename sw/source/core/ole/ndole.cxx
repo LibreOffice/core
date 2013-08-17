@@ -298,7 +298,7 @@ sal_Bool SwOLENode::RestorePersistentData()
         if ( xChild.is() )
             xChild->setParent( p->GetModel() );
 
-        OSL_ENSURE( aOLEObj.aName.Len(), "No object name!" );
+        OSL_ENSURE( !aOLEObj.aName.isEmpty(), "No object name!" );
         OUString aObjName;
         if ( !p->GetEmbeddedObjectContainer().InsertEmbeddedObject( aOLEObj.xOLERef.GetObject(), aObjName ) )
         {
@@ -668,7 +668,7 @@ SwOLEObj::SwOLEObj( const svt::EmbeddedObjectRef& xObj ) :
 }
 
 
-SwOLEObj::SwOLEObj( const String &rString, sal_Int64 nAspect ) :
+SwOLEObj::SwOLEObj( const OUString &rString, sal_Int64 nAspect ) :
     pOLENd( 0 ),
     pListener( 0 ),
     aName( rString )
@@ -737,7 +737,7 @@ SwOLEObj::~SwOLEObj()
 void SwOLEObj::SetNode( SwOLENode* pNode )
 {
     pOLENd = pNode;
-    if ( !aName.Len() )
+    if ( aName.isEmpty() )
     {
         SwDoc* pDoc = pNode->GetDoc();
 
@@ -895,22 +895,20 @@ sal_Bool SwOLEObj::UnloadObject( uno::Reference< embed::XEmbeddedObject > xObj, 
     return bRet;
 }
 
-String SwOLEObj::GetDescription()
+OUString SwOLEObj::GetDescription()
 {
-    String aResult;
     uno::Reference< embed::XEmbeddedObject > xEmbObj = GetOleRef();
-    if ( xEmbObj.is() )
-    {
-        SvGlobalName aClassID( xEmbObj->getClassID() );
-        if ( SotExchange::IsMath( aClassID ) )
-            aResult = SW_RESSTR(STR_MATH_FORMULA);
-        else if ( SotExchange::IsChart( aClassID ) )
-            aResult = SW_RESSTR(STR_CHART);
-        else
-            aResult = SW_RESSTR(STR_OLE);
-    }
+    if ( !xEmbObj.is() )
+        return OUString();
 
-    return aResult;
+    SvGlobalName aClassID( xEmbObj->getClassID() );
+    if ( SotExchange::IsMath( aClassID ) )
+        return SW_RESSTR(STR_MATH_FORMULA);
+
+    if ( SotExchange::IsChart( aClassID ) )
+        return SW_RESSTR(STR_CHART);
+
+    return SW_RESSTR(STR_OLE);
 }
 
 
