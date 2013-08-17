@@ -37,30 +37,22 @@ class SdrView;
 class SvxTextAttrPage : public SvxTabPage
 {
 private:
-    FixedLine           aFlText;
-    TriStateBox         aTsbAutoGrowWidth;
-    TriStateBox         aTsbAutoGrowHeight;
-    TriStateBox         aTsbFitToSize;
-    TriStateBox         aTsbContour;
-    TriStateBox         aTsbWordWrapText;
-    TriStateBox         aTsbAutoGrowSize;
+    TriStateBox*         m_pTsbAutoGrowWidth;
+    TriStateBox*         m_pTsbAutoGrowHeight;
+    TriStateBox*         m_pTsbFitToSize;
+    TriStateBox*         m_pTsbContour;
+    TriStateBox*         m_pTsbWordWrapText;
+    TriStateBox*         m_pTsbAutoGrowSize;
 
+    VclFrame*            m_pFlDistance;
+    MetricField*         m_pMtrFldLeft;
+    MetricField*         m_pMtrFldRight;
+    MetricField*         m_pMtrFldTop;
+    MetricField*         m_pMtrFldBottom;
 
-    FixedLine           aFlDistance;
-    FixedText           aFtLeft;
-    MetricField         aMtrFldLeft;
-    FixedText           aFtRight;
-    MetricField         aMtrFldRight;
-    FixedText           aFtTop;
-    MetricField         aMtrFldTop;
-    FixedText           aFtBottom;
-    MetricField         aMtrFldBottom;
-
-    FixedLine           aFlSeparator;
-
-    FixedLine           aFlPosition;
-    SvxRectCtl          aCtlPosition;
-    TriStateBox         aTsbFullWidth;
+    VclFrame*            m_pFlPosition;
+    SvxRectCtl*          m_pCtlPosition;
+    TriStateBox*         m_pTsbFullWidth;
 
     const SfxItemSet&   rOutAttrs;
     const SdrView*      pView;

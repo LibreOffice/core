@@ -34,7 +34,6 @@
 #include <svx/dialogs.hrc>
 
 #include "textattr.hxx"
-#include "textattr.hrc"
 #include <dialmgr.hxx>
 #include "svx/dlgutil.hxx"
 #include <sfx2/request.hxx>
@@ -43,9 +42,11 @@
 
 static sal_uInt16 pRanges[] =
 {
-    SDRATTR_MISC_FIRST, SDRATTR_TEXT_HORZADJUST,
-    SDRATTR_TEXT_WORDWRAP, SDRATTR_TEXT_AUTOGROWSIZE,
-    0
+      SDRATTR_MISC_FIRST
+    , SDRATTR_TEXT_HORZADJUST
+    , SDRATTR_TEXT_WORDWRAP
+    , SDRATTR_TEXT_AUTOGROWSIZE
+    , 0
 };
 
 /*************************************************************************
@@ -55,53 +56,44 @@ static sal_uInt16 pRanges[] =
 \************************************************************************/
 
 SvxTextAttrPage::SvxTextAttrPage( Window* pWindow, const SfxItemSet& rInAttrs ) :
-                SvxTabPage      ( pWindow, CUI_RES( RID_SVXPAGE_TEXTATTR ),
-                                  rInAttrs ),
-
-                aFlText         ( this, CUI_RES( FL_TEXT ) ),
-                aTsbAutoGrowWidth  ( this, CUI_RES( TSB_AUTOGROW_WIDTH ) ),
-                aTsbAutoGrowHeight ( this, CUI_RES( TSB_AUTOGROW_HEIGHT ) ),
-                aTsbFitToSize   ( this, CUI_RES( TSB_FIT_TO_SIZE ) ),
-                aTsbContour     ( this, CUI_RES( TSB_CONTOUR ) ),
-                aTsbWordWrapText( this, CUI_RES( TSB_WORDWRAP_TEXT ) ),
-                aTsbAutoGrowSize( this, CUI_RES( TSB_AUTOGROW_SIZE ) ),
-                aFlDistance     ( this, CUI_RES( FL_DISTANCE ) ),
-                aFtLeft         ( this, CUI_RES( FT_LEFT ) ),
-                aMtrFldLeft     ( this, CUI_RES( MTR_FLD_LEFT ) ),
-                aFtRight        ( this, CUI_RES( FT_RIGHT ) ),
-                aMtrFldRight    ( this, CUI_RES( MTR_FLD_RIGHT ) ),
-                aFtTop          ( this, CUI_RES( FT_TOP ) ),
-                aMtrFldTop      ( this, CUI_RES( MTR_FLD_TOP ) ),
-                aFtBottom       ( this, CUI_RES( FT_BOTTOM ) ),
-                aMtrFldBottom   ( this, CUI_RES( MTR_FLD_BOTTOM ) ),
-
-                aFlSeparator    ( this, CUI_RES( FL_SEPARATOR ) ),
-
-                aFlPosition     ( this, CUI_RES( FL_POSITION ) ),
-                aCtlPosition    ( this, CUI_RES( CTL_POSITION ),
-                                            RP_MM, 240, 100 ),
-                aTsbFullWidth   ( this, CUI_RES( TSB_FULL_WIDTH ) ),
-
-                rOutAttrs       ( rInAttrs )
+                SvxTabPage      ( pWindow
+                                ,"TextAttributesPage"
+                                ,"cui/ui/textattrtabpage.ui"
+                                , rInAttrs ),
+                rOutAttrs( rInAttrs )
 {
-    FreeResource();
+    get(m_pTsbAutoGrowWidth,"TSB_AUTOGROW_WIDTH");
+    get(m_pTsbAutoGrowHeight,"TSB_AUTOGROW_HEIGHT");
+    get(m_pTsbFitToSize,"TSB_FIT_TO_SIZE");
+    get(m_pTsbContour,"TSB_CONTOUR");
+    get(m_pTsbWordWrapText,"TSB_WORDWRAP_TEXT");
+    get(m_pTsbAutoGrowSize,"TSB_AUTOGROW_SIZE");
+    get(m_pFlDistance,"FL_DISTANCE");
+    get(m_pMtrFldLeft,"MTR_FLD_LEFT");
+    get(m_pMtrFldRight,"MTR_FLD_RIGHT");
+    get(m_pMtrFldTop,"MTR_FLD_TOP");
+    get(m_pMtrFldBottom,"MTR_FLD_BOTTOM");
+    get(m_pFlPosition,"FL_POSITION");
+    get(m_pCtlPosition,"CTL_POSITION");
+//                       RP_MM, 240, 100 ),
+    get(m_pTsbFullWidth,"TSB_FULL_WIDTH");
+
 
     FieldUnit eFUnit = GetModuleFieldUnit( rInAttrs );
-    SetFieldUnit( aMtrFldLeft, eFUnit );
-    SetFieldUnit( aMtrFldRight, eFUnit );
-    SetFieldUnit( aMtrFldTop, eFUnit );
-    SetFieldUnit( aMtrFldBottom, eFUnit );
+    SetFieldUnit( *m_pMtrFldLeft, eFUnit );
+    SetFieldUnit( *m_pMtrFldRight, eFUnit );
+    SetFieldUnit( *m_pMtrFldTop, eFUnit );
+    SetFieldUnit( *m_pMtrFldBottom, eFUnit );
 
     Link aLink( LINK( this, SvxTextAttrPage, ClickHdl_Impl ) );
-    aTsbAutoGrowWidth.SetClickHdl( aLink );
-    aTsbAutoGrowHeight.SetClickHdl( aLink );
-    aTsbFitToSize.SetClickHdl( aLink );
-    aTsbContour.SetClickHdl( aLink );
+    m_pTsbAutoGrowWidth->SetClickHdl( aLink );
+    m_pTsbAutoGrowHeight->SetClickHdl( aLink );
+    m_pTsbFitToSize->SetClickHdl( aLink );
+    m_pTsbContour->SetClickHdl( aLink );
 
-    aTsbFullWidth.SetClickHdl(
-        LINK( this, SvxTextAttrPage, ClickFullWidthHdl_Impl ) );
+    m_pTsbFullWidth->SetClickHdl(LINK( this, SvxTextAttrPage, ClickFullWidthHdl_Impl ) );
 
-    aCtlPosition.SetAccessibleRelationMemberOf( &aFlPosition );
+//     aCtlPosition.SetAccessibleRelationMemberOf( &aFlPosition );
 }
 
 /*************************************************************************
@@ -133,11 +125,11 @@ void SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
     if( pItem )
     {
         long nValue = ( ( const SdrTextLeftDistItem* )pItem )->GetValue();
-        SetMetricValue( aMtrFldLeft, nValue, eUnit );
+        SetMetricValue( *m_pMtrFldLeft, nValue, eUnit );
     }
     else
-        aMtrFldLeft.SetText( String() );
-    aMtrFldLeft.SaveValue();
+        m_pMtrFldLeft->SetText( "" );
+    m_pMtrFldLeft->SaveValue();
 
     pItem = GetItem( rAttrs, SDRATTR_TEXT_RIGHTDIST );
     if( !pItem )
@@ -145,11 +137,11 @@ void SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
     if( pItem )
     {
         long nValue = ( ( const SdrTextRightDistItem* )pItem )->GetValue();
-        SetMetricValue( aMtrFldRight, nValue, eUnit );
+        SetMetricValue( *m_pMtrFldRight, nValue, eUnit );
     }
     else
-        aMtrFldRight.SetText( String() );
-    aMtrFldRight.SaveValue();
+        m_pMtrFldRight->SetText( "" );
+    m_pMtrFldRight->SaveValue();
 
     pItem = GetItem( rAttrs, SDRATTR_TEXT_UPPERDIST );
     if( !pItem )
@@ -157,11 +149,11 @@ void SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
     if( pItem )
     {
         long nValue = ( ( const SdrTextUpperDistItem* )pItem )->GetValue();
-        SetMetricValue( aMtrFldTop, nValue, eUnit );
+        SetMetricValue( *m_pMtrFldTop, nValue, eUnit );
     }
     else
-        aMtrFldTop.SetText( String() );
-    aMtrFldTop.SaveValue();
+        m_pMtrFldTop->SetText( "" );
+    m_pMtrFldTop->SaveValue();
 
     pItem = GetItem( rAttrs, SDRATTR_TEXT_LOWERDIST );
     if( !pItem )
@@ -169,55 +161,55 @@ void SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
     if( pItem )
     {
         long nValue = ( ( const SdrTextLowerDistItem* )pItem )->GetValue();
-        SetMetricValue( aMtrFldBottom, nValue, eUnit );
+        SetMetricValue( *m_pMtrFldBottom, nValue, eUnit );
     }
     else
-        aMtrFldBottom.SetText( String() );
-    aMtrFldBottom.SaveValue();
+        m_pMtrFldBottom->SetText( "" );
+    m_pMtrFldBottom->SaveValue();
 
     // adjust to height
     if ( rAttrs.GetItemState( SDRATTR_TEXT_AUTOGROWHEIGHT ) != SFX_ITEM_DONTCARE )
     {
-        aTsbAutoGrowHeight.SetState( ( ( const SdrTextAutoGrowHeightItem& )rAttrs.Get( SDRATTR_TEXT_AUTOGROWHEIGHT ) ).
+        m_pTsbAutoGrowHeight->SetState( ( ( const SdrTextAutoGrowHeightItem& )rAttrs.Get( SDRATTR_TEXT_AUTOGROWHEIGHT ) ).
                         GetValue() ? STATE_CHECK : STATE_NOCHECK );
-        aTsbAutoGrowHeight.EnableTriState( sal_False );
+        m_pTsbAutoGrowHeight->EnableTriState( sal_False );
     }
     else
-        aTsbAutoGrowHeight.SetState( STATE_DONTKNOW );
-    aTsbAutoGrowHeight.SaveValue();
+        m_pTsbAutoGrowHeight->SetState( STATE_DONTKNOW );
+    m_pTsbAutoGrowHeight->SaveValue();
 
     // adjust to width
     if ( rAttrs.GetItemState( SDRATTR_TEXT_AUTOGROWWIDTH ) != SFX_ITEM_DONTCARE )
     {
-        aTsbAutoGrowWidth.SetState( ( ( const SdrTextAutoGrowWidthItem& )rAttrs.Get( SDRATTR_TEXT_AUTOGROWWIDTH ) ).
+        m_pTsbAutoGrowWidth->SetState( ( ( const SdrTextAutoGrowWidthItem& )rAttrs.Get( SDRATTR_TEXT_AUTOGROWWIDTH ) ).
                         GetValue() ? STATE_CHECK : STATE_NOCHECK );
-        aTsbAutoGrowWidth.EnableTriState( sal_False );
+        m_pTsbAutoGrowWidth->EnableTriState( sal_False );
     }
     else
-        aTsbAutoGrowWidth.SetState( STATE_DONTKNOW );
-    aTsbAutoGrowWidth.SaveValue();
+        m_pTsbAutoGrowWidth->SetState( STATE_DONTKNOW );
+    m_pTsbAutoGrowWidth->SaveValue();
 
     // autogrowsize
     if ( rAttrs.GetItemState( SDRATTR_TEXT_AUTOGROWSIZE ) != SFX_ITEM_DONTCARE )
     {
-        aTsbAutoGrowSize.SetState( ( ( const SdrTextAutoGrowHeightItem& )rAttrs.Get( SDRATTR_TEXT_AUTOGROWHEIGHT ) ).
+        m_pTsbAutoGrowSize->SetState( ( ( const SdrTextAutoGrowHeightItem& )rAttrs.Get( SDRATTR_TEXT_AUTOGROWHEIGHT ) ).
                         GetValue() ? STATE_CHECK : STATE_NOCHECK );
-        aTsbAutoGrowSize.EnableTriState( sal_False );
+        m_pTsbAutoGrowSize->EnableTriState( sal_False );
     }
     else
-        aTsbAutoGrowSize.SetState( STATE_DONTKNOW );
-    aTsbAutoGrowSize.SaveValue();
+        m_pTsbAutoGrowSize->SetState( STATE_DONTKNOW );
+    m_pTsbAutoGrowSize->SaveValue();
 
     // wordwrap text
     if ( rAttrs.GetItemState( SDRATTR_TEXT_WORDWRAP ) != SFX_ITEM_DONTCARE )
     {
-        aTsbWordWrapText.SetState( ( ( const SdrTextWordWrapItem& )rAttrs.Get( SDRATTR_TEXT_WORDWRAP ) ).
+        m_pTsbWordWrapText->SetState( ( ( const SdrTextWordWrapItem& )rAttrs.Get( SDRATTR_TEXT_WORDWRAP ) ).
                         GetValue() ? STATE_CHECK : STATE_NOCHECK );
-        aTsbWordWrapText.EnableTriState( sal_False );
+        m_pTsbWordWrapText->EnableTriState( sal_False );
     }
     else
-        aTsbWordWrapText.SetState( STATE_DONTKNOW );
-    aTsbWordWrapText.SaveValue();
+        m_pTsbWordWrapText->SetState( STATE_DONTKNOW );
+    m_pTsbWordWrapText->SaveValue();
 
 
     // #103516# Do the setup based on states of hor/ver adjust
@@ -232,7 +224,7 @@ void SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
         SdrTextHorzAdjust eTHA = (SdrTextHorzAdjust)((const SdrTextHorzAdjustItem&)rAttrs.Get(SDRATTR_TEXT_HORZADJUST)).GetValue();
         RECT_POINT eRP = RP_LB;
 
-        aTsbFullWidth.EnableTriState( sal_False );
+        m_pTsbFullWidth->EnableTriState( sal_False );
 
         // Translate item values into local anchor position.
         switch (eTVA)
@@ -282,22 +274,21 @@ void SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
         {
             // Move anchor to valid position.
             ClickFullWidthHdl_Impl(NULL);
-            aTsbFullWidth.SetState(STATE_CHECK);
+            m_pTsbFullWidth->SetState(STATE_CHECK);
         }
 
-        aCtlPosition.SetActualRP( eRP );
+        m_pCtlPosition->SetActualRP( eRP );
     }
     else
     {
         // VertAdjust or HorAdjust is not unequivocal
-        aCtlPosition.Reset();
+        m_pCtlPosition->Reset();
 
-        aCtlPosition.SetState(STATE_DONTKNOW);
-        aCtlPosition.DoCompletelyDisable(sal_True);
+        m_pCtlPosition->SetState(STATE_DONTKNOW);
+        m_pCtlPosition->DoCompletelyDisable(sal_True);
 
-        aTsbFullWidth.SetState(STATE_DONTKNOW);
-        aTsbFullWidth.Enable( sal_False );
-        aFlPosition.Enable( sal_False );
+        m_pTsbFullWidth->SetState(STATE_DONTKNOW);
+        m_pFlPosition->Enable( sal_False );
     }
 
     // adjust to border
@@ -305,22 +296,22 @@ void SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
     {
         SdrFitToSizeType eFTS = (SdrFitToSizeType)
                     ( ( const SdrTextFitToSizeTypeItem& )rAttrs.Get( SDRATTR_TEXT_FITTOSIZE ) ).GetValue();
-        aTsbFitToSize.SetState( eFTS == SDRTEXTFIT_NONE ? STATE_NOCHECK : STATE_CHECK );
-        aTsbFitToSize.EnableTriState( sal_False );
+        m_pTsbFitToSize->SetState( eFTS == SDRTEXTFIT_NONE ? STATE_NOCHECK : STATE_CHECK );
+        m_pTsbFitToSize->EnableTriState( sal_False );
     }
     else
-        aTsbFitToSize.SetState( STATE_DONTKNOW );
-    aTsbFitToSize.SaveValue();
+        m_pTsbFitToSize->SetState( STATE_DONTKNOW );
+    m_pTsbFitToSize->SaveValue();
 
     if( rAttrs.GetItemState( SDRATTR_TEXT_CONTOURFRAME ) != SFX_ITEM_DONTCARE )
     {
         sal_Bool bContour = ( ( const SdrTextContourFrameItem& )rAttrs.Get( SDRATTR_TEXT_CONTOURFRAME ) ).GetValue();
-        aTsbContour.SetState( bContour ? STATE_CHECK : STATE_NOCHECK );
-        aTsbContour.EnableTriState( sal_False );
+        m_pTsbContour->SetState( bContour ? STATE_CHECK : STATE_NOCHECK );
+        m_pTsbContour->EnableTriState( sal_False );
     }
     else
-        aTsbContour.SetState( STATE_DONTKNOW );
-    aTsbContour.SaveValue();
+        m_pTsbContour->SetState( STATE_DONTKNOW );
+    m_pTsbContour->SaveValue();
 
     ClickHdl_Impl( NULL );
 }
@@ -340,62 +331,62 @@ sal_Bool SvxTextAttrPage::FillItemSet( SfxItemSet& rAttrs)
     sal_Int32    nValue;
     TriState eState;
 
-    if( aMtrFldLeft.GetText() != aMtrFldLeft.GetSavedValue() )
+    if( m_pMtrFldLeft->GetText() != m_pMtrFldLeft->GetSavedValue() )
     {
-        nValue = GetCoreValue( aMtrFldLeft, eUnit );
+        nValue = GetCoreValue( *m_pMtrFldLeft, eUnit );
         rAttrs.Put( SdrTextLeftDistItem( nValue ) );
     }
 
-    if( aMtrFldRight.GetText() != aMtrFldRight.GetSavedValue() )
+    if( m_pMtrFldRight->GetText() != m_pMtrFldRight->GetSavedValue() )
     {
-        nValue = GetCoreValue( aMtrFldRight, eUnit );
+        nValue = GetCoreValue( *m_pMtrFldRight, eUnit );
         rAttrs.Put( SdrTextRightDistItem( nValue ) );
     }
 
-    if( aMtrFldTop.GetText() != aMtrFldTop.GetSavedValue() )
+    if( m_pMtrFldTop->GetText() != m_pMtrFldTop->GetSavedValue() )
     {
-        nValue = GetCoreValue( aMtrFldTop, eUnit );
+        nValue = GetCoreValue( *m_pMtrFldTop, eUnit );
         rAttrs.Put( SdrTextUpperDistItem( nValue ) );
     }
 
-    if( aMtrFldBottom.GetText() != aMtrFldBottom.GetSavedValue() )
+    if( m_pMtrFldBottom->GetText() != m_pMtrFldBottom->GetSavedValue() )
     {
-        nValue = GetCoreValue( aMtrFldBottom, eUnit );
+        nValue = GetCoreValue( *m_pMtrFldBottom, eUnit );
         rAttrs.Put( SdrTextLowerDistItem( nValue ) );
     }
 
-    eState = aTsbAutoGrowHeight.GetState();
-    if( eState != aTsbAutoGrowHeight.GetSavedValue() )
+    eState = m_pTsbAutoGrowHeight->GetState();
+    if( eState != m_pTsbAutoGrowHeight->GetSavedValue() )
     {
         rAttrs.Put( SdrTextAutoGrowHeightItem( (sal_Bool) STATE_CHECK == eState ) );
     }
 
-    eState = aTsbAutoGrowWidth.GetState();
-    if( eState != aTsbAutoGrowWidth.GetSavedValue() )
+    eState = m_pTsbAutoGrowWidth->GetState();
+    if( eState != m_pTsbAutoGrowWidth->GetSavedValue() )
     {
         rAttrs.Put( SdrTextAutoGrowWidthItem( (sal_Bool) STATE_CHECK == eState ) );
     }
 
-    eState = aTsbAutoGrowSize.GetState();
-    if( eState != aTsbAutoGrowSize.GetSavedValue() )
+    eState = m_pTsbAutoGrowSize->GetState();
+    if( eState != m_pTsbAutoGrowSize->GetSavedValue() )
     {
         rAttrs.Put( SdrTextAutoGrowHeightItem( (sal_Bool) STATE_CHECK == eState ) );
     }
 
-    eState = aTsbWordWrapText.GetState();
-    if( eState != aTsbWordWrapText.GetSavedValue() )
+    eState = m_pTsbWordWrapText->GetState();
+    if( eState != m_pTsbWordWrapText->GetSavedValue() )
     {
         rAttrs.Put( SdrTextWordWrapItem( (sal_Bool) STATE_CHECK == eState ) );
     }
 
-    eState = aTsbContour.GetState();
-    if( eState != aTsbContour.GetSavedValue() )
+    eState = m_pTsbContour->GetState();
+    if( eState != m_pTsbContour->GetSavedValue() )
     {
         rAttrs.Put( SdrTextContourFrameItem( (sal_Bool) STATE_CHECK == eState ) );
     }
 
-    eState = aTsbFitToSize.GetState();
-    if( eState != aTsbFitToSize.GetSavedValue() )
+    eState = m_pTsbFitToSize->GetState();
+    if( eState != m_pTsbFitToSize->GetSavedValue() )
     {
         SdrFitToSizeType eFTS;
         switch( eState )
@@ -409,7 +400,7 @@ sal_Bool SvxTextAttrPage::FillItemSet( SfxItemSet& rAttrs)
     }
 
     // centered
-    RECT_POINT eRP = aCtlPosition.GetActualRP();
+    RECT_POINT eRP = m_pCtlPosition->GetActualRP();
     SdrTextVertAdjust eTVA, eOldTVA;
     SdrTextHorzAdjust eTHA, eOldTHA;
 
@@ -437,11 +428,11 @@ sal_Bool SvxTextAttrPage::FillItemSet( SfxItemSet& rAttrs)
     }
 
     // #103516# Do not change values if adjust controls were disabled.
-    sal_Bool bIsDisabled(aCtlPosition.IsCompletelyDisabled());
+    sal_Bool bIsDisabled(m_pCtlPosition->IsCompletelyDisabled());
 
     if(!bIsDisabled)
     {
-        if( aTsbFullWidth.GetState() == STATE_CHECK )
+        if( m_pTsbFullWidth->GetState() == STATE_CHECK )
         {
             if (IsTextDirectionLeftToRight())
                 eTHA = SDRTEXTHORZADJUST_BLOCK;
@@ -515,12 +506,12 @@ void SvxTextAttrPage::Construct()
             }
         }
     }
-    aTsbAutoGrowHeight.Enable( bAutoGrowHeightEnabled );
-    aTsbAutoGrowWidth.Enable( bAutoGrowWidthEnabled );
-    aTsbFitToSize.Enable( bFitToSizeEnabled );
-    aTsbContour.Enable( bContourEnabled );
-    aTsbAutoGrowSize.Enable( bAutoGrowSizeEnabled );
-    aTsbWordWrapText.Enable( bWordWrapTextEnabled );
+    m_pTsbAutoGrowHeight->Enable( bAutoGrowHeightEnabled );
+    m_pTsbAutoGrowWidth->Enable( bAutoGrowWidthEnabled );
+    m_pTsbFitToSize->Enable( bFitToSizeEnabled );
+    m_pTsbContour->Enable( bContourEnabled );
+    m_pTsbAutoGrowSize->Enable( bAutoGrowSizeEnabled );
+    m_pTsbWordWrapText->Enable( bWordWrapTextEnabled );
 }
 
 /*************************************************************************
@@ -544,7 +535,7 @@ sal_uInt16* SvxTextAttrPage::GetRanges()
 */
 void SvxTextAttrPage::PointChanged( Window*, RECT_POINT eRP )
 {
-    if (aTsbFullWidth.GetState() == STATE_CHECK)
+    if (m_pTsbFullWidth->GetState() == STATE_CHECK)
     {
         // Depending on write direction and currently checked anchor we have
         // to uncheck the "full width" button.
@@ -557,7 +548,7 @@ void SvxTextAttrPage::PointChanged( Window*, RECT_POINT eRP )
                 case RP_RT:
                 case RP_RM:
                 case RP_RB:
-                    aTsbFullWidth.SetState( STATE_NOCHECK );
+                    m_pTsbFullWidth->SetState( STATE_NOCHECK );
                 break;
                 default: ;//prevent warning
             }
@@ -570,7 +561,7 @@ void SvxTextAttrPage::PointChanged( Window*, RECT_POINT eRP )
                 case RP_LB:
                 case RP_MB:
                 case RP_RB:
-                    aTsbFullWidth.SetState( STATE_NOCHECK );
+                    m_pTsbFullWidth->SetState( STATE_NOCHECK );
                 break;
                 default: ;//prevent warning
             }
@@ -589,26 +580,26 @@ void SvxTextAttrPage::PointChanged( Window*, RECT_POINT eRP )
 */
 IMPL_LINK_NOARG(SvxTextAttrPage, ClickFullWidthHdl_Impl)
 {
-    if( aTsbFullWidth.GetState() == STATE_CHECK )
+    if( m_pTsbFullWidth->GetState() == STATE_CHECK )
     {
         if (IsTextDirectionLeftToRight())
         {
             // Move text anchor to horizontal middle axis.
-            switch( aCtlPosition.GetActualRP() )
+            switch( m_pCtlPosition->GetActualRP() )
             {
                 case RP_LT:
                 case RP_RT:
-                    aCtlPosition.SetActualRP( RP_MT );
+                    m_pCtlPosition->SetActualRP( RP_MT );
                     break;
 
                 case RP_LM:
                 case RP_RM:
-                    aCtlPosition.SetActualRP( RP_MM );
+                    m_pCtlPosition->SetActualRP( RP_MM );
                     break;
 
                 case RP_LB:
                 case RP_RB:
-                    aCtlPosition.SetActualRP( RP_MB );
+                    m_pCtlPosition->SetActualRP( RP_MB );
                     break;
                 default: ;//prevent warning
             }
@@ -616,21 +607,21 @@ IMPL_LINK_NOARG(SvxTextAttrPage, ClickFullWidthHdl_Impl)
         else
         {
             // Move text anchor to vertical middle axis.
-            switch( aCtlPosition.GetActualRP() )
+            switch( m_pCtlPosition->GetActualRP() )
             {
                 case RP_LT:
                 case RP_LB:
-                    aCtlPosition.SetActualRP( RP_LM );
+                    m_pCtlPosition->SetActualRP( RP_LM );
                     break;
 
                 case RP_MT:
                 case RP_MB:
-                    aCtlPosition.SetActualRP( RP_MM );
+                    m_pCtlPosition->SetActualRP( RP_MM );
                     break;
 
                 case RP_RT:
                 case RP_RB:
-                    aCtlPosition.SetActualRP( RP_RM );
+                    m_pCtlPosition->SetActualRP( RP_RM );
                 break;
                 default: ;//prevent warning
             }
@@ -647,44 +638,36 @@ IMPL_LINK_NOARG(SvxTextAttrPage, ClickFullWidthHdl_Impl)
 
 IMPL_LINK_NOARG(SvxTextAttrPage, ClickHdl_Impl)
 {
-    sal_Bool bAutoGrowWidth  = aTsbAutoGrowWidth.GetState() == STATE_CHECK;
-    sal_Bool bAutoGrowHeight = aTsbAutoGrowHeight.GetState() == STATE_CHECK;
-    sal_Bool bFitToSize      = aTsbFitToSize.GetState() == STATE_CHECK;
-    sal_Bool bContour        = aTsbContour.GetState() == STATE_CHECK;
+    sal_Bool bAutoGrowWidth  = m_pTsbAutoGrowWidth->GetState() == STATE_CHECK;
+    sal_Bool bAutoGrowHeight = m_pTsbAutoGrowHeight->GetState() == STATE_CHECK;
+    sal_Bool bFitToSize      = m_pTsbFitToSize->GetState() == STATE_CHECK;
+    sal_Bool bContour        = m_pTsbContour->GetState() == STATE_CHECK;
 
-    aTsbContour.Enable( !bFitToSize &&
+    m_pTsbContour->Enable( !bFitToSize &&
                         !( ( bAutoGrowWidth && bAutoGrowWidthEnabled ) || ( bAutoGrowHeight && bAutoGrowHeightEnabled ) ) &&
                         bContourEnabled );
 
-    aTsbAutoGrowWidth.Enable( !bFitToSize &&
+    m_pTsbAutoGrowWidth->Enable( !bFitToSize &&
                               !( bContour && bContourEnabled ) &&
                               bAutoGrowWidthEnabled );
 
-    aTsbAutoGrowHeight.Enable( !bFitToSize &&
+    m_pTsbAutoGrowHeight->Enable( !bFitToSize &&
                                !( bContour && bContourEnabled ) &&
                                bAutoGrowHeightEnabled );
 
-    aTsbFitToSize.Enable( !( ( bAutoGrowWidth && bAutoGrowWidthEnabled ) || ( bAutoGrowHeight && bAutoGrowHeightEnabled ) ) &&
+    m_pTsbFitToSize->Enable( !( ( bAutoGrowWidth && bAutoGrowWidthEnabled ) || ( bAutoGrowHeight && bAutoGrowHeightEnabled ) ) &&
                           !( bContour && bContourEnabled ) &&
                           bFitToSizeEnabled );
 
     // #101901# enable/disable metric fields and decorations dependent of contour
-    aMtrFldLeft.Enable(!bContour);
-    aMtrFldRight.Enable(!bContour);
-    aMtrFldTop.Enable(!bContour);
-    aMtrFldBottom.Enable(!bContour);
-    aFlDistance.Enable(!bContour);
-    aFtLeft.Enable(!bContour);
-    aFtRight.Enable(!bContour);
-    aFtTop.Enable(!bContour);
-    aFtBottom.Enable(!bContour);
+    m_pFlDistance->Enable(!bContour);
 
     if( bContour && bContourEnabled )
     {
-        aMtrFldLeft.SetValue( 0 );
-        aMtrFldRight.SetValue( 0 );
-        aMtrFldTop.SetValue( 0 );
-        aMtrFldBottom.SetValue( 0 );
+        m_pMtrFldLeft->SetValue( 0 );
+        m_pMtrFldRight->SetValue( 0 );
+        m_pMtrFldTop->SetValue( 0 );
+        m_pMtrFldBottom->SetValue( 0 );
     }
 
     // #103516# Do the setup based on states of hor/ver adjust
@@ -693,9 +676,7 @@ IMPL_LINK_NOARG(SvxTextAttrPage, ClickHdl_Impl)
     sal_Bool bHorAndVer(SFX_ITEM_DONTCARE == eVState || SFX_ITEM_DONTCARE == eHState);
 
     // #83698# enable/disable text anchoring dependent of contour
-    aCtlPosition.Enable(!bContour && !bHorAndVer);
-    aTsbFullWidth.Enable(!bContour && !bHorAndVer);
-    aFlPosition.Enable(!bContour && !bHorAndVer);
+    m_pFlPosition->Enable(!bContour && !bHorAndVer);
 
     return( 0L );
 }
