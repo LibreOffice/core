@@ -96,6 +96,15 @@ SvxRectCtl::SvxRectCtl(Window* pParent, RECT_POINT eRpt,
     Resize_Impl();
 }
 
+void SvxRectCtl::SetControlSettings(RECT_POINT eRpt, sal_uInt16 nBorder, sal_uInt16 nCircle, CTL_STYLE eStyle)
+{
+    nBorderWidth = nBorder;
+    nRadius = nCircle;
+    eDefRP = eRpt;
+    eCS = eStyle;
+    Resize_Impl();
+}
+
 Size SvxRectCtl::GetOptimalSize() const
 {
     return LogicToPixel(Size(39, 39), MAP_APPFONT);

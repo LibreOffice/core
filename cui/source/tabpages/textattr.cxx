@@ -75,7 +75,7 @@ SvxTextAttrPage::SvxTextAttrPage( Window* pWindow, const SfxItemSet& rInAttrs ) 
     get(m_pMtrFldBottom,"MTR_FLD_BOTTOM");
     get(m_pFlPosition,"FL_POSITION");
     get(m_pCtlPosition,"CTL_POSITION");
-//                       RP_MM, 240, 100 ),
+    m_pCtlPosition->SetControlSettings(RP_MM, 240, 100),
     get(m_pTsbFullWidth,"TSB_FULL_WIDTH");
 
 
@@ -92,8 +92,6 @@ SvxTextAttrPage::SvxTextAttrPage( Window* pWindow, const SfxItemSet& rInAttrs ) 
     m_pTsbContour->SetClickHdl( aLink );
 
     m_pTsbFullWidth->SetClickHdl(LINK( this, SvxTextAttrPage, ClickFullWidthHdl_Impl ) );
-
-//     aCtlPosition.SetAccessibleRelationMemberOf( &aFlPosition );
 }
 
 /*************************************************************************

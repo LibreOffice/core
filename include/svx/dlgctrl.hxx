@@ -102,6 +102,8 @@ public:
                 sal_uInt16 nBorder = 200, sal_uInt16 nCircle = 80, CTL_STYLE eStyle = CS_RECT );
     SvxRectCtl( Window* pParent, RECT_POINT eRpt = RP_MM,
                 sal_uInt16 nBorder = 200, sal_uInt16 nCircle = 80, CTL_STYLE eStyle = CS_RECT );
+    void SetControlSettings(RECT_POINT eRpt = RP_MM, sal_uInt16 nBorder = 200,
+        sal_uInt16 nCircle = 80, CTL_STYLE eStyle = CS_RECT);
     virtual ~SvxRectCtl();
 
     virtual void        Paint( const Rectangle& rRect );
