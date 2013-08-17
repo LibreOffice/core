@@ -263,12 +263,12 @@ sal_Bool SwEditShell::IsUpdateTOX() const
     return GetDoc()->IsUpdateTOX();
 }
 
-const String&   SwEditShell::GetTOIAutoMarkURL() const
+OUString SwEditShell::GetTOIAutoMarkURL() const
 {
     return GetDoc()->GetTOIAutoMarkURL();
 }
 
-void SwEditShell::SetTOIAutoMarkURL(const String& rSet)
+void SwEditShell::SetTOIAutoMarkURL(const OUString& rSet)
 {
     GetDoc()->SetTOIAutoMarkURL(rSet);
 }

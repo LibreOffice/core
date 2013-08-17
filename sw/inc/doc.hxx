@@ -284,7 +284,7 @@ class SW_DLLPUBLIC SwDoc :
     Timer       maStatsUpdateTimer;      ///< Timer for asynchronous stats calculation
     SwDBData    maDBData;                ///< database descriptor
     ::com::sun::star::uno::Sequence <sal_Int8 > maRedlinePasswd;
-    String      msTOIAutoMarkURL;        ///< ::com::sun::star::util::URL of table of index AutoMark file
+    OUString    msTOIAutoMarkURL;        ///< ::com::sun::star::util::URL of table of index AutoMark file
     boost::ptr_vector< boost::nullable<String> > maPatternNms;          // Array for names of document-templates
     com::sun::star::uno::Reference<com::sun::star::container::XNameContainer>
         mxXForms;                        ///< container with XForms models
@@ -1409,8 +1409,8 @@ public:
     void SetUpdateTOX( bool bFlag = true )     { mbUpdateTOX = bFlag; }
     bool IsUpdateTOX() const                   { return mbUpdateTOX; }
 
-    const String&   GetTOIAutoMarkURL() const {return msTOIAutoMarkURL;}
-    void            SetTOIAutoMarkURL(const String& rSet)  {msTOIAutoMarkURL = rSet;}
+    OUString        GetTOIAutoMarkURL() const {return msTOIAutoMarkURL;}
+    void            SetTOIAutoMarkURL(const OUString& rSet) {msTOIAutoMarkURL = rSet;}
     void            ApplyAutoMark();
 
     bool IsInReading() const                    { return mbInReading; }
