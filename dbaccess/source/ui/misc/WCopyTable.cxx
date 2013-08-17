@@ -261,8 +261,7 @@ OUString ObjectCopySource::getSelectStatement() const
                 aSQL.appendAscii( ", " );
         }
 
-        aSQL.appendAscii( "FROM " );
-        aSQL.append( ::dbtools::composeTableNameForSelect( m_xConnection, m_xObject ) );
+        aSQL.append( "FROM " + ::dbtools::composeTableNameForSelect( m_xConnection, m_xObject ) );
 
         sSelectStatement = aSQL.makeStringAndClear();
     }

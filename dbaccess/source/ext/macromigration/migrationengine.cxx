@@ -1253,12 +1253,7 @@ namespace dbmm
                 }
                 sBaseName = aReplacement.makeStringAndClear();
 
-                OUStringBuffer aNewLibNameAttempt;
-                aNewLibNameAttempt.append( sPrefix );
-                aNewLibNameAttempt.append( sBaseName );
-                aNewLibNameAttempt.appendAscii( "_" );
-                aNewLibNameAttempt.append( _rSourceLibName );
-                OUString sTargetName( aNewLibNameAttempt.makeStringAndClear() );
+                OUString sTargetName( sPrefix + sBaseName + "_" + _rSourceLibName );
                 if ( !_rxTargetContainer->hasByName( sTargetName ) )
                     return sTargetName;
             }
@@ -1267,12 +1262,7 @@ namespace dbmm
             // (The latter is valid, since there can be multiple sub documents with the same base name,
             // in different levels in the hierarchy.)
             // In this case, just use the umambiguous sub document number.
-            OUStringBuffer aNewLibName;
-            aNewLibName.append( sPrefix );
-            aNewLibName.append( OUString::valueOf( sal_Int64( _rDocument.nNumber ) ) );
-            aNewLibName.appendAscii( "_" );
-            aNewLibName.append( _rSourceLibName );
-            return aNewLibName.makeStringAndClear();
+            return sPrefix + OUString::valueOf( sal_Int64( _rDocument.nNumber ) ) + "_" + _rSourceLibName;
         }
     }
 
@@ -1680,10 +1670,7 @@ namespace dbmm
             OSL_ENSURE( sLibrary != sNewLibName,
                 "MigrationEngine_Impl::impl_adjustScriptLibrary_nothrow: a library which has not been migrated?" );
 
-            OUStringBuffer aNewLocation;
-            aNewLocation.append( sNewLibName );
-            aNewLocation.append( sScriptName.copy( nLibModuleSeparator ) );
-            xUri->setName( aNewLocation.makeStringAndClear() );
+            xUri->setName( sNewLibName + sScriptName.copy( nLibModuleSeparator ) );
 
             // update the new script URL
             _inout_rScriptCode = xUri->getUriReference();

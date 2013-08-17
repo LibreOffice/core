@@ -218,10 +218,7 @@ namespace dbaccess
     private:
         OUString impl_prefix( const ::xmloff::token::XMLTokenEnum i_eToken )
         {
-            OUStringBuffer aQualifiedName( m_aNamespace );
-            aQualifiedName.append( sal_Unicode( ':' ) );
-            aQualifiedName.append( ::xmloff::token::GetXMLToken( i_eToken ) );
-            return aQualifiedName.makeStringAndClear();
+            return m_aNamespace + ":" + ::xmloff::token::GetXMLToken( i_eToken );
         }
 
     private:
