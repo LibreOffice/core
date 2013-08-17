@@ -361,8 +361,10 @@ MacroSecurityTrustedSourcesTP::MacroSecurityTrustedSourcesTP(Window* _pParent, M
     static long aTabs[] = { 3, 0, 0, 0 };
     m_pTrustCertLB->SetTabs( aTabs );
 
-    m_pTrustCertLB->InsertHeaderEntry(get<FixedText>("to")->GetText() + "\t"
-        +  get<FixedText>("by")->GetText() + "\t" + get<FixedText>("date")->GetText());
+    OUStringBuffer aBuf(get<FixedText>("to")->GetText());
+    aBuf.append("\t").append(get<FixedText>("by")->GetText())
+        .append("\t").append(get<FixedText>("date")->GetText());
+    m_pTrustCertLB->InsertHeaderEntry(aBuf.makeStringAndClear());
 
     m_pTrustCertLB->SetSelectHdl( LINK( this, MacroSecurityTrustedSourcesTP, TrustCertLBSelectHdl ) );
     m_pViewCertPB->SetClickHdl( LINK( this, MacroSecurityTrustedSourcesTP, ViewCertPBHdl ) );
