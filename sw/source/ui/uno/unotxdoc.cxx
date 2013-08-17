@@ -2070,7 +2070,7 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
         }
         break;
         case WID_DOC_AUTO_MARK_URL :
-            aAny <<= OUString(pDocShell->GetDoc()->GetTOIAutoMarkURL());
+            aAny <<= pDocShell->GetDoc()->GetTOIAutoMarkURL();
         break;
         case WID_DOC_HIDE_TIPS :
         {

@@ -446,8 +446,8 @@ public:
     void                InsertTOXType(const SwTOXType& rTyp);
 
     /// AutoMark file
-    const String&   GetTOIAutoMarkURL() const;
-    void            SetTOIAutoMarkURL(const String& rSet);
+    OUString        GetTOIAutoMarkURL() const;
+    void            SetTOIAutoMarkURL(const OUString& rSet);
     void            ApplyAutoMark();
 
     /// Key for managing index.
