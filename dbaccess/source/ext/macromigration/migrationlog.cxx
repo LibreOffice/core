@@ -430,11 +430,8 @@ namespace dbmm
             OUString sBackedUp( MacroMigrationResId( STR_SAVED_COPY_TO ) );
             sBackedUp = sBackedUp.replaceAll( "$location$", m_pData->sBackupLocation );
 
-            aBuffer.appendAscii( "=== " );
-            aBuffer.append     ( OUString( MacroMigrationResId( STR_DATABASE_DOCUMENT ) ) );
-            aBuffer.appendAscii( " ===\n" );
-            aBuffer.append     ( sBackedUp );
-            aBuffer.appendAscii( "\n\n" );
+            aBuffer.append( "=== " + OUString( MacroMigrationResId( STR_DATABASE_DOCUMENT ) )
+                    + " ===\n" + sBackedUp + "\n\n");
         }
 
         if ( !m_pData->aFailures.empty() )
@@ -459,9 +456,7 @@ namespace dbmm
                 OUString sDocTitle( MacroMigrationResId( rDoc.eType == eForm ? STR_FORM : STR_REPORT ) );
                 sDocTitle = sDocTitle.replaceAll( "$name$", rDoc.sName );
 
-                aBuffer.appendAscii( "=== " );
-                aBuffer.append     ( sDocTitle );
-                aBuffer.appendAscii( " ===\n" );
+                aBuffer.append( "=== " + sDocTitle + " ===\n" );
 
                 for (   ::std::vector< LibraryEntry >::const_iterator lib = rDoc.aMovedLibraries.begin();
                         lib != rDoc.aMovedLibraries.end();
@@ -473,8 +468,7 @@ namespace dbmm
                     sMovedLib = sMovedLib.replaceAll( "$old$", lib->sOldName );
                     sMovedLib = sMovedLib.replaceAll( "$new$", lib->sNewName );
 
-                    aBuffer.append( sMovedLib );
-                    aBuffer.append( sal_Unicode( '\n' ) );
+                    aBuffer.append( sMovedLib + "\n" );
                 }
 
                 aBuffer.append( sal_Unicode( '\n' ) );
