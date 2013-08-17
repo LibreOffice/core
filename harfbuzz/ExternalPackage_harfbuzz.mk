@@ -11,7 +11,10 @@ $(eval $(call gb_ExternalPackage_ExternalPackage,harfbuzz,harfbuzz))
 
 $(eval $(call gb_ExternalPackage_use_external_project,harfbuzz,harfbuzz))
 
-$(eval $(call gb_ExternalPackage_add_file,harfbuzz,lib/libharfbuzz.a,src/.libs/libharfbuzz.a))
+$(eval $(call gb_ExternalPackage_add_files,harfbuzz,lib,\
+	src/.libs/libharfbuzz.a \
+	src/.libs/libharfbuzz-icu.a \
+))
 
 
 # vim: set noet sw=4 ts=4:

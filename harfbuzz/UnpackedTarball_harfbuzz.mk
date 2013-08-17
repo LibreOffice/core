@@ -11,9 +11,4 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,harfbuzz))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,harfbuzz,$(HARFBUZZ_TARBALL),,harfbuzz))
 
-$(eval $(call gb_UnpackedTarball_add_patches,harfbuzz, \
-	harfbuzz/harfbuzz.configure.patch.1 \
-	harfbuzz/harfbuzz-0.9.16-winxp.patch.1 \
-))
-
 # vim: set noet sw=4 ts=4:
