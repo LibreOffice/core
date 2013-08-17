@@ -17,6 +17,8 @@
 #import "MainSplitViewController.h"
 #import "serverList_vc.h"
 #import <dispatch/dispatch.h>
+#import <SystemConfiguration/SystemConfiguration.h>
+#import <SystemConfiguration/CaptiveNetwork.h>
 
 #define ExistingServersKey @"CommunicationManager.ExistingServers"
 
@@ -46,6 +48,16 @@
     return sharedComManager;
 }
 
++ (id)fetchSSIDInfo {
+    NSArray *ifs = (__bridge_transfer id)CNCopySupportedInterfaces();
+    id info = nil;
+    for (NSString *ifnam in ifs) {
+        info = (__bridge_transfer id)CNCopyCurrentNetworkInfo((__bridge CFStringRef)ifnam);
+        NSLog(@"%@ => %@", ifnam, info);
+        if (info && [info count]) { break; }
+    }
+    return info;
+}
 
 - (void) connectionStatusHandler:(NSNotification *)note
 {
@@ -189,5 +201,26 @@
     [[NSUserDefaults standardUserDefaults] setObject:[NSKeyedArchiver archivedDataWithRootObject:self.servers] forKey:ExistingServersKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
+
+#pragma mark -
+//
+//- (NetworkStatus) currentReachabilityStatus
+//{
+//    NSAssert(reachabilityRef != NULL, @"currentNetworkStatus called with NULL reachabilityRef");
+//    NetworkStatus retVal = NotReachable;
+//    SCNetworkReachabilityFlags flags;
+//    if (SCNetworkReachabilityGetFlags(reachabilityRef, &flags))
+//    {
+//        if(localWiFiRef)
+//        {
+//            retVal = [self localWiFiStatusForFlags: flags];
+//        }
+//        else
+//        {
+//            retVal = [self networkStatusForFlags: flags];
+//        }
+//    }
+//    return retVal;
+//}
 
 @end
