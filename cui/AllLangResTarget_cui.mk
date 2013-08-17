@@ -76,7 +76,6 @@ $(eval $(call gb_SrsTarget_add_files,cui/res,\
     cui/source/tabpages/paragrph.src \
     cui/source/tabpages/strings.src \
     cui/source/tabpages/textanim.src \
-    cui/source/tabpages/textattr.src \
     cui/source/tabpages/transfrm.src \
 ))
 
