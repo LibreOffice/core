@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "linkeddocuments.hxx"
 #include <osl/diagnose.h>
 #include <tools/diagnose_ex.h>
@@ -44,7 +43,6 @@
 #include "browserids.hxx"
 #include <sfx2/new.hxx>
 #include "moduledbu.hxx"
-// -----------------
 // for calling basic
 #include <sfx2/app.hxx>
 #include <basic/sbx.hxx>
@@ -61,10 +59,8 @@
 #include <com/sun/star/io/WrongFormatException.hpp>
 #include "com/sun/star/sdb/RowSetVetoException.hpp"
 
-//......................................................................
 namespace dbaui
 {
-//......................................................................
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::container;
@@ -106,12 +102,8 @@ namespace dbaui
         }
     }
 
-
-    //==================================================================
-    //= OLinkedDocumentsAccess
-    //==================================================================
+    // OLinkedDocumentsAccess
     DBG_NAME(OLinkedDocumentsAccess)
-    //------------------------------------------------------------------
     OLinkedDocumentsAccess::OLinkedDocumentsAccess( Window* _pDialogParent, const Reference< XDatabaseDocumentUI >& i_rDocumentUI,
         const Reference< XComponentContext >& _rxContext, const Reference< XNameAccess >& _rxContainer,
         const Reference< XConnection>& _xConnection, const OUString& _sDataSourceName )
@@ -126,12 +118,10 @@ namespace dbaui
         OSL_ENSURE(m_xContext.is(), "OLinkedDocumentsAccess::OLinkedDocumentsAccess: invalid service factory!");
         OSL_ENSURE(m_pDialogParent, "OLinkedDocumentsAccess::OLinkedDocumentsAccess: really need a dialog parent!");
     }
-    //------------------------------------------------------------------
     OLinkedDocumentsAccess::~OLinkedDocumentsAccess()
     {
         DBG_DTOR(OLinkedDocumentsAccess,NULL);
     }
-    //------------------------------------------------------------------
     Reference< XComponent> OLinkedDocumentsAccess::impl_open( const OUString& _rLinkName, Reference< XComponent >& _xDefinition,
         ElementOpenMode _eOpenMode, const ::comphelper::NamedValueCollection& _rAdditionalArgs )
     {
@@ -185,7 +175,6 @@ namespace dbaui
 
         return xRet;
     }
-    //------------------------------------------------------------------
     void OLinkedDocumentsAccess::impl_newWithPilot( const char* _pWizardService,
         const sal_Int32 _nCommandType, const OUString& _rObjectName )
     {
@@ -223,28 +212,23 @@ namespace dbaui
             DBG_UNHANDLED_EXCEPTION();
         }
     }
-    //------------------------------------------------------------------
     void OLinkedDocumentsAccess::newFormWithPilot( const sal_Int32 _nCommandType,const OUString& _rObjectName )
     {
         impl_newWithPilot( "com.sun.star.wizards.form.CallFormWizard", _nCommandType, _rObjectName );
     }
 
-    //------------------------------------------------------------------
     void OLinkedDocumentsAccess::newReportWithPilot( const sal_Int32 _nCommandType, const OUString& _rObjectName )
     {
         impl_newWithPilot( "com.sun.star.wizards.report.CallReportWizard", _nCommandType, _rObjectName );
     }
-    //------------------------------------------------------------------
     void OLinkedDocumentsAccess::newTableWithPilot()
     {
         impl_newWithPilot( "com.sun.star.wizards.table.CallTableWizard", -1, OUString() );
     }
-    //------------------------------------------------------------------
     void OLinkedDocumentsAccess::newQueryWithPilot()
     {
         impl_newWithPilot( "com.sun.star.wizards.query.CallQueryWizard", -1, OUString() );
     }
-    //------------------------------------------------------------------
     Reference< XComponent > OLinkedDocumentsAccess::newDocument( sal_Int32 i_nActionID,
         const ::comphelper::NamedValueCollection& i_rCreationArgs, Reference< XComponent >& o_rDefinition )
     {
@@ -331,7 +315,6 @@ namespace dbaui
         return xNewDocument;
     }
 
-    //------------------------------------------------------------------
     Reference< XComponent > OLinkedDocumentsAccess::open( const OUString& _rLinkName, Reference< XComponent >& _xDefinition,
         ElementOpenMode _eOpenMode, const ::comphelper::NamedValueCollection& _rAdditionalArgs )
     {
@@ -393,9 +376,6 @@ namespace dbaui
         return xRet;
     }
 
-
-//......................................................................
 }   // namespace dbaui
-//......................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

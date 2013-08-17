@@ -30,17 +30,13 @@
 
 #include <memory>
 
-//........................................................................
 namespace dbaui
 {
-//........................................................................
 
     struct SubComponentManager_Data;
     class OApplicationController;
 
-    //====================================================================
-    //= SubComponentManager
-    //====================================================================
+    // SubComponentManager
     typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::beans::XPropertyChangeListener
                                     >   SubComponentManager_Base;
     class SubComponentManager : public SubComponentManager_Base
@@ -120,9 +116,7 @@ namespace dbaui
         ::std::auto_ptr< SubComponentManager_Data > m_pData;
     };
 
-//........................................................................
 } // namespace dbaui
-//........................................................................
 
 #endif // DBACCESS_SUBCOMPONENTMANAGER_HXX
 

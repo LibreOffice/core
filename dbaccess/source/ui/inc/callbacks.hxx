@@ -34,15 +34,11 @@ struct ExecuteDropEvent;
 
 namespace cppu { class OInterfaceContainerHelper; }
 
-//........................................................................
 namespace dbaui
 {
-//........................................................................
 
     class IController;
-    //====================================================================
-    //= IControlActionListener
-    //====================================================================
+    // IControlActionListener
     class SAL_NO_VTABLE IControlActionListener
     {
     public:
@@ -68,9 +64,7 @@ namespace dbaui
         ~IControlActionListener() {}
     };
 
-    //====================================================================
-    //= IContextMenuProvider
-    //====================================================================
+    // IContextMenuProvider
     class SAL_NO_VTABLE IContextMenuProvider
     {
     public:
@@ -106,9 +100,7 @@ namespace dbaui
         ~IContextMenuProvider() {}
     };
 
-    //====================================================================
-    //= IDragTransferableListener
-    //====================================================================
+    // IDragTransferableListener
     class SAL_NO_VTABLE IDragTransferableListener
     {
     public:
@@ -119,9 +111,7 @@ namespace dbaui
         ~IDragTransferableListener() {}
     };
 
-//........................................................................
 }   // namespace dbaui
-//........................................................................
 
 #endif // _DBACCESS_UI_CALLBACKS_HXX_
 

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "ConnectionPageSetup.hxx"
 #include "AutoControls.hrc"
 #include "dbadminsetup.hrc"
@@ -55,10 +54,8 @@
 #include <sfx2/docfilt.hxx>
 #include <vcl/mnemonic.hxx>
 
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::ucb;
     using namespace ::com::sun::star::ui::dialogs;
@@ -69,15 +66,12 @@ namespace dbaui
     using namespace ::dbtools;
     using namespace ::svt;
 
-
-
     OGenericAdministrationPage* OConnectionTabPageSetup::CreateDbaseTabPage( Window* pParent, const SfxItemSet& _rAttrSet )
     {
         OConnectionTabPageSetup* oDBWizardPage = new OConnectionTabPageSetup( pParent, PAGE_DBWIZARD_DBASE,    _rAttrSet, STR_DBASE_HELPTEXT,    STR_DBASE_HEADERTEXT,    STR_DBASE_PATH_OR_FILE);
         oDBWizardPage->FreeResource();
         return oDBWizardPage;
     }
-
 
     OGenericAdministrationPage* OConnectionTabPageSetup::CreateMSAccessTabPage( Window* pParent, const SfxItemSet& _rAttrSet )
     {
@@ -107,10 +101,7 @@ namespace dbaui
         return oDBWizardPage;
     }
 
-
-    //========================================================================
-    //= OConnectionTabPageSetup
-    //========================================================================
+    // OConnectionTabPageSetup
     DBG_NAME(OConnectionTabPageSetup)
     OConnectionTabPageSetup::OConnectionTabPageSetup(Window* pParent, sal_uInt16 _rId, const SfxItemSet& _rCoreAttrs, sal_uInt16 _nHelpTextResId, sal_uInt16 _nHeaderResId, sal_uInt16 _nUrlResId)
         :OConnectionHelper(pParent, ModuleRes(_rId), _rCoreAttrs)
@@ -126,7 +117,6 @@ namespace dbaui
         }
         else
             m_aFT_HelpText.Hide();
-
 
         if ( USHRT_MAX != _nHeaderResId )
             SetHeaderText(FT_AUTOWIZARDHEADER, _nHeaderResId);
@@ -158,13 +148,11 @@ namespace dbaui
         SetRoadmapStateValue(sal_False);
     }
 
-    // -----------------------------------------------------------------------
     OConnectionTabPageSetup::~OConnectionTabPageSetup()
     {
         DBG_DTOR(OConnectionTabPageSetup,NULL);
     }
 
-    // -----------------------------------------------------------------------
     void OConnectionTabPageSetup::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
     {
         m_eType = m_pAdminDialog->getDatasourceType(_rSet);
@@ -189,35 +177,28 @@ namespace dbaui
 
         callModifiedHdl();
     }
-    // -----------------------------------------------------------------------
        sal_Bool OConnectionTabPageSetup::commitPage( ::svt::WizardTypes::CommitPageReason /*_eReason*/ )
     {
         return commitURL();
     }
 
-    // -----------------------------------------------------------------------
     sal_Bool OConnectionTabPageSetup::FillItemSet(SfxItemSet& _rSet)
     {
         sal_Bool bChangedSomething = sal_False;
         fillString(_rSet,&m_aConnectionURL, DSID_CONNECTURL, bChangedSomething);
         return bChangedSomething;
     }
-    // -----------------------------------------------------------------------
     bool OConnectionTabPageSetup::checkTestConnection()
     {
         return !m_aConnectionURL.IsVisible() || (m_aConnectionURL.GetTextNoPrefix().Len() != 0);
     }
 
-    // -----------------------------------------------------------------------
     IMPL_LINK(OConnectionTabPageSetup, OnEditModified, Edit*, /*_pEdit*/)
     {
         SetRoadmapStateValue(checkTestConnection());
         callModifiedHdl();
         return 0L;
     }
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

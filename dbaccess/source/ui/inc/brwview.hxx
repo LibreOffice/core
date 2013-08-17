@@ -28,14 +28,12 @@
 #include <dbaccess/dataview.hxx>
 #include <unotools/eventlisteneradapter.hxx>
 
-
 namespace com { namespace sun { namespace star { namespace awt {
     class XControl;
     class XControlContainer;
     class XControlModel;
 }}}}
 
-// =========================================================================
 class Splitter;
 
 namespace dbaui

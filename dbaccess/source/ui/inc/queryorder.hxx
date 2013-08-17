@@ -53,9 +53,7 @@ namespace com
     }
 }
 
-//==================================================================
 // DlgOrderCrit
-//==================================================================
 namespace dbaui
 {
     class DlgOrderCrit : public ModalDialog
@@ -83,7 +81,6 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> m_xColumns;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>      m_xConnection;
 
-
         ListBox*        m_aColumnList[DOG_ROWS];
         ListBox*        m_aValueList[DOG_ROWS];
 
@@ -107,6 +104,5 @@ namespace dbaui
     };
 }
 #endif // DBAUI_QUERYORDER_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

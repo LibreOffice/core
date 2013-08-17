@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "adtabdlg.hxx"
 #include "browserids.hxx"
 #include "dbu_qry.hrc"
@@ -101,12 +100,10 @@ namespace dbaui
 
     class OViewController : public OQueryController
     {
-        //------------------------------------------------------------------------------
         virtual OUString SAL_CALL getImplementationName() throw( RuntimeException )
         {
             return getImplementationName_Static();
         }
-        //-------------------------------------------------------------------------
         virtual Sequence< OUString> SAL_CALL getSupportedServiceNames() throw(RuntimeException)
         {
             return getSupportedServiceNames_Static();
@@ -142,7 +139,6 @@ namespace dbaui
 #if OSL_DEBUG_LEVEL > 1
     namespace
     {
-        // -----------------------------------------------------------------------------
         void insertParseTree(SvTreeListBox* _pBox,::connectivity::OSQLParseNode* _pNode,SvTreeListEntry* _pParent = NULL)
         {
             OUString rString;
@@ -151,7 +147,6 @@ namespace dbaui
                 // rule name as rule: ...
                 rString = "RULE_ID: " + OUString::valueOf( (sal_Int32)_pNode->getRuleID() ) +
                           "(" + OSQLParser::RuleIDToStr(_pNode->getRuleID()) + ")";
-
 
                 _pParent = _pBox->InsertEntry(rString,_pParent);
 
@@ -224,7 +219,6 @@ namespace dbaui
 
     namespace
     {
-        // -----------------------------------------------------------------------------
         String lcl_getObjectResourceString( sal_uInt16 _nResId, sal_Int32 _nCommandType )
         {
             String sMessageText = String( ModuleRes( _nResId ) );
@@ -302,36 +296,30 @@ namespace
     }
 }
 
-//------------------------------------------------------------------------------
 OUString SAL_CALL OQueryController::getImplementationName() throw( RuntimeException )
 {
     return getImplementationName_Static();
 }
 
-//------------------------------------------------------------------------------
 OUString OQueryController::getImplementationName_Static() throw( RuntimeException )
 {
     return OUString("org.openoffice.comp.dbu.OQueryDesign");
 }
-//------------------------------------------------------------------------------
 Sequence< OUString> OQueryController::getSupportedServiceNames_Static(void) throw( RuntimeException )
 {
     Sequence< OUString> aSupported(1);
     aSupported.getArray()[0] = "com.sun.star.sdb.QueryDesign";
     return aSupported;
 }
-//-------------------------------------------------------------------------
 Sequence< OUString> SAL_CALL OQueryController::getSupportedServiceNames() throw(RuntimeException)
 {
     return getSupportedServiceNames_Static();
 }
-// -------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL OQueryController::Create(const Reference<XMultiServiceFactory >& _rxFactory)
 {
     return *(new OQueryController(comphelper::getComponentContext(_rxFactory)));
 }
 DBG_NAME(OQueryController);
-// -----------------------------------------------------------------------------
 OQueryController::OQueryController(const Reference< XComponentContext >& _rM)
     :OJoinController(_rM)
     ,OQueryController_PBase( getBroadcastHelper() )
@@ -358,7 +346,6 @@ OQueryController::OQueryController(const Reference< XComponentContext >& _rM)
         &m_bEscapeProcessing, ::getCppuType( &m_bEscapeProcessing ) );
 }
 
-// -----------------------------------------------------------------------------
 OQueryController::~OQueryController()
 {
     DBG_DTOR(OQueryController,NULL);
@@ -374,26 +361,22 @@ OQueryController::~OQueryController()
 IMPLEMENT_FORWARD_XINTERFACE2( OQueryController, OJoinController, OQueryController_PBase )
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( OQueryController, OJoinController, OQueryController_PBase )
 
-//-------------------------------------------------------------------------
 Reference< XPropertySetInfo > SAL_CALL OQueryController::getPropertySetInfo() throw(RuntimeException)
 {
     Reference< XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
 }
 
-//-------------------------------------------------------------------------
 sal_Bool SAL_CALL OQueryController::convertFastPropertyValue( Any& o_rConvertedValue, Any& o_rOldValue, sal_Int32 i_nHandle, const Any& i_rValue ) throw (IllegalArgumentException)
 {
     return OPropertyContainer::convertFastPropertyValue( o_rConvertedValue, o_rOldValue, i_nHandle, i_rValue );
 }
 
-//-------------------------------------------------------------------------
 void SAL_CALL OQueryController::setFastPropertyValue_NoBroadcast( sal_Int32 i_nHandle, const Any& i_rValue ) throw ( Exception )
 {
     OPropertyContainer::setFastPropertyValue_NoBroadcast( i_nHandle, i_rValue );
 }
 
-//-------------------------------------------------------------------------
 void SAL_CALL OQueryController::getFastPropertyValue( Any& o_rValue, sal_Int32 i_nHandle ) const
 {
     switch ( i_nHandle )
@@ -425,13 +408,11 @@ void SAL_CALL OQueryController::getFastPropertyValue( Any& o_rValue, sal_Int32 i
     }
 }
 
-//-------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper& OQueryController::getInfoHelper()
 {
     return *const_cast< OQueryController* >( this )->getArrayHelper();
 }
 
-//--------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper* OQueryController::createArrayHelper( ) const
 {
     Sequence< Property > aProps;
@@ -456,7 +437,6 @@ void SAL_CALL OQueryController::getFastPropertyValue( Any& o_rValue, sal_Int32 i
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
 
-// -----------------------------------------------------------------------------
 void OQueryController::deleteIterator()
 {
     if(m_pSqlIterator)
@@ -467,7 +447,6 @@ void OQueryController::deleteIterator()
         m_pSqlIterator = NULL;
     }
 }
-// -----------------------------------------------------------------------------
 void OQueryController::disposing()
 {
     OQueryController_PBase::disposing();
@@ -483,12 +462,10 @@ void OQueryController::disposing()
     OJoinController::disposing();
     OQueryController_PBase::disposing();
 }
-// -----------------------------------------------------------------------------
 void OQueryController::clearFields()
 {
     OTableFields().swap(m_vTableFieldDesc);
 }
-// -----------------------------------------------------------------------------
 FeatureState OQueryController::GetState(sal_uInt16 _nId) const
 {
     FeatureState aReturn;
@@ -581,7 +558,6 @@ FeatureState OQueryController::GetState(sal_uInt16 _nId) const
     }
     return aReturn;
 }
-// -----------------------------------------------------------------------------
 void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >& aArgs)
 {
     switch(_nId)
@@ -830,7 +806,6 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
     InvalidateFeature(_nId);
 }
 
-// -----------------------------------------------------------------------------
 void OQueryController::impl_showAutoSQLViewError( const ::com::sun::star::uno::Any& _rErrorDetails )
 {
     SQLContext aErrorContext;
@@ -841,7 +816,6 @@ void OQueryController::impl_showAutoSQLViewError( const ::com::sun::star::uno::A
     showError( aErrorContext );
 }
 
-// -----------------------------------------------------------------------------
 bool OQueryController::impl_setViewMode( ::dbtools::SQLExceptionInfo* _pErrorInfo )
 {
     OSL_PRECOND( getContainer(), "OQueryController::impl_setViewMode: illegal call!" );
@@ -871,7 +845,6 @@ bool OQueryController::impl_setViewMode( ::dbtools::SQLExceptionInfo* _pErrorInf
     return bSuccess;
 }
 
-// -----------------------------------------------------------------------------
 void OQueryController::impl_initialize()
 {
     OJoinController::impl_initialize();
@@ -953,7 +926,6 @@ void OQueryController::impl_initialize()
             m_bGraphicalDesign = false;
     }
 
-    // .................................................................................................................
     // . initial design
     bool bForceInitialDesign = false;
     Sequence< PropertyValue > aCurrentQueryDesignProps;
@@ -1089,13 +1061,11 @@ void OQueryController::impl_initialize()
     }
 }
 
-// -----------------------------------------------------------------------------
 void OQueryController::onLoadedMenu(const Reference< ::com::sun::star::frame::XLayoutManager >& /*_xLayoutManager*/)
 {
     ensureToolbars( *this, m_bGraphicalDesign );
 }
 
-// -----------------------------------------------------------------------------
 OUString OQueryController::getPrivateTitle( ) const
 {
     OUString sName = m_sName;
@@ -1112,7 +1082,6 @@ OUString OQueryController::getPrivateTitle( ) const
     }
     return sName;
 }
-// -----------------------------------------------------------------------------
 void OQueryController::setQueryComposer()
 {
     if(isConnected())
@@ -1137,7 +1106,6 @@ void OQueryController::setQueryComposer()
         }
     }
 }
-// -----------------------------------------------------------------------------
 sal_Bool OQueryController::Construct(Window* pParent)
 {
     // TODO: we have to check if we should create the text- or the design- view
@@ -1147,12 +1115,10 @@ sal_Bool OQueryController::Construct(Window* pParent)
     return OJoinController::Construct(pParent);
 }
 
-// -----------------------------------------------------------------------------
 OJoinDesignView* OQueryController::getJoinView()
 {
     return getContainer()->getDesignView();
 }
-// -----------------------------------------------------------------------------
 void OQueryController::describeSupportedFeatures()
 {
     OJoinController::describeSupportedFeatures();
@@ -1175,7 +1141,6 @@ void OQueryController::describeSupportedFeatures()
     implDescribeSupportedFeature( ".uno:DBMakeDisjunct",    ID_EDIT_QUERY_DESIGN );
 #endif
 }
-// -----------------------------------------------------------------------------
 void OQueryController::impl_onModifyChanged()
 {
     OJoinController::impl_onModifyChanged();
@@ -1183,7 +1148,6 @@ void OQueryController::impl_onModifyChanged()
     InvalidateFeature(ID_BROWSER_SAVEASDOC);
     InvalidateFeature(ID_BROWSER_QUERY_EXECUTE);
 }
-// -----------------------------------------------------------------------------
 void SAL_CALL OQueryController::disposing( const EventObject& Source ) throw(RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -1203,7 +1167,6 @@ void SAL_CALL OQueryController::disposing( const EventObject& Source ) throw(Run
 
     OJoinController::disposing(Source);
 }
-// -----------------------------------------------------------------------------
 void OQueryController::reconnect(sal_Bool _bUI)
 {
     deleteIterator();
@@ -1227,7 +1190,6 @@ void OQueryController::reconnect(sal_Bool _bUI)
     }
 }
 
-// -----------------------------------------------------------------------------
 void OQueryController::saveViewSettings( ::comphelper::NamedValueCollection& o_rViewSettings, const bool i_includingCriteria ) const
 {
     saveTableWindows( o_rViewSettings );
@@ -1253,7 +1215,6 @@ void OQueryController::saveViewSettings( ::comphelper::NamedValueCollection& o_r
     o_rViewSettings.put( "SplitterPosition", m_nSplitPos );
     o_rViewSettings.put( "VisibleRows", m_nVisibleRows );
 }
-// -----------------------------------------------------------------------------
 void OQueryController::loadViewSettings( const ::comphelper::NamedValueCollection& o_rViewSettings )
 {
     loadTableWindows( o_rViewSettings );
@@ -1262,7 +1223,6 @@ void OQueryController::loadViewSettings( const ::comphelper::NamedValueCollectio
     m_nVisibleRows = o_rViewSettings.getOrDefault( "VisibleRows", m_nVisibleRows );
     m_aFieldInformation = o_rViewSettings.getOrDefault( "Fields", m_aFieldInformation );
 }
-// -----------------------------------------------------------------------------
 void OQueryController::execute_QueryPropDlg()
 {
     QueryPropertiesDialog aQueryPropDlg(
@@ -1276,7 +1236,6 @@ void OQueryController::execute_QueryPropDlg()
         InvalidateFeature( SID_QUERY_LIMIT, 0, sal_True );
     }
 }
-// -----------------------------------------------------------------------------
 sal_Int32 OQueryController::getColWidth(sal_uInt16 _nColPos)  const
 {
     if ( _nColPos < m_aFieldInformation.getLength() )
@@ -1287,7 +1246,6 @@ sal_Int32 OQueryController::getColWidth(sal_uInt16 _nColPos)  const
     }
     return 0;
 }
-// -----------------------------------------------------------------------------
 Reference<XNameAccess> OQueryController::getObjectContainer()  const
 {
     Reference< XNameAccess > xElements;
@@ -1314,7 +1272,6 @@ Reference<XNameAccess> OQueryController::getObjectContainer()  const
     return xElements;
 }
 
-// -----------------------------------------------------------------------------
 void OQueryController::executeQuery()
 {
     // we don't need to check the connection here because we already check the composer
@@ -1400,7 +1357,6 @@ void OQueryController::executeQuery()
         }
     }
 }
-// -----------------------------------------------------------------------------
 sal_Bool OQueryController::askForNewName(const Reference<XNameAccess>& _xElements,sal_Bool _bSaveAs)
 {
     OSL_ENSURE( !editingCommand(), "OQueryController::askForNewName: not to be called when designing an independent statement!" );
@@ -1448,7 +1404,6 @@ sal_Bool OQueryController::askForNewName(const Reference<XNameAccess>& _xElement
     }
     return bRet;
 }
-// -----------------------------------------------------------------------------
 bool OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
 {
     OSL_ENSURE(isEditable(),"Slot ID_BROWSER_SAVEDOC should not be enabled!");
@@ -1630,7 +1585,6 @@ bool OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
 
     return bSuccess;
 }
-//-----------------------------------------------------------------------------
 
 namespace {
 struct CommentStrip
@@ -1714,7 +1668,6 @@ static ::std::vector< CommentStrip > getComment( const OUString& rQuery )
     }
     return aRet;
 }
-//------------------------------------------------------------------------------
 
 /** Concat/insert comments that were previously obtained with getComment().
 
@@ -1773,7 +1726,6 @@ static OUString concatComment( const OUString& rQuery, const ::std::vector< Comm
     }
     return aBuf.makeStringAndClear();
 }
-// -----------------------------------------------------------------------------
 OUString OQueryController::translateStatement( bool _bFireStatementChange )
 {
     // now set the properties
@@ -1818,7 +1770,6 @@ OUString OQueryController::translateStatement( bool _bFireStatementChange )
 
     return sTranslatedStmt;
 }
-// -----------------------------------------------------------------------------
 short OQueryController::saveModified()
 {
     SolarMutexGuard aSolarGuard;
@@ -1846,7 +1797,6 @@ short OQueryController::saveModified()
     }
     return nRet;
 }
-// -----------------------------------------------------------------------------
 void OQueryController::impl_reset( const bool i_bForceCurrentControllerSettings )
 {
     bool bValid = false;
@@ -1970,7 +1920,6 @@ void OQueryController::impl_reset( const bool i_bForceCurrentControllerSettings 
     getContainer()->setNoneVisbleRow(m_nVisibleRows);
 }
 
-// -----------------------------------------------------------------------------
 void OQueryController::reset()
 {
     impl_reset();
@@ -1978,7 +1927,6 @@ void OQueryController::reset()
     ClearUndoManager();
 }
 
-// -----------------------------------------------------------------------------
 void OQueryController::setStatement_fireEvent( const OUString& _rNewStatement, bool _bFireStatementChange )
 {
     Any aOldValue = makeAny( m_sStatement );
@@ -1990,7 +1938,6 @@ void OQueryController::setStatement_fireEvent( const OUString& _rNewStatement, b
         fire( &nHandle, &aNewValue, &aOldValue, 1, sal_False );
 }
 
-// -----------------------------------------------------------------------------
 void OQueryController::setEscapeProcessing_fireEvent( const sal_Bool _bEscapeProcessing )
 {
     if ( _bEscapeProcessing == m_bEscapeProcessing )
@@ -2004,20 +1951,17 @@ void OQueryController::setEscapeProcessing_fireEvent( const sal_Bool _bEscapePro
     fire( &nHandle, &aNewValue, &aOldValue, 1, sal_False );
 }
 
-// -----------------------------------------------------------------------------
 IMPL_LINK( OQueryController, OnExecuteAddTable, void*, /*pNotInterestedIn*/ )
 {
     Execute( ID_BROWSER_ADDTABLE,Sequence<PropertyValue>() );
     return 0L;
 }
 
-// -----------------------------------------------------------------------------
 bool OQueryController::allowViews() const
 {
     return true;
 }
 
-// -----------------------------------------------------------------------------
 bool OQueryController::allowQueries() const
 {
     OSL_ENSURE( getSdbMetaData().isConnected(), "OQueryController::allowQueries: illegal call!" );
@@ -2030,7 +1974,6 @@ bool OQueryController::allowQueries() const
     return !bCreatingView;
 }
 
-// -----------------------------------------------------------------------------
 Any SAL_CALL OQueryController::getViewData() throw( RuntimeException )
 {
     ::osl::MutexGuard aGuard( getMutex() );
@@ -2042,14 +1985,11 @@ Any SAL_CALL OQueryController::getViewData() throw( RuntimeException )
 
     return makeAny( aViewSettings.getPropertyValues() );
 }
-// -----------------------------------------------------------------------------
 void SAL_CALL OQueryController::restoreViewData(const Any& /*Data*/) throw( RuntimeException )
 {
     // TODO
 }
 
-// -----------------------------------------------------------------------------
 } // namespace dbaui
-// -----------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

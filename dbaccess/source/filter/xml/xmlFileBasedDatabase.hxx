@@ -35,9 +35,7 @@ namespace dbaxml
                     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList);
         virtual ~OXMLFileBasedDatabase();
     };
-// -----------------------------------------------------------------------------
 } // namespace dbaxml
-// -----------------------------------------------------------------------------
 
 #endif // DBA_XMLFILEBASEDDATABASE_HXX_INCLUDED
 

@@ -43,9 +43,7 @@ namespace dbaxml
         OXMLAutoStylePoolP(ODBExport& rXMLExport);
         virtual ~OXMLAutoStylePoolP();
     };
-// -----------------------------------------------------------------------------
 } // dbaxml
-// -----------------------------------------------------------------------------
 #endif // DBA_XMLAUTOSTYLE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

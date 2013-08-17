@@ -28,14 +28,10 @@
 
 #include <memory>
 
-//........................................................................
 namespace sdbtools
 {
-//........................................................................
 
-    //====================================================================
-    //= DataSourceMetaData
-    //====================================================================
+    // DataSourceMetaData
     typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::sdb::tools::XDataSourceMetaData
                                     >   DataSourceMetaData_Base;
     struct DataSourceMetaData_Impl;
@@ -73,10 +69,7 @@ namespace sdbtools
         DataSourceMetaData& operator=( const DataSourceMetaData& );   // never implemented
     };
 
-
-//........................................................................
 } // namespace sdbtools
-//........................................................................
 
 #endif // DBACCESS_DATASOURCEMETADATA_HXX
 

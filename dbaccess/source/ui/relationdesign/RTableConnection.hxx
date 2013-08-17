@@ -25,7 +25,6 @@
 namespace dbaui
 {
     class ORelationTableView;
-    //==================================================================
     class ORelationTableConnection : public OTableConnection
     {
     public:
@@ -41,8 +40,5 @@ namespace dbaui
     };
 }
 #endif // DBAUI_RTABLECONNECTION_HXX
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -26,10 +26,8 @@
 namespace dbaccess
 {
 
-//==========================================================================
-//= OCommandBase - a base class (in fact just a container for some members)
-//=                 for classes implementing the sdb.CommandDefinition service
-//==========================================================================
+// OCommandBase - a base class (in fact just a container for some members)
+//                 for classes implementing the sdb.CommandDefinition service
 class OCommandBase
 {
 public: // need public access

@@ -24,14 +24,10 @@
 
 namespace dbtools { class SQLExceptionInfo; }
 
-//........................................................................
 namespace dbaui
 {
-//........................................................................
 
-    //====================================================================
-    //= IObjectNameCheck
-    //====================================================================
+    // IObjectNameCheck
     /** interface encapsulating the check for the validity of an object name
     */
     class IObjectNameCheck
@@ -57,9 +53,7 @@ namespace dbaui
         virtual ~IObjectNameCheck() { }
     };
 
-//........................................................................
 } // namespace dbaui
-//........................................................................
 
 #endif // DBACCESS_SOURCE_UI_INC_OBJECTNAMECHECK_HXX
 

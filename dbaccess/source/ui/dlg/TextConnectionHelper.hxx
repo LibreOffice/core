@@ -30,21 +30,16 @@
 #include <rtl/ustring.hxx>
 #include <vcl/lstbox.hxx>
 
-
-//.........................................................................
 namespace dbaui
 
 {
-//.........................................................................
 
     #define TC_EXTENSION    ((short)0x01)   // a section specifying the extension of the files to connect to
     #define TC_SEPARATORS   ((short)0x02)   // a section specifying the various separators
     #define TC_HEADER       ((short)0x04)   // a section containing the "Text contains header" check box only
     #define TC_CHARSET      ((short)0x08)   // not yet implemented
 
-    //========================================================================
-    //= OTextConnectionPage
-    //========================================================================
+    // OTextConnectionPage
     class OTextConnectionHelper : public Control
     {
         OTextConnectionHelper();
@@ -95,7 +90,6 @@ namespace dbaui
         void        SetSeparator( ComboBox& rBox, const String& rList, const String& rVal );
         void        SetExtension(const String& _rVal);
 
-
     public:
         void        implInitControls(const SfxItemSet& _rSet, sal_Bool _bValid);
         void        fillControls(::std::vector< ISaveValueWrapper* >& _rControlList);
@@ -106,9 +100,7 @@ namespace dbaui
         sal_Bool prepareLeave();
     };
 
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
 
 #endif // DBAUI_DBWIZ2_HXX
 

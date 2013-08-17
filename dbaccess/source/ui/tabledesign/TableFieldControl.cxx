@@ -37,19 +37,16 @@ using namespace dbaui;
 OTableFieldControl::OTableFieldControl( Window* pParent, OTableDesignHelpBar* pHelpBar) :OFieldDescControl(pParent,pHelpBar)
 {
 }
-//------------------------------------------------------------------
 void OTableFieldControl::CellModified(long nRow, sal_uInt16 nColId )
 {
     GetCtrl()->CellModified(nRow,nColId);
 }
-//------------------------------------------------------------------
 OTableEditorCtrl* OTableFieldControl::GetCtrl() const
 {
     OTableDesignView* pDesignWin = static_cast<OTableDesignView*>(GetParent()->GetParent()->GetParent()->GetParent());
     OSL_ENSURE(pDesignWin,"no view!");
     return pDesignWin->GetEditorCtrl();
 }
-//------------------------------------------------------------------
 sal_Bool OTableFieldControl::IsReadOnly()
 {
     sal_Bool bRead(GetCtrl()->IsReadOnly());
@@ -68,7 +65,6 @@ sal_Bool OTableFieldControl::IsReadOnly()
     }
     return bRead;
 }
-//------------------------------------------------------------------
 void OTableFieldControl::ActivateAggregate( EControlType eType )
 {
     switch(eType)
@@ -80,7 +76,6 @@ void OTableFieldControl::ActivateAggregate( EControlType eType )
             OFieldDescControl::ActivateAggregate(eType);
     }
 }
-//------------------------------------------------------------------
 void OTableFieldControl::DeactivateAggregate( EControlType eType )
 {
     switch(eType)
@@ -92,17 +87,14 @@ void OTableFieldControl::DeactivateAggregate( EControlType eType )
             OFieldDescControl::DeactivateAggregate(eType);
     }
 }
-// -----------------------------------------------------------------------------
 void OTableFieldControl::SetModified(sal_Bool bModified)
 {
     GetCtrl()->GetView()->getController().setModified(bModified);
 }
-// -----------------------------------------------------------------------------
 ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> OTableFieldControl::getConnection()
 {
     return GetCtrl()->GetView()->getController().getConnection();
 }
-// -----------------------------------------------------------------------------
 ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData> OTableFieldControl::getMetaData()
 {
     Reference<XConnection> xCon = GetCtrl()->GetView()->getController().getConnection();
@@ -110,36 +102,29 @@ void OTableFieldControl::SetModified(sal_Bool bModified)
         return NULL;
     return xCon->getMetaData();
 }
-// -----------------------------------------------------------------------------
 Reference< XNumberFormatter >   OTableFieldControl::GetFormatter() const
 {
     return GetCtrl()->GetView()->getController().getNumberFormatter();
 }
-// -----------------------------------------------------------------------------
 TOTypeInfoSP OTableFieldControl::getTypeInfo(sal_Int32 _nPos)
 {
     return GetCtrl()->GetView()->getController().getTypeInfo(_nPos);
 }
-// -----------------------------------------------------------------------------
 const OTypeInfoMap* OTableFieldControl::getTypeInfo() const
 {
     return const_cast<OTableFieldControl*>(this)->GetCtrl()->GetView()->getController().getTypeInfo();
 }
-// -----------------------------------------------------------------------------
 Locale OTableFieldControl::GetLocale() const
 {
     return const_cast<OTableFieldControl*>(this)->GetCtrl()->GetView()->getLocale();
 }
-// -----------------------------------------------------------------------------
 sal_Bool OTableFieldControl::isAutoIncrementValueEnabled() const
 {
     return const_cast<OTableFieldControl*>(this)->GetCtrl()->GetView()->getController().isAutoIncrementValueEnabled();
 }
-// -----------------------------------------------------------------------------
 OUString OTableFieldControl::getAutoIncrementValue() const
 {
     return const_cast<OTableFieldControl*>(this)->GetCtrl()->GetView()->getController().getAutoIncrementValue();
 }
-// -----------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

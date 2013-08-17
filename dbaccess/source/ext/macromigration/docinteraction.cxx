@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "docinteraction.hxx"
 
 #include <com/sun/star/frame/XModel.hpp>
@@ -29,10 +28,8 @@
 #include <rtl/ref.hxx>
 #include <tools/diagnose_ex.h>
 
-//........................................................................
 namespace dbmm
 {
-//........................................................................
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
@@ -51,9 +48,7 @@ namespace dbmm
     using ::com::sun::star::task::PasswordRequestMode_PASSWORD_ENTER;
     using ::com::sun::star::task::PasswordRequestMode_PASSWORD_REENTER;
 
-    //====================================================================
-    //= InteractionHandler_Data
-    //====================================================================
+    // InteractionHandler_Data
     struct InteractionHandler_Data
     {
         Reference< XInteractionHandler >    xHandler;
@@ -69,10 +64,7 @@ namespace dbmm
         }
     };
 
-    //====================================================================
-    //= InteractionHandler
-    //====================================================================
-    //--------------------------------------------------------------------
+    // InteractionHandler
     InteractionHandler::InteractionHandler( const Reference<XComponentContext>& _rContext, const Reference< XModel >& _rxDocument )
         :m_pData( new InteractionHandler_Data( _rContext ) )
     {
@@ -81,12 +73,10 @@ namespace dbmm
         m_pData->xHandler = aDocArgs.getOrDefault( "InteractionHandler", m_pData->xHandler );
     }
 
-    //--------------------------------------------------------------------
     InteractionHandler::~InteractionHandler()
     {
     }
 
-    //--------------------------------------------------------------------
     bool InteractionHandler::requestDocumentPassword( const OUString& _rDocumentName, OUString& _io_rPassword )
     {
         // create request
@@ -114,7 +104,6 @@ namespace dbmm
         return true;
     }
 
-    //--------------------------------------------------------------------
     void InteractionHandler::reportError( const Any& _rError )
     {
         ::rtl::Reference< ::comphelper::OInteractionRequest > pRequest( new ::comphelper::OInteractionRequest( _rError ) );
@@ -124,8 +113,6 @@ namespace dbmm
         m_pData->xHandler->handle( pRequest.get() );
     }
 
-//........................................................................
 } // namespace dbmm
-//........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

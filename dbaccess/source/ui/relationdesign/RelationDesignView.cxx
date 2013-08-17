@@ -51,18 +51,15 @@ ORelationDesignView::ORelationDesignView(Window* _pParent, ORelationController& 
 {
     DBG_CTOR(ORelationDesignView,NULL);
 }
-// -----------------------------------------------------------------------------
 ORelationDesignView::~ORelationDesignView()
 {
     DBG_DTOR(ORelationDesignView,NULL);
 }
-// -------------------------------------------------------------------------
 void ORelationDesignView::Construct()
 {
     m_pTableView    = new ORelationTableView(m_pScrollWindow,this);
     OJoinDesignView::Construct();
 }
-// -----------------------------------------------------------------------------
 void ORelationDesignView::initialize()
 {
     m_pTableView->clearLayoutInformation();
@@ -70,7 +67,6 @@ void ORelationDesignView::initialize()
 
     OJoinDesignView::initialize();
 }
-// -----------------------------------------------------------------------------
 long ORelationDesignView::PreNotify( NotifyEvent& rNEvt )
 {
     long nDone = 0L;
@@ -86,19 +82,11 @@ long ORelationDesignView::PreNotify( NotifyEvent& rNEvt )
         nDone = OJoinDesignView::PreNotify(rNEvt);
     return nDone;
 }
-// -----------------------------------------------------------------------------
 void ORelationDesignView::GetFocus()
 {
     OJoinDesignView::GetFocus();
     if ( m_pTableView && m_pTableView->IsVisible() && !m_pTableView->GetTabWinMap()->empty() )
         m_pTableView->GrabTabWinFocus();
 }
-// -----------------------------------------------------------------------------
-
-
-
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

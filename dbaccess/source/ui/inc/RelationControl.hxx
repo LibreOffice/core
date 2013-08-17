@@ -25,7 +25,6 @@
 
 namespace dbaui
 {
-    //========================================================================
     class OTableListBoxControl;
     class IRelationControlInterface;
     class ORelationControl;

@@ -23,14 +23,11 @@
 
 #include <map>
 
-//........................................................................
 namespace dbmm
 {
 #define OVERALL_RANGE   100000
 
-    //====================================================================
-    //= misc types
-    //====================================================================
+    // misc types
     struct PhaseData
     {
         // the weight of the phase, relative to all other phases
@@ -63,9 +60,7 @@ namespace dbmm
 
     typedef ::std::map< PhaseID, PhaseData >   Phases;
 
-    //====================================================================
-    //= ProgressMixer_Data
-    //====================================================================
+    // ProgressMixer_Data
     struct ProgressMixer_Data
     {
         Phases              aPhases;
@@ -84,17 +79,14 @@ namespace dbmm
         }
     };
 
-    //--------------------------------------------------------------------
     namespace
     {
 #if OSL_DEBUG_LEVEL > 0
-        //----------------------------------------------------------------
         bool lcl_isRunning( const ProgressMixer_Data& _rData )
         {
             return _rData.pCurrentPhase != _rData.aPhases.end();
         }
 #endif
-        //----------------------------------------------------------------
         void lcl_ensureInitialized( ProgressMixer_Data& _rData )
         {
             OSL_PRECOND( _rData.nWeightSum, "lcl_ensureInitialized: we have no phases, this will crash!" );
@@ -122,21 +114,16 @@ namespace dbmm
         }
     }
 
-    //====================================================================
-    //= ProgressMixer
-    //====================================================================
-    //--------------------------------------------------------------------
+    // ProgressMixer
     ProgressMixer::ProgressMixer( IProgressConsumer& _rConsumer )
         :m_pData( new ProgressMixer_Data( _rConsumer ) )
     {
     }
 
-    //--------------------------------------------------------------------
     ProgressMixer::~ProgressMixer()
     {
     }
 
-    //--------------------------------------------------------------------
     void ProgressMixer::registerPhase( const PhaseID _nID, const PhaseWeight _nWeight )
     {
         OSL_PRECOND( !lcl_isRunning( *m_pData ), "ProgressMixer::registerPhase: already running!" );
@@ -146,7 +133,6 @@ namespace dbmm
         m_pData->nWeightSum += _nWeight;
     }
 
-    //--------------------------------------------------------------------
     void ProgressMixer::startPhase( const PhaseID _nID, const sal_uInt32 _nPhaseRange )
     {
         OSL_ENSURE( m_pData->aPhases.find( _nID ) != m_pData->aPhases.end(),
@@ -156,7 +142,6 @@ namespace dbmm
         m_pData->pCurrentPhase = m_pData->aPhases.find( _nID );
     }
 
-    //--------------------------------------------------------------------
     void ProgressMixer::advancePhase( const sal_uInt32 _nPhaseProgress )
     {
         OSL_PRECOND( lcl_isRunning( *m_pData ), "ProgresMixer::advancePhase: not running!" );
@@ -174,7 +159,6 @@ namespace dbmm
         m_pData->rConsumer.advance( nOverallProgress );
     }
 
-    //--------------------------------------------------------------------
     void ProgressMixer::endPhase()
     {
         OSL_PRECOND( lcl_isRunning( *m_pData ), "ProgresMixer::endPhase: not running!" );
@@ -193,8 +177,6 @@ namespace dbmm
             m_pData->rConsumer.end();
     }
 
-//........................................................................
 } // namespace dbmm
-//........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

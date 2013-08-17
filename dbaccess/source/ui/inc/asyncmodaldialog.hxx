@@ -22,14 +22,10 @@
 
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 
-//........................................................................
 namespace dbaui
 {
-//........................................................................
 
-    //====================================================================
-    //= AsyncDialogExecutor
-    //====================================================================
+    // AsyncDialogExecutor
     /** helper class for executing (UNO) dialogs modal, but asynchronously
     */
     class AsyncDialogExecutor
@@ -47,9 +43,7 @@ namespace dbaui
         );
     };
 
-//........................................................................
 } // namespace dbaui
-//........................................................................
 
 #endif // DBACCESS_ASYNCMODALDIALOG_HXX
 

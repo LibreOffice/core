@@ -41,9 +41,7 @@ namespace dbaccess
 {
     typedef ::cppu::ImplHelper1< ::com::sun::star::container::XContainerListener> OTableContainer_Base;
 
-    //==========================================================================
-    //= OTableContainer
-    //==========================================================================
+    // OTableContainer
     class OContainerMediator;
 
     class OTableContainer :  public OFilteredContainer,
@@ -52,7 +50,6 @@ namespace dbaccess
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > m_xTableDefinitions;
         ::rtl::Reference< OContainerMediator >                                          m_pTableMediator;
         sal_Bool                m_bInDrop;                  // set when we are in the drop method
-
 
         // OFilteredContainer
         virtual void addMasterContainerListener();
@@ -103,6 +100,5 @@ namespace dbaccess
     };
 }
 #endif // _DBA_CORE_TABLECONTAINER_HXX_
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

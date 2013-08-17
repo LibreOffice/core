@@ -57,9 +57,7 @@ namespace dbaccess
 
 class OSharedConnectionManager;
 
-//============================================================
-//= ODatabaseSource
-//============================================================
+// ODatabaseSource
 typedef ::cppu::WeakComponentImplHelper11   <   ::com::sun::star::lang::XServiceInfo
                                             ,   ::com::sun::star::sdbc::XDataSource
                                             ,   ::com::sun::star::sdb::XBookmarksSupplier
@@ -72,7 +70,6 @@ typedef ::cppu::WeakComponentImplHelper11   <   ::com::sun::star::lang::XService
                                             ,   ::com::sun::star::util::XFlushListener
                                             ,   ::com::sun::star::sdb::XDocumentDataSource
                                             >   ODatabaseSource_Base;
-
 
 class ODatabaseSource   :public ModelDependentComponent // must be first
                         ,public ODatabaseSource_Base
@@ -223,6 +220,5 @@ protected:
 }   // namespace dbaccess
 
 #endif // _DBA_COREDATAACCESS_DATALINK_HXX_
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

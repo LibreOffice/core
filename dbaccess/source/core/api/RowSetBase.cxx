@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "RowSetBase.hxx"
 #include "CRowSetDataColumn.hxx"
 #include <connectivity/sdbcx/VCollection.hxx>
@@ -56,9 +55,7 @@ using namespace ::osl;
 namespace dbaccess
 {
 
-// =========================================================================
-// = OEmptyCollection
-// =========================================================================
+// OEmptyCollection
 class OEmptyCollection : public sdbcx::OCollection
 {
 protected:
@@ -77,9 +74,7 @@ connectivity::sdbcx::ObjectType OEmptyCollection::createObject(const OUString& /
     return connectivity::sdbcx::ObjectType();
 }
 
-// =========================================================================
-// = ORowSetBase
-// =========================================================================
+// ORowSetBase
 DBG_NAME(ORowSetBase)
 
 ORowSetBase::ORowSetBase( const Reference<XComponentContext>& _rContext, ::cppu::OBroadcastHelper& _rBHelper, ::osl::Mutex* _pMutex )
@@ -470,7 +465,6 @@ sal_Bool SAL_CALL ORowSetBase::moveToBookmark( const Any& bookmark ) throw(SQLEx
             SAL_WARN("dbaccess", "Bookmark is not valid");
         throwFunctionSequenceException(*m_pMySelf);
     }
-
 
     checkCache();
 
@@ -1453,7 +1447,6 @@ sal_Int32 ORowSetBase::impl_getRowCount() const
         ++nRowCount;
     return nRowCount;
 }
-// =============================================================================
 struct ORowSetNotifierImpl
 {
     ::std::vector<sal_Int32>    aChangedColumns;

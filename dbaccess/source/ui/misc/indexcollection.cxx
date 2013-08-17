@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "indexcollection.hxx"
 #include <tools/diagnose_ex.h>
 #include <com/sun/star/sdbcx/XAppend.hpp>
@@ -28,10 +27,8 @@
 #include <com/sun/star/sdbcx/XDrop.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 
-//......................................................................
 namespace dbaui
 {
-//......................................................................
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::container;
@@ -39,21 +36,16 @@ namespace dbaui
     using namespace ::com::sun::star::sdbcx;
     using namespace ::com::sun::star::sdbc;
 
-    //==================================================================
-    //= OIndexCollection
-    //==================================================================
-    //------------------------------------------------------------------
+    // OIndexCollection
     OIndexCollection::OIndexCollection()
     {
     }
 
-    //------------------------------------------------------------------
     OIndexCollection::OIndexCollection(const OIndexCollection& _rSource)
     {
         *this = _rSource;
     }
 
-    //------------------------------------------------------------------
     const OIndexCollection& OIndexCollection::operator=(const OIndexCollection& _rSource)
     {
         detach();
@@ -62,20 +54,17 @@ namespace dbaui
         return *this;
     }
 
-    //------------------------------------------------------------------
     void OIndexCollection::attach(const Reference< XNameAccess >& _rxIndexes)
     {
         implConstructFrom(_rxIndexes);
     }
 
-    //------------------------------------------------------------------
     void OIndexCollection::detach()
     {
         m_xIndexes.clear();
         m_aIndexes.clear();
     }
 
-    //------------------------------------------------------------------
     Indexes::const_iterator OIndexCollection::find(const String& _rName) const
     {
         OUString sNameCompare(_rName);
@@ -90,7 +79,6 @@ namespace dbaui
         return aSearch;
     }
 
-    //------------------------------------------------------------------
     Indexes::iterator OIndexCollection::find(const String& _rName)
     {
         OUString sNameCompare(_rName);
@@ -105,7 +93,6 @@ namespace dbaui
         return aSearch;
     }
 
-    //------------------------------------------------------------------
     Indexes::const_iterator OIndexCollection::findOriginal(const String& _rName) const
     {
         OUString sNameCompare(_rName);
@@ -120,7 +107,6 @@ namespace dbaui
         return aSearch;
     }
 
-    //------------------------------------------------------------------
     Indexes::iterator OIndexCollection::findOriginal(const String& _rName)
     {
         OUString sNameCompare(_rName);
@@ -135,7 +121,6 @@ namespace dbaui
         return aSearch;
     }
 
-    //------------------------------------------------------------------
     void OIndexCollection::commitNewIndex(const Indexes::iterator& _rPos) SAL_THROW((SQLException))
     {
         OSL_ENSURE(_rPos->isNew(), "OIndexCollection::commitNewIndex: index must be new!");
@@ -205,7 +190,6 @@ namespace dbaui
         }
     }
 
-    //------------------------------------------------------------------
     sal_Bool OIndexCollection::dropNoRemove(const Indexes::iterator& _rPos) SAL_THROW((SQLException))
     {
         try
@@ -239,7 +223,6 @@ namespace dbaui
         return sal_True;
     }
 
-    //------------------------------------------------------------------
     sal_Bool OIndexCollection::drop(const Indexes::iterator& _rPos) SAL_THROW((SQLException))
     {
         OSL_ENSURE((_rPos >= m_aIndexes.begin()) && (_rPos < m_aIndexes.end()),
@@ -254,7 +237,6 @@ namespace dbaui
         return sal_True;
     }
 
-    //------------------------------------------------------------------
     void OIndexCollection::implFillIndexInfo(OIndex& _rIndex) SAL_THROW((Exception))
     {
         // get the UNO descriptor for the index
@@ -268,7 +250,6 @@ namespace dbaui
             implFillIndexInfo(_rIndex, xIndex);
     }
 
-    //------------------------------------------------------------------
     void OIndexCollection::implFillIndexInfo(OIndex& _rIndex, Reference< XPropertySet > _rxDescriptor) SAL_THROW((Exception))
     {
         static const OUString s_sPrimaryIndexPropertyName = OUString("IsPrimaryKeyIndex");
@@ -318,7 +299,6 @@ namespace dbaui
         }
     }
 
-    //------------------------------------------------------------------
     void OIndexCollection::resetIndex(const Indexes::iterator& _rPos) SAL_THROW((SQLException))
     {
         OSL_ENSURE(_rPos >= m_aIndexes.begin() && _rPos < m_aIndexes.end(),
@@ -342,7 +322,6 @@ namespace dbaui
         }
     }
 
-    //------------------------------------------------------------------
     Indexes::iterator OIndexCollection::insert(const String& _rName)
     {
         OSL_ENSURE(end() == find(_rName), "OIndexCollection::insert: invalid new name!");
@@ -353,7 +332,6 @@ namespace dbaui
         return m_aIndexes.end() - 1;    // the last element is the new one ...
     }
 
-    //------------------------------------------------------------------
     void OIndexCollection::implConstructFrom(const Reference< XNameAccess >& _rxIndexes)
     {
         detach();
@@ -384,8 +362,6 @@ namespace dbaui
         }
     }
 
-//......................................................................
 }   // namespace dbaui
-//......................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

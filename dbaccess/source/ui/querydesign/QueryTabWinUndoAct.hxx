@@ -25,7 +25,6 @@
 
 namespace dbaui
 {
-    // ================================================================================================
     // OQueryTabWinUndoAct - undo base class for all which is concerned with insert/remove TabWins
 
     class OQueryTableWindow;
@@ -44,7 +43,6 @@ namespace dbaui
         virtual ~OQueryTabWinUndoAct();
 
         void SetOwnership(sal_Bool bTakeIt) { m_bOwnerOfObjects = bTakeIt; }
-
 
         virtual void Undo() = 0;
         virtual void Redo() = 0;
@@ -65,10 +63,7 @@ namespace dbaui
         }
     };
 
-
 }
 #endif // DBAUI_QUERYTABWINUNDOACT_HXX
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

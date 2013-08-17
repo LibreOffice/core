@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "adminpages.hxx"
 #include "dbadmin.hrc"
 #include "dbadmin.hxx"
@@ -44,10 +43,8 @@
 #include <algorithm>
 #include <stdlib.h>
 
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::sdbc;
@@ -60,11 +57,8 @@ namespace dbaui
     {
     }
 
-    //=========================================================================
-    //= OGenericAdministrationPage
-    //=========================================================================
+    // OGenericAdministrationPage
     DBG_NAME(OGenericAdministrationPage)
-    //-------------------------------------------------------------------------
     OGenericAdministrationPage::OGenericAdministrationPage(Window* _pParent, const ResId& _rId, const SfxItemSet& _rAttrSet)
         :SfxTabPage(_pParent, _rId, _rAttrSet)
         ,m_abEnableRoadmap(sal_False)
@@ -77,7 +71,6 @@ namespace dbaui
         SetExchangeSupport(sal_True);
     }
 
-    //-------------------------------------------------------------------------
     OGenericAdministrationPage::OGenericAdministrationPage(Window* _pParent, const OString& _rId, const OUString& _rUIXMLDescription, const SfxItemSet& _rAttrSet)
         :SfxTabPage(_pParent, _rId, _rUIXMLDescription, _rAttrSet)
         ,m_abEnableRoadmap(sal_False)
@@ -90,7 +83,6 @@ namespace dbaui
         SetExchangeSupport(sal_True);
     }
 
-    //-------------------------------------------------------------------------
     OGenericAdministrationPage::~OGenericAdministrationPage()
     {
         DELETEZ(m_pFT_HeaderText);
@@ -98,7 +90,6 @@ namespace dbaui
         DBG_DTOR(OGenericAdministrationPage,NULL);
     }
 
-    //-------------------------------------------------------------------------
     int OGenericAdministrationPage::DeactivatePage(SfxItemSet* _pSet)
     {
         if (_pSet)
@@ -111,12 +102,10 @@ namespace dbaui
         return LEAVE_PAGE;
     }
 
-    //-------------------------------------------------------------------------
     void OGenericAdministrationPage::Reset(const SfxItemSet& _rCoreAttrs)
     {
         implInitControls(_rCoreAttrs, sal_False);
     }
-    //-------------------------------------------------------------------------
     void OGenericAdministrationPage::ActivatePage()
     {
         TabPage::ActivatePage();
@@ -124,13 +113,11 @@ namespace dbaui
         if ( m_pItemSetHelper )
             ActivatePage(*m_pItemSetHelper->getOutputSet());
     }
-    //-------------------------------------------------------------------------
     void OGenericAdministrationPage::ActivatePage(const SfxItemSet& _rSet)
     {
         implInitControls(_rSet, sal_True);
     }
 
-    // -----------------------------------------------------------------------
     void OGenericAdministrationPage::getFlags(const SfxItemSet& _rSet, sal_Bool& _rValid, sal_Bool& _rReadonly)
     {
         SFX_ITEMSET_GET(_rSet, pInvalid, SfxBoolItem, DSID_INVALID_SELECTION, sal_True);
@@ -139,14 +126,11 @@ namespace dbaui
         _rReadonly = !_rValid || (pReadonly && pReadonly->GetValue());
     }
 
-
-    // -----------------------------------------------------------------------
     IMPL_LINK_NOARG(OGenericAdministrationPage, OnControlModified)
     {
         callModifiedHdl();
         return 0L;
     }
-    // -----------------------------------------------------------------------
     sal_Bool OGenericAdministrationPage::getSelectedDataSource(OUString& _sReturn,OUString& _sCurr)
     {
         // collect all ODBC data source names
@@ -174,7 +158,6 @@ namespace dbaui
         return sal_True;
     }
 
-    // -----------------------------------------------------------------------
     void OGenericAdministrationPage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
     {
         // check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
@@ -198,24 +181,20 @@ namespace dbaui
         aControlList.clear();
     }
 
-    // -----------------------------------------------------------------------
     void OGenericAdministrationPage::initializePage()
     {
         OSL_ENSURE(m_pItemSetHelper,"NO ItemSetHelper set!");
         if ( m_pItemSetHelper )
             Reset(*m_pItemSetHelper->getOutputSet());
     }
-    // -----------------------------------------------------------------------
     sal_Bool OGenericAdministrationPage::commitPage( ::svt::WizardTypes::CommitPageReason )
     {
         return sal_True;
     }
-    // -----------------------------------------------------------------------
     bool OGenericAdministrationPage::canAdvance() const
     {
         return true;
     }
-    // -----------------------------------------------------------------------
     void OGenericAdministrationPage::fillBool( SfxItemSet& _rSet, CheckBox* _pCheckBox, sal_uInt16 _nID, sal_Bool& _bChangedSomething, bool _bRevertValue )
     {
         if ( (_pCheckBox != NULL ) && ( _pCheckBox->GetState() != _pCheckBox->GetSavedValue() ) )
@@ -237,7 +216,6 @@ namespace dbaui
             _bChangedSomething = sal_True;
         }
     }
-    // -----------------------------------------------------------------------
     void OGenericAdministrationPage::fillInt32(SfxItemSet& _rSet,NumericField* _pEdit,sal_uInt16 _nID,sal_Bool& _bChangedSomething)
     {
         if( (_pEdit != NULL) && (_pEdit->GetValue() != _pEdit->GetSavedValue().toInt32()) )
@@ -246,7 +224,6 @@ namespace dbaui
             _bChangedSomething = sal_True;
         }
     }
-    // -----------------------------------------------------------------------
     void OGenericAdministrationPage::fillString(SfxItemSet& _rSet,Edit* _pEdit,sal_uInt16 _nID,sal_Bool& _bChangedSomething)
     {
         if( (_pEdit != NULL) && (_pEdit->GetText() != _pEdit->GetSavedValue()) )
@@ -263,7 +240,6 @@ namespace dbaui
         _pWindow->SetControlFont( aFont );
     }
 
-    // -----------------------------------------------------------------------
     IMPL_LINK(OGenericAdministrationPage, OnTestConnectionClickHdl, PushButton*, /*_pButton*/)
     {
         OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
@@ -315,10 +291,7 @@ namespace dbaui
         SetControlFontWeight(m_pFT_HeaderText);
     }
 
-    //=========================================================================
-    //= LayoutHelper
-    //=========================================================================
-    //-------------------------------------------------------------------------
+    // LayoutHelper
     void LayoutHelper::positionBelow( const Control& _rReference, Control& _rControl, const ControlRelation _eRelation,
         const long _nIndentAppFont )
     {
@@ -332,7 +305,6 @@ namespace dbaui
         _rControl.SetPosPixel( aControlPos );
     }
 
-    //-------------------------------------------------------------------------
     void LayoutHelper::fitSizeRightAligned( PushButton& io_button )
     {
         const Point aOldPos = io_button.GetPosPixel();
@@ -350,8 +322,6 @@ namespace dbaui
         }
     }
 
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -24,9 +24,7 @@
 
 namespace dbaui
 {
-    // ========================================================
     // Wizard Page
-    // ========================================================
     class OCopyTableWizard;
     class OWizardPage       : public TabPage
     {
@@ -45,7 +43,5 @@ namespace dbaui
     };
 }
 #endif // DBAUI_WIZ_TABBPAGE_HXX
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

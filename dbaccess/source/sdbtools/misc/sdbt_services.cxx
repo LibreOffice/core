@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "module_sdbt.hxx"
 
 using ::com::sun::star::lang::XMultiServiceFactory;
@@ -27,8 +26,6 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::XInterface;
 
 extern "C" void SAL_CALL createRegistryInfo_ConnectionTools();
-
-//---------------------------------------------------------------------------------------
 
 extern "C" void SAL_CALL sdbt_initializeModule()
 {
@@ -40,7 +37,6 @@ extern "C" void SAL_CALL sdbt_initializeModule()
     }
 }
 
-//---------------------------------------------------------------------------------------
 extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL sdbt_component_getFactory(
                     const sal_Char* pImplementationName,
                     void* pServiceManager,

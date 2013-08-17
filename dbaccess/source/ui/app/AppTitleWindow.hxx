@@ -60,7 +60,6 @@ namespace dbaui
         */
         void setTitle(sal_uInt16 _nTitleId);
 
-
         /** Gets the min Width in Pixel which is needed to display the whole
 
             @return
@@ -68,9 +67,7 @@ namespace dbaui
         */
         long GetWidthPixel() const;
     };
-// .............................................................
 } // namespace dbaui
-// .............................................................
 #endif // DBAUI_TITLE_WINDOW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -28,14 +28,10 @@
 #include "moduledbu.hxx"
 #include <com/sun/star/sdbc/XConnection.hpp>
 
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
 
-    //=====================================================================
-    //= ODirectSQLDialog
-    //=====================================================================
+    // ODirectSQLDialog
     class ODirectSQLDialog;
     typedef ::svt::OGenericUnoDialog                                        ODirectSQLDialog_BASE;
     typedef ::comphelper::OPropertyArrayUsageHelper< ODirectSQLDialog >     ODirectSQLDialog_PBASE;
@@ -64,9 +60,7 @@ namespace dbaui
         virtual void implInitialize(const com::sun::star::uno::Any& _rValue);
     };
 
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
 
 #endif // DBAUI_UNODIRECTSQL_HXX
 

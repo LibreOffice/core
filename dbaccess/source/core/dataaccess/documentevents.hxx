@@ -35,9 +35,7 @@ namespace dbaccess
     typedef ::std::map< OUString, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > >
             DocumentEventsData;
 
-    //====================================================================
-    //= DocumentEvents
-    //====================================================================
+    // DocumentEvents
     struct DocumentEvents_Data;
 
     typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::container::XNameReplace

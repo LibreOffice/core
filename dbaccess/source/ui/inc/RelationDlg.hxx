@@ -28,12 +28,10 @@
 #include "RelControliFace.hxx"
 #include "moduledbu.hxx"
 
-
 namespace dbaui
 {
     class OJoinTableView;
     class OTableListBoxControl;
-    //========================================================================
     class ORelationDialog : public ModalDialog
                             ,public IRelationControlInterface
     {
@@ -55,7 +53,6 @@ namespace dbaui
         OKButton    aPB_OK;
         CancelButton aPB_CANCEL;
         HelpButton  aPB_HELP;
-
 
         TTableConnectionData::value_type                                        m_pConnData;
         TTableConnectionData::value_type                                        m_pOrigConnData;
@@ -100,6 +97,5 @@ namespace dbaui
     };
 }
 #endif // DBAUI_RELATIONDIALOG_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

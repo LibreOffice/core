@@ -34,15 +34,12 @@
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
 #include <comphelper/sequence.hxx>
 
-
 namespace dbaccess
 {
-    //=======================================================================================
-    //= OSharedConnection: This class implements a simple forwarding of connection calls.
-    //= All methods will be forwarded with exception of the set methods, which are not allowed
-    //= to be called on shared connections. Instances of this class will be created when the
-    //= datasource is asked for not isolated connection.
-    //=======================================================================================
+    // OSharedConnection: This class implements a simple forwarding of connection calls.
+    // All methods will be forwarded with exception of the set methods, which are not allowed
+    // to be called on shared connections. Instances of this class will be created when the
+    // datasource is asked for not isolated connection.
     typedef ::cppu::WeakComponentImplHelper1< ::com::sun::star::sdbc::XConnection
                                             > OSharedConnection_BASE;
     typedef ::connectivity::OConnectionWrapper  OSharedConnection_BASE2;

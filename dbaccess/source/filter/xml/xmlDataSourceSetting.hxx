@@ -52,16 +52,13 @@ namespace dbaxml
 
         virtual void Characters( const OUString& rChars );
 
-
         /** adds value to property
             @param  _sValue
                 The value to add.
         */
         void addValue(const OUString& _sValue);
     };
-// -----------------------------------------------------------------------------
 } // namespace dbaxml
-// -----------------------------------------------------------------------------
 
 #endif // DBA_XMLDATASOURCESETTING_HXX
 

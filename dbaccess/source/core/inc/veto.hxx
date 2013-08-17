@@ -27,9 +27,7 @@
 namespace dbaccess
 {
 
-    //====================================================================
-    //= Veto
-    //====================================================================
+    // Veto
     typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::util::XVeto
                                     >   Veto_Base;
     /** implements ::com::sun::star::util::XVeto

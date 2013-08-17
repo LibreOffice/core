@@ -22,8 +22,7 @@
 
 typedef sal_Int32   ItemID;
 
-//========================================================================
-//= item ids for the data source administration dialog
+// item ids for the data source administration dialog
 
 #define DSID_NAME                   1           // name of a data source, SfxStringItem
 #define DSID_ORIGINALNAME           2           // orginal name, internal, SfxStringItem
@@ -88,9 +87,7 @@ typedef sal_Int32   ItemID;
 #define DSID_RESPECTRESULTSETTYPE   61
     // don't forget to adjust DSID_LAST_ITEM_ID below!
 
-
-//========================================================================
-//= item range. Adjust this if you introduce new items above
+// item range. Adjust this if you introduce new items above
 
 #define DSID_FIRST_ITEM_ID  DSID_NAME
 #define DSID_LAST_ITEM_ID   DSID_RESPECTRESULTSETTYPE

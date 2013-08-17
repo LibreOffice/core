@@ -23,7 +23,6 @@
 
 namespace dbaui
 {
-    // ================================================================================================
     // OQueryDesignUndoAction - undo base class for actions in graphical query design (without field list)
     class OJoinTableView;
     class OQueryDesignUndoAction : public OCommentUndoAction

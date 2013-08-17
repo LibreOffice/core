@@ -17,11 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <cppuhelper/factory.hxx>
 #include <osl/diagnose.h>
 #include "flt_reghelper.hxx"
-
 
 using namespace ::dbaxml;
 using namespace ::com::sun::star::uno;
@@ -55,7 +53,6 @@ extern "C" void SAL_CALL createRegistryInfo_dbaxml()
     }
 }
 
-//---------------------------------------------------------------------------------------
 extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL dbaxml_component_getFactory(
                     const sal_Char* pImplementationName,
                     void* pServiceManager,

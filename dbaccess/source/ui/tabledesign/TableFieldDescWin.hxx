@@ -29,7 +29,6 @@ namespace dbaui
     class OFieldDescGenWin;
     class OTableDesignHelpBar;
     class OFieldDescription;
-    //==================================================================
     // Ableitung von TabPage ist ein Trick von TH,
     // um Aenderungen der Systemfarben zu bemerken
     class OTableFieldDescWin : public TabPage
@@ -95,8 +94,5 @@ namespace dbaui
     };
 }
 #endif // DBAUI_TABLEFIELDDESCRIPTION_HXX
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

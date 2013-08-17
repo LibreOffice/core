@@ -57,9 +57,7 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::xml::sax;
-// -------------
 // - ODBExport -
-// -------------
 #define PROGRESS_BAR_STEP 20
 
 class ODBExport : public SvXMLExport
@@ -189,9 +187,7 @@ public:
     inline Reference<XPropertySet> getDataSource() const { return m_xDataSource; }
 };
 
-// -----------------------------------------------------------------------------
 } // dbaxml
-// -----------------------------------------------------------------------------
 #endif // DBA_XMLEXPORT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

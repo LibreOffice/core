@@ -26,13 +26,9 @@
 
 #include <vcl/msgbox.hxx>
 
-//........................................................................
 namespace dbaui
 {
-    //====================================================================
-    //= TextConnectionSettingsDialog
-    //====================================================================
-    //--------------------------------------------------------------------
+    // TextConnectionSettingsDialog
     TextConnectionSettingsDialog::TextConnectionSettingsDialog( Window* _pParent, SfxItemSet& _rItems )
         :ModalDialog( _pParent, ModuleRes( DLG_TEXT_CONNECTION_SETTINGS ) )
         ,m_aOK( this, ModuleRes( 1 ) )
@@ -45,12 +41,10 @@ namespace dbaui
         m_aOK.SetClickHdl( LINK( this, TextConnectionSettingsDialog, OnOK ) );
     }
 
-    //--------------------------------------------------------------------
     TextConnectionSettingsDialog::~TextConnectionSettingsDialog()
     {
     }
 
-    //--------------------------------------------------------------------
     void TextConnectionSettingsDialog::bindItemStorages( SfxItemSet& _rSet, PropertyValues& _rValues )
     {
         _rValues[ PROPERTY_ID_HEADER_LINE ].reset( new SetItemPropertyStorage( _rSet, DSID_TEXTFILEHEADER ) );
@@ -61,14 +55,12 @@ namespace dbaui
         _rValues[ PROPERTY_ID_ENCODING ].reset( new SetItemPropertyStorage( _rSet, DSID_CHARSET ) );
     }
 
-    //--------------------------------------------------------------------
     short TextConnectionSettingsDialog::Execute()
     {
         m_pTextConnectionHelper->implInitControls( m_rItems, sal_True );
         return ModalDialog::Execute();
     }
 
-    //--------------------------------------------------------------------
     IMPL_LINK( TextConnectionSettingsDialog, OnOK, PushButton*, /*_pButton*/ )
     {
         if ( m_pTextConnectionHelper->prepareLeave() )
@@ -82,8 +74,6 @@ namespace dbaui
         return 0L;
     }
 
-//........................................................................
 } // namespace dbaui
-//........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

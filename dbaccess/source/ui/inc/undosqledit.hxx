@@ -25,9 +25,7 @@
 namespace dbaui
 {
     class OSqlEdit;
-    // ================================================================================================
     // OSqlEditUndoAct - Undo-class for changing sql text
-    //------------------------------------------------------------------------
     class OSqlEditUndoAct : public OCommentUndoAction
     {
     protected:
@@ -45,6 +43,5 @@ namespace dbaui
     };
 }
 #endif // DBAUI_UNDOSQLEDIT_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

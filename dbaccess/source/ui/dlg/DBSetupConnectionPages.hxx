@@ -31,16 +31,11 @@
 #include <ucbhelper/content.hxx>
 #include <vcl/field.hxx>
 
-
-//.........................................................................
 namespace dbaui
 
 {
-//.........................................................................
 
-    //========================================================================
-    //= OSpreadSheetConnectionPageSetup
-    //========================================================================
+    // OSpreadSheetConnectionPageSetup
     class OSpreadSheetConnectionPageSetup : public OConnectionTabPageSetup
     {
     public:
@@ -59,9 +54,7 @@ namespace dbaui
 
     };
 
-    //========================================================================
-    //= OTextConnectionPage
-    //========================================================================
+    // OTextConnectionPage
     class OTextConnectionPageSetup : public OConnectionTabPageSetup
     {
     public:
@@ -83,9 +76,7 @@ namespace dbaui
         DECL_LINK(ImplGetExtensionHdl, OTextConnectionHelper*);
     };
 
-    //========================================================================
-    //= OLDAPConnectionPageSetup
-    //========================================================================
+    // OLDAPConnectionPageSetup
     class OLDAPConnectionPageSetup : public OGenericAdministrationPage
     {
     public:
@@ -113,9 +104,7 @@ namespace dbaui
         CheckBox            m_aCBUseSSL;
     };
 
-    //========================================================================
-    //= MySQLNativeSetupPage
-    //========================================================================
+    // MySQLNativeSetupPage
     class MySQLNativeSetupPage : public OGenericAdministrationPage
     {
     private:
@@ -141,9 +130,7 @@ namespace dbaui
         DECL_LINK( OnModified, Edit* );
     };
 
-    //========================================================================
-    //= OGeneralSpecialJDBCConnectionPageSetup
-    //========================================================================
+    // OGeneralSpecialJDBCConnectionPageSetup
     class OGeneralSpecialJDBCConnectionPageSetup : public OGenericAdministrationPage
     {
     public:
@@ -176,7 +163,6 @@ namespace dbaui
         FixedText           m_aFTDefaultPortNumber;
         NumericField        m_aNFPortNumber;
 
-
         FixedText           m_aFTDriverClass;
         Edit                m_aETDriverClass;
         PushButton          m_aPBTestJavaDriver;
@@ -185,10 +171,7 @@ namespace dbaui
         sal_uInt16              m_nPortId;
     };
 
-
-    //========================================================================
-    //= OJDBCConnectionPageSetup
-    //========================================================================
+    // OJDBCConnectionPageSetup
     class OJDBCConnectionPageSetup : public OConnectionTabPageSetup
     {
     public:
@@ -210,11 +193,7 @@ namespace dbaui
         PushButton          m_aPBTestJavaDriver;
     };
 
-
-
-    //========================================================================
-    //= OJDBCConnectionPageSetup
-    //========================================================================
+    // OJDBCConnectionPageSetup
     class OMySQLIntroPageSetup : public OGenericAdministrationPage
     {
     public:
@@ -233,9 +212,6 @@ namespace dbaui
         void                SetClickHdl( const Link& rLink ) { maClickHdl = rLink; }
         const Link&         GetClickHdl() const { return maClickHdl; }
         DECL_LINK(ImplClickHdl, OMySQLIntroPageSetup*);
-
-
-
 
     protected:
         virtual sal_Bool FillItemSet(SfxItemSet& _rSet);
@@ -256,12 +232,7 @@ namespace dbaui
 
     };
 
-
-
-
-    //========================================================================
-    //= OAuthentificationPageSetup
-    //========================================================================
+    // OAuthentificationPageSetup
     class OAuthentificationPageSetup : public OGenericAdministrationPage
     {
     public:
@@ -284,11 +255,7 @@ namespace dbaui
         virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList);
     };
 
-
-
-    //========================================================================
-    //= OFinalDBPageSetup
-    //========================================================================
+    // OFinalDBPageSetup
     class OFinalDBPageSetup : public OGenericAdministrationPage
     {
     public:
@@ -323,9 +290,7 @@ namespace dbaui
         virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList);
     };
 
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
 
 #endif
 

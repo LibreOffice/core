@@ -47,13 +47,9 @@
 #include <connectivity/ConnectionWrapper.hxx>
 #include <connectivity/warningscontainer.hxx>
 
-//........................................................................
 namespace dbaccess
 {
-//........................................................................
 
-//==========================================================================
-//==========================================================================
 typedef ::comphelper::ImplHelper14  <   ::com::sun::star::container::XChild
                                     ,   ::com::sun::star::sdbcx::XTablesSupplier
                                     ,   ::com::sun::star::sdbcx::XViewsSupplier
@@ -71,9 +67,7 @@ typedef ::comphelper::ImplHelper14  <   ::com::sun::star::container::XChild
                                     >   OConnection_Base;
 
 class ODatabaseSource;
-//==========================================================================
-//= OConnection
-//==========================================================================
+// OConnection
 class OConnection           :public ::comphelper::OBaseMutex
                             ,public OSubComponent
                             ,public ::connectivity::OConnectionWrapper
@@ -100,7 +94,6 @@ protected:
     // @ see com.sun.star.sdb.tools.XViewAccess
     DECLARE_STL_USTRINGACCESS_MAP( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>, TSupportServices);
     TSupportServices                m_aSupportServices;
-
 
     OTableContainer*                m_pTables;
     OViewContainer*                 m_pViews;
@@ -232,11 +225,8 @@ private:
     void    impl_fillTableFilter();
 };
 
-//........................................................................
 }   // namespace dbaccess
-//........................................................................
 
 #endif // _DBA_CORE_CONNECTION_HXX_
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

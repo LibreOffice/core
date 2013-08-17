@@ -73,10 +73,8 @@ namespace dbaui
 
         void setGraphic(const Graphic& _rGraphic ) { m_aGraphicObj.SetGraphic(_rGraphic); }
     };
-    //==================================================================
     // A helper class for the controls in the detail page.
     // Combines general functionality.
-    //==================================================================
     class OAppDetailPageHelper : public Window
     {
         DBTreeListBox*      m_pLists[ELEMENT_COUNT];
@@ -321,7 +319,6 @@ namespace dbaui
         */
         void elementRemoved(ElementType _eType
                             ,const OUString& _rName );
-
 
         /// returns the preview mode
         PreviewMode getPreviewMode();

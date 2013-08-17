@@ -57,9 +57,7 @@ namespace dbaccess
         ~IPropertyContainer() {}
     };
 
-    //====================================================================
-    //= OColumnSettings
-    //====================================================================
+    // OColumnSettings
     class OColumnSettings
     {
         //  <properties>

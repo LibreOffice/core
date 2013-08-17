@@ -52,7 +52,6 @@ namespace dbaui
         }
         sal_Bool checkString(const OUString& _sToCheck,OUString& _rsCorrected);
     };
-    //==================================================================
     class OSQLNameEdit : public Edit
                         ,public OSQLNameChecker
     {
@@ -96,6 +95,5 @@ namespace dbaui
 
 }
 #endif // DBAUI_SQLNAMEEDIT_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

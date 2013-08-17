@@ -25,14 +25,10 @@
 
 class ResMgr;
 
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
 
-//=========================================================================
-//= OModule
-//=========================================================================
+// OModule
 class OModuleImpl;
 class OModule
 {
@@ -64,9 +60,7 @@ private:
     static void ensureImpl();
 };
 
-//=========================================================================
-//= OModuleClient
-//=========================================================================
+// OModuleClient
 /** base class for objects which uses any global module-specific resources
 */
 class OModuleClient
@@ -76,9 +70,7 @@ public:
     ~OModuleClient()    { OModule::revokeClient(); }
 };
 
-//=========================================================================
-//= ModuleRes
-//=========================================================================
+// ModuleRes
 /** specialized ResId, using the resource manager provided by the global module
 */
 class ModuleRes : public ::ResId
@@ -87,9 +79,7 @@ public:
     ModuleRes(sal_uInt16 _nId) : ResId(_nId, *OModule::getResManager()) { }
 };
 
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
 
 #endif // _DBAUI_MODULE_DBU_HXX_
 

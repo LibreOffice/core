@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "directsql.hxx"
 #include "dbu_dlg.hrc"
 #include <vcl/msgbox.hxx>
@@ -28,20 +27,15 @@
 #include <rtl/strbuf.hxx>
 #include <com/sun/star/sdbc/XRow.hpp>
 
-//........................................................................
 namespace dbaui
 {
-//........................................................................
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::sdbc;
     using namespace ::com::sun::star::lang;
 
-    //====================================================================
-    //= DirectSQLDialog
-    //====================================================================
+    // DirectSQLDialog
 DBG_NAME(DirectSQLDialog)
-//--------------------------------------------------------------------
     DirectSQLDialog::DirectSQLDialog( Window* _pParent, const Reference< XConnection >& _rxConn )
         :ModalDialog(_pParent, "DirectSQLDialog" , "dbaccess/ui/directsqldialog.ui")
         ,m_nHistoryLimit(20)
@@ -82,7 +76,6 @@ DBG_NAME(DirectSQLDialog)
         OnStatementModified(m_pSQL);
     }
 
-    //--------------------------------------------------------------------
     DirectSQLDialog::~DirectSQLDialog()
     {
         {
@@ -93,7 +86,6 @@ DBG_NAME(DirectSQLDialog)
         DBG_DTOR(DirectSQLDialog,NULL);
     }
 
-    //--------------------------------------------------------------------
     void DirectSQLDialog::_disposing( const EventObject& _rSource )
     {
         SolarMutexGuard aSolarGuard;
@@ -112,14 +104,12 @@ DBG_NAME(DirectSQLDialog)
         PostUserEvent(LINK(this, DirectSQLDialog, OnClose));
     }
 
-    //--------------------------------------------------------------------
     sal_Int32 DirectSQLDialog::getHistorySize() const
     {
         CHECK_INVARIANTS("DirectSQLDialog::getHistorySize");
         return m_aStatementHistory.size();
     }
 
-    //--------------------------------------------------------------------
     void DirectSQLDialog::implEnsureHistoryLimit()
     {
         CHECK_INVARIANTS("DirectSQLDialog::implEnsureHistoryLimit");
@@ -137,7 +127,6 @@ DBG_NAME(DirectSQLDialog)
         }
     }
 
-    //--------------------------------------------------------------------
     void DirectSQLDialog::implAddToStatementHistory(const String& _rStatement)
     {
         CHECK_INVARIANTS("DirectSQLDialog::implAddToStatementHistory");
@@ -158,7 +147,6 @@ DBG_NAME(DirectSQLDialog)
     }
 
 #ifdef DBG_UTIL
-    //--------------------------------------------------------------------
     const sal_Char* DirectSQLDialog::impl_CheckInvariants() const
     {
         if (m_aStatementHistory.size() != m_aNormalizedHistory.size())
@@ -177,7 +165,6 @@ DBG_NAME(DirectSQLDialog)
     }
 #endif
 
-    //--------------------------------------------------------------------
     void DirectSQLDialog::implExecuteStatement(const String& _rStatement)
     {
         CHECK_INVARIANTS("DirectSQLDialog::implExecuteStatement");
@@ -250,7 +237,6 @@ DBG_NAME(DirectSQLDialog)
         addStatusText(sStatus);
     }
 
-    //--------------------------------------------------------------------
     void DirectSQLDialog::addStatusText(const String& _rMessage)
     {
         OUString sAppendMessage = OUString::number(m_nStatusCount++) + ": " + _rMessage + "\n\n";
@@ -261,7 +247,6 @@ DBG_NAME(DirectSQLDialog)
         m_pStatus->SetSelection(Selection(sCompleteMessage.getLength(), sCompleteMessage.getLength()));
     }
 
-    //--------------------------------------------------------------------
     void DirectSQLDialog::addOutputText(const String& _rMessage)
     {
         String sAppendMessage = _rMessage;
@@ -272,7 +257,6 @@ DBG_NAME(DirectSQLDialog)
         m_pOutput->SetText(sCompleteMessage);
     }
 
-    //--------------------------------------------------------------------
     void DirectSQLDialog::executeCurrent()
     {
         CHECK_INVARIANTS("DirectSQLDialog::executeCurrent");
@@ -289,7 +273,6 @@ DBG_NAME(DirectSQLDialog)
         m_pSQL->GrabFocus();
     }
 
-    //--------------------------------------------------------------------
     void DirectSQLDialog::switchToHistory(sal_Int32 _nHistoryPos, sal_Bool _bUpdateListBox)
     {
         CHECK_INVARIANTS("DirectSQLDialog::switchToHistory");
@@ -316,28 +299,24 @@ DBG_NAME(DirectSQLDialog)
             OSL_FAIL("DirectSQLDialog::switchToHistory: invalid position!");
     }
 
-    //--------------------------------------------------------------------
     IMPL_LINK( DirectSQLDialog, OnStatementModified, void*, /*NOTINTERESTEDIN*/ )
     {
         m_pExecute->Enable(!m_pSQL->GetText().isEmpty());
         return 0L;
     }
 
-    //--------------------------------------------------------------------
     IMPL_LINK( DirectSQLDialog, OnClose, void*, /*NOTINTERESTEDIN*/ )
     {
         EndDialog( RET_OK );
         return 0L;
     }
 
-    //--------------------------------------------------------------------
     IMPL_LINK( DirectSQLDialog, OnExecute, void*, /*NOTINTERESTEDIN*/ )
     {
         executeCurrent();
         return 0L;
     }
 
-    //--------------------------------------------------------------------
     IMPL_LINK( DirectSQLDialog, OnListEntrySelected, void*, /*NOTINTERESTEDIN*/ )
     {
         if (!m_pSQLHistory->IsTravelSelect())
@@ -349,8 +328,6 @@ DBG_NAME(DirectSQLDialog)
         return 0L;
     }
 
-//........................................................................
 }   // namespace dbaui
-//........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

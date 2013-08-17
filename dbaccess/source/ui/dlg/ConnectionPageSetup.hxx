@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #ifndef DBAUI_CONNECTIONPAGESETUP_HXX
 #define DBAUI_CONNECTIONPAGESETUP_HXX
 #include "ConnectionHelper.hxx"
@@ -28,15 +27,10 @@
 
 #include <vcl/field.hxx>
 
-
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
 
-    //=========================================================================
-    //= OConnectionTabPageSetup
-    //=========================================================================
+    // OConnectionTabPageSetup
 
     /** implements the connection page of the data source properties dialog.
     */
@@ -57,12 +51,10 @@ namespace dbaui
         static  OGenericAdministrationPage* CreateODBCTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
         static  OGenericAdministrationPage* CreateUserDefinedTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
 
-
         virtual sal_Bool        FillItemSet (SfxItemSet& _rCoreAttrs);
 
         virtual void        implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
         virtual sal_Bool    commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
-
 
         inline void enableConnectionURL() { m_aConnectionURL.SetReadOnly(sal_False); }
         inline void disableConnectionURL() { m_aConnectionURL.SetReadOnly(); }
@@ -74,7 +66,6 @@ namespace dbaui
         void    changeConnectionURL( const String& _rNewDSN );
         String  getConnectionURL( ) const;
 
-
     protected:
         OConnectionTabPageSetup(Window* pParent, sal_uInt16 _rId, const SfxItemSet& _rCoreAttrs, sal_uInt16 _nHelpTextResId, sal_uInt16 _nHeaderResId, sal_uInt16 _nUrlResId);
         virtual bool checkTestConnection();
@@ -82,9 +73,7 @@ namespace dbaui
         virtual ~OConnectionTabPageSetup();
     };
 
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
 
 #endif
 

@@ -33,10 +33,8 @@
 #include <svl/poolitem.hxx>
 
 class Window;
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
     namespace DataSourceInfoConverter
     {
         void convert(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext> & xContext,
@@ -46,9 +44,7 @@ namespace dbaui
                      const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xDatasource);
     };
     class IItemSetHelper;
-    //========================================================================
-    //= ODbDataSourceAdministrationHelper
-    //========================================================================
+    // ODbDataSourceAdministrationHelper
     class ODbDataSourceAdministrationHelper
     {
     public:
@@ -65,7 +61,6 @@ namespace dbaui
         ::com::sun::star::uno::Any              m_aDataSourceOrName;
         typedef ::std::set< OUString >   StringSet;
         typedef StringSet::const_iterator       ConstStringSetIterator;
-
 
         MapInt2String           m_aDirectPropTranslator;    /// translating property id's into names (direct properties of a data source)
         MapInt2String           m_aIndirectPropTranslator;  /// translating property id's into names (indirect properties of a data source)
@@ -172,9 +167,7 @@ namespace dbaui
 #endif
     };
 
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
 
 #endif // _DBAUI_DBADMINIMPL_HXX_
 

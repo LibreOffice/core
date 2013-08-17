@@ -35,14 +35,10 @@
 
 #include <svtools/editbrowsebox.hxx>
 
-//........................................................................
 namespace dbaui
 {
-//........................................................................
 
-    //====================================================================
-    //= DirectSQLDialog
-    //====================================================================
+    // DirectSQLDialog
     class DirectSQLDialog
             :public ModalDialog
             ,public ::utl::OEventListenerAdapter
@@ -113,7 +109,6 @@ namespace dbaui
 #endif
     };
 
-    //====================================================================
 #ifdef DBG_UTIL
 #define CHECK_INVARIANTS(methodname)    \
     {   \
@@ -125,9 +120,7 @@ namespace dbaui
 #define CHECK_INVARIANTS(methodname)
 #endif
 
-//........................................................................
 }   // namespace dbaui
-//........................................................................
 
 #endif // _DBACCESS_UI_DIRECTSQL_HXX_
 

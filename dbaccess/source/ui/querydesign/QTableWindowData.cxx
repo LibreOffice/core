@@ -20,30 +20,21 @@
 #include "QTableWindowData.hxx"
 #include <tools/debug.hxx>
 
-
 using namespace dbaui;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
 
 DBG_NAME(OQueryTableWindowData)
-//==================================================================
 // class OQueryTableWindowData
-//==================================================================
-//------------------------------------------------------------------------------
 OQueryTableWindowData::OQueryTableWindowData(const OUString& _rComposedName, const OUString& rTableName, const OUString& rTableAlias )
     :OTableWindowData(NULL,_rComposedName, rTableName, rTableAlias)
 {
     DBG_CTOR(OQueryTableWindowData,NULL);
 }
 
-//------------------------------------------------------------------------------
 OQueryTableWindowData::~OQueryTableWindowData()
 {
     DBG_DTOR(OQueryTableWindowData,NULL);
 }
-// -----------------------------------------------------------------------------
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
