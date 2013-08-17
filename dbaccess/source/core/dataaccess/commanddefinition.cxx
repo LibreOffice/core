@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "commanddefinition.hxx"
 #include "apitools.hxx"
 #include "dbastrings.hrc"
@@ -41,9 +40,7 @@ using namespace ::cppu;
 namespace dbaccess
 {
 
-//==========================================================================
 //= OCommandDefinition
-//==========================================================================
 extern "C" void SAL_CALL createRegistryInfo_OCommandDefinition()
 {
     static ::dba::OAutoRegistration< OCommandDefinition > aAutoRegistration;
@@ -126,7 +123,6 @@ void OCommandDefinition::setUpdateSchemaName(const OUString& p1) throw( ::com::s
 {
     setPropertyValue(PROPERTY_UPDATE_SCHEMANAME, Any(p1) );
 }
-
 
 OCommandDefinition::OCommandDefinition(const Reference< XComponentContext >& _xORB
                                        ,const Reference< XInterface >& _rxContainer

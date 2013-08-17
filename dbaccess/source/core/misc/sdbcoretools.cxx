@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "sdbcoretools.hxx"
 #include "dbastrings.hrc"
 
@@ -36,10 +35,8 @@
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 
-//.........................................................................
 namespace dbaccess
 {
-//.........................................................................
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
@@ -52,8 +49,6 @@ namespace dbaccess
     using namespace ::com::sun::star::embed;
     using namespace ::com::sun::star::container;
 
-    // =========================================================================
-    // -------------------------------------------------------------------------
     void notifyDataSourceModified(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxObject,sal_Bool _bModified)
     {
         Reference< XInterface > xDs = getDataSource( _rxObject );
@@ -65,7 +60,6 @@ namespace dbaccess
             xModi->setModified(_bModified);
     }
 
-    // -------------------------------------------------------------------------
     Reference< XInterface > getDataSource( const Reference< XInterface >& _rxDependentObject )
     {
         Reference< XInterface > xParent = _rxDependentObject;
@@ -79,7 +73,6 @@ namespace dbaccess
         return xReturn;
     }
 
-// -----------------------------------------------------------------------------
     OUString extractExceptionMessage( const Reference<XComponentContext> & _rContext, const Any& _rError )
     {
         OUString sDisplayMessage;
@@ -118,7 +111,6 @@ namespace dbaccess
 
     namespace tools { namespace stor {
 
-    // -----------------------------------------------------------------------------
     bool storageIsWritable_nothrow( const Reference< XStorage >& _rxStorage )
     {
         if ( !_rxStorage.is() )
@@ -137,7 +129,6 @@ namespace dbaccess
         return ( nMode & ElementModes::WRITE ) != 0;
     }
 
-    // -----------------------------------------------------------------------------
     bool commitStorageIfWriteable( const Reference< XStorage >& _rxStorage ) SAL_THROW(( IOException, WrappedTargetException, RuntimeException ))
     {
         bool bSuccess = false;
@@ -153,8 +144,6 @@ namespace dbaccess
 
     } } // tools::stor
 
-//.........................................................................
 }   // namespace dbaccess
-//.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

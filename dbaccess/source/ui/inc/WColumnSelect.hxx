@@ -31,9 +31,7 @@ namespace dbaui
 {
     class OFieldDescription;
 
-    // ========================================================
     // Wizard Page: OWizColumnSelect
-    // ========================================================
 
     class OWizColumnSelect : public OWizardPage
     {
@@ -46,10 +44,8 @@ namespace dbaui
         ImageButton             m_ibColumns_LH;
         MultiListBox            m_lbNewColumnNames; // right side
 
-
         DECL_LINK( ButtonClickHdl, Button * );
         DECL_LINK( ListDoubleClickHdl, MultiListBox * );
-
 
         void clearListBox(MultiListBox& _rListBox);
         void fillColumns(       ListBox* pRight,
@@ -73,7 +69,6 @@ namespace dbaui
 
         void enableButtons();
 
-
         sal_uInt16 adjustColumnPosition(ListBox* _pLeft,
                                     const OUString&  _sColumnName,
                                     ODatabaseExport::TColumnVector::size_type nCurrentPos,
@@ -90,7 +85,5 @@ namespace dbaui
     };
 }
 #endif // DBAUI_WIZ_COLUMNSELECT_HXX
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -44,7 +44,6 @@
 
 #include <functional>
 
-
 namespace com { namespace sun { namespace star {
     namespace sdb { struct RowChangeEvent; }
     namespace lang { struct Locale; }
@@ -327,7 +326,6 @@ namespace dbaccess
         // is called when the rowset has deleted this bookmark _rBookmark
         void onDeletedRow( const ::com::sun::star::uno::Any& _rBookmark, sal_Int32 _nPos );
 
-        // ==========================================================
         // granular access control
         struct GrantNotifierAccess { friend class ORowSetNotifier; private: GrantNotifierAccess () { } };
 
@@ -350,7 +348,6 @@ namespace dbaccess
         ::osl::Mutex*   getMutex() const { return m_pMutex; }
     };
 
-    // ========================================================================
     /** eases the handling of the doCancelModification and notifyCancelInsert methods
 
         <p>The class can only be used on the stack, within a method of ORowSetBase (or derivees)</p>

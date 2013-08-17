@@ -43,7 +43,6 @@
 #include "TableCopyHelper.hxx"
 #include "commontypes.hxx"
 
-// =========================================================================
 class SvTreeListEntry;
 class Splitter;
 struct SvSortData;
@@ -51,16 +50,13 @@ struct SvSortData;
 namespace com { namespace sun{ namespace star { namespace container { class XNameContainer; } } } }
 
 class SvTreeList;
-// .........................................................................
 namespace dbaui
 {
-// .........................................................................
 
     class DBTreeView;
     struct DBTreeEditedEntry;
     class ImageProvider;
 
-    // =====================================================================
     typedef ::cppu::ImplHelper5 <   ::com::sun::star::frame::XStatusListener
                                 ,   ::com::sun::star::view::XSelectionSupplier
                                 ,   ::com::sun::star::document::XScriptInvocationContext
@@ -75,12 +71,10 @@ namespace dbaui
     {
     protected:
 
-        // ---------------------------
         ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCollator >   m_xCollator;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >     m_xCurrentFrameParent;
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >      m_xMainToolbar;
 
-        // ---------------------------
         struct ExternalFeature
         {
             ::com::sun::star::util::URL     aURL;
@@ -121,7 +115,6 @@ namespace dbaui
         sal_Bool                m_bEnableBrowser;
         ::boost::optional< bool >
                                 m_aDocScriptSupport;    // relevant if and only if we are associated with exactly one DBDoc
-
 
         virtual OUString getPrivateTitle( ) const;
     // attribute access
@@ -482,9 +475,7 @@ namespace dbaui
         void    impl_sanitizeRowSetClauses_nothrow();
     };
 
-// .........................................................................
 }   // namespace dbaui
-// .........................................................................
 
 #endif // _SBA_UNODATBR_HXX_
 

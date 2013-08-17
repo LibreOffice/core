@@ -56,9 +56,7 @@ OJoinControl::OJoinControl(Window* _pParent,const ResId& _rResId)
 {
     FreeResource();
 }
-// -----------------------------------------------------------------------------
 } // dbaui
-// -----------------------------------------------------------------------------
 DBG_NAME(DlgQryJoin)
 DlgQryJoin::DlgQryJoin( OQueryTableView * pParent,
                        const TTableConnectionData::value_type& _pData,
@@ -81,7 +79,6 @@ DlgQryJoin::DlgQryJoin( OQueryTableView * pParent,
     DBG_CTOR(DlgQryJoin,NULL);
 
     aML_HelpText.SetControlBackground( GetSettings().GetStyleSettings().GetFaceColor() );
-    //////////////////////////////////////////////////////////////////////
     // Connection kopieren
     m_pConnData.reset(_pData->NewInstance());
     m_pConnData->CopyFrom(*_pData);
@@ -160,14 +157,12 @@ DlgQryJoin::DlgQryJoin( OQueryTableView * pParent,
     FreeResource();
 }
 
-//------------------------------------------------------------------------
 DlgQryJoin::~DlgQryJoin()
 {
     DBG_DTOR(DlgQryJoin,NULL);
     delete m_pJoinControl;
     delete m_pTableControl;
 }
-// -----------------------------------------------------------------------------
 IMPL_LINK( DlgQryJoin, LBChangeHdl, ListBox*, /*pListBox*/ )
 {
     DBG_CHKTHIS(DlgQryJoin,NULL);
@@ -256,7 +251,6 @@ IMPL_LINK( DlgQryJoin, LBChangeHdl, ListBox*, /*pListBox*/ )
     aML_HelpText.SetText( sHelpText );
     return 1;
 }
-// -----------------------------------------------------------------------------
 
 IMPL_LINK( DlgQryJoin, OKClickHdl, Button*, /*pButton*/ )
 {
@@ -268,7 +262,6 @@ IMPL_LINK( DlgQryJoin, OKClickHdl, Button*, /*pButton*/ )
     EndDialog(RET_OK);
     return 1;
 }
-// -----------------------------------------------------------------------------
 
 IMPL_LINK( DlgQryJoin, NaturalToggleHdl, CheckBox*, /*pButton*/ )
 {
@@ -301,24 +294,20 @@ IMPL_LINK( DlgQryJoin, NaturalToggleHdl, CheckBox*, /*pButton*/ )
 
     return 1;
 }
-// -----------------------------------------------------------------------------
 TTableConnectionData::value_type DlgQryJoin::getConnectionData() const
 {
     return m_pConnData;
 }
-// -----------------------------------------------------------------------------
 void DlgQryJoin::setValid(sal_Bool _bValid)
 {
     aPB_OK.Enable(_bValid || eJoinType == CROSS_JOIN );
 }
-// -----------------------------------------------------------------------------
 void DlgQryJoin::notifyConnectionChange( )
 {
     setJoinType( static_cast<OQueryTableConnectionData*>(m_pConnData.get())->GetJoinType() );
     m_pJoinControl->m_aCBNatural.Check(static_cast<OQueryTableConnectionData*>(m_pConnData.get())->isNatural());
     NaturalToggleHdl(&m_pJoinControl->m_aCBNatural);
 }
-// -----------------------------------------------------------------------------
 void DlgQryJoin::setJoinType(EJoinType _eNewJoinType)
 {
     eJoinType = _eNewJoinType;
@@ -357,8 +346,5 @@ void DlgQryJoin::setJoinType(EJoinType _eNewJoinType)
 
     LBChangeHdl(&m_pJoinControl->aLB_JoinType);
 }
-// -----------------------------------------------------------------------------
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

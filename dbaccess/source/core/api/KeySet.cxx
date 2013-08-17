@@ -484,7 +484,6 @@ Sequence< sal_Int32 > SAL_CALL OKeySet::deleteRows( const Sequence< Any >& rows 
     static OUString aOr(" OR ");
     static OUString aEqual(" = ?");
 
-
     // use keys and indexes for exact postioning
     // first the keys
     Reference<XNameAccess> xKeyColumns = getKeyColumns();
@@ -576,7 +575,6 @@ void SAL_CALL OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow
     Reference<XIndexAccess> xIndexes;
     if ( xIndexSup.is() )
         xIndexes.set(xIndexSup->getIndexes(),UNO_QUERY);
-
 
     ::std::vector< Reference<XNameAccess> > aAllIndexColumns;
     lcl_fillIndexColumns(xIndexes,aAllIndexColumns);
@@ -1388,7 +1386,6 @@ bool OKeySet::doTryRefetch_throw()  throw(SQLException, RuntimeException)
     return m_xSet->next();
 }
 
-// -----------------------------------------------------------------------------
 void SAL_CALL OKeySet::refreshRow() throw(SQLException, RuntimeException)
 {
    SAL_INFO("dbaccess", "OKeySet::refreshRow" );

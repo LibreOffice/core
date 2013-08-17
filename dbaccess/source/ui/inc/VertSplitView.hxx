@@ -25,7 +25,6 @@ class Splitter;
 
 namespace dbaui
 {
-    //==================================================================
     class OSplitterView : public Window
     {
         Splitter*                           m_pSplitter;

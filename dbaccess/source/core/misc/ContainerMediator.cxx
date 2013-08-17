@@ -30,11 +30,8 @@
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 
-
-//........................................................................
 namespace dbaccess
 {
-//........................................................................
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::sdbc;
@@ -73,7 +70,6 @@ OContainerMediator::OContainerMediator( const Reference< XContainer >& _xContain
         m_xContainer.clear();
     }
 }
-// -----------------------------------------------------------------------------
 OContainerMediator::~OContainerMediator()
 {
     DBG_DTOR(OContainerMediator,NULL);
@@ -81,7 +77,6 @@ OContainerMediator::~OContainerMediator()
     impl_cleanup_nothrow();
 }
 
-// -----------------------------------------------------------------------------
 void OContainerMediator::impl_cleanup_nothrow()
 {
     try
@@ -104,7 +99,6 @@ void OContainerMediator::impl_cleanup_nothrow()
     }
 }
 
-// -----------------------------------------------------------------------------
 void SAL_CALL OContainerMediator::elementInserted( const ContainerEvent& _rEvent ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -120,7 +114,6 @@ void SAL_CALL OContainerMediator::elementInserted( const ContainerEvent& _rEvent
         }
     }
 }
-// -----------------------------------------------------------------------------
 void SAL_CALL OContainerMediator::elementRemoved( const ContainerEvent& _rEvent ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -142,7 +135,6 @@ void SAL_CALL OContainerMediator::elementRemoved( const ContainerEvent& _rEvent 
         }
     }
 }
-// -----------------------------------------------------------------------------
 void SAL_CALL OContainerMediator::elementReplaced( const ContainerEvent& _rEvent ) throw(RuntimeException)
 {
     Reference< XContainer > xContainer = m_xContainer;
@@ -175,7 +167,6 @@ void SAL_CALL OContainerMediator::elementReplaced( const ContainerEvent& _rEvent
     }
 }
 
-// -----------------------------------------------------------------------------
 void SAL_CALL OContainerMediator::disposing( const EventObject& /*Source*/ ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -183,7 +174,6 @@ void SAL_CALL OContainerMediator::disposing( const EventObject& /*Source*/ ) thr
     impl_cleanup_nothrow();
 }
 
-// -----------------------------------------------------------------------------
 void OContainerMediator::impl_initSettings_nothrow( const OUString& _rName, const Reference< XPropertySet >& _rxDestination )
 {
     try
@@ -200,7 +190,6 @@ void OContainerMediator::impl_initSettings_nothrow( const OUString& _rName, cons
     }
 }
 
-// -----------------------------------------------------------------------------
 void OContainerMediator::notifyElementCreated( const OUString& _sName, const Reference< XPropertySet >& _xDest )
 {
     if ( !m_xSettings.is() )
@@ -244,9 +233,6 @@ void OContainerMediator::notifyElementCreated( const OUString& _sName, const Ref
     ::rtl::Reference< OPropertyForward > pForward( new OPropertyForward( _xDest, m_xSettings, _sName, aPropertyList ) );
     m_aForwardList[ _sName ] = pForward;
 }
-// -----------------------------------------------------------------------------
-//........................................................................
 }   // namespace dbaccess
-//........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

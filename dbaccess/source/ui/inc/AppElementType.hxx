@@ -21,10 +21,8 @@
 
 #include <com/sun/star/sdb/application/DatabaseObject.hpp>
 
-//........................................................................
 namespace dbaui
 {
-//........................................................................
 
     enum ElementType
     {
@@ -51,9 +49,7 @@ namespace dbaui
         E_OPEN_FOR_MAIL
     };
 
-//........................................................................
 } // namespace dbaui
-//........................................................................
 #endif // DBAUI_APPELEMENTTYPE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

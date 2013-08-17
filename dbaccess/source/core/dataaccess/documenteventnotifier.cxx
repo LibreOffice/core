@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "documenteventnotifier.hxx"
 
 #include <com/sun/star/frame/DoubleInitializationException.hpp>
@@ -48,14 +47,10 @@ namespace dbaccess
 
     using namespace ::com::sun::star;
 
-    //==================================================================
     //= DocumentEventHolder
-    //==================================================================
     typedef ::comphelper::EventHolder< DocumentEvent >  DocumentEventHolder;
 
-    //====================================================================
     //= DocumentEventNotifier_Impl
-    //====================================================================
     class DocumentEventNotifier_Impl : public ::comphelper::IEventProcessor
     {
         oslInterlockedCount                                     m_refCount;
@@ -236,9 +231,7 @@ namespace dbaccess
         impl_notifyEvent_nothrow( rEventHolder.getEventObject() );
     }
 
-    //====================================================================
     //= DocumentEventNotifier
-    //====================================================================
     DocumentEventNotifier::DocumentEventNotifier( ::cppu::OWeakObject& _rBroadcasterDocument, ::osl::Mutex& _rMutex )
         :m_pImpl( new DocumentEventNotifier_Impl( _rBroadcasterDocument, _rMutex ) )
     {

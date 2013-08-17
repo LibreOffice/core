@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "dsnItem.hxx"
 #include "ConnectionHelper.hxx"
 #include "AutoControls.hrc"
@@ -75,12 +74,8 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 
-
-
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::ucb;
@@ -92,7 +87,6 @@ namespace dbaui
     using namespace ::com::sun::star::mozilla;
     using namespace ::dbtools;
     using namespace ::svt;
-
 
 DBG_NAME(OConnectionHelper)
 
@@ -113,15 +107,12 @@ DBG_NAME(OConnectionHelper)
         m_aConnectionURL.SetTypeCollection(m_pCollection);
     }
 
-
     OConnectionHelper::~OConnectionHelper()
     {
 
         DBG_DTOR(OConnectionHelper,NULL);
     }
 
-
-    // -----------------------------------------------------------------------
     void OConnectionHelper::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
     {
         // check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
@@ -150,7 +141,6 @@ DBG_NAME(OConnectionHelper)
         OGenericAdministrationPage::implInitControls(_rSet, _bSaveValue);
     }
 
-    // -----------------------------------------------------------------------
     void OConnectionHelper::implUpdateURLDependentStates() const
     {
         OSL_PRECOND( m_pAdminDialog, "OConnectionHelper::implUpdateURLDependentStates: no admin dialog!" );
@@ -161,7 +151,6 @@ DBG_NAME(OConnectionHelper)
             m_pAdminDialog->enableConfirmSettings( getURLNoPrefix().Len() > 0 );
     }
 
-    // -----------------------------------------------------------------------
     IMPL_LINK(OConnectionHelper, OnBrowseConnections, PushButton*, /*_pButton*/)
     {
         OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
@@ -306,7 +295,6 @@ DBG_NAME(OConnectionHelper)
                 for (sal_Int32 index=0; index < count; index++)
                     aProfiles.insert(pArray[index]);
 
-
                 // execute the select dialog
                 ODatasourceSelectDialog aSelector(GetParent(), aProfiles);
                 OUString sOldProfile=getURLNoPrefix();
@@ -329,14 +317,11 @@ DBG_NAME(OConnectionHelper)
         return 0L;
     }
 
-    //-------------------------------------------------------------------------
-
     bool OConnectionHelper::checkTestConnection()
     {
         return true;
     }
 
-    //-------------------------------------------------------------------------
     void OConnectionHelper::impl_setURL( const String& _rURL, sal_Bool _bPrefix )
     {
         String sURL( comphelper::string::stripEnd(_rURL, '*') );
@@ -380,7 +365,6 @@ DBG_NAME(OConnectionHelper)
         implUpdateURLDependentStates();
     }
 
-    //-------------------------------------------------------------------------
     String OConnectionHelper::impl_getURL( sal_Bool _bPrefix ) const
     {
         // get the pure text
@@ -419,25 +403,21 @@ DBG_NAME(OConnectionHelper)
         return sURL;
     }
 
-    //-------------------------------------------------------------------------
     void OConnectionHelper::setURL( const String& _rURL )
     {
         impl_setURL( _rURL, sal_True );
     }
 
-    //-------------------------------------------------------------------------
     String OConnectionHelper::getURLNoPrefix( ) const
     {
         return impl_getURL( sal_False );
     }
 
-    //-------------------------------------------------------------------------
     void OConnectionHelper::setURLNoPrefix( const String& _rURL )
     {
         impl_setURL( _rURL, sal_False );
     }
 
-    //-------------------------------------------------------------------------
     sal_Int32 OConnectionHelper::checkPathExistence(const String& _rURL)
     {
         IS_PATH_EXIST e_exists = pathExists(_rURL, sal_False);
@@ -504,7 +484,6 @@ DBG_NAME(OConnectionHelper)
         return RET_OK;
     }
 
-    // -----------------------------------------------------------------------------
     IS_PATH_EXIST OConnectionHelper::pathExists(const OUString& _rURL, sal_Bool bIsFile) const
     {
         ::ucbhelper::Content aCheckExistence;
@@ -528,7 +507,6 @@ DBG_NAME(OConnectionHelper)
            }
         return eExists;
     }
-    //-------------------------------------------------------------------------
     long OConnectionHelper::PreNotify( NotifyEvent& _rNEvt )
     {
         if ( m_pCollection->isFileSystemBased(m_eType) )
@@ -554,8 +532,6 @@ DBG_NAME(OConnectionHelper)
 
         return OGenericAdministrationPage::PreNotify( _rNEvt );
     }
-
-    //-------------------------------------------------------------------------
 
     sal_Bool OConnectionHelper::createDirectoryDeep(const String& _rPathURL)
     {
@@ -625,22 +601,17 @@ DBG_NAME(OConnectionHelper)
         return sal_True;
     }
 
-
-    // -----------------------------------------------------------------------
     void OConnectionHelper::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
     {
         _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aFT_Connection));
         _rControlList.push_back(new ODisableWrapper<PushButton>(&m_aPB_Connection));
     }
 
-
-    // -----------------------------------------------------------------------
     void OConnectionHelper::fillControls(::std::vector< ISaveValueWrapper* >& _rControlList)
     {
         _rControlList.push_back( new OSaveValueWrapper<Edit>( &m_aConnectionURL ) );
     }
 
-    //-------------------------------------------------------------------------
     sal_Bool OConnectionHelper::commitURL()
     {
         String sURL;
@@ -694,7 +665,6 @@ DBG_NAME(OConnectionHelper)
         m_aConnectionURL.SaveValueNoPrefix();
         return sal_True;
     }
-    //-------------------------------------------------------------------------
     void OConnectionHelper::askForFileName(::sfx2::FileDialogHelper& _aFileOpen)
     {
         String sOldPath = getURLNoPrefix();
@@ -710,8 +680,6 @@ DBG_NAME(OConnectionHelper)
         }
     }
 
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

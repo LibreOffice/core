@@ -17,19 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "listviewitems.hxx"
 #include "svtools/viewdataentry.hxx"
 
-//........................................................................
 namespace dbaui
 {
-//........................................................................
 
-    //========================================================================
     // class OBoldListboxString
-    //========================================================================
-    //------------------------------------------------------------------------
     void OBoldListboxString::InitViewData( SvTreeListBox* pView,SvTreeListEntry* pEntry, SvViewDataItem* _pViewData)
     {
         SvLBoxString::InitViewData( pView, pEntry, _pViewData );
@@ -68,8 +62,6 @@ namespace dbaui
             SvLBoxString::Paint(rPos, rDev, pView, pEntry);
     }
 
-//........................................................................
 }   // namespace dbaui
-//........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

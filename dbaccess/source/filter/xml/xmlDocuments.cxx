@@ -50,7 +50,6 @@ OXMLDocuments::OXMLDocuments( ODBFilter& rImport
     DBG_CTOR(OXMLDocuments,NULL);
 
 }
-// -----------------------------------------------------------------------------
 OXMLDocuments::OXMLDocuments( ODBFilter& rImport
                 ,sal_uInt16 nPrfx
                 , const OUString& rLName
@@ -63,14 +62,12 @@ OXMLDocuments::OXMLDocuments( ODBFilter& rImport
 {
     DBG_CTOR(OXMLDocuments,NULL);
 }
-// -----------------------------------------------------------------------------
 
 OXMLDocuments::~OXMLDocuments()
 {
 
     DBG_DTOR(OXMLDocuments,NULL);
 }
-// -----------------------------------------------------------------------------
 
 SvXMLImportContext* OXMLDocuments::CreateChildContext(
         sal_uInt16 nPrefix,
@@ -103,17 +100,12 @@ SvXMLImportContext* OXMLDocuments::CreateChildContext(
     if( !pContext )
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
 
-
     return pContext;
 }
-// -----------------------------------------------------------------------------
 ODBFilter& OXMLDocuments::GetOwnImport()
 {
     return static_cast<ODBFilter&>(GetImport());
 }
-// -----------------------------------------------------------------------------
-//----------------------------------------------------------------------------
 } // namespace dbaxml
-// -----------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

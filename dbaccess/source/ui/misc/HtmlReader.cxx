@@ -66,11 +66,8 @@ using namespace ::com::sun::star::awt;
 
 #define DBAUI_HTML_FONTSIZES    8       // like export, HTML-Options
 
-// ==========================================================================
 DBG_NAME(OHTMLReader)
-// ==========================================================================
 // OHTMLReader
-// ==========================================================================
 OHTMLReader::OHTMLReader(SvStream& rIn,const SharedConnection& _rxConnection,
                         const Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
@@ -89,7 +86,6 @@ OHTMLReader::OHTMLReader(SvStream& rIn,const SharedConnection& _rxConnection,
     // If the file starts with a BOM, switch to UCS2.
     SetSwitchToUCS2( sal_True );
 }
-// ---------------------------------------------------------------------------
 OHTMLReader::OHTMLReader(SvStream& rIn,
                          sal_Int32 nRows,
                          const TPositions &_rColumnPositions,
@@ -111,12 +107,10 @@ OHTMLReader::OHTMLReader(SvStream& rIn,
     // If the file starts with a BOM, switch to UCS2.
     SetSwitchToUCS2( sal_True );
 }
-// ---------------------------------------------------------------------------
 OHTMLReader::~OHTMLReader()
 {
     DBG_DTOR(OHTMLReader,NULL);
 }
-// ---------------------------------------------------------------------------
 SvParserState OHTMLReader::CallParser()
 {
     SAL_INFO("dbaccess.ui", "OHTMLReader::CallParser" );
@@ -127,7 +121,6 @@ SvParserState OHTMLReader::CallParser()
     SetColumnTypes(m_pColumnList,m_pInfoMap);
     return m_bFoundTable ? eParseState : SVPAR_ERROR;
 }
-// -----------------------------------------------------------------------------
 void OHTMLReader::NextToken( int nToken )
 {
     SAL_INFO("dbaccess.ui", "OHTMLReader::NextToken" );
@@ -239,7 +232,6 @@ void OHTMLReader::NextToken( int nToken )
                     m_pUpdateHelper->insertRow();
                 }
                 catch(SQLException& e)
-                //////////////////////////////////////////////////////////////////////
                 // handling update failure
                 {
                     showErrorDialog(e);
@@ -297,7 +289,6 @@ void OHTMLReader::NextToken( int nToken )
         }
     }
 }
-// -----------------------------------------------------------------------------
 void OHTMLReader::fetchOptions()
 {
     SAL_INFO("dbaccess.ui", "OHTMLReader::fetchOptions" );
@@ -320,7 +311,6 @@ void OHTMLReader::fetchOptions()
         }
     }
 }
-//---------------------------------------------------------------------------------
 void OHTMLReader::TableDataOn(SvxCellHorJustify& eVal)
 {
     SAL_INFO("dbaccess.ui", "OHTMLReader::TableDataOn" );
@@ -351,7 +341,6 @@ void OHTMLReader::TableDataOn(SvxCellHorJustify& eVal)
     }
 }
 
-//---------------------------------------------------------------------------------
 void OHTMLReader::TableFontOn(FontDescriptor& _rFont,sal_Int32 &_rTextColor)
 {
     SAL_INFO("dbaccess.ui", "OHTMLReader::TableFontOn" );
@@ -401,7 +390,6 @@ void OHTMLReader::TableFontOn(FontDescriptor& _rFont,sal_Int32 &_rTextColor)
         }
     }
 }
-// ---------------------------------------------------------------------------
 sal_Int16 OHTMLReader::GetWidthPixel( const HTMLOption& rOption )
 {
     SAL_INFO("dbaccess.ui", "OHTMLReader::GetWidthPixel" );
@@ -423,7 +411,6 @@ sal_Int16 OHTMLReader::GetWidthPixel( const HTMLOption& rOption )
             return (sal_Int16)rOption.GetNumber();  // pixel
     }
 }
-// ---------------------------------------------------------------------------
 sal_Bool OHTMLReader::CreateTable(int nToken)
 {
     SAL_INFO("dbaccess.ui", "OHTMLReader::CreateTable" );
@@ -534,7 +521,6 @@ sal_Bool OHTMLReader::CreateTable(int nToken)
 
     return !executeWizard(aTableName,makeAny(nTextColor),aFont) && m_xTable.is();
 }
-// -----------------------------------------------------------------------------
 void OHTMLReader::setTextEncoding()
 {
     SAL_INFO("dbaccess.ui", "OHTMLReader::setTextEncoding" );
@@ -543,20 +529,17 @@ void OHTMLReader::setTextEncoding()
     ParseMetaOptions(NULL, NULL);
 }
 
-// -----------------------------------------------------------------------------
 void OHTMLReader::release()
 {
     SAL_INFO("dbaccess.ui", "OHTMLReader::release" );
     DBG_CHKTHIS(OHTMLReader,NULL);
     ReleaseRef();
 }
-// -----------------------------------------------------------------------------
 TypeSelectionPageFactory OHTMLReader::getTypeSelectionPageFactory()
 {
     SAL_INFO("dbaccess.ui", "OHTMLReader::getTypeSelectionPageFactory" );
     DBG_CHKTHIS(OHTMLReader,NULL);
     return &OWizHTMLExtend::Create;
 }
-// -----------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

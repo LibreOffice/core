@@ -113,16 +113,12 @@ OXMLFileBasedDatabase::OXMLFileBasedDatabase( ODBFilter& rImport,
         }
     }
 }
-// -----------------------------------------------------------------------------
 
 OXMLFileBasedDatabase::~OXMLFileBasedDatabase()
 {
 
     DBG_DTOR(OXMLFileBasedDatabase,NULL);
 }
-// -----------------------------------------------------------------------------
-//----------------------------------------------------------------------------
 } // namespace dbaxml
-// -----------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

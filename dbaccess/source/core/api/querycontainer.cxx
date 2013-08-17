@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "querycontainer.hxx"
 #include "dbastrings.hrc"
 #include "query.hxx"
@@ -58,9 +57,7 @@ using namespace ::cppu;
 namespace dbaccess
 {
 
-//==========================================================================
 //= OQueryContainer
-//==========================================================================
 DBG_NAME(OQueryContainer)
 
 OQueryContainer::OQueryContainer(

@@ -56,7 +56,6 @@ namespace dbtools
 
 namespace dbaui
 {
-    // =========================================================================
 
     typedef ::cppu::ImplInheritanceHelper9  <   OGenericUnoController
                                             ,   ::com::sun::star::sdb::XSQLErrorListener
@@ -126,7 +125,6 @@ namespace dbaui
         };
         friend class FormErrorHelper;
 
-    // ================
     // attribute access
     protected:
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >             getRowSet()         const   { return m_xRowSet; }
@@ -249,7 +247,6 @@ namespace dbaui
 
         virtual sal_Bool InitializeGridModel(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent > & xGrid);
 
-
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >  CreateGridModel();
             // our default implementation simply instantiates a stardiv.one.form.component.Grid service
             // you most probably don't want to override this behaviuor
@@ -272,7 +269,6 @@ namespace dbaui
         virtual void AddColumnListener(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & xCol);
         virtual void RemoveColumnListener(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & xCol);
 
-
             // call after "major changes" (e.g. the completion of the async load).
             // invalidates all toolbox slots and all supported features.
 
@@ -291,8 +287,6 @@ namespace dbaui
             // (a "operation" is not only a simple reload: If the user sets a filter, an reloading the form
             // after setting this filter fails, the filter is reset and the form is reloaded, again. Only the
             // whole process (_both_ XLoadable::reload calls _together_) form the "reload operation"
-
-        // --------------------
 
             // empty the frame where our view resides
         virtual sal_Bool CommitCurrent();

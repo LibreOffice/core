@@ -27,7 +27,6 @@
 namespace dbaui
 {
     class OAppBorderWindow;
-    //==================================================================
     class OApplicationSwapWindow :  public Window,
                                     public IClipboardTest
     {
@@ -46,7 +45,6 @@ namespace dbaui
         virtual ~OApplicationSwapWindow();
         // window overloads
         virtual void Resize();
-
 
         inline sal_Bool isCutAllowed()      { return sal_False; }
         inline sal_Bool isCopyAllowed()     { return sal_False; }
@@ -75,7 +73,6 @@ namespace dbaui
         /// return the element of currently select entry
         ElementType getElementType() const;
 
-
         /** clears the selection in the icon choice control and calls the handler
         */
         void clearSelection();
@@ -89,9 +86,7 @@ namespace dbaui
     private:
         bool onContainerSelected( ElementType _eType );
     };
-// .............................................................
 } // namespace dbaui
-// .............................................................
 #endif // DBAUI_APPSWAPWINDOW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

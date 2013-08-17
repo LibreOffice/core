@@ -23,7 +23,6 @@
 
 namespace dbaui
 {
-    // ================================================================================================
     // OQueryAddTabConnUndoAction - Undo-Klasse fuer Einfuegen einer Connection
 
     class OQueryTableView;
@@ -36,7 +35,6 @@ namespace dbaui
         virtual void Redo();
     };
 
-    // ================================================================================================
     // OQueryDelTabConnUndoAction - Undo-Klasse fuer Einfuegen einer Connection
 
     class OQueryDelTabConnUndoAction : public OQueryTabConnUndoAction
@@ -49,6 +47,5 @@ namespace dbaui
     };
 }
 #endif // DBAUI_QUERYADDTABCONNUNDOACTION_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

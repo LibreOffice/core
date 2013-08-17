@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "TableDesignControl.hxx"
 #include "dbu_tbl.hrc"
 #include "TableDesignView.hxx"
@@ -36,7 +35,6 @@ using namespace ::com::sun::star::util;
 #define HANDLE_ID 0
 
 DBG_NAME(OTableRowView)
-//------------------------------------------------------------------------
 OTableRowView::OTableRowView(Window* pParent)
     :EditBrowseBox(pParent, ModuleRes(RID_DB_TAB_EDITOR),EBBF_NONE,
                     BROWSER_COLUMNSELECTION | BROWSER_MULTISELECTION | BROWSER_AUTOSIZE_LASTCOL |
@@ -52,14 +50,12 @@ OTableRowView::OTableRowView(Window* pParent)
 
 }
 
-//------------------------------------------------------------------------
 OTableRowView::~OTableRowView()
 {
 
     DBG_DTOR(OTableRowView,NULL);
 }
 
-//------------------------------------------------------------------------
 void OTableRowView::Init()
 {
     EditBrowseBox::Init();
@@ -84,7 +80,6 @@ void OTableRowView::Init()
     SetMode(nMode);
 }
 
-//------------------------------------------------------------------------
 void OTableRowView::KeyInput( const KeyEvent& rEvt )
 {
     if (IsDeleteAllowed(0))
@@ -106,14 +101,12 @@ void OTableRowView::KeyInput( const KeyEvent& rEvt )
     EditBrowseBox::KeyInput(rEvt);
 }
 
-//------------------------------------------------------------------------
 void OTableRowView::SetUpdatable( sal_Bool bUpdate )
 {
     m_bUpdatable = bUpdate;
 
 }
 
-//------------------------------------------------------------------------
 void OTableRowView::Command(const CommandEvent& rEvt)
 {
 
@@ -174,32 +167,27 @@ void OTableRowView::Command(const CommandEvent& rEvt)
 
 }
 
-//------------------------------------------------------------------------------
 void OTableRowView::cut()
 {
     CopyRows();
     DeleteRows();
 }
 
-//------------------------------------------------------------------------------
 void OTableRowView::copy()
 {
     CopyRows();
 }
 
-//------------------------------------------------------------------------------
 void OTableRowView::paste()
 {
     OSL_FAIL("OTableRowView::Paste : (pseudo-) abstract method called !");
 }
 
-//------------------------------------------------------------------------------
 void OTableRowView::Paste( long nRow )
 {
     InsertRows( nRow );
 }
 
-//------------------------------------------------------------------------------
 EditBrowseBox::RowStatus OTableRowView::GetRowStatus(long nRow) const
 {
     if (nRow >= 0 && m_nDataPos == nRow)
@@ -207,7 +195,5 @@ EditBrowseBox::RowStatus OTableRowView::GetRowStatus(long nRow) const
     else
         return CLEAN;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

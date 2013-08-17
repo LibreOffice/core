@@ -29,7 +29,6 @@
 
 namespace dbaui
 {
-    //========================================================================
     class OTableRowView;
     class OTableRow;
     class OTableDesignUndoAct : public OCommentUndoAction
@@ -45,7 +44,6 @@ namespace dbaui
         virtual ~OTableDesignUndoAct();
     };
 
-    //========================================================================
     class OTableEditorCtrl;
     class OTableEditorUndoAct : public OTableDesignUndoAct
     {
@@ -58,8 +56,6 @@ namespace dbaui
         virtual ~OTableEditorUndoAct();
     };
 
-
-    //========================================================================
     class OTableDesignCellUndoAct : public OTableDesignUndoAct
     {
     protected:
@@ -76,7 +72,6 @@ namespace dbaui
         virtual ~OTableDesignCellUndoAct();
     };
 
-    //========================================================================
     class OTableEditorTypeSelUndoAct : public OTableEditorUndoAct
     {
     protected:
@@ -93,7 +88,6 @@ namespace dbaui
         virtual ~OTableEditorTypeSelUndoAct();
     };
 
-    //========================================================================
     class OTableEditorDelUndoAct : public OTableEditorUndoAct
     {
     protected:
@@ -107,7 +101,6 @@ namespace dbaui
         virtual ~OTableEditorDelUndoAct();
     };
 
-    //========================================================================
     class OTableEditorInsUndoAct : public OTableEditorUndoAct
     {
     protected:
@@ -124,7 +117,6 @@ namespace dbaui
         virtual ~OTableEditorInsUndoAct();
     };
 
-    //========================================================================
     class OTableEditorInsNewUndoAct : public OTableEditorUndoAct
     {
     protected:
@@ -139,7 +131,6 @@ namespace dbaui
         virtual ~OTableEditorInsNewUndoAct();
     };
 
-    //========================================================================
     class OPrimKeyUndoAct : public OTableEditorUndoAct
     {
     protected:
@@ -157,6 +148,5 @@ namespace dbaui
     };
 }
 #endif // DBAUI_TABLEUNDO_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

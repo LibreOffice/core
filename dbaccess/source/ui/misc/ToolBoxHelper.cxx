@@ -38,7 +38,6 @@ namespace dbaui
         SvtMiscOptions().AddListenerLink( LINK( this, OToolBoxHelper, ConfigOptionsChanged ) );
         Application::AddEventListener( LINK( this, OToolBoxHelper, SettingsChanged ) );
     }
-    // -----------------------------------------------------------------------------
     OToolBoxHelper::~OToolBoxHelper()
     {
         SvtMiscOptions().RemoveListenerLink( LINK( this, OToolBoxHelper, ConfigOptionsChanged ) );
@@ -46,7 +45,6 @@ namespace dbaui
         DBG_DTOR(OToolBoxHelper,NULL);
     }
 
-    // -----------------------------------------------------------------------------
     void OToolBoxHelper::checkImageList()
     {
         if ( m_pToolBox )
@@ -66,7 +64,6 @@ namespace dbaui
             }
         }
     }
-    // -----------------------------------------------------------------------------
     IMPL_LINK(OToolBoxHelper, ConfigOptionsChanged, SvtMiscOptions*, /*_pOptions*/)
     {
         if ( m_pToolBox )
@@ -80,7 +77,6 @@ namespace dbaui
 
         return 0L;
     }
-    // -----------------------------------------------------------------------------
     IMPL_LINK(OToolBoxHelper, SettingsChanged, VclWindowEvent*, _pEvt)
     {
         if ( m_pToolBox && _pEvt && _pEvt->GetId() == VCLEVENT_APPLICATION_DATACHANGED )
@@ -95,7 +91,6 @@ namespace dbaui
 
         return 0L;
     }
-    // -----------------------------------------------------------------------------
     void OToolBoxHelper::setToolBox(ToolBox* _pTB)
     {
         sal_Bool bFirstTime = (m_pToolBox == NULL);
@@ -107,8 +102,6 @@ namespace dbaui
                 adjustToolBoxSize(m_pToolBox);
         }
     }
-// -----------------------------------------------------------------------------
 } // namespace
-// -----------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "core_resource.hxx"
 #include "core_resource.hrc"
 #include "datasource.hxx"
@@ -63,7 +62,6 @@
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/DialogProvider.hpp>
 #include <com/sun/star/document/XGraphicObjectResolver.hpp>
-
 
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/enumhelper.hxx>
@@ -122,9 +120,7 @@ using ::com::sun::star::sdb::application::XDatabaseDocumentUI;
 namespace dbaccess
 {
 
-//============================================================
 //= ViewMonitor
-//============================================================
 
 bool ViewMonitor::onControllerConnected( const Reference< XController >& _rxController )
 {
@@ -151,9 +147,7 @@ bool ViewMonitor::onSetCurrentController( const Reference< XController >& _rxCon
     return bLoadFinished;
 }
 
-//============================================================
 //= ODatabaseDocument
-//============================================================
 DBG_NAME(ODatabaseDocument)
 
 extern "C" void SAL_CALL createRegistryInfo_ODatabaseDocument()
@@ -397,7 +391,6 @@ static OUString sPictures( "Pictures" );
 // c) populate the temp storage with the associated embed images ( will be stored in a 'Pictures' folder )
 // d) delete the 'Picture' element from the root storage
 // e) copy the Pictures element of the temp storage to the root storage
-//
 // this assumes that we don't use the Pictures folder in the root of the base
 // document for anything, I believe this is a valid assumption ( as much as
 // I could check anyway )

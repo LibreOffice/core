@@ -30,7 +30,6 @@ namespace dbaui
     class OTableController;
     class OTableFieldDescWin;
     class OTableEditorCtrl;
-    //==================================================================
     class OTableBorderWindow : public Window
     {
         Splitter                            m_aHorzSplitter;
@@ -52,7 +51,6 @@ namespace dbaui
         OTableEditorCtrl*       GetEditorCtrl() const { return m_pEditorCtrl; }
         OTableFieldDescWin*     GetDescWin()    const { return m_pFieldDescWin; }
     };
-    //==================================================================
     class OTableDesignView : public ODataView
                             ,public IClipboardTest
     {
@@ -70,7 +68,6 @@ namespace dbaui
 
         IClipboardTest* getActiveChild() const;
     protected:
-
 
         // return the Rectangle where I can paint myself
         virtual void resizeDocumentView(Rectangle& rRect);

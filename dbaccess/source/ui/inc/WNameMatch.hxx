@@ -28,9 +28,7 @@
 
 namespace dbaui
 {
-    // ========================================================
     // columns are at root only no children
-    // ========================================================
     class OColumnTreeBox : public OMarkableTreeListBox
     {
         sal_Bool m_bReadOnly;
@@ -48,10 +46,8 @@ namespace dbaui
         using OMarkableTreeListBox::Select;
     };
 
-    // ========================================================
     // Wizard Page: OWizNameMatching
     // Name matching for data appending
-    // ========================================================
     class OWizNameMatching : public OWizardPage
     {
         FixedText           m_FT_TABLE_LEFT;
@@ -85,7 +81,5 @@ namespace dbaui
     };
 }
 #endif // DBAUI_WIZ_NAMEMATCHING_HXX
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

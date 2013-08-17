@@ -42,11 +42,7 @@ using namespace dbaccess;
 namespace dbaccess
 {
 
-//=========================================================================
-//
 // struct ResultListEntry.
-//
-//=========================================================================
 
 struct ResultListEntry
 {
@@ -59,19 +55,11 @@ struct ResultListEntry
     ResultListEntry( const ContentProperties& rEntry ) : rData( rEntry ) {}
 };
 
-//=========================================================================
-//
 // ResultList.
-//
-//=========================================================================
 
 typedef std::vector< ResultListEntry* > ResultList;
 
-//=========================================================================
-//
 // struct DataSupplier_Impl.
-//
-//=========================================================================
 
 struct DataSupplier_Impl
 {
@@ -89,7 +77,6 @@ struct DataSupplier_Impl
     ~DataSupplier_Impl();
 };
 
-//=========================================================================
 DataSupplier_Impl::~DataSupplier_Impl()
 {
     ResultList::const_iterator it  = m_aResults.begin();
@@ -104,11 +91,7 @@ DataSupplier_Impl::~DataSupplier_Impl()
 
 }
 
-//=========================================================================
-//
 // DataSupplier Implementation.
-//
-//=========================================================================
 DBG_NAME(DataSupplier)
 
 DataSupplier::DataSupplier( const rtl::Reference< ODocumentContainer >& rContent,

@@ -29,14 +29,11 @@
 #include <boost/unordered_map.hpp>
 #include <map>
 
-//........................................................................
 namespace dbaccess
 {
-//........................................................................
 
     namespace DatabaseObject = ::com::sun::star::sdb::application::DatabaseObject;
 
-    // -------------------------------------------------------------------
     enum SubComponentType
     {
         TABLE = DatabaseObject::TABLE,
@@ -49,7 +46,6 @@ namespace dbaccess
         UNKNOWN         = 10001
     };
 
-    // -------------------------------------------------------------------
     struct DBACCESS_DLLPRIVATE SubComponentDescriptor
     {
         OUString     sName;
@@ -68,14 +64,10 @@ namespace dbaccess
         }
     };
 
-    // -------------------------------------------------------------------
     typedef ::boost::unordered_map< OUString, SubComponentDescriptor, OUStringHash > MapStringToCompDesc;
     typedef ::std::map< SubComponentType, MapStringToCompDesc > MapCompTypeToCompDescs;
 
-
-//........................................................................
 } // namespace dbaccess
-//........................................................................
 
 #endif // SUBCOMPONENTS_HXX
 

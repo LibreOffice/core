@@ -27,10 +27,8 @@
 #include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
     /* this class allows to browse through the collection of forms and reports
     */
     class OCollectionView : public ModalDialog
@@ -69,12 +67,8 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent> getSelectedFolder() const;
         OUString getName() const;
     };
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
-
 
 #endif //DBAUI_COLLECTIONVIEW_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

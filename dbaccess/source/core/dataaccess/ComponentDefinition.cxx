@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "ComponentDefinition.hxx"
 #include "apitools.hxx"
 #include "dbastrings.hrc"
@@ -84,9 +83,7 @@ OComponentDefinition_Impl::~OComponentDefinition_Impl()
 {
     DBG_DTOR(OComponentDefinition_Impl,NULL);
 }
-//==========================================================================
 //= OComponentDefinition
-//==========================================================================
 
 DBG_NAME(OComponentDefinition)
 
@@ -141,7 +138,6 @@ OComponentDefinition::~OComponentDefinition()
 {
     DBG_DTOR(OComponentDefinition, NULL);
 }
-
 
 OComponentDefinition::OComponentDefinition( const Reference< XInterface >& _rxContainer
                                        ,const OUString& _rElementName
@@ -293,7 +289,6 @@ void OComponentDefinition::columnAppended( const Reference< XPropertySet >& _rxS
     // which held another XChild weak, and forwarded all getParent requests to this other XChild.
     // m_pColumns was used for this. This was nonsense, since m_pColumns dies when our instance dies,
     // but xColDesc will live longer than this. So effectively, the setParent call was pretty useless.
-    //
     // The intention for this parenting was that the column descriptor is able to find the data source,
     // by traveling up the parent hierachy until there's an XDataSource. This didn't work (which
     // for instance causes #i65023#). We need another way to properly ensure this.
