@@ -1052,7 +1052,7 @@ Any SwXLineNumberingProperties::getPropertyValue(const OUString& rPropertyName)
                     aRet <<= (sal_Int16)rInfo.GetCountBy();
                 break;
                 case WID_SEPARATOR_TEXT  :
-                    aRet <<= OUString(rInfo.GetDivider());
+                    aRet <<= rInfo.GetDivider();
                 break;
                 case WID_SEPARATOR_INTERVAL:
                     aRet <<= (sal_Int16)rInfo.GetDividerCountBy();

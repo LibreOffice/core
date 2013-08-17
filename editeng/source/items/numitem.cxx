@@ -97,18 +97,17 @@ SvxNumberType::~SvxNumberType()
         xFormatter = 0;
 }
 
-String SvxNumberType::GetNumStr( sal_uLong nNo ) const
+OUString SvxNumberType::GetNumStr( sal_uLong nNo ) const
 {
     const LanguageTag& rLang = Application::GetSettings().GetLanguageTag();
     return GetNumStr( nNo, rLang.getLocale() );
 }
 
-String  SvxNumberType::GetNumStr( sal_uLong nNo, const Locale& rLocale ) const
+OUString SvxNumberType::GetNumStr( sal_uLong nNo, const Locale& rLocale ) const
 {
     lcl_getFormatter(xFormatter);
-    String aTmpStr;
     if(!xFormatter.is())
-        return aTmpStr;
+        return OUString();
 
     if(bShowSymbol)
     {
@@ -121,7 +120,7 @@ String  SvxNumberType::GetNumStr( sal_uLong nNo, const Locale& rLocale ) const
                 {
                     // '0' allowed for ARABIC numberings
                     if(NumberingType::ARABIC == nNumType && 0 == nNo )
-                        aTmpStr = '0';
+                        return OUString('0');
                     else
                     {
                         Sequence< PropertyValue > aProperties(2);
@@ -133,7 +132,7 @@ String  SvxNumberType::GetNumStr( sal_uLong nNo, const Locale& rLocale ) const
 
                         try
                         {
-                            aTmpStr = xFormatter->makeNumberingString( aProperties, rLocale );
+                            return xFormatter->makeNumberingString( aProperties, rLocale );
                         }
                         catch(const Exception&)
                         {
@@ -142,7 +141,7 @@ String  SvxNumberType::GetNumStr( sal_uLong nNo, const Locale& rLocale ) const
                 }
         }
     }
-    return aTmpStr;
+    return OUString();
 }
 
 SvxNumberFormat::SvxNumberFormat( sal_Int16 eType,

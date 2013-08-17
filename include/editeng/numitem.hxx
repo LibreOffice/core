@@ -72,8 +72,8 @@ public:
     SvxNumberType(const SvxNumberType& rType);
     ~SvxNumberType();
 
-    String          GetNumStr( sal_uLong nNo ) const;
-    String          GetNumStr( sal_uLong nNo, const com::sun::star::lang::Locale& rLocale ) const;
+    OUString        GetNumStr( sal_uLong nNo ) const;
+    OUString        GetNumStr( sal_uLong nNo, const com::sun::star::lang::Locale& rLocale ) const;
 
     void            SetNumberingType(sal_Int16 nSet) {nNumType = nSet;}
     sal_Int16       GetNumberingType() const {return nNumType;}
