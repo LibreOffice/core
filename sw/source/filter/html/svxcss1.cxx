@@ -185,7 +185,7 @@ static CSS1PropertyEnum const aBorderStyleTable[] =
     { "groove",      CSS1_BS_GROOVE      },
     { "ridge",       CSS1_BS_RIDGE       },
     { "inset",       CSS1_BS_INSET       },
-    { "inset",      CSS1_BS_OUTSET      },
+    { "outset",      CSS1_BS_OUTSET      },
     { 0,                    0                   }
 };
 
