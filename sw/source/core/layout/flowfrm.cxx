@@ -17,23 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "pam.hxx"
 #include "swtable.hxx"
-#include "frame.hxx"
 #include "rootfrm.hxx"
 #include "pagefrm.hxx"
-#include "flyfrm.hxx"
-#include "viewsh.hxx"
-#include "doc.hxx"
 #include "viewimp.hxx"
 #include "viewopt.hxx"
-#include "dflyobj.hxx"
 #include "frmtool.hxx"
 #include "dcontact.hxx"
 #include <editeng/formatbreakitem.hxx>
 #include <editeng/keepitem.hxx>
 #include <fmtsrnd.hxx>
-#include <fmtanchr.hxx>
 #include <fmtpdsc.hxx>
 #include <editeng/ulspitem.hxx>
 #include <tgrditem.hxx>
@@ -46,7 +39,6 @@
 #include "tabfrm.hxx"
 #include "pagedesc.hxx"
 #include "layact.hxx"
-#include "fmtornt.hxx"
 #include "flyfrms.hxx"
 #include "sectfrm.hxx"
 #include "section.hxx"
