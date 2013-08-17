@@ -158,7 +158,7 @@
 
 - (void)showAtPoint:(CGPoint)point inView:(UIView *)view withText:(NSString *)text
 {
-    UIFont *font = UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? kTextFontPad : kTextFontPhone;
+    UIFont *font = UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? kSmallTextFontPad : kTextFontPhone;
     
     CGSize screenSize = [self screenSize];
     CGSize textSize = [text sizeWithFont:font constrainedToSize:CGSizeMake(screenSize.width - kHorizontalMargin*4.f, 1000.f) lineBreakMode:UILineBreakModeWordWrap];
@@ -168,7 +168,7 @@
     textView.userInteractionEnabled = NO;
     [textView setNumberOfLines:0]; //This is so the label word wraps instead of cutting off the text
     textView.font = font;
-    textView.textAlignment = kTextAlignment;
+    textView.textAlignment = kTextAlignmentLeft;
     textView.textColor = kTextColor;
     textView.text = text;
     

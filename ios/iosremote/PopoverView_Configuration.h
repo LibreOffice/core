@@ -53,7 +53,7 @@
 // DIVIDERS BETWEEN VIEWS
 
 //Bool that turns off/on the dividers
-#define kShowDividersBetweenViews NO
+#define kShowDividersBetweenViews YES
 
 //color for the divider fill
 #define kDividerColor [UIColor colorWithRed:0.329 green:0.341 blue:0.353 alpha:0.15f]
@@ -88,6 +88,8 @@
 //normal text font
 #define kTextFontPad [UIFont fontWithName:@"HelveticaNeue" size:20.f]
 
+#define kSmallTextFontPad [UIFont fontWithName:@"HelveticaNeue" size:16.f]
+
 //normal text color
 #define kTextColor [UIColor colorWithRed:0.329 green:0.341 blue:0.353 alpha:1]
 // highlighted text color
@@ -95,6 +97,9 @@
 
 //normal text alignment
 #define kTextAlignment UITextAlignmentCenter
+
+//normal text alignment
+#define kTextAlignmentLeft UITextAlignmentLeft
 
 //title font
 #define kTitleFontPhone [UIFont fontWithName:@"HelveticaNeue-Bold" size:16.f]
