@@ -445,13 +445,6 @@ QueryBox MSG_CLPBRD_CLEAR
     Message [ en-US ] = "You have a large amount of data saved in the clipboard.\nShould the clipboard contents remain available for other applications?" ;
 };
 
-QueryBox MSG_SAVE_HTML_QUERY
-{
-    BUTTONS = WB_YES_NO_CANCEL ;
-    DEFBUTTON = WB_DEF_YES ;
-    Message [ en-US ] = "Conversion into HTML format \nmay cause information loss. \nDo you want to save the document?" ;
-};
-
 String STR_ABSTRACT_TITLE
 {
     Text [ en-US ] = "Abstract: " ;

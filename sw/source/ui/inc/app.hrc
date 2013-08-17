@@ -30,7 +30,6 @@
 
 // Messages
 #define MSG_ERROR_SEND_MAIL             ( RC_APP_BEGIN + 6)
-#define MSG_SAVE_HTML_QUERY             ( RC_APP_BEGIN + 7)
 
 // For the interface because the RID_APP_BEGIN is now Desktop.
 #define RID_SW_NAME                     ( RC_APP_BEGIN + 8)
