@@ -1246,6 +1246,7 @@ $(call gb_LinkTarget_use_package,$(1),\
 )
 $(call gb_LinkTarget_use_static_libraries,$(1),\
 	harfbuzz \
+	harfbuzz-icu \
 )
 
 endef
