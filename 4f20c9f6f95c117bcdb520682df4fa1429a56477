@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//8tQ\u003d",
+        "filename": "xmlsecurity/source/dialogs/resourcemanager.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2013-08-17T14:37:02Z",
+      "side": 1,
+      "message": "In the original code, just one string is appended to s1 and three to s2.",
+      "revId": "4f20c9f6f95c117bcdb520682df4fa1429a56477",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
