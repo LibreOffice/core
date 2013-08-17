@@ -1197,6 +1197,14 @@ uno::Sequence<PropertyValue> SwAccessibleParagraph::getCharacterAttributes(
     return aValues;
 }
 
+static void SetPutRecursive(SfxItemSet &targetSet, const SfxItemSet &sourceSet)
+{
+    const SfxItemSet *const pParentSet = sourceSet.GetParent();
+    if (pParentSet)
+        SetPutRecursive(targetSet, *pParentSet);
+    targetSet.Put(sourceSet);
+}
+
 // #i63870#
 void SwAccessibleParagraph::_getDefaultAttributesImpl(
         const uno::Sequence< OUString >& aRequestedAttributes,
@@ -1243,7 +1251,7 @@ void SwAccessibleParagraph::_getDefaultAttributesImpl(
         SfxItemSet aCharSet( const_cast<SwAttrPool&>(pTxtNode->GetDoc()->GetAttrPool()),
                              RES_CHRATR_BEGIN, RES_CHRATR_END - 1,
                              0 );
-        aCharSet.Put( pTxtNode->GetTxtColl()->GetAttrSet() );
+        SetPutRecursive( aCharSet, pTxtNode->GetTxtColl()->GetAttrSet() );
         pSet->Put( aCharSet );
     }
 
