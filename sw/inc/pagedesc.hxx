@@ -238,6 +238,8 @@ public:
     /// Given a SwNode return the pagedesc in use at that location.
     static const SwPageDesc* GetPageDescOfNode(const SwNode& rNd);
 
+    static SwPageDesc* GetByName(SwDoc& rDoc, const OUString& rName);
+
     SwPageDesc& operator=( const SwPageDesc& );
 
     SwPageDesc( const SwPageDesc& );
@@ -332,8 +334,6 @@ public:
     operator SwPageDesc() const; // #i7983#
 };
 
-
-SwPageDesc* GetPageDescByName_Impl(SwDoc& rDoc, const OUString& rName);
 
 #endif  //PAGEDESC_HXX
 

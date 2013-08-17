@@ -30,6 +30,7 @@
 #include <swtable.hxx>
 #include <frmtool.hxx>
 #include <doc.hxx>          // for GetAttrPool
+#include <poolfmt.hrc>
 #include <poolfmt.hxx>
 #include <switerator.hxx>
 
@@ -371,6 +372,32 @@ void SwPageDesc::ChgFirstShare( sal_Bool bNew )
     else
         eUse = (UseOnPage) (eUse & nsUseOnPage::PD_NOFIRSTSHARE);
 }
+
+SwPageDesc* SwPageDesc::GetByName(SwDoc& rDoc, const OUString& rName)
+{
+    const sal_uInt16 nDCount = rDoc.GetPageDescCnt();
+
+    for( sal_uInt16 i = 0; i < nDCount; i++ )
+    {
+        SwPageDesc* pDsc = &rDoc.GetPageDesc( i );
+        if(pDsc->GetName() == rName)
+        {
+            return pDsc;
+        }
+    }
+
+    for( sal_Int32 i = RC_POOLPAGEDESC_BEGIN; i <= STR_POOLPAGE_LANDSCAPE; ++i)
+    {
+        if (rName==SW_RESSTR(i))
+        {
+            return rDoc.GetPageDescFromPool( static_cast< sal_uInt16 >(
+                        i - RC_POOLPAGEDESC_BEGIN + RES_POOLPAGE_BEGIN) );
+        }
+    }
+
+    return 0;
+}
+
 
 /*************************************************************************
 |*
