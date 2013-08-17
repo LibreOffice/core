@@ -615,7 +615,7 @@ sal_Bool ViewShell::HasCharts() const
     {
         ++aIdx;
         const SwOLENode *pNd = aIdx.GetNode().GetOLENode();
-        if( pNd && pNd->GetChartTblName().Len() )
+        if( pNd && !pNd->GetChartTblName().isEmpty() )
         {
             bRet = sal_True;
             break;

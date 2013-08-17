@@ -73,12 +73,12 @@ class SW_DLLPUBLIC SwOLENode: public SwNoTxtNode
     friend class SwNodes;
     mutable SwOLEObj aOLEObj;
     Graphic*    pGraphic;
-    String sChartTblName;       ///< with chart objects: name of referenced table.
+    OUString sChartTblName;     ///< with chart objects: name of referenced table.
     sal_Bool   bOLESizeInvalid; /**< Should be considered at SwDoc::PrtOLENotify
                                    (e.g. copied). Is not persistent. */
 
     SwEmbedObjectLink*  mpObjectLink;
-    String maLinkURL;
+    OUString maLinkURL;
 
     SwOLENode(  const SwNodeIndex &rWhere,
                 const svt::EmbeddedObjectRef&,
@@ -86,7 +86,7 @@ class SW_DLLPUBLIC SwOLENode: public SwNoTxtNode
                 SwAttrSet* pAutoAttr = 0 );
 
     SwOLENode(  const SwNodeIndex &rWhere,
-                const String &rName,
+                const OUString &rName,
                 sal_Int64 nAspect,
                 SwGrfFmtColl *pGrfColl,
                 SwAttrSet* pAutoAttr = 0 );
@@ -126,7 +126,7 @@ public:
 
     /** Remove OLE-object from "memory".
        inline void Unload() { aOLEObj.Unload(); } */
-    String GetDescription() const { return aOLEObj.GetDescription(); }
+    OUString GetDescription() const { return aOLEObj.GetDescription(); }
 
     sal_Bool UpdateLinkURL_Impl();
     void BreakFileLink_Impl();
@@ -137,8 +137,8 @@ public:
     // #i99665#
     bool IsChart() const;
 
-    const String& GetChartTblName() const       { return sChartTblName; }
-    void SetChartTblName( const String& rNm )   { sChartTblName = rNm; }
+    OUString GetChartTblName() const { return sChartTblName; }
+    void SetChartTblName( const OUString& rNm ) { sChartTblName = rNm; }
 };
 
 
