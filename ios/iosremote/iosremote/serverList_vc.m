@@ -12,6 +12,7 @@
 #import "Server.h"
 #import "Client.h"
 #import "ControlVariables.h"
+#import "PopoverView.h"
 
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -59,7 +60,7 @@
     _searchStateText = searchStateText;
     // This doesn't work well on iOS7, might be a bug. The text will get duplicated, it seems that the older section header view was not removed
     [self.serverTable reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
-//    [self.serverTable reloadData];
+    //    [self.serverTable reloadData];
 }
 
 - (void) setStyle:(UITableViewCellSelectionStyle)style
@@ -159,7 +160,7 @@
            didFindService:(NSNetService *)aNetService
                moreComing:(BOOL)moreComing
 {
-//    [self.comManager.autoDiscoveryServers removeObject:aNetService];
+    //    [self.comManager.autoDiscoveryServers removeObject:aNetService];
     [self.comManager.autoDiscoveryServers addObject:aNetService];
     
     NSLog(@"Got service %p with hostname %@\n", aNetService,
@@ -169,7 +170,7 @@
     
     if(!moreComing)
     {
-//        [self.tableView reloadData];
+        //        [self.tableView reloadData];
         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
         [self.searchTimeoutTimer invalidate];
         [self.searchLabelTimer invalidate];
@@ -185,7 +186,7 @@
     
     if(!moreComing)
     {
-//        [self.tableView reloadData];
+        //        [self.tableView reloadData];
         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
         [self startSearching];
     }
@@ -255,11 +256,18 @@
                                                                                        }];
     NSLog(@"Clear auto discovered servers");
     [self.comManager.autoDiscoveryServers removeAllObjects];
-//    [self.serverTable reloadData];
+    //    [self.serverTable reloadData];
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
     self.serviceBrowser = [[NSNetServiceBrowser alloc] init];
     [self.serviceBrowser setDelegate:self];
     [self startSearching];
+    
+    if (![[CommunicationManager fetchSSIDInfo] valueForKey:@"SSID"]) {
+        [self revealHelpInfo:[self.tableView cellForRowAtIndexPath:[NSIndexPath
+                                                                    indexPathForRow:0
+                                                                    inSection:0]].accessoryView];
+    }
+    
     [super viewDidAppear:animated];
 }
 
@@ -369,6 +377,12 @@
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.bounds.size.width, [self tableView:tableView heightForHeaderInSection:section])];
     [view addSubview:sectionHeader];
     
+    if (self.comManager.searchState == SEARCHING && section == 0) {
+        UIActivityIndicatorView * aiv = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        aiv.center = CGPointMake([sectionHeader.text sizeWithFont: sectionHeader.font].width + 2 * aiv.frame.size.width, sectionHeader.center.y);
+        [aiv startAnimating];
+        [view addSubview:aiv];
+    }
     return view;
 }
 
@@ -386,20 +400,6 @@
         [view addSubview:sectionFooter];
         return view;
     }
-//    
-//    if ([self.comManager.autoDiscoveryServers count] == 0 && section == 0) {
-//        UILabel *sectionFooter = [[UILabel alloc] initWithFrame:CGRectMake(20, 10, tableView.frame.size.width - 50, 60)];
-//        [sectionFooter setLineBreakMode:NSLineBreakByWordWrapping];
-//        [sectionFooter setNumberOfLines:5];
-//        sectionFooter.backgroundColor = [UIColor clearColor];
-//        sectionFooter.font = kAppSmallTextFont;
-//        sectionFooter.textColor = kTintColor;
-//        sectionFooter.text = NSLocalizedString(@"Don't have a working WiFi around you? Consider create your own hotspot with your phone or your computer", @"Displayed when no customized server is available");
-//        
-//        UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.bounds.size.width, [self tableView:tableView heightForFooterInSection:section])];
-//        [view addSubview:sectionFooter];
-//        return view;
-//    }
     return nil;
 }
 
@@ -431,6 +431,27 @@
     }
 }
 
+-(void)revealHelpInfo:(UIView *)sender
+{
+    if (sender) {
+        if ([[CommunicationManager fetchSSIDInfo] valueForKey:@"SSID"])
+            [PopoverView showPopoverAtPoint:CGPointMake(sender.frame.origin.x,
+                                                        sender.frame.origin.y + sender.frame.size.height/2)
+                                     inView:sender
+                                   withText:[NSString
+                                             stringWithFormat:NSLocalizedString(@"* Launch Impress on your computer\n* Connect both devices to the same WiFi network\n* P.S. Your iOS device is connected to \"%@\" now", nil), [[CommunicationManager fetchSSIDInfo] valueForKey:@"SSID"]]
+                                   delegate:nil];
+        else {
+            [PopoverView showPopoverAtPoint:CGPointMake(sender.frame.origin.x,
+                                                        sender.frame.origin.y + sender.frame.size.height/2)
+                                     inView:sender
+                                   withText:[NSString
+                                             stringWithFormat:NSLocalizedString(@"* You don't have a WiFi connection now.\n* Connect your iOS device and your computer to the same network\n* Refresh\n* hint: you may create a personal hotspot on your computer/iPhone", nil), [[CommunicationManager fetchSSIDInfo] valueForKey:@"SSID"]]
+                                   delegate:nil];
+        }
+    }
+}
+
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *cellIdentifier = @"server_item_cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
@@ -440,16 +461,17 @@
             cell.textLabel.text = NSLocalizedString(self.searchStateText, nil);
             cell.textLabel.lineBreakMode = UILineBreakModeClip;
             cell.selectionStyle = self.style;
+            
+            UIButton *infoBtn = [UIButton buttonWithType:UIButtonTypeInfoDark];
+            infoBtn.frame = CGRectMake(3, 8, 30, 30);
+            [infoBtn addTarget:self action:@selector(revealHelpInfo:) forControlEvents:UIControlEventTouchUpInside];
+            
+            cell.accessoryView = infoBtn;
         } else {
             id s = [self.comManager.autoDiscoveryServers objectAtIndex:indexPath.row];
-            
-            if ([s isKindOfClass:[Server class]]) {
-                [cell.textLabel setText:[s serverName]];
-                [cell.detailTextLabel setText:[s serverAddress]];
-            } else if ([s isKindOfClass:[NSNetService class]]){
-                [cell.textLabel setText:[s name]];
-                [cell.detailTextLabel setText:@""];
-            }
+            [cell.textLabel setText:[s name]];
+            [cell.detailTextLabel setText:@""];
+            cell.accessoryView = nil;
         }
     }
     else {
