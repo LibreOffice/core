@@ -641,7 +641,6 @@ uno::Reference < i18n::XExtendedInputSequenceChecker > TextEngine::GetInputSeque
 
 sal_Bool TextEngine::IsInputSequenceCheckingRequired( sal_Unicode c, const TextSelection& rCurSel ) const
 {
-    uno::Reference< i18n::XBreakIterator > xBI = ((TextEngine *) this)->GetBreakIterator();
     SvtCTLOptions aCTLOptions;
 
     // get the index that really is first
@@ -650,11 +649,16 @@ sal_Bool TextEngine::IsInputSequenceCheckingRequired( sal_Unicode c, const TextS
     if (nMaxPos < nFirstPos)
         nFirstPos = nMaxPos;
 
-    sal_Bool bIsSequenceChecking =
+    bool bIsSequenceChecking =
         aCTLOptions.IsCTLFontEnabled() &&
         aCTLOptions.IsCTLSequenceChecking() &&
-        nFirstPos != 0 && /* first char needs not to be checked */
-        xBI.is() && i18n::ScriptType::COMPLEX == xBI->getScriptType( OUString( c ), 0 );
+        nFirstPos != 0; /* first char needs not to be checked */
+
+    if (bIsSequenceChecking)
+    {
+        uno::Reference< i18n::XBreakIterator > xBI = const_cast<TextEngine *>(this)->GetBreakIterator();
+        bIsSequenceChecking = xBI.is() && i18n::ScriptType::COMPLEX == xBI->getScriptType( OUString( c ), 0 );
+    }
 
     return bIsSequenceChecking;
 }
