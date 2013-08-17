@@ -338,10 +338,10 @@ public:
     const Graphic *GetGrfAtPos( const Point &rDocPos,
                                 String &rName, sal_Bool &rbLink ) const;
 
-    const String GetObjTitle() const;
-    void SetObjTitle( const String& rTitle );
-    const String GetObjDescription() const;
-    void SetObjDescription( const String& rDescription );
+    OUString GetObjTitle() const;
+    void SetObjTitle( const OUString& rTitle );
+    OUString GetObjDescription() const;
+    void SetObjDescription( const OUString& rDescription );
 
 
     sal_Bool IsFrmSelected() const;

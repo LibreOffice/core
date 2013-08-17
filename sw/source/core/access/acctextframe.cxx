@@ -105,7 +105,7 @@ void SwAccessibleTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *
 
             const SwFlyFrmFmt* pFlyFrmFmt =
                             dynamic_cast<const SwFlyFrmFmt*>( pFlyFrm->GetFmt() );
-            if ( pFlyFrmFmt->GetObjDescription().Len() != 0 )
+            if ( !pFlyFrmFmt->GetObjDescription().isEmpty() )
             {
                 break;
             }

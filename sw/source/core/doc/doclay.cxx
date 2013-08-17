@@ -1214,12 +1214,12 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
                 // <title> and <description> attributes are lost when calling <DelFrms()>.
                 // Thus, keep them and restore them after the calling <MakeFrms()>
                 const bool bIsSwFlyFrmFmtInstance( dynamic_cast<SwFlyFrmFmt*>(pOldFmt) != 0 );
-                const String sTitle( bIsSwFlyFrmFmtInstance
+                const OUString sTitle( bIsSwFlyFrmFmtInstance
                                      ? static_cast<SwFlyFrmFmt*>(pOldFmt)->GetObjTitle()
-                                     : String() );
-                const String sDescription( bIsSwFlyFrmFmtInstance
+                                     : OUString() );
+                const OUString sDescription( bIsSwFlyFrmFmtInstance
                                            ? static_cast<SwFlyFrmFmt*>(pOldFmt)->GetObjDescription()
-                                           : String() );
+                                           : OUString() );
                 pOldFmt->DelFrms();
 
                 pNewFmt = rDoc.MakeFlyFrmFmt( rDoc.GetUniqueFrameName(),

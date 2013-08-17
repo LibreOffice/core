@@ -110,7 +110,7 @@ void SwAccessibleNoTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem
             aEvent.NewValue <<= msTitle;
             FireAccessibleEvent( aEvent );
 
-            if ( pNd->GetDescription().Len() != 0 )
+            if ( !pNd->GetDescription().isEmpty() )
             {
                 break;
             }

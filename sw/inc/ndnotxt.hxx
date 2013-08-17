@@ -60,12 +60,10 @@ public:
     virtual sal_Bool SavePersistentData();
     virtual sal_Bool RestorePersistentData();
 
-    const String GetTitle() const;
-    void SetTitle( const String& rTitle,
-                   bool bBroadcast = false );
-    const String GetDescription() const;
-    void SetDescription( const String& rDescription,
-                         bool bBroadcast = false );
+    OUString GetTitle() const;
+    void SetTitle( const OUString& rTitle, bool bBroadcast = false );
+    OUString GetDescription() const;
+    void SetDescription( const OUString& rDescription, bool bBroadcast = false );
 
     void               SetContour( const PolyPolygon *pPoly,
                                    sal_Bool bAutomatic = sal_False );
