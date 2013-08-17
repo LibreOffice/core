@@ -34,10 +34,8 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>
 
-//........................................................................
 namespace dbaui
 {
-//........................................................................
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
@@ -67,9 +65,7 @@ namespace dbaui
     using ::com::sun::star::document::XDocumentEventBroadcaster;
     using ::com::sun::star::awt::XWindow;
 
-    //====================================================================
-    //= FrameWindowActivationListener
-    //====================================================================
+    // FrameWindowActivationListener
     typedef ::cppu::WeakImplHelper1 <   XTopWindowListener
                                     >   FrameWindowActivationListener_Base;
     class FrameWindowActivationListener : public FrameWindowActivationListener_Base
@@ -102,9 +98,7 @@ namespace dbaui
         ControllerFrame_Data*   m_pData;
     };
 
-    //====================================================================
-    //= ControllerFrame_Data
-    //====================================================================
+    // ControllerFrame_Data
     struct ControllerFrame_Data
     {
         ControllerFrame_Data( IController& _rController )
@@ -125,10 +119,7 @@ namespace dbaui
         bool                                                m_bIsTopLevelDocumentWindow;
     };
 
-    //====================================================================
-    //= helper
-    //====================================================================
-    //--------------------------------------------------------------------
+    // helper
     static void lcl_setFrame_nothrow( ControllerFrame_Data& _rData, const Reference< XFrame >& _rxFrame )
     {
         // release old listener
@@ -159,7 +150,6 @@ namespace dbaui
         }
     }
 
-    //--------------------------------------------------------------------
     static bool lcl_isActive_nothrow( const Reference< XFrame >& _rxFrame )
     {
         bool bIsActive = false;
@@ -179,7 +169,6 @@ namespace dbaui
         return bIsActive;
     }
 
-    //--------------------------------------------------------------------
     /** updates various global and local states with a new active component
 
         In particular, the following are updated
@@ -214,7 +203,6 @@ namespace dbaui
         }
     }
 
-    //--------------------------------------------------------------------
     /** broadcasts the OnFocus resp. OnUnfocus event
     */
     static void lcl_notifyFocusChange_nothrow( ControllerFrame_Data& _rData, bool _bActive )
@@ -234,7 +222,6 @@ namespace dbaui
         }
     }
 
-    //--------------------------------------------------------------------
     static void lcl_updateActive_nothrow( ControllerFrame_Data& _rData, bool _bActive )
     {
         if ( _rData.m_bActive == _bActive )
@@ -245,26 +232,22 @@ namespace dbaui
         lcl_notifyFocusChange_nothrow( _rData, _bActive );
     }
 
-    //--------------------------------------------------------------------
     FrameWindowActivationListener::FrameWindowActivationListener( ControllerFrame_Data& _rData )
         :m_pData( &_rData )
     {
         impl_registerOnFrameContainerWindow_nothrow( true );
     }
 
-    //--------------------------------------------------------------------
     FrameWindowActivationListener::~FrameWindowActivationListener()
     {
     }
 
-    //--------------------------------------------------------------------
     void FrameWindowActivationListener::dispose()
     {
         impl_registerOnFrameContainerWindow_nothrow( false );
         m_pData = NULL;
     }
 
-    //--------------------------------------------------------------------
     void FrameWindowActivationListener::impl_registerOnFrameContainerWindow_nothrow( bool _bRegister )
     {
         OSL_ENSURE( m_pData && m_pData->m_xFrame.is(), "FrameWindowActivationListener::impl_registerOnFrameContainerWindow_nothrow: no frame!" );
@@ -295,78 +278,64 @@ namespace dbaui
         }
     }
 
-    //--------------------------------------------------------------------
     void FrameWindowActivationListener::impl_checkDisposed_throw() const
     {
         if ( !m_pData )
             throw DisposedException( OUString(), *const_cast< FrameWindowActivationListener* >( this ) );
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL FrameWindowActivationListener::windowOpened( const EventObject& /*_rEvent*/ ) throw (RuntimeException)
     {
         // not interested in
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL FrameWindowActivationListener::windowClosing( const EventObject& /*_rEvent*/ ) throw (RuntimeException)
     {
         // not interested in
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL FrameWindowActivationListener::windowClosed( const EventObject& /*_rEvent*/ ) throw (RuntimeException)
     {
         // not interested in
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL FrameWindowActivationListener::windowMinimized( const EventObject& /*_rEvent*/ ) throw (RuntimeException)
     {
         // not interested in
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL FrameWindowActivationListener::windowNormalized( const EventObject& /*_rEvent*/ ) throw (RuntimeException)
     {
         // not interested in
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL FrameWindowActivationListener::windowActivated( const EventObject& /*_rEvent*/ ) throw (RuntimeException)
     {
         impl_checkDisposed_throw();
         lcl_updateActive_nothrow( *m_pData, true );
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL FrameWindowActivationListener::windowDeactivated( const EventObject& /*_rEvent*/ ) throw (RuntimeException)
     {
         impl_checkDisposed_throw();
         lcl_updateActive_nothrow( *m_pData, false );
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL FrameWindowActivationListener::disposing( const EventObject& /*_rEvent*/ ) throw (RuntimeException)
     {
         dispose();
     }
 
-    //====================================================================
-    //= ControllerFrame
-    //====================================================================
-    //--------------------------------------------------------------------
+    // ControllerFrame
     ControllerFrame::ControllerFrame( IController& _rController )
         :m_pData( new ControllerFrame_Data( _rController ) )
     {
     }
 
-    //--------------------------------------------------------------------
     ControllerFrame::~ControllerFrame()
     {
     }
 
-    //--------------------------------------------------------------------
     const Reference< XFrame >& ControllerFrame::attachFrame( const Reference< XFrame >& _rxFrame )
     {
         // set new frame, including listener handling
@@ -385,19 +354,16 @@ namespace dbaui
         return m_pData->m_xFrame;
     }
 
-    //--------------------------------------------------------------------
     const Reference< XFrame >& ControllerFrame::getFrame() const
     {
         return m_pData->m_xFrame;
     }
 
-    //--------------------------------------------------------------------
     bool ControllerFrame::isActive() const
     {
         return m_pData->m_bActive;
     }
 
-    //--------------------------------------------------------------------
     void ControllerFrame::frameAction( FrameAction _eAction )
     {
         bool bActive = m_pData->m_bActive;
@@ -421,8 +387,6 @@ namespace dbaui
         lcl_updateActive_nothrow( *m_pData, bActive );
     }
 
-//........................................................................
 } // namespace dbaui
-//........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

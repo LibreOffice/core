@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "xmlExport.hxx"
 #include "xmlAutoStyle.hxx"
 #include "flt_reghelper.hxx"
@@ -76,22 +75,23 @@ namespace dbaxml
         static Reference< XInterface > SAL_CALL Create(const Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
     };
 }
-// -----------------------------------------------------------------------------
+
 extern "C" void SAL_CALL createRegistryInfo_ODBFilterExport( )
 {
     static ::dbaxml::OMultiInstanceAutoRegistration< ::dbaxml::ODBExport > aAutoRegistration;
 }
-//--------------------------------------------------------------------------
+
 extern "C" void SAL_CALL createRegistryInfo_OSettingsExport( )
+
 {
     static ::dbaxml::OMultiInstanceAutoRegistration< ::dbaxml::ODBExportHelper > aAutoRegistration;
 }
-//--------------------------------------------------------------------------
+
 extern "C" void SAL_CALL createRegistryInfo_OFullExport( )
 {
     static ::dbaxml::OMultiInstanceAutoRegistration< ::dbaxml::ODBFullExportHelper > aAutoRegistration;
 }
-//--------------------------------------------------------------------------
+
 namespace dbaxml
 {
     using namespace comphelper;
@@ -99,17 +99,16 @@ namespace dbaxml
     using namespace ::com::sun::star::sdbcx;
     using namespace ::com::sun::star::util;
 
-    //---------------------------------------------------------------------
     Reference< XInterface > SAL_CALL ODBExportHelper::Create(const Reference< XMultiServiceFactory >& _rxORB)
     {
         return static_cast< XServiceInfo* >(new ODBExport(comphelper::getComponentContext(_rxORB),EXPORT_SETTINGS | EXPORT_PRETTY ));
     }
-    //---------------------------------------------------------------------
+
     OUString SAL_CALL ODBExportHelper::getImplementationName_Static(  ) throw (RuntimeException)
     {
         return OUString("com.sun.star.comp.sdb.XMLSettingsExporter");
     }
-    //---------------------------------------------------------------------
+
     Sequence< OUString > SAL_CALL ODBExportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
     {
         Sequence< OUString > aSupported(1);
@@ -117,18 +116,14 @@ namespace dbaxml
         return aSupported;
     }
 
-
-    //---------------------------------------------------------------------
     Reference< XInterface > SAL_CALL ODBFullExportHelper::Create(const Reference< XMultiServiceFactory >& _rxORB)
     {
         return static_cast< XServiceInfo* >(new ODBExport(comphelper::getComponentContext(_rxORB),EXPORT_ALL));
     }
-    //---------------------------------------------------------------------
     OUString SAL_CALL ODBFullExportHelper::getImplementationName_Static(  ) throw (RuntimeException)
     {
         return OUString("com.sun.star.comp.sdb.XMLFullExporter");
     }
-    //---------------------------------------------------------------------
     Sequence< OUString > SAL_CALL ODBFullExportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
     {
         Sequence< OUString > aSupported(1);
@@ -136,7 +131,6 @@ namespace dbaxml
         return aSupported;
     }
 
-    //---------------------------------------------------------------------
     OUString lcl_implGetPropertyXMLType(const Type& _rType)
     {
         // possible types we can write (either because we recognize them directly or because we convert _rValue
@@ -192,7 +186,6 @@ namespace dbaxml
             // nothing to do here
         }
     };
-// -----------------------------------------------------------------------------
 ODBExport::ODBExport(const Reference< XComponentContext >& _rxContext,sal_uInt16 nExportFlag)
 : SvXMLExport( util::MeasureUnit::MM_10TH, _rxContext, XML_DATABASE,
         EXPORT_OASIS | nExportFlag)
@@ -258,7 +251,7 @@ ODBExport::ODBExport(const Reference< XComponentContext >& _rxContext,sal_uInt16
         m_xRowExportHelper.get(),
         OUString(XML_STYLE_FAMILY_TABLE_ROW_STYLES_PREFIX ));
 }
-// -----------------------------------------------------------------------------
+
 IMPLEMENT_SERVICE_INFO_IMPLNAME_STATIC(ODBExport, "com.sun.star.comp.sdb.DBExportFilter")
 IMPLEMENT_SERVICE_INFO_SUPPORTS(ODBExport)
 IMPLEMENT_SERVICE_INFO_GETSUPPORTED1_STATIC(ODBExport, "com.sun.star.document.ExportFilter")
@@ -269,7 +262,6 @@ IMPLEMENT_SERVICE_INFO_GETSUPPORTED1_STATIC(ODBExport, "com.sun.star.document.Ex
     return static_cast< XServiceInfo* >(new ODBExport( comphelper::getComponentContext(_rxORB)));
 }
 
-// -----------------------------------------------------------------------------
 void ODBExport::exportDataSource()
 {
     try
@@ -488,7 +480,7 @@ void ODBExport::exportDataSource()
         DBG_UNHANDLED_EXCEPTION();
     }
 }
-// -----------------------------------------------------------------------------
+
 void ODBExport::exportApplicationConnectionSettings(const TSettingsMap& _aSettings)
 {
     const ::xmloff::token::XMLTokenEnum pSettings[] = {
@@ -524,7 +516,7 @@ void ODBExport::exportApplicationConnectionSettings(const TSettingsMap& _aSettin
 
     exportDataSourceSettings();
 }
-// -----------------------------------------------------------------------------
+
 void ODBExport::exportDriverSettings(const TSettingsMap& _aSettings)
 {
     const ::xmloff::token::XMLTokenEnum pSettings[] = {
@@ -545,7 +537,7 @@ void ODBExport::exportDriverSettings(const TSettingsMap& _aSettings)
     exportDelimiter();
     exportCharSet();
 }
-// -----------------------------------------------------------------------------
+
 void ODBExport::exportConnectionData()
 {
     SvXMLElementExport aConnData(*this,XML_NAMESPACE_DB, XML_CONNECTION_DATA, sal_True, sal_True);
@@ -668,7 +660,7 @@ void ODBExport::exportConnectionData()
 
     exportLogin();
 }
-// -----------------------------------------------------------------------------
+
 template< typename T > void ODBExport::exportDataSourceSettingsSequence(
     ::std::vector< TypedPropertyValue >::iterator const & in)
 {
@@ -755,7 +747,7 @@ void ODBExport::exportDataSourceSettings()
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 void ODBExport::exportCharSet()
 {
     if ( !m_sCharSet.isEmpty() )
@@ -765,7 +757,7 @@ void ODBExport::exportCharSet()
         SvXMLElementExport aElem(*this,XML_NAMESPACE_DB, XML_FONT_CHARSET, sal_True, sal_True);
     }
 }
-// -----------------------------------------------------------------------------
+
 void ODBExport::exportDelimiter()
 {
     if ( m_aDelimiter.get() && m_aDelimiter->bUsed )
@@ -777,7 +769,7 @@ void ODBExport::exportDelimiter()
         SvXMLElementExport aElem(*this,XML_NAMESPACE_DB, XML_DELIMITER, sal_True, sal_True);
     }
 }
-// -----------------------------------------------------------------------------
+
 void ODBExport::exportAutoIncrement()
 {
     if ( m_aAutoIncrement.get() )
@@ -787,7 +779,7 @@ void ODBExport::exportAutoIncrement()
         SvXMLElementExport aElem(*this,XML_NAMESPACE_DB, XML_AUTO_INCREMENT, sal_True, sal_True);
     }
 }
-// -----------------------------------------------------------------------------
+
 void ODBExport::exportSequence(const Sequence< OUString>& _aValue
                             ,::xmloff::token::XMLTokenEnum _eTokenFilter
                             ,::xmloff::token::XMLTokenEnum _eTokenType)
@@ -807,7 +799,7 @@ void ODBExport::exportSequence(const Sequence< OUString>& _aValue
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 void ODBExport::exportLogin()
 {
     Reference<XPropertySet> xProp(getDataSource());
@@ -825,7 +817,7 @@ void ODBExport::exportLogin()
     if ( bAddLogin )
         SvXMLElementExport aElem(*this,XML_NAMESPACE_DB, XML_LOGIN, sal_True, sal_True);
 }
-// -----------------------------------------------------------------------------
+
 void ODBExport::exportCollection(const Reference< XNameAccess >& _xCollection
                                 ,enum ::xmloff::token::XMLTokenEnum _eComponents
                                 ,enum ::xmloff::token::XMLTokenEnum _eSubComponents
@@ -858,7 +850,7 @@ void ODBExport::exportCollection(const Reference< XNameAccess >& _xCollection
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 void ODBExport::exportComponent(XPropertySet* _xProp)
 {
     OUString sValue;
@@ -876,7 +868,7 @@ void ODBExport::exportComponent(XPropertySet* _xProp)
     AddAttribute(XML_NAMESPACE_DB, XML_AS_TEMPLATE,bAsTemplate ? XML_TRUE : XML_FALSE);
     SvXMLElementExport aComponents(*this,XML_NAMESPACE_DB, XML_COMPONENT, sal_True, sal_True);
 }
-// -----------------------------------------------------------------------------
+
 void ODBExport::exportQuery(XPropertySet* _xProp)
 {
     AddAttribute(XML_NAMESPACE_DB, XML_COMMAND,getString(_xProp->getPropertyValue(PROPERTY_COMMAND)));
@@ -900,7 +892,7 @@ void ODBExport::exportQuery(XPropertySet* _xProp)
     exportFilter(_xProp,PROPERTY_ORDER,XML_ORDER_STATEMENT);
     exportTableName(_xProp,sal_True);
 }
-// -----------------------------------------------------------------------------
+
 void ODBExport::exportTable(XPropertySet* _xProp)
 {
     exportTableName(_xProp,sal_False);
@@ -923,7 +915,7 @@ void ODBExport::exportTable(XPropertySet* _xProp)
     exportFilter(_xProp,PROPERTY_FILTER,XML_FILTER_STATEMENT);
     exportFilter(_xProp,PROPERTY_ORDER,XML_ORDER_STATEMENT);
 }
-// -----------------------------------------------------------------------------
+
 void ODBExport::exportStyleName(XPropertySet* _xProp,SvXMLAttributeList& _rAtt)
 {
     Reference<XPropertySet> xFind(_xProp);
@@ -931,7 +923,7 @@ void ODBExport::exportStyleName(XPropertySet* _xProp,SvXMLAttributeList& _rAtt)
     exportStyleName(XML_DEFAULT_CELL_STYLE_NAME,xFind,_rAtt,m_aCellAutoStyleNames);
     exportStyleName(XML_DEFAULT_ROW_STYLE_NAME,xFind,_rAtt,m_aRowAutoStyleNames);
 }
-// -----------------------------------------------------------------------------
+
 void ODBExport::exportStyleName(const ::xmloff::token::XMLTokenEnum _eToken,const uno::Reference<beans::XPropertySet>& _xProp,SvXMLAttributeList& _rAtt,TPropertyStyleMap& _rMap)
 {
     TPropertyStyleMap::iterator aFind = _rMap.find(_xProp);
@@ -942,7 +934,7 @@ void ODBExport::exportStyleName(const ::xmloff::token::XMLTokenEnum _eToken,cons
         _rMap.erase(aFind);
     }
 }
-// -----------------------------------------------------------------------------
+
 void ODBExport::exportTableName(XPropertySet* _xProp,sal_Bool _bUpdate)
 {
     OUString sValue;
@@ -963,7 +955,7 @@ void ODBExport::exportTableName(XPropertySet* _xProp,sal_Bool _bUpdate)
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 void ODBExport::exportFilter(XPropertySet* _xProp
                              ,const OUString& _sProp
                              ,enum ::xmloff::token::XMLTokenEnum _eStatementType)
@@ -978,7 +970,7 @@ void ODBExport::exportFilter(XPropertySet* _xProp
     }
     OSL_POSTCOND(!GetAttrList().getLength(),"Invalid attribute length!");
 }
-// -----------------------------------------------------------------------------
+
 void ODBExport::exportColumns(const Reference<XColumnsSupplier>& _xColSup)
 {
     OSL_PRECOND( _xColSup.is(), "ODBExport::exportColumns: invalid columns supplier!" );
@@ -1059,7 +1051,7 @@ void ODBExport::exportColumns(const Reference<XColumnsSupplier>& _xColSup)
         DBG_UNHANDLED_EXCEPTION();
     }
 }
-// -----------------------------------------------------------------------------
+
 void ODBExport::exportForms()
 {
     Any aValue;
@@ -1080,7 +1072,7 @@ void ODBExport::exportForms()
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 void ODBExport::exportReports()
 {
     Any aValue;
@@ -1101,7 +1093,7 @@ void ODBExport::exportReports()
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 void ODBExport::exportQueries(sal_Bool _bExportContext)
 {
     Any aValue;
@@ -1129,7 +1121,7 @@ void ODBExport::exportQueries(sal_Bool _bExportContext)
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 void ODBExport::exportTables(sal_Bool _bExportContext)
 {
     Reference<XTablesSupplier> xSup(getDataSource(),UNO_QUERY);
@@ -1149,7 +1141,7 @@ void ODBExport::exportTables(sal_Bool _bExportContext)
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 void ODBExport::exportAutoStyle(XPropertySet* _xProp)
 {
     typedef ::std::pair<TPropertyStyleMap*,sal_uInt16> TEnumMapperPair;
@@ -1247,7 +1239,7 @@ void ODBExport::exportAutoStyle(XPropertySet* _xProp)
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 void ODBExport::_ExportContent()
 {
     exportDataSource();
@@ -1256,12 +1248,12 @@ void ODBExport::_ExportContent()
     exportQueries(sal_True);
     exportTables(sal_True);
 }
-// -----------------------------------------------------------------------------
+
 void ODBExport::_ExportMasterStyles()
 {
     GetPageExport()->exportMasterStyles( sal_True );
 }
-// -----------------------------------------------------------------------------
+
 void ODBExport::_ExportAutoStyles()
 {
     // there are no styles that require their own autostyles
@@ -1291,17 +1283,17 @@ void ODBExport::_ExportAutoStyles()
         exportDataStyles();
     }
 }
-// -----------------------------------------------------------------------------
+
 void ODBExport::_ExportStyles(sal_Bool bUsed)
 {
     SvXMLExport::_ExportStyles(bUsed);
 }
-// -----------------------------------------------------------------------------
+
 sal_uInt32 ODBExport::exportDoc(enum ::xmloff::token::XMLTokenEnum eClass)
 {
     return SvXMLExport::exportDoc( eClass );
 }
-// -----------------------------------------------------------------------------
+
 void ODBExport::GetViewSettings(Sequence<PropertyValue>& aProps)
 {
     Reference<XQueryDefinitionsSupplier> xSup(getDataSource(),UNO_QUERY);
@@ -1339,7 +1331,7 @@ void ODBExport::GetViewSettings(Sequence<PropertyValue>& aProps)
     }
 
 }
-// -----------------------------------------------------------------------------
+
 void ODBExport::GetConfigurationSettings(Sequence<PropertyValue>& aProps)
 {
     Reference<XPropertySet> xProp(getDataSource());
@@ -1364,7 +1356,7 @@ void ODBExport::GetConfigurationSettings(Sequence<PropertyValue>& aProps)
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 OUString ODBExport::implConvertAny(const Any& _rValue)
 {
     OUStringBuffer aBuffer;
@@ -1396,7 +1388,7 @@ OUString ODBExport::implConvertAny(const Any& _rValue)
 
     return aBuffer.makeStringAndClear();
 }
-// -----------------------------------------------------------------------------
+
 UniReference < XMLPropertySetMapper > ODBExport::GetTableStylesPropertySetMapper() const
 {
     if ( !m_xTableStylesPropertySetMapper.is() )
@@ -1405,7 +1397,7 @@ UniReference < XMLPropertySetMapper > ODBExport::GetTableStylesPropertySetMapper
     }
     return m_xTableStylesPropertySetMapper;
 }
-// -----------------------------------------------------------------------------
+
 UniReference < XMLPropertySetMapper > ODBExport::GetCellStylesPropertySetMapper() const
 {
     if ( !m_xCellStylesPropertySetMapper.is() )
@@ -1414,7 +1406,7 @@ UniReference < XMLPropertySetMapper > ODBExport::GetCellStylesPropertySetMapper(
     }
     return m_xCellStylesPropertySetMapper;
 }
-// -----------------------------------------------------------------------------
+
 UniReference < XMLPropertySetMapper > ODBExport::GetColumnStylesPropertySetMapper() const
 {
     if ( !m_xColumnStylesPropertySetMapper.is() )
@@ -1423,12 +1415,12 @@ UniReference < XMLPropertySetMapper > ODBExport::GetColumnStylesPropertySetMappe
     }
     return m_xColumnStylesPropertySetMapper;
 }
-// -----------------------------------------------------------------------------
+
 SvXMLAutoStylePoolP* ODBExport::CreateAutoStylePool()
 {
     return new OXMLAutoStylePoolP(*this);
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL ODBExport::setSourceDocument( const Reference< XComponent >& xDoc ) throw(IllegalArgumentException, RuntimeException)
 {
     Reference<XOfficeDatabaseDocument> xOfficeDoc(xDoc,UNO_QUERY_THROW);
@@ -1438,14 +1430,14 @@ void SAL_CALL ODBExport::setSourceDocument( const Reference< XComponent >& xDoc 
     SetNumberFormatsSupplier(xNum);
     SvXMLExport::setSourceDocument(xDoc);
 }
-// -----------------------------------------------------------------------------
+
 void ODBExport::_ExportFontDecls()
 {
     GetFontAutoStylePool(); // make sure the pool is created
     collectComponentStyles();
     SvXMLExport::_ExportFontDecls();
 }
-// -----------------------------------------------------------------------------
+
 void ODBExport::collectComponentStyles()
 {
     if ( m_bAllreadyFilled )
@@ -1455,8 +1447,7 @@ void ODBExport::collectComponentStyles()
     exportQueries(sal_False);
     exportTables(sal_False);
 }
-// -----------------------------------------------------------------------------
+
 }// dbaxml
-// -----------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -29,11 +29,8 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 
-//========================================================================
 // class OTableRow
-//========================================================================
 DBG_NAME(OTableRow)
-//------------------------------------------------------------------------------
 OTableRow::OTableRow()
     :m_pActFieldDescr( NULL )
     ,m_nPos( -1 )
@@ -42,7 +39,7 @@ OTableRow::OTableRow()
 {
     DBG_CTOR(OTableRow,NULL);
 }
-//------------------------------------------------------------------------------
+
 OTableRow::OTableRow(const Reference< XPropertySet >& xAffectedCol)
     :m_pActFieldDescr( NULL )
     ,m_nPos( -1 )
@@ -52,7 +49,7 @@ OTableRow::OTableRow(const Reference< XPropertySet >& xAffectedCol)
     DBG_CTOR(OTableRow,NULL);
     m_pActFieldDescr = new OFieldDescription(xAffectedCol);
 }
-//------------------------------------------------------------------------------
+
 OTableRow::OTableRow( const OTableRow& rRow, long nPosition )
     :m_pActFieldDescr(NULL)
     ,m_nPos( nPosition )
@@ -69,7 +66,6 @@ OTableRow::OTableRow( const OTableRow& rRow, long nPosition )
     }
 }
 
-//------------------------------------------------------------------------------
 OTableRow::~OTableRow()
 {
     DBG_DTOR(OTableRow,NULL);
@@ -77,20 +73,19 @@ OTableRow::~OTableRow()
         delete m_pActFieldDescr;
 }
 
-//------------------------------------------------------------------------------
 void OTableRow::SetPrimaryKey( sal_Bool bSet )
 {
     DBG_CHKTHIS(OTableRow,NULL);
     if(m_pActFieldDescr)
         m_pActFieldDescr->SetPrimaryKey(bSet);
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool OTableRow::IsPrimaryKey() const
 {
     DBG_CHKTHIS(OTableRow,NULL);
     return m_pActFieldDescr && m_pActFieldDescr->IsPrimaryKey();
 }
-// -----------------------------------------------------------------------------
+
 void OTableRow::SetFieldType( const TOTypeInfoSP& _pType, sal_Bool _bForce )
 {
     DBG_CHKTHIS(OTableRow,NULL);
@@ -109,10 +104,9 @@ void OTableRow::SetFieldType( const TOTypeInfoSP& _pType, sal_Bool _bForce )
         m_pActFieldDescr = NULL;
     }
 }
-// -----------------------------------------------------------------------------
+
 namespace dbaui
 {
-    // -----------------------------------------------------------------------------
     SvStream& operator<<( SvStream& _rStr, const OTableRow& _rRow )
     {
         _rStr << _rRow.m_nPos;
@@ -151,7 +145,6 @@ namespace dbaui
             _rStr << (sal_Int32)0;
         return _rStr;
     }
-    // -----------------------------------------------------------------------------
     SvStream& operator>>( SvStream& _rStr, OTableRow& _rRow )
     {
         _rStr >> _rRow.m_nPos;
@@ -188,7 +181,6 @@ namespace dbaui
 
             pFieldDesc->SetControlDefault(aControlDefault);
 
-
             _rStr >> nValue;
             pFieldDesc->SetTypeValue(nValue);
 
@@ -212,7 +204,6 @@ namespace dbaui
         }
         return _rStr;
     }
-    // -----------------------------------------------------------------------------
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

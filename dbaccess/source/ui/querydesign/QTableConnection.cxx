@@ -22,12 +22,9 @@
 #include "QueryTableView.hxx"
 #include "ConnectionLine.hxx"
 using namespace dbaui;
-//========================================================================
 // class OQueryTableConnection
-//========================================================================
 DBG_NAME(OQueryTableConnection)
 
-//------------------------------------------------------------------------
 OQueryTableConnection::OQueryTableConnection(OQueryTableView* pContainer, const TTableConnectionData::value_type& pTabConnData)
     :OTableConnection(pContainer, pTabConnData)
     ,m_bVisited(sal_False)
@@ -35,20 +32,18 @@ OQueryTableConnection::OQueryTableConnection(OQueryTableView* pContainer, const 
     DBG_CTOR(OQueryTableConnection,NULL);
 }
 
-//------------------------------------------------------------------------
 OQueryTableConnection::OQueryTableConnection(const OQueryTableConnection& rConn)
     :OTableConnection( rConn )
 {
     DBG_CTOR(OQueryTableConnection,NULL);
     // no own members, so base class functionality is sufficient
 }
-//------------------------------------------------------------------------
+
 OQueryTableConnection::~OQueryTableConnection()
 {
     DBG_DTOR(OQueryTableConnection,NULL);
 }
 
-//------------------------------------------------------------------------
 OQueryTableConnection& OQueryTableConnection::operator=(const OQueryTableConnection& rConn)
 {
     if (&rConn == this)
@@ -59,7 +54,6 @@ OQueryTableConnection& OQueryTableConnection::operator=(const OQueryTableConnect
     return *this;
 }
 
-//------------------------------------------------------------------------
 sal_Bool OQueryTableConnection::operator==(const OQueryTableConnection& rCompare)
 {
     OSL_ENSURE(GetData() && rCompare.GetData(), "OQueryTableConnection::operator== : one of the two participants has no data!");
@@ -82,6 +76,5 @@ sal_Bool OQueryTableConnection::operator==(const OQueryTableConnection& rCompare
                 )
             );
 }
-// -----------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

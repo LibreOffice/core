@@ -31,14 +31,11 @@
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/implbase1.hxx>
 
-
 namespace dbaccess
 {
 
     typedef ::cppu::ImplHelper1< ::com::sun::star::container::XChild > TXChild;
-    // =========================================================================
-    //= OTableColumnDescriptor
-    // =========================================================================
+    // OTableColumnDescriptor
     /**
      *  provides the properties for description. A descriptor could be used to create a new table column.
      */
@@ -104,9 +101,7 @@ namespace dbaccess
         void    impl_registerProperties();
     };
 
-    // =========================================================================
-    // = OTableColumn
-    // =========================================================================
+    // OTableColumn
     class OTableColumn;
     typedef ::comphelper::OPropertyArrayUsageHelper < OTableColumn >    OTableColumn_PBase;
     /** describes a column of a table
@@ -131,9 +126,7 @@ namespace dbaccess
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const;
     };
 
-    // =========================================================================
-    // = OQueryColumn
-    // =========================================================================
+    // OQueryColumn
     class OQueryColumn;
     typedef ::comphelper::OPropertyArrayUsageHelper< OQueryColumn > OQueryColumn_PBase;
     /** a column of a Query, with additional information obtained from parsing the query statement
@@ -181,9 +174,7 @@ namespace dbaccess
         using ::cppu::OPropertySetHelper::getFastPropertyValue;
     };
 
-    // =========================================================================
-    // = OColumnWrapper
-    // =========================================================================
+    // OColumnWrapper
     /**
      *  describes all properties for a columns of a table. Only the view parts are provided
      *  directly, all the other parts are derived from a driver implementation
@@ -227,9 +218,7 @@ namespace dbaccess
         using OColumn::getFastPropertyValue;
     };
 
-    // =========================================================================
-    // = OTableColumnDescriptorWrapper
-    // =========================================================================
+    // OTableColumnDescriptorWrapper
     /**
      *  provides the properties for description. A descriptor could be used to create a new table column.
      */
@@ -276,9 +265,7 @@ namespace dbaccess
         using OColumnWrapper::getFastPropertyValue;
     };
 
-    // =========================================================================
-    // = OTableColumnWrapper
-    // =========================================================================
+    // OTableColumnWrapper
     /**
      *  describes all properties for a columns of a table. Only the view parts are provided
      *  directly, all the other parts are derived from a driver implementation

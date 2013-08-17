@@ -25,14 +25,10 @@
 #include "dsntypes.hxx"
 #include <memory>
 
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
 
-//=========================================================================
-//= OConnectionURLEdit
-//=========================================================================
+// OConnectionURLEdit
 /** an edit control which may be used to edit connection URLs like
     "sdbc:odbc:" or "jdbc:". It prevents the user from editing this prefix,
     though it is normally shown.
@@ -55,7 +51,6 @@ public:
     virtual void    SetText(const OUString& _rStr, const Selection& _rNewSelection);
     virtual OUString  GetText() const;
 
-
     /** Showsthe Prefix
         @param  _bShowPrefix
             If <TRUE/> than the prefix will be visible, otherwise not.
@@ -71,9 +66,7 @@ public:
     inline void     SetTypeCollection(::dbaccess::ODsnTypeCollection* _pTypeCollection) { m_pTypeCollection = _pTypeCollection; }
 };
 
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
 
 #endif // _DBAUI_CURLEDIT_HXX_
 

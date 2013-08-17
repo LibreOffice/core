@@ -30,17 +30,13 @@
 
 #include <vector>
 
-//........................................................................
 namespace dbaui
 {
-//........................................................................
 
     struct BooleanSettingDesc;
     typedef ::std::vector< BooleanSettingDesc > BooleanSettingDescs;
 
-    //====================================================================
-    //= SpecialSettingsPage
-    //====================================================================
+    // SpecialSettingsPage
     /** implements the "Special Settings" page of the advanced database settings
     */
     class SpecialSettingsPage : public OGenericAdministrationPage
@@ -99,9 +95,7 @@ namespace dbaui
         void    impl_initBooleanSettings();
     };
 
-    //====================================================================
-    //= GeneratedValuesPage
-    //====================================================================
+    // GeneratedValuesPage
     class GeneratedValuesPage : public OGenericAdministrationPage
     {
     protected:
@@ -138,9 +132,7 @@ namespace dbaui
         DECL_LINK( OnCheckBoxClick, CheckBox * );
     };
 
-//........................................................................
 } // namespace dbaui
-//........................................................................
 
 #endif // DBACCESS_ADVANCEDSETTINGS_HXX
 

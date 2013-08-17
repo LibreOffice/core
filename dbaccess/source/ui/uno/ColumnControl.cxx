@@ -29,10 +29,9 @@ extern "C" void SAL_CALL createRegistryInfo_OColumnControl()
 {
     static ::dbaui::OMultiInstanceAutoRegistration< ::dbaui::OColumnControl> aAutoRegistration;
 }
-//.........................................................................
+
 namespace dbaui
 {
-//.........................................................................
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::beans;
@@ -43,7 +42,7 @@ OColumnControl::OColumnControl(const Reference<XComponentContext>& rxContext)
     :UnoControl(), m_xContext(rxContext)
 {
 }
-// -----------------------------------------------------------------------------
+
 IMPLEMENT_SERVICE_INFO_IMPLNAME_STATIC(OColumnControl, SERVICE_CONTROLDEFAULT)
 IMPLEMENT_SERVICE_INFO_SUPPORTS(OColumnControl)
 IMPLEMENT_SERVICE_INFO_GETSUPPORTED2_STATIC(OColumnControl, "com.sun.star.awt.UnoControl","com.sun.star.sdb.ColumnDescriptorControl")
@@ -52,12 +51,12 @@ Reference< XInterface > SAL_CALL OColumnControl::Create(const Reference< XMultiS
 {
     return static_cast< XServiceInfo* >(new OColumnControl(comphelper::getComponentContext(_rxORB)));
 }
-// -----------------------------------------------------------------------------
+
 OUString OColumnControl::GetComponentServiceName()
 {
     return OUString("com.sun.star.sdb.ColumnDescriptorControl");
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OColumnControl::createPeer(const Reference< XToolkit >& /*rToolkit*/, const Reference< XWindowPeer >& rParentPeer) throw( RuntimeException )
 {
     ::osl::ClearableMutexGuard aGuard( GetMutex() );
@@ -132,8 +131,7 @@ void SAL_CALL OColumnControl::createPeer(const Reference< XToolkit >& /*rToolkit
         mbCreatingPeer = sal_False;
     }
 }
-//.........................................................................
+
 }   // namespace dbaui
-//.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

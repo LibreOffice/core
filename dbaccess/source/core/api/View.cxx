@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "View.hxx"
 #include "dbastrings.hrc"
 
@@ -56,9 +55,7 @@ namespace dbaccess
         }
         return sSupportService;
     }
-    //====================================================================
-    //= View
-    //====================================================================
+    // View
     View::View( const Reference< XConnection >& _rxConnection, sal_Bool _bCaseSensitive,
         const OUString& _rCatalogName,const OUString& _rSchemaName, const OUString& _rName )
         :View_Base( _bCaseSensitive, _rName, _rxConnection->getMetaData(), 0, OUString(), _rSchemaName, _rCatalogName )
@@ -133,4 +130,5 @@ namespace dbaccess
     }
 
 } // namespace dbaccess
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "AppController.hxx"
 #include <comphelper/sequence.hxx>
 #include <comphelper/property.hxx>
@@ -82,10 +81,8 @@
 #include <osl/mutex.hxx>
 #include "subcomponentmanager.hxx"
 
-//........................................................................
 namespace dbaui
 {
-//........................................................................
 using namespace ::dbtools;
 using namespace ::svx;
 using namespace ::svtools;
@@ -101,7 +98,6 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::util;
 
-// -----------------------------------------------------------------------------
 void OApplicationController::deleteTables(const ::std::vector< OUString>& _rList)
 {
     SharedConnection xConnection( ensureConnection() );
@@ -185,7 +181,7 @@ void OApplicationController::deleteTables(const ::std::vector< OUString>& _rList
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 void OApplicationController::deleteObjects( ElementType _eType, const ::std::vector< OUString>& _rList, bool _bConfirm )
 {
     Reference< XNameContainer > xNames( getElements( _eType ), UNO_QUERY );
@@ -296,7 +292,7 @@ void OApplicationController::deleteObjects( ElementType _eType, const ::std::vec
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 void OApplicationController::deleteEntries()
 {
     SolarMutexGuard aSolarGuard;
@@ -326,7 +322,7 @@ void OApplicationController::deleteEntries()
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 // DO NOT CALL with getMutex() held!!
 const SharedConnection& OApplicationController::ensureConnection( ::dbtools::SQLExceptionInfo* _pErrorInfo )
 {
@@ -414,13 +410,13 @@ const SharedConnection& OApplicationController::ensureConnection( ::dbtools::SQL
 
     return m_xDataSourceConnection;
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool OApplicationController::isDataSourceReadOnly() const
 {
     Reference<XStorable> xStore(m_xModel,UNO_QUERY);
     return !xStore.is() || xStore->isReadonly();
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool OApplicationController::isConnectionReadOnly() const
 {
     sal_Bool bIsConnectionReadOnly = sal_True;
@@ -438,7 +434,7 @@ sal_Bool OApplicationController::isConnectionReadOnly() const
     // TODO check configuration
     return bIsConnectionReadOnly;
 }
-// -----------------------------------------------------------------------------
+
 Reference< XNameAccess > OApplicationController::getElements( ElementType _eType )
 {
     Reference< XNameAccess > xElements;
@@ -487,7 +483,7 @@ Reference< XNameAccess > OApplicationController::getElements( ElementType _eType
 
     return xElements;
 }
-// -----------------------------------------------------------------------------
+
 void OApplicationController::getSelectionElementNames(::std::vector< OUString>& _rNames) const
 {
     SolarMutexGuard aSolarGuard;
@@ -498,7 +494,6 @@ void OApplicationController::getSelectionElementNames(::std::vector< OUString>& 
     getContainer()->getSelectionElementNames( _rNames );
 }
 
-// -----------------------------------------------------------------------------
 SAL_WNODEPRECATED_DECLARATIONS_PUSH
 ::std::auto_ptr< OLinkedDocumentsAccess > OApplicationController::getDocumentsAccess( ElementType _eType )
 {
@@ -519,9 +514,9 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ) );
     return pDocuments;
 }
+
 SAL_WNODEPRECATED_DECLARATIONS_POP
 
-// -----------------------------------------------------------------------------
 TransferableHelper* OApplicationController::copyObject()
 {
     try
@@ -587,7 +582,7 @@ TransferableHelper* OApplicationController::copyObject()
     }
     return NULL;
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAccessDescriptor& _rPasteData,const OUString& _sParentFolder ,sal_Bool _bMove)
 {
     try
@@ -674,7 +669,6 @@ sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAcc
                         return sal_False;
                     }
                 }
-
 
                 Reference< XNameContainer > xDestQueries(getQueryDefintions(), UNO_QUERY);
                 Reference< XSingleServiceFactory > xQueryFactory(xDestQueries, UNO_QUERY);
@@ -772,7 +766,7 @@ sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAcc
     }
     return sal_False;
 }
-// -----------------------------------------------------------------------------
+
 Reference<XNameContainer> OApplicationController::getQueryDefintions() const
 {
     Reference<XQueryDefinitionsSupplier> xSet(m_xDataSource,UNO_QUERY);
@@ -783,7 +777,7 @@ Reference<XNameContainer> OApplicationController::getQueryDefintions() const
     }
     return xNames;
 }
-// -----------------------------------------------------------------------------
+
 void OApplicationController::getSupportedFormats(ElementType _eType,::std::vector<SotFormatStringId>& _rFormatIds) const
 {
     switch( _eType )
@@ -800,18 +794,17 @@ void OApplicationController::getSupportedFormats(ElementType _eType,::std::vecto
             break;
     }
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool OApplicationController::isTableFormat()  const
 {
     return m_aTableCopyHelper.isTableFormat(getViewClipboard());
 }
-// -----------------------------------------------------------------------------
+
 IMPL_LINK( OApplicationController, OnAsyncDrop, void*, /*NOTINTERESTEDIN*/ )
 {
     m_nAsyncDrop = 0;
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
-
 
     if ( m_aAsyncDrop.nType == E_TABLE )
     {
@@ -842,9 +835,7 @@ IMPL_LINK( OApplicationController, OnAsyncDrop, void*, /*NOTINTERESTEDIN*/ )
 
     return 0L;
 }
-//........................................................................
-}   // namespace dbaui
-//........................................................................
 
+}   // namespace dbaui
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

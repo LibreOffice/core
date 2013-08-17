@@ -17,24 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "core_resource.hxx"
 
 #include <tools/resmgr.hxx>
 
 // ---- needed as long as we have no contexts for components ---
 #include <vcl/svapp.hxx>
-//---------------------------------------------------
 #include <rtl/instance.hxx>
 #include <svl/solar.hrc>
 
-//.........................................................................
 namespace dbaccess
 {
 
-    //==================================================================
-    //= ResourceManager
-    //==================================================================
+    // ResourceManager
     namespace
     {
         // access safety
@@ -44,7 +39,6 @@ namespace dbaccess
     sal_Int32       ResourceManager::s_nClients = 0;
     ResMgr*         ResourceManager::m_pImpl = NULL;
 
-    //------------------------------------------------------------------
     void ResourceManager::ensureImplExists()
     {
         if (m_pImpl)
@@ -53,7 +47,6 @@ namespace dbaccess
         m_pImpl = ResMgr::CreateResMgr("dba", Application::GetSettings().GetUILanguageTag());
     }
 
-    //------------------------------------------------------------------
     OUString ResourceManager::loadString(sal_uInt16 _nResId)
     {
         OUString sReturn;
@@ -65,14 +58,12 @@ namespace dbaccess
         return sReturn;
     }
 
-    //------------------------------------------------------------------
     OUString ResourceManager::loadString( sal_uInt16 _nResId, const sal_Char* _pPlaceholderAscii, const OUString& _rReplace )
     {
         OUString sString( loadString( _nResId ) );
         return sString.replaceFirst( OUString::createFromAscii(_pPlaceholderAscii), _rReplace );
     }
 
-    //------------------------------------------------------------------
     OUString ResourceManager::loadString( sal_uInt16 _nResId, const sal_Char* _pPlaceholderAscii1, const OUString& _rReplace1,
         const sal_Char* _pPlaceholderAscii2, const OUString& _rReplace2 )
     {
@@ -82,14 +73,12 @@ namespace dbaccess
         return sString;
     }
 
-    //-------------------------------------------------------------------------
     void ResourceManager::registerClient()
     {
         ::osl::MutexGuard aGuard(theResourceManagerMutex::get());
         ++s_nClients;
     }
 
-    //-------------------------------------------------------------------------
     void ResourceManager::revokeClient()
     {
         ::osl::MutexGuard aGuard(theResourceManagerMutex::get());
@@ -99,8 +88,6 @@ namespace dbaccess
             m_pImpl = NULL;
         }
     }
-//.........................................................................
 }
-//.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

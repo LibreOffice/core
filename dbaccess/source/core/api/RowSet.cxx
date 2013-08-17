@@ -2012,6 +2012,7 @@ void SAL_CALL ORowSet::removeRowSetApproveListener( const Reference< XRowSetAppr
 
     m_aApproveListeners.removeInterface(listener);
 }
+
 // XRowsChangeBroadcaster
 void SAL_CALL ORowSet::addRowsChangeListener( const Reference< XRowsChangeListener >& listener ) throw(RuntimeException)
 {
@@ -2704,6 +2705,7 @@ void ORowSet::impl_rebuild_throw(::osl::ResettableMutexGuard& _rGuard)
     m_pCache->reset(xResultSet);
     notifyAllListeners(_rGuard);
 }
+
 // ***********************************************************
 //  ORowSetClone
 // ***********************************************************

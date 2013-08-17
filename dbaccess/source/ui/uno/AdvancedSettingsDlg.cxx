@@ -17,24 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "unoadmin.hxx"
 #include "dbu_reghelper.hxx"
 #include "advancedsettingsdlg.hxx"
 #include <comphelper/processfactory.hxx>
 
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
 
-    //=========================================================================
-    //= OAdvancedSettingsDialog
-    //=========================================================================
+    // OAdvancedSettingsDialog
     class OAdvancedSettingsDialog
             :public ODatabaseAdministrationDialog
             ,public ::comphelper::OPropertyArrayUsageHelper< OAdvancedSettingsDialog >
@@ -68,44 +63,36 @@ namespace dbaui
         virtual Dialog* createDialog(Window* _pParent);
     };
 
-    //=========================================================================
-    //-------------------------------------------------------------------------
     OAdvancedSettingsDialog::OAdvancedSettingsDialog(const Reference< XComponentContext >& _rxORB)
         :ODatabaseAdministrationDialog(_rxORB)
     {
     }
-    //-------------------------------------------------------------------------
     Sequence<sal_Int8> SAL_CALL OAdvancedSettingsDialog::getImplementationId(  ) throw(RuntimeException)
     {
         static ::cppu::OImplementationId aId;
         return aId.getImplementationId();
     }
 
-    //-------------------------------------------------------------------------
     Reference< XInterface > SAL_CALL OAdvancedSettingsDialog::Create(const Reference< XMultiServiceFactory >& _rxFactory)
     {
         return *(new OAdvancedSettingsDialog( comphelper::getComponentContext(_rxFactory) ));
     }
 
-    //-------------------------------------------------------------------------
     OUString SAL_CALL OAdvancedSettingsDialog::getImplementationName() throw(RuntimeException)
     {
         return getImplementationName_Static();
     }
 
-    //-------------------------------------------------------------------------
     OUString OAdvancedSettingsDialog::getImplementationName_Static() throw(RuntimeException)
     {
         return OUString("org.openoffice.comp.dbu.OAdvancedSettingsDialog");
     }
 
-    //-------------------------------------------------------------------------
     ::comphelper::StringSequence SAL_CALL OAdvancedSettingsDialog::getSupportedServiceNames() throw(RuntimeException)
     {
         return getSupportedServiceNames_Static();
     }
 
-    //-------------------------------------------------------------------------
     ::comphelper::StringSequence OAdvancedSettingsDialog::getSupportedServiceNames_Static() throw(RuntimeException)
     {
         ::comphelper::StringSequence aSupported(1);
@@ -113,36 +100,30 @@ namespace dbaui
         return aSupported;
     }
 
-    //-------------------------------------------------------------------------
     Reference<XPropertySetInfo>  SAL_CALL OAdvancedSettingsDialog::getPropertySetInfo() throw(RuntimeException)
     {
         Reference<XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
         return xInfo;
     }
 
-    //-------------------------------------------------------------------------
     ::cppu::IPropertyArrayHelper& OAdvancedSettingsDialog::getInfoHelper()
     {
         return *const_cast<OAdvancedSettingsDialog*>(this)->getArrayHelper();
     }
 
-    //------------------------------------------------------------------------------
     ::cppu::IPropertyArrayHelper* OAdvancedSettingsDialog::createArrayHelper( ) const
     {
         Sequence< Property > aProps;
         describeProperties(aProps);
         return new ::cppu::OPropertyArrayHelper(aProps);
     }
-    //------------------------------------------------------------------------------
     Dialog* OAdvancedSettingsDialog::createDialog(Window* _pParent)
     {
         AdvancedSettingsDialog* pDlg = new AdvancedSettingsDialog(_pParent, m_pDatasourceItems, m_aContext, m_aInitialSelection);
         return pDlg;
     }
 
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
 
 extern "C" void SAL_CALL createRegistryInfo_OAdvancedSettingsDialog()
 {

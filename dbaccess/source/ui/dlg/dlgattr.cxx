@@ -34,7 +34,6 @@
 using namespace dbaui;
 
 DBG_NAME(SbaSbAttrDlg)
-//==================================================================
 SbaSbAttrDlg::SbaSbAttrDlg(Window* pParent, const SfxItemSet* pCellAttrs, SvNumberFormatter* pFormatter, sal_uInt16 nFlags, sal_Bool bRow)
              : SfxTabDialog(pParent, ModuleRes( DLG_ATTR ), pCellAttrs )
              ,aTitle(ModuleRes(ST_ROW))
@@ -56,7 +55,6 @@ SbaSbAttrDlg::SbaSbAttrDlg(Window* pParent, const SfxItemSet* pCellAttrs, SvNumb
     FreeResource();
 }
 
-// -----------------------------------------------------------------------
 SbaSbAttrDlg::~SbaSbAttrDlg()
 {
     delete pNumberInfoItem;
@@ -64,7 +62,6 @@ SbaSbAttrDlg::~SbaSbAttrDlg()
     DBG_DTOR(SbaSbAttrDlg,NULL);
 }
 
-// -----------------------------------------------------------------------
 void SbaSbAttrDlg::PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage )
 {
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
@@ -81,6 +78,5 @@ void SbaSbAttrDlg::PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage )
         break;
     }
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

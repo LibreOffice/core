@@ -357,4 +357,5 @@ void SAL_CALL OStaticSet::moveToCurrentRow(  ) throw(SQLException, RuntimeExcept
 {
     SAL_INFO("dbaccess", "OStaticSet::moveToCurrentRow" );
 }
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

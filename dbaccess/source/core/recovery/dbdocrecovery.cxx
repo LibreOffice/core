@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "recovery/dbdocrecovery.hxx"
 #include "sdbcoretools.hxx"
 #include "storagetextstream.hxx"
@@ -41,10 +40,8 @@
 
 #include <algorithm>
 
-//........................................................................
 namespace dbaccess
 {
-//........................................................................
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
@@ -76,12 +73,9 @@ namespace dbaccess
 
     namespace ElementModes = ::com::sun::star::embed::ElementModes;
 
-    //====================================================================
-    //= helpers
-    //====================================================================
+    // helpers
     namespace
     {
-        // .........................................................................
         static void lcl_getPersistentRepresentation( const MapStringToCompDesc::value_type& i_rComponentDesc, OUStringBuffer& o_rBuffer )
         {
             o_rBuffer.append( i_rComponentDesc.first );
@@ -91,7 +85,6 @@ namespace dbaccess
             o_rBuffer.append( sal_Unicode( i_rComponentDesc.second.bForEditing ? '1' : '0' ) );
         }
 
-        // .........................................................................
         static bool lcl_extractCompDesc( const OUString& i_rIniLine, OUString& o_rStorName, SubComponentDescriptor& o_rCompDesc )
         {
             const sal_Int32 nEqualSignPos = i_rIniLine.indexOf( sal_Unicode( '=' ) );
@@ -156,7 +149,6 @@ namespace dbaccess
             aTextOutput.writeLine();
         }
 
-        // .........................................................................
         static bool lcl_isSectionStart( const OUString& i_rIniLine, OUString& o_rSectionName )
         {
             const sal_Int32 nLen = i_rIniLine.getLength();
@@ -168,7 +160,6 @@ namespace dbaccess
             return false;
         }
 
-        // .........................................................................
         static void lcl_stripTrailingLineFeed( OUString& io_rLine )
         {
             const sal_Int32 nLen = io_rLine.getLength();
@@ -176,7 +167,6 @@ namespace dbaccess
                 io_rLine = io_rLine.copy( 0, nLen - 1 );
         }
 
-        // .........................................................................
         static void lcl_readObjectMap_throw( const Reference<XComponentContext> & i_rxContext, const Reference< XStorage >& i_rStorage,
             MapStringToCompDesc& o_mapStorageToObjectName )
         {
@@ -228,7 +218,6 @@ namespace dbaccess
             }
         }
 
-        // .........................................................................
         static void lcl_markModified( const Reference< XComponent >& i_rSubComponent )
         {
             const Reference< XModifiable > xModify( i_rSubComponent, UNO_QUERY );
@@ -242,9 +231,7 @@ namespace dbaccess
         }
     }
 
-    //====================================================================
-    //= DatabaseDocumentRecovery_Data
-    //====================================================================
+    // DatabaseDocumentRecovery_Data
     struct DBACCESS_DLLPRIVATE DatabaseDocumentRecovery_Data
     {
         const Reference<XComponentContext> aContext;
@@ -255,21 +242,16 @@ namespace dbaccess
         }
     };
 
-    //====================================================================
-    //= DatabaseDocumentRecovery
-    //====================================================================
-    //--------------------------------------------------------------------
+    // DatabaseDocumentRecovery
     DatabaseDocumentRecovery::DatabaseDocumentRecovery( const Reference<XComponentContext> & i_rContext )
         :m_pData( new DatabaseDocumentRecovery_Data( i_rContext ) )
     {
     }
 
-    //--------------------------------------------------------------------
     DatabaseDocumentRecovery::~DatabaseDocumentRecovery()
     {
     }
 
-    //--------------------------------------------------------------------
     void DatabaseDocumentRecovery::saveModifiedSubComponents( const Reference< XStorage >& i_rTargetStorage,
         const ::std::vector< Reference< XController > >& i_rControllers )
     {
@@ -324,7 +306,6 @@ namespace dbaccess
         tools::stor::commitStorageIfWriteable( xRecoveryStorage );
     }
 
-    //--------------------------------------------------------------------
     void DatabaseDocumentRecovery::recoverSubDocuments( const Reference< XStorage >& i_rDocumentStorage,
         const Reference< XController >& i_rTargetController )
     {
@@ -412,8 +393,6 @@ namespace dbaccess
         }
     }
 
-//........................................................................
 } // namespace dbaccess
-//........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

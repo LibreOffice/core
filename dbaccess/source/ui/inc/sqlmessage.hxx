@@ -38,14 +38,10 @@ namespace com { namespace sun { namespace star {
     }
 } } }
 
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
 
-//==================================================================
 // OSQLMessageBox
-//==================================================================
 struct SQLMessageBox_Impl;
 class OSQLMessageBox : public ButtonDialog
 {
@@ -107,9 +103,7 @@ private:
     void    impl_addDetailsButton();
 };
 
-//==================================================================
 // OSQLWarningBox
-//==================================================================
 class OSQLWarningBox : public OSQLMessageBox
 {
 public:
@@ -119,9 +113,7 @@ public:
                     const ::dbtools::SQLExceptionInfo* _pAdditionalErrorInfo = NULL );
 };
 
-//==================================================================
 // OSQLErrorBox
-//==================================================================
 class OSQLErrorBox : public OSQLMessageBox
 {
 public:
@@ -131,9 +123,7 @@ public:
                   const ::dbtools::SQLExceptionInfo* _pAdditionalErrorInfo = NULL );
 };
 
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
 
 #endif // _DBAUI_SQLMESSAGE_HXX_
 

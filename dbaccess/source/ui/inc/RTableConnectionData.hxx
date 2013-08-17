@@ -32,7 +32,6 @@ namespace dbaui
     const sal_uInt16 CARDINAL_ONE_ONE   = 0x0004;
 
     class OConnectionLineData;
-    //==================================================================
     class ORelationTableConnectionData :    public OTableConnectionData
     {
         friend bool operator==(const ORelationTableConnectionData& lhs, const ORelationTableConnectionData& rhs);
@@ -71,7 +70,6 @@ namespace dbaui
         */
         virtual sal_Bool Update();
 
-
         void        SetCardinality();
         inline void SetUpdateRules( sal_Int32 nAttr ){ m_nUpdateRules = nAttr; }
         inline void SetDeleteRules( sal_Int32 nAttr ){ m_nDeleteRules = nAttr; }
@@ -87,7 +85,5 @@ namespace dbaui
 }
 
 #endif // DBAUI_RTABLECONNECTIONDATA_HXX
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

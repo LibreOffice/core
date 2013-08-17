@@ -67,8 +67,8 @@ void OXMLAutoStylePoolP::exportStyleAttributes(
         }
     }
 }
+
 DBG_NAME(OXMLAutoStylePoolP)
-// -----------------------------------------------------------------------------
 OXMLAutoStylePoolP::OXMLAutoStylePoolP(ODBExport& rTempODBExport):
     SvXMLAutoStylePoolP(rTempODBExport),
     rODBExport(rTempODBExport)
@@ -76,16 +76,13 @@ OXMLAutoStylePoolP::OXMLAutoStylePoolP(ODBExport& rTempODBExport):
     DBG_CTOR(OXMLAutoStylePoolP,NULL);
 
 }
-// -----------------------------------------------------------------------------
+
 OXMLAutoStylePoolP::~OXMLAutoStylePoolP()
 {
 
     DBG_DTOR(OXMLAutoStylePoolP,NULL);
 }
-// -----------------------------------------------------------------------------
 
-//----------------------------------------------------------------------------
 } // namespace dbaxml
-// -----------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -22,7 +22,6 @@
 #include <xmloff/xmlictxt.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
 
-
 namespace dbaxml
 {
     class ODBFilter;
@@ -45,9 +44,7 @@ namespace dbaxml
                     );
         virtual ~OXMLComponent();
     };
-// -----------------------------------------------------------------------------
 } // namespace dbaxml
-// -----------------------------------------------------------------------------
 
 #endif // DBA_XMLCOMPONENT_HXX
 

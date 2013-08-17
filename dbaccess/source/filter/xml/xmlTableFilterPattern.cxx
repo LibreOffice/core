@@ -39,14 +39,13 @@ OXMLTableFilterPattern::OXMLTableFilterPattern( SvXMLImport& rImport,
     DBG_CTOR(OXMLTableFilterPattern,NULL);
 
 }
-// -----------------------------------------------------------------------------
 
 OXMLTableFilterPattern::~OXMLTableFilterPattern()
 {
 
     DBG_DTOR(OXMLTableFilterPattern,NULL);
 }
-// -----------------------------------------------------------------------------
+
 void OXMLTableFilterPattern::Characters( const OUString& rChars )
 {
     if ( m_bNameFilter )
@@ -55,8 +54,6 @@ void OXMLTableFilterPattern::Characters( const OUString& rChars )
         m_rParent.pushTableTypeFilter(rChars);
 }
 
-//----------------------------------------------------------------------------
 } // namespace dbaxml
-// -----------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

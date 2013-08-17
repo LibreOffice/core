@@ -48,7 +48,6 @@ namespace dbaui
 #define BROW_CRIT6_ROW          11
 #define BROW_ROW_CNT            12
 
-    //==================================================================
     class OQueryDesignView;
     class OSelectionBrowseBox : public ::svt::EditBrowseBox
     {
@@ -181,7 +180,6 @@ namespace dbaui
         @return  The XAccessible interface of the specified cell. */
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessibleCell( sal_Int32 nRow, sal_uInt16 nColumnId );
 
-
     protected:
         virtual sal_Bool            SeekRow( long nRow );
 
@@ -283,7 +281,6 @@ namespace dbaui
                                         OTableFieldDescRef& _pEntry,
                                         sal_Bool& _bListAction);
 
-
         /** append an undo action for the table field
             @param  _sOldAlias
                 The old table alias.
@@ -329,7 +326,5 @@ namespace dbaui
     };
 }
 #endif // DBAUI_QUERYDESIGN_OSELECTIONBROWSEBOX_HXX
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

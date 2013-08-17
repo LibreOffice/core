@@ -101,6 +101,7 @@ namespace
         }
     }
 }
+
 DBG_NAME(OKeySet)
 
 OKeySet::OKeySet(const connectivity::OSQLTable& _xTable,
@@ -144,6 +145,7 @@ OKeySet::~OKeySet()
 
     DBG_DTOR(OKeySet,NULL);
 }
+
 void OKeySet::initColumns()
 {
     Reference<XDatabaseMetaData> xMeta = m_xConnection->getMetaData();
@@ -224,6 +226,7 @@ void OKeySet::findTableColumnsMatching_throw(   const Any& i_aTable,
             m_aAutoColumns.push_back( keyColumn->first );
     }
 }
+
 SAL_WNODEPRECATED_DECLARATIONS_POP
 
 namespace
@@ -484,7 +487,6 @@ Sequence< sal_Int32 > SAL_CALL OKeySet::deleteRows( const Sequence< Any >& rows 
     static OUString aOr(" OR ");
     static OUString aEqual(" = ?");
 
-
     // use keys and indexes for exact postioning
     // first the keys
     Reference<XNameAccess> xKeyColumns = getKeyColumns();
@@ -576,7 +578,6 @@ void SAL_CALL OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow
     Reference<XIndexAccess> xIndexes;
     if ( xIndexSup.is() )
         xIndexes.set(xIndexSup->getIndexes(),UNO_QUERY);
-
 
     ::std::vector< Reference<XNameAccess> > aAllIndexColumns;
     lcl_fillIndexColumns(xIndexes,aAllIndexColumns);
@@ -909,6 +910,7 @@ void OKeySet::executeInsert( const ORowSetRow& _rInsertRow,const OUString& i_sSQ
         tryRefetch(_rInsertRow,bRefetch);
     }
 }
+
 void OKeySet::tryRefetch(const ORowSetRow& _rInsertRow,bool bRefetch)
 {
     if ( bRefetch )
@@ -1257,6 +1259,7 @@ sal_Bool SAL_CALL OKeySet::absolute( sal_Int32 row ) throw(SQLException, Runtime
 {
     return absolute_checked(row,sal_True);
 }
+
 sal_Bool OKeySet::absolute_checked( sal_Int32 row, sal_Bool /* i_bFetchRow */ )
 {
    SAL_INFO("dbaccess", "OKeySet::absolute" );
@@ -1339,6 +1342,7 @@ sal_Bool OKeySet::previous_checked( sal_Bool /* i_bFetchRow */ )
     }
     return m_aKeyIter != m_aKeyMap.begin();
 }
+
 sal_Bool SAL_CALL OKeySet::previous(  ) throw(SQLException, RuntimeException)
 {
     return previous_checked(sal_True);
@@ -1388,7 +1392,6 @@ bool OKeySet::doTryRefetch_throw()  throw(SQLException, RuntimeException)
     return m_xSet->next();
 }
 
-// -----------------------------------------------------------------------------
 void SAL_CALL OKeySet::refreshRow() throw(SQLException, RuntimeException)
 {
    SAL_INFO("dbaccess", "OKeySet::refreshRow" );
@@ -1499,6 +1502,7 @@ bool OKeySet::fillAllRows()
         return true;
     }
 }
+
 // XRow
 sal_Bool SAL_CALL OKeySet::wasNull(  ) throw(SQLException, RuntimeException)
 {
@@ -1758,4 +1762,5 @@ void OKeySet::impl_convertValue_throw(const ORowSetRow& _rInsertRow,const Select
             break;
     }
 }
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

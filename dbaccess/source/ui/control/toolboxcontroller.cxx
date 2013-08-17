@@ -38,11 +38,11 @@
 #include "UITools.hxx"
 #include <comphelper/processfactory.hxx>
 
-
 extern "C" void SAL_CALL createRegistryInfo_OToolboxController()
 {
     static ::dbaui::OMultiInstanceAutoRegistration< ::dbaui::OToolboxController> aAutoRegistration;
 }
+
 namespace dbaui
 {
     using namespace svt;
@@ -76,7 +76,6 @@ namespace dbaui
         osl_atomic_decrement(&m_refCount);
 
     }
-    // -----------------------------------------------------------------------------
     IMPLEMENT_SERVICE_INFO_IMPLNAME_STATIC(OToolboxController, "com.sun.star.sdb.ApplicationToolboxController")
     IMPLEMENT_SERVICE_INFO_SUPPORTS(OToolboxController)
     IMPLEMENT_SERVICE_INFO_GETSUPPORTED1_STATIC(OToolboxController, "com.sun.star.frame.ToolboxController")
@@ -87,8 +86,6 @@ namespace dbaui
         return static_cast< XServiceInfo* >(new OToolboxController( comphelper::getComponentContext(_rxORB) ));
     }
 
-
-    // -----------------------------------------------------------------------------
     // XInterface
     Any SAL_CALL OToolboxController::queryInterface( const Type& _rType ) throw (RuntimeException)
     {
@@ -97,17 +94,14 @@ namespace dbaui
             aReturn = TToolboxController_BASE::queryInterface(_rType);
         return aReturn;
     }
-    // -----------------------------------------------------------------------------
     void SAL_CALL OToolboxController::acquire() throw ()
     {
         ToolboxController::acquire();
     }
-    // -----------------------------------------------------------------------------
     void SAL_CALL OToolboxController::release() throw ()
     {
         ToolboxController::release();
     }
-    // -----------------------------------------------------------------------------
     void SAL_CALL OToolboxController::initialize( const Sequence< Any >& _rArguments ) throw (Exception, RuntimeException)
     {
         ToolboxController::initialize(_rArguments);
@@ -154,7 +148,6 @@ namespace dbaui
             pToolBox->SetItemBits(m_nToolBoxId,pToolBox->GetItemBits(m_nToolBoxId) | TIB_DROPDOWN);
         }
     }
-    // -----------------------------------------------------------------------------
     void SAL_CALL OToolboxController::statusChanged( const FeatureStateEvent& Event ) throw ( RuntimeException )
     {
         SolarMutexGuard aSolarMutexGuard;
@@ -185,7 +178,6 @@ namespace dbaui
             }
         }
     }
-    // -----------------------------------------------------------------------------
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr<PopupMenu> OToolboxController::getMenu()
     {
@@ -232,7 +224,6 @@ namespace dbaui
         return pMenu;
     }
     SAL_WNODEPRECATED_DECLARATIONS_POP
-    // -----------------------------------------------------------------------------
     Reference< ::com::sun::star::awt::XWindow > SAL_CALL OToolboxController::createPopupWindow() throw (RuntimeException)
     {
         // execute the menu
@@ -271,11 +262,6 @@ namespace dbaui
         }
         return Reference< ::com::sun::star::awt::XWindow >();
     }
-    // -----------------------------------------------------------------------------
-    // -----------------------------------------------------------------------------
-//..........................................................................
 } // dbaui
-//..........................................................................
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

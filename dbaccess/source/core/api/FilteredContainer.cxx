@@ -234,9 +234,7 @@ sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, ::std::vecto
         return aReturn;
     }
 
-    //==========================================================================
-    //= OViewContainer
-    //==========================================================================
+    // OViewContainer
     OFilteredContainer::OFilteredContainer(::cppu::OWeakObject& _rParent,
                                  ::osl::Mutex& _rMutex,
                                  const Reference< XConnection >& _xCon,
@@ -486,4 +484,5 @@ sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, ::std::vecto
     }
 
 } // namespace
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

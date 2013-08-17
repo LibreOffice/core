@@ -47,7 +47,6 @@
 
 namespace dbaui
 {
-    //------------------------------------------------------------------
     // TODO : replace this class if MM provides an WeakSubObject in cppu
     class OSbaWeakSubObject : public ::cppu::OWeakObject
     {
@@ -61,7 +60,6 @@ namespace dbaui
         virtual void SAL_CALL release() throw() { m_rParent.release(); }
     };
 
-    //------------------------------------------------------------------
     // declaration of a listener multiplexer class
     #define BEGIN_DECLARE_LISTENER_MULTIPLEXER(classname, listenerclass)                    \
     class classname                                                                         \
@@ -79,13 +77,11 @@ namespace dbaui
         /* ::com::sun::star::lang::XEventListener */                                        \
         virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw(::com::sun::star::uno::RuntimeException);  \
 
-
     #define DECLARE_MULTIPLEXER_VOID_METHOD(methodname, eventtype)                          \
         virtual void SAL_CALL methodname(const eventtype& e) throw (::com::sun::star::uno::RuntimeException); \
 
     #define DECLARE_MULTIPLEXER_BOOL_METHOD(methodname, eventtype)                          \
         virtual sal_Bool SAL_CALL methodname(const eventtype& e) throw (::com::sun::star::uno::RuntimeException);   \
-
 
     #define END_DECLARE_LISTENER_MULTIPLEXER()                                              \
     /* resolve ambiguity : both OWeakObject and OInterfaceContainerHelper have these memory operators */    \
@@ -93,12 +89,10 @@ namespace dbaui
         void SAL_CALL operator delete( void * p ) throw() { OSbaWeakSubObject::operator delete(p); }    \
     };                                                                                      \
 
-    //------------------------------------------------------------------
     // implementation of a listener multiplexer class
 
     #define IMPLEMENT_LISTENER_MULTIPLEXER_CORE(classname, listenerclass)                   \
                                                                                             \
-    /*................................................................*/                    \
     classname::classname(::cppu::OWeakObject& rSource, ::osl::Mutex& _rMutex)               \
             :OSbaWeakSubObject(rSource)                                                     \
             ,OInterfaceContainerHelper(_rMutex)                                             \
@@ -118,11 +112,9 @@ namespace dbaui
                                                                                             \
         return aReturn;                                                                     \
     }                                                                                       \
-    /*................................................................*/                    \
     void SAL_CALL classname::disposing(const ::com::sun::star::lang::EventObject& ) throw(::com::sun::star::uno::RuntimeException)\
     {                                                                                       \
     }                                                                                       \
-
 
     #define IMPLEMENT_LISTENER_MULTIPLEXER_VOID_METHOD(classname, listenerclass, methodname, eventtype) \
     void SAL_CALL classname::methodname(const eventtype& e) throw (::com::sun::star::uno::RuntimeException) \
@@ -135,7 +127,6 @@ namespace dbaui
     }                                                                                       \
 
     #define IMPLEMENT_LISTENER_MULTIPLEXER_BOOL_METHOD(classname, listenerclass, methodname, eventtype) \
-    /*................................................................*/                    \
     sal_Bool SAL_CALL classname::methodname(const eventtype& e) throw (::com::sun::star::uno::RuntimeException) \
     {                                                                                       \
         eventtype aMulti(e);                                                                \
@@ -147,10 +138,8 @@ namespace dbaui
         return bResult;                                                                     \
     }                                                                                       \
 
-    //------------------------------------------------------------------
     // helper for classes which do event multiplexing
     #define IMPLEMENT_LISTENER_ADMINISTRATION(classname, listenernamespace, listenerdesc, multiplexer, braodcasterclass, broadcaster) \
-    /*................................................................*/                    \
     void SAL_CALL classname::add##listenerdesc(const ::com::sun::star::uno::Reference< ::com::sun::star::listenernamespace::X##listenerdesc >& l) throw(::com::sun::star::uno::RuntimeException)\
     {                                                                                       \
         multiplexer.addInterface(l);                                                            \
@@ -161,7 +150,6 @@ namespace dbaui
                 xBroadcaster->add##listenerdesc(&multiplexer);                              \
         }                                                                                   \
     }                                                                                       \
-    /*................................................................*/                    \
     void SAL_CALL classname::remove##listenerdesc(const ::com::sun::star::uno::Reference< ::com::sun::star::listenernamespace::X##listenerdesc >& l) throw(::com::sun::star::uno::RuntimeException)\
     {                                                                                       \
         if (multiplexer.getLength() == 1)                                                   \
@@ -172,7 +160,6 @@ namespace dbaui
         }                                                                                   \
         multiplexer.removeInterface(l);                                                     \
     }                                                                                       \
-
 
     #define STOP_MULTIPLEXER_LISTENING(listenerdesc, multiplexer, braodcasterclass, broadcaster) \
     if (multiplexer.getLength())                                                            \
@@ -190,9 +177,6 @@ namespace dbaui
             xBroadcaster->add##listenerdesc(&multiplexer);                              \
     }                                                                                   \
 
-
-
-    //------------------------------------------------------------------
     // declaration of property listener multiplexers
     // (with support for specialized and unspecialized property listeners)
 
@@ -231,11 +215,8 @@ namespace dbaui
         void Notify(::cppu::OInterfaceContainerHelper& rListeners, const eventtype& e);     \
     };                                                                                      \
 
-
-    //------------------------------------------------------------------
     // implementation of property listener multiplexers
     #define IMPLEMENT_PROPERTY_MULTIPLEXER(classname, listenerclass, methodname, eventtype, exceptions) \
-    /*................................................................*/                    \
     classname::classname(::cppu::OWeakObject& rSource, ::osl::Mutex& rMutex)                \
             :OSbaWeakSubObject(rSource)                                                     \
             ,m_aListeners(rMutex)                                                           \
@@ -255,7 +236,6 @@ namespace dbaui
                                                                                             \
         return aReturn;                                                                     \
     }                                                                                       \
-    /*................................................................*/                    \
     void SAL_CALL classname::disposing(const ::com::sun::star::lang::EventObject& ) throw(::com::sun::star::uno::RuntimeException)\
     {                                                                                       \
     }                                                                                       \
@@ -309,10 +289,8 @@ namespace dbaui
             static_cast< listenerclass*>(aIt.next())->methodname(aMulti);               \
     }                                                                                       \
 
-    //------------------------------------------------------------------
     // helper for classes which do property event multiplexing
     #define IMPLEMENT_PROPERTY_LISTENER_ADMINISTRATION(classname, listenerdesc, multiplexer, braodcasterclass, broadcaster) \
-    /*................................................................*/                    \
     void SAL_CALL classname::add##listenerdesc(const OUString& rName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::X##listenerdesc >& l ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)\
     {                                                                                       \
         multiplexer.addInterface(rName, l);                                                 \
@@ -323,7 +301,6 @@ namespace dbaui
                 xBroadcaster->add##listenerdesc(OUString(), &multiplexer);                           \
         }                                                                                   \
     }                                                                                       \
-    /*................................................................*/                    \
     void SAL_CALL classname::remove##listenerdesc(const OUString& rName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::X##listenerdesc >& l ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)\
     {                                                                                       \
         if (multiplexer.getOverallLen() == 1)                                               \
@@ -351,11 +328,7 @@ namespace dbaui
             xBroadcaster->add##listenerdesc(OUString(), &multiplexer);                               \
     }                                                                                       \
 
-
-
-    //==================================================================
     // some listener multiplexers
-    //==================================================================
     // ::com::sun::star::frame::XStatusListener
     BEGIN_DECLARE_LISTENER_MULTIPLEXER(SbaXStatusMultiplexer, ::com::sun::star::frame::XStatusListener)
         DECLARE_MULTIPLEXER_VOID_METHOD(statusChanged, ::com::sun::star::frame::FeatureStateEvent)

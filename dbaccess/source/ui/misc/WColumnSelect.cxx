@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "WColumnSelect.hxx"
 #include "dbu_misc.hrc"
 #include <osl/diagnose.h>
@@ -43,19 +42,16 @@ using namespace dbaui;
 
 namespace CopyTableOperation = ::com::sun::star::sdb::application::CopyTableOperation;
 
-// -----------------------------------------------------------------------
 String OWizColumnSelect::GetTitle() const { return String(ModuleRes(STR_WIZ_COLUMN_SELECT_TITEL)); }
-// -----------------------------------------------------------------------------
 OWizardPage::OWizardPage( Window* pParent, const ResId& rResId )
     : TabPage(pParent,rResId)
     ,m_pParent(static_cast<OCopyTableWizard*>(pParent))
     ,m_bFirstTime(sal_True)
 {
 }
-//========================================================================
+
 // OWizColumnSelect
 DBG_NAME(OWizColumnSelect);
-//========================================================================
 OWizColumnSelect::OWizColumnSelect( Window* pParent)
     :OWizardPage( pParent, ModuleRes( TAB_WIZ_COLUMN_SELECT ))
     ,m_flColumns( this, ModuleRes( FL_COLUMN_SELECT ) )
@@ -79,7 +75,7 @@ OWizColumnSelect::OWizColumnSelect( Window* pParent)
     m_lbNewColumnNames.SetDoubleClickHdl(LINK(this,OWizColumnSelect,ListDoubleClickHdl));
     FreeResource();
 }
-// -----------------------------------------------------------------------
+
 OWizColumnSelect::~OWizColumnSelect()
 {
     DBG_DTOR(OWizColumnSelect,NULL);
@@ -94,7 +90,6 @@ OWizColumnSelect::~OWizColumnSelect()
     m_lbNewColumnNames.Clear();
 }
 
-// -----------------------------------------------------------------------
 void OWizColumnSelect::Reset()
 {
     // restore original state
@@ -120,7 +115,7 @@ void OWizColumnSelect::Reset()
 
     m_bFirstTime = sal_False;
 }
-// -----------------------------------------------------------------------
+
 void OWizColumnSelect::ActivatePage( )
 {
     DBG_CHKTHIS(OWizColumnSelect,NULL);
@@ -144,7 +139,7 @@ void OWizColumnSelect::ActivatePage( )
     m_pParent->EnableButton(OCopyTableWizard::WIZARD_NEXT,m_lbNewColumnNames.GetEntryCount() && m_pParent->getOperation() != CopyTableOperation::AppendData);
     m_ibColumns_RH.GrabFocus();
 }
-// -----------------------------------------------------------------------
+
 sal_Bool OWizColumnSelect::LeavePage()
 {
     DBG_CHKTHIS(OWizColumnSelect,NULL);
@@ -160,7 +155,6 @@ sal_Bool OWizColumnSelect::LeavePage()
 
     clearListBox(m_lbNewColumnNames);
 
-
     if  (   m_pParent->GetPressedButton() == OCopyTableWizard::WIZARD_NEXT
         ||  m_pParent->GetPressedButton() == OCopyTableWizard::WIZARD_FINISH
         )
@@ -168,7 +162,7 @@ sal_Bool OWizColumnSelect::LeavePage()
     else
         return sal_True;
 }
-// -----------------------------------------------------------------------
+
 IMPL_LINK( OWizColumnSelect, ButtonClickHdl, Button *, pButton )
 {
     MultiListBox *pLeft = NULL;
@@ -231,7 +225,7 @@ IMPL_LINK( OWizColumnSelect, ButtonClickHdl, Button *, pButton )
 
     return 0;
 }
-// -----------------------------------------------------------------------
+
 IMPL_LINK( OWizColumnSelect, ListDoubleClickHdl, MultiListBox *, pListBox )
 {
     MultiListBox *pLeft,*pRight;
@@ -246,7 +240,6 @@ IMPL_LINK( OWizColumnSelect, ListDoubleClickHdl, MultiListBox *, pListBox )
         pLeft  = &m_lbNewColumnNames;
     }
 
-    //////////////////////////////////////////////////////////////////////
     // If database is able to process PrimaryKeys, set PrimaryKey
     Reference< XDatabaseMetaData >  xMetaData( m_pParent->m_xDestConnection->getMetaData() );
     OUString sExtraChars = xMetaData->getExtraNameCharacters();
@@ -264,14 +257,14 @@ IMPL_LINK( OWizColumnSelect, ListDoubleClickHdl, MultiListBox *, pListBox )
     enableButtons();
     return 0;
 }
-// -----------------------------------------------------------------------------
+
 void OWizColumnSelect::clearListBox(MultiListBox& _rListBox)
 {
     while(_rListBox.GetEntryCount())
         _rListBox.RemoveEntry(0);
     _rListBox.Clear();
 }
-// -----------------------------------------------------------------------------
+
 void OWizColumnSelect::fillColumns(ListBox* pRight,::std::vector< OUString> &_rRightColumns)
 {
     sal_uInt16 nCount = pRight->GetEntryCount();
@@ -279,7 +272,7 @@ void OWizColumnSelect::fillColumns(ListBox* pRight,::std::vector< OUString> &_rR
     for(sal_uInt16 i=0; i < nCount;++i)
         _rRightColumns.push_back(pRight->GetEntry(i));
 }
-// -----------------------------------------------------------------------------
+
 void OWizColumnSelect::createNewColumn( ListBox* _pListbox,
                                         OFieldDescription* _pSrcField,
                                         ::std::vector< OUString>& _rRightColumns,
@@ -305,7 +298,7 @@ void OWizColumnSelect::createNewColumn( ListBox* _pListbox,
     if ( !bNotConvert )
         m_pParent->showColumnTypeNotSupported(sConvertedName);
 }
-// -----------------------------------------------------------------------------
+
 void OWizColumnSelect::moveColumn(  ListBox* _pRight,
                                     ListBox* _pLeft,
                                     ::std::vector< OUString>& _rRightColumns,
@@ -348,7 +341,7 @@ void OWizColumnSelect::moveColumn(  ListBox* _pRight,
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 // Simply returning fields back to their original position is
 // not enough. We need to take into acccount what fields have
 // been removed earlier and adjust accordingly. Based on the
@@ -398,7 +391,7 @@ sal_uInt16 OWizColumnSelect::adjustColumnPosition( ListBox* _pLeft,
 
     return nAdjustedPos;
 }
-// -----------------------------------------------------------------------------
+
 void OWizColumnSelect::enableButtons()
 {
     sal_Bool bEntries = m_lbNewColumnNames.GetEntryCount() != 0;
@@ -408,6 +401,5 @@ void OWizColumnSelect::enableButtons()
     m_pParent->GetOKButton().Enable(bEntries);
     m_pParent->EnableButton(OCopyTableWizard::WIZARD_NEXT,bEntries && m_pParent->getOperation() != CopyTableOperation::AppendData);
 }
-// -----------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

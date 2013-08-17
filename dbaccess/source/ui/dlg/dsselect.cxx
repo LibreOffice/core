@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "dsselect.hxx"
 #include "dsselect.hrc"
 #include "dbu_dlg.hrc"
@@ -41,17 +40,14 @@
 #include <svl/eitem.hxx>
 #include <svl/itemset.hxx>
 
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::comphelper;
-//==================================================================
 ODatasourceSelectDialog::ODatasourceSelectDialog(Window* _pParent, const StringBag& _rDatasources, SfxItemSet* _pOutputSet)
      :ModalDialog(_pParent, ModuleRes(DLG_DATASOURCE_SELECTION))
      ,m_aDescription        (this, ModuleRes(FT_DESCRIPTION))
@@ -75,12 +71,10 @@ ODatasourceSelectDialog::ODatasourceSelectDialog(Window* _pParent, const StringB
     FreeResource();
 }
 
-// -----------------------------------------------------------------------
 ODatasourceSelectDialog::~ODatasourceSelectDialog()
 {
 }
 
-// -----------------------------------------------------------------------
 IMPL_LINK( ODatasourceSelectDialog, ListDblClickHdl, ListBox *, pListBox )
 {
     if (pListBox->GetSelectEntryCount())
@@ -88,7 +82,6 @@ IMPL_LINK( ODatasourceSelectDialog, ListDblClickHdl, ListBox *, pListBox )
     return 0;
 }
 
-// -----------------------------------------------------------------------
 sal_Bool ODatasourceSelectDialog::Close()
 {
 #ifdef HAVE_ODBC_ADMINISTRATION
@@ -99,7 +92,6 @@ sal_Bool ODatasourceSelectDialog::Close()
     return ModalDialog::Close();
 }
 
-// -----------------------------------------------------------------------
 #ifdef HAVE_ODBC_ADMINISTRATION
 IMPL_LINK_NOARG(ODatasourceSelectDialog, ManageClickHdl)
 {
@@ -139,7 +131,6 @@ IMPL_LINK( ODatasourceSelectDialog, ManageProcessFinished, void*, /**/ )
 }
 
 #endif
-// -----------------------------------------------------------------------------
 void ODatasourceSelectDialog::fillListBox(const StringBag& _rDatasources)
 {
     OUString sSelected;
@@ -164,8 +155,6 @@ void ODatasourceSelectDialog::fillListBox(const StringBag& _rDatasources)
     }
 }
 
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

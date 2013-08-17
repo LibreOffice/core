@@ -60,11 +60,8 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::accessibility;
 
-//==================================================================
 // class ORelationTableView
-//==================================================================
 DBG_NAME(ORelationTableView)
-//------------------------------------------------------------------------
 ORelationTableView::ORelationTableView( Window* pParent, ORelationDesignView* pView )
     :OJoinTableView( pParent, pView )
     , ::comphelper::OContainerListener(m_aMutex)
@@ -76,7 +73,6 @@ ORelationTableView::ORelationTableView( Window* pParent, ORelationDesignView* pV
     SetHelpId(HID_CTL_RELATIONTAB);
 }
 
-//------------------------------------------------------------------------
 ORelationTableView::~ORelationTableView()
 {
     DBG_DTOR(ORelationTableView,NULL);
@@ -84,7 +80,6 @@ ORelationTableView::~ORelationTableView()
         m_pContainerListener->dispose();
 }
 
-//------------------------------------------------------------------------
 void ORelationTableView::ReSync()
 {
     DBG_CHKTHIS(ORelationTableView,NULL);
@@ -102,7 +97,6 @@ void ORelationTableView::ReSync()
     // gehen, und alle solchen TabWinDatas oder darauf bezogenen ConnDatas muss ich dann loeschen.
     ::std::vector< OUString> arrInvalidTables;
 
-    //////////////////////////////////////////////////////////////////////
     // create and insert windows
     TTableWindowData* pTabWinDataList = m_pView->getController().getTableWindowData();
     TTableWindowData::reverse_iterator aIter = pTabWinDataList->rbegin();
@@ -159,14 +153,14 @@ void ORelationTableView::ReSync()
     if ( !GetTabWinMap()->empty() )
         GetTabWinMap()->begin()->second->GrabFocus();
 }
-//------------------------------------------------------------------------------
+
 sal_Bool ORelationTableView::IsAddAllowed()
 {
     DBG_CHKTHIS(ORelationTableView,NULL);
 
     return !m_pView->getController().isReadOnly();
 }
-//------------------------------------------------------------------------
+
 void ORelationTableView::AddConnection(const OJoinExchangeData& jxdSource, const OJoinExchangeData& jxdDest)
 {
     DBG_CHKTHIS(ORelationTableView,NULL);
@@ -208,11 +202,9 @@ void ORelationTableView::AddConnection(const OJoinExchangeData& jxdSource, const
     {
         try
         {
-            //////////////////////////////////////////////////////////////////////
             // Daten der Datenbank uebergeben
             if( pTabConnData->Update() )
             {
-                //////////////////////////////////////////////////////////////////////
                 // UI-Object in ConnListe eintragen
                 addConnection( new ORelationTableConnection( this, pTabConnData ) );
             }
@@ -228,8 +220,6 @@ void ORelationTableView::AddConnection(const OJoinExchangeData& jxdSource, const
     }
 }
 
-
-//------------------------------------------------------------------------
 void ORelationTableView::ConnDoubleClicked( OTableConnection* pConnection )
 {
     DBG_CHKTHIS(ORelationTableView,NULL);
@@ -257,7 +247,6 @@ void ORelationTableView::ConnDoubleClicked( OTableConnection* pConnection )
     Invalidate(INVALIDATE_NOCHILDREN);
 }
 
-//------------------------------------------------------------------------------
 void ORelationTableView::AddNewRelation()
 {
     DBG_CHKTHIS(ORelationTableView,NULL);
@@ -274,7 +263,6 @@ void ORelationTableView::AddNewRelation()
     }
 }
 
-//------------------------------------------------------------------------------
 bool ORelationTableView::RemoveConnection( OTableConnection* pConn ,sal_Bool /*_bDelete*/)
 {
     DBG_CHKTHIS(ORelationTableView,NULL);
@@ -295,7 +283,6 @@ bool ORelationTableView::RemoveConnection( OTableConnection* pConn ,sal_Bool /*_
     return false;
 }
 
-//------------------------------------------------------------------------------
 void ORelationTableView::AddTabWin(const OUString& _rComposedName, const OUString& rWinName, sal_Bool /*bNewTable*/)
 {
     DBG_CHKTHIS(ORelationTableView,NULL);
@@ -311,12 +298,10 @@ void ORelationTableView::AddTabWin(const OUString& _rComposedName, const OUStrin
         return;
     }
 
-    //////////////////////////////////////////////////////////////////
     // Neue Datenstruktur in DocShell eintragen
     TTableWindowData::value_type pNewTabWinData(createTableWindowData( _rComposedName, rWinName,rWinName ));
     pNewTabWinData->ShowAll(sal_False);
 
-    //////////////////////////////////////////////////////////////////
     // Neues Fenster in Fensterliste eintragen
     OTableWindow* pNewTabWin = createWindow( pNewTabWinData );
     if(pNewTabWin->Init())
@@ -341,7 +326,7 @@ void ORelationTableView::AddTabWin(const OUString& _rComposedName, const OUStrin
         delete pNewTabWin;
     }
 }
-// -----------------------------------------------------------------------------
+
 void ORelationTableView::RemoveTabWin( OTableWindow* pTabWin )
 {
     OSQLWarningBox aDlg( this, ModuleRes( STR_QUERY_REL_DELETE_WINDOW ), WB_YES_NO | WB_DEF_YES );
@@ -392,22 +377,21 @@ void ORelationTableView::lookForUiActivities()
     }
 }
 
-// -----------------------------------------------------------------------------
 OTableWindow* ORelationTableView::createWindow(const TTableWindowData::value_type& _pData)
 {
     return new ORelationTableWindow(this,_pData);
 }
-// -----------------------------------------------------------------------------
+
 bool ORelationTableView::allowQueries() const
 {
     return false;
 }
-// -----------------------------------------------------------------------------
+
 void ORelationTableView::_elementInserted( const container::ContainerEvent& /*_rEvent*/ )  throw(::com::sun::star::uno::RuntimeException)
 {
 
 }
-// -----------------------------------------------------------------------------
+
 void ORelationTableView::_elementRemoved( const container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException)
 {
     m_bInRemove = true;
@@ -427,7 +411,7 @@ void ORelationTableView::_elementRemoved( const container::ContainerEvent& _rEve
     }
     m_bInRemove = false;
 }
-// -----------------------------------------------------------------------------
+
 void ORelationTableView::_elementReplaced( const container::ContainerEvent& /*_rEvent*/ ) throw(::com::sun::star::uno::RuntimeException)
 {
 }

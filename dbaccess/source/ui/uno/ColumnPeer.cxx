@@ -23,10 +23,8 @@
 #include "dbustrings.hrc"
 #include "FieldDescriptions.hxx"
 
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -44,7 +42,7 @@ OColumnPeer::OColumnPeer(Window* _pParent,const Reference<XComponentContext>& _r
     }
     osl_atomic_decrement( &m_refCount );
 }
-// -----------------------------------------------------------------------------
+
 void OColumnPeer::setEditWidth(sal_Int32 _nWidth)
 {
     SolarMutexGuard aGuard;
@@ -55,7 +53,7 @@ void OColumnPeer::setEditWidth(sal_Int32 _nWidth)
         pFieldControl->setEditWidth(_nWidth);
     }
 }
-// -----------------------------------------------------------------------------
+
 void OColumnPeer::setColumn(const Reference< XPropertySet>& _xColumn)
 {
     SolarMutexGuard aGuard;
@@ -103,7 +101,7 @@ void OColumnPeer::setColumn(const Reference< XPropertySet>& _xColumn)
         pFieldControl->DisplayData(m_pActFieldDescr);
     }
 }
-// -----------------------------------------------------------------------------
+
 void OColumnPeer::setConnection(const Reference< XConnection>& _xCon)
 {
     SolarMutexGuard aGuard;
@@ -111,7 +109,7 @@ void OColumnPeer::setConnection(const Reference< XConnection>& _xCon)
     if ( pFieldControl )
         pFieldControl->setConnection(_xCon);
 }
-//------------------------------------------------------------------------------
+
 void OColumnPeer::setProperty( const OUString& _rPropertyName, const Any& Value) throw( RuntimeException )
 {
     SolarMutexGuard aGuard;
@@ -129,7 +127,7 @@ void OColumnPeer::setProperty( const OUString& _rPropertyName, const Any& Value)
     else
         VCLXWindow::setProperty(_rPropertyName,Value);
 }
-// -----------------------------------------------------------------------------
+
 Any OColumnPeer::getProperty( const OUString& _rPropertyName ) throw( RuntimeException )
 {
     Any aProp;
@@ -146,8 +144,7 @@ Any OColumnPeer::getProperty( const OUString& _rPropertyName ) throw( RuntimeExc
         aProp = VCLXWindow::getProperty(_rPropertyName);
     return aProp;
 }
-//.........................................................................
+
 }   // namespace dbaui
-//.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

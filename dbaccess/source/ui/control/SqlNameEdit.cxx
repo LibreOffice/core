@@ -20,7 +20,6 @@
 #include "SqlNameEdit.hxx"
 namespace dbaui
 {
-    //------------------------------------------------------------------
     sal_Bool isCharOk(sal_Unicode _cChar,sal_Bool _bFirstChar,sal_Bool _bUpperCase,const OUString& _sAllowedChars)
     {
         return  (
@@ -31,7 +30,6 @@ namespace dbaui
                  (!_bUpperCase && (_cChar >= 'a' && _cChar <= 'z'))
                 );
     }
-    //------------------------------------------------------------------
     sal_Bool OSQLNameChecker::checkString(const OUString& _sToCheck,
                                         OUString& _rsCorrected)
     {
@@ -53,7 +51,6 @@ namespace dbaui
         }
         return bCorrected;
     }
-    //------------------------------------------------------------------
     void OSQLNameEdit::Modify()
     {
         OUString sCorrected;
@@ -67,7 +64,6 @@ namespace dbaui
         }
         Edit::Modify();
     }
-    //------------------------------------------------------------------
     void OSQLNameComboBox::Modify()
     {
         OUString sCorrected;
@@ -82,6 +78,5 @@ namespace dbaui
         ComboBox::Modify();
     }
 }
-// -----------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

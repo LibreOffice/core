@@ -148,6 +148,7 @@ IMPL_LINK_INLINE_START( DlgOrderCrit, FieldListSelectHdl, ListBox *, /*pListBox*
     EnableLines();
     return 0;
 }
+
 IMPL_LINK_INLINE_END( DlgOrderCrit, FieldListSelectHdl, ListBox *, pListBox )
 
 void DlgOrderCrit::impl_initializeOrderList_nothrow()

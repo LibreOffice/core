@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "UITools.hxx"
 #include <sfx2/docfilt.hxx>
 #include "callbacks.hxx"
@@ -110,10 +109,8 @@
 
 #include <editeng/justifyitem.hxx>
 
-// .........................................................................
 namespace dbaui
 {
-// .........................................................................
 using namespace ::dbtools;
 using namespace ::comphelper;
 using namespace ::com::sun::star;
@@ -134,7 +131,6 @@ using ::com::sun::star::ucb::IOErrorCode_NO_FILE;
 using ::com::sun::star::ucb::IOErrorCode_NOT_EXISTING;
 using ::com::sun::star::frame::XModel;
 
-// -----------------------------------------------------------------------------
 SQLExceptionInfo createConnection(  const OUString& _rsDataSourceName,
                                      const Reference< ::com::sun::star::container::XNameAccess >& _xDatabaseContext,
                                     const Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
@@ -153,7 +149,7 @@ SQLExceptionInfo createConnection(  const OUString& _rsDataSourceName,
 
     return createConnection(xProp,_rxContext,_rEvtLst,_rOUTConnection);
 }
-// -----------------------------------------------------------------------------
+
 SQLExceptionInfo createConnection(  const Reference< ::com::sun::star::beans::XPropertySet>& _xDataSource,
                                     const Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
                                     Reference< ::com::sun::star::lang::XEventListener>& _rEvtLst,
@@ -178,7 +174,6 @@ SQLExceptionInfo createConnection(  const Reference< ::com::sun::star::beans::XP
     {
         SAL_WARN("dbaccess.ui", "createConnection: error while retrieving data source properties!");
     }
-
 
     try
     {
@@ -212,7 +207,7 @@ SQLExceptionInfo createConnection(  const Reference< ::com::sun::star::beans::XP
 
     return aInfo;
 }
-// -----------------------------------------------------------------------------
+
 Reference< XDataSource > getDataSourceByName( const OUString& _rDataSourceName,
     Window* _pErrorMessageParent, Reference< XComponentContext > _rxContext, ::dbtools::SQLExceptionInfo* _pErrorInfo )
 {
@@ -268,7 +263,7 @@ Reference< XDataSource > getDataSourceByName( const OUString& _rDataSourceName,
 
     return Reference<XDataSource>();
 }
-// -----------------------------------------------------------------------------
+
 Reference< XInterface > getDataSourceOrModel(const Reference< XInterface >& _xObject)
 {
     Reference< XInterface > xRet;
@@ -285,14 +280,12 @@ Reference< XInterface > getDataSourceOrModel(const Reference< XInterface >& _xOb
 
     return xRet;
 }
-// -----------------------------------------------------------------------------
+
 void showError(const SQLExceptionInfo& _rInfo,Window* _pParent,const Reference< XComponentContext >& _rxContext)
 {
     OSL_ENSURE(_pParent,"showError: Parent window must be NOT NULL!");
     ::dbtools::showError(_rInfo,VCLUnoHelper::GetInterface(_pParent), _rxContext);
 }
-
-// -----------------------------------------------------------------------------
 
 TOTypeInfoSP getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
                                sal_Int32 _nType,
@@ -432,7 +425,7 @@ TOTypeInfoSP getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
     OSL_ENSURE(pTypeInfo, "getTypeInfoFromType: no type info found for this type!");
     return pTypeInfo;
 }
-// -----------------------------------------------------------------------------
+
 void fillTypeInfo(  const Reference< ::com::sun::star::sdbc::XConnection>& _rxConnection,
                     const String& _rsTypeNames,
                     OTypeInfoMap& _rTypeInfoMap,
@@ -645,7 +638,7 @@ void fillTypeInfo(  const Reference< ::com::sun::star::sdbc::XConnection>& _rxCo
         ::comphelper::disposeComponent(xRs);
     }
 }
-// -----------------------------------------------------------------------------
+
 void setColumnProperties(const Reference<XPropertySet>& _rxColumn,const OFieldDescription* _pFieldDesc)
 {
     _rxColumn->setPropertyValue(PROPERTY_NAME,makeAny(_pFieldDesc->GetName()));
@@ -663,7 +656,7 @@ void setColumnProperties(const Reference<XPropertySet>& _rxColumn,const OFieldDe
     if ( _pFieldDesc->IsAutoIncrement() && !_pFieldDesc->GetAutoIncrementValue().isEmpty() && _rxColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_AUTOINCREMENTCREATION) )
         _rxColumn->setPropertyValue(PROPERTY_AUTOINCREMENTCREATION,makeAny(_pFieldDesc->GetAutoIncrementValue()));
 }
-// -----------------------------------------------------------------------------
+
 OUString createDefaultName(const Reference< XDatabaseMetaData>& _xMetaData,const Reference<XNameAccess>& _xTables,const OUString& _sName)
 {
     OSL_ENSURE(_xMetaData.is(),"No MetaData!");
@@ -706,7 +699,7 @@ OUString createDefaultName(const Reference< XDatabaseMetaData>& _xMetaData,const
     }
     return sDefaultName;
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool checkDataSourceAvailable(const OUString& _sDataSourceName,const Reference< ::com::sun::star::uno::XComponentContext >& _xContext)
 {
     Reference< XDatabaseContext > xDataBaseContext = DatabaseContext::create(_xContext);
@@ -723,7 +716,7 @@ sal_Bool checkDataSourceAvailable(const OUString& _sDataSourceName,const Referen
     }
     return bRet;
 }
-// -----------------------------------------------------------------------------
+
 sal_Int32 mapTextAllign(const SvxCellHorJustify& _eAlignment)
 {
     sal_Int32 nAlignment = com::sun::star::awt::TextAlign::LEFT;
@@ -738,7 +731,7 @@ sal_Int32 mapTextAllign(const SvxCellHorJustify& _eAlignment)
     }
     return nAlignment;
 }
-// -----------------------------------------------------------------------------
+
 SvxCellHorJustify mapTextJustify(const sal_Int32& _nAlignment)
 {
     SvxCellHorJustify eJustify = SVX_HOR_JUSTIFY_LEFT;
@@ -752,7 +745,7 @@ SvxCellHorJustify mapTextJustify(const sal_Int32& _nAlignment)
     }
     return eJustify;
 }
-// -----------------------------------------------------------------------------
+
 void callColumnFormatDialog(const Reference<XPropertySet>& xAffectedCol,
                             const Reference<XPropertySet>& xField,
                             SvNumberFormatter* _pFormatter,
@@ -789,7 +782,7 @@ void callColumnFormatDialog(const Reference<XPropertySet>& xAffectedCol,
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool callColumnFormatDialog(Window* _pParent,
                                 SvNumberFormatter* _pFormatter,
                                 sal_Int32 _nDataType,
@@ -805,7 +798,6 @@ sal_Bool callColumnFormatDialog(Window* _pParent,
     if (_bHasFormat)
         _nFlags |= TP_ATTR_NUMBER;
 
-    // ------------
     // UNO->ItemSet
     static SfxItemInfo aItemInfos[] =
     {
@@ -866,7 +858,6 @@ sal_Bool callColumnFormatDialog(Window* _pParent,
         SbaSbAttrDlg aDlg(_pParent, pFormatDescriptor, _pFormatter, _nFlags);
         if (RET_OK == aDlg.Execute())
         {
-            // ------------
             // ItemSet->UNO
             // UNO-properties
             const SfxItemSet* pSet = aDlg.GetExampleSet();
@@ -910,7 +901,6 @@ sal_Bool callColumnFormatDialog(Window* _pParent,
     return bRet;
 }
 
-//------------------------------------------------------------------------------
 const SfxFilter* getStandardDatabaseFilter()
 {
     const SfxFilter* pFilter = SfxFilter::GetFilterByName(OUString("StarOffice XML (Base)"));
@@ -918,8 +908,6 @@ const SfxFilter* getStandardDatabaseFilter()
     return pFilter;
 }
 
-
-// -----------------------------------------------------------------------------
 sal_Bool appendToFilter(const Reference<XConnection>& _xConnection,
                         const OUString& _sName,
                         const Reference< XComponentContext >& _rxContext,
@@ -970,7 +958,7 @@ sal_Bool appendToFilter(const Reference<XConnection>& _xConnection,
     }
     return bRet;
 }
-// -----------------------------------------------------------------------------
+
 void notifySystemWindow(Window* _pWindow,Window* _pToRegister, ::comphelper::mem_fun1_t<TaskPaneList,Window*> _rMemFunc)
 {
     OSL_ENSURE(_pWindow,"Window can not be null!");
@@ -980,7 +968,7 @@ void notifySystemWindow(Window* _pWindow,Window* _pToRegister, ::comphelper::mem
         _rMemFunc( pSystemWindow->GetTaskPaneList(), _pToRegister );
     }
 }
-// -----------------------------------------------------------------------------
+
 void adjustToolBoxSize(ToolBox* _pToolBox)
 {
     // adjust the toolbox size, otherwise large bitmaps don't fit into
@@ -999,7 +987,7 @@ void adjustToolBoxSize(ToolBox* _pToolBox)
         _pToolBox->Invalidate();
     }
 }
-// -----------------------------------------------------------------------------
+
 void adjustBrowseBoxColumnWidth( ::svt::EditBrowseBox* _pBox, sal_uInt16 _nColId )
 {
     sal_Int32 nColSize = -1;
@@ -1028,25 +1016,23 @@ void adjustBrowseBoxColumnWidth( ::svt::EditBrowseBox* _pBox, sal_uInt16 _nColId
         _pBox->SetColumnWidth( _nColId, nValue );
     }
 }
-// -----------------------------------------------------------------------------
+
 // check if SQL92 name checking is enabled
 sal_Bool isSQL92CheckEnabled(const Reference<XConnection>& _xConnection)
 {
     return ::dbtools::getBooleanDataSourceSetting( _xConnection, PROPERTY_ENABLESQL92CHECK );
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool isAppendTableAliasEnabled(const Reference<XConnection>& _xConnection)
 {
     return ::dbtools::getBooleanDataSourceSetting( _xConnection, INFO_APPEND_TABLE_ALIAS );
 }
 
-// -----------------------------------------------------------------------------
 sal_Bool generateAsBeforeTableAlias(const Reference<XConnection>& _xConnection)
 {
     return ::dbtools::getBooleanDataSourceSetting( _xConnection, INFO_AS_BEFORE_CORRELATION_NAME );
 }
 
-// -----------------------------------------------------------------------------
 void fillAutoIncrementValue(const Reference<XPropertySet>& _xDatasource,
                             sal_Bool& _rAutoIncrementValueEnabled,
                             OUString& _rsAutoIncrementValue)
@@ -1070,7 +1056,7 @@ void fillAutoIncrementValue(const Reference<XPropertySet>& _xDatasource,
             pValue->Value >>= _rAutoIncrementValueEnabled;
     }
 }
-// -----------------------------------------------------------------------------
+
 void fillAutoIncrementValue(const Reference<XConnection>& _xConnection,
                             sal_Bool& _rAutoIncrementValueEnabled,
                             OUString& _rsAutoIncrementValue)
@@ -1082,7 +1068,7 @@ void fillAutoIncrementValue(const Reference<XConnection>& _xConnection,
         fillAutoIncrementValue(xProp,_rAutoIncrementValueEnabled,_rsAutoIncrementValue);
     }
 }
-// -----------------------------------------------------------------------------
+
 OUString getStrippedDatabaseName(const Reference<XPropertySet>& _xDataSource,OUString& _rsDatabaseName)
 {
     if ( _rsDatabaseName.isEmpty() && _xDataSource.is() )
@@ -1102,7 +1088,7 @@ OUString getStrippedDatabaseName(const Reference<XPropertySet>& _xDataSource,OUS
         sName = aURL.getBase(INetURLObject::LAST_SEGMENT,true,INetURLObject::DECODE_UNAMBIGUOUS);
     return sName;
 }
-// -----------------------------------------------------------------------------
+
 void AppendConfigToken( OUString& _rURL, sal_Bool _bQuestionMark )
 {
     // query part exists?
@@ -1122,7 +1108,6 @@ void AppendConfigToken( OUString& _rURL, sal_Bool _bQuestionMark )
 
 namespace
 {
-    // -----------------------------------------------------------------------
 
     sal_Bool GetHelpAnchor_Impl( const OUString& _rURL, OUString& _rAnchor )
     {
@@ -1154,10 +1139,8 @@ namespace
 
         return bRet;
     }
-// .........................................................................
 } // annonymous
-// .........................................................................
-// -----------------------------------------------------------------------------
+
 ::com::sun::star::util::URL createHelpAgentURL(const OUString& _sModuleName, const OString& sHelpId)
 {
     ::com::sun::star::util::URL aURL;
@@ -1178,7 +1161,7 @@ namespace
     }
     return aURL;
 }
-// -----------------------------------------------------------------------------
+
 void setEvalDateFormatForFormatter(Reference< ::com::sun::star::util::XNumberFormatter >& _rxFormatter)
 {
     OSL_ENSURE( _rxFormatter.is(),"setEvalDateFormatForFormatter: Formatter is NULL!");
@@ -1197,7 +1180,7 @@ void setEvalDateFormatForFormatter(Reference< ::com::sun::star::util::XNumberFor
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 TOTypeInfoSP queryPrimaryKeyType(const OTypeInfoMap& _rTypeInfo)
 {
     TOTypeInfoSP pTypeInfo;
@@ -1229,7 +1212,7 @@ TOTypeInfoSP queryPrimaryKeyType(const OTypeInfoMap& _rTypeInfo)
     OSL_ENSURE(pTypeInfo.get(),"checkColumns: cann't find a type which is useable as a key!");
     return pTypeInfo;
 }
-// -----------------------------------------------------------------------------
+
 TOTypeInfoSP queryTypeInfoByType(sal_Int32 _nDataType,const OTypeInfoMap& _rTypeInfo)
 {
     OTypeInfoMap::const_iterator aIter = _rTypeInfo.find(_nDataType);
@@ -1302,7 +1285,7 @@ TOTypeInfoSP queryTypeInfoByType(sal_Int32 _nDataType,const OTypeInfoMap& _rType
     OSL_ENSURE(pTypeInfo,"Wrong DataType supplied!");
     return pTypeInfo;
 }
-// -----------------------------------------------------------------------------
+
 sal_Int32 askForUserAction(Window* _pParent,sal_uInt16 _nTitle,sal_uInt16 _nText,sal_Bool _bAll,const OUString& _sName)
 {
     SolarMutexGuard aGuard;
@@ -1317,7 +1300,6 @@ sal_Int32 askForUserAction(Window* _pParent,sal_uInt16 _nTitle,sal_uInt16 _nText
     return aAsk.Execute();
 }
 
-// -----------------------------------------------------------------------------
 namespace
 {
     static OUString lcl_createSDBCLevelStatement( const OUString& _rStatement, const Reference< XConnection >& _rxConnection )
@@ -1338,7 +1320,6 @@ namespace
     }
 }
 
-// -----------------------------------------------------------------------------
 Reference< XPropertySet > createView( const OUString& _rName, const Reference< XConnection >& _rxConnection,
                                     const OUString& _rCommand )
 {
@@ -1388,7 +1369,6 @@ Reference< XPropertySet > createView( const OUString& _rName, const Reference< X
     return xView;
 }
 
-// -----------------------------------------------------------------------------
 Reference<XPropertySet> createView( const OUString& _rName, const Reference< XConnection >& _rxConnection
                                    ,const Reference<XPropertySet>& _rxSourceObject)
 {
@@ -1411,7 +1391,6 @@ Reference<XPropertySet> createView( const OUString& _rName, const Reference< XCo
     return createView( _rName, _rxConnection, sCommand );
 }
 
-// -----------------------------------------------------------------------------
 sal_Bool insertHierachyElement( Window* _pParent, const Reference< XComponentContext >& _rxContext,
                            const Reference<XHierarchicalNameContainer>& _xNames,
                            const String& _sParentFolder,
@@ -1454,7 +1433,6 @@ sal_Bool insertHierachyElement( Window* _pParent, const Reference< XComponentCon
                 sTargetName = String(ModuleRes( _bCollection ? STR_NEW_FOLDER : ((_bForm) ? RID_STR_FORM : RID_STR_REPORT)));
             sLabel = String(ModuleRes( _bCollection ? STR_FOLDER_LABEL  : ((_bForm) ? STR_FRM_LABEL : STR_RPT_LABEL)));
             sTargetName = ::dbtools::createUniqueName(xNameAccess,sTargetName);
-
 
             // here we have everything needed to create a new query object ...
             HierarchicalNameCheck aNameChecker( _xNames.get(), sName );
@@ -1515,10 +1493,9 @@ sal_Bool insertHierachyElement( Window* _pParent, const Reference< XComponentCon
 
     return sal_True;
 }
-// -----------------------------------------------------------------------------
+
 Reference< XNumberFormatter > getNumberFormatter(const Reference< XConnection >& _rxConnection, const Reference< ::com::sun::star::uno::XComponentContext >& _rxContext )
 {
-    // ---------------------------------------------------------------
     // create a formatter working with the connections format supplier
     Reference< XNumberFormatter > xFormatter;
 
@@ -1541,9 +1518,6 @@ Reference< XNumberFormatter > getNumberFormatter(const Reference< XConnection >&
     return xFormatter;
 }
 
-
-// .........................................................................
 } // dbaui
-// .........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

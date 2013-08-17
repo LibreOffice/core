@@ -17,18 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "module_dba.hxx"
 
-//........................................................................
 namespace dba
 {
-//........................................................................
 
     IMPLEMENT_MODULE( DbaModule, "dba" )
 
-//........................................................................
 } // namespace sdbtools
-//........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

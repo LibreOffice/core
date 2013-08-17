@@ -25,9 +25,7 @@
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/implbase2.hxx>
 
-//==============================================================================
-//= SbaExternalSourceBrowser
-//==============================================================================
+// SbaExternalSourceBrowser
 
 namespace dbaui
 {

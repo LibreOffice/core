@@ -71,10 +71,8 @@ class Font;
 class SvNumberFormatter;
 class SfxFilter;
 
-// .........................................................................
 namespace dbaui
 {
-// .........................................................................
 
     /** creates a new connection and appends the eventlistener
         @param  _rsDataSourceName       name of the datasource
@@ -414,10 +412,7 @@ namespace dbaui
     // detect installed locale
     void AppendConfigToken( OUString& _rURL, sal_Bool _bQuestionMark );
 
-// .........................................................................
 }
-// .........................................................................
 #endif // DBAUI_TOOLS_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

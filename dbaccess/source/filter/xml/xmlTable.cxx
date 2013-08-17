@@ -103,14 +103,13 @@ OXMLTable::OXMLTable( ODBFilter& _rImport
         GetOwnImport().GetComponentContext()->getServiceManager()->createInstanceWithArgumentsAndContext(m_sServiceName,aArguments, GetOwnImport().GetComponentContext()),
         UNO_QUERY);
 }
-// -----------------------------------------------------------------------------
 
 OXMLTable::~OXMLTable()
 {
 
     DBG_DTOR(OXMLTable,NULL);
 }
-// -----------------------------------------------------------------------------
+
 SvXMLImportContext* OXMLTable::CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
@@ -155,12 +154,12 @@ SvXMLImportContext* OXMLTable::CreateChildContext(
 
     return pContext;
 }
-// -----------------------------------------------------------------------------
+
 ODBFilter& OXMLTable::GetOwnImport()
 {
     return static_cast<ODBFilter&>(GetImport());
 }
-// -----------------------------------------------------------------------------
+
 void OXMLTable::setProperties(uno::Reference< XPropertySet > & _xProp )
 {
     try
@@ -180,7 +179,7 @@ void OXMLTable::setProperties(uno::Reference< XPropertySet > & _xProp )
         OSL_FAIL("OXMLTable::EndElement -> exception catched");
     }
 }
-// -----------------------------------------------------------------------------
+
 void OXMLTable::EndElement()
 {
     uno::Reference<XNameContainer> xNameContainer(m_xParentContainer,UNO_QUERY);
@@ -215,7 +214,7 @@ void OXMLTable::EndElement()
     }
 
 }
-// -----------------------------------------------------------------------------
+
 void OXMLTable::fillAttributes(sal_uInt16 /*nPrfx*/
                                 ,const OUString& /*_sLocalName*/
                                 ,const uno::Reference< XAttributeList > & _xAttrList
@@ -254,8 +253,7 @@ void OXMLTable::fillAttributes(sal_uInt16 /*nPrfx*/
         }
     }
 }
-//----------------------------------------------------------------------------
+
 } // namespace dbaxml
-// -----------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

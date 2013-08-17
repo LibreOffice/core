@@ -36,14 +36,10 @@ namespace com { namespace sun { namespace star {
     }
 }}}
 
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
     class ODbDataSourceAdministrationHelper;
-    //=========================================================================
-    //= OUserAdminDlg
-    //=========================================================================
+    // OUserAdminDlg
 
     /** implements the user adin dialog
     */
@@ -80,9 +76,7 @@ namespace dbaui
         virtual void setTitle(const OUString& _sTitle);
         virtual void enableConfirmSettings( bool _bEnable );
     };
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
 
 #endif // DBAUI_USERADMINDLG_HXX
 

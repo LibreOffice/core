@@ -19,7 +19,6 @@
 #ifndef DBAUI_TYPEINFO_HXX
 #define DBAUI_TYPEINFO_HXX
 
-
 #include <rtl/ustring.hxx>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/ColumnSearch.hpp>
@@ -27,11 +26,8 @@
 #include <boost/shared_ptr.hpp>
 #include <map>
 
-
-
 namespace dbaui
 {
-//========================================================================
 // Based on these ids the language dependent OUString are fetched from the resource
 const sal_uInt16 TYPE_UNKNOWN   = 0;
 const sal_uInt16 TYPE_TEXT      = 1;
@@ -84,7 +80,6 @@ const sal_uInt16 TYPE_BIT       = 31;
 
         sal_Int16       nSearchType;    // if it is possible to search for type
 
-
         sal_Bool        bCurrency       : 1,    // currency
                         bAutoIncrement  : 1,    // if automatic incrementing field
                         bNullable       : 1,    // if field can be NULL
@@ -132,6 +127,5 @@ const sal_uInt16 TYPE_BIT       = 31;
 }
 
 #endif // DBAUI_TYPEINFO_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

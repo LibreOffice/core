@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "query.hxx"
 #include "dbastrings.hrc"
 #include <connectivity/warningscontainer.hxx>
@@ -66,9 +65,7 @@ using namespace ::utl;
 namespace dbaccess
 {
 
-//==========================================================================
-//= OQuery
-//==========================================================================
+// OQuery
 DBG_NAME(OQuery)
 
 OQuery::OQuery( const Reference< XPropertySet >& _rxCommandDefinition
@@ -368,4 +365,5 @@ OUString OQuery::determineContentType() const
 }
 
 }   // namespace dbaccess
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "dbu_reghelper.hxx"
 #include <com/sun/star/document/XEventListener.hpp>
 #include <com/sun/star/container/XSet.hpp>
@@ -35,10 +34,8 @@ extern "C" void SAL_CALL createRegistryInfo_ODBTypeWizDialogSetup()
     static OMultiInstanceAutoRegistration< ODBTypeWizDialogSetup > aAutoRegistration;
 }
 
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
@@ -46,8 +43,6 @@ namespace dbaui
     using namespace ::com::sun::star::sdb;
     using namespace ::com::sun::star::sdbc;
 
-//=========================================================================
-//-------------------------------------------------------------------------
 ODBTypeWizDialogSetup::ODBTypeWizDialogSetup(const Reference< XComponentContext >& _rxORB)
     :ODatabaseAdministrationDialog(_rxORB)
     ,m_bOpenDatabase(sal_True)
@@ -59,39 +54,34 @@ ODBTypeWizDialogSetup::ODBTypeWizDialogSetup(const Reference< XComponentContext 
     registerProperty(OUString("StartTableWizard"), 4, PropertyAttribute::TRANSIENT,
         &m_bStartTableWizard, getBooleanCppuType());
 }
-//-------------------------------------------------------------------------
+
 Sequence<sal_Int8> SAL_CALL ODBTypeWizDialogSetup::getImplementationId(  ) throw(RuntimeException)
 {
     static ::cppu::OImplementationId aId;
     return aId.getImplementationId();
 }
 
-//-------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL ODBTypeWizDialogSetup::Create(const Reference< XMultiServiceFactory >& _rxFactory)
 {
     Reference < XInterface > xDBWizard = *(new ODBTypeWizDialogSetup( comphelper::getComponentContext(_rxFactory) ));
     return xDBWizard;
 }
 
-//-------------------------------------------------------------------------
 OUString SAL_CALL ODBTypeWizDialogSetup::getImplementationName() throw(RuntimeException)
 {
     return getImplementationName_Static();
 }
 
-//-------------------------------------------------------------------------
 OUString ODBTypeWizDialogSetup::getImplementationName_Static() throw(RuntimeException)
 {
     return OUString("org.openoffice.comp.dbu.ODBTypeWizDialogSetup");
 }
 
-//-------------------------------------------------------------------------
 ::comphelper::StringSequence SAL_CALL ODBTypeWizDialogSetup::getSupportedServiceNames() throw(RuntimeException)
 {
     return getSupportedServiceNames_Static();
 }
 
-//-------------------------------------------------------------------------
 ::comphelper::StringSequence ODBTypeWizDialogSetup::getSupportedServiceNames_Static() throw(RuntimeException)
 {
     ::comphelper::StringSequence aSupported(1);
@@ -99,31 +89,28 @@ OUString ODBTypeWizDialogSetup::getImplementationName_Static() throw(RuntimeExce
     return aSupported;
 }
 
-//-------------------------------------------------------------------------
 Reference<XPropertySetInfo>  SAL_CALL ODBTypeWizDialogSetup::getPropertySetInfo() throw(RuntimeException)
 {
     return createPropertySetInfo( getInfoHelper() );
 }
 
-//-------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper& ODBTypeWizDialogSetup::getInfoHelper()
 {
     return *const_cast<ODBTypeWizDialogSetup*>(this)->getArrayHelper();
 }
 
-//------------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper* ODBTypeWizDialogSetup::createArrayHelper( ) const
 {
     Sequence< Property > aProps;
     describeProperties(aProps);
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
-//------------------------------------------------------------------------------
+
 Dialog* ODBTypeWizDialogSetup::createDialog(Window* _pParent)
 {
     return new ODbTypeWizDialogSetup(_pParent, m_pDatasourceItems, m_aContext, m_aInitialSelection);
 }
-// -----------------------------------------------------------------------------
+
 void ODBTypeWizDialogSetup::executedDialog(sal_Int16 _nExecutionResult)
 {
     if ( _nExecutionResult == RET_OK )
@@ -134,8 +121,6 @@ void ODBTypeWizDialogSetup::executedDialog(sal_Int16 _nExecutionResult)
     }
 }
 
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

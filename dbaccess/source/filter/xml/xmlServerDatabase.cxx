@@ -135,17 +135,13 @@ OXMLServerDatabase::OXMLServerDatabase( ODBFilter& rImport,
         }
     }
 }
-// -----------------------------------------------------------------------------
 
 OXMLServerDatabase::~OXMLServerDatabase()
 {
 
     DBG_DTOR(OXMLServerDatabase,NULL);
 }
-// -----------------------------------------------------------------------------
 
-//----------------------------------------------------------------------------
 } // namespace dbaxml
-// -----------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "defaultobjectnamecheck.hxx"
 
 #include "dbu_misc.hrc"
@@ -42,10 +41,8 @@
 #include <vector>
 #include <boost/shared_ptr.hpp>
 
-//........................................................................
 namespace dbaui
 {
-//........................................................................
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::container::XNameAccess;
@@ -67,9 +64,7 @@ namespace dbaui
 
     namespace CommandType = ::com::sun::star::sdb::CommandType;
 
-    //====================================================================
-    //= helper
-    //====================================================================
+    // helper
     namespace
     {
         void lcl_fillNameExistsError( const OUString& _rObjectName, SQLExceptionInfo& _out_rErrorToDisplay )
@@ -82,19 +77,14 @@ namespace dbaui
 
     }
 
-    //====================================================================
-    //= HierarchicalNameCheck_Impl
-    //====================================================================
+    // HierarchicalNameCheck_Impl
     struct HierarchicalNameCheck_Impl
     {
         Reference< XHierarchicalNameAccess >    xHierarchicalNames;
         OUString                         sRelativeRoot;
     };
 
-    //====================================================================
-    //= HierarchicalNameCheck
-    //====================================================================
-    //--------------------------------------------------------------------
+    // HierarchicalNameCheck
     HierarchicalNameCheck::HierarchicalNameCheck( const Reference< XHierarchicalNameAccess >& _rxNames, const OUString& _rRelativeRoot )
         :m_pImpl( new HierarchicalNameCheck_Impl )
     {
@@ -105,12 +95,10 @@ namespace dbaui
             throw IllegalArgumentException();
     }
 
-    //--------------------------------------------------------------------
     HierarchicalNameCheck::~HierarchicalNameCheck()
     {
     }
 
-    //--------------------------------------------------------------------
     bool HierarchicalNameCheck::isNameValid( const OUString& _rObjectName, SQLExceptionInfo& _out_rErrorToDisplay ) const
     {
         try
@@ -136,19 +124,14 @@ namespace dbaui
         return false;
     }
 
-    //====================================================================
-    //= DynamicTableOrQueryNameCheck_Impl
-    //====================================================================
+    // DynamicTableOrQueryNameCheck_Impl
     struct DynamicTableOrQueryNameCheck_Impl
     {
         sal_Int32                   nCommandType;
         Reference< XObjectNames >   xObjectNames;
     };
 
-    //====================================================================
-    //= DynamicTableOrQueryNameCheck
-    //====================================================================
-    //--------------------------------------------------------------------
+    // DynamicTableOrQueryNameCheck
     DynamicTableOrQueryNameCheck::DynamicTableOrQueryNameCheck( const Reference< XConnection >& _rxSdbLevelConnection, sal_Int32 _nCommandType )
         :m_pImpl( new DynamicTableOrQueryNameCheck_Impl )
     {
@@ -163,12 +146,10 @@ namespace dbaui
         m_pImpl->nCommandType = _nCommandType;
     }
 
-    //--------------------------------------------------------------------
     DynamicTableOrQueryNameCheck::~DynamicTableOrQueryNameCheck()
     {
     }
 
-    //--------------------------------------------------------------------
     bool DynamicTableOrQueryNameCheck::isNameValid( const OUString& _rObjectName, ::dbtools::SQLExceptionInfo& _out_rErrorToDisplay ) const
     {
         try
@@ -183,8 +164,6 @@ namespace dbaui
         return false;
     }
 
-//........................................................................
 } // namespace dbaui
-//........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

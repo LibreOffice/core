@@ -20,19 +20,14 @@
 #include "ConnectionLineData.hxx"
 #include <tools/debug.hxx>
 
-
 using namespace dbaui;
 DBG_NAME(OConnectionLineData)
-//==================================================================
 //class OConnectionLineData
-//==================================================================
-//------------------------------------------------------------------------
 OConnectionLineData::OConnectionLineData()
 {
     DBG_CTOR(OConnectionLineData,NULL);
 }
 
-//------------------------------------------------------------------------
 OConnectionLineData::OConnectionLineData( const OUString& rSourceFieldName, const OUString& rDestFieldName )
     :m_aSourceFieldName( rSourceFieldName )
     ,m_aDestFieldName( rDestFieldName )
@@ -40,7 +35,6 @@ OConnectionLineData::OConnectionLineData( const OUString& rSourceFieldName, cons
     DBG_CTOR(OConnectionLineData,NULL);
 }
 
-//------------------------------------------------------------------------
 OConnectionLineData::OConnectionLineData( const OConnectionLineData& rConnLineData )
     : ::salhelper::SimpleReferenceObject()
 {
@@ -48,20 +42,17 @@ OConnectionLineData::OConnectionLineData( const OConnectionLineData& rConnLineDa
     *this = rConnLineData;
 }
 
-//------------------------------------------------------------------------
 OConnectionLineData::~OConnectionLineData()
 {
     DBG_DTOR(OConnectionLineData,NULL);
 }
 
-//------------------------------------------------------------------------
 void OConnectionLineData::CopyFrom(const OConnectionLineData& rSource)
 {
     *this = rSource;
     // Here I rely on the (non-virtual) operator=, which only copies my members
 }
 
-//------------------------------------------------------------------------
 OConnectionLineData& OConnectionLineData::operator=( const OConnectionLineData& rConnLineData )
 {
     if (&rConnLineData == this)
@@ -73,21 +64,20 @@ OConnectionLineData& OConnectionLineData::operator=( const OConnectionLineData& 
     return *this;
 }
 
-//------------------------------------------------------------------------
 bool OConnectionLineData::Reset()
 {
     m_aDestFieldName = m_aSourceFieldName = OUString();
     return true;
 }
-// -----------------------------------------------------------------------------
+
 namespace dbaui
 {
-//-------------------------------------------------------------------------
 bool operator==(const OConnectionLineData& lhs, const OConnectionLineData& rhs)
 {
     return (lhs.m_aSourceFieldName == rhs.m_aSourceFieldName)
         && (lhs.m_aDestFieldName == rhs.m_aDestFieldName);
 }
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

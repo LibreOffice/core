@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "dbexchange.hxx"
 #include <sot/formats.hxx>
 #include <sot/storage.hxx>
@@ -30,7 +29,6 @@
 #include <svx/dataaccessdescriptor.hxx>
 #include "UITools.hxx"
 #include <comphelper/processfactory.hxx>
-
 
 namespace dbaui
 {
@@ -59,7 +57,6 @@ namespace dbaui
         }
     }
 
-    // -----------------------------------------------------------------------------
     ODataClipboard::ODataClipboard(
                     const OUString&  _rDatasource,
                     const sal_Int32         _nCommandType,
@@ -80,7 +77,6 @@ namespace dbaui
         osl_atomic_decrement( &m_refCount );
     }
 
-    // -----------------------------------------------------------------------------
     ODataClipboard::ODataClipboard(
                     const OUString&  _rDatasource,
                     const sal_Int32         _nCommandType,
@@ -95,7 +91,6 @@ namespace dbaui
         m_pRtf.set( new ORTFImportExport( getDescriptor(),_rxORB, _rxFormatter ) );
     }
 
-    // -----------------------------------------------------------------------------
     ODataClipboard::ODataClipboard( const Reference< XPropertySet >& i_rAliveForm,
                                     const Sequence< Any >& i_rSelectedRows,
                                     const sal_Bool i_bBookmarkSelection,
@@ -139,7 +134,6 @@ namespace dbaui
         osl_atomic_decrement( &m_refCount );
     }
 
-    // -----------------------------------------------------------------------------
     sal_Bool ODataClipboard::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId, const ::com::sun::star::datatransfer::DataFlavor& /*rFlavor*/ )
     {
         if (nUserObjectId == SOT_FORMAT_RTF || nUserObjectId == SOT_FORMATSTR_ID_HTML )
@@ -154,7 +148,6 @@ namespace dbaui
         return sal_False;
     }
 
-    // -----------------------------------------------------------------------------
     void ODataClipboard::AddSupportedFormats()
     {
         if ( m_pRtf.is() )
@@ -166,7 +159,6 @@ namespace dbaui
         ODataAccessObjectTransferable::AddSupportedFormats();
     }
 
-    // -----------------------------------------------------------------------------
     sal_Bool ODataClipboard::GetData( const DataFlavor& rFlavor )
     {
         const sal_uLong nFormat = SotExchange::GetFormat(rFlavor);
@@ -186,7 +178,6 @@ namespace dbaui
         return ODataAccessObjectTransferable::GetData( rFlavor );
     }
 
-    // -----------------------------------------------------------------------------
     void ODataClipboard::ObjectReleased()
     {
         if ( m_pHtml.is() )
@@ -216,7 +207,6 @@ namespace dbaui
         ODataAccessObjectTransferable::ObjectReleased( );
     }
 
-    // -----------------------------------------------------------------------------
     void SAL_CALL ODataClipboard::disposing( const ::com::sun::star::lang::EventObject& i_rSource ) throw (::com::sun::star::uno::RuntimeException)
     {
         ODataAccessDescriptor& rDescriptor( getDescriptor() );
@@ -249,6 +239,5 @@ namespace dbaui
         ClearFormats();
     }
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

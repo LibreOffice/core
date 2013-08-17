@@ -55,9 +55,7 @@ namespace dbaxml
         static UniReference < XMLPropertySetMapper > GetCellStylesPropertySetMapper();
         static UniReference < XMLPropertySetMapper > GetRowStylesPropertySetMapper();
     };
-// -----------------------------------------------------------------------------
 } // dbaxml
-// -----------------------------------------------------------------------------
 #endif // DBA_XMLHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

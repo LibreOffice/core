@@ -22,10 +22,8 @@
 
 #include <svtools/genericunodialog.hxx>
 #include "moduledbu.hxx"
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
 
 typedef ::svt::OGenericUnoDialog OSQLMessageDialogBase;
 class OSQLMessageDialog
@@ -74,9 +72,7 @@ protected:
     virtual Dialog* createDialog(Window* _pParent);
 };
 
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
 
 #endif // _DBAUI_UNOSQLMESSAGE_HXX_
 

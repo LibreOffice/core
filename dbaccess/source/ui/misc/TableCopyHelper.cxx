@@ -55,10 +55,8 @@
 #include <cppuhelper/exc_hlp.hxx>
 
 #include "dbexchange.hxx"
-//........................................................................
 namespace dbaui
 {
-//........................................................................
 using namespace ::dbtools;
 using namespace ::svx;
 using namespace ::com::sun::star::uno;
@@ -73,13 +71,11 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::ucb;
 
-// -----------------------------------------------------------------------------
 OTableCopyHelper::OTableCopyHelper(OGenericUnoController* _pControler)
     :m_pController(_pControler)
 {
 }
 
-// -----------------------------------------------------------------------------
 void OTableCopyHelper::insertTable( const OUString& i_rSourceDataSource, const Reference<XConnection>& i_rSourceConnection,
         const OUString& i_rCommand, const sal_Int32 i_nCommandType,
         const Reference< XResultSet >& i_rSourceRows, const Sequence< Any >& i_rSelection, const sal_Bool i_bBookmarkSelection,
@@ -138,7 +134,6 @@ void OTableCopyHelper::insertTable( const OUString& i_rSourceDataSource, const R
     }
 }
 
-// -----------------------------------------------------------------------------
 void OTableCopyHelper::pasteTable( const ::svx::ODataAccessDescriptor& _rPasteData, const OUString& i_rDestDataSourceName,
                                   const SharedConnection& i_rDestConnection )
 {
@@ -166,7 +161,6 @@ void OTableCopyHelper::pasteTable( const ::svx::ODataAccessDescriptor& _rPasteDa
         OSL_ENSURE( _rPasteData.has( daBookmarkSelection ), "OTableCopyHelper::pasteTable: you should specify BookmarkSelection, too, to be on the safe side!" );
     }
 
-
     sal_Bool bBookmarkSelection( sal_True );
     if ( _rPasteData.has( daBookmarkSelection ) )
     {
@@ -183,7 +177,6 @@ void OTableCopyHelper::pasteTable( const ::svx::ODataAccessDescriptor& _rPasteDa
                  i_rDestDataSourceName, i_rDestConnection );
 }
 
-// -----------------------------------------------------------------------------
 void OTableCopyHelper::pasteTable( SotFormatStringId _nFormatId
                                   ,const TransferableDataHelper& _rTransData
                                   ,const OUString& i_rDestDataSource
@@ -226,7 +219,6 @@ void OTableCopyHelper::pasteTable( SotFormatStringId _nFormatId
         m_pController->showError(SQLException(String(ModuleRes(STR_NO_TABLE_FORMAT_INSIDE)),*m_pController,OUString("S1000"),0,Any()));
 }
 
-// -----------------------------------------------------------------------------
 void OTableCopyHelper::pasteTable( const TransferableDataHelper& _rTransData
                                   ,const OUString& i_rDestDataSource
                                   ,const SharedConnection& _xConnection)
@@ -239,7 +231,6 @@ void OTableCopyHelper::pasteTable( const TransferableDataHelper& _rTransData
         pasteTable( SOT_FORMAT_RTF,_rTransData,i_rDestDataSource,_xConnection);
 }
 
-// -----------------------------------------------------------------------------
 sal_Bool OTableCopyHelper::copyTagTable(OTableCopyHelper::DropDescriptor& _rDesc, sal_Bool _bCheck,const SharedConnection& _xConnection)
 {
     Reference<XEventListener> xEvt;
@@ -260,7 +251,7 @@ sal_Bool OTableCopyHelper::copyTagTable(OTableCopyHelper::DropDescriptor& _rDesc
     pImport->setStream(pStream);
     return pImport->Read();
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool OTableCopyHelper::isTableFormat(const TransferableDataHelper& _rClipboard)  const
 {
     sal_Bool bTableFormat   =   _rClipboard.HasFormat(SOT_FORMATSTR_ID_DBACCESS_TABLE)
@@ -270,7 +261,7 @@ sal_Bool OTableCopyHelper::isTableFormat(const TransferableDataHelper& _rClipboa
 
     return bTableFormat;
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool OTableCopyHelper::copyTagTable(const TransferableDataHelper& _aDroppedData
                                         ,DropDescriptor& _rAsyncDrop
                                         ,const SharedConnection& _xConnection)
@@ -305,7 +296,7 @@ sal_Bool OTableCopyHelper::copyTagTable(const TransferableDataHelper& _aDroppedD
     }
     return bRet;
 }
-// -----------------------------------------------------------------------------
+
 void OTableCopyHelper::asyncCopyTagTable(  DropDescriptor& _rDesc
                                 ,const OUString& i_rDestDataSource
                                 ,const SharedConnection& _xConnection)
@@ -324,9 +315,7 @@ void OTableCopyHelper::asyncCopyTagTable(  DropDescriptor& _rDesc
     else
         m_pController->showError(SQLException(String(ModuleRes(STR_NO_TABLE_FORMAT_INSIDE)),*m_pController,OUString("S1000"),0,Any()));
 }
-// -----------------------------------------------------------------------------
-//........................................................................
+
 }   // namespace dbaui
-//........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

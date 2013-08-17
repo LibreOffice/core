@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "AppController.hxx"
 #include "AppDetailView.hxx"
 #include "AppView.hxx"
@@ -67,7 +66,6 @@
 #include <vcl/waitobj.hxx>
 #include <osl/mutex.hxx>
 
-//........................................................................
 namespace dbaui
 {
 using namespace ::dbtools;
@@ -92,9 +90,6 @@ using ::com::sun::star::ui::XContextMenuInterceptor;
 
 namespace DatabaseObject = ::com::sun::star::sdb::application::DatabaseObject;
 namespace ErrorCondition = ::com::sun::star::sdb::ErrorCondition;
-
-//........................................................................
-// -----------------------------------------------------------------------------
 
 class CloseChecker : public ::cppu::WeakImplHelper1< com::sun::star::lang::XEventListener >
 {
@@ -122,7 +117,7 @@ public:
     }
 
 };
-// -----------------------------------------------------------------------------
+
 void OApplicationController::convertToView(const OUString& _sName)
 {
     try
@@ -165,7 +160,7 @@ void OApplicationController::convertToView(const OUString& _sName)
         DBG_UNHANDLED_EXCEPTION();
     }
 }
-// -----------------------------------------------------------------------------
+
 void OApplicationController::pasteFormat(sal_uInt32 _nFormatId)
 {
     if ( _nFormatId )
@@ -188,13 +183,12 @@ void OApplicationController::pasteFormat(sal_uInt32 _nFormatId)
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 void OApplicationController::openDataSourceAdminDialog()
 {
     openDialog( OUString( "com.sun.star.sdb.DatasourceAdministrationDialog" ) );
 }
 
-// -----------------------------------------------------------------------------
 void OApplicationController::openDialog( const OUString& _sServiceName )
 {
     try
@@ -254,13 +248,12 @@ void OApplicationController::openDialog( const OUString& _sServiceName )
         DBG_UNHANDLED_EXCEPTION();
     }
 }
-// -----------------------------------------------------------------------------
+
 void OApplicationController::openTableFilterDialog()
 {
     openDialog( OUString( "com.sun.star.sdb.TableFilterDialog" ) );
 }
 
-// -----------------------------------------------------------------------------
 void OApplicationController::refreshTables()
 {
     if ( getContainer() && getContainer()->getDetailView() )
@@ -282,12 +275,12 @@ void OApplicationController::refreshTables()
         getContainer()->getDetailView()->createTablesPage( ensureConnection() );
     }
 }
-// -----------------------------------------------------------------------------
+
 void OApplicationController::openDirectSQLDialog()
 {
     openDialog( SERVICE_SDB_DIRECTSQLDIALOG );
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OApplicationController::propertyChange( const PropertyChangeEvent& evt ) throw (RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
@@ -336,7 +329,6 @@ void SAL_CALL OApplicationController::propertyChange( const PropertyChangeEvent&
     modified(aEvt);
 }
 
-// -----------------------------------------------------------------------------
 Reference< XDataSource > SAL_CALL OApplicationController::getDataSource() throw (RuntimeException)
 {
     ::osl::MutexGuard aGuard( getMutex() );
@@ -344,7 +336,6 @@ Reference< XDataSource > SAL_CALL OApplicationController::getDataSource() throw 
     return xDataSource;
 }
 
-// -----------------------------------------------------------------------------
 Reference< XWindow > SAL_CALL OApplicationController::getApplicationMainWindow() throw (RuntimeException)
 {
     ::osl::MutexGuard aGuard( getMutex() );
@@ -353,28 +344,24 @@ Reference< XWindow > SAL_CALL OApplicationController::getApplicationMainWindow()
     return xWindow;
 }
 
-// -----------------------------------------------------------------------------
 Sequence< Reference< XComponent > > SAL_CALL OApplicationController::getSubComponents() throw (RuntimeException)
 {
     ::osl::MutexGuard aGuard( getMutex() );
     return m_pSubComponentManager->getSubComponents();
 }
 
-// -----------------------------------------------------------------------------
 Reference< XConnection > SAL_CALL OApplicationController::getActiveConnection() throw (RuntimeException)
 {
     ::osl::MutexGuard aGuard( getMutex() );
     return m_xDataSourceConnection.getTyped();
 }
 
-// -----------------------------------------------------------------------------
 ::sal_Bool SAL_CALL OApplicationController::isConnected(  ) throw (RuntimeException)
 {
     ::osl::MutexGuard aGuard( getMutex() );
     return m_xDataSourceConnection.is();
 }
 
-// -----------------------------------------------------------------------------
 void SAL_CALL OApplicationController::connect(  ) throw (SQLException, RuntimeException)
 {
     SQLExceptionInfo aError;
@@ -390,7 +377,6 @@ void SAL_CALL OApplicationController::connect(  ) throw (SQLException, RuntimeEx
     }
 }
 
-// -----------------------------------------------------------------------------
 beans::Pair< ::sal_Int32, OUString > SAL_CALL OApplicationController::identifySubComponent( const Reference< XComponent >& i_rSubComponent ) throw (IllegalArgumentException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( getMutex() );
@@ -409,7 +395,6 @@ beans::Pair< ::sal_Int32, OUString > SAL_CALL OApplicationController::identifySu
     return beans::Pair< ::sal_Int32, OUString >( nType, sName );
 }
 
-// -----------------------------------------------------------------------------
 ::sal_Bool SAL_CALL OApplicationController::closeSubComponents(  ) throw (RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
@@ -417,8 +402,6 @@ beans::Pair< ::sal_Int32, OUString > SAL_CALL OApplicationController::identifySu
     return m_pSubComponentManager->closeSubComponents();
 }
 
-
-// -----------------------------------------------------------------------------
 namespace
 {
     ElementType lcl_objectType2ElementType( const sal_Int32 _nObjectType )
@@ -438,7 +421,6 @@ namespace
     }
 }
 
-// -----------------------------------------------------------------------------
 void OApplicationController::impl_validateObjectTypeAndName_throw( const sal_Int32 _nObjectType, const ::boost::optional< OUString >& i_rObjectName )
 {
     // ensure we're connected
@@ -486,14 +468,12 @@ void OApplicationController::impl_validateObjectTypeAndName_throw( const sal_Int
         throw NoSuchElementException( *i_rObjectName, *this );
 }
 
-// -----------------------------------------------------------------------------
 Reference< XComponent > SAL_CALL OApplicationController::loadComponent( ::sal_Int32 _ObjectType,
     const OUString& _ObjectName, ::sal_Bool _ForEditing ) throw (IllegalArgumentException, NoSuchElementException, SQLException, RuntimeException)
 {
     return loadComponentWithArguments( _ObjectType, _ObjectName, _ForEditing, Sequence< PropertyValue >() );
 }
 
-// -----------------------------------------------------------------------------
 Reference< XComponent > SAL_CALL OApplicationController::loadComponentWithArguments( ::sal_Int32 _ObjectType,
     const OUString& _ObjectName, ::sal_Bool _ForEditing, const Sequence< PropertyValue >& _Arguments ) throw (IllegalArgumentException, NoSuchElementException, SQLException, RuntimeException)
 {
@@ -513,13 +493,11 @@ Reference< XComponent > SAL_CALL OApplicationController::loadComponentWithArgume
     return xComponent;
 }
 
-// -----------------------------------------------------------------------------
 Reference< XComponent > SAL_CALL OApplicationController::createComponent( ::sal_Int32 i_nObjectType, Reference< XComponent >& o_DocumentDefinition  ) throw (IllegalArgumentException, SQLException, RuntimeException)
 {
     return createComponentWithArguments( i_nObjectType, Sequence< PropertyValue >(), o_DocumentDefinition );
 }
 
-// -----------------------------------------------------------------------------
 Reference< XComponent > SAL_CALL OApplicationController::createComponentWithArguments( ::sal_Int32 i_nObjectType, const Sequence< PropertyValue >& i_rArguments, Reference< XComponent >& o_DocumentDefinition ) throw (IllegalArgumentException, SQLException, RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
@@ -536,20 +514,17 @@ Reference< XComponent > SAL_CALL OApplicationController::createComponentWithArgu
     return xComponent;
 }
 
-// -----------------------------------------------------------------------------
 void SAL_CALL OApplicationController::registerContextMenuInterceptor( const Reference< XContextMenuInterceptor >& _Interceptor ) throw (RuntimeException)
 {
     if ( _Interceptor.is() )
         m_aContextMenuInterceptors.addInterface( _Interceptor );
 }
 
-// -----------------------------------------------------------------------------
 void SAL_CALL OApplicationController::releaseContextMenuInterceptor( const Reference< XContextMenuInterceptor >& _Interceptor ) throw (RuntimeException)
 {
     m_aContextMenuInterceptors.removeInterface( _Interceptor );
 }
 
-// -----------------------------------------------------------------------------
 void OApplicationController::previewChanged( sal_Int32 _nMode )
 {
     SolarMutexGuard aSolarGuard;
@@ -576,7 +551,7 @@ void OApplicationController::previewChanged( sal_Int32 _nMode )
     InvalidateFeature(SID_DB_APP_VIEW_DOCINFO_PREVIEW);
     InvalidateFeature(SID_DB_APP_VIEW_DOC_PREVIEW);
 }
-// -----------------------------------------------------------------------------
+
 void OApplicationController::askToReconnect()
 {
     if ( m_bNeedToReconnect )
@@ -608,7 +583,6 @@ void OApplicationController::askToReconnect()
     }
 }
 
-// -----------------------------------------------------------------------------
 OUString OApplicationController::getDatabaseName() const
 {
     OUString sDatabaseName;
@@ -626,14 +600,12 @@ OUString OApplicationController::getDatabaseName() const
     return sDatabaseName;
 }
 
-// -----------------------------------------------------------------------------
 OUString OApplicationController::getStrippedDatabaseName() const
 {
     OUString sDatabaseName;
     return ::dbaui::getStrippedDatabaseName( m_xDataSource, sDatabaseName );
 }
 
-// -----------------------------------------------------------------------------
 void OApplicationController::onDocumentOpened( const OUString& _rName, const sal_Int32 _nType,
         const ElementOpenMode _eMode, const Reference< XComponent >& _xDocument, const Reference< XComponent >& _rxDefinition )
 {
@@ -657,7 +629,7 @@ void OApplicationController::onDocumentOpened( const OUString& _rName, const sal
         DBG_UNHANDLED_EXCEPTION();
     }
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool OApplicationController::insertHierachyElement(ElementType _eType,const OUString& _sParentFolder,sal_Bool _bCollection,const Reference<XContent>& _xContent,sal_Bool _bMove)
 {
     Reference<XHierarchicalNameContainer> xNames(getElements(_eType), UNO_QUERY);
@@ -670,7 +642,7 @@ sal_Bool OApplicationController::insertHierachyElement(ElementType _eType,const 
                            ,_xContent
                            ,_bMove);
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool OApplicationController::isRenameDeleteAllowed(ElementType _eType,sal_Bool _bDelete) const
 {
     ElementType eType = getContainer()->getElementType();
@@ -710,7 +682,7 @@ sal_Bool OApplicationController::isRenameDeleteAllowed(ElementType _eType,sal_Bo
     }
     return bEnabled;
 }
-// -----------------------------------------------------------------------------
+
 void OApplicationController::onLoadedMenu(const Reference< ::com::sun::star::frame::XLayoutManager >& _xLayoutManager)
 {
 
@@ -743,7 +715,7 @@ void OApplicationController::onLoadedMenu(const Reference< ::com::sun::star::fra
         InvalidateAll();
     }
 }
-// -----------------------------------------------------------------------------
+
 void OApplicationController::doAction(sal_uInt16 _nId ,ElementOpenMode _eOpenMode)
 {
     ::std::vector< OUString> aList;
@@ -798,7 +770,7 @@ void OApplicationController::doAction(sal_uInt16 _nId ,ElementOpenMode _eOpenMod
             aSendMail.Send( getFrame() );
     }
 }
-// -----------------------------------------------------------------------------
+
 ElementType OApplicationController::getElementType(const Reference< XContainer >& _xContainer) const
 {
     ElementType eRet = E_NONE;
@@ -817,8 +789,6 @@ ElementType OApplicationController::getElementType(const Reference< XContainer >
     return eRet;
 }
 
-//........................................................................
 }   // namespace dbaui
-//........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

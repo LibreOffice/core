@@ -53,14 +53,10 @@ namespace com { namespace sun { namespace star {
     }
 } } }
 
-//........................................................................
 namespace dbaccess
 {
-//........................................................................
 class DatabaseDocumentLoader;
-//============================================================
-//= ODatabaseContext
-//============================================================
+// ODatabaseContext
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
     ODatabaseContext_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
 
@@ -118,7 +114,6 @@ protected:
 public:
     ODatabaseContext( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& );
     virtual ~ODatabaseContext();
-
 
     // OComponentHelper
     virtual void SAL_CALL disposing(void);
@@ -189,11 +184,8 @@ private:
     );
 };
 
-//........................................................................
 }   // namespace dbaccess
-//........................................................................
 
 #endif // _DBA_COREDATAACCESS_DATABASECONTEXT_HXX_
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -24,10 +24,8 @@
 
 #include <vector>
 
-//........................................................................
 namespace dbmm
 {
-//........................................................................
 
     enum MigrationErrorType
     {
@@ -58,9 +56,7 @@ namespace dbmm
         ERR_NEW_STYLE_REPORT
     };
 
-    //====================================================================
-    //= MigrationError
-    //====================================================================
+    // MigrationError
     /** encapsulates information about an error which happened during the migration
     */
     struct MigrationError
@@ -156,9 +152,7 @@ namespace dbmm
         }
     };
 
-//........................................................................
 } // namespace dbmm
-//........................................................................
 
 #endif // DBACCESS_MIGRATIONERROR_HXX
 

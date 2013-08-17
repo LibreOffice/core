@@ -64,14 +64,12 @@
 #include <osl/thread.hxx>
 #include <osl/mutex.hxx>
 
-
 #define MAX_THREADS 10
 
 extern "C" void SAL_CALL createRegistryInfo_ORelationControl()
 {
     static ::dbaui::OMultiInstanceAutoRegistration< ::dbaui::ORelationController > aAutoRegistration;
 }
-
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
@@ -89,36 +87,34 @@ using namespace ::dbaui;
 using namespace ::comphelper;
 using namespace ::osl;
 
-//------------------------------------------------------------------------------
 OUString SAL_CALL ORelationController::getImplementationName() throw( RuntimeException )
 {
     return getImplementationName_Static();
 }
 
-//------------------------------------------------------------------------------
 OUString ORelationController::getImplementationName_Static() throw( RuntimeException )
 {
     return OUString("org.openoffice.comp.dbu.ORelationDesign");
 }
-//------------------------------------------------------------------------------
+
 Sequence< OUString> ORelationController::getSupportedServiceNames_Static(void) throw( RuntimeException )
 {
     Sequence< OUString> aSupported(1);
     aSupported.getArray()[0] = OUString("com.sun.star.sdb.RelationDesign");
     return aSupported;
 }
-//-------------------------------------------------------------------------
+
 Sequence< OUString> SAL_CALL ORelationController::getSupportedServiceNames() throw(RuntimeException)
 {
     return getSupportedServiceNames_Static();
 }
-// -------------------------------------------------------------------------
+
 Reference< XInterface > SAL_CALL ORelationController::Create(const Reference<XMultiServiceFactory >& _rxFactory)
 {
     return *(new ORelationController(comphelper::getComponentContext(_rxFactory)));
 }
+
 DBG_NAME(ORelationController);
-// -----------------------------------------------------------------------------
 ORelationController::ORelationController(const Reference< XComponentContext >& _rM)
     : OJoinController(_rM)
     ,m_nThreadEvent(0)
@@ -127,12 +123,12 @@ ORelationController::ORelationController(const Reference< XComponentContext >& _
     DBG_CTOR(ORelationController,NULL);
     InvalidateAll();
 }
-// -----------------------------------------------------------------------------
+
 ORelationController::~ORelationController()
 {
     DBG_DTOR(ORelationController,NULL);
 }
-// -----------------------------------------------------------------------------
+
 FeatureState ORelationController::GetState(sal_uInt16 _nId) const
 {
     FeatureState aReturn;
@@ -152,7 +148,7 @@ FeatureState ORelationController::GetState(sal_uInt16 _nId) const
     }
     return aReturn;
 }
-// -----------------------------------------------------------------------------
+
 void ORelationController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >& aArgs)
 {
     switch(_nId)
@@ -195,7 +191,7 @@ void ORelationController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue
     }
     InvalidateFeature(_nId);
 }
-// -----------------------------------------------------------------------------
+
 void ORelationController::impl_initialize()
 {
     OJoinController::impl_initialize();
@@ -239,20 +235,20 @@ void ORelationController::impl_initialize()
     }
 
 }
-// -----------------------------------------------------------------------------
+
 OUString ORelationController::getPrivateTitle( ) const
 {
     OUString sName = getDataSourceName();
     return ::dbaui::getStrippedDatabaseName(getDataSource(),sName);
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool ORelationController::Construct(Window* pParent)
 {
     setView( * new ORelationDesignView( pParent, *this, getORB() ) );
     OJoinController::Construct(pParent);
     return sal_True;
 }
-// -----------------------------------------------------------------------------
+
 short ORelationController::saveModified()
 {
     short nSaved = RET_YES;
@@ -265,12 +261,13 @@ short ORelationController::saveModified()
     }
     return nSaved;
 }
-// -----------------------------------------------------------------------------
+
 void ORelationController::describeSupportedFeatures()
 {
     OJoinController::describeSupportedFeatures();
     implDescribeSupportedFeature( ".uno:DBAddRelation", SID_RELATION_ADD_RELATION, CommandGroup::EDIT );
 }
+
 namespace
 {
     class RelationLoader : public ::osl::Thread
@@ -380,7 +377,7 @@ namespace
                 {
                     OUString sReferencedTable;
                     xKey->getPropertyValue(PROPERTY_REFERENCEDTABLE) >>= sReferencedTable;
-                    //////////////////////////////////////////////////////////////////////
+
                     // insert windows
                     TTableDataHelper::iterator aRefFind = m_aTableData.find(sReferencedTable);
                     if ( aRefFind == m_aTableData.end() )
@@ -398,11 +395,9 @@ namespace
 
                     OUString sKeyName;
                     xKey->getPropertyValue(PROPERTY_NAME) >>= sKeyName;
-                    //////////////////////////////////////////////////////////////////////
                     // insert connection
                     ORelationTableConnectionData* pTabConnData = new ORelationTableConnectionData( pReferencingTable, pReferencedTable, sKeyName );
                     m_vTableConnectionData.push_back(TTableConnectionData::value_type(pTabConnData));
-                    //////////////////////////////////////////////////////////////////////
                     // insert columns
                     const Reference<XColumnsSupplier> xColsSup(xKey,UNO_QUERY);
                     OSL_ENSURE(xColsSup.is(),"Key is no XColumnsSupplier!");
@@ -422,7 +417,6 @@ namespace
                         }
                         pTabConnData->SetConnLine( j, sColumnName, sRelatedName );
                     }
-                    //////////////////////////////////////////////////////////////////////
                     // Update/Del-Flags setzen
                     sal_Int32   nUpdateRule = 0;
                     sal_Int32   nDeleteRule = 0;
@@ -432,7 +426,6 @@ namespace
                     pTabConnData->SetUpdateRules( nUpdateRule );
                     pTabConnData->SetDeleteRules( nDeleteRule );
 
-                    //////////////////////////////////////////////////////////////////////
                     // Kardinalitaet setzen
                     pTabConnData->SetCardinality();
                 }
@@ -469,7 +462,7 @@ void ORelationController::mergeData(const TTableConnectionData& _aConnectionData
             Application::PostUserEvent(LINK(this, ORelationController, OnThreadFinished));
     }
 }
-// -----------------------------------------------------------------------------
+
 IMPL_LINK( ORelationController, OnThreadFinished, void*, /*NOTINTERESTEDIN*/ )
 {
     ::SolarMutexGuard aSolarGuard;
@@ -491,7 +484,7 @@ IMPL_LINK( ORelationController, OnThreadFinished, void*, /*NOTINTERESTEDIN*/ )
     m_pWaitObject.reset();
     return 0L;
 }
-// -----------------------------------------------------------------------------
+
 void ORelationController::loadData()
 {
     m_pWaitObject.reset( new WaitObject(getView()) );
@@ -536,7 +529,7 @@ void ORelationController::loadData()
         DBG_UNHANDLED_EXCEPTION();
     }
 }
-// -----------------------------------------------------------------------------
+
 TTableWindowData::value_type ORelationController::existsTable(const OUString& _rComposedTableName,sal_Bool _bCase)  const
 {
     ::comphelper::UStringMixEqual bCase(_bCase);
@@ -549,7 +542,7 @@ TTableWindowData::value_type ORelationController::existsTable(const OUString& _r
     }
     return ( aIter != aEnd) ? *aIter : TTableWindowData::value_type();
 }
-// -----------------------------------------------------------------------------
+
 void ORelationController::loadLayoutInformation()
 {
     try
@@ -569,7 +562,7 @@ void ORelationController::loadLayoutInformation()
     {
     }
 }
-// -----------------------------------------------------------------------------
+
 void ORelationController::reset()
 {
     loadLayoutInformation();
@@ -582,19 +575,14 @@ void ORelationController::reset()
     }
 }
 
-// -----------------------------------------------------------------------------
 bool ORelationController::allowViews() const
 {
     return false;
 }
 
-// -----------------------------------------------------------------------------
 bool ORelationController::allowQueries() const
 {
     return false;
 }
-
-// -----------------------------------------------------------------------------
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

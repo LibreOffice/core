@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <string.h>
 
 #include "table.hxx"
@@ -61,9 +60,7 @@ using namespace ::osl;
 using namespace ::comphelper;
 using namespace ::cppu;
 
-//==========================================================================
-//= ODBTable
-//==========================================================================
+// ODBTable
 DBG_NAME(ODBTable)
 
 ODBTable::ODBTable(connectivity::sdbcx::OCollection* _pTables
@@ -399,4 +396,5 @@ sdbcx::OCollection* ODBTable::createIndexes(const TStringVector& _rNames)
     SAL_INFO("dbaccess", "ODBTable::createIndexes" );
     return new OIndexes(this,m_aMutex,_rNames,NULL);
 }
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

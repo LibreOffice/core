@@ -18,7 +18,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "TokenWriter.hxx"
 #include <com/sun/star/sdbc/XColumnLocate.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
@@ -54,7 +53,7 @@ ORowSetImportExport::ORowSetImportExport(   Window* _pParent,
     SAL_INFO("dbaccess.ui", "ORowSetImportExport::ORowSetImportExport" );
     OSL_ENSURE(_pParent,"Window can't be null!");
 }
-// -----------------------------------------------------------------------------
+
 void ORowSetImportExport::initialize()
 {
     SAL_INFO("dbaccess.ui", "ORowSetImportExport::initialize" );
@@ -94,13 +93,13 @@ void ORowSetImportExport::initialize()
             m_aColumnTypes.push_back(DataType::OTHER);
     }
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool ORowSetImportExport::Write()
 {
     SAL_INFO("dbaccess.ui", "ORowSetImportExport::Write" );
     return sal_True;
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool ORowSetImportExport::Read()
 {
     SAL_INFO("dbaccess.ui", "ORowSetImportExport::Read" );
@@ -155,7 +154,7 @@ sal_Bool ORowSetImportExport::Read()
     }
     return sal_True;
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool ORowSetImportExport::insertNewRow()
 {
     SAL_INFO("dbaccess.ui", "ORowSetImportExport::insertNewRow" );
@@ -256,8 +255,5 @@ sal_Bool ORowSetImportExport::insertNewRow()
     }
     return sal_True;
 }
-// -----------------------------------------------------------------------------
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

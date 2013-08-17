@@ -24,15 +24,10 @@
 
 #include "svtools/svlbitm.hxx"
 
-
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
 
-//========================================================================
-//= OMarkableTreeListBox
-//========================================================================
+// OMarkableTreeListBox
 /** a tree list box where all entries can be marked (with a checkbox) and
     unmarked. In addition, inner nodes know a third state which applies
     if some, but not all of their descendants are marked.
@@ -65,9 +60,7 @@ private:
     void InitButtonData();
 };
 
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
 
 #endif // _DBAUI_MARKTREE_HXX_
 

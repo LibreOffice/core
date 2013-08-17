@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "viewcontainer.hxx"
 #include "dbastrings.hrc"
 #include "core_resource.hxx"
@@ -57,9 +56,7 @@ using namespace ::comphelper;
 using namespace ::cppu;
 using namespace ::connectivity::sdbcx;
 
-//==========================================================================
-//= OViewContainer
-//==========================================================================
+// OViewContainer
 DBG_NAME(OViewContainer)
 
 OViewContainer::OViewContainer(::cppu::OWeakObject& _rParent

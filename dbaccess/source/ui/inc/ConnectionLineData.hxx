@@ -30,15 +30,11 @@
 namespace dbaui
 {
 
-    //==================================================================
     // ConnData     ---------->*    ConnLineData
     //    ^1                            ^1
     //    |                             |
     //  Conn        ---------->*    ConnLine
-    //==================================================================
 
-
-    //==================================================================
     /**
         the class OConnectionLineData contains the data of a connection
         e.g. the source and the destanation field
@@ -82,8 +78,6 @@ namespace dbaui
         OConnectionLineData& operator=( const OConnectionLineData& rConnLineData );
     };
 
-    //-------------------------------------------------------------------------
-    //------------------------------------------------------------------
     typedef ::rtl::Reference< OConnectionLineData >     OConnectionLineDataRef;
     typedef ::std::vector< OConnectionLineDataRef > OConnectionLineDataVec;
 }

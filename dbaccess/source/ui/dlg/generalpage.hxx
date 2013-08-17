@@ -28,13 +28,9 @@
 #include <svtools/dialogcontrolling.hxx>
 #include <memory>
 
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
-    //=========================================================================
-    //= OGeneralPage
-    //=========================================================================
+    // OGeneralPage
     class OGeneralPage : public OGenericAdministrationPage
     {
     protected:
@@ -111,9 +107,7 @@ namespace dbaui
         DECL_LINK(OnEmbeddedDBTypeSelected, ListBox*);
     };
 
-    //=========================================================================
-    //= OGeneralPageDialog
-    //=========================================================================
+    // OGeneralPageDialog
     class OGeneralPageDialog : public OGeneralPage
     {
     public:
@@ -126,9 +120,7 @@ namespace dbaui
         virtual void setParentTitle( const OUString& _sURLPrefix );
     };
 
-    //=========================================================================
-    //= OGeneralPageWizard
-    //=========================================================================
+    // OGeneralPageWizard
     class OGeneralPageWizard : public OGeneralPage
     {
     public:
@@ -197,9 +189,7 @@ namespace dbaui
         DECL_LINK( OnOpenDocument, PushButton* );
     };
 
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
 #endif // _DBAUI_GENERALPAGE_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -24,14 +24,10 @@
 #include <rtl/ustring.hxx>
 #include <svx/txenctab.hxx>
 
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
 
-    //=========================================================================
-    //= OCharsetDisplay
-    //=========================================================================
+    // OCharsetDisplay
     typedef ::dbtools::OCharsetMap OCharsetDisplay_Base;
     class OCharsetDisplay
             :protected OCharsetDisplay_Base
@@ -68,9 +64,7 @@ namespace dbaui
         using OCharsetDisplay_Base::find;
     };
 
-    //-------------------------------------------------------------------------
     //- CharsetDisplayDerefHelper
-    //-------------------------------------------------------------------------
     typedef ::dbtools::CharsetIteratorDerefHelper CharsetDisplayDerefHelper_Base;
     class CharsetDisplayDerefHelper : protected CharsetDisplayDerefHelper_Base
     {
@@ -89,9 +83,7 @@ namespace dbaui
         CharsetDisplayDerefHelper(const ::dbtools::CharsetIteratorDerefHelper& _rBase, const OUString& _rDisplayName);
     };
 
-    //-------------------------------------------------------------------------
     //- OCharsetDisplay::ExtendedCharsetIterator
-    //-------------------------------------------------------------------------
     class OCharsetDisplay::ExtendedCharsetIterator
     {
         friend class OCharsetDisplay;
@@ -125,9 +117,7 @@ namespace dbaui
         ExtendedCharsetIterator( const OCharsetDisplay* _pContainer, const base_iterator& _rPosition );
     };
 
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
 
 #endif // _DBAUI_CHARSETS_HXX_
 

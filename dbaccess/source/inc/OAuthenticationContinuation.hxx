@@ -29,11 +29,8 @@
 #include <rtl/ustring.hxx>
 #include <comphelper/interaction.hxx>
 
-
-//........................................................................
 namespace dbaccess
 {
-//........................................................................
 
 class OOO_DLLPUBLIC_DBA OAuthenticationContinuation :
     public comphelper::OInteraction< com::sun::star::ucb::XInteractionSupplyAuthentication >
@@ -66,9 +63,7 @@ public:
     sal_Bool        getRememberPassword() const { return m_bRemberPassword; }
 };
 
-//........................................................................
 }   // namespace dbaccess
-//........................................................................
 
 #endif // _DBACCESS_OAUTHENTICATIONCONTINUATION_HXX_
 

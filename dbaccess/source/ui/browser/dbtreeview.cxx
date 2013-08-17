@@ -17,25 +17,20 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "dbtreeview.hxx"
 #include <svtools/treelistbox.hxx>
 #include "dbtreelistbox.hxx"
 #include "dbtreemodel.hxx"
 #include "dbaccess_helpid.hrc"
 
-// .........................................................................
 namespace dbaui
 {
-// .........................................................................
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
 DBG_NAME(DBTreeView)
-//========================================================================
 // class DBTreeView
-//========================================================================
 DBTreeView::DBTreeView( Window* pParent, WinBits nBits)
                     :   Window( pParent, nBits )
                     , m_pTreeListBox(NULL)
@@ -49,8 +44,6 @@ DBTreeView::DBTreeView( Window* pParent, WinBits nBits)
     m_pTreeListBox->SetHelpId(HID_TLB_TREELISTBOX);
     m_pTreeListBox->Show();
 }
-
-// -----------------------------------------------------------------------------
 
 DBTreeView::~DBTreeView()
 {
@@ -67,24 +60,22 @@ DBTreeView::~DBTreeView()
     }
 }
 
-// -----------------------------------------------------------------------------
 void DBTreeView::SetPreExpandHandler(const Link& _rHdl)
 {
     m_pTreeListBox->SetPreExpandHandler(_rHdl);
 }
 
-// -----------------------------------------------------------------------------
 void    DBTreeView::setCopyHandler(const Link& _rHdl)
 {
     m_pTreeListBox->setCopyHandler(_rHdl);
 }
-// -----------------------------------------------------------------------------
+
 void DBTreeView::Resize()
 {
     Window::Resize();
     m_pTreeListBox->SetPosSizePixel(Point(0,0),GetOutputSizePixel());
 }
-// -------------------------------------------------------------------------
+
 void DBTreeView::setModel(SvTreeList* _pTreeModel)
 {
     if (_pTreeModel)
@@ -92,12 +83,11 @@ void DBTreeView::setModel(SvTreeList* _pTreeModel)
     m_pTreeListBox->SetModel(_pTreeModel);
 }
 
-// -------------------------------------------------------------------------
 void DBTreeView::setSelChangeHdl( const Link& _rHdl )
 {
     m_pTreeListBox->SetSelChangeHdl( _rHdl );
 }
-// -----------------------------------------------------------------------------
+
 void DBTreeView::GetFocus()
 {
     Window::GetFocus();
@@ -105,10 +95,6 @@ void DBTreeView::GetFocus()
         m_pTreeListBox->GrabFocus();
 }
 
-
-// .........................................................................
 }   // namespace dbaui
-// .........................................................................
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

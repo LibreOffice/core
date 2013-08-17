@@ -35,14 +35,10 @@
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/uno3.hxx>
 
-//........................................................................
 namespace dbaccess
 {
-//........................................................................
 
-//==========================================================================
-//= OQueryDescriptor_Base - a query descriptor (as the name suggests :)
-//==========================================================================
+// OQueryDescriptor_Base - a query descriptor (as the name suggests :)
 typedef ::cppu::ImplHelper3<
         ::com::sun::star::sdbcx::XColumnsSupplier,
         ::com::sun::star::lang::XUnoTunnel,
@@ -142,11 +138,8 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
 
 };
-//........................................................................
 }   // namespace dbaccess
-//........................................................................
 
 #endif // _DBA_COREAPI_QUERYDESCRIPTOR_HXX_
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

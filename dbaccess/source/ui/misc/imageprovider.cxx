@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "imageprovider.hxx"
 #include "dbu_resource.hrc"
 #include "moduledbu.hxx"
@@ -31,10 +30,8 @@
 
 #include <tools/diagnose_ex.h>
 
-//........................................................................
 namespace dbaui
 {
-//........................................................................
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::sdbc::XConnection;
@@ -50,9 +47,7 @@ namespace dbaui
 
     namespace GraphicColorMode = ::com::sun::star::graphic::GraphicColorMode;
 
-    //====================================================================
-    //= ImageProvider_Data
-    //====================================================================
+    // ImageProvider_Data
     struct ImageProvider_Data
     {
         /// the connection we work with
@@ -63,10 +58,8 @@ namespace dbaui
         Reference< XTableUIProvider >   xTableUI;
     };
 
-    //--------------------------------------------------------------------
     namespace
     {
-        //................................................................
         static void lcl_getConnectionProvidedTableIcon_nothrow(  const ImageProvider_Data& _rData,
             const OUString& _rName, Reference< XGraphic >& _out_rxGraphic )
         {
@@ -81,7 +74,6 @@ namespace dbaui
             }
         }
 
-        //................................................................
         static void lcl_getTableImageResourceID_nothrow( const ImageProvider_Data& _rData, const OUString& _rName,
             sal_uInt16& _out_rResourceID)
         {
@@ -104,16 +96,12 @@ namespace dbaui
             }
         }
     }
-    //====================================================================
-    //= ImageProvider
-    //====================================================================
-    //--------------------------------------------------------------------
+    // ImageProvider
     ImageProvider::ImageProvider()
         :m_pData( new ImageProvider_Data )
     {
     }
 
-    //--------------------------------------------------------------------
     ImageProvider::ImageProvider( const Reference< XConnection >& _rxConnection )
         :m_pData( new ImageProvider_Data )
     {
@@ -132,7 +120,6 @@ namespace dbaui
         }
     }
 
-    //--------------------------------------------------------------------
     void ImageProvider::getImages( const String& _rName, const sal_Int32 _nDatabaseObjectType, Image& _out_rImage )
     {
         if ( _nDatabaseObjectType != DatabaseObject::TABLE )
@@ -160,7 +147,6 @@ namespace dbaui
         }
     }
 
-    //--------------------------------------------------------------------
     Image ImageProvider::getDefaultImage( sal_Int32 _nDatabaseObjectType )
     {
         Image aObjectImage;
@@ -170,7 +156,6 @@ namespace dbaui
         return aObjectImage;
     }
 
-    //--------------------------------------------------------------------
     sal_uInt16 ImageProvider::getDefaultImageResourceID( sal_Int32 _nDatabaseObjectType)
     {
         sal_uInt16 nImageResourceID( 0 );
@@ -195,7 +180,6 @@ namespace dbaui
         return nImageResourceID;
     }
 
-    //--------------------------------------------------------------------
     Image ImageProvider::getFolderImage( sal_Int32 _nDatabaseObjectType )
     {
         sal_uInt16 nImageResourceID( 0 );
@@ -224,14 +208,11 @@ namespace dbaui
         return aFolderImage;
     }
 
-    //--------------------------------------------------------------------
     Image ImageProvider::getDatabaseImage()
     {
         return Image( ModuleRes( DATABASE_TREE_ICON ) );
     }
 
-//........................................................................
 } // namespace dbaui
-//........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

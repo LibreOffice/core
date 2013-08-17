@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <com/sun/star/sdb/XDatabaseRegistrations.hpp>
 
 #include <cppuhelper/basemutex.hxx>
@@ -69,9 +68,7 @@ namespace dbaccess
         return s_sNodeName;
     }
 
-    //====================================================================
-    //= DatabaseRegistrations - declaration
-    //====================================================================
+    // DatabaseRegistrations - declaration
     typedef ::cppu::WeakAggImplHelper1  <   XDatabaseRegistrations
                                         >   DatabaseRegistrations_Base;
     class DatabaseRegistrations :public ::cppu::BaseMutex
@@ -128,9 +125,7 @@ namespace dbaccess
         ::cppu::OInterfaceContainerHelper   m_aRegistrationListeners;
     };
 
-    //====================================================================
-    //= DatabaseRegistrations - implementation
-    //====================================================================
+    // DatabaseRegistrations - implementation
     DatabaseRegistrations::DatabaseRegistrations( const Reference<XComponentContext> & _rxContext )
         :m_aContext( _rxContext )
         ,m_aConfigurationRoot()
@@ -351,13 +346,12 @@ namespace dbaccess
             m_aRegistrationListeners.removeInterface( _Listener );
     }
 
-    //====================================================================
-    //= DatabaseRegistrations - factory
-    //====================================================================
+    // DatabaseRegistrations - factory
     Reference< XAggregation > createDataSourceRegistrations( const Reference<XComponentContext> & _rxContext )
     {
         return new DatabaseRegistrations( _rxContext );
     }
 
 } // namespace dbaccess
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

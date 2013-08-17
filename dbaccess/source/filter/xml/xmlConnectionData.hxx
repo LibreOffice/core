@@ -41,9 +41,7 @@ namespace dbaxml
                     const OUString& rLocalName,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
     };
-// -----------------------------------------------------------------------------
 } // namespace dbaxml
-// -----------------------------------------------------------------------------
 
 #endif // DBA_XMLCONNECTIONDATA_HXX_INCLUDED
 

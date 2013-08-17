@@ -45,9 +45,7 @@ namespace dbaccess
 {
     typedef ::cppu::ImplHelper1< ::com::sun::star::container::XContainerListener> OViewContainer_Base;
 
-    //==========================================================================
-    //= OViewContainer
-    //==========================================================================
+    // OViewContainer
     class OViewContainer :  public OFilteredContainer,
                             public OViewContainer_Base
     {
@@ -101,6 +99,5 @@ namespace dbaccess
     };
 }
 #endif // _DBA_CORE_VIEWCONTAINER_HXX_
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

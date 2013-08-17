@@ -23,13 +23,9 @@
 #include <tools/string.hxx>
 #include <comphelper/stl_types.hxx>
 
-//......................................................................
 namespace dbaui
 {
-//......................................................................
-    //==================================================================
-    //= OIndexField
-    //==================================================================
+    // OIndexField
     struct OIndexField
     {
         String              sFieldName;
@@ -40,9 +36,7 @@ namespace dbaui
 
     DECLARE_STL_VECTOR( OIndexField, IndexFields );
 
-    //==================================================================
-    //= OIndex
-    //==================================================================
+    // OIndex
     struct GrantIndexAccess
     {
         friend class OIndexCollection;
@@ -50,7 +44,6 @@ namespace dbaui
         GrantIndexAccess() { }
     };
 
-    //..................................................................
     struct OIndex
     {
     protected:
@@ -80,16 +73,13 @@ namespace dbaui
         void        flagAsNew(const GrantIndexAccess&) { sOriginalName = OUString(); }
         void        flagAsCommitted(const GrantIndexAccess&) { sOriginalName = sName; }
 
-
     private:
         OIndex();   // not implemented
     };
 
     DECLARE_STL_VECTOR( OIndex, Indexes );
 
-//......................................................................
 }   // namespace dbaui
-//......................................................................
 
 #endif // _DBAUI_INDEXES_HXX_
 

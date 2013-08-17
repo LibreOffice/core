@@ -40,9 +40,7 @@ namespace dbaui
         // ::com::sun::star::awt::XControl
         virtual void SAL_CALL createPeer(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >& _rToolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& Parent) throw(::com::sun::star::uno::RuntimeException);
     };
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
 
 #endif // DBAUI_COLUMNCONTROL_HXX
 

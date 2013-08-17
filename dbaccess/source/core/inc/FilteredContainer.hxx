@@ -129,9 +129,7 @@ namespace dbaccess
 
         inline sal_Bool isInitialized() const { return m_bConstructed; }
     };
-// ..............................................................................
 } // namespace
-// ..............................................................................
 
 #endif // DBACCESS_CORE_FILTERED_CONTAINER_HXX
 

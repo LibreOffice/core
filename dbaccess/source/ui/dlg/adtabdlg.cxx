@@ -52,12 +52,10 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace dbtools;
 
-// TableObjectListFacade -------------------------------------------------------
 TableObjectListFacade::~TableObjectListFacade()
 {
 }
 
-// TableListFacade -------------------------------------------------------------
 class TableListFacade : public ::cppu::BaseMutex
                     ,   public TableObjectListFacade
                     ,   public ::comphelper::OContainerListener
@@ -221,7 +219,6 @@ bool TableListFacade::isLeafSelected() const
     return pEntry && !m_rTableList.GetModel()->HasChildren( pEntry );
 }
 
-// QueryListFacade -------------------------------------------------------------
 class QueryListFacade : public ::cppu::BaseMutex
                     ,   public TableObjectListFacade
                     ,   public ::comphelper::OContainerListener
@@ -318,7 +315,6 @@ bool QueryListFacade::isLeafSelected() const
     return pEntry && !m_rQueryList.GetModel()->HasChildren( pEntry );
 }
 
-// OAddTableDlg ----------------------------------------------------------------
 OAddTableDlg::OAddTableDlg( Window* pParent, IAddTableDialogContext& _rContext )
              :ModelessDialog( pParent, ModuleRes(DLG_JOIN_TABADD) )
              ,m_aCaseTables( this, ModuleRes( RB_CASE_TABLES ) )

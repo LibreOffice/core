@@ -25,10 +25,8 @@
 #include "curledit.hxx"
 #include <sfx2/filedlghelper.hxx>
 
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
 
     enum IS_PATH_EXIST
     {
@@ -62,7 +60,6 @@ namespace dbaui
         virtual void    fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList);
         virtual void    implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
 
-
         // setting/retrieving the current connection URL
         // necessary because for some types, the URL must be decoded for display purposes
         //String        getURL( OConnectionURLEdit* _m_pConnection ) const;
@@ -76,7 +73,6 @@ namespace dbaui
                 The URL to check.
         */
         sal_Int32   checkPathExistence(const String& _rURL);
-
 
         IS_PATH_EXIST   pathExists(const OUString& _rURL, sal_Bool bIsFile) const;
         sal_Bool        createDirectoryDeep(const String& _rPathNormalized);
@@ -99,9 +95,7 @@ namespace dbaui
         void        implUpdateURLDependentStates() const;
     };
 
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
 
 #endif // DBAUI_CONNECTIONHELPER_HXX
 

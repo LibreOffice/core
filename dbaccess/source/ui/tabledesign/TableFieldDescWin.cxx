@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "TableFieldDescWin.hxx"
 #include <osl/diagnose.h>
 #include "FieldDescriptions.hxx"
@@ -43,24 +42,18 @@
 #define DETAILS_MIN_HELP_HEIGHT         50
 #define DETAILS_OPT_HELP_HEIGHT         100
 
-
 using namespace dbaui;
-//==================================================================
 // class OTableFieldDescWin
-//==================================================================
 DBG_NAME(OTableFieldDescWin)
-//------------------------------------------------------------------------------
 OTableFieldDescWin::OTableFieldDescWin( Window* pParent)
     :TabPage(pParent, WB_3DLOOK)
 {
     DBG_CTOR(OTableFieldDescWin,NULL);
-    //////////////////////////////////////////////////////////////////////
     // Header
     m_pHeader = new FixedText( this, WB_CENTER | WB_INFO ); //  | WB_3DLOOK
     m_pHeader->SetText( String(ModuleRes(STR_TAB_PROPERTIES)) );
     m_pHeader->Show();
 
-    //////////////////////////////////////////////////////////////////////
     // HelpBar
     m_pHelpBar = new OTableDesignHelpBar( this );
     m_pHelpBar->SetHelpId(HID_TAB_DESIGN_HELP_TEXT_FRAME);
@@ -71,11 +64,9 @@ OTableFieldDescWin::OTableFieldDescWin( Window* pParent)
     getGenPage()->Show();
 }
 
-//------------------------------------------------------------------------------
 OTableFieldDescWin::~OTableFieldDescWin()
 {
     DBG_DTOR(OTableFieldDescWin,NULL);
-    //////////////////////////////////////////////////////////////////////
     // Children zerstoeren
     m_pHelpBar->Hide();
     getGenPage()->Hide();
@@ -101,57 +92,48 @@ OTableFieldDescWin::~OTableFieldDescWin()
     }
 }
 
-//------------------------------------------------------------------------------
 void OTableFieldDescWin::Init()
 {
     OSL_ENSURE(getGenPage() != NULL, "OTableFieldDescWin::Init : ups ... no GenericPage ... this will crash ...");
     getGenPage()->Init();
 }
 
-//------------------------------------------------------------------------------
 void OTableFieldDescWin::SetReadOnly( sal_Bool bRead )
 {
     DBG_CHKTHIS(OTableFieldDescWin,NULL);
     getGenPage()->SetReadOnly( bRead );
 }
 
-//------------------------------------------------------------------------------
 void OTableFieldDescWin::DisplayData( OFieldDescription* pFieldDescr )
 {
     DBG_CHKTHIS(OTableFieldDescWin,NULL);
     getGenPage()->DisplayData( pFieldDescr );
 }
 
-//------------------------------------------------------------------------------
 void OTableFieldDescWin::SaveData( OFieldDescription* pFieldDescr )
 {
     DBG_CHKTHIS(OTableFieldDescWin,NULL);
     getGenPage()->SaveData( pFieldDescr );
 }
 
-//------------------------------------------------------------------------------
 void OTableFieldDescWin::Paint( const Rectangle& /*rRect*/ )
 {
     DBG_CHKTHIS(OTableFieldDescWin,NULL);
-    //////////////////////////////////////////////////////////////////////
     // 3D-Linie am oberen Fensterrand
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
     SetLineColor( rStyleSettings.GetLightColor() );
     DrawLine( Point(0,0), Point(GetSizePixel().Width(),0) );
 
-    //////////////////////////////////////////////////////////////////////
     // 3D-Linie zum Abtrennen des Headers
     DrawLine( Point(3, DETAILS_HEADER_HEIGHT), Point(GetSizePixel().Width()-6, DETAILS_HEADER_HEIGHT) );
     SetLineColor( rStyleSettings.GetShadowColor() );
     DrawLine( Point(3, DETAILS_HEADER_HEIGHT-1), Point(GetSizePixel().Width()-6, DETAILS_HEADER_HEIGHT-1) );
 }
 
-//------------------------------------------------------------------------------
 void OTableFieldDescWin::Resize()
 {
     DBG_CHKTHIS(OTableFieldDescWin,NULL);
-    //////////////////////////////////////////////////////////////////////
     // Abmessungen parent window
     Size aOutputSize( GetOutputSizePixel() );
     long nOutputWidth = aOutputSize.Width();
@@ -233,7 +215,7 @@ void OTableFieldDescWin::Resize()
     }
     Invalidate();
 }
-// -----------------------------------------------------------------------------
+
 IClipboardTest* OTableFieldDescWin::getActiveChild() const
 {
     IClipboardTest* pTest = NULL;
@@ -248,52 +230,52 @@ IClipboardTest* OTableFieldDescWin::getActiveChild() const
     }
     return pTest;
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool OTableFieldDescWin::isCopyAllowed()
 {
     return getActiveChild() && getActiveChild()->isCopyAllowed();
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool OTableFieldDescWin::isCutAllowed()
 {
     return (getGenPage() && getGenPage()->HasChildPathFocus() && getGenPage()->isCutAllowed());
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool OTableFieldDescWin::isPasteAllowed()
 {
     return (getGenPage() && getGenPage()->HasChildPathFocus() && getGenPage()->isPasteAllowed());
 }
-// -----------------------------------------------------------------------------
+
 void OTableFieldDescWin::cut()
 {
     if ( getGenPage() && getGenPage()->HasChildPathFocus() )
         getGenPage()->cut();
 }
-// -----------------------------------------------------------------------------
+
 void OTableFieldDescWin::copy()
 {
     if ( getActiveChild() )
         getActiveChild()->copy();
 }
-// -----------------------------------------------------------------------------
+
 void OTableFieldDescWin::paste()
 {
     if ( getGenPage() && getGenPage()->HasChildPathFocus() )
         getGenPage()->paste();
 }
-// -----------------------------------------------------------------------------
+
 void OTableFieldDescWin::GetFocus()
 {
     if ( getGenPage() )
         getGenPage()->GetFocus();
 }
-// -----------------------------------------------------------------------------
+
 void OTableFieldDescWin::LoseFocus()
 {
     if ( getGenPage() )
         getGenPage()->LoseFocus();
 }
-// -----------------------------------------------------------------------------
+
 long OTableFieldDescWin::PreNotify( NotifyEvent& rNEvt )
 {
     sal_Bool bHandled = sal_False;

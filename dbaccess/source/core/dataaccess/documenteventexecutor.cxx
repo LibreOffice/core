@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "documenteventexecutor.hxx"
 
 #include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
@@ -63,9 +62,7 @@ namespace dbaccess
 
     using namespace ::com::sun::star;
 
-    //====================================================================
-    //= DocumentEventExecutor_Data
-    //====================================================================
+    // DocumentEventExecutor_Data
     struct DocumentEventExecutor_Data
     {
         WeakReference< XEventsSupplier >    xDocument;
@@ -118,9 +115,7 @@ namespace dbaccess
         }
     }
 
-    //====================================================================
-    //= DocumentEventExecutor
-    //====================================================================
+    // DocumentEventExecutor
     DocumentEventExecutor::DocumentEventExecutor( const Reference<XComponentContext> & _rContext,
             const Reference< XEventsSupplier >& _rxDocument )
         :m_pData( new DocumentEventExecutor_Data( _rxDocument ) )
@@ -205,4 +200,5 @@ namespace dbaccess
     }
 
 } // namespace dbaccess
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

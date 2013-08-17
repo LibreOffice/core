@@ -29,14 +29,10 @@
 
 #include <cppuhelper/implbase1.hxx>
 
-//........................................................................
 namespace dbaccess
 {
-//........................................................................
 
-    //====================================================================
-    //= SubComponentLoader
-    //====================================================================
+    // SubComponentLoader
     typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::awt::XWindowListener
                                     >   SubComponentLoader_Base;
     struct SubComponentLoader_Data;
@@ -72,9 +68,7 @@ namespace dbaccess
         SubComponentLoader_Data*    m_pData;
     };
 
-//........................................................................
 } // namespace dbaccess
-//........................................................................
 
 #endif // SUBCOMPONENTLOADER_HXX
 

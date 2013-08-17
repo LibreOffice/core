@@ -27,7 +27,6 @@
 #include <osl/diagnose.h>
 #include <vcl/lineinfo.hxx>
 
-
 using namespace dbaui;
 const long DESCRIPT_LINE_WIDTH = 15;
 const long HIT_SENSITIVE_RADIUS = 5;
@@ -42,7 +41,6 @@ namespace
     {
         return Rectangle( _rBase - _aVector, _rBase + _aVector );
     }
-    // -----------------------------------------------------------------------------
     /** GetTextPos calculate the rectangle for the connection to be drawn
             @param  _pWin           the table window where to draw it
             @param  _aConnPos       the connection point
@@ -73,7 +71,6 @@ namespace
 
         return aReturn;
     }
-    // -----------------------------------------------------------------------------
     /** calcPointsYValue calculate the points Y value in relation to the listbox entry
             @param  _pWin           the corresponding window
             @param  _pEntry         the source or dest entry
@@ -109,14 +106,10 @@ namespace
 
         _rNewDescrPos.Y() = _rNewConPos.Y();
     }
-    // -----------------------------------------------------------------------------
 }
 
-//========================================================================
 // class OConnectionLine
-//========================================================================
 DBG_NAME(OConnectionLine)
-//------------------------------------------------------------------------
 OConnectionLine::OConnectionLine( OTableConnection* _pConn, OConnectionLineDataRef _pLineData )
     : m_pTabConn( _pConn )
      ,m_pData( _pLineData )
@@ -124,7 +117,6 @@ OConnectionLine::OConnectionLine( OTableConnection* _pConn, OConnectionLineDataR
     DBG_CTOR(OConnectionLine,NULL);
 }
 
-//------------------------------------------------------------------------
 OConnectionLine::OConnectionLine( const OConnectionLine& _rLine )
 {
     DBG_CTOR(OConnectionLine,NULL);
@@ -132,13 +124,11 @@ OConnectionLine::OConnectionLine( const OConnectionLine& _rLine )
     *this = _rLine;
 }
 
-//------------------------------------------------------------------------
 OConnectionLine::~OConnectionLine()
 {
     DBG_DTOR(OConnectionLine,NULL);
 }
 
-//------------------------------------------------------------------------
 OConnectionLine& OConnectionLine::operator=( const OConnectionLine& rLine )
 {
     if( &rLine != this )
@@ -157,10 +147,8 @@ OConnectionLine& OConnectionLine::operator=( const OConnectionLine& rLine )
     return *this;
 }
 
-//------------------------------------------------------------------------
 Rectangle OConnectionLine::GetBoundingRect()
 {
-    //////////////////////////////////////////////////////////////////////
     // determine surrounding rectangle
     Rectangle aBoundingRect( Point(0,0), Point(0,0) );
     if( !IsValid() )
@@ -193,7 +181,6 @@ Rectangle OConnectionLine::GetBoundingRect()
 
     const OTableWindow* pSourceWin = m_pTabConn->GetSourceWin();
     const OTableWindow* pDestWin = m_pTabConn->GetDestWin();
-    //////////////////////////////////////////////////////////////////////
     // line proceeds in in z-Form
     if( pSourceWin == pDestWin || std::abs(m_aSourceConnPos.X() - m_aDestConnPos.X()) > std::abs(m_aSourceDescrLinePos.X() - m_aDestDescrLinePos.X()) )
     {
@@ -205,24 +192,23 @@ Rectangle OConnectionLine::GetBoundingRect()
 
     return aBoundingRect;
 }
-// -----------------------------------------------------------------------------
+
 void calcPointX1(const OTableWindow* _pWin,Point& _rNewConPos,Point& _rNewDescrPos)
 {
     _rNewConPos.X() = _pWin->GetPosPixel().X() + _pWin->GetSizePixel().Width();
     _rNewDescrPos.X() = _rNewConPos.X();
     _rNewConPos.X() += DESCRIPT_LINE_WIDTH;
 }
-// -----------------------------------------------------------------------------
+
 void calcPointX2(const OTableWindow* _pWin,Point& _rNewConPos,Point& _rNewDescrPos)
 {
     _rNewConPos.X() = _pWin->GetPosPixel().X();
     _rNewDescrPos.X() = _rNewConPos.X();
     _rNewConPos.X() -= DESCRIPT_LINE_WIDTH;
 }
-//------------------------------------------------------------------------
+
 sal_Bool OConnectionLine::RecalcLine()
 {
-    //////////////////////////////////////////////////////////////////////
     // Windows and entries must be set
     const OTableWindow* pSourceWin = m_pTabConn->GetSourceWin();
     const OTableWindow* pDestWin = m_pTabConn->GetDestWin();
@@ -233,7 +219,6 @@ sal_Bool OConnectionLine::RecalcLine()
     SvTreeListEntry* pSourceEntry = pSourceWin->GetListBox()->GetEntryFromText( GetData()->GetSourceFieldName() );
     SvTreeListEntry* pDestEntry = pDestWin->GetListBox()->GetEntryFromText( GetData()->GetDestFieldName() );
 
-    //////////////////////////////////////////////////////////////////////
     // determine X-coordinates
     Point aSourceCenter( 0, 0 );
     Point aDestCenter( 0, 0 );
@@ -263,29 +248,23 @@ sal_Bool OConnectionLine::RecalcLine()
         calcPointX1(pFirstWin,*pFirstConPos,*pFirstDescrPos);
     calcPointX2(pSecondWin,*pSecondConPos,*pSecondDescrPos);
 
-    //////////////////////////////////////////////////////////////////////
     // determine aSourceConnPosY
     calcPointsYValue(pSourceWin,pSourceEntry,m_aSourceConnPos,m_aSourceDescrLinePos);
 
-    //////////////////////////////////////////////////////////////////////
     // determine aDestConnPosY
     calcPointsYValue(pDestWin,pDestEntry,m_aDestConnPos,m_aDestDescrLinePos);
 
     return sal_True;
 }
-// -----------------------------------------------------------------------------
 
-//------------------------------------------------------------------------
 void OConnectionLine::Draw( OutputDevice* pOutDev )
 {
     const sal_uInt16 nRectSize = 3;
 
-    //////////////////////////////////////////////////////////////////////
     // calculate new dimension
     if( !RecalcLine() )
         return;
 
-    //////////////////////////////////////////////////////////////////////
     // draw lines
     if (m_pTabConn->IsSelected())
         pOutDev->SetLineColor(Application::GetSettings().GetStyleSettings().GetHighlightColor());
@@ -302,7 +281,6 @@ void OConnectionLine::Draw( OutputDevice* pOutDev )
     aPoly.Insert(3,m_aDestDescrLinePos);
     pOutDev->DrawPolyLine(aPoly,aLineInfo);
 
-    //////////////////////////////////////////////////////////////////////
     // draw the connection rectangles
     pOutDev->SetFillColor(Application::GetSettings().GetStyleSettings().GetWindowColor());
 
@@ -310,12 +288,12 @@ void OConnectionLine::Draw( OutputDevice* pOutDev )
     pOutDev->DrawRect( calcRect(m_aSourceDescrLinePos,aVector) );
     pOutDev->DrawRect( calcRect( m_aDestDescrLinePos,aVector) );
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool OConnectionLine::IsValid() const
 {
     return m_pData.is();
 }
-//------------------------------------------------------------------------
+
 double dist_Euklid(const Point &p1, const Point& p2,const Point& pM, Point& q)
 {
     Point v(p2 - p1);
@@ -328,10 +306,9 @@ double dist_Euklid(const Point &p1, const Point& p2,const Point& pM, Point& q)
     q.Y() = long(p1.Y() + a * v.Y());
     return l;
 }
-//------------------------------------------------------------------------
+
 bool OConnectionLine::CheckHit( const Point& rMousePos ) const
 {
-    //////////////////////////////////////////////////////////////////////
     /*
         course of action with HitTest:
         the distance is calculated according to Euklid.
@@ -347,17 +324,17 @@ bool OConnectionLine::CheckHit( const Point& rMousePos ) const
 
     return false;
 }
-// -----------------------------------------------------------------------------
+
 Rectangle OConnectionLine::GetSourceTextPos() const
 {
     return GetTextPos(m_pTabConn->GetSourceWin(),m_aSourceConnPos,m_aSourceDescrLinePos);
 }
-// -----------------------------------------------------------------------------
+
 Rectangle OConnectionLine::GetDestTextPos() const
 {
     return GetTextPos(m_pTabConn->GetDestWin(),m_aDestConnPos,m_aDestDescrLinePos);
 }
-// -----------------------------------------------------------------------------
+
 Point OConnectionLine::getMidPoint() const
 {
     Point aDest = m_aDestConnPos - m_aSourceConnPos;
@@ -366,7 +343,5 @@ Point OConnectionLine::getMidPoint() const
 
     return m_aSourceConnPos + aDest;
 }
-// -----------------------------------------------------------------------------
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

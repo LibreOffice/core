@@ -42,7 +42,6 @@ namespace dbaui
     class OApplicationDetailView;
     class OApplicationSwapWindow;
     class OTitleWindow;
-    //==================================================================
     class OAppBorderWindow : public Window
     {
         OTitleWindow*                       m_pPanel;
@@ -66,7 +65,6 @@ namespace dbaui
         OApplicationDetailView* getDetailView() const;
     };
 
-    //==================================================================
     class OApplicationView : public ODataView
                             ,public IClipboardTest
                             ,public ::utl::OEventListenerAdapter
@@ -89,7 +87,6 @@ namespace dbaui
 
         void ImplInitSettings();
     protected:
-
 
         // return the Rectangle where I can paint myself
         virtual void resizeDocumentView(Rectangle& rRect);
@@ -254,7 +251,6 @@ namespace dbaui
         */
         void elementRemoved(ElementType _eType
                             ,const OUString& _rName );
-
 
         /** changes the container which should be displayed. The select handler will also be called.
             @param  _eType

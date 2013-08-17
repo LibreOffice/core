@@ -27,14 +27,10 @@
 
 #include <memory>
 
-//........................................................................
 namespace dbaccess
 {
-//........................................................................
 
-    //====================================================================
-    //= StorageXMLOutputStream
-    //====================================================================
+    // StorageXMLOutputStream
     struct StorageXMLOutputStream_Data;
     class DBACCESS_DLLPRIVATE StorageXMLOutputStream : public StorageOutputStream
     {
@@ -66,9 +62,7 @@ namespace dbaccess
         ::std::auto_ptr< StorageXMLOutputStream_Data >   m_pData;
     };
 
-    //====================================================================
-    //= StorageXMLInputStream
-    //====================================================================
+    // StorageXMLInputStream
     struct StorageXMLInputStream_Data;
     class DBACCESS_DLLPRIVATE StorageXMLInputStream : public StorageInputStream
     {
@@ -93,9 +87,7 @@ namespace dbaccess
         ::std::auto_ptr< StorageXMLInputStream_Data >   m_pData;
     };
 
-//........................................................................
 } // namespace dbaccess
-//........................................................................
 
 #endif // STORAGEXMLSTREAM_HXX
 

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "dbexchange.hxx"
 #include "dbtreelistbox.hxx"
 #include "dbtreemodel.hxx"
@@ -41,10 +40,8 @@
 #include "svtools/treelistentry.hxx"
 
 #include <functional>
-// .........................................................................
 namespace dbaui
 {
-// .........................................................................
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::sdb;
@@ -63,7 +60,6 @@ namespace dbaui
     using namespace ::dbtools;
     using namespace ::svx;
 
-    // -----------------------------------------------------------------------------
     TransferableHelper* SbaTableQueryBrowser::implCopyObject( SvTreeListEntry* _pApplyTo, sal_Int32 _nCommandType, sal_Bool _bAllowConnection )
     {
         try
@@ -95,7 +91,6 @@ namespace dbaui
         }
         return NULL;
     }
-    // -----------------------------------------------------------------------------
     sal_Int8 SbaTableQueryBrowser::queryDrop( const AcceptDropEvent& _rEvt, const DataFlavorExVector& _rFlavors )
     {
         // check if we're a table or query container
@@ -119,7 +114,6 @@ namespace dbaui
 
         return DND_ACTION_NONE;
     }
-    // -----------------------------------------------------------------------------
     sal_Int8 SbaTableQueryBrowser::executeDrop( const ExecuteDropEvent& _rEvt )
     {
         SvTreeListEntry* pHitEntry = m_pTreeView->getListBox().GetEntry( _rEvt.maPosPixel );
@@ -133,11 +127,9 @@ namespace dbaui
         // a TransferableDataHelper for accessing the dropped data
         TransferableDataHelper aDroppedData(_rEvt.maDropEvent.Transferable);
 
-
         // reset the data of the previous async drop (if any)
         if ( m_nAsyncDrop )
             Application::RemoveUserEvent(m_nAsyncDrop);
-
 
         m_nAsyncDrop = 0;
         m_aAsyncDrop.aDroppedData.clear();
@@ -147,7 +139,6 @@ namespace dbaui
         m_aAsyncDrop.bHtml          = sal_False;
         m_aAsyncDrop.pDroppedAt     = NULL;
         m_aAsyncDrop.aUrl           = OUString();
-
 
         // loop through the available formats and see what we can do ...
         // first we have to check if it is our own format, if not we have to copy the stream :-(
@@ -179,7 +170,6 @@ namespace dbaui
         return DND_ACTION_NONE;
     }
 
-    // -----------------------------------------------------------------------------
     sal_Bool SbaTableQueryBrowser::requestDrag( sal_Int8 /*_nAction*/, const Point& _rPosPixel )
     {
         // get the affected list entry
@@ -202,7 +192,6 @@ namespace dbaui
 
         return NULL != pTransfer;
     }
-    // -----------------------------------------------------------------------------
     IMPL_LINK(SbaTableQueryBrowser, OnCopyEntry, void*, /*NOTINTERESIN*/)
     {
         SvTreeListEntry* pSelected = m_pTreeView->getListBox().FirstSelected();
@@ -210,13 +199,11 @@ namespace dbaui
             copyEntry( pSelected );
         return 0;
     }
-    // -----------------------------------------------------------------------------
     sal_Bool SbaTableQueryBrowser::isEntryCopyAllowed(SvTreeListEntry* _pEntry) const
     {
         EntryType eType = getEntryType(_pEntry);
         return  ( eType == etTableOrView || eType == etQuery );
     }
-    // -----------------------------------------------------------------------------
     void SbaTableQueryBrowser::copyEntry(SvTreeListEntry* _pEntry)
     {
         TransferableHelper* pTransfer = NULL;
@@ -227,7 +214,6 @@ namespace dbaui
         if (pTransfer)
             pTransfer->CopyToClipboard(getView());
     }
-    // -----------------------------------------------------------------------------
     IMPL_LINK( SbaTableQueryBrowser, OnAsyncDrop, void*, /*NOTINTERESTEDIN*/ )
     {
         m_nAsyncDrop = 0;
@@ -248,7 +234,6 @@ namespace dbaui
 
         return 0L;
     }
-    // -----------------------------------------------------------------------------
     void SbaTableQueryBrowser::clearTreeModel()
     {
         if (m_pTreeModel)
@@ -279,8 +264,6 @@ namespace dbaui
         }
         m_pCurrentlyDisplayed = NULL;
     }
-// .........................................................................
 }   // namespace dbaui
-// .........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

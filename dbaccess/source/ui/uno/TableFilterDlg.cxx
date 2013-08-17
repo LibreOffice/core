@@ -17,12 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "dbu_reghelper.hxx"
 #include "TableFilterDlg.hxx"
 #include "TablesSingleDlg.hxx"
 #include <comphelper/processfactory.hxx>
-
 
 using namespace dbaui;
 
@@ -31,53 +29,44 @@ extern "C" void SAL_CALL createRegistryInfo_OTableFilterDialog()
     static OMultiInstanceAutoRegistration< OTableFilterDialog > aAutoRegistration;
 }
 
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
 
-//=========================================================================
-//-------------------------------------------------------------------------
 OTableFilterDialog::OTableFilterDialog(const Reference< XComponentContext >& _rxORB)
     :ODatabaseAdministrationDialog(_rxORB)
 {
 }
-//-------------------------------------------------------------------------
+
 Sequence<sal_Int8> SAL_CALL OTableFilterDialog::getImplementationId(  ) throw(RuntimeException)
 {
     static ::cppu::OImplementationId aId;
     return aId.getImplementationId();
 }
 
-//-------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL OTableFilterDialog::Create(const Reference< XMultiServiceFactory >& _rxFactory)
 {
     return *(new OTableFilterDialog( comphelper::getComponentContext(_rxFactory) ));
 }
 
-//-------------------------------------------------------------------------
 OUString SAL_CALL OTableFilterDialog::getImplementationName() throw(RuntimeException)
 {
     return getImplementationName_Static();
 }
 
-//-------------------------------------------------------------------------
 OUString OTableFilterDialog::getImplementationName_Static() throw(RuntimeException)
 {
     return OUString("org.openoffice.comp.dbu.OTableFilterDialog");
 }
 
-//-------------------------------------------------------------------------
 ::comphelper::StringSequence SAL_CALL OTableFilterDialog::getSupportedServiceNames() throw(RuntimeException)
 {
     return getSupportedServiceNames_Static();
 }
 
-//-------------------------------------------------------------------------
 ::comphelper::StringSequence OTableFilterDialog::getSupportedServiceNames_Static() throw(RuntimeException)
 {
     ::comphelper::StringSequence aSupported(1);
@@ -85,35 +74,30 @@ OUString OTableFilterDialog::getImplementationName_Static() throw(RuntimeExcepti
     return aSupported;
 }
 
-//-------------------------------------------------------------------------
 Reference<XPropertySetInfo>  SAL_CALL OTableFilterDialog::getPropertySetInfo() throw(RuntimeException)
 {
     Reference<XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
 }
 
-//-------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper& OTableFilterDialog::getInfoHelper()
 {
     return *const_cast<OTableFilterDialog*>(this)->getArrayHelper();
 }
 
-//------------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper* OTableFilterDialog::createArrayHelper( ) const
 {
     Sequence< Property > aProps;
     describeProperties(aProps);
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
-//------------------------------------------------------------------------------
+
 Dialog* OTableFilterDialog::createDialog(Window* _pParent)
 {
     OTableSubscriptionDialog* pDlg = new OTableSubscriptionDialog(_pParent, m_pDatasourceItems, m_aContext, m_aInitialSelection);
     return pDlg;
 }
 
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

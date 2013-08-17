@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "dlgsave.hxx"
 #include "dlgsave.hrc"
 #include <vcl/msgbox.hxx>
@@ -38,7 +37,6 @@
 #include "moduledbu.hxx"
 #include "objectnamecheck.hxx"
 #include <tools/diagnose_ex.h>
-
 
 using namespace dbaui;
 using namespace dbtools;
@@ -81,9 +79,9 @@ public:
                     const IObjectNameCheck& _rObjectNameCheck,
                     sal_Int32 _nFlags);
 };
-// -----------------------------------------------------------------------------
+
 } // dbaui
-// -----------------------------------------------------------------------------
+
 OSaveAsDlgImpl::OSaveAsDlgImpl( Window * _pParent,
                         const sal_Int32& _rType,
                         const Reference< XConnection>& _xConnection,
@@ -121,7 +119,7 @@ OSaveAsDlgImpl::OSaveAsDlgImpl( Window * _pParent,
     m_aCatalog.SetDropDownLineCount( 10 );
     m_aSchema.SetDropDownLineCount( 10 );
 }
-// -----------------------------------------------------------------------------
+
 OSaveAsDlgImpl::OSaveAsDlgImpl( Window * _pParent,
                         const String& rDefault,
                         const IObjectNameCheck& _rObjectNameCheck,
@@ -147,10 +145,8 @@ OSaveAsDlgImpl::OSaveAsDlgImpl( Window * _pParent,
     m_aSchema.SetDropDownLineCount( 10 );
 }
 
-// -----------------------------------------------------------------------------
 using namespace ::com::sun::star::lang;
 
-//==================================================================
 namespace
 {
     typedef Reference< XResultSet > (SAL_CALL XDatabaseMetaData::*FGetMetaStrings)();
@@ -185,7 +181,6 @@ namespace
     }
 }
 
-//==================================================================
 OSaveAsDlg::OSaveAsDlg( Window * pParent,
                         const sal_Int32& _rType,
                         const Reference< XComponentContext >& _rxContext,
@@ -301,7 +296,7 @@ OSaveAsDlg::OSaveAsDlg( Window * pParent,
 
     implInit();
 }
-// -----------------------------------------------------------------------------
+
 OSaveAsDlg::OSaveAsDlg( Window * pParent,
                         const Reference< XComponentContext >& _rxContext,
                         const String& rDefault,
@@ -315,12 +310,12 @@ OSaveAsDlg::OSaveAsDlg( Window * pParent,
     implInitOnlyTitle(_sLabel);
     implInit();
 }
-// -----------------------------------------------------------------------------
+
 OSaveAsDlg::~OSaveAsDlg()
 {
     DELETEZ(m_pImpl);
 }
-// -----------------------------------------------------------------------------
+
 IMPL_LINK(OSaveAsDlg, ButtonClickHdl, Button *, pButton)
 {
     if (pButton == &m_pImpl->m_aPB_OK)
@@ -350,7 +345,6 @@ IMPL_LINK(OSaveAsDlg, ButtonClickHdl, Button *, pButton)
     }
     return 0;
 }
-// -----------------------------------------------------------------------------
 
 IMPL_LINK(OSaveAsDlg, EditModifyHdl, Edit *, pEdit )
 {
@@ -358,7 +352,7 @@ IMPL_LINK(OSaveAsDlg, EditModifyHdl, Edit *, pEdit )
         m_pImpl->m_aPB_OK.Enable(!m_pImpl->m_aTitle.GetText().isEmpty());
     return 0;
 }
-// -----------------------------------------------------------------------------
+
 void OSaveAsDlg::implInitOnlyTitle(const String& _rLabel)
 {
     m_pImpl->m_aLabel.SetText(_rLabel);
@@ -383,7 +377,7 @@ void OSaveAsDlg::implInitOnlyTitle(const String& _rLabel)
     m_pImpl->m_aTitle.SetText(m_pImpl->m_aName);
     m_pImpl->m_aTitle.setCheck(sal_False); // enable non valid sql chars as well
 }
-// -----------------------------------------------------------------------------
+
 void OSaveAsDlg::implInit()
 {
     if ( 0 == ( m_pImpl->m_nFlags & SAD_ADDITIONAL_DESCRIPTION ) )
@@ -427,7 +421,7 @@ void OSaveAsDlg::implInit()
     m_pImpl->m_aTitle.GrabFocus();
     FreeResource();
 }
-// -----------------------------------------------------------------------------
+
 String OSaveAsDlg::getName() const      { return m_pImpl->m_aName; }
 String OSaveAsDlg::getCatalog() const   { return m_pImpl->m_aCatalog.IsVisible() ? m_pImpl->m_aCatalog.GetText() : OUString(); }
 String OSaveAsDlg::getSchema() const    { return m_pImpl->m_aSchema.IsVisible() ? m_pImpl->m_aSchema.GetText() : OUString(); }

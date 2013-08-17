@@ -28,17 +28,13 @@
 #include <tools/string.hxx>
 #include <boost/shared_ptr.hpp>
 
-//........................................................................
 namespace dbaui
 {
-//........................................................................
 
     // for convenience of our clients
     namespace DatabaseObject = ::com::sun::star::sdb::application::DatabaseObject;
 
-    //====================================================================
-    //= ImageProvider
-    //====================================================================
+    // ImageProvider
     struct ImageProvider_Data;
     /** provides images for database objects such as tables, queries, forms, reports ...
 
@@ -139,9 +135,7 @@ namespace dbaui
         Image getDatabaseImage();
     };
 
-//........................................................................
 } // namespace dbaui
-//........................................................................
 
 #endif // DBACCESS_IMAGEPROVIDER_HXX
 

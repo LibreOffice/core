@@ -25,7 +25,6 @@
 
 namespace dbaui
 {
-    //==================================================================
     class OQueryTableView;
     class OQueryTableConnection : public OTableConnection
     {

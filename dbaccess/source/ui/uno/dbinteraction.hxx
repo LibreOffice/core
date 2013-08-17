@@ -37,14 +37,10 @@ namespace dbtools
     class SQLExceptionInfo;
 }
 
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
 
-    //=========================================================================
-    //= BasicInteractionHandler
-    //=========================================================================
+    // BasicInteractionHandler
     typedef ::cppu::WeakImplHelper2 <   ::com::sun::star::lang::XServiceInfo
                                     ,   ::com::sun::star::task::XInteractionHandler2
                                     >   BasicInteractionHandler_Base;
@@ -124,9 +120,7 @@ namespace dbaui
             const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > >& _rContinuations);
     };
 
-    //=========================================================================
-    //= SQLExceptionInteractionHandler
-    //=========================================================================
+    // SQLExceptionInteractionHandler
     class SQLExceptionInteractionHandler : public BasicInteractionHandler
     {
     public:
@@ -141,9 +135,7 @@ namespace dbaui
         DECLARE_SERVICE_INFO_STATIC();
     };
 
-    //=========================================================================
-    //= SQLExceptionInteractionHandler
-    //=========================================================================
+    // SQLExceptionInteractionHandler
     /** an implementation for the legacy css.sdb.InteractionHandler
 
         css.sdb.InteractionHandler is deprecated, as it does not only handle database related interactions,
@@ -171,9 +163,7 @@ namespace dbaui
         DECLARE_SERVICE_INFO_STATIC();
     };
 
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
 
 #endif // _DBAUI_INTERACTION_HXX_
 

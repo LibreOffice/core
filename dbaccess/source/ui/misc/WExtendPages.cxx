@@ -24,7 +24,6 @@
 
 using namespace dbaui;
 using namespace com::sun::star;
-//========================================================================
 SvParser* OWizHTMLExtend::createReader(sal_Int32 _nRows)
 {
     return new OHTMLReader(*m_pParserStream,
@@ -36,7 +35,7 @@ SvParser* OWizHTMLExtend::createReader(sal_Int32 _nRows)
                             m_pParent->getTypeInfo(),
                             m_pParent->shouldCreatePrimaryKey());
 }
-//========================================================================
+
 SvParser* OWizRTFExtend::createReader(sal_Int32 _nRows)
 {
     return new ORTFReader(*m_pParserStream,
@@ -48,7 +47,7 @@ SvParser* OWizRTFExtend::createReader(sal_Int32 _nRows)
                             m_pParent->getTypeInfo(),
                             m_pParent->shouldCreatePrimaryKey());
 }
-//========================================================================
+
 OWizNormalExtend::OWizNormalExtend(Window* pParent) : OWizTypeSelect( pParent )
 {
     EnableAuto(sal_False);
@@ -64,13 +63,10 @@ OWizNormalExtend::OWizNormalExtend(Window* pParent) : OWizTypeSelect( pParent )
     aflSize = m_aTypeControl.GetSizePixel();
     m_aTypeControl.SetPosSizePixel(aPos,aNewSize);
 }
-// -----------------------------------------------------------------------------
+
 SvParser* OWizNormalExtend::createReader(sal_Int32 /*_nRows*/)
 {
     return NULL;
 }
-// -----------------------------------------------------------------------------
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

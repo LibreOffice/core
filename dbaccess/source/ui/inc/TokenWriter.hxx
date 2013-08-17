@@ -47,9 +47,7 @@ namespace com { namespace sun { namespace star {
 
 namespace dbaui
 {
-    // =========================================================================
     // ODatabaseImportExport base class for import/export
-    // =========================================================================
     class ODatabaseExport;
     typedef ::cppu::WeakImplHelper1< ::com::sun::star::lang::XEventListener> ODatabaseImportExport_BASE;
     class ODatabaseImportExport : public ODatabaseImportExport_BASE
@@ -123,15 +121,12 @@ namespace dbaui
         void enableCheckOnly() { m_bCheckOnly = sal_True; }
         sal_Bool isCheckEnabled() const { return m_bCheckOnly; }
 
-
     private:
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
         void impl_initFromDescriptor( const ::svx::ODataAccessDescriptor& _aDataDescriptor, bool _bPlusDefaultInit );
     };
 
-    // =========================================================================
     // RTF Import and Export
-    // =========================================================================
 
     class ORTFImportExport : public ODatabaseImportExport
     {
@@ -154,9 +149,7 @@ namespace dbaui
         virtual sal_Bool Write();
         virtual sal_Bool Read();
     };
-    // =========================================================================
     // HTML Import and Export
-    // =========================================================================
     #define SBA_HTML_FONTSIZES 7
     const sal_Int16 nIndentMax = 23;
     class OHTMLImportExport : public ODatabaseImportExport
@@ -199,18 +192,16 @@ namespace dbaui
         virtual sal_Bool Read();
 
     };
-    // =========================================================================
     // normal RowSet Import and Export
-    // =========================================================================
 
     class ORowSetImportExport : public ODatabaseImportExport
     {
         OModuleClient       m_aModuleClient;
         ::std::vector<sal_Int32>    m_aColumnMapping;
         ::std::vector<sal_Int32>    m_aColumnTypes;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetUpdate >    m_xTargetResultSetUpdate;   //
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowUpdate >          m_xTargetRowUpdate;         //
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData >  m_xTargetResultSetMetaData; //
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetUpdate >    m_xTargetResultSetUpdate;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowUpdate >          m_xTargetRowUpdate;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData >  m_xTargetResultSetMetaData;
         Window*                     m_pParent;
         sal_Bool                    m_bAlreadyAsked;
 
@@ -241,7 +232,5 @@ namespace dbaui
 
 }
 #endif // DBAUI_TOKENWRITER_HXX
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

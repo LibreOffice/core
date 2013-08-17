@@ -30,12 +30,10 @@
 namespace dbaccess
 {
 
-//==========================================================================
-//= ODataSettings_Base - a base class which implements the property member
-//=                 for an object implementing the sdb::DataSettings
-//=                 service
-//= the properties have to to be registered when used
-//==========================================================================
+// ODataSettings_Base - a base class which implements the property member
+//                 for an object implementing the sdb::DataSettings
+//                 service
+// the properties have to to be registered when used
 class ODataSettings_Base
 {
 public:
@@ -58,11 +56,9 @@ protected:
     ODataSettings_Base(const ODataSettings_Base& _rSource);
     ~ODataSettings_Base();
 };
-//==========================================================================
-//= ODataSettings - a base class which implements the property handling
-//=                 for an object implementing the sdb::DataSettings
-//=                 service
-//==========================================================================
+// ODataSettings - a base class which implements the property handling
+//                 for an object implementing the sdb::DataSettings
+//                 service
 
 class ODataSettings : public ::comphelper::OPropertyStateContainer
                     , public ODataSettings_Base

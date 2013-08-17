@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "UserAdmin.hxx"
 #include "UserAdmin.hrc"
 #include "UITools.hxx"
@@ -51,7 +50,6 @@ using namespace dbaui;
 using namespace ucbhelper;
 using namespace comphelper;
 
-
 class OPasswordDialog : public ModalDialog
 {
     FixedLine       aFLUser;
@@ -64,7 +62,6 @@ class OPasswordDialog : public ModalDialog
     OKButton        aOKBtn;
     CancelButton    aCancelBtn;
     HelpButton      aHelpBtn;
-
 
     DECL_LINK( OKHdl_Impl, void * );
     DECL_LINK( ModifiedHdl, Edit * );
@@ -103,7 +100,7 @@ OPasswordDialog::OPasswordDialog(Window* _pParent,const String& _sUserName) :
     aOKBtn.SetClickHdl( LINK( this, OPasswordDialog, OKHdl_Impl ) );
     aEDOldPassword.SetModifyHdl( LINK( this, OPasswordDialog, ModifiedHdl ) );
 }
-// -----------------------------------------------------------------------------
+
 IMPL_LINK_NOARG(OPasswordDialog, OKHdl_Impl)
 {
     if( aEDPassword.GetText() == aEDPasswordRepeat.GetText() )
@@ -119,7 +116,7 @@ IMPL_LINK_NOARG(OPasswordDialog, OKHdl_Impl)
     }
     return 0;
 }
-// -----------------------------------------------------------------------------
+
 IMPL_LINK( OPasswordDialog, ModifiedHdl, Edit *, pEdit )
 {
     aOKBtn.Enable(!pEdit->GetText().isEmpty());
@@ -127,9 +124,7 @@ IMPL_LINK( OPasswordDialog, ModifiedHdl, Edit *, pEdit )
 }
 
 DBG_NAME(OUserAdmin);
-//================================================================================
 // OUserAdmin
-//================================================================================
 OUserAdmin::OUserAdmin(Window* pParent,const SfxItemSet& _rAttrSet)
     : OGenericAdministrationPage( pParent, ModuleRes(TAB_PAGE_USERADMIN), _rAttrSet)
     ,m_FL_USER(         this , ModuleRes(FL_USER))
@@ -150,13 +145,13 @@ OUserAdmin::OUserAdmin(Window* pParent,const SfxItemSet& _rAttrSet)
 
     FreeResource();
 }
-// -----------------------------------------------------------------------
+
 OUserAdmin::~OUserAdmin()
 {
     DBG_DTOR(OUserAdmin,NULL);
     m_xConnection = NULL;
 }
-// -----------------------------------------------------------------------
+
 void OUserAdmin::FillUserNames()
 {
     if(m_xConnection.is())
@@ -203,12 +198,12 @@ void OUserAdmin::FillUserNames()
     m_TableCtrl.Enable(m_xUsers.is());
 
 }
-// -----------------------------------------------------------------------
+
 SfxTabPage* OUserAdmin::Create( Window* pParent, const SfxItemSet& _rAttrSet )
 {
     return ( new OUserAdmin( pParent, _rAttrSet ) );
 }
-// -----------------------------------------------------------------------
+
 IMPL_LINK( OUserAdmin, UserHdl, PushButton *, pButton )
 {
     try
@@ -281,7 +276,7 @@ IMPL_LINK( OUserAdmin, UserHdl, PushButton *, pButton )
 
     return 0;
 }
-// -----------------------------------------------------------------------
+
 IMPL_LINK( OUserAdmin, ListDblClickHdl, ListBox *, /*pListBox*/ )
 {
     m_TableCtrl.setUserName(GetUser());
@@ -291,20 +286,19 @@ IMPL_LINK( OUserAdmin, ListDblClickHdl, ListBox *, /*pListBox*/ )
     return 0;
 }
 
-// -----------------------------------------------------------------------
 String OUserAdmin::GetUser()
 {
     return m_LB_USER.GetSelectEntry();
 }
-// -----------------------------------------------------------------------------
+
 void OUserAdmin::fillControls(::std::vector< ISaveValueWrapper* >& /*_rControlList*/)
 {
 }
-// -----------------------------------------------------------------------
+
 void OUserAdmin::fillWindows(::std::vector< ISaveValueWrapper* >& /*_rControlList*/)
 {
 }
-// -----------------------------------------------------------------------------
+
 void OUserAdmin::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
 {
     m_TableCtrl.setComponentContext(m_xORB);

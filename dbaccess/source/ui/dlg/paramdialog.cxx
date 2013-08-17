@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "paramdialog.hxx"
 #include "paramdialog.hrc"
 #include "dbu_dlg.hrc"
@@ -38,10 +37,8 @@
 #define EF_VISITED      0x0001
 #define EF_DIRTY        0x0002
 
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
@@ -51,14 +48,8 @@ namespace dbaui
     using namespace ::com::sun::star::util;
     using namespace ::connectivity;
 
-    //==================================================================
-    //= OParameterDialog
-    //==================================================================
+    // OParameterDialog
 
-    //------------------------------------------------------------------------------
-
-
-    //------------------------------------------------------------------------------
 DBG_NAME(OParameterDialog)
 
     OParameterDialog::OParameterDialog(
@@ -124,7 +115,6 @@ DBG_NAME(OParameterDialog)
             DBG_UNHANDLED_EXCEPTION();
         }
 
-
         Construct();
 
         m_aResetVisitFlag.SetTimeoutHdl(LINK(this, OParameterDialog, OnVisitedTimeout));
@@ -132,7 +122,6 @@ DBG_NAME(OParameterDialog)
         FreeResource();
     }
 
-    //------------------------------------------------------------------------------
     OParameterDialog::~OParameterDialog()
     {
         if (m_aResetVisitFlag.IsActive())
@@ -141,7 +130,6 @@ DBG_NAME(OParameterDialog)
         DBG_DTOR(OParameterDialog,NULL);
     }
 
-    //------------------------------------------------------------------------------
     void OParameterDialog::Construct()
     {
         m_aAllParams.SetSelectHdl(LINK(this, OParameterDialog, OnEntrySelected));
@@ -171,7 +159,6 @@ DBG_NAME(OParameterDialog)
         m_aParam.GrabFocus();
     }
 
-    //------------------------------------------------------------------------------
     IMPL_LINK(OParameterDialog, OnValueLoseFocus, Control*, /*pSource*/)
     {
         if (m_nCurrentlySelected != LISTBOX_ENTRY_NOTFOUND)
@@ -229,7 +216,6 @@ DBG_NAME(OParameterDialog)
         return 0L;
     }
 
-    //------------------------------------------------------------------------------
     IMPL_LINK(OParameterDialog, OnButtonClicked, PushButton*, pButton)
     {
         if (&m_aCancelBtn == pButton)
@@ -304,7 +290,6 @@ DBG_NAME(OParameterDialog)
         return 0L;
     }
 
-    //------------------------------------------------------------------------------
     IMPL_LINK(OParameterDialog, OnEntrySelected, ListBox*, /*pList*/)
     {
         if (m_aResetVisitFlag.IsActive())
@@ -342,7 +327,6 @@ DBG_NAME(OParameterDialog)
         return 0L;
     }
 
-    //------------------------------------------------------------------------------
     IMPL_LINK(OParameterDialog, OnVisitedTimeout, Timer*, /*pTimer*/)
     {
         OSL_ENSURE(m_nCurrentlySelected != LISTBOX_ENTRY_NOTFOUND, "OParameterDialog::OnVisitedTimeout : invalid call !");
@@ -391,7 +375,6 @@ DBG_NAME(OParameterDialog)
         return 0L;
     }
 
-    //------------------------------------------------------------------------------
     IMPL_LINK(OParameterDialog, OnValueModified, Control*, /*pBox*/)
     {
         // mark the currently selected entry as dirty
@@ -403,9 +386,6 @@ DBG_NAME(OParameterDialog)
         return 0L;
     }
 
-
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

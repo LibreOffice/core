@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "exsrcbrw.hxx"
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
@@ -42,14 +41,12 @@ using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::frame;
 using namespace dbaui;
 
-//==============================================================================
-//= SbaExternalSourceBrowser
-//==============================================================================
+// SbaExternalSourceBrowser
 extern "C" void SAL_CALL createRegistryInfo_OFormGridView()
 {
     static OMultiInstanceAutoRegistration< SbaExternalSourceBrowser > aAutoRegistration;
 }
-//------------------------------------------------------------------------------
+
 Any SAL_CALL SbaExternalSourceBrowser::queryInterface(const Type& _rType) throw (RuntimeException)
 {
     Any aRet = SbaXDataBrowserController::queryInterface(_rType);
@@ -60,8 +57,8 @@ Any SAL_CALL SbaExternalSourceBrowser::queryInterface(const Type& _rType) throw 
 
     return aRet;
 }
+
 DBG_NAME(SbaExternalSourceBrowser)
-//------------------------------------------------------------------------------
 SbaExternalSourceBrowser::SbaExternalSourceBrowser(const Reference< ::com::sun::star::uno::XComponentContext >& _rM)
     :SbaXDataBrowserController(_rM)
     ,m_aModifyListeners(getMutex())
@@ -72,54 +69,50 @@ SbaExternalSourceBrowser::SbaExternalSourceBrowser(const Reference< ::com::sun::
 
 }
 
-//------------------------------------------------------------------------------
 SbaExternalSourceBrowser::~SbaExternalSourceBrowser()
 {
 
     DBG_DTOR(SbaExternalSourceBrowser,NULL);
 }
 
-//-------------------------------------------------------------------------
 ::comphelper::StringSequence SAL_CALL SbaExternalSourceBrowser::getSupportedServiceNames() throw(RuntimeException)
 {
     return getSupportedServiceNames_Static();
 }
-// -------------------------------------------------------------------------
+
 OUString SbaExternalSourceBrowser::getImplementationName_Static() throw(RuntimeException)
 {
     return OUString("org.openoffice.comp.dbu.OFormGridView");
 }
-//-------------------------------------------------------------------------
+
 ::comphelper::StringSequence SbaExternalSourceBrowser::getSupportedServiceNames_Static() throw(RuntimeException)
 {
     ::comphelper::StringSequence aSupported(1);
     aSupported.getArray()[0] = OUString("com.sun.star.sdb.FormGridView");
     return aSupported;
 }
-//-------------------------------------------------------------------------
+
 Reference< XInterface > SAL_CALL SbaExternalSourceBrowser::Create(const Reference<XMultiServiceFactory >& _rxFactory)
 {
     return *(new SbaExternalSourceBrowser( comphelper::getComponentContext(_rxFactory)));
 }
-//-------------------------------------------------------------------------
+
 OUString SAL_CALL SbaExternalSourceBrowser::getImplementationName() throw(RuntimeException)
 {
     return getImplementationName_Static();
 }
-//------------------------------------------------------------------------------
+
 Reference< XRowSet >  SbaExternalSourceBrowser::CreateForm()
 {
     m_pDataSourceImpl = new SbaXFormAdapter();
     return m_pDataSourceImpl;
 }
 
-//------------------------------------------------------------------------------
 sal_Bool SbaExternalSourceBrowser::InitializeForm(const Reference< XPropertySet > & /*i_formProperties*/)
 {
     return sal_True;
 }
 
-//------------------------------------------------------------------
 sal_Bool SbaExternalSourceBrowser::LoadForm()
 {
     // as we don't have a main form (yet), we have nothing to do
@@ -127,8 +120,6 @@ sal_Bool SbaExternalSourceBrowser::LoadForm()
     return sal_True;
 }
 
-
-//------------------------------------------------------------------
 void SbaExternalSourceBrowser::modified(const ::com::sun::star::lang::EventObject& aEvent) throw( RuntimeException )
 {
     SbaXDataBrowserController::modified(aEvent);
@@ -140,7 +131,6 @@ void SbaExternalSourceBrowser::modified(const ::com::sun::star::lang::EventObjec
         ((::com::sun::star::util::XModifyListener*)aIt.next())->modified(aEvt);
 }
 
-//------------------------------------------------------------------
 void SAL_CALL SbaExternalSourceBrowser::dispatch(const ::com::sun::star::util::URL& aURL, const Sequence< ::com::sun::star::beans::PropertyValue>& aArgs) throw(::com::sun::star::uno::RuntimeException)
 {
     const ::com::sun::star::beans::PropertyValue* pArguments = aArgs.getConstArray();
@@ -250,7 +240,6 @@ void SAL_CALL SbaExternalSourceBrowser::dispatch(const ::com::sun::star::util::U
         SbaXDataBrowserController::dispatch(aURL, aArgs);
 }
 
-//------------------------------------------------------------------
 Reference< ::com::sun::star::frame::XDispatch >  SAL_CALL SbaExternalSourceBrowser::queryDispatch(const ::com::sun::star::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags) throw( RuntimeException )
 {
     Reference< ::com::sun::star::frame::XDispatch >  xReturn;
@@ -304,7 +293,6 @@ Reference< ::com::sun::star::frame::XDispatch >  SAL_CALL SbaExternalSourceBrows
     return xReturn;
 }
 
-//------------------------------------------------------------------
 void SAL_CALL SbaExternalSourceBrowser::disposing()
 {
     // say our modify listeners goodbye
@@ -317,19 +305,16 @@ void SAL_CALL SbaExternalSourceBrowser::disposing()
     SbaXDataBrowserController::disposing();
 }
 
-//------------------------------------------------------------------
 void SAL_CALL SbaExternalSourceBrowser::addModifyListener(const Reference< ::com::sun::star::util::XModifyListener > & aListener) throw( RuntimeException )
 {
     m_aModifyListeners.addInterface(aListener);
 }
 
-//------------------------------------------------------------------
 void SAL_CALL SbaExternalSourceBrowser::removeModifyListener(const Reference< ::com::sun::star::util::XModifyListener > & aListener) throw( RuntimeException )
 {
     m_aModifyListeners.removeInterface(aListener);
 }
 
-//------------------------------------------------------------------
 void SAL_CALL SbaExternalSourceBrowser::unloading(const ::com::sun::star::lang::EventObject& aEvent) throw( RuntimeException )
 {
     if (m_pDataSourceImpl && (m_pDataSourceImpl->getAttachedForm() == aEvent.Source))
@@ -340,7 +325,6 @@ void SAL_CALL SbaExternalSourceBrowser::unloading(const ::com::sun::star::lang::
     SbaXDataBrowserController::unloading(aEvent);
 }
 
-//------------------------------------------------------------------
 void SbaExternalSourceBrowser::Attach(const Reference< XRowSet > & xMaster)
 {
     Any aOldPos;
@@ -414,12 +398,10 @@ void SbaExternalSourceBrowser::Attach(const Reference< XRowSet > & xMaster)
     }
 }
 
-//------------------------------------------------------------------
 void SbaExternalSourceBrowser::ClearView()
 {
     // set a new (empty) datasource
     Attach(Reference< XRowSet > ());
-
 
     // clear all cols in the grid
     Reference< ::com::sun::star::container::XIndexContainer >  xColContainer(getControlModel(), UNO_QUERY);
@@ -427,7 +409,6 @@ void SbaExternalSourceBrowser::ClearView()
         xColContainer->removeByIndex(0);
 }
 
-//------------------------------------------------------------------
 void SAL_CALL SbaExternalSourceBrowser::disposing(const ::com::sun::star::lang::EventObject& Source) throw( RuntimeException )
 {
     if (m_pDataSourceImpl && (m_pDataSourceImpl->getAttachedForm() == Source.Source))
@@ -438,7 +419,6 @@ void SAL_CALL SbaExternalSourceBrowser::disposing(const ::com::sun::star::lang::
     SbaXDataBrowserController::disposing(Source);
 }
 
-//------------------------------------------------------------------
 void SbaExternalSourceBrowser::startListening()
 {
     if (m_pDataSourceImpl && m_pDataSourceImpl->getAttachedForm().is())
@@ -448,7 +428,6 @@ void SbaExternalSourceBrowser::startListening()
     }
 }
 
-//------------------------------------------------------------------
 void SbaExternalSourceBrowser::stopListening()
 {
     if (m_pDataSourceImpl && m_pDataSourceImpl->getAttachedForm().is())
@@ -457,8 +436,5 @@ void SbaExternalSourceBrowser::stopListening()
         xLoadable->removeLoadListener((::com::sun::star::form::XLoadListener*)this);
     }
 }
-
-//==================================================================
-//==================================================================
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

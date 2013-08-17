@@ -37,15 +37,14 @@ DBG_NAME(OPropertyHandlerFactory)
 OPropertyHandlerFactory::OPropertyHandlerFactory()
 {
     DBG_CTOR(OPropertyHandlerFactory,NULL);
-
 }
-// -----------------------------------------------------------------------------
+
 OPropertyHandlerFactory::~OPropertyHandlerFactory()
 {
 
     DBG_DTOR(OPropertyHandlerFactory,NULL);
 }
-// -----------------------------------------------------------------------------
+
 const XMLPropertyHandler* OPropertyHandlerFactory::GetPropertyHandler(sal_Int32 _nType) const
 {
     const XMLPropertyHandler* pHandler = NULL;
@@ -70,9 +69,8 @@ const XMLPropertyHandler* OPropertyHandlerFactory::GetPropertyHandler(sal_Int32 
         pHandler = OControlPropertyHandlerFactory::GetPropertyHandler(_nType);
     return pHandler;
 }
-// -----------------------------------------------------------------------------
+
 #define MAP_END() { NULL, 0, 0, XML_TOKEN_INVALID, 0 , 0, SvtSaveOptions::ODFVER_010}
-// -----------------------------------------------------------------------------
 UniReference < XMLPropertySetMapper > OXMLHelper::GetTableStylesPropertySetMapper()
 {
     static const XMLPropertyMapEntry s_aTableStylesProperties[] =
@@ -82,7 +80,7 @@ UniReference < XMLPropertySetMapper > OXMLHelper::GetTableStylesPropertySetMappe
     UniReference < XMLPropertyHandlerFactory> xFac = new ::xmloff::OControlPropertyHandlerFactory();
     return new XMLPropertySetMapper((XMLPropertyMapEntry*)s_aTableStylesProperties, xFac);
 }
-// -----------------------------------------------------------------------------
+
 UniReference < XMLPropertySetMapper > OXMLHelper::GetColumnStylesPropertySetMapper()
 {
 #define MAP_CONST_COLUMN( name, prefix, token, type, context )  { name, sizeof(name)-1,  prefix, token, type|XML_TYPE_PROP_TABLE_COLUMN, context, SvtSaveOptions::ODFVER_010 }
@@ -96,7 +94,7 @@ UniReference < XMLPropertySetMapper > OXMLHelper::GetColumnStylesPropertySetMapp
     UniReference < XMLPropertyHandlerFactory> xFac = new OPropertyHandlerFactory();
     return new XMLPropertySetMapper((XMLPropertyMapEntry*)s_aColumnStylesProperties, xFac);
 }
-// -----------------------------------------------------------------------------
+
 UniReference < XMLPropertySetMapper > OXMLHelper::GetCellStylesPropertySetMapper()
 {
 #define MAP_CONST_CELL( name, prefix, token, type, context ) { name, sizeof(name)-1,  prefix, token, type|XML_TYPE_PROP_PARAGRAPH, context, SvtSaveOptions::ODFVER_010 }
@@ -137,7 +135,7 @@ UniReference < XMLPropertySetMapper > OXMLHelper::GetCellStylesPropertySetMapper
     UniReference < XMLPropertyHandlerFactory> xFac = new /*OPropertyHandlerFactory*/::xmloff::OControlPropertyHandlerFactory();
     return new XMLPropertySetMapper((XMLPropertyMapEntry*)s_aCellStylesProperties, xFac);
 }
-// -----------------------------------------------------------------------------
+
 UniReference < XMLPropertySetMapper > OXMLHelper::GetRowStylesPropertySetMapper()
 {
 #define MAP_CONST_ROW( name, prefix, token, type, context )  { name, sizeof(name)-1, prefix, token, type|XML_TYPE_PROP_TABLE_ROW, context, SvtSaveOptions::ODFVER_010 }
@@ -149,7 +147,7 @@ UniReference < XMLPropertySetMapper > OXMLHelper::GetRowStylesPropertySetMapper(
     UniReference < XMLPropertyHandlerFactory> xFac = new OPropertyHandlerFactory();
     return new XMLPropertySetMapper((XMLPropertyMapEntry*)s_aStylesProperties, xFac);
 }
-// -----------------------------------------------------------------------------
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -35,14 +35,10 @@ namespace dbtools
     class IWarningsContainer;
 }
 
-//........................................................................
 namespace dbaccess
 {
-//........................................................................
 
-//==========================================================================
-//= OQuery - an object implementing the sdb.Query service
-//==========================================================================
+// OQuery - an object implementing the sdb.Query service
 typedef ::cppu::ImplHelper3 <   ::com::sun::star::sdbcx::XDataDescriptorFactory,
                                 ::com::sun::star::beans::XPropertyChangeListener,
                                 ::com::sun::star::sdbcx::XRename
@@ -50,7 +46,6 @@ typedef ::cppu::ImplHelper3 <   ::com::sun::star::sdbcx::XDataDescriptorFactory,
 class OQuery;
 class OColumn;
 typedef ::comphelper::OPropertyArrayUsageHelper< OQuery >   OQuery_ArrayHelperBase;
-
 
 class OQuery    :public OContentHelper
                 ,public OQueryDescriptor_Base
@@ -76,7 +71,6 @@ protected:
     enum AGGREGATE_ACTION { NONE, SETTING_PROPERTIES, FLUSHING };
     AGGREGATE_ACTION    m_eDoingCurrently;
 
-    // ------------------------------------------------------------------------
     /** a class which automatically resets m_eDoingCurrently in it's destructor
     */
     class OAutoActionReset; // just for the following friend declaration
@@ -155,11 +149,8 @@ private:
     void registerProperties();
 };
 
-//........................................................................
 }   // namespace dbaccess
-//........................................................................
 
 #endif // _DBA_COREAPI_QUERY_HXX_
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

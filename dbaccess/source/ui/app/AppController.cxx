@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "AppController.hxx"
 #include "dbustrings.hrc"
 #include "advancedsettingsdlg.hxx"
@@ -133,10 +132,9 @@ extern "C" void SAL_CALL createRegistryInfo_ODBApplication()
 {
     static ::dbaui::OMultiInstanceAutoRegistration< ::dbaui::OApplicationController > aAutoRegistration;
 }
-//........................................................................
+
 namespace dbaui
 {
-//........................................................................
 using namespace ::dbtools;
 using namespace ::svx;
 using namespace ::com::sun::star;
@@ -162,35 +160,32 @@ using ::com::sun::star::sdb::application::NamedDatabaseObject;
 namespace DatabaseObject = ::com::sun::star::sdb::application::DatabaseObject;
 namespace DatabaseObjectContainer = ::com::sun::star::sdb::application::DatabaseObjectContainer;
 
-//------------------------------------------------------------------------------
 OUString SAL_CALL OApplicationController::getImplementationName() throw( RuntimeException )
 {
     return getImplementationName_Static();
 }
 
-//------------------------------------------------------------------------------
 OUString OApplicationController::getImplementationName_Static() throw( RuntimeException )
 {
     return OUString(SERVICE_SDB_APPLICATIONCONTROLLER);
 }
-//------------------------------------------------------------------------------
+
 Sequence< OUString> OApplicationController::getSupportedServiceNames_Static(void) throw( RuntimeException )
 {
     Sequence< OUString> aSupported(1);
     aSupported.getArray()[0] = OUString("com.sun.star.sdb.application.DefaultViewController");
     return aSupported;
 }
-//-------------------------------------------------------------------------
+
 Sequence< OUString> SAL_CALL OApplicationController::getSupportedServiceNames() throw(RuntimeException)
 {
     return getSupportedServiceNames_Static();
 }
-// -------------------------------------------------------------------------
+
 Reference< XInterface > SAL_CALL OApplicationController::Create(const Reference<XMultiServiceFactory >& _rxFactory)
 {
     return *(new OApplicationController( comphelper::getComponentContext(_rxFactory)));
 }
-// -----------------------------------------------------------------------------
 
 struct XContainerFunctor : public ::std::unary_function< OApplicationController::TContainerVector::value_type , bool>
 {
@@ -206,9 +201,7 @@ struct XContainerFunctor : public ::std::unary_function< OApplicationController:
     }
 };
 
-//====================================================================
-//= OApplicationController
-//====================================================================
+// OApplicationController
 class SelectionNotifier : public ::boost::noncopyable
 {
 private:
@@ -291,11 +284,8 @@ private:
     SelectionNotifier&  m_rNotifier;
 };
 
-//====================================================================
-//= OApplicationController
-//====================================================================
+// OApplicationController
 DBG_NAME(OApplicationController)
-//--------------------------------------------------------------------
 OApplicationController::OApplicationController(const Reference< XComponentContext >& _rxORB)
     :OApplicationController_CBASE( _rxORB )
     ,m_aContextMenuInterceptors( getMutex() )
@@ -313,7 +303,7 @@ OApplicationController::OApplicationController(const Reference< XComponentContex
 {
     DBG_CTOR(OApplicationController,NULL);
 }
-//------------------------------------------------------------------------------
+
 OApplicationController::~OApplicationController()
 {
     if ( !rBHelper.bDisposed && !rBHelper.bInDispose )
@@ -330,10 +320,9 @@ OApplicationController::~OApplicationController()
 
     DBG_DTOR(OApplicationController,NULL);
 }
-//--------------------------------------------------------------------
+
 IMPLEMENT_FORWARD_XTYPEPROVIDER2(OApplicationController,OApplicationController_CBASE,OApplicationController_Base)
 IMPLEMENT_FORWARD_XINTERFACE2(OApplicationController,OApplicationController_CBASE,OApplicationController_Base)
-// -----------------------------------------------------------------------------
 void OApplicationController::disconnect()
 {
     if ( m_xDataSourceConnection.is() )
@@ -357,7 +346,6 @@ void OApplicationController::disconnect()
     InvalidateAll();
 }
 
-//--------------------------------------------------------------------
 void SAL_CALL OApplicationController::disposing()
 {
     ::std::for_each(m_aCurrentContainers.begin(),m_aCurrentContainers.end(),XContainerFunctor(this));
@@ -437,7 +425,6 @@ void SAL_CALL OApplicationController::disposing()
     OApplicationController_CBASE::disposing(); // here the m_refCount must be equal 5
 }
 
-//--------------------------------------------------------------------
 sal_Bool OApplicationController::Construct(Window* _pParent)
 {
     setView( * new OApplicationView( _pParent, getORB(), *this, m_ePreviewMode ) );
@@ -481,7 +468,6 @@ sal_Bool OApplicationController::Construct(Window* _pParent)
     return sal_True;
 }
 
-//--------------------------------------------------------------------
 void SAL_CALL OApplicationController::disposing(const EventObject& _rSource) throw( RuntimeException )
 {
     ::osl::MutexGuard aGuard( getMutex() );
@@ -519,7 +505,7 @@ void SAL_CALL OApplicationController::disposing(const EventObject& _rSource) thr
         OApplicationController_CBASE::disposing( _rSource );
     }
 }
-//--------------------------------------------------------------------
+
 sal_Bool SAL_CALL OApplicationController::suspend(sal_Bool bSuspend) throw( RuntimeException )
 {
     // notify the OnPrepareViewClosing event (before locking any mutex)
@@ -577,7 +563,7 @@ sal_Bool SAL_CALL OApplicationController::suspend(sal_Bool bSuspend) throw( Runt
 
     return bCanSuspend;
 }
-// -----------------------------------------------------------------------------
+
 FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
 {
     FeatureState aReturn;
@@ -968,7 +954,6 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
     return aReturn;
 }
 
-// -----------------------------------------------------------------------------
 namespace
 {
     bool lcl_handleException_nothrow( const Reference< XModel >& _rxDocument, const Any& _rException )
@@ -999,7 +984,6 @@ namespace
     }
 }
 
-// -----------------------------------------------------------------------------
 void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >& aArgs)
 {
     SolarMutexGuard aSolarGuard;
@@ -1425,7 +1409,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
     }
     InvalidateFeature(_nId);
 }
-// -----------------------------------------------------------------------------
+
 void OApplicationController::describeSupportedFeatures()
 {
     OApplicationController_CBASE::describeSupportedFeatures();
@@ -1532,13 +1516,12 @@ void OApplicationController::describeSupportedFeatures()
     implDescribeSupportedFeature( ".uno:DBStatusUserName",  SID_DB_APP_STATUS_USERNAME, CommandGroup::INTERNAL);
     implDescribeSupportedFeature( ".uno:DBStatusHostName",  SID_DB_APP_STATUS_HOSTNAME, CommandGroup::INTERNAL);
 }
-// -----------------------------------------------------------------------------
+
 OApplicationView*   OApplicationController::getContainer() const
 {
     return static_cast< OApplicationView* >( getView() );
 }
 
-// -----------------------------------------------------------------------------
 // ::com::sun::star::container::XContainerListener
 void SAL_CALL OApplicationController::elementInserted( const ContainerEvent& _rEvent ) throw(RuntimeException)
 {
@@ -1575,7 +1558,7 @@ void SAL_CALL OApplicationController::elementInserted( const ContainerEvent& _rE
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OApplicationController::elementRemoved( const ContainerEvent& _rEvent ) throw(RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
@@ -1609,7 +1592,7 @@ void SAL_CALL OApplicationController::elementRemoved( const ContainerEvent& _rEv
         getContainer()->elementRemoved(eType,sName);
     }
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OApplicationController::elementReplaced( const ContainerEvent& _rEvent ) throw(RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
@@ -1658,6 +1641,7 @@ void SAL_CALL OApplicationController::elementReplaced( const ContainerEvent& _rE
         }
     }
 }
+
 namespace
 {
     OUString lcl_getToolBarResource(ElementType _eType)
@@ -1686,7 +1670,7 @@ namespace
         return sToolbar;
     }
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool OApplicationController::onContainerSelect(ElementType _eType)
 {
     OSL_ENSURE(getContainer(),"View is NULL! -> GPF");
@@ -1757,7 +1741,7 @@ sal_Bool OApplicationController::onContainerSelect(ElementType _eType)
 
     return sal_True;
 }
-// -----------------------------------------------------------------------------
+
 bool OApplicationController::onEntryDoubleClick( SvTreeListBox& _rTree )
 {
     if ( getContainer() && getContainer()->isLeaf( _rTree.GetHdlEntry() ) )
@@ -1778,7 +1762,7 @@ bool OApplicationController::onEntryDoubleClick( SvTreeListBox& _rTree )
     }
     return false;   // not handled
 }
-// -----------------------------------------------------------------------------
+
 bool OApplicationController::impl_isAlterableView_nothrow( const OUString& _rTableOrViewName ) const
 {
     OSL_PRECOND( m_xDataSourceConnection.is(), "OApplicationController::impl_isAlterableView_nothrow: no connection!" );
@@ -1804,14 +1788,12 @@ bool OApplicationController::impl_isAlterableView_nothrow( const OUString& _rTab
     return bIsAlterableView;
 }
 
-// -----------------------------------------------------------------------------
 Reference< XComponent > OApplicationController::openElement(const OUString& _sName, ElementType _eType,
     ElementOpenMode _eOpenMode, sal_uInt16 _nInstigatorCommand )
 {
     return openElementWithArguments( _sName, _eType, _eOpenMode, _nInstigatorCommand, ::comphelper::NamedValueCollection() );
 }
 
-// -----------------------------------------------------------------------------
 Reference< XComponent > OApplicationController::openElementWithArguments( const OUString& _sName, ElementType _eType,
     ElementOpenMode _eOpenMode, sal_uInt16 _nInstigatorCommand, const ::comphelper::NamedValueCollection& _rAdditionalArguments )
 {
@@ -1923,7 +1905,7 @@ Reference< XComponent > OApplicationController::openElementWithArguments( const 
     }
     return xRet;
 }
-// -----------------------------------------------------------------------------
+
 IMPL_LINK( OApplicationController, OnSelectContainer, void*, _pType )
 {
     ElementType eType = (ElementType)reinterpret_cast< sal_IntPtr >( _pType );
@@ -1931,7 +1913,7 @@ IMPL_LINK( OApplicationController, OnSelectContainer, void*, _pType )
         getContainer()->selectContainer(eType);
     return 0L;
 }
-// -----------------------------------------------------------------------------
+
 IMPL_LINK( OApplicationController, OnCreateWithPilot, void*, _pType )
 {
     ElementType eType = (ElementType)reinterpret_cast< sal_IntPtr >( _pType );
@@ -1939,7 +1921,6 @@ IMPL_LINK( OApplicationController, OnCreateWithPilot, void*, _pType )
     return 0L;
 }
 
-// -----------------------------------------------------------------------------
 void OApplicationController::newElementWithPilot( ElementType _eType )
 {
     utl::CloseVeto aKeepDoc( getFrame() );
@@ -1989,7 +1970,6 @@ void OApplicationController::newElementWithPilot( ElementType _eType )
     // XDatabaseDocumentUI::loadComponent method.
 }
 
-// -----------------------------------------------------------------------------
 Reference< XComponent > OApplicationController::newElement( ElementType _eType, const ::comphelper::NamedValueCollection& i_rAdditionalArguments,
                                                            Reference< XComponent >& o_rDocumentDefinition )
 {
@@ -2048,7 +2028,6 @@ Reference< XComponent > OApplicationController::newElement( ElementType _eType, 
     return xComponent;
 }
 
-// -----------------------------------------------------------------------------
 void OApplicationController::addContainerListener(const Reference<XNameAccess>& _xCollection)
 {
     try
@@ -2070,7 +2049,7 @@ void OApplicationController::addContainerListener(const Reference<XNameAccess>& 
         DBG_UNHANDLED_EXCEPTION();
     }
 }
-// -----------------------------------------------------------------------------
+
 void OApplicationController::renameEntry()
 {
     SolarMutexGuard aSolarGuard;
@@ -2224,7 +2203,6 @@ void OApplicationController::renameEntry()
     }
 }
 
-// -----------------------------------------------------------------------------
 void OApplicationController::onSelectionChanged()
 {
     InvalidateAll();
@@ -2245,7 +2223,7 @@ void OApplicationController::onSelectionChanged()
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 void OApplicationController::showPreviewFor(const ElementType _eType,const OUString& _sName)
 {
     if ( m_ePreviewMode == E_PREVIEWNONE )
@@ -2292,13 +2270,12 @@ void OApplicationController::showPreviewFor(const ElementType _eType,const OUStr
     }
 }
 
-//------------------------------------------------------------------------------
 IMPL_LINK_NOARG(OApplicationController, OnClipboardChanged)
 {
     OnInvalidateClipboard();
     return 0L;
 }
-//------------------------------------------------------------------------------
+
 void OApplicationController::OnInvalidateClipboard()
 {
     InvalidateFeature(ID_BROWSER_CUT);
@@ -2306,21 +2283,21 @@ void OApplicationController::OnInvalidateClipboard()
     InvalidateFeature(ID_BROWSER_PASTE);
     InvalidateFeature(SID_DB_APP_PASTE_SPECIAL);
 }
-// -----------------------------------------------------------------------------
+
 void OApplicationController::onCutEntry()
 {
 }
-// -----------------------------------------------------------------------------
+
 void OApplicationController::onCopyEntry()
 {
     Execute(ID_BROWSER_COPY,Sequence<PropertyValue>());
 }
-// -----------------------------------------------------------------------------
+
 void OApplicationController::onPasteEntry()
 {
     Execute(ID_BROWSER_PASTE,Sequence<PropertyValue>());
 }
-// -----------------------------------------------------------------------------
+
 void OApplicationController::onDeleteEntry()
 {
     ElementType eType = getContainer()->getElementType();
@@ -2346,85 +2323,71 @@ void OApplicationController::onDeleteEntry()
     executeChecked(nId,Sequence<PropertyValue>());
 }
 
-// -----------------------------------------------------------------------------
 void OApplicationController::executeUnChecked(const URL& _rCommand, const Sequence< PropertyValue>& aArgs)
 {
     OApplicationController_CBASE::executeUnChecked( _rCommand, aArgs );
 }
 
-// -----------------------------------------------------------------------------
 void OApplicationController::executeChecked(const URL& _rCommand, const Sequence< PropertyValue>& aArgs)
 {
     OApplicationController_CBASE::executeChecked( _rCommand, aArgs );
 }
 
-// -----------------------------------------------------------------------------
 void OApplicationController::executeUnChecked(sal_uInt16 _nCommandId, const Sequence< PropertyValue>& aArgs)
 {
     OApplicationController_CBASE::executeUnChecked( _nCommandId, aArgs );
 }
 
-// -----------------------------------------------------------------------------
 void OApplicationController::executeChecked(sal_uInt16 _nCommandId, const Sequence< PropertyValue>& aArgs)
 {
     OApplicationController_CBASE::executeChecked( _nCommandId, aArgs );
 }
 
-// -----------------------------------------------------------------------------
 sal_Bool OApplicationController::isCommandEnabled(sal_uInt16 _nCommandId) const
 {
     return OApplicationController_CBASE::isCommandEnabled( _nCommandId );
 }
 
-// -----------------------------------------------------------------------------
 sal_Bool OApplicationController::isCommandEnabled( const OUString& _rCompleteCommandURL ) const
 {
     return OApplicationController_CBASE::isCommandEnabled( _rCompleteCommandURL );
 }
 
-// -----------------------------------------------------------------------------
 sal_uInt16 OApplicationController::registerCommandURL( const OUString& _rCompleteCommandURL )
 {
     return OApplicationController_CBASE::registerCommandURL( _rCompleteCommandURL );
 }
 
-// -----------------------------------------------------------------------------
 void OApplicationController::notifyHiContrastChanged()
 {
     OApplicationController_CBASE::notifyHiContrastChanged();
 }
 
-// -----------------------------------------------------------------------------
 Reference< XController > OApplicationController::getXController() throw( RuntimeException )
 {
     return OApplicationController_CBASE::getXController();
 }
 
-// -----------------------------------------------------------------------------
 bool OApplicationController::interceptUserInput( const NotifyEvent& _rEvent )
 {
     return OApplicationController_CBASE::interceptUserInput( _rEvent );
 }
 
-// -----------------------------------------------------------------------------
 PopupMenu* OApplicationController::getContextMenu( Control& /*_rControl*/ ) const
 {
     return new PopupMenu( ModuleRes( RID_MENU_APP_EDIT ) );
 }
 
-// -----------------------------------------------------------------------------
 IController& OApplicationController::getCommandController()
 {
     return *static_cast< IApplicationController* >( this );
 }
 
-// -----------------------------------------------------------------------------
 ::cppu::OInterfaceContainerHelper* OApplicationController::getContextMenuInterceptors()
 {
     return &m_aContextMenuInterceptors;
 }
 
-// -----------------------------------------------------------------------------
 Any OApplicationController::getCurrentSelection( Control& _rControl ) const
 {
     Sequence< NamedDatabaseObject > aSelection;
@@ -2432,13 +2395,11 @@ Any OApplicationController::getCurrentSelection( Control& _rControl ) const
     return makeAny( aSelection );
 }
 
-// -----------------------------------------------------------------------------
 sal_Bool OApplicationController::requestQuickHelp( const SvTreeListEntry* /*_pEntry*/, OUString& /*_rText*/ ) const
 {
     return sal_False;
 }
 
-// -----------------------------------------------------------------------------
 sal_Bool OApplicationController::requestDrag( sal_Int8 /*_nAction*/, const Point& /*_rPosPixel*/ )
 {
     TransferableHelper* pTransfer = NULL;
@@ -2463,7 +2424,7 @@ sal_Bool OApplicationController::requestDrag( sal_Int8 /*_nAction*/, const Point
 
     return NULL != pTransfer;
 }
-// -----------------------------------------------------------------------------
+
 sal_Int8 OApplicationController::queryDrop( const AcceptDropEvent& _rEvt, const DataFlavorExVector& _rFlavors )
 {
     sal_Int8 nActionAskedFor = _rEvt.mnAction;
@@ -2508,7 +2469,7 @@ sal_Int8 OApplicationController::queryDrop( const AcceptDropEvent& _rEvt, const 
 
     return DND_ACTION_NONE;
 }
-// -----------------------------------------------------------------------------
+
 sal_Int8 OApplicationController::executeDrop( const ExecuteDropEvent& _rEvt )
 {
     OApplicationView* pView = getContainer();
@@ -2522,11 +2483,9 @@ sal_Int8 OApplicationController::executeDrop( const ExecuteDropEvent& _rEvt )
     // a TransferableDataHelper for accessing the dropped data
     TransferableDataHelper aDroppedData(_rEvt.maDropEvent.Transferable);
 
-
     // reset the data of the previous async drop (if any)
     if ( m_nAsyncDrop )
         Application::RemoveUserEvent(m_nAsyncDrop);
-
 
     m_nAsyncDrop = 0;
     m_aAsyncDrop.aDroppedData.clear();
@@ -2535,7 +2494,6 @@ sal_Int8 OApplicationController::executeDrop( const ExecuteDropEvent& _rEvt )
     m_aAsyncDrop.bError         = sal_False;
     m_aAsyncDrop.bHtml          = sal_False;
     m_aAsyncDrop.aUrl           = OUString();
-
 
     // loop through the available formats and see what we can do ...
     // first we have to check if it is our own format, if not we have to copy the stream :-(
@@ -2611,13 +2569,12 @@ sal_Int8 OApplicationController::executeDrop( const ExecuteDropEvent& _rEvt )
 
     return DND_ACTION_NONE;
 }
-// -----------------------------------------------------------------------------
+
 Reference< XModel >  SAL_CALL OApplicationController::getModel(void) throw( RuntimeException )
 {
     return m_xModel;
 }
 
-// -----------------------------------------------------------------------------
 void OApplicationController::onAttachedFrame()
 {
     sal_Int32 nConnectedControllers( 0 );
@@ -2644,7 +2601,6 @@ void OApplicationController::onAttachedFrame()
     OnFirstControllerConnected();
 }
 
-// -----------------------------------------------------------------------------
 void OApplicationController::OnFirstControllerConnected()
 {
     if ( !m_xModel.is() )
@@ -2693,7 +2649,6 @@ void OApplicationController::OnFirstControllerConnected()
     return;
 }
 
-// -----------------------------------------------------------------------------
 void SAL_CALL OApplicationController::attachFrame( const Reference< XFrame > & i_rxFrame ) throw( RuntimeException )
 {
     ::osl::MutexGuard aGuard( getMutex() );
@@ -2703,7 +2658,6 @@ void SAL_CALL OApplicationController::attachFrame( const Reference< XFrame > & i
         onAttachedFrame();
 }
 
-// -----------------------------------------------------------------------------
 sal_Bool SAL_CALL OApplicationController::attachModel(const Reference< XModel > & _rxModel) throw( RuntimeException )
 {
     ::osl::MutexGuard aGuard( getMutex() );
@@ -2794,7 +2748,7 @@ sal_Bool SAL_CALL OApplicationController::attachModel(const Reference< XModel > 
 
     return sal_True;
 }
-// -----------------------------------------------------------------------------
+
 void OApplicationController::containerFound( const Reference< XContainer >& _xContainer)
 {
     try
@@ -2810,12 +2764,11 @@ void OApplicationController::containerFound( const Reference< XContainer >& _xCo
         DBG_UNHANDLED_EXCEPTION();
     }
 }
-// -----------------------------------------------------------------------------
+
 OUString OApplicationController::getCurrentlySelectedName(sal_Int32& _rnCommandType) const
 {
     _rnCommandType = ( (getContainer()->getElementType() == E_QUERY)
                                 ? CommandType::QUERY : ( (getContainer()->getElementType() == E_TABLE) ? CommandType::TABLE : -1 ));
-
 
     OUString sName;
     if ( _rnCommandType != -1 )
@@ -2833,19 +2786,16 @@ OUString OApplicationController::getCurrentlySelectedName(sal_Int32& _rnCommandT
     return sName;
 }
 
-// -----------------------------------------------------------------------------
 void SAL_CALL OApplicationController::addSelectionChangeListener( const Reference< view::XSelectionChangeListener >& _Listener ) throw (RuntimeException)
 {
     m_pSelectionNotifier->addListener( _Listener );
 }
 
-// -----------------------------------------------------------------------------
 void SAL_CALL OApplicationController::removeSelectionChangeListener( const Reference< view::XSelectionChangeListener >& _Listener ) throw (RuntimeException)
 {
     m_pSelectionNotifier->removeListener( _Listener );
 }
 
-// -----------------------------------------------------------------------------
 ::sal_Bool SAL_CALL OApplicationController::select( const Any& _aSelection ) throw (IllegalArgumentException, RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
@@ -2857,7 +2807,6 @@ void SAL_CALL OApplicationController::removeSelectionChangeListener( const Refer
         return sal_True;
     }
 
-    // --------------------------------------------------------------
     // BEGIN compatibility
     Sequence< NamedValue > aCurrentSelection;
     if ( (_aSelection >>= aCurrentSelection) && aCurrentSelection.getLength() )
@@ -2885,7 +2834,6 @@ void SAL_CALL OApplicationController::removeSelectionChangeListener( const Refer
         return sal_True;
     }
     // END compatibility
-    // --------------------------------------------------------------
 
     Sequence< NamedDatabaseObject > aSelectedObjects;
     if ( !( _aSelection >>= aSelectedObjects ) )
@@ -2970,7 +2918,7 @@ void SAL_CALL OApplicationController::removeSelectionChangeListener( const Refer
 
     return sal_True;
 }
-// -----------------------------------------------------------------------------
+
 Any SAL_CALL OApplicationController::getSelection(  ) throw (RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
@@ -3000,7 +2948,7 @@ Any SAL_CALL OApplicationController::getSelection(  ) throw (RuntimeException)
     }
     return makeAny( aCurrentSelection );
 }
-// -----------------------------------------------------------------------------
+
 void OApplicationController::impl_migrateScripts_nothrow()
 {
     try
@@ -3014,8 +2962,6 @@ void OApplicationController::impl_migrateScripts_nothrow()
     }
 }
 
-//........................................................................
 }   // namespace dbaui
-//........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

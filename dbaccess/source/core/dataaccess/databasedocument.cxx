@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "core_resource.hxx"
 #include "core_resource.hrc"
 #include "datasource.hxx"
@@ -63,7 +62,6 @@
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/DialogProvider.hpp>
 #include <com/sun/star/document/XGraphicObjectResolver.hpp>
-
 
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/enumhelper.hxx>
@@ -122,9 +120,7 @@ using ::com::sun::star::sdb::application::XDatabaseDocumentUI;
 namespace dbaccess
 {
 
-//============================================================
-//= ViewMonitor
-//============================================================
+// ViewMonitor
 
 bool ViewMonitor::onControllerConnected( const Reference< XController >& _rxController )
 {
@@ -151,9 +147,7 @@ bool ViewMonitor::onSetCurrentController( const Reference< XController >& _rxCon
     return bLoadFinished;
 }
 
-//============================================================
-//= ODatabaseDocument
-//============================================================
+// ODatabaseDocument
 DBG_NAME(ODatabaseDocument)
 
 extern "C" void SAL_CALL createRegistryInfo_ODatabaseDocument()
@@ -392,10 +386,15 @@ static OUString sPictures( "Pictures" );
 // try to load the dialog which will try and access the embed images, if those images are not cached in
 //  memory it will try to read them from the Picture directory which is now gone, so... we have to use this
 // inglorious hack below which basically will
+//
 // a) create a temp storage
+//
 // b) introspect any dialogs for any embed graphics and grab the associate URL(s)
+//
 // c) populate the temp storage with the associated embed images ( will be stored in a 'Pictures' folder )
+//
 // d) delete the 'Picture' element from the root storage
+//
 // e) copy the Pictures element of the temp storage to the root storage
 //
 // this assumes that we don't use the Pictures folder in the root of the base
@@ -2173,4 +2172,5 @@ OUString SAL_CALL ODatabaseDocument::getUntitledPrefix()    throw (uno::RuntimeE
 }
 
 }   // namespace dbaccess
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -116,9 +116,7 @@ namespace dbaccess
         virtual void registerPropertyNoMember( const OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes, const ::com::sun::star::uno::Type& _rType, const void* _pInitialValue );
     };
 
-    //============================================================
-    //= IColumnFactory - used by OColumns for creating new columns
-    //============================================================
+    // IColumnFactory - used by OColumns for creating new columns
     class SAL_NO_VTABLE IColumnFactory
     {
     public:
@@ -146,11 +144,9 @@ namespace dbaccess
         ~IColumnFactory() {}
     };
 
-    //============================================================
-    //= OColumns
-    //= general columns map, could be used for readonly access
-    //= no appending and dropping is supported
-    //============================================================
+    // OColumns
+    // general columns map, could be used for readonly access
+    // no appending and dropping is supported
     typedef ::boost::unordered_map<OUString, OColumn*, ::comphelper::UStringMixHash, ::comphelper::UStringMixEqual> OColumnMap;
     typedef ::std::vector<OColumn*> OColumnArray;
 

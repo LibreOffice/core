@@ -17,21 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "dbmm_types.hxx"
 
 #include "dbmm_global.hrc"
 #include "dbmm_module.hxx"
 
-//........................................................................
 namespace dbmm
 {
-//........................................................................
 
-    //====================================================================
-    //= helper
-    //====================================================================
-    //--------------------------------------------------------------------
+    // helper
     OUString getScriptTypeDisplayName( const ScriptType _eType )
     {
         sal_uInt16 nResId( 0 );
@@ -49,8 +43,6 @@ namespace dbmm
         return nResId ? OUString( MacroMigrationResId( nResId ) ) : OUString();
     }
 
-//........................................................................
 } // namespace dbmm
-//........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

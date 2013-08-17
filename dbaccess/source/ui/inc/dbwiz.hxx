@@ -44,14 +44,10 @@ namespace dbaccess
 {
     class ODsnTypeCollection;
 }
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
 
-//=========================================================================
-//= ODbTypeWizDialog
-//=========================================================================
+// ODbTypeWizDialog
 class OGeneralPage;
 class ODbDataSourceAdministrationHelper;
 /** tab dialog for administrating the office wide registered data sources
@@ -125,9 +121,7 @@ private:
     DECL_LINK(OnTypeSelected, OGeneralPage*);
 };
 
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
 
 #endif // DBAUI_DBWIZ_HXX
 

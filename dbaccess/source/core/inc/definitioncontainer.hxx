@@ -75,10 +75,8 @@ private:
         // (for the moment, this is private. Make it public if needed. If really needed.)
 };
 
-//==========================================================================
-//= ODefinitionContainer -  base class of collections of database definition
-//=                         documents
-//==========================================================================
+// ODefinitionContainer -  base class of collections of database definition
+//                         documents
 typedef ::cppu::ImplHelper7 <   ::com::sun::star::container::XIndexAccess
                             ,   ::com::sun::star::container::XNameContainer
                             ,   ::com::sun::star::container::XEnumerationAccess

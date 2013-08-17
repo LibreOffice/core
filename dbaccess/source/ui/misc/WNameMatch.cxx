@@ -29,10 +29,8 @@
 #include <com/sun/star/sdbc/DataType.hpp>
 
 using namespace ::dbaui;
-//========================================================================
 // OWizColumnSelect
 DBG_NAME(OWizNameMatching)
-//========================================================================
 OWizNameMatching::OWizNameMatching( Window* pParent)
         :OWizardPage( pParent, ModuleRes( TAB_WIZ_NAME_MATCHING     ) )
         ,m_FT_TABLE_LEFT(       this, ModuleRes( FT_TABLE_LEFT          ) )
@@ -72,13 +70,12 @@ OWizNameMatching::OWizNameMatching( Window* pParent)
 
     FreeResource();
 }
-// -----------------------------------------------------------------------
+
 OWizNameMatching::~OWizNameMatching()
 {
     DBG_DTOR(OWizNameMatching,NULL);
 }
 
-// -----------------------------------------------------------------------
 void OWizNameMatching::Reset()
 {
     // urspr"unglichen zustand wiederherstellen
@@ -95,7 +92,7 @@ void OWizNameMatching::Reset()
     }
 
 }
-// -----------------------------------------------------------------------
+
 void OWizNameMatching::ActivatePage( )
 {
     DBG_CHKTHIS(OWizNameMatching,NULL);
@@ -111,7 +108,6 @@ void OWizNameMatching::ActivatePage( )
     aName += m_pParent->m_sName;
     m_FT_TABLE_RIGHT.SetText(aName);
 
-
     m_CTRL_LEFT.FillListBox(*m_pParent->getSrcVector());
     m_CTRL_RIGHT.FillListBox(*m_pParent->getDestVector());
 
@@ -121,11 +117,10 @@ void OWizNameMatching::ActivatePage( )
     m_ibColumn_up_right.Enable( m_CTRL_RIGHT.GetEntryCount() > 1 );
     m_ibColumn_down_right.Enable( m_CTRL_RIGHT.GetEntryCount() > 1 );
 
-
     m_pParent->EnableButton(OCopyTableWizard::WIZARD_NEXT,sal_False);
     m_CTRL_LEFT.GrabFocus();
 }
-// -----------------------------------------------------------------------
+
 sal_Bool OWizNameMatching::LeavePage()
 {
     DBG_CHKTHIS(OWizNameMatching,NULL);
@@ -136,7 +131,6 @@ sal_Bool OWizNameMatching::LeavePage()
     m_pParent->m_vColumnTypes.clear();
     m_pParent->m_vColumnPos.resize( pSrcColumns->size(), ODatabaseExport::TPositions::value_type( COLUMN_POSITION_NOT_FOUND, COLUMN_POSITION_NOT_FOUND ) );
     m_pParent->m_vColumnTypes.resize( pSrcColumns->size(), COLUMN_POSITION_NOT_FOUND );
-
 
     sal_Int32 nParamPos = 0;
     SvTreeListEntry* pLeftEntry = m_CTRL_LEFT.GetModel()->First();
@@ -185,9 +179,8 @@ sal_Bool OWizNameMatching::LeavePage()
 
     return sal_True;
 }
-// -----------------------------------------------------------------------
+
 String OWizNameMatching::GetTitle() const { return String(ModuleRes(STR_WIZ_NAME_MATCHING_TITEL)); }
-// -----------------------------------------------------------------------
 IMPL_LINK( OWizNameMatching, ButtonClickHdl, Button *, pButton )
 {
     SvTreeListEntry* pEntry = m_CTRL_LEFT.FirstSelected();
@@ -214,10 +207,9 @@ IMPL_LINK( OWizNameMatching, ButtonClickHdl, Button *, pButton )
         TableListClickHdl(&m_CTRL_LEFT);
     }
 
-
     return 0;
 }
-//------------------------------------------------------------------------------
+
 IMPL_LINK( OWizNameMatching, RightButtonClickHdl, Button *, pButton )
 {
     SvTreeListEntry* pEntry = m_CTRL_RIGHT.FirstSelected();
@@ -241,7 +233,7 @@ IMPL_LINK( OWizNameMatching, RightButtonClickHdl, Button *, pButton )
     }
     return 0;
 }
-//------------------------------------------------------------------------------
+
 IMPL_LINK( OWizNameMatching, TableListClickHdl, void*, /*NOTINTERESTEDIN*/ )
 {
     SvTreeListEntry* pEntry = m_CTRL_LEFT.FirstSelected();
@@ -275,7 +267,7 @@ IMPL_LINK( OWizNameMatching, TableListClickHdl, void*, /*NOTINTERESTEDIN*/ )
 
     return 0;
 }
-//------------------------------------------------------------------------------
+
 IMPL_LINK( OWizNameMatching, TableListRightSelectHdl, void*, /*NOTINTERESTEDIN*/ )
 {
     SvTreeListEntry* pEntry = m_CTRL_RIGHT.FirstSelected();
@@ -309,7 +301,7 @@ IMPL_LINK( OWizNameMatching, TableListRightSelectHdl, void*, /*NOTINTERESTEDIN*/
 
     return 0;
 }
-// -----------------------------------------------------------------------
+
 IMPL_LINK( OWizNameMatching, AllNoneClickHdl, Button *, pButton )
 {
     sal_Bool bAll = pButton == &m_pbAll;
@@ -322,10 +314,8 @@ IMPL_LINK( OWizNameMatching, AllNoneClickHdl, Button *, pButton )
 
     return 0;
 }
-// -----------------------------------------------------------------------
-//========================================================================
+
 // class OColumnString
-//========================================================================
 class OColumnString : public SvLBoxString
 {
     sal_Bool m_bReadOnly;
@@ -338,7 +328,7 @@ public:
 
     virtual void Paint(const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry);
 };
-//------------------------------------------------------------------------
+
 void OColumnString::Paint(const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* /*pView*/, const SvTreeListEntry* /*pEntry*/)
 {
     if(m_bReadOnly)
@@ -349,7 +339,7 @@ void OColumnString::Paint(const Point& rPos, SvTreeListBox& rDev, const SvViewDa
     }
     rDev.DrawText( rPos, GetText() );
 }
-//========================================================================
+
 OColumnTreeBox::OColumnTreeBox( Window* pParent, const ResId& rResId )
     : OMarkableTreeListBox(pParent, rResId)
 {
@@ -358,7 +348,7 @@ OColumnTreeBox::OColumnTreeBox( Window* pParent, const ResId& rResId )
     SetStyle(GetStyle() | WB_BORDER | WB_HASBUTTONS | WB_HSCROLL);
     SetSelectionMode( SINGLE_SELECTION );
 }
-//------------------------------------------------------------------------
+
 void OColumnTreeBox::InitEntry(SvTreeListEntry* pEntry, const OUString& rStr, const Image& rImg1, const Image& rImg2, SvLBoxButtonKind eButtonKind)
 {
     DBTreeListBox::InitEntry(pEntry, rStr, rImg1, rImg2, eButtonKind);
@@ -366,7 +356,7 @@ void OColumnTreeBox::InitEntry(SvTreeListEntry* pEntry, const OUString& rStr, co
     if (pString)
         pEntry->ReplaceItem( pString, pEntry->ItemCount() - 1 );
 }
-//------------------------------------------------------------------------
+
 sal_Bool OColumnTreeBox::Select( SvTreeListEntry* pEntry, sal_Bool bSelect )
 {
     if(bSelect)
@@ -379,7 +369,7 @@ sal_Bool OColumnTreeBox::Select( SvTreeListEntry* pEntry, sal_Bool bSelect )
         bSelect = DBTreeListBox::Select( pEntry,bSelect );
     return bSelect;
 }
-//------------------------------------------------------------------------
+
 void OColumnTreeBox::FillListBox( const ODatabaseExport::TColumnVector& _rList)
 {
     Clear();
@@ -392,10 +382,5 @@ void OColumnTreeBox::FillListBox( const ODatabaseExport::TColumnVector& _rList)
         SetCheckButtonState( pEntry, eState );
     }
 }
-// -----------------------------------------------------------------------------
-
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

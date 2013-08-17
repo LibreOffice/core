@@ -29,14 +29,10 @@
 
 class SfxItemSet;
 
-//........................................................................
 namespace dbaui
 {
-//........................................................................
 
-    //====================================================================
-    //= PropertyStorage
-    //====================================================================
+    // PropertyStorage
     class SAL_NO_VTABLE PropertyStorage
     {
     public:
@@ -49,9 +45,7 @@ namespace dbaui
     typedef ::boost::shared_ptr< PropertyStorage >      PPropertyStorage;
     typedef ::std::map< sal_Int32, PPropertyStorage >   PropertyValues;
 
-    //====================================================================
-    //= SetItemPropertyStorage
-    //====================================================================
+    // SetItemPropertyStorage
     typedef sal_uInt16  ItemId;
 
     /** a PropertyStorage implementation which stores the value in an item set
@@ -77,9 +71,7 @@ namespace dbaui
         const ItemId    m_nItemID;
     };
 
-//........................................................................
 } // namespace dbaui
-//........................................................................
 
 #endif // PROPERTYSTORAGE_HXX
 

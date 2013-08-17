@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "connection.hxx"
 #include "dbastrings.hrc"
 #include "datasource.hxx"
@@ -71,7 +70,6 @@ using ::com::sun::star::sdb::tools::XDataSourceMetaData;
 namespace dbaccess
 {
 
-//==========================================================================
 // XServiceInfo
 OUString OConnection::getImplementationName(  ) throw(RuntimeException)
 {
@@ -131,6 +129,7 @@ Reference< XStatement >  OConnection::createStatement(void) throw( SQLException,
     }
     return xStatement;
 }
+
 Reference< XPreparedStatement >  OConnection::prepareStatement(const OUString& sql) throw( SQLException, RuntimeException )
 {
     SAL_INFO("dbaccess", "OConnection::prepareStatement" );
@@ -275,9 +274,8 @@ void OConnection::setTypeMap(const Reference< XNameAccess > & typeMap) throw( SQ
     checkDisposed();
     m_xMasterConnection->setTypeMap(typeMap);
 }
-//==========================================================================
-//= OConnection
-//==========================================================================
+
+// OConnection
 DBG_NAME(OConnection)
 
 OConnection::OConnection(ODatabaseSource& _rDB
@@ -622,6 +620,7 @@ Reference< XNameAccess > SAL_CALL OConnection::getViews(  ) throw(RuntimeExcepti
 
     return m_pViews;
 }
+
 // XQueriesSupplier
 Reference< XNameAccess >  OConnection::getQueries(void) throw( RuntimeException )
 {
@@ -877,4 +876,5 @@ Reference< XInterface > SAL_CALL OConnection::getTableEditor( const Reference< X
 }
 
 }   // namespace dbaccess
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "apitools.hxx"
 #include "dbastrings.hrc"
 #include <cppuhelper/typeprovider.hxx>
@@ -30,14 +29,9 @@ using namespace ::com::sun::star::lang;
 using namespace cppu;
 using namespace osl;
 
-//==================================================================================
-//= various helper functions
-//==================================================================================
-//============================================================
-//= OSubComponent
-//============================================================
+// various helper functions
+// OSubComponent
 DBG_NAME(OSubComponent)
-//--------------------------------------------------------------------------
 OSubComponent::OSubComponent(Mutex& _rMutex, const Reference< XInterface > & xParent)
               :OComponentHelper(_rMutex)
               ,m_xParent(xParent)
@@ -45,7 +39,7 @@ OSubComponent::OSubComponent(Mutex& _rMutex, const Reference< XInterface > & xPa
     DBG_CTOR(OSubComponent,NULL);
 
 }
-// -----------------------------------------------------------------------------
+
 OSubComponent::~OSubComponent()
 {
     m_xParent = NULL;
@@ -54,7 +48,6 @@ OSubComponent::~OSubComponent()
 }
 
 // com::sun::star::lang::XTypeProvider
-//--------------------------------------------------------------------------
 Sequence< Type > OSubComponent::getTypes() throw (RuntimeException)
 {
     OTypeCollection aTypes(::getCppuType( (const Reference< XComponent > *)0 ),
@@ -65,13 +58,11 @@ Sequence< Type > OSubComponent::getTypes() throw (RuntimeException)
 }
 
 // XInterface
-//--------------------------------------------------------------------------
 void OSubComponent::acquire() throw ( )
 {
     OComponentHelper::acquire();
 }
 
-//--------------------------------------------------------------------------
 void OSubComponent::release() throw ( )
 {
     Reference< XInterface > x( xDelegator );
@@ -121,7 +112,6 @@ void OSubComponent::release() throw ( )
     OWeakAggObject::release();
 }
 
-//--------------------------------------------------------------------------
 Any OSubComponent::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     Any aReturn;
@@ -130,6 +120,5 @@ Any OSubComponent::queryInterface( const Type & rType ) throw(RuntimeException)
 
     return aReturn;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

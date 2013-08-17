@@ -42,16 +42,12 @@ namespace com { namespace sun { namespace star {
     }
 }}}
 
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
 
 class OGenericAdministrationPage;
 
-//=========================================================================
-//= ODbTypeWizDialogSetup
-//=========================================================================
+// ODbTypeWizDialogSetup
 class OGeneralPage;
 class OGeneralPageWizard;
 class ODbDataSourceAdministrationHelper;
@@ -95,8 +91,6 @@ private:
 
     ::dbaccess::ODsnTypeCollection*
                             m_pCollection;  /// the DSN type collection instance
-
-
 
 public:
     /** ctor. The itemset given should have been created by <method>createItemSet</method> and should be destroyed
@@ -188,9 +182,7 @@ private:
     DECL_LINK(ImplModifiedHdl, OGenericAdministrationPage*);
 };
 
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
 
 #endif // DBAUI_DBWIZ2_HXX
 

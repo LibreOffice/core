@@ -49,10 +49,7 @@ using namespace ::com::sun::star::util;
 namespace dbaui
 {
 
-// =============================================================================
-// = OJoinDesignView
-// =============================================================================
-// -----------------------------------------------------------------------------
+// OJoinDesignView
 OJoinDesignView::OJoinDesignView(Window* _pParent, OJoinController& _rController,const Reference< XComponentContext >& _rxContext)
     :ODataView( _pParent, _rController, _rxContext )
     ,m_pTableView(NULL)
@@ -60,7 +57,7 @@ OJoinDesignView::OJoinDesignView(Window* _pParent, OJoinController& _rController
 {
     m_pScrollWindow = new OScrollWindowHelper(this);
 }
-// -----------------------------------------------------------------------------
+
 OJoinDesignView::~OJoinDesignView()
 {
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
@@ -72,7 +69,7 @@ OJoinDesignView::~OJoinDesignView()
     SAL_WNODEPRECATED_DECLARATIONS_POP
     m_pTableView = NULL;
 }
-// -------------------------------------------------------------------------
+
 void OJoinDesignView::Construct()
 {
     m_pScrollWindow->setTableView(m_pTableView);
@@ -83,11 +80,11 @@ void OJoinDesignView::Construct()
 
     ODataView::Construct();
 }
-// -----------------------------------------------------------------------------
+
 void OJoinDesignView::initialize()
 {
 }
-// -------------------------------------------------------------------------
+
 void OJoinDesignView::resizeDocumentView(Rectangle& _rPlayground)
 {
     m_pScrollWindow->SetPosSizePixel( _rPlayground.TopLeft(), _rPlayground.GetSize() );
@@ -96,16 +93,16 @@ void OJoinDesignView::resizeDocumentView(Rectangle& _rPlayground)
     _rPlayground.SetPos( _rPlayground.BottomRight() );
     _rPlayground.SetSize( Size( 0, 0 ) );
 }
-// -----------------------------------------------------------------------------
+
 void OJoinDesignView::setReadOnly(sal_Bool /*_bReadOnly*/)
 {
 }
-// -----------------------------------------------------------------------------
+
 void OJoinDesignView::SaveTabWinUIConfig(OTableWindow* pWin)
 {
     getController().SaveTabWinPosSize(pWin, m_pScrollWindow->GetHScrollBar()->GetThumbPos(), m_pScrollWindow->GetVScrollBar()->GetThumbPos());
 }
-// -----------------------------------------------------------------------------
+
 void OJoinDesignView::KeyInput( const KeyEvent& rEvt )
 {
     if ( m_pTableView && m_pTableView->IsVisible() )
@@ -113,7 +110,6 @@ void OJoinDesignView::KeyInput( const KeyEvent& rEvt )
     else
         ODataView::KeyInput(rEvt);
 }
-// -----------------------------------------------------------------------------
 
 }   // namespace dbaui
 

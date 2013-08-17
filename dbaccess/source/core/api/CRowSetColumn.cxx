@@ -89,4 +89,5 @@ void SAL_CALL ORowSetColumn::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,
 }
 
 }   // namespace dbaccess
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

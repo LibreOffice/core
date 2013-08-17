@@ -25,14 +25,10 @@
 #include <ucbhelper/content.hxx>
 #include "curledit.hxx"
 
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
 
-    //=========================================================================
-    //= OConnectionTabPage
-    //=========================================================================
+    // OConnectionTabPage
 
     /** implements the connection page of the data source properties dialog.
     */
@@ -55,7 +51,6 @@ namespace dbaui
 
         // connection test
         PushButton          m_aTestConnection;
-
 
         // called when the test connection button was clicked
         DECL_LINK(OnTestJavaClickHdl,PushButton*);
@@ -89,9 +84,7 @@ namespace dbaui
         */
         virtual bool checkTestConnection();
     };
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
 
 #endif // _DBAUI_DETAILPAGES_HXX_
 

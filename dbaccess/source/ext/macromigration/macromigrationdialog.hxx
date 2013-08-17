@@ -26,14 +26,10 @@
 
 #include <memory>
 
-//........................................................................
 namespace dbmm
 {
-//........................................................................
 
-    //====================================================================
-    //= MacroMigrationDialog
-    //====================================================================
+    // MacroMigrationDialog
     struct MacroMigrationDialog_Data;
     typedef ::svt::RoadmapWizard    MacroMigrationDialog_Base;
     class MacroMigrationDialog : public MacroMigrationDialog_Base
@@ -76,9 +72,7 @@ namespace dbmm
         ::std::auto_ptr< MacroMigrationDialog_Data >    m_pData;
     };
 
-//........................................................................
 } // namespace dbmm
-//........................................................................
 
 #endif // DBACCESS_MACROMIGRATIONDIALOG_HXX
 

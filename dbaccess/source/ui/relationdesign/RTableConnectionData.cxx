@@ -43,10 +43,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
 DBG_NAME(ORelationTableConnectionData)
-//========================================================================
 // class ORelationTableConnectionData
-//========================================================================
-//------------------------------------------------------------------------
 ORelationTableConnectionData::ORelationTableConnectionData()
     :OTableConnectionData()
     ,m_nUpdateRules(KeyRule::NO_ACTION)
@@ -55,7 +52,7 @@ ORelationTableConnectionData::ORelationTableConnectionData()
 {
     DBG_CTOR(ORelationTableConnectionData,NULL);
 }
-//------------------------------------------------------------------------
+
 ORelationTableConnectionData::ORelationTableConnectionData( const TTableWindowData::value_type& _pReferencingTable,
                                                             const TTableWindowData::value_type& _pReferencedTable,
                                                             const OUString& rConnName )
@@ -71,7 +68,6 @@ ORelationTableConnectionData::ORelationTableConnectionData( const TTableWindowDa
         SetCardinality();
 }
 
-//------------------------------------------------------------------------
 ORelationTableConnectionData::ORelationTableConnectionData( const ORelationTableConnectionData& rConnData )
     :OTableConnectionData( rConnData )
 {
@@ -79,18 +75,15 @@ ORelationTableConnectionData::ORelationTableConnectionData( const ORelationTable
     *this = rConnData;
 }
 
-//------------------------------------------------------------------------
 ORelationTableConnectionData::~ORelationTableConnectionData()
 {
     DBG_DTOR(ORelationTableConnectionData,NULL);
 }
 
-//------------------------------------------------------------------------
 sal_Bool ORelationTableConnectionData::DropRelation()
 {
     DBG_CHKTHIS(ORelationTableConnectionData,NULL);
     ::osl::MutexGuard aGuard( m_aMutex );
-    ////////////////////////////////////////////////////////////
     // Relation loeschen
     Reference< XIndexAccess> xKeys = getReferencingTable()->getKeys();
     if( m_aConnName.Len() && xKeys.is() )
@@ -118,11 +111,9 @@ sal_Bool ORelationTableConnectionData::DropRelation()
     return sal_True;
 }
 
-//------------------------------------------------------------------------
 void ORelationTableConnectionData::ChangeOrientation()
 {
     DBG_CHKTHIS(ORelationTableConnectionData,NULL);
-    //////////////////////////////////////////////////////////////////////
     // Source- und DestFieldName der Linien austauschen
     OUString sTempString;
     OConnectionLineDataVec::iterator aIter = m_vConnLineData.begin();
@@ -134,14 +125,12 @@ void ORelationTableConnectionData::ChangeOrientation()
         (*aIter)->SetDestFieldName( sTempString );
     }
 
-    //////////////////////////////////////////////////////////////////////
     // Member anpassen
     TTableWindowData::value_type pTemp = m_pReferencingTable;
     m_pReferencingTable = m_pReferencedTable;
     m_pReferencedTable = pTemp;
 }
 
-//------------------------------------------------------------------------
 void ORelationTableConnectionData::SetCardinality()
 {
     DBG_CHKTHIS(ORelationTableConnectionData,NULL);
@@ -163,7 +152,7 @@ void ORelationTableConnectionData::SetCardinality()
     }
 
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool ORelationTableConnectionData::checkPrimaryKey(const Reference< XPropertySet>& i_xTable,EConnectionSide _eEConnectionSide) const
 {
     // check if Table has the primary key column dependig on _eEConnectionSide
@@ -198,13 +187,12 @@ sal_Bool ORelationTableConnectionData::checkPrimaryKey(const Reference< XPropert
 
     return sal_True;
 }
-//------------------------------------------------------------------------
+
 sal_Bool ORelationTableConnectionData::IsConnectionPossible()
 {
     DBG_CHKTHIS(ORelationTableConnectionData,NULL);
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    //////////////////////////////////////////////////////////////////////
     // Wenn die SourceFelder ein PrimKey sind, ist nur die Orientierung falsch
     if ( IsSourcePrimKey() && !IsDestPrimKey() )
         ChangeOrientation();
@@ -212,26 +200,22 @@ sal_Bool ORelationTableConnectionData::IsConnectionPossible()
     return sal_True;
 }
 
-//------------------------------------------------------------------------
 OConnectionLineDataRef ORelationTableConnectionData::CreateLineDataObj()
 {
     return new OConnectionLineData();
 }
 
-//------------------------------------------------------------------------
 OConnectionLineDataRef ORelationTableConnectionData::CreateLineDataObj( const OConnectionLineData& rConnLineData )
 {
     return new OConnectionLineData( rConnLineData );
 }
 
-//------------------------------------------------------------------------
 void ORelationTableConnectionData::CopyFrom(const OTableConnectionData& rSource)
 {
     // wie in der Basisklasse zurueckziehen auf das (nicht-virtuelle) operator=
     *this = *static_cast<const ORelationTableConnectionData*>(&rSource);
 }
 
-//------------------------------------------------------------------------
 ORelationTableConnectionData& ORelationTableConnectionData::operator=( const ORelationTableConnectionData& rConnData )
 {
     if (&rConnData == this)
@@ -244,9 +228,9 @@ ORelationTableConnectionData& ORelationTableConnectionData::operator=( const ORe
 
     return *this;
 }
+
 namespace dbaui
 {
-//-------------------------------------------------------------------------
 bool operator==(const ORelationTableConnectionData& lhs, const ORelationTableConnectionData& rhs)
 {
     bool bEqual = (lhs.m_nUpdateRules == rhs.m_nUpdateRules)
@@ -270,12 +254,12 @@ bool operator==(const ORelationTableConnectionData& lhs, const ORelationTableCon
     }
     return bEqual;
 }
+
 }
-//------------------------------------------------------------------------
+
 sal_Bool ORelationTableConnectionData::Update()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    ////////////////////////////////////////////////////////////
     // Alte Relation loeschen
     {
         DropRelation();
@@ -289,7 +273,6 @@ sal_Bool ORelationTableConnectionData::Update()
 
     if ( !xKeys.is() )
         return sal_False;
-    ////////////////////////////////////////////////////////////
     // Neue Relation erzeugen
     Reference<XDataDescriptorFactory> xKeyFactory(xKeys,UNO_QUERY);
     OSL_ENSURE(xKeyFactory.is(),"No XDataDescriptorFactory Interface!");
@@ -444,12 +427,10 @@ xKey.clear();
     }
     // NOTE : the caller is responsible for updating any other objects referencing the old LineDatas (for instance a ConnLine)
 
-    ////////////////////////////////////////////////////////////
     // Kardinalitaet bestimmen
     SetCardinality();
 
     return sal_True;
 }
-// -----------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

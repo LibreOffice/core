@@ -38,10 +38,8 @@
 #include <algorithm>
 #include <functional>
 
-//......................................................................................................................
 namespace dbaui
 {
-//......................................................................................................................
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
@@ -70,12 +68,9 @@ namespace dbaui
     using ::com::sun::star::beans::XPropertySet;
     using ::com::sun::star::beans::PropertyChangeEvent;
 
-    //==================================================================================================================
-    //= helper structs
-    //==================================================================================================================
+    // helper structs
     namespace
     {
-        //..............................................................................................................
         struct SubComponentDescriptor
         {
             /// the name of the sub component, empty if it is yet unsaved
@@ -164,7 +159,6 @@ namespace dbaui
             }
         };
 
-        //..............................................................................................................
         struct SelectSubComponent : public ::std::unary_function< SubComponentDescriptor, Reference< XComponent > >
         {
             Reference< XComponent > operator()( const SubComponentDescriptor &_desc ) const
@@ -176,10 +170,8 @@ namespace dbaui
             }
         };
 
-        //..............................................................................................................
         typedef ::std::vector< SubComponentDescriptor > SubComponents;
 
-        //..............................................................................................................
         struct SubComponentMatch : public ::std::unary_function< SubComponentDescriptor, bool >
         {
         public:
@@ -204,9 +196,7 @@ namespace dbaui
         };
     }
 
-    //==================================================================================================================
-    //= SubComponentManager_Data
-    //==================================================================================================================
+    // SubComponentManager_Data
     struct SubComponentManager_Data
     {
         SubComponentManager_Data( OApplicationController& _rController, const ::comphelper::SharedMutex& _rMutex )
@@ -222,31 +212,24 @@ namespace dbaui
         ::osl::Mutex&   getMutex() const { return m_aMutex; }
     };
 
-    //==================================================================================================================
-    //= SubComponentManager
-    //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+    // SubComponentManager
     SubComponentManager::SubComponentManager( OApplicationController& _rController, const ::comphelper::SharedMutex& _rMutex )
         :m_pData( new SubComponentManager_Data( _rController, _rMutex ) )
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     SubComponentManager::~SubComponentManager()
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     void SubComponentManager::disposing()
     {
         ::osl::MutexGuard aGuard( m_pData->getMutex() );
         m_pData->m_aComponents.clear();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     namespace
     {
-        //..............................................................................................................
         bool lcl_fallbackToAnotherController( SubComponentDescriptor& _rCompDesc )
         {
             Reference< XController > xFallback;
@@ -284,7 +267,6 @@ namespace dbaui
             return false;
         }
 
-        //..............................................................................................................
         bool lcl_closeComponent( const Reference< XCommandProcessor >& _rxCommandProcessor )
         {
             bool bSuccess = false;
@@ -304,7 +286,6 @@ namespace dbaui
             return bSuccess;
         }
 
-        //..............................................................................................................
         bool lcl_closeComponent( const SubComponentDescriptor& _rComponent )
         {
             if ( _rComponent.xComponentCommandProcessor.is() )
@@ -332,7 +313,6 @@ namespace dbaui
             return bSuccess;
         }
 
-        //..............................................................................................................
         void lcl_notifySubComponentEvent( const SubComponentManager_Data& _rData, const sal_Char* _pAsciiEventName,
                 const SubComponentDescriptor& _rComponent )
         {
@@ -352,7 +332,6 @@ namespace dbaui
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL SubComponentManager::propertyChange( const PropertyChangeEvent& i_rEvent ) throw (RuntimeException)
     {
         if ( i_rEvent.PropertyName != PROPERTY_NAME )
@@ -383,7 +362,6 @@ namespace dbaui
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL SubComponentManager::disposing( const EventObject& _rSource ) throw (RuntimeException)
     {
         ::osl::ClearableMutexGuard aGuard( m_pData->getMutex() );
@@ -432,7 +410,6 @@ namespace dbaui
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     Sequence< Reference< XComponent> > SubComponentManager::getSubComponents() const
     {
         ::osl::MutexGuard aGuard( m_pData->getMutex() );
@@ -447,7 +424,6 @@ namespace dbaui
         return aComponents;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     sal_Bool SubComponentManager::closeSubComponents()
     {
         SolarMutexGuard aSolarGuard;
@@ -472,14 +448,12 @@ namespace dbaui
         return empty();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     bool SubComponentManager::empty() const
     {
         ::osl::MutexGuard aGuard( m_pData->getMutex() );
         return m_pData->m_aComponents.empty();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     void SubComponentManager::onSubComponentOpened( const OUString&  _rName, const sal_Int32 _nComponentType,
         const ElementOpenMode _eOpenMode, const Reference< XComponent >& _rxComponent )
     {
@@ -515,7 +489,6 @@ namespace dbaui
         lcl_notifySubComponentEvent( *m_pData, "OnSubComponentOpened", aElement );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     bool SubComponentManager::activateSubFrame( const OUString& _rName, const sal_Int32 _nComponentType,
         const ElementOpenMode _eOpenMode, Reference< XComponent >& o_rComponent ) const
     {
@@ -544,7 +517,6 @@ namespace dbaui
         return true;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     bool SubComponentManager::closeSubFrames( const OUString& i_rName, const sal_Int32 _nComponentType )
     {
         ::osl::MutexGuard aGuard( m_pData->getMutex() );
@@ -566,7 +538,6 @@ namespace dbaui
         return true;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     bool SubComponentManager::lookupSubComponent( const Reference< XComponent >& i_rComponent,
             OUString& o_rName, sal_Int32& o_rComponentType )
     {
@@ -594,8 +565,6 @@ namespace dbaui
         return false;
     }
 
-//......................................................................................................................
 } // namespace dbaui
-//......................................................................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -26,14 +26,10 @@
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-//........................................................................
 namespace dbaccess
 {
-//........................................................................
 
-    //====================================================================
-    //= SubComponentRecovery
-    //====================================================================
+    // SubComponentRecovery
     class DBACCESS_DLLPRIVATE SubComponentRecovery
     {
     public:
@@ -114,10 +110,7 @@ namespace dbaccess
         SubComponentDescriptor                  m_aCompDesc;
     };
 
-
-//........................................................................
 } // namespace dbaccess
-//........................................................................
 
 #endif // SUBCOMPONENTRECOVERY_HXX
 

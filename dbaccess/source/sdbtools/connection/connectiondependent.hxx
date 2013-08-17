@@ -27,14 +27,10 @@
 #include <cppuhelper/weakref.hxx>
 #include <osl/mutex.hxx>
 
-//........................................................................
 namespace sdbtools
 {
-//........................................................................
 
-    //====================================================================
-    //= ConnectionDependentComponent
-    //====================================================================
+    // ConnectionDependentComponent
     class ConnectionDependentComponent
     {
     private:
@@ -103,9 +99,7 @@ namespace sdbtools
         }
     };
 
-    //====================================================================
-    //= ConnectionDependentComponent::EntryGuard
-    //====================================================================
+    // ConnectionDependentComponent::EntryGuard
     /** a class for guarding methods of a connection-dependent component
 
         This class serves multiple purposes:
@@ -137,10 +131,7 @@ namespace sdbtools
         }
     };
 
-
-//........................................................................
 } // namespace sdbtools
-//........................................................................
 
 #endif // DBACCESS_CONNECTION_DEPENDENT_HXX
 

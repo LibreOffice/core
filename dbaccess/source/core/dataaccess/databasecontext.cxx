@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "apitools.hxx"
 #include "core_resource.hrc"
 #include "core_resource.hxx"
@@ -86,7 +85,6 @@ using ::com::sun::star::ucb::IOErrorCode_NO_FILE;
 using ::com::sun::star::ucb::InteractiveIOException;
 using ::com::sun::star::ucb::IOErrorCode_NOT_EXISTING;
 using ::com::sun::star::ucb::IOErrorCode_NOT_EXISTING_PATH;
-
 
 namespace dbaccess
 {
@@ -164,8 +162,7 @@ namespace dbaccess
         {
         }
 
-//= ODatabaseContext
-//==========================================================================
+// ODatabaseContext
 
 ODatabaseContext::ODatabaseContext( const Reference< XComponentContext >& _rxContext )
     :DatabaseAccessContext_Base(m_aMutex)
@@ -762,4 +759,5 @@ void ODatabaseContext::onBasicManagerCreated( const Reference< XModel >& _rxForD
 }
 
 }   // namespace dbaccess
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
