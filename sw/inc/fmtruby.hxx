@@ -16,11 +16,10 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _FMTRUBY_HXX
-#define _FMTRUBY_HXX
+#ifndef FMTRUBY_HXX
+#define FMTRUBY_HXX
 
 
-#include <tools/string.hxx>
 #include <svl/poolitem.hxx>
 
 class SwTxtRuby;
@@ -29,15 +28,15 @@ class SW_DLLPUBLIC SwFmtRuby : public SfxPoolItem
 {
     friend class SwTxtRuby;
 
-    String sRubyTxt;                        ///< The ruby txt.
-    String sCharFmtName;                    ///< Name of the charformat.
+    OUString sRubyTxt;                      ///< The ruby txt.
+    OUString sCharFmtName;                  ///< Name of the charformat.
     SwTxtRuby* pTxtAttr;                    ///< The TextAttribute.
     sal_uInt16 nCharFmtId;                  ///< PoolId of the charformat.
     sal_uInt16 nPosition;                   ///< Position of the Ruby-character.
     sal_uInt16 nAdjustment;                 ///< Specific adjustment of the Ruby-ch.
 
 public:
-    SwFmtRuby( const String& rRubyTxt );
+    SwFmtRuby( const OUString& rRubyTxt );
     SwFmtRuby( const SwFmtRuby& rAttr );
     virtual ~SwFmtRuby();
 
@@ -62,11 +61,11 @@ public:
     const SwTxtRuby* GetTxtRuby() const         { return pTxtAttr; }
     SwTxtRuby* GetTxtRuby()                     { return pTxtAttr; }
 
-    const String& GetText() const               { return sRubyTxt; }
-    void SetText( const String& rTxt )          { sRubyTxt = rTxt; }
+    OUString GetText() const                    { return sRubyTxt; }
+    void SetText( const OUString& rTxt )        { sRubyTxt = rTxt; }
 
-    const String& GetCharFmtName() const        { return sCharFmtName; }
-    void SetCharFmtName( const String& rNm )    { sCharFmtName = rNm; }
+    OUString GetCharFmtName() const             { return sCharFmtName; }
+    void SetCharFmtName( const OUString& rNm )  { sCharFmtName = rNm; }
 
     sal_uInt16 GetCharFmtId() const                 { return nCharFmtId; }
     void SetCharFmtId( sal_uInt16 nNew )            { nCharFmtId = nNew; }

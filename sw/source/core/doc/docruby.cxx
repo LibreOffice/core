@@ -124,7 +124,7 @@ sal_uInt16 SwDoc::SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
                     if( aCheckEntry.GetRubyAttr() != pEntry->GetRubyAttr() )
                     {
                         // set/reset the attribut
-                        if( pEntry->GetRubyAttr().GetText().Len() )
+                        if( !pEntry->GetRubyAttr().GetText().isEmpty() )
                         {
                             InsertPoolItem( aPam, pEntry->GetRubyAttr(), 0 );
                         }
@@ -155,7 +155,7 @@ sal_uInt16 SwDoc::SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
                         const SwRubyListEntry* pEntry = &rList[ nListEntry++ ];
 
                         // set/reset the attribut
-                        if( pEntry->GetRubyAttr().GetText().Len() &&
+                        if( !pEntry->GetRubyAttr().GetText().isEmpty() &&
                             pEntry->GetText().Len() )
                         {
                             InsertString( aPam, pEntry->GetText() );

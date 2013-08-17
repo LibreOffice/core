@@ -421,7 +421,7 @@ bool SwFmtINetFmt::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId  )
 |*    class SwFmtRuby
 *************************************************************************/
 
-SwFmtRuby::SwFmtRuby( const String& rRubyTxt )
+SwFmtRuby::SwFmtRuby( const OUString& rRubyTxt )
     : SfxPoolItem( RES_TXTATR_CJK_RUBY ),
     sRubyTxt( rRubyTxt ),
     pTxtAttr( 0 ),

@@ -255,7 +255,7 @@ SwCharFmt* SwTxtRuby::GetCharFmt()
     const SwFmtRuby& rFmt = SwTxtAttrEnd::GetRuby();
     SwCharFmt* pRet = 0;
 
-    if( rFmt.GetText().Len() )
+    if( !rFmt.GetText().isEmpty() )
     {
         const SwDoc* pDoc = GetTxtNode().GetDoc();
         const String& rStr = rFmt.GetCharFmtName();
