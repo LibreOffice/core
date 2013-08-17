@@ -37,30 +37,26 @@ class SdrView;
 class SvxTextAnimationPage : public SfxTabPage
 {
 private:
-    FixedLine           aFlEffect;
-    FixedText           aFtEffects;
-    ListBox             aLbEffect;
-    FixedText           aFtDirection;
-    ImageButton         aBtnUp;
-    ImageButton         aBtnLeft;
-    ImageButton         aBtnRight;
-    ImageButton         aBtnDown;
+    ListBox*             m_pLbEffect;
+    VclBox*              m_pBoxDirection;
+    PushButton*          m_pBtnUp;
+    PushButton*          m_pBtnLeft;
+    PushButton*          m_pBtnRight;
+    PushButton*          m_pBtnDown;
 
-    FixedLine           aFlProperties;
-    TriStateBox         aTsbStartInside;
-    TriStateBox         aTsbStopInside;
+    VclFrame*            m_pFlProperties;
+    TriStateBox*         m_pTsbStartInside;
+    TriStateBox*         m_pTsbStopInside;
 
-    FixedText           aFtCount;
-    TriStateBox         aTsbEndless;
-    NumericField        aNumFldCount;
+    VclBox*              m_pBoxCount;
+    TriStateBox*         m_pTsbEndless;
+    NumericField*        m_pNumFldCount;
 
-    FixedText           aFtAmount;
-    TriStateBox         aTsbPixel;
-    MetricField         aMtrFldAmount;
+    TriStateBox*         m_pTsbPixel;
+    MetricField*         m_pMtrFldAmount;
 
-    FixedText           aFtDelay;
-    TriStateBox         aTsbAuto;
-    MetricField         aMtrFldDelay;
+    TriStateBox*         m_pTsbAuto;
+    MetricField*         m_pMtrFldDelay;
 
     const SfxItemSet&   rOutAttrs;
     SdrTextAniKind      eAniKind;
