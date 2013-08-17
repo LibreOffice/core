@@ -139,9 +139,9 @@ SwCharFmt* SwTxtINetFmt::GetCharFmt()
             SetVisitedValid( true );
         }
         sal_uInt16 nId;
-        const String& rStr = IsVisited() ? rFmt.GetVisitedFmt()
+        const OUString rStr = IsVisited() ? rFmt.GetVisitedFmt()
                                            : rFmt.GetINetFmt();
-        if( rStr.Len() )
+        if( !rStr.isEmpty() )
             nId = IsVisited() ? rFmt.GetVisitedFmtId() : rFmt.GetINetFmtId();
         else
             nId = static_cast<sal_uInt16>(IsVisited() ? RES_POOLCHR_INET_VISIT : RES_POOLCHR_INET_NORMAL);
@@ -258,14 +258,14 @@ SwCharFmt* SwTxtRuby::GetCharFmt()
     if( !rFmt.GetText().isEmpty() )
     {
         const SwDoc* pDoc = GetTxtNode().GetDoc();
-        const String& rStr = rFmt.GetCharFmtName();
-        sal_uInt16 nId = RES_POOLCHR_RUBYTEXT;
-        if ( rStr.Len() )
-            nId = rFmt.GetCharFmtId();
+        const OUString rStr = rFmt.GetCharFmtName();
+        const sal_uInt16 nId = rStr.isEmpty()
+                             ? static_cast<sal_uInt16>(RES_POOLCHR_RUBYTEXT)
+                             : rFmt.GetCharFmtId();
 
         // JP 10.02.2000, Bug 72806: dont modify the doc for getting the
         //              correct charstyle.
-        bool bResetMod = !pDoc->IsModified();
+        const bool bResetMod = !pDoc->IsModified();
         Link aOle2Lnk;
         if( bResetMod )
         {
