@@ -428,11 +428,7 @@ namespace sdbtools
         sal_Int32 i = 1;
         while ( !pNameCheck->validateName( sName ) )
         {
-            OUStringBuffer aNameBuffer;
-            aNameBuffer.append( sBaseName );
-            aNameBuffer.appendAscii( " " );
-            aNameBuffer.append( (sal_Int32)++i );
-            sName = aNameBuffer.makeStringAndClear();
+            sName = sBaseName + " " + OUString::number(++i);
         }
 
         return sName;

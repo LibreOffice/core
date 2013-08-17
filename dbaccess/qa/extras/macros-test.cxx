@@ -51,11 +51,7 @@ private:
 
 void DBAccessTest::createFileURL(const OUString& aFileBase, const OUString& aFileExtension, OUString& rFilePath)
 {
-    OUString aSep("/");
-    OUStringBuffer aBuffer( getSrcRootURL() );
-    aBuffer.append(m_aBaseString);
-    aBuffer.append(aSep).append(aFileBase).append(aFileExtension);
-    rFilePath = aBuffer.makeStringAndClear();
+    rFilePath = getSrcRootURL() + m_aBaseString + "/" + aFileBase + aFileExtension;
 }
 
 DBAccessTest::DBAccessTest()
