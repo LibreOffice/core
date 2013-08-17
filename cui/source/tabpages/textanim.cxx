@@ -25,7 +25,6 @@
 #include <svx/dialogs.hrc>
 
 #include "textanim.hxx"
-#include "textanim.hrc"
 #include "textattr.hxx"
 #include <dialmgr.hxx>
 #include "svx/dlgutil.hxx"
@@ -88,78 +87,49 @@ void SvxTextTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 \************************************************************************/
 
 SvxTextAnimationPage::SvxTextAnimationPage( Window* pWindow, const SfxItemSet& rInAttrs ) :
-                SfxTabPage      ( pWindow, CUI_RES( RID_SVXPAGE_TEXTANIMATION ),
-                                  rInAttrs ),
-                aFlEffect       ( this, CUI_RES(FL_EFFECT)),
-                aFtEffects      ( this, CUI_RES(FT_EFFECTS)),
-                aLbEffect       ( this, CUI_RES( LB_EFFECT ) ),
-                //aCtlEffect        ( this, CUI_RES( CTL_EFFECT ) ),
-                aFtDirection    ( this, CUI_RES(FT_DIRECTION) ),
-                aBtnUp          ( this, CUI_RES( BTN_UP ) ),
-                aBtnLeft        ( this, CUI_RES( BTN_LEFT ) ),
-                aBtnRight       ( this, CUI_RES( BTN_RIGHT ) ),
-                aBtnDown        ( this, CUI_RES( BTN_DOWN ) ),
-
-                aFlProperties   ( this, CUI_RES(FL_PROPERTIES)),
-                aTsbStartInside ( this, CUI_RES( TSB_START_INSIDE ) ),
-                aTsbStopInside  ( this, CUI_RES( TSB_STOP_INSIDE ) ),
-
-                aFtCount        ( this, CUI_RES(FT_COUNT)),
-                aTsbEndless     ( this, CUI_RES( TSB_ENDLESS ) ),
-                aNumFldCount    ( this, CUI_RES( NUM_FLD_COUNT ) ),
-
-                aFtAmount       ( this, CUI_RES(FT_AMOUNT)),
-                aTsbPixel       ( this, CUI_RES( TSB_PIXEL ) ),
-                aMtrFldAmount   ( this, CUI_RES( MTR_FLD_AMOUNT ) ),
-
-                aFtDelay        ( this, CUI_RES(FT_DELAY)),
-                aTsbAuto        ( this, CUI_RES( TSB_AUTO ) ),
-                aMtrFldDelay    ( this, CUI_RES( MTR_FLD_DELAY ) ),
-
+                SfxTabPage      ( pWindow
+                                  ,"TextAnimation"
+                                  ,"cui/ui/textanimtabpage.ui"
+                                  ,rInAttrs ),
                 rOutAttrs       ( rInAttrs ),
                 eAniKind        ( SDRTEXTANI_NONE )
 {
-    FreeResource();
+    get(m_pLbEffect, "LB_EFFECT");
+    get(m_pBoxDirection,"boxDIRECTION");
+    get(m_pBtnUp, "BTN_UP");
+    get(m_pBtnLeft, "BTN_LEFT");
+    get(m_pBtnRight, "BTN_RIGHT");
+    get(m_pBtnDown, "BTN_DOWN");
+
+    get(m_pFlProperties, "FL_PROPERTIES");
+    get(m_pTsbStartInside, "TSB_START_INSIDE");
+    get(m_pTsbStopInside, "TSB_STOP_INSIDE");
+
+    get(m_pBoxCount, "boxCOUNT");
+    get(m_pTsbEndless,"TSB_ENDLESS");
+    get(m_pNumFldCount,"NUM_FLD_COUNT");
+
+    get(m_pTsbPixel, "TSB_PIXEL");
+    get(m_pMtrFldAmount, "MTR_FLD_AMOUNT");
+
+    get(m_pTsbAuto, "TSB_AUTO");
+    get(m_pMtrFldDelay, "MTR_FLD_DELAY");
 
     eFUnit = GetModuleFieldUnit( rInAttrs );
     SfxItemPool* pPool = rOutAttrs.GetPool();
     DBG_ASSERT( pPool, "Wo ist der Pool" );
     eUnit = pPool->GetMetric( SDRATTR_TEXT_LEFTDIST );
 
-    Construct();
-
-    aLbEffect.SetSelectHdl(
-        LINK( this, SvxTextAnimationPage, SelectEffectHdl_Impl ) );
-    aTsbEndless.SetClickHdl(
-        LINK( this, SvxTextAnimationPage, ClickEndlessHdl_Impl ) );
-    aTsbAuto.SetClickHdl(
-        LINK( this, SvxTextAnimationPage, ClickAutoHdl_Impl ) );
-    aTsbPixel.SetClickHdl(
-        LINK( this, SvxTextAnimationPage, ClickPixelHdl_Impl ) );
+    m_pLbEffect->SetSelectHdl( LINK( this, SvxTextAnimationPage, SelectEffectHdl_Impl ) );
+    m_pTsbEndless->SetClickHdl( LINK( this, SvxTextAnimationPage, ClickEndlessHdl_Impl ) );
+    m_pTsbAuto->SetClickHdl( LINK( this, SvxTextAnimationPage, ClickAutoHdl_Impl ) );
+    m_pTsbPixel->SetClickHdl( LINK( this, SvxTextAnimationPage, ClickPixelHdl_Impl ) );
 
     Link aLink( LINK( this, SvxTextAnimationPage, ClickDirectionHdl_Impl ) );
-    aBtnUp.SetClickHdl( aLink );
-    aBtnLeft.SetClickHdl( aLink );
-    aBtnRight.SetClickHdl( aLink );
-    aBtnDown.SetClickHdl( aLink );
-
-    aNumFldCount.SetAccessibleRelationLabeledBy( &aTsbEndless );
-    aMtrFldAmount.SetAccessibleRelationLabeledBy( &aTsbPixel );
-    aMtrFldDelay.SetAccessibleRelationLabeledBy( &aTsbAuto );
-
-    aBtnUp.SetAccessibleRelationLabeledBy( &aFtDirection );
-    aBtnLeft.SetAccessibleRelationLabeledBy( &aFtDirection );
-    aBtnRight.SetAccessibleRelationLabeledBy( &aFtDirection );
-    aBtnDown.SetAccessibleRelationLabeledBy( &aFtDirection );
-
-    aBtnUp.SetAccessibleRelationMemberOf( &aFlEffect );
-    aBtnLeft.SetAccessibleRelationMemberOf( &aFlEffect );
-    aBtnRight.SetAccessibleRelationMemberOf( &aFlEffect );
-    aBtnDown.SetAccessibleRelationMemberOf( &aFlEffect );
-
-    aTsbEndless.SetAccessibleRelationLabeledBy( &aFtCount );
-    aTsbPixel.SetAccessibleRelationLabeledBy( &aFtAmount );
-    aTsbAuto.SetAccessibleRelationLabeledBy( &aFtDelay );
+    m_pBtnUp->SetClickHdl( aLink );
+    m_pBtnLeft->SetClickHdl( aLink );
+    m_pBtnRight->SetClickHdl( aLink );
+    m_pBtnDown->SetClickHdl( aLink );
 }
 
 /*************************************************************************
@@ -190,11 +160,11 @@ void SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
     if( pItem )
     {
         eAniKind = ( ( const SdrTextAniKindItem* )pItem )->GetValue();
-        aLbEffect.SelectEntryPos( sal::static_int_cast< sal_uInt16 >(eAniKind) );
+        m_pLbEffect->SelectEntryPos( sal::static_int_cast< sal_uInt16 >(eAniKind) );
     }
     else
-        aLbEffect.SetNoSelection();
-    aLbEffect.SaveValue();
+        m_pLbEffect->SetNoSelection();
+    m_pLbEffect->SaveValue();
 
     // animation direction
     pItem = GetItem( rAttrs, SDRATTR_TEXT_ANIDIRECTION );
@@ -207,15 +177,15 @@ void SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
     }
     else
     {
-        aBtnUp.Check( sal_False );
-        aBtnLeft.Check( sal_False );
-        aBtnRight.Check( sal_False );
-        aBtnDown.Check( sal_False );
+        m_pBtnUp->Check( sal_False );
+        m_pBtnLeft->Check( sal_False );
+        m_pBtnRight->Check( sal_False );
+        m_pBtnDown->Check( sal_False );
     }
-    aBtnUp.SaveValue();
-    aBtnLeft.SaveValue();
-    aBtnRight.SaveValue();
-    aBtnDown.SaveValue();
+    m_pBtnUp->SaveValue();
+    m_pBtnLeft->SaveValue();
+    m_pBtnRight->SaveValue();
+    m_pBtnDown->SaveValue();
 
     // Start inside
     pItem = GetItem( rAttrs, SDRATTR_TEXT_ANISTARTINSIDE );
@@ -223,16 +193,16 @@ void SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
         pItem = &pPool->GetDefaultItem( SDRATTR_TEXT_ANISTARTINSIDE );
     if( pItem )
     {
-        aTsbStartInside.EnableTriState( sal_False );
+        m_pTsbStartInside->EnableTriState( sal_False );
         sal_Bool bValue = ( ( const SdrTextAniStartInsideItem* )pItem )->GetValue();
         if( bValue )
-            aTsbStartInside.SetState( STATE_CHECK );
+            m_pTsbStartInside->SetState( STATE_CHECK );
         else
-            aTsbStartInside.SetState( STATE_NOCHECK );
+            m_pTsbStartInside->SetState( STATE_NOCHECK );
     }
     else
-        aTsbStartInside.SetState( STATE_DONTKNOW );
-    aTsbStartInside.SaveValue();
+        m_pTsbStartInside->SetState( STATE_DONTKNOW );
+    m_pTsbStartInside->SaveValue();
 
     // Stop inside
     pItem = GetItem( rAttrs, SDRATTR_TEXT_ANISTOPINSIDE );
@@ -240,16 +210,16 @@ void SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
         pItem = &pPool->GetDefaultItem( SDRATTR_TEXT_ANISTOPINSIDE );
     if( pItem )
     {
-        aTsbStopInside.EnableTriState( sal_False );
+        m_pTsbStopInside->EnableTriState( sal_False );
         sal_Bool bValue = ( ( const SdrTextAniStopInsideItem* )pItem )->GetValue();
         if( bValue )
-            aTsbStopInside.SetState( STATE_CHECK );
+            m_pTsbStopInside->SetState( STATE_CHECK );
         else
-            aTsbStopInside.SetState( STATE_NOCHECK );
+            m_pTsbStopInside->SetState( STATE_NOCHECK );
     }
     else
-        aTsbStopInside.SetState( STATE_DONTKNOW );
-    aTsbStopInside.SaveValue();
+        m_pTsbStopInside->SetState( STATE_DONTKNOW );
+    m_pTsbStopInside->SaveValue();
 
     // quantity
     pItem = GetItem( rAttrs, SDRATTR_TEXT_ANICOUNT );
@@ -257,32 +227,32 @@ void SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
         pItem = &pPool->GetDefaultItem( SDRATTR_TEXT_ANICOUNT );
     if( pItem )
     {
-        aTsbEndless.EnableTriState( sal_False );
+        m_pTsbEndless->EnableTriState( sal_False );
         long nValue = (long) ( ( const SdrTextAniCountItem* )pItem )->GetValue();
-        aNumFldCount.SetValue( nValue );
+        m_pNumFldCount->SetValue( nValue );
         if( nValue == 0 )
         {
             if( eAniKind == SDRTEXTANI_SLIDE )
             {
-                aTsbEndless.SetState( STATE_NOCHECK );
-                aTsbEndless.Enable( sal_False );
+                m_pTsbEndless->SetState( STATE_NOCHECK );
+                m_pTsbEndless->Enable( sal_False );
             }
             else
             {
-                aTsbEndless.SetState( STATE_CHECK );
-                aNumFldCount.SetEmptyFieldValue();
+                m_pTsbEndless->SetState( STATE_CHECK );
+                m_pNumFldCount->SetEmptyFieldValue();
             }
         }
         else
-            aTsbEndless.SetState( STATE_NOCHECK );
+            m_pTsbEndless->SetState( STATE_NOCHECK );
     }
     else
     {
-        aNumFldCount.SetEmptyFieldValue();
-        aTsbEndless.SetState( STATE_DONTKNOW );
+        m_pNumFldCount->SetEmptyFieldValue();
+        m_pTsbEndless->SetState( STATE_DONTKNOW );
     }
-    aTsbEndless.SaveValue();
-    aNumFldCount.SaveValue();
+    m_pTsbEndless->SaveValue();
+    m_pNumFldCount->SaveValue();
 
     // delay
     pItem = GetItem( rAttrs, SDRATTR_TEXT_ANIDELAY );
@@ -290,24 +260,24 @@ void SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
         pItem = &pPool->GetDefaultItem( SDRATTR_TEXT_ANIDELAY );
     if( pItem )
     {
-        aTsbAuto.EnableTriState( sal_False );
+        m_pTsbAuto->EnableTriState( sal_False );
         long nValue = (long) ( ( const SdrTextAniDelayItem* )pItem )->GetValue();
-        aMtrFldDelay.SetValue( nValue );
+        m_pMtrFldDelay->SetValue( nValue );
         if( nValue == 0 )
         {
-            aTsbAuto.SetState( STATE_CHECK );
-            aMtrFldDelay.SetEmptyFieldValue();
+            m_pTsbAuto->SetState( STATE_CHECK );
+            m_pMtrFldDelay->SetEmptyFieldValue();
         }
         else
-            aTsbAuto.SetState( STATE_NOCHECK );
+            m_pTsbAuto->SetState( STATE_NOCHECK );
     }
     else
     {
-        aMtrFldDelay.SetEmptyFieldValue();
-        aTsbAuto.SetState( STATE_DONTKNOW );
+        m_pMtrFldDelay->SetEmptyFieldValue();
+        m_pTsbAuto->SetState( STATE_DONTKNOW );
     }
-    aTsbAuto.SaveValue();
-    aMtrFldDelay.SaveValue();
+    m_pTsbAuto->SaveValue();
+    m_pMtrFldDelay->SaveValue();
 
     // step size
     pItem = GetItem( rAttrs, SDRATTR_TEXT_ANIAMOUNT );
@@ -315,48 +285,48 @@ void SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
         pItem = &pPool->GetDefaultItem( SDRATTR_TEXT_ANIAMOUNT );
     if( pItem )
     {
-        aTsbPixel.EnableTriState( sal_False );
+        m_pTsbPixel->EnableTriState( sal_False );
         long nValue = (long) ( ( const SdrTextAniAmountItem* )pItem )->GetValue();
         if( nValue <= 0 )
         {
-            aTsbPixel.SetState( STATE_CHECK );
+            m_pTsbPixel->SetState( STATE_CHECK );
             nValue = -nValue;
             if( nValue == 0 )
                 nValue++;
-            aMtrFldAmount.SetUnit( FUNIT_CUSTOM );
-            aMtrFldAmount.SetDecimalDigits( 0 );
+            m_pMtrFldAmount->SetUnit( FUNIT_CUSTOM );
+            m_pMtrFldAmount->SetDecimalDigits( 0 );
 
-            aMtrFldAmount.SetSpinSize( 1 );
-            aMtrFldAmount.SetMin( 1 );
-            aMtrFldAmount.SetFirst( 1 );
-            aMtrFldAmount.SetMax( 100 );
-            aMtrFldAmount.SetLast( 100 );
+            m_pMtrFldAmount->SetSpinSize( 1 );
+            m_pMtrFldAmount->SetMin( 1 );
+            m_pMtrFldAmount->SetFirst( 1 );
+            m_pMtrFldAmount->SetMax( 100 );
+            m_pMtrFldAmount->SetLast( 100 );
 
-            aMtrFldAmount.SetValue( nValue );
+            m_pMtrFldAmount->SetValue( nValue );
         }
         else
         {
-            aTsbPixel.SetState( STATE_NOCHECK );
-            aMtrFldAmount.SetUnit( eFUnit );
-            aMtrFldAmount.SetDecimalDigits( 2 );
+            m_pTsbPixel->SetState( STATE_NOCHECK );
+            m_pMtrFldAmount->SetUnit( eFUnit );
+            m_pMtrFldAmount->SetDecimalDigits( 2 );
 
-            aMtrFldAmount.SetSpinSize( 10 );
-            aMtrFldAmount.SetMin( 1 );
-            aMtrFldAmount.SetFirst( 1 );
-            aMtrFldAmount.SetMax( 10000 );
-            aMtrFldAmount.SetLast( 10000 );
+            m_pMtrFldAmount->SetSpinSize( 10 );
+            m_pMtrFldAmount->SetMin( 1 );
+            m_pMtrFldAmount->SetFirst( 1 );
+            m_pMtrFldAmount->SetMax( 10000 );
+            m_pMtrFldAmount->SetLast( 10000 );
 
-            SetMetricValue( aMtrFldAmount, nValue, eUnit );
+            SetMetricValue( *m_pMtrFldAmount, nValue, eUnit );
         }
     }
     else
     {
-        aMtrFldAmount.Disable();
-        aMtrFldAmount.SetEmptyFieldValue();
-        aTsbPixel.SetState( STATE_DONTKNOW );
+        m_pMtrFldAmount->Disable();
+        m_pMtrFldAmount->SetEmptyFieldValue();
+        m_pTsbPixel->SetState( STATE_DONTKNOW );
     }
-    aTsbPixel.SaveValue();
-    aMtrFldAmount.SaveValue();
+    m_pTsbPixel->SaveValue();
+    m_pMtrFldAmount->SaveValue();
 
 
     SelectEffectHdl_Impl( NULL );
@@ -378,19 +348,19 @@ sal_Bool SvxTextAnimationPage::FillItemSet( SfxItemSet& rAttrs)
     TriState eState;
 
     // animation type
-    nPos = aLbEffect.GetSelectEntryPos();
+    nPos = m_pLbEffect->GetSelectEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND &&
-        nPos != aLbEffect.GetSavedValue() )
+        nPos != m_pLbEffect->GetSavedValue() )
     {
         rAttrs.Put( SdrTextAniKindItem( (SdrTextAniKind) nPos ) );
         bModified = sal_True;
     }
 
     // animation direction
-    if( aBtnUp.GetSavedValue() != aBtnUp.IsChecked() ||
-        aBtnLeft.GetSavedValue() != aBtnLeft.IsChecked() ||
-        aBtnRight.GetSavedValue() != aBtnRight.IsChecked() ||
-        aBtnDown.GetSavedValue() != aBtnDown.IsChecked() )
+    if( m_pBtnUp->GetSavedValue() != m_pBtnUp->IsChecked() ||
+        m_pBtnLeft->GetSavedValue() != m_pBtnLeft->IsChecked() ||
+        m_pBtnRight->GetSavedValue() != m_pBtnRight->IsChecked() ||
+        m_pBtnDown->GetSavedValue() != m_pBtnDown->IsChecked() )
     {
         SdrTextAniDirection eValue = (SdrTextAniDirection) GetSelectedDirection();
         rAttrs.Put( SdrTextAniDirectionItem( eValue ) );
@@ -398,35 +368,35 @@ sal_Bool SvxTextAnimationPage::FillItemSet( SfxItemSet& rAttrs)
     }
 
     // Start inside
-    eState = aTsbStartInside.GetState();
-    if( eState != aTsbStartInside.GetSavedValue() )
+    eState = m_pTsbStartInside->GetState();
+    if( eState != m_pTsbStartInside->GetSavedValue() )
     {
         rAttrs.Put( SdrTextAniStartInsideItem( (sal_Bool) STATE_CHECK == eState ) );
         bModified = sal_True;
     }
 
     // Stop inside
-    eState = aTsbStopInside.GetState();
-    if( eState != aTsbStopInside.GetSavedValue() )
+    eState = m_pTsbStopInside->GetState();
+    if( eState != m_pTsbStopInside->GetSavedValue() )
     {
         rAttrs.Put( SdrTextAniStopInsideItem( (sal_Bool) STATE_CHECK == eState ) );
         bModified = sal_True;
     }
 
     // quantity
-    eState = aTsbEndless.GetState();
-    String aStr = aNumFldCount.GetText();
-    if( eState != aTsbEndless.GetSavedValue() ||
-        aStr != aNumFldCount.GetSavedValue() )
+    eState = m_pTsbEndless->GetState();
+    String aStr = m_pNumFldCount->GetText();
+    if( eState != m_pTsbEndless->GetSavedValue() ||
+        aStr != m_pNumFldCount->GetSavedValue() )
     {
         sal_Int64 nValue = 0;
-        if( eState == STATE_CHECK /*#89844#*/ && aTsbEndless.IsEnabled())
+        if( eState == STATE_CHECK /*#89844#*/ && m_pTsbEndless->IsEnabled())
             bModified = sal_True;
         else
         {
-            if( aStr != aNumFldCount.GetSavedValue() )
+            if( aStr != m_pNumFldCount->GetSavedValue() )
             {
-                nValue = aNumFldCount.GetValue();
+                nValue = m_pNumFldCount->GetValue();
                 bModified = sal_True;
             }
         }
@@ -435,19 +405,19 @@ sal_Bool SvxTextAnimationPage::FillItemSet( SfxItemSet& rAttrs)
     }
 
     // delay
-    eState = aTsbAuto.GetState();
-    aStr = aMtrFldDelay.GetText();
-    if( eState != aTsbAuto.GetSavedValue() ||
-        aStr != aMtrFldDelay.GetSavedValue() )
+    eState = m_pTsbAuto->GetState();
+    aStr = m_pMtrFldDelay->GetText();
+    if( eState != m_pTsbAuto->GetSavedValue() ||
+        aStr != m_pMtrFldDelay->GetSavedValue() )
     {
         sal_Int64 nValue = 0;
         if( eState == STATE_CHECK )
             bModified = sal_True;
         else
         {
-            if( aStr != aMtrFldDelay.GetSavedValue() )
+            if( aStr != m_pMtrFldDelay->GetSavedValue() )
             {
-                nValue = aMtrFldDelay.GetValue();
+                nValue = m_pMtrFldDelay->GetValue();
                 bModified = sal_True;
             }
         }
@@ -456,20 +426,20 @@ sal_Bool SvxTextAnimationPage::FillItemSet( SfxItemSet& rAttrs)
     }
 
     // step size
-    eState = aTsbPixel.GetState();
-    aStr = aMtrFldAmount.GetText();
-    if( eState != aTsbPixel.GetSavedValue() ||
-        aStr != aMtrFldAmount.GetSavedValue() )
+    eState = m_pTsbPixel->GetState();
+    aStr = m_pMtrFldAmount->GetText();
+    if( eState != m_pTsbPixel->GetSavedValue() ||
+        aStr != m_pMtrFldAmount->GetSavedValue() )
     {
         sal_Int64 nValue = 0;
         if( eState == STATE_CHECK )
         {
-            nValue = aMtrFldAmount.GetValue();
+            nValue = m_pMtrFldAmount->GetValue();
             nValue = -nValue;
         }
         else
         {
-            nValue = GetCoreValue( aMtrFldAmount, eUnit );
+            nValue = GetCoreValue( *m_pMtrFldAmount, eUnit );
         }
         rAttrs.Put( SdrTextAniAmountItem( (sal_Int16) nValue ) );
 
@@ -477,10 +447,6 @@ sal_Bool SvxTextAnimationPage::FillItemSet( SfxItemSet& rAttrs)
     }
 
     return( bModified );
-}
-
-void SvxTextAnimationPage::Construct()
-{
 }
 
 sal_uInt16* SvxTextAnimationPage::GetRanges()
@@ -502,7 +468,7 @@ SfxTabPage* SvxTextAnimationPage::Create( Window* pWindow,
 
 IMPL_LINK_NOARG(SvxTextAnimationPage, SelectEffectHdl_Impl)
 {
-    sal_uInt16 nPos = aLbEffect.GetSelectEntryPos();
+    sal_uInt16 nPos = m_pLbEffect->GetSelectEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         eAniKind = (SdrTextAniKind) nPos;
@@ -510,25 +476,8 @@ IMPL_LINK_NOARG(SvxTextAnimationPage, SelectEffectHdl_Impl)
         {
             case SDRTEXTANI_NONE:
             {
-                aFtDirection.Disable();
-                aBtnUp.Disable();
-                aBtnLeft.Disable();
-                aBtnRight.Disable();
-                aBtnDown.Disable();
-                aTsbStartInside.Disable();
-                aTsbStopInside.Disable();
-
-                aTsbEndless.Disable();
-                aNumFldCount.Disable();
-                aFtCount.Disable();
-
-                aTsbAuto.Disable();
-                aMtrFldDelay.Disable();
-                aFtDelay.Disable();
-
-                aTsbPixel.Disable();
-                aMtrFldAmount.Disable();
-                aFtAmount.Disable();
+                m_pBoxDirection->Disable();
+                m_pFlProperties->Disable();
             }
             break;
 
@@ -537,52 +486,35 @@ IMPL_LINK_NOARG(SvxTextAnimationPage, SelectEffectHdl_Impl)
             case SDRTEXTANI_ALTERNATE:
             case SDRTEXTANI_SLIDE:
             {
+                m_pFlProperties->Enable();
                 if( eAniKind == SDRTEXTANI_SLIDE )
                 {
-                    aTsbStartInside.Disable();
-                    aTsbStopInside.Disable();
-
-                    aTsbEndless.Disable();
-                    aNumFldCount.Enable();
-                    aNumFldCount.SetValue( aNumFldCount.GetValue() );
+                    m_pTsbStartInside->Disable();
+                    m_pTsbStopInside->Disable();
+                    m_pTsbEndless->Disable();
+                    m_pNumFldCount->Enable();
+                    m_pNumFldCount->SetValue( m_pNumFldCount->GetValue() );
                 }
                 else
                 {
-                    aTsbStartInside.Enable();
-                    aTsbStopInside.Enable();
-
-                    aTsbEndless.Enable();
+                    m_pTsbStartInside->Enable();
+                    m_pTsbStopInside->Enable();
+                    m_pTsbEndless->Enable();
                     ClickEndlessHdl_Impl( NULL );
                 }
-                aFtCount.Enable();
 
-                aTsbAuto.Enable();
-                aFtDelay.Enable();
+                m_pTsbAuto->Enable();
                 ClickAutoHdl_Impl( NULL );
 
                 if( eAniKind == SDRTEXTANI_BLINK )
                 {
-                    aFtDirection.Disable();
-                    aBtnUp.Disable();
-                    aBtnLeft.Disable();
-                    aBtnRight.Disable();
-                    aBtnDown.Disable();
-
-                    aTsbPixel.Disable();
-                    aMtrFldAmount.Disable();
-                    aFtAmount.Disable();
+                    m_pBoxDirection->Disable();
+                    m_pBoxCount->Disable();
                 }
                 else
                 {
-                    aFtDirection.Enable();
-                    aBtnUp.Enable();
-                    aBtnLeft.Enable();
-                    aBtnRight.Enable();
-                    aBtnDown.Enable();
-
-                    aTsbPixel.Enable();
-                    aMtrFldAmount.Enable();
-                    aFtAmount.Enable();
+                    m_pBoxDirection->Enable();
+                    m_pBoxCount->Enable();
                 }
             }
             break;
@@ -597,16 +529,16 @@ IMPL_LINK_NOARG(SvxTextAnimationPage, ClickEndlessHdl_Impl)
 
     if( eAniKind != SDRTEXTANI_SLIDE )
     {
-        TriState eState = aTsbEndless.GetState();
+        TriState eState = m_pTsbEndless->GetState();
         if( eState != STATE_NOCHECK )
         {
-            aNumFldCount.Disable();
-            aNumFldCount.SetEmptyFieldValue();
+            m_pNumFldCount->Disable();
+            m_pNumFldCount->SetEmptyFieldValue();
         }
         else
         {
-            aNumFldCount.Enable();
-            aNumFldCount.SetValue( aNumFldCount.GetValue() );
+            m_pNumFldCount->Enable();
+            m_pNumFldCount->SetValue( m_pNumFldCount->GetValue() );
         }
     }
     return( 0L );
@@ -614,16 +546,16 @@ IMPL_LINK_NOARG(SvxTextAnimationPage, ClickEndlessHdl_Impl)
 
 IMPL_LINK_NOARG(SvxTextAnimationPage, ClickAutoHdl_Impl)
 {
-    TriState eState = aTsbAuto.GetState();
+    TriState eState = m_pTsbAuto->GetState();
     if( eState != STATE_NOCHECK )
     {
-        aMtrFldDelay.Disable();
-        aMtrFldDelay.SetEmptyFieldValue();
+        m_pMtrFldDelay->Disable();
+        m_pMtrFldDelay->SetEmptyFieldValue();
     }
     else
     {
-        aMtrFldDelay.Enable();
-        aMtrFldDelay.SetValue( aMtrFldDelay.GetValue() );
+        m_pMtrFldDelay->Enable();
+        m_pMtrFldDelay->SetValue( m_pMtrFldDelay->GetValue() );
     }
 
     return( 0L );
@@ -631,38 +563,38 @@ IMPL_LINK_NOARG(SvxTextAnimationPage, ClickAutoHdl_Impl)
 
 IMPL_LINK_NOARG(SvxTextAnimationPage, ClickPixelHdl_Impl)
 {
-    TriState eState = aTsbPixel.GetState();
+    TriState eState = m_pTsbPixel->GetState();
     if( eState == STATE_CHECK )
     {
-        sal_Int64 nValue = aMtrFldAmount.GetValue() / 10;
-        aMtrFldAmount.Enable();
-        aMtrFldAmount.SetUnit( FUNIT_CUSTOM );
+        sal_Int64 nValue = m_pMtrFldAmount->GetValue() / 10;
+        m_pMtrFldAmount->Enable();
+        m_pMtrFldAmount->SetUnit( FUNIT_CUSTOM );
         //SetFieldUnit( aMtrFldAmount, FUNIT_CUSTOM );
-        aMtrFldAmount.SetDecimalDigits( 0 );
+        m_pMtrFldAmount->SetDecimalDigits( 0 );
 
-        aMtrFldAmount.SetSpinSize( 1 );
-        aMtrFldAmount.SetMin( 1 );
-        aMtrFldAmount.SetFirst( 1 );
-        aMtrFldAmount.SetMax( 100 );
-        aMtrFldAmount.SetLast( 100 );
+        m_pMtrFldAmount->SetSpinSize( 1 );
+        m_pMtrFldAmount->SetMin( 1 );
+        m_pMtrFldAmount->SetFirst( 1 );
+        m_pMtrFldAmount->SetMax( 100 );
+        m_pMtrFldAmount->SetLast( 100 );
 
-        aMtrFldAmount.SetValue( nValue );
+        m_pMtrFldAmount->SetValue( nValue );
     }
     else if( eState == STATE_NOCHECK )
     {
-        sal_Int64 nValue = aMtrFldAmount.GetValue() * 10;
-        aMtrFldAmount.Enable();
-        aMtrFldAmount.SetUnit( eFUnit );
+        sal_Int64 nValue = m_pMtrFldAmount->GetValue() * 10;
+        m_pMtrFldAmount->Enable();
+        m_pMtrFldAmount->SetUnit( eFUnit );
         //SetFieldUnit( aMtrFldAmount, eFUnit );
-        aMtrFldAmount.SetDecimalDigits( 2 );
+        m_pMtrFldAmount->SetDecimalDigits( 2 );
 
-        aMtrFldAmount.SetSpinSize( 10 );
-        aMtrFldAmount.SetMin( 1 );
-        aMtrFldAmount.SetFirst( 1 );
-        aMtrFldAmount.SetMax( 10000 );
-        aMtrFldAmount.SetLast( 10000 );
+        m_pMtrFldAmount->SetSpinSize( 10 );
+        m_pMtrFldAmount->SetMin( 1 );
+        m_pMtrFldAmount->SetFirst( 1 );
+        m_pMtrFldAmount->SetMax( 10000 );
+        m_pMtrFldAmount->SetLast( 10000 );
 
-        aMtrFldAmount.SetValue( nValue );
+        m_pMtrFldAmount->SetValue( nValue );
     }
 
     return( 0L );
@@ -670,33 +602,33 @@ IMPL_LINK_NOARG(SvxTextAnimationPage, ClickPixelHdl_Impl)
 
 IMPL_LINK( SvxTextAnimationPage, ClickDirectionHdl_Impl, ImageButton *, pBtn )
 {
-    aBtnUp.Check( pBtn == &aBtnUp );
-    aBtnLeft.Check( pBtn == &aBtnLeft );
-    aBtnRight.Check( pBtn == &aBtnRight );
-    aBtnDown.Check( pBtn == &aBtnDown );
+    m_pBtnUp->Check( pBtn == m_pBtnUp );
+    m_pBtnLeft->Check( pBtn == m_pBtnLeft );
+    m_pBtnRight->Check( pBtn == m_pBtnRight );
+    m_pBtnDown->Check( pBtn == m_pBtnDown );
 
     return( 0L );
 }
 
 void SvxTextAnimationPage::SelectDirection( SdrTextAniDirection nValue )
 {
-    aBtnUp.Check( nValue == SDRTEXTANI_UP );
-    aBtnLeft.Check( nValue == SDRTEXTANI_LEFT );
-    aBtnRight.Check( nValue == SDRTEXTANI_RIGHT );
-    aBtnDown.Check( nValue == SDRTEXTANI_DOWN );
+    m_pBtnUp->Check( nValue == SDRTEXTANI_UP );
+    m_pBtnLeft->Check( nValue == SDRTEXTANI_LEFT );
+    m_pBtnRight->Check( nValue == SDRTEXTANI_RIGHT );
+    m_pBtnDown->Check( nValue == SDRTEXTANI_DOWN );
 }
 
 sal_uInt16 SvxTextAnimationPage::GetSelectedDirection()
 {
     sal_uInt16 nValue = 0;
 
-    if( aBtnUp.IsChecked() )
+    if( m_pBtnUp->IsChecked() )
         nValue = SDRTEXTANI_UP;
-    else if( aBtnLeft.IsChecked() )
+    else if( m_pBtnLeft->IsChecked() )
         nValue = SDRTEXTANI_LEFT;
-    else if( aBtnRight.IsChecked() )
+    else if( m_pBtnRight->IsChecked() )
         nValue = SDRTEXTANI_RIGHT;
-    else if( aBtnDown.IsChecked() )
+    else if( m_pBtnDown->IsChecked() )
         nValue = SDRTEXTANI_DOWN;
 
     return( nValue );
