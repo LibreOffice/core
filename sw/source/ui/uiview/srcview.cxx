@@ -633,12 +633,26 @@ sal_uInt16 SwSrcView::StartSearchAndReplace(const SvxSearchItem& rSearchItem,
             {
                 InfoBox( 0, SW_RES(MSG_NOT_FOUND)).Execute();
             }
-            else if(!bRecursive && RET_YES ==
-                QueryBox(0, SW_RES( bForward ? MSG_SEARCH_END
-                                             : MSG_SEARCH_START)).Execute())
+            else if(!bRecursive)
             {
-                pTextView->SetSelection( TextSelection( aPaM, aPaM ) );
-                StartSearchAndReplace( rSearchItem, sal_False, sal_False, sal_True );
+                int nRet;
+
+                if (!bForward)
+                {
+                    nRet = MessageDialog(0, "QueryContinueEndDialog",
+                        "modules/swriter/ui/querycontinueenddialog.ui").Execute();
+                }
+                else
+                {
+                    nRet = MessageDialog(0, "QueryContinueBeginDialog",
+                        "modules/swriter/ui/querycontinuebegindialog.ui").Execute();
+                }
+
+                if (nRet == RET_YES)
+                {
+                    pTextView->SetSelection( TextSelection( aPaM, aPaM ) );
+                    StartSearchAndReplace( rSearchItem, sal_False, sal_False, sal_True );
+                }
             }
         }
     }

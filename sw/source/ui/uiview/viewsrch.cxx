@@ -39,6 +39,7 @@
 #include <svx/srchdlg.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
+#include <vcl/layout.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/wrkwin.hxx>
 #include "editeng/unolingu.hxx"
@@ -501,11 +502,22 @@ sal_Bool SwView::SearchAndWrap(sal_Bool bApi)
     m_pWrtShell->EndAllAction();
         // Try again with WrapAround?
 
-    if( bApi || RET_NO == QueryBox( GetParentWindow( m_pSrchDlg ),
-                                        SW_RES( DOCPOS_START == aOpts.eEnd
-                                            ? MSG_SEARCH_START
-                                            : MSG_SEARCH_END )
-                                    ).Execute() )
+    int nRet = RET_NO;
+    if( !bApi )
+    {
+        if (DOCPOS_START == aOpts.eEnd)
+        {
+            nRet = MessageDialog(GetParentWindow(m_pSrchDlg), "QueryContinueEndDialog",
+                "modules/swriter/ui/querycontinueenddialog.ui").Execute();
+        }
+        else
+        {
+            nRet = MessageDialog(GetParentWindow(m_pSrchDlg), "QueryContinueBeginDialog",
+                "modules/swriter/ui/querycontinuebegindialog.ui").Execute();
+        }
+    }
+
+    if (nRet == RET_NO)
     {
         m_bFound = sal_False;
         m_pWrtShell->Pop();

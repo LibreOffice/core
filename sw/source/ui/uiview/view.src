@@ -53,18 +53,6 @@ QueryBox DLG_SPECIAL_FORCED
     DEFBUTTON = WB_DEF_NO ;
     Message [ en-US ] = "Check special regions is deactivated. Check anyway?" ;
 };
-QueryBox MSG_SEARCH_END
-{
-    Buttons = WB_YES_NO ;
-    DefButton = WB_DEF_YES ;
-    Message [ en-US ] = "%PRODUCTNAME Writer has searched to the end of the document. Do you want to continue at the beginning?" ;
-};
-QueryBox MSG_SEARCH_START
-{
-    Buttons = WB_YES_NO ;
-    DefButton = WB_DEF_YES ;
-    Message [ en-US ] = "%PRODUCTNAME Writer has searched to the beginning of the document. Do you want to continue at the end?" ;
-};
 InfoBox MSG_NO_MERGE_ENTRY
 {
     Message [ en-US ] = "Could not merge documents." ;

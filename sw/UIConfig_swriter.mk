@@ -132,6 +132,8 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/outlinenumbering \
 	sw/uiconfig/swriter/ui/outlinenumberingpage \
 	sw/uiconfig/swriter/ui/outlinepositionpage \
+	sw/uiconfig/swriter/ui/querycontinuebegindialog \
+	sw/uiconfig/swriter/ui/querycontinueenddialog \
 	sw/uiconfig/swriter/ui/querydefaultcompatdialog \
 	sw/uiconfig/swriter/ui/querysavelabeldialog \
 	sw/uiconfig/swriter/ui/queryshowchangesdialog \
