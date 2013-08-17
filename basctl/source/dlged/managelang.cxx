@@ -171,13 +171,11 @@ void ManageLanguageDialog::FillLanguageBox()
         {
             bool bIsDefault = localesAreEqual( aDefaultLocale, pLocale[i] );
             LanguageType eLangType = LanguageTag::convertToLanguageType( pLocale[i] );
-            OUStringBuffer sLanguageBuf(aLangTable.GetString( eLangType ));
+            OUString sLanguage = aLangTable.GetString( eLangType );
             if ( bIsDefault )
             {
-                sLanguageBuf.append(' ');
-                sLanguageBuf.append(m_sDefLangStr);
+                sLanguage += " " + m_sDefLangStr;
             }
-            OUString sLanguage(sLanguageBuf.makeStringAndClear());
             sal_uInt16 nPos = m_aLanguageLB.InsertEntry( sLanguage );
             m_aLanguageLB.SetEntryData( nPos, new LanguageEntry( sLanguage, pLocale[i], bIsDefault ) );
         }
