@@ -38,8 +38,6 @@
 #define STR_CLOSELINKMSG        (RC_DIALOG_BEGIN +  3)
 #define STR_PATH_NOT_FOUND      (RC_DIALOG_BEGIN +  4)
 
-#define STR_FLT_SGV             (RC_DIALOG_BEGIN +  8)
-
 // Controls *****************************************************************
 
 #define CB_USE_PASSWD           (RC_DIALOG_BEGIN     )

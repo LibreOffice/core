@@ -34,10 +34,6 @@ String STR_PATH_NOT_FOUND
 {
     Text [ en-US ] = "The directory '%1' does not exist." ;
 };
-String STR_FLT_SGV
-{
-    Text = "SGV - StarDraw 2.0,SGV" ;
-};
 
 QueryBox RID_QB_SPELL_CONTINUE
 {
