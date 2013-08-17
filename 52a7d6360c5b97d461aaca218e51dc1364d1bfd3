@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//8sQ\u003d",
+        "filename": "svx/source/dialog/ctredlin.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 388,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-08-17T13:40:08Z",
+      "side": 1,
+      "message": "did you see that both SvTabListBox and its superclass SvTreeListBox have _non-virtual_ TabCount methods?  arrrgh!!1!",
+      "revId": "52a7d6360c5b97d461aaca218e51dc1364d1bfd3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
