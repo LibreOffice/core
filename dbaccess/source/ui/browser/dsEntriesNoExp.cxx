@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "unodatbr.hxx"
 #include "browserids.hxx"
 #include "listviewitems.hxx"
@@ -33,11 +32,8 @@ using namespace ::com::sun::star::frame;
 using namespace ::dbtools;
 using namespace ::svx;
 
-// .........................................................................
 namespace dbaui
 {
-// .........................................................................
-// -----------------------------------------------------------------------------
 SbaTableQueryBrowser::EntryType SbaTableQueryBrowser::getChildType( SvTreeListEntry* _pEntry ) const
 {
     OSL_ENSURE(isContainer(_pEntry), "SbaTableQueryBrowser::getChildType: invalid entry!");
@@ -53,13 +49,11 @@ SbaTableQueryBrowser::EntryType SbaTableQueryBrowser::getChildType( SvTreeListEn
     return etUnknown;
 }
 
-// -----------------------------------------------------------------------------
 OUString SbaTableQueryBrowser::GetEntryText( SvTreeListEntry* _pEntry ) const
 {
     return m_pTreeView->getListBox().GetEntryText(_pEntry);
 }
 
-// -----------------------------------------------------------------------------
 SbaTableQueryBrowser::EntryType SbaTableQueryBrowser::getEntryType( const SvTreeListEntry* _pEntry ) const
 {
     if (!_pEntry)
@@ -105,7 +99,6 @@ SbaTableQueryBrowser::EntryType SbaTableQueryBrowser::getEntryType( const SvTree
 
     return etQueryContainer;
 }
-//------------------------------------------------------------------------------
 void SbaTableQueryBrowser::select(SvTreeListEntry* _pEntry, sal_Bool _bSelect)
 {
     SvLBoxItem* pTextItem = _pEntry ? _pEntry->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING) : NULL;
@@ -119,7 +112,6 @@ void SbaTableQueryBrowser::select(SvTreeListEntry* _pEntry, sal_Bool _bSelect)
     }
 }
 
-//------------------------------------------------------------------------------
 void SbaTableQueryBrowser::selectPath(SvTreeListEntry* _pEntry, sal_Bool _bSelect)
 {
     while (_pEntry)
@@ -128,7 +120,6 @@ void SbaTableQueryBrowser::selectPath(SvTreeListEntry* _pEntry, sal_Bool _bSelec
         _pEntry = m_pTreeModel->GetParent(_pEntry);
     }
 }
-//------------------------------------------------------------------------------
 sal_Bool SbaTableQueryBrowser::isSelected(SvTreeListEntry* _pEntry) const
 {
     SvLBoxItem* pTextItem = _pEntry ? _pEntry->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING) : NULL;
@@ -139,7 +130,6 @@ sal_Bool SbaTableQueryBrowser::isSelected(SvTreeListEntry* _pEntry) const
     }
     return sal_False;
 }
-//------------------------------------------------------------------------------
 void SbaTableQueryBrowser::SelectionChanged()
 {
     if ( !m_bShowMenu )
@@ -151,7 +141,6 @@ void SbaTableQueryBrowser::SelectionChanged()
     InvalidateFeature(ID_BROWSER_COPY);
     InvalidateFeature(ID_BROWSER_CUT);
 }
-//------------------------------------------------------------------------------
 void SbaTableQueryBrowser::describeSupportedFeatures()
 {
     SbaXDataBrowserController::describeSupportedFeatures();
@@ -176,7 +165,6 @@ void SbaTableQueryBrowser::describeSupportedFeatures()
     implDescribeSupportedFeature( ".uno:DBRebuildData", ID_BROWSER_REFRESH_REBUILD, CommandGroup::DATA );
 }
 
-// -----------------------------------------------------------------------------
 sal_Int32 SbaTableQueryBrowser::getDatabaseObjectType( EntryType _eType )
 {
     switch ( _eType )
@@ -194,7 +182,6 @@ sal_Int32 SbaTableQueryBrowser::getDatabaseObjectType( EntryType _eType )
     return DatabaseObject::TABLE;
 }
 
-// -----------------------------------------------------------------------------
 void SbaTableQueryBrowser::notifyHiContrastChanged()
 {
     if ( m_pTreeView )
@@ -251,9 +238,6 @@ void SbaTableQueryBrowser::notifyHiContrastChanged()
         }
     }
 }
-// -----------------------------------------------------------------------------
-// .........................................................................
 }   // namespace dbaui
-// .........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

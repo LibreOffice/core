@@ -28,16 +28,12 @@
 #include <memory>
 
 class SfxItemSet;
-//........................................................................
 namespace dbaui
 {
-//........................................................................
 
     class OTextConnectionHelper;
 
-    //====================================================================
-    //= TextConnectionSettingsDialog
-    //====================================================================
+    // TextConnectionSettingsDialog
     class TextConnectionSettingsDialog : public ModalDialog
     {
     public:
@@ -61,9 +57,7 @@ namespace dbaui
         DECL_LINK( OnOK, PushButton* );
     };
 
-//........................................................................
 } // namespace dbaui
-//........................................................................
 
 #endif // TEXTCONNECTIONSETTINGS_HXX
 

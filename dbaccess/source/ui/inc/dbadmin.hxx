@@ -38,14 +38,10 @@ namespace com { namespace sun { namespace star {
     }
 }}}
 
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
 
-//=========================================================================
-//= ODbAdminDialog
-//=========================================================================
+// ODbAdminDialog
 class ODbDataSourceAdministrationHelper;
 /** tab dialog for administrating the office wide registered data sources
 */
@@ -127,9 +123,7 @@ private:
     ApplyResult implApplyChanges();
 };
 
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
 
 #endif // _DBAUI_DBADMIN_HXX_
 

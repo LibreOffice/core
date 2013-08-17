@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "dbu_misc.hrc"
 #include "dbustrings.hrc"
 #include "moduledbu.hxx"
@@ -84,7 +83,6 @@ namespace CopyTableOperation = ::com::sun::star::sdb::application::CopyTableOper
 DBG_NAME(OCopyTableWizard)
 namespace
 {
-    //....................................................................
     void clearColumns(ODatabaseExport::TColumns& _rColumns, ODatabaseExport::TColumnVector& _rColumnsVec)
     {
         ODatabaseExport::TColumns::iterator aIter = _rColumns.begin();
@@ -98,18 +96,12 @@ namespace
     }
 }
 
-//========================================================================
-//= ICopyTableSourceObject
-//========================================================================
-//------------------------------------------------------------------------
+// ICopyTableSourceObject
 ICopyTableSourceObject::~ICopyTableSourceObject()
 {
 }
 
-//========================================================================
-//= ObjectCopySource
-//========================================================================
-//------------------------------------------------------------------------
+// ObjectCopySource
 ObjectCopySource::ObjectCopySource( const Reference< XConnection >& _rxConnection, const Reference< XPropertySet >& _rxObject )
     :m_xConnection( _rxConnection, UNO_SET_THROW )
     ,m_xMetaData( _rxConnection->getMetaData(), UNO_SET_THROW )
@@ -119,7 +111,6 @@ ObjectCopySource::ObjectCopySource( const Reference< XConnection >& _rxConnectio
 {
 }
 
-//------------------------------------------------------------------------
 OUString ObjectCopySource::getQualifiedObjectName() const
 {
     OUString sName;
@@ -131,7 +122,6 @@ OUString ObjectCopySource::getQualifiedObjectName() const
     return sName;
 }
 
-//------------------------------------------------------------------------
 bool ObjectCopySource::isView() const
 {
     bool bIsView = false;
@@ -151,7 +141,6 @@ bool ObjectCopySource::isView() const
     return bIsView;
 }
 
-//------------------------------------------------------------------------
 void ObjectCopySource::copyUISettingsTo( const Reference< XPropertySet >& _rxObject ) const
 {
     const OUString aCopyProperties[] = {
@@ -163,7 +152,6 @@ void ObjectCopySource::copyUISettingsTo( const Reference< XPropertySet >& _rxObj
             _rxObject->setPropertyValue( aCopyProperties[i], m_xObject->getPropertyValue( aCopyProperties[i] ) );
     }
 }
-//------------------------------------------------------------------------
 void ObjectCopySource::copyFilterAndSortingTo( const Reference< XConnection >& _xConnection,const Reference< XPropertySet >& _rxObject ) const
 {
     ::std::pair< OUString, OUString > aProperties[] = {
@@ -180,7 +168,6 @@ void ObjectCopySource::copyFilterAndSortingTo( const Reference< XConnection >& _
         OUString sStatement("SELECT * FROM ");
         sStatement += sTargetName;
         sStatement += OUString(" WHERE 0=1");
-
 
         for ( size_t i=0; i < SAL_N_ELEMENTS(aProperties); ++i )
         {
@@ -209,13 +196,11 @@ void ObjectCopySource::copyFilterAndSortingTo( const Reference< XConnection >& _
     {
     }
 }
-//------------------------------------------------------------------------
 Sequence< OUString > ObjectCopySource::getColumnNames() const
 {
     return m_xObjectColumns->getElementNames();
 }
 
-//------------------------------------------------------------------------
 Sequence< OUString > ObjectCopySource::getPrimaryKeyColumnNames() const
 {
     const Reference<XNameAccess> xPrimaryKeyColumns = getPrimaryKeyColumns_throw(m_xObject);
@@ -225,13 +210,11 @@ Sequence< OUString > ObjectCopySource::getPrimaryKeyColumnNames() const
     return aKeyColNames;
 }
 
-//------------------------------------------------------------------------
 OFieldDescription* ObjectCopySource::createFieldDescription( const OUString& _rColumnName ) const
 {
     Reference< XPropertySet > xColumn( m_xObjectColumns->getByName( _rColumnName ), UNO_QUERY_THROW );
     return new OFieldDescription( xColumn );
 }
-//------------------------------------------------------------------------
 OUString ObjectCopySource::getSelectStatement() const
 {
     OUString sSelectStatement;
@@ -270,7 +253,6 @@ OUString ObjectCopySource::getSelectStatement() const
     return sSelectStatement;
 }
 
-//------------------------------------------------------------------------
 ::utl::SharedUNOComponent< XPreparedStatement > ObjectCopySource::getPreparedSelectStatement() const
 {
     ::utl::SharedUNOComponent< XPreparedStatement > xStatement(
@@ -280,10 +262,7 @@ OUString ObjectCopySource::getSelectStatement() const
     return xStatement;
 }
 
-//========================================================================
-//= NamedTableCopySource
-//========================================================================
-//------------------------------------------------------------------------
+// NamedTableCopySource
 NamedTableCopySource::NamedTableCopySource( const Reference< XConnection >& _rxConnection, const OUString& _rTableName )
     :m_xConnection( _rxConnection, UNO_SET_THROW )
     ,m_xMetaData( _rxConnection->getMetaData(), UNO_SET_THROW )
@@ -294,13 +273,11 @@ NamedTableCopySource::NamedTableCopySource( const Reference< XConnection >& _rxC
     impl_ensureColumnInfo_throw();
 }
 
-//------------------------------------------------------------------------
 OUString NamedTableCopySource::getQualifiedObjectName() const
 {
     return m_sTableName;
 }
 
-//------------------------------------------------------------------------
 bool NamedTableCopySource::isView() const
 {
     OUString sTableType;
@@ -320,16 +297,13 @@ bool NamedTableCopySource::isView() const
     return sTableType == "VIEW";
 }
 
-//------------------------------------------------------------------------
 void NamedTableCopySource::copyUISettingsTo( const Reference< XPropertySet >& /*_rxObject*/ ) const
 {
     // not supported: we do not have UI settings to copy
 }
-// -----------------------------------------------------------------------------
 void NamedTableCopySource::copyFilterAndSortingTo( const Reference< XConnection >& ,const Reference< XPropertySet >& /*_rxObject*/ ) const
 {
 }
-//------------------------------------------------------------------------
 void NamedTableCopySource::impl_ensureColumnInfo_throw()
 {
     if ( !m_aColumnInfo.empty() )
@@ -357,7 +331,6 @@ void NamedTableCopySource::impl_ensureColumnInfo_throw()
     }
 }
 
-//------------------------------------------------------------------------
 ::utl::SharedUNOComponent< XPreparedStatement > NamedTableCopySource::impl_ensureStatement_throw()
 {
     if ( !m_xStatement.is() )
@@ -365,7 +338,6 @@ void NamedTableCopySource::impl_ensureColumnInfo_throw()
     return m_xStatement;
 }
 
-//------------------------------------------------------------------------
 Sequence< OUString > NamedTableCopySource::getColumnNames() const
 {
     Sequence< OUString > aNames( m_aColumnInfo.size() );
@@ -378,7 +350,6 @@ Sequence< OUString > NamedTableCopySource::getColumnNames() const
     return aNames;
 }
 
-//------------------------------------------------------------------------
 Sequence< OUString > NamedTableCopySource::getPrimaryKeyColumnNames() const
 {
     Sequence< OUString > aPKColNames;
@@ -402,7 +373,6 @@ Sequence< OUString > NamedTableCopySource::getPrimaryKeyColumnNames() const
     return aPKColNames;
 }
 
-//------------------------------------------------------------------------
 OFieldDescription* NamedTableCopySource::createFieldDescription( const OUString& _rColumnName ) const
 {
     for (   ::std::vector< OFieldDescription >::const_iterator col = m_aColumnInfo.begin();
@@ -414,7 +384,6 @@ OFieldDescription* NamedTableCopySource::createFieldDescription( const OUString&
 
     return NULL;
 }
-//------------------------------------------------------------------------
 OUString NamedTableCopySource::getSelectStatement() const
 {
     OUStringBuffer aSQL;
@@ -425,15 +394,12 @@ OUString NamedTableCopySource::getSelectStatement() const
     return aSQL.makeStringAndClear();
 }
 
-//------------------------------------------------------------------------
 ::utl::SharedUNOComponent< XPreparedStatement > NamedTableCopySource::getPreparedSelectStatement() const
 {
     return const_cast< NamedTableCopySource* >( this )->impl_ensureStatement_throw();
 }
 
-// ========================================================
 // DummyCopySource
-// ========================================================
 class DummyCopySource : public ICopyTableSourceObject
 {
 public:
@@ -456,70 +422,59 @@ public:
                                 getPreparedSelectStatement() const;
 };
 
-//------------------------------------------------------------------------
 const DummyCopySource& DummyCopySource::Instance()
 {
     static DummyCopySource s_aTheInstance;
     return s_aTheInstance;
 }
 
-//------------------------------------------------------------------------
 OUString DummyCopySource::getQualifiedObjectName() const
 {
     SAL_WARN("dbaccess.ui",  "DummyCopySource::getQualifiedObjectName: not to be called!" );
     return OUString();
 }
 
-//------------------------------------------------------------------------
 bool DummyCopySource::isView() const
 {
     SAL_WARN("dbaccess.ui",  "DummyCopySource::isView: not to be called!" );
     return false;
 }
 
-//------------------------------------------------------------------------
 void DummyCopySource::copyUISettingsTo( const Reference< XPropertySet >& /*_rxObject*/ ) const
 {
     // no support
 }
-// -----------------------------------------------------------------------------
 void DummyCopySource::copyFilterAndSortingTo( const Reference< XConnection >& ,const Reference< XPropertySet >& /*_rxObject*/ ) const
 {
 }
-//------------------------------------------------------------------------
 Sequence< OUString > DummyCopySource::getColumnNames() const
 {
     return Sequence< OUString >();
 }
 
-//------------------------------------------------------------------------
 Sequence< OUString > DummyCopySource::getPrimaryKeyColumnNames() const
 {
     SAL_WARN("dbaccess.ui",  "DummyCopySource::getPrimaryKeyColumnNames: not to be called!" );
     return Sequence< OUString >();
 }
 
-//------------------------------------------------------------------------
 OFieldDescription* DummyCopySource::createFieldDescription( const OUString& /*_rColumnName*/ ) const
 {
     SAL_WARN("dbaccess.ui",  "DummyCopySource::createFieldDescription: not to be called!" );
     return NULL;
 }
-//------------------------------------------------------------------------
 OUString DummyCopySource::getSelectStatement() const
 {
     SAL_WARN("dbaccess.ui",  "DummyCopySource::getSelectStatement: not to be called!" );
     return OUString();
 }
 
-//------------------------------------------------------------------------
 ::utl::SharedUNOComponent< XPreparedStatement > DummyCopySource::getPreparedSelectStatement() const
 {
     SAL_WARN("dbaccess.ui",  "DummyCopySource::getPreparedSelectStatement: not to be called!" );
     return ::utl::SharedUNOComponent< XPreparedStatement >();
 }
 
-//------------------------------------------------------------------------
 namespace
 {
     bool lcl_canCreateViewFor_nothrow( const Reference< XConnection >& _rxConnection )
@@ -539,10 +494,7 @@ namespace
     }
 }
 
-//========================================================================
-//= OCopyTableWizard
-//========================================================================
-//------------------------------------------------------------------------
+// OCopyTableWizard
 OCopyTableWizard::OCopyTableWizard( Window * pParent, const OUString& _rDefaultName, sal_Int16 _nOperation,
         const ICopyTableSourceObject& _rSourceObject, const Reference< XConnection >& _xSourceConnection,
         const Reference< XConnection >& _xConnection, const Reference< XComponentContext >& _rxContext,
@@ -642,7 +594,6 @@ OCopyTableWizard::OCopyTableWizard( Window * pParent, const OUString& _rDefaultN
     ActivatePage();
 }
 
-// -----------------------------------------------------------------------------
 OCopyTableWizard::OCopyTableWizard( Window* pParent, const OUString& _rDefaultName, sal_Int16 _nOperation,
         const ODatabaseExport::TColumns& _rSourceColumns, const ODatabaseExport::TColumnVector& _rSourceColVec,
         const Reference< XConnection >& _xConnection, const Reference< XNumberFormatter >&  _xFormatter,
@@ -695,7 +646,6 @@ OCopyTableWizard::OCopyTableWizard( Window* pParent, const OUString& _rDefaultNa
     ActivatePage();
 }
 
-// -----------------------------------------------------------------------------
 void OCopyTableWizard::construct()
 {
     SAL_INFO("dbaccess.ui", "OCopyTableWizard::construct" );
@@ -730,7 +680,6 @@ void OCopyTableWizard::construct()
     m_pTypeInfo->aUIName = m_sTypeNames.GetToken(TYPE_OTHER);
     m_bAddPKFirstTime = sal_True;
 }
-//------------------------------------------------------------------------
 OCopyTableWizard::~OCopyTableWizard()
 {
     DBG_DTOR(OCopyTableWizard,NULL);
@@ -753,7 +702,6 @@ OCopyTableWizard::~OCopyTableWizard()
     m_aTypeInfo.clear();
     m_aDestTypeInfoIndex.clear();
 }
-// -----------------------------------------------------------------------
 IMPL_LINK_NOARG(OCopyTableWizard, ImplPrevHdl)
 {
     m_ePressed = WIZARD_PREV;
@@ -772,8 +720,6 @@ IMPL_LINK_NOARG(OCopyTableWizard, ImplPrevHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
-
 IMPL_LINK_NOARG(OCopyTableWizard, ImplNextHdl)
 {
     m_ePressed = WIZARD_NEXT;
@@ -791,7 +737,6 @@ IMPL_LINK_NOARG(OCopyTableWizard, ImplNextHdl)
     }
     return 0;
 }
-// -----------------------------------------------------------------------
 sal_Bool OCopyTableWizard::CheckColumns(sal_Int32& _rnBreakPos)
 {
     SAL_INFO("dbaccess.ui", "OCopyTableWizard::CheckColumns" );
@@ -800,7 +745,6 @@ sal_Bool OCopyTableWizard::CheckColumns(sal_Int32& _rnBreakPos)
     m_vColumnTypes.clear();
 
     OSL_ENSURE( m_xDestConnection.is(), "OCopyTableWizard::CheckColumns: No connection!" );
-    //////////////////////////////////////////////////////////////////////
     // If database is able to process PrimaryKeys, set PrimaryKey
     if ( m_xDestConnection.is() )
     {
@@ -876,7 +820,6 @@ sal_Bool OCopyTableWizard::CheckColumns(sal_Int32& _rnBreakPos)
     }
     return bRet;
 }
-// -----------------------------------------------------------------------
 IMPL_LINK_NOARG(OCopyTableWizard, ImplOKHdl)
 {
     m_ePressed = WIZARD_FINISH;
@@ -967,14 +910,12 @@ IMPL_LINK_NOARG(OCopyTableWizard, ImplOKHdl)
     }
     return bFinish;
 }
-//------------------------------------------------------------------------
 sal_Bool OCopyTableWizard::shouldCreatePrimaryKey() const
 {
     SAL_INFO("dbaccess.ui", "OCopyTableWizard::shouldCreatePrimaryKey" );
     return m_bCreatePrimaryKeyColumn;
 }
 
-// -----------------------------------------------------------------------
 void OCopyTableWizard::setCreatePrimaryKey( bool _bDoCreate, const OUString& _rSuggestedName )
 {
     SAL_INFO("dbaccess.ui", "OCopyTableWizard::setCreatePrimaryKey" );
@@ -988,7 +929,6 @@ void OCopyTableWizard::setCreatePrimaryKey( bool _bDoCreate, const OUString& _rS
         pSettingsPage->setCreatePrimaryKey( _bDoCreate, _rSuggestedName );
 }
 
-// -----------------------------------------------------------------------
 IMPL_LINK_NOARG(OCopyTableWizard, ImplActivateHdl)
 {
     OWizardPage* pCurrent = (OWizardPage*)GetPage(GetCurLevel());
@@ -1006,7 +946,6 @@ IMPL_LINK_NOARG(OCopyTableWizard, ImplActivateHdl)
     }
     return 0;
 }
-// -----------------------------------------------------------------------
 void OCopyTableWizard::CheckButtons()
 {
     SAL_INFO("dbaccess.ui", "OCopyTableWizard::CheckButtons" );
@@ -1030,7 +969,6 @@ void OCopyTableWizard::CheckButtons()
         // next already has its state
     }
 }
-// -----------------------------------------------------------------------
 void OCopyTableWizard::EnableButton(Wizard_Button_Style eStyle,sal_Bool bEnable)
 {
     SAL_INFO("dbaccess.ui", "OCopyTableWizard::EnableButton" );
@@ -1044,21 +982,18 @@ void OCopyTableWizard::EnableButton(Wizard_Button_Style eStyle,sal_Bool bEnable)
     pButton->Enable(bEnable);
 
 }
-// -----------------------------------------------------------------------
 long OCopyTableWizard::DeactivatePage()
 {
     SAL_INFO("dbaccess.ui", "OCopyTableWizard::DeactivatePage" );
     OWizardPage* pPage = (OWizardPage*)GetPage(GetCurLevel());
     return pPage ? pPage->LeavePage() : sal_False;
 }
-// -----------------------------------------------------------------------
 void OCopyTableWizard::AddWizardPage(OWizardPage* pPage)
 {
     SAL_INFO("dbaccess.ui", "OCopyTableWizard::AddWizardPage" );
     AddPage(pPage);
     ++m_nPageCount;
 }
-// -----------------------------------------------------------------------------
 void OCopyTableWizard::insertColumn(sal_Int32 _nPos,OFieldDescription* _pField)
 {
     SAL_INFO("dbaccess.ui", "OCopyTableWizard::insertColumn" );
@@ -1077,7 +1012,6 @@ void OCopyTableWizard::insertColumn(sal_Int32 _nPos,OFieldDescription* _pField)
         m_mNameMapping[_pField->GetName()] = _pField->GetName();
     }
 }
-// -----------------------------------------------------------------------------
 void OCopyTableWizard::replaceColumn(sal_Int32 _nPos,OFieldDescription* _pField,const OUString& _sOldName)
 {
     SAL_INFO("dbaccess.ui", "OCopyTableWizard::replaceColumn" );
@@ -1091,14 +1025,12 @@ void OCopyTableWizard::replaceColumn(sal_Int32 _nPos,OFieldDescription* _pField,
             m_vDestColumns.insert(ODatabaseExport::TColumns::value_type(_pField->GetName(),_pField)).first;
     }
 }
-// -----------------------------------------------------------------------------
 void OCopyTableWizard::impl_loadSourceData()
 {
     SAL_INFO("dbaccess.ui", "OCopyTableWizard::impl_loadSourceData" );
     loadData( m_rSourceObject, m_vSourceColumns, m_vSourceVec );
 }
 
-// -----------------------------------------------------------------------------
 void OCopyTableWizard::loadData(  const ICopyTableSourceObject& _rSourceObject, ODatabaseExport::TColumns& _rColumns, ODatabaseExport::TColumnVector& _rColVector )
 {
     SAL_INFO("dbaccess.ui", "OCopyTableWizard::loadData" );
@@ -1111,7 +1043,6 @@ void OCopyTableWizard::loadData(  const ICopyTableSourceObject& _rSourceObject, 
 
     OFieldDescription* pActFieldDescr = NULL;
     OUString sCreateParam("x");
-    //////////////////////////////////////////////////////////////////////
     // ReadOnly-Flag
     // On drop no line must be editable.
     // On add only empty lines must be editable.
@@ -1159,7 +1090,6 @@ void OCopyTableWizard::loadData(  const ICopyTableSourceObject& _rSourceObject, 
         }
     }
 }
-// -----------------------------------------------------------------------------
 void OCopyTableWizard::clearDestColumns()
 {
     SAL_INFO("dbaccess.ui", "OCopyTableWizard::clearDestColumns" );
@@ -1168,7 +1098,6 @@ void OCopyTableWizard::clearDestColumns()
     m_mNameMapping.clear();
 }
 
-// -----------------------------------------------------------------------------
 void OCopyTableWizard::appendColumns( Reference<XColumnsSupplier>& _rxColSup, const ODatabaseExport::TColumnVector* _pVec, sal_Bool _bKeyColumns) const
 {
     SAL_INFO("dbaccess.ui", "OCopyTableWizard::appendColumns" );
@@ -1219,7 +1148,6 @@ void OCopyTableWizard::appendColumns( Reference<XColumnsSupplier>& _rxColSup, co
         }
     }
 }
-// -----------------------------------------------------------------------------
 void OCopyTableWizard::appendKey( Reference<XKeysSupplier>& _rxSup, const ODatabaseExport::TColumnVector* _pVec) const
 {
     SAL_INFO("dbaccess.ui", "OCopyTableWizard::appendKey" );
@@ -1247,7 +1175,6 @@ void OCopyTableWizard::appendKey( Reference<XKeysSupplier>& _rxSup, const ODatab
     }
 
 }
-// -----------------------------------------------------------------------------
 Reference< XPropertySet > OCopyTableWizard::createView() const
 {
     SAL_INFO("dbaccess.ui", "OCopyTableWizard::createView" );
@@ -1257,7 +1184,6 @@ Reference< XPropertySet > OCopyTableWizard::createView() const
         // but in all those cases, this method here should never be called.
     return ::dbaui::createView( m_sName, m_xDestConnection, sCommand );
 }
-// -----------------------------------------------------------------------------
 Reference< XPropertySet > OCopyTableWizard::createTable()
 {
     SAL_INFO("dbaccess.ui", "OCopyTableWizard::createTable" );
@@ -1380,7 +1306,6 @@ Reference< XPropertySet > OCopyTableWizard::createTable()
     return xTable;
 }
 
-// -----------------------------------------------------------------------------
 bool OCopyTableWizard::supportsPrimaryKey( const Reference< XConnection >& _rxConnection )
 {
     OSL_PRECOND( _rxConnection.is(), "OCopyTableWizard::supportsPrimaryKey: invalid connection!" );
@@ -1391,7 +1316,6 @@ bool OCopyTableWizard::supportsPrimaryKey( const Reference< XConnection >& _rxCo
     return aMetaData.supportsPrimaryKeys();
 }
 
-// -----------------------------------------------------------------------------
 bool OCopyTableWizard::supportsViews( const Reference< XConnection >& _rxConnection )
 {
     SAL_INFO("dbaccess.ui", "OCopyTableWizard::supportsViews" );
@@ -1434,7 +1358,6 @@ bool OCopyTableWizard::supportsViews( const Reference< XConnection >& _rxConnect
     return bSupportsViews;
 }
 
-// -----------------------------------------------------------------------------
 sal_Int32 OCopyTableWizard::getMaxColumnNameLength() const
 {
     SAL_INFO("dbaccess.ui", "OCopyTableWizard::getMaxColumnNameLength" );
@@ -1453,19 +1376,16 @@ sal_Int32 OCopyTableWizard::getMaxColumnNameLength() const
     }
     return nLen;
 }
-// -----------------------------------------------------------------------------
 void OCopyTableWizard::setOperation( const sal_Int16 _nOperation )
 {
     SAL_INFO("dbaccess.ui", "OCopyTableWizard::setOperation" );
     m_nOperation = _nOperation;
 }
-// -----------------------------------------------------------------------------
 sal_Int16 OCopyTableWizard::getOperation() const
 {
     SAL_INFO("dbaccess.ui", "OCopyTableWizard::getOperation" );
     return m_nOperation;
 }
-// -----------------------------------------------------------------------------
 OUString OCopyTableWizard::convertColumnName(const TColumnFindFunctor&   _rCmpFunctor,
                                                     const OUString&  _sColumnName,
                                                     const OUString&  _sExtraChars,
@@ -1503,14 +1423,12 @@ OUString OCopyTableWizard::convertColumnName(const TColumnFindFunctor&   _rCmpFu
     return sAlias;
 }
 
-// -----------------------------------------------------------------------------
 void OCopyTableWizard::removeColumnNameFromNameMap(const OUString& _sName)
 {
     SAL_INFO("dbaccess.ui", "OCopyTableWizard::removeColumnNameFromNameMap" );
     m_mNameMapping.erase(_sName);
 }
 
-// -----------------------------------------------------------------------------
 sal_Bool OCopyTableWizard::supportsType(sal_Int32 _nDataType,sal_Int32& _rNewDataType)
 {
     SAL_INFO("dbaccess.ui", "OCopyTableWizard::supportsType" );
@@ -1520,7 +1438,6 @@ sal_Bool OCopyTableWizard::supportsType(sal_Int32 _nDataType,sal_Int32& _rNewDat
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
 TOTypeInfoSP OCopyTableWizard::convertType(const TOTypeInfoSP& _pType,sal_Bool& _bNotConvert)
 {
     SAL_INFO("dbaccess.ui", "OCopyTableWizard::convertType" );
@@ -1619,7 +1536,6 @@ TOTypeInfoSP OCopyTableWizard::convertType(const TOTypeInfoSP& _pType,sal_Bool& 
     }
     return pType;
 }
-// -----------------------------------------------------------------------------
 OUString OCopyTableWizard::createUniqueName(const OUString& _sName)
 {
     SAL_INFO("dbaccess.ui", "OCopyTableWizard::createUniqueName" );
@@ -1641,7 +1557,6 @@ OUString OCopyTableWizard::createUniqueName(const OUString& _sName)
     }
     return sName;
 }
-// -----------------------------------------------------------------------------
 void OCopyTableWizard::showColumnTypeNotSupported(const OUString& _rColumnName)
 {
     SAL_INFO("dbaccess.ui", "OCopyTableWizard::showColumnTypeNotSupported" );
@@ -1649,13 +1564,11 @@ void OCopyTableWizard::showColumnTypeNotSupported(const OUString& _rColumnName)
     sMessage.SearchAndReplaceAscii("#1",_rColumnName);
     showError(sMessage);
 }
-//-------------------------------------------------------------------------------
 void OCopyTableWizard::showError(const OUString& _sErrorMesage)
 {
     SQLExceptionInfo aInfo(_sErrorMesage);
     showError(aInfo.get());
 }
-//-------------------------------------------------------------------------------
 void OCopyTableWizard::showError(const Any& _aError)
 {
     if ( _aError.hasValue() && m_xInteractionHandler.is() )

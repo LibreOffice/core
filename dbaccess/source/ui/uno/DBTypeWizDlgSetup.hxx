@@ -24,13 +24,9 @@
 #include "unoadmin.hxx"
 #endif
 
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
-//=========================================================================
-//= ODBTypeWizDialogSetup
-//=========================================================================
+// ODBTypeWizDialogSetup
 class ODBTypeWizDialogSetup
         :public ODatabaseAdministrationDialog
         ,public ::comphelper::OPropertyArrayUsageHelper< ODBTypeWizDialogSetup >
@@ -68,9 +64,7 @@ protected:
     virtual void executedDialog(sal_Int16 _nExecutionResult);
 };
 
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
 
 #endif // DBAUI_DBTYPEWIZDLG_HXX
 

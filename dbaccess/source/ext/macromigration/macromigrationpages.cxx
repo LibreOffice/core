@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "dbaccess_helpid.hrc"
 #include "dbmm_module.hxx"
 #include "dbmm_global.hrc"
@@ -31,10 +30,8 @@
 #include <tools/diagnose_ex.h>
 #include <vcl/metric.hxx>
 
-//........................................................................
 namespace dbmm
 {
-//........................................................................
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
@@ -48,10 +45,7 @@ namespace dbmm
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::frame::XModel;
 
-    //====================================================================
-    //= MacroMigrationPage
-    //====================================================================
-    //--------------------------------------------------------------------
+    // MacroMigrationPage
     MacroMigrationPage::MacroMigrationPage( MacroMigrationDialog& _rParentDialog, const ResId& _rRes )
         :MacroMigrationPage_Base( &_rParentDialog, _rRes )
         ,m_aHeader( this, MacroMigrationResId( FT_HEADER ) )
@@ -61,27 +55,21 @@ namespace dbmm
         m_aHeader.SetFont( aFont );
     }
 
-    //--------------------------------------------------------------------
     MacroMigrationPage::~MacroMigrationPage()
     {
     }
 
-    //--------------------------------------------------------------------
     const MacroMigrationDialog& MacroMigrationPage::getDialog() const
     {
         return *dynamic_cast< const MacroMigrationDialog* >( GetParentDialog() );
     }
 
-    //--------------------------------------------------------------------
     MacroMigrationDialog& MacroMigrationPage::getDialog()
     {
         return *dynamic_cast< MacroMigrationDialog* >( GetParentDialog() );
     }
 
-    //====================================================================
-    //= PreparationPage
-    //====================================================================
-    //--------------------------------------------------------------------
+    // PreparationPage
     PreparationPage::PreparationPage( MacroMigrationDialog& _rParentDialog )
         :MacroMigrationPage( _rParentDialog, MacroMigrationResId( TP_PREPARE ) )
         ,m_aIntroduction ( this, MacroMigrationResId( FT_INTRODUCTION    ) )
@@ -90,22 +78,17 @@ namespace dbmm
         FreeResource();
     }
 
-    //--------------------------------------------------------------------
     void PreparationPage::showCloseDocsError( bool _bShow )
     {
         m_aCloseDocError.Show( _bShow );
     }
 
-    //--------------------------------------------------------------------
     TabPage* PreparationPage::Create( ::svt::RoadmapWizard& _rParentDialog )
     {
         return new PreparationPage( dynamic_cast< MacroMigrationDialog& >( _rParentDialog ) );
     }
 
-    //====================================================================
-    //= SaveDBDocPage
-    //====================================================================
-    //--------------------------------------------------------------------
+    // SaveDBDocPage
     SaveDBDocPage::SaveDBDocPage( MacroMigrationDialog& _rParentDialog )
         :MacroMigrationPage( _rParentDialog, MacroMigrationResId( TP_SAVE_DBDOC_AS ) )
         ,m_aExplanation         ( this, MacroMigrationResId( FT_EXPLANATION             ) )
@@ -125,21 +108,18 @@ namespace dbmm
         impl_updateLocationDependentItems();
     }
 
-    //--------------------------------------------------------------------
     void SaveDBDocPage::impl_updateLocationDependentItems()
     {
         updateDialogTravelUI();
         m_aStartMigration.Show( !m_aSaveAsLocation.GetText().isEmpty() );
     }
 
-    //--------------------------------------------------------------------
     IMPL_LINK( SaveDBDocPage, OnLocationModified, Edit*, /**/ )
     {
         impl_updateLocationDependentItems();
         return 0L;
     }
 
-    //--------------------------------------------------------------------
     void SaveDBDocPage::initializePage()
     {
         OWizardPage::initializePage();
@@ -164,7 +144,6 @@ namespace dbmm
         }
     }
 
-    //--------------------------------------------------------------------
     bool SaveDBDocPage::canAdvance() const
     {
         if ( !MacroMigrationPage::canAdvance() )
@@ -173,7 +152,6 @@ namespace dbmm
         return !m_aSaveAsLocation.GetText().isEmpty();
     }
 
-    //--------------------------------------------------------------------
     sal_Bool SaveDBDocPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
     {
         if ( !MacroMigrationPage::commitPage( _eReason ) )
@@ -188,16 +166,12 @@ namespace dbmm
         return sal_True;
     }
 
-    //--------------------------------------------------------------------
     TabPage* SaveDBDocPage::Create( ::svt::RoadmapWizard& _rParentDialog )
     {
         return new SaveDBDocPage( dynamic_cast< MacroMigrationDialog& >( _rParentDialog ) );
     }
 
-    //====================================================================
-    //= ProgressPage
-    //====================================================================
-    //--------------------------------------------------------------------
+    // ProgressPage
     ProgressPage::ProgressPage( MacroMigrationDialog& _rParentDialog )
         :MacroMigrationPage( _rParentDialog, MacroMigrationResId( TP_MIGRATE ) )
         ,m_aObjectCount             ( this, MacroMigrationResId( FT_OBJECT_COUNT            ) )
@@ -214,13 +188,11 @@ namespace dbmm
         FreeResource();
     }
 
-    //--------------------------------------------------------------------
     TabPage* ProgressPage::Create( ::svt::RoadmapWizard& _rParentDialog )
     {
         return new ProgressPage( dynamic_cast< MacroMigrationDialog& >( _rParentDialog ) );
     }
 
-    //--------------------------------------------------------------------
     void ProgressPage::setDocumentCounts( const sal_Int32 _nForms, const sal_Int32 _nReports )
     {
         OUString sText( m_aObjectCount.GetText() );
@@ -229,13 +201,11 @@ namespace dbmm
         m_aObjectCount.SetText( sText );
     }
 
-    //--------------------------------------------------------------------
     void ProgressPage::onFinishedSuccessfully()
     {
         m_aMigrationDone.Show();
     }
 
-    //--------------------------------------------------------------------
     void ProgressPage::startObject( const OUString& _rObjectName, const OUString& _rCurrentAction, const sal_uInt32 _nRange )
     {
         m_aCurrentObject.SetText( _rObjectName );
@@ -250,7 +220,6 @@ namespace dbmm
         Update();
     }
 
-    //--------------------------------------------------------------------
     void ProgressPage::setObjectProgressText( const OUString& _rText )
     {
         m_aCurrentAction.SetText( _rText );
@@ -258,14 +227,12 @@ namespace dbmm
         Update();
     }
 
-    //--------------------------------------------------------------------
     void ProgressPage::setObjectProgressValue( const sal_uInt32 _nValue )
     {
         m_aCurrentProgress.SetValue( _nValue );
         Update();
     }
 
-    //--------------------------------------------------------------------
     void ProgressPage::endObject()
     {
         m_aCurrentAction.SetText( OUString() );
@@ -274,31 +241,25 @@ namespace dbmm
         Update();
     }
 
-    //--------------------------------------------------------------------
     void ProgressPage::start( const sal_uInt32 _nOverallRange )
     {
         m_aAllProgress.SetRange( _nOverallRange );
         Update();
     }
 
-    //--------------------------------------------------------------------
     void ProgressPage::setOverallProgressText( const OUString& _rText )
     {
         m_aAllProgressText.SetText( _rText );
         Update();
     }
 
-    //--------------------------------------------------------------------
     void ProgressPage::setOverallProgressValue( const sal_uInt32 _nValue )
     {
         m_aAllProgress.SetValue( _nValue );
         Update();
     }
 
-    //====================================================================
-    //= ResultPage
-    //====================================================================
-    //--------------------------------------------------------------------
+    // ResultPage
     ResultPage::ResultPage( MacroMigrationDialog& _rParentDialog )
         :MacroMigrationPage( _rParentDialog, MacroMigrationResId( TP_SUMMARY ) )
         ,m_aChangesLabel( this, MacroMigrationResId( FT_CHANGES_LABEL ) )
@@ -309,13 +270,11 @@ namespace dbmm
         FreeResource();
     }
 
-    //--------------------------------------------------------------------
     TabPage* ResultPage::Create( ::svt::RoadmapWizard& _rParentDialog )
     {
         return new ResultPage( dynamic_cast< MacroMigrationDialog& >( _rParentDialog ) );
     }
 
-    //--------------------------------------------------------------------
     void ResultPage::displayMigrationLog( const bool _bSuccessful, const OUString& _rSummary )
     {
         m_aChangesLabel.SetText( _bSuccessful ? m_aSuccessful : m_aUnsuccessful );
@@ -342,8 +301,6 @@ namespace dbmm
         m_aChanges.SetPosPixel( aChangesPos );
     }
 
-//........................................................................
 } // namespace dbmm
-//........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

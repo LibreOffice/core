@@ -35,10 +35,8 @@
 
 #include <vcl/msgbox.hxx>
 
-//........................................................................
 namespace dbaui
 {
-//........................................................................
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::lang::XMultiServiceFactory;
@@ -49,9 +47,7 @@ namespace dbaui
     using ::com::sun::star::sdbc::XConnection;
     using ::com::sun::star::sdbc::XDriver;
 
-    //========================================================================
-    //= SpecialSettingsPage
-    //========================================================================
+    // SpecialSettingsPage
     struct BooleanSettingDesc
     {
         CheckBox**  ppControl;          // the dialog's control which displays this setting
@@ -60,9 +56,7 @@ namespace dbaui
         bool        bInvertedDisplay;   // true if and only if the checkbox is checked when the item is sal_False, and vice versa
     };
 
-    //========================================================================
-    //= SpecialSettingsPage
-    //========================================================================
+    // SpecialSettingsPage
     SpecialSettingsPage::SpecialSettingsPage( Window* pParent, const SfxItemSet& _rCoreAttrs, const DataSourceMetaData& _rDSMeta )
         :OGenericAdministrationPage( pParent, ModuleRes( PAGE_ADVANCED_SETTINGS_SPECIAL ), _rCoreAttrs )
         ,m_aTopLine( this, ModuleRes( FL_DATAHANDLING ) )
@@ -173,7 +167,6 @@ namespace dbaui
         FreeResource();
     }
 
-    // -----------------------------------------------------------------------
     SpecialSettingsPage::~SpecialSettingsPage()
     {
         m_aControlDependencies.clear();
@@ -200,7 +193,6 @@ namespace dbaui
         DELETEZ( m_pMaxRowScan );
     }
 
-    // -----------------------------------------------------------------------
     void SpecialSettingsPage::impl_initBooleanSettings()
     {
         OSL_PRECOND( m_aBooleanSettings.empty(), "SpecialSettingsPage::impl_initBooleanSettings: called twice!" );
@@ -232,7 +224,6 @@ namespace dbaui
         }
     }
 
-    // -----------------------------------------------------------------------
     void SpecialSettingsPage::fillWindows( ::std::vector< ISaveValueWrapper* >& _rControlList )
     {
         if ( m_bHasBooleanComparisonMode )
@@ -245,7 +236,6 @@ namespace dbaui
         }
     }
 
-    // -----------------------------------------------------------------------
     void SpecialSettingsPage::fillControls(::std::vector< ISaveValueWrapper* >& _rControlList)
     {
         for (   BooleanSettingDescs::const_iterator setting = m_aBooleanSettings.begin();
@@ -265,7 +255,6 @@ namespace dbaui
             _rControlList.push_back(new OSaveValueWrapper<NumericField>(m_pMaxRowScan));
     }
 
-    // -----------------------------------------------------------------------
     void SpecialSettingsPage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
     {
         // check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
@@ -331,7 +320,6 @@ namespace dbaui
         OGenericAdministrationPage::implInitControls(_rSet, _bSaveValue);
     }
 
-    // -----------------------------------------------------------------------
     sal_Bool SpecialSettingsPage::FillItemSet( SfxItemSet& _rSet )
     {
         sal_Bool bChangedSomething = sal_False;
@@ -363,10 +351,7 @@ namespace dbaui
         return bChangedSomething;
     }
 
-    //========================================================================
-    //= GeneratedValuesPage
-    //========================================================================
-    //------------------------------------------------------------------------
+    // GeneratedValuesPage
     GeneratedValuesPage::GeneratedValuesPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
         :OGenericAdministrationPage(pParent, ModuleRes( PAGE_GENERATED_VALUES ), _rCoreAttrs)
         ,m_aAutoFixedLine        ( this, ModuleRes( FL_SEPARATORAUTO ) )
@@ -386,13 +371,11 @@ namespace dbaui
         FreeResource();
     }
 
-    // -----------------------------------------------------------------------
     GeneratedValuesPage::~GeneratedValuesPage()
     {
         m_aControlDependencies.clear();
     }
 
-    // -----------------------------------------------------------------------
     void GeneratedValuesPage::fillWindows( ::std::vector< ISaveValueWrapper* >& _rControlList )
     {
         _rControlList.push_back( new ODisableWrapper< FixedLine >( &m_aAutoFixedLine ) );
@@ -400,7 +383,6 @@ namespace dbaui
         _rControlList.push_back( new ODisableWrapper< FixedText >( &m_aAutoRetrievingLabel ) );
     }
 
-    // -----------------------------------------------------------------------
     void GeneratedValuesPage::fillControls( ::std::vector< ISaveValueWrapper* >& _rControlList )
     {
         _rControlList.push_back( new OSaveValueWrapper< CheckBox >( &m_aAutoRetrievingEnabled ) );
@@ -408,7 +390,6 @@ namespace dbaui
         _rControlList.push_back( new OSaveValueWrapper< Edit >( &m_aAutoRetrieving ) );
     }
 
-    // -----------------------------------------------------------------------
     void GeneratedValuesPage::implInitControls( const SfxItemSet& _rSet, sal_Bool _bSaveValue )
     {
         // check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
@@ -434,7 +415,6 @@ namespace dbaui
         OGenericAdministrationPage::implInitControls( _rSet, _bSaveValue );
     }
 
-    // -----------------------------------------------------------------------
     sal_Bool GeneratedValuesPage::FillItemSet(SfxItemSet& _rSet)
     {
         sal_Bool bChangedSomething = sal_False;
@@ -446,10 +426,7 @@ namespace dbaui
         return bChangedSomething;
     }
 
-    //========================================================================
-    //= AdvancedSettingsDialog
-    //========================================================================
-    //------------------------------------------------------------------------
+    // AdvancedSettingsDialog
     AdvancedSettingsDialog::AdvancedSettingsDialog( Window* _pParent, SfxItemSet* _pItems,
         const Reference< XComponentContext >& _rxContext, const Any& _aDataSourceName )
         :SfxTabDialog(_pParent, ModuleRes(DLG_DATABASE_ADVANCED), _pItems)
@@ -481,14 +458,12 @@ namespace dbaui
         FreeResource();
     }
 
-    // -----------------------------------------------------------------------
     AdvancedSettingsDialog::~AdvancedSettingsDialog()
     {
         SetInputSet(NULL);
         DELETEZ(pExampleSet);
     }
 
-    // -----------------------------------------------------------------------
     bool AdvancedSettingsDialog::doesHaveAnyAdvancedSettings( const OUString& _sURL )
     {
         DataSourceMetaData aMeta( _sURL );
@@ -498,7 +473,6 @@ namespace dbaui
         return false;
     }
 
-    // -----------------------------------------------------------------------
     short AdvancedSettingsDialog::Execute()
     {
         short nRet = SfxTabDialog::Execute();
@@ -510,7 +484,6 @@ namespace dbaui
         return nRet;
     }
 
-    //-------------------------------------------------------------------------
     void AdvancedSettingsDialog::PageCreated(sal_uInt16 _nId, SfxTabPage& _rPage)
     {
         // register ourself as modified listener
@@ -525,68 +498,56 @@ namespace dbaui
         SfxTabDialog::PageCreated(_nId, _rPage);
     }
 
-    // -----------------------------------------------------------------------------
     const SfxItemSet* AdvancedSettingsDialog::getOutputSet() const
     {
         return pExampleSet;
     }
 
-    // -----------------------------------------------------------------------------
     SfxItemSet* AdvancedSettingsDialog::getWriteOutputSet()
     {
         return pExampleSet;
     }
 
-    // -----------------------------------------------------------------------------
     ::std::pair< Reference< XConnection >, sal_Bool > AdvancedSettingsDialog::createConnection()
     {
         return m_pImpl->createConnection();
     }
 
-    // -----------------------------------------------------------------------------
     Reference< XComponentContext > AdvancedSettingsDialog::getORB() const
     {
         return m_pImpl->getORB();
     }
 
-    // -----------------------------------------------------------------------------
     Reference< XDriver > AdvancedSettingsDialog::getDriver()
     {
         return m_pImpl->getDriver();
     }
 
-    // -----------------------------------------------------------------------------
     OUString AdvancedSettingsDialog::getDatasourceType(const SfxItemSet& _rSet) const
     {
         return m_pImpl->getDatasourceType(_rSet);
     }
 
-    // -----------------------------------------------------------------------------
     void AdvancedSettingsDialog::clearPassword()
     {
         m_pImpl->clearPassword();
     }
 
-    // -----------------------------------------------------------------------------
     void AdvancedSettingsDialog::setTitle(const OUString& _sTitle)
     {
         SetText(_sTitle);
     }
 
-    //-------------------------------------------------------------------------
     void AdvancedSettingsDialog::enableConfirmSettings( bool _bEnable )
     {
         (void)_bEnable;
     }
 
-    //-------------------------------------------------------------------------
     sal_Bool AdvancedSettingsDialog::saveDatasource()
     {
         return PrepareLeaveCurrentPage();
     }
 
-//........................................................................
 } // namespace dbaui
-//........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

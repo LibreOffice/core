@@ -34,14 +34,10 @@
 #include "indexes.hxx"
 #include <dbaccess/ToolBoxHelper.hxx>
 
-//......................................................................
 namespace dbaui
 {
-//......................................................................
 
-    //==================================================================
-    //= DbaIndexList
-    //==================================================================
+    // DbaIndexList
     class DbaIndexList : public SvTreeListBox
     {
     protected:
@@ -78,9 +74,7 @@ namespace dbaui
         using SvTreeListBox::Select;
     };
 
-    //==================================================================
-    //= DbaIndexDialog
-    //==================================================================
+    // DbaIndexDialog
     class IndexFieldsControl;
     class OIndexCollection;
     class DbaIndexDialog :  public ModalDialog,
@@ -167,9 +161,7 @@ namespace dbaui
         void checkControls();
     };
 
-//......................................................................
 }   // namespace dbaui
-//......................................................................
 
 #endif // _DBAUI_INDEXDIALOG_HXX_
 

@@ -29,10 +29,8 @@
 
 #include <boost/scoped_ptr.hpp>
 
-//......................................................................................................................
 namespace dbaui
 {
-//......................................................................................................................
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
@@ -51,9 +49,7 @@ namespace dbaui
     using ::com::sun::star::beans::PropertyValue;
     using ::com::sun::star::lang::EventObject;
 
-    //==================================================================================================================
-    //= OSingleDocumentController_Data
-    //==================================================================================================================
+    // OSingleDocumentController_Data
     struct OSingleDocumentController_Data
     {
         ::boost::scoped_ptr< UndoManager >  m_pUndoManager;
@@ -64,22 +60,17 @@ namespace dbaui
         }
     };
 
-    //==================================================================================================================
-    //= OSingleDocumentController
-    //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+    // OSingleDocumentController
     OSingleDocumentController::OSingleDocumentController( const Reference< XComponentContext >& _rxORB )
         :OSingleDocumentController_Base( _rxORB )
         ,m_pData( new OSingleDocumentController_Data( *this, getMutex() ) )
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     OSingleDocumentController::~OSingleDocumentController()
     {
     }
 
-    // -----------------------------------------------------------------------------
     void SAL_CALL OSingleDocumentController::disposing()
     {
         OSingleDocumentController_Base::disposing();
@@ -87,26 +78,22 @@ namespace dbaui
         m_pData->m_pUndoManager->disposing();
     }
 
-    // -----------------------------------------------------------------------------
     void SAL_CALL OSingleDocumentController::disposing( const EventObject& i_event ) throw( RuntimeException )
     {
         // simply disambiguate
         OSingleDocumentController_Base::disposing( i_event );
     }
 
-    // -----------------------------------------------------------------------------
     void OSingleDocumentController::ClearUndoManager()
     {
         GetUndoManager().Clear();
     }
 
-    // -----------------------------------------------------------------------------
     SfxUndoManager& OSingleDocumentController::GetUndoManager() const
     {
         return m_pData->m_pUndoManager->GetSfxUndoManager();
     }
 
-    // -----------------------------------------------------------------------------
     void OSingleDocumentController::addUndoActionAndInvalidate(SfxUndoAction *_pAction)
     {
         // add undo action
@@ -120,13 +107,11 @@ namespace dbaui
         InvalidateFeature( ID_BROWSER_REDO );
     }
 
-    // -----------------------------------------------------------------------------
     Reference< XUndoManager > SAL_CALL OSingleDocumentController::getUndoManager(  ) throw (RuntimeException)
     {
         return m_pData->m_pUndoManager.get();
     }
 
-    // -----------------------------------------------------------------------------
     FeatureState OSingleDocumentController::GetState(sal_uInt16 _nId) const
     {
         FeatureState aReturn;
@@ -159,7 +144,6 @@ namespace dbaui
         }
         return aReturn;
     }
-    // -----------------------------------------------------------------------------
     void OSingleDocumentController::Execute( sal_uInt16 _nId, const Sequence< PropertyValue >& _rArgs )
     {
         switch ( _nId )
@@ -183,8 +167,6 @@ namespace dbaui
         InvalidateFeature(_nId);
     }
 
-//......................................................................................................................
 } // namespace dbaui
-//......................................................................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

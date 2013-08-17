@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "textconnectionsettings.hxx"
 #include "dbu_reghelper.hxx"
 #include "moduledbu.hxx"
@@ -34,10 +33,8 @@
 #include <svtools/genericunodialog.hxx>
 #include <cppuhelper/implbase1.hxx>
 
-//........................................................................
 namespace dbaui
 {
-//........................................................................
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
@@ -55,9 +52,7 @@ namespace dbaui
 
     namespace PropertyAttribute = ::com::sun::star::beans::PropertyAttribute;
 
-    //====================================================================
-    //= OTextConnectionSettingsDialog
-    //====================================================================
+    // OTextConnectionSettingsDialog
 
     class OTextConnectionSettingsDialog;
     typedef ::cppu::ImplInheritanceHelper1  <   ODatabaseAdministrationDialog
@@ -112,25 +107,19 @@ namespace dbaui
         using OTextConnectionSettingsDialog_BASE::getFastPropertyValue;
     };
 
-    //====================================================================
-    //= OTextConnectionSettingsDialog
-    //====================================================================
-    //--------------------------------------------------------------------
+    // OTextConnectionSettingsDialog
     OTextConnectionSettingsDialog::OTextConnectionSettingsDialog( const Reference<XComponentContext>& _rContext )
         :OTextConnectionSettingsDialog_BASE( _rContext )
     {
         TextConnectionSettingsDialog::bindItemStorages( *m_pDatasourceItems, m_aPropertyValues );
     }
 
-    //---------------------------------------------------------------------
     OTextConnectionSettingsDialog::~OTextConnectionSettingsDialog()
     {
     }
 
-    //---------------------------------------------------------------------
     IMPLEMENT_IMPLEMENTATION_ID( OTextConnectionSettingsDialog )
 
-    //---------------------------------------------------------------------
     IMPLEMENT_SERVICE_INFO_IMPLNAME_STATIC(OTextConnectionSettingsDialog, "com.sun.star.comp.dbaccess.OTextConnectionSettingsDialog")
     IMPLEMENT_SERVICE_INFO_SUPPORTS(OTextConnectionSettingsDialog)
     IMPLEMENT_SERVICE_INFO_GETSUPPORTED1_STATIC(OTextConnectionSettingsDialog, "com.sun.star.sdb.TextConnectionSettings")
@@ -141,19 +130,16 @@ namespace dbaui
         return static_cast< XServiceInfo* >(new OTextConnectionSettingsDialog( comphelper::getComponentContext(_rxORB)));
     }
 
-    //---------------------------------------------------------------------
     Reference< XPropertySetInfo >  SAL_CALL OTextConnectionSettingsDialog::getPropertySetInfo() throw(RuntimeException)
     {
         return createPropertySetInfo( getInfoHelper() );
     }
 
-    //---------------------------------------------------------------------
     ::cppu::IPropertyArrayHelper& OTextConnectionSettingsDialog::getInfoHelper()
     {
         return *getArrayHelper();
     }
 
-    //---------------------------------------------------------------------
     ::cppu::IPropertyArrayHelper* OTextConnectionSettingsDialog::createArrayHelper( ) const
     {
         Sequence< Property > aProps;
@@ -210,19 +196,16 @@ namespace dbaui
         return new ::cppu::OPropertyArrayHelper( aProps );
     }
 
-    //---------------------------------------------------------------------
     Dialog* OTextConnectionSettingsDialog::createDialog(Window* _pParent)
     {
         return new TextConnectionSettingsDialog( _pParent, *m_pDatasourceItems );
     }
 
-    //---------------------------------------------------------------------
     void OTextConnectionSettingsDialog::implInitialize(const Any& _rValue)
     {
         OTextConnectionSettingsDialog_BASE::implInitialize( _rValue );
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL OTextConnectionSettingsDialog::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _rValue ) throw(Exception)
     {
         PropertyValues::const_iterator pos = m_aPropertyValues.find( _nHandle );
@@ -236,7 +219,6 @@ namespace dbaui
         }
     }
 
-    //--------------------------------------------------------------------
     sal_Bool SAL_CALL OTextConnectionSettingsDialog::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue) throw(IllegalArgumentException)
     {
         sal_Bool bModified = sal_False;
@@ -257,7 +239,6 @@ namespace dbaui
         return bModified;
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL OTextConnectionSettingsDialog::getFastPropertyValue( Any& _rValue, sal_Int32 _nHandle ) const
     {
         PropertyValues::const_iterator pos = m_aPropertyValues.find( _nHandle );
@@ -271,9 +252,7 @@ namespace dbaui
         }
     }
 
-//........................................................................
 } // namespace dbaui
-//........................................................................
 
 extern "C" void SAL_CALL createRegistryInfo_OTextConnectionSettingsDialog()
 {

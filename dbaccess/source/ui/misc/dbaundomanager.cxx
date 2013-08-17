@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <dbaccess/dbaundomanager.hxx>
 
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -26,10 +25,8 @@
 #include <vcl/svapp.hxx>
 #include <framework/undomanagerhelper.hxx>
 
-//......................................................................................................................
 namespace dbaui
 {
-//......................................................................................................................
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
@@ -54,9 +51,7 @@ namespace dbaui
     using ::com::sun::star::util::NotLockedException;
     using ::com::sun::star::lang::NoSupportException;
 
-    //==================================================================================================================
-    //= UndoManager_Impl
-    //==================================================================================================================
+    // UndoManager_Impl
     struct UndoManager_Impl : public ::framework::IUndoManagerImplementation
     {
         UndoManager_Impl( UndoManager& i_antiImpl, ::cppu::OWeakObject& i_parent, ::osl::Mutex& i_mutex )
@@ -85,21 +80,17 @@ namespace dbaui
         virtual Reference< XUndoManager >   getThis();
     };
 
-    //------------------------------------------------------------------------------------------------------------------
     ::svl::IUndoManager& UndoManager_Impl::getImplUndoManager()
     {
         return aUndoManager;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     Reference< XUndoManager > UndoManager_Impl::getThis()
     {
         return static_cast< XUndoManager* >( &rAntiImpl );
     }
 
-    //==============================================================================================================
-    //= OslMutexFacade
-    //==============================================================================================================
+    // OslMutexFacade
     class OslMutexFacade : public ::framework::IMutex
     {
     public:
@@ -117,21 +108,17 @@ namespace dbaui
         ::osl::Mutex&   m_rMutex;
     };
 
-    //--------------------------------------------------------------------------------------------------------------
     void OslMutexFacade::acquire()
     {
         m_rMutex.acquire();
     }
 
-    //--------------------------------------------------------------------------------------------------------------
     void OslMutexFacade::release()
     {
         m_rMutex.release();
     }
 
-    //==============================================================================================================
-    //= UndoManagerMethodGuard
-    //==============================================================================================================
+    // UndoManagerMethodGuard
     /** guard for public UNO methods of the UndoManager
     */
     class UndoManagerMethodGuard : public ::framework::IMutexGuard
@@ -161,57 +148,46 @@ namespace dbaui
         OslMutexFacade              m_aMutexFacade;
     };
 
-    //--------------------------------------------------------------------------------------------------------------
     ::framework::IMutex& UndoManagerMethodGuard::getGuardedMutex()
     {
         return m_aMutexFacade;
     }
 
-    //--------------------------------------------------------------------------------------------------------------
     void UndoManagerMethodGuard::clear()
     {
         m_aGuard.clear();
     }
 
-    //--------------------------------------------------------------------------------------------------------------
     void UndoManagerMethodGuard::reset()
     {
         m_aGuard.reset();
     }
 
-    //==================================================================================================================
-    //= UndoManager
-    //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+    // UndoManager
     UndoManager::UndoManager( ::cppu::OWeakObject& i_parent, ::osl::Mutex& i_mutex )
         :m_pImpl( new UndoManager_Impl( *this, i_parent, i_mutex ) )
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     UndoManager::~UndoManager()
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     SfxUndoManager& UndoManager::GetSfxUndoManager() const
     {
         return m_pImpl->aUndoManager;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL UndoManager::acquire(  ) throw ()
     {
         m_pImpl->rParent.acquire();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL UndoManager::release(  ) throw ()
     {
         m_pImpl->rParent.release();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     void UndoManager::disposing()
     {
         {
@@ -221,35 +197,30 @@ namespace dbaui
         m_pImpl->aUndoHelper.disposing();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL UndoManager::enterUndoContext( const OUString& i_title ) throw (RuntimeException)
     {
         UndoManagerMethodGuard aGuard( *m_pImpl );
         m_pImpl->aUndoHelper.enterUndoContext( i_title, aGuard );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL UndoManager::enterHiddenUndoContext(  ) throw (EmptyUndoStackException, RuntimeException)
     {
         UndoManagerMethodGuard aGuard( *m_pImpl );
         m_pImpl->aUndoHelper.enterHiddenUndoContext( aGuard );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL UndoManager::leaveUndoContext(  ) throw (InvalidStateException, RuntimeException)
     {
         UndoManagerMethodGuard aGuard( *m_pImpl );
         m_pImpl->aUndoHelper.leaveUndoContext( aGuard );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL UndoManager::addUndoAction( const Reference< XUndoAction >& i_action ) throw (IllegalArgumentException, RuntimeException)
     {
         UndoManagerMethodGuard aGuard( *m_pImpl );
         m_pImpl->aUndoHelper.addUndoAction( i_action, aGuard );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL UndoManager::undo(  ) throw (EmptyUndoStackException, UndoContextNotClosedException, UndoFailedException, RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
@@ -258,7 +229,6 @@ namespace dbaui
         m_pImpl->aUndoHelper.undo( aGuard );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL UndoManager::redo(  ) throw (EmptyUndoStackException, UndoContextNotClosedException, UndoFailedException, RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
@@ -267,120 +237,102 @@ namespace dbaui
         m_pImpl->aUndoHelper.redo( aGuard );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     ::sal_Bool SAL_CALL UndoManager::isUndoPossible(  ) throw (RuntimeException)
     {
         UndoManagerMethodGuard aGuard( *m_pImpl );
         return m_pImpl->aUndoHelper.isUndoPossible();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     ::sal_Bool SAL_CALL UndoManager::isRedoPossible(  ) throw (RuntimeException)
     {
         UndoManagerMethodGuard aGuard( *m_pImpl );
         return m_pImpl->aUndoHelper.isRedoPossible();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     OUString SAL_CALL UndoManager::getCurrentUndoActionTitle(  ) throw (EmptyUndoStackException, RuntimeException)
     {
         UndoManagerMethodGuard aGuard( *m_pImpl );
         return m_pImpl->aUndoHelper.getCurrentUndoActionTitle();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     OUString SAL_CALL UndoManager::getCurrentRedoActionTitle(  ) throw (EmptyUndoStackException, RuntimeException)
     {
         UndoManagerMethodGuard aGuard( *m_pImpl );
         return m_pImpl->aUndoHelper.getCurrentRedoActionTitle();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     Sequence< OUString > SAL_CALL UndoManager::getAllUndoActionTitles(  ) throw (RuntimeException)
     {
         UndoManagerMethodGuard aGuard( *m_pImpl );
         return m_pImpl->aUndoHelper.getAllUndoActionTitles();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     Sequence< OUString > SAL_CALL UndoManager::getAllRedoActionTitles(  ) throw (RuntimeException)
     {
         UndoManagerMethodGuard aGuard( *m_pImpl );
         return m_pImpl->aUndoHelper.getAllRedoActionTitles();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL UndoManager::clear(  ) throw (UndoContextNotClosedException, RuntimeException)
     {
         UndoManagerMethodGuard aGuard( *m_pImpl );
         m_pImpl->aUndoHelper.clear( aGuard );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL UndoManager::clearRedo(  ) throw (UndoContextNotClosedException, RuntimeException)
     {
         UndoManagerMethodGuard aGuard( *m_pImpl );
         m_pImpl->aUndoHelper.clearRedo( aGuard );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL UndoManager::reset(  ) throw (RuntimeException)
     {
         UndoManagerMethodGuard aGuard( *m_pImpl );
         m_pImpl->aUndoHelper.reset( aGuard );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL UndoManager::addUndoManagerListener( const Reference< XUndoManagerListener >& i_listener ) throw (RuntimeException)
     {
         UndoManagerMethodGuard aGuard( *m_pImpl );
         m_pImpl->aUndoHelper.addUndoManagerListener( i_listener );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL UndoManager::removeUndoManagerListener( const Reference< XUndoManagerListener >& i_listener ) throw (RuntimeException)
     {
         UndoManagerMethodGuard aGuard( *m_pImpl );
         m_pImpl->aUndoHelper.removeUndoManagerListener( i_listener );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL UndoManager::lock(  ) throw (RuntimeException)
     {
         UndoManagerMethodGuard aGuard( *m_pImpl );
         m_pImpl->aUndoHelper.lock();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL UndoManager::unlock(  ) throw (NotLockedException, RuntimeException)
     {
         UndoManagerMethodGuard aGuard( *m_pImpl );
         m_pImpl->aUndoHelper.unlock();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     ::sal_Bool SAL_CALL UndoManager::isLocked(  ) throw (RuntimeException)
     {
         UndoManagerMethodGuard aGuard( *m_pImpl );
         return m_pImpl->aUndoHelper.isLocked();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     Reference< XInterface > SAL_CALL UndoManager::getParent(  ) throw (RuntimeException)
     {
         UndoManagerMethodGuard aGuard( *m_pImpl );
         return *&m_pImpl->rParent;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL UndoManager::setParent( const Reference< XInterface >& i_parent ) throw (NoSupportException, RuntimeException)
     {
         (void)i_parent;
         throw NoSupportException( OUString(), m_pImpl->getThis() );
     }
 
-//......................................................................................................................
 } // namespace dbaui
-//......................................................................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

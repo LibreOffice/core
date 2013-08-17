@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "datasettings.hxx"
 #include "apitools.hxx"
 #include "dbastrings.hrc"
@@ -32,7 +31,6 @@
 
 #include <com/sun/star/awt/FontWidth.hpp>
 
-
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::lang;
@@ -42,9 +40,7 @@ using namespace ::cppu;
 
 namespace dbaccess
 {
-//==========================================================================
-//= ODataSettings
-//==========================================================================
+// ODataSettings
 void ODataSettings::registerPropertiesFor(ODataSettings_Base* _pItem)
 {
     if ( m_bQuery )

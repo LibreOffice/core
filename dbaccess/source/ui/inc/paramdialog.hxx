@@ -42,14 +42,10 @@ namespace connectivity
     class OSQLParseNode;
 }
 
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
 
-    //==================================================================
-    //= OParameterDialog
-    //==================================================================
+    // OParameterDialog
     class OParameterDialog
             :public ModalDialog
             ,public ::svxform::OParseContextClient
@@ -94,7 +90,6 @@ namespace dbaui
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
                     getValues() const { return m_aFinalValues; }
 
-
     protected:
         void Construct();
 
@@ -108,9 +103,7 @@ namespace dbaui
         DECL_LINK(OnValueLoseFocus, Control*);
     };
 
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
 
 #endif // _DBAUI_PARAMDIALOG_HXX_
 

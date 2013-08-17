@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "tablespage.hxx"
 #include "dbu_dlg.hrc"
 #include "dbadmin.hrc"
@@ -54,10 +53,8 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include "AutoControls.hrc"
 
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::sdbc;
@@ -72,11 +69,8 @@ namespace dbaui
     using namespace ::dbtools;
     using namespace ::comphelper;
 
-    //========================================================================
-    //= OTableSubscriptionPage
-    //========================================================================
+    // OTableSubscriptionPage
 DBG_NAME(OTableSubscriptionPage)
-//------------------------------------------------------------------------
     OTableSubscriptionPage::OTableSubscriptionPage( Window* pParent, const SfxItemSet& _rCoreAttrs,OTableSubscriptionDialog* _pTablesDlg )
         :OGenericAdministrationPage( pParent, ModuleRes(PAGE_TABLESUBSCRIPTION), _rCoreAttrs )
         ,m_aTables              (this, ModuleRes(FL_SEPARATOR1))
@@ -103,7 +97,6 @@ DBG_NAME(OTableSubscriptionPage)
         m_aTablesList.SetCheckHandler(LINK(this, OTableSubscriptionPage, OnTreeEntryChecked));
     }
 
-    //------------------------------------------------------------------------
     OTableSubscriptionPage::~OTableSubscriptionPage()
     {
         // just to make sure that our connection will be removed
@@ -116,7 +109,6 @@ DBG_NAME(OTableSubscriptionPage)
         DBG_DTOR(OTableSubscriptionPage,NULL);
     }
 
-    // -----------------------------------------------------------------------------
     void OTableSubscriptionPage::StateChanged( StateChangedType nType )
     {
         OGenericAdministrationPage::StateChanged( nType );
@@ -127,7 +119,6 @@ DBG_NAME(OTableSubscriptionPage)
             m_aTablesList.notifyHiContrastChanged();
         }
     }
-    // -----------------------------------------------------------------------------
     void OTableSubscriptionPage::DataChanged( const DataChangedEvent& rDCEvt )
     {
         OGenericAdministrationPage::DataChanged( rDCEvt );
@@ -140,7 +131,6 @@ DBG_NAME(OTableSubscriptionPage)
             m_aTablesList.notifyHiContrastChanged();
         }
     }
-    //------------------------------------------------------------------
     void OTableSubscriptionPage::resizeControls(const Size& _rDiff)
     {
         if ( _rDiff.Height() )
@@ -153,7 +143,6 @@ DBG_NAME(OTableSubscriptionPage)
                     );
         }
     }
-    //------------------------------------------------------------------------
     void OTableSubscriptionPage::implCheckTables(const Sequence< OUString >& _rTables)
     {
         // the meta data for the current connection, used for splitting up table names
@@ -220,7 +209,6 @@ DBG_NAME(OTableSubscriptionPage)
         m_aTablesList.CheckButtons();
     }
 
-    //------------------------------------------------------------------------
     void OTableSubscriptionPage::implCompleteTablesCheck( const ::com::sun::star::uno::Sequence< OUString >& _rTableFilter )
     {
         if (!_rTableFilter.getLength())
@@ -238,7 +226,6 @@ DBG_NAME(OTableSubscriptionPage)
         }
     }
 
-    //-------------------------------------------------------------------------
     void OTableSubscriptionPage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
     {
         // check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
@@ -396,7 +383,6 @@ DBG_NAME(OTableSubscriptionPage)
         OGenericAdministrationPage::implInitControls(_rSet, _bSaveValue);
     }
 
-    //------------------------------------------------------------------------
     void OTableSubscriptionPage::CheckAll( sal_Bool _bCheck )
     {
         SvButtonState eState = _bCheck ? SV_BUTTON_CHECKED : SV_BUTTON_UNCHECKED;
@@ -411,7 +397,6 @@ DBG_NAME(OTableSubscriptionPage)
             m_aTablesList.checkWildcard(m_aTablesList.getAllObjectsEntry());
     }
 
-    //------------------------------------------------------------------------
     int OTableSubscriptionPage::DeactivatePage(SfxItemSet* _pSet)
     {
         int nResult = OGenericAdministrationPage::DeactivatePage(_pSet);
@@ -425,12 +410,10 @@ DBG_NAME(OTableSubscriptionPage)
 
         return nResult;
     }
-    //------------------------------------------------------------------------
     IMPL_LINK( OTableSubscriptionPage, OnTreeEntryChecked, Control*, _pControl )
     {
         return OnControlModified(_pControl);
     }
-    //------------------------------------------------------------------------
     IMPL_LINK( OTableSubscriptionPage, OnTreeEntryCompare, const SvSortData*, _pSortData )
     {
         const SvTreeListEntry* pLHS = static_cast<const SvTreeListEntry*>(_pSortData->pLeft);
@@ -463,7 +446,6 @@ DBG_NAME(OTableSubscriptionPage)
         return nCompareResult;
     }
 
-    //------------------------------------------------------------------------
     Sequence< OUString > OTableSubscriptionPage::collectDetailedSelection() const
     {
         Sequence< OUString > aTableFilter;
@@ -557,7 +539,6 @@ DBG_NAME(OTableSubscriptionPage)
         return aTableFilter;
     }
 
-    //------------------------------------------------------------------------
     SvTreeListEntry* OTableSubscriptionPage::implNextSibling(SvTreeListEntry* _pEntry) const
     {
         SvTreeListEntry* pReturn = NULL;
@@ -570,7 +551,6 @@ DBG_NAME(OTableSubscriptionPage)
         return pReturn;
     }
 
-    //------------------------------------------------------------------------
     sal_Bool OTableSubscriptionPage::FillItemSet( SfxItemSet& _rCoreAttrs )
     {
         sal_Bool bValid, bReadonly;
@@ -580,7 +560,6 @@ DBG_NAME(OTableSubscriptionPage)
             // don't store anything if the data we're working with is invalid or readonly
             return sal_True;
 
-        /////////////////////////////////////////////////////////////////////////
         // create the output string which contains all the table names
         if ( m_xCurrentConnection.is() )
         {   // collect the table filter data only if we have a connection - else no tables are displayed at all
@@ -600,20 +579,15 @@ DBG_NAME(OTableSubscriptionPage)
         return sal_True;
     }
 
-    // -----------------------------------------------------------------------
     void OTableSubscriptionPage::fillControls(::std::vector< ISaveValueWrapper* >& /*_rControlList*/)
     {
     }
-    // -----------------------------------------------------------------------
     void OTableSubscriptionPage::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
     {
         _rControlList.push_back(new ODisableWrapper<OTableTreeListBox>(&m_aTablesList));
         _rControlList.push_back(new ODisableWrapper<FixedLine>(&m_aTables));
         _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aExplanation));
     }
-    // -----------------------------------------------------------------------
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

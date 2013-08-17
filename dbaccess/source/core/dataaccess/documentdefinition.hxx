@@ -40,17 +40,13 @@ namespace comphelper
     class NamedValueCollection;
 }
 
-//........................................................................
 namespace dbaccess
 {
-//........................................................................
 
     class OInterceptor;
     class OEmbeddedClientHelper;
-//==========================================================================
-//= ODocumentDefinition - a database "document" which is simply a link to a real
-//=                   document
-//==========================================================================
+// ODocumentDefinition - a database "document" which is simply a link to a real
+//                   document
 
 typedef ::cppu::ImplHelper4 <   ::com::sun::star::embed::XComponentSupplier
                             ,   ::com::sun::star::sdb::XSubDocument

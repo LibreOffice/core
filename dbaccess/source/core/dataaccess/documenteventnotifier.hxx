@@ -35,9 +35,7 @@ namespace dbaccess
 {
 
     class DocumentEventNotifier_Impl;
-    //====================================================================
-    //= DocumentEventNotifier
-    //====================================================================
+    // DocumentEventNotifier
     class DocumentEventNotifier
     {
     public:

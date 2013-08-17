@@ -25,14 +25,10 @@
 #include <rtl/ustring.hxx>
 #include <map>
 
-//........................................................................
 namespace dbaui
 {
-//........................................................................
 
-    //====================================================================
-    //= OpenDocumentButton
-    //====================================================================
+    // OpenDocumentButton
     /** a button which can be used to open a document
 
         The text of the button is the same as for the "Open" command in the application
@@ -50,9 +46,7 @@ namespace dbaui
         void    impl_init( const sal_Char* _pAsciiModuleName );
     };
 
-    //====================================================================
-    //= OpenDocumentListBox
-    //====================================================================
+    // OpenDocumentListBox
     class OpenDocumentListBox : public ListBox
     {
     private:
@@ -77,9 +71,7 @@ namespace dbaui
         void    impl_init( const sal_Char* _pAsciiModuleName );
     };
 
-//........................................................................
 } // namespace dbaui
-//........................................................................
 
 #endif // DBACCESS_SOURCE_UI_INC_OPENDOCCONTROLS_HXX
 

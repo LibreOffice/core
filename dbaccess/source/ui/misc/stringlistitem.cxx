@@ -17,35 +17,27 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "stringlistitem.hxx"
 
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
 
 using namespace ::com::sun::star::uno;
 
-//=========================================================================
-//= OStringListItem
-//=========================================================================
+// OStringListItem
 TYPEINIT1(OStringListItem, SfxPoolItem);
-//-------------------------------------------------------------------------
 OStringListItem::OStringListItem(sal_Int16 _nWhich, const Sequence< OUString >& _rList)
     :SfxPoolItem(_nWhich)
     ,m_aList(_rList)
 {
 }
 
-//-------------------------------------------------------------------------
 OStringListItem::OStringListItem(const OStringListItem& _rSource)
     :SfxPoolItem(_rSource)
     ,m_aList(_rSource.m_aList)
 {
 }
 
-//-------------------------------------------------------------------------
 int OStringListItem::operator==(const SfxPoolItem& _rItem) const
 {
     const OStringListItem* pCompare = PTR_CAST(OStringListItem, &_rItem);
@@ -63,14 +55,11 @@ int OStringListItem::operator==(const SfxPoolItem& _rItem) const
     return 1;
 }
 
-//-------------------------------------------------------------------------
 SfxPoolItem* OStringListItem::Clone(SfxItemPool* /* _pPool */) const
 {
     return new OStringListItem(*this);
 }
 
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

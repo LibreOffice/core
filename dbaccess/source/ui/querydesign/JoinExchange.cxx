@@ -29,11 +29,8 @@ namespace dbaui
     using namespace ::com::sun::star::datatransfer;
 
     String OJoinExchObj::m_sJoinFormat;
-    //==================================================================
     // class OJoinExchObj
-    //==================================================================
     DBG_NAME(OJoinExchObj)
-    //------------------------------------------------------------------------
     OJoinExchObj::OJoinExchObj(const OJoinExchangeData& jxdSource,sal_Bool _bFirstEntry)
         :m_bFirstEntry(_bFirstEntry)
         ,m_jxdSourceDescription(jxdSource)
@@ -43,20 +40,17 @@ namespace dbaui
         // add available types to list
     }
 
-    //------------------------------------------------------------------------
     OJoinExchObj::~OJoinExchObj()
     {
         DBG_DTOR(OJoinExchObj,NULL);
     }
 
-    //------------------------------------------------------------------------
     void OJoinExchObj::StartDrag( Window* _pWindow, sal_Int8 _nDragSourceActions, IDragTransferableListener* _pListener )
     {
         m_pDragListener = _pListener;
         TransferableHelper::StartDrag(_pWindow, _nDragSourceActions);
     }
 
-    //------------------------------------------------------------------------
     void OJoinExchObj::DragFinished( sal_Int8 /*nDropAction*/ )
     {
         if (m_pDragListener)
@@ -64,7 +58,6 @@ namespace dbaui
         m_pDragListener = NULL;
     }
 
-    //------------------------------------------------------------------------
     sal_Bool OJoinExchObj::isFormatAvailable( const DataFlavorExVector& _rFormats ,SotFormatStringId _nSlotID)
     {
         DataFlavorExVector::const_iterator aCheckEnd = _rFormats.end();
@@ -79,7 +72,6 @@ namespace dbaui
         return sal_False;
     }
 
-    //------------------------------------------------------------------------
     OJoinExchangeData OJoinExchObj::GetSourceDescription(const Reference< XTransferable >& _rxObject)
     {
         OJoinExchangeData aReturn;
@@ -93,7 +85,6 @@ namespace dbaui
         return aReturn;
     }
 
-    //------------------------------------------------------------------------
     Sequence< sal_Int8 > OJoinExchObj::getUnoTunnelImplementationId()
     {
         static ::cppu::OImplementationId * pId = 0;
@@ -109,7 +100,6 @@ namespace dbaui
         return pId->getImplementationId();
     }
 
-    //------------------------------------------------------------------------
     sal_Int64 SAL_CALL OJoinExchObj::getSomething( const Sequence< sal_Int8 >& _rIdentifier ) throw(RuntimeException)
     {
         if (_rIdentifier.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  _rIdentifier.getConstArray(), 16 ) )
@@ -118,7 +108,6 @@ namespace dbaui
         return 0;
     }
 
-    //------------------------------------------------------------------------
     void OJoinExchObj::AddSupportedFormats()
     {
         AddFormat( SOT_FORMATSTR_ID_SBA_JOIN );
@@ -126,7 +115,6 @@ namespace dbaui
             AddFormat( SOT_FORMATSTR_ID_SBA_TABID );
     }
 
-    //------------------------------------------------------------------------
     sal_Bool OJoinExchObj::GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
     {
         sal_uInt32 nFormat = SotExchange::GetFormat(rFlavor);
@@ -139,7 +127,6 @@ namespace dbaui
         return sal_False;
     }
 
-    //------------------------------------------------------------------------
     Any SAL_CALL OJoinExchObj::queryInterface( const Type& _rType ) throw(RuntimeException)
     {
         Any aReturn = TransferableHelper::queryInterface(_rType);
@@ -148,18 +135,15 @@ namespace dbaui
         return aReturn;
     }
 
-    //------------------------------------------------------------------------
     void SAL_CALL OJoinExchObj::acquire(  ) throw()
     {
         TransferableHelper::acquire( );
     }
 
-    //------------------------------------------------------------------------
     void SAL_CALL OJoinExchObj::release(  ) throw()
     {
         TransferableHelper::release( );
     }
-
 
 }   // namespace dbaui
 

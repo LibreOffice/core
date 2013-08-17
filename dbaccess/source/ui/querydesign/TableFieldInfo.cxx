@@ -17,14 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "TableFieldInfo.hxx"
 #include <tools/debug.hxx>
 
 using namespace dbaui;
-//==================================================================
 // class OTableFieldInfo
-//==================================================================
 
 DBG_NAME(OTableFieldInfo)
 OTableFieldInfo::OTableFieldInfo()  :
@@ -34,13 +31,9 @@ OTableFieldInfo::OTableFieldInfo()  :
     m_eFieldType = TAB_NORMAL_FIELD;
 }
 
-//------------------------------------------------------------------------------
 OTableFieldInfo::~OTableFieldInfo()
 {
     DBG_DTOR(OTableFieldInfo,NULL);
 }
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

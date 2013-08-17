@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "ComponentDefinition.hxx"
 #include "apitools.hxx"
 #include "dbastrings.hrc"
@@ -84,9 +83,7 @@ OComponentDefinition_Impl::~OComponentDefinition_Impl()
 {
     DBG_DTOR(OComponentDefinition_Impl,NULL);
 }
-//==========================================================================
-//= OComponentDefinition
-//==========================================================================
+// OComponentDefinition
 
 DBG_NAME(OComponentDefinition)
 
@@ -141,7 +138,6 @@ OComponentDefinition::~OComponentDefinition()
 {
     DBG_DTOR(OComponentDefinition, NULL);
 }
-
 
 OComponentDefinition::OComponentDefinition( const Reference< XInterface >& _rxContainer
                                        ,const OUString& _rElementName

@@ -28,7 +28,6 @@ namespace dbaui
     class OFieldDescription;
     class OTableFieldControl;
     class OTableEditorCtrl;
-    //==================================================================
     class OFieldDescGenWin : public TabPage
                             ,public IClipboardTest
     {

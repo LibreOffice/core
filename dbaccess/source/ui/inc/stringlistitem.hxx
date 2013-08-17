@@ -25,14 +25,10 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <rtl/ustring.hxx>
 
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
 
-//=========================================================================
-//= OStringListItem
-//=========================================================================
+// OStringListItem
 /** <type>SfxPoolItem</type> which transports a sequence of <type scope="rtl">OUString</type>'s
 */
 class OStringListItem : public SfxPoolItem
@@ -50,9 +46,7 @@ public:
     ::com::sun::star::uno::Sequence< OUString >  getList() const { return m_aList; }
 };
 
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
 
 #endif // _DBAUI_STRINGLISTITEM_HXX_
 

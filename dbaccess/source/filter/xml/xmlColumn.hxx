@@ -51,9 +51,7 @@ namespace dbaxml
         virtual ~OXMLColumn();
         virtual void EndElement();
     };
-// -----------------------------------------------------------------------------
 } // namespace dbaxml
-// -----------------------------------------------------------------------------
 
 #endif // DBA_XMLCOLUMN_HXX
 

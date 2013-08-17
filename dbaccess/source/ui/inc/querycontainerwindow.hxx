@@ -27,14 +27,10 @@
 #include "QueryViewSwitch.hxx"
 #include <vcl/dockwin.hxx>
 
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
 
-    //=====================================================================
-    //= OBeamer
-    //=====================================================================
+    // OBeamer
     // tempoaray class until the beamer is implemented
     class OBeamer : public DockingWindow
     {
@@ -42,9 +38,7 @@ namespace dbaui
         OBeamer(Window* _pParent) : DockingWindow(_pParent,0){}
     };
 
-    //=====================================================================
-    //= OQueryContainerWindow
-    //=====================================================================
+    // OQueryContainerWindow
     class OQueryContainerWindow : public ODataView
     {
         OQueryViewSwitch*   m_pViewSwitch;
@@ -107,9 +101,7 @@ namespace dbaui
     };
     // end of temp classes
 
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
 
 #endif // DBAUI_QUERYCONTAINERWINDOW_HXX
 

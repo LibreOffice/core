@@ -31,9 +31,7 @@ namespace com { namespace sun { namespace star { namespace container
 namespace dbaccess
 {
 
-    //=====================================================================
-    //= IRefreshListener
-    //=====================================================================
+    // IRefreshListener
     class SAL_NO_VTABLE IRefreshListener
     {
     public:

@@ -42,9 +42,7 @@
 namespace dbaccess
 {
 
-    //==========================================================================
-    //= OTables
-    //==========================================================================
+    // OTables
     class ODBTable;
     class OContainerMediator;
     typedef ::comphelper::OIdPropertyArrayUsageHelper< ODBTable >   ODBTable_PROP;
@@ -151,6 +149,5 @@ namespace dbaccess
     };
 }
 #endif // _DBA_CORE_TABLE_HXX_
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

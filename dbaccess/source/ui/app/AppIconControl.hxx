@@ -22,11 +22,9 @@
 #include <svtools/ivctrl.hxx>
 #include <svtools/transfer.hxx>
 
-
 namespace dbaui
 {
     class IControlActionListener;
-    //==================================================================
     class OApplicationIconControl   :public SvtIconChoiceCtrl
                                     ,public DropTargetHelper
     {

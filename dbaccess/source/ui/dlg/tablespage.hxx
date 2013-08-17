@@ -28,15 +28,10 @@
 #include "tabletree.hxx"
 #include <com/sun/star/sdbc/XConnection.hpp>
 
-
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
 
-    //========================================================================
-    //= OTableSubscriptionPage
-    //========================================================================
+    // OTableSubscriptionPage
     class OTableSubscriptionDialog;
     class OTableSubscriptionPage
             :public OGenericAdministrationPage
@@ -65,7 +60,6 @@ namespace dbaui
         virtual void            StateChanged( StateChangedType nStateChange );
         virtual void            DataChanged( const DataChangedEvent& rDCEvt );
 
-
         /** will be called when the controls need to be resized.
         */
         virtual void            resizeControls(const Size& _rDiff);
@@ -81,7 +75,6 @@ namespace dbaui
         DECL_LINK( OnTreeEntryChecked, Control* );
 
     private:
-
 
         /** check the tables in <member>m_aTablesList</member> according to <arg>_rTables</arg>
         */
@@ -104,9 +97,7 @@ namespace dbaui
         void implCompleteTablesCheck( const ::com::sun::star::uno::Sequence< OUString >& _rTableFilter );
     };
 
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
 
 #endif // _DBAUI_TABLESPAGE_HXX_
 

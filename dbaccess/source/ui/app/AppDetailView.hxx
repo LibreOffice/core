@@ -141,7 +141,6 @@ namespace dbaui
         void Clear();
         void setHelpText(sal_uInt16 _nId);
     };
-    //==================================================================
     class OApplicationDetailView : public OSplitterView
                                  , public IClipboardTest
     {
@@ -325,7 +324,6 @@ namespace dbaui
 
         /// <TRUE/> if the preview is enabled
         sal_Bool isPreviewEnabled();
-
 
         /** switches to the given preview mode
             @param  _eMode

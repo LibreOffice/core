@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "dbustrings.hrc"
 #include <toolkit/awt/vclxwindow.hxx>
 #include "dbu_reghelper.hxx"
@@ -37,18 +36,14 @@
 #include <vcl/svapp.hxx>
 // ---
 
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
 
-//=========================================================================
 DBG_NAME(ODatabaseAdministrationDialog)
-//-------------------------------------------------------------------------
 ODatabaseAdministrationDialog::ODatabaseAdministrationDialog(const Reference< XComponentContext >& _rxORB)
     :ODatabaseAdministrationDialogBase(_rxORB)
     ,m_pDatasourceItems(NULL)
@@ -62,7 +57,6 @@ ODatabaseAdministrationDialog::ODatabaseAdministrationDialog(const Reference< XC
     ODbAdminDialog::createItemSet(m_pDatasourceItems, m_pItemPool, m_pItemPoolDefaults, m_pCollection);
 }
 
-//-------------------------------------------------------------------------
 ODatabaseAdministrationDialog::~ODatabaseAdministrationDialog()
 {
     // we do this here cause the base class' call to destroyDialog won't reach us anymore : we're within an dtor,
@@ -79,13 +73,13 @@ ODatabaseAdministrationDialog::~ODatabaseAdministrationDialog()
 
     DBG_DTOR(ODatabaseAdministrationDialog,NULL);
 }
-//-------------------------------------------------------------------------
+
 void ODatabaseAdministrationDialog::destroyDialog()
 {
     ODatabaseAdministrationDialogBase::destroyDialog();
     ODbAdminDialog::destroyItemSet(m_pDatasourceItems, m_pItemPool, m_pItemPoolDefaults);
 }
-//------------------------------------------------------------------------------
+
 void ODatabaseAdministrationDialog::implInitialize(const Any& _rValue)
 {
     PropertyValue aProperty;
@@ -106,8 +100,6 @@ void ODatabaseAdministrationDialog::implInitialize(const Any& _rValue)
         ODatabaseAdministrationDialogBase::implInitialize(_rValue);
 }
 
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

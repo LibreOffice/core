@@ -62,9 +62,7 @@ namespace dbaxml
             m_aTypes.push_back(_sTypeFilter);
         }
     };
-// -----------------------------------------------------------------------------
 } // namespace dbaxml
-// -----------------------------------------------------------------------------
 
 #endif // DBA_XMLTABLEFILTERLIST_HXX
 

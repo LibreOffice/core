@@ -25,14 +25,10 @@
 
 #include <boost/shared_ptr.hpp>
 
-//........................................................................
 namespace dbaui
 {
-//........................................................................
 
-    //====================================================================
-    //= AutheticationMode
-    //====================================================================
+    // AutheticationMode
     enum AuthenticationMode
     {
         AuthNone,
@@ -40,9 +36,7 @@ namespace dbaui
         AuthPwd
     };
 
-    //====================================================================
-    //= DataSourceMetaData
-    //====================================================================
+    // DataSourceMetaData
     class FeatureSet;
     class DataSourceMetaData_Impl;
     /** encapsulates meta data for a data source
@@ -70,9 +64,7 @@ namespace dbaui
         ::boost::shared_ptr< DataSourceMetaData_Impl >  m_pImpl;
     };
 
-    //====================================================================
-    //= FeatureSet
-    //====================================================================
+    // FeatureSet
     /** can be used to ask for (UI) support for certain advanced features
     */
     class FeatureSet
@@ -96,13 +88,11 @@ namespace dbaui
         ::std::set< ItemID >    m_aContent;
     };
 
-    //--------------------------------------------------------------------
     inline  bool FeatureSet::supportsGeneratedValues() const
     {
         return has( DSID_AUTORETRIEVEENABLED );
     }
 
-    //--------------------------------------------------------------------
     inline bool FeatureSet::supportsAnySpecialSetting() const
     {
         return  has( DSID_SQL92CHECK )
@@ -126,9 +116,7 @@ namespace dbaui
             ;
     }
 
-//........................................................................
 } // namespace dbaui
-//........................................................................
 
 #endif // DBACCESS_DSMETA_HXX
 

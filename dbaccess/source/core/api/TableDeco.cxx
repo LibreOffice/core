@@ -56,9 +56,7 @@ using namespace ::comphelper;
 using namespace ::dbtools;
 using namespace ::cppu;
 
-//==========================================================================
-//= ODBTableDecorator
-//==========================================================================
+// ODBTableDecorator
 DBG_NAME(ODBTableDecorator)
 
 ODBTableDecorator::ODBTableDecorator( const Reference< XConnection >& _rxConnection, const Reference< XColumnsSupplier >& _rxNewTable,

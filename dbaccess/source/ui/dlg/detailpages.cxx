@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "detailpages.hxx"
 #include "sqlmessage.hxx"
 #include "dsmeta.hxx"
@@ -48,10 +47,8 @@
 #include <comphelper/types.hxx>
 #include "AutoControls.hrc"
 
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::sdbc;
@@ -60,11 +57,8 @@ namespace dbaui
     using namespace ::com::sun::star::container;
     using namespace ::dbtools;
 
-    //========================================================================
-    //= OCommonBehaviourTabPage
-    //========================================================================
+    // OCommonBehaviourTabPage
     DBG_NAME(OCommonBehaviourTabPage)
-    //------------------------------------------------------------------------
     OCommonBehaviourTabPage::OCommonBehaviourTabPage(Window* pParent, sal_uInt16 nResId, const SfxItemSet& _rCoreAttrs,
         sal_uInt32 nControlFlags,bool _bFreeResource)
 
@@ -122,7 +116,6 @@ namespace dbaui
             FreeResource();
     }
 
-    // -----------------------------------------------------------------------
     OCommonBehaviourTabPage::~OCommonBehaviourTabPage()
     {
         DELETEZ(m_pOptionsLabel);
@@ -143,7 +136,6 @@ namespace dbaui
         DBG_DTOR(OCommonBehaviourTabPage,NULL);
     }
 
-    // -----------------------------------------------------------------------
     void OCommonBehaviourTabPage::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
     {
         if ((m_nControlFlags & CBTP_USE_OPTIONS) == CBTP_USE_OPTIONS)
@@ -157,7 +149,6 @@ namespace dbaui
             _rControlList.push_back(new ODisableWrapper<FixedText>(m_pCharsetLabel));
         }
     }
-    // -----------------------------------------------------------------------
     void OCommonBehaviourTabPage::fillControls(::std::vector< ISaveValueWrapper* >& _rControlList)
     {
         if ((m_nControlFlags & CBTP_USE_OPTIONS) == CBTP_USE_OPTIONS)
@@ -167,7 +158,6 @@ namespace dbaui
             _rControlList.push_back(new OSaveValueWrapper<ListBox>(m_pCharset));
     }
 
-    // -----------------------------------------------------------------------
     void OCommonBehaviourTabPage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
     {
         // check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
@@ -194,7 +184,6 @@ namespace dbaui
         }
         OGenericAdministrationPage::implInitControls(_rSet, _bSaveValue);
     }
-    // -----------------------------------------------------------------------
     sal_Bool OCommonBehaviourTabPage::FillItemSet(SfxItemSet& _rSet)
     {
         sal_Bool bChangedSomething = sal_False;
@@ -213,11 +202,8 @@ namespace dbaui
         return bChangedSomething;
     }
 
-    //========================================================================
-    //= ODbaseDetailsPage
-    //========================================================================
+    // ODbaseDetailsPage
     DBG_NAME(ODbaseDetailsPage)
-    //------------------------------------------------------------------------
     ODbaseDetailsPage::ODbaseDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
         :OCommonBehaviourTabPage(pParent, PAGE_DBASE, _rCoreAttrs, CBTP_USE_CHARSET ,false)
         ,m_aShowDeleted     (this, ModuleRes(CB_SHOWDELETEDROWS))
@@ -236,26 +222,22 @@ namespace dbaui
         FreeResource();
     }
 
-    // -----------------------------------------------------------------------
     ODbaseDetailsPage::~ODbaseDetailsPage()
     {
 
         DBG_DTOR(ODbaseDetailsPage,NULL);
     }
 
-    // -----------------------------------------------------------------------
     SfxTabPage* ODriversSettings::CreateDbase( Window* pParent, const SfxItemSet& _rAttrSet )
     {
         return ( new ODbaseDetailsPage( pParent, _rAttrSet ) );
     }
 
-    // -----------------------------------------------------------------------
     void ODbaseDetailsPage::fillControls(::std::vector< ISaveValueWrapper* >& _rControlList)
     {
         OCommonBehaviourTabPage::fillControls(_rControlList);
         _rControlList.push_back(new OSaveValueWrapper<CheckBox>(&m_aShowDeleted));
     }
-    // -----------------------------------------------------------------------
     void ODbaseDetailsPage::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
     {
         OCommonBehaviourTabPage::fillWindows(_rControlList);
@@ -263,7 +245,6 @@ namespace dbaui
         _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aFT_Message));
         _rControlList.push_back(new ODisableWrapper<PushButton>(&m_aIndexes));
     }
-    // -----------------------------------------------------------------------
     void ODbaseDetailsPage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
     {
         // check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
@@ -289,7 +270,6 @@ namespace dbaui
         OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
     }
 
-    // -----------------------------------------------------------------------
     sal_Bool ODbaseDetailsPage::FillItemSet( SfxItemSet& _rSet )
     {
         sal_Bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(_rSet);
@@ -298,7 +278,6 @@ namespace dbaui
         return bChangedSomething;
     }
 
-    //------------------------------------------------------------------------
     IMPL_LINK( ODbaseDetailsPage, OnButtonClicked, Button*, pButton )
     {
         if (&m_aIndexes == pButton)
@@ -316,11 +295,8 @@ namespace dbaui
         return 0;
     }
 
-    //========================================================================
-    //= OAdoDetailsPage
-    //========================================================================
+    // OAdoDetailsPage
     DBG_NAME(OAdoDetailsPage)
-    // -----------------------------------------------------------------------
     OAdoDetailsPage::OAdoDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
         :OCommonBehaviourTabPage(pParent, PAGE_ADO, _rCoreAttrs, CBTP_USE_CHARSET )
     {
@@ -328,22 +304,17 @@ namespace dbaui
 
     }
 
-    // -----------------------------------------------------------------------
     OAdoDetailsPage::~OAdoDetailsPage()
     {
 
         DBG_DTOR(OAdoDetailsPage,NULL);
     }
-    // -----------------------------------------------------------------------
     SfxTabPage* ODriversSettings::CreateAdo( Window* pParent,   const SfxItemSet& _rAttrSet )
     {
         return ( new OAdoDetailsPage( pParent, _rAttrSet ) );
     }
 
-    // -----------------------------------------------------------------------
-    //========================================================================
-    //= OOdbcDetailsPage
-    //========================================================================
+    // OOdbcDetailsPage
     OOdbcDetailsPage::OOdbcDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
         :OCommonBehaviourTabPage(pParent, PAGE_ODBC, _rCoreAttrs, CBTP_USE_CHARSET | CBTP_USE_OPTIONS,false)
         ,m_aFL_1        (this, ModuleRes(FL_SEPARATOR1))
@@ -361,32 +332,27 @@ namespace dbaui
             pWindows[i]->SetZOrder(pWindows[i-1], WINDOW_ZORDER_BEHIND);
     }
 
-    // -----------------------------------------------------------------------
     SfxTabPage* ODriversSettings::CreateODBC( Window* pParent, const SfxItemSet& _rAttrSet )
     {
         return ( new OOdbcDetailsPage( pParent, _rAttrSet ) );
     }
 
-    // -----------------------------------------------------------------------
     sal_Bool OOdbcDetailsPage::FillItemSet( SfxItemSet& _rSet )
     {
         sal_Bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(_rSet);
         fillBool(_rSet,&m_aUseCatalog,DSID_USECATALOG,bChangedSomething);
         return bChangedSomething;
     }
-    // -----------------------------------------------------------------------
     void OOdbcDetailsPage::fillControls(::std::vector< ISaveValueWrapper* >& _rControlList)
     {
         OCommonBehaviourTabPage::fillControls(_rControlList);
         _rControlList.push_back(new OSaveValueWrapper<CheckBox>(&m_aUseCatalog));
     }
-    // -----------------------------------------------------------------------
     void OOdbcDetailsPage::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
     {
         OCommonBehaviourTabPage::fillWindows(_rControlList);
         _rControlList.push_back(new ODisableWrapper<FixedLine>(&m_aFL_1));
     }
-    // -----------------------------------------------------------------------
     void OOdbcDetailsPage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
     {
         // check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
@@ -400,9 +366,7 @@ namespace dbaui
 
         OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
     }
-    //========================================================================
-    //= OOdbcDetailsPage
-    //========================================================================
+    // OOdbcDetailsPage
     OUserDriverDetailsPage::OUserDriverDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
         :OCommonBehaviourTabPage(pParent, PAGE_USERDRIVER, _rCoreAttrs,
         CBTP_USE_CHARSET | CBTP_USE_OPTIONS ,false)
@@ -416,13 +380,11 @@ namespace dbaui
         FreeResource();
     }
 
-    // -----------------------------------------------------------------------
     SfxTabPage* ODriversSettings::CreateUser( Window* pParent, const SfxItemSet& _rAttrSet )
     {
         return ( new OUserDriverDetailsPage( pParent, _rAttrSet ) );
     }
 
-    // -----------------------------------------------------------------------
     sal_Bool OUserDriverDetailsPage::FillItemSet( SfxItemSet& _rSet )
     {
         sal_Bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(_rSet);
@@ -433,7 +395,6 @@ namespace dbaui
 
         return bChangedSomething;
     }
-    // -----------------------------------------------------------------------
     void OUserDriverDetailsPage::fillControls(::std::vector< ISaveValueWrapper* >& _rControlList)
     {
         OCommonBehaviourTabPage::fillControls(_rControlList);
@@ -441,14 +402,12 @@ namespace dbaui
         _rControlList.push_back(new OSaveValueWrapper<CheckBox>(&m_aUseCatalog));
         _rControlList.push_back(new OSaveValueWrapper<NumericField>(&m_aNFPortNumber));
     }
-    // -----------------------------------------------------------------------
     void OUserDriverDetailsPage::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
     {
         OCommonBehaviourTabPage::fillWindows(_rControlList);
         _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aFTHostname));
         _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aPortNumber));
     }
-    // -----------------------------------------------------------------------
     void OUserDriverDetailsPage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
     {
         // check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
@@ -472,23 +431,18 @@ namespace dbaui
 
         OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
     }
-    //========================================================================
-    //= OMySQLODBCDetailsPage
-    //========================================================================
+    // OMySQLODBCDetailsPage
     OMySQLODBCDetailsPage::OMySQLODBCDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
         :OCommonBehaviourTabPage(pParent, PAGE_MYSQL_ODBC, _rCoreAttrs, CBTP_USE_CHARSET )
     {
     }
 
-    // -----------------------------------------------------------------------
     SfxTabPage* ODriversSettings::CreateMySQLODBC( Window* pParent, const SfxItemSet& _rAttrSet )
     {
         return ( new OMySQLODBCDetailsPage( pParent, _rAttrSet ) );
     }
 
-    //========================================================================
-    //= OMySQLJDBCDetailsPage
-    //========================================================================
+    // OMySQLJDBCDetailsPage
     OGeneralSpecialJDBCDetailsPage::OGeneralSpecialJDBCDetailsPage( Window* pParent,sal_uInt16 _nResId, const SfxItemSet& _rCoreAttrs ,sal_uInt16 _nPortId)
         :OCommonBehaviourTabPage(pParent, _nResId, _rCoreAttrs, CBTP_USE_CHARSET ,false)
         ,m_aFL_1            (this, ModuleRes( FL_SEPARATOR1) )
@@ -544,7 +498,6 @@ namespace dbaui
         FreeResource();
     }
 
-    // -----------------------------------------------------------------------
     void OGeneralSpecialJDBCDetailsPage::fillControls(::std::vector< ISaveValueWrapper* >& _rControlList)
     {
         OCommonBehaviourTabPage::fillControls(_rControlList);
@@ -554,7 +507,6 @@ namespace dbaui
         _rControlList.push_back(new OSaveValueWrapper<NumericField>(&m_aNFPortNumber));
         _rControlList.push_back(new OSaveValueWrapper<Edit>(&m_aEDSocket));
     }
-    // -----------------------------------------------------------------------
     void OGeneralSpecialJDBCDetailsPage::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
     {
         OCommonBehaviourTabPage::fillWindows(_rControlList);
@@ -566,7 +518,6 @@ namespace dbaui
         _rControlList.push_back(new ODisableWrapper<FixedLine>(&m_aFL_1));
     }
 
-    // -----------------------------------------------------------------------
     sal_Bool OGeneralSpecialJDBCDetailsPage::FillItemSet( SfxItemSet& _rSet )
     {
         sal_Bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(_rSet);
@@ -578,7 +529,6 @@ namespace dbaui
 
         return bChangedSomething;
     }
-    // -----------------------------------------------------------------------
     void OGeneralSpecialJDBCDetailsPage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
     {
         // check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
@@ -617,7 +567,6 @@ namespace dbaui
             m_aEDDriverClass.SetModifyFlag();
         }
     }
-    // -----------------------------------------------------------------------
     IMPL_LINK(OGeneralSpecialJDBCDetailsPage, OnTestJavaClickHdl, PushButton*, /*_pButton*/)
     {
         OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
@@ -644,7 +593,6 @@ namespace dbaui
         aMsg.Execute();
         return 0L;
     }
-    // -----------------------------------------------------------------------
     IMPL_LINK(OGeneralSpecialJDBCDetailsPage, OnEditModified, Edit*, _pEdit)
     {
         if ( m_bUseClass && _pEdit == &m_aEDDriverClass )
@@ -655,9 +603,7 @@ namespace dbaui
         return 0L;
     }
 
-    //========================================================================
-    //= MySQLNativePage
-    //========================================================================
+    // MySQLNativePage
     MySQLNativePage::MySQLNativePage( Window* pParent, const SfxItemSet& _rCoreAttrs )
         :OCommonBehaviourTabPage(pParent, PAGE_MYSQL_NATIVE, _rCoreAttrs, CBTP_USE_CHARSET, false )
         ,m_aSeparator1          ( this, ModuleRes( FL_SEPARATOR1) )
@@ -681,7 +627,6 @@ namespace dbaui
         FreeResource();
     }
 
-    // -----------------------------------------------------------------------
     void MySQLNativePage::fillControls(::std::vector< ISaveValueWrapper* >& _rControlList)
     {
         OCommonBehaviourTabPage::fillControls( _rControlList );
@@ -690,7 +635,6 @@ namespace dbaui
         _rControlList.push_back(new OSaveValueWrapper<Edit>(&m_aUserName));
         _rControlList.push_back(new OSaveValueWrapper<CheckBox>(&m_aPasswordRequired));
     }
-    // -----------------------------------------------------------------------
     void MySQLNativePage::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
     {
         OCommonBehaviourTabPage::fillWindows( _rControlList );
@@ -701,7 +645,6 @@ namespace dbaui
         _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aUserNameLabel));
     }
 
-    // -----------------------------------------------------------------------
     sal_Bool MySQLNativePage::FillItemSet( SfxItemSet& _rSet )
     {
         sal_Bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet( _rSet );
@@ -718,7 +661,6 @@ namespace dbaui
 
         return bChangedSomething;
     }
-    // -----------------------------------------------------------------------
     void MySQLNativePage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
     {
         // check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
@@ -740,26 +682,21 @@ namespace dbaui
         OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
     }
 
-    // -----------------------------------------------------------------------
     SfxTabPage* ODriversSettings::CreateMySQLJDBC( Window* pParent, const SfxItemSet& _rAttrSet )
     {
         return ( new OGeneralSpecialJDBCDetailsPage( pParent,PAGE_MYSQL_JDBC, _rAttrSet,DSID_MYSQL_PORTNUMBER ) );
     }
-    // -----------------------------------------------------------------------
     SfxTabPage* ODriversSettings::CreateMySQLNATIVE( Window* pParent, const SfxItemSet& _rAttrSet )
     {
         return ( new MySQLNativePage( pParent, _rAttrSet ) );
     }
 
-    // -----------------------------------------------------------------------
     SfxTabPage* ODriversSettings::CreateOracleJDBC( Window* pParent, const SfxItemSet& _rAttrSet )
     {
         return ( new OGeneralSpecialJDBCDetailsPage( pParent,PAGE_ORACLE_JDBC, _rAttrSet,DSID_ORACLE_PORTNUMBER) );
     }
 
-    //========================================================================
-    //= OLDAPDetailsPage
-    //========================================================================
+    // OLDAPDetailsPage
     OLDAPDetailsPage::OLDAPDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
         :OCommonBehaviourTabPage(pParent, PAGE_LDAP, _rCoreAttrs,0,false)
         ,m_aFL_1            (this, ModuleRes( FL_SEPARATOR1) )
@@ -783,13 +720,11 @@ namespace dbaui
         FreeResource();
     }
 
-    // -----------------------------------------------------------------------
     SfxTabPage* ODriversSettings::CreateLDAP( Window* pParent, const SfxItemSet& _rAttrSet )
     {
         return ( new OLDAPDetailsPage( pParent, _rAttrSet ) );
     }
 
-    // -----------------------------------------------------------------------
     sal_Bool OLDAPDetailsPage::FillItemSet( SfxItemSet& _rSet )
     {
         sal_Bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(_rSet);
@@ -800,7 +735,6 @@ namespace dbaui
         fillBool(_rSet,&m_aCBUseSSL,DSID_CONN_LDAP_USESSL,bChangedSomething);
         return bChangedSomething;
     }
-    //------------------------------------------------------------------------
     IMPL_LINK( OLDAPDetailsPage, OnCheckBoxClick, CheckBox*, pCheckBox )
     {
         callModifiedHdl();
@@ -820,7 +754,6 @@ namespace dbaui
         return 0;
     }
 
-    // -----------------------------------------------------------------------
     void OLDAPDetailsPage::fillControls(::std::vector< ISaveValueWrapper* >& _rControlList)
     {
         OCommonBehaviourTabPage::fillControls(_rControlList);
@@ -829,7 +762,6 @@ namespace dbaui
         _rControlList.push_back(new OSaveValueWrapper<NumericField>(&m_aNFPortNumber));
         _rControlList.push_back(new OSaveValueWrapper<NumericField>(&m_aNFRowCount));
     }
-    // -----------------------------------------------------------------------
     void OLDAPDetailsPage::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
     {
         OCommonBehaviourTabPage::fillWindows(_rControlList);
@@ -838,13 +770,11 @@ namespace dbaui
         _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aFTRowCount));
         _rControlList.push_back(new ODisableWrapper<FixedLine>(&m_aFL_1));
     }
-    // -----------------------------------------------------------------------
     void OLDAPDetailsPage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
     {
         // check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
         sal_Bool bValid, bReadonly;
         getFlags(_rSet, bValid, bReadonly);
-
 
         SFX_ITEMSET_GET(_rSet, pBaseDN, SfxStringItem, DSID_CONN_LDAP_BASEDN, sal_True);
         SFX_ITEMSET_GET(_rSet, pUseSSL, SfxBoolItem, DSID_CONN_LDAP_USESSL, sal_True);
@@ -862,12 +792,8 @@ namespace dbaui
         OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
     }
 
-
-    //========================================================================
-    //= OTextDetailsPage
-    //========================================================================
+    // OTextDetailsPage
     DBG_NAME(OTextDetailsPage)
-    //------------------------------------------------------------------------
     OTextDetailsPage::OTextDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
         :OCommonBehaviourTabPage(pParent, PAGE_TEXT, _rCoreAttrs, 0, false )
     {
@@ -877,7 +803,6 @@ namespace dbaui
         FreeResource();
     }
 
-    // -----------------------------------------------------------------------
     OTextDetailsPage::~OTextDetailsPage()
     {
         DELETEZ(m_pTextConnectionHelper);
@@ -885,26 +810,22 @@ namespace dbaui
         DBG_DTOR(OTextDetailsPage,NULL);
     }
 
-    // -----------------------------------------------------------------------
     SfxTabPage* ODriversSettings::CreateText( Window* pParent,  const SfxItemSet& _rAttrSet )
     {
         return ( new OTextDetailsPage( pParent, _rAttrSet ) );
     }
-    // -----------------------------------------------------------------------
     void OTextDetailsPage::fillControls(::std::vector< ISaveValueWrapper* >& _rControlList)
     {
         OCommonBehaviourTabPage::fillControls(_rControlList);
         m_pTextConnectionHelper->fillControls(_rControlList);
 
     }
-    // -----------------------------------------------------------------------
     void OTextDetailsPage::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
     {
         OCommonBehaviourTabPage::fillWindows(_rControlList);
         m_pTextConnectionHelper->fillWindows(_rControlList);
 
     }
-    // -----------------------------------------------------------------------
     void OTextDetailsPage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
     {
         // first check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
@@ -915,7 +836,6 @@ namespace dbaui
         OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
     }
 
-    // -----------------------------------------------------------------------
     sal_Bool OTextDetailsPage::FillItemSet( SfxItemSet& rSet )
     {
         sal_Bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(rSet);
@@ -923,27 +843,22 @@ namespace dbaui
         return bChangedSomething;
     }
 
-    // -----------------------------------------------------------------------
     sal_Bool OTextDetailsPage::prepareLeave()
     {
         return m_pTextConnectionHelper->prepareLeave();
     }
 
-    //------------------------------------------------------------------------
     SfxTabPage* ODriversSettings::CreateGeneratedValuesPage( Window* _pParent, const SfxItemSet& _rAttrSet )
     {
         return new GeneratedValuesPage( _pParent, _rAttrSet );
     }
 
-    //------------------------------------------------------------------------
     SfxTabPage* ODriversSettings::CreateSpecialSettingsPage( Window* _pParent, const SfxItemSet& _rAttrSet )
     {
         OUString eType = ODbDataSourceAdministrationHelper::getDatasourceType( _rAttrSet );
         DataSourceMetaData aMetaData( eType );
         return new SpecialSettingsPage( _pParent, _rAttrSet, aMetaData );
     }
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

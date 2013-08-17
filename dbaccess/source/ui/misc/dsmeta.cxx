@@ -25,10 +25,8 @@
 #include <map>
 #include <utility>
 
-//........................................................................
 namespace dbaui
 {
-//........................................................................
 
     using namespace dbaccess;
     using namespace ::com::sun::star;
@@ -56,10 +54,7 @@ namespace dbaui
         const sal_Char* pAsciiFeatureName;
     };
 
-    //====================================================================
-    //= global tables
-    //====================================================================
-    //--------------------------------------------------------------------
+    // global tables
     static const FeatureMapping* lcl_getFeatureMappings()
     {
         static const FeatureMapping s_aMappings[] = {
@@ -89,7 +84,6 @@ namespace dbaui
         return s_aMappings;
     }
 
-    //--------------------------------------------------------------------
     static const FeatureSet& lcl_getFeatureSet( const OUString _rURL )
     {
         typedef ::std::map< OUString, FeatureSet, ::comphelper::UStringLess >    FeatureSets;
@@ -122,7 +116,6 @@ namespace dbaui
         return s_aFeatureSets[ _rURL ];
     }
 
-    //--------------------------------------------------------------------
     static AuthenticationMode getAuthenticationMode( const OUString& _sURL )
     {
         static std::map< OUString, FeatureSupport > s_aSupport;
@@ -152,9 +145,7 @@ namespace dbaui
         return s_aSupport[ _sURL ].eAuthentication;
     }
 
-    //====================================================================
-    //= DataSourceMetaData_Impl
-    //====================================================================
+    // DataSourceMetaData_Impl
     class DataSourceMetaData_Impl
     {
     public:
@@ -166,40 +157,31 @@ namespace dbaui
         const OUString m_sURL;
     };
 
-    //--------------------------------------------------------------------
     DataSourceMetaData_Impl::DataSourceMetaData_Impl( const OUString& _sURL )
         :m_sURL( _sURL )
     {
     }
 
-    //====================================================================
-    //= DataSourceMetaData
-    //====================================================================
-    //--------------------------------------------------------------------
+    // DataSourceMetaData
     DataSourceMetaData::DataSourceMetaData( const OUString& _sURL )
         :m_pImpl( new DataSourceMetaData_Impl( _sURL ) )
     {
     }
 
-    //--------------------------------------------------------------------
     DataSourceMetaData::~DataSourceMetaData()
     {
     }
 
-    //--------------------------------------------------------------------
     const FeatureSet& DataSourceMetaData::getFeatureSet() const
     {
         return lcl_getFeatureSet( m_pImpl->getType() );
     }
 
-    //--------------------------------------------------------------------
     AuthenticationMode  DataSourceMetaData::getAuthentication( const OUString& _sURL )
     {
         return getAuthenticationMode( _sURL );
     }
 
-//........................................................................
 } // namespace dbaui
-//........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

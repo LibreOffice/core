@@ -36,10 +36,8 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 
-//==================================================================
 // class OApplicationSwapWindow
 DBG_NAME(OApplicationSwapWindow)
-//==================================================================
 OApplicationSwapWindow::OApplicationSwapWindow( Window* _pParent, OAppBorderWindow& _rBorderWindow )
     :Window(_pParent,WB_DIALOGCONTROL )
     ,m_aIconControl(this)
@@ -55,13 +53,11 @@ OApplicationSwapWindow::OApplicationSwapWindow( Window* _pParent, OAppBorderWind
     m_aIconControl.SetHelpId(HID_APP_SWAP_ICONCONTROL);
     m_aIconControl.Show();
 }
-// -----------------------------------------------------------------------------
 OApplicationSwapWindow::~OApplicationSwapWindow()
 {
 
     DBG_DTOR(OApplicationSwapWindow,NULL);
 }
-// -----------------------------------------------------------------------------
 void OApplicationSwapWindow::Resize()
 {
     Size aFLSize = LogicToPixel( Size( 8, 0 ), MAP_APPFONT );
@@ -74,7 +70,6 @@ void OApplicationSwapWindow::Resize()
     m_aIconControl.SetPosSizePixel( Point(static_cast<long>((aOutputSize.Width() - nX)*0.5), 0)  ,Size(nX,aOutputSize.Height()));
     m_aIconControl.ArrangeIcons();
 }
-// -----------------------------------------------------------------------------
 void OApplicationSwapWindow::ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground )
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
@@ -95,7 +90,6 @@ void OApplicationSwapWindow::ImplInitSettings( sal_Bool bFont, sal_Bool bForegro
     if( bBackground )
         SetBackground( rStyleSettings.GetFieldColor() );
 }
-// -----------------------------------------------------------------------
 void OApplicationSwapWindow::DataChanged( const DataChangedEvent& rDCEvt )
 {
     Window::DataChanged( rDCEvt );
@@ -109,7 +103,6 @@ void OApplicationSwapWindow::DataChanged( const DataChangedEvent& rDCEvt )
         Invalidate();
     }
 }
-// -----------------------------------------------------------------------------
 void OApplicationSwapWindow::clearSelection()
 {
     m_aIconControl.SetNoSelection();
@@ -120,13 +113,11 @@ void OApplicationSwapWindow::clearSelection()
     m_aIconControl.GetClickHdl().Call(&m_aIconControl);
 }
 
-// -----------------------------------------------------------------------------
 void OApplicationSwapWindow::createIconAutoMnemonics( MnemonicGenerator& _rMnemonics )
 {
     m_aIconControl.CreateAutoMnemonics( _rMnemonics );
 }
 
-// -----------------------------------------------------------------------------
 bool OApplicationSwapWindow::interceptKeyInput( const KeyEvent& _rEvent )
 {
     const KeyCode& rKeyCode = _rEvent.GetKeyCode();
@@ -137,7 +128,6 @@ bool OApplicationSwapWindow::interceptKeyInput( const KeyEvent& _rEvent )
     return false;
 }
 
-// -----------------------------------------------------------------------------
 ElementType OApplicationSwapWindow::getElementType() const
 {
     sal_uLong nPos = 0;
@@ -145,7 +135,6 @@ ElementType OApplicationSwapWindow::getElementType() const
     return ( pEntry ) ? *static_cast<ElementType*>(pEntry->GetUserData()) : E_NONE;
 }
 
-// -----------------------------------------------------------------------------
 bool OApplicationSwapWindow::onContainerSelected( ElementType _eType )
 {
     if ( m_eLastType == _eType )
@@ -162,7 +151,6 @@ bool OApplicationSwapWindow::onContainerSelected( ElementType _eType )
     return false;
 }
 
-// -----------------------------------------------------------------------------
 IMPL_LINK(OApplicationSwapWindow, OnContainerSelectHdl, SvtIconChoiceCtrl*, _pControl)
 {
     sal_uLong nPos = 0;
@@ -176,13 +164,11 @@ IMPL_LINK(OApplicationSwapWindow, OnContainerSelectHdl, SvtIconChoiceCtrl*, _pCo
 
     return 1L;
 }
-//------------------------------------------------------------------------------
 IMPL_LINK_NOARG(OApplicationSwapWindow, ChangeToLastSelected)
 {
     selectContainer(m_eLastType);
     return 0L;
 }
-// -----------------------------------------------------------------------------
 void OApplicationSwapWindow::selectContainer(ElementType _eType)
 {
     sal_uLong nCount = m_aIconControl.GetEntryCount();

@@ -29,7 +29,6 @@
 
 #include <set>
 
-
 namespace dbaui
 {
     struct DBTreeEditedEntry
@@ -47,7 +46,6 @@ namespace dbaui
         ~IEntryFilter() {}
     };
 
-    //========================================================================
     class IControlActionListener;
     class IContextMenuProvider;
     class DBTreeListBox     :public SvTreeListBox
@@ -71,7 +69,6 @@ namespace dbaui
         Link                        m_aEditingHandler;      // called before someone will edit an entry
         Link                        m_aEditedHandler;       // called after someone edited an entry
         Link                        m_aEnterKeyHdl;
-
 
         sal_Bool                    m_bHandleEnterKey;
 

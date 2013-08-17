@@ -27,13 +27,10 @@
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
 
-
 class NumericField;
 class Edit;
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
     /// helper class to wrap the savevalue and disable call
     class SAL_NO_VTABLE ISaveValueWrapper
     {
@@ -89,9 +86,7 @@ namespace dbaui
         }
     };
 
-    //=========================================================================
-    //= OGenericAdministrationPage
-    //=========================================================================
+    // OGenericAdministrationPage
     class IDatabaseSettingsDialog;
     class IItemSetHelper;
     class OGenericAdministrationPage    :public SfxTabPage
@@ -250,17 +245,13 @@ namespace dbaui
         virtual Link getControlModifiedLink() { return LINK(this, OGenericAdministrationPage, OnControlModified); }
     };
 
-    //=========================================================================
-    //= ControlRelation
-    //=========================================================================
+    // ControlRelation
     enum ControlRelation
     {
         RelatedControls, UnrelatedControls
     };
 
-    //=========================================================================
-    //= LayoutHelper
-    //=========================================================================
+    // LayoutHelper
     class LayoutHelper
     {
     public:
@@ -276,11 +267,8 @@ namespace dbaui
             // why is CalcMinimumSize not a virtual method of ::Window?
     };
 
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
 
 #endif // _DBAUI_ADMINPAGES_HXX_
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

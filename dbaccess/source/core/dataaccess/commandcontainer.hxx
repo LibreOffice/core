@@ -28,9 +28,7 @@
 
 namespace dbaccess
 {
-//==========================================================================
-//= OCommandContainer
-//==========================================================================
+// OCommandContainer
 
 typedef ::cppu::ImplHelper1 <   ::com::sun::star::lang::XSingleServiceFactory
                             >   OCommandContainer_BASE;
@@ -69,7 +67,6 @@ protected:
 };
 
 }   // namespace dbaccess
-
 
 #endif // _DBA_COREDATAACCESS_COMMANDCONTAINER_HXX_
 

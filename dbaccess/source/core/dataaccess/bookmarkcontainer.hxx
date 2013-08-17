@@ -37,10 +37,8 @@
 namespace dbaccess
 {
 
-//==========================================================================
-//= OBookmarkContainer -    base class of collections of database definition
-//=                         documents
-//==========================================================================
+// OBookmarkContainer -    base class of collections of database definition
+//                         documents
 typedef ::cppu::WeakImplHelper6 <
                                     ::com::sun::star::container::XIndexAccess
                                 ,   ::com::sun::star::container::XNameContainer
@@ -65,7 +63,6 @@ protected:
     ::cppu::OInterfaceContainerHelper
                             m_aContainerListeners;
     ::osl::Mutex&           m_rMutex;
-
 
 public:
     /** constructs the container.<BR>
@@ -127,7 +124,6 @@ public:
         you may call <code>initialize</code> again (maybe with another configuration node).
     */
     virtual void    dispose();
-
 
 protected:
     /** checks whether the object is basically alive, i.e. it has been fully initialized (@see initialize) and

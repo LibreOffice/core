@@ -17,12 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "QueryMoveTabWinUndoAct.hxx"
 #include "JoinTableView.hxx"
 #include "QTableWindow.hxx"
 using namespace dbaui;
-//------------------------------------------------------------------------------
 void OJoinMoveTabWinUndoAct::TogglePosition()
 {
     Point ptFrameScrollPos(m_pOwner->GetHScrollBar()->GetThumbPos(), m_pOwner->GetVScrollBar()->GetThumbPos());
@@ -37,6 +35,5 @@ void OJoinMoveTabWinUndoAct::TogglePosition()
 
     m_ptNextPosition = ptNext;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

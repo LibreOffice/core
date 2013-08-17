@@ -30,7 +30,6 @@ namespace dbaui
         : m_vTableRow(_rvTableRow)
     {
     }
-    // -----------------------------------------------------------------------------
     sal_Bool OTableRowExchange::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId, const ::com::sun::star::datatransfer::DataFlavor& /*rFlavor*/ )
     {
         if(nUserObjectId == SOT_FORMATSTR_ID_SBA_TABED)
@@ -48,13 +47,11 @@ namespace dbaui
         }
         return sal_False;
     }
-    // -----------------------------------------------------------------------------
     void OTableRowExchange::AddSupportedFormats()
     {
         if ( !m_vTableRow.empty() )
             AddFormat(SOT_FORMATSTR_ID_SBA_TABED);
     }
-    // -----------------------------------------------------------------------------
     sal_Bool OTableRowExchange::GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
     {
         sal_uLong nFormat = SotExchange::GetFormat(rFlavor);
@@ -62,12 +59,10 @@ namespace dbaui
             return SetObject(&m_vTableRow,SOT_FORMATSTR_ID_SBA_TABED,rFlavor);
         return sal_False;
     }
-    // -----------------------------------------------------------------------------
     void OTableRowExchange::ObjectReleased()
     {
         m_vTableRow.clear();
     }
-    // -----------------------------------------------------------------------------
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

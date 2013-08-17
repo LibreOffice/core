@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "subcomponentloader.hxx"
 
 #include <com/sun/star/ucb/Command.hpp>
@@ -25,10 +24,8 @@
 
 #include <tools/diagnose_ex.h>
 
-//........................................................................
 namespace dbaccess
 {
-//........................................................................
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
@@ -51,9 +48,7 @@ namespace dbaccess
     using ::com::sun::star::frame::XController2;
     using ::com::sun::star::lang::XComponent;
 
-    //====================================================================
-    //= SubComponentLoader
-    //====================================================================
+    // SubComponentLoader
     struct DBACCESS_DLLPRIVATE SubComponentLoader_Data
     {
         const Reference< XCommandProcessor >    xDocDefCommands;
@@ -73,12 +68,9 @@ namespace dbaccess
         }
     };
 
-    //====================================================================
-    //= helper
-    //====================================================================
+    // helper
     namespace
     {
-        //................................................................
         void lcl_onWindowShown_nothrow( const SubComponentLoader_Data& i_rData )
         {
             try
@@ -106,10 +98,7 @@ namespace dbaccess
         }
     }
 
-    //====================================================================
-    //= SubComponentLoader
-    //====================================================================
-    //--------------------------------------------------------------------
+    // SubComponentLoader
     SubComponentLoader::SubComponentLoader( const Reference< XController >& i_rApplicationController,
             const Reference< XCommandProcessor >& i_rSubDocumentDefinition )
         :m_pData( new SubComponentLoader_Data( i_rSubDocumentDefinition ) )
@@ -125,7 +114,6 @@ namespace dbaccess
         osl_atomic_decrement( &m_refCount );
     }
 
-    //--------------------------------------------------------------------
     SubComponentLoader::SubComponentLoader( const Reference< XController >& i_rApplicationController,
             const Reference< XComponent >& i_rNonDocumentComponent )
         :m_pData( new SubComponentLoader_Data( i_rNonDocumentComponent ) )
@@ -141,27 +129,23 @@ namespace dbaccess
         osl_atomic_decrement( &m_refCount );
     }
 
-    //--------------------------------------------------------------------
     SubComponentLoader::~SubComponentLoader()
     {
         delete m_pData, m_pData = NULL;
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL SubComponentLoader::windowResized( const WindowEvent& i_rEvent ) throw (RuntimeException)
     {
         // not interested in
         (void)i_rEvent;
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL SubComponentLoader::windowMoved( const WindowEvent& i_rEvent ) throw (RuntimeException)
     {
         // not interested in
         (void)i_rEvent;
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL SubComponentLoader::windowShown( const EventObject& i_rEvent ) throw (RuntimeException)
     {
         (void)i_rEvent;
@@ -170,22 +154,18 @@ namespace dbaccess
         m_pData->xAppComponentWindow->removeWindowListener( this );
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL SubComponentLoader::windowHidden( const EventObject& i_rEvent ) throw (RuntimeException)
     {
         // not interested in
         (void)i_rEvent;
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL SubComponentLoader::disposing( const EventObject& i_rEvent ) throw (RuntimeException)
     {
         // not interested in
         (void)i_rEvent;
     }
 
-//........................................................................
 } // namespace dbaccess
-//........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

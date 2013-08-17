@@ -34,15 +34,10 @@
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/implbase2.hxx>
 
-
-//........................................................................
 namespace dbaccess
 {
-//........................................................................
 
-//=========================================================================
-//= OCommandDefinition - a database "document" which describes a query
-//=========================================================================
+// OCommandDefinition - a database "document" which describes a query
     class OCommandDefinition_Impl : public OComponentDefinition_Impl
                                    ,public OCommandBase
     {
@@ -148,11 +143,8 @@ private:
     void registerProperties();
 };
 
-//........................................................................
 }   // namespace dbaccess
-//........................................................................
 
 #endif // _DBA_COREDATAACESS_COMMANDDEFINITION_HXX_
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

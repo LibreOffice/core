@@ -36,7 +36,6 @@
 
 namespace dbaui
 {
-    //========================================================================
     /** unifies the access to a list of table/query objects
     */
     class TableObjectListFacade
@@ -49,7 +48,6 @@ namespace dbaui
         virtual ~TableObjectListFacade();
     };
 
-    //========================================================================
     class IAddTableDialogContext
     {
     public:
@@ -65,7 +63,6 @@ namespace dbaui
         ~IAddTableDialogContext() {}
     };
 
-    //========================================================================
     class OAddTableDlg : public ModelessDialog
     {
         RadioButton         m_aCaseTables;

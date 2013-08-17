@@ -62,16 +62,12 @@ namespace com { namespace sun { namespace star {
     }
 }}}
 
-//........................................................................
 namespace dbaui
 {
-//........................................................................
 
     class SubComponentManager;
 
-    //====================================================================
-    //= OApplicationController
-    //====================================================================
+    // OApplicationController
     class OApplicationController;
     class OApplicationView;
     class OLinkedDocumentsAccess;
@@ -136,7 +132,6 @@ namespace dbaui
     private:
 
         OApplicationView*       getContainer() const;
-
 
         /** returns the database name
             @return
@@ -400,7 +395,6 @@ namespace dbaui
         void    impl_validateObjectTypeAndName_throw( const sal_Int32 _nObjectType, const ::boost::optional< OUString >& i_rObjectName );
 
     protected:
-        // ----------------------------------------------------------------
         // initalizing members
         /** forces usage of a connection which we do not own
             <p>To be used from within XInitialization::initialize only.</p>
@@ -564,9 +558,7 @@ namespace dbaui
         virtual void SAL_CALL disposing();
     };
 
-//........................................................................
 }   // namespace dbaui
-//........................................................................
 
 #endif // DBAUI_APPCONTROLLER_HXX
 

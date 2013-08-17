@@ -37,23 +37,19 @@ namespace dbaui
         ,m_pTableView(_pTableView)
     {
     }
-    // -----------------------------------------------------------------------------
     OUString SAL_CALL OJoinDesignViewAccess::getImplementationName() throw(RuntimeException)
     {
         return getImplementationName_Static();
     }
-    // -----------------------------------------------------------------------------
     OUString OJoinDesignViewAccess::getImplementationName_Static(void) throw( RuntimeException )
     {
         return OUString("org.openoffice.comp.dbu.JoinViewAccessibility");
     }
-    // -----------------------------------------------------------------------------
     void OJoinDesignViewAccess::clearTableView()
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         m_pTableView = NULL;
     }
-    // -----------------------------------------------------------------------------
     // XAccessibleContext
     sal_Int32 SAL_CALL OJoinDesignViewAccess::getAccessibleChildCount(  ) throw (RuntimeException)
     {
@@ -65,7 +61,6 @@ namespace dbaui
             nChildCount = m_pTableView->GetTabWinCount() + m_pTableView->getTableConnections()->size();
         return nChildCount;
     }
-    // -----------------------------------------------------------------------------
     Reference< XAccessible > SAL_CALL OJoinDesignViewAccess::getAccessibleChild( sal_Int32 i ) throw (IndexOutOfBoundsException,RuntimeException)
     {
         Reference< XAccessible > aRet;
@@ -88,32 +83,22 @@ namespace dbaui
             throw IndexOutOfBoundsException();
         return aRet;
     }
-    // -----------------------------------------------------------------------------
     sal_Bool OJoinDesignViewAccess::isEditable() const
     {
         return m_pTableView && !m_pTableView->getDesignView()->getController().isReadOnly();
     }
-    // -----------------------------------------------------------------------------
     sal_Int16 SAL_CALL OJoinDesignViewAccess::getAccessibleRole(  ) throw (RuntimeException)
     {
         return AccessibleRole::VIEW_PORT;
     }
-    // -----------------------------------------------------------------------------
     Reference< XAccessibleContext > SAL_CALL OJoinDesignViewAccess::getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException)
     {
         return this;
     }
-    // -----------------------------------------------------------------------------
-    // -----------------------------------------------------------------------------
     // XInterface
-    // -----------------------------------------------------------------------------
     IMPLEMENT_FORWARD_XINTERFACE2( OJoinDesignViewAccess, VCLXAccessibleComponent, OJoinDesignViewAccess_BASE )
-    // -----------------------------------------------------------------------------
     // XTypeProvider
-    // -----------------------------------------------------------------------------
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( OJoinDesignViewAccess, VCLXAccessibleComponent, OJoinDesignViewAccess_BASE )
 }
-
-// -----------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -26,17 +26,13 @@
 
 #include <memory>
 
-//........................................................................
 namespace dbmm
 {
-//........................................................................
 
     typedef sal_Int16 DocumentID;
     struct MigrationError;
 
-    //====================================================================
-    //= MigrationLog
-    //====================================================================
+    // MigrationLog
     struct MigrationLog_Data;
     class MigrationLog
     {
@@ -44,7 +40,6 @@ namespace dbmm
         MigrationLog();
         ~MigrationLog();
 
-        //----------------------------------------------------------------
         //- event logging
 
         /** logs an unrecoverable error during the migration process
@@ -80,7 +75,6 @@ namespace dbmm
         */
         void        finishedDocument( const DocumentID _nDocID );
 
-        //----------------------------------------------------------------
         //- information retrieval
 
         /** retrieves the new name of a library
@@ -110,9 +104,7 @@ namespace dbmm
         ::std::auto_ptr< MigrationLog_Data >    m_pData;
     };
 
-//........................................................................
 } // namespace dbmm
-//........................................................................
 
 #endif // DBACCESS_MIGRATIONLOG_HXX
 

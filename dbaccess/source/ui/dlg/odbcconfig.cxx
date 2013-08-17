@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "odbcconfig.hxx"
 
 #ifdef SYSTEM_ODBC_HEADERS
@@ -85,11 +84,8 @@
 
 #endif  // HAVE_ODBC_SUPPORT
 
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
-
 
 #ifdef HAVE_ODBC_SUPPORT
 typedef SQLRETURN (SQL_API* TSQLManageDataSource) (SQLHWND hwndParent);
@@ -105,11 +101,8 @@ typedef SQLRETURN (SQL_API* TSQLDataSources) (SQLHENV EnvironmentHandle, SQLUSMA
 #define NSQLDataSources(a,b,c,d,e,f,g,h) (*(TSQLDataSources)(m_pDataSources))(a,b,c,d,e,f,g,h)
 #endif
 
-//=========================================================================
-//= OOdbcLibWrapper
-//=========================================================================
+// OOdbcLibWrapper
 DBG_NAME(OOdbcLibWrapper)
-//-------------------------------------------------------------------------
 #ifdef HAVE_ODBC_SUPPORT
 OOdbcLibWrapper::OOdbcLibWrapper()
     :m_pOdbcLib(NULL)
@@ -119,7 +112,6 @@ OOdbcLibWrapper::OOdbcLibWrapper()
 }
 #endif
 
-//-------------------------------------------------------------------------
 sal_Bool OOdbcLibWrapper::load(const sal_Char* _pLibPath)
 {
     m_sLibPath = OUString::createFromAscii(_pLibPath);
@@ -132,7 +124,6 @@ sal_Bool OOdbcLibWrapper::load(const sal_Char* _pLibPath)
 #endif
 }
 
-//-------------------------------------------------------------------------
 void OOdbcLibWrapper::unload()
 {
 #ifdef HAVE_ODBC_SUPPORT
@@ -144,13 +135,11 @@ void OOdbcLibWrapper::unload()
 #endif
 }
 
-//-------------------------------------------------------------------------
 oslGenericFunction OOdbcLibWrapper::loadSymbol(const sal_Char* _pFunctionName)
 {
     return osl_getFunctionSymbol(m_pOdbcLib, OUString::createFromAscii(_pFunctionName).pData);
 }
 
-//-------------------------------------------------------------------------
 OOdbcLibWrapper::~OOdbcLibWrapper()
 {
     unload();
@@ -158,9 +147,7 @@ OOdbcLibWrapper::~OOdbcLibWrapper()
     DBG_DTOR(OOdbcLibWrapper,NULL);
 }
 
-//=========================================================================
-//= OOdbcEnumeration
-//=========================================================================
+// OOdbcEnumeration
 struct OdbcTypesImpl
 {
 #ifdef HAVE_ODBC_SUPPORT
@@ -171,7 +158,6 @@ struct OdbcTypesImpl
 #endif
 };
 DBG_NAME(OOdbcEnumeration)
-//-------------------------------------------------------------------------
 OOdbcEnumeration::OOdbcEnumeration()
 #ifdef HAVE_ODBC_SUPPORT
     :m_pAllocHandle(NULL)
@@ -207,7 +193,6 @@ OOdbcEnumeration::OOdbcEnumeration()
     }
 }
 
-//-------------------------------------------------------------------------
 OOdbcEnumeration::~OOdbcEnumeration()
 {
     freeEnv();
@@ -216,7 +201,6 @@ OOdbcEnumeration::~OOdbcEnumeration()
     DBG_DTOR(OOdbcEnumeration,NULL);
 }
 
-//-------------------------------------------------------------------------
 sal_Bool OOdbcEnumeration::allocEnv()
 {
     OSL_ENSURE(isLoaded(), "OOdbcEnumeration::allocEnv: not loaded!");
@@ -239,7 +223,6 @@ sal_Bool OOdbcEnumeration::allocEnv()
 #endif
 }
 
-//-------------------------------------------------------------------------
 void OOdbcEnumeration::freeEnv()
 {
 #ifdef HAVE_ODBC_SUPPORT
@@ -249,7 +232,6 @@ void OOdbcEnumeration::freeEnv()
 #endif
 }
 
-//-------------------------------------------------------------------------
 void OOdbcEnumeration::getDatasourceNames(StringBag& _rNames)
 {
     OSL_ENSURE(isLoaded(), "OOdbcEnumeration::getDatasourceNames: not loaded!");
@@ -292,9 +274,7 @@ void OOdbcEnumeration::getDatasourceNames(StringBag& _rNames)
 
 #ifdef HAVE_ODBC_ADMINISTRATION
 
-//=========================================================================
-//= ProcessTerminationWait
-//=========================================================================
+// ProcessTerminationWait
 class ProcessTerminationWait : public ::osl::Thread
 {
     oslProcess  m_hProcessHandle;
@@ -316,17 +296,13 @@ protected:
     }
 };
 
-//=========================================================================
-//= OOdbcManagement
-//=========================================================================
-//-------------------------------------------------------------------------
+// OOdbcManagement
 OOdbcManagement::OOdbcManagement( const Link& _rAsyncFinishCallback )
     :m_pProcessWait( NULL )
     ,m_aAsyncFinishCallback( _rAsyncFinishCallback )
 {
 }
 
-//-------------------------------------------------------------------------
 OOdbcManagement::~OOdbcManagement()
 {
     // wait for our thread to be finished
@@ -334,7 +310,6 @@ OOdbcManagement::~OOdbcManagement()
         m_pProcessWait->join();
 }
 
-//-------------------------------------------------------------------------
 bool OOdbcManagement::manageDataSources_async()
 {
     OSL_PRECOND( !isRunning(), "OOdbcManagement::manageDataSources_async: still running from the previous call!" );
@@ -355,7 +330,6 @@ bool OOdbcManagement::manageDataSources_async()
     return true;
 }
 
-//-------------------------------------------------------------------------
 bool OOdbcManagement::isRunning() const
 {
     return ( m_pProcessWait.get() && m_pProcessWait->isRunning() );
@@ -363,8 +337,6 @@ bool OOdbcManagement::isRunning() const
 
 #endif // HAVE_ODBC_ADMINISTRATION
 
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

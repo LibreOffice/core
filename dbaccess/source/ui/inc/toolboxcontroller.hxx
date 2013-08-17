@@ -58,9 +58,7 @@ namespace dbaui
         // XToolbarController
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > SAL_CALL createPopupWindow() throw (::com::sun::star::uno::RuntimeException);
     };
-//..........................................................................
 } // dbaui
-//..........................................................................
 #endif //DBACCESS_TOOLBOXCONTROLLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -31,14 +31,10 @@
 #include <cppuhelper/compbase4.hxx>
 #include "apitools.hxx"
 
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
 
-//==================================================================
 // OColumnControlModel
-//==================================================================
 typedef ::cppu::WeakAggComponentImplHelper4 <   ::com::sun::star::awt::XControlModel
                                         ,   ::com::sun::star::lang::XServiceInfo
                                         ,   ::com::sun::star::util::XCloneable
@@ -91,16 +87,13 @@ public:
     virtual void SAL_CALL write(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOutStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL read(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxInStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 
-
 // OPropertyArrayUsageHelper
     DECLARE_PROPERTYCONTAINER_DEFAULTS( );
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone(  ) throw (::com::sun::star::uno::RuntimeException);
 };
 
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
 #endif // DBAUI_COLUMNMODEL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

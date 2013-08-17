@@ -35,16 +35,12 @@ namespace svt
     class RoadmapWizard;
 }
 
-//........................................................................
 namespace dbmm
 {
-//........................................................................
 
     class MacroMigrationDialog;
 
-    //====================================================================
-    //= MacroMigrationPage
-    //====================================================================
+    // MacroMigrationPage
     typedef ::svt::OWizardPage  MacroMigrationPage_Base;
     class MacroMigrationPage : public MacroMigrationPage_Base
     {
@@ -60,9 +56,7 @@ namespace dbmm
         FixedText   m_aHeader;
     };
 
-    //====================================================================
-    //= PreparationPage
-    //====================================================================
+    // PreparationPage
     class PreparationPage : public MacroMigrationPage
     {
     public:
@@ -78,9 +72,7 @@ namespace dbmm
         FixedText   m_aCloseDocError;
     };
 
-    //====================================================================
-    //= SaveDBDocPage
-    //====================================================================
+    // SaveDBDocPage
     class SaveDBDocPage : public MacroMigrationPage
     {
     public:
@@ -111,9 +103,7 @@ namespace dbmm
         void impl_updateLocationDependentItems();
     };
 
-    //====================================================================
-    //= ProgressPage
-    //====================================================================
+    // ProgressPage
     class ProgressPage : public MacroMigrationPage, public IMigrationProgress
     {
     public:
@@ -147,9 +137,7 @@ namespace dbmm
         FixedText           m_aMigrationDone;
     };
 
-    //====================================================================
-    //= ResultPage
-    //====================================================================
+    // ResultPage
     class ResultPage : public MacroMigrationPage
     {
     public:
@@ -166,9 +154,7 @@ namespace dbmm
         OUString          m_aUnsuccessful;
     };
 
-//........................................................................
 } // namespace dbmm
-//........................................................................
 
 #endif // DBACCESS_MACROMIGRATIONPAGES_HXX
 

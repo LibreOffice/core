@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "datasourceconnector.hxx"
 #include <osl/diagnose.h>
 #include "dbustrings.hrc"
@@ -43,10 +42,8 @@
 #include "dbu_misc.hrc"
 #include "moduledbu.hxx"
 
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
@@ -59,17 +56,13 @@ namespace dbaui
     using namespace ::dbtools;
     using ::svt::OFileNotation;
 
-    //=====================================================================
-    //= ODatasourceConnector
-    //=====================================================================
-    //---------------------------------------------------------------------
+    // ODatasourceConnector
     ODatasourceConnector::ODatasourceConnector(const Reference< XComponentContext >& _rxContext, Window* _pMessageParent)
         :m_pErrorMessageParent(_pMessageParent)
         ,m_xContext(_rxContext)
     {
     }
 
-    //---------------------------------------------------------------------
     ODatasourceConnector::ODatasourceConnector( const Reference< XComponentContext >& _rxContext, Window* _pMessageParent,
         const OUString& _rContextInformation )
         :m_pErrorMessageParent(_pMessageParent)
@@ -78,7 +71,6 @@ namespace dbaui
     {
     }
 
-    //---------------------------------------------------------------------
     Reference< XConnection > ODatasourceConnector::connect( const OUString& _rDataSourceName,
         ::dbtools::SQLExceptionInfo* _pErrorInfo ) const
     {
@@ -99,7 +91,6 @@ namespace dbaui
         return xConnection;
     }
 
-    //---------------------------------------------------------------------
     Reference< XConnection > ODatasourceConnector::connect(const Reference< XDataSource>& _xDataSource,
         ::dbtools::SQLExceptionInfo* _pErrorInfo ) const
     {
@@ -213,8 +204,6 @@ namespace dbaui
         return xConnection;
     }
 
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

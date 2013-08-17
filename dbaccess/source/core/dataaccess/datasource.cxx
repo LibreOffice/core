@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "datasource.hxx"
 #include "module_dba.hxx"
 #include "userinformation.hxx"
@@ -29,7 +28,6 @@
 #include "SharedConnection.hxx"
 #include "databasedocument.hxx"
 #include "OAuthenticationContinuation.hxx"
-
 
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -94,9 +92,7 @@ using namespace ::comphelper;
 namespace dbaccess
 {
 
-//============================================================
-//= FlushNotificationAdapter
-//============================================================
+// FlushNotificationAdapter
 typedef ::cppu::WeakImplHelper1< XFlushListener > FlushNotificationAdapter_Base;
 /** helper class which implements a XFlushListener, and forwards all
     notification events to another XFlushListener
@@ -133,9 +129,7 @@ protected:
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
 };
 
-//------------------------------------------------------------
 DBG_NAME( FlushNotificationAdapter )
-//------------------------------------------------------------
 FlushNotificationAdapter::FlushNotificationAdapter( const Reference< XFlushable >& _rxBroadcaster, const Reference< XFlushListener >& _rxListener )
     :m_aBroadcaster( _rxBroadcaster )
     ,m_aListener( _rxListener )
@@ -152,7 +146,6 @@ FlushNotificationAdapter::FlushNotificationAdapter( const Reference< XFlushable 
     OSL_ENSURE( m_refCount == 1, "FlushNotificationAdapter::FlushNotificationAdapter: broadcaster isn't holding by hard ref!?" );
 }
 
-//------------------------------------------------------------
 FlushNotificationAdapter::~FlushNotificationAdapter()
 {
     DBG_DTOR( FlushNotificationAdapter, NULL );
@@ -483,9 +476,7 @@ namespace
         }
     };
 }
-//============================================================
-//= ODatabaseContext
-//============================================================
+// ODatabaseContext
 DBG_NAME(ODatabaseSource)
 
 extern "C" void SAL_CALL createRegistryInfo_ODatabaseSource()

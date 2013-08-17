@@ -36,10 +36,8 @@
 #include <comphelper/implementationreference.hxx>
 
 #include <memory>
-//........................................................................
 namespace dbaccess
 {
-//........................................................................
 
     typedef ::cppu::ImplHelper1< ::com::sun::star::sdbcx::XColumnsSupplier > OComponentDefinition_BASE;
 
@@ -81,9 +79,7 @@ namespace dbaccess
     };
 
 class OColumnPropertyListener;
-//=========================================================================
-//= OComponentDefinition - a database "document" which describes a query
-//=========================================================================
+// OComponentDefinition - a database "document" which describes a query
 class OComponentDefinition  :public OContentHelper
                             ,public ODataSettings
                             ,public IColumnFactory
@@ -100,7 +96,6 @@ protected:
 
     virtual ~OComponentDefinition();
     virtual void SAL_CALL disposing();
-
 
 protected:
     OComponentDefinition(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&
@@ -169,9 +164,7 @@ private:
     void registerProperties();
 };
 
-//........................................................................
 }   // namespace dbaccess
-//........................................................................
 
 #endif // DBA_COREDATAACESS_COMPONENTDEFINITION_HXX
 

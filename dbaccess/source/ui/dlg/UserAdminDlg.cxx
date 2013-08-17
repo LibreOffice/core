@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "adminpages.hxx"
 #include "DbAdminImpl.hxx"
 #include "dbu_dlg.hrc"
@@ -39,20 +38,16 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/stdtext.hxx>
 
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::sdbc;
     using namespace ::com::sun::star::sdbcx;
 
-    //========================================================================
-    //= OUserAdminDlg
+    // OUserAdminDlg
 DBG_NAME(OUserAdminDlg)
-//========================================================================
     OUserAdminDlg::OUserAdminDlg(Window* _pParent
                                             , SfxItemSet* _pItems
                                             ,const Reference< XComponentContext >& _rxORB
@@ -81,7 +76,6 @@ DBG_NAME(OUserAdminDlg)
         FreeResource();
     }
 
-    // -----------------------------------------------------------------------
     OUserAdminDlg::~OUserAdminDlg()
     {
         if ( m_bOwnConnection )
@@ -100,7 +94,6 @@ DBG_NAME(OUserAdminDlg)
 
         DBG_DTOR(OUserAdminDlg,NULL);
     }
-    // -----------------------------------------------------------------------
     short OUserAdminDlg::Execute()
     {
         try
@@ -126,7 +119,6 @@ DBG_NAME(OUserAdminDlg)
             m_pImpl->saveChanges(*GetOutputItemSet());
         return nRet;
     }
-    //-------------------------------------------------------------------------
     void OUserAdminDlg::PageCreated(sal_uInt16 _nId, SfxTabPage& _rPage)
     {
         // register ourself as modified listener
@@ -140,17 +132,14 @@ DBG_NAME(OUserAdminDlg)
 
         SfxTabDialog::PageCreated(_nId, _rPage);
     }
-    // -----------------------------------------------------------------------------
     const SfxItemSet* OUserAdminDlg::getOutputSet() const
     {
         return m_pItemSet;
     }
-    // -----------------------------------------------------------------------------
     SfxItemSet* OUserAdminDlg::getWriteOutputSet()
     {
         return m_pItemSet;
     }
-    // -----------------------------------------------------------------------------
     ::std::pair< Reference<XConnection>,sal_Bool> OUserAdminDlg::createConnection()
     {
         if ( !m_xConnection.is() )
@@ -160,43 +149,34 @@ DBG_NAME(OUserAdminDlg)
         }
         return ::std::pair< Reference<XConnection>,sal_Bool> (m_xConnection,sal_False);
     }
-    // -----------------------------------------------------------------------------
     Reference< XComponentContext > OUserAdminDlg::getORB() const
     {
         return m_pImpl->getORB();
     }
-    // -----------------------------------------------------------------------------
     Reference< XDriver > OUserAdminDlg::getDriver()
     {
         return m_pImpl->getDriver();
     }
-    // -----------------------------------------------------------------------------
     OUString OUserAdminDlg::getDatasourceType(const SfxItemSet& _rSet) const
     {
         return m_pImpl->getDatasourceType(_rSet);
     }
-    // -----------------------------------------------------------------------------
     void OUserAdminDlg::clearPassword()
     {
         m_pImpl->clearPassword();
     }
-    // -----------------------------------------------------------------------------
     void OUserAdminDlg::setTitle(const OUString& _sTitle)
     {
         SetText(_sTitle);
     }
-    //-------------------------------------------------------------------------
     void OUserAdminDlg::enableConfirmSettings( bool _bEnable )
     {
         (void)_bEnable;
     }
-    //-------------------------------------------------------------------------
     sal_Bool OUserAdminDlg::saveDatasource()
     {
         return PrepareLeaveCurrentPage();
     }
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

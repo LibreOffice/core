@@ -25,14 +25,10 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include "indexes.hxx"
 
-//......................................................................
 namespace dbaui
 {
-//......................................................................
 
-    //==================================================================
-    //= OIndexCollection
-    //==================================================================
+    // OIndexCollection
     class OIndexCollection
     {
     protected:
@@ -100,10 +96,7 @@ namespace dbaui
         void implFillIndexInfo(OIndex& _rIndex) SAL_THROW((::com::sun::star::uno::Exception));
     };
 
-
-//......................................................................
 }   // namespace dbaui
-//......................................................................
 
 #endif // _DBAUI_INDEXCOLLECTION_HXX_
 
