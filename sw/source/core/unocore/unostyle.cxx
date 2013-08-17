@@ -1835,7 +1835,7 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
                 sal_Bool bPut = sal_False;
                 if (!sDescName.isEmpty())
                 {
-                    SwPageDesc* pPageDesc = ::GetPageDescByName_Impl(*pDoc, sDescName);
+                    SwPageDesc* pPageDesc = SwPageDesc::GetByName(*pDoc, sDescName);
                     if(pPageDesc)
                     {
                         pNewDesc->RegisterToPageDesc( *pPageDesc );

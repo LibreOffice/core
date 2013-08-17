@@ -54,8 +54,6 @@
 #include <fmtfld.hxx>
 #include <fmtpdsc.hxx>
 #include <pagedesc.hxx>
-#include <poolfmt.hrc>
-#include <poolfmt.hxx>
 #include <edimp.hxx>
 #include <fchrfmt.hxx>
 #include <fmtautofmt.hxx>
@@ -323,8 +321,7 @@ SwUnoCursorHelper::SetPageDesc(
         bool bPut = false;
         if (!sDescName.isEmpty())
         {
-            SwPageDesc *const pPageDesc =
-                ::GetPageDescByName_Impl(rDoc, sDescName);
+            SwPageDesc *const pPageDesc = SwPageDesc::GetByName(rDoc, sDescName);
             if (!pPageDesc)
             {
                 throw lang::IllegalArgumentException();
@@ -664,40 +661,6 @@ SwUnoCursorHelper::GetCurTxtFmtColl(SwPaM & rPaM, const bool bConditional)
     } while ( pTmpCrsr != &rPaM );
     return (bError) ? 0 : pFmt;
 }
-
-/* --------------------------------------------------
- *  Hilfsfunktion fuer PageDesc
- * --------------------------------------------------*/
-SwPageDesc* GetPageDescByName_Impl(SwDoc& rDoc, const OUString& rName)
-{
-    SwPageDesc* pRet = 0;
-    sal_uInt16 nDCount = rDoc.GetPageDescCnt();
-    sal_uInt16 i;
-
-    for( i = 0; i < nDCount; i++ )
-    {
-        SwPageDesc* pDsc = &rDoc.GetPageDesc( i );
-        if(pDsc->GetName() == rName)
-        {
-            pRet = pDsc;
-            break;
-        }
-    }
-    if(!pRet)
-    {
-        for(i = RC_POOLPAGEDESC_BEGIN; i <= STR_POOLPAGE_LANDSCAPE; ++i)
-        {
-            if (rName==SW_RESSTR(i))
-            {
-                pRet = rDoc.GetPageDescFromPool( static_cast< sal_uInt16 >(
-                            RES_POOLPAGE_BEGIN + i - RC_POOLPAGEDESC_BEGIN) );
-                break;
-            }
-        }
-    }
-
-    return pRet;
- }
 
 /******************************************************************
  * SwXTextCursor
