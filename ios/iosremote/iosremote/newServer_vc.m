@@ -12,7 +12,6 @@
 #import "UIViewController+LibOStyling.h"
 #import "serverList_vc.h"
 #import "Server.h"
-#import <SystemConfiguration/CaptiveNetwork.h>
 
 @implementation newServerViewController
 
@@ -35,7 +34,7 @@
     NSString *serverAddr = [self.addrCell.textField text];
     if ([serverAddr isValidIPAddress]) {
         if (!serverName || [serverName isEqualToString:@""]) {
-            serverName = [[self fetchSSIDInfo] valueForKey:@"SSID"];
+            serverName = [[CommunicationManager fetchSSIDInfo] valueForKey:@"SSID"];
         }
         NSLog(@"New server name:%@ ip:%@", serverName, serverAddr);
         [self.comManager addServersWithName:serverName AtAddress:serverAddr];
@@ -62,17 +61,6 @@
 
 #pragma mark -
 #pragma mark UIViewController Methods
-
-- (id)fetchSSIDInfo {
-    NSArray *ifs = (__bridge_transfer id)CNCopySupportedInterfaces();
-    id info = nil;
-    for (NSString *ifnam in ifs) {
-        info = (__bridge_transfer id)CNCopyCurrentNetworkInfo((__bridge CFStringRef)ifnam);
-        NSLog(@"%@ => %@", ifnam, info);
-        if (info && [info count]) { break; }
-    }
-    return info;
-}
 
 - (void) handleBack
 {
