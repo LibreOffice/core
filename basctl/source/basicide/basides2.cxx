@@ -199,12 +199,7 @@ ModulWindow* Shell::CreateBasWin( const ScriptDocument& rDocument, const OUStrin
         ModuleInfoHelper::getObjectName( xLib, rModName, sObjName );
         if( !sObjName.isEmpty() )
         {
-            OUStringBuffer aModNameBuf(aModName);
-            aModNameBuf.append(' ');
-            aModNameBuf.append('(');
-            aModNameBuf.append(sObjName);
-            aModNameBuf.append(')');
-            aModName = aModNameBuf.makeStringAndClear();
+            aModName += " (" + sObjName + ")";
         }
     }
     pTabBar->InsertPage( (sal_uInt16)nKey, aModName );

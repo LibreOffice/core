@@ -492,19 +492,16 @@ void TreeListBox::ImpCreateLibSubSubEntriesInVBAMode( SvTreeListEntry* pLibSubRo
 
             // display a nice friendly name in the ObjectModule tab,
                // combining the objectname and module name, e.g. Sheet1 ( Financials )
-            OUStringBuffer aEntryNameBuf( aModName );
+            OUString aEntryName = aModName;
             if( eType == OBJ_TYPE_DOCUMENT_OBJECTS )
             {
                 OUString sObjName;
                 ModuleInfoHelper::getObjectName( xLib, aModName, sObjName );
                 if( !sObjName.isEmpty() )
                 {
-                    aEntryNameBuf.append( " (" );
-                    aEntryNameBuf.append(sObjName);
-                    aEntryNameBuf.append(')');
+                    aEntryName += " (" + sObjName + ")";
                 }
             }
-            OUString aEntryName(aEntryNameBuf.makeStringAndClear());
             SvTreeListEntry* pModuleEntry = FindEntry( pLibSubRootEntry, aEntryName, OBJ_TYPE_MODULE );
             if ( !pModuleEntry )
                 pModuleEntry = AddEntry(
