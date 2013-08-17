@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _RUBYLIST_HXX
-#define _RUBYLIST_HXX
+#ifndef RUBYLIST_HXX
+#define RUBYLIST_HXX
 
 #include <swtypes.hxx>
 #include <fmtruby.hxx>
@@ -25,18 +25,18 @@
 
 class SwRubyListEntry
 {
-    String sText;
-    SwFmtRuby aRubyAttr;
+    OUString m_sText;
+    SwFmtRuby m_aRubyAttr;
 public:
-    SwRubyListEntry() : aRubyAttr( aEmptyStr ) {}
+    SwRubyListEntry() : m_aRubyAttr( OUString() ) {}
     ~SwRubyListEntry();
 
-    const String& GetText() const               { return sText; }
-    void SetText( const String& rStr )          { sText = rStr; }
+    OUString GetText() const                    { return m_sText; }
+    void SetText( const OUString& rStr )        { m_sText = rStr; }
 
-    const SwFmtRuby& GetRubyAttr() const        { return aRubyAttr; }
-          SwFmtRuby& GetRubyAttr()              { return aRubyAttr; }
-    void SetRubyAttr( const SwFmtRuby& rAttr )  { aRubyAttr = rAttr; }
+    const SwFmtRuby& GetRubyAttr() const        { return m_aRubyAttr; }
+          SwFmtRuby& GetRubyAttr()              { return m_aRubyAttr; }
+    void SetRubyAttr( const SwFmtRuby& rAttr )  { m_aRubyAttr = rAttr; }
 };
 
 class SwRubyList : public boost::ptr_vector<SwRubyListEntry> {};

@@ -134,8 +134,8 @@ sal_uInt16 SwDoc::SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
                         }
                     }
 
-                    if( aCheckEntry.GetText() != pEntry->GetText() &&
-                        pEntry->GetText().Len() )
+                    if( !pEntry->GetText().isEmpty() &&
+                        aCheckEntry.GetText() != pEntry->GetText() )
                     {
                         // text is changed, so replace the original
                         ReplaceRange( aPam, pEntry->GetText(), false );
@@ -156,11 +156,11 @@ sal_uInt16 SwDoc::SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
 
                         // set/reset the attribut
                         if( !pEntry->GetRubyAttr().GetText().isEmpty() &&
-                            pEntry->GetText().Len() )
+                            !pEntry->GetText().isEmpty() )
                         {
                             InsertString( aPam, pEntry->GetText() );
                             aPam.SetMark();
-                            aPam.GetMark()->nContent -= pEntry->GetText().Len();
+                            aPam.GetMark()->nContent -= pEntry->GetText().getLength();
                             InsertPoolItem( aPam, pEntry->GetRubyAttr(),
                                     nsSetAttrMode::SETATTR_DONTEXPAND );
                         }
