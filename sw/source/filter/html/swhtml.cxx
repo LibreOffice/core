@@ -1225,7 +1225,7 @@ void SwHTMLParser::NextToken( int nToken )
             switch( nToken )
             {
             case HTML_UNKNOWNCONTROL_OFF:
-                if( aUnknownToken.startsWith(sSaveToken) )
+                if( aUnknownToken != sSaveToken )
                     return;
             case HTML_FRAMESET_ON:
             case HTML_HEAD_OFF:
