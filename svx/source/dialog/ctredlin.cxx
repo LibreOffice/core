@@ -622,7 +622,6 @@ void SvxTPFilter::SetRedlinTable(SvxRedlinTable* pTable)
 
 void SvxTPFilter::ShowDateFields(sal_uInt16 nKind)
 {
-    String aEmpty;
     switch(nKind)
     {
         case FLT_DATE_BEFORE:
@@ -673,7 +672,6 @@ void SvxTPFilter::EnableDateLine1(sal_Bool bFlag)
 }
 void SvxTPFilter::EnableDateLine2(sal_Bool bFlag)
 {
-    String aEmpty;
     if(bFlag && m_pCbDate->IsChecked())
     {
         m_pFtDate2->Enable();
