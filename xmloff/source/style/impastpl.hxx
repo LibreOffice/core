@@ -33,6 +33,7 @@
 
 #include <boost/noncopyable.hpp>
 #include <boost/ptr_container/ptr_set.hpp>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 class SvXMLAutoStylePoolP;
 class SvXMLAutoStylePoolParentP_Impl;
@@ -94,14 +95,15 @@ public:
     void SetName( const OUString& rNew ) { msName = rNew; }
 };
 
-typedef SvXMLAutoStylePoolPropertiesP_Impl* SvXMLAutoStylePoolPropertiesPPtr;
-typedef ::std::vector< SvXMLAutoStylePoolPropertiesPPtr > SvXMLAutoStylePoolPropertiesPList_Impl;
-
 // Parents of AutoStylePool's
 class SvXMLAutoStylePoolParentP_Impl
 {
-    OUString                         msParent;
-    SvXMLAutoStylePoolPropertiesPList_Impl  maPropertiesList;
+public:
+    typedef boost::ptr_vector<SvXMLAutoStylePoolPropertiesP_Impl> PropertiesListType;
+
+private:
+    OUString msParent;
+    PropertiesListType maPropertiesList;
 
 public:
 
@@ -120,7 +122,7 @@ public:
 
     const OUString& GetParent() const { return msParent; }
 
-    const SvXMLAutoStylePoolPropertiesPList_Impl& GetPropertiesList() const
+    const PropertiesListType& GetPropertiesList() const
     {
         return maPropertiesList;
     }

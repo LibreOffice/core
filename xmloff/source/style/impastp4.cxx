@@ -292,7 +292,7 @@ void SvXMLAutoStylePoolP_Impl::exportXML(
         for( size_t j = 0; j < nProperties; j++ )
         {
             const SvXMLAutoStylePoolPropertiesP_Impl* pProperties =
-                rParent.GetPropertiesList()[ j ];
+                &rParent.GetPropertiesList()[j];
             sal_uLong nPos = pProperties->GetPos();
             DBG_ASSERT( nPos < nCount,
                     "SvXMLAutoStylePool_Impl::exportXML: wrong position" );
