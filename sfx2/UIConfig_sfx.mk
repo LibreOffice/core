@@ -25,6 +25,7 @@ $(eval $(call gb_UIConfig_add_uifiles,sfx,\
 	sfx2/uiconfig/ui/singletabdialog \
 	sfx2/uiconfig/ui/documentfontspage \
 	sfx2/uiconfig/ui/cmisinfopage \
+	sfx2/uiconfig/ui/cmisline \
 ))
 
 # vim: set noet sw=4 ts=4:
