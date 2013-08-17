@@ -1224,8 +1224,11 @@ sal_uLong TextEngine::CalcTextHeight()
 
 sal_uLong TextEngine::CalcTextWidth( sal_uLong nPara, sal_uInt16 nPortionStart, sal_uInt16 nLen, const Font* pFont )
 {
+#ifdef DBG_UTIL
     // within the text there must not be a Portion change (attribute/tab)!
-    DBG_ASSERT( mpDoc->GetNodes().GetObject( nPara )->GetText().indexOf( '\t', nPortionStart ) >= (nPortionStart+nLen), "CalcTextWidth: Tab!" );
+    sal_Int32 nTabPos = mpDoc->GetNodes().GetObject( nPara )->GetText().indexOf( '\t', nPortionStart );
+    DBG_ASSERT( nTabPos == -1 || nTabPos >= (nPortionStart+nLen), "CalcTextWidth: Tab!" );
+#endif
 
     sal_uLong nWidth;
     if ( mnFixCharWidth100 )
