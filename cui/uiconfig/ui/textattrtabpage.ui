@@ -13,7 +13,7 @@
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="orientation">vertical</property>
-    <property name="spacing">6</property>
+    <property name="spacing">12</property>
     <child>
       <object class="GtkFrame" id="frame1">
         <property name="visible">True</property>
@@ -33,12 +33,6 @@
                 <property name="row_spacing">6</property>
                 <property name="column_spacing">12</property>
                 <property name="column_homogeneous">True</property>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
                 <child>
                   <object class="GtkCheckButton" id="TSB_AUTOGROW_WIDTH">
                     <property name="label" translatable="yes">Fit wi_dth to text</property>
@@ -147,6 +141,12 @@
                     <property name="height">1</property>
                   </packing>
                 </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
               </object>
             </child>
           </object>
@@ -201,7 +201,7 @@
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes">_Left</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">MTR_FLD_LEFT:0,00cm</property>
+                        <property name="mnemonic_widget">MTR_FLD_LEFT:0.00cm</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -217,7 +217,7 @@
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes">_Right</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">MTR_FLD_RIGHT:0,00cm</property>
+                        <property name="mnemonic_widget">MTR_FLD_RIGHT:0.00cm</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -233,7 +233,7 @@
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes">_Top</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">MTR_FLD_TOP:0,00cm</property>
+                        <property name="mnemonic_widget">MTR_FLD_TOP:0.00cm</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -249,7 +249,7 @@
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes">_Bottom</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">MTR_FLD_BOTTOM:0,00cm</property>
+                        <property name="mnemonic_widget">MTR_FLD_BOTTOM:0.00cm</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -259,7 +259,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="MTR_FLD_LEFT:0,00cm">
+                      <object class="GtkSpinButton" id="MTR_FLD_LEFT:0.00cm">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="invisible_char">•</property>
@@ -274,7 +274,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="MTR_FLD_RIGHT:0,00cm">
+                      <object class="GtkSpinButton" id="MTR_FLD_RIGHT:0.00cm">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="invisible_char">•</property>
@@ -289,7 +289,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="MTR_FLD_TOP:0,00cm">
+                      <object class="GtkSpinButton" id="MTR_FLD_TOP:0.00cm">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="invisible_char">•</property>
@@ -304,7 +304,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="MTR_FLD_BOTTOM:0,00cm">
+                      <object class="GtkSpinButton" id="MTR_FLD_BOTTOM:0.00cm">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="invisible_char">•</property>

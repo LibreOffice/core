@@ -298,7 +298,7 @@
                         <property name="label" translatable="yes">Ta_b stops</property>
                         <property name="use_underline">True</property>
                         <property name="justify">fill</property>
-                        <property name="mnemonic_widget">metricFields:0,00mm</property>
+                        <property name="mnemonic_widget">metricFields:0.00mm</property>
                         <property name="track_visited_links">False</property>
                       </object>
                       <packing>
@@ -309,7 +309,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="metricFields:0,00mm">
+                      <object class="GtkSpinButton" id="metricFields:0.00mm">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="invisible_char">•</property>
