@@ -296,12 +296,13 @@ IMPL_LINK_NOARG(MyWin, VerifyDigitalSignaturesHdl)
     for ( int n = 0; n < nInfos; n++ )
     {
         security::DocumentSignatureInformation& rInf = aInfos[n];
-        OUString aText = "The document is signed by\n\n  " + rInf.Signer->getSubjectName()
-            + "\n\n The signature is ";
+        OUStringBuffer aText( "The document is signed by\n\n  " );
+        aText.append( rInf.Signer->getSubjectName() );
+        aText.append( "\n\n The signature is " );
         if ( !rInf.SignatureIsValid )
             aText.append( "NOT " );
         aText.append( "valid" );
-        InfoBox( this, aText ).Execute();
+        InfoBox( this, aText.makeStringAndClear() ).Execute();
     }
 
     return 0;
