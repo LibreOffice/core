@@ -21,6 +21,8 @@
 
 #include <boost/optional/optional.hpp>
 
+#include <boost/ptr_container/ptr_vector.hpp>
+
 #include "sal/config.h"
 #include "sfx2/dllapi.h"
 
@@ -42,6 +44,8 @@
 #include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/scrbar.hxx>
+#include <vcl/fixed.hxx>
+#include <vcl/ctrl.hxx>
 
 #include "tabdlg.hxx"
 
@@ -510,180 +514,88 @@ public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& );
 };
 
-struct CmisPropertyLine;
-
-class CmisPropertiesEdit : public Edit
-{
-private:
-    CmisPropertyLine*             m_pLine;
-
-public:
-    inline CmisPropertiesEdit(
-        Window* pParent, const ResId& rResId, CmisPropertyLine* pLine ) :
-            Edit( pParent, rResId ), m_pLine( pLine ) {}
-
-    inline CmisPropertyLine*      GetLine() const { return m_pLine; }
-};
-
-class CmisPropertiesDateField : public DateField
-{
-private:
-    CmisPropertyLine*             m_pLine;
-
-public:
-    inline CmisPropertiesDateField(
-        Window* pParent, const ResId& rResId, CmisPropertyLine* pLine ) :
-            DateField( pParent, rResId ), m_pLine( pLine ) {}
-
-    inline CmisPropertyLine*      GetLine() const { return m_pLine; }
-};
-class CmisPropertiesTimeField : public TimeField
-{
-private:
-    CmisPropertyLine*             m_pLine;
-
-public:
-    inline CmisPropertiesTimeField(
-        Window* pParent, const ResId& rResId, CmisPropertyLine* pLine ) :
-            TimeField( pParent, rResId ), m_pLine( pLine ) {}
-
-    inline CmisPropertyLine*      GetLine() const { return m_pLine; }
-};
-
-class CmisPropertiesEditButton : public PushButton
-{
-    CmisPropertyLine*             m_pLine;
-
-public:
-    CmisPropertiesEditButton( Window* pParent, const ResId& rResId, CmisPropertyLine* pLine );
-    ~CmisPropertiesEditButton();
-
-    DECL_LINK(ClickHdl, void *);
-};
-
-class CmisPropertiesYesNoButton : public Control
-{
-private:
-    RadioButton                     m_aYesButton;
-    RadioButton                     m_aNoButton;
-
-public:
-    CmisPropertiesYesNoButton( Window* pParent, const ResId& rResId );
-
-    virtual void    Resize();
-
-    void            SetReadOnly( );
-
-    inline void     CheckYes() { m_aYesButton.Check(); }
-    inline void     CheckNo() { m_aNoButton.Check(); }
-    inline bool     IsYesChecked() const { return m_aYesButton.IsChecked() != sal_False; }
-};
-
 // struct CmisPropertyLine ---------------------------------------------
 
-struct CmisPropertyLine
+struct CmisPropertyLine : public VclBuilderContainer
 {
+    VclFrame*                     m_pFrame;
     OUString                      m_sId;
     OUString                      m_sType;
     bool                          m_bUpdatable;
     bool                          m_bRequired;
     bool                          m_bMultiValued;
     bool                          m_bOpenChoice;
-    FixedText                     m_aName;
-    FixedText                     m_aType;
-    CmisPropertiesEdit            m_aValueEdit;
-    CmisPropertiesDateField       m_aDateField;
-    CmisPropertiesTimeField       m_aTimeField;
-    CmisPropertiesYesNoButton     m_aYesNoButton;
-    Point                         m_aDatePos;
-    Point                         m_aTimePos;
-    Size                          m_aDateTimeSize;
-    bool                          m_bTypeLostFocus;
+    FixedText*                    m_aName;
+    FixedText*                    m_aType;
+    Edit*                         m_aValueEdit;
+    DateField*                    m_aDateField;
+    TimeField*                    m_aTimeField;
+    RadioButton*                  m_aYesButton;
+    RadioButton*                  m_aNoButton;
+
+    long getItemHeight() const;
     CmisPropertyLine( Window* pParent );
 };
 
+typedef boost::ptr_vector<CmisPropertyLine> CmisPropertiesLines;
 // class CmisPropertiesWindow ------------------------------------------
 
-class CmisPropertiesWindow : public Window
+class CmisPropertiesWindow
 {
 private:
-    FixedText                           m_aName;
-    FixedText                           m_aType;
-    Edit                                m_aValueEdit;
-    DateField                           m_aDateField;
-    TimeField                           m_aTimeField;
-    CmisPropertiesYesNoButton           m_aYesNoButton;
-
-    sal_Int32                           m_nLineHeight;
-    sal_Int32                           m_nScrollPos;
+    VclBox*                             m_pBox;
+    sal_Int32                           m_nItemHeight;
     SvtSysLocale                        m_aSysLocale;
-    std::vector< CmisPropertyLine* >    m_aCmisPropertiesLines;
-    CmisPropertyLine*                   m_pCurrentLine;
     SvNumberFormatter                   m_aNumberFormatter;
     Timer                               m_aEditLoseFocusTimer;
     Timer                               m_aBoxLoseFocusTimer;
-
-    DECL_LINK( EditLoseFocusHdl, CmisPropertiesEdit* );
-
-    bool        IsLineValid( CmisPropertyLine* pLine ) const;
-    void        ValidateLine( CmisPropertyLine* pLine, bool bIsFromTypeBox );
-
+    CmisPropertiesLines                 m_aCmisPropertiesLines;
 public:
-    CmisPropertiesWindow(Window* pParent,
-        const OUString &rHeaderAccName,
-        const OUString &rHeaderAccType,
-        const OUString &rHeaderAccValue);
+    CmisPropertiesWindow(SfxTabPage* pParent);
     ~CmisPropertiesWindow();
 
-    void                InitControls( HeaderBar* pHeaderBar, const ScrollBar* pScrollBar );
-    sal_uInt16          GetLineCount() const;
-    inline sal_Int32    GetLineHeight() const { return m_nLineHeight; }
-    void                AddLine( const OUString& sId, const OUString& sName,
-                                 const OUString& sType, const bool bUpdatable,
-                                 const bool bRequired, const bool bMultiValued,
-                                 const bool bOpenChoice,
-                                 com::sun::star::uno::Any& aChoices,
-                                 com::sun::star::uno::Any& rAny );
-    bool                AreAllLinesValid() const;
-    void                ClearAllLines();
-    void                DoScroll( sal_Int32 nNewPos );
+    sal_uInt16 GetLineCount() const;
+    inline sal_Int32 GetItemHeight() const { return m_nItemHeight; }
+    void AddLine( const OUString& sId, const OUString& sName,
+                  const OUString& sType, const bool bUpdatable,
+                  const bool bRequired, const bool bMultiValued,
+                  const bool bOpenChoice,
+                  com::sun::star::uno::Any& aChoices,
+                  com::sun::star::uno::Any& rAny );
+    void ClearAllLines();
+    void DoScroll( sal_Int32 nNewPos );
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::document::CmisProperty >
                         GetCmisProperties() const;
-    void                updateLineWidth();
 };
 
 // class CmisPropertiesControl -----------------------------------------
 
-class CmisPropertiesControl : public VclVBox
+class CmisPropertiesControl
 {
 private:
-    HeaderBar*              m_pHeaderBar;
-    VclHBox*                m_pBody;
-    CmisPropertiesWindow*   m_pPropertiesWin;
-    ScrollBar*              m_pVertScroll;
-    sal_Int32               m_nThumbPos;
-
+    CmisPropertiesWindow    m_pPropertiesWin;
+    VclScrolledWindow&      m_rScrolledWindow;
+    ScrollBar&              m_rVertScroll;
     DECL_LINK( ScrollHdl, ScrollBar* );
 
+    void checkAutoVScroll();
+
 public:
-    CmisPropertiesControl(Window* pParent);
-    ~CmisPropertiesControl();
+    CmisPropertiesControl(SfxTabPage* pParent);
+    void setScrollRange();
 
-    void            AddLine( const OUString& sId, const OUString& sName,
-                             const OUString& sType, const bool bUpdatable,
-                             const bool bRequired, const bool bMultiValude,
-                             const bool bOpenChoice,
-                             com::sun::star::uno::Any& aChoices,
-                             com::sun::star::uno::Any& rAny, bool bInteractive );
+    void AddLine( const OUString& sId, const OUString& sName,
+                  const OUString& sType, const bool bUpdatable,
+                  const bool bRequired, const bool bMultiValude,
+                  const bool bOpenChoice,
+                  com::sun::star::uno::Any& aChoices,
+                  com::sun::star::uno::Any& rAny );
 
-    inline bool     AreAllLinesValid() const { return m_pPropertiesWin->AreAllLinesValid(); }
-    inline void     ClearAllLines() { m_pPropertiesWin->ClearAllLines(); }
+    void ClearAllLines();
     inline ::com::sun::star::uno::Sequence< ::com::sun::star::document::CmisProperty >
                     GetCmisProperties() const
-                        { return m_pPropertiesWin->GetCmisProperties(); }
-    void    Init(VclBuilderContainer& rParent);
-    virtual void setAllocation(const Size &rAllocation);
+                        { return m_pPropertiesWin.GetCmisProperties(); }
 };
 
 // class SfxCmisPropertiesPage -------------------------------------------------
@@ -691,7 +603,7 @@ public:
 class SfxCmisPropertiesPage : public SfxTabPage
 {
 private:
-    CmisPropertiesControl* m_pPropertiesCtrl;
+    CmisPropertiesControl m_pPropertiesCtrl;
     using TabPage::DeactivatePage;
     DECL_LINK(UpdateHdl, void *);
 

@@ -24,11 +24,25 @@
       </packing>
     </child>
     <child>
-      <object class="sfxlo-CmisPropertiesControl" id="cmisproperties">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="hexpand">True</property>
-        <property name="vexpand">True</property>
+      <object class="GtkScrolledWindow" id="CmisScroll">
+          <property name="visible">True</property>
+          <property name="can_focus">True</property>
+          <property name="hexpand">True</property>
+          <property name="vexpand">True</property>
+          <property name="hscrollbar_policy">never</property>
+          <property name="shadow_type">in</property>
+          <child>
+            <object class="GtkBox" id="CmisWindow">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+                <property name="orientation">vertical</property>
+                <child>
+                    <placeholder/>
+                </child>
+             </object>
+           </child>
       </object>
       <packing>
         <property name="left_attach">0</property>

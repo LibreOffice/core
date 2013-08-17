@@ -2144,222 +2144,53 @@ SfxTabPage* SfxCustomPropertiesPage::Create( Window* pParent, const SfxItemSet& 
     return new SfxCustomPropertiesPage( pParent, rItemSet );
 }
 
-
-// class CmisPropertiesYesNoButton -------------------------------------
-
-CmisPropertiesYesNoButton::CmisPropertiesYesNoButton( Window* pParent, const ResId& rResId ) :
-    Control( pParent, rResId ),
-    m_aYesButton( this, ResId( RB_PROPERTY_YES, *rResId.GetResMgr() ) ),
-    m_aNoButton ( this, ResId( RB_PROPERTY_NO, *rResId.GetResMgr() ) )
-{
-    FreeResource();
-    Wallpaper aWall( Color( COL_TRANSPARENT ) );
-    SetBackground( aWall );
-    SetBorderStyle( WINDOW_BORDER_MONO  );
-    CheckNo();
-    m_aYesButton.SetBackground( aWall );
-    m_aNoButton.SetBackground( aWall );
-}
-
-void CmisPropertiesYesNoButton::SetReadOnly( )
-{
-    m_aNoButton.Enable( sal_False );
-    m_aYesButton.Enable( sal_False );
-}
-
-CmisPropertiesEditButton::CmisPropertiesEditButton( Window* pParent, const ResId& rResId, CmisPropertyLine* pLine ) :
-        PushButton( pParent, rResId ), m_pLine( pLine )
-{
-    SetClickHdl( LINK( this, CmisPropertiesEditButton, ClickHdl ));
-}
-
-CmisPropertiesEditButton::~CmisPropertiesEditButton()
-{
-}
-
-IMPL_LINK_NOARG(CmisPropertiesEditButton, ClickHdl)
-{
-    return 1;
-}
-//--------------------------------------------------------------------------
-void CmisPropertiesYesNoButton::Resize()
-{
-    const long nWidth = GetSizePixel().Width();
-    const long n3Width = LogicToPixel( Size( 3, 3 ), MAP_APPFONT ).Width();
-    const long nNewWidth = ( nWidth / 2 ) - n3Width - 2;
-    Size aSize = m_aYesButton.GetSizePixel();
-    const long nDelta = aSize.Width() - nNewWidth;
-    aSize.Width() = nNewWidth;
-    m_aYesButton.SetSizePixel( aSize );
-    Point aPos = m_aNoButton.GetPosPixel();
-    aPos.X() -= nDelta;
-    m_aNoButton.SetPosSizePixel( aPos, aSize );
-}
-
 // struct CmisPropertyLine ---------------------------------------------
-CmisPropertyLine::CmisPropertyLine( Window* pParent ) :
-    m_sId           ( ),
-    m_sType         ( CMIS_TYPE_STRING ),
-    m_aName         ( pParent, SfxResId( SFX_CMIS_PROPERTY_NAME ) ),
-    m_aType         ( pParent, SfxResId( SFX_CMIS_PROPERTY_TYPE ) ),
-    m_aValueEdit    ( pParent, SfxResId( SFX_CMIS_ED_PROPERTY_VALUE ), this ),
-    m_aDateField    ( pParent, SfxResId( SFX_CMIS_FLD_DATE), this),
-    m_aTimeField    ( pParent, SfxResId( SFX_CMIS_FLD_TIME), this),
-    m_aYesNoButton  ( pParent, SfxResId( SFX_CMIS_WIN_PROPERTY_YESNO ) ),
-    m_bTypeLostFocus( false )
-
+CmisPropertyLine::CmisPropertyLine( Window* pParent )
 {
-    m_aTimeField.SetExtFormat( EXTTIMEF_24H_LONG );
-    m_aDateField.SetExtDateFormat( XTDATEF_SYSTEM_SHORT_YYYY );
+    m_sId = OUString("");
+    m_sType = CMIS_TYPE_STRING;
+    m_pUIBuilder = new VclBuilder( pParent, getUIRootDir(), "sfx/ui/cmisline.ui");
+    get( m_pFrame, "CmisFrame" );
+    m_pFrame->Enable();
+    get( m_aName, "name" );
+    get( m_aType, "type" );
+    get( m_aValueEdit, "value" );
+    get( m_aYesButton, "yes" );
+    get( m_aNoButton, "no" );
+    get( m_aDateField, "date" );
+    get( m_aTimeField, "time" );
+}
+
+long CmisPropertyLine::getItemHeight() const
+{
+    return VclContainer::getLayoutRequisition(*m_pFrame).Height();
 }
 
 // class CmisPropertiesWindow -----------------------------------------
 
-CmisPropertiesWindow::CmisPropertiesWindow(Window* pParent,
-    const OUString &rHeaderAccName,
-    const OUString &rHeaderAccType,
-    const OUString &rHeaderAccValue) :
-    Window(pParent),
-    m_aName         ( this, SfxResId( SFX_CMIS_PROPERTY_NAME ) ),
-    m_aType         ( this, SfxResId( SFX_CMIS_PROPERTY_TYPE ) ),
-    m_aValueEdit    ( this, SfxResId( SFX_CMIS_ED_PROPERTY_VALUE ) ),
-    m_aDateField    ( this, SfxResId( SFX_CMIS_FLD_DATE) ),
-    m_aTimeField    ( this, SfxResId( SFX_CMIS_FLD_TIME) ),
-    m_aYesNoButton  ( this, SfxResId( SFX_CMIS_WIN_PROPERTY_YESNO ) ),
-    m_nScrollPos (0),
+CmisPropertiesWindow::CmisPropertiesWindow(SfxTabPage* pParent):
     m_aNumberFormatter( ::comphelper::getProcessComponentContext(),
                         Application::GetSettings().GetLanguageTag().getLanguageType() )
 
 {
-    m_aName.SetAccessibleName(rHeaderAccName);
-    m_aType.SetAccessibleName(rHeaderAccType);
-    m_aValueEdit.SetAccessibleName(rHeaderAccValue);
-}
+    pParent->get(m_pBox, "CmisWindow");
+    if ( !m_aCmisPropertiesLines.empty())
+        m_nItemHeight = m_aCmisPropertiesLines.front().getItemHeight();
+    else
+    {
+        CmisPropertyLine aTemp( m_pBox );
+        m_nItemHeight = aTemp.getItemHeight();
+    }
+};
 
 CmisPropertiesWindow::~CmisPropertiesWindow()
 {
-    m_aEditLoseFocusTimer.Stop();
     ClearAllLines();
 }
 
-IMPL_LINK( CmisPropertiesWindow, EditLoseFocusHdl, CmisPropertiesEdit*, pEdit )
+void CmisPropertiesWindow::ClearAllLines()
 {
-    if ( pEdit )
-    {
-        CmisPropertyLine* pLine = pEdit->GetLine();
-        if ( !pLine->m_bTypeLostFocus )
-        {
-            m_pCurrentLine = pLine;
-            m_aEditLoseFocusTimer.Start();
-        }
-        else
-            pLine->m_bTypeLostFocus = false;
-    }
-    return 0;
-}
-
-bool CmisPropertiesWindow::IsLineValid( CmisPropertyLine* pLine ) const
-{
-    bool bIsValid = true;
-    pLine->m_bTypeLostFocus = false;
-    String sValue = pLine->m_aValueEdit.GetText();
-    if ( sValue.Len() == 0 )
-        return true;
-
-    sal_uInt32 nIndex = 0xFFFFFFFF;
-    if ( CMIS_TYPE_INTEGER == pLine->m_sType ||
-         CMIS_TYPE_DECIMAL == pLine->m_sType )
-        nIndex = const_cast< SvNumberFormatter& >(
-            m_aNumberFormatter ).GetFormatIndex( NF_NUMBER_SYSTEM );
-    else if ( CMIS_TYPE_DATETIME == pLine->m_sType )
-        nIndex = const_cast< SvNumberFormatter& >(
-            m_aNumberFormatter).GetFormatIndex( NF_DATE_SYS_DDMMYYYY );
-
-    if ( nIndex != 0xFFFFFFFF )
-    {
-        sal_uInt32 nTemp = nIndex;
-        double fDummy = 0.0;
-        bIsValid = const_cast< SvNumberFormatter& >(
-            m_aNumberFormatter ).IsNumberFormat( sValue, nIndex, fDummy ) != sal_False;
-        if ( bIsValid && nTemp != nIndex )
-            // sValue is a number but the format doesn't match the index
-            bIsValid = false;
-    }
-
-    return bIsValid;
-}
-
-void CmisPropertiesWindow::ValidateLine( CmisPropertyLine* pLine, bool bIsFromTypeBox )
-{
-    if ( !IsLineValid( pLine ) )
-    {
-        if ( bIsFromTypeBox )
-            pLine->m_bTypeLostFocus = true;
-        Window* pParent = GetParent()->GetParent();
-        if ( QueryBox( pParent, SfxResId( SFX_QB_WRONG_TYPE ) ).Execute() == RET_OK )
-            pLine->m_aType.SetText( CMIS_TYPE_STRING );
-        else
-            pLine->m_aValueEdit.GrabFocus();
-    }
-}
-
-void CmisPropertiesWindow::InitControls( HeaderBar* pHeaderBar, const ScrollBar* pScrollBar )
-{
-    DBG_ASSERT( pHeaderBar, "CmisPropertiesWindow::InitControls(): invalid headerbar" );
-    DBG_ASSERT( pScrollBar, "CmisPropertiesWindow::InitControls(): invalid scrollbar" );
-
-    m_aName.Hide();
-    m_aType.Hide();
-    m_aValueEdit.Hide();
-    m_aDateField.Hide();
-    m_aTimeField.Hide();
-    m_aYesNoButton.Hide();
-
-    const long nOffset = 4;
-    const long nScrollBarWidth = pScrollBar->GetSizePixel().Width();
-    const long nButtonWidth = nScrollBarWidth + nOffset;
-    long nTypeWidth = m_aValueEdit.CalcMinimumSizeForText( CMIS_TYPE_DATETIME ).Width( )
-                      + ( 2 * nOffset );
-    long nFullWidth = pHeaderBar->GetSizePixel().Width();
-    long nItemWidth = ( nFullWidth - nTypeWidth - nButtonWidth ) / 2;
-    pHeaderBar->SetItemSize( HI_NAME, nItemWidth );
-    pHeaderBar->SetItemSize( HI_TYPE, nTypeWidth );
-    pHeaderBar->SetItemSize( HI_VALUE, nItemWidth );
-    pHeaderBar->SetItemSize( HI_ACTION, nButtonWidth );
-
-    Window* pWindows[] = { &m_aName, &m_aType, &m_aValueEdit, NULL };
-    Window** pCurrent = pWindows;
-    sal_uInt16 nPos = 0;
-    while ( *pCurrent )
-    {
-        Rectangle aRect = pHeaderBar->GetItemRect( pHeaderBar->GetItemId( nPos++ ) );
-        Size aSize = (*pCurrent)->GetSizePixel();
-        Point aPos = (*pCurrent)->GetPosPixel();
-        long nWidth = aRect.GetWidth() - nOffset;
-
-        aSize.Width() = nWidth;
-        aPos.X() = aRect.getX() + ( nOffset / 2 );
-        (*pCurrent)->SetPosSizePixel( aPos, aSize );
-
-        if ( *pCurrent == &m_aValueEdit )
-        {
-            aSize = m_aYesNoButton.GetSizePixel();
-            aPos = m_aYesNoButton.GetPosPixel();
-            aSize.Width() = nWidth;
-            aPos.X() = aRect.getX() + ( nOffset / 2 );
-            m_aYesNoButton.SetPosSizePixel( aPos, aSize );
-            aSize.Width() /= 2;
-            aSize.Width() -= 2;
-            m_aDateField.SetPosSizePixel( aPos, aSize );
-            aPos.X() += aSize.Width() + 4;
-            m_aTimeField.SetPosSizePixel( aPos, aSize );
-        }
-
-        pCurrent++;
-    }
-
-    m_nLineHeight = m_aValueEdit.GetSizePixel().Height();
-
+    m_aCmisPropertiesLines.clear();
 }
 
 sal_uInt16 CmisPropertiesWindow::GetLineCount() const
@@ -2367,43 +2198,12 @@ sal_uInt16 CmisPropertiesWindow::GetLineCount() const
     return m_aCmisPropertiesLines.size( );
 }
 
-void CmisPropertiesWindow::updateLineWidth()
-{
-    Window* pWindows[] = {  &m_aName, &m_aType, &m_aValueEdit,
-                            &m_aDateField, &m_aTimeField,
-                            &m_aYesNoButton, NULL };
-
-    for (std::vector< CmisPropertyLine* >::iterator aI =
-        m_aCmisPropertiesLines.begin(), aEnd = m_aCmisPropertiesLines.end();
-        aI != aEnd; ++aI)
-    {
-        CmisPropertyLine* pNewLine = *aI;
-
-        Window* pNewWindows[] =
-            {   &pNewLine->m_aName, &pNewLine->m_aType, &pNewLine->m_aValueEdit,
-                &pNewLine->m_aDateField, &pNewLine->m_aTimeField,
-                &pNewLine->m_aYesNoButton, NULL };
-
-        Window** pCurrent = pWindows;
-        Window** pNewCurrent = pNewWindows;
-        while ( *pCurrent )
-        {
-            Size aSize = (*pCurrent)->GetSizePixel();
-            Point aPos = (*pCurrent)->GetPosPixel();
-            aPos.Y() = (*pNewCurrent)->GetPosPixel().Y();
-            (*pNewCurrent)->SetPosSizePixel( aPos, aSize );
-            pCurrent++;
-            pNewCurrent++;
-        }
-    }
-}
-
 void CmisPropertiesWindow::AddLine( const OUString& sId, const OUString& sName,
                                     const OUString& sType, const bool bUpdatable,
                                     const bool bRequired, const bool bMultiValued,
                                     const bool bOpenChoice, Any& /*aChoices*/, Any& rAny )
 {
-    CmisPropertyLine* pNewLine = new CmisPropertyLine( this );
+    CmisPropertyLine* pNewLine = new CmisPropertyLine( m_pBox );
 
     pNewLine->m_sId = sId;
     pNewLine->m_sType = sType;
@@ -2412,43 +2212,13 @@ void CmisPropertiesWindow::AddLine( const OUString& sId, const OUString& sName,
     pNewLine->m_bMultiValued = bMultiValued;
     pNewLine->m_bOpenChoice = bOpenChoice;
 
-    pNewLine->m_aValueEdit.SetLoseFocusHdl( LINK( this, CmisPropertiesWindow, EditLoseFocusHdl ) );
+    pNewLine->m_aValueEdit->SetReadOnly( !bUpdatable );
+    pNewLine->m_aDateField->SetReadOnly( !bUpdatable );
+    pNewLine->m_aTimeField->SetReadOnly( !bUpdatable );
+    pNewLine->m_aYesButton->Enable( bUpdatable );
+    pNewLine->m_aNoButton->Enable( bUpdatable );
 
-    pNewLine->m_aValueEdit.SetReadOnly( !bUpdatable );
-    pNewLine->m_aDateField.SetReadOnly( !bUpdatable );
-    pNewLine->m_aTimeField.SetReadOnly( !bUpdatable );
-    if ( !bUpdatable)
-        pNewLine->m_aYesNoButton.SetReadOnly( );
-
-    m_nLineHeight = m_aValueEdit.GetSizePixel().Height() ;
-
-    long nPos = GetLineCount() * GetLineHeight();
-    m_aCmisPropertiesLines.push_back( pNewLine );
-    Window* pWindows[] = {  &m_aName, &m_aType, &m_aValueEdit,
-                            &m_aDateField, &m_aTimeField,
-                            &m_aYesNoButton, NULL };
-    Window* pNewWindows[] =
-        {   &pNewLine->m_aName, &pNewLine->m_aType, &pNewLine->m_aValueEdit,
-            &pNewLine->m_aDateField, &pNewLine->m_aTimeField,
-            &pNewLine->m_aYesNoButton, NULL };
-    Window** pCurrent = pWindows;
-    Window** pNewCurrent = pNewWindows;
-    while ( *pCurrent )
-    {
-        Size aSize = (*pCurrent)->GetSizePixel();
-        Point aPos = (*pCurrent)->GetPosPixel();
-        aPos.Y() += nPos;
-        aPos.Y() += m_nScrollPos;
-        (*pNewCurrent)->SetPosSizePixel( aPos, aSize );
-        (*pNewCurrent)->Show();
-        pCurrent++;
-        pNewCurrent++;
-    }
-
-    pNewLine->m_aDatePos = pNewLine->m_aDateField.GetPosPixel();
-    pNewLine->m_aTimePos = pNewLine->m_aTimeField.GetPosPixel();
-    pNewLine->m_aDateTimeSize = pNewLine->m_aDateField.GetSizePixel();
-    pNewLine->m_aName.SetText( sName );
+    pNewLine->m_aName->SetText( sName );
 
     SvtSysLocale aSysLocale;
     const LocaleDataWrapper& rLocaleWrapper = aSysLocale.GetLocaleData();
@@ -2473,9 +2243,9 @@ void CmisPropertiesWindow::AddLine( const OUString& sId, const OUString& sName,
         rAny >>= bTmpValue;
         sValue = ( bTmpValue ? rLocaleWrapper.getTrueWord() : rLocaleWrapper.getFalseWord() );
         if ( bTmpValue )
-            pNewLine->m_aYesNoButton.CheckYes();
+            pNewLine->m_aYesButton->Check();
         else
-            pNewLine->m_aYesNoButton.CheckNo();
+            pNewLine->m_aNoButton->Check();
     }
     else if ( sType == CMIS_TYPE_STRING )
     {
@@ -2485,100 +2255,51 @@ void CmisPropertiesWindow::AddLine( const OUString& sId, const OUString& sName,
     {
         util::DateTime aTmpDateTime;
         rAny >>= aTmpDateTime;
-        pNewLine->m_aDateField.SetDate( Date( aTmpDateTime.Day, aTmpDateTime.Month, aTmpDateTime.Year ) );
-        pNewLine->m_aTimeField.SetTime( Time( aTmpDateTime.Hours, aTmpDateTime.Minutes, aTmpDateTime.Seconds, aTmpDateTime.NanoSeconds ) );
-        pNewLine->m_aDateField.SetPosSizePixel(pNewLine->m_aDatePos, pNewLine->m_aDateTimeSize );
-        pNewLine->m_aTimeField.SetPosSizePixel(pNewLine->m_aTimePos, pNewLine->m_aDateTimeSize );
+        pNewLine->m_aDateField->SetDate( Date( aTmpDateTime.Day, aTmpDateTime.Month, aTmpDateTime.Year ) );
+        pNewLine->m_aTimeField->SetTime( Time( aTmpDateTime.Hours, aTmpDateTime.Minutes, aTmpDateTime.Seconds, aTmpDateTime.NanoSeconds ) );
 
     }
 
-    pNewLine->m_aValueEdit.SetText( sValue );
-    pNewLine->m_aType.SetText( sType );
-    pNewLine->m_aValueEdit.Show( CMIS_TYPE_STRING == sType ||
+    pNewLine->m_aValueEdit->SetText( sValue );
+    pNewLine->m_aType->SetText( sType );
+    pNewLine->m_aValueEdit->Show( CMIS_TYPE_STRING == sType ||
                                  CMIS_TYPE_INTEGER == sType ||
                                  CMIS_TYPE_DECIMAL == sType );
-    pNewLine->m_aDateField.Show( CMIS_TYPE_DATETIME  == sType );
-    pNewLine->m_aTimeField.Show( CMIS_TYPE_DATETIME  == sType );
-    pNewLine->m_aYesNoButton.Show( CMIS_TYPE_BOOL == sType );
+    pNewLine->m_aDateField->Show( CMIS_TYPE_DATETIME  == sType );
+    pNewLine->m_aTimeField->Show( CMIS_TYPE_DATETIME  == sType );
+    pNewLine->m_aYesButton->Show( CMIS_TYPE_BOOL == sType );
+    pNewLine->m_aNoButton->Show( CMIS_TYPE_BOOL == sType );
 
-    pNewLine->m_aName.GrabFocus();
-}
-
-bool CmisPropertiesWindow::AreAllLinesValid() const
-{
-    bool bRet = true;
-    std::vector< CmisPropertyLine* >::const_iterator pIter;
-    for ( pIter = m_aCmisPropertiesLines.begin();
-            pIter != m_aCmisPropertiesLines.end(); ++pIter )
-    {
-        CmisPropertyLine* pLine = *pIter;
-        if ( !IsLineValid( pLine ) )
-        {
-            bRet = false;
-            break;
-        }
-    }
-
-    return bRet;
-}
-
-void CmisPropertiesWindow::ClearAllLines()
-{
-    std::vector< CmisPropertyLine* >::iterator pIter;
-    for ( pIter = m_aCmisPropertiesLines.begin();
-          pIter != m_aCmisPropertiesLines.end(); ++pIter )
-    {
-        CmisPropertyLine* pLine = *pIter;
-        delete pLine;
-    }
-    m_aCmisPropertiesLines.clear();
-    m_nScrollPos = 0;
+    m_aCmisPropertiesLines.push_back( pNewLine );
 }
 
 void CmisPropertiesWindow::DoScroll( sal_Int32 nNewPos )
 {
-    m_nScrollPos += nNewPos;
-    std::vector< CmisPropertyLine* >::iterator pIter;
-    for ( pIter = m_aCmisPropertiesLines.begin();
-            pIter != m_aCmisPropertiesLines.end(); ++pIter )
-    {
-        CmisPropertyLine* pLine = *pIter;
-
-        Window* pWindows[] = {  &pLine->m_aName, &pLine->m_aType, &pLine->m_aValueEdit, &pLine->m_aDateField,
-                                &pLine->m_aTimeField, &pLine->m_aYesNoButton, NULL };
-        Window** pCurrent = pWindows;
-        while ( *pCurrent )
-        {
-            Point aPos = (*pCurrent)->GetPosPixel();
-            aPos.Y() += nNewPos;
-            (*pCurrent)->SetPosPixel( aPos );
-            pCurrent++;
-        }
-    }
+    m_pBox->SetPosPixel(Point(0, nNewPos));
 }
 
 Sequence< document::CmisProperty > CmisPropertiesWindow::GetCmisProperties() const
 {
     Sequence< document::CmisProperty > aPropertiesSeq( m_aCmisPropertiesLines.size() );
     sal_Int32 i = 0;
-    std::vector< CmisPropertyLine* >::const_iterator pIter;
+    boost::ptr_vector< CmisPropertyLine >::const_iterator pIter;
     for ( pIter = m_aCmisPropertiesLines.begin();
             pIter != m_aCmisPropertiesLines.end(); ++pIter, ++i )
     {
-        CmisPropertyLine* pLine = *pIter;
+        CmisPropertyLine pLine = *pIter;
 
-        aPropertiesSeq[i].Id = pLine->m_sId;
-        aPropertiesSeq[i].Type = pLine->m_sType;
-        aPropertiesSeq[i].Updatable = pLine->m_bUpdatable;
-        aPropertiesSeq[i].Required = pLine->m_bRequired;
-        aPropertiesSeq[i].OpenChoice = pLine->m_bOpenChoice;
-        aPropertiesSeq[i].MultiValued = pLine->m_bMultiValued;
+        aPropertiesSeq[i].Id = pLine.m_sId;
+        aPropertiesSeq[i].Type = pLine.m_sType;
+        aPropertiesSeq[i].Updatable = pLine.m_bUpdatable;
+        aPropertiesSeq[i].Required = pLine.m_bRequired;
+        aPropertiesSeq[i].OpenChoice = pLine.m_bOpenChoice;
+        aPropertiesSeq[i].MultiValued = pLine.m_bMultiValued;
 
-        String sPropertyName = pLine->m_aName.GetText();
+        String sPropertyName = pLine.m_aName->GetText();
         if ( sPropertyName.Len() > 0 )
         {
             aPropertiesSeq[i].Name = sPropertyName;
-            OUString sType = pLine->m_aType.GetText( );
+            OUString sType = pLine.m_aType->GetText( );
             if ( CMIS_TYPE_INTEGER == sType ||
                  CMIS_TYPE_DECIMAL == sType )
             {
@@ -2586,26 +2307,26 @@ Sequence< document::CmisProperty > CmisPropertiesWindow::GetCmisProperties() con
                 sal_uInt32 nIndex = const_cast< SvNumberFormatter& >(
                     m_aNumberFormatter ).GetFormatIndex( NF_NUMBER_SYSTEM );
                 sal_Bool bIsNum = const_cast< SvNumberFormatter& >( m_aNumberFormatter ).
-                    IsNumberFormat( pLine->m_aValueEdit.GetText(), nIndex, nValue );
+                    IsNumberFormat( pLine.m_aValueEdit->GetText(), nIndex, nValue );
                 if ( bIsNum )
                     aPropertiesSeq[i].Value <<= makeAny( nValue );
             }
             else if ( CMIS_TYPE_BOOL == sType )
             {
-                bool bValue = pLine->m_aYesNoButton.IsYesChecked();
+                bool bValue = pLine.m_aYesButton->IsChecked();
                 aPropertiesSeq[i].Value <<= makeAny( bValue );
             }
             else if ( CMIS_TYPE_DATETIME == sType )
             {
-                Date aTmpDate = pLine->m_aDateField.GetDate();
-                Time aTmpTime = pLine->m_aTimeField.GetTime();
+                Date aTmpDate = pLine.m_aDateField->GetDate();
+                Time aTmpTime = pLine.m_aTimeField->GetTime();
                 util::DateTime aDateTime(aTmpTime.GetNanoSec(), aTmpTime.GetSec(), aTmpTime.GetMin(), aTmpTime.GetHour(),
                         aTmpDate.GetDay(), aTmpDate.GetMonth(), aTmpDate.GetYear() );
                 aPropertiesSeq[i].Value <<= aDateTime;
             }
             else
             {
-                OUString sValue( pLine->m_aValueEdit.GetText() );
+                OUString sValue( pLine.m_aValueEdit->GetText() );
                 aPropertiesSeq[i].Value <<= makeAny( sValue );
             }
         }
@@ -2614,116 +2335,74 @@ Sequence< document::CmisProperty > CmisPropertiesWindow::GetCmisProperties() con
     return aPropertiesSeq;
 }
 
-CmisPropertiesControl::CmisPropertiesControl(Window* pParent)
-    : VclVBox(pParent)
-    , m_nThumbPos(0)
+CmisPropertiesControl::CmisPropertiesControl(SfxTabPage* pParent)
+    : m_pPropertiesWin( pParent )
+    , m_rScrolledWindow( *pParent->get<VclScrolledWindow>("CmisScroll"))
+    , m_rVertScroll( m_rScrolledWindow.getVertScrollBar())
 {
-}
-
-void CmisPropertiesControl::Init(VclBuilderContainer& rBuilder)
-{
-    m_pHeaderBar = new HeaderBar(this, WB_BUTTONSTYLE | WB_BOTTOMBORDER);
-    m_pBody = new VclHBox(this);
-    OUString sName = rBuilder.get<FixedText>("name")->GetText();
-    OUString sType = rBuilder.get<FixedText>("type")->GetText();
-    OUString sValue = rBuilder.get<FixedText>("value")->GetText();
-    m_pPropertiesWin = new CmisPropertiesWindow(m_pBody, sName, sType, sValue);
-    m_pVertScroll = new ScrollBar(m_pBody, WB_VERT);
-
-    set_hexpand(true);
-    set_vexpand(true);
-    set_expand(true);
-    set_fill(true);
-
-    m_pBody->set_hexpand(true);
-    m_pBody->set_vexpand(true);
-    m_pBody->set_expand(true);
-    m_pBody->set_fill(true);
-    m_pBody->Show();
-
-    m_pPropertiesWin->set_hexpand(true);
-    m_pPropertiesWin->set_vexpand(true);
-    m_pPropertiesWin->set_expand(true);
-    m_pPropertiesWin->set_fill(true);
-    m_pPropertiesWin->Show();
-
-    m_pPropertiesWin->SetBackground( Wallpaper( GetSettings().GetStyleSettings().GetFieldColor() ) );
-    m_pVertScroll->EnableDrag();
-    m_pVertScroll->Show();
-
-    m_pHeaderBar->set_height_request(GetTextHeight() + 6);
-
-    const HeaderBarItemBits nHeadBits = HIB_VCENTER | HIB_FIXED | HIB_FIXEDPOS | HIB_LEFT;
-
-    m_pHeaderBar->InsertItem( HI_NAME, sName, 0, nHeadBits );
-    m_pHeaderBar->InsertItem( HI_TYPE, sType, 0, nHeadBits );
-    m_pHeaderBar->InsertItem( HI_VALUE, sValue, 0, nHeadBits );
-    m_pHeaderBar->InsertItem( HI_ACTION, OUString(), 0, nHeadBits );
-    m_pHeaderBar->Show();
-
-    m_pVertScroll->SetRangeMin( 0 );
-    m_pVertScroll->SetRangeMax( 0 );
-    m_pVertScroll->SetVisibleSize( 0xFFFF );
+    m_rVertScroll.EnableDrag();
+    m_rVertScroll.Show( m_rScrolledWindow.GetStyle() && WB_VSCROLL);
+    m_rVertScroll.SetRangeMin(0);
+    m_rVertScroll.SetVisibleSize( 0xFFFF );
 
     Link aScrollLink = LINK( this, CmisPropertiesControl, ScrollHdl );
-    m_pVertScroll->SetScrollHdl( aScrollLink );
+    m_rVertScroll.SetScrollHdl( aScrollLink );
 }
 
-void CmisPropertiesControl::setAllocation(const Size &rAllocation)
+void CmisPropertiesControl::ClearAllLines()
 {
-    VclVBox::setAllocation(rAllocation);
-
-    m_pPropertiesWin->InitControls( m_pHeaderBar, m_pVertScroll );
-    sal_Int32 nScrollOffset = m_pPropertiesWin->GetLineHeight();
-    sal_Int32 nVisibleEntries = m_pPropertiesWin->GetSizePixel().Height() / nScrollOffset;
-    m_pVertScroll->SetPageSize( nVisibleEntries - 1 );
-    m_pVertScroll->SetVisibleSize( nVisibleEntries );
-    m_pPropertiesWin->updateLineWidth();
-}
-
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeCmisPropertiesControl(Window *pParent,
-    VclBuilder::stringmap &)
-{
-    return new CmisPropertiesControl(pParent);
-}
-
-CmisPropertiesControl::~CmisPropertiesControl()
-{
-    delete m_pVertScroll;
-    delete m_pPropertiesWin;
-    delete m_pBody;
-    delete m_pHeaderBar;
+   m_pPropertiesWin.ClearAllLines();
 }
 
 IMPL_LINK( CmisPropertiesControl, ScrollHdl, ScrollBar*, pScrollBar )
 {
-    sal_Int32 nOffset = m_pPropertiesWin->GetLineHeight();
-    nOffset *= ( m_nThumbPos - pScrollBar->GetThumbPos() );
-    m_nThumbPos = pScrollBar->GetThumbPos();
-    m_pPropertiesWin->DoScroll( nOffset );
+    sal_Int32 nOffset = m_pPropertiesWin.GetItemHeight();
+    nOffset *= ( pScrollBar->GetThumbPos() );
+    m_pPropertiesWin.DoScroll( -nOffset );
     return 0;
+}
+
+void CmisPropertiesControl::checkAutoVScroll()
+{
+    WinBits nBits = m_rScrolledWindow.GetStyle();
+    if (nBits && WB_VSCROLL)
+        return;
+    if (nBits && WB_AUTOVSCROLL)
+    {
+        sal_Bool bShow = m_rVertScroll.GetRangeMax() > m_rVertScroll.GetVisibleSize();
+        if (bShow != m_rVertScroll.IsVisible())
+            m_rVertScroll.Show(bShow);
+    }
+}
+
+void CmisPropertiesControl::setScrollRange()
+{
+    sal_Int32 nScrollOffset = m_pPropertiesWin.GetItemHeight();
+    sal_Int32 nVisibleItems = m_rScrolledWindow.getVisibleChildSize().Height() / nScrollOffset;
+    m_rVertScroll.SetPageSize( nVisibleItems - 1 );
+    m_rVertScroll.SetVisibleSize( nVisibleItems );
+    m_rVertScroll.Scroll();
+    checkAutoVScroll();
 }
 
 void CmisPropertiesControl::AddLine( const OUString& sId, const OUString& sName,
                                      const OUString& sType, const bool bUpdatable,
                                      const bool bRequired, const bool bMultiValued,
-                                     const bool bOpenChoice, Any& aChoices, Any& rAny,
-                                     bool bInteractive )
+                                     const bool bOpenChoice, Any& aChoices, Any& rAny
+                                     )
 {
-    m_pPropertiesWin->AddLine( sId, sName, sType, bUpdatable, bRequired, bMultiValued,
+    m_rVertScroll.SetRangeMax( m_pPropertiesWin.GetLineCount() + 1 );
+    m_rVertScroll.DoScroll( m_pPropertiesWin.GetLineCount() + 1 );
+    m_pPropertiesWin.AddLine( sId, sName, sType, bUpdatable, bRequired, bMultiValued,
                                bOpenChoice, aChoices, rAny );
-    m_pVertScroll->SetRangeMax( m_pPropertiesWin->GetLineCount() + 1 );
-    if ( bInteractive && m_pPropertiesWin->GetOutputSizePixel().Height() <
-        m_pPropertiesWin->GetLineCount() * m_pPropertiesWin->GetLineHeight() )
-        m_pVertScroll->DoScroll( m_pPropertiesWin->GetLineCount() + 1 );
+    checkAutoVScroll();
 }
 
 // class SfxCmisPropertiesPage -----------------------------------------
 SfxCmisPropertiesPage::SfxCmisPropertiesPage( Window* pParent, const SfxItemSet& rItemSet )
     : SfxTabPage(pParent, "CmisInfoPage", "sfx/ui/cmisinfopage.ui", rItemSet)
+    , m_pPropertiesCtrl( this )
 {
-    get(m_pPropertiesCtrl, "cmisproperties");
-    m_pPropertiesCtrl->Init(*this);
 }
 
 sal_Bool SfxCmisPropertiesPage::FillItemSet( SfxItemSet& rSet )
@@ -2748,7 +2427,7 @@ sal_Bool SfxCmisPropertiesPage::FillItemSet( SfxItemSet& rSet )
     if ( pInfo )
     {
         Sequence< document::CmisProperty > aOldProps = pInfo->GetCmisProperties( );
-        Sequence< document::CmisProperty > aNewProps = m_pPropertiesCtrl->GetCmisProperties();
+        Sequence< document::CmisProperty > aNewProps = m_pPropertiesCtrl.GetCmisProperties();
 
         for ( sal_Int32 i = 0; i< aNewProps.getLength( ); i++  )
         {
@@ -2770,9 +2449,7 @@ sal_Bool SfxCmisPropertiesPage::FillItemSet( SfxItemSet& rSet )
             if ( !aNewProps[i].Id.isEmpty() && aNewProps[i].Updatable && oldValue != newValue )
                 aModifiedProps[ nCount++ ] = aNewProps[i];
         }
-
         pInfo->SetCmisProperties( aModifiedProps );
-
     }
 
     rSet.Put( *pInfo );
@@ -2783,29 +2460,26 @@ sal_Bool SfxCmisPropertiesPage::FillItemSet( SfxItemSet& rSet )
 
 void SfxCmisPropertiesPage::Reset( const SfxItemSet& rItemSet )
 {
-    m_pPropertiesCtrl->ClearAllLines();
+    m_pPropertiesCtrl.ClearAllLines();
     const SfxDocumentInfoItem* m_pInfoItem = &(const SfxDocumentInfoItem &)rItemSet.Get(SID_DOCINFO);
     uno::Sequence< document::CmisProperty > aCmisProps = m_pInfoItem->GetCmisProperties();
     for ( sal_Int32 i = 0; i < aCmisProps.getLength(); i++ )
     {
-        m_pPropertiesCtrl->AddLine( aCmisProps[i].Id,
-                                    aCmisProps[i].Name,
-                                    aCmisProps[i].Type,
-                                    aCmisProps[i].Updatable,
-                                    aCmisProps[i].Required,
-                                    aCmisProps[i].MultiValued,
-                                    aCmisProps[i].OpenChoice,
-                                    aCmisProps[i].Choices,
-                                    aCmisProps[i].Value, false );
+        m_pPropertiesCtrl.AddLine( aCmisProps[i].Id,
+                                   aCmisProps[i].Name,
+                                   aCmisProps[i].Type,
+                                   aCmisProps[i].Updatable,
+                                   aCmisProps[i].Required,
+                                   aCmisProps[i].MultiValued,
+                                   aCmisProps[i].OpenChoice,
+                                   aCmisProps[i].Choices,
+                                   aCmisProps[i].Value );
     }
 }
 
 int SfxCmisPropertiesPage::DeactivatePage( SfxItemSet* /*pSet*/ )
 {
-    int nRet = LEAVE_PAGE;
-    if ( !m_pPropertiesCtrl->AreAllLinesValid() )
-        nRet = KEEP_PAGE;
-    return nRet;
+    return LEAVE_PAGE;
 }
 
 SfxTabPage* SfxCmisPropertiesPage::Create( Window* pParent, const SfxItemSet& rItemSet )
