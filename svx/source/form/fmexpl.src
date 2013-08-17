@@ -290,45 +290,6 @@ ImageList RID_SVXIMGLIST_FMEXPL
     NAVIGATOR_IMAGEIDS;
 };
 
-ModalDialog RID_SVXDLG_SETFORM
-{
-    HelpID = "svx:ModalDialog:RID_SVXDLG_SETFORM";
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( 200 , 200 ) ;
-    Moveable = TRUE ;
-    Closeable = TRUE ;
-    GroupBox GB_PATH
-    {
-        Pos = MAP_APPFONT ( 6 , 149 ) ;
-        Size = MAP_APPFONT ( 188 , 25 ) ;
-        Text [ en-US ] = "Path" ;
-    };
-    FixedText FT_PATH
-    {
-        Pos = MAP_APPFONT ( 12 , 155 ) ;
-        Size = MAP_APPFONT ( 156 , 15 ) ;
-    };
-    OKButton PB_OK
-    {
-        Pos = MAP_APPFONT ( 6 , 180 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-    };
-    CancelButton PB_CANCEL
-    {
-        Pos = MAP_APPFONT ( 59 , 180 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-    };
-    HelpButton PB_HELP
-    {
-        Pos = MAP_APPFONT ( 123 , 180 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-    };
-    Text [ en-US ] = "Select form" ;
-};
 DockingWindow RID_SVX_FMEXPLORER
 {
     HelpID = "svx:DockingWindow:RID_SVX_FMEXPLORER";

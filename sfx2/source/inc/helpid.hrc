@@ -23,7 +23,6 @@
 
 // Help-Ids -----------------------------------------------------------------
 
-#define HID_DOCINFO_EDT                                       "SFX2_HID_DOCINFO_EDT"
 #define HID_PRINTMONITOR                                      "SFX2_HID_PRINTMONITOR"
 #define HID_CONFIG_EVENT                                      "SFX2_HID_CONFIG_EVENT"
 #define HID_BROWSERCONTROL                                    "SFX2_HID_BROWSERCONTROL"

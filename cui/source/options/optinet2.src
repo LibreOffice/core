@@ -28,46 +28,4 @@ ErrorBox RID_SVXERR_OPT_PROXYPORTS
     Message [ en-US ] = "Invalid value!\n\nThe maximum value for a port number is 65535.";
 };
 
-// RID_SVXDLG_OPT_JAVASCRIPT_DISABLE -----------------------------------------
-
-ModalDialog RID_SVXDLG_OPT_JAVASCRIPT_DISABLE
-{
-    HelpID = "cui:ModalDialog:RID_SVXDLG_OPT_JAVASCRIPT_DISABLE";
-    OutputSize = TRUE;
-    Size = MAP_APPFONT( 150, 81 );
-    Moveable = TRUE;
-    Closeable = TRUE;
-    FixedImage IMG_JSCPT_WARNING
-    {
-        Pos = MAP_APPFONT( 6, 6 );
-        Size = MAP_APPFONT( 30, 30 );
-    };
-    FixedText FT_JSCPT_WARNING
-    {
-        Pos = MAP_APPFONT( 39, 6 );
-        Size = MAP_APPFONT( 195, 36 );
-        WordBreak = TRUE;
-        Text [ en-US ] = "Please note that with Java\nyou disable Javascript as well.\n\nDo you still want to disable Java?";
-    };
-    CheckBox CB_JSCPT_DISABLE
-    {
-        HelpID = "cui:CheckBox:RID_SVXDLG_OPT_JAVASCRIPT_DISABLE:CB_JSCPT_DISABLE";
-        Pos = MAP_APPFONT( 39, 45 );
-        Size = MAP_APPFONT( 195, 12 );
-        Hide = TRUE;
-        Text [ en-US ] = "~Don't show warning again";
-    };
-    OKButton BTN_JSCPT_YES
-    {
-        Pos = MAP_APPFONT( 41, 61 );
-        Size = MAP_APPFONT( 50, 14 );
-    };
-    CancelButton BTN_JSCPT_NO
-    {
-        Pos = MAP_APPFONT( 94, 61 );
-        Size = MAP_APPFONT( 50, 14 );
-        DefButton = TRUE;
-    };
-};
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

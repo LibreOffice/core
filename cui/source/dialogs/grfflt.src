@@ -356,13 +356,6 @@ ModalDialog RID_SVX_GRFFILTER_DLG_POSTER
 // - DLG_FILTEREMBOSS -
 // --------------------
 
-TabPage RID_SVX_GRFFILTER_DLG_EMBOSS_TAB
-{
-    HelpID = "cui:TabPage:RID_SVX_GRFFILTER_DLG_EMBOSS_TAB";
-    Pos = MAP_APPFONT ( 0, 0 ) ;
-    Size = MAP_APPFONT ( 0, 0 ) ;
-};
-
 ModalDialog RID_SVX_GRFFILTER_DLG_EMBOSS
 {
     HelpID = CMD_SID_GRFFILTER_EMBOSS;

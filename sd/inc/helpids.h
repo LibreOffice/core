@@ -178,7 +178,6 @@
 
 #define HID_DLG_INSERT_PAGES_OBJS                               "SD_HID_DLG_INSERT_PAGES_OBJS"
 #define HID_VECTORIZE_DLG                                       "SD_HID_VECTORIZE_DLG"
-#define HID_UNDO_DELETE_WARNING                                 "SD_HID_UNDO_DELETE_WARNING"
 
 #define HID_MN_SUB_GRAPHIC                                      "SD_HID_MN_SUB_GRAPHIC"
 #define HID_MN_SUB_FIELD                                        "SD_HID_MN_SUB_FIELD"

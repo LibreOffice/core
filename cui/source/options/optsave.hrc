@@ -30,12 +30,6 @@
 #define APP_MATH                6
 #define APP_COUNT               7
 
-//Filter warning
-#define PB_OK                   1
-#define FT_FILTER_WARNING       2
-#define IMG_WARNING             4
-#define PB_CANCEL               5
-
 #endif // #ifndef _SVX_OPTSAVE_HRC
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -53,21 +53,4 @@
 #define FT_FILES2              47
 #define FT_FULL_FILE_NAME      48
 
-#define MD_LINKEDIT            32004
-#define ED_FULL_SOURCE_NAME    1
-
-#define ED_FILEPATH             10
-#define BTN_FILEPATH            11
-#define CB_FILELINK             12
-
-#define MD_INSERT_OBJECT_APPLET 32009
-#define FT_CLASSFILE            10
-#define ED_CLASSFILE            11
-#define FT_CLASSLOCATION        12
-#define ED_CLASSLOCATION        12
-#define BTN_CLASS               13
-#define GB_CLASS                14
-#define ED_APPLET_OPTIONS       20
-#define GB_APPLET_OPTIONS       21
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

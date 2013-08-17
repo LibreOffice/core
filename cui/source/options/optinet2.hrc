@@ -22,14 +22,6 @@
 #include <sfx2/tabpage.hrc>
 #include <svtools/controldims.hrc>
 
-// Defines - JavaScriptDisableQueryBox_Impl -------------------------------
-
-#define IMG_JSCPT_WARNING           220
-#define FT_JSCPT_WARNING            221
-#define CB_JSCPT_DISABLE            222
-#define BTN_JSCPT_YES               224
-#define BTN_JSCPT_NO                225
-
 // Defines - SvxEMailTabPage_Impl
 #define FL_MAIL                     1
 #define FT_MAILERURL                2

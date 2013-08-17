@@ -51,49 +51,6 @@ String STR_COULD_NOT_CREATE_DIRECTORY
 #define WIN_X           220
 #define WIN_Y           72
 
-ModalDialog DLG_DOMAINPASSWORD
-{
-    HelpID = "dbaccess:ModalDialog:DLG_DOMAINPASSWORD";
-    Border = TRUE ;
-    Moveable = TRUE ;
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( WIN_X , WIN_Y ) ;
-    Text[ en-US ] = "Convert Database";
-
-    FixedLine FT_PASSWORD
-    {
-        Pos = MAP_APPFONT ( 3 , 3 ) ;
-        Size = MAP_APPFONT ( WIN_X - 3 - 6 - 6 - 50 , 8 ) ;
-        Text[ en-US ] = "Please enter the ~password for the user 'DOMAIN'.";
-    };
-
-    Edit ET_PASSWORD
-    {
-        HelpID = "dbaccess:Edit:DLG_DOMAINPASSWORD:ET_PASSWORD";
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 + FT_SIZE_X , 16 ) ;
-        Size = MAP_APPFONT ( EDIT_SIZE_X , 12 ) ;
-        PassWord = TRUE ;
-    };
-    OKButton BTN_PASSWORD_OK
-    {
-        Pos = MAP_APPFONT ( WIN_X - 56 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        DefButton = TRUE ;
-    };
-    CancelButton BTN_PASSWORD_CANCEL
-    {
-        Pos = MAP_APPFONT ( WIN_X - 56 , 23 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-    };
-    HelpButton BTN_PASSWORD_HELP
-    {
-        Pos = MAP_APPFONT ( WIN_X - 56 , 43 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-    };
-};
-
 #define PAGE_X_T  (PAGE_X -80)
 #define PAGE_Y_T  (PAGE_Y -50)
 

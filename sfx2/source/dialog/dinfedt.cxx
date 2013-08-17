@@ -22,7 +22,6 @@
 #include "sfx2/sfxresid.hxx"
 
 #include <sfx2/sfx.hrc>
-#include "dinfedt.hrc"
 
 // class InfoEdit_Impl ---------------------------------------------------
 

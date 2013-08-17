@@ -132,7 +132,7 @@
 
 #define RID_APPTITLE                        (RID_SFX_START+4)
 
-#define DLG_DOCINFO_EDT                     (RID_SFX_START+6)
+
 
 #define DLG_STYLE_DESIGNER                  (RID_SFX_START+8)
 

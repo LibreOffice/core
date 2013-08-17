@@ -329,13 +329,6 @@
 
 //free (RID_APP_START+557)
 
-#define RID_UNDO_DELETE_WARNING             (RID_APP_START+558)
-#define IMG_UNDO_DELETE_WARNING             (RID_APP_START+559)
-#define FT_UNDO_DELETE_WARNING              (RID_APP_START+560)
-#define CB_UNDO_DELETE_DISABLE              (RID_APP_START+561)
-#define BTN_UNDO_DELETE_YES                 (RID_APP_START+562)
-#define BTN_UNDO_DELETE_NO                  (RID_APP_START+564)
-
 #define STR_WARNING_NOSOUNDFILE             (RID_APP_START+565)
 
 #define STR_UNDO_GRAFFILTER                 (RID_APP_START+570)

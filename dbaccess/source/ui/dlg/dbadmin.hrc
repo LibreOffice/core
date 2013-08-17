@@ -38,16 +38,12 @@
 #define FT_LDAPROWCOUNT         13
 
 #define ET_USERNAME             1
-#define ET_PASSWORD             2
 #define ET_OPTIONS              3
 #define ET_JDBCDRIVERCLASS      4
 #define ET_HOSTNAME             5
 #define ET_BASEDN               6
 
 #define PB_INDICIES             1
-#define BTN_PASSWORD_OK         2
-#define BTN_PASSWORD_CANCEL     3
-#define BTN_PASSWORD_HELP       4
 #define PB_TESTDRIVERCLASS      5
 
 #define CB_PASSWORD_REQUIRED    1
