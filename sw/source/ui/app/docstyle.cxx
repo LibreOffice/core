@@ -1003,7 +1003,7 @@ bool   SwDocStyleSheet::SetFollow( const OUString& rStr)
             const SwPageDesc* pFollowDesc = !rStr.isEmpty()
                                             ? lcl_FindPageDesc(rDoc, rStr)
                                             : 0;
-            sal_uInt16 nId;
+            sal_uInt16 nId = 0;
             if( pFollowDesc != pDesc->GetFollow() &&
                 rDoc.FindPageDescByName( pDesc->GetName(), &nId ) )
             {
