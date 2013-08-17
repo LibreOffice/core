@@ -45,7 +45,7 @@ OTitleWindow::OTitleWindow(Window* _pParent,sal_uInt16 _nTitleId,WinBits _nBits,
     for (size_t i=0; i < sizeof(pWindows)/sizeof(pWindows[0]); ++i)
         pWindows[i]->Show();
 }
-// -----------------------------------------------------------------------------
+
 OTitleWindow::~OTitleWindow()
 {
     if ( m_pChild )
@@ -57,13 +57,13 @@ OTitleWindow::~OTitleWindow()
 
     DBG_DTOR(OTitleWindow,NULL);
 }
-// -----------------------------------------------------------------------------
+
 void OTitleWindow::setChildWindow(Window* _pChild)
 {
     m_pChild = _pChild;
 }
+
 #define SPACE_BORDER    1
-// -----------------------------------------------------------------------------
 void OTitleWindow::Resize()
 {
     // parent window dimension
@@ -88,7 +88,7 @@ void OTitleWindow::Resize()
                                     Size(nOutputWidth - ( m_bShift ? (2*nXOffset - 2*SPACE_BORDER) : sal_Int32(SPACE_BORDER) ), nOutputHeight - nHeight - 2*nXOffset - 2*SPACE_BORDER) );
     }
 }
-// -----------------------------------------------------------------------------
+
 void OTitleWindow::setTitle(sal_uInt16 _nTitleId)
 {
     if ( _nTitleId != 0 )
@@ -96,14 +96,14 @@ void OTitleWindow::setTitle(sal_uInt16 _nTitleId)
         m_aTitle.SetText(ModuleRes(_nTitleId));
     }
 }
-// -----------------------------------------------------------------------------
+
 void OTitleWindow::GetFocus()
 {
     Window::GetFocus();
     if ( m_pChild )
         m_pChild->GrabFocus();
 }
-// -----------------------------------------------------------------------------
+
 long OTitleWindow::GetWidthPixel() const
 {
     Size aTextSize = LogicToPixel( Size( 12, 0 ), MAP_APPFONT );
@@ -111,7 +111,7 @@ long OTitleWindow::GetWidthPixel() const
 
     return nWidth;
 }
-// -----------------------------------------------------------------------
+
 void OTitleWindow::DataChanged( const DataChangedEvent& rDCEvt )
 {
     Window::DataChanged( rDCEvt );
@@ -126,7 +126,7 @@ void OTitleWindow::DataChanged( const DataChangedEvent& rDCEvt )
         Invalidate();
     }
 }
-//-----------------------------------------------------------------------------
+
 void OTitleWindow::ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground )
 {
     AllSettings aAllSettings = GetSettings();
@@ -153,7 +153,6 @@ void OTitleWindow::ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_B
     if( bBackground )
         SetBackground( rStyleSettings.GetFieldColor() );
 
-
     Window* pWindows [] = { &m_aSpace1, &m_aSpace2, &m_aTitle};
     for (size_t i=0; i < sizeof(pWindows)/sizeof(pWindows[0]); ++i)
     {
@@ -164,8 +163,7 @@ void OTitleWindow::ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_B
         pWindows[i]->SetBackground( Wallpaper( aStyle.GetShadowColor() ) );
     }
 }
-// .............................................................
+
 } // namespace dbaui
-// .............................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

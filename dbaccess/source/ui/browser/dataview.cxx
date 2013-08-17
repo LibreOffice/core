@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <dbaccess/dataview.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/types.hxx>
@@ -30,19 +29,15 @@
 #include <svtools/imgdef.hxx>
 #include <tools/diagnose_ex.h>
 
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::frame;
 
-    //=====================================================================
-    //= ColorChanger
-    //=====================================================================
+    // ColorChanger
     class ColorChanger
     {
     protected:
@@ -64,7 +59,6 @@ namespace dbaui
     };
 
     DBG_NAME(ODataView)
-    // -------------------------------------------------------------------------
     ODataView::ODataView(   Window* pParent,
                             IController& _rController,
                             const Reference< XComponentContext >& _rxContext,
@@ -80,12 +74,10 @@ namespace dbaui
         m_aSeparator.Show();
     }
 
-    // -------------------------------------------------------------------------
     void ODataView::Construct()
     {
     }
 
-    // -------------------------------------------------------------------------
     ODataView::~ODataView()
     {
         DBG_DTOR(ODataView,NULL);
@@ -93,15 +85,12 @@ namespace dbaui
         m_rController.release();
     }
 
-    // -------------------------------------------------------------------------
     void ODataView::resizeDocumentView( Rectangle& /*_rPlayground*/ )
     {
     }
 
-    // -------------------------------------------------------------------------
     void ODataView::Paint( const Rectangle& _rRect )
     {
-        //.................................................................
         // draw the background
         {
             ColorChanger aColors( this, COL_TRANSPARENT, GetSettings().GetStyleSettings().GetFaceColor() );
@@ -112,7 +101,6 @@ namespace dbaui
         Window::Paint( _rRect );
     }
 
-    // -------------------------------------------------------------------------
     void ODataView::resizeAll( const Rectangle& _rPlayground )
     {
         Rectangle aPlayground( _rPlayground );
@@ -126,13 +114,11 @@ namespace dbaui
         resizeDocumentView( aPlayground );
     }
 
-    // -------------------------------------------------------------------------
     void ODataView::Resize()
     {
         Window::Resize();
         resizeAll( Rectangle( Point( 0, 0), GetSizePixel() ) );
     }
-    // -----------------------------------------------------------------------------
     long ODataView::PreNotify( NotifyEvent& _rNEvt )
     {
         bool bHandled = false;
@@ -155,7 +141,6 @@ namespace dbaui
         }
         return bHandled ? 1L : Window::PreNotify( _rNEvt );
     }
-    // -----------------------------------------------------------------------------
     void ODataView::StateChanged( StateChangedType nType )
     {
         Window::StateChanged( nType );
@@ -187,7 +172,6 @@ namespace dbaui
             }
         }
     }
-    // -----------------------------------------------------------------------------
     void ODataView::DataChanged( const DataChangedEvent& rDCEvt )
     {
         Window::DataChanged( rDCEvt );
@@ -202,14 +186,12 @@ namespace dbaui
             m_rController.notifyHiContrastChanged();
         }
     }
-    // -----------------------------------------------------------------------------
     void ODataView::attachFrame(const Reference< XFrame >& _xFrame)
     {
         m_pAccel->init(m_xContext, _xFrame);
     }
-//.........................................................................
 }
+
 // namespace dbaui
-//.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

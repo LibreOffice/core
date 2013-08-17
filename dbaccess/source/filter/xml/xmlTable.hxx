@@ -41,7 +41,6 @@ namespace dbaxml
         sal_Bool        m_bApplyFilter;
         sal_Bool        m_bApplyOrder;
 
-
         ODBFilter& GetOwnImport();
 
         void fillAttributes(    sal_uInt16 nPrfx
@@ -70,9 +69,7 @@ namespace dbaxml
                     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
         virtual void EndElement();
     };
-// -----------------------------------------------------------------------------
 } // namespace dbaxml
-// -----------------------------------------------------------------------------
 
 #endif // DBA_XMLTABLE_HXX
 

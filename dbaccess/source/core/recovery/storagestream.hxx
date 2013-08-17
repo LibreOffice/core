@@ -25,14 +25,10 @@
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-//........................................................................
 namespace dbaccess
 {
-//........................................................................
 
-    //====================================================================
-    //= StorageOutputStream
-    //====================================================================
+    // StorageOutputStream
     /** convenience wrapper around a stream living in a storage
     */
     class DBACCESS_DLLPRIVATE StorageOutputStream
@@ -62,9 +58,7 @@ namespace dbaccess
                                                 m_xOutputStream;
     };
 
-    //====================================================================
-    //= StorageInputStream
-    //====================================================================
+    // StorageInputStream
     /** convenience wrapper around a stream living in a storage
     */
     class DBACCESS_DLLPRIVATE StorageInputStream
@@ -94,9 +88,7 @@ namespace dbaccess
                                                 m_xInputStream;
     };
 
-//........................................................................
 } // namespace dbaccess
-//........................................................................
 
 #endif // STORAGESTREAM_HXX
 

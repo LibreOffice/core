@@ -21,27 +21,21 @@
 #include "dbu_qry.hrc"
 #include "querycontroller.hxx"
 
-
 using namespace dbaui;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 DBG_NAME(OQueryView)
-// -------------------------------------------------------------------------
 OQueryView::OQueryView(Window* _pParent, OQueryController& _rController,const Reference< XComponentContext >& _rxContext)
     :OJoinDesignView( _pParent, _rController, _rxContext )
 {
     DBG_CTOR(OQueryView,NULL);
 
 }
-// -----------------------------------------------------------------------------
+
 OQueryView::~OQueryView()
 {
 
     DBG_DTOR(OQueryView,NULL);
 }
-// -----------------------------------------------------------------------------
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

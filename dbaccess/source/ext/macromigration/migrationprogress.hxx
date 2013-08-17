@@ -20,14 +20,10 @@
 #ifndef DBACCESS_MIGRATIONPROGRESS_HXX
 #define DBACCESS_MIGRATIONPROGRESS_HXX
 
-//........................................................................
 namespace dbmm
 {
-//........................................................................
 
-    //====================================================================
-    //= IMigrationProgress
-    //====================================================================
+    // IMigrationProgress
     class SAL_NO_VTABLE IMigrationProgress
     {
     public:
@@ -43,9 +39,7 @@ namespace dbmm
         ~IMigrationProgress() {}
     };
 
-//........................................................................
 } // namespace dbmm
-//........................................................................
 
 #endif // DBACCESS_MIGRATIONPROGRESS_HXX
 

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "DExport.hxx"
 #include "moduledbu.hxx"
 
@@ -80,9 +79,7 @@ using namespace ::com::sun::star::awt;
 
 namespace CopyTableOperation = ::com::sun::star::sdb::application::CopyTableOperation;
 
-// ==========================================================================
 // ODatabaseExport
-// ==========================================================================
 DBG_NAME(ODatabaseExport)
 ODatabaseExport::ODatabaseExport(sal_Int32 nRows,
                                  const TPositions &_rColumnPositions,
@@ -142,7 +139,7 @@ ODatabaseExport::ODatabaseExport(sal_Int32 nRows,
 
     SetColumnTypes(pList,_pInfoMap);
 }
-//---------------------------------------------------------------------------
+
 ODatabaseExport::ODatabaseExport(const SharedConnection& _rxConnection,
                                  const Reference< XNumberFormatter >& _rxNumberF,
                                  const Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
@@ -285,7 +282,7 @@ ODatabaseExport::ODatabaseExport(const SharedConnection& _rxConnection,
         m_pTypeInfo = TOTypeInfoSP(new OTypeInfo());
     SetColumnTypes(pList,_pInfoMap);
 }
-//---------------------------------------------------------------------------
+
 ODatabaseExport::~ODatabaseExport()
 {
     DBG_DTOR(ODatabaseExport,NULL);
@@ -298,7 +295,7 @@ ODatabaseExport::~ODatabaseExport()
     m_vDestVector.clear();
     m_aDestColumns.clear();
 }
-// -----------------------------------------------------------------------------
+
 void ODatabaseExport::insertValueIntoColumn()
 {
     SAL_INFO("dbaccess.ui", "ODatabaseExport::insertValueIntoColumn" );
@@ -413,7 +410,7 @@ void ODatabaseExport::insertValueIntoColumn()
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 sal_Int16 ODatabaseExport::CheckString(const String& aCheckToken, sal_Int16 _nOldNumberFormat)
 {
     SAL_INFO("dbaccess.ui", "ODatabaseExport::CheckString" );
@@ -561,7 +558,7 @@ sal_Int16 ODatabaseExport::CheckString(const String& aCheckToken, sal_Int16 _nOl
 
     return nNumberFormat;
 }
-// -----------------------------------------------------------------------------
+
 void ODatabaseExport::SetColumnTypes(const TColumnVector* _pList,const OTypeInfoMap* _pInfoMap)
 {
     SAL_INFO("dbaccess.ui", "ODatabaseExport::SetColumnTypes" );
@@ -634,7 +631,7 @@ void ODatabaseExport::SetColumnTypes(const TColumnVector* _pList,const OTypeInfo
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 void ODatabaseExport::CreateDefaultColumn(const OUString& _rColumnName)
 {
     SAL_INFO("dbaccess.ui", "ODatabaseExport::CreateDefaultColumn" );
@@ -687,7 +684,7 @@ void ODatabaseExport::CreateDefaultColumn(const OUString& _rColumnName)
 
     m_vDestVector.push_back(m_aDestColumns.insert(TColumns::value_type(aAlias,pField)).first);
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool ODatabaseExport::createRowSet()
 {
     SAL_INFO("dbaccess.ui", "ODatabaseExport::createRowSet" );
@@ -696,7 +693,7 @@ sal_Bool ODatabaseExport::createRowSet()
 
     return m_pUpdateHelper.get() != NULL;
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool ODatabaseExport::executeWizard(const OUString& _rTableName,const Any& _aTextColor,const FontDescriptor& _rFont)
 {
     SAL_INFO("dbaccess.ui", "ODatabaseExport::executeWizard" );
@@ -763,7 +760,7 @@ sal_Bool ODatabaseExport::executeWizard(const OUString& _rTableName,const Any& _
 
     return bError;
 }
-//---------------------------------------------------------------------------------
+
 void ODatabaseExport::showErrorDialog(const ::com::sun::star::sdbc::SQLException& e)
 {
     SAL_INFO("dbaccess.ui", "ODatabaseExport::showErrorDialog" );
@@ -780,7 +777,7 @@ void ODatabaseExport::showErrorDialog(const ::com::sun::star::sdbc::SQLException
             m_bError = sal_True;
     }
 }
-// -----------------------------------------------------------------------------
+
 void ODatabaseExport::adjustFormat()
 {
     SAL_INFO("dbaccess.ui", "ODatabaseExport::adjustFormat" );
@@ -803,7 +800,7 @@ void ODatabaseExport::adjustFormat()
         eraseTokens();
     }
 }
-// -----------------------------------------------------------------------------
+
 void ODatabaseExport::eraseTokens()
 {
     SAL_INFO("dbaccess.ui", "ODatabaseExport::eraseTokens" );
@@ -811,7 +808,7 @@ void ODatabaseExport::eraseTokens()
     m_sNumToken.Erase();
     m_sValToken.Erase();
 }
-// -----------------------------------------------------------------------------
+
 void ODatabaseExport::ensureFormatter()
 {
     SAL_INFO("dbaccess.ui", "ODatabaseExport::ensureFormatter" );
@@ -825,7 +822,7 @@ void ODatabaseExport::ensureFormatter()
         xNumberFormatSettings->getPropertyValue("NullDate") >>= m_aNullDate;
     }
 }
-// -----------------------------------------------------------------------------
+
 Reference< XPreparedStatement > ODatabaseExport::createPreparedStatment( const Reference<XDatabaseMetaData>& _xMetaData
                                                        ,const Reference<XPropertySet>& _xDestTable
                                                        ,const TPositions& _rvColumns)
@@ -888,7 +885,5 @@ Reference< XPreparedStatement > ODatabaseExport::createPreparedStatment( const R
     // now create,fill and execute the prepared statement
     return Reference< XPreparedStatement >(_xMetaData->getConnection()->prepareStatement(aSql));
 }
-// -----------------------------------------------------------------------------
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

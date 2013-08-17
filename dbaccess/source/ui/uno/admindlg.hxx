@@ -24,13 +24,9 @@
 #include "unoadmin.hxx"
 #endif
 
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
-//=========================================================================
-//= ODataSourcePropertyDialog
-//=========================================================================
+// ODataSourcePropertyDialog
 class ODataSourcePropertyDialog
         :public ODatabaseAdministrationDialog
         ,public ::comphelper::OPropertyArrayUsageHelper< ODataSourcePropertyDialog >
@@ -64,9 +60,7 @@ protected:
     virtual Dialog* createDialog(Window* _pParent);
 };
 
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
 
 #endif // _DBAUI_ADMINDLG_HXX
 

@@ -23,13 +23,9 @@
 #include <svl/stritem.hxx>
 #include <osl/diagnose.h>
 
-//........................................................................
 namespace dbaui
 {
-    //====================================================================
-    //= CharSetListBox
-    //====================================================================
-    //--------------------------------------------------------------------
+    // CharSetListBox
     CharSetListBox::CharSetListBox( Window* _pParent, const ResId& _rResId )
         :ListBox( _pParent, _rResId )
     {
@@ -43,12 +39,10 @@ namespace dbaui
         }
     }
 
-    //--------------------------------------------------------------------
     CharSetListBox::~CharSetListBox()
     {
     }
 
-    //--------------------------------------------------------------------
     void CharSetListBox::SelectEntryByIanaName( const String& _rIanaName )
     {
         OCharsetDisplay::const_iterator aFind = m_aCharSets.findIanaName( _rIanaName );
@@ -78,7 +72,6 @@ namespace dbaui
         }
     }
 
-    //--------------------------------------------------------------------
     bool CharSetListBox::StoreSelectedCharSet( SfxItemSet& _rSet, const sal_uInt16 _nItemId )
     {
         bool bChangedSomething = false;
@@ -95,8 +88,6 @@ namespace dbaui
         return bChangedSomething;
     }
 
-//........................................................................
 } // namespace dbaui
-//........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

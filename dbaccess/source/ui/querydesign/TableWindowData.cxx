@@ -35,11 +35,8 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 
-//==================================================================
 // class OTableWindowData
-//==================================================================
 DBG_NAME(OTableWindowData)
-//------------------------------------------------------------------------------
 OTableWindowData::OTableWindowData( const Reference< XPropertySet>& _xTable
                                    ,const OUString& _rComposedName
                                    ,const OUString& rTableName
@@ -61,7 +58,6 @@ OTableWindowData::OTableWindowData( const Reference< XPropertySet>& _xTable
     listen();
 }
 
-//------------------------------------------------------------------------------
 OTableWindowData::~OTableWindowData()
 {
     DBG_DTOR(OTableWindowData,NULL);
@@ -70,18 +66,16 @@ OTableWindowData::~OTableWindowData()
         stopComponentListening( xComponent );
 }
 
-//------------------------------------------------------------------------------
 sal_Bool OTableWindowData::HasPosition() const
 {
     return ( (m_aPosition.X() != -1) && (m_aPosition.Y() != -1) );
 }
 
-//------------------------------------------------------------------------------
 sal_Bool OTableWindowData::HasSize() const
 {
     return ( (m_aSize.Width() != -1) && (m_aSize.Height() !=-1) );
 }
-// -----------------------------------------------------------------------------
+
 void OTableWindowData::_disposing( const ::com::sun::star::lang::EventObject& /*_rSource*/ )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -90,7 +84,7 @@ void OTableWindowData::_disposing( const ::com::sun::star::lang::EventObject& /*
     m_xKeys.clear();
     m_xTable.clear();
 }
-// -----------------------------------------------------------------------------
+
 bool OTableWindowData::init(const Reference< XConnection  >& _xConnection,bool _bAllowQueries)
 {
     OSL_ENSURE(!m_xTable.is(),"We are already connected to a table!");
@@ -120,7 +114,7 @@ bool OTableWindowData::init(const Reference< XConnection  >& _xConnection,bool _
     Reference< XIndexAccess > xColumnsAsIndex( m_xColumns,UNO_QUERY );
     return xColumnsAsIndex.is() && ( xColumnsAsIndex->getCount() > 0 );
 }
-// -----------------------------------------------------------------------------
+
 void OTableWindowData::listen()
 {
     if ( m_xTable.is() )
@@ -140,6 +134,5 @@ void OTableWindowData::listen()
             m_xKeys = xKeySup->getKeys();
     }
 }
-// -----------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

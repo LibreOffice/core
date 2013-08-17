@@ -744,6 +744,7 @@ IMPL_LINK_INLINE_START( DlgFilterCrit, ListSelectCompHdl, ListBox *, /*pListBox*
     EnableLines();
     return 0;
 }
+
 IMPL_LINK_INLINE_END( DlgFilterCrit, ListSelectCompHdl, ListBox *, pListBox )
 
 void DlgFilterCrit::BuildWherePart()

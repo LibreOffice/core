@@ -45,14 +45,12 @@ OXMLConnectionData::OXMLConnectionData( ODBFilter& rImport,
     rImport.setNewFormat(true);
     DBG_CTOR(OXMLConnectionData,NULL);
 }
-// -----------------------------------------------------------------------------
 
 OXMLConnectionData::~OXMLConnectionData()
 {
 
     DBG_DTOR(OXMLConnectionData,NULL);
 }
-// -----------------------------------------------------------------------------
 
 SvXMLImportContext* OXMLConnectionData::CreateChildContext(
         sal_uInt16 nPrefix,
@@ -98,14 +96,12 @@ SvXMLImportContext* OXMLConnectionData::CreateChildContext(
 
     return pContext;
 }
-// -----------------------------------------------------------------------------
+
 ODBFilter& OXMLConnectionData::GetOwnImport()
 {
     return static_cast<ODBFilter&>(GetImport());
 }
-// -----------------------------------------------------------------------------
-//----------------------------------------------------------------------------
+
 } // namespace dbaxml
-// -----------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

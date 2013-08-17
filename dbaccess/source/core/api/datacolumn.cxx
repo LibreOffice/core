@@ -414,4 +414,5 @@ void ODataColumn::updateObject(const Any& x) throw( SQLException, RuntimeExcepti
 
     m_xRowUpdate->updateObject(m_nPos, x);
 }
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

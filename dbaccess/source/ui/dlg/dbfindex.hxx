@@ -28,14 +28,10 @@
 #include <list>
 #include <comphelper/stl_types.hxx>
 
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
 
-//=========================================================================
-//= OTableIndex
-//=========================================================================
+// OTableIndex
 /// represents a single dbf index
 class OTableIndex
 {
@@ -51,13 +47,10 @@ public:
     String GetIndexFileName() const { return aIndexFileName; }
 };
 
-//-------------------------------------------------------------------------
 typedef ::std::list< OTableIndex >  TableIndexList;
 DECLARE_STL_ITERATORS(TableIndexList);
 
-//=========================================================================
-//= OTableInfo
-//=========================================================================
+// OTableInfo
 class ODbaseIndexDialog;
 /** holds the INF file of a table
 */
@@ -75,11 +68,9 @@ public:
     void WriteInfFile( const String& rDSN ) const;
 };
 
-//-------------------------------------------------------------------------
 typedef ::std::list< OTableInfo >   TableInfoList;
 DECLARE_STL_ITERATORS(TableInfoList);
 
-//////////////////////////////////////////////////////////////////////////
 // IndexDialog
 class ODbaseIndexDialog : public ModalDialog
 {
@@ -136,9 +127,7 @@ public:
     virtual ~ODbaseIndexDialog();
 };
 
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
 
 #endif // _DBAUI_DBFINDEX_HXX_
 

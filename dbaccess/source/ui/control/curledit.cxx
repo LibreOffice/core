@@ -17,19 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "curledit.hxx"
 #include <vcl/svapp.hxx>
 #include <osl/diagnose.h>
 
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
     DBG_NAME(OConnectionURLEdit)
-//=========================================================================
-//= OConnectionURLEdit
-//=========================================================================
+// OConnectionURLEdit
 OConnectionURLEdit::OConnectionURLEdit(Window* _pParent, const ResId& _rResId,sal_Bool _bShowPrefix)
     :Edit(_pParent, _rResId)
     ,m_pTypeCollection(NULL)
@@ -39,7 +34,6 @@ OConnectionURLEdit::OConnectionURLEdit(Window* _pParent, const ResId& _rResId,sa
     DBG_CTOR(OConnectionURLEdit ,NULL);
 }
 
-//-------------------------------------------------------------------------
 OConnectionURLEdit::~OConnectionURLEdit()
 {
     DBG_DTOR(OConnectionURLEdit ,NULL);
@@ -50,7 +44,6 @@ OConnectionURLEdit::~OConnectionURLEdit()
     delete m_pForcedPrefix;
 }
 
-//-------------------------------------------------------------------------
 void OConnectionURLEdit::SetTextNoPrefix(const String& _rText)
 {
     OSL_ENSURE(GetSubEdit(), "OConnectionURLEdit::SetTextNoPrefix: have no current type, not changing the text!");
@@ -58,7 +51,6 @@ void OConnectionURLEdit::SetTextNoPrefix(const String& _rText)
         GetSubEdit()->SetText(_rText);
 }
 
-//-------------------------------------------------------------------------
 String OConnectionURLEdit::GetTextNoPrefix() const
 {
     if (GetSubEdit())
@@ -66,14 +58,12 @@ String OConnectionURLEdit::GetTextNoPrefix() const
     return GetText();
 }
 
-//-------------------------------------------------------------------------
 void OConnectionURLEdit::SetText(const OUString& _rStr)
 {
     Selection aNoSelection(0,0);
     SetText(_rStr, aNoSelection);
 }
 
-//-------------------------------------------------------------------------
 void OConnectionURLEdit::SetText(const OUString& _rStr, const Selection& /*_rNewSelection*/)
 {
     // create new sub controls, if necessary
@@ -125,22 +115,20 @@ void OConnectionURLEdit::SetText(const OUString& _rStr, const Selection& /*_rNew
     Edit::SetText( sNewText );
 }
 
-//-------------------------------------------------------------------------
 OUString OConnectionURLEdit::GetText() const
 {
     if ( m_pForcedPrefix )
         return m_pForcedPrefix->GetText() += Edit::GetText();
     return Edit::GetText();
 }
-// -----------------------------------------------------------------------------
+
 void OConnectionURLEdit::ShowPrefix(sal_Bool _bShowPrefix)
 {
     m_bShowPrefix = _bShowPrefix;
     if ( m_pForcedPrefix )
         m_pForcedPrefix->Show(m_bShowPrefix);
 }
-//.........................................................................
+
 }   // namespace dbaui
-//.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "documentevents.hxx"
 
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -47,9 +46,7 @@ namespace dbaccess
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::uno::Type;
 
-    //====================================================================
-    //= DocumentEvents_Data
-    //====================================================================
+    // DocumentEvents_Data
     struct DocumentEvents_Data : public ::boost::noncopyable
     {
         ::cppu::OWeakObject&    rParent;
@@ -64,9 +61,7 @@ namespace dbaccess
         }
     };
 
-    //====================================================================
-    //= helper
-    //====================================================================
+    // helper
     struct DocumentEventData
     {
         const sal_Char* pAsciiEventName;
@@ -108,9 +103,7 @@ namespace dbaccess
         }
     }
 
-    //====================================================================
-    //= DocumentEvents
-    //====================================================================
+    // DocumentEvents
     DocumentEvents::DocumentEvents( ::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex, DocumentEventsData& _rEventsData )
         :m_pData( new DocumentEvents_Data( _rParent, _rMutex, _rEventsData ) )
     {
@@ -234,4 +227,5 @@ namespace dbaccess
     }
 
 } // namespace dbaccess
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

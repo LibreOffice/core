@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "dbinteraction.hxx"
 #include "dbu_reghelper.hxx"
 #include <tools/diagnose_ex.h>
@@ -41,19 +40,14 @@
 #include "UITools.hxx"
 #include <comphelper/processfactory.hxx>
 
-
-//==========================================================================
-
 extern "C" void SAL_CALL createRegistryInfo_OInteractionHandler()
 {
     static ::dbaui::OMultiInstanceAutoRegistration< ::dbaui::SQLExceptionInteractionHandler > aSQLExceptionInteractionHandler_AutoRegistration;
     static ::dbaui::OMultiInstanceAutoRegistration< ::dbaui::LegacyInteractionHandler > aLegacyInteractionHandler_AutoRegistration;
 }
 
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::ucb;
     using namespace ::com::sun::star::sdb;
@@ -62,10 +56,7 @@ namespace dbaui
     using namespace ::com::sun::star::beans;
     using namespace ::dbtools;
 
-    //=========================================================================
-    //= BasicInteractionHandler
-    //=========================================================================
-    //-------------------------------------------------------------------------
+    // BasicInteractionHandler
     BasicInteractionHandler::BasicInteractionHandler( const Reference< XComponentContext >& rxContext, const bool i_bFallbackToGeneric )
         :m_xContext( rxContext )
         ,m_bFallbackToGeneric( i_bFallbackToGeneric )
@@ -74,19 +65,16 @@ namespace dbaui
             "BasicInteractionHandler::BasicInteractionHandler: enabling legacy behavior, there should be no clients of this anymore!" );
     }
 
-    //-------------------------------------------------------------------------
     ::sal_Bool SAL_CALL BasicInteractionHandler::handleInteractionRequest( const Reference< XInteractionRequest >& i_rRequest ) throw (RuntimeException)
     {
         return impl_handle_throw( i_rRequest );
     }
 
-    //-------------------------------------------------------------------------
     void SAL_CALL BasicInteractionHandler::handle( const Reference< XInteractionRequest >& i_rRequest ) throw(RuntimeException)
     {
         impl_handle_throw( i_rRequest );
     }
 
-    //-------------------------------------------------------------------------
     sal_Bool BasicInteractionHandler::impl_handle_throw( const Reference< XInteractionRequest >& i_Request )
     {
         Any aRequest( i_Request->getRequest() );
@@ -125,7 +113,6 @@ namespace dbaui
         return sal_False;
     }
 
-    //-------------------------------------------------------------------------
     void BasicInteractionHandler::implHandle(const ParametersRequest& _rParamRequest, const Sequence< Reference< XInteractionContinuation > >& _rContinuations)
     {
         SolarMutexGuard aGuard;
@@ -164,7 +151,6 @@ namespace dbaui
         }
     }
 
-    //-------------------------------------------------------------------------
     void BasicInteractionHandler::implHandle(const SQLExceptionInfo& _rSqlInfo, const Sequence< Reference< XInteractionContinuation > >& _rContinuations)
     {
         SolarMutexGuard aGuard;
@@ -238,7 +224,6 @@ namespace dbaui
             DBG_UNHANDLED_EXCEPTION();
         }
     }
-    //-------------------------------------------------------------------------
     void BasicInteractionHandler::implHandle(const DocumentSaveRequest& _rDocuRequest, const Sequence< Reference< XInteractionContinuation > >& _rContinuations)
     {
         SolarMutexGuard aGuard;
@@ -301,7 +286,6 @@ namespace dbaui
                 _rContinuations[nDisApprovePos]->select();
     }
 
-    //-------------------------------------------------------------------------
     bool BasicInteractionHandler::implHandleUnknown( const Reference< XInteractionRequest >& _rxRequest )
     {
         if ( m_xContext.is() )
@@ -314,7 +298,6 @@ namespace dbaui
         return false;
     }
 
-    //-------------------------------------------------------------------------
     sal_Int32 BasicInteractionHandler::getContinuation(Continuation _eCont, const Sequence< Reference< XInteractionContinuation > >& _rContinuations)
     {
         const Reference< XInteractionContinuation >* pContinuations = _rContinuations.getConstArray();
@@ -352,9 +335,7 @@ namespace dbaui
         return -1;
     }
 
-    //==========================================================================
-    //= SQLExceptionInteractionHandler
-    //==========================================================================
+    // SQLExceptionInteractionHandler
     IMPLEMENT_SERVICE_INFO_IMPLNAME_STATIC(SQLExceptionInteractionHandler, "com.sun.star.comp.dbaccess.DatabaseInteractionHandler")
     IMPLEMENT_SERVICE_INFO_SUPPORTS(SQLExceptionInteractionHandler)
     IMPLEMENT_SERVICE_INFO_GETSUPPORTED1_STATIC(SQLExceptionInteractionHandler, "com.sun.star.sdb.DatabaseInteractionHandler")
@@ -365,13 +346,10 @@ namespace dbaui
         return static_cast< XServiceInfo* >(new SQLExceptionInteractionHandler(comphelper::getComponentContext(_rxORB)));
     }
 
-    //==========================================================================
-    //= LegacyInteractionHandler
-    //==========================================================================
+    // LegacyInteractionHandler
     IMPLEMENT_SERVICE_INFO_IMPLNAME_STATIC(LegacyInteractionHandler, "com.sun.star.comp.dbaccess.LegacyInteractionHandler")
     IMPLEMENT_SERVICE_INFO_SUPPORTS(LegacyInteractionHandler)
     IMPLEMENT_SERVICE_INFO_GETSUPPORTED1_STATIC(LegacyInteractionHandler, "com.sun.star.sdb.LegacyInteractionHandler")
-
 
     Reference< XInterface >
         SAL_CALL LegacyInteractionHandler::Create(const Reference< XMultiServiceFactory >& _rxORB)
@@ -379,8 +357,6 @@ namespace dbaui
         return static_cast< XServiceInfo* >(new LegacyInteractionHandler(comphelper::getComponentContext(_rxORB)));
     }
 
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

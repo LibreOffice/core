@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "sqlmessage.hxx"
 #include "dbu_dlg.hrc"
 #include "sqlmessage.hrc"
@@ -52,14 +51,11 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::sdb;
 using namespace com::sun::star::sdbc;
 
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
 
 namespace
 {
-    //------------------------------------------------------------------------------
     class IImageProvider
     {
     public:
@@ -68,7 +64,6 @@ namespace
         virtual ~IImageProvider() { }
     };
 
-    //------------------------------------------------------------------------------
     class ILabelProvider
     {
     public:
@@ -77,7 +72,6 @@ namespace
         virtual ~ILabelProvider() { };
     };
 
-    //------------------------------------------------------------------------------
     class ImageProvider : public IImageProvider
     {
     private:
@@ -99,7 +93,6 @@ namespace
         }
     };
 
-    //------------------------------------------------------------------------------
     class LabelProvider : public ILabelProvider
     {
     private:
@@ -116,7 +109,6 @@ namespace
         }
     };
 
-    //------------------------------------------------------------------------------
     class ProviderFactory
     {
     private:
@@ -185,7 +177,6 @@ namespace
 
     };
 
-    //------------------------------------------------------------------------------
     /// a stripped version of the SQLException, packed for displaying
     struct ExceptionDisplayInfo
     {
@@ -214,7 +205,6 @@ namespace
 
     typedef ::std::vector< ExceptionDisplayInfo >   ExceptionDisplayChain;
 
-    //------------------------------------------------------------------------------
     /// strips the [OOoBase] vendor identifier from the given error message, if applicable
     OUString lcl_stripOOoBaseVendor( const OUString& _rErrorMessage )
     {
@@ -236,7 +226,6 @@ namespace
         return sErrorMessage;
     }
 
-    //------------------------------------------------------------------------------
     void lcl_buildExceptionChain( const SQLExceptionInfo& _rErrorInfo, const ProviderFactory& _rFactory, ExceptionDisplayChain& _out_rChain )
     {
         {
@@ -293,7 +282,6 @@ namespace
         }
     }
 
-    //------------------------------------------------------------------------------
     void lcl_insertExceptionEntry( SvTreeListBox& _rList, size_t _nElementPos, const ExceptionDisplayInfo& _rEntry )
     {
         Image aEntryImage( _rEntry.pImageProvider->getImage() );
@@ -303,7 +291,6 @@ namespace
     }
 }
 
-//==============================================================================
 class OExceptionChainDialog : public ModalDialog
 {
     FixedLine       m_aFrame;
@@ -327,7 +314,6 @@ protected:
 };
 
 DBG_NAME(OExceptionChainDialog)
-//------------------------------------------------------------------------------
 OExceptionChainDialog::OExceptionChainDialog( Window* pParent, const ExceptionDisplayChain& _rExceptions )
     :ModalDialog(pParent, ModuleRes(DLG_SQLEXCEPTIONCHAIN))
     ,m_aFrame           (this, ModuleRes(FL_DETAILS))
@@ -382,13 +368,11 @@ OExceptionChainDialog::OExceptionChainDialog( Window* pParent, const ExceptionDi
     }
 }
 
-//------------------------------------------------------------------------------
 OExceptionChainDialog::~OExceptionChainDialog()
 {
     DBG_DTOR(OExceptionChainDialog,NULL);
 }
 
-//------------------------------------------------------------------------------
 IMPL_LINK_NOARG(OExceptionChainDialog, OnExceptionSelected)
 {
     SvTreeListEntry* pSelected = m_aExceptionList.FirstSelected();
@@ -428,9 +412,7 @@ IMPL_LINK_NOARG(OExceptionChainDialog, OnExceptionSelected)
     return 0L;
 }
 
-//==============================================================================
-//= SQLMessageBox_Impl
-//==============================================================================
+// SQLMessageBox_Impl
 struct SQLMessageBox_Impl
 {
     ExceptionDisplayChain   aDisplayInfo;
@@ -443,7 +425,6 @@ struct SQLMessageBox_Impl
     }
 };
 
-//------------------------------------------------------------------------------
 namespace
 {
     void lcl_positionInAppFont( const Window& _rParent, Window& _rChild, long _nX, long _nY, long _Width, long _Height )
@@ -472,11 +453,9 @@ namespace
     }
 }
 
-//------------------------------------------------------------------------------
 void OSQLMessageBox::impl_positionControls()
 {
     OSL_PRECOND( !m_pImpl->aDisplayInfo.empty(), "OSQLMessageBox::impl_positionControls: nothing to display at all?" );
-
 
     if ( m_pImpl->aDisplayInfo.empty() )
         return;
@@ -573,7 +552,6 @@ void OSQLMessageBox::impl_positionControls()
     SetPageSizePixel( aDialogSize );
 }
 
-//------------------------------------------------------------------------------
 void OSQLMessageBox::impl_initImage( MessageType _eImage )
 {
     switch (_eImage)
@@ -596,7 +574,6 @@ void OSQLMessageBox::impl_initImage( MessageType _eImage )
     }
 }
 
-//------------------------------------------------------------------------------
 void OSQLMessageBox::impl_createStandardButtons( WinBits _nStyle )
 {
     if ( _nStyle & WB_YES_NO_CANCEL )
@@ -641,7 +618,6 @@ void OSQLMessageBox::impl_createStandardButtons( WinBits _nStyle )
     }
 }
 
-//------------------------------------------------------------------------------
 void OSQLMessageBox::impl_addDetailsButton()
 {
     size_t nFirstPageVisible = m_aMessage.IsVisible() ? 2 : 1;
@@ -674,7 +650,6 @@ void OSQLMessageBox::impl_addDetailsButton()
     }
 }
 
-//------------------------------------------------------------------------------
 void OSQLMessageBox::Construct( WinBits _nStyle, MessageType _eImage )
 {
     SetText(
@@ -703,7 +678,6 @@ void OSQLMessageBox::Construct( WinBits _nStyle, MessageType _eImage )
     impl_addDetailsButton();
 }
 
-//------------------------------------------------------------------------------
 OSQLMessageBox::OSQLMessageBox(Window* _pParent, const SQLExceptionInfo& _rException, WinBits _nStyle, const OUString& _rHelpURL )
     :ButtonDialog( _pParent, WB_HORZ | WB_STDDIALOG )
     ,m_aInfoImage( this )
@@ -715,7 +689,6 @@ OSQLMessageBox::OSQLMessageBox(Window* _pParent, const SQLExceptionInfo& _rExcep
     Construct( _nStyle, AUTO );
 }
 
-//------------------------------------------------------------------------------
 OSQLMessageBox::OSQLMessageBox( Window* _pParent, const OUString& _rTitle, const OUString& _rMessage, WinBits _nStyle, MessageType _eType, const ::dbtools::SQLExceptionInfo* _pAdditionalErrorInfo )
     :ButtonDialog( _pParent, WB_HORZ | WB_STDDIALOG )
     ,m_aInfoImage( this )
@@ -733,12 +706,10 @@ OSQLMessageBox::OSQLMessageBox( Window* _pParent, const OUString& _rTitle, const
     Construct( _nStyle, _eType );
 }
 
-//--------------------------------------------------------------------------
 OSQLMessageBox::~OSQLMessageBox()
 {
 }
 
-//--------------------------------------------------------------------------
 IMPL_LINK( OSQLMessageBox, ButtonClickHdl, Button *, /*pButton*/ )
 {
     OExceptionChainDialog aDlg( this, m_pImpl->aDisplayInfo );
@@ -746,26 +717,20 @@ IMPL_LINK( OSQLMessageBox, ButtonClickHdl, Button *, /*pButton*/ )
     return 0;
 }
 
-//==================================================================
 // OSQLWarningBox
-//==================================================================
 OSQLWarningBox::OSQLWarningBox( Window* _pParent, const OUString& _rMessage, WinBits _nStyle,
     const ::dbtools::SQLExceptionInfo* _pAdditionalErrorInfo )
     :OSQLMessageBox( _pParent, String( ModuleRes( STR_EXCEPTION_WARNING ) ), _rMessage, _nStyle, OSQLMessageBox::Warning, _pAdditionalErrorInfo )
 {
 }
 
-//==================================================================
 // OSQLErrorBox
-//==================================================================
 OSQLErrorBox::OSQLErrorBox( Window* _pParent, const OUString& _rMessage, WinBits _nStyle,
     const ::dbtools::SQLExceptionInfo* _pAdditionalErrorInfo )
     :OSQLMessageBox( _pParent, String( ModuleRes( STR_EXCEPTION_ERROR ) ), _rMessage, _nStyle, OSQLMessageBox::Error, _pAdditionalErrorInfo )
 {
 }
 
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

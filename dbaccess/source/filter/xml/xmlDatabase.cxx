@@ -47,14 +47,12 @@ OXMLDatabase::OXMLDatabase( ODBFilter& rImport,
     DBG_CTOR(OXMLDatabase,NULL);
 
 }
-// -----------------------------------------------------------------------------
 
 OXMLDatabase::~OXMLDatabase()
 {
 
     DBG_DTOR(OXMLDatabase,NULL);
 }
-// -----------------------------------------------------------------------------
 
 SvXMLImportContext* OXMLDatabase::CreateChildContext(
         sal_uInt16 nPrefix,
@@ -129,22 +127,19 @@ SvXMLImportContext* OXMLDatabase::CreateChildContext(
     if( !pContext )
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
 
-
     return pContext;
 }
-// -----------------------------------------------------------------------------
+
 ODBFilter& OXMLDatabase::GetOwnImport()
 {
     return static_cast<ODBFilter&>(GetImport());
 }
-// -----------------------------------------------------------------------------
+
 void OXMLDatabase::EndElement()
 {
     GetOwnImport().setPropertyInfo();
 }
 
-//----------------------------------------------------------------------------
 } // namespace dbaxml
-// -----------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -23,10 +23,8 @@
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 
-//........................................................................
 namespace dbmm
 {
-//........................................................................
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
@@ -38,9 +36,7 @@ namespace dbmm
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::uno::makeAny;
 
-    //====================================================================
-    //= ProgressCapture_Data
-    //====================================================================
+    // ProgressCapture_Data
     struct ProgressCapture_Data
     {
         ProgressCapture_Data( const OUString& _rObjectName, IMigrationProgress& _rMasterProgress )
@@ -55,28 +51,22 @@ namespace dbmm
         bool                bDisposed;
     };
 
-    //====================================================================
-    //= ProgressCapture
-    //====================================================================
-    //--------------------------------------------------------------------
+    // ProgressCapture
     ProgressCapture::ProgressCapture( const OUString& _rObjectName, IMigrationProgress& _rMasterProgress )
         :m_pData( new ProgressCapture_Data( _rObjectName, _rMasterProgress ) )
     {
     }
 
-    //--------------------------------------------------------------------
     ProgressCapture::~ProgressCapture()
     {
     }
 
-    //--------------------------------------------------------------------
     void ProgressCapture::dispose()
     {
         SolarMutexGuard aGuard;
         m_pData->bDisposed = true;
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL ProgressCapture::start( const OUString& _rText, ::sal_Int32 _nRange ) throw (RuntimeException)
     {
         SolarMutexGuard aGuard;
@@ -84,7 +74,6 @@ namespace dbmm
             m_pData->rMasterProgress.startObject( m_pData->sObjectName, _rText, _nRange );
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL ProgressCapture::end(  ) throw (RuntimeException)
     {
         SolarMutexGuard aGuard;
@@ -92,7 +81,6 @@ namespace dbmm
             m_pData->rMasterProgress.endObject();
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL ProgressCapture::setText( const OUString& _rText ) throw (RuntimeException)
     {
         SolarMutexGuard aGuard;
@@ -100,7 +88,6 @@ namespace dbmm
             m_pData->rMasterProgress.setObjectProgressText( _rText );
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL ProgressCapture::setValue( ::sal_Int32 _nValue ) throw (RuntimeException)
     {
         SolarMutexGuard aGuard;
@@ -108,14 +95,11 @@ namespace dbmm
             m_pData->rMasterProgress.setObjectProgressValue( _nValue );
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL ProgressCapture::reset(  ) throw (RuntimeException)
     {
         OSL_FAIL( "ProgressCapture::reset: not implemented!" );
     }
 
-//........................................................................
 } // namespace dbmm
-//........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -73,14 +73,10 @@ using namespace ::com::sun::star::ui::dialogs;
 using namespace ::dbtools;
 using namespace ::comphelper;
 
-// .............................................................................
 namespace dbaui
 {
-// .............................................................................
 
-// =============================================================================
-// = AddTableDialogContext
-// =============================================================================
+// AddTableDialogContext
 class AddTableDialogContext : public IAddTableDialogContext
 {
     OJoinController& m_rController;
@@ -106,37 +102,31 @@ private:
     OJoinTableView* getTableView() const;
 };
 
-// -----------------------------------------------------------------------------
 Reference< XConnection > AddTableDialogContext::getConnection() const
 {
     return m_rController.getConnection();
 }
 
-// -----------------------------------------------------------------------------
 bool AddTableDialogContext::allowViews() const
 {
     return m_rController.allowViews();
 }
 
-// -----------------------------------------------------------------------------
 bool AddTableDialogContext::allowQueries() const
 {
     return m_rController.allowQueries();
 }
 
-// -----------------------------------------------------------------------------
 bool AddTableDialogContext::allowAddition() const
 {
     return const_cast< OJoinController& >( m_rController ).getJoinView()->getTableView()->IsAddAllowed();
 }
 
-// -----------------------------------------------------------------------------
 void AddTableDialogContext::addTableWindow( const String& _rQualifiedTableName, const String& _rAliasName )
 {
     getTableView()->AddTabWin( _rQualifiedTableName, _rAliasName, sal_True );
 }
 
-// -----------------------------------------------------------------------------
 void AddTableDialogContext::onWindowClosing( const Window* _pWindow )
 {
     if ( !m_rController.getView() )
@@ -149,7 +139,6 @@ void AddTableDialogContext::onWindowClosing( const Window* _pWindow )
     m_rController.getView()->GrabFocus();
 }
 
-// -----------------------------------------------------------------------------
 OJoinTableView* AddTableDialogContext::getTableView() const
 {
     if ( m_rController.getJoinView() )
@@ -157,37 +146,31 @@ OJoinTableView* AddTableDialogContext::getTableView() const
     return NULL;
 }
 
-// =============================================================================
-// = OJoinController
-// =============================================================================
+// OJoinController
 
 DBG_NAME(OJoinController)
-// -----------------------------------------------------------------------------
 OJoinController::OJoinController(const Reference< XComponentContext >& _rM)
     :OJoinController_BASE(_rM)
     ,m_pAddTableDialog(NULL)
 {
     DBG_CTOR(OJoinController,NULL);
 }
-// -----------------------------------------------------------------------------
+
 OJoinController::~OJoinController()
 {
     DBG_DTOR(OJoinController,NULL);
 }
 
-// -----------------------------------------------------------------------------
 void SAL_CALL OJoinController::disposing( const EventObject& _rSource ) throw(RuntimeException)
 {
     OJoinController_BASE::disposing( _rSource );
 }
 
-// -----------------------------------------------------------------------------
 OJoinDesignView* OJoinController::getJoinView()
 {
     return static_cast< OJoinDesignView* >( getView() );
 }
 
-// -----------------------------------------------------------------------------
 void OJoinController::disposing()
 {
     {
@@ -202,7 +185,7 @@ void OJoinController::disposing()
     m_vTableConnectionData.clear();
     m_vTableData.clear();
 }
-// -----------------------------------------------------------------------------
+
 void OJoinController::reconnect( sal_Bool _bUI )
 {
     OJoinController_BASE::reconnect( _bUI );
@@ -210,13 +193,12 @@ void OJoinController::reconnect( sal_Bool _bUI )
         m_pAddTableDialog->Update();
 }
 
-// -----------------------------------------------------------------------------
 void OJoinController::impl_onModifyChanged()
 {
     OJoinController_BASE::impl_onModifyChanged();
     InvalidateFeature( SID_RELATION_ADD_RELATION );
 }
-// -----------------------------------------------------------------------------
+
 void OJoinController::SaveTabWinPosSize(OTableWindow* pTabWin, long nOffsetX, long nOffsetY)
 {
     // the data for the window
@@ -231,7 +213,7 @@ void OJoinController::SaveTabWinPosSize(OTableWindow* pTabWin, long nOffsetX, lo
     pData->SetSize(pTabWin->GetSizePixel());
 
 }
-// -----------------------------------------------------------------------------
+
 FeatureState OJoinController::GetState(sal_uInt16 _nId) const
 {
     FeatureState aReturn;
@@ -257,7 +239,6 @@ FeatureState OJoinController::GetState(sal_uInt16 _nId) const
     return aReturn;
 }
 
-// -----------------------------------------------------------------------------
 AddTableDialogContext& OJoinController::impl_getDialogContext() const
 {
     if ( !m_pDialogContext.get() )
@@ -268,7 +249,6 @@ AddTableDialogContext& OJoinController::impl_getDialogContext() const
     return *m_pDialogContext;
 }
 
-// -----------------------------------------------------------------------------
 void OJoinController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >& aArgs)
 {
     switch(_nId)
@@ -317,7 +297,7 @@ void OJoinController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >& 
     }
     InvalidateFeature(_nId);
 }
-// -----------------------------------------------------------------------------
+
 void OJoinController::SaveTabWinsPosSize( OJoinTableView::OTableWindowMap* pTabWinList, long nOffsetX, long nOffsetY )
 {
     // Deletion and recreation of the old implementation with the current model is not correct anymore:
@@ -332,12 +312,12 @@ void OJoinController::SaveTabWinsPosSize( OJoinTableView::OTableWindowMap* pTabW
     for(;aIter != aEnd;++aIter)
         SaveTabWinPosSize(aIter->second, nOffsetX, nOffsetY);
 }
-// -----------------------------------------------------------------------------
+
 void OJoinController::removeConnectionData(const TTableConnectionData::value_type& _pData)
 {
     m_vTableConnectionData.erase( ::std::remove(m_vTableConnectionData.begin(),m_vTableConnectionData.end(),_pData),m_vTableConnectionData.end());
 }
-// -----------------------------------------------------------------------------
+
 void OJoinController::describeSupportedFeatures()
 {
     OJoinController_BASE::describeSupportedFeatures();
@@ -347,7 +327,7 @@ void OJoinController::describeSupportedFeatures()
     implDescribeSupportedFeature( ".uno:AddTable",  ID_BROWSER_ADDTABLE,CommandGroup::EDIT );
     implDescribeSupportedFeature( ".uno:EditDoc",   ID_BROWSER_EDITDOC, CommandGroup::EDIT );
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OJoinController::suspend(sal_Bool _bSuspend) throw( RuntimeException )
 {
     if ( getBroadcastHelper().bInDispose || getBroadcastHelper().bDisposed )
@@ -366,7 +346,7 @@ sal_Bool SAL_CALL OJoinController::suspend(sal_Bool _bSuspend) throw( RuntimeExc
     }
     return bCheck;
 }
-// -----------------------------------------------------------------------------
+
 void OJoinController::loadTableWindows( const ::comphelper::NamedValueCollection& i_rViewSettings )
 {
     m_vTableData.clear();
@@ -389,7 +369,6 @@ void OJoinController::loadTableWindows( const ::comphelper::NamedValueCollection
     }
 }
 
-// -----------------------------------------------------------------------------
 void OJoinController::loadTableWindow( const ::comphelper::NamedValueCollection& i_rTableWindowSettings )
 {
     sal_Int32 nX = -1, nY = -1, nHeight = -1, nWidth = -1;
@@ -419,7 +398,7 @@ void OJoinController::loadTableWindow( const ::comphelper::NamedValueCollection&
             m_aMinimumTableViewSize.Y() = (nY+nHeight);
     }
 }
-// -----------------------------------------------------------------------------
+
 void OJoinController::saveTableWindows( ::comphelper::NamedValueCollection& o_rViewSettings ) const
 {
     if ( !m_vTableData.empty() )
@@ -447,7 +426,7 @@ void OJoinController::saveTableWindows( ::comphelper::NamedValueCollection& o_rV
         o_rViewSettings.put( "Tables", aAllTablesData.getPropertyValues() );
     }
 }
-// -----------------------------------------------------------------------------
+
 TTableWindowData::value_type OJoinController::createTableWindowData(const OUString& _sComposedName,const OUString& _sTableName,const OUString& _sWindowName)
 {
     OJoinDesignView* pView = getJoinView();
@@ -457,8 +436,7 @@ TTableWindowData::value_type OJoinController::createTableWindowData(const OUStri
 
     return TTableWindowData::value_type();
 }
-// .............................................................................
+
 }   // namespace dbaui
-// .............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

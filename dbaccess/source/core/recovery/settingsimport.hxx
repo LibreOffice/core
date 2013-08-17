@@ -26,14 +26,10 @@
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 
-//........................................................................
 namespace dbaccess
 {
-//........................................................................
 
-    //====================================================================
-    //= SettingsImport
-    //====================================================================
+    // SettingsImport
     /** a simplified version of xmloff/DocumentSettingsContext
 
         It would be nice if the DocumentSettingsContext would not be that tightly interwoven with the SvXMLImport
@@ -79,9 +75,7 @@ namespace dbaccess
         OUStringBuffer   m_aCharacters;
     };
 
-    //====================================================================
-    //= IgnoringSettingsImport
-    //====================================================================
+    // IgnoringSettingsImport
     class IgnoringSettingsImport : public SettingsImport
     {
     public:
@@ -100,9 +94,7 @@ namespace dbaccess
         }
     };
 
-    //====================================================================
-    //= OfficeSettingsImport
-    //====================================================================
+    // OfficeSettingsImport
     class OfficeSettingsImport : public SettingsImport
     {
     public:
@@ -121,9 +113,7 @@ namespace dbaccess
         ::comphelper::NamedValueCollection& m_rSettings;
     };
 
-    //====================================================================
-    //= ConfigItemSetImport
-    //====================================================================
+    // ConfigItemSetImport
     class ConfigItemImport : public SettingsImport
     {
     public:
@@ -149,9 +139,7 @@ namespace dbaccess
         ::comphelper::NamedValueCollection& m_rSettings;
     };
 
-    //====================================================================
-    //= ConfigItemSetImport
-    //====================================================================
+    // ConfigItemSetImport
     class ConfigItemSetImport : public ConfigItemImport
     {
     public:
@@ -175,9 +163,7 @@ namespace dbaccess
         ::comphelper::NamedValueCollection  m_aChildSettings;
     };
 
-//........................................................................
 } // namespace dbaccess
-//........................................................................
 
 #endif // SETTINGSIMPORT_HXX
 

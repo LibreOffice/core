@@ -24,17 +24,13 @@
 
 #include <memory>
 
-//........................................................................
 namespace dbmm
 {
-//........................................................................
 
     class IMigrationProgress;
     class MigrationLog;
 
-    //====================================================================
-    //= MigrationEngine
-    //====================================================================
+    // MigrationEngine
     class MigrationEngine_Impl;
     class MigrationEngine
     {
@@ -77,9 +73,7 @@ namespace dbmm
         ::std::auto_ptr< MigrationEngine_Impl > m_pImpl;
     };
 
-//........................................................................
 } // namespace dbmm
-//........................................................................
 
 #endif // DBACCESS_MIGRATIONENGINE_HXX
 

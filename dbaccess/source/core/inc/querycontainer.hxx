@@ -59,9 +59,7 @@ namespace dbaccess
                                 ,   ::com::sun::star::sdbcx::XDrop
                                 >   OQueryContainer_Base;
 
-    //==========================================================================
-    //= OQueryContainer
-    //==========================================================================
+    // OQueryContainer
     class OQueryContainer   : public ODefinitionContainer
                             , public OQueryContainer_Base
     {

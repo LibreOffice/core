@@ -39,9 +39,7 @@ namespace dbaxml
 
         virtual void Characters( const OUString& rChars );
     };
-// -----------------------------------------------------------------------------
 } // namespace dbaxml
-// -----------------------------------------------------------------------------
 
 #endif // DBA_XMLTABLEFILTERPATTERN_HXX
 

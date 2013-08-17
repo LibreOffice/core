@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "ScrollHelper.hxx"
 #include <tools/debug.hxx>
 
@@ -26,20 +25,15 @@ namespace dbaui
 {
 DBG_NAME(OScrollHelper)
 
-// -----------------------------------------------------------------------------
-
-
     OScrollHelper::OScrollHelper()
     {
         DBG_CTOR(OScrollHelper,NULL);
     }
-    // -----------------------------------------------------------------------------
     OScrollHelper::~OScrollHelper()
     {
 
         DBG_DTOR(OScrollHelper,NULL);
     }
-    // -----------------------------------------------------------------------------
     void OScrollHelper::scroll(const Point& _rPoint, const Size& _rOutputSize)
     {
         // Scrolling Areas
@@ -60,9 +54,6 @@ DBG_NAME(OScrollHelper)
         if ( aToCall.IsSet() )
             aToCall.Call( NULL );
     }
-    // -----------------------------------------------------------------------------
 }
-// -----------------------------------------------------------------------------
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

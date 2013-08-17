@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "ConnectionPage.hxx"
 #include "DbAdminImpl.hxx"
 #include "DriverSettings.hxx"
@@ -39,10 +38,8 @@
 #include <unotools/confignode.hxx>
 #include <vcl/msgbox.hxx>
 
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
 using namespace com::sun::star::uno;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::lang;
@@ -50,11 +47,8 @@ using namespace com::sun::star::util;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
 
-//=========================================================================
-//= ODbAdminDialog
-//=========================================================================
+// ODbAdminDialog
 DBG_NAME(ODbAdminDialog)
-//-------------------------------------------------------------------------
 ODbAdminDialog::ODbAdminDialog(Window* _pParent
                                , SfxItemSet* _pItems
                                , const Reference< XComponentContext >& _rxContext
@@ -77,7 +71,6 @@ ODbAdminDialog::ODbAdminDialog(Window* _pParent
     FreeResource();
 }
 
-//-------------------------------------------------------------------------
 ODbAdminDialog::~ODbAdminDialog()
 {
     SetInputSet(NULL);
@@ -85,7 +78,7 @@ ODbAdminDialog::~ODbAdminDialog()
 
     DBG_DTOR(ODbAdminDialog,NULL);
 }
-//-------------------------------------------------------------------------
+
 short ODbAdminDialog::Ok()
 {
     SfxTabDialog::Ok();
@@ -94,7 +87,6 @@ short ODbAdminDialog::Ok()
         // TODO : AR_ERROR is not handled correctly, we always close the dialog here
 }
 
-//-------------------------------------------------------------------------
 void ODbAdminDialog::PageCreated(sal_uInt16 _nId, SfxTabPage& _rPage)
 {
     // register ourself as modified listener
@@ -109,7 +101,6 @@ void ODbAdminDialog::PageCreated(sal_uInt16 _nId, SfxTabPage& _rPage)
     SfxTabDialog::PageCreated(_nId, _rPage);
 }
 
-// -----------------------------------------------------------------------------
 void ODbAdminDialog::addDetailPage(sal_uInt16 _nPageId, sal_uInt16 _nTextId, CreateTabPage _pCreateFunc)
 {
     // open our own resource block, as the page titles are strings local to this block
@@ -119,7 +110,6 @@ void ODbAdminDialog::addDetailPage(sal_uInt16 _nPageId, sal_uInt16 _nTextId, Cre
     m_aCurrentDetailPages.push(_nPageId);
 }
 
-//-------------------------------------------------------------------------
 void ODbAdminDialog::impl_selectDataSource(const ::com::sun::star::uno::Any& _aDataSourceName)
 {
     m_pImpl->setDataSourceOrName(_aDataSourceName);
@@ -186,7 +176,6 @@ void ODbAdminDialog::impl_selectDataSource(const ::com::sun::star::uno::Any& _aD
     }
 }
 
-//-------------------------------------------------------------------------
 void ODbAdminDialog::impl_resetPages(const Reference< XPropertySet >& _rxDatasource)
 {
     // the selection is valid if and only if we have a datasource now
@@ -239,22 +228,22 @@ void ODbAdminDialog::impl_resetPages(const Reference< XPropertySet >& _rxDatasou
 
     SetUpdateMode(sal_True);
 }
-// -----------------------------------------------------------------------------
+
 void ODbAdminDialog::setTitle(const OUString& _sTitle)
 {
     SetText(_sTitle);
 }
-//-------------------------------------------------------------------------
+
 void ODbAdminDialog::enableConfirmSettings( bool _bEnable )
 {
     (void)_bEnable;
 }
-//-------------------------------------------------------------------------
+
 sal_Bool ODbAdminDialog::saveDatasource()
 {
     return PrepareLeaveCurrentPage();
 }
-//-------------------------------------------------------------------------
+
 ODbAdminDialog::ApplyResult ODbAdminDialog::implApplyChanges()
 {
     if (!PrepareLeaveCurrentPage())
@@ -275,48 +264,47 @@ ODbAdminDialog::ApplyResult ODbAdminDialog::implApplyChanges()
 
     return AR_LEAVE_MODIFIED;
 }
-//-------------------------------------------------------------------------
+
 void ODbAdminDialog::selectDataSource(const ::com::sun::star::uno::Any& _aDataSourceName)
 {
     impl_selectDataSource(_aDataSourceName);
 }
 
-// -----------------------------------------------------------------------------
 const SfxItemSet* ODbAdminDialog::getOutputSet() const
 {
     return GetExampleSet();
 }
-// -----------------------------------------------------------------------------
+
 SfxItemSet* ODbAdminDialog::getWriteOutputSet()
 {
     return pExampleSet;
 }
-// -----------------------------------------------------------------------------
+
 ::std::pair< Reference<XConnection>,sal_Bool> ODbAdminDialog::createConnection()
 {
     return m_pImpl->createConnection();
 }
-// -----------------------------------------------------------------------------
+
 Reference< XComponentContext > ODbAdminDialog::getORB() const
 {
     return m_pImpl->getORB();
 }
-// -----------------------------------------------------------------------------
+
 Reference< XDriver > ODbAdminDialog::getDriver()
 {
     return m_pImpl->getDriver();
 }
-// -----------------------------------------------------------------------------
+
 OUString ODbAdminDialog::getDatasourceType(const SfxItemSet& _rSet) const
 {
     return m_pImpl->getDatasourceType(_rSet);
 }
-// -----------------------------------------------------------------------------
+
 void ODbAdminDialog::clearPassword()
 {
     m_pImpl->clearPassword();
 }
-//-------------------------------------------------------------------------
+
 SfxItemSet* ODbAdminDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rpPool, SfxPoolItem**& _rppDefaults, ::dbaccess::ODsnTypeCollection* _pTypeCollection)
 {
     // just to be sure ....
@@ -466,7 +454,7 @@ SfxItemSet* ODbAdminDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rp
 
     return _rpSet;
 }
-//-------------------------------------------------------------------------
+
 void ODbAdminDialog::destroyItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rpPool, SfxPoolItem**& _rppDefaults)
 {
     // _first_ delete the set (refering the pool)
@@ -490,8 +478,6 @@ void ODbAdminDialog::destroyItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rpPool, 
         // no need to explicitly delete the defaults, this has been done by the ReleaseDefaults
 }
 
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "dsntypes.hxx"
 #include "dbamiscres.hrc"
 #include <unotools/confignode.hxx>
@@ -31,10 +30,8 @@
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/string.hxx>
 
-//.........................................................................
 namespace dbaccess
 {
-//.........................................................................
 
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
@@ -52,11 +49,8 @@ namespace dbaccess
             }
         }
     }
-//=========================================================================
-//= ODsnTypeCollection
-//=========================================================================
+// ODsnTypeCollection
 DBG_NAME(ODsnTypeCollection)
-//-------------------------------------------------------------------------
 ODsnTypeCollection::ODsnTypeCollection(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _xContext)
 :m_aDriverConfig(_xContext)
 ,m_xContext(_xContext)
@@ -78,18 +72,17 @@ ODsnTypeCollection::ODsnTypeCollection(const ::com::sun::star::uno::Reference< :
         "ODsnTypeCollection::ODsnTypeCollection : invalid resources !");
 }
 
-//-------------------------------------------------------------------------
 ODsnTypeCollection::~ODsnTypeCollection()
 {
     DBG_DTOR(ODsnTypeCollection,NULL);
     OSL_ENSURE(0 == m_nLivingIterators, "ODsnTypeCollection::~ODsnTypeCollection : there are still living iterator objects!");
 }
-//-------------------------------------------------------------------------
+
 OUString ODsnTypeCollection::getTypeDisplayName(const OUString& _sURL) const
 {
     return m_aDriverConfig.getDriverTypeDisplayName(_sURL);
 }
-//-------------------------------------------------------------------------
+
 OUString ODsnTypeCollection::cutPrefix(const OUString& _sURL) const
 {
     OUString sURL( _sURL);
@@ -116,7 +109,6 @@ OUString ODsnTypeCollection::cutPrefix(const OUString& _sURL) const
     return sRet;
 }
 
-//-------------------------------------------------------------------------
 OUString ODsnTypeCollection::getPrefix(const OUString& _sURL) const
 {
     OUString sURL( _sURL);
@@ -141,14 +133,12 @@ OUString ODsnTypeCollection::getPrefix(const OUString& _sURL) const
     return sRet;
 }
 
-//-------------------------------------------------------------------------
 bool ODsnTypeCollection::hasDriver( const sal_Char* _pAsciiPattern ) const
 {
     OUString sPrefix( getPrefix( OUString::createFromAscii( _pAsciiPattern ) ) );
     return ( sPrefix.getLength() > 0 );
 }
 
-// -----------------------------------------------------------------------------
 bool ODsnTypeCollection::isConnectionUrlRequired(const OUString& _sURL) const
 {
     OUString sURL( _sURL);
@@ -167,13 +157,13 @@ bool ODsnTypeCollection::isConnectionUrlRequired(const OUString& _sURL) const
     }
     return sRet.getLength() > 0 && sRet[sRet.getLength()-1] == '*';
 }
-// -----------------------------------------------------------------------------
+
 OUString ODsnTypeCollection::getMediaType(const OUString& _sURL) const
 {
     const ::comphelper::NamedValueCollection& aFeatures = m_aDriverConfig.getMetaData(_sURL);
     return aFeatures.getOrDefault("MediaType",OUString());
 }
-// -----------------------------------------------------------------------------
+
 OUString ODsnTypeCollection::getDatasourcePrefixFromMediaType(const OUString& _sMediaType,const OUString& _sExtension)
 {
     OUString sURL, sFallbackURL;
@@ -202,7 +192,7 @@ OUString ODsnTypeCollection::getDatasourcePrefixFromMediaType(const OUString& _s
     sURL = comphelper::string::stripEnd(sURL, '*');
     return sURL;
 }
-// -----------------------------------------------------------------------------
+
 bool ODsnTypeCollection::isShowPropertiesEnabled( const OUString& _sURL ) const
 {
     return !(    _sURL.matchIgnoreAsciiCaseAsciiL("sdbc:embedded:hsqldb",sizeof("sdbc:embedded:hsqldb")-1)
@@ -216,7 +206,7 @@ bool ODsnTypeCollection::isShowPropertiesEnabled( const OUString& _sURL ) const
             ||  _sURL.matchIgnoreAsciiCaseAsciiL("sdbc:address:evolution:ldap",sizeof("sdbc:address:evolution:ldap")-1)
             ||  _sURL.matchIgnoreAsciiCaseAsciiL("sdbc:address:macab",sizeof("sdbc:address:macab")-1)  );
 }
-// -----------------------------------------------------------------------------
+
 void ODsnTypeCollection::extractHostNamePort(const OUString& _rDsn,OUString& _sDatabaseName,OUString& _rsHostname,sal_Int32& _nPortNumber) const
 {
     OUString sUrl = cutPrefix(_rDsn);
@@ -254,55 +244,54 @@ void ODsnTypeCollection::extractHostNamePort(const OUString& _rDsn,OUString& _sD
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 OUString ODsnTypeCollection::getJavaDriverClass(const OUString& _sURL) const
 {
     const ::comphelper::NamedValueCollection& aFeatures = m_aDriverConfig.getProperties(_sURL);
     return aFeatures.getOrDefault("JavaDriverClass",OUString());
 }
-//-------------------------------------------------------------------------
+
 sal_Bool ODsnTypeCollection::isFileSystemBased(const OUString& _sURL) const
 {
     const ::comphelper::NamedValueCollection& aFeatures = m_aDriverConfig.getMetaData(_sURL);
     return aFeatures.getOrDefault("FileSystemBased",sal_False);
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool ODsnTypeCollection::supportsTableCreation(const OUString& _sURL) const
 {
     const ::comphelper::NamedValueCollection& aFeatures = m_aDriverConfig.getMetaData(_sURL);
     return aFeatures.getOrDefault("SupportsTableCreation",sal_False);
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool ODsnTypeCollection::supportsColumnDescription(const OUString& _sURL) const
 {
     const ::comphelper::NamedValueCollection& aFeatures = m_aDriverConfig.getMetaData(_sURL);
     return aFeatures.getOrDefault("SupportsColumnDescription",sal_False);
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool ODsnTypeCollection::supportsBrowsing(const OUString& _sURL) const
 {
     const ::comphelper::NamedValueCollection& aFeatures = m_aDriverConfig.getMetaData(_sURL);
     return aFeatures.getOrDefault("SupportsBrowsing",sal_False);
 }
-// -----------------------------------------------------------------------------
+
 bool ODsnTypeCollection::needsJVM(const OUString& _sURL) const
 {
     const ::comphelper::NamedValueCollection& aFeatures = m_aDriverConfig.getMetaData(_sURL);
     return aFeatures.getOrDefault("UseJava",sal_False);
 }
-// -----------------------------------------------------------------------------
+
 Sequence<PropertyValue> ODsnTypeCollection::getDefaultDBSettings( const OUString& _sURL ) const
 {
     const ::comphelper::NamedValueCollection& aProperties = m_aDriverConfig.getProperties(_sURL);
     return aProperties.getPropertyValues();
 }
 
-//-------------------------------------------------------------------------
 bool ODsnTypeCollection::isEmbeddedDatabase( const OUString& _sURL ) const
 {
     return _sURL.startsWith( "sdbc:embedded:" );
 }
-// -----------------------------------------------------------------------------
+
 OUString ODsnTypeCollection::getEmbeddedDatabase() const
 {
     OUString sEmbeddedDatabaseURL;
@@ -324,18 +313,17 @@ OUString ODsnTypeCollection::getEmbeddedDatabase() const
 
     return sEmbeddedDatabaseURL;
 }
-//-------------------------------------------------------------------------
+
 ODsnTypeCollection::TypeIterator ODsnTypeCollection::begin() const
 {
     return TypeIterator(this, 0);
 }
 
-//-------------------------------------------------------------------------
 ODsnTypeCollection::TypeIterator ODsnTypeCollection::end() const
 {
     return TypeIterator(this, m_aDsnTypesDisplayNames.size());
 }
-//-------------------------------------------------------------------------
+
 DATASOURCE_TYPE ODsnTypeCollection::determineType(const OUString& _rDsn) const
 {
     OUString sDsn(comphelper::string::stripEnd(_rDsn, '*'));
@@ -437,7 +425,7 @@ DATASOURCE_TYPE ODsnTypeCollection::determineType(const OUString& _rDsn) const
 
     return DST_UNKNOWN;
 }
-// -----------------------------------------------------------------------------
+
 void ODsnTypeCollection::fillPageIds(const OUString& _sURL,::std::vector<sal_Int16>& _rOutPathIds) const
 {
     DATASOURCE_TYPE eType = determineType(_sURL);
@@ -500,7 +488,7 @@ void ODsnTypeCollection::fillPageIds(const OUString& _sURL,::std::vector<sal_Int
             break;
     }
 }
-// -----------------------------------------------------------------------------
+
 OUString ODsnTypeCollection::getType(const OUString& _sURL) const
 {
     OUString sOldPattern;
@@ -516,7 +504,7 @@ OUString ODsnTypeCollection::getType(const OUString& _sURL) const
     }
     return sOldPattern;
 }
-// -----------------------------------------------------------------------------
+
 sal_Int32 ODsnTypeCollection::getIndexOf(const OUString& _sURL) const
 {
     sal_Int32 nRet = -1;
@@ -536,15 +524,13 @@ sal_Int32 ODsnTypeCollection::getIndexOf(const OUString& _sURL) const
 
     return nRet;
 }
-// -----------------------------------------------------------------------------
+
 sal_Int32 ODsnTypeCollection::size() const
 {
     return m_aDsnPrefixes.size();
 }
-//=========================================================================
-//= ODsnTypeCollection::TypeIterator
-//=========================================================================
-//-------------------------------------------------------------------------
+
+// ODsnTypeCollection::TypeIterator
 ODsnTypeCollection::TypeIterator::TypeIterator(const ODsnTypeCollection* _pContainer, sal_Int32 _nInitialPos)
     :m_pContainer(_pContainer)
     ,m_nPosition(_nInitialPos)
@@ -555,7 +541,6 @@ ODsnTypeCollection::TypeIterator::TypeIterator(const ODsnTypeCollection* _pConta
 #endif
 }
 
-//-------------------------------------------------------------------------
 ODsnTypeCollection::TypeIterator::TypeIterator(const TypeIterator& _rSource)
     :m_pContainer(_rSource.m_pContainer)
     ,m_nPosition(_rSource.m_nPosition)
@@ -565,7 +550,6 @@ ODsnTypeCollection::TypeIterator::TypeIterator(const TypeIterator& _rSource)
 #endif
 }
 
-//-------------------------------------------------------------------------
 ODsnTypeCollection::TypeIterator::~TypeIterator()
 {
 #if OSL_DEBUG_LEVEL > 0
@@ -573,19 +557,18 @@ ODsnTypeCollection::TypeIterator::~TypeIterator()
 #endif
 }
 
-//-------------------------------------------------------------------------
 OUString ODsnTypeCollection::TypeIterator::getDisplayName() const
 {
     OSL_ENSURE(m_nPosition < (sal_Int32)m_pContainer->m_aDsnTypesDisplayNames.size(), "ODsnTypeCollection::TypeIterator::getDisplayName : invalid position!");
     return m_pContainer->m_aDsnTypesDisplayNames[m_nPosition];
 }
-// -----------------------------------------------------------------------------
+
 OUString ODsnTypeCollection::TypeIterator::getURLPrefix() const
 {
     OSL_ENSURE(m_nPosition < (sal_Int32)m_pContainer->m_aDsnPrefixes.size(), "ODsnTypeCollection::TypeIterator::getDisplayName : invalid position!");
     return m_pContainer->m_aDsnPrefixes[m_nPosition];
 }
-//-------------------------------------------------------------------------
+
 const ODsnTypeCollection::TypeIterator& ODsnTypeCollection::TypeIterator::operator++()
 {
     OSL_ENSURE(m_nPosition < (sal_Int32)m_pContainer->m_aDsnTypesDisplayNames.size(), "ODsnTypeCollection::TypeIterator::operator++ : invalid position!");
@@ -594,7 +577,6 @@ const ODsnTypeCollection::TypeIterator& ODsnTypeCollection::TypeIterator::operat
     return *this;
 }
 
-//-------------------------------------------------------------------------
 const ODsnTypeCollection::TypeIterator& ODsnTypeCollection::TypeIterator::operator--()
 {
     OSL_ENSURE(m_nPosition >= 0, "ODsnTypeCollection::TypeIterator::operator-- : invalid position!");
@@ -603,14 +585,11 @@ const ODsnTypeCollection::TypeIterator& ODsnTypeCollection::TypeIterator::operat
     return *this;
 }
 
-//-------------------------------------------------------------------------
 bool operator==(const ODsnTypeCollection::TypeIterator& lhs, const ODsnTypeCollection::TypeIterator& rhs)
 {
     return (lhs.m_pContainer == rhs.m_pContainer) && (lhs.m_nPosition == rhs.m_nPosition);
 }
 
-//.........................................................................
 }   // namespace dbaccess
-//.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

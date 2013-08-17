@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "documentdefinition.hxx"
 #include "dbastrings.hrc"
 #include "sdbcoretools.hxx"
@@ -129,7 +128,6 @@ using namespace ::cppu;
 using sdb::application::XDatabaseDocumentUI;
 namespace DatabaseObject = sdb::application::DatabaseObject;
 
-
 #define DEFAULT_WIDTH  10000
 #define DEFAULT_HEIGHT  7500
 
@@ -138,12 +136,9 @@ namespace dbaccess
 
     typedef ::boost::optional< bool > optional_bool;
 
-    //=========================================================================
-    //= helper
-    //=========================================================================
+    // helper
     namespace
     {
-        // --------------------------------------------------------------------
         OUString lcl_determineContentType_nothrow( const Reference< XStorage >& _rxContainerStorage,
             const OUString& _rEntityName )
         {
@@ -162,9 +157,7 @@ namespace dbaccess
         }
     }
 
-    //==================================================================
     // OEmbedObjectHolder
-    //==================================================================
     typedef ::cppu::WeakComponentImplHelper1<   embed::XStateChangeListener > TEmbedObjectHolder;
     class OEmbedObjectHolder :   public ::comphelper::OBaseMutex
                                 ,public TEmbedObjectHolder
@@ -233,9 +226,7 @@ namespace dbaccess
         m_xBroadCaster = NULL;
     }
 
-    //==================================================================
     // OEmbeddedClientHelper
-    //==================================================================
     typedef ::cppu::WeakImplHelper1 <   XEmbeddedClient
                                     >   EmbeddedClientHelper_BASE;
     class OEmbeddedClientHelper : public EmbeddedClientHelper_BASE
@@ -263,9 +254,7 @@ namespace dbaccess
         inline void resetClient(ODocumentDefinition* _pClient) { m_pClient = _pClient; }
     };
 
-    //==================================================================
     // LockModifiable
-    //==================================================================
     class LockModifiable
     {
     public:
@@ -297,9 +286,7 @@ namespace dbaccess
         Reference< XModifiable2 >   m_xModifiable;
     };
 
-    //==================================================================
     // LifetimeCoupler
-    //==================================================================
     typedef ::cppu::WeakImplHelper1 <   css::lang::XEventListener
                                     >   LifetimeCoupler_Base;
     /** helper class which couples the lifetime of a component to the lifetime
@@ -346,9 +333,7 @@ namespace dbaccess
         m_xClient.clear();
     }
 
-    //==================================================================
     // ODocumentSaveContinuation
-    //==================================================================
     class ODocumentSaveContinuation : public OInteraction< XInteractionDocumentSave >
     {
         OUString     m_sName;
@@ -426,9 +411,7 @@ OUString ODocumentDefinition::GetDocumentServiceFromMediaType( const OUString& _
     return sResult;
 }
 
-//==========================================================================
-//= ODocumentDefinition
-//==========================================================================
+// ODocumentDefinition
 DBG_NAME(ODocumentDefinition)
 
 ODocumentDefinition::ODocumentDefinition( const Reference< XInterface >& _rxContainer, const Reference< XComponentContext >& _xORB,
@@ -648,9 +631,7 @@ void ODocumentDefinition::impl_onActivateEmbeddedObject_nothrow( const bool i_bR
 
 namespace
 {
-    // =========================================================================
-    // = PreserveVisualAreaSize
-    // =========================================================================
+    // PreserveVisualAreaSize
     /** stack-guard for preserving the size of the VisArea of an XModel
     */
     class PreserveVisualAreaSize
@@ -692,9 +673,7 @@ namespace
         }
     };
 
-    // =========================================================================
-    // = LayoutManagerLock
-    // =========================================================================
+    // LayoutManagerLock
     /** helper class for stack-usage which during its lifetime locks a layout manager
     */
     class LayoutManagerLock
@@ -1096,9 +1075,7 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
     }
     else if ( aCommand.Name == "delete" )
     {
-        //////////////////////////////////////////////////////////////////
         // delete
-        //////////////////////////////////////////////////////////////////
         closeObject();
         Reference< XStorage> xStorage = getContainerStorage();
         if ( xStorage.is() )
@@ -1440,7 +1417,6 @@ sal_Bool ODocumentDefinition::saveAs()
 
 namespace
 {
-    // .........................................................................
     void    lcl_putLoadArgs( ::comphelper::NamedValueCollection& _io_rArgs, const optional_bool _bSuppressMacros, const optional_bool _bReadOnly )
     {
         if ( !!_bSuppressMacros )
@@ -1524,7 +1500,6 @@ void ODocumentDefinition::separateOpenCommandArguments( const Sequence< Property
 Sequence< PropertyValue > ODocumentDefinition::fillLoadArgs( const Reference< XConnection>& _xConnection, const bool _bSuppressMacros, const bool _bReadOnly,
         const Sequence< PropertyValue >& i_rOpenCommandArguments, Sequence< PropertyValue >& _out_rEmbeddedObjectDescriptor )
 {
-    // .........................................................................
     // (re-)create interceptor, and put it into the descriptor of the embedded object
     if ( m_pInterceptor )
     {
@@ -1540,11 +1515,9 @@ Sequence< PropertyValue > ODocumentDefinition::fillLoadArgs( const Reference< XC
     ::comphelper::NamedValueCollection aEmbeddedDescriptor;
     aEmbeddedDescriptor.put( "OutplaceDispatchInterceptor", xInterceptor );
 
-    // .........................................................................
     ::comphelper::NamedValueCollection aMediaDesc;
     separateOpenCommandArguments( i_rOpenCommandArguments, aMediaDesc, aEmbeddedDescriptor );
 
-    // .........................................................................
     // create the OutplaceFrameProperties, and put them into the descriptor of the embedded object
     ::comphelper::NamedValueCollection OutplaceFrameProperties;
     OutplaceFrameProperties.put( "TopWindow", (sal_Bool)sal_True );
@@ -1570,19 +1543,15 @@ Sequence< PropertyValue > ODocumentDefinition::fillLoadArgs( const Reference< XC
 
     aEmbeddedDescriptor.put( "OutplaceFrameProperties", OutplaceFrameProperties.getNamedValues() );
 
-    // .........................................................................
     // tell the embedded object to have (or not have) script support
     aEmbeddedDescriptor.put( "EmbeddedScriptSupport", (sal_Bool)objectSupportsEmbeddedScripts() );
 
-    // .........................................................................
     // tell the embedded object to not participate in the document recovery game - the DB doc will handle it
     aEmbeddedDescriptor.put( "DocumentRecoverySupport", (sal_Bool)sal_False );
 
-    // .........................................................................
     // pass the descriptor of the embedded object to the caller
     aEmbeddedDescriptor >>= _out_rEmbeddedObjectDescriptor;
 
-    // .........................................................................
     // create the ComponentData, and put it into the document's media descriptor
     {
         ::comphelper::NamedValueCollection aComponentData;
@@ -1596,7 +1565,6 @@ Sequence< PropertyValue > ODocumentDefinition::fillLoadArgs( const Reference< XC
 
     aMediaDesc.put( "DocumentBaseURL", m_pImpl->m_pDataSource->getURL() );
 
-    // .........................................................................
     // put the common load arguments into the document's media descriptor
     lcl_putLoadArgs( aMediaDesc, optional_bool( _bSuppressMacros ), optional_bool( _bReadOnly ) );
 
@@ -2154,9 +2122,7 @@ void ODocumentDefinition::firePropertyChange( sal_Int32 i_nHandle, const Any& i_
     fire( &i_nHandle, &i_rNewValue, &i_rOldValue, 1, i_bVetoable );
 }
 
-// =============================================================================
 // NameChangeNotifier
-// =============================================================================
 NameChangeNotifier::NameChangeNotifier( ODocumentDefinition& i_rDocumentDefinition, const OUString& i_rNewName,
                                   ::osl::ResettableMutexGuard& i_rClearForNotify )
     :m_rDocumentDefinition( i_rDocumentDefinition )
@@ -2181,4 +2147,5 @@ void NameChangeNotifier::impl_fireEvent_throw( const sal_Bool i_bVetoable )
 }
 
 }   // namespace dbaccess
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

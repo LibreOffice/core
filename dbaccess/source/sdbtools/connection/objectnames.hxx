@@ -28,14 +28,10 @@
 
 #include <memory>
 
-//........................................................................
 namespace sdbtools
 {
-//........................................................................
 
-    //====================================================================
-    //= ObjectNames
-    //====================================================================
+    // ObjectNames
     typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::sdb::tools::XObjectNames
                                     >   ObjectNames_Base;
     struct ObjectNames_Impl;
@@ -79,9 +75,7 @@ namespace sdbtools
         ObjectNames& operator=( const ObjectNames& );   // never implemented
     };
 
-//........................................................................
 } // namespace sdbtools
-//........................................................................
 
 #endif // DBACCESS_SOURCE_SDBTOOLS_INC_OBJECTNAMES_HXX
 

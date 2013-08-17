@@ -17,33 +17,25 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "optionalboolitem.hxx"
 
-//........................................................................
 namespace dbaui
 {
-//........................................................................
 
-    //====================================================================
-    //= OptionalBoolItem
-    //====================================================================
+    // OptionalBoolItem
     TYPEINIT1( OptionalBoolItem, SfxPoolItem );
-    //--------------------------------------------------------------------
     OptionalBoolItem::OptionalBoolItem( sal_Int16 _nWhich )
         :SfxPoolItem( _nWhich )
         ,m_aValue()
     {
     }
 
-    //--------------------------------------------------------------------
     OptionalBoolItem::OptionalBoolItem( const OptionalBoolItem& _rSource )
         :SfxPoolItem( _rSource )
         ,m_aValue( _rSource.m_aValue )
     {
     }
 
-    //--------------------------------------------------------------------
     int OptionalBoolItem::operator==( const SfxPoolItem& _rItem ) const
     {
         const OptionalBoolItem* pCompare = PTR_CAST( OptionalBoolItem, &_rItem );
@@ -56,14 +48,11 @@ namespace dbaui
         return 0;
     }
 
-    //--------------------------------------------------------------------
     SfxPoolItem* OptionalBoolItem::Clone( SfxItemPool* /*_pPool*/ ) const
     {
         return new OptionalBoolItem( *this );
     }
 
-//........................................................................
 } // namespace dbaui
-//........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

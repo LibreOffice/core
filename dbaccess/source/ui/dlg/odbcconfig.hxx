@@ -35,14 +35,10 @@
 
 #include <memory>
 
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
 
-//=========================================================================
-//= OOdbcLibWrapper
-//=========================================================================
+// OOdbcLibWrapper
 /** base for helper classes wrapping functionality from an ODBC library
 */
 class OOdbcLibWrapper
@@ -74,9 +70,7 @@ protected:
     void        unload();
 };
 
-//=========================================================================
-//= OOdbcEnumeration
-//=========================================================================
+// OOdbcEnumeration
 struct OdbcTypesImpl;
 class OOdbcEnumeration : public OOdbcLibWrapper
 {
@@ -105,9 +99,7 @@ protected:
     void        freeEnv();
 };
 
-//=========================================================================
-//= OOdbcManagement
-//=========================================================================
+// OOdbcManagement
 #ifdef HAVE_ODBC_ADMINISTRATION
 class ProcessTerminationWait;
 class OOdbcManagement
@@ -124,9 +116,7 @@ public:
 };
 #endif
 
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
 
 #endif // _DBAUI_ODBC_CONFIG_HXX_
 

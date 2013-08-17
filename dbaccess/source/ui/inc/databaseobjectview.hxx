@@ -37,11 +37,8 @@
 
 #include <boost/shared_ptr.hpp>
 
-
-// .........................................................................
 namespace dbaui
 {
-// .........................................................................
     /** encapsulates access to the view of a database object.
 
         @todo
@@ -59,7 +56,6 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::application::XDatabaseDocumentUI >
                         m_xApplication;
         OUString m_sComponentURL;
-
 
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
@@ -149,9 +145,7 @@ namespace dbaui
             );
     };
 
-    //======================================================================
-    //= QueryDesigner
-    //======================================================================
+    // QueryDesigner
     class QueryDesigner : public DatabaseObjectView
     {
     protected:
@@ -173,9 +167,7 @@ namespace dbaui
         );
     };
 
-    //======================================================================
-    //= TableDesigner
-    //======================================================================
+    // TableDesigner
     class TableDesigner : public DatabaseObjectView
     {
     protected:
@@ -211,9 +203,7 @@ namespace dbaui
                 impl_getConnectionProvidedDesigner_nothrow( const OUString& _rTableName );
     };
 
-    //======================================================================
-    //= ResultSetBrowser
-    //======================================================================
+    // ResultSetBrowser
     class ResultSetBrowser : public DatabaseObjectView
     {
     private:
@@ -235,9 +225,7 @@ namespace dbaui
         );
 
     };
-    //======================================================================
-    //= RelationDesigner
-    //======================================================================
+    // RelationDesigner
     class RelationDesigner : public DatabaseObjectView
     {
     public:
@@ -247,9 +235,7 @@ namespace dbaui
             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxParentFrame
         );
     };
-// .........................................................................
 }   // namespace dbaui
-// .........................................................................
 
 #endif // DBACCESS_DATABASE_OBJECT_VIEW_HXX
 

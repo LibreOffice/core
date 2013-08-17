@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "browserids.hxx"
 #include "commontypes.hxx"
 #include <dbaccess/dataview.hxx>
@@ -48,10 +47,8 @@
 #include <tools/diagnose_ex.h>
 #include <vcl/msgbox.hxx>
 
-//........................................................................
 namespace dbaui
 {
-//........................................................................
 
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::uno::Reference;
@@ -172,22 +169,17 @@ namespace dbaui
         }
     };
 
-    //====================================================================
-    //= DBSubComponentController
-    //====================================================================
-    //--------------------------------------------------------------------
+    // DBSubComponentController
     DBSubComponentController::DBSubComponentController(const Reference< XComponentContext >& _rxORB)
         :DBSubComponentController_Base( _rxORB )
         ,m_pImpl( new DBSubComponentController_Impl( getMutex() ) )
     {
     }
 
-    //--------------------------------------------------------------------
     DBSubComponentController::~DBSubComponentController()
     {
     }
 
-    //--------------------------------------------------------------------
     void DBSubComponentController::impl_initialize()
     {
         OGenericUnoController::impl_initialize();
@@ -217,7 +209,6 @@ namespace dbaui
         }
     }
 
-    //--------------------------------------------------------------------
     Any SAL_CALL DBSubComponentController::queryInterface(const Type& _rType) throw (RuntimeException)
     {
         if ( _rType.equals( XScriptInvocationContext::static_type() ) )
@@ -230,7 +221,6 @@ namespace dbaui
         return DBSubComponentController_Base::queryInterface( _rType );
     }
 
-    //--------------------------------------------------------------------
     Sequence< Type > SAL_CALL DBSubComponentController::getTypes(  ) throw (RuntimeException)
     {
         Sequence< Type > aTypes( DBSubComponentController_Base::getTypes() );
@@ -248,7 +238,6 @@ namespace dbaui
         return aTypes;
     }
 
-    //--------------------------------------------------------------------
     void DBSubComponentController::initializeConnection( const Reference< XConnection >& _rxForeignConn )
     {
         DBG_ASSERT( !isConnected(), "DBSubComponentController::initializeConnection: not to be called when already connected!" );
@@ -307,7 +296,6 @@ namespace dbaui
         }
     }
 
-    //--------------------------------------------------------------------
     void DBSubComponentController::reconnect( sal_Bool _bUI )
     {
         OSL_ENSURE(!m_pImpl->m_bSuspended, "Cannot reconnect while suspended!");
@@ -335,7 +323,6 @@ namespace dbaui
         InvalidateAll();
     }
 
-    //--------------------------------------------------------------------
     void DBSubComponentController::disconnect()
     {
         stopConnectionListening(m_pImpl->m_xConnection);
@@ -345,7 +332,6 @@ namespace dbaui
         InvalidateAll();
     }
 
-    //--------------------------------------------------------------------
     void DBSubComponentController::losingConnection()
     {
         // our connection was disposed so we need a new one
@@ -353,7 +339,6 @@ namespace dbaui
         InvalidateAll();
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL DBSubComponentController::disposing()
     {
         DBSubComponentController_Base::disposing();
@@ -365,7 +350,6 @@ namespace dbaui
         m_pImpl->m_aDataSource.clear();
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL DBSubComponentController::disposing(const EventObject& _rSource) throw( RuntimeException )
     {
         if ( _rSource.Source == getConnection() )
@@ -389,49 +373,41 @@ namespace dbaui
             DBSubComponentController_Base::disposing( _rSource );
     }
 
-    //--------------------------------------------------------------------
     void DBSubComponentController::appendError( const OUString& _rErrorMessage, const ::dbtools::StandardSQLState _eSQLState,
             const sal_Int32 _nErrorCode )
     {
         m_pImpl->m_aCurrentError.append( ::dbtools::SQLExceptionInfo::SQL_EXCEPTION, _rErrorMessage, getStandardSQLStateAscii( _eSQLState ),
             _nErrorCode );
     }
-    //--------------------------------------------------------------------
     void DBSubComponentController::clearError()
     {
         m_pImpl->m_aCurrentError = ::dbtools::SQLExceptionInfo();
     }
 
-    //--------------------------------------------------------------------
     sal_Bool DBSubComponentController::hasError() const
     {
         return m_pImpl->m_aCurrentError.isValid();
     }
 
-    //--------------------------------------------------------------------
     const ::dbtools::SQLExceptionInfo& DBSubComponentController::getError() const
     {
         return m_pImpl->m_aCurrentError;
     }
 
-    //--------------------------------------------------------------------
     void DBSubComponentController::displayError()
     {
         showError( m_pImpl->m_aCurrentError );
     }
 
-    //--------------------------------------------------------------------
     sal_Bool SAL_CALL DBSubComponentController::suspend(sal_Bool bSuspend) throw( RuntimeException )
     {
         m_pImpl->m_bSuspended = bSuspend;
         if ( !bSuspend && !isConnected() )
             reconnect(sal_True);
 
-
         return sal_True;
     }
 
-    // -----------------------------------------------------------------------------
     sal_Bool SAL_CALL DBSubComponentController::attachModel( const Reference< XModel > & _rxModel) throw( RuntimeException )
     {
         if ( !_rxModel.is() )
@@ -451,7 +427,6 @@ namespace dbaui
         return sal_True;
     }
 
-    // -----------------------------------------------------------------------------
     void DBSubComponentController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >& _rArgs)
     {
         if ( _nId == ID_BROWSER_CLOSE )
@@ -464,7 +439,6 @@ namespace dbaui
         InvalidateFeature( _nId );
     }
 
-    // -----------------------------------------------------------------------------
     OUString DBSubComponentController::getDataSourceName() const
     {
         OUString sName;
@@ -473,7 +447,6 @@ namespace dbaui
             xDataSourceProps->getPropertyValue(PROPERTY_NAME) >>= sName;
         return sName;
     }
-    // -----------------------------------------------------------------------------
     void DBSubComponentController::connectionLostMessage() const
     {
         String aMessage(ModuleRes(RID_STR_CONNECTION_LOST));
@@ -486,43 +459,36 @@ namespace dbaui
 
         InfoBox(pWin, aMessage).Execute();
     }
-    // -----------------------------------------------------------------------------
     const Reference< XConnection >& DBSubComponentController::getConnection() const
     {
         return m_pImpl->m_xConnection;
     }
 
-    // -----------------------------------------------------------------------------
     sal_Bool DBSubComponentController::isReadOnly() const
     {
         return !m_pImpl->m_bEditable;
     }
 
-    // -----------------------------------------------------------------------------
     sal_Bool DBSubComponentController::isEditable() const
     {
         return m_pImpl->m_bEditable;
     }
 
-    // -----------------------------------------------------------------------------
     void DBSubComponentController::setEditable(sal_Bool _bEditable)
     {
         m_pImpl->m_bEditable = _bEditable;
     }
 
-    // -----------------------------------------------------------------------------
     const ::dbtools::DatabaseMetaData& DBSubComponentController::getSdbMetaData() const
     {
         return m_pImpl->m_aSdbMetaData;
     }
 
-    // -----------------------------------------------------------------------------
     sal_Bool DBSubComponentController::isConnected() const
     {
         return m_pImpl->m_xConnection.is();
     }
 
-    // -----------------------------------------------------------------------------
     Reference< XDatabaseMetaData > DBSubComponentController::getMetaData( ) const
     {
         Reference< XDatabaseMetaData > xMeta;
@@ -538,36 +504,30 @@ namespace dbaui
         return xMeta;
     }
 
-    // -----------------------------------------------------------------------------
     const Reference< XPropertySet >& DBSubComponentController::getDataSource() const
     {
         return m_pImpl->m_aDataSource.getDataSourceProps();
     }
 
-    // -----------------------------------------------------------------------------
     sal_Bool DBSubComponentController::haveDataSource() const
     {
         return m_pImpl->m_aDataSource.is();
     }
 
-    // -----------------------------------------------------------------------------
     Reference< XModel > DBSubComponentController::getDatabaseDocument() const
     {
         return Reference< XModel >( m_pImpl->m_aDataSource.getDatabaseDocument(), UNO_QUERY );
     }
 
-    // -----------------------------------------------------------------------------
     Reference< XNumberFormatter > DBSubComponentController::getNumberFormatter() const
     {
         return m_pImpl->m_xFormatter;
     }
 
-    // -----------------------------------------------------------------------------
     Reference< XModel > DBSubComponentController::getPrivateModel() const
     {
         return getDatabaseDocument();
     }
-    // -----------------------------------------------------------------------------
     // XTitle
     OUString SAL_CALL DBSubComponentController::getTitle()
         throw (RuntimeException)
@@ -587,13 +547,11 @@ namespace dbaui
         return sTitle.makeStringAndClear();
     }
 
-    // -----------------------------------------------------------------------------
     sal_Int32 DBSubComponentController::getCurrentStartNumber() const
     {
         return m_pImpl->m_nDocStartNumber;
     }
 
-    // -----------------------------------------------------------------------------
     Reference< XEmbeddedScripts > SAL_CALL DBSubComponentController::getScriptContainer() throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( getMutex() );
@@ -603,28 +561,24 @@ namespace dbaui
         return Reference< XEmbeddedScripts >( getDatabaseDocument(), UNO_QUERY_THROW );
     }
 
-    // -----------------------------------------------------------------------------
     void SAL_CALL DBSubComponentController::addModifyListener( const Reference< XModifyListener >& i_Listener ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( getMutex() );
         m_pImpl->m_aModifyListeners.addInterface( i_Listener );
     }
 
-    // -----------------------------------------------------------------------------
     void SAL_CALL DBSubComponentController::removeModifyListener( const Reference< XModifyListener >& i_Listener ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( getMutex() );
         m_pImpl->m_aModifyListeners.removeInterface( i_Listener );
     }
 
-    // -----------------------------------------------------------------------------
     ::sal_Bool SAL_CALL DBSubComponentController::isModified(  ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( getMutex() );
         return impl_isModified();
     }
 
-    // -----------------------------------------------------------------------------
     void SAL_CALL DBSubComponentController::setModified( ::sal_Bool i_bModified ) throw (PropertyVetoException, RuntimeException)
     {
         ::osl::ClearableMutexGuard aGuard( getMutex() );
@@ -640,13 +594,11 @@ namespace dbaui
         m_pImpl->m_aModifyListeners.notifyEach( &XModifyListener::modified, aEvent );
     }
 
-    // -----------------------------------------------------------------------------
     sal_Bool DBSubComponentController::impl_isModified() const
     {
         return m_pImpl->m_bModified;
     }
 
-    // -----------------------------------------------------------------------------
     void DBSubComponentController::impl_onModifyChanged()
     {
         InvalidateFeature( ID_BROWSER_SAVEDOC );
@@ -654,8 +606,6 @@ namespace dbaui
             InvalidateFeature( ID_BROWSER_SAVEASDOC );
     }
 
-//........................................................................
 }   // namespace dbaui
-//........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

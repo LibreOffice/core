@@ -28,10 +28,8 @@
 #include <memory>
 
 using namespace ::dbaui;
-//==================================================================
 // class OApplicationIconControl
 DBG_NAME(OApplicationIconControl)
-//==================================================================
 OApplicationIconControl::OApplicationIconControl(Window* _pParent)
     : SvtIconChoiceCtrl(_pParent,WB_ICON | WB_NOCOLUMNHEADER | WB_HIGHLIGHTFRAME | /*!WB_NOSELECTION |*/
                                 WB_TABSTOP | WB_CLIPCHILDREN | WB_NOVSCROLL | WB_SMART_ARRANGE | WB_NOHSCROLL | WB_CENTER)
@@ -63,7 +61,7 @@ OApplicationIconControl::OApplicationIconControl(Window* _pParent)
     SetChoiceWithCursor( sal_True );
     SetSelectionMode(SINGLE_SELECTION);
 }
-// -----------------------------------------------------------------------------
+
 OApplicationIconControl::~OApplicationIconControl()
 {
     sal_uLong nCount = GetEntryCount();
@@ -79,7 +77,7 @@ OApplicationIconControl::~OApplicationIconControl()
 
     DBG_DTOR(OApplicationIconControl,NULL);
 }
-// -----------------------------------------------------------------------------
+
 sal_Int8 OApplicationIconControl::AcceptDrop( const AcceptDropEvent& _rEvt )
 {
     sal_Int8 nDropOption = DND_ACTION_NONE;
@@ -97,7 +95,7 @@ sal_Int8 OApplicationIconControl::AcceptDrop( const AcceptDropEvent& _rEvt )
 
     return nDropOption;
 }
-// -----------------------------------------------------------------------------
+
 sal_Int8 OApplicationIconControl::ExecuteDrop( const ExecuteDropEvent& _rEvt )
 {
     if ( m_pActionListener )

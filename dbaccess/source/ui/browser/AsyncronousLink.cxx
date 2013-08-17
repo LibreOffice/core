@@ -21,12 +21,9 @@
 #include <vcl/svapp.hxx>
 #include <tools/debug.hxx>
 
-//==================================================================
-//= OAsyncronousLink
-//==================================================================
+// OAsyncronousLink
 using namespace dbaui;
 DBG_NAME(OAsyncronousLink)
-//------------------------------------------------------------------
 OAsyncronousLink::OAsyncronousLink( const Link& _rHandler )
     :m_aHandler(_rHandler)
     ,m_aEventSafety()
@@ -36,7 +33,6 @@ OAsyncronousLink::OAsyncronousLink( const Link& _rHandler )
     DBG_CTOR(OAsyncronousLink,NULL);
 }
 
-//------------------------------------------------------------------
 OAsyncronousLink::~OAsyncronousLink()
 {
     {
@@ -56,8 +52,6 @@ OAsyncronousLink::~OAsyncronousLink()
     DBG_DTOR(OAsyncronousLink,NULL);
 }
 
-
-//------------------------------------------------------------------
 void OAsyncronousLink::Call( void* _pArgument )
 {
     ::osl::MutexGuard aEventGuard( m_aEventSafety );
@@ -66,7 +60,6 @@ void OAsyncronousLink::Call( void* _pArgument )
     m_nEventId = Application::PostUserEvent( LINK( this, OAsyncronousLink, OnAsyncCall ), _pArgument );
 }
 
-//------------------------------------------------------------------
 void OAsyncronousLink::CancelCall()
 {
     ::osl::MutexGuard aEventGuard( m_aEventSafety );
@@ -75,7 +68,6 @@ void OAsyncronousLink::CancelCall()
     m_nEventId = 0;
 }
 
-//------------------------------------------------------------------
 IMPL_LINK(OAsyncronousLink, OnAsyncCall, void*, _pArg)
 {
     {

@@ -51,9 +51,7 @@ namespace dbaccess
                                                 ::com::sun::star::sdbcx::XRename,
                                                 ::com::sun::star::lang::XUnoTunnel,
                                                 ::com::sun::star::sdbcx::XAlterTable> OTableDescriptor_BASE;
-    //==========================================================================
-    //= OTables
-    //==========================================================================
+    // OTables
     class ODBTableDecorator;
     typedef ::comphelper::OIdPropertyArrayUsageHelper< ODBTableDecorator >  ODBTableDecorator_PROP;
 
@@ -121,8 +119,6 @@ namespace dbaccess
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxColumnDefinitions
         )   throw(::com::sun::star::sdbc::SQLException);
 
-
-
         // ODescriptor
         virtual void construct();
 
@@ -172,6 +168,5 @@ namespace dbaccess
     };
 }
 #endif // _DBA_CORE_TABLEDECORATOR_HXX_
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

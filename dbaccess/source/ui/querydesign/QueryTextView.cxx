@@ -36,10 +36,8 @@ using namespace dbaui;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::frame;
-// -----------------------------------------------------------------------------
 
 // end of temp classes
-// -------------------------------------------------------------------------
 DBG_NAME(OQueryTextView)
 OQueryTextView::OQueryTextView(OQueryContainerWindow* _pParent)
     :Window(_pParent)
@@ -52,42 +50,42 @@ OQueryTextView::OQueryTextView(OQueryContainerWindow* _pParent)
     m_pEdit->SetPosPixel( Point( 0, 0 ) );
     m_pEdit->Show();
 }
-// -----------------------------------------------------------------------------
+
 OQueryTextView::~OQueryTextView()
 {
     DBG_DTOR(OQueryTextView,NULL);
     ::std::auto_ptr<Window> aTemp(m_pEdit);
     m_pEdit = NULL;
 }
-// -----------------------------------------------------------------------------
+
 void OQueryTextView::GetFocus()
 {
     if ( m_pEdit )
         m_pEdit->GrabFocus();
 }
-// -------------------------------------------------------------------------
+
 void OQueryTextView::Resize()
 {
     Window::Resize();
     m_pEdit->SetSizePixel( GetOutputSizePixel() );
 }
-// -----------------------------------------------------------------------------
+
 // check if the statement is correct when not returning false
 sal_Bool OQueryTextView::checkStatement()
 {
     return sal_True;
 }
-// -----------------------------------------------------------------------------
+
 OUString OQueryTextView::getStatement()
 {
     return m_pEdit->GetText();
 }
-// -----------------------------------------------------------------------------
+
 void OQueryTextView::setReadOnly(sal_Bool _bReadOnly)
 {
     m_pEdit->SetReadOnly(_bReadOnly);
 }
-// -----------------------------------------------------------------------------
+
 void OQueryTextView::clear()
 {
     OSqlEditUndoAct* pUndoAct = new OSqlEditUndoAct( m_pEdit );
@@ -97,46 +95,45 @@ void OQueryTextView::clear()
 
     m_pEdit->SetText(String());
 }
-// -----------------------------------------------------------------------------
+
 void OQueryTextView::setStatement(const OUString& _rsStatement)
 {
     m_pEdit->SetText(_rsStatement);
 }
-// -----------------------------------------------------------------------------
+
 void OQueryTextView::copy()
 {
     if(!m_pEdit->IsInAccelAct() )
         m_pEdit->Copy();
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool OQueryTextView::isCutAllowed()
 {
     return !m_pEdit->GetSelected().isEmpty();
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool OQueryTextView::isPasteAllowed()
 {
     return sal_True;
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool OQueryTextView::isCopyAllowed()
 {
     return sal_True;
 }
-// -----------------------------------------------------------------------------
+
 void OQueryTextView::cut()
 {
     if(!m_pEdit->IsInAccelAct() )
         m_pEdit->Cut();
     getContainerWindow()->getDesignView()->getController().setModified(sal_True);
 }
-// -----------------------------------------------------------------------------
+
 void OQueryTextView::paste()
 {
     if(!m_pEdit->IsInAccelAct() )
         m_pEdit->Paste();
     getContainerWindow()->getDesignView()->getController().setModified(sal_True);
 }
-// -----------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

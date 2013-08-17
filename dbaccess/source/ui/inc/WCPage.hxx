@@ -31,7 +31,6 @@ namespace dbaui
 {
     class OWizColumnSelect;
     class OWizNormalExtend;
-    //========================================================================
     class OCopyTable : public OWizardPage
     {
     protected:
@@ -53,7 +52,6 @@ namespace dbaui
 
         sal_Bool                                    m_bPKeyAllowed;
         sal_Bool                                    m_bUseHeaderAllowed;
-
 
         DECL_LINK( AppendDataClickHdl, Button* );
         DECL_LINK( RadioChangeHdl, Button* );
@@ -93,6 +91,5 @@ namespace dbaui
     };
 }
 #endif // DBAUI_WIZARD_CPAGE_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

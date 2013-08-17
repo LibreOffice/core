@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "TablesSingleDlg.hxx"
 #include "DbAdminImpl.hxx"
 #include "tablespage.hxx"
@@ -29,10 +28,8 @@
 
 #include "dbu_dlg.hrc"
 
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
 using namespace com::sun::star::uno;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::lang;
@@ -40,9 +37,7 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
 
 DBG_NAME(OTableSubscriptionDialog)
-    //========================================================================
-    //= OTableSubscriptionDialog
-    //========================================================================
+    // OTableSubscriptionDialog
 OTableSubscriptionDialog::OTableSubscriptionDialog(Window* pParent
             ,SfxItemSet* _pItems
             ,const Reference< XComponentContext >& _rxORB
@@ -64,13 +59,13 @@ OTableSubscriptionDialog::OTableSubscriptionDialog(Window* pParent
     pTabPage->SetServiceFactory(_rxORB);
     SetTabPage(pTabPage);
 }
-// -----------------------------------------------------------------------------
+
 OTableSubscriptionDialog::~OTableSubscriptionDialog()
 {
     DBG_DTOR(OTableSubscriptionDialog,NULL);
     delete m_pOutSet;
 }
-// -----------------------------------------------------------------------------
+
 short OTableSubscriptionDialog::Execute()
 {
     short nRet = RET_CANCEL;
@@ -85,46 +80,42 @@ short OTableSubscriptionDialog::Execute()
     }
     return nRet;
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool OTableSubscriptionDialog::getCurrentSettings(Sequence< PropertyValue >& _rDriverParams)
 {
     return m_pImpl->getCurrentSettings(_rDriverParams);
 }
-// -----------------------------------------------------------------------------
+
 void OTableSubscriptionDialog::successfullyConnected()
 {
     m_pImpl->successfullyConnected();
 }
-// -----------------------------------------------------------------------------
+
 void OTableSubscriptionDialog::clearPassword()
 {
     m_pImpl->clearPassword();
 }
-// -----------------------------------------------------------------------------
+
 String OTableSubscriptionDialog::getConnectionURL() const
 {
     return m_pImpl->getConnectionURL();
 }
-// -----------------------------------------------------------------------------
+
 Reference< XPropertySet > OTableSubscriptionDialog::getCurrentDataSource()
 {
     return m_pImpl->getCurrentDataSource();
 }
-// -----------------------------------------------------------------------------
+
 const SfxItemSet* OTableSubscriptionDialog::getOutputSet() const
 {
     return m_pOutSet;
 }
-// -----------------------------------------------------------------------------
+
 SfxItemSet* OTableSubscriptionDialog::getWriteOutputSet()
 {
     return m_pOutSet;
 }
-// -----------------------------------------------------------------------------
-//.........................................................................
+
 }   // namespace dbaui
-//.........................................................................
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

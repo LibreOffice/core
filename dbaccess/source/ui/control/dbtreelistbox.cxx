@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "dbtreelistbox.hxx"
 #include "dbu_resource.hrc"
 #include "browserids.hxx"
@@ -41,10 +40,8 @@
 
 #include <memory>
 
-// .........................................................................
 namespace dbaui
 {
-// .........................................................................
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -57,10 +54,7 @@ using namespace ::com::sun::star::view;
 
 DBG_NAME(DBTreeListBox)
 #define SPACEBETWEENENTRIES     4
-//========================================================================
 // class DBTreeListBox
-//========================================================================
-//------------------------------------------------------------------------
 DBTreeListBox::DBTreeListBox( Window* pParent, WinBits nWinStyle ,sal_Bool _bHandleEnterKey)
     :SvTreeListBox(pParent,nWinStyle)
     ,m_pDragedEntry(NULL)
@@ -71,7 +65,7 @@ DBTreeListBox::DBTreeListBox( Window* pParent, WinBits nWinStyle ,sal_Bool _bHan
     DBG_CTOR(DBTreeListBox,NULL);
     init();
 }
-// -----------------------------------------------------------------------------
+
 DBTreeListBox::DBTreeListBox( Window* pParent, const ResId& rResId,sal_Bool _bHandleEnterKey)
     :SvTreeListBox(pParent,rResId)
     ,m_pDragedEntry(NULL)
@@ -82,7 +76,7 @@ DBTreeListBox::DBTreeListBox( Window* pParent, const ResId& rResId,sal_Bool _bHa
     DBG_CTOR(DBTreeListBox,NULL);
     init();
 }
-// -----------------------------------------------------------------------------
+
 void DBTreeListBox::init()
 {
     sal_uInt16 nSize = SPACEBETWEENENTRIES;
@@ -100,13 +94,13 @@ void DBTreeListBox::init()
 
     SetStyle( GetStyle() | WB_QUICK_SEARCH );
 }
-//------------------------------------------------------------------------
+
 DBTreeListBox::~DBTreeListBox()
 {
     DBG_DTOR(DBTreeListBox,NULL);
     implStopSelectionTimer();
 }
-//------------------------------------------------------------------------
+
 SvTreeListEntry* DBTreeListBox::GetEntryPosByName( const String& aName, SvTreeListEntry* pStart, const IEntryFilter* _pFilter ) const
 {
     SvTreeList* myModel = GetModel();
@@ -133,13 +127,11 @@ SvTreeListEntry* DBTreeListBox::GetEntryPosByName( const String& aName, SvTreeLi
     return pEntry;
 }
 
-// -------------------------------------------------------------------------
 void DBTreeListBox::EnableExpandHandler(SvTreeListEntry* _pEntry)
 {
     LINK(this, DBTreeListBox, OnResetEntry).Call(_pEntry);
 }
 
-// -------------------------------------------------------------------------
 void DBTreeListBox::RequestingChildren( SvTreeListEntry* pParent )
 {
     if (m_aPreExpandHandler.IsSet())
@@ -154,7 +146,6 @@ void DBTreeListBox::RequestingChildren( SvTreeListEntry* pParent )
     }
 }
 
-// -------------------------------------------------------------------------
 void DBTreeListBox::InitEntry(SvTreeListEntry* _pEntry, const OUString& aStr, const Image& _rCollEntryBmp, const Image& _rExpEntryBmp, SvLBoxButtonKind eButtonKind)
 {
     SvTreeListBox::InitEntry( _pEntry, aStr, _rCollEntryBmp,_rExpEntryBmp, eButtonKind);
@@ -163,21 +154,17 @@ void DBTreeListBox::InitEntry(SvTreeListEntry* _pEntry, const OUString& aStr, co
     _pEntry->ReplaceItem( pString,_pEntry->GetPos(pTextItem));
 }
 
-// -------------------------------------------------------------------------
 void DBTreeListBox::implStopSelectionTimer()
 {
     if ( m_aTimer.IsActive() )
         m_aTimer.Stop();
 }
 
-// -------------------------------------------------------------------------
 void DBTreeListBox::implStartSelectionTimer()
 {
     implStopSelectionTimer();
     m_aTimer.Start();
 }
-
-// -----------------------------------------------------------------------------
 
 void DBTreeListBox::DeselectHdl()
 {
@@ -185,7 +172,7 @@ void DBTreeListBox::DeselectHdl()
     SvTreeListBox::DeselectHdl();
     implStartSelectionTimer();
 }
-// -------------------------------------------------------------------------
+
 void DBTreeListBox::SelectHdl()
 {
     m_aSelectedEntries.insert( GetHdlEntry() );
@@ -193,7 +180,6 @@ void DBTreeListBox::SelectHdl()
     implStartSelectionTimer();
 }
 
-// -------------------------------------------------------------------------
 void DBTreeListBox::MouseButtonDown( const MouseEvent& rMEvt )
 {
     sal_Bool bHitEmptySpace = (NULL == GetEntry(rMEvt.GetPosPixel(), sal_True));
@@ -203,7 +189,6 @@ void DBTreeListBox::MouseButtonDown( const MouseEvent& rMEvt )
         SvTreeListBox::MouseButtonDown(rMEvt);
 }
 
-// -------------------------------------------------------------------------
 IMPL_LINK(DBTreeListBox, OnResetEntry, SvTreeListEntry*, pEntry)
 {
     // set the flag which allows if the entry can be expanded
@@ -212,7 +197,7 @@ IMPL_LINK(DBTreeListBox, OnResetEntry, SvTreeListEntry*, pEntry)
     GetModel()->InvalidateEntry( pEntry );
     return 0L;
 }
-// -----------------------------------------------------------------------------
+
 void DBTreeListBox::ModelHasEntryInvalidated( SvTreeListEntry* _pEntry )
 {
     SvTreeListBox::ModelHasEntryInvalidated( _pEntry );
@@ -229,7 +214,7 @@ void DBTreeListBox::ModelHasEntryInvalidated( SvTreeListEntry* _pEntry )
         }
     }
 }
-// -------------------------------------------------------------------------
+
 void DBTreeListBox::ModelHasRemoved( SvTreeListEntry* _pEntry )
 {
     SvTreeListBox::ModelHasRemoved(_pEntry);
@@ -241,7 +226,6 @@ void DBTreeListBox::ModelHasRemoved( SvTreeListEntry* _pEntry )
     }
 }
 
-// -------------------------------------------------------------------------
 sal_Int8 DBTreeListBox::AcceptDrop( const AcceptDropEvent& _rEvt )
 {
     sal_Int8 nDropOption = DND_ACTION_NONE;
@@ -282,7 +266,6 @@ sal_Int8 DBTreeListBox::AcceptDrop( const AcceptDropEvent& _rEvt )
     return nDropOption;
 }
 
-// -------------------------------------------------------------------------
 sal_Int8 DBTreeListBox::ExecuteDrop( const ExecuteDropEvent& _rEvt )
 {
     if ( m_pActionListener )
@@ -291,7 +274,6 @@ sal_Int8 DBTreeListBox::ExecuteDrop( const ExecuteDropEvent& _rEvt )
     return DND_ACTION_NONE;
 }
 
-// -------------------------------------------------------------------------
 void DBTreeListBox::StartDrag( sal_Int8 _nAction, const Point& _rPosPixel )
 {
     if ( m_pActionListener )
@@ -307,7 +289,6 @@ void DBTreeListBox::StartDrag( sal_Int8 _nAction, const Point& _rPosPixel )
     }
 }
 
-// -------------------------------------------------------------------------
 void DBTreeListBox::RequestHelp( const HelpEvent& rHEvt )
 {
     if ( !m_pActionListener )
@@ -338,7 +319,6 @@ void DBTreeListBox::RequestHelp( const HelpEvent& rHEvt )
     SvTreeListBox::RequestHelp( rHEvt );
 }
 
-// -----------------------------------------------------------------------------
 void DBTreeListBox::KeyInput( const KeyEvent& rKEvt )
 {
     KeyFuncType eFunc = rKEvt.GetKeyCode().GetFunction();
@@ -380,10 +360,14 @@ void DBTreeListBox::KeyInput( const KeyEvent& rKEvt )
         if ( m_aEnterKeyHdl.IsSet() )
             m_aEnterKeyHdl.Call(this);
         // this is a HACK. If the data source browser is opened in the "beamer", while the main frame
+        //
         // contains a writer document, then pressing enter in the DSB would be rerouted to the writer
+        //
         // document if we would not do this hack here.
         // The problem is that the Writer uses RETURN as _accelerator_ (which is quite weird itself),
+        //
         // so the SFX framework is _obligated_ to pass it to the Writer if nobody else handled it. There
+        //
         // is no chance to distinguish between
         //   "accelerators which are to be executed if the main document has the focus"
         // and
@@ -401,12 +385,12 @@ void DBTreeListBox::KeyInput( const KeyEvent& rKEvt )
     if ( !bHandled )
         SvTreeListBox::KeyInput(rKEvt);
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool DBTreeListBox::EditingEntry( SvTreeListEntry* pEntry, Selection& /*_aSelection*/)
 {
     return m_aEditingHandler.Call(pEntry) != 0;
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool DBTreeListBox::EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText )
 {
     DBTreeEditedEntry aEntry;
@@ -422,7 +406,6 @@ sal_Bool DBTreeListBox::EditedEntry( SvTreeListEntry* pEntry, const OUString& rN
     return sal_False;  // we never want that the base change our text
 }
 
-// -----------------------------------------------------------------------------
 sal_Bool DBTreeListBox::DoubleClickHdl()
 {
     long nResult = aDoubleClickHdl.Call( this );
@@ -430,7 +413,6 @@ sal_Bool DBTreeListBox::DoubleClickHdl()
     return nResult == 0;
 }
 
-// -----------------------------------------------------------------------------
 void scrollWindow(DBTreeListBox* _pListBox, const Point& _rPos,sal_Bool _bUp)
 {
     SvTreeListEntry* pEntry = _pListBox->GetEntry( _rPos );
@@ -439,20 +421,19 @@ void scrollWindow(DBTreeListBox* _pListBox, const Point& _rPos,sal_Bool _bUp)
         _pListBox->ScrollOutputArea( _bUp ? -1 : 1 );
     }
 }
-// -----------------------------------------------------------------------------
+
 IMPL_LINK( DBTreeListBox, ScrollUpHdl, SvTreeListBox*, /*pBox*/ )
 {
     scrollWindow(this,m_aMousePos,sal_True);
     return 0;
 }
 
-//------------------------------------------------------------------------------
 IMPL_LINK( DBTreeListBox, ScrollDownHdl, SvTreeListBox*, /*pBox*/ )
 {
     scrollWindow(this,m_aMousePos,sal_False);
     return 0;
 }
-// -----------------------------------------------------------------------------
+
 namespace
 {
     void lcl_enableEntries( PopupMenu* _pPopup, IController& _rController )
@@ -487,7 +468,6 @@ namespace
     }
 }
 
-// -----------------------------------------------------------------------------
 namespace
 {
     void lcl_adjustMenuItemIDs( Menu& _rMenu, IController& _rCommandController )
@@ -548,9 +528,7 @@ namespace
                 _rMenu.SetItemImage(nId,framework::GetImageFromURL(xFrame,aCommand,sal_False));
         }
     }
-    // =========================================================================
-    // = SelectionSupplier
-    // =========================================================================
+    // SelectionSupplier
     typedef ::cppu::WeakImplHelper1 <   XSelectionSupplier
                                     >   SelectionSupplier_Base;
     class SelectionSupplier : public SelectionSupplier_Base
@@ -575,27 +553,23 @@ namespace
         Any m_aSelection;
     };
 
-    //--------------------------------------------------------------------
     ::sal_Bool SAL_CALL SelectionSupplier::select( const Any& /*_Selection*/ ) throw (IllegalArgumentException, RuntimeException)
     {
         throw IllegalArgumentException();
         // API bug: this should be a NoSupportException
     }
 
-    //--------------------------------------------------------------------
     Any SAL_CALL SelectionSupplier::getSelection(  ) throw (RuntimeException)
     {
         return m_aSelection;
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL SelectionSupplier::addSelectionChangeListener( const Reference< XSelectionChangeListener >& /*_Listener*/ ) throw (RuntimeException)
     {
         OSL_FAIL( "SelectionSupplier::removeSelectionChangeListener: no support!" );
         // API bug: this should be a NoSupportException
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL SelectionSupplier::removeSelectionChangeListener( const Reference< XSelectionChangeListener >& /*_Listener*/ ) throw (RuntimeException)
     {
         OSL_FAIL( "SelectionSupplier::removeSelectionChangeListener: no support!" );
@@ -603,7 +577,6 @@ namespace
     }
 }
 
-// -----------------------------------------------------------------------------
 PopupMenu* DBTreeListBox::CreateContextMenu( void )
 {
     ::std::auto_ptr< PopupMenu > pContextMenu;
@@ -688,14 +661,12 @@ PopupMenu* DBTreeListBox::CreateContextMenu( void )
     return pContextMenu.release();
 }
 
-// -----------------------------------------------------------------------------
 void DBTreeListBox::ExcecuteContextMenuAction( sal_uInt16 _nSelectedPopupEntry )
 {
     if ( m_pContextMenuProvider && _nSelectedPopupEntry )
         m_pContextMenuProvider->getCommandController().executeChecked( _nSelectedPopupEntry, Sequence< PropertyValue >() );
 }
 
-// -----------------------------------------------------------------------------
 IMPL_LINK(DBTreeListBox, OnTimeOut, void*, /*EMPTY_ARG*/)
 {
     implStopSelectionTimer();
@@ -703,14 +674,13 @@ IMPL_LINK(DBTreeListBox, OnTimeOut, void*, /*EMPTY_ARG*/)
     m_aSelChangeHdl.Call( NULL );
     return 0L;
 }
-// -----------------------------------------------------------------------------
+
 void DBTreeListBox::StateChanged( StateChangedType nStateChange )
 {
     if ( nStateChange == STATE_CHANGE_VISIBLE )
         implStopSelectionTimer();
 }
-// .........................................................................
+
 }   // namespace dbaui
-// .........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -24,13 +24,9 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XNumberFormatter.hpp>
 
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
-    // =============================================================================================
     // OColumnControlWindow
-    // =============================================================================================
     class OColumnControlWindow : public OFieldDescControl
     {
         ::com::sun::star::lang::Locale      m_aLocale;
@@ -68,9 +64,7 @@ namespace dbaui
         virtual const OTypeInfoMap* getTypeInfo() const;
         TOTypeInfoSP getDefaultTyp() const;
     };
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
 #endif // DBAUI_COLUMNCONTROLWINDOW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

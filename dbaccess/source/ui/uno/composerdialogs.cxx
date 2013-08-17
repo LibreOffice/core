@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "composerdialogs.hxx"
 
 #include "dbu_reghelper.hxx"
@@ -36,10 +35,8 @@ extern "C" void SAL_CALL createRegistryInfo_ComposerDialogs()
     static ::dbaui::OMultiInstanceAutoRegistration< ::dbaui::RowsetFilterDialog > aFilterDialogRegistration;
 }
 
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
 
 #define PROPERTY_ID_QUERYCOMPOSER       100
 #define PROPERTY_ID_ROWSET              101
@@ -55,11 +52,8 @@ namespace dbaui
     using namespace ::com::sun::star::sdbc;
     using namespace ::com::sun::star::sdb;
 
-    //=====================================================================
-    //= ComposerDialog
-    //=====================================================================
+    // ComposerDialog
     DBG_NAME(ComposerDialog)
-    //---------------------------------------------------------------------
     ComposerDialog::ComposerDialog(const Reference< XComponentContext >& _rxORB)
         :OGenericUnoDialog( _rxORB )
     {
@@ -71,20 +65,16 @@ namespace dbaui
             &m_xRowSet, ::getCppuType( &m_xRowSet ) );
     }
 
-    //---------------------------------------------------------------------
     ComposerDialog::~ComposerDialog()
     {
 
         DBG_DTOR(ComposerDialog,NULL);
     }
 
-    //---------------------------------------------------------------------
     IMPLEMENT_IMPLEMENTATION_ID( ComposerDialog )
 
-    //---------------------------------------------------------------------
     IMPLEMENT_PROPERTYCONTAINER_DEFAULTS( ComposerDialog )
 
-    //---------------------------------------------------------------------
     Dialog* ComposerDialog::createDialog(Window* _pParent)
     {
         // obtain all the objects needed for the dialog
@@ -132,16 +122,12 @@ namespace dbaui
         return createComposerDialog( _pParent, xConnection, xColumns );
     }
 
-    //=====================================================================
-    //= RowsetFilterDialog
-    //=====================================================================
-    //---------------------------------------------------------------------
+    // RowsetFilterDialog
     RowsetFilterDialog::RowsetFilterDialog( const Reference< XComponentContext >& _rxORB )
         :ComposerDialog( _rxORB )
     {
     }
 
-    //---------------------------------------------------------------------
     IMPLEMENT_SERVICE_INFO_IMPLNAME_STATIC(RowsetFilterDialog, "com.sun.star.uno.comp.sdb.RowsetFilterDialog")
     IMPLEMENT_SERVICE_INFO_SUPPORTS(RowsetFilterDialog)
     IMPLEMENT_SERVICE_INFO_GETSUPPORTED1_STATIC(RowsetFilterDialog, "com.sun.star.sdb.FilterDialog")
@@ -152,8 +138,6 @@ namespace dbaui
         return static_cast< XServiceInfo* >(new RowsetFilterDialog( comphelper::getComponentContext(_rxORB)));
     }
 
-
-    //---------------------------------------------------------------------
     Dialog* RowsetFilterDialog::createComposerDialog( Window* _pParent, const Reference< XConnection >& _rxConnection, const Reference< XNameAccess >& _rxColumns )
     {
         return new DlgFilterCrit( _pParent, m_aContext, _rxConnection, m_xComposer, _rxColumns );
@@ -178,7 +162,6 @@ namespace dbaui
             ComposerDialog::initialize(aArguments);
     }
 
-    //---------------------------------------------------------------------
     void RowsetFilterDialog::executedDialog( sal_Int16 _nExecutionResult )
     {
         ComposerDialog::executedDialog( _nExecutionResult );
@@ -187,16 +170,12 @@ namespace dbaui
             static_cast< DlgFilterCrit* >( m_pDialog )->BuildWherePart();
     }
 
-    //=====================================================================
-    //= RowsetOrderDialog
-    //=====================================================================
-    //---------------------------------------------------------------------
+    // RowsetOrderDialog
     RowsetOrderDialog::RowsetOrderDialog( const Reference< XComponentContext >& _rxORB )
         :ComposerDialog( _rxORB )
     {
     }
 
-    //---------------------------------------------------------------------
     IMPLEMENT_SERVICE_INFO_IMPLNAME_STATIC(RowsetOrderDialog, "com.sun.star.uno.comp.sdb.RowsetOrderDialog")
     IMPLEMENT_SERVICE_INFO_SUPPORTS(RowsetOrderDialog)
     IMPLEMENT_SERVICE_INFO_GETSUPPORTED1_STATIC(RowsetOrderDialog, "com.sun.star.sdb.OrderDialog")
@@ -207,13 +186,11 @@ namespace dbaui
         return static_cast< XServiceInfo* >(new RowsetOrderDialog( comphelper::getComponentContext(_rxORB)));
     }
 
-    //---------------------------------------------------------------------
     Dialog* RowsetOrderDialog::createComposerDialog( Window* _pParent, const Reference< XConnection >& _rxConnection, const Reference< XNameAccess >& _rxColumns )
     {
         return new DlgOrderCrit( _pParent, _rxConnection, m_xComposer, _rxColumns );
     }
 
-    //---------------------------------------------------------------------
     void SAL_CALL RowsetOrderDialog::initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException)
     {
         if( aArguments.getLength() == 2 )
@@ -229,7 +206,6 @@ namespace dbaui
             ComposerDialog::initialize(aArguments);
     }
 
-    //---------------------------------------------------------------------
     void RowsetOrderDialog::executedDialog( sal_Int16 _nExecutionResult )
     {
         ComposerDialog::executedDialog( _nExecutionResult );
@@ -243,9 +219,6 @@ namespace dbaui
             m_xComposer->setOrder( static_cast< DlgOrderCrit* >( m_pDialog )->GetOrignalOrder() );
     }
 
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

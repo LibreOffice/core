@@ -39,9 +39,7 @@ typedef ::cppu::ImplHelper5 <   ::com::sun::star::frame::XComponentLoader
                             ,   ::com::sun::star::container::XHierarchicalName
                             ,   ::com::sun::star::embed::XTransactedObject
                             >   ODocumentContainer_Base;
-//==========================================================================
-//= ODocumentContainer -    collections of database documents (reports/forms)
-//==========================================================================
+// ODocumentContainer -    collections of database documents (reports/forms)
 class ODocumentContainer    : public ODefinitionContainer
                             , public ODocumentContainer_Base
                             , public ::comphelper::OPropertyStateContainer

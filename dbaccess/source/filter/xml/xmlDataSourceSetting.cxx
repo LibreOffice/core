@@ -97,13 +97,12 @@ OXMLDataSourceSetting::OXMLDataSourceSetting( ODBFilter& rImport
     }
 
 }
-// -----------------------------------------------------------------------------
 
 OXMLDataSourceSetting::~OXMLDataSourceSetting()
 {
     DBG_DTOR(OXMLDataSourceSetting,NULL);
 }
-// -----------------------------------------------------------------------------
+
 SvXMLImportContext* OXMLDataSourceSetting::CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
@@ -129,7 +128,7 @@ SvXMLImportContext* OXMLDataSourceSetting::CreateChildContext(
 
     return pContext;
 }
-// -----------------------------------------------------------------------------
+
 void OXMLDataSourceSetting::EndElement()
 {
     if ( !m_aSetting.Name.isEmpty() )
@@ -145,13 +144,13 @@ void OXMLDataSourceSetting::EndElement()
         GetOwnImport().addInfo(m_aSetting);
     }
 }
-// -----------------------------------------------------------------------------
+
 void OXMLDataSourceSetting::Characters( const OUString& rChars )
 {
     if ( m_pContainer )
         m_pContainer->addValue(rChars);
 }
-// -----------------------------------------------------------------------------
+
 void OXMLDataSourceSetting::addValue(const OUString& _sValue)
 {
     Any aValue;
@@ -167,12 +166,12 @@ void OXMLDataSourceSetting::addValue(const OUString& _sValue)
         m_aInfoSequence[nPos] = aValue;
     }
 }
-// -----------------------------------------------------------------------------
+
 ODBFilter& OXMLDataSourceSetting::GetOwnImport()
 {
     return static_cast<ODBFilter&>(GetImport());
 }
-// -----------------------------------------------------------------------------
+
 Any OXMLDataSourceSetting::convertString(const ::com::sun::star::uno::Type& _rExpectedType, const OUString& _rReadCharacters)
 {
     Any aReturn;
@@ -231,8 +230,6 @@ Any OXMLDataSourceSetting::convertString(const ::com::sun::star::uno::Type& _rEx
     return aReturn;
 }
 
-//----------------------------------------------------------------------------
 } // namespace dbaxml
-// -----------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

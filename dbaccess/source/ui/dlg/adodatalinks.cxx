@@ -59,6 +59,7 @@ OUString getAdoDatalink(long hWnd,OUString& oldLink)
         dataLink=reinterpret_cast<sal_Unicode *>(PromptNew(hWnd));
     return dataLink;
 }
+
 BSTR PromptNew(long hWnd)
 {
     BSTR connstr=NULL;
@@ -205,6 +206,7 @@ BSTR PromptEdit(long hWnd,BSTR connstr)
     CoUninitialize();
     return _result;
 }
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

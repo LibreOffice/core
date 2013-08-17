@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "bookmarkcontainer.hxx"
 #include "dbastrings.hrc"
 #include "apitools.hxx"
@@ -43,9 +42,7 @@ using namespace ::cppu;
 namespace dbaccess
 {
 
-//==========================================================================
-//= OBookmarkContainer
-//==========================================================================
+// OBookmarkContainer
 DBG_NAME(OBookmarkContainer)
 
 OBookmarkContainer::OBookmarkContainer(OWeakObject& _rParent, Mutex& _rMutex)
@@ -120,7 +117,6 @@ void SAL_CALL OBookmarkContainer::insertByName( const OUString& _rName, const An
     OUString sNewLink;
     if (!(aElement >>= sNewLink))
         throw IllegalArgumentException();
-
 
     implAppend(_rName, sNewLink);
 
@@ -355,4 +351,5 @@ void SAL_CALL OBookmarkContainer::setParent( const Reference< XInterface >& /*Pa
 }
 
 }   // namespace dbaccess
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

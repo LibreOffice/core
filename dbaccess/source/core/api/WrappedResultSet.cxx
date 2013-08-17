@@ -234,4 +234,5 @@ void WrappedResultSet::updateColumn(sal_Int32 nPos,Reference< XRowUpdate > _xPar
         }
     }
 }
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

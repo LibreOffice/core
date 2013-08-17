@@ -17,20 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "dbmm_module.hxx"
 
 #include <rtl/instance.hxx>
 
-//........................................................................
 namespace dbmm
 {
-//........................................................................
 
     IMPLEMENT_MODULE( MacroMigrationModule, "dbmm" );
 
-//........................................................................
 } // namespace dbmm
-//........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

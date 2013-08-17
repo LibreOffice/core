@@ -54,9 +54,7 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::xml::sax;
 
-// -------------
 // - ODBFilter -
-// -------------
 class ODBFilter : public SvXMLImport
 {
 public:
@@ -89,7 +87,6 @@ private:
     bool                                            m_bNewFormat;
 
     sal_Bool                            implImport( const Sequence< PropertyValue >& rDescriptor ) throw (RuntimeException);
-
 
     /** fills the map with the Properties
         @param  _rValue
@@ -160,9 +157,7 @@ public:
     inline void setNewFormat(bool _bNewFormat) { m_bNewFormat = _bNewFormat; }
 };
 
-// -----------------------------------------------------------------------------
 } // dbaxml
-// -----------------------------------------------------------------------------
 #endif // DBA_XMLFILTER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

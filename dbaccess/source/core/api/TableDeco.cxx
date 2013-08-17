@@ -56,9 +56,7 @@ using namespace ::comphelper;
 using namespace ::dbtools;
 using namespace ::cppu;
 
-//==========================================================================
-//= ODBTableDecorator
-//==========================================================================
+// ODBTableDecorator
 DBG_NAME(ODBTableDecorator)
 
 ODBTableDecorator::ODBTableDecorator( const Reference< XConnection >& _rxConnection, const Reference< XColumnsSupplier >& _rxNewTable,
@@ -682,4 +680,5 @@ void SAL_CALL ODBTableDecorator::setName( const OUString& /*aName*/ ) throw (::c
     SAL_INFO("dbaccess", "ODBTableDecorator::setName" );
     throwFunctionNotSupportedException( "XNamed::setName", *this );
 }
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

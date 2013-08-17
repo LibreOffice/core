@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "xmlStyleImport.hxx"
 
 #include <xmloff/nmspmap.hxx>
@@ -47,7 +46,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace xmloff::token;
 
-// -----------------------------------------------------------------------------
 TYPEINIT1( OTableStyleContext, XMLPropStyleContext );
 TYPEINIT1( OTableStylesContext, SvXMLStylesContext );
 DBG_NAME(OTableStyleContext)
@@ -64,14 +62,12 @@ OTableStyleContext::OTableStyleContext( ODBFilter& rImport,
     DBG_CTOR(OTableStyleContext,NULL);
 
 }
-// -----------------------------------------------------------------------------
 
 OTableStyleContext::~OTableStyleContext()
 {
 
     DBG_DTOR(OTableStyleContext,NULL);
 }
-// -----------------------------------------------------------------------------
 
 void OTableStyleContext::FillPropertySet(
             const Reference< XPropertySet > & rPropSet )
@@ -115,12 +111,10 @@ void OTableStyleContext::FillPropertySet(
     }
     XMLPropStyleContext::FillPropertySet(rPropSet);
 }
-// -----------------------------------------------------------------------------
 
 void OTableStyleContext::SetDefaults()
 {
 }
-// -----------------------------------------------------------------------------
 
 void OTableStyleContext::AddProperty(const sal_Int16 nContextID, const uno::Any& rValue)
 {
@@ -129,7 +123,7 @@ void OTableStyleContext::AddProperty(const sal_Int16 nContextID, const uno::Any&
     XMLPropertyState aPropState(nIndex, rValue);
     GetProperties().push_back(aPropState); // has to be insertes in a sort order later
 }
-// -----------------------------------------------------------------------------
+
 void OTableStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
                                         const OUString& rLocalName,
                                         const OUString& rValue )
@@ -142,12 +136,12 @@ void OTableStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
     else
         XMLPropStyleContext::SetAttribute( nPrefixKey, rLocalName, rValue );
 }
-// -----------------------------------------------------------------------------
+
 ODBFilter& OTableStyleContext::GetOwnImport()
 {
     return static_cast<ODBFilter&>(GetImport());
 }
-// -----------------------------------------------------------------------------
+
 DBG_NAME(OTableStylesContext)
 
 OTableStylesContext::OTableStylesContext( SvXMLImport& rImport,
@@ -165,14 +159,12 @@ OTableStylesContext::OTableStylesContext( SvXMLImport& rImport,
     DBG_CTOR(OTableStylesContext,NULL);
 
 }
-// -----------------------------------------------------------------------------
 
 OTableStylesContext::~OTableStylesContext()
 {
 
     DBG_DTOR(OTableStylesContext,NULL);
 }
-// -----------------------------------------------------------------------------
 
 void OTableStylesContext::EndElement()
 {
@@ -182,7 +174,6 @@ void OTableStylesContext::EndElement()
     else
         GetImport().GetStyles()->CopyStylesToDoc(sal_True);
 }
-// -----------------------------------------------------------------------------
 
 UniReference < SvXMLImportPropertyMapper >
     OTableStylesContext::GetImportPropertyMapper(
@@ -220,7 +211,7 @@ UniReference < SvXMLImportPropertyMapper >
 
     return xMapper;
 }
-// ----------------------------------------------------------------------------
+
 SvXMLStyleContext *OTableStylesContext::CreateStyleStyleChildContext(
         sal_uInt16 nFamily, sal_uInt16 nPrefix, const OUString& rLocalName,
         const Reference< xml::sax::XAttributeList > & xAttrList )
@@ -243,14 +234,13 @@ SvXMLStyleContext *OTableStylesContext::CreateStyleStyleChildContext(
 
     return pStyle;
 }
-// -----------------------------------------------------------------------------
+
 Reference < XNameContainer >
         OTableStylesContext::GetStylesContainer( sal_uInt16 nFamily ) const
 {
     Reference < XNameContainer > xStyles = SvXMLStylesContext::GetStylesContainer(nFamily);
     return xStyles;
 }
-// -----------------------------------------------------------------------------
 
 OUString OTableStylesContext::GetServiceName( sal_uInt16 nFamily ) const
 {
@@ -273,7 +263,6 @@ OUString OTableStylesContext::GetServiceName( sal_uInt16 nFamily ) const
     }
     return sServiceName;
 }
-// -----------------------------------------------------------------------------
 
 sal_Int32 OTableStylesContext::GetIndex(const sal_Int16 nContextID)
 {
@@ -294,13 +283,12 @@ sal_Int32 OTableStylesContext::GetIndex(const sal_Int16 nContextID)
     else
         return -1;
 }
-// -----------------------------------------------------------------------------
+
 ODBFilter& OTableStylesContext::GetOwnImport()
 {
     return static_cast<ODBFilter&>(GetImport());
 }
-// -----------------------------------------------------------------------------
+
 } // dbaxml
-// -----------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

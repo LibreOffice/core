@@ -323,4 +323,5 @@ void SAL_CALL OQueryComposer::release() throw()
 {
     OSubComponent::release();
 }
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

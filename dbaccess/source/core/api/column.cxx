@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "ContainerMediator.hxx"
 #include "apitools.hxx"
 #include "column.hxx"
@@ -63,9 +62,7 @@ using namespace ::cppu;
 
 DBG_NAME(OColumn)
 
-//============================================================
-//= OColumn
-//============================================================
+// OColumn
 OColumn::OColumn( const bool _bNameIsReadOnly )
         :OColumnBase( m_aMutex )
         ,::comphelper::OPropertyContainer( OColumnBase::rBHelper )
@@ -153,9 +150,7 @@ void OColumn::registerPropertyNoMember( const OUString& _rName, sal_Int32 _nHand
     ::comphelper::OPropertyContainer::registerPropertyNoMember( _rName, _nHandle, _nAttributes, _rType, _pInitialValue );
 }
 
-//============================================================
-//= OColumns
-//============================================================
+// OColumns
 DBG_NAME(OColumns);
 
 OColumns::OColumns(::cppu::OWeakObject& _rParent,
@@ -221,7 +216,6 @@ Sequence< OUString > OColumns::getSupportedServiceNames(  ) throw (RuntimeExcept
     return aSNS;
 }
 
-//------------------------------------------------------------------
 void OColumns::append( const OUString& _rName, OColumn* _pColumn )
 {
     MutexGuard aGuard(m_rMutex);
@@ -235,7 +229,6 @@ void OColumns::append( const OUString& _rName, OColumn* _pColumn )
     insertElement( _rName, _pColumn );
 }
 
-//------------------------------------------------------------------
 void OColumns::clearColumns()
 {
     MutexGuard aGuard(m_rMutex);
@@ -330,7 +323,6 @@ Sequence< Type > SAL_CALL OColumns::getTypes(  ) throw(RuntimeException)
         Sequence< Type > aTypes(xTypes->getTypes());
 
         Sequence< Type > aSecTypes(OColumns_BASE::getTypes());
-
 
         const Type* pBegin = aTypes.getConstArray();
         const Type* pEnd = pBegin + aTypes.getLength();
@@ -445,4 +437,5 @@ void SAL_CALL OColumns::setParent( const Reference< XInterface >& _xParent ) thr
     ::osl::MutexGuard aGuard(m_rMutex);
     m_xParent = _xParent;
 }
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

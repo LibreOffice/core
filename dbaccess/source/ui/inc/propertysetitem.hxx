@@ -23,14 +23,10 @@
 #include <svl/poolitem.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
 
-    //=========================================================================
-    //= OPropertySetItem
-    //=========================================================================
+    // OPropertySetItem
     /** <type>SfxPoolItem</type> which transports a XPropertySet
     */
     class OPropertySetItem : public SfxPoolItem
@@ -51,9 +47,7 @@ namespace dbaui
                 getPropertySet() const { return m_xSet; }
     };
 
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
 
 #endif // _DBAUI_PROPERTYSETITEM_HXX_
 

@@ -420,4 +420,5 @@ void SAL_CALL OPreparedStatement::clearParameters(  ) throw(SQLException, Runtim
 
     m_xAggregateAsParameters->clearParameters();
 }
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

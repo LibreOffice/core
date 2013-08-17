@@ -24,9 +24,7 @@
 class SvStream;
 namespace dbaui
 {
-    // ========================================================
     // Wizard Page: OWizHTMLExtend
-    // ========================================================
     class OWizHTMLExtend : public OWizTypeSelect
     {
     protected:
@@ -41,9 +39,7 @@ namespace dbaui
 
         virtual ~OWizHTMLExtend(){}
     };
-    // ========================================================
     // Wizard Page: OWizRTFExtend
-    // ========================================================
     class OWizRTFExtend : public OWizTypeSelect
     {
     protected:
@@ -59,9 +55,7 @@ namespace dbaui
         virtual ~OWizRTFExtend(){}
     };
 
-    // ========================================================
     // Wizard Page: OWizNormalExtend
-    // ========================================================
     class OWizNormalExtend : public OWizTypeSelect
     {
     protected:
@@ -71,7 +65,5 @@ namespace dbaui
     };
 }
 #endif // DBAUI_WIZ_EXTENDPAGES_HXX
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

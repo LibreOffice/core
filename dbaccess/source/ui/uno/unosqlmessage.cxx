@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "sqlmessage.hxx"
 #include "unosqlmessage.hxx"
 #include "dbu_reghelper.hxx"
@@ -37,17 +36,13 @@ extern "C" void SAL_CALL createRegistryInfo_OSQLMessageDialog()
     static OMultiInstanceAutoRegistration< OSQLMessageDialog > aAutoRegistration;
 }
 
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
 
-//=========================================================================
-//-------------------------------------------------------------------------
 OSQLMessageDialog::OSQLMessageDialog(const Reference< XComponentContext >& _rxORB)
     :OSQLMessageDialogBase(_rxORB)
 {
@@ -57,38 +52,32 @@ OSQLMessageDialog::OSQLMessageDialog(const Reference< XComponentContext >& _rxOR
         &m_sHelpURL, ::getCppuType( &m_sHelpURL ) );
 }
 
-//-------------------------------------------------------------------------
 Sequence<sal_Int8> SAL_CALL OSQLMessageDialog::getImplementationId(  ) throw(RuntimeException)
 {
     static ::cppu::OImplementationId aId;
     return aId.getImplementationId();
 }
 
-//-------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL OSQLMessageDialog::Create(const Reference< XMultiServiceFactory >& _rxFactory)
 {
     return *(new OSQLMessageDialog( comphelper::getComponentContext(_rxFactory) ));
 }
 
-//-------------------------------------------------------------------------
 OUString SAL_CALL OSQLMessageDialog::getImplementationName() throw(RuntimeException)
 {
     return getImplementationName_Static();
 }
 
-//-------------------------------------------------------------------------
 OUString OSQLMessageDialog::getImplementationName_Static() throw(RuntimeException)
 {
     return OUString("org.openoffice.comp.dbu.OSQLMessageDialog");
 }
 
-//-------------------------------------------------------------------------
 ::comphelper::StringSequence SAL_CALL OSQLMessageDialog::getSupportedServiceNames() throw(RuntimeException)
 {
     return getSupportedServiceNames_Static();
 }
 
-//-------------------------------------------------------------------------
 ::comphelper::StringSequence OSQLMessageDialog::getSupportedServiceNames_Static() throw(RuntimeException)
 {
     ::comphelper::StringSequence aSupported(1);
@@ -96,7 +85,6 @@ OUString OSQLMessageDialog::getImplementationName_Static() throw(RuntimeExceptio
     return aSupported;
 }
 
-//-------------------------------------------------------------------------
 void OSQLMessageDialog::initialize(Sequence<Any> const & args) throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException)
 {
   OUString title;
@@ -114,7 +102,6 @@ void OSQLMessageDialog::initialize(Sequence<Any> const & args) throw (com::sun::
   }
 }
 
-//-------------------------------------------------------------------------
 sal_Bool SAL_CALL OSQLMessageDialog::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue) throw(IllegalArgumentException)
 {
     switch (_nHandle)
@@ -136,20 +123,17 @@ sal_Bool SAL_CALL OSQLMessageDialog::convertFastPropertyValue( Any& _rConvertedV
     }
 }
 
-//-------------------------------------------------------------------------
 Reference<XPropertySetInfo>  SAL_CALL OSQLMessageDialog::getPropertySetInfo() throw(RuntimeException)
 {
     Reference<XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
 }
 
-//-------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper& OSQLMessageDialog::getInfoHelper()
 {
     return *const_cast<OSQLMessageDialog*>(this)->getArrayHelper();
 }
 
-//------------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper* OSQLMessageDialog::createArrayHelper( ) const
 {
     Sequence< Property > aProps;
@@ -157,7 +141,6 @@ Reference<XPropertySetInfo>  SAL_CALL OSQLMessageDialog::getPropertySetInfo() th
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
 
-//------------------------------------------------------------------------------
 Dialog* OSQLMessageDialog::createDialog(Window* _pParent)
 {
     if ( m_aException.hasValue() )
@@ -167,8 +150,6 @@ Dialog* OSQLMessageDialog::createDialog(Window* _pParent)
     return new OSQLMessageBox(_pParent, SQLException());
 }
 
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

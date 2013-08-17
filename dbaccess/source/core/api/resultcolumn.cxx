@@ -311,4 +311,5 @@ void OResultColumn::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
         }
     }
 }
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

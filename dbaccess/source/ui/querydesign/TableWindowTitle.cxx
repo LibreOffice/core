@@ -37,11 +37,8 @@
 using namespace dbaui;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
-//==================================================================
 // class OTableWindowTitle
-//==================================================================
 DBG_NAME(OTableWindowTitle)
-//------------------------------------------------------------------------------
 OTableWindowTitle::OTableWindowTitle( OTableWindow* pParent ) :
      FixedText( pParent, WB_3DLOOK|WB_LEFT|WB_NOLABEL|WB_VCENTER )
     ,m_pTabWin( pParent )
@@ -57,26 +54,23 @@ OTableWindowTitle::OTableWindowTitle( OTableWindow* pParent ) :
     SetFont( aFont );
 }
 
-//------------------------------------------------------------------------------
 OTableWindowTitle::~OTableWindowTitle()
 {
     DBG_DTOR(OTableWindowTitle,NULL);
     m_pTabWin = NULL;
 }
 
-//------------------------------------------------------------------------------
 void OTableWindowTitle::GetFocus()
 {
     if(m_pTabWin)
         m_pTabWin->GetFocus();
 }
 
-//------------------------------------------------------------------------------
 void OTableWindowTitle::LoseFocus()
 {
     m_pTabWin->LoseFocus();
 }
-//------------------------------------------------------------------------------
+
 void OTableWindowTitle::RequestHelp( const HelpEvent& rHEvt )
 {
     if(m_pTabWin)
@@ -101,7 +95,6 @@ void OTableWindowTitle::RequestHelp( const HelpEvent& rHEvt )
     }
 }
 
-//------------------------------------------------------------------------------
 void OTableWindowTitle::Command( const CommandEvent& rEvt )
 {
     switch( rEvt.GetCommand() )
@@ -117,14 +110,12 @@ void OTableWindowTitle::Command( const CommandEvent& rEvt )
     }
 }
 
-//------------------------------------------------------------------------------
 void OTableWindowTitle::KeyInput( const KeyEvent& rEvt )
 {
     if ( m_pTabWin )
         m_pTabWin->KeyInput( rEvt );
 }
 
-//------------------------------------------------------------------------------
 void OTableWindowTitle::MouseButtonDown( const MouseEvent& rEvt )
 {
     if( rEvt.IsLeft() )
@@ -165,8 +156,6 @@ void OTableWindowTitle::MouseButtonDown( const MouseEvent& rEvt )
         Control::MouseButtonDown( rEvt );
 }
 
-
-//------------------------------------------------------------------------------
 void OTableWindowTitle::DataChanged(const DataChangedEvent& rDCEvt)
 {
     if (rDCEvt.GetType() == DATACHANGED_SETTINGS)
@@ -177,7 +166,7 @@ void OTableWindowTitle::DataChanged(const DataChangedEvent& rDCEvt)
         SetTextColor(aSystemStyle.GetButtonTextColor());
     }
 }
-// -----------------------------------------------------------------------------
+
 void OTableWindowTitle::StateChanged( StateChangedType nType )
 {
     Window::StateChanged( nType );

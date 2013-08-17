@@ -43,13 +43,11 @@ OXMLTableFilterList::OXMLTableFilterList( SvXMLImport& rImport, sal_uInt16 nPrfx
     DBG_CTOR(OXMLTableFilterList,NULL);
 
 }
-// -----------------------------------------------------------------------------
 
 OXMLTableFilterList::~OXMLTableFilterList()
 {
     DBG_DTOR(OXMLTableFilterList,NULL);
 }
-// -----------------------------------------------------------------------------
 
 SvXMLImportContext* OXMLTableFilterList::CreateChildContext(
         sal_uInt16 nPrefix,
@@ -74,13 +72,12 @@ SvXMLImportContext* OXMLTableFilterList::CreateChildContext(
 
     return pContext;
 }
-// -----------------------------------------------------------------------------
+
 ODBFilter& OXMLTableFilterList::GetOwnImport()
 {
     return static_cast<ODBFilter&>(GetImport());
 }
 
-// -----------------------------------------------------------------------------
 void OXMLTableFilterList::EndElement()
 {
     Reference<XPropertySet> xDataSource(GetOwnImport().getDataSource());
@@ -92,8 +89,7 @@ void OXMLTableFilterList::EndElement()
             xDataSource->setPropertyValue(PROPERTY_TABLETYPEFILTER,makeAny(Sequence< OUString>(&(*m_aTypes.begin()),m_aTypes.size())));
     }
 }
-//----------------------------------------------------------------------------
+
 } // namespace dbaxml
-// -----------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

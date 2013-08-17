@@ -62,9 +62,7 @@
 
 namespace dbaui
 {
-    //==================================================================
     // SbaXFormAdapter
-    //==================================================================
 
     typedef ::cppu::WeakImplHelper12<   ::com::sun::star::sdbc::XResultSetMetaDataSupplier
                                     ,   ::com::sun::star::sdb::XResultSetAccess

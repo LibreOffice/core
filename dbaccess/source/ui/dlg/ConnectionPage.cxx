@@ -18,7 +18,6 @@
  */
 
 #include <config_features.h>
-
 #include "ConnectionPage.hxx"
 #include "ConnectionPage.hrc"
 #include "dbu_dlg.hrc"
@@ -72,10 +71,8 @@
 
 #include "AutoControls.hrc"
 
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::ucb;
     using namespace ::com::sun::star::ui::dialogs;
@@ -90,9 +87,7 @@ namespace dbaui
     {
         return ( new OConnectionTabPage( pParent, _rAttrSet ) );
     }
-    //========================================================================
-    //= OConnectionTabPage
-    //========================================================================
+    // OConnectionTabPage
     DBG_NAME(OConnectionTabPage)
     OConnectionTabPage::OConnectionTabPage(Window* pParent, const SfxItemSet& _rCoreAttrs)
         :OConnectionHelper(pParent, ModuleRes(PAGE_CONNECTION), _rCoreAttrs)
@@ -122,13 +117,11 @@ namespace dbaui
         LayoutHelper::fitSizeRightAligned( m_aTestConnection );
     }
 
-    // -----------------------------------------------------------------------
     OConnectionTabPage::~OConnectionTabPage()
     {
         DBG_DTOR(OConnectionTabPage,NULL);
     }
 
-    // -----------------------------------------------------------------------
     void OConnectionTabPage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
     {
         // check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
@@ -266,7 +259,6 @@ namespace dbaui
             m_aJavaDriver.ClearModifyFlag();
         }
     }
-    // -----------------------------------------------------------------------
     void OConnectionTabPage::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
     {
         _rControlList.push_back(new ODisableWrapper<FixedLine>(&m_aFL1));
@@ -281,7 +273,6 @@ namespace dbaui
         OConnectionHelper::fillWindows(_rControlList);
 
     }
-    // -----------------------------------------------------------------------
     void OConnectionTabPage::fillControls(::std::vector< ISaveValueWrapper* >& _rControlList)
     {
         _rControlList.push_back(new OSaveValueWrapper<Edit>(&m_aJavaDriver));
@@ -290,7 +281,6 @@ namespace dbaui
         OConnectionHelper::fillControls(_rControlList);
     }
 
-    // -----------------------------------------------------------------------
     sal_Bool OConnectionTabPage::FillItemSet(SfxItemSet& _rSet)
     {
         sal_Bool bChangedSomething = sal_False;
@@ -313,7 +303,6 @@ namespace dbaui
 
         return bChangedSomething;
     }
-    // -----------------------------------------------------------------------
     IMPL_LINK(OConnectionTabPage, OnTestJavaClickHdl, PushButton*, /*_pButton*/)
     {
         OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
@@ -338,7 +327,6 @@ namespace dbaui
         aMsg.Execute();
         return 0L;
     }
-    // -----------------------------------------------------------------------
     bool OConnectionTabPage::checkTestConnection()
     {
         OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
@@ -348,7 +336,6 @@ namespace dbaui
         m_aTestConnection.Enable(bEnableTestConnection);
         return true;
     }
-    // -----------------------------------------------------------------------
     IMPL_LINK(OConnectionTabPage, OnEditModified, Edit*, _pEdit)
     {
         if ( _pEdit == &m_aJavaDriver )
@@ -359,8 +346,6 @@ namespace dbaui
         callModifiedHdl();
         return 0L;
     }
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -25,7 +25,6 @@
 namespace dbaui
 {
 
-    // ================================================================================================
     // OQuerySizeTabWinUndoAct - undo class to change size of TabWins
     class OTableWindow;
     class OJoinSizeTabWinUndoAct : public OQueryDesignUndoAction
@@ -47,7 +46,6 @@ namespace dbaui
         virtual void    Redo() { ToggleSizePosition(); }
     };
 
-    //------------------------------------------------------------------------------
     inline OJoinSizeTabWinUndoAct::OJoinSizeTabWinUndoAct(OJoinTableView* pOwner, const Point& ptOriginalPos, const Size& szOriginalSize, OTableWindow* pTabWin)
         :OQueryDesignUndoAction(pOwner, STR_QUERY_UNDO_SIZETABWIN)
         ,m_ptNextPosition(ptOriginalPos)
@@ -56,7 +54,6 @@ namespace dbaui
     {
     }
 
-    //------------------------------------------------------------------------------
     inline void OJoinSizeTabWinUndoAct::ToggleSizePosition()
     {
         Point ptNext = m_pTabWin->GetPosPixel();
@@ -72,6 +69,5 @@ namespace dbaui
 }
 
 #endif //DBAUI_QUERYSIZETABWINUNDOACT_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

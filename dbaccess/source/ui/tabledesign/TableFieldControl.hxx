@@ -25,9 +25,7 @@ namespace dbaui
 {
     class OTableEditorCtrl;
     class OTableDesignHelpBar;
-    //==================================================================
     // OTableFieldControl
-    //==================================================================
     class OTableFieldControl : public OFieldDescControl
     {
         OTableEditorCtrl*   GetCtrl() const;
@@ -58,6 +56,5 @@ namespace dbaui
     };
 }
 #endif // DBAUI_TABLEFIELDCONTROL_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

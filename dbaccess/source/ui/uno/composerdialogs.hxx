@@ -30,14 +30,10 @@
 #include "moduledbu.hxx"
 #include "apitools.hxx"
 
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
 
-    //=====================================================================
-    //= ComposerDialog
-    //=====================================================================
+    // ComposerDialog
     class ComposerDialog;
     typedef ::comphelper::OPropertyArrayUsageHelper< ComposerDialog >  ComposerDialog_PBASE;
 
@@ -76,9 +72,7 @@ namespace dbaui
         virtual Dialog* createDialog(Window* _pParent);
     };
 
-    //=====================================================================
-    //= RowsetFilterDialog
-    //=====================================================================
+    // RowsetFilterDialog
     class RowsetFilterDialog : public ComposerDialog
     {
     public:
@@ -103,9 +97,7 @@ namespace dbaui
 
     };
 
-    //=====================================================================
-    //= RowsetOrderDialog
-    //=====================================================================
+    // RowsetOrderDialog
     class RowsetOrderDialog : public ComposerDialog
     {
     public:
@@ -129,11 +121,8 @@ namespace dbaui
             throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException);
     };
 
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
 
 #endif // DBACCESS_SOURCE_UI_UNO_COMPOSERDIALOGS_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

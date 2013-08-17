@@ -689,4 +689,5 @@ bool OCacheSet::updateColumnValues(const ORowSetValueVector::Vector& /*io_aCache
 void OCacheSet::fillMissingValues(ORowSetValueVector::Vector& /*io_aRow*/) const
 {
 }
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

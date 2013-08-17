@@ -27,9 +27,7 @@
 namespace dbaccess
 {
 
-    //====================================================================
-    //= ObjectNameApproval
-    //====================================================================
+    // ObjectNameApproval
     struct ObjectNameApproval_Impl;
     /** implementation of the IContainerApprove interface which approves
         elements for insertion into a query or tables container.

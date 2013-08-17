@@ -29,14 +29,10 @@ class SfxItemSet;
 class SfxItemPool;
 class SfxPoolItem;
 
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
 
-//=========================================================================
-//= ODatabaseAdministrationDialog
-//=========================================================================
+// ODatabaseAdministrationDialog
 typedef ::svt::OGenericUnoDialog ODatabaseAdministrationDialogBase;
 class ODatabaseAdministrationDialog
         :public ODatabaseAdministrationDialogBase
@@ -61,9 +57,7 @@ protected:
     virtual void implInitialize(const com::sun::star::uno::Any& _rValue);
 };
 
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
 
 #endif // _DBAUI_UNOADMIN_
 

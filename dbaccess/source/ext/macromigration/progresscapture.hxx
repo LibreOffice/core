@@ -26,16 +26,12 @@
 
 #include <memory>
 
-//........................................................................
 namespace dbmm
 {
-//........................................................................
 
     class IMigrationProgress;
 
-    //====================================================================
-    //= ProgressCapture
-    //====================================================================
+    // ProgressCapture
     typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::task::XStatusIndicator
                                     >   ProgressCapture_Base;
 
@@ -62,9 +58,7 @@ namespace dbmm
         ::std::auto_ptr< ProgressCapture_Data > m_pData;
     };
 
-//........................................................................
 } // namespace dbmm
-//........................................................................
 
 #endif // DBACCESS_PROGRESSCAPTURE_HXX
 

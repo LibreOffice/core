@@ -24,14 +24,10 @@
 
 #include <boost/optional.hpp>
 
-//........................................................................
 namespace dbaui
 {
-//........................................................................
 
-    //====================================================================
-    //= OptionalBoolItem
-    //====================================================================
+    // OptionalBoolItem
     class OptionalBoolItem : public SfxPoolItem
     {
         ::boost::optional< bool >   m_aValue;
@@ -53,9 +49,7 @@ namespace dbaui
             GetFullValue() const { return m_aValue; }
     };
 
-//........................................................................
 } // namespace dbaui
-//........................................................................
 
 #endif // DBACCESS_OPTIONALBOOLITEM_HXX
 

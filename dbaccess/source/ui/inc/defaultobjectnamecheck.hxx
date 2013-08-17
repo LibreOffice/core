@@ -29,14 +29,10 @@
 #include <memory>
 #include <boost/noncopyable.hpp>
 
-//........................................................................
 namespace dbaui
 {
-//........................................................................
 
-    //====================================================================
-    //= HierarchicalNameCheck
-    //====================================================================
+    // HierarchicalNameCheck
     struct HierarchicalNameCheck_Impl;
     /** class implementing the IObjectNameCheck interface, and checking given object names
         against a hierarchical name container
@@ -74,9 +70,7 @@ namespace dbaui
         HierarchicalNameCheck();                                            // never implemented
     };
 
-    //====================================================================
-    //= DynamicTableOrQueryNameCheck
-    //====================================================================
+    // DynamicTableOrQueryNameCheck
     struct DynamicTableOrQueryNameCheck_Impl;
     /** class implementing the IObjectNameCheck interface, and checking a given name
         for being valid as either a query or a table name.
@@ -126,9 +120,7 @@ namespace dbaui
         DynamicTableOrQueryNameCheck();                                                // never implemented
     };
 
-//........................................................................
 } // namespace dbaui
-//........................................................................
 
 #endif // DBACCESS_SOURCE_UI_INC_DEFAULTOBJECTNAMECHECK_HXX
 

@@ -20,7 +20,6 @@
 #ifndef DBACCESS_SOURCE_CORE_INC_COMPOSERTOOLS_HXX
 #define DBACCESS_SOURCE_CORE_INC_COMPOSERTOOLS_HXX
 
-
 #include <rtl/ustrbuf.hxx>
 
 #include <functional>
@@ -28,9 +27,7 @@
 namespace dbaccess
 {
 
-    //====================================================================
-    //= TokenComposer
-    //====================================================================
+    // TokenComposer
     struct TokenComposer : public ::std::unary_function< OUString, void >
     {
     private:
@@ -93,9 +90,7 @@ namespace dbaccess
         virtual void appendNonEmptyToNonEmpty( const OUString& lhs ) = 0;
     };
 
-    //====================================================================
-    //= FilterCreator
-    //====================================================================
+    // FilterCreator
     struct FilterCreator : public TokenComposer
     {
         virtual void appendNonEmptyToNonEmpty( const OUString& lhs )
@@ -108,9 +103,7 @@ namespace dbaccess
         }
     };
 
-    //====================================================================
-    //= FilterCreator
-    //====================================================================
+    // FilterCreator
     struct OrderCreator : public TokenComposer
     {
         virtual void appendNonEmptyToNonEmpty( const OUString& lhs )

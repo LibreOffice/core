@@ -25,14 +25,10 @@
 #include <tools/string.hxx>
 #include <connectivity/DriversConfig.hxx>
 
-//.........................................................................
 namespace dbaccess
 {
-//.........................................................................
 
-//=========================================================================
-//= DATASOURCE_TYPE
-//=========================================================================
+// DATASOURCE_TYPE
 /// known datasource types
 enum DATASOURCE_TYPE
 {
@@ -75,7 +71,6 @@ enum DATASOURCE_TYPE
     DST_USERDEFINE9,
     DST_USERDEFINE10,
 
-
     DST_UNKNOWN         /// unrecognized type
 };
 
@@ -99,10 +94,7 @@ enum DATASOURCE_TYPE
 #define PAGE_DBSETUPWIZARD_USERDEFINED               17
 #define PAGE_DBSETUPWIZARD_MYSQL_NATIVE              18
 
-
-//=========================================================================
-//= ODsnTypeCollection
-//=========================================================================
+// ODsnTypeCollection
 class OOO_DLLPUBLIC_DBA ODsnTypeCollection
 {
 protected:
@@ -190,9 +182,7 @@ public:
     OUString getType(const OUString& _sURL) const;
 };
 
-//-------------------------------------------------------------------------
 //- ODsnTypeCollection::TypeIterator
-//-------------------------------------------------------------------------
 class OOO_DLLPUBLIC_DBA ODsnTypeCollection::TypeIterator
 {
     friend class ODsnTypeCollection;
@@ -225,9 +215,7 @@ protected:
     TypeIterator(const ODsnTypeCollection* _pContainer, sal_Int32 _nInitialPos = 0);
 };
 
-//.........................................................................
 }   // namespace dbaccess
-//.........................................................................
 
 #endif // _DBACCESS_DSNTYPES_HXX_
 

@@ -27,14 +27,10 @@
 
 #include <memory>
 
-//........................................................................
 namespace dbaui
 {
-//........................................................................
 
-    //=========================================================================
-    //= AdvancedSettingsDialog
-    //=========================================================================
+    // AdvancedSettingsDialog
     class ODbDataSourceAdministrationHelper;
     /** implements the advanced page dlg of the data source properties.
     */
@@ -75,9 +71,7 @@ namespace dbaui
         virtual void enableConfirmSettings( bool _bEnable );
     };
 
-//........................................................................
 } // namespace dbaui
-//........................................................................
 
 #endif // DBACCESS_ADVANCEDSETTINGSDLG_HXX
 

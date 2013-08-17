@@ -89,16 +89,13 @@ OXMLConnectionResource::OXMLConnectionResource( ODBFilter& rImport,
         }
     }
 }
-// -----------------------------------------------------------------------------
 
 OXMLConnectionResource::~OXMLConnectionResource()
 {
 
     DBG_DTOR(OXMLConnectionResource,NULL);
 }
-// -----------------------------------------------------------------------------
-//----------------------------------------------------------------------------
+
 } // namespace dbaxml
-// -----------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

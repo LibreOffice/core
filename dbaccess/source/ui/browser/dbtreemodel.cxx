@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "dbtreemodel.hxx"
 #include "dbu_resource.hrc"
 #include <osl/diagnose.h>
@@ -25,13 +24,11 @@
 namespace dbaui
 {
     DBG_NAME(DBTreeListUserData)
-    //------------------------------------------------------------------------
     DBTreeListUserData::DBTreeListUserData()
         :eType(SbaTableQueryBrowser::etQuery)
     {
         DBG_CTOR(DBTreeListUserData,NULL);
     }
-    //------------------------------------------------------------------------
     DBTreeListUserData::~DBTreeListUserData()
     {
         DBG_DTOR(DBTreeListUserData,NULL);

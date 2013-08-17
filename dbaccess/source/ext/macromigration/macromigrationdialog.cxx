@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "dbmm_global.hrc"
 #include "dbmm_module.hxx"
 #include "docinteraction.hxx"
@@ -48,10 +47,8 @@
 
 #include <list>
 
-//........................................................................
 namespace dbmm
 {
-//........................................................................
 
 #define STATE_CLOSE_SUB_DOCS    0
 #define STATE_BACKUP_DBDOC      1
@@ -92,10 +89,7 @@ namespace dbmm
     using ::com::sun::star::ucb::XContent;
     using ::com::sun::star::ucb::XContentIdentifier;
 
-    //====================================================================
-    //= helper
-    //====================================================================
-    //--------------------------------------------------------------------
+    // helper
     static void lcl_getControllers_throw(const Reference< XModel2 >& _rxDocument,
         ::std::list< Reference< XController2 > >& _out_rControllers )
     {
@@ -105,9 +99,7 @@ namespace dbmm
             _out_rControllers.push_back( Reference< XController2 >( xControllerEnum->nextElement(), UNO_QUERY_THROW ) );
     }
 
-    //====================================================================
-    //= MacroMigrationDialog_Data
-    //====================================================================
+    // MacroMigrationDialog_Data
     struct MacroMigrationDialog_Data
     {
         Reference<XComponentContext>          aContext;
@@ -133,10 +125,7 @@ namespace dbmm
         }
     };
 
-    //====================================================================
-    //= MacroMigrationDialog
-    //====================================================================
-    //--------------------------------------------------------------------
+    // MacroMigrationDialog
     MacroMigrationDialog::MacroMigrationDialog( Window* _pParent, const Reference<XComponentContext>& _rContext,
         const Reference< XOfficeDatabaseDocument >& _rxDocument )
         :MacroMigrationDialog_Base( _pParent, MacroMigrationResId( DLG_MACRO_MIGRATION ) )
@@ -166,24 +155,20 @@ namespace dbmm
         OSL_PRECOND( m_pData->xDocumentModel.is(), "MacroMigrationDialog::MacroMigrationDialog: illegal document!" );
     }
 
-    //--------------------------------------------------------------------
     MacroMigrationDialog::~MacroMigrationDialog()
     {
     }
 
-    //--------------------------------------------------------------------
     const Reference<XComponentContext>& MacroMigrationDialog::getComponentContext() const
     {
         return m_pData->aContext;
     }
 
-    //--------------------------------------------------------------------
     const Reference< XOfficeDatabaseDocument >& MacroMigrationDialog::getDocument() const
     {
         return m_pData->xDocument;
     }
 
-    //--------------------------------------------------------------------
     short MacroMigrationDialog::Execute()
     {
         short nResult = MacroMigrationDialog_Base::Execute();
@@ -198,7 +183,6 @@ namespace dbmm
         return nResult;
     }
 
-    //--------------------------------------------------------------------
     sal_Bool MacroMigrationDialog::Close()
     {
         if ( m_pData->bMigrationIsRunning )
@@ -206,7 +190,6 @@ namespace dbmm
         return MacroMigrationDialog_Base::Close();
     }
 
-    //--------------------------------------------------------------------
     void MacroMigrationDialog::enterState( WizardState _nState )
     {
         MacroMigrationDialog_Base::enterState( _nState );
@@ -260,7 +243,6 @@ namespace dbmm
         }
     }
 
-    //--------------------------------------------------------------------
     sal_Bool MacroMigrationDialog::prepareLeaveCurrentState( CommitPageReason _eReason )
     {
         if ( !MacroMigrationDialog_Base::prepareLeaveCurrentState( _eReason ) )
@@ -287,25 +269,21 @@ namespace dbmm
         return sal_True;
     }
 
-    //--------------------------------------------------------------------
     sal_Bool MacroMigrationDialog::leaveState( WizardState _nState )
     {
         return MacroMigrationDialog_Base::leaveState( _nState );
     }
 
-    //--------------------------------------------------------------------
     MacroMigrationDialog::WizardState MacroMigrationDialog::determineNextState( WizardState _nCurrentState ) const
     {
         return MacroMigrationDialog_Base::determineNextState( _nCurrentState );
     }
 
-    //--------------------------------------------------------------------
     sal_Bool MacroMigrationDialog::onFinish()
     {
         return MacroMigrationDialog_Base::onFinish();
     }
 
-    //--------------------------------------------------------------------
     IMPL_LINK( MacroMigrationDialog, OnStartMigration, void*, /*_pNotInterestedIn*/ )
     {
         // prevent closing
@@ -340,7 +318,6 @@ namespace dbmm
         return 0L;
     }
 
-    //--------------------------------------------------------------------
     void MacroMigrationDialog::impl_showCloseDocsError( bool _bShow )
     {
         PreparationPage* pPreparationPage = dynamic_cast< PreparationPage* >( GetPage( STATE_CLOSE_SUB_DOCS ) );
@@ -349,7 +326,6 @@ namespace dbmm
             pPreparationPage->showCloseDocsError( _bShow );
     }
 
-    //--------------------------------------------------------------------
     bool MacroMigrationDialog::impl_closeSubDocs_nothrow()
     {
         OSL_PRECOND( m_pData->xDocument.is(), "MacroMigrationDialog::impl_closeSubDocs_nothrow: no document!" );
@@ -391,7 +367,6 @@ namespace dbmm
         return bSuccess;
     }
 
-    //--------------------------------------------------------------------
     namespace
     {
         bool    lcl_equalURLs_nothrow(
@@ -422,7 +397,6 @@ namespace dbmm
         }
     }
 
-    //--------------------------------------------------------------------
     bool MacroMigrationDialog::impl_backupDocument_nothrow() const
     {
         if ( !m_pData->xDocumentModel.is() )
@@ -473,7 +447,6 @@ namespace dbmm
         return false;
     }
 
-    //--------------------------------------------------------------------
     void MacroMigrationDialog::impl_reloadDocument_nothrow( bool _bMigrationSuccess )
     {
         typedef ::std::pair< Reference< XFrame >, OUString > ViewDescriptor;
@@ -607,8 +580,6 @@ namespace dbmm
         }
     }
 
-//........................................................................
 } // namespace dbmm
-//........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

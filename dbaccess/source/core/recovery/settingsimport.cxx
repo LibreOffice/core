@@ -23,10 +23,8 @@
 #include <sax/tools/converter.hxx>
 #include <xmloff/xmltoken.hxx>
 
-//........................................................................
 namespace dbaccess
 {
-//........................................................................
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
@@ -41,16 +39,12 @@ namespace dbaccess
     using ::com::sun::star::uno::Type;
     using ::com::sun::star::xml::sax::XAttributeList;
 
-    //====================================================================
-    //= SettingsImport
-    //====================================================================
-    //--------------------------------------------------------------------
+    // SettingsImport
     SettingsImport::SettingsImport()
         :m_refCount( 0 )
     {
     }
 
-    //--------------------------------------------------------------------
     SettingsImport::~SettingsImport()
     {
     }
@@ -103,31 +97,23 @@ namespace dbaccess
             // If there is, then just ignore it ...
     }
 
-    //====================================================================
-    //= IgnoringSettingsImport
-    //====================================================================
-    //--------------------------------------------------------------------
+    // IgnoringSettingsImport
     ::rtl::Reference< SettingsImport > IgnoringSettingsImport::nextState( const OUString& i_rElementName )
     {
         (void)i_rElementName;
         return this;
     }
 
-    //====================================================================
-    //= OfficeSettingsImport
-    //====================================================================
-    //--------------------------------------------------------------------
+    // OfficeSettingsImport
     OfficeSettingsImport::OfficeSettingsImport( ::comphelper::NamedValueCollection& o_rSettings )
         :m_rSettings( o_rSettings )
     {
     }
 
-    //--------------------------------------------------------------------
     OfficeSettingsImport::~OfficeSettingsImport()
     {
     }
 
-    //--------------------------------------------------------------------
     ::rtl::Reference< SettingsImport > OfficeSettingsImport::nextState( const OUString& i_rElementName )
     {
         // separate the namespace part from the element name
@@ -147,21 +133,16 @@ namespace dbaccess
         return new IgnoringSettingsImport;
     }
 
-    //====================================================================
-    //= ConfigItemImport
-    //====================================================================
-    //--------------------------------------------------------------------
+    // ConfigItemImport
     ConfigItemImport::ConfigItemImport( ::comphelper::NamedValueCollection& o_rSettings )
         :m_rSettings( o_rSettings )
     {
     }
 
-    //--------------------------------------------------------------------
     ConfigItemImport::~ConfigItemImport()
     {
     }
 
-    //--------------------------------------------------------------------
     ::rtl::Reference< SettingsImport > ConfigItemImport::nextState( const OUString& i_rElementName )
     {
         OSL_FAIL( "ConfigItemImport::nextState: unexpected: this class is responsible for child-less items only!" );
@@ -169,7 +150,6 @@ namespace dbaccess
         return new IgnoringSettingsImport;
     }
 
-    //--------------------------------------------------------------------
     void ConfigItemImport::endElement()
     {
         SettingsImport::endElement();
@@ -181,7 +161,6 @@ namespace dbaccess
         m_rSettings.put( sItemName, aValue );
     }
 
-    //--------------------------------------------------------------------
     void ConfigItemImport::getItemValue( ::com::sun::star::uno::Any& o_rValue ) const
     {
         o_rValue.clear();
@@ -232,21 +211,16 @@ namespace dbaccess
 #endif
     }
 
-    //====================================================================
-    //= ConfigItemSetImport
-    //====================================================================
-    //--------------------------------------------------------------------
+    // ConfigItemSetImport
     ConfigItemSetImport::ConfigItemSetImport( ::comphelper::NamedValueCollection& o_rSettings )
         :ConfigItemImport( o_rSettings )
     {
     }
 
-    //--------------------------------------------------------------------
     ConfigItemSetImport::~ConfigItemSetImport()
     {
     }
 
-    //--------------------------------------------------------------------
     ::rtl::Reference< SettingsImport > ConfigItemSetImport::nextState( const OUString& i_rElementName )
     {
         // separate the namespace part from the element name
@@ -268,14 +242,11 @@ namespace dbaccess
         return new IgnoringSettingsImport;
     }
 
-    //--------------------------------------------------------------------
     void ConfigItemSetImport::getItemValue( Any& o_rValue ) const
     {
         o_rValue <<= m_aChildSettings.getPropertyValues();
     }
 
-//........................................................................
 } // namespace dbaccess
-//........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

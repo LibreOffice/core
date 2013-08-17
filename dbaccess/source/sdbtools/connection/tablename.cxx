@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "tablename.hxx"
 #include "sdbt_resource.hrc"
 #include "module_sdbt.hxx"
@@ -31,10 +30,8 @@
 #include <tools/diagnose_ex.h>
 #include <tools/string.hxx>
 
-//........................................................................
 namespace sdbtools
 {
-//........................................................................
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::sdbc::XConnection;
@@ -56,9 +53,7 @@ namespace sdbtools
 
     using namespace ::dbtools;
 
-    //====================================================================
-    //= TableName
-    //====================================================================
+    // TableName
     struct TableName_Impl
     {
         SdbtClient      m_aModuleClient;    // keep the module alive as long as this instance lives
@@ -68,10 +63,7 @@ namespace sdbtools
         OUString sName;
     };
 
-    //====================================================================
-    //= TableName
-    //====================================================================
-    //--------------------------------------------------------------------
+    // TableName
     TableName::TableName( const Reference<XComponentContext>& _rContext, const Reference< XConnection >& _rxConnection )
         :ConnectionDependentComponent( _rContext )
         ,m_pImpl( new TableName_Impl )
@@ -82,61 +74,52 @@ namespace sdbtools
         setWeakConnection( _rxConnection );
     }
 
-    //--------------------------------------------------------------------
     TableName::~TableName()
     {
     }
 
-    //--------------------------------------------------------------------
     OUString SAL_CALL TableName::getCatalogName() throw (RuntimeException)
     {
         EntryGuard aGuard( *this );
         return m_pImpl->sCatalog;
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL TableName::setCatalogName( const OUString& _catalogName ) throw (RuntimeException)
     {
         EntryGuard aGuard( *this );
         m_pImpl->sCatalog = _catalogName;
     }
 
-    //--------------------------------------------------------------------
     OUString SAL_CALL TableName::getSchemaName() throw (RuntimeException)
     {
         EntryGuard aGuard( *this );
         return m_pImpl->sSchema;
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL TableName::setSchemaName( const OUString& _schemaName ) throw (RuntimeException)
     {
         EntryGuard aGuard( *this );
         m_pImpl->sSchema = _schemaName;
     }
 
-    //--------------------------------------------------------------------
     OUString SAL_CALL TableName::getTableName() throw (RuntimeException)
     {
         EntryGuard aGuard( *this );
         return m_pImpl->sName;
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL TableName::setTableName( const OUString& _tableName ) throw (RuntimeException)
     {
         EntryGuard aGuard( *this );
         m_pImpl->sName = _tableName;
     }
 
-    //--------------------------------------------------------------------
     OUString SAL_CALL TableName::getNameForSelect() throw (RuntimeException)
     {
         EntryGuard aGuard( *this );
         return composeTableNameForSelect( getConnection(), m_pImpl->sCatalog, m_pImpl->sSchema, m_pImpl->sName );
     }
 
-    //--------------------------------------------------------------------
     Reference< XPropertySet > SAL_CALL TableName::getTable() throw (NoSuchElementException, RuntimeException)
     {
         EntryGuard aGuard( *this );
@@ -164,7 +147,6 @@ namespace sdbtools
         return xTable;
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL TableName::setTable( const Reference< XPropertySet >& _table ) throw (IllegalArgumentException, RuntimeException)
     {
         EntryGuard aGuard( *this );
@@ -194,7 +176,6 @@ namespace sdbtools
         }
     }
 
-    //--------------------------------------------------------------------
     namespace
     {
         /** translates a CompositionType into a EComposeRule
@@ -233,7 +214,6 @@ namespace sdbtools
         }
     }
 
-    //--------------------------------------------------------------------
     OUString SAL_CALL TableName::getComposedName( ::sal_Int32 _Type, ::sal_Bool _Quote ) throw (IllegalArgumentException, RuntimeException)
     {
         EntryGuard aGuard( *this );
@@ -244,7 +224,6 @@ namespace sdbtools
             lcl_translateCompositionType_throw( _Type ) );
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL TableName::setComposedName( const OUString& _ComposedName, ::sal_Int32 _Type ) throw (RuntimeException)
     {
         EntryGuard aGuard( *this );
@@ -256,8 +235,6 @@ namespace sdbtools
             lcl_translateCompositionType_throw( _Type ) );
     }
 
-//........................................................................
 } // namespace sdbtools
-//........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

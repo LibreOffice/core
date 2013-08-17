@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "columnsettings.hxx"
 #include "dbastrings.hrc"
 
@@ -28,10 +27,8 @@
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 
-//........................................................................
 namespace dbaccess
 {
-//........................................................................
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
@@ -50,9 +47,7 @@ namespace dbaccess
 
     namespace PropertyAttribute = ::com::sun::star::beans::PropertyAttribute;
 
-    //==============================================================================
-    //= OColumnSettings
-    //==============================================================================
+    // OColumnSettings
     DBG_NAME( OColumnSettings )
 
     OColumnSettings::OColumnSettings()
@@ -160,8 +155,6 @@ namespace dbaccess
         return true;
     }
 
-//........................................................................
 } // namespace dbaccess
-//........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

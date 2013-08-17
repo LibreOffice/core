@@ -56,9 +56,7 @@ namespace
     const sal_Int32 HAS_TABLENAME              = 0x00000040;
 }
 
-//============================================================
-//= OTableColumnDescriptor
-//============================================================
+// OTableColumnDescriptor
 IMPLEMENT_FORWARD_XINTERFACE2(OTableColumnDescriptor,OColumn,TXChild)
 
 void OTableColumnDescriptor::impl_registerProperties()
@@ -130,9 +128,8 @@ void SAL_CALL OTableColumnDescriptor::setParent( const Reference< XInterface >& 
     ::osl::MutexGuard aGuard(m_aMutex);
     m_xParent = _xParent;
 }
-//============================================================
-//= OTableColumn
-//============================================================
+
+// OTableColumn
 DBG_NAME(OTableColumn);
 
 OTableColumn::OTableColumn( const OUString& _rName )
@@ -164,9 +161,7 @@ OUString OTableColumn::getImplementationName(  ) throw (RuntimeException)
     return OTableColumnDescriptor::createArrayHelper();
 }
 
-// =========================================================================
-//= OQueryColumn
-// =========================================================================
+// OQueryColumn
 DBG_NAME( OQueryColumn );
 
 OQueryColumn::OQueryColumn( const Reference< XPropertySet >& _rxParserColumn, const Reference< XConnection >& _rxConnection, const OUString &i_sLabel )
@@ -322,9 +317,7 @@ void SAL_CALL OQueryColumn::getFastPropertyValue( Any& _rValue, sal_Int32 _nHand
     }
 }
 
-//==========================================================================
-//= OColumnWrapper
-//==========================================================================
+// OColumnWrapper
 DBG_NAME(OColumnWrapper);
 
 OColumnWrapper::OColumnWrapper( const Reference< XPropertySet > & rCol, const bool _bNameIsReadOnly )
@@ -420,9 +413,7 @@ sal_Int64 SAL_CALL OColumnWrapper::getSomething( const Sequence< sal_Int8 >& aId
     return 0;
 }
 
-//============================================================
-//= OTableColumnDescriptorWrapper
-//============================================================
+// OTableColumnDescriptorWrapper
 OTableColumnDescriptorWrapper::OTableColumnDescriptorWrapper( const Reference< XPropertySet >& _rCol, const bool _bPureWrap, const bool _bIsDescriptor )
     :OColumnWrapper( _rCol, !_bIsDescriptor )
     ,m_bPureWrap( _bPureWrap )
@@ -575,9 +566,7 @@ void OTableColumnDescriptorWrapper::setFastPropertyValue_NoBroadcast(
     }
 }
 
-//============================================================
-//= OTableColumnWrapper
-//============================================================
+// OTableColumnWrapper
 OTableColumnWrapper::OTableColumnWrapper( const Reference< XPropertySet >& rCol, const Reference< XPropertySet >& _xColDefintion,
             const bool _bPureWrap )
     :OTableColumnDescriptorWrapper( rCol, _bPureWrap, false )
@@ -626,4 +615,5 @@ Sequence< OUString > OTableColumnWrapper::getSupportedServiceNames(  ) throw (Ru
 {
     return OTableColumnDescriptorWrapper::createArrayHelper( nId );
 }
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

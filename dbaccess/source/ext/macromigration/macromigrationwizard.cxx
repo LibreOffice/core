@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "dbmm_module.hxx"
 #include "dbmm_global.hrc"
 #include "macromigrationdialog.hxx"
@@ -28,10 +27,8 @@
 
 #include <svtools/genericunodialog.hxx>
 
-//........................................................................
 namespace dbmm
 {
-//........................................................................
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
@@ -51,9 +48,7 @@ namespace dbmm
     using ::com::sun::star::lang::IllegalArgumentException;
     using ::com::sun::star::frame::XStorable;
 
-    //====================================================================
-    //= MacroMigrationDialogService
-    //====================================================================
+    // MacroMigrationDialogService
     class MacroMigrationDialogService;
     typedef ::svt::OGenericUnoDialog                                                MacroMigrationDialogService_Base;
     typedef ::comphelper::OPropertyArrayUsageHelper< MacroMigrationDialogService >  MacroMigrationDialogService_PBase;
@@ -100,10 +95,7 @@ namespace dbmm
         Reference< XOfficeDatabaseDocument >    m_xDocument;
     };
 
-    //====================================================================
-    //= MacroMigrationDialogService
-    //====================================================================
-    //--------------------------------------------------------------------
+    // MacroMigrationDialogService
     MacroMigrationDialogService::MacroMigrationDialogService( const Reference< XComponentContext >& _rxContext )
         :MacroMigrationDialogService_Base( _rxContext )
         ,m_aContext( _rxContext )
@@ -111,7 +103,6 @@ namespace dbmm
         m_bNeedInitialization = true;
     }
 
-    //--------------------------------------------------------------------
     MacroMigrationDialogService::~MacroMigrationDialogService()
     {
         // we do this here cause the base class' call to destroyDialog won't reach us anymore : we're within an dtor,
@@ -124,25 +115,21 @@ namespace dbmm
         }
     }
 
-    //--------------------------------------------------------------------
     Reference< XInterface > SAL_CALL MacroMigrationDialogService::Create( const Reference< XComponentContext >& _rxContext )
     {
         return *(new MacroMigrationDialogService( _rxContext ) );
     }
 
-    //--------------------------------------------------------------------
     Dialog* MacroMigrationDialogService::createDialog( Window* _pParent )
     {
         return new MacroMigrationDialog( _pParent, m_aContext, m_xDocument );
     }
 
-    //--------------------------------------------------------------------
     void MacroMigrationDialogService::destroyDialog()
     {
         MacroMigrationDialogService_Base::destroyDialog();
     }
 
-    //--------------------------------------------------------------------
     Sequence< sal_Int8 > SAL_CALL MacroMigrationDialogService::getImplementationId() throw(RuntimeException)
     {
         static ::cppu::OImplementationId* pId = NULL;
@@ -158,13 +145,11 @@ namespace dbmm
         return pId->getImplementationId();
     }
 
-    //--------------------------------------------------------------------
     OUString SAL_CALL MacroMigrationDialogService::getImplementationName_static() throw(RuntimeException)
     {
         return OUString( "com.sun.star.comp.dbaccess.macromigration.MacroMigrationDialogService" );
     }
 
-    //--------------------------------------------------------------------
     Sequence< OUString > SAL_CALL MacroMigrationDialogService::getSupportedServiceNames_static() throw(RuntimeException)
     {
         Sequence< OUString > aServices(1);
@@ -172,19 +157,16 @@ namespace dbmm
         return aServices;
     }
 
-    //--------------------------------------------------------------------
     OUString SAL_CALL MacroMigrationDialogService::getImplementationName() throw(RuntimeException)
     {
         return getImplementationName_static();
     }
 
-    //--------------------------------------------------------------------
     Sequence< OUString > SAL_CALL MacroMigrationDialogService::getSupportedServiceNames() throw(RuntimeException)
     {
         return getSupportedServiceNames_static();
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL MacroMigrationDialogService::initialize( const Sequence< Any >& _rArguments ) throw(Exception, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -217,19 +199,16 @@ namespace dbmm
         m_bInitialized = true;
     }
 
-    //--------------------------------------------------------------------
     Reference< XPropertySetInfo > SAL_CALL MacroMigrationDialogService::getPropertySetInfo() throw(RuntimeException)
     {
         return createPropertySetInfo( getInfoHelper() );
     }
 
-    //--------------------------------------------------------------------
     ::cppu::IPropertyArrayHelper& SAL_CALL MacroMigrationDialogService::getInfoHelper()
     {
         return *const_cast< MacroMigrationDialogService* >( this )->getArrayHelper();
     }
 
-    //--------------------------------------------------------------------
     ::cppu::IPropertyArrayHelper* MacroMigrationDialogService::createArrayHelper( ) const
     {
         Sequence< Property > aProps;
@@ -237,14 +216,11 @@ namespace dbmm
         return new ::cppu::OPropertyArrayHelper( aProps );
     }
 
-    //--------------------------------------------------------------------
     void createRegistryInfo_MacroMigrationDialogService()
     {
         static OAutoRegistration< MacroMigrationDialogService > aAutoRegistration;
     }
 
-//........................................................................
 } // namespace dbmm
-//........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

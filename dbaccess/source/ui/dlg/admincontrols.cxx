@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "admincontrols.hxx"
 #include "admincontrols.hrc"
 #include "dbu_dlg.hrc"
@@ -28,14 +27,10 @@
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
 
-//........................................................................
 namespace dbaui
 {
-//........................................................................
 
-    //====================================================================
-    //= TextResetOperatorEventFilter
-    //====================================================================
+    // TextResetOperatorEventFilter
     class TextResetOperatorEventFilter : public ::svt::IWindowEventFilter
     {
     public:
@@ -52,9 +47,7 @@ namespace dbaui
         }
     };
 
-    //====================================================================
-    //= TextResetOperator
-    //====================================================================
+    // TextResetOperator
     class TextResetOperator :public ::svt::IWindowOperator
     {
     public:
@@ -71,7 +64,6 @@ namespace dbaui
               String    m_sUserText;
     };
 
-    //--------------------------------------------------------------------
     void TextResetOperator::operateOn( const VclWindowEvent& _rTrigger, Window& _rOperateOn ) const
     {
         OSL_ENSURE( _rTrigger.GetWindow() == &_rOperateOn, "TextResetOperator::operateOn: you're misusing this implementation!" );
@@ -103,9 +95,7 @@ namespace dbaui
         }
     }
 
-    //====================================================================
-    //= TextResetOperatorController
-    //====================================================================
+    // TextResetOperatorController
     class TextResetOperatorController_Base
     {
     protected:
@@ -135,10 +125,7 @@ namespace dbaui
         }
     };
 
-    //====================================================================
-    //= MySQLNativeSettings
-    //====================================================================
-    //--------------------------------------------------------------------
+    // MySQLNativeSettings
     MySQLNativeSettings::MySQLNativeSettings( Window& _rParent, const Link& _rControlModificationLink )
         :Control( &_rParent, ModuleRes( RID_MYSQL_NATIVE_SETTINGS ).SetAutoRelease( sal_False ) )
         ,m_aDatabaseNameLabel   ( this, ModuleRes( FT_MYSQL_DATABASE_NAME ) )
@@ -182,12 +169,10 @@ namespace dbaui
 #endif
     }
 
-    //--------------------------------------------------------------------
     MySQLNativeSettings::~MySQLNativeSettings()
     {
     }
 
-    //--------------------------------------------------------------------
     void MySQLNativeSettings::fillControls( ::std::vector< ISaveValueWrapper* >& _rControlList )
     {
         _rControlList.push_back( new OSaveValueWrapper< Edit >( &m_aDatabaseName ) );
@@ -197,7 +182,6 @@ namespace dbaui
         _rControlList.push_back( new OSaveValueWrapper< Edit >( &m_aNamedPipe ) );
     }
 
-    //--------------------------------------------------------------------
     void MySQLNativeSettings::fillWindows( ::std::vector< ISaveValueWrapper* >& _rControlList )
     {
         _rControlList.push_back( new ODisableWrapper< FixedText >( &m_aDatabaseNameLabel ) );
@@ -208,7 +192,6 @@ namespace dbaui
         _rControlList.push_back( new ODisableWrapper< RadioButton >( &m_aNamedPipeRadio ) );
     }
 
-    //--------------------------------------------------------------------
     sal_Bool MySQLNativeSettings::FillItemSet( SfxItemSet& _rSet )
     {
         sal_Bool bChangedSomething = sal_False;
@@ -225,7 +208,6 @@ namespace dbaui
         return bChangedSomething;
     }
 
-    //--------------------------------------------------------------------
     void MySQLNativeSettings::implInitControls(const SfxItemSet& _rSet )
     {
         SFX_ITEMSET_GET( _rSet, pInvalid, SfxBoolItem, DSID_INVALID_SELECTION, sal_True );
@@ -270,7 +252,6 @@ namespace dbaui
             m_aHostPortRadio.Check();
     }
 
-    //--------------------------------------------------------------------
     bool MySQLNativeSettings::canAdvance() const
     {
         if ( m_aDatabaseName.GetText().isEmpty() )
@@ -297,8 +278,6 @@ namespace dbaui
         return true;
     }
 
-//........................................................................
 } // namespace dbaui
-//........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

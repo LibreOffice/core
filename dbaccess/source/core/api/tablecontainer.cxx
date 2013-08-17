@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "tablecontainer.hxx"
 #include "dbastrings.hrc"
 #include "table.hxx"
@@ -94,9 +93,8 @@ namespace
         return sal_False;
     }
 }
-//==========================================================================
-//= OTableContainer
-//==========================================================================
+
+// OTableContainer
 DBG_NAME(OTableContainer)
 
 OTableContainer::OTableContainer(::cppu::OWeakObject& _rParent,
@@ -483,4 +481,5 @@ void OTableContainer::addMasterContainerListener()
         DBG_UNHANDLED_EXCEPTION();
     }
 }
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

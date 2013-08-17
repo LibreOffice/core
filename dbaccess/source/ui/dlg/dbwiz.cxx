@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "dbwiz.hxx"
 #include "dbadmin.hrc"
 #include "dbu_dlg.hrc"
@@ -39,10 +38,8 @@
 #include "DbAdminImpl.hxx"
 #include "dbaccess_helpid.hrc"
 
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
 using namespace svt;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::sdbc;
@@ -65,12 +62,8 @@ using namespace com::sun::star::container;
 #define ADDITIONAL_USERDEFINED         11
 #define ADDITIONAL_PAGE_MYSQL_NATIVE   12
 
-
 DBG_NAME(ODbTypeWizDialog)
-//=========================================================================
-//= ODbTypeWizDialog
-//=========================================================================
-//-------------------------------------------------------------------------
+// ODbTypeWizDialog
 ODbTypeWizDialog::ODbTypeWizDialog(Window* _pParent
                                ,SfxItemSet* _pItems
                                ,const Reference< XComponentContext >& _rxORB
@@ -111,13 +104,12 @@ ODbTypeWizDialog::ODbTypeWizDialog(Window* _pParent
     ActivatePage();
 }
 
-//-------------------------------------------------------------------------
 ODbTypeWizDialog::~ODbTypeWizDialog()
 {
     DBG_DTOR(ODbTypeWizDialog,NULL);
     delete m_pOutSet;
 }
-//-------------------------------------------------------------------------
+
 IMPL_LINK(ODbTypeWizDialog, OnTypeSelected, OGeneralPage*, _pTabPage)
 {
     m_eType = _pTabPage->GetSelectedType();
@@ -126,7 +118,7 @@ IMPL_LINK(ODbTypeWizDialog, OnTypeSelected, OGeneralPage*, _pTabPage)
     enableButtons(WZB_FINISH,!bURLRequired);
     return 1L;
 }
-//-------------------------------------------------------------------------
+
 WizardTypes::WizardState ODbTypeWizDialog::determineNextState( WizardState _nCurrentState ) const
 {
     WizardTypes::WizardState nNextState = WZS_INVALID_STATE;
@@ -205,43 +197,41 @@ WizardTypes::WizardState ODbTypeWizDialog::determineNextState( WizardState _nCur
     return nNextState;
 }
 
-// -----------------------------------------------------------------------------
 const SfxItemSet* ODbTypeWizDialog::getOutputSet() const
 {
     return m_pOutSet;
 }
-// -----------------------------------------------------------------------------
+
 SfxItemSet* ODbTypeWizDialog::getWriteOutputSet()
 {
     return m_pOutSet;
 }
-// -----------------------------------------------------------------------------
+
 ::std::pair< Reference<XConnection>,sal_Bool> ODbTypeWizDialog::createConnection()
 {
     return m_pImpl->createConnection();
 }
-// -----------------------------------------------------------------------------
+
 Reference< XComponentContext > ODbTypeWizDialog::getORB() const
 {
     return m_pImpl->getORB();
 }
-// -----------------------------------------------------------------------------
+
 Reference< XDriver > ODbTypeWizDialog::getDriver()
 {
     return m_pImpl->getDriver();
 }
-// -----------------------------------------------------------------------------
+
 OUString ODbTypeWizDialog::getDatasourceType(const SfxItemSet& _rSet) const
 {
     return m_pImpl->getDatasourceType(_rSet);
 }
-// -----------------------------------------------------------------------------
+
 void ODbTypeWizDialog::clearPassword()
 {
     m_pImpl->clearPassword();
 }
 
-// -----------------------------------------------------------------------------
 TabPage* ODbTypeWizDialog::createPage(WizardState _nState)
 {
     sal_uInt16 nStringId = STR_PAGETITLE_ADVANCED;
@@ -311,7 +301,7 @@ TabPage* ODbTypeWizDialog::createPage(WizardState _nState)
     }
     return pPage;
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool ODbTypeWizDialog::leaveState(WizardState _nState)
 {
     SfxTabPage* pPage = static_cast<SfxTabPage*>(WizardDialog::GetPage(_nState));
@@ -319,12 +309,12 @@ sal_Bool ODbTypeWizDialog::leaveState(WizardState _nState)
         pPage->FillItemSet(*m_pOutSet);
     return sal_True;
 }
-// -----------------------------------------------------------------------------
+
 void ODbTypeWizDialog::setTitle(const OUString& _sTitle)
 {
     SetText(_sTitle);
 }
-//-------------------------------------------------------------------------
+
 void ODbTypeWizDialog::enableConfirmSettings( bool _bEnable )
 {
     enableButtons( WZB_FINISH, _bEnable );
@@ -335,7 +325,7 @@ void ODbTypeWizDialog::enableConfirmSettings( bool _bEnable )
     // Plus, the concept must also care for the case where those pages are embedded into
     // anormal tab dialog.
 }
-//-------------------------------------------------------------------------
+
 sal_Bool ODbTypeWizDialog::saveDatasource()
 {
     SfxTabPage* pPage = static_cast<SfxTabPage*>(WizardDialog::GetPage(getCurrentState()));
@@ -348,20 +338,19 @@ sal_Bool ODbTypeWizDialog::saveDatasource()
     DataSourceInfoConverter::convert( getORB(), m_pCollection,sOldURL,m_eType,m_pImpl->getCurrentDataSource());
     return sal_True;
 }
-// -----------------------------------------------------------------------------
+
 IWizardPageController* ODbTypeWizDialog::getPageController( TabPage* _pCurrentPage ) const
 {
     OGenericAdministrationPage* pPage = static_cast<OGenericAdministrationPage*>(_pCurrentPage);
     return pPage;
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool ODbTypeWizDialog::onFinish()
 {
     saveDatasource();
     return m_pImpl->saveChanges(*m_pOutSet) ? OWizardMachine::onFinish() : sal_False;
 }
-//.........................................................................
+
 }   // namespace dbaui
-//.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
