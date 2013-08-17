@@ -2268,21 +2268,17 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             if (m_bHadPicture)
                 dispatchSymbol(RTF_PAR);
             // \pard is allowed between \cell and \row, but in that case it should not reset the fact that we're inside a table.
+            m_aStates.top().aParagraphSprms = m_aDefaultState.aParagraphSprms;
+            m_aStates.top().aParagraphAttributes = m_aDefaultState.aParagraphAttributes;
             if (m_aStates.top().nCells == 0)
             {
-                // Reset everything.
-                m_aStates.top().aParagraphSprms = m_aDefaultState.aParagraphSprms;
-                m_aStates.top().aParagraphAttributes = m_aDefaultState.aParagraphAttributes;
+                // Reset that we're in a table.
                 m_aStates.top().pCurrentBuffer = 0;
             }
             else
             {
-                // Reset only margins.
-                lcl_eraseNestedAttribute(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_spacing, NS_ooxml::LN_CT_Spacing_before);
-                lcl_eraseNestedAttribute(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_spacing, NS_ooxml::LN_CT_Spacing_after);
-                m_aStates.top().aParagraphSprms.erase(NS_sprm::LN_PDxaLeft);
-                m_aStates.top().aParagraphSprms.erase(NS_sprm::LN_PDxaRight);
-                m_aStates.top().aParagraphSprms.erase(NS_sprm::LN_PJc);
+                // We are still in a table.
+                m_aStates.top().aParagraphSprms.set(NS_sprm::LN_PFInTable, RTFValue::Pointer_t(new RTFValue(1)));
             }
             m_aStates.top().resetFrame();
             break;
