@@ -131,7 +131,6 @@ $(eval $(call gb_SrsTarget_add_files,sw/res,\
     sw/source/ui/table/tabledlg.src \
     sw/source/ui/uiview/view.src \
     sw/source/ui/utlui/attrdesc.src \
-    sw/source/ui/utlui/gloslst.src \
     sw/source/ui/utlui/initui.src \
     sw/source/ui/utlui/navipi.src \
     sw/source/ui/utlui/poolfmt.src \

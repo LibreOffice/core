@@ -37,8 +37,6 @@
 #include <vector>
 
 #include <utlui.hrc>
-#include <gloslst.hrc>
-
 
 #define STRING_DELIM (char)0x0A
 #define GLOS_TIMEOUT 30000   // update every 30 seconds
@@ -54,31 +52,26 @@ struct TripleString
 
 class SwGlossDecideDlg : public ModalDialog
 {
-    OKButton        aOk;
-    CancelButton    aCancel;
-    HelpButton      aHelp;
-    ListBox         aListLB;
-    FixedLine       aFL;
+    OKButton* m_pOk;
+    ListBox*  m_pListLB;
 
     DECL_LINK(DoubleClickHdl, void*);
     DECL_LINK(SelectHdl, void*);
 
     public:
         SwGlossDecideDlg(Window* pParent);
-    ListBox&    GetListBox() {return aListLB;}
+    ListBox&    GetListBox() {return *m_pListLB;}
 };
 
-SwGlossDecideDlg::SwGlossDecideDlg(Window* pParent) :
-    ModalDialog(pParent, SW_RES(DLG_GLOSSARY_DECIDE_DLG)),
-    aOk(this,       SW_RES(PB_OK)),
-    aCancel(this,   SW_RES(PB_CANCEL)),
-    aHelp(this,     SW_RES(PB_HELP)),
-    aListLB(this,   SW_RES(LB_LIST)),
-    aFL(this,    SW_RES(FL_GLOSS))
+SwGlossDecideDlg::SwGlossDecideDlg(Window* pParent)
+    : ModalDialog(pParent, "SelectAutoTextDialog",
+        "modules/swriter/ui/selectautotextdialog.ui")
 {
-    FreeResource();
-    aListLB.SetDoubleClickHdl(LINK(this, SwGlossDecideDlg, DoubleClickHdl));
-    aListLB.SetSelectHdl(LINK(this, SwGlossDecideDlg, SelectHdl));
+    get(m_pOk, "ok");
+    get(m_pListLB, "treeview");
+    m_pListLB->set_height_request(m_pListLB->GetTextHeight() * 10);
+    m_pListLB->SetDoubleClickHdl(LINK(this, SwGlossDecideDlg, DoubleClickHdl));
+    m_pListLB->SetSelectHdl(LINK(this, SwGlossDecideDlg, SelectHdl));
 }
 
 IMPL_LINK_NOARG(SwGlossDecideDlg, DoubleClickHdl)
@@ -89,7 +82,7 @@ IMPL_LINK_NOARG(SwGlossDecideDlg, DoubleClickHdl)
 
 IMPL_LINK_NOARG(SwGlossDecideDlg, SelectHdl)
 {
-    aOk.Enable(LISTBOX_ENTRY_NOTFOUND != aListLB.GetSelectEntryPos());
+    m_pOk->Enable(LISTBOX_ENTRY_NOTFOUND != m_pListLB->GetSelectEntryPos());
     return 0;
 }
 
