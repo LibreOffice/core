@@ -39,7 +39,7 @@ class SW_DLLPUBLIC SwOLEObj
     /** Either ref or name are known. If only name is known, ref is obtained
        on demand by GetOleRef() from Sfx. */
     svt::EmbeddedObjectRef xOLERef;
-    String aName;
+    OUString aName;
 
     SwOLEObj( const SwOLEObj& rObj );   /// Not allowed.
     SwOLEObj();
@@ -48,7 +48,7 @@ class SW_DLLPUBLIC SwOLEObj
 
 public:
     SwOLEObj( const svt::EmbeddedObjectRef& pObj );
-    SwOLEObj( const String &rName, sal_Int64 nAspect );
+    SwOLEObj( const OUString &rName, sal_Int64 nAspect );
     ~SwOLEObj();
 
     sal_Bool UnloadObject();
@@ -56,11 +56,11 @@ public:
                                 const SwDoc* pDoc,
                                 sal_Int64 nAspect );
 
-    String GetDescription();
+    OUString GetDescription();
 
     const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > GetOleRef();
     svt::EmbeddedObjectRef& GetObject();
-    const String& GetCurrentPersistName() const { return aName; }
+    OUString GetCurrentPersistName() const { return aName; }
     sal_Bool IsOleRef() const;  ///< To avoid unneccessary loading of object.
 };
 
