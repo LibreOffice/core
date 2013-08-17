@@ -175,12 +175,10 @@ public:
 
     virtual bool GetInfo( SfxPoolItem& rInfo ) const;
 
-    const String GetObjTitle() const;
-    void SetObjTitle( const String& rTitle,
-                      bool bBroadcast = false );
-    const String GetObjDescription() const;
-    void SetObjDescription( const String& rDescription,
-                            bool bBroadcast = false );
+    OUString GetObjTitle() const;
+    void SetObjTitle( const OUString& rTitle, bool bBroadcast = false );
+    OUString GetObjDescription() const;
+    void SetObjDescription( const OUString& rDescription, bool bBroadcast = false );
 
     /** SwFlyFrmFmt::IsBackgroundTransparent
 

@@ -2852,11 +2852,10 @@ bool SwFlyFrmFmt::GetInfo( SfxPoolItem& rInfo ) const
 }
 
 // #i73249#
-void SwFlyFrmFmt::SetObjTitle( const String& rTitle, bool bBroadcast )
+void SwFlyFrmFmt::SetObjTitle( const OUString& rTitle, bool bBroadcast )
 {
     SdrObject* pMasterObject = FindSdrObject();
-    OSL_ENSURE( pMasterObject,
-            "<SwNoTxtNode::SetObjTitle(..)> - missing <SdrObject> instance" );
+    OSL_ENSURE( pMasterObject, "<SwFlyFrmFmt::SetObjTitle(..)> - missing <SdrObject> instance" );
     if ( !pMasterObject )
     {
         return;
@@ -2875,24 +2874,22 @@ void SwFlyFrmFmt::SetObjTitle( const String& rTitle, bool bBroadcast )
     }
 }
 
-const String SwFlyFrmFmt::GetObjTitle() const
+OUString SwFlyFrmFmt::GetObjTitle() const
 {
     const SdrObject* pMasterObject = FindSdrObject();
-    OSL_ENSURE( pMasterObject,
-            "<SwFlyFrmFmt::GetObjTitle(..)> - missing <SdrObject> instance" );
+    OSL_ENSURE( pMasterObject, "<SwFlyFrmFmt::GetObjTitle(..)> - missing <SdrObject> instance" );
     if ( !pMasterObject )
     {
-        return aEmptyStr;
+        return OUString();
     }
 
     return pMasterObject->GetTitle();
 }
 
-void SwFlyFrmFmt::SetObjDescription( const String& rDescription, bool bBroadcast )
+void SwFlyFrmFmt::SetObjDescription( const OUString& rDescription, bool bBroadcast )
 {
     SdrObject* pMasterObject = FindSdrObject();
-    OSL_ENSURE( pMasterObject,
-            "<SwFlyFrmFmt::SetDescription(..)> - missing <SdrObject> instance" );
+    OSL_ENSURE( pMasterObject, "<SwFlyFrmFmt::SetDescription(..)> - missing <SdrObject> instance" );
     if ( !pMasterObject )
     {
         return;
@@ -2911,14 +2908,13 @@ void SwFlyFrmFmt::SetObjDescription( const String& rDescription, bool bBroadcast
     }
 }
 
-const String SwFlyFrmFmt::GetObjDescription() const
+OUString SwFlyFrmFmt::GetObjDescription() const
 {
     const SdrObject* pMasterObject = FindSdrObject();
-    OSL_ENSURE( pMasterObject,
-            "<SwNoTxtNode::GetDescription(..)> - missing <SdrObject> instance" );
+    OSL_ENSURE( pMasterObject, "<SwFlyFrmFmt::GetDescription(..)> - missing <SdrObject> instance" );
     if ( !pMasterObject )
     {
-        return aEmptyStr;
+        return OUString();
     }
 
     return pMasterObject->GetDescription();

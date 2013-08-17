@@ -2007,10 +2007,8 @@ void SwFEShell::GetConnectableFrmFmts(SwFrmFmt & rFmt,
 }
 
 // #i73249#
-const String SwFEShell::GetObjTitle() const
+OUString SwFEShell::GetObjTitle() const
 {
-    String aTitle;
-
     if ( Imp()->HasDrawView() )
     {
         const SdrMarkList *pMrkList = &Imp()->GetDrawView()->GetMarkedObjectList();
@@ -2020,19 +2018,16 @@ const String SwFEShell::GetObjTitle() const
             const SwFrmFmt* pFmt = FindFrmFmt( pObj );
             if ( pFmt->Which() == RES_FLYFRMFMT )
             {
-                aTitle = dynamic_cast<const SwFlyFrmFmt*>(pFmt)->GetObjTitle();
+                return dynamic_cast<const SwFlyFrmFmt*>(pFmt)->GetObjTitle();
             }
-            else
-            {
-                aTitle = pObj->GetTitle();
-            }
+            return pObj->GetTitle();
         }
     }
 
-    return aTitle;
+    return OUString();
 }
 
-void SwFEShell::SetObjTitle( const String& rTitle )
+void SwFEShell::SetObjTitle( const OUString& rTitle )
 {
     if ( Imp()->HasDrawView() )
     {
@@ -2054,10 +2049,8 @@ void SwFEShell::SetObjTitle( const String& rTitle )
     }
 }
 
-const String SwFEShell::GetObjDescription() const
+OUString SwFEShell::GetObjDescription() const
 {
-    String aDescription;
-
     if ( Imp()->HasDrawView() )
     {
         const SdrMarkList *pMrkList = &Imp()->GetDrawView()->GetMarkedObjectList();
@@ -2067,19 +2060,16 @@ const String SwFEShell::GetObjDescription() const
             const SwFrmFmt* pFmt = FindFrmFmt( pObj );
             if ( pFmt->Which() == RES_FLYFRMFMT )
             {
-                aDescription = dynamic_cast<const SwFlyFrmFmt*>(pFmt)->GetObjDescription();
+                return dynamic_cast<const SwFlyFrmFmt*>(pFmt)->GetObjDescription();
             }
-            else
-            {
-                aDescription = pObj->GetDescription();
-            }
+            return pObj->GetDescription();
         }
     }
 
-    return aDescription;
+    return OUString();
 }
 
-void SwFEShell::SetObjDescription( const String& rDescription )
+void SwFEShell::SetObjDescription( const OUString& rDescription )
 {
     if ( Imp()->HasDrawView() )
     {

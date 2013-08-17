@@ -263,12 +263,11 @@ Graphic SwNoTxtNode::GetGraphic() const
 }
 
 // #i73249#
-void SwNoTxtNode::SetTitle( const String& rTitle, bool bBroadcast )
+void SwNoTxtNode::SetTitle( const OUString& rTitle, bool bBroadcast )
 {
     // Title attribute of <SdrObject> replaces own AlternateText attribute
     SwFlyFrmFmt* pFlyFmt = dynamic_cast<SwFlyFrmFmt*>(GetFlyFmt());
-    OSL_ENSURE( pFlyFmt,
-            "<SwNoTxtNode::SetTitle(..)> - missing <SwFlyFrmFmt> instance" );
+    OSL_ENSURE( pFlyFmt, "<SwNoTxtNode::SetTitle(..)> - missing <SwFlyFrmFmt> instance" );
     if ( !pFlyFmt )
     {
         return;
@@ -277,24 +276,22 @@ void SwNoTxtNode::SetTitle( const String& rTitle, bool bBroadcast )
     pFlyFmt->SetObjTitle( rTitle, bBroadcast );
 }
 
-const String SwNoTxtNode::GetTitle() const
+OUString SwNoTxtNode::GetTitle() const
 {
     const SwFlyFrmFmt* pFlyFmt = dynamic_cast<const SwFlyFrmFmt*>(GetFlyFmt());
-    OSL_ENSURE( pFlyFmt,
-            "<SwNoTxtNode::GetTitle(..)> - missing <SwFlyFrmFmt> instance" );
+    OSL_ENSURE( pFlyFmt, "<SwNoTxtNode::GetTitle(..)> - missing <SwFlyFrmFmt> instance" );
     if ( !pFlyFmt )
     {
-        return aEmptyStr;
+        return OUString();
     }
 
     return pFlyFmt->GetObjTitle();
 }
 
-void SwNoTxtNode::SetDescription( const String& rDescription, bool bBroadcast )
+void SwNoTxtNode::SetDescription( const OUString& rDescription, bool bBroadcast )
 {
     SwFlyFrmFmt* pFlyFmt = dynamic_cast<SwFlyFrmFmt*>(GetFlyFmt());
-    OSL_ENSURE( pFlyFmt,
-            "<SwNoTxtNode::SetDescription(..)> - missing <SwFlyFrmFmt> instance" );
+    OSL_ENSURE( pFlyFmt, "<SwNoTxtNode::SetDescription(..)> - missing <SwFlyFrmFmt> instance" );
     if ( !pFlyFmt )
     {
         return;
@@ -303,14 +300,13 @@ void SwNoTxtNode::SetDescription( const String& rDescription, bool bBroadcast )
     pFlyFmt->SetObjDescription( rDescription, bBroadcast );
 }
 
-const String SwNoTxtNode::GetDescription() const
+OUString SwNoTxtNode::GetDescription() const
 {
     const SwFlyFrmFmt* pFlyFmt = dynamic_cast<const SwFlyFrmFmt*>(GetFlyFmt());
-    OSL_ENSURE( pFlyFmt,
-            "<SwNoTxtNode::GetDescription(..)> - missing <SwFlyFrmFmt> instance" );
+    OSL_ENSURE( pFlyFmt, "<SwNoTxtNode::GetDescription(..)> - missing <SwFlyFrmFmt> instance" );
     if ( !pFlyFmt )
     {
-        return aEmptyStr;
+        return OUString();
     }
 
     return pFlyFmt->GetObjDescription();
