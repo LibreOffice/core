@@ -124,7 +124,7 @@ SwExtraPainter::SwExtraPainter( const SwTxtFrm *pFrm, ViewShell *pVwSh,
             nLineNr,    the first line number
             bLineNum is set back to sal_False if the numbering is completely
             outside of the paint rect */
-        nDivider = rLineInf.GetDivider().Len() ? rLineInf.GetDividerCountBy() : 0;
+        nDivider = !rLineInf.GetDivider().isEmpty() ? rLineInf.GetDividerCountBy() : 0;
         nX = pFrm->Frm().Left();
         SwCharFmt* pFmt = rLineInf.GetCharFmt( const_cast<IDocumentStylePoolAccess&>(*pFrm->GetNode()->getIDocumentStylePoolAccess()) );
         OSL_ENSURE( pFmt, "PaintExtraData without CharFmt" );
