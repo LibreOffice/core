@@ -41,35 +41,11 @@ ImageButton BTN_PAGEDOWN
     SmallStyle = TRUE ;
     SYMBOL = IMAGEBUTTON_PAGEDOWN ;
 };
-QueryBox DLG_WRAP
-{
-    BUTTONS = WB_YES_NO ;
-    DEFBUTTON = WB_DEF_YES ;
-    Message [ en-US ] = "Do you want to continue checking at the beginning of the document?" ;
-};
-QueryBox DLG_BODY
-{
-    BUTTONS = WB_YES_NO ;
-    DEFBUTTON = WB_DEF_NO ;
-    Message [ en-US ] = "Do you want to check the main text?" ;
-};
-QueryBox DLG_PRT_FIELDNAME
-{
-    BUTTONS = WB_YES_NO_CANCEL ;
-    DEFBUTTON = WB_DEF_CANCEL ;
-    Message [ en-US ] = "Show field commands option is checked.\nDo you want to print the document with field names?" ;
-};
 QueryBox DLG_SPECIAL
 {
     BUTTONS = WB_YES_NO ;
     DEFBUTTON = WB_DEF_NO ;
     Message [ en-US ] = "Do you want check the special regions?" ;
-};
-QueryBox DLG_THESAURUS
-{
-    BUTTONS = WB_YES_NO ;
-    DEFBUTTON = WB_DEF_NO ;
-    Message [ en-US ] = "This word appears in the list of words you want to avoid! Start thesaurus?" ;
 };
 QueryBox DLG_SPECIAL_FORCED
 {

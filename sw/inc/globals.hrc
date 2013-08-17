@@ -86,14 +86,7 @@
 
 // DIALOGS -----------------------------------------------------------
 
-#define DLG_THESAURUS               (RC_GLOBALS_BEGIN + 2)
 #define DLG_SPECIAL                 (RC_GLOBALS_BEGIN + 3)
-
-// QUERYBOX ---------------------------------------------------------
-
-#define DLG_WRAP                    (RC_GLOBALS_BEGIN + 4)
-#define DLG_BODY                    (RC_GLOBALS_BEGIN + 5)
-#define DLG_PRT_FIELDNAME           (RC_GLOBALS_BEGIN + 6)
 
 // INFOBOX ------------------------------------------------------------
 
