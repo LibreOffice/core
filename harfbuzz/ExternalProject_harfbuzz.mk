@@ -25,8 +25,12 @@ $(call gb_ExternalProject_get_state_target,harfbuzz,build) :
 			--enable-static \
 			--disable-shared \
 			--with-pic \
+			--with-icu=yes \
+			--with-freetype=no \
+			--with-cairo=no \
+			--with-glib=no \
 			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
-		&& (cd $(EXTERNAL_WORKDIR)/src && $(MAKE) libharfbuzz.la) \
+		&& (cd $(EXTERNAL_WORKDIR)/src && $(MAKE)) \
 	)
 
 # vim: set noet sw=4 ts=4:

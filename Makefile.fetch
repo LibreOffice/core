@@ -77,6 +77,7 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 		$(call fetch_Optional,LIBATOMIC_OPS,LIBATOMIC_OPS_TARBALL) \
 		$(call fetch_Optional,CDR,CDR_TARBALL) \
 		$(call fetch_Optional,FIREBIRD,FIREBIRD_TARBALL) \
+		$(call fetch_Optional,HARFBUZZ,HARFBUZZ_TARBALL) \
 		$(call fetch_Optional,MSPUB,MSPUB_TARBALL) \
 		$(call fetch_Optional,MWAW,MWAW_TARBALL) \
 		$(call fetch_Optional,VISIO,VISIO_TARBALL) \
@@ -114,7 +115,6 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 		$(call fetch_Optional,GLIBC,$(GLIBC_TARBALL)) \
 		$(call fetch_Optional,HSQLDB,$(HSQLDB_TARBALL)) \
 		$(call fetch_Optional,HUNSPELL,$(HUNSPELL_TARBALL)) \
-		$(call fetch_Optional,HARFBUZZ,$(HARFBUZZ_TARBALL)) \
 		$(call fetch_Optional,HYPHEN,$(HYPHEN_TARBALL)) \
 		$(call fetch_Optional,ICU,$(ICU_TARBALL)) \
 		$(call fetch_Optional,ICU,$(ICU_51_LAYOUT_FIX_TARBALL)) \
