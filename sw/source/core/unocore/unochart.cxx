@@ -153,7 +153,7 @@ void SwChartLockController_Helper::LockUnlockAllCharts( sal_Bool bLock )
             {
                 ++aIdx;
                 if (0 != ( pONd = aIdx.GetNode().GetOLENode() ) &&
-                    pONd->GetChartTblName().Len() > 0 /* is chart object? */)
+                    !pONd->GetChartTblName().isEmpty() /* is chart object? */)
                 {
                     uno::Reference < embed::XEmbeddedObject > xIP = pONd->GetOLEObj().GetOleRef();
                     if ( svt::EmbeddedObjectRef::TryRunningState( xIP ) )

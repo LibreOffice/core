@@ -243,7 +243,7 @@ SwOLENode::SwOLENode( const SwNodeIndex &rWhere,
 }
 
 SwOLENode::SwOLENode( const SwNodeIndex &rWhere,
-                    const String &rString,
+                    const OUString &rString,
                     sal_Int64 nAspect,
                     SwGrfFmtColl *pGrfColl,
                     SwAttrSet* pAutoAttr ) :
@@ -359,7 +359,7 @@ sal_Bool SwOLENode::SavePersistentData()
                    bChartWithInternalProvider = sal_True;
            }
 
-           if ( IsChart() && sChartTblName.Len() && !bChartWithInternalProvider )
+           if ( IsChart() && !sChartTblName.isEmpty() && !bChartWithInternalProvider )
                bKeepObjectToTempStorage = sal_False;
            pCnt->RemoveEmbeddedObject( aOLEObj.aName, sal_False, bKeepObjectToTempStorage );
            // modify end
@@ -535,9 +535,9 @@ sal_Bool SwOLENode::UpdateLinkURL_Impl()
 
     if ( mpObjectLink )
     {
-        String aNewLinkURL;
+        OUString aNewLinkURL;
         GetDoc()->GetLinkManager().GetDisplayNames( mpObjectLink, 0, &aNewLinkURL, 0, 0 );
-        if ( !aNewLinkURL.EqualsIgnoreCaseAscii( maLinkURL ) )
+        if ( !aNewLinkURL.equalsIgnoreAsciiCase( maLinkURL ) )
         {
             if ( !aOLEObj.xOLERef.is() )
                 aOLEObj.GetOleRef();
@@ -556,7 +556,7 @@ sal_Bool SwOLENode::UpdateLinkURL_Impl()
                     // TODO/LATER: there should be possible to get current mediadescriptor settings from the object
                     uno::Sequence< beans::PropertyValue > aArgs( 1 );
                     aArgs[0].Name = OUString( "URL" );
-                    aArgs[0].Value <<= OUString( aNewLinkURL );
+                    aArgs[0].Value <<= aNewLinkURL;
                     xPersObj->reload( aArgs, uno::Sequence< beans::PropertyValue >() );
 
                     maLinkURL = aNewLinkURL;
@@ -593,7 +593,7 @@ void SwOLENode::BreakFileLink_Impl()
                 uno::Reference< embed::XLinkageSupport > xLinkSupport( aOLEObj.GetOleRef(), uno::UNO_QUERY_THROW );
                 xLinkSupport->breakLink( xStorage, aOLEObj.GetCurrentPersistName() );
                 DisconnectFileLink_Impl();
-                maLinkURL = String();
+                maLinkURL = OUString();
             }
             catch( uno::Exception& )
             {
@@ -620,8 +620,8 @@ void SwOLENode::CheckFileLink_Impl()
             uno::Reference< embed::XLinkageSupport > xLinkSupport( aOLEObj.xOLERef.GetObject(), uno::UNO_QUERY_THROW );
             if ( xLinkSupport->isLink() )
             {
-                String aLinkURL = xLinkSupport->getLinkURL();
-                if ( aLinkURL.Len() )
+                const OUString aLinkURL = xLinkSupport->getLinkURL();
+                if ( !aLinkURL.isEmpty() )
                 {
                     // this is a file link so the model link manager should handle it
                     mpObjectLink = new SwEmbedObjectLink( this );

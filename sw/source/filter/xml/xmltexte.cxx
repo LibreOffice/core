@@ -502,7 +502,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
             sURL = GetExport().AddEmbeddedObject( sURL );
             lcl_addURL( rXMLExport, sURL, false );
         }
-        if( SV_EMBEDDED_OWN == nType && pOLENd->GetChartTblName().Len() )
+        if( SV_EMBEDDED_OWN == nType && !pOLENd->GetChartTblName().isEmpty() )
         {
             OUString sRange( pOLENd->GetChartTblName() );
             OUStringBuffer aBuffer( sRange.getLength() + 2 );
