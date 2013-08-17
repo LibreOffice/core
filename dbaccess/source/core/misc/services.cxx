@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include "module_dba.hxx"
@@ -27,13 +26,10 @@
 
 #include <../dataaccess/databasecontext.hxx>
 
-
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
 
-//***************************************************************************************
-//
 // registry functions
 extern "C" void SAL_CALL createRegistryInfo_OCommandDefinition();
 extern "C" void SAL_CALL createRegistryInfo_OComponentDefinition();
@@ -43,7 +39,6 @@ extern "C" void SAL_CALL createRegistryInfo_ODatabaseSource();
 extern "C" void SAL_CALL createRegistryInfo_DataAccessDescriptorFactory();
 
 namespace dba{
-//--------------------------------------------------------------------------
     ::cppu::ImplementationEntry entries[] = {
         {
             &::dbaccess::DatabaseDataProvider::Create,
@@ -63,11 +58,8 @@ namespace dba{
     };
 }
 
-//***************************************************************************************
-//
 // The prescribed C api must be complied with
 // It consists of three functions which must be exported by the module.
-//
 extern "C" void SAL_CALL createRegistryInfo_DBA()
 {
     static sal_Bool bInit = sal_False;
@@ -83,7 +75,6 @@ extern "C" void SAL_CALL createRegistryInfo_DBA()
     }
 }
 
-//---------------------------------------------------------------------------------------
 extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL dba_component_getFactory(
                     const sal_Char* pImplementationName,
                     void* pServiceManager,

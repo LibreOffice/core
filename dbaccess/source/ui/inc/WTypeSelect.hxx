@@ -33,9 +33,7 @@ class SvParser;
 namespace dbaui
 {
     class OTableDesignHelpBar;
-    // =============================================================================================
     // OWizTypeSelectControl
-    // =============================================================================================
     class OWizTypeSelectControl : public OFieldDescControl
     {
     protected:
@@ -59,11 +57,8 @@ namespace dbaui
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getConnection();
     };
 
-
-    // ========================================================
     // Wizard Page: OWizTypeSelectList
     // just defines the ::com::sun::star::ucb::Command for the Contextmenu
-    // ========================================================
     class OWizTypeSelectList : public MultiListBox
     {
         sal_Bool                m_bPKey;
@@ -79,11 +74,9 @@ namespace dbaui
         void                    SetPKey(sal_Bool bPKey) { m_bPKey = bPKey; }
     };
 
-    // ========================================================
     // Wizard Page: OWizTypeSelect
     // Serves as base class for different copy properties.
     // Calls FillColumnList, when button AUTO is triggered
-    // ========================================================
     class OWizTypeSelect : public OWizardPage
     {
         friend class OWizTypeSelectControl;
@@ -125,11 +118,8 @@ namespace dbaui
         inline void setDuplicateName(sal_Bool _bDuplicateName) { m_bDuplicateName = _bDuplicateName; }
     };
 
-    // ========================================================
     typedef OWizTypeSelect* (*TypeSelectionPageFactory)( Window*, SvStream& );
 }
 #endif // DBAUI_WIZ_TYPESELECT_HXX
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

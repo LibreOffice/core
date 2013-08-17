@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "brwctrlr.hxx"
 #include "brwview.hxx"
 #include "sbagrid.hxx"
@@ -32,7 +31,6 @@
 #include "UITools.hxx"
 #include <osl/diagnose.h>
 
-
 using namespace dbaui;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdb;
@@ -40,7 +38,6 @@ using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
-
 
 namespace
 {
@@ -64,12 +61,9 @@ namespace
         return bGrabFocus;
     }
 }
-//==================================================================
 //= UnoDataBrowserView
-//==================================================================
 
 DBG_NAME(UnoDataBrowserView)
-// -------------------------------------------------------------------------
 UnoDataBrowserView::UnoDataBrowserView( Window* pParent,
                                         IController& _rController,
                                         const Reference< ::com::sun::star::uno::XComponentContext >& _rxContext)
@@ -82,7 +76,6 @@ UnoDataBrowserView::UnoDataBrowserView( Window* pParent,
     DBG_CTOR(UnoDataBrowserView,NULL);
 
 }
-// -------------------------------------------------------------------------
 void UnoDataBrowserView::Construct(const Reference< ::com::sun::star::awt::XControlModel >& xModel)
 {
     try
@@ -120,7 +113,6 @@ void UnoDataBrowserView::Construct(const Reference< ::com::sun::star::awt::XCont
         throw;
     }
 }
-// -------------------------------------------------------------------------
 UnoDataBrowserView::~UnoDataBrowserView()
 {
     {
@@ -145,7 +137,6 @@ UnoDataBrowserView::~UnoDataBrowserView()
 
     DBG_DTOR(UnoDataBrowserView,NULL);
 }
-// -----------------------------------------------------------------------------
 IMPL_LINK( UnoDataBrowserView, SplitHdl, void*, /*NOINTERESTEDIN*/ )
 {
     long nYPos = m_pSplitter->GetPosPixel().Y();
@@ -154,14 +145,12 @@ IMPL_LINK( UnoDataBrowserView, SplitHdl, void*, /*NOINTERESTEDIN*/ )
 
     return 0L;
 }
-// -------------------------------------------------------------------------
 void UnoDataBrowserView::setSplitter(Splitter* _pSplitter)
 {
     m_pSplitter = _pSplitter;
     m_pSplitter->SetSplitHdl( LINK( this, UnoDataBrowserView, SplitHdl ) );
     LINK( this, UnoDataBrowserView, SplitHdl ).Call(m_pSplitter);
 }
-// -------------------------------------------------------------------------
 void UnoDataBrowserView::setTreeView(DBTreeView* _pTreeView)
 {
     if (m_pTreeView != _pTreeView)
@@ -174,7 +163,6 @@ void UnoDataBrowserView::setTreeView(DBTreeView* _pTreeView)
         m_pTreeView = _pTreeView;
     }
 }
-// -------------------------------------------------------------------------
 void UnoDataBrowserView::showStatus( const OUString& _rStatus )
 {
     if (_rStatus.isEmpty())
@@ -190,7 +178,6 @@ void UnoDataBrowserView::showStatus( const OUString& _rStatus )
     }
 }
 
-// -------------------------------------------------------------------------
 void UnoDataBrowserView::hideStatus()
 {
     if (!m_pStatus || !m_pStatus->IsVisible())
@@ -201,7 +188,6 @@ void UnoDataBrowserView::hideStatus()
     Update();
 }
 
-// -------------------------------------------------------------------------
 void UnoDataBrowserView::resizeDocumentView(Rectangle& _rPlayground)
 {
     Point   aSplitPos;
@@ -258,13 +244,11 @@ void UnoDataBrowserView::resizeDocumentView(Rectangle& _rPlayground)
     _rPlayground.SetSize( Size( 0, 0 ) );
 }
 
-//------------------------------------------------------------------
 sal_uInt16 UnoDataBrowserView::View2ModelPos(sal_uInt16 nPos) const
 {
     return m_pVclControl ? m_pVclControl->GetModelColumnPos(m_pVclControl->GetColumnIdFromViewPos(nPos)) : -1;
 }
 
-// -----------------------------------------------------------------------------
 SbaGridControl* UnoDataBrowserView::getVclControl() const
 {
     if ( !m_pVclControl )
@@ -287,7 +271,6 @@ SbaGridControl* UnoDataBrowserView::getVclControl() const
     }
     return m_pVclControl;
 }
-// -----------------------------------------------------------------------------
 void UnoDataBrowserView::GetFocus()
 {
     ODataView::GetFocus();
@@ -306,13 +289,11 @@ void UnoDataBrowserView::GetFocus()
             m_pTreeView->GrabFocus();
     }
 }
-// -----------------------------------------------------------------------------
 void UnoDataBrowserView::_disposing( const ::com::sun::star::lang::EventObject& /*_rSource*/ )
 {
     stopComponentListening(Reference<XComponent>(VCLUnoHelper::GetInterface(m_pVclControl),UNO_QUERY));
     m_pVclControl = NULL;
 }
-// -------------------------------------------------------------------------
 long UnoDataBrowserView::PreNotify( NotifyEvent& rNEvt )
 {
     long nDone = 0L;
@@ -340,7 +321,6 @@ long UnoDataBrowserView::PreNotify( NotifyEvent& rNEvt )
 }
 
 DBG_NAME(BrowserViewStatusDisplay)
-// -----------------------------------------------------------------------------
 BrowserViewStatusDisplay::BrowserViewStatusDisplay( UnoDataBrowserView* _pView, const OUString& _rStatus )
     :m_pView(_pView)
 {
@@ -350,7 +330,6 @@ BrowserViewStatusDisplay::BrowserViewStatusDisplay( UnoDataBrowserView* _pView, 
         m_pView->showStatus(_rStatus);
 }
 
-// -----------------------------------------------------------------------------
 BrowserViewStatusDisplay::~BrowserViewStatusDisplay( )
 {
     if (m_pView)
@@ -358,6 +337,5 @@ BrowserViewStatusDisplay::~BrowserViewStatusDisplay( )
 
     DBG_DTOR(BrowserViewStatusDisplay,NULL);
 }
-// -----------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

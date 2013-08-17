@@ -26,7 +26,6 @@
 namespace dbaui
 {
 
-    // ================================================================================================
     // OQueryMoveTabWinUndoAct - Undo-Klasse fuer Verschieben eines TabWins
     class OTableWindow;
     class OJoinMoveTabWinUndoAct : public OQueryDesignUndoAction
@@ -44,7 +43,6 @@ namespace dbaui
         virtual void    Redo() { TogglePosition(); }
     };
 
-    // ------------------------------------------------------------------------------------------------
     inline OJoinMoveTabWinUndoAct::OJoinMoveTabWinUndoAct(OJoinTableView* pOwner, const Point& ptOriginalPosition, OTableWindow* pTabWin)
         :OQueryDesignUndoAction(pOwner, STR_QUERY_UNDO_MOVETABWIN)
         ,m_ptNextPosition(ptOriginalPosition)
@@ -53,6 +51,5 @@ namespace dbaui
     }
 }
 #endif // DBAUI_OQUERYMOVETABWINUNDOACT_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -26,7 +26,6 @@
 
 namespace dbaui
 {
-    //==================================================================
     class OQueryTableWindow : public OTableWindow
     {
         sal_Int32           m_nAliasNum;
@@ -80,6 +79,5 @@ namespace dbaui
     };
 }
 #endif // DBAUI_QUERY_TABLEWINDOW_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

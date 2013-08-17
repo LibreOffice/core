@@ -24,7 +24,6 @@
 
 namespace dbaui
 {
-    // ================================================================================================
     // SbaCommentUndoAction - Undo-Basisklasse fuer Aktionen, deren GetComment einen aus einer Sba-Resource
     // geladenen String liefert
 
@@ -43,6 +42,5 @@ namespace dbaui
     };
 }
 #endif // DBAUI_GENERALUNDO_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

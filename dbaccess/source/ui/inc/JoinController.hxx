@@ -82,18 +82,15 @@ namespace dbaui
     public:
         OJoinController(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rM);
 
-        // ---------------------------------------------------------------
         // attribute access
         inline TTableWindowData*        getTableWindowData()     { return &m_vTableData; }
         inline TTableConnectionData*    getTableConnectionData() { return &m_vTableConnectionData;}
         inline OAddTableDlg*            getAddTableDialog()const { return m_pAddTableDialog; }
 
-        // ---------------------------------------------------------------
         // OSingleDocumentController overridables
         virtual void        reconnect( sal_Bool _bUI );
         virtual void        impl_onModifyChanged();
 
-        // ---------------------------------------------------------------
         // own overridables
         /** determines whether or not it's allowed for database views to participate in the game
         */
@@ -108,8 +105,6 @@ namespace dbaui
         */
         virtual OJoinDesignView*    getJoinView();
 
-
-        // ---------------------------------------------------------------
         /** erase the data in the data vector
             @param  _pData
                     the data whioch should be erased
@@ -120,7 +115,6 @@ namespace dbaui
 
         void    SaveTabWinPosSize(OTableWindow* pTabWin, long nOffsetX, long nOffsetY);
 
-        // ---------------------------------------------------------------
         // UNO interface overridables
         // XEventListener
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
@@ -130,8 +124,6 @@ namespace dbaui
         // ::com::sun::star::frame::XController
         virtual sal_Bool SAL_CALL suspend(sal_Bool bSuspend) throw( ::com::sun::star::uno::RuntimeException );
 
-
-        // ---------------------------------------------------------------
         // misc
         /** only defines a method to save a SQLException in d&d methods to show the error at a later state
             set the internal member m_aExceptionInfo to _rInfo

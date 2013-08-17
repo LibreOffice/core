@@ -43,7 +43,6 @@ namespace com { namespace sun { namespace star {
 
 namespace dbaui
 {
-    //------------------------------------------------------------------
     struct SbaURLCompare : public ::std::binary_function< ::com::sun::star::util::URL, ::com::sun::star::util::URL, bool>
     {
         bool operator() (const ::com::sun::star::util::URL& x, const ::com::sun::star::util::URL& y) const {return x.Complete == y.Complete ? true : false;}
@@ -53,9 +52,7 @@ namespace dbaui
     {
         sal_Int32 operator() (const ::com::sun::star::util::URL& x) const {return x.Complete.hashCode();}
     };
-    //==================================================================
     // SbaXGridControl
-    //==================================================================
 
     class SbaXStatusMultiplexer;
     class SbaXGridControl
@@ -100,9 +97,7 @@ namespace dbaui
         virtual FmXGridPeer*    imp_CreatePeer(Window* pParent);
     };
 
-    //==================================================================
     // SbaXGridPeer
-    //==================================================================
 
     class SbaXGridPeer
                 :public FmXGridPeer
@@ -172,9 +167,7 @@ namespace dbaui
         MapDispatchToBool   m_aDispatchStates;
     };
 
-    //==================================================================
     // SbaGridHeader
-    //==================================================================
 
     class SbaGridHeader
                 :public FmGridHeader
@@ -202,9 +195,7 @@ namespace dbaui
         using FmGridHeader::StartDrag;
     };
 
-    // =========================================================================
     // interfaces for communication between the vcl grid control and a controller
-    // -------------------------------------------------------------------------
     class SbaGridListener
     {
     public:
@@ -220,10 +211,7 @@ namespace dbaui
         ~SbaGridListener() {}
     };
 
-    //==================================================================
     // SbaGridControl
-    //==================================================================
-    //------------------------------------------------------------------
     class SbaGridControl : public FmGridControl
     {
         friend class SbaGridHeader;
@@ -278,7 +266,6 @@ namespace dbaui
                 at least one row is selected
         */
         void CopySelectedRowsToClipboard();
-
 
     protected:
         // DragSourceHelper overridables

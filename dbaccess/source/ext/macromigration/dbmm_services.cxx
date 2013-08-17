@@ -17,15 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "dbmm_module.hxx"
 
-//........................................................................
 namespace dbmm
 {
-//........................................................................
 
-    //--------------------------------------------------------------------
     extern void createRegistryInfo_MacroMigrationDialogService();
 
     static void initializeModule()
@@ -34,9 +30,7 @@ namespace dbmm
         createRegistryInfo_MacroMigrationDialogService();
     }
 
-//........................................................................
 } // namespace dbmm
-//........................................................................
 
 extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL dbmm_component_getFactory(
     const sal_Char* pImplementationName, SAL_UNUSED_PARAMETER void*,

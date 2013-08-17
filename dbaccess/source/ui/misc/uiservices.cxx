@@ -17,11 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <cppuhelper/factory.hxx>
 #include <osl/diagnose.h>
 #include "dbu_reghelper.hxx"
-
 
 using namespace ::dbaui;
 using namespace ::com::sun::star::uno;
@@ -93,7 +91,6 @@ extern "C" void SAL_CALL createRegistryInfo_DBU()
     }
 }
 
-//---------------------------------------------------------------------------------------
 extern "C"  SAL_DLLPUBLIC_EXPORT void* SAL_CALL dbu_component_getFactory(
                     const sal_Char* pImplementationName,
                     void* pServiceManager,

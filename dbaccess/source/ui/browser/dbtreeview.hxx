@@ -26,9 +26,7 @@ class SvTreeList;
 namespace dbaui
 {
     class DBTreeListBox;
-    // ------------------
     // - DBTreeView -
-    // ------------------
 
     class DBTreeView : public Window
     {
@@ -51,7 +49,6 @@ namespace dbaui
         /// gets the currently set NodeExpansionHandler
 
         void    setCopyHandler(const Link& _rHdl);
-
 
         void                setModel(SvTreeList* _pTreeModel);
         void                setSelChangeHdl(const Link& _rHdl);

@@ -60,9 +60,7 @@ namespace com
         }
     }
 }
-//==================================================================
 // DlgFilterCrit
-//==================================================================
 namespace dbaui
 {
     class DlgFilterCrit :public ModalDialog
@@ -131,6 +129,5 @@ namespace dbaui
 }
 
 #endif // DBAUI_QUERYFILTER_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "connection.hxx"
 #include "dbastrings.hrc"
 #include "datasource.hxx"
@@ -71,7 +70,6 @@ using ::com::sun::star::sdb::tools::XDataSourceMetaData;
 namespace dbaccess
 {
 
-//==========================================================================
 // XServiceInfo
 OUString OConnection::getImplementationName(  ) throw(RuntimeException)
 {
@@ -275,9 +273,7 @@ void OConnection::setTypeMap(const Reference< XNameAccess > & typeMap) throw( SQ
     checkDisposed();
     m_xMasterConnection->setTypeMap(typeMap);
 }
-//==========================================================================
 //= OConnection
-//==========================================================================
 DBG_NAME(OConnection)
 
 OConnection::OConnection(ODatabaseSource& _rDB

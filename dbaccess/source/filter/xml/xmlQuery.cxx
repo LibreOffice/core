@@ -72,14 +72,12 @@ OXMLQuery::OXMLQuery( ODBFilter& rImport
         }
     }
 }
-// -----------------------------------------------------------------------------
 
 OXMLQuery::~OXMLQuery()
 {
 
     DBG_DTOR(OXMLQuery,NULL);
 }
-// -----------------------------------------------------------------------------
 SvXMLImportContext* OXMLQuery::CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
@@ -107,7 +105,6 @@ SvXMLImportContext* OXMLQuery::CreateChildContext(
 
     return pContext;
 }
-// -----------------------------------------------------------------------------
 void OXMLQuery::setProperties(Reference< XPropertySet > & _xProp )
 {
     try
@@ -137,8 +134,6 @@ void OXMLQuery::setProperties(Reference< XPropertySet > & _xProp )
         OSL_FAIL("OXMLTable::EndElement -> exception catched");
     }
 }
-//----------------------------------------------------------------------------
 } // namespace dbaxml
-// -----------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

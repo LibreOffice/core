@@ -34,7 +34,6 @@
 class SvTreeListEntry;
 namespace dbaui
 {
-    //////////////////////////////////////////////////////////////////////////
     // Flags for the size adjustment of SbaJoinTabWins
     const sal_uInt16 SIZING_NONE    = 0x0000;
     const sal_uInt16 SIZING_TOP     = 0x0001;
@@ -194,6 +193,5 @@ namespace dbaui
     };
 }
 #endif //DBAUI_TABLEWINDOW_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

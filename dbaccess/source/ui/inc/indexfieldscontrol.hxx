@@ -25,14 +25,10 @@
 #include "indexcollection.hxx"
 #include <com/sun/star/uno/Sequence.hxx>
 
-//......................................................................
 namespace dbaui
 {
-//......................................................................
 
-    //==================================================================
     // IndexFieldsControl
-    //==================================================================
     class IndexFieldsControl : public ::svt::EditBrowseBox
     {
         OModuleClient        m_aModuleClient;
@@ -94,9 +90,7 @@ namespace dbaui
         using ::svt::EditBrowseBox::Init;
     };
 
-//......................................................................
 }   // namespace dbaui
-//......................................................................
 
 #endif // _DBAUI_INDEXFIELDSCONTROL_HXX_
 

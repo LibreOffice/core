@@ -24,11 +24,8 @@
 #include "ConnectionLine.hxx"
 
 using namespace dbaui;
-//========================================================================
 // class ORelationTableConnection
-//========================================================================
 DBG_NAME(ORelationTableConnection)
-//------------------------------------------------------------------------
 ORelationTableConnection::ORelationTableConnection( ORelationTableView* pContainer,
                                                    const TTableConnectionData::value_type& pTabConnData )
     :OTableConnection( pContainer, pTabConnData )
@@ -36,7 +33,6 @@ ORelationTableConnection::ORelationTableConnection( ORelationTableView* pContain
     DBG_CTOR(ORelationTableConnection,NULL);
 }
 
-//------------------------------------------------------------------------
 ORelationTableConnection::ORelationTableConnection( const ORelationTableConnection& rConn )
     : OTableConnection( rConn )
 {
@@ -44,13 +40,11 @@ ORelationTableConnection::ORelationTableConnection( const ORelationTableConnecti
     // keine eigenen Members, also reicht die Basisklassenfunktionalitaet
 }
 
-//------------------------------------------------------------------------
 ORelationTableConnection::~ORelationTableConnection()
 {
     DBG_DTOR(ORelationTableConnection,NULL);
 }
 
-//------------------------------------------------------------------------
 ORelationTableConnection& ORelationTableConnection::operator=( const ORelationTableConnection& rConn )
 {
     DBG_CHKTHIS(ORelationTableConnection,NULL);
@@ -62,8 +56,6 @@ ORelationTableConnection& ORelationTableConnection::operator=( const ORelationTa
     return *this;
 }
 
-
-//------------------------------------------------------------------------
 void ORelationTableConnection::Draw( const Rectangle& rRect )
 {
     DBG_CHKTHIS(ORelationTableConnection,NULL);
@@ -72,7 +64,6 @@ void ORelationTableConnection::Draw( const Rectangle& rRect )
     if ( pData && (pData->GetCardinality() == CARDINAL_UNDEFINED) )
         return;
 
-    //////////////////////////////////////////////////////////////////////
     // Linien nach oberster Linie durchsuchen
     Rectangle aBoundingRect;
     long nTop = GetBoundingRect().Bottom();
@@ -96,7 +87,6 @@ void ORelationTableConnection::Draw( const Rectangle& rRect )
         }
     }
 
-    //////////////////////////////////////////////////////////////////////
     // Kardinalitaet antragen
     if( !pTopLine )
         return;
@@ -130,10 +120,8 @@ void ORelationTableConnection::Draw( const Rectangle& rRect )
     else
         GetParent()->SetTextColor(Application::GetSettings().GetStyleSettings().GetWindowTextColor());
 
-
     GetParent()->DrawText( aSourcePos, aSourceText, TEXT_DRAW_CLIP | TEXT_DRAW_CENTER | TEXT_DRAW_BOTTOM);
     GetParent()->DrawText( aDestPos, aDestText, TEXT_DRAW_CLIP | TEXT_DRAW_CENTER | TEXT_DRAW_BOTTOM);
 }
-// -----------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

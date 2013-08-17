@@ -24,7 +24,6 @@
 
 namespace dbaui
 {
-    // ================================================================================================
     // OQueryTabWinShowUndoAct - undo class to show a TabWins
 
     class OQueryTabWinShowUndoAct : public OQueryTabWinUndoAct
@@ -37,7 +36,6 @@ namespace dbaui
         virtual void    Redo();
     };
 
-    // ================================================================================================
     // OQueryTabWinDelUndoAct - undo class to delete a TabWins
 
     class OQueryTabWinDelUndoAct : public OQueryTabWinUndoAct
@@ -51,7 +49,5 @@ namespace dbaui
     };
 }
 #endif // DBAUI_QUERYTABWINSHOWUNDOACT_HXX
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

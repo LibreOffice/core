@@ -26,10 +26,8 @@
 
 class SvTreeListBox;
 
-//........................................................................
 namespace dbaui
 {
-//........................................................................
 
     class SAL_NO_VTABLE IApplicationController  :public IController
                                                 ,public IControlActionListener
@@ -85,9 +83,7 @@ namespace dbaui
         ~IApplicationController() {}
     };
 
-//........................................................................
 } // namespace dbaui
-//........................................................................
 
 #endif // DBA30D_IAPPLICATIONCONTROLLER_HXX
 

@@ -64,7 +64,6 @@ namespace dbaxml
 
         virtual ~OTableStyleContext();
 
-
         virtual void FillPropertySet(const ::com::sun::star::uno::Reference<
                     ::com::sun::star::beans::XPropertySet > & rPropSet );
 
@@ -120,9 +119,7 @@ namespace dbaxml
 
         sal_Int32 GetIndex(const sal_Int16 nContextID);
     };
-// -----------------------------------------------------------------------------
 } // dbaxml
-// -----------------------------------------------------------------------------
 #endif // DBA_XMLSTYLEIMPORT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

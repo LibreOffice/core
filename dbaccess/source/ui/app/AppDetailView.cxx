@@ -62,7 +62,6 @@ using ::com::sun::star::sdb::application::NamedDatabaseObject;
 
 #define SPACEBETWEENENTRIES     4
 
-// -----------------------------------------------------------------------------
 TaskEntry::TaskEntry( const sal_Char* _pAsciiUNOCommand, sal_uInt16 _nHelpID, sal_uInt16 _nTitleResourceID, bool _bHideWhenDisabled )
     :sUNOCommand( OUString::createFromAscii( _pAsciiUNOCommand ) )
     ,nHelpID( _nHelpID )
@@ -71,7 +70,6 @@ TaskEntry::TaskEntry( const sal_Char* _pAsciiUNOCommand, sal_uInt16 _nHelpID, sa
 {
 }
 
-// -----------------------------------------------------------------------------
 OCreationList::OCreationList( OTasksWindow& _rParent )
     :SvTreeListBox( &_rParent, WB_TABSTOP | WB_HASBUTTONSATROOT | WB_HASBUTTONS )
     ,m_rTaskWindow( _rParent )
@@ -85,7 +83,6 @@ OCreationList::OCreationList( OTasksWindow& _rParent )
     SetNodeDefaultImages( );
     EnableEntryMnemonics();
 }
-// -----------------------------------------------------------------------------
 void OCreationList::Paint( const Rectangle& _rRect )
 {
     if ( m_pMouseDownEntry )
@@ -99,7 +96,6 @@ void OCreationList::Paint( const Rectangle& _rRect )
         Control::SetFont( m_aOriginalFont );
 }
 
-// -----------------------------------------------------------------------------
 void OCreationList::PreparePaint( SvTreeListEntry* _pEntry )
 {
     Wallpaper aEntryBackground( m_aOriginalBackgroundColor );
@@ -127,7 +123,6 @@ void OCreationList::PreparePaint( SvTreeListEntry* _pEntry )
     SetBackground( aEntryBackground );
 }
 
-// -----------------------------------------------------------------------------
 void OCreationList::SelectSearchEntry( const void* _pEntry )
 {
     SvTreeListEntry* pEntry = const_cast< SvTreeListEntry* >( static_cast< const SvTreeListEntry* >( _pEntry ) );
@@ -140,7 +135,6 @@ void OCreationList::SelectSearchEntry( const void* _pEntry )
         GrabFocus();
 }
 
-// -----------------------------------------------------------------------------
 void OCreationList::ExecuteSearchEntry( const void* _pEntry ) const
 {
     SvTreeListEntry* pEntry = const_cast< SvTreeListEntry* >( static_cast< const SvTreeListEntry* >( _pEntry ) );
@@ -151,7 +145,6 @@ void OCreationList::ExecuteSearchEntry( const void* _pEntry ) const
         onSelected( pEntry );
 }
 
-// -----------------------------------------------------------------------------
 Rectangle OCreationList::GetFocusRect( SvTreeListEntry* _pEntry, long _nLine )
 {
     Rectangle aRect = SvTreeListBox::GetFocusRect( _pEntry, _nLine );
@@ -171,7 +164,6 @@ Rectangle OCreationList::GetFocusRect( SvTreeListEntry* _pEntry, long _nLine )
 
     return aRect;
 }
-// -----------------------------------------------------------------------------
 void OCreationList::StartDrag( sal_Int8 /*_nAction*/, const Point& /*_rPosPixel*/ )
 {
     // don't give this to the base class, it does a ReleaseMouse as very first action
@@ -179,28 +171,24 @@ void OCreationList::StartDrag( sal_Int8 /*_nAction*/, const Point& /*_rPosPixel*
     // something with the drag-event), I hesitate to fix it in the current state,
     // since I don't overlook the consequences, and we're close to 2.0 ...)
 }
-// -----------------------------------------------------------------------------
 void OCreationList::ModelHasCleared()
 {
     SvTreeListBox::ModelHasCleared();
     m_pLastActiveEntry = NULL;
     m_pMouseDownEntry = NULL;
 }
-// -----------------------------------------------------------------------------
 void OCreationList::GetFocus()
 {
     SvTreeListBox::GetFocus();
     if ( !GetCurEntry() )
         setCurrentEntryInvalidate( m_pLastActiveEntry ? m_pLastActiveEntry : GetFirstEntryInView() );
 }
-// -----------------------------------------------------------------------------
 void OCreationList::LoseFocus()
 {
     SvTreeListBox::LoseFocus();
     m_pLastActiveEntry = GetCurEntry();
     setCurrentEntryInvalidate( NULL );
 }
-// -----------------------------------------------------------------------------
 void OCreationList::MouseButtonDown( const MouseEvent& rMEvt )
 {
     SvTreeListBox::MouseButtonDown( rMEvt );
@@ -213,7 +201,6 @@ void OCreationList::MouseButtonDown( const MouseEvent& rMEvt )
         CaptureMouse();
     }
 }
-// -----------------------------------------------------------------------------
 void OCreationList::MouseMove( const MouseEvent& rMEvt )
 {
     if ( rMEvt.IsLeaveWindow() )
@@ -252,7 +239,6 @@ void OCreationList::MouseMove( const MouseEvent& rMEvt )
 
     SvTreeListBox::MouseMove(rMEvt);
 }
-// -----------------------------------------------------------------------------
 void OCreationList::MouseButtonUp( const MouseEvent& rMEvt )
 {
     SvTreeListEntry* pEntry = GetEntry( rMEvt.GetPosPixel() );
@@ -279,7 +265,6 @@ void OCreationList::MouseButtonUp( const MouseEvent& rMEvt )
     if ( bExecute )
         onSelected( pEntry );
 }
-// -----------------------------------------------------------------------------
 bool OCreationList::setCurrentEntryInvalidate( SvTreeListEntry* _pEntry )
 {
     if ( GetCurEntry() != _pEntry )
@@ -297,7 +282,6 @@ bool OCreationList::setCurrentEntryInvalidate( SvTreeListEntry* _pEntry )
     }
     return false;
 }
-// -----------------------------------------------------------------------------
 void OCreationList::updateHelpText()
 {
     sal_uInt16 nHelpTextId = 0;
@@ -305,7 +289,6 @@ void OCreationList::updateHelpText()
         nHelpTextId = reinterpret_cast< TaskEntry* >( GetCurEntry()->GetUserData() )->nHelpID;
     m_rTaskWindow.setHelpText( nHelpTextId );
 }
-// -----------------------------------------------------------------------------
 void OCreationList::onSelected( SvTreeListEntry* _pEntry ) const
 {
     OSL_ENSURE( _pEntry, "OCreationList::onSelected: invalid entry!" );
@@ -313,7 +296,6 @@ void OCreationList::onSelected( SvTreeListEntry* _pEntry ) const
     aCommand.Complete = reinterpret_cast< TaskEntry* >( _pEntry->GetUserData() )->sUNOCommand;
     m_rTaskWindow.getDetailView()->getBorderWin().getView()->getAppController().executeChecked( aCommand, Sequence< PropertyValue >() );
 }
-// -----------------------------------------------------------------------------
 void OCreationList::KeyInput( const KeyEvent& rKEvt )
 {
     const KeyCode& rCode = rKEvt.GetKeyCode();
@@ -343,7 +325,6 @@ void OCreationList::KeyInput( const KeyEvent& rKEvt )
         updateHelpText();
     }
 }
-// -----------------------------------------------------------------------------
 DBG_NAME(OTasksWindow)
 OTasksWindow::OTasksWindow(Window* _pParent,OApplicationDetailView* _pDetailView)
     : Window(_pParent,WB_DIALOGCONTROL )
@@ -368,13 +349,11 @@ OTasksWindow::OTasksWindow(Window* _pParent,OApplicationDetailView* _pDetailView
 
     ImplInitSettings(sal_True,sal_True,sal_True);
 }
-// -----------------------------------------------------------------------------
 OTasksWindow::~OTasksWindow()
 {
     DBG_DTOR(OTasksWindow,NULL);
     Clear();
 }
-// -----------------------------------------------------------------------
 void OTasksWindow::DataChanged( const DataChangedEvent& rDCEvt )
 {
     DBG_CHKTHIS(OTasksWindow,NULL);
@@ -387,7 +366,6 @@ void OTasksWindow::DataChanged( const DataChangedEvent& rDCEvt )
         Invalidate();
     }
 }
-//  -----------------------------------------------------------------------------
 void OTasksWindow::ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground )
 {
     DBG_CHKTHIS(OTasksWindow,NULL);
@@ -422,7 +400,6 @@ void OTasksWindow::ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_B
     aFont.SetWeight(WEIGHT_BOLD);
     m_aDescription.SetControlFont(aFont);
 }
-// -----------------------------------------------------------------------------
 void OTasksWindow::setHelpText(sal_uInt16 _nId)
 {
     DBG_CHKTHIS(OTasksWindow,NULL);
@@ -437,7 +414,6 @@ void OTasksWindow::setHelpText(sal_uInt16 _nId)
         m_aHelpText.SetText(OUString());
 }
 }
-// -----------------------------------------------------------------------------
 IMPL_LINK(OTasksWindow, OnEntrySelectHdl, SvTreeListBox*, /*_pTreeBox*/)
 {
     DBG_CHKTHIS(OTasksWindow,NULL);
@@ -446,7 +422,6 @@ IMPL_LINK(OTasksWindow, OnEntrySelectHdl, SvTreeListBox*, /*_pTreeBox*/)
         m_aHelpText.SetText( ModuleRes( reinterpret_cast< TaskEntry* >( pEntry->GetUserData() )->nHelpID ) );
     return 1L;
 }
-// -----------------------------------------------------------------------------
 void OTasksWindow::Resize()
 {
     DBG_CHKTHIS(OTasksWindow,NULL);
@@ -469,7 +444,6 @@ void OTasksWindow::Resize()
 
     m_aFL.SetPosSizePixel( Point(nHalfOutputWidth , 0), Size(aFLSize.Width(), nOutputHeight ) );
 }
-// -----------------------------------------------------------------------------
 void OTasksWindow::fillTaskEntryList( const TaskEntryList& _rList )
 {
     DBG_CHKTHIS(OTasksWindow,NULL);
@@ -520,7 +494,6 @@ void OTasksWindow::fillTaskEntryList( const TaskEntryList& _rList )
     m_aCreation.updateHelpText();
     Enable(!_rList.empty());
 }
-// -----------------------------------------------------------------------------
 void OTasksWindow::Clear()
 {
     DBG_CHKTHIS(OTasksWindow,NULL);
@@ -533,9 +506,7 @@ void OTasksWindow::Clear()
     }
     m_aCreation.Clear();
 }
-//==================================================================
 // class OApplicationDetailView
-//==================================================================
 DBG_NAME(OApplicationDetailView)
 OApplicationDetailView::OApplicationDetailView(OAppBorderWindow& _rParent,PreviewMode _ePreviewMode) : OSplitterView(&_rParent,sal_False )
     ,m_aHorzSplitter(this)
@@ -570,7 +541,6 @@ OApplicationDetailView::OApplicationDetailView(OAppBorderWindow& _rParent,Previe
     m_aHorzSplitter.SetUniqueId(UID_APP_VIEW_HORZ_SPLIT);
     setSplitter(&m_aHorzSplitter);
 }
-// -----------------------------------------------------------------------------
 OApplicationDetailView::~OApplicationDetailView()
 {
     DBG_DTOR(OApplicationDetailView,NULL);
@@ -578,7 +548,6 @@ OApplicationDetailView::~OApplicationDetailView()
     setSplitter(NULL);
     m_pControlHelper = NULL;
 }
-//  -----------------------------------------------------------------------------
 void OApplicationDetailView::ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground )
 {
     DBG_CHKTHIS(OApplicationDetailView,NULL);
@@ -604,7 +573,6 @@ void OApplicationDetailView::ImplInitSettings( sal_Bool bFont, sal_Bool bForegro
     m_aHorzSplitter.SetFillColor( rStyleSettings.GetDialogColor() );
     m_aHorzSplitter.SetTextFillColor(rStyleSettings.GetDialogColor() );
 }
-// -----------------------------------------------------------------------
 void OApplicationDetailView::DataChanged( const DataChangedEvent& rDCEvt )
 {
     DBG_CHKTHIS(OApplicationDetailView,NULL);
@@ -620,20 +588,17 @@ void OApplicationDetailView::DataChanged( const DataChangedEvent& rDCEvt )
         Invalidate();
     }
 }
-// -----------------------------------------------------------------------------
 void OApplicationDetailView::GetFocus()
 {
     DBG_CHKTHIS(OApplicationDetailView,NULL);
     OSplitterView::GetFocus();
 }
 
-// -----------------------------------------------------------------------------
 void OApplicationDetailView::setTaskExternalMnemonics( MnemonicGenerator& _rMnemonics )
 {
     m_aExternalMnemonics = _rMnemonics;
 }
 
-// -----------------------------------------------------------------------------
 bool OApplicationDetailView::interceptKeyInput( const KeyEvent& _rEvent )
 {
     const KeyCode& rKeyCode = _rEvent.GetKeyCode();
@@ -644,19 +609,16 @@ bool OApplicationDetailView::interceptKeyInput( const KeyEvent& _rEvent )
     return false;
 }
 
-// -----------------------------------------------------------------------------
 void OApplicationDetailView::createTablesPage(const Reference< XConnection >& _xConnection )
 {
     impl_createPage( E_TABLE, _xConnection, NULL );
 }
 
-// -----------------------------------------------------------------------------
 void OApplicationDetailView::createPage( ElementType _eType,const Reference< XNameAccess >& _xContainer )
 {
     impl_createPage( _eType, NULL, _xContainer );
 }
 
-// -----------------------------------------------------------------------------
 void OApplicationDetailView::impl_createPage( ElementType _eType, const Reference< XConnection >& _rxConnection,
     const Reference< XNameAccess >& _rxNonTableElements )
 {
@@ -684,7 +646,6 @@ void OApplicationDetailView::impl_createPage( ElementType _eType, const Referenc
     Resize();
 }
 
-// -----------------------------------------------------------------------------
 const TaskPaneData& OApplicationDetailView::impl_getTaskPaneData( ElementType _eType )
 {
     if ( m_aTaskPaneData.empty() )
@@ -698,7 +659,6 @@ const TaskPaneData& OApplicationDetailView::impl_getTaskPaneData( ElementType _e
     return rData;
 }
 
-// -----------------------------------------------------------------------------
 void OApplicationDetailView::impl_fillTaskPaneData( ElementType _eType, TaskPaneData& _rData ) const
 {
     TaskEntryList& rList( _rData.aTasks );
@@ -765,55 +725,46 @@ void OApplicationDetailView::impl_fillTaskPaneData( ElementType _eType, TaskPane
     }
 }
 
-// -----------------------------------------------------------------------------
 OUString OApplicationDetailView::getQualifiedName( SvTreeListEntry* _pEntry ) const
 {
     DBG_CHKTHIS(OApplicationDetailView,NULL);
     return m_pControlHelper->getQualifiedName( _pEntry );
 }
-// -----------------------------------------------------------------------------
 sal_Bool OApplicationDetailView::isLeaf(SvTreeListEntry* _pEntry) const
 {
     DBG_CHKTHIS(OApplicationDetailView,NULL);
     return m_pControlHelper->isLeaf(_pEntry);
 }
-// -----------------------------------------------------------------------------
 sal_Bool OApplicationDetailView::isALeafSelected() const
 {
     DBG_CHKTHIS(OApplicationDetailView,NULL);
     return m_pControlHelper->isALeafSelected();
 }
-// -----------------------------------------------------------------------------
 void OApplicationDetailView::selectAll()
 {
     DBG_CHKTHIS(OApplicationDetailView,NULL);
     m_pControlHelper->selectAll();
 }
-// -----------------------------------------------------------------------------
 void OApplicationDetailView::sortDown()
 {
     DBG_CHKTHIS(OApplicationDetailView,NULL);
     m_pControlHelper->sortDown();
 }
-// -----------------------------------------------------------------------------
 void OApplicationDetailView::sortUp()
 {
     DBG_CHKTHIS(OApplicationDetailView,NULL);
     m_pControlHelper->sortUp();
 }
-// -----------------------------------------------------------------------------
 sal_Bool OApplicationDetailView::isFilled() const
 {
     DBG_CHKTHIS(OApplicationDetailView,NULL);
     return m_pControlHelper->isFilled();
 }
-// -----------------------------------------------------------------------------
 ElementType OApplicationDetailView::getElementType() const
 {
     DBG_CHKTHIS(OApplicationDetailView,NULL);
     return m_pControlHelper->getElementType();
 }
-// -----------------------------------------------------------------------------
 void OApplicationDetailView::clearPages(sal_Bool _bTaskAlso)
 {
     DBG_CHKTHIS(OApplicationDetailView,NULL);
@@ -821,50 +772,42 @@ void OApplicationDetailView::clearPages(sal_Bool _bTaskAlso)
         getTasksWindow().Clear();
     m_pControlHelper->clearPages();
 }
-// -----------------------------------------------------------------------------
 sal_Int32 OApplicationDetailView::getSelectionCount()
 {
     DBG_CHKTHIS(OApplicationDetailView,NULL);
     return m_pControlHelper->getSelectionCount();
 }
-// -----------------------------------------------------------------------------
 sal_Int32 OApplicationDetailView::getElementCount()
 {
     DBG_CHKTHIS(OApplicationDetailView,NULL);
     return m_pControlHelper->getElementCount();
 }
 
-// -----------------------------------------------------------------------------
 void OApplicationDetailView::getSelectionElementNames( ::std::vector< OUString>& _rNames ) const
 {
     DBG_CHKTHIS(OApplicationDetailView,NULL);
     m_pControlHelper->getSelectionElementNames( _rNames );
 }
-// -----------------------------------------------------------------------------
 void OApplicationDetailView::describeCurrentSelectionForControl( const Control& _rControl, Sequence< NamedDatabaseObject >& _out_rSelectedObjects )
 {
     DBG_CHKTHIS(OApplicationDetailView,NULL);
     m_pControlHelper->describeCurrentSelectionForControl( _rControl, _out_rSelectedObjects );
 }
-// -----------------------------------------------------------------------------
 void OApplicationDetailView::describeCurrentSelectionForType( const ElementType _eType, Sequence< NamedDatabaseObject >& _out_rSelectedObjects )
 {
     DBG_CHKTHIS(OApplicationDetailView,NULL);
     m_pControlHelper->describeCurrentSelectionForType( _eType, _out_rSelectedObjects );
 }
-// -----------------------------------------------------------------------------
 void OApplicationDetailView::selectElements(const Sequence< OUString>& _aNames)
 {
     DBG_CHKTHIS(OApplicationDetailView,NULL);
     m_pControlHelper->selectElements( _aNames );
 }
-// -----------------------------------------------------------------------------
 SvTreeListEntry* OApplicationDetailView::getEntry( const Point& _aPoint ) const
 {
     DBG_CHKTHIS(OApplicationDetailView,NULL);
     return m_pControlHelper->getEntry(_aPoint);
 }
-// -----------------------------------------------------------------------------
 sal_Bool OApplicationDetailView::isCutAllowed()
 {
     DBG_CHKTHIS(OApplicationDetailView,NULL);
@@ -883,19 +826,16 @@ void OApplicationDetailView::paste()
     DBG_CHKTHIS(OApplicationDetailView,NULL);
     m_pControlHelper->paste();
 }
-// -----------------------------------------------------------------------------
 SvTreeListEntry*  OApplicationDetailView::elementAdded(ElementType _eType,const OUString& _rName, const Any& _rObject )
 {
     DBG_CHKTHIS(OApplicationDetailView,NULL);
     return m_pControlHelper->elementAdded(_eType,_rName, _rObject );
 }
-// -----------------------------------------------------------------------------
 void OApplicationDetailView::elementRemoved(ElementType _eType,const OUString& _rName )
 {
     DBG_CHKTHIS(OApplicationDetailView,NULL);
     m_pControlHelper->elementRemoved(_eType,_rName );
 }
-// -----------------------------------------------------------------------------
 void OApplicationDetailView::elementReplaced(ElementType _eType
                                                     ,const OUString& _rOldName
                                                     ,const OUString& _rNewName )
@@ -903,31 +843,26 @@ void OApplicationDetailView::elementReplaced(ElementType _eType
     DBG_CHKTHIS(OApplicationDetailView,NULL);
     m_pControlHelper->elementReplaced( _eType, _rOldName, _rNewName );
 }
-// -----------------------------------------------------------------------------
 PreviewMode OApplicationDetailView::getPreviewMode()
 {
     DBG_CHKTHIS(OApplicationDetailView,NULL);
     return m_pControlHelper->getPreviewMode();
 }
-// -----------------------------------------------------------------------------
 sal_Bool OApplicationDetailView::isPreviewEnabled()
 {
     DBG_CHKTHIS(OApplicationDetailView,NULL);
     return m_pControlHelper->isPreviewEnabled();
 }
-// -----------------------------------------------------------------------------
 void OApplicationDetailView::switchPreview(PreviewMode _eMode)
 {
     DBG_CHKTHIS(OApplicationDetailView,NULL);
     m_pControlHelper->switchPreview(_eMode);
 }
-// -----------------------------------------------------------------------------
 void OApplicationDetailView::showPreview(const Reference< XContent >& _xContent)
 {
     DBG_CHKTHIS(OApplicationDetailView,NULL);
     m_pControlHelper->showPreview(_xContent);
 }
-// -----------------------------------------------------------------------------
 void OApplicationDetailView::showPreview(   const OUString& _sDataSourceName,
                                             const OUString& _sName,
                                             sal_Bool _bTable)
@@ -935,13 +870,11 @@ void OApplicationDetailView::showPreview(   const OUString& _sDataSourceName,
     DBG_CHKTHIS(OApplicationDetailView,NULL);
     m_pControlHelper->showPreview(_sDataSourceName,_sName,_bTable);
 }
-// -----------------------------------------------------------------------------
 sal_Bool OApplicationDetailView::isSortUp() const
 {
     DBG_CHKTHIS(OApplicationDetailView,NULL);
     return m_pControlHelper->isSortUp();
 }
-// -----------------------------------------------------------------------------
 Window* OApplicationDetailView::getTreeWindow() const
 {
     return m_pControlHelper->getCurrentView();

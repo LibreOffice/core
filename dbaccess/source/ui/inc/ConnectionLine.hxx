@@ -28,12 +28,10 @@ class OutputDevice;
 namespace dbaui
 {
 
-    //==================================================================
     // ConnData     ---------->*    ConnLineData
     //    ^1                            ^1
     //    |                             |
     //  Conn        ---------->*    ConnLine
-    //==================================================================
 
     /*
         the class OConnectionLine represents the graphical line between the to two windows

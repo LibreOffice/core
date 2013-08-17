@@ -22,16 +22,12 @@
 
 #include <unotools/componentresmodule.hxx>
 
-//........................................................................
 namespace dbmm
 {
-//........................................................................
 
     DEFINE_MODULE( MacroMigrationModule, MacroMigrationModuleClient, MacroMigrationResId )
 
-//........................................................................
 } // namespace dbmm
-//........................................................................
 
 #endif // DBACCESS_MACROMIGRATION_MODULE_HXX
 
