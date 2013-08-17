@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _NDOLE_HXX
-#define _NDOLE_HXX
+#ifndef NDOLE_HXX
+#define NDOLE_HXX
 
 #include <ndnotxt.hxx>
 
@@ -58,12 +58,10 @@ public:
 
     String GetDescription();
 
-#ifndef _FESHVIEW_ONLY_INLINE_NEEDED
     const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > GetOleRef();
     svt::EmbeddedObjectRef& GetObject();
     const String& GetCurrentPersistName() const { return aName; }
     sal_Bool IsOleRef() const;  ///< To avoid unneccessary loading of object.
-#endif
 };
 
 
@@ -139,11 +137,8 @@ public:
     // #i99665#
     bool IsChart() const;
 
-
-#ifndef _FESHVIEW_ONLY_INLINE_NEEDED
     const String& GetChartTblName() const       { return sChartTblName; }
     void SetChartTblName( const String& rNm )   { sChartTblName = rNm; }
-#endif
 };
 
 

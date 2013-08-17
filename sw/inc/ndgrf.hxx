@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _NDGRF_HXX
-#define _NDGRF_HXX
+#ifndef NDGRF_HXX
+#define NDGRF_HXX
 #include <sfx2/lnkbase.hxx>
 #include <svtools/grfmgr.hxx>
 #include <ndnotxt.hxx>
@@ -147,7 +147,6 @@ public:
     void onGraphicChanged();
 
     virtual Size GetTwipSize() const;
-#ifndef _FESHVIEW_ONLY_INLINE_NEEDED
     void SetTwipSize( const Size& rSz );
 
     sal_Bool IsTransparent() const;
@@ -166,10 +165,9 @@ public:
 
     inline sal_Bool IsScaleImageMap() const         { return bScaleImageMap; }
     inline void SetScaleImageMap( sal_Bool b )      { bScaleImageMap = b; }
-#endif
-        /// in ndcopy.cxx
+
+    /// in ndcopy.cxx
     virtual SwCntntNode* MakeCopy( SwDoc*, const SwNodeIndex& ) const;
-#ifndef _FESHVIEW_ONLY_INLINE_NEEDED
 
     /** Re-read in case graphic was not OK. The current one
        gets replaced by the new one. */
@@ -186,13 +184,10 @@ public:
     void SetNewStreamName( const String& r ) { aNewStrmName = r; }
     /// Is this node selected by any shell?
     sal_Bool IsSelected() const;
-#endif
 
     /// Communicate to graphic that node is in Undo-range.
     virtual sal_Bool SavePersistentData();
     virtual sal_Bool RestorePersistentData();
-
-#ifndef _FESHVIEW_ONLY_INLINE_NEEDED
 
     /// Query link-data.
     bool IsGrfLink() const                  { return refLink.Is(); }
@@ -209,7 +204,6 @@ public:
     /// Returns the with our graphic attributes filled Graphic-Attr-Structure.
     GraphicAttr& GetGraphicAttr( GraphicAttr&, const SwFrm* pFrm ) const;
 
-#endif
     boost::weak_ptr< SwAsyncRetrieveInputStreamThreadConsumer > GetThreadConsumer();
     bool IsLinkedInputStreamReady() const;
     void TriggerAsyncRetrieveInputStream();
@@ -226,21 +220,21 @@ inline       SwGrfNode   *SwNode::GetGrfNode()
 {
      return ND_GRFNODE == nNodeType ? (SwGrfNode*)this : 0;
 }
+
 inline const SwGrfNode   *SwNode::GetGrfNode() const
 {
      return ND_GRFNODE == nNodeType ? (const SwGrfNode*)this : 0;
 }
 
-#ifndef _FESHVIEW_ONLY_INLINE_NEEDED
 inline bool SwGrfNode::IsLinkedFile() const
 {
     return refLink.Is() && OBJECT_CLIENT_GRF == refLink->GetObjType();
 }
+
 inline bool SwGrfNode::IsLinkedDDE() const
 {
     return refLink.Is() && OBJECT_CLIENT_DDE == refLink->GetObjType();
 }
-#endif
 
 #endif
 
