@@ -1564,7 +1564,7 @@ const SwFrmFmt* SwFEShell::IsURLGrfAtPos( const Point& rPt, String* pURL,
     {
         SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
         const SwFmtURL &rURL = pFly->GetFmt()->GetURL();
-        if( rURL.GetURL().Len() || rURL.GetMap() )
+        if( !rURL.GetURL().isEmpty() || rURL.GetMap() )
         {
             bool bSetTargetFrameName = pTargetFrameName != 0;
             bool bSetDescription = pDescription != 0;

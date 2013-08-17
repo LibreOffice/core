@@ -31,9 +31,9 @@ class IntlWrapper;
 
 class SW_DLLPUBLIC SwFmtURL: public SfxPoolItem
 {
-    String    sTargetFrameName; ///< Target frame for URL.
-    String    sURL;             ///< Simple URL.
-    String    sName;            ///< Name of the anchor.
+    OUString  sTargetFrameName; ///< Target frame for URL.
+    OUString  sURL;             ///< Simple URL.
+    OUString  sName;            ///< Name of the anchor.
     ImageMap *pMap;             ///< ClientSide images.
 
     sal_Bool      bIsServerMap;     ///< A ServerSideImageMap with the URL.
@@ -59,18 +59,18 @@ public:
     virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
     virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
-    void SetTargetFrameName( const String& rStr ) { sTargetFrameName = rStr; }
+    void SetTargetFrameName( const OUString& rStr ) { sTargetFrameName = rStr; }
     void SetURL(const OUString &rURL, bool bServerMap);
     void SetMap( const ImageMap *pM );  ///< Pointer will be copied.
 
-    const String   &GetTargetFrameName()const { return sTargetFrameName; }
-    const String   &GetURL()            const { return sURL; }
+    OUString GetTargetFrameName()const { return sTargetFrameName; }
+    OUString GetURL()            const { return sURL; }
           sal_Bool      IsServerMap()       const { return bIsServerMap; }
     const ImageMap *GetMap()            const { return pMap; }
           ImageMap *GetMap()                  { return pMap; }
 
-    const String& GetName() const           { return sName; }
-    void SetName( const String& rNm )       { sName = rNm; }
+    OUString GetName() const                { return sName; }
+    void SetName( const OUString& rNm )     { sName = rNm; }
 };
 
 

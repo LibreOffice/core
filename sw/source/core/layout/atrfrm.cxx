@@ -1665,19 +1665,13 @@ bool SwFmtURL::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     switch ( nMemberId )
     {
         case MID_URL_URL:
-        {
-            OUString sRet = GetURL();
-            rVal <<= sRet;
-        }
+            rVal <<= GetURL();
         break;
         case MID_URL_TARGET:
-        {
-            OUString sRet = GetTargetFrameName();
-            rVal <<= sRet;
-        }
+            rVal <<= GetTargetFrameName();
         break;
         case MID_URL_HYPERLINKNAME:
-            rVal <<= OUString( GetName() );
+            rVal <<= GetName();
             break;
         case MID_URL_CLIENTMAP:
         {

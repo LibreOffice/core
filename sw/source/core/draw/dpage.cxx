@@ -152,7 +152,7 @@ sal_Bool SwDPage::RequestHelp( Window* pWindow, SdrView* pView,
                                            INetURLObject::DECODE_UNAMBIGUOUS);
                 }
             }
-            else if ( rURL.GetURL().Len() )
+            else if ( !rURL.GetURL().isEmpty() )
             {
                 sTxt = URIHelper::removePassword( rURL.GetURL(),
                                         INetURLObject::WAS_ENCODED,

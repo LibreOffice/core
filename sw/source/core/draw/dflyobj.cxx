@@ -860,13 +860,13 @@ Pointer  SwVirtFlyDrawObj::GetMacroPointer(
 bool SwVirtFlyDrawObj::HasMacro() const
 {
     const SwFmtURL &rURL = pFlyFrm->GetFmt()->GetURL();
-    return rURL.GetMap() || rURL.GetURL().Len();
+    return rURL.GetMap() || !rURL.GetURL().isEmpty();
 }
 
 SdrObject* SwVirtFlyDrawObj::CheckMacroHit( const SdrObjMacroHitRec& rRec ) const
 {
     const SwFmtURL &rURL = pFlyFrm->GetFmt()->GetURL();
-    if( rURL.GetMap() || rURL.GetURL().Len() )
+    if( rURL.GetMap() || !rURL.GetURL().isEmpty() )
     {
         SwRect aRect;
         if ( pFlyFrm->Lower() && pFlyFrm->Lower()->IsNoTxtFrm() )

@@ -121,7 +121,7 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
             const SwFmtURL& rURL = *(SwFmtURL*)pURLItem;
             if( rURL.GetMap() )
                 pImageMap = new ImageMap( *rURL.GetMap() );
-            else if( rURL.GetURL().Len() )
+            else if( !rURL.GetURL().isEmpty() )
                 pTargetURL = new INetImage( bLink ? sGrfName : aEmptyStr,
                                             rURL.GetURL(),
                                             rURL.GetTargetFrameName(),

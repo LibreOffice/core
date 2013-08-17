@@ -724,7 +724,7 @@ SfxItemPresentation SwFmtURL::GetPresentation
         {
             if ( pMap )
                 rText += "Client-Map";
-            if ( sURL.Len() )
+            if ( !sURL.isEmpty() )
             {
                 if ( pMap )
                     rText += " - ";
@@ -732,7 +732,7 @@ SfxItemPresentation SwFmtURL::GetPresentation
                 if ( bIsServerMap )
                     rText += " (Server-Map)";
             }
-            if ( sTargetFrameName.Len() )
+            if ( !sTargetFrameName.isEmpty() )
             {
                 rText = rText + ", Target: " + sTargetFrameName;
             }

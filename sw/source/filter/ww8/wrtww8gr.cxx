@@ -388,7 +388,7 @@ void WW8Export::OutGrf(const sw::Frame &rFrame)
     //will be exported to ensure the fidelity
     const SwFmtURL& rURL = rFrame.GetFrmFmt().GetAttrSet().GetURL();
     bool bURLStarted = false;
-    if( rURL.GetURL().Len() && rFrame.GetWriterType() == sw::Frame::eGraphic)
+    if( !rURL.GetURL().isEmpty() && rFrame.GetWriterType() == sw::Frame::eGraphic)
     {
         bURLStarted = true;
         m_pAttrOutput->StartURL( rURL.GetURL(), rURL.GetTargetFrameName() );

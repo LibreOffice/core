@@ -469,7 +469,7 @@ sal_Bool SwTransferable::GetData( const DataFlavor& rFlavor )
             const SwFmtURL& rURL = (SwFmtURL&)aSet.Get( RES_URL );
             if( rURL.GetMap() )
                 pImageMap = new ImageMap( *rURL.GetMap() );
-            else if( rURL.GetURL().Len() )
+            else if( !rURL.GetURL().isEmpty() )
                 pTargetURL = new INetImage( aEmptyStr, rURL.GetURL(),
                                             rURL.GetTargetFrameName(),
                                             aEmptyStr, Size() );
@@ -972,7 +972,7 @@ int SwTransferable::PrepareForCopy( sal_Bool bIsCut )
             pImageMap = new ImageMap( *rURL.GetMap() );
             AddFormat( SOT_FORMATSTR_ID_SVIM );
         }
-        else if( rURL.GetURL().Len() )
+        else if( !rURL.GetURL().isEmpty() )
         {
             pTargetURL = new INetImage( sGrfNm, rURL.GetURL(),
                                         rURL.GetTargetFrameName(),
@@ -2439,7 +2439,7 @@ int SwTransferable::_PasteAsHyperlink( TransferableDataHelper& rData,
                 rSh.GetFlyFrmAttr( aSet );
                 SwFmtURL aURL2( (SwFmtURL&)aSet.Get( RES_URL ) );
                 aURL2.SetURL( sFile, sal_False );
-                if( !aURL2.GetName().Len() )
+                if( aURL2.GetName().isEmpty() )
                     aURL2.SetName( sFile );
                 aSet.Put( aURL2 );
                 rSh.SetFlyFrmAttr( aSet );
@@ -2526,7 +2526,7 @@ int SwTransferable::_PasteFileName( TransferableDataHelper& rData,
                             rSh.GetFlyFrmAttr( aSet );
                             SwFmtURL aURL2( (SwFmtURL&)aSet.Get( RES_URL ) );
                             aURL2.SetURL( sFile, sal_False );
-                            if( !aURL2.GetName().Len() )
+                            if( aURL2.GetName().isEmpty() )
                                 aURL2.SetName( sFile );
                             aSet.Put( aURL2 );
                             rSh.SetFlyFrmAttr( aSet );
@@ -3061,7 +3061,7 @@ void SwTransferable::SetDataForDragAndDrop( const Point& rSttPos )
             pImageMap = new ImageMap( *rURL.GetMap() );
             AddFormat( SOT_FORMATSTR_ID_SVIM );
         }
-        else if( rURL.GetURL().Len() )
+        else if( !rURL.GetURL().isEmpty() )
         {
             pTargetURL = new INetImage( sGrfNm, rURL.GetURL(),
                                         rURL.GetTargetFrameName(),

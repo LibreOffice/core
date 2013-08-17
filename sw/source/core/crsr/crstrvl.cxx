@@ -2113,7 +2113,7 @@ bool SwCrsrShell::SelectNxtPrvHyperlink( bool bNext )
         {
             SwFlyFrmFmt* pFmt = (SwFlyFrmFmt*)(*pFmts)[ n ];
             const SwFmtURL& rURLItem = pFmt->GetURL();
-            if( rURLItem.GetMap() || rURLItem.GetURL().Len() )
+            if( rURLItem.GetMap() || !rURLItem.GetURL().isEmpty() )
             {
                 SwFlyFrm* pFly = pFmt->GetFrm( &aPt, sal_False );
                 SwPosition aTmpPos( *pBodySttNd );

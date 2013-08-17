@@ -104,7 +104,7 @@ static void lcl_PaintReplacement( const SwRect &rRect, const String &rText,
     Color aCol( COL_RED );
     FontUnderline eUnderline = UNDERLINE_NONE;
     const SwFmtURL &rURL = pFrm->FindFlyFrm()->GetFmt()->GetURL();
-    if( rURL.GetURL().Len() || rURL.GetMap() )
+    if( !rURL.GetURL().isEmpty() || rURL.GetMap() )
     {
         bool bVisited = false;
         if ( rURL.GetMap() )
@@ -120,7 +120,7 @@ static void lcl_PaintReplacement( const SwRect &rRect, const String &rText,
                 }
             }
         }
-        else if ( rURL.GetURL().Len() )
+        else if ( !rURL.GetURL().isEmpty() )
             bVisited = rSh.GetDoc()->IsVisitedURL( rURL.GetURL() );
 
         SwFmt *pFmt = rSh.GetDoc()->GetFmtFromPool( static_cast<sal_uInt16>
